@@ -1,0 +1,92 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html">
+	<title>Генератор шрифтов</title>
+	<style type="text/css">
+		table, td, th {border: 2px solid black;}
+		th {background-color: green; color: white;}
+		td, th {height: 50px; width: 50px;}
+		td.normal {background-color: white;}
+		td.checked {background-color: black;}
+	</style>
+	<script>
+		const xsz = 16, ysz = 8;
+		function update_values(){
+			var i,j, str = "";
+			for(i = 0; i < xsz; ++i){
+				var val = 0;
+				for(j = ysz-1; j > -1; --j){
+					var id = "x"+i+"y"+j;
+					val <<= 1;
+					if(document.getElementById(id).className == "checked") val |= 1;
+				}
+				str += "0x" + (val > 15 ? "" : "0") + val.toString(16) + ","
+					+ (i == xsz-1 ? "" : " ");
+			}
+			var cb = document.getElementById("codeblk");
+			cb.value = str;
+			cb.select();
+		}
+		function update_table(){
+			var strings = document.getElementById("codeblk").value.split(",");
+			for(i = 0; i < xsz; ++i){
+				var val = parseInt(strings[i], 16);
+				for(j = ysz-1; j > -1; --j){
+					var td = document.getElementById("x"+i+"y"+j)
+					if(val & 1<<j)
+						td.className = "checked";
+					else
+						td.className = "normal";
+				}
+			}
+		}
+		function swap_class(){
+			if(this.className == "normal")
+				this.className = "checked";
+			else
+				this.className = "normal";
+			update_values();
+		}
+		function clear_all(){
+			document.getElementById("codeblk").value = "";// "0x00, 0x00, 0x00, 0x00, 0x00, 0x00,";
+			update_table();
+		}
+		function filltable(){
+			var tbl = document.createElement("table");
+			var i, j, tr = document.createElement("tr");
+			tbl.appendChild(tr);
+			for(i = -1; i < xsz; ++i){
+				var th = document.createElement("th");
+				if(i != -1) th.innerHTML = i;
+				tr.appendChild(th);
+			}
+			for(j = 0; j < ysz; ++j){
+				tr = document.createElement("tr");
+				tbl.appendChild(tr);
+				for(i = -1; i < xsz; ++i){
+					var td;
+					if(i != -1){
+						td = document.createElement("td");
+						td.className = "normal";
+						td.addEventListener("click", swap_class);
+						td.id = "x"+i+"y"+j;
+					}else{
+						td = document.createElement("th");
+						td.innerHTML = j;
+					}
+					tr.appendChild(td);
+				}
+			}
+			document.body.appendChild(tbl);
+			document.getElementById("codeblk").addEventListener("change", update_table);
+			document.getElementById("clear").addEventListener("click", clear_all);
+			update_values();
+		}
+	</script>
+</head>
+<body onload="filltable()">
+	<div><input type="text" size="40" id="codeblk"><input type="button" value="Clear" id="clear"></div>
+<br>
+<b>Пример буквы "Ы":</b>  0x00, 0x00, 0xc6, 0xc6, 0xc6, 0xc6, 0xf6, 0xde, 0xde, 0xde, 0xde, 0xf6, 0x00, 0x00, 0x00, 0x00,
+	</body>
+</html>

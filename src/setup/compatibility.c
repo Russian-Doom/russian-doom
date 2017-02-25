@@ -1,0 +1,119 @@
+//
+// Copyright(C) 2005-2014 Simon Howard
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+
+// Sound control menu
+
+// =--------------------------------------------------------------=
+// Copyright(C) 2016-2017 Julian Nechaevsky
+//
+// Описание:
+// * Перевод строчек Setup.exe.
+// * Добавлены новые конфигурационные переменные.
+// =--------------------------------------------------------------=
+
+#include <stdlib.h>
+
+#include "m_config.h"
+#include "textscreen.h"
+#include "mode.h"
+
+#include "compatibility.h"
+
+#define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/gameplay.html"
+
+// [JN] Оригинальные ограничения отключены, т.к. в них больше нет смысла
+// int vanilla_savegame_limit = 1;
+// int vanilla_demo_limit = 1;
+
+// [JN] Дополнительные параметры геймплея
+
+// - Графика -
+int colored_blood = 1;           // Кровь разных цветов
+int new_ouch_face = 1;           // Корректная формула "Ouch face"
+int invul_sky = 1;               // Неуязвимость окрашивает небо
+int red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
+int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
+int translucency = 1;            // Прозрачность объектов
+int no_pickup_flash = 0;         // Не мигать экраном при получении предметов
+// - Звук -
+int crushed_corpses_sfx = 1;     // Звук раздавливания трупов
+int blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
+int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
+// - Геймплей -
+int secret_notification = 1;     // Уведомление об обнаружении секрета
+int show_total_time = 1;         // Показывать общее время
+int unlimited_lost_souls = 1;    // Элементаль боли без ограничения
+
+void CompatibilitySettings(void)
+{
+    txt_window_t *window;
+
+    window = TXT_NewWindow("„ополнительные параметры игры");
+
+    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+
+    TXT_AddWidgets(window,
+//  TXT_NewCheckBox("Ћригинальный лимит сохранений",&vanilla_savegame_limit),
+//  TXT_NewCheckBox("Ћригинальный лимит демозаписи",&vanilla_demo_limit),
+        
+    // [JN] Дополнительные параметры Russian DOOM.
+    TXT_If(gamemission == doom,    TXT_NewSeparator("ѓрафика")),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("ђазноцветная кровь и трупы монстров",       &colored_blood)),          // [JN] Уведомление об обнаружении секрета
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Љорректная формула \"Ouch face\"",          &new_ouch_face)),          // [JN] Корректная формула "Ouch face"
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќеуязвимость окрашивает небо",              &invul_sky)),              // [JN] Неуязвимость окрашивает небо
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Љрасная вспышка воскрешения монстров",      &red_resurrection_flash)), // [JN] Неуязвимость окрашивает небо
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("„вуствольное ружье может разрывать врагов", &ssg_blast_enemies)),      // [JN] Двуствольное ружье может разрывать врагов
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("ћффект прозрачности у некоторых объектов",  &translucency)),           // [JN] Двуствольное ружье может разрывать врагов (r_data.c -> tran_filter_pct)
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе мигать экраном при получении предметов", &no_pickup_flash)),        // [JN] Не мигать экраном при получении предметов
+
+		
+    TXT_If(gamemission == doom,    TXT_NewSeparator("‡вук")), 
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("‡вук раздавливания трупов",             &crushed_corpses_sfx)),    // [JN] Звук раздавливания трупов
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћдиночный звук закрытия быстрой двери", &blazing_door_fix_sfx)),   // [JN] Одиночный звук закрытия быстрой двери
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Џроигрывать звук при выходе из игры",   &play_exit_sfx)),   // [JN] Одиночный звук закрытия быстрой двери
+
+    TXT_If(gamemission == doom,    TXT_NewSeparator("ѓеймплей")),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("“ведомление об обнаружении тайников",   &secret_notification)),    // [JN] Уведомление об обнаружении секрета
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћбщее время на межмиссионном экране",   &show_total_time)),        // [JN] Уведомление об обнаружении секрета
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("ћлементаль Ѓоли без ограничения душ",   &unlimited_lost_souls)),   // [JN] Элементаль боли без ограничения
+
+        
+		NULL);
+}
+
+void BindCompatibilityVariables(void)
+{
+//  M_BindIntVariable("vanilla_savegame_limit", &vanilla_savegame_limit);
+//  M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
+
+    // [JN] Дополнительные параметры геймплея
+    
+    // - Графика -
+    M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
+    M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
+    M_BindIntVariable("invul_sky",              &invul_sky);                // Неуязвимость окрашивает небо
+    M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);   // Красная вспышка воскрешения монстров
+    M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
+    M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов
+    M_BindIntVariable("no_pickup_flash",        &no_pickup_flash);          // Не мигать экраном при получении предметов
+    // - Звук -
+    M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);      // Звук раздавливания трупов
+    M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);     // Одиночный звук закрытия быстрой двери
+    M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);            // Проигрывать звук при выходе из игры
+    // - Геймплей -
+    M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
+    M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
+    M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);     // Элементаль боли без ограничения
+}
+
