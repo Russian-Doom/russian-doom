@@ -973,13 +973,16 @@ void P_SpawnMapThing (mapthing_t* mthing)
 	mobj->flags |= MF_AMBUSH;
 
 
-    // [crispy] randomly colorize space marine corpse objects
-    if (!netgame && colored_blood
-        &&
-        (mobj->info->spawnstate == S_PLAY_DIE7 ||
-         mobj->info->spawnstate == S_PLAY_XDIE9))
+    // [crispy] randomly flip space marine corpse objects
+    if (mobj->info->spawnstate == S_PLAY_DIE7 ||
+        mobj->info->spawnstate == S_PLAY_XDIE9)
     {
-        mobj->flags |= (mobj->lastlook << MF_TRANSSHIFT);
+        mobj->health -= Crispy_Random() & 1;
+        // [crispy] randomly colorize space marine corpse objects
+        if (!netgame && colored_blood)
+        {
+            mobj->flags |= (Crispy_Random() & 3) << MF_TRANSSHIFT;
+        }
     }
 }
 

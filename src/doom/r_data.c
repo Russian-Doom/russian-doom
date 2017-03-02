@@ -824,19 +824,25 @@ void R_InitTranMap()
         unsigned char pct;
         unsigned char playpal[256*3]; // [crispy] PLAYPAL has 768 bytes!
       } cache;
+      
+      // [JN] Создавать файл tranmap.dat не нужно.
+      /*
       FILE *cachefp = fopen(strcat(strcpy(fname, configdir),
-                                   "/tranmap.dat"),"r+b");
+                                   ""),"r+b");    // [JN] Ранее "tranmap.dat"
+      */
 
       tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
 
       // Use cached translucency filter if it's available
 
+      /*
       if (!cachefp ? cachefp = fopen(fname,"wb") , 1 :
           fread(&cache, 1, sizeof cache, cachefp) != sizeof cache ||
           cache.pct != tran_filter_pct ||
           memcmp(cache.playpal, playpal, sizeof cache.playpal) ||
           fread(tranmap, 256, 256, cachefp) != 256 ) // killough 4/11/98
-        {
+        { 
+      */
           long pal[3][256], tot[256], pal_w1[3][256];
           long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
           long w2 = (1l<<TSC)-w1;
@@ -888,6 +894,9 @@ void R_InitTranMap()
                   }
               }
           }
+        
+        // [JN] Кеш tranmap.dap, более не актуален.
+        /*
           if (cachefp)        // write out the cached translucency map
             {
               cache.pct = tran_filter_pct;
@@ -900,6 +909,7 @@ void R_InitTranMap()
         
         if (cachefp)
         fclose(cachefp);
+        */
 
       Z_ChangeTag(playpal, PU_CACHE);
     }

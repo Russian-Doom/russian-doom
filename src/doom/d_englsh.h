@@ -163,6 +163,10 @@
 
 #define HUSTR_MSGU  "(cjj,otybt yt jnghfdktyj)"                 // (Сообщение не отправлено)
 
+//
+// DOOM 1
+//
+
 #define HUSTR_E1M1  "t1v1: fyufh"                               // E1M1: Ангар
 #define HUSTR_E1M2  "t1v2: fnjvyfz 'ktrnhjcnfywbz"              // E1M2: Атомная электростанция
 #define HUSTR_E1M3  "t1v3: pfdjl gj gththf,jnrt zlj[bvbrfnjd"   // E1M3: Завод по переработке ядохимикатов
@@ -203,6 +207,10 @@
 #define HUSTR_E4M8  "t4v8: lj ,tccthltxbz"                      // E4M8: До бессердечия
 #define HUSTR_E4M9  "t4v9: cnhf["                               // E4M9: Страх
 
+//
+// DOOM2: Ад на Земле
+//
+
 #define HUSTR_1     "ehjdtym 1: gfhflysq d[jl"                  // Уровень 1: Парадный вход
 #define HUSTR_2     "ehjdtym 2: gjlptvyst pfks"                 // Уровень 2: Подземные залы
 #define HUSTR_3     "ehjdtym 3: dspjd ,hjity"                   // Уровень 3: Вызов брошен
@@ -239,6 +247,50 @@
 #define HUSTR_31    "ehjdtym 31: djkmatyinfqy"                  // Уровень 31: Вольфенштайн
 #define HUSTR_32    "ehjdtym 32: uhjcct"                        // Уровень 32: Гроссе
 
+//
+// DOOM2: Нет покоя для живых
+//
+
+#define NHUSTR_1	"ehjdtym 1: ,fpf yf ptvkt"      // Уровень 1: База на Земле
+#define NHUSTR_2	"ehjdtym 2: kf,jhfnjhbb ,jkb"   // Уровень 2: Лаборатории боли
+#define NHUSTR_3	"ehjdtym 3: rfymjy vthndtwjd"   // Уровень 3: Каньон мертвецов
+#define NHUSTR_4	"ehjdtym 4: flcrfz ujhf"        // Уровень 4: Адская гора
+#define NHUSTR_5	"ehjdtym 5: dbdbctrwbz"         // Уровень 5: Вивисекция
+#define NHUSTR_6	"ehjdtym 6: rhjdm ghtbcgjlyzz"  // Уровень 6: Кровь преисподняя
+#define NHUSTR_7	"ehjdtym 7: ,fyrtn e ,fhjyf"    // Уровень 7: Банкет у Барона
+#define NHUSTR_8	"ehjdtym 8: uhj,ybwf pkj,s"     // Уровень 8: Гробница злобы
+#define NHUSTR_9	"ehjdtym 9: itcndbt ltvjyjd"    // Уровень 9: Шествие демонов
+
+//
+// Мастер-Уровни для DOOM 2
+//
+
+#define MLSTR_1     "vfcnth-ehjdtym: yfgfltybt"                // ATTACK.WAD   - Нападение
+#define MLSTR_2     "vfcnth-ehjdtym: xthyfz ,fiyz"             // BLACKTWR.WAD - Черная Башня
+#define MLSTR_3     "vfcnth-ehjdtym: rhtgjcnm d rhjdfdjv vjht" // BLOODSEA.WAD - Крепость в Кровавом море
+#define MLSTR_4     "vfcnth-ehjdtym: rfymjy"                   // CANYON.WAD   - Каньон
+#define MLSTR_5     "vfcnth-ehjdtym: gjvjcn"                   // CATWALK.WAD  - Помост
+#define MLSTR_6     "vfcnth-ehjdtym: rjv,byfn"                 // COMBINE.WAD  - Комбинат
+#define MLSTR_7     "vfcnth-ehjdtym: abcnekf"                  // FISTULA.WAD  - Фистула
+#define MLSTR_8     "vfcnth-ehjdtym: ufhybpjy"                 // GARRISON.WAD - Гарнизон
+#define MLSTR_9     "vfcnth-ehjdtym: uthbjy"                   // GERYON.WAD   - Герион
+#define MLSTR_10    "vfcnth-ehjdtym: gjvtcnmt nbnfyf"          // MANOR.WAD    - Поместье Титана
+#define MLSTR_11    "vfcnth-ehjdtym: vfdpjktq vtabcnjatkz"     // MEPHISTO.WAD - Мавзолей Мефистофеля
+#define MLSTR_12    "vfcnth-ehjdtym: ghbujdjh vbyjcf"          // MINOS.WAD    - Приговор Миноса
+#define MLSTR_13    "vfcnth-ehjdtym: ytcc"                     // NESSUS.WAD   - Несс
+#define MLSTR_14    "vfcnth-ehjdtym: gfhfljrc"                 // PARADOX.WAD  - Парадокс
+#define MLSTR_15    "vfcnth-ehjdtym: gjlghjcnhfycndj"          // SUBSPACE.WAD - Подпространство
+#define MLSTR_16    "vfcnth-ehjdtym: gjlptvtkmt"               // SUBTERRA.WAD - Подземелье
+#define MLSTR_17    "vfcnth-ehjdtym: neh,jkban d ghtbcgjly.."  // TEETH.WAD    - Турболифт в Преисподнюю
+#define MLSTR_18    "vfcnth-ehjdtym: lehyjq cjy"               //              - Дурной сон
+#define MLSTR_19    "vfcnth-ehjdtym: pfcnhzdibq yf nbnfyt"     // TTRAP.WAD    - Застрявший на Титане
+#define MLSTR_20    "vfcnth-ehjdtym: dtxth"                    // VESPERAS.WAD - Вечер
+#define MLSTR_21    "vfcnth-ehjdtym: djkz dthubkbz"            // VIRGIL.WAD   - Воля Вергилия
+
+//
+// Final DOOM: Эксперимент "Плутония"
+//
+
 #define PHUSTR_1    "ehjdtym 1: rjyuj"                  // Уровень 1: Конго
 #define PHUSTR_2    "ehjdtym 2: rjkjltw lei"            // Уровень 2: Колодец душ
 #define PHUSTR_3    "ehjdtym 3: fwntr"                  // Уровень 3: Ацтек
@@ -274,6 +326,10 @@
 
 #define PHUSTR_31   "ehjdtym 31: rb,thkjujdj"           // Уровень 31: Киберлогово
 #define PHUSTR_32   "ehjdtym 32: blb r ctve"            // Уровень 32: Иди к сему
+
+//
+// Final DOOM: TNT - Дьяволюция
+//
 
 #define THUSTR_1    "ehjdtym 1: wtynh eghfdktybz cbcntvjq"      // Уровень 1: Центр управления системой
 #define THUSTR_2    "ehjdtym 2: ,fh,tr. bp xtkjdtxbys"          // Уровень 2: Барбекю из человечины
@@ -1032,16 +1088,6 @@
 "CONGRATULATIONS YOU HAVE FINISHED... \n\n"\
 "THE MASTER LEVELS\n"
 */
-
-#define NHUSTR_1	"ehjdtym 1: ,fpf yf ptvkt"      // Уровень 1: База на Земле
-#define NHUSTR_2	"ehjdtym 2: kf,jhfnjhbb ,jkb"   // Уровень 2: Лаборатории боли
-#define NHUSTR_3	"ehjdtym 3: rfymjy vthndtwjd"   // Уровень 3: Каньон мертвецов
-#define NHUSTR_4	"ehjdtym 4: flcrfz ujhf"        // Уровень 4: Адская гора
-#define NHUSTR_5	"ehjdtym 5: dbdbctrwbz"         // Уровень 5: Вивисекция
-#define NHUSTR_6	"ehjdtym 6: rhjdm ghtbcgjlyzz"  // Уровень 6: Кровь преисподняя
-#define NHUSTR_7	"ehjdtym 7: ,fyrtn e ,fhjyf"    // Уровень 7: Банкет у Барона
-#define NHUSTR_8	"ehjdtym 8: uhj,ybwf pkj,s"     // Уровень 8: Гробница злобы
-#define NHUSTR_9	"ehjdtym 9: itcndbt ltvjyjd"    // Уровень 9: Шествие демонов
 
 //
 // F_FINALE.C
