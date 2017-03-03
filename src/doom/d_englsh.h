@@ -265,27 +265,27 @@
 // Мастер-Уровни для DOOM 2
 //
 
-#define MLSTR_1     "vfcnth-ehjdtym: yfgfltybt"                // ATTACK.WAD   - Нападение
-#define MLSTR_2     "vfcnth-ehjdtym: xthyfz ,fiyz"             // BLACKTWR.WAD - Черная Башня
-#define MLSTR_3     "vfcnth-ehjdtym: rhtgjcnm d rhjdfdjv vjht" // BLOODSEA.WAD - Крепость в Кровавом море
-#define MLSTR_4     "vfcnth-ehjdtym: rfymjy"                   // CANYON.WAD   - Каньон
-#define MLSTR_5     "vfcnth-ehjdtym: gjvjcn"                   // CATWALK.WAD  - Помост
-#define MLSTR_6     "vfcnth-ehjdtym: rjv,byfn"                 // COMBINE.WAD  - Комбинат
-#define MLSTR_7     "vfcnth-ehjdtym: abcnekf"                  // FISTULA.WAD  - Фистула
-#define MLSTR_8     "vfcnth-ehjdtym: ufhybpjy"                 // GARRISON.WAD - Гарнизон
-#define MLSTR_9     "vfcnth-ehjdtym: uthbjy"                   // GERYON.WAD   - Герион
-#define MLSTR_10    "vfcnth-ehjdtym: gjvtcnmt nbnfyf"          // MANOR.WAD    - Поместье Титана
-#define MLSTR_11    "vfcnth-ehjdtym: vfdpjktq vtabcnjatkz"     // MEPHISTO.WAD - Мавзолей Мефистофеля
-#define MLSTR_12    "vfcnth-ehjdtym: ghbujdjh vbyjcf"          // MINOS.WAD    - Приговор Миноса
-#define MLSTR_13    "vfcnth-ehjdtym: ytcc"                     // NESSUS.WAD   - Несс
-#define MLSTR_14    "vfcnth-ehjdtym: gfhfljrc"                 // PARADOX.WAD  - Парадокс
-#define MLSTR_15    "vfcnth-ehjdtym: gjlghjcnhfycndj"          // SUBSPACE.WAD - Подпространство
-#define MLSTR_16    "vfcnth-ehjdtym: gjlptvtkmt"               // SUBTERRA.WAD - Подземелье
-#define MLSTR_17    "vfcnth-ehjdtym: neh,jkban d ghtbcgjly.."  // TEETH.WAD    - Турболифт в Преисподнюю
-#define MLSTR_18    "vfcnth-ehjdtym: lehyjq cjy"               //              - Дурной сон
-#define MLSTR_19    "vfcnth-ehjdtym: pfcnhzdibq yf nbnfyt"     // TTRAP.WAD    - Застрявший на Титане
-#define MLSTR_20    "vfcnth-ehjdtym: dtxth"                    // VESPERAS.WAD - Вечер
-#define MLSTR_21    "vfcnth-ehjdtym: djkz dthubkbz"            // VIRGIL.WAD   - Воля Вергилия
+#define MLSTR_1     "yfgfltybt"                // ATTACK.WAD   - Нападение
+#define MLSTR_2     "xthyfz ,fiyz"             // BLACKTWR.WAD - Черная Башня
+#define MLSTR_3     "rhtgjcnm d rhjdfdjv vjht" // BLOODSEA.WAD - Крепость в Кровавом море
+#define MLSTR_4     "rfymjy"                   // CANYON.WAD   - Каньон
+#define MLSTR_5     "gjvjcn"                   // CATWALK.WAD  - Помост
+#define MLSTR_6     "rjv,byfn"                 // COMBINE.WAD  - Комбинат
+#define MLSTR_7     "abcnekf"                  // FISTULA.WAD  - Фистула
+#define MLSTR_8     "ufhybpjy"                 // GARRISON.WAD - Гарнизон
+#define MLSTR_9     "uthbjy"                   // GERYON.WAD   - Герион
+#define MLSTR_10    "gjvtcnmt ubufynf"         // MANOR.WAD    - Поместье Гиганта
+#define MLSTR_11    "vfdpjktq vtabcnjatkz"     // MEPHISTO.WAD - Мавзолей Мефистофеля
+#define MLSTR_12    "ghbujdjh vbyjcf"          // MINOS.WAD    - Приговор Миноса
+#define MLSTR_13    "ytcc"                     // NESSUS.WAD   - Несс
+#define MLSTR_14    "gfhfljrc"                 // PARADOX.WAD  - Парадокс
+#define MLSTR_15    "gjlghjcnhfycndj"          // SUBSPACE.WAD - Подпространство
+#define MLSTR_16    "gjlptvtkmt"               // SUBTERRA.WAD - Подземелье
+#define MLSTR_17    "neh,jkban d ghtbcgjly.."  // TEETH.WAD    - Турболифт в Преисподнюю
+#define MLSTR_18    "lehyjq cjy"               //              - Дурной сон
+#define MLSTR_19    "pfcnhzdibq yf nbnfyt"     // TTRAP.WAD    - Застрявший на Титане
+#define MLSTR_20    "dtxth"                    // VESPERAS.WAD - Вечер
+#define MLSTR_21    "djkz dthubkbz"            // VIRGIL.WAD   - Воля Вергилия
 
 //
 // Final DOOM: Эксперимент "Плутония"

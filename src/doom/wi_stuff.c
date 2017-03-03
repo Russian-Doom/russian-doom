@@ -365,7 +365,8 @@ static patch_t*		num[10];
 static patch_t*		wiminus;
 
 // "Finished!" graphics
-static patch_t*		finished; // Завернен (WIF)
+static patch_t*		finished;   // Завернен (WIF)
+static patch_t*		finished_2; // Завернен (WIF, хак для Master Levels)
 static patch_t*		finished_f; // Завершена (WIFF)
 static patch_t*		finished_o; // Завершено (WIFO)
 static patch_t*		finished_m; // Завершены (WIFM)
@@ -452,6 +453,7 @@ void WI_drawLF(void)
 
 		// Отдельные сообщения в разных родах для уровней.
 		// finished_f; - Завершена (WIFF)
+        // finished_2; - Завершен (WIF2, хак для Master Levels)
 		// finished_o; - Завершено (WIFO)
 		// finished_m; - Завершены (WIFM)
 
@@ -541,7 +543,7 @@ void WI_drawLF(void)
 					if (gamemap == 29 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 29: Конец всего живого
 					if (gamemap == 30 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 30: Икона греха
 					if (gamemap == 31 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 31: Вольфенштайн
-					if (gamemap == 32 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 32: Гроссе
+					if (gamemap == 32 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_2->width)) / 2, y, finished_2); }		// Уровень 32: Гроссе
 					if (gamemap == 33 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 33: Предательство
 			}
 			
@@ -2037,6 +2039,9 @@ static void WI_loadUnloadData(load_callback_t callback)
 
     // "finished" / "Завершен"
 	callback(DEH_String("WIF"), &finished);
+    
+    // "Завершен" (хак для Master Levels)
+	callback(DEH_String("WIF2"), &finished_2);
 	
 	// "Завершена"
 	callback(DEH_String("WIFF"), &finished_f);
