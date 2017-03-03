@@ -41,7 +41,8 @@ static float mouse_acceleration = 2.0;
 static int mouse_threshold = 10;
 static int grabmouse = 1;
 
-int novert = 0;
+// [JN] Вертикальное перемещение отключено по умолчанию.
+int novert = 1;
 
 static int *all_mouse_buttons[] = {
     &mousebfire,

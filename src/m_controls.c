@@ -26,15 +26,16 @@
 // Keyboard controls
 //
 
+// [JN] Стандартное управление перенесено на WADS+E
 int key_right = KEY_RIGHTARROW;
 int key_left = KEY_LEFTARROW;
 
-int key_up = KEY_UPARROW;
-int key_down = KEY_DOWNARROW; 
-int key_strafeleft = ',';
-int key_straferight = '.';
+int key_up = 'w';
+int key_down = 's'; 
+int key_strafeleft = 'a';
+int key_straferight = 'd';
 int key_fire = KEY_RCTRL;
-int key_use = ' ';
+int key_use = 'e';
 int key_strafe = KEY_RALT;
 int key_speed = KEY_RSHIFT; 
 int key_toggleautorun = KEY_CAPSLOCK;
@@ -179,10 +180,12 @@ int key_menu_screenshot = 0;
 // Joystick controls
 //
 
+// [JN] Постоянный бег ключен по умолчанию.
+// Ранее: joybspeed = 2;
 int joybfire = 0;
 int joybstrafe = 1;
 int joybuse = 3;
-int joybspeed = 2;
+int joybspeed = 29;
 
 int joybstrafeleft = -1;
 int joybstraferight = -1;
