@@ -208,11 +208,6 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
 
     TXT_AddWidgets(window,
         ar_checkbox = TXT_NewCheckBox("Фиксированное соотношение сторон", &aspect_ratio_correct),
-#if SDL_VERSION_ATLEAST(2, 0, 5)
-        TXT_NewCheckBox("Integer scaling", &integer_scaling),
-#endif
-        TXT_NewCheckBox("Flash borders (VGA porch emulation)",
-                        &vga_porch_flash),
         TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
             TXT_NewCheckBox("Графическа€ загрузка", &graphical_startup)),
         TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
@@ -221,15 +216,20 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
             TXT_NewCheckBox("Показывать значок дискеты", &show_diskicon)),
 
         // [JN] ћой корректор контрастности. “.к. палитры разные дл€ трЄх игр,
-        // задаЄтс€ через три разных переменных.
 							
         TXT_NewSeparator("Гамма-коррекци€"), 
-        TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen, TXT_NewCheckBox("Оптимизаци€ игровой палитры",   &lcd_gamma_fix)),
+        TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen, 
+            TXT_NewCheckBox("Оптимизаци€ игровой палитры", &lcd_gamma_fix)),
         
-        // [JN] Ёксперементальна€ возможность отключени€ аппаратного ускорени€
+        // [JN] Ёксперементальные возможности
 							
         TXT_NewSeparator("Совместимость"), 
-        TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen, TXT_NewCheckBox("Отключить аппаратное ускорение",   &force_software_renderer)),
+        TXT_NewCheckBox("Мигание бордюров экрана (эмул€ци€ VGA)", &vga_porch_flash),
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+        TXT_NewCheckBox("Целочисленное масштабирование окна", &integer_scaling),
+#endif
+        TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen, 
+            TXT_NewCheckBox("Отключить аппаратное ускорение", &force_software_renderer)),
 
 #ifdef HAVE_LIBPNG
         TXT_NewCheckBox("Сохран€ть скриншоты в формате PNG", &png_screenshots),
