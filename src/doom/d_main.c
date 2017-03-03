@@ -1101,6 +1101,7 @@ void D_SetGameDescription(void)
                         {
                             DEH_AddStringReplacement(HUSTR_1, MLSTR_6);
                             DEH_AddStringReplacement("WIF", "MLVL06");
+                            DEH_AddStringReplacement("SKY1", "MLSKY1");
                         }
                         // FISTULA.WAD - Фистула
                         else if (M_StrCaseStr(myargv[mlvls], "FISTULA.WAD"))
@@ -1119,12 +1120,14 @@ void D_SetGameDescription(void)
                         {
                             DEH_AddStringReplacement(HUSTR_8, MLSTR_9);
                             DEH_AddStringReplacement("WIFM", "MLVL09");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
                         }
                         // MANOR.WAD - Поместье Гиганта
                         else if (M_StrCaseStr(myargv[mlvls], "MANOR.WAD"))
                         {
                             DEH_AddStringReplacement(HUSTR_1, MLSTR_10);
                             DEH_AddStringReplacement("WIF", "MLVL10");
+                            DEH_AddStringReplacement("SKY1", "MLSKY2");
                         }
                         // MEPHISTO.WAD - Мавзолей Мефистофеля
                         else if (M_StrCaseStr(myargv[mlvls], "MEPHISTO.WAD"))
@@ -1137,12 +1140,14 @@ void D_SetGameDescription(void)
                         {
                             DEH_AddStringReplacement(HUSTR_5, MLSTR_12);
                             DEH_AddStringReplacement("WIFM", "MLVL12");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
                         }
                         // NESSUS.WAD - Несс
                         else if (M_StrCaseStr(myargv[mlvls], "NESSUS.WAD"))
                         {
                             DEH_AddStringReplacement(HUSTR_7, MLSTR_13);
                             DEH_AddStringReplacement("WIF", "MLVL13");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
                         }
                         // PARADOX.WAD - Парадокс
                         else if (M_StrCaseStr(myargv[mlvls], "PARADOX.WAD"))
@@ -1175,18 +1180,21 @@ void D_SetGameDescription(void)
                         {
                             DEH_AddStringReplacement(HUSTR_1, MLSTR_19);
                             DEH_AddStringReplacement("WIF",  "MLVL19");
+                            DEH_AddStringReplacement("SKY1", "MLSKY2");
                         }
                         // VESPERAS.WAD - Вечер
                         else if (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))
                         {
                             DEH_AddStringReplacement(HUSTR_9, MLSTR_20);
                             DEH_AddStringReplacement("WIFF",  "MLVL20");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
                         }
                         // VIRGIL.WAD - Воля Вергилия
                         else if (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))
                         {
                             DEH_AddStringReplacement(HUSTR_3, MLSTR_21);
                             DEH_AddStringReplacement("WIF",  "MLVL21");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
                         }
                     }
                 }
