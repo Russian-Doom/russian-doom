@@ -517,7 +517,7 @@ void ConfigKeyboard(void)
 				   // "Misc."
                    TXT_NewSeparator("Дополнительно"),
 				   // "Always run"
-                   run_control = TXT_NewCheckBox("Всегда бежать", &always_run),
+                   run_control = TXT_NewCheckBox("Режим посто€нного бега", &always_run),
                    TXT_TABLE_EOL,
 				   // "Use native keyboard mapping"
                    TXT_NewInvertedCheckBox("Использовать нативную раскладку",
