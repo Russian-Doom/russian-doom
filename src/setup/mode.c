@@ -50,6 +50,10 @@
 GameMission_t gamemission;
 static const iwad_t **iwads;
 
+// [JN] Default language is Russian.
+// Using "english_setup = 0" will strict selection to Russian.
+int english_setup;
+
 typedef struct
 {
     char *label;
@@ -124,6 +128,9 @@ static char *nickname = NULL;
 
 static void BindMiscVariables(void)
 {
+    // [JN] First things firts. Let's bind language variable in any case.
+    M_BindIntVariable("english_setup",     &english_setup);
+
     if (gamemission == doom)
     {
         M_BindIntVariable("detaillevel",   &detailLevel);
@@ -321,6 +328,20 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
     }
 
     TXT_AddWidget(window, TXT_NewStrut(0, 1));
+    
+    // [JN] Creating horizontal language selection.
+    // Since I'm using Windows-1251 codepage for textscreen, 
+    // it may appears as unreadable sybmols in Git repository.
+    // However, in compiled executable for both Windows and
+    // Linux everything works fine.
+    
+    TXT_AddWidget(window, TXT_NewSeparator("°зык / Language")),
+    TXT_SetTableColumns(window, 2);
+        TXT_AddWidgets(window,
+
+        TXT_NewRadioButton("Русский", &english_setup, 0),
+        TXT_NewRadioButton("English", &english_setup, 1),
+        NULL);
 
     // No IWADs found at all?  Fall back to doom, then.
 

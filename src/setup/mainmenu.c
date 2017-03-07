@@ -47,6 +47,9 @@
 
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/index.html"
 
+// [JN] INTing language variable
+int english_setup;
+
 static const int cheat_sequence[] =
 {
     KEY_UPARROW, KEY_UPARROW, KEY_DOWNARROW, KEY_DOWNARROW,
@@ -237,7 +240,18 @@ void MainMenu(void)
     txt_window_action_t *quit_action;
     txt_window_action_t *warp_action;
 
-    window = TXT_NewWindow("Главное меню");
+    // [JN] Just for the very first test. If english_setup is 1, 
+    // print Setup's main window title in English.
+    // If 0, print in Russian.
+
+    if (english_setup)
+    { 
+        window = TXT_NewWindow("Main Menu");
+    }
+    else
+    { 
+        window = TXT_NewWindow("Главное меню");
+    }
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 

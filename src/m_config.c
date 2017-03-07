@@ -902,6 +902,9 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(show_total_time),           // Показывать общее время
     CONFIG_VARIABLE_INT(unlimited_lost_souls),      // Элементаль боли без ограничения
     
+    // - Язык / Language -
+    CONFIG_VARIABLE_INT(english_setup),             // Language of Setup executable
+    
     //!
     // If non-zero, save screenshots in PNG format.
     //
