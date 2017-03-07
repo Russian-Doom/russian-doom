@@ -12,13 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// ќписание:
-// * ѕеревод строчек setup.exe. 
-// * ќтключен поиск неподдерживаемой игры Strife.
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdlib.h>
 #include <string.h>
@@ -300,7 +294,7 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
     int i;
 
 	// "Select game"
-    window = TXT_NewWindow("Выбор игры");
+    window = TXT_NewWindow("Russian DOOM");
 
 	// "Select a game to configure:\n"
     TXT_AddWidget(window, TXT_NewLabel("Выберите желаемую игру:\n"));
@@ -328,13 +322,13 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
     }
 
     TXT_AddWidget(window, TXT_NewStrut(0, 1));
-    
+
     // [JN] Creating horizontal language selection.
     // Since I'm using Windows-1251 codepage for textscreen, 
     // it may appears as unreadable sybmols in Git repository.
     // However, in compiled executable for both Windows and
     // Linux everything works fine.
-    
+
     TXT_AddWidget(window, TXT_NewSeparator("°зык / Language")),
     TXT_SetTableColumns(window, 2);
         TXT_AddWidgets(window,

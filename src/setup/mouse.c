@@ -12,12 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// ќписание:
-// * ѕеревод строчек Setup.exe
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdlib.h>
 
@@ -34,6 +29,8 @@
 
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/mouse.html"
 
+extern int english_setup;
+
 static int usemouse = 1;
 
 static int mouseSensitivity = 5;
@@ -41,7 +38,7 @@ static float mouse_acceleration = 2.0;
 static int mouse_threshold = 10;
 static int grabmouse = 1;
 
-// [JN] Вертикальное перемещение отключено по умолчанию.
+// [JN] ¬ертикальное перемещение отключено по умолчанию.
 int novert = 1;
 
 static int *all_mouse_buttons[] = {
@@ -92,72 +89,143 @@ static void ConfigExtraButtons(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 {
     txt_window_t *window;
     txt_table_t *buttons_table;
-
-    window = TXT_NewWindow("Дополнительные кнопки мыши");	// "Additional mouse buttons"
-
-    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
-
-    TXT_AddWidgets(window,
-                   buttons_table = TXT_NewTable(2),
-                   NULL);
-
-    TXT_SetColumnWidths(buttons_table, 24, 5);
-
-    AddMouseControl(buttons_table, "Движение назад", &mousebbackward);		// "Move backward"
-    AddMouseControl(buttons_table, "Использовать", &mousebuse);				// "Use"
-    AddMouseControl(buttons_table, "Боком влево", &mousebstrafeleft);		// "Strafe left"
-    AddMouseControl(buttons_table, "Боком вправо", &mousebstraferight);		// "Strafe right"
-
-    if (gamemission == hexen || gamemission == strife)
+    
+    /* English language */
+    if (english_setup)
     {
-        AddMouseControl(buttons_table, "Прыжок", &mousebjump);				// "Jump"
-    }
+        window = TXT_NewWindow("Additional mouse buttons");
 
-    AddMouseControl(buttons_table, "Предыдущее оружие", &mousebprevweapon);	// "Previous weapon"
-    AddMouseControl(buttons_table, "Следующее оружие", &mousebnextweapon);	// "Next weapon"
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+
+        TXT_AddWidgets(window,
+                    buttons_table = TXT_NewTable(2),
+                    NULL);
+
+        TXT_SetColumnWidths(buttons_table, 24, 5);
+
+        AddMouseControl(buttons_table, "Move backward",     &mousebbackward);
+        AddMouseControl(buttons_table, "Use",               &mousebuse);
+        AddMouseControl(buttons_table, "Strafe left",       &mousebstrafeleft);
+        AddMouseControl(buttons_table, "Strafe right",      &mousebstraferight);
+
+        if (gamemission == hexen || gamemission == strife)
+        {
+            AddMouseControl(buttons_table, "Jump", &mousebjump);
+        }
+
+        AddMouseControl(buttons_table, "Previous weapon", &mousebprevweapon);
+        AddMouseControl(buttons_table, "Next weapon",     &mousebnextweapon);
+    }
+    
+    /* –усский €зык */
+    else
+    {
+        window = TXT_NewWindow("Дополнительные кнопки мыши");
+
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+
+        TXT_AddWidgets(window,
+                    buttons_table = TXT_NewTable(2),
+                    NULL);
+
+        TXT_SetColumnWidths(buttons_table, 24, 5);
+
+        AddMouseControl(buttons_table, "Движение назад",    &mousebbackward);
+        AddMouseControl(buttons_table, "Использовать",      &mousebuse);
+        AddMouseControl(buttons_table, "Боком влево",       &mousebstrafeleft);
+        AddMouseControl(buttons_table, "Боком вправо",      &mousebstraferight);
+
+        if (gamemission == hexen || gamemission == strife)
+        {
+            AddMouseControl(buttons_table, "Прыжок",        &mousebjump);
+        }
+
+        AddMouseControl(buttons_table, "Предыдущее оружие", &mousebprevweapon);
+        AddMouseControl(buttons_table, "Следующее оружие",  &mousebnextweapon);
+    }
 }
 
 void ConfigMouse(void)
 {
     txt_window_t *window;
 
-    window = TXT_NewWindow("Настройки мыши"); // "Mouse configuration"
+    /* English language */
+    if (english_setup)
+    {
+        window = TXT_NewWindow("Mouse configuration");
 
-    TXT_SetTableColumns(window, 2);
+        TXT_SetTableColumns(window, 2);
 
-    TXT_SetWindowAction(window, TXT_HORIZ_CENTER, TestConfigAction());
-    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+        TXT_SetWindowAction(window, TXT_HORIZ_CENTER, TestConfigAction());
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
-    TXT_AddWidgets(window,
-                   TXT_NewCheckBox("Разрешить использование мыши", &usemouse),		// "Enable mouse"
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_NewInvertedCheckBox("Разрешить вертикальное перемещение",	// "Allow vertical mouse movement"
-                                           &novert),
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_NewCheckBox("Захват мыши в оконном режиме", 					// "Grab mouse in windowed mode"
-                                   &grabmouse),
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_NewCheckBox("Двойной клик активизирует \"использование\"",	// "Double click acts as \"use\""
-                                   &dclick_use),
-                   TXT_TABLE_OVERFLOW_RIGHT,
+        TXT_AddWidgets(window,
+            TXT_NewCheckBox("Enable mouse", &usemouse),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_NewInvertedCheckBox("Allow vertical mouse movement", &novert),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_NewCheckBox("Grab mouse in windowed mode",           &grabmouse),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_NewCheckBox("Double click acts as \"use\"",          &dclick_use),
+            TXT_TABLE_OVERFLOW_RIGHT,
 
-                   TXT_NewSeparator("Настройка перемещени€"),	// "Mouse motion"
-                   TXT_NewLabel("Скорость"),					// "Speed"
-                   TXT_NewSpinControl(&mouseSensitivity, 1, 256),
-                   TXT_NewLabel("Акселераци€"),					// "Acceleration"
-                   TXT_NewFloatSpinControl(&mouse_acceleration, 1.0, 5.0),
-                   TXT_NewLabel("Порог акселерации"),			// "Acceleration threshold"
-                   TXT_NewSpinControl(&mouse_threshold, 0, 32),
+            TXT_NewSeparator("Mouse motion"),
+            TXT_NewLabel("Speed"),
+            TXT_NewSpinControl(&mouseSensitivity, 1, 256),
+            TXT_NewLabel("Acceleration"),
+            TXT_NewFloatSpinControl(&mouse_acceleration, 1.0, 5.0),
+            TXT_NewLabel("Acceleration threshold"),
+            TXT_NewSpinControl(&mouse_threshold, 0, 32),
 
-                   TXT_NewSeparator("Кнопки"),					// "Buttons"
-                   NULL);
+            TXT_NewSeparator("Buttons"),
+            NULL);
 
-    AddMouseControl(window, "Атака/стрельба", &mousebfire);		// "Fire/Attack"
-    AddMouseControl(window, "Движение вперед", &mousebforward);	// "Move forward"
-    AddMouseControl(window, "Движение боком", &mousebstrafe);	// "Strafe on"
+        AddMouseControl(window, "Fire/Attack",      &mousebfire);
+        AddMouseControl(window, "Move forward",     &mousebforward);
+        AddMouseControl(window, "Strafe on",        &mousebstrafe);
 
-    TXT_AddWidget(window,
-                  TXT_NewButton2("Дополнительно...", ConfigExtraButtons, NULL));	// "More controls..."
+        TXT_AddWidget(window,
+                    TXT_NewButton2("More controls...", ConfigExtraButtons, NULL));
+    }
+    
+    /* –усский €зык */
+    else
+    {
+        window = TXT_NewWindow("Настройки мыши");
+
+        TXT_SetTableColumns(window, 2);
+
+        TXT_SetWindowAction(window, TXT_HORIZ_CENTER, TestConfigAction());
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+
+        TXT_AddWidgets(window,
+            TXT_NewCheckBox("Разрешить использование мыши",                 &usemouse),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_NewInvertedCheckBox("Разрешить вертикальное перемещение",   &novert),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_NewCheckBox("Захват мыши в оконном режиме",                 &grabmouse),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_NewCheckBox("Двойной клик активизирует \"использование\"",  &dclick_use),
+            TXT_TABLE_OVERFLOW_RIGHT,
+
+            TXT_NewSeparator("Настройка перемещени€"),
+            TXT_NewLabel("Скорость"),
+            TXT_NewSpinControl(&mouseSensitivity, 1, 256),
+            TXT_NewLabel("Акселераци€"),
+            TXT_NewFloatSpinControl(&mouse_acceleration, 1.0, 5.0),
+            TXT_NewLabel("Порог акселерации"),
+            TXT_NewSpinControl(&mouse_threshold, 0, 32),
+
+            TXT_NewSeparator("Кнопки"),
+            NULL);
+
+        AddMouseControl(window, "Атака/стрельба",       &mousebfire);
+        AddMouseControl(window, "Движение вперед",      &mousebforward);
+        AddMouseControl(window, "Движение боком",       &mousebstrafe);
+
+        TXT_AddWidget(window,
+                    TXT_NewButton2("Дополнительно...", ConfigExtraButtons, NULL));
+    }
 }
 
 void BindMouseVariables(void)
@@ -169,3 +237,4 @@ void BindMouseVariables(void)
     M_BindIntVariable("mouse_threshold",         &mouse_threshold);
     M_BindFloatVariable("mouse_acceleration",    &mouse_acceleration);
 }
+

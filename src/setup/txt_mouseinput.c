@@ -12,12 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// ќписание:
-// * ѕеревод строчек Setup.exe
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,6 +26,8 @@
 #include "txt_io.h"
 #include "txt_label.h"
 #include "txt_window.h"
+
+extern int english_setup;
 
 #define MOUSE_INPUT_WIDTH 8
 
@@ -61,7 +58,16 @@ static void OpenPromptWindow(txt_mouse_input_t *mouse_input)
     // Silently update when the shift key is held down.
     mouse_input->check_conflicts = !TXT_GetModifierState(TXT_MOD_SHIFT);
 
-    window = TXT_MessageBox(NULL, "Нажмите кнопку мыши...");	// "Press the new mouse button..."
+    /* English language */
+    if (english_setup)
+    {
+        window = TXT_MessageBox(NULL, "Press the new mouse button...");
+    }
+    /* –усский €зык */
+    else
+    {
+        window = TXT_MessageBox(NULL, "Нажмите кнопку мыши...");
+    }
 
     TXT_SetMouseListener(window, MousePressCallback, mouse_input);
 }
@@ -78,20 +84,43 @@ static void TXT_MouseInputSizeCalc(TXT_UNCAST_ARG(mouse_input))
 
 static void GetMouseButtonDescription(int button, char *buf, size_t buf_len)
 {
-    switch (button)
+    /* English language */
+    if (english_setup)
     {
-        case 0:
-            M_StringCopy(buf, "ЛЕВА°", buf_len);	// "LEFT"
-            break;
-        case 1:
-            M_StringCopy(buf, "ПРАВА°", buf_len);	// "RIGHT"
-            break;
-        case 2:
-            M_StringCopy(buf, "СРЕДН°°", buf_len);	// "MID"
-            break;
-        default:
-            M_snprintf(buf, buf_len, "КНОПКА #%i", button + 1);	// "BUTTON #%i"
-            break;
+        switch (button)
+        {
+            case 0:
+                M_StringCopy(buf, "LEFT", buf_len);
+                break;
+            case 1:
+                M_StringCopy(buf, "RIGHT", buf_len);
+                break;
+            case 2:
+                M_StringCopy(buf, "MID", buf_len);
+                break;
+            default:
+                M_snprintf(buf, buf_len, "BUTTON #%i", button + 1);
+                break;
+        }
+    }
+    /* –усский €зык */
+    else
+    {
+        switch (button)
+        {
+            case 0:
+                M_StringCopy(buf, "ЛЕВА°", buf_len);
+                break;
+            case 1:
+                M_StringCopy(buf, "ПРАВА°", buf_len);
+                break;
+            case 2:
+                M_StringCopy(buf, "СРЕДН°°", buf_len);
+                break;
+            default:
+                M_snprintf(buf, buf_len, "КНОПКА #%i", button + 1);
+                break;
+        }
     }
 }
 
@@ -103,7 +132,16 @@ static void TXT_MouseInputDrawer(TXT_UNCAST_ARG(mouse_input))
 
     if (*mouse_input->variable < 0)
     {
-        M_StringCopy(buf, "(-)", sizeof(buf));	// "(none)"
+        /* English language */
+        if (english_setup)
+        {
+            M_StringCopy(buf, "(none)", sizeof(buf));
+        }
+        /* –усский €зык */
+        else
+        {
+            M_StringCopy(buf, "(-)", sizeof(buf));
+        }
     }
     else
     {

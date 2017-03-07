@@ -12,12 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// ќписание:
-// * ѕеревод строчек Setup.exe
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,6 +32,8 @@
 #include "txt_joybinput.h"
 
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/joystick.html"
+
+extern int english_setup;
 
 typedef struct
 {
@@ -419,15 +416,13 @@ static const known_joystick_t known_joysticks[] =
     },
 
     {
-		// "USB Vibration Joystick"
-        "USB джойстик с вибрацией",
+        "USB Vibration Joystick",
         4, 12, 1,
         multilaser_js030_controller,
     },
 
     {
-		// "USB,2-axis 8-button gamepad  "
-        "USB, 2 мини., 8-и кнопочный",
+        "USB,2-axis 8-button gamepad  ",
         2, 8, 0,
         buffalo_classic_controller,
     },
@@ -436,8 +431,7 @@ static const known_joystick_t known_joysticks[] =
     // Controller". Hopefully the number of buttons/axes/hats should be
     // enough to distinguish it from other gamepads.
     {
-		// "Wireless Controller"
-        "Беспроводной геймпад",
+        "Wireless Controller",
         6, 14, 1,
         ps4_ds4_controller,
     },
@@ -549,11 +543,21 @@ static const known_joystick_t *GetJoystickType(int index)
         }
     }
 
-	// "Unknown joystick '%s' with %i axes, %i buttons, %i hats\n"
+    /* English language */
+    if (english_setup)
+    {
+        printf("Unknown joystick '%s' with %i axes, %i buttons, %i hats\n",
+           name, axes, buttons, hats);   
+        printf("Please consider sending in details about your gamepad!\n");
+    }
+
+    /* –усский €зык */
+    else
+    {
     printf("Неизвестный тип джойстика '%s' с %i мини-геймпадами, %i кнопками, %i хатками\n",
            name, axes, buttons, hats);
-	// "Please consider sending in details about your gamepad!\n"
     printf("Просьба прислать информацию о данном джойстике!\n");
+    }
 
     return NULL;
 }
@@ -678,13 +682,31 @@ static void SetJoystickButtonLabel(void)
 
     if (!usejoystick || !strcmp(joystick_guid, ""))
     {
-		// "None set"
-        name = "Не выбрано";
+        /* English language */
+        if (english_setup)
+        {
+            name = "None set";
+        }
+
+        /* –усский €зык */
+        else
+        {
+            name = "Не выбрано";
+        }
     }
     else
     {
-		// "Not found (device disconnected?)"
-        name = "Не обнаружено";
+        /* English language */
+        if (english_setup)
+        {
+        name = "Not found (device disconnected?)";
+        }
+
+        /* –усский €зык */
+        else
+        {
+            name = "Не обнаружено (устройство не подключено?)";
+        }
 
         // Use the device name if the GUID and index match.
         if (joystick_index >= 0 && joystick_index < SDL_NumJoysticks())
@@ -833,14 +855,23 @@ static int CalibrationEventCallback(SDL_Event *event, void *user_data)
 
 static void NoJoystick(void)
 {
-	// "No gamepads or joysticks could be found.\n\n"
-	// "Try configuring your controller from within\n"
-	// "your OS first. Maybe you need to install\n"
-	// "some drivers or otherwise configure it."
+    /* English language */
+    if (english_setup)
+    {
+    TXT_MessageBox(NULL, "No gamepads or joysticks could be found.\n\n"
+                         "Try configuring your controller from within\n"
+                         "your OS first. Maybe you need to install\n"
+                         "some drivers or otherwise configure it.");
+    }
+
+    /* –усский €зык */
+    else
+    {
     TXT_MessageBox(NULL, "Джойстик или геймпад не обнаружен.\n\n"
                          "Убедитесь что устройство установлено\n"
                          "в операционной системе и имеет\n"
-                         "корректно настроенные драйверы.");
+                         "корректно настроенные драйверы.");        
+    }
 
     usejoystick = 0;
     joystick_index = -1;
@@ -865,17 +896,29 @@ static void CalibrateJoystick(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
         return;
     }
 
-	// "Gamepad/Joystick calibration"
-    calibration_window = TXT_NewWindow("Калибровка джойстика/геймпада");
+    /* English language */
+    if (english_setup)
+    {
+        calibration_window = TXT_NewWindow("Gamepad/Joystick calibration");
+        TXT_AddWidgets(calibration_window,
+            TXT_NewStrut(0, 1),
+               TXT_NewLabel("Center the D-pad or joystick,\n"
+                            "and press a button."),
+               TXT_NewStrut(0, 1),
+               NULL);
+    }
 
-    TXT_AddWidgets(calibration_window,
-                   TXT_NewStrut(0, 1),
-				   // "Center the D-pad or joystick,\n"
-				   // "and press a button."
-                   TXT_NewLabel("Отцентрируйте D-pad или джойстик\n"
-                                "и нажмите любую кнопку."),
-                   TXT_NewStrut(0, 1),
-                   NULL);
+    /* –усский €зык */
+    else
+    {
+        calibration_window = TXT_NewWindow("Калибровка джойстика/геймпада");    
+        TXT_AddWidgets(calibration_window,
+               TXT_NewStrut(0, 1),
+               TXT_NewLabel("Отцентрируйте D-pad или джойстик\n"
+                            "и нажмите любую кнопку."),
+               TXT_NewStrut(0, 1),
+               NULL);
+    }
 
     TXT_SetWindowAction(calibration_window, TXT_HORIZ_LEFT, NULL);
     TXT_SetWindowAction(calibration_window, TXT_HORIZ_CENTER, 
@@ -913,94 +956,148 @@ void ConfigJoystick(void)
 {
     txt_window_t *window;
 
-	// "Gamepad/Joystick configuration"
-    window = TXT_NewWindow("Настройки джойстика/геймпада");
-    TXT_SetTableColumns(window, 6);
-    TXT_SetColumnWidths(window, 18, 10, 1, 15, 10, 0);
-    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
-
-    TXT_AddWidgets(window,
-			       // "Controller"
-                   TXT_NewLabel("Устройство"),
-                   joystick_button = TXT_NewButton("zzzz"),
-                   TXT_TABLE_EOL,
-
-				   // "Axes"
-                   TXT_NewSeparator("Руко€ть"),
-				   // "Forward/backward"
-                   TXT_NewLabel("Вперед/назад"),
-                   y_axis_widget = TXT_NewJoystickAxis(&joystick_y_axis,
-                                                       &joystick_y_invert,
-                                                       JOYSTICK_AXIS_VERTICAL),
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_TABLE_EMPTY,
-                   TXT_TABLE_EMPTY,
-
-				   // "Turn left/right"
-                   TXT_NewLabel("Поворот"),
-                   x_axis_widget =
-                        TXT_NewJoystickAxis(&joystick_x_axis,
-                                            &joystick_x_invert,
-                                            JOYSTICK_AXIS_HORIZONTAL),
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_TABLE_EMPTY,
-                   TXT_TABLE_EMPTY,
-
-				   // "Strafe left/right"
-                   TXT_NewLabel("Движение боком"),
-                   TXT_NewJoystickAxis(&joystick_strafe_axis,
-                                       &joystick_strafe_invert,
-                                        JOYSTICK_AXIS_HORIZONTAL),
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_TABLE_EMPTY,
-                   TXT_TABLE_EMPTY,
-
-				   // "Buttons"
-                   TXT_NewSeparator("Кнопки"),
-                   NULL);
-
-	// "Fire/Attack"
-    AddJoystickControl(window, "Атака/стрельба", &joybfire);
-	// "Strafe Left"
-    AddJoystickControl(window, "Боком влево", &joybstrafeleft);
-
-	// "Use"
-    AddJoystickControl(window, "Использовать", &joybuse);
-	// "Strafe Right"
-    AddJoystickControl(window, "Боком вправо", &joybstraferight);
-
-	// "Previous weapon"
-    AddJoystickControl(window, "Предыдущее оружие", &joybprevweapon);
-	// "Strafe"
-    AddJoystickControl(window, "Движение боком", &joybstrafe);
-
-	// Next weapon
-    AddJoystickControl(window, "Следующее оружие", &joybnextweapon);
-
-    // High values of joybspeed are used to activate the "always run mode"
-    // trick in Vanilla Doom.  If this has been enabled, not only is the
-    // joybspeed value meaningless, but the control itself is useless.
-
-    if (joybspeed < 20)
+    /* English language */
+    if (english_setup)
     {
-		// "Speed"
-        AddJoystickControl(window, "Скорость", &joybspeed);
+        window = TXT_NewWindow("Gamepad/Joystick configuration");
+        TXT_SetTableColumns(window, 6);
+        TXT_SetColumnWidths(window, 18, 10, 1, 15, 10, 0);
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+
+        TXT_AddWidgets(window,
+            TXT_NewLabel("Controller"),
+            joystick_button = TXT_NewButton("zzzz"),
+            TXT_TABLE_EOL,
+
+            TXT_NewSeparator("Axes"),
+
+            TXT_NewLabel("Forward/backward"),
+            y_axis_widget = TXT_NewJoystickAxis(&joystick_y_axis,
+                                                &joystick_y_invert,
+                                                JOYSTICK_AXIS_VERTICAL),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_EMPTY,
+            TXT_TABLE_EMPTY,
+
+            TXT_NewLabel("Turn left/right"),
+            x_axis_widget =
+                TXT_NewJoystickAxis(&joystick_x_axis,
+                                    &joystick_x_invert,
+                                    JOYSTICK_AXIS_HORIZONTAL),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_EMPTY,
+            TXT_TABLE_EMPTY,
+
+            TXT_NewLabel("Strafe left/right"),
+            TXT_NewJoystickAxis(&joystick_strafe_axis,
+                                &joystick_strafe_invert,
+                                JOYSTICK_AXIS_HORIZONTAL),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_EMPTY,
+            TXT_TABLE_EMPTY,
+
+            TXT_NewSeparator("Buttons"),
+            NULL);
+
+        AddJoystickControl(window, "Fire/Attack",     &joybfire);
+        AddJoystickControl(window, "Strafe Left",     &joybstrafeleft);
+        AddJoystickControl(window, "Use",             &joybuse);
+        AddJoystickControl(window, "Strafe Right",    &joybstraferight);
+        AddJoystickControl(window, "Previous weapon", &joybprevweapon);
+        AddJoystickControl(window, "Strafe",          &joybstrafe);
+        AddJoystickControl(window, "Next weapon",     &joybnextweapon);
+
+        // High values of joybspeed are used to activate the "always run mode"
+        // trick in Vanilla Doom.  If this has been enabled, not only is the
+        // joybspeed value meaningless, but the control itself is useless.
+
+        if (joybspeed < 20)
+        {
+            AddJoystickControl(window, "Speed", &joybspeed);
+        }
+
+        if (gamemission == hexen || gamemission == strife)
+        {
+            AddJoystickControl(window, "Jump", &joybjump);
+        }
+
+        AddJoystickControl(window, "Activate menu",  &joybmenu);
+        AddJoystickControl(window, "Toggle Automap", &joybautomap);
     }
 
-    if (gamemission == hexen || gamemission == strife)
+    /* –усский €зык */
+    else
     {
-		// "Jump"
-        AddJoystickControl(window, "Прыжок", &joybjump);
+        window = TXT_NewWindow("Настройки джойстика/геймпада");
+        TXT_SetTableColumns(window, 6);
+        TXT_SetColumnWidths(window, 18, 10, 1, 15, 10, 0);
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+
+        TXT_AddWidgets(window,
+            TXT_NewLabel("Устройство"),
+            joystick_button = TXT_NewButton("zzzz"),
+            TXT_TABLE_EOL,
+
+            TXT_NewSeparator("Руко€ть"),
+            TXT_NewLabel("Вперед/назад"),
+            y_axis_widget = TXT_NewJoystickAxis(&joystick_y_axis,
+                                                &joystick_y_invert,
+                                                JOYSTICK_AXIS_VERTICAL),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_EMPTY,
+            TXT_TABLE_EMPTY,
+
+            TXT_NewLabel("Поворот"),
+            x_axis_widget =
+                TXT_NewJoystickAxis(&joystick_x_axis,
+                                    &joystick_x_invert,
+                                    JOYSTICK_AXIS_HORIZONTAL),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_EMPTY,
+            TXT_TABLE_EMPTY,
+
+            TXT_NewLabel("Движение боком"),
+            TXT_NewJoystickAxis(&joystick_strafe_axis,
+                                &joystick_strafe_invert,
+                                JOYSTICK_AXIS_HORIZONTAL),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_TABLE_EMPTY,
+            TXT_TABLE_EMPTY,
+
+            TXT_NewSeparator("Кнопки"),
+            NULL);
+
+        AddJoystickControl(window, "Атака/стрельба",    &joybfire);
+        AddJoystickControl(window, "Боком влево",       &joybstrafeleft);
+        AddJoystickControl(window, "Использовать",      &joybuse);
+        AddJoystickControl(window, "Боком вправо",      &joybstraferight);
+        AddJoystickControl(window, "Предыдущее оружие", &joybprevweapon);
+        AddJoystickControl(window, "Движение боком",    &joybstrafe);
+        AddJoystickControl(window, "Следующее оружие",  &joybnextweapon);
+
+        // High values of joybspeed are used to activate the "always run mode"
+        // trick in Vanilla Doom.  If this has been enabled, not only is the
+        // joybspeed value meaningless, but the control itself is useless.
+
+        if (joybspeed < 20)
+        {
+            AddJoystickControl(window, "Скорость", &joybspeed);
+        }
+
+        if (gamemission == hexen || gamemission == strife)
+        {
+            AddJoystickControl(window, "Прыжок", &joybjump);
+        }
+
+        AddJoystickControl(window, "Активировать меню ", &joybmenu);
+        AddJoystickControl(window, "Открыть карту",      &joybautomap);
     }
-
-	// "Activate menu"
-    AddJoystickControl(window, "Активировать меню ", &joybmenu);
-
-	// "Toggle Automap"
-    AddJoystickControl(window, "Открыть карту", &joybautomap);
 
     TXT_SignalConnect(joystick_button, "pressed", CalibrateJoystick, NULL);
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, TestConfigAction());

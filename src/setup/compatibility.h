@@ -12,12 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * Добавлены новые конфигурационные переменные.
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #ifndef SETUP_COMPATIBILITY_H
 #define SETUP_COMPATIBILITY_H
@@ -46,6 +41,8 @@ extern int play_exit_sfx;           // Проигрывать звук при в
 extern int secret_notification;     // Уведомление об обнаружении секрета
 extern int show_total_time;         // Показывать общее время
 extern int unlimited_lost_souls;    // Элементаль боли без ограничения
+// - Язык / Language -
+extern int english_setup;           // Language of Setup executable
 
 
 #endif /* #ifndef SETUP_COMPATIBILITY_H */

@@ -37,4 +37,3 @@ txt_joystick_input_t *TXT_NewJoystickInput(int *variable);
 
 #endif /* #ifndef TXT_JOYB_INPUT_H */
 
-

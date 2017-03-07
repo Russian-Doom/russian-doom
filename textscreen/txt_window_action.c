@@ -12,12 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// –усский перевод (C) 2016-2017 ёлиан Ќечаевский
-//
-// ќписание:
-// * ѕеревод строчек Setup.exe
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdlib.h>
 #include <string.h>
@@ -30,6 +25,8 @@
 #include "txt_io.h"
 #include "txt_main.h"
 #include "txt_window.h"
+
+extern int english_setup;
 
 static void TXT_WindowActionSizeCalc(TXT_UNCAST_ARG(action))
 {
@@ -145,7 +142,17 @@ txt_window_action_t *TXT_NewWindowEscapeAction(txt_window_t *window)
 {
     txt_window_action_t *action;
 
-    action = TXT_NewWindowAction(KEY_ESCAPE, "Назад");	// "Close"
+    /* English language */
+    if (english_setup)
+    {
+        action = TXT_NewWindowAction(KEY_ESCAPE, "Close");
+    }
+    /* –усский €зык */
+    else
+    {
+        action = TXT_NewWindowAction(KEY_ESCAPE, "Назад");
+    }
+
     TXT_SignalConnect(action, "pressed", WindowCloseCallback, window);
 
     return action;
@@ -157,7 +164,17 @@ txt_window_action_t *TXT_NewWindowAbortAction(txt_window_t *window)
 {
     txt_window_action_t *action;
 
-    action = TXT_NewWindowAction(KEY_ESCAPE, "Отмена");	// "Abort"
+    /* English language */
+    if (english_setup)
+    {
+        action = TXT_NewWindowAction(KEY_ESCAPE, "Abort");
+    }
+    /* –усский €зык */
+    else
+    {
+        action = TXT_NewWindowAction(KEY_ESCAPE, "Отмена");
+    }
+
     TXT_SignalConnect(action, "pressed", WindowCloseCallback, window);
 
     return action;
@@ -167,7 +184,16 @@ txt_window_action_t *TXT_NewWindowSelectAction(txt_window_t *window)
 {
     txt_window_action_t *action;
 
-    action = TXT_NewWindowAction(KEY_ENTER, "Выбор");	// "Select"
+    /* English language */
+    if (english_setup)
+    {
+        action = TXT_NewWindowAction(KEY_ENTER, "Select");
+    }
+    /* –усский €зык */
+    else
+    {
+        action = TXT_NewWindowAction(KEY_ENTER, "Выбор");
+    }
     TXT_SignalConnect(action, "pressed", WindowSelectCallback, window);
 
     return action;

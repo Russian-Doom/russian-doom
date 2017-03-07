@@ -12,14 +12,9 @@
 // GNU General Public License for more details.
 //
 
-// Code for invoking Doom
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// ќписание:
-// * ѕеревод строчек Setup.exe
-// =--------------------------------------------------------------=
+// Code for invoking Doom
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -50,6 +45,8 @@
 #include "m_argv.h"
 #include "m_config.h"
 #include "m_misc.h"
+
+extern int english_setup;
 
 struct execute_context_s
 {
@@ -129,11 +126,21 @@ execute_context_t *NewExecuteContext(void)
 
     if (result->stream == NULL)
     {
-		// "Error opening response file\n"
-        fprintf(stderr, "Ошибка открыти€ ответного файла\n");
+        /* English language */
+        if (english_setup)
+        {
+            fprintf(stderr, "Error opening response file\n");
+        }
+
+        /* –усский €зык */
+        else
+        {
+            fprintf(stderr, "ќшибка открыти€ ответного файла\n");
+        }
+
         exit(-1);
     }
-    
+
     return result;
 }
 
@@ -366,12 +373,22 @@ static void TestCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(data))
     char *extra_cfg;
     txt_window_t *testwindow;
 
-	// "Starting Doom"
-	// "Starting Doom to test the\n"
-	// "settings.  Please wait."
+    /* English language */
+    if (english_setup)
+    {
+    testwindow = TXT_MessageBox("Starting Doom",
+                                "Starting Doom to test the\n"
+                                "settings.  Please wait.");
+    }
+
+    /* –усский €зык */
+    else
+    {
     testwindow = TXT_MessageBox("Запуск Doom",
                                 "Запуск игры дл€ проверки управлени€.\n"
                                 "Пожалуйста, подождите.");
+    }
+
     TXT_DrawDesktop();
 
     // Save temporary configuration files with the current configuration
@@ -402,9 +419,19 @@ static void TestCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(data))
 txt_window_action_t *TestConfigAction(void)
 {
     txt_window_action_t *test_action;
-    
-	// "Test"
-    test_action = TXT_NewWindowAction('t', "Проверка");
+
+    /* English language */
+    if (english_setup)
+    {
+        test_action = TXT_NewWindowAction('t', "Test");
+    }
+
+    /* –усский €зык */
+    else
+    {
+        test_action = TXT_NewWindowAction('t', "Проверка");
+    }
+
     TXT_SignalConnect(test_action, "pressed", TestCallback, NULL);
 
     return test_action;

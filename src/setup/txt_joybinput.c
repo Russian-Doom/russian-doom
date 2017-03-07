@@ -12,12 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// ќписание:
-// * ѕеревод строчек Setup.exe
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +33,8 @@
 #include "txt_label.h"
 #include "txt_sdl.h"
 #include "txt_window.h"
+
+extern int english_setup;
 
 #define JOYSTICK_INPUT_WIDTH 10
 
@@ -92,7 +89,16 @@ static int VirtualButtonForVariable(int *variable)
         }
     }
 
-    I_Error("Не обнаружена виртуальна€ кнопка");	// "Couldn't find virtual button"
+    /* English language */
+    if (english_setup)
+    {
+        I_Error("Couldn't find virtual button");
+    }
+    /* –усский €зык */
+    else
+    {
+        I_Error("Ќе обнаружена виртуальна€ кнопка");
+    }
     return -1;
 }
 
@@ -197,7 +203,16 @@ static void PromptWindowClosed(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(joystick))
 
 static void OpenErrorWindow(void)
 {
-    TXT_MessageBox(NULL, "Сперва необходимо выбрать устройство!");	// "Please configure a controller first!"
+    /* English language */
+    if (english_setup)
+    {
+        TXT_MessageBox(NULL, "Please configure a controller first!");
+    }
+    /* –усский €зык */
+    else
+    {
+        TXT_MessageBox(NULL, "Сперва необходимо выбрать устройство!");
+    }
 }
 
 static void OpenPromptWindow(txt_joystick_input_t *joystick_input)
@@ -226,7 +241,16 @@ static void OpenPromptWindow(txt_joystick_input_t *joystick_input)
 
     // Open the prompt window
 
-    window = TXT_MessageBox(NULL, "Нажмите кнопку...");	// "Press the new button on the controller..."
+    /* English language */
+    if (english_setup)
+    {
+        window = TXT_MessageBox(NULL, "Press the new button on the controller...");
+    }
+    /* –усский €зык */
+    else
+    {
+        window = TXT_MessageBox(NULL, "Нажмите кнопку...");
+    }
 
     TXT_SDL_SetEventCallback(EventCallback, joystick_input);
     TXT_SignalConnect(window, "closed", PromptWindowClosed, joystick);
@@ -248,8 +272,18 @@ static void TXT_JoystickInputSizeCalc(TXT_UNCAST_ARG(joystick_input))
 static void GetJoystickButtonDescription(int vbutton, char *buf,
                                          size_t buf_len)
 {
-    M_snprintf(buf, buf_len, "КНОПКА #%i",	// "BUTTON #%i"
-               PhysicalForVirtualButton(vbutton) + 1);
+    /* English language */
+    if (english_setup)
+    {
+        M_snprintf(buf, buf_len, "BUTTON #%i",
+                   PhysicalForVirtualButton(vbutton) + 1);
+    }
+    /* –усский €зык */
+    else
+    {
+        M_snprintf(buf, buf_len, "КНОПКА #%i",
+                   PhysicalForVirtualButton(vbutton) + 1);
+    }
 }
 
 static void TXT_JoystickInputDrawer(TXT_UNCAST_ARG(joystick_input))
@@ -260,7 +294,16 @@ static void TXT_JoystickInputDrawer(TXT_UNCAST_ARG(joystick_input))
 
     if (*joystick_input->variable < 0)
     {
-        M_StringCopy(buf, "(-)", sizeof(buf));	// "(none)"
+        /* English language */
+        if (english_setup)
+        {
+            M_StringCopy(buf, "(none)", sizeof(buf));
+        }
+        /* –усский €зык */
+        else
+        {
+            M_StringCopy(buf, "(-)", sizeof(buf));
+        }
     }
     else
     {

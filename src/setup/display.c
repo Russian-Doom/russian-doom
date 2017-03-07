@@ -12,14 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// ќписание:
-// * ѕеревод строчек Setup.exe
-// * ƒобавлен пункт включени€/отключени€ значка дискеты (Doom).
-// * ƒобавлен пункт оптимизации игровой палитры.
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdlib.h>
 #include <string.h>
@@ -38,6 +31,8 @@
 #include "config.h"
 
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/display.html"
+
+extern int english_setup;
 
 extern void RestartTextscreen(void);
 
@@ -90,8 +85,7 @@ int show_endoom = 1;
 int show_diskicon = 1;
 int png_screenshots = 0;
 
-// [JN]  орректор контрастности.
-
+// [JN]  орректор контрастности
 int lcd_gamma_fix = 1;
 
 static int system_video_env_set;
@@ -170,8 +164,17 @@ static void GenerateSizesTable(TXT_UNCAST_ARG(widget),
     TXT_ClearTable(sizes_table);
     TXT_SetColumnWidths(sizes_table, 14, 14, 14);
 
-	// "Window size"
-    TXT_AddWidget(sizes_table, TXT_NewSeparator("Размер окна"));
+    /* English language */
+    if (english_setup)
+    {
+        TXT_AddWidget(sizes_table, TXT_NewSeparator("Window size"));
+    }
+
+    /* –усский €зык */
+    else
+    {
+        TXT_AddWidget(sizes_table, TXT_NewSeparator("Размер окна"));
+    }
 
     have_size = false;
 
@@ -201,43 +204,83 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
     txt_window_t *window;
     txt_checkbox_t *ar_checkbox;
 
-    window = TXT_NewWindow("Дополнительные настройки");
+    /* English language */
+    if (english_setup)
+    {
+        window = TXT_NewWindow("Advanced display options");
 
-    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
-    TXT_SetColumnWidths(window, 40);
+        TXT_SetColumnWidths(window, 40);
 
-    TXT_AddWidgets(window,
-        ar_checkbox = TXT_NewCheckBox("Фиксированное соотношение сторон", &aspect_ratio_correct),
-        TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
-            TXT_NewCheckBox("Графическа€ загрузка", &graphical_startup)),
-        TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
-            TXT_NewCheckBox("Показывать экран ENDOOM при выходе", &show_endoom)),
-        TXT_If(gamemission == doom,
-            TXT_NewCheckBox("Показывать значок дискеты", &show_diskicon)),
+        TXT_AddWidgets(window,
+            ar_checkbox = TXT_NewCheckBox("Fix aspect ratio", &aspect_ratio_correct),
+            TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
+                TXT_NewCheckBox("Graphical startup", &graphical_startup)),
+            TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
+                TXT_NewCheckBox("Show ENDOOM screen on exit", &show_endoom)),
+            TXT_If(gamemission == doom,
+                TXT_NewCheckBox("Show disk icon", &show_diskicon)),
 
-        // [JN] ћой корректор контрастности. “.к. палитры разные дл€ трЄх игр,
-							
+        // [JN] ћой корректор контрастности
+
+        TXT_NewSeparator("Gamma-correction"), 
+        TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen, 
+            TXT_NewCheckBox("Optimized screen palette", &lcd_gamma_fix)),
+
+        // [JN] Ёкспериментальные функции
+
+        TXT_NewSeparator("Experimental"),
+        TXT_NewCheckBox("Texture smoothing", &smoothing),
+        TXT_NewCheckBox("Flash borders (VGA porch emulation)", &vga_porch_flash),
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+        TXT_NewCheckBox("Integer scaling", &integer_scaling),
+#endif
+
+#ifdef HAVE_LIBPNG
+        TXT_NewCheckBox("Save screenshots in PNG format", &png_screenshots),
+#endif
+        NULL);
+    }
+
+    /* –усский €зык */
+    else
+    {
+        window = TXT_NewWindow("Дополнительные настройки");
+
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+
+        TXT_SetColumnWidths(window, 40);
+
+        TXT_AddWidgets(window,
+            ar_checkbox = TXT_NewCheckBox("Фиксированное соотношение сторон", &aspect_ratio_correct),
+            TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
+                TXT_NewCheckBox("Графическа€ загрузка", &graphical_startup)),
+            TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
+                TXT_NewCheckBox("Показывать экран ENDOOM при выходе", &show_endoom)),
+            TXT_If(gamemission == doom,
+                TXT_NewCheckBox("Показывать значок дискеты", &show_diskicon)),
+
+        // [JN] ћой корректор контрастности
+
         TXT_NewSeparator("Гамма-коррекци€"), 
         TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen, 
             TXT_NewCheckBox("Оптимизаци€ игровой палитры", &lcd_gamma_fix)),
-        
+
         // [JN] Ёкспериментальные функции
-							
-        TXT_NewSeparator("Юкспериментальные функции"), 
-        TXT_NewCheckBox("Сглаживание текстур", &smoothing),
+
+        TXT_NewSeparator("Юкспериментальные функции"),
+        TXT_NewCheckBox("—глаживание текстур", &smoothing),
         TXT_NewCheckBox("Мигать бордюрами экрана (эмул€ци€ VGA)", &vga_porch_flash),
 #if SDL_VERSION_ATLEAST(2, 0, 5)
         TXT_NewCheckBox("Целочисленное масштабирование окна", &integer_scaling),
 #endif
-        TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen, 
-            TXT_NewCheckBox("Отключить аппаратное ускорение", &force_software_renderer)),
 
 #ifdef HAVE_LIBPNG
         TXT_NewCheckBox("Сохран€ть скриншоты в формате PNG", &png_screenshots),
 #endif
         NULL);
-        
+    }
 
     TXT_SignalConnect(ar_checkbox, "changed", GenerateSizesTable, sizes_table);
 }
@@ -249,16 +292,42 @@ void ConfigDisplay(void)
     txt_window_action_t *advanced_button;
 
     // Open the window
-	
-    window = TXT_NewWindow("Настройки экрана");
+
+    /* English language */
+    if (english_setup)
+    {
+        window = TXT_NewWindow("Display Configuration");
+    }
+
+    /* –усский €зык */
+    else
+    {
+        window = TXT_NewWindow("Настройки экрана");
+    }
+
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
     // Build window:
+
+    /* English language */
+    if (english_setup)
+    {
+    TXT_AddWidgets(window,
+        TXT_NewCheckBox("Full screen", &fullscreen),
+        TXT_NewConditional(&fullscreen, 0,
+            sizes_table = TXT_NewTable(3)),
+        NULL);
+    }
+
+    /* –усский €зык */
+    else
+    {
     TXT_AddWidgets(window,
         TXT_NewCheckBox("Полноэкранный режим", &fullscreen),
         TXT_NewConditional(&fullscreen, 0,
             sizes_table = TXT_NewTable(3)),
         NULL);
+    }
 
     TXT_SetColumnWidths(window, 42);    
     
@@ -274,9 +343,19 @@ void ConfigDisplay(void)
     // Button to open "advanced" window.
     // Need to pass a pointer to the window sizes table, as some of the options
     // in there trigger a rebuild of it.
-	
-	// "Advanced"
-    advanced_button = TXT_NewWindowAction('a', "Дополнительно");
+
+    /* English language */
+    if (english_setup)
+    {
+        advanced_button = TXT_NewWindowAction('a', "Advanced");
+    }
+
+    /* –усский €зык */
+    else
+    {
+        advanced_button = TXT_NewWindowAction('a', "Дополнительно");
+    }
+
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, advanced_button);
     TXT_SignalConnect(advanced_button, "pressed",
                       AdvancedDisplayConfig, sizes_table);
@@ -303,24 +382,24 @@ void BindDisplayVariables(void)
     if (gamemission == doom || gamemission == heretic
      || gamemission == strife)
     {
-        M_BindIntVariable("show_endoom",               &show_endoom);
+        M_BindIntVariable("show_endoom",           &show_endoom);
     }
 
     if (gamemission == doom || gamemission == strife)
     {
-        M_BindIntVariable("show_diskicon",             &show_diskicon);
-    }
-	
-	// [JN]  орректор контрастности.
-	
-	if (gamemission == doom || gamemission == heretic || gamemission == hexen)
-    {
-        M_BindIntVariable("lcd_gamma_fix",             &lcd_gamma_fix);
+        M_BindIntVariable("show_diskicon",         &show_diskicon);
     }
 
-	
+	// [JN]  орректор контрастности
+
+	if (gamemission == doom || gamemission == heretic || gamemission == hexen)
+    {
+        M_BindIntVariable("lcd_gamma_fix",         &lcd_gamma_fix);
+    }
+
     if (gamemission == heretic || gamemission == hexen || gamemission == strife)
     {
-        M_BindIntVariable("graphical_startup",        &graphical_startup);
+        M_BindIntVariable("graphical_startup",     &graphical_startup);
     }
 }
+

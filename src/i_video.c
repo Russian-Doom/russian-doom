@@ -16,12 +16,7 @@
 //	DOOM graphics stuff for SDL.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * В заголовке окна оставлено только название игры.
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include "SDL.h"
 #include "SDL_opengl.h"
@@ -640,11 +635,11 @@ static void CreateUpscaledTexture(boolean force)
 
     if (smoothing)
     {
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
     }
     else
     {
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     }
 
     texture_upscaled = SDL_CreateTexture(renderer,
@@ -1239,11 +1234,11 @@ static void SetVideoMode(void)
 
     if (smoothing)
     {
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
     }
     else
     {
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
     }
 
     // Create the intermediate texture that the RGBA surface gets loaded into.
@@ -1400,3 +1395,4 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("usegamma",                  &usegamma);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
 }
+

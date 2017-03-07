@@ -17,13 +17,7 @@
 //    Configuration file interface.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * Добавлены новые конфигурационные переменные.
-// =--------------------------------------------------------------=
-
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -906,7 +900,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(secret_notification),       // Уведомление об обнаружении секрета
     CONFIG_VARIABLE_INT(show_total_time),           // Показывать общее время
     CONFIG_VARIABLE_INT(unlimited_lost_souls),      // Элементаль боли без ограничения
-    
     // - Язык / Language -
     CONFIG_VARIABLE_INT(english_setup),             // Language of Setup executable
     

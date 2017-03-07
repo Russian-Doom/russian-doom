@@ -87,4 +87,3 @@ void TXT_ConfigureJoystickAxis(txt_joystick_axis_t *axis, int using_button,
 
 #endif /* #ifndef TXT_JOY_AXIS_H */
 
-

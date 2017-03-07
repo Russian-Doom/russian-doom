@@ -12,12 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// ќписание:
-// * ѕеревод строчек Setup.exe
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdlib.h>
 #include <string.h>
@@ -30,6 +25,8 @@
 #include "txt_io.h"
 #include "txt_label.h"
 #include "txt_window.h"
+
+extern int english_setup;
 
 #define KEY_INPUT_WIDTH 8
 
@@ -76,7 +73,16 @@ static void OpenPromptWindow(txt_key_input_t *key_input)
 
     key_input->check_conflicts = !TXT_GetModifierState(TXT_MOD_SHIFT);
 
-    window = TXT_MessageBox(NULL, "Нажмите клавишу...");	// "Press the new key..."
+    /* English language */
+    if (english_setup)
+    {
+        window = TXT_MessageBox(NULL, "Press the new key...");
+    }
+    /* –усский €зык */
+    else
+    {
+        window = TXT_MessageBox(NULL, "Нажмите клавишу...");
+    }
 
     TXT_SetKeyListener(window, KeyPressCallback, key_input);
 
@@ -111,7 +117,16 @@ static void TXT_KeyInputDrawer(TXT_UNCAST_ARG(key_input))
 
     if (*key_input->variable == 0)
     {
-        M_StringCopy(buf, "(-)", sizeof(buf));	// "(none)"
+        /* English language */
+        if (english_setup)
+        {
+            M_StringCopy(buf, "(none)", sizeof(buf));
+        }
+        /* –усский €зык */
+        else
+        {
+            M_StringCopy(buf, "(-)", sizeof(buf));
+        }
     }
     else
     {

@@ -12,12 +12,7 @@
 // GNU General Public License for more details.
 //
 
-// =--------------------------------------------------------------=
-// –усский перевод (C) 2016-2017 ёлиан Ќечаевский
-//
-// ќписание:
-// * ѕеревод строчек Setup.exe
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +29,8 @@
 
 #define HELP_KEY KEY_F1
 #define MAXWINDOWS 128
+
+extern int english_setup;
 
 static char *desktop_title;
 static txt_window_t *all_windows[MAXWINDOWS];
@@ -206,25 +203,52 @@ static void DrawHelpIndicator(void)
 
     TXT_GetMousePosition(&x, &y);
 
-    if (y == 0 && x >= TXT_SCREEN_W - 19)
+    /* English language */
+    if (english_setup)
     {
-        fgcolor = TXT_COLOR_GREY;
-        TXT_BGColor(TXT_COLOR_BLACK, 0);
+        if (y == 0 && x >= TXT_SCREEN_W - 9)
+        {
+            fgcolor = TXT_COLOR_GREY;
+            TXT_BGColor(TXT_COLOR_BLACK, 0);
+        }
+        else
+        {
+            fgcolor = TXT_COLOR_BLACK;
+            TXT_BGColor(TXT_COLOR_GREY, 0);
+        }
+
+        TXT_GotoXY(TXT_SCREEN_W - 9, 0);
+
+        TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
+        TXT_DrawString(" ");
+        TXT_DrawString(keybuf);
+
+        TXT_FGColor(fgcolor);
+        TXT_DrawString("=Help ");
     }
+    /* –усский €зык */
     else
     {
-        fgcolor = TXT_COLOR_BLACK;
-        TXT_BGColor(TXT_COLOR_GREY, 0);
+        if (y == 0 && x >= TXT_SCREEN_W - 19)
+        {
+            fgcolor = TXT_COLOR_GREY;
+            TXT_BGColor(TXT_COLOR_BLACK, 0);
+        }
+        else
+        {
+            fgcolor = TXT_COLOR_BLACK;
+            TXT_BGColor(TXT_COLOR_GREY, 0);
+        }
+
+        TXT_GotoXY(TXT_SCREEN_W - 19, 0);
+
+        TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
+        TXT_DrawString(" ");
+        TXT_DrawString(keybuf);
+
+        TXT_FGColor(fgcolor);
+        TXT_DrawString("=Онлайн справка ");	// "=Help "
     }
-
-    TXT_GotoXY(TXT_SCREEN_W - 19, 0);
-
-    TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
-    TXT_DrawString(" ");
-    TXT_DrawString(keybuf);
-
-    TXT_FGColor(fgcolor);
-    TXT_DrawString("=Онлайн справка ");	// "=Help "
 }
 
 void TXT_SetDesktopTitle(char *title)
@@ -277,9 +301,22 @@ static void DesktopInputEvent(int c)
 
             // Clicking the top-right of the screen is equivalent
             // to pressing the help key.
-            if (y == 0 && x >= TXT_SCREEN_W - 19)
+            
+            /* English language */
+            if (english_setup)
             {
-                DesktopInputEvent(HELP_KEY);
+                if (y == 0 && x >= TXT_SCREEN_W - 9)
+                {
+                    DesktopInputEvent(HELP_KEY);
+                }
+            }
+            /* –усский €зык */
+            else
+            {
+                if (y == 0 && x >= TXT_SCREEN_W - 19)
+                {
+                    DesktopInputEvent(HELP_KEY);
+                }
             }
             break;
 
