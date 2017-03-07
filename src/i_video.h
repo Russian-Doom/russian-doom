@@ -90,6 +90,7 @@ extern int screen_width;
 extern int screen_height;
 extern int fullscreen;
 extern int aspect_ratio_correct;
+extern int smoothing;
 extern int integer_scaling;
 extern int vga_porch_flash;
 extern int force_software_renderer;

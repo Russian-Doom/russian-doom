@@ -130,6 +130,10 @@ int fullscreen = true;
 
 int aspect_ratio_correct = true;
 
+// Эксперементальное сглаживание текстур
+
+int smoothing = false;
+
 // VGA Porch palette change emulation
 
 int vga_porch_flash = false;
@@ -634,7 +638,14 @@ static void CreateUpscaledTexture(boolean force)
     // which looks much softer and smoother than "nearest" but does a better
     // job at downscaling from the upscaled texture to screen.
 
+    if (smoothing)
+    {
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
+    }
+    else
+    {
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+    }
 
     texture_upscaled = SDL_CreateTexture(renderer,
                                 pixel_format,
@@ -1226,7 +1237,14 @@ static void SetVideoMode(void)
     // the upscaled texture to "nearest", which is gritty and pixelated and
     // resembles software scaling pretty well.
 
+    if (smoothing)
+    {
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
+    }
+    else
+    {
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+    }
 
     // Create the intermediate texture that the RGBA surface gets loaded into.
     // The SDL_TEXTUREACCESS_STREAMING flag means that this texture's content
@@ -1367,8 +1385,9 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("fullscreen",                &fullscreen);
     M_BindIntVariable("video_display",             &video_display);
     M_BindIntVariable("aspect_ratio_correct",      &aspect_ratio_correct);
-    M_BindIntVariable("integer_scaling",           &integer_scaling);
+    M_BindIntVariable("smoothing",                 &smoothing);
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
+    M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("startup_delay",             &startup_delay);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);
     M_BindIntVariable("fullscreen_height",         &fullscreen_height);

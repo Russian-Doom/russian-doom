@@ -728,10 +728,9 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(aspect_ratio_correct),
 
     //!
-    // If non-zero, forces integer scales for resolution-independent rendering.
-    //
+    // Эксперементальное сглаживание текстур.
 
-    CONFIG_VARIABLE_INT(integer_scaling),
+    CONFIG_VARIABLE_INT(smoothing),
 
     //!
     // If non-zero, any pillar/letter boxes drawn around the game area
@@ -739,6 +738,12 @@ static default_t extra_defaults_list[] =
     // "porch"
 
     CONFIG_VARIABLE_INT(vga_porch_flash),
+
+    //!
+    // If non-zero, forces integer scales for resolution-independent rendering.
+    //
+
+    CONFIG_VARIABLE_INT(integer_scaling),
 
     //!
     // Number of milliseconds to wait on startup after the video mode
