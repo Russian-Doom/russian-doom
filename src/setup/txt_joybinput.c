@@ -34,8 +34,6 @@
 #include "txt_sdl.h"
 #include "txt_window.h"
 
-extern int english_setup;
-
 #define JOYSTICK_INPUT_WIDTH 10
 
 extern int joystick_physical_buttons[NUM_VIRTUAL_BUTTONS];
@@ -89,16 +87,7 @@ static int VirtualButtonForVariable(int *variable)
         }
     }
 
-    /* English language */
-    if (english_setup)
-    {
-        I_Error("Couldn't find virtual button");
-    }
-    /* Русский язык */
-    else
-    {
-        I_Error("Не обнаружена виртуальная кнопка");
-    }
+    I_Error("Не обнаружена виртуальная кнопка");
     return -1;
 }
 
@@ -203,16 +192,7 @@ static void PromptWindowClosed(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(joystick))
 
 static void OpenErrorWindow(void)
 {
-    /* English language */
-    if (english_setup)
-    {
-        TXT_MessageBox(NULL, "Please configure a controller first!");
-    }
-    /* Русский язык */
-    else
-    {
-        TXT_MessageBox(NULL, "‘перва необходимо выбрать устройство!");
-    }
+    TXT_MessageBox(NULL, "‘перва необходимо выбрать устройство!");
 }
 
 static void OpenPromptWindow(txt_joystick_input_t *joystick_input)
@@ -241,16 +221,7 @@ static void OpenPromptWindow(txt_joystick_input_t *joystick_input)
 
     // Open the prompt window
 
-    /* English language */
-    if (english_setup)
-    {
-        window = TXT_MessageBox(NULL, "Press the new button on the controller...");
-    }
-    /* Русский язык */
-    else
-    {
-        window = TXT_MessageBox(NULL, "Ќажмите кнопку...");
-    }
+    window = TXT_MessageBox(NULL, "Ќажмите кнопку...");
 
     TXT_SDL_SetEventCallback(EventCallback, joystick_input);
     TXT_SignalConnect(window, "closed", PromptWindowClosed, joystick);
@@ -272,18 +243,8 @@ static void TXT_JoystickInputSizeCalc(TXT_UNCAST_ARG(joystick_input))
 static void GetJoystickButtonDescription(int vbutton, char *buf,
                                          size_t buf_len)
 {
-    /* English language */
-    if (english_setup)
-    {
-        M_snprintf(buf, buf_len, "BUTTON #%i",
-                   PhysicalForVirtualButton(vbutton) + 1);
-    }
-    /* Русский язык */
-    else
-    {
-        M_snprintf(buf, buf_len, "ЉЌЋЏЉЂ #%i",
-                   PhysicalForVirtualButton(vbutton) + 1);
-    }
+    M_snprintf(buf, buf_len, "ЉЌЋЏЉЂ #%i",
+               PhysicalForVirtualButton(vbutton) + 1);
 }
 
 static void TXT_JoystickInputDrawer(TXT_UNCAST_ARG(joystick_input))
@@ -294,16 +255,7 @@ static void TXT_JoystickInputDrawer(TXT_UNCAST_ARG(joystick_input))
 
     if (*joystick_input->variable < 0)
     {
-        /* English language */
-        if (english_setup)
-        {
-            M_StringCopy(buf, "(none)", sizeof(buf));
-        }
-        /* Русский язык */
-        else
-        {
-            M_StringCopy(buf, "(-)", sizeof(buf));
-        }
+        M_StringCopy(buf, "(-)", sizeof(buf));
     }
     else
     {

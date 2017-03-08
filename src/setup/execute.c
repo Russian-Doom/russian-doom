@@ -46,8 +46,6 @@
 #include "m_config.h"
 #include "m_misc.h"
 
-extern int english_setup;
-
 struct execute_context_s
 {
     char *response_file;
@@ -126,18 +124,7 @@ execute_context_t *NewExecuteContext(void)
 
     if (result->stream == NULL)
     {
-        /* English language */
-        if (english_setup)
-        {
-            fprintf(stderr, "Error opening response file\n");
-        }
-
-        /* –усский €зык */
-        else
-        {
-            fprintf(stderr, "ќшибка открыти€ ответного файла\n");
-        }
-
+        fprintf(stderr, "ќшибка открыти€ ответного файла\n");
         exit(-1);
     }
 
@@ -373,21 +360,9 @@ static void TestCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(data))
     char *extra_cfg;
     txt_window_t *testwindow;
 
-    /* English language */
-    if (english_setup)
-    {
-    testwindow = TXT_MessageBox("Starting Doom",
-                                "Starting Doom to test the\n"
-                                "settings.  Please wait.");
-    }
-
-    /* –усский €зык */
-    else
-    {
     testwindow = TXT_MessageBox("Запуск Doom",
                                 "Запуск игры дл€ проверки управлени€.\n"
                                 "Пожалуйста, подождите.");
-    }
 
     TXT_DrawDesktop();
 
@@ -420,17 +395,7 @@ txt_window_action_t *TestConfigAction(void)
 {
     txt_window_action_t *test_action;
 
-    /* English language */
-    if (english_setup)
-    {
-        test_action = TXT_NewWindowAction('t', "Test");
-    }
-
-    /* –усский €зык */
-    else
-    {
-        test_action = TXT_NewWindowAction('t', "Проверка");
-    }
+    test_action = TXT_NewWindowAction('t', "Проверка");
 
     TXT_SignalConnect(test_action, "pressed", TestCallback, NULL);
 

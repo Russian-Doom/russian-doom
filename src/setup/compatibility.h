@@ -23,7 +23,7 @@ void BindCompatibilityVariables(void);
 // extern int vanilla_savegame_limit;
 // extern int vanilla_demo_limit;
 
-// [JN] Дополнительные параметры геймплея
+// [JN] Дополнительные параметры игры
 
 // - Графика -
 extern int colored_blood;           // Кровь разных цветов
@@ -41,8 +41,7 @@ extern int play_exit_sfx;           // Проигрывать звук при в
 extern int secret_notification;     // Уведомление об обнаружении секрета
 extern int show_total_time;         // Показывать общее время
 extern int unlimited_lost_souls;    // Элементаль боли без ограничения
-// - Язык / Language -
-extern int english_setup;           // Language of Setup executable
 
 
 #endif /* #ifndef SETUP_COMPATIBILITY_H */
+

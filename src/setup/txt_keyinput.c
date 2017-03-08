@@ -26,8 +26,6 @@
 #include "txt_label.h"
 #include "txt_window.h"
 
-extern int english_setup;
-
 #define KEY_INPUT_WIDTH 8
 
 static int KeyPressCallback(txt_window_t *window, int key, 
@@ -73,16 +71,7 @@ static void OpenPromptWindow(txt_key_input_t *key_input)
 
     key_input->check_conflicts = !TXT_GetModifierState(TXT_MOD_SHIFT);
 
-    /* English language */
-    if (english_setup)
-    {
-        window = TXT_MessageBox(NULL, "Press the new key...");
-    }
-    /* –усский €зык */
-    else
-    {
-        window = TXT_MessageBox(NULL, "Нажмите клавишу...");
-    }
+    window = TXT_MessageBox(NULL, "Нажмите клавишу...");
 
     TXT_SetKeyListener(window, KeyPressCallback, key_input);
 
@@ -117,16 +106,7 @@ static void TXT_KeyInputDrawer(TXT_UNCAST_ARG(key_input))
 
     if (*key_input->variable == 0)
     {
-        /* English language */
-        if (english_setup)
-        {
-            M_StringCopy(buf, "(none)", sizeof(buf));
-        }
-        /* –усский €зык */
-        else
-        {
-            M_StringCopy(buf, "(-)", sizeof(buf));
-        }
+        M_StringCopy(buf, "(-)", sizeof(buf));
     }
     else
     {

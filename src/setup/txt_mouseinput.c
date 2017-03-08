@@ -27,8 +27,6 @@
 #include "txt_label.h"
 #include "txt_window.h"
 
-extern int english_setup;
-
 #define MOUSE_INPUT_WIDTH 8
 
 static int MousePressCallback(txt_window_t *window, 
@@ -58,16 +56,7 @@ static void OpenPromptWindow(txt_mouse_input_t *mouse_input)
     // Silently update when the shift key is held down.
     mouse_input->check_conflicts = !TXT_GetModifierState(TXT_MOD_SHIFT);
 
-    /* English language */
-    if (english_setup)
-    {
-        window = TXT_MessageBox(NULL, "Press the new mouse button...");
-    }
-    /* Ğóññêèé ÿçûê */
-    else
-    {
-        window = TXT_MessageBox(NULL, "àæìèòå êíîïêó ìûøè...");
-    }
+    window = TXT_MessageBox(NULL, "àæìèòå êíîïêó ìûøè...");
 
     TXT_SetMouseListener(window, MousePressCallback, mouse_input);
 }
@@ -84,43 +73,20 @@ static void TXT_MouseInputSizeCalc(TXT_UNCAST_ARG(mouse_input))
 
 static void GetMouseButtonDescription(int button, char *buf, size_t buf_len)
 {
-    /* English language */
-    if (english_setup)
+    switch (button)
     {
-        switch (button)
-        {
-            case 0:
-                M_StringCopy(buf, "LEFT", buf_len);
-                break;
-            case 1:
-                M_StringCopy(buf, "RIGHT", buf_len);
-                break;
-            case 2:
-                M_StringCopy(buf, "MID", buf_len);
-                break;
-            default:
-                M_snprintf(buf, buf_len, "BUTTON #%i", button + 1);
-                break;
-        }
-    }
-    /* Ğóññêèé ÿçûê */
-    else
-    {
-        switch (button)
-        {
-            case 0:
-                M_StringCopy(buf, "‹…‚€¡", buf_len);
-                break;
-            case 1:
-                M_StringCopy(buf, "€‚€¡", buf_len);
-                break;
-            case 2:
-                M_StringCopy(buf, "‘…„¡¡", buf_len);
-                break;
-            default:
-                M_snprintf(buf, buf_len, "ŠŠ€ #%i", button + 1);
-                break;
-        }
+        case 0:
+            M_StringCopy(buf, "‹…‚€¡", buf_len);
+            break;
+        case 1:
+            M_StringCopy(buf, "€‚€¡", buf_len);
+            break;
+        case 2:
+            M_StringCopy(buf, "‘…„¡¡", buf_len);
+            break;
+        default:
+            M_snprintf(buf, buf_len, "ŠŠ€ #%i", button + 1);
+            break;
     }
 }
 
@@ -132,16 +98,7 @@ static void TXT_MouseInputDrawer(TXT_UNCAST_ARG(mouse_input))
 
     if (*mouse_input->variable < 0)
     {
-        /* English language */
-        if (english_setup)
-        {
-            M_StringCopy(buf, "(none)", sizeof(buf));
-        }
-        /* Ğóññêèé ÿçûê */
-        else
-        {
-            M_StringCopy(buf, "(-)", sizeof(buf));
-        }
+        M_StringCopy(buf, "(-)", sizeof(buf));
     }
     else
     {

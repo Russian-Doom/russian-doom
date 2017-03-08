@@ -26,8 +26,6 @@
 
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/gameplay.html"
 
-extern int english_setup;
-
 // [JN] ќригинальные ограничени€ отключены, т.к. в них больше нет смысла
 /*
 int vanilla_savegame_limit = 1;
@@ -56,66 +54,30 @@ int unlimited_lost_souls = 1;    // Ёлементаль боли без ограничени€
 void CompatibilitySettings(void)
 {
     txt_window_t *window;
+    window = TXT_NewWindow("Дополнительные параметры игры");
 
-    /* English language */
-    if (english_setup)
-    {
-        window = TXT_NewWindow("Additional gameplay options");
+    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
-        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    TXT_AddWidgets(window,
+    TXT_If(gamemission == doom,    TXT_NewSeparator("Графика")),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Разноцветна€ кровь и трупы монстров",       &colored_blood)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Корректна€ формула \"Ouch face\"",          &new_ouch_face)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Неу€звимость окрашивает небо",              &invul_sky)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Красна€ вспышка воскрешени€ монстров",      &red_resurrection_flash)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Двуствольное ружье может разрывать врагов", &ssg_blast_enemies)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Юффект прозрачности у некоторых объектов",  &translucency)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Не мигать экраном при получении предметов", &no_pickup_flash)),
 
-        TXT_AddWidgets(window,
-        TXT_If(gamemission == doom,    TXT_NewSeparator("Graphics")),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Colored blood and squished corpses",          &colored_blood)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Correct formula of \"Ouch face\"",            &new_ouch_face)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Invulnerability affects sky",                 &invul_sky)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Red flash of monsters resurrection",          &red_resurrection_flash)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Super Shotgun has a chance to blast enemies", &ssg_blast_enemies)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Low-key transparency on some objects",        &translucency)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("No yellow flash on picking up items",         &no_pickup_flash)),
+    TXT_If(gamemission == doom,    TXT_NewSeparator("Звук")), 
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Звук раздавливани€ трупов",             &crushed_corpses_sfx)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Одиночный звук закрыти€ быстрой двери", &blazing_door_fix_sfx)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Проигрывать звук при выходе из игры",   &play_exit_sfx)),
 
-        TXT_If(gamemission == doom,    TXT_NewSeparator("Sound")), 
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Sound of crushed corpses",           &crushed_corpses_sfx)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Single sound of fast closing doors", &blazing_door_fix_sfx)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Playing sound on exiting the game",  &play_exit_sfx)),
-
-        TXT_If(gamemission == doom,    TXT_NewSeparator("Gameplay")),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Notification of discovered secrets",       &secret_notification)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Total level times on intermission screen", &show_total_time)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Pain Elemental without Lost Soul's limit", &unlimited_lost_souls)),
-
-        NULL);
-    }
-
-    /* –усский €зык */
-    else
-    {
-        window = TXT_NewWindow("Дополнительные параметры игры");
-
-        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
-
-        TXT_AddWidgets(window,
-        TXT_If(gamemission == doom,    TXT_NewSeparator("Графика")),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Разноцветна€ кровь и трупы монстров",       &colored_blood)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Корректна€ формула \"Ouch face\"",          &new_ouch_face)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Неу€звимость окрашивает небо",              &invul_sky)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Красна€ вспышка воскрешени€ монстров",      &red_resurrection_flash)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Двуствольное ружье может разрывать врагов", &ssg_blast_enemies)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Юффект прозрачности у некоторых объектов",  &translucency)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Не мигать экраном при получении предметов", &no_pickup_flash)),
-
-        TXT_If(gamemission == doom,    TXT_NewSeparator("Звук")), 
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Звук раздавливани€ трупов",             &crushed_corpses_sfx)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Одиночный звук закрыти€ быстрой двери", &blazing_door_fix_sfx)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Проигрывать звук при выходе из игры",   &play_exit_sfx)),
-
-        TXT_If(gamemission == doom,    TXT_NewSeparator("Геймплей")),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Уведомление об обнаружении тайников",   &secret_notification)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Общее врем€ на межмиссионном экране",   &show_total_time)),
-            TXT_If(gamemission == doom,	TXT_NewCheckBox("Юлементаль Боли без ограничени€ душ",   &unlimited_lost_souls)),
-
-        NULL);
-    }
+    TXT_If(gamemission == doom,    TXT_NewSeparator("Геймплей")),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Уведомление об обнаружении тайников",   &secret_notification)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Общее врем€ на межмиссионном экране",   &show_total_time)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Юлементаль Боли без ограничени€ душ",   &unlimited_lost_souls)),
+    NULL);
 }
 
 void BindCompatibilityVariables(void)
@@ -125,7 +87,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
     */
 
-    // [JN] ƒополнительные параметры геймпле€
+    // [JN] ƒополнительные параметры игры
 
     // - √рафика -
     M_BindIntVariable("colored_blood",          &colored_blood);            //  ровь разных цветов

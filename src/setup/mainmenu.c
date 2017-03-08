@@ -42,9 +42,6 @@
 
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/index.html"
 
-// [JN] »нициализаци€ переменной (Thanks, Fabian!)
-extern int english_setup;
-
 static const int cheat_sequence[] =
 {
     KEY_UPARROW, KEY_UPARROW, KEY_DOWNARROW, KEY_DOWNARROW,
@@ -164,27 +161,12 @@ static void QuitConfirm(void *unused1, void *unused2)
 
     window = TXT_NewWindow(NULL);
 
-    /* English language */
-    if (english_setup)
-    {
-    TXT_AddWidgets(window, 
-                   label = TXT_NewLabel("Exiting setup.\nSave settings"),
-                   TXT_NewStrut(24, 0),
-                   yes_button = TXT_NewButton2("  Yes  ", DoQuit, DoQuit),
-                   no_button = TXT_NewButton2("  No   ", DoQuit, NULL),
-                   NULL);
-    }
-
-    /* –усский €зык */
-    else
-    {
     TXT_AddWidgets(window, 
                    label = TXT_NewLabel("Выход из программы настроек.\nСохранить внесенные изменени€?"),
                    TXT_NewStrut(24, 0),
                    yes_button = TXT_NewButton2(" Сохранить    ", DoQuit, DoQuit),
                    no_button = TXT_NewButton2(" Не сохран€ть ", DoQuit, NULL),
                    NULL);
-    }
 
     TXT_SetWidgetAlign(label, TXT_HORIZ_CENTER);
     TXT_SetWidgetAlign(yes_button, TXT_HORIZ_CENTER);
@@ -222,33 +204,7 @@ static txt_button_t *GetLaunchButton(void)
 {
     char *label;
 
-    /* English language */
-    if (english_setup)
-    {
-        switch (gamemission)
-        {
-        case doom:
-            label = "Save parameters and launch DOOM";
-            break;
-        case heretic:
-            label = "Save parameters and launch Heretic";
-            break;
-        case hexen:
-            label = "Save parameters and launch Hexen";
-            break;
-        case strife:
-            label = "Save parameters and launch STRIFE!";
-            break;
-        default:
-            label = "Save parameters and launch game";
-            break;
-        }
-    }
-
-    /* –усский €зык */
-    else
-    {
-        switch (gamemission)
+    switch (gamemission)
         {
         case doom:
             label = "Сохранить настройки и запустить DOOM";
@@ -266,7 +222,6 @@ static txt_button_t *GetLaunchButton(void)
             label = "Сохранить настройки и запустить игру";
             break;
         }
-    }
 
     return TXT_NewButton2(label, LaunchDoom, NULL);
 }
@@ -277,58 +232,29 @@ void MainMenu(void)
     txt_window_action_t *quit_action;
     txt_window_action_t *warp_action;
 
-    /* English language */
-    if (english_setup)
-    {
-        window = TXT_NewWindow("Main Menu");
-        
-        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    window = TXT_NewWindow("Главное меню");
 
-        TXT_AddWidgets(window,
-        TXT_NewButton2("Configure Display",          (TxtWidgetSignalFunc) ConfigDisplay, NULL),
-        TXT_NewButton2("Configure Sound",            (TxtWidgetSignalFunc) ConfigSound, NULL),
-        TXT_NewButton2("Configure Keyboard",         (TxtWidgetSignalFunc) ConfigKeyboard, NULL),
-        TXT_NewButton2("Configure Mouse",            (TxtWidgetSignalFunc) ConfigMouse, NULL),
-        TXT_NewButton2("Configure Gamepad/Joystick", (TxtWidgetSignalFunc) ConfigJoystick, NULL),
-        TXT_If(gamemission == doom,
-        TXT_NewButton2("Additional gameplay options", (TxtWidgetSignalFunc) CompatibilitySettings, NULL)),
-        GetLaunchButton(),
-        TXT_NewStrut(0, 1),
-        TXT_NewButton2("Start a Network Game",      (TxtWidgetSignalFunc) StartMultiGame, NULL),
-        TXT_NewButton2("Join a Network Game",       (TxtWidgetSignalFunc) JoinMultiGame, NULL),
-        TXT_NewButton2("Multiplayer Configuration", (TxtWidgetSignalFunc) MultiplayerConfig, NULL),
-        NULL);
+    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
-        quit_action = TXT_NewWindowAction(KEY_ESCAPE, "Quit");
-        warp_action = TXT_NewWindowAction(KEY_F2,     "Warp");
-    }
+    TXT_AddWidgets(window,
+    TXT_NewButton2("Настройки экрана",             (TxtWidgetSignalFunc) ConfigDisplay, NULL),
+    TXT_NewButton2("Настройки звука",              (TxtWidgetSignalFunc) ConfigSound, NULL),
+    TXT_NewButton2("Настройки клавиатуры",         (TxtWidgetSignalFunc) ConfigKeyboard, NULL),
+    TXT_NewButton2("Настройки мыши",               (TxtWidgetSignalFunc) ConfigMouse, NULL),
+    TXT_NewButton2("Настройки джойстика/геймпада", (TxtWidgetSignalFunc) ConfigJoystick, NULL),
+    TXT_If(gamemission == doom,
+    TXT_NewButton2("Дополнительные параметры игры", (TxtWidgetSignalFunc) CompatibilitySettings, NULL)),
+    GetLaunchButton(),
+    TXT_NewStrut(0, 1),
+    TXT_NewButton2("Начать сетевую игру",           (TxtWidgetSignalFunc) StartMultiGame, NULL),
+    TXT_NewButton2("Присоединитьс€ к сетевой игре", (TxtWidgetSignalFunc) JoinMultiGame, NULL),
+    TXT_NewButton2("Настройки сетевой игры",        (TxtWidgetSignalFunc) MultiplayerConfig, NULL),
+    NULL);
 
-    /* –усский €зык */
-    else
-    {
-        window = TXT_NewWindow("Главное меню");
+    quit_action = TXT_NewWindowAction(KEY_ESCAPE, "Выход");
+    warp_action = TXT_NewWindowAction(KEY_F2,     "Уровень");
 
-        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
-        TXT_AddWidgets(window,
-        TXT_NewButton2("Настройки экрана",             (TxtWidgetSignalFunc) ConfigDisplay, NULL),
-        TXT_NewButton2("Настройки звука",              (TxtWidgetSignalFunc) ConfigSound, NULL),
-        TXT_NewButton2("Настройки клавиатуры",         (TxtWidgetSignalFunc) ConfigKeyboard, NULL),
-        TXT_NewButton2("Настройки мыши",               (TxtWidgetSignalFunc) ConfigMouse, NULL),
-        TXT_NewButton2("Настройки джойстика/геймпада", (TxtWidgetSignalFunc) ConfigJoystick, NULL),
-        TXT_If(gamemission == doom,
-        TXT_NewButton2("Дополнительные параметры игры", (TxtWidgetSignalFunc) CompatibilitySettings, NULL)),
-        GetLaunchButton(),
-        TXT_NewStrut(0, 1),
-        TXT_NewButton2("Начать сетевую игру",           (TxtWidgetSignalFunc) StartMultiGame, NULL),
-        TXT_NewButton2("Присоединитьс€ к сетевой игре", (TxtWidgetSignalFunc) JoinMultiGame, NULL),
-        TXT_NewButton2("Настройки сетевой игры",        (TxtWidgetSignalFunc) MultiplayerConfig, NULL),
-        NULL);
-
-        quit_action = TXT_NewWindowAction(KEY_ESCAPE, "Выход");
-        warp_action = TXT_NewWindowAction(KEY_F2,     "Уровень");
-    }
-    
     TXT_SignalConnect(quit_action, "pressed", QuitConfirm, NULL);
     TXT_SignalConnect(warp_action, "pressed",
                       (TxtWidgetSignalFunc) WarpMenu, NULL);
@@ -394,25 +320,11 @@ static void InitTextscreen(void)
 {
     SetDisplayDriver();
 
-    /* English language */
-    if (english_setup)
-    {
-        if (!TXT_Init())
-        {
-            fprintf(stderr, "Failed to initialize GUI\n");
-            exit(-1);
-        }
-    }
-
-    /* –усский €зык */
-    else
-    {
-        if (!TXT_Init())
+    if (!TXT_Init())
         {
             fprintf(stderr, "Ќевозможно инициализировать интерфейс\n");
             exit(-1);
         }
-    }
 
     SetIcon();
     SetWindowTitle();

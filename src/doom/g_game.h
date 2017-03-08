@@ -16,12 +16,7 @@
 //   Duh.
 // 
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * Добавлена инициализация переменных совместимости.
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #ifndef __G_GAME__
 #define __G_GAME__
@@ -102,7 +97,6 @@ extern int play_exit_sfx;           // Проигрывать звук при в
 extern int secret_notification;     // Уведомление об обнаружении секрета
 extern int show_total_time;         // Показывать общее время
 extern int unlimited_lost_souls;    // Элементаль боли без ограничения
-
 
 #endif
 

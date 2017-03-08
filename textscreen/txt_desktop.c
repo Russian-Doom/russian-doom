@@ -30,8 +30,6 @@
 #define HELP_KEY KEY_F1
 #define MAXWINDOWS 128
 
-extern int english_setup;
-
 static char *desktop_title;
 static txt_window_t *all_windows[MAXWINDOWS];
 static int num_windows = 0;
@@ -203,33 +201,7 @@ static void DrawHelpIndicator(void)
 
     TXT_GetMousePosition(&x, &y);
 
-    /* English language */
-    if (english_setup)
-    {
-        if (y == 0 && x >= TXT_SCREEN_W - 9)
-        {
-            fgcolor = TXT_COLOR_GREY;
-            TXT_BGColor(TXT_COLOR_BLACK, 0);
-        }
-        else
-        {
-            fgcolor = TXT_COLOR_BLACK;
-            TXT_BGColor(TXT_COLOR_GREY, 0);
-        }
-
-        TXT_GotoXY(TXT_SCREEN_W - 9, 0);
-
-        TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
-        TXT_DrawString(" ");
-        TXT_DrawString(keybuf);
-
-        TXT_FGColor(fgcolor);
-        TXT_DrawString("=Help ");
-    }
-    /* –усский €зык */
-    else
-    {
-        if (y == 0 && x >= TXT_SCREEN_W - 19)
+    if (y == 0 && x >= TXT_SCREEN_W - 19)
         {
             fgcolor = TXT_COLOR_GREY;
             TXT_BGColor(TXT_COLOR_BLACK, 0);
@@ -247,8 +219,7 @@ static void DrawHelpIndicator(void)
         TXT_DrawString(keybuf);
 
         TXT_FGColor(fgcolor);
-        TXT_DrawString("=Онлайн справка ");	// "=Help "
-    }
+        TXT_DrawString("=Онлайн справка ");
 }
 
 void TXT_SetDesktopTitle(char *title)
@@ -301,23 +272,11 @@ static void DesktopInputEvent(int c)
 
             // Clicking the top-right of the screen is equivalent
             // to pressing the help key.
-            
-            /* English language */
-            if (english_setup)
-            {
-                if (y == 0 && x >= TXT_SCREEN_W - 9)
-                {
-                    DesktopInputEvent(HELP_KEY);
-                }
-            }
-            /* –усский €зык */
-            else
-            {
+
                 if (y == 0 && x >= TXT_SCREEN_W - 19)
                 {
                     DesktopInputEvent(HELP_KEY);
                 }
-            }
             break;
 
         case HELP_KEY:

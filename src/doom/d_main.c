@@ -19,19 +19,7 @@
 //	and call the startup functions.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * Указана дополнительная автоматическая подгрузка файлов
-//   с русскоязычными ресурсами "russian-*.wad". 
-// * Дополнительно заданы отдельные экраны помощи, титров и 
-//   титульный экран для Shareware версии Doom 1.
-// * Переведены загрузочные сообщения.
-// * Переведены названия серий игры Doom.
-// * Добавлена инициализация переменной и подгрузка оптимизатора
-//   игровой палитры (russian-doom-palfix.wad).
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <ctype.h>
 #include <stdio.h>
@@ -430,7 +418,6 @@ void D_BindVariables(void)
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);     // Элементаль боли без ограничения
-
 	
     // Multiplayer chat macros
 
