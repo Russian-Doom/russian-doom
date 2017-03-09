@@ -125,9 +125,13 @@ int fullscreen = true;
 
 int aspect_ratio_correct = true;
 
-// Эксперементальное сглаживание текстур
+// [JN] Эксперементальное сглаживание текстур
 
 int smoothing = false;
+
+// [JN] Отключение эффекта плавной смены экранов
+
+int disable_screen_wiping = false;
 
 // VGA Porch palette change emulation
 
@@ -1381,6 +1385,7 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("video_display",             &video_display);
     M_BindIntVariable("aspect_ratio_correct",      &aspect_ratio_correct);
     M_BindIntVariable("smoothing",                 &smoothing);
+    M_BindIntVariable("disable_screen_wiping",     &disable_screen_wiping);
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
     M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("startup_delay",             &startup_delay);

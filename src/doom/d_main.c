@@ -200,7 +200,8 @@ void D_Display (void)
     }
 
     // save the current screen if about to wipe
-    if (gamestate != wipegamestate)
+    // [JN] функция стала опциональной
+    if ((gamestate != wipegamestate && !disable_screen_wiping))
     {
 	wipe = true;
 	wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);

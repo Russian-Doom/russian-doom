@@ -722,9 +722,14 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(aspect_ratio_correct),
 
     //!
-    // Эксперементальное сглаживание текстур.
+    // [JN] Эксперементальное сглаживание текстур.
 
     CONFIG_VARIABLE_INT(smoothing),
+    
+    //!
+    // [JN] Отключение эффекта плавной смены экранов.
+
+    CONFIG_VARIABLE_INT(disable_screen_wiping),
 
     //!
     // If non-zero, any pillar/letter boxes drawn around the game area

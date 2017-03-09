@@ -69,8 +69,9 @@ static char *video_driver = "";
 static char *window_position = "";
 static int aspect_ratio_correct = 1;
 static int smoothing = 0;
-static int integer_scaling = 0;
+static int disable_screen_wiping = 0;
 static int vga_porch_flash = 0;
+static int integer_scaling = 0;
 static int force_software_renderer = 0;
 static int fullscreen = 1;
 static int fullscreen_width = 0, fullscreen_height = 0;
@@ -217,6 +218,8 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
 
     TXT_NewSeparator("Юкспериментальные функции"),
     TXT_NewCheckBox("Сглаживание текстур", &smoothing),
+    TXT_If(gamemission == doom,
+        TXT_NewCheckBox("Отключить эффект плавной смены экранов", &disable_screen_wiping)),
     TXT_NewCheckBox("Мигать бордюрами экрана (эмул€ци€ VGA)", &vga_porch_flash),
 #if SDL_VERSION_ATLEAST(2, 0, 5)
         TXT_NewCheckBox("Целочисленное масштабирование окна", &integer_scaling),
@@ -276,8 +279,9 @@ void BindDisplayVariables(void)
 {
     M_BindIntVariable("aspect_ratio_correct",      &aspect_ratio_correct);
     M_BindIntVariable("smoothing",                 &smoothing);
-    M_BindIntVariable("integer_scaling",           &integer_scaling);
+    M_BindIntVariable("disable_screen_wiping",     &disable_screen_wiping);
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
+    M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("fullscreen",                &fullscreen);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);
     M_BindIntVariable("fullscreen_height",         &fullscreen_height);
