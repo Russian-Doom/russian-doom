@@ -16,6 +16,8 @@
 //	Savegame I/O, archiving, persistence.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __P_SAVEG__
 #define __P_SAVEG__
@@ -64,6 +66,9 @@ void P_RestoreTargets (void);
 
 extern FILE *save_stream;
 extern boolean savegame_error;
+
+// [from crispy]
+extern void M_ConfirmDeleteGame (void);
 
 
 #endif
