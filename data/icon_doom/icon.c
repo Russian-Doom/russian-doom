@@ -1,5 +1,5 @@
-static int icon_new_w = 128;
-static int icon_new_h = 128;
+static int icon_w = 128;
+static int icon_h = 128;
 
 static const unsigned int icon_data[] = {
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 

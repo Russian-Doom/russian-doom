@@ -1,7 +1,7 @@
-static int icon_new_setup_w = 48;
-static int icon_new_setup_h = 48;
+static int setup_icon_w = 48;
+static int setup_icon_h = 48;
 
-static const unsigned int icon_new_setup_data[] = {
+static const unsigned int setup_icon_data[] = {
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 
@@ -386,5 +386,4 @@ static const unsigned int icon_new_setup_data[] = {
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 
-    
 };
