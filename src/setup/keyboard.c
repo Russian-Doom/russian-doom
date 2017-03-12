@@ -257,30 +257,30 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
             AddKeyControl(table, "Свиноморфер",      &key_arti_egg);
             AddKeyControl(table, "Символ защитника", &key_arti_invulnerability);
         }
-        else
-        {
-            TXT_AddWidget(window, table);
-        }
-
-        if (gamemission == doom)
-        {
-            AddSectionLabel(table, "Движение", false);
-            AddKeyControl(table, "Режим посто€нного бега ", &key_toggleautorun);
-        }
-
-        AddSectionLabel(table, "Оружие", extra_keys);
-
-        AddKeyControl(table, "Оружие 1",          &key_weapon1);
-        AddKeyControl(table, "Оружие 2",          &key_weapon2);
-        AddKeyControl(table, "Оружие 3",          &key_weapon3);
-        AddKeyControl(table, "Оружие 4",          &key_weapon4);
-        AddKeyControl(table, "Оружие 5",          &key_weapon5);
-        AddKeyControl(table, "Оружие 6",          &key_weapon6);
-        AddKeyControl(table, "Оружие 7",          &key_weapon7);
-        AddKeyControl(table, "Оружие 8",          &key_weapon8);
-        AddKeyControl(table, "Предыдущее оружие", &key_prevweapon);
-        AddKeyControl(table, "Следующее оружие",  &key_nextweapon);
     }
+    else
+    {
+        TXT_AddWidget(window, table);
+    }
+
+    if (gamemission == doom)
+    {
+        AddSectionLabel(table, "Движение", false);
+        AddKeyControl(table, "Посто€нный бег", &key_toggleautorun);
+    }
+
+    AddSectionLabel(table, "Оружие", extra_keys);
+
+    AddKeyControl(table, "Оружие 1",          &key_weapon1);
+    AddKeyControl(table, "Оружие 2",          &key_weapon2);
+    AddKeyControl(table, "Оружие 3",          &key_weapon3);
+    AddKeyControl(table, "Оружие 4",          &key_weapon4);
+    AddKeyControl(table, "Оружие 5",          &key_weapon5);
+    AddKeyControl(table, "Оружие 6",          &key_weapon6);
+    AddKeyControl(table, "Оружие 7",          &key_weapon7);
+    AddKeyControl(table, "Оружие 8",          &key_weapon8);
+    AddKeyControl(table, "Предыдущее оружие", &key_prevweapon);
+    AddKeyControl(table, "Следующее оружие",  &key_nextweapon);
 }
 
 static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
