@@ -18,16 +18,7 @@
 //	Does palette indicators as well (red pain/berserk, bright pickup)
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * Чит-коды IDFA и IDKFA выдают игроку рюкзак.
-// * Добавлена переменная для корректной формулы Ouch Face
-//   (new_ouch_face). По методу Brad Harding.
-// * Отключены ухмылка и оскал при режиме IDDQD и сфере неуязвимости.
-//   По методу Brad Harding.
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 
 #include <stdio.h>

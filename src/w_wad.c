@@ -16,11 +16,8 @@
 //	Handles WAD file header, directory, lump I/O.
 //
 
-// ----------------------------------------------------------------
-// Copyright(C) 2017 Julian Nechaevsky
-// Описание:
-// * Отключен лимит 4046 лампов в PWAD-файле.
-// ----------------------------------------------------------------
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 
 #include <ctype.h>
 #include <stdio.h>

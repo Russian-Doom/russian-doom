@@ -16,17 +16,8 @@
 //     Common code to parse command line, identifying WAD files to load.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * Перевод строчек слияния WAD-файлов ("merge").
-// * Автоматическая подгрузка russian-hexen-dd.wad для Hexen: DD
-// * Работа -file теперь полностью идентична -merge, что позволит
-//   безболезненно загружать wad-файлы с новыми спрайтами (S_START
-//   / S_END) и предотвратит появление ошибки "Failed to duplicate
-//   string (length 0)
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 
 #include "config.h"
 #include "doomfeatures.h"

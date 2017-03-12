@@ -18,6 +18,7 @@
 
 // Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
+
 #include "SDL.h"
 #include "SDL_opengl.h"
 

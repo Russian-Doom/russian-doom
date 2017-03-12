@@ -16,14 +16,7 @@
 //	BSP traversal, handling of LineSegs for rendering.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * Отключена ошибка Solidsegs Overflow, приводящаяя к аварийному
-//   завершению игры.
-// * Отключен статический лимит MAXDRAWSEGS.
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 
 #include "doomdef.h"

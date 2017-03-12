@@ -16,13 +16,8 @@
 //	Rendering of moving objects, sprites.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * Перевод внутриигровых сообщений.
-// * Увеличено MAXVISSPRITE: 128 * 32 = 4096
-// =--------------------------------------------------------------=
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_THINGS__
 #define __R_THINGS__

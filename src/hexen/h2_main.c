@@ -14,14 +14,8 @@
 // GNU General Public License for more details.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2016-2017 Julian Nechaevsky
-//
-// Описание:
-// * Добавлена поддержка Deathkings of the Dark Citadel.
-//   Больше спасибо CapnClever за помощь!
-// =--------------------------------------------------------------=
 
 // HEADER FILES ------------------------------------------------------------
 

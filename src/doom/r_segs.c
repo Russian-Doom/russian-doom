@@ -16,14 +16,7 @@
 //	All the clipping: columns, horizontal spans, sky columns.
 //
 
-// =--------------------------------------------------------------=
-// Copyright(C) 2017 Julian Nechaevsky
-//
-// Описание:
-// * Отключен статический лимит MAXDRAWSEGS.
-// =--------------------------------------------------------------=
-
-
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 
 #include <stdio.h>
