@@ -15,6 +15,9 @@
 //     OPL interface.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
+
 #include "config.h"
 
 #include <stdio.h>
@@ -89,7 +92,7 @@ static opl_init_result_t InitDriver(opl_driver_t *_driver,
     result2 = OPL_Detect();
     if (result1 == OPL_INIT_NONE || result2 == OPL_INIT_NONE)
     {
-        printf("OPL_Init: No OPL detected using '%s' driver.\n", _driver->name);
+        printf("OPL_Init: Поддержка OPL не обнаружена в драйвере '%s'.\n", _driver->name);
         _driver->shutdown_func();
         driver = NULL;
         return OPL_INIT_NONE;
@@ -97,7 +100,7 @@ static opl_init_result_t InitDriver(opl_driver_t *_driver,
 
     init_stage_reg_writes = 0;
 
-    printf("OPL_Init: Using driver '%s'.\n", driver->name);
+    printf("OPL_Init: Используется драйвер '%s'.\n", driver->name);
 
     return result2;
 }
@@ -117,8 +120,8 @@ static opl_init_result_t AutoSelectDriver(unsigned int port_base)
             return result;
         }
     }
-
-    printf("OPL_Init: Failed to find a working driver.\n");
+    
+    printf("OPL_Init: Невозможно определить корректный драйвер.\n");
 
     return OPL_INIT_NONE;
 }
@@ -149,14 +152,14 @@ opl_init_result_t OPL_Init(unsigned int port_base)
                 }
                 else
                 {
-                    printf("OPL_Init: Failed to initialize "
-                           "driver: '%s'.\n", driver_name);
+                    printf("OPL_Init: Ошибка инициализации "
+                           "драйвера: '%s'.\n", driver_name);
                     return OPL_INIT_NONE;
                 }
             }
         }
 
-        printf("OPL_Init: unknown driver: '%s'.\n", driver_name);
+        printf("OPL_Init: неизвестный драйвер: '%s'.\n", driver_name);
 
         return OPL_INIT_NONE;
     }
