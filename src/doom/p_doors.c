@@ -413,10 +413,11 @@ EV_VerticalDoor
 	
     // if the sector has an active thinker, use it
 
-    if (line->sidenum[side^1] == -1)
+    if (line->sidenum[side^1] == NO_INDEX)
     {
-        // [JN] Фикс ошибки с дверью DR, назначенной односторонней линии
-        // I_Error("EV_VerticalDoor: DR special type on 1-sided linedef");
+        // [JN, from crispy] Фикс ошибки с дверью DR, назначенной 
+        // односторонней линии. Не завершать работу с ошибкой, а
+        // просто проигрывать звук "уфф".
         S_StartSound(NULL,sfx_oof);
         return;
     }
