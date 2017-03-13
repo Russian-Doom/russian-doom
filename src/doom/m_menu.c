@@ -945,6 +945,7 @@ int     epi;
 
 void M_DrawEpisode(void)
 {
+    V_DrawPatchDirect(84, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
     V_DrawPatchDirect(66, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
 }
 
