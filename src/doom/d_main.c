@@ -993,28 +993,6 @@ void D_SetGameDescription(void)
             { 
                 DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
             }
-
-            // [JN] Поддержка DOOM 2: No Rest for the Living
-            
-            int nrv;
-            nrv = M_CheckParmWithArgs ("-file", 1);
-            
-            if (nrv)
-            {
-                while (++nrv != myargc && myargv[nrv][0] != '-')
-                {
-                    char *check;
-                    check = M_StrCaseStr(myargv[nrv], "nerve.wad");
-
-                    if (check != NULL)
-                    {   
-                        gamedescription = "DOOM 2: Нет покоя для живых";
-                        gamemission = pack_nerve;
-                        W_MergeFile("russian/russian-doom-nerve.wad");
-                        // DEH_AddStringReplacement ("TITLEPIC", "INTERPIC");
-                    }
-                }
-            }
         }
         else if (logical_gamemission == pack_plut)
         {
@@ -1056,6 +1034,27 @@ void D_SetGameDescription(void)
                 filename = D_TryFindWADByName(myargv[newpwadfile]);
                 printf(" добавление: %s\n", filename);
                 W_MergeFile(filename);
+
+                // [JN] Поддержка DOOM 2: No Rest for the Living
+
+                int nrv;
+                nrv = M_CheckParmWithArgs ("-file", 1);
+
+                if (nrv)
+                {
+                    while (++nrv != myargc && myargv[nrv][0] != '-')
+                    {
+                        char *check;
+                        check = M_StrCaseStr(myargv[nrv], "nerve.wad");
+        
+                        if (check != NULL)
+                        {   
+                            gamedescription = "DOOM 2: Нет покоя для живых";
+                            gamemission = pack_nerve;
+                            W_MergeFile("russian/russian-doom-nerve.wad");
+                        }
+                    }
+                }
 
                 // [JN] Поддержка Master Levels for DOOM 2
 
@@ -1235,12 +1234,19 @@ void D_SetGameDescription(void)
                         // происходила ТОЛЬКО в случае наличия...уровней?
                         else
                         {
+                            if (gamemission == pack_nerve)
+                            {
+                            return;
+                            }
+                            else
+                            {
                             DEH_AddStringReplacement ("WIF",  "WIFANY");
                             DEH_AddStringReplacement ("WIF2", "WIFANY");
                             DEH_AddStringReplacement ("WIFF", "WIFANY");
                             DEH_AddStringReplacement ("WIFO", "WIFANY");
                             DEH_AddStringReplacement ("WIFM", "WIFANY");  
                             DEH_AddStringReplacement ("WIENTERS", "WIENTER");
+                            }
                         }
                     }
                 }
