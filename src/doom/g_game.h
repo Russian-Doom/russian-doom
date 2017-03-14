@@ -85,6 +85,7 @@ int G_VanillaVersionCode(void);
 extern int colored_blood;           // Кровь разных цветов
 extern int new_ouch_face;           // Корректная формула "Ouch face"
 extern int invul_sky;               // Неуязвимость окрашивает небо
+extern int swirling_liquids;        // Улучшенная анимация жидкостей
 extern int red_resurrection_flash;  // Красная вспышка воскрешения монстров
 extern int ssg_blast_enemies;       // Двуствольное ружье может разрывать врагов
 extern int translucency;            // Прозрачность объектов

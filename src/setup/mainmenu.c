@@ -102,6 +102,7 @@ static void SensibleDefaults(void)
     colored_blood = 1;           // Кровь разных цветов
     new_ouch_face = 1;           // Корректная формула "Ouch face"
     invul_sky = 1;               // Неуязвимость окрашивает небо
+    swirling_liquids = 1;        // Улучшенная анимация жидкостей
     red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
     ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
     translucency = 1;            // Прозрачность объектов

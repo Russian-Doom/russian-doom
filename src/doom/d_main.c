@@ -407,6 +407,7 @@ void D_BindVariables(void)
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
     M_BindIntVariable("invul_sky",              &invul_sky);                // Неуязвимость окрашивает небо
+    M_BindIntVariable("swirling_liquids",       &swirling_liquids);         // Улучшенная анимация жидкостей
     M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);   // Красная вспышка воскрешения монстров
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
     M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов

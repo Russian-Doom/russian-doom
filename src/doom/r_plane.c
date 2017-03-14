@@ -460,7 +460,68 @@ unsigned int		b2 ) // [crispy] 32-bit integer math
     }
 }
 
+// [crispy] add support for SMMU swirling flats
+// adapted from smmu/r_ripple.c, by Simon Howard
+static char *R_DistortedFlat (int flatnum)
+{
+    const int swirlfactor = 8192 / 64;
+    const int swirlfactor2 = 8192 / 32;
+    const int amp = 2;
+    const int amp2 = 2;
+    const int speed = 40;
 
+    static int swirltic;
+    static int offset[4096];
+
+    static char distortedflat[4096];
+    char *normalflat;
+    int i;
+
+    if (swirltic != gametic)
+    {
+    int x, y;
+
+    for (x = 0; x < 64; x++)
+    {
+        for (y = 0; y < 64; y++)
+        {
+        int x1, y1;
+        int sinvalue, sinvalue2;
+
+        sinvalue = (y * swirlfactor + leveltime * speed * 5 + 900) & 8191;
+        sinvalue2 = (x * swirlfactor2 + leveltime * speed * 4 + 300) & 8191;
+        x1 = x + 128
+           + ((finesine[sinvalue] * amp) >> FRACBITS)
+           + ((finesine[sinvalue2] * amp2) >> FRACBITS);
+
+        sinvalue = (x * swirlfactor + leveltime * speed * 3 + 700) & 8191;
+        sinvalue2 = (y * swirlfactor2 + leveltime * speed * 4 + 1200) & 8191;
+        y1 = y + 128
+           + ((finesine[sinvalue] * amp) >> FRACBITS)
+           + ((finesine[sinvalue2] * amp2) >> FRACBITS);
+
+        x1 &= 63;
+        y1 &= 63;
+
+        offset[(y << 6) + x] = (y1 << 6) + x1;
+        }
+    }
+
+    swirltic = gametic;
+    }
+
+    // [JN] Использовать конкретную поверхность
+    normalflat = W_CacheLumpNum(firstflat + flatnum, PU_LEVEL);
+
+    for (i = 0; i < 4096; i++)
+    {
+    distortedflat[i] = normalflat[offset[i]];
+    }
+
+    Z_ChangeTag(normalflat, PU_CACHE);
+
+    return distortedflat;
+}
 
 //
 // R_DrawPlanes
@@ -494,17 +555,16 @@ void R_DrawPlanes (void)
 	if (pl->minx > pl->maxx)
 	    continue;
 
-	
     // sky flat
     if (pl->picnum == skyflatnum)
     {
 	    dc_iscale = pspriteiscale>>detailshift;
-	    
+
 	    // Sky is allways drawn full bright,
 	    //  i.e. colormaps[0] is used.
 	    // Because of this hack, sky is not affected
 	    //  by INVUL inverse mapping.
-		
+
         // [JN] Хак для раскрашивания неба.
         // Ранее: dc_colormap = colormaps;
 
@@ -512,19 +572,19 @@ void R_DrawPlanes (void)
         {
         dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
         }
-        
+
         else
         {
         dc_colormap = colormaps;
         }
-        
+
         dc_texturemid = skytexturemid;
         dc_texheight = textureheight[skytexture]>>FRACBITS;
         for (x=pl->minx ; x <= pl->maxx ; x++)
         {
         dc_yl = pl->top[x];
         dc_yh = pl->bottom[x];
-        
+
         if ((unsigned) dc_yl <= dc_yh) // [crispy] 32-bit integer math
         {
             angle = (viewangle + xtoviewangle[x])>>ANGLETOSKYSHIFT;
@@ -535,11 +595,14 @@ void R_DrawPlanes (void)
         }
         continue;
     }
-	
-	// regular flat
-        lumpnum = firstflat + flattranslation[pl->picnum];
-	ds_source = W_CacheLumpNum(lumpnum, PU_STATIC);
-	
+
+    // regular flat
+    lumpnum = firstflat + flattranslation[pl->picnum];
+    // [crispy] add support for SMMU swirling flats
+    ds_source = (flattranslation[pl->picnum] == -1) ?
+                R_DistortedFlat(pl->picnum) :
+                W_CacheLumpNum(lumpnum, PU_STATIC);
+
 	planeheight = abs(pl->height-viewz);
 	light = (pl->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
@@ -564,6 +627,10 @@ void R_DrawPlanes (void)
 			pl->bottom[x]);
 	}
 	
+    // [crispy] add support for SMMU swirling flats
+    if (flattranslation[pl->picnum] != -1)
+    {
         W_ReleaseLumpNum(lumpnum);
+    }
     }
 }

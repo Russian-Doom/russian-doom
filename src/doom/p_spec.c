@@ -53,6 +53,8 @@
 #include "d_englsh.h"
 // [JN] Уведомление об обнаружении секрета
 extern int secret_notification;
+// [JN] Улучшенная анимация жидкостей
+extern int swirling_liquids;
 
 //
 // Animating textures and planes
@@ -99,38 +101,40 @@ extern anim_t*	lastanim;
 //  using all the flats between the start
 //  and end entry, in the order found in
 //  the WAD file.
-//
-animdef_t		animdefs[] =
+
+// [JN] Добавлен небольшой хак для анимации 
+// жидких поверхностей (swirling floors).
+animdef_t       animdefs[] =
 {
-    {false,	"NUKAGE3",	"NUKAGE1",	8},
-    {false,	"FWATER4",	"FWATER1",	8},
-    {false,	"SWATER4",	"SWATER1", 	8},
-    {false,	"LAVA4",	"LAVA1",	8},
-    {false,	"BLOOD3",	"BLOOD1",	8},
+    {false, "NUKAGE3",  "NUKAGE1",  9}, // Кислота
+    {false, "FWATER4",  "FWATER1",  9}, // Вода
+    {false, "SWATER4",  "SWATER1",  9}, // Вода
+    {false, "LAVA4",    "LAVA1",    9}, // Лава
+    {false, "BLOOD3",   "BLOOD1",   9}, // Кровь
 
     // DOOM II flat animations.
-    {false,	"RROCK08",	"RROCK05",	8},		
-    {false,	"SLIME04",	"SLIME01",	8},
-    {false,	"SLIME08",	"SLIME05",	8},
-    {false,	"SLIME12",	"SLIME09",	8},
+    {false, "SLIME04",  "SLIME01",  9}, // Слизь
+    {false, "SLIME08",  "SLIME05",  9}, // Слизь
+    {false, "RROCK08",  "RROCK05",  8},		
+    {false, "SLIME12",  "SLIME09",  8}, 
 
-    {true,	"BLODGR4",	"BLODGR1",	8},
-    {true,	"SLADRIP3",	"SLADRIP1",	8},
+    {true,  "BLODGR4",  "BLODGR1",  8},
+    {true,  "SLADRIP3", "SLADRIP1", 8},
 
-    {true,	"BLODRIP4",	"BLODRIP1",	8},
-    {true,	"FIREWALL",	"FIREWALA",	8},
-    {true,	"GSTFONT3",	"GSTFONT1",	8},
-    {true,	"FIRELAVA",	"FIRELAV3",	8},
-    {true,	"FIREMAG3",	"FIREMAG1",	8},
-    {true,	"FIREBLU2",	"FIREBLU1",	8},
-    {true,	"ROCKRED3",	"ROCKRED1",	8},
+    {true,  "BLODRIP4", "BLODRIP1", 8},
+    {true,  "FIREWALL", "FIREWALA", 8},
+    {true,  "GSTFONT3", "GSTFONT1", 8},
+    {true,  "FIRELAVA", "FIRELAV3", 8},
+    {true,  "FIREMAG3", "FIREMAG1", 8},
+    {true,  "FIREBLU2", "FIREBLU1", 8},
+    {true,  "ROCKRED3", "ROCKRED1", 8},
 
-    {true,	"BFALL4",	"BFALL1",	8},
-    {true,	"SFALL4",	"SFALL1",	8},
-    {true,	"WFALL4",	"WFALL1",	8},
-    {true,	"DBRAIN4",	"DBRAIN1",	8},
-	
-    {-1,        "",             "",             0},
+    {true,  "BFALL4",   "BFALL1",   8},
+    {true,  "SFALL4",   "SFALL1",   8},
+    {true,  "WFALL4",   "WFALL1",   8},
+    {true,  "DBRAIN4",  "DBRAIN1",  8},
+
+    {-1,    "",         "",         0},
 };
 
 // [crispy] remove MAXANIMS limit
@@ -1137,7 +1141,7 @@ void P_UpdateSpecials (void)
     int		i;
     line_t*	line;
 
-    
+
     //	LEVEL TIMER
     if (levelTimer == true)
     {
@@ -1145,7 +1149,7 @@ void P_UpdateSpecials (void)
 	if (!levelTimeCount)
 	    G_ExitLevel();
     }
-    
+
     //	ANIMATE FLATS AND TEXTURES GLOBALLY
     for (anim = anims ; anim < lastanim ; anim++)
     {
@@ -1155,11 +1159,20 @@ void P_UpdateSpecials (void)
 	    if (anim->istexture)
 		texturetranslation[i] = pic;
 	    else
+        // [crispy] add support for SMMU swirling flats
+        // [JN] Небольшой хак: анимировать только те поверхности,
+        // у которых скорость анимации больше 8, т.е. только те 
+        // жикости, которые явно указанны в animdefs.
+        if (anim->speed > 8 && swirling_liquids)
+        {
+            flattranslation[i] = -1;
+        }
+        else
 		flattranslation[i] = pic;
 	}
     }
 
-    
+
     //	ANIMATE LINE SPECIALS
     for (i = 0; i < numlinespecials; i++)
     {
@@ -1173,7 +1186,7 @@ void P_UpdateSpecials (void)
 	}
     }
 
-    
+
     //	DO BUTTONS
     for (i = 0; i < MAXBUTTONS; i++)
 	if (buttonlist[i].btimer)

@@ -38,6 +38,7 @@ int vanilla_demo_limit = 1;
 int colored_blood = 1;           // Кровь разных цветов
 int new_ouch_face = 1;           // Корректная формула "Ouch face"
 int invul_sky = 1;               // Неуязвимость окрашивает небо
+int swirling_liquids = 1;        // Улучшенная анимация жидкостей
 int red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
 int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
 int translucency = 1;            // Прозрачность объектов
@@ -63,6 +64,7 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ђазноцветная кровь и трупы монстров",       &colored_blood)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Љорректная формула \"Ouch face\"",          &new_ouch_face)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќеуязвимость окрашивает небо",              &invul_sky)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("“лучшенная анимация жидкостей",             &swirling_liquids)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Љрасная вспышка воскрешения монстров",      &red_resurrection_flash)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("„вуствольное ружье может разрывать врагов", &ssg_blast_enemies)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ћффект прозрачности у некоторых объектов",  &translucency)),
@@ -93,6 +95,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
     M_BindIntVariable("invul_sky",              &invul_sky);                // Неуязвимость окрашивает небо
+    M_BindIntVariable("swirling_liquids",       &swirling_liquids);         // Улучшенная анимация жидкостей
     M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);   // Красная вспышка воскрешения монстров
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
     M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов

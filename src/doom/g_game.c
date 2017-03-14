@@ -234,12 +234,13 @@ int     vanilla_savegame_limit = 1;
 int     vanilla_demo_limit = 1;
 */
 
-// [JN] Дополнительные параметры геймплея
+// [JN] Дополнительные параметры игры
 
 // - Графика -
 int colored_blood = 1;           // Кровь разных цветов
 int new_ouch_face = 1;           // Корректная формула "Ouch face"
 int invul_sky = 1;               // Неуязвимость окрашивает небо
+int swirling_liquids = 1;        // Улучшенная анимация жидкостей
 int red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
 int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
 int no_pickup_flash = 0;         // Не мигать экраном при получении предметов
