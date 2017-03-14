@@ -49,6 +49,10 @@ boolean W_ParseCommandLine(void)
     // into the main IWAD.  Multiple files may be specified.
     //
 
+    // [JN] Функция -file перенесена в "D_SetGameDescription":
+    // Doom и Heretic: d_main.c / Heretic: h2_main.c
+
+    /*
     p = M_CheckParmWithArgs("-merge", 1);
 
     if (p > 0)
@@ -65,6 +69,7 @@ boolean W_ParseCommandLine(void)
             W_MergeFile(filename);
         }
     }
+    */
 
     // NWT-style merging:
 
@@ -178,6 +183,32 @@ boolean W_ParseCommandLine(void)
     // Load the specified PWAD files.
     //
 
+    // [JN] Хак, всё ещё необходимый для корректной поддержки
+    // переводов уровней Hexen: Deathkings of the Dark Citadel
+    // В hexen\h2_main.c задается только заголовок окна.
+
+    int dd;
+    dd = M_CheckParmWithArgs ("-file", 1);
+    if (dd)
+    {
+        while (++dd != myargc && myargv[dd][0] != '-')
+        {
+            char *check;
+            check = M_StrCaseStr(myargv[dd], "hexdd.wad");
+
+            if (check != NULL)
+            {
+                char *filename;
+                filename = D_TryFindWADByName("hexdd.wad");
+                W_AddFile("russian/russian-hexen-dd.wad");
+            }
+        }
+    }
+
+    // [JN] Параметр "-file" перенесен в "D_SetGameDescription":
+    // Doom и Heretic: d_main.c / Heretic: h2_main.c
+
+    /*
     p = M_CheckParmWithArgs ("-file", 1);
     if (p)
     {
@@ -192,34 +223,9 @@ boolean W_ParseCommandLine(void)
 
             printf(" добавление: %s\n", filename);	// " adding %s\n"
 	    W_MergeFile(filename);
-		
-		// [JN] Проверка загрузки дополнения hexdd.wad.
-		// В случае обнаружения через -file, происходит
-		// подгрузка русских ресурсов.
-		//
-		// Повторно указано в hexen\h2_main.c, что бы
-		// задать заголовок окна.
-		
-		int dd;
-		dd = M_CheckParmWithArgs ("-file", 1);
-		
-		if (dd)
-			{
-			while (++dd != myargc && myargv[dd][0] != '-')
-			{
-				char *check;
-				check = M_StrCaseStr(myargv[dd], "hexdd.wad");
-				
-				if (check != NULL)
-				{
-				char *filename;
-				filename = D_TryFindWADByName("hexdd.wad");
-				W_AddFile("russian/russian-hexen-dd.wad");
-				}
-			}
-			}
         }
     }
+    */
 
 //    W_PrintDirectory();
 

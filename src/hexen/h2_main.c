@@ -344,6 +344,23 @@ void D_SetGameDescription(void)
             DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
         }
 	}
+
+    // [JN] Параметр "-file" перенесен из w_main.c
+    // Необходимо для того, чтобы любые ресурсы из pwad-файлов
+    // загружались после руссифицированных pwad-файлов.
+
+    int newpwadfile;
+    newpwadfile = M_CheckParmWithArgs ("-file", 1);
+    if (newpwadfile)
+    {
+        while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
+        {
+        char *filename;
+        filename = D_TryFindWADByName(myargv[newpwadfile]);
+        printf(" добавление: %s\n", filename);
+        W_MergeFile(filename);
+        }
+    }
 }
 
 //==========================================================================
@@ -545,7 +562,7 @@ void D_DoomMain(void)
             H2_StartTitle();
         }
     }
-	
+
 	// [JN] Проверка загрузки дополнения hexdd.wad.
 	// В случае обнаружения через -file, происходит
 	// подгрузка русских ресурсов.
@@ -553,25 +570,25 @@ void D_DoomMain(void)
 	//
 	// На данном этапе только указываем заголовок,
 	// непосредственная подгрузка russian-hexen-dd.wad
-	// происходит в w_main.c
+	// происходит в W_ParseCommandLine (w_main.c @ 190).
 	
-	int dd;
-	dd = M_CheckParmWithArgs ("-file", 1);
-	
-	if (dd)
-		{
-		while (++dd != myargc && myargv[dd][0] != '-')
-		{
-			char *check;
-			check = M_StrCaseStr(myargv[dd], "hexdd.wad");
-			
-			if (check != NULL)
-			{
-			gamedescription = "Hexen: Короли Смерти Темной Цитадели";
-			}
-		}
-		}
-		
+    int dd;
+    dd = M_CheckParmWithArgs ("-file", 1);
+
+    if (dd)
+    {
+        while (++dd != myargc && myargv[dd][0] != '-')
+        {
+            char *check;
+            check = M_StrCaseStr(myargv[dd], "hexdd.wad");
+
+            if (check != NULL)
+            {
+            gamedescription = "Hexen: Короли Смерти Темной Цитадели";
+            }
+        }
+    }
+
     H2_GameLoop();              // Never returns
 }
 

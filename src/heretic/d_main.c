@@ -1097,6 +1097,23 @@ void D_DoomMain(void)
         }
     }
 
+    // [JN] Параметр "-file" перенесен из w_main.c
+    // Необходимо для того, чтобы любые ресурсы из pwad-файлов
+    // загружались после руссифицированных pwad-файлов.
+
+    int newpwadfile;
+    newpwadfile = M_CheckParmWithArgs ("-file", 1);
+    if (newpwadfile)
+    {
+        while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
+        {
+        char *filename;
+        filename = D_TryFindWADByName(myargv[newpwadfile]);
+        printf(" добавление: %s\n", filename);
+        W_MergeFile(filename);
+        }
+    }
+
     I_SetWindowTitle(gamedescription);
 
     savegamedir = M_GetSaveGameDir("heretic.wad");
