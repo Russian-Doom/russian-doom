@@ -324,7 +324,9 @@ static patch_t*		shortnum[10];
 static patch_t*		keys[NUMCARDS]; 
 
 // face status patches
-static patch_t*		faces[ST_NUMFACES];
+// [JN] Массив удвоен, необходимо для бессмертия.
+// Thanks Brad Harding for help!
+static patch_t*		faces[ST_NUMFACES * 2];
 
 // face background
 static patch_t*		faceback;
@@ -820,14 +822,9 @@ void ST_updateFaceWidget(void)
 	    // picking up bonus
 	    doevilgrin = false;
 
-        // [JN] Не ухмыляться при подборе оружия в режиме IDDQD и сфере неуязвимости.
-
 	    for (i=0;i<NUMWEAPONS;i++)
 	    {
-			if (oldweaponsowned[i] != plyr->weaponowned[i]
-				// [BH] no evil grin when invulnerable
-				&& !(plyr->cheats & CF_GODMODE)
-				&& !plyr->powers[pw_invulnerability])
+			if (oldweaponsowned[i] != plyr->weaponowned[i])
 			{
 				doevilgrin = true;
 				oldweaponsowned[i] = plyr->weaponowned[i];
@@ -995,12 +992,7 @@ void ST_updateFaceWidget(void)
     if (priority < 6)
     {
 	// rapid firing
-	
-	// [JN] Не оскаливаться при стрельбе в режиме IDDQD и сфере неуязвимости.
-	
-	if (plyr->attackdown
-	// [BH] no rampage face when invulnerable
-	&& !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability])
+	if (plyr->attackdown)
 	{
 	    if (lastattackdown==-1)
 		lastattackdown = ST_RAMPAGEDELAY;
@@ -1044,6 +1036,11 @@ void ST_updateFaceWidget(void)
     st_facecount--;
     st_faceindex = painoffset + faceindex;
 
+    // [JN] При наличии бессмертия активируется дополнительный цикл.
+    if ((plyr->powers[pw_invulnerability]) || (plyr->cheats & CF_GODMODE))
+    {
+    st_faceindex = painoffset + faceindex + ST_NUMFACES;
+    }
 }
 
 void ST_updateWidgets(void)
@@ -1360,6 +1357,28 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     ++facenum;
     callback(DEH_String("STFDEAD0"), &faces[facenum]);
     ++facenum;
+
+    // [JN] Удвоение массива спрайтов лиц, необходимое для бессмертия.
+    for (i = 0; i < ST_NUMPAINFACES; i++)
+    {
+        for (j = 0; j < ST_NUMSTRAIGHTFACES; j++)
+        {
+            M_snprintf(namebuf, 9, "STFST%i%iG", i, j);
+            callback(namebuf, &faces[facenum++]);
+        }
+        M_snprintf(namebuf, 9, "STFTR%i0G", i);          // turn right
+        callback(namebuf, &faces[facenum++]);
+        M_snprintf(namebuf, 9, "STFTL%i0G", i);          // turn left
+        callback(namebuf, &faces[facenum++]);
+        M_snprintf(namebuf, 9, "STFOUC%iG", i);         // ouch!
+        callback(namebuf, &faces[facenum++]);
+        M_snprintf(namebuf, 9, "STFEVL%iG", i);          // evil grin ;)
+        callback(namebuf, &faces[facenum++]);
+        M_snprintf(namebuf, 9, "STFKIL%iG", i);         // pissed off
+        callback(namebuf, &faces[facenum++]);
+    }
+    callback("STFGOD0G", &faces[facenum++]);
+    callback("STFDEA0G", &faces[facenum++]);
 }
 
 static void ST_loadCallback(char *lumpname, patch_t **variable)
