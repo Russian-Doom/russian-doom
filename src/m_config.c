@@ -119,6 +119,22 @@ typedef struct
 
 static default_t	doom_defaults_list[] =
 {
+    // [JN] Все стандартное управление перенесено в
+    // extra_defaults_list, что бы создать единый
+    // конфигурационный файл для каждой игры.
+};
+
+static default_collection_t doom_defaults =
+{
+    doom_defaults_list,
+    arrlen(doom_defaults_list),
+    NULL,
+};
+
+//! @begin_config_file extended
+
+static default_t extra_defaults_list[] =
+{
     //!
     // Mouse sensitivity.  This value is used to multiply input mouse
     // movement to control the effect of moving the mouse.
@@ -679,19 +695,7 @@ static default_t	doom_defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(comport),
-};
 
-static default_collection_t doom_defaults =
-{
-    doom_defaults_list,
-    arrlen(doom_defaults_list),
-    NULL,
-};
-
-//! @begin_config_file extended
-
-static default_t extra_defaults_list[] =
-{
     //!
     // @game heretic hexen strife
     //
@@ -1946,9 +1950,9 @@ static void LoadDefaultCollection(default_collection_t *collection)
 
 // Set the default filenames to use for configuration files.
 
-void M_SetConfigFilenames(char *main_config, char *extra_config)
+void M_SetConfigFilenames(/*char *main_config, */char *extra_config)
 {
-    default_main_config = main_config;
+    // default_main_config = main_config;
     default_extra_config = extra_config;
 }
 

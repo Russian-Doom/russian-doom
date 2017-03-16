@@ -14,6 +14,8 @@
 // GNU General Public License for more details.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 
 #include "doomtype.h"
@@ -60,7 +62,7 @@ int key_useartifact = KEY_ENTER;
 // Hexen key controls
 //
 
-int key_jump = '/';
+int key_jump = ' ';
 
 int key_arti_all             = KEY_BACKSPACE;
 int key_arti_health          = '\\';

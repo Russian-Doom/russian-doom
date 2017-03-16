@@ -16,6 +16,7 @@
 //      Configuration file interface.
 //    
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #ifndef __M_CONFIG__
 #define __M_CONFIG__
@@ -33,7 +34,7 @@ boolean M_SetVariable(char *name, char *value);
 int M_GetIntVariable(char *name);
 const char *M_GetStringVariable(char *name);
 float M_GetFloatVariable(char *name);
-void M_SetConfigFilenames(char *main_config, char *extra_config);
+void M_SetConfigFilenames(/*char *main_config, */char *extra_config);
 char *M_GetSaveGameDir(char *iwadname);
 
 extern char *configdir;
