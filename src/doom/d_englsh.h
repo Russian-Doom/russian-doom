@@ -82,11 +82,17 @@
 
 #define DETAILHI    "dscjrfz ltnfkbpfwbz"       // Высокая детализация
 #define DETAILLO    "ybprfz ltnfkbpfwbz"        // Низкая детализация
-#define GAMMALVL0   "ufvvf-rjhhtrwbz jnrk.xtyf" // Гамма-коррекция отключена
-#define GAMMALVL1   "ehjdtym ufvvf-rjhhtrwbb 1" // Уровень гамма-коррекции 1
-#define GAMMALVL2   "ehjdtym ufvvf-rjhhtrwbb 2" // Уровень гамма-коррекции 2
-#define GAMMALVL3   "ehjdtym ufvvf-rjhhtrwbb 3" // Уровень гамма-коррекции 3
-#define GAMMALVL4   "ehjdtym ufvvf-rjhhtrwbb 4" // Уровень гамма-коррекции 4
+
+#define GAMMALVL0     "ufvvf-rjhhtrwbz jnrk.xtyf"     // Гамма-коррекция отключена
+#define GAMMALV05     "ehjdtym ufvvf-rjhhtrwbb 0>5"   // Уровень гамма-коррекции 0.5
+#define GAMMALVL1     "ehjdtym ufvvf-rjhhtrwbb 1>0"   // Уровень гамма-коррекции 1.0
+#define GAMMALV15     "ehjdtym ufvvf-rjhhtrwbb 1>5"   // Уровень гамма-коррекции 1.5
+#define GAMMALVL2     "ehjdtym ufvvf-rjhhtrwbb 2>0"   // Уровень гамма-коррекции 2.0
+#define GAMMALV25     "ehjdtym ufvvf-rjhhtrwbb 2>5"   // Уровень гамма-коррекции 2.5
+#define GAMMALVL3     "ehjdtym ufvvf-rjhhtrwbb 3>0"   // Уровень гамма-коррекции 3.0
+#define GAMMALV35     "ehjdtym ufvvf-rjhhtrwbb 3>5"   // Уровень гамма-коррекции 3.5
+#define GAMMALVL4     "ehjdtym ufvvf-rjhhtrwbb 4>0"   // Уровень гамма-коррекции 4.0
+
 #define EMPTYSTRING "gecnjq ckjn"               // Пустой слот
 #define SECRETFOUND "j,yfhe;ty nfqybr!"         // Обнаружен тайник!
 

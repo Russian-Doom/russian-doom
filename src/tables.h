@@ -30,6 +30,8 @@
 //	  maps tan(angle) to angle fast. Gotta search.	
 //    
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __TABLES__
 #define __TABLES__
@@ -56,7 +58,7 @@ extern const fixed_t *finecosine;
 extern const fixed_t finetangent[FINEANGLES/2];
 
 // Gamma correction tables.
-extern const byte gammatable[5][256];
+extern const byte gammatable[9][256];
 
 // Binary Angle Measument, BAM.
 

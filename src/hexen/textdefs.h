@@ -57,12 +57,18 @@
 #define NETEND		"YTDJPVJ:YJ PFRJYXBNM CTNTDE> BUHE!\n\n"PRESSKEY				// НЕВОЗМОЖНО ЗАКОНЧИТЬ СЕТЕВУЮ ИГРУ!	you can't end a netgame!
 #define ENDGAME		"are you sure you want to end the game?\n\n"PRESSYN
 #define DOSY		"(YF:VBNT ^E^ XNJ<S DSQNB.)"									// (НАЖМИТЕ "Y" ЧТОБЫ ВЫЙТИ.)	(press y to quit to dos.)
-#define TXT_GAMMA_LEVEL_OFF	"UFVVF-RJHHTRWBZ JNRK>XTYF"								// ГАММА-КОРРЕКЦИЯ ОТКЛЮЧЕНА	GAMMA CORRECTION OFF
-#define TXT_GAMMA_LEVEL_1	"EHJDTYM UFVVF-RJHHTRWBB 1"								// УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1	GAMMA CORRECTION LEVEL 1
-#define TXT_GAMMA_LEVEL_2	"EHJDTYM UFVVF-RJHHTRWBB 2"								// УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2	GAMMA CORRECTION LEVEL 2
-#define TXT_GAMMA_LEVEL_3	"EHJDTYM UFVVF-RJHHTRWBB 3"								// УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3	GAMMA CORRECTION LEVEL 3
-#define TXT_GAMMA_LEVEL_4	"EHJDTYM UFVVF-RJHHTRWBB 4"								// УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4	GAMMA CORRECTION LEVEL 4
-#define	EMPTYSTRING	"GECNJQ CKJN"													// ПУСТОЙ СЛОТ					empty slot
+
+#define TXT_GAMMA_LEVEL_OFF     "UFVVF-RJHHTRWBZ JNRK>XTYF"         // ГАММА-КОРРЕКЦИЯ ОТКЛЮЧЕНА
+#define TXT_GAMMA_LEVEL_0_5     "EHJDTYM UFVVF-RJHHTRWBB 0.5"       // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.5
+#define TXT_GAMMA_LEVEL_1_0     "EHJDTYM UFVVF-RJHHTRWBB 1.0"       // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.0
+#define TXT_GAMMA_LEVEL_1_5     "EHJDTYM UFVVF-RJHHTRWBB 1.5"       // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.5
+#define TXT_GAMMA_LEVEL_2_0     "EHJDTYM UFVVF-RJHHTRWBB 2.0"       // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.0
+#define TXT_GAMMA_LEVEL_2_5     "EHJDTYM UFVVF-RJHHTRWBB 2.5"       // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.5
+#define TXT_GAMMA_LEVEL_3_0     "EHJDTYM UFVVF-RJHHTRWBB 3.0"       // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.0
+#define TXT_GAMMA_LEVEL_3_5     "EHJDTYM UFVVF-RJHHTRWBB 3.5"       // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.5
+#define TXT_GAMMA_LEVEL_4_0     "EHJDTYM UFVVF-RJHHTRWBB 4.0"       // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.0
+
+#define	EMPTYSTRING             "GECNJQ CKJN"                       // ПУСТОЙ СЛОТ
 
 // P_inter.c ---------------------------------------------------------------
 
