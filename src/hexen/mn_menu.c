@@ -316,13 +316,21 @@ static Menu_t *Menus[] = {
 
 static char *GammaText[] = {
     TXT_GAMMA_LEVEL_OFF,
-    TXT_GAMMA_LEVEL_0_5,
+    TXT_GAMMA_LEVEL_0_25,
+    TXT_GAMMA_LEVEL_0_50,
+    TXT_GAMMA_LEVEL_0_75,
     TXT_GAMMA_LEVEL_1_0,
-    TXT_GAMMA_LEVEL_1_5,
+    TXT_GAMMA_LEVEL_1_25,
+    TXT_GAMMA_LEVEL_1_50,
+    TXT_GAMMA_LEVEL_1_75,
     TXT_GAMMA_LEVEL_2_0,
-    TXT_GAMMA_LEVEL_2_5,
+    TXT_GAMMA_LEVEL_2_25,
+    TXT_GAMMA_LEVEL_2_50,
+    TXT_GAMMA_LEVEL_2_75,
     TXT_GAMMA_LEVEL_3_0,
-    TXT_GAMMA_LEVEL_3_5,
+    TXT_GAMMA_LEVEL_3_25,
+    TXT_GAMMA_LEVEL_3_50,
+    TXT_GAMMA_LEVEL_3_75,
     TXT_GAMMA_LEVEL_4_0
 };
 
@@ -1515,7 +1523,7 @@ boolean MN_Responder(event_t * event)
         else if (key == key_menu_gamma)          // F11 (gamma correction)
         {
             usegamma++;
-            if (usegamma > 8)
+            if (usegamma > 16)
             {
                 usegamma = 0;
             }

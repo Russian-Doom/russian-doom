@@ -104,16 +104,24 @@ extern int play_exit_sfx;
 
 void    (*messageRoutine)(int response);
 
-char gammamsg[9][28] =
+char gammamsg[17][29] =
 {
     GAMMALVL0,
+    GAMMALV02,
     GAMMALV05,
+    GAMMALV07,
     GAMMALVL1,
+    GAMMALV12,
     GAMMALV15,
+    GAMMALV17,
     GAMMALVL2,
+    GAMMALV22,
     GAMMALV25,
+    GAMMALV27,
     GAMMALVL3,
+    GAMMALV32,
     GAMMALV35,
+    GAMMALV37,
     GAMMALVL4
 };
 
@@ -1793,7 +1801,7 @@ boolean M_Responder (event_t* ev)
         else if (key == key_menu_gamma)    // gamma toggle
         {
 	    usegamma++;
-	    if (usegamma > 8)
+	    if (usegamma > 16)
 		usegamma = 0;
 	    players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
             I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));

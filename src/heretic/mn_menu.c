@@ -1393,7 +1393,7 @@ boolean MN_Responder(event_t * event)
         else if (key == key_menu_gamma)           // F11 (gamma correction)
         {
             usegamma++;
-            if (usegamma > 8)
+            if (usegamma > 16)
             {
                 usegamma = 0;
             }
