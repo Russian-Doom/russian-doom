@@ -1028,7 +1028,7 @@ void M_DrawOptions(void)
 		 12, mouseSensitivity);
 
     M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1),
-		 9,screenSize);
+		 10,screenSize);
 }
 
 void M_Options(int choice)
@@ -1250,7 +1250,7 @@ void M_SizeDisplay(int choice)
 	}
 	break;
       case 1:
-	if (screenSize < 8)
+	if (screenSize < 9)
 	{
 	    screenblocks++;
 	    screenSize++;

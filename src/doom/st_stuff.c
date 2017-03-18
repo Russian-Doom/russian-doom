@@ -46,6 +46,7 @@
 
 #include "am_map.h"
 #include "m_cheat.h"
+#include "m_menu.h"
 
 #include "s_sound.h"
 
@@ -1210,20 +1211,24 @@ void ST_drawWidgets(boolean refresh)
 	STlib_updateNum(&w_maxammo[i], refresh);
     }
 
-    STlib_updatePercent(&w_health, refresh);
-    STlib_updatePercent(&w_armor, refresh);
+    if (screenblocks == 11)
+        V_DrawPatchDirect(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+    
+    
+    STlib_updatePercent(&w_health, refresh || screenblocks == 11);
+    STlib_updatePercent(&w_armor, refresh || screenblocks == 11);
 
     STlib_updateBinIcon(&w_armsbg, refresh);
 
     for (i=0;i<6;i++)
-	STlib_updateMultIcon(&w_arms[i], refresh);
+	STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11);
 
     STlib_updateMultIcon(&w_faces, refresh);
 
     for (i=0;i<3;i++)
-	STlib_updateMultIcon(&w_keyboxes[i], refresh);
+	STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11);
 
-    STlib_updateNum(&w_frags, refresh);
+    STlib_updateNum(&w_frags, refresh || screenblocks == 11);
 
 }
 
@@ -1249,22 +1254,17 @@ void ST_diffDraw(void)
 void ST_Drawer (boolean fullscreen, boolean refresh)
 {
   
-    st_statusbaron = (!fullscreen) || automapactive;
+    st_statusbaron = (!fullscreen) || automapactive || screenblocks == 11;
     st_firsttime = st_firsttime || refresh;
 
     // Do red-/gold-shifts from damage/items
     ST_doPaletteStuff();
 
-    /*
     // If just after ST_Start(), refresh all
     if (st_firsttime) ST_doRefresh();
     // Otherwise, update as little as possible
     else ST_diffDraw();
-    */
 
-    // [JN] Всегда делать полное обновление статус бара.
-    // Исправляет проблему задержки обновления при закрытии экрана помощи.
-    ST_doRefresh();
 
 }
 

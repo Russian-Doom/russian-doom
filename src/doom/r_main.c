@@ -18,7 +18,7 @@
 //	See tables.c, too.
 //
 
-
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 
 
@@ -678,7 +678,7 @@ void R_ExecuteSetViewSize (void)
 
     setsizeneeded = false;
 
-    if (setblocks == 11)
+    if (setblocks == 11 || setblocks == 12)
     {
 	scaledviewwidth = SCREENWIDTH;
 	viewheight = SCREENHEIGHT;
