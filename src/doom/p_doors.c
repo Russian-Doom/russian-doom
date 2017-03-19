@@ -418,7 +418,7 @@ EV_VerticalDoor
         // [JN, from crispy] Фикс ошибки с дверью DR, назначенной 
         // односторонней линии. Не завершать работу с ошибкой, а
         // просто проигрывать звук "уфф".
-        S_StartSound(NULL,sfx_oof);
+        S_StartSound(player->mo,sfx_oof);
         return;
     }
 
