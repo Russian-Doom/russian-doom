@@ -37,6 +37,8 @@
 
 #include "p_pspr.h"
 
+#include "crispy.h"
+
 #define LOWERSPEED		FRACUNIT*6
 #define RAISESPEED		FRACUNIT*6
 
@@ -479,11 +481,18 @@ A_Punch
     // turn to face target
     if (linetarget)
     {
-	S_StartSound (player->mo, sfx_punch);
-	player->mo->angle = R_PointToAngle2 (player->mo->x,
-					     player->mo->y,
-					     linetarget->x,
-					     linetarget->y);
+        if (!singleplayer)
+        {
+            S_StartSound (player->mo, sfx_punch);
+        }
+        else
+        {
+            S_StartSound (NULL, sfx_punch);
+        }
+        player->mo->angle = R_PointToAngle2 (player->mo->x,
+                            player->mo->y,
+                            linetarget->x,
+                            linetarget->y);
     }
 }
 
@@ -659,7 +668,14 @@ A_FirePistol
 ( player_t*	player,
   pspdef_t*	psp ) 
 {
-    S_StartSound (player->mo, sfx_pistol);
+    if (!singleplayer)
+    {
+        S_StartSound (player->mo, sfx_pistol);
+    }
+    else
+    {
+        S_StartSound (NULL, sfx_pistol);
+    }
 
     P_SetMobjState (player->mo, S_PLAY_ATK2);
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
@@ -682,8 +698,16 @@ A_FireShotgun
   pspdef_t*	psp ) 
 {
     int		i;
-	
-    S_StartSound (player->mo, sfx_shotgn);
+
+    if (!singleplayer)
+    {
+        S_StartSound (player->mo, sfx_shotgn);
+    }
+    else
+    {
+        S_StartSound (NULL, sfx_shotgn);
+    }
+
     P_SetMobjState (player->mo, S_PLAY_ATK2);
 
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
@@ -711,9 +735,16 @@ A_FireShotgun2
     int		i;
     angle_t	angle;
     int		damage;
-		
-	
-    S_StartSound (player->mo, sfx_dshtgn);
+
+    if (!singleplayer)
+    {
+        S_StartSound (player->mo, sfx_dshtgn);
+    }
+    else
+    {
+        S_StartSound (NULL, sfx_dshtgn);
+    }
+
     P_SetMobjState (player->mo, S_PLAY_ATK2);
 
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 2);
@@ -747,12 +778,19 @@ A_FireCGun
 {
     // [JN] Исправление оригинального бага, при котором пулемет
     // издавал два звука выстрела при наличии только одного патрона.
-    
+
     if (!player->ammo[weaponinfo[player->readyweapon].ammo])
 	return;
-	
-    S_StartSound (player->mo, sfx_pistol);
-	
+
+    if (!singleplayer)
+    {
+        S_StartSound (player->mo, sfx_pistol);
+    }
+    else
+    {
+        S_StartSound (NULL, sfx_pistol);
+    }
+
     P_SetMobjState (player->mo, S_PLAY_ATK2);
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
 
@@ -763,7 +801,7 @@ A_FireCGun
 		  - &states[S_CHAIN1] );
 
     P_BulletSlope (player->mo);
-	
+
     P_GunShot (player->mo, !player->refire);
 }
 
@@ -833,7 +871,14 @@ A_BFGsound
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    S_StartSound (player->mo, sfx_bfg);
+    if (!singleplayer)
+    {
+        S_StartSound (player->mo, sfx_bfg);
+    }
+    else
+    {
+        S_StartSound (NULL, sfx_bfg);
+    }
 }
 
 
