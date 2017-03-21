@@ -16,6 +16,7 @@
 //	Game completion, final screen animation.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdio.h>
 #include <ctype.h>
@@ -36,6 +37,8 @@
 
 #include "doomstat.h"
 #include "r_state.h"
+
+extern int draw_shadowed_text;
 
 typedef enum
 {
@@ -299,7 +302,14 @@ void F_TextWrite (void)
 	w = SHORT (hu_font[c]->width);
 	if (cx+w > SCREENWIDTH)
 	    break;
-	V_DrawPatch(cx, cy, hu_font[c]);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(cx, cy, hu_font[c]);
+    }
+    else
+    {
+        V_DrawPatch(cx, cy, hu_font[c]);
+    }
 	cx+=w;
     }
 	
@@ -540,7 +550,14 @@ void F_CastPrint (char* text)
 	}
 		
 	w = SHORT (hu_font[c]->width);
-	V_DrawPatch(cx, 180, hu_font[c]);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(cx, 180, hu_font[c]);
+    }
+    else
+    {
+        V_DrawPatch(cx, 180, hu_font[c]);
+    }
 	cx+=w;
     }
 	
@@ -649,9 +666,18 @@ void F_BunnyScroll (void)
 	return;
     if (finalecount < 1180)
     {
-        V_DrawPatch((SCREENWIDTH - 13 * 8) / 2,
+        if (draw_shadowed_text)
+        {
+            V_DrawShadowedPatchDoom((SCREENWIDTH - 13 * 8) / 2,
                     (SCREENHEIGHT - 8 * 8) / 2, 
                     W_CacheLumpName(DEH_String("END0"), PU_CACHE));
+        }
+        else
+        {
+            V_DrawPatch((SCREENWIDTH - 13 * 8) / 2,
+                    (SCREENHEIGHT - 8 * 8) / 2, 
+                    W_CacheLumpName(DEH_String("END0"), PU_CACHE));            
+        }
 	laststage = 0;
 	return;
     }
@@ -666,9 +692,18 @@ void F_BunnyScroll (void)
     }
 	
     DEH_snprintf(name, 10, "END%i", stage);
-    V_DrawPatch((SCREENWIDTH - 13 * 8) / 2, 
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom((SCREENWIDTH - 13 * 8) / 2, 
                 (SCREENHEIGHT - 8 * 8) / 2, 
                 W_CacheLumpName (name,PU_CACHE));
+    }
+    else
+    {
+        V_DrawPatch((SCREENWIDTH - 13 * 8) / 2, 
+                (SCREENHEIGHT - 8 * 8) / 2, 
+                W_CacheLumpName (name,PU_CACHE));        
+    }
 }
 
 static void F_ArtScreenDrawer(void)

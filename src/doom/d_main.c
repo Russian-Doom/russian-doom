@@ -303,8 +303,17 @@ void D_Display (void)
 	    y = 4;
 	else
 	    y = viewwindowy+4;
-	V_DrawPatchDirect(viewwindowx + (scaledviewwidth - 68) / 2, y,
+
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(viewwindowx + (scaledviewwidth - 68) / 2, y,
                           W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+    }
+    else
+    {
+        V_DrawPatchDirect(viewwindowx + (scaledviewwidth - 68) / 2, y,
+                          W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+    }
     }
 
 
@@ -407,7 +416,7 @@ void D_BindVariables(void)
     // [JN] Дополнительные параметры геймплея
     
     // - Оптимизация игровой палитры -
-    M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);         // [JN] Оптимизация палитры
+    M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);            // Оптимизация игровой палитры
     // - Графика -
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
@@ -416,6 +425,7 @@ void D_BindVariables(void)
     M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);   // Красная вспышка воскрешения монстров
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
     M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
     M_BindIntVariable("no_pickup_flash",        &no_pickup_flash);          // Не мигать экраном при получении предметов
     // - Звук -
     M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);      // Звук раздавливания трупов

@@ -65,7 +65,7 @@
 #define HU_INPUTWIDTH	64
 #define HU_INPUTHEIGHT	1
 
-
+extern int draw_shadowed_text;
 
 char *chat_macros[10] =
 {
@@ -399,10 +399,22 @@ void HU_Start(void)
 		    HU_FONTSTART, &message_on);
 
     // create the map title widget
+    // [JN] Твик для карты, что бы тень не оставалась
+    // на статус баре после закрытия карты
+    if (draw_shadowed_text)
+    {
+    HUlib_initTextLine(&w_title,
+		       HU_TITLEX, HU_TITLEY-1,
+		       hu_font,
+		       HU_FONTSTART);
+    }
+    else
+    {
     HUlib_initTextLine(&w_title,
 		       HU_TITLEX, HU_TITLEY,
 		       hu_font,
 		       HU_FONTSTART);
+    }
     
     switch ( logical_gamemission )
     {

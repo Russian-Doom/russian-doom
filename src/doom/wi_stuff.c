@@ -437,8 +437,14 @@ void WI_drawLF(void)
     if (gamemode != commercial || wbs->last < NUMCMAPS)
     {
         // draw <LevelName> 
-        V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2,
-                    y, lnames[wbs->last]);
+        if (draw_shadowed_text)
+        {
+            V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
+        }
+        else
+        {
+            V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
+        }
 
         // draw "Finished!"
         y += (5*SHORT(lnames[wbs->last]->height))/4;
@@ -449,171 +455,353 @@ void WI_drawLF(void)
 		// finished_o; - Завершено (WIFO)
 		// finished_m; - Завершены (WIFM)
 
-		if (gamemission == doom) // DOOM I
-		{
-			if (gameepisode == 1) // По колено в трупах
-				{
-					if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); } 		// E1M1: Ангар
-					if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M2: Атомная электростанция
-					if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M3: Завод по переработке отходов
-					if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M4: Командный пункт
-					if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M5: Лаборатория на Фобосе
-					if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M6: Центральный пункт обработки
-					if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M7: Вычислительный центр
-					if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M8: Аномалия на Фобосе
-					if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M9: Военная база
-				}
-		
-		if (gameepisode == 2) // Прибрежье Ада
-				{
-					if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); } 	// E2M1: Аномалия на Деймосе
-					if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// E2M2: Хранилище
-					if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E2M3: Очистительный завод
-					if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E2M4: Лаборатория на Деймосе
-					if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E2M5: Командный центр
-					if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// E2M6: Залы проклятых
-					if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// E2M7: Нерестилище
-					if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E2M8: Вавилонская башня
-					if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E2M9: Крепость тайн
-				}
-		if (gameepisode == 3) // Инферно
-				{
-					if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); } 	// E3M1: Крепость Ада
-					if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E3M2: Трясина отчаяния
-					if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M3: Пандемоний
-					if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M4: Дом боли
-					if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M5: Нечестивый собор
-					if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E3M6: Гора Эреб
-					if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M7: Лимб
-					if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M8: Дит
-					if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M9: Кроличий сад
-				}
-		if (gameepisode == 4) // Твоя плоть истощена
-				{
-					if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); } 	// E4M1: Под Адом
-					if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M2: Истинное отвращение
-					if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M3: Расчленение нечестивых
-					if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M4: Непокорное зло
-					if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M5: Они покаются
-					if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M6: Супротив сих нечестивых
-					if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M7: И последовал Ад
-					if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M8: До бессердечия
-					if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M9: Страх
-				}
-		}
-		
-		if (gamemission == doom2) //  DOOM II
-			{
-					if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 1: Парадный вход
-					if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m);  }	// Уровень 2: Подземные залы
-					if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 3: Вызов брошен
-					if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 4: Средоточие
-					if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 5: Сточные туннели
-					if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 6: Пресс
-					if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 7: Смертельно простой
-					if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 8: Уловки и ловушки
-					if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f);  }	// Уровень 9: Яма
-					if (gamemap == 10 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f);  }	// Уровень 10: Заправочная база
-					if (gamemap == 11 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 11: "o" разрушения!
-					if (gamemap == 12 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f);  }	// Уровень 12: Фабрика
-					if (gamemap == 13 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 13: Деловой район
-					if (gamemap == 14 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 14: Глубочайшие логовища
-					if (gamemap == 15 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 15: Промышленная зона
-					if (gamemap == 16 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 16: Пригород
-					if (gamemap == 17 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 17: Владения
-					if (gamemap == 18 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 18: Внутренний двор
-					if (gamemap == 19 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 19: Цитадель
-					if (gamemap == 20 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 20: Попался!
-					if (gamemap == 21 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 21: Нирвана
-					if (gamemap == 22 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 22: Катакомбы
-					if (gamemap == 23 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 23: Целые бочки веселья
-					if (gamemap == 24 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 24: Пропасть
-					if (gamemap == 25 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 25: Кровопады
-					if (gamemap == 26 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 26: Заброшенные шахты
-					if (gamemap == 27 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 27: Кондоминиум монстров
-					if (gamemap == 28 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 28: Мир Духов
-					if (gamemap == 29 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 29: Конец всего живого
-					if (gamemap == 30 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 30: Икона греха
-					if (gamemap == 31 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 31: Вольфенштайн
-					if (gamemap == 32 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_2->width)) / 2, y, finished_2); }		// Уровень 32: Гроссе
-					if (gamemap == 33 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 33: Предательство
-			}
-			
-		if (gamemission == pack_plut) // Plutonia Experiment
-			{
-					if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o);  }	// Уровень 1: Конго
-					if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 2: Колодец душ
-					if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 3: Ацтек
-					if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 4: Запертый в клетке
-					if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 5: Город-призрак
-					if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o);  }	// Уровень 6: Логово Барона
-					if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 7: Двор-ловушка
-					if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 8: Царство
-					if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 9: Аббатство
-					if (gamemap == 10 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);}		// Уровень 10: Натиск
-					if (gamemap == 11 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 11: Преследуемый
-					if (gamemap == 12 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 12: Скорость
-					if (gamemap == 13 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 13: Склеп
-					if (gamemap == 14 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 14: Зарождение
-					if (gamemap == 15 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 15: Сумерки
-					if (gamemap == 16 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 16: Предзнаменование
-					if (gamemap == 17 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 17: Компаунд
-					if (gamemap == 18 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 18: Нейросфера
-					if (gamemap == 19 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 19: В.Р.А.Г.
-					if (gamemap == 20 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 20: Обитель Смерти
-					if (gamemap == 21 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 21: Убийца
-					if (gamemap == 22 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 22: Невыполнимое задание
-					if (gamemap == 23 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 23: Надгробие
-					if (gamemap == 24 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 24: Последний рубеж
-					if (gamemap == 25 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 25: Храм тьмы
-					if (gamemap == 26 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 26: Бункер
-					if (gamemap == 27 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 27: Антихрист
-					if (gamemap == 28 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 28: Канализация
-					if (gamemap == 29 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 29: Одиссея шумов
-					if (gamemap == 30 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 30: Врата Ада
-					if (gamemap == 31 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 31: Киберлогово
-					if (gamemap == 32 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 32: Иди к сему
-					if (gamemap == 33 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// На всякий случай
-			}
+        /* Тексты с тенью */
+        if (draw_shadowed_text)
+        {
+            if (gamemission == doom) // DOOM I
+            {
+                if (gameepisode == 1) // По колено в трупах
+                {
+                    if (gamemap == 1 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); } 		// E1M1: Ангар
+                    if (gamemap == 2 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M2: Атомная электростанция
+                    if (gamemap == 3 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M3: Завод по переработке отходов
+                    if (gamemap == 4 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M4: Командный пункт
+                    if (gamemap == 5 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M5: Лаборатория на Фобосе
+                    if (gamemap == 6 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M6: Центральный пункт обработки
+                    if (gamemap == 7 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M7: Вычислительный центр
+                    if (gamemap == 8 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M8: Аномалия на Фобосе
+                    if (gamemap == 9 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M9: Военная база
+                }
+                if (gameepisode == 2) // Прибрежье Ада
+                {
+                    if (gamemap == 1 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); } 	// E2M1: Аномалия на Деймосе
+                    if (gamemap == 2 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// E2M2: Хранилище
+                    if (gamemap == 3 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E2M3: Очистительный завод
+                    if (gamemap == 4 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E2M4: Лаборатория на Деймосе
+                    if (gamemap == 5 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E2M5: Командный центр
+                    if (gamemap == 6 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// E2M6: Залы проклятых
+                    if (gamemap == 7 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// E2M7: Нерестилище
+                    if (gamemap == 8 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E2M8: Вавилонская башня
+                    if (gamemap == 9 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E2M9: Крепость тайн
+                }
+                if (gameepisode == 3) // Инферно
+                {
+                    if (gamemap == 1 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); } 	// E3M1: Крепость Ада
+                    if (gamemap == 2 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E3M2: Трясина отчаяния
+                    if (gamemap == 3 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M3: Пандемоний
+                    if (gamemap == 4 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M4: Дом боли
+                    if (gamemap == 5 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M5: Нечестивый собор
+                    if (gamemap == 6 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E3M6: Гора Эреб
+                    if (gamemap == 7 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M7: Лимб
+                    if (gamemap == 8 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M8: Дит
+                    if (gamemap == 9 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M9: Кроличий сад
+                }
+                if (gameepisode == 4) // Твоя плоть истощена
+                {
+                    if (gamemap == 1 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); } 	// E4M1: Под Адом
+                    if (gamemap == 2 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M2: Истинное отвращение
+                    if (gamemap == 3 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M3: Расчленение нечестивых
+                    if (gamemap == 4 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M4: Непокорное зло
+                    if (gamemap == 5 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M5: Они покаются
+                    if (gamemap == 6 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M6: Супротив сих нечестивых
+                    if (gamemap == 7 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M7: И последовал Ад
+                    if (gamemap == 8 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M8: До бессердечия
+                    if (gamemap == 9 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M9: Страх
+                }
+            }
 
-			if (gamemission == pack_tnt) // TNT: Evilution
-			{
-					if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 1: Центр управления системой
-					if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 2: Барбекю из человечины
-					if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 3: Центр управления питанием
-					if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 4: Дыра во времени
-					if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 5: Виселица
-					if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 6: Открытый сезон
-					if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 7: Тюрьма
-					if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 8: Металл
-					if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 9: Крепость
-					if (gamemap == 10 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 10: Искупление
-					if (gamemap == 11 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 11: Склад
-					if (gamemap == 12 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 12: Кратер
-					if (gamemap == 13 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 13: Переработка ядерных отходов
-					if (gamemap == 14 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 14: Металлургия
-					if (gamemap == 15 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 15: Мертвая зона
-					if (gamemap == 16 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 16: Глубочайшие достижения
-					if (gamemap == 17 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 17: Зона обработки
-					if (gamemap == 18 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 18: Завод
-					if (gamemap == 19 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 19: Погрузка/отправка
-					if (gamemap == 20 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 20: Центральный пункт обработки
-					if (gamemap == 21 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 21: Административный центр
-					if (gamemap == 22 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 22: Обиталище
-					if (gamemap == 23 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 23: Лунный горный проект
-					if (gamemap == 24 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 24: Карьер
-					if (gamemap == 25 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 25: Логово Барона
-					if (gamemap == 26 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 26: Баллистикс
-					if (gamemap == 27 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 27: Гора Боль
-					if (gamemap == 28 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 28: Чертовщина
-					if (gamemap == 29 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 29: Река Стикс
-					if (gamemap == 30 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 30: Последний вызов
-					if (gamemap == 31 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 31: Фараон
-					if (gamemap == 32 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 32: Карибы
-					if (gamemap == 33 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// На всякий случай
-			}
-            
-			if (gamemission == pack_nerve) // No Rest for the Living
+            if (gamemission == doom2) //  DOOM II
+            {
+                if (gamemap == 1 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 1: Парадный вход
+                if (gamemap == 2 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m);  }	// Уровень 2: Подземные залы
+                if (gamemap == 3 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 3: Вызов брошен
+                if (gamemap == 4 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 4: Средоточие
+                if (gamemap == 5 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 5: Сточные туннели
+                if (gamemap == 6 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 6: Пресс
+                if (gamemap == 7 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 7: Смертельно простой
+                if (gamemap == 8 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 8: Уловки и ловушки
+                if (gamemap == 9 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f);  }	// Уровень 9: Яма
+                if (gamemap == 10 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f);  }	// Уровень 10: Заправочная база
+                if (gamemap == 11 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 11: "o" разрушения!
+                if (gamemap == 12 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f);  }	// Уровень 12: Фабрика
+                if (gamemap == 13 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 13: Деловой район
+                if (gamemap == 14 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 14: Глубочайшие логовища
+                if (gamemap == 15 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 15: Промышленная зона
+                if (gamemap == 16 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 16: Пригород
+                if (gamemap == 17 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 17: Владения
+                if (gamemap == 18 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 18: Внутренний двор
+                if (gamemap == 19 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 19: Цитадель
+                if (gamemap == 20 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 20: Попался!
+                if (gamemap == 21 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 21: Нирвана
+                if (gamemap == 22 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 22: Катакомбы
+                if (gamemap == 23 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 23: Целые бочки веселья
+                if (gamemap == 24 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 24: Пропасть
+                if (gamemap == 25 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 25: Кровопады
+                if (gamemap == 26 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 26: Заброшенные шахты
+                if (gamemap == 27 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 27: Кондоминиум монстров
+                if (gamemap == 28 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 28: Мир Духов
+                if (gamemap == 29 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 29: Конец всего живого
+                if (gamemap == 30 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 30: Икона греха
+                if (gamemap == 31 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 31: Вольфенштайн
+                if (gamemap == 32 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_2->width)) / 2, y, finished_2); }		// Уровень 32: Гроссе
+                if (gamemap == 33 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 33: Предательство
+            }
+
+            if (gamemission == pack_plut) // Plutonia Experiment
+            {
+                if (gamemap == 1 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o);  }	// Уровень 1: Конго
+                if (gamemap == 2 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 2: Колодец душ
+                if (gamemap == 3 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 3: Ацтек
+                if (gamemap == 4 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 4: Запертый в клетке
+                if (gamemap == 5 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 5: Город-призрак
+                if (gamemap == 6 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o);  }	// Уровень 6: Логово Барона
+                if (gamemap == 7 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 7: Двор-ловушка
+                if (gamemap == 8 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 8: Царство
+                if (gamemap == 9 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 9: Аббатство
+                if (gamemap == 10 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);}		// Уровень 10: Натиск
+                if (gamemap == 11 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 11: Преследуемый
+                if (gamemap == 12 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 12: Скорость
+                if (gamemap == 13 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 13: Склеп
+                if (gamemap == 14 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 14: Зарождение
+                if (gamemap == 15 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 15: Сумерки
+                if (gamemap == 16 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 16: Предзнаменование
+                if (gamemap == 17 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 17: Компаунд
+                if (gamemap == 18 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 18: Нейросфера
+                if (gamemap == 19 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 19: В.Р.А.Г.
+                if (gamemap == 20 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 20: Обитель Смерти
+                if (gamemap == 21 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 21: Убийца
+                if (gamemap == 22 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 22: Невыполнимое задание
+                if (gamemap == 23 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 23: Надгробие
+                if (gamemap == 24 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 24: Последний рубеж
+                if (gamemap == 25 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 25: Храм тьмы
+                if (gamemap == 26 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 26: Бункер
+                if (gamemap == 27 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 27: Антихрист
+                if (gamemap == 28 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 28: Канализация
+                if (gamemap == 29 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 29: Одиссея шумов
+                if (gamemap == 30 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 30: Врата Ада
+                if (gamemap == 31 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 31: Киберлогово
+                if (gamemap == 32 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 32: Иди к сему
+                if (gamemap == 33 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// На всякий случай
+            }
+
+            if (gamemission == pack_tnt) // TNT: Evilution
+            {
+                if (gamemap == 1 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 1: Центр управления системой
+                if (gamemap == 2 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 2: Барбекю из человечины
+                if (gamemap == 3 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 3: Центр управления питанием
+                if (gamemap == 4 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 4: Дыра во времени
+                if (gamemap == 5 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 5: Виселица
+                if (gamemap == 6 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 6: Открытый сезон
+                if (gamemap == 7 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 7: Тюрьма
+                if (gamemap == 8 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 8: Металл
+                if (gamemap == 9 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 9: Крепость
+                if (gamemap == 10 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 10: Искупление
+                if (gamemap == 11 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 11: Склад
+                if (gamemap == 12 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 12: Кратер
+                if (gamemap == 13 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 13: Переработка ядерных отходов
+                if (gamemap == 14 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 14: Металлургия
+                if (gamemap == 15 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 15: Мертвая зона
+                if (gamemap == 16 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 16: Глубочайшие достижения
+                if (gamemap == 17 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 17: Зона обработки
+                if (gamemap == 18 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 18: Завод
+                if (gamemap == 19 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 19: Погрузка/отправка
+                if (gamemap == 20 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 20: Центральный пункт обработки
+                if (gamemap == 21 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 21: Административный центр
+                if (gamemap == 22 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 22: Обиталище
+                if (gamemap == 23 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 23: Лунный горный проект
+                if (gamemap == 24 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 24: Карьер
+                if (gamemap == 25 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 25: Логово Барона
+                if (gamemap == 26 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 26: Баллистикс
+                if (gamemap == 27 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 27: Гора Боль
+                if (gamemap == 28 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 28: Чертовщина
+                if (gamemap == 29 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 29: Река Стикс
+                if (gamemap == 30 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 30: Последний вызов
+                if (gamemap == 31 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 31: Фараон
+                if (gamemap == 32 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 32: Карибы
+                if (gamemap == 33 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// На всякий случай
+            }
+
+            if (gamemission == pack_nerve) // Нет покоя для живых
+            {
+                if (gamemap == 1 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }    // Уровень 1: База на Земле
+                if (gamemap == 2 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }    // Уровень 2: Лаборатории боли
+                if (gamemap == 3 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width))   / 2, y, finished);   }    // Уровень 3: Каньон мертвых
+                if (gamemap == 4 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }    // Уровень 4: Адская гора
+                if (gamemap == 5 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }    // Уровень 5: Вивисекция
+                if (gamemap == 6 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }    // Уровень 6: Кровь преисподняя
+                if (gamemap == 7 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished->width))   / 2, y, finished);   }    // Уровень 7: Банкет у Барона
+                if (gamemap == 8 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }    // Уровень 8: Гробница злобы
+                if (gamemap == 9 ) { V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }    // Уровень 9: Шествие демонов
+            }
+        }
+
+        /* Тексты без тени */
+        else
+        {
+            if (gamemission == doom) // DOOM I
+            {
+                if (gameepisode == 1) // По колено в трупах
+                {
+                    if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); } 		// E1M1: Ангар
+                    if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M2: Атомная электростанция
+                    if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M3: Завод по переработке отходов
+                    if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M4: Командный пункт
+                    if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M5: Лаборатория на Фобосе
+                    if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M6: Центральный пункт обработки
+                    if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E1M7: Вычислительный центр
+                    if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M8: Аномалия на Фобосе
+                    if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E1M9: Военная база
+                }
+                if (gameepisode == 2) // Прибрежье Ада
+                {
+                    if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); } 	// E2M1: Аномалия на Деймосе
+                    if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// E2M2: Хранилище
+                    if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E2M3: Очистительный завод
+                    if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E2M4: Лаборатория на Деймосе
+                    if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E2M5: Командный центр
+                    if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// E2M6: Залы проклятых
+                    if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// E2M7: Нерестилище
+                    if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E2M8: Вавилонская башня
+                    if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E2M9: Крепость тайн
+                }
+                if (gameepisode == 3) // Инферно
+                {
+                    if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); } 	// E3M1: Крепость Ада
+                    if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E3M2: Трясина отчаяния
+                    if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M3: Пандемоний
+                    if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M4: Дом боли
+                    if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M5: Нечестивый собор
+                    if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// E3M6: Гора Эреб
+                    if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M7: Лимб
+                    if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M8: Дит
+                    if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// E3M9: Кроличий сад
+                }
+                if (gameepisode == 4) // Твоя плоть истощена
+                {
+                    if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); } 	// E4M1: Под Адом
+                    if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M2: Истинное отвращение
+                    if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M3: Расчленение нечестивых
+                    if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M4: Непокорное зло
+                    if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M5: Они покаются
+                    if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M6: Супротив сих нечестивых
+                    if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M7: И последовал Ад
+                    if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M8: До бессердечия
+                    if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }	// E4M9: Страх
+                }
+            }
+
+            if (gamemission == doom2) //  DOOM II
+            {
+                if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 1: Парадный вход
+                if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m);  }	// Уровень 2: Подземные залы
+                if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 3: Вызов брошен
+                if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 4: Средоточие
+                if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 5: Сточные туннели
+                if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 6: Пресс
+                if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 7: Смертельно простой
+                if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 8: Уловки и ловушки
+                if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f);  }	// Уровень 9: Яма
+                if (gamemap == 10 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f);  }	// Уровень 10: Заправочная база
+                if (gamemap == 11 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 11: "o" разрушения!
+                if (gamemap == 12 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f);  }	// Уровень 12: Фабрика
+                if (gamemap == 13 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 13: Деловой район
+                if (gamemap == 14 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 14: Глубочайшие логовища
+                if (gamemap == 15 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 15: Промышленная зона
+                if (gamemap == 16 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 16: Пригород
+                if (gamemap == 17 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 17: Владения
+                if (gamemap == 18 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 18: Внутренний двор
+                if (gamemap == 19 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 19: Цитадель
+                if (gamemap == 20 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 20: Попался!
+                if (gamemap == 21 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 21: Нирвана
+                if (gamemap == 22 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 22: Катакомбы
+                if (gamemap == 23 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 23: Целые бочки веселья
+                if (gamemap == 24 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 24: Пропасть
+                if (gamemap == 25 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 25: Кровопады
+                if (gamemap == 26 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 26: Заброшенные шахты
+                if (gamemap == 27 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 27: Кондоминиум монстров
+                if (gamemap == 28 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 28: Мир Духов
+                if (gamemap == 29 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 29: Конец всего живого
+                if (gamemap == 30 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 30: Икона греха
+                if (gamemap == 31 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 31: Вольфенштайн
+                if (gamemap == 32 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_2->width)) / 2, y, finished_2); }		// Уровень 32: Гроссе
+                if (gamemap == 33 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 33: Предательство
+            }
+
+            if (gamemission == pack_plut) // Эксперимент “Плутония”
+            {
+                if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o);  }	// Уровень 1: Конго
+                if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 2: Колодец душ
+                if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 3: Ацтек
+                if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 4: Запертый в клетке
+                if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 5: Город-призрак
+                if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o);  }	// Уровень 6: Логово Барона
+                if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);  }		// Уровень 7: Двор-ловушка
+                if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 8: Царство
+                if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 9: Аббатство
+                if (gamemap == 10 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);}		// Уровень 10: Натиск
+                if (gamemap == 11 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 11: Преследуемый
+                if (gamemap == 12 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 12: Скорость
+                if (gamemap == 13 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 13: Склеп
+                if (gamemap == 14 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 14: Зарождение
+                if (gamemap == 15 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 15: Сумерки
+                if (gamemap == 16 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 16: Предзнаменование
+                if (gamemap == 17 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 17: Компаунд
+                if (gamemap == 18 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 18: Нейросфера
+                if (gamemap == 19 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 19: В.Р.А.Г.
+                if (gamemap == 20 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 20: Обитель Смерти
+                if (gamemap == 21 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 21: Убийца
+                if (gamemap == 22 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 22: Невыполнимое задание
+                if (gamemap == 23 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 23: Надгробие
+                if (gamemap == 24 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 24: Последний рубеж
+                if (gamemap == 25 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 25: Храм тьмы
+                if (gamemap == 26 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 26: Бункер
+                if (gamemap == 27 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 27: Антихрист
+                if (gamemap == 28 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 28: Канализация
+                if (gamemap == 29 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 29: Одиссея шумов
+                if (gamemap == 30 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 30: Врата Ада
+                if (gamemap == 31 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 31: Киберлогово
+                if (gamemap == 32 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 32: Иди к сему
+                if (gamemap == 33 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// На всякий случай
+            }
+
+            if (gamemission == pack_tnt) // TNT - Дьяволюция
+            {
+                if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 1: Центр управления системой
+                if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 2: Барбекю из человечины
+                if (gamemap == 3 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 3: Центр управления питанием
+                if (gamemap == 4 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 4: Дыра во времени
+                if (gamemap == 5 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 5: Виселица
+                if (gamemap == 6 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 6: Открытый сезон
+                if (gamemap == 7 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 7: Тюрьма
+                if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 8: Металл
+                if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 9: Крепость
+                if (gamemap == 10 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 10: Искупление
+                if (gamemap == 11 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 11: Склад
+                if (gamemap == 12 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 12: Кратер
+                if (gamemap == 13 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 13: Переработка ядерных отходов
+                if (gamemap == 14 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 14: Металлургия
+                if (gamemap == 15 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 15: Мертвая зона
+                if (gamemap == 16 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 16: Глубочайшие достижения
+                if (gamemap == 17 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 17: Зона обработки
+                if (gamemap == 18 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 18: Завод
+                if (gamemap == 19 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 19: Погрузка/отправка
+                if (gamemap == 20 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 20: Центральный пункт обработки
+                if (gamemap == 21 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 21: Административный центр
+                if (gamemap == 22 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 22: Обиталище
+                if (gamemap == 23 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 23: Лунный горный проект
+                if (gamemap == 24 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 24: Карьер
+                if (gamemap == 25 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }	// Уровень 25: Логово Барона
+                if (gamemap == 26 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 26: Баллистикс
+                if (gamemap == 27 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 27: Гора Боль
+                if (gamemap == 28 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 28: Чертовщина
+                if (gamemap == 29 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }	// Уровень 29: Река Стикс
+                if (gamemap == 30 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 30: Последний вызов
+                if (gamemap == 31 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// Уровень 31: Фараон
+                if (gamemap == 32 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }	// Уровень 32: Карибы
+                if (gamemap == 33 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished); }		// На всякий случай
+            }
+
+            if (gamemission == pack_nerve) // Нет покоя для живых
             {
                 if (gamemap == 1 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }    // Уровень 1: База на Земле
                 if (gamemap == 2 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_m->width)) / 2, y, finished_m); }    // Уровень 2: Лаборатории боли
@@ -625,10 +813,8 @@ void WI_drawLF(void)
                 if (gamemap == 8 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); }    // Уровень 8: Гробница злобы
                 if (gamemap == 9 ) { V_DrawPatch((SCREENWIDTH - SHORT(finished_o->width)) / 2, y, finished_o); }    // Уровень 9: Шествие демонов
             }
+        }
 
-//		if (gamemission == doom && gameepisode == 1 && gamemap == 05) { V_DrawPatch((SCREENWIDTH - SHORT(finished_f->width)) / 2, y, finished_f); } // E1M5: Лаборатория на Фобосе
-					
-		
     }
     else if (wbs->last == NUMCMAPS)
     {
@@ -657,198 +843,380 @@ void WI_drawEL(void)
 
     // draw "Entering"
 	// [JN] Используется дополнительный титр "ЗАГРУЖАЮТСЯ". 
-	
-	if (gamemission == doom) // По колено в трупах
-	{
-		if (gameepisode == 1) // По колено в трупах
-		{
-		if (gamemap == 1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);} // E1M1: Ангар 
-		if (gamemap == 2 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);} // E1M2: Атомная электростанция 
-		if (gamemap == 3 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);} // E1M3: Завод по переработке отходов 
-		if (gamemap == 4 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);} // E1M4: Командный пункт 
-		if (gamemap == 5 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);} // E1M5: Лаборатория на Фобосе 
-		if (gamemap == 6 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);} // E1M6: Центральный пункт обработки 
-		if (gamemap == 7 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);} // E1M7: Вычислительный центр 
-		if (gamemap == 8 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);} // E1M8: Аномалия на Фобосе 
-		if (gamemap == 9 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);} // E1M9: Военная база
-		}
-		
-		if (gameepisode == 2) // Прибрежье Ада
-		{
-		if (gamemap == 1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M1: Аномалия на Деймосе
-		if (gamemap == 2 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M2: Хранилище
-		if (gamemap == 3 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M3: Очистительный завод 
-		if (gamemap == 4 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M4: Лаборатория на Деймосе
-		if (gamemap == 5 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M5: Командный центр
-		if (gamemap == 6 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M6: Залы проклятых
-		if (gamemap == 7 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M7: Нерестилище
-		if (gamemap == 8 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M8: Вавилонская башня
-		if (gamemap == 9 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);} // E2M9: Крепость тайн (загрузка E2M6)
-		}
-		
-		if (gameepisode == 3) // Инферно
-		{
-		if (gamemap == 1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E3M1: Крепость Ада
-		if (gamemap == 2 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E3M2: Трясина отчаяния
-		if (gamemap == 3 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E3M3: Пандемоний
-		if (gamemap == 4 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E3M4: Дом боли
-		if (gamemap == 5 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E3M5: Нечестивый собор
-		if (gamemap == 6 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E3M6: Гора Эреб
-		if (gamemap == 7 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E3M7: Лимб
-		if (gamemap == 8 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E3M8: Дит
-		if (gamemap == 9 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E3M9: Кроличий сад
-		}
-		
-		if (gameepisode == 4) // Твоя плоть истощена
-		{
-		if (gamemap == 1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E4M1: Под Адом
-		if (gamemap == 2 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E4M2: Истинное отвращение
-		if (gamemap == 3 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E4M3: Истязание нечестивых
-		if (gamemap == 4 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E4M4: Непокорное зло
-		if (gamemap == 5 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E4M5: Они покаются
-		if (gamemap == 6 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E4M6: Супротив сих нечестивых
-		if (gamemap == 7 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E4M7: И последовал Ад
-		if (gamemap == 8 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E4M8: До бессердечия
-		if (gamemap == 9 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}  // E4M9: Страх
-		}
-	}
-	
-	if (gamemission == doom2) //  DOOM II
-	{
-		if (gamemap == 1-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 1: Парадный вход
-		if (gamemap == 2-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 2: Подземные залы
-		if (gamemap == 3-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 3: Вызов брошен
-		if (gamemap == 4-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 4: Средоточие
-		if (gamemap == 5-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 5: Сточные туннели
-		if (gamemap == 6-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 6: Пресс
-		if (gamemap == 7-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 7: Смертельно простой
-		if (gamemap == 8-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 8: Уловки и ловушки
-		if (gamemap == 9-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 9: Яма
-		if (gamemap == 10-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 10: Заправочная база
-		if (gamemap == 11-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 11: "o" разрушения!
-		if (gamemap == 12-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 12: Фабрика
-		if (gamemap == 13-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 13: Деловой район
-		if (gamemap == 14-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 14: Глубочайшие логовища
-		if (gamemap == 15-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 15: Промышленная зона
-		if (gamemap == 16-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 16: Пригород
-		if (gamemap == 17-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 17: Владения
-		if (gamemap == 18-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 18: Внутренний двор
-		if (gamemap == 19-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 19: Цитадель
-		if (gamemap == 20-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 20: Попался!
-		if (gamemap == 21-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 21: Нирвана
-		if (gamemap == 22-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 22: Катакомбы
-		if (gamemap == 23-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 23: Целые бочки веселья
-		if (gamemap == 24-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 24: Пропасть
-		if (gamemap == 25-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 25: Кровопады
-		if (gamemap == 26-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 26: Заброшенные шахты
-		if (gamemap == 27-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 27: Кондоминиум монстров
-		if (gamemap == 28-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 28: Мир Духов
-		if (gamemap == 29-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 29: Конец всего живого
-		if (gamemap == 30-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 30: Икона греха
-		if (gamemap == 31-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 31: Вольфенштайн
-		if (gamemap == 32-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 32: Гроссе
-		if (gamemap == 33-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 33: Предательство
-	}
-	
-	if (gamemission == pack_plut) // Plutonia Experiment
-	{
-		if (gamemap == 1-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 1: Конго
-		if (gamemap == 2-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 2: Колодец душ
-		if (gamemap == 3-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 3: Ацтек
-		if (gamemap == 4-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 4: Запертый в клетке
-		if (gamemap == 5-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 5: Город-призрак
-		if (gamemap == 6-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 6: Логово Барона
-		if (gamemap == 7-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 7: Двор-ловушка
-		if (gamemap == 8-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 8: Царство
-		if (gamemap == 9-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 9: Аббатство
-		if (gamemap == 10-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 10: Натиск
-		if (gamemap == 11-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 11: Преследуемый
-		if (gamemap == 12-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 12: Скорость
-		if (gamemap == 13-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 13: Склеп
-		if (gamemap == 14-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 14: Зарождение
-		if (gamemap == 15-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 15: Сумерки
-		if (gamemap == 16-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 16: Предзнаменование
-		if (gamemap == 17-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 17: Компаунд
-		if (gamemap == 18-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 18: Нейросфера
-		if (gamemap == 19-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 19: В.Р.А.Г.
-		if (gamemap == 20-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 20: Обитель Смерти
-		if (gamemap == 21-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 21: Убийца
-		if (gamemap == 22-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 22: Невыполнимое задание
-		if (gamemap == 23-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 23: Надгробие
-		if (gamemap == 24-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 24: Последний рубеж
-		if (gamemap == 25-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 25: Храм тьмы
-		if (gamemap == 26-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 26: Бункер
-		if (gamemap == 27-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 27: Антихрист
-		if (gamemap == 28-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 28: Канализация
-		if (gamemap == 29-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 29: Одиссея шумов
-		if (gamemap == 30-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 30: Врата Ада
-		if (gamemap == 31-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 31: Киберлогово
-		if (gamemap == 32-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 32: Иди к сему
-		if (gamemap == 33-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // На всякий случай
-	}
-	
-	if (gamemission == pack_tnt) // TNT: Evilution
-	{
-		if (gamemap == 1-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 1: Центр управления системой
-		if (gamemap == 2-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 2: Барбекю из человечины
-		if (gamemap == 3-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 3: Центр управления питанием
-		if (gamemap == 4-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 4: Дыра во времени
-		if (gamemap == 5-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 5: Виселица
-		if (gamemap == 6-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 6: Открытый сезон
-		if (gamemap == 7-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 7: Тюрьма
-		if (gamemap == 8-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 8: Металл
-		if (gamemap == 9-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);   }  // Уровень 9: Крепость
-		if (gamemap == 10-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 10: Искупление
-		if (gamemap == 11-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 11: Склад
-		if (gamemap == 12-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 12: Кратер
-		if (gamemap == 13-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 13: Переработка ядерных отходов
-		if (gamemap == 14-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 14: Металлургия
-		if (gamemap == 15-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 15: Мертвая зона
-		if (gamemap == 16-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 16: Глубочайшие достижения
-		if (gamemap == 17-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 17: Зона обработки
-		if (gamemap == 18-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 18: Завод
-		if (gamemap == 19-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 19: Погрузка/отправка
-		if (gamemap == 20-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 20: Центральный пункт обработки
-		if (gamemap == 21-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 21: Административный центр
-		if (gamemap == 22-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 22: Обиталище
-		if (gamemap == 23-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 23: Лунный горный проект
-		if (gamemap == 24-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 24: Карьер
-		if (gamemap == 25-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 25: Логово Барона
-		if (gamemap == 26-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 26: Баллистикс
-		if (gamemap == 27-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 27: Гора Боль
-		if (gamemap == 28-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 28: Чертовщина
-		if (gamemap == 29-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 29: Река Стикс
-		if (gamemap == 30-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 30: Последний вызов
-		if (gamemap == 31-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 31: Фараон
-		if (gamemap == 32-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 32: Карибы (переход на MAP16)
-		if (gamemap == 33-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 32: Карибы (по факту)
-	}
 
-	if (gamemission == pack_nerve) // Нет покоя для живых
+    /* Тексты с тенью */
+    if (draw_shadowed_text)
     {
-        if (gamemap == 1-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}      // Уровень 1: База на Земле
-        if (gamemap == 2-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}    // Уровень 2: Лаборатории боли
-        if (gamemap == 3-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}      // Уровень 3: Каньон мертвецов
-        if (gamemap == 4-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}      // Уровень 4: Адская гора
-        if (gamemap == 5-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}      // Уровень 5: Вивисекция
-        if (gamemap == 6-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}      // Уровень 6: Кровь преисподняя
-        if (gamemap == 7-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}      // Уровень 7: Банкет у Барона
-        if (gamemap == 8-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}      // Уровень 8: Гробница злобы
-        if (gamemap == 9-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}      // Уровень 9: Шествие демонов
-        if (gamemap == 10-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 9: Шествие демонов (по факту)
+        if (gamemission == doom) // По колено в трупах
+        {
+            if (gameepisode == 1) // По колено в трупах
+            {
+                if (gamemap == 1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M1: Ангар 
+                if (gamemap == 2 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M2: Атомная электростанция 
+                if (gamemap == 3 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M3: Завод по переработке отходов 
+                if (gamemap == 4 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M4: Командный пункт 
+                if (gamemap == 5 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M5: Лаборатория на Фобосе 
+                if (gamemap == 6 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M6: Центральный пункт обработки 
+                if (gamemap == 7 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M7: Вычислительный центр 
+                if (gamemap == 8 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M8: Аномалия на Фобосе 
+                if (gamemap == 9 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M9: Военная база
+            }
+            if (gameepisode == 2) // Прибрежье Ада
+            {
+                if (gamemap == 1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M1: Аномалия на Деймосе
+                if (gamemap == 2 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M2: Хранилище
+                if (gamemap == 3 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M3: Очистительный завод 
+                if (gamemap == 4 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M4: Лаборатория на Деймосе
+                if (gamemap == 5 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M5: Командный центр
+                if (gamemap == 6 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M6: Залы проклятых
+                if (gamemap == 7 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M7: Нерестилище
+                if (gamemap == 8 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M8: Вавилонская башня
+                if (gamemap == 9 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);} // E2M9: Крепость тайн (загрузка E2M6)
+            }
+            if (gameepisode == 3) // Инферно
+            {
+                if (gamemap == 1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M1: Крепость Ада
+                if (gamemap == 2 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M2: Трясина отчаяния
+                if (gamemap == 3 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M3: Пандемоний
+                if (gamemap == 4 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M4: Дом боли
+                if (gamemap == 5 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M5: Нечестивый собор
+                if (gamemap == 6 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M6: Гора Эреб
+                if (gamemap == 7 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M7: Лимб
+                if (gamemap == 8 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M8: Дит
+                if (gamemap == 9 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M9: Кроличий сад
+            }
+            if (gameepisode == 4) // Твоя плоть истощена
+            {
+                if (gamemap == 1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M1: Под Адом
+                if (gamemap == 2 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M2: Истинное отвращение
+                if (gamemap == 3 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M3: Истязание нечестивых
+                if (gamemap == 4 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M4: Непокорное зло
+                if (gamemap == 5 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M5: Они покаются
+                if (gamemap == 6 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M6: Супротив сих нечестивых
+                if (gamemap == 7 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M7: И последовал Ад
+                if (gamemap == 8 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M8: До бессердечия
+                if (gamemap == 9 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M9: Страх
+            }
+        }
+
+        if (gamemission == doom2) //  DOOM II
+        {
+            if (gamemap == 1-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 1: Парадный вход
+            if (gamemap == 2-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 2: Подземные залы
+            if (gamemap == 3-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 3: Вызов брошен
+            if (gamemap == 4-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 4: Средоточие
+            if (gamemap == 5-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 5: Сточные туннели
+            if (gamemap == 6-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 6: Пресс
+            if (gamemap == 7-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 7: Смертельно простой
+            if (gamemap == 8-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 8: Уловки и ловушки
+            if (gamemap == 9-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 9: Яма
+            if (gamemap == 10-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 10: Заправочная база
+            if (gamemap == 11-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 11: "o" разрушения!
+            if (gamemap == 12-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 12: Фабрика
+            if (gamemap == 13-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 13: Деловой район
+            if (gamemap == 14-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 14: Глубочайшие логовища
+            if (gamemap == 15-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 15: Промышленная зона
+            if (gamemap == 16-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 16: Пригород
+            if (gamemap == 17-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 17: Владения
+            if (gamemap == 18-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 18: Внутренний двор
+            if (gamemap == 19-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 19: Цитадель
+            if (gamemap == 20-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 20: Попался!
+            if (gamemap == 21-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 21: Нирвана
+            if (gamemap == 22-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 22: Катакомбы
+            if (gamemap == 23-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 23: Целые бочки веселья
+            if (gamemap == 24-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 24: Пропасть
+            if (gamemap == 25-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 25: Кровопады
+            if (gamemap == 26-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}  // Уровень 26: Заброшенные шахты
+            if (gamemap == 27-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 27: Кондоминиум монстров
+            if (gamemap == 28-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 28: Мир Духов
+            if (gamemap == 29-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 29: Конец всего живого
+            if (gamemap == 30-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 30: Икона греха
+            if (gamemap == 31-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 31: Вольфенштайн
+            if (gamemap == 32-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 32: Гроссе
+            if (gamemap == 33-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }  // Уровень 33: Предательство
+        }
+
+        if (gamemission == pack_plut) // Эксперимент “Плутония”
+        {
+            if (gamemap == 1-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 1: Конго
+            if (gamemap == 2-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 2: Колодец душ
+            if (gamemap == 3-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 3: Ацтек
+            if (gamemap == 4-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 4: Запертый в клетке
+            if (gamemap == 5-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 5: Город-призрак
+            if (gamemap == 6-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 6: Логово Барона
+            if (gamemap == 7-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 7: Двор-ловушка
+            if (gamemap == 8-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 8: Царство
+            if (gamemap == 9-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 9: Аббатство
+            if (gamemap == 10-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 10: Натиск
+            if (gamemap == 11-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 11: Преследуемый
+            if (gamemap == 12-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 12: Скорость
+            if (gamemap == 13-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 13: Склеп
+            if (gamemap == 14-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 14: Зарождение
+            if (gamemap == 15-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}   // Уровень 15: Сумерки
+            if (gamemap == 16-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 16: Предзнаменование
+            if (gamemap == 17-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 17: Компаунд
+            if (gamemap == 18-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 18: Нейросфера
+            if (gamemap == 19-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 19: В.Р.А.Г.
+            if (gamemap == 20-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 20: Обитель Смерти
+            if (gamemap == 21-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 21: Убийца
+            if (gamemap == 22-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 22: Невыполнимое задание
+            if (gamemap == 23-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 23: Надгробие
+            if (gamemap == 24-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 24: Последний рубеж
+            if (gamemap == 25-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 25: Храм тьмы
+            if (gamemap == 26-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 26: Бункер
+            if (gamemap == 27-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 27: Антихрист
+            if (gamemap == 28-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 28: Канализация
+            if (gamemap == 29-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 29: Одиссея шумов
+            if (gamemap == 30-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}   // Уровень 30: Врата Ада
+            if (gamemap == 31-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 31: Киберлогово
+            if (gamemap == 32-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 32: Иди к сему
+            if (gamemap == 33-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // На всякий случай
+        }
+
+        if (gamemission == pack_tnt) // TNT - Дьяволюция
+        {
+            if (gamemap == 1-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 1: Центр управления системой
+            if (gamemap == 2-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 2: Барбекю из человечины
+            if (gamemap == 3-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 3: Центр управления питанием
+            if (gamemap == 4-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 4: Дыра во времени
+            if (gamemap == 5-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 5: Виселица
+            if (gamemap == 6-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 6: Открытый сезон
+            if (gamemap == 7-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 7: Тюрьма
+            if (gamemap == 8-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 8: Металл
+            if (gamemap == 9-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 9: Крепость
+            if (gamemap == 10-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 10: Искупление
+            if (gamemap == 11-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 11: Склад
+            if (gamemap == 12-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 12: Кратер
+            if (gamemap == 13-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 13: Переработка ядерных отходов
+            if (gamemap == 14-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 14: Металлургия
+            if (gamemap == 15-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 15: Мертвая зона
+            if (gamemap == 16-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}   // Уровень 16: Глубочайшие достижения
+            if (gamemap == 17-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 17: Зона обработки
+            if (gamemap == 18-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 18: Завод
+            if (gamemap == 19-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 19: Погрузка/отправка
+            if (gamemap == 20-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 20: Центральный пункт обработки
+            if (gamemap == 21-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 21: Административный центр
+            if (gamemap == 22-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 22: Обиталище
+            if (gamemap == 23-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 23: Лунный горный проект
+            if (gamemap == 24-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 24: Карьер
+            if (gamemap == 25-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 25: Логово Барона
+            if (gamemap == 26-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 26: Баллистикс
+            if (gamemap == 27-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 27: Гора Боль
+            if (gamemap == 28-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 28: Чертовщина
+            if (gamemap == 29-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 29: Река Стикс
+            if (gamemap == 30-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 30: Последний вызов
+            if (gamemap == 31-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }   // Уровень 31: Фараон
+            if (gamemap == 32-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}   // Уровень 32: Карибы (переход на MAP16)
+            if (gamemap == 33-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}   // Уровень 32: Карибы (по факту)
+        }
+
+        if (gamemission == pack_nerve) // Нет покоя для живых
+        {
+            if (gamemap == 1-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 1: База на Земле
+            if (gamemap == 2-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}   // Уровень 2: Лаборатории боли
+            if (gamemap == 3-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 3: Каньон мертвецов
+            if (gamemap == 4-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 4: Адская гора
+            if (gamemap == 5-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 5: Вивисекция
+            if (gamemap == 6-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 6: Кровь преисподняя
+            if (gamemap == 7-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 7: Банкет у Барона
+            if (gamemap == 8-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 8: Гробница злобы
+            if (gamemap == 9-1 )  {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 9: Шествие демонов
+            if (gamemap == 10-1 ) {V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}     // Уровень 9: Шествие демонов (по факту)
+        }
     }
-	
-/*    V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,
-		y,
-                entering);
-*/
+
+    /* Тексты без тени */
+    else
+    {
+        if (gamemission == doom) // По колено в трупах
+        {
+            if (gameepisode == 1) // По колено в трупах
+            {
+                if (gamemap == 1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M1: Ангар 
+                if (gamemap == 2 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M2: Атомная электростанция 
+                if (gamemap == 3 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M3: Завод по переработке отходов 
+                if (gamemap == 4 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M4: Командный пункт 
+                if (gamemap == 5 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M5: Лаборатория на Фобосе 
+                if (gamemap == 6 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M6: Центральный пункт обработки 
+                if (gamemap == 7 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M7: Вычислительный центр 
+                if (gamemap == 8 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M8: Аномалия на Фобосе 
+                if (gamemap == 9 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E1M9: Военная база
+            }
+            if (gameepisode == 2) // Прибрежье Ада
+            {
+                if (gamemap == 1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M1: Аномалия на Деймосе
+                if (gamemap == 2 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M2: Хранилище
+                if (gamemap == 3 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M3: Очистительный завод 
+                if (gamemap == 4 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M4: Лаборатория на Деймосе
+                if (gamemap == 5 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M5: Командный центр
+                if (gamemap == 6 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M6: Залы проклятых
+                if (gamemap == 7 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M7: Нерестилище
+                if (gamemap == 8 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E2M8: Вавилонская башня
+                if (gamemap == 9 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);} // E2M9: Крепость тайн (загрузка E2M6)
+            }
+            if (gameepisode == 3) // Инферно
+            {
+                if (gamemap == 1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M1: Крепость Ада
+                if (gamemap == 2 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M2: Трясина отчаяния
+                if (gamemap == 3 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M3: Пандемоний
+                if (gamemap == 4 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M4: Дом боли
+                if (gamemap == 5 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M5: Нечестивый собор
+                if (gamemap == 6 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M6: Гора Эреб
+                if (gamemap == 7 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M7: Лимб
+                if (gamemap == 8 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M8: Дит
+                if (gamemap == 9 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E3M9: Кроличий сад
+            }
+            if (gameepisode == 4) // Твоя плоть истощена
+            {
+                if (gamemap == 1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M1: Под Адом
+                if (gamemap == 2 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M2: Истинное отвращение
+                if (gamemap == 3 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M3: Истязание нечестивых
+                if (gamemap == 4 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M4: Непокорное зло
+                if (gamemap == 5 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M5: Они покаются
+                if (gamemap == 6 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M6: Супротив сих нечестивых
+                if (gamemap == 7 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M7: И последовал Ад
+                if (gamemap == 8 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M8: До бессердечия
+                if (gamemap == 9 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}   // E4M9: Страх
+            }
+        }
+
+        if (gamemission == doom2) //  DOOM II
+        {
+            if (gamemap == 1-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 1: Парадный вход
+            if (gamemap == 2-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 2: Подземные залы
+            if (gamemap == 3-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 3: Вызов брошен
+            if (gamemap == 4-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 4: Средоточие
+            if (gamemap == 5-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 5: Сточные туннели
+            if (gamemap == 6-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 6: Пресс
+            if (gamemap == 7-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 7: Смертельно простой
+            if (gamemap == 8-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 8: Уловки и ловушки
+            if (gamemap == 9-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 9: Яма
+            if (gamemap == 10-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 10: Заправочная база
+            if (gamemap == 11-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 11: "o" разрушения!
+            if (gamemap == 12-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 12: Фабрика
+            if (gamemap == 13-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 13: Деловой район
+            if (gamemap == 14-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 14: Глубочайшие логовища
+            if (gamemap == 15-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 15: Промышленная зона
+            if (gamemap == 16-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 16: Пригород
+            if (gamemap == 17-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 17: Владения
+            if (gamemap == 18-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 18: Внутренний двор
+            if (gamemap == 19-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 19: Цитадель
+            if (gamemap == 20-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 20: Попался!
+            if (gamemap == 21-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 21: Нирвана
+            if (gamemap == 22-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 22: Катакомбы
+            if (gamemap == 23-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 23: Целые бочки веселья
+            if (gamemap == 24-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 24: Пропасть
+            if (gamemap == 25-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 25: Кровопады
+            if (gamemap == 26-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 26: Заброшенные шахты
+            if (gamemap == 27-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 27: Кондоминиум монстров
+            if (gamemap == 28-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 28: Мир Духов
+            if (gamemap == 29-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 29: Конец всего живого
+            if (gamemap == 30-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 30: Икона греха
+            if (gamemap == 31-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 31: Вольфенштайн
+            if (gamemap == 32-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 32: Гроссе
+            if (gamemap == 33-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 33: Предательство
+        }
+
+        if (gamemission == pack_plut) // Эксперимент “Плутония”
+        {
+            if (gamemap == 1-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 1: Конго
+            if (gamemap == 2-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 2: Колодец душ
+            if (gamemap == 3-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 3: Ацтек
+            if (gamemap == 4-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 4: Запертый в клетке
+            if (gamemap == 5-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 5: Город-призрак
+            if (gamemap == 6-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 6: Логово Барона
+            if (gamemap == 7-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 7: Двор-ловушка
+            if (gamemap == 8-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 8: Царство
+            if (gamemap == 9-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 9: Аббатство
+            if (gamemap == 10-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 10: Натиск
+            if (gamemap == 11-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 11: Преследуемый
+            if (gamemap == 12-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 12: Скорость
+            if (gamemap == 13-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 13: Склеп
+            if (gamemap == 14-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 14: Зарождение
+            if (gamemap == 15-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 15: Сумерки
+            if (gamemap == 16-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 16: Предзнаменование
+            if (gamemap == 17-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 17: Компаунд
+            if (gamemap == 18-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 18: Нейросфера
+            if (gamemap == 19-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 19: В.Р.А.Г.
+            if (gamemap == 20-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 20: Обитель Смерти
+            if (gamemap == 21-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 21: Убийца
+            if (gamemap == 22-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 22: Невыполнимое задание
+            if (gamemap == 23-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 23: Надгробие
+            if (gamemap == 24-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 24: Последний рубеж
+            if (gamemap == 25-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 25: Храм тьмы
+            if (gamemap == 26-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 26: Бункер
+            if (gamemap == 27-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 27: Антихрист
+            if (gamemap == 28-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 28: Канализация
+            if (gamemap == 29-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 29: Одиссея шумов
+            if (gamemap == 30-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 30: Врата Ада
+            if (gamemap == 31-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 31: Киберлогово
+            if (gamemap == 32-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 32: Иди к сему
+            if (gamemap == 33-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // На всякий случай
+        }
+
+        if (gamemission == pack_tnt) // TNT - Дьяволюция
+        {
+            if (gamemap == 1-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 1: Центр управления системой
+            if (gamemap == 2-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 2: Барбекю из человечины
+            if (gamemap == 3-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 3: Центр управления питанием
+            if (gamemap == 4-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 4: Дыра во времени
+            if (gamemap == 5-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 5: Виселица
+            if (gamemap == 6-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 6: Открытый сезон
+            if (gamemap == 7-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 7: Тюрьма
+            if (gamemap == 8-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 8: Металл
+            if (gamemap == 9-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 9: Крепость
+            if (gamemap == 10-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 10: Искупление
+            if (gamemap == 11-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 11: Склад
+            if (gamemap == 12-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 12: Кратер
+            if (gamemap == 13-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 13: Переработка ядерных отходов
+            if (gamemap == 14-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 14: Металлургия
+            if (gamemap == 15-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 15: Мертвая зона
+            if (gamemap == 16-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 16: Глубочайшие достижения
+            if (gamemap == 17-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 17: Зона обработки
+            if (gamemap == 18-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 18: Завод
+            if (gamemap == 19-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 19: Погрузка/отправка
+            if (gamemap == 20-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 20: Центральный пункт обработки
+            if (gamemap == 21-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 21: Административный центр
+            if (gamemap == 22-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 22: Обиталище
+            if (gamemap == 23-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 23: Лунный горный проект
+            if (gamemap == 24-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 24: Карьер
+            if (gamemap == 25-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 25: Логово Барона
+            if (gamemap == 26-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 26: Баллистикс
+            if (gamemap == 27-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 27: Гора Боль
+            if (gamemap == 28-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 28: Чертовщина
+            if (gamemap == 29-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 29: Река Стикс
+            if (gamemap == 30-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 30: Последний вызов
+            if (gamemap == 31-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);  }     // Уровень 31: Фараон
+            if (gamemap == 32-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 32: Карибы (переход на MAP16)
+            if (gamemap == 33-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 32: Карибы (по факту)
+        }
+
+        if (gamemission == pack_nerve) // Нет покоя для живых
+        {
+            if (gamemap == 1-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}       // Уровень 1: База на Земле
+            if (gamemap == 2-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(enterings->width))/2,y,enterings);}     // Уровень 2: Лаборатории боли
+            if (gamemap == 3-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}       // Уровень 3: Каньон мертвецов
+            if (gamemap == 4-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}       // Уровень 4: Адская гора
+            if (gamemap == 5-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}       // Уровень 5: Вивисекция
+            if (gamemap == 6-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}       // Уровень 6: Кровь преисподняя
+            if (gamemap == 7-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}       // Уровень 7: Банкет у Барона
+            if (gamemap == 8-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}       // Уровень 8: Гробница злобы
+            if (gamemap == 9-1 )  {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}       // Уровень 9: Шествие демонов
+            if (gamemap == 10-1 ) {V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,y,entering);}       // Уровень 9: Шествие демонов (по факту)
+        }
+    }
 
     // draw level
     y += (5*SHORT(lnames[wbs->next]->height))/4;
 
-    V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2,
-		y, 
-                lnames[wbs->next]);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2, y, lnames[wbs->next]);
+    }
+    else
+    {
+        V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2, y, lnames[wbs->next]);
+    }
 
 }
 
@@ -886,11 +1254,17 @@ WI_drawOnLnode
 	}
     } while (!fits && i!=2 && c[i] != NULL);
 
+    // [JN] Кровавое пятно и надпись "ВЫ ЗДЕСЬ"
     if (fits && i<2)
     {
-	V_DrawPatch(lnodes[wbs->epsd][n].x,
-                    lnodes[wbs->epsd][n].y,
-		    c[i]);
+        if (draw_shadowed_text)
+        {
+            V_DrawShadowedPatchDoom(lnodes[wbs->epsd][n].x, lnodes[wbs->epsd][n].y, c[i]);
+        }
+        else
+        {
+            V_DrawPatch(lnodes[wbs->epsd][n].x, lnodes[wbs->epsd][n].y, c[i]);
+        }
     }
     else
     {
@@ -1061,13 +1435,13 @@ WI_drawNum
     while (digits--)
     {
 	x -= fontwidth;
-	V_DrawPatch(x, y, num[ n % 10 ]);
+	V_DrawShadowedPatchDoom(x, y, num[ n % 10 ]);
 	n /= 10;
     }
 
     // draw a minus sign if necessary
     if (neg)
-	V_DrawPatch(x-=8, y, wiminus);
+	V_DrawShadowedPatchDoom(x-=8, y, wiminus);
 
     return x;
 
@@ -1082,7 +1456,15 @@ WI_drawPercent
     if (p < 0)
 	return;
 
-    V_DrawPatch(x, y, percent);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(x, y, percent);
+    }
+    else
+    {
+        V_DrawPatch(x, y, percent);
+    }
+    
     WI_drawNum(x, y, p, -1);
 }
 
@@ -1118,14 +1500,28 @@ WI_drawTime
 
 	    // draw
 	    if (div==60 || t / div)
-		V_DrawPatch(x, y, colon);
+        if (draw_shadowed_text)
+        {
+            V_DrawShadowedPatchDoom(x, y, colon);
+        }
+        else
+        {
+            V_DrawPatch(x, y, colon);
+        }
 	    
 	} while (t / div);
     }
     else
     {
-	// "sucks"
-	V_DrawPatch(x - SHORT(sucks->width), y, sucks); 
+        // "sucks"
+        if (draw_shadowed_text)
+        {
+            V_DrawShadowedPatchDoom(x - SHORT(sucks->width), y, sucks); 
+        }
+        else
+        {
+            V_DrawPatch(x - SHORT(sucks->width), y, sucks); 
+        }
     }
 }
 
@@ -1410,12 +1806,18 @@ void WI_drawDeathmatchStats(void)
     WI_drawLF();
 
     // draw stat titles (top line)
-    V_DrawPatch(DM_TOTALSX-SHORT(total->width)/2,
-		DM_MATRIXY-WI_SPACINGY+10,
-		total);
-    
-    V_DrawPatch(DM_KILLERSX, DM_KILLERSY, killers);
-    V_DrawPatch(DM_VICTIMSX, DM_VICTIMSY, victims);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(DM_TOTALSX-SHORT(total->width)/2, DM_MATRIXY-WI_SPACINGY+10, total);
+        V_DrawShadowedPatchDoom(DM_KILLERSX, DM_KILLERSY, killers);
+        V_DrawShadowedPatchDoom(DM_VICTIMSX, DM_VICTIMSY, victims);
+    }
+    else
+    {
+        V_DrawPatch(DM_TOTALSX-SHORT(total->width)/2, DM_MATRIXY-WI_SPACINGY+10, total);
+        V_DrawPatch(DM_KILLERSX, DM_KILLERSY, killers);
+        V_DrawPatch(DM_VICTIMSX, DM_VICTIMSY, victims);        
+    }
 
     // draw P?
     x = DM_MATRIXX + DM_SPACINGX;
@@ -1423,26 +1825,18 @@ void WI_drawDeathmatchStats(void)
 
     for (i=0 ; i<MAXPLAYERS ; i++)
     {
+
+    // [JN] Портрет игровка в режиме Дефматч
 	if (playeringame[i])
 	{
-	    V_DrawPatch(x-SHORT(p[i]->width)/2,
-			DM_MATRIXY - WI_SPACINGY,
-			p[i]);
-	    
-	    V_DrawPatch(DM_MATRIXX-SHORT(p[i]->width)/2,
-			y,
-			p[i]);
+        V_DrawPatch(x-SHORT(p[i]->width)/2, DM_MATRIXY - WI_SPACINGY, p[i]);
+        V_DrawPatch(DM_MATRIXX-SHORT(p[i]->width)/2, y, p[i]);
 
-	    if (i == me)
-	    {
-		V_DrawPatch(x-SHORT(p[i]->width)/2,
-			    DM_MATRIXY - WI_SPACINGY,
-			    bstar);
-
-		V_DrawPatch(DM_MATRIXX-SHORT(p[i]->width)/2,
-			    y,
-			    star);
-	    }
+        if (i == me)
+        {
+            V_DrawPatch(x-SHORT(p[i]->width)/2, DM_MATRIXY - WI_SPACINGY, bstar);
+            V_DrawPatch(DM_MATRIXX-SHORT(p[i]->width)/2, y, star);
+        }
 	}
 	else
 	{
@@ -1680,18 +2074,24 @@ void WI_drawNetgameStats(void)
     WI_drawLF();
 
     // draw stat titles (top line)
-    V_DrawPatch(NG_STATSX+NG_SPACINGX-SHORT(mp_kills->width),
-		NG_STATSY, mp_kills);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(mp_kills->width), NG_STATSY, mp_kills);
+        V_DrawShadowedPatchDoom(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items->width),	NG_STATSY, mp_items);
+        V_DrawShadowedPatchDoom(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),NG_STATSY, secret);
 
-    V_DrawPatch(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items->width),
-		NG_STATSY, mp_items);
+        if (dofrags)
+        V_DrawShadowedPatchDoom(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width), NG_STATSY, frags);
+    }
+    else
+    {
+        V_DrawPatch(NG_STATSX+NG_SPACINGX-SHORT(mp_kills->width), NG_STATSY, mp_kills);
+        V_DrawPatch(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items->width),	NG_STATSY, mp_items);
+        V_DrawPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),NG_STATSY, secret);
 
-    V_DrawPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),
-		NG_STATSY, secret);
-    
-    if (dofrags)
-	V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width),
-		    NG_STATSY, frags);
+        if (dofrags)
+        V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width), NG_STATSY, frags);
+    }
 
     // draw stats
     y = NG_STATSY + SHORT(kills->height);
@@ -1702,10 +2102,12 @@ void WI_drawNetgameStats(void)
 	    continue;
 
 	x = NG_STATSX;
-	V_DrawPatch(x-SHORT(p[i]->width), y, p[i]);
 
-	if (i == me)
-	    V_DrawPatch(x-SHORT(p[i]->width), y, star);
+    // [JN] Портрет игрока в режиме совместного прохождения
+    V_DrawPatch(x-SHORT(p[i]->width), y, p[i]);
+
+    if (i == me)
+    V_DrawPatch(x-SHORT(p[i]->width), y, star);
 
 	x += NG_SPACINGX;
 	WI_drawPercent(x-pwidth, y+10, cnt_kills[i]);	x += NG_SPACINGX;
@@ -1854,21 +2256,56 @@ void WI_drawStats(void)
     
     WI_drawLF();
 
-    V_DrawPatch(SP_STATSX, SP_STATSY, kills);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY, kills);
+    }
+    else
+    {
+        V_DrawPatch(SP_STATSX, SP_STATSY, kills);
+    }
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
-    V_DrawPatch(SP_STATSX, SP_STATSY+lh, items);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY+lh, items);
+    }
+    else
+    {
+        V_DrawPatch(SP_STATSX, SP_STATSY+lh, items);
+    }
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
-    V_DrawPatch(SP_STATSX, SP_STATSY+2*lh, sp_secret);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY+2*lh, sp_secret);
+    }
+    else
+    {
+        V_DrawPatch(SP_STATSX, SP_STATSY+2*lh, sp_secret);
+    }
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
 
-    V_DrawPatch(SP_TIMEX, SP_TIMEY, timepatch);
+    if (draw_shadowed_text)
+    {
+        V_DrawShadowedPatchDoom(SP_TIMEX, SP_TIMEY, timepatch);
+    }
+    else
+    {
+        V_DrawPatch(SP_TIMEX, SP_TIMEY, timepatch);
+    }
     WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time, true);
 
     if (wbs->epsd < 4)
     {
-	V_DrawPatch(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, par);
+        if (draw_shadowed_text)
+        {
+            V_DrawShadowedPatchDoom(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, par);
+        }
+        else
+        {
+            V_DrawPatch(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, par);
+        }
 	WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par, true);
     }
     
@@ -1880,8 +2317,15 @@ void WI_drawStats(void)
         {
         const int ttime = wbs->totaltimes / TICRATE;
         const boolean wide = (ttime > 61*59) || (SP_TIMEX + SHORT(overtime->width) >= 320/4);
-    
-        V_DrawPatch(SP_TIMEX + 24, SP_TIMEY + 16, overtime);
+
+        if (draw_shadowed_text)
+        {
+            V_DrawShadowedPatchDoom(SP_TIMEX + 24, SP_TIMEY + 16, overtime);
+        }
+        else
+        {
+            V_DrawPatch(SP_TIMEX + 24, SP_TIMEY + 16, overtime);
+        }
         // [crispy] choose x-position depending on width of time string
         WI_drawTime(296 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
         }

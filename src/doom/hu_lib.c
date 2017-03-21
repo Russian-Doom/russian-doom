@@ -15,6 +15,7 @@
 // DESCRIPTION:  heads-up text and input code
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <ctype.h>
 
@@ -32,6 +33,8 @@
 #define noterased viewwindowx
 
 extern boolean	automapactive;	// in AM_map.c
+
+extern int draw_shadowed_text;
 
 void HUlib_init(void)
 {
@@ -113,7 +116,14 @@ HUlib_drawTextLine
 	    w = SHORT(l->f[c - l->sc]->width);
 	    if (x+w > SCREENWIDTH)
 		break;
-	    V_DrawPatchDirect(x, l->y, l->f[c - l->sc]);
+        if (draw_shadowed_text)
+        {
+            V_DrawShadowedPatchDoom(x, l->y, l->f[c - l->sc]);
+        }
+        else
+        {
+            V_DrawPatchDirect(x, l->y, l->f[c - l->sc]);
+        }
 	    x += w;
 	}
 	else
@@ -128,7 +138,14 @@ HUlib_drawTextLine
     if (drawcursor
 	&& x + SHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
     {
-	V_DrawPatchDirect(x, l->y, l->f['_' - l->sc]);
+        if (draw_shadowed_text)
+        {
+            V_DrawShadowedPatchDoom(x, l->y, l->f['_' - l->sc]);
+        }
+        else
+        {
+            V_DrawPatchDirect(x, l->y, l->f['_' - l->sc]);
+        }
     }
 }
 

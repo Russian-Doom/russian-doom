@@ -901,7 +901,8 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(swirling_liquids),          // Улучшенная анимация жидкостей
     CONFIG_VARIABLE_INT(red_resurrection_flash),    // Красная вспышка воскрешения монстров
     CONFIG_VARIABLE_INT(ssg_blast_enemies),         // Двуствольное ружье может разрывать врагов
-    CONFIG_VARIABLE_INT(translucency),              // Прозрачность объектов
+    CONFIG_VARIABLE_INT(translucency),              // Эффект прозрачности у некоторых объектов
+    CONFIG_VARIABLE_INT(draw_shadowed_text),        // Элементы меню и тексты отбрасывают тень
     CONFIG_VARIABLE_INT(no_pickup_flash),           // Не мигать экраном при получении предметов
     // - Звук -
     CONFIG_VARIABLE_INT(crushed_corpses_sfx),       // Звук раздавливания трупов
