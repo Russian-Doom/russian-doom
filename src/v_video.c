@@ -477,6 +477,62 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
 }
 
 //
+// [JN] V_DrawShadowedPatchDoom - отдельная функция для Doom.
+// Размер отбрасываемой тени уменьшен до 1 пиксела.
+//
+
+void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
+{
+    int count, col;
+    column_t *column;
+    byte *desttop, *dest, *source;
+    byte *desttop2, *dest2;
+    int w;
+
+    tinttable = W_CacheLumpName("TINTMAP", PU_STATIC);
+
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
+
+    if (x < 0
+     || x + SHORT(patch->width) > SCREENWIDTH
+     || y < 0
+     || y + SHORT(patch->height) > SCREENHEIGHT)
+    {
+        I_Error("Bad V_DrawShadowedPatch");
+    }
+
+    col = 0;
+    desttop = dest_screen + y * SCREENWIDTH + x;
+    desttop2 = dest_screen + (y + 1) * SCREENWIDTH + x + 1;
+
+    w = SHORT(patch->width);
+    for (; col < w; x++, col++, desttop++, desttop2++)
+    {
+        column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
+
+        // step through the posts in a column
+
+        while (column->topdelta != 0xff)
+        {
+            source = (byte *) column + 3;
+            dest = desttop + column->topdelta * SCREENWIDTH;
+            dest2 = desttop2 + column->topdelta * SCREENWIDTH;
+            count = column->length;
+
+            while (count--)
+            {   *dest2 = tinttable[((*dest2) << 8)];
+                dest2 += SCREENWIDTH;
+                *dest = *source++;
+                dest += SCREENWIDTH;
+
+            }
+            column = (column_t *) ((byte *) column + column->length + 4);
+        }
+    }
+}
+
+//
 // Load tint table from TINTTAB lump.
 //
 
