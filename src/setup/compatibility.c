@@ -34,6 +34,9 @@ int vanilla_demo_limit = 1;
 
 // [JN] Дополнительные параметры игры
 
+// - Интерфейс -
+int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
+int show_diskicon = 1;           // Показывать значок дискеты
 // - Графика -
 int colored_blood = 1;           // Кровь разных цветов
 int new_ouch_face = 1;           // Корректная формула "Ouch face"
@@ -42,7 +45,6 @@ int swirling_liquids = 1;        // Улучшенная анимация жидкостей
 int red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
 int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
 int translucency = 1;            // Прозрачность объектов
-int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 int no_pickup_flash = 0;         // Не мигать экраном при получении предметов
 // - Звук -
 int crushed_corpses_sfx = 1;     // Звук раздавливания трупов
@@ -65,6 +67,10 @@ void CompatibilitySettings(void)
     TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features = TXT_NewTable(1)));
 
     TXT_AddWidgets(window_features,
+    TXT_If(gamemission == doom,    TXT_NewSeparator("€нтерфейс")),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",   &draw_shadowed_text)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
+    
     TXT_If(gamemission == doom,    TXT_NewSeparator("ѓрафика")),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ђазноцветная кровь и трупы монстров",       &colored_blood)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Љорректная формула \"Ouch face\"",          &new_ouch_face)),
@@ -73,7 +79,6 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Љрасная вспышка воскрешения монстров",      &red_resurrection_flash)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("„вуствольное ружье может разрывать врагов", &ssg_blast_enemies)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ћффект прозрачности у некоторых объектов",  &translucency)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",   &draw_shadowed_text)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе мигать экраном при получении предметов", &no_pickup_flash)),
 
     TXT_If(gamemission == doom,    TXT_NewSeparator("‡вук")), 
@@ -97,6 +102,9 @@ void BindCompatibilityVariables(void)
 
     // [JN] Дополнительные параметры игры
 
+    // - Интерфейс -
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
+    M_BindIntVariable("show_diskicon",          &show_diskicon);            // Показывать значок дискеты
     // - Графика -
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
@@ -105,7 +113,6 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);   // Красная вспышка воскрешения монстров
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
     M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов
-    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
     M_BindIntVariable("no_pickup_flash",        &no_pickup_flash);          // Не мигать экраном при получении предметов
     // - Звук -
     M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);      // Звук раздавливания трупов

@@ -880,20 +880,14 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(show_endoom),
 
     //!
-    // @game doom strife
-    //
-    // If non-zero, a disk activity indicator is displayed when data is read
-    // from disk. If zero, the disk activity indicator is not displayed.
-    //
-
-    CONFIG_VARIABLE_INT(show_diskicon),
-
-    //!
     // [JN] Дополнительные параметры Russian DOOM
     //
 
     // - Оптимизация игровой палитры -
     CONFIG_VARIABLE_INT(lcd_gamma_fix),             // Оптимизация палитры для Doom, Heretic и Hexen.
+    // - Интерфейс -
+    CONFIG_VARIABLE_INT(draw_shadowed_text),        // Элементы меню и тексты отбрасывают тень
+    CONFIG_VARIABLE_INT(show_diskicon),             // Показывать значок дискеты
     // - Графика -
     CONFIG_VARIABLE_INT(colored_blood),             // Кровь разных цветов
     CONFIG_VARIABLE_INT(new_ouch_face),             // Корректная формула "Ouch face"
@@ -902,7 +896,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(red_resurrection_flash),    // Красная вспышка воскрешения монстров
     CONFIG_VARIABLE_INT(ssg_blast_enemies),         // Двуствольное ружье может разрывать врагов
     CONFIG_VARIABLE_INT(translucency),              // Эффект прозрачности у некоторых объектов
-    CONFIG_VARIABLE_INT(draw_shadowed_text),        // Элементы меню и тексты отбрасывают тень
     CONFIG_VARIABLE_INT(no_pickup_flash),           // Не мигать экраном при получении предметов
     // - Звук -
     CONFIG_VARIABLE_INT(crushed_corpses_sfx),       // Звук раздавливания трупов

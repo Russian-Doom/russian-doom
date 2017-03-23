@@ -81,7 +81,6 @@ static int usegamma = 0;
 
 int graphical_startup = 1;
 int show_endoom = 1;
-int show_diskicon = 1;
 int png_screenshots = 0;
 
 // [JN] Корректор контрастности
@@ -205,8 +204,6 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
             TXT_NewCheckBox("ѓрафическая загрузка", &graphical_startup)),
         TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
             TXT_NewCheckBox("Џоказывать экран ENDOOM при выходе", &show_endoom)),
-        TXT_If(gamemission == doom,
-            TXT_NewCheckBox("Џоказывать значок дискеты", &show_diskicon)),
 
     // [JN] Мой корректор контрастности
 
@@ -300,10 +297,12 @@ void BindDisplayVariables(void)
         M_BindIntVariable("show_endoom",           &show_endoom);
     }
 
+    /*
     if (gamemission == doom || gamemission == strife)
     {
         M_BindIntVariable("show_diskicon",         &show_diskicon);
     }
+    */
 
 	// [JN] Корректор контрастности
 
