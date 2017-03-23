@@ -56,11 +56,15 @@ int unlimited_lost_souls = 1;    // Ёлементаль боли без ограничени€
 void CompatibilitySettings(void)
 {
     txt_window_t *window;
+    txt_window_t *window_features;
+
     window = TXT_NewWindow("Дополнительные параметры игры");
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
-    TXT_AddWidgets(window,
+    TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features = TXT_NewTable(1)));
+
+    TXT_AddWidgets(window_features,
     TXT_If(gamemission == doom,    TXT_NewSeparator("Графика")),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Разноцветна€ кровь и трупы монстров",       &colored_blood)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Корректна€ формула \"Ouch face\"",          &new_ouch_face)),
@@ -74,7 +78,7 @@ void CompatibilitySettings(void)
 
     TXT_If(gamemission == doom,    TXT_NewSeparator("Звук")), 
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Звук раздавливани€ трупов",             &crushed_corpses_sfx)),
-        // TXT_If(gamemission == doom,	TXT_NewCheckBox("Одиночный звук закрыти€ быстрой двери", &blazing_door_fix_sfx)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Одиночный звук закрыти€ быстрой двери", &blazing_door_fix_sfx)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Проигрывать звук при выходе из игры",   &play_exit_sfx)),
 
     TXT_If(gamemission == doom,    TXT_NewSeparator("Геймплей")),
