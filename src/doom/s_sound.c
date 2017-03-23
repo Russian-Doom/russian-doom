@@ -40,6 +40,8 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
+#include "crispy.h"
+
 // when to clip out sounds
 // Does not fit the large outdoor areas.
 
@@ -106,7 +108,7 @@ static musicinfo_t *mus_playing = NULL;
 
 // Number of channels to use
 
-int snd_channels = 8;
+int snd_channels = 64;
 
 //
 // Initializes sound stuff, including volume
@@ -530,7 +532,9 @@ void S_StartSound(void *origin_p, int sfx_id)
     pitch = Clamp(pitch);
 
     // kill old sound
-    S_StopSound(origin);
+    // [JN] Хак для звуковых событий
+    if (!singleplayer)
+        S_StopSound(origin);
 
     // try to find a channel
     cnum = S_GetChannel(origin, sfx);
