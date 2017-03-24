@@ -120,17 +120,12 @@ R_MapPlane
   int		x1,
   int		x2 )
 {
-    // [JN] В случае высокой детализации, висплейны рисуются с фиксом из Crispy
-    // Этот метод совершенно неприменим к низкой детализации, т.к. при нём на
-    // текстурах поверхностей начинает появляться некий эффект паралакса.
-    if (!detailLevel)
-    {
-        // [crispy] see below
-        //  angle_t	angle;
-        fixed_t	distance;
-        //  fixed_t	length;
-        unsigned	index;
-        int dx, dy;
+    // [crispy] see below
+    //  angle_t	angle;
+    fixed_t	distance;
+    //  fixed_t	length;
+    unsigned	index;
+    int dx, dy;
 
 #ifdef RANGECHECK
     if (x2 < x1
@@ -193,66 +188,6 @@ R_MapPlane
 
     // high or low detail
     spanfunc ();	
-    }
-    
-    // [JN] В случае низкой детализации, висплейны рисуются по старинке
-    // TODO: Придумать фикс для низкой детализации...
-    
-    else
-    {
-        angle_t	angle;
-        fixed_t	distance;
-        fixed_t	length;
-        unsigned	index;
-        
-    #ifdef RANGECHECK
-        if (x2 < x1
-        || x1 < 0
-        || x2 >= viewwidth
-        || y > viewheight)
-        {
-        I_Error ("R_MapPlane: %i, %i at %i",x1,x2,y);
-        }
-    #endif
-    
-        if (planeheight != cachedheight[y])
-        {
-        cachedheight[y] = planeheight;
-        distance = cacheddistance[y] = FixedMul (planeheight, yslope[y]);
-        ds_xstep = cachedxstep[y] = FixedMul (distance,basexscale);
-        ds_ystep = cachedystep[y] = FixedMul (distance,baseyscale);
-        }
-        else
-        {
-        distance = cacheddistance[y];
-        ds_xstep = cachedxstep[y];
-        ds_ystep = cachedystep[y];
-        }
-        
-        length = FixedMul (distance,distscale[x1]);
-        angle = (viewangle + xtoviewangle[x1])>>ANGLETOFINESHIFT;
-        ds_xfrac = viewx + FixedMul(finecosine[angle], length);
-        ds_yfrac = -viewy - FixedMul(finesine[angle], length);
-    
-        if (fixedcolormap)
-        ds_colormap = fixedcolormap;
-        else
-        {
-        index = distance >> LIGHTZSHIFT;
-        
-        if (index >= MAXLIGHTZ )
-            index = MAXLIGHTZ-1;
-    
-        ds_colormap = planezlight[index];
-        }
-        
-        ds_y = y;
-        ds_x1 = x1;
-        ds_x2 = x2;
-    
-        // high or low detail
-        spanfunc ();	
-    }
 }
 
 

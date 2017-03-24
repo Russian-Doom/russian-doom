@@ -114,7 +114,7 @@ HUlib_drawTextLine
 	    && c <= '_')
 	{
 	    w = SHORT(l->f[c - l->sc]->width);
-	    if (x+w > SCREENWIDTH)
+	    if (x+w > ORIGWIDTH)
 		break;
         if (draw_shadowed_text)
         {
@@ -129,14 +129,14 @@ HUlib_drawTextLine
 	else
 	{
 	    x += 4;
-	    if (x >= SCREENWIDTH)
+	    if (x >= ORIGWIDTH)
 		break;
 	}
     }
 
     // draw the cursor if requested
     if (drawcursor
-	&& x + SHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
+	&& x + SHORT(l->f['_' - l->sc]->width) <= ORIGWIDTH)
     {
         if (draw_shadowed_text)
         {
