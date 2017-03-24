@@ -224,12 +224,12 @@ void D_Display (void)
  	    R_RenderPlayerView (&players[displayplayer]);
   	    AM_Drawer ();
  	}
-	if (wipe || (viewheight != SCREENHEIGHT && fullscreen))
+	if (wipe || (scaledviewheight != (200 << hires) && fullscreen) )
 	    redrawsbar = true;
 	if (inhelpscreensstate && !inhelpscreens)
 	    redrawsbar = true;              // just put away the help screen
-	ST_Drawer (viewheight == SCREENHEIGHT, redrawsbar );
-	fullscreen = viewheight == SCREENHEIGHT;
+	ST_Drawer (scaledviewheight == (200 << hires), redrawsbar );
+ 	fullscreen = scaledviewheight == (200 << hires);
 	break;
 
       case GS_INTERMISSION:
@@ -272,7 +272,7 @@ void D_Display (void)
     }
 
     // see if the border needs to be updated to the screen
-    if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != SCREENWIDTH)
+    if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != (320 << hires))
     {
 	if (menuactive || menuactivestate || !viewactivestate)
 	    borderdrawcount = 3;
@@ -302,16 +302,16 @@ void D_Display (void)
 	if (automapactive)
 	    y = 4;
 	else
-	    y = viewwindowy+4;
+	    y = (viewwindowy >> hires)+4;
 
     if (draw_shadowed_text)
     {
-        V_DrawShadowedPatchDoom(viewwindowx + (scaledviewwidth - 68) / 2, y,
+        V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y,
                           W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
     }
     else
     {
-        V_DrawPatchDirect(viewwindowx + (scaledviewwidth - 68) / 2, y,
+        V_DrawPatchDirect((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y,
                           W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
     }
     }

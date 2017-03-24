@@ -45,6 +45,6 @@ int			skytexturemid;
 //
 void R_InitSkyMap (void)
 {
-    skytexturemid = SCREENHEIGHT/2*FRACUNIT;
+    skytexturemid = ORIGHEIGHT/2*FRACUNIT;
 }
 

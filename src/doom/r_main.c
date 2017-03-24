@@ -625,7 +625,7 @@ void R_InitLightTables (void)
 	startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
 	for (j=0 ; j<MAXLIGHTZ ; j++)
 	{
-	    scale = FixedDiv ((SCREENWIDTH/2*FRACUNIT), (j+1)<<LIGHTZSHIFT);
+	    scale = FixedDiv ((ORIGWIDTH/2*FRACUNIT), (j+1)<<LIGHTZSHIFT);
 	    scale >>= LIGHTSCALESHIFT;
 	    level = startmap - scale/DISTMAP;
 	    
@@ -681,16 +681,17 @@ void R_ExecuteSetViewSize (void)
     if (setblocks == 11 || setblocks == 12)
     {
 	scaledviewwidth = SCREENWIDTH;
-	viewheight = SCREENHEIGHT;
+	scaledviewheight = SCREENHEIGHT;
     }
     else
     {
-	scaledviewwidth = setblocks*32;
-	viewheight = (setblocks*168/10)&~7;
+	scaledviewwidth = (setblocks*32)<<hires;
+ 	scaledviewheight = ((setblocks*168/10)&~7)<<hires;
     }
     
     detailshift = setdetail;
     viewwidth = scaledviewwidth>>detailshift;
+    viewheight = scaledviewheight>>(detailshift && hires);
 	
     centery = viewheight/2;
     centerx = viewwidth/2;
@@ -715,13 +716,13 @@ void R_ExecuteSetViewSize (void)
 	spanfunc = R_DrawSpanLow;
     }
 
-    R_InitBuffer (scaledviewwidth, viewheight);
+    R_InitBuffer (scaledviewwidth, scaledviewheight);
 	
     R_InitTextureMapping ();
     
     // psprite scales
-    pspritescale = FRACUNIT*viewwidth/SCREENWIDTH;
-    pspriteiscale = FRACUNIT*SCREENWIDTH/viewwidth;
+    pspritescale = FRACUNIT*viewwidth/ORIGWIDTH;
+    pspriteiscale = FRACUNIT*ORIGWIDTH/viewwidth;
     
     // thing clipping
     for (i=0 ; i<viewwidth ; i++)
@@ -732,7 +733,7 @@ void R_ExecuteSetViewSize (void)
     {
 	dy = ((i-viewheight/2)<<FRACBITS)+FRACUNIT/2;
 	dy = abs(dy);
-	yslope[i] = FixedDiv ( (viewwidth<<detailshift)/2*FRACUNIT, dy);
+	yslope[i] = FixedDiv ( (viewwidth<<(detailshift && !hires))/2*FRACUNIT, dy);
     }
 	
     for (i=0 ; i<viewwidth ; i++)

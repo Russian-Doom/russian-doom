@@ -89,6 +89,13 @@ void V_CopyRect(int srcx, int srcy, byte *source,
 { 
     byte *src;
     byte *dest; 
+
+    srcx <<= hires;
+    srcy <<= hires;
+    width <<= hires;
+    height <<= hires;
+    destx <<= hires;
+    desty <<= hires;
  
 #ifdef RANGECHECK 
     if (srcx < 0
@@ -100,7 +107,7 @@ void V_CopyRect(int srcx, int srcy, byte *source,
      || desty < 0
      || desty + height > SCREENHEIGHT)
     {
-        I_Error ("Bad V_CopyRect");
+        I_Error ("BadV_CopyRect");
     }
 #endif 
 
@@ -145,7 +152,7 @@ void V_DrawPatch(int x, int y, patch_t *patch)
     byte *desttop;
     byte *dest;
     byte *source;
-    int w;
+    int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
@@ -163,14 +170,14 @@ void V_DrawPatch(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("Bad V_DrawPatch");
+        I_Error("BadV_DrawPatch");
     }
 #endif
 
     V_MarkRect(x, y, SHORT(patch->width), SHORT(patch->height));
 
     col = 0;
-    desttop = dest_screen + y * SCREENWIDTH + x;
+    desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
 
     w = SHORT(patch->width);
 
@@ -181,14 +188,22 @@ void V_DrawPatch(int x, int y, patch_t *patch)
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
+            for (f = 0; f <= hires; f++)
+            {
             source = (byte *)column + 3;
-            dest = desttop + column->topdelta*SCREENWIDTH;
+            dest = desttop + column->topdelta*(SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
             while (count--)
             {
+                if (hires)
+                {
+                    *dest = *source;
+                    dest += SCREENWIDTH;
+                }
                 *dest = *source++;
                 dest += SCREENWIDTH;
+            }
             }
             column = (column_t *)((byte *)column + column->length + 4);
         }
@@ -209,7 +224,7 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
     byte *desttop;
     byte *dest;
     byte *source; 
-    int w; 
+    int w, f; 
  
     y -= SHORT(patch->topoffset); 
     x -= SHORT(patch->leftoffset); 
@@ -223,18 +238,18 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
 
 #ifdef RANGECHECK 
     if (x < 0
-     || x + SHORT(patch->width) > SCREENWIDTH
+     || x + SHORT(patch->width) > ORIGWIDTH
      || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
+     || y + SHORT(patch->height) > ORIGHEIGHT)
     {
-        I_Error("Bad V_DrawPatchFlipped");
+        I_Error("BadV_DrawPatchFlipped");
     }
 #endif
 
     V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height));
 
     col = 0;
-    desttop = dest_screen + y * SCREENWIDTH + x;
+    desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
 
     w = SHORT(patch->width);
 
@@ -245,14 +260,22 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
         // step through the posts in a column
         while (column->topdelta != 0xff )
         {
+            for (f = 0; f <= hires; f++)
+            {
             source = (byte *)column + 3;
-            dest = desttop + column->topdelta*SCREENWIDTH;
+            dest = desttop + column->topdelta*(SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
             while (count--)
             {
+                if (hires)
+                {
+                    *dest = *source;
+                    dest += SCREENWIDTH;
+                }
                 *dest = *source++;
                 dest += SCREENWIDTH;
+            }
             }
             column = (column_t *)((byte *)column + column->length + 4);
         }
@@ -282,21 +305,21 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
     int count, col;
     column_t *column;
     byte *desttop, *dest, *source;
-    int w;
+    int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
     if (x < 0
-     || x + SHORT(patch->width) > SCREENWIDTH 
+     || x + SHORT(patch->width) > ORIGWIDTH 
      || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
+     || y + SHORT(patch->height) > ORIGHEIGHT)
     {
-        I_Error("Bad V_DrawTLPatch");
+        I_Error("BadV_DrawTLPatch");
     }
 
     col = 0;
-    desttop = dest_screen + y * SCREENWIDTH + x;
+    desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop++)
@@ -307,14 +330,22 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
 
         while (column->topdelta != 0xff)
         {
+            for (f = 0; f <= hires; f++)
+            {
             source = (byte *) column + 3;
-            dest = desttop + column->topdelta * SCREENWIDTH;
+            dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
             while (count--)
             {
+                if (hires)
+                {
+                    *dest = tinttable[((*dest) << 8) + *source];
+                    dest += SCREENWIDTH;
+                }
                 *dest = tinttable[((*dest) << 8) + *source++];
                 dest += SCREENWIDTH;
+            }
             }
             column = (column_t *) ((byte *) column + column->length + 4);
         }
@@ -332,7 +363,7 @@ void V_DrawXlaPatch(int x, int y, patch_t * patch)
     int count, col;
     column_t *column;
     byte *desttop, *dest, *source;
-    int w;
+    int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
@@ -344,7 +375,7 @@ void V_DrawXlaPatch(int x, int y, patch_t * patch)
     }
 
     col = 0;
-    desttop = dest_screen + y * SCREENWIDTH + x;
+    desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
 
     w = SHORT(patch->width);
     for(; col < w; x++, col++, desttop++)
@@ -355,15 +386,23 @@ void V_DrawXlaPatch(int x, int y, patch_t * patch)
 
         while(column->topdelta != 0xff)
         {
+            for (f = 0; f <= hires; f++)
+            {
             source = (byte *) column + 3;
-            dest = desttop + column->topdelta * SCREENWIDTH;
+            dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
             while(count--)
             {
+                if (hires)
+                {
+                    *dest = xlatab[*dest + ((*source) << 8)];
+                    dest += SCREENWIDTH;
+                }
                 *dest = xlatab[*dest + ((*source) << 8)];
                 source++;
                 dest += SCREENWIDTH;
+            }
             }
             column = (column_t *) ((byte *) column + column->length + 4);
         }
@@ -381,7 +420,7 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
     int count, col;
     column_t *column;
     byte *desttop, *dest, *source;
-    int w;
+    int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
@@ -391,7 +430,7 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("Bad V_DrawAltTLPatch");
+        I_Error("BadV_DrawAltTLPatch");
     }
 
     col = 0;
@@ -406,14 +445,22 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
 
         while (column->topdelta != 0xff)
         {
+            for (f = 0; f <= hires; f++)
+            {
             source = (byte *) column + 3;
-            dest = desttop + column->topdelta * SCREENWIDTH;
+            dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
             while (count--)
             {
+                if (hires)
+                {
+                    *dest = tinttable[((*dest) << 8) + *source];
+                    dest += SCREENWIDTH;
+                }
                 *dest = tinttable[((*dest) << 8) + *source++];
                 dest += SCREENWIDTH;
+            }
             }
             column = (column_t *) ((byte *) column + column->length + 4);
         }
@@ -432,22 +479,22 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
     column_t *column;
     byte *desttop, *dest, *source;
     byte *desttop2, *dest2;
-    int w;
+    int w, f;
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
     if (x < 0
-     || x + SHORT(patch->width) > SCREENWIDTH
+     || x + SHORT(patch->width) > ORIGWIDTH
      || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
+     || y + SHORT(patch->height) > ORIGHEIGHT)
     {
-        I_Error("Bad V_DrawShadowedPatch");
+        I_Error("BadV_DrawShadowedPatch");
     }
 
     col = 0;
-    desttop = dest_screen + y * SCREENWIDTH + x;
-    desttop2 = dest_screen + (y + 2) * SCREENWIDTH + x + 2;
+    desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
+    desttop2 = dest_screen + ((y + 2) << hires) * SCREENWIDTH + x + 2;
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop++, desttop2++)
@@ -458,18 +505,28 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
 
         while (column->topdelta != 0xff)
         {
+            for (f = 0; f <= hires; f++)
+            {
             source = (byte *) column + 3;
-            dest = desttop + column->topdelta * SCREENWIDTH;
-            dest2 = desttop2 + column->topdelta * SCREENWIDTH;
+            dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
+            dest2 = desttop2 + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
             while (count--)
             {
+                if (hires)
+                {
+                    *dest2 = tinttable[((*dest2) << 8)];
+                    dest2 += SCREENWIDTH;
+                    *dest = *source;
+                    dest += SCREENWIDTH;
+                }
                 *dest2 = tinttable[((*dest2) << 8)];
                 dest2 += SCREENWIDTH;
                 *dest = *source++;
                 dest += SCREENWIDTH;
 
+            }
             }
             column = (column_t *) ((byte *) column + column->length + 4);
         }
@@ -499,7 +556,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("Bad V_DrawShadowedPatch");
+        I_Error("BadV_DrawShadowedPatch");
     }
 
     col = 0;
@@ -567,13 +624,13 @@ void V_DrawBlock(int x, int y, int width, int height, byte *src)
      || y < 0
      || y + height > SCREENHEIGHT)
     {
-	I_Error ("Bad V_DrawBlock");
+	I_Error ("BadV_DrawBlock");
     }
 #endif 
  
     V_MarkRect (x, y, width, height); 
  
-    dest = dest_screen + y * SCREENWIDTH + x; 
+    dest = dest_screen + (y << hires) * SCREENWIDTH + x;
 
     while (height--) 
     { 
@@ -582,6 +639,34 @@ void V_DrawBlock(int x, int y, int width, int height, byte *src)
 	dest += SCREENWIDTH; 
     } 
 } 
+
+void V_DrawScaledBlock(int x, int y, int width, int height, byte *src)
+{
+    byte *dest;
+    int i, j;
+
+#ifdef RANGECHECK
+    if (x < 0
+     || x + width > ORIGWIDTH
+     || y < 0
+     || y + height > ORIGHEIGHT)
+    {
+	I_Error ("BadV_DrawScaledBlock");
+    }
+#endif
+
+    V_MarkRect (x, y, width, height);
+
+    dest = dest_screen + (y << hires) * SCREENWIDTH + (x << hires);
+
+    for (i = 0; i < (height << hires); i++)
+    {
+        for (j = 0; j < (width << hires); j++)
+        {
+            *(dest + i * SCREENWIDTH + j) = *(src + (i >> hires) * width + (j >> hires));
+        }
+    }
+}
 
 void V_DrawFilledBox(int x, int y, int w, int h, int c)
 {
@@ -642,10 +727,34 @@ void V_DrawBox(int x, int y, int w, int h, int c)
 // Draw a "raw" screen (lump containing raw data to blit directly
 // to the screen)
 //
+
+void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
+{
+    int i, j;
+
+#ifdef RANGECHECK
+    if (size < 0
+     || size > ORIGWIDTH * ORIGHEIGHT)
+    {
+        I_Error("BadV_CopyScaledBuffer");
+    }
+#endif
+
+    while (size--)
+    {
+        for (i = 0; i <= hires; i++)
+        {
+            for (j = 0; j <= hires; j++)
+            {
+                *(dest + (size << hires) + (hires * (int) (size / ORIGWIDTH) + i) * SCREENWIDTH + j) = *(src + size);
+            }
+        }
+    }
+}
  
 void V_DrawRawScreen(byte *raw)
 {
-    memcpy(dest_screen, raw, SCREENWIDTH * SCREENHEIGHT);
+    V_CopyScaledBuffer(dest_screen, raw, ORIGWIDTH * ORIGHEIGHT);
 }
 
 //

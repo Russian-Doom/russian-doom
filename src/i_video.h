@@ -28,10 +28,19 @@
 
 #define SCREENWIDTH  320
 #define SCREENHEIGHT 200
+#define hires 1
+
+#define ORIGWIDTH  320
+#define ORIGHEIGHT 200
+
+#define SCREENWIDTH  (ORIGWIDTH << hires)
+#define SCREENHEIGHT (ORIGHEIGHT << hires)
+
+#define SCREENWIDTH_4_3 (256 << hires)
 
 // Screen height used when aspect_ratio_correct=true.
 
-#define SCREENHEIGHT_4_3 240
+#define SCREENHEIGHT_4_3 (240 << hires)
 
 typedef boolean (*grabmouse_callback_t)(void);
 

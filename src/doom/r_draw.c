@@ -43,7 +43,7 @@
 #define MAXHEIGHT			832
 
 // status bar height at bottom of screen
-#define SBARHEIGHT		32
+#define SBARHEIGHT		(32 << hires)
 
 //
 // All drawing to the view buffer is accomplished in this file.
@@ -59,6 +59,7 @@ byte*		viewimage;
 int		viewwidth;
 int		scaledviewwidth;
 int		viewheight;
+int		scaledviewheight;
 int		viewwindowx;
 int		viewwindowy; 
 byte*		ylookup[MAXHEIGHT]; 
@@ -251,9 +252,12 @@ void R_DrawColumnLow (void)
     int			count; 
     byte*		dest; 
     byte*		dest2;
+    byte*		dest3;
+    byte*		dest4;
     fixed_t		frac;
     fixed_t		fracstep;	 
     int                 x;
+    int			heightmask = dc_texheight - 1;
  
     count = dc_yh - dc_yl; 
 
@@ -274,21 +278,61 @@ void R_DrawColumnLow (void)
     // Blocky mode, need to multiply by 2.
     x = dc_x << 1;
     
-    dest = ylookup[dc_yl] + columnofs[x];
-    dest2 = ylookup[dc_yl] + columnofs[x+1];
+    dest = ylookup[(dc_yl << hires)] + columnofs[x];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[x+1];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[x];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[x+1];
     
     fracstep = dc_iscale; 
     frac = dc_texturemid + (dc_yl-centery)*fracstep;
     
+  // heightmask is the Tutti-Frutti fix -- killough
+  if (dc_texheight & heightmask) // not a power of 2 -- killough
+  {
+    heightmask++;
+    heightmask <<= FRACBITS;
+
+    if (frac < 0)
+	while ((frac += heightmask) < 0);
+    else
+	while (frac >= heightmask)
+	    frac -= heightmask;
+
+    do
+    {
+	*dest2 = *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+
+	dest += SCREENWIDTH << hires;
+	dest2 += SCREENWIDTH << hires;
+	if (hires)
+	{
+	    *dest4 = *dest3 = dc_colormap[dc_source[frac>>FRACBITS]];
+	    dest3 += SCREENWIDTH << hires;
+	    dest4 += SCREENWIDTH << hires;
+	}
+	if ((frac += fracstep) >= heightmask)
+	    frac -= heightmask;
+    } while (count--);
+  }
+  else // texture height is a power of 2 -- killough
+  {
     do 
     {
 	// Hack. Does not work corretly.
-	*dest2 = *dest = dc_colormap[dc_source[(frac>>FRACBITS)&127]];
-	dest += SCREENWIDTH;
-	dest2 += SCREENWIDTH;
+	*dest2 = *dest = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
+	dest += SCREENWIDTH << hires;
+	dest2 += SCREENWIDTH << hires;
+	if (hires)
+	{
+	    *dest4 = *dest3 = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
+	    dest3 += SCREENWIDTH << hires;
+	    dest4 += SCREENWIDTH << hires;
+	}
+
 	frac += fracstep; 
 
     } while (count--);
+  }
 }
 
 
@@ -385,6 +429,8 @@ void R_DrawFuzzColumnLow (void)
     int			count; 
     byte*		dest; 
     byte*		dest2; 
+    byte*		dest3;
+    byte*		dest4;
     fixed_t		frac;
     fixed_t		fracstep;	 
     int x;
@@ -416,8 +462,10 @@ void R_DrawFuzzColumnLow (void)
     }
 #endif
     
-    dest = ylookup[dc_yl] + columnofs[x];
-    dest2 = ylookup[dc_yl] + columnofs[x+1];
+    dest = ylookup[(dc_yl << hires)] + columnofs[x];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[x+1];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[x];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[x+1];
 
     // Looks familiar.
     fracstep = dc_iscale; 
@@ -434,13 +482,20 @@ void R_DrawFuzzColumnLow (void)
 	// Add index from colormap to index.
 	*dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
 	*dest2 = colormaps[6*256+dest2[fuzzoffset[fuzzpos]]]; 
+	if (hires)
+	{
+	    *dest3 = colormaps[6*256+dest[fuzzoffset[fuzzpos]]];
+	    *dest4 = colormaps[6*256+dest2[fuzzoffset[fuzzpos]]];
+	    dest3 += SCREENWIDTH << hires;
+	    dest4 += SCREENWIDTH << hires;
+	}
 
 	// Clamp table lookup index.
 	if (++fuzzpos == FUZZTABLE) 
 	    fuzzpos = 0;
 	
-	dest += SCREENWIDTH;
-	dest2 += SCREENWIDTH;
+	dest += SCREENWIDTH << hires;
+	dest2 += SCREENWIDTH << hires;
 
 	frac += fracstep; 
     } while (count--); 
@@ -511,6 +566,8 @@ void R_DrawTranslatedColumnLow (void)
     int			count; 
     byte*		dest; 
     byte*		dest2; 
+    byte*		dest3;
+    byte*		dest4;
     fixed_t		frac;
     fixed_t		fracstep;	 
     int                 x;
@@ -534,8 +591,10 @@ void R_DrawTranslatedColumnLow (void)
 #endif 
 
 
-    dest = ylookup[dc_yl] + columnofs[x]; 
-    dest2 = ylookup[dc_yl] + columnofs[x+1]; 
+    dest = ylookup[(dc_yl << hires)] + columnofs[x];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[x+1];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[x];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[x+1];
 
     // Looks familiar.
     fracstep = dc_iscale; 
@@ -551,8 +610,15 @@ void R_DrawTranslatedColumnLow (void)
 	//  is mapped to gray, red, black/indigo. 
 	*dest = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
 	*dest2 = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
-	dest += SCREENWIDTH;
-	dest2 += SCREENWIDTH;
+	dest += SCREENWIDTH << hires;
+	dest2 += SCREENWIDTH << hires;
+	if (hires)
+	{
+	    *dest3 = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
+	    *dest4 = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
+	    dest3 += SCREENWIDTH << hires;
+	    dest4 += SCREENWIDTH << hires;
+	}
 	
 	frac += fracstep; 
     } while (count--); 
@@ -875,8 +941,8 @@ void R_DrawSpanLow (void)
     ds_x1 <<= 1;
     ds_x2 <<= 1;
 
-    dest = ylookup[(ds_y)] + columnofs[ds_x1];
-    dest2 = ylookup[(ds_y) + 1] + columnofs[ds_x1];
+    dest = ylookup[(ds_y << hires)] + columnofs[ds_x1];
+    dest2 = ylookup[(ds_y << hires) + 1] + columnofs[ds_x1];
 
     do
     {
@@ -890,6 +956,11 @@ void R_DrawSpanLow (void)
 	//  while scale is adjusted appropriately.
 	*dest++ = ds_colormap[ds_source[spot]];
 	*dest++ = ds_colormap[ds_source[spot]];
+	if (hires)
+	{
+	    *dest2++ = ds_colormap[ds_source[spot]];
+	    *dest2++ = ds_colormap[ds_source[spot]];
+	}
 
 //	position += step;
 	ds_xfrac += ds_xstep;
@@ -1009,36 +1080,36 @@ void R_FillBackScreen (void)
 
     patch = W_CacheLumpName(DEH_String("brdr_t"),PU_CACHE);
 
-    for (x=0 ; x<scaledviewwidth ; x+=8)
-	V_DrawPatch(viewwindowx+x, viewwindowy-8, patch);
+    for (x=0 ; x<(scaledviewwidth >> hires) ; x+=8)
+ 	V_DrawPatch((viewwindowx >> hires)+x, (viewwindowy >> hires)-8, patch);
     patch = W_CacheLumpName(DEH_String("brdr_b"),PU_CACHE);
 
-    for (x=0 ; x<scaledviewwidth ; x+=8)
-	V_DrawPatch(viewwindowx+x, viewwindowy+viewheight, patch);
+    for (x=0 ; x<(scaledviewwidth >> hires) ; x+=8)
+ 	V_DrawPatch((viewwindowx >> hires)+x, (viewwindowy >> hires)+(scaledviewheight >> hires), patch);
     patch = W_CacheLumpName(DEH_String("brdr_l"),PU_CACHE);
 
-    for (y=0 ; y<viewheight ; y+=8)
-	V_DrawPatch(viewwindowx-8, viewwindowy+y, patch);
+    for (y=0 ; y<(scaledviewheight >> hires) ; y+=8)
+ 	V_DrawPatch((viewwindowx >> hires)-8, (viewwindowy >> hires)+y, patch);
     patch = W_CacheLumpName(DEH_String("brdr_r"),PU_CACHE);
 
-    for (y=0 ; y<viewheight ; y+=8)
-	V_DrawPatch(viewwindowx+scaledviewwidth, viewwindowy+y, patch);
+    for (y=0 ; y<(scaledviewheight >> hires); y+=8)
+ 	V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires), (viewwindowy >> hires)+y, patch);
 
     // Draw beveled edge. 
-    V_DrawPatch(viewwindowx-8,
-                viewwindowy-8,
+    V_DrawPatch((viewwindowx >> hires)-8,
+                (viewwindowy >> hires)-8,
                 W_CacheLumpName(DEH_String("brdr_tl"),PU_CACHE));
     
-    V_DrawPatch(viewwindowx+scaledviewwidth,
-                viewwindowy-8,
+    V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
+                (viewwindowy >> hires)-8,
                 W_CacheLumpName(DEH_String("brdr_tr"),PU_CACHE));
     
-    V_DrawPatch(viewwindowx-8,
-                viewwindowy+viewheight,
+    V_DrawPatch((viewwindowx >> hires)-8,
+                (viewwindowy >> hires)+(scaledviewheight >> hires),
                 W_CacheLumpName(DEH_String("brdr_bl"),PU_CACHE));
     
-    V_DrawPatch(viewwindowx+scaledviewwidth,
-                viewwindowy+viewheight,
+    V_DrawPatch((viewwindowx >> hires)+(scaledviewwidth >> hires),
+                (viewwindowy >> hires)+(scaledviewheight >> hires),
                 W_CacheLumpName(DEH_String("brdr_br"),PU_CACHE));
 
     V_RestoreBuffer();
@@ -1081,21 +1152,21 @@ void R_DrawViewBorder (void)
     if (scaledviewwidth == SCREENWIDTH) 
 	return; 
   
-    top = ((SCREENHEIGHT-SBARHEIGHT)-viewheight)/2; 
+    top = ((SCREENHEIGHT-SBARHEIGHT)-scaledviewheight)/2; 
     side = (SCREENWIDTH-scaledviewwidth)/2; 
  
     // copy top and one line of left side 
     R_VideoErase (0, top*SCREENWIDTH+side); 
  
     // copy one line of right side and bottom 
-    ofs = (viewheight+top)*SCREENWIDTH-side; 
+    ofs = (scaledviewheight+top)*SCREENWIDTH-side;
     R_VideoErase (ofs, top*SCREENWIDTH+side); 
  
     // copy sides using wraparound 
     ofs = top*SCREENWIDTH + SCREENWIDTH-side; 
     side <<= 1;
     
-    for (i=1 ; i<viewheight ; i++) 
+    for (i=1 ; i<scaledviewheight ; i++) 
     { 
 	R_VideoErase (ofs, side); 
 	ofs += SCREENWIDTH; 
