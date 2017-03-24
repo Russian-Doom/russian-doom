@@ -85,9 +85,6 @@ lighttable_t**	walllights;
 
 int*		maskedtexturecol; // [crispy] 32-bit integer math
 
-int     detailLevel; // [JN] & [crispy] Необходимо для WiggleFix
-
-
 // [crispy] WiggleFix: add this code block near the top of r_segs.c
 //
 // R_FixWiggle()
@@ -286,14 +283,13 @@ R_RenderMaskedSegRange
 
 		sprtopscreen = (int64_t)(t >> FRACBITS); // [crispy] WiggleFix
 	    }
-        
-	    sprtopscreen = centeryfrac - FixedMul(dc_texturemid, spryscale);
+
 	    dc_iscale = 0xffffffffu / (unsigned)spryscale;
-	    
+
 	    // draw the texture
 	    col = (column_t *)( 
 		(byte *)R_GetColumn(texnum,maskedtexturecol[dc_x]) -3);
-			
+
 	    R_DrawMaskedColumn (col);
 	    maskedtexturecol[dc_x] = INT_MAX; // [crispy] 32-bit integer math
 	}
@@ -330,15 +326,7 @@ void R_RenderSegLoop (void)
     for ( ; rw_x < rw_stopx ; rw_x++)
     {
 	// mark floor / ceiling areas
-    // [JN] WiggleFix только для высокой детализации
-    if (!detailLevel)
-    {
         yl = (int)((topfrac+heightunit-1)>>heightbits); // [crispy] WiggleFix
-    }
-    else
-    {
-        yl = (topfrac+HEIGHTUNIT-1)>>HEIGHTBITS;
-    }
 
 	// no space above wall?
 	if (yl < ceilingclip[rw_x]+1)
@@ -359,15 +347,7 @@ void R_RenderSegLoop (void)
 	    }
 	}
 
-    // [JN] WiggleFix только для высокой детализации
-    if (!detailLevel)
-    {
         yh = (int)(bottomfrac>>heightbits); // [crispy] WiggleFix
-    }
-    else
-    {
-        yh = bottomfrac>>HEIGHTBITS;
-    }
 
 	if (yh >= floorclip[rw_x])
 	    yh = floorclip[rw_x]-1;
@@ -428,15 +408,7 @@ void R_RenderSegLoop (void)
 	    if (toptexture)
 	    {
 		// top wall
-        // [JN] WiggleFix только для высокой детализации
-        if (!detailLevel)
-        {
         mid = (int)(pixhigh>>heightbits); // [crispy] WiggleFix
-        }
-        else
-        {
-		mid = pixhigh>>HEIGHTBITS;
-        }
         
 		pixhigh += pixhighstep;
 
@@ -466,15 +438,8 @@ void R_RenderSegLoop (void)
 	    if (bottomtexture)
 	    {
 		// bottom wall
-        // [JN] WiggleFix только для высокой детализации
-        if (!detailLevel)
-        {
         mid = (int)((pixlow+heightunit-1)>>heightbits); // [crispy] WiggleFix
-        }
-        else
-        {
-		mid = (pixlow+HEIGHTUNIT-1)>>HEIGHTBITS;
-        }
+
 		pixlow += pixlowstep;
 
 		// no space above wall?
@@ -520,9 +485,6 @@ void R_RenderSegLoop (void)
 // above R_StoreWallRange
 fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 {
-    // [JN] WiggleFix только для высокой детализации
-    if (!detailLevel)
-    {
     int		anglea = ANG90 + (visangle - viewangle);
     int		angleb = ANG90 + (visangle - rw_normalangle);
     int		den = FixedMul(rw_distance, finesine[anglea >> ANGLETOFINESHIFT]);
@@ -544,59 +506,6 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 	scale = max_rwscale;
 
     return scale;
-    }
-    
-    // [JN] Низкая детализация использует оригинальный метод обработки
-    else
-    {
-    fixed_t		scale;
-    angle_t		anglea;
-    angle_t		angleb;
-    int			sinea;
-    int			sineb;
-    fixed_t		num;
-    int			den;
-
-    // UNUSED
-#if 0
-{
-    fixed_t		dist;
-    fixed_t		z;
-    fixed_t		sinv;
-    fixed_t		cosv;
-	
-    sinv = finesine[(visangle-rw_normalangle)>>ANGLETOFINESHIFT];	
-    dist = FixedDiv (rw_distance, sinv);
-    cosv = finecosine[(viewangle-visangle)>>ANGLETOFINESHIFT];
-    z = abs(FixedMul (dist, cosv));
-    scale = FixedDiv(projection, z);
-    return scale;
-}
-#endif
-
-    anglea = ANG90 + (visangle-viewangle);
-    angleb = ANG90 + (visangle-rw_normalangle);
-
-    // both sines are allways positive
-    sinea = finesine[anglea>>ANGLETOFINESHIFT];	
-    sineb = finesine[angleb>>ANGLETOFINESHIFT];
-    num = FixedMul(projection,sineb)<<detailshift;
-    den = FixedMul(rw_distance,sinea);
-
-    if (den > num>>FRACBITS)
-    {
-	scale = FixedDiv (num, den);
-
-	if (scale > 64*FRACUNIT)
-	    scale = 64*FRACUNIT;
-	else if (scale < 256)
-	    scale = 256;
-    }
-    else
-	scale = 64*FRACUNIT;
-	
-    return scale;
-    }
 }
  
 
@@ -669,11 +578,7 @@ R_StoreWallRange
     
     // [crispy] WiggleFix: add this line, in r_segs.c:R_StoreWallRange,
     // right before calls to R_ScaleFromGlobalAngle:
-    // [JN] WiggleFix только для высокой детализации
-    if (!detailLevel)
-    {
     R_FixWiggle(frontsector);
-    }
     
     // calculate scale at both ends and step
     ds_p->scale1 = rw_scale = 
@@ -754,7 +659,6 @@ R_StoreWallRange
 	    // properly render skies (consider door "open" if both ceilings are sky):
 	    && (backsector->ceilingpic != skyflatnum ||
 	       frontsector->ceilingpic != skyflatnum);
-    
     
 	// two sided line
 	ds_p->sprtopclip = ds_p->sprbottomclip = NULL;
@@ -949,79 +853,29 @@ R_StoreWallRange
 
     
     // calculate incremental stepping values for texture edges
-    // [JN] WiggleFix только для высокой детализации
-    if (!detailLevel)
-    {
     worldtop >>= invhgtbits;
     worldbottom >>= invhgtbits;
-    }
-    else
-    {
-    worldtop >>= 4;
-    worldbottom >>= 4;
-    }
 	
     topstep = -FixedMul (rw_scalestep, worldtop);
-    // [JN] WiggleFix только для высокой детализации
-    if (!detailLevel)
-    {
     topfrac = ((int64_t)centeryfrac>>invhgtbits) - (((int64_t)worldtop * rw_scale)>>FRACBITS); // [crispy] WiggleFix
-    }
-    else
-    {
-    topfrac = (centeryfrac>>4) - FixedMul (worldtop, rw_scale);
-    }
 
     bottomstep = -FixedMul (rw_scalestep,worldbottom);
-    // [JN] WiggleFix только для высокой детализации
-    if (!detailLevel)
-    {
     bottomfrac = ((int64_t)centeryfrac>>invhgtbits) - (((int64_t)worldbottom * rw_scale)>>FRACBITS); // [crispy] WiggleFix
-    }
-    else
-    {
-    bottomfrac = (centeryfrac>>4) - FixedMul (worldbottom, rw_scale);
-    }
 	
     if (backsector)
     {
-        // [JN] WiggleFix только для высокой детализации
-        if (!detailLevel)
-        {
         worldhigh >>= invhgtbits;
         worldlow >>= invhgtbits;
-        }
-        else
-        {
-        worldhigh >>= 4;
-        worldlow >>= 4;
-        }
 
 	if (worldhigh < worldtop)
 	{
-        // [JN] WiggleFix только для высокой детализации
-        if (!detailLevel)
-        {
         pixhigh = ((int64_t)centeryfrac>>invhgtbits) - (((int64_t)worldhigh * rw_scale)>>FRACBITS); // [crispy] WiggleFix
-        }
-        else
-        {
-	    pixhigh = (centeryfrac>>4) - FixedMul (worldhigh, rw_scale);
-        }
 	    pixhighstep = -FixedMul (rw_scalestep,worldhigh);
 	}
 	
 	if (worldlow > worldbottom)
 	{
-        // [JN] WiggleFix только для высокой детализации
-        if (!detailLevel)
-        {
         pixlow = ((int64_t)centeryfrac>>invhgtbits) - (((int64_t)worldlow * rw_scale)>>FRACBITS); // [crispy] WiggleFix
-        }
-        else
-        {
-        pixlow = (centeryfrac>>4) - FixedMul (worldlow, rw_scale);
-        }
 	    pixlowstep = -FixedMul (rw_scalestep,worldlow);
 	}
     }
@@ -1040,15 +894,15 @@ R_StoreWallRange
     if ( ((ds_p->silhouette & SIL_TOP) || maskedtexture)
 	 && !ds_p->sprtopclip)
     {
-	memcpy (lastopening, ceilingclip+start, sizeof(lastopening)*(rw_stopx-start)); // [crispy] 32-bit integer math
+	memcpy (lastopening, ceilingclip+start, sizeof(*lastopening)*(rw_stopx-start));
 	ds_p->sprtopclip = lastopening - start;
 	lastopening += rw_stopx - start;
     }
     
     if ( ((ds_p->silhouette & SIL_BOTTOM) || maskedtexture)
-    && !ds_p->sprbottomclip)
+     && !ds_p->sprbottomclip)
     {
-	memcpy (lastopening, floorclip+start, sizeof(lastopening)*(rw_stopx-start)); // [crispy] 32-bit integer math
+	memcpy (lastopening, floorclip+start, sizeof(*lastopening)*(rw_stopx-start));
 	ds_p->sprbottomclip = lastopening - start;
 	lastopening += rw_stopx - start;	
     }
