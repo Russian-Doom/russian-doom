@@ -194,6 +194,44 @@ void V_DrawPatch(int x, int y, patch_t *patch)
             dest = desttop + column->topdelta*(SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
+            // [crispy] prevent framebuffer overflows
+            {
+                int tmpy = y + column->topdelta;
+
+                // [crispy] too far left
+                if (x < 0)
+                {
+                    continue;
+                }
+
+                // [crispy] too far right / width
+                if (x >= ORIGWIDTH)
+                {
+                    break;
+                }
+
+                // [crispy] too high
+                while (tmpy < 0)
+                {
+                    count--;
+                    source++;
+                    dest += (SCREENWIDTH << hires);
+                    tmpy++;
+                }
+
+                // [crispy] too low / height
+                while (tmpy + count > ORIGHEIGHT)
+                {
+                    count--;
+                }
+
+                // [crispy] nothing left to draw?
+                if (count < 1)
+                {
+                    continue;
+                }
+            }
+
             while (count--)
             {
                 if (hires)
@@ -544,7 +582,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
     column_t *column;
     byte *desttop, *dest, *source;
     byte *desttop2, *dest2;
-    int w;
+    int w, f;
 
     tinttable = W_CacheLumpName("TINTMAP", PU_STATIC);
 
@@ -556,12 +594,12 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("BadV_DrawShadowedPatch");
+        I_Error("BadV_DrawShadowedPatchDoom");
     }
 
     col = 0;
-    desttop = dest_screen + y * SCREENWIDTH + x;
-    desttop2 = dest_screen + (y + 1) * SCREENWIDTH + x + 1;
+    desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
+    desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 1;
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop++, desttop2++)
@@ -572,18 +610,29 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
 
         while (column->topdelta != 0xff)
         {
+          for (f = 0; f <= hires; f++)
+          {
             source = (byte *) column + 3;
-            dest = desttop + column->topdelta * SCREENWIDTH;
-            dest2 = desttop2 + column->topdelta * SCREENWIDTH;
+            dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
+            dest2 = desttop2 + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
             while (count--)
-            {   *dest2 = tinttable[((*dest2) << 8)];
+            {
+                if (hires)
+                {
+                    *dest2 = tinttable[((*dest2) << 8)];
+                    dest2 += SCREENWIDTH;
+                    *dest = *source;
+                    dest += SCREENWIDTH;
+                }
+                *dest2 = tinttable[((*dest2) << 8)];
                 dest2 += SCREENWIDTH;
                 *dest = *source++;
                 dest += SCREENWIDTH;
 
             }
+          }
             column = (column_t *) ((byte *) column + column->length + 4);
         }
     }

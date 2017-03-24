@@ -224,12 +224,12 @@ void D_Display (void)
  	    R_RenderPlayerView (&players[displayplayer]);
   	    AM_Drawer ();
  	}
-	if (wipe || (scaledviewheight != (200 << hires) && fullscreen) )
+	if (wipe || (scaledviewheight != SCREENHEIGHT && fullscreen) )
 	    redrawsbar = true;
 	if (inhelpscreensstate && !inhelpscreens)
 	    redrawsbar = true;              // just put away the help screen
-	ST_Drawer (scaledviewheight == (200 << hires), redrawsbar );
- 	fullscreen = scaledviewheight == (200 << hires);
+	ST_Drawer (scaledviewheight == SCREENHEIGHT, redrawsbar );
+ 	fullscreen = scaledviewheight == SCREENHEIGHT;
 	break;
 
       case GS_INTERMISSION:

@@ -300,7 +300,7 @@ void F_TextWrite (void)
 	}
 		
 	w = SHORT (hu_font[c]->width);
-	if (cx+w > SCREENWIDTH)
+	if (cx+w > ORIGWIDTH)
 	    break;
     if (draw_shadowed_text)
     {
@@ -535,7 +535,7 @@ void F_CastPrint (char* text)
     }
     
     // draw it
-    cx = SCREENWIDTH/2-width/2;
+    cx = ORIGWIDTH/2-width/2;
     ch = text;
     while (ch)
     {
@@ -589,9 +589,9 @@ void F_CastDrawer (void)
 			
     patch = W_CacheLumpNum (lump+firstspritelump, PU_CACHE);
     if (flip)
-	V_DrawPatchFlipped(SCREENWIDTH/2, 170, patch);
+	V_DrawPatchFlipped(ORIGWIDTH/2, 170, patch);
     else
-	V_DrawPatch(SCREENWIDTH/2, 170, patch);
+	V_DrawPatch(ORIGWIDTH/2, 170, patch);
 }
 
 
@@ -656,18 +656,18 @@ void F_BunnyScroll (void)
 
     V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
 	
-    scrolled = (SCREENWIDTH - ((signed int) finalecount-230)/2);
-    if (scrolled > SCREENWIDTH)
-	scrolled = SCREENWIDTH;
+    scrolled = (ORIGWIDTH - ((signed int) finalecount-230)/2);
+    if (scrolled > ORIGWIDTH)
+	scrolled = ORIGWIDTH;
     if (scrolled < 0)
 	scrolled = 0;
 		
     for ( x=0 ; x<ORIGWIDTH  ; x++)
     {
-	if (x+scrolled < SCREENWIDTH)
+	if (x+scrolled < ORIGWIDTH)
 	    F_DrawPatchCol (x, p1, x+scrolled);
 	else
-	    F_DrawPatchCol (x, p2, x+scrolled - SCREENWIDTH);		
+	    F_DrawPatchCol (x, p2, x+scrolled - ORIGWIDTH);		
     }
 	
     if (finalecount < 1130)
@@ -676,8 +676,8 @@ void F_BunnyScroll (void)
     {
         if (draw_shadowed_text)
         {
-            V_DrawShadowedPatchDoom((SCREENWIDTH - 13 * 8) / 2,
-                    (SCREENHEIGHT - 8 * 8) / 2, 
+            V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2,
+                    (ORIGHEIGHT - 8 * 8) / 2, 
                     W_CacheLumpName(DEH_String("END0"), PU_CACHE));
         }
         else
@@ -702,14 +702,14 @@ void F_BunnyScroll (void)
     DEH_snprintf(name, 10, "END%i", stage);
     if (draw_shadowed_text)
     {
-        V_DrawShadowedPatchDoom((SCREENWIDTH - 13 * 8) / 2, 
-                (SCREENHEIGHT - 8 * 8) / 2, 
+        V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2, 
+                (ORIGHEIGHT - 8 * 8) / 2, 
                 W_CacheLumpName (name,PU_CACHE));
     }
     else
     {
-        V_DrawPatch((SCREENWIDTH - 13 * 8) / 2, 
-                (SCREENHEIGHT - 8 * 8) / 2, 
+        V_DrawPatch((ORIGWIDTH - 13 * 8) / 2, 
+                (ORIGHEIGHT - 8 * 8) / 2, 
                 W_CacheLumpName (name,PU_CACHE));        
     }
 }
