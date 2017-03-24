@@ -660,13 +660,14 @@ void R_DrawTLColumn (void)
     } while (count--);
 }
 
+// [crispy] draw translucent column, low-resolution version
 void R_DrawTLColumnLow (void)
 {
     int			count;
     byte*		dest;
     byte*		dest2;
-//  byte*		dest3;
-//  byte*		dest4;
+    byte*		dest3;
+    byte*		dest4;
     fixed_t		frac;
     fixed_t		fracstep;
     int                 x;
@@ -687,19 +688,29 @@ void R_DrawTLColumnLow (void)
     }
 #endif
 
-    dest = ylookup[(dc_yl)] + columnofs[x];
-    dest2 = ylookup[(dc_yl)] + columnofs[x+1];
+    dest = ylookup[(dc_yl << hires)] + columnofs[x];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[x+1];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[x];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[x+1];
 
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     do
     {
- 	*dest = tranmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+	*dest = tranmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
 	*dest2 = tranmap[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-	dest += SCREENWIDTH;
-	dest2 += SCREENWIDTH;
-    frac += fracstep;
+	dest += SCREENWIDTH << hires;
+	dest2 += SCREENWIDTH << hires;
+	if (hires)
+	{
+	    *dest3 = tranmap[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+	    *dest4 = tranmap[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+	    dest3 += SCREENWIDTH << hires;
+	    dest4 += SCREENWIDTH << hires;
+	}
+
+	frac += fracstep;
     } while (count--);
 }
 
