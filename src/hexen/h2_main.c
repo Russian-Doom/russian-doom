@@ -323,27 +323,17 @@ void D_SetGameDescription(void)
 
     if (gamemode == shareware)
     {
-	gamedescription = "Hexen: Демоверсия четырех уровней";
-	W_AddFile("russian/russian-hexen-common.wad");
-	W_AddFile("russian/russian-hexen-demo.wad");
-	
-        if (lcd_gamma_fix) 
-        { 
-            DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-        }
+        gamedescription = "Hexen: Демоверсия четырех уровней";
+        W_AddFile("russian/russian-hexen-common.wad");
+        W_AddFile("russian/russian-hexen-demo.wad");
     }
 
     else
     {
-	gamedescription = "Hexen";
-	W_AddFile("russian/russian-hexen-common.wad");
-	W_AddFile("russian/russian-hexen-beyond.wad");
-	
-        if (lcd_gamma_fix) 
-        { 
-            DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-        }
-	}
+        gamedescription = "Hexen";
+        W_AddFile("russian/russian-hexen-common.wad");
+        W_AddFile("russian/russian-hexen-beyond.wad");
+    }
 
     // [JN] Параметр "-file" перенесен из w_main.c
     // Необходимо для того, чтобы любые ресурсы из pwad-файлов

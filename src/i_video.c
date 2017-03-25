@@ -47,6 +47,8 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
+extern int lcd_gamma_fix;
+
 // These are (1) the window (or the full screen) that our game is rendered to
 // and (2) the renderer that scales the texture (see below) into this window.
 
@@ -1337,7 +1339,10 @@ void I_InitGraphics(void)
 
     // Set the palette
 
-    doompal = W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE);
+    if (lcd_gamma_fix)
+        doompal = W_CacheLumpName(DEH_String("PALFIX"), PU_CACHE);
+    else
+        doompal = W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE);
     I_SetPalette(doompal);
     SDL_SetPaletteColors(screenbuffer->format->palette, palette, 0, 256);
 

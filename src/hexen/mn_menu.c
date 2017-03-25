@@ -107,6 +107,8 @@ typedef struct
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
+extern int lcd_gamma_fix;
+
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
 
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
@@ -1294,7 +1296,10 @@ boolean MN_Responder(event_t * event)
                     askforquit = false;
                     typeofask = 0;
                     paused = false;
-                    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+                    if (lcd_gamma_fix)
+                        I_SetPalette(W_CacheLumpName("PALFIX", PU_CACHE));
+                    else
+                        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
                     H2_StartTitle();    // go to intro/demo mode.
                     return false;
                 case 3:
@@ -1806,7 +1811,10 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+    if (lcd_gamma_fix)
+        I_SetPalette(W_CacheLumpName("PALFIX", PU_CACHE));
+    else
+        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
     V_CopyScaledBuffer(I_VideoBuffer,
            (byte *) W_CacheLumpNum(W_GetNumForName("TITLE") + InfoType,
                                    PU_CACHE), ORIGWIDTH * ORIGHEIGHT);

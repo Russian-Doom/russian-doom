@@ -29,6 +29,8 @@ void P_PlayerNextArtifact(player_t * player);
 
 // Data
 
+extern int lcd_gamma_fix;
+
 boolean onground;
 int newtorch;                   // used in the torch flicker effect.
 int newtorchdelta;
@@ -418,7 +420,10 @@ void P_DeathThink(player_t * player)
     {
         if (player == &players[consoleplayer])
         {
-            I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
+            if (lcd_gamma_fix)
+                I_SetPalette((byte *) W_CacheLumpName("PALFIX", PU_CACHE));
+            else
+                I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
             inv_ptr = 0;
             curpos = 0;
             newtorch = 0;

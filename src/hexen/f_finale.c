@@ -51,6 +51,8 @@ static char *GetFinaleText(int sequence);
 extern boolean automapactive;
 extern boolean viewactive;
 
+extern int lcd_gamma_fix;
+
 // PUBLIC DATA DECLARATIONS ------------------------------------------------
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
@@ -254,17 +256,20 @@ static void InitializeFade(boolean fadeIn)
         for (i = 0; i < 768; i++)
         {
             Palette[i] = 0;
-            PaletteDelta[i] = FixedDiv((*((byte *) W_CacheLumpName("playpal",
-                                                                   PU_CACHE) +
-                                          i)) << FRACBITS, 70 * FRACUNIT);
+            if (lcd_gamma_fix)
+                PaletteDelta[i] = FixedDiv((*((byte *) W_CacheLumpName("PALFIX", PU_CACHE) + i)) << FRACBITS, 70 * FRACUNIT);
+            else
+                PaletteDelta[i] = FixedDiv((*((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE) + i)) << FRACBITS, 70 * FRACUNIT);
         }
     }
     else
     {
         for (i = 0; i < 768; i++)
         {
-            RealPalette[i] =
-                *((byte *) W_CacheLumpName("playpal", PU_CACHE) + i);
+            if (lcd_gamma_fix)
+                RealPalette[i] = *((byte *) W_CacheLumpName("PALFIX", PU_CACHE) + i);
+            else
+                RealPalette[i] = *((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE) + i);
             Palette[i] = RealPalette[i] << FRACBITS;
             PaletteDelta[i] = FixedDiv(Palette[i], -70 * FRACUNIT);
         }

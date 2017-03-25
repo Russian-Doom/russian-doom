@@ -40,6 +40,8 @@ typedef struct Cheat_s
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
+extern int lcd_gamma_fix;
+
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
 
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
@@ -298,7 +300,10 @@ void SB_Init(void)
     {
         PatchSmNumbers[i] = W_CacheLumpNum(startLump + i, PU_STATIC);
     }
-    PlayPalette = W_GetNumForName("PLAYPAL");
+    if (lcd_gamma_fix)
+        PlayPalette = W_GetNumForName("PALFIX");
+    else
+        PlayPalette = W_GetNumForName("PLAYPAL");
     SpinFlylump = W_GetNumForName("SPFLY0");
     SpinMinotaurLump = W_GetNumForName("SPMINO0");
     SpinSpeedLump = W_GetNumForName("SPBOOT0");

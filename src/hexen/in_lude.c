@@ -41,6 +41,8 @@ typedef enum
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
+extern int lcd_gamma_fix;
+
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
 
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
@@ -98,7 +100,10 @@ extern void AM_Stop(void);
 void IN_Start(void)
 {
     int i;
-    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+    if (lcd_gamma_fix)
+        I_SetPalette(W_CacheLumpName("PALFIX", PU_CACHE));
+    else
+        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
     InitStats();
     LoadPics();
     intermission = true;
