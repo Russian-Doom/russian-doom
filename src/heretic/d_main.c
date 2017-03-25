@@ -1062,13 +1062,8 @@ void D_DoomMain(void)
     {
         gamemode = shareware;
         gamedescription = "Heretic (Демоверсия)";
-		W_AddFile("russian/russian-heretic-common.wad");
-		W_AddFile("russian/russian-heretic-demo.wad");
-		
-		if (lcd_gamma_fix)
-        { 
-            DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-        }
+        W_AddFile("russian/russian-heretic-common.wad");
+        W_AddFile("russian/russian-heretic-demo.wad");
     }
     else if (W_CheckNumForName("EXTENDED") != -1)
     {
@@ -1076,25 +1071,15 @@ void D_DoomMain(void)
 
         gamemode = retail;
         gamedescription = "Heretic: Тень Змеиных Всадников";
-		W_AddFile("russian/russian-heretic-common.wad");
-		W_AddFile("russian/russian-heretic-retail.wad");
-		
-		if (lcd_gamma_fix)
-        { 
-            DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-        }
+        W_AddFile("russian/russian-heretic-common.wad");
+        W_AddFile("russian/russian-heretic-retail.wad");
     }
     else
     {
         gamemode = registered;
         gamedescription = "Heretic";
-		W_AddFile("russian/russian-heretic-common.wad");
-		W_AddFile("russian/russian-heretic-registered.wad");
-		
-		if (lcd_gamma_fix)
-        { 
-            DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-        }
+        W_AddFile("russian/russian-heretic-common.wad");
+        W_AddFile("russian/russian-heretic-registered.wad");
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c

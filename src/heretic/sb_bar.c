@@ -78,6 +78,8 @@ int ArtifactFlash;
 
 static int DisplayTicker = 0;
 
+extern int lcd_gamma_fix;
+
 // Private Data
 
 static int HealthMarker;
@@ -237,7 +239,10 @@ void SB_Init(void)
     {
         PatchSmNumbers[i] = W_CacheLumpNum(startLump + i, PU_STATIC);
     }
-    playpalette = W_GetNumForName(DEH_String("PLAYPAL"));
+    if (lcd_gamma_fix)
+        playpalette = W_GetNumForName(DEH_String("PALFIX"));
+    else
+        playpalette = W_GetNumForName(DEH_String("PLAYPAL"));
     spinbooklump = W_GetNumForName(DEH_String("SPINBK0"));
     spinflylump = W_GetNumForName(DEH_String("SPFLY0"));
 }

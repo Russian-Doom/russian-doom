@@ -36,6 +36,8 @@ boolean onground;
 int newtorch;                   // used in the torch flicker effect.
 int newtorchdelta;
 
+extern int lcd_gamma_fix;
+
 boolean WeaponInShareware[] = {
     true,                       // Staff
     true,                       // Gold wand
@@ -387,7 +389,10 @@ void P_DeathThink(player_t * player)
     {
         if (player == &players[consoleplayer])
         {
-            I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+            if (lcd_gamma_fix)
+                I_SetPalette(W_CacheLumpName(DEH_String("PALFIX"), PU_CACHE));
+            else
+                I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
             inv_ptr = 0;
             curpos = 0;
             newtorch = 0;

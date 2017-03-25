@@ -64,6 +64,8 @@
 #define SLOTTEXTLEN     16
 #define ASCII_CURSOR '['
 
+extern int lcd_gamma_fix;
+
 // Types
 
 typedef enum
@@ -1171,8 +1173,10 @@ boolean MN_Responder(event_t * event)
                     //set the msg to be cleared
                     players[consoleplayer].message = NULL;
                     paused = false;
-                    I_SetPalette(W_CacheLumpName
-                                 ("PLAYPAL", PU_CACHE));
+                    if (lcd_gamma_fix)
+                        I_SetPalette(W_CacheLumpName ("PALFIX", PU_CACHE));
+                    else
+                        I_SetPalette(W_CacheLumpName ("PLAYPAL", PU_CACHE));
                     D_StartTitle();     // go to intro/demo mode.
                     break;
 
@@ -1397,7 +1401,10 @@ boolean MN_Responder(event_t * event)
             {
                 usegamma = 0;
             }
-            I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
+            if (lcd_gamma_fix)
+                I_SetPalette((byte *) W_CacheLumpName("PALFIX", PU_CACHE));
+            else
+                I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
             return true;
         }
 
@@ -1667,7 +1674,10 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+    if (lcd_gamma_fix)
+        I_SetPalette(W_CacheLumpName("PALFIX", PU_CACHE));
+    else
+        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
     V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("TITLE") + InfoType,
                                    PU_CACHE));
 //      V_DrawPatch(0, 0, W_CacheLumpNum(W_GetNumForName("TITLE")+InfoType,

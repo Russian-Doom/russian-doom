@@ -38,6 +38,8 @@ int FontABaseLump;
 extern boolean automapactive;
 extern boolean viewactive;
 
+extern int lcd_gamma_fix;
+
 extern void D_StartTitle(void);
 
 /*
@@ -313,7 +315,10 @@ void F_DrawUnderwater(void)
             {
                 underwawa = true;
                 V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-                lumpname = DEH_String("E2PAL");
+                if (lcd_gamma_fix)
+                    lumpname = DEH_String("E2PALFIX");
+                else
+                    lumpname = DEH_String("E2PAL");
                 palette = W_CacheLumpName(lumpname, PU_STATIC);
                 I_SetPalette(palette);
                 W_ReleaseLumpName(lumpname);
@@ -327,7 +332,10 @@ void F_DrawUnderwater(void)
         case 2:
             if (underwawa)
             {
-                lumpname = DEH_String("PLAYPAL");
+                if (lcd_gamma_fix)
+                    lumpname = DEH_String("PALFIX");
+                else
+                    lumpname = DEH_String("PLAYPAL");
                 palette = W_CacheLumpName(lumpname, PU_STATIC);
                 I_SetPalette(palette);
                 W_ReleaseLumpName(lumpname);

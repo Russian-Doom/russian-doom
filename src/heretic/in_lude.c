@@ -105,6 +105,8 @@ static char *KillersText[] = { "E", "<", "B", "Q", "W", "S", "" }; // "У", "Б"
 
 extern char *LevelNames[];
 
+extern int lcd_gamma_fix;
+
 typedef struct
 {
     int x;
@@ -157,7 +159,10 @@ extern void AM_Stop(void);
 
 void IN_Start(void)
 {
-    I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+    if (lcd_gamma_fix)
+        I_SetPalette(W_CacheLumpName(DEH_String("PALFIX"), PU_CACHE));
+    else
+        I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
     IN_LoadPics();
     IN_InitStats();
     intermission = true;
