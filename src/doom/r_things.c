@@ -40,6 +40,8 @@
 #define MINZ				(FRACUNIT*4)
 #define BASEYCENTER			(ORIGHEIGHT/2)
 
+extern int randomly_flipcorpses;
+
 //void R_DrawColumn (void);
 //void R_DrawFuzzColumn (void);
 
@@ -580,6 +582,22 @@ void R_ProjectSprite (mobj_t* thing)
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth-1 : x2;	
     iscale = FixedDiv (FRACUNIT, xscale);
+
+    if (randomly_flipcorpses)
+    {
+        // [crispy] flip death sprites and corpses randomly
+        if ((thing->flags & MF_CORPSE &&
+            thing->type != MT_CYBORG &&
+            thing->type != MT_BARREL) ||
+            thing->info->spawnstate == S_PLAY_DIE7 ||
+            thing->info->spawnstate == S_PLAY_XDIE9)
+        {
+            if (thing->health & 1)
+            {
+                flip = true;
+            }
+        }
+    }
 
     if (flip)
     {

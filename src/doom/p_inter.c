@@ -755,6 +755,10 @@ P_KillMobj
 	P_SetMobjState (target, target->info->deathstate);
     target->tics -= P_Random()&3;
 
+    // [crispy] randomize corpse health
+    if (singleplayer)
+        target->health -= target->tics & 1;
+ 
     if (target->tics < 1)
 	target->tics = 1;
 		

@@ -238,6 +238,7 @@ int     vanilla_demo_limit = 1;
 
 // - Графика -
 int colored_blood = 1;           // Кровь разных цветов
+int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
 int new_ouch_face = 1;           // Корректная формула "Ouch face"
 int invul_sky = 1;               // Неуязвимость окрашивает небо
 int swirling_liquids = 1;        // Улучшенная анимация жидкостей

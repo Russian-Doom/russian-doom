@@ -419,6 +419,7 @@ void D_BindVariables(void)
     M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);            // Оптимизация игровой палитры
     // - Графика -
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
+    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);     // Произвольное зеркальное отражение трупов
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
     M_BindIntVariable("invul_sky",              &invul_sky);                // Неуязвимость окрашивает небо
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);         // Улучшенная анимация жидкостей

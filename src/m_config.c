@@ -890,6 +890,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(show_diskicon),             // Показывать значок дискеты
     // - Графика -
     CONFIG_VARIABLE_INT(colored_blood),             // Кровь разных цветов
+    CONFIG_VARIABLE_INT(randomly_flipcorpses),      // Произвольное зеркальное отражение трупов
     CONFIG_VARIABLE_INT(new_ouch_face),             // Корректная формула "Ouch face"
     CONFIG_VARIABLE_INT(invul_sky),                 // Неуязвимость окрашивает небо
     CONFIG_VARIABLE_INT(swirling_liquids),          // Улучшенная анимация жидкостей

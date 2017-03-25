@@ -39,6 +39,7 @@ int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 int show_diskicon = 1;           // Показывать значок дискеты
 // - Графика -
 int colored_blood = 1;           // Кровь разных цветов
+int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
 int new_ouch_face = 1;           // Корректная формула "Ouch face"
 int invul_sky = 1;               // Неуязвимость окрашивает небо
 int swirling_liquids = 1;        // Улучшенная анимация жидкостей
@@ -73,7 +74,8 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
     
     TXT_If(gamemission == doom,    TXT_NewSeparator("ѓрафика")),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("ђазноцветная кровь и трупы монстров",       &colored_blood)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("ђазноцветная кровь и трупы",                &colored_blood)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Џроизвольное зеркальное отражение трупов",  &randomly_flipcorpses)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Љорректная формула \"Ouch face\"",          &new_ouch_face)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќеуязвимость окрашивает небо",              &invul_sky)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("“лучшенная анимация жидкостей",             &swirling_liquids)),
@@ -109,6 +111,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("show_diskicon",          &show_diskicon);            // Показывать значок дискеты
     // - Графика -
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
+    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);     // Произвольное зеркальное отражение трупов
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
     M_BindIntVariable("invul_sky",              &invul_sky);                // Неуязвимость окрашивает небо
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);         // Улучшенная анимация жидкостей

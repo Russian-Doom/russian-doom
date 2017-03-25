@@ -83,6 +83,7 @@ int G_VanillaVersionCode(void);
 
 // - Графика -
 extern int colored_blood;           // Кровь разных цветов
+extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
 extern int new_ouch_face;           // Корректная формула "Ouch face"
 extern int invul_sky;               // Неуязвимость окрашивает небо
 extern int swirling_liquids;        // Улучшенная анимация жидкостей

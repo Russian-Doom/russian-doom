@@ -100,6 +100,7 @@ static void SensibleDefaults(void)
 
     // - Графика -
     colored_blood = 1;           // Кровь разных цветов
+    randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
     new_ouch_face = 1;           // Корректная формула "Ouch face"
     invul_sky = 1;               // Неуязвимость окрашивает небо
     swirling_liquids = 1;        // Улучшенная анимация жидкостей
