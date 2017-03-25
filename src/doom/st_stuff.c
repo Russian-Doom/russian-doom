@@ -60,7 +60,7 @@
 #include "dstrings.h"
 #include "sounds.h"
 
-// [JN] Не мигать экраном при получении предметов
+extern int lcd_gamma_fix;
 extern int no_pickup_flash;
 
 //
@@ -1394,7 +1394,10 @@ void ST_loadGraphics(void)
 
 void ST_loadData(void)
 {
-    lu_palette = W_GetNumForName (DEH_String("PLAYPAL"));
+    if (lcd_gamma_fix)
+        lu_palette = W_GetNumForName (DEH_String("PALFIX"));
+    else
+        lu_palette = W_GetNumForName (DEH_String("PLAYPAL"));
     ST_loadGraphics();
 }
 

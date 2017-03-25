@@ -78,6 +78,8 @@
 
 #include "d_main.h"
 
+extern int lcd_gamma_fix;
+
 //
 // D-DoomLoop()
 // Not a globally visible function,
@@ -262,7 +264,10 @@ void D_Display (void)
     
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
-	I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+    if (lcd_gamma_fix)
+        I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
+    else
+        I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
 
     // see if the border needs to be initially drawn
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
@@ -924,11 +929,6 @@ void D_SetGameDescription(void)
             W_MergeFile("russian/russian-freedoom-common.wad");
             DEH_AddStringReplacement ("TITLEPIC", "FDTITLE1");
             DEH_LoadLumpByName("DEHACKED", true, true);
-
-            if (lcd_gamma_fix) 
-            { 
-                DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-            }
             */
         }
         else if (gamemode == retail)
@@ -938,33 +938,18 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("The Ultimate DOOM");
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-doom1.wad");
-
-            if (lcd_gamma_fix) 
-            { 
-                DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-            }
         }
         else if (gamemode == registered)
         {
             gamedescription = GetGameName("DOOM");
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-doom1.wad");
-
-            if (lcd_gamma_fix) 
-            { 
-                DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-            }
         }
         else if (gamemode == shareware)
         {
             gamedescription = GetGameName("DOOM (Демоверсия)");
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-doom1.wad");
-
-			if (lcd_gamma_fix) 
-            { 
-                DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-            }
         }
     }
     else
@@ -979,11 +964,6 @@ void D_SetGameDescription(void)
                 /*
                 W_MergeFile("russian/russian-freedoom-common.wad");
                 W_MergeFile("russian/russian-freedoom-dm.wad");
-            
-                if (lcd_gamma_fix) 
-                { 
-                    DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-                }
                 */
             }
             else
@@ -993,11 +973,6 @@ void D_SetGameDescription(void)
                 W_MergeFile("russian/russian-freedoom-common.wad");
                 DEH_AddStringReplacement ("TITLEPIC", "FDTITLE1");
                 DEH_LoadLumpByName("DEHACKED", true, true);
-            
-                if (lcd_gamma_fix) 
-                { 
-                    DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-                }
                 */
             }
         }
@@ -1006,33 +981,18 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("DOOM 2: Ад на Земле");
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-doom2.wad");
-
-            if (lcd_gamma_fix) 
-            { 
-                DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-            }
         }
         else if (logical_gamemission == pack_plut)
         {
             gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-plutonia.wad");
-
-            if (lcd_gamma_fix) 
-            { 
-                DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-            }
         }
         else if (logical_gamemission == pack_tnt)
         {
             gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-tnt.wad");
-
-            if (lcd_gamma_fix) 
-            { 
-                DEH_AddStringReplacement ("PLAYPAL", "PALFIX1");
-            }
         }
 
         // [JN] Параметр "-file" перенесен из w_main.c

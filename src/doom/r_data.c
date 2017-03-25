@@ -41,6 +41,8 @@
 
 #include "r_data.h"
 
+extern int lcd_gamma_fix;
+
 //
 // Graphics.
 // DOOM graphics for walls and sprites
@@ -797,58 +799,43 @@ byte *tranmap;
 // By Lee Killough 2/21/98
 //
 
-// [JN] Изначально 66. Значение непрозрачности увеличено до 85.
-int tran_filter_pct = 85;       // filter percent
+// [JN] Изначально 66. Значение непрозрачности увеличено до 82.
+int tran_filter_pct = 80;       // filter percent
 
 #define TSC 12        /* number of fixed point digits in filter percent */
 
 void R_InitTranMap()
 {
-  int lump = W_CheckNumForName("TRANMAP");
+    int lump = W_CheckNumForName("TRANMAP");
 
-  // If a tranlucency filter map lump is present, use it
-
-  if (lump != -1)  // Set a pointer to the translucency filter maps.
+    // If a tranlucency filter map lump is present, use it
+    
+    if (lump != -1)  // Set a pointer to the translucency filter maps.
     tranmap = W_CacheLumpNum(lump, PU_STATIC);   // killough 4/11/98
-  else
-    {   // Compose a default transparent filter map based on PLAYPAL.
-      unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-      char fname[PATH_MAX+1]; extern char *configdir;
-      struct {
-        unsigned char pct;
-        unsigned char playpal[256*3]; // [crispy] PLAYPAL has 768 bytes!
-      } cache;
-      
-      // [JN] Создавать файл tranmap.dat не нужно.
-      /*
-      FILE *cachefp = fopen(strcat(strcpy(fname, configdir),
-                                   ""),"r+b");    // [JN] Ранее "tranmap.dat"
-      */
+    else
+    if (lcd_gamma_fix)
+    {
+        {   // Compose a default transparent filter map based on PLAYPAL.
+            unsigned char *playpal = W_CacheLumpName("PALFIX", PU_STATIC);
+            char fname[PATH_MAX+1]; extern char *configdir;
+            struct {
+            unsigned char pct;
+            unsigned char playpal[256*3]; // [crispy] PLAYPAL has 768 bytes!
+        } cache;
 
-      tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
+        tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
+        long pal[3][256], tot[256], pal_w1[3][256];
+        long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
+        long w2 = (1l<<TSC)-w1;
 
-      // Use cached translucency filter if it's available
+        // First, convert playpal into long int type, and transpose array,
+        // for fast inner-loop calculations. Precompute tot array.
 
-      /*
-      if (!cachefp ? cachefp = fopen(fname,"wb") , 1 :
-          fread(&cache, 1, sizeof cache, cachefp) != sizeof cache ||
-          cache.pct != tran_filter_pct ||
-          memcmp(cache.playpal, playpal, sizeof cache.playpal) ||
-          fread(tranmap, 256, 256, cachefp) != 256 ) // killough 4/11/98
-        { 
-      */
-          long pal[3][256], tot[256], pal_w1[3][256];
-          long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
-          long w2 = (1l<<TSC)-w1;
-
-          // First, convert playpal into long int type, and transpose array,
-          // for fast inner-loop calculations. Precompute tot array.
-
-          {
+        {
             register int i = 255;
             register const unsigned char *p = playpal+255*3;
             do
-              {
+            {
                 register long t,d;
                 pal_w1[0][i] = (pal[0][i] = t = p[0]) * w1;
                 d = t*t;
@@ -858,22 +845,22 @@ void R_InitTranMap()
                 d += t*t;
                 p -= 3;
                 tot[i] = d << (TSC-1);
-              }
+            }
             while (--i>=0);
-          }
+        }
 
-          // Next, compute all entries using minimum arithmetic.
+        // Next, compute all entries using minimum arithmetic.
 
-          {
+        {
             int i,j;
             byte *tp = tranmap;
             for (i=0;i<256;i++)
-              {
+            {
                 long r1 = pal[0][i] * w2;
                 long g1 = pal[1][i] * w2;
                 long b1 = pal[2][i] * w2;
                 for (j=0;j<256;j++,tp++)
-                  {
+                {
                     register int color = 255;
                     register long err;
                     long r = pal_w1[0][j] + r1;
@@ -881,31 +868,81 @@ void R_InitTranMap()
                     long b = pal_w1[2][j] + b1;
                     long best = LONG_MAX;
                     do
-                      if ((err = tot[color] - pal[0][color]*r
-                          - pal[1][color]*g - pal[2][color]*b) < best)
-                        best = err, *tp = color;
-                    while (--color >= 0);
-                  }
-              }
-          }
-        
-        // [JN] Кеш tranmap.dap, более не актуален.
-        /*
-          if (cachefp)        // write out the cached translucency map
-            {
-              cache.pct = tran_filter_pct;
-              memcpy(cache.playpal, playpal, sizeof cache.playpal);
-              fseek(cachefp, 0, SEEK_SET);
-              fwrite(&cache, 1, sizeof cache, cachefp);
-              fwrite(tranmap, 256, 256, cachefp);
+                        if ((err = tot[color] - pal[0][color]*r
+                            - pal[1][color]*g - pal[2][color]*b) < best)
+                            best = err, *tp = color;
+                        while (--color >= 0);
+                }
             }
         }
-        
-        if (cachefp)
-        fclose(cachefp);
-        */
+        Z_ChangeTag(playpal, PU_CACHE);
+        }
+    }
 
-      Z_ChangeTag(playpal, PU_CACHE);
+    else
+    {
+        {   // Compose a default transparent filter map based on PLAYPAL.
+            unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
+            char fname[PATH_MAX+1]; extern char *configdir;
+            struct {
+            unsigned char pct;
+            unsigned char playpal[256*3]; // [crispy] PLAYPAL has 768 bytes!
+        } cache;
+
+        tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
+        long pal[3][256], tot[256], pal_w1[3][256];
+        long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
+        long w2 = (1l<<TSC)-w1;
+
+        // First, convert playpal into long int type, and transpose array,
+        // for fast inner-loop calculations. Precompute tot array.
+
+        {
+            register int i = 255;
+            register const unsigned char *p = playpal+255*3;
+            do
+            {
+                register long t,d;
+                pal_w1[0][i] = (pal[0][i] = t = p[0]) * w1;
+                d = t*t;
+                pal_w1[1][i] = (pal[1][i] = t = p[1]) * w1;
+                d += t*t;
+                pal_w1[2][i] = (pal[2][i] = t = p[2]) * w1;
+                d += t*t;
+                p -= 3;
+                tot[i] = d << (TSC-1);
+            }
+            while (--i>=0);
+        }
+
+        // Next, compute all entries using minimum arithmetic.
+
+        {
+            int i,j;
+            byte *tp = tranmap;
+            for (i=0;i<256;i++)
+            {
+                long r1 = pal[0][i] * w2;
+                long g1 = pal[1][i] * w2;
+                long b1 = pal[2][i] * w2;
+                for (j=0;j<256;j++,tp++)
+                {
+                    register int color = 255;
+                    register long err;
+                    long r = pal_w1[0][j] + r1;
+                    long g = pal_w1[1][j] + g1;
+                    long b = pal_w1[2][j] + b1;
+                    long best = LONG_MAX;
+                    do
+                        if ((err = tot[color] - pal[0][color]*r
+                            - pal[1][color]*g - pal[2][color]*b) < best)
+                            best = err, *tp = color;
+                    while (--color >= 0);
+                }
+            }
+        }
+        Z_ChangeTag(playpal, PU_CACHE);
+        }
     }
 }
 
