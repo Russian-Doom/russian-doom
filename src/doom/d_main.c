@@ -432,6 +432,7 @@ void D_BindVariables(void)
     M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);     // Одиночный звук закрытия быстрой двери
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);            // Проигрывать звук при выходе из игры
     // - Геймплей -
+    M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);     // Элементаль боли без ограничения

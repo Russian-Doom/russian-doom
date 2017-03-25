@@ -902,6 +902,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(blazing_door_fix_sfx),      // Одиночный звук закрытия быстрой двери
     CONFIG_VARIABLE_INT(play_exit_sfx),             // Проигрывать звук при выходе из игры
     // - Геймплей -
+    CONFIG_VARIABLE_INT(negative_health),           // Отображать отрицательное здоровье
     CONFIG_VARIABLE_INT(secret_notification),       // Уведомление об обнаружении секрета
     CONFIG_VARIABLE_INT(show_total_time),           // Показывать общее время
     CONFIG_VARIABLE_INT(unlimited_lost_souls),      // Элементаль боли без ограничения

@@ -113,6 +113,7 @@ static void SensibleDefaults(void)
     blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
     play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
     // - Геймплей -
+    negative_health = 0;         // Отображать отрицательное здоровье
     secret_notification = 1;     // Уведомление об обнаружении секрета
     show_total_time = 1;         // Показывать общее время
     unlimited_lost_souls = 1;    // Элементаль боли без ограничения

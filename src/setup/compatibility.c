@@ -51,6 +51,7 @@ int crushed_corpses_sfx = 1;     // «вук раздавливани€ трупов
 int blazing_door_fix_sfx = 1;    // ќдиночный звук закрыти€ быстрой двери
 int play_exit_sfx = 1;           // ѕроигрывать звук при выходе из игры
 // - √еймплей -
+int negative_health = 0;         // ќтображать отрицательное здоровье
 int secret_notification = 1;     // ”ведомление об обнаружении секрета
 int show_total_time = 1;         // ѕоказывать общее врем€
 int unlimited_lost_souls = 1;    // Ёлементаль боли без ограничени€
@@ -82,14 +83,15 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Не мигать экраном при получении предметов", &no_pickup_flash)),
 
     TXT_If(gamemission == doom,    TXT_NewSeparator("Звук")), 
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Звук раздавливани€ трупов",             &crushed_corpses_sfx)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Одиночный звук закрыти€ быстрой двери", &blazing_door_fix_sfx)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Проигрывать звук при выходе из игры",   &play_exit_sfx)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Звук раздавливани€ трупов",                 &crushed_corpses_sfx)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Одиночный звук закрыти€ быстрой двери",     &blazing_door_fix_sfx)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Проигрывать звук при выходе из игры",       &play_exit_sfx)),
 
     TXT_If(gamemission == doom,    TXT_NewSeparator("Геймплей")),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Уведомление об обнаружении тайников",   &secret_notification)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Общее врем€ на межмиссионном экране",   &show_total_time)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Юлементаль Боли без ограничени€ душ",   &unlimited_lost_souls)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Отображать отрицательное здоровье",         &negative_health)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Уведомление об обнаружении тайников",       &secret_notification)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Общее врем€ на межмиссионном экране",       &show_total_time)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Юлементаль Боли без ограничени€ душ",       &unlimited_lost_souls)),
     NULL);
 }
 
@@ -119,6 +121,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);     // ќдиночный звук закрыти€ быстрой двери
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);            // ѕроигрывать звук при выходе из игры
     // - √еймплей -
+    M_BindIntVariable("negative_health",        &negative_health);          // ќтображать отрицательное здоровье
     M_BindIntVariable("secret_notification",    &secret_notification);      // ”ведомление об обнаружении секрета
     M_BindIntVariable("show_total_time",        &show_total_time);          // ѕоказывать общее врем€
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);     // Ёлементаль боли без ограничени€

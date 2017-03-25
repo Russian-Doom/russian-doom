@@ -44,7 +44,7 @@
 #define BONUSADD	6
 
 extern int ssg_blast_enemies; // [JN] Двуствольное ружье может разрывать врагов
-
+extern int negative_health;   // [JN] Отображать отрицательное здоровье
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
@@ -904,8 +904,17 @@ P_DamageMobj
 	    damage -= saved;
 	}
 	player->health -= damage; 	// mirror mobj health here for Dave
-	if (player->health < 0)
-	    player->health = 0;
+    // [from-crispy] Опциональная функция отрицательного здоровья
+    if (negative_health)
+    {
+        if (player->health < -99)
+            player->health = -99;
+    }
+    else
+    {
+        if (player->health < 0)
+            player->health = 0;        
+    }
 	
 	player->attacker = source;
 	player->damagecount += damage;	// add damage after armor / invuln
