@@ -532,9 +532,82 @@ void S_StartSound(void *origin_p, int sfx_id)
     pitch = Clamp(pitch);
 
     // kill old sound
-    // [JN] Хак для звуковых событий
-    if (!singleplayer)
+
+    // [JN] Звуки должны прерываться только у монстров,
+    // и только определённые. Необходимо для корректной
+    // работы моего фикса, исправляющего прерывания
+    // звуков стрельбы игрока. Только для одиночной игры.
+    if (singleplayer)
+    {
+        if( /* Бензопила           */
+            (sfx_id == sfx_sawup)  ||
+            /* Зомби               */
+            (sfx_id == sfx_posit1) ||
+            (sfx_id == sfx_posit2) ||
+            (sfx_id == sfx_posit3) ||
+            (sfx_id == sfx_posact) ||
+            (sfx_id == sfx_popain) ||
+            (sfx_id == sfx_podth1) ||
+            (sfx_id == sfx_podth2) ||
+            (sfx_id == sfx_podth3) || 
+            /* Бес                 */
+            (sfx_id == sfx_bgsit1) ||
+            (sfx_id == sfx_bgsit2) ||
+            (sfx_id == sfx_bgact)  ||
+            (sfx_id == sfx_firsht) ||
+            (sfx_id == sfx_claw)   ||
+            (sfx_id == sfx_bgdth1) ||
+            (sfx_id == sfx_bgdth2) ||
+            /* Демон               */
+            (sfx_id == sfx_sgtsit) ||
+            (sfx_id == sfx_dmpain) ||
+            (sfx_id == sfx_dmact)  ||
+            (sfx_id == sfx_sgtdth) ||
+            /* Потерянная душа     */
+            (sfx_id == sfx_sklatk) ||
+            /* Какодемон           */
+            (sfx_id == sfx_cacsit) ||
+            (sfx_id == sfx_cacdth) ||
+            /* Рыцарь Ада          */
+            (sfx_id == sfx_kntsit) ||
+            (sfx_id == sfx_kntdth) ||
+            /* Барон Ада           */
+            (sfx_id == sfx_brssit) ||
+            (sfx_id == sfx_brsdth) ||
+            /* Арахнотрон          */
+            (sfx_id == sfx_bspsit) ||
+            (sfx_id == sfx_bspact) ||
+            (sfx_id == sfx_bspdth) ||
+            /* Элементаль Боли     */
+            (sfx_id == sfx_pesit)  ||
+            (sfx_id == sfx_pepain) ||
+            (sfx_id == sfx_pedth)  ||
+            /* Ревенант            */
+            (sfx_id == sfx_skesit) ||
+            (sfx_id == sfx_skeact) ||
+            (sfx_id == sfx_skedth) ||
+            /* Манкубус            */
+            (sfx_id == sfx_mansit) ||
+            (sfx_id == sfx_mnpain) ||
+            (sfx_id == sfx_mandth) ||
+            /* Арчвайл             */
+            (sfx_id == sfx_vilsit) ||
+            (sfx_id == sfx_vilact) ||
+            (sfx_id == sfx_vipain) ||
+            (sfx_id == sfx_vildth) ||
+            /* Паук-Предводитель   */
+            (sfx_id == sfx_spisit) ||
+            /* Кибердемон          */
+            (sfx_id == sfx_cybsit) ||
+            /* Вольфенштайн СС     */
+            (sfx_id == sfx_sssit)  ||
+            (sfx_id == sfx_ssdth)   )
         S_StopSound(origin);
+    }
+    else
+    {
+        S_StopSound(origin);
+    }
 
     // try to find a channel
     cnum = S_GetChannel(origin, sfx);
