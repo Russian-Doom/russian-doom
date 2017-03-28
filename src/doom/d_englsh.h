@@ -167,7 +167,8 @@
 //	G_game.C
 //
 
-#define GGSAVED "buhf cj[hfytyf>"   // Игра сохранена.
+#define GGSAVED     "buhf cj[hfytyf>"   // Игра сохранена.
+#define GGLOADED    "buhf pfuhe;tyf>"   // Игра загружена.
 
 //
 //	HU_stuff.C

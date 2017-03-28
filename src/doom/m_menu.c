@@ -752,8 +752,16 @@ void M_QuickSave(void)
 	quickSaveSlot = -2;	// means to pick a slot now
 	return;
     }
+
+    if (fast_quickload)
+    {
+    M_DoSave(quickSaveSlot);
+    }
+    else
+    {
     DEH_snprintf(tempstring, 80, QSPROMPT, savegamestrings[quickSaveSlot]);
     M_StartMessage(tempstring,M_QuickSaveResponse,true);
+    }
 }
 
 
@@ -773,6 +781,8 @@ void M_QuickLoadResponse(int key)
 
 void M_QuickLoad(void)
 {
+    static char qloadmessage[24];
+    
     if (netgame)
     {
 	M_StartMessage(DEH_String(QLOADNET),NULL,false);
@@ -784,8 +794,16 @@ void M_QuickLoad(void)
 	M_StartMessage(DEH_String(QSAVESPOT),NULL,false);
 	return;
     }
+    
+    if (fast_quickload)
+    {
+    M_LoadSelect(quickSaveSlot);
+    }
+    else
+    {
     DEH_snprintf(tempstring, 80, QLPROMPT, savegamestrings[quickSaveSlot]);
     M_StartMessage(tempstring,M_QuickLoadResponse,true);
+    }
 }
 
 

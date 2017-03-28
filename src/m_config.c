@@ -887,6 +887,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(lcd_gamma_fix),             // Оптимизация палитры для Doom, Heretic и Hexen.
     // - Интерфейс -
     CONFIG_VARIABLE_INT(draw_shadowed_text),        // Элементы меню и тексты отбрасывают тень
+    CONFIG_VARIABLE_INT(fast_quickload),            // Не выводить запрос при быстрой загрузке
     CONFIG_VARIABLE_INT(show_diskicon),             // Показывать значок дискеты
     // - Графика -
     CONFIG_VARIABLE_INT(colored_blood),             // Кровь разных цветов

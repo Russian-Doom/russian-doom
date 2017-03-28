@@ -72,6 +72,7 @@ static const bex_string_t bex_stringtable[] = {
     {"GAMMALVL4", GAMMALVL4},
     {"EMPTYSTRING", EMPTYSTRING},
     {"GGSAVED", GGSAVED},
+    {"GGLOADED", GGLOADED},
     {"SAVEGAMENAME", SAVEGAMENAME},
     // part 2 - messages when the player gets things
     {"GOTARMOR", GOTARMOR},

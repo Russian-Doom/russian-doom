@@ -36,6 +36,7 @@ int vanilla_demo_limit = 1;
 
 // - Интерфейс -
 int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
+int fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
 int show_diskicon = 1;           // Показывать значок дискеты
 // - Графика -
 int colored_blood = 1;           // Кровь разных цветов
@@ -71,6 +72,7 @@ void CompatibilitySettings(void)
     TXT_AddWidgets(window_features,
     TXT_If(gamemission == doom,    TXT_NewSeparator("€нтерфейс")),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",   &draw_shadowed_text)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе выводить запрос при быстрой загрузке",   &fast_quickload)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
     
     TXT_If(gamemission == doom,    TXT_NewSeparator("ѓрафика")),
@@ -108,6 +110,7 @@ void BindCompatibilityVariables(void)
 
     // - Интерфейс -
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
+    M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
     M_BindIntVariable("show_diskicon",          &show_diskicon);            // Показывать значок дискеты
     // - Графика -
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
