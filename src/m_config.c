@@ -51,7 +51,7 @@ char *configdir;
 
 // Default filenames for configuration files.
 
-static char *default_main_config;
+// static char *default_main_config;
 static char *default_extra_config;
 
 typedef enum 
@@ -2016,7 +2016,7 @@ void M_LoadDefaults (void)
     else
     {
         doom_defaults.filename
-            = M_StringJoin(configdir, default_main_config, NULL);
+            = M_StringJoin(configdir, default_extra_config, NULL);
     }
 
     printf("Сохранение файла конфигурации: %s\n", doom_defaults.filename);
