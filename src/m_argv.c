@@ -15,6 +15,7 @@
 // DESCRIPTION:
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <ctype.h>
 #include <stdio.h>
@@ -113,7 +114,7 @@ static void LoadResponseFile(int argv_index)
 
         if (k < 0)
         {
-            I_Error("Failed to read full contents of '%s'", response_filename);
+            I_Error("Невозможно прочитать содержимое \"%s\"", response_filename);
         }
 
         i += k;
@@ -172,7 +173,7 @@ static void LoadResponseFile(int argv_index)
 
             if (k >= size || infile[k] == '\n')
             {
-                I_Error("Quotes unclosed in response file '%s'",
+                I_Error("Кавычки не закрыты в ответном файле \"%s\"",
                         response_filename);
             }
 

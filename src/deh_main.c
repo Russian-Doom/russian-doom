@@ -15,6 +15,8 @@
 // Main dehacked code
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -400,7 +402,7 @@ int DEH_LoadFile(char *filename)
 
     if (DEH_HadError(context))
     {
-        I_Error("Error parsing dehacked file");
+        I_Error("Ошибка обработки файла Dehacked");
     }
 
     return 1;
@@ -439,7 +441,7 @@ int DEH_LoadLump(int lumpnum, boolean allow_long, boolean allow_error)
     // errors to just be ignored if allow_error=true.
     if (!allow_error && DEH_HadError(context))
     {
-        I_Error("Error parsing dehacked lump");
+        I_Error("Ошибка обработки блока Dehacked");
     }
 
     return 1;

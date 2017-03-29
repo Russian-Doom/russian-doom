@@ -1706,7 +1706,7 @@ void P_UnArchiveThinkers (void)
 	    break;
 
 	  default:
-	    I_Error ("Unknown tclass %i in savegame",tclass);
+	    I_Error ("Неизвестный tclass %i в сохраненной игре",tclass);
 	}
     }
 }
@@ -2019,8 +2019,8 @@ void P_UnArchiveSpecials (void)
         break;
 				
 	  default:
-	    I_Error ("P_UnarchiveSpecials:Unknown tclass %i "
-		     "in savegame",tclass);
+	    I_Error ("P_UnarchiveSpecials: неизвестный tclass %i "
+		     "в сохраненной игре",tclass);
 	}
 	
     }

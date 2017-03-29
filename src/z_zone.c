@@ -16,6 +16,8 @@
 //	Zone Memory Allocation. Neat.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdlib.h> // [crispy] realloc()
 #include <string.h>
 
@@ -184,7 +186,7 @@ void Z_Free (void* ptr)
     block = (memblock_t *) ( (byte *)ptr - sizeof(memblock_t));
 
     if (block->id != ZONEID)
-	I_Error ("Z_Free: freed a pointer without ZONEID");
+	I_Error ("Z_Free: высвобождение указателя без ZONEID");
 
     if (block->tag != PU_FREE && block->user != NULL)
     {
@@ -341,7 +343,7 @@ Z_Malloc
     }
 	
 	if (user == NULL && tag >= PU_PURGELEVEL)
-	    I_Error ("Z_Malloc: an owner is required for purgable blocks");
+	    I_Error ("Z_Malloc: для очищаемых блоков требуется административных объект");
 
     base->user = user;
     base->tag = tag;
@@ -482,13 +484,13 @@ void Z_CheckHeap (void)
 	}
 	
 	if ( (byte *)block + block->size != (byte *)block->next)
-	    I_Error ("Z_CheckHeap: block size does not touch the next block\n");
+	    I_Error ("Z_CheckHeap: размер блока не соприкасается с последующим блоком\n");
 
 	if ( block->next->prev != block)
-	    I_Error ("Z_CheckHeap: next block doesn't have proper back link\n");
+	    I_Error ("Z_CheckHeap: последующий блок не имеет корректной обратной связи\n");
 
 	if (block->tag == PU_FREE && block->next->tag == PU_FREE)
-	    I_Error ("Z_CheckHeap: two consecutive free blocks\n");
+	    I_Error ("Z_CheckHeap: два последовательных свободных блока\n");
     }
 }
 
@@ -505,12 +507,11 @@ void Z_ChangeTag2(void *ptr, int tag, char *file, int line)
     block = (memblock_t *) ((byte *)ptr - sizeof(memblock_t));
 
     if (block->id != ZONEID)
-        I_Error("%s:%i: Z_ChangeTag: block without a ZONEID!",
+        I_Error("%s:%i: Z_ChangeTag: блок без ZONEID!",
                 file, line);
 
     if (tag >= PU_PURGELEVEL && block->user == NULL)
-        I_Error("%s:%i: Z_ChangeTag: an owner is required "
-                "for purgable blocks", file, line);
+        I_Error("%s:%i: Z_ChangeTag: для высвобождаемых блоков требуется административный объект", file, line);
 
     block->tag = tag;
 }
@@ -523,7 +524,7 @@ void Z_ChangeUser(void *ptr, void **user)
 
     if (block->id != ZONEID)
     {
-        I_Error("Z_ChangeUser: Tried to change user for invalid block!");
+        I_Error("Z_ChangeUser: попытка смены пользователя для некорректного блока!");
     }
 
     block->user = user;
@@ -566,7 +567,7 @@ void *crispy_realloc(void *ptr, size_t size)
 
     if (!newp && size)
     {
-	I_Error ("crispy_realloc: failed on (re-)allocation of %i bytes", size);
+	I_Error ("crispy_realloc: ошибка (пере-)обнаружения %i байт", size);
     }
     else
     {

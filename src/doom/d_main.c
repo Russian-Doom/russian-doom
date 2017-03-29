@@ -1794,9 +1794,9 @@ void D_DoomMain (void)
     // None found?
 
     if (iwadfile == NULL)
-    {	// [JN] Используется английский текст из за проблем с кодировкой.
-        I_Error("Game mode indeterminate.  No IWAD file was found.  Try\n"
-                "specifying one with the '-iwad' command line parameter.\n");
+    {
+        I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
+                "Попробуйте указать IWAD-файл командой '-iwad'.\n");
     }
 
     modifiedgame = false;

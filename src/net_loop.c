@@ -15,6 +15,8 @@
 //      Loopback network module for server compiled into the client
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -92,7 +94,7 @@ static boolean NET_CL_InitClient(void)
 
 static boolean NET_CL_InitServer(void)
 {
-    I_Error("NET_CL_InitServer: attempted to initialize client pipe end as a server!");
+    I_Error("NET_CL_InitServer: попытка инициалиализировать клиент как сервер!");
     return false;
 }
 
@@ -161,7 +163,7 @@ net_module_t net_loop_client_module =
 
 static boolean NET_SV_InitClient(void)
 {
-    I_Error("NET_SV_InitClient: attempted to initialize server pipe end as a client!");
+    I_Error("NET_SV_InitClient: попытка инициализировать сервер как клиент!");
     return false;
 }
 

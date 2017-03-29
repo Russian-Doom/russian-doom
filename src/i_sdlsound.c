@@ -17,6 +17,8 @@
 //	System interface for sound.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include "config.h"
 
 #include <stdio.h>
@@ -263,7 +265,7 @@ static void UnlockAllocatedSound(allocated_sound_t *snd)
 {
     if (snd->use_count <= 0)
     {
-        I_Error("Sound effect released more times than it was locked...");
+        I_Error("Количество воспроизведения звукового эффекта превысило допустимый лимит...");
     }
 
     --snd->use_count;
@@ -1101,7 +1103,7 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
     {
         if (SRC_ConversionMode() < 0)
         {
-            I_Error("I_SDL_InitSound: Invalid value for use_libsamplerate: %i",
+            I_Error("I_SDL_InitSound: неизвестная переменная в use_libsamplerate: %i",
                     use_libsamplerate);
         }
 

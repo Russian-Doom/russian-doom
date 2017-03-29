@@ -17,6 +17,8 @@
 //	Switches, buttons. Two-state animation. Exits.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 
 #include "i_system.h"
@@ -128,7 +130,7 @@ void P_InitSwitchList(void)
 			
 	    if (R_CheckTextureNumForName(alphSwitchList[i].name1) < 0)
 	    {
-		I_Error("Can't find switch texture '%s'!",
+		I_Error("Не найдена текстура переключателя '%s'!",
 			alphSwitchList[i].name1);
 		continue;
 	    }
@@ -180,7 +182,7 @@ P_StartButton
 	}
     }
     
-    I_Error("P_StartButton: no button slots left!");
+    I_Error("P_StartButton: превышен лимит слотов для переключателей!");
 }
 
 

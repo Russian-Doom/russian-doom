@@ -17,6 +17,7 @@
 //	set up initial state and misc. LUTs.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 
 #include <math.h>
@@ -211,7 +212,7 @@ void P_LoadSegs (int lump)
         // e6y: check for wrong indexes
         if ((unsigned)ldef->sidenum[side] >= (unsigned)numsides)
         {
-            I_Error("P_LoadSegs: linedef %d for seg %d references a non-existent sidedef %d",
+            I_Error("P_LoadSegs: линия %d для сегмента %d указывает на несуществующую сторону %d",
                     linedef, i, (unsigned)ldef->sidenum[side]);
         }
 

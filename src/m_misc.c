@@ -17,6 +17,7 @@
 //      Miscellaneous.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -210,7 +211,7 @@ int M_ReadFile(char *name, byte **buffer)
 	
     handle = fopen(name, "rb");
     if (handle == NULL)
-	I_Error ("Couldn't read file %s", name);
+	I_Error ("Невозможно прочитать файл %s", name);
 
     // find the size of the file by seeking to the end and
     // reading the current position
@@ -222,7 +223,7 @@ int M_ReadFile(char *name, byte **buffer)
     fclose (handle);
 	
     if (count < length)
-	I_Error ("Couldn't read file %s", name);
+	I_Error ("Невозможно прочитать файл %s", name);
 		
     *buffer = buf;
     return length;
@@ -384,7 +385,7 @@ char *M_StringDuplicate(const char *orig)
 
     if (result == NULL)
     {
-        I_Error("Failed to duplicate string (length %i)\n",
+        I_Error("Невозможно дублировать строку (длина %i)\n",
                 strlen(orig));
     }
 
@@ -425,7 +426,7 @@ char *M_StringReplace(const char *haystack, const char *needle,
     result = malloc(result_len);
     if (result == NULL)
     {
-        I_Error("M_StringReplace: Failed to allocate new string");
+        I_Error("M_StringReplace: не удалось обнаружить новую строку");
         return NULL;
     }
 
@@ -536,7 +537,7 @@ char *M_StringJoin(const char *s, ...)
 
     if (result == NULL)
     {
-        I_Error("M_StringJoin: Failed to allocate new string.");
+        I_Error("M_StringJoin: не удалось обнаружить новую строку");
         return NULL;
     }
 

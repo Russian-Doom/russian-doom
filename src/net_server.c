@@ -14,6 +14,8 @@
 // Network server code
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -1259,7 +1261,7 @@ static void NET_SV_SendTics(net_client_t *client,
 
         if (i != cmd->seq)
         {
-            I_Error("Wanted to send %i, but %i is in its place", i, cmd->seq);
+            I_Error("Попытка отправки %i, но %i расположен некорректно", i, cmd->seq);
         }
 
         // Add command

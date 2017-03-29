@@ -16,6 +16,8 @@
 //	Plats (i.e. elevator platforms) code, raising/lowering.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 
 #include "i_system.h"
@@ -285,7 +287,7 @@ void P_AddActivePlat(plat_t* plat)
 	    activeplats[i] = plat;
 	    return;
 	}
-    I_Error ("P_AddActivePlat: no more plats!");
+    I_Error ("P_AddActivePlat: превышен лимит платформ!");
 }
 
 void P_RemoveActivePlat(plat_t* plat)
@@ -300,5 +302,5 @@ void P_RemoveActivePlat(plat_t* plat)
 	    
 	    return;
 	}
-    I_Error ("P_RemoveActivePlat: can't find plat!");
+    I_Error ("P_RemoveActivePlat: платформа не обнаружена!");
 }

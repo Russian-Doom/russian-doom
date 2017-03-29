@@ -16,6 +16,8 @@
 //     through the network module system
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 
 #include "i_system.h"
@@ -47,7 +49,7 @@ void NET_AddModule(net_context_t *context, net_module_t *module)
 {
     if (context->num_modules >= MAX_MODULES)
     {
-        I_Error("NET_AddModule: No more modules for context");
+        I_Error("NET_AddModule: превышен лимит контекстных модулей");
     }
     
     context->modules[context->num_modules] = module;

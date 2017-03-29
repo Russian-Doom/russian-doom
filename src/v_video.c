@@ -19,6 +19,8 @@
 //	Functions to blit a block to the screen.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -107,7 +109,7 @@ void V_CopyRect(int srcx, int srcy, byte *source,
      || desty < 0
      || desty + height > SCREENHEIGHT)
     {
-        I_Error ("BadV_CopyRect");
+        I_Error ("Ошибка V_CopyRect");
     }
 #endif 
 
@@ -170,7 +172,7 @@ void V_DrawPatch(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("BadV_DrawPatch");
+        I_Error("Ошибка V_DrawPatch");
     }
 #endif
 
@@ -280,7 +282,7 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > ORIGHEIGHT)
     {
-        I_Error("BadV_DrawPatchFlipped");
+        I_Error("Ошибка V_DrawPatchFlipped");
     }
 #endif
 
@@ -353,7 +355,7 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
      || y < 0
      || y + SHORT(patch->height) > ORIGHEIGHT)
     {
-        I_Error("BadV_DrawTLPatch");
+        I_Error("Ошибка V_DrawTLPatch");
     }
 
     col = 0;
@@ -468,7 +470,7 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("BadV_DrawAltTLPatch");
+        I_Error("Ошибка V_DrawAltTLPatch");
     }
 
     col = 0;
@@ -527,7 +529,7 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > ORIGHEIGHT)
     {
-        I_Error("BadV_DrawShadowedPatch");
+        I_Error("Ошибка V_DrawShadowedPatch");
     }
 
     col = 0;
@@ -594,7 +596,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("BadV_DrawShadowedPatchDoom");
+        I_Error("Ошибка V_DrawShadowedPatchDoom");
     }
 
     col = 0;
@@ -673,7 +675,7 @@ void V_DrawBlock(int x, int y, int width, int height, byte *src)
      || y < 0
      || y + height > SCREENHEIGHT)
     {
-	I_Error ("BadV_DrawBlock");
+	I_Error ("Ошибка V_DrawBlock");
     }
 #endif 
  
@@ -700,7 +702,7 @@ void V_DrawScaledBlock(int x, int y, int width, int height, byte *src)
      || y < 0
      || y + height > ORIGHEIGHT)
     {
-	I_Error ("BadV_DrawScaledBlock");
+	I_Error ("Ошибка V_DrawScaledBlock");
     }
 #endif
 
@@ -785,7 +787,7 @@ void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
     if (size < 0
      || size > ORIGWIDTH * ORIGHEIGHT)
     {
-        I_Error("BadV_CopyScaledBuffer");
+        I_Error("Ошибка V_CopyScaledBuffer");
     }
 #endif
 
@@ -1059,7 +1061,7 @@ void V_ScreenShot(char *format)
 
     if (i == 100)
     {
-        I_Error ("V_ScreenShot: Couldn't create a PCX");
+        I_Error ("V_ScreenShot: не удалось создать файл PCX");
     }
 
 #ifdef HAVE_LIBPNG

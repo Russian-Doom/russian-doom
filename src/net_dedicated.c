@@ -15,6 +15,8 @@
 // Dedicated server code.
 // 
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -52,10 +54,9 @@ static void CheckForClientOptions(void)
     {
         if (M_CheckParm(not_dedicated_options[i]) > 0)
         {
-            I_Error("The command line parameter '%s' was specified to a "
-                    "dedicated server.\nGame parameters should be specified "
-                    "to the first player to join a server, \nnot to the "
-                    "server itself. ",
+            I_Error("Параметр командной строки '%s' указан выделенному серверу.\n"
+                    "Параметры должны быть указаны первым игроком, присоединившемся\n"
+                    "к серверу, но не заданы самим сервером",
                     not_dedicated_options[i]);
         }
     }

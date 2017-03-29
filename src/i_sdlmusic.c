@@ -745,7 +745,7 @@ static void DumpSubstituteConfig(char *filename)
 
     if (fs == NULL)
     {
-        I_Error("Failed to open %s for writing", filename);
+        I_Error("Невозможно открыть %s для записи", filename);
         return;
     }
 

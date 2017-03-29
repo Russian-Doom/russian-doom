@@ -15,6 +15,8 @@
 //     Querying servers to find their current status.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -776,7 +778,7 @@ void NET_QueryAddress(char *addr_str)
 
     if (addr == NULL)
     {
-        I_Error("NET_QueryAddress: Host '%s' not found!", addr_str);
+        I_Error("NET_QueryAddress: хост '%s' не найден!", addr_str);
     }
 
     // Add the address to the list of targets.
@@ -797,7 +799,7 @@ void NET_QueryAddress(char *addr_str)
     }
     else
     {
-        I_Error("No response from '%s'", addr_str);
+        I_Error("Ответ не получен от '%s'", addr_str);
     }
 }
 

@@ -16,6 +16,8 @@
 //	WAD I/O functions.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include "config.h"
 
 #ifdef _WIN32
@@ -80,7 +82,7 @@ unsigned int GetFileLength(HANDLE handle)
 
     if (result == INVALID_SET_FILE_POINTER)
     {
-        I_Error("W_Win32_OpenFile: Failed to read file length");
+        I_Error("W_Win32_OpenFile: ошибка чтения длины файла");
     }
 
     return result;
@@ -172,7 +174,7 @@ size_t W_Win32_Read(wad_file_t *wad, unsigned int offset,
 
     if (result == INVALID_SET_FILE_POINTER)
     {
-        I_Error("W_Win32_Read: Failed to set file pointer to %i",
+        I_Error("W_Win32_Read: невозможно задать указатель файла %i",
                 offset);
     }
 
@@ -180,7 +182,7 @@ size_t W_Win32_Read(wad_file_t *wad, unsigned int offset,
 
     if (!ReadFile(win32_wad->handle, buffer, buffer_len, &bytes_read, NULL))
     {
-        I_Error("W_Win32_Read: Error reading from file");
+        I_Error("W_Win32_Read: ошибка чтения файла");
     }
 
     return bytes_read;

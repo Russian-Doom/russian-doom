@@ -15,6 +15,8 @@
 //     Networking module which uses SDL_net
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -149,7 +151,7 @@ static void NET_SDL_FreeAddress(net_addr_t *addr)
         }
     }
 
-    I_Error("NET_SDL_FreeAddress: Attempted to remove an unused address!");
+    I_Error("NET_SDL_FreeAddress: попытка удаления неиспользованного адреса!");
 }
 
 static boolean NET_SDL_InitClient(void)
@@ -177,7 +179,7 @@ static boolean NET_SDL_InitClient(void)
 
     if (udpsocket == NULL)
     {
-        I_Error("NET_SDL_InitClient: Unable to open a socket!");
+        I_Error("NET_SDL_InitClient: невозможно открыть сокет!");
     }
     
     recvpacket = SDLNet_AllocPacket(1500);
@@ -208,7 +210,7 @@ static boolean NET_SDL_InitServer(void)
 
     if (udpsocket == NULL)
     {
-        I_Error("NET_SDL_InitServer: Unable to bind to port %i", port);
+        I_Error("NET_SDL_InitServer: невозможно назначить порт %i", port);
     }
 
     recvpacket = SDLNet_AllocPacket(1500);
@@ -264,7 +266,7 @@ static void NET_SDL_SendPacket(net_addr_t *addr, net_packet_t *packet)
 
     if (!SDLNet_UDP_Send(udpsocket, -1, &sdl_packet))
     {
-        I_Error("NET_SDL_SendPacket: Error transmitting packet: %s",
+        I_Error("NET_SDL_SendPacket: ошибка передачи пакета: %s",
                 SDLNet_GetError());
     }
 }
@@ -277,7 +279,7 @@ static boolean NET_SDL_RecvPacket(net_addr_t **addr, net_packet_t **packet)
 
     if (result < 0)
     {
-        I_Error("NET_SDL_RecvPacket: Error receiving packet: %s",
+        I_Error("NET_SDL_RecvPacket: ошибка получения пакета: %s",
                 SDLNet_GetError());
     }
 

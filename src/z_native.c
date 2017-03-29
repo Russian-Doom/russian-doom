@@ -19,6 +19,7 @@
 //	uses native calls to malloc() and free().
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 #include <stdlib.h>
 #include <string.h>
@@ -142,7 +143,7 @@ void Z_Free (void* ptr)
 
     if (block->id != ZONEID)
     {
-        I_Error ("Z_Free: freed a pointer without ZONEID");
+        I_Error ("Z_Free: высвобождение указателя без ZONEID");
     }
 		
     if (block->tag != PU_FREE && block->user != NULL)
@@ -236,13 +237,12 @@ void *Z_Malloc(int size, int tag, void *user)
 
     if (tag < 0 || tag >= PU_NUM_TAGS || tag == PU_FREE)
     {
-        I_Error("Z_Malloc: attempted to allocate a block with an invalid "
-                "tag: %i", tag);
+        I_Error("Z_Malloc: попытка обнаружения блока с некорректным номером: %i", tag);
     }
 
     if (user == NULL && tag >= PU_PURGELEVEL)
     {
-        I_Error ("Z_Malloc: an owner is required for purgable blocks");
+        I_Error ("Z_Malloc: для очищаемых блоков памяти требуется административный объект");
     }
 
     // Malloc a block of the required size
@@ -257,7 +257,7 @@ void *Z_Malloc(int size, int tag, void *user)
         {
             if (!ClearCache(sizeof(memblock_t) + size))
             {
-                I_Error("Z_Malloc: failed on allocation of %i bytes", size);
+                I_Error("Z_Malloc: ошибка обнаружения %i байт памяти", size);
             }
         }
     }
@@ -422,12 +422,12 @@ void Z_CheckHeap (void)
         {
             if (block->id != ZONEID)
             {
-                I_Error("Z_CheckHeap: Block without a ZONEID!");
+                I_Error("Z_CheckHeap: блок без ZONEID!");
             }
             
             if (block->prev != prev)
             {
-                I_Error("Z_CheckHeap: Doubly-linked list corrupted!");
+                I_Error("Z_CheckHeap: двусвязный блок поврежден!");
             }
             
             prev = block;
@@ -449,12 +449,11 @@ void Z_ChangeTag2(void *ptr, int tag, char *file, int line)
     block = (memblock_t *) ((byte *)ptr - sizeof(memblock_t));
 
     if (block->id != ZONEID)
-        I_Error("%s:%i: Z_ChangeTag: block without a ZONEID!",
+        I_Error("%s:%i: Z_ChangeTag: блок без ZONEID!",
                 file, line);
 
     if (tag >= PU_PURGELEVEL && block->user == NULL)
-        I_Error("%s:%i: Z_ChangeTag: an owner is required "
-                "for purgable blocks", file, line);
+        I_Error("%s:%i: Z_ChangeTag: для очищаемых блоков памяти требуется административный объект", file, line);
 
     // Remove the block from its current list, and rehook it into
     // its new list.
@@ -472,7 +471,7 @@ void Z_ChangeUser(void *ptr, void **user)
 
     if (block->id != ZONEID)
     {
-        I_Error("Z_ChangeUser: Tried to change user for invalid block!");
+        I_Error("Z_ChangeUser: попытка смены пользователя для некорректного блока!");
     }
 
     block->user = user;

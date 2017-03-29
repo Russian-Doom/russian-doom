@@ -876,7 +876,7 @@ void M_DrawReadThis1(void)
             break;
 
         default:
-            I_Error("Unhandled game version");
+            I_Error("Версия игры не определена");
             break;
     }
 

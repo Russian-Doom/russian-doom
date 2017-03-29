@@ -671,7 +671,7 @@ void R_InitTextures (void)
 	offset = LONG(*directory);
 
 	if (offset > maxoff)
-	    I_Error ("R_InitTextures: bad texture directory");
+	    I_Error ("R_InitTextures: некорректная директория текстур");
 	
 	mtexture = (maptexture_t *) ( (byte *)maptex + offset);
 
@@ -695,9 +695,9 @@ void R_InitTextures (void)
 	    patch->patch = patchlookup[SHORT(mpatch->patch)];
 	    if (patch->patch == -1)
 	    {
-		// I_Error ("R_InitTextures: Missing patch in texture %s", texture->name);
+        // I_Error ("R_InitTextures: Missing patch in texture %s", texture->name);
         // [crispy] make non-fatal
-        fprintf (stderr, "R_InitTextures: Missing patch in texture %s\n",
+        fprintf (stderr, "R_InitTextures: отсутствует патч в текстуре %s\n",
   			 texture->name);
  		patch->patch = 0;
 	    }
@@ -1000,7 +1000,7 @@ int R_FlatNumForName (char* name)
     {
 	namet[8] = 0;
 	memcpy (namet, name,8);
-	I_Error ("R_FlatNumForName: %s not found",namet);
+	I_Error ("R_FlatNumForName: поверхность %s не найдена",namet);
     }
     return i - firstflat;
 }
@@ -1054,8 +1054,7 @@ int	R_TextureNumForName (char* name)
     {
 	// I_Error ("R_TextureNumForName: %s not found", name);
     // [crispy] make non-fatal
-    fprintf (stderr, "R_TextureNumForName: %s not found\n",
-  		 name);
+    fprintf (stderr, "R_TextureNumForName: текстура %s не найдена", name);
  	return 0;
     }
     return i;

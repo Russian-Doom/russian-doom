@@ -16,7 +16,7 @@
 //	Refresh of things, i.e. objects represented by sprites.
 //
 
-
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 
 #include <stdio.h>
@@ -111,7 +111,7 @@ R_InstallSpriteLump
     
     if (frame >= 29 || rotation > 16) // [crispy] support 16 sprite rotations
 	I_Error("R_InstallSpriteLump: "
-		"Bad frame characters in lump %i", lump);
+		"некорректный фрейм в блоке %i", lump);
 	
     if ((int)frame > maxframe)
 	maxframe = frame;
@@ -120,12 +120,12 @@ R_InstallSpriteLump
     {
 	// the lump should be used for all rotations
 	if (sprtemp[frame].rotate == false)
-	    I_Error ("R_InitSprites: Sprite %s frame %c has "
-		     "multip rot=0 lump", spritename, 'A'+frame);
+	    I_Error ("R_InitSprites: фрейм %c спрайта %s имеет "
+		     "многократный блок rot=0", spritename, 'A'+frame);
 
 	if (sprtemp[frame].rotate == true)
-	    I_Error ("R_InitSprites: Sprite %s frame %c has rotations "
-		     "and a rot=0 lump", spritename, 'A'+frame);
+	    I_Error ("R_InitSprites: фрейм %c спрайта %s имеет фреймы поворота "
+		     "и блок rot=0", spritename, 'A'+frame);
 			
 	sprtemp[frame].rotate = false;
 	for (r=0 ; r<16 ; r++) // [crispy] support 16 sprite rotations
@@ -138,16 +138,16 @@ R_InstallSpriteLump
 	
     // the lump is only used for one rotation
     if (sprtemp[frame].rotate == false)
-	I_Error ("R_InitSprites: Sprite %s frame %c has rotations "
-		 "and a rot=0 lump", spritename, 'A'+frame);
+	I_Error ("R_InitSprites: фрейм спрайта %c спрайта %s имеет фреймы поворота "
+		 "и блок rot=0", spritename, 'A'+frame);
 		
     sprtemp[frame].rotate = true;
 
     // make 0 based
     rotation--;		
     if (sprtemp[frame].lump[rotation] != -1)
-	I_Error ("R_InitSprites: Sprite %s : %c : %c "
-		 "has two lumps mapped to it",
+	I_Error ("R_InitSprites: спрайу %s : %c : %c "
+		 "назначено несколько одинаковых блоков",
 		 spritename, 'A'+frame, '1'+rotation);
 		
     sprtemp[frame].lump[rotation] = lump - firstspritelump;
@@ -261,8 +261,8 @@ void R_InitSpriteDefs (char** namelist)
 		// must have all 8 frames
 		for (rotation=0 ; rotation<8 ; rotation++)
 		    if (sprtemp[frame].lump[rotation] == -1)
-			I_Error ("R_InitSprites: Sprite %s frame %c "
-				 "is missing rotations",
+			I_Error ("R_InitSprites: в фрейме %c спрайта %s отсутствует "
+				 "информация о вращении",
 				 spritename, frame+'A');
 
 		// [crispy] support 16 sprite rotations
@@ -447,7 +447,7 @@ R_DrawVisSprite
 	texturecolumn = frac>>FRACBITS;
 #ifdef RANGECHECK
 	if (texturecolumn < 0 || texturecolumn >= SHORT(patch->width))
-	    I_Error ("R_DrawSpriteRange: bad texturecolumn");
+	    I_Error ("R_DrawSpriteRange: некорректныая информация texturecolumn");
 #endif
 	column = (column_t *) ((byte *)patch +
 			       LONG(patch->columnofs[texturecolumn]));
@@ -520,13 +520,13 @@ void R_ProjectSprite (mobj_t* thing)
     // decide which patch to use for sprite relative to player
 #ifdef RANGECHECK
     if ((unsigned int) thing->sprite >= (unsigned int) numsprites)
-	I_Error ("R_ProjectSprite: invalid sprite number %i ",
+	I_Error ("R_ProjectSprite: некорректный номер спрайта %i ",
 		 thing->sprite);
 #endif
     sprdef = &sprites[thing->sprite];
 #ifdef RANGECHECK
     if ( (thing->frame&FF_FRAMEMASK) >= sprdef->numframes )
-	I_Error ("R_ProjectSprite: invalid sprite frame %i : %i ",
+	I_Error ("R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
 		 thing->sprite, thing->frame);
 #endif
     sprframe = &sprdef->spriteframes[ thing->frame & FF_FRAMEMASK];
@@ -699,13 +699,13 @@ void R_DrawPSprite (pspdef_t* psp)
     // decide which patch to use
 #ifdef RANGECHECK
     if ( (unsigned)psp->state->sprite >= (unsigned int) numsprites)
-	I_Error ("R_ProjectSprite: invalid sprite number %i ",
+	I_Error ("R_ProjectSprite: некорректный номер спрайта %i ",
 		 psp->state->sprite);
 #endif
     sprdef = &sprites[psp->state->sprite];
 #ifdef RANGECHECK
     if ( (psp->state->frame & FF_FRAMEMASK)  >= sprdef->numframes)
-	I_Error ("R_ProjectSprite: invalid sprite frame %i : %i ",
+	I_Error ("R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
 		 psp->state->sprite, psp->state->frame);
 #endif
     sprframe = &sprdef->spriteframes[ psp->state->frame & FF_FRAMEMASK ];

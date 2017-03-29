@@ -259,9 +259,8 @@ void W_CheckCorrectIWAD(GameMission_t mission)
 
             if (lumpnum >= 0)
             {
-                I_Error("\nYou are trying to use a %s IWAD file with "
-                        "the %s%s binary.\nThis isn't going to work.\n"
-                        "You probably want to use the %s%s binary.",
+                I_Error("\nВы пытаетесь запусть IWAD-файл %s с исполняемым файлом %s%s.\n"
+                        "Запуск невозможен. Вам необходимо использовать исполняемый файл %s%s.",
                         D_SuggestGameName(unique_lumps[i].mission,
                                           indetermined),
                         PROGRAM_PREFIX,

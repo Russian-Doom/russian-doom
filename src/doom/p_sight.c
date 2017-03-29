@@ -16,6 +16,7 @@
 //	LineOfSight/Visibility checks, uses REJECT Lookup Table.
 //
 
+// Russian DOOM (C) 2016-2017 Julian Nechaevsky
 
 
 #include "doomdef.h"
@@ -145,7 +146,7 @@ boolean P_CrossSubsector (int num)
 	
 #ifdef RANGECHECK
     if (num>=numsubsectors)
-	I_Error ("P_CrossSubsector: ss %i with numss = %i",
+	I_Error ("P_CrossSubsector: ss %i с numss = %i",
 		 num,
 		 numsubsectors);
 #endif

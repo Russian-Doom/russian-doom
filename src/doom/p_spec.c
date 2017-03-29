@@ -199,7 +199,7 @@ void P_InitPicAnims (void)
 	lastanim->numpics = lastanim->picnum - lastanim->basepic + 1;
 
 	if (lastanim->numpics < 2)
-	    I_Error ("P_InitPicAnims: bad cycle from %s to %s",
+	    I_Error ("P_InitPicAnims: некорректный цикл от %s до %s",
 		     startname, endname);
 	
 	lastanim->speed = animdefs[i].speed;
@@ -1118,7 +1118,7 @@ void P_PlayerInSpecialSector (player_t* player)
 			
       default:
 	I_Error ("P_PlayerInSpecialSector: "
-		 "unknown special %i",
+		 "неизвестная специфика %i",
 		 sector->special);
 	break;
     };
@@ -1516,8 +1516,8 @@ void P_SpawnSpecials (void)
 	  case 48:
             if (numlinespecials >= MAXLINEANIMS)
             {
-                I_Error("Too many scrolling wall linedefs! "
-                        "(Vanilla limit is 64)");
+                I_Error("Превышен лимит линий со скроллингом текстур!\n"
+                        "(Оригинальный лимит равен 64)");
             }
 	    // EFFECT FIRSTCOL SCROLL+
 	    linespeciallist[numlinespecials] = &lines[i];

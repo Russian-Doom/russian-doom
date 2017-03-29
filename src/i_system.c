@@ -105,7 +105,6 @@ static byte *AutoAllocMemory(int *size, int default_ram, int min_ram)
 
         if (default_ram < min_ram)
         {
-			// "Unable to allocate %i MiB of RAM for zone"
             I_Error("Невозможно обнаружить %i МБ памяти для распределения", default_ram);
         }
 
@@ -282,7 +281,6 @@ void I_Error (char *error, ...)
 
     if (already_quitting)
     {
-		// "Warning: recursive call to I_Error detected.\n"
         fprintf(stderr, "Внимание: обнаружен рекурсивный вызов в I_Error.\n");
         exit(-1);
     }
