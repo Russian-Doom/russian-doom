@@ -18,3 +18,24 @@ At the end of the compilation process, you will find your new Russian DOOM build
 
 
 Please note: to run the compiled game executables you will need folder 'russian' (which contains translated wad files) placed in the folder with executables, as well as official IWAD files.
+
+### Building Russian DOOM on Linux
+
+Compiling on Linux is rather simple. 
+
+##### Step 1: Checking compilation dependencies
+
+First of all, make sure you have all necessary dependencies for compilation. On Debian Linux they can be installed by following command, invoked by root:
+
+`apt-get install gcc make libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev python-imaging`
+
+##### Step 2: Compiling Russian DOOM
+
+Download source code archive of latest release version or from Git repository, unpack it and use following commands:
+
+`./autogen.sh` <br />
+`make`
+
+After successful compilation the resulting binaries can be found in the src/ directory.
+
+Please note: to run the compiled game executables you will need folder 'russian' (which contains translated wad files) placed in the folder with executables, as well as official IWAD files.
