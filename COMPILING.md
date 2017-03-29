@@ -18,7 +18,6 @@ At the end of the compilation process, you will find your new Russian DOOM build
 
 Please note: to run the compiled game executables you will need the folder 'russian' which contains translated wad files and can be found in Windows binaries archive. It must be placed to the folder with executables, as well as SDL2.dll, SDL2_mixer.dll and SDL2_net.dll files, and official IWAD files.
 
-<br />
 
 ### Building Russian DOOM on Linux
 
