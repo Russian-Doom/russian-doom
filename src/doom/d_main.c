@@ -39,6 +39,7 @@
 
 #include "z_zone.h"
 #include "w_main.h"
+#include "w_merge.h"
 #include "w_wad.h"
 #include "s_sound.h"
 #include "v_diskicon.h"
@@ -264,10 +265,12 @@ void D_Display (void)
     
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
+    {
     if (lcd_gamma_fix)
         I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
     else
         I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+    }
 
     // see if the border needs to be initially drawn
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
@@ -957,6 +960,7 @@ void D_SetGameDescription(void)
     }
     else
     {
+        int newpwadfile;
         // Doom 2 of some kind.  But which mission?
         
         if (is_freedoom)
@@ -1004,7 +1008,6 @@ void D_SetGameDescription(void)
         //
         // Функция "-merge" более не используется.
 
-        int newpwadfile;
         newpwadfile = M_CheckParmWithArgs ("-file", 1);
 
         if (newpwadfile)
@@ -1012,13 +1015,15 @@ void D_SetGameDescription(void)
             while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
             {
                 char *filename;
+                int nrv;
+                int mlvls;
+
                 filename = D_TryFindWADByName(myargv[newpwadfile]);
                 printf(" добавление: %s\n", filename);
                 W_MergeFile(filename);
 
                 // [JN] Поддержка DOOM 2: No Rest for the Living
 
-                int nrv;
                 nrv = M_CheckParmWithArgs ("-file", 1);
 
                 if (nrv)
@@ -1039,14 +1044,13 @@ void D_SetGameDescription(void)
 
                 // [JN] Поддержка Master Levels for DOOM 2
 
-                int mlvls;
                 mlvls = M_CheckParmWithArgs ("-file", 1);
 
                 if (mlvls)
                 {
                     while (++mlvls != myargc && myargv[mlvls][0] != '-')
                     {
-                        char *check;
+                        boolean check;
                         check = (
                         (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))     ||
                         (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))   ||
@@ -1070,7 +1074,7 @@ void D_SetGameDescription(void)
                         (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))
                         );
 
-                        if (check != NULL)
+                        if (check)
                         {   
                             gamedescription = "Мастер-Уровни для DOOM 2";
                             W_MergeFile("russian/russian-doom-master.wad");
@@ -1493,11 +1497,14 @@ static void D_Endoom(void)
 	
 	if ( gamemode == shareware ) // [JN] DOOM Shareware
 		endoom = W_CacheLumpName(DEH_String("ENDOOMS"), PU_STATIC);
+	else
 	if ( gamemode == registered ) // [JN] DOOM 1 Registered 
 		endoom = W_CacheLumpName(DEH_String("ENDOOMR"), PU_STATIC);
+	else
 	if ( gamemode == retail ) // [JN] The Ultimate DOOM
 		endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
-	if ( gamemode == commercial ) // [JN] DOOM 2 / Final DOOM
+	else
+//	if ( gamemode == commercial ) // [JN] DOOM 2 / Final DOOM
 		endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
 
     I_Endoom(endoom);

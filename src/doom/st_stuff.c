@@ -61,7 +61,6 @@
 #include "sounds.h"
 
 extern int lcd_gamma_fix;
-extern int no_pickup_flash;
 
 //
 // STATUS BAR DATA
@@ -442,6 +441,7 @@ void ST_refreshBackground(void)
 }
 
 // [crispy] adapted from boom202s/M_CHEAT.C:467-498
+/*
 static int ST_cheat_massacre()
 {
     int killcount = 0;
@@ -476,6 +476,7 @@ static int ST_cheat_massacre()
 
     return killcount;
 } 
+*/
 
 // Respond to keyboard input events,
 //  intercept cheats.
@@ -579,7 +580,6 @@ ST_Responder (event_t* ev)
       // [JN] В несколько упрощенном варианте, без счетчика монстров
       else if (cht_CheckCheat(&cheat_massacre, ev->data2))
       {
-        int killcount = ST_cheat_massacre();
         plyr->message = DEH_String(STSTR_MASSACRE);
     
         // M_snprintf(msg, sizeof(msg), "%s%d %s%s%s %s",

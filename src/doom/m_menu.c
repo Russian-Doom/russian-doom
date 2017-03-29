@@ -101,8 +101,6 @@ int			messageLastMenuActive;
 // timed message = no input from user
 boolean			messageNeedsInput;
 
-// [JN] Проигрывать звук при выходе из игры
-extern int play_exit_sfx;
 
 void    (*messageRoutine)(int response);
 
@@ -781,8 +779,6 @@ void M_QuickLoadResponse(int key)
 
 void M_QuickLoad(void)
 {
-    static char qloadmessage[24];
-    
     if (netgame)
     {
 	M_StartMessage(DEH_String(QLOADNET),NULL,false);
@@ -1362,7 +1358,6 @@ M_DrawThermo
 {
     int		xx;
     int		i;
-    char	num[4];
 
     if (draw_shadowed_text)
     {
@@ -1910,10 +1905,10 @@ boolean M_Responder (event_t* ev)
 	    if (usegamma > 16)
 		usegamma = 0;
 	    players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
-        if (lcd_gamma_fix)
-            I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
-        else
-            I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+	    if (lcd_gamma_fix)
+		I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
+	    else
+		I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
 	    return true;
 	}
     }

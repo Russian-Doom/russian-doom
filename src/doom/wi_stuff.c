@@ -105,8 +105,6 @@
 #define DM_VICTIMSX    		5
 #define DM_VICTIMSY		50
 
-// [JN] Показывать общее время
-extern int  show_total_time;
 
 
 typedef enum
@@ -1500,6 +1498,7 @@ WI_drawTime
 
 	    // draw
 	    if (div==60 || t / div)
+	    {
         if (draw_shadowed_text)
         {
             V_DrawShadowedPatchDoom(x, y, colon);
@@ -1508,6 +1507,7 @@ WI_drawTime
         {
             V_DrawPatch(x, y, colon);
         }
+	    }
 	    
 	} while (t / div);
     }
@@ -2316,7 +2316,6 @@ void WI_drawStats(void)
         if (sp_state > 8)
         {
         const int ttime = wbs->totaltimes / TICRATE;
-        const boolean wide = (ttime > 61*59) || (SP_TIMEX + SHORT(overtime->width) >= 320/4);
 
         if (draw_shadowed_text)
         {

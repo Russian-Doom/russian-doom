@@ -164,8 +164,6 @@ void P_ExplodeMissile (mobj_t* mo)
 
 void P_XYMovement (mobj_t* mo) 
 { 	
-    fixed_t 	ptryx;
-    fixed_t	ptryy;
     player_t*	player;
     fixed_t	xmove;
     fixed_t	ymove;

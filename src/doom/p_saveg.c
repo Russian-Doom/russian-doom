@@ -39,8 +39,6 @@ FILE *save_stream;
 int savegamelength;
 boolean savegame_error;
 
-static char line[260];
-static char string[80];
 
 // Get the filename of a temporary file to write the savegame to.  After
 // the file has been successfully saved, it will be renamed to the 
@@ -1412,7 +1410,6 @@ void P_WriteSaveGameHeader(char *description)
 boolean P_ReadSaveGameHeader(void)
 {
     int	 i; 
-    int value;
     byte a, b, c; 
     char vcheck[VERSIONSIZE]; 
     char read_vcheck[VERSIONSIZE];
@@ -1522,7 +1519,6 @@ void P_ArchiveWorld (void)
     sector_t*		sec;
     line_t*		li;
     side_t*		si;
-    byte a, b, c; 
     
     // do sectors
     for (i=0, sec = sectors ; i<numsectors ; i++,sec++)

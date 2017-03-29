@@ -857,7 +857,6 @@ PTR_AimTraverse (intercept_t* in)
 		
     if (in->isaline)
     {
-    boolean safe = false;
 	li = in->d.line;
 	
 	if ( !(li->flags & ML_TWOSIDED) )
@@ -1466,7 +1465,7 @@ boolean PIT_ChangeSector (mobj_t*	thing)
     // [JN] Бочка не должна кровоточить от крашера
 	if (thing->type == MT_BARREL)
 	{
-		return;
+		return true;
 	}
     
 	else
