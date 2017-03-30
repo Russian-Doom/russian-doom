@@ -9,8 +9,8 @@
 		<Build>
 			<Target title="Debug">
 				<Option platforms="" />
-				<Option output="../bin/chocolate-heretic-dbg.exe" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../bin" />
+				<Option output="../src/russian-heretic-dbg.exe" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../src" />
 				<Option object_output="../obj/chocolate-heretic/dbg" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -25,8 +25,8 @@
 			</Target>
 			<Target title="Release">
 				<Option platforms="Windows;" />
-				<Option output="../bin/russian-heretic.exe" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../bin" />
+				<Option output="../src/russian-heretic.exe" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../src" />
 				<Option object_output="../obj/chocolate-heretic/rel" />
 				<Option type="0" />
 				<Option compiler="gcc" />

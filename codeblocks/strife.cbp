@@ -3,12 +3,14 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="Strife" />
+		<Option platforms="Windows;" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="../bin/chocolate-strife-dbg.exe" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../bin" />
+				<Option platforms="" />
+				<Option output="../src/chocolate-strife-dbg.exe" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../src" />
 				<Option object_output="../obj/chocolate-strife/dbg" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -22,8 +24,9 @@
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="../bin/chocolate-strife.exe" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../bin" />
+				<Option platforms="Windows;" />
+				<Option output="../src/chocolate-strife.exe" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../src" />
 				<Option object_output="../obj/chocolate-strife/rel" />
 				<Option type="0" />
 				<Option compiler="gcc" />

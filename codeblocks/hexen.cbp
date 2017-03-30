@@ -9,8 +9,8 @@
 		<Build>
 			<Target title="Debug">
 				<Option platforms="" />
-				<Option output="../bin/chocolate-hexen-dbg.exe" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../bin" />
+				<Option output="../src/russian-hexen-dbg.exe" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../src" />
 				<Option object_output="../obj/chocolate-hexen/dbg" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -25,8 +25,8 @@
 			</Target>
 			<Target title="Release">
 				<Option platforms="Windows;" />
-				<Option output="../bin/russian-hexen.exe" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../bin" />
+				<Option output="../src/russian-hexen.exe" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../src" />
 				<Option object_output="../obj/chocolate-hexen/rel" />
 				<Option type="0" />
 				<Option compiler="gcc" />
