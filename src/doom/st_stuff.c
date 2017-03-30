@@ -580,7 +580,7 @@ ST_Responder (event_t* ev)
       // [JN] В несколько упрощенном варианте, без счетчика монстров
       else if (cht_CheckCheat(&cheat_massacre, ev->data2))
       {
-        int killcount = ST_cheat_massacre();
+        ST_cheat_massacre();
         plyr->message = DEH_String(STSTR_MASSACRE);
     
         // M_snprintf(msg, sizeof(msg), "%s%d %s%s%s %s",
