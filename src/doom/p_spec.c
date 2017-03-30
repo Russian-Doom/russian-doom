@@ -24,6 +24,7 @@
 
 
 #include <stdlib.h>
+#include "crispy.h"
 
 #include "doomdef.h"
 #include "doomstat.h"
@@ -51,10 +52,6 @@
 
 // [JN] Файл со строчкой о найденном секрете.
 #include "d_englsh.h"
-// [JN] Уведомление об обнаружении секрета
-extern int secret_notification;
-// [JN] Улучшенная анимация жидкостей
-extern int swirling_liquids;
 
 //
 // Animating textures and planes

@@ -942,6 +942,7 @@ P_DamageMobj
  	// gets an extra damage boost for the occasional gib chance
     if (ssg_blast_enemies)
     {
+        extern boolean P_CheckMeleeRange (mobj_t* actor);
         if (singleplayer && source && source->player &&
             source->player->readyweapon == wp_supershotgun &&
             target->info->xdeathstate &&

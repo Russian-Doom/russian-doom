@@ -694,7 +694,6 @@ void R_DrawPSprite (pspdef_t* psp)
     boolean		flip;
     vissprite_t*	vis;
     vissprite_t		avis;
-    fixed_t		psp_sx;
     
     // decide which patch to use
 #ifdef RANGECHECK

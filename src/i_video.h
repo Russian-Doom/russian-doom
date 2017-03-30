@@ -26,8 +26,6 @@
 
 // Screen width and height.
 
-#define SCREENWIDTH  320
-#define SCREENHEIGHT 200
 #define hires 1
 
 #define ORIGWIDTH  320

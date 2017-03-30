@@ -817,16 +817,11 @@ void R_InitTranMap()
     {
         {   // Compose a default transparent filter map based on PLAYPAL.
             unsigned char *playpal = W_CacheLumpName("PALFIX", PU_STATIC);
-            char fname[PATH_MAX+1]; extern char *configdir;
-            struct {
-            unsigned char pct;
-            unsigned char playpal[256*3]; // [crispy] PLAYPAL has 768 bytes!
-        } cache;
 
-        tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
         long pal[3][256], tot[256], pal_w1[3][256];
         long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
         long w2 = (1l<<TSC)-w1;
+        tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
 
         // First, convert playpal into long int type, and transpose array,
         // for fast inner-loop calculations. Precompute tot array.
@@ -883,16 +878,11 @@ void R_InitTranMap()
     {
         {   // Compose a default transparent filter map based on PLAYPAL.
             unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-            char fname[PATH_MAX+1]; extern char *configdir;
-            struct {
-            unsigned char pct;
-            unsigned char playpal[256*3]; // [crispy] PLAYPAL has 768 bytes!
-        } cache;
 
-        tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
         long pal[3][256], tot[256], pal_w1[3][256];
         long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
         long w2 = (1l<<TSC)-w1;
+        tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
 
         // First, convert playpal into long int type, and transpose array,
         // for fast inner-loop calculations. Precompute tot array.

@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "crispy.h"
 
 #include "m_random.h"
 #include "i_system.h"
@@ -41,8 +42,6 @@
 // Data.
 #include "sounds.h"
 
-extern int unlimited_lost_souls;    // [JN] Элементаль боли без ограничения
-extern int translucency;            // [JN] Прозрачность объектов
 
 
 typedef enum

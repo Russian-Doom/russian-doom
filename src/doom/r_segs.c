@@ -519,7 +519,7 @@ R_StoreWallRange
 ( int	start,
   int	stop )
 {
-    angle_t		distangle, offsetangle;
+    angle_t		offsetangle;
     fixed_t		vtop;
     int			lightnum;
     int64_t		dx, dy, dx1, dy1; // [crispy] fix long wall wobble
@@ -559,7 +559,6 @@ R_StoreWallRange
     if (offsetangle > ANG90)
 	offsetangle = ANG90;
 
-    distangle = ANG90 - offsetangle;
     // [crispy] fix long wall wobble
     // thank you very much Linguica, e6y and kb1
     // http://www.doomworld.com/vb/post/1340718
@@ -646,19 +645,6 @@ R_StoreWallRange
     }
     else
     {
-	// [crispy] fix sprites being visible behind closed doors
-	// adapted from mbfsrc/R_BSP.C:234-257
-	const boolean doorclosed =
-	    // if door is closed because back is shut:
-	    backsector->ceilingheight <= backsector->floorheight
-	    // preserve a kind of transparent door/lift special effect:
-	    && (backsector->ceilingheight >= frontsector->ceilingheight ||
-	       curline->sidedef->toptexture)
-	    && (backsector->floorheight <= frontsector->floorheight ||
-	       curline->sidedef->bottomtexture)
-	    // properly render skies (consider door "open" if both ceilings are sky):
-	    && (backsector->ceilingpic != skyflatnum ||
-	       frontsector->ceilingpic != skyflatnum);
     
 	// two sided line
 	ds_p->sprtopclip = ds_p->sprbottomclip = NULL;
