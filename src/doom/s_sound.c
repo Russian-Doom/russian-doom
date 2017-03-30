@@ -599,6 +599,8 @@ void S_StartSound(void *origin_p, int sfx_id)
             (sfx_id == sfx_spisit) ||
             /* Кибердемон          */
             (sfx_id == sfx_cybsit) ||
+            /* Джон Ромеро         */
+            (sfx_id == sfx_bospn)  ||
             /* Вольфенштайн СС     */
             (sfx_id == sfx_sssit)  ||
             (sfx_id == sfx_ssdth)   )
