@@ -70,11 +70,11 @@ static void OpenWaitDialog(void)
 
     TXT_SetDesktopTitle(PACKAGE_STRING);
 
-    window = TXT_NewWindow("РћР¶РёРґР°РЅРёРµ Р·Р°РїСѓСЃРєР° РёРіСЂС‹...");
+    window = TXT_NewWindow("Ћжидание запуска игры...");
 
-    TXT_AddWidget(window, TXT_NewLabel("\nРџРѕР¶Р°Р»СѓР№СЃС‚Р°, РїРѕРґРѕР¶РґРёС‚Рµ...\n\n"));
+    TXT_AddWidget(window, TXT_NewLabel("\nЏожалуйста, подождите...\n\n"));
 
-    cancel = TXT_NewWindowAction(KEY_ESCAPE, "РћС‚РјРµРЅР°");
+    cancel = TXT_NewWindowAction(KEY_ESCAPE, "Ћтмена");
     TXT_SignalConnect(cancel, "pressed", EscapePressed, NULL);
 
     TXT_SetWindowAction(window, TXT_HORIZ_LEFT, cancel);
@@ -167,7 +167,7 @@ static void UpdateGUI(void)
 
     if (net_client_wait_data.num_drones > 0)
     {
-        M_snprintf(buf, sizeof(buf), " (+%i РЅР°Р±Р»СЋРґР°С‚РµР»РµР№)",
+        M_snprintf(buf, sizeof(buf), " (+%i наблюдателей)",
                    net_client_wait_data.num_drones);
         TXT_SetLabel(drone_label, buf);
     }
@@ -178,7 +178,7 @@ static void UpdateGUI(void)
 
     if (net_client_wait_data.is_controller)
     {
-        startgame = TXT_NewWindowAction(' ', "РќР°С‡Р°С‚СЊ РёРіСЂСѓ");
+        startgame = TXT_NewWindowAction(' ', "Ќачать игру");
         TXT_SignalConnect(startgame, "pressed", StartGame, NULL);
     }
     else
@@ -225,15 +225,15 @@ static void CheckMasterStatus(void)
     if (added)
     {
         TXT_SetLabel(master_msg_label,
-            "Р’Р°С€ СЃРµСЂРІРµСЂ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ РЅР° С†РµРЅС‚СЂР°Р»СЊРЅРѕРј СЃРµСЂРІРµСЂРµ.\n"
-            "Р”СЂСѓРіРёРµ РёРіСЂРѕРєРё СЃРјРѕРіСѓС‚ СѓРІРёРґРµС‚СЊ Р’Р°С€ СЃРµСЂРІРµСЂ РІ СЂРµР¶РёРјРµ РѕРЅР»Р°Р№РЅ.");
+            "‚аш сервер зарегистрирован на центральном сервере.\n"
+            "„ругие игроки смогут увидеть ваш сервер в режиме онлайн.");
     }
     else
     {
         TXT_SetLabel(master_msg_label,
-            "РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃВ¤ РЅР° С†РµРЅС‚СЂР°Р»СЊРЅРѕРј СЃРµСЂРІРµСЂРµ. Р’Р°С€ СЃРµСЂРІРµСЂ\n"
-            "РЅРµ Р±СѓРґРµС‚ РґРѕСЃС‚СѓРїРµРЅ РІ СЂРµР¶РёРјРµ РѕРЅР»Р°Р№РЅ. РџСЂРѕРІРµСЂСЊС‚Рµ РЅР°СЃС‚СЂРѕР№РєРё СЃРµС‚РµРІРѕРіРѕ\n"
-            "РѕР±РѕСЂСѓРґРѕРІР°РЅРёВ¤ Рё РЅР°СЃС‚СЂРѕР№С‚Рµ С„РѕСЂРІР°СЂРґРёРЅРі UDP РїРѕСЂС‚Р° 2342.");
+            "Ќе удалось зарегистрироваться на центральном сервере. ‚аш сервер\n"
+            "не будет доступен в режиме онлайн. Џроверьте настройки сетевого\n"
+            "оборудования и настройте форвардинг UDP порта 2342.");
     }
 }
 
@@ -285,29 +285,29 @@ static void CheckSHA1Sums(void)
 
     if (!correct_wad)
     {
-        printf("Р’РЅРёРјР°РЅРёРµ: РљРѕРЅС‚СЂРѕР»СЊРЅР°В¤ СЃСѓРјРјР° WAD-С„Р°Р№Р»Р° SHA1 РЅРµ СЃРѕРІРїР°РґР°РµС‚ СЃ СЃРµСЂРІРµСЂРЅРѕР№:\n");
-        PrintSHA1Digest("Р›РѕРєР°Р»СЊРЅР°В¤", net_local_wad_sha1sum);
-        PrintSHA1Digest("РЎРµСЂРІРµСЂРЅР°В¤", net_client_wait_data.wad_sha1sum);
+        printf("‚нимание: Љонтрольная сумма WAD-файла SHA1 не совпадает с серверной:\n");
+        PrintSHA1Digest("‹окальная", net_local_wad_sha1sum);
+        PrintSHA1Digest("‘ерверная", net_client_wait_data.wad_sha1sum);
     }
 
     if (!same_freedoom)
     {
-        printf("Р’РЅРёРјР°РЅРёРµ: РЎРјРµС€РёРІР°РЅРёРµ РґР°РЅРЅС‹С… Freedoom Рё РЅРµ Freedoom\n");
-        printf("Р›РѕРєР°Р»СЊРЅС‹Рµ: %i  РЎРµСЂРІРµСЂРЅС‹Рµ: %i\n", 
+        printf("‚нимание: ‘мешивание данных Freedoom и не Freedoom\n");
+        printf("‹окальные: %i  ‘ерверные: %i\n", 
                net_local_is_freedoom, 
                net_client_wait_data.is_freedoom);
     }
 
     if (!correct_deh)
     {
-        printf("Р’РЅРёРјР°РЅРёРµ: РљРѕРЅС‚СЂРѕР»СЊРЅР°В¤ СЃСѓРјРјР° SHA1 Р±Р»РѕРєР° Dehacked РЅРµ СЃРѕРІРїР°РґР°РµС‚ СЃ СЃРµСЂРІРµСЂРЅРѕР№:\n");
-        PrintSHA1Digest("Р›РѕРєР°Р»СЊРЅР°В¤", net_local_deh_sha1sum);
-        PrintSHA1Digest("РЎРµСЂРІРµСЂРЅР°В¤", net_client_wait_data.deh_sha1sum);
+        printf("‚нимание: Љонтрольная сумма SHA1 блока Dehacked не совпадает с серверной:\n");
+        PrintSHA1Digest("‹окальная", net_local_deh_sha1sum);
+        PrintSHA1Digest("‘ерверная", net_client_wait_data.deh_sha1sum);
     }
 
-    window = TXT_NewWindow("Р’РќРРњРђРќРР•!"); // В¬РЊВ»С›СРЊВ»в‰€!
+    window = TXT_NewWindow("‚Ќ€ЊЂЌ€…!"); // ВНИМАНИЕ!
 
-    cont_button = TXT_NewWindowAction(KEY_ENTER, "РџСЂРѕРґРѕР»Р¶РёС‚СЊ");
+    cont_button = TXT_NewWindowAction(KEY_ENTER, "Џродолжить");
     TXT_SignalConnect(cont_button, "pressed", CloseWindow, window);
 
     TXT_SetWindowAction(window, TXT_HORIZ_LEFT, NULL);
@@ -323,36 +323,36 @@ static void CheckSHA1Sums(void)
         if (net_local_is_freedoom)
         {
             TXT_AddWidget(window, TXT_NewLabel
-            ("Р’С‹ РёСЃРїРѕР»СЊР·СѓРµС‚Рµ РґР°РЅРЅС‹Рµ IWAD Freedom, РІ С‚Рѕ РІСЂРµРјВ¤ РєР°Рє\n"
-             "РґСЂСѓРіРёРµ РёРіСЂРѕРєРё РёСЃРїРѕР»СЊР·СѓСЋС‚ РѕС„РёС†РёР°Р»СЊРЅС‹Р№ IWAD. РЈР±РµРґРёС‚РµСЃСЊ,\n"
-             "С‡С‚Рѕ РёРіСЂР°РµС‚Рµ РЅР° С‚РµС… Р¶Рµ РёРіСЂРѕРІС‹С… СѓСЂРѕРІРЅВ¤С…, С‡С‚Рѕ Рё РґСЂСѓРіРёРµ РёРіСЂРѕРєРё.\n"));
+            ("‚ы используете данные IWAD Freedom, в то время как\n"
+             "другие игроки используют официальный IWAD. “бедитесь,\n"
+             "что играете на тех же игровых уровнях, что и другие игроки.\n"));
         }
         else
         {
             TXT_AddWidget(window, TXT_NewLabel
-            ("Р’С‹ РёСЃРїРѕР»СЊР·СѓРµС‚Рµ РґР°РЅРЅС‹Рµ РѕС„РёС†РёР°Р»СЊРЅРѕРіРѕ IWAD, РІ С‚Рѕ РІСЂРµРјВ¤ РєР°Рє\n"
-             "РґСЂСѓРіРёРµ РёРіСЂРѕРєРё РёСЃРїРѕР»СЊР·СѓСЋС‚ РґР°РЅРЅС‹Рµ Freedoom. РЈР±РµРґРёС‚РµСЃСЊ,\n"
-             "С‡С‚Рѕ РёРіСЂР°РµС‚Рµ РЅР° С‚РµС… Р¶Рµ РёРіСЂРѕРІС‹С… СѓСЂРѕРІРЅВ¤С…, С‡С‚Рѕ Рё РґСЂСѓРіРёРµ РёРіСЂРѕРєРё.\n"));
+            ("‚ы используете данные официального IWAD, в то время как\n"
+             "другие игроки используют данные Freedoom. “бедитесь,\n"
+             "что играете на тех же игровых уровнях, что и другие игроки.\n"));
         }
     }
     else if (!correct_wad)
     {
         TXT_AddWidget(window, TXT_NewLabel
-            ("РЎРѕРґРµР¶СЂРёРјРѕРµ РїР°РїРєРё Р’Р°С€РёС… WAD-С„Р°Р№Р»Р°РјРё РЅРµ СЃРѕРІРїР°РґР°РµС‚ СЃ СЃРѕРґРµСЂР¶РёРјС‹Рј\n"
-			 "РїР°РїРєР°РјРё РїР°РїРѕРє Сѓ РґСЂСѓРіРёС… РёРіСЂРѕРєРѕРІ. РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ РёСЃРїРѕР»СЊР·СѓРµС‚Рµ\n"
-             "С‚Рµ Р¶Рµ СЃР°РјС‹Рµ WAD-С„Р°Р№Р»С‹.\n"));
+            ("‘одежримое папки Ваших WAD-файлов не совпадает с содержимым\n"
+			 "папками папок у других игроков. “бедитесь, что используете\n"
+             "те же самые WAD-файлы.\n"));
     }
 
     if (!correct_deh)
     {
         TXT_AddWidget(window, TXT_NewLabel
-            ("РЎРѕРґРµСЂР¶РёРјРѕРµ Р±Р»РѕРєР° Dehacked РЅРµ СЃРѕРІРїР°РґР°РµС‚ СЃ СЃРѕРґРµСЂР¶РёРјС‹Рј Сѓ РґСЂСѓРіРёС…\n"
-             "РёРіСЂРѕРєРѕРІ. РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ РёСЃРїРѕР»СЊР·СѓРµС‚Рµ С‚Р°РєРѕР№ Р¶Рµ Р±Р»РѕРє Dehacked,\n"
-             "С‡С‚Рѕ Рё РґСЂСѓРіРёРµ РёРіСЂРѕРєРё.\n"));
+            ("‘одержимое блока Dehacked не совпадает с содержимым у других\n"
+             "игроков. “бедитесь, что используете такой же блок Dehacked,\n"
+             "что и другие игроки.\n"));
     }
 
     TXT_AddWidget(window, TXT_NewLabel
-            ("Р’ СЃР»СѓС‡Р°Рµ РїСЂРѕРґРѕР»Р¶РµРЅРёВ¤ РјРѕРіСѓС‚ РІРѕР·РЅРёРєРЅСѓС‚СЊ РѕС€РёР±РєРё РґРµСЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё."));
+            ("‚ случае продолжения могут возникнуть ошибки десинхронизации."));
 
     had_warning = true;
 }
@@ -423,7 +423,7 @@ void NET_WaitForLaunch(void)
 
         if (!net_client_connected)
         {
-            I_Error("РЎРѕРµРґРёРЅРµРЅРёРµ СЃ СЃРµСЂРІРµСЂРѕРј РїРѕС‚РµСЂСЏРЅРѕ");
+            I_Error("Соединение с сервером потеряно");
         }
 
         TXT_Sleep(100);
