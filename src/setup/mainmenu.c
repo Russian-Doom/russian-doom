@@ -305,7 +305,7 @@ static void SetIcon(void)
 
 static void SetWindowTitle(void)
 {
-    char *title;
+    // char *title;
 
 	/* [JN] Сокращено для универсальности названия
     title = M_StringReplace(PACKAGE_NAME " Setup ver " PACKAGE_VERSION,
@@ -317,7 +317,7 @@ static void SetWindowTitle(void)
 
 	// Ранее: TXT_SetDesktopTitle(title);
 
-    free(title);
+    // free(title);
 }
 
 // Initialize the textscreen library.
