@@ -11,7 +11,7 @@
 				<Option platforms="" />
 				<Option output="../src/russian-heretic-dbg.exe" prefix_auto="0" extension_auto="0" />
 				<Option working_dir="../src" />
-				<Option object_output="../obj/chocolate-heretic/dbg" />
+				<Option object_output="../obj/russian-heretic/dbg" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
@@ -27,7 +27,7 @@
 				<Option platforms="Windows;" />
 				<Option output="../src/russian-heretic.exe" prefix_auto="0" extension_auto="0" />
 				<Option working_dir="../src" />
-				<Option object_output="../obj/chocolate-heretic/rel" />
+				<Option object_output="../obj/russian-heretic/rel" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
@@ -44,7 +44,7 @@
 			<Add alias="All" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
-			<Add option='-DPROGRAM_PREFIX=&quot;\&quot;chocolate-\&quot;&quot;' />
+			<Add option='-DPROGRAM_PREFIX=&quot;\&quot;russian-\&quot;&quot;' />
 			<Add option='-DD_CDROM=&quot;\&quot;CD-ROM Version: default.cfg from c:\\doomdata\n\&quot;&quot;' />
 			<Add directory="." />
 			<Add directory="../src" />
