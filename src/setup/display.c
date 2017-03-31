@@ -199,7 +199,7 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
     TXT_SetColumnWidths(window, 40);
 
     TXT_AddWidgets(window,
-        ar_checkbox = TXT_NewCheckBox("Фиксированное соотношение сторон", &aspect_ratio_correct),
+        ar_checkbox = TXT_NewCheckBox("Фиксировать соотношение сторон", &aspect_ratio_correct),
         TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
             TXT_NewCheckBox("Графическа€ загрузка", &graphical_startup)),
         TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
