@@ -141,7 +141,8 @@ static char *gamemodes[] =
 { 
     "‘овместное прохождение",   // "Co-operative"
     "„ефматч",                  // "Deathmatch"
-    "„ефматч 2.0"               // "Deathmatch 2.0"
+    "„ефматч 2.0",              // "Deathmatch 2.0"
+    "„ефматч 3.0"               // "Deathmatch 3.0"
 };
 
 static char *strife_gamemodes[] =
@@ -295,6 +296,10 @@ static void StartGame(int multiplayer)
         else if (deathmatch == 2 || strife_altdeath != 0)
         {
             AddCmdLineParameter(exec, "-altdeath");
+        }
+        else if (deathmatch == 3)
+        {
+            AddCmdLineParameter(exec, "-dm3");
         }
 
         if (timer > 0)
@@ -716,7 +721,7 @@ static txt_dropdown_list_t *GameTypeDropdown(void)
     {
         case doom:
         default:
-            return TXT_NewDropdownList(&deathmatch, gamemodes, 3);
+            return TXT_NewDropdownList(&deathmatch, gamemodes, 4);
 
         // Heretic and Hexen don't support Deathmatch II:
 

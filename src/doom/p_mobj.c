@@ -733,16 +733,16 @@ void P_RespawnSpecials (void)
     int			i;
 
     // only respawn items in deathmatch
-    if (deathmatch != 2)
-	return;	// 
+    if (deathmatch != 2 && deathmatch != 3)
+	return;
 
     // nothing left to respawn?
     if (iquehead == iquetail)
-	return;		
+	return;
 
     // wait at least 30 seconds
     if (leveltime - itemrespawntime[iquetail] < 30*TICRATE)
-	return;			
+	return;
 
     mthing = &itemrespawnque[iquetail];
 	
