@@ -5,6 +5,7 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Thomas "CapnClever" Birkel
 - Mike "chungy" Swanson
 - Jonathan "jmtd" Dowland
+- Alexandre-Xavier "AXDOOMER" Labonté-Lamoureux
 
 #### [Crispy Doom](https://www.chocolate-doom.org/wiki/index.php/Crispy_Doom) source port 
 - Fabian Greffrath
