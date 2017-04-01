@@ -541,6 +541,9 @@ void S_StartSound(void *origin_p, int sfx_id)
     {
         if( /* Бензопила           */
             (sfx_id == sfx_sawup)  ||
+            (sfx_id == sfx_sawidl) ||
+            (sfx_id == sfx_sawful) ||
+            (sfx_id == sfx_sawhit) ||
             /* Зомби               */
             (sfx_id == sfx_posit1) ||
             (sfx_id == sfx_posit2) ||

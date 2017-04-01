@@ -136,10 +136,18 @@ void P_BringUpWeapon (player_t* player)
 	
     if (player->pendingweapon == wp_nochange)
 	player->pendingweapon = player->readyweapon;
-		
-    if (player->pendingweapon == wp_chainsaw)
-	S_StartSound (player->mo, sfx_sawup);
-		
+
+    if (singleplayer)
+    {
+        if (player->pendingweapon == wp_chainsaw)
+        S_StartSound (NULL, sfx_sawup);
+    }
+    else
+    {
+        if (player->pendingweapon == wp_chainsaw)
+        S_StartSound (player->mo, sfx_sawup);    
+    }
+
     newstate = weaponinfo[player->pendingweapon].upstate;
 
     player->pendingweapon = wp_nochange;
@@ -291,7 +299,14 @@ A_WeaponReady
     if (player->readyweapon == wp_chainsaw
 	&& psp->state == &states[S_SAW])
     {
-	S_StartSound (player->mo, sfx_sawidl);
+        if (singleplayer)
+        {
+            S_StartSound (NULL, sfx_sawidl);
+        }
+        else
+        {
+            S_StartSound (player->mo, sfx_sawidl);
+        }
     }
     
     // check for change
@@ -517,12 +532,24 @@ A_Saw
     slope = P_AimLineAttack (player->mo, angle, MELEERANGE+1);
     P_LineAttack (player->mo, angle, MELEERANGE+1, slope, damage);
 
-    if (!linetarget)
+    if (singleplayer)
     {
-	S_StartSound (player->mo, sfx_sawful);
-	return;
+        if (!linetarget)
+        {
+        S_StartSound (NULL, sfx_sawful);
+        return;
+        }
+        S_StartSound (NULL, sfx_sawhit);
     }
-    S_StartSound (player->mo, sfx_sawhit);
+    else
+    {
+        if (!linetarget)
+        {
+        S_StartSound (player->mo, sfx_sawful);
+        return;
+        }
+        S_StartSound (player->mo, sfx_sawhit);
+    }
 	
     // turn to face target
     angle = R_PointToAngle2 (player->mo->x, player->mo->y,
