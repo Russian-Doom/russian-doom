@@ -1809,7 +1809,14 @@ A_OpenShotgun2
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    S_StartSound (player->mo, sfx_dbopn);
+    if (singleplayer)
+    {
+        S_StartSound (NULL, sfx_dbopn);
+    }
+    else
+    {
+        S_StartSound (player->mo, sfx_dbopn);
+    }
 }
 
 void
@@ -1817,7 +1824,14 @@ A_LoadShotgun2
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    S_StartSound (player->mo, sfx_dbload);
+    if (singleplayer)
+    {
+        S_StartSound (NULL, sfx_dbload);
+    }
+    else
+    {
+        S_StartSound (player->mo, sfx_dbload);
+    }
 }
 
 void
@@ -1830,7 +1844,14 @@ A_CloseShotgun2
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    S_StartSound (player->mo, sfx_dbcls);
+    if (singleplayer)
+    {
+        S_StartSound (NULL, sfx_dbcls);
+    }
+    else
+    {
+        S_StartSound (player->mo, sfx_dbcls);
+    }
     A_ReFire(player,psp);
 }
 
