@@ -14,7 +14,7 @@
 #define PACKAGE_TARNAME "russian-doom"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.2"
+#define PACKAGE_VERSION "2.3"
 
 /* Change this when you create your awesome forked version */
 #define PROGRAM_PREFIX "russian-"
@@ -23,7 +23,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "2.2"
+#define VERSION "2.3"
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
