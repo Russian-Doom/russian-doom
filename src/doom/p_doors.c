@@ -569,6 +569,7 @@ void P_SpawnDoorCloseIn30 (sector_t* sec)
     door->type = vld_normal;
     door->speed = VDOORSPEED;
     door->topcountdown = 30 * TICRATE;
+    door->topheight = sec->ceilingheight;
 }
 
 //
