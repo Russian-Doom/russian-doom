@@ -442,6 +442,7 @@ void D_BindVariables(void)
     // - Звук -
     M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);      // Звук раздавливания трупов
     M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);     // Одиночный звук закрытия быстрой двери
+    M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);            // Проигрывать звук при выходе из игры
     // - Геймплей -
     M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье

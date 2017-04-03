@@ -902,6 +902,7 @@ static default_t extra_defaults_list[] =
     // - Звук -
     CONFIG_VARIABLE_INT(crushed_corpses_sfx),       // Звук раздавливания трупов
     CONFIG_VARIABLE_INT(blazing_door_fix_sfx),      // Одиночный звук закрытия быстрой двери
+    CONFIG_VARIABLE_INT(correct_endlevel_sfx),      // Корректный звук завершения уровня
     CONFIG_VARIABLE_INT(play_exit_sfx),             // Проигрывать звук при выходе из игры
     // - Геймплей -
     CONFIG_VARIABLE_INT(negative_health),           // Отображать отрицательное здоровье

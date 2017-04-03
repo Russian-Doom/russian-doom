@@ -114,6 +114,7 @@ static void SensibleDefaults(void)
     // - Звук -
     crushed_corpses_sfx = 1;     // Звук раздавливания трупов
     blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
+    correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
     play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
     // - Геймплей -
     negative_health = 0;         // Отображать отрицательное здоровье

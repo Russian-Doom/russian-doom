@@ -51,6 +51,7 @@ int no_pickup_flash = 0;         // Не мигать экраном при получении предметов
 // - Звук -
 int crushed_corpses_sfx = 1;     // Звук раздавливания трупов
 int blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
+int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
 // - Геймплей -
 int negative_health = 0;         // Отображать отрицательное здоровье
@@ -89,6 +90,7 @@ void CompatibilitySettings(void)
     TXT_If(gamemission == doom,    TXT_NewSeparator("‡вук")), 
         TXT_If(gamemission == doom,	TXT_NewCheckBox("‡вук раздавливания трупов",                 &crushed_corpses_sfx)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћдиночный звук закрытия быстрой двери",     &blazing_door_fix_sfx)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Љорректный звук завершения уровня",         &correct_endlevel_sfx)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Џроигрывать звук при выходе из игры",       &play_exit_sfx)),
 
     TXT_If(gamemission == doom,    TXT_NewSeparator("ѓеймплей")),
@@ -125,6 +127,7 @@ void BindCompatibilityVariables(void)
     // - Звук -
     M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);      // Звук раздавливания трупов
     M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);     // Одиночный звук закрытия быстрой двери
+    M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);            // Проигрывать звук при выходе из игры
     // - Геймплей -
     M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье

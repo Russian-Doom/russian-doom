@@ -204,18 +204,21 @@ P_ChangeSwitchTexture
     int     i;
     int     sound;
 	
-    if (!useAgain)
-	line->special = 0;
-
     texTop = sides[line->sidenum[0]].toptexture;
     texMid = sides[line->sidenum[0]].midtexture;
     texBot = sides[line->sidenum[0]].bottomtexture;
 	
     sound = sfx_swtchn;
 
-    // EXIT SWITCH?
-    if (line->special == 11)                
-	sound = sfx_swtchx;
+    if (correct_endlevel_sfx)
+    {
+        // EXIT SWITCH?
+        if (line->special == 11 || line->special == 51)
+        sound = sfx_swtchx;
+    }
+
+    if (!useAgain)
+	line->special = 0;
 	
     for (i = 0;i < numswitches*2;i++)
     {

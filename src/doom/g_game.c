@@ -250,6 +250,7 @@ int no_pickup_flash = 0;         // Не мигать экраном при по
 // - Звук -
 int crushed_corpses_sfx = 1;     // Звук раздавливания трупов
 int blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
+int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
 // - Геймплей -
 int negative_health = 0;         // Отображать отрицательное здоровье
