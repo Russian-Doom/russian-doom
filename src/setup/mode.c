@@ -89,17 +89,15 @@ static mission_config_t mission_configs[] =
         PROGRAM_PREFIX "hexen"
     },
 	
-	/*
     {
         "Strife",
         strife,
         IWAD_MASK_STRIFE,
         "strife",
-        "strife.cfg",
+        // "strife.cfg",
         PROGRAM_PREFIX "strife.cfg",
         PROGRAM_PREFIX "strife"
     }
-	*/
 };
 
 static GameSelectCallback game_selected_callback;

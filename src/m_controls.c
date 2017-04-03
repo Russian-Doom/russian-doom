@@ -81,10 +81,11 @@ int key_arti_invulnerability = '5';
 
 // Note: Strife also uses key_invleft, key_invright, key_jump, key_lookup, and
 // key_lookdown, but with different default values.
+// [JN] Strife: Дополнительные кнопки
 
 int key_usehealth = 'h';
 int key_invquery  = 'q';
-int key_mission   = 'w';
+int key_mission   = 'x';
 int key_invpop    = 'z';
 int key_invkey    = 'k';
 int key_invhome   = KEY_HOME;
@@ -286,7 +287,7 @@ void M_BindStrifeControls(void)
     key_message_refresh = '/';
 
     // These keys are shared with Heretic/Hexen but have different defaults:
-    key_jump     = 'a';
+    key_jump     = ' ';      // [JN] Strife: кнопка прыжка
     key_lookup   = KEY_PGUP;
     key_lookdown = KEY_PGDN;
     key_invleft  = KEY_INS;

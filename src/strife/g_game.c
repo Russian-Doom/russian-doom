@@ -232,8 +232,8 @@ int      testcontrols_mousespeed;
 mobj_t*		bodyque[BODYQUESIZE]; 
 //int       bodyqueslot; [STRIFE] unused
  
-int             vanilla_savegame_limit = 1;
-int             vanilla_demo_limit = 1;
+// int             vanilla_savegame_limit = 1;
+// int             vanilla_demo_limit = 1;
  
 
 int G_CmdChecksum (ticcmd_t* cmd) 
@@ -1845,10 +1845,12 @@ void G_DoSaveGame (char *path)
     // except if the vanilla_savegame_limit setting is turned off.
     // [STRIFE]: Verified subject to same limit.
 
+    /*
     if (vanilla_savegame_limit && ftell(save_stream) > SAVEGAMESIZE)
     {
         I_Error ("Savegame buffer overrun");
     }
+    */
     
     // Finish up, close the savegame file.
 
@@ -2160,19 +2162,7 @@ void G_WriteDemoTiccmd (ticcmd_t* cmd)
 
     if (demo_p > demoend - 16)
     {
-        if (vanilla_demo_limit)
-        {
-            // no more space 
-            G_CheckDemoStatus (); 
-            return; 
-        }
-        else
-        {
-            // Vanilla demo limit disabled: unlimited
-            // demo lengths!
-
-            IncreaseDemoBuffer();
-        }
+        IncreaseDemoBuffer();
     } 
 
     G_ReadDemoTiccmd (cmd);         // make SURE it is exactly the same 
