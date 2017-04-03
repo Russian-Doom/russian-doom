@@ -1120,7 +1120,7 @@ void ST_Ticker (void)
 
 }
 
-static int st_palette = 0;
+int st_palette = 0;
 
 void ST_doPaletteStuff(void)
 {
