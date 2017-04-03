@@ -22,3 +22,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Y-Dr. Now
 - MAJOR93MOREAU
 - Sergey "Districh" Ivanov
+- Jeff Doggett
