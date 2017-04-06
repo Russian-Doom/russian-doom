@@ -204,11 +204,12 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
             TXT_NewCheckBox("ѓрафическая загрузка", &graphical_startup)),
         TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
             TXT_NewCheckBox("Џоказывать экран ENDOOM при выходе", &show_endoom)),
+            
 
     // [JN] Мой корректор контрастности
 
     TXT_NewSeparator("ѓамма-коррекция"), 
-    TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen, 
+    TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen || gamemission == strife, 
         TXT_NewCheckBox("Ћптимизация игровой палитры", &lcd_gamma_fix)),
 
     // [JN] Экспериментальные функции
@@ -296,13 +297,6 @@ void BindDisplayVariables(void)
     {
         M_BindIntVariable("show_endoom",           &show_endoom);
     }
-
-    /*
-    if (gamemission == doom || gamemission == strife)
-    {
-        M_BindIntVariable("show_diskicon",         &show_diskicon);
-    }
-    */
 
 	// [JN] Корректор контрастности
 

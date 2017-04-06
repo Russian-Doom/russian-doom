@@ -86,9 +86,7 @@ static void SensibleDefaults(void)
     mousebnextweapon = 3;
     snd_musicdevice = 3;
     joybspeed = 29;                 // Always run
-//  vanilla_savegame_limit = 0;
     vanilla_keyboard_mapping = 0;
-//  vanilla_demo_limit = 0;
     graphical_startup = 0;
     show_endoom = 0;
     dclick_use = 0;
@@ -101,6 +99,7 @@ static void SensibleDefaults(void)
     // - »нтерфейс -
     draw_shadowed_text = 1;      // Ёлементы меню и тексты отбрасывают тень
     fast_quickload = 1;          // Ќе выводить запрос при быстрой загрузке
+    show_exit_sequence = 1;      // [Strife] Њоказывать заставку при выходе
     // - √рафика -
     colored_blood = 1;           //  ровь разных цветов
     randomly_flipcorpses = 1;    // ѕроизвольное зеркальное отражение трупов
@@ -249,7 +248,7 @@ void MainMenu(void)
     TXT_NewButton2("Настройки клавиатуры",         (TxtWidgetSignalFunc) ConfigKeyboard, NULL),
     TXT_NewButton2("Настройки мыши",               (TxtWidgetSignalFunc) ConfigMouse, NULL),
     TXT_NewButton2("Настройки джойстика/геймпада", (TxtWidgetSignalFunc) ConfigJoystick, NULL),
-    TXT_If(gamemission == doom,
+    TXT_If(gamemission == doom || gamemission == strife,
     TXT_NewButton2("Дополнительные параметры игры", (TxtWidgetSignalFunc) CompatibilitySettings, NULL)),
     GetLaunchButton(),
     TXT_NewStrut(0, 1),

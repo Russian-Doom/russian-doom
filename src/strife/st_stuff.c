@@ -1500,7 +1500,10 @@ void ST_loadData(void)
 //    static int dword_8848C = 1; // STRIFE-TODO: what is the purpose of this?
 //    dword_8848C = 0;
 
-    lu_palette = W_GetNumForName (DEH_String("PLAYPAL"));
+    if (lcd_gamma_fix)
+        lu_palette = W_GetNumForName (DEH_String("PALFIX"));
+    else
+        lu_palette = W_GetNumForName (DEH_String("PLAYPAL"));
     ST_loadGraphics();
 }
 

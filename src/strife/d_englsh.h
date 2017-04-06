@@ -33,8 +33,8 @@
 //
 //	M_Menu.C
 //
-#define PRESSKEY 	"press a key."
-#define PRESSYN 	"press y or n."
+#define PRESSKEY    "(yf;vbnt k.,e. rkfdbie)"   // (Нажмите любую клавишу)
+#define PRESSYN     "(yf;vbnt ^#^ bkb ^@^)"     // (Нажмите "Y" или "N")
 #define QUITMSG	"are you sure you want to\nquit this great game?"
 // [STRIFE] modified:
 #define LOADNET 	"you can't load while in a net game!\n\n"PRESSKEY
@@ -43,9 +43,9 @@
 #define QSAVESPOT	"you haven't picked a\nquicksave slot yet!\n\n"PRESSKEY
 // [STRIFE] modified:
 #define SAVEDEAD 	"you're not playing a game\n\n"PRESSKEY
-#define QSPROMPT 	"quicksave over your game named\n\n'%s'?\n\n"PRESSYN
+#define QSPROMPT 	"dsgjkybnm gthtpfgbcm\n,scnhjuj cj[hfytybz\n\n^%s^?\n\n"PRESSYN    // Выполнить перезапись \n быстрого сохранения
 // [STRIFE] modified:
-#define QLPROMPT	"do you want to quickload\n\n'%s'?\n\n"PRESSYN
+#define QLPROMPT	"dsgjkybnm pfuhepre\n,scnhjuj cj[hfytybz\n\n^%s^?\n\n"PRESSYN  // Выполнить загрузку \n быстрого сохранения
 
 #define NEWGAME	\
 "you can't start a new game\n"\
@@ -59,22 +59,36 @@
 "this is the shareware version of doom.\n\n"\
 "you need to order the entire trilogy.\n\n"PRESSKEY
 
-#define MSGOFF	"Messages OFF"
-#define MSGON		"Messages ON"
-#define NETEND	"you can't end a netgame!\n\n"PRESSKEY
-#define ENDGAME	"are you sure you want\nto end the game?\n\n"PRESSYN
+#define MSGOFF  "cjj,otybz dsrk.xtys"                               // Сообщения выключены
+#define MSGON   "cjj,otybz drk.xtys"                                // Сообщения включены
+#define NETEND  "ytdjpvj;yj pfrjyxbnm ctntde. buhe!\n\n"PRESSKEY    // Невозможно закончить сетевую игру!
+#define ENDGAME "ds ltqcndbntkmyj [jnbnt\npfrjyxbnm buhe?\n\n"PRESSYN    // Вы действительно хотите \n закончить игру?
 
 // haleyjd 09/11/10: [STRIFE] No "to dos." on this
-#define DOSY		"(press y to quit)" 
+#define DOSY		"(yf;vbnt ^#^ xnj,s dsqnb)"       // (Нажмите "Y" чтобы выйти)
 
-#define DETAILHI	"High detail"
-#define DETAILLO	"Low detail"
-#define GAMMALVL0	"Gamma correction OFF"
-#define GAMMALVL1	"Gamma correction level 1"
-#define GAMMALVL2	"Gamma correction level 2"
-#define GAMMALVL3	"Gamma correction level 3"
-#define GAMMALVL4	"Gamma correction level 4"
-#define EMPTYSTRING	"empty slot"
+#define DETAILHI    "dscjrfz ltnfkbpfwbz"             // Высокая детализация
+#define DETAILLO    "ybprfz ltnfkbpfwbz"              // Низкая детализация
+
+#define GAMMALVL0   "ufvvf-rjhhtrwbz jnrk.xtyf"       // Гамма-коррекция отключена
+#define GAMMALV02   "ehjdtym ufvvf-rjhhtrwbb 0>25"    // Уровень гамма-коррекции 0.25
+#define GAMMALV05   "ehjdtym ufvvf-rjhhtrwbb 0>50"    // Уровень гамма-коррекции 0.50
+#define GAMMALV07   "ehjdtym ufvvf-rjhhtrwbb 0>75"    // Уровень гамма-коррекции 0.75
+#define GAMMALVL1   "ehjdtym ufvvf-rjhhtrwbb 1>0"     // Уровень гамма-коррекции 1.0
+#define GAMMALV12   "ehjdtym ufvvf-rjhhtrwbb 1>25"    // Уровень гамма-коррекции 1.25
+#define GAMMALV15   "ehjdtym ufvvf-rjhhtrwbb 1>50"    // Уровень гамма-коррекции 1.50
+#define GAMMALV17   "ehjdtym ufvvf-rjhhtrwbb 1>75"    // Уровень гамма-коррекции 1.75
+#define GAMMALVL2   "ehjdtym ufvvf-rjhhtrwbb 2>0"     // Уровень гамма-коррекции 2.0
+#define GAMMALV22   "ehjdtym ufvvf-rjhhtrwbb 2>25"    // Уровень гамма-коррекции 2.25
+#define GAMMALV25   "ehjdtym ufvvf-rjhhtrwbb 2>50"    // Уровень гамма-коррекции 2.50
+#define GAMMALV27   "ehjdtym ufvvf-rjhhtrwbb 2>75"    // Уровень гамма-коррекции 2.75
+#define GAMMALVL3   "ehjdtym ufvvf-rjhhtrwbb 3>0"     // Уровень гамма-коррекции 3.0
+#define GAMMALV32   "ehjdtym ufvvf-rjhhtrwbb 3>25"    // Уровень гамма-коррекции 3.25
+#define GAMMALV35   "ehjdtym ufvvf-rjhhtrwbb 3>50"    // Уровень гамма-коррекции 3.50
+#define GAMMALV37   "ehjdtym ufvvf-rjhhtrwbb 3>75"    // Уровень гамма-коррекции 3.75
+#define GAMMALVL4   "ehjdtym ufvvf-rjhhtrwbb 4>0"     // Уровень гамма-коррекции 4.0
+
+#define EMPTYSTRING	"gecnjq ckjn"                     // Пустой слот
 
 //
 //	P_inter.C

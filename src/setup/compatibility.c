@@ -26,18 +26,13 @@
 
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/gameplay.html"
 
-// [JN] Оригинальные ограничения отключены, т.к. в них больше нет смысла
-/*
-int vanilla_savegame_limit = 1;
-int vanilla_demo_limit = 1;
-*/
-
 // [JN] Дополнительные параметры игры
 
 // - Интерфейс -
 int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 int fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
-int show_diskicon = 1;           // Показывать значок дискеты
+int show_diskicon = 1;           // Значок дискеты / [Strife] песочных часов
+int show_exit_sequence = 1;      // [Strife] Показывать заставку при выходе
 // - Графика -
 int colored_blood = 1;           // Кровь разных цветов
 int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
@@ -71,10 +66,14 @@ void CompatibilitySettings(void)
     TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features = TXT_NewTable(1)));
 
     TXT_AddWidgets(window_features,
-    TXT_If(gamemission == doom,    TXT_NewSeparator("€нтерфейс")),
+    TXT_If(gamemission == doom || gamemission == strife, TXT_NewSeparator("€нтерфейс")),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",   &draw_shadowed_text)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе выводить запрос при быстрой загрузке",   &fast_quickload)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
+        
+        // [JN] Элементы для Strife 
+        TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать значок песочных часов",        &show_diskicon)),
+        TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать заставку при выходе",          &show_exit_sequence)),
     
     TXT_If(gamemission == doom,    TXT_NewSeparator("ѓрафика")),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ђазноцветная кровь и трупы",                &colored_blood)),
@@ -103,17 +102,13 @@ void CompatibilitySettings(void)
 
 void BindCompatibilityVariables(void)
 {
-    /*
-    M_BindIntVariable("vanilla_savegame_limit", &vanilla_savegame_limit);
-    M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
-    */
-
     // [JN] Дополнительные параметры игры
 
     // - Интерфейс -
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
     M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
     M_BindIntVariable("show_diskicon",          &show_diskicon);            // Показывать значок дискеты
+    M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);       // [Strife] Показывать заставку при выходе
     // - Графика -
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);     // Произвольное зеркальное отражение трупов

@@ -28,6 +28,8 @@ void BindCompatibilityVariables(void);
 // - Интерфейс -
 extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
 extern int fast_quickload;          // Не выводить запрос при быстрой загрузке
+extern int show_diskicon;           // Значок дискеты / [Strife] песочных часов
+extern int show_exit_sequence;      // [Strife] Показывать заставку при выходе
 // - Графика -
 extern int colored_blood;           // Кровь разных цветов
 extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов

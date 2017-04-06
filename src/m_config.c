@@ -703,7 +703,7 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(graphical_startup),
-
+    
     //!
     // If non-zero, the game will run in full screen mode.  If zero,
     // the game will run in a window.
@@ -889,6 +889,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(draw_shadowed_text),        // Элементы меню и тексты отбрасывают тень
     CONFIG_VARIABLE_INT(fast_quickload),            // Не выводить запрос при быстрой загрузке
     CONFIG_VARIABLE_INT(show_diskicon),             // Показывать значок дискеты
+    CONFIG_VARIABLE_INT(show_exit_sequence),        // [Strife] Показывать заставку при выходе
     // - Графика -
     CONFIG_VARIABLE_INT(colored_blood),             // Кровь разных цветов
     CONFIG_VARIABLE_INT(randomly_flipcorpses),      // Произвольное зеркальное отражение трупов

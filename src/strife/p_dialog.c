@@ -1393,14 +1393,20 @@ void P_DialogStart(player_t *player)
     switch(rnd)
     {
     case 2:
-        byetext = DEH_String("BYE!");
+        // "BYE!"
+        // "Прощай!"
+        byetext = DEH_String("ghjofq!");
         break;
     case 1:
-        byetext = DEH_String("Thanks, Bye!");
+        // "Thanks, Bye!"
+        // "Спасибо, прощай!"
+        byetext = DEH_String("cgfcb,j< ghjofq!");
         break;
     default:
     case 0:
-        byetext = DEH_String("See you later!");
+        // "See you later!"
+        // "До встречи!"
+        byetext = DEH_String("lj dcnhtxb!");
         break;
     }
 

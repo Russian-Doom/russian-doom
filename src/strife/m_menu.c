@@ -105,12 +105,24 @@ boolean			messageNeedsInput;
 
 void    (*messageRoutine)(int response);
 
-char gammamsg[5][26] =
+char gammamsg[17][29] =
 {
     GAMMALVL0,
+    GAMMALV02,
+    GAMMALV05,
+    GAMMALV07,
     GAMMALVL1,
+    GAMMALV12,
+    GAMMALV15,
+    GAMMALV17,
     GAMMALVL2,
+    GAMMALV22,
+    GAMMALV25,
+    GAMMALV27,
     GAMMALVL3,
+    GAMMALV32,
+    GAMMALV35,
+    GAMMALV37,
     GAMMALVL4
 };
 
@@ -578,7 +590,9 @@ void M_DrawNameChar(void)
 {
     int i;
 
-    M_WriteText(72, 28, DEH_String("Name Your Character"));
+    // "Name Your Character"
+    // "Выберите слот сохранения игры"
+    M_WriteText(22, 28, DEH_String("ds,thbnt ckjn cj[hfytybz buhs"));
 
     for (i = 0;i < load_end; i++)
     {
@@ -782,7 +796,8 @@ void M_SaveGame (int choice)
     if (netgame)
     {
         // haleyjd 20110211: Hooray for Rogue's awesome multiplayer support...
-        M_StartMessage(DEH_String("You can't save a netgame"), NULL, false);
+        // Невозможно сохранить сетевую игру
+        M_StartMessage(DEH_String("ytdjpvj;yj cj[hfybnm ctntde. buhe"), NULL, false);
         return;
     }
     if (!usergame)
@@ -830,7 +845,8 @@ void M_QuickSave(void)
     if (netgame)
     {
         // haleyjd 20110211 [STRIFE]: More fun...
-        M_StartMessage(DEH_String("You can't save a netgame"), NULL, false);
+        // Невозможно сохранить сетевую игру
+        M_StartMessage(DEH_String("ytdjpvj;yj cj[hfybnm ctntde. buhe"), NULL, false);
         return;
     }
 
@@ -1156,9 +1172,11 @@ void M_AutoUseHealth(void)
         players[consoleplayer].cheats ^= CF_AUTOHEALTH;
 
         if(players[consoleplayer].cheats & CF_AUTOHEALTH)
-            players[consoleplayer].message = DEH_String("Auto use health ON");
+            // Автоматическое лечение: включено
+            players[consoleplayer].message = DEH_String("fdnjvfnbxtcrjt ktxtybt: drk.xtyj");
         else
-            players[consoleplayer].message = DEH_String("Auto use health OFF");
+            // Автоматическое лечение: выключено
+            players[consoleplayer].message = DEH_String("fdnjvfnbxtcrjt ktxtybt: dsrk.xtyj");
     }
 }
 
@@ -1172,9 +1190,11 @@ void M_ChangeShowText(void)
     dialogshowtext ^= true;
 
     if(dialogshowtext)
-        players[consoleplayer].message = DEH_String("Conversation Text On");
+        // Текст в диалоговых окнах: включен
+        players[consoleplayer].message = DEH_String("ntrcn d lbfkjujds[ jryf[: drk.xty");
     else
-        players[consoleplayer].message = DEH_String("Conversation Text Off");
+        // Текст в диалоговых окнах: выключен
+        players[consoleplayer].message = DEH_String("ntrcn d lbfkjujds[ jryf[: dsrk.xty");
 }
 
 //
@@ -1335,7 +1355,8 @@ static char *M_SelectEndMessage(void)
 void M_QuitStrife(int choice)
 {
     DEH_snprintf(endstring, sizeof(endstring),
-                 "Do you really want to leave?\n\n" DOSY);
+                 // Вы действительно хотите выйти?
+                 "ds ltqcndbntkmyj [jnbnt dsqnb?\n\n" DOSY);
   
     M_StartMessage(endstring, M_QuitResponse, true);
 }
@@ -2094,10 +2115,13 @@ boolean M_Responder (event_t* ev)
         else if (key == key_menu_gamma)    // gamma toggle
         {
             usegamma++;
-            if (usegamma > 4)
+            if (usegamma > 16)
                 usegamma = 0;
             players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
-            I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+            if (lcd_gamma_fix)
+                I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
+            else
+                I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
             return true;
         }
         else if(gameversion == exe_strife_1_31 && key == key_spy)

@@ -84,6 +84,6 @@ void G_DrawMouseSpeedBox(void);
 boolean G_WriteSaveName(int slot, const char *charname);
 void    G_ReadCurrent(const char *path);
 
-// extern int vanilla_savegame_limit;
-// extern int vanilla_demo_limit;
+// [JN] Показывать заставку при выходе
+extern int show_exit_sequence;
 #endif

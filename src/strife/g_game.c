@@ -231,10 +231,10 @@ int      testcontrols_mousespeed;
 
 mobj_t*		bodyque[BODYQUESIZE]; 
 //int       bodyqueslot; [STRIFE] unused
- 
-// int             vanilla_savegame_limit = 1;
-// int             vanilla_demo_limit = 1;
- 
+
+// [JN] Показывать заставку при выходе
+int         show_exit_sequence = 1;
+
 
 int G_CmdChecksum (ticcmd_t* cmd) 
 { 
@@ -939,7 +939,8 @@ void G_Ticker (void)
             break; 
         case ga_screenshot: 
             V_ScreenShot("STRIFE%02i.%s"); // [STRIFE] file name, message
-            players[consoleplayer].message = DEH_String("STRIFE  by Rogue entertainment");
+            // Спец. символ "$": Strife создан Rogue Entertainment
+            players[consoleplayer].message = DEH_String("$");
             gameaction = ga_nothing; 
             break; 
         case ga_nothing: 
@@ -1176,7 +1177,9 @@ void G_PlayerReborn (int player)
         p->inventory[i].type = NUMMOBJTYPES;
 
     // villsa [STRIFE]: Default objective
-    M_StringCopy(mission_objective, DEH_String("Find help"),
+    // "Find help"
+    // "Найти помощь"
+    M_StringCopy(mission_objective, DEH_String("yfqnb gjvjom"),
                  OBJECTIVE_LEN);
 }
 
@@ -1841,17 +1844,6 @@ void G_DoSaveGame (char *path)
 
     P_WriteSaveGameEOF();
 
-    // Enforce the same savegame size limit as in Vanilla Doom, 
-    // except if the vanilla_savegame_limit setting is turned off.
-    // [STRIFE]: Verified subject to same limit.
-
-    /*
-    if (vanilla_savegame_limit && ftell(save_stream) > SAVEGAMESIZE)
-    {
-        I_Error ("Savegame buffer overrun");
-    }
-    */
-    
     // Finish up, close the savegame file.
 
     fclose(save_stream);
@@ -1871,7 +1863,9 @@ void G_DoSaveGame (char *path)
     // [STRIFE]: custom message logic
     if(!strcmp(path, savepath))
     {
-        M_snprintf(savename, sizeof(savename), "%s saved.", character_name);
+        // "%s saved."
+        // "Игра сохранена."
+        M_snprintf(savename, sizeof(savename), "buhf cj[hfytyf>", character_name);
         players[consoleplayer].message = savename;
     }
 

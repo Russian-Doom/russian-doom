@@ -859,7 +859,12 @@ boolean P_UseInventoryItem(player_t* player, int item)
             name = "Item";
 
         M_snprintf(useinventorymsg, sizeof(useinventorymsg),
-                   "You used the %s.", name);
+                   // "You used the %s."
+                   // "Использовано: %s."
+                   // "bcgjkmpjdfyj: %s>"
+                   // [JN] ХАК: Сообщения об использовании записаны в info.c,
+                   // в то время как сообщения о получении записаны в p_inter.c
+                   "%s", name);
         player->message = useinventorymsg;
 
         if(player == &players[consoleplayer])

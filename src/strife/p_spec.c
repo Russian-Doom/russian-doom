@@ -1012,7 +1012,8 @@ P_CrossSpecialLine
         GiveObjective(crosslinestr, 0);
 
         // Put up a message
-        thing->player->message = DEH_String("Incoming Message...");
+        // Входящее сообщение...
+        thing->player->message = DEH_String("d[jlzott cjj,otybt>>>");
         line->special = 0;
         break;
 

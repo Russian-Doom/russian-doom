@@ -146,6 +146,8 @@ int             show_endoom = 1;
 int             show_diskicon = 1;
 int             graphical_startup = 1;
 
+int     lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Strife
+
 // If true, startup has completed and the main game loop has started.
 
 static boolean main_loop_started = false;
@@ -291,7 +293,10 @@ void D_Display (void)
 
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
-        I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+        if (lcd_gamma_fix)
+            I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
+        else
+            I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
 
     // see if the border needs to be initially drawn
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
@@ -442,11 +447,12 @@ void D_BindVariables(void)
     M_BindIntVariable("show_talk",              &dialogshowtext);
     M_BindIntVariable("screensize",             &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_channels);
-    // M_BindIntVariable("vanilla_savegame_limit", &vanilla_savegame_limit);
-    // M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
     M_BindIntVariable("show_endoom",            &show_endoom);
     M_BindIntVariable("show_diskicon",          &show_diskicon);
     M_BindIntVariable("graphical_startup",      &graphical_startup);
+    
+    // [JN] Показывать заставку при выходе
+    M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);
 
     M_BindStringVariable("back_flat",           &back_flat);
     M_BindStringVariable("nickname",            &nickname);
@@ -614,15 +620,23 @@ void D_DoAdvanceDemo (void)
         I_Quit();
         return;
     case -4: // show exit screen
-        menuactive = false;
-        pagetic = 3*TICRATE;
-        gamestate = GS_DEMOSCREEN;
-        pagename = DEH_String("PANEL7");
-        S_StartMusic(mus_fast);
-        if(isdemoversion)
-            demosequence = -3; // show Velocity logo
+        // [JN] Опциональное отображение заставки
+        if (show_exit_sequence)
+        {
+            menuactive = false;
+            pagetic = 3*TICRATE;
+            gamestate = GS_DEMOSCREEN;
+            pagename = DEH_String("PANEL7");
+            S_StartMusic(mus_fast);
+            if(isdemoversion)
+                demosequence = -3; // show Velocity logo
+            else
+                demosequence = -5; // exit
+        }
         else
-            demosequence = -5; // exit
+        {
+            I_Quit();
+        }
         return;
     case -3: // show Velocity logo for demo version
         pagetic = 6*TICRATE;
@@ -919,6 +933,7 @@ void DoTimeBomb(void)
 void D_SetGameDescription(void)
 {
     gamedescription = GetGameName("Strife: Quest for the Sigil");
+    W_MergeFile("russian/russian-strife.wad");
 }
 
 //      print title for every printed line
