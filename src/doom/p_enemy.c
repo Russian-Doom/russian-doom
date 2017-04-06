@@ -1024,9 +1024,17 @@ void A_Tracer (mobj_t* actor)
     // killough 3/6/98: fix revenant internal demo bug by subtracting
     // levelstarttic from gametic:
 
-    if ((gametic-levelstarttic) & 3)
-	return;
-    
+    if(singleplayer)
+    {
+        if (leveltime & 3)
+        return;
+    }
+    else
+    {
+        if ((gametic-levelstarttic) & 3)
+        return;
+    }
+
     // spawn a puff of smoke behind the rocket		
     P_SpawnPuff (actor->x, actor->y, actor->z);
 	
