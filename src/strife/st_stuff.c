@@ -366,6 +366,8 @@ boolean ST_Responder(event_t* ev)
         return false;
 
     // keydown events
+    // [JN] TODO: Исправить, выдаются некорректные названия из хака.
+    /*
     if(ev->data1 == key_invquery) // inventory query
     {
         inventory_t *inv = &(plyr->inventory[plyr->inventorycursor]);
@@ -377,6 +379,7 @@ boolean ST_Responder(event_t* ev)
             plyr->message = st_msgbuf;
         }
     }
+    */
 
     // villsa [STRIFE]
     if(ev->data1 == key_invpop || ev->data1 == key_invkey || ev->data1 == key_mission)

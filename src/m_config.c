@@ -285,6 +285,7 @@ static default_t extra_defaults_list[] =
 
     CONFIG_VARIABLE_KEY(key_lookcenter),
 
+    /*
     //!
     // @game strife
     //
@@ -292,6 +293,7 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_KEY(key_invquery),
+    */
 
     //!
     // @game strife

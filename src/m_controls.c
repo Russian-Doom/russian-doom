@@ -84,14 +84,14 @@ int key_arti_invulnerability = '5';
 // [JN] Strife: Дополнительные кнопки
 
 int key_usehealth = 'h';
-int key_invquery  = 'q';
-int key_mission   = 'x';
-int key_invpop    = 'z';
+// int key_invquery  = 'q';
+int key_mission   = 'q';      // [JN] Ранее: x
+int key_invpop    = 'r';      // [JN] Ранее: z
 int key_invkey    = 'k';
-int key_invhome   = KEY_HOME;
-int key_invend    = KEY_END;
-int key_invuse    = KEY_ENTER;
-int key_invdrop   = KEY_BACKSPACE;
+int key_invhome   = KEY_HOME; //
+int key_invend    = KEY_END;  // 
+int key_invuse    = 'f';      // [JN] Ранее: KEY_ENTER
+int key_invdrop   = 'g';      // [JN] Ранее: KEY_BACKSPACE
 
 
 //
@@ -287,11 +287,11 @@ void M_BindStrifeControls(void)
     key_message_refresh = '/';
 
     // These keys are shared with Heretic/Hexen but have different defaults:
-    key_jump     = ' ';      // [JN] Strife: кнопка прыжка
+    key_jump     = ' ';      // [JN] Кнопка прыжка
     key_lookup   = KEY_PGUP;
     key_lookdown = KEY_PGDN;
-    key_invleft  = KEY_INS;
-    key_invright = KEY_DEL;
+    key_invleft  = '[';  // [JN] Ранее: KEY_INS
+    key_invright = ']';  // [JN] Ранее: KEY_DEL
 
     M_BindIntVariable("key_jump",           &key_jump);
     M_BindIntVariable("key_lookUp",         &key_lookup);
@@ -301,7 +301,7 @@ void M_BindStrifeControls(void)
 
     // Custom Strife-only Keys:
     M_BindIntVariable("key_useHealth",      &key_usehealth);
-    M_BindIntVariable("key_invquery",       &key_invquery);
+    // M_BindIntVariable("key_invquery",       &key_invquery);
     M_BindIntVariable("key_mission",        &key_mission);
     M_BindIntVariable("key_invPop",         &key_invpop);
     M_BindIntVariable("key_invKey",         &key_invkey);

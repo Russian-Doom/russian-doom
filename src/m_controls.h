@@ -44,7 +44,7 @@ extern int key_useartifact;
 
 // villsa [STRIFE] strife keys
 extern int key_usehealth;
-extern int key_invquery;
+// extern int key_invquery;
 extern int key_mission;
 extern int key_invpop;
 extern int key_invkey;

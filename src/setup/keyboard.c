@@ -41,7 +41,7 @@ static int *controls[] = { &key_left, &key_right, &key_up, &key_down,
                            &key_use, &key_strafe, &key_speed, &key_jump,
                            &key_flyup, &key_flydown, &key_flycenter,
                            &key_lookup, &key_lookdown, &key_lookcenter,
-                           &key_invleft, &key_invright, &key_invquery,
+                           &key_invleft, &key_invright, /*&key_invquery,*/
                            &key_invuse, &key_invpop, &key_mission, &key_invkey,
                            &key_invhome, &key_invend, &key_invdrop,
                            &key_useartifact, &key_pause, &key_usehealth,
@@ -226,18 +226,17 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
         AddKeyControl(table, "Пролистать влево",  &key_invleft);
         AddKeyControl(table, "Пролистать вправо", &key_invright);
 
-        // [JN] Strife у нас не поддержимаетс€, пропускаем.
         if (gamemission == strife)
         {
-            AddKeyControl(table, "Home",         &key_invhome);
-            AddKeyControl(table, "End",          &key_invend);
-            AddKeyControl(table, "Query",        &key_invquery);
-            AddKeyControl(table, "Drop",         &key_invdrop);
-            AddKeyControl(table, "Show weapons", &key_invpop);
-            AddKeyControl(table, "Show mission", &key_mission);
-            AddKeyControl(table, "Show keys",    &key_invkey);
-            AddKeyControl(table, "Use",          &key_invuse);
-            AddKeyControl(table, "Use health",   &key_usehealth);
+            AddKeyControl(table, "Пролистать в начало",  &key_invhome);
+            AddKeyControl(table, "Пролистать в конец",   &key_invend);
+            // AddKeyControl(table, "Query",             &key_invquery);
+            AddKeyControl(table, "Бросить предмет",      &key_invdrop);
+            AddKeyControl(table, "Показать оружие",      &key_invpop);
+            AddKeyControl(table, "Показать задани€",     &key_mission);
+            AddKeyControl(table, "Показать ключи",       &key_invkey);
+            AddKeyControl(table, "Использовать предмет", &key_invuse);
+            AddKeyControl(table, "Быстрое лечение",      &key_usehealth);
         }
         else
         {
