@@ -323,7 +323,7 @@ menu_t  NewDef =
     &MainDef,           // previous menu - haleyjd [STRIFE] changed to MainDef
     NewGameMenu,        // menuitem_t ->
     M_DrawNewGame,      // drawing routine ->
-    48,63,              // x,y
+    66,63,              // x,y
     toorough            // lastOn - haleyjd [STRIFE]: default to skill 1
 };
 
@@ -596,14 +596,14 @@ void M_DrawNameChar(void)
 
     for (i = 0;i < load_end; i++)
     {
-        M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
-        M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+        M_DrawSaveLoadBorder(LoadDef.x-3,LoadDef.y+LINEHEIGHT*i);
+        M_WriteText(LoadDef.x-4,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
     }
 
     if (saveStringEnter)
     {
         i = M_StringWidth(savegamestrings[quickSaveSlot]);
-        M_WriteText(LoadDef.x + i,LoadDef.y+LINEHEIGHT*quickSaveSlot,"_");
+        M_WriteText(LoadDef.x-4 + i,LoadDef.y+LINEHEIGHT*quickSaveSlot,"_");
     }
 }
 
@@ -644,13 +644,13 @@ void M_DrawLoad(void)
 {
     int             i;
 
-    V_DrawPatchDirect(72, 28, 
-                      W_CacheLumpName(DEH_String("M_LOADG"), PU_CACHE));
+    V_DrawShadowedPatchStrife(55, 24, 
+                      W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
 
     for (i = 0;i < load_end; i++)
     {
-        M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
-        M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+        M_DrawSaveLoadBorder(LoadDef.x-3,LoadDef.y+LINEHEIGHT*i);
+        M_WriteText(LoadDef.x-4,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
     }
 }
 
@@ -663,17 +663,17 @@ void M_DrawSaveLoadBorder(int x,int y)
 {
     int             i;
 
-    V_DrawPatchDirect(x - 8, y + 7,
+    V_DrawShadowedPatchStrife(x - 8, y + 7,
                       W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
 
-    for (i = 0;i < 24;i++)
+    for (i = 0;i < 22;i++)
     {
-        V_DrawPatchDirect(x, y + 7,
+        V_DrawShadowedPatchStrife(x, y + 7,
                           W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
         x += 8;
     }
 
-    V_DrawPatchDirect(x, y + 7, 
+    V_DrawShadowedPatchStrife(x, y + 7, 
                       W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
 }
 
@@ -725,17 +725,17 @@ void M_DrawSave(void)
 {
     int             i;
 
-    V_DrawPatchDirect(72, 28, W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE));
+    V_DrawShadowedPatchStrife(53, 24, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
-        M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
-        M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+        M_DrawSaveLoadBorder(LoadDef.x-3,LoadDef.y+LINEHEIGHT*i);
+        M_WriteText(LoadDef.x-4,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
     }
 
     if (saveStringEnter)
     {
         i = M_StringWidth(savegamestrings[quickSaveSlot]);
-        M_WriteText(LoadDef.x + i,LoadDef.y+LINEHEIGHT*quickSaveSlot,"_");
+        M_WriteText(LoadDef.x-4 + i,LoadDef.y+LINEHEIGHT*quickSaveSlot,"_");
     }
 }
 
@@ -956,7 +956,7 @@ void M_DrawReadThis3(void)
 //
 void M_DrawSound(void)
 {
-    V_DrawPatchDirect (100, 10, W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
+    V_DrawShadowedPatchStrife (61, 13, W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1),
                  16,sfxVolume);
@@ -1043,7 +1043,7 @@ void M_MusicVol(int choice)
 //
 void M_DrawMainMenu(void)
 {
-    V_DrawPatchDirect(84, 2,
+    V_DrawShadowedPatchStrife(82, 2,
                       W_CacheLumpName(DEH_String("M_STRIFE"), PU_CACHE));
 }
 
@@ -1057,8 +1057,8 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
-    V_DrawPatchDirect(96, 14, W_CacheLumpName(DEH_String("M_NGAME"), PU_CACHE));
-    V_DrawPatchDirect(54, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
+    V_DrawShadowedPatchStrife(82, 15, W_CacheLumpName(DEH_String("M_NGAME"), PU_CACHE));
+    V_DrawShadowedPatchStrife(54, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
 }
 
 void M_NewGame(int choice)
@@ -1145,7 +1145,7 @@ char	msgNames[2][9]		= {"M_MSGOFF","M_MSGON"};
 void M_DrawOptions(void)
 {
     // haleyjd 08/27/10: [STRIFE] M_OPTTTL -> M_OPTION
-    V_DrawPatchDirect(108, 15, 
+    V_DrawShadowedPatchStrife(89, 14, 
                       W_CacheLumpName(DEH_String("M_OPTION"), PU_CACHE));
 
     // haleyjd 08/26/10: [STRIFE] Removed messages, sensitivity, detail.
@@ -1444,17 +1444,17 @@ M_DrawThermo
 
     xx = x;
     yy = y + 6; // [STRIFE] +6 to y coordinate
-    V_DrawPatchDirect(xx, yy, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
+    V_DrawShadowedPatchStrife(xx, yy, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
     xx += 8;
     for (i=0;i<thermWidth;i++)
     {
-        V_DrawPatchDirect(xx, yy, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
+        V_DrawShadowedPatchStrife(xx, yy, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
         xx += 8;
     }
-    V_DrawPatchDirect(xx, yy, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
+    V_DrawShadowedPatchStrife(xx, yy, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
 
     // [STRIFE] +2 to initial y coordinate
-    V_DrawPatchDirect((x + 8) + thermDot * 8, y + 2,
+    V_DrawShadowedPatchStrife((x + 8) + thermDot * 8, y + 2,
                       W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));
 }
 
@@ -1604,7 +1604,7 @@ M_WriteText
         }
         else
         {
-            V_DrawPatchDirect(cx, cy, hu_font[c]);
+            V_DrawShadowedPatchStrife(cx, cy, hu_font[c]);
             cx += w;
         }
     }
@@ -1933,7 +1933,7 @@ boolean M_Responder (event_t* ev)
             if (ch >= 32 && ch <= 127 &&
                 saveCharIndex < SAVESTRINGSIZE-1 &&
                 M_StringWidth(savegamestrings[quickSaveSlot]) <
-                (SAVESTRINGSIZE-2)*8)
+                (SAVESTRINGSIZE-2)*7)
             {
                 savegamestrings[quickSaveSlot][saveCharIndex++] = ch;
                 savegamestrings[quickSaveSlot][saveCharIndex] = 0;
@@ -2378,7 +2378,7 @@ void M_Drawer (void)
 
         if (name[0])
         {
-            V_DrawPatchDirect (x, y, W_CacheLumpName(name, PU_CACHE));
+            V_DrawShadowedPatchStrife (x-14, y, W_CacheLumpName(name, PU_CACHE));
         }
         y += LINEHEIGHT;
     }
@@ -2386,7 +2386,7 @@ void M_Drawer (void)
     
     // haleyjd 08/27/10: [STRIFE] Adjust to draw spinning Sigil
     // DRAW SIGIL
-    V_DrawPatchDirect(x + CURSORXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
+    V_DrawPatchDirect(x + CURSORXOFF - 7, currentMenu->y - 6 + itemOn*LINEHEIGHT,
                       W_CacheLumpName(DEH_String(cursorName[whichCursor]),
                                       PU_CACHE));
 

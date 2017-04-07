@@ -703,7 +703,7 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(graphical_startup),
-    
+
     //!
     // If non-zero, the game will run in full screen mode.  If zero,
     // the game will run in a window.
