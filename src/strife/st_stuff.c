@@ -551,14 +551,16 @@ boolean ST_Responder(event_t* ev)
                 for(i = 0; i < NUMCARDS; i++)
                     plyr->cards[i] = false;
 
-                plyr->message = DEH_String("Keys removed");
+                // Ключи конфискованы
+                plyr->message = DEH_String("rk.xb rjyabcrjdfys");
             }
             else
             {
                 for(i = 0; i < NUMCARDS; i++)
                     plyr->cards[i] = true;
 
-                plyr->message = DEH_String("Cheater Keys Added");
+                // Ключи выданы
+                plyr->message = DEH_String("rk.xb dslfys");
             }
         }
         else
@@ -566,7 +568,8 @@ boolean ST_Responder(event_t* ev)
             for(i = 0; i < FIRSTKEYSETAMOUNT; i++)
                 plyr->cards[i] = true;
 
-            plyr->message = DEH_String("Cheater Keys Added");
+            // Ключи выданы
+            plyr->message = DEH_String("rk.xb dslfys");
         }
     }
     else if (cht_CheckCheat(&cheat_noclip, ev->data2))
@@ -615,7 +618,8 @@ boolean ST_Responder(event_t* ev)
         P_GiveItemToPlayer(plyr, SPR_STMP, MT_INV_MED1);
         P_GiveItemToPlayer(plyr, SPR_MDKT, MT_INV_MED2);
         P_GiveItemToPlayer(plyr, SPR_FULL, MT_INV_MED3);
-        plyr->message = DEH_String("you got the stuff!");
+        // успешно получено!
+        plyr->message = DEH_String("ecgtiyj gjkextyj!");
     }
     if(cht_CheckCheat(&cheat_powerup[ST_PUMPUP_P], ev->data2))
     {
@@ -629,20 +633,23 @@ boolean ST_Responder(event_t* ev)
 
         for(i = 0; i < NUMAMMO; ++i)
             P_GiveAmmo(plyr, i, 1);
-        plyr->message = DEH_String("you got the stuff!");
+        // успешно получено!
+        plyr->message = DEH_String("ecgtiyj gjkextyj!");
     }
     if(cht_CheckCheat(&cheat_powerup[ST_PUMPUP_S], ev->data2))
     {
         // [STRIFE]: PUMPUPS gives stamina and accuracy upgrades
         P_GiveItemToPlayer(plyr, SPR_TOKN, MT_TOKEN_STAMINA);
         P_GiveItemToPlayer(plyr, SPR_TOKN, MT_TOKEN_NEW_ACCURACY);
-        plyr->message = DEH_String("you got the stuff!");
+        // успешно получено!
+        plyr->message = DEH_String("ecgtiyj gjkextyj!");
     }
     if(cht_CheckCheat(&cheat_powerup[ST_PUMPUP_T], ev->data2))
     {
         // [STRIFE] PUMPUPT gives targeter
         P_GivePower(plyr, pw_targeter);
-        plyr->message = DEH_String("you got the stuff!");
+        // успешно получено!
+        plyr->message = DEH_String("ecgtiyj gjkextyj!");
     }
     // [STRIFE]: PUMPUP
     if (cht_CheckCheat(&cheat_powerup[ST_PUMPUP], ev->data2))
@@ -657,7 +664,8 @@ boolean ST_Responder(event_t* ev)
         // [STRIFE] 'GPS' for player position
         static char buf[ST_MSGWIDTH];
         M_snprintf(buf, sizeof(buf),
-                   "ang=0x%x;x,y=(0x%x,0x%x)",
+                   // "ang=0x%x;x,y=(0x%x,0x%x)",
+                   "euk=0x%x-[<#=(0x%x<0x%x)",
                    players[consoleplayer].mo->angle,
                    players[consoleplayer].mo->x,
                    players[consoleplayer].mo->y);
@@ -717,14 +725,16 @@ boolean ST_Responder(event_t* ev)
     if(cht_CheckCheat(&cheat_nuke, ev->data2))
     {
         stonecold ^= 1;
-        plyr->message = DEH_String("Kill 'em.  Kill 'em All");
+        // Убей их. Убей их всех!
+        plyr->message = DEH_String("e,tq b[> e,tq b[ dct[!");
         return false;
     }
 
     // villsa [STRIFE]
     if(cht_CheckCheat(&cheat_midas, ev->data2))
     {
-        plyr->message = DEH_String("YOU GOT THE MIDAS TOUCH, BABY");
+        // Сделаем игру снова великой!
+        plyr->message = DEH_String("cltkftv buhe cyjdf dtkbrjq!");
         P_GiveItemToPlayer(plyr, SPR_HELT, MT_TOKEN_TOUGHNESS);
     }
 

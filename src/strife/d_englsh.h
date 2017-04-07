@@ -247,22 +247,22 @@
 //	ST_stuff.C
 //
 
-#define STSTR_MUS               "Music Change"
-#define STSTR_NOMUS             "IMPOSSIBLE SELECTION"
-#define STSTR_DQDON             "You're Invincible!"   // [STRIFE]
-#define STSTR_DQDOFF            "You're a looney!"     // [STRIFE]
+#define STSTR_MUS               "cvtyf vepsrb"         // Смена музыки
+#define STSTR_NOMUS             "ds,jh ytdjpvj;ty"     // Выбор невозможен
+#define STSTR_DQDON             "ds ytezpdbvs!"        // [STRIFE] Вы неуязвимы!
+#define STSTR_DQDOFF            "ds ghtdjc[jlys!"      // [STRIFE] Вы превосходны!
 
 #define STSTR_KFAADDED          "Very Happy Ammo Added"
-#define STSTR_FAADDED           "Ammo Added"           // [STRIFE]
+#define STSTR_FAADDED           "gjkyjt djjhe;tybt"    // [STRIFE] Полное вооружение
 
-#define STSTR_NCON              "No Clipping Mode ON"
-#define STSTR_NCOFF             "No Clipping Mode OFF"
+#define STSTR_NCON              "ghj[j;ltybt xthtp cntys drk.xtyj"   // Прохождение через стены включено
+#define STSTR_NCOFF             "ghj[j;ltybt xthtp cntys jnvtytyj"  // Прохождение через стены отменено
 
-#define STSTR_BEHOLD            "Bzrk, Inviso, Mask, Health, Pack, Stats"  // [STRIFE]
-#define STSTR_BEHOLDX           "Power-up Toggled"
+#define STSTR_BEHOLD            "b-,thcthr< I-ytdblbvjcnm< M-vfcrf< H-pljhjdmt< P-h.rpfr, S-lfyyst>"  // [STRIFE] B-берсерк, I-невидимость, M-маска, H-здоровье, P-рюкзак, S-данные.
+#define STSTR_BEHOLDX           "ghtlvtn gjkexty"  // Предмет получен
 
 #define STSTR_CHOPPERS          "... doesn't suck - GM"
-#define STSTR_CLEV              "Changing Level..."
+#define STSTR_CLEV              "cvtyf ehjdyz>>>" // Смена уровня...
 
 //
 //	F_Finale.C

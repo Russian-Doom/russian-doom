@@ -1355,8 +1355,8 @@ static char *M_SelectEndMessage(void)
 void M_QuitStrife(int choice)
 {
     DEH_snprintf(endstring, sizeof(endstring),
-                 // Вы действительно хотите выйти?
-                 "ds ltqcndbntkmyj [jnbnt dsqnb?\n\n" DOSY);
+                 // Вы действительно хотите \n выйти из игры?
+                 "ds ltqcndbntkmyj [jnbnt\ndsqnb bp buhs?\n\n" DOSY);
   
     M_StartMessage(endstring, M_QuitResponse, true);
 }

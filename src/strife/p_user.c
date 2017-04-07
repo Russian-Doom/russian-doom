@@ -402,13 +402,15 @@ void P_PlayerThink (player_t* player)
 
                     if(cheat & CF_NOCLIP)
                     {
-                        player->message = DEH_String("No Clipping Mode ON");
+                        // Прохождение через стены активировано
+                        player->message = DEH_String("ghj[j;ltybt xthtp cntys frnbdbhjdfyj");
                         player->mo->flags |= MF_NOCLIP;
                     }
                     else
                     {
+                        // Прохождение через стены отменено
                         player->mo->flags &= ~MF_NOCLIP;
-                        player->message = DEH_String("No Clipping Mode OFF");
+                        player->message = DEH_String("ghj[j;ltybt xthtp cntys jnvtytyj");
                     }
                 }
             }

@@ -5460,9 +5460,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "eljcnjdthtybt_kbxyjcnb",     //namepointer
+        "eljcnjdthtybt",     //namepointer
         // ID_Badge
-        // Удостоверение личности
+        // Удостоверение
     },
 
     {       /*MT_PRISONKEY*/
@@ -5489,7 +5489,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_GIVEQUEST|MF_NOTDMATCH,        //flags
-        "Prison_Key",       //namepointer
+        "rk.x_jn_n.hmvs",       //namepointer
         // Prison_Key
         // Ключ от тюрьмы
     },
@@ -5663,9 +5663,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "eljcnjdthtybt_kbxyjcnb",      //namepointer
+        "eljcnjdthtybt",      //namepointer
         // ID_Card
-        // Удостоверение личности
+        // Удостоверение
     },
 
     {       /*MT_KEY_SILVER*/
@@ -5750,9 +5750,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "djtyyjt_eljcnjdthtybt",      //namepointer
+        "gfccgjhn_djbyf",      //namepointer
         // Military_ID
-        // Военное удостоверение
+        // Пасспорт воина
     },
 
     {       /*MT_KEY_ORDER*/
@@ -5866,9 +5866,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rhfcysq_ghbcnfkmysq_rk.x",      //namepointer
+        "rhfcysq_rhbcnfkk",      //namepointer
         // Red_Crystal_Key
-        // Красный кристальный ключ
+        // Красный кристалл
     },
 
     {       /*MT_KEY_BLUE_CRYSTAL*/
@@ -5895,9 +5895,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "cbybq_rhbcnfkmysq_rk.x",     //namepointer
+        "cbybq_rhbcnfkk",     //namepointer
         // Blue_Crystal_Key
-        // Синий кристальный ключ
+        // Синий кристалл
     },
 
     {       /*MT_KEY_CHAPEL*/
@@ -6127,7 +6127,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "New_Key5",     //namepointer
+        "yjdsq_rk.x_5",     //namepointer
+        // New_Key5
+        // Новый ключ 5
     },
 
     {       /*MT_INV_SHADOWARMOR*/

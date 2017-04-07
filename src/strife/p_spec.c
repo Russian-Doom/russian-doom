@@ -1303,7 +1303,8 @@ P_CrossSpecialLine
             }
 
             DEH_snprintf(crosslinestr, sizeof(crosslinestr), 
-                         "Entering%s", 
+                         // Загружается %уровень...
+                         "pfuhe;ftncz%s>>>", 
                          DEH_String(mapnames[map - 1]) + 8);
             thing->player->message = crosslinestr;
 
