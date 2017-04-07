@@ -45,7 +45,6 @@
 		</VirtualTargets>
 		<Compiler>
 			<Add option='-DPROGRAM_PREFIX=&quot;\&quot;russian-\&quot;&quot;' />
-			<Add option='-DD_CDROM=&quot;\&quot;CD-ROM Version: default.cfg from c:\\doomdata\n\&quot;&quot;' />
 			<Add directory="." />
 			<Add directory="../src" />
 			<Add directory="../src/doom" />
