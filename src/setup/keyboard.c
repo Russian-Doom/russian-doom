@@ -335,7 +335,7 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
     AddKeyControl(table, "Открыть карту",           &key_map_toggle);
     AddKeyControl(table, "Приблизить",              &key_map_zoomin);
     AddKeyControl(table, "Отдалить",                &key_map_zoomout);
-    AddKeyControl(table, "Максимальное отдаление",  &key_map_maxzoom);
+    AddKeyControl(table, "Полный масштаб",          &key_map_maxzoom);
     AddKeyControl(table, "Режим следовани€",        &key_map_follow);
     AddKeyControl(table, "Прокрутить вверх",        &key_map_north);
     AddKeyControl(table, "Прокрутить вниз",         &key_map_south);
