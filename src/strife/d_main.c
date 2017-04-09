@@ -934,6 +934,23 @@ void D_SetGameDescription(void)
 {
     gamedescription = GetGameName("Strife: Quest for the Sigil");
     W_MergeFile("russian/russian-strife.wad");
+
+	// [JN] Параметр "-file" перенесен из w_main.c
+    // Необходимо для того, чтобы любые ресурсы из pwad-файлов
+    // загружались после руссифицированных pwad-файлов.
+
+    int newpwadfile;
+    newpwadfile = M_CheckParmWithArgs ("-file", 1);
+    if (newpwadfile)
+    {
+        while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
+        {
+        char *filename;
+        filename = D_TryFindWADByName(myargv[newpwadfile]);
+        printf(" добавление: %s\n", filename);
+        W_MergeFile(filename);
+        }
+    }
 }
 
 //      print title for every printed line
