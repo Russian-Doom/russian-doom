@@ -776,7 +776,7 @@ static char *banners[] =
     // strife1.wad:
 
     "                      "
-    "STRIFE:  Quest for the Sigil v1.2"
+    "STRIFE:  История поиска Сигиля v1.2"
     "                                 "
 };
 
@@ -932,10 +932,10 @@ void DoTimeBomb(void)
 
 void D_SetGameDescription(void)
 {
-    gamedescription = GetGameName("Strife: Quest for the Sigil");
+    gamedescription = GetGameName("Strife: История поиска Сигиля");
     W_MergeFile("russian/russian-strife.wad");
 
-	// [JN] Параметр "-file" перенесен из w_main.c
+    // [JN] Параметр "-file" перенесен из w_main.c
     // Необходимо для того, чтобы любые ресурсы из pwad-файлов
     // загружались после руссифицированных pwad-файлов.
 
