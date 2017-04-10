@@ -434,12 +434,14 @@ P_FindNextHighestFloor
             {
                 height = other->floorheight;
             }
+            /*
             else if (h == MAX_ADJOINING_SECTORS + 2)
             {
                 // Fatal overflow: game crashes at 22 sectors
                 I_Error("Sector with more than 22 adjoining sectors. "
                         "Vanilla will crash here");
             }
+            */
 
             heightlist[h++] = other->floorheight;
         }
@@ -1303,9 +1305,13 @@ P_CrossSpecialLine
             }
 
             DEH_snprintf(crosslinestr, sizeof(crosslinestr), 
+                         // [JN] Важно: цифта + 11 подразумевает количество первых 
+                         // символов, написанных в названиях уровнях в d_english.h,
+                         // и будет вычитаться из строчки о загрузке уровня.
+
                          // Загружается %уровень...
                          "pfuhe;ftncz%s>>>", 
-                         DEH_String(mapnames[map - 1]) + 8);
+                         DEH_String(mapnames[map - 1]) + 11);
             thing->player->message = crosslinestr;
 
             if(netgame && deathmatch)
@@ -1313,7 +1319,8 @@ P_CrossSpecialLine
                 if(levelTimer && levelTimeCount != 0)
                 {
                     DEH_snprintf(crosslinestr, sizeof(crosslinestr), 
-                                 "%d min left", 
+                                 // Осталось минут: %d
+                                 "jcnfkjcm vbyen: %d", 
                                  (levelTimeCount/TICRATE)/60);
                     break;
                 }

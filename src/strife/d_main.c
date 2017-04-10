@@ -776,7 +776,7 @@ static char *banners[] =
     // strife1.wad:
 
     "                      "
-    "STRIFE:  История поиска Сигиля v1.2"
+    "STRIFE:  Quest for the Sigil v1.2"
     "                                 "
 };
 
@@ -932,7 +932,7 @@ void DoTimeBomb(void)
 
 void D_SetGameDescription(void)
 {
-    gamedescription = GetGameName("Strife: История поиска Сигиля");
+    gamedescription = GetGameName("Strife: Сага о поиске Сигиля");
     W_MergeFile("russian/russian-strife.wad");
 
     // [JN] Параметр "-file" перенесен из w_main.c

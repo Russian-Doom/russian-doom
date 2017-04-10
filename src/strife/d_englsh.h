@@ -157,44 +157,44 @@
 
 // haleyjd 08/31/10: [STRIFE] Strife map names
 
-#define HUSTR_1         "AREA  1: sanctuary"
-#define HUSTR_2         "AREA  2: town"
-#define HUSTR_3         "AREA  3: front base"
-#define HUSTR_4         "AREA  4: power station"
-#define HUSTR_5         "AREA  5: prison"
-#define HUSTR_6         "AREA  6: sewers"
-#define HUSTR_7         "AREA  7: castle"
-#define HUSTR_8         "AREA  8: Audience Chamber"
-#define HUSTR_9         "AREA  9: Castle: Programmer's Keep"
+#define HUSTR_1         "j,kfcnm  1: cdznbkbot"                         // ОБЛАСТЬ  1: Святилище
+#define HUSTR_2         "j,kfcnm  2: ujhjl"                             // ОБЛАСТЬ  2: Город
+#define HUSTR_3         "j,kfcnm  3: ,fpf ahjynf"                       // ОБЛАСТЬ  3: База Фронта
+#define HUSTR_4         "j,kfcnm  4: 'ktrnhjcnfywbz"                    // ОБЛАСТЬ  4: Электростанция
+#define HUSTR_5         "j,kfcnm  5: n.hmvf"                            // ОБЛАСТЬ  5: Тюрьма
+#define HUSTR_6         "j,kfcnm  6: rfyfkbpfwbz"                       // ОБЛАСТЬ  6: Канализация
+#define HUSTR_7         "j,kfcnm  7: pfvjr"                             // ОБЛАСТЬ  7: Замок
+#define HUSTR_8         "j,kfcnm  8: pfk felbtywbq"                     // ОБЛАСТЬ  8: Зал аудиенций
+#define HUSTR_9         "j,kfcnm  9: j,bntkm ghjuhfvvbcnf"              // ОБЛАСТЬ  9: (Замок:) Обитель Программиста
 
-#define HUSTR_10        "AREA 10: New Front Base"
-#define HUSTR_11        "AREA 11: Borderlands"
-#define HUSTR_12        "AREA 12: the temple of the oracle"
-#define HUSTR_13        "AREA 13: Catacombs"
-#define HUSTR_14        "AREA 14: mines"
-#define HUSTR_15        "AREA 15: Fortress: Administration"
-#define HUSTR_16        "AREA 16: Fortress: Bishop's Tower"
-#define HUSTR_17        "AREA 17: Fortress: The Bailey"
-#define HUSTR_18        "AREA 18: Fortress: Stores"
-#define HUSTR_19        "AREA 19: Fortress: Security Complex"
+#define HUSTR_10        "j,kfcnm 10: yjdfz ,fpf ahjynf"                 // ОБЛАСТЬ 10: Новая база Фронта 
+#define HUSTR_11        "j,kfcnm 11: gjuhfybxyst ptvkb"                 // ОБЛАСТЬ 11: Пограничные земли
+#define HUSTR_12        "j,kfcnm 12: [hfv jhfrekf"                      // ОБЛАСТЬ 12: Храм Оракула
+#define HUSTR_13        "j,kfcnm 13: rfnfrjv,s"                         // ОБЛАСТЬ 13: Катакомбы
+#define HUSTR_14        "j,kfcnm 14: if[ns"                             // ОБЛАСТЬ 14: Шахты
+#define HUSTR_15        "j,kfcnm 15: eghfdktybt rhtgjcnb"               // ОБЛАСТЬ 15: (Крепость:) Управление Крепости
+#define HUSTR_16        "j,kfcnm 16: rhtgjcnyfz ,fiyz tgbcrjgf"         // ОБЛАСТЬ 16: (Крепость:) Крепостная башня Епископа
+#define HUSTR_17        "j,kfcnm 17: dyenhtyybq ldjh rhtgjcnb"          // ОБЛАСТЬ 17: (Крепость:) Внутренний двор Крепости
+#define HUSTR_18        "j,kfcnm 18: rhtgjcnyst rkfljdst"               // ОБЛАСТЬ 18: (Крепость:) Крепостные кладовые
+#define HUSTR_19        "j,kfcnm 19: rjvgktrc ,tpjgfcyjcnb"             // ОБЛАСТЬ 19: (Крепость:) Комплекс безопасности
 
-#define HUSTR_20        "AREA 20: Factory: Receiving"
-#define HUSTR_21        "AREA 21: Factory: Manufacturing"
-#define HUSTR_22        "AREA 22: Factory: Forge"
-#define HUSTR_23        "AREA 23: Order Commons"
-#define HUSTR_24        "AREA 24: Factory: Conversion Chapel"
-#define HUSTR_25        "AREA 25: Catacombs: Ruined Temple"
-#define HUSTR_26        "AREA 26: proving grounds"
-#define HUSTR_27        "AREA 27: The Lab"
-#define HUSTR_28        "AREA 28: Alien Ship"
-#define HUSTR_29        "AREA 29: Entity's Lair"
+#define HUSTR_20        "j,kfcnm 20: af,hbrf: geyrn ghbtvf"             // ОБЛАСТЬ 20: Фабрика: пункт приема
+#define HUSTR_21        "j,kfcnm 21: af,hbrf: ghjbpdjlcndj"             // ОБЛАСТЬ 21: Фабрика: производство
+#define HUSTR_22        "j,kfcnm 22: af,hbrf: repybwf"                  // ОБЛАСТЬ 22: Фабрика: кузница
+#define HUSTR_23        "j,kfcnm 23: j,obyf gjhzlrf"                    // ОБЛАСТЬ 23: Община Порядка
+#define HUSTR_24        "j,kfcnm 24: xfcjdyz j,hfotybz"                 // ОБЛАСТЬ 24: Часовня обращения
+#define HUSTR_25        "j,kfcnm 25: hfpheityysq [hfv"                  // ОБЛАСТЬ 25: (Катакомбы:) Разрушенный храм
+#define HUSTR_26        "j,kfcnm 26: gjkbujy"                           // ОБЛАСТЬ 26: Полигон
+#define HUSTR_27        "j,kfcnm 27: kf,jhfnjhbz"                       // ОБЛАСТЬ 27: Лаборатория
+#define HUSTR_28        "j,kfcnm 28: rjhf,km xe;b["                     // ОБЛАСТЬ 28: Корабль чужих
+#define HUSTR_29        "j,kfcnm 29: gtothf ceoyjcnb"                   // ОБЛАСТЬ 29: Пещера Сущности
 
-#define HUSTR_30        "AREA 30: Abandoned Front Base"
-#define HUSTR_31        "AREA 31: Training Facility"
+#define HUSTR_30        "j,kfcnm 30: gjrbyenfz ,fpf ghjynf"             // ОБЛАСТЬ 30: Покинутая база Фронта
+#define HUSTR_31        "j,kfcnm 31: nhtybhjdjxysq rjvgktrc"            // ОБЛАСТЬ 31: Тренировочный комплекс
 
-#define HUSTR_32        "AREA  1: Sanctuary"
-#define HUSTR_33        "AREA  2: Town"
-#define HUSTR_34        "AREA  3: Movement Base"
+#define HUSTR_32        "j,kfcnm  1: cdznbkbot"                         // ОБЛАСТЬ  1: Святилище
+#define HUSTR_33        "j,kfcnm  2: ujhjl"                             // ОБЛАСТЬ  2: Город
+#define HUSTR_34        "j,kfcnm  3: gthtldb;yfz ,fpf"                  // ОБЛАСТЬ  3: Передвижная база
 
 // haleyjd 20110219: [STRIFE] replaced all with Strife chat macros:
 #define HUSTR_CHATMACRO1        "Fucker!"

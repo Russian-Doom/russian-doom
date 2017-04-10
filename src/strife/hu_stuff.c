@@ -50,7 +50,8 @@
 #define HU_TITLEX       0
 
 // haleyjd 09/01/10: [STRIFE] 167 -> 160 to move up level name
-#define HU_TITLEY       (160 - SHORT(hu_font[0]->height))
+// [JN] Смещено на 2 пиксела вверх, т.к. мой алфавит смещён на 2 пиксела вниз.
+#define HU_TITLEY       (160 - SHORT(hu_font[0]->height)-2)
 
 #define HU_INPUTTOGGLE  't'
 #define HU_INPUTX       HU_MSGX
