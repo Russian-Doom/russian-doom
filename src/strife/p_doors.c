@@ -228,7 +228,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 133:
         if(!p->cards[key_IDCard])
         {
-            p->message = DEH_String("You need an id card");
+            // Нужно удостоверение.
+            p->message = DEH_String("ye;yj eljcnjdthtybt>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -238,7 +239,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 135:
         if(!p->cards[key_IDBadge])
         {
-            p->message = DEH_String("You need an id badge");
+            // Нужно удостоверение.
+            p->message = DEH_String("ye;yj eljcnjdthtybt>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -248,7 +250,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 137:
         if(!p->cards[key_Passcard])
         {
-            p->message = DEH_String("You need a pass card");
+            // Нужен пропуск.
+            p->message = DEH_String("ye;ty ghjgecr>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -258,7 +261,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 164:
         if(!p->cards[key_GoldKey])
         {
-            p->message = DEH_String("You need a gold key");
+            // Нужен золотой ключ.
+            p->message = DEH_String("ye;ty pjkjnjq rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -268,7 +272,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 163:
         if(!p->cards[key_SilverKey])
         {
-            p->message = DEH_String("You need a silver key");
+            // Нужен серебряный ключ.
+            p->message = DEH_String("ye;ty ctht,hzysq rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -278,7 +283,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 162:
         if(!p->cards[key_BrassKey])
         {
-            p->message = DEH_String("You need a brass key");
+            // Нужен медный ключ.
+            p->message = DEH_String("ye;ty vtlysq rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -288,7 +294,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 168:
         if(!p->cards[key_SeveredHand])
         {
-            p->message = DEH_String("Hand print not on file");
+            // Отпечаток руки не опознан.
+            p->message = DEH_String("jngtxfnjr herb yt jgjpyfy>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -297,7 +304,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 171:
         if(!p->cards[key_PrisonKey])
         {
-            p->message = DEH_String("You don't have the key to the prison");
+            // Нужен ключ от тюрьмы.
+            p->message = DEH_String("ye;ty rk.x jn n.hmvs>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -306,7 +314,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 172:
         if(!p->cards[key_Power1Key])
         {
-            p->message = DEH_String("You don't have the key");
+            // Нужен ключ.
+            p->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -315,7 +324,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 173:
         if(!p->cards[key_Power2Key])
         {
-            p->message = DEH_String("You don't have the key");
+            // Нужен ключ.
+            p->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -324,7 +334,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 176:
         if(!p->cards[key_Power3Key])
         {
-            p->message = DEH_String("You don't have the key");
+            // Нужен ключ.
+            p->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -333,7 +344,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 189:
         if(!p->cards[key_OracleKey])
         {
-            p->message = DEH_String("You don't have the key");
+            // Нужен ключ.
+            p->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -342,7 +354,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 191:
         if(!p->cards[key_MilitaryID])
         {
-            p->message = DEH_String("You don't have the key");
+            // Нужен ключ.
+            p->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -351,7 +364,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 192:
         if(!p->cards[key_WarehouseKey])
         {
-            p->message = DEH_String("You don't have the key");
+            // Нужен ключ.
+            p->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -360,7 +374,8 @@ int EV_DoLockedDoor(line_t* line, vldoor_e type, mobj_t* thing)
     case 223:
         if(!p->cards[key_MineKey])
         {
-            p->message = DEH_String("You don't have the key");
+            // Нужен ключ.
+            p->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return 0;
         }
@@ -553,7 +568,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
     case 26:  // DR ID Card door
     case 32:  // D1 ID Card door
         if(!player->cards[key_IDCard])
-        {   // Для этой двери нужно удостоверение.
+        {   
+            // Для этой двери нужно удостоверение.
             player->message = DEH_String("lkz 'njq ldthb ye;yj eljcnjdthtybt>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -574,7 +590,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
     case 28:  // DR ID Badge door
     case 33:  // D1 ID Badge door
         if(!player->cards[key_IDBadge])
-        {   // Для этой двери нужно удостоверение.
+        {   
+            // Для этой двери нужно удостоверение.
             player->message = DEH_String("lkz 'njq ldthb ye;yj eljcnjdthtybt>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -623,7 +640,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 166: // DR Hand Print door
         if(!player->cards[key_SeveredHand])
-        {   // Отпечаток руки не опознан.
+        {   
+            // Отпечаток руки не опознан.
             player->message = DEH_String("jngtxfnjr herb yt jgjpyfy>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -632,7 +650,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 169: // DR Base key door
         if(!player->cards[key_BaseKey])
-        {   // Нужен ключ.
+        {   
+            // Нужен ключ.
             player->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -641,7 +660,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 170: // DR Gov's Key door
         if(!player->cards[key_GovsKey])
-        {   // Нужен ключ.
+        {   
+            // Нужен ключ.
             player->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -650,7 +670,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 190: // DR Order Key door
         if(!player->cards[key_OrderKey])
-        {   // Нужен ключ.
+        {   
+            // Нужен ключ.
             player->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -666,7 +687,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 213: // DR Chalice door
         if(!P_PlayerHasItem(player, MT_INV_CHALICE))
-        {   // Нужна ритуальная чаша!
+        {   
+            // Нужна Ритуальная чаша!
             player->message = DEH_String("ye;yf hbnefkmyfz xfif!");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -675,7 +697,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 217: // DR Core Key door
         if(!player->cards[key_CoreKey])
-        {   // Нужен ключ.
+        {   
+            // Нужен ключ.
             player->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -684,7 +707,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 221: // DR Mauler Key door
         if(!player->cards[key_MaulerKey])
-        {   // Нужен ключ.
+        {   
+            // Нужен ключ.
             player->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -693,7 +717,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 224: // DR Chapel Key door
         if(!player->cards[key_ChapelKey])
-        {   // Нужен ключ.
+        {   
+            // Нужен ключ.
             player->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -702,7 +727,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 225: // DR Catacomb Key door
         if(!player->cards[key_CatacombKey])
-        {   // Нужен ключ.
+        {   
+            // Нужен ключ.
             player->message = DEH_String("ye;ty rk.x>");
             S_StartSound(NULL, sfx_oof);
             return;
@@ -711,7 +737,8 @@ void EV_VerticalDoor(line_t* line, mobj_t* thing)
 
     case 232: // DR Oracle Pass door
         if(!(player->questflags & QF_QUEST18))
-        {   // Нужен пропуск к Оракулу!
+        {   
+            // Нужен пропуск к Оракулу!
             player->message = DEH_String("ye;ty ghjgecr r jhfreke!");
             S_StartSound(NULL, sfx_oof);
             return;
