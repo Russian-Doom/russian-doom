@@ -231,7 +231,7 @@ static void TextWrite(void)
         {
             break;
         }
-        V_DrawPatch(cx, cy, w);
+        V_DrawShadowedPatchRaven(cx, cy, w);
         cx += SHORT(w->width);
     }
 }
