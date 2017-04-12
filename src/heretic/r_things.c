@@ -713,9 +713,7 @@ void R_DrawPSprite(pspdef_t * psp)
     vis = &avis;
     vis->mobjflags = 0;
     vis->psprite = true;
-    vis->texturemid =
-        (BASEYCENTER << FRACBITS) + FRACUNIT / 2 - (psp->sy -
-                                                    spritetopoffset[lump]);
+    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp->sy-spritetopoffset[lump]);
     if (viewheight == SCREENHEIGHT)
     {
         vis->texturemid -= PSpriteSY[players[consoleplayer].readyweapon];
