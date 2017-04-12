@@ -887,8 +887,8 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher)
             else if(special->sprite == SPR_GYID) // (Military_ID) Получено военное удостоверение.
                 DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj djtyyjt eljcnjdthtybt>");
                 
-            else if(special->sprite == SPR_FUBR) // (Order_Key) Получен ключ Порядка.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x gjhzlrf>");
+            else if(special->sprite == SPR_FUBR) // (Order_Key) Получен ключ Ордена.
+                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jhltyf>");
                 
             else if(special->sprite == SPR_WARE) // (Warehouse_Key) Получен ключ от склада.
                 DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jn crkflf>");

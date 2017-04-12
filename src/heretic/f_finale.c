@@ -216,7 +216,7 @@ void F_TextWrite(void)
         w = W_CacheLumpNum(FontABaseLump + c - 33, PU_CACHE);
         if (cx + SHORT(w->width) > SCREENWIDTH)
             break;
-        V_DrawPatch(cx, cy, w);
+        V_DrawShadowedPatchRaven(cx, cy, w);
         cx += SHORT(w->width);
     }
 

@@ -181,7 +181,7 @@
 #define HUSTR_20        "j,kfcnm 20: af,hbrf: geyrn ghbtvf"             // ОБЛАСТЬ 20: Фабрика: пункт приема
 #define HUSTR_21        "j,kfcnm 21: af,hbrf: ghjbpdjlcndj"             // ОБЛАСТЬ 21: Фабрика: производство
 #define HUSTR_22        "j,kfcnm 22: af,hbrf: repybwf"                  // ОБЛАСТЬ 22: Фабрика: кузница
-#define HUSTR_23        "j,kfcnm 23: j,obyf gjhzlrf"                    // ОБЛАСТЬ 23: Община Порядка
+#define HUSTR_23        "j,kfcnm 23: j,obyf jhltyf"                     // ОБЛАСТЬ 23: Община Ордена
 #define HUSTR_24        "j,kfcnm 24: xfcjdyz j,hfotybz"                 // ОБЛАСТЬ 24: Часовня обращения
 #define HUSTR_25        "j,kfcnm 25: hfpheityysq [hfv"                  // ОБЛАСТЬ 25: (Катакомбы:) Разрушенный храм
 #define HUSTR_26        "j,kfcnm 26: gjkbujy"                           // ОБЛАСТЬ 26: Полигон

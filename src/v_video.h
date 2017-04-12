@@ -60,6 +60,7 @@ void V_DrawTLPatch(int x, int y, patch_t *patch);
 void V_DrawAltTLPatch(int x, int y, patch_t * patch);
 void V_DrawShadowedPatch(int x, int y, patch_t *patch);
 void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch);
+void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch);
 void V_DrawShadowedPatchStrife(int x, int y, patch_t *patch);
 void V_DrawXlaPatch(int x, int y, patch_t * patch);     // villsa [STRIFE]
 void V_DrawPatchDirect(int x, int y, patch_t *patch);

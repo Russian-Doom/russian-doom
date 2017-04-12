@@ -168,32 +168,57 @@ static rndmessage_t rndMessages[] =
         "PEASANT",
         10,
         {
-            "PLEASE DON'T HURT ME.",
+            // Пожалуйста, не трогай меня.
+            "gj;fkeqcnf< yt nhjufq vtyz>",
+
+            // Если собираешься навредить мне,
+            // я не стою твоих усилий.
+            "tckb cj,bhftimcz yfdhtlbnm vyt<\n"
+            "z yt cnj. ndjb[ ecbkbq>",
             
-            "IF YOU'RE LOOKING TO HURT ME, I'M \n"
-            "NOT REALLY WORTH THE EFFORT.",
+            // Я ничего не знаю.
+            "z ybxtuj yt pyf.>",
+
+            // Уходи, или я позову стражу!
+            "e[jlb< bkb z gjpjde cnhf;e!",
             
-            "I DON'T KNOW ANYTHING.",
-            
-            "GO AWAY OR I'LL CALL THE GUARDS!",
-            
-            "I WISH SOMETIMES THAT ALL THESE \n"
-            "REBELS WOULD JUST LEARN THEIR \n"
-            "PLACE AND STOP THIS NONSENSE.",
+            // Хотел бы я, чтобы однажды эти 
+            // постанцы узнали свое место и
+            // прекратили эту бесполезную 
+            // возню>
+            "[jntk ,s z< xnj,s jlyf;ls 'nb\n"
+            "gjdcnfyws epyfkb cdjt vtcnj b\n"
+            "ghtrhfnbkb 'ne ,tcgjktpye.\n"
+            "djpy.>",
 
-            "JUST LEAVE ME ALONE, OK?",
+            // Просто оставь меня в покое, 
+            // ладно?
+            "ghjcnj jcnfdm vtyz d gjrjt<\n"
+            "kflyj?",
 
-            "I'M NOT SURE, BUT SOMETIMES I THINK \n"
-            "THAT I KNOW SOME OF THE ACOLYTES.",
+            // Я не совсем уверен, но мне
+            // кажется, что я знал некоторых
+            // служителей и ранее.
+            "z yt cjdctv edthty< yj vyt\n"
+            "rf;tncz< xnj z pyfk ytrjnjhs[\n"
+            "cke;bntktq b hfytt>",
 
-            "THE ORDER'S GOT EVERYTHING AROUND HERE PRETTY WELL LOCKED UP TIGHT.",
+            // Орден держит здесь все в
+            // крепкой узде.
+            "jhlty lth;bn pltcm dct d\n"
+            "rhtgrjq eplt>",
 
-            "THERE'S NO WAY THAT THIS IS JUST A \n"
-            "SECURITY FORCE.",
+            // Без разрешения стражей порядка
+            // и шагу ступить нельзя.
+            ",tp hfphtitybz cnhf;tq gjhzlrf\n"
+            "b ifue cnegbnm ytkmpz>",
 
-            "I'VE HEARD THAT THE ORDER IS REALLY \n"
-            "NERVOUS ABOUT THE FRONT'S \n"
-            "ACTIONS AROUND HERE."
+            // Я слышал, что Орден обеспокоен
+            // повышенной активностью повстанцев
+            // в этом регионе.
+            "z cksifk< xnj jhlty j,tcgjrjty\n"
+            "gjdsityyjq frnbdyjcnm.\n"
+            "gjdcnfywtd d 'njv htubjyt>"
         }
     },
     // Rebel
@@ -238,30 +263,52 @@ static rndmessage_t rndMessages[] =
         "AGUARD",
         10,
         {
-            "MOVE ALONG,  PEASANT.",
+            // Займсь своим делом, крестьянин.
+            "pfqvbcm cdjbv ltkjv< rhtcnmzyby>",
 
-            "FOLLOW THE TRUE FAITH, ONLY THEN \n"
-            "WILL YOU BEGIN TO UNDERSTAND.",
+            // Следуя лишь по пути истинной
+            // веры, ты узришь правду.
+            "cktlez kbim gj genb bcnbyyjq\n"
+            "dths< ns ephbim ghfdle>",
 
-            "ONLY THROUGH DEATH CAN ONE BE \n"
-            "TRULY REBORN.",
+            // Только лишь через смерть можно
+            // достичь истинного перерождения
+            "njkmrj kbim xthtp cvthnm vj;yj\n"
+            "ljcnbxm bcnbyyjuj gththj;ltybz",
 
-            "I'M NOT INTERESTED IN YOUR USELESS \n"
-            "DRIVEL.",
+            // Я не расположен к пустой и
+            // бессмысленной болтовне. 
+            "z yt hfcgjkj;ty r gecnjq b\n"
+            ",tccvscktyyjq ,jknjdyt>",
 
-            "IF I HAD WANTED TO TALK TO YOU I \n"
-            "WOULD HAVE TOLD YOU SO.",
+            // Если бы я хотел с тобой говорить
+            // я бы тебе об этом сказал.
+            // 
+            "tckb ,s z [jntk c nj,jq ujdjhbnm<\n"
+            "z ,s nt,t j, 'njv crfpfk>",
 
-            "GO AND ANNOY SOMEONE ELSE!",
+            // Иди и надоедай кому-нибудь 
+            // другому!
+            "blb b yfljtlfq rjve-yb,elm\n"
+            "lheujve!",
 
-            "KEEP MOVING!",
+            // Проходи, не задерживайся!
+            "ghj[jlb< yt pflth;bdfqcz!",
 
-            "IF THE ALARM GOES OFF, JUST STAY OUT OF OUR WAY!",
+            // Если прозвучит тревога, лучше бы 
+            // тебе не стоять на нашем пути!
+            "tckb ghjpdexbn nhtdjuf< kexit ,s\n"
+            "nt,t yt cnjznm yf yfitv genb!",
 
-            "THE ORDER WILL CLEANSE THE WORLD \n"
-            "AND USHER IT INTO THE NEW ERA.",
+            // Орден принесет очищение в этот
+            // мир и станет его проводником 
+            // в новую великую эпоху.
+            "jhlty ghbytctn jxbotybt d 'njn\n"
+            "vbh b cnfytn tuj ghjdjlybrjv\n"
+            "d yjde. dtkbre. 'gj[e>",
 
-            "PROBLEM?  NO, I THOUGHT NOT.",
+            // Проблемы? Думаю никаких.
+            "ghj,ktvs? levf. ybrfrb[>",
         }
     },
     // Beggar
@@ -271,29 +318,46 @@ static rndmessage_t rndMessages[] =
         {
             "ALMS FOR THE POOR?",
 
-            "WHAT ARE YOU LOOKING AT, SURFACER?",
+            // Чего уставился, поверхностный?
+            "xtuj ecnfdbkcz< gjdth[yjcnysq?",
 
             "YOU WOULDN'T HAVE ANY EXTRA FOOD, WOULD YOU?",
 
-            "YOU  SURFACE PEOPLE WILL NEVER \n"
-            "                                                                 "
-            "                                      UNDERSTAND US.",
+            // Вы, поверхностные, никогда не
+            // сможете понять нас.
+            "ds< gjdth[yjcnyst< ybrjulf yt\n"
+            "cvj;tnt gjyznm yfc>",
 
-            "HA, THE GUARDS CAN'T FIND US.  THOSE \n"
-            "IDIOTS DON'T EVEN KNOW WE EXIST.",
+            // Хах! Эта глупая стража никогда
+            // не найдет нас. Они даже не
+            // знают, что мы существуем.
+            "[f[! 'nf ukegfz cnhf;f ybrjulf\n"
+            "yt yfqltn yfc> jyb lf;t yt\n"
+            "pyf.n< xnj vs ceotcndetv.",
 
-            "ONE DAY EVERYONE BUT THOSE WHO SERVE THE ORDER WILL BE FORCED TO "
-            "  JOIN US.",
+            // Однажды всем, кто не служит
+            // Ордену придется присоединиться
+            // к нам.
+            "jlyf;ls dctv< rnj yt cke;bn\n"
+            "jhltye ghbltncz ghbcjtlbybnmcz\n"
+            "r yfv>",
 
-            "STARE NOW,  BUT YOU KNOW THAT THIS WILL BE YOUR OWN FACE ONE DAY.",
+            // Уставился... Знай же, что ты
+            // и сам станешь таким однажды.
+            "ecnfdbkcz>>> pyfq ;t< xnj ns\n"
+            "b cfv cnfytim nfrbv jlyf;ls>",
 
             // Note: "NOTHING THING" is an authentic typo
             "THERE'S NOTHING THING MORE \n"
             "ANNOYING THAN A SURFACER WITH AN ATTITUDE!",
 
+            // Орден 
             "THE ORDER WILL MAKE SHORT WORK OF YOUR PATHETIC FRONT.",
 
-            "WATCH YOURSELF SURFACER. WE KNOW OUR ENEMIES!"
+            // Полегче, поверхностный. Мы
+            // знаем своих врагов!
+            "gjktuxt< gjdth[yjcnysq> vs\n"
+            "pyftv cdjb[ dhfujd!"
         }
     },
     // Templar
@@ -1197,7 +1261,8 @@ void P_DialogDoChoice(int choice)
             }
         }
         else
-            message = DEH_String("You seem to have enough!");
+            // У тебя и так достаточно!
+            message = DEH_String("e nt,z b nfr ljcnfnjxyj!");
 
         // store next dialog into the talking actor
         nextdialog = currentchoice->next;
@@ -1353,7 +1418,8 @@ void P_DialogStart(player_t *player)
         if(mobjinfo[linetarget->type].name)
             dialogname = DEH_String(mobjinfo[linetarget->type].name); // mobjtype name
         else
-            dialogname = DEH_String("Person"); // default name - like Joe in Doom 3 :P
+            // Персона
+            dialogname = DEH_String("gthcjyf"); // default name - like Joe in Doom 3 :P
     }
 
     // setup number of choices to choose from

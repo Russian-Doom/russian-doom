@@ -195,12 +195,12 @@ void D_Display(void)
     {
         if (!netgame)
         {
-            V_DrawPatch(160, (viewwindowy >> hires) + 5, W_CacheLumpName(DEH_String("PAUSED"),
+            V_DrawShadowedPatchRaven(160, (viewwindowy >> hires) + 5, W_CacheLumpName(DEH_String("PAUSED"),
                                                               PU_CACHE));
         }
         else
         {
-            V_DrawPatch(160, 70, W_CacheLumpName(DEH_String("PAUSED"), PU_CACHE));
+            V_DrawShadowedPatchRaven(160, 70, W_CacheLumpName(DEH_String("PAUSED"), PU_CACHE));
         }
     }
     // Handle player messages
@@ -312,7 +312,7 @@ void D_PageDrawer(void)
     V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
     if (demosequence == 1)
     {
-        V_DrawPatch(4, 160, W_CacheLumpName(DEH_String("ADVISOR"), PU_CACHE));
+        V_DrawShadowedPatchRaven(4, 160, W_CacheLumpName(DEH_String("ADVISOR"), PU_CACHE));
     }
     UpdateState |= I_FULLSCRN;
 }

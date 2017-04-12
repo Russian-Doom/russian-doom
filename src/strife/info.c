@@ -2775,7 +2775,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SOLID|MF_SHOOTABLE|MF_JUSTHIT|MF_COUNTKILL,      //flags
-        "Beggar",       //namepointer
+        "ybobq",       //namepointer
+        // Beggar
+        // Нищий
     },
 
     {       /*MT_BEGGAR2*/
@@ -2802,7 +2804,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SOLID|MF_SHOOTABLE|MF_JUSTHIT|MF_COUNTKILL,      //flags
-        "Beggar",       //namepointer
+        "ybobq",       //namepointer
+        // Beggar
+        // Нищий
     },
 
     {       /*MT_BEGGAR3*/
@@ -2829,7 +2833,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SOLID|MF_SHOOTABLE|MF_JUSTHIT|MF_COUNTKILL,      //flags
-        "Beggar",       //namepointer
+        "ybobq",       //namepointer
+        // Beggar
+        // Нищий
     },
 
     {       /*MT_BEGGAR4*/
@@ -2856,7 +2862,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SOLID|MF_SHOOTABLE|MF_JUSTHIT|MF_COUNTKILL,      //flags
-        "Beggar",       //namepointer
+        "ybobq",       //namepointer
+        // Beggar
+        // Нищий
     },
 
     {       /*MT_BEGGAR5*/
@@ -2883,7 +2891,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SOLID|MF_SHOOTABLE|MF_JUSTHIT|MF_COUNTKILL,      //flags
-        "Beggar",       //namepointer
+        "ybobq",       //namepointer
+        // Beggar
+        // Нищий
     },
 
     {       /*MT_REBEL1*/
@@ -3180,7 +3190,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_agrac1,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,     //flags
-        "ACOLYTE",      //namepointer
+        "cke;bntkm",      //namepointer
+        // ACOLYTE
+        // Служитель
     },
 
     {       /*MT_GUARD2*/
@@ -3207,7 +3219,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_agrac2,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL|MF_COLORSWAP1,       //flags
-        "ACOLYTE",      //namepointer
+        "cke;bntkm",      //namepointer
+        // ACOLYTE
+        // Служитель
     },
 
     {       /*MT_GUARD3*/
@@ -3234,7 +3248,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_agrac3,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL|MF_COLORSWAP2,       //flags
-        "ACOLYTE",      //namepointer
+        "cke;bntkm",      //namepointer
+        // ACOLYTE
+        // Служитель
     },
 
     {       /*MT_GUARD4*/
@@ -3261,7 +3277,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_agrac1,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL|MF_COLORSWAP1|MF_COLORSWAP2,     //flags
-        "ACOLYTE",      //namepointer
+        "cke;bntkm",      //namepointer
+        // ACOLYTE
+        // Служитель
     },
 
     {       /*MT_GUARD5*/
@@ -3288,7 +3306,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_agrac2,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL|MF_COLORSWAP3,       //flags
-        "ACOLYTE",      //namepointer
+        "cke;bntkm",      //namepointer
+        // ACOLYTE
+        // Служитель
     },
 
     {       /*MT_GUARD6*/
@@ -3315,7 +3335,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_agrac3,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL|MF_COLORSWAP1|MF_COLORSWAP3,     //flags
-        "ACOLYTE",      //namepointer
+        "cke;bntkm",      //namepointer
+        // ACOLYTE
+        // Служитель
     },
 
     {       /*MT_GUARD7*/
@@ -3342,7 +3364,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_agrac3,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL|MF_COLORSWAP2|MF_COLORSWAP3,     //flags
-        "ACOLYTE",      //namepointer
+        "cke;bntkm",      //namepointer
+        // ACOLYTE
+        // Служитель
     },
 
     {       /*MT_GUARD8*/
@@ -3370,7 +3394,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         sfx_agrac3,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL|MF_COLORSWAP1|MF_COLORSWAP2
         |MF_COLORSWAP3,     //flags
-        "ACOLYTE",      //namepointer
+        "cke;bntkm",      //namepointer
+        // ACOLYTE
+        // Служитель
     },
 
     {       /*MT_SHADOWGUARD*/
@@ -3397,7 +3423,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_agrac2,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_COUNTKILL,     //flags
-        "ACOLYTE",      //namepointer
+        "cke;bntkm",      //namepointer
+        // ACOLYTE
+        // Служитель
     },
 
     {       /*MT_PGUARD*/
@@ -3424,7 +3452,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_pgract,     //activesound
         MF_SOLID|MF_SHOOTABLE|MF_NOBLOOD|MF_COUNTKILL,      //flags
-        "TEMPLAR",      //namepointer
+        "[hfvjdybr",      //namepointer
+        // TEMPLAR
+        // Храмовник
     },
 
     {       /*MT_CRUSADER*/
@@ -3506,7 +3536,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SOLID|MF_SHOOTABLE|MF_NOBLOOD|MF_COUNTKILL|MF_NOTDMATCH,      //flags
-        "ORACLE",       //namepointer
+        "jhfrek",       //namepointer
+        // ORACLE
+        // Оракул
     },
 
     {       /*MT_PRIEST*/
@@ -3534,7 +3566,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         sfx_tend,       //activesound
         MF_SOLID|MF_SHOOTABLE|MF_NOGRAVITY|MF_GIVEQUEST|MF_FLOAT
         |MF_NODIALOG|MF_NOBLOOD|MF_COUNTKILL|MF_NOTDMATCH,       //flags
-        "PRIEST",       //namepointer
+        "cdzotyybr",       //namepointer
+        // PRIEST
+        // Cвященник
     },
 
     {       /*MT_SPECTRE_A*/
@@ -5779,9 +5813,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_gjhzlrf",        //namepointer
+        "rk.x_jhltyf",        //namepointer
         // Order_Key
-        // Ключ Порядка
+        // Ключ Ордена
     },
 
     {       /*MT_KEY_WAREHOUSE*/

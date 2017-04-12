@@ -367,7 +367,7 @@ void MN_DrTextA(char *text, int x, int y)
         else
         {
             p = W_CacheLumpNum(FontABaseLump + c - 33, PU_CACHE);
-            V_DrawPatch(x, y, p);
+            V_DrawShadowedPatchRaven(x, y, p);
             x += SHORT(p->width) - 1;
         }
     }
@@ -425,7 +425,7 @@ void MN_DrTextB(char *text, int x, int y)
         else
         {
             p = W_CacheLumpNum(FontBBaseLump + c - 33, PU_CACHE);
-            V_DrawPatch(x, y, p);
+            V_DrawShadowedPatchRaven(x, y, p);
             x += SHORT(p->width) - 1;
         }
     }
@@ -553,7 +553,7 @@ void MN_Drawer(void)
         }
         y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT) + SELECTOR_YOFFSET;
         selName = DEH_String(MenuTime & 16 ? "M_SLCTR1" : "M_SLCTR2");
-        V_DrawPatch(x + SELECTOR_XOFFSET, y,
+        V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET, y,
                     W_CacheLumpName(selName, PU_CACHE));
     }
 }
@@ -569,10 +569,10 @@ static void DrawMainMenu(void)
     int frame;
 
     frame = (MenuTime / 3) % 18;
-    V_DrawPatch(88, 0, W_CacheLumpName(DEH_String("M_HTIC"), PU_CACHE));
-    V_DrawPatch(40, 10, W_CacheLumpNum(SkullBaseLump + (17 - frame),
+    V_DrawShadowedPatchRaven(88, 0, W_CacheLumpName(DEH_String("M_HTIC"), PU_CACHE));
+    V_DrawShadowedPatchRaven(40, 10, W_CacheLumpNum(SkullBaseLump + (17 - frame),
                                        PU_CACHE));
-    V_DrawPatch(232, 10, W_CacheLumpNum(SkullBaseLump + frame, PU_CACHE));
+    V_DrawShadowedPatchRaven(232, 10, W_CacheLumpNum(SkullBaseLump + frame, PU_CACHE));
 }
 
 //---------------------------------------------------------------------------
@@ -698,7 +698,7 @@ static void DrawFileSlots(Menu_t * menu)
     y = menu->y;
     for (i = 0; i < 6; i++)
     {
-        V_DrawPatch(x, y, W_CacheLumpName(DEH_String("M_FSLOT"), PU_CACHE));
+        V_DrawShadowedPatchRaven(x, y, W_CacheLumpName(DEH_String("M_FSLOT"), PU_CACHE));
         if (SlotStatus[i])
         {
             MN_DrTextA(SlotText[i], x + 5, y + 5);
@@ -1713,13 +1713,13 @@ static void DrawSlider(Menu_t * menu, int item, int width, int slot)
 
     x = menu->x + 24;
     y = menu->y + 2 + (item * ITEM_HEIGHT);
-    V_DrawPatch(x - 32, y, W_CacheLumpName(DEH_String("M_SLDLT"), PU_CACHE));
+    V_DrawShadowedPatchRaven(x - 32, y, W_CacheLumpName(DEH_String("M_SLDLT"), PU_CACHE));
     for (x2 = x, count = width; count--; x2 += 8)
     {
-        V_DrawPatch(x2, y, W_CacheLumpName(DEH_String(count & 1 ? "M_SLDMD1"
+        V_DrawShadowedPatchRaven(x2, y, W_CacheLumpName(DEH_String(count & 1 ? "M_SLDMD1"
                                            : "M_SLDMD2"), PU_CACHE));
     }
-    V_DrawPatch(x2, y, W_CacheLumpName(DEH_String("M_SLDRT"), PU_CACHE));
+    V_DrawShadowedPatchRaven(x2, y, W_CacheLumpName(DEH_String("M_SLDRT"), PU_CACHE));
     V_DrawPatch(x + 4 + slot * 8, y + 7,
                 W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
 }

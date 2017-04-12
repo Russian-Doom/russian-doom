@@ -785,17 +785,17 @@ void IN_DrawYAH(void)
     }
     for (i = 0; i < prevmap; i++)
     {
-        V_DrawPatch(YAHspot[gameepisode - 1][i].x,
+        V_DrawShadowedPatchRaven(YAHspot[gameepisode - 1][i].x,
                     YAHspot[gameepisode - 1][i].y, patchBEENTHERE);
     }
     if (players[consoleplayer].didsecret)
     {
-        V_DrawPatch(YAHspot[gameepisode - 1][8].x,
+        V_DrawShadowedPatchRaven(YAHspot[gameepisode - 1][8].x,
                     YAHspot[gameepisode - 1][8].y, patchBEENTHERE);
     }
     if (!(intertime & 16) || interstate == 3)
     {                           // draw the destination 'X'
-        V_DrawPatch(YAHspot[gameepisode - 1][gamemap - 1].x,
+        V_DrawShadowedPatchRaven(YAHspot[gameepisode - 1][gamemap - 1].x,
                     YAHspot[gameepisode - 1][gamemap - 1].y, patchGOINGTHERE);
     }
 }
