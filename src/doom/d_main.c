@@ -1238,6 +1238,27 @@ void D_SetGameDescription(void)
                 }
             }
         }
+
+        // Автоматическая загрузка блока DEHACKED
+        //
+        // [crispy] load DEHACKED lumps by default, but allow overriding
+        // [JN] Функция активируется после параметра "-file"
+        if (!M_ParmExists("-nodehlump") && !M_ParmExists("-nodeh"))
+        {
+            int i, loaded = 0;
+            int numiwadlumps;
+
+            for (i = numiwadlumps; i < numlumps; ++i)
+            {
+                if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8))
+                {
+                    DEH_LoadLump(i, true, true); // [crispy] allow long, allow error
+                    loaded++;
+                }
+            }
+            // "  loaded %i DEHACKED lumps from PWAD files.\n"
+            printf("  Загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
+        }
     }
 }
 
@@ -1980,31 +2001,6 @@ void D_DoomMain (void)
 
     // Generate the WAD hash table.  Speed things up a bit.
     W_GenerateHashTable();
-
-    // Load DEHACKED lumps from WAD files - but only if we give the right
-    // command line parameter.
-
-    //!
-    // @category mod
-    //
-    // Load Dehacked patches from DEHACKED lumps contained in one of the
-    // loaded PWAD files.
-    //
-    if (M_ParmExists("-dehlump"))
-    {
-        int i, loaded = 0;
-
-        for (i = numiwadlumps; i < numlumps; ++i)
-        {
-            if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8))
-            {
-                DEH_LoadLump(i, false, false);
-                loaded++;
-            }
-        }
-		// "  loaded %i DEHACKED lumps from PWAD files.\n"
-        printf("  Загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
-    }
 
     // Set the gamedescription string. This is only possible now that
     // we've finished loading Dehacked patches.
