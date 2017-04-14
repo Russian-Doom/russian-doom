@@ -76,7 +76,6 @@
 #include "r_local.h"
 #include "statdump.h"
 
-
 #include "d_main.h"
 
 extern int lcd_gamma_fix;
@@ -94,46 +93,43 @@ void D_DoomLoop (void);
 
 // Location where savegames are stored
 
-char *          savegamedir;
+char *    savegamedir;
 
 // location of IWAD and WAD files
 
-char *          iwadfile;
+char *    iwadfile;
 
+boolean    devparm;	    // started game with -devparm
+boolean    nomonsters;	// checkparm of -nomonsters
+boolean    respawnparm;	// checkparm of -respawn
+boolean    fastparm;	// checkparm of -fast
 
-boolean		devparm;	// started game with -devparm
-boolean         nomonsters;	// checkparm of -nomonsters
-boolean         respawnparm;	// checkparm of -respawn
-boolean         fastparm;	// checkparm of -fast
-
-//extern int soundVolume;
-//extern  int	sfxVolume;
-//extern  int	musicVolume;
 
 extern  boolean	inhelpscreens;
 
-skill_t		startskill;
-int             startepisode;
-int		startmap;
-boolean		autostart;
-int             startloadgame;
+skill_t     startskill;
+boolean     autostart;
+boolean     advancedemo;
+int         startepisode;
+int         startmap;
+int         startloadgame;
 
-boolean		advancedemo;
 
 // Store demo, do not accept any inputs
-boolean         storedemo;
+boolean     storedemo;
 
 // If true, the main game loop has started.
-boolean         main_loop_started = false;
+boolean     main_loop_started = false;
 
-char		wadfile[1024];  // primary wad file
-char		mapdir[1024];   // directory of development maps
+char        wadfile[1024];  // primary wad file
+char        mapdir[1024];   // directory of development maps
 
-int show_endoom = 1;
+
+int show_endoom   = 1;
 int show_diskicon = 1;
 
-int lcd_gamma_fix = 1;  // [JN] Оптимизация палитры Doom
-int translucency = 1;   // [JN] Прозрачность объектов
+int lcd_gamma_fix = 1;    // [JN] Оптимизация палитры Doom
+int translucency  = 1;    // [JN] Прозрачность объектов
 
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
@@ -146,20 +142,18 @@ void D_CheckNetGame(void);
 void D_ProcessEvents (void)
 {
     event_t*	ev;
-	
-    // IF STORE DEMO, DO NOT ACCEPT INPUT
-    if (storedemo)
+
+    if (storedemo) // IF STORE DEMO, DO NOT ACCEPT INPUT
         return;
-	
+
     while ((ev = D_PopEvent()) != NULL)
     {
-	if (M_Responder (ev))
-	    continue;               // menu ate the event
-	G_Responder (ev);
+        if (M_Responder (ev))
+            continue;   // menu ate the event
+
+        G_Responder (ev);
     }
 }
-
-
 
 
 //
@@ -168,134 +162,140 @@ void D_ProcessEvents (void)
 //
 
 // wipegamestate can be set to -1 to force a wipe on the next draw
-gamestate_t     wipegamestate = GS_DEMOSCREEN;
+gamestate_t wipegamestate = GS_DEMOSCREEN;
 extern  boolean setsizeneeded;
-extern  int             showMessages;
+extern  int     showMessages;
+
 void R_ExecuteSetViewSize (void);
 
 void D_Display (void)
 {
-    static  boolean		viewactivestate = false;
-    static  boolean		menuactivestate = false;
-    static  boolean		inhelpscreensstate = false;
-    static  boolean		fullscreen = false;
-    static  gamestate_t		oldgamestate = -1;
-    static  int			borderdrawcount;
-    int				nowtime;
-    int				tics;
-    int				wipestart;
-    int				y;
-    boolean			done;
-    boolean			wipe;
-    boolean			redrawsbar;
+    static boolean      viewactivestate = false;
+    static boolean      menuactivestate = false;
+    static boolean      inhelpscreensstate = false;
+    static boolean      fullscreen = false;
+    static gamestate_t  oldgamestate = -1;
+    static int          borderdrawcount;
+    int                 nowtime;
+    int                 tics;
+    int                 wipestart;
+    int                 y;
+    boolean             done;
+    boolean             wipe;
+    boolean             redrawsbar;
 
     if (nodrawers)
-	return;                    // for comparative timing / profiling
-		
+        return;     // for comparative timing / profiling
+
     redrawsbar = false;
-    
+
     // change the view size if needed
     if (setsizeneeded)
     {
-	R_ExecuteSetViewSize ();
-	oldgamestate = -1;                      // force background redraw
-	borderdrawcount = 3;
+        R_ExecuteSetViewSize ();
+        oldgamestate    = -1;   // force background redraw
+        borderdrawcount = 3;
     }
 
     // save the current screen if about to wipe
     // [JN] функция стала опциональной
     if ((gamestate != wipegamestate && !disable_screen_wiping))
     {
-	wipe = true;
-	wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
+        wipe = true;
+        wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
     }
     else
-	wipe = false;
+    {
+        wipe = false;
+    }
 
     if (gamestate == GS_LEVEL && gametic)
-	HU_Erase();
-    
+        HU_Erase();
+
     // do buffered drawing
     switch (gamestate)
     {
-      case GS_LEVEL:
-	if (!gametic)
-	    break;
-	if (automapactive)
-	{
- 	    // [crispy] update automap while playing
- 	    R_RenderPlayerView (&players[displayplayer]);
-  	    AM_Drawer ();
- 	}
-	if (wipe || (scaledviewheight != SCREENHEIGHT && fullscreen) )
-	    redrawsbar = true;
+        case GS_LEVEL:
+        if (!gametic)
+            break;
+
+        if (automapactive)
+        {
+            // [crispy] update automap while playing
+            R_RenderPlayerView (&players[displayplayer]);
+            AM_Drawer ();
+        }
+
+    if (wipe || (scaledviewheight != SCREENHEIGHT && fullscreen))
+        redrawsbar = true;
+
 	if (inhelpscreensstate && !inhelpscreens)
-	    redrawsbar = true;              // just put away the help screen
+        redrawsbar = true;      // just put away the help screen
+
 	ST_Drawer (scaledviewheight == SCREENHEIGHT, redrawsbar );
  	fullscreen = scaledviewheight == SCREENHEIGHT;
 	break;
 
-      case GS_INTERMISSION:
-	WI_Drawer ();
-	break;
+    case GS_INTERMISSION:
+    WI_Drawer ();
+    break;
 
-      case GS_FINALE:
-	F_Drawer ();
-	break;
+    case GS_FINALE:
+    F_Drawer ();
+    break;
 
-      case GS_DEMOSCREEN:
-	D_PageDrawer ();
-	break;
+    case GS_DEMOSCREEN:
+    D_PageDrawer ();
+    break;
     }
-    
+
     // draw buffered stuff to screen
     I_UpdateNoBlit ();
-    
+
     // draw the view directly
     if (gamestate == GS_LEVEL && !automapactive && gametic)
     {
-	R_RenderPlayerView (&players[displayplayer]);
-    
-    if (screenblocks == 11)
-        ST_Drawer(0, 0);
+        R_RenderPlayerView (&players[displayplayer]);
+
+        if (screenblocks == 11)
+            ST_Drawer(0, 0);
     }
 
     if (gamestate == GS_LEVEL && gametic)
-	HU_Drawer ();
+        HU_Drawer ();
     
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
     {
-    if (lcd_gamma_fix)
-        I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
-    else
-        I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+        if (lcd_gamma_fix)
+            I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
+        else
+            I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
     }
 
     // see if the border needs to be initially drawn
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
     {
-	viewactivestate = false;        // view was not active
-	R_FillBackScreen ();    // draw the pattern into the back screen
+        viewactivestate = false;    // view was not active
+        R_FillBackScreen ();        // draw the pattern into the back screen
     }
 
     // see if the border needs to be updated to the screen
     if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != (320 << hires))
     {
-	if (menuactive || menuactivestate || !viewactivestate)
-	    borderdrawcount = 3;
-	if (borderdrawcount)
-	{
-	    R_DrawViewBorder ();    // erase old menu stuff
-	    borderdrawcount--;
-	}
+        if (menuactive || menuactivestate || !viewactivestate)
+            borderdrawcount = 3;
 
+        if (borderdrawcount)
+        {
+            R_DrawViewBorder ();    // erase old menu stuff
+            borderdrawcount--;
+        }
     }
 
     if (testcontrols)
     {
         // Box showing current mouse speed
-
         V_DrawMouseSpeedBox(testcontrols_mousespeed);
     }
 
@@ -303,60 +303,55 @@ void D_Display (void)
     viewactivestate = viewactive;
     inhelpscreensstate = inhelpscreens;
     oldgamestate = wipegamestate = gamestate;
-    
+
     // draw pause pic
     if (paused)
     {
-	if (automapactive)
-	    y = 4;
-	else
-	    y = (viewwindowy >> hires)+4;
+        if (automapactive)
+        y = 4;
+        else
+        y = (viewwindowy >> hires)+4;
 
-    if (draw_shadowed_text)
-    {
-        V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y,
-                          W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
-    }
-    else
-    {
-        V_DrawPatchDirect((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y,
-                          W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
-    }
+        if (draw_shadowed_text)
+            V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y,
+            W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+
+        else
+            V_DrawPatchDirect((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y,
+            W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+
     }
 
 
     // menus go directly to the screen
-    M_Drawer ();          // menu is drawn even on top of everything
-    NetUpdate ();         // send out any new accumulation
-
+    M_Drawer ();            // menu is drawn even on top of everything
+    NetUpdate ();           // send out any new accumulation
 
     // normal update
     if (!wipe)
     {
-	I_FinishUpdate ();              // page flip or blit buffer
-	return;
+        I_FinishUpdate ();  // page flip or blit buffer
+        return;
     }
-    
+
     // wipe update
     wipe_EndScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
-
     wipestart = I_GetTime () - 1;
 
     do
     {
-	do
-	{
-	    nowtime = I_GetTime ();
-	    tics = nowtime - wipestart;
+        do
+        {
+            nowtime = I_GetTime ();
+            tics = nowtime - wipestart;
             I_Sleep(1);
-	} while (tics <= 0);
-        
-	wipestart = nowtime;
-	done = wipe_ScreenWipe(wipe_Melt
-			       , 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
-	I_UpdateNoBlit ();
-	M_Drawer ();                            // menu is drawn even on top of wipes
-	I_FinishUpdate ();                      // page flip or blit buffer
+        } while (tics <= 0);
+
+    wipestart = nowtime;
+    done = wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
+    I_UpdateNoBlit ();
+    M_Drawer ();        // menu is drawn even on top of wipes
+    I_FinishUpdate ();  // page flip or blit buffer
     } while (!done);
 }
 
@@ -367,17 +362,12 @@ static void EnableLoadingDisk(void)
     if (show_diskicon)
     {
         if (M_CheckParm("-cdrom") > 0)
-        {
             disk_lump_name = DEH_String("STCDROM");
-        }
-        else
-        {
-            disk_lump_name = DEH_String("STDISK");
-        }
 
-        V_EnableLoadingDisk(disk_lump_name,
-                            SCREENWIDTH - LOADING_DISK_W,
-                            SCREENHEIGHT - LOADING_DISK_H);
+        else
+            disk_lump_name = DEH_String("STDISK");
+
+        V_EnableLoadingDisk(disk_lump_name,SCREENWIDTH - LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
     }
 }
 
@@ -420,16 +410,17 @@ void D_BindVariables(void)
     M_BindIntVariable("snd_channels",           &snd_channels);
     M_BindIntVariable("show_endoom",            &show_endoom);
 
-    // [JN] Дополнительные параметры геймплея
+    // [JN] Дополнительные параметры игры
     
-    // - Оптимизация игровой палитры -
+    // Оптимизация игровой палитры
     M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);            // Оптимизация игровой палитры
-    // - Интерфейс -
+
+    // Интерфейс
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
     M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
     M_BindIntVariable("show_diskicon",          &show_diskicon);            // Отображать значок дискеты
-    
-    // - Графика -
+
+    // Графика
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);     // Произвольное зеркальное отражение трупов
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
@@ -439,17 +430,19 @@ void D_BindVariables(void)
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
     M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов
     M_BindIntVariable("no_pickup_flash",        &no_pickup_flash);          // Не мигать экраном при получении предметов
-    // - Звук -
+
+    // Звук
     M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);      // Звук раздавливания трупов
     M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);     // Одиночный звук закрытия быстрой двери
     M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);            // Проигрывать звук при выходе из игры
-    // - Геймплей -
+
+    // Геймплей
     M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);     // Элементаль боли без ограничения
-	
+
     // Multiplayer chat macros
 
     for (i=0; i<10; ++i)
@@ -469,28 +462,23 @@ void D_BindVariables(void)
 
 boolean D_GrabMouseCallback(void)
 {
-    // Drone players don't need mouse focus
-
-    if (drone)
+    if (drone)                  // Drone players don't need mouse focus
         return false;
 
-    // when menu is active or game is paused, release the mouse 
- 
-    if (menuactive || paused)
+    if (menuactive || paused)   // when menu is active or game is paused, release the mouse 
         return false;
 
     // only grab mouse when playing levels (but not demos)
-
     return (gamestate == GS_LEVEL) && !demoplayback && !advancedemo;
 }
 
 //
 //  D_DoomLoop
 //
+
 void D_DoomLoop (void)
 {
-    if (gamevariant == bfgedition &&
-        (demorecording || (gameaction == ga_playdemo) || netgame))
+    if (gamevariant == bfgedition && (demorecording || (gameaction == ga_playdemo) || netgame))
     {
         printf(" WARNING: You are playing using one of the Doom Classic\n"
                " IWAD files shipped with the Doom 3: BFG Edition. These are\n"
@@ -499,7 +487,7 @@ void D_DoomLoop (void)
     }
 
     if (demorecording)
-	G_BeginRecording ();
+    G_BeginRecording ();
 
     main_loop_started = true;
 
@@ -523,44 +511,43 @@ void D_DoomLoop (void)
 
     while (1)
     {
-	// frame syncronous IO operations
-	I_StartFrame ();
+        I_StartFrame ();    // frame syncronous IO operations
+        TryRunTics ();      // will run at least one tic
+        
+        // move positional sounds
+        S_UpdateSounds (players[consoleplayer].mo);
 
-        TryRunTics (); // will run at least one tic
-
-	S_UpdateSounds (players[consoleplayer].mo);// move positional sounds
-
-	// Update display, next frame, with current state.
+        // Update display, next frame, with current state.
         if (screenvisible)
             D_Display ();
     }
 }
 
 
-
 //
 //  DEMO LOOP
 //
-int             demosequence;
-int             pagetic;
-char                    *pagename;
+int     demosequence;
+int     pagetic;
+char    *pagename;
 
 
 //
 // D_PageTicker
 // Handles timing for warped projection
 //
+
 void D_PageTicker (void)
 {
     if (--pagetic < 0)
-	D_AdvanceDemo ();
+    D_AdvanceDemo ();
 }
-
 
 
 //
 // D_PageDrawer
 //
+
 void D_PageDrawer (void)
 {
     V_DrawPatch (0, 0, W_CacheLumpName(pagename, PU_CACHE));
@@ -571,6 +558,7 @@ void D_PageDrawer (void)
 // D_AdvanceDemo
 // Called after each demo or intro demosequence finishes
 //
+
 void D_AdvanceDemo (void)
 {
     advancedemo = true;
@@ -581,11 +569,12 @@ void D_AdvanceDemo (void)
 // This cycles through the demo sequences.
 // FIXME - version dependend demo numbers?
 //
+
 void D_DoAdvanceDemo (void)
 {
     players[consoleplayer].playerstate = PST_LIVE;  // not reborn
     advancedemo = false;
-    usergame = false;               // no save / end game here
+    usergame = false;                               // no save / end game here
     paused = false;
     gameaction = ga_nothing;
 
@@ -597,95 +586,119 @@ void D_DoAdvanceDemo (void)
 
     // However! There is an alternate version of Final Doom that
     // includes a fixed executable.
-	
-    // [JN] И всё-таки, что бы обычные версии Final DOOM не крашились,
-    // поддержка четвёртой демозаписи оставлена только для Ultimate.
-    
-    if (gameversion == exe_ultimate /*|| gameversion == exe_final*/)
-      demosequence = (demosequence+1)%7;
-    else
-      demosequence = (demosequence+1)%6;
-    
-switch (demosequence)
-    {
-      case 0:
-	if ( gamemode == commercial )
-	    pagetic = TICRATE * 11;
-	else
-	    pagetic = 170;
-    if (gamemission == pack_nerve)
-    pagetic = 1000;
-	gamestate = GS_DEMOSCREEN;
-	if ( gamemode == shareware )
-		pagename = DEH_String("TITLEPIS"); // [JN] Для Doom 1 Shareware версии подгружать тайтл "TITLEPIS".
-	else
-		pagename = DEH_String("TITLEPIC"); // [JN] Для всех остальных подгружать тайтл "TITLEPIC".
-	if ( gamemode == commercial )
-	  S_StartMusic(mus_dm2ttl);
-	else
-	  S_StartMusic (mus_intro);
-	break;
-      case 1:
-    if (gamemission == pack_nerve) break; // [JN] Пропускаем этот шаг...
-	G_DeferedPlayDemo(DEH_String("demo1"));
-	break;
-      case 2:
-    if (gamemission == pack_nerve)
-    pagetic = 1000;
-	else
-    pagetic = 200;
-	gamestate = GS_DEMOSCREEN;
-	if ( gamemode == shareware )            // [JN] DOOM Shareware
-		pagename = DEH_String("CREDITS");
-	if ( gamemode == registered )           // [JN] DOOM 1 Registered 
-		pagename = DEH_String("CREDITS");
-	if ( gamemode == retail )               // [JN] The Ultimate DOOM
-		pagename = DEH_String("CREDIT"); 
-	if ( gamemode == commercial )           // [JN] DOOM 2 / Final DOOM
-		pagename = DEH_String("CREDIT"); 
-	break;
-      case 3:
-      if (gamemission == pack_nerve) break; // [JN] Пропускаем этот шаг...
-      else
-          G_DeferedPlayDemo(DEH_String("demo2"));
-	break;
-      case 4:
-      if (gamemission == pack_nerve) break; // [JN] Пропускаем этот шаг...
-	gamestate = GS_DEMOSCREEN;
-	if ( gamemode == commercial)
-	{
-	    pagetic = TICRATE * 11;
-	if ( gamemode == shareware )
-		pagename = DEH_String("TITLEPIS");  // [JN] Для Doom 1 Shareware версии подгружать тайтл "TITLEPIS".
-	else
-		pagename = DEH_String("TITLEPIC");  // [JN] Для всех остальных подгружать тайтл "TITLEPIC".
-	    S_StartMusic(mus_dm2ttl);
-	}
-	else
-	{
-	    pagetic = 200;
 
-	    if (gameversion >= exe_ultimate)
-	      pagename = DEH_String("CREDIT");
-	    else
-	      pagename = DEH_String("HELP2");
-	}
+    // [JN] Чтобы обычные версии Final DOOM не крашились,
+    // поддержка четвёртой демозаписи оставлена только для Ultimate.
+
+    if (gameversion == exe_ultimate /*|| gameversion == exe_final*/)
+        demosequence = (demosequence+1)%7;
+    else
+        demosequence = (demosequence+1)%6;
+
+    switch (demosequence)
+    {
+        case 0:
+
+        if ( gamemode == commercial )
+            pagetic = TICRATE * 11;
+        else
+            pagetic = 170;
+
+        if (gamemission == pack_nerve)
+        pagetic = 1000;
+        gamestate = GS_DEMOSCREEN;
+
+        if ( gamemode == shareware )
+            pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
+        else
+            pagename = DEH_String("TITLEPIC");
+        
+        if ( gamemode == commercial )
+            S_StartMusic(mus_dm2ttl);
+        else
+            S_StartMusic (mus_intro);
+        break;
+
+        case 1:
+        
+        if (gamemission == pack_nerve) 
+            break;
+
+        G_DeferedPlayDemo(DEH_String("demo1"));
+            break;
+
+        case 2:
+
+        if (gamemission == pack_nerve)
+            pagetic = 1000;
+        else
+            pagetic = 200;
+            gamestate = GS_DEMOSCREEN;
+
+        // [JN] Я использую разные названия экранов для разных версий
+        if (gamemode == shareware)
+            pagename = DEH_String("CREDITS");
+        if (gamemode == registered)
+            pagename = DEH_String("CREDITS");
+        if (gamemode == retail)
+            pagename = DEH_String("CREDIT"); 
+        if (gamemode == commercial)
+            pagename = DEH_String("CREDIT"); 
+        break;
+        
+      case 3:
+      
+        if (gamemission == pack_nerve)
+            break;
+        else
+            G_DeferedPlayDemo(DEH_String("demo2"));
+        break;
+
+      case 4:
+
+        if (gamemission == pack_nerve) 
+            break;
+        gamestate = GS_DEMOSCREEN;
+        if ( gamemode == commercial)
+        {
+            pagetic = TICRATE * 11;
+            if ( gamemode == shareware )
+                pagename = DEH_String("TITLEPIS");
+            else
+                pagename = DEH_String("TITLEPIC");
+                S_StartMusic(mus_dm2ttl);
+        }
+        else
+        {
+            pagetic = 200;
+
+            if (gameversion >= exe_ultimate)
+                pagename = DEH_String("CREDIT");
+            else
+                pagename = DEH_String("HELP2");
+        }
+    break;
+
+    case 5:
+
+    if (gamemission == pack_nerve) 
+        break;
+
+    G_DeferedPlayDemo(DEH_String("demo3"));
 	break;
-      case 5:
-    if (gamemission == pack_nerve) break;   // [JN] Пропускаем этот шаг...
-	G_DeferedPlayDemo(DEH_String("demo3"));
-	break;
-        // THE DEFINITIVE DOOM Special Edition demo
-      case 6:
-    if (gamemission == pack_nerve) break;   // [JN] Пропускаем этот шаг...
-	G_DeferedPlayDemo(DEH_String("demo4"));
-	break;
+
+    case 6: // THE DEFINITIVE DOOM Special Edition demo
+
+    if (gamemission == pack_nerve) 
+        break;
+
+    G_DeferedPlayDemo(DEH_String("demo4"));
+    break;
     }
     
     // The Doom 3: BFG Edition version of doom2.wad does not have a
     // TITLETPIC lump. Use INTERPIC instead as a workaround.
-    if (gamevariant == bfgedition && !strcasecmp(pagename, "TITLEPIC")
-        && W_CheckNumForName("titlepic") < 0)
+    if (gamevariant == bfgedition && !strcasecmp(pagename, "TITLEPIC") && W_CheckNumForName("titlepic") < 0)
     {
         pagename = DEH_String("INTERPIC");
     }
@@ -695,6 +708,7 @@ switch (demosequence)
 //
 // D_StartTitle
 //
+
 void D_StartTitle (void)
 {
     gameaction = ga_nothing;
@@ -754,15 +768,14 @@ static char *banners[] =
 
 static char *GetGameName(char *gamename)
 {
-    size_t i;
-    char *deh_sub;
-    
+    size_t  i;
+    char    *deh_sub;
+
     for (i=0; i<arrlen(banners); ++i)
     {
         // Has the banner been replaced?
-
         deh_sub = DEH_String(banners[i]);
-        
+
         if (deh_sub != banners[i])
         {
             size_t gamename_size;
@@ -775,8 +788,7 @@ static char *GetGameName(char *gamename)
             gamename_size = strlen(deh_sub) + 10;
             gamename = Z_Malloc(gamename_size, PU_STATIC, 0);
             version = G_VanillaVersionCode();
-            M_snprintf(gamename, gamename_size, deh_sub,
-                       version / 100, version % 100);
+            M_snprintf(gamename, gamename_size, deh_sub, version / 100, version % 100);
 
             while (gamename[0] != '\0' && isspace(gamename[0]))
             {
@@ -816,16 +828,17 @@ static void SetMissionForPackName(char *pack_name)
             return;
         }
     }
-    // Valid mission packs are:\n
+
     printf("Корректные серии игр:\n");
 
     for (i = 0; i < arrlen(packs); ++i)
     {
         printf("\t%s\n", packs[i].name);
     }
-    // Unknown mission pack name
+
     I_Error("Неизвестная серия игры: %s", pack_name);
 }
+
 
 //
 // Find out what version of Doom is playing.
@@ -860,7 +873,6 @@ void D_IdentifyVersion(void)
         if (gamemission == none)
         {
             // Still no idea.  I don't think this is going to work.
-
 			// Unknown or invalid IWAD file.
             I_Error("Неопознанный или некорректный IWAD-файл.");
         }
@@ -873,19 +885,13 @@ void D_IdentifyVersion(void)
         // Doom 1.  But which version?
 
         if (W_CheckNumForName("E4M1") > 0)
-        {
-            // Ultimate Doom
+            gamemode = retail;      // The Ultimate Doom
 
-            gamemode = retail;
-        } 
         else if (W_CheckNumForName("E3M1") > 0)
-        {
-            gamemode = registered;
-        }
+            gamemode = registered;  // Doom Registered
+
         else
-        {
-            gamemode = shareware;
-        }
+            gamemode = shareware;   // Doom Shareware
     }
     else
     {
@@ -940,8 +946,6 @@ void D_SetGameDescription(void)
         }
         else if (gamemode == retail)
         {
-            // Ultimate Doom
-
             gamedescription = GetGameName("The Ultimate DOOM");
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-doom1.wad");
@@ -963,7 +967,7 @@ void D_SetGameDescription(void)
     {
         int newpwadfile;
         // Doom 2 of some kind.  But which mission?
-        
+
         if (is_freedoom)
         {
             if (is_freedm)
@@ -1003,240 +1007,235 @@ void D_SetGameDescription(void)
             W_MergeFile("russian/russian-doom-tnt.wad");
         }
 
-        // [JN] Параметр "-file" перенесен из w_main.c
-        // Необходимо для того, что бы любые ресурсы из pwad-файлов
-        // загружались после руссифицированных pwad-файлов.
-        //
-        // Функция "-merge" более не используется.
+    // [JN] Параметр "-file" перенесен из w_main.c
+    // Необходимо для того, что бы любые ресурсы из pwad-файлов
+    // загружались после руссифицированных pwad-файлов.
+    // Функция "-merge" более не используется.
 
-        newpwadfile = M_CheckParmWithArgs ("-file", 1);
+    newpwadfile = M_CheckParmWithArgs ("-file", 1);
 
-        if (newpwadfile)
+    if (newpwadfile)
+    {
+        while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
         {
-            while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
+            char    *filename;
+            int     nrv;
+            int     mlvls;
+
+            filename = D_TryFindWADByName(myargv[newpwadfile]);
+            printf(" добавление: %s\n", filename);
+            W_MergeFile(filename);
+
+            // [JN] Поддержка DOOM 2: No Rest for the Living
+            nrv = M_CheckParmWithArgs ("-file", 1);
+
+            if (nrv)
             {
-                char *filename;
-                int nrv;
-                int mlvls;
-
-                filename = D_TryFindWADByName(myargv[newpwadfile]);
-                printf(" добавление: %s\n", filename);
-                W_MergeFile(filename);
-
-                // [JN] Поддержка DOOM 2: No Rest for the Living
-
-                nrv = M_CheckParmWithArgs ("-file", 1);
-
-                if (nrv)
+                while (++nrv != myargc && myargv[nrv][0] != '-')
                 {
-                    while (++nrv != myargc && myargv[nrv][0] != '-')
-                    {
-                        char *check;
-                        check = M_StrCaseStr(myargv[nrv], "nerve.wad");
-        
-                        if (check != NULL)
-                        {   
-                            gamedescription = "DOOM 2: Нет покоя для живых";
-                            gamemission = pack_nerve;
-                            W_MergeFile("russian/russian-doom-nerve.wad");
-                        }
-                    }
-                }
+                    char *check;
+                    check = M_StrCaseStr(myargv[nrv], "nerve.wad");
 
-                // [JN] Поддержка Master Levels for DOOM 2
-
-                mlvls = M_CheckParmWithArgs ("-file", 1);
-
-                if (mlvls)
-                {
-                    while (++mlvls != myargc && myargv[mlvls][0] != '-')
-                    {
-                        boolean check;
-                        check = (
-                        (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))     ||
-                        (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))   ||
-                        (M_StrCaseStr(myargv[mlvls], "BLOODSEA.WAD"))   ||
-                        (M_StrCaseStr(myargv[mlvls], "CANYON.WAD"))     ||
-                        (M_StrCaseStr(myargv[mlvls], "CATWALK.WAD"))    ||
-                        (M_StrCaseStr(myargv[mlvls], "COMBINE.WAD"))    ||
-                        (M_StrCaseStr(myargv[mlvls], "FISTULA.WAD"))    ||
-                        (M_StrCaseStr(myargv[mlvls], "GARRISON.WAD"))   ||
-                        (M_StrCaseStr(myargv[mlvls], "GERYON.WAD"))     ||
-                        (M_StrCaseStr(myargv[mlvls], "MANOR.WAD"))      ||
-                        (M_StrCaseStr(myargv[mlvls], "MEPHISTO.WAD"))   ||
-                        (M_StrCaseStr(myargv[mlvls], "MINOS.WAD"))      ||
-                        (M_StrCaseStr(myargv[mlvls], "NESSUS.WAD"))     ||
-                        (M_StrCaseStr(myargv[mlvls], "PARADOX.WAD"))    ||
-                        (M_StrCaseStr(myargv[mlvls], "SUBSPACE.WAD"))   ||
-                        (M_StrCaseStr(myargv[mlvls], "SUBTERRA.WAD"))   ||
-                        (M_StrCaseStr(myargv[mlvls], "TEETH.WAD"))      ||
-                        (M_StrCaseStr(myargv[mlvls], "TTRAP.WAD"))      ||
-                        (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))   ||
-                        (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))
-                        );
-
-                        if (check)
-                        {   
-                            gamedescription = "Мастер-Уровни для DOOM 2";
-                            W_MergeFile("russian/russian-doom-master.wad");
-
-                            // ATTACK.WAD - Нападение
-                            if (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_1);
-                                DEH_AddStringReplacement("WIF", "MLVL01");
-                            }
-                            // BLACKTWR.WAD - Черная Башня
-                            else if (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_25, MLSTR_2);
-                                DEH_AddStringReplacement("WIFM", "MLVL02");
-                            }
-                            // BLOODSEA.WAD - Крепость в Кровавом море
-                            else if (M_StrCaseStr(myargv[mlvls], "BLOODSEA.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_7, MLSTR_3);
-                                DEH_AddStringReplacement("WIF", "MLVL03");
-                            }
-                            // CANYON.WAD - Каньон
-                            else if (M_StrCaseStr(myargv[mlvls], "CANYON.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_4);
-                                DEH_AddStringReplacement("WIF", "MLVL04");
-                            }
-                            // CATWALK.WAD - Помост
-                            else if (M_StrCaseStr(myargv[mlvls], "CATWALK.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_5);
-                                DEH_AddStringReplacement("WIF", "MLVL05");
-                            }
-                            // COMBINE.WAD - Комбинат
-                            else if (M_StrCaseStr(myargv[mlvls], "COMBINE.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_6);
-                                DEH_AddStringReplacement("WIF", "MLVL06");
-                                DEH_AddStringReplacement("SKY1", "MLSKY1");
-                            }
-                            // FISTULA.WAD - Фистула
-                            else if (M_StrCaseStr(myargv[mlvls], "FISTULA.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_7);
-                                DEH_AddStringReplacement("WIF", "MLVL07");
-                            }
-                            // GARRISON.WAD - Гарнизон
-                            else if (M_StrCaseStr(myargv[mlvls], "GARRISON.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_8);
-                                DEH_AddStringReplacement("WIF", "MLVL08");
-                            }
-                            // GERYON.WAD - Герион
-                            else if (M_StrCaseStr(myargv[mlvls], "GERYON.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_8, MLSTR_9);
-                                DEH_AddStringReplacement("WIFM", "MLVL09");
-                                DEH_AddStringReplacement("SKY1", "MLSKY3");
-                            }
-                            // MANOR.WAD - Поместье Гиганта
-                            else if (M_StrCaseStr(myargv[mlvls], "MANOR.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_10);
-                                DEH_AddStringReplacement("WIF", "MLVL10");
-                                DEH_AddStringReplacement("SKY1", "MLSKY2");
-                            }
-                            // MEPHISTO.WAD - Мавзолей Мефистофеля
-                            else if (M_StrCaseStr(myargv[mlvls], "MEPHISTO.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_7, MLSTR_11);
-                                DEH_AddStringReplacement("WIF", "MLVL11");
-                            }
-                            // MINOS.WAD - Приговор Миноса
-                            else if (M_StrCaseStr(myargv[mlvls], "MINOS.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_5, MLSTR_12);
-                                DEH_AddStringReplacement("WIFM", "MLVL12");
-                                DEH_AddStringReplacement("SKY1", "MLSKY3");
-                            }
-                            // NESSUS.WAD - Несс
-                            else if (M_StrCaseStr(myargv[mlvls], "NESSUS.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_7, MLSTR_13);
-                                DEH_AddStringReplacement("WIF", "MLVL13");
-                                DEH_AddStringReplacement("SKY1", "MLSKY3");
-                            }
-                            // PARADOX.WAD - Парадокс
-                            else if (M_StrCaseStr(myargv[mlvls], "PARADOX.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_14);
-                                DEH_AddStringReplacement("WIF", "MLVL14");
-                            }
-                            // SUBSPACE.WAD - Подпространство
-                            else if (M_StrCaseStr(myargv[mlvls], "SUBSPACE.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_15);
-                                DEH_AddStringReplacement("WIF", "MLVL15");
-                            }
-                            // SUBTERRA.WAD - Подземелье
-                            else if (M_StrCaseStr(myargv[mlvls], "SUBTERRA.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_16);
-                                DEH_AddStringReplacement("WIF", "MLVL16");
-                            }
-                            // TEETH.WAD - Турболифт в Преисподнюю / Дурной сон
-                            else if (M_StrCaseStr(myargv[mlvls], "TEETH.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_31, MLSTR_17);
-                                DEH_AddStringReplacement(HUSTR_32, MLSTR_18);
-                                DEH_AddStringReplacement("WIF",  "MLVL17");
-                                DEH_AddStringReplacement("WIF2", "MLVL18");
-                            }
-                            // TTRAP.WAD - Застрявший на Титане
-                            else if (M_StrCaseStr(myargv[mlvls], "TTRAP.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_1, MLSTR_19);
-                                DEH_AddStringReplacement("WIF",  "MLVL19");
-                                DEH_AddStringReplacement("SKY1", "MLSKY2");
-                            }
-                            // VESPERAS.WAD - Вечер
-                            else if (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_9, MLSTR_20);
-                                DEH_AddStringReplacement("WIFF",  "MLVL20");
-                                DEH_AddStringReplacement("SKY1", "MLSKY3");
-                            }
-                            // VIRGIL.WAD - Воля Вергилия
-                            else if (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))
-                            {
-                                DEH_AddStringReplacement(HUSTR_3, MLSTR_21);
-                                DEH_AddStringReplacement("WIF",  "MLVL21");
-                                DEH_AddStringReplacement("SKY1", "MLSKY3");
-                            }
-                        }
-
-                        // [JN] Использовать общий титр "Уровень завершён" и
-                        // "Загружается", что бы предотвратить возможные
-                        // несостыковки в разных родах названий уровней.
-                        //
-                        // TODO: реализовать проверку, что бы замена 
-                        // происходила ТОЛЬКО в случае наличия...уровней?
-                        else
-                        {
-                            if (gamemission == pack_nerve)
-                            {
-                            return;
-                            }
-                            else
-                            {
-                            DEH_AddStringReplacement ("WIF",  "WIFANY");
-                            DEH_AddStringReplacement ("WIF2", "WIFANY");
-                            DEH_AddStringReplacement ("WIFF", "WIFANY");
-                            DEH_AddStringReplacement ("WIFO", "WIFANY");
-                            DEH_AddStringReplacement ("WIFM", "WIFANY");  
-                            DEH_AddStringReplacement ("WIENTERS", "WIENTER");
-                            }
-                        }
+                    if (check != NULL)
+                    {   
+                        gamedescription = "DOOM 2: Нет покоя для живых";
+                        gamemission = pack_nerve;
+                        W_MergeFile("russian/russian-doom-nerve.wad");
                     }
                 }
             }
+
+            // [JN] Поддержка Master Levels for DOOM 2
+            mlvls = M_CheckParmWithArgs ("-file", 1);
+
+            if (mlvls)
+            {
+            while (++mlvls != myargc && myargv[mlvls][0] != '-')
+            {
+                boolean check;
+                check = (
+                (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))     ||
+                (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))   ||
+                (M_StrCaseStr(myargv[mlvls], "BLOODSEA.WAD"))   ||
+                (M_StrCaseStr(myargv[mlvls], "CANYON.WAD"))     ||
+                (M_StrCaseStr(myargv[mlvls], "CATWALK.WAD"))    ||
+                (M_StrCaseStr(myargv[mlvls], "COMBINE.WAD"))    ||
+                (M_StrCaseStr(myargv[mlvls], "FISTULA.WAD"))    ||
+                (M_StrCaseStr(myargv[mlvls], "GARRISON.WAD"))   ||
+                (M_StrCaseStr(myargv[mlvls], "GERYON.WAD"))     ||
+                (M_StrCaseStr(myargv[mlvls], "MANOR.WAD"))      ||
+                (M_StrCaseStr(myargv[mlvls], "MEPHISTO.WAD"))   ||
+                (M_StrCaseStr(myargv[mlvls], "MINOS.WAD"))      ||
+                (M_StrCaseStr(myargv[mlvls], "NESSUS.WAD"))     ||
+                (M_StrCaseStr(myargv[mlvls], "PARADOX.WAD"))    ||
+                (M_StrCaseStr(myargv[mlvls], "SUBSPACE.WAD"))   ||
+                (M_StrCaseStr(myargv[mlvls], "SUBTERRA.WAD"))   ||
+                (M_StrCaseStr(myargv[mlvls], "TEETH.WAD"))      ||
+                (M_StrCaseStr(myargv[mlvls], "TTRAP.WAD"))      ||
+                (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))   ||
+                (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))     );
+
+                if (check)
+                {   
+                    gamedescription = "Мастер-Уровни для DOOM 2";
+                    W_MergeFile("russian/russian-doom-master.wad");
+
+                    // ATTACK.WAD - Нападение
+                    if (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_1);
+                        DEH_AddStringReplacement("WIF", "MLVL01");
+                    }
+                    // BLACKTWR.WAD - Черная Башня
+                    else if (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_25, MLSTR_2);
+                        DEH_AddStringReplacement("WIFM", "MLVL02");
+                    }
+                    // BLOODSEA.WAD - Крепость в Кровавом море
+                    else if (M_StrCaseStr(myargv[mlvls], "BLOODSEA.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_7, MLSTR_3);
+                        DEH_AddStringReplacement("WIF", "MLVL03");
+                    }
+                    // CANYON.WAD - Каньон
+                    else if (M_StrCaseStr(myargv[mlvls], "CANYON.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_4);
+                        DEH_AddStringReplacement("WIF", "MLVL04");
+                    }
+                    // CATWALK.WAD - Помост
+                    else if (M_StrCaseStr(myargv[mlvls], "CATWALK.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_5);
+                        DEH_AddStringReplacement("WIF", "MLVL05");
+                    }
+                    // COMBINE.WAD - Комбинат
+                    else if (M_StrCaseStr(myargv[mlvls], "COMBINE.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_6);
+                        DEH_AddStringReplacement("WIF", "MLVL06");
+                        DEH_AddStringReplacement("SKY1", "MLSKY1");
+                    }
+                    // FISTULA.WAD - Фистула
+                    else if (M_StrCaseStr(myargv[mlvls], "FISTULA.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_7);
+                        DEH_AddStringReplacement("WIF", "MLVL07");
+                    }
+                    // GARRISON.WAD - Гарнизон
+                    else if (M_StrCaseStr(myargv[mlvls], "GARRISON.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_8);
+                        DEH_AddStringReplacement("WIF", "MLVL08");
+                    }
+                    // GERYON.WAD - Герион
+                    else if (M_StrCaseStr(myargv[mlvls], "GERYON.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_8, MLSTR_9);
+                        DEH_AddStringReplacement("WIFM", "MLVL09");
+                        DEH_AddStringReplacement("SKY1", "MLSKY3");
+                    }
+                    // MANOR.WAD - Поместье Гиганта
+                    else if (M_StrCaseStr(myargv[mlvls], "MANOR.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_10);
+                        DEH_AddStringReplacement("WIF", "MLVL10");
+                        DEH_AddStringReplacement("SKY1", "MLSKY2");
+                    }
+                    // MEPHISTO.WAD - Мавзолей Мефистофеля
+                    else if (M_StrCaseStr(myargv[mlvls], "MEPHISTO.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_7, MLSTR_11);
+                        DEH_AddStringReplacement("WIF", "MLVL11");
+                    }
+                    // MINOS.WAD - Приговор Миноса
+                    else if (M_StrCaseStr(myargv[mlvls], "MINOS.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_5, MLSTR_12);
+                        DEH_AddStringReplacement("WIFM", "MLVL12");
+                        DEH_AddStringReplacement("SKY1", "MLSKY3");
+                    }
+                    // NESSUS.WAD - Несс
+                    else if (M_StrCaseStr(myargv[mlvls], "NESSUS.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_7, MLSTR_13);
+                        DEH_AddStringReplacement("WIF", "MLVL13");
+                        DEH_AddStringReplacement("SKY1", "MLSKY3");
+                    }
+                    // PARADOX.WAD - Парадокс
+                    else if (M_StrCaseStr(myargv[mlvls], "PARADOX.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_14);
+                        DEH_AddStringReplacement("WIF", "MLVL14");
+                    }
+                    // SUBSPACE.WAD - Подпространство
+                    else if (M_StrCaseStr(myargv[mlvls], "SUBSPACE.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_15);
+                        DEH_AddStringReplacement("WIF", "MLVL15");
+                    }
+                    // SUBTERRA.WAD - Подземелье
+                    else if (M_StrCaseStr(myargv[mlvls], "SUBTERRA.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_16);
+                        DEH_AddStringReplacement("WIF", "MLVL16");
+                    }
+                    // TEETH.WAD - Турболифт в Преисподнюю / Дурной сон
+                    else if (M_StrCaseStr(myargv[mlvls], "TEETH.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_31, MLSTR_17);
+                        DEH_AddStringReplacement(HUSTR_32, MLSTR_18);
+                        DEH_AddStringReplacement("WIF",  "MLVL17");
+                        DEH_AddStringReplacement("WIF2", "MLVL18");
+                    }
+                    // TTRAP.WAD - Застрявший на Титане
+                    else if (M_StrCaseStr(myargv[mlvls], "TTRAP.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_1, MLSTR_19);
+                        DEH_AddStringReplacement("WIF",  "MLVL19");
+                        DEH_AddStringReplacement("SKY1", "MLSKY2");
+                    }
+                    // VESPERAS.WAD - Вечер
+                    else if (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_9, MLSTR_20);
+                        DEH_AddStringReplacement("WIFF",  "MLVL20");
+                        DEH_AddStringReplacement("SKY1", "MLSKY3");
+                    }
+                    // VIRGIL.WAD - Воля Вергилия
+                    else if (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))
+                    {
+                        DEH_AddStringReplacement(HUSTR_3, MLSTR_21);
+                        DEH_AddStringReplacement("WIF",  "MLVL21");
+                        DEH_AddStringReplacement("SKY1", "MLSKY3");
+                    }
+                }
+
+                // [JN] Использовать общий титр "Уровень завершён" и
+                // "Загружается", что бы предотвратить возможные
+                // несостыковки в разных родах названий уровней.
+                //
+                // TODO: реализовать проверку, что бы замена 
+                // происходила ТОЛЬКО в случае наличия...уровней?
+
+                else
+                {
+                    if (gamemission == pack_nerve)
+                        return;
+                    else
+                    {
+                        DEH_AddStringReplacement ("WIF",  "WIFANY");
+                        DEH_AddStringReplacement ("WIF2", "WIFANY");
+                        DEH_AddStringReplacement ("WIFF", "WIFANY");
+                        DEH_AddStringReplacement ("WIFO", "WIFANY");
+                        DEH_AddStringReplacement ("WIFM", "WIFANY");  
+                        DEH_AddStringReplacement ("WIENTERS", "WIENTER");
+                    }
+                }
+            }
+            }
+        }
         }
 
         // Автоматическая загрузка блока DEHACKED
@@ -1247,29 +1246,27 @@ void D_SetGameDescription(void)
         {
             int i, loaded = 0;
             int numiwadlumps;
-
-            for (i = numiwadlumps; i < numlumps; ++i)
-            {
-                if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8))
+    
+                for (i = numiwadlumps; i < numlumps; ++i)
                 {
-                    DEH_LoadLump(i, true, true); // [crispy] allow long, allow error
-                    loaded++;
+                    if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8))
+                    {
+                        DEH_LoadLump(i, true, true); // [crispy] allow long, allow error
+                        loaded++;
+                    }
                 }
-            }
-            // "  loaded %i DEHACKED lumps from PWAD files.\n"
-            printf("  Загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
+                printf("  Загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
         }
     }
 }
 
 //      print title for every printed line
-char            title[128];
+char    title[128];
 
 static boolean D_AddFile(char *filename)
 {
     wad_file_t *handle;
 
-	// " adding %s\n"
     printf(" добавление: %s\n", filename);
     handle = W_AddFile(filename);
 
@@ -1348,11 +1345,11 @@ static struct
 
 static void InitGameVersion(void)
 {
-    byte *demolump;
-    char demolumpname[6];
-    int demoversion;
-    int p;
-    int i;
+    byte    *demolump;
+    char    demolumpname[6];
+    int     demoversion;
+    int     p;
+    int     i;
     boolean status;
 
     //! 
@@ -1376,19 +1373,16 @@ static void InitGameVersion(void)
                 break;
             }
         }
-        
+
         if (gameversions[i].description == NULL) 
         {
-			// "Supported game versions:\n"
             printf("Поддерживаемые версии игр:\n");
 
             for (i=0; gameversions[i].description != NULL; ++i)
             {
-                printf("\t%s (%s)\n", gameversions[i].cmdline,
-                        gameversions[i].description);
+                printf("\t%s (%s)\n", gameversions[i].cmdline, gameversions[i].description);
             }
-            
-			// "Unknown game version '%s'"
+
             I_Error("Неизвестная версия игры \"%s\"", myargv[p+1]);
         }
     }
@@ -1399,17 +1393,14 @@ static void InitGameVersion(void)
         if (gamemission == pack_chex)
         {
             // chex.exe - identified by iwad filename
-
             gameversion = exe_chex;
         }
         else if (gamemission == pack_hacx)
         {
             // hacx.exe: identified by iwad filename
-
             gameversion = exe_hacx;
         }
-        else if (gamemode == shareware || gamemode == registered
-              || (gamemode == commercial && gamemission == doom2))
+        else if (gamemode == shareware || gamemode == registered || (gamemode == commercial && gamemission == doom2))
         {
             // original
             gameversion = exe_doom_1_9;
@@ -1464,7 +1455,7 @@ static void InitGameVersion(void)
             gameversion = exe_final;
         }
     }
-    
+
     // The original exe does not support retail - 4th episode not supported
 
     if (gameversion < exe_ultimate && gamemode == retail)
@@ -1474,8 +1465,7 @@ static void InitGameVersion(void)
 
     // EXEs prior to the Final Doom exes do not support Final Doom.
 
-    if (gameversion < exe_final && gamemode == commercial
-     && (gamemission == pack_tnt || gamemission == pack_plut))
+    if (gameversion < exe_final && gamemode == commercial && (gamemission == pack_tnt || gamemission == pack_plut))
     {
         gamemission = doom2;
     }
@@ -1489,10 +1479,7 @@ void PrintGameVersion(void)
     {
         if (gameversions[i].version == gameversion)
         {
-			// "Emulating the behavior of the "
-			// "'%s' executable.\n"
-            printf("Режим эмуляции "
-                   "исполняемого файла \"%s\".\n", gameversions[i].description);
+            printf("Режим эмуляции исполняемого файла \"%s\".\n", gameversions[i].description);
             break;
         }
     }
@@ -1508,25 +1495,24 @@ static void D_Endoom(void)
     // in screensaver or control test mode. Only show it once the
     // game has actually started.
 
-    if (!show_endoom || !main_loop_started
-     || screensaver_mode || M_CheckParm("-testcontrols") > 0)
+    if (!show_endoom || !main_loop_started || screensaver_mode || M_CheckParm("-testcontrols") > 0)
     {
         return;
     }
 
 	// [JN] Задаём различные экраные ENDOOM для Shareware и
 	// Registered, чтобы избежать дубликации архивов с ресурсами.
-	
-	if ( gamemode == shareware ) // [JN] DOOM Shareware
+
+	if ( gamemode == shareware )    // [JN] DOOM Shareware
 		endoom = W_CacheLumpName(DEH_String("ENDOOMS"), PU_STATIC);
 	else
-	if ( gamemode == registered ) // [JN] DOOM 1 Registered 
+	if ( gamemode == registered )   // [JN] DOOM 1 Registered 
 		endoom = W_CacheLumpName(DEH_String("ENDOOMR"), PU_STATIC);
 	else
-	if ( gamemode == retail ) // [JN] The Ultimate DOOM
+	if ( gamemode == retail )       // [JN] The Ultimate DOOM
 		endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
 	else
-//	if ( gamemode == commercial ) // [JN] DOOM 2 / Final DOOM
+//	if ( gamemode == commercial )   // [JN] DOOM 2 / Final DOOM
 		endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
 
     I_Endoom(endoom);
@@ -1549,10 +1535,9 @@ static void LoadIwadDeh(void)
     {
         if (!DEH_LoadLumpByName("DEHACKED", true, false))
         {
-			// "DEHACKED lump not found.  Please check that this is the "
-			// "Hacx v1.2 IWAD."
-            I_Error("Не найден блок DEHACKED.  Проверьте расположение данного блока в IWAD-файе "
-                    "Hacx v1.2 IWAD.");
+            // "DEHACKED lump not found.  Please check that this is the "
+            // "Hacx v1.2 IWAD."
+            I_Error("Не найден блок DEHACKED.  Проверьте расположение данного блока в IWAD-файе Hacx v1.2 IWAD.");
         }
     }
 
@@ -1560,8 +1545,8 @@ static void LoadIwadDeh(void)
     // and installed next to the IWAD.
     if (gameversion == exe_chex)
     {
-        char *chex_deh = NULL;
-        char *sep;
+        char    *chex_deh = NULL;
+        char    *sep;
 
         // Look for chex.deh in the same directory as the IWAD file.
         sep = strrchr(iwadfile, DIR_SEPARATOR);
@@ -1612,20 +1597,19 @@ static void G_CheckDemoStatusAtExit (void)
 //
 // D_DoomMain
 //
+
 void D_DoomMain (void)
 {
-    int p;
-    char file[256];
-    char demolumpname[9];
-    int numiwadlumps;
+    int     p;
+    char    file[256];
+    char    demolumpname[9];
+    int     numiwadlumps;
 
     I_AtExit(D_Endoom, false);
 
     // print banner
-
     I_PrintBanner(PACKAGE_STRING);
 
-	// "Z_Init: Init zone memory allocation daemon. \n"
     DEH_printf("Z_Init: Инициализация распределения памяти.\n");
     Z_Init ();
 
@@ -1639,10 +1623,8 @@ void D_DoomMain (void)
 
     if (M_CheckParm("-dedicated") > 0)
     {
-		// "Dedicated server mode.\n"
         printf("Режим выделенного сервера.\n");
         NET_DedicatedServer();
-
         // Never returns
     }
 
@@ -1694,7 +1676,7 @@ void D_DoomMain (void)
     //
     // Disable monsters.
     //
-	
+
     nomonsters = M_CheckParm ("-nomonsters");
 
     //!
@@ -1732,7 +1714,7 @@ void D_DoomMain (void)
     //
 
     if (M_CheckParm ("-deathmatch"))
-	deathmatch = 1;
+        deathmatch = 1;
 
     //!
     // @category net
@@ -1743,7 +1725,7 @@ void D_DoomMain (void)
     //
 
     if (M_CheckParm ("-altdeath"))
-	deathmatch = 2;
+        deathmatch = 2;
 
     //!
     // @category net
@@ -1754,10 +1736,10 @@ void D_DoomMain (void)
     //
 
     if (M_CheckParm ("-dm3"))
-	deathmatch = 3;
+        deathmatch = 3;
 
     if (devparm)
-	DEH_printf(D_DEVSTR);
+        DEH_printf(D_DEVSTR);
     
     // find which dir to use for config files
 
@@ -1774,14 +1756,12 @@ void D_DoomMain (void)
     if (M_ParmExists("-cdrom"))
     {
         printf(D_CDROM);
-
         M_SetConfigDir("c:\\doomdata\\");
     }
     else
 #endif
     {
         // Auto-detect the configuration dir.
-
         M_SetConfigDir(NULL);
     }
 
@@ -1795,33 +1775,31 @@ void D_DoomMain (void)
 
     if ( (p=M_CheckParm ("-turbo")) )
     {
-	int     scale = 200;
-	extern int forwardmove[2];
-	extern int sidemove[2];
-	
-	if (p<myargc-1)
-	    scale = atoi (myargv[p+1]);
-	if (scale < 10)
-	    scale = 10;
-	if (scale > 400)
-	    scale = 400;
-		// "turbo scale: %i%%\n"
+        int         scale = 200;
+        extern int  forwardmove[2];
+        extern int  sidemove[2];
+
+        if (p<myargc-1)
+            scale = atoi (myargv[p+1]);
+        if (scale < 10)
+            scale = 10;
+        if (scale > 400)
+            scale = 400;
+        
         DEH_printf("турбо ускорение: %i%%\n", scale);
-	forwardmove[0] = forwardmove[0]*scale/100;
-	forwardmove[1] = forwardmove[1]*scale/100;
-	sidemove[0] = sidemove[0]*scale/100;
-	sidemove[1] = sidemove[1]*scale/100;
+        forwardmove[0] = forwardmove[0]*scale/100;
+        forwardmove[1] = forwardmove[1]*scale/100;
+        sidemove[0] = sidemove[0]*scale/100;
+        sidemove[1] = sidemove[1]*scale/100;
     }
-    
+
     // init subsystems
-	// "V_Init: allocate screens.\n"
     DEH_printf("V_Init: Обнаружение экранов.\n");
     V_Init ();
 
     // Load configuration files before initialising other subsystems.
-	// "M_LoadDefaults: Load system defaults.\n"
     DEH_printf("M_LoadDefaults: Загрузка системных стандартов.\n");
-    M_SetConfigFilenames(/*"default.cfg", */PROGRAM_PREFIX "doom.cfg");
+    M_SetConfigFilenames(PROGRAM_PREFIX "doom.cfg");
     D_BindVariables();
     M_LoadDefaults();
 
@@ -1841,7 +1819,6 @@ void D_DoomMain (void)
 
     modifiedgame = false;
 
-	// "W_Init: Init WADfiles.\n"
     DEH_printf("W_Init: Инициализация WAD-файлов.\n");
     D_AddFile(iwadfile);
     numiwadlumps = numlumps;
@@ -1858,13 +1835,9 @@ void D_DoomMain (void)
     if (W_CheckNumForName("FREEDOOM") >= 0)
     {
         if (W_CheckNumForName("FREEDM") >= 0)
-        {
             gamevariant = freedm;
-        }
         else
-        {
             gamevariant = freedoom;
-        }
     }
     else if (W_CheckNumForName("DMENUPIC") >= 0)
     {
@@ -1894,7 +1867,7 @@ void D_DoomMain (void)
 
     if (gamevariant == bfgedition)
     {
-		// "BFG Edition: Using workarounds as needed.\n"
+        // "BFG Edition: Using workarounds as needed.\n"
         printf("BFG Edition: Применение дополнительной совместимости.\n");
 
         // BFG Edition changes the names of the secret levels to
@@ -1903,9 +1876,9 @@ void D_DoomMain (void)
         // version), MAP33 overflows into the Plutonia level names
         // array, so HUSTR_33 is actually PHUSTR_1.
 
-        DEH_AddStringReplacement(HUSTR_31, "ehjdtym 31: blraf");            // [JN] level 31: idkfa
-        DEH_AddStringReplacement(HUSTR_32, "ehjdtym 32: rby");              // [JN] level 32: keen
-        DEH_AddStringReplacement(PHUSTR_1, "ehjdtym 33: ghtlfntkmcndj");    // [JN] level 33: betray
+        DEH_AddStringReplacement(HUSTR_31, "ehjdtym 31: blraf");            // [JN] уровень 31: идкфа
+        DEH_AddStringReplacement(HUSTR_32, "ehjdtym 32: rby");              // [JN] уровень 32: кин
+        DEH_AddStringReplacement(PHUSTR_1, "ehjdtym 33: ghtlfntkmcndj");    // [JN] уровень 33: предательство
 
         // The BFG edition doesn't have the "low detail" menu option (fair
         // enough). But bizarrely, it reuses the M_GDHIGH patch as a label
@@ -1935,7 +1908,7 @@ void D_DoomMain (void)
     modifiedgame = W_ParseCommandLine();
 
     // Debug:
-//    W_PrintDirectory();
+    // W_PrintDirectory();
 
     //!
     // @arg <demo>
@@ -1957,7 +1930,7 @@ void D_DoomMain (void)
         // Play back the demo named demo.lmp, determining the framerate
         // of the screen.
         //
-	p = M_CheckParmWithArgs("-timedemo", 1);
+    p = M_CheckParmWithArgs("-timedemo", 1);
 
     }
 
@@ -1981,8 +1954,7 @@ void D_DoomMain (void)
 
         if (D_AddFile(file))
         {
-            M_StringCopy(demolumpname, lumpinfo[numlumps - 1]->name,
-                         sizeof(demolumpname));
+            M_StringCopy(demolumpname, lumpinfo[numlumps - 1]->name, sizeof(demolumpname));
         }
         else
         {
@@ -1993,7 +1965,6 @@ void D_DoomMain (void)
             M_StringCopy(demolumpname, myargv[p + 1], sizeof(demolumpname));
         }
 
-		// "Playing demo %s.\n"
         printf("Проигрывание демозаписи: %s.\n", file);
     }
 
@@ -2021,38 +1992,32 @@ void D_DoomMain (void)
     // Check for -file in shareware
     if (modifiedgame && (gamevariant != freedoom))
     {
-	// These are the lumps that will be checked in IWAD,
-	// if any one is not present, execution will be aborted.
-	char name[23][8]=
-	{
-	    "e2m1","e2m2","e2m3","e2m4","e2m5","e2m6","e2m7","e2m8","e2m9",
-	    "e3m1","e3m3","e3m3","e3m4","e3m5","e3m6","e3m7","e3m8","e3m9",
-	    "dphoof","bfgga0","heada1","cybra1","spida1d1"
-	};
-	int i;
-	
-	if ( gamemode == shareware)
-		// "\nYou cannot -file with the shareware "
-		// "version. Register!"
-	    I_Error(DEH_String("\nВы не можете использовать -file в демонстрационной версии."
-			       "Приобретите полную версию!"));
+        // These are the lumps that will be checked in IWAD,
+        // if any one is not present, execution will be aborted.
+        char name[23][8]=
+        {
+            "e2m1","e2m2","e2m3","e2m4","e2m5","e2m6","e2m7","e2m8","e2m9",
+            "e3m1","e3m3","e3m3","e3m4","e3m5","e3m6","e3m7","e3m8","e3m9",
+            "dphoof","bfgga0","heada1","cybra1","spida1d1"
+        };
 
-	// Check for fake IWAD with right name,
-	// but w/o all the lumps of the registered version. 
-	if (gamemode == registered)
-	    for (i = 0;i < 23; i++)
-		if (W_CheckNumForName(name[i])<0)
-			// "\nThis is not the registered version."
-		    I_Error(DEH_String("\nДанная версия не является зарегистрированной."));
+        int i;
+
+        if ( gamemode == shareware)
+            I_Error(DEH_String("\nВы не можете использовать -file в демонстрационной версии."
+                    "Приобретите полную версию!"));
+
+        // Check for fake IWAD with right name,
+        // but w/o all the lumps of the registered version. 
+        if (gamemode == registered)
+            for (i = 0;i < 23; i++)
+            if (W_CheckNumForName(name[i])<0)
+                I_Error(DEH_String("\nДанная версия не является зарегистрированной."));
     }
 
-    if (W_CheckNumForName("SS_START") >= 0
-     || W_CheckNumForName("FF_END") >= 0)
+    if (W_CheckNumForName("SS_START") >= 0 || W_CheckNumForName("FF_END") >= 0)
     {
         I_PrintDivider();
-		// " WARNING: The loaded WAD file contains modified sprites or\n"
-		// " floor textures.  You may want to use the '-merge' command\n"
-		// " line option instead of '-file'.\n"
         printf(" ВНИМАНИЕ: Загруженный WAD-файл содержит измененные спрайты\n"
                " или текстуры поверхностей. Рекоммендуется использовать\n"
                " команду '-merge' вместо '-file'.\n");
@@ -2066,10 +2031,6 @@ void D_DoomMain (void)
     // message and give a link to the website.
     if (gamevariant == freedoom)
     {
-		// " WARNING: You are playing using one of the Freedoom IWAD\n"
-		// " files, which might not work in this port. See this page\n"
-		// " for more information on how to play using Freedoom:\n"
-		// "   https://www.chocolate-doom.org/wiki/index.php/Freedoom\n"
         printf(" ВНИМАНИЕ: IWAD-файлы Freedoom могут работать некорректно,\n"
                " с данной версией порта. Ознакомьтесь с дополнительной\n"
                " информацией по адресу:\n"
@@ -2077,7 +2038,6 @@ void D_DoomMain (void)
         I_PrintDivider();
     }
 
-	// "I_Init: Setting up machine state.\n"
     DEH_printf("I_Init: Инициализация состояния компьютера.\n");
     I_CheckIsScreensaver();
     I_InitTimer();
@@ -2086,7 +2046,6 @@ void D_DoomMain (void)
     I_InitMusic();
 
 #ifdef FEATURE_MULTIPLAYER
-	// "NET_Init: Init network subsystem.\n"
     printf ("NET_Init: Инициализация сетевой подсистемы.\n");
     NET_Init ();
 #endif
@@ -2112,8 +2071,8 @@ void D_DoomMain (void)
 
     if (p)
     {
-	startskill = myargv[p+1][0]-'1';
-	autostart = true;
+        startskill = myargv[p+1][0]-'1';
+        autostart = true;
     }
 
     //!
@@ -2127,11 +2086,11 @@ void D_DoomMain (void)
 
     if (p)
     {
-	startepisode = myargv[p+1][0]-'0';
-	startmap = 1;
-	autostart = true;
+        startepisode = myargv[p+1][0]-'0';
+        startmap = 1;
+        autostart = true;
     }
-	
+
     timelimit = 0;
 
     //! 
@@ -2146,7 +2105,7 @@ void D_DoomMain (void)
 
     if (p)
     {
-	timelimit = atoi(myargv[p+1]);
+        timelimit = atoi(myargv[p+1]);
     }
 
     //!
@@ -2160,7 +2119,7 @@ void D_DoomMain (void)
 
     if (p)
     {
-	timelimit = 20;
+        timelimit = 20;
     }
 
     //!
@@ -2229,33 +2188,26 @@ void D_DoomMain (void)
         startloadgame = -1;
     }
 
-	// "M_Init: Init miscellaneous info.\n"
     DEH_printf("M_Init: Инициализация дополнительной информации.\n");
     M_Init ();
 
-	// "R_Init: Init DOOM refresh daemon - "
     DEH_printf("R_Init: Инициализация процесса запуска DOOM - ");
     R_Init ();
 
-	// "\nP_Init: Init Playloop state.\n"
     DEH_printf("\nP_Init: Инициализация игрового окружения.\n");
     P_Init ();
 
-	// "S_Init: Setting up sound.\n"
     DEH_printf("S_Init: Активация звуковой системы.\n");
     S_Init (sfxVolume * 8, musicVolume * 8);
 
-	// "D_CheckNetGame: Checking network game status.\n"
     DEH_printf("D_CheckNetGame: Проверка статуса сетевой игры.\n");
     D_CheckNetGame ();
 
     PrintGameVersion();
 
-	// "HU_Init: Setting up heads up display.\n"
     DEH_printf("HU_Init: Настройка игрового дисплея.\n");
     HU_Init ();
 
-	// "ST_Init: Init status bar.\n"
     DEH_printf("ST_Init: Инициализация строки состояния.\n");
     ST_Init ();
 
@@ -2269,7 +2221,6 @@ void D_DoomMain (void)
     if (M_CheckParmWithArgs("-statdump", 1))
     {
         I_AtExit(StatDump, true);
-		// "External statistics registered.\n"
         DEH_printf("Регистрация внешней статистики.\n");
     }
 
@@ -2285,37 +2236,37 @@ void D_DoomMain (void)
 
     if (p)
     {
-	G_RecordDemo (myargv[p+1]);
-	autostart = true;
+        G_RecordDemo (myargv[p+1]);
+        autostart = true;
     }
 
     p = M_CheckParmWithArgs("-playdemo", 1);
     if (p)
     {
-	singledemo = true;              // quit after one demo
-	G_DeferedPlayDemo (demolumpname);
-	D_DoomLoop ();  // never returns
+        singledemo = true;  // quit after one demo
+        G_DeferedPlayDemo (demolumpname);
+        D_DoomLoop ();      // never returns
     }
-	
+
     p = M_CheckParmWithArgs("-timedemo", 1);
     if (p)
     {
-	G_TimeDemo (demolumpname);
-	D_DoomLoop ();  // never returns
+        G_TimeDemo (demolumpname);
+        D_DoomLoop ();      // never returns
     }
-	
+
     if (startloadgame >= 0)
     {
         M_StringCopy(file, P_SaveGameFile(startloadgame), sizeof(file));
-	G_LoadGame(file);
+        G_LoadGame(file);
     }
-	
+
     if (gameaction != ga_loadgame )
     {
-	if (autostart || netgame)
-	    G_InitNew (startskill, startepisode, startmap);
-	else
-	    D_StartTitle ();                // start up intro loop
+        if (autostart || netgame)
+            G_InitNew (startskill, startepisode, startmap);
+        else
+            D_StartTitle ();    // start up intro loop
     }
 
     D_DoomLoop ();  // never returns
