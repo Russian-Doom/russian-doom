@@ -335,6 +335,20 @@ P_UseSpecialLine
       case 117:		// Blazing door raise
       case 118:		// Blazing door open
 	EV_VerticalDoor (line, thing);
+    
+    // [JN] (from DOOM Retro) Возможность честно завершить E4M8
+    // при активированном параметре -nomonsters.
+    if (nomonsters)
+    {
+        if (gamemode == retail && gameepisode == 4 && gamemap == 8)
+        {
+            line_t      junk;
+    
+            junk.tag = 666;
+            EV_DoFloor(&junk, lowerFloorToLowest);
+        }
+    }
+    
 	break;
 	
 	//UNUSED - Door Slide Open&Close
@@ -395,6 +409,22 @@ P_UseSpecialLine
 	// Lower Floor to Lowest
 	if (EV_DoFloor(line,lowerFloorToLowest))
 	    P_ChangeSwitchTexture(line,0);
+    
+    // [JN] (from DOOM Retro) Возможность честно завершить E1M8 и MAP07
+    // при активированном параметре -nomonsters.
+    if (nomonsters)
+    {
+        if ((gamemode == shareware || registered || retail && gameepisode == 1 && gamemap == 8) || 
+            (gamemode == commercial && gamemap == 7))
+        {
+            line_t      junk;
+    
+            junk.tag = 666;
+            EV_DoFloor(&junk, lowerFloorToLowest);
+            junk.tag = 667;
+            EV_DoFloor(&junk, raiseToTexture);
+        }
+    }
 	break;
 	
       case 29:
