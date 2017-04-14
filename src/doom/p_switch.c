@@ -345,7 +345,7 @@ P_UseSpecialLine
             line_t      junk;
     
             junk.tag = 666;
-            EV_DoFloor(&junk, lowerFloorToLowest);
+            EV_DoFloor (&junk, lowerFloorToLowest);
         }
     }
     
@@ -420,9 +420,9 @@ P_UseSpecialLine
             line_t      junk;
     
             junk.tag = 666;
-            EV_DoFloor(&junk, lowerFloorToLowest);
+            EV_DoFloor (&junk, lowerFloorToLowest);
             junk.tag = 667;
-            EV_DoFloor(&junk, raiseToTexture);
+            EV_DoFloor (&junk, raiseToTexture);
         }
     }
 	break;
@@ -531,6 +531,19 @@ P_UseSpecialLine
 	// BlzOpenDoor YELLOW
 	if (EV_DoLockedDoor (line,vld_blazeOpen,thing))
 	    P_ChangeSwitchTexture(line,0);
+    
+    // [JN] (from DOOM Retro) Возможность честно завершить E4M6
+    // при активированном параметре -nomonsters.
+    if (nomonsters)
+    {
+        if (gamemode == retail && gameepisode == 4 && gamemap == 6)
+        {
+            line_t      junk;
+            
+            junk.tag = 666;
+            EV_DoDoor (&junk, vld_blazeOpen);
+        }
+    }
 	break;
 	
       case 140:
