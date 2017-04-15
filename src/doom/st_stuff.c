@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 
+#include "i_swap.h" // [crispy] SHORT()
 #include "i_system.h"
 #include "i_video.h"
 #include "z_zone.h"
@@ -1226,6 +1227,32 @@ void ST_drawWidgets(boolean refresh)
 
     STlib_updateNum(&w_ready, refresh);
 
+    // [crispy] draw "special widgets" in the Crispy HUD
+    if (screenblocks == 11 && !automapactive)
+    {
+        // [crispy] draw berserk pack instead of no ammo if appropriate
+        if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
+        {
+            static patch_t *patch;
+
+            if (!patch)
+            {
+                const int lump = W_CheckNumForName(DEH_String("PSTRA0"));
+
+                if (lump >= 0)
+                    patch = W_CacheLumpNum(lump, PU_STATIC);
+            }
+
+            if (patch)
+            {
+                // [crispy] (23,179) is the center of the Ammo widget
+                V_DrawPatch(23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
+			               179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
+			               patch);
+            }
+        }
+    }
+    
     for (i=0;i<4;i++)
     {
 	STlib_updateNum(&w_ammo[i], refresh);
