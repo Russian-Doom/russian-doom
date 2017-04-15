@@ -99,10 +99,10 @@ char *    savegamedir;
 
 char *    iwadfile;
 
-boolean    devparm;	    // started game with -devparm
-boolean    nomonsters;	// checkparm of -nomonsters
-boolean    respawnparm;	// checkparm of -respawn
-boolean    fastparm;	// checkparm of -fast
+boolean    devparm;     // started game with -devparm
+boolean    nomonsters;  // checkparm of -nomonsters
+boolean    respawnparm; // checkparm of -respawn
+boolean    fastparm;    // checkparm of -fast
 
 
 extern  boolean	inhelpscreens;
@@ -257,7 +257,7 @@ void D_Display (void)
     {
         R_RenderPlayerView (&players[displayplayer]);
 
-        if (screenblocks == 11)
+        if (screenblocks == 11 || screenblocks == 12)
             ST_Drawer(0, 0);
     }
 
@@ -324,8 +324,8 @@ void D_Display (void)
 
 
     // menus go directly to the screen
-    M_Drawer ();            // menu is drawn even on top of everything
-    NetUpdate ();           // send out any new accumulation
+    M_Drawer ();        // menu is drawn even on top of everything
+    NetUpdate ();       // send out any new accumulation
 
     // normal update
     if (!wipe)

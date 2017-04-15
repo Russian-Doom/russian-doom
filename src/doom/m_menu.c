@@ -1081,7 +1081,7 @@ void M_DrawOptions(void)
     // [JN] Размер ползунка скорости мыши. Изначальное значение: 10.
     M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1), 12, mouseSensitivity);
 
-    M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1), 10,screenSize);
+    M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1), 11,screenSize);
 }
 
 void M_Options(int choice)
@@ -1290,7 +1290,7 @@ void M_SizeDisplay(int choice)
         break;
 
         case 1:
-        if (screenSize < 9)
+        if (screenSize < 10)
         {
             screenblocks++;
             screenSize++;

@@ -1228,7 +1228,7 @@ void ST_drawWidgets(boolean refresh)
     STlib_updateNum(&w_ready, refresh);
 
     // [crispy] draw "special widgets" in the Crispy HUD
-    if (screenblocks == 11 && !automapactive)
+    if ((screenblocks == 11 || screenblocks == 12) && !automapactive)
     {
         // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
@@ -1259,24 +1259,50 @@ void ST_drawWidgets(boolean refresh)
 	STlib_updateNum(&w_maxammo[i], refresh);
     }
 
+    // [JN] Crispy HUD с подписями
     if (screenblocks == 11)
+    {
+        if (!automapactive) // [JN] Не нужно рисовать эти патчи на карте
+        {
+            // [JN] Не отображать "патроны" для кулака и бензопилы.
+            if (plyr->readyweapon == wp_pistol ||
+            plyr->readyweapon == wp_shotgun ||
+            plyr->readyweapon == wp_supershotgun ||
+            plyr->readyweapon == wp_chaingun ||
+            plyr->readyweapon == wp_missile ||
+            plyr->readyweapon == wp_plasma ||
+            plyr->readyweapon == wp_bfg)
+                V_DrawPatchDirect(2, 191, W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
+
+            if (deathmatch) // [JN] Фраги
+                V_DrawPatchDirect(108, 191, W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
+            else // [JN] Оружие
+                V_DrawPatchDirect(108, 191, W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
+
+            // [JN] Здоровье, броня, перечисление патронов.
+            V_DrawPatchDirect(52, 173, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
+        }
+        V_DrawPatchDirect(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+    }
+    
+    // [JN] Традиционный Crispy HUD
+    if (screenblocks == 12)
         V_DrawPatchDirect(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
     
-    
-    STlib_updatePercent(&w_health, refresh || screenblocks == 11);
-    STlib_updatePercent(&w_armor, refresh || screenblocks == 11);
+    STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12);
+    STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12);
 
     STlib_updateBinIcon(&w_armsbg, refresh);
 
     for (i=0;i<6;i++)
-	STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11);
+	STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
 
     STlib_updateMultIcon(&w_faces, refresh);
 
     for (i=0;i<3;i++)
-	STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11);
+	STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12);
 
-    STlib_updateNum(&w_frags, refresh || screenblocks == 11);
+    STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12);
 
 }
 
@@ -1302,7 +1328,7 @@ void ST_diffDraw(void)
 void ST_Drawer (boolean fullscreen, boolean refresh)
 {
   
-    st_statusbaron = (!fullscreen) || automapactive || screenblocks == 11;
+    st_statusbaron = (!fullscreen) || automapactive || screenblocks == 11 || screenblocks == 12;
     st_firsttime = st_firsttime || refresh;
 
     // Do red-/gold-shifts from damage/items
