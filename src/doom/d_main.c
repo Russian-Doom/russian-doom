@@ -965,7 +965,6 @@ void D_SetGameDescription(void)
     }
     else
     {
-        int newpwadfile;
         // Doom 2 of some kind.  But which mission?
 
         if (is_freedoom)
@@ -1006,12 +1005,14 @@ void D_SetGameDescription(void)
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-tnt.wad");
         }
+    }
 
     // [JN] Параметр "-file" перенесен из w_main.c
     // Необходимо для того, что бы любые ресурсы из pwad-файлов
     // загружались после руссифицированных pwad-файлов.
     // Функция "-merge" более не используется.
 
+    int newpwadfile;
     newpwadfile = M_CheckParmWithArgs ("-file", 1);
 
     if (newpwadfile)
@@ -1050,215 +1051,216 @@ void D_SetGameDescription(void)
 
             if (mlvls)
             {
-            while (++mlvls != myargc && myargv[mlvls][0] != '-')
-            {
-                boolean check;
-                check = (
-                (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))     ||
-                (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))   ||
-                (M_StrCaseStr(myargv[mlvls], "BLOODSEA.WAD"))   ||
-                (M_StrCaseStr(myargv[mlvls], "CANYON.WAD"))     ||
-                (M_StrCaseStr(myargv[mlvls], "CATWALK.WAD"))    ||
-                (M_StrCaseStr(myargv[mlvls], "COMBINE.WAD"))    ||
-                (M_StrCaseStr(myargv[mlvls], "FISTULA.WAD"))    ||
-                (M_StrCaseStr(myargv[mlvls], "GARRISON.WAD"))   ||
-                (M_StrCaseStr(myargv[mlvls], "GERYON.WAD"))     ||
-                (M_StrCaseStr(myargv[mlvls], "MANOR.WAD"))      ||
-                (M_StrCaseStr(myargv[mlvls], "MEPHISTO.WAD"))   ||
-                (M_StrCaseStr(myargv[mlvls], "MINOS.WAD"))      ||
-                (M_StrCaseStr(myargv[mlvls], "NESSUS.WAD"))     ||
-                (M_StrCaseStr(myargv[mlvls], "PARADOX.WAD"))    ||
-                (M_StrCaseStr(myargv[mlvls], "SUBSPACE.WAD"))   ||
-                (M_StrCaseStr(myargv[mlvls], "SUBTERRA.WAD"))   ||
-                (M_StrCaseStr(myargv[mlvls], "TEETH.WAD"))      ||
-                (M_StrCaseStr(myargv[mlvls], "TTRAP.WAD"))      ||
-                (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))   ||
-                (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))     );
-
-                if (check)
-                {   
-                    gamedescription = "Мастер-Уровни для DOOM 2";
-                    W_MergeFile("russian/russian-doom-master.wad");
-
-                    // ATTACK.WAD - Нападение
-                    if (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_1);
-                        DEH_AddStringReplacement("WIF", "MLVL01");
-                    }
-                    // BLACKTWR.WAD - Черная Башня
-                    else if (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_25, MLSTR_2);
-                        DEH_AddStringReplacement("WIFM", "MLVL02");
-                    }
-                    // BLOODSEA.WAD - Крепость в Кровавом море
-                    else if (M_StrCaseStr(myargv[mlvls], "BLOODSEA.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_7, MLSTR_3);
-                        DEH_AddStringReplacement("WIF", "MLVL03");
-                    }
-                    // CANYON.WAD - Каньон
-                    else if (M_StrCaseStr(myargv[mlvls], "CANYON.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_4);
-                        DEH_AddStringReplacement("WIF", "MLVL04");
-                    }
-                    // CATWALK.WAD - Помост
-                    else if (M_StrCaseStr(myargv[mlvls], "CATWALK.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_5);
-                        DEH_AddStringReplacement("WIF", "MLVL05");
-                    }
-                    // COMBINE.WAD - Комбинат
-                    else if (M_StrCaseStr(myargv[mlvls], "COMBINE.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_6);
-                        DEH_AddStringReplacement("WIF", "MLVL06");
-                        DEH_AddStringReplacement("SKY1", "MLSKY1");
-                    }
-                    // FISTULA.WAD - Фистула
-                    else if (M_StrCaseStr(myargv[mlvls], "FISTULA.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_7);
-                        DEH_AddStringReplacement("WIF", "MLVL07");
-                    }
-                    // GARRISON.WAD - Гарнизон
-                    else if (M_StrCaseStr(myargv[mlvls], "GARRISON.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_8);
-                        DEH_AddStringReplacement("WIF", "MLVL08");
-                    }
-                    // GERYON.WAD - Герион
-                    else if (M_StrCaseStr(myargv[mlvls], "GERYON.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_8, MLSTR_9);
-                        DEH_AddStringReplacement("WIFM", "MLVL09");
-                        DEH_AddStringReplacement("SKY1", "MLSKY3");
-                    }
-                    // MANOR.WAD - Поместье Гиганта
-                    else if (M_StrCaseStr(myargv[mlvls], "MANOR.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_10);
-                        DEH_AddStringReplacement("WIF", "MLVL10");
-                        DEH_AddStringReplacement("SKY1", "MLSKY2");
-                    }
-                    // MEPHISTO.WAD - Мавзолей Мефистофеля
-                    else if (M_StrCaseStr(myargv[mlvls], "MEPHISTO.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_7, MLSTR_11);
-                        DEH_AddStringReplacement("WIF", "MLVL11");
-                    }
-                    // MINOS.WAD - Приговор Миноса
-                    else if (M_StrCaseStr(myargv[mlvls], "MINOS.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_5, MLSTR_12);
-                        DEH_AddStringReplacement("WIFM", "MLVL12");
-                        DEH_AddStringReplacement("SKY1", "MLSKY3");
-                    }
-                    // NESSUS.WAD - Несс
-                    else if (M_StrCaseStr(myargv[mlvls], "NESSUS.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_7, MLSTR_13);
-                        DEH_AddStringReplacement("WIF", "MLVL13");
-                        DEH_AddStringReplacement("SKY1", "MLSKY3");
-                    }
-                    // PARADOX.WAD - Парадокс
-                    else if (M_StrCaseStr(myargv[mlvls], "PARADOX.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_14);
-                        DEH_AddStringReplacement("WIF", "MLVL14");
-                    }
-                    // SUBSPACE.WAD - Подпространство
-                    else if (M_StrCaseStr(myargv[mlvls], "SUBSPACE.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_15);
-                        DEH_AddStringReplacement("WIF", "MLVL15");
-                    }
-                    // SUBTERRA.WAD - Подземелье
-                    else if (M_StrCaseStr(myargv[mlvls], "SUBTERRA.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_16);
-                        DEH_AddStringReplacement("WIF", "MLVL16");
-                    }
-                    // TEETH.WAD - Турболифт в Преисподнюю / Дурной сон
-                    else if (M_StrCaseStr(myargv[mlvls], "TEETH.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_31, MLSTR_17);
-                        DEH_AddStringReplacement(HUSTR_32, MLSTR_18);
-                        DEH_AddStringReplacement("WIF",  "MLVL17");
-                        DEH_AddStringReplacement("WIF2", "MLVL18");
-                    }
-                    // TTRAP.WAD - Застрявший на Титане
-                    else if (M_StrCaseStr(myargv[mlvls], "TTRAP.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_1, MLSTR_19);
-                        DEH_AddStringReplacement("WIF",  "MLVL19");
-                        DEH_AddStringReplacement("SKY1", "MLSKY2");
-                    }
-                    // VESPERAS.WAD - Вечер
-                    else if (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_9, MLSTR_20);
-                        DEH_AddStringReplacement("WIFF",  "MLVL20");
-                        DEH_AddStringReplacement("SKY1", "MLSKY3");
-                    }
-                    // VIRGIL.WAD - Воля Вергилия
-                    else if (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))
-                    {
-                        DEH_AddStringReplacement(HUSTR_3, MLSTR_21);
-                        DEH_AddStringReplacement("WIF",  "MLVL21");
-                        DEH_AddStringReplacement("SKY1", "MLSKY3");
-                    }
-                }
-
-                // [JN] Использовать общий титр "Уровень завершён" и
-                // "Загружается", что бы предотвратить возможные
-                // несостыковки в разных родах названий уровней.
-                //
-                // TODO: реализовать проверку, что бы замена 
-                // происходила ТОЛЬКО в случае наличия...уровней?
-
-                else
+                while (++mlvls != myargc && myargv[mlvls][0] != '-')
                 {
-                    if (gamemission == pack_nerve)
-                        return;
+                    boolean check;
+                    check = (
+                    (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))     ||
+                    (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))   ||
+                    (M_StrCaseStr(myargv[mlvls], "BLOODSEA.WAD"))   ||
+                    (M_StrCaseStr(myargv[mlvls], "CANYON.WAD"))     ||
+                    (M_StrCaseStr(myargv[mlvls], "CATWALK.WAD"))    ||
+                    (M_StrCaseStr(myargv[mlvls], "COMBINE.WAD"))    ||
+                    (M_StrCaseStr(myargv[mlvls], "FISTULA.WAD"))    ||
+                    (M_StrCaseStr(myargv[mlvls], "GARRISON.WAD"))   ||
+                    (M_StrCaseStr(myargv[mlvls], "GERYON.WAD"))     ||
+                    (M_StrCaseStr(myargv[mlvls], "MANOR.WAD"))      ||
+                    (M_StrCaseStr(myargv[mlvls], "MEPHISTO.WAD"))   ||
+                    (M_StrCaseStr(myargv[mlvls], "MINOS.WAD"))      ||
+                    (M_StrCaseStr(myargv[mlvls], "NESSUS.WAD"))     ||
+                    (M_StrCaseStr(myargv[mlvls], "PARADOX.WAD"))    ||
+                    (M_StrCaseStr(myargv[mlvls], "SUBSPACE.WAD"))   ||
+                    (M_StrCaseStr(myargv[mlvls], "SUBTERRA.WAD"))   ||
+                    (M_StrCaseStr(myargv[mlvls], "TEETH.WAD"))      ||
+                    (M_StrCaseStr(myargv[mlvls], "TTRAP.WAD"))      ||
+                    (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))   ||
+                    (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))     );
+
+                    if (check)
+                    {   
+                        gamedescription = "Мастер-Уровни для DOOM 2";
+                        W_MergeFile("russian/russian-doom-master.wad");
+    
+                        // ATTACK.WAD - Нападение
+                        if (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_1);
+                            DEH_AddStringReplacement("WIF", "MLVL01");
+                        }
+                        // BLACKTWR.WAD - Черная Башня
+                        else if (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_25, MLSTR_2);
+                            DEH_AddStringReplacement("WIFM", "MLVL02");
+                        }
+                        // BLOODSEA.WAD - Крепость в Кровавом море
+                        else if (M_StrCaseStr(myargv[mlvls], "BLOODSEA.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_7, MLSTR_3);
+                            DEH_AddStringReplacement("WIF", "MLVL03");
+                        }
+                        // CANYON.WAD - Каньон
+                        else if (M_StrCaseStr(myargv[mlvls], "CANYON.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_4);
+                            DEH_AddStringReplacement("WIF", "MLVL04");
+                        }
+                        // CATWALK.WAD - Помост
+                        else if (M_StrCaseStr(myargv[mlvls], "CATWALK.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_5);
+                            DEH_AddStringReplacement("WIF", "MLVL05");
+                        }
+                        // COMBINE.WAD - Комбинат
+                        else if (M_StrCaseStr(myargv[mlvls], "COMBINE.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_6);
+                            DEH_AddStringReplacement("WIF", "MLVL06");
+                            DEH_AddStringReplacement("SKY1", "MLSKY1");
+                        }
+                        // FISTULA.WAD - Фистула
+                        else if (M_StrCaseStr(myargv[mlvls], "FISTULA.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_7);
+                            DEH_AddStringReplacement("WIF", "MLVL07");
+                        }
+                        // GARRISON.WAD - Гарнизон
+                        else if (M_StrCaseStr(myargv[mlvls], "GARRISON.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_8);
+                            DEH_AddStringReplacement("WIF", "MLVL08");
+                        }
+                        // GERYON.WAD - Герион
+                        else if (M_StrCaseStr(myargv[mlvls], "GERYON.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_8, MLSTR_9);
+                            DEH_AddStringReplacement("WIFM", "MLVL09");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
+                        }
+                        // MANOR.WAD - Поместье Гиганта
+                        else if (M_StrCaseStr(myargv[mlvls], "MANOR.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_10);
+                            DEH_AddStringReplacement("WIF", "MLVL10");
+                            DEH_AddStringReplacement("SKY1", "MLSKY2");
+                        }
+                        // MEPHISTO.WAD - Мавзолей Мефистофеля
+                        else if (M_StrCaseStr(myargv[mlvls], "MEPHISTO.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_7, MLSTR_11);
+                            DEH_AddStringReplacement("WIF", "MLVL11");
+                        }
+                        // MINOS.WAD - Приговор Миноса
+                        else if (M_StrCaseStr(myargv[mlvls], "MINOS.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_5, MLSTR_12);
+                            DEH_AddStringReplacement("WIFM", "MLVL12");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
+                        }
+                        // NESSUS.WAD - Несс
+                        else if (M_StrCaseStr(myargv[mlvls], "NESSUS.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_7, MLSTR_13);
+                            DEH_AddStringReplacement("WIF", "MLVL13");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
+                        }
+                        // PARADOX.WAD - Парадокс
+                        else if (M_StrCaseStr(myargv[mlvls], "PARADOX.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_14);
+                            DEH_AddStringReplacement("WIF", "MLVL14");
+                        }
+                        // SUBSPACE.WAD - Подпространство
+                        else if (M_StrCaseStr(myargv[mlvls], "SUBSPACE.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_15);
+                            DEH_AddStringReplacement("WIF", "MLVL15");
+                        }
+                        // SUBTERRA.WAD - Подземелье
+                        else if (M_StrCaseStr(myargv[mlvls], "SUBTERRA.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_16);
+                            DEH_AddStringReplacement("WIF", "MLVL16");
+                        }
+                        // TEETH.WAD - Турболифт в Преисподнюю / Дурной сон
+                        else if (M_StrCaseStr(myargv[mlvls], "TEETH.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_31, MLSTR_17);
+                            DEH_AddStringReplacement(HUSTR_32, MLSTR_18);
+                            DEH_AddStringReplacement("WIF",  "MLVL17");
+                            DEH_AddStringReplacement("WIF2", "MLVL18");
+                        }
+                        // TTRAP.WAD - Застрявший на Титане
+                        else if (M_StrCaseStr(myargv[mlvls], "TTRAP.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_1, MLSTR_19);
+                            DEH_AddStringReplacement("WIF",  "MLVL19");
+                            DEH_AddStringReplacement("SKY1", "MLSKY2");
+                        }
+                        // VESPERAS.WAD - Вечер
+                        else if (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_9, MLSTR_20);
+                            DEH_AddStringReplacement("WIFF",  "MLVL20");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
+                        }
+                        // VIRGIL.WAD - Воля Вергилия
+                        else if (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))
+                        {
+                            DEH_AddStringReplacement(HUSTR_3, MLSTR_21);
+                            DEH_AddStringReplacement("WIF",  "MLVL21");
+                            DEH_AddStringReplacement("SKY1", "MLSKY3");
+                        }
+                    }
+
+                    // [JN] Использовать общий титр "Уровень завершён" и
+                    // "Загружается", что бы предотвратить возможные
+                    // несостыковки в разных родах названий уровней.
+                    //
+                    // TODO: реализовать проверку, что бы замена 
+                    // происходила ТОЛЬКО в случае наличия...уровней?
+
                     else
                     {
-                        DEH_AddStringReplacement ("WIF",  "WIFANY");
-                        DEH_AddStringReplacement ("WIF2", "WIFANY");
-                        DEH_AddStringReplacement ("WIFF", "WIFANY");
-                        DEH_AddStringReplacement ("WIFO", "WIFANY");
-                        DEH_AddStringReplacement ("WIFM", "WIFANY");  
-                        DEH_AddStringReplacement ("WIENTERS", "WIENTER");
+                        if (gamemission == pack_nerve)
+                            return;
+                        else
+                        {
+                            DEH_AddStringReplacement ("WIF",  "WIFANY");
+                            DEH_AddStringReplacement ("WIF2", "WIFANY");
+                            DEH_AddStringReplacement ("WIFF", "WIFANY");
+                            DEH_AddStringReplacement ("WIFO", "WIFANY");
+                            DEH_AddStringReplacement ("WIFM", "WIFANY");  
+                            DEH_AddStringReplacement ("WIENTERS", "WIENTER");
+                        }
                     }
                 }
             }
-            }
-        }
-        }
-
-        // Автоматическая загрузка блока DEHACKED
-        //
-        // [crispy] load DEHACKED lumps by default, but allow overriding
-        // [JN] Функция активируется после параметра "-file"
-        if (!M_ParmExists("-nodehlump") && !M_ParmExists("-nodeh"))
-        {
-            int i, loaded = 0;
-            int numiwadlumps;
-    
-                for (i = numiwadlumps; i < numlumps; ++i)
-                {
-                    if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8))
-                    {
-                        DEH_LoadLump(i, true, true); // [crispy] allow long, allow error
-                        loaded++;
-                    }
-                }
-                printf("  Загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
         }
     }
+
+    // Автоматическая загрузка блока DEHACKED
+    //
+    // [crispy] load DEHACKED lumps by default, but allow overriding
+    // [JN] Функция активируется после параметра "-file"
+
+    if (!M_ParmExists("-nodehlump") && !M_ParmExists("-nodeh"))
+    {
+        int i, loaded = 0;
+        int numiwadlumps;
+
+        for (i = numiwadlumps; i < numlumps; ++i)
+        {
+            if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8))
+            {
+                DEH_LoadLump(i, true, true); // [crispy] allow long, allow error
+                loaded++;
+            }
+        }
+        printf("  Загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
+    }
 }
+
 
 //      print title for every printed line
 char    title[128];
