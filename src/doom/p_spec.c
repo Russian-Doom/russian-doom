@@ -1175,12 +1175,17 @@ void P_UpdateSpecials (void)
     {
 	line = linespeciallist[i];
 	switch(line->special)
-	{
-	  case 48:
-	    // EFFECT FIRSTCOL SCROLL +
-	    sides[line->sidenum[0]].textureoffset += FRACUNIT;
-	    break;
-	}
+    {
+        case 48:
+        // EFFECT FIRSTCOL SCROLL +
+        sides[line->sidenum[0]].textureoffset += FRACUNIT;
+        break;
+
+        case 85:
+        // [JN] (Boom) Scroll Texture Right
+        sides[line->sidenum[0]].textureoffset += -FRACUNIT;
+        break;
+    }
     }
 
 
@@ -1508,19 +1513,20 @@ void P_SpawnSpecials (void)
     numlinespecials = 0;
     for (i = 0;i < numlines; i++)
     {
-	switch(lines[i].special)
-	{
-	  case 48:
+    switch(lines[i].special)
+    {
+        case 48:
+        case 85:
             if (numlinespecials >= MAXLINEANIMS)
             {
                 I_Error("Превышен лимит линий со скроллингом текстур!\n"
                         "(Оригинальный лимит равен 64)");
             }
-	    // EFFECT FIRSTCOL SCROLL+
-	    linespeciallist[numlinespecials] = &lines[i];
-	    numlinespecials++;
-	    break;
-	}
+            // EFFECT FIRSTCOL SCROLL+
+            linespeciallist[numlinespecials] = &lines[i];
+            numlinespecials++;
+            break;
+    }
     }
 
     
