@@ -42,6 +42,8 @@
 // Data.
 #include "sounds.h"
 
+#include "crispy.h"
+
 extern int colored_blood;       // [JN] Кровь разных цветов
 extern int crushed_corpses_sfx; // [JN] Звук раздавливания трупов
 
@@ -174,10 +176,20 @@ P_TeleportMove
     numspechit = 0;
     
     // stomp on any things contacted
-    xl = (tmbbox[BOXLEFT] - bmaporgx - MAXRADIUS)>>MAPBLOCKSHIFT;
-    xh = (tmbbox[BOXRIGHT] - bmaporgx + MAXRADIUS)>>MAPBLOCKSHIFT;
-    yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS)>>MAPBLOCKSHIFT;
-    yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS)>>MAPBLOCKSHIFT;
+    if (singleplayer)
+    {
+        xl = (tmbbox[BOXLEFT] - bmaporgx - MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+        xh = (tmbbox[BOXRIGHT] - bmaporgx + MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+        yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+        yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+    }
+    else
+    {
+        xl = (tmbbox[BOXLEFT] - bmaporgx - MAXRADIUS)>>MAPBLOCKSHIFT;
+        xh = (tmbbox[BOXRIGHT] - bmaporgx + MAXRADIUS)>>MAPBLOCKSHIFT;
+        yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS)>>MAPBLOCKSHIFT;
+        yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS)>>MAPBLOCKSHIFT;        
+    }
 
     for (bx=xl ; bx<=xh ; bx++)
 	for (by=yl ; by<=yh ; by++)
@@ -450,10 +462,20 @@ P_CheckPosition
     // because mobj_ts are grouped into mapblocks
     // based on their origin point, and can overlap
     // into adjacent blocks by up to MAXRADIUS units.
-    xl = (tmbbox[BOXLEFT] - bmaporgx - MAXRADIUS)>>MAPBLOCKSHIFT;
-    xh = (tmbbox[BOXRIGHT] - bmaporgx + MAXRADIUS)>>MAPBLOCKSHIFT;
-    yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS)>>MAPBLOCKSHIFT;
-    yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS)>>MAPBLOCKSHIFT;
+    if (singleplayer)
+    {
+        xl = (tmbbox[BOXLEFT] - bmaporgx - MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+        xh = (tmbbox[BOXRIGHT] - bmaporgx + MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+        yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+        yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+    }
+    else
+    {
+        xl = (tmbbox[BOXLEFT] - bmaporgx - MAXRADIUS)>>MAPBLOCKSHIFT;
+        xh = (tmbbox[BOXRIGHT] - bmaporgx + MAXRADIUS)>>MAPBLOCKSHIFT;
+        yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS)>>MAPBLOCKSHIFT;
+        yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS)>>MAPBLOCKSHIFT;
+    }
 
     for (bx=xl ; bx<=xh ; bx++)
 	for (by=yl ; by<=yh ; by++)
@@ -1281,8 +1303,11 @@ P_RadiusAttack
     int		yh;
     
     fixed_t	dist;
-	
-    dist = (damage+MAXRADIUS)<<FRACBITS;
+
+	if (singleplayer)
+        dist = (damage+MAXRADIUSEXT)<<FRACBITS;
+    else
+        dist = (damage+MAXRADIUS)<<FRACBITS;
     yh = (spot->y + dist - bmaporgy)>>MAPBLOCKSHIFT;
     yl = (spot->y - dist - bmaporgy)>>MAPBLOCKSHIFT;
     xh = (spot->x + dist - bmaporgx)>>MAPBLOCKSHIFT;

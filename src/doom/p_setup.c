@@ -727,19 +727,31 @@ void P_GroupLines (void)
 	sector->soundorg.y = (bbox[BOXTOP]+bbox[BOXBOTTOM])/2;
 		
 	// adjust bounding box to map blocks
-	block = (bbox[BOXTOP]-bmaporgy+MAXRADIUS)>>MAPBLOCKSHIFT;
+    if (singleplayer)
+        block = (bbox[BOXTOP]-bmaporgy+MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+    else
+        block = (bbox[BOXTOP]-bmaporgy+MAXRADIUS)>>MAPBLOCKSHIFT;
 	block = block >= bmapheight ? bmapheight-1 : block;
 	sector->blockbox[BOXTOP]=block;
 
-	block = (bbox[BOXBOTTOM]-bmaporgy-MAXRADIUS)>>MAPBLOCKSHIFT;
+    if (singleplayer)
+        block = (bbox[BOXBOTTOM]-bmaporgy-MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+    else
+        block = (bbox[BOXBOTTOM]-bmaporgy-MAXRADIUS)>>MAPBLOCKSHIFT;
 	block = block < 0 ? 0 : block;
 	sector->blockbox[BOXBOTTOM]=block;
 
-	block = (bbox[BOXRIGHT]-bmaporgx+MAXRADIUS)>>MAPBLOCKSHIFT;
+    if (singleplayer)
+        block = (bbox[BOXRIGHT]-bmaporgx+MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+    else
+        block = (bbox[BOXRIGHT]-bmaporgx+MAXRADIUS)>>MAPBLOCKSHIFT;
 	block = block >= bmapwidth ? bmapwidth-1 : block;
 	sector->blockbox[BOXRIGHT]=block;
 
-	block = (bbox[BOXLEFT]-bmaporgx-MAXRADIUS)>>MAPBLOCKSHIFT;
+    if (singleplayer)
+        block = (bbox[BOXLEFT]-bmaporgx-MAXRADIUSEXT)>>MAPBLOCKSHIFT;
+    else
+        block = (bbox[BOXLEFT]-bmaporgx-MAXRADIUS)>>MAPBLOCKSHIFT;
 	block = block < 0 ? 0 : block;
 	sector->blockbox[BOXLEFT]=block;
     }
