@@ -250,10 +250,11 @@ int blazing_door_fix_sfx = 1;    // Одиночный звук закрытия
 int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
 // Геймплей
-int negative_health = 0;         // Отображать отрицательное здоровье
-int secret_notification = 1;     // Уведомление об обнаружении секрета
-int show_total_time = 1;         // Показывать общее время
-int unlimited_lost_souls = 1;    // Элементаль боли без ограничения
+int negative_health = 0;          // Отображать отрицательное здоровье
+int secret_notification = 1;      // Уведомление об обнаружении секрета
+int show_total_time = 1;          // Показывать общее время
+int unlimited_lost_souls = 1;     // Элементаль боли без ограничения душ
+int unlimited_archvile_range = 0; // Арчвайл без ограничения дистанции атаки
  
 int G_CmdChecksum (ticcmd_t* cmd) 
 { 

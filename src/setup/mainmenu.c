@@ -116,10 +116,11 @@ static void SensibleDefaults(void)
     correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
     play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
     // - Геймплей -
-    negative_health = 0;         // Отображать отрицательное здоровье
-    secret_notification = 1;     // Уведомление об обнаружении секрета
-    show_total_time = 1;         // Показывать общее время
-    unlimited_lost_souls = 1;    // Элементаль боли без ограничения
+    negative_health = 0;          // Отображать отрицательное здоровье
+    secret_notification = 1;      // Уведомление об обнаружении секрета
+    show_total_time = 1;          // Показывать общее время
+    unlimited_lost_souls = 1;     // Элементаль боли без ограничения душ
+    unlimited_archvile_range = 0; // Арчвайл без ограничения дистанции атаки
 }
 
 static int MainMenuKeyPress(txt_window_t *window, int key, void *user_data)

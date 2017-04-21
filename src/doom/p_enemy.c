@@ -219,8 +219,13 @@ boolean P_CheckMissileRange (mobj_t* actor)
 
     if (actor->type == MT_VILE)
     {
-	if (dist > 14*64)	
-	    return false;	// too far away
+        if (dist > 14*64)
+        {
+            if (singleplayer && unlimited_archvile_range)
+                return true;    // [JN] атаковать без ограничения дистанции
+            else
+                return false;   // too far away            
+        }
     }
 	
 

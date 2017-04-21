@@ -49,10 +49,11 @@ int blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
 int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
 // - Геймплей -
-int negative_health = 0;         // Отображать отрицательное здоровье
-int secret_notification = 1;     // Уведомление об обнаружении секрета
-int show_total_time = 1;         // Показывать общее время
-int unlimited_lost_souls = 1;    // Элементаль боли без ограничения
+int negative_health = 0;          // Отображать отрицательное здоровье
+int secret_notification = 1;      // Уведомление об обнаружении секрета
+int show_total_time = 1;          // Показывать общее время
+int unlimited_lost_souls = 1;     // Элементаль боли без ограничения
+int unlimited_archvile_range = 0; // Арчвайл без ограничения дистанции атаки
 
 void CompatibilitySettings(void)
 {
@@ -97,6 +98,7 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("“ведомление об обнаружении тайников",       &secret_notification)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћбщее время на межмиссионном экране",       &show_total_time)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ћлементаль Ѓоли без ограничения душ",       &unlimited_lost_souls)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ђрчвайл без ограничения дистанции атаки",   &unlimited_archvile_range)),
     NULL);
 }
 
@@ -125,9 +127,10 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);            // Проигрывать звук при выходе из игры
     // - Геймплей -
-    M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье
-    M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
-    M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
-    M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);     // Элементаль боли без ограничения
+    M_BindIntVariable("negative_health",        &negative_health);            // Отображать отрицательное здоровье
+    M_BindIntVariable("secret_notification",    &secret_notification);        // Уведомление об обнаружении секрета
+    M_BindIntVariable("show_total_time",        &show_total_time);            // Показывать общее время
+    M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);       // Элементаль боли без ограничения
+    M_BindIntVariable("unlimited_archvile_range", &unlimited_archvile_range); // Арчвайл без ограничения дистанции атаки
 }
 
