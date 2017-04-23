@@ -319,12 +319,18 @@ boolean PIT_CheckThing (mobj_t* thing)
 	
 	P_DamageMobj (thing, tmthing, tmthing, damage);
 	
-	tmthing->flags &= ~MF_SKULLFLY;
-	tmthing->momx = tmthing->momy = tmthing->momz = 0;
-	
-	P_SetMobjState (tmthing, tmthing->info->spawnstate);
-	
-	return false;		// stop moving
+    // [JN] Исправление бага: https://doomwiki.org/wiki/Lost_soul_colliding_with_items
+    // Только для одиночной игры, т.к. вызывает рассинхронизацию третьей демозаписи Плутонии.
+    // Thanks AXDOOMER for this fix!
+    if (!singleplayer)
+    {
+        tmthing->flags &= ~MF_SKULLFLY;
+        tmthing->momx = tmthing->momy = tmthing->momz = 0;
+
+        P_SetMobjState (tmthing, tmthing->info->spawnstate);
+
+        return false;		// stop moving
+    }    
     }
 
     
