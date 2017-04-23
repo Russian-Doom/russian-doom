@@ -120,6 +120,7 @@ static void SensibleDefaults(void)
     secret_notification = 1;      // Уведомление об обнаружении секрета
     show_total_time = 1;          // Показывать общее время
     unlimited_lost_souls = 1;     // Элементаль боли без ограничения душ
+    agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных душ
     unlimited_archvile_range = 0; // Арчвайл без ограничения дистанции атаки
 }
 

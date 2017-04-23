@@ -254,6 +254,7 @@ int negative_health = 0;          // Отображать отрицательн
 int secret_notification = 1;      // Уведомление об обнаружении секрета
 int show_total_time = 1;          // Показывать общее время
 int unlimited_lost_souls = 1;     // Элементаль боли без ограничения душ
+int agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных душ
 int unlimited_archvile_range = 0; // Арчвайл без ограничения дистанции атаки
  
 int G_CmdChecksum (ticcmd_t* cmd) 

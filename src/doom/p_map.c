@@ -44,8 +44,9 @@
 
 #include "crispy.h"
 
-extern int colored_blood;       // [JN] Кровь разных цветов
-extern int crushed_corpses_sfx; // [JN] Звук раздавливания трупов
+extern int colored_blood;        // [JN] Кровь разных цветов
+extern int crushed_corpses_sfx;  // [JN] Звук раздавливания трупов
+extern int agressive_lost_souls; // [JN] Повышенная агрессивность Потерянных душ
 
 // Spechit overrun magic value.
 //
@@ -320,9 +321,10 @@ boolean PIT_CheckThing (mobj_t* thing)
 	P_DamageMobj (thing, tmthing, tmthing, damage);
 	
     // [JN] Исправление бага: https://doomwiki.org/wiki/Lost_soul_colliding_with_items
-    // Только для одиночной игры, т.к. вызывает рассинхронизацию третьей демозаписи Плутонии.
+    // Только для одиночной игры, т.к. вызывает рассинхронизацию демозаписией.
     // Thanks AXDOOMER for this fix!
-    if (!singleplayer)
+
+    if (!singleplayer || !agressive_lost_souls)
     {
         tmthing->flags &= ~MF_SKULLFLY;
         tmthing->momx = tmthing->momy = tmthing->momz = 0;
@@ -330,7 +332,7 @@ boolean PIT_CheckThing (mobj_t* thing)
         P_SetMobjState (tmthing, tmthing->info->spawnstate);
 
         return false;		// stop moving
-    }    
+    }
     }
 
     

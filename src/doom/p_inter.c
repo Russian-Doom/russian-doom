@@ -43,8 +43,9 @@
 
 #define BONUSADD	6
 
-extern int ssg_blast_enemies; // [JN] Двуствольное ружье может разрывать врагов
-extern int negative_health;   // [JN] Отображать отрицательное здоровье
+extern int ssg_blast_enemies;    // [JN] Двуствольное ружье может разрывать врагов
+extern int negative_health;      // [JN] Отображать отрицательное здоровье
+extern int agressive_lost_souls; // [JN] Повышенная агрессивность Потерянных душ
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
@@ -955,12 +956,27 @@ P_DamageMobj
 	return;
     }
 
-    if ( (P_Random () < target->info->painchance)
-	 && !(target->flags&MF_SKULLFLY) )
+    // [JN] Исправление бага: https://doomwiki.org/wiki/Lost_soul_charging_backwards
+    // Только для одиночной игры, т.к. вызывает рассинхронизацию демозаписей.
+    // Thanks AXDOOMER for this fix!
+    if (singleplayer && agressive_lost_souls)
     {
-	target->flags |= MF_JUSTHIT;	// fight back!
-	
-	P_SetMobjState (target, target->info->painstate);
+        if (P_Random () < target->info->painchance)
+        {
+            if (target->flags&MF_SKULLFLY)
+                target->flags &= ~MF_SKULLFLY;
+
+            target->flags |= MF_JUSTHIT;	// fight back!
+            P_SetMobjState (target, target->info->painstate);
+        }
+    }
+    else
+    {
+        if ( (P_Random () < target->info->painchance) && !(target->flags&MF_SKULLFLY) )
+        {
+            target->flags |= MF_JUSTHIT;	// fight back!
+            P_SetMobjState (target, target->info->painstate);
+        }        
     }
 			
     target->reactiontime = 0;		// we're awake now...	

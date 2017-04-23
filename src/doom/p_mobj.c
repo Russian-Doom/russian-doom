@@ -45,6 +45,7 @@ void P_SpawnMapThing (mapthing_t*	mthing);
 
 extern int colored_blood;           // [JN] Кровь разных цветов
 extern int red_resurrection_flash;  // [JN] Одиночный звук закрытия быстрой двери
+extern int agressive_lost_souls;    // [JN] Повышенная агрессивность Потерянных душ
 //
 // P_SetMobjState
 // Returns true if the mobj is still present.
@@ -179,8 +180,8 @@ void P_XYMovement (mobj_t* mo)
 	    mo->momx = mo->momy = mo->momz = 0;
 
         // [JN] Исправление бага: https://doomwiki.org/wiki/Lost_soul_target_amnesia
-        // Только для одиночной игры, т.к. вызывает рассинхронизацию третьей демозаписи Плутонии.
-        if (singleplayer)
+        // Только для одиночной игры, т.к. вызывает рассинхронизацию демозаписей.
+        if (singleplayer && agressive_lost_souls)
             P_SetMobjState (mo, mo->info->seestate);
         else
             P_SetMobjState (mo, mo->info->spawnstate);

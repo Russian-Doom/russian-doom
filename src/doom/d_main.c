@@ -442,6 +442,7 @@ void D_BindVariables(void)
     M_BindIntVariable("secret_notification",      &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("show_total_time",          &show_total_time);          // Показывать общее время
     M_BindIntVariable("unlimited_lost_souls",     &unlimited_lost_souls);     // Элементаль боли без ограничения душ
+    M_BindIntVariable("agressive_lost_souls",     &agressive_lost_souls);     // Повышенная агрессивность Потерянных душ
     M_BindIntVariable("unlimited_archvile_range", &unlimited_archvile_range); // Арчвайл без ограничения дистанции атаки
 
     // Multiplayer chat macros
