@@ -36,6 +36,8 @@
 
 #include "doomstat.h"
 
+#include "crispy.h"
+
 
 void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);
@@ -176,7 +178,12 @@ void P_XYMovement (mobj_t* mo)
 	    mo->flags &= ~MF_SKULLFLY;
 	    mo->momx = mo->momy = mo->momz = 0;
 
-	    P_SetMobjState (mo, mo->info->spawnstate);
+        // [JN] Исправление бага: https://doomwiki.org/wiki/Lost_soul_target_amnesia
+        // Только для одиночной игры, т.к. вызывает рассинхронизацию третьей демозаписи Плутонии.
+        if (singleplayer)
+            P_SetMobjState (mo, mo->info->seestate);
+        else
+            P_SetMobjState (mo, mo->info->spawnstate);
 	}
 	return;
     }
