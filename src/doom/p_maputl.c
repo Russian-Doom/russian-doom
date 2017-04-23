@@ -35,6 +35,8 @@
 // State.
 #include "r_state.h"
 
+#include "crispy.h"
+
 //
 // P_AproxDistance
 // Gives an estimation of distance (not exact)
@@ -485,18 +487,41 @@ P_BlockLinesIterator
 	
     offset = *(blockmap+offset);
 
-    for ( list = blockmaplump+offset ; *list != -1 ; list++)
+    // [JN] Исправление бага: https://doomwiki.org/wiki/Hitscan_attacks_hit_invisible_barriers_in_large_open_areas
+    // Исключительно для одиночной игры, т.к. исправление может вызывать рассинхронизацию демозаписией.
+    // Many thanks to Fabian Greffrath for this solution!
+
+    if (singleplayer)
     {
-	ld = &lines[*list];
+        for ( list = blockmaplump+offset+1 ; *list != -1 ; list++)
+        {
+            ld = &lines[*list];
 
-	if (ld->validcount == validcount)
-	    continue; 	// line has already been checked
+            if (ld->validcount == validcount)
+            continue; 	// line has already been checked
 
-	ld->validcount = validcount;
-		
-	if ( !func(ld) )
-	    return false;
+            ld->validcount = validcount;
+
+            if ( !func(ld) )
+            return false;
+        }
     }
+    else
+    {
+        for ( list = blockmaplump+offset ; *list != -1 ; list++)
+        {
+            ld = &lines[*list];
+
+            if (ld->validcount == validcount)
+            continue; 	// line has already been checked
+
+            ld->validcount = validcount;
+		
+            if ( !func(ld) )
+            return false;
+        }
+    }
+
     return true;	// everything was checked
 }
 
