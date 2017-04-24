@@ -216,37 +216,19 @@ void P_XYMovement (mobj_t* mo)
     // [JN] Исправление бага: https://doomwiki.org/wiki/Mancubus_fireball_clipping
     // Исключительно для одиночной игры, т.к. вызывает рассинхронизацию демозаписией.
 
-    if (singleplayer)
+    if ( singleplayer && (xmove > MAXMOVE/2 || ymove > MAXMOVE/2 || xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2) ||
+       (!singleplayer && (xmove > MAXMOVE/2 || ymove > MAXMOVE/2)) )
     {
-        if (xmove > MAXMOVE/2 || ymove > MAXMOVE/2 || xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)
-        {
-            ptryx = mo->x + xmove/2;
-            ptryy = mo->y + ymove/2;
-            xmove >>= 1;
-            ymove >>= 1;
-        }
-        else
-        {
-            ptryx = mo->x + xmove;
-            ptryy = mo->y + ymove;
-            xmove = ymove = 0;
-        }
+        ptryx = mo->x + xmove/2;
+        ptryy = mo->y + ymove/2;
+        xmove >>= 1;
+        ymove >>= 1;
     }
     else
     {
-        if (xmove > MAXMOVE/2 || ymove > MAXMOVE/2)
-        {
-            ptryx = mo->x + xmove/2;
-            ptryy = mo->y + ymove/2;
-            xmove >>= 1;
-            ymove >>= 1;
-        }
-        else
-        {
-            ptryx = mo->x + xmove;
-            ptryy = mo->y + ymove;
-            xmove = ymove = 0;
-        }
+        ptryx = mo->x + xmove;
+        ptryy = mo->y + ymove;
+        xmove = ymove = 0;
     }
 
 	if (!P_TryMove (mo, ptryx, ptryy))
