@@ -489,20 +489,22 @@ P_BlockLinesIterator
 
     // [JN] Исправление бага: https://doomwiki.org/wiki/Hitscan_attacks_hit_invisible_barriers_in_large_open_areas
     // Исключительно для одиночной игры, т.к. исправление может вызывать рассинхронизацию демозаписией.
-    // Many thanks to Fabian Greffrath for this solution and Dmitry D. Chernov aka Black Doomer for code simplifying!
+    // Many thanks to Fabian Greffrath for this solution and Dmitry D. Chernov aka Black Doomer!
 
-    list = blockmaplump+offset + ((singleplayer) ? 1 : 0);
+    if (singleplayer)
+    offset++;
 
-    for ( ; *list != -1 ; list++)
+    for ( list = blockmaplump+offset ; *list != -1 ; list++)
     {
-        ld = &lines[*list];
 
-        if (ld->validcount == validcount)
+    ld = &lines[*list];
+
+    if (ld->validcount == validcount)
         continue; 	// line has already been checked
 
-        ld->validcount = validcount;
+    ld->validcount = validcount;
 
-        if ( !func(ld) )
+    if ( !func(ld) )
         return false;
     }
 
