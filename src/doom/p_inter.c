@@ -686,6 +686,12 @@ P_TouchSpecialThing
     if (special->flags & MF_COUNTITEM)
 	player->itemcount++;
     P_RemoveMobj (special);
+
+    // [JN] Ограничение длительности желтой палитры пятью секундами (175 * 0,35 = 5).
+    // Не нужно держать экран окрашенным в желтую палитру слишком долго.
+    if (player->bonuscount >= 175)
+        player->bonuscount = 175;
+
     player->bonuscount += BONUSADD;
     if (player == &players[consoleplayer])
 	S_StartSound (NULL, sound);
