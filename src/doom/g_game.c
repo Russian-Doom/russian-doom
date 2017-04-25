@@ -2122,8 +2122,9 @@ void G_WriteDemoTiccmd (ticcmd_t* cmd)
     // reset demo pointer back
     demo_p = demo_start;
 
-    // [JN] Лимит демозаписей отключен, сразу расширять демо-буффер
-    IncreaseDemoBuffer();
+    // [JN] Расширять демо-буффер при необходимости
+    if (demo_p > demoend - 16)
+        IncreaseDemoBuffer();
 	
     G_ReadDemoTiccmd (cmd); // make SURE it is exactly the same 
 }
