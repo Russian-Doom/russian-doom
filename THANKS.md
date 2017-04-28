@@ -5,13 +5,18 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Thomas "CapnClever" Birkel
 - Mike "chungy" Swanson
 - Jonathan "jmtd" Dowland
-- Alexandre-Xavier "AXDOOMER" Labonté-Lamoureux
 
 #### [Crispy Doom](https://www.chocolate-doom.org/wiki/index.php/Crispy_Doom) source port 
 - Fabian Greffrath
 
 #### [DOOM Retro](http://doomretro.com/) source port 
 - Brad Harding
+
+#### [PCDoom](https://github.com/nukeykt/PCDoom-v2) source port 
+- Alexey Khokholov
+
+#### [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) source port
+- Alexandre-Xavier "AXDOOMER" Labonté-Lamoureux
 
 ##### And also:
 - Maxim "MaxLeon" Pyanov, Oleg Zik and Oleg “Kai” Sudarikov
