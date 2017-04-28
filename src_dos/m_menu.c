@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -100,7 +101,7 @@ void    (*messageRoutine)(int response);
 
 #define SAVESTRINGSIZE 	24
 
-char gammamsg[5][26] =
+char gammamsg[5][29] =
 {
     GAMMALVL0,
     GAMMALVL1,
@@ -113,26 +114,40 @@ char endmsg1[NUM_QUITMESSAGES][80] =
 {
     // DOOM1
     QUITMSG,
-    "please don't leave, there's more\ndemons to toast!",
-    "let's beat it -- this is turning\ninto a bloodbath!",
-    "i wouldn't leave if i were you.\ndos is much worse.",
-    "you're trying to say you like dos\nbetter than me, right?",
-    "don't leave yet -- there's a\ndemon around that corner!",
-    "ya know, next time you come in here\ni'm gonna toast ya.",
-    "go ahead and leave. see if i care."
+	// Пожалуйста, не уходите! \n Здесь осталось ещё много демонов!
+	"gj;fkeqcnf< yt e[jlbnt! \n pltcm jcnfkjcm tot vyjuj ltvjyjd!",
+	// Давайте определимся, это будет \n ваша первая и последняя попытка!
+	"lfdfqnt jghtltkbvcz< 'nj ,eltn \n dfif gthdfz b gjcktlyzz gjgsnrf!",
+	// На Вашем месте я не уходил. \n Работать намного скучнее.
+	"yf dfitv vtcnt z ,s yt e[jlbk>\nhf,jnfnm yfvyjuj crexytt>",
+	// Вы хотите сказать, что операционная \n система лучше чем я, да?
+	"ds [jnbnt crfpfnm< xnj jgthfwbjyyfz \n cbcntvf kexit xtv z< lf?",
+	// Не уходите, в дальнем углу \n притаился еще один монстр!
+	"yt e[jlbnt< d lfkmytv euke \n ghbnfbkcz tot jlby vjycnh!",
+	// Знаете, когда Вы вернётесь, \n Вас будут ждать большие неприятности.
+	"pyftnt< rjulf ds dthytntcm< \n dfc ,elen ;lfnm ,jkmibt ytghbznyjcnb>",
+	// Давайте, уходите. \n Мне абсолютно всё равно.
+	"lfdfqnt< e[jlbnt> \n vyt f,cjk.nyj dct hfdyj>"
 };
 
 char endmsg2[NUM_QUITMESSAGES][80] =
 {
     // QuitDOOM II messages
     QUITMSG,
-    "you want to quit?\nthen, thou hast lost an eighth!",
-    "don't go now, there's a \ndimensional shambler waiting\nat the dos prompt!",
-    "get outta here and go back\nto your boring programs.",
-    "if i were your boss, i'd \n deathmatch ya in a minute!",
-    "look, bud. you leave now\nand you forfeit your body count!",
-    "just leave. when you come\nback, i'll be waiting with a bat.",
-    "you're lucky i don't smack\nyou for thinking about leaving."
+    // Всерьез задумали выйти? \n Полагаю, это не очень-то разумно!
+    "dcthmtp pflevfkb dsqnb?\ngjkfuf.< 'nj yt jxtym-nj hfpevyj!", 
+    // Не уходите, в операционной системе \n вас ждут ужасные демоны!
+    "yt e[jlbnt< d jgthfwbjyyjq cbcntvt\ndfc ;len e;fcyst ltvjys!",
+    // Отлично, вот и убирайтесь отсюда к \n своим скучным программам!
+    "jnkbxyj< djn b e,bhfqntcm jnc.lf\nr cdjbv crexysv ghjuhfvvfv!", 
+    // Вам определённо следует \n остаться на сверхурочное время!
+    "dfv jghtltktyyj cktletn\njcnfnmcz yf cdth[ehjxyjt dhtvz!",
+    // Слушайте, лучше останьтесь, иначе \n может случится что-то страшное.
+    "ckeifqnt< kexit jcnfymntcm< byfxt\nvj;tn ckexbnmcz xnj-nj cnhfiyjt>",
+    // Просто уходите. когда вернётесь, \n вам крупно не поздоровится.
+    "ghjcnj e[jlbnt> rjulf dthytntcm<\ndfv rhegyj yt gjpljhjdbncz>", 
+    // Вам очень повезло, что за это \n с вами ничего не случится!
+    "dfv jxtym gjdtpkj< xnj pf 'nj \n c dfvb ybxtuj yt ckexbncz!"
 };
 
 // we are going to be entering a savegame string
@@ -460,6 +475,8 @@ enum
     load4,
     load5,
     load6,
+    load7,
+    load8,
     load_end
 } load_e;
 
@@ -470,7 +487,9 @@ menuitem_t LoadMenu[]=
     {1,"", M_LoadSelect,'3'},
     {1,"", M_LoadSelect,'4'},
     {1,"", M_LoadSelect,'5'},
-    {1,"", M_LoadSelect,'6'}
+    {1,"", M_LoadSelect,'6'},
+    {1,"", M_LoadSelect,'7'},
+    {1,"", M_LoadSelect,'8'},
 };
 
 menu_t  LoadDef =
@@ -479,7 +498,7 @@ menu_t  LoadDef =
     &MainDef,
     LoadMenu,
     M_DrawLoad,
-    80,54,
+    67,38, // [JN] Отцентрированы и скорректированы поля ввода текста
     0
 };
 
@@ -493,7 +512,9 @@ menuitem_t SaveMenu[]=
     {1,"", M_SaveSelect,'3'},
     {1,"", M_SaveSelect,'4'},
     {1,"", M_SaveSelect,'5'},
-    {1,"", M_SaveSelect,'6'}
+    {1,"", M_SaveSelect,'6'},
+    {1,"", M_SaveSelect,'7'},
+    {1,"", M_SaveSelect,'8'}
 };
 
 menu_t  SaveDef =
@@ -502,7 +523,7 @@ menu_t  SaveDef =
     &MainDef,
     SaveMenu,
     M_DrawSave,
-    80,54,
+    67,38, // [JN] Отцентрированы и скорректированы поля ввода текста
     0
 };
 
@@ -545,8 +566,9 @@ void M_ReadSaveStrings(void)
 void M_DrawLoad(void)
 {
     int             i;
-	
-    V_DrawPatchDirect (72,28,0,W_CacheLumpName("M_LOADG",PU_CACHE));
+
+    // [JN] Используется дополнительный тайтл для меню загрузки: "ЗАГРУЗИТЬ ИГРУ"
+    V_DrawPatchDirect (59,13,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
@@ -613,8 +635,9 @@ void M_LoadGame (int choice)
 void M_DrawSave(void)
 {
     int             i;
-	
-    V_DrawPatchDirect (72,28,0,W_CacheLumpName("M_SAVEG",PU_CACHE));
+
+    // [JN] Используется дополнительный тайтл для меню загрузки: "СОХРАНИТЬ ИГРУ"
+    V_DrawPatchDirect (57,13,0,W_CacheLumpName("M_SGTTL",PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
@@ -766,7 +789,8 @@ void M_DrawReadThis(void)
 //
 void M_DrawSound(void)
 {
-    V_DrawPatchDirect (60,38,0,W_CacheLumpName("M_SVOL",PU_CACHE));
+    // [JN] Используется дополнительный заголовок для меню ГРОМКОСТИ.
+    V_DrawPatchDirect (90,40,0,W_CacheLumpName("M_SVLTTL",PU_CACHE));
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1),
 		 16,sfxVolume);
@@ -822,7 +846,12 @@ void M_MusicVol(int choice)
 //
 void M_DrawMainMenu(void)
 {
-    V_DrawPatchDirect (94,2,0,W_CacheLumpName("M_DOOM",PU_CACHE));
+    if (tnt)
+        V_DrawPatchDirect (94,2,0,W_CacheLumpName("M_DOOMT",PU_CACHE));
+    else if (plutonia)
+        V_DrawPatchDirect (94,2,0,W_CacheLumpName("M_DOOMP",PU_CACHE));
+    else
+        V_DrawPatchDirect (94,2,0,W_CacheLumpName("M_DOOM",PU_CACHE));
 }
 
 
@@ -908,7 +937,7 @@ char	msgNames[2][9]		= {"M_MSGOFF","M_MSGON"};
 
 void M_DrawOptions(void)
 {
-    V_DrawPatchDirect (108,15,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
+    V_DrawPatchDirect (89,13,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
 	
     V_DrawPatchDirect (OptionsDef.x + 175,OptionsDef.y+LINEHEIGHT*detail,0,
 		       W_CacheLumpName(detailNames[detailLevel],PU_CACHE));
@@ -1084,7 +1113,7 @@ void M_ChangeSensitivity(int choice)
 	    mouseSensitivity--;
 	break;
       case 1:
-	if (mouseSensitivity < 9)
+	if (mouseSensitivity < 255) // [crispy] extended range
 	    mouseSensitivity++;
 	break;
     }
@@ -1159,8 +1188,22 @@ M_DrawThermo
     }
     V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMR",PU_CACHE));
 
-    V_DrawPatchDirect ((x+8) + thermDot*8,y,
-		       0,W_CacheLumpName("M_THERMO",PU_CACHE));
+    // [crispy] do not crash anymore if value exceeds thermometer range
+    if (thermDot >= thermWidth)
+    {
+        thermDot = thermWidth - 1;
+        V_DrawPatchDirect ((x+8) + thermDot*8,y,0,W_CacheLumpName("M_THERMW",PU_CACHE));
+    }
+    else if (thermDot == 0)
+    {
+        V_DrawPatchDirect ((x+8) + thermDot*8,y,0,W_CacheLumpName("M_THERMD",PU_CACHE));
+    }
+    else
+    {
+        V_DrawPatchDirect ((x+8) + thermDot*8,y,0,W_CacheLumpName("M_THERMO",PU_CACHE));
+    }
+
+
 }
 
 

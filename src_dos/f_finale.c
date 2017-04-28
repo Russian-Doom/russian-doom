@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -645,7 +646,10 @@ void F_CastDrawer (void)
     patch_t*		patch;
     
     // erase the entire screen to a background
-    V_DrawPatch (0,0,0, W_CacheLumpName ("BOSSBACK", PU_CACHE));
+    if (!plutonia)
+        V_DrawPatch (0,0,0, W_CacheLumpName ("BOSSBACK", PU_CACHE));
+    else
+        V_DrawPatch (0,0,0, W_CacheLumpName ("BOSSBACP", PU_CACHE));
 
     F_CastPrint (castorder[castnum].name);
     

@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -528,7 +529,7 @@ void R_InitTextures (void)
 	    patch->patch = patchlookup[SHORT(mpatch->patch)];
 	    if (patch->patch == -1)
 	    {
-		I_Error ("R_InitTextures: Missing patch in texture %s",
+		I_Error ("R_InitTextures: Отсутствует патч в текстуре %s",
 			 texture->name);
 	    }
 	}		

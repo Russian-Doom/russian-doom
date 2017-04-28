@@ -251,7 +251,15 @@ void G_BuildTiccmd (ticcmd_t* cmd)
  
     strafe = gamekeydown[key_strafe] || mousebuttons[mousebstrafe] 
 	|| joybuttons[joybstrafe]; 
-    speed = gamekeydown[key_speed] || joybuttons[joybspeed];
+    // speed = gamekeydown[key_speed] || joybuttons[joybspeed];
+    
+    // [JN] Включен режим постоянного бега, временно 
+    // отключается зажатием кнопки бега.
+    speed = true;
+    if (gamekeydown[key_speed] || joybuttons[joybspeed])
+    {
+        speed = false;
+    }
  
     forward = side = 0;
     

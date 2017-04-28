@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -126,7 +127,7 @@ R_MapPlane
 	|| x2>=viewwidth
 	|| (unsigned)y>viewheight)
     {
-	I_Error ("R_MapPlane: %i, %i at %i",x1,x2,y);
+	I_Error ("R_MapPlane: %i, %i в %i",x1,x2,y);
     }
 #endif
 
@@ -235,7 +236,7 @@ R_FindPlane
 	return check;
 		
     if (lastvisplane - visplanes == MAXVISPLANES)
-	I_Error ("R_FindPlane: no more visplanes");
+	I_Error ("R_FindPlane: превышен лимит visplanes");
 		
     lastvisplane++;
 
@@ -366,15 +367,15 @@ void R_DrawPlanes (void)
 				
 #ifdef RANGECHECK
     if (ds_p - drawsegs > MAXDRAWSEGS)
-	I_Error ("R_DrawPlanes: drawsegs overflow (%i)",
+	I_Error ("R_DrawPlanes: ошибка переполнения drawsegs (%i)",
 		 ds_p - drawsegs);
     
     if (lastvisplane - visplanes > MAXVISPLANES)
-	I_Error ("R_DrawPlanes: visplane overflow (%i)",
+	I_Error ("R_DrawPlanes: ошибка переполнения visplane (%i)",
 		 lastvisplane - visplanes);
     
     if (lastopening - openings > MAXOPENINGS)
-	I_Error ("R_DrawPlanes: opening overflow (%i)",
+	I_Error ("R_DrawPlanes: ошибка переполнения opening (%i)",
 		 lastopening - openings);
 #endif
 

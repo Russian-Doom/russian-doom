@@ -2,7 +2,8 @@
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 1993-2008 Raven Software
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -757,10 +758,10 @@ void I_StartupMouse(void)
 
     if (I_ResetMouse() != 0xffff)
     {
-        printf("Mouse: not present\n", 0);
+        printf("Мышь отсутствует\n", 0);
         return;
     }
-    printf("Mouse: detected\n", 0);
+    printf("Мышь обнаружена\n", 0);
 
     mousepresent = 1;
 
@@ -1166,7 +1167,18 @@ void I_Quit(void)
         D_QuitNetGame();
     }
     M_SaveDefaults();
-    scr = (byte*)W_CacheLumpName("ENDOOM", PU_CACHE);
+    if (shareware)
+        scr = (byte*)W_CacheLumpName("ENDOOMS", PU_CACHE);
+    else if (registered)
+        scr = (byte*)W_CacheLumpName("ENDOOMR", PU_CACHE);
+    else if (retail)
+        scr = (byte*)W_CacheLumpName("ENDOOMU", PU_CACHE);
+    else if (tnt)
+        scr = (byte*)W_CacheLumpName("ENDOOMT", PU_CACHE);
+    else if (plutonia)
+        scr = (byte*)W_CacheLumpName("ENDOOMP", PU_CACHE);
+    else
+        scr = (byte*)W_CacheLumpName("ENDOOMH", PU_CACHE);
     I_ShutdownGraphics();
     I_ShutdownSound();
     I_ShutdownTimer();
@@ -1200,7 +1212,7 @@ byte *I_ZoneBase(int *size)
     int386x(0x31, &regs, &regs, &segregs);
 
     heap = meminfo[0];
-    printf("DPMI memory: 0x%x", heap);
+    printf("Память DPMI: 0x%x", heap);
 
     do
     {
@@ -1212,12 +1224,12 @@ byte *I_ZoneBase(int *size)
         ptr = malloc(heap);
     } while (!ptr);
 
-    printf(", 0x%x allocated for zone\n", heap);
+    printf(", 0x%x обнаружено для распределения.\n", heap);
     if (heap < 0x180000)
     {
         printf("\n");
-        printf("Insufficient memory! Please, free up more memory for DOOM.\n\n");
-        printf("DOOM aborted.\n");
+        printf("Недостаточно памяти! Пожалуйста, освободите больше памяти для запуска DOOM.\n\n");
+        printf("Выполнение программы прервано.\n");
         exit(1);
     }
 #if 0
@@ -1227,7 +1239,7 @@ byte *I_ZoneBase(int *size)
     int386(0x31, &regs, &regs);
     if (regs.w.cflag)
     {
-        I_Error("Couldn't allocate DPMI memory!");
+        I_Error("Невозможно распределить память DPMI!");
     }
     block = (regs.w.si << 16) + regs.w.di;
 #endif
@@ -1364,7 +1376,7 @@ byte *I_AllocLow (int length)
     //selector = regs.w.dx;
     if (regs.w.cflag != 0)
     {
-        I_Error("I_AllocLow: DOS alloc of %i failed, %i free",
+        I_Error("I_AllocLow: невозможно обнаружить %i, свободно %i",
                 length, regs.w.bx * 16);
     }
 
@@ -1437,7 +1449,7 @@ void I_InitNetwork(void)
         doomcom = malloc(sizeof(*doomcom));
         if (!doomcom)
         {
-            I_Error("malloc() in I_InitNetwork() failed");
+            I_Error("Ошибка malloc() в I_InitNetwork()");
         }
         memset(doomcom, 0, sizeof(*doomcom));
         netgame = false;
@@ -1464,7 +1476,7 @@ void I_NetCmd(void)
 {
     if (!netgame)
     {
-        I_Error("I_NetCmd when not in netgame");
+        I_Error("I_NetCmd не в сетевой игре");
     }
     DPMIInt(doomcom->intnum);
 }

@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -1564,8 +1565,13 @@ void WI_loadData(void)
 	lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS,
 				       PU_STATIC, 0);
 	for (i=0 ; i<NUMCMAPS ; i++)
-	{								
-	    sprintf(name, "CWILV%2.2d", i);
+	{
+        if (commercial)
+            sprintf(name, "CWILV%2.2d", i);
+        if (tnt)
+            sprintf(name, "TWILV%2.2d", i);
+        if (plutonia)
+            sprintf(name, "PWILV%2.2d", i);
 	    lnames[i] = W_CacheLumpName(name, PU_STATIC);
 	}					
     }

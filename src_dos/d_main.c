@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -20,7 +21,7 @@
 //  and call the startup functions.
 //
 
-#define	BGCOLOR		2
+#define	BGCOLOR		1
 #define	FGCOLOR		15
 
 #include <stdlib.h>
@@ -364,7 +365,7 @@ void D_DoomLoop (void)
     {
 	char    filename[20];
 	sprintf (filename,"debug%i.txt",consoleplayer);
-	printf ("debug output to: %s\n",filename);
+	printf ("запись отладочного файла: %s\n",filename);
 	debugfile = fopen (filename,"w");
     }
 	
@@ -466,7 +467,14 @@ void D_AdvanceDemo (void)
 	else
 	    pagetic = 170;
 	gamestate = GS_DEMOSCREEN;
-	pagename = "TITLEPIC";
+    if (shareware)
+        pagename = "TITLEPIS";
+    else if (tnt)
+        pagename = "TITLEPIT";
+    else if (plutonia)
+        pagename = "TITLEPIP";
+    else
+        pagename = "TITLEPIC";
 	if ( commercial )
 	  S_StartMusic(mus_dm2ttl);
 	else
@@ -478,7 +486,12 @@ void D_AdvanceDemo (void)
       case 2:
 	pagetic = 200;
 	gamestate = GS_DEMOSCREEN;
-	pagename = "CREDIT";
+    if (shareware)
+        pagename = "CREDITS";
+    else if (retail)
+        pagename = "CREDITU";
+    else
+        pagename = "CREDIT";
 	break;
       case 3:
 	G_DeferedPlayDemo ("demo2");
@@ -488,7 +501,14 @@ void D_AdvanceDemo (void)
 	if ( commercial)
 	{
 	    pagetic = 35 * 11;
-	    pagename = "TITLEPIC";
+        if (shareware)
+            pagename = "TITLEPIS";
+        else if (tnt)
+            pagename = "TITLEPIT";
+        else if (plutonia)
+            pagename = "TITLEPIP";
+        else
+            pagename = "TITLEPIC";
 	    S_StartMusic(mus_dm2ttl);
 	}
 	else
@@ -620,8 +640,20 @@ void D_RedrawTitle(void)
     //Set cursor pos to zero
     D_SetCursorPosition(0, 0);
 
-    //Draw title
-    D_DrawTitle(title, FGCOLOR, BGCOLOR);
+    //Draw title (title, FGCOLOR, BGCOLOR);
+    // [JN] Разные цвета для разных игр
+    if (shareware)
+        D_DrawTitle(title, 14, 1);
+    else if (registered)
+        D_DrawTitle(title, 15, 1);
+    else if (retail)
+        D_DrawTitle(title, 15, 6);
+    else if (tnt)
+        D_DrawTitle(title, 14, 4);
+    else if (plutonia)
+        D_DrawTitle(title, 15, 2);
+    else
+        D_DrawTitle(title, 15, 4);
 
     //Restore old cursor pos
     D_SetCursorPosition(column, row);
@@ -704,6 +736,8 @@ void IdentifyVersion (void)
     {
 	if( !access (myargv[p+1],R_OK) )
 	{
+        // [JN] I have to disable support for French verion
+        /*
 	    if ( !strcasecmp (myargv[p+1],"doom2f.wad") )
 	    {
 	        commercial = true;
@@ -713,11 +747,13 @@ void IdentifyVersion (void)
 	        D_AddFile ("doom2f.wad");
 	        return;
 	    }
+        */
 
 	    if ( !strcasecmp (myargv[p+1],"doom2.wad") )
 	    {
 	        commercial = true;
 	        D_AddFile ("doom2.wad");
+            D_AddFile ("rusdoom.wad");
 	        return;
 	    }
 
@@ -726,6 +762,7 @@ void IdentifyVersion (void)
 	        commercial = true;
 	        plutonia = true;
 	        D_AddFile ("plutonia.wad");
+            D_AddFile ("rusdoom.wad");
 	        return;
 	    }
 
@@ -734,21 +771,24 @@ void IdentifyVersion (void)
 	        commercial = true;
 	        tnt = true;
 	        D_AddFile ("tnt.wad");
-	        return;
-	    }
-
-	    if ( !strcasecmp (myargv[p+1],"doomu.wad") )
-	    {
-	        registered = true;
-	        retail = true;
-	        D_AddFile ("doomu.wad");
+            D_AddFile ("rusdoom.wad");
 	        return;
 	    }
 
 	    if ( !strcasecmp (myargv[p+1],"doom.wad") )
 	    {
-	        registered = true;
+	        // registered = true;
+	        retail = true;
 	        D_AddFile ("doom.wad");
+            D_AddFile ("rusdoom.wad");
+	        return;
+	    }
+
+	    if ( !strcasecmp (myargv[p+1],"doomr.wad") )
+	    {
+	        registered = true;
+	        D_AddFile ("doomr.wad");
+            D_AddFile ("rusdoom.wad");
 	        return;
 	    }
 
@@ -756,12 +796,15 @@ void IdentifyVersion (void)
 	    {
 	        shareware = true;
 	        D_AddFile ("doom1.wad");
+            D_AddFile ("rusdoom.wad");
 	        return;
 	    }
 	}
     }
     else
     {
+    // [JN] I have to disable support for French verion
+    /*
 	if ( !access ("doom2f.wad",R_OK) )
 	{
 	    commercial = true;
@@ -772,11 +815,13 @@ void IdentifyVersion (void)
 	    D_AddFile ("doom2f.wad");
 	    return;
 	}
+    */
 
 	if ( !access ("doom2.wad",R_OK) )
 	{
 	    commercial = true;
 	    D_AddFile ("doom2.wad");
+        D_AddFile ("rusdoom.wad");
 	    return;
 	}
 
@@ -785,6 +830,7 @@ void IdentifyVersion (void)
 	    commercial = true;
 	    plutonia = true;
 	    D_AddFile ("plutonia.wad");
+        D_AddFile ("rusdoom.wad");
 	    return;
 	}
 
@@ -793,21 +839,25 @@ void IdentifyVersion (void)
 	    commercial = true;
 	    tnt = true;
 	    D_AddFile ("tnt.wad");
-	    return;
-	}
-
-	if ( !access ("doomu.wad",R_OK) )
-	{
-	    registered = true;
-	    retail = true;
-	    D_AddFile ("doomu.wad");
+        D_AddFile ("rusdoom.wad");
 	    return;
 	}
 
 	if ( !access ("doom.wad",R_OK) )
 	{
-	    registered = true;
+	    // registered = true;
+	    retail = true;
 	    D_AddFile ("doom.wad");
+        D_AddFile ("rusdoom.wad");
+	    return;
+	}
+
+	if ( !access ("doomr.wad",R_OK) )
+	{
+	    registered = true;
+	    D_AddFile ("doomr.wad");
+        D_AddFile ("rusdoom.wad");
+
 	    return;
 	}
 
@@ -815,11 +865,12 @@ void IdentifyVersion (void)
 	{
 	    shareware = true;
 	    D_AddFile ("doom1.wad");
+        D_AddFile ("rusdoom.wad");
 	    return;
 	}
     }
 }
-    printf("Game mode indeterminate.\n");
+    printf("Невозможно определить игру.\n");
     exit(1);
     //I_Error ("Game mode indeterminate\n");
 }
@@ -849,10 +900,10 @@ void FindResponseFile (void)
 	    handle = fopen (&myargv[i][1],"rb");
 	    if (!handle)
 	    {
-		printf ("\nNo such response file!");
+		printf ("\nОтсутствует ответный файл!");
 		exit(1);
 	    }
-	    printf("Found response file %s!\n",&myargv[i][1]);
+	    printf("Найден ответный файл %s!\n",&myargv[i][1]);
 	    fseek (handle,0,SEEK_END);
 	    size = ftell(handle);
 	    fseek (handle,0,SEEK_SET);
@@ -889,7 +940,7 @@ void FindResponseFile (void)
 	    myargc = indexinfile;
 	
 	    // DISPLAY ARGS
-	    printf("%d command-line args:\n",myargc);
+	    printf("%d параметры командной строки:\n",myargc);
 	    for (k=1;k<myargc;k++)
 		printf("%s\n",myargv[k]);
 
@@ -925,11 +976,53 @@ void D_DoomMain (void)
     else if (M_CheckParm ("-deathmatch"))
 	deathmatch = 1;
 
+    if (shareware || registered)
+    {
+        sprintf(title,
+        "                         "
+        "Система загрузки DOOM v%i.%i"
+        "                           ",
+        VERSION/100,VERSION%100);
+    }
+    else if (retail)
+    {
+        sprintf(title,
+        "                           "
+        "The Ultimate DOOM v%i.%i"
+        "                           ",
+        VERSION/100,VERSION%100);
+    }
+    else if (tnt)
+    {
+        sprintf(title,
+        "                   "
+        "Final DOOM: Эксперимент \"Плутония\" v%i.%i"
+        "                           ",
+        VERSION/100,VERSION%100);
+    }
+    else if (plutonia)
+    {
+        sprintf(title,
+        "                   "
+        "Final DOOM: Эксперимент \"Плутония\" v%i.%i"
+        "                           ",
+        VERSION/100,VERSION%100);
+    }
+    else if (commercial)
+    {
+        sprintf(title,
+        "                         "
+        "DOOM 2: Ад на Земле v%i.%i"
+        "                           ",
+        VERSION/100,VERSION%100);
+    }
+
+    /*
     if (!commercial)
     {
         sprintf(title,
                 "                         "
-                "DOOM System Startup v%i.%i"
+                "Система загрузки DOOM v%i.%i"
                 "                           ",
                 VERSION/100,VERSION%100);
     }
@@ -939,7 +1032,7 @@ void D_DoomMain (void)
         {
             sprintf(title,
                     "                   "
-                    "DOOM 2: Plutonia Experiment v%i.%i"
+                    "Final DOOM: Эксперимент \"Плутония\" v%i.%i"
                     "                           ",
                     VERSION/100,VERSION%100);
         }
@@ -947,7 +1040,7 @@ void D_DoomMain (void)
         {
             sprintf(title,
                     "                     "
-                    "DOOM 2: TNT - Evilution v%i.%i"
+                    "Final DOOM: TNT - Дьяволюция v%i.%i"
                     "                           ",
                     VERSION/100,VERSION%100);
         }
@@ -955,17 +1048,26 @@ void D_DoomMain (void)
         {
             sprintf(title,
                     "                         "
-                    "DOOM 2: Hell on Earth v%i.%i"
+                    "DOOM 2: Ад на Земле v%i.%i"
                     "                           ",
                     VERSION/100,VERSION%100);
         }
     }
+    if(retail)
+    {
+        sprintf(title,
+        "                           "
+        "The Ultimate DOOM v%i.%i"
+        "                           ",
+        VERSION/100,VERSION%100);
+    }
+    */
     
     regs.w.ax = 3;
     int386(0x10, &regs, &regs);
     D_DrawTitle(title, FGCOLOR, BGCOLOR);
 
-    printf("\nP_Init: Checking cmd-line parameters...\n");
+    printf("\nP_Init: Проверка параметров командной строки...\n");
 
     if (devparm)
     {
@@ -993,7 +1095,7 @@ void D_DoomMain (void)
 	    scale = 10;
 	if (scale > 400)
 	    scale = 400;
-	printf ("turbo scale: %i%%\n",scale);
+	printf ("турбо ускорение: %i%%\n",scale);
 	forwardmove[0] = forwardmove[0]*scale/100;
 	forwardmove[1] = forwardmove[1]*scale/100;
 	sidemove[0] = sidemove[0]*scale/100;
@@ -1024,7 +1126,7 @@ void D_DoomMain (void)
         {
 	    sprintf (file,"~"DEVMAPS"E%cM%c.wad",
 		     myargv[p+1][0], myargv[p+2][0]);
-	    printf("Warping to Episode %s, Map %s.\n",
+	    printf("Перемещение в эпизод %s, карту %s.\n",
 		   myargv[p+1],myargv[p+2]);
         }
 	D_AddFile (file);
@@ -1049,7 +1151,7 @@ void D_DoomMain (void)
     {
 	sprintf (file,"%s.lmp", myargv[p+1]);
 	D_AddFile (file);
-	printf("Playing demo %s.lmp.\n",myargv[p+1]);
+	printf("Проигрывание демозаписи %s.lmp.\n",myargv[p+1]);
     }
     
     // get skill / episode / map from parms
@@ -1079,7 +1181,7 @@ void D_DoomMain (void)
     {
 	int     time;
 	time = atoi(myargv[p+1]);
-	printf("Levels will end after %d minute",time);
+	printf("Уровни будут завершаться после %d минут(ы)",time);
 	if (time>1)
 	    printf("s");
 	printf(".\n");
@@ -1087,7 +1189,7 @@ void D_DoomMain (void)
 
     p = M_CheckParm ("-avg");
     if (p && p < myargc-1 && deathmatch)
-	printf("Austin Virtual Gaming: Levels will end after 20 minutes\n");
+	printf("Austin Virtual Gaming: Уровни будут завершаться после 20 минут\n");
 
     p = M_CheckParm ("-warp");
     if (p && p < myargc-1)
@@ -1103,16 +1205,16 @@ void D_DoomMain (void)
     }
     
     // init subsystems
-    printf ("V_Init: allocate screens.\n");
+    printf ("V_Init: Обнаружение экранов.\n");
     V_Init ();
 
-    printf ("M_LoadDefaults: Load system defaults.\n");
+    printf ("M_LoadDefaults: Загрузка системных стандартов.\n");
     M_LoadDefaults ();              // load before initing other systems
 
-    printf ("Z_Init: Init zone memory allocation daemon. \n");
+    printf ("Z_Init: Инициализация распределения памяти. \n");
     Z_Init ();
 
-    printf ("W_Init: Init WADfiles.\n");
+    printf ("W_Init: Инициализация WAD-файлов.\n");
     W_InitMultipleFiles (wadfiles);
     
     if (registered)
@@ -1132,7 +1234,7 @@ void D_DoomMain (void)
                     retail = true;
                     sprintf(title,
                     "                         "
-                    "The Ultimate DOOM Startup v%i.%i"
+                    "Загрузка Ultimate DOOM v%i.%i"
                     "                        ",
                     VERSION/100,VERSION%100);
                     D_RedrawTitle();
@@ -1168,23 +1270,26 @@ void D_DoomMain (void)
 		    retail = registered = false;
 		}
 
-	if (shareware && modifiedgame)
-	    I_Error("\nYou cannot -file with the shareware version.");
+    // [JN] Disabled, needed for loading translated wads
+    //
+	// if (shareware && modifiedgame)
+	//     I_Error("\nYou cannot -file with the shareware version.");
     }
     
     // If additonal PWAD files are used, print modified banner
-    if (modifiedgame)
-    {
-	/*m*/printf (
-	    "===========================================================================\n"
-	    "ATTENTION:  This version of DOOM has been modified.  If you would like to\n"
-	    "get a copy of the original game, call 1-800-IDGAMES or see the readme file.\n"
-	    "        You will not receive technical support for modified games.\n"
-	    "                      press enter to continue\n"
-	    "===========================================================================\n"
-	    );
-	getchar ();
-    }
+    //
+    // if (modifiedgame)
+    // {
+	// /*m*/printf (
+	//     "===========================================================================\n"
+	//     "ATTENTION:  This version of DOOM has been modified.  If you would like to\n"
+	//     "get a copy of the original game, call 1-800-IDGAMES or see the readme file.\n"
+	//     "        You will not receive technical support for modified games.\n"
+	//     "                      press enter to continue\n"
+	//     "===========================================================================\n"
+	//     );
+	// getchar ();
+    // }
 	
 
     // Check and print which version is executed.
@@ -1192,9 +1297,9 @@ void D_DoomMain (void)
     if (registered)
     {
         if (retail)
-            printf("\tretail version.\n");
+            printf("\tкоммерческая версия.\n");
         else
-            printf("\tregistered version.\n");
+            printf("\tзарегистрированная версия.\n");
         D_RedrawTitle();
         printf(
             "===========================================================================\n"
@@ -1206,12 +1311,12 @@ void D_DoomMain (void)
     }
     if (shareware)
     {
-        printf("\tshareware version.\n");
+        printf("\tдемонстрационная версия.\n");
         D_RedrawTitle();
     }
     if (commercial)
     {
-        printf("\tcommercial version.\n");
+        printf("\tкоммерческая версия.\n");
         D_RedrawTitle();
         printf(
             "===========================================================================\n"
@@ -1222,35 +1327,35 @@ void D_DoomMain (void)
         D_RedrawTitle();
     }
 
-    printf ("M_Init: Init miscellaneous info.\n");
+    printf ("M_Init: Инициализация дополнительной информации.\n");
     D_RedrawTitle();
     M_Init ();
 
-    printf ("R_Init: Init DOOM refresh daemon - ");
+    printf ("R_Init: Инициализация процесса запуска DOOM - ");
     D_RedrawTitle();
     R_Init ();
 
-    printf ("\nP_Init: Init Playloop state.\n");
+    printf ("\nP_Init: Инициализация игрового окружения.\n");
     D_RedrawTitle();
     P_Init ();
 
-    printf ("I_Init: Setting up machine state.\n");
+    printf ("I_Init: Инициализация состояния компьютера.\n");
     D_RedrawTitle();
     I_Init ();
 
-    printf ("D_CheckNetGame: Checking network game status.\n");
+    printf ("D_CheckNetGame: Проверка статуса сетевой игры.\n");
     D_RedrawTitle();
     D_CheckNetGame ();
 
-    printf ("S_Init: Setting up sound.\n");
+    printf ("S_Init: Активация звуковой системы.\n");
     D_RedrawTitle();
     S_Init (sfxVolume*8, musicVolume*8);
 
-    printf ("HU_Init: Setting up heads up display.\n");
+    printf ("HU_Init: Настройка игрового дисплея.\n");
     D_RedrawTitle();
     HU_Init ();
 
-    printf ("ST_Init: Init status bar.\n");
+    printf ("ST_Init: Инициализация строки состояния.\n");
     D_RedrawTitle();
     ST_Init ();
 
@@ -1262,7 +1367,7 @@ void D_DoomMain (void)
 	extern  void*	statcopy;                            
 
 	statcopy = (void*)atoi(myargv[p+1]);
-	printf ("External statistics registered.\n");
+	printf ("Зарегистрирована внешняя статистика.\n");
         D_RedrawTitle();
     }
     

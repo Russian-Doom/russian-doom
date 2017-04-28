@@ -2,7 +2,8 @@
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 1993-2008 Raven Software
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -138,7 +139,7 @@ void I_StartupCyberMan(void)
     if ((short)RMI.EAX != 1)
     {
         // SWIFT functions not present
-        printf("CyberMan: Wrong mouse driver - no SWIFT support (AX=%04x).\n",
+        printf("CyberMan: Драйвер мыши без поддержки SWIFT (AX=%04x).\n",
                 (unsigned)(short)RMI.EAX);
     }
     else
@@ -148,17 +149,17 @@ void I_StartupCyberMan(void)
             // no SWIFT device, or not CyberMan
             if (pbuf->deviceType == 0)
             {
-                printf("CyberMan: no SWIFT device connected.\n");
+                printf("CyberMan: Устройство с поддержкой SWIFT не обнаружено.\n");
             }
             else
             {
-                printf("CyberMan: SWIFT device is not a CyberMan! (type=%d)\n",
+                printf("CyberMan: Устройство SWIFT не от производителя CyberMan! (тип=%d)\n",
                        pbuf->deviceType);
             }
         }
         else
         {
-            printf("CyberMan: CyberMan %d.%02d connected.\n",
+            printf("CyberMan: Устройство CyberMan %d.%02d подключено.\n",
                    pbuf->majorVersion, pbuf->minorVersion);
             isCyberPresent = 1;
             mousepresent = 0;

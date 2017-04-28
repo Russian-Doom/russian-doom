@@ -1,6 +1,7 @@
 //
 // Copyright (C) 2015 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier LabontÈ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -342,7 +343,7 @@ void WAV_PlayMode(int channels, int samplerate) {
     }
     status = FX_Init(device, channels, 2, 16, samplerate);
     FX_SetVolume(255);
-    printf("Status %i %i %i %i\n", device, device + 10, SoundBlaster, status);
+    printf("ë‚†‚„· %i %i %i %i\n", device, device + 10, SoundBlaster, status);
 }
 
 int CODEC_Detect(int *a, int *b)

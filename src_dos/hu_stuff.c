@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -43,7 +44,9 @@
 #define HU_TITLET	(mapnamest[gamemap-1])
 #define HU_TITLEHEIGHT	1
 #define HU_TITLEX	0
-#define HU_TITLEY	(167 - SHORT(hu_font[0]->height))
+// [JN] Ранее HU_TITLEY был равен 167. 
+// Смещение на 1 px вверх, что бы буквы "Щ" и "Ц" не наезжали на HUD
+#define HU_TITLEY	(166 - SHORT(hu_font[0]->height))
 
 #define HU_INPUTTOGGLE	't'
 #define HU_INPUTX	HU_MSGX
