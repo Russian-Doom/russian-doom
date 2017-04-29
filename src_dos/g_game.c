@@ -63,7 +63,7 @@
 #include "g_game.h"
 
 
-#define SAVEGAMESIZE	2883584 // [JN] Ранее: 0x2c000
+#define SAVEGAMESIZE	2883584 // [JN] Previously: 0x2c000
 #define SAVESTRINGSIZE	24
 
 
@@ -254,8 +254,8 @@ void G_BuildTiccmd (ticcmd_t* cmd)
 	|| joybuttons[joybstrafe]; 
     // speed = gamekeydown[key_speed] || joybuttons[joybspeed];
     
-    // [JN] Включен режим постоянного бега, временно 
-    // отключается зажатием кнопки бега.
+    // [JN] Enabled always run mode. "Run" button acts as "walk"
+    // TODO: FOR TESTING ONLY!!! Not working after playing demos!
     speed = true;
     if (gamekeydown[key_speed] || joybuttons[joybspeed])
     {
@@ -407,7 +407,8 @@ void G_BuildTiccmd (ticcmd_t* cmd)
 	} 
     } 
  
-    forward += mousey; 
+    // [JN] Disabled vertical mouse movement
+    // forward += mousey; 
     if (strafe) 
 	side += mousex*2; 
     else 
