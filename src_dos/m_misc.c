@@ -358,13 +358,13 @@ default_t	defaults[] =
     
     {"key_right",&key_right, SC_RIGHTARROW, 1},
     {"key_left",&key_left, SC_LEFTARROW, 1},
-    {"key_up",&key_up, SC_UPARROW, 1},
-    {"key_down",&key_down, SC_DOWNARROW, 1},
-    {"key_strafeleft",&key_strafeleft, SC_COMMA, 1},
-    {"key_straferight",&key_straferight, SC_PERIOD, 1},
+    {"key_up",&key_up, SC_KEY_W, 1},
+    {"key_down",&key_down, SC_KEY_S, 1},
+    {"key_strafeleft",&key_strafeleft, SC_KEY_A, 1},
+    {"key_straferight",&key_straferight, SC_KEY_D, 1},
 
     {"key_fire",&key_fire, SC_RCTRL, 1},
-    {"key_use",&key_use, SC_SPACE, 1},
+    {"key_use",&key_use, SC_KEY_E, 1},
     {"key_strafe",&key_strafe, SC_RALT, 1},
     {"key_speed",&key_speed, SC_RSHIFT, 1},
 
@@ -379,12 +379,12 @@ default_t	defaults[] =
     {"joyb_use",&joybuse,3},
     {"joyb_speed",&joybspeed,31},   // [JN] Enable always run by default
 
-    {"screenblocks",&screenblocks, 9},
+    {"screenblocks",&screenblocks, 10},
     {"detaillevel",&detailLevel, 0},
 
-    {"snd_channels",&numChannels, 3},
-    {"snd_musicdevice",&snd_DesiredMusicDevice, 0},
-    {"snd_sfxdevice",&snd_DesiredSfxDevice, 0},
+    {"snd_channels",&numChannels, 8},
+    {"snd_musicdevice",&snd_DesiredMusicDevice, 3},
+    {"snd_sfxdevice",&snd_DesiredSfxDevice, 3},
     {"snd_sbport",&snd_SBport, 0x220},
     {"snd_sbirq",&snd_SBirq, 5},
     {"snd_sbdma",&snd_SBdma, 1},
