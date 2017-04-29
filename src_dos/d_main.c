@@ -641,7 +641,7 @@ void D_RedrawTitle(void)
     D_SetCursorPosition(0, 0);
 
     //Draw title (title, FGCOLOR, BGCOLOR);
-    // [JN] Разные цвета для разных игр
+    // [JN] Different colors for different games
     if (shareware)
         D_DrawTitle(title, 14, 1);
     else if (registered)
@@ -996,7 +996,7 @@ void D_DoomMain (void)
     {
         sprintf(title,
         "                   "
-        "Final DOOM: Эксперимент \"Плутония\" v%i.%i"
+        "Final DOOM: TNT - Дьяволюция v%i.%i"
         "                           ",
         VERSION/100,VERSION%100);
     }
