@@ -65,7 +65,7 @@
 
 #define SAVEGAMESIZE	2883584 // [JN] Previously: 0x2c000
 #define SAVESTRINGSIZE	24
-
+#define MAX_JOY_BUTTONS 20
 
 
 boolean	G_CheckDemoStatus (void); 
@@ -252,16 +252,22 @@ void G_BuildTiccmd (ticcmd_t* cmd)
  
     strafe = gamekeydown[key_strafe] || mousebuttons[mousebstrafe] 
 	|| joybuttons[joybstrafe]; 
-    // speed = gamekeydown[key_speed] || joybuttons[joybspeed];
-    
-    // [JN] Enabled always run mode. "Run" button acts as "walk"
-    // TODO: FOR TESTING ONLY!!! Not working after playing demos!
-    speed = true;
-    if (gamekeydown[key_speed] || joybuttons[joybspeed])
-    {
+
+    // fraggle: support the old "joyb_speed = 31" hack which
+    // allowed an autorun effect
+
+    speed = key_speed >= NUMKEYS
+        || joybspeed >= MAX_JOY_BUTTONS
+        /*|| gamekeydown[key_speed] */
+        || joybuttons[joybspeed];
+
+    // [JN] "Run" button makes player walk in autorun mode,
+    // and makes player run in walk mode.
+    if ((joybspeed >= MAX_JOY_BUTTONS) && (gamekeydown[key_speed]))
         speed = false;
-    }
- 
+    else if ((joybspeed <= MAX_JOY_BUTTONS) && (gamekeydown[key_speed]))
+        speed = true;
+
     forward = side = 0;
     
     // use two stage accelerative turning

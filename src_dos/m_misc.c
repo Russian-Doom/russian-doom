@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -376,7 +377,7 @@ default_t	defaults[] =
     {"joyb_fire",&joybfire,0},
     {"joyb_strafe",&joybstrafe,1},
     {"joyb_use",&joybuse,3},
-    {"joyb_speed",&joybspeed,2},
+    {"joyb_speed",&joybspeed,31},   // [JN] Enable always run by default
 
     {"screenblocks",&screenblocks, 9},
     {"detaillevel",&detailLevel, 0},
