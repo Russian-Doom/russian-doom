@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -128,7 +129,7 @@ void R_DrawColumn (void)
     if ((unsigned)dc_x >= SCREENWIDTH
 	|| dc_yl < 0
 	|| dc_yh >= SCREENHEIGHT) 
-	I_Error ("R_DrawColumn: %i to %i at %i", dc_yl, dc_yh, dc_x); 
+	I_Error ("R_DrawColumn: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x); 
 #endif 
 
         outp (SC_INDEX+1,1<<(dc_x&3)); 
@@ -176,7 +177,7 @@ void R_DrawColumnLow (void)
 	|| dc_yh >= SCREENHEIGHT)
     {
 	
-	I_Error ("R_DrawColumn: %i to %i at %i", dc_yl, dc_yh, dc_x);
+	I_Error ("R_DrawColumn: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x);
     }
     //	dccount++; 
 #endif 
@@ -256,7 +257,7 @@ void R_DrawFuzzColumn (void)
     if ((unsigned)dc_x >= SCREENWIDTH
 	|| dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-	I_Error ("R_DrawFuzzColumn: %i to %i at %i",
+	I_Error ("R_DrawFuzzColumn: %i ª %i ¢ %i",
 		 dc_yl, dc_yh, dc_x);
     }
 #endif
@@ -338,7 +339,7 @@ void R_DrawTranslatedColumn (void)
 	|| dc_yl < 0
 	|| dc_yh >= SCREENHEIGHT)
     {
-	I_Error ( "R_DrawColumn: %i to %i at %i",
+	I_Error ( "R_DrawColumn: %i ª %i ¢ %i",
 		  dc_yl, dc_yh, dc_x);
     }
     
@@ -468,7 +469,7 @@ void R_DrawSpan (void)
         || ds_x2>=SCREENWIDTH  
         || (unsigned)ds_y>SCREENHEIGHT)
     {
-        I_Error( "R_DrawSpan: %i to %i at %i",
+        I_Error( "R_DrawSpan: %i ª %i ¢ %i",
                  ds_x1,ds_x2,ds_y);
     } 
 #endif 
@@ -531,7 +532,7 @@ void R_DrawSpanLow (void)
         || ds_x2>=SCREENWIDTH  
         || (unsigned)ds_y>SCREENHEIGHT)
     {
-        I_Error( "R_DrawSpan: %i to %i at %i",
+        I_Error( "R_DrawSpan: %i ª %i ¢ %i",
                  ds_x1,ds_x2,ds_y);
     } 
 #endif 

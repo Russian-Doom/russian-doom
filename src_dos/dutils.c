@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -35,7 +36,7 @@ lnode_t* dll_AddEndNode(list_t* list, void* value)
 
     if (!list)
     {
-        I_Error("Bad list in dll_AddEndNode");
+        I_Error("Некорректный список в dll_AddEndNode");
     }
 
     node = (lnode_t*)Z_Malloc(sizeof(lnode_t), PU_STATIC, 0);
@@ -64,7 +65,7 @@ lnode_t* dll_AddStartNode(list_t* list, void* value)
 
     if (!list)
     {
-        I_Error("Bad list in dll_AddStartNode");
+        I_Error("Некорректный список в dll_AddStartNode");
     }
 
     node = (lnode_t*)Z_Malloc(sizeof(lnode_t), PU_STATIC, 0);
@@ -92,11 +93,11 @@ void* dll_DelNode(list_t* list, lnode_t* node)
     void* value;
     if (!list)
     {
-        I_Error("Bad list in dll_DelNode");
+        I_Error("Некорректный список в dll_DelNode");
     }
     if (!list->start)
     {
-        I_Error("Empty list in dll_DelNode");
+        I_Error("Некорректный список в dll_DelNode");
     }
     value = node->value;
     if (node->prev)

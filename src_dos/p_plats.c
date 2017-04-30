@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -288,7 +289,7 @@ void P_AddActivePlat(plat_t* plat)
 	    activeplats[i] = plat;
 	    return;
 	}
-    I_Error ("P_AddActivePlat: no more plats!");
+    I_Error ("P_AddActivePlat: Превышен лимит платформ!");
 }
 
 void P_RemoveActivePlat(plat_t* plat)
@@ -303,5 +304,5 @@ void P_RemoveActivePlat(plat_t* plat)
 	    
 	    return;
 	}
-    I_Error ("P_RemoveActivePlat: can't find plat!");
+    I_Error ("P_RemoveActivePlat: Платформа не обнаружена!");
 }

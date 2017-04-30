@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -120,7 +121,7 @@ void Z_Free (void* ptr)
     block = (memblock_t *) ( (byte *)ptr - sizeof(memblock_t));
 
     if (block->id != ZONEID)
-	I_Error ("Z_Free: freed a pointer without ZONEID");
+	I_Error ("Z_Free: ¢ëá¢®¡®¦¤¥­¨¥ ãª § â¥«ï ¡¥§ ZONEID");
 		
     if (block->user > (void **)0x100)
     {
@@ -210,7 +211,7 @@ Z_Malloc
 	if (rover == start)
 	{
 	    // scanned all the way around the list
-	    I_Error ("Z_Malloc: failed on allocation of %i bytes", size);
+	    I_Error ("Z_Malloc: è¨¡ª  ®¡­ àã¦¥­¨ï %i ¡ ©â ¯ ¬ïâ¨", size);
 	}
 	
 	if (rover->user)
@@ -266,7 +267,7 @@ Z_Malloc
     else
     {
 	if (tag >= PU_PURGELEVEL)
-	    I_Error ("Z_Malloc: an owner is required for purgable blocks");
+	    I_Error ("Z_Malloc: „«ï ®ç¨é ¥¬ëå ¡«®ª®¢ ¯ ¬ïâ¨ âà¥¡ã¥âáï  ¤¬¨­¨áâà â¨¢­ë© ®¡ê¥ªâ");
 
 	// mark as in use, but unowned	
 	base->user = (void *)2;		
@@ -402,13 +403,13 @@ void Z_CheckHeap (void)
 	}
 	
 	if ( (byte *)block + block->size != (byte *)block->next)
-	    I_Error ("Z_CheckHeap: block size does not touch the next block\n");
+	    I_Error ("Z_CheckHeap:  §¬¥à ¡«®ª  ­¥ § âà £¨¢ ¥â á«¥¤ãîé¨© ¡«®ª\n");
 
 	if ( block->next->prev != block)
-	    I_Error ("Z_CheckHeap: next block doesn't have proper back link\n");
+	    I_Error ("Z_CheckHeap: ‘«¥¤ãîé¨© ¡«®ª ­¥ ¨¬¥¥â ª®àà¥ªâ­®© ®¡à â­®© á¢ï§¨\n");
 
 	if (!block->user && !block->next->user)
-	    I_Error ("Z_CheckHeap: two consecutive free blocks\n");
+	    I_Error ("Z_CheckHeap: ¡­ àã¦¥­ë ¤¢  ¯®á«¥¤®¢ â¥«ì­ëå á¢®¡®¤­ëå ¡«®ª \n");
     }
 }
 
@@ -428,10 +429,10 @@ Z_ChangeTag2
     block = (memblock_t *) ( (byte *)ptr - sizeof(memblock_t));
 
     if (block->id != ZONEID)
-	I_Error ("Z_ChangeTag: freed a pointer without ZONEID");
+	I_Error ("Z_ChangeTag: ¢ëá¢®¡®¦¤¥­¨¥ ãª § â¥«ï ¡¥§ ZONEID");
 
     if (tag >= PU_PURGELEVEL && (unsigned)block->user < 0x100)
-	I_Error ("Z_ChangeTag: an owner is required for purgable blocks");
+	I_Error ("Z_ChangeTag: ¤«ï ®ç¨é ¥¬ëå ¡«®ª®¢ ¯ ¬ïâ¨ âà¥¡ã¥âáï  ¤¬¨­¨áâà â¨¢­ë© ®¡ê¥ªâ");
 
     block->tag = tag;
 }

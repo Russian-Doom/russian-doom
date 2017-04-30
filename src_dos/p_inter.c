@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -71,7 +72,7 @@ P_GiveAmmo
 	return false;
 		
     if (ammo < 0 || ammo > NUMAMMO)
-	I_Error ("P_GiveAmmo: bad type %i", ammo);
+	I_Error ("P_GiveAmmo: Некорректный тип %i", ammo);
 		
     if ( player->ammo[ammo] == player->maxammo[ammo]  )
 	return false;
@@ -638,7 +639,7 @@ P_TouchSpecialThing
 	break;
 		
       default:
-	I_Error ("P_SpecialThing: Unknown gettable thing");
+	I_Error ("P_SpecialThing: Получен неизвестный предмет");
     }
 	
     if (special->flags & MF_COUNTITEM)

@@ -2,7 +2,8 @@
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 1993-2008 Raven Software
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -53,7 +54,7 @@ void I_StartupTimer(void)
     tsm_ID = TSM_NewService(I_TimerISR, 35, 0, 0);
     if (tsm_ID == -1)
     {
-        I_Error("Can't register 35 Hz timer w/ DMX library");
+        I_Error("Невозможно зарегистрировать 35 Гц таймер в библиотеке DMX");
     }
 #endif
 }

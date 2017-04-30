@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -188,7 +189,7 @@ V_CopyRect
 	|| (unsigned)srcscrn>4
 	|| (unsigned)destscrn>4)
     {
-	I_Error ("Bad V_CopyRect");
+	I_Error ("Žè¨¡ª  V_CopyRect");
     }
 #endif 
     V_MarkRect (destx, desty, width, height); 
@@ -302,7 +303,7 @@ V_DrawPatchFlipped
 	|| (unsigned)scrn>4)
     {
       fprintf( stderr, "Patch origin %d,%d exceeds LFB\n", x,y );
-      I_Error ("Bad V_DrawPatch in V_DrawPatchFlipped");
+      I_Error ("Žè¨¡ª  V_DrawPatch ¢ V_DrawPatchFlipped");
     }
 #endif 
  
@@ -367,7 +368,7 @@ V_DrawPatchDirect
 	|| y+SHORT(patch->height)>SCREENHEIGHT 
 	|| (unsigned)scrn>4)
     {
-	I_Error ("Bad V_DrawPatchDirect");
+	I_Error ("Žè¨¡ª  V_DrawPatchDirect");
     }
 #endif 
  
@@ -425,7 +426,7 @@ V_DrawBlock
 	|| y+height>SCREENHEIGHT 
 	|| (unsigned)scrn>4 )
     {
-	I_Error ("Bad V_DrawBlock");
+	I_Error ("Žè¨¡ª  V_DrawBlock");
     }
 #endif 
  
@@ -465,7 +466,7 @@ V_GetBlock
 	|| y+height>SCREENHEIGHT 
 	|| (unsigned)scrn>4 )
     {
-	I_Error ("Bad V_DrawBlock");
+	I_Error ("Žè¨¡ª  V_DrawBlock");
     }
 #endif 
  

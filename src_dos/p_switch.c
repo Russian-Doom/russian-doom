@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -126,7 +127,7 @@ void P_InitSwitchList(void)
 			
 	    if (R_CheckTextureNumForName(alphSwitchList[i].name1) < 0)
 	    {
-		I_Error("Can't find switch texture '%s'!",
+		I_Error("Не обнаружена текстура переключателя '%s'!",
 			alphSwitchList[i].name1);
 		continue;
 	    }
@@ -178,7 +179,7 @@ P_StartButton
 	}
     }
     
-    I_Error("P_StartButton: no button slots left!");
+    I_Error("P_StartButton: Превышен лимит слотов для кнопок!");
 }
 
 

@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -308,7 +309,7 @@ void P_UnArchiveThinkers (void)
 	    break;
 			
 	  default:
-	    I_Error ("Unknown tclass %i in savegame",tclass);
+	    I_Error ("Неизвестный tclass %i в сохраненной игре",tclass);
 	}
 	
     }
@@ -569,8 +570,8 @@ void P_UnArchiveSpecials (void)
 	    break;
 				
 	  default:
-	    I_Error ("P_UnarchiveSpecials:Unknown tclass %i "
-		     "in savegame",tclass);
+	    I_Error ("P_UnarchiveSpecials: Неизвестный tclass %i "
+		     "в сохраненной игре",tclass);
 	}
 	
     }

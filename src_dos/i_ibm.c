@@ -1063,7 +1063,7 @@ void IO_SetTimer0(int speed)
 {
     if (speed > 0 && speed < 150)
     {
-        I_Error("INT_SetTimer0: %i is a bad value", speed);
+        I_Error("INT_SetTimer0: %i является некорректным значением", speed);
     }
 
     _outbyte(0x43, 0x36);                            // Change timer 0

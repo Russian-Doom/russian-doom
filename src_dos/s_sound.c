@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -142,7 +143,7 @@ void S_SetMusicVolume(int volume)
 {
     if (volume < 0 || volume > 127)
     {
-        I_Error("Attempt to set music volume at %d",
+        I_Error("Попытка установить громкость музыки на значение %d",
             volume);
     }
 
@@ -192,7 +193,7 @@ S_ChangeMusic
     if ( (musicnum <= mus_None)
 	 || (musicnum >= NUMMUSIC) )
     {
-	I_Error("Bad music number %d", musicnum);
+	I_Error("Некорректный номер музыки: %d", musicnum);
     }
     else
 	music = &S_music[musicnum];
@@ -343,7 +344,7 @@ void S_SetSfxVolume(int volume)
 {
 
     if (volume < 0 || volume > 127)
-	I_Error("Attempt to set sfx volume at %d", volume);
+	I_Error("Попытка установить громкость звука на значение %d", volume);
 
     snd_SfxVolume = volume;
 
@@ -463,7 +464,7 @@ S_StartSoundAtVolume
   
   // check for bogus sound #
   if (sfx_id < 1 || sfx_id > NUMSFX)
-    I_Error("Bad sfx #: %d", sfx_id);
+    I_Error("Некорректный номер звука: %d", sfx_id);
   
   sfx = &S_sfx[sfx_id];
   

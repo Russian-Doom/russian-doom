@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labontщ-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -278,7 +279,7 @@ boolean P_Move (mobj_t*	actor)
 	return false;
 		
     if ((unsigned)actor->movedir >= 8)
-	I_Error ("Weird actor->movedir!");
+	I_Error ("Некорректное значение actor->movedir!");
 		
     tryx = actor->x + actor->info->speed*xspeed[actor->movedir];
     tryy = actor->y + actor->info->speed*yspeed[actor->movedir];
@@ -366,7 +367,7 @@ void P_NewChaseDir (mobj_t*	actor)
     dirtype_t	turnaround;
 
     if (!actor->target)
-	I_Error ("P_NewChaseDir: called with no target");
+	I_Error ("P_NewChaseDir: Вызов без заданной цели");
 		
     olddir = actor->movedir;
     turnaround=opposite[olddir];

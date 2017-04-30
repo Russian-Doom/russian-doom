@@ -169,7 +169,7 @@ void P_InitPicAnims (void)
 	lastanim->numpics = lastanim->picnum - lastanim->basepic + 1;
 
 	if (lastanim->numpics < 2)
-	    I_Error ("P_InitPicAnims: bad cycle from %s to %s",
+	    I_Error ("P_InitPicAnims: Некорректный цикл от %s к %s",
 		     animdefs[i].startname,
 		     animdefs[i].endname);
 	
@@ -1049,7 +1049,7 @@ void P_PlayerInSpecialSector (player_t* player)
 			
       default:
 	I_Error ("P_PlayerInSpecialSector: "
-		 "unknown special %i",
+		 "Неизвестная специфика %i",
 		 sector->special);
 	break;
     };
@@ -1326,7 +1326,7 @@ void P_SpawnSpecials (void)
 	  case 48:
 	    if (numlinespecials >= MAXLINEANIMS)
 	    {
-		I_Error("Too many scrolling walls!");
+		I_Error("Превышен лимит текстур с анимацией прокрутки!");
 	    }
 	    // EFFECT FIRSTCOL SCROLL+
 	    linespeciallist[numlinespecials] = &lines[i];
