@@ -737,6 +737,12 @@ void ST_updateFaceWidget(void)
     static int	lastattackdown = -1;
     static int	priority = 0;
     boolean	doevilgrin;
+    
+    // [crispy] fix status bar face hysteresis
+    int		painoffset;
+    static int	faceindex;
+
+    painoffset = ST_calcPainOffset();
 
     if (priority < 10)
     {
@@ -744,7 +750,8 @@ void ST_updateFaceWidget(void)
 	if (!plyr->health)
 	{
 	    priority = 9;
-	    st_faceindex = ST_DEADFACE;
+	    painoffset = 0;
+		faceindex = ST_DEADFACE;
 	    st_facecount = 1;
 	}
     }
@@ -769,7 +776,7 @@ void ST_updateFaceWidget(void)
 		// evil grin if just picked up weapon
 		priority = 8;
 		st_facecount = ST_EVILGRINCOUNT;
-		st_faceindex = ST_calcPainOffset() + ST_EVILGRINOFFSET;
+		faceindex = ST_EVILGRINOFFSET;
 	    }
 	}
 
@@ -787,7 +794,7 @@ void ST_updateFaceWidget(void)
 	    if (plyr->health - st_oldhealth > ST_MUCHPAIN)
 	    {
 		st_facecount = ST_TURNCOUNT;
-		st_faceindex = ST_calcPainOffset() + ST_OUCHOFFSET;
+		faceindex = ST_OUCHOFFSET;
 	    }
 	    else
 	    {
@@ -811,22 +818,21 @@ void ST_updateFaceWidget(void)
 
 		
 		st_facecount = ST_TURNCOUNT;
-		st_faceindex = ST_calcPainOffset();
 		
 		if (diffang < ANG45)
 		{
 		    // head-on    
-		    st_faceindex += ST_RAMPAGEOFFSET;
+		    faceindex = ST_RAMPAGEOFFSET;
 		}
 		else if (i)
 		{
 		    // turn face right
-		    st_faceindex += ST_TURNOFFSET;
+		    faceindex = ST_TURNOFFSET;
 		}
 		else
 		{
 		    // turn face left
-		    st_faceindex += ST_TURNOFFSET+1;
+		    faceindex = ST_TURNOFFSET+1;
 		}
 	    }
 	}
@@ -841,13 +847,13 @@ void ST_updateFaceWidget(void)
 	    {
 		priority = 7;
 		st_facecount = ST_TURNCOUNT;
-		st_faceindex = ST_calcPainOffset() + ST_OUCHOFFSET;
+		faceindex = ST_OUCHOFFSET;
 	    }
 	    else
 	    {
 		priority = 6;
 		st_facecount = ST_TURNCOUNT;
-		st_faceindex = ST_calcPainOffset() + ST_RAMPAGEOFFSET;
+		faceindex = ST_RAMPAGEOFFSET;
 	    }
 
 	}
@@ -864,7 +870,7 @@ void ST_updateFaceWidget(void)
 	    else if (!--lastattackdown)
 	    {
 		priority = 5;
-		st_faceindex = ST_calcPainOffset() + ST_RAMPAGEOFFSET;
+		faceindex = ST_RAMPAGEOFFSET;
 		st_facecount = 1;
 		lastattackdown = 1;
 	    }
@@ -882,7 +888,8 @@ void ST_updateFaceWidget(void)
 	{
 	    priority = 4;
 
-	    st_faceindex = ST_GODFACE;
+	    painoffset = 0;
+	    faceindex = ST_GODFACE;
 	    st_facecount = 1;
 
 	}
@@ -892,13 +899,15 @@ void ST_updateFaceWidget(void)
     // look left or look right if the facecount has timed out
     if (!st_facecount)
     {
-	st_faceindex = ST_calcPainOffset() + (st_randomnumber % 3);
+	faceindex = st_randomnumber % 3;
 	st_facecount = ST_STRAIGHTFACECOUNT;
 	priority = 0;
     }
 
     st_facecount--;
 
+    // [crispy] fix status bar face hysteresis
+    st_faceindex = painoffset + faceindex;
 }
 
 void ST_updateWidgets(void)
