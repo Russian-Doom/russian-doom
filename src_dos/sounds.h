@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -283,6 +284,7 @@ typedef enum
     sfx_skesit,
     sfx_skeatk,
     sfx_radio,
+    sfx_slop2,
     NUMSFX
 } sfxenum_t;
 
