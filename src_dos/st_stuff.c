@@ -540,6 +540,10 @@ ST_Responder (event_t* ev)
       // 'dqd' cheat for toggleable god mode
       if (cht_CheckCheat(&cheat_god, ev->data1))
       {
+        // [JN] IDDQD does not affect on dead player
+        if (plyr->playerstate == PST_DEAD)
+            return false;
+ 
 	plyr->cheats ^= CF_GODMODE;
 	if (plyr->cheats & CF_GODMODE)
 	{
