@@ -560,7 +560,15 @@ ST_Responder (event_t* ev)
 	
 	for (i=0;i<NUMWEAPONS;i++)
 	  plyr->weaponowned[i] = true;
-	
+
+    // [JN] Checking: does player have a backpack?
+    if (!plyr->backpack)
+    {
+        for (i=0 ; i<NUMAMMO ; i++)
+        plyr->maxammo[i] *= 2;
+        plyr->backpack = true;
+    }
+
 	for (i=0;i<NUMAMMO;i++)
 	  plyr->ammo[i] = plyr->maxammo[i];
 	
@@ -574,7 +582,15 @@ ST_Responder (event_t* ev)
 	
 	for (i=0;i<NUMWEAPONS;i++)
 	  plyr->weaponowned[i] = true;
-	
+
+    // [JN] Checking: does player have a backpack?
+    if (!plyr->backpack)
+    {
+        for (i=0 ; i<NUMAMMO ; i++)
+        plyr->maxammo[i] *= 2;
+        plyr->backpack = true;
+    }
+
 	for (i=0;i<NUMAMMO;i++)
 	  plyr->ammo[i] = plyr->maxammo[i];
 	
