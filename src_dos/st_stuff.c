@@ -613,8 +613,9 @@ ST_Responder (event_t* ev)
 	{
 	  musnum = mus_runnin + (buf[0]-'0')*10 + buf[1]-'0' - 1;
 	  
-	  if (((buf[0]-'0')*10 + buf[1]-'0') > 35)
-	    plyr->message = STSTR_NOMUS;
+	  // [crispy] prevent crash with IDMUS00
+	  if (((buf[0]-'0')*10 + buf[1]-'0') > 35 || musnum < mus_runnin)
+        plyr->message = STSTR_NOMUS;
 	  else
 	    S_ChangeMusic(musnum, 1);
 	}
@@ -622,7 +623,8 @@ ST_Responder (event_t* ev)
 	{
 	  musnum = mus_e1m1 + (buf[0]-'1')*9 + (buf[1]-'1');
 	  
-	  if (((buf[0]-'1')*9 + buf[1]-'1') > 31)
+	  // [crispy] prevent crash with IDMUS0x or IDMUSx0
+	  if (((buf[0]-'1')*9 + buf[1]-'1') > 31 || buf[0] < '1' || buf[1] < '1')
 	    plyr->message = STSTR_NOMUS;
 	  else
 	    S_ChangeMusic(musnum, 1);
