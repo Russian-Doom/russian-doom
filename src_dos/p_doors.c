@@ -521,6 +521,9 @@ void P_SpawnDoorCloseIn30 (sector_t* sec)
     door->type = normal;
     door->speed = VDOORSPEED;
     door->topcountdown = 30 * 35;
+    // [JN] Fixed infinite raising issue.
+    // Thanks Jeff Doggett for this fix!
+    door->topheight = sec->ceilingheight;
 }
 
 //
