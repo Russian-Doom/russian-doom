@@ -45,6 +45,7 @@
 // Data.
 #include "sounds.h"
 
+#include "d_englsh.h"
 
 //
 // Animating textures and planes
@@ -1034,6 +1035,12 @@ void P_PlayerInSpecialSector (player_t* player)
 	// SECRET SECTOR
 	player->secretcount++;
 	sector->special = 0;
+
+    // [JN] Notification of discovered secrets
+	player->message = SECRETFOUND;	 
+    if (player == &players[consoleplayer])
+        S_StartSound(0, sfx_getpow);
+
 	break;
 			
       case 11:
