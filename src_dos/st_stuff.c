@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -319,7 +320,9 @@ static patch_t*		shortnum[10];
 static patch_t*		keys[NUMCARDS]; 
 
 // face status patches
-static patch_t*		faces[ST_NUMFACES];
+// [JN] Doubled array for GOD mode faces
+// Thanks Brad Harding for help!
+static patch_t*		faces[ST_NUMFACES * 2];
 
 // face background
 static patch_t*		faceback;
@@ -908,6 +911,12 @@ void ST_updateFaceWidget(void)
 
     // [crispy] fix status bar face hysteresis
     st_faceindex = painoffset + faceindex;
+    
+    // [JN] Additional array of faces for GOD mode
+    if ((plyr->powers[pw_invulnerability]) || (plyr->cheats & CF_GODMODE))
+    {
+        st_faceindex = painoffset + faceindex + ST_NUMFACES;
+    }
 }
 
 void ST_updateWidgets(void)
@@ -1184,7 +1193,29 @@ void ST_loadGraphics(void)
     }
     faces[facenum++] = W_CacheLumpName("STFGOD0", PU_STATIC);
     faces[facenum++] = W_CacheLumpName("STFDEAD0", PU_STATIC);
+    
 
+    // [JN] Doubled array of faced, needed for GOD mode
+    for (i=0;i<ST_NUMPAINFACES;i++)
+    {
+	for (j=0;j<ST_NUMSTRAIGHTFACES;j++)
+	{
+	    sprintf(namebuf, "GTFST%d%d", i, j);
+	    faces[facenum++] = W_CacheLumpName(namebuf, PU_STATIC);
+	}
+	sprintf(namebuf, "GTFTR%d0", i);	// turn right
+	faces[facenum++] = W_CacheLumpName(namebuf, PU_STATIC);
+	sprintf(namebuf, "GTFTL%d0", i);	// turn left
+	faces[facenum++] = W_CacheLumpName(namebuf, PU_STATIC);
+	sprintf(namebuf, "GTFOUCH%d", i);	// ouch!
+	faces[facenum++] = W_CacheLumpName(namebuf, PU_STATIC);
+	sprintf(namebuf, "GTFEVL%d", i);	// evil grin ;)
+	faces[facenum++] = W_CacheLumpName(namebuf, PU_STATIC);
+	sprintf(namebuf, "GTFKILL%d", i);	// pissed off
+	faces[facenum++] = W_CacheLumpName(namebuf, PU_STATIC);
+    }
+    faces[facenum++] = W_CacheLumpName("GTFGOD0", PU_STATIC);
+    faces[facenum++] = W_CacheLumpName("GTFDEAD0", PU_STATIC);
 }
 
 void ST_loadData(void)
