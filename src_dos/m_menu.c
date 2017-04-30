@@ -101,12 +101,24 @@ void    (*messageRoutine)(int response);
 
 #define SAVESTRINGSIZE 	24
 
-char gammamsg[5][29] =
+char gammamsg[17][29] =
 {
     GAMMALVL0,
+    GAMMALV02,
+    GAMMALV05,
+    GAMMALV07,
     GAMMALVL1,
+    GAMMALV12,
+    GAMMALV15,
+    GAMMALV17,
     GAMMALVL2,
+    GAMMALV22,
+    GAMMALV25,
+    GAMMALV27,
     GAMMALVL3,
+    GAMMALV32,
+    GAMMALV35,
+    GAMMALV37,
     GAMMALVL4
 };
 
@@ -1596,7 +1608,7 @@ boolean M_Responder (event_t* ev)
 				
 	  case KEY_F11:           // gamma toggle
 	    usegamma++;
-	    if (usegamma > 4)
+	    if (usegamma > 16)
 		usegamma = 0;
 	    players[consoleplayer].message = gammamsg[usegamma];
 	    I_SetPalette (W_CacheLumpName ("PLAYPAL",PU_CACHE));
