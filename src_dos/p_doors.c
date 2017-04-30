@@ -405,7 +405,9 @@ EV_VerticalDoor
     // if the door action is on a single-sided linedef, ignore
     if (line->sidenum[side^1] == -1)
     {
-        S_StartSound(NULL,sfx_oof);
+        // [JN] Use player->mo for sound source, don't play it globally.
+        // This also fixes time lag on using this linedef.
+        S_StartSound(player->mo,sfx_oof);
         return;
     }
 
