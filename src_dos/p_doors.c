@@ -122,8 +122,8 @@ void T_VerticalDoor (vldoor_t* door)
 	      case blazeClose:
 		door->sector->specialdata = NULL;
 		P_RemoveThinker (&door->thinker);  // unlink and free
-		S_StartSound((mobj_t *)&door->sector->soundorg,
-			     sfx_bdcls);
+        // [crispy] fix "fast doors make two closing sounds"
+		// S_StartSound((mobj_t *)&door->sector->soundorg,sfx_bdcls);
 		break;
 		
 	      case normal:
@@ -148,6 +148,12 @@ void T_VerticalDoor (vldoor_t* door)
 	      case blazeClose:
 	      case close:		// DO NOT GO BACK UP!
 		break;
+
+        // [crispy] fix "fast doors reopening with wrong sound"
+        case blazeRaise:
+        door->direction = 1;
+        S_StartSound(&door->sector->soundorg, sfx_bdopn);
+        break;        
 		
 	      default:
 		door->direction = 1;
