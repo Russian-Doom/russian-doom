@@ -628,25 +628,18 @@ ST_Responder (event_t* ev)
 	    S_ChangeMusic(musnum, 1);
 	}
       }
-      else if(!commercial && cht_CheckCheat(&cheat_noclip, ev->data1))
-      {	
-	plyr->cheats ^= CF_NOCLIP;
-	
-	if (plyr->cheats & CF_NOCLIP)
-	  plyr->message = STSTR_NCON;
-	else
-	  plyr->message = STSTR_NCOFF;
-      }
-      else if (commercial
-          && cht_CheckCheat(&cheat_commercial_noclip, ev->data1))
-      {
-	plyr->cheats ^= CF_NOCLIP;
-	
-	if (plyr->cheats & CF_NOCLIP)
-	  plyr->message = STSTR_NCON;
-	else
-	  plyr->message = STSTR_NCOFF;
-      }
+    // [JN] Both cheat codes IDCLIP / IDSPISPOPD works in all games
+    else if(cht_CheckCheat(&cheat_noclip, ev->data1) || 
+    cht_CheckCheat(&cheat_commercial_noclip, ev->data1))
+    {	
+    plyr->cheats ^= CF_NOCLIP;
+
+    if (plyr->cheats & CF_NOCLIP)
+        plyr->message = STSTR_NCON;
+    else
+        plyr->message = STSTR_NCOFF;
+    }
+
       // 'behold?' power-up cheats
       for (i=0;i<6;i++)
       {
