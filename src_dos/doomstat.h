@@ -35,6 +35,7 @@
 #include "d_player.h"
 
 
+#define singleplayer (!demorecording && !demoplayback && !netgame)
 
 // ------------------------
 // Command line parameters.

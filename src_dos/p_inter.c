@@ -872,13 +872,23 @@ P_DamageMobj
 	if (player == &players[consoleplayer])
 	    I_Tactile (40,10,40+temp*2);
     }
-    
+
     // do the damage	
     target->health -= damage;	
     if (target->health <= 0)
     {
-	P_KillMobj (source, target);
-	return;
+        // [crispy] the lethal pellet of a point-blank SSG blast
+        // gets an extra damage boost for the occasional gib chance
+        if (singleplayer &&
+            source && source->player &&
+            source->player->readyweapon == wp_supershotgun &&
+            target->info->xdeathstate &&
+            P_CheckMeleeRange(target) &&
+            damage >= 10)
+            target->health -= target->info->spawnhealth;
+
+        P_KillMobj (source, target);
+        return;
     }
 
     if ( (P_Random () < target->info->painchance)
