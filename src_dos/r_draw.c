@@ -68,6 +68,7 @@ int		columnofs[MAXWIDTH];
 //  (color ramps used for  suit colors).
 //
 byte		translations[3][256];	
+byte		*tinttable; // used for translucent sprites
  
  
 #define SC_INDEX                0x3C4
@@ -394,6 +395,10 @@ void R_DrawTranslatedColumn (void)
 void R_InitTranslationTables (void)
 {
     int		i;
+    
+	// Load tint table
+    // [JN] For DOOM I'm calling it TINTMAP, not TINTTAB
+	tinttable = W_CacheLumpName("TINTMAP", PU_STATIC);
 	
     translationtables = Z_Malloc (256*3+255, PU_STATIC, 0);
     translationtables = (byte *)(( (int)translationtables + 255 )& ~255);

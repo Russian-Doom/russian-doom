@@ -79,7 +79,13 @@ V_DrawPatchDirect
   int		y,
   int		scrn,
   patch_t*	patch );
-
+  
+void 
+V_DrawShadowedPatch
+( int		x,
+  int		y,
+  int		scrn,
+  patch_t	*patch );
 
 // Draw a linear block of pixels into the view buffer.
 void
