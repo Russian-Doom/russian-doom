@@ -808,6 +808,18 @@ void P_SpawnMapThing (mapthing_t* mthing)
     mobj->angle = ANG45 * (mthing->angle/45);
     if (mthing->options & MTF_AMBUSH)
 	mobj->flags |= MF_AMBUSH;
+
+    // [crispy] randomly flip space marine corpse objects
+    if (mobj->info->spawnstate == S_PLAY_DIE7 ||
+    mobj->info->spawnstate == S_PLAY_XDIE9)
+    {
+        mobj->health -= Crispy_Random() & 1;
+        // [crispy] randomly colorize space marine corpse objects
+        if (!netgame)
+        {
+            mobj->flags |= (Crispy_Random() & 3) << MF_TRANSSHIFT;
+        }
+    }
 }
 
 

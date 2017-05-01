@@ -140,6 +140,7 @@ unsigned char rndtable[256] = {
 
 int	rndindex = 0;
 int	prndindex = 0;
+int	crndindex = 0;
 
 // Which one is deterministic?
 int P_Random (void)
@@ -152,6 +153,13 @@ int M_Random (void)
 {
     rndindex = (rndindex+1)&0xff;
     return rndtable[rndindex];
+}
+
+// [crispy] our own private random function
+int Crispy_Random (void)
+{
+    crndindex = (crndindex+1)&0xff;
+    return rndtable[crndindex];
 }
 
 void M_ClearRandom (void)
