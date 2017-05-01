@@ -115,6 +115,7 @@ int             displayplayer;          // view being displayed
 int             gametic; 
 int             levelstarttic;          // gametic at level start 
 int             totalkills, totalitems, totalsecret;    // for intermission 
+int             totalleveltimes;        // [crispy] CPhipps - total time for all completed levels
  
 char            demoname[32]; 
 boolean         demorecording; 
@@ -1136,6 +1137,13 @@ void G_DoCompleted (void)
 	memcpy (wminfo.plyr[i].frags, players[i].frags 
 		, sizeof(wminfo.plyr[i].frags)); 
     } 
+    
+    // [crispy] CPhipps - total time for all completed levels
+    // cph - modified so that only whole seconds are added to the totalleveltimes
+    // value; so our total is compatible with the "naive" total of just adding
+    // the times in seconds shown for each level. Also means our total time
+    // will agree with Compet-n.
+    wminfo.totaltimes = (totalleveltimes += (leveltime - leveltime % TICRATE));
  
     gamestate = GS_INTERMISSION; 
     viewactive = false; 
@@ -1441,6 +1449,9 @@ G_InitNew
     gameepisode = episode; 
     gamemap = map; 
     gameskill = skill; 
+ 
+    // [crispy] CPhipps - total time for all completed levels
+    totalleveltimes = 0;
  
     viewactive = true;
     

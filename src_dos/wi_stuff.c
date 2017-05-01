@@ -370,6 +370,10 @@ static patch_t*		time;
 static patch_t*		par;
 static patch_t*		sucks;
 
+// "Total time:"
+static patch_t*		overtime;
+
+
 // "killers", "victims"
 static patch_t*		killers;
 static patch_t*		victims; 
@@ -681,7 +685,8 @@ void
 WI_drawTime
 ( int		x,
   int		y,
-  int		t )
+  int		t,
+  boolean	suck )
 {
 
     int		div;
@@ -690,7 +695,7 @@ WI_drawTime
     if (t<0)
 	return;
 
-    if (t <= 61*59)
+    if (t <= 61*59 || !suck)
     {
 	div = 1;
 
@@ -1450,12 +1455,23 @@ void WI_drawStats(void)
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
 
     V_DrawPatch(SP_TIMEX, SP_TIMEY, FB, time);
-    WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time);
+    WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time, true);
 
     if (wbs->epsd < 4 && !plutonia && !tnt)
     {
 	V_DrawPatch(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, FB, par);
-	WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par);
+	WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par, true);
+    }
+    
+    // [crispy] draw total time after level time and par time
+    if (sp_state > 8)
+    {
+        const int ttime = wbs->totaltimes / TICRATE;
+
+        V_DrawPatch(SP_TIMEX + 24, SP_TIMEY + 16, FB, overtime);
+        //V_DrawPatch(SP_TIMEX, SP_TIMEY + 16, total);
+        // [crispy] choose x-position depending on width of time string
+        WI_drawTime(296 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
     }
 
 }
@@ -1671,6 +1687,9 @@ void WI_loadData(void)
 
     // "par"
     par = W_CacheLumpName("WIPAR", PU_STATIC);   
+
+    // "Total time:"
+    overtime = W_CacheLumpName("WIOVTIME", PU_STATIC);   
 
     // "killers" (vertical)
     killers = W_CacheLumpName("WIKILRS", PU_STATIC);
