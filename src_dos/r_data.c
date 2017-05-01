@@ -667,7 +667,9 @@ int R_FlatNumForName (char* name)
     {
 	namet[8] = 0;
 	memcpy (namet, name,8);
-	I_Error ("R_FlatNumForName: Текстура поверхности %s не найдена",namet);
+	// [crispy] since there is no "No Flat" marker,
+	// render missing flats as SKY
+	return skyflatnum;
     }
     return i - firstflat;
 }
