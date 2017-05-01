@@ -646,6 +646,7 @@ void D_RedrawTitle(void)
 
     //Draw title (title, FGCOLOR, BGCOLOR);
     // [JN] Different colors for different games
+    // http://www.brackeen.com/vga/basics.html
     if (shareware)
         D_DrawTitle(title, 14, 1);
     else if (registered)
@@ -655,7 +656,7 @@ void D_RedrawTitle(void)
     else if (tnt)
         D_DrawTitle(title, 14, 4);
     else if (plutonia)
-        D_DrawTitle(title, 15, 2);
+        D_DrawTitle(title, 10, 4);
     else
         D_DrawTitle(title, 15, 4);
 
@@ -1021,52 +1022,6 @@ void D_DoomMain (void)
         VERSION/100,VERSION%100);
     }
 
-    /*
-    if (!commercial)
-    {
-        sprintf(title,
-                "                         "
-                "Система загрузки DOOM v%i.%i"
-                "                           ",
-                VERSION/100,VERSION%100);
-    }
-    else
-    {
-        if (plutonia)
-        {
-            sprintf(title,
-                    "                   "
-                    "Final DOOM: Эксперимент \"Плутония\" v%i.%i"
-                    "                           ",
-                    VERSION/100,VERSION%100);
-        }
-        else if(tnt)
-        {
-            sprintf(title,
-                    "                     "
-                    "Final DOOM: TNT - Дьяволюция v%i.%i"
-                    "                           ",
-                    VERSION/100,VERSION%100);
-        }
-        else
-        {
-            sprintf(title,
-                    "                         "
-                    "DOOM 2: Ад на Земле v%i.%i"
-                    "                           ",
-                    VERSION/100,VERSION%100);
-        }
-    }
-    if(retail)
-    {
-        sprintf(title,
-        "                           "
-        "The Ultimate DOOM v%i.%i"
-        "                           ",
-        VERSION/100,VERSION%100);
-    }
-    */
-    
     regs.w.ax = 3;
     int386(0x10, &regs, &regs);
     D_DrawTitle(title, FGCOLOR, BGCOLOR);
