@@ -63,6 +63,8 @@ extern boolean		message_dontfuckwithme;
 
 extern boolean		chat_on;		// in heads-up code
 
+extern int st_palette;
+
 //
 // defaulted values
 //
@@ -1372,6 +1374,7 @@ boolean M_Responder (event_t* ev)
     static  int     lasty = 0;
     static  int     mousex = 0;
     static  int     lastx = 0;
+    byte*	pal;
 	
     ch = -1;
 	
@@ -1612,7 +1615,8 @@ boolean M_Responder (event_t* ev)
 	    if (usegamma > 16)
 		usegamma = 0;
 	    players[consoleplayer].message = gammamsg[usegamma];
-	    I_SetPalette (W_CacheLumpName ("PLAYPAL",PU_CACHE));
+        pal = (byte *) W_CacheLumpName ("PLAYPAL", PU_CACHE)+st_palette*768;
+	    I_SetPalette (pal);
 	    return true;
 				
 	}
