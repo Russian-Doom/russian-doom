@@ -478,6 +478,20 @@ R_StoreWallRange
     }
     else
     {
+    // [crispy] fix sprites being visible behind closed doors
+    // adapted from mbfsrc/R_BSP.C:234-257
+    const boolean doorclosed =
+        // if door is closed because back is shut:
+        backsector->ceilingheight <= backsector->floorheight
+        // preserve a kind of transparent door/lift special effect:
+        && (backsector->ceilingheight >= frontsector->ceilingheight ||
+            curline->sidedef->toptexture)
+        && (backsector->floorheight <= frontsector->floorheight ||
+            curline->sidedef->bottomtexture)
+            // properly render skies (consider door "open" if both ceilings are sky):
+            && (backsector->ceilingpic != skyflatnum ||
+            frontsector->ceilingpic != skyflatnum);
+
 	// two sided line
 	ds_p->sprtopclip = ds_p->sprbottomclip = NULL;
 	ds_p->silhouette = 0;
@@ -506,14 +520,14 @@ R_StoreWallRange
 	    // ds_p->sprtopclip = screenheightarray;
 	}
 		
-	if (backsector->ceilingheight <= frontsector->floorheight)
+	if (backsector->ceilingheight <= frontsector->floorheight || doorclosed)
 	{
 	    ds_p->sprbottomclip = negonearray;
 	    ds_p->bsilheight = MAXINT;
 	    ds_p->silhouette |= SIL_BOTTOM;
 	}
 	
-	if (backsector->floorheight >= frontsector->ceilingheight)
+	if (backsector->floorheight >= frontsector->ceilingheight || doorclosed)
 	{
 	    ds_p->sprtopclip = screenheightarray;
 	    ds_p->tsilheight = MININT;
