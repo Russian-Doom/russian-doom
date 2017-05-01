@@ -1838,16 +1838,10 @@ void G_DoNewGame (void)
     netgame = false;
     deathmatch = false;
     playeringame[1] = playeringame[2] = playeringame[3] = 0;
-
-    // [JN] Не сбрасывать параметры -respawn, -fast и -nomonsters
-    // при начале новой игры.
-    // [crispy] do not reset -respawn, -fast and -nomonsters parameters
-    /*
-    respawnparm = false;
-    fastparm = false;
-    nomonsters = false;
-    */
-
+    // [from-crispy] Выполнять проверку параметров командной строки
+    respawnparm = M_CheckParm ("-respawn");
+    fastparm = M_CheckParm ("-fast");
+    nomonsters = M_CheckParm ("-nomonsters");
     consoleplayer = 0;
     G_InitNew (d_skill, d_episode, d_map); 
     gameaction = ga_nothing; 

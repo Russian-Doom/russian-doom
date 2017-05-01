@@ -1364,9 +1364,10 @@ void G_DoNewGame (void)
     netgame = false;
     deathmatch = false;
     playeringame[1] = playeringame[2] = playeringame[3] = 0;
-    respawnparm = false;
-    fastparm = false;
-    nomonsters = false;
+    // [from-crispy] re-read game parameters from command line when starting a new game
+    respawnparm = M_CheckParm ("-respawn");
+    fastparm = M_CheckParm ("-fast");
+    nomonsters = M_CheckParm ("-nomonsters");
     consoleplayer = 0;
     G_InitNew (d_skill, d_episode, d_map); 
     gameaction = ga_nothing; 
