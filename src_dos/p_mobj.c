@@ -143,7 +143,17 @@ void P_XYMovement (mobj_t* mo)
 	
     do
     {
-	if (xmove > MAXMOVE/2 || ymove > MAXMOVE/2)
+        
+    // killough 8/9/98: fix bug in original Doom source:
+    // Large negative displacements were never considered.
+    // This explains the tendency for Mancubus fireballs
+    // to pass through walls.
+  
+    // [JN] Fixes bug: https://doomwiki.org/wiki/Mancubus_fireball_clipping
+    // Not safe for internal demos, strictly for single player.
+    // Thanks to Jeff Doggett for simplifying!
+ 
+	if ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (singleplayer && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)))
 	{
 	    ptryx = mo->x + xmove/2;
 	    ptryy = mo->y + ymove/2;
