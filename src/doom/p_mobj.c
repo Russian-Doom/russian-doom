@@ -455,7 +455,21 @@ void P_ZMovement (mobj_t* mo)
 	if ( (mo->flags & MF_MISSILE)
 	     && !(mo->flags & MF_NOCLIP) )
 	{
-	    P_ExplodeMissile (mo);
+        if (singleplayer)
+        {
+            // [JN] Исправление бага "Missiles exploding against the sky ceiling"
+            // https://doomwiki.org/wiki/Projectiles_explode_on_impact_with_%22sky%22
+            // Небезопасно для демозаписей, поэтому назначено только для (singleplayer).
+            // Спасибо Alexandre-Xavier Labonté-Lamoureux!
+            if (mo->subsector->sector->ceilingpic == skyflatnum)
+            P_RemoveMobj (mo);
+            else
+            P_ExplodeMissile (mo);
+        }
+        else
+        {
+            P_ExplodeMissile (mo);
+        }
 	    return;
 	}
     }
