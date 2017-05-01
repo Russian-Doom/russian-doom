@@ -645,6 +645,12 @@ P_TouchSpecialThing
     if (special->flags & MF_COUNTITEM)
 	player->itemcount++;
     P_RemoveMobj (special);
+    
+    // [JN] Limit yellow screen to, well, aprox. 5 seconds.
+    // No need to keep yellow screen too long.
+    if (player->bonuscount >= 170)
+        player->bonuscount = 170;
+    
     player->bonuscount += BONUSADD;
     if (player == &players[consoleplayer])
 	S_StartSound (NULL, sound);
