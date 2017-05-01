@@ -1077,7 +1077,8 @@ void M_QuitResponse(int ch)
 {
     if (ch != 'y')
 	return;
-    if (!netgame)
+    // [JN] No need to play exit sfx if it's volume set to 0.
+    if (!netgame && sfxVolume > 0)
     {
 	if (commercial)
 	    S_StartSound(NULL,quitsounds2[(gametic>>2)&7]);
