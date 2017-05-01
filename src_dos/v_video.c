@@ -637,8 +637,7 @@ V_DrawPatchDirect
 		*dest = *source++; 
 		dest += SCREENWIDTH/4; 
 	    } 
-	    column = (column_t *)(  (byte *)column + column->length 
-				    + 4 ); 
+	    column = (column_t *)(  (byte *)column + column->length + 4 ); 
 	} 
 	if ( ((++x)&3) == 0 ) 
 	    desttop++;	// go to next byte, not next plane 
@@ -653,48 +652,62 @@ extern byte *tinttable;
 
 void V_DrawShadowedPatch(int x, int y, int scrn, patch_t *patch)
 {
-	int			count,col;
-	column_t	*column;
-	byte		*desttop, *dest, *source;
-	byte		*desttop2, *dest2;
-	int			w;
-	
-	y -= SHORT(patch->topoffset);
-	x -= SHORT(patch->leftoffset);
+    int		count;
+    int		col; 
+    column_t*	column; 
+    byte*	desttop;
+    byte*	desttop2;
+    byte*	dest;
+    byte*	dest2;
+    byte*	source; 
+    int		w; 
+	 
+    y -= SHORT(patch->topoffset); 
+    x -= SHORT(patch->leftoffset); 
 
-	if (x<0||x+SHORT(patch->width) >SCREENWIDTH || y<0 || y+SHORT(patch->height)>SCREENHEIGHT)
-		I_Error ("Bad V_DrawPatch");
-
-	col = 0;
-	desttop = destscreen+y*SCREENWIDTH/4+x;
-	desttop2 = destscreen+(y+2)*SCREENWIDTH/4+x+2;
-	
-	w = SHORT(patch->width);
-	for ( ; col<w ; x++, col++, desttop++, desttop2++)
-	{
-		column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
-
-// step through the posts in a column
-	
-		while (column->topdelta != 0xff )
-		{
-			source = (byte *)column + 3;
-			dest = desttop + column->topdelta*SCREENWIDTH/4;
-			dest2 = desttop2 + column->topdelta*SCREENWIDTH/4;
-			count = column->length;
-			
-			while (count--)
-			{
-				*dest2 = tinttable[((*dest2)<<8)];
-				dest2 += SCREENWIDTH/4;
-				*dest = *source++;
-				dest += SCREENWIDTH/4;
-
-			}
-			column = (column_t *)(  (byte *)column + column->length + 4 );
-		}
-	}			
-}
+#ifdef RANGECHECK 
+    if (x<0
+	||x+SHORT(patch->width) >SCREENWIDTH
+	|| y<0
+	|| y+SHORT(patch->height)>SCREENHEIGHT 
+	|| (unsigned)scrn>4)
+    {
+	I_Error ("Žè¨¡ª  V_DrawPatchDirect");
+    }
+#endif 
+ 
+    col = 0;
+    desttop = destscreen + y*SCREENWIDTH/4 + (x>>2); 
+    desttop2 = destscreen + (y+2)*SCREENWIDTH/4 + (x>>2)+2; 
+	 
+    w = SHORT(patch->width); 
+    for ( ; col<w ; col++)
+    { 
+	outp (SC_INDEX+1,1<<(x&3)); 
+	column = (column_t *)((byte *)patch + LONG(patch->columnofs[col])); 
+ 
+	// step through the posts in a column 
+	 
+	while (column->topdelta != 0xff ) 
+	{ 
+	    source = (byte *)column + 3; 
+	    dest = desttop + column->topdelta*SCREENWIDTH/4; 
+        dest2 = desttop2 + column->topdelta*SCREENWIDTH/4; 
+	    count = column->length; 
+ 
+	    while (count--) 
+	    { 
+        *dest2 = tinttable[((*dest2)<<8)];
+        dest2 += SCREENWIDTH/4;
+		*dest = *source++; 
+		dest += SCREENWIDTH/4; 
+	    } 
+	    column = (column_t *)(  (byte *)column + column->length + 4 ); 
+	} 
+	if ( ((++x)&3) == 0 ) 
+	    desttop++;	// go to next byte, not next plane 
+    }
+} 
 
 //
 // V_DrawBlock
