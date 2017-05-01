@@ -449,7 +449,9 @@ void R_InitPointToAngle (void)
 #endif
 }
 
-
+// [crispy] WiggleFix: move R_ScaleFromGlobalAngle function to r_segs.c,
+// above R_StoreWallRange
+#if 0
 //
 // R_ScaleFromGlobalAngle
 // Returns the texture mapping scale
@@ -507,6 +509,7 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 	
     return scale;
 }
+#endif
 
 
 
