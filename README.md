@@ -4,7 +4,7 @@
 
 Russian DOOM is Copyright &copy; 2016&ndash;2017 by [Julian Nechaevsky](http://jnechaevsky.users.sourceforge.net/author.html). The project is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard and [Crispy Doom](https://www.chocolate-doom.org/wiki/index.php/Crispy_Doom) by Fabian Greffrath, and distibutes with their permission. 
 
-DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey Khokholov and [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) by Alexandre-Xavier Labonté-Lamoureux, and distibutes with their permission. 
+DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey Khokholov and [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) by Alexandre-Xavier Labonté-Lamoureux, with additions from [Crispy Doom](https://www.chocolate-doom.org/wiki/index.php/Crispy_Doom) by Fabian Greffrath, and distibutes with their permission. 
 
 Project source codes are available under the terms and conditions of [GNU General Public License v2.0](https://github.com/JNechaevsky/russian-doom/blob/master/LICENSE.txt).
 
@@ -12,3 +12,5 @@ Project source codes are available under the terms and conditions of [GNU Genera
 
 For Windows (x86 and x64): [russian-doom-2.2-win32.zip](http://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.2/russian-doom-2.2-win32.zip/download)<br />
 Source codes: [russian-doom-2.2-source.zip](http://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.2/Source/russian-doom-2.2-source.zip/download)
+
+
