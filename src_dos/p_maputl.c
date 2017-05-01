@@ -1,7 +1,7 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -32,6 +32,8 @@
 
 // State.
 #include "r_state.h"
+
+#include "doomstat.h"
 
 //
 // P_AproxDistance
@@ -482,6 +484,13 @@ P_BlockLinesIterator
     offset = y*bmapwidth+x;
 	
     offset = *(blockmap+offset);
+
+    // [JN] Fixes bug: https://doomwiki.org/wiki/Hitscan_attacks_hit_invisible_barriers_in_large_open_areas
+    // Not safe for demos, strictly for single player.
+    // Many thanks to Fabian Greffrath for this solution and Dmitry D. Chernov aka Black Doomer!
+
+    if (singleplayer)
+    offset++;
 
     for ( list = blockmaplump+offset ; *list != -1 ; list++)
     {
