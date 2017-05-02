@@ -36,6 +36,8 @@
  
 #define ZONEID	0x1d4a11
 
+boolean MallocFailureOk;
+
 
 typedef struct
 {
@@ -88,6 +90,8 @@ void Z_Init (void)
 {
     memblock_t*	block;
     int		size;
+    
+    MallocFailureOk = false;
 
     mainzone = (memzone_t *)I_ZoneBase (&size);
     mainzone->size = size;
@@ -209,9 +213,12 @@ Z_Malloc
     do
     {
 	if (rover == start)
-	{
-	    // scanned all the way around the list
-	    I_Error ("Z_Malloc: è¨¡ª  ®¡­ àã¦¥­¨ï %i ¡ ©â ¯ ¬ïâ¨", size);
+	{   // scanned all the way around the list
+        if(MallocFailureOk == true)
+        {
+            return NULL;
+        }
+        I_Error ("Z_Malloc: è¨¡ª  ®¡­ àã¦¥­¨ï %i ¡ ©â ¯ ¬ïâ¨", size);
 	}
 	
 	if (rover->user)
