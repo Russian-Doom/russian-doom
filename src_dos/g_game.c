@@ -128,8 +128,6 @@ int SaveGameType;
 FILE *SaveGameFP;
 int SaveGameType;
 
-extern boolean MallocFailureOk;
-
 
 char            demoname[32]; 
 boolean         demorecording; 
@@ -1348,9 +1346,7 @@ void G_DoSaveGame (void)
 //
 void SV_Open(char *fileName)
 {
-	MallocFailureOk = true;
 	save_p = savebuffer = Z_Malloc(SAVEGAMESIZE, PU_STATIC, NULL);
-	MallocFailureOk = false;
     
 	if(savebuffer == NULL)
 	{ // Not enough memory - use file save method
