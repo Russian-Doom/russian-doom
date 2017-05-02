@@ -119,14 +119,8 @@ int             totalleveltimes;        // [crispy] CPhipps - total time for all
 
 
 // [JN] Heretic savegame stuff.
-int SaveGameType;
-
-#define SVG_RAM 0
-#define SVG_FILE 1
 #define SAVE_GAME_TERMINATOR 0x1d
-
 FILE *SaveGameFP;
-int SaveGameType;
 
 
 char            demoname[32]; 
@@ -1347,16 +1341,7 @@ void G_DoSaveGame (void)
 void SV_Open(char *fileName)
 {
 	save_p = savebuffer = Z_Malloc(SAVEGAMESIZE, PU_STATIC, NULL);
-    
-	if(savebuffer == NULL)
-	{ // Not enough memory - use file save method
-		SaveGameType = SVG_FILE;
-		SaveGameFP = fopen(fileName, "wb");
-	}
-	else
-	{
-		SaveGameType = SVG_RAM;
-	}
+	SaveGameFP = fopen(fileName, "wb");
 }
 
 //
@@ -1368,20 +1353,14 @@ void SV_Close(char *fileName)
 
 	SV_WriteByte(SAVE_GAME_TERMINATOR);
 
-	if(SaveGameType == SVG_RAM)
+	length = save_p-savebuffer;
+	if(length > SAVEGAMESIZE)
 	{
-		length = save_p-savebuffer;
-		if(length > SAVEGAMESIZE)
-		{
-			I_Error("Ошибка переполнения буфера сохраненной игры");
-		}
-		M_WriteFile(fileName, savebuffer, length);
-		Z_Free(savebuffer);
+		I_Error("Ошибка переполнения буфера сохраненной игры");
 	}
-	else
-	{ // SVG_FILE
-		fclose(SaveGameFP);
-	}
+	M_WriteFile(fileName, savebuffer, length);
+	Z_Free(savebuffer);
+	fclose(SaveGameFP);
 }
 
 //
@@ -1389,15 +1368,9 @@ void SV_Close(char *fileName)
 //
 void SV_Write(void *buffer, int size)
 {
-	if(SaveGameType == SVG_RAM)
-	{
-		memcpy(save_p, buffer, size);
-		save_p += size;
-	}
-	else
-	{ // SVG_FILE
-		fwrite(buffer, size, 1, SaveGameFP);
-	}
+	memcpy(save_p, buffer, size);
+	save_p += size;
+	fwrite(buffer, size, 1, SaveGameFP);
 }
 
 void SV_WriteByte(byte val)
