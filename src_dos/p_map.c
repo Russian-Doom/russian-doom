@@ -765,7 +765,7 @@ void P_SlideMove (mobj_t* mo)
       stairstep:
 	if (singleplayer && !P_TryMove (mo, mo->x, mo->y + mo->momy/8))
 	    P_TryMove (mo, mo->x + mo->momx/8, mo->y);
-    else if (!singleplayer && !P_TryMove (mo, mo->x, mo->y + mo->momy))
+    else if (!P_TryMove (mo, mo->x, mo->y + mo->momy))
         P_TryMove (mo, mo->x + mo->momx, mo->y);
 	return;
     }
