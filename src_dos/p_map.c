@@ -759,9 +759,14 @@ void P_SlideMove (mobj_t* mo)
     if (bestslidefrac == FRACUNIT+1)
     {
 	// the move most have hit the middle, so stairstep
+    // [JN] Fixes bug: https://doomwiki.org/wiki/Wallrunning
+    // Not safe for demos, strictly for single player.
+    // Thanks to Alexandre-Xavier Labonte-Lamoureux!
       stairstep:
-	if (!P_TryMove (mo, mo->x, mo->y + mo->momy))
-	    P_TryMove (mo, mo->x + mo->momx, mo->y);
+	if (singleplayer && !P_TryMove (mo, mo->x, mo->y + mo->momy/8))
+	    P_TryMove (mo, mo->x + mo->momx/8, mo->y);
+    else if (!singleplayer && !P_TryMove (mo, mo->x, mo->y + mo->momy))
+        P_TryMove (mo, mo->x + mo->momx, mo->y);
 	return;
     }
 
