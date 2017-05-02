@@ -19,7 +19,7 @@
 //	set up initial state and misc. LUTs.
 //
 
-
+#include <stdint.h>
 #include <math.h>
 
 #include "z_zone.h"
@@ -612,10 +612,10 @@ static void P_RemoveSlimeTrails(void)
 		    {
 			// [crispy] move the vertex towards the linedef
 			// by projecting it using the law of cosines
-			long long dx2 = (l->dx >> FRACBITS) * (l->dx >> FRACBITS);
-			long long dy2 = (l->dy >> FRACBITS) * (l->dy >> FRACBITS);
-			long long dxy = (l->dx >> FRACBITS) * (l->dy >> FRACBITS);
-			long long s = dx2 + dy2;
+			int64_t dx2 = (l->dx >> FRACBITS) * (l->dx >> FRACBITS);
+			int64_t dy2 = (l->dy >> FRACBITS) * (l->dy >> FRACBITS);
+			int64_t dxy = (l->dx >> FRACBITS) * (l->dy >> FRACBITS);
+			int64_t s = dx2 + dy2;
 			int x0 = v->x, y0 = v->y, x1 = l->v1->x, y1 = l->v1->y;
 
 			// [crispy] MBF actually overrides v->x and v->y here
