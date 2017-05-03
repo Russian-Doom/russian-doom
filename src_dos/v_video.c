@@ -645,13 +645,76 @@ V_DrawPatchDirect
 } 
 
 //
-// V_DrawShadowedPatch
-// Masks a column based masked pic to the screen.
+// V_DrawShadow
+// Masks a column based masked shadow to the screen. 
 //
+
 extern byte *tinttable;
 
 void
-V_DrawShadowedPatch
+V_DrawShadow
+( int		x,
+  int		y,
+  int		scrn,
+  patch_t*	patch ) 
+{ 
+
+    int		count;
+    int		col; 
+    column_t*	column; 
+    byte*	desttop;
+    byte*	dest;
+    byte*	source; 
+    int		w; 
+	 
+    y -= SHORT(patch->topoffset); 
+    x -= SHORT(patch->leftoffset); 
+#ifdef RANGECHECK 
+    if (x<0 ||x+SHORT(patch->width) >SCREENWIDTH || y<0 || y+SHORT(patch->height)>SCREENHEIGHT  || (unsigned)scrn>4)
+    {
+      fprintf( stderr, "Shadow at %d,%d exceeds LFB\n", x,y );
+      // No I_Error abort - what is up with TNT.WAD?
+      fprintf( stderr, "V_DrawShadow: bad patch (ignored)\n");
+      return;
+    }
+#endif 
+ 
+    if (!scrn)
+	V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height)); 
+
+    col = 0; 
+    desttop = screens[scrn]+y*SCREENWIDTH+x; 
+	 
+    w = SHORT(patch->width); 
+
+    for ( ; col<w ; x++, col++, desttop++)
+    { 
+	column = (column_t *)((byte *)patch + LONG(patch->columnofs[col])); 
+ 
+	// step through the posts in a column 
+	while (column->topdelta != 0xff ) 
+	{ 
+	    source = (byte *)column + 3; 
+	    dest = desttop + column->topdelta*SCREENWIDTH; 
+	    count = column->length; 
+			 
+	    while (count--) 
+	    { 
+		*dest = *dest = tinttable[((*dest)<<8)];
+		dest += SCREENWIDTH; 
+	    } 
+	    column = (column_t *)(  (byte *)column + column->length + 4 ); 
+	} 
+    }			 
+} 
+
+//
+// V_DrawShadowDirect
+// Masks a column based masked shadow to the screen.
+//
+
+void
+V_DrawShadowDirect
 ( int		x,
   int		y,
   int		scrn,
@@ -671,18 +734,13 @@ V_DrawShadowedPatch
     x -= SHORT(patch->leftoffset); 
 
 #ifdef RANGECHECK 
-    if (x<0
-	||x+SHORT(patch->width) >SCREENWIDTH
-	|| y<0
-	|| y+SHORT(patch->height)>SCREENHEIGHT 
-	|| (unsigned)scrn>4)
+    if (x<0 ||x+SHORT(patch->width) >SCREENWIDTH || y<0 || y+SHORT(patch->height)>SCREENHEIGHT || (unsigned)scrn>4)
     {
 	I_Error ("Žè¨¡ª  V_DrawShadowedPatch");
     }
 #endif 
  
     desttop = destscreen + y*SCREENWIDTH/4 + (x>>2); 
-    // desttop2 = destscreen + (y+2)*SCREENWIDTH/4 + (x>>2); 
 	 
     w = SHORT(patch->width); 
     for ( col = 0 ; col<w ; col++) 
@@ -696,13 +754,10 @@ V_DrawShadowedPatch
 	{ 
 	    source = (byte *)column + 3; 
 	    dest = desttop + column->topdelta*SCREENWIDTH/4; 
-        // dest2 = desttop2 + column->topdelta*SCREENWIDTH/4; 
 	    count = column->length; 
  
 	    while (count--) 
 	    {
-        // *dest = *source++; 
-		// dest += SCREENWIDTH/4; 
         *dest = tinttable[((*dest)<<8)];
         dest += SCREENWIDTH/4; 
 

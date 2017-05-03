@@ -381,6 +381,7 @@ void F_TextWrite (void)
 	w = SHORT (hu_font[c]->width);
 	if (cx+w > SCREENWIDTH)
 	    break;
+    V_DrawShadow(cx+1, cy+1, 0, hu_font[c]);
 	V_DrawPatch(cx, cy, 0, hu_font[c]);
 	cx+=w;
     }
@@ -625,6 +626,7 @@ void F_CastPrint (char* text)
 	}
 		
 	w = SHORT (hu_font[c]->width);
+    V_DrawShadow(cx+1, 181, 0, hu_font[c]);
 	V_DrawPatch(cx, 180, 0, hu_font[c]);
 	cx+=w;
     }
@@ -738,8 +740,8 @@ void F_BunnyScroll (void)
 	return;
     if (finalecount < 1180)
     {
-	V_DrawPatch ((SCREENWIDTH-13*8)/2,
-		     (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName ("END0",PU_CACHE));
+    V_DrawShadow (((SCREENWIDTH-13*8)/2)+1, ((SCREENHEIGHT-8*8)/2)+1,0, W_CacheLumpName ("END0",PU_CACHE));
+	V_DrawPatch ((SCREENWIDTH-13*8)/2, (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName ("END0",PU_CACHE));
 	laststage = 0;
 	return;
     }
@@ -754,6 +756,7 @@ void F_BunnyScroll (void)
     }
 	
     sprintf (name,"END%i",stage);
+    V_DrawShadow (((SCREENWIDTH-13*8)/2)+1, ((SCREENHEIGHT-8*8)/2)+1,0, W_CacheLumpName (name,PU_CACHE));
     V_DrawPatch ((SCREENWIDTH-13*8)/2, (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName (name,PU_CACHE));
 }
 

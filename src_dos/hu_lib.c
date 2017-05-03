@@ -1,7 +1,8 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
-// Copyright (C) 2017 Alexandre-Xavier Labonté-Lamoureux
+// Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
+// Copyright (C) 2017 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -111,6 +112,7 @@ HUlib_drawTextLine
 	    w = SHORT(l->f[c - l->sc]->width);
 	    if (x+w > SCREENWIDTH)
 		break;
+        V_DrawShadowDirect(x+1, l->y+1, FG, l->f[c - l->sc]);
 	    V_DrawPatchDirect(x, l->y, FG, l->f[c - l->sc]);
 	    x += w;
 	}
@@ -126,6 +128,7 @@ HUlib_drawTextLine
     if (drawcursor
 	&& x + SHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
     {
+    V_DrawShadowDirect(x+1, l->y+1, FG, l->f['_' - l->sc]);
 	V_DrawPatchDirect(x, l->y, FG, l->f['_' - l->sc]);
     }
 }

@@ -581,8 +581,8 @@ void M_DrawLoad(void)
 {
     int             i;
 
-    // [JN] Используется дополнительный тайтл для меню загрузки: "ЗАГРУЗИТЬ ИГРУ"
-    V_DrawShadowedPatch (60,14,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
+    // [JN] Used different title-patch: "ЗАГРУЗИТЬ ИГРУ"
+    V_DrawShadowDirect (60,14,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
     V_DrawPatchDirect (59,13,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
@@ -600,15 +600,18 @@ void M_DrawSaveLoadBorder(int x,int y)
 {
     int             i;
 	
-    V_DrawPatchDirect (x-8,y+7,0,W_CacheLumpName("M_LSLEFT",PU_CACHE));
+    V_DrawShadowDirect (x-7,y+9,0,W_CacheLumpName("M_LSLEFT",PU_CACHE));
+    V_DrawPatchDirect (x-8,y+8,0,W_CacheLumpName("M_LSLEFT",PU_CACHE));
 	
     for (i = 0;i < 24;i++)
     {
-	V_DrawPatchDirect (x,y+7,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
+    V_DrawShadowDirect (x+1,y+9,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
+	V_DrawPatchDirect (x,y+8,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
 	x += 8;
     }
 
-    V_DrawPatchDirect (x,y+7,0,W_CacheLumpName("M_LSRGHT",PU_CACHE));
+    V_DrawShadowDirect (x+1,y+9,0,W_CacheLumpName("M_LSRGHT",PU_CACHE));
+    V_DrawPatchDirect (x,y+8,0,W_CacheLumpName("M_LSRGHT",PU_CACHE));
 }
 
 
@@ -651,7 +654,8 @@ void M_DrawSave(void)
 {
     int             i;
 
-    // [JN] Используется дополнительный тайтл для меню загрузки: "СОХРАНИТЬ ИГРУ"
+    // [JN] Used different title-patch: "СОХРАНИТЬ ИГРУ"
+    V_DrawShadowDirect (58,14,0,W_CacheLumpName("M_SGTTL",PU_CACHE));
     V_DrawPatchDirect (57,13,0,W_CacheLumpName("M_SGTTL",PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
@@ -805,6 +809,7 @@ void M_DrawReadThis(void)
 void M_DrawSound(void)
 {
     // [JN] Используется дополнительный заголовок для меню ГРОМКОСТИ.
+    V_DrawShadowDirect (91,41,0,W_CacheLumpName("M_SVLTTL",PU_CACHE));
     V_DrawPatchDirect (90,40,0,W_CacheLumpName("M_SVLTTL",PU_CACHE));
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1),
@@ -877,7 +882,10 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
+    V_DrawShadowDirect (97,15,0,W_CacheLumpName("M_NEWG",PU_CACHE));
     V_DrawPatchDirect (96,14,0,W_CacheLumpName("M_NEWG",PU_CACHE));
+
+    V_DrawShadowDirect (55,39,0,W_CacheLumpName("M_SKILL",PU_CACHE));
     V_DrawPatchDirect (54,38,0,W_CacheLumpName("M_SKILL",PU_CACHE));
 }
 
@@ -903,7 +911,10 @@ int     epi;
 
 void M_DrawEpisode(void)
 {
+    V_DrawShadowDirect (97,15,0,W_CacheLumpName("M_NEWG",PU_CACHE));
     V_DrawPatchDirect (96,14,0,W_CacheLumpName("M_NEWG",PU_CACHE));
+
+    V_DrawShadowDirect (55,39,0,W_CacheLumpName("M_EPISOD",PU_CACHE));
     V_DrawPatchDirect (54,38,0,W_CacheLumpName("M_EPISOD",PU_CACHE));
 }
 
@@ -953,11 +964,16 @@ char	msgNames[2][9]		= {"M_MSGOFF","M_MSGON"};
 
 void M_DrawOptions(void)
 {
+    V_DrawShadowDirect (90,14,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
     V_DrawPatchDirect (89,13,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
 	
+    V_DrawShadowDirect (OptionsDef.x + 176,OptionsDef.y+1+LINEHEIGHT*detail,0,
+		       W_CacheLumpName(detailNames[detailLevel],PU_CACHE));
     V_DrawPatchDirect (OptionsDef.x + 175,OptionsDef.y+LINEHEIGHT*detail,0,
 		       W_CacheLumpName(detailNames[detailLevel],PU_CACHE));
 
+    V_DrawShadowDirect (OptionsDef.x + 121,OptionsDef.y+1+LINEHEIGHT*messages,0,
+		       W_CacheLumpName(msgNames[showMessages],PU_CACHE));
     V_DrawPatchDirect (OptionsDef.x + 120,OptionsDef.y+LINEHEIGHT*messages,0,
 		       W_CacheLumpName(msgNames[showMessages],PU_CACHE));
 
@@ -1196,13 +1212,16 @@ M_DrawThermo
     int		i;
 
     xx = x;
+    V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERML",PU_CACHE));
     V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERML",PU_CACHE));
     xx += 8;
     for (i=0;i<thermWidth;i++)
     {
+    V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERMM",PU_CACHE));
 	V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMM",PU_CACHE));
 	xx += 8;
     }
+    V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERMR",PU_CACHE));
     V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMR",PU_CACHE));
 
     // [crispy] do not crash anymore if value exceeds thermometer range
@@ -1352,6 +1371,7 @@ M_WriteText
 	w = SHORT (hu_font[c]->width);
 	if (cx+w > SCREENWIDTH)
 	    break;
+    V_DrawShadowDirect(cx+1, cy+1, 0, hu_font[c]);
 	V_DrawPatchDirect(cx, cy, 0, hu_font[c]);
 	cx+=w;
     }
@@ -1814,13 +1834,17 @@ void M_Drawer (void)
     for (i=0;i<max;i++)
     {
 	if (currentMenu->menuitems[i].name[0])
-	    V_DrawPatchDirect (x,y,0,
-			       W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE));
+    {
+        V_DrawShadowDirect (x+1,y+1,0, W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE));
+	    V_DrawPatchDirect (x,y,0, W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE));
+    }
 	y += LINEHEIGHT;
     }
 
     
     // DRAW SKULL
+    V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
+		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
     V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
 		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
 

@@ -79,9 +79,16 @@ V_DrawPatchDirect
   int		y,
   int		scrn,
   patch_t*	patch );
+
+void
+V_DrawShadow
+( int		x,
+  int		y,
+  int		scrn,
+  patch_t*	patch);
   
 void 
-V_DrawShadowedPatch
+V_DrawShadowDirect
 ( int		x,
   int		y,
   int		scrn,
