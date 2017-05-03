@@ -150,6 +150,18 @@ void S_SetMusicVolume(int volume)
     I_SetMusicVolume(127);
     I_SetMusicVolume(volume);
     snd_MusicVolume = volume;
+    
+    // [JN] Fixed bug when music was playing/hearable when it's volume set to "0"
+    if (musicVolume == 0)
+    {
+        I_PauseSong(mus_playing->handle);
+        mus_paused = true;
+    }
+    else
+    {
+        I_ResumeSong(mus_playing->handle);
+        mus_paused = false;
+    }
 }
 
 

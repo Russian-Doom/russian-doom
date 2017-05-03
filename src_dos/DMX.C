@@ -153,6 +153,13 @@ int MUS_PlaySong(int handle, int volume) {
     }
     status = MUSIC_PlaySong((unsigned char*)mus_data, mus_loop);
     MUSIC_SetVolume(volume * 2);
+
+    // [JN] Fixed bug when music was playing/hearable when it's volume set to "0"
+    if (volume == 0)
+    MUS_PauseSong(handle);
+    else
+    MUS_ResumeSong(handle);
+
     return (status != MUSIC_Ok);
 }
 
