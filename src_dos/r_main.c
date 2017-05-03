@@ -20,7 +20,7 @@
 //
 
 
-
+#include <stdint.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -266,19 +266,27 @@ R_PointOnSegSide
     return 1;			
 }
 
-int
-SlopeDiv
-( unsigned	num,
-  unsigned	den)
+int SlopeDiv(unsigned int num, unsigned int den)
 {
-    unsigned 	ans;
+    int64_t ans;
     
     if (den < 512)
-	return SLOPERANGE;
+    {
+        return SLOPERANGE;
+    }
+    else
+    {
+        ans = ((int64_t) num << 3) / (den >> 8);
 
-    ans = (num<<3)/(den>>8);
-
-    return ans <= SLOPERANGE ? ans : SLOPERANGE;
+        if (ans <= SLOPERANGE)
+        {
+            return (int) ans;
+        }
+        else
+        {
+            return SLOPERANGE;
+        }
+    }
 }
 
 //
