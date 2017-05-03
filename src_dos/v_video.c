@@ -650,7 +650,12 @@ V_DrawPatchDirect
 //
 extern byte *tinttable;
 
-void V_DrawShadowedPatch(int x, int y, int scrn, patch_t *patch)
+void
+V_DrawShadowedPatch
+( int		x,
+  int		y,
+  int		scrn,
+  patch_t*	patch ) 
 {
     int		count;
     int		col; 
@@ -672,16 +677,15 @@ void V_DrawShadowedPatch(int x, int y, int scrn, patch_t *patch)
 	|| y+SHORT(patch->height)>SCREENHEIGHT 
 	|| (unsigned)scrn>4)
     {
-	I_Error ("Žè¨¡ª  V_DrawPatchDirect");
+	I_Error ("Žè¨¡ª  V_DrawShadowedPatch");
     }
 #endif 
  
-    col = 0;
     desttop = destscreen + y*SCREENWIDTH/4 + (x>>2); 
-    desttop2 = destscreen + (y+2)*SCREENWIDTH/4 + (x>>2)+2; 
+    // desttop2 = destscreen + (y+2)*SCREENWIDTH/4 + (x>>2); 
 	 
     w = SHORT(patch->width); 
-    for ( ; col<w ; col++)
+    for ( col = 0 ; col<w ; col++) 
     { 
 	outp (SC_INDEX+1,1<<(x&3)); 
 	column = (column_t *)((byte *)patch + LONG(patch->columnofs[col])); 
@@ -692,15 +696,16 @@ void V_DrawShadowedPatch(int x, int y, int scrn, patch_t *patch)
 	{ 
 	    source = (byte *)column + 3; 
 	    dest = desttop + column->topdelta*SCREENWIDTH/4; 
-        dest2 = desttop2 + column->topdelta*SCREENWIDTH/4; 
+        // dest2 = desttop2 + column->topdelta*SCREENWIDTH/4; 
 	    count = column->length; 
  
 	    while (count--) 
-	    { 
-        *dest2 = tinttable[((*dest2)<<8)];
-        dest2 += SCREENWIDTH/4;
-		*dest = *source++; 
-		dest += SCREENWIDTH/4; 
+	    {
+        // *dest = *source++; 
+		// dest += SCREENWIDTH/4; 
+        *dest = tinttable[((*dest)<<8)];
+        dest += SCREENWIDTH/4; 
+
 	    } 
 	    column = (column_t *)(  (byte *)column + column->length + 4 ); 
 	} 

@@ -582,8 +582,8 @@ void M_DrawLoad(void)
     int             i;
 
     // [JN] Используется дополнительный тайтл для меню загрузки: "ЗАГРУЗИТЬ ИГРУ"
-    // V_DrawPatchDirect (59,13,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
-    V_DrawShadowedPatch (59,13,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
+    V_DrawShadowedPatch (60,14,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
+    V_DrawPatchDirect (59,13,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
