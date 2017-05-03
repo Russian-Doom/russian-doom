@@ -131,24 +131,43 @@ R_MapPlane
     }
 #endif
 
-    if (planeheight != cachedheight[y])
+    // [JN] Fixes floor texture distortion on changing brightness.
+    // Only for high detail. For low detail these formulas brings floor texture parallax.
+    if (!detailshift)
     {
-	cachedheight[y] = planeheight;
-	distance = cacheddistance[y] = FixedMul (planeheight, yslope[y]);
-	ds_xstep = cachedxstep[y] = FixedMul (distance,basexscale);
-	ds_ystep = cachedystep[y] = FixedMul (distance,baseyscale);
+        // [crispy] visplanes with the same flats now match up far better than before
+        // adapted from prboom-plus/src/r_plane.c:191-239, translated to fixed-point math
+
+        if (y == centery)
+    	return;
+
+        distance = FixedMul(planeheight, yslope[y]);
+        ds_xstep = FixedMul(viewsin, planeheight) / abs(centery - y);
+        ds_ystep = FixedMul(viewcos, planeheight) / abs(centery - y);
+        ds_xfrac =  viewx + FixedMul(viewcos, distance) + (x1 - centerx) * ds_xstep;
+        ds_yfrac = -viewy - FixedMul(viewsin, distance) + (x1 - centerx) * ds_ystep;
     }
     else
     {
-	distance = cacheddistance[y];
-	ds_xstep = cachedxstep[y];
-	ds_ystep = cachedystep[y];
+        if (planeheight != cachedheight[y])
+        {
+        cachedheight[y] = planeheight;
+        distance = cacheddistance[y] = FixedMul (planeheight, yslope[y]);
+        ds_xstep = cachedxstep[y] = FixedMul (distance,basexscale);
+        ds_ystep = cachedystep[y] = FixedMul (distance,baseyscale);
+        }
+        else
+        {
+        distance = cacheddistance[y];
+        ds_xstep = cachedxstep[y];
+        ds_ystep = cachedystep[y];
     }
 	
     length = FixedMul (distance,distscale[x1]);
     angle = (viewangle + xtoviewangle[x1])>>ANGLETOFINESHIFT;
     ds_xfrac = viewx + FixedMul(finecosine[angle], length);
     ds_yfrac = -viewy - FixedMul(finesine[angle], length);
+    }
 
     if (fixedcolormap)
 	ds_colormap = fixedcolormap;

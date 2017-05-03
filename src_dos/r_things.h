@@ -18,6 +18,7 @@
 //	Rendering of moving objects, sprites.
 //
 
+#include <stdint.h>
 
 #ifndef __R_THINGS__
 #define __R_THINGS__
@@ -37,7 +38,7 @@ extern int		screenheightarray[SCREENWIDTH]; // [crispy] 32-bit integer math
 extern int*		mfloorclip; // [crispy] 32-bit integer math
 extern int*		mceilingclip; // [crispy] 32-bit integer math
 extern fixed_t		spryscale;
-extern fixed_t		sprtopscreen;
+extern int64_t		sprtopscreen;
 
 extern fixed_t		pspritescale;
 extern fixed_t		pspriteiscale;

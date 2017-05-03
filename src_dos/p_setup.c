@@ -175,7 +175,7 @@ void P_LoadSegs (int lump)
     {
 	li->v1 = &vertexes[SHORT(ml->v1)];
 	li->v2 = &vertexes[SHORT(ml->v2)];
-					
+
 	li->angle = (SHORT(ml->angle))<<16;
 	li->offset = (SHORT(ml->offset))<<16;
 	linedef = SHORT(ml->linedef);
@@ -193,6 +193,21 @@ void P_LoadSegs (int lump)
     Z_Free (data);
 }
 
+// [crispy] fix long wall wobble
+void P_SegLengths (void)
+{
+    int i;
+    seg_t *li;
+    fixed_t dx, dy;
+
+    for (i = 0; i < numsegs; i++)
+    {
+	li = &segs[i];
+	dx = li->v2->px - li->v1->px;
+	dy = li->v2->py - li->v1->py;
+	li->length = (fixed_t)sqrt((double)dx*dx + (double)dy*dy);
+    }
+}
 
 //
 // P_LoadSubsectors
@@ -705,6 +720,8 @@ P_SetupLevel
     
     // [crispy] remove slime trails
     P_RemoveSlimeTrails();
+    // [crispy] fix long wall wobble
+    P_SegLengths();
 
     bodyqueslot = 0;
     deathmatch_p = deathmatchstarts;

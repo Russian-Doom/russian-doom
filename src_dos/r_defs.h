@@ -253,7 +253,8 @@ typedef struct
     // backsector is NULL for one sided lines
     sector_t*	frontsector;
     sector_t*	backsector;
-    
+
+    fixed_t	length; // [crispy] fix long wall wobble
 } seg_t;
 
 
