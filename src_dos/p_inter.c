@@ -543,7 +543,14 @@ P_TouchSpecialThing
       case SPR_ROCK:
 	if (!P_GiveAmmo (player, am_misl,1))
 	    return;
-	player->message = GOTROCKET;
+			if (gameskill == sk_baby || gameskill == sk_nightmare)
+			{   // [JN] "Получено две ракеты." 
+				player->message = GOTROCKET2;
+			}
+			else
+			{   // [JN] "Получена ракета."
+				player->message = GOTROCKET;
+			}
 	break;
 	
       case SPR_BROK:
@@ -567,7 +574,14 @@ P_TouchSpecialThing
       case SPR_SHEL:
 	if (!P_GiveAmmo (player, am_shell,1))
 	    return;
-	player->message = GOTSHELLS;
+			if (gameskill == sk_baby || gameskill == sk_nightmare)
+			{   // [JN] Получено 8 патронов для дробовика.
+				player->message = GOTSHELLS8;
+			}
+			else
+			{   // [JN] Получено 4 патрона для дробовика.
+				player->message = GOTSHELLS;
+			}
 	break;
 	
       case SPR_SBOX:
