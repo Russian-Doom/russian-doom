@@ -596,6 +596,14 @@ void WI_drawAnimatedBack(void)
 	    V_DrawPatch(a->loc.x, a->loc.y, FB, a->p[a->ctr]);
     }
 
+    // [crispy] show Fortress of Mystery if it has been completed
+    if (wbs->epsd == 1 && wbs->didsecret)
+    {
+        a = &anims[1][7];
+ 
+        V_DrawPatch(a->loc.x, a->loc.y, 0, a->p[2]);
+    }    
+
 }
 
 //
