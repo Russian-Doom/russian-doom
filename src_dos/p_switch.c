@@ -105,7 +105,7 @@ void P_InitSwitchList(void)
 	
     episode = 1;
 
-    if (registered)
+    if (registered || retail)
 	episode = 2;
     else
 	if (commercial)
