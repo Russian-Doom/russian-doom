@@ -1279,6 +1279,9 @@ void G_DoLoadGame (void)
  
     if (setsizeneeded)
 	R_ExecuteSetViewSize ();
+
+    // [JN] Additional message for loaded game ("Game loaded.")
+    players[consoleplayer].message = GGLOADED;
     
     // draw the pattern into the back screen
     R_FillBackScreen ();   
