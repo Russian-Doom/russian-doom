@@ -12,6 +12,9 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [DOOM Retro](http://doomretro.com/) source port 
 - Brad Harding
 
+#### [RiscOS Doom](https://github.com/jeffdoggett/Doom) source port 
+- Jeff Doggett
+
 #### [PCDoom](https://github.com/nukeykt/PCDoom-v2) source port 
 - Alexey Khokholov
 
@@ -27,5 +30,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Y-Dr. Now
 - MAJOR93MOREAU
 - Sergey "Districh" Ivanov
-- Jeff Doggett
 - Zodomaniac
