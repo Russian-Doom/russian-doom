@@ -458,7 +458,7 @@ void D_AdvanceDemo (void)
     paused = false;
     gameaction = ga_nothing;
 
-    if((retail || plutonia || tnt) && !altfinal && W_CheckNumForName("demo4"))
+    if(retail && W_CheckNumForName("demo4"))
         demosequence = (demosequence+1)%7;
     else
         demosequence = (demosequence+1)%6;
@@ -490,7 +490,7 @@ void D_AdvanceDemo (void)
       case 2:
 	pagetic = 200;
 	gamestate = GS_DEMOSCREEN;
-    if (shareware)
+    if (shareware || registered)
         pagename = "CREDITS";
     else if (retail)
         pagename = "CREDITU";
@@ -519,6 +519,11 @@ void D_AdvanceDemo (void)
 	{
 	    pagetic = 200;
 
+	    if (shareware || registered)
+	    pagename = "CREDITS";
+	    else if (retail)
+	    pagename = "CREDITU";
+	    else
 	    pagename = "CREDIT";
 	}
 	break;
