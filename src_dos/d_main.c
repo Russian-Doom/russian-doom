@@ -661,7 +661,7 @@ void D_RedrawTitle(void)
     else if (tnt)
         D_DrawTitle(title, 14, 4);
     else if (plutonia)
-        D_DrawTitle(title, 10, 4);
+        D_DrawTitle(title, 15, 2);
     else
         D_DrawTitle(title, 15, 4);
 
@@ -746,8 +746,7 @@ void IdentifyVersion (void)
     {
 	if( !access (myargv[p+1],R_OK) )
 	{
-        // [JN] I have to disable support for French verion
-        /*
+        /* [JN] French verion is not supported
 	    if ( !strcasecmp (myargv[p+1],"doom2f.wad") )
 	    {
 	        commercial = true;
@@ -787,17 +786,13 @@ void IdentifyVersion (void)
 
 	    if ( !strcasecmp (myargv[p+1],"doom.wad") )
 	    {
-	        // registered = true;
-	        retail = true;
 	        D_AddFile ("doom.wad");
-            D_AddFile ("rusdoom.wad");
-	        return;
-	    }
 
-	    if ( !strcasecmp (myargv[p+1],"doomr.wad") )
-	    {
-	        registered = true;
-	        D_AddFile ("doomr.wad");
+            if (W_CheckNumForName("E4M1") > 0)
+            retail = true;
+            else
+            registered = true;
+
             D_AddFile ("rusdoom.wad");
 	        return;
 	    }
@@ -813,8 +808,7 @@ void IdentifyVersion (void)
     }
     else
     {
-    // [JN] I have to disable support for French verion
-    /*
+    /* [JN] French verion is not supported
 	if ( !access ("doom2f.wad",R_OK) )
 	{
 	    commercial = true;
@@ -855,17 +849,13 @@ void IdentifyVersion (void)
 
 	if ( !access ("doom.wad",R_OK) )
 	{
-	    // registered = true;
-	    retail = true;
 	    D_AddFile ("doom.wad");
-        D_AddFile ("rusdoom.wad");
-	    return;
-	}
 
-	if ( !access ("doomr.wad",R_OK) )
-	{
-	    registered = true;
-	    D_AddFile ("doomr.wad");
+        if (W_CheckNumForName("E4M1") > 0)
+        retail = true;
+        else
+        registered = true;
+
         D_AddFile ("rusdoom.wad");
 
 	    return;
@@ -880,6 +870,7 @@ void IdentifyVersion (void)
 	}
     }
 }
+
     printf("Невозможно определить игру.\n");
     exit(1);
     //I_Error ("Game mode indeterminate\n");
@@ -991,7 +982,7 @@ void D_DoomMain (void)
         sprintf(title,
         "                         "
         "Система загрузки DOOM v%i.%i"
-        "                           ",
+        "                        ",
         VERSION/100,VERSION%100);
     }
     else if (retail)
@@ -1007,7 +998,7 @@ void D_DoomMain (void)
         sprintf(title,
         "                   "
         "Final DOOM: TNT - Дьяволюция v%i.%i"
-        "                           ",
+        "                       ",
         VERSION/100,VERSION%100);
     }
     else if (plutonia)
@@ -1015,7 +1006,7 @@ void D_DoomMain (void)
         sprintf(title,
         "                   "
         "Final DOOM: Эксперимент \"Плутония\" v%i.%i"
-        "                           ",
+        "                 ",
         VERSION/100,VERSION%100);
     }
     else if (commercial)
@@ -1023,7 +1014,7 @@ void D_DoomMain (void)
         sprintf(title,
         "                         "
         "DOOM 2: Ад на Земле v%i.%i"
-        "                           ",
+        "                          ",
         VERSION/100,VERSION%100);
     }
 
@@ -1195,11 +1186,12 @@ void D_DoomMain (void)
             {
 	        if (i == 11)
                 {
+                    registered = false;
                     retail = true;
                     sprintf(title,
                     "                         "
                     "Загрузка Ultimate DOOM v%i.%i"
-                    "                        ",
+                    "                       ",
                     VERSION/100,VERSION%100);
                     D_RedrawTitle();
                 }
