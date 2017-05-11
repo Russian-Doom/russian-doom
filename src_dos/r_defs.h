@@ -18,6 +18,8 @@
 //      Refresh/rendering module, shared data struct definitions.
 //
 
+#include <stdint.h>
+
 #ifndef __R_DEFS__
 #define __R_DEFS__
 
@@ -254,7 +256,7 @@ typedef struct
     sector_t*	frontsector;
     sector_t*	backsector;
 
-    fixed_t	length; // [crispy] fix long wall wobble
+    int64_t	length; // [crispy] fix long wall wobble
 } seg_t;
 
 
