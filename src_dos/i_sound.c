@@ -113,7 +113,7 @@ int I_RegisterSong(void *data)
 {
     int rc = MUS_RegisterSong(data);
 #ifdef SNDDEBUG
-    if (rc<0) printf("MUS_Reg() returned %d\n", rc);
+    if (rc<0) printf("MUS_Reg() возврат значения: %d\n", rc);
 #endif
     return rc;
 }
@@ -122,7 +122,7 @@ void I_UnRegisterSong(int handle)
 {
     int rc = MUS_UnregisterSong(handle);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_Unreg() returned %d\n", rc);
+    if (rc < 0) printf("MUS_Unreg() возврат значения: %d\n", rc);
 #endif
 }
 
@@ -130,7 +130,7 @@ int I_QrySongPlaying(int handle)
 {
     int rc = MUS_QrySongPlaying(handle);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_QrySP() returned %d\n", rc);
+    if (rc < 0) printf("MUS_QrySP() возврат значения: %d\n", rc);
 #endif
     return rc;
 }
@@ -142,7 +142,7 @@ void I_StopSong(int handle)
     int rc;
     rc = MUS_StopSong(handle);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_StopSong() returned %d\n", rc);
+    if (rc < 0) printf("MUS_StopSong() возврат значения: %d\n", rc);
 #endif
     // Fucking kluge pause
     {
@@ -157,11 +157,11 @@ void I_PlaySong(int handle, boolean looping)
     int rc;
     rc = MUS_ChainSong(handle, looping ? handle : -1);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_ChainSong() returned %d\n", rc);
+    if (rc < 0) printf("MUS_ChainSong() возврат значения: %d\n", rc);
 #endif
     rc = MUS_PlaySong(handle, snd_MusicVolume);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_PlaySong() returned %d\n", rc);
+    if (rc < 0) printf("MUS_PlaySong() возврат значения: %d\n", rc);
 #endif
 }
 
@@ -282,7 +282,7 @@ void I_sndArbitrateCards(void)
         }
         if (ENS_Detect())
         {
-            printf("Dude.  The ENSONIQ ain't responding.\n");
+            printf("Внимание! Устройство ENSONIQ не отвечает.\n");
         }
     }
     if (codec)
@@ -293,7 +293,7 @@ void I_sndArbitrateCards(void)
         }
         if (CODEC_Detect(&snd_SBport, &snd_SBdma))
         {
-            printf("CODEC.  The CODEC ain't responding.\n");
+            printf("Внимание! CODEC не отвечает.\n");
         }
     }
     if (gus)
@@ -305,7 +305,7 @@ void I_sndArbitrateCards(void)
         fprintf(stderr, "GUS1\n");
         if (GF1_Detect())
         {
-            printf("Dude.  The GUS ain't responding.\n");
+            printf("Внимание! Устройство GUS не отвечает.\n");
         }
         else
         {
@@ -331,7 +331,7 @@ void I_sndArbitrateCards(void)
         }
         if (SB_Detect(&snd_SBport, &snd_SBirq, &snd_SBdma, 0))
         {
-            printf("SB isn't responding at p=0x%x, i=%d, d=%d\n",
+            printf("SB не отвечает по каналам p=0x%x, i=%d, d=%d\n",
                    snd_SBport, snd_SBirq, snd_SBdma);
         }
         else
@@ -340,7 +340,7 @@ void I_sndArbitrateCards(void)
         }
         if (devparm)
         {
-            printf("SB_Detect returned p=0x%x,i=%d,d=%d\n",
+            printf("SB_Detect: возврат значения p=0x%x,i=%d,d=%d\n",
                    snd_SBport, snd_SBirq, snd_SBdma);
         }
     }
@@ -353,7 +353,7 @@ void I_sndArbitrateCards(void)
         }
         if (AL_Detect(&wait, 0))
         {
-            printf("Dude.  The Adlib isn't responding.\n");
+            printf("Внимание! Устройство Adlib не отвечает.\n");
         }
         else
         {
@@ -373,7 +373,7 @@ void I_sndArbitrateCards(void)
         }
         if (MPU_Detect(&snd_Mport, &i))
         {
-            printf("The MPU-401 isn't reponding @ p=0x%x.\n", snd_Mport);
+            printf("Устройство MPU-401 не отвечает @ p=0x%x.\n", snd_Mport);
         }
         else
         {
@@ -416,9 +416,9 @@ void I_StartupSound(void)
 
     if (devparm)
     {
-        printf("  Music device #%d & dmxCode=%d\n", snd_MusicDevice,
+        printf("  Музыкальное устройство #%d & dmxCode=%d\n", snd_MusicDevice,
                dmxCodes[snd_MusicDevice]);
-        printf("  Sfx device #%d & dmxCode=%d\n", snd_SfxDevice,
+        printf("  Звуковое устройство #%d & dmxCode=%d\n", snd_SfxDevice,
                dmxCodes[snd_SfxDevice]);
     }
 
@@ -427,14 +427,14 @@ void I_StartupSound(void)
     //
     if (devparm)
     {
-        printf("  calling DMX_Init\n");
+        printf("  Вызов DMX_Init\n");
     }
     rc = DMX_Init(SND_TICRATE, SND_MAXSONGS, dmxCodes[snd_MusicDevice],
                   dmxCodes[snd_SfxDevice]);
 
     if (devparm)
     {
-        printf("  DMX_Init() returned %d\n", rc);
+        printf("  DMX_Init() возврат значения: %d\n", rc);
     }
 }
 //
