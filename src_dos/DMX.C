@@ -325,7 +325,7 @@ void DMX_DeInit(void) {
 
 void WAV_PlayMode(int channels, int samplerate) {
     long device, status;
-    char tmp[300];
+    // char tmp[300];
     switch (dmx_sdev) {
     case 0:
         device = NumSoundCards;

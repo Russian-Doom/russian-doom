@@ -724,9 +724,7 @@ V_DrawShadowDirect
     int		col; 
     column_t*	column; 
     byte*	desttop;
-    byte*	desttop2;
     byte*	dest;
-    byte*	dest2;
     byte*	source; 
     int		w; 
 	 

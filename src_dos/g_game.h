@@ -67,5 +67,13 @@ boolean G_Responder (event_t*	ev);
 
 void G_ScreenShot (void);
 
+// Support routines for saving games
+void SV_Open(char *fileName);
+void SV_Close(char *fileName);
+void SV_Write(void *buffer, int size);
+void SV_WriteByte(byte val);
+void SV_WriteWord(unsigned short val);
+void SV_WriteLong(unsigned int val);
+
 
 #endif
