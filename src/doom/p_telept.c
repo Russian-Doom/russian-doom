@@ -97,12 +97,16 @@ EV_Teleport
 		if (!P_TeleportMove (thing, m->x, m->y))
 		    return 0;
 
-                // The first Final Doom executable does not set thing->z
-                // when teleporting. This quirk is unique to this
-                // particular version; the later version included in
-                // some versions of the Id Anthology fixed this.
+            // The first Final Doom executable does not set thing->z
+            // when teleporting. This quirk is unique to this
+            // particular version; the later version included in
+            // some versions of the Id Anthology fixed this.
 
-                if (gameversion != exe_final)
+            // [JN] Исправлен (скорректирован*) баг, при котором
+            // телепорты в Final Doom не использовали Z координату.
+            // https://doomwiki.org/wiki/Final_Doom_teleporters_do_not_set_Z_coordinate
+            // Всегда выполнять проверку координаты Z, вне зависимости от игры и ее версии:
+            /* if (gameversion != exe_final) */
 		    thing->z = thing->floorz;
 
 		if (thing->player)

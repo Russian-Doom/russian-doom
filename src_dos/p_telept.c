@@ -97,8 +97,12 @@ EV_Teleport
 		if (!P_TeleportMove (thing, m->x, m->y))
 		    return 0;
 		
-		if (!(plutonia || tnt) || altfinal)
+        // [JN] Fixed (correted*) bug Final Doom teleporters do not set Z coordinate
+        // https://doomwiki.org/wiki/Final_Doom_teleporters_do_not_set_Z_coordinate
+        // Always use Z coord, no matter which game is:
+		/* if (!(plutonia || tnt) || altfinal) */
 		    thing->z = thing->floorz;  //fixme: not needed?
+
 		if (thing->player)
 		    thing->player->viewz = thing->z+thing->player->viewheight;
 				
