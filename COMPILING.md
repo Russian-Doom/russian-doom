@@ -39,3 +39,19 @@ Download source code archive of latest release version or from Git repository, u
 After successful compilation the resulting binaries can be found in the src/ directory.
 
 Please note: to run the compiled game executables you will need the folder 'russian' to be placed in the folder with executables, as well as official IWAD files.
+
+
+### Building a DOS version of Russian DOOM
+
+##### Step 1: Getting Open Watcom C
+
+The primary IDE for building Russian DOOM is Open Watcom C, which may be downloaded on it's [official site](http://www.openwatcom.org/download.php).
+
+##### Step 2: Compiling project
+
+After installation of Open Watcom C, open it's IDE and then choose menu File > Open Project... 
+<br />Choose 'src_dos/rusdoom.wpj' and press 'Make target' button.
+
+At the end of the compilation process, you will find compiled binary 'rusdoom.exe' in the source code directory.
+
+Please note: to run the compiled game executable you will need to copy 'rusdoom.exe', 'rusdoom.wad' and 'dos4gw.exe' files to your Doom directory, as well as official IWAD files.
