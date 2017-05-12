@@ -348,7 +348,11 @@ S_AdjustSoundParams
 		* ((S_CLIPPING_DIST - approx_dist)>>FRACBITS))
 	    / S_ATTENUATOR; 
     }
-    
+
+    // [JN] Zero SFX volume means there must not be *any* sounds at all.
+    if (snd_SfxVolume == 0)
+    return 0;
+
     return (*vol > 0);
 }
 

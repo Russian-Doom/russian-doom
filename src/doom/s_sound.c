@@ -437,6 +437,10 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
             / S_ATTENUATOR;
     }
 
+    // [JN] Нулевая громкость подразумевает *полное* отсутствие звуков.
+    if (snd_SfxVolume == 0)
+    return 0;
+
     return (*vol > 0);
 }
 
