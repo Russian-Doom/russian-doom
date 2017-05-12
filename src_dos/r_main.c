@@ -457,6 +457,9 @@ void R_InitPointToAngle (void)
 #endif
 }
 
+// [crispy] WiggleFix: move R_ScaleFromGlobalAngle function to r_segs.c,
+// above R_StoreWallRange
+// [JN] Renamed to *Low, still needed for Low Detail.
 //
 // R_ScaleFromGlobalAngle
 // Returns the texture mapping scale
@@ -464,7 +467,7 @@ void R_InitPointToAngle (void)
 //  at the given angle.
 // rw_distance must be calculated first.
 //
-fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
+fixed_t R_ScaleFromGlobalAngleLow (angle_t visangle)
 {
     fixed_t		scale;
     int			anglea;
