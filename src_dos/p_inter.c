@@ -40,6 +40,7 @@
 
 #define BONUSADD	6
 
+extern boolean P_CheckMeleeRange (mobj_t* actor);
 
 
 

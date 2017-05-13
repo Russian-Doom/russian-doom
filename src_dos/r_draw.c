@@ -657,6 +657,7 @@ void R_FillBackScreen (void)
 	} 
 
 	// Unreachable code?
+    // [JN] TODO: Watcom C - why it's unreachable? Is it needed at all?
 	if (SCREENWIDTH&63) 
 	{ 
 	    memcpy (dest, src+((y&63)<<6), SCREENWIDTH&63); 

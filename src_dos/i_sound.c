@@ -124,6 +124,7 @@ void I_UnRegisterSong(int handle)
 #ifdef SNDDEBUG
     if (rc < 0) printf("MUS_Unreg() возврат значения: %d\n", rc);
 #endif
+    rc = false;
 }
 
 int I_QrySongPlaying(int handle)
