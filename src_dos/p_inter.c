@@ -904,7 +904,7 @@ P_DamageMobj
     {
         // [crispy] the lethal pellet of a point-blank SSG blast
         // gets an extra damage boost for the occasional gib chance
-        if (!M_CheckParm ("-vanilla") && singleplayer &&
+        if (!vanilla && singleplayer &&
             source && source->player &&
             source->player->readyweapon == wp_supershotgun &&
             target->info->xdeathstate &&

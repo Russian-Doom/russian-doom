@@ -1302,7 +1302,7 @@ boolean PIT_ChangeSector (mobj_t*	thing)
 	thing->height = 0;
 	thing->radius = 0;
 
-    if (!M_CheckParm ("-vanilla"))
+    if (!vanilla)
     S_StartSound(thing, sfx_slop2);
 
 	// keep checking

@@ -1039,7 +1039,7 @@ void P_PlayerInSpecialSector (player_t* player)
 	sector->special = 0;
 
     // [JN] Notification of discovered secrets
-    if (!M_CheckParm ("-vanilla"))
+    if (!vanilla)
     {
 	player->message = SECRETFOUND;	 
     if (player == &players[consoleplayer])
@@ -1108,7 +1108,7 @@ void P_UpdateSpecials (void)
         // [crispy] add support for SMMU swirling flats
         // [JN] Small hack: animate only surface with animation
         // speed > 8, i.e. only those ones, which defined in animdefs.
-        if (!M_CheckParm ("-vanilla") && anim->speed > 8)
+        if (!vanilla && anim->speed > 8)
         {
             flattranslation[i] = -1;
         }

@@ -555,7 +555,7 @@ S_StartSoundAtVolume
     // Needed for proper working of my prevention of 
     // firing sounds being breaked by player's "Oof!".
     // Strictly for single player.
-    if (!M_CheckParm ("-vanilla") && singleplayer)
+    if (!vanilla && singleplayer)
     {
         if( /* Chainsaw          */
         (sfx_id == sfx_sawup)  ||

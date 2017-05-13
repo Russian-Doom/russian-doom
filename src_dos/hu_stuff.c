@@ -432,7 +432,7 @@ void HU_Start(void)
 		    HU_FONTSTART, &message_on);
 
     // create the map title widget
-    if (!M_CheckParm ("-vanilla"))
+    if (!vanilla)
     HUlib_initTextLine(&w_title,HU_TITLEX, HU_TITLEY,hu_font,HU_FONTSTART);
     else
     HUlib_initTextLine(&w_title,HU_TITLEX, HU_TITLEY+1,hu_font,HU_FONTSTART);

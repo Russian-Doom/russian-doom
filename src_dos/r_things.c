@@ -560,7 +560,7 @@ void R_ProjectSprite (mobj_t* thing)
         thing->info->spawnstate == S_PLAY_DIE7 ||
         thing->info->spawnstate == S_PLAY_XDIE9)
     {
-        if ((thing->health & 1) && (!M_CheckParm ("-vanilla")))
+        if ((thing->health & 1) && !vanilla)
         {
             flip = true;
         }

@@ -231,7 +231,7 @@ void P_BringUpWeapon (player_t* player)
     if (player->pendingweapon == wp_nochange)
 	player->pendingweapon = player->readyweapon;
 		
-    if (!M_CheckParm ("-vanilla") && singleplayer)
+    if (!vanilla && singleplayer)
     {
         if (player->pendingweapon == wp_chainsaw)
         S_StartSound (NULL, sfx_sawup);
@@ -393,7 +393,7 @@ A_WeaponReady
     if (player->readyweapon == wp_chainsaw
 	&& psp->state == &states[S_SAW])
     {
-    if (!M_CheckParm ("-vanilla") && singleplayer)
+    if (!vanilla && singleplayer)
         S_StartSound (NULL, sfx_sawidl);
     else
         S_StartSound (player->mo, sfx_sawidl);
@@ -586,7 +586,7 @@ A_Punch
     // turn to face target
     if (linetarget)
     {
-    if (!M_CheckParm ("-vanilla") && singleplayer)
+    if (!vanilla && singleplayer)
         S_StartSound (NULL, sfx_punch);
     else
         S_StartSound (player->mo, sfx_punch);
@@ -621,13 +621,13 @@ A_Saw
 
     if (!linetarget)
     {
-    if (!M_CheckParm ("-vanilla") && singleplayer)
+    if (!vanilla && singleplayer)
         S_StartSound (NULL, sfx_sawful);
     else
         S_StartSound (player->mo, sfx_sawful);
 	return;
     }
-    if (!M_CheckParm ("-vanilla") && singleplayer)
+    if (!vanilla && singleplayer)
         S_StartSound (NULL, sfx_sawhit);
     else
         S_StartSound (player->mo, sfx_sawhit);
@@ -758,7 +758,7 @@ A_FirePistol
 ( player_t*	player,
   pspdef_t*	psp ) 
 {
-    if (!M_CheckParm ("-vanilla") && singleplayer)
+    if (!vanilla && singleplayer)
         S_StartSound (NULL, sfx_pistol);
     else
         S_StartSound (player->mo, sfx_pistol);
@@ -785,7 +785,7 @@ A_FireShotgun
 {
     int		i;
 	
-    if(!M_CheckParm ("-vanilla") && singleplayer)
+    if(!vanilla && singleplayer)
         S_StartSound (NULL, sfx_shotgn);
     else
         S_StartSound (player->mo, sfx_shotgn);
@@ -818,7 +818,7 @@ A_FireShotgun2
     angle_t	angle;
     int		damage;
 		
-	if (!M_CheckParm ("-vanilla") && singleplayer)
+	if (!vanilla && singleplayer)
         S_StartSound (NULL, sfx_dshtgn);
     else
         S_StartSound (player->mo, sfx_dshtgn);
@@ -857,7 +857,7 @@ A_FireCGun
     if (!player->ammo[weaponinfo[player->readyweapon].ammo])
 	return;
 
-    if (!M_CheckParm ("-vanilla") && singleplayer)
+    if (!vanilla && singleplayer)
         S_StartSound (NULL, sfx_pistol);
     else
         S_StartSound (player->mo, sfx_pistol);
@@ -942,7 +942,7 @@ A_BFGsound
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    if (!M_CheckParm ("-vanilla") && singleplayer)
+    if (!vanilla && singleplayer)
         S_StartSound (NULL, sfx_bfg);
     else
         S_StartSound (player->mo, sfx_bfg);

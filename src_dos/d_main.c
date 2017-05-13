@@ -114,6 +114,7 @@ boolean         plutonia;
 boolean         tnt;
 boolean         french;
 boolean         altfinal;
+boolean         vanilla;
 
 
 char		wadfile[1024];		// primary wad file
@@ -319,7 +320,7 @@ void D_Display (void)
 	else
 	    y = viewwindowy+4;
 
-    if (!M_CheckParm ("-vanilla"))
+    if (!vanilla)
     V_DrawShadowDirect(viewwindowx+1+(scaledviewwidth-68)/2,y+1,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
 	V_DrawPatchDirect(viewwindowx+(scaledviewwidth-68)/2,y,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
     }
@@ -658,7 +659,7 @@ void D_RedrawTitle(void)
     // [JN] Different colors for different games
     // http://www.brackeen.com/vga/basics.html
 
-    if (M_CheckParm ("-vanilla"))
+    if (vanilla)
     {
         if (retail || tnt || plutonia)
         D_DrawTitle(title, 8, 7);
@@ -710,6 +711,11 @@ void D_AddFile (char *file)
 //
 void IdentifyVersion (void)
 {
+    if (M_CheckParm ("-vanilla"))
+    {
+        vanilla = true;
+    }
+
     strcpy(basedefault,"default.cfg");
     if (M_CheckParm ("-shdev"))
     {
