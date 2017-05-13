@@ -751,8 +751,12 @@ void M_QuickSave(void)
 	quickSaveSlot = -2;	// means to pick a slot now
 	return;
     }
-    sprintf(tempstring,QSPROMPT,savegamestrings[quickSaveSlot]);
-    M_StartMessage(tempstring,M_QuickSaveResponse,true);
+
+    // [JN] Don't ask for overwriting, just save it.
+    // sprintf(tempstring,QSPROMPT,savegamestrings[quickSaveSlot]);
+    // M_StartMessage(tempstring,M_QuickSaveResponse,true);
+
+    M_DoSave(quickSaveSlot);
 }
 
 
@@ -783,8 +787,12 @@ void M_QuickLoad(void)
 	M_StartMessage(QSAVESPOT,NULL,false);
 	return;
     }
-    sprintf(tempstring,QLPROMPT,savegamestrings[quickSaveSlot]);
-    M_StartMessage(tempstring,M_QuickLoadResponse,true);
+
+    // [JN] Don't ask for loading, just load it.
+    // sprintf(tempstring,QLPROMPT,savegamestrings[quickSaveSlot]);
+    // M_StartMessage(tempstring,M_QuickLoadResponse,true);
+
+    M_LoadSelect(quickSaveSlot);
 }
 
 
