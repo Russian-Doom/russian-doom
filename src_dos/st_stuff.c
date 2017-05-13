@@ -800,82 +800,151 @@ void ST_updateFaceWidget(void)
 
     }
   
-    if (priority < 8)
+    if (priority < 8) 
+    { 	    
+    // being attacked
+    if (plyr->damagecount && plyr->attacker && plyr->attacker != plyr->mo)
     {
-	if (plyr->damagecount
-	    && plyr->attacker
-	    && plyr->attacker != plyr->mo)
-	{
-	    // being attacked
-	    priority = 7;
-	    
-	    if (plyr->health - st_oldhealth > ST_MUCHPAIN)
-	    {
-		st_facecount = ST_TURNCOUNT;
-		faceindex = ST_OUCHOFFSET;
-	    }
-	    else
-	    {
-		badguyangle = R_PointToAngle2(plyr->mo->x,
-					      plyr->mo->y,
-					      plyr->attacker->x,
-					      plyr->attacker->y);
-		
-		if (badguyangle > plyr->mo->angle)
-		{
-		    // whether right or left
-		    diffang = badguyangle - plyr->mo->angle;
-		    i = diffang > ANG180; 
-		}
-		else
-		{
-		    // whether left or right
-		    diffang = plyr->mo->angle - badguyangle;
-		    i = diffang <= ANG180; 
-		} // confusing, aint it?
+		// [JN] Correct "Ouch face" formula (part 1)
+        // Thanks Brad Harding!
+        if (!vanilla)
+        {
+        // [BH] fix ouch-face when damage > 20
+        if (st_oldhealth - plyr->health > ST_MUCHPAIN)
+        {
+            st_facecount = ST_TURNCOUNT;
+            faceindex = ST_OUCHOFFSET;
+            priority = 8;   // [BH] keep ouch-face visible
+        }
+        else
+        {
+            angle_t badguyangle = R_PointToAngle2(plyr->mo->x, plyr->mo->y, plyr->attacker->x,plyr->attacker->y);
+            angle_t diffang;
 
-		
-		st_facecount = ST_TURNCOUNT;
-		
-		if (diffang < ANG45)
-		{
-		    // head-on    
-		    faceindex = ST_RAMPAGEOFFSET;
-		}
-		else if (i)
-		{
-		    // turn face right
-		    faceindex = ST_TURNOFFSET;
-		}
+            if (badguyangle > plyr->mo->angle)
+            {
+                // whether right or left
+                diffang = badguyangle - plyr->mo->angle;
+                i = (diffang > ANG180);
+            }
+            else
+            {
+                // whether left or right
+                diffang = plyr->mo->angle - badguyangle;
+                i = (diffang <= ANG180);
+            }       // confusing, ain't it?
+
+            st_facecount = ST_TURNCOUNT;
+
+            if (diffang < ANG45)
+            {
+                // head-on
+                faceindex = ST_RAMPAGEOFFSET;
+            }
+            else if (i)
+            {
+                // turn face right
+                faceindex = ST_TURNOFFSET;
+            }
+            else
+            {
+                // turn face left
+                faceindex = ST_TURNOFFSET+1;
+            }
+        }
+        }
+
+		// [JN] Traditional formula
 		else
-		{
-		    // turn face left
-		    faceindex = ST_TURNOFFSET+1;
-		}
-	    }
-	}
+        {
+            if (plyr->health - st_oldhealth > ST_MUCHPAIN)
+            {
+                st_facecount = ST_TURNCOUNT;
+                faceindex = ST_OUCHOFFSET;
+                priority = 7;
+            }
+            else
+            {
+                badguyangle = R_PointToAngle2(plyr->mo->x,
+                plyr->mo->y,
+                plyr->attacker->x,
+                plyr->attacker->y);
+
+                if (badguyangle > plyr->mo->angle)
+                {
+                    // whether right or left
+                    diffang = badguyangle - plyr->mo->angle;
+                    i = diffang > ANG180; 
+                }
+                else
+                {
+                    // whether left or right
+                    diffang = plyr->mo->angle - badguyangle;
+                    i = diffang <= ANG180; 
+                } // confusing, aint it?
+
+                st_facecount = ST_TURNCOUNT;
+
+                if (diffang < ANG45)
+                {
+                    // head-on    
+                    faceindex = ST_RAMPAGEOFFSET;
+                }
+                else if (i)
+                {
+                    // turn face right
+                    faceindex = ST_TURNOFFSET;
+                }
+                else
+                {
+                    // turn face left
+                    faceindex = ST_TURNOFFSET+1;
+                }
+            }
+        }
     }
-  
+    }
+
+    // [JN] Correct "Ouch face" formula (part 2)
+    // Thanks Brad Harding!
+
     if (priority < 7)
     {
-	// getting hurt because of your own damn stupidity
-	if (plyr->damagecount)
-	{
-	    if (plyr->health - st_oldhealth > ST_MUCHPAIN)
-	    {
-		priority = 7;
-		st_facecount = ST_TURNCOUNT;
-		faceindex = ST_OUCHOFFSET;
-	    }
-	    else
-	    {
-		priority = 6;
-		st_facecount = ST_TURNCOUNT;
-		faceindex = ST_RAMPAGEOFFSET;
-	    }
+    // getting hurt because of your own damn stupidity
+    if (plyr->damagecount)
+    {
+        if (!vanilla)
+        {
+            if (st_oldhealth - plyr->health > ST_MUCHPAIN)
+            {
+                priority = 7;
+                st_facecount = ST_TURNCOUNT;
+                faceindex = ST_OUCHOFFSET;
+            }
+            else
+            {
+                priority = 6;
+                st_facecount = ST_TURNCOUNT;
+                faceindex = ST_RAMPAGEOFFSET;
+            }
+        }
 
-	}
-
+        else
+        {
+            if (plyr->health - st_oldhealth > ST_MUCHPAIN)
+            {
+                priority = 7;
+                st_facecount = ST_TURNCOUNT;
+                faceindex = ST_OUCHOFFSET;
+            }
+            else
+            {
+                priority = 6;
+                st_facecount = ST_TURNCOUNT;
+                faceindex = ST_RAMPAGEOFFSET;
+            }
+        }
+    }
     }
   
     if (priority < 6)
