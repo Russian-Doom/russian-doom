@@ -27,6 +27,7 @@
 
 #include "doomdef.h"
 #include "doomdata.h"
+#include "doomstat.h"
 
 #include "m_misc.h"
 
@@ -658,7 +659,6 @@ V_DrawShadow
   int		scrn,
   patch_t*	patch ) 
 { 
-
     int		count;
     int		col; 
     column_t*	column; 
@@ -666,7 +666,10 @@ V_DrawShadow
     byte*	dest;
     byte*	source; 
     int		w; 
-	 
+
+    if (vanilla)
+    return;
+
     y -= SHORT(patch->topoffset); 
     x -= SHORT(patch->leftoffset); 
 #ifdef RANGECHECK 
@@ -727,14 +730,17 @@ V_DrawShadowDirect
     byte*	dest;
     byte*	source; 
     int		w; 
-	 
+    
+    if (vanilla)
+    return;
+
     y -= SHORT(patch->topoffset); 
     x -= SHORT(patch->leftoffset); 
 
 #ifdef RANGECHECK 
     if (x<0 ||x+SHORT(patch->width) >SCREENWIDTH || y<0 || y+SHORT(patch->height)>SCREENHEIGHT || (unsigned)scrn>4)
     {
-	I_Error ("Žè¨¡ª  V_DrawShadowedPatch");
+	I_Error ("Žè¨¡ª  V_DrawShadowDirect");
     }
 #endif 
  

@@ -113,7 +113,6 @@ HUlib_drawTextLine
 	    w = SHORT(l->f[c - l->sc]->width);
 	    if (x+w > SCREENWIDTH)
 		break;
-        if (!vanilla)
         V_DrawShadowDirect(x+1, l->y+1, FG, l->f[c - l->sc]);
 	    V_DrawPatchDirect(x, l->y, FG, l->f[c - l->sc]);
 	    x += w;
@@ -130,7 +129,6 @@ HUlib_drawTextLine
     if (drawcursor
 	&& x + SHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
     {
-    if (!vanilla)
     V_DrawShadowDirect(x+1, l->y+1, FG, l->f['_' - l->sc]);
 	V_DrawPatchDirect(x, l->y, FG, l->f['_' - l->sc]);
     }
