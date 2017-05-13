@@ -84,11 +84,13 @@ M_DrawText
 	    break;
 	if (direct)
     {
+        if (!M_CheckParm ("-vanilla"))
         V_DrawShadow(x+1, y+1, 0, hu_font[c]);
 	    V_DrawPatchDirect(x, y, 0, hu_font[c]);
     }
 	else
     {
+        if (!M_CheckParm ("-vanilla"))
         V_DrawShadow(x+1, y+1, 0, hu_font[c]);
 	    V_DrawPatch(x, y, 0, hu_font[c]);
     }

@@ -1301,6 +1301,8 @@ boolean PIT_ChangeSector (mobj_t*	thing)
 	thing->flags &= ~MF_SOLID;
 	thing->height = 0;
 	thing->radius = 0;
+
+    if (!M_CheckParm ("-vanilla"))
     S_StartSound(thing, sfx_slop2);
 
 	// keep checking

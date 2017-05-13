@@ -476,7 +476,12 @@ void R_DrawPlanes (void)
 	    //  by INVUL inverse mapping.
 
         // [JN] INVUL sphere now affects the sky
+        if (!M_CheckParm ("-vanilla"))
 	    dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
+        else
+        dc_colormap = colormaps;
+    
+
 	    dc_texturemid = skytexturemid;
 	    for (x=pl->minx ; x <= pl->maxx ; x++)
 	    {

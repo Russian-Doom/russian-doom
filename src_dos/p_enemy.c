@@ -1783,7 +1783,7 @@ A_OpenShotgun2
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    if (singleplayer)
+    if (!M_CheckParm ("-vanilla") && singleplayer)
         S_StartSound (NULL, sfx_dbopn);
     else
         S_StartSound (player->mo, sfx_dbopn);
@@ -1794,7 +1794,7 @@ A_LoadShotgun2
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    if (singleplayer)
+    if (!M_CheckParm ("-vanilla") && singleplayer)
         S_StartSound (NULL, sfx_dbload);
     else
         S_StartSound (player->mo, sfx_dbload);
@@ -1810,7 +1810,7 @@ A_CloseShotgun2
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    if (singleplayer)
+    if (!M_CheckParm ("-vanilla") && singleplayer)
         S_StartSound (NULL, sfx_dbcls);
     else
         S_StartSound (player->mo, sfx_dbcls);

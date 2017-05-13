@@ -582,11 +582,16 @@ void M_DrawLoad(void)
     int             i;
 
     // [JN] Used different title-patch: "ЗАГРУЗИТЬ ИГРУ"
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (60,14,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
     V_DrawPatchDirect (59,13,0,W_CacheLumpName("M_LGTTL",PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
-	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
+    if (!M_CheckParm ("-vanilla"))
+    M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
+    else
+    M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y-1+LINEHEIGHT*i);
+
 	M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
     }
 }
@@ -600,16 +605,19 @@ void M_DrawSaveLoadBorder(int x,int y)
 {
     int             i;
 	
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (x-7,y+9,0,W_CacheLumpName("M_LSLEFT",PU_CACHE));
     V_DrawPatchDirect (x-8,y+8,0,W_CacheLumpName("M_LSLEFT",PU_CACHE));
 	
     for (i = 0;i < 24;i++)
     {
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (x+1,y+9,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
 	V_DrawPatchDirect (x,y+8,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
 	x += 8;
     }
 
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (x+1,y+9,0,W_CacheLumpName("M_LSRGHT",PU_CACHE));
     V_DrawPatchDirect (x,y+8,0,W_CacheLumpName("M_LSRGHT",PU_CACHE));
 }
@@ -655,11 +663,16 @@ void M_DrawSave(void)
     int             i;
 
     // [JN] Used different title-patch: "СОХРАНИТЬ ИГРУ"
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (58,14,0,W_CacheLumpName("M_SGTTL",PU_CACHE));
     V_DrawPatchDirect (57,13,0,W_CacheLumpName("M_SGTTL",PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
+    if (!M_CheckParm ("-vanilla"))
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
+    else
+    M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y-1+LINEHEIGHT*i);
+
 	M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
     }
 	
@@ -752,11 +765,16 @@ void M_QuickSave(void)
 	return;
     }
 
-    // [JN] Don't ask for overwriting, just save it.
-    // sprintf(tempstring,QSPROMPT,savegamestrings[quickSaveSlot]);
-    // M_StartMessage(tempstring,M_QuickSaveResponse,true);
-
-    M_DoSave(quickSaveSlot);
+    if (!M_CheckParm ("-vanilla"))
+    {
+        // [JN] Don't ask for overwriting, just save it.
+        M_DoSave(quickSaveSlot);
+    }
+    else
+    {
+        sprintf(tempstring,QSPROMPT,savegamestrings[quickSaveSlot]);
+        M_StartMessage(tempstring,M_QuickSaveResponse,true);
+    }
 }
 
 
@@ -788,11 +806,16 @@ void M_QuickLoad(void)
 	return;
     }
 
-    // [JN] Don't ask for loading, just load it.
-    // sprintf(tempstring,QLPROMPT,savegamestrings[quickSaveSlot]);
-    // M_StartMessage(tempstring,M_QuickLoadResponse,true);
-
-    M_LoadSelect(quickSaveSlot);
+    if (!M_CheckParm ("-vanilla"))
+    {
+        // [JN] Don't ask for loading, just load it.
+        M_LoadSelect(quickSaveSlot);
+    }
+    else
+    {
+        sprintf(tempstring,QLPROMPT,savegamestrings[quickSaveSlot]);
+        M_StartMessage(tempstring,M_QuickLoadResponse,true);        
+    }
 }
 
 
@@ -817,6 +840,7 @@ void M_DrawReadThis(void)
 void M_DrawSound(void)
 {
     // [JN] Используется дополнительный заголовок для меню ГРОМКОСТИ.
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (91,41,0,W_CacheLumpName("M_SVLTTL",PU_CACHE));
     V_DrawPatchDirect (90,40,0,W_CacheLumpName("M_SVLTTL",PU_CACHE));
 
@@ -890,9 +914,11 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (97,15,0,W_CacheLumpName("M_NEWG",PU_CACHE));
     V_DrawPatchDirect (96,14,0,W_CacheLumpName("M_NEWG",PU_CACHE));
 
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (55,39,0,W_CacheLumpName("M_SKILL",PU_CACHE));
     V_DrawPatchDirect (54,38,0,W_CacheLumpName("M_SKILL",PU_CACHE));
 }
@@ -919,9 +945,11 @@ int     epi;
 
 void M_DrawEpisode(void)
 {
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (97,15,0,W_CacheLumpName("M_NEWG",PU_CACHE));
     V_DrawPatchDirect (96,14,0,W_CacheLumpName("M_NEWG",PU_CACHE));
 
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (55,39,0,W_CacheLumpName("M_EPISOD",PU_CACHE));
     V_DrawPatchDirect (54,38,0,W_CacheLumpName("M_EPISOD",PU_CACHE));
 }
@@ -972,14 +1000,17 @@ char	msgNames[2][9]		= {"M_MSGOFF","M_MSGON"};
 
 void M_DrawOptions(void)
 {
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (90,14,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
     V_DrawPatchDirect (89,13,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
 	
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (OptionsDef.x + 176,OptionsDef.y+1+LINEHEIGHT*detail,0,
 		       W_CacheLumpName(detailNames[detailLevel],PU_CACHE));
     V_DrawPatchDirect (OptionsDef.x + 175,OptionsDef.y+LINEHEIGHT*detail,0,
 		       W_CacheLumpName(detailNames[detailLevel],PU_CACHE));
 
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (OptionsDef.x + 121,OptionsDef.y+1+LINEHEIGHT*messages,0,
 		       W_CacheLumpName(msgNames[showMessages],PU_CACHE));
     V_DrawPatchDirect (OptionsDef.x + 120,OptionsDef.y+LINEHEIGHT*messages,0,
@@ -1220,15 +1251,19 @@ M_DrawThermo
     int		i;
 
     xx = x;
+
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERML",PU_CACHE));
     V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERML",PU_CACHE));
     xx += 8;
     for (i=0;i<thermWidth;i++)
     {
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERMM",PU_CACHE));
 	V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMM",PU_CACHE));
 	xx += 8;
     }
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERMR",PU_CACHE));
     V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMR",PU_CACHE));
 
@@ -1379,6 +1414,7 @@ M_WriteText
 	w = SHORT (hu_font[c]->width);
 	if (cx+w > SCREENWIDTH)
 	    break;
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect(cx+1, cy+1, 0, hu_font[c]);
 	V_DrawPatchDirect(cx, cy, 0, hu_font[c]);
 	cx+=w;
@@ -1843,6 +1879,7 @@ void M_Drawer (void)
     {
 	if (currentMenu->menuitems[i].name[0])
     {
+        if (!M_CheckParm ("-vanilla"))
         V_DrawShadowDirect (x+1,y+1,0, W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE));
 	    V_DrawPatchDirect (x,y,0, W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE));
     }
@@ -1851,6 +1888,7 @@ void M_Drawer (void)
 
     
     // DRAW SKULL
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
 		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
     V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,

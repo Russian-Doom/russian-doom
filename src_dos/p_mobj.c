@@ -869,7 +869,7 @@ void P_SpawnMapThing (mapthing_t* mthing)
     {
         mobj->health -= Crispy_Random() & 1;
         // [crispy] randomly colorize space marine corpse objects
-        if (!netgame)
+        if (!netgame && !M_CheckParm ("-vanilla"))
         {
             mobj->flags |= (Crispy_Random() & 3) << MF_TRANSSHIFT;
         }

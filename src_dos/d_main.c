@@ -318,6 +318,8 @@ void D_Display (void)
 	    y = 4;
 	else
 	    y = viewwindowy+4;
+
+    if (!M_CheckParm ("-vanilla"))
     V_DrawShadowDirect(viewwindowx+1+(scaledviewwidth-68)/2,y+1,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
 	V_DrawPatchDirect(viewwindowx+(scaledviewwidth-68)/2,y,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
     }
@@ -655,18 +657,29 @@ void D_RedrawTitle(void)
     //Draw title (title, FGCOLOR, BGCOLOR);
     // [JN] Different colors for different games
     // http://www.brackeen.com/vga/basics.html
-    if (shareware)
-        D_DrawTitle(title, 14, 1);
-    else if (registered)
-        D_DrawTitle(title, 15, 1);
-    else if (retail)
-        D_DrawTitle(title, 15, 6);
-    else if (tnt)
-        D_DrawTitle(title, 14, 4);
-    else if (plutonia)
-        D_DrawTitle(title, 15, 2);
+
+    if (M_CheckParm ("-vanilla"))
+    {
+        if (retail || tnt || plutonia)
+        D_DrawTitle(title, 8, 7);
+        else // (shareware || registered || commercial)
+        D_DrawTitle(title, 4, 7);
+    }
     else
+    {
+        if (shareware)
+        D_DrawTitle(title, 14, 1);
+        else if (registered)
+        D_DrawTitle(title, 15, 1);
+        else if (retail)
+        D_DrawTitle(title, 15, 6);
+        else if (tnt)
+        D_DrawTitle(title, 14, 4);
+        else if (plutonia)
+        D_DrawTitle(title, 15, 2);
+        else
         D_DrawTitle(title, 15, 4);
+    }
 
     //Restore old cursor pos
     D_SetCursorPosition(column, row);

@@ -541,7 +541,7 @@ ST_Responder (event_t* ev)
       if (cht_CheckCheat(&cheat_god, ev->data1))
       {
         // [JN] IDDQD does not affect on dead player
-        if (plyr->playerstate == PST_DEAD)
+        if (!M_CheckParm ("-vanilla") && plyr->playerstate == PST_DEAD)
             return false;
  
 	plyr->cheats ^= CF_GODMODE;
@@ -566,7 +566,7 @@ ST_Responder (event_t* ev)
 	  plyr->weaponowned[i] = true;
 
     // [JN] Checking: does player have a backpack?
-    if (!plyr->backpack)
+    if (!plyr->backpack && !M_CheckParm ("-vanilla"))
     {
         for (i=0 ; i<NUMAMMO ; i++)
         plyr->maxammo[i] *= 2;
@@ -588,7 +588,7 @@ ST_Responder (event_t* ev)
 	  plyr->weaponowned[i] = true;
 
     // [JN] Checking: does player have a backpack?
-    if (!plyr->backpack)
+    if (!plyr->backpack && !M_CheckParm ("-vanilla"))
     {
         for (i=0 ; i<NUMAMMO ; i++)
         plyr->maxammo[i] *= 2;
