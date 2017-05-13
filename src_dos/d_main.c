@@ -789,13 +789,8 @@ void IdentifyVersion (void)
 
 	    if ( !strcasecmp (myargv[p+1],"doom.wad") )
 	    {
-	        D_AddFile ("doom.wad");
-
-            if (W_CheckNumForName("E4M1") > 0)
-            retail = true;
-            else
             registered = true;
-
+            D_AddFile ("doom.wad");
             D_AddFile ("rusdoom.wad");
 	        return;
 	    }
@@ -852,13 +847,8 @@ void IdentifyVersion (void)
 
 	if ( !access ("doom.wad",R_OK) )
 	{
-	    D_AddFile ("doom.wad");
-
-        if (W_CheckNumForName("E4M1") > 0)
-        retail = true;
-        else
         registered = true;
-
+        D_AddFile ("doom.wad");
         D_AddFile ("rusdoom.wad");
 
 	    return;
@@ -1175,35 +1165,16 @@ void D_DoomMain (void)
     printf ("W_Init: Инициализация WAD-файлов.\n");
     W_InitMultipleFiles (wadfiles);
     
-    if (registered)
+    if (W_CheckNumForName("E4M1") >= 0)
     {
-	char name[12][8]=
-	{
-	    "e4m1","e4m2","e4m3","e4m4","e4m5","e4m6","e4m7","e4m8","e4m9",
-	    "credit","m_epi4","demo4"
-	};
-        int i;
-	for (i = 0;i < 12; i++)
-        {
-            if (W_CheckNumForName(name[i])>-1)
-            {
-	        if (i == 11)
-                {
-                    registered = false;
-                    retail = true;
-                    sprintf(title,
-                    "                         "
-                    "Загрузка Ultimate DOOM v%i.%i"
-                    "                       ",
-                    VERSION/100,VERSION%100);
-                    D_RedrawTitle();
-                }
-            }
-            else
-            {
-                break;
-            }
-        }
+        registered = false;
+        retail = true;
+        sprintf(title,
+        "                         "
+        "Загрузка Ultimate DOOM v%i.%i"
+        "                       ",
+        VERSION/100,VERSION%100);
+        D_RedrawTitle();
     }
 
     // Check for -file in shareware
