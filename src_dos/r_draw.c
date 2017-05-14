@@ -657,12 +657,15 @@ void R_FillBackScreen (void)
 	} 
 
 	// Unreachable code?
-    // [JN] TODO: Watcom C - why it's unreachable? Is it needed at all?
+    // [JN] Watcom C - Unreachable code. No need to keep it, since
+    // screen width never changes. Thanks AXDOOMER for explanation.
+    /*
 	if (SCREENWIDTH&63) 
 	{ 
 	    memcpy (dest, src+((y&63)<<6), SCREENWIDTH&63); 
 	    dest += (SCREENWIDTH&63); 
 	} 
+    */
     } 
 	
     patch = W_CacheLumpName ("brdr_t",PU_CACHE);
