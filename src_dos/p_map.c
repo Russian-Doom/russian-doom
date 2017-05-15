@@ -1332,6 +1332,10 @@ boolean PIT_ChangeSector (mobj_t*	thing)
 
 	// spray blood in a random direction
 
+    // [JN] Barrel must not bleed by crusher damage
+    if (!vanilla && thing->type == MT_BARREL)
+    return true;
+
     // [JN] Blue blood for Cacodemon
     if (!vanilla && thing->type == MT_HEAD)
     mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOODB);
