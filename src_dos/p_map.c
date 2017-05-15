@@ -1331,9 +1331,22 @@ boolean PIT_ChangeSector (mobj_t*	thing)
 	P_DamageMobj(thing,NULL,NULL,10);
 
 	// spray blood in a random direction
-	mo = P_SpawnMobj (thing->x,
-			  thing->y,
-			  thing->z + thing->height/2, MT_BLOOD);
+
+    // [JN] Blue blood for Cacodemon
+    if (!vanilla && thing->type == MT_HEAD)
+    mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOODB);
+
+    // [JN] Green blood for Hell Knight and Baron of Hell
+    else if (!vanilla && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
+    mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOODG);
+    
+    // [JN] Fuzzed blood for Spectre
+    else if (!vanilla && thing->type == MT_SHADOWS)
+    mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOODF);
+
+    // [JN] Red blood for all other monsters
+    else
+    mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOOD);
 	
 	mo->momx = (P_Random() - P_Random ())<<12;
 	mo->momy = (P_Random() - P_Random ())<<12;

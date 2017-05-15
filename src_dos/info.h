@@ -1299,6 +1299,7 @@ typedef enum {
     MT_MISC86,
     MT_BLOODB,
     MT_BLOODG,
+    MT_BLOODF,
     NUMMOBJTYPES
 
 } mobjtype_t;

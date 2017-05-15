@@ -948,8 +948,12 @@ P_SpawnBlood
     th = P_SpawnMobj (x,y,z, MT_BLOODB);
 
     // [JN] Green blood for Hell Knight and Baron of Hell
-    else if (!vanilla && (target->type == MT_BRUISER) || (target->type == MT_KNIGHT))
+    else if (!vanilla && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
     th = P_SpawnMobj (x,y,z, MT_BLOODG);
+
+    // [JN] Fuzzed blood for Spectre
+    else if (!vanilla && target->type == MT_SHADOWS)
+    th = P_SpawnMobj (x,y,z, MT_BLOODF);
 
     // [JN] Red blood for all other monsters
     else
@@ -957,10 +961,6 @@ P_SpawnBlood
 
     th->momz = FRACUNIT*2;
     th->tics -= P_Random()&3;
-
-    // [JN] Fuzzed blood for Spectre
-    if (!vanilla && target->flags & MF_SHADOW)
-    th->flags |= MF_SHADOW;
 
     if (th->tics < 1)
     th->tics = 1;
