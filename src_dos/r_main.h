@@ -92,6 +92,7 @@ extern	int		detailshift;
 // Used to select shadow mode etc.
 //
 extern void		(*colfunc) (void);
+extern void		(*transcolfunc) (void);
 extern void		(*basecolfunc) (void);
 extern void		(*fuzzcolfunc) (void);
 // No shadow effects on floors.

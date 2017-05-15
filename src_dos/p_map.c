@@ -1029,7 +1029,7 @@ boolean PTR_ShootTraverse (intercept_t* in)
     if (in->d.thing->flags & MF_NOBLOOD)
 	P_SpawnPuff (x,y,z);
     else
-	P_SpawnBlood (x,y,z, la_damage);
+	P_SpawnBlood (x,y,z, la_damage, th); // [crispy] pass thing type
 
     if (la_damage)
 	P_DamageMobj (th, shootthing, shootthing, la_damage);

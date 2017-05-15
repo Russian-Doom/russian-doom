@@ -46,6 +46,7 @@
 extern	byte*		screens[5];
 
 extern  int	dirtybox[4];
+extern byte *dp_translation;
 
 extern const byte gammatable[17][256];
 extern	int	usegamma;

@@ -936,11 +936,75 @@ P_SpawnBlood
 ( fixed_t	x,
   fixed_t	y,
   fixed_t	z,
-  int		damage )
+  int		damage,
+   mobj_t*	target ) // [crispy] pass thing type
 {
     mobj_t*	th;
 	
     z += ((P_Random()-P_Random())<<10);
+    
+    if (target->type == MT_HEAD)
+    {   // Какодемон
+        th = P_SpawnMobj (x,y,z, MT_BLOODB);
+        th->momz = FRACUNIT*2;
+        th->tics -= P_Random()&3;
+    
+        if (th->tics < 1)
+        th->tics = 1;
+            
+        if (damage <= 12 && damage >= 9)
+        P_SetMobjState (th,S_BLOOD2);
+        else if (damage < 9)
+        P_SetMobjState (th,S_BLOOD3);
+    }
+    
+    else if ((target->type == MT_BRUISER) || (target->type == MT_KNIGHT))
+    {   // Барон Ада или Рыцарь Ада
+        th = P_SpawnMobj (x,y,z, MT_BLOODG);
+        th->momz = FRACUNIT*2;
+        th->tics -= P_Random()&3;
+        
+        if (th->tics < 1)
+        th->tics = 1;
+                
+        if (damage <= 12 && damage >= 9)
+        P_SetMobjState (th,S_BLOOD2);
+        else if (damage < 9)
+        P_SetMobjState (th,S_BLOOD3);
+    }
+        
+    else if (target->flags & MF_SHADOW)
+    {   // Призрак
+        th = P_SpawnMobj (x,y,z, MT_BLOOD);
+        th->momz = FRACUNIT*2;
+        th->tics -= P_Random()&3;
+        th->flags |= MF_SHADOW;
+        
+        if (th->tics < 1)
+        th->tics = 1;
+                
+        if (damage <= 12 && damage >= 9)
+        P_SetMobjState (th,S_BLOOD2);
+        else if (damage < 9)
+        P_SetMobjState (th,S_BLOOD3);
+    }
+    
+    else
+    {   // Все остальные монстры с красной кровью
+        th = P_SpawnMobj (x,y,z, MT_BLOOD);
+        th->momz = FRACUNIT*2;
+        th->tics -= P_Random()&3;
+        
+        if (th->tics < 1)
+        th->tics = 1;
+                
+        if (damage <= 12 && damage >= 9)
+        P_SetMobjState (th,S_BLOOD2);
+        else if (damage < 9)
+        P_SetMobjState (th,S_BLOOD3);
+    }
+    
+    /*
     th = P_SpawnMobj (x,y,z, MT_BLOOD);
     th->momz = FRACUNIT*2;
     th->tics -= P_Random()&3;
@@ -952,6 +1016,7 @@ P_SpawnBlood
 	P_SetMobjState (th,S_BLOOD2);
     else if (damage < 9)
 	P_SetMobjState (th,S_BLOOD3);
+    */
 }
 
 
