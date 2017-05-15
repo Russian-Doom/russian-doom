@@ -1217,9 +1217,11 @@ byte *I_ZoneBase(int *size)
     do
     {
         heap -= 0x20000; // leave 128k alone
-        if (heap > 0x800000)
+        // [JN] Increased amount of available heap for game to use
+        // 8.388.608 bytes * 8 = 67.108.864 bytes (64 MB)
+        if (heap > 0x800000*8)
         {
-            heap = 0x800000;
+            heap = 0x800000*8;
         }
         ptr = malloc(heap);
     } while (!ptr);

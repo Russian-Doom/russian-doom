@@ -62,8 +62,8 @@
 
 #include "g_game.h"
 
-
-#define SAVEGAMESIZE	0x2c000*3 // [JN] Increased savegame limit (180224*3=540672)
+// [JN] Increased savegame limit (180.224 bytes * 16 = 2.883.584 | 2.75 MB)
+#define SAVEGAMESIZE	0x2c000*16
 #define SAVESTRINGSIZE	24
 #define MAX_JOY_BUTTONS 20
 
@@ -119,15 +119,8 @@ int             totalleveltimes;        // [crispy] CPhipps - total time for all
 
 
 // [JN] Heretic savegame stuff.
-int SaveGameType;
-
-#define SVG_RAM 0
-#define SVG_FILE 1
 #define SAVE_GAME_TERMINATOR 0x1d
-
 FILE *SaveGameFP;
-
-extern boolean MallocFailureOk;
 
 
 char            demoname[32]; 
@@ -1350,19 +1343,8 @@ void G_DoSaveGame (void)
 //
 void SV_Open(char *fileName)
 {
-    MallocFailureOk = true;
     save_p = savebuffer = Z_Malloc(SAVEGAMESIZE, PU_STATIC, NULL);
-    MallocFailureOk = false;
-
-    if(savebuffer == NULL)
-    { // Not enough memory - use file save method
-        SaveGameType = SVG_FILE;
-        SaveGameFP = fopen(fileName, "wb");
-    }
-    else
-    {
-        SaveGameType = SVG_RAM;
-    }
+    SaveGameFP = fopen(fileName, "wb");
 }
 
 //
@@ -1373,21 +1355,14 @@ void SV_Close(char *fileName)
     int length;
 
     SV_WriteByte(SAVE_GAME_TERMINATOR);
+    length = save_p-savebuffer;
 
-    if(SaveGameType == SVG_RAM)
-    {
-        length = save_p-savebuffer;
-        if(length > SAVEGAMESIZE)
-        {
-            I_Error("Ошибка переполнения буфера сохраненной игры");
-        }
-        M_WriteFile(fileName, savebuffer, length);
-        Z_Free(savebuffer);
-    }
-    else
-    { // SVG_FILE
-        fclose(SaveGameFP);
-    }
+    if(length > SAVEGAMESIZE)
+    I_Error("Ошибка переполнения буфера сохраненной игры");
+
+    M_WriteFile(fileName, savebuffer, length);
+    Z_Free(savebuffer);
+    fclose(SaveGameFP);
 }
 
 //
@@ -1395,15 +1370,9 @@ void SV_Close(char *fileName)
 //
 void SV_Write(void *buffer, int size)
 {
-    if(SaveGameType == SVG_RAM)
-    {
-        memcpy(save_p, buffer, size);
-        save_p += size;
-    }
-    else
-    { // SVG_FILE
-        fwrite(buffer, size, 1, SaveGameFP);
-    }
+    memcpy(save_p, buffer, size);
+    save_p += size;
+    fwrite(buffer, size, 1, SaveGameFP);
 }
 
 void SV_WriteByte(byte val)
