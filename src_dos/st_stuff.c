@@ -542,7 +542,10 @@ ST_Responder (event_t* ev)
       {
         // [JN] IDDQD does not affect on dead player
         if (!vanilla && plyr->playerstate == PST_DEAD)
+        {
+            plyr->message = CHEATDENIED;	
             return false;
+        }
  
 	plyr->cheats ^= CF_GODMODE;
 	if (plyr->cheats & CF_GODMODE)

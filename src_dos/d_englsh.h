@@ -100,8 +100,9 @@
 #define GAMMALV37   "ehjdtym ufvvf-rjhhtrwbb 3>75"    // Уровень гамма-коррекции 3.75
 #define GAMMALVL4   "ehjdtym ufvvf-rjhhtrwbb 4>0"     // Уровень гамма-коррекции 4.0
 
-#define EMPTYSTRING "gecnjq ckjn"               // Пустой слот
-#define SECRETFOUND "j,yfhe;ty nfqybr!"         // Обнаружен тайник!
+#define EMPTYSTRING "gecnjq ckjn"                  // Пустой слот
+#define SECRETFOUND "j,yfhe;ty nfqybr!"            // Обнаружен тайник!
+#define CHEATDENIED "dsgjkytybt rjvfyls pfghtotyj" // Выполнение команды запрещено
 
 //
 //	P_inter.C
