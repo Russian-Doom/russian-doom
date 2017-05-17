@@ -808,16 +808,12 @@ void P_SlideMove (mobj_t* mo)
     // move up to the wall
     if (bestslidefrac == FRACUNIT+1)
     {
-	// the move most have hit the middle, so stairstep
-    // [JN] Исправление бага: https://doomwiki.org/wiki/Wallrunning
-    // Небезопасно для демозаписей, поэтому назначено только для (singleplayer).
-    // Спасибо Alexandre-Xavier Labonte-Lamoureux!
-      stairstep:
-	if (singleplayer && !P_TryMove (mo, mo->x, mo->y + mo->momy/8))
-	    P_TryMove (mo, mo->x + mo->momx/8, mo->y);
-    else if (!P_TryMove (mo, mo->x, mo->y + mo->momy))
+        // the move most have hit the middle, so stairstep
+        stairstep:
+        if (!P_TryMove (mo, mo->x, mo->y + mo->momy))
         P_TryMove (mo, mo->x + mo->momx, mo->y);
-	return;
+
+        return;
     }
 
     // fudge a bit to make sure it doesn't hit
