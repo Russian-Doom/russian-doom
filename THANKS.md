@@ -36,3 +36,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - MAJOR93MOREAU
 - Sergey "Districh" Ivanov
 - Zodomaniac
+- NY00123
