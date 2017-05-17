@@ -26,6 +26,9 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) source port
 - Alexandre-Xavier "AXDOOMER" Labonté-Lamoureux
 
+#### [DOSBox](http://www.dosbox.com/) emulator
+- The DOSBox Team
+
 ##### And also:
 - Maxim "MaxLeon" Pyanov, Oleg Zik and Oleg “Kai” Sudarikov
 - [LeD] Jake Crusher
