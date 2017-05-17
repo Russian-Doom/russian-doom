@@ -28,6 +28,7 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 
 #### [DOSBox](http://www.dosbox.com/) emulator
 - The DOSBox Team
+- SDL2 patch by NY00123
 
 ##### And also:
 - Maxim "MaxLeon" Pyanov, Oleg Zik and Oleg “Kai” Sudarikov
@@ -39,4 +40,3 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - MAJOR93MOREAU
 - Sergey "Districh" Ivanov
 - Zodomaniac
-- NY00123
