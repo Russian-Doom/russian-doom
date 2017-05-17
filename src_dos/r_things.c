@@ -616,11 +616,18 @@ void R_ProjectSprite (mobj_t* thing)
 	vis->colormap = spritelights[index];
     }	
 
-    if (thing->type == MT_BLOODB)
+    // [crispy] colored blood 
+    // [JN] ...but not in vanilla mode
+    if (!vanilla && (thing->type == MT_BLOOD || thing->sprite == SPR_POL5) && thing->target)
+    {
+        // [crispy] Cacodemons bleed blue blood
+        if (thing->target->type == MT_HEAD)
         vis->translation = (byte *) &cr_blue2;
-    
-    if (thing->type == MT_BLOODG)
+
+        // [crispy] Barons of Hell and Hell Knights bleed green blood
+        else if (thing->target->type == MT_BRUISER || thing->target->type == MT_KNIGHT)
         vis->translation = (byte *) &cr_green;
+    }
 }
 
 

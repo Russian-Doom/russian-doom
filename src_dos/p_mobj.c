@@ -942,23 +942,7 @@ P_SpawnBlood
     mobj_t*	th;
 
     z += ((P_Random()-P_Random())<<10);
-
-    // [JN] Blue blood for Cacodemon
-    if (!vanilla && target->type == MT_HEAD)
-    th = P_SpawnMobj (x,y,z, MT_BLOODB);
-
-    // [JN] Green blood for Hell Knight and Baron of Hell
-    else if (!vanilla && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
-    th = P_SpawnMobj (x,y,z, MT_BLOODG);
-
-    // [JN] Fuzzed blood for Spectre
-    else if (!vanilla && target->type == MT_SHADOWS)
-    th = P_SpawnMobj (x,y,z, MT_BLOODF);
-
-    // [JN] Red blood for all other monsters
-    else
     th = P_SpawnMobj (x,y,z, MT_BLOOD);
-
     th->momz = FRACUNIT*2;
     th->tics -= P_Random()&3;
 
@@ -969,6 +953,14 @@ P_SpawnBlood
     P_SetMobjState (th,S_BLOOD2);
     else if (damage < 9)
     P_SetMobjState (th,S_BLOOD3);
+
+    // [crispy] connect blood object with the monster that bleeds it
+    th->target = target;
+
+    // [crispy] Spectres bleed spectre blood
+    // [JN] ...but not in vanilla mode
+    if (!vanilla)
+    th->flags |= (target->flags & MF_SHADOW);
 }
 
 

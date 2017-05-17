@@ -1281,74 +1281,78 @@ boolean		nofit;
 boolean PIT_ChangeSector (mobj_t*	thing)
 {
     mobj_t*	mo;
-	
+
     if (P_ThingHeightClip (thing))
     {
-	// keep checking
-	return true;
+    // keep checking
+    return true;
     }
 
     // crunch bodies to giblets
     if (thing->health <= 0)
     {
-	P_SetMobjState (thing, S_GIBS);
+        // [JN] no bloody mess for barrel and Lost Souls
+        if (!vanilla && (thing->type == MT_BARREL || thing->type == MT_SKULL))
+        {
+            P_SetMobjState (thing, SPR_TROO);
+        }
+        else
+        {
+            if (!vanilla) // [JN] *Squish!*
+            S_StartSound(thing, sfx_slop2);
 
-	thing->flags &= ~MF_SOLID;
-	thing->height = 0;
-	thing->radius = 0;
+            P_SetMobjState (thing, S_GIBS);
+        }
 
-    if (!vanilla)
-    S_StartSound(thing, sfx_slop2);
+        thing->flags &= ~MF_SOLID;
+        thing->height = 0;
+        thing->radius = 0;
 
-	// keep checking
-	return true;		
+        // [crispy] connect giblet object with the crushed monster
+        thing->target = thing;
+
+        // keep checking
+        return true;		
     }
 
     // crunch dropped items
     if (thing->flags & MF_DROPPED)
     {
-	P_RemoveMobj (thing);
-	
-	// keep checking
-	return true;		
+        P_RemoveMobj (thing);
+
+        // keep checking
+        return true;		
     }
 
     if (! (thing->flags & MF_SHOOTABLE) )
     {
-	// assume it is bloody gibs or something
-	return true;			
+        // assume it is bloody gibs or something
+        return true;			
     }
-    
+
     nofit = true;
 
     if (crushchange && !(leveltime&3) )
     {
-	P_DamageMobj(thing,NULL,NULL,10);
+        P_DamageMobj(thing,NULL,NULL,10);
 
-	// spray blood in a random direction
+        // spray blood in a random direction
+        if (!vanilla && thing->type == MT_BARREL) // [JN] no blood for barrel
+        return true;
 
-    // [JN] Barrel must not bleed by crusher damage
-    if (!vanilla && thing->type == MT_BARREL)
-    return true;
+        else
+        mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOOD);
 
-    // [JN] Blue blood for Cacodemon
-    if (!vanilla && thing->type == MT_HEAD)
-    mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOODB);
+        mo->momx = (P_Random() - P_Random ())<<12;
+        mo->momy = (P_Random() - P_Random ())<<12;
 
-    // [JN] Green blood for Hell Knight and Baron of Hell
-    else if (!vanilla && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
-    mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOODG);
-    
-    // [JN] Fuzzed blood for Spectre
-    else if (!vanilla && thing->type == MT_SHADOWS)
-    mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOODF);
+        // [crispy] connect blood object with the monster that bleeds it
+        mo->target = thing;
 
-    // [JN] Red blood for all other monsters
-    else
-    mo = P_SpawnMobj (thing->x,thing->y,thing->z + thing->height/2, MT_BLOOD);
-	
-	mo->momx = (P_Random() - P_Random ())<<12;
-	mo->momy = (P_Random() - P_Random ())<<12;
+        // [crispy] Spectres bleed spectre blood
+        // [JN] ...but not in vanilla mode
+        if (!vanilla)
+        mo->flags |= (thing->flags & MF_SHADOW);
     }
 
     // keep checking (crush other things)	
