@@ -1181,11 +1181,13 @@ void ST_doPaletteStuff(void)
         else
         {
             palette = (plyr->bonuscount+7)>>3;
-    
+            // [JN] Дополнительный фрейм палитры для более плавного
+            // появления/угасания жёлтого экрана при подборе предметов.
+            // https://doomwiki.org/wiki/PLAYPAL
             if (palette >= NUMBONUSPALS)
-                palette = NUMBONUSPALS-1;
+                palette = NUMBONUSPALS;
     
-            palette += STARTBONUSPALS;
+            palette += STARTBONUSPALS-1;
         }
     }
 
