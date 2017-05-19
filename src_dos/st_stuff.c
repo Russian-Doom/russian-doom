@@ -1115,9 +1115,17 @@ void ST_doPaletteStuff(void)
     {
 	palette = (plyr->bonuscount+7)>>3;
 
+	// [JN] Added one extra palette for more smoothing fade in/out
+	// https://doomwiki.org/wiki/PLAYPAL
 	if (palette >= NUMBONUSPALS)
+	    if (!vanilla)
+	    palette = NUMBONUSPALS;
+	    else
 	    palette = NUMBONUSPALS-1;
 
+	if (!vanilla)
+	palette += STARTBONUSPALS-1;
+	else
 	palette += STARTBONUSPALS;
     }
 
