@@ -1279,7 +1279,7 @@ void D_DoomMain (void)
     D_RedrawTitle();
     M_Init ();
 
-    printf ("R_Init: Инициализация процесса запуска DOOM - ");
+    printf ("R_Init: Инициализация запуска DOOM - ");
     D_RedrawTitle();
     R_Init ();
 
