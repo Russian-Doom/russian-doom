@@ -1225,14 +1225,19 @@ byte *I_ZoneBase(int *size)
 
         // [JN] Crash-preventing condition. No need to lockup OS
         // in case of using "0", "-1" and below values.
-        if (maxmem <= 1)
+        if (maxmem < 1)
         maxmem = 1;
+
+        // [JN] Limit maximum memory to 64 MB, since DOS/4GW
+        // allows using maximum up to 64 MB.
+        else if (maxmem > 64)
+        maxmem = 64;
     }
     
     do
     {
         heap -= 0x20000; // leave 128k alone
-        // [JN] So, what is out heap size?
+        // [JN] So, what is our heap size?
         if (heap > maxmem)
         {
             heap = maxmem;
