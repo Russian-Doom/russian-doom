@@ -113,11 +113,6 @@ int             totalleveltimes;    // [crispy] CPhipps - total time for all com
 int             totalkills, totalitems, totalsecret;    // for intermission
 
 
-// [JN] Heretic savegame stuff
-#define SAVE_GAME_TERMINATOR 0x1d
-FILE *SaveGameFP;
-
-
 char            demoname[32];
 boolean         demorecording;
 boolean         demoplayback;
@@ -133,7 +128,8 @@ wbstartstruct_t wminfo;             // parms for world map / intermission
 
 short		consistancy[MAXPLAYERS][BACKUPTICS];
 
-byte*		savebuffer;
+byte*       savebuffer;
+byte        saveshit[SAVEGAMESIZE];
 
 
 //
@@ -1195,8 +1191,8 @@ void G_LoadGame (char* name)
 #define VERSIONSIZE     16
 
 
-void G_DoLoadGame (void)
-{
+void G_DoLoadGame (void) 
+{ 
     int     length;
     int     i;
     int     a,b,c;
@@ -1208,20 +1204,17 @@ void G_DoLoadGame (void)
     save_p = savebuffer + SAVESTRINGSIZE;
 
     // skip the description field
-    memset (vcheck,0,sizeof(vcheck)); 
-    sprintf (vcheck,"version %i",VERSION); 
-    if (strcmp ((char*)save_p, vcheck)) 
-    {   // bad version
-        return;
-    }
+    memset (vcheck,0,sizeof(vcheck));
+    sprintf (vcheck,"version %i",VERSION);
+    if (strcmp ((char*)save_p, vcheck))
+	return; // bad version 
     save_p += VERSIONSIZE;
-    gameskill = *save_p++;
+
+    gameskill   = *save_p++;
     gameepisode = *save_p++;
-    gamemap = *save_p++;
+    gamemap     = *save_p++;
     for (i=0 ; i<MAXPLAYERS ; i++)
-    {
-        playeringame[i] = *save_p++;
-    }
+	playeringame[i] = *save_p++;
 
     // load a base level
     G_InitNew (gameskill, gameepisode, gamemap);
@@ -1238,22 +1231,20 @@ void G_DoLoadGame (void)
     P_UnArchiveThinkers();
     P_UnArchiveSpecials();
 
-    if (*save_p != SAVE_GAME_TERMINATOR)
-    {   // Missing savegame termination marker
-        I_Error ("Некорректный файл сохраненной игры");
-    }
+    if (*save_p != 0x1d)
+	I_Error ("Некорректный файл сохраненной игры.");
 
     // done
     Z_Free (savebuffer);
 
     if (setsizeneeded)
-    R_ExecuteSetViewSize ();
+    R_ExecuteSetViewSize();
 
     // [JN] Additional message for loaded game ("Игра загружена.")
     players[consoleplayer].message = GGLOADED;
 
     // draw the pattern into the back screen
-    R_FillBackScreen();
+    R_FillBackScreen ();
 }
 
 
@@ -1262,49 +1253,60 @@ void G_DoLoadGame (void)
 // Called by the menu task.
 // Description is a 24 byte text string
 //
-void G_SaveGame (int slot, char* description)
-{ 
-    savegameslot = slot; 
-    strcpy (savedescription, description); 
-    sendsave = true; 
-} 
+void
+G_SaveGame (int slot, char* description)
+{
+    savegameslot = slot;
+    strcpy (savedescription, description);
+    sendsave = true;
+}
 
 void G_DoSaveGame (void)
 {
     char    name[100];
     char    name2[VERSIONSIZE];
     char*   description;
+    int     length;
     int     i;
 
     if (M_CheckParm("-cdrom"))
     sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",savegameslot);
     else
     sprintf (name,SAVEGAMENAME"%d.dsg",savegameslot);
-
     description = savedescription;
 
-    SV_Open(name);
-    SV_Write(description, SAVESTRINGSIZE);
-    memset(name2, 0, sizeof(name2));
-    sprintf(name2, "version %i", VERSION);
-    SV_Write(name2, VERSIONSIZE);
-    SV_WriteByte(gameskill);
-    SV_WriteByte(gameepisode);
-    SV_WriteByte(gamemap);
-    for(i = 0; i < MAXPLAYERS; i++)
-    {
-        SV_WriteByte(playeringame[i]);
-    }
-    SV_WriteByte(leveltime>>16);
-    SV_WriteByte(leveltime>>8);
-    SV_WriteByte(leveltime);
+    // [JN] Perfect solution by Alexandre-Xavier Labonte-Lamoureux
+    // Safely increases saveing buffer a lot, so now it is possible
+    // to get Doom+ save gamelimit (x16) without any pain.
+    save_p = savebuffer = &saveshit;
+
+    memcpy (save_p, description, SAVESTRINGSIZE);
+    save_p += SAVESTRINGSIZE;
+    memset (name2,0,sizeof(name2));
+    sprintf (name2,"version %i",VERSION);
+    memcpy (save_p, name2, VERSIONSIZE);
+    save_p += VERSIONSIZE;
+
+    *save_p++ = gameskill;
+    *save_p++ = gameepisode;
+    *save_p++ = gamemap;
+    for (i=0 ; i<MAXPLAYERS ; i++)
+    *save_p++ = playeringame[i];
+    *save_p++ = leveltime>>16;
+    *save_p++ = leveltime>>8;
+    *save_p++ = leveltime;
 
     P_ArchivePlayers();
     P_ArchiveWorld();
     P_ArchiveThinkers();
     P_ArchiveSpecials();
-    SV_Close(name);
 
+    *save_p++ = 0x1d;   // consistancy marker
+
+    length = save_p - savebuffer;
+    if (length > SAVEGAMESIZE)
+    I_Error ("Ошибка переполнения буфера сохраненной игры.");
+    M_WriteFile (name, savebuffer, length);
     gameaction = ga_nothing;
     savedescription[0] = 0;
 
@@ -1312,61 +1314,6 @@ void G_DoSaveGame (void)
 
     // draw the pattern into the back screen
     R_FillBackScreen();
-}
-
-
-//
-// SV_Open
-//
-void SV_Open(char *fileName)
-{
-    save_p = savebuffer = Z_Malloc(SAVEGAMESIZE, PU_STATIC, NULL);
-    SaveGameFP = fopen(fileName, "wb");
-}
-
-
-//
-// SV_Close
-//
-void SV_Close(char *fileName)
-{
-    int     length;
-
-    SV_WriteByte(SAVE_GAME_TERMINATOR);
-    length = save_p-savebuffer;
-
-    if(length > SAVEGAMESIZE)
-    I_Error("Ошибка переполнения буфера сохраненной игры");
-
-    M_WriteFile(fileName, savebuffer, length);
-    Z_Free(savebuffer);
-    fclose(SaveGameFP);
-}
-
-
-//
-// SV_Write
-//
-void SV_Write(void *buffer, int size)
-{
-    memcpy(save_p, buffer, size);
-    save_p += size;
-    fwrite(buffer, size, 1, SaveGameFP);
-}
-
-void SV_WriteByte(byte val)
-{
-    SV_Write(&val, sizeof(byte));
-}
-
-void SV_WriteWord(unsigned short val)
-{
-    SV_Write(&val, sizeof(unsigned short));
-}
-
-void SV_WriteLong(unsigned int val)
-{
-    SV_Write(&val, sizeof(int));
 }
 
 

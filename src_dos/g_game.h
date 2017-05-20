@@ -1,6 +1,5 @@
 //
 // Copyright (C) 1993-1996 Id Software, Inc.
-// Copyright (C) 1993-2008 Raven Software
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
 // Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
 // Copyright (C) 2017 Julian Nechaevsky
@@ -68,14 +67,6 @@ void G_Ticker (void);
 boolean G_Responder (event_t*	ev);
 
 void G_ScreenShot (void);
-
-// Support routines for saving games
-void SV_Open(char *fileName);
-void SV_Close(char *fileName);
-void SV_Write(void *buffer, int size);
-void SV_WriteByte(byte val);
-void SV_WriteWord(unsigned short val);
-void SV_WriteLong(unsigned int val);
 
 
 #endif
