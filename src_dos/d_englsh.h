@@ -1058,7 +1058,9 @@
 // кибердемона.
 
 
-// No Rest for the Living | Нет покоя для живых
+/******************************************** 
+
+[JN] NRFTL text. Not used in DOS version. 
 
 #define N1TEXT \
 "ytghbznyjcnb< rfpfkjcm< yfcnbukb d cfvsq\n"\
@@ -1096,11 +1098,13 @@
 // Эта миссия завершена.
 
 
-/* [JN] Текст от Master Levels. В данный момент не используется.
+[JN] The Master Levels. Not used.
+
 #define M1TEXT \
 "CONGRATULATIONS YOU HAVE FINISHED... \n\n"\
 "THE MASTER LEVELS\n"
-*/
+
+********************************************/
 
 //
 // F_FINALE.C
