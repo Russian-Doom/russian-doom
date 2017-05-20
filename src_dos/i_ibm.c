@@ -1203,6 +1203,8 @@ byte *I_ZoneBase(int *size)
     int meminfo[32];
     int heap;
     byte *ptr;
+    int maxmem = 0x800000; // [JN] Initial heap size to use
+    int p;
 
     memset(meminfo, 0, sizeof(meminfo));
     segread(&segregs);
@@ -1213,15 +1215,27 @@ byte *I_ZoneBase(int *size)
 
     heap = meminfo[0];
     printf("Память DPMI: 0x%x", heap);
+    
+    // [JN] Command line parameter to increase/decrease heap size
+    // Thanks to Alexandre-Xavier Labonte-Lamoureux for the code!
+    p = M_CheckParm ("-mb");
+    if (p && p < myargc-1)
+    {
+        maxmem = 1024 * 1024 * atoi(myargv[p + 1]);
 
+        // [JN] Crash-preventing condition. No need to lockup OS
+        // in case of using "0", "-1" and below values.
+        if (maxmem <= 1)
+        maxmem = 1;
+    }
+    
     do
     {
         heap -= 0x20000; // leave 128k alone
-        // [JN] Increased amount of available heap for game to use
-        // 8.388.608 bytes * 8 = 67.108.864 bytes (64 MB)
-        if (heap > 0x800000*8)
+        // [JN] So, what is out heap size?
+        if (heap > maxmem)
         {
-            heap = 0x800000*8;
+            heap = maxmem;
         }
         ptr = malloc(heap);
     } while (!ptr);
@@ -1230,7 +1244,8 @@ byte *I_ZoneBase(int *size)
     if (heap < 0x180000)
     {
         printf("\n");
-        printf("Недостаточно памяти! Пожалуйста, освободите больше памяти для запуска DOOM.\n\n");
+        printf("Недостаточно оперативной памяти!\n");
+        printf("Для запуска DOOM необходимо минимум 2 мегабайта памяти.\n\n");
         printf("Выполнение программы прервано.\n");
         exit(1);
     }
