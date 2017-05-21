@@ -22,9 +22,9 @@
 #define __AMMAP_H__
 
 // Used by ST StatusBar stuff.
-#define AM_MSGHEADER (('a'<<24)+('m'<<16))
-#define AM_MSGENTERED (AM_MSGHEADER | ('e'<<8))
-#define AM_MSGEXITED (AM_MSGHEADER | ('x'<<8))
+#define AM_MSGHEADER    (('a'<<24)+('m'<<16))
+#define AM_MSGENTERED   (AM_MSGHEADER | ('e'<<8))
+#define AM_MSGEXITED    (AM_MSGHEADER | ('x'<<8))
 
 
 // Called by main loop.
@@ -41,6 +41,5 @@ void AM_Drawer (void);
 // if the level is completed while it is up.
 void AM_Stop (void);
 
-
-
 #endif
+
