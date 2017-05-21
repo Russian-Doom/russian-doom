@@ -62,7 +62,7 @@ typedef struct
 //  (child of Text Line widget)
 typedef struct
 {
-    hu_textline_    l[HU_MAXLINES]; // text lines to draw
+    hu_textline_t   l[HU_MAXLINES]; // text lines to draw
     int             h;              // height in lines
     int             cl;             // current line number
 
