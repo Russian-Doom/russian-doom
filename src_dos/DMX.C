@@ -27,7 +27,7 @@ void TSM_Install(int rate)
 {
 }
 
-fx_  blaster_config dmx_blaster;
+fx_blaster_config dmx_blaster;
 int  (*tsm_func)(void);
 task *tsm_task = NULL;
 
