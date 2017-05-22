@@ -695,7 +695,7 @@ ST_Responder (event_t* ev)
       {
         static char buf[ST_MSGWIDTH];
 
-        M_snprintf(buf, sizeof(buf), "EUK=0x%x;[<e=(0x%x,0x%x)", // [JN] "ang=0x%x;x,y=(0x%x,0x%x)"
+        M_snprintf(buf, sizeof(buf), "eujk=%x / [<e=(%x<%x)", // [JN] "ang=0x%x;x,y=(0x%x,0x%x)"
                    players[consoleplayer].mo->angle,
                    players[consoleplayer].mo->x,
                    players[consoleplayer].mo->y);
