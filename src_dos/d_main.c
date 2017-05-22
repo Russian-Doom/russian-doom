@@ -1200,9 +1200,9 @@ void D_DoomMain (void)
         registered = false;
         retail = true;
         sprintf(title,
-        "                         "
+        "                          "
         "Загрузка Ultimate DOOM v%i.%i"
-        "                       ",
+        "                           ",
         VERSION/100,VERSION%100);
         D_RedrawTitle();
     }
