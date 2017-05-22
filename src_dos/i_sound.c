@@ -426,10 +426,8 @@ void I_StartupSound(void)
     //
     // inits DMX sound library
     //
-    if (devparm)
-    {
-        printf("  Вызов DMX_Init\n");
-    }
+    printf("  вызов DMX_Init\n");
+
     rc = DMX_Init(SND_TICRATE, SND_MAXSONGS, dmxCodes[snd_MusicDevice],
                   dmxCodes[snd_SfxDevice]);
 
