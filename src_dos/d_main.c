@@ -58,7 +58,9 @@
 
 #include "d_main.h"
 
-#define BGCOLOR     1
+// [JN] Default banner colors. Background changed to
+// black for prevention of color blinking in slow CPUs
+#define BGCOLOR     0
 #define FGCOLOR     15
 
 //
