@@ -433,7 +433,7 @@ void I_StartupSound(void)
 
     if (devparm)
     {
-        printf("  DMX_Init() возврат значения: %d\n", rc);
+        printf("  возврат значения DMX_Init: %d\n", rc);
     }
 }
 //
