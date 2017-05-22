@@ -237,6 +237,7 @@ void M_SaveGame(int choice);
 void M_Options(int choice);
 void M_EndGame(int choice);
 void M_ReadThis(int choice);
+void M_ReadThis2(int choice);
 void M_QuitDOOM(int choice);
 
 void M_ChangeMessages(int choice);
@@ -256,7 +257,9 @@ void M_QuickSave(void);
 void M_QuickLoad(void);
 
 void M_DrawMainMenu(void);
-void M_DrawReadThis(void);
+void M_DrawReadThis1(void);
+void M_DrawReadThis2(void);
+void M_DrawReadThisRetail(void);
 void M_DrawNewGame(void);
 void M_DrawEpisode(void);
 void M_DrawOptions(void);
@@ -419,7 +422,7 @@ menu_t  OptionsDef =
 };
 
 //
-// Read This! MENU
+// Read This! MENU 1 & 2
 //
 enum
 {
@@ -427,18 +430,18 @@ enum
     read1_end
 } read_e;
 
-menuitem_t ReadMenu[]=
+menuitem_t ReadMenu1[] =
 {
-    {1,"",M_FinishReadThis,0}
+    {1,"",M_ReadThis2,0}
 };
 
-menu_t  ReadDef =
+menu_t  ReadDef1 =
 {
     read1_end,
     &MainDef,
-    ReadMenu,
-    M_DrawReadThis,
-    330,175,
+    ReadMenu1,
+    M_DrawReadThis1,
+    280,181,
     0
 };
 
@@ -447,6 +450,21 @@ enum
     rdthsempty2,
     read2_end
 } read_e2;
+
+menuitem_t ReadMenu2[]=
+{
+    {1,"",M_FinishReadThis,0}
+};
+
+menu_t  ReadDef2 =
+{
+    read2_end,
+    NULL,
+    ReadMenu2,
+    M_DrawReadThisRetail,
+    330,168,
+    0
+};
 
 //
 // SOUND VOLUME MENU
@@ -817,11 +835,24 @@ void M_QuickLoad(void)
 
 
 //
-// Read This Menu
+// Read This Menus
+// Had a "quick hack to fix romero bug"
 //
-void M_DrawReadThis(void)
+void M_DrawReadThis1(void)
 {
     inhelpscreens = true;
+    V_DrawPatchDirect(0, 0, 0, W_CacheLumpName("HELP2", PU_CACHE));
+}
+
+
+
+//
+// Read This Menus - optional second page.
+//
+void M_DrawReadThisRetail(void)
+{
+    inhelpscreens = true;
+
     if (commercial)
         V_DrawPatchDirect(0, 0, 0, W_CacheLumpName("HELP", PU_CACHE));
     else
@@ -971,7 +1002,7 @@ void M_Episode(int choice)
 	 && choice)
     {
 	M_StartMessage(SWSTRING,NULL,false);
-	M_SetupNextMenu(&ReadDef);
+	M_SetupNextMenu(&ReadDef1);
 	return;
     }
 	 
@@ -1075,7 +1106,13 @@ void M_EndGame(int choice)
 void M_ReadThis(int choice)
 {
     choice = 0;
-    M_SetupNextMenu(&ReadDef);
+    M_SetupNextMenu(&ReadDef1);
+}
+
+void M_ReadThis2(int choice)
+{
+    choice = 0;
+    M_SetupNextMenu(&ReadDef2);
 }
 
 void M_FinishReadThis(int choice)
@@ -1604,7 +1641,7 @@ boolean M_Responder (event_t* ev)
 	  case KEY_F1:            // Help key
 	    M_StartControlPanel ();
 
-	    currentMenu = &ReadDef;
+	    currentMenu = &ReadDef2;
 	    
 	    itemOn = 0;
 	    S_StartSound(NULL,sfx_swtchn);
@@ -1930,16 +1967,24 @@ void M_Init (void)
     messageLastMenuActive = menuactive;
     quickSaveSlot = -1;
 
+    // [JN] Don't show shareware info screen (HELP2) in non-shareware Doom 1
+    // Taken from Chocolate Doom (src/doom/m_menu.c)    
+    if (registered || retail)
+    {
+        MainMenu[readthis].routine = M_ReadThis2;
+        ReadDef2.prevMenu = NULL;
+    }
+
     if (commercial)
     {
         MainMenu[readthis] = MainMenu[quitdoom];
         MainDef.numitems--;
         MainDef.y += 8;
         NewDef.prevMenu = &MainDef;
-        ReadDef.routine = M_DrawReadThis;
-        ReadDef.x = 330;
-        ReadDef.y = 165;
-        ReadMenu[0].routine = M_FinishReadThis;
+        ReadDef1.routine = M_DrawReadThisRetail;
+        ReadDef1.x = 330;
+        ReadDef1.y = 165;
+        ReadMenu1[0].routine = M_FinishReadThis;
     }
 
     // We need to remove the fourth episode.
