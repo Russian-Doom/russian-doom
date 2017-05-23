@@ -222,7 +222,6 @@ void D_Display (void)
     // save the current screen if about to wipe
     if (gamestate != wipegamestate)
     {
-        if (M_CheckParm ("-nowipe"))
         wipe = false;
         else
         wipe = true;
@@ -470,6 +469,10 @@ void D_DoAdvanceDemo (void)
         pagetic = 35 * 11;
         else
         pagetic = 170;
+
+        if (devparm)
+        pagetic = 35 * 666; // [JN] Pause here for a while
+
         gamestate = GS_DEMOSCREEN;
 
         if (shareware)

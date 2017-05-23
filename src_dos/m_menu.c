@@ -1196,6 +1196,8 @@ void M_QuitDOOM(int choice)
                 endmsg1[(gametic >> 2) % NUM_QUITMESSAGES]);
     }
   
+  I_Quit ();
+  else
   M_StartMessage(endstring,M_QuitResponse,true);
 }
 
@@ -1310,6 +1312,8 @@ M_DrawThermo
 
 
 
+// [JN] From Doom Alpha, not needed
+/*
 void
 M_DrawEmptyCell
 ( menu_t*	menu,
@@ -1327,6 +1331,7 @@ M_DrawSelCell
     V_DrawPatchDirect (menu->x - 10,        menu->y+item*LINEHEIGHT - 1, 0,
 		       W_CacheLumpName("M_CELL2",PU_CACHE));
 }
+*/
 
 
 void
