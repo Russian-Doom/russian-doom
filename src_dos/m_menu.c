@@ -1196,6 +1196,7 @@ void M_QuitDOOM(int choice)
                 endmsg1[(gametic >> 2) % NUM_QUITMESSAGES]);
     }
   
+  if (devparm) // [JN] Quit immediately
   I_Quit ();
   else
   M_StartMessage(endstring,M_QuitResponse,true);

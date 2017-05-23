@@ -222,6 +222,7 @@ void D_Display (void)
     // save the current screen if about to wipe
     if (gamestate != wipegamestate)
     {
+        if (devparm) // [JN] Quit immediately
         wipe = false;
         else
         wipe = true;
