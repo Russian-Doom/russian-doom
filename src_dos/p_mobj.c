@@ -806,7 +806,8 @@ void P_SpawnMapThing (mapthing_t* mthing)
     }
 
     // check for apropriate skill level
-    if (!netgame && (mthing->options & 16) )
+    // [JN] Ultra-Nightmare: always spawn multiplayer things
+    if (!netgame && (mthing->options & 16) && !ultranm)
 	return;
 		
     if (gameskill == sk_baby)
@@ -815,6 +816,10 @@ void P_SpawnMapThing (mapthing_t* mthing)
 	bit = 4;
     else
 	bit = 1<<(gameskill-1);
+
+    // [JN] Ultra-Nightmare: always spawn things from "hard" mode
+    if (ultranm)
+    bit = 4;
 
     if (!(mthing->options & bit) )
 	return;

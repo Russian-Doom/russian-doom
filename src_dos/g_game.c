@@ -1348,6 +1348,9 @@ void G_DoNewGame (void)
     fastparm = M_CheckParm ("-fast");
     nomonsters = M_CheckParm ("-nomonsters");
 
+    // [JN] Ultra-Nightmare mode activation
+    ultranm = M_CheckParm("-ultranm");
+
     consoleplayer = 0;
     G_InitNew (d_skill, d_episode, d_map);
     gameaction = ga_nothing;
@@ -1390,7 +1393,8 @@ void G_InitNew (skill_t skill, int episode, int map)
     else
     respawnmonsters = false;
 
-    if (fastparm || (skill == sk_nightmare && gameskill != sk_nightmare) )
+    // [JN] Ultra-Nightmare: fast monsters
+    if (fastparm || (skill == sk_nightmare && gameskill != sk_nightmare) || ultranm)
     { 
         for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
 
@@ -1409,6 +1413,35 @@ void G_InitNew (skill_t skill, int episode, int map)
         mobjinfo[MT_BRUISERSHOT].speed = 15*FRACUNIT;
         mobjinfo[MT_HEADSHOT].speed = 10*FRACUNIT;
         mobjinfo[MT_TROOPSHOT].speed = 10*FRACUNIT;
+    }
+
+    // [JN] Ultra-Nightmare: exclusive speedups (original speed)
+    if (ultranm)
+    {
+        mobjinfo[MT_POSSESSED].speed = 12; // Zombieman (8)
+        mobjinfo[MT_SHOTGUY].speed = 12;   // Shotgun guy (8)
+        mobjinfo[MT_CHAINGUY].speed = 12;  // Chaingunner (8)
+        mobjinfo[MT_TROOP].speed = 12;     // Imp (8)
+        mobjinfo[MT_HEAD].speed = 12;      // Cacodemon (8)
+        mobjinfo[MT_KNIGHT].speed = 12;    // Hell Knight (8)
+        mobjinfo[MT_BRUISER].speed = 12;   // Baron of Hell (8)
+        mobjinfo[MT_SKULL].speed = 12;     // Lost Soul (8)
+        mobjinfo[MT_BABY].speed = 18;      // Arachnotron (12)
+        mobjinfo[MT_PAIN].speed = 12;      // Pain Elemental (8)
+        mobjinfo[MT_UNDEAD].speed = 15;    // Revenant (10)
+        mobjinfo[MT_UNDEAD].speed = 12;    // Mancubus (8)
+        mobjinfo[MT_VILE].speed = 22;      // Archvile (15)
+        mobjinfo[MT_SPIDER].speed = 18;    // Spider Mastermind (12)
+        mobjinfo[MT_CYBORG].speed = 24;    // Cyberdemon (16)
+        mobjinfo[MT_CYBORG].speed = 12;    // Wolfenstein SS (8)
+
+        mobjinfo[MT_FATSHOT].speed = 25*FRACUNIT;   // Mancubus fireball (20)
+        mobjinfo[MT_ARACHPLAZ].speed = 30*FRACUNIT; // Arachnotrol plasma (25)
+
+        // [JN] Half-doubled Chainsaw speed (attack only)
+        for (i=S_SAW1 ; i<=S_SAW1 ; i++)
+        if (states[i].tics != 1)
+        states[i].tics >>= 1; 
     }
 
     // force players to be initialized upon first level load

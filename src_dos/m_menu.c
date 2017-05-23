@@ -223,6 +223,8 @@ short		whichSkull;		// which skull to draw
 // warning: initializer-string for array of chars is too long
 char    skullName[2][/*8*/9] = {"M_SKULL1","M_SKULL2"};
 
+char    skullNameUNM[2][9] = {"M_SKUNM1","M_SKUNM2"};
+
 // current menudef
 menu_t*	currentMenu;                          
 
@@ -1905,13 +1907,23 @@ void M_Drawer (void)
 	y += LINEHEIGHT;
     }
 
-    
     // DRAW SKULL
+
+    // [JN] Ultra-Nightmare exclusive skull
+    if (ultranm)
+    {
+    V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
+		      W_CacheLumpName(skullNameUNM[whichSkull],PU_CACHE));
+    V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
+		      W_CacheLumpName(skullNameUNM[whichSkull],PU_CACHE));
+    }
+    else
+    {
     V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
 		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
     V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
 		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-
+    }
 }
 
 

@@ -46,6 +46,7 @@ extern boolean nomonsters;  // checkparm of -nomonsters
 extern boolean respawnparm; // checkparm of -respawn
 extern boolean fastparm;    // checkparm of -fast
 extern boolean devparm;     // DEBUG: launched with -devparm
+extern boolean ultranm;     // [JN] Ultra-Nightmare: checkparm of -ultranm
 
 // Set if homebrew PWAD stuff has been added.
 extern boolean  modifiedgame;
