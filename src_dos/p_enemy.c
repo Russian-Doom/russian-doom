@@ -217,11 +217,7 @@ boolean P_CheckMissileRange (mobj_t* actor)
 
     if (actor->type == MT_VILE)
     {
-        // [JN] Ultra-Nightmare: doubled attack range (to 1792)
-        if (ultranm && (dist > 14*64*2))
-        return false;   // too far away
-
-        else if (!ultranm && (dist > 14*64)) // 896
+        if (dist > 14*64) // 896
         return false;   // too far away
     }
 	
@@ -715,7 +711,7 @@ void A_Chase (mobj_t*	actor)
     {
 	actor->flags &= ~MF_JUSTATTACKED;
     // [JN] Ultra-Nightmare: don't call P_NewChaseDir
-	if (gameskill != sk_nightmare && !fastparm && !ultranm)
+	if (gameskill != sk_nightmare && !fastparm)
 	    P_NewChaseDir (actor);
 	return;
     }
@@ -734,9 +730,8 @@ void A_Chase (mobj_t*	actor)
     // check for missile attack
     if (actor->info->missilestate)
     {
-    // // [JN] Ultra-Nightmare: what it is for?
 	if (gameskill < sk_nightmare
-	    && !fastparm && !ultranm && actor->movecount)
+	    && !fastparm && actor->movecount)
 	{
 	    goto nomissile;
 	}
@@ -815,9 +810,6 @@ void A_PosAttack (mobj_t* actor)
     S_StartSound (actor, sfx_pistol);
     angle += (P_Random()-P_Random())<<20;
 
-    if (ultranm) // [JN] Ultra-Nightmare: +50%
-    damage = ((P_Random()%5)+1)*4.5;
-    else
     damage = ((P_Random()%5)+1)*3;
 
     P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
@@ -843,9 +835,6 @@ void A_SPosAttack (mobj_t* actor)
     {
 	angle = bangle + ((P_Random()-P_Random())<<20);
 
-    if (ultranm) // [JN] Ultra-Nightmare: +50%
-	damage = ((P_Random()%5)+1)*4.5;
-    else
     damage = ((P_Random()%5)+1)*3;
 
 	P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
@@ -869,9 +858,6 @@ void A_CPosAttack (mobj_t* actor)
 
     angle = bangle + ((P_Random()-P_Random())<<20);
 
-    if (ultranm) // [JN] Ultra-Nightmare: +50%
-    damage = ((P_Random()%5)+1)*4.5;
-    else
     damage = ((P_Random()%5)+1)*3;
 
     P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
@@ -937,9 +923,6 @@ void A_TroopAttack (mobj_t* actor)
     {
 	S_StartSound (actor, sfx_claw);
 
-    if (ultranm) // [JN] Ultra-Nightmare: +50%
-	damage = (P_Random()%8+1)*4.5;
-    else
     damage = (P_Random()%8+1)*3;
 
 	P_DamageMobj (actor->target, actor, actor, damage);
@@ -962,11 +945,7 @@ void A_SargAttack (mobj_t* actor)
     A_FaceTarget (actor);
     if (P_CheckMeleeRange (actor))
     {
-    if (ultranm) // [JN] Ultra-Nightmare: +50%
-	damage = ((P_Random()%10)+1)*6;
-    else
     damage = ((P_Random()%10)+1)*4;
-
 	P_DamageMobj (actor->target, actor, actor, damage);
     }
 }
@@ -981,11 +960,7 @@ void A_HeadAttack (mobj_t* actor)
     A_FaceTarget (actor);
     if (P_CheckMeleeRange (actor))
     {
-    if (ultranm) // [JN] Ultra-Nightmare: +50%
-	damage = (P_Random()%6+1)*15;
-    else
     damage = (P_Random()%6+1)*10;
-
 	P_DamageMobj (actor->target, actor, actor, damage);
 	return;
     }
@@ -1015,11 +990,7 @@ void A_BruisAttack (mobj_t* actor)
     {
 	S_StartSound (actor, sfx_claw);
 
-    if (ultranm) // [JN] Ultra-Nightmare: +50%
-	damage = (P_Random()%8+1)*15;
-    else
     damage = (P_Random()%8+1)*10;
-
 	P_DamageMobj (actor->target, actor, actor, damage);
 	return;
     }
@@ -1142,9 +1113,6 @@ void A_SkelFist (mobj_t*	actor)
 	
     if (P_CheckMeleeRange (actor))
     {
-    if (ultranm) // [JN] Ultra-Nightmare: +50%
-	damage = ((P_Random()%10)+1)*9;
-    else
     damage = ((P_Random()%10)+1)*6;
 
 	S_StartSound (actor, sfx_skepch);

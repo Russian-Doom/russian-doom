@@ -1914,22 +1914,10 @@ void M_Drawer (void)
     }
 
     // DRAW SKULL
-
-    // [JN] Ultra-Nightmare exclusive skull
-    if (ultranm)
-    {
-    V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
-		      W_CacheLumpName(skullNameUNM[whichSkull],PU_CACHE));
-    V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
-		      W_CacheLumpName(skullNameUNM[whichSkull],PU_CACHE));
-    }
-    else
-    {
     V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
 		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
     V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
 		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-    }
 }
 
 

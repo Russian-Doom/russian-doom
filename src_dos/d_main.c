@@ -82,7 +82,6 @@ boolean     respawnparm; // checkparm of -respawn
 boolean     fastparm;    // checkparm of -fast
 boolean     drone;
 boolean	    singletics = false; // debug flag to cancel adaptiveness
-boolean     ultranm;     // [JN] Ultra-Nightmare: checkparm of -ultranm
 
 //extern int soundVolume;
 extern int  sfxVolume;
@@ -993,7 +992,6 @@ void D_DoomMain (void)
     respawnparm = M_CheckParm("-respawn");
     fastparm = M_CheckParm("-fast");
     devparm = M_CheckParm("-devparm");
-    ultranm = M_CheckParm("-ultranm");
 
     if (M_CheckParm("-dm3"))
     deathmatch = 3;
@@ -1199,9 +1197,6 @@ void D_DoomMain (void)
     Z_Init();
 
     printf ("W_Init: Инициализация WAD-файлов.\n");
-    // [JN] Ultra-Nightmare: perfect place for text info
-    if (ultranm)
-    printf("\tУльтракошмарный режим!\n");
     W_InitMultipleFiles (wadfiles);
 
     if (W_CheckNumForName("E4M1") >= 0)
