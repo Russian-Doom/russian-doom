@@ -1286,7 +1286,7 @@ void G_DoSaveGame (void)
     // [JN] Perfect solution by Alexandre-Xavier Labonte-Lamoureux
     // Safely increases saveing buffer a lot, so now it is possible
     // to get Doom+ save gamelimit (x16) without any pain.
-    save_p = savebuffer = &saveshit;
+    save_p = savebuffer = saveshit;
 
     memcpy (save_p, description, SAVESTRINGSIZE);
     save_p += SAVESTRINGSIZE;
