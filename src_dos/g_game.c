@@ -63,9 +63,6 @@
 #define SAVESTRINGSIZE  24
 #define MAX_JOY_BUTTONS 20
 
-// [crispy] make sure "fast" parameters are really only applied once
-static boolean fast_applied;
-
 
 boolean	G_CheckDemoStatus (void);
 void    G_ReadDemoTiccmd (ticcmd_t* cmd);
@@ -1200,6 +1197,8 @@ void G_DoLoadGame (void)
     int     i;
     int     a,b,c;
     char    vcheck[VERSIONSIZE];
+    // [crispy] make sure "fast" parameters are really only applied once
+    static boolean fast_applied;
 
     gameaction = ga_nothing;
 
@@ -1370,6 +1369,8 @@ extern int  skytexture;
 void G_InitNew (skill_t skill, int episode, int map)
 {
     int     i;
+    // [crispy] make sure "fast" parameters are really only applied once
+    static boolean fast_applied;
 
     if (paused)
     {
@@ -1424,28 +1425,49 @@ void G_InitNew (skill_t skill, int episode, int map)
         fast_applied = false;
     }
 
-    // [JN] Ultra-Nightmare: exclusive speedups (original speed)
+    // [JN] Ultra-Nightmare: modifiers
     if (ultranm)
     {
+        // Slightly increased movement speed
         mobjinfo[MT_POSSESSED].speed = 12; // Zombieman (8)
         mobjinfo[MT_SHOTGUY].speed = 12;   // Shotgun guy (8)
         mobjinfo[MT_CHAINGUY].speed = 12;  // Chaingunner (8)
         mobjinfo[MT_TROOP].speed = 12;     // Imp (8)
+        mobjinfo[MT_SKULL].speed = 12;     // Lost Soul (8)
         mobjinfo[MT_HEAD].speed = 12;      // Cacodemon (8)
         mobjinfo[MT_KNIGHT].speed = 12;    // Hell Knight (8)
         mobjinfo[MT_BRUISER].speed = 12;   // Baron of Hell (8)
-        mobjinfo[MT_SKULL].speed = 12;     // Lost Soul (8)
         mobjinfo[MT_BABY].speed = 18;      // Arachnotron (12)
         mobjinfo[MT_PAIN].speed = 12;      // Pain Elemental (8)
         mobjinfo[MT_UNDEAD].speed = 15;    // Revenant (10)
-        mobjinfo[MT_UNDEAD].speed = 12;    // Mancubus (8)
+        mobjinfo[MT_FATSO].speed = 12;     // Mancubus (8)
         mobjinfo[MT_VILE].speed = 22;      // Archvile (15)
         mobjinfo[MT_SPIDER].speed = 18;    // Spider Mastermind (12)
         mobjinfo[MT_CYBORG].speed = 24;    // Cyberdemon (16)
-        mobjinfo[MT_CYBORG].speed = 12;    // Wolfenstein SS (8)
+        mobjinfo[MT_WOLFSS].speed = 12;    // Wolfenstein SS (8)
 
+        // Slightly increased Missiles speed
         mobjinfo[MT_FATSHOT].speed = 25*FRACUNIT;   // Mancubus fireball (20)
         mobjinfo[MT_ARACHPLAZ].speed = 30*FRACUNIT; // Arachnotrol plasma (25)
+
+        // Halfed pain chances
+        mobjinfo[MT_POSSESSED].painchance = 100; // Zombieman (200)
+        mobjinfo[MT_SHOTGUY].painchance = 87;    // Shotgun guy (175)
+        mobjinfo[MT_CHAINGUY].painchance = 85;   // Chaingunner (170)
+        mobjinfo[MT_TROOP].painchance = 100;     // Imp (200)
+        mobjinfo[MT_SERGEANT].painchance = 90;   // Demon (180)
+        mobjinfo[MT_SKULL].painchance = 128;     // Lost Soul (256)
+        mobjinfo[MT_HEAD].painchance = 64;       // Cacodemon (128)
+        mobjinfo[MT_KNIGHT].painchance = 25;     // Hell Knight (50)
+        mobjinfo[MT_BRUISER].painchance = 25;    // Baron of Hell (50)
+        mobjinfo[MT_BABY].painchance = 64;       // Arachnotron (128)
+        mobjinfo[MT_PAIN].painchance = 64;       // Pain Elemental (128)
+        mobjinfo[MT_UNDEAD].painchance = 50;     // Revenant (100)
+        mobjinfo[MT_FATSO].painchance = 40;      // Mancubus (80)
+        mobjinfo[MT_VILE].painchance = 5;        // Archvile (10)
+        mobjinfo[MT_SPIDER].painchance = 20;     // Spider Mastermind (40)
+        mobjinfo[MT_CYBORG].painchance = 10;     // Cyberdemon (20)
+        mobjinfo[MT_WOLFSS].painchance = 85;     // Wolfenstein SS (170)
 
         // [JN] Half-doubled Chainsaw speed (attack only)
         for (i=S_SAW1 ; i<=S_SAW1 ; i++)
