@@ -1197,6 +1197,8 @@ void G_DoLoadGame (void)
     int     i;
     int     a,b,c;
     char    vcheck[VERSIONSIZE];
+    // [crispy] make sure "fast" parameters are really only applied once
+    static boolean fast_applied;
 
     gameaction = ga_nothing;
 
@@ -1215,6 +1217,12 @@ void G_DoLoadGame (void)
     gamemap     = *save_p++;
     for (i=0 ; i<MAXPLAYERS ; i++)
 	playeringame[i] = *save_p++;
+
+    if (ultranm)
+    {
+    fastparm = true;
+    fast_applied = true;
+    }
 
     // load a base level
     G_InitNew (gameskill, gameepisode, gamemap);
@@ -1342,15 +1350,12 @@ void G_DoNewGame (void)
     netgame = false;
     deathmatch = false;
     playeringame[1] = playeringame[2] = playeringame[3] = 0;
-
-    // [from-crispy] re-read game parameters from command line when starting a new game
-    respawnparm = M_CheckParm ("-respawn");
-    fastparm = M_CheckParm ("-fast");
-    nomonsters = M_CheckParm ("-nomonsters");
-
-    // [JN] Ultra-Nightmare mode activation
-    ultranm = M_CheckParm("-ultranm");
-
+    // [crispy] do not reset -respawn, -fast and -nomonsters parameters
+    /*
+    respawnparm = false;
+    fastparm = false;
+    nomonsters = false;
+    */
     consoleplayer = 0;
     G_InitNew (d_skill, d_episode, d_map);
     gameaction = ga_nothing;
@@ -1364,6 +1369,8 @@ extern int  skytexture;
 void G_InitNew (skill_t skill, int episode, int map)
 {
     int     i;
+    // [crispy] make sure "fast" parameters are really only applied once
+    static boolean fast_applied;
 
     if (paused)
     {
@@ -1394,25 +1401,28 @@ void G_InitNew (skill_t skill, int episode, int map)
     respawnmonsters = false;
 
     // [JN] Ultra-Nightmare: fast monsters
-    if (fastparm || (skill == sk_nightmare && gameskill != sk_nightmare) || ultranm)
-    { 
+    // [crispy] make sure "fast" parameters are really only applied once
+    if ((fastparm || ultranm || skill == sk_nightmare) && !fast_applied)
+    {
         for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
-
         // [crispy] Fix infinite loop caused by Demon speed bug
-        if (states[i].tics != 1)
-        states[i].tics >>= 1; 
-
+        if (states[i].tics > 1)
+        {
+        states[i].tics >>= 1;
+        }
         mobjinfo[MT_BRUISERSHOT].speed = 20*FRACUNIT;
         mobjinfo[MT_HEADSHOT].speed = 20*FRACUNIT;
         mobjinfo[MT_TROOPSHOT].speed = 20*FRACUNIT;
+        fast_applied = true;
     }
-    else if (skill != sk_nightmare && gameskill == sk_nightmare)
+    else if (!fastparm && skill != sk_nightmare && fast_applied)
     {
-        for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++) 
+        for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
         states[i].tics <<= 1;
         mobjinfo[MT_BRUISERSHOT].speed = 15*FRACUNIT;
         mobjinfo[MT_HEADSHOT].speed = 10*FRACUNIT;
         mobjinfo[MT_TROOPSHOT].speed = 10*FRACUNIT;
+        fast_applied = false;
     }
 
     // [JN] Ultra-Nightmare: exclusive speedups (original speed)
