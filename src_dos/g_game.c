@@ -1197,8 +1197,6 @@ void G_DoLoadGame (void)
     int     i;
     int     a,b,c;
     char    vcheck[VERSIONSIZE];
-    // [crispy] make sure "fast" parameters are really only applied once
-    static boolean fast_applied;
 
     gameaction = ga_nothing;
 
