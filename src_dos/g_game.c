@@ -63,6 +63,9 @@
 #define SAVESTRINGSIZE  24
 #define MAX_JOY_BUTTONS 20
 
+// [crispy] make sure "fast" parameters are really only applied once
+static boolean fast_applied;
+
 
 boolean	G_CheckDemoStatus (void);
 void    G_ReadDemoTiccmd (ticcmd_t* cmd);
@@ -1197,8 +1200,6 @@ void G_DoLoadGame (void)
     int     i;
     int     a,b,c;
     char    vcheck[VERSIONSIZE];
-    // [crispy] make sure "fast" parameters are really only applied once
-    static boolean fast_applied;
 
     gameaction = ga_nothing;
 
@@ -1369,8 +1370,6 @@ extern int  skytexture;
 void G_InitNew (skill_t skill, int episode, int map)
 {
     int     i;
-    // [crispy] make sure "fast" parameters are really only applied once
-    static boolean fast_applied;
 
     if (paused)
     {

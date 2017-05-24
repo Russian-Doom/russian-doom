@@ -76,6 +76,9 @@
 
 #define SAVEGAMESIZE	0x2c000
 
+// [crispy] make sure "fast" parameters are really only applied once
+static boolean fast_applied;
+
 void    G_ReadDemoTiccmd (ticcmd_t* cmd);
 void    G_WriteDemoTiccmd (ticcmd_t* cmd);
 void    G_PlayerReborn (int player);
@@ -1858,8 +1861,6 @@ G_InitNew
 {
     char    *skytexturename;
     int     i;
-    // [crispy] make sure "fast" parameters are really only applied once
-    static boolean fast_applied;
 
     if (paused)
     {
