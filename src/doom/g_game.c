@@ -1838,10 +1838,12 @@ void G_DoNewGame (void)
     netgame = false;
     deathmatch = false;
     playeringame[1] = playeringame[2] = playeringame[3] = 0;
-    // [from-crispy] Выполнять проверку параметров командной строки
-    respawnparm = M_CheckParm ("-respawn");
-    fastparm = M_CheckParm ("-fast");
-    nomonsters = M_CheckParm ("-nomonsters");
+    // [crispy] do not reset -respawn, -fast and -nomonsters parameters
+    /*
+    respawnparm = false;
+    fastparm = false;
+    nomonsters = false;
+    */
     consoleplayer = 0;
     G_InitNew (d_skill, d_episode, d_map); 
     gameaction = ga_nothing; 
@@ -1856,6 +1858,8 @@ G_InitNew
 {
     char    *skytexturename;
     int     i;
+    // [crispy] make sure "fast" parameters are really only applied once
+    static boolean fast_applied;
 
     if (paused)
     {
@@ -1933,26 +1937,29 @@ G_InitNew
     else
     respawnmonsters = false;
 
-    if (fastparm || (skill == sk_nightmare && gameskill != sk_nightmare) )
+    // [crispy] make sure "fast" parameters are really only applied once
+    if ((fastparm || skill == sk_nightmare) && !fast_applied)
     {
         for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
-        // [crispy] Fix infinite loop caused by Demon speed bug
-        if (states[i].tics != 1)
-        {
-            states[i].tics >>= 1;
-        }
+	    // [crispy] Fix infinite loop caused by Demon speed bug
+	    if (states[i].tics > 1)
+	    {
+	    states[i].tics >>= 1;
+	    }
 
         mobjinfo[MT_BRUISERSHOT].speed = 20*FRACUNIT;
         mobjinfo[MT_HEADSHOT].speed = 20*FRACUNIT;
         mobjinfo[MT_TROOPSHOT].speed = 20*FRACUNIT;
+        fast_applied = true;
     }
-    else if (skill != sk_nightmare && gameskill == sk_nightmare)
+    else if (!fastparm && skill != sk_nightmare && fast_applied)
     {
         for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
         states[i].tics <<= 1;
         mobjinfo[MT_BRUISERSHOT].speed = 15*FRACUNIT;
         mobjinfo[MT_HEADSHOT].speed = 10*FRACUNIT;
         mobjinfo[MT_TROOPSHOT].speed = 10*FRACUNIT;
+        fast_applied = false;
     }
 
     // force players to be initialized upon first level load
