@@ -810,6 +810,7 @@ void ST_updateFaceWidget(void)
     {
 		// [JN] Correct "Ouch face" formula (part 1)
         // Thanks Brad Harding!
+        // Taken from Doom Retro (src/st_stuff.c)
         if (!vanilla)
         {
         // [BH] fix ouch-face when damage > 20
@@ -910,6 +911,7 @@ void ST_updateFaceWidget(void)
 
     // [JN] Correct "Ouch face" formula (part 2)
     // Thanks Brad Harding!
+    // Taken from Doom Retro (src/st_stuff.c)
 
     if (priority < 7)
     {

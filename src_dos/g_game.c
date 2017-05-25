@@ -241,7 +241,8 @@ void G_BuildTiccmd (ticcmd_t* cmd)
  
     strafe = gamekeydown[key_strafe] || mousebuttons[mousebstrafe] || joybuttons[joybstrafe]; 
 
-    // [JN] Always Run hack from Chocolate Doom
+    // [JN] Always Run hack
+    // Taken from Chocolate Doom (src/doom/g_game.c)
     // fraggle: support the old "joyb_speed = 31" hack which
     // allowed an autorun effect
 
