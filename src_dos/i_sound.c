@@ -244,7 +244,7 @@ void I_sndArbitrateCards(void)
         snd_MusicDevice = snd_none;
     }
     // Check if the user wants randomly pitched sounds
-    if (M_CheckParm("-sndpitch"))
+    if (M_CheckParm("-pitch"))
     {
         soundpitch = true;
     }
