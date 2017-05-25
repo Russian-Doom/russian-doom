@@ -21,6 +21,9 @@ Note: it does affect increased engine limits and bug fixes.
 `-pitch`<br />
 Activates sound pitching like in earlier versions of Doom.
 
+`-mb`<br />
+Define amount of memory for game to use. Minimum and default is 2, maximum is 64.
+
 `-dm3`<br />
 Enables newschool deathmatch (Deathmatch 3.0) mode. Weapons will stay after picking up, but items and powerups will dissapear, and will respawn after 30 seconds.
 
