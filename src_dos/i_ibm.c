@@ -1227,11 +1227,6 @@ byte *I_ZoneBase(int *size)
         // in case of using "0", "-1" and below values.
         if (maxmem < 1)
         maxmem = 1;
-
-        // [JN] Limit maximum memory to 64 MB, since DOS/4GW
-        // allows using maximum up to 64 MB.
-        else if (maxmem > 64)
-        maxmem = 64;
     }
     
     do
