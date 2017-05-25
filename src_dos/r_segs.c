@@ -467,8 +467,11 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 
 	// [kb] When this evaluates True, the scale is clamped,
 	//  and there will be some wiggling.
-	if (scale > max_rwscale)
-	    scale = max_rwscale;
+    // [JN] Reduced to 256. In higher values Mini-Medusa bug appears under
+    // the two sided transparent textures. 256 is good enough to prevent 
+    // shaking of too sharp angles and textures while close noclip looking.
+	if (scale > 256*FRACUNIT)
+	    scale = 256*FRACUNIT;
 	else if (scale < 256)
 	    scale = 256;
     }
