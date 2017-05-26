@@ -1521,21 +1521,11 @@ A_PainShootSkull
     // [JN] Элементаль боли без ограничения... Ну, почти без ограничения. 
     // Тем не менее, снятие лимита не распростроняется на запись и проигрывание
     // демозаписи, а также сетевую игру, потому как может вызвать рассинхронизацию.
-	if (unlimited_lost_souls && !demorecording && !netgame && !demoplayback)
-	{
-		if (count > 10240)
-		return;
-	}
-	else
-	{
-		if (count > 20)
-		return;
-	}		
-		
-	/*	
-    if (count > 20)
-	return;
-	*/
+    if (unlimited_lost_souls && singleplayer && count > 10240)
+    return;
+
+    else if (!unlimited_lost_souls && count > 20)
+    return;
 
     // okay, there's playe for another one
     an = angle >> ANGLETOFINESHIFT;
