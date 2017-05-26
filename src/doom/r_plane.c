@@ -500,18 +500,11 @@ void R_DrawPlanes (void)
 	    // Because of this hack, sky is not affected
 	    //  by INVUL inverse mapping.
 
-        // [JN] Хак для раскрашивания неба.
-        // Ранее: dc_colormap = colormaps;
-
+        // [JN] Окрашивание неба при неузязвимости.
         if (invul_sky)
-        {
         dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
-        }
-
         else
-        {
         dc_colormap = colormaps;
-        }
 
         dc_texturemid = skytexturemid;
         dc_texheight = textureheight[skytexture]>>FRACBITS;
