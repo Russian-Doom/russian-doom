@@ -1041,8 +1041,8 @@ P_SpawnPuffSafe
 //
 // P_SpawnBlood
 // 
-// [JN] Модификация функции P_SpawnBlood, по методу 
-// от Fabian Greffrath
+// [JN] Модификация функции P_SpawnBlood по методу Фабиана Греффрата.
+// Разноцветная кровь только в случае "colored_blood".
 void
 P_SpawnBlood
 ( fixed_t	x,
@@ -1052,88 +1052,51 @@ P_SpawnBlood
   mobj_t*	target ) // [crispy] pass thing type
 {
     mobj_t*	th;
-	
+
     z += (P_SubRandom() << 10);
-    
-    // [JN] Если установлена цветная кровь...
-    if (colored_blood)
-    {
-        if (target->type == MT_HEAD)
-        {   // Какодемон
-            th = P_SpawnMobj (x,y,z, MT_BLOODBLUE);
-            th->momz = FRACUNIT*2;
-            th->tics -= P_Random()&3;
-        
-            if (th->tics < 1)
-            th->tics = 1;
-                
-            if (damage <= 12 && damage >= 9)
-            P_SetMobjState (th,S_BLOODB2);
-            else if (damage < 9)
-            P_SetMobjState (th,S_BLOODB3);
-        }
-        
-        else if ((target->type == MT_BRUISER) || (target->type == MT_KNIGHT))
-        {   // Барон Ада или Рыцарь Ада
-            th = P_SpawnMobj (x,y,z, MT_BLOODGREEN);
-            th->momz = FRACUNIT*2;
-            th->tics -= P_Random()&3;
-        
-            if (th->tics < 1)
-            th->tics = 1;
-                
-            if (damage <= 12 && damage >= 9)
-            P_SetMobjState (th,S_BLOODG2);
-            else if (damage < 9)
-            P_SetMobjState (th,S_BLOODG3);
-        }
-        
-        else if (target->flags & MF_SHADOW)
-        {   // Призрак
-            th = P_SpawnMobj (x,y,z, MT_BLOOD);
-            th->momz = FRACUNIT*2;
-            th->tics -= P_Random()&3;
-            th->flags |= MF_SHADOW;
-        
-            if (th->tics < 1)
-            th->tics = 1;
-                
-            if (damage <= 12 && damage >= 9)
-            P_SetMobjState (th,S_BLOOD2);
-            else if (damage < 9)
-            P_SetMobjState (th,S_BLOOD3);
-        }
-        
-        else
-        {   // Все остальные монстры с красной кровью
-            th = P_SpawnMobj (x,y,z, MT_BLOOD);
-            th->momz = FRACUNIT*2;
-            th->tics -= P_Random()&3;
-        
-            if (th->tics < 1)
-            th->tics = 1;
-                
-            if (damage <= 12 && damage >= 9)
-            P_SetMobjState (th,S_BLOOD2);
-            else if (damage < 9)
-            P_SetMobjState (th,S_BLOOD3);
-        }
-    }
-    
-    // [JN] Если НЕ установлена цветная кровь...
+
+    // Какодемон
+    if (colored_blood && target->type == MT_HEAD)
+    th = P_SpawnMobj (x,y,z, MT_BLOODBLUE);
+
+    // Барон Ада или Рыцарь Ада
+    else if (colored_blood && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+    th = P_SpawnMobj (x,y,z, MT_BLOODGREEN);
+
+    // Все остальные монстры с красной кровью
     else
+    th = P_SpawnMobj (x,y,z, MT_BLOOD);
+
+    th->momz = FRACUNIT*2;
+    th->tics -= P_Random()&3;
+    // Призрачная кровь у призрака
+    if (colored_blood && target->flags & MF_SHADOW) 
+    th->flags |= MF_SHADOW;
+
+    if (th->tics < 1)
+    th->tics = 1;
+
+    if (damage <= 12 && damage >= 9)
     {
-            th = P_SpawnMobj (x,y,z, MT_BLOOD);
-            th->momz = FRACUNIT*2;
-            th->tics -= P_Random()&3;
-        
-            if (th->tics < 1)
-            th->tics = 1;
-                
-            if (damage <= 12 && damage >= 9)
-            P_SetMobjState (th,S_BLOOD2);
-            else if (damage < 9)
-            P_SetMobjState (th,S_BLOOD3);
+        if (colored_blood && target->type == MT_HEAD)
+        P_SetMobjState (th,S_BLOODB2);
+
+        else if (colored_blood && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+        P_SetMobjState (th,S_BLOODG2);
+
+        else
+        P_SetMobjState (th,S_BLOOD2);
+    }
+    else if (damage < 9)
+    {
+        if (colored_blood && target->type == MT_HEAD)
+        P_SetMobjState (th,S_BLOODB3);
+
+        else if (colored_blood && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+        P_SetMobjState (th,S_BLOODG3);
+
+        else
+        P_SetMobjState (th,S_BLOOD3);
     }
 }
 
