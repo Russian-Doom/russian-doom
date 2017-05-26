@@ -1363,116 +1363,36 @@ boolean PIT_ChangeSector (mobj_t*	thing)
     }
     
     // crunch bodies to giblets
+    // [JN] Разноцветное мясцо только в случае "colored_blood".
 
-    // [JN] Бочка и потерянная душаболее не оставляют 
-    // кровавую лужу при смерти от быстрого крашера.	
-    // Разноцветное мясцо только в случае "colored_blood".
-    
-    // TODO: Разобраться, почему приходится так явно прописывать объекты...
-    
     if (thing->health <= 0)
     {
-        
-        // [JN] Разноцветное мясцо только в случае настройки "colored_blood"
-        if (colored_blood)
-        {
-            // [JN] Синее мясцо
-            if (thing->type == MT_HEAD)
-            {
-                P_SetMobjState (thing, S_GIBSB);
-                thing->flags &= ~MF_SOLID;
-                thing->height = 0;
-                thing->radius = 0;
-                if (crushed_corpses_sfx)
-                {
-                    S_StartSound(thing, sfx_slop2);
-                }
-            }
-        
-            // [JN] Зеленое мясцо
-            else if ((thing->type == MT_BRUISER) || (thing->type == MT_KNIGHT))
-            {
-                P_SetMobjState (thing, S_GIBSG);
-                thing->flags &= ~MF_SOLID;
-                thing->height = 0;
-                thing->radius = 0;
-                if (crushed_corpses_sfx)
-                {
-                    S_StartSound(thing, sfx_slop2);
-                }
-            }
+        // [JN] Синее мясцо
+        if (colored_blood && thing->type == MT_HEAD)
+        P_SetMobjState (thing, S_GIBSB);
 
-            // [JN] красное мясцо
-            else if ((thing->type == MT_PLAYER) || 
-                (thing->type == MT_POSSESSED) ||
-                (thing->type == MT_SHOTGUY) ||
-                (thing->type == MT_CHAINGUY) ||
-                (thing->type == MT_TROOP) ||
-                (thing->type == MT_SERGEANT) ||
-                (thing->type == MT_SHADOWS) ||
-                (thing->type == MT_BABY) ||
-                (thing->type == MT_PAIN) ||
-                (thing->type == MT_UNDEAD) ||
-                (thing->type == MT_FATSO) ||
-                (thing->type == MT_VILE) ||
-                (thing->type == MT_SPIDER) ||
-                (thing->type == MT_CYBORG) ||
-                (thing->type == MT_WOLFSS) )
-            {
-                P_SetMobjState (thing, S_GIBS);
-                thing->flags &= ~MF_SOLID;
-                thing->height = 0;
-                thing->radius = 0;
-                if (crushed_corpses_sfx)
-                {
-                    S_StartSound(thing, sfx_slop2); // [JN] Звук раздавленного трупа
-                }
-            }
+        // [JN] Зеленое мясцо
+        else if (colored_blood && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
+        P_SetMobjState (thing, S_GIBSG);
 
-            // [JN] Не оставляют мясцо, не издают звук
-            else if ((thing->type == MT_BARREL) || (thing->type == MT_SKULL))
-            {
-                P_SetMobjState (thing, SPR_TROO);
-                thing->flags &= ~MF_SOLID;
-                thing->height = 0;
-                thing->radius = 0;
-            }
-            
-            else
-            {   // [JN] Все остальные объекты
-                P_SetMobjState (thing, S_GIBS);
-                thing->flags &= ~MF_SOLID;
-                thing->height = 0;
-                thing->radius = 0;
-            }
-        }
-		
+        // [JN] Не оставляют мясца
+        else if (thing->type == MT_BARREL || thing->type == MT_SKULL)
+        P_SetMobjState (thing, SPR_TROO);
+
+        // [JN] Все остальные монстры
         else
-        {
-            if ((thing->type == MT_BARREL) || (thing->type == MT_SKULL))
-            {   // [JN] Не оставляют кучу
-                P_SetMobjState (thing, SPR_TROO);
-                thing->flags &= ~MF_SOLID;
-                thing->height = 0;
-                thing->radius = 0;
-            }
-            
-            else
-            {   // [JN] Все остальные объекты.
-                P_SetMobjState (thing, S_GIBS);
-                thing->flags &= ~MF_SOLID;
-                thing->height = 0;
-                thing->radius = 0;
-                if (crushed_corpses_sfx)
-                {
-                    S_StartSound(thing, sfx_slop2); // [JN] Звук раздавленного трупа
-                }
-            }
-        }
+        P_SetMobjState (thing, S_GIBS);
 
+        thing->flags &= ~MF_SOLID;
+        thing->height = 0;
+        thing->radius = 0;
 
-	// keep checking
-	return true;		
+        // [JN] Бочка и Потерянная Душа не издают звук *шмяк!*
+        if (crushed_corpses_sfx && !(thing->type == MT_BARREL || thing->type == MT_SKULL))
+        S_StartSound(thing, sfx_slop2);
+
+        // keep checking
+        return true;		
     }
 
     // crunch dropped items
@@ -1494,53 +1414,32 @@ boolean PIT_ChangeSector (mobj_t*	thing)
 
     if (crushchange && !(leveltime&3) )
     {
-	P_DamageMobj(thing,NULL,NULL,10);
+        P_DamageMobj(thing,NULL,NULL,10);
 
-    // [JN] Бочка не должна кровоточить от крашера
-	if (thing->type == MT_BARREL)
-	{
-		return true;
-	}
+        // spray blood in a random direction
+
+        // [JN] Бочка не должна кровоточить от крашера
+        if (thing->type == MT_BARREL)
+        return true;
     
-	else
-	{
-	// spray blood in a random direction
-    
-    // [JN] Разные цвета крови при получении урона от крашера
-    if (colored_blood)
-    {
         // [JN] Какодемон
-        if (thing->type == MT_HEAD) 
-        {
+        else if (colored_blood && thing->type == MT_HEAD)
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODBLUE);
-        }
-        
+
         // [JN] Рыцарь Ада и Барон Ада
-        else if ((thing->type == MT_BRUISER) || (thing->type == MT_KNIGHT))
-        {
+        else if (colored_blood && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODGREEN);
-        }
-        
-        // [JN] Рыцарь Ада и Барон Ада
-        else if (thing->type == MT_SHADOWS)
-        {
+
+        // [JN] Призрак
+        else if (colored_blood && thing->type == MT_SHADOWS)
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODFUZZ);
-        }
-        
+
+        // [JN] Все остальные монстры
         else
-        {
-        mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOOD);   
-        }
-    }
-    
-    else
-    {
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOOD);
-	}
-    
-	mo->momx = P_SubRandom() << 12;
-	mo->momy = P_SubRandom() << 12;
-	}
+
+        mo->momx = P_SubRandom() << 12;
+        mo->momy = P_SubRandom() << 12;
     }
 
     // keep checking (crush other things)	
