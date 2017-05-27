@@ -1197,6 +1197,7 @@ void G_DoLoadGame (void)
     int     length;
     int     i;
     int     a,b,c;
+    int     d,e,f;
     char    vcheck[VERSIONSIZE];
 
     gameaction = ga_nothing;
@@ -1225,6 +1226,12 @@ void G_DoLoadGame (void)
     b = *save_p++;
     c = *save_p++;
     leveltime = (a<<16) + (b<<8) + c;
+
+    // [JN] Get total level times
+    d = *save_p++;
+    e = *save_p++;
+    f = *save_p++;
+    totalleveltimes = (d<<16) + (e<<8) + f;
 
     // dearchive all the modifications
     P_UnArchivePlayers();
@@ -1296,6 +1303,9 @@ void G_DoSaveGame (void)
     *save_p++ = leveltime>>16;
     *save_p++ = leveltime>>8;
     *save_p++ = leveltime;
+    *save_p++ = totalleveltimes>>16;
+    *save_p++ = totalleveltimes>>8;
+    *save_p++ = totalleveltimes;
 
     P_ArchivePlayers();
     P_ArchiveWorld();
