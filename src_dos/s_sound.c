@@ -332,7 +332,8 @@ S_AdjustSoundParams
     {
 	*vol = snd_SfxVolume;
     }
-    else if (gamemap == 8)
+    // [crispy] proper sound clipping in non-Doom1 MAP08
+    else if (gamemap == 8 && !commercial)
     {
 	if (approx_dist > S_CLIPPING_DIST)
 	    approx_dist = S_CLIPPING_DIST;
@@ -349,11 +350,8 @@ S_AdjustSoundParams
 	    / S_ATTENUATOR; 
     }
 
-    // [JN] Zero SFX volume means there must not be *any* sounds at all.
-    if (snd_SfxVolume == 0)
-    return 0;
-
-    return (*vol > 0);
+    // [JN] & [crispy] Zero SFX volume means there must not be *any* sounds at all.
+    return (*vol > 0 && snd_SfxVolume);
 }
 
 void S_SetSfxVolume(int volume)
