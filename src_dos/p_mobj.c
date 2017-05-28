@@ -793,7 +793,17 @@ void P_SpawnMapThing (mapthing_t* mthing)
 	}
 	return;
     }
-	
+
+    // [JN] Fix for some Final Doom maps with save-breakable things with id "0".
+    // Taken from Chocolate Doom (src/doom/p_mobj.c)    
+    if (mthing->type <= 0)
+    {
+        // Thing type 0 is actually "player -1 start".  
+        // For some reason, Vanilla Doom accepts/ignores this.
+
+        return;
+    }
+    
     // check for players specially
     if (mthing->type <= 4)
     {
