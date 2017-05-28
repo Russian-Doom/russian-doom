@@ -208,7 +208,7 @@ P_ChangeSwitchTexture
     sound = sfx_swtchn;
 
     // EXIT SWITCH?
-    if (line->special == 11 || line->special == 51)                
+    if (!vanilla && (line->special == 11 || line->special == 51))                
 	sound = sfx_swtchx;
 
     if (!useAgain)
