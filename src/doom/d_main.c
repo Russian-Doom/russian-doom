@@ -2192,7 +2192,7 @@ void D_DoomMain (void)
         startloadgame = -1;
     }
 
-    DEH_printf("M_Init: Инициализация дополнительной информации.\n");
+    DEH_printf("M_Init: Инициализация внутренних данных.\n");
     M_Init ();
 
     DEH_printf("R_Init: Инициализация процесса запуска DOOM - ");

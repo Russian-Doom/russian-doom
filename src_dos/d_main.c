@@ -1292,7 +1292,7 @@ void D_DoomMain (void)
         D_RedrawTitle();
     }
 
-    printf("M_Init: Инициализация дополнительной информации.\n");
+    printf("M_Init: Инициализация внутренних данных.\n");
     D_RedrawTitle();
     M_Init();
 
