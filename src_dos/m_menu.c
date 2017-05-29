@@ -494,7 +494,7 @@ menu_t  SoundDef =
     &OptionsDef,
     SoundMenu,
     M_DrawSound,
-    80,64,
+    88,64,
     0
 };
 
