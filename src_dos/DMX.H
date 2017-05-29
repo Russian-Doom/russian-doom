@@ -53,6 +53,7 @@ void DMX_DeInit(void);
 void WAV_PlayMode(int channels, int samplerate);
 int  CODEC_Detect(int *a, int *b);
 int  ENS_Detect(void);
+void AL_RegisterTimbreBank(unsigned char *timbres);
 
 
 #define AHW_PC_SPEAKER      1
