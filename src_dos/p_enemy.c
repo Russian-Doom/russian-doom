@@ -269,6 +269,7 @@ boolean P_Move (mobj_t*	actor)
     fixed_t	tryy;
     
     line_t*	ld;
+    line_t*	blockline;
     
     // warning: 'catch', 'throw', and 'try'
     // are all C++ reserved words
@@ -306,6 +307,36 @@ boolean P_Move (mobj_t*	actor)
 			
 	actor->movedir = DI_NODIR;
 	good = false;
+
+    // [JN] Fixed bug of monsters get stuck in doortracks and walls.
+    // https://doomwiki.org/wiki/Monsters_stuck_in_doortracks,_walls_or_hanging_off_lifts
+    // Highly unsafe for internal demos, single player only.
+    // Adapted from Doom Retro (src/p_enemy.c), thanks Brad Harding!
+
+    // if the special is not a door that can be opened, return false
+    //
+    // killough 8/9/98: this is what caused monsters to get stuck in
+    // doortracks, because it thought that the monster freed itself
+    // by opening a door, even if it was moving towards the doortrack,
+    // and not the door itself.
+    //
+    // killough 9/9/98: If a line blocking the monster is activated,
+    // return true 90% of the time. If a line blocking the monster is
+    // not activated, but some other line is, return false 90% of the
+    // time. A bit of randomness is needed to ensure it's free from
+    // lockups, but for most cases, it returns the correct result.
+    //
+    // Do NOT simply return false 1/4th of the time (causes monsters to
+    // back out when they shouldn't, and creates secondary stickiness).
+    if (singleplayer)
+    {
+        for (good = false; numspechit--;)
+            if (P_UseSpecialLine(actor, spechit[numspechit], 0))
+            good |= (spechit[numspechit] == blockline ? 1 : 2);
+
+        return (good && ((M_Random() >= 230) ^ (good & 1)));
+    }
+
 	while (numspechit--)
 	{
 	    ld = spechit[numspechit];
