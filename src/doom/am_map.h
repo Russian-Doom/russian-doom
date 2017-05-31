@@ -16,6 +16,7 @@
 //  AutoMap module.
 //
 
+
 #ifndef __AMMAP_H__
 #define __AMMAP_H__
 
@@ -23,9 +24,9 @@
 #include "m_cheat.h"
 
 // Used by ST StatusBar stuff.
-#define AM_MSGHEADER (('a'<<24)+('m'<<16))
-#define AM_MSGENTERED (AM_MSGHEADER | ('e'<<8))
-#define AM_MSGEXITED (AM_MSGHEADER | ('x'<<8))
+#define AM_MSGHEADER    (('a'<<24)+('m'<<16))
+#define AM_MSGENTERED   (AM_MSGHEADER | ('e'<<8))
+#define AM_MSGEXITED    (AM_MSGHEADER | ('x'<<8))
 
 
 // Called by main loop.
@@ -47,3 +48,4 @@ extern cheatseq_t cheat_amap;
 
 
 #endif
+

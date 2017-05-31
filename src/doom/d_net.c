@@ -55,8 +55,8 @@ static void PlayerQuitGame(player_t *player)
     // Do this the same way as Vanilla Doom does, to allow dehacked
     // replacements of this message
 
-    M_StringCopy(exitmsg, DEH_String("buhjr 1 jnrk.xbkcz jn cthdthf>"), // Игрок № отключился от сервера. 
-                 sizeof(exitmsg));
+    // Игрок № отключился от сервера.
+    M_StringCopy(exitmsg, DEH_String("buhjr 1 jnrk.xbkcz jn cthdthf>"), sizeof(exitmsg));
 
     exitmsg[6] += player_num; // [JN] Номер символа, в котором указывается порядковый № игрока.
 
@@ -70,6 +70,7 @@ static void PlayerQuitGame(player_t *player)
         G_CheckDemoStatus ();
     }
 }
+
 
 static void RunTic(ticcmd_t *cmds, boolean *ingame)
 {
@@ -136,6 +137,7 @@ static void LoadGameSettings(net_gamesettings_t *settings)
     }
 }
 
+
 // Save the game settings from global variables to the specified
 // game settings structure.
 
@@ -155,9 +157,9 @@ static void SaveGameSettings(net_gamesettings_t *settings)
     settings->respawn_monsters = respawnparm;
     settings->timelimit = timelimit;
 
-    settings->lowres_turn = M_CheckParm("-record") > 0
-                         && M_CheckParm("-longtics") == 0;
+    settings->lowres_turn = M_CheckParm("-record") > 0 && M_CheckParm("-longtics") == 0;
 }
+
 
 static void InitConnectData(net_connect_data_t *connect_data)
 {

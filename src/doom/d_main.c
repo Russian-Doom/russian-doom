@@ -92,44 +92,40 @@ extern int lcd_gamma_fix;
 void D_DoomLoop (void);
 
 // Location where savegames are stored
-
-char *    savegamedir;
+char* savegamedir;
 
 // location of IWAD and WAD files
+char* iwadfile;
 
-char *    iwadfile;
+boolean devparm;     // started game with -devparm
+boolean nomonsters;  // checkparm of -nomonsters
+boolean respawnparm; // checkparm of -respawn
+boolean fastparm;    // checkparm of -fast
 
-boolean    devparm;     // started game with -devparm
-boolean    nomonsters;  // checkparm of -nomonsters
-boolean    respawnparm; // checkparm of -respawn
-boolean    fastparm;    // checkparm of -fast
+extern boolean inhelpscreens;
 
-
-extern  boolean	inhelpscreens;
-
-skill_t     startskill;
-boolean     autostart;
-boolean     advancedemo;
-int         startepisode;
-int         startmap;
-int         startloadgame;
+skill_t startskill;
+boolean autostart;
+boolean advancedemo;
+int startepisode;
+int startmap;
+int startloadgame;
 
 
 // Store demo, do not accept any inputs
-boolean     storedemo;
+boolean storedemo;
 
 // If true, the main game loop has started.
-boolean     main_loop_started = false;
+boolean main_loop_started = false;
 
-char        wadfile[1024];  // primary wad file
-char        mapdir[1024];   // directory of development maps
+char wadfile[1024];  // primary wad file
+char mapdir[1024];   // directory of development maps
 
 
 int show_endoom   = 1;
 int show_diskicon = 1;
-
-int lcd_gamma_fix = 1;    // [JN] Оптимизация палитры Doom
-int translucency  = 1;    // [JN] Прозрачность объектов
+int lcd_gamma_fix = 1; // [JN] Оптимизация палитры Doom
+int translucency  = 1; // [JN] Прозрачность объектов
 
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
@@ -139,17 +135,18 @@ void D_CheckNetGame(void);
 // D_ProcessEvents
 // Send all the events of the given timestamp down the responder chain
 //
+
 void D_ProcessEvents (void)
 {
-    event_t*	ev;
+    event_t* ev;
 
     if (storedemo) // IF STORE DEMO, DO NOT ACCEPT INPUT
-        return;
+    return;
 
     while ((ev = D_PopEvent()) != NULL)
     {
         if (M_Responder (ev))
-            continue;   // menu ate the event
+        continue;   // menu ate the event
 
         G_Responder (ev);
     }
@@ -163,10 +160,12 @@ void D_ProcessEvents (void)
 
 // wipegamestate can be set to -1 to force a wipe on the next draw
 gamestate_t wipegamestate = GS_DEMOSCREEN;
-extern  boolean setsizeneeded;
-extern  int     showMessages;
+
+extern boolean setsizeneeded;
+extern int     showMessages;
 
 void R_ExecuteSetViewSize (void);
+
 
 void D_Display (void)
 {
@@ -185,7 +184,7 @@ void D_Display (void)
     boolean             redrawsbar;
 
     if (nodrawers)
-        return;     // for comparative timing / profiling
+    return; // for comparative timing / profiling
 
     redrawsbar = false;
 
@@ -193,7 +192,7 @@ void D_Display (void)
     if (setsizeneeded)
     {
         R_ExecuteSetViewSize ();
-        oldgamestate    = -1;   // force background redraw
+        oldgamestate    = -1; // force background redraw
         borderdrawcount = 3;
     }
 
@@ -210,14 +209,14 @@ void D_Display (void)
     }
 
     if (gamestate == GS_LEVEL && gametic)
-        HU_Erase();
+    HU_Erase();
 
     // do buffered drawing
     switch (gamestate)
     {
         case GS_LEVEL:
         if (!gametic)
-            break;
+        break;
 
         if (automapactive)
         {
@@ -226,27 +225,27 @@ void D_Display (void)
             AM_Drawer ();
         }
 
-    if (wipe || (scaledviewheight != SCREENHEIGHT && fullscreen))
+        if (wipe || (scaledviewheight != SCREENHEIGHT && fullscreen))
         redrawsbar = true;
 
-	if (inhelpscreensstate && !inhelpscreens)
-        redrawsbar = true;      // just put away the help screen
+        if (inhelpscreensstate && !inhelpscreens)
+        redrawsbar = true; // just put away the help screen
 
-	ST_Drawer (scaledviewheight == SCREENHEIGHT, redrawsbar );
- 	fullscreen = scaledviewheight == SCREENHEIGHT;
-	break;
+        ST_Drawer (scaledviewheight == SCREENHEIGHT, redrawsbar );
+        fullscreen = scaledviewheight == SCREENHEIGHT;
+        break;
 
-    case GS_INTERMISSION:
-    WI_Drawer ();
-    break;
+        case GS_INTERMISSION:
+        WI_Drawer ();
+        break;
 
-    case GS_FINALE:
-    F_Drawer ();
-    break;
+        case GS_FINALE:
+        F_Drawer ();
+        break;
 
-    case GS_DEMOSCREEN:
-    D_PageDrawer ();
-    break;
+        case GS_DEMOSCREEN:
+        D_PageDrawer ();
+        break;
     }
 
     // draw buffered stuff to screen
@@ -258,19 +257,19 @@ void D_Display (void)
         R_RenderPlayerView (&players[displayplayer]);
 
         if (screenblocks == 11 || screenblocks == 12)
-            ST_Drawer(0, 0);
+        ST_Drawer(0, 0);
     }
 
     if (gamestate == GS_LEVEL && gametic)
-        HU_Drawer ();
-    
+    HU_Drawer ();
+
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
     {
         if (lcd_gamma_fix)
-            I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
+        I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
         else
-            I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+        I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
     }
 
     // see if the border needs to be initially drawn
@@ -284,11 +283,11 @@ void D_Display (void)
     if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != (320 << hires))
     {
         if (menuactive || menuactivestate || !viewactivestate)
-            borderdrawcount = 3;
+        borderdrawcount = 3;
 
         if (borderdrawcount)
         {
-            R_DrawViewBorder ();    // erase old menu stuff
+            R_DrawViewBorder (); // erase old menu stuff
             borderdrawcount--;
         }
     }
@@ -313,19 +312,15 @@ void D_Display (void)
         y = (viewwindowy >> hires)+4;
 
         if (draw_shadowed_text)
-            V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y,
-            W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+        V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y, W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
 
         else
-            V_DrawPatchDirect((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y,
-            W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
-
+        V_DrawPatchDirect((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y, W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
     }
 
-
     // menus go directly to the screen
-    M_Drawer ();        // menu is drawn even on top of everything
-    NetUpdate ();       // send out any new accumulation
+    M_Drawer ();    // menu is drawn even on top of everything
+    NetUpdate ();   // send out any new accumulation
 
     // normal update
     if (!wipe)
@@ -355,6 +350,7 @@ void D_Display (void)
     } while (!done);
 }
 
+
 static void EnableLoadingDisk(void)
 {
     char *disk_lump_name;
@@ -362,14 +358,15 @@ static void EnableLoadingDisk(void)
     if (show_diskicon)
     {
         if (M_CheckParm("-cdrom") > 0)
-            disk_lump_name = DEH_String("STCDROM");
+        disk_lump_name = DEH_String("STCDROM");
 
         else
-            disk_lump_name = DEH_String("STDISK");
+        disk_lump_name = DEH_String("STDISK");
 
         V_EnableLoadingDisk(disk_lump_name,SCREENWIDTH - LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
     }
 }
+
 
 //
 // Add configuration file variable bindings.
@@ -456,6 +453,7 @@ void D_BindVariables(void)
     }
 }
 
+
 //
 // D_GrabMouseCallback
 //
@@ -464,15 +462,16 @@ void D_BindVariables(void)
 
 boolean D_GrabMouseCallback(void)
 {
-    if (drone)                  // Drone players don't need mouse focus
-        return false;
+    if (drone)  // Drone players don't need mouse focus
+    return false;
 
-    if (menuactive || paused)   // when menu is active or game is paused, release the mouse 
-        return false;
+    if (menuactive || paused)  // when menu is active or game is paused, release the mouse 
+    return false;
 
     // only grab mouse when playing levels (but not demos)
     return (gamestate == GS_LEVEL) && !demoplayback && !advancedemo;
 }
+
 
 //
 //  D_DoomLoop
@@ -515,13 +514,13 @@ void D_DoomLoop (void)
     {
         I_StartFrame ();    // frame syncronous IO operations
         TryRunTics ();      // will run at least one tic
-        
+
         // move positional sounds
         S_UpdateSounds (players[consoleplayer].mo);
 
         // Update display, next frame, with current state.
         if (screenvisible)
-            D_Display ();
+        D_Display ();
     }
 }
 
@@ -593,49 +592,49 @@ void D_DoAdvanceDemo (void)
     // поддержка четвёртой демозаписи оставлена только для Ultimate.
 
     if (gameversion == exe_ultimate /*|| gameversion == exe_final*/)
-        demosequence = (demosequence+1)%7;
+    demosequence = (demosequence+1)%7;
     else
-        demosequence = (demosequence+1)%6;
+    demosequence = (demosequence+1)%6;
 
     switch (demosequence)
     {
         case 0:
 
         if ( gamemode == commercial )
-            pagetic = TICRATE * 11;
+        pagetic = TICRATE * 11;
         else
-            pagetic = 170;
+        pagetic = 170;
 
         if (gamemission == pack_nerve)
         pagetic = 1000;
         gamestate = GS_DEMOSCREEN;
 
         if ( gamemode == shareware )
-            pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
+        pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
         else
-            pagename = DEH_String("TITLEPIC");
+        pagename = DEH_String("TITLEPIC");
         
         if ( gamemode == commercial )
-            S_StartMusic(mus_dm2ttl);
+        S_StartMusic(mus_dm2ttl);
         else
-            S_StartMusic (mus_intro);
+        S_StartMusic (mus_intro);
         break;
 
         case 1:
         
         if (gamemission == pack_nerve) 
-            break;
+        break;
 
         G_DeferedPlayDemo(DEH_String("demo1"));
-            break;
+        break;
 
         case 2:
 
         if (gamemission == pack_nerve)
-            pagetic = 1000;
+        pagetic = 1000;
         else
-            pagetic = 200;
-            gamestate = GS_DEMOSCREEN;
+        pagetic = 200;
+        gamestate = GS_DEMOSCREEN;
 
         // [JN] Я использую разные названия экранов для разных версий
         if (gamemode == shareware)
@@ -647,28 +646,30 @@ void D_DoAdvanceDemo (void)
         if (gamemode == commercial)
             pagename = DEH_String("CREDIT"); 
         break;
-        
-      case 3:
-      
+
+        case 3:
+
         if (gamemission == pack_nerve)
-            break;
+        break;
         else
-            G_DeferedPlayDemo(DEH_String("demo2"));
+        G_DeferedPlayDemo(DEH_String("demo2"));
         break;
 
-      case 4:
+        case 4:
 
         if (gamemission == pack_nerve) 
-            break;
+        break;
+    
         gamestate = GS_DEMOSCREEN;
         if ( gamemode == commercial)
         {
             pagetic = TICRATE * 11;
-            if ( gamemode == shareware )
-                pagename = DEH_String("TITLEPIS");
+            if (gamemode == shareware)
+            pagename = DEH_String("TITLEPIS");
             else
-                pagename = DEH_String("TITLEPIC");
-                S_StartMusic(mus_dm2ttl);
+            pagename = DEH_String("TITLEPIC");
+
+            S_StartMusic(mus_dm2ttl);
         }
         else
         {
@@ -679,23 +680,23 @@ void D_DoAdvanceDemo (void)
             else
                 pagename = DEH_String("HELP2");
         }
-    break;
-
-    case 5:
-
-    if (gamemission == pack_nerve) 
         break;
 
-    G_DeferedPlayDemo(DEH_String("demo3"));
-	break;
+        case 5:
 
-    case 6: // THE DEFINITIVE DOOM Special Edition demo
-
-    if (gamemission == pack_nerve) 
+        if (gamemission == pack_nerve) 
         break;
 
-    G_DeferedPlayDemo(DEH_String("demo4"));
-    break;
+        G_DeferedPlayDemo(DEH_String("demo3"));
+        break;
+
+        case 6: // THE DEFINITIVE DOOM Special Edition demo
+
+        if (gamemission == pack_nerve) 
+        break;
+
+        G_DeferedPlayDemo(DEH_String("demo4"));
+        break;
     }
     
     // The Doom 3: BFG Edition version of doom2.wad does not have a
@@ -763,6 +764,7 @@ static char *banners[] =
     "                           ",
 };
 
+
 //
 // Get game name: if the startup banner has been replaced, use that.
 // Otherwise, use the name given
@@ -808,6 +810,7 @@ static char *GetGameName(char *gamename)
 
     return gamename;
 }
+
 
 static void SetMissionForPackName(char *pack_name)
 {
