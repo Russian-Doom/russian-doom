@@ -59,3 +59,4 @@ void  PCFX_UnlockMemory( void );
 int   PCFX_LockMemory( void );
 
 #endif
+
