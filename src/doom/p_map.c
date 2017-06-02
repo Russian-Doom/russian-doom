@@ -1375,6 +1375,10 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         else if (colored_blood && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
         P_SetMobjState (thing, S_GIBSG);
 
+        // [JN] Специальное мясцо для Паука-Предводителя
+        else if (colored_blood && thing->type == MT_SPIDER)
+        P_SetMobjState (thing, S_GIBSM);
+
         // [JN] Не оставляют мясца
         else if (thing->type == MT_BARREL || thing->type == MT_SKULL)
         P_SetMobjState (thing, SPR_TROO);

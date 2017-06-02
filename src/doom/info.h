@@ -168,6 +168,7 @@ typedef enum
     SPR_BLUG,
     SPR_POLB,
     SPR_POLG,
+    SPR_POLM,
     SPR_RFOG,
     NUMSPRITES
 
@@ -1150,6 +1151,7 @@ typedef enum
     S_BLOODG3, //
     S_GIBSB,   // [JN] Синее мясцо
     S_GIBSG,   // [JN] Зеленое мясцо
+    S_GIBSM,   // [JN] Специальное мясцо для Паука-Предводителя
     S_RFOG,
     S_RFOG01,
     S_RFOG02,
@@ -1323,6 +1325,7 @@ typedef enum {
     MT_BLOODGREEN,
     MT_GIBSBLUE,
     MT_GIBSGREEN,
+    MT_GIBSMASTERMIND,
 	MT_BLOODFUZZ,
     MT_RFOG,
     NUMMOBJTYPES

@@ -48,7 +48,7 @@ char *sprnames[] = {
     "COL3","COL4","CAND","CBRA","COL6","TRE1","TRE2","ELEC","CEYE","FSKU",
     "COL5","TBLU","TGRN","TRED","SMBT","SMGT","SMRT","HDB1","HDB2","HDB3",
     "HDB4","HDB5","HDB6","POB1","POB2","BRS1","TLMP","TLP2","BLUB","BLUG",
-    "POLB","POLG","RFOG",
+    "POLB","POLG","POLM","RFOG",
     NULL
 };
 
@@ -1117,6 +1117,8 @@ state_t	states[NUMSTATES] = {
     {SPR_POLB,0,-1,{NULL},S_NULL,0,0},      // S_GIBSB
     // [JN] Зеленое мясцо
     {SPR_POLG,0,-1,{NULL},S_NULL,0,0},      // S_GIBSG
+    // [JN] Специальное мясцо для Паука-Предводителя
+    {SPR_POLM,0,-1,{NULL},S_NULL,0,0},      // S_GIBSM
     // [JN] Красная вспышка воскрешения монстров
     {SPR_RFOG,32768,6,{NULL},S_RFOG01,0,0}, // S_КFOG
     {SPR_RFOG,32769,6,{NULL},S_RFOG02,0,0}, // S_КFOG01
@@ -4800,7 +4802,33 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
 	0,              // flags
 	S_NULL          // raisestate
     },
-	
+
+    {		        // MT_GIBSMASTERMIND
+	-1,		        // doomednum
+	S_GIBSM,	    // spawnstate
+	1000,		    // spawnhealth
+	S_NULL,		    // seestate
+	sfx_None,	    // seesound
+	8,		        // reactiontime
+	sfx_None,       // attacksound
+	S_NULL,		    // painstate
+	0,		        // painchance
+	sfx_None,	    // painsound
+	S_NULL,		    // meleestate
+	S_NULL,		    // missilestate
+	S_NULL,		    // deathstate
+	S_NULL,		    // xdeathstate
+	sfx_None,       // deathsound
+	0,              // speed
+	20*FRACUNIT,    // radius
+	16*FRACUNIT,    // height
+	100,            // mass
+	0,              // damage
+	sfx_None,		// activesound
+	0,              // flags
+	S_NULL          // raisestate
+    },
+
 	{		        // MT_BLOODFUZZ
 	-1,		        // doomednum
 	S_BLOOD1,	    // spawnstate
