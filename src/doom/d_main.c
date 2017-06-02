@@ -1193,7 +1193,6 @@ void D_SetGameDescription(void)
                             DEH_AddStringReplacement(HUSTR_31, MLSTR_17);
                             DEH_AddStringReplacement(HUSTR_32, MLSTR_18);
                             DEH_AddStringReplacement("WIF",  "MLVL17");
-                            DEH_AddStringReplacement("WIF2", "MLVL18");
                         }
                         // TTRAP.WAD - Застрявший на Титане
                         else if (M_StrCaseStr(myargv[mlvls], "TTRAP.WAD"))
@@ -1215,28 +1214,6 @@ void D_SetGameDescription(void)
                             DEH_AddStringReplacement(HUSTR_3, MLSTR_21);
                             DEH_AddStringReplacement("WIF",  "MLVL21");
                             DEH_AddStringReplacement("SKY1", "MLSKY3");
-                        }
-                    }
-
-                    // [JN] Использовать общий титр "Уровень завершён" и
-                    // "Загружается", что бы предотвратить возможные
-                    // несостыковки в разных родах названий уровней.
-                    //
-                    // TODO: реализовать проверку, что бы замена 
-                    // происходила ТОЛЬКО в случае наличия...уровней?
-
-                    else
-                    {
-                        if (gamemission == pack_nerve)
-                            return;
-                        else
-                        {
-                            DEH_AddStringReplacement ("WIF",  "WIFANY");
-                            DEH_AddStringReplacement ("WIF2", "WIFANY");
-                            DEH_AddStringReplacement ("WIFF", "WIFANY");
-                            DEH_AddStringReplacement ("WIFO", "WIFANY");
-                            DEH_AddStringReplacement ("WIFM", "WIFANY");  
-                            DEH_AddStringReplacement ("WIENTERS", "WIENTER");
                         }
                     }
                 }
