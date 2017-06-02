@@ -32,8 +32,6 @@
 
 extern boolean	automapactive;	// in AM_map.c
 
-extern int draw_shadowed_text;
-
 
 void HUlib_init(void)
 {
@@ -107,10 +105,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
             if (x+w > ORIGWIDTH)
             break;
 
-            if (draw_shadowed_text)
             V_DrawShadowedPatchDoom(x, l->y, l->f[c - l->sc]);
-            else
-            V_DrawPatchDirect(x, l->y, l->f[c - l->sc]);
 
             x += w;
         }
@@ -126,10 +121,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
     // draw the cursor if requested
     if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= ORIGWIDTH)
     {
-        if (draw_shadowed_text)
         V_DrawShadowedPatchDoom(x, l->y, l->f['_' - l->sc]);
-        else
-        V_DrawPatchDirect(x, l->y, l->f['_' - l->sc]);
     }
 }
 

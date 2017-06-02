@@ -560,11 +560,7 @@ void M_DrawLoad(void)
     int i;
 
     // [JN] Используется дополнительный тайтл для меню загрузки: "ЗАГРУЗИТЬ ИГРУ"
-
-    if (draw_shadowed_text)
-        V_DrawShadowedPatchDoom(59, 13, W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
-    else
-        V_DrawPatchDirect(59, 13, W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(59, 13, W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
 
     for (i = 0;i < load_end; i++)
     {
@@ -581,29 +577,32 @@ void M_DrawSaveLoadBorder(int x,int y)
 {
     int i;
 
+    // [JN] Условие if (draw_shadowed_text) необходимо для пиксельного перфикционизма,
+    // чтобы строчки с текстом смотрились одинаково симпатично как с тенью, так и без.
+
     if (draw_shadowed_text)
     {    
-        V_DrawShadowedPatchDoom(x - 8, y + 8, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
+        V_DrawShadowedPatchDoom(x - 8, y + 9, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
 
         for (i = 0;i < 24;i++)
         {
-            V_DrawShadowedPatchDoom(x, y + 8, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
+            V_DrawShadowedPatchDoom(x, y + 9, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
             x += 8;
         }
 
-        V_DrawShadowedPatchDoom(x, y + 8,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
+        V_DrawShadowedPatchDoom(x, y + 9,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
     }
     else
     {
-        V_DrawPatchDirect(x - 8, y + 7, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
+        V_DrawPatchDirect(x - 8, y + 8, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
 
         for (i = 0;i < 24;i++)
         {
-            V_DrawPatchDirect(x, y + 7, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
+            V_DrawPatchDirect(x, y + 8, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
             x += 8;
         }
 
-        V_DrawPatchDirect(x, y + 7,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
+        V_DrawPatchDirect(x, y + 8,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
     }
 }
 
@@ -646,11 +645,7 @@ void M_DrawSave(void)
     int i;
 	
     // [JN] Используется дополнительный тайтл для меню загрузки: "СОХРАНИТЬ ИГРУ"
-
-    if (draw_shadowed_text)
-        V_DrawShadowedPatchDoom(57, 13, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
-    else
-        V_DrawPatchDirect(57, 13, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(57, 13, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
 
     for (i = 0;i < load_end; i++)
     {
@@ -893,11 +888,7 @@ void M_DrawReadThis2(void)
 void M_DrawSound(void)
 {   
     // [JN] Используется дополнительный заголовок для меню ГРОМКОСТИ.
-
-    if (draw_shadowed_text)
-        V_DrawShadowedPatchDoom (90, 40, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
-    else
-        V_DrawPatchDirect (90, 40, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
+    V_DrawShadowedPatchDoom (90, 40, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1), 16,sfxVolume);
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(music_vol+1), 16,musicVolume);
@@ -959,16 +950,8 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
-    if (draw_shadowed_text)
-    {
-        V_DrawShadowedPatchDoom(84, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-        V_DrawShadowedPatchDoom(38, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
-    }
-    else
-    {
-        V_DrawPatchDirect(84, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-        V_DrawPatchDirect(38, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
-    }
+    V_DrawShadowedPatchDoom(84, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+    V_DrawShadowedPatchDoom(38, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
 }
 
 void M_NewGame(int choice)
@@ -995,16 +978,8 @@ int epi;
 
 void M_DrawEpisode(void)
 {
-    if (draw_shadowed_text)
-    {
-        V_DrawShadowedPatchDoom(84, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-        V_DrawShadowedPatchDoom(66, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
-    }
-    else
-    {
-        V_DrawPatchDirect(84, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-        V_DrawPatchDirect(66, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
-    }
+    V_DrawShadowedPatchDoom(84, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+    V_DrawShadowedPatchDoom(66, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
 }
 
 void M_VerifyNightmare(int key)
@@ -1057,26 +1032,13 @@ static char *msgNames[2] = {"M_MSGOFF","M_MSGON"};
 
 void M_DrawOptions(void)
 {
-    if (draw_shadowed_text)
-    {
-        V_DrawShadowedPatchDoom(89, 13, W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(89, 13, W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
 
-        V_DrawShadowedPatchDoom(OptionsDef.x + 175, OptionsDef.y + LINEHEIGHT * detail,
-            W_CacheLumpName(DEH_String(detailNames[detailLevel]), PU_CACHE));
+    V_DrawShadowedPatchDoom(OptionsDef.x + 175, OptionsDef.y + LINEHEIGHT * detail,
+        W_CacheLumpName(DEH_String(detailNames[detailLevel]), PU_CACHE));
 
-        V_DrawShadowedPatchDoom(OptionsDef.x + 120, OptionsDef.y + LINEHEIGHT * messages,
-            W_CacheLumpName(DEH_String(msgNames[showMessages]), PU_CACHE));
-    }
-    else
-    {
-        V_DrawPatchDirect(89, 13, W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
-
-        V_DrawPatchDirect(OptionsDef.x + 175, OptionsDef.y + LINEHEIGHT * detail,
-            W_CacheLumpName(DEH_String(detailNames[detailLevel]), PU_CACHE));
-
-        V_DrawPatchDirect(OptionsDef.x + 120, OptionsDef.y + LINEHEIGHT * messages,
-            W_CacheLumpName(DEH_String(msgNames[showMessages]), PU_CACHE));        
-    }
+    V_DrawShadowedPatchDoom(OptionsDef.x + 120, OptionsDef.y + LINEHEIGHT * messages,
+        W_CacheLumpName(DEH_String(msgNames[showMessages]), PU_CACHE));
 
     // [JN] Размер ползунка скорости мыши. Изначальное значение: 10.
     M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1), 12, mouseSensitivity);
@@ -1315,30 +1277,15 @@ M_DrawThermo
     int xx;
     int i;
 
-    if (draw_shadowed_text)
+    xx = x;
+    V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
+    xx += 8;
+    for (i=0;i<thermWidth;i++)
     {
-        xx = x;
-        V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
+        V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
         xx += 8;
-        for (i=0;i<thermWidth;i++)
-        {
-            V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
-            xx += 8;
-        }
-        V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
     }
-    else
-    {
-        xx = x;
-        V_DrawPatchDirect(xx, y, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
-        xx += 8;
-        for (i=0;i<thermWidth;i++)
-        {
-            V_DrawPatchDirect(xx, y, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
-            xx += 8;
-        }
-        V_DrawPatchDirect(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
-    }
+    V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
 
     // [crispy] do not crash anymore if value exceeds thermometer range
     // [JN] Если ползунок уезжает за пределы полоски вправо, окрашивать его красным
@@ -1491,10 +1438,7 @@ M_WriteText
         if (cx+w > ORIGWIDTH)
             break;
 
-        if (draw_shadowed_text)
-            V_DrawShadowedPatchDoom(cx, cy, hu_font[c]);
-        else
-            V_DrawPatchDirect(cx, cy, hu_font[c]);
+        V_DrawShadowedPatchDoom(cx, cy, hu_font[c]);
 
         cx+=w;
     }
@@ -2137,26 +2081,15 @@ void M_Drawer (void)
 
         if (name[0])
         {
-            if (draw_shadowed_text)
-                V_DrawShadowedPatchDoom (x, y, W_CacheLumpName(name, PU_CACHE));
-            else
-                V_DrawPatchDirect (x, y, W_CacheLumpName(name, PU_CACHE));
+            V_DrawShadowedPatchDoom (x, y, W_CacheLumpName(name, PU_CACHE));
         }
 
     y += LINEHEIGHT;
     }
 
     // DRAW SKULL
-    if (draw_shadowed_text)
-    {
-        V_DrawShadowedPatchDoom(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
-            W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
-    }
-    else
-    {
-        V_DrawPatchDirect(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
-            W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
-    }
+    V_DrawShadowedPatchDoom(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
+        W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
 }
 
 

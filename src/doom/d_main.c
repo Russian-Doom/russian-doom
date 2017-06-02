@@ -311,11 +311,7 @@ void D_Display (void)
         else
         y = (viewwindowy >> hires)+4;
 
-        if (draw_shadowed_text)
         V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y, W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
-
-        else
-        V_DrawPatchDirect((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y, W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
     }
 
     // menus go directly to the screen

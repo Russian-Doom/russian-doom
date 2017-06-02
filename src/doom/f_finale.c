@@ -38,8 +38,6 @@
 #include "doomstat.h"
 #include "r_state.h"
 
-extern int draw_shadowed_text;
-
 typedef enum
 {
     F_STAGE_TEXT,
@@ -308,14 +306,7 @@ void F_TextWrite (void)
         if (cx+w > ORIGWIDTH)
 	    break;
 
-        if (draw_shadowed_text)
-        {
-            V_DrawShadowedPatchDoom(cx, cy, hu_font[c]);
-        }
-        else
-        {
-            V_DrawPatch(cx, cy, hu_font[c]);
-        }
+        V_DrawShadowedPatchDoom(cx, cy, hu_font[c]);
 
         cx+=w;
     }
@@ -570,10 +561,8 @@ void F_CastPrint (char* text)
         }
 
         w = SHORT (hu_font[c]->width);
-        if (draw_shadowed_text)
+
         V_DrawShadowedPatchDoom(cx, 180, hu_font[c]);
-        else
-        V_DrawPatch(cx, 180, hu_font[c]);
 
         cx+=w;
     }
@@ -689,18 +678,9 @@ void F_BunnyScroll (void)
 
     if (finalecount < 1180)
     {
-        if (draw_shadowed_text)
-        {
-            V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2,
-                    (ORIGHEIGHT - 8 * 8) / 2, 
-                    W_CacheLumpName(DEH_String("END0"), PU_CACHE));
-        }
-        else
-        {
-        V_DrawPatch((ORIGWIDTH - 13 * 8) / 2,
-                    (ORIGHEIGHT - 8 * 8) / 2, 
-                    W_CacheLumpName(DEH_String("END0"), PU_CACHE));            
-        }
+        V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2,
+            (ORIGHEIGHT - 8 * 8) / 2, 
+            W_CacheLumpName(DEH_String("END0"), PU_CACHE));
 
         laststage = 0;
         return;
@@ -718,18 +698,10 @@ void F_BunnyScroll (void)
     }
 
     DEH_snprintf(name, 10, "END%i", stage);
-    if (draw_shadowed_text)
-    {
-        V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2, 
-                (ORIGHEIGHT - 8 * 8) / 2, 
-                W_CacheLumpName (name,PU_CACHE));
-    }
-    else
-    {
-        V_DrawPatch((ORIGWIDTH - 13 * 8) / 2, 
-                (ORIGHEIGHT - 8 * 8) / 2, 
-                W_CacheLumpName (name,PU_CACHE));        
-    }
+
+    V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2, 
+            (ORIGHEIGHT - 8 * 8) / 2, 
+            W_CacheLumpName (name,PU_CACHE));
 }
 
 
