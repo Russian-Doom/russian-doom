@@ -90,8 +90,8 @@ void D_PageDrawer(void);
 void D_AdvanceDemo(void);
 boolean F_Responder(event_t * ev);
 
-// [JN] Оптимизация палитры Heretic
-int lcd_gamma_fix = 1;
+int lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Heretic
+int draw_shadowed_text;     // [JN] Элементы меню и тексты отбрасывают тень
 
 //---------------------------------------------------------------------------
 //

@@ -124,7 +124,8 @@ static int demosequence;
 static int pagetic;
 static char *pagename;
 
-int lcd_gamma_fix = 1;	// [JN] Оптимизация палитры Hexen
+int lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Hexen
+int draw_shadowed_text;     // [JN] Элементы меню и тексты отбрасывают тень
 
 // CODE --------------------------------------------------------------------
 
