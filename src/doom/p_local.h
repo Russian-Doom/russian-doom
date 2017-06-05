@@ -47,12 +47,6 @@
 // but we do not have any moving sectors nearby
 #define MAXRADIUS		32*FRACUNIT
 
-// Дополнительный радиус для одиночной игры, что бы не нарушать 
-// совместимость с оригинальными демозаписями. Увеличен радиус 
-// проверки клиппинга, что позволяет исправить баг оригинальной игры: 
-// https://doomwiki.org/wiki/Spider_paralysis
-#define MAXRADIUSEXT    128*FRACUNIT
-
 #define GRAVITY		FRACUNIT
 #define MAXMOVE		(30*FRACUNIT)
 
