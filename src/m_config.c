@@ -913,7 +913,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(show_total_time),           // Показывать общее время
     CONFIG_VARIABLE_INT(unlimited_lost_souls),      // Элементаль боли без ограничения душ
     CONFIG_VARIABLE_INT(agressive_lost_souls),      // Повышенная агрессивность Потерянных душ
-    CONFIG_VARIABLE_INT(unlimited_archvile_range),  // Арчвайл без ограничения дистанции атаки
     
     //!
     // If non-zero, save screenshots in PNG format.

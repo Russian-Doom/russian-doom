@@ -121,7 +121,6 @@ static void SensibleDefaults(void)
     show_total_time = 1;          // Показывать общее время
     unlimited_lost_souls = 1;     // Элементаль боли без ограничения душ
     agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных душ
-    unlimited_archvile_range = 0; // Арчвайл без ограничения дистанции атаки
 }
 
 static int MainMenuKeyPress(txt_window_t *window, int key, void *user_data)

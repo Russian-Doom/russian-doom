@@ -105,7 +105,6 @@ extern int secret_notification;      // Уведомление об обнару
 extern int show_total_time;          // Показывать общее время
 extern int unlimited_lost_souls;     // Элементаль боли без ограничения душ
 extern int agressive_lost_souls;     // Повышенная агрессивность Потерянных душ
-extern int unlimited_archvile_range; // Арчвайл без ограничения дистанции атаки
 
 #endif
 
