@@ -938,11 +938,8 @@ void D_SetGameDescription(void)
         if (is_freedoom)
         {
             gamedescription = GetGameName("Freedoom: Стадия 1");
-            /*
             W_MergeFile("russian/russian-freedoom-common.wad");
-            DEH_AddStringReplacement ("TITLEPIC", "FDTITLE1");
-            DEH_LoadLumpByName("DEHACKED", true, true);
-            */
+            // DEH_AddStringReplacement ("TITLEPIC", "FDTITLE1");
         }
         else if (gamemode == retail)
         {
@@ -980,11 +977,8 @@ void D_SetGameDescription(void)
             else
             {
                 gamedescription = GetGameName("Freedoom: Стадия 2");
-                /*
                 W_MergeFile("russian/russian-freedoom-common.wad");
-                DEH_AddStringReplacement ("TITLEPIC", "FDTITLE1");
-                DEH_LoadLumpByName("DEHACKED", true, true);
-                */
+                // DEH_AddStringReplacement ("TITLEPIC", "FDTITLE2");
             }
         }
         else if (logical_gamemission == doom2)
