@@ -576,12 +576,11 @@ void M_DrawLoad(void)
 void M_DrawSaveLoadBorder(int x,int y)
 {
     int i;
-    boolean is_freedoom = W_CheckNumForName("FREEDOOM") >= 0;
 
     // [JN] Условие if (draw_shadowed_text) необходимо для пиксельного перфикционизма,
     // чтобы строчки с текстом смотрились одинаково симпатично как с тенью, так и без.
 
-    if (!is_freedoom)
+    if (gamevariant == !freedoom)
     {
     if (draw_shadowed_text)
     {
@@ -609,7 +608,7 @@ void M_DrawSaveLoadBorder(int x,int y)
     }
     }
 
-    if (is_freedoom)
+    else if (gamevariant == freedoom)
     {
         V_DrawShadowedPatchDoom(x - 8, y + 7, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
 
