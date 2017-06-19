@@ -147,6 +147,7 @@ int             show_diskicon = 1;
 int             graphical_startup = 1;
 
 int     lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Strife
+int     draw_shadowed_text;     // [JN] Элементы меню и тексты отбрасывают тень
 
 // If true, startup has completed and the main game loop has started.
 
