@@ -117,17 +117,20 @@ typedef struct
 
 //! @begin_config_file default
 
+// [JN] Все стандартное управление перенесено в
+// extra_defaults_list, что бы создать единый
+// конфигурационный файл для каждой игры.
+/*
 static default_t	doom_defaults_list[] =
 {
-    // [JN] Все стандартное управление перенесено в
-    // extra_defaults_list, что бы создать единый
-    // конфигурационный файл для каждой игры.
+    
 };
+*/
 
 static default_collection_t doom_defaults =
 {
-    doom_defaults_list,
-    arrlen(doom_defaults_list),
+    // doom_defaults_list,
+    // arrlen(doom_defaults_list),
     NULL,
 };
 
