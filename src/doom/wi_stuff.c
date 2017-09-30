@@ -416,7 +416,10 @@ void WI_drawLF(void)
         V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
 
         // draw "Finished!"
-        y += (5*SHORT(lnames[wbs->last]->height))/4;
+        if (freedoom && netgame) // [JN] Небольшая коррекция координат для более симпатичного отображения
+            y += (4*SHORT(lnames[wbs->last]->height))/4;
+        else
+            y += (5*SHORT(lnames[wbs->last]->height))/4;
         
         V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(finished->width)) / 2, y, finished);
     }
