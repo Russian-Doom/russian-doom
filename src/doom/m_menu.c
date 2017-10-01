@@ -875,6 +875,15 @@ void M_DrawReadThis1(void)
         break;
     }
 
+    // [JN] Для обоих Стадий Freedoom используется одинаковое положение
+    // черепа. Так, чтобы он не перекрывал надписb "ПКМ" и "E".
+    if (gamevariant == freedoom)
+    {
+        // I_Error("Арриба! Арриба!");
+        skullx = 323;
+        skully = 183;
+    }
+
     lumpname = DEH_String(lumpname);
 
     V_DrawPatchDirect (0, 0, W_CacheLumpName(lumpname, PU_CACHE));
