@@ -1087,7 +1087,7 @@ void D_SetGameDescription(void)
                         else if (M_StrCaseStr(myargv[mlvls], "BLACKTWR.WAD"))
                         {
                             DEH_AddStringReplacement(HUSTR_25, MLSTR_2);
-                            DEH_AddStringReplacement("WIFM", "MLVL02");
+                            DEH_AddStringReplacement("WIF", "MLVL02");
                         }
                         // BLOODSEA.WAD - Крепость в Кровавом море
                         else if (M_StrCaseStr(myargv[mlvls], "BLOODSEA.WAD"))
@@ -1130,7 +1130,7 @@ void D_SetGameDescription(void)
                         else if (M_StrCaseStr(myargv[mlvls], "GERYON.WAD"))
                         {
                             DEH_AddStringReplacement(HUSTR_8, MLSTR_9);
-                            DEH_AddStringReplacement("WIFM", "MLVL09");
+                            DEH_AddStringReplacement("WIF", "MLVL09");
                             DEH_AddStringReplacement("SKY1", "MLSKY3");
                         }
                         // MANOR.WAD - Поместье Гиганта
@@ -1150,7 +1150,7 @@ void D_SetGameDescription(void)
                         else if (M_StrCaseStr(myargv[mlvls], "MINOS.WAD"))
                         {
                             DEH_AddStringReplacement(HUSTR_5, MLSTR_12);
-                            DEH_AddStringReplacement("WIFM", "MLVL12");
+                            DEH_AddStringReplacement("WIF", "MLVL12");
                             DEH_AddStringReplacement("SKY1", "MLSKY3");
                         }
                         // NESSUS.WAD - Несс
@@ -1196,7 +1196,7 @@ void D_SetGameDescription(void)
                         else if (M_StrCaseStr(myargv[mlvls], "VESPERAS.WAD"))
                         {
                             DEH_AddStringReplacement(HUSTR_9, MLSTR_20);
-                            DEH_AddStringReplacement("WIFF",  "MLVL20");
+                            DEH_AddStringReplacement("WIF",  "MLVL20");
                             DEH_AddStringReplacement("SKY1", "MLSKY3");
                         }
                         // VIRGIL.WAD - Воля Вергилия
