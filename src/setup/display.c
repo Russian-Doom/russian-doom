@@ -215,7 +215,7 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
     // [JN] Ёкспериментальные функции
 
     TXT_NewSeparator("Юкспериментальные функции"),
-    TXT_NewCheckBox("Сглаживание текстур", &smoothing),
+    TXT_NewCheckBox("Незначительное сглаживание текстур", &smoothing),
     TXT_If(gamemission == doom,
         TXT_NewCheckBox("Отключить эффект плавной смены экранов", &disable_screen_wiping)),
     TXT_NewCheckBox("Мигать бордюрами экрана (эмул€ци€ VGA)", &vga_porch_flash),

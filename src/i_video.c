@@ -129,7 +129,7 @@ int fullscreen = true;
 
 int aspect_ratio_correct = true;
 
-// [JN] Эксперементальное сглаживание текстур
+// [JN] Незначительное сглаживание текстур
 
 int smoothing = false;
 
@@ -643,11 +643,11 @@ static void CreateUpscaledTexture(boolean force)
 
     if (smoothing)
     {
-        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     }
     else
     {
-        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
     }
 
     texture_upscaled = SDL_CreateTexture(renderer,
@@ -1240,14 +1240,7 @@ static void SetVideoMode(void)
     // the upscaled texture to "nearest", which is gritty and pixelated and
     // resembles software scaling pretty well.
 
-    if (smoothing)
-    {
-        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
-    }
-    else
-    {
-        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-    }
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
     // Create the intermediate texture that the RGBA surface gets loaded into.
     // The SDL_TEXTUREACCESS_STREAMING flag means that this texture's content
