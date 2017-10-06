@@ -425,7 +425,10 @@ void ST_Stop(void);
 void ST_refreshBackground(void)
 {
 
-    if (st_statusbaron && screenblocks < 11)
+    if (screenblocks >= 11 && !automapactive)
+        return;
+
+    if (st_statusbaron)
     {
         V_UseBuffer(st_backing_screen);
 
@@ -1299,7 +1302,7 @@ void ST_drawWidgets(boolean refresh)
     for (i=0;i<6;i++)
 	STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
 
-    if (screenblocks < 11)
+    if (screenblocks < 11 || automapactive)
     {
     STlib_updateMultIcon(&w_faces, refresh);
     }
