@@ -26,6 +26,9 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) source port
 - Alexandre-Xavier "AXDOOMER" Labonté-Lamoureux
 
+#### [SDL](https://www.libsdl.org/), [SDL_mixer](https://www.libsdl.org/projects/SDL_mixer/) and [SDL_net](https://www.libsdl.org/projects/SDL_net/)
+- Sam Lantinga
+
 #### [DOSBox](http://www.dosbox.com/) emulator
 - The DOSBox Team
 - SDL2 patch by NY00123
