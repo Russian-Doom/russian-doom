@@ -395,7 +395,7 @@ void HU_Start(void)
     // create the map title widget
     // [JN] Твик для карты (-1), что бы тень не оставалась
     // на статус баре после закрытия карты
-    if (draw_shadowed_text)
+    if (draw_shadowed_text && !vanillaparm)
     {
         HUlib_initTextLine(&w_title, HU_TITLEX, HU_TITLEY-1, hu_font, HU_FONTSTART);
     }

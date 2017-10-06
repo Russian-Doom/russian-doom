@@ -1426,7 +1426,7 @@ void WI_drawStats(void)
 
     // [crispy] draw total time after level time and par time
     // [JN] Но только если опция включена в настройках совместимости
-    if (show_total_time)
+    if (show_total_time && !vanillaparm)
     {
         if (sp_state > 8)
         {

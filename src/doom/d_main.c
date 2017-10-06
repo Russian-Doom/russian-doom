@@ -102,6 +102,8 @@ boolean nomonsters;  // checkparm of -nomonsters
 boolean respawnparm; // checkparm of -respawn
 boolean fastparm;    // checkparm of -fast
 
+boolean vanillaparm; // [JN] проверка параметра -vanilla
+
 extern boolean inhelpscreens;
 
 skill_t startskill;
@@ -1676,6 +1678,15 @@ void D_DoomMain (void)
     //
 
     devparm = M_CheckParm ("-devparm");
+
+    //!
+    // @vanilla
+    //
+    // [JN] Активация "ванильного" режима, отключающего некоторые
+    // опциональные улучшения и фичи. По аналогии версии для DOS.
+    //
+
+    vanillaparm = M_CheckParm ("-vanilla");
 
     I_DisplayFPSDots(devparm);
 

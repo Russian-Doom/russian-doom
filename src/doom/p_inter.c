@@ -916,7 +916,7 @@ P_DamageMobj
 	}
 	player->health -= damage; 	// mirror mobj health here for Dave
     // [from-crispy] Опциональная функция отрицательного здоровья
-    if (negative_health)
+    if (negative_health && !vanillaparm)
     {
         if (player->health < -99)
             player->health = -99;
@@ -947,7 +947,7 @@ P_DamageMobj
     // [JN] Шансовое разрывание врагов при выстреле из SSG!
     // [crispy] the lethal pellet of a point-blank SSG blast
  	// gets an extra damage boost for the occasional gib chance
-    if (ssg_blast_enemies)
+    if (ssg_blast_enemies && !vanillaparm)
     {
         extern boolean P_CheckMeleeRange (mobj_t* actor);
         if (singleplayer && source && source->player &&
@@ -965,7 +965,7 @@ P_DamageMobj
     // [JN] Исправление бага: https://doomwiki.org/wiki/Lost_soul_charging_backwards
     // Только для одиночной игры, т.к. вызывает рассинхронизацию демозаписей.
     // Thanks AXDOOMER for this fix!
-    if (singleplayer && agressive_lost_souls)
+    if (singleplayer && agressive_lost_souls && !vanillaparm)
     {
         if (P_Random () < target->info->painchance)
         {

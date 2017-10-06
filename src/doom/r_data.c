@@ -980,7 +980,7 @@ void R_InitData (void)
     printf (".");
     R_InitSpriteLumps ();
     printf (".");
-    if (translucency)
+    if (translucency && !vanillaparm)
     {
         R_InitTranMap();
         printf (".");

@@ -1091,7 +1091,7 @@ void P_PlayerInSpecialSector (player_t* player)
 	
 	// [JN] Оповещение "Обнаружен секрет!"
 	// Звук проигрывается только у обнаружевшего игрока.
-	if (secret_notification)
+	if (secret_notification && !vanillaparm)
 	{
 	player->message = SECRETFOUND;	 
 	    if (player == &players[consoleplayer])
@@ -1160,7 +1160,7 @@ void P_UpdateSpecials (void)
         // [JN] Небольшой хак: анимировать только те поверхности,
         // у которых скорость анимации больше 8, т.е. только те 
         // жикости, которые явно указанны в animdefs.
-        if (anim->speed > 8 && swirling_liquids)
+        if (anim->speed > 8 && swirling_liquids && !vanillaparm)
         {
             flattranslation[i] = -1;
         }

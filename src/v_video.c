@@ -67,6 +67,7 @@ int dirtybox[4];
 static vpatchclipfunc_t patchclip_callback = NULL;
 
 extern int draw_shadowed_text;
+extern int vanillaparm;
 
 //
 // V_MarkRect 
@@ -604,7 +605,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
     col = 0;
     desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
     
-    if (draw_shadowed_text)
+    if (draw_shadowed_text && !vanillaparm)
     desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 1;
 
 
@@ -622,7 +623,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
             source = (byte *) column + 3;
             dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
 
-            if (draw_shadowed_text) // [JN] Рисовать тень только при необходимости
+            if (draw_shadowed_text && !vanillaparm) // [JN] Рисовать тень только при необходимости
             dest2 = desttop2 + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
 
             count = column->length;
@@ -631,7 +632,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
             {
                 if (hires)
                 {
-                    if (draw_shadowed_text)
+                    if (draw_shadowed_text && !vanillaparm)
                     {
                         *dest2 = tinttable[((*dest2) << 8)];
                         dest2 += SCREENWIDTH;
@@ -640,7 +641,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
                     dest += SCREENWIDTH;
                 }
                 
-                if (draw_shadowed_text)
+                if (draw_shadowed_text && !vanillaparm)
                 {
                     *dest2 = tinttable[((*dest2) << 8)];
                     dest2 += SCREENWIDTH;

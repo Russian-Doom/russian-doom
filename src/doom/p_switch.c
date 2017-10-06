@@ -210,7 +210,7 @@ P_ChangeSwitchTexture
 	
     sound = sfx_swtchn;
 
-    if (correct_endlevel_sfx)
+    if (correct_endlevel_sfx && !vanillaparm)
     {
         // EXIT SWITCH?
         if (line->special == 11 || line->special == 51)

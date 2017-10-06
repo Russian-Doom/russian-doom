@@ -392,7 +392,7 @@ void R_DrawVisSprite (vissprite_t* vis, int x1, int x2)
     }
 
     // [crispy] translucent sprites
-    if (translucency && (vis->mobjflags & MF_TRANSLUCENT))
+    if (translucency && !vanillaparm && (vis->mobjflags & MF_TRANSLUCENT))
     {
         colfunc = tlcolfunc;
     }
@@ -541,7 +541,7 @@ void R_ProjectSprite (mobj_t* thing)
     vis->x2 = x2 >= viewwidth ? viewwidth-1 : x2;	
     iscale = FixedDiv (FRACUNIT, xscale);
 
-    if (randomly_flipcorpses)
+    if (randomly_flipcorpses && !vanillaparm)
     {
         // [crispy] flip death sprites and corpses randomly
         if ((thing->flags & MF_CORPSE &&

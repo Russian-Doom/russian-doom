@@ -47,6 +47,8 @@ extern boolean respawnparm; // checkparm of -respawn
 extern boolean fastparm;    // checkparm of -fast
 extern boolean devparm;     // DEBUG: launched with -devparm
 
+extern boolean vanillaparm; // [JN] активация "ванильного" режима
+
 
 // -----------------------------------------------------
 // Game Mode - identify IWAD as shareware, retail etc.

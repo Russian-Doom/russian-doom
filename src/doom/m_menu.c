@@ -582,7 +582,7 @@ void M_DrawSaveLoadBorder(int x,int y)
 
     if (gamevariant == !freedoom)
     {
-    if (draw_shadowed_text)
+    if (draw_shadowed_text && !vanillaparm)
     {
         V_DrawShadowedPatchDoom(x - 8, y + 9, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
 
@@ -1194,7 +1194,7 @@ void M_QuitResponse(int key)
     return;
 
     // [JN] Опциональное проигрывание звука при выходе из игры
-    if ((!netgame && play_exit_sfx && sfxVolume > 0))
+    if ((!netgame && play_exit_sfx && vanillaparm && sfxVolume > 0))
     {
         if (gamemode == commercial)
         S_StartSound(NULL,quitsounds2[(gametic>>2)&7]);

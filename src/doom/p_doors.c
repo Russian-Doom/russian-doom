@@ -123,7 +123,7 @@ void T_VerticalDoor (vldoor_t* door)
 	      case vld_blazeClose:
 		door->sector->specialdata = NULL;
 		P_RemoveThinker (&door->thinker);  // unlink and free
-        if (blazing_door_fix_sfx)
+        if (blazing_door_fix_sfx && !vanillaparm)
         {
             // [crispy] fix "fast doors make two closing sounds"
             break;

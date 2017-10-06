@@ -181,7 +181,7 @@ void P_XYMovement (mobj_t* mo)
 
         // [JN] Исправление бага: https://doomwiki.org/wiki/Lost_soul_target_amnesia
         // Только для одиночной игры, т.к. вызывает рассинхронизацию демозаписей.
-        if (singleplayer && agressive_lost_souls)
+        if (singleplayer && agressive_lost_souls && !vanillaparm)
             P_SetMobjState (mo, mo->info->seestate);
         else
             P_SetMobjState (mo, mo->info->spawnstate);
@@ -507,7 +507,7 @@ P_NightmareRespawn (mobj_t* mobj)
     
     // [JN] В зависимости от настроек, отображаем красную 
     // или же стандартную вспышку воскрешения монстров.
-    if (red_resurrection_flash)
+    if (red_resurrection_flash && !vanillaparm)
     mo = P_SpawnMobj (mobj->x,mobj->y,mobj->subsector->sector->floorheight , MT_RFOG); 
     else
     mo = P_SpawnMobj (mobj->x,mobj->y,mobj->subsector->sector->floorheight , MT_TFOG); 
@@ -520,7 +520,7 @@ P_NightmareRespawn (mobj_t* mobj)
 
     // [JN] В зависимости от настроек, отображаем красную 
     // или же стандартную вспышку воскрешения монстров.
-    if (red_resurrection_flash)
+    if (red_resurrection_flash && !vanillaparm)
     mo = P_SpawnMobj (x, y, ss->sector->floorheight , MT_RFOG);
     else
     mo = P_SpawnMobj (x, y, ss->sector->floorheight , MT_TFOG);
@@ -976,7 +976,7 @@ void P_SpawnMapThing (mapthing_t* mthing)
     {
         mobj->health -= Crispy_Random() & 1;
         // [crispy] randomly colorize space marine corpse objects
-        if (!netgame && colored_blood)
+        if (!netgame && colored_blood && !vanillaparm)
         {
             mobj->flags |= (Crispy_Random() & 3) << MF_TRANSSHIFT;
         }
@@ -1049,11 +1049,11 @@ P_SpawnBlood
     z += (P_SubRandom() << 10);
 
     // Какодемон
-    if (!is_freedoom && colored_blood && target->type == MT_HEAD)
+    if (!is_freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
     th = P_SpawnMobj (x,y,z, MT_BLOODBLUE);
 
     // Барон Ада или Рыцарь Ада
-    else if (!is_freedoom && colored_blood && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+    else if (!is_freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
     th = P_SpawnMobj (x,y,z, MT_BLOODGREEN);
 
     // Все остальные монстры с красной кровью
@@ -1063,7 +1063,7 @@ P_SpawnBlood
     th->momz = FRACUNIT*2;
     th->tics -= P_Random()&3;
     // Призрачная кровь у призрака
-    if (colored_blood && target->flags & MF_SHADOW) 
+    if (colored_blood && !vanillaparm && target->flags & MF_SHADOW) 
     th->flags |= MF_SHADOW;
 
     if (th->tics < 1)
@@ -1071,10 +1071,10 @@ P_SpawnBlood
 
     if (damage <= 12 && damage >= 9)
     {
-        if (!is_freedoom && colored_blood && target->type == MT_HEAD)
+        if (!is_freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
         P_SetMobjState (th,S_BLOODB2);
 
-        else if (!is_freedoom && colored_blood && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+        else if (!is_freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
         P_SetMobjState (th,S_BLOODG2);
 
         else
@@ -1082,10 +1082,10 @@ P_SpawnBlood
     }
     else if (damage < 9)
     {
-        if (!is_freedoom && colored_blood && target->type == MT_HEAD)
+        if (!is_freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
         P_SetMobjState (th,S_BLOODB3);
 
-        else if (!is_freedoom && colored_blood && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+        else if (!is_freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
         P_SetMobjState (th,S_BLOODG3);
 
         else

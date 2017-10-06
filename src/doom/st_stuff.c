@@ -872,7 +872,7 @@ void ST_updateFaceWidget(void)
 		// По методу Brad Harding (Doom Retro).
 		
 		// [JN] Корректная формула "new_ouch_face"
-		if (new_ouch_face)
+		if (new_ouch_face && !vanillaparm)
 			{
 			// [BH] fix ouch-face when damage > 20
             if (st_oldhealth - plyr->health > ST_MUCHPAIN)
@@ -978,7 +978,7 @@ void ST_updateFaceWidget(void)
 	// getting hurt because of your own damn stupidity
 	if (plyr->damagecount)
 	{
-		if (new_ouch_face)
+		if (new_ouch_face && !vanillaparm)
 		{
 			if (st_oldhealth - plyr->health > ST_MUCHPAIN)
 			{
@@ -1174,7 +1174,7 @@ void ST_doPaletteStuff(void)
     // [JN] Изменение палитры при получении бонусов
     else if (plyr->bonuscount)
     {
-        if (no_pickup_flash)
+        if (no_pickup_flash && !vanillaparm)
         {
             return;
         }

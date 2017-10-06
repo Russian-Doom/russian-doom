@@ -314,7 +314,7 @@ boolean PIT_CheckThing (mobj_t* thing)
     // Только для одиночной игры, т.к. вызывает рассинхронизацию демозаписией.
     // Thanks AXDOOMER for this fix!
 
-    if (!singleplayer || !agressive_lost_souls)
+    if (!singleplayer || !agressive_lost_souls || vanillaparm)
     {
         tmthing->flags &= ~MF_SKULLFLY;
         tmthing->momx = tmthing->momy = tmthing->momz = 0;
@@ -1345,15 +1345,15 @@ boolean PIT_ChangeSector (mobj_t*	thing)
     if (thing->health <= 0)
     {
         // [JN] Синее мясцо
-        if (gamevariant == !freedoom && colored_blood && thing->type == MT_HEAD)
+        if (gamevariant == !freedoom && colored_blood && !vanillaparm && thing->type == MT_HEAD)
         P_SetMobjState (thing, S_GIBSB);
 
         // [JN] Зеленое мясцо
-        else if (gamevariant == !freedoom && colored_blood && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
+        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
         P_SetMobjState (thing, S_GIBSG);
 
         // [JN] Специальное мясцо для Паука-Предводителя
-        else if (gamevariant == !freedoom && colored_blood && thing->type == MT_SPIDER)
+        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && thing->type == MT_SPIDER)
         P_SetMobjState (thing, S_GIBSM);
 
         // [JN] Не оставляют мясца
@@ -1369,7 +1369,7 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         thing->radius = 0;
 
         // [JN] Бочка и Потерянная Душа не издают звук *шмяк!*
-        if (crushed_corpses_sfx && !(thing->type == MT_BARREL || thing->type == MT_SKULL))
+        if (crushed_corpses_sfx && !vanillaparm && !(thing->type == MT_BARREL || thing->type == MT_SKULL))
         S_StartSound(thing, sfx_slop2);
 
         // keep checking
@@ -1404,15 +1404,15 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         return true;
     
         // [JN] Какодемон
-        else if (gamevariant == !freedoom && colored_blood && thing->type == MT_HEAD)
+        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && thing->type == MT_HEAD)
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODBLUE);
 
         // [JN] Рыцарь Ада и Барон Ада
-        else if (gamevariant == !freedoom && colored_blood && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
+        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODGREEN);
 
         // [JN] Призрак
-        else if (colored_blood && thing->type == MT_SHADOWS)
+        else if (colored_blood && !vanillaparm && thing->type == MT_SHADOWS)
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODFUZZ);
 
         // [JN] Все остальные монстры

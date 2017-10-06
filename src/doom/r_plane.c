@@ -483,7 +483,7 @@ void R_DrawPlanes (void)
             //  by INVUL inverse mapping.
 
             // [JN] Окрашивание неба при неузязвимости.
-            if (invul_sky)
+            if (invul_sky && !vanillaparm)
             dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
             else
             dc_colormap = colormaps;
