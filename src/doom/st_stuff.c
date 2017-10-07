@@ -417,6 +417,9 @@ cheatseq_t cheat_mypos = CHEAT("idmypos", 0);
 // [crispy] new cheats
 cheatseq_t cheat_massacre = CHEAT("tntem", 0);
 
+// [JN] Чит-код отображения версии проекта
+cheatseq_t cheat_version = CHEAT("version", 0);
+
 //
 // STATUS BAR CODE
 //
@@ -480,7 +483,6 @@ static int ST_cheat_massacre()
 
     return killcount;
 } 
-
 
 // Respond to keyboard input events,
 //  intercept cheats.
@@ -610,6 +612,11 @@ ST_Responder (event_t* ev)
         //           crstr[CR_GOLD],
         //           killcount, crstr[CR_NONE], monster, (killcount == 1) ? "" : "s", killed);
         // plyr->message = msg;
+      } 
+      // [JN] Сообщение версии проекта
+      else if (cht_CheckCheat(&cheat_version, ev->data2))
+      {
+        plyr->message = DEH_String(STSTR_VERSION);
       } 
       // 'mus' cheat for changing music
       else if (cht_CheckCheat(&cheat_mus, ev->data2))
