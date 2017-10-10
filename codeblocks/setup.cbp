@@ -57,7 +57,7 @@
 			<Add directory="../src/setup" />
 		</ResourceCompiler>
 		<Linker>
-			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_net" />
+			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_net -lSDL2_mixer -mwindows" />
 			<Add directory="../lib" />
 		</Linker>
 		<Unit filename="../src/d_iwad.c">

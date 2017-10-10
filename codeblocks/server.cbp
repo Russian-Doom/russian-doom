@@ -43,7 +43,7 @@
 			<Add directory="../textscreen" />
 		</Compiler>
 		<Linker>
-			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_net" />
+			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_net -mwindows" />
 		</Linker>
 		<Unit filename="../src/d_dedicated.c">
 			<Option compilerVar="CC" />

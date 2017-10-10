@@ -42,7 +42,7 @@
 			<Add directory="../src" />
 		</Compiler>
 		<Linker>
-			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer" />
+			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -mwindows" />
 		</Linker>
 		<Unit filename="../opl/ioperm_sys.c">
 			<Option compilerVar="CC" />
