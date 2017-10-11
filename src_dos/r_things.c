@@ -667,6 +667,58 @@ void R_AddSprites (sector_t* sec)
 }
 
 
+// [crispy] apply bobbing (or centering) to the player's weapon sprite
+static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
+{
+	const angle_t angle = (128 * leveltime) & FINEMASK;
+
+	if (sx)
+	{
+		*sx = FRACUNIT;
+
+		if (bobx)
+		{
+			 *sx += FixedMul(viewplayer->bob, finecosine[angle]);
+		}
+	}
+
+	if (sy)
+	{
+		*sy = 32 * FRACUNIT; // [crispy] WEAPONTOP
+
+		if (boby)
+		{
+			*sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)]);
+		}
+	}
+}
+
+// [crispy] & [JN] Halfed (1/2) weapon bobbing amplitude while shooting and moving
+static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
+{
+	const angle_t angle = (128 * leveltime) & FINEMASK;
+
+	if (sx)
+	{
+		*sx = FRACUNIT;
+
+		if (bobx)
+		{
+			 *sx += FixedMul(viewplayer->bob, finecosine[angle] / 2);
+		}
+	}
+
+	if (sy)
+	{
+		*sy = 32 * FRACUNIT; // [crispy] WEAPONTOP
+
+		if (boby)
+		{
+			*sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)] / 2);
+		}
+	}
+}
+
 //
 // R_DrawPSprite
 //
@@ -681,6 +733,7 @@ void R_DrawPSprite (pspdef_t* psp)
     boolean		flip;
     vissprite_t*	vis;
     vissprite_t		avis;
+    const int state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] For smoothen Chainsaw idle animation
     
     // decide which patch to use
 #ifdef RANGECHECK
@@ -698,6 +751,27 @@ void R_DrawPSprite (pspdef_t* psp)
 
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0];
+
+    // [crispy] smoothen Chainsaw idle animation
+    if (!vanilla && (state == S_SAW || state == S_SAWB))
+    {
+        R_ApplyWeaponBob(&psp->sx, true, &psp->sy, true);
+    }
+    
+    // [JN] Weapon bobbing while shooting and moving
+    if (!vanilla && (
+        /* Кулак      */ state == S_PUNCH1   || state == S_PUNCH2   || state == S_PUNCH3   || state == S_PUNCH4  || state == S_PUNCH5 ||
+        /* Бензопила  */ state == S_SAW1     || state == S_SAW2     ||
+        /* Пистолет   */ state == S_PISTOL1  || state == S_PISTOL2  || state == S_PISTOL3  || state == S_PISTOL4 ||
+        /* Дробовик   */ state == S_SGUN1    || state == S_SGUN2    || state == S_SGUN3    || state == S_SGUN4   || state == S_SGUN5  || state == S_SGUN6  || state == S_SGUN7  || state == S_SGUN8  || state == S_SGUN9   ||
+        /* Двустволка */ state == S_DSGUN1   || state == S_DSGUN2   || state == S_DSGUN3   || state == S_DSGUN4  || state == S_DSGUN5 || state == S_DSGUN6 || state == S_DSGUN7 || state == S_DSGUN9 || state == S_DSGUN10 ||
+        /* Пулемет    */ state == S_CHAIN1   || state == S_CHAIN2   || state == S_CHAIN3   ||
+        /* Ракетница  */ state == S_MISSILE1 || state == S_MISSILE2 || state == S_MISSILE3 ||
+        /* Плазмаган  */ state == S_PLASMA1  || state == S_PLASMA2  ||
+        /* BFG9000    */ state == S_BFG1     || state == S_BFG2     || state == S_BFG3     || state == S_BFG4 ))
+    {
+        R_ApplyWeaponFiringBob(&psp->sx, true, &psp->sy, true);
+    }
     
     // calculate edges of the shape
     tx = psp->sx-160*FRACUNIT;
