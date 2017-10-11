@@ -391,11 +391,9 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
  
     forward = side = 0;
 
-    /*
     // villsa [STRIFE] running causes centerview to occur
     if(speed)
         cmd->buttons2 |= BT2_CENTERVIEW;
-    */
 
     // villsa [STRIFE] disable running if low on health
     if (players[consoleplayer].health <= 15)

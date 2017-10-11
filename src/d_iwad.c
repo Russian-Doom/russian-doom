@@ -50,7 +50,7 @@ static const iwad_t iwads[] =
     { "heretic1.wad", heretic,   shareware,  "Heretic Shareware" },
     { "hexen.wad",    hexen,     commercial, "Hexen" },
 //  { "strife0.wad",  strife,    commercial, "Strife" }, // haleyjd: STRIFE-FIXME
-    { "strife1.wad",  strife,    commercial, "Strife" },
+//  { "strife1.wad",  strife,    commercial, "Strife" }, // [JN] Перевод не осуществлен
 };
 
 // Array of locations to search for IWAD files
@@ -434,7 +434,7 @@ static void CheckDOSDefaults(void)
     AddIWADDir("\\hexen");              // Hexen
     AddIWADDir("\\hexendk");            // Hexen Deathkings of the Dark Citadel
 
-    AddIWADDir("\\strife");             // Strife
+//  AddIWADDir("\\strife");             // Strife
 }
 
 #endif
