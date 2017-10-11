@@ -1370,6 +1370,39 @@ static void saveg_write_fireflicker_t(fireflicker_t *str)
     saveg_write32(str->maxlight);
 }
 
+static void saveg_read_button_t(button_t *str)
+{
+    int line;
+
+    // line_t *line;
+    line = saveg_read32();
+    str->line = &lines[line];
+
+    // bwhere_e where;
+    str->where = (bwhere_e)saveg_read32();
+
+    // int btexture;
+    str->btexture = saveg_read32();
+
+    // int btimer;
+    str->btimer = saveg_read32();
+}
+
+static void saveg_write_button_t(button_t *str)
+{
+    // line_t *line;
+    saveg_write32(str->line - lines);
+
+    // bwhere_e where;
+    saveg_write32((int)str->where);
+
+    // int btexture;
+    saveg_write32(str->btexture);
+
+    // int btimer;
+    saveg_write32(str->btimer);
+}
+
 //
 // Write the header for a savegame
 //
@@ -1787,6 +1820,7 @@ enum
     tc_strobe,
     tc_glow,
     tc_fireflicker,
+    tc_button,
     tc_endspecials
 
 } specials_e;	
@@ -1808,6 +1842,7 @@ void P_ArchiveSpecials (void)
 {
     thinker_t*		th;
     int			i;
+    button_t		*button_ptr;
 	
     // save off the current thinkers
     for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
@@ -1905,12 +1940,28 @@ void P_ArchiveSpecials (void)
         continue;
     }
     }
+    
+    button_ptr = buttonlist;
+    i = MAXBUTTONS;
+    do
+    {
+        if (button_ptr->btimer != 0)
+        {
+            saveg_write8(tc_button);
+            saveg_write_pad();
+            saveg_write_button_t(button_ptr);
+        }
+        button_ptr++;
+    } while (--i);
 	
     // add a terminating marker
     saveg_write8(tc_endspecials);
 
 }
 
+// [JN] Сохранение текстур кнопок и переключателей.
+// Thanks Brad Harding for the code!
+void P_StartButton(line_t *line, bwhere_e w, int texture, int time);
 
 //
 // P_UnArchiveSpecials
@@ -1926,6 +1977,7 @@ void P_UnArchiveSpecials (void)
     strobe_t*		strobe;
     glow_t*		    glow;
     fireflicker_t   *fireflicker;
+    button_t        *button;
 	
 	
     // read in saved thinkers
@@ -2012,6 +2064,13 @@ void P_UnArchiveSpecials (void)
             saveg_read_fireflicker_t(fireflicker);
         fireflicker->thinker.function.acp1 = (actionf_p1)T_FireFlicker;
         P_AddThinker(&fireflicker->thinker);
+        break;
+
+      case tc_button:
+        saveg_read_pad();
+        button = (button_t *)Z_Malloc(sizeof(*button), PU_LEVEL, NULL);
+            saveg_read_button_t(button);
+        P_StartButton(button->line, button->where, button->btexture, button->btimer);
         break;
 				
 	  default:
