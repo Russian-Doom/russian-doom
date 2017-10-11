@@ -1960,7 +1960,7 @@ void P_ArchiveSpecials (void)
 }
 
 // [JN] Сохранение текстур кнопок и переключателей.
-// Thanks Brad Harding for the code!
+// Thanks Brad Harding for the code and Jeff Doggett for optimization!
 void P_StartButton(line_t *line, bwhere_e w, int texture, int time);
 
 //
@@ -2068,9 +2068,9 @@ void P_UnArchiveSpecials (void)
 
       case tc_button:
         saveg_read_pad();
-        button = (button_t *)Z_Malloc(sizeof(*button), PU_LEVEL, NULL);
-            saveg_read_button_t(button);
-        P_StartButton(button->line, button->where, button->btexture, button->btimer);
+        button_t button;
+            saveg_read_button_t(&button);
+        P_StartButton(button.line, button.where, button.btexture, button.btimer);
         break;
 				
 	  default:
