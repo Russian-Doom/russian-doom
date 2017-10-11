@@ -635,6 +635,31 @@ void R_AddSprites (sector_t* sec)
     R_ProjectSprite (thing);
 }
 
+// [crispy] apply bobbing (or centering) to the player's weapon sprite
+static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
+{
+	const angle_t angle = (128 * leveltime) & FINEMASK;
+
+	if (sx)
+	{
+		*sx = FRACUNIT;
+
+		if (bobx)
+		{
+			 *sx += FixedMul(viewplayer->bob, finecosine[angle]);
+		}
+	}
+
+	if (sy)
+	{
+		*sy = 32 * FRACUNIT; // [crispy] WEAPONTOP
+
+		if (boby)
+		{
+			*sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)]);
+		}
+	}
+}
 
 //
 // R_DrawPSprite
@@ -650,6 +675,7 @@ void R_DrawPSprite (pspdef_t* psp)
     boolean         flip;
     vissprite_t*    vis;
     vissprite_t     avis;
+    const int state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] Для плавной анимации бензопилы
 
     // decide which patch to use
 #ifdef RANGECHECK
@@ -665,6 +691,12 @@ void R_DrawPSprite (pspdef_t* psp)
 
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0];
+
+    // [crispy] smoothen Chainsaw idle animation
+    if (state == S_SAW || state == S_SAWB)
+    {
+        R_ApplyWeaponBob(&psp->sx, true, &psp->sy, true);
+    }
 
     // calculate edges of the shape
     tx = psp->sx-(ORIGWIDTH/2)*FRACUNIT;
