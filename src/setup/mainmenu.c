@@ -109,6 +109,7 @@ static void SensibleDefaults(void)
     red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
     ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
     translucency = 1;            // Прозрачность объектов
+    weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
     no_pickup_flash = 1;         // Не мигать экраном при получении предметов
     // - Звук -
     crushed_corpses_sfx = 1;     // Звук раздавливания трупов

@@ -42,6 +42,7 @@ int swirling_liquids = 1;        // Улучшенная анимация жидкостей
 int red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
 int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
 int translucency = 1;            // Прозрачность объектов
+int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
 int no_pickup_flash = 0;         // Не мигать экраном при получении предметов
 // - Звук -
 int crushed_corpses_sfx = 1;     // Звук раздавливания трупов
@@ -85,6 +86,7 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Љрасная вспышка воскрешения монстров",      &red_resurrection_flash)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("„вуствольное ружье может разрывать врагов", &ssg_blast_enemies)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ћффект прозрачности у некоторых объектов",  &translucency)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Џокачивание оружия при стрельбе в движении",&weapon_bobbing)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе мигать экраном при получении предметов", &no_pickup_flash)),
 
     TXT_If(gamemission == doom,    TXT_NewSeparator("‡вук")), 
@@ -120,6 +122,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);   // Красная вспышка воскрешения монстров
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
     M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов
+    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении
     M_BindIntVariable("no_pickup_flash",        &no_pickup_flash);          // Не мигать экраном при получении предметов
     // - Звук -
     M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);      // Звук раздавливания трупов
