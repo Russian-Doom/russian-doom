@@ -720,13 +720,13 @@ void R_DrawPSprite (pspdef_t* psp)
     flip = (boolean)sprframe->flip[0];
 
     // [crispy] smoothen Chainsaw idle animation
-    if (state == S_SAW || state == S_SAWB)
+    if (!vanillaparm && (state == S_SAW || state == S_SAWB))
     {
         R_ApplyWeaponBob(&psp->sx, true, &psp->sy, true);
     }
     
     // [JN] Опциональное покачивание оружия при стрельбе в движении
-    if (weapon_bobbing && (
+    if (!vanillaparm && weapon_bobbing && (
         /* Кулак      */ state == S_PUNCH1   || state == S_PUNCH2   || state == S_PUNCH3   || state == S_PUNCH4  || state == S_PUNCH5 ||
         /* Бензопила  */ state == S_SAW1     || state == S_SAW2     ||
         /* Пистолет   */ state == S_PISTOL1  || state == S_PISTOL2  || state == S_PISTOL3  || state == S_PISTOL4 ||
