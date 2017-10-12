@@ -97,6 +97,9 @@ int messageLastMenuActive;
 // timed message = no input from user
 boolean messageNeedsInput;
 
+// [JN] Дополнительный титр "БЫСТРАЯ ЗАГРУЗКА"
+boolean QuickSaveTitle;
+
 
 void (*messageRoutine)(int response);
 
@@ -660,8 +663,16 @@ void M_DrawSave(void)
 {
     int i;
 	
-    // [JN] Используется дополнительный тайтл для меню загрузки: "СОХРАНИТЬ ИГРУ"
-    V_DrawShadowedPatchDoom(57, 13, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
+    if (QuickSaveTitle)
+    {
+        // [JN] Используется дополнительный тайтл для меню загрузки: "БЫСТРОЕ СОХРАНЕНИЕ"
+        V_DrawShadowedPatchDoom(22, 13, W_CacheLumpName(DEH_String("M_QSGTTL"), PU_CACHE));
+    }
+    else
+    {
+        // [JN] Используется дополнительный тайтл для меню загрузки: "СОХРАНИТЬ ИГРУ"
+        V_DrawShadowedPatchDoom(57, 13, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
+    }
 
     for (i = 0;i < load_end; i++)
     {
@@ -1751,6 +1762,7 @@ boolean M_Responder (event_t* ev)
         }
         else if (key == key_menu_save)     // Save
         {
+            QuickSaveTitle = false;
             M_StartControlPanel();
             S_StartSound(NULL,sfx_swtchn);
             M_SaveGame(0);
@@ -1779,6 +1791,7 @@ boolean M_Responder (event_t* ev)
         }
         else if (key == key_menu_qsave)    // Quicksave
         {
+            QuickSaveTitle = true;
             S_StartSound(NULL,sfx_swtchn);
             M_QuickSave();
             return true;
