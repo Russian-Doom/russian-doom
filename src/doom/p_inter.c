@@ -738,12 +738,14 @@ P_KillMobj
 	// count environment kills against you
 	if (!source)	
 	    target->player->frags[target->player-players]++;
-			
-	target->flags &= ~MF_SOLID;
-	target->player->playerstate = PST_DEAD;
+
+    target->flags &= ~MF_SOLID;
+    target->player->playerstate = PST_DEAD;
     // [JN] & [crispy] Сброс бонусной желтой палитры при смерти игрока
     target->player->bonuscount = 0;
-	P_DropWeapon (target->player);
+    // [JN] & [crispy] Снятие эффекта инвертированной палитры при смерти игрока
+    target->player->fixedcolormap = target->player->powers[pw_infrared] ? 1 : 0;
+    P_DropWeapon (target->player);
 
 	if (target->player == &players[consoleplayer]
 	    && automapactive)
