@@ -1181,8 +1181,9 @@ void ST_doPaletteStuff(void)
 	palette += STARTREDPALS;
     }
 
-    // [JN] Изменение палитры при получении бонусов
-    else if (plyr->bonuscount)
+    // [JN] Изменение палитры при получении бонусов.
+    // Палитра изменяется только у живого игрока.
+    else if (plyr->bonuscount && plyr->health > 0)
     {
         if (no_pickup_flash && !vanillaparm)
         {
