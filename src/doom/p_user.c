@@ -250,17 +250,8 @@ void P_PlayerThink (player_t* player)
 	
     if (player->playerstate == PST_DEAD)
     {
-        P_DeathThink (player);
-
-        // [JN] Снятие эффекта инвертированной палитры при смерти игрока
-        // Снимается только белая палитра, остальные эффекты от усилений
-        // не должны пропадать.
-        if (player->powers[pw_invulnerability])
-        {
-            player->fixedcolormap = !INVERSECOLORMAP;
-        }
-
-        return;
+	P_DeathThink (player);
+	return;
     }
     
     // Move around.
