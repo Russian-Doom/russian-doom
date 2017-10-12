@@ -735,6 +735,10 @@ P_KillMobj
     
     if (target->player)
     {
+    // [JN] & [crispy] Сброс бонусной желтой палитры при смерти игрока
+    if (target->player->playerstate = PST_DEAD)
+        target->player->bonuscount = 0;
+
 	// count environment kills against you
 	if (!source)	
 	    target->player->frags[target->player-players]++;
