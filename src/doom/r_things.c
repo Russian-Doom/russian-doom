@@ -726,7 +726,7 @@ void R_DrawPSprite (pspdef_t* psp)
     }
     
     // [JN] Опциональное покачивание оружия при стрельбе в движении
-    if (!vanillaparm && weapon_bobbing && (
+    if (!vanillaparm && !demoplayback && !demorecording && weapon_bobbing && (
         /* Кулак      */ state == S_PUNCH1   || state == S_PUNCH2   || state == S_PUNCH3   || state == S_PUNCH4  || state == S_PUNCH5 ||
         /* Бензопила  */ state == S_SAW1     || state == S_SAW2     ||
         /* Пистолет   */ state == S_PISTOL1  || state == S_PISTOL2  || state == S_PISTOL3  || state == S_PISTOL4 ||

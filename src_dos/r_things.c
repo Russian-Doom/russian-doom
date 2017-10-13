@@ -768,7 +768,7 @@ void R_DrawPSprite (pspdef_t* psp)
         /* Пулемет    */ state == S_CHAIN1   || state == S_CHAIN2   || state == S_CHAIN3   ||
         /* Ракетница  */ state == S_MISSILE1 || state == S_MISSILE2 || state == S_MISSILE3 ||
         /* Плазмаган  */ state == S_PLASMA1  || state == S_PLASMA2  ||
-        /* BFG9000    */ state == S_BFG1     || state == S_BFG2     || state == S_BFG3     || state == S_BFG4 ))
+        /* BFG9000    */ state == S_BFG1     || state == S_BFG2     || state == S_BFG3     || state == S_BFG4 ) && !demoplayback && !demorecording)
     {
         R_ApplyWeaponFiringBob(&psp->sx, true, &psp->sy, true);
     }
