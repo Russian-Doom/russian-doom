@@ -117,6 +117,8 @@ FILE *debugfile;
 int UpdateState;
 int maxplayers = MAXPLAYERS;
 
+boolean vanillaparm; // [JN] проверка параметра -vanilla
+
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 static int WarpMap;

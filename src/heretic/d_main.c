@@ -68,6 +68,8 @@ boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom;                  // true if cd-rom mode active
 boolean noartiskip;             // whether shift-enter skips an artifact
 
+boolean vanillaparm; // [JN] проверка параметра -vanilla
+
 skill_t startskill;
 int startepisode;
 int startmap;
