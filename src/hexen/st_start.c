@@ -124,7 +124,7 @@ void ST_Init(void)
 
     if (graphical_startup && !debugmode && !testcontrols)
     {
-        I_SetWindowTitleHR("Hexen startup - " PACKAGE_STRING);
+        I_SetWindowTitleHR("Запуск Hexen"); // [JN] "Hexen startup - " PACKAGE_STRING
 
         // Set 640x480x16 mode
         if (I_SetVideoModeHR())
