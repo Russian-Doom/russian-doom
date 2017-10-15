@@ -583,8 +583,6 @@ void M_DrawSaveLoadBorder(int x,int y)
     // [JN] Условие if (draw_shadowed_text) необходимо для пиксельного перфикционизма,
     // чтобы строчки с текстом смотрились одинаково симпатично как с тенью, так и без.
 
-    if (gamevariant == !freedoom)
-    {
     if (draw_shadowed_text && !vanillaparm)
     {
         V_DrawShadowedPatchDoom(x - 8, y + 9, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
@@ -608,20 +606,6 @@ void M_DrawSaveLoadBorder(int x,int y)
         }
 
         V_DrawPatchDirect(x, y + 8,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
-    }
-    }
-
-    else if (gamevariant == freedoom)
-    {
-        V_DrawShadowedPatchDoom(x - 8, y + 7, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
-
-        for (i = 0;i < 24;i++)
-        {
-            V_DrawShadowedPatchDoom(x, y + 7, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
-            x += 8;
-        }
-
-        V_DrawShadowedPatchDoom(x, y + 7,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
     }
 }
 
@@ -890,7 +874,6 @@ void M_DrawReadThis1(void)
     // черепа. Так, чтобы он не перекрывал надписb "ПКМ" и "E".
     if (gamevariant == freedoom)
     {
-        // I_Error("Арриба! Арриба!");
         skullx = 323;
         skully = 183;
     }
