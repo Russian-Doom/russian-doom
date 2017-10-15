@@ -153,7 +153,7 @@ typedef struct
 
 // Extended MAXINTERCEPTS, to allow for intercepts overrun emulation.
 
-#define MAXINTERCEPTS_ORIGINAL 128
+#define MAXINTERCEPTS_ORIGINAL 128*16 // [JN] Лимит шестнадцатикратно умножен
 #define MAXINTERCEPTS          (MAXINTERCEPTS_ORIGINAL + 61)
 
 extern intercept_t	intercepts[MAXINTERCEPTS];

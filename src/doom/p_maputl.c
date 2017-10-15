@@ -614,6 +614,11 @@ PIT_AddLineIntercepts (line_t* ld)
     // [JN] Эмуляция лимита отключена
     // InterceptsOverrun(intercept_p - intercepts, intercept_p);
     intercept_p++;
+    // [crispy] & [JN] Не совершать возврат по достижению лимита
+    if (intercept_p - intercepts == MAXINTERCEPTS + 1)
+    {
+        return false;
+    }
 
     return true;	// continue
 }
@@ -681,6 +686,11 @@ boolean PIT_AddThingIntercepts (mobj_t* thing)
     // [JN] Эмуляция лимита отключена
     // InterceptsOverrun(intercept_p - intercepts, intercept_p);
     intercept_p++;
+    // [crispy] & [JN] Не совершать возврат по достижению лимита
+    if (intercept_p - intercepts == MAXINTERCEPTS + 1)
+    {
+        return false;
+    }
 
     return true;		// keep going
 }
