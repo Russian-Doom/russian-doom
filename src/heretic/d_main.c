@@ -49,6 +49,7 @@
 #include "s_sound.h"
 #include "w_main.h"
 #include "v_video.h"
+#include "w_merge.h"
 
 #define CT_KEY_GREEN    'g'
 #define CT_KEY_YELLOW   'y'
