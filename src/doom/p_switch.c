@@ -414,7 +414,7 @@ P_UseSpecialLine
     // при активированном параметре -nomonsters.
     if (nomonsters)
     {
-        if ((gamemode == shareware || registered || retail && gameepisode == 1 && gamemap == 8) || 
+        if (((gamemode == shareware || registered || retail) && gameepisode == 1 && gamemap == 8) || 
             (gamemode == commercial && gamemap == 7))
         {
             line_t      junk;
