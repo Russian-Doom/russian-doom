@@ -44,6 +44,7 @@
 #include "p_local.h"
 #include "v_video.h"
 #include "w_main.h"
+#include "w_merge.h"
 
 // MACROS ------------------------------------------------------------------
 
