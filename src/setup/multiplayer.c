@@ -1133,10 +1133,10 @@ void SetPlayerNameDefault(void)
 void MultiplayerConfig(void)
 {
     txt_window_t *window;
-    txt_label_t *label;
-    txt_table_t *table;
-    char buf[10];
-    int i;
+    // txt_label_t *label;
+    // txt_table_t *table;
+    // char buf[10];
+    // int i;
 
     window = TXT_NewWindow("Настройки сетевой игры");
     //  TXT_SetWindowHelpURL(window, MULTI_CONFIG_HELP_URL);
