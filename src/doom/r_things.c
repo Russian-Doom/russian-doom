@@ -39,6 +39,8 @@
 extern int randomly_flipcorpses;
 extern int weapon_bobbing;
 
+extern boolean chainsaw_attack_swing;
+
 //void R_DrawColumn (void);
 //void R_DrawFuzzColumn (void);
 
@@ -673,7 +675,11 @@ static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *s
 
 		if (bobx)
 		{
-			 *sx += FixedMul(viewplayer->bob, finecosine[angle] / 2);
+            if (chainsaw_attack_swing) // [JN] Отдельная амплитуда для атаки бензопилы
+            *sx += FixedMul(viewplayer->bob, finecosine[angle] / 16);
+
+            else
+			*sx += FixedMul(viewplayer->bob, finecosine[angle] / 2);
 		}
 	}
 
@@ -683,6 +689,10 @@ static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *s
 
 		if (boby)
 		{
+            if (chainsaw_attack_swing) // [JN] Отдельная амплитуда для атаки бензопилы
+            *sy += FixedMul(viewplayer->bob, finesine[angle*16 & (FINEANGLES / 2 - 1)] / 12);
+
+            else
 			*sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)] / 2);
 		}
 	}
@@ -719,23 +729,30 @@ void R_DrawPSprite (pspdef_t* psp)
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0];
 
-    // [crispy] smoothen Chainsaw idle animation
-    if (!vanillaparm && (state == S_SAW || state == S_SAWB))
+    // [crispy] Smoothen Chainsaw idle animation
+    // [JN] ...а также применять стандартную анимацию покачивания к некоторым фреймам стрельбы
+    // для получения плавного эффекта перехода от состояния стрельбы к обычному состоянию.
+    if (!vanillaparm && !demoplayback && !demorecording && weapon_bobbing && (
+    /* Бензопила  */ state == S_SAW      || state == S_SAWB     ||
+    /* Дробовик   */ state == S_SGUN8    || state == S_SGUN9    ||
+    /* Двустволка */ state == S_DSGUN9   || state == S_DSGUN10  ||
+    /* Плазмаган  */ state == S_PLASMA2  ||
+    /* BFG9000    */ state == S_BFG3     || state == S_BFG4 ))
     {
         R_ApplyWeaponBob(&psp->sx, true, &psp->sy, true);
     }
     
-    // [JN] Опциональное покачивание оружия при стрельбе в движении
+    // [JN] Уполовиненная амплитуда покачия оружия при стрельбе в движении
     if (!vanillaparm && !demoplayback && !demorecording && weapon_bobbing && (
-        /* Кулак      */ state == S_PUNCH1   || state == S_PUNCH2   || state == S_PUNCH3   || state == S_PUNCH4  || state == S_PUNCH5 ||
-        /* Бензопила  */ state == S_SAW1     || state == S_SAW2     ||
-        /* Пистолет   */ state == S_PISTOL1  || state == S_PISTOL2  || state == S_PISTOL3  || state == S_PISTOL4 ||
-        /* Дробовик   */ state == S_SGUN1    || state == S_SGUN2    || state == S_SGUN3    || state == S_SGUN4   || state == S_SGUN5  || state == S_SGUN6  || state == S_SGUN7  || state == S_SGUN8  || state == S_SGUN9   ||
-        /* Двустволка */ state == S_DSGUN1   || state == S_DSGUN2   || state == S_DSGUN3   || state == S_DSGUN4  || state == S_DSGUN5 || state == S_DSGUN6 || state == S_DSGUN7 || state == S_DSGUN9 || state == S_DSGUN10 ||
-        /* Пулемет    */ state == S_CHAIN1   || state == S_CHAIN2   || state == S_CHAIN3   ||
-        /* Ракетница  */ state == S_MISSILE1 || state == S_MISSILE2 || state == S_MISSILE3 ||
-        /* Плазмаган  */ state == S_PLASMA1  || state == S_PLASMA2  ||
-        /* BFG9000    */ state == S_BFG1     || state == S_BFG2     || state == S_BFG3     || state == S_BFG4 ))
+    /* Кулак      */ state == S_PUNCH1   || state == S_PUNCH2   || state == S_PUNCH3   || state == S_PUNCH4  || state == S_PUNCH5 ||
+    /* Бензопила  */ state == S_SAW1     || state == S_SAW2     ||
+    /* Пистолет   */ state == S_PISTOL1  || state == S_PISTOL2  || state == S_PISTOL3  || state == S_PISTOL4 ||
+    /* Дробовик   */ state == S_SGUN1    || state == S_SGUN2    || state == S_SGUN3    || state == S_SGUN4   || state == S_SGUN5  || state == S_SGUN6  || state == S_SGUN7  ||
+    /* Двустволка */ state == S_DSGUN1   || state == S_DSGUN2   || state == S_DSGUN3   || state == S_DSGUN4  || state == S_DSGUN5 || state == S_DSGUN6 || state == S_DSGUN7 ||
+    /* Пулемет    */ state == S_CHAIN1   || state == S_CHAIN2   || state == S_CHAIN3   ||
+    /* Ракетница  */ state == S_MISSILE1 || state == S_MISSILE2 || state == S_MISSILE3 ||
+    /* Плазмаган  */ state == S_PLASMA1  ||
+    /* BFG9000    */ state == S_BFG1     || state == S_BFG2 ))
     {
         R_ApplyWeaponFiringBob(&psp->sx, true, &psp->sy, true);
     }

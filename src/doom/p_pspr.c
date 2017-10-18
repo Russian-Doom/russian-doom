@@ -45,6 +45,9 @@
 #define WEAPONBOTTOM	128*FRACUNIT
 #define WEAPONTOP		32*FRACUNIT
 
+// [JN] Переменная для отдельного покачивание бензопилы
+// во время обычной атаки и атаки непосредственно противника.
+boolean chainsaw_attack_swing;
 
 
 //
@@ -532,6 +535,9 @@ A_Saw
     slope = P_AimLineAttack (player->mo, angle, MELEERANGE+1);
     P_LineAttack (player->mo, angle, MELEERANGE+1, slope, damage);
 
+    // [JN] Происходит обычная (пустая) атака
+    chainsaw_attack_swing = false;
+
     if (singleplayer)
     {
         if (!linetarget)
@@ -569,6 +575,8 @@ A_Saw
 	    player->mo->angle += ANG90/20;
     }
     player->mo->flags |= MF_JUSTATTACKED;
+    // [JN] Происходит атака (пиление) врага
+    chainsaw_attack_swing = true;
 }
 
 // Doom does not check the bounds of the ammo array.  As a result,
