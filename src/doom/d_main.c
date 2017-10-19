@@ -972,10 +972,8 @@ void D_SetGameDescription(void)
             if (is_freedm)
             {
                 gamedescription = GetGameName("FreeDM");
-                /*
                 W_MergeFile("russian/russian-freedoom-common.wad");
                 W_MergeFile("russian/russian-freedoom-dm.wad");
-                */
             }
             else
             {

@@ -1633,7 +1633,8 @@ void G_WorldDone (void)
             break;
         }
     }
-    else if ( gamemode == commercial )
+    // [JN] Не отображать межмиссионные тексты в FreeDM
+    else if ( gamemode == commercial && gamevariant != freedm )
     {
         switch (gamemap)
         {
