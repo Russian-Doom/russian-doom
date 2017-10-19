@@ -322,7 +322,8 @@ static patch_t*		tallpercent;
 static patch_t*		shortnum[10];
 
 // 3 key-cards, 3 skulls
-static patch_t*		keys[NUMCARDS]; 
+// jff 2/24/98 extend number of patches by three skull/card combos
+static patch_t*		keys[NUMCARDS+3]; 
 
 // face status patches
 // [JN] Массив удвоен, необходимо для бессмертия.
@@ -1076,6 +1077,8 @@ void ST_updateFaceWidget(void)
     }
 }
 
+int sts_traditional_keys; // killough 2/28/98: traditional status bar keys
+
 void ST_updateWidgets(void)
 {
     static int	largeammo = 1994; // means "n/a"
@@ -1109,8 +1112,10 @@ void ST_updateWidgets(void)
     {
 	keyboxes[i] = plyr->cards[i] ? i : -1;
 
+    //jff 2/24/98 select double key
+
 	if (plyr->cards[i+3])
-	    keyboxes[i] = i+3;
+	    keyboxes[i] = keyboxes[i]==-1 || sts_traditional_keys ? i+3 : i+6;
     }
 
     // refresh everything if this is him coming back to life
@@ -1387,7 +1392,7 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     callback(DEH_String("STTPRCNT"), &tallpercent);
 
     // key cards
-    for (i=0;i<NUMCARDS;i++)
+    for (i=0;i<NUMCARDS+3;i++)  //jff 2/23/98 show both keys too
     {
 	DEH_snprintf(namebuf, 9, "STKEYS%d", i);
         callback(namebuf, &keys[i]);
