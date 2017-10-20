@@ -412,18 +412,14 @@ P_UseSpecialLine
     
     // [JN] (from DOOM Retro) Возможность честно завершить E1M8 и MAP07
     // при активированном параметре -nomonsters.
-    if (nomonsters)
+    if (nomonsters && ((gamemode != commercial && gameepisode == 1 && gamemap == 8) || (gamemode == commercial && gamemap == 7)))
     {
-        if (((gamemode == shareware || registered || retail) && gameepisode == 1 && gamemap == 8) || 
-            (gamemode == commercial && gamemap == 7))
-        {
             line_t      junk;
     
             junk.tag = 666;
             EV_DoFloor (&junk, lowerFloorToLowest);
             junk.tag = 667;
             EV_DoFloor (&junk, raiseToTexture);
-        }
     }
 	break;
 	
