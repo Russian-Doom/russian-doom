@@ -1077,8 +1077,6 @@ void ST_updateFaceWidget(void)
     }
 }
 
-int sts_traditional_keys; // killough 2/28/98: traditional status bar keys
-
 void ST_updateWidgets(void)
 {
     static int	largeammo = 1994; // means "n/a"
@@ -1115,7 +1113,7 @@ void ST_updateWidgets(void)
     //jff 2/24/98 select double key
 
 	if (plyr->cards[i+3])
-	    keyboxes[i] = keyboxes[i]==-1 || sts_traditional_keys ? i+3 : i+6;
+	    keyboxes[i] = keyboxes[i]==-1 ? i+3 : i+6;
     }
 
     // refresh everything if this is him coming back to life
