@@ -1113,7 +1113,7 @@ void ST_updateWidgets(void)
     //jff 2/24/98 select double key
 
 	if (plyr->cards[i+3])
-	    keyboxes[i] = keyboxes[i]==-1 ? i+3 : i+6;
+	    keyboxes[i] = (keyboxes[i]==-1) ? i+3 : i+6;
     }
 
     // refresh everything if this is him coming back to life
