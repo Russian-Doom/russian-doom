@@ -1716,6 +1716,8 @@ static boolean CheckBossEnd(mobjtype_t motype)
     }
 }
 
+boolean    flag667;
+
 //
 // A_BossDeath
 // Possibly trigger special effects
@@ -1784,9 +1786,17 @@ void A_BossDeath (mobj_t* mo)
 	    
 	    if (mo->type == MT_BABY)
 	    {
-		junk.tag = 667;
-		EV_DoFloor(&junk,raiseToTexture);
-		return;
+            // [JN] (from DOOM Retro) Активировать подъем 
+            // сектора 667 только один раз. Исправляет баг:
+            // https://doomwiki.org/wiki/Tag_667#Bugs
+	        if (!flag667)
+	        {
+	            junk.tag = 667;
+	            EV_DoFloor(&junk,raiseToTexture);
+	            flag667 = true;
+	        }
+
+	        return;
 	    }
 	}
     }
