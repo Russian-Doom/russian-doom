@@ -1963,8 +1963,10 @@ void A_BrainScream (mobj_t*	mo)
     int		y;
     int		z;
     mobj_t*	th;
-	
-    for (x=mo->x - 196*FRACUNIT ; x< mo->x + 320*FRACUNIT ; x+= FRACUNIT*8)
+
+    // [JN] Взрывы Иконы греха отцентрированы. Исправление бага:
+    // https://doomwiki.org/wiki/Lopsided_final_boss_explosions
+    for (x=mo->x - 320*FRACUNIT ; x< mo->x + 320*FRACUNIT ; x+= FRACUNIT*8)
     {
 	y = mo->y - 320*FRACUNIT;
 	z = 128 + P_Random()*2*FRACUNIT;
