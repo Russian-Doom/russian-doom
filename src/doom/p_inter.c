@@ -934,6 +934,11 @@ P_DamageMobj
 	player->attacker = source;
 	player->damagecount += damage;	// add damage after armor / invuln
 
+    // [JN] Простейшее исправление бага 1%го урона
+    // https://doomwiki.org/wiki/1%25_damage_bug
+    if (player->damagecount < 2) 
+        player->damagecount = 2;
+
 	if (player->damagecount > 100)
 	    player->damagecount = 100;	// teleport stomp does 10k points...
 	
