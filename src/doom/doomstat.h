@@ -95,6 +95,11 @@ extern skill_t gameskill;
 extern int gameepisode;
 extern int gamemap;
 
+// [JN] Необходимо для сохранения переменной в сохраненных играх
+// и предотвращения "двойного подъема" эффекта сектора 667.
+// Thanks Jeff Doggett!
+extern boolean flag667;
+
 // If non-zero, exit the level after this number of minutes
 extern int timelimit;
 
