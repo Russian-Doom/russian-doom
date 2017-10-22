@@ -398,6 +398,7 @@ cheatseq_t cheat_mus = CHEAT("idmus", 2);
 cheatseq_t cheat_god = CHEAT("iddqd", 0);
 cheatseq_t cheat_ammo = CHEAT("idkfa", 0);
 cheatseq_t cheat_ammonokey = CHEAT("idfa", 0);
+cheatseq_t cheat_keys = CHEAT("idka", 0);
 cheatseq_t cheat_noclip = CHEAT("idspispopd", 0);
 cheatseq_t cheat_commercial_noclip = CHEAT("idclip", 0);
 
@@ -598,6 +599,15 @@ boolean ST_Responder (event_t* ev)
                     plyr->cards[i] = true;
 
                 plyr->message = DEH_String(STSTR_KFAADDED);
+            }
+
+            // [JN] 'ka' чит для выдачи ключей
+            else if (cht_CheckCheat(&cheat_keys, ev->data2))
+            {
+                for (i=0;i<NUMCARDS;i++)
+                    plyr->cards[i] = true;
+
+                plyr->message = DEH_String(STSTR_KAADDED);
             }
 
             // [crispy] implement Boom's "tntem" cheat

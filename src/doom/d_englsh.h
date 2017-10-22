@@ -438,6 +438,7 @@
 
 #define STSTR_KFAADDED  ",jtpfgfc gjgjkyty"                         // Боезапас пополнен
 #define STSTR_FAADDED   ",jtpfgfc gjgjkyty (,tp rk.xtq)"            // Боезапас пополнен (без ключей)
+#define STSTR_KAADDED   "rk.xb gjkextys"                            // Ключи получены
 
 #define STSTR_NCON      "ghj[j;ltybt xthtp cntys frnbdbhjdfyj"      // Прохождение через стены активировано
 #define STSTR_NCOFF     "ghj[j;ltybt xthtp cntys ltfrnbdbhjdfyj"    // Прохождение через стены дереактивировано

@@ -289,6 +289,7 @@ static const bex_string_t bex_stringtable[] = {
     {"STSTR_DQDOFF", STSTR_DQDOFF},
     {"STSTR_KFAADDED", STSTR_KFAADDED},
     {"STSTR_FAADDED", STSTR_FAADDED},
+    {"STSTR_KAADDED", STSTR_KAADDED},
     {"STSTR_NCON", STSTR_NCON},
     {"STSTR_NCOFF", STSTR_NCOFF},
     {"STSTR_BEHOLD", STSTR_BEHOLD},
