@@ -1843,6 +1843,7 @@ G_DeferedInitNew
     d_episode = episode; 
     d_map = map; 
     gameaction = ga_newgame; 
+    flag667 = false;
 } 
 
 
@@ -1862,6 +1863,7 @@ void G_DoNewGame (void)
     consoleplayer = 0;
     G_InitNew (d_skill, d_episode, d_map); 
     gameaction = ga_nothing; 
+    flag667 = false;
 } 
 
 
