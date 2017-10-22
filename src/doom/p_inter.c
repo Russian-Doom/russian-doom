@@ -936,7 +936,7 @@ P_DamageMobj
 
     // [JN] Простейшее исправление бага 1%го урона
     // https://doomwiki.org/wiki/1%25_damage_bug
-    if (player->damagecount < 2) 
+    if ((damage > 0) && (player->damagecount < 2)) 
         player->damagecount = 2;
 
 	if (player->damagecount > 100)
