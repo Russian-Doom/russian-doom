@@ -324,6 +324,7 @@ void D_SetGameDescription(void)
     4 Level Demo Version
     Press any key to continue.
 */
+    int newpwadfile;
 
     if (gamemode == shareware)
     {
@@ -343,7 +344,6 @@ void D_SetGameDescription(void)
     // Необходимо для того, чтобы любые ресурсы из pwad-файлов
     // загружались после руссифицированных pwad-файлов.
 
-    int newpwadfile;
     newpwadfile = M_CheckParmWithArgs ("-file", 1);
     if (newpwadfile)
     {
@@ -368,6 +368,7 @@ void D_DoomMain(void)
 {
     GameMission_t gamemission;
     int p;
+    int dd;
 
     I_AtExit(D_HexenQuitMessage, false);
     startepisode = 1;
@@ -565,8 +566,7 @@ void D_DoomMain(void)
 	// На данном этапе только указываем заголовок,
 	// непосредственная подгрузка russian-hexen-dd.wad
 	// происходит в W_ParseCommandLine (w_main.c @ 190).
-	
-    int dd;
+
     dd = M_CheckParmWithArgs ("-file", 1);
 
     if (dd)

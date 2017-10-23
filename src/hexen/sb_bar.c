@@ -40,8 +40,6 @@ typedef struct Cheat_s
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
-extern int lcd_gamma_fix;
-
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
 
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------

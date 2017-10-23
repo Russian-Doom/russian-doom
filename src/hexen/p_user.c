@@ -29,8 +29,6 @@ void P_PlayerNextArtifact(player_t * player);
 
 // Data
 
-extern int lcd_gamma_fix;
-
 boolean onground;
 int newtorch;                   // used in the torch flicker effect.
 int newtorchdelta;

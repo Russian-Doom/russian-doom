@@ -43,7 +43,6 @@ extern void A_UnHideThing(mobj_t * actor);
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 extern fixed_t FloatBobOffsets[64];
-extern int lcd_gamma_fix;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 

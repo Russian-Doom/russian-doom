@@ -51,8 +51,6 @@ static char *GetFinaleText(int sequence);
 extern boolean automapactive;
 extern boolean viewactive;
 
-extern int lcd_gamma_fix;
-
 // PUBLIC DATA DECLARATIONS ------------------------------------------------
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
