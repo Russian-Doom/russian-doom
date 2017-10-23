@@ -1240,14 +1240,12 @@ static void SetVideoMode(void)
     CreateUpscaledTexture(true);
 }
 
-/*
+
 static const char *hw_emu_warning = 
-"===========================================================================\n"
-"WARNING: it looks like you are using a software GL implementation.\n"
-"To improve performance, try setting force_software_renderer in your\n"
-"configuration file.\n"
-"===========================================================================\n";
-*/
+"==============================================================================\n"
+"ВНИМАНИЕ: В вашей системе используется программная эмуляция аппратного\n"
+"ускорения, это может отрицательно сказаться на графической производительности.\n" 
+"==============================================================================\n";
 
 static void CheckGLVersion(void)
 {
@@ -1259,12 +1257,10 @@ static void CheckGLVersion(void)
     {
         version = (const char *)glfp(GL_VERSION);
 
-        /*
         if (version && strstr(version, "Mesa"))
         {
             printf("%s", hw_emu_warning);
         }
-        */
     }
 }
 
