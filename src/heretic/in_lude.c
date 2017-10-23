@@ -610,8 +610,8 @@ void IN_DrawOldLevel(void)
     int i;
     int x;
 	
-	boolean secret;
-	secret = false;
+	// boolean secret;
+	// secret = false;
 
     x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] +
                             7) / 2;
@@ -811,7 +811,7 @@ void IN_DrawSingleStats(void)
     int x;
     static int sounds;
 	
-	int lastlevel = -1, lastepisode = -1;
+	// int lastlevel = -1, lastepisode = -1;
 
     IN_DrTextB(DEH_String("DHFUB"), 50, 65);    // ВРАГИ
     IN_DrTextB(DEH_String("GHTLVTNS"), 50, 90); // ПРЕДМЕТЫ
