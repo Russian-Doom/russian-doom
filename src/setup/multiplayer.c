@@ -955,11 +955,17 @@ static void QueryResponseCallback(net_addr_t *addr,
 {
     TXT_CAST_ARG(txt_table_t, results_table);
     char ping_time_str[16];
-    char description[47];
+    char description[128];
 
     M_snprintf(ping_time_str, sizeof(ping_time_str), "%ims", ping_time);
-    M_StringCopy(description, querydata->description,
-                 sizeof(description));
+
+    // Build description from server name field. Because there is limited
+    // space, we only include the player count if there are already players
+    // connected to the server.
+    M_snprintf(description, sizeof(description), "(%d/%d) ",
+                querydata->num_players, querydata->max_players);
+
+    M_StringConcat(description, querydata->description, sizeof(description));
 
     TXT_AddWidgets(results_table,
                    TXT_NewLabel(ping_time_str),
