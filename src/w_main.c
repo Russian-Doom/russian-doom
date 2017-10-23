@@ -199,8 +199,6 @@ boolean W_ParseCommandLine(void)
 
             if (check != NULL)
             {
-                char *filename;
-                filename = D_TryFindWADByName("hexdd.wad");
                 W_AddFile("russian/russian-hexen-dd.wad");
             }
         }
