@@ -3255,7 +3255,7 @@ static void CopyFile(char *source_name, char *dest_name)
     const int BUFFER_CHUNK_SIZE = 0x10000;
 
     byte *buffer;
-    int file_length, file_remaining;
+    int /*file_length,*/ file_remaining;
     FILE *read_handle, *write_handle;
     int buf_count, read_count, write_count;
 
@@ -3264,7 +3264,7 @@ static void CopyFile(char *source_name, char *dest_name)
     {
         I_Error ("Couldn't read file %s", source_name);
     }
-    file_length = file_remaining = M_FileLength(read_handle);
+    /*file_length = */file_remaining = M_FileLength(read_handle);
 
     // Vanilla savegame emulation.
     //
