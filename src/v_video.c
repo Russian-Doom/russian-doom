@@ -606,8 +606,13 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
     desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
     
     if (draw_shadowed_text && !vanillaparm)
-    desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 1;
-
+    {
+        desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 1;
+    }
+    else
+    {
+        desttop2 = NULL;
+    }
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop++, desttop2++)
@@ -615,49 +620,54 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
 
         // step through the posts in a column
-
         while (column->topdelta != 0xff)
         {
-          for (f = 0; f <= hires; f++)
-          {
-            source = (byte *) column + 3;
-            dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
-
-            if (draw_shadowed_text && !vanillaparm) // [JN] Рисовать тень только при необходимости
-            dest2 = desttop2 + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
-
-            count = column->length;
-
-            while (count--)
+            for (f = 0; f <= hires; f++)
             {
-                if (hires)
+                source = (byte *) column + 3;
+                dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
+
+                if (draw_shadowed_text && !vanillaparm)
                 {
+                    dest2 = desttop2 + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
+                }
+                else 
+                {
+                    dest2 = NULL;
+                }
+
+                count = column->length;
+
+                while (count--)
+                {
+                    if (hires)
+                    {
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            *dest2 = tinttable[((*dest2) << 8)];
+                            dest2 += SCREENWIDTH;
+                        }
+                        *dest = *source;
+                        dest += SCREENWIDTH;
+                    }
+
                     if (draw_shadowed_text && !vanillaparm)
                     {
                         *dest2 = tinttable[((*dest2) << 8)];
                         dest2 += SCREENWIDTH;
                     }
-                    *dest = *source;
+                    *dest = *source++;
                     dest += SCREENWIDTH;
                 }
-                
-                if (draw_shadowed_text && !vanillaparm)
-                {
-                    *dest2 = tinttable[((*dest2) << 8)];
-                    dest2 += SCREENWIDTH;
-                }
-                *dest = *source++;
-                dest += SCREENWIDTH;
-
             }
-          }
+
             column = (column_t *) ((byte *) column + column->length + 4);
         }
     }
 }
 
 //
-// [JN] V_DrawShadowedPatchRaven - отдельная функция для Doom.
+// [JN] V_DrawShadowedPatchRaven - отдельная функция для Heretic и Hexen.
 // Размер отбрасываемой тени уменьшен до 1 пиксела.
 //
 
