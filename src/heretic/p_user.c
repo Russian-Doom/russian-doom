@@ -36,8 +36,6 @@ boolean onground;
 int newtorch;                   // used in the torch flicker effect.
 int newtorchdelta;
 
-extern int lcd_gamma_fix;
-
 boolean WeaponInShareware[] = {
     true,                       // Staff
     true,                       // Gold wand

@@ -38,8 +38,6 @@ int FontABaseLump;
 extern boolean automapactive;
 extern boolean viewactive;
 
-extern int lcd_gamma_fix;
-
 extern void D_StartTitle(void);
 
 /*

@@ -78,8 +78,6 @@ int ArtifactFlash;
 
 static int DisplayTicker = 0;
 
-extern int lcd_gamma_fix;
-
 // Private Data
 
 static int HealthMarker;

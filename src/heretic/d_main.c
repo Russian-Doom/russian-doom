@@ -824,6 +824,7 @@ void D_DoomMain(void)
     int p;
     char file[256];
     char demolumpname[9];
+    int newpwadfile;
 
     I_PrintBanner(PACKAGE_STRING);
 
@@ -1089,7 +1090,6 @@ void D_DoomMain(void)
     // Необходимо для того, чтобы любые ресурсы из pwad-файлов
     // загружались после руссифицированных pwad-файлов.
 
-    int newpwadfile;
     newpwadfile = M_CheckParmWithArgs ("-file", 1);
     if (newpwadfile)
     {

@@ -64,8 +64,6 @@
 #define SLOTTEXTLEN     16
 #define ASCII_CURSOR '['
 
-extern int lcd_gamma_fix;
-
 // Types
 
 typedef enum

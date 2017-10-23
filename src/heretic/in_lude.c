@@ -105,8 +105,6 @@ static char *KillersText[] = { "E", "<", "B", "Q", "W", "S", "" }; // "У", "Б"
 
 extern char *LevelNames[];
 
-extern int lcd_gamma_fix;
-
 typedef struct
 {
     int x;
