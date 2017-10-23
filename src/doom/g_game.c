@@ -1681,8 +1681,6 @@ void G_LoadGame (char* name)
 void G_DoLoadGame (void) 
 { 
     int savedleveltime;
-    // [crispy] make sure "fast" parameters are really only applied once
-    static boolean fast_applied;
 
     gameaction = ga_nothing; 
 
@@ -1703,14 +1701,6 @@ void G_DoLoadGame (void)
 
     savedleveltime = leveltime;
 
-    /*
-    if (ultranm)
-    {
-    fastparm = true;
-    fast_applied = true;
-    }
-    */
-    
     // load a base level 
     G_InitNew (gameskill, gameepisode, gamemap); 
  
