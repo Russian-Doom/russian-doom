@@ -1464,8 +1464,10 @@ void WI_checkForAccelerate(void)
 
             if (player->cmd.buttons & BT_USE)
             {
-            if (!player->usedown)
-                acceleratestage = 1;
+                if (!player->usedown)
+                {
+                    acceleratestage = 1;
+                }
                 player->usedown = true;
             }
             else

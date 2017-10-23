@@ -107,10 +107,14 @@ void R_InstallSpriteLump (int lump, unsigned frame, char rot, boolean flipped)
     {
     // the lump should be used for all rotations
     if (sprtemp[frame].rotate == false)
+    {
         I_Error ("R_InitSprites: фрейм %c спрайта %s имеет многократный блок rot=0", spritename, 'A'+frame);
+    }
 
 	if (sprtemp[frame].rotate == true)
+    {
 	    I_Error ("R_InitSprites: фрейм %c спрайта %s имеет фреймы поворота и блок rot=0", spritename, 'A'+frame);
+    }
 
     sprtemp[frame].rotate = false;
     for (r=0 ; r<16 ; r++) // [crispy] support 16 sprite rotations

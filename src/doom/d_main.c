@@ -933,6 +933,8 @@ void D_IdentifyVersion(void)
 
 void D_SetGameDescription(void)
 {
+    int newpwadfile;
+
     boolean is_freedoom = W_CheckNumForName("FREEDOOM") >= 0,
             is_freedm = W_CheckNumForName("FREEDM") >= 0;
 
@@ -1011,7 +1013,6 @@ void D_SetGameDescription(void)
     // загружались после руссифицированных pwad-файлов.
     // Функция "-merge" более не используется.
 
-    int newpwadfile;
     newpwadfile = M_CheckParmWithArgs ("-file", 1);
 
     if (newpwadfile)

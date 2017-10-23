@@ -1979,6 +1979,7 @@ void P_UnArchiveSpecials (void)
     strobe_t*       strobe;
     glow_t*         glow;
     fireflicker_t*  fireflicker;
+    button_t        button;
 	
     // read in saved thinkers
     while (1)
@@ -2068,7 +2069,6 @@ void P_UnArchiveSpecials (void)
 
       case tc_button:
         saveg_read_pad();
-        button_t button;
             saveg_read_button_t(&button);
         P_StartButton(button.line, button.where, button.btexture, button.btimer);
         break;

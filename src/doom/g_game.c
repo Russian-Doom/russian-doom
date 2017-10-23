@@ -1423,11 +1423,14 @@ void G_ExitLevel (void)
 void G_SecretExitLevel (void) 
 {
     // IF NO WOLF3D LEVELS, NO SECRET EXIT!
-    if ( (gamemode == commercial)
-    && (W_CheckNumForName("map31")<0))
+    if ((gamemode == commercial) && (W_CheckNumForName("map31")<0))
+    {
         secretexit = false;
+    }
     else
-        secretexit = true; 
+    {
+        secretexit = true;
+    }
         gameaction = ga_completed; 
 } 
  
