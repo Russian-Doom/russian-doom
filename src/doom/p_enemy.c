@@ -266,7 +266,6 @@ boolean P_Move (mobj_t*	actor)
     fixed_t	tryy;
     
     line_t*	ld;
-    line_t*	blockline;
     
     // warning: 'catch', 'throw', and 'try'
     // are all C++ reserved words
@@ -329,8 +328,6 @@ boolean P_Move (mobj_t*	actor)
     {
         for (good = false; numspechit--;)
             if (P_UseSpecialLine(actor, spechit[numspechit], 0))
-            good |= (spechit[numspechit] == blockline ? 1 : 2);
-
         return (good && ((M_Random() >= 230) ^ (good & 1)));
     }
     
