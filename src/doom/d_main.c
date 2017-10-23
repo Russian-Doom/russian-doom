@@ -78,6 +78,10 @@
 
 #include "d_main.h"
 
+// [JN] Сделана глобальной, нужна для функции автоподргузки 
+// блоков DEHACKED, а также в цикле D_DoomMain.
+int numiwadlumps; 
+
 extern int lcd_gamma_fix;
 
 //
@@ -1219,7 +1223,6 @@ void D_SetGameDescription(void)
     if (!M_ParmExists("-nodehlump") && !M_ParmExists("-nodeh"))
     {
         int i, loaded = 0;
-        int numiwadlumps;
 
         for (i = numiwadlumps; i < numlumps; ++i)
         {
@@ -1577,7 +1580,6 @@ void D_DoomMain (void)
     int     p;
     char    file[256];
     char    demolumpname[9];
-    int     numiwadlumps;
 
     I_AtExit(D_Endoom, false);
 
