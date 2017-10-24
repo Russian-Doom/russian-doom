@@ -369,6 +369,9 @@ void R_DrawFuzzColumn (void)
 { 
     int			count; 
     byte*		dest; 
+    byte*		dest2; 
+    byte*		dest3;
+    byte*		dest4;
     fixed_t		frac;
     fixed_t		fracstep;	 
 
@@ -396,6 +399,9 @@ void R_DrawFuzzColumn (void)
 #endif
     
     dest = ylookup[dc_yl] + columnofs[dc_x];
+    dest2 = ylookup[(dc_yl)] + columnofs[dc_x+1];
+    dest3 = ylookup[(dc_yl) + 1] + columnofs[dc_x];
+    dest4 = ylookup[(dc_yl) + 1] + columnofs[dc_x+1];
 
     // Looks familiar.
     fracstep = dc_iscale; 
@@ -410,13 +416,19 @@ void R_DrawFuzzColumn (void)
 	//  a pixel that is either one column
 	//  left or right of the current one.
 	// Add index from colormap to index.
-	*dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
+	*dest = colormaps[3*256+dest[fuzzoffset[fuzzpos]]]; 
+	*dest2 = colormaps[3*256+dest2[fuzzoffset[fuzzpos]]]; 
+    *dest3 = colormaps[3*256+dest[fuzzoffset[fuzzpos]]];
+    *dest4 = colormaps[3*256+dest2[fuzzoffset[fuzzpos]]];
 
 	// Clamp table lookup index.
 	if (++fuzzpos == FUZZTABLE) 
 	    fuzzpos = 0;
 	
 	dest += SCREENWIDTH;
+	dest2 += SCREENWIDTH;
+    dest3 += SCREENWIDTH;
+    dest4 += SCREENWIDTH;
 
 	frac += fracstep; 
     } while (count--); 
