@@ -326,8 +326,9 @@ boolean P_Move (mobj_t*	actor)
     // back out when they shouldn't, and creates secondary stickiness).
     if (singleplayer)
     {
-        // [JN] TODO: Решить что-нибудь - оставить фикс или нет?
         for (good = false; numspechit--;)
+            if (P_UseSpecialLine(actor, spechit[numspechit], 0))
+
         return (good && ((M_Random() >= 230) ^ (good & 1)));
     }
     
