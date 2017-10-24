@@ -452,11 +452,8 @@ void R_DrawFuzzColumnLow (void)
 	dc_yl = 1;
 
     // .. and high.
-    // [JN] viewheight изменен на viewwidth, что позволит 
-    // закрыть горизонтальную проредь между оружием и HUD.
-    // https://doomwiki.org/wiki/Partial_invisibility_effect#Vertical_cutoff
-    if (dc_yh == viewwidth-1) 
-	dc_yh = viewwidth - 2; 
+    // if (dc_yh == viewheight-1)
+	// dc_yh = viewheight - 1; 
 		 
     count = dc_yh - dc_yl; 
 
