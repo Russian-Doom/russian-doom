@@ -414,7 +414,7 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
     // [JN] Добавлен параметр "-monosfx". При его наличии:
     // true = отключение стерео-разброса
     // false = использование стандарного разброса S_STEREO_SWING
-    *sep = 128 - (FixedMul(((M_CheckParm("-monosfx") > 0) ? 0 : S_STEREO_SWING), finesine[angle]) >> FRACBITS);
+    *sep = 128 - (FixedMul(monosfx ? 0 : S_STEREO_SWING, finesine[angle]) >> FRACBITS);
 
     // volume calculation
     if (approx_dist < S_CLOSE_DIST)
