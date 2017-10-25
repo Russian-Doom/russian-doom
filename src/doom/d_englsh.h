@@ -450,7 +450,7 @@
 #define STSTR_BEHOLDX   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
 
 #define STSTR_MASSACRE  "dct vjycnhs eybxnj;tys"                    // Все монстры уничтожены
-#define STSTR_VERSION   "dthcbz 2>3"                                // Версия 2.3
+#define STSTR_VERSION   "dthcbz 2>3 (25>11>2017)"                   // Версия 2.3 (25.11.2017)
 
 //
 //	F_Finale.C
