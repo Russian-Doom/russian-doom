@@ -170,6 +170,7 @@ typedef enum
     SPR_POLG,
     SPR_POLM,
     SPR_RFOG,
+    SPR_CANA,
     NUMSPRITES
 
 } spritenum_t;
@@ -1164,6 +1165,10 @@ typedef enum
     S_RFOG8,
     S_RFOG9,
     S_RFOG10,
+    S_CANDLESTIK_ANIM,  // [JN] Анимированная свечка
+    S_CANDLESTIK_ANIM2, // 
+    S_CANDLESTIK_ANIM3, //
+    S_CANDLESTIK_ANIM4, // 
     NUMSTATES
 } statenum_t;
 
@@ -1328,6 +1333,7 @@ typedef enum {
     MT_GIBSMASTERMIND,
 	MT_BLOODFUZZ,
     MT_RFOG,
+    MT_ANIMCANDLE,
     NUMMOBJTYPES
 
 } mobjtype_t;

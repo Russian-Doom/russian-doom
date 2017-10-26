@@ -46,6 +46,9 @@ void P_SpawnMapThing (mapthing_t*	mthing);
 extern int colored_blood;           // [JN] Кровь разных цветов
 extern int red_resurrection_flash;  // [JN] Одиночный звук закрытия быстрой двери
 extern int agressive_lost_souls;    // [JN] Повышенная агрессивность Потерянных душ
+
+extern boolean animated_candle;     // [JN] Анимированная свечка
+
 //
 // P_SetMobjState
 // Returns true if the mobj is still present.
@@ -955,6 +958,12 @@ void P_SpawnMapThing (mapthing_t* mthing)
     else
 	z = ONFLOORZ;
     
+    // [JN] Активация анимированной свечки
+    if (animated_candle && i == MT_MISC49 && !vanillaparm && gamevariant == !freedoom)
+    {
+        i = MT_ANIMCANDLE;
+    }
+
     mobj = P_SpawnMobj (x,y,z, i);
     mobj->spawnpoint = *mthing;
 
