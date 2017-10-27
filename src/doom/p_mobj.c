@@ -1064,11 +1064,11 @@ P_SpawnBlood
     z += (P_SubRandom() << 10);
 
     // Какодемон
-    if (gamevariant == !freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
+    if (gamevariant != freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
     th = P_SpawnMobj (x,y,z, MT_BLOODBLUE);
 
     // Барон Ада или Рыцарь Ада
-    else if (gamevariant == !freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+    else if (gamevariant != freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
     th = P_SpawnMobj (x,y,z, MT_BLOODGREEN);
 
     // Все остальные монстры с красной кровью
@@ -1086,10 +1086,10 @@ P_SpawnBlood
 
     if (damage <= 12 && damage >= 9)
     {
-        if (gamevariant == !freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
+        if (gamevariant != freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
         P_SetMobjState (th,S_BLOODB2);
 
-        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+        else if (gamevariant != freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
         P_SetMobjState (th,S_BLOODG2);
 
         else
@@ -1097,10 +1097,10 @@ P_SpawnBlood
     }
     else if (damage < 9)
     {
-        if (gamevariant == !freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
+        if (gamevariant != freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
         P_SetMobjState (th,S_BLOODB3);
 
-        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+        else if (gamevariant != freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
         P_SetMobjState (th,S_BLOODG3);
 
         else

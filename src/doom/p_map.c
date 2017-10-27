@@ -1345,15 +1345,15 @@ boolean PIT_ChangeSector (mobj_t*	thing)
     if (thing->health <= 0)
     {
         // [JN] Синее мясцо
-        if (gamevariant == !freedoom && colored_blood && !vanillaparm && thing->type == MT_HEAD)
+        if (gamevariant != freedoom && colored_blood && !vanillaparm && thing->type == MT_HEAD)
         P_SetMobjState (thing, S_GIBSB);
 
         // [JN] Зеленое мясцо
-        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
+        else if (gamevariant != freedoom && colored_blood && !vanillaparm && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
         P_SetMobjState (thing, S_GIBSG);
 
         // [JN] Специальное мясцо для Паука-Предводителя
-        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && thing->type == MT_SPIDER)
+        else if (gamevariant != freedoom && colored_blood && !vanillaparm && thing->type == MT_SPIDER)
         P_SetMobjState (thing, S_GIBSM);
 
         // [JN] Не оставляют мясца
@@ -1404,11 +1404,11 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         return true;
     
         // [JN] Какодемон
-        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && thing->type == MT_HEAD)
+        else if (gamevariant != freedoom && colored_blood && !vanillaparm && thing->type == MT_HEAD)
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODBLUE);
 
         // [JN] Рыцарь Ада и Барон Ада
-        else if (gamevariant == !freedoom && colored_blood && !vanillaparm && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
+        else if (gamevariant != freedoom && colored_blood && !vanillaparm && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODGREEN);
 
         // [JN] Призрак
