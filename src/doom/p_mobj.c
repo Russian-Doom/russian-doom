@@ -47,7 +47,7 @@ extern int colored_blood;           // [JN] Кровь разных цветов
 extern int red_resurrection_flash;  // [JN] Одиночный звук закрытия быстрой двери
 extern int agressive_lost_souls;    // [JN] Повышенная агрессивность Потерянных душ
 
-extern boolean animated_candle;     // [JN] Анимированная свечка
+extern boolean animated_candles;    // [JN] Анимированные свечка и канделябр
 
 //
 // P_SetMobjState
@@ -958,10 +958,17 @@ void P_SpawnMapThing (mapthing_t* mthing)
     else
 	z = ONFLOORZ;
     
-    // [JN] Активация анимированной свечки
-    if (animated_candle && i == MT_MISC49 && !vanillaparm && gamevariant == !freedoom)
+    // [JN] Активация анимированной свечки и канделабра
+    if (animated_candles && !vanillaparm && gamevariant != freedoom)
     {
-        i = MT_ANIMCANDLE;
+        if (i == MT_MISC49)
+        {
+            i = MT_ANIMCANDLE;
+        }
+        if (i == MT_MISC50)
+        {
+            i = MT_ANIMCANDELABRA;
+        }
     }
 
     mobj = P_SpawnMobj (x,y,z, i);
