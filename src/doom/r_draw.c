@@ -372,11 +372,9 @@ void R_DrawFuzzColumn (void)
 { 
     int     count; 
     byte*   dest; 
-    byte*   dest2; 
-    byte*   dest3;
-    byte*   dest4;
     fixed_t frac;
     fixed_t fracstep;	 
+    boolean cutoff = false;
 
     // Adjust borders. Low... 
     if (!dc_yl) 
@@ -384,7 +382,10 @@ void R_DrawFuzzColumn (void)
 
     // .. and high.
     if (dc_yh == viewheight-1) 
+    {
     dc_yh = viewheight - 2; 
+    cutoff = true;
+    }
 
     count = dc_yh - dc_yl; 
 
@@ -399,12 +400,7 @@ void R_DrawFuzzColumn (void)
     }
 #endif
 
-    // [JN] Добавлены dest2, dest3 и dest4. Необходимо для исправления бага:
-    // https://doomwiki.org/wiki/Partial_invisibility_effect#Vertical_cutoff
     dest  = ylookup[dc_yl] + columnofs[dc_x];
-    dest2 = ylookup[(dc_yl)] + columnofs[dc_x+1];
-    dest3 = ylookup[(dc_yl) + 1] + columnofs[dc_x];
-    dest4 = ylookup[(dc_yl) + 1] + columnofs[dc_x+1];
 
     // Looks familiar.
     fracstep = dc_iscale; 
@@ -420,21 +416,22 @@ void R_DrawFuzzColumn (void)
         //  left or right of the current one.
         // Add index from colormap to index.
         *dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
-        *dest2 = colormaps[dest2[fuzzoffset[fuzzpos]]]; 
-        *dest3 = colormaps[6*256+dest[fuzzoffset[fuzzpos]]];
-        *dest4 = colormaps[dest2[fuzzoffset[fuzzpos]]];
 
         // Clamp table lookup index.
         if (++fuzzpos == FUZZTABLE) 
         fuzzpos = 0;
 
         dest += SCREENWIDTH;
-        dest2 += SCREENWIDTH;
-        dest3 += SCREENWIDTH;
-        dest4 += SCREENWIDTH;
 
         frac += fracstep; 
     } while (count--); 
+
+    // [crispy] if the line at the bottom had to be cut off,
+    // draw one extra line using only pixels of that line and the one above
+    if (cutoff)
+    {
+        *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+    }
 } 
 
 
@@ -449,16 +446,18 @@ void R_DrawFuzzColumnLow (void)
     fixed_t frac;
     fixed_t fracstep;	 
     int     x;
+    boolean cutoff = false;
 
     // Adjust borders. Low... 
     if (!dc_yl) 
     dc_yl = 1;
 
     // .. and high.
-    // [JN] Закомментировано для исправления бага:
-    // https://doomwiki.org/wiki/Partial_invisibility_effect#Vertical_cutoff
-    // if (dc_yh == viewheight-1)
-    // dc_yh = viewheight - 2; 
+    if (dc_yh == viewheight-1)
+    {
+    dc_yh = viewheight - 2; 
+    cutoff = true;
+    }
 
     count = dc_yh - dc_yl; 
 
@@ -513,6 +512,19 @@ void R_DrawFuzzColumnLow (void)
 
         frac += fracstep; 
     } while (count--); 
+
+    // [crispy] if the line at the bottom had to be cut off,
+    // draw one extra line using only pixels of that line and the one above
+    if (cutoff)
+    {
+        *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        *dest2 = colormaps[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (hires)
+        {
+            *dest3 = *dest;
+            *dest4 = *dest2;
+        }
+    }
 } 
 
 
