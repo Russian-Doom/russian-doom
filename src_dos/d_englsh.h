@@ -206,7 +206,7 @@
 #define HUSTR_E3M4  "t3v4: ljv ,jkb"                            // E3M4: Дом боли
 #define HUSTR_E3M5  "t3v5: ytxtcnbdsq cj,jh"                    // E3M5: Нечестивый собор
 #define HUSTR_E3M6  "t3v6: ujhf 'ht,"                           // E3M6: Гора Эреб
-#define HUSTR_E3M7  "t3v7: kbv,"                                // E3M7: Лимб
+#define HUSTR_E3M7  "t3v7: dhfnf d kbv,"                        // E3M7: Врата в Лимб
 #define HUSTR_E3M8  "t3v8: lbn"                                 // E3M8: Дит
 #define HUSTR_E3M9  "t3v9: rhjkbxbq cfl"                        // E3M9: Кроличий сад
 
