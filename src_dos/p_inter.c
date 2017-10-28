@@ -715,6 +715,10 @@ P_KillMobj
 			
 	target->flags &= ~MF_SOLID;
 	target->player->playerstate = PST_DEAD;
+    // [JN] & [crispy] Remove yellow palette on dead player 
+    target->player->bonuscount = 0;
+    // [JN] & [crispy] Remove inverted white palette on dead player
+    target->player->fixedcolormap = target->player->powers[pw_infrared] ? 1 : 0;
 	P_DropWeapon (target->player);
 
 	if (target->player == &players[consoleplayer]
