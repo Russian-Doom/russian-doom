@@ -113,7 +113,8 @@ animdef_t       animdefs[] =
     {true,  "BLODRIP4", "BLODRIP1", 8},
     {true,  "FIREWALL", "FIREWALA", 8},
     {true,  "GSTFONT3", "GSTFONT1", 8},
-    {true,  "FIRELAVA", "FIRELAV3", 8},
+    // [JN] Restored animation sequence for FIRELAVA
+    {true,  "FIRELAVA", "FIRELAV2", 8}, 
     {true,  "FIREMAG3", "FIREMAG1", 8},
     {true,  "FIREBLU2", "FIREBLU1", 8},
     {true,  "ROCKRED3", "ROCKRED1", 8},
