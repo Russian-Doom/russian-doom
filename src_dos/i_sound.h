@@ -26,6 +26,8 @@
 #define SND_MAXSONGS    40      // max number of songs in game
 #define SND_SAMPLERATE  11025   // sample rate of sound effects
 
+boolean monosfx; // [JN] Mono-speaker emulation
+
 typedef enum
 {
     snd_none,

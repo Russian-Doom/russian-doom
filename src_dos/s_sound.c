@@ -79,6 +79,7 @@ extern int snd_DesiredSfxDevice;
 
 
 
+
 typedef struct
 {
     // sound information (if null, channel avail.)
@@ -325,7 +326,14 @@ S_AdjustSoundParams
     angle >>= ANGLETOFINESHIFT;
 
     // stereo separation
-    *sep = 128 - (FixedMul(S_STEREO_SWING,finesine[angle])>>FRACBITS);
+    if (monosfx)
+    {
+        *sep = 128;
+    }
+    else
+    {
+        *sep = 128 - (FixedMul(S_STEREO_SWING,finesine[angle])>>FRACBITS);
+    }
 
     // volume calculation
     if (approx_dist < S_CLOSE_DIST)
