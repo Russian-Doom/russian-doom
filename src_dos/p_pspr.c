@@ -41,6 +41,8 @@
 #define WEAPONBOTTOM	128*FRACUNIT
 #define WEAPONTOP		32*FRACUNIT
 
+boolean chainsaw_attack_swing;
+
 
 // plasma cells for a bfg attack
 #define BFGCELLS		40		
@@ -619,6 +621,9 @@ A_Saw
     // use meleerange + 1 se the puff doesn't skip the flash
     slope = P_AimLineAttack (player->mo, angle, MELEERANGE+1);
     P_LineAttack (player->mo, angle, MELEERANGE+1, slope, damage);
+    
+    // [JN] Common (clean) attack
+    chainsaw_attack_swing = false;
 
     if (!linetarget)
     {
@@ -651,6 +656,9 @@ A_Saw
 	    player->mo->angle += ANG90/20;
     }
     player->mo->flags |= MF_JUSTATTACKED;
+    
+    // [JN] Sawing enemy
+    chainsaw_attack_swing = true;
 }
 
 
