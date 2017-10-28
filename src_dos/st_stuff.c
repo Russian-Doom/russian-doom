@@ -317,7 +317,8 @@ static patch_t*		tallpercent;
 static patch_t*		shortnum[10];
 
 // 3 key-cards, 3 skulls
-static patch_t*		keys[NUMCARDS]; 
+// jff 2/24/98 extend number of patches by three skull/card combos
+static patch_t*		keys[NUMCARDS+3]; 
 
 // face status patches
 // [JN] Doubled array for GOD mode faces
@@ -1040,9 +1041,11 @@ void ST_updateWidgets(void)
     for (i=0;i<3;i++)
     {
 	keyboxes[i] = plyr->cards[i] ? i : -1;
+    
+    //jff 2/24/98 select double key
 
 	if (plyr->cards[i+3])
-	    keyboxes[i] = i+3;
+	    keyboxes[i] = (keyboxes[i]==-1) ? i+3 : i+6;
     }
 
     // refresh everything if this is him coming back to life
@@ -1240,7 +1243,7 @@ void ST_loadGraphics(void)
     tallpercent = (patch_t *) W_CacheLumpName("STTPRCNT", PU_STATIC);
 
     // key cards
-    for (i=0;i<NUMCARDS;i++)
+    for (i=0;i<NUMCARDS+3;i++)  //jff 2/23/98 show both keys too
     {
 	sprintf(namebuf, "STKEYS%d", i);
 	keys[i] = (patch_t *) W_CacheLumpName(namebuf, PU_STATIC);
