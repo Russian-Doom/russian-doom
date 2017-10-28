@@ -48,7 +48,7 @@ char *sprnames[] = {
     "COL3","COL4","CAND","CBRA","COL6","TRE1","TRE2","ELEC","CEYE","FSKU",
     "COL5","TBLU","TGRN","TRED","SMBT","SMGT","SMRT","HDB1","HDB2","HDB3",
     "HDB4","HDB5","HDB6","POB1","POB2","BRS1","TLMP","TLP2","BLUB","BLUG",
-    "POLB","POLG","POLM","RFOG","CANA","CBAA",
+    "POLB","POLG","POLM","RFOG",
     NULL
 };
 
@@ -1132,14 +1132,6 @@ state_t	states[NUMSTATES] = {
     {SPR_RFOG,32775,6,{NULL},S_RFOG9,0,0},  // S_КFOG8
     {SPR_RFOG,32776,6,{NULL},S_RFOG10,0,0}, // S_КFOG9
     {SPR_RFOG,32777,6,{NULL},S_NULL,0,0},   // S_КFOG10
-    {SPR_CANA,32768,4,{NULL},S_CANDLESTIK_ANIM2,0,0},   // S_CANDLESTIK_ANIM
-    {SPR_CANA,32769,4,{NULL},S_CANDLESTIK_ANIM3,0,0},   // S_CANDLESTIK_ANIM2
-    {SPR_CANA,32770,4,{NULL},S_CANDLESTIK_ANIM4,0,0},   // S_CANDLESTIK_ANIM3
-    {SPR_CANA,32771,4,{NULL},S_CANDLESTIK_ANIM,0,0},    // S_CANDLESTIK_ANIM4
-    {SPR_CBAA,32768,4,{NULL},S_CANDELABRA_ANIM2,0,0},   // S_CANDELABRA_ANIM
-    {SPR_CBAA,32769,4,{NULL},S_CANDELABRA_ANIM3,0,0},   // S_CANDELABRA_ANIM2
-    {SPR_CBAA,32770,4,{NULL},S_CANDELABRA_ANIM4,0,0},   // S_CANDELABRA_ANIM3
-    {SPR_CBAA,32771,4,{NULL},S_CANDELABRA_ANIM,0,0},    // S_CANDELABRA_ANIM4
 };
 
 
@@ -4887,58 +4879,6 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
 	sfx_None,       // activesound
 	MF_NOBLOCKMAP|MF_NOGRAVITY, // flags
 	S_NULL          // raisestate
-    },
-
-    {                   // MT_ANIMCANDLE
-    90,                 // doomednum
-    S_CANDLESTIK_ANIM,  // spawnstate
-    1000,               // spawnhealth
-    S_NULL,             // seestate
-    sfx_None,           // seesound
-    8,                  // reactiontime
-    sfx_None,           // attacksound
-    S_NULL,             // painstate
-    0,                  // painchance
-    sfx_None,           // painsound
-    S_NULL,             // meleestate
-    S_NULL,             // missilestate
-    S_NULL,             // deathstate
-    S_NULL,             // xdeathstate
-    sfx_None,           // deathsound
-    0,                  // speed
-    20*FRACUNIT,        // radius
-    16*FRACUNIT,        // height
-    100,                // mass
-    0,                  // damage
-    sfx_None,           // activesound
-    0,                  // flags
-    S_NULL              // raisestate
-    },
-
-    {                   // MT_ANIMCANDELABRA
-	35,                 // doomednum
-	S_CANDELABRA_ANIM,  // spawnstate
-	1000,               // spawnhealth
-	S_NULL,             // seestate
-	sfx_None,           // seesound
-	8,                  // reactiontime
-	sfx_None,           // attacksound
-	S_NULL,             // painstate
-	0,                  // painchance
-	sfx_None,           // painsound
-	S_NULL,             // meleestate
-	S_NULL,             // missilestate
-	S_NULL,             // deathstate
-	S_NULL,             // xdeathstate
-	sfx_None,           // deathsound
-	0,                  // speed
-	16*FRACUNIT,        // radius
-	16*FRACUNIT,        // height
-	100,                // mass
-	0,                  // damage
-	sfx_None,           // activesound
-	MF_SOLID,           // flags
-	S_NULL              // raisestate
     },
 };
 

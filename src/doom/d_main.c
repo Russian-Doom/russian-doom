@@ -124,9 +124,6 @@ boolean storedemo;
 // If true, the main game loop has started.
 boolean main_loop_started = false;
 
-// [JN] Анимированные свечка и канделябр
-boolean animated_candles = true;
-
 char wadfile[1024];  // primary wad file
 char mapdir[1024];   // directory of development maps
 
@@ -1217,13 +1214,6 @@ void D_SetGameDescription(void)
                 }
             }
         }
-
-        // [JN] Отключение анимации свечки
-        // TODO: сделать нормальную проверку на наличие спрайтов в pwad
-        if (M_CheckParm("-file") > 0)
-		{
-			animated_candles = false;
-		}
     }
 
     // Автоматическая загрузка блока DEHACKED
