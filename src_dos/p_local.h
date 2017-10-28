@@ -157,7 +157,7 @@ typedef struct
     }			d;
 } intercept_t;
 
-#define MAXINTERCEPTS	128
+#define MAXINTERCEPTS	128*16  // [JN] multiplied by 16
 
 extern intercept_t	intercepts[MAXINTERCEPTS];
 extern intercept_t*	intercept_p;
