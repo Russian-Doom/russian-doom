@@ -607,7 +607,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
     
     if (draw_shadowed_text && !vanillaparm)
     {
-        desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 1;
+        desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 2;
     }
     else
     {
@@ -694,7 +694,7 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
 
     col = 0;
     desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
-    desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 1;
+    desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 2;
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop++, desttop2++)
