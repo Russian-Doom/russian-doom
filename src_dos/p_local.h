@@ -49,11 +49,6 @@
 // but we do not have any moving sectors nearby
 #define MAXRADIUS		32*FRACUNIT
 
-// [JN] Additional radius for fixing bug:
-// https://doomwiki.org/wiki/Spider_paralysis
-// Used for singleplayer only, not safe for internal demos.
-#define MAXRADIUSEXT    128*FRACUNIT
-
 #define GRAVITY		FRACUNIT
 #define MAXMOVE		(30*FRACUNIT)
 
