@@ -37,6 +37,9 @@
 // Random sound pitch
 boolean         soundpitch;
 
+// [JN] Mono-speaker emulation
+boolean         monosfx;
+
 //
 // I_StartupTimer
 //

@@ -77,7 +77,8 @@ extern int snd_SfxDevice;
 extern int snd_DesiredMusicDevice;
 extern int snd_DesiredSfxDevice;
 
-
+// [JN] Mono-speaker emulation
+extern int monosfx;
 
 
 typedef struct
