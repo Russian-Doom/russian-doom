@@ -968,6 +968,7 @@ void G_Ticker (void)
             {
                 players[consoleplayer].message = DEH_String("crhbyijn cj[hfyty"); // Скриншот сохранен
             }
+            S_StartSound(NULL,sfx_tink); // [JN] "Тик!"
             gameaction = ga_nothing;
             break;
 
