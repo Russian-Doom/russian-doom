@@ -128,7 +128,7 @@ char wadfile[1024];  // primary wad file
 char mapdir[1024];   // directory of development maps
 
 
-int show_endoom   = 1;
+int show_endoom   = 0;
 int show_diskicon = 1;
 int lcd_gamma_fix = 1; // [JN] Оптимизация палитры Doom
 int translucency  = 1; // [JN] Прозрачность объектов

@@ -85,7 +85,7 @@ boolean advancedemo;
 
 FILE *debugfile;
 
-static int show_endoom = 1;
+static int show_endoom = 0;
 
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
