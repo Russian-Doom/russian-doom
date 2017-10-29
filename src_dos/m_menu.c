@@ -97,7 +97,10 @@ int			messy;
 int			messageLastMenuActive;
 
 // timed message = no input from user
-boolean			messageNeedsInput;     
+boolean			messageNeedsInput;  
+
+// [JN] Additional title "›‘’… ‘•€…ˆ…"
+boolean QuickSaveTitle;   
 
 void    (*messageRoutine)(int response);
 
@@ -678,9 +681,19 @@ void M_DrawSave(void)
 {
     int             i;
 
-    // [JN] Used different title-patch: "‘•€ˆ’œ ˆƒ“"
-    V_DrawShadowDirect (58,14,0,W_CacheLumpName("M_SGTTL",PU_CACHE));
-    V_DrawPatchDirect (57,13,0,W_CacheLumpName("M_SGTTL",PU_CACHE));
+    if (QuickSaveTitle)
+    {
+        // [JN] Using title: "›‘’… ‘•€…ˆ…"
+        V_DrawShadowDirect(58,14,0,W_CacheLumpName("M_QSGTTL",PU_CACHE));
+        V_DrawPatchDirect (57,13,0,W_CacheLumpName("M_QSGTTL",PU_CACHE));
+    }
+    else
+    {
+        // [JN] Using title: "‘•€ˆ’œ ˆƒ“"
+        V_DrawShadowDirect(58,14,0,W_CacheLumpName("M_SGTTL",PU_CACHE));
+        V_DrawPatchDirect (57,13,0,W_CacheLumpName("M_SGTTL",PU_CACHE));
+    }
+
     for (i = 0;i < load_end; i++)
     {
     if (!vanilla)
@@ -1656,6 +1669,7 @@ boolean M_Responder (event_t* ev)
 	    return true;
 				
 	  case KEY_F2:            // Save
+	    QuickSaveTitle = false;
 	    M_StartControlPanel();
 	    S_StartSound(NULL,sfx_swtchn);
 	    M_SaveGame(0);
@@ -1680,6 +1694,7 @@ boolean M_Responder (event_t* ev)
 	    return true;
 				
 	  case KEY_F6:            // Quicksave
+	    QuickSaveTitle = true;
 	    S_StartSound(NULL,sfx_swtchn);
 	    M_QuickSave();
 	    return true;
