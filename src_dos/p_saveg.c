@@ -329,6 +329,7 @@ enum
     tc_flash,
     tc_strobe,
     tc_glow,
+    tc_fireflicker,
     tc_endspecials
 
 } specials_e;	
@@ -356,6 +357,7 @@ void P_ArchiveSpecials (void)
     lightflash_t*	flash;
     strobe_t*		strobe;
     glow_t*		glow;
+    fireflicker_t*   fireflicker;
     int			i;
 	
     // save off the current thinkers
@@ -455,6 +457,17 @@ void P_ArchiveSpecials (void)
 	    glow->sector = (sector_t *)(glow->sector - sectors);
 	    continue;
 	}
+
+	if (th->function.acp1 == (actionf_p1)T_FireFlicker)
+	{
+	    *save_p++ = tc_fireflicker;
+	    PADSAVEP();
+	    fireflicker = (fireflicker_t *)save_p;
+	    memcpy (fireflicker, th, sizeof(*fireflicker));
+	    save_p += sizeof(*fireflicker);
+	    fireflicker->sector = (sector_t *)(fireflicker->sector - sectors);
+	    continue;
+	}
     }
 	
     // add a terminating marker
@@ -476,6 +489,7 @@ void P_UnArchiveSpecials (void)
     lightflash_t*	flash;
     strobe_t*		strobe;
     glow_t*		glow;
+    fireflicker_t*   fireflicker;
 	
 	
     // read in saved thinkers
@@ -567,6 +581,16 @@ void P_UnArchiveSpecials (void)
 	    glow->sector = &sectors[(int)glow->sector];
 	    glow->thinker.function.acp1 = (actionf_p1)T_Glow;
 	    P_AddThinker (&glow->thinker);
+	    break;
+        
+	  case tc_fireflicker:
+	    PADSAVEP();
+	    fireflicker = Z_Malloc (sizeof(*fireflicker), PU_LEVEL, NULL);
+	    memcpy (fireflicker, save_p, sizeof(*fireflicker));
+	    save_p += sizeof(*fireflicker);
+	    fireflicker->sector = &sectors[(int)fireflicker->sector];
+	    fireflicker->thinker.function.acp1 = (actionf_p1)T_FireFlicker;
+	    P_AddThinker (&fireflicker->thinker);
 	    break;
 				
 	  default:
