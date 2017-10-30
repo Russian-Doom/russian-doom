@@ -1158,7 +1158,7 @@ static void SetVideoMode(void)
         renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
     }
 
-    if (force_software_renderer)
+    else if (force_software_renderer)
     {
         renderer_flags |= SDL_RENDERER_SOFTWARE;
     }
