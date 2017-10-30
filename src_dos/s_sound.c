@@ -624,11 +624,11 @@ S_StartSoundAtVolume
         (sfx_id == sfx_vipain) ||
         (sfx_id == sfx_vildth) ||
         /* Spider Mastermind   */
-        (sfx_id == sfx_spisit) ||
+        // (sfx_id == sfx_spisit) ||
         /* Cyberdemon          */
-        (sfx_id == sfx_cybsit) ||
+        // (sfx_id == sfx_cybsit) ||
         /* John Romero         */
-        (sfx_id == sfx_bospn)  ||
+        // (sfx_id == sfx_bospn)  ||
         /* Wolfenstein SS      */
         (sfx_id == sfx_sssit)  ||
         (sfx_id == sfx_ssdth)   )
