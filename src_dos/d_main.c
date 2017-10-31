@@ -545,6 +545,14 @@ void D_DoAdvanceDemo (void)
         G_DeferedPlayDemo ("demo4");
         break;
     }
+
+    // The Doom 3: BFG Edition version of doom2.wad does not have a
+    // TITLETPIC lump. Use INTERPIC instead as a workaround.
+    if (!strcasecmp(pagename, "TITLEPIC") && W_CheckNumForName("titlepic") < 0)
+    {
+        // [crispy] use DMENUPIC instead of TITLEPIC, it's awesome
+        pagename = "DMENUPIC";
+    }
 }
 
 
