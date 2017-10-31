@@ -424,6 +424,21 @@ void P_LoadThings (int lump)
 	if (spawn == false)
 	    break;
 
+	// [crispy] minor fixes to prevent users from getting stuck in levels with mapping errors
+	if (singleplayer)
+	{
+	    // [crispy] spawn Former Human instead of Wolf SS in BFG Edition
+	    if (gamevariant == bfgedition && mt->type == 84)
+	    {
+	        mt->type = 3004;
+	    }
+	    // [crispy] TNT MAP31 has a yellow key that is erroneously marked as multi-player only
+	    if (gamemission == pack_tnt && gamemap == 31 && mt->type == 6)
+	    {
+	        mt->options &= ~16;
+	    }
+	}
+
 	// Do spawn all other stuff. 
 	spawnthing.x = SHORT(mt->x);
 	spawnthing.y = SHORT(mt->y);
