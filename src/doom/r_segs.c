@@ -794,12 +794,447 @@ void R_StoreWallRange (int start, int stop)
         else if (curline->v1->x == curline->v2->x)
         lightnum++;
 
-        if (lightnum < 0)		
-        walllights = scalelight[0];
+        if (lightnum < 0)
+        {
+            // [JN] Standard light table
+            walllights = scalelight[0];
+
+            // [JN] Applying brightmaps to walls...
+            if (!vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+            {
+                // Doom 1
+                if (gamemission == doom)
+                {
+                    if (segtextured == R_TextureNumForName("LITEBLU2"))
+                    {
+                        walllights = fullbright_notgray[0];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2STON2"))
+                    {
+                        walllights = fullbright_redonly[0];
+                    }
+                }
+
+                // Doom 2 only
+                if (gamemission == doom2 || gamemission == pack_tnt || gamemission == pack_plut)
+                {
+                    if (segtextured == R_TextureNumForName("SW1BRN1")
+                    || segtextured == R_TextureNumForName("SW1STARG")
+                    || segtextured == R_TextureNumForName("SW1STON2")
+                    || segtextured == R_TextureNumForName("SW2MARB"))
+                    {
+                        walllights = fullbright_redonly[0];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2STON2")
+                    || segtextured == R_TextureNumForName("SW2STARG"))
+                    {
+                        walllights = fullbright_greenonly1[0];
+                    }
+                }
+
+                // Doom 1 & 2
+                if (gamemission == doom || gamemission == doom2 || gamemission == pack_tnt || gamemission == pack_plut)
+                {
+                    if (segtextured == R_TextureNumForName("SW1BRCOM")
+                    || segtextured == R_TextureNumForName("SW1DIRT")
+                    || segtextured == R_TextureNumForName("SW1STRTN")
+                    || segtextured == R_TextureNumForName("SW2COMP")
+                    || segtextured == R_TextureNumForName("SW2PANEL")
+                    || segtextured == R_TextureNumForName("SW2SLAD")
+                    || segtextured == R_TextureNumForName("SW2WOOD")
+                    || segtextured == R_TextureNumForName("WOOD4")
+                    || segtextured == R_TextureNumForName("WOODSKUL")
+                    || segtextured == R_TextureNumForName("SLADSKUL")
+                    || segtextured == R_TextureNumForName("SW1BRIK")
+                    || segtextured == R_TextureNumForName("SW1COMM")
+                    || segtextured == R_TextureNumForName("SW1MET2")
+                    || segtextured == R_TextureNumForName("SW1STON1")
+                    || segtextured == R_TextureNumForName("SW1STONE")
+                    || segtextured == R_TextureNumForName("SW2BLUE")
+                    || segtextured == R_TextureNumForName("SW2GSTON")
+                    || segtextured == R_TextureNumForName("SW2ROCK")
+                    || segtextured == R_TextureNumForName("SW2STON6")
+                    || segtextured == R_TextureNumForName("SW2ZIM")
+                    || segtextured == R_TextureNumForName("WOODGARG"))
+                    {
+                        walllights = fullbright_redonly[0];
+                    }
+                    else if (segtextured == R_TextureNumForName("COMP2")
+                    || segtextured == R_TextureNumForName("COMPUTE2")
+                    || segtextured == R_TextureNumForName("SILVER3")
+                    || segtextured == R_TextureNumForName("COMPUTE1")
+                    || segtextured == R_TextureNumForName("COMPUTE3")
+                    || segtextured == R_TextureNumForName("SW2MOD1"))
+                    {
+                        walllights = fullbright_notgrayorbrown[0];
+                    }
+                    else if (segtextured == R_TextureNumForName("COMPSTA2")
+                    || segtextured == R_TextureNumForName("EXITSIGN")
+                    || segtextured == R_TextureNumForName("PLANET1")
+                    || segtextured == R_TextureNumForName("SW2EXIT")
+                    || segtextured == R_TextureNumForName("SW2GRAY1")
+                    || segtextured == R_TextureNumForName("COMPSTA1")
+                    || segtextured == R_TextureNumForName("EXITSTON")
+                    || segtextured == R_TextureNumForName("SILVER2")
+                    || segtextured == R_TextureNumForName("LITEBLU1")
+                    || segtextured == R_TextureNumForName("SW2GRAY"))
+                    {
+                        walllights = fullbright_notgray[0];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2BRN1")
+                    || segtextured == R_TextureNumForName("SW2STON1")
+                    || segtextured == R_TextureNumForName("SW2STONE")
+                    || segtextured == R_TextureNumForName("SW2TEK")
+                    || segtextured == R_TextureNumForName("SW2BRIK")
+                    || segtextured == R_TextureNumForName("SW2BRN2")
+                    || segtextured == R_TextureNumForName("SW2COMM")
+                    || segtextured == R_TextureNumForName("SW2DIRT")
+                    || segtextured == R_TextureNumForName("SW2MET2")
+                    || segtextured == R_TextureNumForName("SW2STRTN")
+                    || segtextured == R_TextureNumForName("SW2VINE")
+                    || segtextured == R_TextureNumForName("PIPEWAL1")
+                    || segtextured == R_TextureNumForName("TEKLITE2"))
+                    {
+                        walllights = fullbright_greenonly1[0];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2BRCOM")
+                    || segtextured == R_TextureNumForName("SW2BRNGN"))
+                    {
+                        walllights = fullbright_greenonly2[0];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2METAL"))
+                    {
+                        walllights = fullbright_greenonly3[0];
+                    }
+                }
+
+                // TNT - Evilution
+                if (gamemission == pack_tnt)
+                {
+                    if (segtextured == R_TextureNumForName("LITEYEL2")
+                    || segtextured == R_TextureNumForName("LITEYEL3")
+                    || segtextured == R_TextureNumForName("YELMETAL"))
+                    {
+                        walllights = fullbright_orangeyellow[0];
+                    }
+                    else if (segtextured == R_TextureNumForName("BTNTMETL")
+                    || segtextured == R_TextureNumForName("BTNTSLVR"))
+                    {
+                        walllights = fullbright_notgrayorbrown[0];
+                    }
+                    else if (segtextured == R_TextureNumForName("PNK4EXIT")
+                    || segtextured == R_TextureNumForName("LITERED2"))
+                    {
+                        walllights = fullbright_redonly[0];
+                    }
+                }
+
+                // Plutonia
+                if (gamemission == pack_plut)
+                {
+                    if (segtextured == R_TextureNumForName("SW2SKULL"))
+                    {
+                        walllights = fullbright_redonly[0];
+                    }
+                }
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+
         else if (lightnum >= LIGHTLEVELS)
-        walllights = scalelight[LIGHTLEVELS-1];
+        {
+            // [JN] Standard light table
+            walllights = scalelight[LIGHTLEVELS-1];
+
+            // [JN] Applying brightmaps to walls...
+            if (!vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+            {
+                // Doom 1
+                if (gamemission == doom)
+                {
+                    if (segtextured == R_TextureNumForName("LITEBLU2"))
+                    {
+                        walllights = fullbright_notgray[LIGHTLEVELS-1];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2STON2"))
+                    {
+                        walllights = fullbright_redonly[LIGHTLEVELS-1];
+                    }
+                }
+
+                // Doom 2 only
+                if (gamemission == doom2 || gamemission == pack_tnt || gamemission == pack_plut)
+                {
+                    if (segtextured == R_TextureNumForName("SW1BRN1")
+                    || segtextured == R_TextureNumForName("SW1STARG")
+                    || segtextured == R_TextureNumForName("SW1STON2")
+                    || segtextured == R_TextureNumForName("SW2MARB"))
+                    {
+                        walllights = fullbright_redonly[LIGHTLEVELS-1];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2STON2")
+                    || segtextured == R_TextureNumForName("SW2STARG"))
+                    {
+                        walllights = fullbright_greenonly1[LIGHTLEVELS-1];
+                    }
+                }
+
+                // Doom 1 & 2
+                if (gamemission == doom || gamemission == doom2 || gamemission == pack_tnt || gamemission == pack_plut)
+                {
+                    if (segtextured == R_TextureNumForName("SW1BRCOM")
+                    || segtextured == R_TextureNumForName("SW1DIRT")
+                    || segtextured == R_TextureNumForName("SW1STRTN")
+                    || segtextured == R_TextureNumForName("SW2COMP")
+                    || segtextured == R_TextureNumForName("SW2PANEL")
+                    || segtextured == R_TextureNumForName("SW2SLAD")
+                    || segtextured == R_TextureNumForName("SW2WOOD")
+                    || segtextured == R_TextureNumForName("WOOD4")
+                    || segtextured == R_TextureNumForName("WOODSKUL")
+                    || segtextured == R_TextureNumForName("SLADSKUL")
+                    || segtextured == R_TextureNumForName("SW1BRIK")
+                    || segtextured == R_TextureNumForName("SW1COMM")
+                    || segtextured == R_TextureNumForName("SW1MET2")
+                    || segtextured == R_TextureNumForName("SW1STON1")
+                    || segtextured == R_TextureNumForName("SW1STONE")
+                    || segtextured == R_TextureNumForName("SW2BLUE")
+                    || segtextured == R_TextureNumForName("SW2GSTON")
+                    || segtextured == R_TextureNumForName("SW2ROCK")
+                    || segtextured == R_TextureNumForName("SW2STON6")
+                    || segtextured == R_TextureNumForName("SW2ZIM")
+                    || segtextured == R_TextureNumForName("WOODGARG"))
+                    {
+                        walllights = fullbright_redonly[LIGHTLEVELS-1];
+                    }
+                    else if (segtextured == R_TextureNumForName("COMP2")
+                    || segtextured == R_TextureNumForName("COMPUTE2")
+                    || segtextured == R_TextureNumForName("SILVER3")
+                    || segtextured == R_TextureNumForName("COMPUTE1")
+                    || segtextured == R_TextureNumForName("COMPUTE3")
+                    || segtextured == R_TextureNumForName("SW2MOD1"))
+                    {
+                        walllights = fullbright_notgrayorbrown[LIGHTLEVELS-1];
+                    }
+                    else if (segtextured == R_TextureNumForName("COMPSTA2")
+                    || segtextured == R_TextureNumForName("EXITSIGN")
+                    || segtextured == R_TextureNumForName("PLANET1")
+                    || segtextured == R_TextureNumForName("SW2EXIT")
+                    || segtextured == R_TextureNumForName("SW2GRAY1")
+                    || segtextured == R_TextureNumForName("COMPSTA1")
+                    || segtextured == R_TextureNumForName("EXITSTON")
+                    || segtextured == R_TextureNumForName("SILVER2")
+                    || segtextured == R_TextureNumForName("LITEBLU1")
+                    || segtextured == R_TextureNumForName("SW2GRAY"))
+                    {
+                        walllights = fullbright_notgray[LIGHTLEVELS-1];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2BRN1")
+                    || segtextured == R_TextureNumForName("SW2STON1")
+                    || segtextured == R_TextureNumForName("SW2STONE")
+                    || segtextured == R_TextureNumForName("SW2TEK")
+                    || segtextured == R_TextureNumForName("SW2BRIK")
+                    || segtextured == R_TextureNumForName("SW2BRN2")
+                    || segtextured == R_TextureNumForName("SW2COMM")
+                    || segtextured == R_TextureNumForName("SW2DIRT")
+                    || segtextured == R_TextureNumForName("SW2MET2")
+                    || segtextured == R_TextureNumForName("SW2STRTN")
+                    || segtextured == R_TextureNumForName("SW2VINE")
+                    || segtextured == R_TextureNumForName("PIPEWAL1")
+                    || segtextured == R_TextureNumForName("TEKLITE2"))
+                    {
+                        walllights = fullbright_greenonly1[LIGHTLEVELS-1];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2BRCOM")
+                    || segtextured == R_TextureNumForName("SW2BRNGN"))
+                    {
+                        walllights = fullbright_greenonly2[LIGHTLEVELS-1];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2METAL"))
+                    {
+                        walllights = fullbright_greenonly3[LIGHTLEVELS-1];
+                    }
+                }
+
+                // TNT - Evilution
+                if (gamemission == pack_tnt)
+                {
+                    if (segtextured == R_TextureNumForName("LITEYEL2")
+                    || segtextured == R_TextureNumForName("LITEYEL3")
+                    || segtextured == R_TextureNumForName("YELMETAL"))
+                    {
+                        walllights = fullbright_orangeyellow[LIGHTLEVELS-1];
+                    }
+                    else if (segtextured == R_TextureNumForName("BTNTMETL")
+                    || segtextured == R_TextureNumForName("BTNTSLVR"))
+                    {
+                        walllights = fullbright_notgrayorbrown[LIGHTLEVELS-1];
+                    }
+                    else if (segtextured == R_TextureNumForName("PNK4EXIT")
+                    || segtextured == R_TextureNumForName("LITERED2"))
+                    {
+                        walllights = fullbright_redonly[LIGHTLEVELS-1];
+                    }
+                }
+
+                // Plutonia
+                if (gamemission == pack_plut)
+                {
+                    if (segtextured == R_TextureNumForName("SW2SKULL"))
+                    {
+                        walllights = fullbright_redonly[LIGHTLEVELS-1];
+                    }
+                }
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+
         else
-        walllights = scalelight[lightnum];
+        {
+            // [JN] Standard light table
+            walllights = scalelight[lightnum];
+
+            // [JN] Applying brightmaps to walls...
+            if (!vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+            {
+                // Doom 1 only
+                if (gamemission == doom)
+                {
+                    if (segtextured == R_TextureNumForName("LITEBLU2"))
+                    {
+                        walllights = fullbright_notgray[lightnum];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2STON2"))
+                    {
+                        walllights = fullbright_redonly[lightnum];
+                    }
+                }
+
+                // Doom 2 only
+                if (gamemission == doom2 || gamemission == pack_tnt || gamemission == pack_plut)
+                {
+                    if (segtextured == R_TextureNumForName("SW1BRN1")
+                    || segtextured == R_TextureNumForName("SW1STARG")
+                    || segtextured == R_TextureNumForName("SW1STON2")
+                    || segtextured == R_TextureNumForName("SW2MARB"))
+                    {
+                        walllights = fullbright_redonly[lightnum];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2STON2")
+                    || segtextured == R_TextureNumForName("SW2STARG"))
+                    {
+                        walllights = fullbright_greenonly1[lightnum];
+                    }
+                }
+
+                // Doom 1 & 2
+                if (gamemission == doom || gamemission == doom2 || gamemission == pack_tnt || gamemission == pack_plut)
+                {
+                    if (segtextured == R_TextureNumForName("SW1BRCOM")
+                    || segtextured == R_TextureNumForName("SW1DIRT")
+                    || segtextured == R_TextureNumForName("SW1STRTN")
+                    || segtextured == R_TextureNumForName("SW2COMP")
+                    || segtextured == R_TextureNumForName("SW2PANEL")
+                    || segtextured == R_TextureNumForName("SW2SLAD")
+                    || segtextured == R_TextureNumForName("SW2WOOD")
+                    || segtextured == R_TextureNumForName("WOOD4")
+                    || segtextured == R_TextureNumForName("WOODSKUL")
+                    || segtextured == R_TextureNumForName("SLADSKUL")
+                    || segtextured == R_TextureNumForName("SW1BRIK")
+                    || segtextured == R_TextureNumForName("SW1COMM")
+                    || segtextured == R_TextureNumForName("SW1MET2")
+                    || segtextured == R_TextureNumForName("SW1STON1")
+                    || segtextured == R_TextureNumForName("SW1STONE")
+                    || segtextured == R_TextureNumForName("SW2BLUE")
+                    || segtextured == R_TextureNumForName("SW2GSTON")
+                    || segtextured == R_TextureNumForName("SW2ROCK")
+                    || segtextured == R_TextureNumForName("SW2STON6")
+                    || segtextured == R_TextureNumForName("SW2ZIM")
+                    || segtextured == R_TextureNumForName("WOODGARG"))
+                    {
+                        walllights = fullbright_redonly[lightnum];
+                    }
+                    else if (segtextured == R_TextureNumForName("COMP2")
+                    || segtextured == R_TextureNumForName("COMPUTE2")
+                    || segtextured == R_TextureNumForName("SILVER3")
+                    || segtextured == R_TextureNumForName("COMPUTE1")
+                    || segtextured == R_TextureNumForName("COMPUTE3")
+                    || segtextured == R_TextureNumForName("SW2MOD1"))
+                    {
+                        walllights = fullbright_notgrayorbrown[lightnum];
+                    }
+                    else if (segtextured == R_TextureNumForName("COMPSTA2")
+                    || segtextured == R_TextureNumForName("EXITSIGN")
+                    || segtextured == R_TextureNumForName("PLANET1")
+                    || segtextured == R_TextureNumForName("SW2EXIT")
+                    || segtextured == R_TextureNumForName("SW2GRAY1")
+                    || segtextured == R_TextureNumForName("COMPSTA1")
+                    || segtextured == R_TextureNumForName("EXITSTON")
+                    || segtextured == R_TextureNumForName("SILVER2")
+                    || segtextured == R_TextureNumForName("LITEBLU1")
+                    || segtextured == R_TextureNumForName("SW2GRAY"))
+                    {
+                        walllights = fullbright_notgray[lightnum];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2BRN1")
+                    || segtextured == R_TextureNumForName("SW2STON1")
+                    || segtextured == R_TextureNumForName("SW2STONE")
+                    || segtextured == R_TextureNumForName("SW2TEK")
+                    || segtextured == R_TextureNumForName("SW2BRIK")
+                    || segtextured == R_TextureNumForName("SW2BRN2")
+                    || segtextured == R_TextureNumForName("SW2COMM")
+                    || segtextured == R_TextureNumForName("SW2DIRT")
+                    || segtextured == R_TextureNumForName("SW2MET2")
+                    || segtextured == R_TextureNumForName("SW2STRTN")
+                    || segtextured == R_TextureNumForName("SW2VINE")
+                    || segtextured == R_TextureNumForName("PIPEWAL1")
+                    || segtextured == R_TextureNumForName("TEKLITE2"))
+                    {
+                        walllights = fullbright_greenonly1[lightnum];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2BRCOM")
+                    || segtextured == R_TextureNumForName("SW2BRNGN"))
+                    {
+                        walllights = fullbright_greenonly2[lightnum];
+                    }
+                    else if (segtextured == R_TextureNumForName("SW2METAL"))
+                    {
+                        walllights = fullbright_greenonly3[lightnum];
+                    }
+                }
+
+                // TNT - Evilution
+                if (gamemission == pack_tnt)
+                {
+                    if (segtextured == R_TextureNumForName("LITEYEL2")
+                    || segtextured == R_TextureNumForName("LITEYEL3")
+                    || segtextured == R_TextureNumForName("YELMETAL"))
+                    {
+                        walllights = fullbright_orangeyellow[lightnum];
+                    }
+                    else if (segtextured == R_TextureNumForName("BTNTMETL")
+                    || segtextured == R_TextureNumForName("BTNTSLVR"))
+                    {
+                        walllights = fullbright_notgrayorbrown[lightnum];
+                    }
+                    else if (segtextured == R_TextureNumForName("PNK4EXIT")
+                    || segtextured == R_TextureNumForName("LITERED2"))
+                    {
+                        walllights = fullbright_redonly[lightnum];
+                    }
+                }
+
+                // Plutonia
+                if (gamemission == pack_plut)
+                {
+                    if (segtextured == R_TextureNumForName("SW2SKULL"))
+                    {
+                        walllights = fullbright_redonly[lightnum];
+                    }
+                }
+            }
+        }
     }
     }
 

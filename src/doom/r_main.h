@@ -64,6 +64,16 @@ extern lighttable_t*    scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t*    zlight[LIGHTLEVELS][MAXLIGHTZ];
 
+// [JN] Brightmaps
+extern lighttable_t*    fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_greenonly1[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
+
 extern int extralight;
 extern lighttable_t* fixedcolormap;
 
