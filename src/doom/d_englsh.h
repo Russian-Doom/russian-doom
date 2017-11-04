@@ -961,7 +961,7 @@
 #define T3TEXT \
 "jnrhsdf.ofzcz gthcgtrnbdf dsukzlbn\n"\
 "xthnjdcrb pyfrjvjq b gf[ytn \n"\
-"ckjdyj pf;fhtyyst 'rcrhbvtyns>\n"\
+"ckjdyj pf;fhtyyst 'rcrhtvtyns>\n"\
 "'nj vtcnj yt yhfdbkjcm dfv hfymit<\n"\
 "b ds xthnjdcrb edthtys< xnj yt\n"\
 "gjyhfdbncz b ctqxfc> xtv ,jkmit ds\n"\
@@ -974,7 +974,7 @@
 
 // Открывающаяся перспектива выглядит 
 // чертовски знакомой и пахнет 
-// словно зажаренные экскрименты. 
+// словно зажаренные экскременты. 
 // Это место не нравилось вам раньше, 
 // и Вы чертовски уверены, что не 
 // понравится и сейчас. Чем больше Вы 
