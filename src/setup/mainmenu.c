@@ -102,6 +102,7 @@ static void SensibleDefaults(void)
     fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
     show_exit_sequence = 1;      // [Strife] ѕоказывать заставку при выходе
     // - Графика -
+    brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
     colored_blood = 1;           // Кровь разных цветов
     randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
     new_ouch_face = 1;           // Корректная формула "Ouch face"

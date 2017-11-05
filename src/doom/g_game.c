@@ -238,6 +238,7 @@ int             bodyqueslot;
 int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 int fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
 // Графика
+int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
 int colored_blood = 1;           // Кровь разных цветов
 int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
 int new_ouch_face = 1;           // Корректная формула "Ouch face"

@@ -31,6 +31,7 @@
 #include "w_wad.h"
 #include "r_local.h"
 #include "doomstat.h"
+#include "g_game.h"
 
 
 #define MINZ        (FRACUNIT*4)
@@ -617,7 +618,7 @@ void R_ProjectSprite (mobj_t* thing)
         vis->colormap = spritelights[index];
 
         // [JN] Applying brightmaps to sprites...
-        if (!vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+        if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
         {
             if (thing->type == MT_MISC3) // Armor Bonus
             vis->colormap = fullbrights_dimmeditems[index];

@@ -86,6 +86,7 @@ int G_VanillaVersionCode(void);
 extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
 extern int fast_quickload;          // Не выводить запрос при быстрой загрузке
 // - Графика -
+extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
 extern int colored_blood;           // Кровь разных цветов
 extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
 extern int new_ouch_face;           // Корректная формула "Ouch face"

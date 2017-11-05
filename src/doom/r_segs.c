@@ -27,6 +27,7 @@
 #include "doomstat.h"
 #include "r_local.h"
 #include "r_sky.h"
+#include "g_game.h"
 
 // [JN] Brightmaps
 boolean brightmaps_are_set = false;
@@ -867,7 +868,7 @@ void R_StoreWallRange (int start, int stop)
 
     // TODO: how should I really call R_InitBrightmaps once and set all brightmaps?
     // if (!brightmaps_are_set)
-    if (!vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+    if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
     R_InitBrightmaps();
     
     if (segtextured)

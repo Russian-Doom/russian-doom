@@ -32,6 +32,7 @@ extern int fast_quickload;          // Не выводить запрос при
 extern int show_diskicon;           // Значок дискеты / [Strife] песочных часов
 extern int show_exit_sequence;      // [Strife] Показывать заставку при выходе
 // - Графика -
+extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
 extern int colored_blood;           // Кровь разных цветов
 extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
 extern int new_ouch_face;           // Корректная формула "Ouch face"
