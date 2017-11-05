@@ -266,6 +266,7 @@ boolean P_Move (mobj_t*	actor)
     fixed_t	tryy;
     
     line_t*	ld;
+    line_t*	blockline;
     
     // warning: 'catch', 'throw', and 'try'
     // are all C++ reserved words
