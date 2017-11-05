@@ -269,7 +269,7 @@ boolean P_Move (mobj_t*	actor)
     fixed_t	tryy;
     
     line_t*	ld;
-    // line_t*	blockline;
+    line_t*	blockline;
     
     // warning: 'catch', 'throw', and 'try'
     // are all C++ reserved words
@@ -328,14 +328,16 @@ boolean P_Move (mobj_t*	actor)
     //
     // Do NOT simply return false 1/4th of the time (causes monsters to
     // back out when they shouldn't, and creates secondary stickiness).
-    // if (singleplayer)
-    // {
-    //     for (good = false; numspechit--;)
-    //         if (P_UseSpecialLine(actor, spechit[numspechit], 0))
-    //         good |= (spechit[numspechit] == blockline ? 1 : 2);
-    // 
-    //     return (good && ((M_Random() >= 230) ^ (good & 1)));
-    // }
+    if (singleplayer)
+    {
+        blockline = spechit[numspechit];
+
+        for (good = false; numspechit--;)
+            if (P_UseSpecialLine(actor, spechit[numspechit], 0))
+            good |= (spechit[numspechit] == blockline ? 1 : 2);
+
+        return (good && ((M_Random() >= 230) ^ (good & 1)));
+    }
 
 	while (numspechit--)
 	{
