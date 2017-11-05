@@ -15,6 +15,9 @@
 //     GUS emulation code.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __GUSCONF_H__
 #define __GUSCONF_H__
 

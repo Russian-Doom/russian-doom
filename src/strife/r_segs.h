@@ -16,6 +16,8 @@
 //	Refresh module, drawing LineSegs from BSP.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_SEGS__
 #define __R_SEGS__

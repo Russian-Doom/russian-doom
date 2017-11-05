@@ -16,6 +16,8 @@
 //  Sprite animation.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __P_PSPR__
 #define __P_PSPR__

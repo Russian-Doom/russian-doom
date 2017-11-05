@@ -15,6 +15,9 @@
 //     OPL timer thread.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef OPL_TIMER_H
 #define OPL_TIMER_H
 

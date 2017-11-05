@@ -16,6 +16,8 @@
 //	Map Objects, MObj, definition and handling.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __P_MOBJ__
 #define __P_MOBJ__

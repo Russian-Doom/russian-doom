@@ -15,6 +15,9 @@
 // Text mode emulation in SDL
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef TXT_GUI_H
 #define TXT_GUI_H
 

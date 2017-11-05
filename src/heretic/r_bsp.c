@@ -15,6 +15,9 @@
 //
 // R_bsp.c
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "doomdef.h"
 #include "i_system.h"
 #include "m_bbox.h"

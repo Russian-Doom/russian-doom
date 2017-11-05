@@ -16,6 +16,9 @@
 //	Plats (i.e. elevator platforms) code, raising/lowering.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdio.h>
 
 #include "i_system.h"

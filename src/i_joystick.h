@@ -15,6 +15,8 @@
 //      System-specific joystick interface.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __I_JOYSTICK__
 #define __I_JOYSTICK__

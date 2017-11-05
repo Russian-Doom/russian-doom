@@ -16,6 +16,8 @@
 //	Sky rendering.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_SKY__
 #define __R_SKY__

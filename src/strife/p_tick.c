@@ -17,6 +17,8 @@
 //	Thinker, Ticker.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include "z_zone.h"
 #include "p_local.h"

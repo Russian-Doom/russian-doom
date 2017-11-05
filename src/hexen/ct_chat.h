@@ -17,6 +17,9 @@
 // Chat mode stuff
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef HEXEN_CT_CHAT_H
 #define HEXEN_CT_CHAT_H
 

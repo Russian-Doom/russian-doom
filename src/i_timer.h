@@ -16,6 +16,8 @@
 //      System-specific timer interface
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __I_TIMER__
 #define __I_TIMER__

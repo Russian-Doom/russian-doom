@@ -16,6 +16,9 @@
 //	Main program, simply calls D_DoomMain high level loop.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "config.h"
 
 #include <stdio.h>

@@ -16,9 +16,7 @@
 //	All the clipping: columns, horizontal spans, sky columns.
 //
 
-
-
-
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include <stdio.h>

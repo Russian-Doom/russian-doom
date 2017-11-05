@@ -17,6 +17,9 @@
 //	generation of lookups, caching, retrieval by name.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdio.h>
 
 #include "d_main.h"

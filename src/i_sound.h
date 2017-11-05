@@ -16,6 +16,8 @@
 //	The not so system specific sound interface.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __I_SOUND__
 #define __I_SOUND__

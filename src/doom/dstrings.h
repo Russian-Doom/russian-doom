@@ -17,6 +17,8 @@
 //	DOOM strings, by language.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __DSTRINGS__
 #define __DSTRINGS__

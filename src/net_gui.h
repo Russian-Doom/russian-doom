@@ -17,6 +17,8 @@
 //    start the game.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef NET_GUI_H
 #define NET_GUI_H

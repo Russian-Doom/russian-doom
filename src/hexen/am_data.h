@@ -14,6 +14,9 @@
 // GNU General Public License for more details.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __AMDATA_H__
 #define __AMDATA_H__
 

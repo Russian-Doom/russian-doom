@@ -15,6 +15,9 @@
 // Parses "Misc" sections in dehacked files
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef DEH_MISC_H
 #define DEH_MISC_H
 

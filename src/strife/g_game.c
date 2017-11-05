@@ -15,6 +15,9 @@
 // DESCRIPTION:  none
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>

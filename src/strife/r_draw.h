@@ -16,6 +16,8 @@
 //	System specific interface stuff.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_DRAW__
 #define __R_DRAW__

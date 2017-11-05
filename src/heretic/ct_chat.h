@@ -17,6 +17,9 @@
 // Chat mode stuff
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef HERETIC_CT_CHAT_H
 #define HERETIC_CT_CHAT_H
 

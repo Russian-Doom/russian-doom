@@ -12,7 +12,8 @@
 // GNU General Public License for more details.
 //
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include "textscreen.h"
 #include "doomtype.h"

@@ -24,6 +24,9 @@
 // version: 1.7.4
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef OPL_OPL3_H
 #define OPL_OPL3_H
 

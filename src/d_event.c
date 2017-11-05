@@ -19,6 +19,9 @@
 // Events can be discarded if no responder claims them
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdlib.h>
 #include "d_event.h"
 

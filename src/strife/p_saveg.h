@@ -16,6 +16,8 @@
 //	Savegame I/O, archiving, persistence.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __P_SAVEG__
 #define __P_SAVEG__

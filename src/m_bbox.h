@@ -16,6 +16,8 @@
 //    Nil.
 //    
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __M_BBOX__
 #define __M_BBOX__

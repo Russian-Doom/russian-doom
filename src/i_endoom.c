@@ -15,6 +15,9 @@
 //    Exit text-mode ENDOOM screen.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdio.h>
 #include <string.h>
 

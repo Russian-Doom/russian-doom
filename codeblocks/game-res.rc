@@ -10,11 +10,11 @@ FILETYPE 1
   BLOCK "040904E4"
   {
    VALUE "FileVersion", "2.3"
-   VALUE "FileDescription", "Russian DOOM"
-   VALUE "InternalName", "Russian DOOM"
-   VALUE "CompanyName", "Russian DOOM"
+   VALUE "FileDescription", "Russian Doom"
+   VALUE "InternalName", "Russian Doom"
+   VALUE "CompanyName", "Russian Doom"
    VALUE "LegalCopyright", "\xA9 2016-2017 Julian Nechaevsky. All rights reserved."
-   VALUE "ProductName", "Russian DOOM"
+   VALUE "ProductName", "Russian Doom"
    VALUE "ProductVersion", "2.3"
   }
  }

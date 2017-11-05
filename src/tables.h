@@ -30,7 +30,7 @@
 //	  maps tan(angle) to angle fast. Gotta search.	
 //    
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #ifndef __TABLES__

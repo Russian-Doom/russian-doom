@@ -15,6 +15,9 @@
 // Definitions for use in the dehacked code
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef DEH_DEFS_H
 #define DEH_DEFS_H
 

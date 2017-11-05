@@ -18,6 +18,9 @@
 //  some internal structures shared by many modules are here
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __DOOMDATA__
 #define __DOOMDATA__
 

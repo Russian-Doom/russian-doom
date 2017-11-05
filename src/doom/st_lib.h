@@ -16,6 +16,9 @@
 // 	The status bar widget code.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __STLIB__
 #define __STLIB__
 

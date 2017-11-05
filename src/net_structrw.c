@@ -14,6 +14,9 @@
 // Reading and writing various structures into packets
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -16,6 +16,8 @@
 //	Mission start screen wipe/melt, special effects.
 //	
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __F_WIPE_H__
 #define __F_WIPE_H__

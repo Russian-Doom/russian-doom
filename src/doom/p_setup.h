@@ -16,6 +16,8 @@
 //   Setup a game, startup stuff.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __P_SETUP__
 #define __P_SETUP__

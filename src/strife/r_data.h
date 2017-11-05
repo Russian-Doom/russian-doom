@@ -17,6 +17,8 @@
 //  by name.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_DATA__
 #define __R_DATA__

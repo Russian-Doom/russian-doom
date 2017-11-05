@@ -16,6 +16,9 @@
 //	WAD I/O functions.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "config.h"
 
 #ifdef HAVE_MMAP

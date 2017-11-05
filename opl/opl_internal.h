@@ -15,6 +15,8 @@
 //     OPL internal interface.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef OPL_INTERNAL_H
 #define OPL_INTERNAL_H

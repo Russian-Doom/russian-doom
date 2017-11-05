@@ -18,6 +18,8 @@
 //  suffers state changes of more or less violent nature.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __D_THINK__
 #define __D_THINK__

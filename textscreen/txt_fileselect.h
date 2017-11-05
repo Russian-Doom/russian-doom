@@ -15,6 +15,9 @@
 // Routines for selecting files, and the txt_fileselect_t widget.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef TXT_FILESELECT_H
 #define TXT_FILESELECT_H
 

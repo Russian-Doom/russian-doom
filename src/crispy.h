@@ -17,6 +17,8 @@
 //	Crispy Doom specific variables.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __CRISPY_H__
 #define __CRISPY_H__

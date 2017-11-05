@@ -20,6 +20,9 @@
 // Dialog Engine for Strife
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef P_DIALOG_H__
 #define P_DIALOG_H__
 

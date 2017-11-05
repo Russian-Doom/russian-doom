@@ -17,7 +17,7 @@
 //	set up initial state and misc. LUTs.
 //
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include <math.h>

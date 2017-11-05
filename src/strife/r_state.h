@@ -16,6 +16,8 @@
 //	Refresh/render internal state variables (global).
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_STATE__
 #define __R_STATE__

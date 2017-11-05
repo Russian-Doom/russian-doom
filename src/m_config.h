@@ -16,7 +16,8 @@
 //      Configuration file interface.
 //    
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __M_CONFIG__
 #define __M_CONFIG__

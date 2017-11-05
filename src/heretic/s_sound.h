@@ -13,8 +13,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-
 // soundst.h
+
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __SOUNDSTH__
 #define __SOUNDSTH__

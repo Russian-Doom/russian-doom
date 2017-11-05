@@ -15,6 +15,8 @@
 //       SDL Joystick code.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include "SDL.h"
 #include "SDL_joystick.h"

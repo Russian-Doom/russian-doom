@@ -19,6 +19,8 @@
 //	 utility functions, etc.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __P_SPEC__
 #define __P_SPEC__

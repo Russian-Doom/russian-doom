@@ -17,6 +17,9 @@
 //	Kept as a sample, DOOM2  sounds. Frozen.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __SOUNDS__
 #define __SOUNDS__
 

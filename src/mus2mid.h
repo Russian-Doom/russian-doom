@@ -17,6 +17,9 @@
 // mus2mid.h - Ben Ryves 2006 - http://benryves.com - benryves@benryves.com
 // Use to convert a MUS file into a single track, type 0 MIDI file.
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef MUS2MID_H
 #define MUS2MID_H
 

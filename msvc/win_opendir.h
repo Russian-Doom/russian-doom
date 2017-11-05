@@ -13,6 +13,9 @@
 //  public domain).
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef I_OPNDIR_H__
 #define I_OPNDIR_H__
 

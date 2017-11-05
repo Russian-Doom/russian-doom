@@ -15,6 +15,9 @@
 //	System interface for PC speaker sound.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "SDL.h"
 #include <string.h>
 

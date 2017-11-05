@@ -16,6 +16,9 @@
 //    (Should be NetBSD as well, but untested).
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "config.h"
 
 // OpenBSD/NetBSD:

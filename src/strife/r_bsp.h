@@ -16,6 +16,8 @@
 //	Refresh module, BSP traversal and handling.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_BSP__
 #define __R_BSP__

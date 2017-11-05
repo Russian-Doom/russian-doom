@@ -17,6 +17,9 @@
 // External definitions for action pointer functions.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef HERETIC_P_ACTION_H
 #define HERETIC_P_ACTION_H
 

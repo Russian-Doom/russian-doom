@@ -15,6 +15,9 @@
 // Dehacked entrypoint and common code
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef DEH_MAIN_H
 #define DEH_MAIN_H
 

@@ -16,6 +16,8 @@
 //    Exit text-mode ENDOOM screen.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __I_ENDOOM__
 #define __I_ENDOOM__

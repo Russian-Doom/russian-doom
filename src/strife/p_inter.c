@@ -16,6 +16,9 @@
 //	Handling interactions (i.e., collisions).
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 // Data.
 #include "doomdef.h"
 #include "dstrings.h"

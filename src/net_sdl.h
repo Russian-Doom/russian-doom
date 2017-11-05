@@ -15,6 +15,9 @@
 //     Networking module which uses SDL_net
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef NET_SDL_H
 #define NET_SDL_H
 

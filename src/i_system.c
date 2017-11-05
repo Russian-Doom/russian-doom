@@ -15,7 +15,7 @@
 // DESCRIPTION:
 //
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include <stdlib.h>
@@ -202,7 +202,7 @@ void I_PrintStartupBanner(char *gamedescription)
     " указанных или подразумеваемых. Авторы ни при каких обстоятельствах не\n"
     " несут ответственности за косвенный, особый или непреднамеренный ущерб.\n"
     " \n"
-    " Автор проекта Russian DOOM: Юлиан Нечаевский\n");
+    " Автор проекта Russian Doom: Юлиан Нечаевский\n");
 
     I_PrintDivider();
 }

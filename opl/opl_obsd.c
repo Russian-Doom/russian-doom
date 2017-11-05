@@ -15,6 +15,9 @@
 //     OPL OpenBSD interface (also NetBSD)
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "config.h"
 
 // OpenBSD has a i386_iopl on i386 and amd64_iopl on x86_64,

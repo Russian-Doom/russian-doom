@@ -16,6 +16,8 @@
 //	Rendering of moving objects, sprites.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_THINGS__
 #define __R_THINGS__

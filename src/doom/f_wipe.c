@@ -16,6 +16,9 @@
 //	Mission begin melt/wipe screen special effect.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <string.h>
 
 #include "z_zone.h"

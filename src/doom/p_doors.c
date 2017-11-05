@@ -15,7 +15,7 @@
 // DESCRIPTION: Door animation code (opening/closing)
 //
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include "z_zone.h"

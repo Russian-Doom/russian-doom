@@ -19,6 +19,7 @@
 //	 Quake.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #ifndef __Z_ZONE__

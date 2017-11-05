@@ -16,6 +16,7 @@
 //	Fixed point implementation.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include "stdlib.h"

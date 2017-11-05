@@ -18,6 +18,9 @@
 //	This one is the original DOOM version, preserved.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __INFO__
 #define __INFO__
 

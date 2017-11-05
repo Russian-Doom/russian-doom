@@ -14,6 +14,9 @@
 // Common code shared between the client and server
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef NET_COMMON_H
 #define NET_COMMON_H
 

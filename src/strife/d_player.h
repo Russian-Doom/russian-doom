@@ -16,6 +16,8 @@
 //
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __D_PLAYER__
 #define __D_PLAYER__

@@ -15,6 +15,9 @@
 //     SHA-1 digest.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __SHA1_H__
 #define __SHA1_H__
 

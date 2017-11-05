@@ -15,6 +15,9 @@
 // Dehacked string replacements
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef DEH_STR_H
 #define DEH_STR_H
 

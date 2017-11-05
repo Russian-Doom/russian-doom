@@ -8,10 +8,10 @@
 #define PACKAGE_BUGREPORT "julian.nechaevsky@outlook.com"
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "Russian DOOM"
+#define PACKAGE_NAME "Russian Doom"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Russian DOOM v2.3"
+#define PACKAGE_STRING "Russian Doom v2.3"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "russian-doom"

@@ -17,6 +17,8 @@
 //   lots of other stuff.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __DOOMDEF__
 #define __DOOMDEF__

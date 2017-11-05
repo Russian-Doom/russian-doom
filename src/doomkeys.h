@@ -16,6 +16,9 @@
 //       Key definitions
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __DOOMKEYS__
 #define __DOOMKEYS__
 

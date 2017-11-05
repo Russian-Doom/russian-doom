@@ -15,6 +15,9 @@
 // Dedicated server code.
 // 
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef NET_DEDICATED_H
 #define NET_DEDICATED_H
 

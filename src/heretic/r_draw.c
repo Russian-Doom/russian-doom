@@ -15,6 +15,9 @@
 //
 // R_draw.c
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "doomdef.h"
 #include "deh_str.h"
 #include "r_local.h"

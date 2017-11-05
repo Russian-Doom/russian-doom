@@ -17,6 +17,9 @@
 //     Cygwin ioperm library.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef IOPERM_SYS_H
 #define IOPERM_SYS_H
 

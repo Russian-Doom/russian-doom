@@ -12,6 +12,9 @@
 // GNU General Public License for more details.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef SETUP_JOYSTICK_H
 #define SETUP_JOYSTICK_H
 

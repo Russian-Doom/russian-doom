@@ -17,6 +17,8 @@
 //	 separating modules.
 //    
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__

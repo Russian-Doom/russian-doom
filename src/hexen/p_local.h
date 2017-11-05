@@ -14,6 +14,8 @@
 // GNU General Public License for more details.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __P_LOCAL__
 #define __P_LOCAL__

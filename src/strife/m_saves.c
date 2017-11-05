@@ -19,6 +19,9 @@
 // Strife Hub Saving Code
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 // For GNU C and POSIX targets, dirent.h should be available. Otherwise, for
 // Visual C++, we need to include the win_opendir module.
 #if defined(_MSC_VER)

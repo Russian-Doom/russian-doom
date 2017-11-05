@@ -15,6 +15,9 @@
 //      Network packet manipulation (net_packet_t)
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <string.h>
 #include "m_misc.h"
 #include "net_packet.h"

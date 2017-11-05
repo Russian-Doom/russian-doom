@@ -17,6 +17,7 @@
 //   and skill level, and display parameters.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include "doomdef.h"

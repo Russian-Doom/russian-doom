@@ -15,6 +15,9 @@
 //     Querying servers to find their current status.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef NET_QUERY_H
 #define NET_QUERY_H
 

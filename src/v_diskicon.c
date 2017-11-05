@@ -16,6 +16,9 @@
 //	Disk load indicator.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "doomtype.h"
 #include "deh_str.h"
 #include "i_swap.h"

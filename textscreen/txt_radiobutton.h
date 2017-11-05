@@ -12,6 +12,9 @@
 // GNU General Public License for more details.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef TXT_RADIOBUTTON_H
 #define TXT_RADIOBUTTON_H
 

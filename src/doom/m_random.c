@@ -16,6 +16,9 @@
 //	Random number LUT.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 //
 // M_Random
 // Returns a 0-255 number

@@ -16,6 +16,9 @@
 //  Intermission.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __WI_STUFF__
 #define __WI_STUFF__
 

@@ -18,6 +18,8 @@
 //	Functions to blit a block to the screen.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __V_VIDEO__
 #define __V_VIDEO__

@@ -18,6 +18,7 @@
 //	Does palette indicators as well (red pain/berserk, bright pickup)
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include <stdio.h>

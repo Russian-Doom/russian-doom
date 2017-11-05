@@ -29,6 +29,9 @@
 // * Peters <colin@fu.is.saga-u.ac.jp>
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef _MSC_VER
 #error i_opndir.c is for Microsoft Visual C++ only
 #endif

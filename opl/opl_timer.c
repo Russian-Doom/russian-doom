@@ -17,6 +17,9 @@
 //     waking up to invoke callbacks set using OPL_Timer_SetCallback.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "SDL.h"
 
 #include "opl_timer.h"

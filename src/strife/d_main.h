@@ -16,6 +16,8 @@
 //	System specific interface stuff.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __D_MAIN__
 #define __D_MAIN__

@@ -15,6 +15,9 @@
 // Base interface that abstracts the text mode screen.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef TXT_MAIN_H
 #define TXT_MAIN_H
 

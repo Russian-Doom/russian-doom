@@ -16,6 +16,9 @@
 //     program.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef DOOM_FEATURES_H
 #define DOOM_FEATURES_H
 

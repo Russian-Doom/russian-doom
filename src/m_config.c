@@ -17,7 +17,7 @@
 //    Configuration file interface.
 //
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include <stdio.h>
@@ -885,7 +885,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(show_endoom),
 
     //!
-    // [JN] Дополнительные параметры Russian DOOM
+    // [JN] Дополнительные параметры игры
     //
 
     // - Оптимизация игровой палитры -

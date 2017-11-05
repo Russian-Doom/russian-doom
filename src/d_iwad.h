@@ -15,6 +15,8 @@
 //     Find IWAD and initialize according to IWAD type.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __D_IWAD__
 #define __D_IWAD__

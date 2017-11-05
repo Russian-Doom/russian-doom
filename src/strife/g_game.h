@@ -16,6 +16,8 @@
 //   Duh.
 // 
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __G_GAME__
 #define __G_GAME__

@@ -16,6 +16,8 @@
 //	Endianess handling, swapping 16bit and 32bit.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __I_SWAP__
 #define __I_SWAP__

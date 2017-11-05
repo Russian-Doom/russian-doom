@@ -15,6 +15,9 @@
 //      Network packet manipulation (net_packet_t)
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef NET_IO_H
 #define NET_IO_H
 

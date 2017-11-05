@@ -15,6 +15,8 @@
 // DESCRIPTION:
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 // We are referring to sprite numbers.
 #include "info.h"

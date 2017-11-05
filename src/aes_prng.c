@@ -25,6 +25,9 @@
 // up to work independently.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdint.h>
 
 #include "aes_prng.h"

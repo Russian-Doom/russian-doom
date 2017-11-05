@@ -16,6 +16,8 @@
 //  AutoMap module.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __AMMAP_H__
 #define __AMMAP_H__

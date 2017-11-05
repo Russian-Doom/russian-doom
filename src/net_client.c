@@ -14,6 +14,9 @@
 // Network client code
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>

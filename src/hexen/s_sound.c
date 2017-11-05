@@ -14,6 +14,9 @@
 // GNU General Public License for more details.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include "h2def.h"
 #include "m_random.h"
 #include "i_cdmus.h"

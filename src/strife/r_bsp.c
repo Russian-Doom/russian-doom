@@ -16,7 +16,7 @@
 //	BSP traversal, handling of LineSegs for rendering.
 //
 
-
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include "doomdef.h"

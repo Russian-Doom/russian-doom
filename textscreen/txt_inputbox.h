@@ -12,6 +12,9 @@
 // GNU General Public License for more details.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef TXT_INPUTBOX_H
 #define TXT_INPUTBOX_H
 

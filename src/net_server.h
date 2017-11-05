@@ -14,6 +14,9 @@
 // Network server code
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef NET_SERVER_H
 #define NET_SERVER_H
 

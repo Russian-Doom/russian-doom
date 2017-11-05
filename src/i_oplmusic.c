@@ -16,6 +16,8 @@
 //   System interface for music.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include <stdio.h>
 #include <stdlib.h>

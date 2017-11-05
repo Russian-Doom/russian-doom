@@ -17,6 +17,9 @@
 //	all OS independend parts.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdlib.h>
 
 #include "doomfeatures.h"

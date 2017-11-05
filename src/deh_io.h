@@ -15,6 +15,9 @@
 // Dehacked I/O code (does all reads from dehacked files)
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef DEH_IO_H
 #define DEH_IO_H
 

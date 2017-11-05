@@ -17,6 +17,9 @@
 //	Switches, buttons. Two-state animation. Exits.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdio.h>
 
 #include "i_system.h"

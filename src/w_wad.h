@@ -16,6 +16,8 @@
 //	WAD I/O functions.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __W_WAD__
 #define __W_WAD__

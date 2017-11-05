@@ -15,6 +15,9 @@
 //      Loopback network module for server compiled into the client
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef NET_LOOP_H
 #define NET_LOOP_H
 

@@ -17,6 +17,9 @@
 //	All the rendering/drawing stuff is here.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __R_LOCAL__
 #define __R_LOCAL__
 

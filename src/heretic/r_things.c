@@ -14,6 +14,10 @@
 // GNU General Public License for more details.
 //
 // R_things.c
+
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "doomdef.h"

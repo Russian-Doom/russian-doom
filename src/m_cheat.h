@@ -16,6 +16,8 @@
 //	Cheat code checking.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __M_CHEAT__
 #define __M_CHEAT__

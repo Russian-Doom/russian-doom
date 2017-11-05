@@ -16,6 +16,9 @@
 //       Generate a checksum of the WAD directory.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

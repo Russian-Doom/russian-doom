@@ -15,6 +15,9 @@
 // Parses Text substitution sections in dehacked files
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

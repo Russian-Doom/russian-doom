@@ -16,6 +16,8 @@
 //	Random number LUT.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include <time.h>
 

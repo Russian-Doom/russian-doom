@@ -16,6 +16,8 @@
 //    System-specific keyboard/mouse input.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __I_INPUT__
 #define __I_INPUT__

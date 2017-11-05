@@ -21,6 +21,8 @@
 //   In practice, things are a bit messy.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __D_STATE__
 #define __D_STATE__

@@ -1,6 +1,6 @@
-# Russian DOOM for DOS
+# Russian Doom for DOS
 
-This is a sub-project of main project Russian DOOM. 
+This is a sub-project of main project Russian Doom. 
 
 ## Supported games
 * Doom shareware

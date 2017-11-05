@@ -16,7 +16,7 @@
 //	LineOfSight/Visibility checks, uses REJECT Lookup Table.
 //
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include "doomdef.h"

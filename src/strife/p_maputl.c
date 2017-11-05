@@ -20,6 +20,7 @@
 //	and some PIT_* functions to use for iteration.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
 
 
 #include <stdlib.h>

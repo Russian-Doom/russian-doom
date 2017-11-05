@@ -16,7 +16,8 @@
 //	WAD I/O functions.
 //
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include "config.h"
 

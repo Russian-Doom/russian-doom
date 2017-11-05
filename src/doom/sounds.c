@@ -17,6 +17,8 @@
 //	Kept as a sample, DOOM2 sounds.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include <stdlib.h>
 

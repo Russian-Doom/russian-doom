@@ -16,6 +16,9 @@
 //	Win32 Resources
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef DEDICATEDSERVER
 #ifdef CHOCOLATESETUP
 1 ICON "../data/setup.ico"
@@ -34,11 +37,11 @@ BEGIN
 		BLOCK "040904E4"
 		BEGIN
 			VALUE "FileVersion", "2.3"
-			VALUE "FileDescription", "Russian DOOM 2.3"
+			VALUE "FileDescription", "Russian Doom 2.3"
 			VALUE "InternalName", "russian-doom"
 			VALUE "CompanyName", "julian.nechaevsky@outlook.com"
 			VALUE "LegalCopyright", "\xA9 2016-2017 Julian Nechaevsky. All rights reserved."
-			VALUE "ProductName", "Russian DOOM"
+			VALUE "ProductName", "Russian Doom"
 			VALUE "ProductVersion", "2.3"
 		END
 	END

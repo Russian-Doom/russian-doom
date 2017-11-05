@@ -12,7 +12,8 @@
 // GNU General Public License for more details.
 //
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include <stdlib.h>
 #include <string.h>
@@ -285,7 +286,7 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
     int i;
 
 	// "Select game"
-    window = TXT_NewWindow("Russian DOOM");
+    window = TXT_NewWindow("Russian Doom");
 
     TXT_AddWidget(window, TXT_NewLabel("Выберите желаемую игру:\n"));
 

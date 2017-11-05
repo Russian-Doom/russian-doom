@@ -16,6 +16,8 @@
 //	Fixed point arithemtics, implementation.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __M_FIXED__
 #define __M_FIXED__

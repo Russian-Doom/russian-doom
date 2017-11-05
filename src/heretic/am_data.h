@@ -15,6 +15,9 @@
 //
 // AM_data.h : The vector graphics for the automap
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef __AMDATA_H__
 #define __AMDATA_H__
 

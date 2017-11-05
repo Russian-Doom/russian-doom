@@ -16,6 +16,8 @@
 //      Refresh/rendering module, shared data struct definitions.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_DEFS__
 #define __R_DEFS__

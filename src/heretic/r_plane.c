@@ -15,6 +15,9 @@
 //
 // R_planes.c
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #include <stdlib.h>
 #include "doomdef.h"
 #include "deh_str.h"

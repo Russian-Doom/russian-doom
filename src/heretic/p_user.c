@@ -13,8 +13,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-
 // P_user.c
+
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include <stdlib.h>
 

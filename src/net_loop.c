@@ -15,7 +15,8 @@
 //      Loopback network module for server compiled into the client
 //
 
-// Russian DOOM (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #include <stdio.h>
 #include <stdlib.h>

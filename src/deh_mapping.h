@@ -17,6 +17,9 @@
 // name
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef DEH_MAPPING_H
 #define DEH_MAPPING_H
 

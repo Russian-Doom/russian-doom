@@ -19,6 +19,9 @@
 // Strife Hub Saving Code
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef M_SAVES_H__
 #define M_SAVES_H__
 

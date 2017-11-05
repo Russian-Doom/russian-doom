@@ -16,6 +16,9 @@
 //     for Hexen startup loading screen.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef I_VIDEOHR_H
 #define I_VIDEOHR_H
 

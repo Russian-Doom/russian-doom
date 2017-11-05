@@ -15,6 +15,9 @@
 //     Definitions for use in networking code.
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
+
 #ifndef NET_DEFS_H
 #define NET_DEFS_H 
 

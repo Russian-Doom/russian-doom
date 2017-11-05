@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
-	<Workspace title="Russian DOOM">
+	<Workspace title="Russian Doom">
 		<Project filename="doom.cbp" active="1">
 			<Depends filename="libtextscreen.cbp" />
 			<Depends filename="libopl.cbp" />

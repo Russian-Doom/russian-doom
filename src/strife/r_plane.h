@@ -16,6 +16,8 @@
 //	Refresh, visplane stuff (floor, ceilings).
 //
 
+// Russian Doom (C) 2016-2017 Julian Nechaevsky
+
 
 #ifndef __R_PLANE__
 #define __R_PLANE__
