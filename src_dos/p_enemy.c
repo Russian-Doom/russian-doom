@@ -1614,8 +1614,12 @@ void A_XScream (mobj_t* actor)
 
 void A_Pain (mobj_t* actor)
 {
-    if (actor->info->painsound)
-	S_StartSound (actor, actor->info->painsound);	
+    // [JN] Do not break firing sounds by player's pain sounds
+    if (actor->info->doomednum == -1)
+    S_StartSound (singleplayer ? NULL : actor, actor->info->painsound);
+
+    else if (actor->info->painsound)
+    S_StartSound (actor, actor->info->painsound);	
 }
 
 
@@ -1817,10 +1821,7 @@ A_OpenShotgun2
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_dbopn);
-    else
-        S_StartSound (player->mo, sfx_dbopn);
+    S_StartSound (player->mo, sfx_dbopn);
 }
 
 void
@@ -1828,10 +1829,7 @@ A_LoadShotgun2
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_dbload);
-    else
-        S_StartSound (player->mo, sfx_dbload);
+    S_StartSound (player->mo, sfx_dbload);
 }
 
 void
@@ -1844,10 +1842,7 @@ A_CloseShotgun2
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_dbcls);
-    else
-        S_StartSound (player->mo, sfx_dbcls);
+    S_StartSound (player->mo, sfx_dbcls);
     A_ReFire(player,psp);
 }
 

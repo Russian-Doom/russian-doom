@@ -1101,7 +1101,8 @@ boolean	PTR_UseTraverse (intercept_t* in)
 	P_LineOpening (in->d.line);
 	if (openrange <= 0)
 	{
-	    S_StartSound (usething, sfx_noway);
+        // [JN] Do not break firing sounds by using walls
+        S_StartSound (singleplayer ? NULL : usething, sfx_noway);
 	    
 	    // can't use through a wall
 	    return false;	
@@ -1277,6 +1278,11 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         {
             if (!vanilla) // [JN] *Squish!*
             S_StartSound(thing, sfx_slop2);
+
+            // [JN] Player's squishing sound NULLified.
+            // Needed for replacing player's pain sound while death by crusher.
+            if (!vanilla && thing->type == MT_PLAYER)
+            S_StartSound(singleplayer? NULL : thing, sfx_slop2);
 
             P_SetMobjState (thing, S_GIBS);
         }

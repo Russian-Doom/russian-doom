@@ -356,7 +356,8 @@ void P_ZMovement (mobj_t* mo)
 		mo->player->deltaviewheight = mo->momz>>3;
 		if (mo->health > 0)
 		{
-			S_StartSound (mo, sfx_oof);
+            // [JN] Do not break firing sounds by falling "oof" sound
+            S_StartSound (singleplayer ? NULL : mo, sfx_oof);
 		}
 	    }
 	    mo->momz = 0;

@@ -557,87 +557,8 @@ S_StartSoundAtVolume
       pitch = 255;
   }
 
-    // kill old sound
-    // [JN] Sounds must have breaks, but not all of them.
-    // Needed for proper working of my prevention of 
-    // firing sounds being breaked by player's "Oof!".
-    // Strictly for single player.
-    if (!vanilla && singleplayer)
-    {
-        if( /* Chainsaw          */
-        (sfx_id == sfx_sawup)  ||
-        (sfx_id == sfx_sawidl) ||
-        (sfx_id == sfx_sawful) ||
-        (sfx_id == sfx_sawhit) ||
-        /* Zombieman           */
-        (sfx_id == sfx_posit1) ||
-        (sfx_id == sfx_posit2) ||
-        (sfx_id == sfx_posit3) ||
-        (sfx_id == sfx_posact) ||
-        (sfx_id == sfx_popain) ||
-        (sfx_id == sfx_podth1) ||
-        (sfx_id == sfx_podth2) ||
-        (sfx_id == sfx_podth3) || 
-        /* Imp                 */
-        (sfx_id == sfx_bgsit1) ||
-        (sfx_id == sfx_bgsit2) ||
-        (sfx_id == sfx_bgact)  ||
-        (sfx_id == sfx_firsht) ||
-        (sfx_id == sfx_claw)   ||
-        (sfx_id == sfx_bgdth1) ||
-        (sfx_id == sfx_bgdth2) ||
-        /* Demon               */
-        (sfx_id == sfx_sgtsit) ||
-        (sfx_id == sfx_dmpain) ||
-        (sfx_id == sfx_dmact)  ||
-        (sfx_id == sfx_sgtdth) ||
-        /* Lost Soul           */
-        (sfx_id == sfx_sklatk) ||
-        /* Cacodemon           */
-        (sfx_id == sfx_cacsit) ||
-        (sfx_id == sfx_cacdth) ||
-        /* Hell Knight         */
-        (sfx_id == sfx_kntsit) ||
-        (sfx_id == sfx_kntdth) ||
-        /* Baron of Hell       */
-        (sfx_id == sfx_brssit) ||
-        (sfx_id == sfx_brsdth) ||
-        /* Arachnotron         */
-        (sfx_id == sfx_bspsit) ||
-        (sfx_id == sfx_bspact) ||
-        (sfx_id == sfx_bspdth) ||
-        /* Pain Elemental      */
-        (sfx_id == sfx_pesit)  ||
-        (sfx_id == sfx_pepain) ||
-        (sfx_id == sfx_pedth)  ||
-        /* Revenant            */
-        (sfx_id == sfx_skesit) ||
-        (sfx_id == sfx_skeact) ||
-        (sfx_id == sfx_skedth) ||
-        /* Mancubus            */
-        (sfx_id == sfx_mansit) ||
-        (sfx_id == sfx_mnpain) ||
-        (sfx_id == sfx_mandth) ||
-        /* Arch-vile           */
-        (sfx_id == sfx_vilsit) ||
-        (sfx_id == sfx_vilact) ||
-        (sfx_id == sfx_vipain) ||
-        (sfx_id == sfx_vildth) ||
-        /* Spider Mastermind   */
-        // (sfx_id == sfx_spisit) ||
-        /* Cyberdemon          */
-        // (sfx_id == sfx_cybsit) ||
-        /* John Romero         */
-        // (sfx_id == sfx_bospn)  ||
-        /* Wolfenstein SS      */
-        (sfx_id == sfx_sssit)  ||
-        (sfx_id == sfx_ssdth)   )
-            S_StopSound(origin);
-    }
-    else
-    {
-        S_StopSound(origin);
-    }
+  // kill old sound
+  S_StopSound(origin);
 
   // try to find a channel
   cnum = S_getChannel(origin, sfx);

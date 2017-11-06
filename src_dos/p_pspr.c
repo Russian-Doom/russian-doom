@@ -234,16 +234,8 @@ void P_BringUpWeapon (player_t* player)
     if (player->pendingweapon == wp_nochange)
 	player->pendingweapon = player->readyweapon;
 		
-    if (!vanilla && singleplayer)
-    {
-        if (player->pendingweapon == wp_chainsaw)
-        S_StartSound (NULL, sfx_sawup);
-    }
-    else
-    {
-        if (player->pendingweapon == wp_chainsaw)
-        S_StartSound (player->mo, sfx_sawup);        
-    }
+    if (player->pendingweapon == wp_chainsaw)
+    S_StartSound (player->mo, sfx_sawup);  
 		
     newstate = weaponinfo[player->pendingweapon].upstate;
 
@@ -396,9 +388,6 @@ A_WeaponReady
     if (player->readyweapon == wp_chainsaw
 	&& psp->state == &states[S_SAW])
     {
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_sawidl);
-    else
         S_StartSound (player->mo, sfx_sawidl);
     }
     
@@ -589,10 +578,7 @@ A_Punch
     // turn to face target
     if (linetarget)
     {
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_punch);
-    else
-        S_StartSound (player->mo, sfx_punch);
+    S_StartSound (player->mo, sfx_punch);
 
 	player->mo->angle = R_PointToAngle2 (player->mo->x,
 					     player->mo->y,
@@ -627,16 +613,10 @@ A_Saw
 
     if (!linetarget)
     {
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_sawful);
-    else
         S_StartSound (player->mo, sfx_sawful);
-	return;
+        return;
     }
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_sawhit);
-    else
-        S_StartSound (player->mo, sfx_sawhit);
+    S_StartSound (player->mo, sfx_sawhit);
 	
     // turn to face target
     angle = R_PointToAngle2 (player->mo->x, player->mo->y,
@@ -767,10 +747,7 @@ A_FirePistol
 ( player_t*	player,
   pspdef_t*	psp ) 
 {
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_pistol);
-    else
-        S_StartSound (player->mo, sfx_pistol);
+    S_StartSound (player->mo, sfx_pistol);
 
     P_SetMobjState (player->mo, S_PLAY_ATK2);
     player->ammo[weaponinfo[player->readyweapon].ammo]--;
@@ -794,10 +771,7 @@ A_FireShotgun
 {
     int		i;
 	
-    if(!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_shotgn);
-    else
-        S_StartSound (player->mo, sfx_shotgn);
+    S_StartSound (player->mo, sfx_shotgn);
     
     P_SetMobjState (player->mo, S_PLAY_ATK2);
 
@@ -827,10 +801,7 @@ A_FireShotgun2
     angle_t	angle;
     int		damage;
 		
-	if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_dshtgn);
-    else
-        S_StartSound (player->mo, sfx_dshtgn);
+    S_StartSound (player->mo, sfx_dshtgn);
     
     P_SetMobjState (player->mo, S_PLAY_ATK2);
 
@@ -866,10 +837,7 @@ A_FireCGun
     if (!player->ammo[weaponinfo[player->readyweapon].ammo])
 	return;
 
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_pistol);
-    else
-        S_StartSound (player->mo, sfx_pistol);
+    S_StartSound (player->mo, sfx_pistol);
 		
     P_SetMobjState (player->mo, S_PLAY_ATK2);
     player->ammo[weaponinfo[player->readyweapon].ammo]--;
@@ -951,10 +919,7 @@ A_BFGsound
 ( player_t*	player,
   pspdef_t*	psp )
 {
-    if (!vanilla && singleplayer)
-        S_StartSound (NULL, sfx_bfg);
-    else
-        S_StartSound (player->mo, sfx_bfg);
+    S_StartSound (player->mo, sfx_bfg);
 }
 
 
