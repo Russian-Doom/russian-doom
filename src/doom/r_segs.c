@@ -577,6 +577,19 @@ void R_InitBrightmaps (void)
     || segtextured == R_TextureNumForName("COMPUTE3")
     || segtextured == R_TextureNumForName("SW2MOD1")
     || segtextured == R_TextureNumForName("BTNTMETL")
+    || segtextured == R_TextureNumForName("SLAD2")
+    || segtextured == R_TextureNumForName("SLAD3")
+    || segtextured == R_TextureNumForName("SLAD4")
+    || segtextured == R_TextureNumForName("SLAD5")
+    || segtextured == R_TextureNumForName("SLAD6")
+    || segtextured == R_TextureNumForName("SLAD7")
+    || segtextured == R_TextureNumForName("SLAD8")
+    || segtextured == R_TextureNumForName("SLAD9")
+    || segtextured == R_TextureNumForName("SLAD10")
+    || segtextured == R_TextureNumForName("SLAD11")
+    || segtextured == R_TextureNumForName("SLAD12")
+    || segtextured == R_TextureNumForName("SLADRIP1")
+    || segtextured == R_TextureNumForName("SLADRIP3")
     || segtextured == R_TextureNumForName("BTNTSLVR"));
     
     brightmap_greenonly1 = (segtextured == R_TextureNumForName("SW2BRN1")
@@ -594,6 +607,7 @@ void R_InitBrightmaps (void)
     || segtextured == R_TextureNumForName("TEKLITE2"));
     
     brightmap_greenonly2 = (segtextured == R_TextureNumForName("SW2BRCOM")
+    || segtextured == R_TextureNumForName("M_TEC")
     || segtextured == R_TextureNumForName("SW2BRNGN"));
     
     brightmap_greenonly3 = (segtextured == R_TextureNumForName("SW2METAL"));
