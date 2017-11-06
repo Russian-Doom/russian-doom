@@ -408,7 +408,8 @@ void P_ZMovement (mobj_t* mo)
             // [JN] Издавать звук "Ууф" только в том случае, если игрок живой.
             if (mo->health > 0)
             {
-                S_StartSound (mo, sfx_oof);
+                // [JN] Не прерывать звуки выстрелов при падении с высоты
+                S_StartSound (singleplayer ? NULL : mo, sfx_oof);
             }
 	    }
 	    mo->momz = 0;

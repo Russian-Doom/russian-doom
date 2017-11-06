@@ -1176,7 +1176,8 @@ boolean	PTR_UseTraverse (intercept_t* in)
 	P_LineOpening (in->d.line);
 	if (openrange <= 0)
 	{
-	    S_StartSound (usething, sfx_noway);
+        // [JN] Не прерывать звуки выстрелов при нажатии на стену
+	    S_StartSound (singleplayer ? NULL : usething, sfx_noway);
 	    
 	    // can't use through a wall
 	    return false;	
@@ -1371,6 +1372,11 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         // [JN] Бочка и Потерянная Душа не издают звук *шмяк!*
         if (crushed_corpses_sfx && !vanillaparm && !(thing->type == MT_BARREL || thing->type == MT_SKULL))
         S_StartSound(thing, sfx_slop2);
+
+        // [JN] Звук раздавливания игрока NULLифицирован.
+        // Необходимо для замещения звука боли при смерти от крашера.
+        if (crushed_corpses_sfx && !vanillaparm && thing->type == MT_PLAYER)
+        S_StartSound(singleplayer? NULL : thing, sfx_slop2);
 
         // keep checking
         return true;		
