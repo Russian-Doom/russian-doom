@@ -247,7 +247,6 @@ int swirling_liquids = 1;        // Улучшенная анимация жид
 int red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
 int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
 int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
-int no_pickup_flash = 0;         // Не мигать экраном при получении предметов
 // Звук
 int crushed_corpses_sfx = 1;     // Звук раздавливания трупов
 int blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери

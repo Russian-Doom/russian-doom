@@ -906,7 +906,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(ssg_blast_enemies),         // Двуствольное ружье может разрывать врагов
     CONFIG_VARIABLE_INT(translucency),              // Эффект прозрачности у некоторых объектов
     CONFIG_VARIABLE_INT(weapon_bobbing),            // Покачивание оружия при стрельбе в движении
-    CONFIG_VARIABLE_INT(no_pickup_flash),           // Не мигать экраном при получении предметов
     // - Звук -
     CONFIG_VARIABLE_INT(crushed_corpses_sfx),       // Звук раздавливания трупов
     CONFIG_VARIABLE_INT(blazing_door_fix_sfx),      // Одиночный звук закрытия быстрой двери

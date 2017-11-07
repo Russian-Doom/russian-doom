@@ -1188,12 +1188,6 @@ void ST_doPaletteStuff(void)
     // [JN] Изменение палитры при получении бонусов
     else if (plyr->bonuscount)
     {
-        if (no_pickup_flash && !vanillaparm)
-        {
-            return;
-        }
-        else
-        {
             palette = (plyr->bonuscount+7)>>3;
             // [JN] Дополнительный фрейм палитры для более плавного
             // появления/угасания жёлтого экрана при подборе предметов.
@@ -1202,7 +1196,6 @@ void ST_doPaletteStuff(void)
             palette = NUMBONUSPALS;
 
             palette += STARTBONUSPALS-1;
-        }
     }
 
     else if ( plyr->powers[pw_ironfeet] > 4*32 || plyr->powers[pw_ironfeet]&8)

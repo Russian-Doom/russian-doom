@@ -112,7 +112,6 @@ static void SensibleDefaults(void)
     ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
     translucency = 1;            // Прозрачность объектов
     weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
-    no_pickup_flash = 1;         // Не мигать экраном при получении предметов
     // - Звук -
     crushed_corpses_sfx = 1;     // Звук раздавливания трупов
     blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
