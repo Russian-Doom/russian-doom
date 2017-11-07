@@ -885,7 +885,7 @@ void R_StoreWallRange (int start, int stop)
 
     // TODO: how should I really call R_InitBrightmaps once and set all brightmaps?
     // if (!brightmaps_are_set)
-    if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+    if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm && !fixedcolormap)
     R_InitBrightmaps();
     
     if (segtextured)
