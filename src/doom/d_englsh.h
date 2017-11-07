@@ -452,6 +452,11 @@
 #define STSTR_BEHOLDX   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
 
 #define STSTR_MASSACRE  "dct vjycnhs eybxnj;tys"                    // Все монстры уничтожены
+
+#define STSTR_ALWAYSRUN "gjcnjzyysq ,tu "                           // Постоянный бег
+#define STSTR_ALWRUNON  "drk.xty"                                   // включен
+#define STSTR_ALWRUNOFF "dsrk.xty"                                  // выключен
+
 #define STSTR_VERSION   "dthcbz 2>3 (25>11>2017)"                   // Версия 2.3 (25.11.2017)
 
 //

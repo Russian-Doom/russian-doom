@@ -421,8 +421,8 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         }
 
         // [JN] Добавлен звуковой фидбек
-        M_snprintf(autorunmsg, sizeof(autorunmsg), "gjcnjzyysq ,tu %s", // Постоянный бег
-            (joybspeed >= MAX_JOY_BUTTONS) ? "drk.xty" : "dsrk.xty");   // включен / выключен
+        M_snprintf(autorunmsg, sizeof(autorunmsg), STSTR_ALWAYSRUN "%s",
+            (joybspeed >= MAX_JOY_BUTTONS) ? STSTR_ALWRUNON : STSTR_ALWRUNOFF);
         players[consoleplayer].message = autorunmsg;
         S_StartSound(NULL,sfx_swtchn);
 
