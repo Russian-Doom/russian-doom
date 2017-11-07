@@ -453,6 +453,11 @@
 
 #define STSTR_MASSACRE  "dct vjycnhs eybxnj;tys"                    // Все монстры уничтожены
 
+// Специфические сообщения порта
+#define STSTR_TESTCTRLS "ht;bv ghjdthrb eghfdktybz"                 // Режим проверки управления
+
+#define STSTR_SCRNSHT   "crhbyijn cj[hfyty"                         // Скриншот сохранен
+
 #define STSTR_ALWAYSRUN "gjcnjzyysq ,tu "                           // Постоянный бег
 #define STSTR_ALWRUNON  "drk.xty"                                   // включен
 #define STSTR_ALWRUNOFF "dsrk.xty"                                  // выключен

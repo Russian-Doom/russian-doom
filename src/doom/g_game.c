@@ -735,7 +735,7 @@ void G_DoLoadLevel (void)
 
     if (testcontrols)
     {
-        players[consoleplayer].message = "ht;bv ghjdthrb eghfdktybz"; // Режим проверки управления
+        players[consoleplayer].message = STSTR_TESTCTRLS;
     }
 }
 
@@ -967,7 +967,7 @@ void G_Ticker (void)
             V_ScreenShot("DOOM%02i.%s");
             if (devparm)
             {
-                players[consoleplayer].message = DEH_String("crhbyijn cj[hfyty"); // Скриншот сохранен
+                players[consoleplayer].message = STSTR_SCRNSHT;
             }
             S_StartSound(NULL,sfx_itemup); // [JN] Звуковой фидбек
             gameaction = ga_nothing;
