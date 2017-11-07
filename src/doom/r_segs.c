@@ -30,7 +30,7 @@
 #include "g_game.h"
 
 // [JN] Brightmaps
-boolean brightmaps_are_set = false;
+// boolean brightmaps_are_set = false;
 int brightmap_redonly_doom1;
 int brightmap_redonly_doom2;
 int brightmap_greenonly1_doom2;
@@ -47,6 +47,7 @@ int brightmap_orangeyellow;
 
 // True if any of the segs textures might be visible.
 boolean segtextured;	
+boolean bmaptextured;
 
 // False if the back side is the same plane.
 boolean markfloor;	
@@ -522,102 +523,103 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 void R_InitBrightmaps (void)
 {
     // Doom 1 only
-    brightmap_redonly_doom1 = (gamemission == doom && segtextured == R_TextureNumForName("SW2STON2"));
+    brightmap_redonly_doom1 = (gamemission == doom && bmaptextured == R_TextureNumForName("SW2STON2"));
     
     // Doom 2 only
-    brightmap_redonly_doom2 = (gamemission != doom && (segtextured == R_TextureNumForName("SW1BRN1")
-    || segtextured == R_TextureNumForName("SW1STARG")
-    || segtextured == R_TextureNumForName("SW1STON2")
-    || segtextured == R_TextureNumForName("SW2MARB")));
+    brightmap_redonly_doom2 = (gamemission != doom && (bmaptextured == R_TextureNumForName("SW1BRN1")
+    || bmaptextured == R_TextureNumForName("SW1STARG")
+    || bmaptextured == R_TextureNumForName("SW1STON2")
+    || bmaptextured == R_TextureNumForName("SW2MARB")));
     
-    brightmap_greenonly1_doom2 = (gamemission != doom && (segtextured == R_TextureNumForName("SW2STON2")
-    || segtextured == R_TextureNumForName("SW2STARG")));
+    brightmap_greenonly1_doom2 = (gamemission != doom && (bmaptextured == R_TextureNumForName("SW2STON2")
+    || bmaptextured == R_TextureNumForName("SW2STARG")));
     
     // All games
-    brightmap_redonly = (segtextured == R_TextureNumForName("SW1BRCOM")
-    || segtextured == R_TextureNumForName("SW1DIRT")
-    || segtextured == R_TextureNumForName("SW1STRTN")
-    || segtextured == R_TextureNumForName("SW2COMP")
-    || segtextured == R_TextureNumForName("SW2PANEL")
-    || segtextured == R_TextureNumForName("SW2SLAD")
-    || segtextured == R_TextureNumForName("SW2WOOD")
-    || segtextured == R_TextureNumForName("WOOD4")
-    || segtextured == R_TextureNumForName("WOODSKUL")
-    || segtextured == R_TextureNumForName("SLADSKUL")
-    || segtextured == R_TextureNumForName("SW1BRIK")
-    || segtextured == R_TextureNumForName("SW1COMM")
-    || segtextured == R_TextureNumForName("SW1MET2")
-    || segtextured == R_TextureNumForName("SW1STON1")
-    || segtextured == R_TextureNumForName("SW1STONE")
-    || segtextured == R_TextureNumForName("SW2BLUE")
-    || segtextured == R_TextureNumForName("SW2GSTON")
-    || segtextured == R_TextureNumForName("SW2ROCK")
-    || segtextured == R_TextureNumForName("SW2STON6")
-    || segtextured == R_TextureNumForName("SW2ZIM")
-    || segtextured == R_TextureNumForName("WOODGARG")
-    || segtextured == R_TextureNumForName("PNK4EXIT")
-    || segtextured == R_TextureNumForName("LITERED2"));
+    brightmap_redonly = (bmaptextured == R_TextureNumForName("SW1BRCOM")
+    || bmaptextured == R_TextureNumForName("SW1DIRT")
+    || bmaptextured == R_TextureNumForName("SW1STRTN")
+    || bmaptextured == R_TextureNumForName("SW2COMP")
+    || bmaptextured == R_TextureNumForName("SW2PANEL")
+    || bmaptextured == R_TextureNumForName("SW2SLAD")
+    || bmaptextured == R_TextureNumForName("SW2WOOD")
+    || bmaptextured == R_TextureNumForName("WOOD4")
+    || bmaptextured == R_TextureNumForName("WOODSKUL")
+    || bmaptextured == R_TextureNumForName("SLADSKUL")
+    || bmaptextured == R_TextureNumForName("SW1BRIK")
+    || bmaptextured == R_TextureNumForName("SW1COMM")
+    || bmaptextured == R_TextureNumForName("SW1MET2")
+    || bmaptextured == R_TextureNumForName("SW1STON1")
+    || bmaptextured == R_TextureNumForName("SW1STONE")
+    || bmaptextured == R_TextureNumForName("SW2BLUE")
+    || bmaptextured == R_TextureNumForName("SW2GSTON")
+    || bmaptextured == R_TextureNumForName("SW2ROCK")
+    || bmaptextured == R_TextureNumForName("SW2STON6")
+    || bmaptextured == R_TextureNumForName("SW2ZIM")
+    || bmaptextured == R_TextureNumForName("WOODGARG")
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("LITERED2"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("PNK4EXIT")));
     
-    brightmap_notgray = (segtextured == R_TextureNumForName("COMPSTA2")
-    || segtextured == R_TextureNumForName("EXITSIGN")
-    || segtextured == R_TextureNumForName("PLANET1")
-    || segtextured == R_TextureNumForName("SW2EXIT")
-    || segtextured == R_TextureNumForName("SW2GRAY1")
-    || segtextured == R_TextureNumForName("COMPSTA1")
-    || segtextured == R_TextureNumForName("EXITSTON")
-    || segtextured == R_TextureNumForName("SILVER2")
-    || segtextured == R_TextureNumForName("LITEBLU1")
-    || segtextured == R_TextureNumForName("SW2GRAY")
-    || segtextured == R_TextureNumForName("LITEBLU2"));
+    brightmap_notgray = (bmaptextured == R_TextureNumForName("COMPSTA2")
+    || bmaptextured == R_TextureNumForName("EXITSIGN")
+    || bmaptextured == R_TextureNumForName("PLANET1")
+    || bmaptextured == R_TextureNumForName("SW2EXIT")
+    || bmaptextured == R_TextureNumForName("SW2GRAY1")
+    || bmaptextured == R_TextureNumForName("COMPSTA1")
+    || bmaptextured == R_TextureNumForName("EXITSTON")
+    || bmaptextured == R_TextureNumForName("SILVER2")
+    || bmaptextured == R_TextureNumForName("LITEBLU1")
+    || bmaptextured == R_TextureNumForName("SW2GRAY")
+    || bmaptextured == R_TextureNumForName("LITEBLU2"));
     
-    brightmap_notgrayorbrown = (segtextured == R_TextureNumForName("COMP2")
-    || segtextured == R_TextureNumForName("COMPUTE2")
-    || segtextured == R_TextureNumForName("SILVER3")
-    || segtextured == R_TextureNumForName("COMPUTE1")
-    || segtextured == R_TextureNumForName("COMPUTE3")
-    || segtextured == R_TextureNumForName("SW2MOD1")
-    || segtextured == R_TextureNumForName("BTNTMETL")
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD2"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD3"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD4"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD5"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD6"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD7"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD8"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD9"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD10"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD11"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLAD12"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLADRIP1"))
-    || (gamemission != doom && segtextured == R_TextureNumForName("SLADRIP3"))
-    || segtextured == R_TextureNumForName("BTNTSLVR"));
+    brightmap_notgrayorbrown = (bmaptextured == R_TextureNumForName("COMP2")
+    || bmaptextured == R_TextureNumForName("COMPUTE2")
+    || bmaptextured == R_TextureNumForName("SILVER3")
+    || bmaptextured == R_TextureNumForName("COMPUTE1")
+    || bmaptextured == R_TextureNumForName("COMPUTE3")
+    || bmaptextured == R_TextureNumForName("SW2MOD1")
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("BTNTMETL"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("BTNTSLVR"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD2"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD3"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD4"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD5"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD6"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD7"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD8"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD9"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD10"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD11"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD12"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLADRIP1"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLADRIP3")));
     
-    brightmap_greenonly1 = (segtextured == R_TextureNumForName("SW2BRN1")
-    || segtextured == R_TextureNumForName("SW2BRCOM")
-    || segtextured == R_TextureNumForName("SW2STON1")
-    || segtextured == R_TextureNumForName("SW2STONE")
-    || segtextured == R_TextureNumForName("SW2TEK")
-    || segtextured == R_TextureNumForName("SW2BRIK")
-    || segtextured == R_TextureNumForName("SW2BRN2")
-    || segtextured == R_TextureNumForName("SW2COMM")
-    || segtextured == R_TextureNumForName("SW2DIRT")
-    || segtextured == R_TextureNumForName("SW2MET2")
-    || segtextured == R_TextureNumForName("SW2STRTN")
-    || segtextured == R_TextureNumForName("SW2VINE")
-    || segtextured == R_TextureNumForName("PIPEWAL1")
-    || segtextured == R_TextureNumForName("TEKLITE2"));
+    brightmap_greenonly1 = (bmaptextured == R_TextureNumForName("SW2BRN1")
+    || bmaptextured == R_TextureNumForName("SW2BRCOM")
+    || bmaptextured == R_TextureNumForName("SW2STON1")
+    || bmaptextured == R_TextureNumForName("SW2STONE")
+    || bmaptextured == R_TextureNumForName("SW2TEK")
+    || bmaptextured == R_TextureNumForName("SW2BRIK")
+    || bmaptextured == R_TextureNumForName("SW2BRN2")
+    || bmaptextured == R_TextureNumForName("SW2COMM")
+    || bmaptextured == R_TextureNumForName("SW2DIRT")
+    || bmaptextured == R_TextureNumForName("SW2MET2")
+    || bmaptextured == R_TextureNumForName("SW2STRTN")
+    || bmaptextured == R_TextureNumForName("SW2VINE")
+    || bmaptextured == R_TextureNumForName("PIPEWAL1")
+    || bmaptextured == R_TextureNumForName("TEKLITE2"));
     
-    brightmap_greenonly2 = (segtextured == R_TextureNumForName("M_TEC")
-    || segtextured == R_TextureNumForName("SW2BRNGN"));
+    brightmap_greenonly2 = (bmaptextured == R_TextureNumForName("SW2BRNGN")
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("M_TEC")));
     
-    brightmap_greenonly3 = (segtextured == R_TextureNumForName("SW2METAL"));
+    brightmap_greenonly3 = (bmaptextured == R_TextureNumForName("SW2METAL"));
     
-    brightmap_orangeyellow = (segtextured == R_TextureNumForName("LITEYEL2")
-    || segtextured == R_TextureNumForName("LITEYEL3")
-    || segtextured == R_TextureNumForName("YELMETAL"));
+    brightmap_orangeyellow = (bmaptextured == R_TextureNumForName("TEKBRON2")
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("LITEYEL2"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("LITEYEL3"))
+    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("YELMETAL")));
 
     // [JN] Setting is done. Do not run this cycle again.
-    brightmaps_are_set = true;
+    // brightmaps_are_set = true;
 }
 
 //
@@ -879,6 +881,7 @@ void R_StoreWallRange (int start, int stop)
 
     // calculate rw_offset (only needed for textured lines)
     segtextured = midtexture | toptexture | bottomtexture | maskedtexture;
+    bmaptextured = midtexture | toptexture | bottomtexture;
 
     // TODO: how should I really call R_InitBrightmaps once and set all brightmaps?
     // if (!brightmaps_are_set)
