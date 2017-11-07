@@ -47,9 +47,9 @@
 //
 //	M_Menu.C
 //
-#define PRESSKEY    "(yf;vbnt k.,e. rkfdbie)"   // (Нажмите любую клавишу.)
-#define PRESSYN     "(yf;vbnt ^#^ bkb ^@^)"     // (Нажмите "Y" или "N".)
-#define DOSY        "(yf;vbnt ^#^ xnj,s dsqnb)" // (Нажмите "Y" чтобы выйти.)
+#define PRESSKEY    "(yf;vbnt k.,e. rkfdbie)"   // (Нажмите любую клавишу)
+#define PRESSYN     "(yf;vbnt ^#^ bkb ^@^)"     // (Нажмите "Y" или "N")
+#define DOSY        "(yf;vbnt ^#^ xnj,s dsqnb)" // (Нажмите "Y" чтобы выйти)
 
 #define QUITMSG     "ds ltqcndbntkmyj ]jnbnt dsqnb\nbp 'njq pfvtxfntkmyjq buhs?"            // Вы действительно хотите выйти \n из этой замечательной игры?
 #define LOADNET     "ytdjpvj;yj pfuhepbnm cj[hfytyye.\nbuhe d ctntdjq buht!\n\n"PRESSKEY    // Невозможно загрузить сохраненую \n игру в сетевой игре!
@@ -433,8 +433,8 @@
 //	ST_stuff.C
 //
 
-#define STSTR_MUS       "cvtyf vepsrb"                              // Смена музыки
-#define STSTR_NOMUS     "ds,jh ytdjpvj;ty"                          // Выбор невозможен
+#define STSTR_MUS       "cvtyf vepsrb>>>"                           // Смена музыки...
+#define STSTR_NOMUS     "ytrjhhtrnysq ds,jh"                        // Некорректный выбор
 #define STSTR_DQDON     "ytezpdbvjcnm frnbdbhjdfyf"                 // Неуязвимость активирована
 #define STSTR_DQDOFF    "ytezpdbvjcnm ltfrnbdbhjdfyf"               // Неуязвимость деактивирована
 
