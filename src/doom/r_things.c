@@ -37,9 +37,6 @@
 #define MINZ        (FRACUNIT*4)
 #define BASEYCENTER (ORIGHEIGHT/2)
 
-extern int randomly_flipcorpses;
-extern int weapon_bobbing;
-
 extern boolean chainsaw_attack_swing;
 
 //void R_DrawColumn (void);
@@ -392,7 +389,6 @@ void R_DrawVisSprite (vissprite_t* vis, int x1, int x2)
     int         texturecolumn;
     fixed_t     frac;
     patch_t*    patch;
-    extern int  translucency;
 
     patch = W_CacheLumpNum (vis->patch+firstspritelump, PU_CACHE);
 
