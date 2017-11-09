@@ -94,14 +94,11 @@ lighttable_t* zlight[LIGHTLEVELS][MAXLIGHTZ];
 
 // [JN] Brightmaps
 lighttable_t* fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t* fullbright_redonly_doom1[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t* fullbright_redonly_doom2[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_greenonly1[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t* fullbright_greenonly1_doom2[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
 
@@ -731,14 +728,11 @@ void R_ExecuteSetViewSize (void)
 
             // [JN] Brightmaps
             fullbright_redonly[i][j] = brightmaps_redonly + level*256;
-            fullbright_redonly_doom1[i][j] = brightmaps_redonly + level*256;
-            fullbright_redonly_doom2[i][j] = brightmaps_redonly + level*256;
             fullbright_notgray[i][j] = brightmaps_notgray + level*256;
             fullbright_notgrayorbrown[i][j] = brightmaps_notgrayorbrown + level*256;
             fullbright_greenonly1[i][j] = brightmaps_greenonly1 + level*256;
             fullbright_greenonly2[i][j] = brightmaps_greenonly2 + level*256;
             fullbright_greenonly3[i][j] = brightmaps_greenonly3 + level*256;
-            fullbright_greenonly1_doom2[i][j] = brightmaps_greenonly1 + level*256;
             fullbright_orangeyellow[i][j] = brightmaps_orangeyellow + level*256;
             fullbright_dimmeditems[i][j] = brightmaps_dimmeditems + level*256;
         }

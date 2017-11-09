@@ -31,9 +31,6 @@
 
 // [JN] Brightmaps
 // boolean brightmaps_are_set = false;
-int brightmap_redonly_doom1;
-int brightmap_redonly_doom2;
-int brightmap_greenonly1_doom2;
 int brightmap_redonly;
 int brightmap_notgrayorbrown;
 int brightmap_notgray;
@@ -522,20 +519,12 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 
 void R_InitBrightmaps (void)
 {
-    // Doom 1 only
-    brightmap_redonly_doom1 = (gamemission == doom && bmaptextured == R_TextureNumForName("SW2STON2"));
-    
-    // Doom 2 only
-    brightmap_redonly_doom2 = (gamemission != doom && (bmaptextured == R_TextureNumForName("SW1BRN1")
+    brightmap_redonly = ((gamemission == doom && bmaptextured == R_TextureNumForName("SW2STON2"))
+    || (gamemission != doom && (bmaptextured == R_TextureNumForName("SW1BRN1")
     || bmaptextured == R_TextureNumForName("SW1STARG")
     || bmaptextured == R_TextureNumForName("SW1STON2")
-    || bmaptextured == R_TextureNumForName("SW2MARB")));
-    
-    brightmap_greenonly1_doom2 = (gamemission != doom && (bmaptextured == R_TextureNumForName("SW2STON2")
-    || bmaptextured == R_TextureNumForName("SW2STARG")));
-    
-    // All games
-    brightmap_redonly = (bmaptextured == R_TextureNumForName("SW1BRCOM")
+    || bmaptextured == R_TextureNumForName("SW2MARB")))    
+    || bmaptextured == R_TextureNumForName("SW1BRCOM")
     || bmaptextured == R_TextureNumForName("SW1DIRT")
     || bmaptextured == R_TextureNumForName("SW1STRTN")
     || bmaptextured == R_TextureNumForName("SW2COMP")
@@ -556,8 +545,8 @@ void R_InitBrightmaps (void)
     || bmaptextured == R_TextureNumForName("SW2STON6")
     || bmaptextured == R_TextureNumForName("SW2ZIM")
     || bmaptextured == R_TextureNumForName("WOODGARG")
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("LITERED2"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("PNK4EXIT")));
+    || (gamemission == pack_tnt && (bmaptextured == R_TextureNumForName("LITERED2")
+    || bmaptextured == R_TextureNumForName("PNK4EXIT"))));
     
     brightmap_notgray = (bmaptextured == R_TextureNumForName("COMPSTA2")
     || bmaptextured == R_TextureNumForName("EXITSIGN")
@@ -577,23 +566,25 @@ void R_InitBrightmaps (void)
     || bmaptextured == R_TextureNumForName("COMPUTE1")
     || bmaptextured == R_TextureNumForName("COMPUTE3")
     || bmaptextured == R_TextureNumForName("SW2MOD1")
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("BTNTMETL"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("BTNTSLVR"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD2"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD3"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD4"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD5"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD6"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD7"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD8"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD9"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD10"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD11"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLAD12"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLADRIP1"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("SLADRIP3")));
+    || (gamemission == pack_tnt && (bmaptextured == R_TextureNumForName("BTNTMETL")
+    || bmaptextured == R_TextureNumForName("BTNTSLVR")
+    || bmaptextured == R_TextureNumForName("SLAD2")
+    || bmaptextured == R_TextureNumForName("SLAD3")
+    || bmaptextured == R_TextureNumForName("SLAD4")
+    || bmaptextured == R_TextureNumForName("SLAD5")
+    || bmaptextured == R_TextureNumForName("SLAD6")
+    || bmaptextured == R_TextureNumForName("SLAD7")
+    || bmaptextured == R_TextureNumForName("SLAD8")
+    || bmaptextured == R_TextureNumForName("SLAD9")
+    || bmaptextured == R_TextureNumForName("SLAD10")
+    || bmaptextured == R_TextureNumForName("SLAD11")
+    || bmaptextured == R_TextureNumForName("SLAD12")
+    || bmaptextured == R_TextureNumForName("SLADRIP1")
+    || bmaptextured == R_TextureNumForName("SLADRIP3"))));
     
-    brightmap_greenonly1 = (bmaptextured == R_TextureNumForName("SW2BRN1")
+    brightmap_greenonly1 = ((gamemission != doom && (bmaptextured == R_TextureNumForName("SW2STON2")
+    || bmaptextured == R_TextureNumForName("SW2STARG")))
+    || bmaptextured == R_TextureNumForName("SW2BRN1")
     || bmaptextured == R_TextureNumForName("SW2BRCOM")
     || bmaptextured == R_TextureNumForName("SW2STON1")
     || bmaptextured == R_TextureNumForName("SW2STONE")
@@ -614,9 +605,9 @@ void R_InitBrightmaps (void)
     brightmap_greenonly3 = (bmaptextured == R_TextureNumForName("SW2METAL"));
     
     brightmap_orangeyellow = (bmaptextured == R_TextureNumForName("TEKBRON2")
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("LITEYEL2"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("LITEYEL3"))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("YELMETAL")));
+    || (gamemission == pack_tnt && (bmaptextured == R_TextureNumForName("LITEYEL2")
+    || bmaptextured == R_TextureNumForName("LITEYEL3")
+    || bmaptextured == R_TextureNumForName("YELMETAL"))));
 
     // [JN] Setting is done. Do not run this cycle again.
     // brightmaps_are_set = true;
@@ -921,10 +912,6 @@ void R_StoreWallRange (int start, int stop)
         {
             if (brightmap_redonly)
             walllights = fullbright_redonly[0];
-            else if (brightmap_redonly_doom1)
-            walllights = fullbright_redonly_doom1[0];
-            else if (brightmap_redonly_doom2)
-            walllights = fullbright_redonly_doom2[0];
             else if (brightmap_notgray)
             walllights = fullbright_notgray[0];
             else if (brightmap_notgrayorbrown)
@@ -935,8 +922,6 @@ void R_StoreWallRange (int start, int stop)
             walllights = fullbright_greenonly2[0];
             else if (brightmap_greenonly3)
             walllights = fullbright_greenonly3[0];
-            else if (brightmap_greenonly1_doom2)
-            walllights = fullbright_greenonly1_doom2[0];
             else if (brightmap_orangeyellow)
             walllights = fullbright_orangeyellow[0];
             else // [JN] Standard light table
@@ -947,10 +932,6 @@ void R_StoreWallRange (int start, int stop)
         {
             if (brightmap_redonly)
             walllights = fullbright_redonly[LIGHTLEVELS-1];
-            else if (brightmap_redonly_doom1)
-            walllights = fullbright_redonly_doom1[LIGHTLEVELS-1];
-            else if (brightmap_redonly_doom2)
-            walllights = fullbright_redonly_doom2[LIGHTLEVELS-1];
             else if (brightmap_notgray)
             walllights = fullbright_notgray[LIGHTLEVELS-1];
             else if (brightmap_notgrayorbrown)
@@ -961,8 +942,6 @@ void R_StoreWallRange (int start, int stop)
             walllights = fullbright_greenonly2[LIGHTLEVELS-1];
             else if (brightmap_greenonly3)
             walllights = fullbright_greenonly3[LIGHTLEVELS-1];
-            else if (brightmap_greenonly1_doom2)
-            walllights = fullbright_greenonly1_doom2[LIGHTLEVELS-1];
             else if (brightmap_orangeyellow)
             walllights = fullbright_orangeyellow[LIGHTLEVELS-1];
             else // [JN] Standard light table 
@@ -973,10 +952,6 @@ void R_StoreWallRange (int start, int stop)
         {
             if (brightmap_redonly)
             walllights = fullbright_redonly[lightnum];
-            else if (brightmap_redonly_doom1)
-            walllights = fullbright_redonly_doom1[lightnum];
-            else if (brightmap_redonly_doom2)
-            walllights = fullbright_redonly_doom2[lightnum];
             else if (brightmap_notgray)
             walllights = fullbright_notgray[lightnum];
             else if (brightmap_notgrayorbrown)
@@ -987,8 +962,6 @@ void R_StoreWallRange (int start, int stop)
             walllights = fullbright_greenonly2[lightnum];
             else if (brightmap_greenonly3)
             walllights = fullbright_greenonly3[lightnum];
-            else if (brightmap_greenonly1_doom2)
-            walllights = fullbright_greenonly1_doom2[lightnum];
             else if (brightmap_orangeyellow)
             walllights = fullbright_orangeyellow[lightnum];
             else // [JN] Standard light table 
