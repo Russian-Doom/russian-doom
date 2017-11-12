@@ -273,7 +273,7 @@ menu_t  MainDef =
     NULL,
     MainMenu,
     M_DrawMainMenu,
-    97,64,
+    97,70,
     0
 };
 
