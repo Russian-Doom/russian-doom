@@ -1505,6 +1505,13 @@ boolean M_Responder (event_t* ev)
         return false;
     }
 
+    // [JN] Не запрашивать подтверждение на выход при нажатии F10 в режиме разработчика (devparm).
+    if (devparm && ev->data1 == key_menu_quit)
+    {
+        I_Quit();
+        return true;
+    }
+
     // "close" button pressed on window?
     if (ev->type == ev_quit)
     {
