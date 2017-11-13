@@ -630,14 +630,8 @@ static void CreateUpscaledTexture(boolean force)
     // which looks much softer and smoother than "nearest" but does a better
     // job at downscaling from the upscaled texture to screen.
 
-    if (smoothing)
-    {
-        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-    }
-    else
-    {
-        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-    }
+    // [JN] smooting - функция и переменная незначительного сглаживания текстур.
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, smoothing ? "linear" : "nearest");
 
     texture_upscaled = SDL_CreateTexture(renderer,
                                 pixel_format,
