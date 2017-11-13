@@ -60,13 +60,14 @@ int agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных Душ
 void CompatibilitySettings(void)
 {
     txt_window_t *window;
-    txt_window_t *window_features;
+    txt_table_t  *window_features;
 
     window = TXT_NewWindow("„ополнительные параметры игры");
+    window_features = TXT_NewTable(1);
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
-    TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features = TXT_NewTable(1)));
+    TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features));
 
     TXT_AddWidgets(window_features,
     TXT_If(gamemission == doom || gamemission == strife, TXT_NewSeparator("€нтерфейс")),

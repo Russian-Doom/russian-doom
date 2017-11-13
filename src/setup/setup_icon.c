@@ -1,5 +1,6 @@
-static int setup_icon_w = 48;
-static int setup_icon_h = 48;
+// [JN] Размеры иконки заданы в mainmenu.c
+// static int setup_icon_w = 48;
+// static int setup_icon_h = 48;
 
 static const unsigned int setup_icon_data[] = {
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 
