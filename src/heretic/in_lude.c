@@ -615,75 +615,8 @@ void IN_DrawOldLevel(void)
                             7) / 2;
     IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
 
-	// [JN] Задаём разные тексты "завершен/завершена/завершено/завершены" для всех уровней игры. 
-	// Экран №2, при загрузке нового уровня.
-	if (gameepisode == 1) //ГОРОД ПРОКЛЯТЫХ
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"),  x, 25); }	// E1M1: ДОКИ
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"),  x, 25); }	// E1M2: ТЕМНИЦЫ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M3: ПРИВРАТНИЦКАЯ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M4: СТОРОЖЕВАЯ БАШНЯ
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M5: ЦИТАДЕЛЬ
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),   x, 25); }	// E1M6: КАФЕДРАЛЬНЫЙ СОБОР
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"),  x, 25); }	// E1M7: СКЛЕПЫ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M8: АДСКАЯ УТРОБА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYJ")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"),  x, 25); }	// E1M9: КЛАДБИЩЕ
-	}
-	
-	if (gameepisode == 2) // АДСКАЯ УТРОБА
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M1: КРАТЕР
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E2M2: ЛАВОВЫЕ ОЧАГИ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E2M3: РЕКА ОГНЯ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M4: ЛЕДЯНОЙ ГРОТ
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E2M5: КАТАКОМБЫ
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M6: ЛАБИРИНТ
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M7: БОЛЬШОЙ ЗАЛ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E2M8: ПОРТАЛЫ ХАОСА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M9: ЛЕДНИК 
-	}
-
-	if (gameepisode == 3) // КУПОЛ Д'СПАРИЛА
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M1: КЛАДОВАЯ
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E3M2: СТОЧНЫЙ КОЛОДЕЦ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYJ")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"), x, 25); }	// E3M3: СЛИЯНИЕ 
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M4: ЛАЗУРНАЯ КРЕПОСТЬ
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"), x, 25); }	// E3M5: ЛОГОВО ОФИДИАНОВ
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E3M6: ЗАЛЫ СТРАХА
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M7: ПРОПАСТЬ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M8: КРЕПОСТЬ Д'СПАРИЛА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E3M9: ВОДОНОСНЫЙ СЛОЙ
-	}
-
-	if (gameepisode == 4) // СКЛЕП
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E4M1: КАТАФАЛК
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYJ")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"), x, 25); }	// E4M2: УКРЫТИЕ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E4M3: МОНАСТЫРСКАЯ ГАЛЕРЕЯ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E4M4: ГРОБНИЦА
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E4M5: ВЕЛИКАЯ ЛЕСТНИЦА
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E4M6: ЗАЛЫ ОТСТУПНИКОВ
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E4M7: ТВЕРДЫНИ ПОГИБЕЛИ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E4M8: РАЗРУШЕННЫЙ МОСТ
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E4M9: МАВЗОЛЕЙ
-	}
-
-	if (gameepisode == 5) // ЗАСТОЙНЫЕ ВЛАДЕНИЯ
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E5M1: ОХРОВЫЕ УТЕСЫ
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E5M2: СТРЕМНИНА
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M3: ПРИЧАЛ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M4: ВНУТРЕННИЙ ДВОР
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M5: ГИДРОТИР
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E5M6: КОЛОННАДА 
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M7: ЗЛОВОННЫЙ ОСОБНЯК
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E5M8: ПОЛЕ ВЫСШЕГО СУДА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E5M9: НЕРАЗБЕРИХА Д'СПАРИЛА
-	}
-	
-//   x = 160 - MN_TextAWidth(DEH_String("FINISHED")) / 2;
-//   MN_DrTextA(DEH_String("FINISHED"), x, 25);
+    x = 160 - MN_TextAWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;    // УРОВЕНЬ ЗАВЕРШЕН 
+    MN_DrTextA(DEH_String("EHJDTYM PFDTHITY"), x, 25);              // УРОВЕНЬ ЗАВЕРШЕН
 
     if (prevmap == 9)
     {
@@ -729,50 +662,10 @@ void IN_DrawYAH(void)
 {
     int i;
     int x;
-	
-	// [JN] Задаём разные тексты "загружается/загружаются" для эпизодов 1, 2 и 3.	
-	if (gameepisode == 1) // ГОРОД ПРОКЛЯТЫХ
-	{
-		if (gamemap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 10); }	// E1M1: ДОКИ
-		if (gamemap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 10); }	// E1M2: ТЕМНИЦЫ
-		if (gamemap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E1M3: ПРИВРАТНИЦКАЯ
-		if (gamemap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E1M4: СТОРОЖЕВАЯ БАШНЯ
-		if (gamemap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E1M5: ЦИТАДЕЛЬ
-		if (gamemap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E1M6: КАФЕДРАЛЬНЫЙ СОБОР
-		if (gamemap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 10); }	// E1M7: СКЛЕПЫ
-		if (gamemap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E1M8: АДСКАЯ УТРОБА
-		if (gamemap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E1M9: КЛАДБИЩЕ
-	}
-			
-	if (gameepisode == 2) // ГОРОД ПРОКЛЯТЫХ
-	{
-		if (gamemap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E2M1: КРАТЕР
-		if (gamemap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 10); }	// E2M2: ЛАВОВЫЕ ОЧАГИ
-		if (gamemap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E2M3: РЕКА ОГНЯ
-		if (gamemap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E2M4: ЛЕДЯНОЙ ГРОТ
-		if (gamemap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 10); }	// E2M5: КАТАКОМБЫ
-		if (gamemap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E2M6: ЛАБИРИНТ
-		if (gamemap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E2M7: БОЛЬШОЙ ЗАЛ
-		if (gamemap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 10); }	// E2M8: ПОРТАЛЫ ХАОСА
-		if (gamemap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E2M9: ЛЕДНИК 
-	}
-	
-	if (gameepisode == 3) // КУПОЛ Д'СПАРИЛА
-	{
-		if (gamemap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E3M1: КЛАДОВАЯ
-		if (gamemap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E3M2: СТОЧНЫЙ КОЛОДЕЦ
-		if (gamemap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E3M3: СЛИЯНИЕ 
-		if (gamemap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E3M4: ЛАЗУРНАЯ КРЕПОСТЬ
-		if (gamemap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E3M5: ЛОГОВО ОФИДИАНОВ
-		if (gamemap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 10); }	// E3M6: ЗАЛЫ СТРАХА
-		if (gamemap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E3M7: ПРОПАСТЬ
-		if (gamemap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E3M8: КРЕПОСТЬ Д'СПАРИЛА
-		if (gamemap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10); }	// E3M9: ВОДОНОСНЫЙ СЛОЙ
-	}
-	
-    // x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2;		// ЗАГРУЖАЕТСЯ
-    // MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 10);				// ЗАГРУЖАЕТСЯ
-	
+
+    x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ EHJDTYM")) / 2;		// ЗАГРУЖАЕТСЯ УРОВЕНЬ
+    MN_DrTextA(DEH_String("PFUHE:FTNCZ EHJDTYM"), x, 10);				// ЗАГРУЖАЕТСЯ УРОВЕНЬ
+
     x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] +
                             7) / 2;
     IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7, x, 20);
@@ -819,72 +712,8 @@ void IN_DrawSingleStats(void)
                             7) / 2;
     IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
 
-	// [JN] Задаём разные тексты "завершен/завершена/завершено/завершены" для всех уровней игры. 
-	// Экран №1, со статистикой.
-	if (gameepisode == 1) //ГОРОД ПРОКЛЯТЫХ
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"),  x, 25); }	// E1M1: ДОКИ
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"),  x, 25); }	// E1M2: ТЕМНИЦЫ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M3: ПРИВРАТНИЦКАЯ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M4: СТОРОЖЕВАЯ БАШНЯ
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M5: ЦИТАДЕЛЬ
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),   x, 25); }	// E1M6: КАФЕДРАЛЬНЫЙ СОБОР
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"),  x, 25); }	// E1M7: СКЛЕПЫ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M8: АДСКАЯ УТРОБА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYJ")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"),  x, 25); }	// E1M9: КЛАДБИЩЕ
-	}
-	
-	if (gameepisode == 2) // АДСКАЯ УТРОБА
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M1: КРАТЕР
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E2M2: ЛАВОВЫЕ ОЧАГИ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E2M3: РЕКА ОГНЯ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M4: ЛЕДЯНОЙ ГРОТ
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E2M5: КАТАКОМБЫ
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M6: ЛАБИРИНТ
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M7: БОЛЬШОЙ ЗАЛ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E2M8: ПОРТАЛЫ ХАОСА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M9: ЛЕДНИК 
-	}
-
-	if (gameepisode == 3) // КУПОЛ Д'СПАРИЛА
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M1: КЛАДОВАЯ
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E3M2: СТОЧНЫЙ КОЛОДЕЦ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYJ")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"), x, 25); }	// E3M3: СЛИЯНИЕ 
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M4: ЛАЗУРНАЯ КРЕПОСТЬ
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"), x, 25); }	// E3M5: ЛОГОВО ОФИДИАНОВ
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E3M6: ЗАЛЫ СТРАХА
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M7: ПРОПАСТЬ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M8: КРЕПОСТЬ Д'СПАРИЛА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E3M9: ВОДОНОСНЫЙ СЛОЙ
-	}
-
-	if (gameepisode == 4) // СКЛЕП
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E4M1: КАТАФАЛК
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYJ")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"), x, 25); }	// E4M2: УКРЫТИЕ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E4M3: МОНАСТЫРСКАЯ ГАЛЕРЕЯ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E4M4: ГРОБНИЦА
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E4M5: ВЕЛИКАЯ ЛЕСТНИЦА
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E4M6: ЗАЛЫ ОТСТУПНИКОВ
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E4M7: ТВЕРДЫНИ ПОГИБЕЛИ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E4M8: РАЗРУШЕННЫЙ МОСТ
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E4M9: МАВЗОЛЕЙ
-	}
-
-	if (gameepisode == 5) // ЗАСТОЙНЫЕ ВЛАДЕНИЯ
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E5M1: ОХРОВЫЕ УТЕСЫ
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E5M2: СТРЕМНИНА
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M3: ПРИЧАЛ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M4: ВНУТРЕННИЙ ДВОР
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M5: ГИДРОТИР
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E5M6: КОЛОННАДА 
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M7: ЗЛОВОННЫЙ ОСОБНЯК
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E5M8: ПОЛЕ ВЫСШЕГО СУДА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E5M9: НЕРАЗБЕРИХА Д'СПАРИЛА
-	}
+    x = 160 - MN_TextAWidth(DEH_String("EHJDTYM PFDTHITY")) / 2; // УРОВЕНЬ ЗАВЕРШЕН
+    MN_DrTextA(DEH_String("EHJDTYM PFDTHITY"), x, 25);           // УРОВЕНЬ ЗАВЕРШЕН
 
     if (intertime < 30)
     {
@@ -940,36 +769,9 @@ void IN_DrawSingleStats(void)
     }
     else
     {
-	
-	// [JN] Задаём разные тексты "загружается/загружаются" для эпизодов 4 и 5.	
-	if (gameepisode == 4) // СКЛЕП
-	{
-		if (gamemap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E4M1: КАТАФАЛК
-		if (gamemap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E4M2: УКРЫТИЕ
-		if (gamemap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E4M3: МОНАСТЫРСКАЯ ГАЛЕРЕЯ
-		if (gamemap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E4M4: ГРОБНИЦА
-		if (gamemap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E4M5: ВЕЛИКАЯ ЛЕСТНИЦА
-		if (gamemap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 160); }	// E4M6: ЗАЛЫ ОТСТУПНИКОВ
-		if (gamemap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 160); }	// E4M7: ТВЕРДЫНИ ПОГИБЕЛИ
-		if (gamemap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E4M8: РАЗРУШЕННЫЙ МОСТ
-		if (gamemap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E4M9: МАВЗОЛЕЙ
-	}
-	
-	if (gameepisode == 5) // ЗАСТОЙНЫЕ ВЛАДЕНИЯ
-	{
-		if (gamemap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:F>NCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:F>NCZ"), x, 160); }	// E5M1: ОХРОВЫЕ УТЕСЫ
-		if (gamemap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E5M2: СТРЕМНИНА
-		if (gamemap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E5M3: ПРИЧАЛ
-		if (gamemap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E5M4: ВНУТРЕННИЙ ДВОР
-		if (gamemap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E5M5: ГИДРОТИР
-		if (gamemap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E5M6: КОЛОННАДА 
-		if (gamemap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E5M7: ЗЛОВОННЫЙ ОСОБНЯК
-		if (gamemap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E5M8: ПОЛЕ ВЫСШЕГО СУДА
-		if (gamemap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2; MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160); }	// E5M9: НЕРАЗБЕРИХА Д'СПАРИЛА
-	}
-	
-//        x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ")) / 2;	// ЗАГРУЖАЕТСЯ
-//        MN_DrTextA(DEH_String("PFUHE:FTNCZ"), x, 160);			// ЗАГРУЖАЕТСЯ
+
+        x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ EHJDTYM")) / 2;	// ЗАГРУЖАЕТСЯ УРОВЕНЬ
+        MN_DrTextA(DEH_String("PFUHE:FTNCZ EHJDTYM"), x, 160);			// ЗАГРУЖАЕТСЯ УРОВЕНЬ
 
         x = 160 -
             MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] +
@@ -1000,75 +802,9 @@ void IN_DrawCoopStats(void)
     x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] +
                             7) / 2;
     IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
-    
-	// [JN] Задаём разные тексты "завершен/завершена/завершено/завершены" для всех уровней игры. 
-	// Экран совместного прохождения.
-	if (gameepisode == 1) //ГОРОД ПРОКЛЯТЫХ
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"),  x, 25); }	// E1M1: ДОКИ
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"),  x, 25); }	// E1M2: ТЕМНИЦЫ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M3: ПРИВРАТНИЦКАЯ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M4: СТОРОЖЕВАЯ БАШНЯ
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M5: ЦИТАДЕЛЬ
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),   x, 25); }	// E1M6: КАФЕДРАЛЬНЫЙ СОБОР
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"),  x, 25); }	// E1M7: СКЛЕПЫ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"),  x, 25); }	// E1M8: АДСКАЯ УТРОБА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYJ")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"),  x, 25); }	// E1M9: КЛАДБИЩЕ
-	}
-	
-	if (gameepisode == 2) // АДСКАЯ УТРОБА
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M1: КРАТЕР
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E2M2: ЛАВОВЫЕ ОЧАГИ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E2M3: РЕКА ОГНЯ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M4: ЛЕДЯНОЙ ГРОТ
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E2M5: КАТАКОМБЫ
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M6: ЛАБИРИНТ
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M7: БОЛЬШОЙ ЗАЛ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E2M8: ПОРТАЛЫ ХАОСА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E2M9: ЛЕДНИК 
-	}
 
-	if (gameepisode == 3) // КУПОЛ Д'СПАРИЛА
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M1: КЛАДОВАЯ
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E3M2: СТОЧНЫЙ КОЛОДЕЦ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYJ")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"), x, 25); }	// E3M3: СЛИЯНИЕ 
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M4: ЛАЗУРНАЯ КРЕПОСТЬ
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"), x, 25); }	// E3M5: ЛОГОВО ОФИДИАНОВ
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E3M6: ЗАЛЫ СТРАХА
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M7: ПРОПАСТЬ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E3M8: КРЕПОСТЬ Д'СПАРИЛА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E3M9: ВОДОНОСНЫЙ СЛОЙ
-	}
-
-	if (gameepisode == 4) // СКЛЕП
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E4M1: КАТАФАЛК
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYJ")) / 2; MN_DrTextA(DEH_String("PFDTHITYJ"), x, 25); }	// E4M2: УКРЫТИЕ
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E4M3: МОНАСТЫРСКАЯ ГАЛЕРЕЯ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E4M4: ГРОБНИЦА
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E4M5: ВЕЛИКАЯ ЛЕСТНИЦА
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E4M6: ЗАЛЫ ОТСТУПНИКОВ
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E4M7: ТВЕРДЫНИ ПОГИБЕЛИ
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E4M8: РАЗРУШЕННЫЙ МОСТ
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E4M9: МАВЗОЛЕЙ
-	}
-
-	if (gameepisode == 5) // ЗАСТОЙНЫЕ ВЛАДЕНИЯ
-	{
-		if (prevmap == 1 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E5M1: ОХРОВЫЕ УТЕСЫ
-		if (prevmap == 2 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E5M2: СТРЕМНИНА
-		if (prevmap == 3 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M3: ПРИЧАЛ
-		if (prevmap == 4 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M4: ВНУТРЕННИЙ ДВОР
-		if (prevmap == 5 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M5: ГИДРОТИР
-		if (prevmap == 6 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E5M6: КОЛОННАДА 
-		if (prevmap == 7 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITY"))  / 2; MN_DrTextA(DEH_String("PFDTHITY"),  x, 25); }	// E5M7: ЗЛОВОННЫЙ ОСОБНЯК
-		if (prevmap == 8 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYS")) / 2; MN_DrTextA(DEH_String("PFDTHITYS"), x, 25); }	// E5M8: ПОЛЕ ВЫСШЕГО СУДА
-		if (prevmap == 9 ) { x = 160 - MN_TextAWidth(DEH_String("PFDTHITYF")) / 2; MN_DrTextA(DEH_String("PFDTHITYF"), x, 25); }	// E5M9: НЕРАЗБЕРИХА Д'СПАРИЛА
-	}
-	
-//	x = 160 - MN_TextAWidth(DEH_String("FINISHED")) / 2; MN_DrTextA(DEH_String("FINISHED"), x, 25);
+    x = 160 - MN_TextAWidth(DEH_String("EHJDTYM PFDTHITY")) / 2; // УРОВЕНЬ ЗАВЕРШЕН
+    MN_DrTextA(DEH_String("EHJDTYM PFDTHITY"), x, 25);           // УРОВЕНЬ ЗАВЕРШЕН
 
     ypos = 50;
     for (i = 0; i < MAXPLAYERS; i++)
