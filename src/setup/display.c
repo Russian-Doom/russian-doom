@@ -215,14 +215,16 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
 
     // [JN] Ёкспериментальные функции
 
-    TXT_NewSeparator("Юкспериментальные функции"),
+    TXT_NewSeparator("Рендеринг"),
     TXT_NewCheckBox("Незначительное сглаживание текстур", &smoothing),
     TXT_If(gamemission == doom,
         TXT_NewCheckBox("Отключить эффект плавной смены экранов", &disable_screen_wiping)),
+/*
     TXT_NewCheckBox("Мигать бордюрами экрана (эмул€ци€ VGA)", &vga_porch_flash),
 #if SDL_VERSION_ATLEAST(2, 0, 5)
         TXT_NewCheckBox("Целочисленное масштабирование окна", &integer_scaling),
 #endif
+*/
 
 #ifdef HAVE_LIBPNG
         TXT_NewCheckBox("Сохран€ть скриншоты в формате PNG", &png_screenshots),
