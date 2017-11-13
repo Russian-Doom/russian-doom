@@ -12,7 +12,7 @@ FILETYPE 1
    VALUE "FileVersion", "2.3"
    VALUE "FileDescription", "Russian Doom"
    VALUE "InternalName", "Russian Doom"
-   VALUE "CompanyName", "Russian Doom"
+   VALUE "CompanyName", "julian.nechaevsky@outlook.com"
    VALUE "LegalCopyright", "\xA9 2016-2017 Julian Nechaevsky. All rights reserved."
    VALUE "ProductName", "Russian Doom"
    VALUE "ProductVersion", "2.3"

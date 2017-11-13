@@ -10,9 +10,9 @@ FILETYPE 1
   BLOCK "040904E4"
   {
    VALUE "FileVersion", "2.3"
-   VALUE "FileDescription", "Настройка Russian Doom"
-   VALUE "InternalName", "setup"
-   VALUE "CompanyName", "Russian Doom"
+   VALUE "FileDescription", "Программа настроек"
+   VALUE "InternalName", "Setup.exe"
+   VALUE "CompanyName", "julian.nechaevsky@outlook.com"
    VALUE "LegalCopyright", "\xA9 2016-2017 Julian Nechaevsky. All rights reserved."
    VALUE "ProductName", "Setup.exe"
    VALUE "ProductVersion", "2.3"
