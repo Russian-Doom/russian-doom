@@ -6,7 +6,7 @@ Russian Doom is Copyright &copy; 2016&ndash;2017 by [Julian Nechaevsky](http://j
 
 DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey Khokholov and [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) by Alexandre-Xavier Labonté-Lamoureux, with significant additions from [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath, and distributes with their permission. 
 
-The project, all it's materials, files and source codes are available under the terms and conditions of [GNU General Public License version 2](https://github.com/JNechaevsky/russian-doom/blob/master/LICENSE.txt).
+The project, all it's translation materials and source codes are available under the terms and conditions of [GNU General Public License version 2](https://github.com/JNechaevsky/russian-doom/blob/master/LICENSE.txt).
 
 ##### Download latest version
 
