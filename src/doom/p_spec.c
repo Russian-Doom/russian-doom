@@ -1215,7 +1215,13 @@ void P_UpdateSpecials (void)
 			buttonlist[i].btexture;
 		    break;
 		}
-		S_StartSound(&buttonlist[i].soundorg,sfx_swtchn);
+
+        // [JN] Корректировка повторного звучания "sfx_swtchn" для односторонних линий.
+        if (buttonlist[i].line->backsector == NULL && !vanillaparm)
+        S_StartSound(buttonlist[i].soundorg,sfx_swtchn);
+        else
+        S_StartSound(&buttonlist[i].soundorg,sfx_swtchn);
+
 		memset(&buttonlist[i],0,sizeof(button_t));
 	    }
 	}
