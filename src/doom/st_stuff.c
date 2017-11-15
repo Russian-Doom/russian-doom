@@ -107,7 +107,7 @@ extern int lcd_gamma_fix;
 #define ST_NUMEXTRAFACES    2
 
 #define ST_NUMFACES \
-       (ST_FACESTRIDE*ST_NUMPAINFACES+ST_NUMEXTRAFACES+1) // [JN] Atari Doom - +1 дополнительное лицо
+       (ST_FACESTRIDE*ST_NUMPAINFACES+ST_NUMEXTRAFACES+6) // [JN] Atari Doom - +6 дополнительных лиц
 
 #define ST_TURNOFFSET       (ST_NUMSTRAIGHTFACES)
 #define ST_OUCHOFFSET       (ST_TURNOFFSET + ST_NUMTURNFACES)
@@ -116,7 +116,12 @@ extern int lcd_gamma_fix;
 #define ST_GODFACE          (ST_NUMPAINFACES*ST_FACESTRIDE)
 #define ST_DEADFACE         (ST_GODFACE+1)
 // [JN] Atari Doom - дополнительное лицо "разорванного" игрока
-#define ST_EXPLFACE         (ST_DEADFACE+1)
+#define ST_EXPLFACE0        (ST_DEADFACE+1)
+#define ST_EXPLFACE1        (ST_EXPLFACE0+1)
+#define ST_EXPLFACE2        (ST_EXPLFACE1+1)
+#define ST_EXPLFACE3        (ST_EXPLFACE2+1)
+#define ST_EXPLFACE4        (ST_EXPLFACE3+1)
+#define ST_EXPLFACE5        (ST_EXPLFACE4+1)
 
 #define ST_FACESX           143
 #define ST_FACESY           168
@@ -862,8 +867,23 @@ void ST_updateFaceWidget(void)
         {
             priority = 9;
             painoffset = 0;
-            faceindex = ST_EXPLFACE;
-            st_facecount = 1;
+
+            // [JN] Синхронизация лица с состоянием игрока
+            if (plyr->mo->state == &states[S_PLAY_XDIE1])
+                faceindex = ST_EXPLFACE0;
+            if (plyr->mo->state == &states[S_PLAY_XDIE2])
+                faceindex = ST_EXPLFACE1;
+            if (plyr->mo->state == &states[S_PLAY_XDIE3])
+                faceindex = ST_EXPLFACE2;
+            if (plyr->mo->state == &states[S_PLAY_XDIE4])
+                faceindex = ST_EXPLFACE3;
+            if (plyr->mo->state == &states[S_PLAY_XDIE5])
+                faceindex = ST_EXPLFACE4;
+            if ((plyr->mo->state == &states[S_PLAY_XDIE6])
+            || (plyr->mo->state == &states[S_PLAY_XDIE7])
+            || (plyr->mo->state == &states[S_PLAY_XDIE8])
+            || (plyr->mo->state == &states[S_PLAY_XDIE9]))
+                faceindex = ST_EXPLFACE5;
         }
     }
 
@@ -1458,6 +1478,16 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     ++facenum;
     callback(DEH_String("STFEXPL0"), &faces[facenum]);
     ++facenum;
+    callback(DEH_String("STFEXPL1"), &faces[facenum]);
+    ++facenum;
+    callback(DEH_String("STFEXPL2"), &faces[facenum]);
+    ++facenum;
+    callback(DEH_String("STFEXPL3"), &faces[facenum]);
+    ++facenum;
+    callback(DEH_String("STFEXPL4"), &faces[facenum]);
+    ++facenum;
+    callback(DEH_String("STFEXPL5"), &faces[facenum]);
+    ++facenum;
 
     // [JN] Удвоение массива спрайтов лиц, необходимое для бессмертия.
     for (i = 0; i < ST_NUMPAINFACES; i++)
@@ -1487,6 +1517,11 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     callback("STFGOD0G", &faces[facenum++]);
     callback("STFDEA0G", &faces[facenum++]);
     callback("STFEXP0G", &faces[facenum++]);
+    callback("STFEXP1G", &faces[facenum++]);
+    callback("STFEXP2G", &faces[facenum++]);
+    callback("STFEXP3G", &faces[facenum++]);
+    callback("STFEXP4G", &faces[facenum++]);
+    callback("STFEXP5G", &faces[facenum++]);
 }
 
 
