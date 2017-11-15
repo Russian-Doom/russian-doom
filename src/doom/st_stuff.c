@@ -862,7 +862,8 @@ void ST_updateFaceWidget(void)
             faceindex = ST_DEADFACE;
             st_facecount = 1;
         }
-        // [JN] Atari Doom - дополнительное лицо "разорванного" игрока
+        // [JN] Atari Doom - дополнительное лицо "разорванного" игрока.
+        // Proper checking for xdeath state has been taken from Crispy Doom, thanks to Fabian Greffrath!
         if (plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate && !vanillaparm)
         {
             priority = 9;
