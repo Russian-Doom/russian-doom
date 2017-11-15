@@ -1556,10 +1556,29 @@ A_PainShootSkull
     y = actor->y + FixedMul (prestep, finesine[an]);
     z = actor->z + 8*FRACUNIT;
 		
+    // [JN] Предотвращение появление Потеряных Душ за пределами карты,
+    // т.е. за односторонними линиями. Только для одиночной игры, так как
+    // небезопасно для внутренних демозаписей (например, Plutonia DEMO3).
+    // This code (as well as PIT_CrossLine and floor/ceiling checking) 
+    // has beed taken from Doom Retro, thanks to Brad Harding!
+
+    // Check whether the Lost Soul is being fired through a 1-sided
+    // wall or an impassible line, or a "monsters can't cross" line.
+    // If it is, then we don't allow the spawn.
+    if (singleplayer)
+    {
+        if (P_CheckLineSide(actor, x, y))
+        return;
+    }
+
     newmobj = P_SpawnMobj (x , y, z, MT_SKULL);
 
     // Check for movements.
-    if (!P_TryMove (newmobj, newmobj->x, newmobj->y))
+    if (!P_TryMove (newmobj, newmobj->x, newmobj->y)
+    // Check to see if the new Lost Soul's z value is above the
+    // ceiling of its new sector, or below the floor. If so, kill it.
+    || newmobj->z > newmobj->subsector->sector->ceilingheight - newmobj->height
+    || newmobj->z < newmobj->subsector->sector->floorheight)
     {
 	// kill it immediately
 	P_DamageMobj (newmobj,actor,actor,10000);	

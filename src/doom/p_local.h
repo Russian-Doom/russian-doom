@@ -228,6 +228,7 @@ extern	int	numspechit;
 
 boolean P_CheckPosition (mobj_t *thing, fixed_t x, fixed_t y);
 boolean P_TryMove (mobj_t* thing, fixed_t x, fixed_t y);
+boolean P_CheckLineSide(mobj_t *actor, fixed_t x, fixed_t y);
 boolean P_TeleportMove (mobj_t* thing, fixed_t x, fixed_t y);
 void	P_SlideMove (mobj_t* mo);
 boolean P_CheckSight (mobj_t* t1, mobj_t* t2);

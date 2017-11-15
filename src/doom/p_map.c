@@ -75,6 +75,8 @@ int		tmflags;
 fixed_t		tmx;
 fixed_t		tmy;
 
+static int          pe_x, pe_y;     // Pain Elemental position for Lost Soul checks // phares
+static int          ls_x, ls_y;     // Lost Soul position for Lost Soul checks      // phares
 
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
@@ -205,6 +207,35 @@ P_TeleportMove
 //
 // MOVEMENT ITERATOR FUNCTIONS
 //
+
+//
+// PIT_CrossLine
+// Checks to see if a PE->LS trajectory line crosses a blocking
+// line. Returns false if it does.
+//
+// tmbbox holds the bounding box of the trajectory. If that box
+// does not touch the bounding box of the line in question,
+// then the trajectory is not blocked. If the PE is on one side
+// of the line and the LS is on the other side, then the
+// trajectory is blocked.
+//
+// Currently this assumes an infinite line, which is not quite
+// correct. A more correct solution would be to check for an
+// intersection of the trajectory and the line, but that takes
+// longer and probably really isn't worth the effort.
+//
+//
+// killough 11/98: reformatted
+// [BH] Allow pain elementals to shoot lost souls through 2-sided walls with an ML_BLOCKMONSTERS
+//  flag. This is a compromise between BOOM and Vanilla DOOM behaviors, and allows pain elementals
+//  at the end of REQUIEM.WAD's MAP04 to do their thing.
+static boolean PIT_CrossLine(line_t *ld)
+{
+    return (!((ld->flags ^ ML_TWOSIDED) & (ML_TWOSIDED | ML_BLOCKING/* | ML_BLOCKMONSTERS*/))
+        || tmbbox[BOXLEFT] > ld->bbox[BOXRIGHT] || tmbbox[BOXRIGHT] < ld->bbox[BOXLEFT]
+        || tmbbox[BOXTOP] < ld->bbox[BOXBOTTOM] || tmbbox[BOXBOTTOM] > ld->bbox[BOXTOP]
+        || P_PointOnLineSide(pe_x, pe_y, ld) == P_PointOnLineSide(ls_x, ls_y, ld));
+}
 
 static void SpechitOverrun(line_t *ld);
 
@@ -385,6 +416,54 @@ boolean PIT_CheckThing (mobj_t* thing)
     return !(thing->flags & MF_SOLID);
 }
 
+//
+// P_CheckLineSide
+//
+// This routine checks for Lost Souls trying to be spawned
+// across 1-sided lines, impassible lines, or "monsters can't
+// cross" lines. Draw an imaginary line between the PE
+// and the new Lost Soul spawn spot. If that line crosses
+// a 'blocking' line, then disallow the spawn. Only search
+// lines in the blocks of the blockmap where the bounding box
+// of the trajectory line resides. Then check bounding box
+// of the trajectory vs. the bounding box of each blocking
+// line to see if the trajectory and the blocking line cross.
+// Then check the PE and LS to see if they're on different
+// sides of the blocking line. If so, return true, otherwise
+// false.
+boolean P_CheckLineSide(mobj_t *actor, fixed_t x, fixed_t y)
+{
+    int xl;
+    int xh;
+    int yl;
+    int yh;
+
+    pe_x = actor->x;
+    pe_y = actor->y;
+    ls_x = x;
+    ls_y = y;
+
+    // here is the bounding box of the trajectory
+    tmbbox[BOXLEFT] = MIN(pe_x, x);
+    tmbbox[BOXRIGHT] = MAX(pe_x, x);
+    tmbbox[BOXTOP] = MAX(pe_y, y);
+    tmbbox[BOXBOTTOM] = MIN(pe_y, y);
+
+    // determine which blocks to look in for blocking lines
+    xl = (tmbbox[BOXLEFT] - bmaporgx) >> MAPBLOCKSHIFT;
+    xh = (tmbbox[BOXRIGHT] - bmaporgx) >> MAPBLOCKSHIFT;
+    yl = (tmbbox[BOXBOTTOM] - bmaporgy) >> MAPBLOCKSHIFT;
+    yh = (tmbbox[BOXTOP] - bmaporgy) >> MAPBLOCKSHIFT;
+
+    validcount++;               // prevents checking same line twice
+
+    for (int bx = xl; bx <= xh; bx++)
+        for (int by = yl; by <= yh; by++)
+            if (!P_BlockLinesIterator(bx, by, PIT_CrossLine))
+                return true;
+
+    return false;
+}
 
 //
 // MOVEMENT CLIPPING
