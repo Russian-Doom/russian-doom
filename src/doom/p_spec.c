@@ -1218,7 +1218,7 @@ void P_UpdateSpecials (void)
 
         // [JN] Корректировка повторного звучания "sfx_swtchn" для односторонних линий.
         if (buttonlist[i].line->backsector == NULL && !vanillaparm)
-        S_StartSound(buttonlist[i].soundorg,sfx_swtchn);
+        S_StartSound(buttonlist->soundorg,sfx_swtchn);
         else
         S_StartSound(&buttonlist[i].soundorg,sfx_swtchn);
 
