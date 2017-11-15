@@ -107,7 +107,7 @@ extern int lcd_gamma_fix;
 #define ST_NUMEXTRAFACES    2
 
 #define ST_NUMFACES \
-       (ST_FACESTRIDE*ST_NUMPAINFACES+ST_NUMEXTRAFACES)
+       (ST_FACESTRIDE*ST_NUMPAINFACES+ST_NUMEXTRAFACES+1) // [JN] Atari Doom - +1 дополнительное лицо
 
 #define ST_TURNOFFSET       (ST_NUMSTRAIGHTFACES)
 #define ST_OUCHOFFSET       (ST_TURNOFFSET + ST_NUMTURNFACES)
@@ -115,6 +115,8 @@ extern int lcd_gamma_fix;
 #define ST_RAMPAGEOFFSET    (ST_EVILGRINOFFSET + 1)
 #define ST_GODFACE          (ST_NUMPAINFACES*ST_FACESTRIDE)
 #define ST_DEADFACE         (ST_GODFACE+1)
+// [JN] Atari Doom - дополнительное лицо "разорванного" игрока
+#define ST_EXPLFACE         (ST_DEADFACE+1)
 
 #define ST_FACESX           143
 #define ST_FACESY           168
@@ -855,6 +857,14 @@ void ST_updateFaceWidget(void)
             faceindex = ST_DEADFACE;
             st_facecount = 1;
         }
+        // [JN] Atari Doom - дополнительное лицо "разорванного" игрока
+        if (plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate && !vanillaparm)
+        {
+            priority = 9;
+            painoffset = 0;
+            faceindex = ST_EXPLFACE;
+            st_facecount = 1;
+        }
     }
 
     if (priority < 9)
@@ -1446,6 +1456,8 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     ++facenum;
     callback(DEH_String("STFDEAD0"), &faces[facenum]);
     ++facenum;
+    callback(DEH_String("STFEXPL0"), &faces[facenum]);
+    ++facenum;
 
     // [JN] Удвоение массива спрайтов лиц, необходимое для бессмертия.
     for (i = 0; i < ST_NUMPAINFACES; i++)
@@ -1474,6 +1486,7 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
 
     callback("STFGOD0G", &faces[facenum++]);
     callback("STFDEA0G", &faces[facenum++]);
+    callback("STFEXP0G", &faces[facenum++]);
 }
 
 
