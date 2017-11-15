@@ -882,7 +882,8 @@ void ST_updateFaceWidget(void)
             if ((plyr->mo->state == &states[S_PLAY_XDIE6])
             || (plyr->mo->state == &states[S_PLAY_XDIE7])
             || (plyr->mo->state == &states[S_PLAY_XDIE8])
-            || (plyr->mo->state == &states[S_PLAY_XDIE9]))
+            || (plyr->mo->state == &states[S_PLAY_XDIE9])
+            || (plyr->mo->state == &states[S_GIBS]))
                 faceindex = ST_EXPLFACE5;
         }
     }
