@@ -1652,30 +1652,30 @@ static default_t extra_defaults_list[] =
     // - Интерфейс -
     CONFIG_VARIABLE_INT(draw_shadowed_text),        // Элементы меню и тексты отбрасывают тень
     CONFIG_VARIABLE_INT(fast_quickload),            // Не выводить запрос при быстрой загрузке
-    CONFIG_VARIABLE_INT(show_diskicon),             // Показывать значок дискеты
+    CONFIG_VARIABLE_INT(show_total_time),           // Показывать общее время
+    CONFIG_VARIABLE_INT(show_diskicon),             // Показывать значок дискеты    
     CONFIG_VARIABLE_INT(show_exit_sequence),        // [Strife] Показывать заставку при выходе
     // - Графика -
     CONFIG_VARIABLE_INT(brightmaps),                // Брайтмаппинг текстур и спрайтов
     CONFIG_VARIABLE_INT(fake_contrast),             // Имитация контрастного освещения стен
-    CONFIG_VARIABLE_INT(colored_blood),             // Кровь разных цветов
-    CONFIG_VARIABLE_INT(randomly_flipcorpses),      // Произвольное зеркальное отражение трупов
-    CONFIG_VARIABLE_INT(new_ouch_face),             // Корректная формула "Ouch face"
-    CONFIG_VARIABLE_INT(invul_sky),                 // Неуязвимость окрашивает небо
-    CONFIG_VARIABLE_INT(swirling_liquids),          // Улучшенная анимация жидкостей
-    CONFIG_VARIABLE_INT(red_resurrection_flash),    // Красная вспышка воскрешения монстров
-    CONFIG_VARIABLE_INT(ssg_blast_enemies),         // Двуствольное ружье может разрывать врагов
     CONFIG_VARIABLE_INT(translucency),              // Эффект прозрачности у некоторых объектов
-    CONFIG_VARIABLE_INT(weapon_bobbing),            // Покачивание оружия при стрельбе в движении
+    CONFIG_VARIABLE_INT(swirling_liquids),          // Улучшенная анимация жидкостей    
+    CONFIG_VARIABLE_INT(randomly_flipcorpses),      // Произвольное зеркальное отражение трупов
+    CONFIG_VARIABLE_INT(colored_blood),             // Кровь разных цветов
+    CONFIG_VARIABLE_INT(invul_sky),                 // Неуязвимость окрашивает небо
+    CONFIG_VARIABLE_INT(red_resurrection_flash),    // Красная вспышка воскрешения монстров
     // - Звук -
     CONFIG_VARIABLE_INT(crushed_corpses_sfx),       // Звук раздавливания трупов
     CONFIG_VARIABLE_INT(blazing_door_fix_sfx),      // Одиночный звук закрытия быстрой двери
-    CONFIG_VARIABLE_INT(correct_endlevel_sfx),      // Корректный звук завершения уровня
     CONFIG_VARIABLE_INT(play_exit_sfx),             // Проигрывать звук при выходе из игры
+    CONFIG_VARIABLE_INT(correct_endlevel_sfx),      // Корректный звук завершения уровня
     // - Геймплей -
-    CONFIG_VARIABLE_INT(negative_health),           // Отображать отрицательное здоровье
     CONFIG_VARIABLE_INT(secret_notification),       // Уведомление об обнаружении секрета
-    CONFIG_VARIABLE_INT(show_total_time),           // Показывать общее время
+    CONFIG_VARIABLE_INT(weapon_bobbing),            // Покачивание оружия при стрельбе в движении
+    CONFIG_VARIABLE_INT(new_ouch_face),             // Корректная формула "Ouch face"
+    CONFIG_VARIABLE_INT(ssg_blast_enemies),         // Двуствольное ружье может разрывать врагов
     CONFIG_VARIABLE_INT(unlimited_lost_souls),      // Элементаль боли без ограничения душ
+    CONFIG_VARIABLE_INT(negative_health),           // Отображать отрицательное здоровье
     CONFIG_VARIABLE_INT(agressive_lost_souls),      // Повышенная агрессивность Потерянных душ
 };
 

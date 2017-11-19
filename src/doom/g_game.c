@@ -237,28 +237,28 @@ int             bodyqueslot;
 // Интерфейс
 int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 int fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
+int show_total_time = 1;         // Показывать общее время
 // Графика
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
 int fake_contrast = 0;           // Имитация контрастного освещения стен
-int colored_blood = 1;           // Кровь разных цветов
-int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
-int new_ouch_face = 1;           // Корректная формула "Ouch face"
-int invul_sky = 1;               // Неуязвимость окрашивает небо
 int swirling_liquids = 1;        // Улучшенная анимация жидкостей
+int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
+int colored_blood = 1;           // Кровь разных цветов
+int invul_sky = 1;               // Неуязвимость окрашивает небо
 int red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
-int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
-int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
 // Звук
 int crushed_corpses_sfx = 1;     // Звук раздавливания трупов
 int blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
-int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
+int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 // Геймплей
-int negative_health = 0;          // Отображать отрицательное здоровье
-int secret_notification = 1;      // Уведомление об обнаружении секрета
-int show_total_time = 1;          // Показывать общее время
-int unlimited_lost_souls = 1;     // Элементаль боли без ограничения душ
-int agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных душ
+int secret_notification = 1;     // Уведомление об обнаружении секрета
+int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
+int new_ouch_face = 1;           // Корректная формула "Ouch face"
+int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
+int unlimited_lost_souls = 1;    // Элементаль боли без ограничения душ
+int negative_health = 0;         // Отображать отрицательное здоровье
+int agressive_lost_souls = 0;    // Повышенная агрессивность Потерянных душ
  
 int G_CmdChecksum (ticcmd_t* cmd) 
 { 

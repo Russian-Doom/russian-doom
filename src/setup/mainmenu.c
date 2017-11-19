@@ -105,30 +105,30 @@ static void SensibleDefaults(void)
     // - Интерфейс -
     draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
     fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
+    show_total_time = 1;         // Показывать общее время
     show_exit_sequence = 1;      // [Strife] ѕоказывать заставку при выходе
     // - Графика -
     brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
     fake_contrast = 0;           // Имитация контрастного освещения стен
-    colored_blood = 1;           // Кровь разных цветов
-    randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
-    new_ouch_face = 1;           // Корректная формула "Ouch face"
-    invul_sky = 1;               // Неуязвимость окрашивает небо
-    swirling_liquids = 1;        // Улучшенная анимация жидкостей
-    red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
-    ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
     translucency = 1;            // Прозрачность объектов
-    weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
+    swirling_liquids = 1;        // Улучшенная анимация жидкостей
+    randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
+    colored_blood = 1;           // Кровь разных цветов
+    invul_sky = 1;               // Неуязвимость окрашивает небо
+    red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
     // - Звук -
     crushed_corpses_sfx = 1;     // Звук раздавливания трупов
     blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
-    correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
     play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
+    correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
     // - Геймплей -
-    negative_health = 0;          // Отображать отрицательное здоровье
-    secret_notification = 1;      // Уведомление об обнаружении секрета
-    show_total_time = 1;          // Показывать общее время
-    unlimited_lost_souls = 1;     // Элементаль боли без ограничения душ
-    agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных душ
+    secret_notification = 1;     // Уведомление об обнаружении секрета
+    weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
+    new_ouch_face = 1;           // Корректная формула "Ouch face"
+    ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов    
+    unlimited_lost_souls = 1;    // Элементаль боли без ограничения душ    
+    negative_health = 0;         // Отображать отрицательное здоровье
+    agressive_lost_souls = 0;    // Повышенная агрессивность Потерянных душ
 }
 
 static int MainMenuKeyPress(txt_window_t *window, int key, void *user_data)

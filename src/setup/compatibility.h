@@ -29,31 +29,31 @@ void BindCompatibilityVariables(void);
 // - Интерфейс -
 extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
 extern int fast_quickload;          // Не выводить запрос при быстрой загрузке
+extern int show_total_time;         // Показывать общее время
 extern int show_diskicon;           // Значок дискеты / [Strife] песочных часов
 extern int show_exit_sequence;      // [Strife] Показывать заставку при выходе
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
 extern int fake_contrast;           // Имитация контрастного освещения стен
-extern int colored_blood;           // Кровь разных цветов
-extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
-extern int new_ouch_face;           // Корректная формула "Ouch face"
-extern int invul_sky;               // Неуязвимость окрашивает небо
-extern int swirling_liquids;        // Улучшенная анимация жидкостей
-extern int red_resurrection_flash;  // Красная вспышка воскрешения монстров
-extern int ssg_blast_enemies;       // Двуствольное ружье может разрывать врагов
 extern int translucency;            // Прозрачность объектов
-extern int weapon_bobbing;          // Покачивание оружия при стрельбе в движении
+extern int swirling_liquids;        // Улучшенная анимация жидкостей
+extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
+extern int colored_blood;           // Кровь разных цветов
+extern int invul_sky;               // Неуязвимость окрашивает небо
+extern int red_resurrection_flash;  // Красная вспышка воскрешения монстров
 // - Звук -
 extern int crushed_corpses_sfx;     // Звук раздавливания трупов
 extern int blazing_door_fix_sfx;    // Одиночный звук закрытия быстрой двери
-extern int correct_endlevel_sfx;    // Корректный звук завершения уровня
 extern int play_exit_sfx;           // Проигрывать звук при выходе из игры
+extern int correct_endlevel_sfx;    // Корректный звук завершения уровня
 // - Геймплей -
-extern int negative_health;          // Отображать отрицательное здоровье
-extern int secret_notification;      // Уведомление об обнаружении секрета
-extern int show_total_time;          // Показывать общее время
-extern int unlimited_lost_souls;     // Элементаль боли без ограничения душ
-extern int agressive_lost_souls;     // Повышенная агрессивность Потерянных душ
+extern int secret_notification;     // Уведомление об обнаружении секрета
+extern int weapon_bobbing;          // Покачивание оружия при стрельбе в движении
+extern int new_ouch_face;           // Корректная формула "Ouch face"
+extern int ssg_blast_enemies;       // Двуствольное ружье может разрывать врагов
+extern int unlimited_lost_souls;    // Элементаль боли без ограничения душ
+extern int negative_health;         // Отображать отрицательное здоровье
+extern int agressive_lost_souls;    // Повышенная агрессивность Потерянных душ
 
 
 #endif /* #ifndef SETUP_COMPATIBILITY_H */
