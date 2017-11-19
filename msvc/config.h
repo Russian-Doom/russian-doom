@@ -11,7 +11,7 @@
 #define PACKAGE_NAME "Russian Doom"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Russian Doom v2.3"
+#define PACKAGE_STRING "Russian Doom 2.3"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "russian-doom"
