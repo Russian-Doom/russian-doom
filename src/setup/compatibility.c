@@ -36,6 +36,7 @@ int show_diskicon = 1;           // Значок дискеты / [Strife] песочных часов
 int show_exit_sequence = 1;      // [Strife] Показывать заставку при выходе
 // - Графика -
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
+int fake_contrast = 0;           // Имитация контрастного освещения стен
 int colored_blood = 1;           // Кровь разных цветов
 int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
 int new_ouch_face = 1;           // Корректная формула "Ouch face"
@@ -82,6 +83,7 @@ void CompatibilitySettings(void)
     
     TXT_If(gamemission == doom,    TXT_NewSeparator("ѓрафика")),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ѓрайтмаппинг текстур и спрайтов",           &brightmaps)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("€митация контрастного освещения стен",      &fake_contrast)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ћффект прозрачности у некоторых объектов",  &translucency)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("“лучшенная анимация жидкостей",             &swirling_liquids)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Џроизвольное зеркальное отражение трупов",  &randomly_flipcorpses)),
@@ -117,6 +119,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);       // [Strife] Показывать заставку при выходе
     // - Графика -
     M_BindIntVariable("brightmaps",             &brightmaps);               // Брайтмаппинг текстур и спрайтов
+    M_BindIntVariable("fake_contrast",          &fake_contrast);            // Имитация контрастного освещения стен
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);     // Произвольное зеркальное отражение трупов
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"

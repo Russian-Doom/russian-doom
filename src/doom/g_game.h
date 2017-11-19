@@ -87,6 +87,7 @@ extern int draw_shadowed_text;      // Элементы меню и тексты
 extern int fast_quickload;          // Не выводить запрос при быстрой загрузке
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
+extern int fake_contrast;           // Имитация контрастного освещения стен
 extern int colored_blood;           // Кровь разных цветов
 extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
 extern int new_ouch_face;           // Корректная формула "Ouch face"

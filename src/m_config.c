@@ -1656,6 +1656,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(show_exit_sequence),        // [Strife] Показывать заставку при выходе
     // - Графика -
     CONFIG_VARIABLE_INT(brightmaps),                // Брайтмаппинг текстур и спрайтов
+    CONFIG_VARIABLE_INT(fake_contrast),             // Имитация контрастного освещения стен
     CONFIG_VARIABLE_INT(colored_blood),             // Кровь разных цветов
     CONFIG_VARIABLE_INT(randomly_flipcorpses),      // Произвольное зеркальное отражение трупов
     CONFIG_VARIABLE_INT(new_ouch_face),             // Корректная формула "Ouch face"

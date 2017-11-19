@@ -108,6 +108,7 @@ static void SensibleDefaults(void)
     show_exit_sequence = 1;      // [Strife] ѕоказывать заставку при выходе
     // - Графика -
     brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
+    fake_contrast = 0;           // Имитация контрастного освещения стен
     colored_blood = 1;           // Кровь разных цветов
     randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
     new_ouch_face = 1;           // Корректная формула "Ouch face"
