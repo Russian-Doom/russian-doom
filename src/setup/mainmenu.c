@@ -44,10 +44,6 @@
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/index.html"
 
 
-// [JN] Размеры иконки в setup_icon.c
-static int setup_icon_w = 48;
-static int setup_icon_h = 48;
-
 static const int cheat_sequence[] =
 {
     KEY_UPARROW, KEY_UPARROW, KEY_DOWNARROW, KEY_DOWNARROW,

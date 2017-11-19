@@ -1,6 +1,10 @@
-// [JN] Размеры иконки заданы в i_video.c
-// static int icon_w = 128;
-// static int icon_h = 128;
+// [JN] Purely to shut up GCC compiler warnings
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wunused-const-variable"
+
+
+static int icon_w = 128;
+static int icon_h = 128;
 
 static const unsigned int icon_data[] = {
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 

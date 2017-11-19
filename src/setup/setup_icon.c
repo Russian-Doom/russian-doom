@@ -1,6 +1,10 @@
-// [JN] Размеры иконки заданы в mainmenu.c
-// static int setup_icon_w = 48;
-// static int setup_icon_h = 48;
+// [JN] Purely to shut up GCC compiler warnings
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wunused-const-variable"
+
+
+static int setup_icon_w = 48;
+static int setup_icon_h = 48;
 
 static const unsigned int setup_icon_data[] = {
     0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 

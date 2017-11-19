@@ -51,9 +51,6 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-// [JN] Размеры иконки из icon.c
-static int icon_w = 128;
-static int icon_h = 128;
 
 int lcd_gamma_fix;
 
