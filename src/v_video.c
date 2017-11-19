@@ -69,7 +69,7 @@ static vpatchclipfunc_t patchclip_callback = NULL;
 
 extern int lcd_gamma_fix;
 extern int draw_shadowed_text;
-extern int vanillaparm;
+int vanillaparm;
 
 //
 // V_MarkRect 
