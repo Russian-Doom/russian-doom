@@ -39,6 +39,8 @@ FILE *save_stream;
 int savegamelength;
 boolean savegame_error;
 
+extern boolean flip_levels_cmdline;
+
 
 // Get the filename of a temporary file to write the savegame to.  After
 // the file has been successfully saved, it will be renamed to the 
@@ -208,13 +210,13 @@ static void saveg_writep(void *p)
 static void saveg_read_mapthing_t(mapthing_t *str)
 {
     // short x;
-    str->x = flip_levels ? -saveg_read16() : saveg_read16();
+    str->x = flip_levels || flip_levels_cmdline ? -saveg_read16() : saveg_read16();
 
     // short y;
     str->y = saveg_read16();
 
     // short angle;
-    str->angle = flip_levels ? (180 - saveg_read16()) : saveg_read16();
+    str->angle = flip_levels || flip_levels_cmdline ? (180 - saveg_read16()) : saveg_read16();
 
     // short type;
     str->type = saveg_read16();
@@ -226,13 +228,13 @@ static void saveg_read_mapthing_t(mapthing_t *str)
 static void saveg_write_mapthing_t(mapthing_t *str)
 {
     // short x;
-    saveg_write16(flip_levels ? -str->x : str->x);
+    saveg_write16(flip_levels || flip_levels_cmdline ? -str->x : str->x);
 
     // short y;
     saveg_write16(str->y);
 
     // short angle;
-    saveg_write16(flip_levels ? (180 - str->angle) : str->angle);
+    saveg_write16(flip_levels || flip_levels_cmdline ? (180 - str->angle) : str->angle);
 
     // short type;
     saveg_write16(str->type);
@@ -306,7 +308,7 @@ static void saveg_read_mobj_t(mobj_t *str)
     saveg_read_thinker_t(&str->thinker);
 
     // fixed_t x;
-    str->x = flip_levels ? -saveg_read32() : saveg_read32();
+    str->x = flip_levels || flip_levels_cmdline ? -saveg_read32() : saveg_read32();
 
     // fixed_t y;
     str->y = saveg_read32();
@@ -321,7 +323,7 @@ static void saveg_read_mobj_t(mobj_t *str)
     str->sprev = saveg_readp();
 
     // angle_t angle;
-    str->angle = flip_levels ? (ANG180 - saveg_read32()) : saveg_read32();
+    str->angle = flip_levels || flip_levels_cmdline ? (ANG180 - saveg_read32()) : saveg_read32();
 
     // spritenum_t sprite;
     str->sprite = saveg_read_enum();
@@ -351,7 +353,7 @@ static void saveg_read_mobj_t(mobj_t *str)
     str->height = saveg_read32();
 
     // fixed_t momx;
-    str->momx = flip_levels ? -saveg_read32() : saveg_read32();
+    str->momx = flip_levels || flip_levels_cmdline ? -saveg_read32() : saveg_read32();
 
     // fixed_t momy;
     str->momy = saveg_read32();
@@ -424,7 +426,7 @@ static void saveg_write_mobj_t(mobj_t *str)
     saveg_write_thinker_t(&str->thinker);
 
     // fixed_t x;
-    saveg_write32(flip_levels ? -str->x : str->x);
+    saveg_write32(flip_levels || flip_levels_cmdline ? -str->x : str->x);
 
     // fixed_t y;
     saveg_write32(str->y);
@@ -439,7 +441,7 @@ static void saveg_write_mobj_t(mobj_t *str)
     saveg_writep(str->sprev);
 
     // angle_t angle;
-    saveg_write32(flip_levels ? (ANG180 - str->angle) : str->angle);
+    saveg_write32(flip_levels || flip_levels_cmdline ? (ANG180 - str->angle) : str->angle);
 
     // spritenum_t sprite;
     saveg_write_enum(str->sprite);
@@ -469,7 +471,7 @@ static void saveg_write_mobj_t(mobj_t *str)
     saveg_write32(str->height);
 
     // fixed_t momx;
-    saveg_write32(flip_levels ? -str->momx : str->momx);
+    saveg_write32(flip_levels || flip_levels_cmdline ? -str->momx : str->momx);
 
     // fixed_t momy;
     saveg_write32(str->momy);

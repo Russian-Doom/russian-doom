@@ -135,6 +135,8 @@ int show_diskicon = 1;
 int lcd_gamma_fix = 1; // [JN] Оптимизация палитры Doom
 int translucency  = 1; // [JN] Прозрачность объектов
 
+boolean flip_levels_cmdline = false;
+
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
 
@@ -2153,6 +2155,15 @@ void D_DoomMain (void)
         startmap = 1;
         autostart = true;
         testcontrols = true;
+    }
+
+    // [crispy] port level flipping feature over from Strawberry Doom
+
+    p = M_CheckParm("-fliplevels");
+
+    if (p > 0)
+    {
+        flip_levels_cmdline = !flip_levels_cmdline;
     }
 
     // Check for load game parameter
