@@ -1677,6 +1677,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(unlimited_lost_souls),      // Элементаль боли без ограничения душ
     CONFIG_VARIABLE_INT(negative_health),           // Отображать отрицательное здоровье
     CONFIG_VARIABLE_INT(agressive_lost_souls),      // Повышенная агрессивность Потерянных душ
+    CONFIG_VARIABLE_INT(flip_levels),               // Зеркальное отражение уровней
 };
 
 static default_collection_t extra_defaults =

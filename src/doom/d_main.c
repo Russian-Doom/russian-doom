@@ -109,6 +109,7 @@ boolean fastparm;    // checkparm of -fast
 
 boolean vanillaparm; // [JN] проверка параметра -vanilla
 
+
 extern boolean inhelpscreens;
 
 skill_t startskill;
@@ -443,8 +444,9 @@ void D_BindVariables(void)
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);     // Элементаль боли без ограничения душ
-    M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);     // Повышенная агрессивность Потерянных душ
+    M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье
+    M_BindIntVariable("flip_levels",            &flip_levels);              // Зеркальное отражение уровней
 
     // Multiplayer chat macros
 
@@ -609,7 +611,7 @@ void D_DoAdvanceDemo (void)
         else
         pagetic = 170;
 
-        if (gamemission == pack_nerve)
+        if (gamemission == pack_nerve || flip_levels)
         pagetic = 1000;
         gamestate = GS_DEMOSCREEN;
 
@@ -626,7 +628,7 @@ void D_DoAdvanceDemo (void)
 
         case 1:
         
-        if (gamemission == pack_nerve) 
+        if (gamemission == pack_nerve || flip_levels) 
         break;
 
         G_DeferedPlayDemo(DEH_String("demo1"));
@@ -634,7 +636,7 @@ void D_DoAdvanceDemo (void)
 
         case 2:
 
-        if (gamemission == pack_nerve)
+        if (gamemission == pack_nerve || flip_levels)
         pagetic = 1000;
         else
         pagetic = 200;
@@ -653,7 +655,7 @@ void D_DoAdvanceDemo (void)
 
         case 3:
 
-        if (gamemission == pack_nerve)
+        if (gamemission == pack_nerve || flip_levels)
         break;
         else
         G_DeferedPlayDemo(DEH_String("demo2"));
@@ -661,7 +663,7 @@ void D_DoAdvanceDemo (void)
 
         case 4:
 
-        if (gamemission == pack_nerve) 
+        if (gamemission == pack_nerve || flip_levels) 
         break;
     
         gamestate = GS_DEMOSCREEN;
@@ -688,7 +690,7 @@ void D_DoAdvanceDemo (void)
 
         case 5:
 
-        if (gamemission == pack_nerve) 
+        if (gamemission == pack_nerve || flip_levels) 
         break;
 
         G_DeferedPlayDemo(DEH_String("demo3"));
@@ -696,7 +698,7 @@ void D_DoAdvanceDemo (void)
 
         case 6: // THE DEFINITIVE DOOM Special Edition demo
 
-        if (gamemission == pack_nerve) 
+        if (gamemission == pack_nerve || flip_levels) 
         break;
 
         G_DeferedPlayDemo(DEH_String("demo4"));

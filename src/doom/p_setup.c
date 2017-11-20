@@ -113,7 +113,19 @@ mapthing_t	deathmatchstarts[MAX_DEATHMATCH_STARTS];
 mapthing_t*	deathmatch_p;
 mapthing_t	playerstarts[MAXPLAYERS];
 
+// [crispy] recalculate seg offsets
+// adapted from prboom-plus/src/p_setup.c:474-482
+static fixed_t GetOffset(vertex_t *v1, vertex_t *v2)
+{
+    fixed_t dx, dy;
+    fixed_t r;
 
+    dx = (v1->x - v2->x)>>FRACBITS;
+    dy = (v1->y - v2->y)>>FRACBITS;
+    r = (fixed_t)(sqrt(dx*dx + dy*dy))<<FRACBITS;
+
+    return r;
+}
 
 
 
@@ -146,6 +158,9 @@ void P_LoadVertexes (int lump)
     {
 	li->x = SHORT(ml->x)<<FRACBITS;
 	li->y = SHORT(ml->y)<<FRACBITS;
+    
+	if (flip_levels && singleplayer)
+	    li->x = -li->x;
     
     // [crispy] initialize pseudovertexes with actual vertex coordinates
     li->px = li->x;
@@ -201,10 +216,21 @@ void P_LoadSegs (int lump)
     {
     li->v1 = &vertexes[(unsigned short)SHORT(ml->v1)]; // [crispy] extended nodes
     li->v2 = &vertexes[(unsigned short)SHORT(ml->v2)]; // [crispy] extended nodes
+
+	if (flip_levels && singleplayer)
+	{
+            vertex_t* tmp = li->v1;
+            li->v1 = li->v2;
+            li->v2 = tmp;
+	}
     
 	li->angle = (SHORT(ml->angle))<<FRACBITS;
-	li->offset = (SHORT(ml->offset))<<FRACBITS;
-	linedef = (unsigned short)SHORT(ml->linedef);
+    
+	if (flip_levels && singleplayer)
+            li->angle = -li->angle;
+    
+//	li->offset = (SHORT(ml->offset))<<FRACBITS; // [crispy] recalculated below
+	linedef = (unsigned short)SHORT(ml->linedef); // [crispy] extended nodes
 	ldef = &lines[linedef];
 	li->linedef = ldef;
 	side = SHORT(ml->side);
@@ -218,6 +244,12 @@ void P_LoadSegs (int lump)
 
 	li->sidedef = &sides[ldef->sidenum[side]];
 	li->frontsector = sides[ldef->sidenum[side]].sector;
+	// [crispy] recalculate
+    if (flip_levels && singleplayer)
+    li->offset = GetOffset(li->v1, ldef->v2);
+    else
+    li->offset = GetOffset(li->v1, ldef->v1);
+	// li->offset = GetOffset(li->v1, ((ml->side ^ flip_levels) ? ldef->v2 : ldef->v1));
 
         if (ldef-> flags & ML_TWOSIDED)
         {
@@ -355,6 +387,15 @@ void P_LoadNodes (int lump)
 	no->y = SHORT(mn->y)<<FRACBITS;
 	no->dx = SHORT(mn->dx)<<FRACBITS;
 	no->dy = SHORT(mn->dy)<<FRACBITS;
+    
+	if (flip_levels && singleplayer)
+	{
+	    no->x += no->dx;
+	    no->y += no->dy;
+	    no->x = -no->x;
+	    no->dy = -no->dy;
+	}
+    
 	for (j=0 ; j<2 ; j++)
 	{
 	    no->children[j] = (unsigned short)SHORT(mn->children[j]);
@@ -375,6 +416,13 @@ void P_LoadNodes (int lump)
         
 	    for (k=0 ; k<4 ; k++)
 		no->bbox[j][k] = SHORT(mn->bbox[j][k])<<FRACBITS;
+    
+	    if (flip_levels && singleplayer)
+	    {
+		fixed_t tmp = no->bbox[j][2];
+		no->bbox[j][2] = -no->bbox[j][3];
+		no->bbox[j][3] = -tmp;
+	    }    
 	}
     }
 	
@@ -445,6 +493,12 @@ void P_LoadThings (int lump)
 	spawnthing.angle = SHORT(mt->angle);
 	spawnthing.type = SHORT(mt->type);
 	spawnthing.options = SHORT(mt->options);
+    
+	if (flip_levels && singleplayer)
+	{
+	    spawnthing.x = -spawnthing.x;
+	    spawnthing.angle = 180 - spawnthing.angle;
+	}
 	
 	P_SpawnMapThing(&spawnthing);
     }
@@ -478,8 +532,18 @@ void P_LoadLineDefs (int lump)
 	ld->flags = (unsigned short)SHORT(mld->flags);
 	ld->special = SHORT(mld->special);
 	ld->tag = SHORT(mld->tag);
-    v1 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)];
-    v2 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)];
+
+	if (flip_levels && singleplayer)
+	{
+	    v1 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)]; // [crispy] extended nodes
+	    v2 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)]; // [crispy] extended nodes
+	}
+	else
+	{
+	v1 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)]; // [crispy] extended nodes
+	v2 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)]; // [crispy] extended nodes
+	}
+
 	ld->dx = v2->x - v1->x;
 	ld->dy = v2->y - v1->y;
 	
@@ -633,6 +697,29 @@ void P_LoadBlockMap (int lump)
     bmaporgy = blockmaplump[1]<<FRACBITS;
     bmapwidth = blockmaplump[2];
     bmapheight = blockmaplump[3];
+    
+    if (flip_levels && singleplayer)
+    {
+	int x, y;
+	int32_t* rowoffset; // [crispy] BLOCKMAP limit
+
+	bmaporgx += bmapwidth * 128 * FRACUNIT;
+	bmaporgx = -bmaporgx;
+
+	for (y = 0; y < bmapheight; y++)
+	{
+	    rowoffset = blockmap + y * bmapwidth;
+
+	    for (x = 0; x < bmapwidth / 2; x++)
+	    {
+	        int32_t tmp; // [crispy] BLOCKMAP limit
+
+	        tmp = rowoffset[x];
+	        rowoffset[x] = rowoffset[bmapwidth-1-x];
+	        rowoffset[bmapwidth-1-x] = tmp;
+	    }
+	}
+    }
 	
     // Clear out mobj chains
 

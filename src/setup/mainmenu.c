@@ -123,8 +123,9 @@ static void SensibleDefaults(void)
     new_ouch_face = 1;           // Корректная формула "Ouch face"
     ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов    
     unlimited_lost_souls = 1;    // Элементаль боли без ограничения душ    
-    negative_health = 0;         // Отображать отрицательное здоровье
     agressive_lost_souls = 0;    // Повышенная агрессивность Потерянных душ
+    negative_health = 0;         // Отображать отрицательное здоровье
+    flip_levels = 0;             // Зеркальное отражение уровней
 }
 
 static int MainMenuKeyPress(txt_window_t *window, int key, void *user_data)

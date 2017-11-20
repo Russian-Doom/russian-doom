@@ -257,8 +257,9 @@ int weapon_bobbing = 1;          // Покачивание оружия при �
 int new_ouch_face = 1;           // Корректная формула "Ouch face"
 int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
 int unlimited_lost_souls = 1;    // Элементаль боли без ограничения душ
-int negative_health = 0;         // Отображать отрицательное здоровье
 int agressive_lost_souls = 0;    // Повышенная агрессивность Потерянных душ
+int negative_health = 0;         // Отображать отрицательное здоровье
+int flip_levels = 0;             // Зеркальное отражение уровней
  
 int G_CmdChecksum (ticcmd_t* cmd) 
 { 
@@ -2073,6 +2074,12 @@ void G_ReadDemoTiccmd (ticcmd_t* cmd)
     }
 
     cmd->buttons = (unsigned char)*demo_p++; 
+
+    if (flip_levels)
+    {
+	cmd->sidemove *= (const signed char) -1;
+	cmd->angleturn *= (const short) -1;
+    }
 } 
 
 // Increase the size of the demo buffer to allow unlimited demos
@@ -2110,6 +2117,12 @@ static void IncreaseDemoBuffer(void)
 void G_WriteDemoTiccmd (ticcmd_t* cmd) 
 { 
     byte *demo_start;
+
+    if (flip_levels)
+    {
+	cmd->sidemove *= (const signed char) -1;
+	cmd->angleturn *= (const short) -1;
+    }
 
     if (gamekeydown[key_demo_quit]) // press q to end demo recording 
     G_CheckDemoStatus (); 
