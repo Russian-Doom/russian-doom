@@ -9,10 +9,12 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [Crispy Doom](https://www.chocolate-doom.org/wiki/index.php/Crispy_Doom) source port 
 - Fabian Greffrath
 
-#### [BOOM](https://www.doomworld.com/idgames/themes/TeamTNT/boom/boom202) and [PrBoom+](http://prboom-plus.sourceforge.net/) source ports
+#### [BOOM](https://www.doomworld.com/idgames/themes/TeamTNT/boom/boom202) and [PrBoom+](http://prboom-plus.sourceforge.net/) source port families
 - Lee Killough
+- Rand Phares
+- Colin Phipps
 - Andrey Budko
-- and other respected authors
+- and other respected Authors
 
 #### [DOOM Retro](http://doomretro.com/) source port 
 - Brad Harding
