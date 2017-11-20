@@ -613,7 +613,7 @@ void D_DoAdvanceDemo (void)
         else
         pagetic = 170;
 
-        if (gamemission == pack_nerve || flip_levels)
+        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
         pagetic = 1000;
         gamestate = GS_DEMOSCREEN;
 
@@ -630,7 +630,7 @@ void D_DoAdvanceDemo (void)
 
         case 1:
         
-        if (gamemission == pack_nerve || flip_levels) 
+        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
         break;
 
         G_DeferedPlayDemo(DEH_String("demo1"));
@@ -638,7 +638,7 @@ void D_DoAdvanceDemo (void)
 
         case 2:
 
-        if (gamemission == pack_nerve || flip_levels)
+        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
         pagetic = 1000;
         else
         pagetic = 200;
@@ -657,7 +657,7 @@ void D_DoAdvanceDemo (void)
 
         case 3:
 
-        if (gamemission == pack_nerve || flip_levels)
+        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
         break;
         else
         G_DeferedPlayDemo(DEH_String("demo2"));
@@ -665,7 +665,7 @@ void D_DoAdvanceDemo (void)
 
         case 4:
 
-        if (gamemission == pack_nerve || flip_levels) 
+        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline) 
         break;
     
         gamestate = GS_DEMOSCREEN;
@@ -692,7 +692,7 @@ void D_DoAdvanceDemo (void)
 
         case 5:
 
-        if (gamemission == pack_nerve || flip_levels) 
+        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline) 
         break;
 
         G_DeferedPlayDemo(DEH_String("demo3"));
@@ -700,7 +700,7 @@ void D_DoAdvanceDemo (void)
 
         case 6: // THE DEFINITIVE DOOM Special Edition demo
 
-        if (gamemission == pack_nerve || flip_levels) 
+        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
         break;
 
         G_DeferedPlayDemo(DEH_String("demo4"));
