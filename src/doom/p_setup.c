@@ -704,7 +704,7 @@ void P_LoadBlockMap (int lump)
     if ((flip_levels || flip_levels_cmdline) && singleplayer)
     {
 	int x, y;
-	int32_t* rowoffset; // [crispy] BLOCKMAP limit
+	long* rowoffset; // [crispy] BLOCKMAP limit
 
 	bmaporgx += bmapwidth * 128 * FRACUNIT;
 	bmaporgx = -bmaporgx;
@@ -715,7 +715,7 @@ void P_LoadBlockMap (int lump)
 
 	    for (x = 0; x < bmapwidth / 2; x++)
 	    {
-	        int32_t tmp; // [crispy] BLOCKMAP limit
+	        long tmp; // [crispy] BLOCKMAP limit
 
 	        tmp = rowoffset[x];
 	        rowoffset[x] = rowoffset[bmapwidth-1-x];
