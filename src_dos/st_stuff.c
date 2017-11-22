@@ -97,8 +97,11 @@
 
 #define ST_NUMEXTRAFACES		2
 
+// [JN] Additional faces:
+// Atari Doom: +6 (exploded face)
+//   PSX Doom: +1 (squished face)
 #define ST_NUMFACES \
-          (ST_FACESTRIDE*ST_NUMPAINFACES+ST_NUMEXTRAFACES+6) // [JN] Atari Doom - +6 extra faces
+          (ST_FACESTRIDE*ST_NUMPAINFACES+ST_NUMEXTRAFACES+7)
 
 #define ST_TURNOFFSET		(ST_NUMSTRAIGHTFACES)
 #define ST_OUCHOFFSET		(ST_TURNOFFSET + ST_NUMTURNFACES)
@@ -113,6 +116,8 @@
 #define ST_EXPLFACE3        (ST_EXPLFACE2+1)
 #define ST_EXPLFACE4        (ST_EXPLFACE3+1)
 #define ST_EXPLFACE5        (ST_EXPLFACE4+1)
+// [JN] PSX Doom - squished extra face
+#define ST_CRSHFACE0        (ST_EXPLFACE5+1)
 
 #define ST_FACESX			143
 #define ST_FACESY			168
@@ -783,7 +788,8 @@ void ST_updateFaceWidget(void)
 		faceindex = ST_DEADFACE;
 	    st_facecount = 1;
 	}
-	// [JN] Proper checking for xdeath state has been taken from Crispy Doom, thanks to Fabian Greffrath!
+    // [JN] Atari и PSX Doom - extra faces of exploded and squished player.
+	// Proper checking for xdeath state has been taken from Crispy Doom, thanks to Fabian Greffrath!
 	if (plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate && !vanilla)
 	{
 	    priority = 9;
@@ -803,9 +809,11 @@ void ST_updateFaceWidget(void)
 	    if ((plyr->mo->state == &states[S_PLAY_XDIE6])
 	    || (plyr->mo->state == &states[S_PLAY_XDIE7])
 	    || (plyr->mo->state == &states[S_PLAY_XDIE8])
-	    || (plyr->mo->state == &states[S_PLAY_XDIE9])
-	    || (plyr->mo->state == &states[S_GIBS]))
+	    || (plyr->mo->state == &states[S_PLAY_XDIE9]))
 	        faceindex = ST_EXPLFACE5;
+
+        if (plyr->mo->state == &states[S_GIBS])
+            faceindex = ST_CRSHFACE0;
 	}
     }
 
@@ -1330,6 +1338,7 @@ void ST_loadGraphics(void)
     faces[facenum++] = W_CacheLumpName("STFEXPL3", PU_STATIC);
     faces[facenum++] = W_CacheLumpName("STFEXPL4", PU_STATIC);
     faces[facenum++] = W_CacheLumpName("STFEXPL5", PU_STATIC);
+    faces[facenum++] = W_CacheLumpName("STFCRSH0", PU_STATIC);
     
 
     // [JN] Doubled array of faced, needed for GOD mode
@@ -1359,6 +1368,7 @@ void ST_loadGraphics(void)
     faces[facenum++] = W_CacheLumpName("GTFEXPL3", PU_STATIC);
     faces[facenum++] = W_CacheLumpName("GTFEXPL4", PU_STATIC);
     faces[facenum++] = W_CacheLumpName("GTFEXPL5", PU_STATIC);
+    faces[facenum++] = W_CacheLumpName("GTFCRSH0", PU_STATIC);
 }
 
 void ST_loadData(void)
