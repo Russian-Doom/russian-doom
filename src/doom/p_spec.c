@@ -1216,11 +1216,14 @@ void P_UpdateSpecials (void)
 		    break;
 		}
 
-        // [JN] Корректировка повторного звучания "sfx_swtchn" для односторонних линий.
-        if (buttonlist[i].line->backsector == NULL && !vanillaparm)
-        S_StartSound(buttonlist[i].soundorg,sfx_swtchn);
-        else
+        // [JN] Standard sound behaviour for "vanilla" game mode.
+        if (vanillaparm)
         S_StartSound(&buttonlist[i].soundorg,sfx_swtchn);
+        // [crispy] & [JN] Logically proper sound behavior.
+        // Do not play second "sfx_swtchn" on two-sided linedefs that attached to special sectors,
+        // and always play second sound on single-sided linedefs.
+        else if (!buttonlist[i].line->backsector || !buttonlist[i].line->backsector->specialdata)
+        S_StartSound(buttonlist[i].soundorg,sfx_swtchn);
 
 		memset(&buttonlist[i],0,sizeof(button_t));
 	    }
