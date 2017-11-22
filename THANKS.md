@@ -46,3 +46,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Sergey "Districh" Ivanov
 - Zodomaniac
 - David Carlier
+- theleo_ua
