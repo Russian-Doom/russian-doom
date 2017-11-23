@@ -126,7 +126,22 @@ void P_CalcHeight (player_t* player)
 	    if (!player->deltaviewheight)
 		player->deltaviewheight = 1;
 	}
-    }
+	// [crispy] squat down weapon sprite a bit after hitting the ground
+	if (player->psp_dy_max)
+	{
+	    player->psp_dy -= FRACUNIT;
+
+	      if (player->psp_dy < player->psp_dy_max)
+	      {
+	          player->psp_dy = -player->psp_dy;
+	      }
+	  
+	      if (player->psp_dy == 0)
+	      {
+	          player->psp_dy_max = 0;
+	      }
+	    }
+	}
     player->viewz = player->mo->z + player->viewheight + bob;
 
     if (player->viewz > player->mo->ceilingz-4*FRACUNIT)

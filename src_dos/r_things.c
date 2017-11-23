@@ -743,6 +743,7 @@ void R_DrawPSprite (pspdef_t* psp)
     boolean		flip;
     vissprite_t*	vis;
     vissprite_t		avis;
+    fixed_t         psp_sx = psp->sx, psp_sy = psp->sy;
     const int state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] For smoothen Chainsaw idle animation
     
     // decide which patch to use
@@ -771,7 +772,7 @@ void R_DrawPSprite (pspdef_t* psp)
     /* Plasmagun */ state == S_PLASMA2  ||
     /* BFG9000   */ state == S_BFG3     || state == S_BFG4 ))
     {
-        R_ApplyWeaponBob(&psp->sx, true, &psp->sy, true);
+        R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
     }
     
     // [JN] Halfed amplitude for bobbing while moving and shooting
@@ -786,11 +787,15 @@ void R_DrawPSprite (pspdef_t* psp)
     /* Plasmagun */ state == S_PLASMA1  ||
     /* BFG9000   */ state == S_BFG1     || state == S_BFG2 ))
     {
-        R_ApplyWeaponFiringBob(&psp->sx, true, &psp->sy, true);
+        R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
     }
-    
+
+    // [crispy] squat down weapon sprite a bit after hitting the ground
+    if (!vanilla)
+    psp_sy += abs(viewplayer->psp_dy);
+
     // calculate edges of the shape
-    tx = psp->sx-160*FRACUNIT;
+    tx = psp_sx-160*FRACUNIT;
 	
     tx -= spriteoffset[lump];	
     x1 = (centerxfrac + FixedMul (tx,pspritescale) ) >>FRACBITS;
@@ -810,7 +815,7 @@ void R_DrawPSprite (pspdef_t* psp)
     vis = &avis;
     vis->translation = NULL;
     vis->mobjflags = 0;
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/2-(psp->sy-spritetopoffset[lump]);
+    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/2-(psp_sy-spritetopoffset[lump]);
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth-1 : x2;	
     vis->scale = pspritescale<<detailshift;

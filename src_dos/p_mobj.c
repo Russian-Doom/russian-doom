@@ -354,6 +354,8 @@ void P_ZMovement (mobj_t* mo)
 		// after hitting the ground (hard),
 		// and utter appropriate sound.
 		mo->player->deltaviewheight = mo->momz>>3;
+		// [crispy] squat down weapon sprite as well
+ 		mo->player->psp_dy_max = mo->momz>>2;
 		if (mo->health > 0)
 		{
             // [JN] Do not break firing sounds by falling "oof" sound
