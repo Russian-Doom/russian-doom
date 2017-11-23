@@ -761,6 +761,7 @@ void R_DrawPSprite (pspdef_t* psp)
     boolean         flip;
     vissprite_t*    vis;
     vissprite_t     avis;
+    fixed_t         psp_sx = psp->sx, psp_sy = psp->sy;
     const int state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] Для плавной анимации бензопилы
 
     // decide which patch to use
@@ -788,7 +789,7 @@ void R_DrawPSprite (pspdef_t* psp)
     /* Плазмаган  */ state == S_PLASMA2  ||
     /* BFG9000    */ state == S_BFG3     || state == S_BFG4 ))
     {
-        R_ApplyWeaponBob(&psp->sx, true, &psp->sy, true);
+        R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
     }
     
     // [JN] Уполовиненная амплитуда покачия оружия при стрельбе в движении
@@ -803,11 +804,15 @@ void R_DrawPSprite (pspdef_t* psp)
     /* Плазмаган  */ state == S_PLASMA1  ||
     /* BFG9000    */ state == S_BFG1     || state == S_BFG2 ))
     {
-        R_ApplyWeaponFiringBob(&psp->sx, true, &psp->sy, true);
+        R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
     }
 
+    // [crispy] squat down weapon sprite a bit after hitting the ground
+    if (weapon_bobbing && !vanillaparm)
+    psp_sy += abs(viewplayer->psp_dy);
+
     // calculate edges of the shape
-    tx = psp->sx-(ORIGWIDTH/2)*FRACUNIT;
+    tx = psp_sx-(ORIGWIDTH/2)*FRACUNIT;
 
     tx -= spriteoffset[lump];	
     x1 = (centerxfrac + FixedMul (tx,pspritescale) ) >>FRACBITS;
@@ -827,7 +832,7 @@ void R_DrawPSprite (pspdef_t* psp)
     vis = &avis;
     vis->mobjflags = 0;
     // [crispy] weapons drawn 1 pixel too high when player is idle
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp->sy-spritetopoffset[lump]);
+    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth-1 : x2;	
     vis->scale = pspritescale<<(detailshift && !hires);

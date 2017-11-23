@@ -404,6 +404,8 @@ void P_ZMovement (mobj_t* mo)
 		// after hitting the ground (hard),
 		// and utter appropriate sound.
 		mo->player->deltaviewheight = mo->momz>>3;
+        // [crispy] squat down weapon sprite as well
+        mo->player->psp_dy_max = mo->momz>>2;
         
             // [JN] Издавать звук "Ууф" только в том случае, если игрок живой.
             if (mo->health > 0)

@@ -149,6 +149,9 @@ typedef struct player_s
 
     // True if secret level has been done.
     boolean didsecret;	
+    
+    // [crispy] squat down weapon sprite a bit after hitting the ground
+    fixed_t	psp_dy, psp_dy_max;
 } player_t;
 
 
