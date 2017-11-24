@@ -36,13 +36,13 @@ BEGIN
 	BEGIN
 		BLOCK "040904E4"
 		BEGIN
-			VALUE "FileVersion", "2.3"
-			VALUE "FileDescription", "Russian Doom 2.3"
+			VALUE "FileVersion", "2.4"
+			VALUE "FileDescription", "Russian Doom 2.4"
 			VALUE "InternalName", "russian-doom"
 			VALUE "CompanyName", "julian.nechaevsky@outlook.com"
 			VALUE "LegalCopyright", "\xA9 2016-2017 Julian Nechaevsky. All rights reserved."
 			VALUE "ProductName", "Russian Doom"
-			VALUE "ProductVersion", "2.3"
+			VALUE "ProductVersion", "2.4"
 		END
 	END
 	BLOCK "VarFileInfo"

@@ -9,8 +9,8 @@
 		<Build>
 			<Target title="Debug">
 				<Option platforms="" />
-				<Option output="../src/russian-doom-dbg.exe" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../src" />
+				<Option output="../bin/russian-doom-dbg.exe" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../bin" />
 				<Option object_output="../obj/russian-doom/dbg" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -25,14 +25,15 @@
 			</Target>
 			<Target title="Release">
 				<Option platforms="Windows;" />
-				<Option output="../src/russian-doom.exe" prefix_auto="0" extension_auto="0" />
-				<Option working_dir="../src" />
+				<Option output="../bin/russian-doom.exe" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../bin" />
 				<Option object_output="../obj/russian-doom/rel" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-Wall" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />

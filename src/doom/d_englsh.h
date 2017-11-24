@@ -462,7 +462,7 @@
 #define STSTR_ALWRUNON  "drk.xty"                                   // включен
 #define STSTR_ALWRUNOFF "dsrk.xty"                                  // выключен
 
-#define STSTR_VERSION   "dthcbz 2>3 (25>11>2017)"                   // Версия 2.3 (25.11.2017)
+#define STSTR_VERSION   "dthcbz 2>4 (d hfphf,jnrt)"                 // Версия 2.4 (в разработке)
 
 //
 //	F_Finale.C
