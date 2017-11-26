@@ -96,7 +96,7 @@
 #define	TXT_KEY_FIRE		"JUYTYYSQ RK>X"			// ОГНЕННЫЙ КЛЮЧ            FIRE KEY
 #define	TXT_KEY_EMERALD		"BPEVHELYSQ RK>X"		// ИЗУМРУДНЫЙ КЛЮЧ          EMERALD KEY
 #define	TXT_KEY_DUNGEON		"RK>X JN GJLPTVTKMZ"	// КЛЮЧ ОТ ПОДЗЕМЕЛЬЯ       DUNGEON KEY
-#define	TXT_KEY_SILVER		"CTHT<HZYYSQ RK>X"		// СЕРЕБРЯННЫЙ КЛЮЧ         SILVER KEY
+#define	TXT_KEY_SILVER		"CTHT<HZYSQ RK>X"		// СЕРЕБРЯНЫЙ КЛЮЧ          SILVER KEY
 #define	TXT_KEY_RUSTED		"H:FDSQ RK>X"			// РЖАВЫЙ КЛЮЧ              RUSTED KEY
 #define	TXT_KEY_HORN		"HJUJDJQ RK>X"			// РОГОВОЙ КЛЮЧ             HORN KEY
 #define	TXT_KEY_SWAMP		"<JKJNYSQ RK>X"			// БОЛОТНЫЙ КЛЮЧ            SWAMP KEY
