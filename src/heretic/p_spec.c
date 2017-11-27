@@ -884,6 +884,11 @@ void P_PlayerInSpecialSector(player_t * player)
         case 9:                // SecretArea
             player->secretcount++;
             sector->special = 0;
+
+            // [JN] Notification of discovered secrets
+            P_SetMessage(&players[consoleplayer], TXT_SECRET_FOUND, false);
+            if (player == &players[consoleplayer])
+                S_StartSound(NULL, sfx_telept);
             break;
         case 11:               // Exit_SuperDamage (DOOM E1M8 finale)
             /*

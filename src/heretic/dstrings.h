@@ -390,3 +390,5 @@
 
 #define TXT_ALWAYSRUN_ON "GJCNJZYYSQ <TU DRK>XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
 #define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ <TU DSRK>XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
+
+#define TXT_SECRET_FOUND "J<YFHE:TY NFQYBR!"          // ОБНАРУЖЕН ТАЙНИК!
