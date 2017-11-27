@@ -954,7 +954,7 @@ static boolean SCMouseSensi(int option)
 {
     if (option == RIGHT_DIR)
     {
-        if (mouseSensitivity < 9)
+        if (mouseSensitivity < 255) // [crispy] extended range
         {
             mouseSensitivity++;
         }
@@ -1720,6 +1720,21 @@ static void DrawSlider(Menu_t * menu, int item, int width, int slot)
                                            : "M_SLDMD2"), PU_CACHE));
     }
     V_DrawShadowedPatchRaven(x2, y, W_CacheLumpName(DEH_String("M_SLDRT"), PU_CACHE));
-    V_DrawPatch(x + 4 + slot * 8, y + 7,
-                W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
+
+    // [JN] Colorizing slider gem...
+    // Most left position (dull green gem)
+    if (slot == 0)
+    {
+        V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_SLDKD"), PU_CACHE));
+    }
+    // [JN] Most right position that is "out of bounds" (red gem).
+    // Only the mouse sensitivity menu requires this trick.
+    else if (CurrentMenu == &OptionsMenu && slot > 8)
+    {
+        slot = 8;
+        V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_SLDKR"), PU_CACHE));
+    }
+    // [JN] Standard function (green gem)
+    else
+    V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
 }
