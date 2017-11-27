@@ -191,10 +191,16 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
     texnum = texturetranslation[curline->sidedef->midtexture];
 
     lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
-    if (curline->v1->y == curline->v2->y)
-        lightnum--;
-    else if (curline->v1->x == curline->v2->x)
-        lightnum++;
+
+    // [JN] Fake contrast: make optional
+    if (fake_contrast)
+    {
+        if (curline->v1->y == curline->v2->y)
+            lightnum--;
+        else if (curline->v1->x == curline->v2->x)
+            lightnum++;
+    }
+
     if (lightnum < 0)
         walllights = scalelight[0];
     else if (lightnum >= LIGHTLEVELS)
@@ -726,10 +732,16 @@ void R_StoreWallRange(int start, int stop)
         {
             lightnum =
                 (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
-            if (curline->v1->y == curline->v2->y)
-                lightnum--;
-            else if (curline->v1->x == curline->v2->x)
-                lightnum++;
+
+            // [JN] Fake contrast: make optional
+            if (fake_contrast)
+            {
+                if (curline->v1->y == curline->v2->y)
+                    lightnum--;
+                else if (curline->v1->x == curline->v2->x)
+                    lightnum++;
+            }
+
             if (lightnum < 0)
                 walllights = scalelight[0];
             else if (lightnum >= LIGHTLEVELS)

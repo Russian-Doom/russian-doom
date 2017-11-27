@@ -703,7 +703,10 @@ void G_ScreenShot(void);
 // [JN] Дополнительные параметры игры
 
 // - Графика -
+extern int fake_contrast;           // Имитация контрастного освещения стен
 extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
+// - Геймплей -
+extern int secret_notification;     // Уведомление об обнаружении тайников
 
 
 //-----

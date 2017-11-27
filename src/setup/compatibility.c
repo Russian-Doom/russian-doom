@@ -84,7 +84,7 @@ void CompatibilitySettings(void)
     
     TXT_If(gamemission == doom || gamemission == heretic,   TXT_NewSeparator("Графика")),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Брайтмаппинг текстур и спрайтов",           &brightmaps)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Имитаци€ контрастного освещени€ стен",      &fake_contrast)),
+        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Имитаци€ контрастного освещени€ стен",      &fake_contrast)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Юффект прозрачности у некоторых объектов",  &translucency)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Улучшенна€ анимаци€ жидкостей",             &swirling_liquids)),
         TXT_If(gamemission == doom || gamemission == heretic,   TXT_NewCheckBox("Произвольное зеркальное отражение трупов",  &randomly_flipcorpses)),
@@ -98,8 +98,8 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Проигрывать звук при выходе из игры",       &play_exit_sfx)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Корректный звук завершени€ уровн€",         &correct_endlevel_sfx)),
 
-    TXT_If(gamemission == doom,    TXT_NewSeparator("Геймплей")),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Уведомление об обнаружении тайников",       &secret_notification)),
+    TXT_If(gamemission == doom || gamemission == heretic,    TXT_NewSeparator("Геймплей")),
+        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Уведомление об обнаружении тайников",       &secret_notification)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Покачивание оружи€ при стрельбе в движении",&weapon_bobbing)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Корректна€ формула \"Ouch face\"",          &new_ouch_face)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Двуствольное ружье может разрывать врагов", &ssg_blast_enemies)),

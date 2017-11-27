@@ -135,12 +135,15 @@ int testcontrols_mousespeed;
 // [JN] Дополнительные параметры игры
 
 // - Графика -
+int fake_contrast = 0;           // Имитация контрастного освещения стен
 int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
+// - Геймплей -
+int secret_notification = 1;     // Уведомление об обнаружении тайников
+
 
 //
 // controls (have defaults)
 //
-
 
 
 #define MAXPLMOVE       0x32
