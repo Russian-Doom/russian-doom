@@ -500,10 +500,20 @@ void S_UpdateSounds(mobj_t * listener)
                                     channel[i].mo->x, channel[i].mo->y);
             angle = (angle - viewangle) >> 24;
             sep = angle * 2 - 128;
+
+            // [JN] If we have a "-monosfx" cmd line parameter, activate fixed (mono) separation
+            if (monosfx)
+            {
+                sep = 128;            
+            }
+            else
+            {
             if (sep < 64)
                 sep = -sep;
             if (sep > 192)
                 sep = 512 - sep;
+            }
+
             // TODO: Pitch shifting.
             I_UpdateSoundParams(channel[i].handle, vol, sep);
             priority = S_sfx[channel[i].sound_id].priority;
