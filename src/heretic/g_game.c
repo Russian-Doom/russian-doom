@@ -132,6 +132,11 @@ boolean testcontrols = false;
 int testcontrols_mousespeed;
 
 
+// [JN] Дополнительные параметры игры
+
+// - Графика -
+int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
+
 //
 // controls (have defaults)
 //

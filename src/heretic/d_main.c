@@ -782,8 +782,14 @@ void D_BindVariables(void)
 //  M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
     M_BindIntVariable("show_endoom",            &show_endoom);
     M_BindIntVariable("graphical_startup",      &graphical_startup);
-	
-	M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);		// [JN] Оптимизация палитры
+
+    // [JN] Дополнительные параметры игры
+
+    // - Оптимизация игровой палитры -
+    M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);		// Оптимизация палитры
+
+    // - Графика -
+    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses); // Произвольное зеркальное отражение трупов
 
 
     for (i=0; i<10; ++i)

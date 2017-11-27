@@ -699,6 +699,13 @@ boolean G_Responder(event_t * ev);
 
 void G_ScreenShot(void);
 
+
+// [JN] Дополнительные параметры игры
+
+// - Графика -
+extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
+
+
 //-----
 //PLAY
 //-----

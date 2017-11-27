@@ -254,7 +254,7 @@ void MainMenu(void)
     TXT_NewButton2("Настройки клавиатуры",         (TxtWidgetSignalFunc) ConfigKeyboard, NULL),
     TXT_NewButton2("Настройки мыши",               (TxtWidgetSignalFunc) ConfigMouse, NULL),
     TXT_NewButton2("Настройки джойстика/геймпада", (TxtWidgetSignalFunc) ConfigJoystick, NULL),
-    TXT_If(gamemission == doom || gamemission == strife,
+    TXT_If(gamemission == doom || gamemission == heretic,
     TXT_NewButton2("Дополнительные параметры игры", (TxtWidgetSignalFunc) CompatibilitySettings, NULL)),
     GetLaunchButton(),
     TXT_NewStrut(0, 1),
