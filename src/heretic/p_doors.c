@@ -273,6 +273,9 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
                 if (door->direction == -1)
                 {
                     door->direction = 1;        // go back up
+
+                    // [crispy] & [JN] play sound effect when the door is opened again while going down
+                    S_StartSound(&door->sector->soundorg, sfx_dormov);
                 }
                 else
                 {
@@ -281,6 +284,9 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
                         return;
                     }
                     door->direction = -1;       // start going down immediately
+
+                    // [crispy] & [JN] play sound effect when the door is closed manually
+                    S_StartSound(&door->sector->soundorg, sfx_dormov);
                 }
                 return;
         }
