@@ -710,12 +710,14 @@ void SB_PaletteFlash(void)
     }
     else if (CPlayer->bonuscount)
     {
+        // [JN] One extra palette for pickup flashing
+        // https://doomwiki.org/wiki/PLAYPAL
         palette = (CPlayer->bonuscount + 7) >> 3;
         if (palette >= NUMBONUSPALS)
         {
-            palette = NUMBONUSPALS - 1;
+            palette = NUMBONUSPALS;
         }
-        palette += STARTBONUSPALS;
+        palette += STARTBONUSPALS-1;
     }
     else
     {
