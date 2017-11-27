@@ -41,15 +41,16 @@ fixed_t skyiscale;
 visplane_t visplanes[MAXVISPLANES], *lastvisplane;
 visplane_t *floorplane, *ceilingplane;
 
-short openings[MAXOPENINGS], *lastopening;
+int  openings[MAXOPENINGS]; // [crispy] 32-bit integer math
+int* lastopening;           // [crispy] 32-bit integer math
 
 //
 // clip values are the solid pixel bounding the range
 // floorclip starts out SCREENHEIGHT
 // ceilingclip starts out -1
 //
-short floorclip[SCREENWIDTH];
-short ceilingclip[SCREENWIDTH];
+int  floorclip[SCREENWIDTH];   // [crispy] 32-bit integer math
+int  ceilingclip[SCREENWIDTH]; // [crispy] 32-bit integer math
 
 //
 // spanstart holds the start of a plane span
@@ -299,7 +300,7 @@ visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop)
     }
 
     for (x = intrl; x <= intrh; x++)
-        if (pl->top[x] != 0xffff)
+        if (pl->top[x] != 0xffffffffu) // [crispy] hires / 32-bit integer math
             break;
 
     if (x > intrh)
@@ -335,7 +336,11 @@ visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop)
 ================
 */
 
-void R_MakeSpans(int x, int t1, int b1, int t2, int b2)
+void R_MakeSpans(int x, 
+ unsigned int t1, // [crispy] 32-bit integer math
+ unsigned int b1, // [crispy] 32-bit integer math
+ unsigned int t2, // [crispy] 32-bit integer math
+ unsigned int b2) // [crispy] 32-bit integer math
 {
     while (t1 < t2 && t1 <= b1)
     {
@@ -414,7 +419,7 @@ void R_DrawPlanes(void)
             {
                 dc_yl = pl->top[x];
                 dc_yh = pl->bottom[x];
-                if (dc_yl <= dc_yh)
+                if ((unsigned) dc_yl <= dc_yh) // [crispy] 32-bit integer math
                 {
                     angle = (viewangle + xtoviewangle[x]) >> ANGLETOSKYSHIFT;
                     dc_x = x;
@@ -503,8 +508,8 @@ void R_DrawPlanes(void)
             light = 0;
         planezlight = zlight[light];
 
-        pl->top[pl->maxx + 1] = 0xffff;
-        pl->top[pl->minx - 1] = 0xffff;
+        pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
+        pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
 
         stop = pl->maxx + 1;
         for (x = pl->minx; x <= stop; x++)
