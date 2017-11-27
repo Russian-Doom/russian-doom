@@ -208,3 +208,8 @@
 
 #define AMSTR_FOLLOWON		"HT:BV CKTLJDFYBZ DRK>XTY"		// РЕЖИМ СЛЕДОВАНИЯ ВКЛЮЧЕН			FOLLOW MODE ON
 #define AMSTR_FOLLOWOFF		"HT:BV CKTLJDFYBZ JNRK>XTY"		// РЕЖИМ СЛЕДОВАНИЯ ОТКЛЮЧЕН		FOLLOW MODE OFF
+
+// [JN] Специфические сообщения порта
+
+#define TXT_ALWAYSRUN_ON "GJCNJZYYSQ <TU DRK>XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
+#define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ <TU DSRK>XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН

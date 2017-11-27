@@ -263,12 +263,6 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
         TXT_AddWidget(window, table);
     }
 
-    if (gamemission == doom)
-    {
-        AddSectionLabel(table, "Движение", false);
-        AddKeyControl(table, "Посто€нный бег", &key_toggleautorun);
-    }
-
     AddSectionLabel(table, "Оружие", extra_keys);
 
     AddKeyControl(table, "Оружие 1",          &key_weapon1);
@@ -281,6 +275,9 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
     AddKeyControl(table, "Оружие 8",          &key_weapon8);
     AddKeyControl(table, "Предыдущее оружие", &key_prevweapon);
     AddKeyControl(table, "Следующее оружие",  &key_nextweapon);
+
+    AddSectionLabel(table, "Движение", true);
+    AddKeyControl(table, "Посто€нный бег", &key_toggleautorun);
 }
 
 static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))

@@ -306,6 +306,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     int forward, side;
     int look, arti;
     int flyheight;
+    static int  joybspeed_old = 2;
 
     extern boolean noartiskip;
 
@@ -363,6 +364,26 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     else
     {
         lspeed = 2;
+    }
+
+    // [crispy] toggle always run
+    if (gamekeydown[key_toggleautorun])
+    {
+        if (joybspeed >= MAX_JOY_BUTTONS)
+        {
+            joybspeed = joybspeed_old;
+        }
+        else
+        {
+            joybspeed_old = joybspeed;
+            joybspeed = 29;
+        }
+
+        // [JN] Added audible feedback
+        P_SetMessage(&players[consoleplayer], (joybspeed >= MAX_JOY_BUTTONS) ? TXT_ALWAYSRUN_ON : TXT_ALWAYSRUN_OFF, false);
+        S_StartSound(NULL, sfx_chat);
+
+        gamekeydown[key_toggleautorun] = false;
     }
 
 //
