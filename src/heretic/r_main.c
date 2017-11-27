@@ -317,7 +317,9 @@ void R_InitPointToAngle(void)
 = Returns the texture mapping scale for the current line at the given angle
 = rw_distance must be calculated first
 ================
-*/
+
+// [crispy] WiggleFix: move R_ScaleFromGlobalAngle function to r_segs.c,
+// above R_StoreWallRange
 
 fixed_t R_ScaleFromGlobalAngle(angle_t visangle)
 {
@@ -360,7 +362,7 @@ fixed_t R_ScaleFromGlobalAngle(angle_t visangle)
 
     return scale;
 }
-
+*/
 
 
 /*
