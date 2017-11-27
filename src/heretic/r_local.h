@@ -144,6 +144,8 @@ typedef struct
     line_t *linedef;
     sector_t *frontsector;
     sector_t *backsector;       // NULL for one sided lines
+
+    fixed_t length; // [crispy] fix long wall wobble
 } seg_t;
 
 typedef struct
@@ -439,8 +441,8 @@ extern int screenheightarray[SCREENWIDTH]; // [crispy] 32-bit integer math
 extern int*  mfloorclip;   // [crispy] 32-bit integer math
 extern int*  mceilingclip; // [crispy] 32-bit integer math
 extern fixed_t spryscale;
-extern fixed_t sprtopscreen;
-extern fixed_t sprbotscreen;
+extern int64_t sprtopscreen;
+extern int64_t sprbotscreen;
 
 extern fixed_t pspritescale, pspriteiscale;
 
