@@ -170,7 +170,11 @@ void D_Display(void)
             if (!gametic)
                 break;
             if (automapactive)
+            {
+                // [crispy] update automap while playing
+                R_RenderPlayerView(&players[displayplayer]);
                 AM_Drawer();
+            }
             else
                 R_RenderPlayerView(&players[displayplayer]);
             CT_Drawer();

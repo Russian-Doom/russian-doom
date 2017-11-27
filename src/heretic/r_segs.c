@@ -480,6 +480,7 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 
 void R_StoreWallRange(int start, int stop)
 {
+    extern boolean automapactive;
     fixed_t hyp;
     fixed_t sineval;
     angle_t distangle, offsetangle;
@@ -499,6 +500,10 @@ void R_StoreWallRange(int start, int stop)
 
 // mark the segment as visible for auto map
     linedef->flags |= ML_MAPPED;
+
+// [crispy] (flags & ML_MAPPED) is all we need to know for automap
+    if (automapactive)
+        return;
 
 //
 // calculate rw_distance for scale calculation
