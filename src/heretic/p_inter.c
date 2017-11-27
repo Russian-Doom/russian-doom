@@ -25,6 +25,7 @@
 #include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
+#include "crispy.h"
 
 #define BONUSADD 6
 
@@ -957,6 +958,11 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
         P_SetMobjState(target, target->info->deathstate);
     }
     target->tics -= P_Random() & 3;
+
+    // [crispy] randomize corpse health
+    if (singleplayer)
+        target->health -= target->tics & 1;
+
 //      I_StartSound(&actor->r, actor->info->deathsound);
 }
 
