@@ -583,7 +583,12 @@ int R_FlatNumForName(char *name)
     {
         namet[8] = 0;
         memcpy(namet, name, 8);
-        I_Error("R_FlatNumForName: %s not found", namet);
+        // [crispy] make non-fatal
+        fprintf (stderr, "R_FlatNumForName: текстура поверхности %s не найдена\n", namet);
+        // I_Error("R_FlatNumForName: %s not found", namet);
+        // [crispy] since there is no "No Flat" marker,
+        // render missing flats as SKY
+        return skyflatnum;
     }
     return i - firstflat;
 }
@@ -626,9 +631,15 @@ int R_TextureNumForName(char *name)
     //char  namet[9];
 
     i = R_CheckTextureNumForName(name);
-    if (i == -1)
-        I_Error("R_TextureNumForName: %s not found", name);
-
+    if (i==-1)
+    {
+        // I_Error ("R_TextureNumForName: %s not found", name);
+        // [crispy] make non-fatal
+        // [JN] TODO: Temporal solution for brightmaps' performance problem.
+        // Increases perfomance and prevents spamming in console output on Linux.
+        // fprintf (stderr, "R_TextureNumForName: текстура %s не найдена", name);
+        return 0;
+    }
     return i;
 }
 
