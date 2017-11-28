@@ -546,6 +546,8 @@ void P_ZMovement(mobj_t * mo)
             if (mo->player && mo->momz < -GRAVITY * 8 && !(mo->flags2 & MF2_FLY))       // squat down
             {
                 mo->player->deltaviewheight = mo->momz >> 3;
+                // [crispy] squat down weapon sprite as well
+                mo->player->psp_dy_max = mo->momz>>2;
                 S_StartSound(mo, sfx_plroof);
                 // haleyjd: removed externdriver crap
                 mo->player->centering = true;

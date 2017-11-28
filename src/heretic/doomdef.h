@@ -469,6 +469,8 @@ typedef struct player_s
     int chickenPeck;            // chicken peck countdown
     mobj_t *rain1;              // active rain maker 1
     mobj_t *rain2;              // active rain maker 2
+    // [crispy] squat down weapon sprite a bit after hitting the ground
+    fixed_t	psp_dy, psp_dy_max;
 } player_t;
 
 #define CF_NOCLIP		1

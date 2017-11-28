@@ -799,6 +799,10 @@ void R_DrawPSprite(pspdef_t * psp)
             R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
         }
 
+    // [crispy] squat down weapon sprite a bit after hitting the ground
+    if (weapon_bobbing)
+    psp_sy += abs(viewplayer->psp_dy);
+        
 //
 // calculate edges of the shape
 //
