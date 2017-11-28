@@ -100,7 +100,7 @@ void CompatibilitySettings(void)
 
     TXT_If(gamemission == doom || gamemission == heretic,    TXT_NewSeparator("Геймплей")),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Уведомление об обнаружении тайников",       &secret_notification)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Покачивание оружи€ при стрельбе в движении",&weapon_bobbing)),
+        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Покачивание оружи€ при стрельбе в движении",&weapon_bobbing)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Корректна€ формула \"Ouch face\"",          &new_ouch_face)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Двуствольное ружье может разрывать врагов", &ssg_blast_enemies)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Юлементаль Боли без ограничени€ душ",       &unlimited_lost_souls)),

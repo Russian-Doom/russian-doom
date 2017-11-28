@@ -25,6 +25,7 @@
 #include "i_swap.h"
 #include "i_system.h"
 #include "r_local.h"
+#include "crispy.h"
 
 typedef struct
 {
@@ -655,6 +656,57 @@ void R_AddSprites(sector_t * sec)
         R_ProjectSprite(thing);
 }
 
+// [crispy] apply bobbing (or centering) to the player's weapon sprite
+static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
+{
+	const angle_t angle = (128 * leveltime) & FINEMASK;
+
+	if (sx)
+	{
+		*sx = FRACUNIT;
+
+		if (bobx)
+		{
+			 *sx += FixedMul(viewplayer->bob, finecosine[angle]);
+		}
+	}
+
+	if (sy)
+	{
+		*sy = 32 * FRACUNIT; // [crispy] WEAPONTOP
+
+		if (boby)
+		{
+			*sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)]);
+		}
+	}
+}
+
+// [crispy] & [JN] Halfed bobbing amplitude while firing
+static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
+{
+    const angle_t angle = (128 * leveltime) & FINEMASK;
+
+    if (sx)
+    {
+        *sx = FRACUNIT;
+    
+        if (bobx)
+        {
+            *sx += FixedMul(viewplayer->bob, finecosine[angle] / 2);
+        }
+    }
+
+    if (sy)
+    {
+        *sy = 32 * FRACUNIT; // [crispy] WEAPONTOP
+    
+        if (boby)
+        {
+            *sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)] / 2);
+        }
+    }
+}
 
 /*
 ========================
@@ -685,6 +737,8 @@ void R_DrawPSprite(pspdef_t * psp)
     int lump;
     boolean flip;
     vissprite_t *vis, avis;
+    fixed_t psp_sx = psp->sx, psp_sy = psp->sy;
+    const int state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] We need to define what "state" actually is
 
     int tempangle;
 
@@ -707,10 +761,48 @@ void R_DrawPSprite(pspdef_t * psp)
     lump = sprframe->lump[0];
     flip = (boolean) sprframe->flip[0];
 
+    // [JN] Applying standard bobbing for animation interpolation (Staff+, Gauntlets+),
+    // and for preventing "shaking" between refiring states. "Plus" means activated Tome of Power:
+    if (singleplayer && weapon_bobbing && (
+        /* Staff+       */ state == S_STAFFREADY2_1    || state == S_STAFFREADY2_2    || state == S_STAFFREADY2_3    ||
+        /* Gauntlets+   */ state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3 ||
+        /* CrBow        */ state == S_CRBOWATK1_6      || state == S_CRBOWATK1_7      || state == S_CRBOWATK1_8      ||
+        /* CrBow+       */ state == S_CRBOWATK2_6      || state == S_CRBOWATK2_7      || state == S_CRBOWATK2_8      ||
+        /* HellStaff+   */ state == S_HORNRODATK2_5    || state == S_HORNRODATK2_6    || state == S_HORNRODATK2_7    || state == S_HORNRODATK2_8 || state == S_HORNRODATK2_9 ||
+        /* Phoenix Rod  */ state == S_PHOENIXATK1_4    || state == S_PHOENIXATK1_5    ||
+        /* Phoenix Rod+ */ state == S_PHOENIXATK2_4    ||
+        /* Firemace+    */ state == S_MACEATK2_4))
+        {
+            R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
+        }
+
+    // [JN] Applying halfed bobbing while firing:
+    if (singleplayer && weapon_bobbing && (
+        /* Chicken      */ state == S_BEAKREADY      || state == S_BEAKATK1_1     || state == S_BEAKATK2_1     ||
+        /* Gauntlets    */ state == S_GAUNTLETATK1_1 || state == S_GAUNTLETATK1_2 || state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4 || state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK1_6 || state == S_GAUNTLETATK1_7 ||
+        /* Gauntlets+   */ state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2 || state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4 || state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6 || state == S_GAUNTLETATK2_7 ||
+        /* Staff        */ state == S_STAFFATK1_1    || state == S_STAFFATK1_2    || state == S_STAFFATK1_3    ||
+        /* Staff+       */ state == S_STAFFATK2_1    || state == S_STAFFATK2_2    || state == S_STAFFATK2_3    ||
+        /* Wand         */ state == S_GOLDWANDATK1_1 || state == S_GOLDWANDATK1_2 || state == S_GOLDWANDATK1_3 || state == S_GOLDWANDATK1_4 ||
+        /* Wand+        */ state == S_GOLDWANDATK2_1 || state == S_GOLDWANDATK2_2 || state == S_GOLDWANDATK2_3 || state == S_GOLDWANDATK2_4 ||
+        /* CrBow        */ state == S_CRBOWATK1_1    || state == S_CRBOWATK1_2    || state == S_CRBOWATK1_3    || state == S_CRBOWATK1_4    || state == S_CRBOWATK1_5    ||
+        /* CrBow+       */ state == S_CRBOWATK2_1    || state == S_CRBOWATK2_2    || state == S_CRBOWATK2_3    || state == S_CRBOWATK2_4    || state == S_CRBOWATK2_5    ||
+        /* DrClaw       */ state == S_BLASTERATK1_1  || state == S_BLASTERATK1_2  || state == S_BLASTERATK1_3  || state == S_BLASTERATK1_4  || state == S_BLASTERATK1_5  || state == S_BLASTERATK1_6  ||
+        /* DrClaw+      */ state == S_BLASTERATK2_1  || state == S_BLASTERATK2_2  || state == S_BLASTERATK2_3  || state == S_BLASTERATK2_4  || state == S_BLASTERATK2_5  || state == S_BLASTERATK2_6  ||
+        /* HlStaff      */ state == S_HORNRODATK1_1  || state == S_HORNRODATK1_2  || state == S_HORNRODATK1_3  ||
+        /* HlStaff+     */ state == S_HORNRODATK2_1  || state == S_HORNRODATK2_2  || state == S_HORNRODATK2_3  || state == S_HORNRODATK2_4  ||
+        /* Phoenix Rod  */ state == S_PHOENIXATK1_1  || state == S_PHOENIXATK1_2  || state == S_PHOENIXATK1_3  ||
+        /* Phoenix Rod+ */ state == S_PHOENIXATK2_1  || state == S_PHOENIXATK2_2  || state == S_PHOENIXATK2_3  ||
+        /* Firemace     */ state == S_MACEATK1_1     || state == S_MACEATK1_2     || state == S_MACEATK1_3     || state == S_MACEATK1_4     || state == S_MACEATK1_5     || state == S_MACEATK1_6     || state == S_MACEATK1_7     || state == S_MACEATK1_8 || state == S_MACEATK1_9 || state == S_MACEATK1_10 ||
+        /* Firemace+    */ state == S_MACEATK2_1     || state == S_MACEATK2_2     || state == S_MACEATK2_3))
+        {
+            R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
+        }
+
 //
 // calculate edges of the shape
 //
-    tx = psp->sx - 160 * FRACUNIT;
+    tx = psp_sx - 160 * FRACUNIT;
 
     tx -= spriteoffset[lump];
     if (viewangleoffset)
@@ -738,7 +830,7 @@ void R_DrawPSprite(pspdef_t * psp)
     vis->mobjflags = 0;
     vis->psprite = true;
     // [crispy] weapons drawn 1 pixel too high when player is idle
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp->sy-spritetopoffset[lump]);
+    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
     if (viewheight == SCREENHEIGHT)
     {
         vis->texturemid -= PSpriteSY[players[consoleplayer].readyweapon];

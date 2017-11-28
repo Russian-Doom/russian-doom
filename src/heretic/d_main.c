@@ -793,6 +793,7 @@ void D_BindVariables(void)
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses); // Произвольное зеркальное отражение трупов
     // - Геймплей -
     M_BindIntVariable("secret_notification",    &secret_notification);  // Уведомление об обнаружении тайников    
+    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);       // Покачивание оружия при стрельбе в движении
 
 
     for (i=0; i<10; ++i)
