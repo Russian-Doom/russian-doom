@@ -20,6 +20,7 @@
 
 #include "doomdef.h"
 #include "deh_str.h"
+#include "dstrings.h"
 #include "i_video.h"
 #include "i_swap.h"
 #include "m_cheat.h"
@@ -65,6 +66,7 @@ static void CheatChickenFunc(player_t * player, Cheat_t * cheat);
 static void CheatMassacreFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat);
+static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat);
 
 // Public Data
 
@@ -161,6 +163,9 @@ cheatseq_t CheatMassacreSeq = CHEAT("massacre", 0);
 cheatseq_t CheatIDKFASeq = CHEAT("idkfa", 0);
 cheatseq_t CheatIDDQDSeq = CHEAT("iddqd", 0);
 
+// [JN] Russian Doom "VERSION" cheat code
+cheatseq_t CheatVERSIONSeq = CHEAT("version", 0);
+
 static Cheat_t Cheats[] = {
     {CheatGodFunc,       &CheatGodSeq},
     {CheatNoClipFunc,    &CheatNoClipSeq},
@@ -178,6 +183,7 @@ static Cheat_t Cheats[] = {
     {CheatMassacreFunc,  &CheatMassacreSeq},
     {CheatIDKFAFunc,     &CheatIDKFASeq},
     {CheatIDDQDFunc,     &CheatIDDQDSeq},
+    {CheatVERSIONFunc,   &CheatVERSIONSeq},
     {NULL,               NULL} 
 };
 
@@ -1296,4 +1302,9 @@ static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
 {
     P_DamageMobj(player->mo, NULL, player->mo, 10000);
     P_SetMessage(player, DEH_String(TXT_CHEATIDDQD), true);
+}
+
+static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)
+{
+    P_SetMessage(player, TXT_VERSION, true);
 }

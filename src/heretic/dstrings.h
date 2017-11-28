@@ -388,6 +388,8 @@
 
 // [JN] Специфические сообщения порта
 
+#define TXT_VERSION "DTHCBZ 2.4 (D HFPHF<JNRT)"       // ВЕРСИЯ 2.4 (В РАЗРАБОТКЕ)
+
 #define TXT_ALWAYSRUN_ON "GJCNJZYYSQ <TU DRK>XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
 #define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ <TU DSRK>XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
 
