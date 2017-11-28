@@ -49,6 +49,19 @@ fixed_t pspritescale, pspriteiscale;
 
 lighttable_t **spritelights;
 
+// [JN] Brightmaps
+lighttable_t** fullbrights_greenonly;
+lighttable_t** fullbrights_redonly;
+lighttable_t** fullbrights_blueonly;
+lighttable_t** fullbrights_purpleonly;
+lighttable_t** fullbrights_notbronze;
+lighttable_t** fullbrights_flame;
+lighttable_t** fullbrights_greenonly_dim;
+lighttable_t** fullbrights_redonly_dim;
+lighttable_t** fullbrights_blueonly_dim;
+lighttable_t** fullbrights_yellowonly_dim;
+
+
 // constant arrays used for psprite clipping and initializing clipping
 int negonearray[SCREENWIDTH];       // [crispy] 32-bit integer math
 int screenheightarray[SCREENWIDTH]; // [crispy] 32-bit integer math
@@ -619,10 +632,80 @@ void R_ProjectSprite(mobj_t * thing)
         if (index >= MAXLIGHTSCALE)
             index = MAXLIGHTSCALE - 1;
         vis->colormap = spritelights[index];
+
+        // [JN] Applying brightmaps to sprites...
+
+        // - Green only -----------------------------------
+        if (thing->type == MT_ARTIEGG ||   // Morph Ovum
+            thing->type == MT_AMCBOWHEFTY) // Quiver of Etherial Arrows
+            vis->colormap = fullbrights_greenonly[index];
+
+        // - Red only -----------------------------------
+        if (thing->type == MT_AMSKRDWIMPY  || // Lesser Runes
+            thing->type == MT_AMSKRDHEFTY  || // Greater Runes
+            thing->type == MT_ARTITELEPORT || // Chaos Device
+            thing->type == MT_HEAD)           // Iron Lich
+            vis->colormap = fullbrights_redonly[index];
+
+        // - Blue only -----------------------------------
+        if (thing->type == MT_SORCERER1 || // D'Sparil on Serpent
+            thing->type == MT_SORCERER2)   // D'Sparil walking
+            vis->colormap = fullbrights_blueonly[index];
+
+        // - Yellow only -----------------------------------
+        if (thing->type == MT_ARTIINVULNERABILITY) // Ring of Invulnerability
+            vis->colormap = fullbrights_notbronze[index];
+        
+        // - Purple only -----------------------------------
+        if (thing->type == MT_WIZARD) // Disciple of D'Sparil
+            vis->colormap = fullbrights_purpleonly[index];
+
+        // - Flame -----------------------------------
+        if (thing->type == MT_AMPHRDWIMPY || // Flame Orb
+            thing->type == MT_AMPHRDHEFTY || // Inferno Orb
+            thing->type == MT_CHANDELIER  || // Chandelier
+            thing->type == MT_MISC10      || // Torch
+            thing->type == MT_SERPTORCH   || // Serpent Torch
+            thing->type == MT_MISC6       || // Fire Brazier
+            thing->type == MT_MISC12)        // Volcano
+            vis->colormap = fullbrights_flame[index];
+
+        // - Green only (diminished) -----------------------------
+        if (thing->type == MT_MISC15    || // Etherial Crossbow
+            thing->type == MT_AMCBOWWIMPY) // Etherial Arrows
+            vis->colormap = fullbrights_greenonly_dim[index];
+
+        if (thing->type == MT_KNIGHT    || // Undead Warrior
+            thing->type == MT_KNIGHTGHOST) // Undead Warrior Ghost
+            vis->colormap = fullbrights_greenonly_dim[index];
+
+        // - Red only (diminished) -----------------------------
+        if (thing->type == MT_WSKULLROD   || // Hellstaff
+            thing->type == MT_WPHOENIXROD || // Phoenix Rod
+            thing->type == MT_ITEMSHIELD2)   // Enchanted Shield
+            vis->colormap = fullbrights_redonly_dim[index];
+
+        // - Blue only -----------------------------------
+        if (thing->type == MT_AMBLSRWIMPY || // Claw Orb
+            thing->type == MT_AMBLSRHEFTY)   // Energy Orb
+            vis->colormap = fullbrights_blueonly_dim[index];
+
+        // - Yellow only -----------------------------------
+        if (thing->type == MT_AMGWNDWIMPY || // Wand Crystal
+            thing->type == MT_AMGWNDHEFTY)   // Crystal Geode
+            vis->colormap = fullbrights_yellowonly_dim[index];
+
+        // - Standard full bright formula ------------
+        if (thing->type == MT_BEASTBALL    || // Weredragon's fireball
+            thing->type == MT_BURNBALL     || // Weredragon's fireball
+            thing->type == MT_BURNBALLFB   || // Weredragon's fireball
+            thing->type == MT_PUFFY        || // Weredragon's fireball
+            thing->type == MT_HEADFX3      || // Iron Lich's fire column
+            thing->type == MT_VOLCANOBLAST || // Volcano blast
+            thing->type == MT_VOLCANOTBLAST)  // Volcano blast (impact)
+            vis->colormap = colormaps;
     }
 }
-
-
 
 
 /*
@@ -645,12 +728,53 @@ void R_AddSprites(sector_t * sec)
 
     lightnum = (sec->lightlevel >> LIGHTSEGSHIFT) + extralight;
     if (lightnum < 0)
+    {
         spritelights = scalelight[0];
+
+        // [JN] Brightmaps
+        fullbrights_greenonly = fullbright_greenonly[0];
+        fullbrights_redonly = fullbright_redonly[0];
+        fullbrights_blueonly = fullbright_blueonly[0];
+        fullbrights_purpleonly = fullbright_purpleonly[0];
+        fullbrights_notbronze = fullbright_notbronze[0];
+        fullbrights_flame = fullbright_flame[0];
+        fullbrights_greenonly_dim = fullbright_greenonly_dim[0];
+        fullbrights_redonly_dim = fullbright_redonly_dim[0];
+        fullbrights_blueonly_dim = fullbright_blueonly_dim[0];
+        fullbrights_yellowonly_dim = fullbright_yellowonly_dim[0];
+    }
     else if (lightnum >= LIGHTLEVELS)
+    {
         spritelights = scalelight[LIGHTLEVELS - 1];
+
+        // [JN] Brightmaps
+        fullbrights_greenonly = fullbright_greenonly[LIGHTLEVELS - 1];
+        fullbrights_redonly = fullbright_redonly[LIGHTLEVELS - 1];
+        fullbrights_blueonly = fullbright_blueonly[LIGHTLEVELS - 1];
+        fullbrights_purpleonly = fullbright_purpleonly[LIGHTLEVELS - 1];
+        fullbrights_notbronze = fullbright_notbronze[LIGHTLEVELS - 1];
+        fullbrights_flame = fullbright_flame[LIGHTLEVELS - 1];
+        fullbrights_greenonly_dim = fullbright_greenonly_dim[LIGHTLEVELS - 1];
+        fullbrights_redonly_dim = fullbright_redonly_dim[LIGHTLEVELS - 1];
+        fullbrights_blueonly_dim = fullbright_blueonly_dim[LIGHTLEVELS - 1];
+        fullbrights_yellowonly_dim = fullbright_yellowonly_dim[LIGHTLEVELS - 1];
+    }
     else
+    {
         spritelights = scalelight[lightnum];
 
+        // [JN] Brightmaps
+        fullbrights_greenonly = fullbright_greenonly[lightnum];
+        fullbrights_redonly = fullbright_redonly[lightnum];
+        fullbrights_blueonly = fullbright_blueonly[lightnum];
+        fullbrights_purpleonly = fullbright_purpleonly[lightnum];
+        fullbrights_notbronze = fullbright_notbronze[lightnum];
+        fullbrights_flame = fullbright_flame[lightnum];
+        fullbrights_greenonly_dim = fullbright_greenonly_dim[lightnum];
+        fullbrights_redonly_dim = fullbright_redonly_dim[lightnum];
+        fullbrights_blueonly_dim = fullbright_blueonly_dim[lightnum];
+        fullbrights_yellowonly_dim = fullbright_yellowonly_dim[lightnum];
+    }
 
     for (thing = sec->thinglist; thing; thing = thing->snext)
         R_ProjectSprite(thing);

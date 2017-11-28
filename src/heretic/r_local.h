@@ -309,6 +309,30 @@ extern lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 
+// [JN] Brightmaps
+extern lighttable_t* fullbright_greenonly[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_blueonly[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_purpleonly[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_notbronze[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_flame[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_greenonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_redonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_blueonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_yellowonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
+// [JN] ...erm?!
+extern lighttable_t* brightmaps_greenonly;
+extern lighttable_t* brightmaps_redonly;
+extern lighttable_t* brightmaps_blueonly;
+extern lighttable_t* brightmaps_purpleonly;
+extern lighttable_t* brightmaps_notbronze;
+extern lighttable_t* brightmaps_flame;
+extern lighttable_t* brightmaps_greenonly_dim;
+extern lighttable_t* brightmaps_redonly_dim;
+extern lighttable_t* brightmaps_blueonly_dim;
+extern lighttable_t* brightmaps_yellowonly_dim;
+
+
 extern int extralight;
 extern lighttable_t *fixedcolormap;
 

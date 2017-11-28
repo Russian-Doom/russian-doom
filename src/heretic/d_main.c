@@ -1079,8 +1079,8 @@ void D_DoomMain(void)
     {
         gamemode = shareware;
         gamedescription = "Heretic (Демоверсия)";
-        W_AddFile("russian/russian-heretic-common.wad");
-        W_AddFile("russian/russian-heretic-demo.wad");
+        W_MergeFile("russian/russian-heretic-common.wad");
+        W_MergeFile("russian/russian-heretic-demo.wad");
     }
     else if (W_CheckNumForName("EXTENDED") != -1)
     {
@@ -1088,15 +1088,15 @@ void D_DoomMain(void)
 
         gamemode = retail;
         gamedescription = "Heretic: Тень Змеиных Всадников";
-        W_AddFile("russian/russian-heretic-common.wad");
-        W_AddFile("russian/russian-heretic-retail.wad");
+        W_MergeFile("russian/russian-heretic-common.wad");
+        W_MergeFile("russian/russian-heretic-retail.wad");
     }
     else
     {
         gamemode = registered;
         gamedescription = "Heretic";
-        W_AddFile("russian/russian-heretic-common.wad");
-        W_AddFile("russian/russian-heretic-registered.wad");
+        W_MergeFile("russian/russian-heretic-common.wad");
+        W_MergeFile("russian/russian-heretic-registered.wad");
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
