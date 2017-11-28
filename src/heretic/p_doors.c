@@ -260,6 +260,16 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
     }
 
     // if the sector has an active thinker, use it
+
+    // [from-crispy] if the door action is on a single-sided linedef, ignore
+    if (line->sidenum[side^1] == -1)
+    {
+        // [JN] Use player->mo for sound source, don't play it globally.
+        // This also fixes bombing out on using this linedef.
+        S_StartSound(player->mo,sfx_plroof);
+        return;
+    }
+
     sec = sides[line->sidenum[side ^ 1]].sector;
     if (sec->specialdata)
     {
