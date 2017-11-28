@@ -548,7 +548,11 @@ void P_ZMovement(mobj_t * mo)
                 mo->player->deltaviewheight = mo->momz >> 3;
                 // [crispy] squat down weapon sprite as well
                 mo->player->psp_dy_max = mo->momz>>2;
+
+                // [JN] Dead men does not say "off"
+                if (mo->health > 0)
                 S_StartSound(mo, sfx_plroof);
+
                 // haleyjd: removed externdriver crap
                 mo->player->centering = true;
             }
