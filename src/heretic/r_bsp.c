@@ -452,8 +452,9 @@ void R_Subsector(int num)
     }
 
     // check for solidsegs overflow - extremely unsatisfactory!
-    if(newend > &solidsegs[32])
-        I_Error("R_Subsector: solidsegs overflow (vanilla may crash here)\n");
+    // [JN] make non-fatal
+    // if(newend > &solidsegs[32])
+    //     I_Error("R_Subsector: solidsegs overflow (vanilla may crash here)\n");
 }
 
 
