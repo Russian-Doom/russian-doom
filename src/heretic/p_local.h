@@ -158,6 +158,10 @@ mobj_t *P_SpawnMissileAngle(mobj_t * source, mobjtype_t type,
 mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type);
 mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle);
 
+// [from-crispy]
+void    P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe);
+mobj_t *P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boolean safe);
+
 // ***** P_ENEMY *****
 
 void P_NoiseAlert(mobj_t * target, mobj_t * emmiter);

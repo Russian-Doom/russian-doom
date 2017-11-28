@@ -860,6 +860,11 @@ void P_MobjThinker(mobj_t * mobj)
 
 mobj_t *P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
 {
+    return P_SpawnMobjSafe(x, y, z, type, false);
+}
+
+mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boolean safe)
+{
     mobj_t *mobj;
     state_t *st;
     mobjinfo_t *info;
@@ -882,7 +887,7 @@ mobj_t *P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
     {
         mobj->reactiontime = info->reactiontime;
     }
-    mobj->lastlook = P_Random() % MAXPLAYERS;
+    mobj->lastlook = safe ? 0 : P_Random () % MAXPLAYERS;
 
     // Set the state, but do not use P_SetMobjState, because action
     // routines can't be called yet.  If the spawnstate has an action
@@ -1197,11 +1202,25 @@ void P_SpawnMapThing(mapthing_t * mthing)
 extern fixed_t attackrange;
 
 void P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z)
+    {
+        P_SpawnPuffSafe(x, y, z, false);
+    }
+    
+    void
+    P_SpawnPuffSafe
+    ( fixed_t	x,
+    fixed_t	y,
+    fixed_t	z,
+    boolean	safe )
 {
     mobj_t *puff;
 
-    z += (P_SubRandom() << 10);
-    puff = P_SpawnMobj(x, y, z, PuffType);
+    if (!safe)
+    {
+        z += (P_SubRandom() << 10);
+    }
+
+    puff = P_SpawnMobjSafe (x, y, z, PuffType, safe);
     if (puff->info->attacksound)
     {
         S_StartSound(puff, puff->info->attacksound);
