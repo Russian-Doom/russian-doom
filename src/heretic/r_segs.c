@@ -30,6 +30,13 @@
 #include "doomdef.h"
 #include "r_local.h"
 
+
+// [JN] Brightmaps
+int brightmap_redonly;
+int brightmap_blueonly;
+int brightmap_notbronze;
+boolean bmaptextured;
+
 // OPTIMIZE: closed two sided lines as single sided
 
 boolean segtextured;            // true if any of the segs textures might be vis
@@ -474,6 +481,18 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
     return scale;
 }
 
+void R_InitBrightmaps (void)
+{
+    brightmap_redonly = (bmaptextured == R_TextureNumForName("GRSKULL3"));
+
+    brightmap_blueonly = (bmaptextured == R_TextureNumForName("DOOREXIT") 
+    || bmaptextured == R_TextureNumForName("SW2ON")
+    || bmaptextured == R_TextureNumForName("SW2OFF"));
+
+    brightmap_notbronze = (bmaptextured == R_TextureNumForName("SW1ON")
+    || bmaptextured == R_TextureNumForName("SW1OFF"));
+}
+
 /*
 =====================
 =
@@ -709,6 +728,10 @@ void R_StoreWallRange(int start, int stop)
 // calculate rw_offset (only needed for textured lines)
 //
     segtextured = midtexture | toptexture | bottomtexture | maskedtexture;
+    bmaptextured = midtexture | toptexture | bottomtexture;
+
+    // [JN] Call brightmap lookup
+    R_InitBrightmaps();
 
     if (segtextured)
     {
@@ -743,11 +766,38 @@ void R_StoreWallRange(int start, int stop)
             }
 
             if (lightnum < 0)
+            {
+                if (brightmap_redonly)
+                walllights = fullbright_redonly[0];
+                else if (brightmap_blueonly)
+                walllights = fullbright_blueonly[0];
+                else if (brightmap_notbronze)
+                walllights = fullbright_notbronze[0];
+                else // [JN] Standard light table
                 walllights = scalelight[0];
+            }
             else if (lightnum >= LIGHTLEVELS)
+            {
+                if (brightmap_redonly)
+                walllights = fullbright_redonly[LIGHTLEVELS - 1];
+                else if (brightmap_blueonly)
+                walllights = fullbright_blueonly[LIGHTLEVELS - 1];
+                else if (brightmap_notbronze)
+                walllights = fullbright_notbronze[LIGHTLEVELS - 1];
+                else // [JN] Standard light table
                 walllights = scalelight[LIGHTLEVELS - 1];
+            }
             else
+            {
+                if (brightmap_redonly)
+                walllights = fullbright_redonly[lightnum];
+                else if (brightmap_blueonly)
+                walllights = fullbright_blueonly[lightnum];
+                else if (brightmap_notbronze)
+                walllights = fullbright_notbronze[lightnum];
+                else // [JN] Standard light table
                 walllights = scalelight[lightnum];
+            }
         }
     }
 
