@@ -705,6 +705,7 @@ void G_ScreenShot(void);
 // [JN] Дополнительные параметры игры
 
 // - Графика -
+extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
 extern int fake_contrast;           // Имитация контрастного освещения стен
 extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
 // - Геймплей -

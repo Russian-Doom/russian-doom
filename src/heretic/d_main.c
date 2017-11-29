@@ -789,6 +789,7 @@ void D_BindVariables(void)
     M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);		// Оптимизация палитры
 
     // - Графика -
+    M_BindIntVariable("brightmaps",             &brightmaps);           // Брайтмаппинг текстур и спрайтов
     M_BindIntVariable("fake_contrast",          &fake_contrast);        // Имитация контрастного освещения стен
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses); // Произвольное зеркальное отражение трупов
     // - Геймплей -

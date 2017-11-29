@@ -83,7 +83,7 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == strife, TXT_NewCheckBox("Показывать заставку при выходе",          &show_exit_sequence)),
     
     TXT_If(gamemission == doom || gamemission == heretic,   TXT_NewSeparator("Графика")),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Брайтмаппинг текстур и спрайтов",           &brightmaps)),
+        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Брайтмаппинг текстур и спрайтов",           &brightmaps)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Имитаци€ контрастного освещени€ стен",      &fake_contrast)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Юффект прозрачности у некоторых объектов",  &translucency)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Улучшенна€ анимаци€ жидкостей",             &swirling_liquids)),

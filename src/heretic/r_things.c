@@ -635,76 +635,87 @@ void R_ProjectSprite(mobj_t * thing)
         vis->colormap = spritelights[index];
 
         // [JN] Applying brightmaps to sprites...
+        if (brightmaps)
+        {
+            // - Green only -
+            if (thing->type == MT_ARTIEGG ||   // Morph Ovum
+                thing->type == MT_AMCBOWHEFTY) // Quiver of Etherial Arrows
+                vis->colormap = fullbrights_greenonly[index];
 
-        // - Green only -----------------------------------
-        if (thing->type == MT_ARTIEGG ||   // Morph Ovum
-            thing->type == MT_AMCBOWHEFTY) // Quiver of Etherial Arrows
-            vis->colormap = fullbrights_greenonly[index];
+            // - Red only -
+            if (thing->type == MT_AMSKRDWIMPY  || // Lesser Runes
+                thing->type == MT_AMSKRDHEFTY  || // Greater Runes
+                thing->type == MT_ARTITELEPORT || // Chaos Device
+                thing->type == MT_HEAD)           // Iron Lich
+                vis->colormap = fullbrights_redonly[index];
 
-        // - Red only -----------------------------------
-        if (thing->type == MT_AMSKRDWIMPY  || // Lesser Runes
-            thing->type == MT_AMSKRDHEFTY  || // Greater Runes
-            thing->type == MT_ARTITELEPORT || // Chaos Device
-            thing->type == MT_HEAD)           // Iron Lich
-            vis->colormap = fullbrights_redonly[index];
+            // - Blue only -
+            if (thing->type == MT_SORCERER1 || // D'Sparil on Serpent
+                thing->type == MT_SORCERER2)   // D'Sparil walking
+                vis->colormap = fullbrights_blueonly[index];
 
-        // - Blue only -----------------------------------
-        if (thing->type == MT_SORCERER1 || // D'Sparil on Serpent
-            thing->type == MT_SORCERER2)   // D'Sparil walking
-            vis->colormap = fullbrights_blueonly[index];
+            // - Not bronze -
+            if (thing->type == MT_ARTIINVULNERABILITY) // Ring of Invulnerability
+                vis->colormap = fullbrights_notbronze[index];
 
-        // - Yellow only -----------------------------------
-        if (thing->type == MT_ARTIINVULNERABILITY) // Ring of Invulnerability
-            vis->colormap = fullbrights_notbronze[index];
+            // - Purple only -
+            if (thing->type == MT_WIZARD) // Disciple of D'Sparil
+                vis->colormap = fullbrights_purpleonly[index];
+
+            // - Flame -
+            if (thing->type == MT_AMPHRDWIMPY || // Flame Orb
+                thing->type == MT_AMPHRDHEFTY || // Inferno Orb
+                thing->type == MT_CHANDELIER  || // Chandelier
+                thing->type == MT_MISC10      || // Torch
+                thing->type == MT_SERPTORCH   || // Serpent Torch
+                thing->type == MT_MISC6       || // Fire Brazier
+                thing->type == MT_MISC12)        // Volcano
+                vis->colormap = fullbrights_flame[index];
+
+            // - Green only (diminished) -
+            if (thing->type == MT_MISC15    || // Etherial Crossbow
+                thing->type == MT_AMCBOWWIMPY) // Etherial Arrows
+                vis->colormap = fullbrights_greenonly_dim[index];
+
+            if (thing->type == MT_KNIGHT    || // Undead Warrior
+                thing->type == MT_KNIGHTGHOST) // Undead Warrior Ghost
+                vis->colormap = fullbrights_greenonly_dim[index];
+
+            // - Red only (diminished) -
+            if (thing->type == MT_WSKULLROD   || // Hellstaff
+                thing->type == MT_WPHOENIXROD || // Phoenix Rod
+                thing->type == MT_ITEMSHIELD2)   // Enchanted Shield
+                vis->colormap = fullbrights_redonly_dim[index];
+
+            // - Blue only -
+            if (thing->type == MT_AMBLSRWIMPY || // Claw Orb
+                thing->type == MT_AMBLSRHEFTY)   // Energy Orb
+                vis->colormap = fullbrights_blueonly_dim[index];
+
+            // - Yellow only -
+            if (thing->type == MT_AMGWNDWIMPY || // Wand Crystal
+                thing->type == MT_AMGWNDHEFTY)   // Crystal Geode
+                vis->colormap = fullbrights_yellowonly_dim[index];
+
+            // - Standard full bright formula -
+            if (thing->type == MT_BEASTBALL    || // Weredragon's fireball
+                thing->type == MT_BURNBALL     || // Weredragon's fireball
+                thing->type == MT_BURNBALLFB   || // Weredragon's fireball
+                thing->type == MT_PUFFY        || // Weredragon's fireball
+                thing->type == MT_HEADFX3      || // Iron Lich's fire column
+                thing->type == MT_VOLCANOBLAST || // Volcano blast
+                thing->type == MT_VOLCANOTBLAST)  // Volcano blast (impact)
+                vis->colormap = colormaps;
+        }
         
-        // - Purple only -----------------------------------
-        if (thing->type == MT_WIZARD) // Disciple of D'Sparil
-            vis->colormap = fullbrights_purpleonly[index];
-
-        // - Flame -----------------------------------
-        if (thing->type == MT_AMPHRDWIMPY || // Flame Orb
-            thing->type == MT_AMPHRDHEFTY || // Inferno Orb
-            thing->type == MT_CHANDELIER  || // Chandelier
-            thing->type == MT_MISC10      || // Torch
-            thing->type == MT_SERPTORCH   || // Serpent Torch
-            thing->type == MT_MISC6       || // Fire Brazier
-            thing->type == MT_MISC12)        // Volcano
-            vis->colormap = fullbrights_flame[index];
-
-        // - Green only (diminished) -----------------------------
-        if (thing->type == MT_MISC15    || // Etherial Crossbow
-            thing->type == MT_AMCBOWWIMPY) // Etherial Arrows
-            vis->colormap = fullbrights_greenonly_dim[index];
-
-        if (thing->type == MT_KNIGHT    || // Undead Warrior
-            thing->type == MT_KNIGHTGHOST) // Undead Warrior Ghost
-            vis->colormap = fullbrights_greenonly_dim[index];
-
-        // - Red only (diminished) -----------------------------
-        if (thing->type == MT_WSKULLROD   || // Hellstaff
-            thing->type == MT_WPHOENIXROD || // Phoenix Rod
-            thing->type == MT_ITEMSHIELD2)   // Enchanted Shield
-            vis->colormap = fullbrights_redonly_dim[index];
-
-        // - Blue only -----------------------------------
-        if (thing->type == MT_AMBLSRWIMPY || // Claw Orb
-            thing->type == MT_AMBLSRHEFTY)   // Energy Orb
-            vis->colormap = fullbrights_blueonly_dim[index];
-
-        // - Yellow only -----------------------------------
-        if (thing->type == MT_AMGWNDWIMPY || // Wand Crystal
-            thing->type == MT_AMGWNDHEFTY)   // Crystal Geode
-            vis->colormap = fullbrights_yellowonly_dim[index];
-
-        // - Standard full bright formula ------------
-        if (thing->type == MT_BEASTBALL    || // Weredragon's fireball
-            thing->type == MT_BURNBALL     || // Weredragon's fireball
-            thing->type == MT_BURNBALLFB   || // Weredragon's fireball
-            thing->type == MT_PUFFY        || // Weredragon's fireball
-            thing->type == MT_HEADFX3      || // Iron Lich's fire column
-            thing->type == MT_VOLCANOBLAST || // Volcano blast
-            thing->type == MT_VOLCANOTBLAST)  // Volcano blast (impact)
-            vis->colormap = colormaps;
+        // [JN] Fallback. If we are not using brightmaps, apply full brightness
+        // to the objects, that no longer lighten up in info.c (S_FIREBRAZIER* and S_WALLTORCH*).
+        if (!brightmaps)
+        {
+            if (thing->type == MT_MISC6  || // S_FIREBRAZIER*
+                thing->type == MT_MISC10)   // S_WALLTORCH1*
+                vis->colormap = colormaps;
+        }
     }
 }
 
