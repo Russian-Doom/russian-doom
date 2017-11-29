@@ -665,6 +665,7 @@ void R_ProjectSprite(mobj_t * thing)
             // - Flame -
             if (thing->type == MT_AMPHRDWIMPY || // Flame Orb
                 thing->type == MT_AMPHRDHEFTY || // Inferno Orb
+                thing->type == MT_MISC4       || // Torch (Artifact)
                 thing->type == MT_CHANDELIER  || // Chandelier
                 thing->type == MT_MISC10      || // Torch
                 thing->type == MT_SERPTORCH   || // Serpent Torch
@@ -712,8 +713,9 @@ void R_ProjectSprite(mobj_t * thing)
         // to the objects, that no longer lighten up in info.c (S_FIREBRAZIER* and S_WALLTORCH*).
         if (!brightmaps)
         {
-            if (thing->type == MT_MISC6  || // S_FIREBRAZIER*
-                thing->type == MT_MISC10)   // S_WALLTORCH1*
+            if (thing->type == MT_MISC4  || // Torch (Artifact)
+                thing->type == MT_MISC6  || // S_FIREBRAZIER*
+                thing->type == MT_MISC10)   // S_WALLTORCH*
                 vis->colormap = colormaps;
         }
     }
