@@ -353,14 +353,25 @@ static void DrINumber(signed int val, int x, int y)
 static void DrBNumber(signed int val, int x, int y)
 {
     patch_t *patch;
+    patch_t *patch_n;
     int xpos;
     int oldval;
+
+    // [JN] Declare a "minus" symbol in the big green font
+    patch_n = W_CacheLumpName(DEH_String("FONTB13"), PU_CACHE);
 
     oldval = val;
     xpos = x;
     if (val < 0)
     {
-        val = 0;
+        val = -val; // [JN] Support for negative values
+        
+        if (-val <= -99) // [JN] Do not drop below -99. Looks confusing, eh?
+        val = 99;
+
+        // [JN] Draw minus symbol with respection of digits placement.
+        // However, values below -10 requires some correction in "x" placement.
+        V_DrawShadowedPatch(xpos + (val <= 9 ? 16 : 8) - SHORT(patch_n->width) / 2, y-1, patch_n);
     }
     if (val > 99)
     {
@@ -942,36 +953,88 @@ void DrawFullScreenStuff(void)
     int i;
     int x;
     int temp;
+    int fs_ammo = CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo]; // [JN] Definition of full screen ammo
 
     UpdateState |= I_FULLSCRN;
     if (CPlayer->mo->health > 0)
     {
-        DrBNumber(CPlayer->mo->health, 5, 180);
+        // [JN] Draw ammount of health
+        DrBNumber(CPlayer->mo->health, 5, 176);
     }
     else
     {
-        DrBNumber(0, 5, 180);
+        DrBNumber(0, 5, 176);
     }
+
+    // [JN] Always draw ammo in full screen HUD
+    if (fs_ammo && CPlayer->readyweapon > 0 && CPlayer->readyweapon < 7)
+    {
+        DrBNumber(fs_ammo, 274, 176);
+    }
+
     if (deathmatch)
     {
         temp = 0;
-        for (i = 0; i < MAXPLAYERS; i++)
+
+        // [JN] Do not draw frag counter below opened inventory, 
+        // because it looks aesthetically bad.
+        if (!inventory)
         {
-            if (playeringame[i])
+            for (i = 0; i < MAXPLAYERS; i++)
             {
-                temp += CPlayer->frags[i];
+                if (playeringame[i])
+                {
+                    temp += CPlayer->frags[i];
+                }
             }
+            DrBNumber(temp, 173, 176);
         }
-        DrINumber(temp, 45, 185);
+        
+        // [JN] Always draw keys in Deathmatch, but only if player alive,
+        // and not while opened inventory. Just as visual reminder.
+        if (CPlayer->mo->health > 0 && !inventory)
+        {
+            V_DrawShadowedPatch(219, 174, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219, 182, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219, 190, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+        }
     }
     if (!inventory)
     {
+        // [JN] Draw health vial
+        V_DrawShadowedPatch(48, 218, W_CacheLumpName("PTN1A0", PU_CACHE));
+        
+        // [JN] Draw keys
+        if (!deathmatch)
+        {
+            if (CPlayer->keys[key_yellow])
+            V_DrawShadowedPatch(219, 174, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            if (CPlayer->keys[key_green])
+            V_DrawShadowedPatch(219, 182, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            if (CPlayer->keys[key_blue])
+            V_DrawShadowedPatch(219, 190, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+        }
+
         if (CPlayer->readyArtifact > 0)
         {
             patch = DEH_String(patcharti[CPlayer->readyArtifact]);
-            V_DrawTLPatch(286, 170, W_CacheLumpName(DEH_String("ARTIBOX"), PU_CACHE));
-            V_DrawPatch(286, 170, W_CacheLumpName(patch, PU_CACHE));
-            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 307, 192);
+            
+            // [JN] Draw Artifacts
+            V_DrawShadowedPatch(238, 170, W_CacheLumpName(patch, PU_CACHE));
+            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 259, 191);
+        }
+
+        if (CPlayer->armorpoints > 0)
+        {
+            // [JN] Player have Silver Shield
+            if (CPlayer->armortype == 1)
+                V_DrawShadowedPatch(110, 214, W_CacheLumpName("SHLDA0", PU_CACHE));
+            // [JN] Player have Enchanted Shield
+            else if (CPlayer->armortype == 2)
+                V_DrawShadowedPatch(108, 216, W_CacheLumpName("SHD2A0", PU_CACHE));
+
+            // [JN] Draw ammount of armor
+            DrBNumber(CPlayer->armorpoints, 57, 176);
         }
     }
     else
