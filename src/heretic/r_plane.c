@@ -430,7 +430,7 @@ void R_DrawPlanes(void)
     extern int columnofs[MAXWIDTH];
 
 #ifdef RANGECHECK
-    if (ds_p - drawsegs > MAXDRAWSEGS)
+    if (ds_p - drawsegs > numdrawsegs)
         I_Error("R_DrawPlanes: drawsegs overflow (%i)", ds_p - drawsegs);
     if (lastvisplane - visplanes > numvisplanes)
         I_Error("R_DrawPlanes: visplane overflow (%i)",
