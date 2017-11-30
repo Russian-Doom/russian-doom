@@ -846,6 +846,28 @@ static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *s
     }
 }
 
+// [crispy] & [JN] Chicken's special bobbing
+static inline void R_ApplyChickenBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
+{
+    const angle_t angle = (128 * leveltime) & FINEMASK;
+
+    if (sx)
+    {
+        *sx = FRACUNIT;
+    
+        if (bobx)
+        *sx += FixedMul(viewplayer->bob, finecosine[angle] / 18);
+    }
+
+    if (sy)
+    {
+        *sy = 32 * FRACUNIT; // [crispy] WEAPONTOP
+    
+        if (boby)
+        *sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)] / 6);
+    }
+}
+
 /*
 ========================
 =
@@ -916,7 +938,6 @@ void R_DrawPSprite(pspdef_t * psp)
 
     // [JN] Applying halfed bobbing while firing:
     if (singleplayer && weapon_bobbing && !vanillaparm && (
-        /* Chicken      */ state == S_BEAKREADY      || state == S_BEAKATK1_1     || state == S_BEAKATK2_1     ||
         /* Gauntlets    */ state == S_GAUNTLETATK1_1 || state == S_GAUNTLETATK1_2 || state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4 || state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK1_6 || state == S_GAUNTLETATK1_7 ||
         /* Gauntlets+   */ state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2 || state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4 || state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6 || state == S_GAUNTLETATK2_7 ||
         /* Staff        */ state == S_STAFFATK1_1    || state == S_STAFFATK1_2    || state == S_STAFFATK1_3    ||
@@ -936,6 +957,10 @@ void R_DrawPSprite(pspdef_t * psp)
         {
             R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
         }
+
+    // [JN] Applying special chicken's bobbing:
+    if (singleplayer && weapon_bobbing && !vanillaparm && (state == S_BEAKREADY || state == S_BEAKATK1_1 || state == S_BEAKATK2_1))
+        R_ApplyChickenBob(&psp_sx, true, &psp_sy, true);
 
     // [crispy] squat down weapon sprite a bit after hitting the ground
     if (weapon_bobbing && !vanillaparm)
