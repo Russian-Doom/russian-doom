@@ -188,7 +188,7 @@ typedef struct
     } d;
 } intercept_t;
 
-#define	MAXINTERCEPTS	128
+#define	MAXINTERCEPTS	128*16 // [JN] Multiplied by 16
 extern intercept_t intercepts[MAXINTERCEPTS], *intercept_p;
 typedef boolean(*traverser_t) (intercept_t * in);
 
