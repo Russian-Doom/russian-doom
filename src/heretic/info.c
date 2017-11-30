@@ -987,10 +987,12 @@ state_t states[NUMSTATES] = {
     {SPR_IMPX, 25, -1, NULL, S_NULL, 0, 0},     // S_IMP_XCRASH3
     {SPR_IMPX, 12, 5, NULL, S_IMP_CHUNKA2, 0, 0},       // S_IMP_CHUNKA1
     {SPR_IMPX, 13, 700, NULL, S_IMP_CHUNKA3, 0, 0},     // S_IMP_CHUNKA2
-    {SPR_IMPX, 14, 700, NULL, S_NULL, 0, 0},    // S_IMP_CHUNKA3
+    // [JN] Do not remove chunk after 700 tics
+    {SPR_IMPX, 14, -1, NULL, S_NULL, 0, 0},    // S_IMP_CHUNKA3
     {SPR_IMPX, 15, 5, NULL, S_IMP_CHUNKB2, 0, 0},       // S_IMP_CHUNKB1
     {SPR_IMPX, 16, 700, NULL, S_IMP_CHUNKB3, 0, 0},     // S_IMP_CHUNKB2
-    {SPR_IMPX, 17, 700, NULL, S_NULL, 0, 0},    // S_IMP_CHUNKB3
+    // [JN] Do not remove chunk after 700 tics
+    {SPR_IMPX, 17, -1, NULL, S_NULL, 0, 0},    // S_IMP_CHUNKB3
     {SPR_FX10, 32768, 6, NULL, S_IMPFX2, 0, 0}, // S_IMPFX1
     {SPR_FX10, 32769, 6, NULL, S_IMPFX3, 0, 0}, // S_IMPFX2
     {SPR_FX10, 32770, 6, NULL, S_IMPFX1, 0, 0}, // S_IMPFX3
