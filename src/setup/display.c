@@ -80,7 +80,7 @@ static int window_width = 640, window_height = 480;
 static int startup_delay = 1000;
 static int usegamma = 0;
 
-int graphical_startup = 1;
+int graphical_startup = 0; // [JN] Disabled by default
 int show_endoom = 0;
 int png_screenshots = 0;
 

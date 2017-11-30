@@ -74,7 +74,7 @@ skill_t startskill;
 int startepisode;
 int startmap;
 int UpdateState;
-static int graphical_startup = 1;
+static int graphical_startup = 0; // [JN] Disabled by default
 static boolean using_graphical_startup;
 static boolean main_loop_started = false;
 boolean autostart;
