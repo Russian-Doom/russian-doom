@@ -452,10 +452,10 @@ void R_PrecacheLevel(void);
 //
 // R_things.c
 //
-// [JN] MAXVISSPRITES увеличено в 32 раза
-#define	MAXVISSPRITES	128*32
+#define	MAXVISSPRITES	128
 
-extern vissprite_t vissprites[MAXVISSPRITES], *vissprite_p;
+extern vissprite_t *vissprites;
+extern vissprite_t *vissprite_p;
 extern vissprite_t vsprsortedhead;
 
 // constant arrays used for psprite clipping and initializing clipping
