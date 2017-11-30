@@ -725,7 +725,7 @@ void SB_PaletteFlash(void)
         }
         palette += STARTREDPALS;
     }
-    else if (CPlayer->bonuscount)
+    else if (CPlayer->bonuscount && CPlayer->health > 0) // [crispy] never show the yellow bonus palette for a dead player
     {
         // [JN] One extra palette for pickup flashing
         // https://doomwiki.org/wiki/PLAYPAL
