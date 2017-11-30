@@ -174,6 +174,9 @@ static int currentSlot;
 static int quicksave;
 static int quickload;
 
+// [JN] Set default mouse sensitivity to 5, like in Doom
+int mouseSensitivity = 5;
+
 static MenuItem_t MainItems[] = {
     {ITT_EFUNC, "YJDFZ BUHF", SCNetCheck, 1, MENU_EPISODE},	// НОВАЯ ИГРА
     {ITT_SETMENU, "YFCNHJQRB", NULL, 0, MENU_OPTIONS},		// НАСТРОЙКИ
