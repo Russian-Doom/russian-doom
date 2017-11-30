@@ -882,6 +882,16 @@ void D_DoomMain(void)
     startmap = 1;
     autostart = false;
 
+    //!
+    // @vanilla
+    //
+    // [JN] Activate vanilla gameplay mode.
+    // All optional enhancements will be disabled without 
+    // modifying configuration file (russian-heretic.cfg)
+    //
+
+    vanillaparm = M_ParmExists("-vanilla");
+
 //
 // get skill / episode / map from parms
 //

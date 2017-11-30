@@ -586,7 +586,7 @@ void R_ProjectSprite(mobj_t * thing)
     iscale = FixedDiv(FRACUNIT, xscale);
 
     // [crispy] flip death sprites and corpses randomly
-    if (randomly_flipcorpses)
+    if (randomly_flipcorpses && !vanillaparm)
     {
         if ((thing->flags & MF_CORPSE &&
         thing->type != MT_MINOTAUR &&
@@ -635,7 +635,7 @@ void R_ProjectSprite(mobj_t * thing)
         vis->colormap = spritelights[index];
 
         // [JN] Applying brightmaps to sprites...
-        if (brightmaps)
+        if (brightmaps && !vanillaparm)
         {
             // - Green only -
             if (thing->type == MT_ARTIEGG ||   // Morph Ovum
@@ -711,7 +711,7 @@ void R_ProjectSprite(mobj_t * thing)
         
         // [JN] Fallback. If we are not using brightmaps, apply full brightness
         // to the objects, that no longer lighten up in info.c (S_FIREBRAZIER* and S_WALLTORCH*).
-        if (!brightmaps)
+        if (!brightmaps || vanillaparm)
         {
             if (thing->type == MT_MISC4  || // Torch (Artifact)
                 thing->type == MT_MISC6  || // S_FIREBRAZIER*
@@ -901,7 +901,7 @@ void R_DrawPSprite(pspdef_t * psp)
 
     // [JN] Applying standard bobbing for animation interpolation (Staff+, Gauntlets+),
     // and for preventing "shaking" between refiring states. "Plus" means activated Tome of Power:
-    if (singleplayer && weapon_bobbing && (
+    if (singleplayer && weapon_bobbing && !vanillaparm && (
         /* Staff+       */ state == S_STAFFREADY2_1    || state == S_STAFFREADY2_2    || state == S_STAFFREADY2_3    ||
         /* Gauntlets+   */ state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3 ||
         /* CrBow        */ state == S_CRBOWATK1_6      || state == S_CRBOWATK1_7      || state == S_CRBOWATK1_8      ||
@@ -915,7 +915,7 @@ void R_DrawPSprite(pspdef_t * psp)
         }
 
     // [JN] Applying halfed bobbing while firing:
-    if (singleplayer && weapon_bobbing && (
+    if (singleplayer && weapon_bobbing && !vanillaparm && (
         /* Chicken      */ state == S_BEAKREADY      || state == S_BEAKATK1_1     || state == S_BEAKATK2_1     ||
         /* Gauntlets    */ state == S_GAUNTLETATK1_1 || state == S_GAUNTLETATK1_2 || state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4 || state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK1_6 || state == S_GAUNTLETATK1_7 ||
         /* Gauntlets+   */ state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2 || state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4 || state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6 || state == S_GAUNTLETATK2_7 ||
@@ -938,7 +938,7 @@ void R_DrawPSprite(pspdef_t * psp)
         }
 
     // [crispy] squat down weapon sprite a bit after hitting the ground
-    if (weapon_bobbing)
+    if (weapon_bobbing && !vanillaparm)
     psp_sy += abs(viewplayer->psp_dy);
         
 //

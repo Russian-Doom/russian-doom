@@ -885,7 +885,7 @@ void P_PlayerInSpecialSector(player_t * player)
             player->secretcount++;
             sector->special = 0;
 
-            if (secret_notification)
+            if (secret_notification && !vanillaparm)
             {
                 // [JN] Notification of discovered secrets
                 P_SetMessage(&players[consoleplayer], TXT_SECRET_FOUND, false);

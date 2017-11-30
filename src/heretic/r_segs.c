@@ -734,7 +734,7 @@ void R_StoreWallRange(int start, int stop)
     bmaptextured = midtexture | toptexture | bottomtexture;
 
     // [JN] Call brightmap lookup
-    if (brightmaps)
+    if (brightmaps && !vanillaparm)
     R_InitBrightmaps();
 
     if (segtextured)
@@ -761,7 +761,7 @@ void R_StoreWallRange(int start, int stop)
                 (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
 
             // [JN] Fake contrast: make optional
-            if (fake_contrast)
+            if (fake_contrast || vanillaparm)
             {
                 if (curline->v1->y == curline->v2->y)
                     lightnum--;
