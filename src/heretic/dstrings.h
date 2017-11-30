@@ -164,6 +164,30 @@
 
 //---------------------------------------------------------------------------
 //
+// MN_menu.c
+//
+//---------------------------------------------------------------------------
+
+#define TXT_GAMMA_LEVEL_OFF      "UFVVF-RJHHTRWBZ JNRK>XTYF"        // ГАММА-КОРРЕКЦИЯ ОТКЛЮЧЕНА
+#define TXT_GAMMA_LEVEL_0_25     "EHJDTYM UFVVF-RJHHTRWBB 0.25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.25
+#define TXT_GAMMA_LEVEL_0_50     "EHJDTYM UFVVF-RJHHTRWBB 0.50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.50
+#define TXT_GAMMA_LEVEL_0_75     "EHJDTYM UFVVF-RJHHTRWBB 0.75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.75
+#define TXT_GAMMA_LEVEL_1_0      "EHJDTYM UFVVF-RJHHTRWBB 1.0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.0
+#define TXT_GAMMA_LEVEL_1_25     "EHJDTYM UFVVF-RJHHTRWBB 1.25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.25
+#define TXT_GAMMA_LEVEL_1_50     "EHJDTYM UFVVF-RJHHTRWBB 1.50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.50
+#define TXT_GAMMA_LEVEL_1_75     "EHJDTYM UFVVF-RJHHTRWBB 1.75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.75
+#define TXT_GAMMA_LEVEL_2_0      "EHJDTYM UFVVF-RJHHTRWBB 2.0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.0
+#define TXT_GAMMA_LEVEL_2_25     "EHJDTYM UFVVF-RJHHTRWBB 2.25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.25
+#define TXT_GAMMA_LEVEL_2_50     "EHJDTYM UFVVF-RJHHTRWBB 2.50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.50
+#define TXT_GAMMA_LEVEL_2_75     "EHJDTYM UFVVF-RJHHTRWBB 2.75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.75
+#define TXT_GAMMA_LEVEL_3_0      "EHJDTYM UFVVF-RJHHTRWBB 3.0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.0
+#define TXT_GAMMA_LEVEL_3_25     "EHJDTYM UFVVF-RJHHTRWBB 3.25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.25
+#define TXT_GAMMA_LEVEL_3_50     "EHJDTYM UFVVF-RJHHTRWBB 3.50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.50
+#define TXT_GAMMA_LEVEL_3_75     "EHJDTYM UFVVF-RJHHTRWBB 3.75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.75
+#define TXT_GAMMA_LEVEL_4_0      "EHJDTYM UFVVF-RJHHTRWBB 4.0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.0
+
+//---------------------------------------------------------------------------
+//
 // F_finale.c
 //
 //---------------------------------------------------------------------------

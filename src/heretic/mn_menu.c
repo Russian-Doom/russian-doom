@@ -316,6 +316,26 @@ static Menu_t *Menus[] = {
     &SaveMenu
 };
 
+static char *GammaText[] = {
+    TXT_GAMMA_LEVEL_OFF,
+    TXT_GAMMA_LEVEL_0_25,
+    TXT_GAMMA_LEVEL_0_50,
+    TXT_GAMMA_LEVEL_0_75,
+    TXT_GAMMA_LEVEL_1_0,
+    TXT_GAMMA_LEVEL_1_25,
+    TXT_GAMMA_LEVEL_1_50,
+    TXT_GAMMA_LEVEL_1_75,
+    TXT_GAMMA_LEVEL_2_0,
+    TXT_GAMMA_LEVEL_2_25,
+    TXT_GAMMA_LEVEL_2_50,
+    TXT_GAMMA_LEVEL_2_75,
+    TXT_GAMMA_LEVEL_3_0,
+    TXT_GAMMA_LEVEL_3_25,
+    TXT_GAMMA_LEVEL_3_50,
+    TXT_GAMMA_LEVEL_3_75,
+    TXT_GAMMA_LEVEL_4_0
+};
+
 //---------------------------------------------------------------------------
 //
 // PROC MN_Init
@@ -1408,6 +1428,8 @@ boolean MN_Responder(event_t * event)
                 I_SetPalette((byte *) W_CacheLumpName("PALFIX", PU_CACHE));
             else
                 I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
+            
+            P_SetMessage(&players[consoleplayer], GammaText[usegamma], false);
             return true;
         }
 
