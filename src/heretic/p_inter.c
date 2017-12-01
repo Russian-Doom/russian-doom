@@ -865,7 +865,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             sound = sfx_wpnup;
             break;
         default:
-            I_Error("P_SpecialThing: Unknown gettable thing");
+            printf("P_SpecialThing: Unknown gettable thing"); // [JN] make non-fatal
     }
     if (special->flags & MF_COUNTITEM)
     {
