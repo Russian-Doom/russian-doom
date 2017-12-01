@@ -141,6 +141,7 @@ int randomly_flipcorpses = 1;    // Произвольное зеркально�
 // - Геймплей -
 int secret_notification = 1;     // Уведомление об обнаружении тайников
 int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
+int flip_levels = 0;             // Зеркальное отражение уровней
 
 
 //
@@ -1736,6 +1737,12 @@ void G_ReadDemoTiccmd(ticcmd_t * cmd)
     cmd->buttons = (unsigned char) *demo_p++;
     cmd->lookfly = (unsigned char) *demo_p++;
     cmd->arti = (unsigned char) *demo_p++;
+
+    if (flip_levels)
+    {
+        cmd->sidemove *= (const signed char) -1;
+        cmd->angleturn *= (const short) -1;
+    }
 }
 
 // Increase the size of the demo buffer to allow unlimited demos
@@ -1773,6 +1780,12 @@ static void IncreaseDemoBuffer(void)
 void G_WriteDemoTiccmd(ticcmd_t * cmd)
 {
     byte *demo_start;
+
+    if (flip_levels)
+    {
+        cmd->sidemove *= (const signed char) -1;
+        cmd->angleturn *= (const short) -1;
+    }
 
     if (gamekeydown[key_demo_quit]) // press to end demo recording
         G_CheckDemoStatus();

@@ -68,7 +68,8 @@ boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom;                  // true if cd-rom mode active
 boolean noartiskip;             // whether shift-enter skips an artifact
 
-boolean vanillaparm; // [JN] проверка параметра -vanilla
+boolean vanillaparm; // [JN] Check for -vanilla
+boolean flip_levels_cmdline = false; // [JN] Flipper levels initially false
 
 skill_t startskill;
 int startepisode;
@@ -361,6 +362,7 @@ void D_DoAdvanceDemo(void)
         case 2:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
+            if (!flip_levels || !flip_levels_cmdline)
             G_DeferedPlayDemo(DEH_String("demo1"));
             break;
         case 3:
@@ -371,6 +373,7 @@ void D_DoAdvanceDemo(void)
         case 4:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
+            if (!flip_levels || !flip_levels_cmdline)
             G_DeferedPlayDemo(DEH_String("demo2"));
             break;
         case 5:
@@ -388,6 +391,7 @@ void D_DoAdvanceDemo(void)
         case 6:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
+            if (!flip_levels || !flip_levels_cmdline)
             G_DeferedPlayDemo(DEH_String("demo3"));
             break;
     }
@@ -795,6 +799,7 @@ void D_BindVariables(void)
     // - Геймплей -
     M_BindIntVariable("secret_notification",    &secret_notification);  // Уведомление об обнаружении тайников    
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);       // Покачивание оружия при стрельбе в движении
+    M_BindIntVariable("flip_levels",            &flip_levels);          // Зеркальное отражение уровней
 
 
     for (i=0; i<10; ++i)
@@ -1138,6 +1143,12 @@ void D_DoomMain(void)
         startmap = 1;
         autostart = true;
         testcontrols = true;
+    }
+
+    // [crispy] port level flipping feature over from Strawberry Doom
+    if (M_ParmExists("-fliplevels"))
+    {
+        flip_levels_cmdline = !flip_levels_cmdline;
     }
 
     I_InitTimer();

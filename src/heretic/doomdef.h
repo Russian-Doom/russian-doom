@@ -713,6 +713,7 @@ extern int randomly_flipcorpses;    // Произвольное зеркальн
 // - Геймплей -
 extern int secret_notification;     // Уведомление об обнаружении тайников
 extern int weapon_bobbing;          // Покачивание оружия при стрельбе в движении
+extern int flip_levels;             // Зеркальное отражение уровней
 
 
 //-----

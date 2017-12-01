@@ -106,7 +106,7 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Юлементаль Боли без ограничени€ душ",       &unlimited_lost_souls)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Повышенна€ агрессивность Потер€нных душ",   &agressive_lost_souls)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Отображать отрицательное здоровье",         &negative_health)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Зеркальное отражение уровней",              &flip_levels)),
+        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Зеркальное отражение уровней",              &flip_levels)),
     NULL);
 }
 
