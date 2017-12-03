@@ -838,7 +838,6 @@ void P_ShootSpecialLine(mobj_t * thing, line_t * line)
 void P_PlayerInSpecialSector(player_t * player)
 {
     sector_t *sector;
-    static sector_t *error;
     static int pushTab[5] = {
         2048 * 5,
         2048 * 10,
@@ -956,14 +955,10 @@ void P_PlayerInSpecialSector(player_t * player)
             // Only used in (P_mobj):P_XYMovement and (P_user):P_Thrust
             break;
 
-        default:
-            // [crispy] ignore unknown special sectors
-            if (error != sector)
-            {
-                error = sector;
-                printf("P_PlayerInSpecialSector: "
-                        "unknown special %i", sector->special);
-            }
+        // [JN] Don't do anything
+        // default:
+        //     I_Error("P_PlayerInSpecialSector: "
+        //             "unknown special %i", sector->special);
     }
 }
 
