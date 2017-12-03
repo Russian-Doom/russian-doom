@@ -319,6 +319,7 @@ extern lighttable_t* fullbright_greenonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t* fullbright_redonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t* fullbright_blueonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t* fullbright_yellowonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t* fullbright_ethereal[LIGHTLEVELS][MAXLIGHTSCALE];
 // [JN] ...erm?!
 extern lighttable_t* brightmaps_greenonly;
 extern lighttable_t* brightmaps_redonly;
@@ -330,6 +331,7 @@ extern lighttable_t* brightmaps_greenonly_dim;
 extern lighttable_t* brightmaps_redonly_dim;
 extern lighttable_t* brightmaps_blueonly_dim;
 extern lighttable_t* brightmaps_yellowonly_dim;
+extern lighttable_t* brightmaps_ethereal;
 
 
 extern int extralight;

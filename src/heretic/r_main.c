@@ -78,6 +78,7 @@ lighttable_t *fullbright_greenonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *fullbright_redonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *fullbright_blueonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *fullbright_yellowonly_dim[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_ethereal[LIGHTLEVELS][MAXLIGHTSCALE];
 
 int extralight;                 // bumped light from gun blasts
 
@@ -663,6 +664,7 @@ void R_ExecuteSetViewSize(void)
             fullbright_redonly_dim[i][j] = brightmaps_redonly_dim + level * 256;
             fullbright_blueonly_dim[i][j] = brightmaps_blueonly_dim + level * 256;
             fullbright_yellowonly_dim[i][j] = brightmaps_yellowonly_dim + level * 256;
+            fullbright_ethereal[i][j] = brightmaps_ethereal + level * 256;
         }
     }
 

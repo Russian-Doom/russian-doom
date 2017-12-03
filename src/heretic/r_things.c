@@ -60,6 +60,7 @@ lighttable_t** fullbrights_greenonly_dim;
 lighttable_t** fullbrights_redonly_dim;
 lighttable_t** fullbrights_blueonly_dim;
 lighttable_t** fullbrights_yellowonly_dim;
+lighttable_t** fullbrights_ethereal;
 
 
 // constant arrays used for psprite clipping and initializing clipping
@@ -770,6 +771,7 @@ void R_AddSprites(sector_t * sec)
         fullbrights_redonly_dim = fullbright_redonly_dim[0];
         fullbrights_blueonly_dim = fullbright_blueonly_dim[0];
         fullbrights_yellowonly_dim = fullbright_yellowonly_dim[0];
+        fullbrights_ethereal = fullbright_ethereal[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
@@ -786,6 +788,7 @@ void R_AddSprites(sector_t * sec)
         fullbrights_redonly_dim = fullbright_redonly_dim[LIGHTLEVELS - 1];
         fullbrights_blueonly_dim = fullbright_blueonly_dim[LIGHTLEVELS - 1];
         fullbrights_yellowonly_dim = fullbright_yellowonly_dim[LIGHTLEVELS - 1];
+        fullbrights_ethereal = fullbright_ethereal[LIGHTLEVELS - 1];
     }
     else
     {
@@ -802,6 +805,7 @@ void R_AddSprites(sector_t * sec)
         fullbrights_redonly_dim = fullbright_redonly_dim[lightnum];
         fullbrights_blueonly_dim = fullbright_blueonly_dim[lightnum];
         fullbrights_yellowonly_dim = fullbright_yellowonly_dim[lightnum];
+        fullbrights_ethereal = fullbright_ethereal[lightnum];
     }
 
     for (thing = sec->thinglist; thing; thing = thing->snext)
@@ -1070,6 +1074,7 @@ void R_DrawPlayerSprites(void)
 {
     int i, lightnum;
     pspdef_t *psp;
+    const int state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] We need to define what "state" actually is
 
 //
 // get light level
@@ -1078,11 +1083,169 @@ void R_DrawPlayerSprites(void)
         (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) +
         extralight;
     if (lightnum < 0)
+    {
         spritelights = scalelight[0];
+
+        // [JN] Applying brightmaps to HUD weapons...
+        if (brightmaps && !vanillaparm)
+        {
+            // Staff+
+            if (state == S_STAFFDOWN2 || state == S_STAFFUP2 || state == S_STAFFREADY2_1 || state == S_STAFFREADY2_2 || state == S_STAFFREADY2_3 || state == S_STAFFATK2_1 || state == S_STAFFATK2_2 || state == S_STAFFATK2_3)
+            spritelights = fullbright_blueonly[0];
+            // Gauntlets
+            else if (state == S_GAUNTLETATK1_1 || state == S_GAUNTLETATK1_2 || state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4 || state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK1_6 || state == S_GAUNTLETATK1_7)
+            spritelights = fullbright_greenonly[0];
+            // Gauntlets+
+            else if (state == S_GAUNTLETDOWN2 || state == S_GAUNTLETUP2 || state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2 || state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4 || state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6 || state == S_GAUNTLETATK2_7)
+            spritelights = fullbright_redonly[0];
+            // Wand
+            else if (state == S_GOLDWANDATK1_1 || state == S_GOLDWANDATK1_2 || state == S_GOLDWANDATK1_3 || state == S_GOLDWANDATK1_4)
+            spritelights = fullbright_flame[0];
+            // Wand+
+            else if (state == S_GOLDWANDATK2_1 || state == S_GOLDWANDATK2_2 || state == S_GOLDWANDATK2_3 || state == S_GOLDWANDATK2_4)
+            spritelights = fullbright_flame[0];
+            // Crossbow
+            else if (state == S_CRBOWDOWN || state == S_CRBOWUP || state == S_CRBOW1 || state == S_CRBOW2 || state == S_CRBOW3 || state == S_CRBOW4 || state == S_CRBOW5 || state == S_CRBOW6 || state == S_CRBOW7 || state == S_CRBOW8 || state == S_CRBOW9 || state == S_CRBOW10 || state == S_CRBOW11 || state == S_CRBOW12 || state == S_CRBOW13 || state == S_CRBOW14 || state == S_CRBOW15 || state == S_CRBOW16 || state == S_CRBOW17 || state == S_CRBOW18 || state == S_CRBOWATK1_1 || state == S_CRBOWATK1_2 || state == S_CRBOWATK1_3 || state == S_CRBOWATK1_4 || state == S_CRBOWATK1_5 || state == S_CRBOWATK1_6 || state == S_CRBOWATK1_7 || state == S_CRBOWATK1_8)
+            spritelights = fullbright_ethereal[0];
+            // Crossbow+
+            else if (state == S_CRBOWATK2_1 || state == S_CRBOWATK2_2 || state == S_CRBOWATK2_3 || state == S_CRBOWATK2_4 || state == S_CRBOWATK2_5 || state == S_CRBOWATK2_6 || state == S_CRBOWATK2_7 || state == S_CRBOWATK2_8)
+            spritelights = fullbright_ethereal[0];
+            // Dragon Claw
+            else if (state == S_BLASTERREADY || state == S_BLASTERDOWN || state == S_BLASTERUP || state == S_BLASTERATK1_1 || state == S_BLASTERATK1_2 || state == S_BLASTERATK1_3 || state == S_BLASTERATK1_4 || state == S_BLASTERATK1_5 || state == S_BLASTERATK1_6)
+            spritelights = fullbright_blueonly[0];
+            // Dragon Claw+
+            else if (state == S_BLASTERATK2_1 || state == S_BLASTERATK2_2 || state == S_BLASTERATK2_3 || state == S_BLASTERATK2_4 || state == S_BLASTERATK2_5 || state == S_BLASTERATK2_6)
+            spritelights = fullbright_blueonly[0];    
+            // Hell Staff 
+            else if (state == S_HORNRODATK1_1 || state == S_HORNRODATK1_2 || state == S_HORNRODATK1_3)
+            spritelights = fullbright_redonly[0];
+            // Hell Staff+
+            else if (state == S_HORNRODATK2_1 || state == S_HORNRODATK2_2 || state == S_HORNRODATK2_3 || state == S_HORNRODATK2_4 || state == S_HORNRODATK2_5 || state == S_HORNRODATK2_6 || state == S_HORNRODATK2_7 || state == S_HORNRODATK2_8 || state == S_HORNRODATK2_9)
+            spritelights = fullbright_redonly[0];
+            // Phoenix Rod
+            else if (state == S_PHOENIXATK1_1 || state == S_PHOENIXATK1_2 || state == S_PHOENIXATK1_3 || state == S_PHOENIXATK1_4)
+            spritelights = fullbright_flame[0];    
+            // Phoenix Rod+
+            else if (state == S_PHOENIXATK2_1 || state == S_PHOENIXATK2_3 || state == S_PHOENIXATK2_4)
+            spritelights = fullbright_flame[0];
+            // Phoenix Rod's red gem
+            else if (state == S_PHOENIXREADY || state == S_PHOENIXDOWN || state == S_PHOENIXUP)
+            spritelights = fullbright_redonly[0];
+        }
+    }
     else if (lightnum >= LIGHTLEVELS)
+    {
         spritelights = scalelight[LIGHTLEVELS - 1];
+
+        // [JN] Applying brightmaps to HUD weapons...
+        if (brightmaps && !vanillaparm)
+        {
+            if (brightmaps && !vanillaparm)
+            {
+                // Staff+
+                if (state == S_STAFFDOWN2 || state == S_STAFFUP2 || state == S_STAFFREADY2_1 || state == S_STAFFREADY2_2 || state == S_STAFFREADY2_3 || state == S_STAFFATK2_1 || state == S_STAFFATK2_2 || state == S_STAFFATK2_3)
+                spritelights = fullbright_blueonly[LIGHTLEVELS - 1];
+                // Gauntlets
+                else if (state == S_GAUNTLETATK1_1 || state == S_GAUNTLETATK1_2 || state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4 || state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK1_6 || state == S_GAUNTLETATK1_7)
+                spritelights = fullbright_greenonly[LIGHTLEVELS - 1];
+                // Gauntlets+
+                else if (state == S_GAUNTLETDOWN2 || state == S_GAUNTLETUP2 || state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2 || state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4 || state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6 || state == S_GAUNTLETATK2_7)
+                spritelights = fullbright_redonly[LIGHTLEVELS - 1];
+                // Wand
+                else if (state == S_GOLDWANDATK1_1 || state == S_GOLDWANDATK1_2 || state == S_GOLDWANDATK1_3 || state == S_GOLDWANDATK1_4)
+                spritelights = fullbright_flame[LIGHTLEVELS - 1];
+                // Wand+
+                else if (state == S_GOLDWANDATK2_1 || state == S_GOLDWANDATK2_2 || state == S_GOLDWANDATK2_3 || state == S_GOLDWANDATK2_4)
+                spritelights = fullbright_flame[LIGHTLEVELS - 1];
+                // Crossbow
+                else if (state == S_CRBOWDOWN || state == S_CRBOWUP || state == S_CRBOW1 || state == S_CRBOW2 || state == S_CRBOW3 || state == S_CRBOW4 || state == S_CRBOW5 || state == S_CRBOW6 || state == S_CRBOW7 || state == S_CRBOW8 || state == S_CRBOW9 || state == S_CRBOW10 || state == S_CRBOW11 || state == S_CRBOW12 || state == S_CRBOW13 || state == S_CRBOW14 || state == S_CRBOW15 || state == S_CRBOW16 || state == S_CRBOW17 || state == S_CRBOW18 || state == S_CRBOWATK1_1 || state == S_CRBOWATK1_2 || state == S_CRBOWATK1_3 || state == S_CRBOWATK1_4 || state == S_CRBOWATK1_5 || state == S_CRBOWATK1_6 || state == S_CRBOWATK1_7 || state == S_CRBOWATK1_8)
+                spritelights = fullbright_ethereal[LIGHTLEVELS - 1];
+                // Crossbow+
+                else if (state == S_CRBOWATK2_1 || state == S_CRBOWATK2_2 || state == S_CRBOWATK2_3 || state == S_CRBOWATK2_4 || state == S_CRBOWATK2_5 || state == S_CRBOWATK2_6 || state == S_CRBOWATK2_7 || state == S_CRBOWATK2_8)
+                spritelights = fullbright_ethereal[LIGHTLEVELS - 1];
+                // Dragon Claw
+                else if (state == S_BLASTERREADY || state == S_BLASTERDOWN || state == S_BLASTERUP || state == S_BLASTERATK1_1 || state == S_BLASTERATK1_2 || state == S_BLASTERATK1_3 || state == S_BLASTERATK1_4 || state == S_BLASTERATK1_5 || state == S_BLASTERATK1_6)
+                spritelights = fullbright_blueonly[LIGHTLEVELS - 1];
+                // Dragon Claw+
+                else if (state == S_BLASTERATK2_1 || state == S_BLASTERATK2_2 || state == S_BLASTERATK2_3 || state == S_BLASTERATK2_4 || state == S_BLASTERATK2_5 || state == S_BLASTERATK2_6)
+                spritelights = fullbright_blueonly[LIGHTLEVELS - 1];
+                // Hell Staff 
+                else if (state == S_HORNRODATK1_1  || state == S_HORNRODATK1_2 || state == S_HORNRODATK1_3)
+                spritelights = fullbright_redonly[LIGHTLEVELS - 1];
+                // Hell Staff+
+                else if (state == S_HORNRODATK2_1  || state == S_HORNRODATK2_2 || state == S_HORNRODATK2_3 || state == S_HORNRODATK2_4 || state == S_HORNRODATK2_5 || state == S_HORNRODATK2_6 || state == S_HORNRODATK2_7 || state == S_HORNRODATK2_8 || state == S_HORNRODATK2_9)
+                spritelights = fullbright_redonly[LIGHTLEVELS - 1];
+                // Phoenix Rod
+                else if (state == S_PHOENIXATK1_1  || state == S_PHOENIXATK1_2 || state == S_PHOENIXATK1_3 || state == S_PHOENIXATK1_4)
+                spritelights = fullbright_flame[LIGHTLEVELS - 1];
+                // Phoenix Rod+
+                else if (state == S_PHOENIXATK2_1  || state == S_PHOENIXATK2_3 || state == S_PHOENIXATK2_4)
+                spritelights = fullbright_flame[LIGHTLEVELS - 1];
+                // Phoenix Rod's red gem
+                else if (state == S_PHOENIXREADY || state == S_PHOENIXDOWN || state == S_PHOENIXUP)
+                spritelights = fullbright_redonly[LIGHTLEVELS - 1];
+            }
+        }
+    }
     else
+    {
         spritelights = scalelight[lightnum];
+
+        // [JN] Applying brightmaps to HUD weapons...
+        if (brightmaps && !vanillaparm)
+        {
+            // Staff+
+            if (state == S_STAFFDOWN2 || state == S_STAFFUP2 || state == S_STAFFREADY2_1 || state == S_STAFFREADY2_2 || state == S_STAFFREADY2_3 || state == S_STAFFATK2_1 || state == S_STAFFATK2_2 || state == S_STAFFATK2_3)
+            spritelights = fullbright_blueonly[lightnum];
+            // Gauntlets
+            else if (state == S_GAUNTLETATK1_1 || state == S_GAUNTLETATK1_2 || state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4 || state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK1_6 || state == S_GAUNTLETATK1_7)
+            spritelights = fullbright_greenonly[lightnum];
+            // Gauntlets+
+            else if (state == S_GAUNTLETDOWN2 || state == S_GAUNTLETUP2 || state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3 || state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2 || state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4 || state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6 || state == S_GAUNTLETATK2_7)
+            spritelights = fullbright_redonly[lightnum];
+            // Wand
+            else if (state == S_GOLDWANDATK1_1 || state == S_GOLDWANDATK1_2 || state == S_GOLDWANDATK1_3 || state == S_GOLDWANDATK1_4)
+            spritelights = fullbright_flame[lightnum];
+            // Wand+
+            else if (state == S_GOLDWANDATK2_1 || state == S_GOLDWANDATK2_2 || state == S_GOLDWANDATK2_3 || state == S_GOLDWANDATK2_4)
+            spritelights = fullbright_flame[lightnum];
+            // Crossbow
+            else if (state == S_CRBOWDOWN || state == S_CRBOWUP || state == S_CRBOW1 || state == S_CRBOW2 || state == S_CRBOW3 || state == S_CRBOW4 || state == S_CRBOW5 || state == S_CRBOW6 || state == S_CRBOW7 || state == S_CRBOW8 || state == S_CRBOW9 || state == S_CRBOW10 || state == S_CRBOW11 || state == S_CRBOW12 || state == S_CRBOW13 || state == S_CRBOW14 || state == S_CRBOW15 || state == S_CRBOW16 || state == S_CRBOW17 || state == S_CRBOW18 || state == S_CRBOWATK1_1 || state == S_CRBOWATK1_2 || state == S_CRBOWATK1_3 || state == S_CRBOWATK1_4 || state == S_CRBOWATK1_5 || state == S_CRBOWATK1_6 || state == S_CRBOWATK1_7 || state == S_CRBOWATK1_8)
+            spritelights = fullbright_ethereal[lightnum];
+            // Crossbow+
+            else if (state == S_CRBOWATK2_1 || state == S_CRBOWATK2_2 || state == S_CRBOWATK2_3 || state == S_CRBOWATK2_4 || state == S_CRBOWATK2_5 || state == S_CRBOWATK2_6 || state == S_CRBOWATK2_7 || state == S_CRBOWATK2_8)
+            spritelights = fullbright_ethereal[lightnum];
+            // Dragon Claw
+            else if (state == S_BLASTERREADY || state == S_BLASTERDOWN || state == S_BLASTERUP || state == S_BLASTERATK1_1  || state == S_BLASTERATK1_2  || state == S_BLASTERATK1_3  || state == S_BLASTERATK1_4  || state == S_BLASTERATK1_5  || state == S_BLASTERATK1_6)
+            spritelights = fullbright_blueonly[lightnum];
+            // Dragon Claw+
+            else if (state == S_BLASTERATK2_1 || state == S_BLASTERATK2_2 || state == S_BLASTERATK2_3 || state == S_BLASTERATK2_4 || state == S_BLASTERATK2_5 || state == S_BLASTERATK2_6)
+            spritelights = fullbright_blueonly[lightnum];
+            // Hell Staff 
+            else if (state == S_HORNRODATK1_1 || state == S_HORNRODATK1_2 || state == S_HORNRODATK1_3)
+            spritelights = fullbright_redonly[lightnum];
+            // Hell Staff+
+            else if (state == S_HORNRODATK2_1 || state == S_HORNRODATK2_2 || state == S_HORNRODATK2_3 || state == S_HORNRODATK2_4 || state == S_HORNRODATK2_5 || state == S_HORNRODATK2_6 || state == S_HORNRODATK2_7 || state == S_HORNRODATK2_8 || state == S_HORNRODATK2_9)
+            spritelights = fullbright_redonly[lightnum];
+            // Phoenix Rod
+            else if (state == S_PHOENIXATK1_1 || state == S_PHOENIXATK1_2 || state == S_PHOENIXATK1_3 || state == S_PHOENIXATK1_4)
+            spritelights = fullbright_flame[lightnum];
+            // Phoenix Rod+
+            else if (state == S_PHOENIXATK2_1 || state == S_PHOENIXATK2_3 || state == S_PHOENIXATK2_4)
+            spritelights = fullbright_flame[lightnum];
+            // Phoenix Rod's red gem
+            else if (state == S_PHOENIXREADY || state == S_PHOENIXDOWN || state == S_PHOENIXUP)
+            spritelights = fullbright_redonly[lightnum];
+        }
+    }
+
+    // [JN] Fallback. If we are not using brightmaps, apply full brightness
+    // to the objects, that no longer lighten up in info.c (S_GAUNTLETATK1_3-5 and S_GAUNTLETATK2_3-5).
+    if (!brightmaps || vanillaparm)
+    {
+        if (state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4 || state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4 || state == S_GAUNTLETATK2_5)
+        spritelights = scalelight[LIGHTLEVELS-1]; 
+    }
 //
 // clip to screen bounds
 //

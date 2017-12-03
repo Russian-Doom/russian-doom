@@ -317,16 +317,18 @@ state_t states[NUMSTATES] = {
     {SPR_GAUN, 6, 1, A_Raise, S_GAUNTLETUP2, 0, 0},     // S_GAUNTLETUP2
     {SPR_GAUN, 1, 4, NULL, S_GAUNTLETATK1_2, 0, 0},     // S_GAUNTLETATK1_1
     {SPR_GAUN, 2, 4, NULL, S_GAUNTLETATK1_3, 0, 0},     // S_GAUNTLETATK1_2
-    {SPR_GAUN, 32771, 4, A_GauntletAttack, S_GAUNTLETATK1_4, 0, 0},     // S_GAUNTLETATK1_3
-    {SPR_GAUN, 32772, 4, A_GauntletAttack, S_GAUNTLETATK1_5, 0, 0},     // S_GAUNTLETATK1_4
-    {SPR_GAUN, 32773, 4, A_GauntletAttack, S_GAUNTLETATK1_6, 0, 0},     // S_GAUNTLETATK1_5
+    // [JN] Disable full brightness for 3, 4 and 5. Use brightmap instead.
+    {SPR_GAUN, 3, 4, A_GauntletAttack, S_GAUNTLETATK1_4, 0, 0},     // S_GAUNTLETATK1_3
+    {SPR_GAUN, 4, 4, A_GauntletAttack, S_GAUNTLETATK1_5, 0, 0},     // S_GAUNTLETATK1_4
+    {SPR_GAUN, 5, 4, A_GauntletAttack, S_GAUNTLETATK1_6, 0, 0},     // S_GAUNTLETATK1_5
     {SPR_GAUN, 2, 4, A_ReFire, S_GAUNTLETATK1_7, 0, 0}, // S_GAUNTLETATK1_6
     {SPR_GAUN, 1, 4, A_Light0, S_GAUNTLETREADY, 0, 0},  // S_GAUNTLETATK1_7
     {SPR_GAUN, 9, 4, NULL, S_GAUNTLETATK2_2, 0, 0},     // S_GAUNTLETATK2_1
     {SPR_GAUN, 10, 4, NULL, S_GAUNTLETATK2_3, 0, 0},    // S_GAUNTLETATK2_2
-    {SPR_GAUN, 32779, 4, A_GauntletAttack, S_GAUNTLETATK2_4, 0, 0},     // S_GAUNTLETATK2_3
-    {SPR_GAUN, 32780, 4, A_GauntletAttack, S_GAUNTLETATK2_5, 0, 0},     // S_GAUNTLETATK2_4
-    {SPR_GAUN, 32781, 4, A_GauntletAttack, S_GAUNTLETATK2_6, 0, 0},     // S_GAUNTLETATK2_5
+    // [JN] Disable full brightness for 3, 4 and 5. Use brightmap instead.
+    {SPR_GAUN, 11, 4, A_GauntletAttack, S_GAUNTLETATK2_4, 0, 0},     // S_GAUNTLETATK2_3
+    {SPR_GAUN, 12, 4, A_GauntletAttack, S_GAUNTLETATK2_5, 0, 0},     // S_GAUNTLETATK2_4
+    {SPR_GAUN, 13, 4, A_GauntletAttack, S_GAUNTLETATK2_6, 0, 0},     // S_GAUNTLETATK2_5
     {SPR_GAUN, 10, 4, A_ReFire, S_GAUNTLETATK2_7, 0, 0},        // S_GAUNTLETATK2_6
     {SPR_GAUN, 9, 4, A_Light0, S_GAUNTLETREADY2_1, 0, 0},       // S_GAUNTLETATK2_7
     {SPR_PUF1, 32768, 4, NULL, S_GAUNTLETPUFF1_2, 0, 0},        // S_GAUNTLETPUFF1_1

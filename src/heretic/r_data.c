@@ -83,6 +83,7 @@ lighttable_t *brightmaps_greenonly_dim;
 lighttable_t *brightmaps_redonly_dim;
 lighttable_t *brightmaps_blueonly_dim;
 lighttable_t *brightmaps_yellowonly_dim;
+lighttable_t *brightmaps_ethereal;
 
 /*
 ==============================================================================
@@ -535,8 +536,8 @@ void R_InitSpriteLumps(void)
 
 void R_InitColormaps(void)
 {
-    int lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11;
-    int length, length2, length3, length4, length5, length6, length7, length8, length9, length10, length11;
+    int lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11, lump12;
+    int length, length2, length3, length4, length5, length6, length7, length8, length9, length10, length11, length12;
 //
 // load in the light tables
 // 256 byte align tables
@@ -607,6 +608,12 @@ void R_InitColormaps(void)
     length11 = W_LumpLength(lump11);
     brightmaps_yellowonly_dim = Z_Malloc(length11, PU_STATIC, 0);
     W_ReadLump(lump11, brightmaps_yellowonly_dim);
+
+    // Ethereal
+    lump12 = W_GetNumForName(DEH_String("BRTMAP11"));
+    length12 = W_LumpLength(lump12);
+    brightmaps_ethereal = Z_Malloc(length12, PU_STATIC, 0);
+    W_ReadLump(lump12, brightmaps_ethereal);
 }
 
 
