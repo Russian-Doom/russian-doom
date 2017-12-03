@@ -1110,6 +1110,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
         // [crispy] ignore unknown map things
         printf("P_SpawnMapThing: Unknown type %i at (%i, %i)", mthing->type,
                 mthing->x, mthing->y);
+        return;
     }
 
 // don't spawn keys and players in deathmatch
