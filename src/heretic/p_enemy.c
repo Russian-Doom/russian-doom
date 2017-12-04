@@ -26,6 +26,7 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_video.h"
+#include "crispy.h"
 
 // Macros
 
@@ -253,6 +254,7 @@ boolean P_Move(mobj_t * actor)
     fixed_t tryx, tryy;
     line_t *ld;
     boolean good;
+    line_t *blockline;
 
     if (actor->movedir == DI_NODIR)
     {
@@ -281,6 +283,33 @@ boolean P_Move(mobj_t * actor)
         }
         actor->movedir = DI_NODIR;
         good = false;
+
+        // [JN] Fixed bug when monsters getting stuck in doortracks:
+        //
+        // killough 8/9/98: this is what caused monsters to get stuck in
+        // doortracks, because it thought that the monster freed itself
+        // by opening a door, even if it was moving towards the doortrack,
+        // and not the door itself.
+        //
+        // killough 9/9/98: If a line blocking the monster is activated,
+        // return true 90% of the time. If a line blocking the monster is
+        // not activated, but some other line is, return false 90% of the
+        // time. A bit of randomness is needed to ensure it's free from
+        // lockups, but for most cases, it returns the correct result.
+        //
+        // Do NOT simply return false 1/4th of the time (causes monsters to
+        // back out when they shouldn't, and creates secondary stickiness).
+        if (singleplayer)
+        {
+            blockline = spechit[numspechit];
+        
+            for (good = false; numspechit--;)
+                if (P_UseSpecialLine(actor, spechit[numspechit]))
+                    good |= spechit[numspechit] == blockline ? 1 : 2;
+        
+            return (good && ((M_Random() >= 230) ^ (good & 1)));
+        }
+
         while (numspechit--)
         {
             ld = spechit[numspechit];
