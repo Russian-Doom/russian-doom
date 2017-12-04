@@ -1625,6 +1625,7 @@ void G_DoLoadGame(void)
     P_UnArchiveWorld();
     P_UnArchiveThinkers();
     P_UnArchiveSpecials();
+    P_RestoreTargets();
 
     if (SV_ReadByte() != SAVE_GAME_TERMINATOR)
     {                           // Missing savegame termination marker
