@@ -1499,6 +1499,22 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_nextweapon),
 
     //!
+    // @game heretic
+    //
+    // [JN] Bindable keys for artifacts.
+    //
+
+    CONFIG_VARIABLE_KEY(key_arti_quartz),
+    CONFIG_VARIABLE_KEY(key_arti_urn),
+    CONFIG_VARIABLE_KEY(key_arti_bomb),
+    CONFIG_VARIABLE_KEY(key_arti_tome),
+    CONFIG_VARIABLE_KEY(key_arti_ring),
+    CONFIG_VARIABLE_KEY(key_arti_chaosdevice),
+    CONFIG_VARIABLE_KEY(key_arti_shadowsphere),
+    CONFIG_VARIABLE_KEY(key_arti_wings),
+    CONFIG_VARIABLE_KEY(key_arti_torch),
+
+    //!
     // @game hexen
     //
     // Key to use one of each artifact.
