@@ -569,7 +569,7 @@ void R_ExecuteSetViewSize(void)
 
     setsizeneeded = false;
 
-    if (setblocks == 11)
+    if (setblocks == 11 || setblocks == 12) // [JN] Sizes 11 and 12 are the full screen mode
     {
         scaledviewwidth = SCREENWIDTH;
         viewheight = SCREENHEIGHT;
