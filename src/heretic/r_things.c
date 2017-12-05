@@ -603,12 +603,12 @@ void R_ProjectSprite(mobj_t * thing)
     // [crispy] flip death sprites and corpses randomly
     if (randomly_flipcorpses && !vanillaparm)
     {
-        if ((thing->flags & MF_CORPSE &&
-        thing->type != MT_MINOTAUR &&
-        thing->type != MT_SORCERER1 &&
-        thing->type != MT_SORCERER2) ||
-        thing->info->spawnstate == S_PLAY_DIE7 ||
-        thing->info->spawnstate == S_PLAY_XDIE9)
+        if ((thing->flags & MF_CORPSE && thing->type != MT_MINOTAUR && thing->type != MT_SORCERER1 && thing->type != MT_SORCERER2)
+        || thing->info->spawnstate == S_HANGINGCORPSE     // Hanging Corpse (51)
+        || thing->info->spawnstate == S_SKULLHANG70_1     // Hanging Skull 1 (17)
+        || thing->info->spawnstate == S_SKULLHANG60_1     // Hanging Skull 2 (24)
+        || thing->info->spawnstate == S_SKULLHANG45_1     // Hanging Skull 3 (25)
+        || thing->info->spawnstate == S_SKULLHANG35_1)    // Hanging Skull 4 (26)
         {
             if (thing->health & 1)
             {
