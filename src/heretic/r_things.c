@@ -685,7 +685,8 @@ void R_ProjectSprite(mobj_t * thing)
                 thing->type == MT_MISC10      || // Torch
                 thing->type == MT_SERPTORCH   || // Serpent Torch
                 thing->type == MT_MISC6       || // Fire Brazier
-                thing->type == MT_MISC12)        // Volcano
+                thing->type == MT_MISC12      || // Volcano
+                thing->info->deathstate == S_CLINK_DIE1) // Sabreclaw's death sequence
                 vis->colormap = fullbrights_flame[index];
 
             // - Green only (diminished) -
