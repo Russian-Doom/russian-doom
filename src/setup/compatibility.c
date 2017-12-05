@@ -89,7 +89,7 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Улучшенна€ анимаци€ жидкостей",             &swirling_liquids)),
         TXT_If(gamemission == doom || gamemission == heretic,   TXT_NewCheckBox("Произвольное зеркальное отражение трупов",  &randomly_flipcorpses)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Разноцветна€ кровь и трупы",                &colored_blood)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Неу€звимость окрашивает небо",              &invul_sky)),
+        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Неу€звимость окрашивает небо",              &invul_sky)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Красна€ вспышка воскрешени€ монстров",      &red_resurrection_flash)),
 
     TXT_If(gamemission == doom,    TXT_NewSeparator("Звук")), 

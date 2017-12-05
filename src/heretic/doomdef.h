@@ -710,6 +710,7 @@ void G_ScreenShot(void);
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
 extern int fake_contrast;           // Имитация контрастного освещения стен
 extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
+extern int invul_sky;               // Неуязвимость окрашивает небо
 // - Геймплей -
 extern int secret_notification;     // Уведомление об обнаружении тайников
 extern int weapon_bobbing;          // Покачивание оружия при стрельбе в движении

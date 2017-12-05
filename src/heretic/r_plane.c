@@ -444,7 +444,13 @@ void R_DrawPlanes(void)
         if (pl->picnum == skyflatnum)
         {
             dc_iscale = skyiscale;
+
+            // [JN] Invulnerability effect will colorize sky texture
+            if (invul_sky && !vanillaparm)
+            dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
+            else
             dc_colormap = colormaps;    // sky is allways drawn full bright
+
             dc_texturemid = skytexturemid;
             dc_texheight = textureheight[skytexture]>>FRACBITS;
             for (x = pl->minx; x <= pl->maxx; x++)
@@ -480,7 +486,11 @@ void R_DrawPlanes(void)
                     }
                     while (count--);
 
-//                                      colfunc ();
+                    // [JN] Initially it was commented out. Colfunc() calls R_DrawColumn()
+                    // which, originally, doesn't know how to draw textures taller than 128 pixels.
+                    // I'm using R_DrawColumn with enhancements by Lee Killough, so now it actually
+                    // can draw 128++ tall textures, but height itself must be defined in TEXTURE lump.
+                    colfunc ();
                 }
             }
             continue;

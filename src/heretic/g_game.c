@@ -138,6 +138,7 @@ int testcontrols_mousespeed;
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
 int fake_contrast = 0;           // Имитация контрастного освещения стен
 int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
+int invul_sky = 1;               // Неуязвимость окрашивает небо
 // - Геймплей -
 int secret_notification = 1;     // Уведомление об обнаружении тайников
 int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
