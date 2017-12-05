@@ -696,7 +696,14 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
 
     col = 0;
     desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
-    desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 2;
+    if (draw_shadowed_text && !vanillaparm)
+    {
+        desttop2 = dest_screen + ((y + 1) << hires) * SCREENWIDTH + x + 2;
+    }
+    else
+    {
+        desttop2 = NULL;
+    }
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop++, desttop2++)
@@ -711,23 +718,38 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
           {
             source = (byte *) column + 3;
             dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
-            dest2 = desttop2 + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
+
+            if (draw_shadowed_text && !vanillaparm)
+            {
+                dest2 = desttop2 + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
+            }
+            else 
+            {
+                dest2 = NULL;
+            }
+
             count = column->length;
 
             while (count--)
             {
                 if (hires)
                 {
-                    *dest2 = tinttable[((*dest2) << 8)];
-                    dest2 += SCREENWIDTH;
+                    if (draw_shadowed_text && !vanillaparm)
+                    {
+                        *dest2 = tinttable[((*dest2) << 8)];
+                        dest2 += SCREENWIDTH;
+                    }
                     *dest = *source;
                     dest += SCREENWIDTH;
                 }
-                *dest2 = tinttable[((*dest2) << 8)];
-                dest2 += SCREENWIDTH;
+
+                if (draw_shadowed_text && !vanillaparm)
+                {
+                    *dest2 = tinttable[((*dest2) << 8)];
+                    dest2 += SCREENWIDTH;
+                }
                 *dest = *source++;
                 dest += SCREENWIDTH;
-
             }
           }
             column = (column_t *) ((byte *) column + column->length + 4);

@@ -706,6 +706,8 @@ void G_ScreenShot(void);
 
 // [JN] Дополнительные параметры игры
 
+// - Интерфейс -
+extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
 extern int fake_contrast;           // Имитация контрастного освещения стен

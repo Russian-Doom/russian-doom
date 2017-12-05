@@ -792,6 +792,8 @@ void D_BindVariables(void)
     // - Оптимизация игровой палитры -
     M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);		// Оптимизация палитры
 
+    // - Интерфейс -
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);   // Элементы меню и тексты отбрасывают тень
     // - Графика -
     M_BindIntVariable("brightmaps",             &brightmaps);           // Брайтмаппинг текстур и спрайтов
     M_BindIntVariable("fake_contrast",          &fake_contrast);        // Имитация контрастного освещения стен

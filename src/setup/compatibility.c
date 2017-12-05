@@ -72,8 +72,8 @@ void CompatibilitySettings(void)
     TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features));
 
     TXT_AddWidgets(window_features,
-    TXT_If(gamemission == doom || gamemission == strife, TXT_NewSeparator("Интерфейс")),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Юлементы меню и тексты отбрасывают тень",   &draw_shadowed_text)),
+    TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator("Интерфейс")),
+        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Юлементы меню и тексты отбрасывают тень",   &draw_shadowed_text)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Не выводить запрос при быстрой загрузке",   &fast_quickload)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Общее врем€ на межмиссионном экране",       &show_total_time)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Показывать значок дискеты",                 &show_diskicon)),
