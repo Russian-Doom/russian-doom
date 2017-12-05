@@ -738,7 +738,9 @@ void P_PlayerThink(player_t * player)
         }
         else
         {
-            player->fixedcolormap = 0;
+            // [JN] & [crispy] Also apply full brightness to the world,
+            // while invulnerability is fading out with activated torch.
+            player->fixedcolormap = player->powers[pw_infrared] ? 1 : 0;
         }
     }
     else if (player->powers[pw_infrared])
