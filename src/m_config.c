@@ -1509,6 +1509,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_arti_bomb),
     CONFIG_VARIABLE_KEY(key_arti_tome),
     CONFIG_VARIABLE_KEY(key_arti_ring),
+    CONFIG_VARIABLE_KEY(key_arti_morphegg),
     CONFIG_VARIABLE_KEY(key_arti_chaosdevice),
     CONFIG_VARIABLE_KEY(key_arti_shadowsphere),
     CONFIG_VARIABLE_KEY(key_arti_wings),

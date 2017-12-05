@@ -64,6 +64,7 @@ int key_arti_urn = 0;
 int key_arti_bomb = 0;
 int key_arti_tome = 0;
 int key_arti_ring = 0;
+int key_arti_morphegg = 0;
 int key_arti_chaosdevice = 0;
 int key_arti_shadowsphere = 0;
 int key_arti_wings = 0;
@@ -280,6 +281,7 @@ void M_BindHereticControls(void)
     M_BindIntVariable("key_arti_bomb",            &key_arti_bomb);
     M_BindIntVariable("key_arti_tome",            &key_arti_tome);
     M_BindIntVariable("key_arti_ring",            &key_arti_ring);
+    M_BindIntVariable("key_arti_morphegg",        &key_arti_morphegg);
     M_BindIntVariable("key_arti_chaosdevice",     &key_arti_chaosdevice);
     M_BindIntVariable("key_arti_shadowsphere",    &key_arti_shadowsphere);
     M_BindIntVariable("key_arti_wings",           &key_arti_wings);

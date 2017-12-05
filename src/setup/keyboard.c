@@ -50,7 +50,7 @@ static int *controls[] = { &key_left, &key_right, &key_up, &key_down,
                            &key_weapon4, &key_weapon5, &key_weapon6,
                            &key_weapon7, &key_weapon8,
                            &key_arti_quartz, &key_arti_urn, &key_arti_bomb, 
-                           &key_arti_tome, &key_arti_ring, &key_arti_chaosdevice, 
+                           &key_arti_tome, &key_arti_ring, &key_arti_morphegg, &key_arti_chaosdevice, 
                            &key_arti_shadowsphere, &key_arti_wings, &key_arti_torch,                           
                            &key_arti_all, &key_arti_health, &key_arti_poisonbag,
                            &key_arti_blastradius, &key_arti_teleport,
@@ -256,6 +256,7 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
             AddKeyControl(table, "Часова€ бомба древних", &key_arti_bomb);
             AddKeyControl(table, "Том могущества",        &key_arti_tome);
             AddKeyControl(table, "Кольцо неу€звимости",   &key_arti_ring);
+            AddKeyControl(table, "Морфийное €йцо",        &key_arti_morphegg);
             AddKeyControl(table, "Юмблема Хаоса",         &key_arti_chaosdevice);
             AddKeyControl(table, "Тенева€ сфера",         &key_arti_shadowsphere);
             AddKeyControl(table, "Крыль€ гнева",          &key_arti_wings);

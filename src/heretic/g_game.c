@@ -512,7 +512,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         gamekeydown[key_arti_quartz] = false;
         cmd->arti = arti_health;
     }
-    else if (gamekeydown[key_arti_urn] && !cmd->arti)
+    else if (gamekeydown[key_arti_urn] && !cmd->arti && (players[consoleplayer].mo->health < MAXHEALTH))
     {
         gamekeydown[key_arti_urn] = false;
         cmd->arti = arti_superhealth;
@@ -531,6 +531,11 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     {
         gamekeydown[key_arti_ring] = false;
         cmd->arti = arti_invulnerability;
+    }
+    else if (gamekeydown[key_arti_morphegg] && !cmd->arti)
+    {
+        gamekeydown[key_arti_morphegg] = false;
+        cmd->arti = arti_egg;
     }
     else if (gamekeydown[key_arti_chaosdevice] && !cmd->arti)
     {

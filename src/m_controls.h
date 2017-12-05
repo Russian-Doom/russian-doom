@@ -76,6 +76,7 @@ extern int key_arti_urn;
 extern int key_arti_bomb;
 extern int key_arti_tome;
 extern int key_arti_ring;
+extern int key_arti_morphegg;
 extern int key_arti_chaosdevice;
 extern int key_arti_shadowsphere;
 extern int key_arti_wings;
