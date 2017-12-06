@@ -42,6 +42,7 @@ int key_use = 'e';
 int key_strafe = KEY_RALT;
 int key_speed = KEY_RSHIFT; 
 int key_toggleautorun = KEY_CAPSLOCK;
+int key_togglemlook = 0;
 
 // 
 // Heretic keyboard controls
@@ -259,6 +260,7 @@ void M_BindBaseControls(void)
     M_BindIntVariable("key_pause",           &key_pause);
     M_BindIntVariable("key_message_refresh", &key_message_refresh);
     M_BindIntVariable("key_toggleautorun",   &key_toggleautorun);
+    M_BindIntVariable("key_togglemlook",     &key_togglemlook);
 
 }
 

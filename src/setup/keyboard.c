@@ -37,7 +37,7 @@ static int always_run = 0;
 // Keys within these groups cannot have the same value.
 
 static int *controls[] = { &key_left, &key_right, &key_up, &key_down,
-                           &key_toggleautorun,
+                           &key_toggleautorun,&key_togglemlook,
                            &key_strafeleft, &key_straferight, &key_fire,
                            &key_use, &key_strafe, &key_speed, &key_jump,
                            &key_flyup, &key_flydown, &key_flycenter,
@@ -215,6 +215,7 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
         AddKeyControl(table, "Смотреть вверх", &key_lookup);
         AddKeyControl(table, "Смотреть вниз",  &key_lookdown);
         AddKeyControl(table, "Центрировать",   &key_lookcenter);
+        AddKeyControl(table, "Обзор мышью",    &key_togglemlook);
 
         if (gamemission == heretic || gamemission == hexen)
         {

@@ -807,6 +807,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(novert),
 
     //!
+    // [JN] Mouselook: config variable initialization.
+    //
+
+    CONFIG_VARIABLE_INT(mlook),
+
+    //!
     // Mouse acceleration factor.  When the speed of mouse movement
     // exceeds the threshold value (mouse_threshold), the speed is
     // multiplied by this value.
@@ -1654,11 +1660,16 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_multi_msgplayer8),
 
     //!
-    // @game doom
-    // Toggle always run.
+    // [JN] Toggle always run.
     //
 
     CONFIG_VARIABLE_KEY(key_toggleautorun),
+
+    //!
+    // [JN] Toggle mouselook.
+    //
+
+    CONFIG_VARIABLE_KEY(key_togglemlook),
 
     //!
     // [JN] Дополнительные параметры игры

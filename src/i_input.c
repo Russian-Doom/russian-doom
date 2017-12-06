@@ -87,6 +87,9 @@ static unsigned int mouse_button_state = 0;
 // [JN] Вертикальное перемещение отключено по умолчанию.
 int novert = 1;
 
+// [JN] Mouselook: disabled by default.
+int mlook = 0;
+
 // If true, keyboard mapping is ignored, like in Vanilla Doom.
 // The sensible thing to do is to disable this if you have a non-US
 // keyboard.
@@ -447,7 +450,8 @@ void I_ReadMouse(void)
         ev.data1 = mouse_button_state;
         ev.data2 = AccelerateMouse(x);
 
-        if (!novert)
+        // [JN] Mouselook: we need vertical mouse movement for mlook
+        if (!novert || mlook)
         {
             ev.data3 = -AccelerateMouse(y);
         }

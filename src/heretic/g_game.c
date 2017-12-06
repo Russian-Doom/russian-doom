@@ -693,7 +693,37 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         testcontrols_mousespeed = 0;
     }
 
-    forward += mousey;
+    // [JN] Mouselook: initials
+    if (mlook && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive)
+    {
+        players[consoleplayer].lookdir += mousey / 8; 
+        
+         if (players[consoleplayer].lookdir > 90)
+             players[consoleplayer].lookdir = 90;
+         else
+         if (players[consoleplayer].lookdir < -110)
+             players[consoleplayer].lookdir = -110;
+    }
+
+    // [JN] Mouselook: toggling
+    if (gamekeydown[key_togglemlook])
+    {
+        if (!mlook)
+        {
+            mlook = true;
+        }
+        else
+        {
+            mlook = false;
+            look = TOCENTER;
+        }
+
+        P_SetMessage(&players[consoleplayer], (mlook == true ? TXT_MLOOK_ON : TXT_MLOOK_OFF), false);
+        S_StartSound(NULL, sfx_chat);
+
+        gamekeydown[key_togglemlook] = false;
+    }
+
     mousex = mousey = 0;
 
     if (forward > MAXPLMOVE)

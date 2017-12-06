@@ -786,6 +786,7 @@ void D_BindVariables(void)
 //  M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
     M_BindIntVariable("show_endoom",            &show_endoom);
     M_BindIntVariable("graphical_startup",      &graphical_startup);
+    M_BindIntVariable("mlook",                  &mlook);
 
     // [JN] Дополнительные параметры игры
 

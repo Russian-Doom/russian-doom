@@ -417,4 +417,7 @@
 #define TXT_ALWAYSRUN_ON "GJCNJZYYSQ <TU DRK>XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
 #define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ <TU DSRK>XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
 
+#define TXT_MLOOK_ON "J<PJH VSIM> DRK>XTY"            // ОБЗОР МЫШЬЮ ВКЛЮЧЕН
+#define TXT_MLOOK_OFF "J<PJH VSIM> DSRK>XTY"          // ОБЗОР МЫШЬЮ ВЫКЛЮЧЕН
+
 #define TXT_SECRET_FOUND "J<YFHE:TY NFQYBR!"          // ОБНАРУЖЕН ТАЙНИК!

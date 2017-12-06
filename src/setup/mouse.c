@@ -35,6 +35,7 @@ static int usemouse = 1;
 static int mouseSensitivity = 5;
 static float mouse_acceleration = 2.0;
 static int mouse_threshold = 10;
+static int mlook = 0;
 static int grabmouse = 1;
 
 // [JN] ¬ертикальное перемещение отключено по умолчанию.
@@ -126,8 +127,10 @@ void ConfigMouse(void)
 
     TXT_AddWidgets(window,
         TXT_NewCheckBox("Разрешить использование мыши",                 &usemouse),
-        TXT_TABLE_OVERFLOW_RIGHT,
-        TXT_NewInvertedCheckBox("Разрешить вертикальное перемещение",   &novert),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_If(gamemission == doom || gamemission == hexen, TXT_NewInvertedCheckBox("Разрешить вертикальное перемещение",   &novert)),
+            TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_If(gamemission == heretic, TXT_NewCheckBox("Вертикальный обзор мышью",   &mlook)),
         TXT_TABLE_OVERFLOW_RIGHT,
         TXT_NewCheckBox("Захват мыши в оконном режиме",                 &grabmouse),
         TXT_TABLE_OVERFLOW_RIGHT,
@@ -157,6 +160,7 @@ void BindMouseVariables(void)
 {
     M_BindIntVariable("use_mouse",               &usemouse);
     M_BindIntVariable("novert",                  &novert);
+    M_BindIntVariable("mlook",                   &mlook);
     M_BindIntVariable("grabmouse",               &grabmouse);
     M_BindIntVariable("mouse_sensitivity",       &mouseSensitivity);
     M_BindIntVariable("mouse_threshold",         &mouse_threshold);
