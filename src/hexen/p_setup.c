@@ -299,6 +299,8 @@ void P_LoadSectors(int lump)
         ss->tag = SHORT(ms->tag);
         ss->thinglist = NULL;
         ss->seqType = SEQTYPE_STONE;    // default seqType
+        // [crispy] WiggleFix: [kb] for R_FixWiggle()
+        ss->cachedheight = 0;
     }
     W_ReleaseLumpNum(lump);
 }
