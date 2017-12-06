@@ -808,9 +808,16 @@ void R_SetupFrame(player_t * player)
 
 void R_RenderPlayerView(player_t * player)
 {
+    extern boolean automapactive;
+
     R_SetupFrame(player);
     R_ClearClipSegs();
     R_ClearDrawSegs();
+    if (automapactive)
+    {
+        R_RenderBSPNode (numnodes-1);
+        return;
+    }
     R_ClearPlanes();
     R_ClearSprites();
     NetUpdate();                // check for new console commands
