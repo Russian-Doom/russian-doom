@@ -199,7 +199,7 @@ boolean W_ParseCommandLine(void)
 
             if (check != NULL)
             {
-                W_AddFile("russian/russian-hexen-dd.wad");
+                W_MergeFile("russian/russian-hexen-dd.wad");
             }
         }
     }
