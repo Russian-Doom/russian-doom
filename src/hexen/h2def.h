@@ -801,6 +801,11 @@ boolean G_Responder(event_t * ev);
 
 void G_ScreenShot(void);
 
+// [JN] Дополнительные параметры игры
+
+// - Графика -
+extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
+
 //-------
 //SV_SAVE
 //-------

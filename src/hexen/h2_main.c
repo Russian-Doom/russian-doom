@@ -130,6 +130,12 @@ static char *pagename;
 int lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Hexen
 int draw_shadowed_text;     // [JN] Элементы меню и тексты отбрасывают тень
 
+
+// [JN] Дополнительные параметры игры
+
+// - Графика -
+int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
+
 // CODE --------------------------------------------------------------------
 
 void D_BindVariables(void)
@@ -173,8 +179,14 @@ void D_BindVariables(void)
     M_BindIntVariable("snd_channels",           &snd_Channels);
 //  M_BindIntVariable("vanilla_savegame_limit", &vanilla_savegame_limit);
 //  M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
-	
-	M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);		// [JN] Оптимизация палитры
+
+
+    // [JN] Дополнительные параметры игры
+
+    // Оптимизация палитры
+	M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);
+    // - Графика -
+    M_BindIntVariable("brightmaps",             &brightmaps);           // Брайтмаппинг текстур и спрайтов
 
 
     M_BindStringVariable("savedir", &SavePath);

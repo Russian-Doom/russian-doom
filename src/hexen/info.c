@@ -1406,10 +1406,8 @@ state_t states[NUMSTATES] = {
     {SPR_FSRD, 2, 1, A_WeaponReady, S_FSWORDREADY10, 0, 0}, // S_FSWORDREADY9
     {SPR_FSRD, 2, 1, A_WeaponReady, S_FSWORDREADY11, 0, 0}, // S_FSWORDREADY10
     {SPR_FSRD, 2, 1, A_WeaponReady, S_FSWORDREADY, 0, 0},   // S_FSWORDREADY11
-    // ------------------------------------------------------
     {SPR_FSRD, 0, 1, A_Lower, S_FSWORDDOWN, 0, 0},  // S_FSWORDDOWN
     {SPR_FSRD, 0, 1, A_Raise, S_FSWORDUP, 0, 0},    // S_FSWORDUP
-    // ------------------------------------------------------
     {SPR_FSRD, 3, 3, NULL, S_FSWORDATK_2, 5, 36},   // S_FSWORDATK_1
     {SPR_FSRD, 4, 3, NULL, S_FSWORDATK_3, 5, 36},   // S_FSWORDATK_2
     {SPR_FSRD, 5, 2, NULL, S_FSWORDATK_4, 5, 36},   // S_FSWORDATK_3
@@ -1422,7 +1420,6 @@ state_t states[NUMSTATES] = {
     {SPR_FSRD, 2, 1, NULL, S_FSWORDATK_11, 5, 50},  // S_FSWORDATK_10
     {SPR_FSRD, 0, 1, NULL, S_FSWORDATK_12, 5, 45},  // S_FSWORDATK_11
     {SPR_FSRD, 1, 1, NULL, S_FSWORDREADY, 5, 40},   // S_FSWORDATK_12
-    // ---------------------------------------------------------------------------
     {SPR_FSFX, 32768, 3, NULL, S_FSWORD_MISSILE2, 0, 0},        // S_FSWORD_MISSILE1
     {SPR_FSFX, 32769, 3, NULL, S_FSWORD_MISSILE3, 0, 0},        // S_FSWORD_MISSILE2
     {SPR_FSFX, 32770, 3, NULL, S_FSWORD_MISSILE1, 0, 0},        // S_FSWORD_MISSILE3
@@ -1520,7 +1517,6 @@ state_t states[NUMSTATES] = {
     {SPR_WCFM, 32773, 4, NULL, S_CFLAME7, 0, 0},        // S_CFLAME6
     {SPR_WCFM, 32774, 4, NULL, S_CFLAME8, 0, 0},        // S_CFLAME7
     {SPR_WCFM, 32775, 4, NULL, S_CFLAME1, 0, 0},        // S_CFLAME8
-    // ---------------------------------------------------------------------------
     {SPR_CFLM, 0, 1, A_WeaponReady, S_CFLAMEREADY2, 0, 0},      // S_CFLAMEREADY1
     {SPR_CFLM, 0, 1, A_WeaponReady, S_CFLAMEREADY3, 0, 0},      // S_CFLAMEREADY2
     {SPR_CFLM, 0, 1, A_WeaponReady, S_CFLAMEREADY4, 0, 0},      // S_CFLAMEREADY3
@@ -1533,10 +1529,8 @@ state_t states[NUMSTATES] = {
     {SPR_CFLM, 2, 1, A_WeaponReady, S_CFLAMEREADY11, 0, 0},     // S_CFLAMEREADY10
     {SPR_CFLM, 2, 1, A_WeaponReady, S_CFLAMEREADY12, 0, 0},     // S_CFLAMEREADY11
     {SPR_CFLM, 2, 1, A_WeaponReady, S_CFLAMEREADY1, 0, 0},      // S_CFLAMEREADY12
-    // ---------------------------------------------------------------------------
     {SPR_CFLM, 0, 1, A_Lower, S_CFLAMEDOWN, 0, 0},      // S_CFLAMEDOWN
     {SPR_CFLM, 0, 1, A_Raise, S_CFLAMEUP, 0, 0},        // S_CFLAMEUP
-    // ---------------------------------------------------------------------------
     {SPR_CFLM, 0, 2, NULL, S_CFLAMEATK_2, 0, 40},       // S_CFLAMEATK_1
     {SPR_CFLM, 3, 2, NULL, S_CFLAMEATK_3, 0, 50},       // S_CFLAMEATK_2
     {SPR_CFLM, 3, 2, NULL, S_CFLAMEATK_4, 0, 36},       // S_CFLAMEATK_3
@@ -1545,7 +1539,6 @@ state_t states[NUMSTATES] = {
     {SPR_CFLM, 32772, 4, NULL, S_CFLAMEATK_7, 0, 0},    // S_CFLAMEATK_6
     {SPR_CFLM, 6, 2, NULL, S_CFLAMEATK_8, 0, 40},       // S_CFLAMEATK_7
     {SPR_CFLM, 6, 2, NULL, S_CFLAMEREADY1, 0, 0},       // S_CFLAMEATK_8
-    // ---------------------------------------------------------------------------
     {SPR_CFFX, 32781, 5, NULL, S_CFLAMEFLOOR2, 0, 0},   // S_CFLAMEFLOOR1
     {SPR_CFFX, 32782, 4, NULL, S_CFLAMEFLOOR3, 0, 0},   // S_CFLAMEFLOOR2
     {SPR_CFFX, 32783, 3, NULL, S_NULL, 0, 0},   // S_CFLAMEFLOOR3

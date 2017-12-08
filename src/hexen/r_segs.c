@@ -575,7 +575,7 @@ void R_StoreWallRange(int start, int stop)
     bmaptextured = midtexture | toptexture | bottomtexture;
 
     // [JN] Call brightmap lookup
-    if (LevelUseFullBright == true)
+    if (brightmaps && LevelUseFullBright == true)
     R_InitBrightmaps();
 
     if (segtextured)
