@@ -128,11 +128,12 @@ static int pagetic;
 static char *pagename;
 
 int lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Hexen
-int draw_shadowed_text;     // [JN] Элементы меню и тексты отбрасывают тень
 
 
 // [JN] Дополнительные параметры игры
 
+// - Интерфейс -
+int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 // - Графика -
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
 
@@ -186,6 +187,8 @@ void D_BindVariables(void)
 
     // Оптимизация палитры
 	M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);
+    // - Интерфейс -
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);   // Элементы меню и тексты отбрасывают тень
     // - Графика -
     M_BindIntVariable("brightmaps",             &brightmaps);           // Брайтмаппинг текстур и спрайтов
 
@@ -652,6 +655,16 @@ static void HandleArgs(void)
     artiskip = M_ParmExists("-artiskip");
 
     debugmode = M_ParmExists("-debug");
+
+    //!
+    // @vanilla
+    //
+    // [JN] Activate vanilla gameplay mode.
+    // All optional enhancements will be disabled without 
+    // modifying configuration file (russian-heretic.cfg)
+    //
+
+    vanillaparm = M_ParmExists("-vanilla");
 
     //!
     // @vanilla

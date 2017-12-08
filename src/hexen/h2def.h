@@ -616,6 +616,8 @@ extern boolean altpal;          // checkparm to use an alternate palette routine
 
 extern boolean cdrom;           // true if cd-rom mode active ("-cdrom")
 
+extern boolean vanillaparm;     // checkparm of -vanilla
+
 extern boolean deathmatch;      // only if started as net death
 
 extern boolean netgame;         // only true if >1 player
@@ -806,6 +808,8 @@ extern int mlook;
 
 // [JN] Дополнительные параметры игры
 
+// - Интерфейс -
+extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
 

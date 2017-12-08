@@ -626,7 +626,7 @@ void R_ProjectSprite(mobj_t * thing)
 
         // [JN] Applying brightmaps to sprites...
         
-        if (brightmaps && LevelUseFullBright == true)
+        if (brightmaps && !vanillaparm && LevelUseFullBright == true)
         {
             // - Red only -
 
@@ -716,7 +716,7 @@ void R_ProjectSprite(mobj_t * thing)
         
         // [JN] Fallback. If we are not using brightmaps, apply full brightness
         // to the objects, that no longer lighten up in info.c.
-        if (!brightmaps && LevelUseFullBright == true)
+        if ((!brightmaps || vanillaparm) && LevelUseFullBright == true)
         {
             if (thing->type == MT_ARTITORCH
             ||  thing->type == MT_SPEEDBOOTS
@@ -968,7 +968,7 @@ void R_DrawPlayerSprites(void)
         spritelights = scalelight[0];
 
         // [JN] Applying brightmaps to HUD weapons...
-        if (brightmaps)
+        if (brightmaps && !vanillaparm)
         {
             // Fighter: Axe
             if (state == S_FAXEREADY_G || state == S_FAXEREADY_G1 || state == S_FAXEREADY_G2 || state == S_FAXEREADY_G3 || state == S_FAXEREADY_G4 || state == S_FAXEREADY_G5 || state == S_FAXEDOWN_G || state == S_FAXEUP_G || state == S_FAXEUP_G || state == S_FAXEATK_G1 || state == S_FAXEATK_G2 || state == S_FAXEATK_G3 || state == S_FAXEATK_G4 || state == S_FAXEATK_G5 || state == S_FAXEATK_G6 || state == S_FAXEATK_G7 || state == S_FAXEATK_G8 || state == S_FAXEATK_G9 || state == S_FAXEATK_G10 || state == S_FAXEATK_G11 || state == S_FAXEATK_G12 || state == S_FAXEATK_G13)
@@ -994,7 +994,7 @@ void R_DrawPlayerSprites(void)
         }
         // [JN] Fallback. If we are not using brightmaps, apply full brightness
         // to the objects, that no longer lighten up in info.c.
-        else
+        if (!brightmaps || vanillaparm)
         {
             if (state == S_FSWORDREADY || state == S_FSWORDREADY1 || state == S_FSWORDREADY2 || state == S_FSWORDREADY3 || state == S_FSWORDREADY4 || state == S_FSWORDREADY5 || state == S_FSWORDREADY6 || state == S_FSWORDREADY7 || state == S_FSWORDREADY8 || state == S_FSWORDREADY9 || state == S_FSWORDREADY10 || state == S_FSWORDREADY11 || state == S_FSWORDDOWN || state == S_FSWORDUP || state == S_FSWORDATK_1 || state == S_FSWORDATK_2 || state == S_FSWORDATK_3 || state == S_FSWORDATK_4 || state == S_FSWORDATK_5 || state == S_FSWORDATK_6 || state == S_FSWORDATK_7 || state == S_FSWORDATK_8 || state == S_FSWORDATK_9 || state == S_FSWORDATK_10 || state == S_FSWORDATK_11 || state == S_FSWORDATK_12 || state == S_MLIGHTNINGREADY || state == S_MLIGHTNINGREADY2 || state == S_MLIGHTNINGREADY3 || state == S_MLIGHTNINGREADY4 || state == S_MLIGHTNINGREADY5 || state == S_MLIGHTNINGREADY6 || state == S_MLIGHTNINGREADY7 || state == S_MLIGHTNINGREADY8 || state == S_MLIGHTNINGREADY9 || state == S_MLIGHTNINGREADY10 || state == S_MLIGHTNINGREADY11 || state == S_MLIGHTNINGREADY12 || state == S_MLIGHTNINGREADY13 || state == S_MLIGHTNINGREADY14 || state == S_MLIGHTNINGREADY15 || state == S_MLIGHTNINGREADY16 || state == S_MLIGHTNINGREADY17 || state == S_MLIGHTNINGREADY18 || state == S_MLIGHTNINGREADY19 || state == S_MLIGHTNINGREADY20 || state == S_MLIGHTNINGREADY21 || state == S_MLIGHTNINGREADY22 || state == S_MLIGHTNINGREADY23 || state == S_MLIGHTNINGREADY24 || state == S_MLIGHTNINGDOWN || state == S_MLIGHTNINGUP || state == S_MLIGHTNINGATK_1 || state == S_MLIGHTNINGATK_2 || state == S_MLIGHTNINGATK_3 || state == S_MLIGHTNINGATK_4 || state == S_MLIGHTNINGATK_5 || state == S_MLIGHTNINGATK_6 || state == S_MLIGHTNINGATK_7 || state == S_MLIGHTNINGATK_8 || state == S_MLIGHTNINGATK_9 || state == S_MLIGHTNINGATK_10 || state == S_MLIGHTNINGATK_11)
                 spritelights = scalelight[LIGHTLEVELS - 1];
@@ -1005,7 +1005,7 @@ void R_DrawPlayerSprites(void)
         spritelights = scalelight[LIGHTLEVELS - 1];
         
         // [JN] Applying brightmaps to HUD weapons...
-        if (brightmaps)
+        if (brightmaps && !vanillaparm)
         {
             // Fighter: Axe
             if (state == S_FAXEREADY_G || state == S_FAXEREADY_G1 || state == S_FAXEREADY_G2 || state == S_FAXEREADY_G3 || state == S_FAXEREADY_G4 || state == S_FAXEREADY_G5 || state == S_FAXEDOWN_G || state == S_FAXEUP_G || state == S_FAXEUP_G || state == S_FAXEATK_G1 || state == S_FAXEATK_G2 || state == S_FAXEATK_G3 || state == S_FAXEATK_G4 || state == S_FAXEATK_G5 || state == S_FAXEATK_G6 || state == S_FAXEATK_G7 || state == S_FAXEATK_G8 || state == S_FAXEATK_G9 || state == S_FAXEATK_G10 || state == S_FAXEATK_G11 || state == S_FAXEATK_G12 || state == S_FAXEATK_G13)
@@ -1035,7 +1035,7 @@ void R_DrawPlayerSprites(void)
         spritelights = scalelight[lightnum];
         
         // [JN] Applying brightmaps to HUD weapons...
-        if (brightmaps)
+        if (brightmaps && !vanillaparm)
         {
             // Fighter: Axe
             if (state == S_FAXEREADY_G || state == S_FAXEREADY_G1 || state == S_FAXEREADY_G2 || state == S_FAXEREADY_G3 || state == S_FAXEREADY_G4 || state == S_FAXEREADY_G5 || state == S_FAXEDOWN_G || state == S_FAXEUP_G || state == S_FAXEUP_G || state == S_FAXEATK_G1 || state == S_FAXEATK_G2 || state == S_FAXEATK_G3 || state == S_FAXEATK_G4 || state == S_FAXEATK_G5 || state == S_FAXEATK_G6 || state == S_FAXEATK_G7 || state == S_FAXEATK_G8 || state == S_FAXEATK_G9 || state == S_FAXEATK_G10 || state == S_FAXEATK_G11 || state == S_FAXEATK_G12 || state == S_FAXEATK_G13)
@@ -1061,7 +1061,7 @@ void R_DrawPlayerSprites(void)
         }
         // [JN] Fallback. If we are not using brightmaps, apply full brightness
         // to the objects, that no longer lighten up in info.c.
-        else
+        if (!brightmaps || vanillaparm)
         {
             if (state == S_FSWORDREADY || state == S_FSWORDREADY1 || state == S_FSWORDREADY2 || state == S_FSWORDREADY3 || state == S_FSWORDREADY4 || state == S_FSWORDREADY5 || state == S_FSWORDREADY6 || state == S_FSWORDREADY7 || state == S_FSWORDREADY8 || state == S_FSWORDREADY9 || state == S_FSWORDREADY10 || state == S_FSWORDREADY11 || state == S_FSWORDDOWN || state == S_FSWORDUP || state == S_FSWORDATK_1 || state == S_FSWORDATK_2 || state == S_FSWORDATK_3 || state == S_FSWORDATK_4 || state == S_FSWORDATK_5 || state == S_FSWORDATK_6 || state == S_FSWORDATK_7 || state == S_FSWORDATK_8 || state == S_FSWORDATK_9 || state == S_FSWORDATK_10 || state == S_FSWORDATK_11 || state == S_FSWORDATK_12 || state == S_MLIGHTNINGREADY || state == S_MLIGHTNINGREADY2 || state == S_MLIGHTNINGREADY3 || state == S_MLIGHTNINGREADY4 || state == S_MLIGHTNINGREADY5 || state == S_MLIGHTNINGREADY6 || state == S_MLIGHTNINGREADY7 || state == S_MLIGHTNINGREADY8 || state == S_MLIGHTNINGREADY9 || state == S_MLIGHTNINGREADY10 || state == S_MLIGHTNINGREADY11 || state == S_MLIGHTNINGREADY12 || state == S_MLIGHTNINGREADY13 || state == S_MLIGHTNINGREADY14 || state == S_MLIGHTNINGREADY15 || state == S_MLIGHTNINGREADY16 || state == S_MLIGHTNINGREADY17 || state == S_MLIGHTNINGREADY18 || state == S_MLIGHTNINGREADY19 || state == S_MLIGHTNINGREADY20 || state == S_MLIGHTNINGREADY21 || state == S_MLIGHTNINGREADY22 || state == S_MLIGHTNINGREADY23 || state == S_MLIGHTNINGREADY24 || state == S_MLIGHTNINGDOWN || state == S_MLIGHTNINGUP || state == S_MLIGHTNINGATK_1 || state == S_MLIGHTNINGATK_2 || state == S_MLIGHTNINGATK_3 || state == S_MLIGHTNINGATK_4 || state == S_MLIGHTNINGATK_5 || state == S_MLIGHTNINGATK_6 || state == S_MLIGHTNINGATK_7 || state == S_MLIGHTNINGATK_8 || state == S_MLIGHTNINGATK_9 || state == S_MLIGHTNINGATK_10 || state == S_MLIGHTNINGATK_11)
                 spritelights = scalelight[LIGHTLEVELS - 1];
