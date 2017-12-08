@@ -65,6 +65,16 @@ lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 
+// [JN] Brightmaps
+lighttable_t *fullbright_greenonly[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_blueonly[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_purpleonly[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_flame[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_yellowred[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t *fullbright_firebull[LIGHTLEVELS][MAXLIGHTSCALE];
+
+
 int extralight;                 // bumped light from gun blasts
 
 void (*colfunc) (void);
@@ -638,6 +648,15 @@ void R_ExecuteSetViewSize(void)
             if (level >= NUMCOLORMAPS)
                 level = NUMCOLORMAPS - 1;
             scalelight[i][j] = colormaps + level * 256;
+
+            // [JN] Brightmaps
+            fullbright_greenonly[i][j] = brightmaps_greenonly + level * 256;
+            fullbright_redonly[i][j] = brightmaps_redonly + level * 256;
+            fullbright_blueonly[i][j] = brightmaps_blueonly + level * 256;
+            fullbright_purpleonly[i][j] = brightmaps_purpleonly + level * 256;
+            fullbright_flame[i][j] = brightmaps_flame + level * 256;
+            fullbright_yellowred[i][j] = brightmaps_yellowred + level * 256;
+            fullbright_firebull[i][j] = brightmaps_firebull + level * 256;
         }
     }
 

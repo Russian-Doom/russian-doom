@@ -67,6 +67,14 @@ fixed_t *spritetopoffset;
 
 lighttable_t *colormaps;
 
+// [JN] Brightmaps
+lighttable_t *brightmaps_greenonly;
+lighttable_t *brightmaps_redonly;
+lighttable_t *brightmaps_blueonly;
+lighttable_t *brightmaps_purpleonly;
+lighttable_t *brightmaps_flame;
+lighttable_t *brightmaps_yellowred;
+lighttable_t *brightmaps_firebull;
 
 /*
 ==============================================================================
@@ -489,7 +497,7 @@ void R_InitSpriteLumps(void)
 
 void R_InitColormaps(void)
 {
-    int lump, length;
+    int lump, length, lump2, length2, lump3, length3, lump4, length4, lump5, length5, lump6, length6, lump7, length7, lump8, length8;
 //
 // load in the light tables
 // 256 byte align tables
@@ -498,6 +506,50 @@ void R_InitColormaps(void)
     length = W_LumpLength(lump);
     colormaps = Z_Malloc(length, PU_STATIC, 0);
     W_ReadLump(lump, colormaps);
+
+    // [JN] Loading brightmaps...
+
+    // Green only
+    lump2 = W_GetNumForName("BRTMAP1");
+    length2 = W_LumpLength(lump2);
+    brightmaps_greenonly = Z_Malloc(length2, PU_STATIC, 0);
+    W_ReadLump(lump2, brightmaps_greenonly);
+    
+    // Red only
+    lump3 = W_GetNumForName("BRTMAP2");
+    length3 = W_LumpLength(lump3);
+    brightmaps_redonly = Z_Malloc(length3, PU_STATIC, 0);
+    W_ReadLump(lump3, brightmaps_redonly);
+    
+    // Blue only
+    lump4 = W_GetNumForName("BRTMAP3");
+    length4 = W_LumpLength(lump4);
+    brightmaps_blueonly = Z_Malloc(length4, PU_STATIC, 0);
+    W_ReadLump(lump4, brightmaps_blueonly);
+    
+    // Purple only
+    lump5 = W_GetNumForName("BRTMAP4");
+    length5 = W_LumpLength(lump5);
+    brightmaps_purpleonly = Z_Malloc(length5, PU_STATIC, 0);
+    W_ReadLump(lump5, brightmaps_purpleonly);
+    
+    // Flame
+    lump6 = W_GetNumForName("BRTMAP5");
+    length6 = W_LumpLength(lump6);
+    brightmaps_flame = Z_Malloc(length6, PU_STATIC, 0);
+    W_ReadLump(lump6, brightmaps_flame);
+    
+    // Flame 2 (yellow + red)
+    lump7 = W_GetNumForName("BRTMAP6");
+    length7 = W_LumpLength(lump7);
+    brightmaps_yellowred = Z_Malloc(length7, PU_STATIC, 0);
+    W_ReadLump(lump7, brightmaps_yellowred);
+    
+    // Flame Bull (special for lit Minotaur statue)
+    lump8 = W_GetNumForName("BRTMAP7");
+    length8 = W_LumpLength(lump8);
+    brightmaps_firebull = Z_Malloc(length8, PU_STATIC, 0);
+    W_ReadLump(lump8, brightmaps_firebull);
 }
 
 
@@ -582,9 +634,15 @@ int R_TextureNumForName(char *name)
     //char  namet[9];
 
     i = R_CheckTextureNumForName(name);
-    if (i == -1)
-        I_Error("R_TextureNumForName: %s not found", name);
-
+    if (i==-1)
+    {
+        // I_Error ("R_TextureNumForName: %s not found", name);
+        // [crispy] make non-fatal
+        // [JN] TODO: Temporal solution for brightmaps' performance problem.
+        // Increases perfomance and prevents spamming in console output on Linux.
+        // fprintf (stderr, "R_TextureNumForName: текстура %s не найдена", name);
+        return 0;
+    }
     return i;
 }
 

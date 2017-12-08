@@ -48,6 +48,16 @@ fixed_t pspritescale, pspriteiscale;
 
 lighttable_t **spritelights;
 
+// [JN] Brightmaps
+lighttable_t **fullbrights_greenonly;
+lighttable_t **fullbrights_redonly;
+lighttable_t **fullbrights_blueonly;
+lighttable_t **fullbrights_purpleonly;
+lighttable_t **fullbrights_flame;
+lighttable_t **fullbrights_yellowred;
+lighttable_t **fullbrights_firebull;
+
+
 // constant arrays used for psprite clipping and initializing clipping
 short negonearray[SCREENWIDTH];
 short screenheightarray[SCREENWIDTH];
@@ -613,6 +623,96 @@ void R_ProjectSprite(mobj_t * thing)
         if (index >= MAXLIGHTSCALE)
             index = MAXLIGHTSCALE - 1;
         vis->colormap = spritelights[index];
+
+        // [JN] Applying brightmaps to sprites...
+        
+        if (LevelUseFullBright == true)
+        {
+            // - Red only -
+
+            // Banishment Device
+            if (thing->type == MT_TELEPORTOTHER) 
+            vis->colormap = fullbrights_redonly[index];
+
+            // Chaos Device
+            if (thing->type == MT_ARTITELEPORT)
+            vis->colormap = fullbrights_redonly[index];
+
+            // Korax
+            if (thing->type == MT_KORAX)
+            vis->colormap = fullbrights_redonly[index];
+
+            // Flame Mask
+            if (thing->type == MT_ARTIPUZZSKULL2)
+            vis->colormap = fullbrights_redonly[index];            
+
+            // - Blue only -
+
+            // Crater of Might
+            if (thing->type == MT_SPEEDBOOTS)
+            vis->colormap = fullbrights_blueonly[index];
+
+            // Blue candle (lit)
+            if (thing->type == MT_ZBLUE_CANDLE)
+            vis->colormap = fullbrights_blueonly[index];
+
+            // Wendigo
+            if (thing->type == MT_ICEGUY)
+            vis->colormap = fullbrights_blueonly[index];
+
+            // Mystic Ambit Incant
+            if (thing->type == MT_HEALRADIUS)
+            vis->colormap = fullbrights_blueonly[index];
+
+            // - Purple only -
+
+            // Crater of Might
+            if (thing->type == MT_BOOSTMANA)
+            vis->colormap = fullbrights_purpleonly[index];
+
+            // Dragonskin Bracers
+            if (thing->type == MT_BOOSTARMOR)
+            vis->colormap = fullbrights_purpleonly[index];
+
+            // Icon of the Defender
+            if (thing->type == MT_ARTIINVULNERABILITY)
+            vis->colormap = fullbrights_purpleonly[index];
+
+            // - Flame -
+
+            // Torch (Artifact)
+            if (thing->type == MT_ARTITORCH)
+            vis->colormap = fullbrights_flame[index];
+
+            // 3 candles (lit)
+            if (thing->type == MT_BRASSTORCH)
+            vis->colormap = fullbrights_flame[index];
+
+            // Skull with Flame
+            if (thing->type == MT_FIRETHING)
+            vis->colormap = fullbrights_flame[index];
+
+            // Twined Torch
+            if (thing->type == MT_ZTWINEDTORCH || thing->type == MT_ZTWINEDTORCH_UNLIT)
+            vis->colormap = fullbrights_flame[index];
+
+            // Wall torch
+            if (thing->type == MT_ZWALLTORCH || thing->type == MT_ZWALLTORCH_UNLIT)
+            vis->colormap = fullbrights_flame[index];
+
+            // Chandelier
+            if (thing->type == MT_MISC5 || thing->type == MT_MISC6)
+            vis->colormap = fullbrights_flame[index];
+
+            // Cauldron
+            if (thing->type == MT_ZCAULDRON)
+            vis->colormap = fullbrights_flame[index];
+        
+            // - Fire Bull -
+            
+            if (thing->type == MT_ZFIREBULL || thing->type == MT_ZFIREBULL_UNLIT)
+            vis->colormap = fullbrights_firebull[index];
+        }
     }
 }
 
@@ -639,11 +739,44 @@ void R_AddSprites(sector_t * sec)
 
     lightnum = (sec->lightlevel >> LIGHTSEGSHIFT) + extralight;
     if (lightnum < 0)
+    {
         spritelights = scalelight[0];
+
+        // [JN] Brightmaps
+        fullbrights_greenonly = fullbright_greenonly[0];
+        fullbrights_redonly = fullbright_redonly[0];
+        fullbrights_blueonly = fullbright_blueonly[0];
+        fullbrights_purpleonly = fullbright_purpleonly[0];
+        fullbrights_flame = fullbright_flame[0];
+        fullbrights_yellowred = fullbright_yellowred[0];
+        fullbrights_firebull = fullbright_firebull[0];
+    }
     else if (lightnum >= LIGHTLEVELS)
+    {
         spritelights = scalelight[LIGHTLEVELS - 1];
+
+        // [JN] Brightmaps
+        fullbrights_greenonly = fullbright_greenonly[LIGHTLEVELS - 1];
+        fullbrights_redonly = fullbright_redonly[LIGHTLEVELS - 1];
+        fullbrights_blueonly = fullbright_blueonly[LIGHTLEVELS - 1];
+        fullbrights_purpleonly = fullbright_purpleonly[LIGHTLEVELS - 1];
+        fullbrights_flame = fullbright_flame[LIGHTLEVELS - 1];
+        fullbrights_yellowred = fullbright_yellowred[LIGHTLEVELS - 1];
+        fullbrights_firebull = fullbright_firebull[LIGHTLEVELS - 1];
+    }
     else
+    {
         spritelights = scalelight[lightnum];
+
+        // [JN] Brightmaps
+        fullbrights_greenonly = fullbright_greenonly[lightnum];
+        fullbrights_redonly = fullbright_redonly[lightnum];
+        fullbrights_blueonly = fullbright_blueonly[lightnum];
+        fullbrights_purpleonly = fullbright_purpleonly[lightnum];
+        fullbrights_flame = fullbright_flame[lightnum];
+        fullbrights_yellowred = fullbright_yellowred[lightnum];
+        fullbrights_firebull = fullbright_firebull[lightnum];
+    }
 
 
     for (thing = sec->thinglist; thing; thing = thing->snext)
@@ -803,6 +936,7 @@ void R_DrawPlayerSprites(void)
 {
     int i, lightnum;
     pspdef_t *psp;
+    const int state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] We need to define what "state" actually is
 
 //
 // get light level
@@ -811,11 +945,89 @@ void R_DrawPlayerSprites(void)
         (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) +
         extralight;
     if (lightnum < 0)
+    {
         spritelights = scalelight[0];
+
+        // [JN] Applying brightmaps to HUD weapons...
+        
+        // Fighter: Axe
+        if (state == S_FAXEREADY_G || state == S_FAXEREADY_G1 || state == S_FAXEREADY_G2 || state == S_FAXEREADY_G3 || state == S_FAXEREADY_G4 || state == S_FAXEREADY_G5 || state == S_FAXEDOWN_G || state == S_FAXEUP_G || state == S_FAXEUP_G || state == S_FAXEATK_G1 || state == S_FAXEATK_G2 || state == S_FAXEATK_G3 || state == S_FAXEATK_G4 || state == S_FAXEATK_G5 || state == S_FAXEATK_G6 || state == S_FAXEATK_G7 || state == S_FAXEATK_G8 || state == S_FAXEATK_G9 || state == S_FAXEATK_G10 || state == S_FAXEATK_G11 || state == S_FAXEATK_G12 || state == S_FAXEATK_G13)
+            spritelights = fullbright_blueonly[0];
+        // Fighter: Sword
+        else if (state == S_FSWORDREADY || state == S_FSWORDREADY1 || state == S_FSWORDREADY2 || state == S_FSWORDREADY3 || state == S_FSWORDREADY4 || state == S_FSWORDREADY5 || state == S_FSWORDREADY6 || state == S_FSWORDREADY7 || state == S_FSWORDREADY8 || state == S_FSWORDREADY9 || state == S_FSWORDREADY10 || state == S_FSWORDREADY11 || state == S_FSWORDDOWN || state == S_FSWORDUP || state == S_FSWORDATK_1 || state == S_FSWORDATK_2 || state == S_FSWORDATK_3 || state == S_FSWORDATK_4 || state == S_FSWORDATK_5 || state == S_FSWORDATK_6 || state == S_FSWORDATK_7 || state == S_FSWORDATK_8 || state == S_FSWORDATK_9 || state == S_FSWORDATK_10 || state == S_FSWORDATK_11 || state == S_FSWORDATK_12)
+            spritelights = fullbright_greenonly[0];
+        // Cleric: Serpent Staff
+        else if (state == S_CSTAFFATK_1 || state == S_CSTAFFATK_2 || state == S_CSTAFFATK_3 || state == S_CSTAFFATK_4 || state == S_CSTAFFATK2_1)
+            spritelights = fullbright_greenonly[0];
+        // Cleric: Flame
+        else if (state == S_CFLAMEDOWN || state == S_CFLAMEUP || state == S_CFLAMEREADY1 || state == S_CFLAMEREADY2 || state == S_CFLAMEREADY3 || state == S_CFLAMEREADY4 || state == S_CFLAMEREADY5 || state == S_CFLAMEREADY6 || state == S_CFLAMEREADY7 || state == S_CFLAMEREADY8 || state == S_CFLAMEREADY9 || state == S_CFLAMEREADY10 || state == S_CFLAMEREADY11 || state == S_CFLAMEREADY12 || state == S_CFLAMEATK_1 || state == S_CFLAMEATK_2 || state == S_CFLAMEATK_3 || state == S_CFLAMEATK_7 || state == S_CFLAMEATK_8)
+            spritelights = fullbright_yellowred[0];
+        // Mage: Frost
+        else if (state == S_CONEATK1_2 || state == S_CONEATK1_3 || state == S_CONEATK1_4 || state == S_CONEATK1_5 || state == S_CONEATK1_6 || state == S_CONEATK1_7 || state == S_CONEATK1_8)
+            spritelights = fullbright_blueonly[0];
+        // Mage: Lightning
+        else if (state == S_MLIGHTNINGREADY || state == S_MLIGHTNINGREADY2 || state == S_MLIGHTNINGREADY3 || state == S_MLIGHTNINGREADY4 || state == S_MLIGHTNINGREADY5 || state == S_MLIGHTNINGREADY6 || state == S_MLIGHTNINGREADY7 || state == S_MLIGHTNINGREADY8 || state == S_MLIGHTNINGREADY9 || state == S_MLIGHTNINGREADY10 || state == S_MLIGHTNINGREADY11 || state == S_MLIGHTNINGREADY12 || state == S_MLIGHTNINGREADY13 || state == S_MLIGHTNINGREADY14 || state == S_MLIGHTNINGREADY15 || state == S_MLIGHTNINGREADY16 || state == S_MLIGHTNINGREADY17 || state == S_MLIGHTNINGREADY18 || state == S_MLIGHTNINGREADY19 || state == S_MLIGHTNINGREADY20 || state == S_MLIGHTNINGREADY21 || state == S_MLIGHTNINGREADY22 || state == S_MLIGHTNINGREADY23 || state == S_MLIGHTNINGREADY24 || state == S_MLIGHTNINGDOWN || state == S_MLIGHTNINGUP || state == S_MLIGHTNINGATK_1 || state == S_MLIGHTNINGATK_2 || state == S_MLIGHTNINGATK_3 || state == S_MLIGHTNINGATK_4 || state == S_MLIGHTNINGATK_5 || state == S_MLIGHTNINGATK_6 || state == S_MLIGHTNINGATK_7 || state == S_MLIGHTNINGATK_8 || state == S_MLIGHTNINGATK_9 || state == S_MLIGHTNINGATK_10 || state == S_MLIGHTNINGATK_11)
+            spritelights = fullbright_blueonly[0];
+        // Mage: Arc
+        else if (state == S_MSTAFFREADY || state == S_MSTAFFREADY2 || state == S_MSTAFFREADY3 || state == S_MSTAFFREADY4 || state == S_MSTAFFREADY5 || state == S_MSTAFFREADY6 || state == S_MSTAFFREADY7 || state == S_MSTAFFREADY8 || state == S_MSTAFFREADY9 || state == S_MSTAFFREADY10 || state == S_MSTAFFREADY11 || state == S_MSTAFFREADY12 || state == S_MSTAFFREADY13 || state == S_MSTAFFREADY14 || state == S_MSTAFFREADY15 || state == S_MSTAFFREADY16 || state == S_MSTAFFREADY17 || state == S_MSTAFFREADY18 || state == S_MSTAFFREADY19 || state == S_MSTAFFREADY20 || state == S_MSTAFFREADY21 || state == S_MSTAFFREADY22 || state == S_MSTAFFREADY23 || state == S_MSTAFFREADY24 || state == S_MSTAFFREADY25 || state == S_MSTAFFREADY26 || state == S_MSTAFFREADY27 || state == S_MSTAFFREADY28 || state == S_MSTAFFREADY29 || state == S_MSTAFFREADY30 || state == S_MSTAFFREADY31 || state == S_MSTAFFREADY32 || state == S_MSTAFFREADY33 || state == S_MSTAFFREADY34 || state == S_MSTAFFREADY35 || state == S_MSTAFFDOWN || state == S_MSTAFFUP || state == S_MSTAFFATK_1 || state == S_MSTAFFATK_4 || state == S_MSTAFFATK_5 || state == S_MSTAFFATK_6 || state == S_MSTAFFATK_7)
+            spritelights = fullbright_yellowred[0];
+    }
     else if (lightnum >= LIGHTLEVELS)
+    {
         spritelights = scalelight[LIGHTLEVELS - 1];
+        
+        // [JN] Applying brightmaps to HUD weapons...
+        
+        // Fighter: Axe
+        if (state == S_FAXEREADY_G || state == S_FAXEREADY_G1 || state == S_FAXEREADY_G2 || state == S_FAXEREADY_G3 || state == S_FAXEREADY_G4 || state == S_FAXEREADY_G5 || state == S_FAXEDOWN_G || state == S_FAXEUP_G || state == S_FAXEUP_G || state == S_FAXEATK_G1 || state == S_FAXEATK_G2 || state == S_FAXEATK_G3 || state == S_FAXEATK_G4 || state == S_FAXEATK_G5 || state == S_FAXEATK_G6 || state == S_FAXEATK_G7 || state == S_FAXEATK_G8 || state == S_FAXEATK_G9 || state == S_FAXEATK_G10 || state == S_FAXEATK_G11 || state == S_FAXEATK_G12 || state == S_FAXEATK_G13)
+            spritelights = fullbright_blueonly[LIGHTLEVELS - 1];
+        // Fighter: Sword
+        else if (state == S_FSWORDREADY || state == S_FSWORDREADY1 || state == S_FSWORDREADY2 || state == S_FSWORDREADY3 || state == S_FSWORDREADY4 || state == S_FSWORDREADY5 || state == S_FSWORDREADY6 || state == S_FSWORDREADY7 || state == S_FSWORDREADY8 || state == S_FSWORDREADY9 || state == S_FSWORDREADY10 || state == S_FSWORDREADY11 || state == S_FSWORDDOWN || state == S_FSWORDUP || state == S_FSWORDATK_1 || state == S_FSWORDATK_2 || state == S_FSWORDATK_3 || state == S_FSWORDATK_4 || state == S_FSWORDATK_5 || state == S_FSWORDATK_6 || state == S_FSWORDATK_7 || state == S_FSWORDATK_8 || state == S_FSWORDATK_9 || state == S_FSWORDATK_10 || state == S_FSWORDATK_11 || state == S_FSWORDATK_12)
+            spritelights = fullbright_greenonly[LIGHTLEVELS - 1];
+        // Cleric: Serpent Staff
+        else if (state == S_CSTAFFATK_1 || state == S_CSTAFFATK_2 || state == S_CSTAFFATK_3 || state == S_CSTAFFATK_4 || state == S_CSTAFFATK2_1)
+            spritelights = fullbright_greenonly[LIGHTLEVELS - 1];
+        // Cleric: Flame
+        else if (state == S_CFLAMEDOWN || state == S_CFLAMEUP || state == S_CFLAMEREADY1 || state == S_CFLAMEREADY2 || state == S_CFLAMEREADY3 || state == S_CFLAMEREADY4 || state == S_CFLAMEREADY5 || state == S_CFLAMEREADY6 || state == S_CFLAMEREADY7 || state == S_CFLAMEREADY8 || state == S_CFLAMEREADY9 || state == S_CFLAMEREADY10 || state == S_CFLAMEREADY11 || state == S_CFLAMEREADY12 || state == S_CFLAMEATK_1 || state == S_CFLAMEATK_2 || state == S_CFLAMEATK_3 || state == S_CFLAMEATK_7 || state == S_CFLAMEATK_8)
+            spritelights = fullbright_yellowred[LIGHTLEVELS - 1];
+        // Mage: Frost
+        else if (state == S_CONEATK1_2 || state == S_CONEATK1_3 || state == S_CONEATK1_4 || state == S_CONEATK1_5 || state == S_CONEATK1_6 || state == S_CONEATK1_7 || state == S_CONEATK1_8)
+            spritelights = fullbright_blueonly[LIGHTLEVELS - 1];
+        // Mage: Lightning
+        else if (state == S_MLIGHTNINGREADY || state == S_MLIGHTNINGREADY2 || state == S_MLIGHTNINGREADY3 || state == S_MLIGHTNINGREADY4 || state == S_MLIGHTNINGREADY5 || state == S_MLIGHTNINGREADY6 || state == S_MLIGHTNINGREADY7 || state == S_MLIGHTNINGREADY8 || state == S_MLIGHTNINGREADY9 || state == S_MLIGHTNINGREADY10 || state == S_MLIGHTNINGREADY11 || state == S_MLIGHTNINGREADY12 || state == S_MLIGHTNINGREADY13 || state == S_MLIGHTNINGREADY14 || state == S_MLIGHTNINGREADY15 || state == S_MLIGHTNINGREADY16 || state == S_MLIGHTNINGREADY17 || state == S_MLIGHTNINGREADY18 || state == S_MLIGHTNINGREADY19 || state == S_MLIGHTNINGREADY20 || state == S_MLIGHTNINGREADY21 || state == S_MLIGHTNINGREADY22 || state == S_MLIGHTNINGREADY23 || state == S_MLIGHTNINGREADY24 || state == S_MLIGHTNINGDOWN || state == S_MLIGHTNINGUP || state == S_MLIGHTNINGATK_1 || state == S_MLIGHTNINGATK_2 || state == S_MLIGHTNINGATK_3 || state == S_MLIGHTNINGATK_4 || state == S_MLIGHTNINGATK_5 || state == S_MLIGHTNINGATK_6 || state == S_MLIGHTNINGATK_7 || state == S_MLIGHTNINGATK_8 || state == S_MLIGHTNINGATK_9 || state == S_MLIGHTNINGATK_10 || state == S_MLIGHTNINGATK_11)
+            spritelights = fullbright_blueonly[LIGHTLEVELS - 1];
+        // Mage: Arc
+        else if (state == S_MSTAFFREADY || state == S_MSTAFFREADY2 || state == S_MSTAFFREADY3 || state == S_MSTAFFREADY4 || state == S_MSTAFFREADY5 || state == S_MSTAFFREADY6 || state == S_MSTAFFREADY7 || state == S_MSTAFFREADY8 || state == S_MSTAFFREADY9 || state == S_MSTAFFREADY10 || state == S_MSTAFFREADY11 || state == S_MSTAFFREADY12 || state == S_MSTAFFREADY13 || state == S_MSTAFFREADY14 || state == S_MSTAFFREADY15 || state == S_MSTAFFREADY16 || state == S_MSTAFFREADY17 || state == S_MSTAFFREADY18 || state == S_MSTAFFREADY19 || state == S_MSTAFFREADY20 || state == S_MSTAFFREADY21 || state == S_MSTAFFREADY22 || state == S_MSTAFFREADY23 || state == S_MSTAFFREADY24 || state == S_MSTAFFREADY25 || state == S_MSTAFFREADY26 || state == S_MSTAFFREADY27 || state == S_MSTAFFREADY28 || state == S_MSTAFFREADY29 || state == S_MSTAFFREADY30 || state == S_MSTAFFREADY31 || state == S_MSTAFFREADY32 || state == S_MSTAFFREADY33 || state == S_MSTAFFREADY34 || state == S_MSTAFFREADY35 || state == S_MSTAFFDOWN || state == S_MSTAFFUP || state == S_MSTAFFATK_1 || state == S_MSTAFFATK_4 || state == S_MSTAFFATK_5 || state == S_MSTAFFATK_6 || state == S_MSTAFFATK_7)
+            spritelights = fullbright_yellowred[LIGHTLEVELS - 1];
+    }
     else
+    {
         spritelights = scalelight[lightnum];
+        
+        // [JN] Applying brightmaps to HUD weapons...
+        
+        // Fighter: Axe
+        if (state == S_FAXEREADY_G || state == S_FAXEREADY_G1 || state == S_FAXEREADY_G2 || state == S_FAXEREADY_G3 || state == S_FAXEREADY_G4 || state == S_FAXEREADY_G5 || state == S_FAXEDOWN_G || state == S_FAXEUP_G || state == S_FAXEUP_G || state == S_FAXEATK_G1 || state == S_FAXEATK_G2 || state == S_FAXEATK_G3 || state == S_FAXEATK_G4 || state == S_FAXEATK_G5 || state == S_FAXEATK_G6 || state == S_FAXEATK_G7 || state == S_FAXEATK_G8 || state == S_FAXEATK_G9 || state == S_FAXEATK_G10 || state == S_FAXEATK_G11 || state == S_FAXEATK_G12 || state == S_FAXEATK_G13)
+            spritelights = fullbright_blueonly[lightnum];
+        // Fighter: Sword
+        else if (state == S_FSWORDREADY || state == S_FSWORDREADY1 || state == S_FSWORDREADY2 || state == S_FSWORDREADY3 || state == S_FSWORDREADY4 || state == S_FSWORDREADY5 || state == S_FSWORDREADY6 || state == S_FSWORDREADY7 || state == S_FSWORDREADY8 || state == S_FSWORDREADY9 || state == S_FSWORDREADY10 || state == S_FSWORDREADY11 || state == S_FSWORDDOWN || state == S_FSWORDUP || state == S_FSWORDATK_1 || state == S_FSWORDATK_2 || state == S_FSWORDATK_3 || state == S_FSWORDATK_4 || state == S_FSWORDATK_5 || state == S_FSWORDATK_6 || state == S_FSWORDATK_7 || state == S_FSWORDATK_8 || state == S_FSWORDATK_9 || state == S_FSWORDATK_10 || state == S_FSWORDATK_11 || state == S_FSWORDATK_12)
+            spritelights = fullbright_greenonly[lightnum];
+        // Cleric: Serpent Staff
+        else if (state == S_CSTAFFATK_1 || state == S_CSTAFFATK_2 || state == S_CSTAFFATK_3 || state == S_CSTAFFATK_4 || state == S_CSTAFFATK2_1)
+            spritelights = fullbright_greenonly[lightnum];
+        // Cleric: Flame
+        else if (state == S_CFLAMEDOWN || state == S_CFLAMEUP || state == S_CFLAMEREADY1 || state == S_CFLAMEREADY2 || state == S_CFLAMEREADY3 || state == S_CFLAMEREADY4 || state == S_CFLAMEREADY5 || state == S_CFLAMEREADY6 || state == S_CFLAMEREADY7 || state == S_CFLAMEREADY8 || state == S_CFLAMEREADY9 || state == S_CFLAMEREADY10 || state == S_CFLAMEREADY11 || state == S_CFLAMEREADY12 || state == S_CFLAMEATK_1 || state == S_CFLAMEATK_2 || state == S_CFLAMEATK_3 || state == S_CFLAMEATK_7 || state == S_CFLAMEATK_8)
+            spritelights = fullbright_yellowred[lightnum];
+        // Mage: Frost
+        else if (state == S_CONEATK1_2 || state == S_CONEATK1_3 || state == S_CONEATK1_4 || state == S_CONEATK1_5 || state == S_CONEATK1_6 || state == S_CONEATK1_7 || state == S_CONEATK1_8)
+            spritelights = fullbright_blueonly[lightnum];
+        // Mage: Lightning
+        else if (state == S_MLIGHTNINGREADY || state == S_MLIGHTNINGREADY2 || state == S_MLIGHTNINGREADY3 || state == S_MLIGHTNINGREADY4 || state == S_MLIGHTNINGREADY5 || state == S_MLIGHTNINGREADY6 || state == S_MLIGHTNINGREADY7 || state == S_MLIGHTNINGREADY8 || state == S_MLIGHTNINGREADY9 || state == S_MLIGHTNINGREADY10 || state == S_MLIGHTNINGREADY11 || state == S_MLIGHTNINGREADY12 || state == S_MLIGHTNINGREADY13 || state == S_MLIGHTNINGREADY14 || state == S_MLIGHTNINGREADY15 || state == S_MLIGHTNINGREADY16 || state == S_MLIGHTNINGREADY17 || state == S_MLIGHTNINGREADY18 || state == S_MLIGHTNINGREADY19 || state == S_MLIGHTNINGREADY20 || state == S_MLIGHTNINGREADY21 || state == S_MLIGHTNINGREADY22 || state == S_MLIGHTNINGREADY23 || state == S_MLIGHTNINGREADY24 || state == S_MLIGHTNINGDOWN || state == S_MLIGHTNINGUP || state == S_MLIGHTNINGATK_1 || state == S_MLIGHTNINGATK_2 || state == S_MLIGHTNINGATK_3 || state == S_MLIGHTNINGATK_4 || state == S_MLIGHTNINGATK_5 || state == S_MLIGHTNINGATK_6 || state == S_MLIGHTNINGATK_7 || state == S_MLIGHTNINGATK_8 || state == S_MLIGHTNINGATK_9 || state == S_MLIGHTNINGATK_10 || state == S_MLIGHTNINGATK_11)
+            spritelights = fullbright_blueonly[lightnum];
+        // Mage: Arc
+        else if (state == S_MSTAFFREADY || state == S_MSTAFFREADY2 || state == S_MSTAFFREADY3 || state == S_MSTAFFREADY4 || state == S_MSTAFFREADY5 || state == S_MSTAFFREADY6 || state == S_MSTAFFREADY7 || state == S_MSTAFFREADY8 || state == S_MSTAFFREADY9 || state == S_MSTAFFREADY10 || state == S_MSTAFFREADY11 || state == S_MSTAFFREADY12 || state == S_MSTAFFREADY13 || state == S_MSTAFFREADY14 || state == S_MSTAFFREADY15 || state == S_MSTAFFREADY16 || state == S_MSTAFFREADY17 || state == S_MSTAFFREADY18 || state == S_MSTAFFREADY19 || state == S_MSTAFFREADY20 || state == S_MSTAFFREADY21 || state == S_MSTAFFREADY22 || state == S_MSTAFFREADY23 || state == S_MSTAFFREADY24 || state == S_MSTAFFREADY25 || state == S_MSTAFFREADY26 || state == S_MSTAFFREADY27 || state == S_MSTAFFREADY28 || state == S_MSTAFFREADY29 || state == S_MSTAFFREADY30 || state == S_MSTAFFREADY31 || state == S_MSTAFFREADY32 || state == S_MSTAFFREADY33 || state == S_MSTAFFREADY34 || state == S_MSTAFFREADY35 || state == S_MSTAFFDOWN || state == S_MSTAFFUP || state == S_MSTAFFATK_1 || state == S_MSTAFFATK_4 || state == S_MSTAFFATK_5 || state == S_MSTAFFATK_6 || state == S_MSTAFFATK_7)
+            spritelights = fullbright_yellowred[lightnum];
+    }
 //
 // clip to screen bounds
 //

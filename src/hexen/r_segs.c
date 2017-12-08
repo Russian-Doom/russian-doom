@@ -21,6 +21,14 @@
 #include "i_system.h"
 #include "r_local.h"
 
+// [JN] Brightmaps
+int brightmap_greenonly;
+int brightmap_redonly;
+int brightmap_blueonly;
+int brightmap_flame;
+int brightmap_yellowred;
+boolean bmaptextured;
+
 // OPTIMIZE: closed two sided lines as single sided
 
 boolean segtextured;            // true if any of the segs textures might be vis
@@ -313,6 +321,23 @@ void R_RenderSegLoop(void)
 
 }
 
+void R_InitBrightmaps (void)
+{
+    brightmap_greenonly = (bmaptextured == R_TextureNumForName("SW_1_MD"));
+
+    brightmap_redonly = (bmaptextured == R_TextureNumForName("SW_2_DN"));
+    
+    brightmap_blueonly = (bmaptextured == R_TextureNumForName("SW_1_DN") 
+    || bmaptextured == R_TextureNumForName("SW_2_MD"));
+
+    brightmap_flame = (bmaptextured == R_TextureNumForName("SPAWN03")
+    || bmaptextured == R_TextureNumForName("SPAWN12")
+    || bmaptextured == R_TextureNumForName("SW51_ON")
+    || bmaptextured == R_TextureNumForName("SW52_ON"));
+    
+    brightmap_yellowred = (bmaptextured == R_TextureNumForName("SPAWN09")
+    || bmaptextured == R_TextureNumForName("SPAWN10"));
+}
 
 /*
 =====================
@@ -547,6 +572,11 @@ void R_StoreWallRange(int start, int stop)
 // calculate rw_offset (only needed for textured lines)
 //
     segtextured = midtexture | toptexture | bottomtexture | maskedtexture;
+    bmaptextured = midtexture | toptexture | bottomtexture;
+
+    // [JN] Call brightmap lookup
+    if (LevelUseFullBright == true)
+    R_InitBrightmaps();
 
     if (segtextured)
     {
@@ -577,9 +607,37 @@ void R_StoreWallRange(int start, int stop)
             //if (lightnum < 0)
             //      walllights = scalelight[0];
             if (lightnum >= LIGHTLEVELS)
+            {
+                if (brightmap_greenonly)
+                walllights = fullbright_greenonly[LIGHTLEVELS - 1];
+                else if (brightmap_redonly)
+                walllights = fullbright_redonly[LIGHTLEVELS - 1];
+                else if (brightmap_blueonly)
+                walllights = fullbright_blueonly[LIGHTLEVELS - 1];
+                else if (brightmap_flame)
+                walllights = fullbright_flame[LIGHTLEVELS - 1];
+                else if (brightmap_yellowred)
+                walllights = fullbright_yellowred[LIGHTLEVELS - 1];
+
+                else // [JN] Standard light table
                 walllights = scalelight[LIGHTLEVELS - 1];
+            }
             else
+            {
+                if (brightmap_greenonly)
+                walllights = fullbright_greenonly[lightnum];
+                else if (brightmap_redonly)
+                walllights = fullbright_redonly[lightnum];
+                else if (brightmap_blueonly)
+                walllights = fullbright_blueonly[lightnum];
+                else if (brightmap_flame)
+                walllights = fullbright_flame[lightnum];
+                else if (brightmap_yellowred)
+                walllights = fullbright_yellowred[lightnum];
+
+                else // [JN] Standard light table
                 walllights = scalelight[lightnum];
+            }
         }
     }
 
