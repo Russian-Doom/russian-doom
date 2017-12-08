@@ -523,14 +523,25 @@ static void DrRedINumber(signed int val, int x, int y)
 static void DrBNumber(signed int val, int x, int y)
 {
     patch_t *patch;
+    patch_t *patch_n;
     int xpos;
     int oldval;
+
+    // [JN] Declare a "minus" symbol in the big green font
+    patch_n = W_CacheLumpName("FONTB13", PU_CACHE);
 
     oldval = val;
     xpos = x;
     if (val < 0)
     {
-        val = 0;
+        val = -val; // [JN] Support for negative values
+
+        if (-val <= -99) // [JN] Do not drop below -99. Looks confusing, eh?
+        val = 99;
+
+        // [JN] Draw minus symbol with respection of digits placement.
+        // However, values below -10 requires some correction in "x" placement.
+        V_DrawShadowedPatch(xpos + (val <= 9 ? 16 : 8) - SHORT(patch_n->width) / 2, y-1, patch_n);
     }
     if (val > 99)
     {
@@ -1389,16 +1400,60 @@ void DrawFullScreenStuff(void)
     int i;
     int x;
     int temp;
+    int mana_blue = CPlayer->mana[0];
+    int mana_green = CPlayer->mana[1];
+    int armor = AutoArmorSave[CPlayer->class] +
+                CPlayer->armorpoints[ARMOR_ARMOR] +
+                CPlayer->armorpoints[ARMOR_SHIELD] +
+                CPlayer->armorpoints[ARMOR_HELMET] +
+                CPlayer->armorpoints[ARMOR_AMULET];
 
     UpdateState |= I_FULLSCRN;
+
+    // [JN] Health
     if (CPlayer->mo->health > 0)
     {
-        DrBNumber(CPlayer->mo->health, 5, 180);
+        // [JN] Draw ammount of health
+        DrBNumber(CPlayer->mo->health, 5, 176);
     }
     else
     {
-        DrBNumber(0, 5, 180);
+        // [JN] Draw "0" for zero health
+        DrBNumber(0, 5, 176);
     }
+
+    // [JN] Mana
+    {
+        // [JN] First weapon?
+        if (CPlayer->readyweapon == WP_FIRST)
+        {
+            V_DrawShadowedPatchRaven(301, 170, W_CacheLumpName("MANADIM1", PU_CACHE));
+            V_DrawShadowedPatchRaven(301, 184, W_CacheLumpName("MANADIM2", PU_CACHE));
+        }
+        // [JN] Second weapon?
+        else if (CPlayer->readyweapon == WP_SECOND)
+        {
+            V_DrawShadowedPatchRaven(301, 170, W_CacheLumpName("MANABRT1", PU_CACHE));
+            V_DrawShadowedPatchRaven(301, 184, W_CacheLumpName("MANADIM2", PU_CACHE));
+        }
+        // [JN] Trird weapon?
+        else if (CPlayer->readyweapon == WP_THIRD)
+        {
+            V_DrawShadowedPatchRaven(301, 170, W_CacheLumpName("MANADIM1", PU_CACHE));
+            V_DrawShadowedPatchRaven(301, 184, W_CacheLumpName("MANABRT2", PU_CACHE));
+        }
+        // [JN] Fourth weapon?
+        else
+        {
+            V_DrawShadowedPatchRaven(301, 170, W_CacheLumpName("MANABRT1", PU_CACHE));
+            V_DrawShadowedPatchRaven(301, 184, W_CacheLumpName("MANABRT2", PU_CACHE));
+        }        
+
+        // [JN] Draw ammounts of mana
+        DrINumber(mana_blue, 273, 170);
+        DrINumber(mana_green, 273, 184);
+    }
+
     if (deathmatch)
     {
         temp = 0;
@@ -1409,21 +1464,31 @@ void DrawFullScreenStuff(void)
                 temp += CPlayer->frags[i];
             }
         }
-        DrINumber(temp, 45, 185);
+
+        // [JN] Do not draw frag counter below opened inventory, because it looks aesthetically bad.
+        if (!inventory)
+        DrBNumber(temp, 173, 176);
     }
     if (!inventory)
     {
+        // [JN] Draw health vial
+        V_DrawShadowedPatch(48, 218, W_CacheLumpName("PTN1A0", PU_CACHE));
+
         if (CPlayer->readyArtifact > 0)
         {
-            V_DrawTLPatch(286, 170, W_CacheLumpName("ARTIBOX", PU_CACHE));
-            V_DrawPatch(284, 169,
-                        W_CacheLumpName(patcharti[CPlayer->readyArtifact],
-                                        PU_CACHE));
+            // [JN] Don't draw ARTIBOX, it's too cumbersome
+            // V_DrawTLPatch(240, 170, W_CacheLumpName("ARTIBOX", PU_CACHE));
+            V_DrawShadowedPatchRaven(238, 169, W_CacheLumpName(patcharti[CPlayer->readyArtifact], PU_CACHE));
             if (CPlayer->inventory[inv_ptr].count > 1)
             {
-                DrSmallNumber(CPlayer->inventory[inv_ptr].count, 302, 192);
+                DrSmallNumber(CPlayer->inventory[inv_ptr].count, 256, 191);
             }
         }
+
+        // [JN] Draw ammount of armor
+        DrBNumber(FixedDiv(armor, 5 * FRACUNIT) >> FRACBITS, 46, 176);
+        // [JN] Draw generic armor icon
+        V_DrawShadowedPatch(87, 178, W_CacheLumpName("ARM5A0", PU_CACHE));
     }
     else
     {
