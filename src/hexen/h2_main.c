@@ -179,6 +179,7 @@ void D_BindVariables(void)
     M_BindIntVariable("snd_channels",           &snd_Channels);
 //  M_BindIntVariable("vanilla_savegame_limit", &vanilla_savegame_limit);
 //  M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
+    M_BindIntVariable("mlook",                  &mlook);
 
 
     // [JN] Дополнительные параметры игры

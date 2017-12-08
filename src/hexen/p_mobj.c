@@ -827,6 +827,8 @@ void P_ZMovement(mobj_t * mo)
                         S_StartSound(mo, SFX_PLAYER_LAND);
                     }
                     // haleyjd: removed externdriver crap
+                    // [JN] Mouselook: disable centering while mouselook
+                    if (!mlook)
                     mo->player->centering = true;
                 }
             }

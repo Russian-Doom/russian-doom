@@ -82,8 +82,9 @@ static void CheatScriptFunc1(player_t * player, Cheat_t * cheat);
 static void CheatScriptFunc2(player_t * player, Cheat_t * cheat);
 static void CheatScriptFunc3(player_t * player, Cheat_t * cheat);
 static void CheatRevealFunc(player_t * player, Cheat_t * cheat);
-static void CheatTrackFunc1(player_t * player, Cheat_t * cheat);
-static void CheatTrackFunc2(player_t * player, Cheat_t * cheat);
+// [JN] Disabled. I need "`" key for using without SFX_PLATFORM_STOP sound.
+// static void CheatTrackFunc1(player_t * player, Cheat_t * cheat);
+// static void CheatTrackFunc2(player_t * player, Cheat_t * cheat);
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
@@ -210,13 +211,13 @@ cheatseq_t CheatScriptSeq3 = CHEAT("puke", 2);
 
 cheatseq_t CheatRevealSeq = CHEAT("mapsco", 0);
 
-cheatseq_t CheatTrackSeq1 = CHEAT("`", 0);
-
-cheatseq_t CheatTrackSeq2 = CHEAT("`", 2);
+// [JN] Disabled. I need "`" key for using without SFX_PLATFORM_STOP sound.
+// cheatseq_t CheatTrackSeq1 = CHEAT("`", 0);
+// cheatseq_t CheatTrackSeq2 = CHEAT("`", 2);
 
 static Cheat_t Cheats[] = {
-    {CheatTrackFunc1, &CheatTrackSeq1},
-    {CheatTrackFunc2, &CheatTrackSeq2},
+    // {CheatTrackFunc1, &CheatTrackSeq1},
+    // {CheatTrackFunc2, &CheatTrackSeq2},
     {CheatGodFunc, &CheatGodSeq},
     {CheatNoClipFunc, &CheatNoClipSeq},
     {CheatWeaponsFunc, &CheatWeaponsSeq},
@@ -1952,72 +1953,74 @@ static void CheatRevealFunc(player_t * player, Cheat_t * cheat)
     cheating = (cheating + 1) % 3;
 }
 
+// [JN] Disabled. I need "`" key for using without SFX_PLATFORM_STOP sound.
+
 //===========================================================================
 //
 // CheatTrackFunc1
 //
 //===========================================================================
-
-static void CheatTrackFunc1(player_t * player, Cheat_t * cheat)
-{
-    char buffer[80];
-
-    if (!cdmusic)
-    {
-        return;
-    }
-
-    if (I_CDMusInit() == -1)
-    {
-        P_SetMessage(player, "JIB<RF BYBWBFKBPFWBB RJVGFRN-LBCRF", true);	// ОШИБКА ИНИЦИАЛИЗАЦИИ КОМПАКТ-ДИСКА
-    }
-
-    M_snprintf(buffer, sizeof(buffer), "ERF:BNT :TKFTVE> LJHJ:RE (%.2d - %.2d);\n",	// УКАЖИТЕ ЖЕЛАЕМУЮ ДОРОЖКУ (%.2d - %.2d):
-               I_CDMusFirstTrack(), I_CDMusLastTrack());
-    P_SetMessage(player, buffer, true);
-}
-
+// 
+// static void CheatTrackFunc1(player_t * player, Cheat_t * cheat)
+// {
+//     char buffer[80];
+// 
+//     if (!cdmusic)
+//     {
+//         return;
+//     }
+// 
+//     if (I_CDMusInit() == -1)
+//     {
+//         P_SetMessage(player, "JIB<RF BYBWBFKBPFWBB RJVGFRN-LBCRF", true);	// ОШИБКА ИНИЦИАЛИЗАЦИИ КОМПАКТ-ДИСКА
+//     }
+// 
+//     M_snprintf(buffer, sizeof(buffer), "ERF:BNT :TKFTVE> LJHJ:RE (%.2d - %.2d);\n",	// УКАЖИТЕ ЖЕЛАЕМУЮ ДОРОЖКУ (%.2d - %.2d):
+//                I_CDMusFirstTrack(), I_CDMusLastTrack());
+//     P_SetMessage(player, buffer, true);
+// }
+// 
 //===========================================================================
 //
 // CheatTrackFunc2
 //
 //===========================================================================
-
-static void CheatTrackFunc2(player_t * player, Cheat_t * cheat)
-{
-    char buffer[80];
-    int track;
-    char args[2];
-
-    cht_GetParam(cheat->seq, args);
-
-    if (!cdmusic)
-    {
-        return;
-    }
-
-    track = (args[0] - '0') * 10 + (args[1] - '0');
-    if (track < I_CDMusFirstTrack() || track > I_CDMusLastTrack())
-    {
-        P_SetMessage(player, "YTRJHHTRNYSQ YJVTH NHTRF\n", true);		// НЕКОРРЕКТНЫЙ НОМЕР ТРЕКА
-        return;
-    }
-
-    if (track == S_GetCurrentCDTrack())
-    {
-        return;
-    }
-
-    if (!S_StartCustomCDTrack(track))
-    {
-        M_snprintf(buffer, sizeof(buffer),
-                   "JIB<RF GHB GJGSNRT GHJBUHFNM NHTR; %.2d\n", track);	// ОШИБКА ПРИ ПОПЫТКЕ ПРОИГРАТЬ ТРЕК: %.2d\n
-        P_SetMessage(player, buffer, true);
-    }
-    else
-    {
-        // No error encountered while attempting to play the track
-        M_snprintf(buffer, sizeof(buffer), "GHJBUHSDFYBT NHTRF; %.2d\n", track);	// ПРОИГРЫВАНИЕ ТРЕКА %.2d
-        P_SetMessage(player, buffer, true);
-    }
-}
+// 
+// static void CheatTrackFunc2(player_t * player, Cheat_t * cheat)
+// {
+//     char buffer[80];
+//     int track;
+//     char args[2];
+// 
+//     cht_GetParam(cheat->seq, args);
+// 
+//     if (!cdmusic)
+//     {
+//         return;
+//     }
+// 
+//     track = (args[0] - '0') * 10 + (args[1] - '0');
+//     if (track < I_CDMusFirstTrack() || track > I_CDMusLastTrack())
+//     {
+//         P_SetMessage(player, "YTRJHHTRNYSQ YJVTH NHTRF\n", true);		// НЕКОРРЕКТНЫЙ НОМЕР ТРЕКА
+//         return;
+//     }
+// 
+//     if (track == S_GetCurrentCDTrack())
+//     {
+//         return;
+//     }
+// 
+//     if (!S_StartCustomCDTrack(track))
+//     {
+//         M_snprintf(buffer, sizeof(buffer),
+//                    "JIB<RF GHB GJGSNRT GHJBUHFNM NHTR; %.2d\n", track);	// ОШИБКА ПРИ ПОПЫТКЕ ПРОИГРАТЬ ТРЕК: %.2d\n
+//         P_SetMessage(player, buffer, true);
+//     }
+//     else
+//     {
+//         // No error encountered while attempting to play the track
+//         M_snprintf(buffer, sizeof(buffer), "GHJBUHSDFYBT NHTRF; %.2d\n", track);	// ПРОИГРЫВАНИЕ ТРЕКА %.2d
+//         P_SetMessage(player, buffer, true);
+//     }
+// }

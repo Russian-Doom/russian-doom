@@ -801,6 +801,9 @@ boolean G_Responder(event_t * ev);
 
 void G_ScreenShot(void);
 
+// [JN] Mouselook
+extern int mlook;
+
 // [JN] Дополнительные параметры игры
 
 // - Графика -
