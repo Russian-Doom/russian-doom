@@ -748,6 +748,8 @@ static int oldkeys = -1;
 
 extern boolean automapactive;
 
+extern int screenblocks;
+
 void SB_Drawer(void)
 {
     // Sound info debug stuff
@@ -758,6 +760,7 @@ void SB_Drawer(void)
     CPlayer = &players[consoleplayer];
     if (viewheight == SCREENHEIGHT && !automapactive)
     {
+        if (screenblocks == 11) // [JN] Draw only in 11 screen size, 12 is clean full screen
         DrawFullScreenStuff();
         SB_state = -1;
     }
