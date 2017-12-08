@@ -218,6 +218,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     int pClass;
     static int  joybspeed_old = 2;
     extern boolean MenuActive;
+    extern boolean askforquit;
 
     extern boolean artiskip;
 
@@ -666,7 +667,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     }
 
    // [JN] Mouselook: initials
-   if (mlook && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive)
+   if (mlook && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive && !askforquit)
    {
        players[consoleplayer].lookdir += mousey / 8; 
        

@@ -321,7 +321,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     int look, arti;
     int flyheight;
     static int  joybspeed_old = 2;
-
+    extern boolean askforquit;
     extern boolean noartiskip;
 
     // haleyjd: removed externdriver crap
@@ -694,7 +694,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     }
 
     // [JN] Mouselook: initials
-    if (mlook && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive)
+    if (mlook && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive && !askforquit)
     {
         players[consoleplayer].lookdir += mousey / 8; 
         
