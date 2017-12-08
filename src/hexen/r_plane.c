@@ -422,6 +422,8 @@ void R_DrawPlanes(void)
                 skyTexture = texturetranslation[Sky1Texture];
                 offset2 = Sky2ColumnOffset >> 16;
                 skyTexture2 = texturetranslation[Sky2Texture];
+                // [JN] Tutti-Frutti: how it should be applied?
+                // dc_texheight = textureheight[skytexture]>>FRACBITS;
                 for (x = pl->minx; x <= pl->maxx; x++)
                 {
                     dc_yl = pl->top[x];
@@ -470,6 +472,8 @@ void R_DrawPlanes(void)
                     offset = Sky1ColumnOffset >> 16;
                     skyTexture = texturetranslation[Sky1Texture];
                 }
+                // [JN] Tutti-Frutti: how it should be applied?
+                // dc_texheight = textureheight[skytexture]>>FRACBITS;
                 for (x = pl->minx; x <= pl->maxx; x++)
                 {
                     dc_yl = pl->top[x];
