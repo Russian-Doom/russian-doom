@@ -802,7 +802,7 @@ static void DrawOptionsMenu(void)
     {
         MN_DrTextB("DSRK.", 213, 50);	// ВЫКЛ.
     }
-    DrawSlider(&OptionsMenu, 3, 10, mouseSensitivity);
+    DrawSlider(&OptionsMenu, 3, 9, mouseSensitivity);
 }
 
 //---------------------------------------------------------------------------
