@@ -92,6 +92,14 @@ extern int key_arti_teleportother;
 extern int key_arti_egg;
 extern int key_arti_invulnerability;
 
+extern int key_arti_superhealth;
+extern int key_arti_boostarmor;
+extern int key_arti_boostmana;
+extern int key_arti_summon;
+extern int key_arti_fly;
+extern int key_arti_speed;
+extern int key_arti_healingradius;
+
 extern int key_demo_quit;
 extern int key_spy;
 extern int key_prevweapon;

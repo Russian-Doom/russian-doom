@@ -439,6 +439,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     }
 
     // Artifact hot keys
+    // [JN] Extended to all of them.
     if (gamekeydown[key_arti_all] && !cmd->arti)
     {
         gamekeydown[key_arti_all] = false;     // Use one of each artifact
@@ -480,6 +481,47 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     {
         gamekeydown[key_arti_invulnerability] = false;
         cmd->arti = arti_invulnerability;
+    }
+    // [JN] The rest of Artifacts:
+    else if (gamekeydown[key_arti_superhealth] && !cmd->arti && (players[consoleplayer].mo->health < MAXHEALTH))
+    {
+        gamekeydown[key_arti_superhealth] = false;
+        cmd->arti = arti_superhealth;
+    }
+    else if (gamekeydown[key_arti_boostarmor] && !cmd->arti)
+    {
+        gamekeydown[key_arti_boostarmor] = false;
+        cmd->arti = arti_boostarmor;
+    }
+    else if (gamekeydown[key_arti_boostmana] && !cmd->arti)
+    {
+        gamekeydown[key_arti_boostmana] = false;
+        cmd->arti = arti_boostmana;
+    }
+    else if (gamekeydown[key_arti_summon] && !cmd->arti)
+    {
+        gamekeydown[key_arti_summon] = false;
+        cmd->arti = arti_summon;
+    }
+    else if (gamekeydown[key_arti_fly] && !cmd->arti)
+    {
+        gamekeydown[key_arti_fly] = false;
+        cmd->arti = arti_fly;
+    }
+    else if (gamekeydown[key_arti_speed] && !cmd->arti)
+    {
+        gamekeydown[key_arti_speed] = false;
+        cmd->arti = arti_speed;
+    }
+    else if (gamekeydown[key_arti_torch] && !cmd->arti)
+    {
+        gamekeydown[key_arti_torch] = false;
+        cmd->arti = arti_torch;
+    }
+    else if (gamekeydown[key_arti_healingradius] && !cmd->arti)
+    {
+        gamekeydown[key_arti_healingradius] = false;
+        cmd->arti = arti_healingradius;
     }
 
 //

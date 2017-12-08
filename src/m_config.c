@@ -1584,6 +1584,21 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_KEY(key_arti_invulnerability),
+    
+    //!
+    // @game hexen
+    //
+    // [JN] Now we can bind all the Artifacts.
+    //
+
+    CONFIG_VARIABLE_KEY(key_arti_superhealth),
+    CONFIG_VARIABLE_KEY(key_arti_boostarmor),
+    CONFIG_VARIABLE_KEY(key_arti_boostmana),
+    CONFIG_VARIABLE_KEY(key_arti_summon),
+    CONFIG_VARIABLE_KEY(key_arti_fly),
+    CONFIG_VARIABLE_KEY(key_arti_speed),
+    CONFIG_VARIABLE_KEY(key_arti_torch),
+    CONFIG_VARIABLE_KEY(key_arti_healingradius),
 
     //!
     // Key to re-display last message.

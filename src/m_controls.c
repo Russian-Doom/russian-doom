@@ -69,7 +69,6 @@ int key_arti_morphegg = 0;
 int key_arti_chaosdevice = 0;
 int key_arti_shadowsphere = 0;
 int key_arti_wings = 0;
-int key_arti_torch = 0;
 
 //
 // Hexen key controls
@@ -85,6 +84,14 @@ int key_arti_teleport        = '8';
 int key_arti_teleportother   = '7';
 int key_arti_egg             = '6';
 int key_arti_invulnerability = '5';
+int key_arti_superhealth = 0;
+int key_arti_boostarmor = 0;
+int key_arti_boostmana = 0;
+int key_arti_summon = 0;
+int key_arti_fly = 0;
+int key_arti_speed = 0;
+int key_arti_torch = 0;
+int key_arti_healingradius = 0;
 
 //
 // Strife key controls
@@ -304,6 +311,15 @@ void M_BindHexenControls(void)
     M_BindIntVariable("key_arti_teleportother",   &key_arti_teleportother);
     M_BindIntVariable("key_arti_egg",             &key_arti_egg);
     M_BindIntVariable("key_arti_invulnerability", &key_arti_invulnerability);
+    
+    M_BindIntVariable("key_arti_superhealth",      &key_arti_superhealth);
+    M_BindIntVariable("key_arti_boostarmor",       &key_arti_boostarmor);
+    M_BindIntVariable("key_arti_boostmana",        &key_arti_boostmana);
+    M_BindIntVariable("key_arti_summon",           &key_arti_summon);
+    M_BindIntVariable("key_arti_fly",              &key_arti_fly);
+    M_BindIntVariable("key_arti_speed",            &key_arti_speed);
+    M_BindIntVariable("key_arti_torch",            &key_arti_torch);
+    M_BindIntVariable("key_arti_healingradius",    &key_arti_healingradius);
 }
 
 void M_BindStrifeControls(void)

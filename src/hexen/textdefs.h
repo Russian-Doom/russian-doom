@@ -178,7 +178,7 @@
 #define TXT_CHEATSOUNDOFF		"JNKFLRF PDERF JNRK>XTYF"			// ОТЛАДКА ЗВУКА ОТКЛЮЧЕНА				SOUND DEBUG OFF
 #define TXT_CHEATTICKERON		"CXTNXBR RFLHJDJQ XFCNJNS DRK>XTY"	// СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ВКЛЮЧЕН		TICKER ON
 #define TXT_CHEATTICKEROFF		"CXTNXBR RFLHJDJQ XFCNJNS JNRK>XTY"	// СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ОТКЛЮЧЕН	TICKER OFF
-#define TXT_CHEATARTIFACTS3		"DCT FHNBAFRNS"						// ВСЕ АРТИФАКТЫ						ALL ARTIFACTS
+#define TXT_CHEATARTIFACTS3		"DCT FHNTAFRNS"						// ВСЕ АРТЕФАКТЫ						ALL ARTIFACTS
 #define TXT_CHEATARTIFACTSFAIL	"YTRJHHTRNYSQ DDJL"					// НЕКОРРЕНТНЫЙ ВВОД					BAD INPUT
 #define TXT_CHEATWARP			"GTHTVTOTYBT YF EHJDTYM"			// ПЕРЕМЕЩЕНИЕ НА УРОВЕНЬ				LEVEL WARP
 #define TXT_CHEATSCREENSHOT		"CYBVJR \"RHFYF"					// СНИМОК ЭКРАНА						SCREENSHOT

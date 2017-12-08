@@ -55,7 +55,9 @@ static int *controls[] = { &key_left, &key_right, &key_up, &key_down,
                            &key_arti_all, &key_arti_health, &key_arti_poisonbag,
                            &key_arti_blastradius, &key_arti_teleport,
                            &key_arti_teleportother, &key_arti_egg,
-                           &key_arti_invulnerability,
+                           &key_arti_invulnerability, &key_arti_superhealth, &key_arti_boostarmor,
+                           &key_arti_boostmana, &key_arti_summon, &key_arti_fly, &key_arti_speed,
+                           &key_arti_torch, &key_arti_healingradius,
                            &key_prevweapon, &key_nextweapon, NULL };
 
 static int *menu_nav[] = { &key_menu_activate, &key_menu_up, &key_menu_down,
@@ -276,6 +278,15 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
             AddKeyControl(table, "Юмблема изгнани€", &key_arti_teleportother);
             AddKeyControl(table, "Свиноморфер",      &key_arti_egg);
             AddKeyControl(table, "Символ защитника", &key_arti_invulnerability);
+            
+            AddKeyControl(table, "Мистическа€ урна",            &key_arti_superhealth);
+            AddKeyControl(table, "Наручи из драконьей кожи",    &key_arti_boostarmor);
+            AddKeyControl(table, "Чаша могущества",             &key_arti_boostmana);
+            AddKeyControl(table, "Темный слуга",                &key_arti_summon);
+            AddKeyControl(table, "Крыль€ гнева",                &key_arti_fly);
+            AddKeyControl(table, "Сапоги-скороходы",            &key_arti_speed);
+            AddKeyControl(table, "Факел",                       &key_arti_torch);
+            AddKeyControl(table, "Чары магического единства",   &key_arti_healingradius);
         }
     }
     else
