@@ -269,6 +269,9 @@ void M_BindBaseControls(void)
     M_BindIntVariable("key_toggleautorun",   &key_toggleautorun);
     M_BindIntVariable("key_togglemlook",     &key_togglemlook);
 
+    M_BindIntVariable("key_lookup",         &key_lookup);
+    M_BindIntVariable("key_lookdown",       &key_lookdown);
+    M_BindIntVariable("key_lookcenter",     &key_lookcenter);
 }
 
 void M_BindHereticControls(void)
@@ -276,10 +279,6 @@ void M_BindHereticControls(void)
     M_BindIntVariable("key_flyup",          &key_flyup);
     M_BindIntVariable("key_flydown",        &key_flydown);
     M_BindIntVariable("key_flycenter",      &key_flycenter);
-
-    M_BindIntVariable("key_lookup",         &key_lookup);
-    M_BindIntVariable("key_lookdown",       &key_lookdown);
-    M_BindIntVariable("key_lookcenter",     &key_lookcenter);
 
     M_BindIntVariable("key_invleft",        &key_invleft);
     M_BindIntVariable("key_invright",       &key_invright);

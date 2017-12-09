@@ -1024,6 +1024,7 @@ PTR_AimTraverse (intercept_t* in)
 //
 // PTR_ShootTraverse
 //
+// TODO: Mouselook - add support for floor/ceiling hitting
 boolean PTR_ShootTraverse (intercept_t* in)
 {
     fixed_t		x;

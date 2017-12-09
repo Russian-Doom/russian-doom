@@ -33,6 +33,7 @@
 #include "r_sky.h"
 
 extern int invul_sky;   // [JN] Неуязвимость окрашивает небо
+extern int mlook;
 
 planefunction_t floorfunc;
 planefunction_t ceilingfunc;
@@ -475,7 +476,12 @@ void R_DrawPlanes (void)
         // sky flat
         if (pl->picnum == skyflatnum)
         {
+            // [JN] Original:
             dc_iscale = pspriteiscale>>(detailshift && !hires);
+            
+            // [JN] Mouselook addition:
+            if (mlook)
+            dc_iscale = dc_iscale * 114 / 228;
 
             // Sky is allways drawn full bright,
             //  i.e. colormaps[0] is used.

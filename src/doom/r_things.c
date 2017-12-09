@@ -848,6 +848,9 @@ void R_DrawPSprite (pspdef_t* psp)
         vis->startfrac = 0;
     }
 
+    // [JN] Mouselook: also move HUD weapons while mouse look
+    vis->texturemid += FixedMul(((centery - viewheight / 2) << FRACBITS), vis->xiscale);
+
     if (vis->x1 > x1)
     vis->startfrac += vis->xiscale*(vis->x1-x1);
 

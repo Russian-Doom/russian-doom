@@ -127,10 +127,10 @@ void ConfigMouse(void)
 
     TXT_AddWidgets(window,
         TXT_NewCheckBox("Разрешить использование мыши",                 &usemouse),
+            // TXT_TABLE_OVERFLOW_RIGHT,
+            // TXT_If(gamemission == doom, TXT_NewInvertedCheckBox("Разрешить вертикальное перемещение",   &novert)),
             TXT_TABLE_OVERFLOW_RIGHT,
-            TXT_If(gamemission == doom, TXT_NewInvertedCheckBox("Разрешить вертикальное перемещение",   &novert)),
-            TXT_TABLE_OVERFLOW_RIGHT,
-            TXT_If(gamemission == heretic || gamemission == hexen, TXT_NewCheckBox("Вертикальный обзор мышью",   &mlook)),
+            TXT_NewCheckBox("Вертикальный обзор мышью",   &mlook),
         TXT_TABLE_OVERFLOW_RIGHT,
         TXT_NewCheckBox("Захват мыши в оконном режиме",                 &grabmouse),
         TXT_TABLE_OVERFLOW_RIGHT,

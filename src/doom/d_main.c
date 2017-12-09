@@ -412,6 +412,7 @@ void D_BindVariables(void)
     M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("snd_channels",           &snd_channels);
     M_BindIntVariable("show_endoom",            &show_endoom);
+    M_BindIntVariable("mlook",                  &mlook);
 
     // [JN] Дополнительные параметры игры
     

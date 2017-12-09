@@ -451,19 +451,6 @@
 #define STSTR_BEHOLD    "v=,tccv>< s=,thc>< i=ytd>< r=rjc>< a=rhn>< l=dbp>" // m=бессм., ы=берс., ш=нев., к=кос., ф=крт., д=виз.
 #define STSTR_BEHOLDX   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
 
-#define STSTR_MASSACRE  "dct vjycnhs eybxnj;tys"                    // Все монстры уничтожены
-
-// Специфические сообщения порта
-#define STSTR_TESTCTRLS "ht;bv ghjdthrb eghfdktybz"                 // Режим проверки управления
-
-#define STSTR_SCRNSHT   "crhbyijn cj[hfyty"                         // Скриншот сохранен
-
-#define STSTR_ALWAYSRUN "gjcnjzyysq ,tu "                           // Постоянный бег
-#define STSTR_ALWRUNON  "drk.xty"                                   // включен
-#define STSTR_ALWRUNOFF "dsrk.xty"                                  // выключен
-
-#define STSTR_VERSION   "dthcbz 2>4 (d hfphf,jnrt)"                 // Версия 2.4 (в разработке)
-
 //
 //	F_Finale.C
 //
@@ -1137,6 +1124,22 @@
 #define CC_SPIDER   "gfer-ghtldjlbntkm"     // Паук-предводитель
 #define CC_CYBER    "rb,thltvjy"            // Кибердемон
 #define CC_HERO     "yfi uthjq"             // Наш Герой
+
+// Специфические сообщения порта
+#define STSTR_TESTCTRLS "ht;bv ghjdthrb eghfdktybz"                 // Режим проверки управления
+#define STSTR_MASSACRE  "dct vjycnhs eybxnj;tys"                    // Все монстры уничтожены
+
+#define STSTR_SCRNSHT   "crhbyijn cj[hfyty"                         // Скриншот сохранен
+
+#define STSTR_ALWAYSRUN "gjcnjzyysq ,tu "                           // Постоянный бег
+#define STSTR_ALWRUNON  "drk.xty"                                   // включен
+#define STSTR_ALWRUNOFF "dsrk.xty"                                  // выключен
+
+#define STSRT_MOUSELOOK "j,pjh vsim. "                              // Обзор мышью 
+#define STSTR_MLOOK_ON  "drk.xty"                                   // включен
+#define STSTR_MLOOK_OFF "dsrk.xty"                                  // выключен
+
+#define STSTR_VERSION   "dthcbz 2>4 (d hfphf,jnrt)"                 // Версия 2.4 (в разработке)
 
 
 #endif

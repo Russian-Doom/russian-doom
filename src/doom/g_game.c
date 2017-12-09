@@ -201,6 +201,7 @@ static const struct
 
 static boolean  gamekeydown[NUMKEYS]; 
 static int      turnheld;   // for accelerative turning
+static int      lookheld;
 
 static boolean  mousearray[MAX_MOUSE_BUTTONS + 1];
 static boolean *mousebuttons = &mousearray[1];  // allow [-1]
@@ -369,8 +370,10 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     boolean     bstrafe; 
     int         speed;
     int         tspeed; 
+    int         lspeed;
     int         forward;
     int         side;
+    int         look;
     static int  joybspeed_old = 2;
 
     memset(cmd, 0, sizeof(ticcmd_t));
@@ -390,7 +393,7 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // [JN] Модификатор мнопки бега
     speed ^= speedkeydown();
  
-    forward = side = 0;
+    forward = side = look = 0;
 
     // use two stage accelerative turning
     // on the keyboard and joystick
@@ -406,6 +409,23 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         tspeed = 2; // slow turn 
     else 
         tspeed = speed;
+
+    if (gamekeydown[key_lookdown] || gamekeydown[key_lookup])
+    {
+        lookheld += ticdup;
+    }
+    else
+    {
+        lookheld = 0;
+    }
+    if (lookheld < SLOWTURNTICS)
+    {
+        lspeed = 1;
+    }
+    else
+    {
+        lspeed = 2;
+    }
 
     // [crispy] toggle always run
     if (gamekeydown[key_toggleautorun])
@@ -604,8 +624,6 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         } 
     }
 
-    forward += mousey; 
-
     if (strafe) 
         side += mousex*2; 
     else 
@@ -615,6 +633,48 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     {
         // No movement in the previous frame
         testcontrols_mousespeed = 0;
+    }
+
+    // [JN] Mouselook: toggling
+    if (gamekeydown[key_togglemlook])
+    {
+        static char mlookmsg[24];
+
+        if (!mlook)
+        {
+            mlook = true;
+        }
+        else
+        {
+            mlook = false;
+            look = TOCENTER;
+        }
+
+        M_snprintf(mlookmsg, sizeof(mlookmsg), STSRT_MOUSELOOK "%s",
+            (mlook == true) ? STSTR_MLOOK_ON : STSTR_MLOOK_OFF);
+        players[consoleplayer].message = mlookmsg;
+        
+        S_StartSound(NULL, sfx_swtchn);
+
+        gamekeydown[key_togglemlook] = false;
+    }
+
+    // [JN] Mouselook: handling
+    if (!demoplayback && players[consoleplayer].playerstate == PST_LIVE && !paused && !menuactive)
+    {
+        players[consoleplayer].lookdir += mousey / 8; 
+        
+        if (players[consoleplayer].lookdir > 90)
+            players[consoleplayer].lookdir = 90;
+        else
+        if (players[consoleplayer].lookdir < -110)
+            players[consoleplayer].lookdir = -110;
+        
+        if (look < 0)
+        {
+            look += 16;
+        }
+        cmd->lookfly = look;
     }
 
     mousex = mousey = 0; 

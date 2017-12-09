@@ -80,6 +80,9 @@ int G_VanillaVersionCode(void);
 // extern int vanilla_savegame_limit;
 // extern int vanilla_demo_limit;
 
+// [JN] Mouselook
+extern int mlook;
+
 // [JN] Дополнительные параметры игры
 
 // - Интерфейс -

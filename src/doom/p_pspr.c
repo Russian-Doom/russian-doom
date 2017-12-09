@@ -49,6 +49,7 @@
 // во время обычной атаки и атаки непосредственно противника.
 boolean chainsaw_attack_swing;
 
+extern int mlook;
 
 //
 // P_SetPsprite
@@ -636,6 +637,12 @@ void P_BulletSlope (mobj_t*	mo)
 	{
 	    an -= 2<<26;
 	    bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
+	}
+    // [JN] Mouselook: also count vertical angles
+    if (!linetarget && mlook)
+	{
+	    an += 2 << 26;
+	    bulletslope = (mo->player->lookdir << FRACBITS) / 173;
 	}
     }
 }

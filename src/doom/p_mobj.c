@@ -42,7 +42,7 @@
 void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);
 
-
+extern int mlook;
 extern int colored_blood;           // [JN] Кровь разных цветов
 extern int red_resurrection_flash;  // [JN] Одиночный звук закрытия быстрой двери
 extern int agressive_lost_souls;    // [JN] Повышенная агрессивность Потерянных душ
@@ -842,6 +842,7 @@ void P_SpawnPlayer (mapthing_t* mthing)
     p->extralight = 0;
     p->fixedcolormap = 0;
     p->viewheight = VIEWHEIGHT;
+    p->lookdir = 0;
 
     // setup gun psprite
     P_SetupPsprites (p);
@@ -1222,6 +1223,13 @@ P_SpawnPlayerMissile
 	    an = source->angle;
 	    slope = 0;
 	}
+
+    // [JN] Mouselook: also count vertical angles
+    if (!linetarget && mlook)
+    {
+        an = source->angle;
+        slope = ((source->player->lookdir) << FRACBITS) / 173;
+    }
     }
 		
     x = source->x;

@@ -193,7 +193,8 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
     txt_window_t *window;
     txt_scrollpane_t *scrollpane;
     txt_table_t *table;
-    boolean extra_keys = gamemission == heretic
+    boolean extra_keys = gamemission == doom
+                      || gamemission == heretic
                       || gamemission == hexen
                       || gamemission == strife;
 
@@ -214,9 +215,12 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 
         AddSectionLabel(table, "Взгл€д", false);
 
-        AddKeyControl(table, "Смотреть вверх", &key_lookup);
-        AddKeyControl(table, "Смотреть вниз",  &key_lookdown);
-        AddKeyControl(table, "Центрировать",   &key_lookcenter);
+        if (gamemission == heretic || gamemission == hexen)
+        {
+            AddKeyControl(table, "Смотреть вверх", &key_lookup);
+            AddKeyControl(table, "Смотреть вниз",  &key_lookdown);
+            AddKeyControl(table, "Центрировать",   &key_lookcenter);
+        }
         AddKeyControl(table, "Обзор мышью",    &key_togglemlook);
 
         if (gamemission == heretic || gamemission == hexen)
@@ -228,26 +232,30 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
             AddKeyControl(table, "Центрировать", &key_flycenter);
         }
 
-        AddSectionLabel(table, "Инвентарь", true);
-
-        AddKeyControl(table, "Пролистать влево",  &key_invleft);
-        AddKeyControl(table, "Пролистать вправо", &key_invright);
-
-        if (gamemission == strife)
+        if (gamemission == heretic || gamemission == hexen)
         {
-            AddKeyControl(table, "Пролистать в начало",  &key_invhome);
-            AddKeyControl(table, "Пролистать в конец",   &key_invend);
-            // AddKeyControl(table, "Query",             &key_invquery);
-            AddKeyControl(table, "Бросить предмет",      &key_invdrop);
-            AddKeyControl(table, "Показать оружие",      &key_invpop);
-            AddKeyControl(table, "Показать задани€",     &key_mission);
-            AddKeyControl(table, "Показать ключи",       &key_invkey);
-            AddKeyControl(table, "Использовать предмет", &key_invuse);
-            AddKeyControl(table, "Быстрое лечение",      &key_usehealth);
-        }
-        else
-        {
-            AddKeyControl(table, "Использовать артефакт ", &key_useartifact);
+            AddSectionLabel(table, "Инвентарь", true);
+
+            AddKeyControl(table, "Пролистать влево",  &key_invleft);
+            AddKeyControl(table, "Пролистать вправо", &key_invright);
+
+
+            if (gamemission == strife)
+            {
+                AddKeyControl(table, "Пролистать в начало",  &key_invhome);
+                AddKeyControl(table, "Пролистать в конец",   &key_invend);
+                // AddKeyControl(table, "Query",             &key_invquery);
+                AddKeyControl(table, "Бросить предмет",      &key_invdrop);
+                AddKeyControl(table, "Показать оружие",      &key_invpop);
+                AddKeyControl(table, "Показать задани€",     &key_mission);
+                AddKeyControl(table, "Показать ключи",       &key_invkey);
+                AddKeyControl(table, "Использовать предмет", &key_invuse);
+                AddKeyControl(table, "Быстрое лечение",      &key_usehealth);
+            }
+            else
+            {
+                AddKeyControl(table, "Использовать артефакт ", &key_useartifact);
+            }
         }
 
         if (gamemission == heretic)
