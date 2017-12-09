@@ -42,7 +42,7 @@ int key_use = 'e';
 int key_strafe = KEY_RALT;
 int key_speed = KEY_RSHIFT; 
 int key_toggleautorun = KEY_CAPSLOCK;
-int key_togglemlook = 0;
+int key_togglemlook = '`';
 
 // 
 // Heretic keyboard controls
