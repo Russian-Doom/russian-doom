@@ -242,11 +242,21 @@ void P_DeathThink (player_t* player)
     onground = (player->mo->z <= player->mo->floorz);
     P_CalcHeight (player);
 
+    // [JN] Mouselook: smoothed lookdir centering while dying
     if (mlook)
     {
-        // [JN] Mouselook: centering player's view.
-        // TODO: make it smoother
-        player->lookdir = TOCENTER;
+        if (player->lookdir > 0)
+        {
+            player->lookdir -= 6;
+        }
+        else if (player->lookdir < 0)
+        {
+            player->lookdir += 6;
+        }
+        if (abs(player->lookdir) < 6)
+        {
+            player->lookdir = 0;
+        }
     }
 
     if (player->attacker && player->attacker != player->mo)
