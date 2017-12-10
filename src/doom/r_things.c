@@ -674,13 +674,13 @@ void R_ProjectSprite (mobj_t* thing)
             vis->colormap = fullbrights_cpos_attack_2[index];
 
             // Cacodemon (S_HEAD_ATK3)
-            else if (thing->type == MT_HEAD && (thing->frame == 0 || thing->frame == 1 || thing->frame == 2))
+            else if (thing->type == MT_HEAD && (thing->frame == 1 || thing->frame == 2))
             vis->colormap = fullbrights_caco_attack_1[index];
             else if (thing->type == MT_HEAD && thing->frame == 3)
             vis->colormap = fullbrights_caco_attack_2[index];
 
             // Pain Elemental
-            else if (thing->type == MT_PAIN)
+            else if (thing->type == MT_PAIN && (thing->frame == 3 || thing->frame == 4))
             vis->colormap = fullbrights_pain_elemental[index];
 
             // Hell Knight:
@@ -802,6 +802,25 @@ void R_AddSprites (sector_t* sec)
         fullbrights_greenonly1 = fullbright_greenonly1[0];
         fullbrights_dimmeditems = fullbright_dimmeditems[0];
         fullbrights_redonly = fullbright_redonly[0];
+        fullbrights_poss_attack = fullbright_poss_attack[0];
+        fullbrights_spos_attack = fullbright_spos_attack[0];
+        fullbrights_cpos_attack_1 = fullbright_cpos_attack_1[0];
+        fullbrights_cpos_attack_2 = fullbright_cpos_attack_2[0];
+        fullbrights_caco_attack_1 = fullbright_caco_attack_1[0];
+        fullbrights_caco_attack_2 = fullbright_caco_attack_2[0];
+        fullbrights_pain_elemental = fullbright_pain_elemental[0];
+        fullbrights_lost_soul_1 = fullbright_lost_soul_1[0];
+        fullbrights_lost_soul_2 = fullbright_lost_soul_2[0];
+        fullbrights_bspi_attack_1 = fullbright_bspi_attack_1[0];
+        fullbrights_bspi_attack_2 = fullbright_bspi_attack_2[0];
+        fullbrights_skel_attack = fullbright_skel_attack[0];
+        fullbrights_fatt_attack = fullbright_fatt_attack[0];
+        fullbrights_sswv_attack = fullbright_sswv_attack[0];
+        fullbrights_torches = fullbright_torches[0];
+        fullbrights_floor_lamp = fullbright_floor_lamp[0];
+        fullbrights_tech_lamps = fullbright_tech_lamps[0];
+        fullbrights_flam_barrel = fullbright_flam_barrel[0];
+        fullbrights_expl_barrel = fullbright_expl_barrel[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
