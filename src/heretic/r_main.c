@@ -23,6 +23,7 @@
 #include "doomdef.h"
 #include "m_bbox.h"
 #include "r_local.h"
+#include "p_local.h"
 #include "tables.h"
 
 int viewangleoffset;
@@ -773,7 +774,7 @@ void R_SetupFrame(player_t * player)
     extralight = player->extralight;
     viewz = player->viewz;
 
-    tempCentery = viewheight / 2 + ((player->lookdir) << hires) * screenblocks / 10;
+    tempCentery = viewheight / 2 + ((player->lookdir / MLOOKUNIT) << hires) * (screenblocks < 11 ? screenblocks : 11) / 10;
     if (centery != tempCentery)
     {
         centery = tempCentery;

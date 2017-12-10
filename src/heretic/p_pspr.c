@@ -817,7 +817,7 @@ void P_BulletSlope(mobj_t * mo)
         if (!linetarget)
         {
             an += 2 << 26;
-            bulletslope = (mo->player->lookdir << FRACBITS) / 173;
+            bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 173;
         }
     }
 }

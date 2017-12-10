@@ -116,6 +116,7 @@ boolean P_UseArtifact(player_t * player, artitype_t arti);
 int P_GetPlayerNum(player_t * player);
 void P_TeleportOther(mobj_t * victim);
 void ResetBlasted(mobj_t * mo);
+#define MLOOKUNIT	8
 
 // ***** P_MOBJ *****
 

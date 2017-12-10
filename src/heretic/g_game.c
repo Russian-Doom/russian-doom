@@ -696,13 +696,13 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     // [JN] Mouselook: initials
     if (mlook && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive && !askforquit && !paused)
     {
-        players[consoleplayer].lookdir += mousey / 8; 
+        players[consoleplayer].lookdir += mousey;
         
-         if (players[consoleplayer].lookdir > 90)
-             players[consoleplayer].lookdir = 90;
+         if (players[consoleplayer].lookdir > 90 * MLOOKUNIT)
+             players[consoleplayer].lookdir = 90 * MLOOKUNIT;
          else
-         if (players[consoleplayer].lookdir < -110)
-             players[consoleplayer].lookdir = -110;
+         if (players[consoleplayer].lookdir < -110 * MLOOKUNIT)
+             players[consoleplayer].lookdir = -110 * MLOOKUNIT;
     }
 
     // [JN] Mouselook: toggling
