@@ -75,6 +75,26 @@ lighttable_t** fullbrights_greenonly2;
 lighttable_t** fullbrights_greenonly3;
 lighttable_t** fullbrights_orangeyellow;
 lighttable_t** fullbrights_dimmeditems;
+// [JN] Extra brightmaps
+lighttable_t** fullbrights_poss_attack;
+lighttable_t** fullbrights_spos_attack;
+lighttable_t** fullbrights_cpos_attack_1;
+lighttable_t** fullbrights_cpos_attack_2;
+lighttable_t** fullbrights_caco_attack_1;
+lighttable_t** fullbrights_caco_attack_2;
+lighttable_t** fullbrights_pain_elemental;
+lighttable_t** fullbrights_lost_soul_1;
+lighttable_t** fullbrights_lost_soul_2;
+lighttable_t** fullbrights_bspi_attack_1;
+lighttable_t** fullbrights_bspi_attack_2;
+lighttable_t** fullbrights_skel_attack;
+lighttable_t** fullbrights_fatt_attack;
+lighttable_t** fullbrights_sswv_attack;
+lighttable_t** fullbrights_torches;
+lighttable_t** fullbrights_floor_lamp;
+lighttable_t** fullbrights_tech_lamps;
+lighttable_t** fullbrights_flam_barrel;
+lighttable_t** fullbrights_expl_barrel;
 
 // constant arrays
 //  used for psprite clipping and initializing clipping
@@ -617,20 +637,137 @@ void R_ProjectSprite (mobj_t* thing)
         // [JN] Applying brightmaps to sprites...
         if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
         {
-            if (thing->type == MT_MISC3) // Armor Bonus
+            // Armor Bonus
+            if (thing->type == MT_MISC3)
             vis->colormap = fullbrights_dimmeditems[index];
 
-            else if (thing->type == MT_MISC20) // Cell Charge
+            // Cell Charge
+            else if (thing->type == MT_MISC20)
             vis->colormap = fullbrights_dimmeditems[index];
 
-            else if (thing->type == MT_MISC21) // Cell Charge Pack
+            // Cell Charge Pack
+            else if (thing->type == MT_MISC21)
             vis->colormap = fullbrights_dimmeditems[index];
 
-            else if (thing->type == MT_MISC25) // BFG9000
+            // BFG9000
+            else if (thing->type == MT_MISC25)
             vis->colormap = fullbrights_redonly[index];
 
-            else if (thing->type == MT_MISC28) // Plasmagun
+            // Plasmagun
+            else if (thing->type == MT_MISC28)
             vis->colormap = fullbrights_redonly[index];
+            
+            // Extra brightmaps
+
+            // Zombieman (S_POSS_ATK2)
+            else if (thing->type == MT_POSSESSED && thing->frame == 5)
+            vis->colormap = fullbrights_poss_attack[index];
+
+            // Shotgun Guy (S_SPOS_ATK2)
+            else if (thing->type == MT_SHOTGUY && thing->frame == 5)
+            vis->colormap = fullbrights_spos_attack[index];
+
+            // Chaingunner (S_CPOS_ATK2, S_CPOS_ATK3)
+            else if (thing->type == MT_CHAINGUY && thing->frame == 4)
+            vis->colormap = fullbrights_cpos_attack_1[index];
+            else if (thing->type == MT_CHAINGUY && thing->frame == 5)
+            vis->colormap = fullbrights_cpos_attack_2[index];
+
+            // Cacodemon (S_HEAD_ATK3)
+            else if (thing->type == MT_HEAD && (thing->frame == 0 || thing->frame == 1 || thing->frame == 2))
+            vis->colormap = fullbrights_caco_attack_1[index];
+            else if (thing->type == MT_HEAD && thing->frame == 3)
+            vis->colormap = fullbrights_caco_attack_2[index];
+
+            // Pain Elemental
+            else if (thing->type == MT_PAIN)
+            vis->colormap = fullbrights_pain_elemental[index];
+
+            // Hell Knight:
+            else if (thing->type == MT_KNIGHT && (thing->frame == 0 || thing->frame == 1 || thing->frame == 2 || thing->frame == 3 || thing->frame == 4 || thing->frame == 5 || thing->frame == 6))
+            vis->colormap = fullbrights_greenonly1[index];
+
+            // Baron of Hell:
+            else if (thing->type == MT_BRUISER && (thing->frame == 0 || thing->frame == 1 || thing->frame == 2 || thing->frame == 3 || thing->frame == 4 || thing->frame == 5 || thing->frame == 6))
+            vis->colormap = fullbrights_greenonly1[index];
+
+            // Lost Soul
+            else if (thing->type == MT_SKULL && thing->frame == 0)
+            vis->colormap = fullbrights_lost_soul_1[index];
+            else if (thing->type == MT_SKULL && thing->frame == 1)
+            vis->colormap = fullbrights_lost_soul_2[index];
+
+            // Arachnotron - attack 1
+            else if (thing->type == MT_BABY && thing->frame == 6)
+            vis->colormap = fullbrights_bspi_attack_1[index];
+            // Arachnotron - attack 2
+            else if (thing->type == MT_BABY && thing->frame == 7)
+            vis->colormap = fullbrights_bspi_attack_2[index];
+
+            // Revenant
+            else if (thing->type == MT_UNDEAD && thing->frame == 9)
+            vis->colormap = fullbrights_skel_attack[index];
+
+            // Mancubus
+            else if (thing->type == MT_FATSO && thing->frame == 7)
+            vis->colormap = fullbrights_fatt_attack[index];
+
+            // Wolfenstein SS
+            else if (thing->type == MT_WOLFSS && thing->frame == 6)
+            vis->colormap = fullbrights_sswv_attack[index];
+
+            // Torches, all six
+            else if (thing->type == MT_MISC41   // Tall blue
+            || thing->type == MT_MISC42         // Tall green
+            || thing->type == MT_MISC43         // Tall red
+            || thing->type == MT_MISC44         // Short blue
+            || thing->type == MT_MISC45         // Short green
+            || thing->type == MT_MISC46)        // Short red
+            vis->colormap = fullbrights_torches[index];
+
+            // Yellow floor lamp
+            else if (thing->type == MT_MISC31)
+            vis->colormap = fullbrights_floor_lamp[index];
+
+            // Tech floor lamps
+            else if (thing->type == MT_MISC29   // Tall techno floor lamp
+            || thing->type == MT_MISC30)        // Short techno floor lamp
+            vis->colormap = fullbrights_tech_lamps[index];
+
+            // Flaming barrel
+            else if (thing->type == MT_MISC77)
+            vis->colormap = fullbrights_flam_barrel[index];
+
+            // Explosive barrel
+            else if (thing->type == MT_BARREL)
+            vis->colormap = fullbrights_expl_barrel[index];
+        }
+
+        // [JN] Fallback. If we are not using brightmaps, apply full brightness
+        // to the objects, that no longer lighten up in info.c
+        if (!brightmaps || vanillaparm)
+        {
+            if ((thing->type == MT_POSSESSED && thing->frame == 5)
+            || (thing->type == MT_SHOTGUY && thing->frame == 5)
+            || (thing->type == MT_SHOTGUY && thing->frame == 5)
+            || (thing->type == MT_CHAINGUY && (thing->frame == 4 || thing->frame == 5))
+            || (thing->type == MT_HEAD && thing->frame == 3)
+            || (thing->type == MT_SKULL)
+            || (thing->type == MT_BABY && (thing->frame == 6 || thing->frame == 7))
+            || (thing->type == MT_UNDEAD && thing->frame == 9)
+            || (thing->type == MT_FATSO && thing->frame == 7)
+            || (thing->type == MT_WOLFSS && thing->frame == 6)
+            || (thing->type == MT_MISC41)       // Tall blue torch
+            || (thing->type == MT_MISC42)       // Tall green torch
+            || (thing->type == MT_MISC43)       // Tall red torch
+            || (thing->type == MT_MISC44)       // Short blue torch
+            || (thing->type == MT_MISC45)       // Short green torch
+            || (thing->type == MT_MISC46)       // Short red torch
+            || (thing->type == MT_MISC31)       // Yellow floor lamp
+            || (thing->type == MT_MISC29)       // Tall techno floor lamp
+            || (thing->type == MT_MISC30)       // Short techno floor lamp
+            || (thing->type == MT_MISC77))      // Flaming barrel
+            vis->colormap = colormaps;
         }
     }	
 }
@@ -662,6 +799,7 @@ void R_AddSprites (sector_t* sec)
         spritelights = scalelight[0];
 
         // [JN] Calculating only necessary sprite brightmaps
+        fullbrights_greenonly1 = fullbright_greenonly1[0];
         fullbrights_dimmeditems = fullbright_dimmeditems[0];
         fullbrights_redonly = fullbright_redonly[0];
     }
@@ -670,16 +808,56 @@ void R_AddSprites (sector_t* sec)
         spritelights = scalelight[LIGHTLEVELS-1];
 
         // [JN] Calculating only necessary sprite brightmaps
+        fullbrights_greenonly1 = fullbright_greenonly1[LIGHTLEVELS-1];
         fullbrights_dimmeditems = fullbright_dimmeditems[LIGHTLEVELS-1];
         fullbrights_redonly = fullbright_redonly[LIGHTLEVELS-1];
+        fullbrights_poss_attack = fullbright_poss_attack[LIGHTLEVELS-1];
+        fullbrights_spos_attack = fullbright_spos_attack[LIGHTLEVELS-1];
+        fullbrights_cpos_attack_1 = fullbright_cpos_attack_1[LIGHTLEVELS-1];
+        fullbrights_cpos_attack_2 = fullbright_cpos_attack_2[LIGHTLEVELS-1];
+        fullbrights_caco_attack_1 = fullbright_caco_attack_1[LIGHTLEVELS-1];
+        fullbrights_caco_attack_2 = fullbright_caco_attack_2[LIGHTLEVELS-1];
+        fullbrights_pain_elemental = fullbright_pain_elemental[LIGHTLEVELS-1];
+        fullbrights_lost_soul_1 = fullbright_lost_soul_1[LIGHTLEVELS-1];
+        fullbrights_lost_soul_2 = fullbright_lost_soul_2[LIGHTLEVELS-1];
+        fullbrights_bspi_attack_1 = fullbright_bspi_attack_1[LIGHTLEVELS-1];
+        fullbrights_bspi_attack_2 = fullbright_bspi_attack_2[LIGHTLEVELS-1];
+        fullbrights_skel_attack = fullbright_skel_attack[LIGHTLEVELS-1];
+        fullbrights_fatt_attack = fullbright_fatt_attack[LIGHTLEVELS-1];
+        fullbrights_sswv_attack = fullbright_sswv_attack[LIGHTLEVELS-1];
+        fullbrights_torches = fullbright_torches[LIGHTLEVELS-1];
+        fullbrights_floor_lamp = fullbright_floor_lamp[LIGHTLEVELS-1];
+        fullbrights_tech_lamps = fullbright_tech_lamps[LIGHTLEVELS-1];
+        fullbrights_flam_barrel = fullbright_flam_barrel[LIGHTLEVELS-1];
+        fullbrights_expl_barrel = fullbright_expl_barrel[LIGHTLEVELS-1];
     }
     else
     {
         spritelights = scalelight[lightnum];
 
         // [JN] Calculating only necessary sprite brightmaps
+        fullbrights_greenonly1 = fullbright_greenonly1[lightnum];
         fullbrights_dimmeditems = fullbright_dimmeditems[lightnum];
         fullbrights_redonly = fullbright_redonly[lightnum];
+        fullbrights_poss_attack = fullbright_poss_attack[lightnum];
+        fullbrights_spos_attack = fullbright_spos_attack[lightnum];
+        fullbrights_cpos_attack_1 = fullbright_cpos_attack_1[lightnum];
+        fullbrights_cpos_attack_2 = fullbright_cpos_attack_2[lightnum];
+        fullbrights_caco_attack_1 = fullbright_caco_attack_1[lightnum];
+        fullbrights_caco_attack_2 = fullbright_caco_attack_2[lightnum];
+        fullbrights_pain_elemental = fullbright_pain_elemental[lightnum];
+        fullbrights_lost_soul_1 = fullbright_lost_soul_1[lightnum];
+        fullbrights_lost_soul_2 = fullbright_lost_soul_2[lightnum];
+        fullbrights_bspi_attack_1 = fullbright_bspi_attack_1[lightnum];
+        fullbrights_bspi_attack_2 = fullbright_bspi_attack_2[lightnum];
+        fullbrights_skel_attack = fullbright_skel_attack[lightnum];
+        fullbrights_fatt_attack = fullbright_fatt_attack[lightnum];
+        fullbrights_sswv_attack = fullbright_sswv_attack[lightnum];
+        fullbrights_torches = fullbright_torches[lightnum];
+        fullbrights_floor_lamp = fullbright_floor_lamp[lightnum];
+        fullbrights_tech_lamps = fullbright_tech_lamps[lightnum];
+        fullbrights_flam_barrel = fullbright_flam_barrel[lightnum];
+        fullbrights_expl_barrel = fullbright_expl_barrel[lightnum];
     }
 
     // Handle all things in sector.

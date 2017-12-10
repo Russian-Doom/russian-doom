@@ -319,8 +319,8 @@ state_t	states[NUMSTATES] = {
     {SPR_POSS,3,4,{A_Chase},S_POSS_RUN8,0,0},	// S_POSS_RUN7
     {SPR_POSS,3,4,{A_Chase},S_POSS_RUN1,0,0},	// S_POSS_RUN8
     {SPR_POSS,4,10,{A_FaceTarget},S_POSS_ATK2,0,0},	// S_POSS_ATK1
-    // [JN] Фрейм атаки зомбимена в полной яркости
-    {SPR_POSS,5|0x8000,8,{A_PosAttack},S_POSS_ATK3,0,0},	// S_POSS_ATK2
+    // [JN] Don't use full brightness for ATK2, use extra brightmap instead
+    {SPR_POSS,5,8,{A_PosAttack},S_POSS_ATK3,0,0},	// S_POSS_ATK2
     {SPR_POSS,4,8,{NULL},S_POSS_RUN1,0,0},	// S_POSS_ATK3
     {SPR_POSS,6,3,{NULL},S_POSS_PAIN2,0,0},	// S_POSS_PAIN
     {SPR_POSS,6,3,{A_Pain},S_POSS_RUN1,0,0},	// S_POSS_PAIN2
@@ -353,7 +353,8 @@ state_t	states[NUMSTATES] = {
     {SPR_SPOS,3,3,{A_Chase},S_SPOS_RUN8,0,0},	// S_SPOS_RUN7
     {SPR_SPOS,3,3,{A_Chase},S_SPOS_RUN1,0,0},	// S_SPOS_RUN8
     {SPR_SPOS,4,10,{A_FaceTarget},S_SPOS_ATK2,0,0},	// S_SPOS_ATK1
-    {SPR_SPOS,32773,10,{A_SPosAttack},S_SPOS_ATK3,0,0},	// S_SPOS_ATK2
+    // [JN] Disable full brightness for ATK3, use extra brightmap instead
+    {SPR_SPOS,5,10,{A_SPosAttack},S_SPOS_ATK3,0,0},	// S_SPOS_ATK2
     {SPR_SPOS,4,10,{NULL},S_SPOS_RUN1,0,0},	// S_SPOS_ATK3
     {SPR_SPOS,6,3,{NULL},S_SPOS_PAIN2,0,0},	// S_SPOS_PAIN
     {SPR_SPOS,6,3,{A_Pain},S_SPOS_RUN1,0,0},	// S_SPOS_PAIN2
@@ -474,8 +475,9 @@ state_t	states[NUMSTATES] = {
     {SPR_SKEL,6,6,{A_SkelWhoosh},S_SKEL_FIST3,0,0},	// S_SKEL_FIST2
     {SPR_SKEL,7,6,{A_FaceTarget},S_SKEL_FIST4,0,0},	// S_SKEL_FIST3
     {SPR_SKEL,8,6,{A_SkelFist},S_SKEL_RUN1,0,0},	// S_SKEL_FIST4
-    {SPR_SKEL,32777,0,{A_FaceTarget},S_SKEL_MISS2,0,0},	// S_SKEL_MISS1
-    {SPR_SKEL,32777,10,{A_FaceTarget},S_SKEL_MISS3,0,0},	// S_SKEL_MISS2
+    // [JN] Disable full brightness for MISS1-2 frames, use extra brightmap instead
+    {SPR_SKEL,9,0,{A_FaceTarget},S_SKEL_MISS2,0,0},	// S_SKEL_MISS1
+    {SPR_SKEL,9,10,{A_FaceTarget},S_SKEL_MISS3,0,0},	// S_SKEL_MISS2
     {SPR_SKEL,10,10,{A_SkelMissile},S_SKEL_MISS4,0,0},	// S_SKEL_MISS3
     {SPR_SKEL,10,10,{A_FaceTarget},S_SKEL_RUN1,0,0},	// S_SKEL_MISS4
     {SPR_SKEL,11,5,{NULL},S_SKEL_PAIN2,0,0},	// S_SKEL_PAIN
@@ -512,13 +514,16 @@ state_t	states[NUMSTATES] = {
     {SPR_FATT,5,4,{A_Chase},S_FATT_RUN12,0,0},	// S_FATT_RUN11
     {SPR_FATT,5,4,{A_Chase},S_FATT_RUN1,0,0},	// S_FATT_RUN12
     {SPR_FATT,6,20,{A_FatRaise},S_FATT_ATK2,0,0},	// S_FATT_ATK1
-    {SPR_FATT,32775,10,{A_FatAttack1},S_FATT_ATK3,0,0},	// S_FATT_ATK2
+    // [JN] Disable full brightness for ATK2, use extra brightmap instead
+    {SPR_FATT,7,10,{A_FatAttack1},S_FATT_ATK3,0,0},	// S_FATT_ATK2
     {SPR_FATT,8,5,{A_FaceTarget},S_FATT_ATK4,0,0},	// S_FATT_ATK3
     {SPR_FATT,6,5,{A_FaceTarget},S_FATT_ATK5,0,0},	// S_FATT_ATK4
-    {SPR_FATT,32775,10,{A_FatAttack2},S_FATT_ATK6,0,0},	// S_FATT_ATK5
+    // [JN] Disable full brightness for ATK5, use extra brightmap instead
+    {SPR_FATT,7,10,{A_FatAttack2},S_FATT_ATK6,0,0},	// S_FATT_ATK5
     {SPR_FATT,8,5,{A_FaceTarget},S_FATT_ATK7,0,0},	// S_FATT_ATK6
     {SPR_FATT,6,5,{A_FaceTarget},S_FATT_ATK8,0,0},	// S_FATT_ATK7
-    {SPR_FATT,32775,10,{A_FatAttack3},S_FATT_ATK9,0,0},	// S_FATT_ATK8
+    // [JN] Disable full brightness for ATK8, use extra brightmap instead
+    {SPR_FATT,7,10,{A_FatAttack3},S_FATT_ATK9,0,0},	// S_FATT_ATK8
     {SPR_FATT,8,5,{A_FaceTarget},S_FATT_ATK10,0,0},	// S_FATT_ATK9
     {SPR_FATT,6,5,{A_FaceTarget},S_FATT_RUN1,0,0},	// S_FATT_ATK10
     {SPR_FATT,9,3,{NULL},S_FATT_PAIN2,0,0},	// S_FATT_PAIN
@@ -552,8 +557,9 @@ state_t	states[NUMSTATES] = {
     {SPR_CPOS,3,3,{A_Chase},S_CPOS_RUN8,0,0},	// S_CPOS_RUN7
     {SPR_CPOS,3,3,{A_Chase},S_CPOS_RUN1,0,0},	// S_CPOS_RUN8
     {SPR_CPOS,4,10,{A_FaceTarget},S_CPOS_ATK2,0,0},	// S_CPOS_ATK1
-    {SPR_CPOS,32773,4,{A_CPosAttack},S_CPOS_ATK3,0,0},	// S_CPOS_ATK2
-    {SPR_CPOS,32772,4,{A_CPosAttack},S_CPOS_ATK4,0,0},	// S_CPOS_ATK3
+    // [JN] Disable full brightness for ATK2 and ATK3, use extra brightmaps instead
+    {SPR_CPOS,5,4,{A_CPosAttack},S_CPOS_ATK3,0,0},	// S_CPOS_ATK2
+    {SPR_CPOS,4,4,{A_CPosAttack},S_CPOS_ATK4,0,0},	// S_CPOS_ATK3
     {SPR_CPOS,5,1,{A_CPosRefire},S_CPOS_ATK2,0,0},	// S_CPOS_ATK4
     {SPR_CPOS,6,3,{NULL},S_CPOS_PAIN2,0,0},	// S_CPOS_PAIN
     {SPR_CPOS,6,3,{A_Pain},S_CPOS_RUN1,0,0},	// S_CPOS_PAIN2
@@ -641,7 +647,8 @@ state_t	states[NUMSTATES] = {
     {SPR_HEAD,0,3,{A_Chase},S_HEAD_RUN1,0,0},	// S_HEAD_RUN1
     {SPR_HEAD,1,5,{A_FaceTarget},S_HEAD_ATK2,0,0},	// S_HEAD_ATK1
     {SPR_HEAD,2,5,{A_FaceTarget},S_HEAD_ATK3,0,0},	// S_HEAD_ATK2
-    {SPR_HEAD,32771,5,{A_HeadAttack},S_HEAD_RUN1,0,0},	// S_HEAD_ATK3
+    // [JN] Disable full brightness for ATK3, use extra brightmap instead
+    {SPR_HEAD,3,5,{A_HeadAttack},S_HEAD_RUN1,0,0},	// S_HEAD_ATK3
     {SPR_HEAD,4,3,{NULL},S_HEAD_PAIN2,0,0},	// S_HEAD_PAIN
     {SPR_HEAD,4,3,{A_Pain},S_HEAD_PAIN3,0,0},	// S_HEAD_PAIN2
     {SPR_HEAD,5,6,{NULL},S_HEAD_RUN1,0,0},	// S_HEAD_PAIN3
@@ -720,10 +727,11 @@ state_t	states[NUMSTATES] = {
     {SPR_BOS2,10,8,{NULL},S_BOS2_RAISE6,0,0},	// S_BOS2_RAISE5
     {SPR_BOS2,9,8,{NULL},S_BOS2_RAISE7,0,0},	// S_BOS2_RAISE6
     {SPR_BOS2,8,8,{NULL},S_BOS2_RUN1,0,0},	// S_BOS2_RAISE7
-    {SPR_SKUL,32768,10,{A_Look},S_SKULL_STND2,0,0},	// S_SKULL_STND
-    {SPR_SKUL,32769,10,{A_Look},S_SKULL_STND,0,0},	// S_SKULL_STND2
-    {SPR_SKUL,32768,6,{A_Chase},S_SKULL_RUN2,0,0},	// S_SKULL_RUN1
-    {SPR_SKUL,32769,6,{A_Chase},S_SKULL_RUN1,0,0},	// S_SKULL_RUN2
+    // [JN] Disable full brightness for STND-ATK4 frames, use extra brightmap instead
+    {SPR_SKUL,0,10,{A_Look},S_SKULL_STND2,0,0},	// S_SKULL_STND
+    {SPR_SKUL,1,10,{A_Look},S_SKULL_STND,0,0},	// S_SKULL_STND2
+    {SPR_SKUL,0,6,{A_Chase},S_SKULL_RUN2,0,0},	// S_SKULL_RUN1
+    {SPR_SKUL,1,6,{A_Chase},S_SKULL_RUN1,0,0},	// S_SKULL_RUN2
     {SPR_SKUL,32770,10,{A_FaceTarget},S_SKULL_ATK2,0,0},	// S_SKULL_ATK1
     {SPR_SKUL,32771,4,{A_SkullAttack},S_SKULL_ATK3,0,0},	// S_SKULL_ATK2
     {SPR_SKUL,32770,4,{NULL},S_SKULL_ATK4,0,0},	// S_SKULL_ATK3
@@ -783,10 +791,11 @@ state_t	states[NUMSTATES] = {
     {SPR_BSPI,4,3,{A_Chase},S_BSPI_RUN11,0,0},	// S_BSPI_RUN10
     {SPR_BSPI,5,3,{A_Chase},S_BSPI_RUN12,0,0},	// S_BSPI_RUN11
     {SPR_BSPI,5,3,{A_Chase},S_BSPI_RUN1,0,0},	// S_BSPI_RUN12
-    {SPR_BSPI,32768,20,{A_FaceTarget},S_BSPI_ATK2,0,0},	// S_BSPI_ATK1
-    {SPR_BSPI,32774,4,{A_BspiAttack},S_BSPI_ATK3,0,0},	// S_BSPI_ATK2
-    {SPR_BSPI,32775,4,{NULL},S_BSPI_ATK4,0,0},	// S_BSPI_ATK3
-    {SPR_BSPI,32775,1,{A_SpidRefire},S_BSPI_ATK2,0,0},	// S_BSPI_ATK4
+    // [JN] Disable full brightness for ATK* frames, use extra brightmap instead
+    {SPR_BSPI,0,20,{A_FaceTarget},S_BSPI_ATK2,0,0},	// S_BSPI_ATK1
+    {SPR_BSPI,6,4,{A_BspiAttack},S_BSPI_ATK3,0,0},	// S_BSPI_ATK2
+    {SPR_BSPI,7,4,{NULL},S_BSPI_ATK4,0,0},	// S_BSPI_ATK3
+    {SPR_BSPI,7,1,{A_SpidRefire},S_BSPI_ATK2,0,0},	// S_BSPI_ATK4
     {SPR_BSPI,8,3,{NULL},S_BSPI_PAIN2,0,0},	// S_BSPI_PAIN
     {SPR_BSPI,8,3,{A_Pain},S_BSPI_RUN1,0,0},	// S_BSPI_PAIN2
     {SPR_BSPI,9,20,{A_Scream},S_BSPI_DIE2,0,0},	// S_BSPI_DIE1
@@ -876,9 +885,11 @@ state_t	states[NUMSTATES] = {
     {SPR_SSWV,3,3,{A_Chase},S_SSWV_RUN1,0,0},	// S_SSWV_RUN8
     {SPR_SSWV,4,10,{A_FaceTarget},S_SSWV_ATK2,0,0},	// S_SSWV_ATK1
     {SPR_SSWV,5,10,{A_FaceTarget},S_SSWV_ATK3,0,0},	// S_SSWV_ATK2
-    {SPR_SSWV,32774,4,{A_CPosAttack},S_SSWV_ATK4,0,0},	// S_SSWV_ATK3
+    // [JN] Disable full brightness for ATK3, use extra brightmap instead
+    {SPR_SSWV,6,4,{A_CPosAttack},S_SSWV_ATK4,0,0},	// S_SSWV_ATK3
     {SPR_SSWV,5,6,{A_FaceTarget},S_SSWV_ATK5,0,0},	// S_SSWV_ATK4
-    {SPR_SSWV,32774,4,{A_CPosAttack},S_SSWV_ATK6,0,0},	// S_SSWV_ATK5
+    // [JN] Disable full brightness for ATK5, use extra brightmap instead
+    {SPR_SSWV,6,4,{A_CPosAttack},S_SSWV_ATK6,0,0},	// S_SSWV_ATK5
     {SPR_SSWV,5,1,{A_CPosRefire},S_SSWV_ATK2,0,0},	// S_SSWV_ATK6
     {SPR_SSWV,7,3,{NULL},S_SSWV_PAIN2,0,0},	// S_SSWV_PAIN
     {SPR_SSWV,7,3,{A_Pain},S_SSWV_RUN1,0,0},	// S_SSWV_PAIN2
@@ -951,9 +962,10 @@ state_t	states[NUMSTATES] = {
     {SPR_BEXP,32770,5,{NULL},S_BEXP4,0,0},	// S_BEXP3
     {SPR_BEXP,32771,10,{A_Explode},S_BEXP5,0,0},	// S_BEXP4
     {SPR_BEXP,32772,10,{NULL},S_NULL,0,0},	// S_BEXP5
-    {SPR_FCAN,32768,4,{NULL},S_BBAR2,0,0},	// S_BBAR1
-    {SPR_FCAN,32769,4,{NULL},S_BBAR3,0,0},	// S_BBAR2
-    {SPR_FCAN,32770,4,{NULL},S_BBAR1,0,0},	// S_BBAR3
+    // [JN] Disable full brightness for BBAR*, use extra brightmap instead
+    {SPR_FCAN,0,4,{NULL},S_BBAR2,0,0},	// S_BBAR1
+    {SPR_FCAN,1,4,{NULL},S_BBAR3,0,0},	// S_BBAR2
+    {SPR_FCAN,2,4,{NULL},S_BBAR1,0,0},	// S_BBAR3
     {SPR_BON1,0,6,{NULL},S_BON1A,0,0},	// S_BON1
     {SPR_BON1,1,6,{NULL},S_BON1B,0,0},	// S_BON1A
     {SPR_BON1,2,6,{NULL},S_BON1C,0,0},	// S_BON1B
@@ -1024,7 +1036,8 @@ state_t	states[NUMSTATES] = {
     {SPR_PLAS,0,-1,{NULL},S_NULL,0,0},	// S_PLAS
     {SPR_SHOT,0,-1,{NULL},S_NULL,0,0},	// S_SHOT
     {SPR_SGN2,0,-1,{NULL},S_NULL,0,0},	// S_SHOT2
-    {SPR_COLU,32768,-1,{NULL},S_NULL,0,0},	// S_COLU
+    // [JN] Disable full brightness for COLU, use extra brightmap instead
+    {SPR_COLU,0,-1,{NULL},S_NULL,0,0},	// S_COLU
     {SPR_SMT2,0,-1,{NULL},S_NULL,0,0},	// S_STALAG
     {SPR_GOR1,0,10,{NULL},S_BLOODYTWITCH2,0,0},	// S_BLOODYTWITCH
     {SPR_GOR1,1,15,{NULL},S_BLOODYTWITCH3,0,0},	// S_BLOODYTWITCH2
@@ -1064,30 +1077,36 @@ state_t	states[NUMSTATES] = {
     {SPR_FSKU,32770,6,{NULL},S_FLOATSKULL,0,0},	// S_FLOATSKULL3
     {SPR_COL5,0,14,{NULL},S_HEARTCOL2,0,0},	// S_HEARTCOL
     {SPR_COL5,1,14,{NULL},S_HEARTCOL,0,0},	// S_HEARTCOL2
-    {SPR_TBLU,32768,4,{NULL},S_BLUETORCH2,0,0},	// S_BLUETORCH
-    {SPR_TBLU,32769,4,{NULL},S_BLUETORCH3,0,0},	// S_BLUETORCH2
-    {SPR_TBLU,32770,4,{NULL},S_BLUETORCH4,0,0},	// S_BLUETORCH3
-    {SPR_TBLU,32771,4,{NULL},S_BLUETORCH,0,0},	// S_BLUETORCH4
-    {SPR_TGRN,32768,4,{NULL},S_GREENTORCH2,0,0},	// S_GREENTORCH
-    {SPR_TGRN,32769,4,{NULL},S_GREENTORCH3,0,0},	// S_GREENTORCH2
-    {SPR_TGRN,32770,4,{NULL},S_GREENTORCH4,0,0},	// S_GREENTORCH3
-    {SPR_TGRN,32771,4,{NULL},S_GREENTORCH,0,0},	// S_GREENTORCH4
-    {SPR_TRED,32768,4,{NULL},S_REDTORCH2,0,0},	// S_REDTORCH
-    {SPR_TRED,32769,4,{NULL},S_REDTORCH3,0,0},	// S_REDTORCH2
-    {SPR_TRED,32770,4,{NULL},S_REDTORCH4,0,0},	// S_REDTORCH3
-    {SPR_TRED,32771,4,{NULL},S_REDTORCH,0,0},	// S_REDTORCH4
-    {SPR_SMBT,32768,4,{NULL},S_BTORCHSHRT2,0,0},	// S_BTORCHSHRT
-    {SPR_SMBT,32769,4,{NULL},S_BTORCHSHRT3,0,0},	// S_BTORCHSHRT2
-    {SPR_SMBT,32770,4,{NULL},S_BTORCHSHRT4,0,0},	// S_BTORCHSHRT3
-    {SPR_SMBT,32771,4,{NULL},S_BTORCHSHRT,0,0},	// S_BTORCHSHRT4
-    {SPR_SMGT,32768,4,{NULL},S_GTORCHSHRT2,0,0},	// S_GTORCHSHRT
-    {SPR_SMGT,32769,4,{NULL},S_GTORCHSHRT3,0,0},	// S_GTORCHSHRT2
-    {SPR_SMGT,32770,4,{NULL},S_GTORCHSHRT4,0,0},	// S_GTORCHSHRT3
-    {SPR_SMGT,32771,4,{NULL},S_GTORCHSHRT,0,0},	// S_GTORCHSHRT4
-    {SPR_SMRT,32768,4,{NULL},S_RTORCHSHRT2,0,0},	// S_RTORCHSHRT
-    {SPR_SMRT,32769,4,{NULL},S_RTORCHSHRT3,0,0},	// S_RTORCHSHRT2
-    {SPR_SMRT,32770,4,{NULL},S_RTORCHSHRT4,0,0},	// S_RTORCHSHRT3
-    {SPR_SMRT,32771,4,{NULL},S_RTORCHSHRT,0,0},	// S_RTORCHSHRT4
+    // [JN] Disable full brightness for BLUETORCH*, use extra brightmap instead
+    {SPR_TBLU,0,4,{NULL},S_BLUETORCH2,0,0},	// S_BLUETORCH
+    {SPR_TBLU,1,4,{NULL},S_BLUETORCH3,0,0},	// S_BLUETORCH2
+    {SPR_TBLU,2,4,{NULL},S_BLUETORCH4,0,0},	// S_BLUETORCH3
+    {SPR_TBLU,3,4,{NULL},S_BLUETORCH,0,0},	// S_BLUETORCH4
+    // [JN] Disable full brightness for GREENTORCH*, use extra brightmap instead
+    {SPR_TGRN,0,4,{NULL},S_GREENTORCH2,0,0},	// S_GREENTORCH
+    {SPR_TGRN,1,4,{NULL},S_GREENTORCH3,0,0},	// S_GREENTORCH2
+    {SPR_TGRN,2,4,{NULL},S_GREENTORCH4,0,0},	// S_GREENTORCH3
+    {SPR_TGRN,3,4,{NULL},S_GREENTORCH,0,0},	// S_GREENTORCH4
+    // [JN] Disable full brightness for REDTORCH*, use extra brightmap instead
+    {SPR_TRED,0,4,{NULL},S_REDTORCH2,0,0},	// S_REDTORCH
+    {SPR_TRED,1,4,{NULL},S_REDTORCH3,0,0},	// S_REDTORCH2
+    {SPR_TRED,2,4,{NULL},S_REDTORCH4,0,0},	// S_REDTORCH3
+    {SPR_TRED,3,4,{NULL},S_REDTORCH,0,0},	// S_REDTORCH4
+    // [JN] Disable full brightness for BTORCHSHRT*, use extra brightmap instead
+    {SPR_SMBT,0,4,{NULL},S_BTORCHSHRT2,0,0},	// S_BTORCHSHRT
+    {SPR_SMBT,1,4,{NULL},S_BTORCHSHRT3,0,0},	// S_BTORCHSHRT2
+    {SPR_SMBT,2,4,{NULL},S_BTORCHSHRT4,0,0},	// S_BTORCHSHRT3
+    {SPR_SMBT,3,4,{NULL},S_BTORCHSHRT,0,0},	// S_BTORCHSHRT4
+    // [JN] Disable full brightness for GTORCHSHRT*, use extra brightmap instead
+    {SPR_SMGT,0,4,{NULL},S_GTORCHSHRT2,0,0},	// S_GTORCHSHRT
+    {SPR_SMGT,1,4,{NULL},S_GTORCHSHRT3,0,0},	// S_GTORCHSHRT2
+    {SPR_SMGT,2,4,{NULL},S_GTORCHSHRT4,0,0},	// S_GTORCHSHRT3
+    {SPR_SMGT,3,4,{NULL},S_GTORCHSHRT,0,0},	// S_GTORCHSHRT4
+    // [JN] Disable full brightness for RTORCHSHRT*, use extra brightmap instead
+    {SPR_SMRT,0,4,{NULL},S_RTORCHSHRT2,0,0},	// S_RTORCHSHRT
+    {SPR_SMRT,1,4,{NULL},S_RTORCHSHRT3,0,0},	// S_RTORCHSHRT2
+    {SPR_SMRT,2,4,{NULL},S_RTORCHSHRT4,0,0},	// S_RTORCHSHRT3
+    {SPR_SMRT,3,4,{NULL},S_RTORCHSHRT,0,0},	// S_RTORCHSHRT4
     {SPR_HDB1,0,-1,{NULL},S_NULL,0,0},	// S_HANGNOGUTS
     {SPR_HDB2,0,-1,{NULL},S_NULL,0,0},	// S_HANGBNOBRAIN
     {SPR_HDB3,0,-1,{NULL},S_NULL,0,0},	// S_HANGTLOOKDN
@@ -1097,14 +1116,16 @@ state_t	states[NUMSTATES] = {
     {SPR_POB1,0,-1,{NULL},S_NULL,0,0},	// S_COLONGIBS
     {SPR_POB2,0,-1,{NULL},S_NULL,0,0},	// S_SMALLPOOL
     {SPR_BRS1,0,-1,{NULL},S_NULL,0,0},		// S_BRAINSTEM
-    {SPR_TLMP,32768,4,{NULL},S_TECHLAMP2,0,0},	// S_TECHLAMP
-    {SPR_TLMP,32769,4,{NULL},S_TECHLAMP3,0,0},	// S_TECHLAMP2
-    {SPR_TLMP,32770,4,{NULL},S_TECHLAMP4,0,0},	// S_TECHLAMP3
-    {SPR_TLMP,32771,4,{NULL},S_TECHLAMP,0,0},	// S_TECHLAMP4
-    {SPR_TLP2,32768,4,{NULL},S_TECH2LAMP2,0,0},	// S_TECH2LAMP
-    {SPR_TLP2,32769,4,{NULL},S_TECH2LAMP3,0,0},	// S_TECH2LAMP2
-    {SPR_TLP2,32770,4,{NULL},S_TECH2LAMP4,0,0},	// S_TECH2LAMP3
-    {SPR_TLP2,32771,4,{NULL},S_TECH2LAMP,0,0},	// S_TECH2LAMP4
+    // [JN] Disable full brightness for TECHLAMP*, use extra brightmap instead
+    {SPR_TLMP,0,4,{NULL},S_TECHLAMP2,0,0},	// S_TECHLAMP
+    {SPR_TLMP,1,4,{NULL},S_TECHLAMP3,0,0},	// S_TECHLAMP2
+    {SPR_TLMP,2,4,{NULL},S_TECHLAMP4,0,0},	// S_TECHLAMP3
+    {SPR_TLMP,3,4,{NULL},S_TECHLAMP,0,0},	// S_TECHLAMP4
+    // [JN] Disable full brightness for TECH2LAMP*, use extra brightmap instead
+    {SPR_TLP2,0,4,{NULL},S_TECH2LAMP2,0,0},	// S_TECH2LAMP
+    {SPR_TLP2,1,4,{NULL},S_TECH2LAMP3,0,0},	// S_TECH2LAMP2
+    {SPR_TLP2,2,4,{NULL},S_TECH2LAMP4,0,0},	// S_TECH2LAMP3
+    {SPR_TLP2,3,4,{NULL},S_TECH2LAMP,0,0},	// S_TECH2LAMP4
     // [JN] Синяя кровь
     {SPR_BLUB,2,8,{NULL},S_BLOODB2,0,0},    // S_BLOODB1
     {SPR_BLUB,1,8,{NULL},S_BLOODB3,0,0},    // S_BLOODB2

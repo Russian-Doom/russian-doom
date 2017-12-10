@@ -102,6 +102,25 @@ lighttable_t* fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_poss_attack[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_spos_attack[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_cpos_attack_1[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_cpos_attack_2[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_caco_attack_1[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_caco_attack_2[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_pain_elemental[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_lost_soul_1[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_lost_soul_2[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_bspi_attack_1[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_bspi_attack_2[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_skel_attack[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_fatt_attack[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_sswv_attack[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_torches[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_floor_lamp[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_tech_lamps[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_flam_barrel[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_expl_barrel[LIGHTLEVELS][MAXLIGHTSCALE];
 
 // bumped light from gun blasts
 int extralight;			
@@ -736,6 +755,25 @@ void R_ExecuteSetViewSize (void)
             fullbright_greenonly3[i][j] = brightmaps_greenonly3 + level*256;
             fullbright_orangeyellow[i][j] = brightmaps_orangeyellow + level*256;
             fullbright_dimmeditems[i][j] = brightmaps_dimmeditems + level*256;
+            fullbright_poss_attack[i][j] = brightmaps_poss_attack + level*256;
+            fullbright_spos_attack[i][j] = brightmaps_spos_attack + level*256;
+            fullbright_cpos_attack_1[i][j] = brightmaps_cpos_attack_1 + level*256;
+            fullbright_cpos_attack_2[i][j] = brightmaps_cpos_attack_2 + level*256;
+            fullbright_caco_attack_1[i][j] = brightmaps_caco_attack_1 + level*256;
+            fullbright_caco_attack_2[i][j] = brightmaps_caco_attack_2 + level*256;
+            fullbright_pain_elemental[i][j] = brightmaps_pain_elemental + level*256;
+            fullbright_lost_soul_1[i][j] = brightmaps_lost_soul_1 + level*256;
+            fullbright_lost_soul_2[i][j] = brightmaps_lost_soul_2 + level*256;
+            fullbright_bspi_attack_1[i][j] = brightmaps_bspi_attack_1 + level*256;
+            fullbright_bspi_attack_2[i][j] = brightmaps_bspi_attack_2 + level*256;
+            fullbright_skel_attack[i][j] = brightmaps_skel_attack + level*256;
+            fullbright_fatt_attack[i][j] = brightmaps_fatt_attack + level*256;
+            fullbright_sswv_attack[i][j] = brightmaps_sswv_attack + level*256;
+            fullbright_torches[i][j] = brightmaps_torches + level*256;
+            fullbright_floor_lamp[i][j] = brightmaps_floor_lamp + level*256;
+            fullbright_tech_lamps[i][j] = brightmaps_tech_lamps + level*256;
+            fullbright_flam_barrel[i][j] = brightmaps_flam_barrel + level*256;
+            fullbright_expl_barrel[i][j] = brightmaps_expl_barrel + level*256;
         }
     }
 }
