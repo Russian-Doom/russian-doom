@@ -193,10 +193,10 @@ void P_MovePlayer (player_t* player)
         }
         else
         {
-            player->lookdir += 5 * look;
-            if (player->lookdir > 90 || player->lookdir < -110)
+            player->lookdir += MLOOKUNIT * 5 * look;
+            if (player->lookdir > 90 * MLOOKUNIT || player->lookdir < -110)
             {
-                player->lookdir -= 5 * look;
+                player->lookdir -= MLOOKUNIT * 5 * look;
             }
         }
     }
@@ -207,7 +207,7 @@ void P_MovePlayer (player_t* player)
             player->lookdir = 0;
         }
 
-        if (player->lookdir < 8)
+        if (player->lookdir < 8 * MLOOKUNIT)
         {
             player->lookdir = 0;
             player->centering = false;
@@ -243,21 +243,16 @@ void P_DeathThink (player_t* player)
     P_CalcHeight (player);
 
     // [JN] Mouselook: smoothed lookdir centering while dying
-    if (mlook)
-    {
-        if (player->lookdir > 0)
-        {
-            player->lookdir -= 6;
-        }
-        else if (player->lookdir < 0)
-        {
-            player->lookdir += 6;
-        }
-        if (abs(player->lookdir) < 6)
+        if (player->lookdir >  8 * MLOOKUNIT)
+            player->lookdir -= 8 * MLOOKUNIT;
+        else 
+        if (player->lookdir < -8 * MLOOKUNIT)
+            player->lookdir += 8 * MLOOKUNIT;
+        else
+        if (player->lookdir)
         {
             player->lookdir = 0;
         }
-    }
 
     if (player->attacker && player->attacker != player->mo)
     {

@@ -1228,7 +1228,7 @@ P_SpawnPlayerMissile
     if (!linetarget && mlook)
     {
         an = source->angle;
-        slope = ((source->player->lookdir) << FRACBITS) / 173;
+        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 173;
     }
     }
 		

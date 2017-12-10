@@ -201,7 +201,6 @@ static const struct
 
 static boolean  gamekeydown[NUMKEYS]; 
 static int      turnheld;   // for accelerative turning
-static int      lookheld;
 
 static boolean  mousearray[MAX_MOUSE_BUTTONS + 1];
 static boolean *mousebuttons = &mousearray[1];  // allow [-1]
@@ -370,7 +369,6 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     boolean     bstrafe; 
     int         speed;
     int         tspeed; 
-    int         lspeed;
     int         forward;
     int         side;
     int         look;
@@ -409,23 +407,6 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         tspeed = 2; // slow turn 
     else 
         tspeed = speed;
-
-    if (gamekeydown[key_lookdown] || gamekeydown[key_lookup])
-    {
-        lookheld += ticdup;
-    }
-    else
-    {
-        lookheld = 0;
-    }
-    if (lookheld < SLOWTURNTICS)
-    {
-        lspeed = 1;
-    }
-    else
-    {
-        lspeed = 2;
-    }
 
     // [crispy] toggle always run
     if (gamekeydown[key_toggleautorun])
@@ -662,13 +643,13 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // [JN] Mouselook: handling
     if (!demoplayback && players[consoleplayer].playerstate == PST_LIVE && !paused && !menuactive)
     {
-        players[consoleplayer].lookdir += mousey / 8; 
+        players[consoleplayer].lookdir += mousey;
         
-        if (players[consoleplayer].lookdir > 90)
-            players[consoleplayer].lookdir = 90;
+        if (players[consoleplayer].lookdir > 90 * MLOOKUNIT)
+            players[consoleplayer].lookdir = 90 * MLOOKUNIT;
         else
-        if (players[consoleplayer].lookdir < -110)
-            players[consoleplayer].lookdir = -110;
+        if (players[consoleplayer].lookdir < -110 * MLOOKUNIT)
+            players[consoleplayer].lookdir = -110 * MLOOKUNIT;
         
         if (look < 0)
         {
