@@ -429,6 +429,7 @@ void D_BindVariables(void)
     M_BindIntVariable("brightmaps",             &brightmaps);               // Брайтмаппинг текстур и спрайтов
     M_BindIntVariable("fake_contrast",          &fake_contrast);            // Имитация контрастного освещения стен
     M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов
+    M_BindIntVariable("floating_powerups",      &floating_powerups);        // Левитирующие сферы-артефакты
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);         // Улучшенная анимация жидкостей
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);     // Произвольное зеркальное отражение трупов
     M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов

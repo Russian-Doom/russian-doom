@@ -241,6 +241,7 @@ int show_total_time = 1;         // Показывать общее время
 // Графика
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
 int fake_contrast = 0;           // Имитация контрастного освещения стен
+int floating_powerups = 0;       // Левитирующие сферы-артефакты
 int swirling_liquids = 1;        // Улучшенная анимация жидкостей
 int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
 int colored_blood = 1;           // Кровь разных цветов

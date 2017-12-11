@@ -1702,6 +1702,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(brightmaps),                // Брайтмаппинг текстур и спрайтов
     CONFIG_VARIABLE_INT(fake_contrast),             // Имитация контрастного освещения стен
     CONFIG_VARIABLE_INT(translucency),              // Эффект прозрачности у некоторых объектов
+    CONFIG_VARIABLE_INT(floating_powerups),         // Левитирующие сферы-артефакты
     CONFIG_VARIABLE_INT(swirling_liquids),          // Улучшенная анимация жидкостей    
     CONFIG_VARIABLE_INT(randomly_flipcorpses),      // Произвольное зеркальное отражение трупов
     CONFIG_VARIABLE_INT(colored_blood),             // Кровь разных цветов
