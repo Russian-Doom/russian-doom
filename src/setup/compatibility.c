@@ -69,7 +69,12 @@ void CompatibilitySettings(void)
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
-    TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features));
+    if (gamemission == doom)
+        TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features));
+    else if (gamemission == heretic)
+        TXT_AddWidget(window, TXT_NewScrollPane(47, 11, window_features));
+    else if (gamemission == hexen)
+        TXT_AddWidget(window, TXT_NewScrollPane(47, 4, window_features));
 
     TXT_AddWidgets(window_features,
     TXT_NewSeparator("ˆםעונפויס"),

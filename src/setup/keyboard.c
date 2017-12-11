@@ -294,7 +294,7 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
             AddKeyControl(table, "Крыль€ гнева",                &key_arti_fly);
             AddKeyControl(table, "Сапоги-скороходы",            &key_arti_speed);
             AddKeyControl(table, "Факел",                       &key_arti_torch);
-            AddKeyControl(table, "Чары магического единства",   &key_arti_healingradius);
+            AddKeyControl(table, "Чары магического единства ",  &key_arti_healingradius);
         }
     }
     else
@@ -308,10 +308,16 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
     AddKeyControl(table, "Оружие 2",          &key_weapon2);
     AddKeyControl(table, "Оружие 3",          &key_weapon3);
     AddKeyControl(table, "Оружие 4",          &key_weapon4);
-    AddKeyControl(table, "Оружие 5",          &key_weapon5);
-    AddKeyControl(table, "Оружие 6",          &key_weapon6);
-    AddKeyControl(table, "Оружие 7",          &key_weapon7);
-    AddKeyControl(table, "Оружие 8",          &key_weapon8);
+    if (gamemission != hexen)
+    {   // [JN] Weapons 5, 6, 7 are not available in Hexen
+        AddKeyControl(table, "Оружие 5",      &key_weapon5);
+        AddKeyControl(table, "Оружие 6",      &key_weapon6);
+        AddKeyControl(table, "Оружие 7",      &key_weapon7);
+    }
+    if (gamemission == doom)
+    {   // [JN] Weapon 8 only available in Doom
+        AddKeyControl(table, "Оружие 8",      &key_weapon8);
+    }
     AddKeyControl(table, "Предыдущее оружие", &key_prevweapon);
     AddKeyControl(table, "Следующее оружие",  &key_nextweapon);
 
