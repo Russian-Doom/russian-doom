@@ -82,6 +82,7 @@ static void CheatScriptFunc1(player_t * player, Cheat_t * cheat);
 static void CheatScriptFunc2(player_t * player, Cheat_t * cheat);
 static void CheatScriptFunc3(player_t * player, Cheat_t * cheat);
 static void CheatRevealFunc(player_t * player, Cheat_t * cheat);
+static void CheatRusVersionFunc(player_t * player, Cheat_t * cheat);
 // [JN] Disabled. I need "`" key for using without SFX_PLATFORM_STOP sound.
 // static void CheatTrackFunc1(player_t * player, Cheat_t * cheat);
 // static void CheatTrackFunc2(player_t * player, Cheat_t * cheat);
@@ -211,6 +212,8 @@ cheatseq_t CheatScriptSeq3 = CHEAT("puke", 2);
 
 cheatseq_t CheatRevealSeq = CHEAT("mapsco", 0);
 
+cheatseq_t CheatRusVersionSeq = CHEAT("version", 0);
+
 // [JN] Disabled. I need "`" key for using without SFX_PLATFORM_STOP sound.
 // cheatseq_t CheatTrackSeq1 = CHEAT("`", 0);
 // cheatseq_t CheatTrackSeq2 = CHEAT("`", 2);
@@ -243,6 +246,7 @@ static Cheat_t Cheats[] = {
     {CheatScriptFunc2, &CheatScriptSeq2},
     {CheatScriptFunc3, &CheatScriptSeq3},
     {CheatRevealFunc, &CheatRevealSeq},
+    {CheatRusVersionFunc, &CheatRusVersionSeq},
 };
 
 #define SET_CHEAT(cheat, seq) \
@@ -2012,6 +2016,11 @@ static void CheatScriptFunc3(player_t * player, Cheat_t * cheat)
                    "DSGJKYTYBT CRHBGNF %.2d", script);	// ВЫПОЛНЕНИЕ СКРИПТА %.2d
         P_SetMessage(player, textBuffer, true);
     }
+}
+
+static void CheatRusVersionFunc(player_t * player, Cheat_t * cheat)
+{
+    P_SetMessage(player, TXT_VERSION, true); 
 }
 
 extern int cheating;
