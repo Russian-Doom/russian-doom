@@ -2259,7 +2259,7 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
     else
     {
         z = source->z + 4 * 8 * FRACUNIT +
-            ((source->player->lookdir) << FRACBITS) / 173;
+            ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 173;
         z -= source->floorclip;
     }
     MissileMobj = P_SpawnMobj(x, y, z, type);
@@ -2370,13 +2370,13 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
         if (!linetarget)
         {
             an = angle;
-            slope = ((source->player->lookdir) << FRACBITS) / 173;
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 173;
         }
     }
     x = source->x;
     y = source->y;
     z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir) << FRACBITS) / 173;
+        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 173;
     z -= source->floorclip;
     th = P_SpawnMobj(x, y, z, type);
 //      if(th->info->seesound)
@@ -2421,10 +2421,10 @@ mobj_t *P_SPMAngleXYZ(mobj_t * source, fixed_t x, fixed_t y,
         if (!linetarget)
         {
             an = angle;
-            slope = ((source->player->lookdir) << FRACBITS) / 173;
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 173;
         }
     }
-    z += 4 * 8 * FRACUNIT + ((source->player->lookdir) << FRACBITS) / 173;
+    z += 4 * 8 * FRACUNIT + ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 173;
     z -= source->floorclip;
     th = P_SpawnMobj(x, y, z, type);
 //      if(th->info->seesound)
