@@ -1075,11 +1075,11 @@ void A_FireMacePL1B(player_t * player, pspdef_t * psp)
     ball = P_SpawnMobj(pmo->x, pmo->y, pmo->z + 28 * FRACUNIT
                        - FOOTCLIPSIZE * (pmo->flags2 & 1), MT_MACEFX2);
 
-    ball->momz = 2 * FRACUNIT + ((player->lookdir) << (FRACBITS - 5));
+    ball->momz = 2 * FRACUNIT + ((player->lookdir / MLOOKUNIT) << (FRACBITS - 5));
     angle = pmo->angle;
     ball->target = pmo;
     ball->angle = angle;
-    ball->z += (player->lookdir) << (FRACBITS - 4);
+    ball->z += (player->lookdir / MLOOKUNIT) << (FRACBITS - 4);
     angle >>= ANGLETOFINESHIFT;
     ball->momx = (pmo->momx >> 1)
         + FixedMul(ball->info->speed, finecosine[angle]);
@@ -1245,7 +1245,7 @@ void A_FireMacePL2(player_t * player, pspdef_t * psp)
     {
         mo->momx += player->mo->momx;
         mo->momy += player->mo->momy;
-        mo->momz = 2 * FRACUNIT + ((player->lookdir) << (FRACBITS - 5));
+        mo->momz = 2 * FRACUNIT + ((player->lookdir / MLOOKUNIT) << (FRACBITS - 5));
         if (linetarget)
         {
             mo->special1.m = linetarget;
@@ -1700,12 +1700,12 @@ void A_FirePhoenixPL2(player_t * player, pspdef_t * psp)
     angle = pmo->angle;
     x = pmo->x + (P_SubRandom() << 9);
     y = pmo->y + (P_SubRandom() << 9);
-    z = pmo->z + 26 * FRACUNIT + ((player->lookdir) << FRACBITS) / 173;
+    z = pmo->z + 26 * FRACUNIT + ((player->lookdir / MLOOKUNIT) << FRACBITS) / 173;
     if (pmo->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;
     }
-    slope = ((player->lookdir) << FRACBITS) / 173 + (FRACUNIT / 10);
+    slope = ((player->lookdir / MLOOKUNIT) << FRACBITS) / 173 + (FRACUNIT / 10);
     mo = P_SpawnMobj(x, y, z, MT_PHOENIXFX2);
     mo->target = pmo;
     mo->angle = angle;
