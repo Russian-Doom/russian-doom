@@ -604,6 +604,8 @@ void R_ProjectSprite(mobj_t * thing)
     if (randomly_flipcorpses && !vanillaparm)
     {
         if ((thing->flags & MF_CORPSE && thing->type != MT_MINOTAUR && thing->type != MT_SORCERER1 && thing->type != MT_SORCERER2)
+        || thing->info->spawnstate == S_MOSS1             // Moss 1
+        || thing->info->spawnstate == S_MOSS2             // Moss 2
         || thing->info->spawnstate == S_HANGINGCORPSE     // Hanging Corpse (51)
         || thing->info->spawnstate == S_SKULLHANG70_1     // Hanging Skull 1 (17)
         || thing->info->spawnstate == S_SKULLHANG60_1     // Hanging Skull 2 (24)
