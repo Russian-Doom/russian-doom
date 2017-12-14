@@ -66,11 +66,6 @@ extern lighttable_t* brightmaps_bspi_attack_2;
 extern lighttable_t* brightmaps_skel_attack;
 extern lighttable_t* brightmaps_fatt_attack;
 extern lighttable_t* brightmaps_sswv_attack;
-extern lighttable_t* brightmaps_torches;
-extern lighttable_t* brightmaps_floor_lamp;
-extern lighttable_t* brightmaps_tech_lamps;
-extern lighttable_t* brightmaps_flam_barrel;
-extern lighttable_t* brightmaps_expl_barrel;
 
 extern int viewwidth;
 extern int scaledviewwidth;

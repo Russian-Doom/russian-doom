@@ -116,11 +116,6 @@ lighttable_t* fullbright_bspi_attack_2[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_skel_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_fatt_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_sswv_attack[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t* fullbright_torches[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t* fullbright_floor_lamp[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t* fullbright_tech_lamps[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t* fullbright_flam_barrel[LIGHTLEVELS][MAXLIGHTSCALE];
-lighttable_t* fullbright_expl_barrel[LIGHTLEVELS][MAXLIGHTSCALE];
 
 // bumped light from gun blasts
 int extralight;			
@@ -769,11 +764,6 @@ void R_ExecuteSetViewSize (void)
             fullbright_skel_attack[i][j] = brightmaps_skel_attack + level*256;
             fullbright_fatt_attack[i][j] = brightmaps_fatt_attack + level*256;
             fullbright_sswv_attack[i][j] = brightmaps_sswv_attack + level*256;
-            fullbright_torches[i][j] = brightmaps_torches + level*256;
-            fullbright_floor_lamp[i][j] = brightmaps_floor_lamp + level*256;
-            fullbright_tech_lamps[i][j] = brightmaps_tech_lamps + level*256;
-            fullbright_flam_barrel[i][j] = brightmaps_flam_barrel + level*256;
-            fullbright_expl_barrel[i][j] = brightmaps_expl_barrel + level*256;
         }
     }
 }

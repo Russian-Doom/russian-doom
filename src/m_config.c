@@ -1700,6 +1700,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(show_exit_sequence),        // [Strife] Показывать заставку при выходе
     // - Графика -
     CONFIG_VARIABLE_INT(brightmaps),                // Брайтмаппинг текстур и спрайтов
+    CONFIG_VARIABLE_INT(brightmaps_extra),          // Дополнительный брайтмаппинг монстров
     CONFIG_VARIABLE_INT(fake_contrast),             // Имитация контрастного освещения стен
     CONFIG_VARIABLE_INT(translucency),              // Эффект прозрачности у некоторых объектов
     CONFIG_VARIABLE_INT(floating_powerups),         // Левитирующие сферы-артефакты

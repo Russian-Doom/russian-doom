@@ -89,11 +89,6 @@ extern lighttable_t*    fullbright_bspi_attack_2[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_skel_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_fatt_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_sswv_attack[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_torches[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_floor_lamp[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_tech_lamps[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_flam_barrel[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_expl_barrel[LIGHTLEVELS][MAXLIGHTSCALE];
 
 extern int extralight;
 extern lighttable_t* fixedcolormap;

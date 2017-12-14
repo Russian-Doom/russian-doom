@@ -192,11 +192,6 @@ lighttable_t	*brightmaps_bspi_attack_2;
 lighttable_t	*brightmaps_skel_attack;
 lighttable_t	*brightmaps_fatt_attack;
 lighttable_t	*brightmaps_sswv_attack;
-lighttable_t	*brightmaps_torches;
-lighttable_t	*brightmaps_floor_lamp;
-lighttable_t	*brightmaps_tech_lamps;
-lighttable_t	*brightmaps_flam_barrel;
-lighttable_t	*brightmaps_expl_barrel;
 
 
 extern int      translucency;
@@ -988,7 +983,6 @@ void R_InitColormaps (void)
 {
     int	lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9;
     int lump10, lump11, lump12, lump13, lump14, lump15, lump16, lump17, lump18, lump19, lump20, lump21, lump22, lump23;
-    int lump24, lump25, lump26, lump27, lump28;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -1067,21 +1061,6 @@ void R_InitColormaps (void)
     
     lump23 = W_GetNumForName(DEH_String("BRTMAE14"));
     brightmaps_sswv_attack = W_CacheLumpNum(lump23, PU_STATIC);
-    
-    lump24 = W_GetNumForName(DEH_String("BRTMAE15"));
-    brightmaps_torches = W_CacheLumpNum(lump24, PU_STATIC);
-    
-    lump25 = W_GetNumForName(DEH_String("BRTMAE16"));
-    brightmaps_floor_lamp = W_CacheLumpNum(lump25, PU_STATIC);
-    
-    lump26 = W_GetNumForName(DEH_String("BRTMAE17"));
-    brightmaps_tech_lamps = W_CacheLumpNum(lump26, PU_STATIC);
-    
-    lump27 = W_GetNumForName(DEH_String("BRTMAE18"));
-    brightmaps_flam_barrel = W_CacheLumpNum(lump27, PU_STATIC);
-    
-    lump28 = W_GetNumForName(DEH_String("BRTMAE19"));
-    brightmaps_expl_barrel = W_CacheLumpNum(lump28, PU_STATIC);
 }
 
 

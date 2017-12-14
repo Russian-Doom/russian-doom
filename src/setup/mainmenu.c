@@ -105,6 +105,7 @@ static void SensibleDefaults(void)
     show_exit_sequence = 1;      // [Strife] ѕоказывать заставку при выходе
     // - Графика -
     brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
+    brightmaps_extra = 1;        // Брайтмаппинг текстур и спрайтов
     fake_contrast = 0;           // Имитация контрастного освещения стен
     translucency = 1;            // Прозрачность объектов
     floating_powerups = 0;       // Левитирующие сферы-артефакты

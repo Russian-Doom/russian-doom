@@ -34,6 +34,7 @@ extern int show_diskicon;           // Значок дискеты / [Strife] п
 extern int show_exit_sequence;      // [Strife] Показывать заставку при выходе
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
+extern int brightmaps_extra;        // Дополнительный брайтмаппинг монстров
 extern int fake_contrast;           // Имитация контрастного освещения стен
 extern int translucency;            // Прозрачность объектов
 extern int floating_powerups;       // Левитирующие сферы-артефакты
