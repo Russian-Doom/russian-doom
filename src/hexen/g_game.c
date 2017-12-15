@@ -821,7 +821,7 @@ void G_DoLoadLevel(void)
 
     if (testcontrols)
     {
-        P_SetMessage(&players[consoleplayer], "HT:BV GHJDTHRB EGHFDKTYBZ", false);		// РЕЖИМ ПРОВЕРКИ УПРАВЛЕНИЯ
+        P_SetMessage(&players[consoleplayer], "HT;BV GHJDTHRB EGHFDKTYBZ", false);		// РЕЖИМ ПРОВЕРКИ УПРАВЛЕНИЯ
     }
 }
 
@@ -1090,7 +1090,7 @@ void G_Ticker(void)
                 break;
             case ga_screenshot:
                 V_ScreenShot("HEXEN%02i.%s");
-                P_SetMessage(&players[consoleplayer], "CYBVJR \"RHFYF", false);	// СНИМОК ЭКРАНА | SCREEN SHOT
+                P_SetMessage(&players[consoleplayer], "CYBVJR 'RHFYF", false);	// СНИМОК ЭКРАНА | SCREEN SHOT
                 gameaction = ga_nothing;
                 break;
             case ga_leavemap:
@@ -1629,7 +1629,7 @@ void G_Completed(int map, int position)
 {
     if (gamemode == shareware && map > 4)
     {
-        P_SetMessage(&players[consoleplayer], "LTVJDTHCBZ. GHJ{JL DJCGHTOTY.", true);	// ДЕМОВЕРСИЯ. ПРОХОД ВОСПРЕЩЕН.
+        P_SetMessage(&players[consoleplayer], "LTVJDTHCBZ> GHJ{JL DJCGHTOTY>", true);	// ДЕМОВЕРСИЯ. ПРОХОД ВОСПРЕЩЕН.
         S_StartSound(NULL, SFX_CHAT);
         return;
     }

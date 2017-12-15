@@ -552,7 +552,7 @@ boolean P_StartLockedACS(line_t * line, byte * args, mobj_t * mo, int side)
         if (!(mo->player->keys & (1 << (lock - 1))))
         {
             M_snprintf(LockedBuffer, sizeof(LockedBuffer),
-                       "LKZ JNRHSNBZ YE:TY %s\n", TextKeyMessages[lock - 1]);	// ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n
+                       "LKZ JNRHSNBZ YE;TY %s\n", TextKeyMessages[lock - 1]);	// ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n
             P_SetMessage(mo->player, LockedBuffer, true);
             S_StartSound(mo, SFX_DOOR_LOCKED);
             return false;

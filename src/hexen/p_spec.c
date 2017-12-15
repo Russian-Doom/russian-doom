@@ -424,7 +424,7 @@ static boolean CheckedLockedDoor(mobj_t * mo, byte lock)
     if (!(mo->player->keys & (1 << (lock - 1))))
     {
         M_snprintf(LockedBuffer, sizeof(LockedBuffer),
-                   "LKZ JNRHSNBZ YE:TY %s\n", TextKeyMessages[lock - 1]); // ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n | YOU NEED THE %s\n
+                   "LKZ JNRHSNBZ YE;TY %s\n", TextKeyMessages[lock - 1]); // ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n | YOU NEED THE %s\n
         P_SetMessage(mo->player, LockedBuffer, true);
         S_StartSound(mo, SFX_DOOR_LOCKED);
         return false;

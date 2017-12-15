@@ -1526,7 +1526,7 @@ static void DrawWorldTimer(void)
     seconds = worldTimer;
 
     M_snprintf(timeBuffer, sizeof(timeBuffer),
-               "%.2d ; %.2d ; %.2d", hours, minutes, seconds); // [JN] ":" заменено на ";"
+               "%.2d : %.2d : %.2d", hours, minutes, seconds);
     MN_DrTextA(timeBuffer, 237, 8); // [JN] Небольшая корректировка позиции
 
     if (days)

@@ -18,23 +18,8 @@
 
 
 //
-// Памятка по символам:
-// --------------------
-//   Строчный шрифт:
-//   { = Х (STCFN064)
-//   } = Ъ (STCFN066)
-//   : = Ж (FONTA26)
-//   " = Э (FONTA02)
-//   < = Б (FONTA28)
-//   > = Ю (FONTA30)
+// Памятка по символам: docs_russian/charmap/raven_charmap.xlsx
 //
-//   Заглавный шрифт:
-//   { = Х (STCFN065)
-//   } = Ъ (STCFN067)
-//   : = Ж (FONTB26)
-//   " = Э (FONTB26)
-//   < = Б (FONTB28)
-//   > = Ю (FONTB30)
 
 
 // HEADER FILES ------------------------------------------------------------
@@ -61,7 +46,7 @@
 #define SELECTOR_XOFFSET (-28)
 #define SELECTOR_YOFFSET (-1)
 #define SLOTTEXTLEN	16
-#define ASCII_CURSOR '['
+#define ASCII_CURSOR '_'
 
 // TYPES -------------------------------------------------------------------
 
@@ -184,7 +169,7 @@ static MenuItem_t MainItems[] = {
     {ITT_SETMENU, "YFCNHJQRB", NULL, 0, MENU_OPTIONS},			// НАСТРОЙКИ
     {ITT_SETMENU, "AFQKS BUHS", NULL, 0, MENU_FILES},			// ФАЙЛЫ ИГРЫ
     {ITT_EFUNC,   "BYAJHVFWBZ", SCInfo, 0, MENU_NONE},			// ИНФОРМАЦИЯ
-    {ITT_EFUNC,   "DS{JL", SCQuitGame, 0, MENU_NONE}			// ВЫХОД
+    {ITT_EFUNC,   "DS[JL", SCQuitGame, 0, MENU_NONE}			// ВЫХОД
 };
 
 static Menu_t MainMenu = {
@@ -211,7 +196,7 @@ static Menu_t ClassMenu = {
 
 static MenuItem_t FilesItems[] = {
     {ITT_SETMENU, "PFUHEPBNM BUHE", SCNetCheck2, 2, MENU_LOAD},		// ЗАГРУЗИТЬ ИГРУ
-    {ITT_SETMENU, "CJ{HFYBNM BUHE", NULL, 0, MENU_SAVE}				// СОХРАНИТЬ ИГРУ
+    {ITT_SETMENU, "CJ[HFYBNM BUHE", NULL, 0, MENU_SAVE}				// СОХРАНИТЬ ИГРУ
 };
 
 static Menu_t FilesMenu = {
@@ -274,10 +259,10 @@ static Menu_t SkillMenu = {
 
 static MenuItem_t OptionsItems[] = {
     {ITT_EFUNC, "PFRJYXBNM BUHE", SCEndGame, 0, MENU_NONE},		// ЗАКОНЧИТЬ ИГРУ
-    {ITT_EFUNC, "CJJ<OTYBZ; ", SCMessages, 0, MENU_NONE},		// СООБЩЕНИЯ:
+    {ITT_EFUNC, "CJJ,OTYBZ: ", SCMessages, 0, MENU_NONE},		// СООБЩЕНИЯ:
     {ITT_LRFUNC, "CRJHJCNM VSIB", SCMouseSensi, 0, MENU_NONE},	// СКОРОСТЬ МЫШИ
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
-    {ITT_SETMENU, "LJGJKYBNTKMYJ...", NULL, 0, MENU_OPTIONS2}	// ДОПОЛНИТЕЛЬНО...
+    {ITT_SETMENU, "LJGJKYBNTKMYJ>>>", NULL, 0, MENU_OPTIONS2}	// ДОПОЛНИТЕЛЬНО...
 };
 
 static Menu_t OptionsMenu = {
@@ -289,7 +274,7 @@ static Menu_t OptionsMenu = {
 };
 
 static MenuItem_t Options2Items[] = {
-    {ITT_LRFUNC, "HFPVTH \"RHFYF", SCScreenSize, 0, MENU_NONE},		// РАЗМЕР ЭКРАНА
+    {ITT_LRFUNC, "HFPVTH 'RHFYF", SCScreenSize, 0, MENU_NONE},		// РАЗМЕР ЭКРАНА
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
     {ITT_LRFUNC, "UHJVRJCNM PDERF", SCSfxVolume, 0, MENU_NONE},		// ГРОМКОСТЬ ЗВУКА
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
@@ -529,11 +514,11 @@ void MN_Ticker(void)
 //---------------------------------------------------------------------------
 
 char *QuitEndMsg[] = {
-    "DS LTQCNDBNTKMYJ :TKFTNT DSQNB?",			// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ВЫЙТИ?  | DS LTQCNDBNTKMYJ :TKFTNT DSQNB
-    "DS LTQCNDBNTKMYJ :TKFTNT PFRJYXBNM BUHE?",	// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ЗАКОНЧИТЬ ИГРУ?
-    "DSGJKYBNM <SCNHJT CJ{HFYTYBT BUHS;",		// ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
-    "DSGJKYBNM <SCNHE> PFUHEPRE BUHS;",			// ВЫПОЛНИТЬ БЫСТРУЮ ЗАГРУЗКУ ИГРЫ:
-    "DS LTQCNDBNTKMYJ {JNBNT CJDTHIBNM CEBWBL?"	// ВЫ ДЕЙСТВИТЕЛЬНО ХОТИТЕ СОВЕРШИТЬ СУИЦИД?
+    "DS LTQCNDBNTKMYJ ;TKFTNT DSQNB?",			// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ВЫЙТИ?
+    "DS LTQCNDBNTKMYJ ;TKFTNT PFRJYXBNM BUHE?",	// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ЗАКОНЧИТЬ ИГРУ?
+    "DSGJKYBNM ,SCNHJT CJ[HFYTYBT BUHS:",		// ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
+    "DSGJKYBNM ,SCNHE. PFUHEPRE BUHS:",			// ВЫПОЛНИТЬ БЫСТРУЮ ЗАГРУЗКУ ИГРЫ:
+    "DS LTQCNDBNTKMYJ [JNBNT CJDTHIBNM CEBWBL?"	// ВЫ ДЕЙСТВИТЕЛЬНО ХОТИТЕ СОВЕРШИТЬ СУИЦИД?
 };
 
 void MN_Drawer(void)
@@ -641,7 +626,7 @@ static void DrawClassMenu(void)
         "m_mwalk1"
     };
 
-    MN_DrTextB("DS<THBNT RKFCC;", 5, 24);	// ВЫБЕРИТЕ КЛАСС:
+    MN_DrTextB("DS,THBNT RKFCC:", 5, 24);	// ВЫБЕРИТЕ КЛАСС:
     class = (pclass_t) CurrentMenu->items[CurrentItPos].option;
     V_DrawShadowedPatchRaven(174, 8, W_CacheLumpName(boxLumpName[class], PU_CACHE));
     V_DrawPatch(174 + 24, 8 + 12,
@@ -657,7 +642,7 @@ static void DrawClassMenu(void)
 
 static void DrawSkillMenu(void)
 {
-	MN_DrTextB("EHJDTYM CKJ:YJCNB;", 57, 16);	// УРОВЕНЬ СЛОЖНОСТИ:
+	MN_DrTextB("EHJDTYM CKJ;YJCNB:", 57, 16);	// УРОВЕНЬ СЛОЖНОСТИ:
 }
 
 //---------------------------------------------------------------------------
@@ -698,7 +683,7 @@ static void DrawLoadMenu(void)
 
 static void DrawSaveMenu(void)
 {
-    MN_DrTextB("CJ{HFYBNM BUHE", 160 - MN_TextBWidth("CJ{HFYBNM BUHE") / 2, 10);	// СОХРАНИТЬ ИГРУ
+    MN_DrTextB("CJ[HFYBNM BUHE", 160 - MN_TextBWidth("CJ[HFYBNM BUHE") / 2, 10);	// СОХРАНИТЬ ИГРУ
     if (!slottextloaded)
     {
         MN_LoadSlotText();
@@ -796,11 +781,11 @@ static void DrawOptionsMenu(void)
 {
     if (messageson)
     {
-        MN_DrTextB("DRK.", 213, 50);	// ВКЛ.
+        MN_DrTextB("DRK>", 213, 50);	// ВКЛ.
     }
     else
     {
-        MN_DrTextB("DSRK.", 213, 50);	// ВЫКЛ.
+        MN_DrTextB("DSRK>", 213, 50);	// ВЫКЛ.
     }
     DrawSlider(&OptionsMenu, 3, 9, mouseSensitivity);
 }
@@ -870,11 +855,11 @@ static void SCMessages(int option)
     messageson ^= 1;
     if (messageson)
     {
-        P_SetMessage(&players[consoleplayer], "CJJ<OTYBZ DRK>XTYS", true);	// СООБЩЕНИЯ ВКЛЮЧЕНЫ
+        P_SetMessage(&players[consoleplayer], "CJJ,OTYBZ DRK.XTYS", true);	// СООБЩЕНИЯ ВКЛЮЧЕНЫ
     }
     else
     {
-        P_SetMessage(&players[consoleplayer], "CJJ<OTYBZ DSRK>XTYS", true);	// СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
+        P_SetMessage(&players[consoleplayer], "CJJ,OTYBZ DSRK.XTYS", true);	// СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
     }
     S_StartSound(NULL, SFX_CHAT);
 }
@@ -895,15 +880,15 @@ static boolean SCNetCheck(int option)
     {
         case 1:                // new game
             P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ:YJ YFXFNM YJDE> nBUHE D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
+                         "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
             break;
         case 2:                // load game
             P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ:YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
+                         "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
             break;
         case 3:                // end game
             P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ:YJ PFRJYXBNM CTNTDE> BUHE!", true);		// НЕВОЗМОЖНО ЗАКОНЧИТЬ СЕТЕВУЮ ИГРУ!
+                         "YTDJPVJ;YJ PFRJYXBNM CTNTDE. BUHE!", true);		// НЕВОЗМОЖНО ЗАКОНЧИТЬ СЕТЕВУЮ ИГРУ!
             break;
     }
     MenuActive = false;
@@ -977,7 +962,7 @@ static void SCSaveGame(int option)
         {
             ptr++;
         }
-        *ptr = '[';
+        *ptr = '_';
         *(ptr + 1) = 0;
         SlotStatus[option]++;
         currentSlot = option;
@@ -1010,7 +995,7 @@ static void SCClass(int option)
     if (netgame)
     {
         P_SetMessage(&players[consoleplayer],
-                     "YTDJPVJ:YJ YFXFNM YJDE> nBUHE D CTNTDJQ BUHT!",	// НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
+                     "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!",	// НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
                      true);
         return;
     }
@@ -1019,16 +1004,16 @@ static void SCClass(int option)
     {
         case PCLASS_FIGHTER:
             SkillMenu.x = 120;
-            SkillItems[0].text = "JHE:TYJCTW";	// ОРУЖЕНОСЕЦ
+            SkillItems[0].text = "JHE;TYJCTW";	// ОРУЖЕНОСЕЦ
             SkillItems[1].text = "HSWFHM";		// РЫЦАРЬ
             SkillItems[2].text = "DJBNTKM";		// ВОИТЕЛЬ
-            SkillItems[3].text = "<THCTHR";		// БЕРСЕРК
+            SkillItems[3].text = ",THCTHR";		// БЕРСЕРК
             SkillItems[4].text = "NBNFY";		// ТИТАН
             break;
         case PCLASS_CLERIC:
             SkillMenu.x = 116;
             SkillItems[0].text = "FKNFHYBR";	// АЛТАРНИК
-            SkillItems[1].text = "CKE:BNTKM";	// СЛУЖИТЕЛЬ  
+            SkillItems[1].text = "CKE;BNTKM";	// СЛУЖИТЕЛЬ  
             SkillItems[2].text = "CDZOTYYBR";	// СВЯЩЕННИК
             SkillItems[3].text = "RFHLBYFK";	// КАРДИНАЛ
             SkillItems[4].text = "TGBCRJG";		// ЕПИСКОП
@@ -1038,8 +1023,8 @@ static void SCClass(int option)
 			SkillItems[0].text = "EXTYBR";			// УЧЕНИК
             SkillItems[1].text = "XFHJLTQ";			// ЧАРОДЕЙ
             SkillItems[2].text = "RJKLEY";			// КОЛДУН
-            SkillItems[3].text = "XTHYJRYB:YBR";	// ЧЕРНОКНИЖНИК
-            SkillItems[4].text = "DTH{JDYSQ VFU";	// ВЕРХОВНЫЙ МАГ
+            SkillItems[3].text = "XTHYJRYB;YBR";	// ЧЕРНОКНИЖНИК
+            SkillItems[4].text = "DTH[JDYSQ VFU";	// ВЕРХОВНЫЙ МАГ
             break;
     }
     SetMenu(MENU_SKILL);
@@ -1304,14 +1289,14 @@ boolean MN_Responder(event_t * event)
                     return false;
                 case 3:
                     P_SetMessage(&players[consoleplayer],
-                                 "<SCNHJT CJ{HFYTYBT....", false);	// БЫСТРОЕ СОХРАНЕНИЕ...
+                                 ",SCNHJT CJ[HFYTYBT>>>", false);	// БЫСТРОЕ СОХРАНЕНИЕ...
                     FileMenuKeySteal = true;
                     SCSaveGame(quicksave - 1);
                     BorderNeedRefresh = true;
                     break;
                 case 4:
                     P_SetMessage(&players[consoleplayer],
-                                 "<SCNHFZ PFUHEPRF....", false);	// БЫСТРАЯ ЗАГРУЗКА...
+                                 ",SCNHFZ PFUHEPRF>>>", false);	// БЫСТРАЯ ЗАГРУЗКА...
                     SCLoadGame(quickload - 1);
                     BorderNeedRefresh = true;
                     break;
@@ -1450,7 +1435,7 @@ boolean MN_Responder(event_t * event)
                     slottextloaded = false; //reload the slot text
                     quicksave = -1;
                     P_SetMessage(&players[consoleplayer],
-                                 "DS<THBNT CKJN <SCNHJUJ CJ{HFYTYBZ", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
+                                 "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
                 }
                 else
                 {
@@ -1501,7 +1486,7 @@ boolean MN_Responder(event_t * event)
                     slottextloaded = false; // reload the slot text
                     quickload = -1;
                     P_SetMessage(&players[consoleplayer],
-                                 "DS<THBNT CKJN <SCNHJQ PFUHEPRB", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
+                                 "DS,THBNT CKJN ,SCNHJQ PFUHEPRB", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
                 }
                 else
                 {
@@ -1734,9 +1719,30 @@ boolean MN_Responder(event_t * event)
                 slotptr++;
                 return (true);
             }
-            if (isdigit(charTyped) || charTyped == ' '
-             || charTyped == ',' || charTyped == '.' || charTyped == '-'
-             || charTyped == '!')
+            // [JN] Extended support of Russian alphabet input, including special symbols.
+            if (isdigit(charTyped) 
+            || charTyped == ' '
+            || charTyped == '!'
+            || charTyped == '('
+            || charTyped == ')'
+            || charTyped == '-'
+            || charTyped == '+'
+            || charTyped == '='
+            || charTyped == '/'
+            || charTyped == '\\'
+            || charTyped == '*'
+            || charTyped == '?'
+            || charTyped == '_'
+            || charTyped == '<'
+            || charTyped == '>'
+            || charTyped == ':'
+            || charTyped == '"'
+            || charTyped == ']'   // ъ
+            || charTyped == '['   // х
+            || charTyped == ';'   // ж
+            || charTyped == '\''  // э
+            || charTyped == ','   // б
+            || charTyped == '.')  // ю
             {
                 *textBuffer++ = charTyped;
                 *textBuffer = ASCII_CURSOR;
