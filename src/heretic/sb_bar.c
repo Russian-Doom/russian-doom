@@ -489,9 +489,9 @@ static void DrawSoundInfo(void)
     }
     x = 0;
     MN_DrTextA(DEH_String("BVZ"), xPos[x++], 30);	// ИМЯ
-    MN_DrTextA(DEH_String("VJ.N"), xPos[x++], 30);	// МО.Т
-    MN_DrTextA(DEH_String("VJ.{"), xPos[x++], 30);	// МО.Х
-    MN_DrTextA(DEH_String("VJ.E"), xPos[x++], 30);	// МО.У
+    MN_DrTextA(DEH_String("VJ>N"), xPos[x++], 30);	// МО.Т
+    MN_DrTextA(DEH_String("VJ>["), xPos[x++], 30);	// МО.Х
+    MN_DrTextA(DEH_String("VJ>E"), xPos[x++], 30);	// МО.У
     MN_DrTextA(DEH_String("YV"), xPos[x++], 30);	// НМ (НОМЕР)
     MN_DrTextA(DEH_String("GHT"), xPos[x++], 30);	// ПРЕ
     MN_DrTextA(DEH_String("LBCN"), xPos[x++], 30);	// ДИСТ

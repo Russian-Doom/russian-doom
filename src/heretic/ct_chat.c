@@ -130,22 +130,17 @@ static boolean ValidChatChar(char c)
     return (c >= 'a' && c <= 'z')
         || (c >= 'A' && c <= 'Z')
         || (c >= '0' && c <= '9')
-        || c == '!' || c == '?'
-        || c == ' ' || c == '\''
-        || c == ',' || c == '.'
-        || c == '-' || c == '='
+        || c == '!' || c == '?' || c == ' ' || c == '-' || c == '='
 		
-		// [JN] Добавлены буквы русского алфавита.
-		
-		|| c == '{'
-		|| c == '}'
-		|| c == '['
-		|| c == ']'
-		|| c == ':'
-		|| c == ';'
-		|| c == '"'
-		|| c == '<'
-		|| c == '>';
+		// [JN] Добавлены буквы русского алфавита и специальные символы
+        || c == '(' || c == ')' || c == '+' || c == '/' || c == '\\'
+        || c == '*' || c == '_' || c == '<' || c == '>' || c == ':' || c == '"'
+        || c == ']'   // ъ
+        || c == '['   // х
+        || c == ';'   // ж
+        || c == '\''  // э
+        || c == ','   // б
+        || c == '.';  // ю;
 }
 
 //===========================================================================
@@ -378,7 +373,7 @@ void CT_Drawer(void)
                 x += patch->width;
             }
         }
-        V_DrawShadowedPatchRaven(x, 10, W_CacheLumpName(DEH_String("FONTA59"), PU_CACHE));
+        V_DrawShadowedPatchRaven(x, 10, W_CacheLumpName(DEH_String("FONTA63"), PU_CACHE)); // [JN] Replaced to FONTA63 ('_')
         BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
     }

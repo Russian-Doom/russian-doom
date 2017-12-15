@@ -18,23 +18,8 @@
 
 
 //
-// Памятка по символам:
-// --------------------
-// 	 Строчный шрифт:
-// 	 { = Х (STCFN064)
-// 	 } = Ъ (STCFN066)
-// 	 : = Ж (FONTA26)
-// 	 " = Э (FONTA02)
-// 	 < = Б (FONTA28)
-// 	 > = Ю (FONTA30)
+// Памятка по символам: docs_russian/charmap/raven_charmap.xlsx
 //
-//   Заглавный шрифт:
-// 	 { = Х (STCFN065)
-// 	 } = Ъ (STCFN067)
-// 	 : = Ж (FONTB26)
-// 	 " = Э (FONTB26)
-// 	 < = Б (FONTB28)
-// 	 > = Ю (FONTB30)
 
 
 // MN_menu.c
@@ -64,7 +49,7 @@
 #define SELECTOR_XOFFSET (-28)
 #define SELECTOR_YOFFSET (-1)
 #define SLOTTEXTLEN     16
-#define ASCII_CURSOR '['
+#define ASCII_CURSOR '_'
 
 // Types
 
@@ -506,10 +491,10 @@ void MN_Ticker(void)
 //---------------------------------------------------------------------------
 
 char *QuitEndMsg[] = {
-    "DS LTQCNDBNTKMYJ :TKFTNT DSQNB?",			// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ВЫЙТИ?
-    "DS LTQCNDBNTKMYJ :TKFTNT PFRJYXBNM BUHE?",	// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ЗАКОНЧИТЬ ИГРУ?
-    "DSGJKYBNM <SCNHJT CJ{HFYTYBT BUHS;",		// ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
-    "DSGJKYBNM <SCNHE> PFUHEPRE BUHS;"			// ВЫПОЛНИТЬ БЫСТРУЮ ЗАГРУЗКУ ИГРЫ:
+    "DS LTQCNDBNTKMYJ ;TKFTNT DSQNB?",			// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ВЫЙТИ?
+    "DS LTQCNDBNTKMYJ ;TKFTNT PFRJYXBNM BUHE?",	// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ЗАКОНЧИТЬ ИГРУ?
+    "DSGJKYBNM ,SCNHJT CJ[HFYTYBT BUHS:",		// ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
+    "DSGJKYBNM ,SCNHE. PFUHEPRE BUHS:"			// ВЫПОЛНИТЬ БЫСТРУЮ ЗАГРУЗКУ ИГРЫ:
 };
 
 void MN_Drawer(void)
@@ -778,11 +763,11 @@ static boolean SCNetCheck(int option)
     {
         case 1:
             P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ:YJ YFXFNM YJDE> nBUHE D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
+                         "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
             break;
         case 2:
             P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ:YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
+                         "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
             break;
         default:
             break;
@@ -842,11 +827,11 @@ static boolean SCMessages(int option)
     messageson ^= 1;
     if (messageson)
     {
-        P_SetMessage(&players[consoleplayer], DEH_String("CJJ<OTYBZ DRK>XTYS"), true);	// СООБЩЕНИЯ ВКЛЮЧЕНЫ
+        P_SetMessage(&players[consoleplayer], DEH_String("CJJ,OTYBZ DRK.XTYS"), true);	// СООБЩЕНИЯ ВКЛЮЧЕНЫ
     }
     else
     {
-        P_SetMessage(&players[consoleplayer], DEH_String("CJJ<OTYBZ DSRK>XTYS"), true);	// СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
+        P_SetMessage(&players[consoleplayer], DEH_String("CJJ,OTYBZ DSRK.XTYS"), true);	// СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
     }
     S_StartSound(NULL, sfx_chat);
     return true;
@@ -909,7 +894,7 @@ static boolean SCSaveGame(int option)
         {
             ptr++;
         }
-        *ptr = '[';
+        *ptr = '_';
         *(ptr + 1) = 0;
         SlotStatus[option]++;
         currentSlot = option;
@@ -944,7 +929,7 @@ static boolean SCEpisode(int option)
     if (gamemode == shareware && option > 1)
     {
         P_SetMessage(&players[consoleplayer],
-                     "\"GBPJL YT LJCNEGTY D LTVJDTHCBB", true);	// ЭПИЗОД НЕ ДОСТУПЕН В ДЕМОВЕРСИИ
+                     "'GBPJL YTLJCNEGTY D LTVJDTHCBB", true);	// ЭПИЗОД НЕДОСТУПЕН В ДЕМОВЕРСИИ
     }
     else
     {
@@ -1205,7 +1190,7 @@ boolean MN_Responder(event_t * event)
 
                 case 3:
                     P_SetMessage(&players[consoleplayer],
-                                 "<SCNHJT CJ{HFYTYBT....", false);	// БЫСТРОЕ СОХРАНЕНИЕ...
+                                 ",SCNHJT CJ[HFYTYBT>>>", false);   // БЫСТРОЕ СОХРАНЕНИЕ...
                     FileMenuKeySteal = true;
                     SCSaveGame(quicksave - 1);
                     BorderNeedRefresh = true;
@@ -1213,7 +1198,7 @@ boolean MN_Responder(event_t * event)
 
                 case 4:
                     P_SetMessage(&players[consoleplayer],
-                                 "<SCNHFZ PFUHEPRF....", false);	// БЫСТРАЯ ЗАГРУЗКА...
+                                 ",SCNHFZ PFUHEPRF>>>", false);    // БЫСТРАЯ ЗАГРУЗКА...
                     SCLoadGame(quickload - 1);
                     BorderNeedRefresh = true;
                     break;
@@ -1348,7 +1333,7 @@ boolean MN_Responder(event_t * event)
                     slottextloaded = false; //reload the slot text, when needed
                     quicksave = -1;
                     P_SetMessage(&players[consoleplayer],
-                                 "DS<THBNT CKJN <SCNHJUJ CJ{HFYTYBZ", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
+                                 "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
                 }
                 else
                 {
@@ -1394,7 +1379,7 @@ boolean MN_Responder(event_t * event)
                 slottextloaded = false;     //reload the slot text, when needed
                 quickload = -1;
                 P_SetMessage(&players[consoleplayer],
-                             "DS<THBNT CKJN <SCNHJQ PFUHEPRB", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
+                             "DS,THBNT CKJN ,SCNHJQ PFUHEPRB", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
             }
             else
             {
@@ -1616,9 +1601,30 @@ boolean MN_Responder(event_t * event)
                 slotptr++;
                 return (true);
             }
-            if (isdigit(charTyped) || charTyped == ' '
-              || charTyped == ',' || charTyped == '.' || charTyped == '-'
-              || charTyped == '!')
+            // [JN] Extended support of Russian alphabet input, including special symbols.
+            if (isdigit(charTyped) 
+            || charTyped == ' '
+            || charTyped == '!'
+            || charTyped == '('
+            || charTyped == ')'
+            || charTyped == '-'
+            || charTyped == '+'
+            || charTyped == '='
+            || charTyped == '/'
+            || charTyped == '\\'
+            || charTyped == '*'
+            || charTyped == '?'
+            || charTyped == '_'
+            || charTyped == '<'
+            || charTyped == '>'
+            || charTyped == ':'
+            || charTyped == '"'
+            || charTyped == ']'   // ъ
+            || charTyped == '['   // х
+            || charTyped == ';'   // ж
+            || charTyped == '\''  // э
+            || charTyped == ','   // б
+            || charTyped == '.')  // ю
             {
                 *textBuffer++ = charTyped;
                 *textBuffer = ASCII_CURSOR;

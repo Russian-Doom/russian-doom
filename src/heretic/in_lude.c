@@ -663,8 +663,8 @@ void IN_DrawYAH(void)
     int i;
     int x;
 
-    x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ EHJDTYM")) / 2;		// ЗАГРУЖАЕТСЯ УРОВЕНЬ
-    MN_DrTextA(DEH_String("PFUHE:FTNCZ EHJDTYM"), x, 10);				// ЗАГРУЖАЕТСЯ УРОВЕНЬ
+    x = 160 - MN_TextAWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;		// ЗАГРУЖАЕТСЯ УРОВЕНЬ
+    MN_DrTextA(DEH_String("PFUHE;FTNCZ EHJDTYM"), x, 10);				// ЗАГРУЖАЕТСЯ УРОВЕНЬ
 
     x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] +
                             7) / 2;
@@ -770,8 +770,8 @@ void IN_DrawSingleStats(void)
     else
     {
 
-        x = 160 - MN_TextAWidth(DEH_String("PFUHE:FTNCZ EHJDTYM")) / 2;	// ЗАГРУЖАЕТСЯ УРОВЕНЬ
-        MN_DrTextA(DEH_String("PFUHE:FTNCZ EHJDTYM"), x, 160);			// ЗАГРУЖАЕТСЯ УРОВЕНЬ
+        x = 160 - MN_TextAWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;	// ЗАГРУЖАЕТСЯ УРОВЕНЬ
+        MN_DrTextA(DEH_String("PFUHE;FTNCZ EHJDTYM"), x, 160);			// ЗАГРУЖАЕТСЯ УРОВЕНЬ
 
         x = 160 -
             MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] +

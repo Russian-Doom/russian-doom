@@ -38,55 +38,55 @@ vertex_t KeyPoints[NUMKEYS];
 
 char *LevelNames[] = {
     // ЭПИЗОД 1 - ГОРОД ПРОКЛЯТЫХ
-    "T1V1;  LJRB",					// E1M1: ДОКИ
-    "T1V2;  NTVYBWS",				// E1M2: ТЕМНИЦЫ
-    "T1V3;  GHBDHFNYBWRFZ",			// E1M3: ПРИВРАТНИЦКАЯ
-    "T1V4;  CNJHJ:TDFZ <FIYZ",		// E1M4: СТОРОЖЕВАЯ БАШНЯ
-    "T1V5;  WBNFLTKM",				// E1M5: ЦИТАДЕЛЬ
-    "T1V6;  RFATLTHFKMYSQ CJ<JH",	// E1M6: КАФЕДРАЛЬНЫЙ СОБОР
-    "T1V7;  CRKTGS",				// E1M7: СКЛЕПЫ
-    "T1V8;  FLCRFZ ENHJ<F",			// E1M8: АДСКАЯ УТРОБА
-    "T1V9;  RKFL<BOT",				// E1M9: КЛАДБИЩЕ
+    "T1V1:  LJRB",                  // E1M1: ДОКИ
+    "T1V2:  NTVYBWS",               // E1M2: ТЕМНИЦЫ
+    "T1V3:  GHBDHFNYBWRFZ",         // E1M3: ПРИВРАТНИЦКАЯ
+    "T1V4:  CNJHJ;TDFZ ,FIYZ",      // E1M4: СТОРОЖЕВАЯ БАШНЯ
+    "T1V5:  WBNFLTKM",              // E1M5: ЦИТАДЕЛЬ
+    "T1V6:  RFATLTHFKMYSQ CJ,JH",   // E1M6: КАФЕДРАЛЬНЫЙ СОБОР
+    "T1V7:  CRKTGS",                // E1M7: СКЛЕПЫ
+    "T1V8:  FLCRFZ ENHJ,F",         // E1M8: АДСКАЯ УТРОБА
+    "T1V9:  RKFL,BOT",              // E1M9: КЛАДБИЩЕ
     // ЭПИЗОД 2 - АДСКАЯ УТРОБА
-    "T2V1;  RHFNTH",				// E2M1: КРАТЕР
-    "T2V2;  KFDJDST JXFUB",			// E2M2: ЛАВОВЫЕ ОЧАГИ
-    "T2V3;  HTRF JUYZ",				// E2M3: РЕКА ОГНЯ
-    "T2V4;  KTLZYJQ UHJN",			// E2M4: ЛЕДЯНОЙ ГРОТ
-    "T2V5;  RFNFRJV<S",				// E2M5: КАТАКОМБЫ
-    "T2V6;  KF<BHBYN",				// E2M6: ЛАБИРИНТ
-    "T2V7;  <JKMIJQ PFK",			// E2M7: БОЛЬШОЙ ЗАЛ
-    "T2V8;  GJHNFKS {FJCF",			// E2M8: ПОРТАЛЫ ХАОСА
-    "T2V9;  KTLYBR",				// E2M9: ЛЕДНИК 
+    "T2V1:  RHFNTH",                // E2M1: КРАТЕР
+    "T2V2:  KFDJDST JXFUB",         // E2M2: ЛАВОВЫЕ ОЧАГИ
+    "T2V3:  HTRF JUYZ",             // E2M3: РЕКА ОГНЯ
+    "T2V4:  KTLZYJQ UHJN",          // E2M4: ЛЕДЯНОЙ ГРОТ
+    "T2V5:  RFNFRJV,S",             // E2M5: КАТАКОМБЫ
+    "T2V6:  KF,BHBYN",              // E2M6: ЛАБИРИНТ
+    "T2V7:  ,JKMIJQ PFK",           // E2M7: БОЛЬШОЙ ЗАЛ
+    "T2V8:  GJHNFKS [FJCF",         // E2M8: ПОРТАЛЫ ХАОСА
+    "T2V9:  KTLYBR",                // E2M9: ЛЕДНИК 
     // ЭПИЗОД 3 - КУПОЛ Д'СПАРИЛА
-    "T3V1;  RKFLJDFZ",				// E3M1: КЛАДОВАЯ
-    "T3V2;  CNJXYSQ RJKJLTW",		// E3M2: СТОЧНЫЙ КОЛОДЕЦ
-    "T3V3;  CKBZYBT",				// E3M3: СЛИЯНИЕ 
-    "T3V4;  KFPEHYFZ RHTGJCNM",		// E3M4: ЛАЗУРНАЯ КРЕПОСТЬ
-    "T3V5;  KJUJDJ JABLBFYJD",		// E3M5: ЛОГОВО ОФИДИАНОВ
-    "T3V6;  PFKS CNHF{F",			// E3M6: ЗАЛЫ СТРАХА
-    "T3V7;  GHJGFCNM",				// E3M7: ПРОПАСТЬ
-    "T3V8;  RHTGJCNM L'CGFHBKF",	// E3M8: КРЕПОСТЬ Д'СПАРИЛА
-    "T3V9;  DJLJYJCYSQ CKJQ",		// E3M9: ВОДОНОСНЫЙ СЛОЙ
+    "T3V1:  RKFLJDFZ",              // E3M1: КЛАДОВАЯ
+    "T3V2:  CNJXYSQ RJKJLTW",       // E3M2: СТОЧНЫЙ КОЛОДЕЦ
+    "T3V3:  CKBZYBT",               // E3M3: СЛИЯНИЕ 
+    "T3V4:  KFPEHYFZ RHTGJCNM",     // E3M4: ЛАЗУРНАЯ КРЕПОСТЬ
+    "T3V5:  KJUJDJ JABLBFYJD",      // E3M5: ЛОГОВО ОФИДИАНОВ
+    "T3V6:  PFKS CNHF[F",           // E3M6: ЗАЛЫ СТРАХА
+    "T3V7:  GHJGFCNM",              // E3M7: ПРОПАСТЬ
+    "T3V8:  RHTGJCNM L\"CGFHBKF",   // E3M8: КРЕПОСТЬ Д'СПАРИЛА
+    "T3V9:  DJLJYJCYSQ CKJQ",       // E3M9: ВОДОНОСНЫЙ СЛОЙ
     // ЭПИЗОД 4: СКЛЕП
-    "T4V1;  RFNFAFKR",				// E4M1: КАТАФАЛК
-    "T4V2;  ERHSNBT",				// E4M2: УКРЫТИЕ
-    "T4V3;  VJYFCNSHCRFZ UFKTHTZ",	// E4M3: МОНАСТЫРСКАЯ ГАЛЕРЕЯ
-    "T4V4;  UHJ<YBWF",				// E4M4: ГРОБНИЦА
-    "T4V5;  DTKBRFZ KTCNYBWF",		// E4M5: ВЕЛИКАЯ ЛЕСТНИЦА
-    "T4V6;  PFKS JNCNEGYBRJD",		// E4M6: ЗАЛЫ ОТСТУПНИКОВ
-    "T4V7;  NDTHLSYB GJUB<TKB", 	// E4M7: ТВЕРДЫНИ ПОГИБЕЛИ
-    "T4V8;  HFPHEITYYSQ VJCN",		// E4M8: РАЗРУШЕННЫЙ МОСТ
-    "T4V9;  VFDPJKTQ",				// E4M9: МАВЗОЛЕЙ
+    "T4V1:  RFNFAFKR",              // E4M1: КАТАФАЛК
+    "T4V2:  ERHSNBT",               // E4M2: УКРЫТИЕ
+    "T4V3:  VJYFCNSHCRFZ UFKTHTZ",  // E4M3: МОНАСТЫРСКАЯ ГАЛЕРЕЯ
+    "T4V4:  UHJ,YBWF",              // E4M4: ГРОБНИЦА
+    "T4V5:  DTKBRFZ KTCNYBWF",      // E4M5: ВЕЛИКАЯ ЛЕСТНИЦА
+    "T4V6:  PFKS JNCNEGYBRJD",      // E4M6: ЗАЛЫ ОТСТУПНИКОВ
+    "T4V7:  NDTHLSYB GJUB,TKB",     // E4M7: ТВЕРДЫНИ ПОГИБЕЛИ
+    "T4V8:  HFPHEITYYSQ VJCN",      // E4M8: РАЗРУШЕННЫЙ МОСТ
+    "T4V9:  VFDPJKTQ",              // E4M9: МАВЗОЛЕЙ
     // ЭПИЗОД 5: ЗАСТОЙНЫЕ ВЛАДЕНИЯ  
-    "T5V1;  J{HJDST ENTCS", 		// E5M1: ОХРОВЫЕ УТЕСЫ
-    "T5V2;  CNHTVYBYF",				// E5M2: СТРЕМНИНА
-    "T5V3;  GHBXFK",				// E5M3: ПРИЧАЛ
-    "T5V4;  DYENHTYYBQ LDJH",		// E5M4: ВНУТРЕННИЙ ДВОР
-    "T5V5;  UBLHJNBH",				// E5M5: ГИДРОТИР
-    "T5V6;  RJKJYYFLF",				// E5M6: КОЛОННАДА 
-    "T5V7;  PKJDJYYSQ JCJ<YZR",		// E5M7: ЗЛОВОННЫЙ ОСОБНЯК
-    "T5V8;  GJKT DSCITUJ CELF",		// E5M8: ПОЛЕ ВЫСШЕГО СУДА
-    "T5V9;  GENFYBWF L'CGFHBKF"		// E5M9: ПУТАНИЦА Д'СПАРИЛА
+    "T5V1:  J[HJDST ENTCS",         // E5M1: ОХРОВЫЕ УТЕСЫ
+    "T5V2:  CNHTVYBYF",             // E5M2: СТРЕМНИНА
+    "T5V3:  GHBXFK",                // E5M3: ПРИЧАЛ
+    "T5V4:  DYENHTYYBQ LDJH",       // E5M4: ВНУТРЕННИЙ ДВОР
+    "T5V5:  UBLHJNBH",              // E5M5: ГИДРОТИР
+    "T5V6:  RJKJYYFLF",             // E5M6: КОЛОННАДА 
+    "T5V7:  PKJDJYYSQ JCJ,YZR",     // E5M7: ЗЛОВОННЫЙ ОСОБНЯК
+    "T5V8:  GJKT DSCITUJ CELF",     // E5M8: ПОЛЕ ВЫСШЕГО СУДА
+    "T5V9:  GENFYBWF L\"CGFHBKF",   // E5M9: ПУТАНИЦА Д'СПАРИЛА
     // EPISODE 6: unnamed
     "T6V1:  ",
     "T6V2:  ",

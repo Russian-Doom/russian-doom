@@ -835,7 +835,7 @@ void G_DoLoadLevel(void)
 
     if (testcontrols)
     {
-        P_SetMessage(&players[consoleplayer], "HT:BV GHJDTHRB EGHFDKTYBZ", false);	// РЕЖИМ ПРОВЕРКИ УПРАВЛЕНИЯ
+        P_SetMessage(&players[consoleplayer], "HT;BV GHJDTHRB EGHFDKTYBZ", false);	// РЕЖИМ ПРОВЕРКИ УПРАВЛЕНИЯ
     }
 }
 
@@ -1180,7 +1180,7 @@ void G_Ticker(void)
                             else
                             {
                                 M_StringCopy(savedescription,
-                                             DEH_String("CJ{HFYBNM BUHE"),	// СОХРАНИТЬ ИГРУ
+                                             DEH_String("CJ[HFYBNM BUHE"),	// СОХРАНИТЬ ИГРУ
                                              sizeof(savedescription));
                             }
                         }
