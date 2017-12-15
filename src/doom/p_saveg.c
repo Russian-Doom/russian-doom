@@ -665,6 +665,9 @@ static void saveg_read_player_t(player_t *str)
     // fixed_t bob;
     str->bob = saveg_read32();
 
+    // int lookdir;
+    str->lookdir = saveg_read32();
+
     // int health;
     str->health = saveg_read32();
 
@@ -795,6 +798,9 @@ static void saveg_write_player_t(player_t *str)
 
     // fixed_t bob;
     saveg_write32(str->bob);
+
+    // int lookdir;
+    saveg_write32(str->lookdir);
 
     // int health;
     saveg_write32(str->health);
