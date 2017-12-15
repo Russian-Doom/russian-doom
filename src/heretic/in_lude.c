@@ -101,7 +101,7 @@ static signed int totalFrags[MAXPLAYERS];
 static fixed_t dSlideX[MAXPLAYERS];
 static fixed_t dSlideY[MAXPLAYERS];
 
-static char *KillersText[] = { "E", "<", "B", "Q", "W", "S", "" }; // "У", "Б", "И", "Й", "Ц", "Ы", ""
+static char *KillersText[] = { "E", ",", "B", "Q", "W", "S", "" }; // "У", "Б", "И", "Й", "Ц", "Ы", ""
 
 extern char *LevelNames[];
 
@@ -797,7 +797,7 @@ void IN_DrawCoopStats(void)
     static int sounds;
 
     IN_DrTextB(DEH_String("DHFUB"), 81, 35);   // ВРАГИ (95, 35)
-    IN_DrTextB(DEH_String("<JYECS"), 150, 35);  // БОНУСЫ (155, 35)
+    IN_DrTextB(DEH_String(",JYECS"), 150, 35);  // БОНУСЫ (155, 35)
     IN_DrTextB(DEH_String("CTRHTNS"), 232, 35); // СЕКРЕТЫ (232, 35)
     x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] +
                             7) / 2;
@@ -858,7 +858,7 @@ void IN_DrawDMStats(void)
     ypos = 55;
 
     IN_DrTextB(DEH_String("BNJU"), 265, 30);	// ИТОГ
-    MN_DrTextA(DEH_String(":THNDS"), 140, 8);	// ЖЕРТВЫ
+    MN_DrTextA(DEH_String(";THNDS"), 140, 8);	// ЖЕРТВЫ
     for (i = 0; i < 7; i++)
     {
         MN_DrTextA(DEH_String(KillersText[i]), 10, 80 + 9 * i);
@@ -952,7 +952,7 @@ void IN_DrawTime(int x, int y, int h, int m, int s)
     if (h)
     {
         IN_DrawNumber(h, x, y, 2);
-        IN_DrTextB(DEH_String(";"), x + 26, y); // [JN] Ранее ":", но теперь двоеточие заменяет букву "Ж"
+        IN_DrTextB(DEH_String(":"), x + 26, y);
     }
     x += 34;
     if (m || h)
@@ -962,7 +962,7 @@ void IN_DrawTime(int x, int y, int h, int m, int s)
     x += 34;
     if (s)
     {
-        IN_DrTextB(DEH_String(";"), x - 8, y); // [JN] Ранее ":", но теперь двоеточие заменяет букву "Ж"
+        IN_DrTextB(DEH_String(":"), x - 8, y);
         IN_DrawNumber(s, x, y, 2);
     }
 }
