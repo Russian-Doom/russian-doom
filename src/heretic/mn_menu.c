@@ -167,7 +167,7 @@ static MenuItem_t MainItems[] = {
     {ITT_SETMENU, "YFCNHJQRB", NULL, 0, MENU_OPTIONS},		// НАСТРОЙКИ
     {ITT_SETMENU, "AFQKS BUHS", NULL, 0, MENU_FILES},		// ФАЙЛЫ ИГРЫ
     {ITT_EFUNC, "BYAJHVFWBZ", SCInfo, 0, MENU_NONE},		// ИНФОРМАЦИЯ
-    {ITT_EFUNC, "DS{JL", SCQuitGame, 0, MENU_NONE}			// ВЫХОД
+    {ITT_EFUNC, "DS[JL", SCQuitGame, 0, MENU_NONE}			// ВЫХОД
 };
 
 static Menu_t MainMenu = {
@@ -179,9 +179,9 @@ static Menu_t MainMenu = {
 };
 
 static MenuItem_t EpisodeItems[] = {
-    {ITT_EFUNC, "UJHJL GHJRKZNS{", SCEpisode, 1, MENU_NONE},		// ГОРОД ПРОКЛЯТЫХ
-    {ITT_EFUNC, "FLCRFZ ENHJ<F", SCEpisode, 2, MENU_NONE},			// АДСКАЯ УТРОБА
-    {ITT_EFUNC, "REGJK L'CGFHBKF", SCEpisode, 3, MENU_NONE},		// КУПОЛ Д'СПАРИЛА
+    {ITT_EFUNC, "UJHJL GHJRKZNS[", SCEpisode, 1, MENU_NONE},		// ГОРОД ПРОКЛЯТЫХ
+    {ITT_EFUNC, "FLCRFZ ENHJ,F", SCEpisode, 2, MENU_NONE},			// АДСКАЯ УТРОБА
+    {ITT_EFUNC, "REGJK L\"CGFHBKF", SCEpisode, 3, MENU_NONE},		// КУПОЛ Д'СПАРИЛА
     {ITT_EFUNC, "CRKTG", SCEpisode, 4, MENU_NONE},					// СКЛЕП
     {ITT_EFUNC, "PFCNJQYST DKFLTYBZ", SCEpisode, 5, MENU_NONE}		// ЗАСТОЙНЫЕ ВЛАДЕНИЯ 
 };
@@ -196,7 +196,7 @@ static Menu_t EpisodeMenu = {
 
 static MenuItem_t FilesItems[] = {
     {ITT_EFUNC, "PFUHEPBNM BUHE", SCNetCheck, 2, MENU_LOAD},	// ЗАГРУЗИТЬ ИГРУ
-    {ITT_SETMENU, "CJ{HFYBNM BUHE", NULL, 0, MENU_SAVE}			// СОХРАНИТЬ ИГРУ
+    {ITT_SETMENU, "CJ[HFYBNM BUHE", NULL, 0, MENU_SAVE}			// СОХРАНИТЬ ИГРУ
 };
 
 static Menu_t FilesMenu = {
@@ -242,10 +242,10 @@ static Menu_t SaveMenu = {
 };
 
 static MenuItem_t SkillItems[] = {
-    {ITT_EFUNC, "YZYTXRF YFLJ<YF VYT", SCSkill, sk_baby, MENU_NONE},	// НЯНЕЧКА НАДОБНА МНЕ
-    {ITT_EFUNC, "YT CNJKM VE:TCNDTYTY Z", SCSkill, sk_easy, MENU_NONE},	// НЕ СТОЛЬ МУЖЕСТВЕНЕН Я
-    {ITT_EFUNC, "GJLFQNT VYT B{", SCSkill, sk_medium, MENU_NONE},		// ПОДАЙТЕ МНЕ ИХ
-    {ITT_EFUNC, "BCREITY Z CHF:TYBZVB", SCSkill, sk_hard, MENU_NONE},	// ИСКУШЕН Я СРАЖЕНИЯМИ
+    {ITT_EFUNC, "YZYTXRF YFLJ,YF VYT", SCSkill, sk_baby, MENU_NONE},	// НЯНЕЧКА НАДОБНА МНЕ
+    {ITT_EFUNC, "YT CNJKM VE;TCNDTYTY Z", SCSkill, sk_easy, MENU_NONE},	// НЕ СТОЛЬ МУЖЕСТВЕНЕН Я
+    {ITT_EFUNC, "GJLFQNT VYT B[", SCSkill, sk_medium, MENU_NONE},		// ПОДАЙТЕ МНЕ ИХ
+    {ITT_EFUNC, "BCREITY Z CHF;TYBZVB", SCSkill, sk_hard, MENU_NONE},	// ИСКУШЕН Я СРАЖЕНИЯМИ
     {ITT_EFUNC, "XEVF JDKFLTKF VYJQ", SCSkill, sk_nightmare, MENU_NONE} // ЧУМА ОВЛАДЕЛА МНОЙ
 };
 
@@ -259,10 +259,10 @@ static Menu_t SkillMenu = {
 
 static MenuItem_t OptionsItems[] = {
     {ITT_EFUNC, "PFRJYXBNM BUHE", SCEndGame, 0, MENU_NONE},		// ЗАКОНЧИТЬ ИГРУ
-    {ITT_EFUNC, "CJJ<OTYBZ; ", SCMessages, 0, MENU_NONE},		// СООБЩЕНИЯ:
+    {ITT_EFUNC, "CJJ,OTYBZ: ", SCMessages, 0, MENU_NONE},		// СООБЩЕНИЯ:
     {ITT_LRFUNC, "CRJHJCNM VSIB", SCMouseSensi, 0, MENU_NONE},	// СКОРОСТЬ МЫШИ
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
-    {ITT_SETMENU, "LJGJKYBNTKMYJ...", NULL, 0, MENU_OPTIONS2}	// ДОПОЛНИТЕЛЬНО...
+    {ITT_SETMENU, "LJGJKYBNTKMYJ>>>", NULL, 0, MENU_OPTIONS2}	// ДОПОЛНИТЕЛЬНО...
 };
 
 static Menu_t OptionsMenu = {
@@ -274,7 +274,7 @@ static Menu_t OptionsMenu = {
 };
 
 static MenuItem_t Options2Items[] = {
-    {ITT_LRFUNC, "HFPVTH \"RHFYF", SCScreenSize, 0, MENU_NONE},		// РАЗМЕР ЭКРАНА
+    {ITT_LRFUNC, "HFPVTH 'RHFYF", SCScreenSize, 0, MENU_NONE},		// РАЗМЕР ЭКРАНА
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
     {ITT_LRFUNC, "UHJVRJCNM PDERF", SCSfxVolume, 0, MENU_NONE},		// ГРОМКОСТЬ ЗВУКА
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
@@ -648,7 +648,7 @@ static void DrawSaveMenu(void)
 {
     char *title;
 
-    title = DEH_String("CJ{HFYBNM BUHE");	// СОХРАНИТЬ ИГРУ
+    title = DEH_String("CJ[HFYBNM BUHE");	// СОХРАНИТЬ ИГРУ
 
     MN_DrTextB(title, 160 - MN_TextBWidth(title) / 2, 10);
     if (!slottextloaded)
@@ -725,11 +725,11 @@ static void DrawOptionsMenu(void)
 {
     if (messageson)
     {
-        MN_DrTextB(DEH_String("DRK."), 213, 50);	// ВКЛ.
+        MN_DrTextB(DEH_String("DRK>"), 213, 50);	// ВКЛ.
     }
     else
     {
-        MN_DrTextB(DEH_String("DSRK."), 213, 50);	// ВЫКЛ.
+        MN_DrTextB(DEH_String("DSRK>"), 213, 50);	// ВЫКЛ.
     }
     DrawSlider(&OptionsMenu, 3, 9, mouseSensitivity);
 }
