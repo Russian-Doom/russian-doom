@@ -1873,7 +1873,7 @@ static void CheatPigFunc(player_t * player, Cheat_t * cheat)
     {
         P_MorphPlayer(player);
     }
-    P_SetMessage(player, "{H>-{H>!", true);	// ХРЮ-ХРЮ!
+    P_SetMessage(player, "[H,-[H,!", true);	// ХРЮ-ХРЮ!
 }
 
 static void CheatMassacreFunc(player_t * player, Cheat_t * cheat)
@@ -1882,7 +1882,7 @@ static void CheatMassacreFunc(player_t * player, Cheat_t * cheat)
     char buffer[80];
 
     count = P_Massacre();
-    M_snprintf(buffer, sizeof(buffer), "EYBXNJ:TYJ VJYCNHJD; %d\n", count); // УНИЧТОЖЕНО МОНСТРОВ: %d
+    M_snprintf(buffer, sizeof(buffer), "EYBXNJ;TYJ VJYCNHJD: %d\n", count); // УНИЧТОЖЕНО МОНСТРОВ: %d
     P_SetMessage(player, buffer, true);
 }
 
@@ -1913,23 +1913,23 @@ static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatQuickenFunc1(player_t * player, Cheat_t * cheat)
 {
-    P_SetMessage(player, "GSNFTIMCZ C{BNHBNM? \"NJ HFP...", true);	// ПЫТАЕШЬСЯ СХИТРИТЬ? ЭТО РАЗ...
+    P_SetMessage(player, "GSNFTIMCZ C[BNHBNM? 'NJ HFP>>>", true);	// ПЫТАЕШЬСЯ СХИТРИТЬ? ЭТО РАЗ...
 }
 
 static void CheatQuickenFunc2(player_t * player, Cheat_t * cheat)
 {
-    P_SetMessage(player, "\"NJ LDF...", true);	// ЭТО ДВА...
+    P_SetMessage(player, "'NJ LDF>>>", true);	// ЭТО ДВА...
 }
 
 static void CheatQuickenFunc3(player_t * player, Cheat_t * cheat)
 {
     P_DamageMobj(player->mo, NULL, player->mo, 10000);
-    P_SetMessage(player, "\"NJ NHB. DHTVZ EVBHFNM!", true); // ЭТО ТРИ. ВРЕМЯ УМИРАТЬ!
+    P_SetMessage(player, "'NJ NHB> DHTVZ EVBHFNM!", true); // ЭТО ТРИ. ВРЕМЯ УМИРАТЬ!
 }
 
 static void CheatClassFunc1(player_t * player, Cheat_t * cheat)
 {
-    P_SetMessage(player, "DS<THBNT YJDSQ RKFCC GTHCJYF:F (0 - 2)", true);	// ВЫБЕРИТЕ НОВЫЙ КЛАСС ПЕРСОНАЖА (0 - 2)
+    P_SetMessage(player, "DS,THBNT YJDSQ RKFCC GTHCJYF;F (0 - 2)", true);	// ВЫБЕРИТЕ НОВЫЙ КЛАСС ПЕРСОНАЖА (0 - 2)
 }
 
 static void CheatClassFunc2(player_t * player, Cheat_t * cheat)
@@ -1973,7 +1973,7 @@ static void CheatDebugFunc(player_t * player, Cheat_t * cheat)
     M_snprintf(textBuffer, sizeof(textBuffer),
 				// УРОВЕНЬ %d (%d)  X:%5d  Y:%5d  Z:%5d 
 				// [JN] TODO: Добавить символ "Z" ...
-               "EHJDTYM %d (%d)  {;%5d  E;%5d",
+               "EHJDTYM %d (%d)  [:%5d  E:%5d",
                P_GetMapWarpTrans(gamemap),
                gamemap,
                player->mo->x >> FRACBITS,

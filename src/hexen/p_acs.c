@@ -455,7 +455,7 @@ boolean P_StartACS(int number, int map, byte * args, mobj_t * activator,
     {                           // Script not found
         //I_Error("P_StartACS: Unknown script number %d", number);
         M_snprintf(ErrorMsg, sizeof(ErrorMsg),
-                   "P_STARTACS ERROR: UNKNOWN SCRIPT %d", number);
+                   "JIB,RF DSGJKYTYBZ CRHBGNF %d", number); // ОШИБКА ВЫПОЛНЕНИЯ СКРИПТА: %d
         P_SetMessage(&players[consoleplayer], ErrorMsg, true);
     }
     statePtr = &ACSInfo[infoIndex].state;
