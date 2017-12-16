@@ -1553,8 +1553,8 @@ boolean P_UseArtifact(player_t * player, artitype_t arti)
                     mo->angle =
                         player->mo->angle + (((P_Random() & 7) - 4) << 24);
                     mo->momz =
-                        4 * FRACUNIT + ((player->lookdir) << (FRACBITS - 4));
-                    mo->z += player->lookdir << (FRACBITS - 4);
+                        4 * FRACUNIT + ((player->lookdir / MLOOKUNIT) << (FRACBITS - 4));
+                    mo->z += player->lookdir / MLOOKUNIT << (FRACBITS - 4);
                     P_ThrustMobj(mo, mo->angle, mo->info->speed);
                     mo->momx += player->mo->momx >> 1;
                     mo->momy += player->mo->momy >> 1;
