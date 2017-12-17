@@ -176,11 +176,15 @@ void R_DrawTLColumn(void)
     int count;
     byte *dest;
     fixed_t frac, fracstep;
+    boolean cutoff = false;
 
     if (!dc_yl)
         dc_yl = 1;
     if (dc_yh == viewheight - 1)
+    {
         dc_yh = viewheight - 2;
+        cutoff = true;
+    }
 
     count = dc_yh - dc_yl;
     if (count < 0)
@@ -206,6 +210,14 @@ void R_DrawTLColumn(void)
         frac += fracstep;
     }
     while (count--);
+
+    // [crispy] if the line at the bottom had to be cut off,
+    // draw one extra line using only pixels of that line and the one above
+    // [JN] Slightly modified for Heretic
+    if (cutoff)
+    {
+        *dest = tinttable[((*dest) << 8) + dc_colormap[dc_source[(frac >> FRACBITS) & 127 / 2]]];
+    }
 }
 
 /*
