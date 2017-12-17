@@ -34,8 +34,12 @@ int skytexture;
 int skytexturemid;
 fixed_t skyiscale;
 
-// [JN] Floor brightmaps
+// [JN] For brightmaps initialization.
+// Floors and ceilings:
 int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4, bmapflatnum5;
+// Walls:
+int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05, bmaptexture06, bmaptexture07;
+int bmap_terminator;
 
 //
 // opening
@@ -95,13 +99,42 @@ void R_InitSkyMap(void)
     skyflatnum = R_FlatNumForName(DEH_String("F_SKY1"));
     skytexturemid = 200 * FRACUNIT;
     skyiscale = FRACUNIT >> hires;
+}
 
-    // [JN] Why don't lookup floor brightmaps here?
+
+// ===========================================================
+// =                                                         =
+// = [JN] Lookup and init all the textures for brightmapping =
+// =                                                         =
+// ===========================================================
+void R_InitBrightmaps(void)
+{
+    // Flats and ceilings...
+
+    // blue_only_floor
     bmapflatnum1 = R_FlatNumForName(DEH_String("FLOOR21"));
     bmapflatnum2 = R_FlatNumForName(DEH_String("FLOOR22"));
     bmapflatnum3 = R_FlatNumForName(DEH_String("FLOOR23"));
     bmapflatnum4 = R_FlatNumForName(DEH_String("FLOOR24"));
-    bmapflatnum5 = R_FlatNumForName(DEH_String("FLOOR26"));
+    bmapflatnum5 = R_FlatNumForName(DEH_String("FLOOR26"));    
+
+    // Textures...
+
+    // brightmap_redonly
+    bmaptexture01 = R_TextureNumForName(DEH_String("GRSKULL3"));
+    // brightmap_blueonly
+    bmaptexture02 = R_TextureNumForName(DEH_String("DOOREXIT"));
+    bmaptexture03 = R_TextureNumForName(DEH_String("SW2ON"));
+    bmaptexture04 = R_TextureNumForName(DEH_String("SW2OFF"));
+    bmaptexture05 = R_TextureNumForName(DEH_String("SW2OFF"));
+    // brightmap_notbronze
+    bmaptexture06 = R_TextureNumForName(DEH_String("SW1ON"));
+    bmaptexture07 = R_TextureNumForName(DEH_String("SW1OFF"));
+    
+    // For some odd reason, it is necessary to declare last texture
+    // as a "terminator", which will use standard light formula.
+    // Otherwise, non-standard textures will use latest brightmap.
+    bmap_terminator = R_TextureNumForName(DEH_String("WOODWL"));
 }
 
 
