@@ -663,6 +663,7 @@ void R_ProjectSprite(mobj_t * thing)
             if (thing->type == MT_AMSKRDWIMPY  || // Lesser Runes
                 thing->type == MT_AMSKRDHEFTY  || // Greater Runes
                 thing->type == MT_ARTITELEPORT || // Chaos Device
+                thing->type == MT_MUMMYSOUL    || // Golem's freed ghost
                 thing->type == MT_HEAD)           // Iron Lich
                 vis->colormap = fullbrights_redonly[index];
 
