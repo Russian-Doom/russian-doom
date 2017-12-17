@@ -1044,8 +1044,10 @@ void R_DrawPSprite(pspdef_t * psp)
     if (viewplayer->powers[pw_invisibility] > 4 * 32 ||
         viewplayer->powers[pw_invisibility] & 8)
     {
+        // [JN] Fixed vanilla bug: translucent HUD weapons 
+        // should also be affected by yellow invulnerability palette.
         // Invisibility
-        vis->colormap = spritelights[MAXLIGHTSCALE - 1];
+        vis->colormap = fixedcolormap ? fixedcolormap : spritelights[MAXLIGHTSCALE - 1];
         vis->mobjflags |= MF_SHADOW;
     }
     else if (fixedcolormap)
