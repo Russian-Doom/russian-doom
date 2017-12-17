@@ -34,6 +34,9 @@ int skytexture;
 int skytexturemid;
 fixed_t skyiscale;
 
+// [JN] Floor brightmaps
+int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4, bmapflatnum5;
+
 //
 // opening
 //
@@ -92,6 +95,13 @@ void R_InitSkyMap(void)
     skyflatnum = R_FlatNumForName(DEH_String("F_SKY1"));
     skytexturemid = 200 * FRACUNIT;
     skyiscale = FRACUNIT >> hires;
+
+    // [JN] Why don't lookup floor brightmaps here?
+    bmapflatnum1 = R_FlatNumForName(DEH_String("FLOOR21"));
+    bmapflatnum2 = R_FlatNumForName(DEH_String("FLOOR22"));
+    bmapflatnum3 = R_FlatNumForName(DEH_String("FLOOR23"));
+    bmapflatnum4 = R_FlatNumForName(DEH_String("FLOOR24"));
+    bmapflatnum5 = R_FlatNumForName(DEH_String("FLOOR26"));
 }
 
 
@@ -549,6 +559,15 @@ void R_DrawPlanes(void)
         if (light < 0)
             light = 0;
         planezlight = zlight[light];
+
+        // [JN] Apply brightmaps to floor/ceiling...
+        if (brightmaps && !vanillaparm &&
+        (pl->picnum == bmapflatnum1     // FLOOR21
+        || pl->picnum == bmapflatnum2   // FLOOR22
+        || pl->picnum == bmapflatnum3   // FLOOR23
+        || pl->picnum == bmapflatnum4   // FLOOR24
+        || pl->picnum == bmapflatnum5)) // FLOOR26
+        planezlight = fullbright_blueonly_floor[light];
 
         pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
         pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
