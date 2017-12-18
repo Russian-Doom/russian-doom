@@ -54,6 +54,10 @@ planefunction_t floorfunc, ceilingfunc;
 // Walls:
 int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
 int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
+int bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15;
+int bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20;
+int bmaptexture21, bmaptexture22;
+
 int bmap_terminator;
 
 // Opening
@@ -144,6 +148,18 @@ void R_InitBrightmaps(void)
     bmaptexture06 = R_TextureNumForName("SPAWN12");
     bmaptexture07 = R_TextureNumForName("SW51_ON");
     bmaptexture08 = R_TextureNumForName("SW52_ON");
+    bmaptexture11 = R_TextureNumForName("X_FAC01"); // Korax
+    bmaptexture12 = R_TextureNumForName("X_FAC02"); // Korax
+    bmaptexture13 = R_TextureNumForName("X_FAC03"); // Korax
+    bmaptexture14 = R_TextureNumForName("X_FAC04"); // Korax
+    bmaptexture15 = R_TextureNumForName("X_FAC05"); // Korax
+    bmaptexture16 = R_TextureNumForName("X_FAC06"); // Korax
+    bmaptexture17 = R_TextureNumForName("X_FAC07"); // Korax
+    bmaptexture18 = R_TextureNumForName("X_FAC08"); // Korax
+    bmaptexture19 = R_TextureNumForName("X_FAC09"); // Korax
+    bmaptexture20 = R_TextureNumForName("X_FAC10"); // Korax
+    bmaptexture21 = R_TextureNumForName("X_FAC11"); // Korax
+    bmaptexture22 = R_TextureNumForName("X_FAC12"); // Korax
     
     // brightmap_yellowred
     bmaptexture09 = R_TextureNumForName("SPAWN09");
