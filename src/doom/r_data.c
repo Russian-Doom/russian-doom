@@ -178,6 +178,7 @@ lighttable_t	*brightmaps_greenonly2;
 lighttable_t	*brightmaps_greenonly3;
 lighttable_t	*brightmaps_orangeyellow;
 lighttable_t	*brightmaps_dimmeditems;
+lighttable_t	*brightmaps_blueonly;
 lighttable_t	*brightmaps_poss_attack;
 lighttable_t	*brightmaps_spos_attack;
 lighttable_t	*brightmaps_cpos_attack_1;
@@ -982,7 +983,7 @@ void R_InitTranMap()
 void R_InitColormaps (void)
 {
     int	lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9;
-    int lump10, lump11, lump12, lump13, lump14, lump15, lump16, lump17, lump18, lump19, lump20, lump21, lump22, lump23;
+    int lump10, lump11, lump12, lump13, lump14, lump15, lump16, lump17, lump18, lump19, lump20, lump21, lump22, lump23, lump24;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -1017,6 +1018,9 @@ void R_InitColormaps (void)
     
     lump9 = W_GetNumForName(DEH_String("BRTMAP8"));
     brightmaps_dimmeditems = W_CacheLumpNum(lump9, PU_STATIC);
+
+    lump24 = W_GetNumForName(DEH_String("BRTMAP9"));
+    brightmaps_blueonly = W_CacheLumpNum(lump24, PU_STATIC);
 
     // [JN] Precaching extra brightmaps
 
@@ -1162,9 +1166,7 @@ int	R_TextureNumForName (char* name)
     {
 	// I_Error ("R_TextureNumForName: %s not found", name);
     // [crispy] make non-fatal
-    // [JN] TODO: Temporal solution for brightmaps' performance problem.
-    // Increases perfomance and prevents spamming in console output on Linux.
-    // fprintf (stderr, "R_TextureNumForName: текстура %s не найдена", name);
+    fprintf (stderr, "R_TextureNumForName: текстура %s не найдена", name);
  	return 0;
     }
     return i;

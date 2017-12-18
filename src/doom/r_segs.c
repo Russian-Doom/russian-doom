@@ -30,7 +30,6 @@
 #include "g_game.h"
 
 // [JN] Brightmaps
-// boolean brightmaps_are_set = false;
 int brightmap_redonly;
 int brightmap_notgrayorbrown;
 int brightmap_notgray;
@@ -38,6 +37,26 @@ int brightmap_greenonly1;
 int brightmap_greenonly2;
 int brightmap_greenonly3;
 int brightmap_orangeyellow;
+int brightmap_blueonly;
+
+extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
+extern int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
+extern int bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15;
+extern int bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20;
+extern int bmaptexture21, bmaptexture22, bmaptexture23, bmaptexture24, bmaptexture25;
+extern int bmaptexture26, bmaptexture27, bmaptexture28, bmaptexture29, bmaptexture30;
+extern int bmaptexture31, bmaptexture32, bmaptexture33, bmaptexture34, bmaptexture35;
+extern int bmaptexture36, bmaptexture37, bmaptexture38, bmaptexture39, bmaptexture40;
+extern int bmaptexture41, bmaptexture42, bmaptexture43, bmaptexture44, bmaptexture45;
+extern int bmaptexture46, bmaptexture47, bmaptexture48, bmaptexture49, bmaptexture50;
+extern int bmaptexture51, bmaptexture52, bmaptexture53, bmaptexture54, bmaptexture55;
+extern int bmaptexture56, bmaptexture57, bmaptexture58, bmaptexture59, bmaptexture60;
+extern int bmaptexture61, bmaptexture62, bmaptexture63, bmaptexture64, bmaptexture65;
+extern int bmaptexture66, bmaptexture67, bmaptexture68, bmaptexture69, bmaptexture70;
+extern int bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74, bmaptexture75;
+extern int bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80;
+extern int bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84;
+extern int bmap_terminator;
 
 
 // OPTIMIZE: closed two sided lines as single sided
@@ -520,104 +539,6 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
     return scale;
 }
 
-
-void R_InitBrightmaps (void)
-{
-    brightmap_redonly = (bmaptextured == R_TextureNumForName("SW1STARG")
-    || bmaptextured == R_TextureNumForName("SW2MARB")
-    || bmaptextured == R_TextureNumForName("SW1BRCOM")
-    || bmaptextured == R_TextureNumForName("SW1DIRT")
-    || bmaptextured == R_TextureNumForName("SW1STRTN")
-    || bmaptextured == R_TextureNumForName("SW2PANEL")
-    || bmaptextured == R_TextureNumForName("SW2SLAD")
-    || bmaptextured == R_TextureNumForName("SW2WOOD")
-    || bmaptextured == R_TextureNumForName("WOOD4")
-    || bmaptextured == R_TextureNumForName("WOODSKUL")
-    || bmaptextured == R_TextureNumForName("SLADSKUL")
-    || bmaptextured == R_TextureNumForName("SW1BRIK")
-    || bmaptextured == R_TextureNumForName("SW1COMM")
-    || bmaptextured == R_TextureNumForName("SW1MET2")
-    || bmaptextured == R_TextureNumForName("SW1STON1")
-    || bmaptextured == R_TextureNumForName("SW2BLUE")
-    || bmaptextured == R_TextureNumForName("SW2GSTON")
-    || bmaptextured == R_TextureNumForName("SW2ROCK")
-    || bmaptextured == R_TextureNumForName("SW2STON6")
-    || bmaptextured == R_TextureNumForName("SW2ZIM")
-    || midtexture == R_TextureNumForName("SW2COMP")  || toptexture == R_TextureNumForName("SW2COMP")  || bottomtexture == R_TextureNumForName("SW2COMP")
-    || midtexture == R_TextureNumForName("SW1STONE") || toptexture == R_TextureNumForName("SW1STONE") || bottomtexture == R_TextureNumForName("SW1STONE")
-    || midtexture == R_TextureNumForName("WOODGARG") || toptexture == R_TextureNumForName("WOODGARG") || bottomtexture == R_TextureNumForName("WOODGARG")
-    || (gamemission == doom && (bmaptextured == R_TextureNumForName("SW2STON2")))
-    || (gamemission != doom && (bmaptextured == R_TextureNumForName("SW1BRN1")))
-    || (gamemission != doom && (bmaptextured == R_TextureNumForName("SW1STON2")))
-    || (gamemission == pack_tnt && (bmaptextured == R_TextureNumForName("LITERED2")
-    || bmaptextured == R_TextureNumForName("PNK4EXIT"))));
-    
-    brightmap_notgray = (bmaptextured == R_TextureNumForName("COMPSTA2")
-    || bmaptextured == R_TextureNumForName("PLANET1")
-    || bmaptextured == R_TextureNumForName("SW2EXIT")
-    || bmaptextured == R_TextureNumForName("SW2GRAY1")
-    || bmaptextured == R_TextureNumForName("COMPSTA1")
-    || bmaptextured == R_TextureNumForName("EXITSTON")
-    || bmaptextured == R_TextureNumForName("SILVER2")
-    || bmaptextured == R_TextureNumForName("LITEBLU1")
-    || bmaptextured == R_TextureNumForName("SW2GRAY")
-    || bmaptextured == R_TextureNumForName("LITEBLU2")
-    || midtexture == R_TextureNumForName("EXITSIGN") || toptexture == R_TextureNumForName("EXITSIGN") || bottomtexture == R_TextureNumForName("EXITSIGN"));
-    
-    brightmap_notgrayorbrown = (bmaptextured == R_TextureNumForName("COMP2")
-    || bmaptextured == R_TextureNumForName("COMPUTE2")
-    || bmaptextured == R_TextureNumForName("SILVER3")
-    || bmaptextured == R_TextureNumForName("COMPUTE1")
-    || bmaptextured == R_TextureNumForName("COMPUTE3")
-    || (gamemission != doom && (midtexture == R_TextureNumForName("SW2MOD1") || toptexture == R_TextureNumForName("SW2MOD1") || bottomtexture == R_TextureNumForName("SW2MOD1")))
-    || (gamemission == pack_tnt && (bmaptextured == R_TextureNumForName("BTNTMETL")
-    || bmaptextured == R_TextureNumForName("BTNTSLVR")
- /* || bmaptextured == R_TextureNumForName("SLAD2")
-    || bmaptextured == R_TextureNumForName("SLAD3")
-    || bmaptextured == R_TextureNumForName("SLAD4")
-    || bmaptextured == R_TextureNumForName("SLAD5")
-    || bmaptextured == R_TextureNumForName("SLAD6")
-    || bmaptextured == R_TextureNumForName("SLAD7")
-    || bmaptextured == R_TextureNumForName("SLAD8")
-    || bmaptextured == R_TextureNumForName("SLAD9")
-    || bmaptextured == R_TextureNumForName("SLAD10")
-    || bmaptextured == R_TextureNumForName("SLAD11")
-    || bmaptextured == R_TextureNumForName("SLAD12")
-    || bmaptextured == R_TextureNumForName("SLADRIP1")
-    || bmaptextured == R_TextureNumForName("SLADRIP3")*/)));
-    
-    brightmap_greenonly1 = (bmaptextured == R_TextureNumForName("SW2STARG")
-    || bmaptextured == R_TextureNumForName("SW2BRN1")
-    || bmaptextured == R_TextureNumForName("SW2BRCOM")
-    || bmaptextured == R_TextureNumForName("SW2STON1")
-    || bmaptextured == R_TextureNumForName("SW2STONE")
-    || bmaptextured == R_TextureNumForName("SW2TEK")
-    || bmaptextured == R_TextureNumForName("SW2BRIK")
-    || bmaptextured == R_TextureNumForName("SW2BRN2")
-    || bmaptextured == R_TextureNumForName("SW2COMM")
-    || bmaptextured == R_TextureNumForName("SW2DIRT")
-    || bmaptextured == R_TextureNumForName("SW2MET2")
-    || bmaptextured == R_TextureNumForName("SW2STRTN")
-    || bmaptextured == R_TextureNumForName("SW2VINE")
-    || bmaptextured == R_TextureNumForName("PIPEWAL1")
-    || bmaptextured == R_TextureNumForName("TEKLITE2")
-    || (gamemission != doom && bmaptextured == R_TextureNumForName("SW2STON2")));
-    
-    brightmap_greenonly2 = (bmaptextured == R_TextureNumForName("SW2BRNGN")
-    || (gamemission == doom2 && (bmaptextured == R_TextureNumForName("SW2SKULL")))
-    || (gamemission == pack_tnt && bmaptextured == R_TextureNumForName("M_TEC")));
-    
-    brightmap_greenonly3 = (bmaptextured == R_TextureNumForName("SW2METAL"));
-    
-    brightmap_orangeyellow = (bmaptextured == R_TextureNumForName("TEKBRON2")
-    || (gamemission == pack_tnt && (bmaptextured == R_TextureNumForName("LITEYEL2")
-    || bmaptextured == R_TextureNumForName("LITEYEL3")
-    || bmaptextured == R_TextureNumForName("YELMETAL"))));
-
-    // [JN] Setting is done. Do not run this cycle again.
-    // brightmaps_are_set = true;
-}
-
 //
 // R_StoreWallRange
 // A wall segment will be drawn
@@ -877,13 +798,7 @@ void R_StoreWallRange (int start, int stop)
 
     // calculate rw_offset (only needed for textured lines)
     segtextured = midtexture | toptexture | bottomtexture | maskedtexture;
-    bmaptextured = midtexture | toptexture | bottomtexture;
 
-    // TODO: how should I really call R_InitBrightmaps once and set all brightmaps?
-    // if (!brightmaps_are_set)
-    if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm && !fixedcolormap)
-    R_InitBrightmaps();
-    
     if (segtextured)
     {
         offsetangle = rw_normalangle-rw_angle1;
@@ -919,61 +834,160 @@ void R_StoreWallRange (int start, int stop)
 
         if (lightnum < 0)
         {
-            if (brightmap_redonly)
-            walllights = fullbright_redonly[0];
-            else if (brightmap_notgray)
-            walllights = fullbright_notgray[0];
-            else if (brightmap_notgrayorbrown)
-            walllights = fullbright_notgrayorbrown[0];
-            else if (brightmap_greenonly1)
-            walllights = fullbright_greenonly1[0];
-            else if (brightmap_greenonly2)
-            walllights = fullbright_greenonly2[0];
-            else if (brightmap_greenonly3)
-            walllights = fullbright_greenonly3[0];
-            else if (brightmap_orangeyellow)
-            walllights = fullbright_orangeyellow[0];
-            else // [JN] Standard light table
             walllights = scalelight[0];
         }
-        // --------------------------------------------------------------------------------
         else if (lightnum >= LIGHTLEVELS)
         {
-            if (brightmap_redonly)
-            walllights = fullbright_redonly[LIGHTLEVELS-1];
-            else if (brightmap_notgray)
-            walllights = fullbright_notgray[LIGHTLEVELS-1];
-            else if (brightmap_notgrayorbrown)
-            walllights = fullbright_notgrayorbrown[LIGHTLEVELS-1];
-            else if (brightmap_greenonly1)
-            walllights = fullbright_greenonly1[LIGHTLEVELS-1];
-            else if (brightmap_greenonly2)
-            walllights = fullbright_greenonly2[LIGHTLEVELS-1];
-            else if (brightmap_greenonly3)
-            walllights = fullbright_greenonly3[LIGHTLEVELS-1];
-            else if (brightmap_orangeyellow)
-            walllights = fullbright_orangeyellow[LIGHTLEVELS-1];
-            else // [JN] Standard light table 
             walllights = scalelight[LIGHTLEVELS-1];
         }
-        // --------------------------------------------------------------------------------
         else
         {
-            if (brightmap_redonly)
+            // [JN] Standard formula first
+            walllights = scalelight[lightnum];
+            
+            // - red_only ----------------------------------------------------------------------------------
+            if (midtexture == bmaptexture03 || toptexture == bmaptexture03 || bottomtexture == bmaptexture03
+            ||  midtexture == bmaptexture04 || toptexture == bmaptexture04 || bottomtexture == bmaptexture04
+            ||  midtexture == bmaptexture05 || toptexture == bmaptexture05 || bottomtexture == bmaptexture05
+            ||  midtexture == bmaptexture07 || toptexture == bmaptexture07 || bottomtexture == bmaptexture07
+            ||  midtexture == bmaptexture08 || toptexture == bmaptexture08 || bottomtexture == bmaptexture08
+            ||  midtexture == bmaptexture09 || toptexture == bmaptexture09 || bottomtexture == bmaptexture09
+            ||  midtexture == bmaptexture11 || toptexture == bmaptexture11 || bottomtexture == bmaptexture11
+            || midtexture == bmaptexture13 || toptexture == bmaptexture13 || bottomtexture == bmaptexture13
+            ||  midtexture == bmaptexture15 || toptexture == bmaptexture15 || bottomtexture == bmaptexture15
+            ||  midtexture == bmaptexture16 || toptexture == bmaptexture16 || bottomtexture == bmaptexture16
+            ||  midtexture == bmaptexture17 || toptexture == bmaptexture17 || bottomtexture == bmaptexture17
+            ||  midtexture == bmaptexture21 || toptexture == bmaptexture21 || bottomtexture == bmaptexture21
+            ||  midtexture == bmaptexture22 || toptexture == bmaptexture22 || bottomtexture == bmaptexture22
+            ||  midtexture == bmaptexture23 || toptexture == bmaptexture23 || bottomtexture == bmaptexture23)
             walllights = fullbright_redonly[lightnum];
-            else if (brightmap_notgray)
+
+            // Doom 1 only: red_only
+            if ((gamemission == doom) && (midtexture == bmaptexture10 || toptexture == bmaptexture10 || bottomtexture == bmaptexture10
+            || midtexture == bmaptexture24 || toptexture == bmaptexture24 || bottomtexture == bmaptexture24))
+            walllights = fullbright_redonly[lightnum];
+
+            // Non Doom 1: red_only
+            if ((gamemission != doom) && (midtexture == bmaptexture01 || toptexture == bmaptexture01 || bottomtexture == bmaptexture01
+            || midtexture == bmaptexture02 || toptexture == bmaptexture02 || bottomtexture == bmaptexture02
+            || midtexture == bmaptexture06 || toptexture == bmaptexture06 || bottomtexture == bmaptexture06
+            ||  midtexture == bmaptexture12 || toptexture == bmaptexture12 || bottomtexture == bmaptexture12
+            || midtexture == bmaptexture14 || toptexture == bmaptexture14 || bottomtexture == bmaptexture14
+            || midtexture == bmaptexture18 || toptexture == bmaptexture18 || bottomtexture == bmaptexture18
+            || midtexture == bmaptexture19 || toptexture == bmaptexture19 || bottomtexture == bmaptexture19
+            || midtexture == bmaptexture20 || toptexture == bmaptexture20 || bottomtexture == bmaptexture20
+            || midtexture == bmaptexture25 || toptexture == bmaptexture25 || bottomtexture == bmaptexture25
+            || midtexture == bmaptexture26 || toptexture == bmaptexture26 || bottomtexture == bmaptexture26))
+            walllights = fullbright_redonly[lightnum];
+
+            // // TNT only: red_only
+            if ((gamemission == pack_tnt) && (midtexture == bmaptexture27 || toptexture == bmaptexture27 || bottomtexture == bmaptexture27
+            || midtexture == bmaptexture28 || toptexture == bmaptexture28 || bottomtexture == bmaptexture28))
+            walllights = fullbright_redonly[lightnum];
+
+            // - notgray -----------------------------------------------------------------------------------
+            if (midtexture == bmaptexture29 || toptexture == bmaptexture29 || bottomtexture == bmaptexture29
+            ||  midtexture == bmaptexture31 || toptexture == bmaptexture31 || bottomtexture == bmaptexture31
+            ||  midtexture == bmaptexture32 || toptexture == bmaptexture32 || bottomtexture == bmaptexture32
+            ||  midtexture == bmaptexture33 || toptexture == bmaptexture33 || bottomtexture == bmaptexture33
+            ||  midtexture == bmaptexture34 || toptexture == bmaptexture34 || bottomtexture == bmaptexture34
+            ||  midtexture == bmaptexture36 || toptexture == bmaptexture36 || bottomtexture == bmaptexture36
+            ||  midtexture == bmaptexture37 || toptexture == bmaptexture37 || bottomtexture == bmaptexture37
+            ||  midtexture == bmaptexture39 || toptexture == bmaptexture39 || bottomtexture == bmaptexture39)
             walllights = fullbright_notgray[lightnum];
-            else if (brightmap_notgrayorbrown)
+
+            // Doom 1 only
+            if ((gamemission == doom) && (midtexture == bmaptexture30 || toptexture == bmaptexture30 || bottomtexture == bmaptexture30
+            || midtexture == bmaptexture38 || toptexture == bmaptexture38 || bottomtexture == bmaptexture38))
+            walllights = fullbright_notgray[lightnum];   
+
+            // - notgrayorbrown ----------------------------------------------------------------------------
+            // Doom 1 only
+            if ((gamemission == doom) && (midtexture == bmaptexture40 || toptexture == bmaptexture40 || bottomtexture == bmaptexture40
+            ||  midtexture == bmaptexture41 || toptexture == bmaptexture41 || bottomtexture == bmaptexture41
+            ||  midtexture == bmaptexture43 || toptexture == bmaptexture43 || bottomtexture == bmaptexture43
+            ||  midtexture == bmaptexture44 || toptexture == bmaptexture44 || bottomtexture == bmaptexture44))
             walllights = fullbright_notgrayorbrown[lightnum];
-            else if (brightmap_greenonly1)
+
+            // Non Doom 1
+            if ((gamemission != doom) && (midtexture == bmaptexture42 || toptexture == bmaptexture42 || bottomtexture == bmaptexture42
+            ||  midtexture == bmaptexture45 || toptexture == bmaptexture45 || bottomtexture == bmaptexture45))
+            walllights = fullbright_notgrayorbrown[lightnum];
+
+            // TNT only
+            if ((gamemission == pack_tnt) && (midtexture == bmaptexture46 || toptexture == bmaptexture46 || bottomtexture == bmaptexture46
+            || midtexture == bmaptexture47 || toptexture == bmaptexture47 || bottomtexture == bmaptexture47
+            || midtexture == bmaptexture48 || toptexture == bmaptexture48 || bottomtexture == bmaptexture48
+            || midtexture == bmaptexture49 || toptexture == bmaptexture49 || bottomtexture == bmaptexture49
+            || midtexture == bmaptexture50 || toptexture == bmaptexture50 || bottomtexture == bmaptexture50
+            || midtexture == bmaptexture51 || toptexture == bmaptexture51 || bottomtexture == bmaptexture51
+            || midtexture == bmaptexture52 || toptexture == bmaptexture52 || bottomtexture == bmaptexture52
+            || midtexture == bmaptexture53 || toptexture == bmaptexture53 || bottomtexture == bmaptexture53
+            || midtexture == bmaptexture54 || toptexture == bmaptexture54 || bottomtexture == bmaptexture54
+            || midtexture == bmaptexture55 || toptexture == bmaptexture55 || bottomtexture == bmaptexture55
+            || midtexture == bmaptexture56 || toptexture == bmaptexture56 || bottomtexture == bmaptexture56
+            || midtexture == bmaptexture57 || toptexture == bmaptexture57 || bottomtexture == bmaptexture57
+            // || midtexture == bmaptexture58 || toptexture == bmaptexture58 || bottomtexture == bmaptexture58 /* don't use */
+            || midtexture == bmaptexture59 || toptexture == bmaptexture59 || bottomtexture == bmaptexture59
+            || midtexture == bmaptexture60 || toptexture == bmaptexture60 || bottomtexture == bmaptexture60
+            ))
+            walllights = fullbright_notgrayorbrown[lightnum];
+
+            // - greenonly1 --------------------------------------------------------------------------------
+            if (midtexture == bmaptexture63 || toptexture == bmaptexture63 || bottomtexture == bmaptexture63
+            ||  midtexture == bmaptexture64 || toptexture == bmaptexture64 || bottomtexture == bmaptexture64
+            ||  midtexture == bmaptexture65 || toptexture == bmaptexture65 || bottomtexture == bmaptexture65
+            ||  midtexture == bmaptexture68 || toptexture == bmaptexture68 || bottomtexture == bmaptexture68
+            ||  midtexture == bmaptexture69 || toptexture == bmaptexture69 || bottomtexture == bmaptexture69
+            ||  midtexture == bmaptexture70 || toptexture == bmaptexture70 || bottomtexture == bmaptexture70
+            ||  midtexture == bmaptexture72 || toptexture == bmaptexture72 || bottomtexture == bmaptexture72
+            ||  midtexture == bmaptexture73 || toptexture == bmaptexture73 || bottomtexture == bmaptexture73)
             walllights = fullbright_greenonly1[lightnum];
-            else if (brightmap_greenonly2)
+
+            // Non Doom 1
+            if ((gamemission != doom) && (midtexture == bmaptexture76 || toptexture == bmaptexture76 || bottomtexture == bmaptexture76
+            || midtexture == bmaptexture61 || toptexture == bmaptexture61 || bottomtexture == bmaptexture61
+            || midtexture == bmaptexture62 || toptexture == bmaptexture62 || bottomtexture == bmaptexture62
+            || midtexture == bmaptexture66 || toptexture == bmaptexture66 || bottomtexture == bmaptexture66
+            || midtexture == bmaptexture67 || toptexture == bmaptexture67 || bottomtexture == bmaptexture67
+            || midtexture == bmaptexture71 || toptexture == bmaptexture71 || bottomtexture == bmaptexture71
+            || midtexture == bmaptexture74 || toptexture == bmaptexture74 || bottomtexture == bmaptexture74
+            || midtexture == bmaptexture75 || toptexture == bmaptexture75 || bottomtexture == bmaptexture75))
+            walllights = fullbright_greenonly1[lightnum];
+
+            // - greenonly2 --------------------------------------------------------------------------------
+            if (midtexture == bmaptexture77 || toptexture == bmaptexture77 || bottomtexture == bmaptexture77)
             walllights = fullbright_greenonly2[lightnum];
-            else if (brightmap_greenonly3)
+
+            // Doom 2 only
+            if ((gamemission == doom2) && (midtexture == bmaptexture78 || toptexture == bmaptexture78 || bottomtexture == bmaptexture78))
+            walllights = fullbright_greenonly2[lightnum];
+
+            // TNT only
+            if ((gamemission == pack_tnt) && (midtexture == bmaptexture79 || toptexture == bmaptexture79 || bottomtexture == bmaptexture79))
+            walllights = fullbright_greenonly2[lightnum];
+
+            // - greenonly3 ---------------------------------------------------------------------------------
+            if (midtexture == bmaptexture80 || toptexture == bmaptexture80 || bottomtexture == bmaptexture80)
             walllights = fullbright_greenonly3[lightnum];
-            else if (brightmap_orangeyellow)
+
+            // - orangeyellow -------------------------------------------------------------------------------
+            if ((gamemission != doom) && (midtexture == bmaptexture81 || toptexture == bmaptexture81 || bottomtexture == bmaptexture81))
             walllights = fullbright_orangeyellow[lightnum];
-            else // [JN] Standard light table 
+
+            // TNT only
+            if ((gamemission == pack_tnt) && (midtexture == bmaptexture82 || toptexture == bmaptexture82 || bottomtexture == bmaptexture82
+            || midtexture == bmaptexture83 || toptexture == bmaptexture83 || bottomtexture == bmaptexture83
+            || midtexture == bmaptexture84 || toptexture == bmaptexture84 || bottomtexture == bmaptexture84))
+            walllights = fullbright_orangeyellow[lightnum];  
+
+            // - blueonly -------------------------------------------------------------------------------
+            // Non Doom 1
+            if ((gamemission != doom) && (midtexture == bmaptexture35 || toptexture == bmaptexture35 || bottomtexture == bmaptexture35))
+            walllights = fullbright_blueonly[lightnum];
+
+            // [JN] Apply brightmap terminator...
+            if (midtexture == bmap_terminator || toptexture == bmap_terminator || bottomtexture == bmap_terminator)
             walllights = scalelight[lightnum];
         }
     }

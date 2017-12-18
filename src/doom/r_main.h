@@ -75,6 +75,7 @@ extern lighttable_t*    fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_blueonly[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_poss_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_spos_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_cpos_attack_1[LIGHTLEVELS][MAXLIGHTSCALE];
@@ -167,6 +168,9 @@ void R_Init (void);
 
 // Called by M_Responder.
 void R_SetViewSize (int blocks, int detail);
+
+// [JN] Brightmaps
+void R_InitBrightmaps (void);
 
 #endif
 

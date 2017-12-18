@@ -102,6 +102,7 @@ lighttable_t* fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_blueonly[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_poss_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_spos_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_cpos_attack_1[LIGHTLEVELS][MAXLIGHTSCALE];
@@ -750,6 +751,7 @@ void R_ExecuteSetViewSize (void)
             fullbright_greenonly3[i][j] = brightmaps_greenonly3 + level*256;
             fullbright_orangeyellow[i][j] = brightmaps_orangeyellow + level*256;
             fullbright_dimmeditems[i][j] = brightmaps_dimmeditems + level*256;
+            fullbright_blueonly[i][j] = brightmaps_blueonly + level*256;
             fullbright_poss_attack[i][j] = brightmaps_poss_attack + level*256;
             fullbright_spos_attack[i][j] = brightmaps_spos_attack + level*256;
             fullbright_cpos_attack_1[i][j] = brightmaps_cpos_attack_1 + level*256;
@@ -788,6 +790,8 @@ void R_Init (void)
     R_InitLightTables ();
     printf (".");
     R_InitSkyMap ();
+    // [JN] Lookup and init all the textures for brightmapping
+    R_InitBrightmaps ();
     R_InitTranslationTables ();
     printf (".");
 

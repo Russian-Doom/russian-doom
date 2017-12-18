@@ -52,6 +52,7 @@ extern lighttable_t* brightmaps_greenonly2;
 extern lighttable_t* brightmaps_greenonly3;
 extern lighttable_t* brightmaps_orangeyellow;
 extern lighttable_t* brightmaps_dimmeditems;
+extern lighttable_t* brightmaps_blueonly;
 extern lighttable_t* brightmaps_poss_attack;
 extern lighttable_t* brightmaps_spos_attack;
 extern lighttable_t* brightmaps_cpos_attack_1;
