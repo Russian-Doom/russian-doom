@@ -650,8 +650,8 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         if (players[consoleplayer].lookdir > 90 * MLOOKUNIT)
             players[consoleplayer].lookdir = 90 * MLOOKUNIT;
         else
-        if (players[consoleplayer].lookdir < -110 * MLOOKUNIT)
-            players[consoleplayer].lookdir = -110 * MLOOKUNIT;
+        if (players[consoleplayer].lookdir < -160 * MLOOKUNIT)
+            players[consoleplayer].lookdir = -160 * MLOOKUNIT;
         
         if (look < 0)
         {
