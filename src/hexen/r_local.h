@@ -412,6 +412,7 @@ void R_ClearClipSegs(void);
 
 void R_ClearDrawSegs(void);
 void R_InitSkyMap(void);
+void R_InitBrightmaps(void);
 void R_RenderBSPNode(int bspnum);
 
 //

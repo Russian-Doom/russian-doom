@@ -638,9 +638,7 @@ int R_TextureNumForName(char *name)
     {
         // I_Error ("R_TextureNumForName: %s not found", name);
         // [crispy] make non-fatal
-        // [JN] TODO: Temporal solution for brightmaps' performance problem.
-        // Increases perfomance and prevents spamming in console output on Linux.
-        // fprintf (stderr, "R_TextureNumForName: текстура %s не найдена", name);
+        fprintf (stderr, "R_TextureNumForName: текстура %s не найдена", name);
         return 0;
     }
     return i;

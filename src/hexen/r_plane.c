@@ -50,6 +50,12 @@ fixed_t skyiscale;
 boolean DoubleSky;
 planefunction_t floorfunc, ceilingfunc;
 
+// [JN] For brightmaps initialization.
+// Walls:
+int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
+int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
+int bmap_terminator;
+
 // Opening
 visplane_t visplanes[MAXVISPLANES], *lastvisplane;
 visplane_t *floorplane, *ceilingplane;
@@ -112,6 +118,41 @@ void R_InitSkyMap(void)
     skyflatnum = R_FlatNumForName("F_SKY");
     skytexturemid = 200 * FRACUNIT;
     skyiscale = FRACUNIT;
+}
+
+// ===========================================================
+// =                                                         =
+// = [JN] Lookup and init all the textures for brightmapping =
+// =                                                         =
+// ===========================================================
+void R_InitBrightmaps(void)
+{
+    // Textures...
+
+    // brightmap_greenonly
+    bmaptexture01 = R_TextureNumForName("SW_1_MD");
+    
+    // brightmap_redonly
+    bmaptexture02 = R_TextureNumForName("SW_2_DN");
+    
+    // brightmap_blueonly
+    bmaptexture03 = R_TextureNumForName("SW_1_DN");
+    bmaptexture04 = R_TextureNumForName("SW_2_MD");
+    
+    // brightmap_flame
+    bmaptexture05 = R_TextureNumForName("SPAWN03");
+    bmaptexture06 = R_TextureNumForName("SPAWN12");
+    bmaptexture07 = R_TextureNumForName("SW51_ON");
+    bmaptexture08 = R_TextureNumForName("SW52_ON");
+    
+    // brightmap_yellowred
+    bmaptexture09 = R_TextureNumForName("SPAWN09");
+    bmaptexture10 = R_TextureNumForName("SPAWN10");
+    
+    // We need to declare a "terminator" - standard game texture
+    // that present in all Hexen series and uses standard light formula.
+    // Otherwise, non-standard textures will use latest brightmap.
+    bmap_terminator = R_TextureNumForName(("FOREST01"));    
 }
 
 //==========================================================================

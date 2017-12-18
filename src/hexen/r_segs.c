@@ -27,7 +27,9 @@ int brightmap_redonly;
 int brightmap_blueonly;
 int brightmap_flame;
 int brightmap_yellowred;
-boolean bmaptextured;
+extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
+extern int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
+extern int bmap_terminator;
 
 // OPTIMIZE: closed two sided lines as single sided
 
@@ -324,24 +326,6 @@ void R_RenderSegLoop(void)
 
 }
 
-void R_InitBrightmaps (void)
-{
-    brightmap_greenonly = (bmaptextured == R_TextureNumForName("SW_1_MD"));
-
-    brightmap_redonly = (bmaptextured == R_TextureNumForName("SW_2_DN"));
-    
-    brightmap_blueonly = (bmaptextured == R_TextureNumForName("SW_1_DN") 
-    || bmaptextured == R_TextureNumForName("SW_2_MD"));
-
-    brightmap_flame = (bmaptextured == R_TextureNumForName("SPAWN03")
-    || bmaptextured == R_TextureNumForName("SPAWN12")
-    || bmaptextured == R_TextureNumForName("SW51_ON")
-    || bmaptextured == R_TextureNumForName("SW52_ON"));
-    
-    brightmap_yellowred = (bmaptextured == R_TextureNumForName("SPAWN09")
-    || bmaptextured == R_TextureNumForName("SPAWN10"));
-}
-
 /*
 =====================
 =
@@ -575,11 +559,6 @@ void R_StoreWallRange(int start, int stop)
 // calculate rw_offset (only needed for textured lines)
 //
     segtextured = midtexture | toptexture | bottomtexture | maskedtexture;
-    bmaptextured = midtexture | toptexture | bottomtexture;
-
-    // [JN] Call brightmap lookup
-    if (brightmaps && !vanillaparm && LevelUseFullBright == true)
-    R_InitBrightmaps();
 
     if (segtextured)
     {
@@ -611,35 +590,40 @@ void R_StoreWallRange(int start, int stop)
             //      walllights = scalelight[0];
             if (lightnum >= LIGHTLEVELS)
             {
-                if (brightmap_greenonly)
-                walllights = fullbright_greenonly[LIGHTLEVELS - 1];
-                else if (brightmap_redonly)
-                walllights = fullbright_redonly[LIGHTLEVELS - 1];
-                else if (brightmap_blueonly)
-                walllights = fullbright_blueonly[LIGHTLEVELS - 1];
-                else if (brightmap_flame)
-                walllights = fullbright_flame[LIGHTLEVELS - 1];
-                else if (brightmap_yellowred)
-                walllights = fullbright_yellowred[LIGHTLEVELS - 1];
-
-                else // [JN] Standard light table
                 walllights = scalelight[LIGHTLEVELS - 1];
             }
             else
             {
-                if (brightmap_greenonly)
-                walllights = fullbright_greenonly[lightnum];
-                else if (brightmap_redonly)
-                walllights = fullbright_redonly[lightnum];
-                else if (brightmap_blueonly)
-                walllights = fullbright_blueonly[lightnum];
-                else if (brightmap_flame)
-                walllights = fullbright_flame[lightnum];
-                else if (brightmap_yellowred)
-                walllights = fullbright_yellowred[lightnum];
-
-                else // [JN] Standard light table
+                // [JN] Standard formula first
                 walllights = scalelight[lightnum];
+                
+                // [JN] Apply brightmaps to walls...
+                if (brightmaps && !vanillaparm)
+                {
+                    if (midtexture == bmaptexture01 || toptexture == bmaptexture01 || bottomtexture == bmaptexture01)
+                    walllights = fullbright_greenonly[lightnum];
+                
+                    if (midtexture == bmaptexture02 || toptexture == bmaptexture02 || bottomtexture == bmaptexture02)
+                    walllights = fullbright_redonly[lightnum];
+                
+                    if (midtexture == bmaptexture03 || toptexture == bmaptexture03 || bottomtexture == bmaptexture03
+                    || midtexture == bmaptexture04  || toptexture == bmaptexture04 || bottomtexture == bmaptexture04)
+                    walllights = fullbright_blueonly[lightnum];
+                
+                    if (midtexture == bmaptexture05 || toptexture == bmaptexture05 || bottomtexture == bmaptexture05
+                    || midtexture == bmaptexture06  || toptexture == bmaptexture06 || bottomtexture == bmaptexture06
+                    || midtexture == bmaptexture07  || toptexture == bmaptexture07 || bottomtexture == bmaptexture07
+                    || midtexture == bmaptexture08  || toptexture == bmaptexture08 || bottomtexture == bmaptexture08)
+                    walllights = fullbright_flame[lightnum];
+                
+                    if (midtexture == bmaptexture09 || toptexture == bmaptexture09 || bottomtexture == bmaptexture09
+                    || midtexture == bmaptexture10  || toptexture == bmaptexture10 || bottomtexture == bmaptexture10)
+                    walllights = fullbright_yellowred[lightnum];                
+                
+                    // [JN] Apply brightmap terminator...
+                    if (midtexture == bmap_terminator || toptexture == bmap_terminator || bottomtexture == bmap_terminator)
+                    walllights = scalelight[lightnum];
+                }
             }
         }
     }
