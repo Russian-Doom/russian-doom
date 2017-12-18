@@ -248,11 +248,8 @@ void P_LoadSegs (int lump)
 	li->sidedef = &sides[ldef->sidenum[side]];
 	li->frontsector = sides[ldef->sidenum[side]].sector;
 	// [crispy] recalculate
-    if ((flip_levels || flip_levels_cmdline) && singleplayer)
-    li->offset = GetOffset(li->v1, ldef->v2);
-    else
-    li->offset = GetOffset(li->v1, ldef->v1);
-	// li->offset = GetOffset(li->v1, ((ml->side ^ flip_levels) ? ldef->v2 : ldef->v1));
+    if (singleplayer)
+    li->offset = GetOffset(li->v1, ((ml->side ^ (flip_levels || flip_levels_cmdline) ? ldef->v2 : ldef->v1)));
 
         if (ldef-> flags & ML_TWOSIDED)
         {
