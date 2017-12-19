@@ -714,10 +714,13 @@ void R_Init(void)
     printf (".");
     //tprintf("R_InitSkyMap\n", 0);
     R_InitSkyMap();
-    // [JN] Lookup and init all the textures for brightmapping
-    R_InitBrightmaps();
     printf (".");
     R_InitTranslationTables();
+    // [JN] Lookup and init all the textures for brightmapping
+    if (brightmaps && !vanillaparm)
+    {
+        R_InitBrightmaps();
+    }
     framecount = 0;
 }
 

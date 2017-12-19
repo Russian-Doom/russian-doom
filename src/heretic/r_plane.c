@@ -109,7 +109,12 @@ void R_InitSkyMap(void)
 // ===========================================================
 void R_InitBrightmaps(void)
 {
-    // Flats and ceilings...
+    // Print informative message while startup
+    printf("\nR_Init: Инициализация брайтмаппинга.");
+
+    // -------------------------------------------------------
+    //  Flats and ceilings
+    // -------------------------------------------------------
 
     // blue_only_floor
     bmapflatnum1 = R_FlatNumForName(DEH_String("FLOOR21"));
@@ -118,7 +123,9 @@ void R_InitBrightmaps(void)
     bmapflatnum4 = R_FlatNumForName(DEH_String("FLOOR24"));
     bmapflatnum5 = R_FlatNumForName(DEH_String("FLOOR26"));    
 
-    // Textures...
+    // -------------------------------------------------------
+    //  Textures
+    // -------------------------------------------------------
 
     // brightmap_redonly
     bmaptexture01 = R_TextureNumForName(DEH_String("GRSKULL3"));
@@ -131,9 +138,9 @@ void R_InitBrightmaps(void)
     bmaptexture06 = R_TextureNumForName(DEH_String("SW1ON"));
     bmaptexture07 = R_TextureNumForName(DEH_String("SW1OFF"));
     
-    // For some odd reason, it is necessary to declare last texture
-    // as a "terminator", which will use standard light formula.
-    // Otherwise, non-standard textures will use latest brightmap.
+    // We need to declare a "terminator" - standard game texture,
+    // presented in all Heretic series and using standard light formula.
+    // Otherwise, non-defined textures will use latest brightmap.
     bmap_terminator = R_TextureNumForName(DEH_String("WOODWL"));
 }
 
