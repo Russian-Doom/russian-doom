@@ -111,6 +111,18 @@ lighttable_t*		scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t*		scalelightfixed[MAXLIGHTSCALE];
 lighttable_t*		zlight[LIGHTLEVELS][MAXLIGHTZ];
 
+// [JN] Brightmaps
+lighttable_t* fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_greenonly1[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_blueonly[LIGHTLEVELS][MAXLIGHTSCALE];
+extern boolean vanilla;
+
 // bumped light from gun blasts
 int			extralight;			
 
@@ -774,6 +786,17 @@ void R_ExecuteSetViewSize (void)
 		level = NUMCOLORMAPS-1;
 
 	    scalelight[i][j] = colormaps + level*256;
+
+        // [JN] Brightmaps
+        fullbright_redonly[i][j] = brightmaps_redonly + level*256;
+        fullbright_notgray[i][j] = brightmaps_notgray + level*256;
+        fullbright_notgrayorbrown[i][j] = brightmaps_notgrayorbrown + level*256;
+        fullbright_greenonly1[i][j] = brightmaps_greenonly1 + level*256;
+        fullbright_greenonly2[i][j] = brightmaps_greenonly2 + level*256;
+        fullbright_greenonly3[i][j] = brightmaps_greenonly3 + level*256;
+        fullbright_orangeyellow[i][j] = brightmaps_orangeyellow + level*256;
+        fullbright_dimmeditems[i][j] = brightmaps_dimmeditems + level*256;
+        fullbright_blueonly[i][j] = brightmaps_blueonly + level*256;
 	}
     }
 }
@@ -806,6 +829,11 @@ void R_Init (void)
     R_InitSkyMap ();
     printf (".");
     R_InitTranslationTables ();
+    // [JN] Lookup and init all the textures for brightmapping
+    if (!vanilla)
+    {
+        R_InitBrightmaps ();
+    }
 	
     framecount = 0;
 }

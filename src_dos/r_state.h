@@ -44,6 +44,17 @@ extern fixed_t*		spritetopoffset;
 
 extern lighttable_t*	colormaps;
 
+// [JN] Brightmaps
+extern lighttable_t* brightmaps_notgray;
+extern lighttable_t* brightmaps_notgrayorbrown;
+extern lighttable_t* brightmaps_redonly;
+extern lighttable_t* brightmaps_greenonly1;
+extern lighttable_t* brightmaps_greenonly2;
+extern lighttable_t* brightmaps_greenonly3;
+extern lighttable_t* brightmaps_orangeyellow;
+extern lighttable_t* brightmaps_dimmeditems;
+extern lighttable_t* brightmaps_blueonly;
+
 extern int		viewwidth;
 extern int		scaledviewwidth;
 extern int		viewheight;

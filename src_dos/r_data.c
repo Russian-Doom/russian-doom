@@ -149,6 +149,16 @@ fixed_t*	spritetopoffset;
 
 lighttable_t	*colormaps;
 
+// [JN] Brightmaps
+lighttable_t	*brightmaps_notgray;
+lighttable_t	*brightmaps_notgrayorbrown;
+lighttable_t	*brightmaps_redonly;
+lighttable_t	*brightmaps_greenonly1;
+lighttable_t	*brightmaps_greenonly2;
+lighttable_t	*brightmaps_greenonly3;
+lighttable_t	*brightmaps_orangeyellow;
+lighttable_t	*brightmaps_dimmeditems;
+lighttable_t	*brightmaps_blueonly;
 
 //
 // MAPTEXTURE_T CACHING
@@ -622,6 +632,15 @@ void R_InitSpriteLumps (void)
 void R_InitColormaps (void)
 {
     int	lump, length;
+    int	lump2, length2;
+    int	lump3, length3;
+    int	lump4, length4;
+    int	lump5, length5;
+    int	lump6, length6;
+    int	lump7, length7;
+    int	lump8, length8;
+    int	lump9, length9;
+    int	lump10, length10;
     
     // Load in the light tables, 
     //  256 byte align tables.
@@ -630,6 +649,64 @@ void R_InitColormaps (void)
     colormaps = Z_Malloc (length, PU_STATIC, 0); 
     colormaps = (byte *)( ((int)colormaps + 255)&~0xff); 
     W_ReadLump (lump,colormaps); 
+    
+    // [JN] Loading brightmaps
+    // Note: tables as well as it's valuaes are taken from Doom Retro (r_data.c).
+    // Many thanks to Brad Harding for his amazing research of brightmap tables and colors!
+
+    lump2 = W_GetNumForName("BRTMAP1"); 
+    length2 = W_LumpLength (lump2) + 255; 
+    brightmaps_notgray = Z_Malloc (length2, PU_STATIC, 0); 
+    brightmaps_notgray = (byte *)( ((int)brightmaps_notgray + 255)&~0xff); 
+    W_ReadLump (lump2,brightmaps_notgray);
+
+    lump3 = W_GetNumForName("BRTMAP2"); 
+    length3 = W_LumpLength (lump3) + 255; 
+    brightmaps_notgrayorbrown = Z_Malloc (length3, PU_STATIC, 0); 
+    brightmaps_notgrayorbrown = (byte *)( ((int)brightmaps_notgrayorbrown + 255)&~0xff); 
+    W_ReadLump (lump3,brightmaps_notgrayorbrown); 
+
+    lump4 = W_GetNumForName("BRTMAP3"); 
+    length4 = W_LumpLength (lump4) + 255; 
+    brightmaps_redonly = Z_Malloc (length4, PU_STATIC, 0); 
+    brightmaps_redonly = (byte *)( ((int)brightmaps_redonly + 255)&~0xff); 
+    W_ReadLump (lump4,brightmaps_redonly);
+    
+    lump5 = W_GetNumForName("BRTMAP4"); 
+    length5 = W_LumpLength (lump5) + 255; 
+    brightmaps_greenonly1 = Z_Malloc (length5, PU_STATIC, 0); 
+    brightmaps_greenonly1 = (byte *)( ((int)brightmaps_greenonly1 + 255)&~0xff); 
+    W_ReadLump (lump5,brightmaps_greenonly1); 
+    
+    lump6 = W_GetNumForName("BRTMAP5"); 
+    length6 = W_LumpLength (lump6) + 255; 
+    brightmaps_greenonly2 = Z_Malloc (length6, PU_STATIC, 0); 
+    brightmaps_greenonly2 = (byte *)( ((int)brightmaps_greenonly2 + 255)&~0xff); 
+    W_ReadLump (lump6,brightmaps_greenonly2);
+
+    lump7 = W_GetNumForName("BRTMAP6"); 
+    length7 = W_LumpLength (lump7) + 255; 
+    brightmaps_greenonly3 = Z_Malloc (length7, PU_STATIC, 0); 
+    brightmaps_greenonly3 = (byte *)( ((int)brightmaps_greenonly3 + 255)&~0xff); 
+    W_ReadLump (lump7,brightmaps_greenonly3);
+    
+    lump8 = W_GetNumForName("BRTMAP7"); 
+    length8 = W_LumpLength (lump8) + 255; 
+    brightmaps_orangeyellow = Z_Malloc (length8, PU_STATIC, 0); 
+    brightmaps_orangeyellow = (byte *)( ((int)brightmaps_orangeyellow + 255)&~0xff); 
+    W_ReadLump (lump8,brightmaps_orangeyellow);
+    
+    lump9 = W_GetNumForName("BRTMAP8"); 
+    length9 = W_LumpLength (lump9) + 255; 
+    brightmaps_dimmeditems = Z_Malloc (length9, PU_STATIC, 0); 
+    brightmaps_dimmeditems = (byte *)( ((int)brightmaps_dimmeditems + 255)&~0xff); 
+    W_ReadLump (lump9,brightmaps_dimmeditems);
+    
+    lump10 = W_GetNumForName("BRTMAP9"); 
+    length10 = W_LumpLength (lump10) + 255; 
+    brightmaps_blueonly = Z_Malloc (length10, PU_STATIC, 0); 
+    brightmaps_blueonly = (byte *)( ((int)brightmaps_blueonly + 255)&~0xff); 
+    W_ReadLump (lump10,brightmaps_blueonly);
 }
 
 

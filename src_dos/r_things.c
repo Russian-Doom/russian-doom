@@ -72,6 +72,16 @@ fixed_t		pspriteiscale;
 
 lighttable_t**	spritelights;
 
+// [JN] Brightmaps
+lighttable_t**	fullbrights_notgray;
+lighttable_t**	fullbrights_notgrayorbrown;
+lighttable_t**	fullbrights_redonly;
+lighttable_t**	fullbrights_greenonly1;
+lighttable_t**	fullbrights_greenonly2;
+lighttable_t**	fullbrights_greenonly3;
+lighttable_t**	fullbrights_orangeyellow;
+lighttable_t**	fullbrights_dimmeditems;
+
 // constant arrays
 //  used for psprite clipping and initializing clipping
 int		negonearray[SCREENWIDTH]; // [crispy] 32-bit integer math
@@ -616,6 +626,30 @@ void R_ProjectSprite (mobj_t* thing)
 	    index = MAXLIGHTSCALE-1;
 
 	vis->colormap = spritelights[index];
+
+    // [JN] Applying brightmaps to sprites...
+    if (!vanilla)
+    {
+        // Armor Bonus
+        if (thing->type == MT_MISC3)
+        vis->colormap = fullbrights_dimmeditems[index];
+
+        // Cell Charge
+        else if (thing->type == MT_MISC20)
+        vis->colormap = fullbrights_dimmeditems[index];
+
+        // Cell Charge Pack
+        else if (thing->type == MT_MISC21)
+        vis->colormap = fullbrights_dimmeditems[index];
+
+        // BFG9000
+        else if (thing->type == MT_MISC25)
+        vis->colormap = fullbrights_redonly[index];
+
+        // Plasmagun
+        else if (thing->type == MT_MISC28)
+        vis->colormap = fullbrights_redonly[index];
+    }
     }	
 
     // [crispy] colored blood 
@@ -657,11 +691,29 @@ void R_AddSprites (sector_t* sec)
     lightnum = (sec->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
     if (lightnum < 0)		
-	spritelights = scalelight[0];
+    {
+        spritelights = scalelight[0];
+
+        // [JN] Calculating sprite brightmaps
+        fullbrights_dimmeditems = fullbright_dimmeditems[0];
+        fullbrights_redonly = fullbright_redonly[0];
+    }
     else if (lightnum >= LIGHTLEVELS)
-	spritelights = scalelight[LIGHTLEVELS-1];
+    {
+        spritelights = scalelight[LIGHTLEVELS-1];
+
+        // [JN] Calculating sprite brightmaps
+        fullbrights_dimmeditems = fullbright_dimmeditems[LIGHTLEVELS-1];
+        fullbrights_redonly = fullbright_redonly[LIGHTLEVELS-1];
+    }
     else
-	spritelights = scalelight[lightnum];
+    {
+        spritelights = scalelight[lightnum];
+
+        // [JN] Calculating sprite brightmaps
+        fullbrights_dimmeditems = fullbright_dimmeditems[lightnum];
+        fullbrights_redonly = fullbright_redonly[lightnum];
+    }
 
     // Handle all things in sector.
     for (thing = sec->thinglist ; thing ; thing = thing->snext)
