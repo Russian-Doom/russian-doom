@@ -689,9 +689,12 @@ void R_Init(void)
     R_InitPlanes();
     R_InitLightTables();
     R_InitSkyMap();
-    // [JN] Lookup and init all the textures for brightmapping
-    R_InitBrightmaps();
     R_InitTranslationTables();
+    // [JN] Lookup and init all the textures for brightmapping
+    if (brightmaps && !vanillaparm)
+    {
+        R_InitBrightmaps();
+    }
     framecount = 0;
 }
 

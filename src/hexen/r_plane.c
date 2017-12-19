@@ -131,7 +131,12 @@ void R_InitSkyMap(void)
 // ===========================================================
 void R_InitBrightmaps(void)
 {
-    // Textures...
+    // Print informative message while startup
+    printf("\nR_Init: Инициализация брайтмаппинга.");
+
+    // -------------------------------------------------------
+    //  Textures
+    // -------------------------------------------------------
 
     // brightmap_greenonly
     bmaptexture01 = R_TextureNumForName("SW_1_MD");
@@ -165,9 +170,9 @@ void R_InitBrightmaps(void)
     bmaptexture09 = R_TextureNumForName("SPAWN09");
     bmaptexture10 = R_TextureNumForName("SPAWN10");
     
-    // We need to declare a "terminator" - standard game texture
-    // that present in all Hexen series and uses standard light formula.
-    // Otherwise, non-standard textures will use latest brightmap.
+    // We need to declare a "terminator" - standard game texture,
+    // presented in all Hexen series and using standard light formula.
+    // Otherwise, non-defined textures will use latest brightmap.
     bmap_terminator = R_TextureNumForName(("FOREST01"));    
 }
 
