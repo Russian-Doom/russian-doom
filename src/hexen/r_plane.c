@@ -151,7 +151,6 @@ void R_InitBrightmaps(void)
     // brightmap_flame
     bmaptexture05 = R_TextureNumForName("SPAWN03");
     bmaptexture06 = R_TextureNumForName("SPAWN12");
-    bmaptexture07 = R_TextureNumForName("SW51_ON");
     bmaptexture08 = R_TextureNumForName("SW52_ON");
     bmaptexture11 = R_TextureNumForName("X_FAC01"); // Korax
     bmaptexture12 = R_TextureNumForName("X_FAC02"); // Korax
@@ -165,6 +164,9 @@ void R_InitBrightmaps(void)
     bmaptexture20 = R_TextureNumForName("X_FAC10"); // Korax
     bmaptexture21 = R_TextureNumForName("X_FAC11"); // Korax
     bmaptexture22 = R_TextureNumForName("X_FAC12"); // Korax
+
+    if (gamemode != shareware)
+    bmaptexture07 = R_TextureNumForName("SW51_ON");
     
     // brightmap_yellowred
     bmaptexture09 = R_TextureNumForName("SPAWN09");

@@ -649,9 +649,14 @@ void R_StoreWallRange(int start, int stop)
 
                     if (midtexture == bmaptexture05 || toptexture == bmaptexture05 || bottomtexture == bmaptexture05
                     || midtexture == bmaptexture06  || toptexture == bmaptexture06 || bottomtexture == bmaptexture06
-                    || midtexture == bmaptexture07  || toptexture == bmaptexture07 || bottomtexture == bmaptexture07
                     || midtexture == bmaptexture08  || toptexture == bmaptexture08 || bottomtexture == bmaptexture08)
                     walllights = fullbright_flame[lightnum];
+                    
+                    if (gamemode != shareware)
+                    {
+                        if (midtexture == bmaptexture07  || toptexture == bmaptexture07 || bottomtexture == bmaptexture07)
+                        walllights = fullbright_flame[lightnum];
+                    }
 
                     if (midtexture == bmaptexture09 || toptexture == bmaptexture09 || bottomtexture == bmaptexture09
                     || midtexture == bmaptexture10  || toptexture == bmaptexture10 || bottomtexture == bmaptexture10)
