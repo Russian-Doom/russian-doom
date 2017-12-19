@@ -117,6 +117,8 @@ lighttable_t* fullbright_bspi_attack_2[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_skel_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_fatt_attack[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_sswv_attack[LIGHTLEVELS][MAXLIGHTSCALE];
+extern int brightmaps;
+extern boolean vanillaparm;
 
 // bumped light from gun blasts
 int extralight;			
@@ -790,10 +792,13 @@ void R_Init (void)
     R_InitLightTables ();
     printf (".");
     R_InitSkyMap ();
-    // [JN] Lookup and init all the textures for brightmapping
-    R_InitBrightmaps ();
     R_InitTranslationTables ();
     printf (".");
+    // [JN] Lookup and init all the textures for brightmapping
+    if (brightmaps && !vanillaparm)
+    {
+        R_InitBrightmaps ();
+    }
 
     framecount = 0;
 }
