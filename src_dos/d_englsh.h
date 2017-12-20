@@ -211,9 +211,9 @@
 #define HUSTR_E3M9  "t3v9: rhjkbxbq cfl"                        // E3M9: Кроличий сад
 
 #define HUSTR_E4M1  "t4v1: gjl fljv"                            // E4M1: Под Адом
-#define HUSTR_E4M2  "t4v2: bcntyyjt jndhfotybt"                 // E4M2: Истинное отвращение
+#define HUSTR_E4M2  "t4v2: bcnbyyfz ytyfdbcnm"                  // E4M2: Истинная ненависть
 #define HUSTR_E4M3  "t4v3: bcnzpfybt ytxtcnbds["                // E4M3: Истязание нечестивых
-#define HUSTR_E4M4  "t4v4: ytgjrjhyjt pkj"                      // E4M4: Непокорное зло
+#define HUSTR_E4M4  "t4v4: ytelth;bvjt pkj"                     // E4M4: Неудержимое зло
 #define HUSTR_E4M5  "t4v5: jyb gjrf.ncz"                        // E4M5: Они покаются
 #define HUSTR_E4M6  "t4v6: ceghjnbd cb[ ytxtcnbds["             // E4M6: Супротив сих нечестивых
 #define HUSTR_E4M7  "t4v7: b gjcktljdfk fl"                     // E4M7: И последовал Ад
