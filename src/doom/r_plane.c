@@ -34,6 +34,7 @@
 
 extern int invul_sky;   // [JN] Неуязвимость окрашивает небо
 extern int mlook;
+extern boolean scaled_sky;
 
 // [JN] For brightmaps initialization
 // Walls:
@@ -502,13 +503,9 @@ void R_DrawPlanes (void)
             // [JN] Original:
             dc_iscale = pspriteiscale>>(detailshift && !hires);
             
-            // [JN] Mouselook addition. Disabled at the moment, since my tall
-            // skies does not require any scaling.
-            // TODO: Add support for original (256x128) skies, loaded from pwads
-            // without using TEXTUREs lump. 
-            //
-            // if (mlook)
-            // dc_iscale = dc_iscale * 114 / 228;
+            // [JN] Mouselook addition
+            if (mlook && scaled_sky)
+            dc_iscale = dc_iscale / 2;
 
             // Sky is allways drawn full bright,
             //  i.e. colormaps[0] is used.
