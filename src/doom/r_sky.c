@@ -47,6 +47,23 @@ int			skytexturemid;
 //
 void R_InitSkyMap (void)
 {
-    skytexturemid = ORIGHEIGHT/2*FRACUNIT;
+    
+    skytexturemid = ORIGHEIGHT+199 * FRACUNIT; 
+
+    // [JN] TODO: Add support for original (256x128) skies, loaded from pwads
+    // without using TEXTUREs lump. It should be something like this...
+    //
+    // int skyheight = textureheight[skytexture]>>FRACBITS;
+    // 
+    // Use standard, unscaled code
+    // if (skyheight >= 128 && skyheight < 200)
+    // {
+    //    skytexturemid = ORIGHEIGHT/2*FRACUNIT; 
+    // }
+    // else
+    // {
+    //     skytexturemid = ORIGHEIGHT+199 * FRACUNIT;
+    //
+    // }
 }
 
