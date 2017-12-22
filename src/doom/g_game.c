@@ -240,7 +240,6 @@ int fast_quickload = 1;          // Не выводить запрос при б
 int show_total_time = 1;         // Показывать общее время
 // Графика
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
-int brightmaps_extra = 1;        // Дополнительный брайтмаппинг монстров
 int fake_contrast = 0;           // Имитация контрастного освещения стен
 int floating_powerups = 0;       // Левитирующие сферы-артефакты
 int swirling_liquids = 1;        // Улучшенная анимация жидкостей

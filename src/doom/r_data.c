@@ -179,20 +179,6 @@ lighttable_t	*brightmaps_greenonly3;
 lighttable_t	*brightmaps_orangeyellow;
 lighttable_t	*brightmaps_dimmeditems;
 lighttable_t	*brightmaps_blueonly;
-lighttable_t	*brightmaps_poss_attack;
-lighttable_t	*brightmaps_spos_attack;
-lighttable_t	*brightmaps_cpos_attack_1;
-lighttable_t	*brightmaps_cpos_attack_2;
-lighttable_t	*brightmaps_caco_attack_1;
-lighttable_t	*brightmaps_caco_attack_2;
-lighttable_t	*brightmaps_pain_elemental;
-lighttable_t	*brightmaps_lost_soul_1;
-lighttable_t	*brightmaps_lost_soul_2;
-lighttable_t	*brightmaps_bspi_attack_1;
-lighttable_t	*brightmaps_bspi_attack_2;
-lighttable_t	*brightmaps_skel_attack;
-lighttable_t	*brightmaps_fatt_attack;
-lighttable_t	*brightmaps_sswv_attack;
 
 
 extern int      translucency;
@@ -982,8 +968,7 @@ void R_InitTranMap()
 //
 void R_InitColormaps (void)
 {
-    int	lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9;
-    int lump10, lump11, lump12, lump13, lump14, lump15, lump16, lump17, lump18, lump19, lump20, lump21, lump22, lump23, lump24;
+    int	lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -1019,52 +1004,8 @@ void R_InitColormaps (void)
     lump9 = W_GetNumForName(DEH_String("BRTMAP8"));
     brightmaps_dimmeditems = W_CacheLumpNum(lump9, PU_STATIC);
 
-    lump24 = W_GetNumForName(DEH_String("BRTMAP9"));
-    brightmaps_blueonly = W_CacheLumpNum(lump24, PU_STATIC);
-
-    // [JN] Precaching extra brightmaps
-
-    lump10 = W_GetNumForName(DEH_String("BRTMAE1"));
-    brightmaps_poss_attack = W_CacheLumpNum(lump10, PU_STATIC);
-    
-    lump11 = W_GetNumForName(DEH_String("BRTMAE2"));
-    brightmaps_spos_attack = W_CacheLumpNum(lump11, PU_STATIC);
-    
-    lump12 = W_GetNumForName(DEH_String("BRTMAE3"));
-    brightmaps_cpos_attack_1 = W_CacheLumpNum(lump12, PU_STATIC);
-    
-    lump13 = W_GetNumForName(DEH_String("BRTMAE4"));
-    brightmaps_cpos_attack_2 = W_CacheLumpNum(lump13, PU_STATIC);
-    
-    lump14 = W_GetNumForName(DEH_String("BRTMAE5"));
-    brightmaps_caco_attack_1 = W_CacheLumpNum(lump14, PU_STATIC);
-    
-    lump15 = W_GetNumForName(DEH_String("BRTMAE6"));
-    brightmaps_caco_attack_2 = W_CacheLumpNum(lump15, PU_STATIC);
-
-    lump16 = W_GetNumForName(DEH_String("BRTMAE7"));
-    brightmaps_pain_elemental = W_CacheLumpNum(lump16, PU_STATIC);
-    
-    lump17 = W_GetNumForName(DEH_String("BRTMAE8"));
-    brightmaps_lost_soul_1 = W_CacheLumpNum(lump17, PU_STATIC);
-    
-    lump18 = W_GetNumForName(DEH_String("BRTMAE9"));
-    brightmaps_lost_soul_2 = W_CacheLumpNum(lump18, PU_STATIC);
-    
-    lump19 = W_GetNumForName(DEH_String("BRTMAE10"));
-    brightmaps_bspi_attack_1 = W_CacheLumpNum(lump19, PU_STATIC);
-    
-    lump20 = W_GetNumForName(DEH_String("BRTMAE11"));
-    brightmaps_bspi_attack_2 = W_CacheLumpNum(lump20, PU_STATIC);
-
-    lump21 = W_GetNumForName(DEH_String("BRTMAE12"));
-    brightmaps_skel_attack = W_CacheLumpNum(lump21, PU_STATIC);
-    
-    lump22 = W_GetNumForName(DEH_String("BRTMAE13"));
-    brightmaps_fatt_attack = W_CacheLumpNum(lump22, PU_STATIC);
-    
-    lump23 = W_GetNumForName(DEH_String("BRTMAE14"));
-    brightmaps_sswv_attack = W_CacheLumpNum(lump23, PU_STATIC);
+    lump10 = W_GetNumForName(DEH_String("BRTMAP9"));
+    brightmaps_blueonly = W_CacheLumpNum(lump10, PU_STATIC);
 }
 
 

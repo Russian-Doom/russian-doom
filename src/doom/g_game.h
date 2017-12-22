@@ -91,7 +91,6 @@ extern int fast_quickload;          // Не выводить запрос при
 extern int show_total_time;         // Показывать общее время
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
-extern int brightmaps_extra;        // Дополнительный брайтмаппинг монстров
 extern int fake_contrast;           // Имитация контрастного освещения стен
 extern int translucency;            // Прозрачность объектов
 extern int floating_powerups;       // Левитирующие сферы-артефакты

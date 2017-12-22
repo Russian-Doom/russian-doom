@@ -319,8 +319,8 @@ state_t	states[NUMSTATES] = {
     {SPR_POSS,3,4,{A_Chase},S_POSS_RUN8,0,0},	// S_POSS_RUN7
     {SPR_POSS,3,4,{A_Chase},S_POSS_RUN1,0,0},	// S_POSS_RUN8
     {SPR_POSS,4,10,{A_FaceTarget},S_POSS_ATK2,0,0},	// S_POSS_ATK1
-    // [JN] Don't use full brightness for ATK2, use extra brightmap instead
-    {SPR_POSS,5,8,{A_PosAttack},S_POSS_ATK3,0,0},	// S_POSS_ATK2
+    // [JN] Фрейм атаки зомбимена в полной яркости
+    {SPR_POSS,5|0x8000,8,{A_PosAttack},S_POSS_ATK3,0,0},	// S_POSS_ATK2
     {SPR_POSS,4,8,{NULL},S_POSS_RUN1,0,0},	// S_POSS_ATK3
     {SPR_POSS,6,3,{NULL},S_POSS_PAIN2,0,0},	// S_POSS_PAIN
     {SPR_POSS,6,3,{A_Pain},S_POSS_RUN1,0,0},	// S_POSS_PAIN2
@@ -353,8 +353,7 @@ state_t	states[NUMSTATES] = {
     {SPR_SPOS,3,3,{A_Chase},S_SPOS_RUN8,0,0},	// S_SPOS_RUN7
     {SPR_SPOS,3,3,{A_Chase},S_SPOS_RUN1,0,0},	// S_SPOS_RUN8
     {SPR_SPOS,4,10,{A_FaceTarget},S_SPOS_ATK2,0,0},	// S_SPOS_ATK1
-    // [JN] Disable full brightness for ATK3, use extra brightmap instead
-    {SPR_SPOS,5,10,{A_SPosAttack},S_SPOS_ATK3,0,0},	// S_SPOS_ATK2
+    {SPR_SPOS,32773,10,{A_SPosAttack},S_SPOS_ATK3,0,0},	// S_SPOS_ATK2
     {SPR_SPOS,4,10,{NULL},S_SPOS_RUN1,0,0},	// S_SPOS_ATK3
     {SPR_SPOS,6,3,{NULL},S_SPOS_PAIN2,0,0},	// S_SPOS_PAIN
     {SPR_SPOS,6,3,{A_Pain},S_SPOS_RUN1,0,0},	// S_SPOS_PAIN2
@@ -475,9 +474,8 @@ state_t	states[NUMSTATES] = {
     {SPR_SKEL,6,6,{A_SkelWhoosh},S_SKEL_FIST3,0,0},	// S_SKEL_FIST2
     {SPR_SKEL,7,6,{A_FaceTarget},S_SKEL_FIST4,0,0},	// S_SKEL_FIST3
     {SPR_SKEL,8,6,{A_SkelFist},S_SKEL_RUN1,0,0},	// S_SKEL_FIST4
-    // [JN] Disable full brightness for MISS1-2 frames, use extra brightmap instead
-    {SPR_SKEL,9,0,{A_FaceTarget},S_SKEL_MISS2,0,0},	// S_SKEL_MISS1
-    {SPR_SKEL,9,10,{A_FaceTarget},S_SKEL_MISS3,0,0},	// S_SKEL_MISS2
+    {SPR_SKEL,32777,0,{A_FaceTarget},S_SKEL_MISS2,0,0},	// S_SKEL_MISS1
+    {SPR_SKEL,32777,10,{A_FaceTarget},S_SKEL_MISS3,0,0},	// S_SKEL_MISS2
     {SPR_SKEL,10,10,{A_SkelMissile},S_SKEL_MISS4,0,0},	// S_SKEL_MISS3
     {SPR_SKEL,10,10,{A_FaceTarget},S_SKEL_RUN1,0,0},	// S_SKEL_MISS4
     {SPR_SKEL,11,5,{NULL},S_SKEL_PAIN2,0,0},	// S_SKEL_PAIN
@@ -514,16 +512,13 @@ state_t	states[NUMSTATES] = {
     {SPR_FATT,5,4,{A_Chase},S_FATT_RUN12,0,0},	// S_FATT_RUN11
     {SPR_FATT,5,4,{A_Chase},S_FATT_RUN1,0,0},	// S_FATT_RUN12
     {SPR_FATT,6,20,{A_FatRaise},S_FATT_ATK2,0,0},	// S_FATT_ATK1
-    // [JN] Disable full brightness for ATK2, use extra brightmap instead
-    {SPR_FATT,7,10,{A_FatAttack1},S_FATT_ATK3,0,0},	// S_FATT_ATK2
+    {SPR_FATT,32775,10,{A_FatAttack1},S_FATT_ATK3,0,0},	// S_FATT_ATK2
     {SPR_FATT,8,5,{A_FaceTarget},S_FATT_ATK4,0,0},	// S_FATT_ATK3
     {SPR_FATT,6,5,{A_FaceTarget},S_FATT_ATK5,0,0},	// S_FATT_ATK4
-    // [JN] Disable full brightness for ATK5, use extra brightmap instead
-    {SPR_FATT,7,10,{A_FatAttack2},S_FATT_ATK6,0,0},	// S_FATT_ATK5
+    {SPR_FATT,32775,10,{A_FatAttack2},S_FATT_ATK6,0,0},	// S_FATT_ATK5
     {SPR_FATT,8,5,{A_FaceTarget},S_FATT_ATK7,0,0},	// S_FATT_ATK6
     {SPR_FATT,6,5,{A_FaceTarget},S_FATT_ATK8,0,0},	// S_FATT_ATK7
-    // [JN] Disable full brightness for ATK8, use extra brightmap instead
-    {SPR_FATT,7,10,{A_FatAttack3},S_FATT_ATK9,0,0},	// S_FATT_ATK8
+    {SPR_FATT,32775,10,{A_FatAttack3},S_FATT_ATK9,0,0},	// S_FATT_ATK8
     {SPR_FATT,8,5,{A_FaceTarget},S_FATT_ATK10,0,0},	// S_FATT_ATK9
     {SPR_FATT,6,5,{A_FaceTarget},S_FATT_RUN1,0,0},	// S_FATT_ATK10
     {SPR_FATT,9,3,{NULL},S_FATT_PAIN2,0,0},	// S_FATT_PAIN
@@ -557,9 +552,8 @@ state_t	states[NUMSTATES] = {
     {SPR_CPOS,3,3,{A_Chase},S_CPOS_RUN8,0,0},	// S_CPOS_RUN7
     {SPR_CPOS,3,3,{A_Chase},S_CPOS_RUN1,0,0},	// S_CPOS_RUN8
     {SPR_CPOS,4,10,{A_FaceTarget},S_CPOS_ATK2,0,0},	// S_CPOS_ATK1
-    // [JN] Disable full brightness for ATK2 and ATK3, use extra brightmaps instead
-    {SPR_CPOS,5,4,{A_CPosAttack},S_CPOS_ATK3,0,0},	// S_CPOS_ATK2
-    {SPR_CPOS,4,4,{A_CPosAttack},S_CPOS_ATK4,0,0},	// S_CPOS_ATK3
+    {SPR_CPOS,32773,4,{A_CPosAttack},S_CPOS_ATK3,0,0},	// S_CPOS_ATK2
+    {SPR_CPOS,32772,4,{A_CPosAttack},S_CPOS_ATK4,0,0},	// S_CPOS_ATK3
     {SPR_CPOS,5,1,{A_CPosRefire},S_CPOS_ATK2,0,0},	// S_CPOS_ATK4
     {SPR_CPOS,6,3,{NULL},S_CPOS_PAIN2,0,0},	// S_CPOS_PAIN
     {SPR_CPOS,6,3,{A_Pain},S_CPOS_RUN1,0,0},	// S_CPOS_PAIN2
@@ -647,8 +641,7 @@ state_t	states[NUMSTATES] = {
     {SPR_HEAD,0,3,{A_Chase},S_HEAD_RUN1,0,0},	// S_HEAD_RUN1
     {SPR_HEAD,1,5,{A_FaceTarget},S_HEAD_ATK2,0,0},	// S_HEAD_ATK1
     {SPR_HEAD,2,5,{A_FaceTarget},S_HEAD_ATK3,0,0},	// S_HEAD_ATK2
-    // [JN] Disable full brightness for ATK3, use extra brightmap instead
-    {SPR_HEAD,3,5,{A_HeadAttack},S_HEAD_RUN1,0,0},	// S_HEAD_ATK3
+    {SPR_HEAD,32771,5,{A_HeadAttack},S_HEAD_RUN1,0,0},	// S_HEAD_ATK3
     {SPR_HEAD,4,3,{NULL},S_HEAD_PAIN2,0,0},	// S_HEAD_PAIN
     {SPR_HEAD,4,3,{A_Pain},S_HEAD_PAIN3,0,0},	// S_HEAD_PAIN2
     {SPR_HEAD,5,6,{NULL},S_HEAD_RUN1,0,0},	// S_HEAD_PAIN3
@@ -727,11 +720,10 @@ state_t	states[NUMSTATES] = {
     {SPR_BOS2,10,8,{NULL},S_BOS2_RAISE6,0,0},	// S_BOS2_RAISE5
     {SPR_BOS2,9,8,{NULL},S_BOS2_RAISE7,0,0},	// S_BOS2_RAISE6
     {SPR_BOS2,8,8,{NULL},S_BOS2_RUN1,0,0},	// S_BOS2_RAISE7
-    // [JN] Disable full brightness for STND-ATK4 frames, use extra brightmap instead
-    {SPR_SKUL,0,10,{A_Look},S_SKULL_STND2,0,0},	// S_SKULL_STND
-    {SPR_SKUL,1,10,{A_Look},S_SKULL_STND,0,0},	// S_SKULL_STND2
-    {SPR_SKUL,0,6,{A_Chase},S_SKULL_RUN2,0,0},	// S_SKULL_RUN1
-    {SPR_SKUL,1,6,{A_Chase},S_SKULL_RUN1,0,0},	// S_SKULL_RUN2
+    {SPR_SKUL,32768,10,{A_Look},S_SKULL_STND2,0,0},	// S_SKULL_STND
+    {SPR_SKUL,32769,10,{A_Look},S_SKULL_STND,0,0},	// S_SKULL_STND2
+    {SPR_SKUL,32768,6,{A_Chase},S_SKULL_RUN2,0,0},	// S_SKULL_RUN1
+    {SPR_SKUL,32769,6,{A_Chase},S_SKULL_RUN1,0,0},	// S_SKULL_RUN2
     {SPR_SKUL,32770,10,{A_FaceTarget},S_SKULL_ATK2,0,0},	// S_SKULL_ATK1
     {SPR_SKUL,32771,4,{A_SkullAttack},S_SKULL_ATK3,0,0},	// S_SKULL_ATK2
     {SPR_SKUL,32770,4,{NULL},S_SKULL_ATK4,0,0},	// S_SKULL_ATK3
@@ -791,11 +783,10 @@ state_t	states[NUMSTATES] = {
     {SPR_BSPI,4,3,{A_Chase},S_BSPI_RUN11,0,0},	// S_BSPI_RUN10
     {SPR_BSPI,5,3,{A_Chase},S_BSPI_RUN12,0,0},	// S_BSPI_RUN11
     {SPR_BSPI,5,3,{A_Chase},S_BSPI_RUN1,0,0},	// S_BSPI_RUN12
-    // [JN] Disable full brightness for ATK* frames, use extra brightmap instead
-    {SPR_BSPI,0,20,{A_FaceTarget},S_BSPI_ATK2,0,0},	// S_BSPI_ATK1
-    {SPR_BSPI,6,4,{A_BspiAttack},S_BSPI_ATK3,0,0},	// S_BSPI_ATK2
-    {SPR_BSPI,7,4,{NULL},S_BSPI_ATK4,0,0},	// S_BSPI_ATK3
-    {SPR_BSPI,7,1,{A_SpidRefire},S_BSPI_ATK2,0,0},	// S_BSPI_ATK4
+    {SPR_BSPI,32768,20,{A_FaceTarget},S_BSPI_ATK2,0,0},	// S_BSPI_ATK1
+    {SPR_BSPI,32774,4,{A_BspiAttack},S_BSPI_ATK3,0,0},	// S_BSPI_ATK2
+    {SPR_BSPI,32775,4,{NULL},S_BSPI_ATK4,0,0},	// S_BSPI_ATK3
+    {SPR_BSPI,32775,1,{A_SpidRefire},S_BSPI_ATK2,0,0},	// S_BSPI_ATK4
     {SPR_BSPI,8,3,{NULL},S_BSPI_PAIN2,0,0},	// S_BSPI_PAIN
     {SPR_BSPI,8,3,{A_Pain},S_BSPI_RUN1,0,0},	// S_BSPI_PAIN2
     {SPR_BSPI,9,20,{A_Scream},S_BSPI_DIE2,0,0},	// S_BSPI_DIE1
@@ -885,11 +876,9 @@ state_t	states[NUMSTATES] = {
     {SPR_SSWV,3,3,{A_Chase},S_SSWV_RUN1,0,0},	// S_SSWV_RUN8
     {SPR_SSWV,4,10,{A_FaceTarget},S_SSWV_ATK2,0,0},	// S_SSWV_ATK1
     {SPR_SSWV,5,10,{A_FaceTarget},S_SSWV_ATK3,0,0},	// S_SSWV_ATK2
-    // [JN] Disable full brightness for ATK3, use extra brightmap instead
-    {SPR_SSWV,6,4,{A_CPosAttack},S_SSWV_ATK4,0,0},	// S_SSWV_ATK3
+    {SPR_SSWV,32774,4,{A_CPosAttack},S_SSWV_ATK4,0,0},	// S_SSWV_ATK3
     {SPR_SSWV,5,6,{A_FaceTarget},S_SSWV_ATK5,0,0},	// S_SSWV_ATK4
-    // [JN] Disable full brightness for ATK5, use extra brightmap instead
-    {SPR_SSWV,6,4,{A_CPosAttack},S_SSWV_ATK6,0,0},	// S_SSWV_ATK5
+    {SPR_SSWV,32774,4,{A_CPosAttack},S_SSWV_ATK6,0,0},	// S_SSWV_ATK5
     {SPR_SSWV,5,1,{A_CPosRefire},S_SSWV_ATK2,0,0},	// S_SSWV_ATK6
     {SPR_SSWV,7,3,{NULL},S_SSWV_PAIN2,0,0},	// S_SSWV_PAIN
     {SPR_SSWV,7,3,{A_Pain},S_SSWV_RUN1,0,0},	// S_SSWV_PAIN2
