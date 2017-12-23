@@ -201,6 +201,14 @@ typedef enum
 
 } mobjflag_t;
 
+// killough 9/15/98: Same, but internal flags, not intended for .deh
+// (some degree of opaqueness is good, to avoid compatibility woes)
+
+enum {
+  MIF_FALLING = 1,      // Object is falling
+  MIF_ARMED = 2,        // Object is armed (for MF_TOUCHY objects)
+  MIF_LINEDONE = 4,     // Object has activated W1 or S1 linedef via DEH frame
+};
 
 // Map Object definition.
 typedef struct mobj_s
@@ -233,6 +241,9 @@ typedef struct mobj_s
     fixed_t		floorz;
     fixed_t		ceilingz;
 
+    // killough 11/98: the lowest floor over all contacted Sectors.
+    fixed_t             dropoffz;
+
     // For movement checking.
     fixed_t		radius;
     fixed_t		height;	
@@ -251,6 +262,7 @@ typedef struct mobj_s
     int			tics;	// state tic counter
     state_t*		state;
     int			flags;
+    int			intflags;  // killough 9/15/98: internal flags
     int			health;
 
     // Movement direction, movement generation (zig-zagging).
@@ -269,6 +281,8 @@ typedef struct mobj_s
     // no matter what (even if shot)
     int			threshold;
 
+    short       gear; // killough 11/98: used in torque simulation
+
     // Additional info record for player avatars only.
     // Only valid if type == MT_PLAYER
     struct player_s*	player;
@@ -284,6 +298,10 @@ typedef struct mobj_s
     
 } mobj_t;
 
+// killough 11/98:
+// For torque simulation:
 
+#define OVERDRIVE 6
+#define MAXGEAR (OVERDRIVE+16)
 
 #endif
