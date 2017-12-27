@@ -470,6 +470,16 @@ unsigned char	cheat_mypos_seq[] =
     0xb2, 0x26, 0xb6, 0xba, 0x2a, 0xf6, 0xea, 0xff	// idmypos
 }; 
 
+// [JN] idka
+unsigned char	cheat_keys_seq[] =
+{
+    SCRAMBLE('i'),
+    SCRAMBLE('d'),
+    SCRAMBLE('k'),
+    SCRAMBLE('a'),
+    0xff    // [JN] terminator?
+}; 
+
 // [JN] version cheat
 unsigned char	cheat_version_seq[] =
 {
@@ -506,6 +516,7 @@ cheatseq_t	cheat_powerup[7] =
 cheatseq_t	cheat_choppers = { cheat_choppers_seq, 0 };
 cheatseq_t	cheat_clev = { cheat_clev_seq, 0 };
 cheatseq_t	cheat_mypos = { cheat_mypos_seq, 0 };
+cheatseq_t	cheat_keys = { cheat_keys_seq, 0 };
 cheatseq_t	cheat_version = { cheat_version_seq, 0 };
 
 
@@ -713,6 +724,14 @@ ST_Responder (event_t* ev)
 		players[consoleplayer].mo->x,
 		players[consoleplayer].mo->y);
 	plyr->message = buf;
+      }
+      // [JN] 'ka' for keys
+      else if (cht_CheckCheat(&cheat_keys, ev->data1))
+      {
+		for (i=0;i<NUMCARDS;i++)
+		  plyr->cards[i] = true;
+
+		plyr->message = STSTR_KAADDED;
       }
       // [JN] version cheat
       else if (cht_CheckCheat(&cheat_version, ev->data1))
