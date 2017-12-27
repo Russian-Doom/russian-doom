@@ -240,6 +240,8 @@ P_RadiusAttack
   mobj_t*	source,
   int		damage );
 
+void P_ApplyTorque(mobj_t *mo);     // killough 9/12/98
+
 
 
 //

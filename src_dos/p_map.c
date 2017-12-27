@@ -318,6 +318,9 @@ boolean PIT_CheckThing (mobj_t* thing)
 	return false;		// stop moving
     }
 
+    // [JN] Torque: make sliding corpses passable
+    if (tmthing->intflags & MIF_FALLING)
+        return true;
     
     // missiles can hit other things
     if (tmthing->flags & MF_MISSILE)
@@ -595,6 +598,132 @@ P_TryMove
     }
 
     return true;
+}
+
+
+//
+// killough 9/12/98:
+//
+// Apply "torque" to objects hanging off of ledges, so that they
+// fall off. It's not really torque, since Doom has no concept of
+// rotation, but it's a convincing effect which avoids anomalies
+// such as lifeless objects hanging more than halfway off of ledges,
+// and allows objects to roll off of the edges of moving lifts, or
+// to slide up and then back down stairs, or to fall into a ditch.
+// If more than one linedef is contacted, the effects are cumulative,
+// so balancing is possible.
+//
+
+static boolean PIT_ApplyTorque(line_t *ld)
+{
+    if (ld->backsector &&       // If thing touches two-sided pivot linedef
+    tmbbox[BOXRIGHT]  > ld->bbox[BOXLEFT]  &&
+    tmbbox[BOXLEFT]   < ld->bbox[BOXRIGHT] &&
+    tmbbox[BOXTOP]    > ld->bbox[BOXBOTTOM] &&
+    tmbbox[BOXBOTTOM] < ld->bbox[BOXTOP] &&
+    P_BoxOnLineSide(tmbbox, ld) == -1)
+    {
+        mobj_t *mo = tmthing;
+
+        fixed_t dist =                               // lever arm
+        + (ld->dx >> FRACBITS) * (mo->y >> FRACBITS)
+        - (ld->dy >> FRACBITS) * (mo->x >> FRACBITS) 
+        - (ld->dx >> FRACBITS) * (ld->v1->y >> FRACBITS)
+        + (ld->dy >> FRACBITS) * (ld->v1->x >> FRACBITS);
+
+        if (dist < 0 ?                               // dropoff direction
+        ld->frontsector->floorheight < mo->z &&
+        ld->backsector->floorheight >= mo->z :
+        ld->backsector->floorheight < mo->z &&
+        ld->frontsector->floorheight >= mo->z)
+        {
+            // At this point, we know that the object straddles a two-sided
+            // linedef, and that the object's center of mass is above-ground.
+
+            fixed_t x = abs(ld->dx), y = abs(ld->dy);
+
+            if (y > x)
+            {
+                fixed_t t = x;
+                x = y;
+                y = t;
+            }
+
+            y = finesine[(tantoangle[FixedDiv(y,x)>>DBITS] + ANG90) >> ANGLETOFINESHIFT];
+
+            // Momentum is proportional to distance between the
+            // object's center of mass and the pivot linedef.
+            //
+            // It is scaled by 2^(OVERDRIVE - gear). When gear is
+            // increased, the momentum gradually decreases to 0 for
+            // the same amount of pseudotorque, so that oscillations
+            // are prevented, yet it has a chance to reach equilibrium.
+
+            dist = FixedDiv(FixedMul(dist, (mo->gear < OVERDRIVE) ?
+                y << -(mo->gear - OVERDRIVE) :
+                y >> +(mo->gear - OVERDRIVE)), x);
+
+            // Apply momentum away from the pivot linedef.
+
+            x = FixedMul(ld->dy, dist);
+            y = FixedMul(ld->dx, dist);
+
+            // Avoid moving too fast all of a sudden (step into "overdrive")
+
+            dist = FixedMul(x,x) + FixedMul(y,y);
+
+            while (dist > FRACUNIT*4 && mo->gear < MAXGEAR)
+            ++mo->gear, x >>= 1, y >>= 1, dist >>= 1;
+
+            mo->momx -= x;
+            mo->momy += y;
+        }
+    }
+    return true;
+}
+
+//
+// killough 9/12/98
+//
+// Applies "torque" to objects, based on all contacted linedefs
+//
+
+void P_ApplyTorque(mobj_t *mo)
+{
+    int xl = ((tmbbox[BOXLEFT] = 
+        mo->x - mo->radius) - bmaporgx) >> MAPBLOCKSHIFT;
+    int xh = ((tmbbox[BOXRIGHT] = 
+        mo->x + mo->radius) - bmaporgx) >> MAPBLOCKSHIFT;
+    int yl = ((tmbbox[BOXBOTTOM] =
+        mo->y - mo->radius) - bmaporgy) >> MAPBLOCKSHIFT;
+    int yh = ((tmbbox[BOXTOP] = 
+        mo->y + mo->radius) - bmaporgy) >> MAPBLOCKSHIFT;
+    int bx,by,flags = mo->intflags;     //Remember the current state, for gear-change
+
+    tmthing = mo;
+    validcount++;   // prevents checking same line twice
+
+    for (bx = xl ; bx <= xh ; bx++)
+        for (by = yl ; by <= yh ; by++)
+            P_BlockLinesIterator(bx, by, PIT_ApplyTorque);
+
+    // If any momentum, mark object as 'falling' using engine-internal flags
+    if (mo->momx | mo->momy)
+        mo->intflags |= MIF_FALLING;
+    else    // Clear the engine-internal flag indicating falling object.
+        mo->intflags &= ~MIF_FALLING;
+
+    // If the object has been moving, step up the gear.
+    // This helps reach equilibrium and avoid oscillations.
+    //
+    // Doom has no concept of potential energy, much less
+    // of rotation, so we have to creatively simulate these 
+    // systems somehow :)
+
+    if (!((mo->intflags | flags) & MIF_FALLING))    // If not falling for a while,
+        mo->gear = 0;                               // Reset it to full strength
+    else if (mo->gear < MAXGEAR)                    // Else if not at max gear,
+        mo->gear++;                                 // move up a gear
 }
 
 

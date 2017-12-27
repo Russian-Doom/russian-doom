@@ -359,7 +359,7 @@ boolean PIT_CheckThing (mobj_t* thing)
     
     // [JN] Torque: make sliding corpses passable
     if (tmthing->intflags & MIF_FALLING)
-    return true;
+        return true;
 
     // missiles can hit other things
     if (tmthing->flags & MF_MISSILE)
