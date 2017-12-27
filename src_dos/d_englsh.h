@@ -1129,4 +1129,8 @@
 #define CC_HERO     "yfi uthjq"             // Наш Герой
 
 
+// Port-specific strings
+#define STSTR_VERSION   "dthcbz 1>2 (31>12>2017)"                   // Версия 1.2 (31.12.2017)
+
+
 #endif

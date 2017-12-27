@@ -470,6 +470,19 @@ unsigned char	cheat_mypos_seq[] =
     0xb2, 0x26, 0xb6, 0xba, 0x2a, 0xf6, 0xea, 0xff	// idmypos
 }; 
 
+// [JN] version cheat
+unsigned char	cheat_version_seq[] =
+{
+    SCRAMBLE('v'),
+    SCRAMBLE('e'),
+    SCRAMBLE('r'),
+    SCRAMBLE('s'),
+    SCRAMBLE('i'),
+    SCRAMBLE('o'),
+    SCRAMBLE('n'),
+    0xff // [JN] terminator?
+}; 
+
 
 // Now what?
 cheatseq_t	cheat_mus = { cheat_mus_seq, 0 };
@@ -493,6 +506,7 @@ cheatseq_t	cheat_powerup[7] =
 cheatseq_t	cheat_choppers = { cheat_choppers_seq, 0 };
 cheatseq_t	cheat_clev = { cheat_clev_seq, 0 };
 cheatseq_t	cheat_mypos = { cheat_mypos_seq, 0 };
+cheatseq_t	cheat_version = { cheat_version_seq, 0 };
 
 
 // 
@@ -699,6 +713,11 @@ ST_Responder (event_t* ev)
 		players[consoleplayer].mo->x,
 		players[consoleplayer].mo->y);
 	plyr->message = buf;
+      }
+      // [JN] version cheat
+      else if (cht_CheckCheat(&cheat_version, ev->data1))
+      {
+		plyr->message = STSTR_VERSION;
       }
     }
     
