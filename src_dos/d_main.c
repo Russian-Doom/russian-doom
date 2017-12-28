@@ -221,8 +221,8 @@ void D_Display (void)
     // save the current screen if about to wipe
     if (gamestate != wipegamestate)
     {
-        if (!devparm) // [JN] No wipe in developer mode
-        wipe = true;
+        if (devparm) // [JN] No wipe in developer mode
+        wipe = false;
 
         wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
     }
