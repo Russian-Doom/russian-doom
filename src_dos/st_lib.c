@@ -31,12 +31,15 @@
 #include "st_stuff.h"
 #include "st_lib.h"
 #include "r_local.h"
+#include "m_menu.h"
 
 
 // in AM_map.c
 extern boolean		automapactive; 
 
 
+// [JN] For Crispy HUD
+extern int screenblocks;
 
 
 //
@@ -112,6 +115,8 @@ STlib_drawNum
     if (n->y - ST_Y < 0)
 	I_Error("drawNum: n->y - ST_Y < 0");
 
+    // [JN] Copy background only on standard HUD
+    if (screenblocks < 11 || automapactive)
     V_CopyRect(x, n->y - ST_Y, BG, w*numdigits, h, x, n->y, FG);
 
     // if non-number, do not draw it
@@ -122,19 +127,34 @@ STlib_drawNum
 
     // in the special case of 0, you draw 0
     if (!num)
-	V_DrawPatch(x - w, n->y, FG, n->p[ 0 ]);
+    {
+        if (screenblocks < 11 || automapactive)
+        V_DrawPatch(x - w, n->y, FG, n->p[ 0 ]);
+        else
+        V_DrawPatchDirect(x - w, n->y, 0, n->p[ 0 ]);
+    }
 
     // draw the new number
     while (num && numdigits--)
     {
 	x -= w;
+    
+    if (screenblocks < 11 || automapactive)
 	V_DrawPatch(x, n->y, FG, n->p[ num % 10 ]);
+    else
+    V_DrawPatchDirect(x, n->y, 0, n->p[ num % 10 ]);
+
 	num /= 10;
     }
 
     // draw a minus sign if necessary
     if (neg)
-	V_DrawPatch(x - 8, n->y, FG, sttminus);
+    {
+        if (screenblocks < 11 || automapactive)
+        V_DrawPatch(x - 8, n->y, FG, sttminus);
+        else
+        V_DrawPatchDirect(x - 8, n->y, 0, sttminus);
+    }
 }
 
 
@@ -172,7 +192,12 @@ STlib_updatePercent
   int			refresh )
 {
     if (refresh && *per->n.on)
-	V_DrawPatch(per->n.x, per->n.y, FG, per->p);
+    {
+        if (screenblocks < 11 || automapactive)
+        V_DrawPatch(per->n.x, per->n.y, FG, per->p);
+        else
+        V_DrawPatchDirect(per->n.x, per->n.y, 0, per->p);
+    }
     
     STlib_updateNum(&per->n, refresh);
 }
@@ -222,9 +247,16 @@ STlib_updateMultIcon
 	    if (y - ST_Y < 0)
 		I_Error("updateMultIcon: y - ST_Y < 0");
 
+        // [JN] Copy background only in standard HUD
+        if (screenblocks < 11 || automapactive)
 	    V_CopyRect(x, y-ST_Y, BG, w, h, x, y, FG);
 	}
+    
+    if (screenblocks < 11 || automapactive)
 	V_DrawPatch(mi->x, mi->y, FG, mi->p[*mi->inum]);
+    else
+    V_DrawPatchDirect(mi->x, mi->y, 0, mi->p[*mi->inum]);
+
 	mi->oldinum = *mi->inum;
     }
 }
@@ -272,8 +304,14 @@ STlib_updateBinIcon
 	    I_Error("updateBinIcon: y - ST_Y < 0");
 
 	if (*bi->val)
+    {
+        if (screenblocks < 11 || automapactive)
 	    V_DrawPatch(bi->x, bi->y, FG, bi->p);
-	else
+        else
+        V_DrawPatchDirect(bi->x, bi->y, 0, bi->p);
+    }
+    // [JN] Update backfround only in standard HUD
+	else if (screenblocks < 11 || automapactive)
 	    V_CopyRect(x, y-ST_Y, BG, w, h, x, y, FG);
 
 	bi->oldval = *bi->val;

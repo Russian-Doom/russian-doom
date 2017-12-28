@@ -1052,8 +1052,9 @@ void M_DrawOptions(void)
     M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(mousesens+1),
 		 10,mouseSensitivity);
 	
+    // [JN] Initially 9. Two new screen sizes for Crispy HUDs.
     M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1),
-		 9,screenSize);
+		 11,screenSize);
 }
 
 void M_Options(int choice)
@@ -1264,7 +1265,8 @@ void M_SizeDisplay(int choice)
 	}
 	break;
       case 1:
-	if (screenSize < 8)
+    // [JN] Initially 8. Two new screen sizes for Crispy HUDs.
+	if (screenSize < 10)
 	{
 	    screenblocks++;
 	    screenSize++;

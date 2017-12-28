@@ -709,7 +709,8 @@ void R_ExecuteSetViewSize (void)
 
     setsizeneeded = false;
 
-    if (setblocks == 11)
+    // [JN] Crispy HUD screen sizes is also "full screen"
+    if (setblocks == 11 || setblocks == 12 || setblocks == 13)
     {
 	scaledviewwidth = SCREENWIDTH;
 	viewheight = SCREENHEIGHT;

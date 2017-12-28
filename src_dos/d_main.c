@@ -86,6 +86,7 @@ boolean	    singletics = false; // debug flag to cancel adaptiveness
 //extern int soundVolume;
 extern int  sfxVolume;
 extern int  musicVolume;
+extern int  screenblocks;
 
 extern boolean  inhelpscreens;
 
@@ -273,7 +274,13 @@ void D_Display (void)
 
     // draw the view directly
     if (gamestate == GS_LEVEL && !automapactive && gametic)
+    {
     R_RenderPlayerView (&players[displayplayer]);
+
+    // [JN] Make HUD calculations while active Crispy HUDs
+    if (screenblocks == 11 || screenblocks == 12)
+        ST_Drawer(0, 0);
+    }
 
     if (gamestate == GS_LEVEL && gametic)
     HU_Drawer ();

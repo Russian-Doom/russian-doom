@@ -53,11 +53,14 @@
 // Data.
 #include "dstrings.h"
 #include "sounds.h"
+#include "m_menu.h"
 
 //
 // STATUS BAR DATA
 //
 
+// [JN] For Crispy HUD
+extern int screenblocks;
 
 // Palette indices.
 // For damage/bonus red-/gold-shifts
@@ -532,7 +535,7 @@ void ST_Stop(void);
 void ST_refreshBackground(void)
 {
 
-    if (st_statusbaron)
+    if (st_statusbaron && screenblocks < 11 || automapactive)
     {
 	V_DrawPatch(ST_X, 0, BG, sbar);
 
@@ -1238,26 +1241,96 @@ void ST_drawWidgets(boolean refresh)
 
     STlib_updateNum(&w_ready, refresh);
 
+    // [crispy] draw "special widgets" in the Crispy HUD
+    if ((screenblocks == 11 || screenblocks == 12) && !automapactive)
+    {
+        // [crispy] draw berserk pack instead of no ammo if appropriate
+        if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
+        {
+            static patch_t *patch;
+    
+            if (!patch)
+            {
+                const int lump = W_CheckNumForName("PSTRA0");
+    
+                if (lump >= 0)
+                patch = W_CacheLumpNum(lump, PU_STATIC);
+            }
+    
+            if (patch)
+            {
+                // [crispy] (23,179) is the center of the Ammo widget
+                // [JN] Using "V_DrawPatchDirect" and monitor "0"
+                V_DrawPatchDirect(23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
+                            179 - SHORT(patch->height)/2 + SHORT(patch->topoffset), 0,
+                            patch);
+            }
+        }
+    }
+
     for (i=0;i<4;i++)
     {
 	STlib_updateNum(&w_ammo[i], refresh);
 	STlib_updateNum(&w_maxammo[i], refresh);
     }
 
-    STlib_updatePercent(&w_health, refresh);
-    STlib_updatePercent(&w_armor, refresh);
+    // [JN] Signed Crispy HUD
+    if (screenblocks == 11)
+    {
+        if (!automapactive) // [JN] Don't draw these patches again in standard HUD while activated automap
+        {
+            // [JN] Don't draw ammo for fist and chainsaw
+            if (plyr->readyweapon == wp_pistol
+            || plyr->readyweapon == wp_shotgun
+            || plyr->readyweapon == wp_supershotgun
+            || plyr->readyweapon == wp_chaingun
+            || plyr->readyweapon == wp_missile
+            || plyr->readyweapon == wp_plasma
+            || plyr->readyweapon == wp_bfg)
+            V_DrawPatchDirect(2, 191, 0, W_CacheLumpName("STCHAMMO", PU_CACHE));
+
+            if (deathmatch) // [JN] Frags (孜把忘忍我)
+                V_DrawPatchDirect(108, 191, 0, W_CacheLumpName("STCHFRGS", PU_CACHE));
+            else            // [JN] Arms (妍把批忪我快)
+                V_DrawPatchDirect(108, 191, 0, W_CacheLumpName("STCHARMS", PU_CACHE));
+
+            // [JN] Health, armor, list of ammo
+            V_DrawPatchDirect(52, 173, 0, W_CacheLumpName("STCHNAMS", PU_CACHE));
+        }
+
+        // [JN] For prevention of yellow slashes "blinking",
+        // they must be drawn above standard HUD while opened automap.
+        if (automapactive)
+        V_DrawPatch(292, 173, 0, W_CacheLumpName("STYSSLSH", PU_CACHE));
+        else
+        V_DrawPatchDirect(292, 173, 0, W_CacheLumpName("STYSSLSH", PU_CACHE));
+    }
+
+    // [JN] Exclusive Crispy HUD
+    if (screenblocks == 12)
+    {
+        // [JN] Only yellow slashes in Exclusive HUD. The logics same as above.
+        if (automapactive)
+        V_DrawPatch(292, 173, 0, W_CacheLumpName("STYSSLSH", PU_CACHE));
+        else
+        V_DrawPatchDirect(292, 173, 0, W_CacheLumpName("STYSSLSH", PU_CACHE));
+    }
+
+    STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12);
+    STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12);
 
     STlib_updateBinIcon(&w_armsbg, refresh);
 
     for (i=0;i<6;i++)
-	STlib_updateMultIcon(&w_arms[i], refresh);
+	STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
 
-    STlib_updateMultIcon(&w_faces, refresh);
+    if (screenblocks < 11 || automapactive)
+	STlib_updateMultIcon(&w_faces, refresh);
 
     for (i=0;i<3;i++)
-	STlib_updateMultIcon(&w_keyboxes[i], refresh);
+	STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12);
 
-    STlib_updateNum(&w_frags, refresh);
+    STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12);
 
 }
 
@@ -1283,7 +1356,7 @@ void ST_diffDraw(void)
 void ST_Drawer (boolean fullscreen, boolean refresh)
 {
   
-    st_statusbaron = (!fullscreen) || automapactive;
+    st_statusbaron = (!fullscreen) || automapactive || screenblocks == 11 || screenblocks == 12;
     st_firsttime = st_firsttime || refresh;
 
     // Do red-/gold-shifts from damage/items
