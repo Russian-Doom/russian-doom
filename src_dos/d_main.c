@@ -224,6 +224,8 @@ void D_Display (void)
     {
         if (devparm) // [JN] No wipe in developer mode
         wipe = false;
+        else
+        wipe = true;
 
         wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
     }
