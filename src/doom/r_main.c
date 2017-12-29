@@ -93,6 +93,9 @@ lighttable_t* scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* scalelightfixed[MAXLIGHTSCALE];
 lighttable_t* zlight[LIGHTLEVELS][MAXLIGHTZ];
 
+// [JN] Floor brightmaps
+lighttable_t* fullbright_notgrayorbrown_floor[LIGHTLEVELS][MAXLIGHTZ];
+
 // [JN] Brightmaps
 lighttable_t* fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
@@ -611,6 +614,9 @@ void R_InitLightTables (void)
             level = NUMCOLORMAPS-1;
 
             zlight[i][j] = colormaps + level*256;
+            
+            // [JN] Floor brightmaps
+            fullbright_notgrayorbrown_floor[i][j] = brightmaps_notgrayorbrown + level * 256;
         }
     }
 }

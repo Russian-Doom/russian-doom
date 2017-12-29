@@ -66,6 +66,9 @@ extern lighttable_t*    scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t*    zlight[LIGHTLEVELS][MAXLIGHTZ];
 
+// [JN] Floor brightmaps
+extern lighttable_t*    fullbright_notgrayorbrown_floor[LIGHTLEVELS][MAXLIGHTZ];
+
 // [JN] Brightmaps
 extern lighttable_t*    fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];

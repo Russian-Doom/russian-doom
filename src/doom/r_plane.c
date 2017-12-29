@@ -32,11 +32,14 @@
 #include "r_local.h"
 #include "r_sky.h"
 
+extern int brightmaps;
 extern int invul_sky;   // [JN] Неуязвимость окрашивает небо
 extern int mlook;
 extern boolean scaled_sky;
 
 // [JN] For brightmaps initialization
+// Floors and ceilings:
+int bmapflatnum1, bmapflatnum2, bmapflatnum3;
 // Walls:
 int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
 int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
@@ -555,6 +558,13 @@ void R_DrawPlanes (void)
 
         planezlight = zlight[light];
 
+        // [JN] Apply brightmaps to floor/ceiling...
+        if (brightmaps && !vanillaparm &&
+        (pl->picnum == bmapflatnum1     // CONS1_1
+        || pl->picnum == bmapflatnum2   // CONS1_5
+        || pl->picnum == bmapflatnum3)) // CONS1_7
+        planezlight = fullbright_notgrayorbrown_floor[light];
+
         pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
         pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
 
@@ -588,6 +598,15 @@ void R_InitBrightmaps(void)
 
     // Texture lookup. There are many strict definitions,
     // for example, no need to lookup Doom 1 textures in TNT.
+    
+    // -------------------------------------------------------
+    //  Flats and ceilings
+    // -------------------------------------------------------
+
+    // All games
+    bmapflatnum1 = R_FlatNumForName("CONS1_1");
+    bmapflatnum2 = R_FlatNumForName("CONS1_5");
+    bmapflatnum3 = R_FlatNumForName("CONS1_7");
 
     // -------------------------------------------------------
     //  Red only
