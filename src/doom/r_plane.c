@@ -621,6 +621,7 @@ void R_InitBrightmaps(void)
         bmaptexture16 = R_TextureNumForName(("SW2BLUE"));
         bmaptexture17 = R_TextureNumForName(("SW2GSTON"));
         bmaptexture23 = R_TextureNumForName(("WOODGARG"));
+        bmaptexture34 = R_TextureNumForName(("EXITSTON"));
     }
 
     // In both games - Doom 1: red only, Doom 2: green only
@@ -664,18 +665,13 @@ void R_InitBrightmaps(void)
         bmaptexture15 = R_TextureNumForName(("SW1STON1"));
         bmaptexture21 = R_TextureNumForName(("SW2COMP"));
         bmaptexture22 = R_TextureNumForName(("SW1STONE"));
+        bmaptexture39 = R_TextureNumForName(("EXITSIGN"));
     }
 
     // -------------------------------------------------------
     //  Not gray
     // -------------------------------------------------------
     
-    // Not in Shareware
-    if (gamemode != shareware)
-    {
-        bmaptexture34 = R_TextureNumForName(("EXITSTON"));
-    }
-
     // Doom 1 only
     if (gamemode == shareware || gamemode == registered || gamemode == retail)
     {
@@ -691,7 +687,6 @@ void R_InitBrightmaps(void)
         bmaptexture33 = R_TextureNumForName(("COMPSTA1"));
         bmaptexture36 = R_TextureNumForName(("LITEBLU1"));
         bmaptexture37 = R_TextureNumForName(("SW2GRAY"));
-        bmaptexture39 = R_TextureNumForName(("EXITSIGN"));
     }
 
     // -------------------------------------------------------
@@ -711,7 +706,6 @@ void R_InitBrightmaps(void)
     if (gamemode == commercial)
     {
         bmaptexture42 = R_TextureNumForName(("SILVER3"));
-        bmaptexture45 = R_TextureNumForName(("SW2MOD1"));
     }
 
     // TNT Evilution only
@@ -746,9 +740,8 @@ void R_InitBrightmaps(void)
     // Not in Doom 1
     if (gamemode == commercial)
     {
+        bmaptexture45 = R_TextureNumForName(("SW2MOD1"));
         bmaptexture58 = R_TextureNumForName(("SPCDOOR3"));
-        bmaptexture61 = R_TextureNumForName(("SW2STARG"));
-        bmaptexture62 = R_TextureNumForName(("SW2BRN1"));
         bmaptexture66 = R_TextureNumForName(("SW2TEK"));
         bmaptexture67 = R_TextureNumForName(("SW2BRIK"));
         bmaptexture71 = R_TextureNumForName(("SW2MET2"));
@@ -758,12 +751,8 @@ void R_InitBrightmaps(void)
 
     // All games
     {
-        bmaptexture63 = R_TextureNumForName(("SW2BRCOM"));
-        bmaptexture64 = R_TextureNumForName(("SW2STON1"));
-        bmaptexture65 = R_TextureNumForName(("SW2STONE"));
         bmaptexture68 = R_TextureNumForName(("SW2BRN2"));
         bmaptexture69 = R_TextureNumForName(("SW2COMM"));
-        bmaptexture70 = R_TextureNumForName(("SW2DIRT"));
         bmaptexture72 = R_TextureNumForName(("SW2STRTN"));
     }
 
@@ -777,6 +766,13 @@ void R_InitBrightmaps(void)
         bmaptexture78 = R_TextureNumForName(("SW2SKULL"));
     }    
 
+    // Not in Doom 1
+    if (gamemode == commercial)
+    {
+        bmaptexture61 = R_TextureNumForName(("SW2STARG"));
+        bmaptexture62 = R_TextureNumForName(("SW2BRN1"));
+    }
+
     // TNT Evilution only
     if (gamemission == pack_tnt)
     {
@@ -785,7 +781,10 @@ void R_InitBrightmaps(void)
 
     // All games
     {
-        bmaptexture77 = R_TextureNumForName(("SW2BRNGN"));
+        bmaptexture63 = R_TextureNumForName(("SW2BRCOM"));
+        bmaptexture64 = R_TextureNumForName(("SW2STON1"));
+        bmaptexture65 = R_TextureNumForName(("SW2STONE"));
+        bmaptexture70 = R_TextureNumForName(("SW2DIRT"));
     }
 
     // -------------------------------------------------------
@@ -794,6 +793,7 @@ void R_InitBrightmaps(void)
 
     // All games
     {
+        bmaptexture77 = R_TextureNumForName(("SW2BRNGN"));
         bmaptexture80 = R_TextureNumForName(("SW2METAL"));
     }
 

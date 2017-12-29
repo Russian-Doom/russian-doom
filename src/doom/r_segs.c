@@ -851,7 +851,8 @@ void R_StoreWallRange (int start, int stop)
                     || midtexture == bmaptexture11 || toptexture == bmaptexture11 || bottomtexture == bmaptexture11
                     || midtexture == bmaptexture16 || toptexture == bmaptexture16 || bottomtexture == bmaptexture16
                     || midtexture == bmaptexture17 || toptexture == bmaptexture17 || bottomtexture == bmaptexture17
-                    || midtexture == bmaptexture23 || toptexture == bmaptexture23 || bottomtexture == bmaptexture23)
+                    || midtexture == bmaptexture23 || toptexture == bmaptexture23 || bottomtexture == bmaptexture23
+                    || midtexture == bmaptexture34 || toptexture == bmaptexture34 || bottomtexture == bmaptexture34)
                     walllights = fullbright_redonly[lightnum];
                 }
 
@@ -901,19 +902,13 @@ void R_StoreWallRange (int start, int stop)
                 || midtexture == bmaptexture13 || toptexture == bmaptexture13 || bottomtexture == bmaptexture13
                 || midtexture == bmaptexture15 || toptexture == bmaptexture15 || bottomtexture == bmaptexture15
                 || midtexture == bmaptexture21 || toptexture == bmaptexture21 || bottomtexture == bmaptexture21
-                || midtexture == bmaptexture22 || toptexture == bmaptexture22 || bottomtexture == bmaptexture22)
+                || midtexture == bmaptexture22 || toptexture == bmaptexture22 || bottomtexture == bmaptexture22
+                ||  midtexture == bmaptexture39 || toptexture == bmaptexture39 || bottomtexture == bmaptexture39)
                 walllights = fullbright_redonly[lightnum];
 
                 // -------------------------------------------------------
                 //  Not gray
                 // -------------------------------------------------------
-
-                // Not in Shareware
-                if (gamemode != shareware)
-                {
-                    if (midtexture == bmaptexture34 || toptexture == bmaptexture34 || bottomtexture == bmaptexture34)
-                    walllights = fullbright_notgray[lightnum];
-                }
 
                 // Doom 1 only
                 if (gamemode == shareware || gamemode == registered || gamemode == retail)
@@ -929,8 +924,7 @@ void R_StoreWallRange (int start, int stop)
                 ||  midtexture == bmaptexture32 || toptexture == bmaptexture32 || bottomtexture == bmaptexture32
                 ||  midtexture == bmaptexture33 || toptexture == bmaptexture33 || bottomtexture == bmaptexture33
                 ||  midtexture == bmaptexture36 || toptexture == bmaptexture36 || bottomtexture == bmaptexture36
-                ||  midtexture == bmaptexture37 || toptexture == bmaptexture37 || bottomtexture == bmaptexture37
-                ||  midtexture == bmaptexture39 || toptexture == bmaptexture39 || bottomtexture == bmaptexture39)
+                ||  midtexture == bmaptexture37 || toptexture == bmaptexture37 || bottomtexture == bmaptexture37)
                 walllights = fullbright_notgray[lightnum];                
 
                 // -------------------------------------------------------
@@ -950,8 +944,7 @@ void R_StoreWallRange (int start, int stop)
                 // Not in Doom 1
                 if (gamemode == commercial)
                 {
-                    if (midtexture == bmaptexture42 || toptexture == bmaptexture42 || bottomtexture == bmaptexture42
-                    || midtexture == bmaptexture45 || toptexture == bmaptexture45 || bottomtexture == bmaptexture45)
+                    if (midtexture == bmaptexture42 || toptexture == bmaptexture42 || bottomtexture == bmaptexture42)
                     walllights = fullbright_notgrayorbrown[lightnum];
                 }
 
@@ -989,25 +982,21 @@ void R_StoreWallRange (int start, int stop)
                 // Not in Doom 1
                 if (gamemode == commercial)
                 {
-                    if (midtexture == bmaptexture58 || toptexture == bmaptexture58 || bottomtexture == bmaptexture58
-                    || midtexture == bmaptexture61 || toptexture == bmaptexture61 || bottomtexture == bmaptexture61
+                    if (midtexture == bmaptexture45 || toptexture == bmaptexture45 || bottomtexture == bmaptexture45
+                    || midtexture == bmaptexture58 || toptexture == bmaptexture58 || bottomtexture == bmaptexture58
                     || midtexture == bmaptexture62 || toptexture == bmaptexture62 || bottomtexture == bmaptexture62
                     || midtexture == bmaptexture66 || toptexture == bmaptexture66 || bottomtexture == bmaptexture66
                     || midtexture == bmaptexture67 || toptexture == bmaptexture67 || bottomtexture == bmaptexture67
                     || midtexture == bmaptexture71 || toptexture == bmaptexture71 || bottomtexture == bmaptexture71
                     || midtexture == bmaptexture74 || toptexture == bmaptexture74 || bottomtexture == bmaptexture74
-                    || midtexture == bmaptexture75 || toptexture == bmaptexture75 || bottomtexture == bmaptexture75
-                    || midtexture == bmaptexture24 || toptexture == bmaptexture24 || bottomtexture == bmaptexture24) // Doom 2: green only
+                    || midtexture == bmaptexture75 || toptexture == bmaptexture75 || bottomtexture == bmaptexture75)
+
                     walllights = fullbright_greenonly1[lightnum];
                 }
 
                 // All games
-                if (midtexture == bmaptexture63 || toptexture == bmaptexture63 || bottomtexture == bmaptexture63
-                || midtexture == bmaptexture64 || toptexture == bmaptexture64 || bottomtexture == bmaptexture64
-                || midtexture == bmaptexture65 || toptexture == bmaptexture65 || bottomtexture == bmaptexture65
-                || midtexture == bmaptexture68 || toptexture == bmaptexture68 || bottomtexture == bmaptexture68
+                if (midtexture == bmaptexture68 || toptexture == bmaptexture68 || bottomtexture == bmaptexture68
                 || midtexture == bmaptexture69 || toptexture == bmaptexture69 || bottomtexture == bmaptexture69
-                || midtexture == bmaptexture70 || toptexture == bmaptexture70 || bottomtexture == bmaptexture70
                 || midtexture == bmaptexture72 || toptexture == bmaptexture72 || bottomtexture == bmaptexture72)
                 walllights = fullbright_greenonly1[lightnum];         
 
@@ -1022,15 +1011,27 @@ void R_StoreWallRange (int start, int stop)
                     walllights = fullbright_greenonly2[lightnum];
                 }
 
+                // Not in Doom 1
+                if (gamemode == commercial)
+                {
+                    if (midtexture == bmaptexture24 || toptexture == bmaptexture24 || bottomtexture == bmaptexture24 // Doom 2: green only
+                    || midtexture == bmaptexture61 || toptexture == bmaptexture61 || bottomtexture == bmaptexture61
+                    || midtexture == bmaptexture62 || toptexture == bmaptexture62 || bottomtexture == bmaptexture62)
+                    walllights = fullbright_greenonly2[lightnum];
+                }
+
                 // TNT Evilution only
                 if (gamemission == pack_tnt)
                 {
                     if (midtexture == bmaptexture79 || toptexture == bmaptexture79 || bottomtexture == bmaptexture79)
                     walllights = fullbright_greenonly2[lightnum];
                 }
-
+                
                 // All games
-                if (midtexture == bmaptexture77 || toptexture == bmaptexture77 || bottomtexture == bmaptexture77)
+                if (midtexture == bmaptexture63 || toptexture == bmaptexture63 || bottomtexture == bmaptexture63
+                || midtexture == bmaptexture64 || toptexture == bmaptexture64 || bottomtexture == bmaptexture64
+                || midtexture == bmaptexture65 || toptexture == bmaptexture65 || bottomtexture == bmaptexture65
+                || midtexture == bmaptexture70 || toptexture == bmaptexture70 || bottomtexture == bmaptexture70)
                 walllights = fullbright_greenonly2[lightnum];
 
                 // -------------------------------------------------------
@@ -1038,7 +1039,8 @@ void R_StoreWallRange (int start, int stop)
                 // -------------------------------------------------------
 
                 // All games
-                if (midtexture == bmaptexture80 || toptexture == bmaptexture80 || bottomtexture == bmaptexture80)
+                if (midtexture == bmaptexture77 || toptexture == bmaptexture77 || bottomtexture == bmaptexture77
+                || midtexture == bmaptexture80 || toptexture == bmaptexture80 || bottomtexture == bmaptexture80)
                 walllights = fullbright_greenonly3[lightnum];
 
                 // -------------------------------------------------------
