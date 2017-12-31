@@ -705,6 +705,7 @@ void R_InitBrightmaps(void)
     // Not in Doom 1
     if (gamemode == commercial)
     {
+        bmaptexture35 = R_TextureNumForName(("SILVER2"));
         bmaptexture42 = R_TextureNumForName(("SILVER3"));
     }
 
@@ -813,16 +814,6 @@ void R_InitBrightmaps(void)
         bmaptexture82 = R_TextureNumForName(("LITEYEL2"));
         bmaptexture83 = R_TextureNumForName(("LITEYEL3"));
         bmaptexture84 = R_TextureNumForName(("YELMETAL"));
-    }
-
-    // -------------------------------------------------------
-    //  Blue only
-    // -------------------------------------------------------
-
-    // Not in Doom 1
-    if (gamemode == commercial)
-    {
-        bmaptexture35 = R_TextureNumForName(("SILVER2"));
     }
 
     // -------------------------------------------------------
