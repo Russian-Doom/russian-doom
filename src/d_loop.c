@@ -16,7 +16,7 @@
 //     Main loop code.
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #include <stdlib.h>

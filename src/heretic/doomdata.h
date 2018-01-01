@@ -15,7 +15,7 @@
 //
 // DoomData.h
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 // all external data is defined here

@@ -16,7 +16,7 @@
 //     SDL implementation of system-specific input interface.
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #include "SDL.h"

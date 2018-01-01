@@ -16,7 +16,7 @@
 //	Intermission screens.
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 // haleyjd 08/23/2010: There is no intermission in Strife

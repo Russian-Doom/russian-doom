@@ -16,7 +16,7 @@
 //	Refresh of things, i.e. objects represented by sprites.
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #include <stdio.h>

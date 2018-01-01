@@ -15,7 +15,7 @@
 //     Common code to parse command line, identifying WAD files to load.
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef W_MAIN_H

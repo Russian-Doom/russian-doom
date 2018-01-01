@@ -16,7 +16,7 @@
 //   Menu widget stuff, episode selection and such.
 //    
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef __M_MENU__

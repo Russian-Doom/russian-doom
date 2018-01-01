@@ -16,7 +16,7 @@
 //      Refresh/rendering module, shared data struct definitions.
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef V_PATCH_H

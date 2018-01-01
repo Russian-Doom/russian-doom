@@ -19,7 +19,7 @@
 // Strife Hub Saving Code
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 // For GNU C and POSIX targets, dirent.h should be available. Otherwise, for

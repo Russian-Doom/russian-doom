@@ -18,7 +18,7 @@
 // read the deutex source code made my brain hurt.
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef W_MERGE_H

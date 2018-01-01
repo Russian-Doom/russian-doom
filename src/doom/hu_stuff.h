@@ -15,7 +15,7 @@
 // DESCRIPTION:  Head up display
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef __HU_STUFF_H__

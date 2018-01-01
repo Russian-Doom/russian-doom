@@ -17,7 +17,7 @@
 //	Muzzle flash?
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #include "z_zone.h"

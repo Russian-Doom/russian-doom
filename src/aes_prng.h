@@ -15,7 +15,7 @@
 //     Pseudo-random number generator for secure demos.
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef __AES_PRNG_H__

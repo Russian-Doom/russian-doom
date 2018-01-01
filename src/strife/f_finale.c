@@ -19,7 +19,7 @@
 // [STRIFE] Module marked finished 2010-09-13 22:56
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #include <stdio.h>

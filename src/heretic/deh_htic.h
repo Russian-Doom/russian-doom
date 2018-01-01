@@ -15,7 +15,7 @@
 // Common header for Heretic dehacked (HHE) support.
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef DEH_HTIC_H

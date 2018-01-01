@@ -15,7 +15,7 @@
 //
 // R_local.h
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef __R_LOCAL__
