@@ -77,6 +77,11 @@ fixed_t bottomstep;
 
 lighttable_t **walllights;
 
+// [JN] Additional tables for brightmaps
+lighttable_t **walllights_top;
+lighttable_t **walllights_middle;
+lighttable_t **walllights_bottom;
+
 int* maskedtexturecol; // [crispy] 32-bit integer math
 
 // [crispy] WiggleFix: add this code block near the top of r_segs.c
@@ -363,6 +368,10 @@ void R_RenderSegLoop(void)
 //
 // texturecolumn and lighting are independent of wall tiers
 //
+
+        // [JN] Moved outside "segtextured"
+        index = rw_scale >> (LIGHTSCALESHIFT + hires);
+
         if (segtextured)
         {
             // calculate texture offset
@@ -371,10 +380,11 @@ void R_RenderSegLoop(void)
                 rw_offset - FixedMul(finetangent[angle], rw_distance);
             texturecolumn >>= FRACBITS;
             // calculate lighting
-            index = rw_scale >> (LIGHTSCALESHIFT + hires);
+            /* index = rw_scale >> (LIGHTSCALESHIFT + hires); // [JN] See above */
             if (index >= MAXLIGHTSCALE)
                 index = MAXLIGHTSCALE - 1;
-            dc_colormap = walllights[index];
+            /* dc_colormap = walllights[index]; // [JN] All wall segments (top/middle/bottom) now using own lights */
+
             dc_x = rw_x;
             dc_iscale = 0xffffffffu / (unsigned) rw_scale;
         }
@@ -389,6 +399,13 @@ void R_RenderSegLoop(void)
             dc_texturemid = rw_midtexturemid;
             dc_source = R_GetColumn(midtexture, texturecolumn);
             dc_texheight = textureheight[midtexture]>>FRACBITS;
+
+            // [JN] Account fixed colormap
+            if (fixedcolormap)
+            dc_colormap = fixedcolormap;
+            else
+            dc_colormap = walllights_middle[index];            
+
             colfunc();
             ceilingclip[rw_x] = viewheight;
             floorclip[rw_x] = -1;
@@ -408,6 +425,13 @@ void R_RenderSegLoop(void)
                     dc_texturemid = rw_toptexturemid;
                     dc_source = R_GetColumn(toptexture, texturecolumn);
                     dc_texheight = textureheight[toptexture]>>FRACBITS;
+
+                    // [JN] Account fixed colormap
+                    if (fixedcolormap)
+                    dc_colormap = fixedcolormap;
+                    else
+                    dc_colormap = walllights_top[index];
+
                     colfunc();
                     ceilingclip[rw_x] = mid;
                 }
@@ -433,6 +457,13 @@ void R_RenderSegLoop(void)
                     dc_texturemid = rw_bottomtexturemid;
                     dc_source = R_GetColumn(bottomtexture, texturecolumn);
                     dc_texheight = textureheight[bottomtexture]>>FRACBITS;
+
+                    // [JN] Account fixed colormap
+                    if (fixedcolormap)
+                    dc_colormap = fixedcolormap;
+                    else
+                    dc_colormap = walllights_bottom[index];
+
                     colfunc();
                     floorclip[rw_x] = mid;
                 }
@@ -762,38 +793,85 @@ void R_StoreWallRange(int start, int stop)
                     lightnum--;
                 else if (curline->v1->x == curline->v2->x)
                     lightnum++;
+
+                // [JN] Brightmapped line can't have lightlevel 0,
+                // otherwise brightmap will not work at all.
+                if (brightmaps && frontsector->lightlevel == 0)
+                lightnum++;
             }
 
             if (lightnum < 0)
             {
                 walllights = scalelight[0];
+
+                // [JN] If sector brightness = 0
+                walllights_top = scalelight[0];
+                walllights_middle = scalelight[0];
+                walllights_bottom = scalelight[0];
             }
             else if (lightnum >= LIGHTLEVELS)
             {
                 walllights = scalelight[LIGHTLEVELS - 1];
+
+                // [JN] If sector brightness = 256
+                walllights_top = scalelight[LIGHTLEVELS-1];
+                walllights_middle = scalelight[LIGHTLEVELS-1];
+                walllights_bottom = scalelight[LIGHTLEVELS-1];
             }
             else
             {
-                // [JN] Standard formula first
+                // [JN] Standard formulas first
                 walllights = scalelight[lightnum];
+                walllights_top = scalelight[lightnum];
+                walllights_middle = scalelight[lightnum];
+                walllights_bottom = scalelight[lightnum];
 
                 // [JN] Apply brightmaps to walls...
                 if (brightmaps && !vanillaparm)
                 {
-                    if (midtexture == bmaptexture01 || toptexture == bmaptexture01 || bottomtexture == bmaptexture01)
+                    // -------------------------------------------------------
+                    //  Red only
+                    // -------------------------------------------------------
+
+                    if (midtexture == bmaptexture01)
                     walllights = fullbright_redonly[lightnum];
 
-                    if (midtexture == bmaptexture02 || toptexture == bmaptexture02 || bottomtexture == bmaptexture02
-                    || midtexture == bmaptexture03  || toptexture == bmaptexture03 || bottomtexture == bmaptexture03
-                    || midtexture == bmaptexture04  || toptexture == bmaptexture04 || bottomtexture == bmaptexture04
-                    || midtexture == bmaptexture05  || toptexture == bmaptexture05 || bottomtexture == bmaptexture05)
-                    walllights = fullbright_blueonly[lightnum];
+                    if (toptexture == bmaptexture01)
+                    walllights_top = fullbright_redonly[lightnum];
 
-                    if (midtexture == bmaptexture06 || toptexture == bmaptexture06 || bottomtexture == bmaptexture06
-                    || midtexture == bmaptexture07  || toptexture == bmaptexture07 || bottomtexture == bmaptexture07)
-                    walllights = fullbright_notbronze[lightnum];
+                    if (bottomtexture == bmaptexture01)
+                    walllights_bottom = fullbright_redonly[lightnum];
 
-                    // [JN] Apply brightmap terminator...
+                    // -------------------------------------------------------
+                    //  Blue only
+                    // -------------------------------------------------------
+
+                    if (midtexture == bmaptexture02 || midtexture == bmaptexture03 || midtexture == bmaptexture04 || midtexture == bmaptexture05)
+                    walllights_middle = fullbright_blueonly[lightnum];
+
+                    if (toptexture == bmaptexture02 || toptexture == bmaptexture03 || toptexture == bmaptexture04 || toptexture == bmaptexture05)
+                    walllights_top = fullbright_blueonly[lightnum];
+
+                    if (bottomtexture == bmaptexture02 || bottomtexture == bmaptexture03 || bottomtexture == bmaptexture04 || bottomtexture == bmaptexture05)
+                    walllights_bottom = fullbright_blueonly[lightnum];
+
+                    // -------------------------------------------------------
+                    //  Not bronze
+                    // -------------------------------------------------------
+
+                    if (midtexture == bmaptexture06 || midtexture == bmaptexture07)
+                    walllights_middle = fullbright_notbronze[lightnum];
+
+                    if (toptexture == bmaptexture06 || toptexture == bmaptexture07)
+                    walllights_top = fullbright_notbronze[lightnum];
+                    
+                    if (bottomtexture == bmaptexture06 || bottomtexture == bmaptexture07)
+                    walllights_bottom = fullbright_notbronze[lightnum];
+
+                    // -------------------------------------------------------
+                    //  Brightmap terminator
+                    // -------------------------------------------------------
+
                     if (midtexture == bmap_terminator || toptexture == bmap_terminator || bottomtexture == bmap_terminator)
                     walllights = scalelight[lightnum];
                 }
