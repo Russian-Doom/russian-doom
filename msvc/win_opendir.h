@@ -13,7 +13,7 @@
 //  public domain).
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef I_OPNDIR_H__

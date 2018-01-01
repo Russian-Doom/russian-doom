@@ -29,7 +29,7 @@
 // * Peters <colin@fu.is.saga-u.ac.jp>
 //
 
-// Russian Doom (C) 2016-2017 Julian Nechaevsky
+// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef _MSC_VER
