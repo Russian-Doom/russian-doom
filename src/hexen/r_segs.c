@@ -103,13 +103,26 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
     texnum = texturetranslation[curline->sidedef->midtexture];
 
     lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
-    //if (curline->v1->y == curline->v2->y)
-    //      lightnum--;
-    //else if (curline->v1->x == curline->v2->x)
-    //      lightnum++;
-    //if (lightnum < 0)
-    //      walllights = scalelight[0];
-    if (lightnum >= LIGHTLEVELS)
+    
+    // [JN] Fake contrast: ressurected, make optional
+    if (fake_contrast && !vanilla)
+    {
+        if (curline->v1->y == curline->v2->y)
+            lightnum--;
+        else if (curline->v1->x == curline->v2->x)
+            lightnum++;
+
+        // [JN] Brightmapped line can't have lightlevel 0,
+        // otherwise brightmap will not work at all.
+        if (brightmaps && frontsector->lightlevel == 0)
+        lightnum++;
+    }
+    
+    if (lightnum < 0)
+    {
+          walllights = scalelight[0];
+    }
+    else if (lightnum >= LIGHTLEVELS)
     {
         walllights = scalelight[LIGHTLEVELS - 1];
     }
@@ -635,15 +648,32 @@ void R_StoreWallRange(int start, int stop)
         // OPTIMIZE: get rid of LIGHTSEGSHIFT globally
         if (!fixedcolormap)
         {
-            lightnum =
-                (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
-            //if (curline->v1->y == curline->v2->y)
-            //      lightnum--;
-            //else if (curline->v1->x == curline->v2->x)
-            //      lightnum++;
-            //if (lightnum < 0)
-            //      walllights = scalelight[0];
-            if (lightnum >= LIGHTLEVELS)
+            lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
+            
+            // [JN] Fake contrast: ressurected, make optional
+            if (fake_contrast && !vanillaparm)
+            {
+                if (curline->v1->y == curline->v2->y)
+                    lightnum--;
+                else if (curline->v1->x == curline->v2->x)
+                    lightnum++;
+
+                // [JN] Brightmapped line can't have lightlevel 0,
+                // otherwise brightmap will not work at all.
+                if (brightmaps && frontsector->lightlevel == 0)
+                lightnum++;
+            }
+
+            if (lightnum < 0)
+            {
+                walllights = scalelight[0];
+
+                // [JN] If sector brightness = 0
+                walllights_top = scalelight[0];
+                walllights_middle = scalelight[0];
+                walllights_bottom = scalelight[0];
+            }
+            else if (lightnum >= LIGHTLEVELS)
             {
                 walllights = scalelight[LIGHTLEVELS - 1];
 

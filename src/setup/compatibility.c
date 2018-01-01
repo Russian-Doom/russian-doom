@@ -75,7 +75,7 @@ void CompatibilitySettings(void)
     else if (gamemission == heretic)
         TXT_AddWidget(window, TXT_NewScrollPane(47, 11, window_features));
     else if (gamemission == hexen)
-        TXT_AddWidget(window, TXT_NewScrollPane(47, 4, window_features));
+        TXT_AddWidget(window, TXT_NewScrollPane(47, 5, window_features));
 
     TXT_AddWidgets(window_features,
     TXT_NewSeparator("Интерфейс"),
@@ -90,7 +90,7 @@ void CompatibilitySettings(void)
     
     TXT_NewSeparator("Графика"),
         TXT_NewCheckBox("Брайтмаппинг текстур и спрайтов",           &brightmaps),
-        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Имитаци€ контрастного освещени€ стен",      &fake_contrast)),
+        TXT_NewCheckBox("Имитаци€ контрастного освещени€ стен",      &fake_contrast),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Юффект прозрачности у некоторых объектов",  &translucency)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Левитирующие сферы-артефакты",              &floating_powerups)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Улучшенна€ анимаци€ жидкостей",             &swirling_liquids)),

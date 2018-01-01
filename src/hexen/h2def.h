@@ -812,6 +812,7 @@ extern int mlook;
 extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
+extern int fake_contrast;           // Имитация контрастного освещения стен
 
 //-------
 //SV_SAVE

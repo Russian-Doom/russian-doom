@@ -136,6 +136,7 @@ int lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Hexen
 int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 // - Графика -
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
+int fake_contrast = 0;           // Имитация контрастного освещения стен
 
 // CODE --------------------------------------------------------------------
 
@@ -191,6 +192,7 @@ void D_BindVariables(void)
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);   // Элементы меню и тексты отбрасывают тень
     // - Графика -
     M_BindIntVariable("brightmaps",             &brightmaps);           // Брайтмаппинг текстур и спрайтов
+    M_BindIntVariable("fake_contrast",          &fake_contrast);        // Имитация контрастного освещения стен
 
 
     M_BindStringVariable("savedir", &SavePath);
