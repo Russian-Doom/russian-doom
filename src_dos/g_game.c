@@ -834,7 +834,9 @@ boolean G_CheckSpot (int playernum, mapthing_t* mthing)
     fixed_t         x;
     fixed_t         y;
     subsector_t*    ss;
-    unsigned        an;
+    signed int      an; //
+    fixed_t         xa; // [JN] For correct MT_FOG spawning, see below
+    fixed_t         ya; //
     mobj_t*         mo;
     int             i;
 
@@ -861,9 +863,14 @@ boolean G_CheckSpot (int playernum, mapthing_t* mthing)
     bodyqueslot++;
 
     // spawn a teleport fog
+    // [JN] Now spawns in all possible directions of the spawn spots. Adapted from PrBoom+.
     ss = R_PointInSubsector (x,y);
-    an = ( ANG45 * ((unsigned)mthing->angle/45) ) >> ANGLETOFINESHIFT;
-    mo = P_SpawnMobj (x+20*finecosine[an], y+20*finesine[an], ss->sector->floorheight, MT_TFOG);
+    an = (ANG45 >> ANGLETOFINESHIFT) * ((signed int) mthing->angle / 45);
+
+    xa = finecosine[an];
+    ya = finesine[an];
+
+    mo = P_SpawnMobj(x + 20 * xa, y + 20 * ya, ss->sector->floorheight, MT_TFOG);
 
     if (players[consoleplayer].viewz != 1)
     S_StartSound (mo, sfx_telept);  // don't start sound on first frame 
