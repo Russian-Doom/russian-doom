@@ -433,7 +433,7 @@ void P_PlayerThink (player_t* player)
         // быть в полной яркости.
         // [JN] Also care about infra green light visor.
         
-        if (infragreen_visor)
+        if (infragreen_visor && !vanillaparm)
         {
             player->fixedcolormap = player->powers[pw_infrared] ? 33 : 0;
         }
@@ -447,7 +447,7 @@ void P_PlayerThink (player_t* player)
 	if (player->powers[pw_infrared] > 4*32
 	    || (player->powers[pw_infrared]&8) )
 	{
-        if (infragreen_visor)
+        if (infragreen_visor && !vanillaparm)
         {   // [JN] Infra green visor: COLORMAP 33
             player->fixedcolormap = INFRAGREENCOLORMAP;
         }
