@@ -168,6 +168,7 @@ fixed_t*	spriteoffset;
 fixed_t*	spritetopoffset;
 
 lighttable_t	*colormaps;
+lighttable_t	*colormaps_beta; // [JN] For infra green light amplification visor
 
 // [JN] Brightmaps
 lighttable_t	*brightmaps_notgray;
@@ -967,13 +968,17 @@ void R_InitTranMap()
 //
 void R_InitColormaps (void)
 {
-    int	lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9;
+    int	lump, lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9;
 
     // Load in the light tables, 
     //  256 byte align tables.
 
     lump  = W_GetNumForName(DEH_String("COLORMAP"));
     colormaps  = W_CacheLumpNum(lump, PU_STATIC);
+
+    // [JN] COLORMAP (№33) from Press Release Beta for infra green visor
+    lump1  = W_GetNumForName(DEH_String("COLORMAB"));
+    colormaps_beta  = W_CacheLumpNum(lump1, PU_STATIC);
 
     // [JN] Precaching brightmaps
     // Note: tables as well as it's valuaes are taken from Doom Retro (r_data.c).

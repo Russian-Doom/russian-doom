@@ -32,6 +32,7 @@
 #include "p_local.h"
 #include "r_local.h"
 #include "r_sky.h"
+#include "g_game.h"
 
 
 // Fineangles in the SCREENWIDTH wide window.
@@ -843,6 +844,12 @@ void R_SetupFrame (player_t* player)
 
     if (player->fixedcolormap)
     {
+        // [JN] Infra green visor: use colormap №33 from Beta's COLORMAB lump.
+        // Needed for compatibility and for preventing "black screen" while 
+        // using Visor with possible non-standard COLORMAPS in PWADs.
+        if (infragreen_visor)
+        fixedcolormap = colormaps_beta + player->fixedcolormap*256;
+        else
         fixedcolormap = colormaps + player->fixedcolormap*256;
 
         walllights = scalelightfixed;
