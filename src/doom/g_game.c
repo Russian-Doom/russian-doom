@@ -1292,6 +1292,12 @@ G_CheckSpot
         // 'an' will always be positive.
         an = (ANG45 >> ANGLETOFINESHIFT) * ((signed int) mthing->angle / 45);
 
+        // [JN] Unh-uh. Let MT_TFOG always to be spawned,
+        // in any direction of Deathmatch spawning spot.
+        xa = finecosine[an];
+        ya = finesine[an];
+
+        /*
         switch (an)
         {
             case 4096:              // -4096:
@@ -1327,6 +1333,7 @@ G_CheckSpot
             xa = ya = 0;
             break;
         }
+        */
         mo = P_SpawnMobj(x + 20 * xa, y + 20 * ya, ss->sector->floorheight, MT_TFOG);
     }
 
