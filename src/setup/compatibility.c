@@ -37,6 +37,7 @@ int show_exit_sequence = 1;      // [Strife] Показывать заставку при выходе
 // - Графика -
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
 int fake_contrast = 0;           // Имитация контрастного освещения стен
+int infragreen_visor = 0;        // Инфразеленый визор усиления освещения
 int colored_blood = 1;           // Кровь разных цветов
 int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
 int new_ouch_face = 1;           // Корректная формула "Ouch face"
@@ -92,6 +93,7 @@ void CompatibilitySettings(void)
         TXT_NewCheckBox("Ѓрайтмаппинг текстур и спрайтов",           &brightmaps),
         TXT_NewCheckBox("€митация контрастного освещения стен",      &fake_contrast),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("ћффект прозрачности у некоторых объектов",  &translucency)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("€нфразеленый визор усиления освещения",     &infragreen_visor)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("‹евитирующие сферы-артефакты",              &floating_powerups)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("“лучшенная анимация жидкостей",             &swirling_liquids)),
         TXT_If(gamemission == doom || gamemission == heretic,   TXT_NewCheckBox("Џроизвольное зеркальное отражение трупов",  &randomly_flipcorpses)),
@@ -131,6 +133,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("brightmaps",             &brightmaps);               // Брайтмаппинг текстур и спрайтов
     M_BindIntVariable("fake_contrast",          &fake_contrast);            // Имитация контрастного освещения стен
     M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов
+    M_BindIntVariable("infragreen_visor",       &infragreen_visor);         // Инфразеленый визор усиления освещения
     M_BindIntVariable("floating_powerups",      &floating_powerups);        // Левитирующие сферы-артефакты
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);         // Улучшенная анимация жидкостей
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);     // Произвольное зеркальное отражение трупов

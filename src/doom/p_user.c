@@ -28,10 +28,14 @@
 
 #include "doomstat.h"
 
+#include "g_game.h"
+
 #include "crispy.h"
 
 // Index of the special effects (INVUL inverse) map.
 #define INVERSECOLORMAP		32
+// [JN] Infra green light amplification visor.
+#define INFRAGREENCOLORMAP	33
 
 
 //
@@ -427,15 +431,30 @@ void P_PlayerThink (player_t* player)
         // [JN] & [crispy] Если у игрока активирован визор и неуязвимость,
         // при спадании неузязвимости неинвертированные цвета должны
         // быть в полной яркости.
-        player->fixedcolormap = player->powers[pw_infrared] ? 1 : 0;
+        // [JN] Also care about infra green light visor.
+        
+        if (infragreen_visor)
+        {
+            player->fixedcolormap = player->powers[pw_infrared] ? 33 : 0;
+        }
+        else
+        {
+            player->fixedcolormap = player->powers[pw_infrared] ? 1 : 0;
+        }
     }
     else if (player->powers[pw_infrared])	
     {
 	if (player->powers[pw_infrared] > 4*32
 	    || (player->powers[pw_infrared]&8) )
 	{
-	    // almost full bright
-	    player->fixedcolormap = 1;
+        if (infragreen_visor)
+        {   // [JN] Infra green visor: COLORMAP 33
+            player->fixedcolormap = INFRAGREENCOLORMAP;
+        }
+        else
+        {   // almost full bright
+            player->fixedcolormap = 1;
+        }
 	}
 	else
 	    player->fixedcolormap = 0;

@@ -107,6 +107,7 @@ static void SensibleDefaults(void)
     brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
     fake_contrast = 0;           // Имитация контрастного освещения стен
     translucency = 1;            // Прозрачность объектов
+    infragreen_visor = 0;        // Инфразеленый визор усиления освещения
     floating_powerups = 0;       // Левитирующие сферы-артефакты
     swirling_liquids = 1;        // Улучшенная анимация жидкостей
     randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
