@@ -28,6 +28,9 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) source port
 - Alexandre-Xavier "AXDOOMER" Labonté-Lamoureux
 
+#### [Strawberry Doom](http://remood.org/) source port
+- RestlessRodent aka GhostlyDeath
+
 #### [SDL](https://www.libsdl.org/), [SDL_mixer](https://www.libsdl.org/projects/SDL_mixer/) and [SDL_net](https://www.libsdl.org/projects/SDL_net/)
 - Sam Lantinga
 
