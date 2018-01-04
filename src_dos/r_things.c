@@ -923,6 +923,7 @@ void R_DrawPlayerSprites (void)
     int		i;
     int		lightnum;
     pspdef_t*	psp;
+    const int	state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] We need to define what "state" actually is
     
     // get light level
     lightnum =
@@ -930,11 +931,26 @@ void R_DrawPlayerSprites (void)
 	+extralight;
 
     if (lightnum < 0)		
-	spritelights = scalelight[0];
+    {
+        spritelights = scalelight[0];
+    }
     else if (lightnum >= LIGHTLEVELS)
-	spritelights = scalelight[LIGHTLEVELS-1];
+    {
+        spritelights = scalelight[LIGHTLEVELS-1];
+    }
     else
-	spritelights = scalelight[lightnum];
+    {
+        // [JN] Standard formula first
+        spritelights = scalelight[lightnum];
+
+        // [JN] Applying brightmaps to HUD weapons...
+        if (!vanilla)
+        {
+            // BFG9000
+            if (state == S_BFG1 || state == S_BFG2 || state == S_BFG3 || state == S_BFG4)
+            spritelights = fullbright_redonly[lightnum];
+        }
+    }
     
     // clip to screen bounds
     mfloorclip = screenheightarray;
