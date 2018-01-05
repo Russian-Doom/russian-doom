@@ -772,6 +772,9 @@ static void HandleArgs(void)
         ST_Message("Проигрывание демозаписи %s.\n", myargv[p+1]);	// "Playing demo %s.\n"
     }
 
+    // [JN] Addition: also generate the WAD hash table.  Speed things up a bit.
+    W_GenerateHashTable();
+
     //!
     // @category demo
     //
