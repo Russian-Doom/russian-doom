@@ -1086,6 +1086,9 @@ void D_DoomMain(void)
         printf("Проигрывание демозаписи %s.\n", file);	// "Playing demo %s.\n"
     }
 
+    // [JN] Addition: also generate the WAD hash table.  Speed things up a bit.
+    W_GenerateHashTable();
+
     //!
     // @category demo
     //
