@@ -46,7 +46,7 @@
 #define TXT_ARTIEGG             "VJHABQYJT ZQWJ"        // МОРФИЙНОЕ ЯЙЦО
 #define TXT_ARTISUPERHEALTH     "VBCNBXTCRFZ EHYF"      // МИСТИЧЕСКАЯ УРНА
 #define TXT_ARTITORCH           "AFRTK"                 // ФАКЕЛ
-#define TXT_ARTIFIREBOMB        "XFCJDFZ ,JV,F LHTDYB]" // ЧАСОВАЯ БОМБА ДРЕВНИХ
+#define TXT_ARTIFIREBOMB        "XFCJDFZ ,JV,F LHTDYB[" // ЧАСОВАЯ БОМБА ДРЕВНИХ
 #define TXT_ARTITELEPORT        "'V,KTVF [FJCF"         // ЭМБЛЕМА ХАОСА
 
 // Items
