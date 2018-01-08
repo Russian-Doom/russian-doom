@@ -765,6 +765,4 @@ void R_InitBrightmaps(void)
         // Otherwise, non-defined textures will use latest brightmap.
         bmap_terminator = R_TextureNumForName("BIGDOOR2");
     }
-    
-    I_Error ("è®‚‚Æ!");
 }
