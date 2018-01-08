@@ -546,8 +546,9 @@ P_NightmareRespawn (mobj_t* mobj)
     
     // [JN] В зависимости от настроек, отображаем красную 
     // или же стандартную вспышку воскрешения монстров.
-    mo = P_SpawnMobj (mobj->x,mobj->y,mobj->subsector->sector->floorheight , (red_resurrection_flash && !vanillaparm) ? MT_RFOG : MT_TFOG); 
-    
+    mo = P_SpawnMobj (mobj->x, mobj->y, mobj->subsector->sector->floorheight, 
+        (red_resurrection_flash && !vanillaparm) ? MT_RFOG : MT_TFOG); 
+
     // initiate teleport sound
     S_StartSound (mo, sfx_telept);
 
@@ -556,10 +557,8 @@ P_NightmareRespawn (mobj_t* mobj)
 
     // [JN] В зависимости от настроек, отображаем красную 
     // или же стандартную вспышку воскрешения монстров.
-    if (red_resurrection_flash && !vanillaparm)
-    mo = P_SpawnMobj (x, y, ss->sector->floorheight , MT_RFOG);
-    else
-    mo = P_SpawnMobj (x, y, ss->sector->floorheight , MT_TFOG);
+    mo = P_SpawnMobj (x, y, ss->sector->floorheight, 
+        (red_resurrection_flash && !vanillaparm) ? MT_RFOG : MT_TFOG);
 
     S_StartSound (mo, sfx_telept);
 
