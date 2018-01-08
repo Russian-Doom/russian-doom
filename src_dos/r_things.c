@@ -469,6 +469,7 @@ void R_ProjectSprite (mobj_t* thing)
     
     fixed_t		gxt;
     fixed_t		gyt;
+    fixed_t		gzt;    // killough 3/27/98
     
     fixed_t		tx;
     fixed_t		tz;
@@ -558,6 +559,13 @@ void R_ProjectSprite (mobj_t* thing)
     if (x2 < 0)
 	return;
     
+    // killough 4/9/98: clip things which are out of view due to height
+    // [JN] Beware! Extremly unsafe for mouse look!
+    gzt = thing->z + spritetopoffset[lump];
+    if (thing->z > viewz + FixedDiv(centeryfrac, xscale) ||
+        gzt      < viewz - FixedDiv(centeryfrac-viewheight, xscale))
+	return;
+
     // store information in a vissprite
     vis = R_NewVisSprite ();
     vis->translation = NULL;
