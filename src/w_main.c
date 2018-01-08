@@ -184,26 +184,6 @@ boolean W_ParseCommandLine(void)
     // Load the specified PWAD files.
     //
 
-    // [JN] Хак, всё ещё необходимый для корректной поддержки
-    // переводов уровней Hexen: Deathkings of the Dark Citadel
-    // В hexen\h2_main.c задается только заголовок окна.
-
-    int dd;
-    dd = M_CheckParmWithArgs ("-file", 1);
-    if (dd)
-    {
-        while (++dd != myargc && myargv[dd][0] != '-')
-        {
-            char *check;
-            check = M_StrCaseStr(myargv[dd], "hexdd.wad");
-
-            if (check != NULL)
-            {
-                W_MergeFile("russian/russian-hexen-dd.wad");
-            }
-        }
-    }
-
     // [JN] Параметр "-file" перенесен в "D_SetGameDescription":
     // Doom и Heretic: d_main.c / Heretic: h2_main.c
 

@@ -367,10 +367,30 @@ void D_SetGameDescription(void)
     {
         while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
         {
-        char *filename;
-        filename = D_TryFindWADByName(myargv[newpwadfile]);
-        printf(" добавление: %s\n", filename);
-        W_MergeFile(filename);
+            char    *filename;
+            int     dd;
+
+            filename = D_TryFindWADByName(myargv[newpwadfile]);
+            printf(" добавление: %s\n", filename);
+            W_MergeFile(filename);
+
+            // [JN] Поддержка Hexen: Deathkings of the Dark Citadel
+            // Больше спасибо CapnClever за оказанную помощь!
+            dd = M_CheckParmWithArgs ("-file", 1);
+            if (dd)
+            {
+                while (++dd != myargc && myargv[dd][0] != '-')
+                {
+                    char *check;
+                    check = M_StrCaseStr(myargv[dd], "hexdd.wad");
+            
+                    if (check != NULL)
+                    {
+                        gamedescription = "Hexen: Короли Смерти Темной Цитадели";
+                        W_MergeFile("russian/russian-hexen-dd.wad");
+                    }
+                }
+            }
         }
     }
 }
@@ -386,7 +406,6 @@ void D_DoomMain(void)
 {
     GameMission_t gamemission;
     int p;
-    int dd;
 
     I_AtExit(D_HexenQuitMessage, false);
     startepisode = 1;
@@ -573,31 +592,6 @@ void D_DoomMain(void)
         else
         {
             H2_StartTitle();
-        }
-    }
-
-	// [JN] Проверка загрузки дополнения hexdd.wad.
-	// В случае обнаружения через -file, происходит
-	// подгрузка русских ресурсов.
-	// Больше спасибо CapnClever за помощь!
-	//
-	// На данном этапе только указываем заголовок,
-	// непосредственная подгрузка russian-hexen-dd.wad
-	// происходит в W_ParseCommandLine (w_main.c @ 190).
-
-    dd = M_CheckParmWithArgs ("-file", 1);
-
-    if (dd)
-    {
-        while (++dd != myargc && myargv[dd][0] != '-')
-        {
-            char *check;
-            check = M_StrCaseStr(myargv[dd], "hexdd.wad");
-
-            if (check != NULL)
-            {
-            gamedescription = "Hexen: Короли Смерти Темной Цитадели";
-            }
         }
     }
 
