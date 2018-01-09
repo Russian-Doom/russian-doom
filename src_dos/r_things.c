@@ -108,15 +108,10 @@ char*		spritename;
 // R_InstallSpriteLump
 // Local function for R_InitSprites.
 //
-void
-R_InstallSpriteLump
-( int		lump,
-  unsigned	frame,
-  unsigned	rotation,
-  boolean	flipped )
+// [JN] Modified for proper sprite loading, code is taken from MBF.
+//
+void R_InstallSpriteLump (int lump, unsigned frame, unsigned rotation, boolean flipped)
 {
-    int		r;
-	
     if (frame >= 29 || rotation > 8)
 	I_Error("R_InstallSpriteLump: Некорректный фрейм в блоке %i", lump);
 	
@@ -125,36 +120,25 @@ R_InstallSpriteLump
 		
     if (rotation == 0)
     {
-	// the lump should be used for all rotations
-	if (sprtemp[frame].rotate == false)
-	    I_Error ("R_InitSprites: В фрейме %c спрайта %s присутствует множественный блок rot=0", spritename, 'A'+frame);
-
-	if (sprtemp[frame].rotate == true)
-	    I_Error ("R_InitSprites: В фрейме %c спрайта %s присутствуют кадры вращения и блок rot=0", spritename, 'A'+frame);
-			
-	sprtemp[frame].rotate = false;
-	for (r=0 ; r<8 ; r++)
-	{
-	    sprtemp[frame].lump[r] = lump - firstspritelump;
-	    sprtemp[frame].flip[r] = (byte)flipped;
-	}
-	return;
+        // the lump should be used for all rotations
+        int r;
+        for (r=0 ; r<8 ; r++)
+            if (sprtemp[frame].lump[r]==-1)
+            {
+                sprtemp[frame].lump[r] = lump - firstspritelump;
+                sprtemp[frame].flip[r] = (byte) flipped;
+                sprtemp[frame].rotate = false; //jff 4/24/98 if any subbed, rotless
+            }
+        return;
     }
 	
     // the lump is only used for one rotation
-    if (sprtemp[frame].rotate == false)
-	I_Error ("R_InitSprites: В фрейме %c спрайта %s присутствуют кадры вращения и блок rot=0", spritename, 'A'+frame);
-		
-    sprtemp[frame].rotate = true;
-
-    // make 0 based
-    rotation--;		
-    if (sprtemp[frame].lump[rotation] != -1)
-	I_Error ("R_InitSprites: Спрайту %s : %c : %c назначено несколько блоков",
-		 spritename, 'A'+frame, '1'+rotation);
-		
-    sprtemp[frame].lump[rotation] = lump - firstspritelump;
-    sprtemp[frame].flip[rotation] = (byte)flipped;
+    if (sprtemp[frame].lump[--rotation] == -1)
+    {
+        sprtemp[frame].lump[rotation] = lump - firstspritelump;
+        sprtemp[frame].flip[rotation] = (byte) flipped;
+        sprtemp[frame].rotate = true; //jff 4/24/98 only change if rot used
+    }
 }
 
 

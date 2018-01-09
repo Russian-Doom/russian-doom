@@ -199,6 +199,71 @@ void W_AddFile (char *filename)
 }
 
 
+// jff 1/23/98 Create routines to reorder the master directory
+// putting all flats into one marked block, and all sprites into another.
+// This will allow loading of sprites and flats from a PWAD with no
+// other changes to code, particularly fast hashes of the lumps.
+//
+// killough 1/24/98 modified routines to be a little faster and smaller
+
+static int IsMarker(const char *marker, const char *name)
+{
+    return !strncasecmp(name, marker, 8) ||
+    (*name == *marker && !strncasecmp(name+1, marker, 7));
+}
+
+// killough 4/17/98: add namespace tags
+
+static void W_CoalesceMarkedResource(const char *start_marker, const char *end_marker, int namespace)
+{
+    lumpinfo_t *marked = malloc(sizeof(*marked) * numlumps);
+    size_t i, num_marked = 0, num_unmarked = 0;
+    int is_marked = 0, mark_end = 0;
+    lumpinfo_t *lump = lumpinfo;
+
+    for (i=numlumps; i--; lump++)
+    if (IsMarker(start_marker, lump->name))       // start marker found
+    {
+        // If this is the first start marker, add start marker to marked lumps
+        if (!num_marked)
+        {
+            strncpy(marked->name, start_marker, 8);
+            marked->size = 0;                   // killough 3/20/98: force size to be 0
+            marked->namespace = ns_global;      // killough 4/17/98
+            num_marked = 1;
+        }
+
+        is_marked = 1;                          // start marking lumps
+    }
+    else if (IsMarker(end_marker, lump->name))  // end marker found
+    {
+        mark_end = 1;                           // add end marker below
+        is_marked = 0;                          // stop marking lumps
+    } 
+    else if (is_marked)                         // if we are marking lumps,
+    {                                           // move lump to marked list
+        marked[num_marked] = *lump;
+        marked[num_marked++].namespace = namespace;  // killough 4/17/98
+    }
+    else
+    {
+        lumpinfo[num_unmarked++] = *lump;       // else move down THIS list
+    }
+
+    // Append marked list to end of unmarked list
+    memcpy(lumpinfo + num_unmarked, marked, num_marked * sizeof(*marked));
+
+    free(marked);                               // free marked list
+
+    numlumps = num_unmarked + num_marked;       // new total number of lumps
+
+    if (mark_end)                               // add end marker
+    {
+        lumpinfo[numlumps].size = 0;            // killough 3/20/98: force size to be 0
+        lumpinfo[numlumps].namespace = ns_global;   // killough 4/17/98
+        strncpy(lumpinfo[numlumps++].name, end_marker, 8);
+    }
+}
 
 
 //
@@ -277,6 +342,17 @@ void W_InitMultipleFiles (char** filenames)
 
     if (!numlumps)
 	I_Error ("W_InitFiles: Файлы не найдены");
+
+    //jff 1/23/98
+    // get all the sprites and flats into one marked block each
+    // killough 1/24/98: change interface to use M_START/M_END explicitly
+    // killough 4/17/98: Add namespace tags to each entry
+
+    W_CoalesceMarkedResource("S_START", "S_END", ns_sprites);
+    W_CoalesceMarkedResource("F_START", "F_END", ns_flats);
+
+    // killough 4/4/98: add colormap markers
+    W_CoalesceMarkedResource("C_START", "C_END", ns_colormaps);
     
     // set up caching
     size = numlumps * sizeof(*lumpcache);
