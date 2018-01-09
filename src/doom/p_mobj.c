@@ -491,10 +491,17 @@ void P_ZMovement (mobj_t* mo)
 	    mo->momz = -mo->momz;
 	}
 	
-	if ( (mo->flags & MF_MISSILE)
-	     && !(mo->flags & MF_NOCLIP) )
+	if ((mo->flags & MF_MISSILE) && !(mo->flags & MF_NOCLIP))
 	{
-        P_ExplodeMissile (mo);
+        // [JN] Fix projectiles explode on impact with "sky" ceilings
+        if (mo->subsector->sector->ceilingpic == skyflatnum)
+        {
+            P_RemoveMobj(mo);
+        }
+        else
+        {
+            P_ExplodeMissile (mo);
+        }
 	    return;
 	}
     }
