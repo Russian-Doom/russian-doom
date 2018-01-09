@@ -77,8 +77,26 @@ typedef	struct
     
 } cliprange_t;
 
+// 1/11/98: Lee Killough
+//
+// This fixes many strange venetian blinds crashes, which occurred when a scan
+// line had too many "posts" of alternating non-transparent and transparent
+// regions. Using a doubly-linked list to represent the posts is one way to
+// do it, but it has increased overhead and poor spatial locality, which hurts
+// cache performance on modern machines. Since the maximum number of posts
+// theoretically possible is a function of screen width, a static limit is
+// okay in this case. It used to be 32, which was way too small.
+//
+// This limit was frequently mistaken for the visplane limit in some Doom
+// editing FAQs, where visplanes were said to "double" if a pillar or other
+// object split the view's space into two pieces horizontally. That did not
+// have anything to do with visplanes, but it had everything to do with these
+// clip posts.
+// #define MAXSEGS		32
 
-#define MAXSEGS		32
+// [JN] Replaced MAX_SCREENWIDTH with SCREENWIDTH
+#define MAXSEGS (SCREENWIDTH/2+1)   /* killough 1/11/98, 2/8/98 */
+
 
 // newend is one past the last valid seg
 cliprange_t*	newend;
