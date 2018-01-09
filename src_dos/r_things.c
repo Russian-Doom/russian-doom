@@ -175,108 +175,118 @@ R_InstallSpriteLump
 //  letter/number appended.
 // The rotation character can be 0 to signify no rotations.
 //
+// 1/25/98, 1/31/98 killough : Rewritten for performance
+//
+// Empirically verified to have excellent hash
+// properties across standard Doom sprites:
+
+#define R_SpriteNameHash(s) ((unsigned)((s)[0]-((s)[1]*3-(s)[3]*2-(s)[2])*2))
+
 void R_InitSpriteDefs (char** namelist) 
-{ 
-    char**	check;
-    int		i;
-    int		l;
-    int		intname;
-    int		frame;
-    int		rotation;
-    int		start;
-    int		end;
-    int		patched;
-		
+{
+    size_t numentries = lastspritelump-firstspritelump+1;
+    struct { int index, next; } *hash;
+    int i;
+
+    if (!numentries || !*namelist)
+    return;
+
     // count the number of sprite names
-    check = namelist;
-    while (*check != NULL)
-	check++;
+    for (i=0; namelist[i]; i++);
 
-    numsprites = check-namelist;
-	
-    if (!numsprites)
-	return;
-		
+    numsprites = i;
+
     sprites = Z_Malloc(numsprites *sizeof(*sprites), PU_STATIC, NULL);
-	
-    start = firstspritelump-1;
-    end = lastspritelump+1;
-	
-    // scan all the lump names for each of the names,
-    //  noting the highest frame letter.
-    // Just compare 4 characters as ints
-    for (i=0 ; i<numsprites ; i++)
-    {
-	spritename = namelist[i];
-	memset (sprtemp,-1, sizeof(sprtemp));
-		
-	maxframe = -1;
-	intname = *(int *)namelist[i];
-	
-	// scan the lumps,
-	//  filling in the frames for whatever is found
-	for (l=start+1 ; l<end ; l++)
-	{
-	    if (*(int *)lumpinfo[l].name == intname)
-	    {
-		frame = lumpinfo[l].name[4] - 'A';
-		rotation = lumpinfo[l].name[5] - '0';
 
-		if (modifiedgame)
-		    patched = W_GetNumForName (lumpinfo[l].name);
-		else
-		    patched = l;
+    // Create hash table based on just the first four letters of each sprite
+    // killough 1/31/98
 
-		R_InstallSpriteLump (patched, frame, rotation, false);
+    hash = malloc(sizeof(*hash)*numentries); // allocate hash table
 
-		if (lumpinfo[l].name[6])
-		{
-		    frame = lumpinfo[l].name[6] - 'A';
-		    rotation = lumpinfo[l].name[7] - '0';
-		    R_InstallSpriteLump (l, frame, rotation, true);
-		}
-	    }
-	}
-	
-	// check the frames that were found for completeness
-	if (maxframe == -1)
-	{
-	    sprites[i].numframes = 0;
-	    continue;
-	}
-		
-	maxframe++;
-	
-	for (frame = 0 ; frame < maxframe ; frame++)
-	{
-	    switch ((int)sprtemp[frame].rotate)
-	    {
-	      case -1:
-		// no rotations were found for that frame at all
-		I_Error ("R_InitSprites: Не найдены патчи для фрейма %c спрайта %s", namelist[i], frame+'A');
-		break;
-		
-	      case 0:
-		// only the first rotation is needed
-		break;
-			
-	      case 1:
-		// must have all 8 frames
-		for (rotation=0 ; rotation<8 ; rotation++)
-		    if (sprtemp[frame].lump[rotation] == -1)
-			I_Error ("R_InitSprites: Отсутствуют кадры вращения в фрейме %c спрайта %s",
-				 namelist[i], frame+'A');
-		break;
-	    }
-	}
-	
-	// allocate space for the frames present and copy sprtemp to it
-	sprites[i].numframes = maxframe;
-	sprites[i].spriteframes = 
-	    Z_Malloc (maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
-	memcpy (sprites[i].spriteframes, sprtemp, maxframe*sizeof(spriteframe_t));
+    for (i=0; i<numentries; i++)             // initialize hash table as empty
+    hash[i].index = -1;
+
+    for (i=0; i<numentries; i++)             // Prepend each sprite to hash chain
+    {                                        // prepend so that later ones win
+        int j = R_SpriteNameHash(lumpinfo[i+firstspritelump].name) % numentries;
+        hash[i].next = hash[j].index;
+        hash[j].index = i;
     }
 
+    // scan all the lump names for each of the names,
+    //  noting the highest frame letter.
+
+    for (i=0 ; i<numsprites ; i++)
+    {
+        const char *spritename = namelist[i];
+        int j = hash[R_SpriteNameHash(spritename) % numentries].index;
+
+        if (j >= 0)
+        {
+            memset(sprtemp, -1, sizeof(sprtemp));
+            maxframe = -1;
+            do
+            {
+                register lumpinfo_t *lump = lumpinfo + j + firstspritelump;
+
+                // Fast portable comparison -- killough
+                // (using int pointer cast is nonportable):
+
+                if (!((lump->name[0] ^ spritename[0]) |
+                      (lump->name[1] ^ spritename[1]) |
+                      (lump->name[2] ^ spritename[2]) |
+                      (lump->name[3] ^ spritename[3])))
+                {
+                    R_InstallSpriteLump(j+firstspritelump,
+                                      lump->name[4] - 'A',
+                                      lump->name[5] - '0',
+                                      false);
+                    if (lump->name[6])
+                    R_InstallSpriteLump(j+firstspritelump,
+                                      lump->name[6] - 'A',
+                                      lump->name[7] - '0',
+                                      true);
+                }
+            }
+            while ((j = hash[j].next) >= 0);
+
+            // check the frames that were found for completeness
+            if ((sprites[i].numframes = ++maxframe))  // killough 1/31/98
+            {
+                int frame;
+
+                for (frame = 0; frame < maxframe; frame++)
+                switch ((int) sprtemp[frame].rotate)
+                {
+                    case -1:
+                    // no rotations were found for that frame at all
+                    // [crispy] make non-fatal
+                    fprintf (stderr, "R_InitSprites: отсутствуют патчи в спрайте %.8s фрейме %c", namelist[i], frame+'A');
+                    break;
+
+                    case 0:
+                    // only the first rotation is needed
+                    break;
+
+                    case 1:
+                    // must have all 8 frames
+                    {
+                        int rotation;
+                        for (rotation=0 ; rotation<8 ; rotation++)
+                            if (sprtemp[frame].lump[rotation] == -1)
+                                I_Error ("R_InitSprites: Sprite %.8s frame %c is missing rotations",namelist[i], frame+'A');
+                        break;
+                    }
+                }
+
+                // allocate space for the frames present and copy sprtemp to it
+                sprites[i].spriteframes = Z_Malloc (maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
+                memcpy (sprites[i].spriteframes, sprtemp, maxframe*sizeof(spriteframe_t));
+            }
+        }
+    }
+
+    free(hash); // free hash table
 }
 
 
