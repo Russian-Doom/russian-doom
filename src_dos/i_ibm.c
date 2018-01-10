@@ -320,6 +320,10 @@ void I_SetPalette(byte *palette)
 {
 	int i;
 
+    // [JN] Check for incorrect gamma levels while startup
+    if (usegamma < 0 || usegamma > 16)
+    usegamma = 0;    
+
 	if(novideo)
 	{
 		return;
