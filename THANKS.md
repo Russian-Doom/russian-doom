@@ -33,7 +33,7 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 
 #### [DOSDoom](https://doomwiki.org/wiki/DOSDoom) source port
 - Chi Hoang
-- DOSDoom Team
+- The DOSDoom Team
 
 #### [SDL](https://www.libsdl.org/), [SDL_mixer](https://www.libsdl.org/projects/SDL_mixer/) and [SDL_net](https://www.libsdl.org/projects/SDL_net/)
 - Sam Lantinga
@@ -54,3 +54,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Zodomaniac
 - David Carlier
 - theleo_ua
+- Tamás "BlooD2oo1" Mélykuti
