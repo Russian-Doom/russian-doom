@@ -1232,6 +1232,190 @@ boolean PTR_ShootTraverse (intercept_t* in)
 	
 }
 
+// [JN] Hitscan attacks now affecting floors and ceilings.
+// Adapted from DOSDoom v0.65 (P_MAP.C / PTR_ShootTraverse).
+boolean PTR_ShootTraverseAndFloors (intercept_t* in)
+{
+    fixed_t     x, y, z;
+    fixed_t     frac;
+    fixed_t     slope;
+    fixed_t     dist;
+    fixed_t     distz;
+    int         side;
+    fixed_t     thingtopslope;
+    fixed_t     thingbottomslope;
+
+    boolean     hitfloor;
+    boolean     hitceiling;
+
+    line_t* li;
+    mobj_t* th;
+
+    boolean safe = false;
+
+    // Intercept is a line?
+    if (in->isaline)
+    {
+        li = in->d.line;
+
+        // Line is a special, Cause action....
+        if (li->special)
+        P_ShootSpecialLine (shootthing, li);
+
+        // shoot doesn't go through a one-sided line, since one sided lines
+        // do not have a sector the other side.
+        if (li->flags & ML_TWOSIDED)
+        {
+            P_LineOpening (li);
+
+            dist = FixedMul (attackrange, in->frac);
+
+            if (li->frontsector->floorheight == li->backsector->floorheight)
+            {
+                hitfloor = false;
+            }
+            else
+            {
+                // ceiling heights are different, check trace path
+                slope = FixedDiv (openbottom - shootz, dist);
+
+                if (slope >= aimslope)
+                    hitfloor = true;
+                else
+                    hitfloor = false;
+            }
+
+            if (li->frontsector->ceilingheight == li->backsector->ceilingheight)
+            {
+                hitceiling = false;
+            }
+            else
+            {
+                slope = FixedDiv (opentop - shootz, dist);
+            
+                if (slope <= aimslope)
+                    hitceiling = true;
+                else
+                    hitceiling = false;
+            }
+
+            // didn't hit either floor or ceiling, shot may continue...
+            if (!hitceiling && !hitfloor)
+                return true;
+        }
+
+        // position a bit closer
+        frac = in->frac - FixedDiv (4*FRACUNIT,attackrange);
+        distz = FixedMul (aimslope, FixedMul(frac, attackrange));
+        x = trace.x + FixedMul (trace.dx, frac);
+        y = trace.y + FixedMul (trace.dy, frac);
+        z = shootz + FixedMul (aimslope, FixedMul(frac, attackrange));
+        
+        // [JN] We need a small additional checking for preventing puff appearance
+        // in some instances on sky floors and ceilings. Adapted from Doom Retro,
+        // thanks Brad Harding for his implementation (p_map.c / PTR_ShootTraverse)!
+        if ((side = li->sidenum[P_PointOnLineSide(shootthing->x, shootthing->y, li)]) != -1)
+        {
+            sector_t    *sector = sides[side].sector;
+            fixed_t     ceilingz = sector->ceilingheight;
+
+            // [JN] Checking only for ceilingpic, allowing puffs to be appeared on sky floors.
+            // Projectles are always hitting sky floors, so why not hitscans?
+            if (z > ceilingz && distz && sector->ceilingpic == skyflatnum)
+            {
+                return false;
+            }
+            /* [JN] Working code for floorpic checking. Not used, but I still would like to keep it.
+            else
+            {
+                fixed_t floorz = sector->floorheight;
+            
+                if (z < floorz && distz && sector->floorpic == skyflatnum)
+                return false;
+            }*/
+        }
+        
+        if (li->frontsector->ceilingpic == skyflatnum)
+        {
+            // don't shoot the sky!
+            if (z > li->frontsector->ceilingheight)
+            return false;
+
+            // lets check we haven't just hit the sky hack line...
+            // -ACB- 1998/09/02
+            // [JN] Slightly simplified
+            if (li->backsector && li->backsector->ceilingpic==skyflatnum && li->backsector->floorheight<z)
+                return false;
+        }
+
+        // -KM- 1998/09/18 Bullet puffs can hit ceilings/floors
+        side = P_PointOnLineSide(trace.x, trace.y, li);
+
+        if (z < sides[li->sidenum[side]].sector->floorheight)
+        {
+            z = sides[li->sidenum[side]].sector->floorheight;
+            frac = FixedDiv(z - shootz, FixedMul(aimslope, attackrange));
+            x = trace.x + FixedMul (trace.dx, frac);
+            y = trace.y + FixedMul (trace.dy, frac);
+        }
+        if (z > sides[li->sidenum[side]].sector->ceilingheight)
+        {
+            z = sides[li->sidenum[side]].sector->ceilingheight;
+            frac = FixedDiv(z - shootz, FixedMul(aimslope, attackrange));
+            x = trace.x + FixedMul (trace.dx, frac);
+            y = trace.y + FixedMul (trace.dy, frac);
+        }
+
+        // Spawn bullet puffs.
+        P_SpawnPuffSafe (x, y, z, safe);
+
+        // don't go any farther
+        return false;
+    }
+    
+    // shoot a thing
+    th = in->d.thing;
+
+    if (th == shootthing)
+    return true;        // don't shoot self
+    
+    if (!(th->flags&MF_SHOOTABLE))
+    return true;        // got to able to shoot it
+
+    // check angles to see if the thing can be aimed at
+    dist = FixedMul (attackrange, in->frac);
+    thingtopslope = FixedDiv (th->z+th->height - shootz , dist);
+
+    if (thingtopslope < aimslope)
+    return true;        // shot over the thing
+
+    thingbottomslope = FixedDiv (th->z - shootz, dist);
+
+    if (thingbottomslope > aimslope)
+    return true;        // shot under the thing
+    
+    // hit thing
+    // position a bit closer
+    frac = in->frac - FixedDiv (10*FRACUNIT,attackrange);
+
+    x = trace.x + FixedMul (trace.dx, frac);
+    y = trace.y + FixedMul (trace.dy, frac);
+    z = shootz + FixedMul (aimslope, FixedMul(frac, attackrange));
+
+    // Spawn bullet puffs or blood spots,
+    // depending on target type.
+    if (in->d.thing->flags & MF_NOBLOOD)
+    P_SpawnPuff (x,y,z);
+
+    else
+    P_SpawnBlood (x,y,z, la_damage, th);    // [crispy] pass thing type
+
+    if (la_damage)
+    P_DamageMobj (th, shootthing, shootthing, la_damage);
+
+    // don't go any farther
+    return false;
+}
 
 //
 // P_AimLineAttack
@@ -1299,7 +1483,8 @@ P_LineAttack
     P_PathTraverse ( t1->x, t1->y,
 		     x2, y2,
 		     PT_ADDLINES|PT_ADDTHINGS,
-		     PTR_ShootTraverse );
+		     // [JN] Shooting floors is extremly unsafe for internal demos!
+		     (singleplayer ? PTR_ShootTraverseAndFloors : PTR_ShootTraverse) );
 }
  
 
