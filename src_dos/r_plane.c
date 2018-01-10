@@ -139,11 +139,9 @@ R_MapPlane
   int		x1,
   int		x2 )
 {
-    angle_t     angle;      // [JN] Still needed for low detail
-    fixed_t     length;     // [JN] Still needed for low detail
     fixed_t     distance;
     unsigned    index;
-    int         dx, dy;     // [JN] Needed for high detail
+    int         dx, dy;
 	
 #ifdef RANGECHECK
     if (x2 < x1
@@ -155,63 +153,42 @@ R_MapPlane
     }
 #endif
 
-// [JN] Fixes floor texture distortion on changing brightness.
-// Only for high detail. For low detail these formulas brings floor texture parallax.
+    // [crispy] visplanes with the same flats now match up far better than before
+    // adapted from prboom-plus/src/r_plane.c:191-239, translated to fixed-point math
 
-    /* HIGH detail */
-    if (!detailshift)
+    // [crispy] avoid division by zero if (y == centery)
+    if (y == centery)
+    return;
+
+    if (!(dy = abs(centery - y)))
+    return;
+
+    if (planeheight != cachedheight[y])
     {
-        // [crispy] visplanes with the same flats now match up far better than before
-        // adapted from prboom-plus/src/r_plane.c:191-239, translated to fixed-point math
+        cachedheight[y] = planeheight;
+        distance = cacheddistance[y] = FixedMul (planeheight, yslope[y]);
 
-        // [crispy] avoid division by zero if (y == centery)
-        if (y == centery)
-        return;
-
-        if (!(dy = abs(centery - y)))
-        return;
-    
-        if (planeheight != cachedheight[y])
+        if (!detailshift) // [JN] HIGH detail
         {
-            cachedheight[y] = planeheight;
-            distance = cacheddistance[y] = FixedMul (planeheight, yslope[y]);
             ds_xstep = cachedxstep[y] = FixedMul (viewsin, planeheight) / dy;
             ds_ystep = cachedystep[y] = FixedMul (viewcos, planeheight) / dy;
         }
-        else
+        else // [JN] LOW detail. (Blocky mode, need to multiply by 2. Sounds familiar? :)
         {
-            distance = cacheddistance[y];
-            ds_xstep = cachedxstep[y];
-            ds_ystep = cachedystep[y];
+            ds_xstep = cachedxstep[y] = FixedMul (viewsin, planeheight) / dy * 2;
+            ds_ystep = cachedystep[y] = FixedMul (viewcos, planeheight) / dy * 2;
         }
-
-        dx = x1 - centerx;
-        ds_xfrac = viewx + FixedMul(viewcos, distance) + dx * ds_xstep;
-        ds_yfrac = -viewy - FixedMul(viewsin, distance) + dx * ds_ystep;
     }
-
-    /* LOW detail */
     else
     {
-        if (planeheight != cachedheight[y])
-        {
-            cachedheight[y] = planeheight;
-            distance = cacheddistance[y] = FixedMul (planeheight, yslope[y]);
-            ds_xstep = cachedxstep[y] = FixedMul (distance,basexscale);
-            ds_ystep = cachedystep[y] = FixedMul (distance,baseyscale);
-        }
-        else
-        {
-            distance = cacheddistance[y];
-            ds_xstep = cachedxstep[y];
-            ds_ystep = cachedystep[y];
-        }
-
-        length = FixedMul (distance,distscale[x1]);
-        angle = (viewangle + xtoviewangle[x1])>>ANGLETOFINESHIFT;
-        ds_xfrac = viewx + FixedMul(finecosine[angle], length);
-        ds_yfrac = -viewy - FixedMul(finesine[angle], length);
+        distance = cacheddistance[y];
+        ds_xstep = cachedxstep[y];
+        ds_ystep = cachedystep[y];
     }
+
+    dx = x1 - centerx;
+    ds_xfrac = viewx + FixedMul(viewcos, distance) + dx * ds_xstep;
+    ds_yfrac = -viewy - FixedMul(viewsin, distance) + dx * ds_ystep;
 
     if (fixedcolormap)
     {
