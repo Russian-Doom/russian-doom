@@ -139,10 +139,11 @@ R_MapPlane
   int		x1,
   int		x2 )
 {
-    angle_t	angle;
-    fixed_t	distance;
-    fixed_t	length;
-    unsigned	index;
+    angle_t     angle;      // [JN] Still needed for low detail
+    fixed_t     length;     // [JN] Still needed for low detail
+    fixed_t     distance;
+    unsigned    index;
+    int         dx, dy;     // [JN] Needed for high detail
 	
 #ifdef RANGECHECK
     if (x2 < x1
@@ -154,56 +155,78 @@ R_MapPlane
     }
 #endif
 
-    // [JN] Fixes floor texture distortion on changing brightness.
-    // Only for high detail. For low detail these formulas brings floor texture parallax.
+// [JN] Fixes floor texture distortion on changing brightness.
+// Only for high detail. For low detail these formulas brings floor texture parallax.
+
+    /* HIGH detail */
     if (!detailshift)
     {
         // [crispy] visplanes with the same flats now match up far better than before
         // adapted from prboom-plus/src/r_plane.c:191-239, translated to fixed-point math
 
+        // [crispy] avoid division by zero if (y == centery)
         if (y == centery)
-    	return;
+        return;
 
-        distance = FixedMul(planeheight, yslope[y]);
-        ds_xstep = FixedMul(viewsin, planeheight) / abs(centery - y);
-        ds_ystep = FixedMul(viewcos, planeheight) / abs(centery - y);
-        ds_xfrac =  viewx + FixedMul(viewcos, distance) + (x1 - centerx) * ds_xstep;
-        ds_yfrac = -viewy - FixedMul(viewsin, distance) + (x1 - centerx) * ds_ystep;
+        if (!(dy = abs(centery - y)))
+        return;
+    
+        if (planeheight != cachedheight[y])
+        {
+            cachedheight[y] = planeheight;
+            distance = cacheddistance[y] = FixedMul (planeheight, yslope[y]);
+            ds_xstep = cachedxstep[y] = FixedMul (viewsin, planeheight) / dy;
+            ds_ystep = cachedystep[y] = FixedMul (viewcos, planeheight) / dy;
+        }
+        else
+        {
+            distance = cacheddistance[y];
+            ds_xstep = cachedxstep[y];
+            ds_ystep = cachedystep[y];
+        }
+
+        dx = x1 - centerx;
+        ds_xfrac = viewx + FixedMul(viewcos, distance) + dx * ds_xstep;
+        ds_yfrac = -viewy - FixedMul(viewsin, distance) + dx * ds_ystep;
     }
+
+    /* LOW detail */
     else
     {
         if (planeheight != cachedheight[y])
         {
-        cachedheight[y] = planeheight;
-        distance = cacheddistance[y] = FixedMul (planeheight, yslope[y]);
-        ds_xstep = cachedxstep[y] = FixedMul (distance,basexscale);
-        ds_ystep = cachedystep[y] = FixedMul (distance,baseyscale);
+            cachedheight[y] = planeheight;
+            distance = cacheddistance[y] = FixedMul (planeheight, yslope[y]);
+            ds_xstep = cachedxstep[y] = FixedMul (distance,basexscale);
+            ds_ystep = cachedystep[y] = FixedMul (distance,baseyscale);
         }
         else
         {
-        distance = cacheddistance[y];
-        ds_xstep = cachedxstep[y];
-        ds_ystep = cachedystep[y];
-    }
-	
-    length = FixedMul (distance,distscale[x1]);
-    angle = (viewangle + xtoviewangle[x1])>>ANGLETOFINESHIFT;
-    ds_xfrac = viewx + FixedMul(finecosine[angle], length);
-    ds_yfrac = -viewy - FixedMul(finesine[angle], length);
+            distance = cacheddistance[y];
+            ds_xstep = cachedxstep[y];
+            ds_ystep = cachedystep[y];
+        }
+
+        length = FixedMul (distance,distscale[x1]);
+        angle = (viewangle + xtoviewangle[x1])>>ANGLETOFINESHIFT;
+        ds_xfrac = viewx + FixedMul(finecosine[angle], length);
+        ds_yfrac = -viewy - FixedMul(finesine[angle], length);
     }
 
     if (fixedcolormap)
-	ds_colormap = fixedcolormap;
+    {
+        ds_colormap = fixedcolormap;
+    }
     else
     {
-	index = distance >> LIGHTZSHIFT;
-	
-	if (index >= MAXLIGHTZ )
-	    index = MAXLIGHTZ-1;
+        index = distance >> LIGHTZSHIFT;
 
-	ds_colormap = planezlight[index];
+        if (index >= MAXLIGHTZ )
+            index = MAXLIGHTZ-1;
+
+        ds_colormap = planezlight[index];
     }
-	
+
     ds_y = y;
     ds_x1 = x1;
     ds_x2 = x2;
