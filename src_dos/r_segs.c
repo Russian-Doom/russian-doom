@@ -234,10 +234,14 @@ R_RenderMaskedSegRange
 	
     lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
-    if (curline->v1->y == curline->v2->y)
-	lightnum--;
-    else if (curline->v1->x == curline->v2->x)
-	lightnum++;
+    // [JN] Fake contrast: make vanilla only.
+    if (vanilla)
+    {
+        if (curline->v1->y == curline->v2->y)
+        lightnum--;
+        else if (curline->v1->x == curline->v2->x)
+        lightnum++;
+    }
 
     if (lightnum < 0)		
 	walllights = scalelight[0];
