@@ -153,6 +153,10 @@ typedef struct player_s
 
     // [crispy] squat down weapon sprite a bit after hitting the ground
     fixed_t	psp_dy, psp_dy_max;
+
+    // [JN] Mouselook variables
+    int     lookdir;
+    boolean centering;
 } player_t;
 
 

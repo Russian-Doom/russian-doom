@@ -25,6 +25,8 @@
 #include "d_event.h"
 
 
+// [JN] Mouselook
+extern int mlook;
 
 //
 // GAME

@@ -26,6 +26,7 @@
 #include "r_local.h"
 #endif
 
+#define TOCENTER        -8
 #define FLOATSPEED		(FRACUNIT*4)
 
 
@@ -85,6 +86,7 @@ void P_DropWeapon (player_t* player);
 //
 // P_USER
 //
+#define MLOOKUNIT	8
 void	P_PlayerThink (player_t* player);
 
 

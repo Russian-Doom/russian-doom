@@ -1130,8 +1130,12 @@
 
 
 // Port-specific strings
-#define STSTR_KAADDED   "rk.xb gjkextys"                            // Ключи получены
 #define STSTR_VERSION   "dthcbz 1>3 (d hfhpf,jnrt)"                 // Версия 1.3 (в разработке)
+
+#define STSTR_KAADDED   "rk.xb gjkextys"                            // Ключи получены
+
+#define STSTR_MLOOK_ON  "j,pjh vsim. drk.xty"                       // Обзор мышью включен
+#define STSTR_MLOOK_OFF "j,pjh vsim. dsrk.xty"                      // Обзор мышью выключен
 
 
 #endif

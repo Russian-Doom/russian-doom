@@ -35,6 +35,7 @@ typedef struct
     short   consistancy; // checks for net game
     byte    chatchar;
     byte    buttons;
+    byte    lookfly;     // [JN] Mouselook: up/down/centering
 } ticcmd_t;
 
 #endif

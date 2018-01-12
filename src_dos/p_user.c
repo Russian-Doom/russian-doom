@@ -41,6 +41,9 @@
 // 16 pixels of bob
 #define MAXBOB	0x100000	
 
+
+extern boolean mlook;
+
 boolean		onground;
 
 
@@ -156,6 +159,7 @@ void P_CalcHeight (player_t* player)
 void P_MovePlayer (player_t* player)
 {
     ticcmd_t*		cmd;
+    int				look;
 	
     cmd = &player->cmd;
 	
@@ -175,6 +179,48 @@ void P_MovePlayer (player_t* player)
 	 && player->mo->state == &states[S_PLAY] )
     {
 	P_SetMobjState (player->mo, S_PLAY_RUN1);
+    }
+    
+    // [JN] Mouselook
+    if (!mlook)
+    {
+        player->lookdir = 0;
+    }
+    else
+    {
+        look = cmd->lookfly & 15;
+        if (look > 7)
+        {
+            look -= 16;
+        }
+        if (look)
+        {
+            if (look == TOCENTER)
+            {
+                player->centering = true;
+            }
+            else
+            {
+                player->lookdir += MLOOKUNIT * 5 * look;
+                if (player->lookdir > 90 * MLOOKUNIT || player->lookdir < -110)
+                {
+                    player->lookdir -= MLOOKUNIT * 5 * look;
+                }
+            }
+        }
+        if (player->centering)
+        {
+            if (player->lookdir > 0 || player->lookdir < 0)
+            {
+                player->lookdir = 0;
+            }
+        
+            if (player->lookdir < 8 * MLOOKUNIT)
+            {
+                player->lookdir = 0;
+                player->centering = false;
+            }
+        }
     }
 }	
 
@@ -205,6 +251,14 @@ void P_DeathThink (player_t* player)
     onground = (player->mo->z <= player->mo->floorz);
     P_CalcHeight (player);
 	
+    // [JN] Mouselook: smoothed lookdir centering while dying
+    if (player->lookdir >  8 * MLOOKUNIT)
+	    player->lookdir -= 8 * MLOOKUNIT;
+    else if (player->lookdir < -8 * MLOOKUNIT)
+	    player->lookdir += 8 * MLOOKUNIT;
+    else if (player->lookdir)
+	    player->lookdir = 0;
+    
     if (player->attacker && player->attacker != player->mo)
     {
 	angle = R_PointToAngle2 (player->mo->x,

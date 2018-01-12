@@ -34,6 +34,8 @@
 #include "doomstat.h"
 
 
+extern int mlook;
+
 void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);
 
@@ -785,6 +787,7 @@ void P_SpawnPlayer (mapthing_t* mthing)
     p->extralight = 0;
     p->fixedcolormap = 0;
     p->viewheight = VIEWHEIGHT;
+    p->lookdir = 0;
 
     // setup gun psprite
     P_SetupPsprites (p);
@@ -1114,6 +1117,13 @@ P_SpawnPlayerMissile
 	    an = source->angle;
 	    slope = 0;
 	}
+    }
+    
+    // [JN] Mouselook: also count vertical angles
+    if (!linetarget && mlook)
+    {
+        an = source->angle;
+        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 173;
     }
 		
     x = source->x;

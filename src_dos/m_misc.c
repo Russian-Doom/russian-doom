@@ -275,6 +275,8 @@ extern int	key_use;
 extern int	key_strafe;
 extern int	key_speed;
 
+extern int	key_mouselook;
+
 extern int	mousebfire;
 extern int	mousebstrafe;
 extern int	mousebforward;
@@ -335,6 +337,8 @@ typedef struct
 #define SC_END                  0x4f
 #define SC_ENTER                0x1c
 
+#define SC_TILDE                0x29 // [JN] Mouselook keycode: `
+
 #define SC_KEY_A                0x1e
 #define SC_KEY_B                0x30
 #define SC_KEY_C                0x2e
@@ -381,6 +385,7 @@ default_t	defaults[] =
     {"key_use",&key_use, SC_KEY_E, 1},
     {"key_strafe",&key_strafe, SC_RALT, 1},
     {"key_speed",&key_speed, SC_RSHIFT, 1},
+    {"key_mouselook",&key_mouselook, SC_TILDE, 1},
 
     {"use_mouse",&usemouse, 1},
     {"mouseb_fire",&mousebfire,0},

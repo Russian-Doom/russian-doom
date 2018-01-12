@@ -41,6 +41,8 @@
 #define WEAPONBOTTOM	128*FRACUNIT
 #define WEAPONTOP		32*FRACUNIT
 
+
+extern int mlook;
 boolean chainsaw_attack_swing;
 
 
@@ -713,6 +715,12 @@ void P_BulletSlope (mobj_t*	mo)
 	{
 	    an -= 2<<26;
 	    bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
+	}
+    // [JN] Mouselook: also count vertical angles
+    if (!linetarget && mlook)
+	{
+	    an += 2 << 26;
+	    bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 173;
 	}
     }
 }

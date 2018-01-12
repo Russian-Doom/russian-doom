@@ -131,6 +131,8 @@ short		consistancy[MAXPLAYERS][BACKUPTICS];
 byte*       savebuffer;
 byte        saveshit[SAVEGAMESIZE];
 
+// [JN] Mouselook: initially disabled
+boolean mlook = false;
 
 //
 // controls (have defaults)
@@ -145,6 +147,7 @@ int     key_fire;
 int     key_use;
 int     key_strafe;
 int     key_speed; 
+int     key_mouselook;
 
 int     mousebfire; 
 int     mousebstrafe; 
@@ -228,6 +231,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     int     tspeed;
     int     forward;
     int     side;
+    int     look;
 
     ticcmd_t*	base;
 
@@ -255,7 +259,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     else if ((joybspeed <= MAX_JOY_BUTTONS) && (gamekeydown[key_speed]))
         speed = true;
 
-    forward = side = 0;
+    forward = side = look = 0;
 
     // use two stage accelerative turning
     // on the keyboard and joystick
@@ -403,6 +407,44 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     side += mousex*2;
     else
     cmd->angleturn -= mousex*0x8;
+
+    // [JN] Mouselook: toggling
+    if (gamekeydown[key_mouselook])
+    {
+        if (!mlook)
+        {
+            mlook = true;
+            players[consoleplayer].message = STSTR_MLOOK_ON;
+        }
+        else
+        {
+            mlook = false;
+            look = TOCENTER;
+            players[consoleplayer].message = STSTR_MLOOK_OFF;
+        }
+    
+        S_StartSound(NULL, sfx_swtchn);
+    
+        gamekeydown[key_mouselook] = false;
+    }
+    
+    // [JN] Mouselook: handling
+    if (mlook && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !paused && !menuactive)
+    {
+        players[consoleplayer].lookdir += mousey;
+        
+        if (players[consoleplayer].lookdir > 90 * MLOOKUNIT)
+            players[consoleplayer].lookdir = 90 * MLOOKUNIT;
+        else
+        if (players[consoleplayer].lookdir < -110 * MLOOKUNIT)
+            players[consoleplayer].lookdir = -110 * MLOOKUNIT;
+        
+        if (look < 0)
+        {
+            look += 16;
+        }
+        cmd->lookfly = look;
+    }
 
     mousex = mousey = 0;
 

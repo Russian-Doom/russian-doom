@@ -105,7 +105,10 @@ EV_Teleport
 		    thing->z = thing->floorz;  //fixme: not needed?
 
 		if (thing->player)
+		{
 		    thing->player->viewz = thing->z+thing->player->viewheight;
+		    thing->player->lookdir = 0;
+		}
 				
 		// spawn teleport fog at source and destination
 		fog = P_SpawnMobj (oldx, oldy, oldz, MT_TFOG);
