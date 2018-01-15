@@ -1339,15 +1339,14 @@ void ST_drawWidgets(boolean refresh)
     STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12);
     STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12);
 
+    if (screenblocks < 11 || automapactive)
     STlib_updateBinIcon(&w_armsbg, refresh);
 
     for (i=0;i<6;i++)
     STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
 
     if (screenblocks < 11 || automapactive)
-    {
-        STlib_updateMultIcon(&w_faces, refresh);
-    }
+    STlib_updateMultIcon(&w_faces, refresh);
 
     for (i=0;i<3;i++)
     STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12);
