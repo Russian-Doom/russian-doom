@@ -1150,6 +1150,17 @@ void R_StoreWallRange (int start, int stop)
             if (midtexture == bmap_terminator || toptexture == bmap_terminator || bottomtexture == bmap_terminator)
             walllights = scalelight[lightnum];
         }
+
+        // [JN] Decrease wall brightness to "0" on sector with zero height.
+        // Fades screen to black for crushed player under the closed door.
+        // TODO: it should be done through the sector brightness.
+        if (frontsector->floorheight == frontsector->ceilingheight)
+        {
+            walllights = scalelight[0];
+            walllights_top = scalelight[0];
+            walllights_middle = scalelight[0];
+            walllights_bottom = scalelight[0];
+        }
     }
     }
 

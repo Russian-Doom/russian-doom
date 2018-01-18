@@ -151,6 +151,11 @@ void P_CalcHeight (player_t* player)
 
     if (player->viewz > player->mo->ceilingz-4*FRACUNIT)
 	player->viewz = player->mo->ceilingz-4*FRACUNIT;
+
+    // [JN] Prevent crushed player's viewz to be set beneath the floor,
+    // for preventing ablility to see level's "out of bounds" under the closed door.
+    if (player->playerstate != PST_LIVE && player->viewz < player->mo->floorz)
+    player->viewz = player->mo->floorz;
 }
 
 
