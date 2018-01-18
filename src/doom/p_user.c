@@ -154,7 +154,7 @@ void P_CalcHeight (player_t* player)
 
     // [JN] Prevent crushed player's viewz to be set beneath the floor,
     // for preventing ablility to see level's "out of bounds" under the closed door.
-    if (player->playerstate != PST_LIVE && player->viewz < player->mo->floorz)
+    if (player->playerstate == PST_DEAD && player->viewz < player->mo->floorz)
     player->viewz = player->mo->floorz;
 }
 
