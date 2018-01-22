@@ -320,6 +320,7 @@ enum
     hurtme,
     violence,
     nightmare,
+    ultra_nm,
     newg_end
 } newgame_e;
 
@@ -329,7 +330,8 @@ menuitem_t NewGameMenu[]=
     {1,"M_ROUGH",   M_ChooseSkill, 'h'},
     {1,"M_HURT",    M_ChooseSkill, 'h'},
     {1,"M_ULTRA",   M_ChooseSkill, 'u'},
-    {1,"M_NMARE",   M_ChooseSkill, 'n'}
+    {1,"M_NMARE",   M_ChooseSkill, 'n'},
+    {1,"M_UNMARE",  M_ChooseSkill, 'z'}
 };
 
 menu_t  NewDef =
@@ -1010,11 +1012,25 @@ void M_VerifyNightmare(int key)
     M_ClearMenus ();
 }
 
+void M_VerifyUltraNightmare(int key)
+{
+    if (key != key_menu_confirm)
+    return;
+
+    G_DeferedInitNew(ultra_nm,epi+1,1);
+    M_ClearMenus ();
+}
+
 void M_ChooseSkill(int choice)
 {
     if (choice == nightmare)
     {
         M_StartMessage(DEH_String(NIGHTMARE),M_VerifyNightmare,true);
+        return;
+    }
+    if (choice == ultra_nm)
+    {
+        M_StartMessage(DEH_String(ULTRANM),M_VerifyUltraNightmare,true);
         return;
     }
 

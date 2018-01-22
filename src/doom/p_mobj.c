@@ -708,7 +708,7 @@ P_SpawnMobjSafe
     mobj->flags = info->flags;
     mobj->health = info->spawnhealth;
 
-    if (gameskill != sk_nightmare)
+    if (gameskill != sk_nightmare || gameskill != sk_ultranm)
 	mobj->reactiontime = info->reactiontime;
     
     mobj->lastlook = safe ? Crispy_Random () % MAXPLAYERS : P_Random () % MAXPLAYERS;
@@ -974,7 +974,7 @@ void P_SpawnMapThing (mapthing_t* mthing)
 		
     if (gameskill == sk_baby)
 	bit = 1;
-    else if (gameskill == sk_nightmare)
+    else if (gameskill == sk_nightmare || gameskill == sk_ultranm)
 	bit = 4;
     else
 	bit = 1<<(gameskill-1);

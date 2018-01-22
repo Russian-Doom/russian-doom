@@ -524,7 +524,7 @@ boolean ST_Responder (event_t* ev)
     // if a user keypress...
     else if (ev->type == ev_keydown)
     {
-        if (!netgame && gameskill != sk_nightmare)
+        if (!netgame && (gameskill != sk_nightmare && gameskill != sk_ultranm))
         {
             // 'dqd' cheat for toggleable god mode
             if (cht_CheckCheat(&cheat_god, ev->data2))

@@ -71,6 +71,17 @@
 "edthtys? 'njn ehjdtym ckj;yjcnb\n"\
 "lf;t yt ,kbpjr r xtcnyjve>\n\n"PRESSYN 
 
+// Сложность аналогична "кошмарной",
+// однако монстры не воскрешаются,
+// и объем аммуниции не удваивается.
+//
+// (Уверены, что сможете выжить?)
+#define ULTRANM	\
+"ckj;yjcnm fyfkjubxyf ^rjivfhyjq^<\n"\
+"jlyfrj vjycnhs yt djcrhtif.ncz<\n"\
+"b j,]tv fvveybwbb yt eldfbdftncz>\n\n"\
+"(edthtys< xnj cvj;tnt ds;bnm?)"
+
 // Это демонстрационная версия игры.
 // Вам необходимо приобрести всю трилогию.
 #define SWSTRING	\

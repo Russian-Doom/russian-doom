@@ -1964,8 +1964,9 @@ G_InitNew
     }
     */
 
-    if (skill > sk_nightmare)
-    skill = sk_nightmare;
+    // [JN] Increased from sk_nightmare to sk_ultranm
+    if (skill > sk_ultranm)
+    skill = sk_ultranm;
 
     if (gameversion >= exe_ultimate)
     {
@@ -2005,7 +2006,7 @@ G_InitNew
     respawnmonsters = false;
 
     // [crispy] make sure "fast" parameters are really only applied once
-    if ((fastparm || skill == sk_nightmare) && !fast_applied)
+    if ((fastparm || skill == sk_nightmare || skill == sk_ultranm) && !fast_applied)
     {
         for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
 	    // [crispy] Fix infinite loop caused by Demon speed bug
@@ -2017,6 +2018,27 @@ G_InitNew
         mobjinfo[MT_BRUISERSHOT].speed = 20*FRACUNIT;
         mobjinfo[MT_HEADSHOT].speed = 20*FRACUNIT;
         mobjinfo[MT_TROOPSHOT].speed = 20*FRACUNIT;
+
+        if (skill == sk_ultranm)
+        {
+            mobjinfo[MT_POSSESSED].speed = 12;  // Zombieman
+            mobjinfo[MT_SHOTGUY].speed = 12;    // Shotgun guy
+            mobjinfo[MT_CHAINGUY].speed = 12;   // Chaingunner
+            mobjinfo[MT_TROOP].speed = 12;      // Imp
+            mobjinfo[MT_SKULL].speed = 12;      // Lost Soul
+            mobjinfo[MT_HEAD].speed = 12;       // Cacodemon
+            mobjinfo[MT_KNIGHT].speed = 12;     // Hell Knight
+            mobjinfo[MT_BRUISER].speed = 12;    // Baron of Hell
+            mobjinfo[MT_BABY].speed = 14;       // Arachnotron
+            mobjinfo[MT_PAIN].speed = 12;       // Pain Elemental
+            mobjinfo[MT_UNDEAD].speed = 12;     // Revenant
+            mobjinfo[MT_FATSO].speed = 10;      // Mancubus
+            mobjinfo[MT_VILE].speed = 17;       // Archvile
+            mobjinfo[MT_SPIDER].speed = 15;     // Spider Mastermind
+            mobjinfo[MT_CYBORG].speed = 18;     // Cyberdemon
+            mobjinfo[MT_WOLFSS].speed = 12;     // Wolf SS
+        }
+        
         fast_applied = true;
     }
     else if (!fastparm && skill != sk_nightmare && fast_applied)
