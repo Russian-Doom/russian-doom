@@ -35,17 +35,6 @@
 // Data.
 #include "sounds.h"
 
-// [JN] Needed for Watcom
-#ifndef MAX
-#define MAX(a,b)    (((a) > (b)) ? (a) : (b))
-#endif
-#ifndef MIN
-#define MIN(a,b)    (((a) < (b)) ? (a) : (b))
-#endif
-#ifndef BETWEEN
-#define BETWEEN(l,u,x) (((l)>(x))?(l):((x)>(u))?(u):(x))
-#endif
-
 
 fixed_t		tmbbox[4];
 mobj_t*		tmthing;

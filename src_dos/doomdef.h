@@ -238,6 +238,17 @@ fixed_t FixedDiv2 (fixed_t a, fixed_t b);
 #define SHORT(x)	(x)
 #define LONG(x)		(x)
 
+// [JN] Needed for Watcom
+#ifndef MAX
+#define MAX(a,b)    (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef MIN
+#define MIN(a,b)    (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef BETWEEN
+#define BETWEEN(l,u,x) (((l)>(x))?(l):((x)>(u))?(u):(x))
+#endif
+
 // DOOM basic types (boolean),
 //  and max/min values.
 //#include "doomtype.h"
