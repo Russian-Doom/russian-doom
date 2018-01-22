@@ -31,10 +31,6 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [Strawberry Doom](http://remood.org/) source port
 - RestlessRodent aka GhostlyDeath
 
-#### [DOSDoom](https://doomwiki.org/wiki/DOSDoom) source port
-- Chi Hoang
-- The DOSDoom Team
-
 #### [SDL](https://www.libsdl.org/), [SDL_mixer](https://www.libsdl.org/projects/SDL_mixer/) and [SDL_net](https://www.libsdl.org/projects/SDL_net/)
 - Sam Lantinga
 
