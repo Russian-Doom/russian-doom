@@ -1120,7 +1120,7 @@ P_SpawnPlayerMissile
     }
     
     // [JN] Mouselook: also count vertical angles
-    if (!linetarget && mlook)
+    if (singleplayer && !linetarget && mlook)
     {
         an = source->angle;
         slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 173;

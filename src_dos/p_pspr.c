@@ -717,7 +717,7 @@ void P_BulletSlope (mobj_t*	mo)
 	    bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
 	}
     // [JN] Mouselook: also count vertical angles
-    if (!linetarget && mlook)
+    if (singleplayer && !linetarget && mlook)
 	{
 	    an += 2 << 26;
 	    bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 173;
