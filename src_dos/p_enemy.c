@@ -744,7 +744,7 @@ void A_Chase (mobj_t*	actor)
     {
 	actor->flags &= ~MF_JUSTATTACKED;
     // [JN] Ultra-Nightmare: don't call P_NewChaseDir
-	if (gameskill != sk_nightmare && !fastparm)
+	if ((gameskill != sk_nightmare || gameskill != sk_ultranm) && !fastparm)
 	    P_NewChaseDir (actor);
 	return;
     }
@@ -843,7 +843,7 @@ void A_PosAttack (mobj_t* actor)
     S_StartSound (actor, sfx_pistol);
     angle += (P_Random()-P_Random())<<20;
 
-    damage = ((P_Random()%5)+1)*3;
+    damage = ((P_Random()%5)+1)*(sk_ultranm ? 5 : 3);
 
     P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
 }
@@ -868,7 +868,7 @@ void A_SPosAttack (mobj_t* actor)
     {
 	angle = bangle + ((P_Random()-P_Random())<<20);
 
-    damage = ((P_Random()%5)+1)*3;
+    damage = ((P_Random()%5)+1)*(sk_ultranm ? 5 : 3);
 
 	P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
     }
@@ -891,7 +891,7 @@ void A_CPosAttack (mobj_t* actor)
 
     angle = bangle + ((P_Random()-P_Random())<<20);
 
-    damage = ((P_Random()%5)+1)*3;
+    damage = ((P_Random()%5)+1)*(sk_ultranm ? 5 : 3);
 
     P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
 }

@@ -68,6 +68,17 @@
 "edthtys? 'njn ehjdtym ckj;yjcnb\n"\
 "lf;t yt ,kbpjr r xtcnyjve>\n\n"PRESSYN 
 
+// Монстры не воскрешаются, однако
+// их скорость и диапазон урона,
+// наносимого игроку, увеличены.
+//
+// Уверены, что сможете выжить?
+#define ULTRANM	\
+"vjycnhs yt djcrhtif.ncz< jlyfrj\n"\
+"b[ crjhjcnm b lbfgfpjy ehjyf<\n"\
+"yfyjcbvjuj buhjre< edtkbxtys>\n\n"\
+"edthtys< xnj cvj;tnt ds;bnm?\n\n"PRESSYN
+
 // Это демонстрационная версия игры.
 // Вам необходимо приобрести всю трилогию.
 #define SWSTRING	\

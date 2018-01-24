@@ -1430,8 +1430,9 @@ void G_InitNew (skill_t skill, int episode, int map)
         S_ResumeSound ();
     }
 
-    if (skill > sk_nightmare)
-    skill = sk_nightmare;
+    // [JN] Increased from sk_nightmare to sk_ultranm
+    if (skill > sk_ultranm)
+    skill = sk_ultranm;
 
     if (episode == 0)
     episode = 4;
@@ -1452,9 +1453,8 @@ void G_InitNew (skill_t skill, int episode, int map)
     else
     respawnmonsters = false;
 
-    // [JN] Ultra-Nightmare: fast monsters
     // [crispy] make sure "fast" parameters are really only applied once
-    if ((fastparm || skill == sk_nightmare) && !fast_applied)
+    if ((fastparm || skill == sk_nightmare || skill == sk_ultranm) && !fast_applied)
     {
         for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
         // [crispy] Fix infinite loop caused by Demon speed bug
@@ -1465,9 +1465,44 @@ void G_InitNew (skill_t skill, int episode, int map)
         mobjinfo[MT_BRUISERSHOT].speed = 20*FRACUNIT;
         mobjinfo[MT_HEADSHOT].speed = 20*FRACUNIT;
         mobjinfo[MT_TROOPSHOT].speed = 20*FRACUNIT;
+
+        // [JN] Ultra Nightmare definitions
+        if (skill == sk_ultranm)
+        {
+            // Monster's speed                           Name (initial value)
+            mobjinfo[MT_POSSESSED].speed = 12;           // Zombieman (8)
+            mobjinfo[MT_SHOTGUY].speed = 12;             // Shotgun guy (8)
+            mobjinfo[MT_CHAINGUY].speed = 12;            // Chaingunner (8)
+            mobjinfo[MT_TROOP].speed = 12;               // Imp (8)
+            mobjinfo[MT_SKULL].speed = 12;               // Lost Soul (8)
+            mobjinfo[MT_HEAD].speed = 12;                // Cacodemon (8)
+            mobjinfo[MT_KNIGHT].speed = 12;              // Hell Knight (8)
+            mobjinfo[MT_BRUISER].speed = 12;             // Baron of Hell (8)
+            mobjinfo[MT_BABY].speed = 14;                // Arachnotron (12)
+            mobjinfo[MT_PAIN].speed = 12;                // Pain Elemental (8)
+            mobjinfo[MT_UNDEAD].speed = 12;              // Revenant (8)
+            mobjinfo[MT_FATSO].speed = 10;               // Mancubus (8)
+            mobjinfo[MT_VILE].speed = 17;                // Archvile (15)
+            mobjinfo[MT_SPIDER].speed = 15;              // Spider Mastermind (12)
+            mobjinfo[MT_CYBORG].speed = 18;              // Cyberdemon (16)
+            mobjinfo[MT_WOLFSS].speed = 12;              // Wolf SS (8)
+
+            // Monster's missiles speed                  Name (initial value)
+            mobjinfo[MT_ARACHPLAZ].speed = 30*FRACUNIT;  // Arachnotron (25*FRACUNIT)
+            mobjinfo[MT_FATSHOT].speed = 25*FRACUNIT;    // Mancubus (20*FRACUNIT)
+
+            // Monster's damage                          Name (initial value)
+            mobjinfo[MT_TROOPSHOT].damage = 5;           // Imp (3)
+            mobjinfo[MT_HEADSHOT].damage = 9;            // Cacodemon (5)
+            mobjinfo[MT_BRUISERSHOT].damage = 12;        // Knight / Baron (8) 
+            mobjinfo[MT_ARACHPLAZ].damage = 8;           // Arachnotron (5)
+            mobjinfo[MT_TRACER].damage = 15;             // Revenant (10)
+            mobjinfo[MT_FATSHOT].damage = 15;            // Mancubus (10)
+        }
+
         fast_applied = true;
     }
-    else if (!fastparm && skill != sk_nightmare && fast_applied)
+    else if (!fastparm && skill != sk_nightmare && skill != sk_ultranm && fast_applied)
     {
         for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
         states[i].tics <<= 1;
