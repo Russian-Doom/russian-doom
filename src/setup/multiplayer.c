@@ -81,7 +81,8 @@ static char *doom_skills[] =
     "Юй, не так грубо.",    // "Hey, not too rough."
     "Сделай мне больно.",   // "Hurt me plenty."
     "Ультранасилие.",       // "Ultra-Violence."
-    "КОЩМАР!",              // "NIGHTMARE!"
+    "Кошмар.",              // "Nightmare."
+    "Ультра кошмар!",       // "Ultra Nightmare!
 };
 
 static char *chex_skills[] =
@@ -785,7 +786,7 @@ static void StartGameMenu(char *window_title, int multiplayer)
 
     TXT_AddWidgets(window,
                 TXT_NewLabel("Сложность"),
-                skillbutton = TXT_NewDropdownList(&skill, doom_skills, 5),
+                skillbutton = TXT_NewDropdownList(&skill, doom_skills, 6),
                 TXT_NewLabel("Уровень"),
                 warpbutton = TXT_NewButton2("?", LevelSelectDialog, NULL),
                 NULL);
@@ -808,7 +809,7 @@ static void StartGameMenu(char *window_title, int multiplayer)
                 TXT_TABLE_OVERFLOW_RIGHT,
                 TXT_NewCheckBox("Быстрые монстры", &fast),
                 TXT_TABLE_OVERFLOW_RIGHT,
-                TXT_NewCheckBox("Монстры восстанавливаютс€", &respawn),
+                TXT_NewCheckBox("Монстры воскрешаютс€", &respawn),
                 TXT_TABLE_OVERFLOW_RIGHT,
                 NULL);
 
