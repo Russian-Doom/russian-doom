@@ -43,6 +43,7 @@
 
 #define BONUSADD	6
 
+extern int infragreen_visor;     // [JN] Инфразеленый визор усиления освещения
 extern int ssg_blast_enemies;    // [JN] Двуствольное ружье может разрывать врагов
 extern int negative_health;      // [JN] Отображать отрицательное здоровье
 extern int agressive_lost_souls; // [JN] Повышенная агрессивность Потерянных душ
@@ -744,7 +745,7 @@ P_KillMobj
     // [JN] & [crispy] Сброс бонусной желтой палитры при смерти игрока
     target->player->bonuscount = 0;
     // [JN] & [crispy] Снятие эффекта инвертированной палитры при смерти игрока
-    target->player->fixedcolormap = target->player->powers[pw_infrared] ? 1 : 0;
+    target->player->fixedcolormap = target->player->powers[pw_infrared] ? (infragreen_visor ? 33 : 1) : 0;
     P_DropWeapon (target->player);
 
 	if (target->player == &players[consoleplayer]
