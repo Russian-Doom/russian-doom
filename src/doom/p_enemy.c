@@ -835,7 +835,12 @@ void A_PosAttack (mobj_t* actor)
 
     S_StartSound (actor, sfx_pistol);
     angle += P_SubRandom() << 20;
-    damage = ((P_Random()%5)+1)*(sk_ultranm ? 5 : 3);
+    
+    if (sk_ultranm && !demorecording && !demoplayback)
+    damage = ((P_Random()%5)+1)*5;
+    else
+    damage = ((P_Random()%5)+1)*3;
+
     P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
 }
 
@@ -857,10 +862,15 @@ void A_SPosAttack (mobj_t* actor)
 
     for (i=0 ; i<3 ; i++)
     {
-	angle = bangle + (P_SubRandom() << 20);
-	damage = ((P_Random()%5)+1)*(sk_ultranm ? 5 : 3);
-	P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
-    }
+    angle = bangle + (P_SubRandom() << 20);
+
+    if (sk_ultranm && !demorecording && !demoplayback)
+    damage = ((P_Random()%5)+1)*5;
+    else
+    damage = ((P_Random()%5)+1)*3;
+
+    P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
+    }        
 }
 
 void A_CPosAttack (mobj_t* actor)
@@ -879,7 +889,12 @@ void A_CPosAttack (mobj_t* actor)
     slope = P_AimLineAttack (actor, bangle, MISSILERANGE);
 
     angle = bangle + (P_SubRandom() << 20);
-    damage = ((P_Random()%5)+1)*(sk_ultranm ? 5 : 3);
+
+    if (sk_ultranm && !demorecording && !demoplayback)
+    damage = ((P_Random()%5)+1)*5;
+    else
+    damage = ((P_Random()%5)+1)*3;
+
     P_LineAttack (actor, angle, MISSILERANGE, slope, damage);
 }
 
