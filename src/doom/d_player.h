@@ -155,6 +155,9 @@ typedef struct player_s
 
     int     lookdir;
     boolean centering;
+    
+    // [JN] Local time widget.
+    char* message_time;
 } player_t;
 
 

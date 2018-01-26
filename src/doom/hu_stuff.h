@@ -30,6 +30,11 @@
 #define HU_FONTSTART    '!' // the first font characters
 #define HU_FONTEND      '_' // the last font characters
 
+// [JN] Definitions of small gray font (note: this is not full array)
+#define HU_FONTSTART_GRAY    '!' // the first font characters
+#define HU_FONTEND_GRAY      ':' // the last font characters
+#define HU_FONTSIZE_GRAY     (HU_FONTEND_GRAY - HU_FONTSTART_GRAY + 1)	
+
 // Calculate # of glyphs in font.
 #define HU_FONTSIZE     (HU_FONTEND - HU_FONTSTART + 1)	
 #define HU_BROADCAST    5

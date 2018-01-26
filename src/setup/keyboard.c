@@ -37,7 +37,7 @@ static int always_run = 0;
 // Keys within these groups cannot have the same value.
 
 static int *controls[] = { &key_left, &key_right, &key_up, &key_down,
-                           &key_toggleautorun,&key_togglemlook,
+                           &key_toggleautorun, &key_togglemlook, &key_toggletime,
                            &key_strafeleft, &key_straferight, &key_fire,
                            &key_use, &key_strafe, &key_speed, &key_jump,
                            &key_flyup, &key_flydown, &key_flycenter,
@@ -373,6 +373,7 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 
     AddKeyControl(table, "Показать последнее сообщение ", &key_message_refresh);
     AddKeyControl(table, "Закончить запись демо",         &key_demo_quit);
+    AddKeyControl(table, "Отобразить системное верм€",    &key_toggletime);
 
     AddSectionLabel(table, "Карта", true);
     AddKeyControl(table, "Открыть карту",           &key_map_toggle);

@@ -19,6 +19,7 @@
 
 
 #include <ctype.h>
+#include <time.h>
 
 #include "doomdef.h"
 #include "doomkeys.h"
@@ -64,6 +65,7 @@
 #define HU_COORDX       (ORIGWIDTH - 8 * hu_font['A'-HU_FONTSTART]->width)
 
 extern int draw_shadowed_text;
+extern int local_time;
 
 char *chat_macros[10] =
 {
@@ -90,6 +92,8 @@ char* player_names[] =
 char        chat_char; // remove later.
 static      player_t* plr;
 patch_t*    hu_font[HU_FONTSIZE];
+patch_t*    hu_font_gray[HU_FONTSIZE];    // [JN] Small gray font
+
 static      hu_textline_t w_title;
 boolean     chat_on;
 static      hu_itext_t w_chat;
@@ -104,6 +108,10 @@ static boolean  message_nottobefuckedwith;
 
 static hu_stext_t w_message;
 static int message_counter;
+
+// [JN] Local time widget
+static boolean  message_on_time;
+static hu_stext_t w_message_time;
 
 extern int showMessages;
 
@@ -356,15 +364,25 @@ void HU_Init(void)
 {
     int     i;
     int     j;
+    int     g;
     char    buffer[9];
 
     // load the heads-up font
     j = HU_FONTSTART;
+    g = HU_FONTSTART_GRAY;
 
+    // [JN] Standard STCFN font
     for (i=0;i<HU_FONTSIZE;i++)
     {
         DEH_snprintf(buffer, 9, "STCFN%.3d", j++);
         hu_font[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    // [JN] Small gray STCFG font
+    for (i=0;i<HU_FONTSIZE_GRAY;i++)
+    {
+        DEH_snprintf(buffer, 9, "STCFG%.3d", g++);
+        hu_font_gray[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 }
 
@@ -385,12 +403,16 @@ void HU_Start(void)
 
     plr = &players[consoleplayer];
     message_on = false;
+    message_on_time = true; // [JN] Local time widget
     message_dontfuckwithme = false;
     message_nottobefuckedwith = false;
     chat_on = false;
 
     // create the message widget
     HUlib_initSText(&w_message, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, hu_font, HU_FONTSTART, &message_on);
+
+    // [JN] Create the local time widget
+    HUlib_initSText(&w_message_time, 294, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
 
     // create the map title widget
     // [JN] Твик для карты (-1), что бы тень не оставалась
@@ -459,6 +481,11 @@ void HU_Start(void)
 void HU_Drawer(void)
 {
     HUlib_drawSText(&w_message);
+    if (local_time)
+    {
+        // [JN] Draw local time widget
+        HUlib_drawSText(&w_message_time);
+    }
     HUlib_drawIText(&w_chat);
 
     if (automapactive)
@@ -469,6 +496,11 @@ void HU_Drawer(void)
 void HU_Erase(void)
 {
     HUlib_eraseSText(&w_message);
+    if (local_time)
+    {
+        // [JN] Erase local time widget
+        HUlib_eraseSText(&w_message_time);
+    }
     HUlib_eraseIText(&w_chat);
     HUlib_eraseTextLine(&w_title);
 }
@@ -478,6 +510,14 @@ void HU_Ticker(void)
 {
     int     i, rc;
     char    c;
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    static char s[64];
+    strftime(s, sizeof(s), "%H:%M", tm);
+
+    // [JN] Start local time widget
+    if (local_time)
+    plr->message_time = (s);
 
     // tick down message counter if message is up
     if (message_counter && !--message_counter)
@@ -488,6 +528,14 @@ void HU_Ticker(void)
 
     if (showMessages || message_dontfuckwithme)
     {
+        // [JN] Handling local time widget
+        if (plr->message_time)
+        {
+            HUlib_addMessageToSText(&w_message_time, 0, plr->message_time);
+            plr->message_time = 0;
+            message_on_time = true;
+        }
+
         // display message if necessary
         if ((plr->message && !message_nottobefuckedwith) || (plr->message && message_dontfuckwithme))
         {

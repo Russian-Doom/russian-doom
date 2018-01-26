@@ -135,6 +135,7 @@ int show_endoom   = 0;
 int show_diskicon = 1;
 int lcd_gamma_fix = 1; // [JN] Оптимизация палитры Doom
 int translucency  = 1; // [JN] Прозрачность объектов
+int local_time    = 0; // [JN] Local time widget
 
 boolean flip_levels_cmdline = false;
 
@@ -414,6 +415,7 @@ void D_BindVariables(void)
     M_BindIntVariable("snd_channels",           &snd_channels);
     M_BindIntVariable("show_endoom",            &show_endoom);
     M_BindIntVariable("mlook",                  &mlook);
+    M_BindIntVariable("local_time",             &local_time);
 
     // [JN] Дополнительные параметры игры
     

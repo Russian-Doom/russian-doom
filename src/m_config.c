@@ -813,6 +813,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(mlook),
 
     //!
+    // [JN] Local time widget variable.
+    //
+
+    CONFIG_VARIABLE_INT(local_time),
+
+    //!
     // Mouse acceleration factor.  When the speed of mouse movement
     // exceeds the threshold value (mouse_threshold), the speed is
     // multiplied by this value.
@@ -1685,6 +1691,12 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_KEY(key_togglemlook),
+
+    //!
+    // [JN] Toggle local time widget.
+    //
+
+    CONFIG_VARIABLE_KEY(key_toggletime),
 
     //!
     // [JN] Дополнительные параметры игры
