@@ -597,7 +597,7 @@ P_SpawnMobjSafe
     mobj->flags = info->flags;
     mobj->health = info->spawnhealth;
 
-    if (gameskill != sk_nightmare || gameskill != sk_ultranm)
+    if (gameskill != sk_nightmare && gameskill != sk_ultranm)
 	mobj->reactiontime = info->reactiontime;
     
     mobj->lastlook = safe ? Crispy_Random () % MAXPLAYERS : P_Random () % MAXPLAYERS;
