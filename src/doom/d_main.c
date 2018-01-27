@@ -675,12 +675,9 @@ void D_DoAdvanceDemo (void)
         break;
     
         gamestate = GS_DEMOSCREEN;
-        if ( gamemode == commercial)
+        if (gamemode == commercial)
         {
             pagetic = TICRATE * 11;
-            if (gamemode == shareware)
-            pagename = DEH_String("TITLEPIS");
-            else
             pagename = DEH_String("TITLEPIC");
 
             S_StartMusic(mus_dm2ttl);
@@ -691,6 +688,8 @@ void D_DoAdvanceDemo (void)
 
             if (gameversion >= exe_ultimate)
                 pagename = DEH_String("CREDIT");
+            else if (gamemode == registered)
+                pagename = DEH_String("CREDITS");
             else
                 pagename = DEH_String("HELP2");
         }

@@ -522,9 +522,7 @@ void D_DoAdvanceDemo (void)
         if (commercial)
         {
             pagetic = 35 * 11;
-            if (shareware)
-            pagename = "TITLEPIS";
-            else if (tnt)
+            if (tnt)
             pagename = "TITLEPIT";
             else if (plutonia)
             pagename = "TITLEPIP";
@@ -537,7 +535,9 @@ void D_DoAdvanceDemo (void)
         {
         pagetic = 200;
 
-        if (shareware || registered)
+        if (shareware)
+        pagename = "HELP2";
+        else if (registered)
         pagename = "CREDITS";
         else if (retail)
         pagename = "CREDITU";
