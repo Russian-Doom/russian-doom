@@ -577,12 +577,14 @@ void R_StoreWallRange (int start, int stop)
     {
         int numdrawsegs_old = numdrawsegs;
 
-        if (numdrawsegs_old == MAXDRAWSEGS)
-        printf("R_StoreWallRange: Hit MAXDRAWSEGS (%d) Vanilla limit.\n", MAXDRAWSEGS);
-
         numdrawsegs = numdrawsegs ? 2 * numdrawsegs : MAXDRAWSEGS;
-        drawsegs = realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));
+        drawsegs = I_Realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));
+        memset(drawsegs + numdrawsegs_old, 0, (numdrawsegs - numdrawsegs_old) * sizeof(*drawsegs));
+
         ds_p = drawsegs + numdrawsegs_old;
+
+        if (numdrawsegs_old)
+        fprintf(stderr, "R_StoreWallRange: ????????? ????? MAXDRAWSEGS (%d), ???????? ?? (%d).\n", numdrawsegs_old, numdrawsegs);
     }
 
 #ifdef RANGECHECK
