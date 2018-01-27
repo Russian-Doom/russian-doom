@@ -168,7 +168,7 @@ void P_InitPicAnims (void)
 	if (lastanim >= anims + maxanims)
 	{
 	    size_t newmax = maxanims ? 2 * maxanims : MAXANIMS;
-	    anims = crispy_realloc(anims, newmax * sizeof(*anims));
+	    anims = I_Realloc(anims, newmax * sizeof(*anims));
 	    lastanim = anims + maxanims;
 	    maxanims = newmax;
 	}
