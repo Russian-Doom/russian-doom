@@ -89,7 +89,7 @@ void S_ResumeSound(void);
 //
 // Updates music & sounds
 //
-void S_UpdateSounds(void* listener);
+void S_UpdateSounds(void* listener_p);
 
 void S_SetMusicVolume(int volume);
 void S_SetSfxVolume(int volume);
