@@ -363,13 +363,15 @@ P_FindNextHighestFloor
     static int heightlist_size = 0;
 
     // [crispy] remove MAX_ADJOINING_SECTORS Vanilla limit
+    // from prboom-plus/src/p_spec.c:404-411
     if (sec->linecount > heightlist_size)
     {
-	do
-	{
-        heightlist_size = heightlist_size ? 2 * heightlist_size : MAX_ADJOINING_SECTORS;
-	} while (sec->linecount > heightlist_size);
-	heightlist = realloc(heightlist, heightlist_size * sizeof(*heightlist));
+        do
+        {
+            heightlist_size = heightlist_size ? 2 * heightlist_size : MAX_ADJOINING_SECTORS;
+        } while (sec->linecount > heightlist_size);
+
+        heightlist = I_Realloc(heightlist, heightlist_size * sizeof(*heightlist));
     }
 
     for (i=0, h=0; i < sec->linecount; i++)
