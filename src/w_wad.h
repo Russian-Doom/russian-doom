@@ -64,14 +64,14 @@ lumpindex_t W_GetNumForName(char *name);
 int W_LumpLength(lumpindex_t lump);
 void W_ReadLump(lumpindex_t lump, void *dest);
 
-void *W_CacheLumpNum(lumpindex_t lump, int tag);
+void *W_CacheLumpNum(lumpindex_t lumpnum, int tag);
 void *W_CacheLumpName(char *name, int tag);
 
 void W_GenerateHashTable(void);
 
 extern unsigned int W_LumpNameHash(const char *s);
 
-void W_ReleaseLumpNum(lumpindex_t lump);
+void W_ReleaseLumpNum(lumpindex_t lumpnum);
 void W_ReleaseLumpName(char *name);
 
 #endif
