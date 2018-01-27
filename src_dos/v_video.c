@@ -708,7 +708,7 @@ V_DrawShadow
 			 
 	    while (count--) 
 	    { 
-		*dest = *dest = tinttable[((*dest)<<8)];
+		*dest = tinttable[((*dest)<<8)];
 		dest += SCREENWIDTH; 
 	    } 
 	    column = (column_t *)(  (byte *)column + column->length + 4 ); 
