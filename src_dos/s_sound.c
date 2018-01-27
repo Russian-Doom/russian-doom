@@ -255,10 +255,12 @@ void S_StopChannel(int cnum)
 	// stop the sound playing
 	if (I_SoundIsPlaying(c->handle))
 	{
+/*
 #ifdef SAWDEBUG
 	    if (c->sfxinfo == &S_sfx[sfx_sawful])
 		fprintf(stderr, "stopped\n");
 #endif
+*/
 	    I_StopSound(c->handle);
 	}
 
@@ -607,15 +609,18 @@ S_StartSound
 ( void*		origin,
   int		sfx_id )
 {
+/*
 #ifdef SAWDEBUG
     // if (sfx_id == sfx_sawful)
     // sfx_id = sfx_itemup;
 #endif
+*/
   
     S_StartSoundAtVolume(origin, sfx_id, snd_SfxVolume);
 
 
     // UNUSED. We had problems, had we not?
+/*
 #ifdef SAWDEBUG
 {
     int i;
@@ -670,6 +675,7 @@ S_StartSound
     }
 }
 #endif
+*/
  
 }
 //
