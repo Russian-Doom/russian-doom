@@ -245,24 +245,27 @@ void R_ClearPlanes (void)
 
 
 // [crispy] remove MAXVISPLANES Vanilla limit
-void R_RaiseVisplanes (visplane_t** vp)
+static void R_RaiseVisplanes (visplane_t** vp)
 {
     if (lastvisplane - visplanes == numvisplanes)
     {
-        int numvisplanes_old = numvisplanes;
-        visplane_t* visplanes_old = visplanes;
+	int numvisplanes_old = numvisplanes;
+	visplane_t* visplanes_old = visplanes;
 
-        if (numvisplanes_old == MAXVISPLANES)
-        printf("R_FindPlane: Hit MAXVISPLANES (%d) Vanilla limit.\n", MAXVISPLANES);
+	numvisplanes = numvisplanes ? 2 * numvisplanes : MAXVISPLANES;
+	visplanes = I_Realloc(visplanes, numvisplanes * sizeof(*visplanes));
+	memset(visplanes + numvisplanes_old, 0, (numvisplanes - numvisplanes_old) * sizeof(*visplanes));
 
-        numvisplanes = numvisplanes ? 2 * numvisplanes : MAXVISPLANES;
-        visplanes = realloc(visplanes, numvisplanes * sizeof(*visplanes));
-        lastvisplane = visplanes + numvisplanes_old;
-        floorplane = visplanes + (floorplane - visplanes_old);
-        ceilingplane = visplanes + (ceilingplane - visplanes_old);
+	lastvisplane = visplanes + numvisplanes_old;
+	floorplane = visplanes + (floorplane - visplanes_old);
+	ceilingplane = visplanes + (ceilingplane - visplanes_old);
 
-        if (vp)
-        *vp = visplanes + (*vp - visplanes_old);
+	if (numvisplanes_old)
+	    fprintf(stderr, "R_FindPlane: достигнут лимит MAXVISPLANES (%d), увеличен до (%d).\n", numvisplanes_old, numvisplanes);
+
+	// keep the pointer passed as argument in relation to the visplanes pointer
+	if (vp)
+	    *vp = visplanes + (*vp - visplanes_old);
     }
 }
 
