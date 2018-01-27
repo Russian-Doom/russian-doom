@@ -744,7 +744,7 @@ void A_Chase (mobj_t*	actor)
     {
 	actor->flags &= ~MF_JUSTATTACKED;
     // [JN] Ultra-Nightmare: don't call P_NewChaseDir
-	if ((gameskill != sk_nightmare || gameskill != sk_ultranm) && !fastparm)
+	if (gameskill != sk_nightmare && gameskill != sk_ultranm && !fastparm)
 	    P_NewChaseDir (actor);
 	return;
     }
