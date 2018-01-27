@@ -110,7 +110,7 @@ void I_UpdateNoBlit (void);
 void I_FinishUpdate (void);
 
 // Wait for vertical retrace or pause a bit.
-void I_WaitVBL(int count);
+void I_WaitVBL(int vbls);
 
 void I_ReadScreen (byte* scr);
 
