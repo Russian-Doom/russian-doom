@@ -180,7 +180,7 @@ STlib_updatePercent
 // Multiple Icon widget routines
 void
 STlib_initMultIcon
-( st_multicon_t*	mi,
+( st_multicon_t*	i,
   int			x,
   int			y,
   patch_t**		il,
