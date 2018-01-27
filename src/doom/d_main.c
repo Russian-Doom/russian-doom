@@ -1553,17 +1553,19 @@ static void D_Endoom(void)
 	// [JN] Задаём различные экраные ENDOOM для Shareware и
 	// Registered, чтобы избежать дубликации архивов с ресурсами.
 
-	if ( gamemode == shareware )    // [JN] DOOM Shareware
-		endoom = W_CacheLumpName(DEH_String("ENDOOMS"), PU_STATIC);
-	else
-	if ( gamemode == registered )   // [JN] DOOM 1 Registered 
-		endoom = W_CacheLumpName(DEH_String("ENDOOMR"), PU_STATIC);
-	else
-	if ( gamemode == retail )       // [JN] The Ultimate DOOM
-		endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
-	else
-//	if ( gamemode == commercial )   // [JN] DOOM 2 / Final DOOM
-		endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
+    if (gamemode == shareware)
+    {   // [JN] DOOM Shareware
+        endoom = W_CacheLumpName(DEH_String("ENDOOMS"), PU_STATIC);
+    }
+    else if (gamemode == registered)
+    {   // [JN] DOOM 1 Registered 
+        endoom = W_CacheLumpName(DEH_String("ENDOOMR"), PU_STATIC);
+    }
+    else
+    {
+        // [JN] The Ultimate DOOM / DOOM 2 / Final DOOM
+        endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
+    }
 
     I_Endoom(endoom);
 }
