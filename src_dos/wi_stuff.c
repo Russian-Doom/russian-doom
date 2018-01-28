@@ -1783,7 +1783,7 @@ void WI_unloadData(void)
 	}
     }
     
-    Z_Free(lnames);
+    // Z_Free(lnames);  // killough 4/26/98: this free is too early!!!
 
     Z_ChangeTag(percent, PU_CACHE);
     Z_ChangeTag(colon, PU_CACHE);
