@@ -447,7 +447,7 @@ void R_InitTextures (void)
     names = W_CacheLumpName ("PNAMES", PU_STATIC);
     nummappatches = LONG ( *((int *)names) );
     name_p = names+4;
-    patchlookup = alloca (nummappatches*sizeof(*patchlookup));
+    patchlookup = malloc (nummappatches*sizeof(*patchlookup));  // killough
     
     for (i=0 ; i<nummappatches ; i++)
     {
@@ -477,14 +477,17 @@ void R_InitTextures (void)
 	maxoff2 = 0;
     }
     numtextures = numtextures1 + numtextures2;
-	
-    textures = Z_Malloc (numtextures*4, PU_STATIC, 0);
-    texturecolumnlump = Z_Malloc (numtextures*4, PU_STATIC, 0);
-    texturecolumnofs = Z_Malloc (numtextures*4, PU_STATIC, 0);
-    texturecomposite = Z_Malloc (numtextures*4, PU_STATIC, 0);
-    texturecompositesize = Z_Malloc (numtextures*4, PU_STATIC, 0);
-    texturewidthmask = Z_Malloc (numtextures*4, PU_STATIC, 0);
-    textureheight = Z_Malloc (numtextures*4, PU_STATIC, 0);
+
+    // killough 4/9/98: make column offsets 32-bit;
+    // clean up malloc-ing to use sizeof
+
+    textures = Z_Malloc (numtextures*sizeof*(textures), PU_STATIC, 0);
+    texturecolumnlump = Z_Malloc (numtextures*sizeof*(texturecolumnlump), PU_STATIC, 0);
+    texturecolumnofs = Z_Malloc (numtextures*sizeof*(texturecolumnofs), PU_STATIC, 0);
+    texturecomposite = Z_Malloc (numtextures*sizeof*(texturecomposite), PU_STATIC, 0);
+    texturecompositesize = Z_Malloc (numtextures*sizeof*(texturecompositesize), PU_STATIC, 0);
+    texturewidthmask = Z_Malloc (numtextures*sizeof*(texturewidthmask), PU_STATIC, 0);
+    textureheight = Z_Malloc (numtextures*sizeof*(textureheight), PU_STATIC, 0);
 
     totalwidth = 0;
     
@@ -545,8 +548,13 @@ void R_InitTextures (void)
         patch->patch = 0;
         }
 	}		
-	texturecolumnlump[i] = Z_Malloc (texture->width*2, PU_STATIC,0);
-	texturecolumnofs[i] = Z_Malloc (texture->width*2, PU_STATIC,0);
+
+    // killough 4/9/98: make column offsets 32-bit;
+    // clean up malloc-ing to use sizeof
+    // killough 12/98: fix sizeofs
+
+    texturecolumnlump[i] = Z_Malloc (texture->width*sizeof**texturecolumnlump, PU_STATIC,0);
+    texturecolumnofs[i] = Z_Malloc(texture->width*sizeof**texturecolumnofs, PU_STATIC,0);
 
 	j = 1;
 	while (j*2 <= texture->width)
@@ -558,6 +566,8 @@ void R_InitTextures (void)
 	totalwidth += texture->width;
     }
 
+    free(patchlookup);  // killough
+
     Z_Free (maptex1);
     if (maptex2)
 	Z_Free (maptex2);
@@ -566,8 +576,9 @@ void R_InitTextures (void)
     for (i=0 ; i<numtextures ; i++)
 	R_GenerateLookup (i);
     
-    // Create translation table for global animation.
-    texturetranslation = Z_Malloc ((numtextures+1)*4, PU_STATIC, 0);
+    // killough 4/9/98: make column offsets 32-bit;
+    // clean up malloc-ing to use sizeof
+    texturetranslation = Z_Malloc((numtextures+1)*sizeof*texturetranslation, PU_STATIC, 0);
     
     for (i=0 ; i<numtextures ; i++)
 	texturetranslation[i] = i;
