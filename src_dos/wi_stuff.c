@@ -402,8 +402,7 @@ static patch_t**	lnames;
 
 void WI_slamBackground(void)
 {
-    memcpy(screens[0], screens[1], SCREENWIDTH * SCREENHEIGHT);
-    V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
+    V_CopyRect(0, 0, 1, SCREENWIDTH, SCREENHEIGHT, 0, 0, 0);  // killough 11/98
 }
 
 // The ticker is used to detect keys
