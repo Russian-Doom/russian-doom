@@ -124,17 +124,12 @@ R_ClipSolidWallSegment
 	    // Post is entirely visible (above start),
 	    //  so insert a new clippost.
 	    R_StoreWallRange (first, last);
-	    next = newend;
-	    newend++;
-	    
-	    while (next != start)
-	    {
-		*next = *(next-1);
-		next--;
-	    }
-	    next->first = first;
-	    next->last = last;
-	    return;
+
+        // 1/11/98 killough: performance tuning using fast memmove
+        memmove(start+1,start,(++newend-start)*sizeof(*start));
+        start->first = first;
+        start->last = last;
+        return;
 	}
 		
 	// There is a fragment above *start.
@@ -318,7 +313,7 @@ void R_AddLine (seg_t*	line)
     x2 = viewangletox[angle2];
 
     // Does not cross a pixel?
-    if (x1 == x2)
+    if (x1 >= x2)       // killough 1/31/98 -- change == to >= for robustness
 	return;				
 	
     backsector = line->backsector;
@@ -560,32 +555,30 @@ void R_Subsector (int num)
 // Renders all subsectors below a given node,
 //  traversing subtree recursively.
 // Just call with BSP root.
+//
+// killough 5/2/98: reformatted, removed tail recursion
+
 void R_RenderBSPNode (int bspnum)
 {
-    node_t*	bsp;
-    int		side;
-
-    // Found a subsector?
-    if (bspnum & NF_SUBSECTOR)
+    while (!(bspnum & NF_SUBSECTOR))  // Found a subsector?
     {
-	if (bspnum == -1)			
-	    R_Subsector (0);
-	else
-	    R_Subsector (bspnum&(~NF_SUBSECTOR));
-	return;
+        node_t *bsp = &nodes[bspnum];
+
+        // Decide which side the view point is on.
+        int side = R_PointOnSide(viewx, viewy, bsp);
+
+        // Recursively divide front space.
+        R_RenderBSPNode(bsp->children[side]);
+
+        // Possibly divide back space.
+
+        if (!R_CheckBBox(bsp->bbox[side^=1]))
+        return;
+
+        bspnum = bsp->children[side];
     }
-		
-    bsp = &nodes[bspnum];
-    
-    // Decide which side the view point is on.
-    side = R_PointOnSide (viewx, viewy, bsp);
 
-    // Recursively divide front space.
-    R_RenderBSPNode (bsp->children[side]); 
-
-    // Possibly divide back space.
-    if (R_CheckBBox (bsp->bbox[side^1]))	
-	R_RenderBSPNode (bsp->children[side^1]);
+    R_Subsector(bspnum == -1 ? 0 : bspnum & ~NF_SUBSECTOR);
 }
 
 
