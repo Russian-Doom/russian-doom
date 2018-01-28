@@ -32,6 +32,7 @@
 
 #include "r_local.h"
 #include "r_sky.h"
+#include "r_segs.h"
 
 // [JN] Brightmaps
 extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
@@ -270,7 +271,7 @@ R_RenderMaskedSegRange
 	    ? frontsector->ceilingheight : backsector->ceilingheight;
 	dc_texturemid = dc_texturemid - viewz;
     }
-    dc_texturemid += curline->sidedef->rowoffset;
+    dc_texturemid += curline->sidedef->rowoffset - SPARKLEFIX * SPARKLEFIX; // [JN] Sparkle fix (some of my magic here)
 			
     if (fixedcolormap)
 	dc_colormap = fixedcolormap;
@@ -343,6 +344,9 @@ R_RenderMaskedSegRange
 //
 #define HEIGHTBITS		12
 #define HEIGHTUNIT		(1<<HEIGHTBITS)
+
+// [JN] Note: SPARKLEFIX has been taken from Doom Retro.
+// Many thanks to Brad Harding for his research and fixing this bug!
 
 void R_RenderSegLoop (void)
 {
@@ -418,7 +422,7 @@ void R_RenderSegLoop (void)
         // [JN] All wall segments (top/middle/bottom) now using own lights
 	    // dc_colormap = walllights[index];
 	    dc_x = rw_x;
-	    dc_iscale = 0xffffffffu / (unsigned)rw_scale;
+	    dc_iscale = 0xffffffffu / (unsigned)rw_scale - SPARKLEFIX; // [JN] Sparkle fix
 	}
 	
 	// draw the wall tiers
@@ -456,7 +460,7 @@ void R_RenderSegLoop (void)
 		{
 		    dc_yl = yl;
 		    dc_yh = mid;
-		    dc_texturemid = rw_toptexturemid;
+		    dc_texturemid = rw_toptexturemid + (dc_yl - centery + 1) * SPARKLEFIX; // [JN] Sparkle fix
 		    dc_source = R_GetColumn(toptexture,texturecolumn);
 
             // [JN] Account fixed colormap
@@ -492,7 +496,7 @@ void R_RenderSegLoop (void)
 		{
 		    dc_yl = mid;
 		    dc_yh = yh;
-		    dc_texturemid = rw_bottomtexturemid;
+		    dc_texturemid = rw_bottomtexturemid + (dc_yl - centery + 1) * SPARKLEFIX; // [JN] Sparkle fix
 		    dc_source = R_GetColumn(bottomtexture,
 					    texturecolumn);
 

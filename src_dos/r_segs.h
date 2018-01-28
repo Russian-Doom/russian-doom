@@ -22,6 +22,10 @@
 #ifndef __R_SEGS__
 #define __R_SEGS__
 
+// [BH] Compensate for rounding errors in DOOM's renderer by stretching wall
+//  columns by 1px. This eliminates the randomly-colored pixels ("sparkles")
+//  that appear at the bottom of some columns.
+#define SPARKLEFIX      64
 
 void
 R_RenderMaskedSegRange
