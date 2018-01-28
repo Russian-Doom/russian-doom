@@ -1579,6 +1579,9 @@ void WI_loadData(void)
     char	name[9];
     anim_t*	a;
 
+    // killough 4/26/98: free lnames here (it was freed too early in Doom)
+    Z_Free(lnames);    
+
     if (commercial)
 	strcpy(name, "INTERPIC");
     else 
