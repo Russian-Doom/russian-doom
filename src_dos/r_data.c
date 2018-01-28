@@ -580,17 +580,19 @@ void R_InitTextures (void)
 //
 void R_InitFlats (void)
 {
-    int		i;
-	
+    int     i;
+
     firstflat = W_GetNumForName ("F_START") + 1;
-    lastflat = W_GetNumForName ("F_END") - 1;
-    numflats = lastflat - firstflat + 1;
-	
+    lastflat  = W_GetNumForName ("F_END") - 1;
+    numflats  = lastflat - firstflat + 1;
+
     // Create translation table for global animation.
-    flattranslation = Z_Malloc ((numflats+1)*4, PU_STATIC, 0);
-    
+    // killough 4/9/98: make column offsets 32-bit;
+    // clean up malloc-ing to use sizeof
+    flattranslation = Z_Malloc ((numflats+1)*sizeof(*flattranslation), PU_STATIC, 0);
+
     for (i=0 ; i<numflats ; i++)
-	flattranslation[i] = i;
+    flattranslation[i] = i;
 }
 
 
