@@ -602,26 +602,30 @@ void R_InitFlats (void)
 //
 void R_InitSpriteLumps (void)
 {
-    int		i;
-    patch_t	*patch;
-	
+    int     i;
+    patch_t *patch;
+
     firstspritelump = W_GetNumForName ("S_START") + 1;
-    lastspritelump = W_GetNumForName ("S_END") - 1;
-    
-    numspritelumps = lastspritelump - firstspritelump + 1;
-    spritewidth = Z_Malloc (numspritelumps*4, PU_STATIC, 0);
-    spriteoffset = Z_Malloc (numspritelumps*4, PU_STATIC, 0);
-    spritetopoffset = Z_Malloc (numspritelumps*4, PU_STATIC, 0);
-	
+    lastspritelump  = W_GetNumForName ("S_END") - 1;
+    numspritelumps  = lastspritelump - firstspritelump + 1;
+
+    // killough 4/9/98: make columnd offsets 32-bit;
+    // clean up malloc-ing to use sizeof
+
+    spritewidth = Z_Malloc (numspritelumps*sizeof*(spritewidth), PU_STATIC, 0);
+    spriteoffset = Z_Malloc (numspritelumps*sizeof*(spriteoffset), PU_STATIC, 0);
+    spritetopoffset = Z_Malloc (numspritelumps*sizeof*(spritetopoffset), PU_STATIC, 0);
+
     for (i=0 ; i< numspritelumps ; i++)
     {
-	if (!(i&63))
-	    printf (".");
+        if (!(i&63))
+        printf (".");
 
-	patch = W_CacheLumpNum (firstspritelump+i, PU_CACHE);
-	spritewidth[i] = SHORT(patch->width)<<FRACBITS;
-	spriteoffset[i] = SHORT(patch->leftoffset)<<FRACBITS;
-	spritetopoffset[i] = SHORT(patch->topoffset)<<FRACBITS;
+        patch = W_CacheLumpNum (firstspritelump+i, PU_CACHE);
+
+        spritewidth[i] = SHORT(patch->width)<<FRACBITS;
+        spriteoffset[i] = SHORT(patch->leftoffset)<<FRACBITS;
+        spritetopoffset[i] = SHORT(patch->topoffset)<<FRACBITS;
     }
 }
 
