@@ -691,7 +691,12 @@ void D_DoAdvanceDemo (void)
             else if (gamemode == registered)
                 pagename = DEH_String("CREDITS");
             else
-                pagename = DEH_String("HELP2");
+            {
+                if (gamevariant == old_shareware)       // [JN] Red chars for older sharewares
+                    pagename = DEH_String("HELP2RED");
+                else                                    // [JN] Green chars
+                    pagename = DEH_String("HELP2");
+            }
         }
         break;
 
