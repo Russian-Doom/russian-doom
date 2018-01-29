@@ -2370,6 +2370,8 @@ void G_DeferedPlayDemo (char* name)
 
 // Generate a string describing a demo version
 
+// [JN] No longer used
+/*
 static char *DemoVersionDescription(int version)
 {
     static char resultbuf[16];
@@ -2414,6 +2416,7 @@ static char *DemoVersionDescription(int version)
         return resultbuf;
     }
 }
+*/
 
 void G_DoPlayDemo (void)
 {
@@ -2438,6 +2441,10 @@ void G_DoPlayDemo (void)
     }
     else if (demoversion != G_VanillaVersionCode())
     {
+        // [JN] Don't bomb out on unsopported demo versions, just skip them
+        return;
+
+        /*
         char *message = "Демозапись от другой версии игры!\n"
                         "(версия %i, должна быть %i)\n"
                         "\n"
@@ -2447,6 +2454,7 @@ void G_DoPlayDemo (void)
                         "\n";
 
         I_Error(message, demoversion, G_VanillaVersionCode(), DemoVersionDescription(demoversion));
+        */
     }
 
     skill = *demo_p++; 
