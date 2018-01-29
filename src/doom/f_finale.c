@@ -725,7 +725,10 @@ static void F_ArtScreenDrawer(void)
                 }
                 else
                 {
-                    lumpname = "HELP2";
+                    if (gamevariant == old_shareware)
+                    lumpname = "HELP2RED";  // [JN] Red chars for older sharewares
+                    else
+                    lumpname = "HELP2";     // [JN] Green chars
                 }
                 break;
             case 2:
