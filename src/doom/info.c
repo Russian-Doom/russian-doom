@@ -980,32 +980,36 @@ state_t	states[NUMSTATES] = {
     {SPR_YSKU,32769,10,{NULL},S_YSKULL,0,0},	// S_YSKULL2
     {SPR_STIM,0,-1,{NULL},S_NULL,0,0},	// S_STIM
     {SPR_MEDI,0,-1,{NULL},S_NULL,0,0},	// S_MEDI
-    {SPR_SOUL,32768,6,{NULL},S_SOUL2,0,0},	// S_SOUL
-    {SPR_SOUL,32769,6,{NULL},S_SOUL3,0,0},	// S_SOUL2
-    {SPR_SOUL,32770,6,{NULL},S_SOUL4,0,0},	// S_SOUL3
-    {SPR_SOUL,32771,6,{NULL},S_SOUL5,0,0},	// S_SOUL4
-    {SPR_SOUL,32770,6,{NULL},S_SOUL6,0,0},	// S_SOUL5
-    {SPR_SOUL,32769,6,{NULL},S_SOUL,0,0},	// S_SOUL6
+    // [JN] Disabled full brightness for older Sharewares emulation
+    {SPR_SOUL,0,6,{NULL},S_SOUL2,0,0},		// S_SOUL  (32768)
+    {SPR_SOUL,1,6,{NULL},S_SOUL3,0,0},		// S_SOUL2 (32769)
+    {SPR_SOUL,2,6,{NULL},S_SOUL4,0,0},		// S_SOUL3 (32770)
+    {SPR_SOUL,3,6,{NULL},S_SOUL5,0,0},		// S_SOUL4 (32771)
+    {SPR_SOUL,2,6,{NULL},S_SOUL6,0,0},		// S_SOUL5 (32770)
+    {SPR_SOUL,1,6,{NULL},S_SOUL,0,0},		// S_SOUL6 (32769)
     {SPR_PINV,32768,6,{NULL},S_PINV2,0,0},	// S_PINV
     {SPR_PINV,32769,6,{NULL},S_PINV3,0,0},	// S_PINV2
     {SPR_PINV,32770,6,{NULL},S_PINV4,0,0},	// S_PINV3
     {SPR_PINV,32771,6,{NULL},S_PINV,0,0},	// S_PINV4
     {SPR_PSTR,32768,-1,{NULL},S_NULL,0,0},	// S_PSTR
-    {SPR_PINS,32768,6,{NULL},S_PINS2,0,0},	// S_PINS
-    {SPR_PINS,32769,6,{NULL},S_PINS3,0,0},	// S_PINS2
-    {SPR_PINS,32770,6,{NULL},S_PINS4,0,0},	// S_PINS3
-    {SPR_PINS,32771,6,{NULL},S_PINS,0,0},	// S_PINS4
+    // [JN] Disabled full brightness for older Sharewares emulation
+    {SPR_PINS,0,6,{NULL},S_PINS2,0,0},		// S_PINS  (32768)
+    {SPR_PINS,1,6,{NULL},S_PINS3,0,0},		// S_PINS2 (32769)
+    {SPR_PINS,2,6,{NULL},S_PINS4,0,0},		// S_PINS3 (32770)
+    {SPR_PINS,3,6,{NULL},S_PINS,0,0},		// S_PINS4 (32771)
     {SPR_MEGA,32768,6,{NULL},S_MEGA2,0,0},	// S_MEGA
     {SPR_MEGA,32769,6,{NULL},S_MEGA3,0,0},	// S_MEGA2
     {SPR_MEGA,32770,6,{NULL},S_MEGA4,0,0},	// S_MEGA3
     {SPR_MEGA,32771,6,{NULL},S_MEGA,0,0},	// S_MEGA4
-    {SPR_SUIT,32768,-1,{NULL},S_NULL,0,0},	// S_SUIT
-    {SPR_PMAP,32768,6,{NULL},S_PMAP2,0,0},	// S_PMAP
-    {SPR_PMAP,32769,6,{NULL},S_PMAP3,0,0},	// S_PMAP2
-    {SPR_PMAP,32770,6,{NULL},S_PMAP4,0,0},	// S_PMAP3
-    {SPR_PMAP,32771,6,{NULL},S_PMAP5,0,0},	// S_PMAP4
-    {SPR_PMAP,32770,6,{NULL},S_PMAP6,0,0},	// S_PMAP5
-    {SPR_PMAP,32769,6,{NULL},S_PMAP,0,0},	// S_PMAP6
+    // [JN] Disabled full brightness for older Sharewares emulation
+    {SPR_SUIT,0,-1,{NULL},S_NULL,0,0},		// S_SUIT  (32768)
+    // [JN] Disabled full brightness for older Sharewares emulation
+    {SPR_PMAP,0,6,{NULL},S_PMAP2,0,0},		// S_PMAP  (32768)
+    {SPR_PMAP,1,6,{NULL},S_PMAP3,0,0},		// S_PMAP2 (32769)
+    {SPR_PMAP,2,6,{NULL},S_PMAP4,0,0},		// S_PMAP3 (32770)
+    {SPR_PMAP,3,6,{NULL},S_PMAP5,0,0},		// S_PMAP4 (32771)
+    {SPR_PMAP,2,6,{NULL},S_PMAP6,0,0},		// S_PMAP5 (32770)
+    {SPR_PMAP,1,6,{NULL},S_PMAP,0,0},		// S_PMAP6 (32769)
     {SPR_PVIS,32768,6,{NULL},S_PVIS2,0,0},	// S_PVIS
     {SPR_PVIS,1,6,{NULL},S_PVIS,0,0},	// S_PVIS2
     {SPR_CLIP,0,-1,{NULL},S_NULL,0,0},	// S_CLIP
