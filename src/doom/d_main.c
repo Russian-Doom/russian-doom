@@ -1903,6 +1903,10 @@ void D_DoomMain (void)
     {
         gamevariant = bfgedition;
     }
+    else if (gamemode == shareware && W_CheckNumForName("STCHAT") >= 0)
+    {
+        gamevariant = old_shareware;
+    }
 
     //!
     // @category mod

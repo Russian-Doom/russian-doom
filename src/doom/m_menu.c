@@ -838,6 +838,9 @@ void M_DrawReadThis1(void)
         {
             // Doom 1
             // HELP2 is the first screen shown in Doom 1
+            if (gamevariant == old_shareware)   // [JN] Red chars for older sharewares
+            lumpname = "HELP2RED";  
+            else                                // [JN] Green chars
             lumpname = "HELP2";
             skullx = 280;
             skully = 185;
@@ -899,6 +902,9 @@ void M_DrawReadThis2(void)
     // We only ever draw the second page if this is 
     // gameversion == exe_doom_1_9 and gamemode == registered
 
+    if (gamevariant == old_shareware)   // [JN] Red chars for older sharewares
+    V_DrawPatchDirect(0, 0, W_CacheLumpName(DEH_String("HELP1RED"), PU_CACHE));
+    else                                // [JN] Green chars
     V_DrawPatchDirect(0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
 }
 
