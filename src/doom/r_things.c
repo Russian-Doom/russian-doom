@@ -614,16 +614,6 @@ void R_ProjectSprite (mobj_t* thing)
 
         vis->colormap = spritelights[index];
 
-        if (gamevariant != old_shareware)
-        {
-            // [JN] Restore full brightness if we are not in old_shareware mode
-            if (thing->type == MT_MISC12    // Super Charge
-            || thing->type == MT_MISC14     // Radiation Shielding Suit
-            || thing->type == MT_MISC15     // Automap
-            || thing->type == MT_INS)       // Partial Invisibility
-            vis->colormap = colormaps;
-        }
-
         // [JN] Applying brightmaps to sprites...
         if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
         {
