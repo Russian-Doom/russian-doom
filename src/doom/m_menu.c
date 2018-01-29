@@ -824,6 +824,7 @@ void M_DrawReadThis1(void)
 
     switch (gameversion)
     {
+        case exe_doom_1_666:    // [JN] Needed for Shareware 1.6
         case exe_doom_1_9:
         case exe_hacx:
 		if (gamemode == commercial )
@@ -1156,8 +1157,11 @@ void M_ReadThis2(int choice)
 {
     // Doom 1.9 had two menus when playing Doom 1
     // All others had only one
+    //
+    // [JN] I've also need this screen for 1.6 Shareware
 
-    if (gameversion == exe_doom_1_9 && gamemode != commercial)
+    if ((gameversion == exe_doom_1_9 && gamemode != commercial)
+    || (gameversion == exe_doom_1_666 && gamemode == shareware))
     {
         choice = 0;
         M_SetupNextMenu(&ReadDef2);
