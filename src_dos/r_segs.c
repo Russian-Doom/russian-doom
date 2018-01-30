@@ -271,7 +271,7 @@ R_RenderMaskedSegRange
 	    ? frontsector->ceilingheight : backsector->ceilingheight;
 	dc_texturemid = dc_texturemid - viewz;
     }
-    dc_texturemid += curline->sidedef->rowoffset - SPARKLEFIX * SPARKLEFIX; // [JN] Sparkle fix (some of my magic here)
+    dc_texturemid += curline->sidedef->rowoffset * SPARKLEFIX * SPARKLEFIX; // [JN] Sparkle fix (some of my magic here)
 			
     if (fixedcolormap)
 	dc_colormap = fixedcolormap;
