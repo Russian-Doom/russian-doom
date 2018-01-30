@@ -1020,6 +1020,8 @@ void A_BruisAttack (mobj_t* actor)
 	return;
 
     // [JN] Исправление оригинального бага с отсутствующим A_FaceTarget
+    // https://doomwiki.org/wiki/Baron_attacks_a_monster_behind_him
+    if (singleplayer)
     A_FaceTarget (actor);
     
     if (P_CheckMeleeRange (actor))

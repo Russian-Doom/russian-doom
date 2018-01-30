@@ -1028,6 +1028,11 @@ void A_BruisAttack (mobj_t* actor)
     if (!actor->target)
 	return;
 		
+    // [JN] Fixed Baron attacks a monster behind him bug:
+    // https://doomwiki.org/wiki/Baron_attacks_a_monster_behind_him
+    if (singleplayer)
+    A_FaceTarget (actor);        
+
     if (P_CheckMeleeRange (actor))
     {
 	S_StartSound (actor, sfx_claw);
