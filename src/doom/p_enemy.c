@@ -1493,11 +1493,31 @@ void A_FatAttack3 (mobj_t*	actor)
 //
 #define	SKULLSPEED		(20*FRACUNIT)
 
+// killough 10/98: this emulates the beta version's lost soul attacks
+void A_SkullAttackBeta (mobj_t* actor)
+{
+    int		damage;
+
+    if (!actor->target || actor->target->type == MT_SKULL)
+	return;
+
+    S_StartSound(actor, actor->info->attacksound);
+    A_FaceTarget(actor);
+    damage = (P_Random()%8+1)*actor->info->damage;
+    P_DamageMobj(actor->target, actor, actor, damage);
+
+    // [JN] Return to see state, otherwise Lost Sould will be freezed
+    P_SetMobjState (actor, actor->info->seestate);
+}
+
 void A_SkullAttack (mobj_t* actor)
 {
     mobj_t*		dest;
     angle_t		an;
     int			dist;
+
+    if (gamemode == pressbeta)
+	return A_SkullAttackBeta (actor);
 
     if (!actor->target)
 	return;
