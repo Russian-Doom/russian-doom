@@ -769,7 +769,7 @@ P_KillMobj
     }
 
     if (target->health < -target->info->spawnhealth 
-	&& target->info->xdeathstate)
+	&& target->info->xdeathstate && gamemode != pressbeta) // [JN] Press Beta don't have xdeath states
     {
 	P_SetMobjState (target, target->info->xdeathstate);
     }
