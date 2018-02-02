@@ -1023,7 +1023,8 @@ void D_SetGameDescription(void)
 
             // [JN] String replacement routine:
             DEH_AddStringReplacement ("M_JKILL",   "M_JKILL2");
-            DEH_AddStringReplacement ("STBAR",     "STBAR2");
+            DEH_AddStringReplacement ("STBAR",     "STBARB");
+            DEH_AddStringReplacement ("STCHARMS",  "STCHARTS");
             DEH_AddStringReplacement (GOTHTHBONUS, GOTDAGGER);
             DEH_AddStringReplacement (GOTARMBONUS, GOTCHEST);
             DEH_AddStringReplacement (GOTSUPER,    GOTEXTRALIFE);

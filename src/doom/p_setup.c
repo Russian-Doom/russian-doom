@@ -1000,7 +1000,7 @@ P_SetupLevel
     for (i=0 ; i<MAXPLAYERS ; i++)
     {
 	players[i].killcount = players[i].secretcount 
-	    = players[i].itemcount = 0;
+	    = players[i].itemcount = players[i].artifactcount = 0;
     }
 
     // Initial height of PointOfView

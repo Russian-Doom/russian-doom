@@ -323,6 +323,9 @@ static boolean st_armson;
 // !deathmatch
 static boolean st_fragson; 
 
+// [JN] only in Press Beta
+static boolean st_artifactson;
+
 // main bar left
 static patch_t* sbar;
 
@@ -359,6 +362,9 @@ static st_number_t      w_ready;
  // in deathmatch only, summary of frags stats
 static st_number_t      w_frags;
 
+// [JN] Press Beta: artifacts widget
+static st_number_t      w_artifacts;
+
 // health widget
 static st_percent_t     w_health;
 
@@ -387,6 +393,9 @@ static st_number_t      w_maxammo[4];
 
 // number of frags so far in deathmatch
 static int st_fragscount;
+
+// [JN] Press Beta: number of picked up artifacts
+static int st_artifactscount;
 
 // used to use appopriately pained face
 static int st_oldhealth = -1;
@@ -1236,6 +1245,21 @@ void ST_updateWidgets(void)
             st_fragscount -= plyr->frags[i];
     }
 
+    // [JN] Press Beta: artifacts counter routines
+    if (gamemode == pressbeta)
+    {   
+        st_artifactson = !deathmatch && st_statusbaron; 
+        st_artifactscount = 0;
+
+        // [JN] Overflow guard, just for reliability
+        if (st_artifactscount < 0)
+            st_artifactscount = 0;
+        if (st_artifactscount > 99)
+            st_artifactscount = 99;
+
+        st_artifactscount += plyr->artifactcount;
+    }
+
     // get rid of chat window if up because of message
     if (!--st_msgcounter)
     st_chat = st_oldchat;
@@ -1328,6 +1352,9 @@ void ST_drawWidgets(boolean refresh)
     // used by w_frags widget
     st_fragson = deathmatch && st_statusbaron; 
 
+    // [JN] used by w_artifacts widget
+    st_artifactson = !deathmatch && st_statusbaron; 
+
     STlib_updateNum(&w_ready, refresh);
 
     // [crispy] draw "special widgets" in the Crispy HUD
@@ -1396,11 +1423,16 @@ void ST_drawWidgets(boolean refresh)
     STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12);
     STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12);
 
-    if (screenblocks < 11 || automapactive)
+    // [JN] Don't update/draw ARMS background in Press Beta
+    if ((screenblocks < 11 || automapactive) && gamemode != pressbeta)
     STlib_updateBinIcon(&w_armsbg, refresh);
 
+    // [JN] Don't update/draw ARMS section in Press Beta
+    if (gamemode != pressbeta)
+    {
     for (i=0;i<6;i++)
     STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
+    }
 
     if (screenblocks < 11 || automapactive)
     STlib_updateMultIcon(&w_faces, refresh);
@@ -1409,6 +1441,10 @@ void ST_drawWidgets(boolean refresh)
     STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12);
 
     STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12);
+    
+    // [JN] Update and draw Artifacts (АРТФ) widget only in Press Beta
+    if (gamemode == pressbeta)
+    STlib_updateNum(&w_artifacts, refresh || screenblocks == 11 || screenblocks == 12);
 }
 
 
@@ -1716,6 +1752,15 @@ void ST_createWidgets(void)
         tallnum,
         &st_fragscount,
         &st_fragson,
+        ST_FRAGSWIDTH);
+
+    // [JN] Press Beta artifacts sum
+    STlib_initNum(&w_artifacts,
+        ST_FRAGSX,
+        ST_FRAGSY,
+        tallnum,
+        &st_artifactscount,
+        &st_artifactson,
         ST_FRAGSWIDTH);
 
     // faces

@@ -377,15 +377,22 @@ P_TouchSpecialThing
 	// bonus items
       case SPR_BON1:
 	if (gamemode != pressbeta) // [JN] No health bonus in Press Beta
+	{
 	player->health++;		// can go over 100%
 	if (player->health > deh_max_health)
 	    player->health = deh_max_health;
 	player->mo->health = player->health;
+	}
+	else
+	{
+	player->artifactcount++;
+	}
 	player->message = DEH_String(GOTHTHBONUS);
 	break;
 	
       case SPR_BON2:
 	if (gamemode != pressbeta) // [JN] No armor bonus in Press Beta
+	{
 	player->armorpoints++;		// can go over 100%
 	if (player->armorpoints > deh_max_armor)
 	    player->armorpoints = deh_max_armor;
@@ -393,14 +400,21 @@ P_TouchSpecialThing
         // for the armor helmets, armortype 1 is always used.
 	if (!player->armortype)
 	    player->armortype = 1;
+	}
+	else
+	{
+	player->artifactcount++;
+	}
 	player->message = DEH_String(GOTARMBONUS);
 	break;
 
       case SPR_BON3:    // [JN] Evil Sceptre
+	player->artifactcount++;
 	player->message = DEH_String(GOTSCEPTRE);
 	break;
 	
       case SPR_BON4:    // [JN] Unholy bible
+	player->artifactcount++;
 	player->message = DEH_String(GOTBIBLE);
 	break;
 	
