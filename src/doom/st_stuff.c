@@ -1097,6 +1097,8 @@ void ST_updateFaceWidget(void)
         // getting hurt because of your own damn stupidity
         if (plyr->damagecount)
         {
+            if (gamemode != pressbeta)
+            {
             if (new_ouch_face && !vanillaparm)
             {
                 if (st_oldhealth - plyr->health > ST_MUCHPAIN)
@@ -1126,6 +1128,22 @@ void ST_updateFaceWidget(void)
                     priority = 6;
                     st_facecount = ST_TURNCOUNT;
                     faceindex = ST_RAMPAGEOFFSET;
+                }
+            }
+            }
+
+            // [JN] Press Beta: OUCH face is appearing only after getting
+            // hurt in special sectors (slime, blood, etc). Emulate this.
+            else
+            {
+                priority = 7;
+                st_facecount = ST_TURNCOUNT;
+                faceindex = ST_RAMPAGEOFFSET;
+                
+                if (plyr->mo->subsector->sector->special)
+                {
+                    priority = 6;
+                    faceindex = ST_OUCHOFFSET;
                 }
             }
         }
