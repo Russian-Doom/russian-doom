@@ -131,6 +131,13 @@
 #define GOTSUPER    "cdth[pfhzl!"               // Сверхзаряд!
 #define GOTMEDINEED "gjkextyf rhfqyt ytj,[jlbvfz fgntxrf!"  // Получена крайне необходимая аптечка!
 
+// [JN] Press Beta items
+#define GOTDAGGER   "gjkexty ltvjybxtcrbq rby;fk>"      // Получен демонический кинжал.
+#define GOTCHEST    "gjkexty ceyler c xthtgfvb>"        // Получен сундук с черепами.
+#define GOTSCEPTRE  "gjkexty lmzdjkmcrbq crbgtnh>"      // Получен дьявольский скипетр.
+#define GOTBIBLE    "gjkextyf ytxtcnbdfz ,b,kbz>"       // Получена нечестивая Библия.
+#define GOTEXTRALIFE "gjkextyf ljgjkybntkmyfz ;bpym!"   // Получена дополнительная жизнь!
+
 #define GOTBLUECARD "gjkextyf cbyzz rk.x-rfhnf>"    // Получена синяя ключ-карта.
 #define GOTYELWCARD "gjkextyf ;tknfz rk.x-rfhnf>"   // Получена желтая ключ-карта
 #define GOTREDCARD  "gjkextyf rhfcyfz rk.x-rfhnf>"  // Получена красная ключ-карта.

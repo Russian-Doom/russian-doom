@@ -613,115 +613,147 @@ void D_DoAdvanceDemo (void)
     switch (demosequence)
     {
         case 0:
+        {
+            if (gamemode == commercial)
+                pagetic = TICRATE * 11;
+            else
+                pagetic = 170;
 
-        if ( gamemode == commercial )
-        pagetic = TICRATE * 11;
-        else
-        pagetic = 170;
+            if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
+                pagetic = 1000;
 
-        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
-        pagetic = 1000;
-        gamestate = GS_DEMOSCREEN;
+            gamestate = GS_DEMOSCREEN;
 
-        if ( gamemode == shareware )
-        pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
-        else
-        pagename = DEH_String("TITLEPIC");
+            if (gamemode == shareware)
+                pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
+            else
+                pagename = DEH_String("TITLEPIC");
         
-        if ( gamemode == commercial )
-        S_StartMusic(mus_dm2ttl);
-        else
-        S_StartMusic (mus_intro);
-        break;
+            if (gamemode == commercial)
+                S_StartMusic(mus_dm2ttl);
+            else
+                S_StartMusic (mus_intro);
+
+            break;
+        }
 
         case 1:
-        
-        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
-        break;
+        {
+            if (gamemode == pressbeta       // [JN] No demos in Press Beta
+            || gamemission == pack_nerve    // ... no demos in NERVE
+            || flip_levels                  // ... no demos in flipped levels (boolean)
+            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            break;
 
-        G_DeferedPlayDemo(DEH_String("demo1"));
-        break;
+            G_DeferedPlayDemo(DEH_String("demo1"));
+
+            break;
+        }
 
         case 2:
+        {
+            if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
+                pagetic = 1000;
+            else
+                pagetic = 200;
 
-        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
-        pagetic = 1000;
-        else
-        pagetic = 200;
-        gamestate = GS_DEMOSCREEN;
+            gamestate = GS_DEMOSCREEN;
 
-        // [JN] Я использую разные названия экранов для разных версий
-        if (gamemode == shareware)
-            pagename = DEH_String("CREDITS");
-        if (gamemode == registered)
-            pagename = DEH_String("CREDITS");
-        if (gamemode == retail)
-            pagename = DEH_String("CREDIT"); 
-        if (gamemode == commercial)
-            pagename = DEH_String("CREDIT"); 
-        break;
+            // [JN] Я использую разные названия экранов для разных версий
+            if (gamemode == shareware)
+                pagename = DEH_String("CREDITS");
+            if (gamemode == registered)
+                pagename = DEH_String("CREDITS");
+            if (gamemode == retail)
+                pagename = DEH_String("CREDIT"); 
+            if (gamemode == commercial)
+                pagename = DEH_String("CREDIT"); 
+            break;
+        }
 
         case 3:
+        {
+            if (gamemode == pressbeta       // [JN] No demos in Press Beta
+            || gamemission == pack_nerve    // ... no demos in NERVE
+            || flip_levels                  // ... no demos in flipped levels (boolean)
+            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            break;
 
-        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
-        break;
-        else
-        G_DeferedPlayDemo(DEH_String("demo2"));
-        break;
+            else
+            G_DeferedPlayDemo(DEH_String("demo2"));
+
+            break;
+        }
 
         case 4:
-
-        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline) 
-        break;
-    
-        gamestate = GS_DEMOSCREEN;
-        if (gamemode == commercial)
         {
-            pagetic = TICRATE * 11;
-            pagename = DEH_String("TITLEPIC");
+            if (gamemode == pressbeta       // [JN] No demos in Press Beta
+            || gamemission == pack_nerve    // ... no demos in NERVE
+            || flip_levels                  // ... no demos in flipped levels (boolean)
+            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            break;
 
-            S_StartMusic(mus_dm2ttl);
-        }
-        else
-        {
-            pagetic = 200;
+            gamestate = GS_DEMOSCREEN;
 
-            if (gameversion >= exe_ultimate)
-                pagename = DEH_String("CREDIT");
-            else if (gamemode == registered)
-                pagename = DEH_String("CREDITS");
+            if (gamemode == commercial)
+            {
+                pagetic = TICRATE * 11;
+                pagename = DEH_String("TITLEPIC");
+
+                S_StartMusic(mus_dm2ttl);
+            }
             else
             {
-                if (gamevariant == old_shareware)       // [JN] Red chars for older sharewares
-                    pagename = DEH_String("HELP2RED");
-                else                                    // [JN] Green chars
-                    pagename = DEH_String("HELP2");
+                pagetic = 200;
+
+                if (gameversion >= exe_ultimate)
+                    pagename = DEH_String("CREDIT");
+                else if (gamemode == registered)
+                    pagename = DEH_String("CREDITS");
+                else
+                {
+                    if (gamevariant == old_shareware)       // [JN] Red chars for older sharewares
+                        pagename = DEH_String("HELP2RED");
+                    else                                    // [JN] Green chars
+                        pagename = DEH_String("HELP2");
+                }
             }
+
+            break;
         }
-        break;
 
         case 5:
+        {
+            if (gamemode == pressbeta       // [JN] No demos in Press Beta
+            || gamemission == pack_nerve    // ... no demos in NERVE
+            || flip_levels                  // ... no demos in flipped levels (boolean)
+            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            break;
 
-        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline) 
-        break;
+            G_DeferedPlayDemo(DEH_String("demo3"));
 
-        G_DeferedPlayDemo(DEH_String("demo3"));
-        break;
+            break;
+        }
 
         case 6: // THE DEFINITIVE DOOM Special Edition demo
+        {
+            if (gamemode == pressbeta       // [JN] No demos in Press Beta
+            || gamemission == pack_nerve    // ... no demos in NERVE
+            || flip_levels                  // ... no demos in flipped levels (boolean)
+            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            break;
 
-        if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
-        break;
+            G_DeferedPlayDemo(DEH_String("demo4"));
 
-        G_DeferedPlayDemo(DEH_String("demo4"));
-        break;
-    }
-    
-    // The Doom 3: BFG Edition version of doom2.wad does not have a
-    // TITLETPIC lump. Use INTERPIC instead as a workaround.
-    if (gamevariant == bfgedition && !strcasecmp(pagename, "TITLEPIC") && W_CheckNumForName("titlepic") < 0)
-    {
-        pagename = DEH_String("INTERPIC");
+            break;
+        }
+
+        // The Doom 3: BFG Edition version of doom2.wad does not have a
+        // TITLETPIC lump. Use INTERPIC instead as a workaround.
+        if (gamevariant == bfgedition && !strcasecmp(pagename, "TITLEPIC") && W_CheckNumForName("titlepic") < 0)
+        {
+            pagename = DEH_String("INTERPIC");
+        }
     }
 }
 
@@ -984,6 +1016,18 @@ void D_SetGameDescription(void)
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-doom1.wad");
         }
+        else if (gamemode == pressbeta)
+        {
+            gamedescription = GetGameName("DOOM (Бета-версия)");
+            W_MergeFile("russian/russian-doom-common.wad");
+
+            // [JN] String replacement routine:
+            DEH_AddStringReplacement ("M_JKILL",   "M_JKILL2");
+            DEH_AddStringReplacement ("STBAR",     "STBAR2");
+            DEH_AddStringReplacement (GOTHTHBONUS, GOTDAGGER);
+            DEH_AddStringReplacement (GOTARMBONUS, GOTCHEST);
+            DEH_AddStringReplacement (GOTSUPER,    GOTEXTRALIFE);
+        }
     }
     else
     {
@@ -1038,6 +1082,10 @@ void D_SetGameDescription(void)
             char    *filename;
             int     nrv;
             int     mlvls;
+
+            // [JN] Using -file for Press Beta is strictly prohibited
+            if (gamemode == pressbeta)
+            return;
 
             filename = D_TryFindWADByName(myargv[newpwadfile]);
             printf(" добавление: %s\n", filename);
@@ -1598,6 +1646,12 @@ static void LoadIwadDeh(void)
         }
     }
 
+    // [JN] Doom Press Beta have some info in DEHACKED lump, load it.
+    if (gamemode == pressbeta)
+    {
+        DEH_LoadLumpByName("DEHACKED", false, true);
+    }
+
     // Chex Quest needs a separate Dehacked patch which must be downloaded
     // and installed next to the IWAD.
     if (gameversion == exe_chex)
@@ -1908,9 +1962,15 @@ void D_DoomMain (void)
     {
         gamevariant = bfgedition;
     }
+    // [JN] Checking for older sharewares
     else if (gamemode == shareware && W_CheckNumForName("STCHAT") >= 0)
     {
         gamevariant = old_shareware;
+    }
+    // [JN] Checking for Press Beta
+    else if (W_CheckNumForName("DOOMPRES") >= 0)
+    {
+        gamemode = pressbeta;
     }
 
     //!

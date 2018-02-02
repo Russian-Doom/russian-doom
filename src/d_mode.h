@@ -53,6 +53,7 @@ typedef enum
     registered,      // Doom/Heretic registered
     commercial,      // Doom II/Hexen
     retail,          // Ultimate Doom
+    pressbeta,       // [JN] Doom Press Beta
     indetermined     // Unknown.
 } GameMode_t;
 

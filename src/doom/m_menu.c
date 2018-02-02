@@ -267,11 +267,32 @@ menuitem_t MainMenu[]=
     {1,"M_QUITG",M_QuitDOOM,'q'}
 };
 
+// Special menu for Press Beta
+menuitem_t MainMenuBeta[]=
+{
+    {1,"M_BLVL1",  M_Episode, '1'},
+    {1,"M_BLVL2",  M_Episode, '2'},
+    {1,"M_BLVL3",  M_Episode, '3'},
+    {1,"M_OPTION", M_Options, 'o'},
+    {1,"M_QUITG",  M_QuitDOOM,'q'}
+};
+
 menu_t  MainDef =
 {
     main_end,
     NULL,
     MainMenu,
+    M_DrawMainMenu,
+    97,70,
+    0
+};
+
+// Special menu for Press Beta
+menu_t  MainDefBeta =
+{
+    main_end,
+    NULL,
+    MainMenuBeta,
     M_DrawMainMenu,
     97,70,
     0
@@ -1767,6 +1788,11 @@ boolean M_Responder (event_t* ev)
         }
         else if (key == key_menu_help)     // Help key
         {
+        // [JN] No HELP screens in Press Beta.
+        // Screenshots with -devparm still working, though.
+        if (gamemode == pressbeta)
+        return false;
+
         M_StartControlPanel ();
 
         if ( gamemode == retail )
@@ -1954,7 +1980,13 @@ boolean M_Responder (event_t* ev)
         currentMenu->lastOn = itemOn;
         if (currentMenu->prevMenu)
         {
+            // [JN] Small hack for preventing going to
+            // the Episode selection in Press Beta.
+            if (gamemode == pressbeta)
+            currentMenu = &MainDef;
+            else
             currentMenu = currentMenu->prevMenu;
+
             itemOn = currentMenu->lastOn;
             S_StartSound(NULL,sfx_swtchn);
         }
@@ -2220,6 +2252,14 @@ void M_Init (void)
 
         case retail:
         // We are fine.
+        break;
+
+        case pressbeta:
+        // [JN] Use special menu for Press Beta
+        MainDef = MainDefBeta;
+        // [JN] Remove one lower menu item
+        MainDef.numitems--;
+
         default:
         break;
     }

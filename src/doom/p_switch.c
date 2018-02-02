@@ -109,7 +109,7 @@ void P_InitSwitchList(void)
 	
     episode = 1;
 
-    if (gamemode == registered || gamemode == retail)
+    if (gamemode == registered || gamemode == retail || gamemode == pressbeta)
 	episode = 2;
     else
 	if ( gamemode == commercial )

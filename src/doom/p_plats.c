@@ -198,6 +198,10 @@ EV_DoPlat
 	    break;
 	    
 	  case downWaitUpStay:
+	    // [JN] Lifts don't have a speed multipler in Press Beta
+	    if (gamemode == pressbeta)
+	    plat->speed = PLATSPEED;
+	    else
 	    plat->speed = PLATSPEED * 4;
 	    plat->low = P_FindLowestFloorSurrounding(sec);
 

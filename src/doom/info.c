@@ -48,7 +48,7 @@ char *sprnames[] = {
     "COL3","COL4","CAND","CBRA","COL6","TRE1","TRE2","ELEC","CEYE","FSKU",
     "COL5","TBLU","TGRN","TRED","SMBT","SMGT","SMRT","HDB1","HDB2","HDB3",
     "HDB4","HDB5","HDB6","POB1","POB2","BRS1","TLMP","TLP2","BLUB","BLUG",
-    "POLB","POLG","POLM","RFOG",
+    "POLB","POLG","POLM","RFOG","BON3","BON4",
     NULL
 };
 
@@ -1132,6 +1132,10 @@ state_t	states[NUMSTATES] = {
     {SPR_RFOG,32775,6,{NULL},S_RFOG9,0,0},  // S_КFOG8
     {SPR_RFOG,32776,6,{NULL},S_RFOG10,0,0}, // S_КFOG9
     {SPR_RFOG,32777,6,{NULL},S_NULL,0,0},   // S_КFOG10
+    // [JN] Press Beta: Evil Sceptre
+    {SPR_BON3,0,-1,{NULL},S_NULL,0,0},      // S_BON3
+    // [JN] Press Beta: Unholy Bible
+    {SPR_BON4,0,-1,{NULL},S_NULL,0,0},      // S_BON4
 };
 
 
@@ -4879,6 +4883,84 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
 	sfx_None,       // activesound
 	MF_NOBLOCKMAP|MF_NOGRAVITY, // flags
 	S_NULL          // raisestate
+    },
+
+    {               // MT_PLASMA1 (Press Beta)
+	-1,             // doomednum
+	S_TBALL1,       // spawnstate
+	1000,           // spawnhealth
+	S_NULL,         // seestate
+	sfx_plasma,     // seesound
+	8,              // reactiontime
+	sfx_None,       // attacksound
+	S_NULL,         // painstate
+	0,              // painchance
+	sfx_None,       // painsound
+	S_NULL,         // meleestate
+	S_NULL,         // missilestate
+	S_TBALLX1,      // deathstate
+	S_NULL,         // xdeathstate
+	sfx_firxpl,		// deathsound
+	25*FRACUNIT,    // speed
+	13*FRACUNIT,    // radius
+	8*FRACUNIT,     // height
+	100,            // mass
+	5,              // damage
+	sfx_None,       // activesound
+	MF_NOBLOCKMAP|MF_MISSILE|MF_DROPOFF|MF_NOGRAVITY|MF_TRANSLUCENT,		// flags
+	S_NULL          // raisestate
+    },
+
+    {               // MT_SCEPTRE (Press Beta)
+    2016,           // doomednum
+    S_BON3,         // spawnstate
+    1000,           // spawnhealth
+    S_NULL,         // seestate
+    sfx_None,       // seesound
+    8,              // reactiontime
+    sfx_None,       // attacksound
+    S_NULL,         // painstate
+    0,              // painchance
+    sfx_None,       // painsound
+    S_NULL,         // meleestate
+    S_NULL,         // missilestate
+    S_NULL,         // deathstate
+    S_NULL,         // xdeathstate
+    sfx_None,       // deathsound
+    0,              // speed
+    10*FRACUNIT,    // radius
+    16*FRACUNIT,    // height
+    100,            // mass
+    0,              // damage
+    sfx_None,       // activesound
+    MF_SPECIAL|MF_COUNTITEM,    // flags
+    S_NULL          // raisestate
+    },
+
+    {               // MT_BIBLE (Press Beta)
+    2017,           // doomednum
+    S_BON4,         // spawnstate
+    1000,           // spawnhealth
+    S_NULL,         // seestate
+    sfx_None,       // seesound
+    8,              // reactiontime
+    sfx_None,       // attacksound
+    S_NULL,         // painstate
+    0,              // painchance
+    sfx_None,       // painsound
+    S_NULL,         // meleestate
+    S_NULL,         // missilestate
+    S_NULL,         // deathstate
+    S_NULL,         // xdeathstate
+    sfx_None,       // deathsound
+    0,              // speed
+    20*FRACUNIT,    // radius
+    10*FRACUNIT,    // height
+    100,            // mass
+    0,              // damage
+    sfx_None,       // activesound
+    MF_SPECIAL|MF_COUNTITEM,    // flags
+    S_NULL          // raisestate
     },
 };
 

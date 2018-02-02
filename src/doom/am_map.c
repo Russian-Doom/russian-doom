@@ -268,6 +268,9 @@ static int followplayer = 1; // specifies whether to follow the player around
 
 cheatseq_t cheat_amap = CHEAT("iddt", 0);
 
+// [JN] Press Beta cheat codes
+cheatseq_t cheat_amap_beta = CHEAT("eek", 0);
+
 static boolean stopped = true;
 
 // Calculates the slope and slope according to the x-axis of a line
@@ -726,8 +729,15 @@ boolean AM_Responder (event_t* ev)
             rc = false;
         }
 
-        if ((!deathmatch || gameversion <= exe_doom_1_8)
+        if ((!deathmatch || gameversion <= exe_doom_1_8) && gamemode != pressbeta
         && cht_CheckCheat(&cheat_amap, ev->data2))
+        {
+            rc = false;
+            cheating = (cheating + 1) % 3;
+        }
+
+        // [JN] Press Beta: 'EEK' instead of 'IDDT'
+        if (gamemode == pressbeta && cht_CheckCheat(&cheat_amap_beta, ev->data2))
         {
             rc = false;
             cheating = (cheating + 1) % 3;

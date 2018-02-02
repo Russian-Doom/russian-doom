@@ -593,6 +593,23 @@ A_FireBFG
 }
 
 
+//
+// A_FirePlasmaBeta
+//
+// killough 7/11/98: emulate Doom's beta version, which alternated fireballs
+static void 
+A_FirePlasmaBeta 
+( player_t* player, 
+  pspdef_t* psp) 
+{
+    DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
+
+    P_SetPsprite (player,
+		  ps_flash,
+		  weaponinfo[player->readyweapon].flashstate+(P_Random ()&1) );
+
+    P_SpawnPlayerMissile(player->mo, player->refire&1 ? MT_PLASMA1 : MT_PLASMA);
+}
 
 //
 // A_FirePlasma
@@ -602,6 +619,9 @@ A_FirePlasma
 ( player_t*	player,
   pspdef_t*	psp ) 
 {
+    if (gamemode == pressbeta)
+    return A_FirePlasmaBeta (player, psp);
+    
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
 
     P_SetPsprite (player,

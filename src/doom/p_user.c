@@ -422,6 +422,8 @@ void P_PlayerThink (player_t* player)
 
     
     // Handling colormaps.
+    if (gamemode != pressbeta)
+    {
     if (player->powers[pw_invulnerability])
     {
 	if (player->powers[pw_invulnerability] > 4*32
@@ -461,6 +463,24 @@ void P_PlayerThink (player_t* player)
     }
     else
 	player->fixedcolormap = 0;
+    }
+
+    // [JN] Press Beta colormaps maze
+    else 
+    {
+        // [JN] Light Amplification Visor using green colormap (33)
+        // In Beta INVERSECOLORMAP have a higher priority than INFRAGREENCOLORMAP. Account this.
+        if (player->powers[pw_infrared] > 4*32 || player->powers[pw_infrared] & 8)
+        player->fixedcolormap = player->powers[pw_invisibility] ? INVERSECOLORMAP : INFRAGREENCOLORMAP;
+
+        // [JN] Invisibility using inverse colormap (32)
+        else if (player->powers[pw_invisibility] > 4*32 || player->powers[pw_invisibility] & 8)
+        player->fixedcolormap = INVERSECOLORMAP;
+
+        // [JN] Diminished lightning
+        else
+        player->fixedcolormap = 0;
+    }
 }
 
 

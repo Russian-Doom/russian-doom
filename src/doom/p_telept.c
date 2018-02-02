@@ -126,8 +126,9 @@ EV_Teleport
 		S_StartSound (fog, sfx_telept);
 		
 		// don't move for a bit
-		if (thing->player)
-		    thing->reactiontime = 18;	
+		// [JN] Press Beta telepoters doesn't have any delay
+		if (thing->player && gamemode != pressbeta)
+		    thing->reactiontime = 18;
 
 		thing->angle = m->angle;
 		thing->momx = thing->momy = thing->momz = 0;

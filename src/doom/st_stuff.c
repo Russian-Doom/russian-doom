@@ -432,6 +432,11 @@ cheatseq_t cheat_mypos = CHEAT("idmypos", 0);
 // [crispy] new cheats
 cheatseq_t cheat_massacre = CHEAT("tntem", 0);
 
+// [JN] Press Beta cheat codes
+cheatseq_t cheat_god_beta    = CHEAT("tst", 0); // iddqd
+cheatseq_t cheat_ammo_beta   = CHEAT("amo", 0); // idkfa
+cheatseq_t cheat_noclip_beta = CHEAT("nc", 0);  // idclip
+
 // [JN] Чит-код отображения версии проекта
 cheatseq_t cheat_version = CHEAT("version", 0);
 
@@ -524,7 +529,7 @@ boolean ST_Responder (event_t* ev)
     // if a user keypress...
     else if (ev->type == ev_keydown)
     {
-        if (!netgame && (gameskill != sk_nightmare && gameskill != sk_ultranm))
+        if (!netgame && (gameskill != sk_nightmare && gameskill != sk_ultranm) && gamemode != pressbeta)
         {
             // 'dqd' cheat for toggleable god mode
             if (cht_CheckCheat(&cheat_god, ev->data2))
@@ -735,7 +740,7 @@ boolean ST_Responder (event_t* ev)
         }
 
         // 'clev' change-level cheat
-        if (!netgame && cht_CheckCheat(&cheat_clev, ev->data2))
+        if (!netgame && cht_CheckCheat(&cheat_clev, ev->data2) && gamemode != pressbeta)
         {
             char    buf[3];
             int     epsd;
@@ -811,6 +816,56 @@ boolean ST_Responder (event_t* ev)
             // So be it.
             plyr->message = DEH_String(STSTR_CLEV);
             G_DeferedInitNew(gameskill, epsd, map);
+        }
+
+        // [JN] Finally, Press Beta cheats
+        if (gamemode == pressbeta)
+        {
+            // 'TST' - god mode
+            if (cht_CheckCheat(&cheat_god_beta, ev->data2))
+            {
+                plyr->cheats ^= CF_GODMODE;
+
+                if (plyr->cheats & CF_GODMODE)
+                {
+                    if (plyr->mo)
+                    plyr->mo->health = 100;
+
+                    plyr->health = deh_god_mode_health;
+                    plyr->message = DEH_String(STSTR_DQDON);
+                }
+                else 
+                plyr->message = DEH_String(STSTR_DQDOFF);
+            }
+
+            // 'AMO' cheat for key full ammo
+            else if (cht_CheckCheat(&cheat_ammo_beta, ev->data2))
+            {
+                plyr->armorpoints = deh_idkfa_armor;
+                plyr->armortype = deh_idkfa_armor_class;
+
+                for (i=0;i<NUMWEAPONS;i++)
+                    plyr->weaponowned[i] = true;
+
+                for (i=0;i<NUMAMMO;i++)
+                    plyr->ammo[i] = plyr->maxammo[i];
+
+                for (i=0;i<NUMCARDS;i++)
+                    plyr->cards[i] = true;
+
+                plyr->message = DEH_String(STSTR_KFAADDED);
+            }
+
+            // 'NC' - noclipping mode
+            else if (cht_CheckCheat(&cheat_noclip_beta, ev->data2))
+            {	
+                plyr->cheats ^= CF_NOCLIP;
+
+                if (plyr->cheats & CF_NOCLIP)
+                    plyr->message = DEH_String(STSTR_NCON);
+                else
+                    plyr->message = DEH_String(STSTR_NCOFF);
+            }
         }
     }
 

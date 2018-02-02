@@ -617,8 +617,8 @@ void R_ProjectSprite (mobj_t* thing)
         // [JN] Applying brightmaps to sprites...
         if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
         {
-            // Armor Bonus
-            if (thing->type == MT_MISC3)
+            // Armor Bonus (don't light up Skull Chest from Press Beta)
+            if (thing->type == MT_MISC3 && gamemode != pressbeta)
             vis->colormap = fullbrights_dimmeditems[index];
 
             // Cell Charge
@@ -867,7 +867,12 @@ void R_DrawPSprite (pspdef_t* psp)
     if (viewplayer->powers[pw_invisibility] > 4*32 || viewplayer->powers[pw_invisibility] & 8)
     {
         // shadow draw
+        if (gamemode != pressbeta)
         vis->colormap = NULL;
+
+        // [JN] Press Beta: use inverted palette for Partial Invisibility
+        else
+        vis->colormap = fixedcolormap;    
     }
     else if (fixedcolormap)
     {

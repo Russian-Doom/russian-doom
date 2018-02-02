@@ -1472,6 +1472,15 @@ static int e4pars[10] =
     0, 165, 255, 135, 150, 180, 390, 135, 360, 180
 };
 
+// [JN] Press Beta Par Times
+int bpars[4][10] = 
+{ 
+    {0}, 
+    {0, 75},  // Уровень 1: Атомная электростанция
+    {0, 90},  // Уровень 2: Нечестивый собор
+    {0, 90}   // Уровень 3: Хранилище
+}; 
+
 // [crispy] No Rest For The Living par times from the BFG Edition
 static int npars[9] =
 {
@@ -1659,6 +1668,10 @@ void G_DoCompleted (void)
     // [JN] Почему это не работает как else if?
     if (gamemission == pack_nerve)
     wminfo.partime = TICRATE*npars[gamemap-1];
+
+    // [JN] Press Beta par times
+    if (gamemode == pressbeta)
+    wminfo.partime = TICRATE*bpars[gameepisode][gamemap];
 
     wminfo.pnum = consoleplayer; 
 

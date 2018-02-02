@@ -32,6 +32,7 @@
 #include "r_local.h"
 #include "s_sound.h"
 #include "doomstat.h"
+#include "d_main.h"     // [JN] D_StartTitle
 
 // Data.
 #include "sounds.h"
@@ -337,7 +338,7 @@ static patch_t*     num[10];
 static patch_t*     wiminus;
 
 // "Finished!" graphics
-static patch_t*     finished;   // Завернен (WIF)
+static patch_t*     finished;   // Увроень завернен
 
 //  "Пред."
 static patch_t*     mp_items;
@@ -767,6 +768,13 @@ void WI_drawShowNextLoc(void)
     int i;
     int last;
 
+    // [JN] Press Beta: end the game after finishing level
+    if (gamemode == pressbeta)
+    {
+        D_StartTitle ();    // [JN] back to the Main Menu
+        return;             // ... and don't go any farther.
+    }
+    
     WI_slamBackground();
 
     // draw animated background
@@ -1426,7 +1434,8 @@ void WI_drawStats(void)
 
     // [crispy] draw total time after level time and par time
     // [JN] Но только если опция включена в настройках совместимости
-    if (show_total_time && !vanillaparm)
+    // [JN] Also don't show for Press Beta, there's one level per episode.
+    if (show_total_time && !vanillaparm && gamemode != pressbeta)
     {
         if (sp_state > 8)
         {

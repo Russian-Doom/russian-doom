@@ -173,6 +173,8 @@ typedef enum
     SPR_POLG,
     SPR_POLM,
     SPR_RFOG,
+    SPR_BON3,       // (Press Beta)
+    SPR_BON4,       // (Press Beta)
     NUMSPRITES
 
 } spritenum_t;
@@ -1167,6 +1169,8 @@ typedef enum
     S_RFOG8,
     S_RFOG9,
     S_RFOG10,
+    S_BON3,         // (Press Beta)
+    S_BON4,         // (Press Beta)
     NUMSTATES
 } statenum_t;
 
@@ -1331,6 +1335,9 @@ typedef enum {
     MT_GIBSMASTERMIND,
 	MT_BLOODFUZZ,
     MT_RFOG,
+    MT_PLASMA1,     // (Press Beta)
+    MT_SCEPTRE,     // (Press Beta)
+    MT_BIBLE,       // (Press Beta)
     NUMMOBJTYPES
 
 } mobjtype_t;
