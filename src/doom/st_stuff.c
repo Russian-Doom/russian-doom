@@ -1774,7 +1774,7 @@ void ST_createWidgets(void)
 
     // [JN] Press Beta artifacts sum
     STlib_initNum(&w_artifacts,
-        ST_FRAGSX,
+        ST_FRAGSX+1,
         ST_FRAGSY,
         tallnum,
         &st_artifactscount,
