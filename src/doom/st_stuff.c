@@ -1208,6 +1208,8 @@ void ST_updateWidgets(void)
         keyboxes[i] = plyr->cards[i] ? i : -1;
 
         //jff 2/24/98 select double key
+        // [JN] Press Beta have a bug with missing skull keys on HUD.
+        // To emulate this, following condition must be commented out:
 
         if (plyr->cards[i+3])
         keyboxes[i] = (keyboxes[i]==-1) ? i+3 : i+6;
