@@ -994,7 +994,7 @@ void ST_updateFaceWidget(void)
             // По методу Brad Harding (Doom Retro).
 
             // [JN] Корректная формула "new_ouch_face"
-            if (new_ouch_face && !vanillaparm)
+            if (new_ouch_face && !vanillaparm && gamemode != pressbeta)
             {
                 // [BH] fix ouch-face when damage > 20
                 if (st_oldhealth - plyr->health > ST_MUCHPAIN)
