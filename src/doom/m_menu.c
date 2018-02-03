@@ -1878,6 +1878,18 @@ boolean M_Responder (event_t* ev)
                 I_SetPalette ((byte *)W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE)+st_palette*768);
             return true;
         }
+        else if (key == key_toggletime)    // [JN] Toggling of local time widget
+        {
+            if (!local_time)
+            {
+                local_time = true;
+            }
+            else
+            {
+                local_time = false;
+            }
+            return true;
+        }
     }
 
     // Pop-up menu?

@@ -82,8 +82,6 @@ int G_VanillaVersionCode(void);
 
 // [JN] Mouselook
 extern int mlook;
-// [JN] Local time widget
-extern int local_time;
 
 // [JN] Дополнительные параметры игры
 
