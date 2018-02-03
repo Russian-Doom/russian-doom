@@ -636,6 +636,10 @@ void R_ProjectSprite (mobj_t* thing)
             // Plasmagun
             else if (thing->type == MT_MISC28)
             vis->colormap = fullbrights_redonly[index];
+        
+            // Press Beta's Lost Soul
+            if (thing->type == MT_SKULL && gamemode == pressbeta)
+            vis->colormap = fullbrights_notgray[index];
         }
     }	
 }
@@ -667,6 +671,7 @@ void R_AddSprites (sector_t* sec)
         spritelights = scalelight[0];
 
         // [JN] Calculating sprite brightmaps
+        fullbrights_notgray = fullbright_notgray[0];
         fullbrights_greenonly1 = fullbright_greenonly1[0];
         fullbrights_dimmeditems = fullbright_dimmeditems[0];
         fullbrights_redonly = fullbright_redonly[0];
@@ -676,6 +681,7 @@ void R_AddSprites (sector_t* sec)
         spritelights = scalelight[LIGHTLEVELS-1];
 
         // [JN] Calculating sprite brightmaps
+        fullbrights_notgray = fullbright_notgray[LIGHTLEVELS-1];
         fullbrights_greenonly1 = fullbright_greenonly1[LIGHTLEVELS-1];
         fullbrights_dimmeditems = fullbright_dimmeditems[LIGHTLEVELS-1];
         fullbrights_redonly = fullbright_redonly[LIGHTLEVELS-1];
@@ -685,6 +691,7 @@ void R_AddSprites (sector_t* sec)
         spritelights = scalelight[lightnum];
 
         // [JN] Calculating sprite brightmaps
+        fullbrights_notgray = fullbright_notgray[lightnum];
         fullbrights_greenonly1 = fullbright_greenonly1[lightnum];
         fullbrights_dimmeditems = fullbright_dimmeditems[lightnum];
         fullbrights_redonly = fullbright_redonly[lightnum];
