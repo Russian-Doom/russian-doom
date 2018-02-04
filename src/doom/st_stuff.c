@@ -1460,9 +1460,25 @@ void ST_drawWidgets(boolean refresh)
 
     STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12);
     
-    // [JN] Update and draw Artifacts (АРТФ) widget only in Press Beta
+    // [JN] Press Beta: some special routine. I need to draw Artifacts widet while not in
+    // automap and Arms widget while in automap. Plus, background must be redrawn immediately.
+    // Also see AM_Stop at am_map.c
     if (gamemode == pressbeta)
-    STlib_updateNum(&w_artifacts, refresh || screenblocks == 11 || screenblocks == 12);
+    {
+        if (!automapactive)
+        {
+            // [JN] Draw Artifacts widet
+            STlib_updateNum(&w_artifacts, refresh || screenblocks == 11 || screenblocks == 12);
+        }
+        else
+        {
+            // [JN] Draw Arms widet. Background (w_armsbg) and numbers (w_arms)
+            STlib_updateBinIcon(&w_armsbg, refresh || screenblocks == 11 || screenblocks == 12);
+
+            for (i=0;i<6;i++)
+            STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
+        }
+    }
 }
 
 

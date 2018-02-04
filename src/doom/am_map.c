@@ -555,6 +555,14 @@ void AM_Stop (void)
     automapactive = false;
     ST_Responder(&st_notify);
     stopped = true;
+
+    // [JN] Press Beta: immediately update all widgets and background.
+    // Needed for correct redwaring of arms/artifacts section.
+    if (gamemode == pressbeta)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+    }
 }
 
 
