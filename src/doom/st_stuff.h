@@ -54,6 +54,10 @@ void ST_Start (void);
 // Called by startup code.
 void ST_Init (void);
 
+// [JN] Prototypes for am_map.c
+void ST_refreshBackground (void);
+void ST_drawWidgets (boolean refresh);
+
 
 
 // States for status bar code.

@@ -47,6 +47,7 @@
 #include "dstrings.h"
 
 #include "am_map.h"
+#include "st_stuff.h"   // [JN] ST_refreshBackground and ST_drawWidgets
 
 
 // For use if I do walls with outsides/insides

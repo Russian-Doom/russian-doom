@@ -29,6 +29,7 @@
 #include "doomstat.h"
 
 #include "g_game.h"
+#include "d_main.h" // [JN] D_StartTitle
 
 #include "crispy.h"
 
