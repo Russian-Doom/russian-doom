@@ -131,6 +131,11 @@ int             levelstarttic;      // gametic at level start
 int             totalkills, totalitems, totalsecret;    // for intermission
 int             totalleveltimes;    // [crispy] CPhipps - total time for all completed levels
  
+// [JN] Press Beta: value for player's lifes.
+// Note that this is "local" value, not placed into the player's structure -
+// no need to do this, since Press Beta is single player only.
+int             lifecount;
+
 char           *demoname;
 boolean         demorecording;
 boolean         longtics;       // cph's doom 1.91 longtics hack
@@ -2098,6 +2103,9 @@ G_InitNew
     totalleveltimes = 0;
 
     viewactive = true;
+
+    // [JN] Press Beta: give player 3 lifes
+    lifecount = 3;
 
     // Set the sky to use.
     //

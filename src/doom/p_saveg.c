@@ -39,6 +39,7 @@ FILE *save_stream;
 int savegamelength;
 boolean savegame_error;
 
+extern int lifecount;   // [JN] Press Beta: amount of Lives
 extern boolean flip_levels_cmdline;
 
 
@@ -743,6 +744,9 @@ static void saveg_read_player_t(player_t *str)
     // int secretcount;
     str->secretcount = saveg_read32();
 
+    // int lifecount;
+    lifecount = saveg_read32();
+
     // int artifactcount;
     str->artifactcount = saveg_read32();
 
@@ -879,6 +883,9 @@ static void saveg_write_player_t(player_t *str)
 
     // int secretcount;
     saveg_write32(str->secretcount);
+
+    // int lifecount;
+    saveg_write32(lifecount);
 
     // int artifactcount;
     saveg_write32(str->artifactcount);

@@ -53,6 +53,7 @@ extern int agressive_lost_souls; // [JN] Повышенная агрессивн
 int	maxammo[NUMAMMO] = {200, 50, 300, 50};
 int	clipammo[NUMAMMO] = {10, 4, 20, 1};
 
+extern int lifecount;   // [JN] Press Beta: amount of lifes
 
 //
 // GET STUFF
@@ -419,6 +420,8 @@ P_TouchSpecialThing
 	break;
 	
       case SPR_SOUL:
+	if (gamemode == pressbeta)  // [JN] Press Beta: add Extra Life!
+	    lifecount++;
 	player->health += deh_soulsphere_health;
 	if (player->health > deh_max_soulsphere)
 	    player->health = deh_max_soulsphere;

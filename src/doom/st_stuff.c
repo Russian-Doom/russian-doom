@@ -63,6 +63,9 @@
 
 extern int lcd_gamma_fix;
 
+// [JN] Press Beta: amount of lifes
+extern int lifecount;
+
 //
 // STATUS BAR DATA
 //
@@ -170,6 +173,11 @@ extern int lcd_gamma_fix;
 #define ST_FRAGSX           138
 #define ST_FRAGSY           171	
 #define ST_FRAGSWIDTH       2
+
+// [JN] Press Beta: player's life pos.
+#define ST_LIFESX           177
+#define ST_LIFESY           193
+#define ST_LIFESWIDTH       1
 
 // ARMOR number pos.
 #define ST_ARMORWIDTH       3
@@ -364,6 +372,9 @@ static st_number_t      w_frags;
 
 // [JN] Press Beta: artifacts widget
 static st_number_t      w_artifacts;
+
+// [JN] Press Beta: widget for player's lifes
+static st_number_t      w_lifes;
 
 // health widget
 static st_percent_t     w_health;
@@ -1478,6 +1489,10 @@ void ST_drawWidgets(boolean refresh)
             for (i=0;i<6;i++)
             STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
         }
+
+        // [JN] Draw player's life widget only in traditional HUD and automap
+        if (screenblocks <= 10 || automapactive)
+        STlib_updateNum(&w_lifes, refresh);
     }
 }
 
@@ -1796,6 +1811,15 @@ void ST_createWidgets(void)
         &st_artifactscount,
         &st_artifactson,
         ST_FRAGSWIDTH);
+
+    // [JN] Press Beta: player's lifes sum
+    STlib_initNum(&w_lifes,
+        ST_LIFESX,
+        ST_LIFESY,
+        shortnum,
+        &lifecount,
+        &st_statusbaron,
+        ST_LIFESWIDTH);
 
     // faces
     STlib_initMultIcon(&w_faces,

@@ -47,6 +47,7 @@
 
 boolean		onground;
 
+extern int lifecount;   // [JN] Press Beta: amount of lifes
 extern int mlook;
 
 //
@@ -286,7 +287,23 @@ void P_DeathThink (player_t* player)
 	
 
     if (player->cmd.buttons & BT_USE)
-	player->playerstate = PST_REBORN;
+    {
+        if (gamemode == pressbeta)
+        {
+            // [JN] Press Beta: substract one life first
+            lifecount--;
+
+            // [JN] Press Beta: now checking for remaining amount
+            if (lifecount < 0)
+            {
+                lifecount = 0;      // Don't display -1!
+                D_StartTitle ();    // ... back to the Main Menu
+                return;             // ... and don't go any farther.
+            }
+        }
+
+        player->playerstate = PST_REBORN;
+    }
 }
 
 
