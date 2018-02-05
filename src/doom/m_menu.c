@@ -906,6 +906,13 @@ void M_DrawReadThis1(void)
         skully = 183;
     }
 
+    // [JN] Pixel-perfect position for skull in Press Beta
+    if (gamemode == pressbeta)
+    {
+            skullx = 330;
+            skully = 176;
+    }
+
     lumpname = DEH_String(lumpname);
 
     V_DrawPatchDirect (0, 0, W_CacheLumpName(lumpname, PU_CACHE));
@@ -1788,11 +1795,6 @@ boolean M_Responder (event_t* ev)
         }
         else if (key == key_menu_help)     // Help key
         {
-        // [JN] No HELP screens in Press Beta.
-        // Screenshots with -devparm still working, though.
-        if (gamemode == pressbeta)
-        return false;
-
         M_StartControlPanel ();
 
         if ( gamemode == retail )
