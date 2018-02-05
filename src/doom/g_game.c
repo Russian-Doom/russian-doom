@@ -131,9 +131,10 @@ int             levelstarttic;      // gametic at level start
 int             totalkills, totalitems, totalsecret;    // for intermission
 int             totalleveltimes;    // [crispy] CPhipps - total time for all completed levels
  
-// [JN] Press Beta: value for player's lifes.
-// Note that this is "local" value, not placed into the player's structure -
+// [JN] Press Beta: value for player's artifacts and lifes.
+// Note that these are "local" values, not placed into the player's structure -
 // no need to do this, since Press Beta is single player only.
+int             artifactcount;
 int             lifecount;
 
 char           *demoname;
@@ -1205,13 +1206,11 @@ void G_PlayerReborn (int player)
     int         killcount;
     int         itemcount;
     int         secretcount; 
-    int         artifactcount;
 
     memcpy (frags,players[player].frags,sizeof(frags)); 
     killcount = players[player].killcount; 
     itemcount = players[player].itemcount; 
     secretcount = players[player].secretcount; 
-    artifactcount = players[player].artifactcount;
 
     p = &players[player]; 
     memset (p, 0, sizeof(*p)); 
@@ -1220,7 +1219,6 @@ void G_PlayerReborn (int player)
     players[player].killcount = killcount; 
     players[player].itemcount = itemcount; 
     players[player].secretcount = secretcount; 
-    players[player].artifactcount = artifactcount; 
 
     p->usedown = p->attackdown = true;  // don't do anything immediately 
     p->playerstate = PST_LIVE;       
@@ -1232,6 +1230,8 @@ void G_PlayerReborn (int player)
 
     for (i=0 ; i<NUMAMMO ; i++) 
 	p->maxammo[i] = maxammo[i]; 
+
+    artifactcount = 0;  // [JN] Press Beta: reset amount of artifacts
 }
 
 //
@@ -2104,8 +2104,8 @@ G_InitNew
 
     viewactive = true;
 
-    // [JN] Press Beta: give player 3 lifes
-    lifecount = 3;
+    artifactcount = 0;  // [JN] Press Beta: initialy 0 artifacts
+    lifecount = 3;      // [JN] Press Beta: give player 3 lifes
 
     // Set the sky to use.
     //

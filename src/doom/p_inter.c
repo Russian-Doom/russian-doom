@@ -53,7 +53,8 @@ extern int agressive_lost_souls; // [JN] Повышенная агрессивн
 int	maxammo[NUMAMMO] = {200, 50, 300, 50};
 int	clipammo[NUMAMMO] = {10, 4, 20, 1};
 
-extern int lifecount;   // [JN] Press Beta: amount of lifes
+extern int artifactcount;   // [JN] Press Beta: amount of artifacts
+extern int lifecount;       // [JN] Press Beta: amount of lifes
 
 //
 // GET STUFF
@@ -386,7 +387,7 @@ P_TouchSpecialThing
 	}
 	else
 	{
-	player->artifactcount++;
+	artifactcount++;
 	}
 	player->message = DEH_String(GOTHTHBONUS);
 	break;
@@ -404,18 +405,18 @@ P_TouchSpecialThing
 	}
 	else
 	{
-	player->artifactcount++;
+	artifactcount++;
 	}
 	player->message = DEH_String(GOTARMBONUS);
 	break;
 
       case SPR_BON3:    // [JN] Evil Sceptre
-	player->artifactcount++;
+	artifactcount++;
 	player->message = DEH_String(GOTSCEPTRE);
 	break;
 	
       case SPR_BON4:    // [JN] Unholy bible
-	player->artifactcount++;
+	artifactcount++;
 	player->message = DEH_String(GOTBIBLE);
 	break;
 	

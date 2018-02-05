@@ -63,8 +63,8 @@
 
 extern int lcd_gamma_fix;
 
-// [JN] Press Beta: amount of lifes
-extern int lifecount;
+extern int artifactcount;   // [JN] Press Beta: amount of artifacts
+extern int lifecount;       // [JN] Press Beta: amount of lifes
 
 //
 // STATUS BAR DATA
@@ -1286,7 +1286,7 @@ void ST_updateWidgets(void)
         if (st_artifactscount > 99)
             st_artifactscount = 99;
 
-        st_artifactscount += plyr->artifactcount;
+        st_artifactscount += artifactcount;
     }
 
     // get rid of chat window if up because of message

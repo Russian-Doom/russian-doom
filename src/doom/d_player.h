@@ -123,9 +123,6 @@ typedef struct player_s
     int itemcount;
     int secretcount;
 
-    // [JN] Press Beta: counter of collected artifacts.
-    int artifactcount;
-
     // Hint messages.
     char* message;	
 

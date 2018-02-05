@@ -999,8 +999,7 @@ P_SetupLevel
     wminfo.partime = 180;
     for (i=0 ; i<MAXPLAYERS ; i++)
     {
-	players[i].killcount = players[i].secretcount 
-	    = players[i].itemcount = players[i].artifactcount = 0;
+	players[i].killcount = players[i].secretcount = players[i].itemcount =  0;
     }
 
     // Initial height of PointOfView

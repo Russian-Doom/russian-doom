@@ -1422,6 +1422,32 @@ void WI_drawStats(void)
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
 
     V_DrawShadowedPatchDoom(SP_TIMEX, SP_TIMEY, timepatch);
+    
+    // [JN] Press Beta: draw additional "Artifacts" counter
+    if (gamemode == pressbeta)
+    {
+        extern int artifactcount;
+        
+        // [JN] Draw "Артефакты" title
+        V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTIF"), PU_CACHE));
+        
+        // [JN] Don't start counting immediately
+        if (sp_state > 7)
+        {
+            // [JN] Number of collected artifacts
+            WI_drawNum(ORIGWIDTH - 103, SP_STATSY+3*lh, artifactcount, -1);
+            
+            // [JN] Draw "из" patch ("of")
+            V_DrawShadowedPatchDoom(ORIGWIDTH - 96, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTOF"), PU_CACHE));            
+            // [JN] Overall amount of artifacts, different for each level
+            if (gameepisode == 1 && gamemap == 1)
+            WI_drawNum(ORIGWIDTH - 39, SP_STATSY+3*lh, 36, 2);  // Map 1: 36 artifacts
+            else if (gameepisode == 2 && gamemap == 1)
+            WI_drawNum(ORIGWIDTH - 39, SP_STATSY+3*lh, 29, 2);  // Map 2: 29 artifacts
+            else if (gameepisode == 3 && gamemap == 1)
+            WI_drawNum(ORIGWIDTH - 39, SP_STATSY+3*lh, 25, 2);  // Map 3: 25 artifacts
+        }
+    }
 
     WI_drawTime(ORIGWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time, true);
 
