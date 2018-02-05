@@ -1435,10 +1435,10 @@ void WI_drawStats(void)
         if (sp_state > 7)
         {
             // [JN] Number of collected artifacts
-            WI_drawNum(ORIGWIDTH - 103, SP_STATSY+3*lh, artifactcount, -1);
-            
+            WI_drawNum(ORIGWIDTH - 78, SP_STATSY+3*lh, artifactcount, -1);
+
             // [JN] Draw "из" patch ("of")
-            V_DrawShadowedPatchDoom(ORIGWIDTH - 96, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTOF"), PU_CACHE));            
+            V_DrawShadowedPatchDoom(ORIGWIDTH - 76, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTOF"), PU_CACHE));            
             // [JN] Overall amount of artifacts, different for each level
             if (gameepisode == 1 && gamemap == 1)
             WI_drawNum(ORIGWIDTH - 39, SP_STATSY+3*lh, 36, 2);  // Map 1: 36 artifacts
