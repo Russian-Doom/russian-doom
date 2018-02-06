@@ -1,9 +1,9 @@
-AC_INIT(Russian Doom, 2.4, julian.nechaevsky@outlook.com,
+AC_INIT(Russian Doom, 2.5, julian.nechaevsky@outlook.com,
         russian-doom)
 
 PACKAGE_SHORTNAME=${PACKAGE_NAME% Doom}
 PACKAGE_SHORTDESC="Russian Doom, Freedoom, Heretic and Hexen"
-PACKAGE_COPYRIGHT="Copyright (C) 2016-2017"
+PACKAGE_COPYRIGHT="Copyright (C) 2016-2018"
 PACKAGE_LICENSE="GNU General Public License, version 2"
 PACKAGE_MAINTAINER="Julian Nechaevsky"
 PACKAGE_URL="http://jnechaevsky.sf.net/rusdoom"
