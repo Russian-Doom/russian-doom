@@ -106,7 +106,6 @@ lighttable_t* fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
-extern int brightmaps;
 extern boolean vanillaparm;
 
 // bumped light from gun blasts

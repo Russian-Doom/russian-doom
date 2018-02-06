@@ -39,6 +39,8 @@
 extern void R_InitSky(int map);
 extern void P_PlayerNextArtifact(player_t * player);
 
+extern boolean MenuActive;
+
 // Functions
 
 boolean G_CheckDemoStatus(void);
@@ -217,7 +219,6 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     int flyheight;
     int pClass;
     static int  joybspeed_old = 2;
-    extern boolean MenuActive;
     extern boolean askforquit;
 
     extern boolean artiskip;
@@ -892,7 +893,6 @@ static void SetMouseButtons(unsigned int buttons_mask)
 boolean G_Responder(event_t * ev)
 {
     player_t *plr;
-    extern boolean MenuActive;
 
     plr = &players[consoleplayer];
     if (ev->type == ev_keyup && ev->data1 == key_useartifact)

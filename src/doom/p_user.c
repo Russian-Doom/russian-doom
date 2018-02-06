@@ -49,7 +49,6 @@
 boolean		onground;
 
 extern int lifecount;   // [JN] Press Beta: amount of lifes
-extern int mlook;
 
 //
 // P_Thrust
