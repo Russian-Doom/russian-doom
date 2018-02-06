@@ -1993,11 +1993,6 @@ boolean M_Responder (event_t* ev)
         currentMenu->lastOn = itemOn;
         if (currentMenu->prevMenu)
         {
-            // [JN] Small hack for preventing going to
-            // the Episode selection in Press Beta.
-            if (gamemode == pressbeta)
-            currentMenu = &MainDef;
-            else
             currentMenu = currentMenu->prevMenu;
 
             itemOn = currentMenu->lastOn;
@@ -2272,6 +2267,9 @@ void M_Init (void)
         MainDef = MainDefBeta;
         // [JN] Remove one lower menu item
         MainDef.numitems--;
+        // [JN] Correct return to previous menu
+        NewDef.prevMenu = &MainDef;
+        break;
 
         default:
         break;
