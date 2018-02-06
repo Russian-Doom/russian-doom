@@ -1349,18 +1349,27 @@ M_DrawThermo
   int thermWidth,
   int thermDot )
 {
-    int xx;
-    int i;
+    int     xx;
+    int     i;
+    char    num[4];
 
     xx = x;
+
     V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
+
     xx += 8;
+
     for (i=0;i<thermWidth;i++)
     {
         V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
         xx += 8;
     }
+
     V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
+
+    // [JN] from Crispy Doom: also draw numerical representation of slider position
+    M_snprintf(num, 4, "%3d", thermDot);
+    M_WriteText(xx + 8, y + 3, num);
 
     // [crispy] do not crash anymore if value exceeds thermometer range
     // [JN] Если ползунок уезжает за пределы полоски вправо, окрашивать его красным
@@ -1378,16 +1387,6 @@ M_DrawThermo
     {
         V_DrawPatchDirect((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));        
     }
-
-    // Ранее:
-    //  V_DrawPatchDirect((x + 8) + thermDot * 8, y,
-    //		      W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));
-    
-    //  [JN] Цифровая индикация ползунков из Crispy Doom.
-    //  Не используется, т.к. не смотря на полезность функции, 
-    //  это нарушет оригинальный вид элементов меню.
-    //  M_snprintf(num, 4, "%3d", thermDot);
-    //  M_WriteText(xx + 8, y + 3, num);
 }
 
 
