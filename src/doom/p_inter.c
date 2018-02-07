@@ -445,9 +445,12 @@ P_TouchSpecialThing
 	
 	// cards
 	// leave cards for everyone
+    // [JN] Don't pick up a key if player already have it
       case SPR_BKEY:
 	if (!player->cards[it_bluecard])
 	    player->message = DEH_String(GOTBLUECARD);
+	else
+	    return;
 	P_GiveCard (player, it_bluecard);
 	if (!netgame)
 	    break;
@@ -456,6 +459,8 @@ P_TouchSpecialThing
       case SPR_YKEY:
 	if (!player->cards[it_yellowcard])
 	    player->message = DEH_String(GOTYELWCARD);
+	else
+	    return;
 	P_GiveCard (player, it_yellowcard);
 	if (!netgame)
 	    break;
@@ -464,6 +469,8 @@ P_TouchSpecialThing
       case SPR_RKEY:
 	if (!player->cards[it_redcard])
 	    player->message = DEH_String(GOTREDCARD);
+	else
+	    return;
 	P_GiveCard (player, it_redcard);
 	if (!netgame)
 	    break;
@@ -472,6 +479,8 @@ P_TouchSpecialThing
       case SPR_BSKU:
 	if (!player->cards[it_blueskull])
 	    player->message = DEH_String(GOTBLUESKUL);
+	else
+	    return;
 	P_GiveCard (player, it_blueskull);
 	if (!netgame)
 	    break;
@@ -480,6 +489,8 @@ P_TouchSpecialThing
       case SPR_YSKU:
 	if (!player->cards[it_yellowskull])
 	    player->message = DEH_String(GOTYELWSKUL);
+	else
+	    return;
 	P_GiveCard (player, it_yellowskull);
 	if (!netgame)
 	    break;
@@ -488,6 +499,8 @@ P_TouchSpecialThing
       case SPR_RSKU:
 	if (!player->cards[it_redskull])
 	    player->message = DEH_String(GOTREDSKULL);
+	else
+	    return;
 	P_GiveCard (player, it_redskull);
 	if (!netgame)
 	    break;
