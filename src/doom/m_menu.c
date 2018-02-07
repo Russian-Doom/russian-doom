@@ -1367,9 +1367,13 @@ M_DrawThermo
 
     V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
 
-    // [JN] from Crispy Doom: also draw numerical representation of slider position
-    M_snprintf(num, 4, "%3d", thermDot);
-    M_WriteText(xx + 8, y + 3, num);
+    // [JN] from Crispy Doom: also draw numerical representation of slider position.
+    // Also don't draw it for "Screen size" slider, which is a 10 units in width.
+    if (thermWidth > 11)
+    {
+        M_snprintf(num, 4, "%3d", thermDot);
+        M_WriteText(xx + 8, y + 3, num);
+    }
 
     // [crispy] do not crash anymore if value exceeds thermometer range
     // [JN] Если ползунок уезжает за пределы полоски вправо, окрашивать его красным
