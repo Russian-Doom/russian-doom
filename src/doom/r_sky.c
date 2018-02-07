@@ -23,32 +23,31 @@
 // Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
-// Needed for FRACUNIT.
-#include "m_fixed.h"
+// HEADER FILES ------------------------------------------------------------
 
-// Needed for Flat retrieval.
-#include "r_data.h"
-
-
+#include "m_fixed.h"    // Needed for FRACUNIT
+#include "r_data.h"     // Needed for Flat retrieval
 #include "r_sky.h"
 
-//
-// sky mapping
-//
-int			skyflatnum;
-int			skytexture;
-int			skytexturemid;
+// PUBLIC DATA DEFINITIONS -------------------------------------------------
+
+int skyflatnum;         //
+int skytexture;         // sky mapping
+int skytexturemid;      //
+
+// EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 extern boolean scaled_sky;
 
+// CODE ====================================================================
 
-//
+// -------------------------------------------------------------------------
 // R_InitSkyMap
 // Called whenever the view size changes.
-//
+// -------------------------------------------------------------------------
+
 void R_InitSkyMap (void)
 {
-    
     if (scaled_sky)
     {
         skytexturemid = ORIGHEIGHT/2*FRACUNIT;
@@ -58,4 +57,3 @@ void R_InitSkyMap (void)
         skytexturemid = ORIGHEIGHT+199 * FRACUNIT;
     }
 }
-
