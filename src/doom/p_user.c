@@ -47,6 +47,7 @@
 #define MAXBOB	0x100000	
 
 boolean		onground;
+boolean beneath_door;   // [JN] Player is crushed by closed door
 
 extern int lifecount;   // [JN] Press Beta: amount of lifes
 
@@ -152,6 +153,18 @@ void P_CalcHeight (player_t* player)
 
     if (player->viewz > player->mo->ceilingz-4*FRACUNIT)
 	player->viewz = player->mo->ceilingz-4*FRACUNIT;
+
+    // [JN] If dead player is crushed by closed door, 
+    // set boolean "beneath_door" to true and stop
+    // game world rendering in R_RenderPlayerView.
+    if (singleplayer && player->playerstate == PST_DEAD && player->viewz < player->mo->floorz)
+    {
+        beneath_door = true;
+    }
+    else
+    {
+        beneath_door = false;
+    }
 }
 
 

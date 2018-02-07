@@ -871,6 +871,7 @@ void R_RenderPlayerView (player_t* player)
 {	
     extern void V_DrawFilledBox (int x, int y, int w, int h, int c);
     extern boolean automapactive;
+    extern boolean beneath_door;
 
     R_SetupFrame (player);
 
@@ -882,6 +883,13 @@ void R_RenderPlayerView (player_t* player)
         R_RenderBSPNode (numnodes-1);
         return;
     }
+
+    if (beneath_door == true)
+    {
+        // [JN] fill whole screen with black color and don't go any farther
+        V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+        return;
+    }    
 
     // [JN] Draw map's "out of bounds" as a black color
     V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
