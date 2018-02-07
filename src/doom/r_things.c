@@ -19,9 +19,10 @@
 // Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
+// HEADER FILES ------------------------------------------------------------
+
 #include <stdio.h>
 #include <stdlib.h>
-
 
 #include "deh_main.h"
 #include "doomdef.h"
@@ -34,15 +35,12 @@
 #include "g_game.h"
 #include "crispy.h"
 
+// MACROS ------------------------------------------------------------------
 
 #define MINZ        (FRACUNIT*4)
 #define BASEYCENTER (ORIGHEIGHT/2)
 
-extern boolean chainsaw_attack_swing;
-
-//void R_DrawColumn (void);
-//void R_DrawFuzzColumn (void);
-
+// TYPES -------------------------------------------------------------------
 
 typedef struct
 {
@@ -53,6 +51,11 @@ typedef struct
     int bottomclip;
 } maskdraw_t;
 
+// EXTERNAL DATA DECLARATIONS ----------------------------------------------
+
+extern boolean chainsaw_attack_swing;
+
+// PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 //
 // Sprite rotation 0 is facing the viewer,
@@ -76,18 +79,15 @@ lighttable_t** fullbrights_greenonly3;
 lighttable_t** fullbrights_orangeyellow;
 lighttable_t** fullbrights_dimmeditems;
 
-// constant arrays
-//  used for psprite clipping and initializing clipping
+// constant arrays used for psprite clipping and initializing clipping
 int negonearray[SCREENWIDTH];
 int screenheightarray[SCREENWIDTH];
-
 
 //
 // INITIALIZATION FUNCTIONS
 //
 
-// variables used to look up
-//  and range check thing_t sprites patches
+// variables used to look up and range check thing_t sprites patches
 spritedef_t*    sprites;
 int             numsprites;
 
@@ -95,11 +95,31 @@ spriteframe_t   sprtemp[29];
 int             maxframe;
 char*           spritename;
 
+//
+// GAME FUNCTIONS
+//
 
+vissprite_t     vissprites[MAXVISSPRITES];
+vissprite_t*    vissprite_p;
+int	            newvissprite;
+
+int*            mfloorclip;
+int*            mceilingclip;
+
+fixed_t         spryscale;
+int64_t         sprtopscreen; // [crispy] WiggleFix
+
+vissprite_t     vsprsortedhead;
+
+// CODE ====================================================================
+
+// -------------------------------------------------------------------------
 //
 // R_InstallSpriteLump
 // Local function for R_InitSprites.
 //
+// -------------------------------------------------------------------------
+
 void R_InstallSpriteLump (int lump, unsigned frame, char rot, boolean flipped)
 {
     int r;
@@ -150,7 +170,7 @@ void R_InstallSpriteLump (int lump, unsigned frame, char rot, boolean flipped)
     sprtemp[frame].flip[rotation] = (byte)flipped;
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_InitSpriteDefs
 // Pass a null terminated list of sprite names
@@ -166,6 +186,8 @@ void R_InstallSpriteLump (int lump, unsigned frame, char rot, boolean flipped)
 //  letter/number appended.
 // The rotation character can be 0 to signify no rotations.
 //
+// -------------------------------------------------------------------------
+
 void R_InitSpriteDefs (char** namelist)
 {
     char**  check;
@@ -276,19 +298,13 @@ void R_InitSpriteDefs (char** namelist)
     }
 }
 
-
-//
-// GAME FUNCTIONS
-//
-vissprite_t     vissprites[MAXVISSPRITES];
-vissprite_t*    vissprite_p;
-int	            newvissprite;
-
-
+// -------------------------------------------------------------------------
 //
 // R_InitSprites
 // Called at program start.
 //
+// -------------------------------------------------------------------------
+
 void R_InitSprites (char** namelist)
 {
     int i;
@@ -301,20 +317,24 @@ void R_InitSprites (char** namelist)
     R_InitSpriteDefs (namelist);
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_ClearSprites
 // Called at frame start.
 //
+// -------------------------------------------------------------------------
+
 void R_ClearSprites (void)
 {
     vissprite_p = vissprites;
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_NewVisSprite
 //
+// -------------------------------------------------------------------------
+
 vissprite_t overflowsprite;
 vissprite_t* R_NewVisSprite (void)
 {
@@ -325,18 +345,14 @@ vissprite_t* R_NewVisSprite (void)
     return vissprite_p-1;
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_DrawMaskedColumn
 // Used for sprites and masked mid textures.
 // Masked means: partly transparent, i.e. stored
 //  in posts/runs of opaque pixels.
 //
-int* mfloorclip;
-int* mceilingclip;
-
-fixed_t spryscale;
-int64_t sprtopscreen; // [crispy] WiggleFix
+// -------------------------------------------------------------------------
 
 void R_DrawMaskedColumn (column_t* column)
 {
@@ -379,11 +395,13 @@ void R_DrawMaskedColumn (column_t* column)
     dc_texturemid = basetexturemid;
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_DrawVisSprite
 //  mfloorclip and mceilingclip should also be set.
 //
+// -------------------------------------------------------------------------
+
 void R_DrawVisSprite (vissprite_t* vis, int x1, int x2)
 {
     column_t*   column;
@@ -432,41 +450,33 @@ void R_DrawVisSprite (vissprite_t* vis, int x1, int x2)
     colfunc = basecolfunc;
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_ProjectSprite
 // Generates a vissprite for a thing
 //  if it might be visible.
 //
+// -------------------------------------------------------------------------
+
 void R_ProjectSprite (mobj_t* thing)
 {
-    fixed_t tr_x;
-    fixed_t tr_y;
+    int         x1, x2;
+    int         lump;
+    int         index;
+    unsigned    rot;
 
-    fixed_t gxt;
-    fixed_t gyt;
+    fixed_t     tr_x, tr_y;
+    fixed_t     gxt, gyt;
+    fixed_t     tx, tz;
+    fixed_t     xscale;
+    fixed_t     iscale;
 
-    fixed_t tx;
-    fixed_t tz;
-
-    fixed_t xscale;
-
-    int x1;
-    int x2;
-
-    spritedef_t*   sprdef;
-    spriteframe_t* sprframe;
-    int            lump;
-
-    unsigned rot;
-    boolean  flip;
-
-    int index;
-
-    vissprite_t* vis;
-
-    angle_t ang;
-    fixed_t iscale;
+    vissprite_t*    vis;
+    spritedef_t*    sprdef;
+    spriteframe_t*  sprframe;
+    
+    boolean         flip;
+    angle_t         ang;    
 
     // transform the origin point
     tr_x = thing->x - viewx;
@@ -644,11 +654,13 @@ void R_ProjectSprite (mobj_t* thing)
     }	
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_AddSprites
 // During BSP traversal, this adds sprites by sector.
 //
+// -------------------------------------------------------------------------
+
 void R_AddSprites (sector_t* sec)
 {
     mobj_t* thing;
@@ -702,7 +714,12 @@ void R_AddSprites (sector_t* sec)
     R_ProjectSprite (thing);
 }
 
+// -------------------------------------------------------------------------
+//
 // [crispy] apply bobbing (or centering) to the player's weapon sprite
+//
+// -------------------------------------------------------------------------
+
 static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
 {
 	const angle_t angle = (128 * leveltime) & FINEMASK;
@@ -728,7 +745,12 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 	}
 }
 
+// -------------------------------------------------------------------------
+//
 // [crispy] & [JN] Уполовиненная амплитуда при стрельбе в движении
+//
+// -------------------------------------------------------------------------
+
 static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
 {
 	const angle_t angle = (128 * leveltime) & FINEMASK;
@@ -762,21 +784,24 @@ static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *s
 	}
 }
 
+// -------------------------------------------------------------------------
 //
 // R_DrawPSprite
 //
+// -------------------------------------------------------------------------
+
 void R_DrawPSprite (pspdef_t* psp)
 {
+    int             x1, x2;
+    int             lump;
     fixed_t         tx;
-    int             x1;
-    int             x2;
+    fixed_t         psp_sx = psp->sx, psp_sy = psp->sy;
     spritedef_t*    sprdef;
     spriteframe_t*  sprframe;
-    int             lump;
-    boolean         flip;
     vissprite_t*    vis;
     vissprite_t     avis;
-    fixed_t         psp_sx = psp->sx, psp_sy = psp->sy;
+    boolean         flip;
+
     const int state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] Для плавной анимации бензопилы
 
     // decide which patch to use
@@ -900,16 +925,18 @@ void R_DrawPSprite (pspdef_t* psp)
     R_DrawVisSprite (vis, vis->x1, vis->x2);
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_DrawPlayerSprites
 //
+// -------------------------------------------------------------------------
+
 void R_DrawPlayerSprites (void)
 {
     int         i;
     int         lightnum;
-    pspdef_t*   psp;
     const int   state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] We need to define what "state" actually is
+    pspdef_t*   psp;    
 
     // get light level
     lightnum = (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) + extralight;
@@ -948,11 +975,11 @@ void R_DrawPlayerSprites (void)
     }
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_SortVisSprites
 //
-vissprite_t	vsprsortedhead;
+// -------------------------------------------------------------------------
 
 void R_SortVisSprites (void)
 {
@@ -963,8 +990,7 @@ void R_SortVisSprites (void)
     vissprite_t     unsorted;
     fixed_t         bestscale;
 
-    count = vissprite_p - vissprites;
-
+    count         = vissprite_p - vissprites;
     unsorted.next = unsorted.prev = &unsorted;
 
     if (!count)
@@ -1007,13 +1033,14 @@ void R_SortVisSprites (void)
     }
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_DrawSprite
 //
+// -------------------------------------------------------------------------
+
 void R_DrawSprite (vissprite_t* spr)
 {
-    drawseg_t*  ds;
     int         clipbot[SCREENWIDTH];
     int         cliptop[SCREENWIDTH];
     int         x;
@@ -1021,6 +1048,7 @@ void R_DrawSprite (vissprite_t* spr)
     int         r2;
     fixed_t     scale;
     fixed_t     lowscale;
+    drawseg_t*  ds;
     /* int      silhouette; // [JN] No longer unused */
 
     for (x = spr->x1 ; x<=spr->x2 ; x++)
@@ -1094,10 +1122,12 @@ void R_DrawSprite (vissprite_t* spr)
     R_DrawVisSprite (spr, spr->x1, spr->x2);
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_DrawMasked
 //
+// -------------------------------------------------------------------------
+
 void R_DrawMasked (void)
 {
     vissprite_t*    spr;
@@ -1132,4 +1162,3 @@ void R_DrawMasked (void)
     if (!viewangleoffset)		
     R_DrawPlayerSprites ();
 }
-
