@@ -539,6 +539,10 @@ void ST_refreshBackground(void)
     {
 	V_DrawPatch(ST_X, 0, BG, sbar);
 
+	// [crispy] back up arms widget background
+	if (!deathmatch)
+	    V_DrawPatch(ST_ARMSBGX, 0, BG, armsbg);
+
 	if (netgame)
 	    V_DrawPatch(ST_FX, 0, BG, faceback);
 
