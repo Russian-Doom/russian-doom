@@ -694,7 +694,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     }
 
     // [JN] Mouselook: initials
-    if (mlook && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive && !askforquit && !paused)
+    // TODO: make it safe for network game
+    if (mlook && !netgame && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive && !askforquit && !paused)
     {
         players[consoleplayer].lookdir += mousey;
         
