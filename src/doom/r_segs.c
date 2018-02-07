@@ -19,6 +19,8 @@
 // Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
+// HEADER FILES ------------------------------------------------------------
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,53 +32,51 @@
 #include "g_game.h"
 #include "r_segs.h"
 
-// [JN] For brightmaps initialization
-// Walls:
-extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
-extern int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
-extern int bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15;
-extern int bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20;
-extern int bmaptexture21, bmaptexture22, bmaptexture23, bmaptexture24, bmaptexture25;
-extern int bmaptexture26, bmaptexture27, bmaptexture28, bmaptexture29, bmaptexture30;
-extern int bmaptexture31, bmaptexture32, bmaptexture33, bmaptexture34, bmaptexture35;
-extern int bmaptexture36, bmaptexture37, bmaptexture38, bmaptexture39, bmaptexture40;
-extern int bmaptexture41, bmaptexture42, bmaptexture43, bmaptexture44, bmaptexture45;
-extern int bmaptexture46, bmaptexture47, bmaptexture48, bmaptexture49, bmaptexture50;
-extern int bmaptexture51, bmaptexture52, bmaptexture53, bmaptexture54, bmaptexture55;
-extern int bmaptexture56, bmaptexture57, bmaptexture58, bmaptexture59, bmaptexture60;
-extern int bmaptexture61, bmaptexture62, bmaptexture63, bmaptexture64, bmaptexture65;
-extern int bmaptexture66, bmaptexture67, bmaptexture68, bmaptexture69, bmaptexture70;
-extern int bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74, bmaptexture75;
-extern int bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80;
-extern int bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84;
-extern int bmap_terminator;
+// MACROS ------------------------------------------------------------------
 
+#define HEIGHTBITS  12
+#define HEIGHTUNIT  (1<<HEIGHTBITS)
 
-// OPTIMIZE: closed two sided lines as single sided
+// PUBLIC DATA DEFINITIONS -------------------------------------------------
+
+// [JN] Wall brightmaps initialization
+extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, 
+bmaptexture05, bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, 
+bmaptexture10, bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, 
+bmaptexture15, bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19,
+bmaptexture20, bmaptexture21, bmaptexture22, bmaptexture23, bmaptexture24, 
+bmaptexture25, bmaptexture26, bmaptexture27, bmaptexture28, bmaptexture29, 
+bmaptexture30, bmaptexture31, bmaptexture32, bmaptexture33, bmaptexture34, 
+bmaptexture35, bmaptexture36, bmaptexture37, bmaptexture38, bmaptexture39, 
+bmaptexture40, bmaptexture41, bmaptexture42, bmaptexture43, bmaptexture44, 
+bmaptexture45, bmaptexture46, bmaptexture47, bmaptexture48, bmaptexture49, 
+bmaptexture50, bmaptexture51, bmaptexture52, bmaptexture53, bmaptexture54,
+bmaptexture55, bmaptexture56, bmaptexture57, bmaptexture58, bmaptexture59, 
+bmaptexture60, bmaptexture61, bmaptexture62, bmaptexture63, bmaptexture64, 
+bmaptexture65, bmaptexture66, bmaptexture67, bmaptexture68, bmaptexture69, 
+bmaptexture70, bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74,
+bmaptexture75, bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, 
+bmaptexture80, bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84,
+bmap_terminator;
+
+// PUBLIC DATA DEFINITIONS -------------------------------------------------
+
+int toptexture, bottomtexture, midtexture;
+
+int rw_angle1;      // angle to line origin
+int rw_x, rw_stopx; // regular wall
+
+int worldtop, worldbottom, worldhigh, worldlow;
 
 // True if any of the segs textures might be visible.
-boolean segtextured;	
+boolean segtextured;
 
 // False if the back side is the same plane.
-boolean markfloor;	
-boolean markceiling;
-boolean maskedtexture;
-
-int toptexture;
-int bottomtexture;
-int midtexture;
+boolean markfloor, markceiling, maskedtexture;
 
 angle_t rw_normalangle;
-// angle to line origin
-int rw_angle1;	
-
-//
-// regular wall
-//
-int rw_x;
-int rw_stopx;
-
 angle_t rw_centerangle;
+
 fixed_t rw_offset;
 fixed_t rw_distance;
 fixed_t rw_scale;
@@ -85,31 +85,25 @@ fixed_t rw_midtexturemid;
 fixed_t rw_toptexturemid;
 fixed_t rw_bottomtexturemid;
 
-int worldtop;
-int worldbottom;
-int worldhigh;
-int worldlow;
-
-int64_t pixhigh; // [crispy] WiggleFix
-int64_t pixlow;  // [crispy] WiggleFix
+int64_t pixhigh;    // [crispy] WiggleFix
+int64_t pixlow;     // [crispy] WiggleFix
 fixed_t pixhighstep;
 fixed_t pixlowstep;
 
-int64_t topfrac; // [crispy] WiggleFix
+int64_t topfrac;    // [crispy] WiggleFix
 fixed_t topstep;
 
 int64_t bottomfrac; // [crispy] WiggleFix
 fixed_t bottomstep;
 
-
 lighttable_t** walllights;
+lighttable_t** walllights_top;      //
+lighttable_t** walllights_middle;   // [JN] Additional tables for brightmaps
+lighttable_t** walllights_bottom;   //
 
-// [JN] Additional tables for brightmaps
-lighttable_t** walllights_top;
-lighttable_t** walllights_middle;
-lighttable_t** walllights_bottom;
+int* maskedtexturecol;  // [crispy] 32-bit integer math
 
-int* maskedtexturecol; // [crispy] 32-bit integer math
+// CODE ====================================================================
 
 // [crispy] WiggleFix: add this code block near the top of r_segs.c
 //
@@ -172,6 +166,12 @@ static const struct
     { 128 * FRACUNIT,  9}
 };
 
+// -------------------------------------------------------------------------
+//
+// R_FixWiggle
+//
+// -------------------------------------------------------------------------
+
 void R_FixWiggle (sector_t *sector)
 {
     static int	lastheight = 0;
@@ -206,12 +206,13 @@ void R_FixWiggle (sector_t *sector)
     }
 }
  
- 
+// -------------------------------------------------------------------------
 //
 // R_RenderMaskedSegRange
 //
-void
-R_RenderMaskedSegRange (drawseg_t* ds, int x1, int x2)
+// -------------------------------------------------------------------------
+
+void R_RenderMaskedSegRange (drawseg_t* ds, int x1, int x2)
 {
     unsigned    index;
     column_t*   col;
@@ -321,7 +322,7 @@ R_RenderMaskedSegRange (drawseg_t* ds, int x1, int x2)
     }
 }
 
-
+// -------------------------------------------------------------------------
 //
 // R_RenderSegLoop
 // Draws zero, one, or two textures (and possibly a masked
@@ -330,11 +331,10 @@ R_RenderMaskedSegRange (drawseg_t* ds, int x1, int x2)
 //  textures.
 // CALLED: CORE LOOPING ROUTINE.
 //
-#define HEIGHTBITS  12
-#define HEIGHTUNIT  (1<<HEIGHTBITS)
-
 // [JN] Note: SPARKLEFIX has been taken from Doom Retro.
-// Many thanks to Brad Harding for his research and fixing this bug!
+//      Many thanks to Brad Harding for his research and fixing this bug!
+//
+// -------------------------------------------------------------------------
 
 void R_RenderSegLoop (void)
 {
@@ -534,9 +534,13 @@ void R_RenderSegLoop (void)
     }
 }
 
-
+// -------------------------------------------------------------------------
+//
 // [crispy] WiggleFix: move R_ScaleFromGlobalAngle function to r_segs.c,
 // above R_StoreWallRange
+//
+// -------------------------------------------------------------------------
+
 fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 {
     int     anglea = ANG90 + (visangle - viewangle);
@@ -564,11 +568,13 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
     return scale;
 }
 
+// -------------------------------------------------------------------------
 //
 // R_StoreWallRange
-// A wall segment will be drawn
-//  between start and stop pixels (inclusive).
+// A wall segment will be drawn between start and stop pixels (inclusive).
 //
+// -------------------------------------------------------------------------
+
 void R_StoreWallRange (int start, int stop)
 {
     angle_t     offsetangle;
@@ -1239,4 +1245,3 @@ void R_StoreWallRange (int start, int stop)
     }
     ds_p++;
 }
-
