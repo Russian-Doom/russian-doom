@@ -572,8 +572,14 @@ P_TouchSpecialThing
 	break;
 	
       case SPR_PMAP:
-	if (!P_GivePower (player, pw_allmap))
-	    return;
+	// [JN] Allow to pickup automap if player already have it,
+	// to make 100% items possible on levels with few automaps. 
+	// Notable example: MAP27 of Hell on Earth.
+	//
+	// old code:
+	// if (!P_GivePower (player, pw_allmap))
+	//     return;
+	P_GivePower (player, pw_allmap);
 	player->message = DEH_String(GOTMAP);
 	sound = sfx_getpow;
 	break;
