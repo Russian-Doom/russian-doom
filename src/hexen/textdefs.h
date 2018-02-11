@@ -175,7 +175,7 @@
 
 // [JN] Специфические сообщения порта
 
-#define TXT_VERSION "DTHCBZ 2>5 (D HFPHF,JNRT)"       // ВЕРСИЯ 2.5 (В РАЗРАБОТКЕ)
+#define TXT_VERSION "DTHCBZ 2>5 (11>02>2018)"         // ВЕРСИЯ 2.5 (11.02.2018)
 
 #define TXT_ALWAYSRUN_ON "GJCNJZYYSQ ,TU DRK.XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
 #define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ ,TU DSRK.XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
