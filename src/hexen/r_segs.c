@@ -105,7 +105,8 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
     lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
     
     // [JN] Fake contrast: ressurected, make optional
-    if (fake_contrast && !vanilla)
+    // but also do not use it in foggy maps 
+    if (fake_contrast && !vanilla && LevelUseFullBright)
     {
         if (curline->v1->y == curline->v2->y)
             lightnum--;
@@ -651,7 +652,8 @@ void R_StoreWallRange(int start, int stop)
             lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT) + extralight;
             
             // [JN] Fake contrast: ressurected, make optional
-            if (fake_contrast && !vanillaparm)
+            // but also do not use it in foggy maps 
+            if (fake_contrast && !vanillaparm && LevelUseFullBright)
             {
                 if (curline->v1->y == curline->v2->y)
                     lightnum--;
