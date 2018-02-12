@@ -1158,7 +1158,7 @@
 #define STSTR_MLOOK_ON  "drk.xty"                                   // включен
 #define STSTR_MLOOK_OFF "dsrk.xty"                                  // выключен
 
-#define STSTR_VERSION   "dthcbz 2>5 (11>02>2018)"                   // Версия 2.5 (11.02.2018)
+#define STSTR_VERSION   "dthcbz 2>6 (d hfphf,jnrt)"                 // Версия 2.6 (в разработке)
 
 
 #endif

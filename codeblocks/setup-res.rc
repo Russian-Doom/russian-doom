@@ -1,21 +1,21 @@
 1 ICON "../data/setup.ico"
 
 1 VERSIONINFO
-PRODUCTVERSION 2,5
-FILEVERSION 2,5
+PRODUCTVERSION 2,6
+FILEVERSION 2,6
 FILETYPE 1
 {
  BLOCK "StringFileInfo"
  {
   BLOCK "040904E4"
   {
-   VALUE "FileVersion", "2.5"
+   VALUE "FileVersion", "2.6"
    VALUE "FileDescription", "Программа настроек"
    VALUE "InternalName", "Setup.exe"
    VALUE "CompanyName", "julian.nechaevsky@outlook.com"
    VALUE "LegalCopyright", "\xA9 2016-2018 Julian Nechaevsky. All rights reserved."
    VALUE "ProductName", "Setup.exe"
-   VALUE "ProductVersion", "2.5"
+   VALUE "ProductVersion", "2.6"
   }
  }
  BLOCK "VarFileInfo"
