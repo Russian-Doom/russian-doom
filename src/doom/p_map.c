@@ -1594,6 +1594,14 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         else
         P_SetMobjState (thing, S_GIBS);
 
+        // [JN] Initialize player's movement momentum for preventing
+        // "flying through" solid walls in crushed state.
+        if (singleplayer && thing->type == MT_PLAYER)
+        {
+        thing->momx = 0;
+        thing->momy = 0;
+        }
+
         thing->flags &= ~MF_SOLID;
         thing->height = 0;
         thing->radius = 0;

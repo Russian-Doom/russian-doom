@@ -30,6 +30,7 @@
 #include "r_state.h"
 // Data.
 #include "sounds.h"
+#include "crispy.h"
 
 
 //
@@ -97,7 +98,10 @@ T_MovePlane
 		{
 		    sector->floorheight = lastpos;
 		    P_ChangeSector(sector,crush);
-		    //return crushed;
+		    // [JN] Crush everyone to death. 
+		    // Special fix for E2M4 and probably other maps.
+		    if (singleplayer)
+		    return crushed;
 		}
 		return pastdest;
 	    }
