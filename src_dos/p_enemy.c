@@ -1296,7 +1296,8 @@ void A_Fire (mobj_t* actor);
 
 void A_StartFire (mobj_t* actor)
 {
-    S_StartSound(actor,sfx_flamst);
+    // [JN] Not called by the engine
+    // S_StartSound(actor,sfx_flamst);
     A_Fire(actor);
 }
 
@@ -1350,6 +1351,9 @@ void A_VileTarget (mobj_t*	actor)
     actor->tracer = fog;
     fog->target = actor;
     fog->tracer = actor->target;
+
+    // [F.G.B.H.J.N.] play D(S/P)FLAMST sound when Arch-Vile spawns fire attack
+    S_StartSound(fog, sfx_flamst);
     A_Fire (fog);
 }
 
