@@ -375,6 +375,16 @@ void F_TextWrite (void)
 
     V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
 
+    // [JN] Draw special background on entering Wolfenstein and Grosse levels
+    if ((commercial && !plutonia && !tnt) && !vanilla)
+    {
+        if (gamemap == 15)  // Leaving MAP15, entering MAP31
+        V_DrawPatch (0,0,0,W_CacheLumpName("WLFBACK1",PU_CACHE));
+
+        if (gamemap == 31)  // Leaving MAP31, entering MAP32
+        V_DrawPatch (0,0,0,W_CacheLumpName("WLFBACK2",PU_CACHE));
+    }
+
     // draw some of the text onto the screen
     cx = 10;
     cy = 10;
