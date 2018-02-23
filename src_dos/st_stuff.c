@@ -1360,6 +1360,7 @@ void ST_diffDraw(void)
 
 void ST_Drawer (boolean fullscreen, boolean refresh)
 {
+    extern boolean inhelpscreens;
   
     st_statusbaron = (!fullscreen) || automapactive || screenblocks == 11 || screenblocks == 12;
     st_firsttime = st_firsttime || refresh;
@@ -1368,7 +1369,8 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
     ST_doPaletteStuff();
 
     // If just after ST_Start(), refresh all
-    if (st_firsttime) ST_doRefresh();
+    // [JN] Also redraw whole status bar after closing HELP screens
+    if (st_firsttime || inhelpscreens) ST_doRefresh();
     // Otherwise, update as little as possible
     else ST_diffDraw();
 
