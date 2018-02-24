@@ -199,6 +199,10 @@
 		<Unit filename="../src/doom/p_enemy.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../src/doom/p_fix.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../src/doom/p_fix.h" />
 		<Unit filename="../src/doom/p_floor.c">
 			<Option compilerVar="CC" />
 		</Unit>
