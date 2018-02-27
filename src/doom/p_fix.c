@@ -1296,56 +1296,105 @@ linefix_t linefix[] =
 
    // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
 
-    { pack_plut,    1,   1,    1110,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },   
-    
-    { pack_plut,    1,   2,      44,    0, "",         "",            "",                 -4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },   
-    
-    { pack_plut,    1,   3,     558,    1, "",         "",            "",                 -6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,     560,    1, "",         "",            "",                 -6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,     693,    1, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,     694,    1, "",         "",            "",                207,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,     695,    1, "",         "",            "",                 79,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,     696,    1, "",         "",            "",                222,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,     716,    1, "",         "",            "",                 91,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,     717,    1, "",         "",            "",                234,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,     719,    1, "",         "",            "",                128,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,     720,    1, "",         "",            "",                 15,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,    1173,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   3,    1174,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    
-    { pack_plut,    1,   4,     303,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   4,     308,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   4,     531,    0, "",         "",            "",            DEFAULT,        18, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   4,     532,    0, "",         "",            "",            DEFAULT,        18, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   4,     762,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   4,     763,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   4,     845,    0, "",         "",            "",                  4,        -2, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   4,     852,    0, "",         "",            "",                  4,        -2, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   4,     975,    0, "",         "",            "",                 87,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   1,    1110,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
-    { pack_plut,    1,   6,    1337,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   6,    1343,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   2,      44,    0, "",         "",            "",                 -4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
-    { pack_plut,    1,   6,     236,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   6,     239,    1, "",         "A-RAIL1",     "",                 -7,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    
-    { pack_plut,    1,   9,     849,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   9,     850,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    
-    { pack_plut,    1,   9,     254,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,   9,     988,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    
-    { pack_plut,    1,  12,     230,    1, "",         "A-MIDGRATE",  "",            DEFAULT,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
-    
-    { pack_plut,    1,  12,    1099,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,  12,    1103,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,  12,    1113,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    
-    { pack_plut,    1,  15,     407,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,  15,     874,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { pack_plut,    1,  15,    1113,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    
-    { pack_plut,    1,  15,     667,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     558,    1, "",         "",            "",                 -6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     560,    1, "",         "",            "",                 -6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     693,    1, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     694,    1, "",         "",            "",                207,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     695,    1, "",         "",            "",                 79,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     696,    1, "",         "",            "",                222,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     716,    1, "",         "",            "",                 91,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     717,    1, "",         "",            "",                234,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     719,    1, "",         "",            "",                128,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,     720,    1, "",         "",            "",                 15,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,    1173,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   3,    1174,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   4,     303,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     308,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     531,    0, "",         "",            "",            DEFAULT,        18, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     532,    0, "",         "",            "",            DEFAULT,        18, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     762,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     763,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     845,    0, "",         "",            "",                  4,        -2, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     852,    0, "",         "",            "",                  4,        -2, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   4,     975,    0, "",         "",            "",                 87,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   6,    1337,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   6,    1343,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   6,     236,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   6,     239,    1, "",         "A-RAIL1",     "",                 -7,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   9,     849,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   9,     850,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   9,     254,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   9,     988,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  12,     230,    1, "",         "A-MIDGRATE",  "",            DEFAULT,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  14,    1099,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  14,    1103,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  14,    1113,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  15,     407,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  15,     874,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  15,    1113,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  16,     667,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  19,     361,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  19,     366,    1, "",         "MIDBRONZ",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  20,     267,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     297,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     315,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     511,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     869,    1, "",         "",            "",            DEFAULT,       -50, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     876,    0, "",         "",            "",            DEFAULT,        65, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     882,    0, "",         "",            "",            DEFAULT,        65, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,     904,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,    1110,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  20,    1115,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  22,     375,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1026,    1, "",         "",            "",                 45,        40, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1028,    1, "",         "",            "",                -16,        40, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1033,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1034,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1035,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  22,    1115,    1, "",         "MIDBARS3",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  23,    1463,    1, "",         "BRNSMALR",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  23,    1468,    1, "",         "BRNSMALC",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  23,    1468,    1, "",         "BRNSMALL",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  25,     142,    0, "",         "",            "",            DEFAULT,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  25,     144,    0, "",         "",            "",            DEFAULT,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  28,     195,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     199,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     204,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     209,    1, "",         "BRNSMAL1",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     675,    0, "",         "",            "BRICK10",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,     676,    0, "",         "",            "BRICK10",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1232,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1233,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1234,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    1235,    0, "",         "",            "",            DEFAULT,        -1, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    2352,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    2360,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  28,    2496,    0, "BRICK10",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  29,    2842,    0, "A-BROCK2", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  31,     929,    0, "",         "",            "",            DEFAULT,        54, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,  32,     805,    0, "A-BRICK3", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { -1,               0,   0,       0,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT }
 };
@@ -1524,6 +1573,18 @@ sectorfix_t sectorfix[] =
     { pack_plut,        1,  16,     96, "",        "",        DEFAULT,     DEFAULT,            16,                            DEFAULT, DEFAULT },
     { pack_plut,        1,  16,     97, "",        "NUKAGE1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,  16,    104, "",        "NUKAGE1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_plut,        1,  17,     83, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_plut,        1,  20,    100, "FLOOR3_3","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,  20,    128, "FLOOR7_1","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,  20,    129, "",        "FLAT23",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,  20,    177, "FLOOR7_1","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_plut,        1,  26,      9, "",        "F_SKY1",  DEFAULT,         205,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,  26,     10, "",        "F_SKY1",  DEFAULT,         205,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,  26,    162, "FLAT23",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,  26,    165, "DEM1_5",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { -1,               0,   0,      0, "",        "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 };
