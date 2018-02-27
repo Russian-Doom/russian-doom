@@ -1727,6 +1727,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(play_exit_sfx),             // Проигрывать звук при выходе из игры
     CONFIG_VARIABLE_INT(correct_endlevel_sfx),      // Корректный звук завершения уровня
     // - Геймплей -
+    CONFIG_VARIABLE_INT(fix_map_errors),            // Исправлять ошибки оригинальных уровней
     CONFIG_VARIABLE_INT(secret_notification),       // Уведомление об обнаружении секрета
     CONFIG_VARIABLE_INT(weapon_bobbing),            // Покачивание оружия при стрельбе в движении
     CONFIG_VARIABLE_INT(new_ouch_face),             // Корректная формула "Ouch face"

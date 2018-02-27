@@ -260,6 +260,7 @@ int blazing_door_fix_sfx = 1;    // Одиночный звук закрытия
 int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
 int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 // Геймплей
+int fix_map_errors = 1;          // Исправлять ошибки оригинальных уровней
 int secret_notification = 1;     // Уведомление об обнаружении секрета
 int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
 int new_ouch_face = 1;           // Корректная формула "Ouch face"

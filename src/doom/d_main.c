@@ -447,6 +447,7 @@ void D_BindVariables(void)
     M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
 
     // Геймплей
+    M_BindIntVariable("fix_map_errors",         &fix_map_errors);           // Исправлять ошибки оригинальных уровней
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"

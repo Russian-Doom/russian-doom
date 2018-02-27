@@ -277,8 +277,8 @@ void P_LoadSegs (int lump)
         }
         
         // [BH] Apply any map-specific fixes.
-        // [JN] TODO: make optional, safe for PWADs!
-        if (!vanillaparm)
+        // [JN] TODO: make safe for PWADs!
+        if (!vanillaparm && fix_map_errors)
         {
             for (int j = 0; linefix[j].mission != -1; j++)
             {
@@ -417,8 +417,8 @@ void P_LoadSectors (int lump)
         }
 
         // [BH] Apply any level-specific fixes.
-        // [JN] TODO: make optional, safe for PWADs!
-        if (!vanillaparm)
+        // [JN] TODO: make safe for PWADs!
+        if (!vanillaparm && fix_map_errors)
         {
             for (int j = 0; sectorfix[j].mission != -1; j++)
             {

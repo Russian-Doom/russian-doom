@@ -120,6 +120,7 @@ static void SensibleDefaults(void)
     play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
     correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
     // - Геймплей -
+    fix_map_errors = 1;          // Исправлять ошибки оригинальных уровней
     secret_notification = 1;     // Уведомление об обнаружении секрета
     weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
     new_ouch_face = 1;           // Корректная формула "Ouch face"
