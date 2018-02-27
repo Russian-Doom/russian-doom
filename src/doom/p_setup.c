@@ -442,7 +442,7 @@ void P_LoadSectors (int lump)
 
                 if (sectorfix[j].special != DEFAULT)
                 {
-                    ss->special = SHORT(sectorfix[j].special) << FRACBITS;
+                    ss->special = SHORT(sectorfix[j].special);
                 }
 
                 if (sectorfix[j].newtag != DEFAULT && (sectorfix[j].oldtag == DEFAULT
