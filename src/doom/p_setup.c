@@ -278,56 +278,59 @@ void P_LoadSegs (int lump)
         
         // [BH] Apply any map-specific fixes.
         // [JN] TODO: make optional, safe for PWADs!
-        for (int j = 0; linefix[j].mission != -1; j++)
+        if (!vanillaparm)
         {
-            if (linedef == linefix[j].linedef && gamemission == linefix[j].mission
-                && gameepisode == linefix[j].epsiode && gamemap == linefix[j].map
-                && side == linefix[j].side)
+            for (int j = 0; linefix[j].mission != -1; j++)
             {
-                if (*linefix[j].toptexture)
+                if (linedef == linefix[j].linedef && gamemission == linefix[j].mission
+                    && gameepisode == linefix[j].epsiode && gamemap == linefix[j].map
+                    && side == linefix[j].side)
                 {
-                    li->sidedef->toptexture = R_TextureNumForName(linefix[j].toptexture);
-                }
+                    if (*linefix[j].toptexture)
+                    {
+                        li->sidedef->toptexture = R_TextureNumForName(linefix[j].toptexture);
+                    }
 
-                if (*linefix[j].middletexture)
-                {
-                    li->sidedef->midtexture = R_TextureNumForName(linefix[j].middletexture);
-                }
+                    if (*linefix[j].middletexture)
+                    {
+                        li->sidedef->midtexture = R_TextureNumForName(linefix[j].middletexture);
+                    }
 
-                if (*linefix[j].bottomtexture)
-                {
-                    li->sidedef->bottomtexture = R_TextureNumForName(linefix[j].bottomtexture);
-                }
+                    if (*linefix[j].bottomtexture)
+                    {
+                        li->sidedef->bottomtexture = R_TextureNumForName(linefix[j].bottomtexture);
+                    }
 
-                if (linefix[j].offset != DEFAULT)
-                {
-                    li->offset = SHORT(linefix[j].offset) << FRACBITS;
-                    li->sidedef->textureoffset = 0;
-                }
+                    if (linefix[j].offset != DEFAULT)
+                    {
+                        li->offset = SHORT(linefix[j].offset) << FRACBITS;
+                        li->sidedef->textureoffset = 0;
+                    }
 
-                if (linefix[j].rowoffset != DEFAULT)
-                {
-                    li->sidedef->rowoffset = SHORT(linefix[j].rowoffset) << FRACBITS;
-                }
+                    if (linefix[j].rowoffset != DEFAULT)
+                    {
+                        li->sidedef->rowoffset = SHORT(linefix[j].rowoffset) << FRACBITS;
+                    }
 
-                if (linefix[j].flags != DEFAULT)
-                {
-                    if (li->linedef->flags & linefix[j].flags)
-                        li->linedef->flags &= ~linefix[j].flags;
-                    else
-                        li->linedef->flags |= linefix[j].flags;
-                }
-                if (linefix[j].special != DEFAULT)
-                {
-                    li->linedef->special = linefix[j].special;
-                }
+                    if (linefix[j].flags != DEFAULT)
+                    {
+                        if (li->linedef->flags & linefix[j].flags)
+                            li->linedef->flags &= ~linefix[j].flags;
+                        else
+                            li->linedef->flags |= linefix[j].flags;
+                    }
+                    if (linefix[j].special != DEFAULT)
+                    {
+                        li->linedef->special = linefix[j].special;
+                    }
 
-                if (linefix[j].tag != DEFAULT)
-                {
-                    li->linedef->tag = linefix[j].tag;
-                }
+                    if (linefix[j].tag != DEFAULT)
+                    {
+                        li->linedef->tag = linefix[j].tag;
+                    }
 
-                break;
+                    break;
+                }
             }
         }
     }
@@ -415,43 +418,46 @@ void P_LoadSectors (int lump)
 
         // [BH] Apply any level-specific fixes.
         // [JN] TODO: make optional, safe for PWADs!
-        for (int j = 0; sectorfix[j].mission != -1; j++)
+        if (!vanillaparm)
         {
-            if (i == sectorfix[j].sector && gamemission == sectorfix[j].mission
-                && gameepisode == sectorfix[j].epsiode && gamemap == sectorfix[j].map)
+            for (int j = 0; sectorfix[j].mission != -1; j++)
             {
-                if (*sectorfix[j].floorpic)
+                if (i == sectorfix[j].sector && gamemission == sectorfix[j].mission
+                    && gameepisode == sectorfix[j].epsiode && gamemap == sectorfix[j].map)
                 {
-                    ss->floorpic = R_FlatNumForName(sectorfix[j].floorpic);
+                    if (*sectorfix[j].floorpic)
+                    {
+                        ss->floorpic = R_FlatNumForName(sectorfix[j].floorpic);
+                    }
+    
+                    if (*sectorfix[j].ceilingpic)
+                    {
+                        ss->ceilingpic = R_FlatNumForName(sectorfix[j].ceilingpic);
+                    }
+    
+                    if (sectorfix[j].floorheight != DEFAULT)
+                    {
+                        ss->floorheight = SHORT(sectorfix[j].floorheight) << FRACBITS;
+                    }
+    
+                    if (sectorfix[j].ceilingheight != DEFAULT)
+                    {
+                        ss->ceilingheight = SHORT(sectorfix[j].ceilingheight) << FRACBITS;
+                    }
+    
+                    if (sectorfix[j].special != DEFAULT)
+                    {
+                        ss->special = SHORT(sectorfix[j].special);
+                    }
+    
+                    if (sectorfix[j].newtag != DEFAULT && (sectorfix[j].oldtag == DEFAULT
+                        || sectorfix[j].oldtag == ss->tag))
+                    {
+                        ss->tag = SHORT(sectorfix[j].newtag) << FRACBITS;
+                    }
+    
+                    break;
                 }
-
-                if (*sectorfix[j].ceilingpic)
-                {
-                    ss->ceilingpic = R_FlatNumForName(sectorfix[j].ceilingpic);
-                }
-
-                if (sectorfix[j].floorheight != DEFAULT)
-                {
-                    ss->floorheight = SHORT(sectorfix[j].floorheight) << FRACBITS;
-                }
-
-                if (sectorfix[j].ceilingheight != DEFAULT)
-                {
-                    ss->ceilingheight = SHORT(sectorfix[j].ceilingheight) << FRACBITS;
-                }
-
-                if (sectorfix[j].special != DEFAULT)
-                {
-                    ss->special = SHORT(sectorfix[j].special);
-                }
-
-                if (sectorfix[j].newtag != DEFAULT && (sectorfix[j].oldtag == DEFAULT
-                    || sectorfix[j].oldtag == ss->tag))
-                {
-                    ss->tag = SHORT(sectorfix[j].newtag) << FRACBITS;
-                }
-
-                break;
             }
         }
     }
