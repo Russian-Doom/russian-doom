@@ -704,6 +704,11 @@ linefix_t linefix[] =
     { doom2,            1,   5,     919,    0, "",         "",            "",                 24,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   5,     920,    0, "",         "",            "",                  8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
+    { doom2,            1,   6,      24,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                  0,                                    DEFAULT },
+    { doom2,            1,   6,      25,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                  0,                                    DEFAULT },
+    { doom2,            1,   6,     332,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   6,     339,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   6,     340,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   6,     836,    0, "",         "",            "",                 26,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   6,     837,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   6,     839,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -722,6 +727,13 @@ linefix_t linefix[] =
     { doom2,            1,   6,     925,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   6,     929,    0, "",         "",            "",                 26,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   6,     930,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   6,     932,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   6,     947,    0, "",         "",            "",                 56,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   6,     949,    0, "",         "",            "",                 -8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   6,     952,    0, "",         "",            "",                  8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   6,     960,    0, "",         "",            "",            DEFAULT,       -18, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   6,     964,    0, "",         "",            "",            DEFAULT,       -18, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   6,     969,    0, "",         "",            "",            DEFAULT,       -18, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { doom2,            1,   7,     168,    1, "",         "",            "ZIMMER2",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
