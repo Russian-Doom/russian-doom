@@ -30,6 +30,7 @@
 #include "g_game.h"
 
 #include "s_sound.h"
+#include "crispy.h"
 
 // Data.
 #include "sounds.h"
@@ -304,12 +305,19 @@ P_UseSpecialLine
 	if (line->flags & ML_SECRET)
 	    return false;
 	
+	// [JN] There was a bug in vanilla code which was making monsters stuck
+	// in linedef specs 32, 33, 34. Fix it by adding correct break/return.
 	switch(line->special)
 	{
 	  case 1: 	// MANUAL DOOR RAISE
+	    if (singleplayer)
+	    break;
 	  case 32:	// MANUAL BLUE
 	  case 33:	// MANUAL RED
 	  case 34:	// MANUAL YELLOW
+	    if (singleplayer)
+	    return false;
+	    else
 	    break;
 	    
 	  default:
