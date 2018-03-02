@@ -301,7 +301,7 @@ void P_LoadSegs (int lump)
                         li->sidedef->bottomtexture = R_TextureNumForName(linefix[j].bottomtexture);
                     }
 
-                    if (linefix[j].offset != DEFAULT)
+                    if (linefix[j].offset != DEFAULT && !flip_levels && !flip_levels_cmdline )
                     {
                         li->offset = SHORT(linefix[j].offset) << FRACBITS;
                         li->sidedef->textureoffset = 0;
