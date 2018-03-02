@@ -715,12 +715,7 @@ R_StoreWallRange
 	ds_p->sprtopclip = ds_p->sprbottomclip = NULL;
 	ds_p->silhouette = 0;
 	
-	// [JN] Here comes partial fix of shining through the floor
-	// items while mouse looking: backsector->floorheight < viewz
-	// TODO: add a clipping check if there are no both single-sided
-	// and doulbe-sided linedefs.
-	if (frontsector->floorheight > backsector->floorheight
-	||  backsector->floorheight < viewz)
+	if (frontsector->floorheight > backsector->floorheight)
 	{
 	    ds_p->silhouette = SIL_BOTTOM;
 	    ds_p->bsilheight = frontsector->floorheight;
