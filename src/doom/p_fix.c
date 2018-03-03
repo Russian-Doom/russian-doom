@@ -40,6 +40,10 @@ linefix_t linefix[] =
     { doom,             1,   2,     134,    1, "STARTAN2", "",            "",            DEFAULT,        69, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             1,   2,     281,    0, "",         "",            "",                -36,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             1,   2,     574,    1, "COMPTALL", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   2,     689,    0, "",         "",            "",            DEFAULT,        55, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   2,     694,    0, "",         "",            "",                 24,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   2,     696,    0, "",         "",            "",            DEFAULT,        72, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   2,     698,    0, "",         "",            "",                 40,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             1,   2,     986,    0, "",         "",            "",                 64,         8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
     { doom,             1,   3,     434,    0, "STONE",    "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
