@@ -173,8 +173,16 @@ linefix_t linefix[] =
     { doom,             2,   4,    1062,    0, "SLADWALL", "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,    1071,    0, "GRAYTALL", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
+    { doom,             2,   5,     370,    0, "",         "",            "",                 48,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { doom,             2,   5,     371,    0, "",         "",            "",                 44,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { doom,             2,   5,     380,    0, "",         "",            "",                 45,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   5,     381,    0, "",         "",            "",                 29,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   5,     590,    0, "",         "",            "STEP1",       DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   5,     590,    1, "BROVINE",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   5,     958,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { doom,             2,   5,     960,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { doom,             2,   5,     967,    0, "",         "",            "",                 22,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   5,     971,    0, "",         "",            "",                 22,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   5,    1027,    1, "COMPSPAN", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
     { doom,             2,   6,     460,    0, "",         "",            "",                -14,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
