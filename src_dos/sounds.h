@@ -285,6 +285,7 @@ typedef enum
     sfx_skeatk,
     sfx_radio,
     sfx_slop2,
+    sfx_swtchw,
     NUMSFX
 } sfxenum_t;
 

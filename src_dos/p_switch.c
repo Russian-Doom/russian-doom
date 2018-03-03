@@ -208,8 +208,16 @@ P_ChangeSwitchTexture
     sound = sfx_swtchn;
 
     // EXIT SWITCH?
-    if (!vanilla && (line->special == 11 || line->special == 51))                
-	sound = sfx_swtchx;
+    if (!vanilla)
+    {
+        if (line->special == 11 || line->special == 51)
+        {
+            if (commercial && !tnt && !plutonia && gamemap == 31)
+            sound = sfx_swtchw;
+            else
+            sound = sfx_swtchx;
+        }
+    }
 
     if (!useAgain)
 	line->special = 0;
