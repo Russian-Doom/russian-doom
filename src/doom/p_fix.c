@@ -287,6 +287,10 @@ linefix_t linefix[] =
     { doom,             2,   9,     123,    1, "GSTONE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   9,     140,    1, "GSTONE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
+    { doom,             3,   1,       8,    0, "",         "",            "",                 96,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { doom,             3,   1,      17,    0, "",         "",            "",                 96,        48, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             3,   1,      18,    0, "",         "",            "",                208,        48, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    
     { doom,             3,   2,     146,    1, "",         "MIDVINE1",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   2,     433,    1, "",         "",            "ASHWALL",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   2,     434,    1, "",         "",            "ASHWALL",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -2071,6 +2075,7 @@ sectorfix_t sectorfix[] =
     { doom,             2,   7,    251, "CRATOP2","",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   7,     57, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom,             3,   1,     30, "",       "",         DEFAULT,     56,            DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             3,   3,    172, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             3,   5,    150, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
