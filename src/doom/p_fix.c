@@ -46,6 +46,7 @@ linefix_t linefix[] =
     { doom,             1,   2,     698,    0, "",         "",            "",                 40,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             1,   2,     986,    0, "",         "",            "",                 64,         8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
+    { doom,             1,   3,     334,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             1,   3,     434,    0, "STONE",    "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
     { doom,             1,   4,     321,    0, "",         "",            "STEP1",       DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -56,9 +57,19 @@ linefix_t linefix[] =
     
     { doom,             1,   5,      37,    0, "",         "",            "",                 -2,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             1,   5,      43,    0, "",         "",            "",                 -2,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   5,      45,    0, "",         "",            "",                 44,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   5,      51,    0, "",         "",            "",                 28,       -16, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   5,     149,    0, "",         "",            "",                 42,       104, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   5,     150,    0, "",         "",            "",                -23,       104, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   5,     265,    0, "",         "",            "",            DEFAULT,         0, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
+    { doom,             1,   5,     270,    0, "",         "",            "",            DEFAULT,         0, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
     
     { doom,             1,   6,      30,    0, "",         "",            "",                  1,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             1,   6,      31,    0, "",         "",            "",                  2,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   6,     147,    0, "",         "",            "",                  3,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   6,     148,    0, "",         "",            "",                  3,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   6,     894,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   6,     897,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
     { doom,             1,   7,     450,    1, "COMPTALL", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             1,   7,     744,    1, "",         "",            "TEKWALL1",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
