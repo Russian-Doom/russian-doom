@@ -218,6 +218,12 @@ P_ChangeSwitchTexture
         if (line->special == 11 || line->special == 51)
         sound = sfx_swtchx;
     }
+    else if (gamemission == doom2 && gamemap == 31 && !vanillaparm)
+    {
+        // [JN] Exit switch sound from Wolfenstein 3D
+        if (line->special == 11 || line->special == 51)
+        sound = sfx_swtchw;
+    }
 
     if (!useAgain)
 	line->special = 0;
