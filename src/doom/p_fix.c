@@ -1500,9 +1500,16 @@ linefix_t linefix[] =
     { doom2,            1,  28,     531,    1, "WOOD8",    "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     547,    1, "WOOD8",    "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     548,    1, "WOOD8",    "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  28,     619,    0, "",         "",            "",                -12,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     650,    1, "",         "MIDBARS1",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     651,    1, "",         "MIDBARS1",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     652,    1, "",         "MIDBARS1",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  28,     686,    0, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
+    { doom2,            1,  28,     687,    0, "",         "",            "",                245,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
+    { doom2,            1,  28,     688,    0, "",         "",            "",                204,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
+    { doom2,            1,  28,     689,    0, "",         "",            "",                 11,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
+    { doom2,            1,  28,     690,    0, "",         "",            "",                 52,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
+    { doom2,            1,  28,     692,    0, "",         "",            "",                192,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },    
 
     { doom2,            1,  29,     6,      0, "",         "",            "",                 48,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  29,     105,    0, "",         "",            "",                 56,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -2059,6 +2066,8 @@ sectorfix_t sectorfix[] =
 
     { doom2,            1,  27,     80, "",        "FLAT5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  27,     93, "",        "",        DEFAULT,     DEFAULT,       0,                                  DEFAULT, DEFAULT },
+
+    { doom2,            1,  28,     14, "",        "",            -44,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom2,            1,  29,      6, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  29,    152, "",        "",        DEFAULT,     936,           DEFAULT,                            DEFAULT, DEFAULT },
