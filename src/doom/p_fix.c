@@ -62,6 +62,12 @@ linefix_t linefix[] =
     { doom,             1,   7,     746,    1, "",         "",            "TEKWALL1",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             1,   7,     747,    1, "",         "",            "TEKWALL1",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
+    { doom,             1,   8,      74,    0, "",         "",            "",                 23,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   8,      87,    0, "",         "",            "",                  0,       120, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   8,      88,    0, "",         "",            "",                  0,       120, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   8,     153,    0, "",         "",            "",                 55,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             1,   8,     154,    0, "",         "",            "",                 47,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    
     { doom,             2,   1,      48,    0, "",         "",            "",            DEFAULT,        -4, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   1,     174,    0, "",         "",            "",                 87,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   1,     182,    0, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
