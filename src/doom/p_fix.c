@@ -762,6 +762,14 @@ linefix_t linefix[] =
     
     { doom,             4,   9,     343,    0, "",         "METAL",       "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   9,     345,    0, "",         "METAL",       "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   9,     672,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   9,     673,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   9,     674,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   9,     675,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   9,     676,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   9,     677,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   9,     678,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   9,     679,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   9,    1175,    0, "",         "",            "CRATINY",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   9,    1176,    0, "",         "",            "CRATINY",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   9,    1195,    0, "",         "",            "",                 16,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -2336,6 +2344,10 @@ sectorfix_t sectorfix[] =
     { doom,             4,   4,     62, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             4,   5,    134, "FLAT1",  "",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             4,   9,    154, "",       "",         DEFAULT,     216,           DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             4,   9,    162, "",       "",         DEFAULT,     216,           DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             4,   9,    163, "",       "",         DEFAULT,     216,           DEFAULT,                            DEFAULT, DEFAULT },
 
    // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
 
