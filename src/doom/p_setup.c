@@ -278,7 +278,7 @@ void P_LoadSegs (int lump)
         
         // [BH] Apply any map-specific fixes.
         // [JN] TODO: make safe for PWADs!
-        if (!vanillaparm && fix_map_errors)
+        if (!vanillaparm && fix_map_errors && !freedoom && gamemode != pressbeta)
         {
             for (int j = 0; linefix[j].mission != -1; j++)
             {
@@ -418,7 +418,7 @@ void P_LoadSectors (int lump)
 
         // [BH] Apply any level-specific fixes.
         // [JN] TODO: make safe for PWADs!
-        if (!vanillaparm && fix_map_errors)
+        if (!vanillaparm && fix_map_errors && !freedoom && gamemode != pressbeta)
         {
             for (int j = 0; sectorfix[j].mission != -1; j++)
             {
