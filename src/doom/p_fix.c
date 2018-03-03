@@ -185,6 +185,13 @@ linefix_t linefix[] =
     { doom,             2,   5,     971,    0, "",         "",            "",                 22,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   5,    1027,    1, "COMPSPAN", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
+    { doom,             2,   6,       2,    0, "",         "",            "",                112,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   6,      26,    0, "",         "",            "",                 16,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   6,      35,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { doom,             2,   6,      40,    0, "",         "",            "",                 34,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   6,      42,    0, "",         "",            "",                -18,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   6,      44,    0, "",         "",            "",                -18,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   6,      45,    0, "",         "",            "",                160,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,     460,    0, "",         "",            "",                -14,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,     461,    0, "",         "",            "",                 -8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,     462,    0, "",         "",            "",                -12,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
