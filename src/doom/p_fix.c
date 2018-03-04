@@ -2515,3 +2515,12 @@ sectorfix_t sectorfix[] =
     { -1,               0,   0,      0, "",        "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 };
 
+thingfix_t thingfix[] =
+{
+   // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
+
+//  { doom,             1,   1,    35, 2035,                      1312,   -3264,    1056,   -3424, DEFAULT, DEFAULT                            },
+    
+    { -1,               0,   0,     0, 0,                      DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT                            }
+};
+

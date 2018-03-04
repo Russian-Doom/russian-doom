@@ -597,7 +597,39 @@ void P_LoadThings (int lump)
 	spawnthing.angle = SHORT(mt->angle);
 	spawnthing.type = SHORT(mt->type);
 	spawnthing.options = SHORT(mt->options);
+
+    // [BH] Apply any level-specific fixes.
+    if (canmodify && fix_map_errors)
+    {
+        for (int j = 0; thingfix[j].mission != -1; j++)
+        {
+            if (gamemission == thingfix[j].mission && gameepisode == thingfix[j].epsiode
+                && gamemap == thingfix[j].map && i == thingfix[j].thing && spawnthing.type == thingfix[j].type
+                && spawnthing.x == SHORT(thingfix[j].oldx) && spawnthing.y == SHORT(thingfix[j].oldy))
+            {
+                if (thingfix[j].newx == REMOVE && thingfix[j].newy == REMOVE)
+                    spawn = false;
+                else
+                {
+                    spawnthing.x = SHORT(thingfix[j].newx);
+                    spawnthing.y = SHORT(thingfix[j].newy);
+                }
     
+                if (thingfix[j].angle != DEFAULT)
+                {
+                    spawnthing.angle = SHORT(thingfix[j].angle);
+                }
+    
+                if (thingfix[j].options != DEFAULT)
+                {
+                    spawnthing.options = thingfix[j].options;
+                }
+    
+                break;
+            }
+        }
+    }
+
 	if ((flip_levels || flip_levels_cmdline) && singleplayer)
 	{
 	    spawnthing.x = -spawnthing.x;
