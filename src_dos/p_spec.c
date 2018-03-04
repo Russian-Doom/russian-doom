@@ -975,8 +975,9 @@ P_ShootSpecialLine
 	
       case 46:
 	// OPEN DOOR
+	// [JN] Specific changed to "once only"
 	EV_DoDoor(line,open);
-	P_ChangeSwitchTexture(line,1);
+	P_ChangeSwitchTexture(line,0);
 	break;
 	
       case 47:
