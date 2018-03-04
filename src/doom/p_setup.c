@@ -279,7 +279,7 @@ void P_LoadSegs (int lump)
         }
         
         // [BH] Apply any map-specific fixes.
-        if (canmodify && !vanillaparm && fix_map_errors)
+        if (canmodify && fix_map_errors)
         {
             for (int j = 0; linefix[j].mission != -1; j++)
             {
@@ -418,7 +418,7 @@ void P_LoadSectors (int lump)
         }
 
         // [BH] Apply any level-specific fixes.
-        if (canmodify && !vanillaparm && fix_map_errors)
+        if (canmodify && fix_map_errors)
         {
             for (int j = 0; sectorfix[j].mission != -1; j++)
             {
@@ -1142,9 +1142,9 @@ P_SetupLevel
 	
     // [JN] Checking for multiple map lump names for allowing map fixes to work.
     // Adaptaken from Doom Retro, thanks Brad Harding!
-    //  Fixes also should not work for: Press Beta, Freedoom and FreeDM.
+    //  Fixes also should not work for: vanilla game mode, Press Beta, Freedoom and FreeDM.
     canmodify = (((W_CheckMultipleLumps(lumpname) == 1 || gamemission == pack_nerve)
-        && (gamemode != pressbeta && gamevariant != freedoom && gamevariant != freedm)));
+        && (!vanillaparm && gamemode != pressbeta && gamevariant != freedoom && gamevariant != freedm)));
 
     leveltime = 0;
     
