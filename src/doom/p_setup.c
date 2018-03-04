@@ -77,6 +77,8 @@ int     detailLevel; // [JN] & [crispy] Необходимо для WiggleFix
 
 static int      totallines;
 
+boolean canmodify;
+
 extern boolean flip_levels_cmdline;
 
 
@@ -277,8 +279,7 @@ void P_LoadSegs (int lump)
         }
         
         // [BH] Apply any map-specific fixes.
-        // [JN] TODO: make safe for PWADs!
-        if (!vanillaparm && fix_map_errors && gamemode != pressbeta && gamevariant != freedoom && gamevariant != freedm)
+        if (canmodify && !vanillaparm && fix_map_errors)
         {
             for (int j = 0; linefix[j].mission != -1; j++)
             {
@@ -417,8 +418,7 @@ void P_LoadSectors (int lump)
         }
 
         // [BH] Apply any level-specific fixes.
-        // [JN] TODO: make safe for PWADs!
-        if (!vanillaparm && fix_map_errors && gamemode != pressbeta && gamevariant != freedoom && gamevariant != freedm)
+        if (canmodify && !vanillaparm && fix_map_errors)
         {
             for (int j = 0; sectorfix[j].mission != -1; j++)
             {
@@ -1140,6 +1140,12 @@ P_SetupLevel
 
     lumpnum = W_GetNumForName (lumpname);
 	
+    // [JN] Checking for multiple map lump names for allowing map fixes to work.
+    // Adaptaken from Doom Retro, thanks Brad Harding!
+    //  Fixes also should not work for: Press Beta, Freedoom and FreeDM.
+    canmodify = (((W_CheckMultipleLumps(lumpname) == 1 || gamemission == pack_nerve)
+        && (gamemode != pressbeta && gamevariant != freedoom && gamevariant != freedm)));
+
     leveltime = 0;
     
     // note: most of this ordering is important	

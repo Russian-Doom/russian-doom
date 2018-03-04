@@ -51,6 +51,7 @@ struct lumpinfo_s
     lumpindex_t next;
 };
 
+int W_CheckMultipleLumps(char *name);
 
 extern lumpinfo_t **lumpinfo;
 extern unsigned int numlumps;
