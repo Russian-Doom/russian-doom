@@ -2519,8 +2519,108 @@ thingfix_t thingfix[] =
 {
    // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
 
-//  { doom,             1,   1,    35, 2035,                      1312,   -3264,    1056,   -3424, DEFAULT, DEFAULT                            },
-    
+    { doom,             1,   6,    16, 3002,                       800,    -704,     800,    -688, DEFAULT, DEFAULT                            },
+    { doom,             1,   6,   403,   58,                     -2016,    2096,   -2016,    2080, DEFAULT, DEFAULT                            },
+
+    { doom,             1,   7,    15, 2012,                      -304,   -2256,    -304,   -2264, DEFAULT, DEFAULT                            },
+    { doom,             1,   7,    16, 2049,                      -272,   -2256,    -272,   -2264, DEFAULT, DEFAULT                            },
+    { doom,             1,   7,    17, 2048,                      -240,   -2256,    -240,   -2264, DEFAULT, DEFAULT                            },
+    { doom,             1,   7,    18, 2002,                      -208,   -2256,    -208,   -2264, DEFAULT, DEFAULT                            },
+    { doom,             1,   7,    19, 2048,                      -176,   -2256,    -176,   -2264, DEFAULT, DEFAULT                            },
+
+    { doom,             2,   2,     2,    1,                       608,    4576,     608,    4574, DEFAULT, DEFAULT                            },
+    { doom,             2,   2,     3,    2,                        96,    4576,      96,    4574, DEFAULT, DEFAULT                            },
+
+    { doom,             2,   3,    37,    8,                       864,    -224,     864,    -216, DEFAULT, DEFAULT                            },
+
+    { doom,             2,   5,    79, 2005,                     -1056,     160,   -1052,     160, DEFAULT, DEFAULT                            },
+
+    { doom,             2,   6,   290, 3002,                       992,    -128,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+    { doom,             2,   6,   291, 3002,                      1056,    -128,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { doom,             3,   3,    19, 2047,                      -480,     864,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { doom,             4,   1,     0,    1,                       160,     352,     160,     350, DEFAULT, DEFAULT                            },
+    { doom,             4,   1,     1,    2,                       288,     352,     288,     350, DEFAULT, DEFAULT                            },
+    { doom,             4,   1,     2,    3,                       416,     224,     414,     224, DEFAULT, DEFAULT                            },
+    { doom,             4,   1,     3,    4,                        32,     224,      34,     224, DEFAULT, DEFAULT                            },
+
+    { doom,             4,   3,    69, 3001,                      -608,   -1696,    -640,   -1696, DEFAULT, DEFAULT                            },
+    { doom,             4,   3,   232, 2010,                      1296,    1008,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { doom,             4,   4,   106,   58,                       320,    -160,     328,    -128, DEFAULT, DEFAULT                            },
+    { doom,             4,   4,   107,   58,                       -16,    -160,      -8,    -128, DEFAULT, DEFAULT                            },
+    { doom,             4,   4,   108, 3005,                       320,     -96,     328,     -88, DEFAULT, DEFAULT                            },
+    { doom,             4,   4,   109, 3005,                       -16,     -96,      -8,     -88, DEFAULT, DEFAULT                            },
+
+   // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
+
+    { doom2,            1,   2,    69, 2035,                       464,     784,     464,     800, DEFAULT, DEFAULT                            },
+    { doom2,            1,   2,    84, 2035,                       992,     896,     992,     904, DEFAULT, DEFAULT                            },
+    { doom2,            1,   2,    85,    9,                       944,     896,     944,     912, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,   4,   136,   86,                      -368,     880,    -360,     880, DEFAULT, DEFAULT                            },
+    { doom2,            1,   4,   137,   86,                      -368,    1072,    -360,    1080, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,   5,   108, 3006,                      2848,    -400,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,   6,   244,   86,                      1264,     336,    1264,     344, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,  11,   165,   58,                       752,     304,     760,     304, DEFAULT, DEFAULT                            },
+    { doom2,            1,  11,   236,   17,                      1952,     272,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,  14,    24,   45,                      1408,     240,    1400,     240, DEFAULT, DEFAULT                            },
+    { doom2,            1,  14,    26,   45,                      1120,     448,    1128,     456, DEFAULT, DEFAULT                            },
+    { doom2,            1,  14,    27,   45,                      1408,     448,    1400,     456, DEFAULT, DEFAULT                            },
+    { doom2,            1,  14,    32,   46,                      3248,     384,    3248,     392, DEFAULT, DEFAULT                            },
+    { doom2,            1,  14,    33,   46,                      3120,     384,    3120,     392, DEFAULT, DEFAULT                            },
+    { doom2,            1,  14,    34,   46,                      2928,     384,    2928,     392, DEFAULT, DEFAULT                            },
+    { doom2,            1,  14,    35,   46,                      2800,     384,    2800,     392, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,  17,   127,   58,                     -1888,   -2896,   -1896,   -2872, DEFAULT, DEFAULT                            },
+    { doom2,            1,  17,   128,   58,                     -1984,   -2896,   -1976,   -2872, DEFAULT, DEFAULT                            },
+    { doom2,            1,  17,   129,   58,                     -2064,   -2896,   -2056,   -2872, DEFAULT, DEFAULT                            },
+    { doom2,            1,  17,   130,   58,                     -1936,   -2848,   -1936,   -2800, DEFAULT, DEFAULT                            },
+    { doom2,            1,  17,   131,   58,                     -2016,   -2848,   -2016,   -2800, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,  18,   188, 2048,                       816,    1216,     812,    1216, DEFAULT, DEFAULT                            },
+    { doom2,            1,  18,   189, 2047,                       816,    1168,     812,    1168, DEFAULT, DEFAULT                            },
+    { doom2,            1,  18,   278, 2015,                      -912,     368,    -916,     368, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,  19,   112,   14,                      -912,    -880,    -912,    -880, DEFAULT, (MTF_EASY | MTF_NORMAL | MTF_HARD) },
+
+    { doom2,            1,  24,   238,  3002,                    -1200,    -352,   -1184,    -352, DEFAULT, DEFAULT                            },
+    { doom2,            1,  24,   239,  3002,                    -1136,    -352,   -1120,    -352, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,  30,     1,    89,                     2880,    1424,    2880,    1424,     270, DEFAULT                            },
+
+    { doom2,            1,  31,    60,  3002,                     1376,     800,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,  32,    67,    11,                     1216,    4640,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+   // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
+
+    { pack_tnt,         1,   3,     7,    14,                     -416,     416,    -416,     416,     135, DEFAULT                            },
+    { pack_tnt,         1,   3,    34,    14,                      960,    1472,     960,    1472,     135, DEFAULT                            },
+
+    { pack_tnt,         1,  11,   314,    26,                     1640,     936,    1624,     944, DEFAULT, DEFAULT                            },
+    { pack_tnt,         1,  11,   315,    25,                     1816,     936,    1832,     944, DEFAULT, DEFAULT                            },
+
+    { pack_tnt,         1,  20,   511,    17,                     2910,   -1595,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { pack_tnt,         1,  24,   158,    70,                     -912,    1440,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { pack_tnt,         1,  25,   362,  2046,                     1656,    -512,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { pack_tnt,         1,  29,   405,    67,                    -5536,     992,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+   // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
+
+    { pack_plut,        1,   9,   304,    56,                    -5216,   -1568,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
+    { pack_plut,        1,  12,   225,     0,                     1600,   -3104,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+    { pack_plut,        1,  12,   226,     0,                      992,   -3360,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+
     { -1,               0,   0,     0, 0,                      DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT                            }
 };
 
