@@ -686,8 +686,8 @@ void M_DrawSave(void)
     if (QuickSaveTitle)
     {
         // [JN] Using title: "›‘’… ‘•€…ˆ…"
-        V_DrawShadowDirect(58,14,0,W_CacheLumpName("M_QSGTTL",PU_CACHE));
-        V_DrawPatchDirect (57,13,0,W_CacheLumpName("M_QSGTTL",PU_CACHE));
+        V_DrawShadowDirect(23,14,0,W_CacheLumpName("M_QSGTTL",PU_CACHE));
+        V_DrawPatchDirect (22,13,0,W_CacheLumpName("M_QSGTTL",PU_CACHE));
     }
     else
     {
