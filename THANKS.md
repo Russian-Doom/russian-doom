@@ -51,3 +51,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - David Carlier
 - theleo_ua
 - Tamás "BlooD2oo1" Mélykuti
+- Pavel "Corak" Zegelman
