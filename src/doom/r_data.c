@@ -833,13 +833,14 @@ int tran_filter_pct = 80;       // filter percent
 
 void R_InitTranMap()
 {
-    int lump = W_CheckNumForName("TRANMAP");
+    // [JN] Don't lookup for lump, generate it dynamically
+    // int lump = W_CheckNumForName("TRANMAP");
 
     // If a tranlucency filter map lump is present, use it
     
-    if (lump != -1)  // Set a pointer to the translucency filter maps.
-    tranmap = W_CacheLumpNum(lump, PU_STATIC);   // killough 4/11/98
-    else
+    // if (lump != -1)  // Set a pointer to the translucency filter maps.
+    // tranmap = W_CacheLumpNum(lump, PU_STATIC);   // killough 4/11/98
+    // else
     if (lcd_gamma_fix)
     {
         {   // Compose a default transparent filter map based on PLAYPAL.
