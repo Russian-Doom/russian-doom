@@ -359,18 +359,22 @@ linefix_t linefix[] =
     { doom,             3,   2,     452,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   2,     454,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
+    { doom,             3,   3,     645,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             3,   3,     648,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,     790,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,     791,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,     793,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,     797,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,     854,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,     855,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             3,   3,     919,    0, "",         "",            "",                 88,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
     { doom,             3,   3,     994,    1, "SLADWALL", "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,     995,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,     996,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,    1055,    0, "",         "NUKE24",      "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,    1056,    0, "",         "NUKE24",      "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   3,    1057,    0, "",         "NUKE24",      "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             3,   3,    1099,    0, "",         "BRNSMALC",    "",                144,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
     { doom,             3,   4,       4,    0, "",         "",            "",                 16,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   4,      17,    0, "",         "",            "",               -128,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -2723,6 +2727,7 @@ thingfix_t thingfix[] =
     { doom,             2,   6,   291, 3002,                      1056,    -128,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
 
     { doom,             3,   3,    19, 2047,                      -480,     864,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
+    { doom,             3,   3,   180,   34,                      -576,     848,    -576,     840, DEFAULT, DEFAULT                            },
 
     { doom,             4,   1,     0,    1,                       160,     352,     160,     350, DEFAULT, DEFAULT                            },
     { doom,             4,   1,     1,    2,                       288,     352,     288,     350, DEFAULT, DEFAULT                            },
