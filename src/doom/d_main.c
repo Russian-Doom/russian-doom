@@ -1278,54 +1278,32 @@ void D_SetGameDescription(void)
                         }
                     }
                 }
-            }
-
-            // [JN] Sky loading routine. While we still in "newpwadfile"
-            // section, we must check for new skies in loaded pwad files.
-            //
-            // The logics as follows:
-            //
-            // If loaded pwad contain sky texture(s) or patch(es), don't load 
-            // my tall skies and use strictly original skies, that will be 
-            // stretched while mlook and have traditional vertical offsets.
-            // Checking must be as strict as possible.
-            if (W_CheckNumForName("SKY1")  > 0  // Doom 1 patches...
-            || W_CheckNumForName("SKY2")   > 0
-            || W_CheckNumForName("SKY3")   > 0
-            || W_CheckNumForName("SKY4")   > 0
-            || W_CheckNumForName("RSKY1")  > 0  // Doom 2 patches...
-            || W_CheckNumForName("RSKY2")  > 0
-            || W_CheckNumForName("RSKY3")  > 0
-            || R_TextureNumForName("SKY1") > 0  // Textures...
-            || R_TextureNumForName("SKY2") > 0
-            || R_TextureNumForName("SKY3") > 0
-            || mlvls)                           // No support for mlvls skies :(
-            {
-                // [JN] If found, sky may be scaled while mlook and 
-                // taller skies should not be loaded.
+                // [JN] Still in mlvls loop, enable sky scaling for Master Levels
                 scaled_sky = true;
-            }
-
-            // [JN] No Rest for the Living using 
-            // Doom 2 skies, so it can be supported
-            if (gamemission == pack_nerve)
-            {
-                scaled_sky = false;
             }
         }
     }
 
-    // [JN] Moving on. Now checking other game variants. Freedoom is
-    // not a pwad, so it can't be checked in "newpwadfile" section.
-    if (gamevariant == freedoom || gamevariant == freedm)
+    // [JN] Sky scaling determination. Sky itself can be loaded as new
+    // patches, composed in TEXTURE1 lump, or as patches with standard names.
+    if (W_CheckMultipleLumps("TEXTURE1") > 1    // Have new textures
+    || W_CheckMultipleLumps("SKY1") > 1         // Doom 1 patches
+    || W_CheckMultipleLumps("SKY2") > 1
+    || W_CheckMultipleLumps("SKY3") > 1
+    || W_CheckMultipleLumps("SKY4") > 1
+    || W_CheckMultipleLumps("RSKY1") > 1        // Doom 2 patches
+    || W_CheckMultipleLumps("RSKY2") > 1
+    || W_CheckMultipleLumps("RSKY3") > 1
+    || is_freedoom)                             // Freedoom is also not supported
     {
         scaled_sky = true;
-    }        
-
-    // [JN] And finally, if loaded pwads does not have any new skies,
-    // we are free to load taller skies, depending on the game.
-    if (!scaled_sky)
+    }
+    // [JN] ...So, we are free to use taller skies? Load them.
+    // Note: "scaled_sky" variable is still needed for sky rendering.
+    else
     {
+        scaled_sky = false;
+
         // Doom 1
         if (gamemode == shareware || gamemode == registered || gamemode == retail)
         W_MergeFile("russian/russian-doom-doom1-skies.wad");
