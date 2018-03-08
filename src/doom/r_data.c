@@ -833,18 +833,19 @@ int tran_filter_pct = 80;       // filter percent
 
 void R_InitTranMap()
 {
-    // [JN] Don't lookup for lump, generate it dynamically
-    // int lump = W_CheckNumForName("TRANMAP");
+    // [JN] Don't lookup for TRANMAP lump, generate tranlucency dynamically
 
     // If a tranlucency filter map lump is present, use it
-    
+    // int lump = W_CheckNumForName("TRANMAP");
+
     // if (lump != -1)  // Set a pointer to the translucency filter maps.
     // tranmap = W_CacheLumpNum(lump, PU_STATIC);   // killough 4/11/98
     // else
-    if (lcd_gamma_fix)
-    {
-        {   // Compose a default transparent filter map based on PLAYPAL.
-            unsigned char *playpal = W_CacheLumpName("PALFIX", PU_STATIC);
+    {   
+        // Compose a default transparent filter map based on PLAYPAL.
+        unsigned char *playpal = lcd_gamma_fix ?
+                                 W_CacheLumpName("PALFIX", PU_STATIC) :
+                                 W_CacheLumpName("PLAYPAL", PU_STATIC);
 
         long pal[3][256], tot[256], pal_w1[3][256];
         long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
@@ -898,69 +899,8 @@ void R_InitTranMap()
                 }
             }
         }
+
         Z_ChangeTag(playpal, PU_CACHE);
-        }
-    }
-
-    else
-    {
-        {   // Compose a default transparent filter map based on PLAYPAL.
-            unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-
-        long pal[3][256], tot[256], pal_w1[3][256];
-        long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
-        long w2 = (1l<<TSC)-w1;
-        tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
-
-        // First, convert playpal into long int type, and transpose array,
-        // for fast inner-loop calculations. Precompute tot array.
-
-        {
-            register int i = 255;
-            register const unsigned char *p = playpal+255*3;
-            do
-            {
-                register long t,d;
-                pal_w1[0][i] = (pal[0][i] = t = p[0]) * w1;
-                d = t*t;
-                pal_w1[1][i] = (pal[1][i] = t = p[1]) * w1;
-                d += t*t;
-                pal_w1[2][i] = (pal[2][i] = t = p[2]) * w1;
-                d += t*t;
-                p -= 3;
-                tot[i] = d << (TSC-1);
-            }
-            while (--i>=0);
-        }
-
-        // Next, compute all entries using minimum arithmetic.
-
-        {
-            int i,j;
-            byte *tp = tranmap;
-            for (i=0;i<256;i++)
-            {
-                long r1 = pal[0][i] * w2;
-                long g1 = pal[1][i] * w2;
-                long b1 = pal[2][i] * w2;
-                for (j=0;j<256;j++,tp++)
-                {
-                    register int color = 255;
-                    register long err;
-                    long r = pal_w1[0][j] + r1;
-                    long g = pal_w1[1][j] + g1;
-                    long b = pal_w1[2][j] + b1;
-                    long best = LONG_MAX;
-                    do
-                        if ((err = tot[color] - pal[0][color]*r
-                            - pal[1][color]*g - pal[2][color]*b) < best)
-                            best = err, *tp = color;
-                    while (--color >= 0);
-                }
-            }
-        }
-        Z_ChangeTag(playpal, PU_CACHE);
-        }
     }
 }
 
