@@ -2624,7 +2624,6 @@ sectorfix_t sectorfix[] =
     { doom2,            1,   4,     40, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   4,     46, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
-    { doom2,            1,   5,    110, "",        "",        DEFAULT,     288,           DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   5,    155, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom2,            1,   8,     92, "",        "CEIL3_6", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
@@ -2775,8 +2774,8 @@ thingfix_t thingfix[] =
     { doom,             1,   7,    18, 2002,                      -208,   -2256,    -208,   -2264, DEFAULT, DEFAULT                            },
     { doom,             1,   7,    19, 2048,                      -176,   -2256,    -176,   -2264, DEFAULT, DEFAULT                            },
 
-    { doom,             2,   2,     2,    1,                       608,    4576,     608,    4574, DEFAULT, DEFAULT                            },
-    { doom,             2,   2,     3,    2,                        96,    4576,      96,    4574, DEFAULT, DEFAULT                            },
+//  { doom,             2,   2,     2,    1,                       608,    4576,     608,    4574, DEFAULT, DEFAULT                            }, [JN] Not safe for DEMO2
+//  { doom,             2,   2,     3,    2,                        96,    4576,      96,    4574, DEFAULT, DEFAULT                            }, [JN] Not safe for DEMO2
 
     { doom,             2,   3,    37,    8,                       864,    -224,     864,    -216, DEFAULT, DEFAULT                            },
 
@@ -2814,7 +2813,7 @@ thingfix_t thingfix[] =
 
     { doom2,            1,   6,   244,   86,                      1264,     336,    1264,     344, DEFAULT, DEFAULT                            },
 
-    { doom2,            1,  11,   165,   58,                       752,     304,     760,     304, DEFAULT, DEFAULT                            },
+//  { doom2,            1,  11,   165,   58,                       752,     304,     760,     304, DEFAULT, DEFAULT                            }, [JN] Not safe for DEMO1
     { doom2,            1,  11,   236,   17,                      1952,     272,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
 
     { doom2,            1,  14,    24,   45,                      1408,     240,    1400,     240, DEFAULT, DEFAULT                            },
