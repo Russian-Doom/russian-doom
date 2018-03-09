@@ -469,6 +469,7 @@
 
 #define STSTR_BEHOLD    "v=,tccv>< s=,thc>< i=ytd>< r=rjc>< a=rhn>< l=dbp>" // m=бессм., ы=берс., ш=нев., к=кос., ф=крт., д=виз.
 #define STSTR_BEHOLDX   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
+#define STSTR_BEHOLDZ   "ghtlvtn ltfrnbdbhjdfy"                     // Предмет деактивирован
 
 //
 //	F_Finale.C

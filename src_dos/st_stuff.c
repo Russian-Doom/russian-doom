@@ -700,13 +700,17 @@ ST_Responder (event_t* ev)
 	if (cht_CheckCheat(&cheat_powerup[i], ev->data1))
 	{
 	  if (!plyr->powers[i])
+	  {
 	    P_GivePower( plyr, i);
+	    plyr->message = STSTR_BEHOLDX; // [JN] Активирован
+	  }
 	  else if (i!=pw_strength)
+	  {
 	    plyr->powers[i] = 1;
+	    plyr->message = STSTR_BEHOLDZ; // [JN] Деактивирован
+	  }
 	  else
 	    plyr->powers[i] = 0;
-	  
-	  plyr->message = STSTR_BEHOLDX;
 	}
       }
       
