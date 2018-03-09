@@ -1400,6 +1400,7 @@ linefix_t linefix[] =
     { doom2,            1,   9,     524,    0, "",         "",            "",                -15,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   9,     553,    0, "",         "",            "",                176,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   9,     628,    1, "",         "",            "PIPE4",       DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   9,     631,    0, "",         "",            "",                  8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { doom2,            1,  10,     190,    0, "",         "",            "",                 32,         8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  10,     195,    0, "",         "",            "",                -24,         8, DEFAULT,                            DEFAULT,                                    DEFAULT },
