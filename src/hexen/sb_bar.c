@@ -763,7 +763,6 @@ static int oldkeys = -1;
 
 extern boolean automapactive;
 
-extern int screenblocks;
 
 void SB_Drawer(void)
 {
