@@ -33,26 +33,7 @@
 #include "r_local.h"
 #include "r_sky.h"
 #include "r_segs.h"
-
-// [JN] Brightmaps
-extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
-extern int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
-extern int bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15;
-extern int bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20;
-extern int bmaptexture21, bmaptexture22, bmaptexture23, bmaptexture24, bmaptexture25;
-extern int bmaptexture26, bmaptexture27, bmaptexture28, bmaptexture29, bmaptexture30;
-extern int bmaptexture31, bmaptexture32, bmaptexture33, bmaptexture34, bmaptexture35;
-extern int bmaptexture36, bmaptexture37, bmaptexture38, bmaptexture39, bmaptexture40;
-extern int bmaptexture41, bmaptexture42, bmaptexture43, bmaptexture44, bmaptexture45;
-extern int bmaptexture46, bmaptexture47, bmaptexture48, bmaptexture49, bmaptexture50;
-extern int bmaptexture51, bmaptexture52, bmaptexture53, bmaptexture54, bmaptexture55;
-extern int bmaptexture56, bmaptexture57, bmaptexture58, bmaptexture59, bmaptexture60;
-extern int bmaptexture61, bmaptexture62, bmaptexture63, bmaptexture64, bmaptexture65;
-extern int bmaptexture66, bmaptexture67, bmaptexture68, bmaptexture69, bmaptexture70;
-extern int bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74, bmaptexture75;
-extern int bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80;
-extern int bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84;
-extern int bmap_terminator;
+#include "r_bmaps.h"
 
 
 // OPTIMIZE: closed two sided lines as single sided
