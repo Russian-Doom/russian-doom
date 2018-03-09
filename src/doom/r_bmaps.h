@@ -15,6 +15,9 @@
 //	Brightmap textures and flats lookup routine.
 //
 
+#ifndef __R_BMAPS__
+#define __R_BMAPS__
+
 
 // Lookup prototypes
 int R_TextureNumForName (char *name);
@@ -45,3 +48,5 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
 // Terminator:
 int bmap_terminator;
 
+
+#endif // __R_BMAPS__
