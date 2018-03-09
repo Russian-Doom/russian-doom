@@ -1369,6 +1369,52 @@ void I_InitGraphics(void)
     I_AtExit(I_ShutdownGraphics, true);
 }
 
+void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
+{
+	SDL_Rect rect;
+	SDL_PixelFormat *format;
+	int temp;
+	uint32_t png_format;
+	byte *pixels;
+
+	// [crispy] adjust cropping rectangle if necessary
+	rect.x = rect.y = 0;
+	SDL_GetRendererOutputSize(renderer, &rect.w, &rect.h);
+	if (rect.w * actualheight > rect.h * SCREENWIDTH)
+	{
+		temp = rect.w;
+		rect.w = rect.h * SCREENWIDTH / actualheight;
+		rect.x = (temp - rect.w) / 2;
+	}
+	else
+	if (rect.h * SCREENWIDTH > rect.w * actualheight)
+	{
+		temp = rect.h;
+		rect.h = rect.w * actualheight / SCREENWIDTH;
+		rect.y = (temp - rect.h) / 2;
+	}
+
+	// [crispy] native PNG pixel format
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+	png_format = SDL_PIXELFORMAT_ABGR8888;
+#else
+	png_format = SDL_PIXELFORMAT_RGBA8888;
+#endif
+	format = SDL_AllocFormat(png_format);
+	temp = rect.w * format->BytesPerPixel; // [crispy] pitch
+
+	// [crispy] allocate memory for screenshot image
+	pixels = malloc(rect.h * temp);
+	SDL_RenderReadPixels(renderer, &rect, format->format, pixels, temp);
+
+	*data = pixels;
+	*w = rect.w;
+	*h = rect.h;
+	*p = temp;
+
+	SDL_FreeFormat(format);
+}
+
 // Bind all variables controlling video options into the configuration
 // file system.
 void I_BindVideoVariables(void)

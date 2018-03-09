@@ -1122,20 +1122,34 @@ static void warning_fn(png_structp p, png_const_charp s)
 }
 
 void WritePNGfile(char *filename, byte *data,
-                  int inwidth, int inheight,
+                  int width, int height,
                   byte *palette)
 {
     png_structp ppng;
     png_infop pinfo;
-    png_colorp pcolor;
+//  png_colorp pcolor;
     FILE *handle;
     int i, j;
-    int width, height;
+//  int w_factor, h_factor;
     byte *rowbuf;
+    extern void I_RenderReadPixels(byte **data, int *w, int *h, int *p);
 
-    // scale up to accommodate aspect ratio correction
-    width = inwidth * 5;
-    height = inheight * 6;
+/*
+    if (aspect_ratio_correct)
+    {
+        // scale up to accommodate aspect ratio correction
+        w_factor = 5;
+        h_factor = 6;
+
+        width *= w_factor;
+        height *= h_factor;
+    }
+    else
+    {
+        w_factor = 1;
+        h_factor = 1;
+    }
+*/
 
     handle = fopen(filename, "wb");
     if (!handle)
@@ -1147,18 +1161,27 @@ void WritePNGfile(char *filename, byte *data,
                                    error_fn, warning_fn);
     if (!ppng)
     {
+        fclose(handle);
         return;
     }
 
     pinfo = png_create_info_struct(ppng);
     if (!pinfo)
     {
+        fclose(handle);
         png_destroy_write_struct(&ppng, NULL);
         return;
     }
 
     png_init_io(ppng, handle);
 
+    I_RenderReadPixels(&data, &width, &height, &j);
+    rowbuf = data;
+
+    png_set_IHDR(ppng, pinfo, width, height,
+                 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+/*
     png_set_IHDR(ppng, pinfo, width, height,
                  8, PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
@@ -1166,6 +1189,7 @@ void WritePNGfile(char *filename, byte *data,
     pcolor = malloc(sizeof(*pcolor) * 256);
     if (!pcolor)
     {
+        fclose(handle);
         png_destroy_write_struct(&ppng, &pinfo);
         return;
     }
@@ -1179,9 +1203,11 @@ void WritePNGfile(char *filename, byte *data,
 
     png_set_PLTE(ppng, pinfo, pcolor, 256);
     free(pcolor);
+*/
 
     png_write_info(ppng, pinfo);
 
+/*
     rowbuf = malloc(width);
 
     if (rowbuf)
@@ -1191,11 +1217,11 @@ void WritePNGfile(char *filename, byte *data,
             // expand the row 5x
             for (j = 0; j < SCREENWIDTH; j++)
             {
-                memset(rowbuf + j * 5, *(data + i*SCREENWIDTH + j), 5);
+                memset(rowbuf + j * w_factor, *(data + i*SCREENWIDTH + j), w_factor);
             }
 
             // write the row 6 times
-            for (j = 0; j < 6; j++)
+            for (j = 0; j < h_factor; j++)
             {
                 png_write_row(ppng, rowbuf);
             }
@@ -1203,6 +1229,14 @@ void WritePNGfile(char *filename, byte *data,
 
         free(rowbuf);
     }
+*/
+
+    for (i = 0; i < height; i++)
+    {
+        png_write_row(ppng, rowbuf);
+        rowbuf += j;
+    }
+    free(data);
 
     png_write_end(ppng, pinfo);
     png_destroy_write_struct(&ppng, &pinfo);
