@@ -960,6 +960,13 @@ linefix_t linefix[] =
 
    // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
 
+    { doom2,            1,   1,       4,    0, "",         "",            "",                  5,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   1,       6,    0, "",         "",            "",                  5,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   1,     121,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   1,     125,    0, "",         "",            "",                  5,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   1,     141,    0, "",         "",            "",                  5,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   1,     143,    0, "",         "",            "",                  5,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   1,     175,    0, "",         "",            "",                117,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   1,     169,    1, "",         "BRNSMAL2",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   1,     334,    1, "",         "MIDBARS3",    "BRONZE1",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   1,     335,    1, "",         "MIDBARS3",    "BRONZE1",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
