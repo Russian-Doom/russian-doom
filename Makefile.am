@@ -65,8 +65,8 @@ hereticdocs_DATA = $(DOC_FILES)
 hexendocsdir = ${docdir}/../${PROGRAM_PREFIX}hexen
 hexendocs_DATA = $(DOC_FILES)
 
-strifedocsdir = ${docdir}/../${PROGRAM_PREFIX}strife
-strifedocs_DATA = $(DOC_FILES) README.Strife.md
+# strifedocs_DATA = $(DOC_FILES) README.Strife.md
+# strifedocsdir = ${docdir}/../${PROGRAM_PREFIX}strife
 
 MAINTAINERCLEANFILES =  $(AUX_DIST_GEN)
 
@@ -76,8 +76,9 @@ DIST_SUBDIRS=pkg $(SUBDIRS)
 
 if HAVE_PYTHON
 
+# -DSTRIFE
 INSTALL : man/INSTALL.template man/simplecpp
-	./man/simplecpp -DDOOM -DHERETIC -DHEXEN -DSTRIFE \
+	./man/simplecpp -DDOOM -DHERETIC -DHEXEN \
 	                < man/INSTALL.template > $@
 
 endif
