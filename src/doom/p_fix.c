@@ -1365,6 +1365,7 @@ linefix_t linefix[] =
     { doom2,            1,   8,     183,    0, "",         "",            "",                -13,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   8,     196,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   8,     232,    0, "",         "",            "STEP2",       DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,   8,     237,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   8,     249,    1, "COMPWERD", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   8,     270,    1, "COMPTALL", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,   8,     276,    1, "COMPTALL", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
