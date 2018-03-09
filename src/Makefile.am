@@ -1,5 +1,6 @@
 
-SUBDIRS = doom heretic hexen strife setup
+# strife
+SUBDIRS = doom heretic hexen setup
 
 execgamesdir = ${bindir}
 
