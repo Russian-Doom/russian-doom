@@ -735,7 +735,10 @@ boolean ST_Responder (event_t* ev)
                         plyr->message = DEH_String(STSTR_BEHOLDZ); // [JN] Деактивирован
                     }
                     else
+                    {
                         plyr->powers[i] = 0;
+                        plyr->message = DEH_String(STSTR_BEHOLDZ); // [JN] Деактивирован
+                    }
                 }
             }
 

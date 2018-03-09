@@ -710,7 +710,10 @@ ST_Responder (event_t* ev)
 	    plyr->message = STSTR_BEHOLDZ; // [JN] Деактивирован
 	  }
 	  else
+	  {
 	    plyr->powers[i] = 0;
+	    plyr->message = STSTR_BEHOLDZ; // [JN] Деактивирован
+	  }
 	}
       }
       
