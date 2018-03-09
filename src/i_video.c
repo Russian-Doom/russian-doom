@@ -101,7 +101,7 @@ int usemouse = 1;
 
 // Save screenshots in PNG format.
 
-int png_screenshots = 0;
+int png_screenshots = 1; // [JN] Crispy!
 
 // SDL video driver name
 

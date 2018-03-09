@@ -82,7 +82,7 @@ static int usegamma = 0;
 
 int graphical_startup = 0; // [JN] Disabled by default
 int show_endoom = 0;
-int png_screenshots = 0;
+int png_screenshots = 1;   // [JN] Crispy!
 
 // [JN] Корректор контрастности
 int lcd_gamma_fix = 1;
