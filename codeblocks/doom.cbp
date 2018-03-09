@@ -259,6 +259,10 @@
 		<Unit filename="../src/doom/p_user.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../src/doom/r_bmaps.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../src/doom/r_bmaps.h" />
 		<Unit filename="../src/doom/r_bsp.c">
 			<Option compilerVar="CC" />
 		</Unit>
