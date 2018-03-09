@@ -31,7 +31,7 @@ extern int draw_shadowed_text;      // Элементы меню и тексты
 extern int fast_quickload;          // Не выводить запрос при быстрой загрузке
 extern int show_total_time;         // Показывать общее время
 extern int show_diskicon;           // Значок дискеты / [Strife] песочных часов
-extern int show_exit_sequence;      // [Strife] Показывать заставку при выходе
+// extern int show_exit_sequence;      // [Strife] Показывать заставку при выходе
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
 extern int fake_contrast;           // Имитация контрастного освещения стен

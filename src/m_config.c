@@ -1709,7 +1709,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(fast_quickload),            // Не выводить запрос при быстрой загрузке
     CONFIG_VARIABLE_INT(show_total_time),           // Показывать общее время
     CONFIG_VARIABLE_INT(show_diskicon),             // Показывать значок дискеты    
-    CONFIG_VARIABLE_INT(show_exit_sequence),        // [Strife] Показывать заставку при выходе
+//  CONFIG_VARIABLE_INT(show_exit_sequence),        // [Strife] Показывать заставку при выходе
     // - Графика -
     CONFIG_VARIABLE_INT(brightmaps),                // Брайтмаппинг текстур и спрайтов
     CONFIG_VARIABLE_INT(fake_contrast),             // Имитация контрастного освещения стен

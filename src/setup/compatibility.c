@@ -33,7 +33,7 @@
 int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 int fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
 int show_diskicon = 1;           // Значок дискеты / [Strife] песочных часов
-int show_exit_sequence = 1;      // [Strife] Показывать заставку при выходе
+// int show_exit_sequence = 1;      // [Strife] Показывать заставку при выходе
 // - Графика -
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
 int fake_contrast = 0;           // Имитация контрастного освещения стен
@@ -87,8 +87,8 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom, TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
         
         // [JN] Элементы для Strife 
-        TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать значок песочных часов",        &show_diskicon)),
-        TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать заставку при выходе",          &show_exit_sequence)),
+        // TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать значок песочных часов",        &show_diskicon)),
+        // TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать заставку при выходе",          &show_exit_sequence)),
     
     TXT_NewSeparator("ѓрафика"),
         TXT_NewCheckBox("Ѓрайтмаппинг текстур и спрайтов",           &brightmaps),
@@ -129,7 +129,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
     M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
     M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
-    M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);       // [Strife] Показывать заставку при выходе
+    // M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);       // [Strife] Показывать заставку при выходе
     M_BindIntVariable("show_diskicon",          &show_diskicon);            // Показывать значок дискеты
     // - Графика -
     M_BindIntVariable("brightmaps",             &brightmaps);               // Брайтмаппинг текстур и спрайтов

@@ -102,7 +102,7 @@ static void SensibleDefaults(void)
     draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
     fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
     show_total_time = 1;         // Показывать общее время
-    show_exit_sequence = 1;      // [Strife] ѕоказывать заставку при выходе
+    // show_exit_sequence = 1;      // [Strife] ѕоказывать заставку при выходе
     // - Графика -
     brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
     fake_contrast = 0;           // Имитация контрастного освещения стен
