@@ -146,10 +146,15 @@ AC_SUBST(bashcompletiondir)
 dnl Shut up the datarootdir warnings.
 AC_DEFUN([AC_DATAROOTDIR_CHECKED])
 
+# [JN] Unused, moved out
+# man/Makefile
+# man/bash-completion/Makefile
+# src/strife.appdata.xml
+# src/strife.desktop
+# src/strife/Makefile
+
 AC_OUTPUT([
 Makefile
-man/Makefile
-man/bash-completion/Makefile
 opl/Makefile
 opl/examples/Makefile
 pcsound/Makefile
@@ -174,9 +179,6 @@ src/setup-res.rc
 src/setup/Makefile
 src/setup/setup.desktop
 src/setup/setup-manifest.xml
-src/strife.appdata.xml
-src/strife.desktop
-src/strife/Makefile
 textscreen/Makefile
 textscreen/examples/Makefile
 textscreen/fonts/Makefile

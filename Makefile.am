@@ -38,32 +38,32 @@ CODEBLOCKS_FILES=                              \
         codeblocks/setup-res.rc
 
 DOC_FILES=                              \
-        README.md                       \
-        README.Music.md                 \
-        NEWS.md                         \
-        PHILOSOPHY.md                   \
-        ChangeLog
+        README.md
+#       README.Music.md                 \
+#       NEWS.md                         \
+#       PHILOSOPHY.md                   \
+#       ChangeLog
 
 EXTRA_DIST=                             \
         $(AUX_DIST_GEN)                 \
         $(MSVC_FILES)                   \
-        $(CODEBLOCKS_FILES)             \
-        $(DOC_FILES)                    \
-        NOT-BUGS.md                     \
-        README.Strife.md                \
-        .lvimrc                         \
-        HACKING.md                      \
-        TODO.md                         \
-        rpm.spec
+        $(CODEBLOCKS_FILES)
+#       $(DOC_FILES)                    \
+#       NOT-BUGS.md                     \
+#       README.Strife.md                \
+#       .lvimrc                         \
+#       HACKING.md                      \
+#       TODO.md                         \
+#       rpm.spec
 
-doomdocsdir = ${docdir}/../${PROGRAM_PREFIX}doom
-doomdocs_DATA = $(DOC_FILES) NOT-BUGS.md
+# doomdocsdir = ${docdir}/../${PROGRAM_PREFIX}doom
+# doomdocs_DATA = $(DOC_FILES) NOT-BUGS.md
 
-hereticdocsdir = ${docdir}/../${PROGRAM_PREFIX}heretic
-hereticdocs_DATA = $(DOC_FILES)
+# hereticdocsdir = ${docdir}/../${PROGRAM_PREFIX}heretic
+# hereticdocs_DATA = $(DOC_FILES)
 
-hexendocsdir = ${docdir}/../${PROGRAM_PREFIX}hexen
-hexendocs_DATA = $(DOC_FILES)
+# hexendocsdir = ${docdir}/../${PROGRAM_PREFIX}hexen
+# hexendocs_DATA = $(DOC_FILES)
 
 # strifedocs_DATA = $(DOC_FILES) README.Strife.md
 # strifedocsdir = ${docdir}/../${PROGRAM_PREFIX}strife
@@ -74,12 +74,11 @@ SUBDIRS=textscreen opl pcsound data src man
 
 DIST_SUBDIRS=pkg $(SUBDIRS)
 
-if HAVE_PYTHON
-
-# -DSTRIFE
-INSTALL : man/INSTALL.template man/simplecpp
-	./man/simplecpp -DDOOM -DHERETIC -DHEXEN \
-	                < man/INSTALL.template > $@
-
-endif
+# if HAVE_PYTHON
+# 
+# INSTALL : man/INSTALL.template man/simplecpp
+# 	./man/simplecpp -DDOOM -DHERETIC -DHEXEN -DSTRIFE \
+# 	                < man/INSTALL.template > $@
+# 
+# endif
 
