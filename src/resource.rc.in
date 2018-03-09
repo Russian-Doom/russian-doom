@@ -15,14 +15,14 @@ FILETYPE 1
    VALUE "FileDescription", "@PACKAGE_STRING@"
    VALUE "InternalName", "@PACKAGE_TARNAME@"
    VALUE "CompanyName", "@PACKAGE_BUGREPORT@"
-   VALUE "LegalCopyright", "@PACKAGE_COPYRIGHT@. Licensed under @PACKAGE_LICENSE@"
+   VALUE "LegalCopyright", "Copyright \xA9 2016-2018 Julian Nechaevsky. Licensed under GNU General Public License, version 2"
    VALUE "ProductName", "@PACKAGE_NAME@"
    VALUE "ProductVersion", "@PACKAGE_VERSION@"
   }
  }
  BLOCK "VarFileInfo"
  {
-  VALUE "Translation", 0x409, 1252
+  VALUE "Translation", 0x0419, 1251
  }
 }
 
