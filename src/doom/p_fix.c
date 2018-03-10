@@ -1950,6 +1950,7 @@ linefix_t linefix[] =
     { doom2,            1,  20,     429,    0, "",         "",            "",                143,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  20,     431,    0, "",         "",            "",                 79,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  20,     438,    0, "",         "",            "",                 16,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  20,     452,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  20,     453,    1, "",         "",            "ROCK1",       DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  20,     463,    0, "",         "",            "",            DEFAULT,       102, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  20,     522,    0, "",         "",            "",                -16,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -1991,6 +1992,8 @@ linefix_t linefix[] =
     { doom2,            1,  21,      66,    0, "",         "",            "",                 39,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  21,      67,    0, "",         "",            "",                 47,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  21,      68,    0, "",         "",            "",                 26,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  21,     174,    0, "",         "",            "",            DEFAULT,       -40, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  21,     175,    0, "",         "",            "",            DEFAULT,       -40, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  21,     203,    0, "DOORRED",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { doom2,            1,  22,      60,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
