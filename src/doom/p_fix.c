@@ -2088,6 +2088,10 @@ linefix_t linefix[] =
     { doom2,            1,  23,       8,    1, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { doom2,            1,  23,     110,    0, "",         "METAL",       "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  23,     112,    0, "",         "METAL",       "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  23,     382,    0, "",         "",            "",                 11,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  23,     383,    0, "",         "",            "",                 11,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  23,     384,    0, "",         "",            "",                 11,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  23,     385,    0, "",         "",            "",            DEFAULT,         4, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { doom2,            1,  24,     284,    0, "",         "",            "",                -16,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  24,     285,    0, "",         "",            "",                -65,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
