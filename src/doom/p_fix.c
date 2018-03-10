@@ -2151,6 +2151,8 @@ linefix_t linefix[] =
     { doom2,            1,  25,     349,    1, "",         "MIDSPACE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  25,     436,    1, "MARBLE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  25,     618,    0, "",         "",            "",                  8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  25,     689,    0, "",         "",            "",                 48,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  25,     690,    0, "",         "",            "",                 48,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  25,     693,    0, "",         "",            "",                 16,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  25,     694,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  25,     695,    0, "",         "",            "",                -16,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
