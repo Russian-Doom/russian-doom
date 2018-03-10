@@ -24,6 +24,35 @@
 #include "r_defs.h"
 
 
+vertexfix_t vertexfix[] =
+{
+   // mission, episode, map, vertex,  oldx,  oldy,  newx,  newy
+
+    { doom,          1,   3,    771,  -328, -1920,  -320, -1920 },
+
+    { doom,          2,   2,   1344,  1312,  3992,  1312,  4000 },
+
+    { doom,          2,   6,    646,    64,  2008,    66,  2006 },
+    { doom,          2,   6,    647,   112,  1960,   111,  1961 },
+    { doom,          2,   6,    648,  -368,  1960,  -367,  1961 },
+    { doom,          2,   6,    649,  -320,  2008,  -322,  2006 },
+
+    { doom,          2,   7,    255,  2880,   624,  2880,   629 },
+    { doom,          2,   7,    378,  3824,   640,  3829,   640 },
+    { doom,          2,   7,    379,  3840,   624,  3840,   629 },
+    { doom,          2,   7,    381,  2896,   640,  2891,   640 },
+    { doom,          2,   7,    393,  1944,  1024,  1952,  1024 },
+    { doom,          2,   7,    495,  1944,   960,  1952,   960 },
+
+   // mission, episode, map, vertex,  oldx,  oldy,  newx,  newy
+
+    { doom2,         1,   1,    288,   320,  1416,   320,  1408 },
+
+    { doom2,         1,   2,    273,   736,  1216,   736,  1208 },
+
+    { -1,            0,   0,      0,     0,     0,     0,     0 }
+};
+
 linefix_t linefix[] =
 {
    // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
@@ -268,11 +297,12 @@ linefix_t linefix[] =
     { doom,             2,   6,     619,    0, "",         "",            "",            DEFAULT,   DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
     { doom,             2,   6,     639,    0, "EXITSIGN", "",            "",                 -8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,     640,    0, "EXITSIGN", "",            "",                 -8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { doom,             2,   6,     747,    0, "",         "",            "",                 -2,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { doom,             2,   6,     750,    0, "",         "",            "",                 -2,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   6,     747,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   6,     750,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,     757,    0, "",         "",            "",                 -1,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,     756,    0, "",         "",            "",                 -1,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,     758,    0, "",         "",            "",                 -1,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   6,     779,    0, "",         "",            "",                 -1,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,    1000,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,    1005,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   6,    1011,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },

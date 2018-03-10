@@ -165,6 +165,24 @@ void P_LoadVertexes (int lump)
 	li->x = SHORT(ml->x)<<FRACBITS;
 	li->y = SHORT(ml->y)<<FRACBITS;
     
+    // [BH] Apply any map-specific fixes.
+    if (canmodify && fix_map_errors)
+    {
+        for (int j = 0; vertexfix[j].mission != -1; j++)
+        {
+            if (i == vertexfix[j].vertex && gamemission == vertexfix[j].mission
+                && gameepisode == vertexfix[j].epsiode && gamemap == vertexfix[j].map
+                && vertexes[i].x == SHORT(vertexfix[j].oldx) << FRACBITS
+                && vertexes[i].y == SHORT(vertexfix[j].oldy) << FRACBITS)
+            {
+                vertexes[i].x = SHORT(vertexfix[j].newx) << FRACBITS;
+                vertexes[i].y = SHORT(vertexfix[j].newy) << FRACBITS;
+
+                break;
+            }
+        }
+    }
+
 	if ((flip_levels || flip_levels_cmdline) && singleplayer)
 	    li->x = -li->x;
     
