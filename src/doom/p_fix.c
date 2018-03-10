@@ -2220,6 +2220,7 @@ linefix_t linefix[] =
     { doom2,            1,  28,     214,    1, "",         "",            "ZIMMER8",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     215,    1, "",         "",            "ZIMMER8",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     221,    0, "",         "",            "BFALL1",      DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  28,     256,    1, "",         "",            "ZIMMER8",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     388,    1, "",         "",            "FIREBLU2",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     391,    0, "BIGDOOR5", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  28,     531,    1, "WOOD8",    "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
