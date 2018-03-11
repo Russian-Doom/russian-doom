@@ -2856,6 +2856,13 @@ sectorfix_t sectorfix[] =
     { doom2,            1,   8,     95, "",        "CEIL3_6", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   8,     96, "",        "CEIL3_6", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom2,            1,   9,     27, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   9,     60, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   9,     81, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   9,     83, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   9,    111, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   9,    112, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
     { doom2,            1,  10,    101, "",        "",        DEFAULT,     128,           DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom2,            1,  11,     90, "SLIME16", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
