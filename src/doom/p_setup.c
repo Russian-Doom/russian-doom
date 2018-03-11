@@ -1192,10 +1192,13 @@ P_SetupLevel
 	
     // [JN] Checking for multiple map lump names for allowing map fixes to work.
     // Adaptaken from Doom Retro, thanks Brad Harding!
-    //  Fixes also should not work for: non-single player game mode,
+    //  Fixes also should not work for: network game, IWAD versions below 1.9,
     //  vanilla game mode, Press Beta, Freedoom and FreeDM.
     canmodify = (((W_CheckMultipleLumps(lumpname) == 1 || gamemission == pack_nerve)
-        && (singleplayer && !vanillaparm && gamemode != pressbeta && gamevariant != freedoom && gamevariant != freedm)));
+        && (!netgame && !vanillaparm
+        && gameversion >= exe_doom_1_9
+        && gamemode != pressbeta
+        && gamevariant != freedoom && gamevariant != freedm)));
 
     leveltime = 0;
     
