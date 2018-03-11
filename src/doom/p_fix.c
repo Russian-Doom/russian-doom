@@ -2880,8 +2880,22 @@ sectorfix_t sectorfix[] =
     { doom2,            1,  13,     79, "",        "",        DEFAULT,     512,           DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  13,    151, "",        "CEIL5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom2,            1,  14,     16, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,     71, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  14,    106, "",        "",        176,         DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    123, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    128, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    155, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  14,    163, "",        "FLAT1_1", DEFAULT,     248,           DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    180, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    195, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    203, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    207, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    223, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    260, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    297, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    326, "",        "RROCK12", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  14,    329, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom2,            1,  15,    197, "GATE5",   "GATE5",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
