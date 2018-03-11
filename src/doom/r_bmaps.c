@@ -22,7 +22,7 @@
 
 
 // Floors and ceilings:
-int bmapflatnum1, bmapflatnum2, bmapflatnum3;
+int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4;
 
 // Walls:
 int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
@@ -66,6 +66,7 @@ void R_InitBrightmaps(void)
         bmapflatnum1 = R_FlatNumForName("CONS1_1");
         bmapflatnum2 = R_FlatNumForName("CONS1_5");
         bmapflatnum3 = R_FlatNumForName("CONS1_7");
+        bmapflatnum4 = R_FlatNumForName("GATE6");
     }
 
     // -------------------------------------------------------

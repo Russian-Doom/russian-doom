@@ -544,6 +544,10 @@ void R_DrawPlanes (void)
         || pl->picnum == bmapflatnum3)) // CONS1_7
         planezlight = fullbright_notgrayorbrown_floor[light];
 
+        if (brightmaps && !vanillaparm &&
+        pl->picnum == bmapflatnum4)     // GATE6
+        planezlight = fullbright_orangeyellow_floor[light];
+
         pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
         pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
 

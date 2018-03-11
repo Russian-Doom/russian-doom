@@ -22,7 +22,7 @@
 
 
 // Floors and ceilings:
-extern int bmapflatnum1, bmapflatnum2, bmapflatnum3;
+extern int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4;
 
 // Walls:
 extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
