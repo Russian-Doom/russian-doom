@@ -251,7 +251,7 @@ linefix_t linefix[] =
     { doom,             2,   4,     574,    0, "",         "",            "",                 21,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     644,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     645,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
-    { doom,             2,   4,     680,    0, "",         "",            "",            DEFAULT,        -8, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+    { doom,             2,   4,     680,    1, "",         "",            "",            DEFAULT,        -8, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     746,    0, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     748,    0, "",         "",            "",                -40,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     751,    0, "",         "",            "",                -48,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -262,6 +262,7 @@ linefix_t linefix[] =
     { doom,             2,   4,     955,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     978,    0, "",         "",            "",                -64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,    1031,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { doom,             2,   4,    1057,    1, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { doom,             2,   4,    1062,    0, "SLADWALL", "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,    1071,    0, "GRAYTALL", "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
