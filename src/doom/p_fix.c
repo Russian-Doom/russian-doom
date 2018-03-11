@@ -375,6 +375,9 @@ linefix_t linefix[] =
     { doom,             2,   7,    1645,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   7,    1662,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     
+    { doom,             2,   9,      68,    0, "",         "",            "",                 15,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   9,      70,    0, "",         "",            "",                -24,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   9,      85,    0, "",         "",            "",                -24,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   9,     110,    1, "",         "MIDGRATE",    "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   9,     115,    1, "",         "MIDGRATE",    "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   9,     121,    1, "GSTONE1",  "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
@@ -2844,6 +2847,8 @@ sectorfix_t sectorfix[] =
     { doom,             2,   7,     57, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   7,    251, "CRATOP2","",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   7,    303, "",       "CEIL5_2",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             2,   9,     16, "GATE6",  "GATE6",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             3,   1,     30, "",       "",         DEFAULT,     56,            DEFAULT,                            DEFAULT, DEFAULT },
 
