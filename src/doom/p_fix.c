@@ -50,6 +50,8 @@ vertexfix_t vertexfix[] =
 
     { doom2,         1,   2,    273,   736,  1216,   736,  1208 },
 
+    { doom2,         1,  30,     51,  4224,  -256,  4224,   -64 },    
+
     { -1,            0,   0,      0,     0,     0,     0,     0 }
 };
 
@@ -2333,6 +2335,7 @@ linefix_t linefix[] =
     { doom2,            1,  30,      38,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  30,      39,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  30,      48,    0, "",         "",            "",            DEFAULT,        32, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  30,      55,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTDRAW,                        DEFAULT,                                    DEFAULT },
 
     { doom2,            1,  31,      32,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  31,      34,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
