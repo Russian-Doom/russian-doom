@@ -2834,6 +2834,12 @@ sectorfix_t sectorfix[] =
 
     { doom2,            1,   5,    155, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom2,            1,   6,     15, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   6,     25, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   6,     47, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   6,     86, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,   6,     87, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
     { doom2,            1,   8,     92, "",        "CEIL3_6", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   8,     94, "",        "CEIL3_6", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,   8,     95, "",        "CEIL3_6", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
@@ -3033,6 +3039,17 @@ thingfix_t thingfix[] =
     { doom2,            1,   5,   108, 3006,                      2848,    -400,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
 
     { doom2,            1,   6,   244,   86,                      1264,     336,    1264,     344, DEFAULT, DEFAULT                            },
+
+    { doom2,            1,   6,    96,   85,                      1280,    1200,    1288,    1200, DEFAULT, DEFAULT                            },
+    { doom2,            1,   6,   205, 2015,                      1104,    1248,    1116,    1248, DEFAULT, DEFAULT                            },
+    { doom2,            1,   6,   206, 2015,                      1136,    1248,    1148,    1248, DEFAULT, DEFAULT                            },
+    { doom2,            1,   6,   207, 2015,                      1168,    1248,    1180,    1248, DEFAULT, DEFAULT                            },
+    { doom2,            1,   6,   208, 2015,                      1104,    1216,    1116,    1216, DEFAULT, DEFAULT                            },
+    { doom2,            1,   6,   209, 2015,                      1136,    1216,    1148,    1216, DEFAULT, DEFAULT                            },
+    { doom2,            1,   6,   210, 2015,                      1168,    1216,    1180,    1216, DEFAULT, DEFAULT                            },
+    { doom2,            1,   6,   211, 2015,                      1104,    1184,    1116,    1184, DEFAULT, DEFAULT                            },
+    { doom2,            1,   6,   212, 2015,                      1136,    1184,    1148,    1184, DEFAULT, DEFAULT                            },
+    { doom2,            1,   6,   213, 2015,                      1168,    1184,    1180,    1184, DEFAULT, DEFAULT                            },
 
 //  { doom2,            1,  11,   165,   58,                       752,     304,     760,     304, DEFAULT, DEFAULT                            }, [JN] Not safe for DEMO1
     { doom2,            1,  11,   236,   17,                      1952,     272,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
