@@ -251,6 +251,7 @@ linefix_t linefix[] =
     { doom,             2,   4,     574,    0, "",         "",            "",                 21,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     644,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     645,    0, "",         "",            "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             2,   4,     680,    0, "",         "",            "",            DEFAULT,        -8, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     746,    0, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     748,    0, "",         "",            "",                -40,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             2,   4,     751,    0, "",         "",            "",                -48,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -2763,11 +2764,16 @@ sectorfix_t sectorfix[] =
 
     { doom,             1,   3,      1, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             1,   3,      6, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             1,   3,     30, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             1,   3,     42, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             1,   4,     56, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom,             1,   5,      6, "",       "FLAT19",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             1,   5,      8, "",       "FLAT19",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             1,   5,     10, "",       "FLAT19",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             1,   5,    114, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             1,   5,    117, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             1,   6,     32, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
@@ -2776,41 +2782,84 @@ sectorfix_t sectorfix[] =
     { doom,             1,   9,     44, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             1,   9,     53, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
-    { doom,             2,   2,      8, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   1,     33, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   1,     87, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom,             2,   2,      8, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   2,     11, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             2,   3,    104, "",       "FLAT5_5",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   3,    111, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   3,    112, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   3,    115, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom,             2,   4,     51, "",       "FLAT5_3",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   4,    170, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   4,    173, "BLOOD3", "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   4,    177, "BLOOD3", "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   4,    202, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   4,    204, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             2,   5,    114, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   5,    119, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   5,    127, "",       "FLAT5_4",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   5,    220, "",       "FLAT5_4",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             2,   6,    161, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   6,    162, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   6,    165, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   6,    170, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
-    { doom,             2,   7,    251, "CRATOP2","",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             2,   7,     57, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   7,    251, "CRATOP2","",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             2,   7,    303, "",       "CEIL5_2",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             3,   1,     30, "",       "",         DEFAULT,     56,            DEFAULT,                            DEFAULT, DEFAULT },
-    { doom,             3,   2,     54, "",       "",         DEFAULT,     256,            DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             3,   2,     40, "",       "FLAT19",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             3,   2,     54, "",       "",         DEFAULT,     256,           DEFAULT,                            DEFAULT, DEFAULT },
+
     { doom,             3,   3,    172, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             3,   3,    176, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             3,   4,     62, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             3,   4,    118, "",       "FLOOR7_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             3,   4,    125, "",       "FLAT5",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             3,   5,     65, "",       "CEIL3_5",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             3,   5,    150, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom,             3,   6,     29, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             3,   6,     34, "",       "",         DEFAULT,     96,            DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             3,   6,     89, "",       "",         DEFAULT,     96,            DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom,             3,   7,     42, "",       "MFLR8_2",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             3,   8,     16, "",       "FLOOR7_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             3,   9,     27, "FLAT20", "",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
     { doom,             4,   1,     64, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             4,   2,     14, "",       "CEIL5_2",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             4,   3,    153, "",       "FLOOR7_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             4,   4,     62, "",       "FLAT1",    DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom,             4,   5,    134, "FLAT1",  "",         DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom,             4,   7,    212, "",       "CEIL5_2",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             4,   8,     79, "",       "CEIL5_2",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             4,   8,     96, "",       "CEIL5_2",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { doom,             4,   9,    100, "",       "FLOOR7_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             4,   9,    154, "",       "",         DEFAULT,     216,           DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             4,   9,    162, "",       "",         DEFAULT,     216,           DEFAULT,                            DEFAULT, DEFAULT },
     { doom,             4,   9,    163, "",       "",         DEFAULT,     216,           DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             4,   9,    238, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom,             4,   9,    240, "",       "FLAT20",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
    // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
 
