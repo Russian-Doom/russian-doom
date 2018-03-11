@@ -2993,6 +2993,7 @@ sectorfix_t sectorfix[] =
 
     { doom2,            1,  29,      6, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  29,    152, "",        "",        DEFAULT,     936,           DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  29,    204, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
    // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
 
