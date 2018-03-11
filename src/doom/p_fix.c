@@ -2247,6 +2247,7 @@ linefix_t linefix[] =
     { doom2,            1,  27,     580,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 31,                                    DEFAULT },
     { doom2,            1,  27,     581,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 31,                                    DEFAULT },
     { doom2,            1,  27,     582,    1, "ZIMMER3",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  27,     797,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
     { doom2,            1,  27,     810,    1, "",         "",            "WOODVERT",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  27,     814,    0, "",         "",            "",            DEFAULT,   DEFAULT, DEFAULT,                                 28,                                    DEFAULT },
 
@@ -2981,8 +2982,12 @@ sectorfix_t sectorfix[] =
     { doom2,            1,  26,    113, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  26,    115, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { doom2,            1,  27,     27, "",        "FLAT10",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  27,     80, "",        "FLAT5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  27,     82, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  27,     87, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  27,     93, "",        "",        DEFAULT,     DEFAULT,       0,                                  DEFAULT, DEFAULT },
+    { doom2,            1,  27,    142, "",        "FLAT5_3", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom2,            1,  28,     14, "",        "",            -44,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
