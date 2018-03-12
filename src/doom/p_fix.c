@@ -567,6 +567,7 @@ linefix_t linefix[] =
     { doom,             3,   5,     325,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     326,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     332,    0, "",         "",            "",                128,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { doom,             3,   5,     557,    0, "",         "",            "",            DEFAULT,   DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     597,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     598,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { doom,             3,   5,     762,    0, "",         "",            "",                168,        32, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -587,6 +588,10 @@ linefix_t linefix[] =
     { doom,             3,   5,    1130,    0, "",         "",            "",            DEFAULT,       -13, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   5,    1329,    1, "",         "",            "GSTONE1",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   5,    1330,    1, "",         "",            "GSTONE1",     DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             3,   5,    1343,    0, "",         "",            "",                160,      -208, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             3,   5,    1345,    0, "",         "",            "",                 -8,      -208, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             3,   5,    1349,    0, "",         "",            "",                160,       -80, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             3,   5,    1351,    0, "",         "",            "",                 -8,       -80, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { doom,             3,   6,      39,    0, "",         "",            "",            DEFAULT,        48, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   6,      40,    0, "",         "",            "",            DEFAULT,        48, DEFAULT,                            DEFAULT,                                    DEFAULT },
