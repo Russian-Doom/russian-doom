@@ -643,6 +643,7 @@ linefix_t linefix[] =
     { doom,             3,   7,     236,    0, "",         "",            "GSTONE2",     DEFAULT,       -24, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   7,     237,    0, "",         "",            "GSTONE2",     DEFAULT,       -24, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   7,     238,    0, "",         "",            "GSTONE2",     DEFAULT,       -24, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             3,   7,     246,    0, "",         "",            "",            DEFAULT,        51, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   7,     302,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
     { doom,             3,   7,     312,    0, "",         "",            "",            DEFAULT,       -56, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             3,   7,     314,    0, "",         "",            "",            DEFAULT,       -56, DEFAULT,                            DEFAULT,                                    DEFAULT },
