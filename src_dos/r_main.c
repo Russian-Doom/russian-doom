@@ -912,9 +912,20 @@ void R_SetupFrame (player_t* player)
 	
     if (player->fixedcolormap)
     {
-	fixedcolormap =
-	    colormaps
-	    + player->fixedcolormap*256*sizeof(lighttable_t);
+	// [JN] Fix aftermath of "Invulnerability colormap bug" fix,
+	// when sky texture was slightly affected by changing to
+	// fixed (non-inversed) colormap.
+	// https://doomwiki.org/wiki/Invulnerability_colormap_bug
+
+	if (player->powers[pw_invulnerability]
+	|| (player->powers[pw_invulnerability] && player->powers[pw_infrared]))
+	{
+        fixedcolormap = colormaps + player->fixedcolormap * 256 * sizeof(lighttable_t);
+	}
+	else
+	{
+        fixedcolormap = colormaps;
+	}
 	
 	walllights = scalelightfixed;
 

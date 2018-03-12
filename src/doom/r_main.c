@@ -845,13 +845,28 @@ void R_SetupFrame (player_t* player)
 
     if (player->fixedcolormap)
     {
-        // [JN] Infra green visor: use colormap №33 from Beta's COLORMAB lump.
+        // [JN] Fix aftermath of "Invulnerability colormap bug" fix,
+        // when sky texture was slightly affected by changing to
+        // fixed (non-inversed) colormap.
+        // https://doomwiki.org/wiki/Invulnerability_colormap_bug
+        // 
+        // Infra green visor is using colormap №33 from Beta's COLORMAB lump.
         // Needed for compatibility and for preventing "black screen" while 
         // using Visor with possible non-standard COLORMAPS in PWADs.
-        if (infragreen_visor)
-        fixedcolormap = colormaps_beta + player->fixedcolormap*256;
+
+        if (player->powers[pw_invulnerability]
+        || (player->powers[pw_invulnerability] && player->powers[pw_infrared]))
+        {
+            fixedcolormap = colormaps + player->fixedcolormap * 256;
+        }
+        else if (infragreen_visor && player->powers[pw_infrared])
+        {
+            fixedcolormap = colormaps_beta + player->fixedcolormap * 256;
+        }
         else
-        fixedcolormap = colormaps + player->fixedcolormap*256;
+        {
+            fixedcolormap = colormaps;
+        }
 
         walllights = scalelightfixed;
 
