@@ -854,8 +854,7 @@ void R_SetupFrame (player_t* player)
         // Needed for compatibility and for preventing "black screen" while 
         // using Visor with possible non-standard COLORMAPS in PWADs.
 
-        if (player->powers[pw_invulnerability]
-        || (player->powers[pw_invulnerability] && player->powers[pw_infrared]))
+        if (player->powers[pw_invulnerability])
         {
             fixedcolormap = colormaps + player->fixedcolormap * 256;
         }

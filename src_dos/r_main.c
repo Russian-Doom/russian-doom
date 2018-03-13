@@ -917,8 +917,7 @@ void R_SetupFrame (player_t* player)
 	// fixed (non-inversed) colormap.
 	// https://doomwiki.org/wiki/Invulnerability_colormap_bug
 
-	if (player->powers[pw_invulnerability]
-	|| (player->powers[pw_invulnerability] && player->powers[pw_infrared]))
+	if (player->powers[pw_invulnerability])
 	{
         fixedcolormap = colormaps + player->fixedcolormap * 256 * sizeof(lighttable_t);
 	}
