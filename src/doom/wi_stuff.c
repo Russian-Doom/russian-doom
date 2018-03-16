@@ -1417,9 +1417,14 @@ void WI_drawStats(void)
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
+    // [JN] Show secrets counter if only map have a secrets.
+    // Adaptaken from Doom Retro, thanks Brad Harding!
+    if (totalsecret || vanillaparm)
+    {
     V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY+2*lh, sp_secret);
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
+    }
 
     V_DrawShadowedPatchDoom(SP_TIMEX, SP_TIMEY, timepatch);
     
