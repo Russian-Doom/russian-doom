@@ -1200,36 +1200,74 @@ void P_UpdateSpecials (void)
 	if (buttonlist[i].btimer)
 	{
 	    buttonlist[i].btimer--;
+
+        // Fix vanilla bug of non-working switch animations in some instances.
+        // Written by Brad Harding, found by Julian Nechaevsky (17.03.2018).
+
 	    if (!buttonlist[i].btimer)
 	    {
-		switch(buttonlist[i].where)
-		{
-		  case top:
-		    sides[buttonlist[i].line->sidenum[0]].toptexture =
-			buttonlist[i].btexture;
-		    break;
-		    
-		  case middle:
-		    sides[buttonlist[i].line->sidenum[0]].midtexture =
-			buttonlist[i].btexture;
-		    break;
-		    
-		  case bottom:
-		    sides[buttonlist[i].line->sidenum[0]].bottomtexture =
-			buttonlist[i].btexture;
-		    break;
-		}
+            int     sidenum = buttonlist[i].line->sidenum[0];
+            short   toptexture = sides[sidenum].toptexture;
+            short   midtexture = sides[sidenum].midtexture;
+            short   bottomtexture = sides[sidenum].bottomtexture;
+            int     btexture = buttonlist[i].btexture;
 
-        // [JN] Standard sound behaviour for "vanilla" game mode.
-        if (vanillaparm)
-        S_StartSound(&buttonlist[i].soundorg,sfx_swtchn);
-        // [crispy] & [JN] Logically proper sound behavior.
-        // Do not play second "sfx_swtchn" on two-sided linedefs that attached to special sectors,
-        // and always play second sound on single-sided linedefs.
-        else if (!buttonlist[i].line->backsector || !buttonlist[i].line->backsector->specialdata)
-        S_StartSound(buttonlist[i].soundorg,sfx_swtchn);
+            switch (buttonlist[i].where)
+            {
+                case nowhere:
+                break;
 
-		memset(&buttonlist[i],0,sizeof(button_t));
+                case top:
+                {
+                    sides[sidenum].toptexture = btexture;
+
+                    if (midtexture == toptexture)
+                    sides[sidenum].midtexture = btexture;
+
+                    if (bottomtexture == toptexture)
+                    sides[sidenum].bottomtexture = btexture;
+                }
+                break;
+
+                case middle:
+                {
+                    sides[sidenum].midtexture = btexture;
+
+                    if (toptexture == midtexture)
+                    sides[sidenum].toptexture = btexture;
+
+                    if (bottomtexture == midtexture)
+                    sides[sidenum].bottomtexture = btexture;
+                }
+                break;
+
+                case bottom:
+                {
+                    sides[sidenum].bottomtexture = btexture;
+
+                    if (toptexture == bottomtexture)
+                    sides[sidenum].toptexture = btexture;
+
+                    if (midtexture == bottomtexture)
+                    sides[sidenum].midtexture = btexture;
+                }
+                break;
+            }
+
+            // [JN] Standard sound behaviour for "vanilla" game mode.
+            if (vanillaparm)
+            {
+                S_StartSound(&buttonlist[i].soundorg,sfx_swtchn);
+            }
+            // [crispy] & [JN] Logically proper sound behavior.
+            // Do not play second "sfx_swtchn" on two-sided linedefs that attached to special sectors,
+            // and always play second sound on single-sided linedefs.
+            else if (!buttonlist[i].line->backsector || !buttonlist[i].line->backsector->specialdata)
+            {
+                S_StartSound(buttonlist[i].soundorg,sfx_swtchn);
+            }
+
+            memset(&buttonlist[i],0,sizeof(button_t));
 	    }
 	}
 }
