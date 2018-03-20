@@ -664,14 +664,15 @@ void S_SetMusicVolume(int volume)
                 volume);
     }
 
-    // [JN] Исправлен баг, при котором музыка
-    // продолжала играть при нулевой громкости
+    // [JN] Fixed bug when music was hearable with zero volume.
+    // Thanks to Fabian Greffrath for notifiying the necessity
+    // of taking care about "paused" game state!
     if (musicVolume == 0)
     {
         I_PauseSong();
         mus_paused = true;
     }
-    else
+    else if (musicVolume > 0 && !paused)
     {
         I_ResumeSong();
         mus_paused = false;
