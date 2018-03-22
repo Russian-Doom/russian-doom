@@ -173,6 +173,7 @@ typedef enum
     SPR_POLG,
     SPR_POLM,
     SPR_RFOG,
+    SPR_CANA,
     SPR_BON3,       // (Press Beta)
     SPR_BON4,       // (Press Beta)
     NUMSPRITES
@@ -1169,6 +1170,9 @@ typedef enum
     S_RFOG8,
     S_RFOG9,
     S_RFOG10,
+    S_CANDLESTIK_A,
+    S_CANDLESTIK_A2,
+    S_CANDLESTIK_A3,
     S_BON3,         // (Press Beta)
     S_BON4,         // (Press Beta)
     NUMSTATES
@@ -1335,6 +1339,7 @@ typedef enum {
     MT_GIBSMASTERMIND,
 	MT_BLOODFUZZ,
     MT_RFOG,
+    MT_MISC49_A,    // Animated candle
     MT_PLASMA1,     // (Press Beta)
     MT_SCEPTRE,     // (Press Beta)
     MT_BIBLE,       // (Press Beta)

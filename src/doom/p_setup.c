@@ -607,6 +607,11 @@ void P_LoadThings (int lump)
 	    {
 	        mt->options &= ~16;
 	    }
+	    // [JN] Replace static candles with animated candles
+	    if (canmodify && mt->type == 34)
+	    {
+	        mt->type = 3000;
+	    }
 	}
 
 	// Do spawn all other stuff. 
