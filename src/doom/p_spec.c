@@ -1214,9 +1214,6 @@ void P_UpdateSpecials (void)
 
             switch (buttonlist[i].where)
             {
-                case nowhere:
-                break;
-
                 case top:
                 {
                     sides[sidenum].toptexture = btexture;
@@ -1251,6 +1248,9 @@ void P_UpdateSpecials (void)
                     if (midtexture == bottomtexture)
                     sides[sidenum].midtexture = btexture;
                 }
+                break;
+
+                case nowhere:
                 break;
             }
 
