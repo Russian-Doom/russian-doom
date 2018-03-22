@@ -264,13 +264,11 @@ static void D_Disconnected(void)
 
     if (drone)
     {
-		// "Disconnected from server in drone mode."
-        I_Error("Отключение от сервера в режиме раздельного экрана.");
+        I_Error("Отключение от сервера в режиме разделенного экрана");
     }
 
     // disconnected from server
 
-	// "Disconnected from server.\n"
     printf("Отключение от сервера.\n");
 }
 
@@ -332,15 +330,13 @@ static void BlockUntilStart(net_gamesettings_t *settings,
 
         if (!net_client_connected)
         {
-			// "Lost connection to server"
             I_Error("Потеряно соединение с сервером");
         }
 
         if (callback != NULL && !callback(net_client_wait_data.ready_players,
                                           net_client_wait_data.num_players))
         {
-			// "Netgame startup aborted."
-            I_Error("Запуск сетевой игры отменен.");
+            I_Error("Запуск сетевой игры отменен");
         }
 
         I_Sleep(100);
@@ -495,7 +491,6 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
             if (addr == NULL)
             {
-				// "No server found on local LAN"
                 I_Error("Серверы не обнаружены в локальной сети");
             }
         }
@@ -517,7 +512,6 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
             if (addr == NULL)
             {
-				// "Unable to resolve '%s'\n"
                 I_Error("Невозможно получить ответ от '%s'\n", myargv[i+1]);
             }
         }
@@ -532,7 +526,6 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
         if (!NET_CL_Connect(addr, connect_data))
         {
-			// "D_InitNetGame: Failed to connect to %s\n"
             I_Error("D_InitNetGame: Невозможно соединиться с %s\n",
                     NET_AddrToString(addr));
         }
