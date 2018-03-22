@@ -48,7 +48,7 @@ char *sprnames[] = {
     "COL3","COL4","CAND","CBRA","COL6","TRE1","TRE2","ELEC","CEYE","FSKU",
     "COL5","TBLU","TGRN","TRED","SMBT","SMGT","SMRT","HDB1","HDB2","HDB3",
     "HDB4","HDB5","HDB6","POB1","POB2","BRS1","TLMP","TLP2","BLUB","BLUG",
-    "POLB","POLG","POLM","RFOG","CANA","BON3","BON4",
+    "POLB","POLG","POLM","RFOG","CANA","CADA","BON3","BON4",
     NULL
 };
 
@@ -1136,6 +1136,11 @@ state_t	states[NUMSTATES] = {
     {SPR_CANA,32768,6,{NULL},S_CANDLESTIK_A2,0,0},    // S_CANDLESTIK_A
     {SPR_CANA,32769,6,{NULL},S_CANDLESTIK_A3,0,0},    // S_CANDLESTIK_A2
     {SPR_CANA,32770,6,{NULL},S_CANDLESTIK_A,0,0},     // S_CANDLESTIK_A3
+    // [JN] Animated candelabra
+    {SPR_CADA,32768,6,{NULL},S_CANDELABRA_A2,0,0},    // S_CANDELABRA_A
+    {SPR_CADA,32769,6,{NULL},S_CANDELABRA_A3,0,0},    // S_CANDELABRA_A2
+    {SPR_CADA,32770,6,{NULL},S_CANDELABRA_A4,0,0},    // S_CANDELABRA_A3
+    {SPR_CADA,32771,6,{NULL},S_CANDELABRA_A,0,0},     // S_CANDELABRA_A4
     // [JN] Press Beta: Evil Sceptre
     {SPR_BON3,0,-1,{NULL},S_NULL,0,0},      // S_BON3
     // [JN] Press Beta: Unholy Bible
@@ -4890,7 +4895,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
     },
 
     {               // MT_MISC49_A
-    3000,           // doomednum
+    4000,           // doomednum
     S_CANDLESTIK_A, // spawnstate
     1000,           // spawnhealth
     S_NULL,         // seestate
@@ -4912,6 +4917,32 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
     0,              // damage
     sfx_None,       // activesound
     0,              // flags
+    S_NULL          // raisestate
+    },
+
+    {               // MT_MISC50_A
+    4001,           // doomednum
+    S_CANDELABRA_A, // spawnstate
+    1000,           // spawnhealth
+    S_NULL,         // seestate
+    sfx_None,       // seesound
+    8,              // reactiontime
+    sfx_None,       // attacksound
+    S_NULL,         // painstate
+    0,              // painchance
+    sfx_None,       // painsound
+    S_NULL,         // meleestate
+    S_NULL,         // missilestate
+    S_NULL,         // deathstate
+    S_NULL,         // xdeathstate
+    sfx_None,       // deathsound
+    0,              // speed
+    16*FRACUNIT,    // radius
+    16*FRACUNIT,    // height
+    100,            // mass
+    0,              // damage
+    sfx_None,       // activesound
+    MF_SOLID,       // flags
     S_NULL          // raisestate
     },
 

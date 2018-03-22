@@ -607,10 +607,14 @@ void P_LoadThings (int lump)
 	    {
 	        mt->options &= ~16;
 	    }
-	    // [JN] Replace static candles with animated candles
-	    if (canmodify && mt->type == 34)
+	    // [JN] Replace static candles and candelabras with animated ones
+	    if (canmodify)
 	    {
-	        mt->type = 3000;
+            if (mt->type == 34)  // Candle
+                mt->type = 4000;
+        
+            if (mt->type == 35)  // Candelabra
+                mt->type = 4001;
 	    }
 	}
 
