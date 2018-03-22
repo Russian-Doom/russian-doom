@@ -2546,7 +2546,8 @@ boolean G_CheckDemoStatus (void)
         timingdemo = false;
         demoplayback = false;
 
-        I_Error ("насчитано %i gametics в %i realtics (%f fps)", gametic, realtics, fps);
+        I_Error ("Насчитано %i gametics в %i realtics.\n"
+                 "Среднее значение FPS: %f.", gametic, realtics, fps);
     } 
 
     if (demoplayback)
