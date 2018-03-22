@@ -1759,7 +1759,7 @@ void P_UnArchiveThinkers (void)
 	    break;
 
 	  default:
-	    I_Error ("Неизвестный tclass %i в сохраненной игре",tclass);
+	    I_Error ("Ошибка сохраненной игры: неизвестный tclass %i",tclass);
 	}
     }
 }
