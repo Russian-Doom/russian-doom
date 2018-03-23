@@ -3225,7 +3225,7 @@ linefix_t linefix[] =
 
    // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
 
-    { pack_plut,        1,   1,    1110,    0, "",         "",            "",                  0,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   1,    1110,    0, "",         "",            "",                  0,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { pack_plut,        1,   2,      44,    0, "",         "",            "",                 -4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
