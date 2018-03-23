@@ -612,7 +612,7 @@ void P_LoadThings (int lump)
         // It's *very* unsafe for internal demos, so there is also "reversive" condition.
 	    if (canmodify)
 	    {
-            if (gameaction == ga_newgame)
+            if (gameaction == ga_newgame || gameaction == ga_loadgame || gameaction == ga_worlddone)
             {
                 if (mt->type == 34)     // Candle
                     mt->type = 4000;    // Animated candle
