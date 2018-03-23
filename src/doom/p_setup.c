@@ -81,6 +81,7 @@ boolean canmodify;
 
 extern boolean flip_levels_cmdline;
 
+gameaction_t    gameaction;
 
 // BLOCKMAP
 // Created from axis aligned bounding box
@@ -607,14 +608,26 @@ void P_LoadThings (int lump)
 	    {
 	        mt->options &= ~16;
 	    }
-	    // [JN] Replace static candles and candelabras with animated ones
+	    // [JN] Replace static candles and candelabras with animated ones.
+        // It's *very* unsafe for internal demos, so there is also "reversive" condition.
 	    if (canmodify)
 	    {
-            if (mt->type == 34)  // Candle
-                mt->type = 4000;
+            if (gameaction == ga_newgame)
+            {
+                if (mt->type == 34)     // Candle
+                    mt->type = 4000;    // Animated candle
         
-            if (mt->type == 35)  // Candelabra
-                mt->type = 4001;
+                if (mt->type == 35)     // Candelabra
+                    mt->type = 4001;    // Animated candelabra
+            }
+            else
+            {
+                if (mt->type == 4000)   // Animated candle
+                    mt->type = 34;      // Candle
+            
+                if (mt->type == 4001)   // Animated candelabra
+                    mt->type = 35;      // Candelabra
+            }
 	    }
 	}
 
