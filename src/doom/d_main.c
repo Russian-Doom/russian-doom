@@ -2258,6 +2258,7 @@ void D_DoomMain (void)
                 startmap = 1;
             }
         }
+        gameaction = ga_newgame;
         autostart = true;
     }
 
