@@ -90,8 +90,7 @@ static byte saveg_read8(void)
     {
         if (!savegame_error)
         {
-            fprintf(stderr, "saveg_read8: Unexpected end of file while "
-                            "reading save game\n");
+            fprintf(stderr, "saveg_read8: неожиданный конец файла в сохраненной игре.\n");
 
             savegame_error = true;
         }
@@ -106,7 +105,7 @@ static void saveg_write8(byte value)
     {
         if (!savegame_error)
         {
-            fprintf(stderr, "saveg_write8: Error while writing save game\n");
+            fprintf(stderr, "saveg_write8: ошибка записи сохраненной игры.\n");
 
             savegame_error = true;
         }

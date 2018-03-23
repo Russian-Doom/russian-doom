@@ -1111,7 +1111,7 @@ static void PadRejectArray(byte *array, unsigned int len)
 
     if (len > sizeof(rejectpad))
     {
-        fprintf(stderr, "PadRejectArray: REJECT lump too short to pad! (%i > %i)\n",
+        fprintf(stderr, "PadRejectArray: блок REJECT слишком мал для заполнения! (%i > %i)\n",
                         len, (int) sizeof(rejectpad));
 
         // Pad remaining space with 0 (or 0xff, if specified on command line).
