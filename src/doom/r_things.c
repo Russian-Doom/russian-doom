@@ -265,7 +265,7 @@ void R_InitSpriteDefs (char** namelist)
             case -1:
             // no rotations were found for that frame at all
             // [crispy] make non-fatal
-            fprintf (stderr, "R_InitSprites: в фрейме %c спрайта %s отсутствуют патчи\n", spritename, frame+'A');
+            fprintf (stderr, "R_InitSprites: не найдены патчи для спрайта %s, фрейма %c\n", spritename, frame+'A');
             break;
 
             case 0:
