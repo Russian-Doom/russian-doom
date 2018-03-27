@@ -3742,6 +3742,7 @@ sectorfix_t sectorfix[] =
     { pack_plut,        1,  16,    104, "",        "NUKAGE1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { pack_plut,        1,  17,     83, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,  17,     96, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { pack_plut,        1,  20,    100, "FLOOR3_3","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,  20,    128, "FLOOR7_1","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
