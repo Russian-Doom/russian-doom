@@ -160,7 +160,11 @@ P_StartButton
 	    && buttonlist[i].line == line)
 	{
 	    
+	  // [crispy] register up to three buttons at once for lines with more than one switch texture
+	  if (buttonlist[i].where == w)
+	  {
 	    return;
+	  }
 	}
     }
     
@@ -222,41 +226,48 @@ P_ChangeSwitchTexture
     if (!useAgain)
 	line->special = 0;
 	
+    // Fix vanilla bug of non-working switch animations in some instances.
+    // Written by Brad Harding, found by Julian Nechaevsky (17.03.2018).
+    // Code by Fabian Greffrath (previously by Brad Harding),
+    // discovered by Julian Nechaevsky (17.03.2018).
+
     for (i = 0;i < numswitches*2;i++)
     {
 	if (switchlist[i] == texTop)
 	{
-	    S_StartSound(&line->soundorg,sound); // [from-crispy] Corrected sound source
+	    S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
 	    sides[line->sidenum[0]].toptexture = switchlist[i^1];
 
 	    if (useAgain)
 		P_StartButton(line,top,switchlist[i],BUTTONTIME);
 
-	    return;
+//	    return;
 	}
-	else
+	// [crispy] register up to three buttons at once for lines with more than one switch texture
+//	else
 	{
 	    if (switchlist[i] == texMid)
 	    {
-		S_StartSound(&line->soundorg,sound); // [from-crispy] Corrected sound source
+		S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
 		sides[line->sidenum[0]].midtexture = switchlist[i^1];
 
 		if (useAgain)
 		    P_StartButton(line, middle,switchlist[i],BUTTONTIME);
 
-		return;
+//		return;
 	    }
-	    else
+	    // [crispy] register up to three buttons at once for lines with more than one switch texture
+//	    else
 	    {
 		if (switchlist[i] == texBot)
 		{
-		    S_StartSound(&line->soundorg,sound); // [from-crispy] Corrected sound source
+		    S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
 		    sides[line->sidenum[0]].bottomtexture = switchlist[i^1];
 
 		    if (useAgain)
 			P_StartButton(line, bottom,switchlist[i],BUTTONTIME);
 
-		    return;
+//		    return;
 		}
 	    }
 	}

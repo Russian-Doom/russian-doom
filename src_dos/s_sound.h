@@ -55,6 +55,10 @@ S_StartSound
   int		sfx_id );
 
 
+void 
+S_StartSoundOnce
+( void*		origin,
+  int		sound_id);
 
 // Will start a sound at a given volume.
 void

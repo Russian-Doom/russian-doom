@@ -377,6 +377,23 @@ void S_SetSfxVolume(int volume)
 
 }
 
+void S_StartSoundOnce (void *origin_p, int sfx_id)
+{
+    int cnum;
+    const sfxinfo_t *const sfx = &S_sfx[sfx_id];
+
+    for (cnum = 0; cnum < numChannels; cnum++)
+    {
+        if (channels[cnum].sfxinfo == sfx &&
+            channels[cnum].origin == origin_p)
+        {
+            return;
+        }
+    }
+
+    S_StartSound(origin_p, sfx_id);
+}
+
 //
 // Stop and resume music, during game PAUSE.
 //
