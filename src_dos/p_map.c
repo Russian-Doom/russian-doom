@@ -745,6 +745,14 @@ boolean P_ThingHeightClip (mobj_t* thing)
     {
 	// walking monsters rise and fall with the floor
 	thing->z = thing->floorz;
+    
+    // [JN] Update player's view when on moving platform.
+    // Idea by Brad Harding, code by Fabian Greffrath.
+    // Thanks, colleagues! (27.03.2018)
+    if (thing->player)
+    {
+        thing->player->viewz = thing->z + thing->player->viewheight;
+    }
     }
     else
     {
