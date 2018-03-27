@@ -164,8 +164,11 @@ P_StartButton
 	if (buttonlist[i].btimer
 	    && buttonlist[i].line == line)
 	{
-	    
-	    return;
+        // [crispy] register up to three buttons at once for lines with more than one switch texture
+        if (buttonlist[i].where == w)
+        {
+            return;
+        }
 	}
     }
     
@@ -195,13 +198,22 @@ P_StartButton
 // Function that changes wall texture.
 // Tell it if switch is ok to use again (1=yes, it's a button).
 //
-void P_ChangeSwitchTexture (line_t* line, int useAgain)
+void
+P_ChangeSwitchTexture
+( line_t*	line,
+  int 		useAgain )
 {
-    int     sidenum = line->sidenum[0];
-    int     sound = sfx_swtchn;
-    short   *toptexture = &sides[sidenum].toptexture;
-    short   *midtexture = &sides[sidenum].midtexture;
-    short   *bottomtexture = &sides[sidenum].bottomtexture;
+    int     texTop;
+    int     texMid;
+    int     texBot;
+    int     i;
+    int     sound;
+
+    texTop = sides[line->sidenum[0]].toptexture;
+    texMid = sides[line->sidenum[0]].midtexture;
+    texBot = sides[line->sidenum[0]].bottomtexture;
+
+    sound = sfx_swtchn;
 
     if (correct_endlevel_sfx && !vanillaparm)
     {
@@ -218,39 +230,50 @@ void P_ChangeSwitchTexture (line_t* line, int useAgain)
 
     if (!useAgain)
 	line->special = 0;
-	
+
     // Fix vanilla bug of non-working switch animations in some instances.
-    // Written by Brad Harding, found by Julian Nechaevsky (17.03.2018).
-    
-    for (int i = 0; i < numswitches * 2; i++)
+    // Code by Fabian Greffrath (previously by Brad Harding),
+    // discovered by Julian Nechaevsky (17.03.2018).
+
+    for (i = 0;i < numswitches*2;i++)
     {
-        bwhere_e    where = nowhere;
-
-        if (switchlist[i] == *bottomtexture)
+        if (switchlist[i] == texTop)
         {
-            where = bottom;
-            *bottomtexture = switchlist[i ^ 1];
-        }
+            S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
+            sides[line->sidenum[0]].toptexture = switchlist[i^1];
 
-        if (switchlist[i] == *midtexture)
-        {
-            where = middle;
-            *midtexture = switchlist[i ^ 1];
-        }
-
-        if (switchlist[i] == *toptexture)
-        {
-            where = top;
-            *toptexture = switchlist[i ^ 1];
-        }
-
-        if (where != nowhere)
-        {
             if (useAgain)
-                P_StartButton(line, where, switchlist[i], BUTTONTIME);
+            P_StartButton(line,top,switchlist[i],BUTTONTIME);
+    
+            // return;
+        }
+        // [crispy] register up to three buttons at once for lines with more than one switch texture
+        //	else
+        {
+            if (switchlist[i] == texMid)
+            {
+            S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
+            sides[line->sidenum[0]].midtexture = switchlist[i^1];
 
-            S_StartSound(&line->soundorg,sound); // [from-crispy] Corrected sound source
-            break;
+            if (useAgain)
+                P_StartButton(line, middle,switchlist[i],BUTTONTIME);
+
+            // return;
+            }
+            // [crispy] register up to three buttons at once for lines with more than one switch texture
+            // else
+            {
+                if (switchlist[i] == texBot)
+                {
+                    S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
+                    sides[line->sidenum[0]].bottomtexture = switchlist[i^1];
+
+                    if (useAgain)
+                    P_StartButton(line, bottom,switchlist[i],BUTTONTIME);
+
+                    // return;
+                }
+            }
         }
     }
 }

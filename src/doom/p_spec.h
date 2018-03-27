@@ -217,7 +217,6 @@ typedef struct
 
 typedef enum
 {
-    nowhere = -1,
     top,
     middle,
     bottom
