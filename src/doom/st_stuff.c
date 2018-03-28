@@ -842,6 +842,10 @@ boolean ST_Responder (event_t* ev)
                 {
                     return false;
                 }
+
+                // [JN] Episode must also be declared to make
+                // TNT and Plutonia map fixes working.
+                epsd = gameepisode;
             }
 
             // So be it.
