@@ -3872,6 +3872,17 @@ thingfix_t thingfix[] =
 
     { pack_tnt,         1,  29,   405,    67,                    -5536,     992,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
 
+    { pack_tnt,         1,  31,   171,     9,                     -608,     912,    -608,     912,       0, DEFAULT                            },
+    { pack_tnt,         1,  31,   172,     9,                     -640,     864,    -640,     864,       0, DEFAULT                            },
+    { pack_tnt,         1,  31,   173,     9,                     -576,     864,    -576,     864,       0, DEFAULT                            },
+    { pack_tnt,         1,  31,   174,     9,                     -640,     800,    -640,     800,       0, DEFAULT                            },
+    { pack_tnt,         1,  31,   175,     9,                     -576,     800,    -576,     800,       0, DEFAULT                            },
+    { pack_tnt,         1,  31,   176,     9,                     -640,     736,    -640,     736,       0, DEFAULT                            },
+    { pack_tnt,         1,  31,   177,     9,                     -576,     736,    -576,     736,       0, DEFAULT                            },
+    { pack_tnt,         1,  31,   178,     9,                     -640,     672,    -640,     672,       0, DEFAULT                            },
+    { pack_tnt,         1,  31,   179,     9,                     -576,     672,    -576,     672,       0, DEFAULT                            },
+    { pack_tnt,         1,  31,   180,     9,                     -608,     624,    -608,     624,       0, DEFAULT                            },
+
    // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
 
     { pack_plut,        1,   9,   304,    56,                    -5216,   -1568,  REMOVE,  REMOVE, DEFAULT, DEFAULT                            },
