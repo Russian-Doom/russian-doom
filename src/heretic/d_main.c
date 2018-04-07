@@ -340,6 +340,7 @@ void D_AdvanceDemo(void)
 
 void D_DoAdvanceDemo(void)
 {
+    S_ResumeSound();    // [JN] Fix vanilla Heretic bug: resume music playing
     players[consoleplayer].playerstate = PST_LIVE;      // don't reborn
     advancedemo = false;
     usergame = false;           // can't save / end game here

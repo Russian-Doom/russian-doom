@@ -1220,6 +1220,7 @@ boolean MN_Responder(event_t * event)
             paused = false;
             UpdateState |= I_FULLSCRN;
             BorderNeedRefresh = true;
+            S_ResumeSound();    // [JN] Fix vanilla Heretic bug: resume music playing
             return true;
         }
 
@@ -1678,6 +1679,7 @@ void MN_DeactivateMenu(void)
     {
         CurrentMenu->oldItPos = CurrentItPos;
     }
+    S_ResumeSound();    // [JN] Fix vanilla Heretic bug: resume music playing
     MenuActive = false;
     if (FileMenuKeySteal)
     {
