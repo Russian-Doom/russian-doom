@@ -1047,6 +1047,7 @@ void H2_AdvanceDemo(void)
 
 void H2_DoAdvanceDemo(void)
 {
+    S_ResumeSound();    // [JN] Fix vanilla Hexen bug: resume music playing
     players[consoleplayer].playerstate = PST_LIVE;      // don't reborn
     advancedemo = false;
     usergame = false;           // can't save/end game here
