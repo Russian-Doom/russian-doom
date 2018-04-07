@@ -26,6 +26,7 @@
 #include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
+#include "crispy.h"
 
 /*
 ===============================================================================
@@ -1328,6 +1329,29 @@ boolean PTR_ShootTraverse(intercept_t * in)
             // [crispy] fix bullet puffs not appearing in outdoor areas
             if (li->backsector->ceilingheight < z)
                 return false;   // it's a sky hack wall
+        }
+
+        // [crispy] check if the hitscan puff's z-coordinate is below of above
+        // its spawning sector's floor or ceiling, respectively, and move its
+        // coordinates to the point where the trajectory hits the plane
+        if (aimslope)
+        {
+            const int lineside = P_PointOnLineSide(x, y, li);
+            int side;
+        
+            if ((side = li->sidenum[lineside]) != NO_INDEX)
+            {
+                const sector_t *const sector = sides[side].sector;
+        
+                if (z < sector->floorheight ||
+                    (z > sector->ceilingheight && sector->ceilingpic != skyflatnum))
+                {
+                    z = BETWEEN(sector->floorheight, sector->ceilingheight, z);
+                    frac = FixedDiv(z - shootz, FixedMul(aimslope, attackrange));
+                    x = trace.x + FixedMul (trace.dx, frac);
+                    y = trace.y + FixedMul (trace.dy, frac);
+                }
+            }
         }
 
         // [from-crispy]
