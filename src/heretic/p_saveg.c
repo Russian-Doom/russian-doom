@@ -1717,8 +1717,10 @@ void P_UnArchiveThinkers(void)
                 saveg_read_mobj_t(mobj);
                 P_SetThingPosition(mobj);
                 mobj->info = &mobjinfo[mobj->type];
-                mobj->floorz = mobj->subsector->sector->floorheight;
-                mobj->ceilingz = mobj->subsector->sector->ceilingheight;
+                // killough 2/28/98:
+                // Fix for falling down into a wall after savegame loaded:
+                // mobj->floorz = mobj->subsector->sector->floorheight;
+                // mobj->ceilingz = mobj->subsector->sector->ceilingheight;
                 mobj->thinker.function = P_MobjThinker;
                 P_AddThinker(&mobj->thinker);
                 break;
