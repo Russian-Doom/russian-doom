@@ -2646,8 +2646,10 @@ static void UnarchiveMobjs(void)
         // Restore broken pointers.
         mobj->info = &mobjinfo[mobj->type];
         P_SetThingPosition(mobj);
-        mobj->floorz = mobj->subsector->sector->floorheight;
-        mobj->ceilingz = mobj->subsector->sector->ceilingheight;
+        // killough 2/28/98:
+        // Fix for falling down into a wall after savegame loaded:
+        // mobj->floorz = mobj->subsector->sector->floorheight;
+        // mobj->ceilingz = mobj->subsector->sector->ceilingheight;
 
         mobj->thinker.function = P_MobjThinker;
         P_AddThinker(&mobj->thinker);
