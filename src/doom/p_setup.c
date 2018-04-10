@@ -593,7 +593,7 @@ void P_LoadThings (int lump)
 	    }
 	}
 	if (spawn == false)
-	    break;
+	    continue;   // [BH] Fix <https://doomwiki.org/wiki/Doom_II_monster_exclusion_bug>.
 
 	// [crispy] minor fixes to prevent users from getting stuck in levels with mapping errors
 	if (singleplayer)
