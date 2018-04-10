@@ -28,21 +28,21 @@
 #endif
 
 1 VERSIONINFO
-PRODUCTVERSION 2,6,0,0
-FILEVERSION 2,6,0,0
+PRODUCTVERSION 2,7,0,0
+FILEVERSION 2,7,0,0
 FILETYPE 1
 BEGIN
 	BLOCK "StringFileInfo"
 	BEGIN
 		BLOCK "040904E4"
 		BEGIN
-			VALUE "FileVersion", "2.6"
-			VALUE "FileDescription", "Russian Doom 2.6"
+			VALUE "FileVersion", "2.7"
+			VALUE "FileDescription", "Russian Doom 2.7"
 			VALUE "InternalName", "russian-doom"
 			VALUE "CompanyName", "julian.nechaevsky@outlook.com"
 			VALUE "LegalCopyright", "\xA9 2016-2018 Julian Nechaevsky. All rights reserved."
 			VALUE "ProductName", "Russian Doom"
-			VALUE "ProductVersion", "2.6"
+			VALUE "ProductVersion", "2.7"
 		END
 	END
 	BLOCK "VarFileInfo"

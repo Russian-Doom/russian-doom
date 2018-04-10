@@ -11,19 +11,19 @@
 #define PACKAGE_NAME "Russian Doom"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Russian Doom 2.6"
+#define PACKAGE_STRING "Russian Doom 2.7"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "russian-doom"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.6"
+#define PACKAGE_VERSION "2.7"
 
 /* Change this when you create your awesome forked version */
 #define PROGRAM_PREFIX "russian-"
 
 /* Version number of package */
-#define VERSION "2.6"
+#define VERSION "2.7"
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */

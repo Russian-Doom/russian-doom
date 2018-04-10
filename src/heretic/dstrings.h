@@ -394,7 +394,7 @@
 
 // [JN] Специфические сообщения порта
 
-#define TXT_VERSION "DTHCBZ 2>6 (11>04>2018)"         // ВЕРСИЯ 2.6 (11.04.2018)
+#define TXT_VERSION "DTHCBZ 2>7 (D HFPHF<JNRT)"       // ВЕРСИЯ 2.7 (в разработке)
 
 #define TXT_ALWAYSRUN_ON "GJCNJZYYSQ ,TU DRK.XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
 #define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ ,TU DSRK.XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
