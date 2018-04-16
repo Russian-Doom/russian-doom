@@ -15,3 +15,4 @@ For DOS: [russian-doom-dos-1.4.zip](https://sourceforge.net/projects/jnechaevsky
 Source codes: [russian-doom-2.6-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.6/Source/russian-doom-2.6-source.zip/download)<br />
 PNG font atlases: [russian-doom-fonts-png.zip](https://sourceforge.net/projects/jnechaevsky/files/PNG%20Fonts/russian-doom-fonts-png.zip/download)
 
+Development plans are available in [online spreadsheet](https://docs.google.com/spreadsheets/d/1fID4Dds3SldQwun0npaH22BC7jRvJIj8oQzyK8iJkjQ/edit?usp=sharing).
