@@ -1163,14 +1163,14 @@
 #define STSTR_VERSION   "dthcbz 2>7"    // Версия 2.7
 
 #if defined (_WIN64)
-#define STSRT_ARCH      "[64"           // x64
+#define STSRT_ARCH      " - ([64)"      // x64
 #elif defined (_WIN32)
-#define STSRT_ARCH      "[86"           // x86
+#define STSRT_ARCH      " - ([86)"      // x86
 #else
 #define STSRT_ARCH      ""              // ?  
 #endif
 
-#define STSRT_DATE      "d hfphf,jnrt"      // (в разработке)
+#define STSRT_DATE      "d hfphf,jnrt"  // (в разработке)
 
 
 #endif

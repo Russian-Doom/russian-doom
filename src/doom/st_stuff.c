@@ -663,7 +663,7 @@ boolean ST_Responder (event_t* ev)
             // [JN] Отображение версии проекта
             else if (cht_CheckCheat(&cheat_version, ev->data2))
             {
-                M_snprintf(msg, sizeof(msg), "%s - (%s) - %s",
+                M_snprintf(msg, sizeof(msg), "%s%s - %s",
                 STSTR_VERSION,
                 STSRT_ARCH,
                 STSRT_DATE);
