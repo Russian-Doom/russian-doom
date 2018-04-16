@@ -459,6 +459,7 @@ cheatseq_t cheat_noclip_beta = CHEAT("nc", 0);  // idclip
 
 // [JN] Чит-код отображения версии проекта
 cheatseq_t cheat_version = CHEAT("version", 0);
+static char msg[ST_MSGWIDTH];
 
 //
 // STATUS BAR CODE
@@ -659,10 +660,15 @@ boolean ST_Responder (event_t* ev)
                 plyr->message = DEH_String(STSTR_MASSACRE);
             }
 
-            // [JN] Сообщение версии проекта
+            // [JN] Отображение версии проекта
             else if (cht_CheckCheat(&cheat_version, ev->data2))
             {
-                plyr->message = DEH_String(STSTR_VERSION);
+                M_snprintf(msg, sizeof(msg), "%s - (%s) - %s",
+                STSTR_VERSION,
+                STSRT_ARCH,
+                STSRT_DATE);
+
+                plyr->message = msg;
             }
 
             // 'mus' cheat for changing music
