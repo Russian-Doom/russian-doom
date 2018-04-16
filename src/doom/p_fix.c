@@ -3799,7 +3799,15 @@ thingfix_t thingfix[] =
 
    // mission,    episode, map, thing, type,                      oldx,    oldy,    newx,    newy,   angle, options
 
+    { doom2,            1,   2,    68, 2035,                       240,     976,     242,     986, DEFAULT, DEFAULT                            },
     { doom2,            1,   2,    69, 2035,                       464,     784,     464,     800, DEFAULT, DEFAULT                            },
+    { doom2,            1,   2,    70, 2035,                       352,     720,     354,     718, DEFAULT, DEFAULT                            },
+    { doom2,            1,   2,    71, 2035,                       352,     528,     352,     518, DEFAULT, DEFAULT                            },
+    { doom2,            1,   2,    73, 2035,                       864,     528,     864,     518, DEFAULT, DEFAULT                            },
+    { doom2,            1,   2,    74, 2035,                       144,    1040,     142,    1040, DEFAULT, DEFAULT                            },
+    { doom2,            1,   2,    75, 2035,                       560,     528,     560,     518, DEFAULT, DEFAULT                            },
+    { doom2,            1,   2,    76, 2035,                       720,     528,     720,     518, DEFAULT, DEFAULT                            },
+    { doom2,            1,   2,    77, 2035,                       224,    1136,     222,    1136, DEFAULT, DEFAULT                            },
     { doom2,            1,   2,    84, 2035,                       992,     896,     992,     904, DEFAULT, DEFAULT                            },
     { doom2,            1,   2,    85,    9,                       944,     896,     944,     912, DEFAULT, DEFAULT                            },
 
