@@ -571,7 +571,8 @@ void R_ProjectSprite (mobj_t* thing)
         // [crispy] flip death sprites and corpses randomly
         if ((thing->flags & MF_CORPSE &&
              thing->type != MT_CYBORG &&
-             thing->type != MT_BARREL) ||
+             thing->type != MT_BARREL &&
+             thing->type != MT_BOSSBRAIN) ||
              thing->info->spawnstate == S_PLAY_DIE7 ||
              thing->info->spawnstate == S_PLAY_XDIE9)
              {
