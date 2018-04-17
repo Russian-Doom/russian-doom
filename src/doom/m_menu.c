@@ -1679,6 +1679,20 @@ boolean M_Responder (event_t* ev)
                 key = key_menu_back;
                 mousewait = I_GetTime() + 15;
             }
+            
+            // [crispy] scroll menus with mouse wheel
+            // [JN] it also affecting mouse side buttons (forward/backward)
+            if (mousebprevweapon >= 0 && ev->data1 & (1 << mousebprevweapon))
+            {
+                key = key_menu_down;
+                mousewait = I_GetTime() + 5;
+            }
+            else
+            if (mousebnextweapon >= 0 && ev->data1 & (1 << mousebnextweapon))
+            {
+                key = key_menu_up;
+                mousewait = I_GetTime() + 5;
+            }
         }
         else
         {
