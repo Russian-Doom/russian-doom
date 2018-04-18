@@ -481,7 +481,7 @@ void HU_Start(void)
 void HU_Drawer(void)
 {
     HUlib_drawSText(&w_message);
-    if (local_time && !vanillaparm)
+    if (local_time)
     {
         // [JN] Draw local time widget
         HUlib_drawSText(&w_message_time);
