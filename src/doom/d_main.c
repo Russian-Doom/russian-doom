@@ -496,10 +496,13 @@ void D_DoomLoop (void)
 {
     if (gamevariant == bfgedition && (demorecording || (gameaction == ga_playdemo) || netgame))
     {
-        printf(" WARNING: You are playing using one of the Doom Classic\n"
-               " IWAD files shipped with the Doom 3: BFG Edition. These are\n"
-               " known to be incompatible with the regular IWAD files and\n"
-               " may cause demos and network games to get out of sync.\n");
+        printf(" ВНИМАНИЕ: Вы используете IWAD от Doom 3: BFG Edition.\n"
+               " Он не совместим с классическим IWAD в сетевой игре и\n" 
+               " имеет проблемы с синхронизацией демозаписей.\n"
+               " \n"
+               " Дополнение No Rest for the Living может работать и\n"
+               " с классическим IWAD, для запуска необходимо указать:\n"
+               " russian-doom -file nerve.wad");
     }
 
     if (demorecording)
