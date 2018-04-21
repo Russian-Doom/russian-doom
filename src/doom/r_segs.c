@@ -207,7 +207,7 @@ void R_RenderMaskedSegRange (drawseg_t* ds, int x1, int x2)
     backsector = curline->backsector;
     texnum = texturetranslation[curline->sidedef->midtexture];
 
-    lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT)+(extralight * LIGHTBRIGHT);
+    lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
     // [JN] Fake contrast: make optional
     if (fake_contrast || vanillaparm)
@@ -833,7 +833,7 @@ void R_StoreWallRange (int start, int stop)
     // OPTIMIZE: get rid of LIGHTSEGSHIFT globally
     if (!fixedcolormap)
     {
-        lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT)+(extralight * LIGHTBRIGHT);
+        lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
         // [JN] Fake contrast: make optional
         if (fake_contrast || vanillaparm)
