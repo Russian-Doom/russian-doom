@@ -527,7 +527,7 @@ void R_DrawPlanes (void)
                     W_CacheLumpNum(lumpnum, PU_STATIC);
 
         planeheight = abs(pl->height-viewz);
-        light = (pl->lightlevel >> LIGHTSEGSHIFT)+extralight;
+        light = (pl->lightlevel >> LIGHTSEGSHIFT)+(extralight * LIGHTBRIGHT);
 
         if (light >= LIGHTLEVELS)
             light = LIGHTLEVELS-1;
