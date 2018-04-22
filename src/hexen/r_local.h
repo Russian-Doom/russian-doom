@@ -44,8 +44,12 @@
 #define LIGHTSEGSHIFT           4
 #define MAXLIGHTSCALE           48
 #define LIGHTSCALESHIFT         12
-#define MAXLIGHTZ                       128
-#define LIGHTZSHIFT                     20
+// [crispy] & [JN] smoother diminished lighting
+#define MAXLIGHTZ                       1024
+#define LIGHTZSHIFT                     17
+// [JN] Vanilla values
+// #define MAXLIGHTZ                       128
+// #define LIGHTZSHIFT                     20
 #define NUMCOLORMAPS            32      // number of diminishing
 #define INVERSECOLORMAP         32
 
