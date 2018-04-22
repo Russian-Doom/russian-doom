@@ -440,10 +440,6 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
             / S_ATTENUATOR;
     }
 
-    // [JN] Нулевая громкость подразумевает *полное* отсутствие звуков.
-    if (snd_SfxVolume == 0)
-    return 0;
-
     return (*vol > 0);
 }
 
@@ -474,6 +470,12 @@ void S_StartSound(void *origin_p, int sfx_id)
 
     origin = (mobj_t *) origin_p;
     volume = snd_SfxVolume;
+
+    // [crispy] make non-fatal, consider zero volume
+    if (sfx_id == sfx_None || !snd_SfxVolume)
+    {
+        return;
+    }
 
     // check for bogus sound #
     if (sfx_id < 1 || sfx_id > NUMSFX)

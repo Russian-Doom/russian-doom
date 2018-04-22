@@ -359,8 +359,7 @@ S_AdjustSoundParams
 	    / S_ATTENUATOR; 
     }
 
-    // [JN] & [crispy] Zero SFX volume means there must not be *any* sounds at all.
-    return (*vol > 0 && snd_SfxVolume);
+    return (*vol > 0);
 }
 
 void S_SetSfxVolume(int volume)
@@ -501,6 +500,12 @@ S_StartSoundAtVolume
   /*fprintf( stderr,
   	   "S_StartSoundAtVolume: playing sound %d (%s)\n",
   	   sfx_id, S_sfx[sfx_id].name );*/
+  
+  // [crispy] make non-fatal, consider zero volume
+  if (sfx_id == sfx_None || !snd_SfxVolume)
+  {
+    return;
+  }
   
   // check for bogus sound #
   if (sfx_id < 1 || sfx_id > NUMSFX)
