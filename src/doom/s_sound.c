@@ -233,6 +233,7 @@ void S_Start(void)
     }
 
     // start new music for the level
+    if (musicVolume) // [crispy] do not reset pause state at zero music volume
     mus_paused = 0;
 
     // [JN] Добавена нумерация музыки для No Rest for the Living
@@ -681,18 +682,14 @@ void S_SetMusicVolume(int volume)
                 volume);
     }
 
-    // [JN] Fixed bug when music was hearable with zero volume.
-    // Thanks to Fabian Greffrath for notifiying the necessity
-    // of taking care about "paused" game state!
+    // [crispy] & [JN] Fixed bug when music was hearable with zero volume
     if (musicVolume == 0)
     {
-        I_PauseSong();
-        mus_paused = true;
+        S_PauseSound();
     }
-    else if (musicVolume > 0 && !paused)
+    else if (!paused)
     {
-        I_ResumeSong();
-        mus_paused = false;
+        S_ResumeSound();
     }
 
     I_SetMusicVolume(volume);
