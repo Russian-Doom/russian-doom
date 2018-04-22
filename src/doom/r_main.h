@@ -60,10 +60,11 @@ extern int loopcount;
 #define MAXLIGHTSCALE       48
 #define LIGHTSCALESHIFT     12
 
-// [JN] TODO: make optional or -vanilla mode friendly
+// [crispy] & [JN] smoother diminished lighting
+// TODO: make optional or -vanilla mode friendly
 #define MAXLIGHTZ           1024
 #define LIGHTZSHIFT         17
-#define LIGHTBRIGHT         2
+// #define LIGHTBRIGHT      2
 
 // [JN] Vanilla values
 // #define MAXLIGHTZ        128
