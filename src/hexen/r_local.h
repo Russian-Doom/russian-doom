@@ -46,7 +46,7 @@
 #define LIGHTSCALESHIFT         12
 // [crispy] & [JN] smoother diminished lighting
 #define MAXLIGHTZ                       1024
-#define LIGHTZSHIFT                     17
+#define LIGHTZSHIFT                     14
 // [JN] Vanilla values
 // #define MAXLIGHTZ                       128
 // #define LIGHTZSHIFT                     20

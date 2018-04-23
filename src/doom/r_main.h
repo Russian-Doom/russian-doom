@@ -63,7 +63,7 @@ extern int loopcount;
 // [crispy] & [JN] smoother diminished lighting
 // TODO: make optional or -vanilla mode friendly
 #define MAXLIGHTZ           1024
-#define LIGHTZSHIFT         17
+#define LIGHTZSHIFT         14
 // #define LIGHTBRIGHT      2
 
 // [JN] Vanilla values
