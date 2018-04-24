@@ -101,6 +101,7 @@ static void SensibleDefaults(void)
     // - Интерфейс -
     draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
     fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
+    automap_stats = 1;           // Отображать статистику уровня на карте
     show_total_time = 1;         // Показывать общее время
     // show_exit_sequence = 1;      // [Strife] ѕоказывать заставку при выходе
     // - Графика -

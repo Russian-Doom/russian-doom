@@ -32,6 +32,7 @@
 // - Интерфейс -
 int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 int fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
+int automap_stats = 1;           // Отображать статистику уровня на карте
 int show_diskicon = 1;           // Значок дискеты / [Strife] песочных часов
 // int show_exit_sequence = 1;      // [Strife] Показывать заставку при выходе
 // - Графика -
@@ -83,6 +84,7 @@ void CompatibilitySettings(void)
     TXT_NewSeparator("€нтерфейс"),
         TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",   &draw_shadowed_text),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе выводить запрос при быстрой загрузке",   &fast_quickload)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћтображать статистику уровня на карте",     &automap_stats)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћбщее время на межмиссионном экране",       &show_total_time)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
         
@@ -128,6 +130,7 @@ void BindCompatibilityVariables(void)
     // - Интерфейс -
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
     M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
+    M_BindIntVariable("automap_stats",          &automap_stats);            // Отображать статистику уровня на карте
     M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
     // M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);       // [Strife] Показывать заставку при выходе
     M_BindIntVariable("show_diskicon",          &show_diskicon);            // Показывать значок дискеты

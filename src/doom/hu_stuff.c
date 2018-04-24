@@ -65,6 +65,7 @@
 #define HU_COORDX       (ORIGWIDTH - 8 * hu_font['A'-HU_FONTSTART]->width)
 
 extern int draw_shadowed_text;
+extern int automap_stats;
 extern int local_time;
 
 char *chat_macros[10] =
@@ -95,6 +96,10 @@ patch_t*    hu_font[HU_FONTSIZE];
 patch_t*    hu_font_gray[HU_FONTSIZE];    // [JN] Small gray font
 
 static      hu_textline_t w_title;
+static      hu_textline_t w_kills;
+static      hu_textline_t w_items;
+static      hu_textline_t w_scrts;
+static      hu_textline_t w_ltime;
 boolean     chat_on;
 static      hu_itext_t w_chat;
 
@@ -426,6 +431,26 @@ void HU_Start(void)
         HUlib_initTextLine(&w_title, HU_TITLEX, HU_TITLEY, hu_font, HU_FONTSTART);
     }
 
+    HUlib_initTextLine(&w_kills,
+		       HU_TITLEX, HU_MSGY + 1 * 8,
+		       hu_font,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_items,
+		       HU_TITLEX, HU_MSGY + 2 * 8,
+		       hu_font,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_scrts,
+		       HU_TITLEX, HU_MSGY + 3 * 8,
+		       hu_font,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_ltime,
+		       HU_TITLEX, HU_MSGY + 5 * 8,
+		       hu_font,
+		       HU_FONTSTART);
+
     switch ( logical_gamemission )
     {
         case doom:
@@ -489,7 +514,44 @@ void HU_Drawer(void)
     HUlib_drawIText(&w_chat);
 
     if (automapactive)
-	HUlib_drawTextLine(&w_title, false);
+    {
+        static char str[32], *s;
+        int time = leveltime / TICRATE;
+
+        HUlib_drawTextLine(&w_title, false);
+
+        // [from-crispy] Show level stats in automap
+        if (!vanillaparm && automap_stats)
+        {
+            sprintf(str, "dhfub: %d/%d", players[consoleplayer].killcount, totalkills);
+            HUlib_clearTextLine(&w_kills);
+            s = str;
+            while (*s)
+                HUlib_addCharToTextLine(&w_kills, *(s++));
+            HUlib_drawTextLine(&w_kills, false);
+    
+            sprintf(str, "ghtlvtns: %d/%d", players[consoleplayer].itemcount, totalitems);
+            HUlib_clearTextLine(&w_items);
+            s = str;
+            while (*s)
+                HUlib_addCharToTextLine(&w_items, *(s++));
+            HUlib_drawTextLine(&w_items, false);
+    
+            sprintf(str, "nfqybrb: %d/%d", players[consoleplayer].secretcount, totalsecret);
+            HUlib_clearTextLine(&w_scrts);
+            s = str;
+            while (*s)
+                HUlib_addCharToTextLine(&w_scrts, *(s++));
+            HUlib_drawTextLine(&w_scrts, false);
+    
+            sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+            HUlib_clearTextLine(&w_ltime);
+            s = str;
+            while (*s)
+                HUlib_addCharToTextLine(&w_ltime, *(s++));
+            HUlib_drawTextLine(&w_ltime, false);
+        }
+    }
 }
 
 
