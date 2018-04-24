@@ -101,7 +101,6 @@ static void SensibleDefaults(void)
     // - Интерфейс -
     draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
     fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
-    automap_stats = 1;           // Отображать статистику уровня на карте
     show_total_time = 1;         // Показывать общее время
     // show_exit_sequence = 1;      // [Strife] ѕоказывать заставку при выходе
     // - Графика -
@@ -122,6 +121,7 @@ static void SensibleDefaults(void)
     correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
     // - Геймплей -
     fix_map_errors = 1;          // Исправлять ошибки оригинальных уровней
+    automap_stats = 1;           // Отображать статистику уровня на карте
     secret_notification = 1;     // Уведомление об обнаружении секрета
     weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
     new_ouch_face = 1;           // Корректная формула "Ouch face"

@@ -425,7 +425,6 @@ void D_BindVariables(void)
     // Интерфейс
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
     M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
-    M_BindIntVariable("automap_stats",          &automap_stats);            // Отображать статистику уровня на карте
     M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
     M_BindIntVariable("show_diskicon",          &show_diskicon);            // Отображать значок дискеты
 
@@ -449,6 +448,7 @@ void D_BindVariables(void)
 
     // Геймплей
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);           // Исправлять ошибки оригинальных уровней
+    M_BindIntVariable("automap_stats",          &automap_stats);            // Отображать статистику уровня на карте
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"

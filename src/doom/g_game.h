@@ -88,7 +88,6 @@ extern int mlook;
 // - Интерфейс -
 extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
 extern int fast_quickload;          // Не выводить запрос при быстрой загрузке
-extern int automap_stats;           // Отображать статистику уровня на карте
 extern int show_total_time;         // Показывать общее время
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
@@ -108,6 +107,7 @@ extern int play_exit_sfx;           // Проигрывать звук при в
 extern int correct_endlevel_sfx;    // Корректный звук завершения уровня
 // - Геймплей -
 extern int fix_map_errors;          // Исправлять ошибки оригинальных уровней
+extern int automap_stats;           // Отображать статистику уровня на карте
 extern int secret_notification;     // Уведомление об обнаружении секрета
 extern int weapon_bobbing;          // Покачивание оружия при стрельбе в движении
 extern int new_ouch_face;           // Корректная формула "Ouch face"
