@@ -28,6 +28,7 @@
 #include "p_local.h"
 #include "am_map.h"
 #include "am_data.h"
+#include "m_misc.h"
 
 #include "doomkeys.h"
 #include "v_video.h"
@@ -1533,6 +1534,26 @@ void AM_Drawer(void)
         level_name = LevelNames[(gameepisode - 1) * 9 + gamemap - 1];
         MN_DrTextA(DEH_String(level_name), 20, 145);
     }
+
+    // [JN] Show level stats in automap
+    if (!vanillaparm && automap_stats)
+    {
+        char text[32];
+        int time = leveltime / TICRATE;
+
+        M_snprintf(text, sizeof(text), "DHFUB: %d/ %d", players[consoleplayer].killcount, totalkills);
+        MN_DrTextA(text, 20, 16);
+
+        M_snprintf(text, sizeof(text), "GHTLVTNS: %d/ %d", players[consoleplayer].itemcount, totalitems);
+        MN_DrTextA(text, 20, 26);
+
+        M_snprintf(text, sizeof(text), "NFQYBRB: %d/ %d", players[consoleplayer].secretcount, totalsecret);
+        MN_DrTextA(text, 20, 36);
+
+        M_snprintf(text, sizeof(text), "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+        MN_DrTextA(text, 20, 53);
+     }
+
 //  I_Update();
 //  V_MarkRect(f_x, f_y, f_w, f_h);
 }

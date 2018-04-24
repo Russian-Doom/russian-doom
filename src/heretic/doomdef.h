@@ -717,6 +717,7 @@ extern int fake_contrast;           // Имитация контрастного
 extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
 extern int invul_sky;               // Неуязвимость окрашивает небо
 // - Геймплей -
+extern int automap_stats;           // Отображать статистику уровня на карте
 extern int secret_notification;     // Уведомление об обнаружении тайников
 extern int weapon_bobbing;          // Покачивание оружия при стрельбе в движении
 extern int flip_levels;             // Зеркальное отражение уровней

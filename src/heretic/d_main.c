@@ -802,7 +802,8 @@ void D_BindVariables(void)
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses); // Произвольное зеркальное отражение трупов
     M_BindIntVariable("invul_sky",              &invul_sky);            // Неуязвимость окрашивает небо
     // - Геймплей -
-    M_BindIntVariable("secret_notification",    &secret_notification);  // Уведомление об обнаружении тайников    
+    M_BindIntVariable("automap_stats",          &automap_stats);        // Отображать статистику уровня на карте
+    M_BindIntVariable("secret_notification",    &secret_notification);  // Уведомление об обнаружении тайников
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);       // Покачивание оружия при стрельбе в движении
     M_BindIntVariable("flip_levels",            &flip_levels);          // Зеркальное отражение уровней
 

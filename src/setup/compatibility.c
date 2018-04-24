@@ -84,7 +84,6 @@ void CompatibilitySettings(void)
     TXT_NewSeparator("Интерфейс"),
         TXT_NewCheckBox("Юлементы меню и тексты отбрасывают тень",   &draw_shadowed_text),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Не выводить запрос при быстрой загрузке",   &fast_quickload)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Отображать статистику уровн€ на карте",     &automap_stats)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Общее врем€ на межмиссионном экране",       &show_total_time)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Показывать значок дискеты",                 &show_diskicon)),
         
@@ -112,6 +111,7 @@ void CompatibilitySettings(void)
 
     TXT_If(gamemission == doom || gamemission == heretic,    TXT_NewSeparator("Геймплей")),
     TXT_If(gamemission == doom,	TXT_NewCheckBox("Исправл€ть ошибки оригинальных уровней",          &fix_map_errors)),
+        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Отображать статистику уровн€ на карте",     &automap_stats)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Уведомление об обнаружении тайников",       &secret_notification)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Покачивание оружи€ при стрельбе в движении",&weapon_bobbing)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Корректна€ формула \"Ouch face\"",          &new_ouch_face)),
