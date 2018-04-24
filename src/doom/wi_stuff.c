@@ -1464,9 +1464,8 @@ void WI_drawStats(void)
     }
 
     // [crispy] draw total time after level time and par time
-    // [JN] Но только если опция включена в настройках совместимости
     // [JN] Also don't show for Press Beta, there's one level per episode.
-    if (show_total_time && !vanillaparm && gamemode != pressbeta)
+    if (!vanillaparm && gamemode != pressbeta)
     {
         if (sp_state > 8)
         {

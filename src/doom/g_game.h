@@ -88,7 +88,6 @@ extern int mlook;
 // - Интерфейс -
 extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
 extern int fast_quickload;          // Не выводить запрос при быстрой загрузке
-extern int show_total_time;         // Показывать общее время
 // - Графика -
 extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
 extern int fake_contrast;           // Имитация контрастного освещения стен

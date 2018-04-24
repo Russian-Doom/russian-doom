@@ -57,7 +57,6 @@ int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
 int fix_map_errors = 1;           // Исправлять ошибки оригинальных уровней
 int automap_stats = 1;           // Отображать статистику уровня на карте
 int secret_notification = 1;      // Уведомление об обнаружении секрета
-int show_total_time = 1;          // Показывать общее время
 int unlimited_lost_souls = 1;     // Элементаль боли без ограничения
 int agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных Душ
 int negative_health = 0;          // Отображать отрицательное здоровье
@@ -84,7 +83,6 @@ void CompatibilitySettings(void)
     TXT_NewSeparator("€нтерфейс"),
         TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",   &draw_shadowed_text),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе выводить запрос при быстрой загрузке",   &fast_quickload)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћбщее время на межмиссионном экране",       &show_total_time)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
         
         // [JN] Элементы для Strife 
@@ -131,7 +129,6 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
     M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
     M_BindIntVariable("automap_stats",          &automap_stats);            // Отображать статистику уровня на карте
-    M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
     // M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);       // [Strife] Показывать заставку при выходе
     M_BindIntVariable("show_diskicon",          &show_diskicon);            // Показывать значок дискеты
     // - Графика -

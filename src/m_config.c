@@ -1707,7 +1707,6 @@ static default_t extra_defaults_list[] =
     // - Интерфейс -
     CONFIG_VARIABLE_INT(draw_shadowed_text),        // Элементы меню и тексты отбрасывают тень
     CONFIG_VARIABLE_INT(fast_quickload),            // Не выводить запрос при быстрой загрузке
-    CONFIG_VARIABLE_INT(show_total_time),           // Показывать общее время
     CONFIG_VARIABLE_INT(show_diskicon),             // Показывать значок дискеты    
 //  CONFIG_VARIABLE_INT(show_exit_sequence),        // [Strife] Показывать заставку при выходе
     // - Графика -

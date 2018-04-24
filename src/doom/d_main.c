@@ -425,7 +425,6 @@ void D_BindVariables(void)
     // Интерфейс
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
     M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
-    M_BindIntVariable("show_total_time",        &show_total_time);          // Показывать общее время
     M_BindIntVariable("show_diskicon",          &show_diskicon);            // Отображать значок дискеты
 
     // Графика
