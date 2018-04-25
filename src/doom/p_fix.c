@@ -3292,8 +3292,10 @@ linefix_t linefix[] =
     { pack_plut,        1,  10,    1010,    0, "GSTONE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { pack_plut,        1,  12,     230,    1, "",         "MIDGRATE",    "",            DEFAULT,   DEFAULT, ML_BLOCKING,                        DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  12,     690,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  12,     985,    0, "",         "WOOD5",       "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  12,     988,    0, "",         "WOOD5",       "",                -32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,  12,    1018,    0, "",         "",            "",            DEFAULT,         0, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
     { pack_plut,        1,  12,    1151,    0, "",         "WOOD5",       "",                -96,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { pack_plut,        1,  13,     107,    1, "A-BROWN5",  "",           "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
