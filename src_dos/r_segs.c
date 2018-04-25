@@ -1025,6 +1025,22 @@ R_StoreWallRange
                 }
 
                 // -------------------------------------------------------
+                //  Plutonia only
+                // -------------------------------------------------------
+                if (plutonia)
+                {
+                    // Dimmed items (red color)
+                    if (midtexture == bmaptexture85)
+                    walllights_middle = fullbright_dimmeditems[lightnum];
+
+                    if (toptexture == bmaptexture85)
+                    walllights_top = fullbright_dimmeditems[lightnum];
+
+                    if (bottomtexture == bmaptexture85)
+                    walllights_bottom = fullbright_dimmeditems[lightnum];
+                }
+
+                // -------------------------------------------------------
                 //  Doom 2 only
                 // -------------------------------------------------------
                 if (commercial && !tnt && !plutonia)
