@@ -41,7 +41,7 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
     bmaptexture66, bmaptexture67, bmaptexture68, bmaptexture69, bmaptexture70,
     bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74, bmaptexture75,
     bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
-    bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84;
+    bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85;
 
 // Terminator:
 int bmap_terminator;
@@ -191,6 +191,14 @@ void R_InitBrightmaps(void)
         bmaptexture82 = R_TextureNumForName("LITEYEL2");
         bmaptexture83 = R_TextureNumForName("LITEYEL3");
         bmaptexture84 = R_TextureNumForName("YELMETAL");
+    }
+    // -------------------------------------------------------
+    //  Plutonia only
+    // -------------------------------------------------------
+    if (gamemission == pack_plut)
+    {
+        // Dimmed items (red color)
+        bmaptexture85 = R_TextureNumForName("SW2SKULL");
     }
 
     // -------------------------------------------------------

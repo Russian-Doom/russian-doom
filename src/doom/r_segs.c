@@ -1075,6 +1075,22 @@ void R_StoreWallRange (int start, int stop)
                 }
 
                 // -------------------------------------------------------
+                //  Plutonia only
+                // -------------------------------------------------------
+                if (gamemission == pack_plut)
+                {
+                    // Dimmed items (red color)
+                    if (midtexture == bmaptexture85)
+                    walllights_middle = fullbright_dimmeditems[lightnum];
+
+                    if (toptexture == bmaptexture85)
+                    walllights_top = fullbright_dimmeditems[lightnum];
+
+                    if (bottomtexture == bmaptexture85)
+                    walllights_bottom = fullbright_dimmeditems[lightnum];
+                }
+
+                // -------------------------------------------------------
                 //  All games
                 // -------------------------------------------------------
                 {
