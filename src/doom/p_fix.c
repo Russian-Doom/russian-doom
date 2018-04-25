@@ -3265,6 +3265,16 @@ linefix_t linefix[] =
     { pack_plut,        1,   6,     236,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,   6,     239,    1, "",         "A-RAIL1",     "",                 -7,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
+    { pack_plut,        1,   7,      50,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   7,      51,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   7,      79,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   7,      82,    0, "",         "",            "",                  6,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
+    { pack_plut,        1,   8,     236,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   8,     239,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   8,     247,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   8,     249,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
     { pack_plut,        1,   9,     849,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,   9,     850,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,   9,    1179,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
@@ -3823,6 +3833,7 @@ sectorfix_t sectorfix[] =
     { pack_plut,        1,   4,    103, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   4,    139, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   4,    147, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,   4,    148, "FLAT1",   "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   4,    164, "",        "FLOOR7_1",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   4,    169, "",        "FLOOR7_1",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
@@ -3833,7 +3844,7 @@ sectorfix_t sectorfix[] =
     { pack_plut,        1,   6,     61, "",        "",        DEFAULT,          36,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   6,     72, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   6,     74, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
-    { pack_plut,        1,   6,     98, "",        "",        DEFAULT,          36,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,   6,     98, "",        "CEIL3_5", DEFAULT,          36,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   6,    102, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   6,    118, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   6,    133, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
@@ -3854,6 +3865,7 @@ sectorfix_t sectorfix[] =
 
     { pack_plut,        1,   9,     74, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   9,     75, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,   9,     78, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   9,     80, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   9,     83, "FLOOR3_3","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,   9,     99, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
