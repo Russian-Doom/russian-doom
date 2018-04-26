@@ -1687,6 +1687,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_toggleautorun),
 
     //!
+    // [JN] Toggle crosshair.
+    //
+
+    CONFIG_VARIABLE_KEY(key_togglecrosshair),
+
+    //!
     // [JN] Toggle mouselook.
     //
 
@@ -1727,6 +1733,8 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(correct_endlevel_sfx),      // Корректный звук завершения уровня
     // - Геймплей -
     CONFIG_VARIABLE_INT(fix_map_errors),            // Исправлять ошибки оригинальных уровней
+    CONFIG_VARIABLE_INT(crosshair_draw),            // Отображать прицел
+    CONFIG_VARIABLE_INT(crosshair_health),          // Индикация здоровья игрока
     CONFIG_VARIABLE_INT(automap_stats),             // Отображать статистику уровня на карте
     CONFIG_VARIABLE_INT(secret_notification),       // Уведомление об обнаружении секрета
     CONFIG_VARIABLE_INT(weapon_bobbing),            // Покачивание оружия при стрельбе в движении

@@ -260,6 +260,8 @@ int play_exit_sfx = 1;           // Проигрывать звук при вы�
 int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 // Геймплей
 int fix_map_errors = 1;          // Исправлять ошибки оригинальных уровней
+int crosshair_draw = 0;          // Отображать прицел
+int crosshair_health = 0;        // Индикация здоровья игрока
 int automap_stats = 1;           // Отображать статистику уровня на карте
 int secret_notification = 1;     // Уведомление об обнаружении секрета
 int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
@@ -441,6 +443,27 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         gamekeydown[key_toggleautorun] = false;
     }
 
+    // [JN] Toggle crosshair
+    if (gamekeydown[key_togglecrosshair])
+    {
+        static char crosshairmsg[24];
+
+        if (!crosshair_draw)
+        {
+            crosshair_draw = true;
+        }
+        else
+        {
+            crosshair_draw = false;
+        }
+
+        M_snprintf(crosshairmsg, sizeof(crosshairmsg), STSRT_CROSSHAIR "%s",
+            crosshair_draw ? STSTR_CROSSHAIR_ON : STSTR_CROSSHAIR_OFF);
+        players[consoleplayer].message = crosshairmsg;
+        S_StartSound(NULL,sfx_swtchn);
+
+        gamekeydown[key_togglecrosshair] = false;
+    }
 
     // let movement keys cancel each other out
     if (strafe) 

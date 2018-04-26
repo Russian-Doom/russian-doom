@@ -120,6 +120,8 @@ static void SensibleDefaults(void)
     correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
     // - Геймплей -
     fix_map_errors = 1;          // Исправлять ошибки оригинальных уровней
+    crosshair_draw = 0;          // Отображать прицел
+    crosshair_health = 0;        // Индикация здоровья игрока
     automap_stats = 1;           // Отображать статистику уровня на карте
     secret_notification = 1;     // Уведомление об обнаружении секрета
     weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении

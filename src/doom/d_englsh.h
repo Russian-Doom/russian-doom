@@ -1159,6 +1159,10 @@
 #define STSTR_MLOOK_ON  "drk.xty"                                   // включен
 #define STSTR_MLOOK_OFF "dsrk.xty"                                  // выключен
 
+#define STSRT_CROSSHAIR "ghbwtk "                                   // Прицел
+#define STSTR_CROSSHAIR_ON  "drk.xty"                               // включен
+#define STSTR_CROSSHAIR_OFF "dsrk.xty"                              // выключен
+
 // Отображение версии проекта
 #define STSTR_VERSION   "dthcbz 2>7"    // Версия 2.7
 

@@ -447,6 +447,8 @@ void D_BindVariables(void)
 
     // Геймплей
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);           // Исправлять ошибки оригинальных уровней
+    M_BindIntVariable("crosshair_draw",         &crosshair_draw);           // Отображать прицел
+    M_BindIntVariable("crosshair_health",       &crosshair_health);         // Индикация здоровья игрока
     M_BindIntVariable("automap_stats",          &automap_stats);            // Отображать статистику уровня на карте
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении

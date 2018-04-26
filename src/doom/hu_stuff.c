@@ -35,6 +35,8 @@
 #include "w_wad.h"
 #include "s_sound.h"
 #include "doomstat.h"
+#include "st_stuff.h" // [JN] ST_HEIGHT
+#include "v_video.h"  // [JN] V_DrawPatch
 
 // Data.
 #include "dstrings.h"
@@ -65,8 +67,11 @@
 #define HU_COORDX       (ORIGWIDTH - 8 * hu_font['A'-HU_FONTSTART]->width)
 
 extern int draw_shadowed_text;
+extern int crosshair_draw;
+extern int crosshair_health;
 extern int automap_stats;
 extern int local_time;
+extern int screenblocks;
 
 char *chat_macros[10] =
 {
@@ -550,6 +555,39 @@ void HU_Drawer(void)
             while (*s)
                 HUlib_addCharToTextLine(&w_ltime, *(s++));
             HUlib_drawTextLine(&w_ltime, false);
+        }
+    }
+
+    // [JN] Draw crosshair. 
+    // Thanks to Fabian Greffrath for ORIGWIDTH, ORIGHEIGHT and ST_HEIGHT values!
+    if (!vanillaparm && !automapactive && crosshair_draw)
+    {
+        if (crosshair_health)
+        {
+            if (plr->health >= 66)
+            {
+            V_DrawPatch(ORIGWIDTH/2,
+                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
+                W_CacheLumpName(DEH_String("XHAIRG"), PU_CACHE)); // Green
+            }
+            else if (plr->health >= 33)
+            {
+            V_DrawPatch(ORIGWIDTH/2,
+                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
+                W_CacheLumpName(DEH_String("XHAIRY"), PU_CACHE)); // Yellow
+            }
+            else if (plr->health <= 32)
+            {
+            V_DrawPatch(ORIGWIDTH/2,
+                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
+                W_CacheLumpName(DEH_String("XHAIRR"), PU_CACHE)); // Red
+            }
+        }
+        else
+        {
+            V_DrawPatch(ORIGWIDTH/2,
+                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
+                W_CacheLumpName(DEH_String("XHAIRR"), PU_CACHE)); // Red (only)         
         }
     }
 }

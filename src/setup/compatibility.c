@@ -55,7 +55,9 @@ int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
 // - Геймплей -
 int fix_map_errors = 1;           // Исправлять ошибки оригинальных уровней
-int automap_stats = 1;           // Отображать статистику уровня на карте
+int crosshair_draw = 0;           // Отображать прицел
+int crosshair_health = 0;         // Индикация здоровья игрока
+int automap_stats = 1;            // Отображать статистику уровня на карте
 int secret_notification = 1;      // Уведомление об обнаружении секрета
 int unlimited_lost_souls = 1;     // Элементаль боли без ограничения
 int agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных Душ
@@ -81,7 +83,7 @@ void CompatibilitySettings(void)
 
     TXT_AddWidgets(window_features,
     TXT_NewSeparator("€нтерфейс"),
-        TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",   &draw_shadowed_text),
+        TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",   &draw_shadowed_text),        
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе выводить запрос при быстрой загрузке",   &fast_quickload)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
         
@@ -108,7 +110,12 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Љорректный звук завершения уровня",         &correct_endlevel_sfx)),
 
     TXT_If(gamemission == doom || gamemission == heretic,    TXT_NewSeparator("ѓеймплей")),
-    TXT_If(gamemission == doom,	TXT_NewCheckBox("€справлять ошибки оригинальных уровней",          &fix_map_errors)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("€справлять ошибки оригинальных уровней",          &fix_map_errors)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћтображать прицел", &crosshair_draw)),
+            TXT_If(gamemission == doom,
+            TXT_NewHorizBox(
+            TXT_NewStrut(4, 0),
+            TXT_NewCheckBox("€ндикация здоровья игрока", &crosshair_health), NULL)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Ћтображать статистику уровня на карте",     &automap_stats)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("“ведомление об обнаружении тайников",       &secret_notification)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Џокачивание оружия при стрельбе в движении",&weapon_bobbing)),
@@ -149,6 +156,8 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
     // - Геймплей -
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);           // Исправлять ошибки оригинальных уровней
+    M_BindIntVariable("crosshair_draw",         &crosshair_draw);           // Отображать прицел
+    M_BindIntVariable("crosshair_health",       &crosshair_health);         // Индикация здоровья игрока
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
