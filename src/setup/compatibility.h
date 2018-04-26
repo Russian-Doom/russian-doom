@@ -49,8 +49,6 @@ extern int play_exit_sfx;           // Проигрывать звук при в
 extern int correct_endlevel_sfx;    // Корректный звук завершения уровня
 // - Геймплей -
 extern int fix_map_errors;          // Исправлять ошибки оригинальных уровней
-extern int crosshair_draw;          // Отображать прицел
-extern int crosshair_health;        // Индикация здоровья игрока
 extern int automap_stats;           // Отображать статистику уровня на карте
 extern int secret_notification;     // Уведомление об обнаружении секрета
 extern int weapon_bobbing;          // Покачивание оружия при стрельбе в движении
@@ -60,6 +58,10 @@ extern int unlimited_lost_souls;    // Элементаль боли без ог
 extern int agressive_lost_souls;    // Повышенная агрессивность Потерянных душ
 extern int negative_health;         // Отображать отрицательное здоровье
 extern int flip_levels;             // Зеркальное отражение уровней
+// - Прицел -
+extern int crosshair_draw;          // Отображать прицел
+extern int crosshair_health;        // Индикация здоровья
+extern int crosshair_scale;         // Увеличенный размер
 
 
 #endif /* #ifndef SETUP_COMPATIBILITY_H */

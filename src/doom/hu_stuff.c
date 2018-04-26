@@ -69,6 +69,7 @@
 extern int draw_shadowed_text;
 extern int crosshair_draw;
 extern int crosshair_health;
+extern int crosshair_scale;
 extern int automap_stats;
 extern int local_time;
 extern int screenblocks;
@@ -562,32 +563,65 @@ void HU_Drawer(void)
     // Thanks to Fabian Greffrath for ORIGWIDTH, ORIGHEIGHT and ST_HEIGHT values!
     if (!vanillaparm && !automapactive && crosshair_draw)
     {
-        if (crosshair_health)
+        if (crosshair_scale)    // Scaled crosshair
         {
-            if (plr->health >= 66)
+            if (crosshair_health)   // Health indication
             {
-            V_DrawPatch(ORIGWIDTH/2,
-                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
-                W_CacheLumpName(DEH_String("XHAIRG"), PU_CACHE)); // Green
+                if (plr->health >= 66)
+                {
+                V_DrawPatch(ORIGWIDTH/2,
+                    ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
+                    W_CacheLumpName(DEH_String("XHAIRSG"), PU_CACHE)); // Green
+                }
+                else if (plr->health >= 33)
+                {
+                V_DrawPatch(ORIGWIDTH/2,
+                    ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
+                    W_CacheLumpName(DEH_String("XHAIRSY"), PU_CACHE)); // Yellow
+                }
+                else if (plr->health <= 32)
+                {
+                V_DrawPatch(ORIGWIDTH/2,
+                    ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
+                    W_CacheLumpName(DEH_String("XHAIRSR"), PU_CACHE)); // Red
+                }
             }
-            else if (plr->health >= 33)
+            else    // No health indication
             {
-            V_DrawPatch(ORIGWIDTH/2,
-                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
-                W_CacheLumpName(DEH_String("XHAIRY"), PU_CACHE)); // Yellow
-            }
-            else if (plr->health <= 32)
-            {
-            V_DrawPatch(ORIGWIDTH/2,
-                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
-                W_CacheLumpName(DEH_String("XHAIRR"), PU_CACHE)); // Red
+                V_DrawPatch(ORIGWIDTH/2,
+                    ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
+                    W_CacheLumpName(DEH_String("XHAIRSR"), PU_CACHE)); // Red (only)         
             }
         }
-        else
+        else    // Unscaled crosshair
         {
-            V_DrawPatch(ORIGWIDTH/2,
-                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
-                W_CacheLumpName(DEH_String("XHAIRR"), PU_CACHE)); // Red (only)         
+            if (crosshair_health)   // Health indication
+            {
+                if (plr->health >= 66)
+                {
+                V_DrawPatchUnscaled(SCREENWIDTH/2,
+                    ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
+                    W_CacheLumpName(DEH_String("XHAIRUG"), PU_CACHE)); // Green
+                }
+                else if (plr->health >= 33)
+                {
+                V_DrawPatchUnscaled(SCREENWIDTH/2,
+                    ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
+                    W_CacheLumpName(DEH_String("XHAIRUY"), PU_CACHE)); // Yellow
+                }
+                else if (plr->health <= 32)
+                {
+                V_DrawPatchUnscaled(SCREENWIDTH/2,
+                    ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
+                    W_CacheLumpName(DEH_String("XHAIRUR"), PU_CACHE)); // Red
+                }
+            }
+            else    // No health indication
+            {
+                V_DrawPatchUnscaled(SCREENWIDTH/2,
+                    ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
+                    W_CacheLumpName(DEH_String("XHAIRUR"), PU_CACHE)); // Red (only)         
+            }
         }
     }
 }

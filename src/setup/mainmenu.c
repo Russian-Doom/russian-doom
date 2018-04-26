@@ -120,8 +120,6 @@ static void SensibleDefaults(void)
     correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
     // - Геймплей -
     fix_map_errors = 1;          // Исправлять ошибки оригинальных уровней
-    crosshair_draw = 0;          // Отображать прицел
-    crosshair_health = 0;        // Индикация здоровья игрока
     automap_stats = 1;           // Отображать статистику уровня на карте
     secret_notification = 1;     // Уведомление об обнаружении секрета
     weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
@@ -131,6 +129,10 @@ static void SensibleDefaults(void)
     agressive_lost_souls = 0;    // Повышенная агрессивность Потерянных душ
     negative_health = 0;         // Отображать отрицательное здоровье
     flip_levels = 0;             // Зеркальное отражение уровней
+    // - Прицел -
+    crosshair_draw = 0;          // Отображать прицел
+    crosshair_health = 0;        // Индикация здоровья
+    crosshair_scale = 0;         // Увеличенный размер
 }
 
 static int MainMenuKeyPress(txt_window_t *window, int key, void *user_data)

@@ -55,14 +55,16 @@ int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
 // - Геймплей -
 int fix_map_errors = 1;           // Исправлять ошибки оригинальных уровней
-int crosshair_draw = 0;           // Отображать прицел
-int crosshair_health = 0;         // Индикация здоровья игрока
 int automap_stats = 1;            // Отображать статистику уровня на карте
 int secret_notification = 1;      // Уведомление об обнаружении секрета
 int unlimited_lost_souls = 1;     // Элементаль боли без ограничения
 int agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных Душ
 int negative_health = 0;          // Отображать отрицательное здоровье
 int flip_levels = 0;              // Зеркальное отображение уровней
+// - Прицел -
+int crosshair_draw = 0;           // Отображать прицел
+int crosshair_health = 0;         // Индикация здоровья
+int crosshair_scale = 0;          // Увеличенный размер
 
 void CompatibilitySettings(void)
 {
@@ -111,11 +113,6 @@ void CompatibilitySettings(void)
 
     TXT_If(gamemission == doom || gamemission == heretic,    TXT_NewSeparator("ѓеймплей")),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("€справлять ошибки оригинальных уровней",          &fix_map_errors)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћтображать прицел", &crosshair_draw)),
-            TXT_If(gamemission == doom,
-            TXT_NewHorizBox(
-            TXT_NewStrut(4, 0),
-            TXT_NewCheckBox("€ндикация здоровья игрока", &crosshair_health), NULL)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Ћтображать статистику уровня на карте",     &automap_stats)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("“ведомление об обнаружении тайников",       &secret_notification)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Џокачивание оружия при стрельбе в движении",&weapon_bobbing)),
@@ -125,6 +122,11 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Џовышенная агрессивность Џотерянных душ",   &agressive_lost_souls)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћтображать отрицательное здоровье",         &negative_health)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("‡еркальное отражение уровней",              &flip_levels)),
+
+    TXT_If(gamemission == doom,    TXT_NewSeparator("Џрицел")),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћтображать прицел", &crosshair_draw)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("€ндикация здоровья", &crosshair_health)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("“величенный размер", &crosshair_scale)),        
     NULL);
 }
 
@@ -156,8 +158,6 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
     // - Геймплей -
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);           // Исправлять ошибки оригинальных уровней
-    M_BindIntVariable("crosshair_draw",         &crosshair_draw);           // Отображать прицел
-    M_BindIntVariable("crosshair_health",       &crosshair_health);         // Индикация здоровья игрока
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
@@ -166,5 +166,9 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);     // Повышенная агрессивность Потерянных душ
     M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье
     M_BindIntVariable("flip_levels",            &flip_levels);              // Зеркальное отражение уровней
+    // - Прицел -
+    M_BindIntVariable("crosshair_draw",         &crosshair_draw);           // Отображать прицел
+    M_BindIntVariable("crosshair_health",       &crosshair_health);         // Индикация здоровья
+    M_BindIntVariable("crosshair_scale",        &crosshair_scale);          // Увеличенный размер
 }
 
