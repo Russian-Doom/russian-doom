@@ -560,26 +560,27 @@ void HU_Drawer(void)
     }
 
     // [JN] Draw crosshair. 
-    // Thanks to Fabian Greffrath for ORIGWIDTH, ORIGHEIGHT and ST_HEIGHT values!
+    // Thanks to Fabian Greffrath for ORIGWIDTH, ORIGHEIGHT and ST_HEIGHT values,
+    // thanks to Zodomaniac for proper health values!
     if (!automapactive && crosshair_draw)
     {
         if (crosshair_scale)    // Scaled crosshair
         {
             if (crosshair_health)   // Health indication
             {
-                if (plr->health >= 66)
+                if (plr->health >= 67)
                 {
                 V_DrawPatch(ORIGWIDTH/2,
                     ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
                     W_CacheLumpName(DEH_String("XHAIRSG"), PU_CACHE)); // Green
                 }
-                else if (plr->health >= 33)
+                else if (plr->health >= 34)
                 {
                 V_DrawPatch(ORIGWIDTH/2,
                     ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
                     W_CacheLumpName(DEH_String("XHAIRSY"), PU_CACHE)); // Yellow
                 }
-                else if (plr->health <= 32)
+                else if (plr->health <= 33)
                 {
                 V_DrawPatch(ORIGWIDTH/2,
                     ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
@@ -597,19 +598,19 @@ void HU_Drawer(void)
         {
             if (crosshair_health)   // Health indication
             {
-                if (plr->health >= 66)
+                if (plr->health >= 67)
                 {
                 V_DrawPatchUnscaled(SCREENWIDTH/2,
                     ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
                     W_CacheLumpName(DEH_String("XHAIRUG"), PU_CACHE)); // Green
                 }
-                else if (plr->health >= 33)
+                else if (plr->health >= 34)
                 {
                 V_DrawPatchUnscaled(SCREENWIDTH/2,
                     ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
                     W_CacheLumpName(DEH_String("XHAIRUY"), PU_CACHE)); // Yellow
                 }
-                else if (plr->health <= 32)
+                else if (plr->health <= 33)
                 {
                 V_DrawPatchUnscaled(SCREENWIDTH/2,
                     ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
