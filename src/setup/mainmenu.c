@@ -98,42 +98,48 @@ static void SensibleDefaults(void)
 
     // [JN] Дополнительные параметры игры
 
-    // - Интерфейс -
-    draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
-    fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
-    // show_exit_sequence = 1;      // [Strife] ѕоказывать заставку при выходе
-    // - Графика -
-    brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
-    fake_contrast = 0;           // Имитация контрастного освещения стен
-    translucency = 1;            // Прозрачность объектов
-    infragreen_visor = 0;        // Инфразеленый визор усиления освещения
-    floating_powerups = 0;       // Левитирующие сферы-артефакты
-    swirling_liquids = 1;        // Улучшенная анимация жидкостей
-    randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
-    colored_blood = 1;           // Кровь разных цветов
-    invul_sky = 1;               // Неуязвимость окрашивает небо
-    red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
-    // - Звук -
-    crushed_corpses_sfx = 1;     // Звук раздавливания трупов
-    blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
-    play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
-    correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
-    // - Геймплей -
-    fix_map_errors = 1;          // Исправлять ошибки оригинальных уровней
-    over_under = 0;              // Игрок может проходить под и над монстрами
-    automap_stats = 1;           // Отображать статистику уровня на карте
-    secret_notification = 1;     // Уведомление об обнаружении секрета
-    weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
-    new_ouch_face = 1;           // Корректная формула "Ouch face"
-    ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов    
-    unlimited_lost_souls = 1;    // Элементаль боли без ограничения душ    
-    agressive_lost_souls = 0;    // Повышенная агрессивность Потерянных душ
-    negative_health = 0;         // Отображать отрицательное здоровье
-    flip_levels = 0;             // Зеркальное отражение уровней
-    // - Прицел -
-    crosshair_draw = 0;          // Отображать прицел
-    crosshair_health = 0;        // Индикация здоровья
-    crosshair_scale = 0;         // Увеличенный размер
+    // Графика
+    brightmaps = 1;
+    fake_contrast = 0;
+    translucency = 1;
+    swirling_liquids = 1;
+    invul_sky = 1;
+    colored_blood = 1;
+    red_resurrection_flash = 1;
+    draw_shadowed_text = 1;
+    show_diskicon = 1;
+
+    // Звук
+    crushed_corpses_sfx = 1;
+    blazing_door_fix_sfx = 1;
+    correct_endlevel_sfx = 0;
+    play_exit_sfx = 1;
+
+    // Тактика
+    automap_stats = 1;
+    secret_notification = 1;
+    negative_health = 0;
+    infragreen_visor = 0;
+
+    // Физика
+    over_under = 0;
+    weapon_bobbing = 1;
+    ssg_blast_enemies = 1;
+    randomly_flipcorpses = 1;
+    floating_powerups = 0;
+
+    // Геймплей
+    fix_map_errors = 1;
+    flip_levels = 0;
+    new_ouch_face = 1;
+    unlimited_lost_souls = 1;
+    agressive_lost_souls = 0;
+    fast_quickload = 1;
+
+    // Прицел
+    crosshair_draw = 0;
+    crosshair_health = 0;
+    crosshair_scale = 0;
 }
 
 static int MainMenuKeyPress(txt_window_t *window, int key, void *user_data)

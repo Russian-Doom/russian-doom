@@ -21,48 +21,51 @@
 void CompatibilitySettings(void);
 void BindCompatibilityVariables(void);
 
-// extern int vanilla_savegame_limit;
-// extern int vanilla_demo_limit;
 
 // [JN] Дополнительные параметры игры
 
-// - Интерфейс -
-extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
-extern int fast_quickload;          // Не выводить запрос при быстрой загрузке
-extern int show_diskicon;           // Значок дискеты / [Strife] песочных часов
-// extern int show_exit_sequence;      // [Strife] Показывать заставку при выходе
-// - Графика -
-extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
-extern int fake_contrast;           // Имитация контрастного освещения стен
-extern int translucency;            // Прозрачность объектов
-extern int infragreen_visor;        // Инфразеленый визор усиления освещения
-extern int floating_powerups;       // Левитирующие сферы-артефакты
-extern int swirling_liquids;        // Улучшенная анимация жидкостей
-extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
-extern int colored_blood;           // Кровь разных цветов
-extern int invul_sky;               // Неуязвимость окрашивает небо
-extern int red_resurrection_flash;  // Красная вспышка воскрешения монстров
-// - Звук -
-extern int crushed_corpses_sfx;     // Звук раздавливания трупов
-extern int blazing_door_fix_sfx;    // Одиночный звук закрытия быстрой двери
-extern int play_exit_sfx;           // Проигрывать звук при выходе из игры
-extern int correct_endlevel_sfx;    // Корректный звук завершения уровня
-// - Геймплей -
-extern int fix_map_errors;          // Исправлять ошибки оригинальных уровней
-extern int over_under;              // Игрок может проходить под и над монстрами
-extern int automap_stats;           // Отображать статистику уровня на карте
-extern int secret_notification;     // Уведомление об обнаружении секрета
-extern int weapon_bobbing;          // Покачивание оружия при стрельбе в движении
-extern int new_ouch_face;           // Корректная формула "Ouch face"
-extern int ssg_blast_enemies;       // Двуствольное ружье может разрывать врагов
-extern int unlimited_lost_souls;    // Элементаль боли без ограничения душ
-extern int agressive_lost_souls;    // Повышенная агрессивность Потерянных душ
-extern int negative_health;         // Отображать отрицательное здоровье
-extern int flip_levels;             // Зеркальное отражение уровней
-// - Прицел -
-extern int crosshair_draw;          // Отображать прицел
-extern int crosshair_health;        // Индикация здоровья
-extern int crosshair_scale;         // Увеличенный размер
+// Графика
+extern int brightmaps;
+extern int fake_contrast;
+extern int translucency;
+extern int swirling_liquids;
+extern int invul_sky;
+extern int colored_blood;
+extern int red_resurrection_flash;
+extern int draw_shadowed_text;
+extern int show_diskicon;
+
+// Звук
+extern int crushed_corpses_sfx;
+extern int blazing_door_fix_sfx;
+extern int correct_endlevel_sfx;
+extern int play_exit_sfx;
+
+// Тактика
+extern int automap_stats;
+extern int secret_notification;
+extern int negative_health;
+extern int infragreen_visor;
+
+// Физика
+extern int over_under;
+extern int weapon_bobbing;
+extern int ssg_blast_enemies;
+extern int randomly_flipcorpses;
+extern int floating_powerups;
+
+// Геймплей
+extern int fix_map_errors;
+extern int flip_levels;
+extern int new_ouch_face;
+extern int unlimited_lost_souls;
+extern int agressive_lost_souls;
+extern int fast_quickload;
+
+// Прицел
+extern int crosshair_draw;
+extern int crosshair_health;
+extern int crosshair_scale;
 
 
 #endif /* #ifndef SETUP_COMPATIBILITY_H */

@@ -422,49 +422,50 @@ void D_BindVariables(void)
     // Оптимизация игровой палитры
     M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);            // Оптимизация игровой палитры
 
-    // Интерфейс
-    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
-    M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
-    M_BindIntVariable("show_diskicon",          &show_diskicon);            // Отображать значок дискеты
-
     // Графика
-    M_BindIntVariable("brightmaps",             &brightmaps);               // Брайтмаппинг текстур и спрайтов
-    M_BindIntVariable("fake_contrast",          &fake_contrast);            // Имитация контрастного освещения стен
-    M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов
-    M_BindIntVariable("infragreen_visor",       &infragreen_visor);         // Инфразеленый визор усиления освещения
-    M_BindIntVariable("floating_powerups",      &floating_powerups);        // Левитирующие сферы-артефакты
-    M_BindIntVariable("swirling_liquids",       &swirling_liquids);         // Улучшенная анимация жидкостей
-    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);     // Произвольное зеркальное отражение трупов
-    M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
-    M_BindIntVariable("invul_sky",              &invul_sky);                // Неуязвимость окрашивает небо
-    M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);   // Красная вспышка воскрешения монстров
+    M_BindIntVariable("brightmaps",             &brightmaps);
+    M_BindIntVariable("fake_contrast",          &fake_contrast);
+    M_BindIntVariable("translucency",           &translucency);
+    M_BindIntVariable("swirling_liquids",       &swirling_liquids);
+    M_BindIntVariable("invul_sky",              &invul_sky);
+    M_BindIntVariable("colored_blood",          &colored_blood);
+    M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
+    M_BindIntVariable("show_diskicon",          &show_diskicon);
 
     // Звук
-    M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);      // Звук раздавливания трупов
-    M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);     // Одиночный звук закрытия быстрой двери
-    M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);            // Проигрывать звук при выходе из игры
-    M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
+    M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);
+    M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);
+    M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);
+    M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);
+
+    // Тактика
+    M_BindIntVariable("automap_stats",          &automap_stats);
+    M_BindIntVariable("secret_notification",    &secret_notification);
+    M_BindIntVariable("negative_health",        &negative_health);
+    M_BindIntVariable("infragreen_visor",       &infragreen_visor);
+
+    // Физика
+    M_BindIntVariable("over_under",             &over_under);
+    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
+    M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);
+    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
+    M_BindIntVariable("floating_powerups",      &floating_powerups);
 
     // Геймплей
-    M_BindIntVariable("fix_map_errors",         &fix_map_errors);           // Исправлять ошибки оригинальных уровней
-    M_BindIntVariable("over_under",             &over_under);               // Игрок может проходить под и над монстрами
-    M_BindIntVariable("automap_stats",          &automap_stats);            // Отображать статистику уровня на карте
-    M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
-    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении
-    M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
-    M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
-    M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);     // Элементаль боли без ограничения душ
-    M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);     // Повышенная агрессивность Потерянных душ
-    M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье
-    M_BindIntVariable("flip_levels",            &flip_levels);              // Зеркальное отражение уровней
+    M_BindIntVariable("fix_map_errors",         &fix_map_errors);
+    M_BindIntVariable("flip_levels",            &flip_levels);
+    M_BindIntVariable("new_ouch_face",          &new_ouch_face);
+    M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
+    M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
+    M_BindIntVariable("fast_quickload",         &fast_quickload);
 
     // Прицел
-    M_BindIntVariable("crosshair_draw",         &crosshair_draw);           // Отображать прицел
-    M_BindIntVariable("crosshair_health",       &crosshair_health);         // Индикация здоровья
-    M_BindIntVariable("crosshair_scale",        &crosshair_scale);          // Увеличенный размер
+    M_BindIntVariable("crosshair_draw",         &crosshair_draw);
+    M_BindIntVariable("crosshair_health",       &crosshair_health);
+    M_BindIntVariable("crosshair_scale",        &crosshair_scale);
 
     // Multiplayer chat macros
-
     for (i=0; i<10; ++i)
     {
         char buf[12];

@@ -1708,45 +1708,53 @@ static default_t extra_defaults_list[] =
     // [JN] Дополнительные параметры игры
     //
 
-    // - Оптимизация игровой палитры -
-    CONFIG_VARIABLE_INT(lcd_gamma_fix),             // Оптимизация палитры для Doom, Heretic и Hexen.
-    // - Интерфейс -
-    CONFIG_VARIABLE_INT(draw_shadowed_text),        // Элементы меню и тексты отбрасывают тень
-    CONFIG_VARIABLE_INT(fast_quickload),            // Не выводить запрос при быстрой загрузке
-    CONFIG_VARIABLE_INT(show_diskicon),             // Показывать значок дискеты    
-//  CONFIG_VARIABLE_INT(show_exit_sequence),        // [Strife] Показывать заставку при выходе
-    // - Графика -
-    CONFIG_VARIABLE_INT(brightmaps),                // Брайтмаппинг текстур и спрайтов
-    CONFIG_VARIABLE_INT(fake_contrast),             // Имитация контрастного освещения стен
-    CONFIG_VARIABLE_INT(translucency),              // Эффект прозрачности у некоторых объектов
-    CONFIG_VARIABLE_INT(infragreen_visor),          // Инфразеленый визор усиления освещения
-    CONFIG_VARIABLE_INT(floating_powerups),         // Левитирующие сферы-артефакты
-    CONFIG_VARIABLE_INT(swirling_liquids),          // Улучшенная анимация жидкостей    
-    CONFIG_VARIABLE_INT(randomly_flipcorpses),      // Произвольное зеркальное отражение трупов
-    CONFIG_VARIABLE_INT(colored_blood),             // Кровь разных цветов
-    CONFIG_VARIABLE_INT(invul_sky),                 // Неуязвимость окрашивает небо
-    CONFIG_VARIABLE_INT(red_resurrection_flash),    // Красная вспышка воскрешения монстров
-    // - Звук -
-    CONFIG_VARIABLE_INT(crushed_corpses_sfx),       // Звук раздавливания трупов
-    CONFIG_VARIABLE_INT(blazing_door_fix_sfx),      // Одиночный звук закрытия быстрой двери
-    CONFIG_VARIABLE_INT(play_exit_sfx),             // Проигрывать звук при выходе из игры
-    CONFIG_VARIABLE_INT(correct_endlevel_sfx),      // Корректный звук завершения уровня
-    // - Геймплей -
-    CONFIG_VARIABLE_INT(fix_map_errors),            // Исправлять ошибки оригинальных уровней
-    CONFIG_VARIABLE_INT(over_under),                // Игрок может проходить под и над монстрами
-    CONFIG_VARIABLE_INT(automap_stats),             // Отображать статистику уровня на карте
-    CONFIG_VARIABLE_INT(secret_notification),       // Уведомление об обнаружении секрета
-    CONFIG_VARIABLE_INT(weapon_bobbing),            // Покачивание оружия при стрельбе в движении
-    CONFIG_VARIABLE_INT(new_ouch_face),             // Корректная формула "Ouch face"
-    CONFIG_VARIABLE_INT(ssg_blast_enemies),         // Двуствольное ружье может разрывать врагов
-    CONFIG_VARIABLE_INT(unlimited_lost_souls),      // Элементаль боли без ограничения душ
-    CONFIG_VARIABLE_INT(negative_health),           // Отображать отрицательное здоровье
-    CONFIG_VARIABLE_INT(agressive_lost_souls),      // Повышенная агрессивность Потерянных душ
-    CONFIG_VARIABLE_INT(flip_levels),               // Зеркальное отражение уровней
-    // - Прицел -
-    CONFIG_VARIABLE_INT(crosshair_draw),            // Отображать прицел
-    CONFIG_VARIABLE_INT(crosshair_health),          // Индикация здоровья
-    CONFIG_VARIABLE_INT(crosshair_scale),           // Увеличенный размер
+    // Оптимизация игровой палитры
+    CONFIG_VARIABLE_INT(lcd_gamma_fix),
+
+    // Графика
+    CONFIG_VARIABLE_INT(brightmaps),
+    CONFIG_VARIABLE_INT(fake_contrast),
+    CONFIG_VARIABLE_INT(translucency),
+    CONFIG_VARIABLE_INT(swirling_liquids),
+    CONFIG_VARIABLE_INT(invul_sky),
+    CONFIG_VARIABLE_INT(colored_blood),
+    CONFIG_VARIABLE_INT(red_resurrection_flash),
+    CONFIG_VARIABLE_INT(draw_shadowed_text),
+    CONFIG_VARIABLE_INT(show_diskicon),
+
+    // Звук
+    CONFIG_VARIABLE_INT(crushed_corpses_sfx),
+    CONFIG_VARIABLE_INT(blazing_door_fix_sfx),
+    CONFIG_VARIABLE_INT(correct_endlevel_sfx),
+    CONFIG_VARIABLE_INT(play_exit_sfx),
+
+    // Тактика
+    CONFIG_VARIABLE_INT(automap_stats),
+    CONFIG_VARIABLE_INT(secret_notification),
+    CONFIG_VARIABLE_INT(negative_health),
+    CONFIG_VARIABLE_INT(infragreen_visor),
+
+    // Физика
+    CONFIG_VARIABLE_INT(over_under),
+    CONFIG_VARIABLE_INT(weapon_bobbing),
+    CONFIG_VARIABLE_INT(ssg_blast_enemies),
+    CONFIG_VARIABLE_INT(randomly_flipcorpses),
+    CONFIG_VARIABLE_INT(floating_powerups),
+
+    // Геймплей
+    CONFIG_VARIABLE_INT(fix_map_errors),
+    CONFIG_VARIABLE_INT(flip_levels),
+    CONFIG_VARIABLE_INT(new_ouch_face),
+    CONFIG_VARIABLE_INT(unlimited_lost_souls),
+    CONFIG_VARIABLE_INT(agressive_lost_souls),
+    CONFIG_VARIABLE_INT(fast_quickload),
+
+    // Прицел
+    CONFIG_VARIABLE_INT(crosshair_draw),
+    CONFIG_VARIABLE_INT(crosshair_health),
+    CONFIG_VARIABLE_INT(crosshair_scale),
+
+    // CONFIG_VARIABLE_INT(show_exit_sequence),    // [Strife]
 };
 
 static default_collection_t extra_defaults =

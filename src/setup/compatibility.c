@@ -27,45 +27,53 @@
 
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/gameplay.html"
 
+
 // [JN] Дополнительные параметры игры
 
-// - Интерфейс -
-int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
-int fast_quickload = 1;          // Не выводить запрос при быстрой загрузке
-int show_diskicon = 1;           // Значок дискеты / [Strife] песочных часов
-// int show_exit_sequence = 1;      // [Strife] Показывать заставку при выходе
-// - Графика -
-int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
-int fake_contrast = 0;           // Имитация контрастного освещения стен
-int infragreen_visor = 0;        // Инфразеленый визор усиления освещения
-int colored_blood = 1;           // Кровь разных цветов
-int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
-int new_ouch_face = 1;           // Корректная формула "Ouch face"
-int invul_sky = 1;               // Неуязвимость окрашивает небо
-int floating_powerups = 0;       // Левитирующие сферы-артефакты
-int swirling_liquids = 1;        // Улучшенная анимация жидкостей
-int red_resurrection_flash = 1;  // Красная вспышка воскрешения монстров
-int ssg_blast_enemies = 1;       // Двуствольное ружье может разрывать врагов
-int translucency = 1;            // Прозрачность объектов
-int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
-// - Звук -
-int crushed_corpses_sfx = 1;     // Звук раздавливания трупов
-int blazing_door_fix_sfx = 1;    // Одиночный звук закрытия быстрой двери
-int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
-int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
-// - Геймплей -
-int fix_map_errors = 1;           // Исправлять ошибки оригинальных уровней
-int over_under = 0;               // Игрок может проходить под и над монстрами
-int automap_stats = 1;            // Отображать статистику уровня на карте
-int secret_notification = 1;      // Уведомление об обнаружении секрета
-int unlimited_lost_souls = 1;     // Элементаль боли без ограничения
-int agressive_lost_souls = 0;     // Повышенная агрессивность Потерянных Душ
-int negative_health = 0;          // Отображать отрицательное здоровье
-int flip_levels = 0;              // Зеркальное отображение уровней
-// - Прицел -
-int crosshair_draw = 0;           // Отображать прицел
-int crosshair_health = 0;         // Индикация здоровья
-int crosshair_scale = 0;          // Увеличенный размер
+// Графика
+int brightmaps = 1;
+int fake_contrast = 0;
+int translucency = 1;
+int swirling_liquids = 1;
+int invul_sky = 1;
+int colored_blood = 1;
+int red_resurrection_flash = 1;
+int draw_shadowed_text = 1;
+int show_diskicon = 1;
+
+// Звук
+int crushed_corpses_sfx = 1;
+int blazing_door_fix_sfx = 1;
+int correct_endlevel_sfx = 0;
+int play_exit_sfx = 1;
+
+// Тактика
+int automap_stats = 1;
+int secret_notification = 1;
+int negative_health = 0;
+int infragreen_visor = 0;
+
+// Физика
+int over_under = 0;
+int weapon_bobbing = 1;
+int ssg_blast_enemies = 1;
+int randomly_flipcorpses = 1;
+int floating_powerups = 0;
+
+// Геймплей
+int fix_map_errors = 1;
+int flip_levels = 0;
+int new_ouch_face = 1;
+int unlimited_lost_souls = 1;
+int agressive_lost_souls = 0;
+int fast_quickload = 1;
+
+// Прицел
+int crosshair_draw = 0;
+int crosshair_health = 0;
+int crosshair_scale = 0;
+
+// int show_exit_sequence = 1;  // [Strife]
 
 void CompatibilitySettings(void)
 {
@@ -85,93 +93,101 @@ void CompatibilitySettings(void)
         TXT_AddWidget(window, TXT_NewScrollPane(47, 5, window_features));
 
     TXT_AddWidgets(window_features,
-    TXT_NewSeparator("€нтерфейс"),
-        TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",   &draw_shadowed_text),        
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе выводить запрос при быстрой загрузке",   &fast_quickload)),
-        TXT_If(gamemission == doom, TXT_NewCheckBox("Џоказывать значок дискеты",                 &show_diskicon)),
+
+    TXT_NewSeparator("ѓрафика"),
+        TXT_NewCheckBox("Ѓрайтмаппинг текстур и спрайтов",                                                      &brightmaps),
+        TXT_NewCheckBox("€митация контрастного освещения стен",                                                 &fake_contrast),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("ћффект прозрачности у некоторых объектов",                 &translucency)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("“лучшенная анимация жидкостей",                            &swirling_liquids)),
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Ќеуязвимость окрашивает небо",   &invul_sky)),    
+        TXT_If(gamemission == doom, TXT_NewCheckBox("ђазноцветная кровь и трупы",                               &colored_blood)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Љрасная вспышка воскрешения монстров",                     &red_resurrection_flash)),
+        TXT_NewCheckBox("ћлементы меню и тексты отбрасывают тень",                                              &draw_shadowed_text),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Џоказывать значок дискеты",                                &show_diskicon)),
+
+    TXT_If(gamemission == doom, TXT_NewSeparator("‡вук")), 
+        TXT_If(gamemission == doom, TXT_NewCheckBox("‡вук раздавливания трупов",                &crushed_corpses_sfx)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Ћдиночный звук закрытия быстрой двери",    &blazing_door_fix_sfx)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Џроигрывать звук при выходе из игры",      &play_exit_sfx)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Љорректный звук завершения уровня",        &correct_endlevel_sfx)),
+
+    TXT_NewSeparator("’актика"),
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Ћтображать статистику уровня на карте",  &automap_stats)),
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("“ведомление об обнаружении тайников",    &secret_notification)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Ћтображать отрицательное здоровье",                                &negative_health)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("€нфразеленый визор усиления освещения",                            &infragreen_visor)),
+
+    TXT_NewSeparator("”изика"),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("€грок может проходить под и над монстрами",                            &over_under)),
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Џокачивание оружия при стрельбе в движении", &weapon_bobbing)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("„вуствольное ружье может разрывать врагов",                            &ssg_blast_enemies)),
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Џроизвольное зеркальное отражение трупов",   &randomly_flipcorpses)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("‹евитирующие сферы-артефакты",                                         &floating_powerups)),
         
-        // [JN] Элементы для Strife 
+    TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator("ѓеймплей")),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("€справлять ошибки оригинальных уровней",                   &fix_map_errors)),
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("‡еркальное отражение уровней",   &flip_levels)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Љорректная формула \"Ouch face\"",                         &new_ouch_face)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("ћлементаль Ѓоли без ограничения душ",                      &unlimited_lost_souls)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Џовышенная агрессивность Џотерянных душ",                  &agressive_lost_souls)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ќе выводить запрос при быстрой загрузке",                  &fast_quickload)),
+
+    TXT_If(gamemission == doom, TXT_NewSeparator("Џрицел")),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћтображать прицел",    &crosshair_draw)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("€ндикация здоровья",   &crosshair_health)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("“величенный размер",   &crosshair_scale)),
+
         // TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать значок песочных часов",        &show_diskicon)),
         // TXT_If(gamemission == strife, TXT_NewCheckBox("Џоказывать заставку при выходе",          &show_exit_sequence)),
-    
-    TXT_NewSeparator("ѓрафика"),
-        TXT_NewCheckBox("Ѓрайтмаппинг текстур и спрайтов",           &brightmaps),
-        TXT_NewCheckBox("€митация контрастного освещения стен",      &fake_contrast),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("ћффект прозрачности у некоторых объектов",  &translucency)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("€нфразеленый визор усиления освещения",     &infragreen_visor)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("‹евитирующие сферы-артефакты",              &floating_powerups)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("“лучшенная анимация жидкостей",             &swirling_liquids)),
-        TXT_If(gamemission == doom || gamemission == heretic,   TXT_NewCheckBox("Џроизвольное зеркальное отражение трупов",  &randomly_flipcorpses)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("ђазноцветная кровь и трупы",                &colored_blood)),
-        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Ќеуязвимость окрашивает небо",              &invul_sky)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Љрасная вспышка воскрешения монстров",      &red_resurrection_flash)),
 
-    TXT_If(gamemission == doom,    TXT_NewSeparator("‡вук")), 
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("‡вук раздавливания трупов",                 &crushed_corpses_sfx)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћдиночный звук закрытия быстрой двери",     &blazing_door_fix_sfx)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Џроигрывать звук при выходе из игры",       &play_exit_sfx)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Љорректный звук завершения уровня",         &correct_endlevel_sfx)),
-
-    TXT_If(gamemission == doom || gamemission == heretic,    TXT_NewSeparator("ѓеймплей")),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("€справлять ошибки оригинальных уровней",          &fix_map_errors)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("€грок может проходить под и над монстрами",       &over_under)),
-        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Ћтображать статистику уровня на карте",     &automap_stats)),
-        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("“ведомление об обнаружении тайников",       &secret_notification)),
-        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Џокачивание оружия при стрельбе в движении",&weapon_bobbing)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Љорректная формула \"Ouch face\"",          &new_ouch_face)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("„вуствольное ружье может разрывать врагов", &ssg_blast_enemies)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("ћлементаль Ѓоли без ограничения душ",       &unlimited_lost_souls)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Џовышенная агрессивность Џотерянных душ",   &agressive_lost_souls)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћтображать отрицательное здоровье",         &negative_health)),
-        TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("‡еркальное отражение уровней",              &flip_levels)),
-
-    TXT_If(gamemission == doom,    TXT_NewSeparator("Џрицел")),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("Ћтображать прицел", &crosshair_draw)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("€ндикация здоровья", &crosshair_health)),
-        TXT_If(gamemission == doom,	TXT_NewCheckBox("“величенный размер", &crosshair_scale)),        
     NULL);
 }
 
 void BindCompatibilityVariables(void)
 {
-    // [JN] Дополнительные параметры игры
+    // Графика
+    M_BindIntVariable("brightmaps",             &brightmaps);
+    M_BindIntVariable("fake_contrast",          &fake_contrast);
+    M_BindIntVariable("translucency",           &translucency);
+    M_BindIntVariable("swirling_liquids",       &swirling_liquids);
+    M_BindIntVariable("invul_sky",              &invul_sky);
+    M_BindIntVariable("colored_blood",          &colored_blood);
+    M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
+    M_BindIntVariable("show_diskicon",          &show_diskicon);
 
-    // - Интерфейс -
-    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);       // Элементы меню и тексты отбрасывают тень
-    M_BindIntVariable("fast_quickload",         &fast_quickload);           // Не выводить запрос при быстрой загрузке
-    M_BindIntVariable("automap_stats",          &automap_stats);            // Отображать статистику уровня на карте
-    // M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);       // [Strife] Показывать заставку при выходе
-    M_BindIntVariable("show_diskicon",          &show_diskicon);            // Показывать значок дискеты
-    // - Графика -
-    M_BindIntVariable("brightmaps",             &brightmaps);               // Брайтмаппинг текстур и спрайтов
-    M_BindIntVariable("fake_contrast",          &fake_contrast);            // Имитация контрастного освещения стен
-    M_BindIntVariable("translucency",           &translucency);             // Прозрачность объектов
-    M_BindIntVariable("infragreen_visor",       &infragreen_visor);         // Инфразеленый визор усиления освещения
-    M_BindIntVariable("floating_powerups",      &floating_powerups);        // Левитирующие сферы-артефакты
-    M_BindIntVariable("swirling_liquids",       &swirling_liquids);         // Улучшенная анимация жидкостей
-    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);     // Произвольное зеркальное отражение трупов
-    M_BindIntVariable("colored_blood",          &colored_blood);            // Кровь разных цветов
-    M_BindIntVariable("invul_sky",              &invul_sky);                // Неуязвимость окрашивает небо
-    M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);   // Красная вспышка воскрешения монстров
-    // - Звук -
-    M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);      // Звук раздавливания трупов
-    M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);     // Одиночный звук закрытия быстрой двери
-    M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);            // Проигрывать звук при выходе из игры
-    M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
-    // - Геймплей -
-    M_BindIntVariable("fix_map_errors",         &fix_map_errors);           // Исправлять ошибки оригинальных уровней
-    M_BindIntVariable("over_under",             &over_under);               // Игрок может проходить под и над монстрами
-    M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
-    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении
-    M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"
-    M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);        // Двуствольное ружье может разрывать врагов
-    M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);     // Элементаль боли без ограничения
-    M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);     // Повышенная агрессивность Потерянных душ
-    M_BindIntVariable("negative_health",        &negative_health);          // Отображать отрицательное здоровье
-    M_BindIntVariable("flip_levels",            &flip_levels);              // Зеркальное отражение уровней
-    // - Прицел -
-    M_BindIntVariable("crosshair_draw",         &crosshair_draw);           // Отображать прицел
-    M_BindIntVariable("crosshair_health",       &crosshair_health);         // Индикация здоровья
-    M_BindIntVariable("crosshair_scale",        &crosshair_scale);          // Увеличенный размер
+    // Звук
+    M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);
+    M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);
+    M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);
+    M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);
+
+    // Тактика
+    M_BindIntVariable("automap_stats",          &automap_stats);
+    M_BindIntVariable("secret_notification",    &secret_notification);
+    M_BindIntVariable("negative_health",        &negative_health);
+    M_BindIntVariable("infragreen_visor",       &infragreen_visor);
+
+    // Физика
+    M_BindIntVariable("over_under",             &over_under);
+    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
+    M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);
+    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
+    M_BindIntVariable("floating_powerups",      &floating_powerups);
+
+    // Геймплей
+    M_BindIntVariable("fix_map_errors",         &fix_map_errors);
+    M_BindIntVariable("flip_levels",            &flip_levels);
+    M_BindIntVariable("new_ouch_face",          &new_ouch_face);
+    M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
+    M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
+    M_BindIntVariable("fast_quickload",         &fast_quickload);
+
+    // Прицел
+    M_BindIntVariable("crosshair_draw",         &crosshair_draw);
+    M_BindIntVariable("crosshair_health",       &crosshair_health);
+    M_BindIntVariable("crosshair_scale",        &crosshair_scale);
+
+    // M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);    // [Strife]
 }
 
