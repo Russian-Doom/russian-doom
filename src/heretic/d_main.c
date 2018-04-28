@@ -49,6 +49,8 @@
 #include "w_main.h"
 #include "v_video.h"
 #include "w_merge.h"
+#include "jn.h"
+
 
 #define CT_KEY_GREEN    'g'
 #define CT_KEY_YELLOW   'y'
@@ -68,8 +70,7 @@ boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom;                  // true if cd-rom mode active
 boolean noartiskip;             // whether shift-enter skips an artifact
 
-boolean vanillaparm; // [JN] Check for -vanilla
-boolean flip_levels_cmdline = false; // [JN] Flipper levels initially false
+boolean flip_levels_cmdline = false;  // [JN] Flipped levels initially false
 
 skill_t startskill;
 int startepisode;

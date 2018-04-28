@@ -79,11 +79,12 @@
 
 #include "d_main.h"
 
+#include "jn.h"
+
 // [JN] Сделана глобальной, нужна для функции автоподргузки 
 // блоков DEHACKED, а также в цикле D_DoomMain.
 int numiwadlumps; 
 
-extern int lcd_gamma_fix;
 
 //
 // D-DoomLoop()

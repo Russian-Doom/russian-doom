@@ -73,6 +73,7 @@
 #include "g_game.h"
 
 #include "crispy.h"
+#include "jn.h"
 
 
 #define SAVEGAMESIZE	0x2c000

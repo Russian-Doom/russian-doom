@@ -40,21 +40,16 @@
 #include "p_inter.h"
 
 #include "crispy.h"
+#include "jn.h"
 
 #define BONUSADD	6
 
-extern int infragreen_visor;     // [JN] Инфразеленый визор усиления освещения
-extern int ssg_blast_enemies;    // [JN] Двуствольное ружье может разрывать врагов
-extern int negative_health;      // [JN] Отображать отрицательное здоровье
-extern int agressive_lost_souls; // [JN] Повышенная агрессивность Потерянных душ
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
 int	maxammo[NUMAMMO] = {200, 50, 300, 50};
 int	clipammo[NUMAMMO] = {10, 4, 20, 1};
 
-extern int artifactcount;   // [JN] Press Beta: amount of artifacts
-extern int lifecount;       // [JN] Press Beta: amount of lifes
 
 //
 // GET STUFF

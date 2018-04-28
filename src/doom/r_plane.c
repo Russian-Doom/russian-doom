@@ -33,9 +33,8 @@
 #include "r_sky.h"
 #include "r_bmaps.h"
 
-extern int brightmaps;
-extern int invul_sky;   // [JN] Неуязвимость окрашивает небо
-extern int mlook;
+#include "jn.h"
+
 extern boolean scaled_sky;
 
 planefunction_t floorfunc;

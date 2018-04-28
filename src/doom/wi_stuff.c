@@ -42,6 +42,9 @@
 
 #include "wi_stuff.h"
 
+#include "jn.h"
+
+
 //
 // Data needed to add patches to full screen intermission pics.
 // Patches are statistics messages, and animations.
@@ -1431,8 +1434,6 @@ void WI_drawStats(void)
     // [JN] Press Beta: draw additional "Artifacts" counter
     if (gamemode == pressbeta)
     {
-        extern int artifactcount;
-        
         // [JN] Draw "Артефакты" title
         V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTIF"), PU_CACHE));
         

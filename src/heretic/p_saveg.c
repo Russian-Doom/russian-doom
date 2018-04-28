@@ -26,10 +26,9 @@
 #include "m_misc.h"
 #include "p_local.h"
 #include "v_video.h"
+#include "jn.h"
 
 static FILE *SaveGameFP;
-
-extern boolean flip_levels_cmdline;
 
 
 //==========================================================================

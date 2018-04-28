@@ -23,7 +23,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "crispy.h"
 
 #include "m_random.h"
 #include "i_system.h"
@@ -42,6 +41,8 @@
 // Data.
 #include "sounds.h"
 
+#include "crispy.h"
+#include "jn.h"
 
 
 typedef enum

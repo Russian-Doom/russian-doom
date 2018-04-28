@@ -24,6 +24,7 @@
 #include "p_local.h"
 #include "sounds.h"
 #include "s_sound.h"
+#include "jn.h"
 
 void G_PlayerReborn(int player);
 void P_SpawnMapThing(mapthing_t * mthing);

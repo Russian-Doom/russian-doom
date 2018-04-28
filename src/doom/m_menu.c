@@ -58,13 +58,14 @@
 
 #include "m_menu.h"
 
+#include "jn.h"
+
 
 extern patch_t*     hu_font[HU_FONTSIZE];
 extern boolean      message_dontfuckwithme;
 
 extern boolean      chat_on;    // in heads-up code
 
-extern int  lcd_gamma_fix;
 extern int  st_palette;
 
 //

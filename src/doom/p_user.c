@@ -32,6 +32,7 @@
 #include "d_main.h" // [JN] D_StartTitle
 
 #include "crispy.h"
+#include "jn.h"
 
 // Index of the special effects (INVUL inverse) map.
 #define INVERSECOLORMAP		32
@@ -49,7 +50,6 @@
 boolean		onground;
 boolean beneath_door;   // [JN] Player is crushed by closed door
 
-extern int lifecount;   // [JN] Press Beta: amount of lifes
 
 //
 // P_Thrust

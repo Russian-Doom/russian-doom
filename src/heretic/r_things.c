@@ -26,6 +26,7 @@
 #include "i_system.h"
 #include "r_local.h"
 #include "crispy.h"
+#include "jn.h"
 
 typedef struct
 {

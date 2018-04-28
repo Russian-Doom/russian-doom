@@ -34,6 +34,8 @@
 #include "r_sky.h"
 #include "g_game.h"
 
+#include "jn.h"
+
 
 // Fineangles in the SCREENWIDTH wide window.
 #define FIELDOFVIEW     2048	
@@ -107,7 +109,6 @@ lighttable_t* fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
-extern boolean vanillaparm;
 
 // bumped light from gun blasts
 int extralight;			

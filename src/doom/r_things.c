@@ -34,6 +34,7 @@
 #include "doomstat.h"
 #include "g_game.h"
 #include "crispy.h"
+#include "jn.h"
 
 // MACROS ------------------------------------------------------------------
 

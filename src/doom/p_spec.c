@@ -24,7 +24,6 @@
 
 
 #include <stdlib.h>
-#include "crispy.h"
 
 #include "doomdef.h"
 #include "doomstat.h"
@@ -52,6 +51,10 @@
 
 // [JN] Файл со строчкой о найденном секрете.
 #include "d_englsh.h"
+
+#include "crispy.h"
+#include "jn.h"
+
 
 //
 // Animating textures and planes

@@ -43,11 +43,8 @@
 #include "sounds.h"
 
 #include "crispy.h"
+#include "jn.h"
 
-extern int colored_blood;        // [JN] Кровь разных цветов
-extern int crushed_corpses_sfx;  // [JN] Звук раздавливания трупов
-extern int over_under;           // [JN] Игрок может проходить под и над монстрами
-extern int agressive_lost_souls; // [JN] Повышенная агрессивность Потерянных душ
 
 // Spechit overrun magic value.
 //

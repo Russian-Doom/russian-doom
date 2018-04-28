@@ -29,6 +29,7 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "crispy.h"
+#include "jn.h"
 
 void P_SpawnMapThing(mapthing_t * mthing);
 
@@ -64,7 +65,6 @@ byte *rejectmatrix;             // for fast sight rejection
 mapthing_t deathmatchstarts[10], *deathmatch_p;
 mapthing_t playerstarts[MAXPLAYERS];
 
-extern boolean flip_levels_cmdline;
 
 // [crispy] recalculate seg offsets
 // adapted from prboom-plus/src/p_setup.c:474-482

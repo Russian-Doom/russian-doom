@@ -508,8 +508,6 @@ extern boolean usergame;        // ok to save / end game
 
 extern boolean ravpic;          // checkparm of -ravpic
 
-extern boolean vanillaparm;     // checkparm of -vanilla
-
 extern boolean altpal;          // checkparm to use an alternate palette routine
 
 extern boolean cdrom;           // true if cd-rom mode active ("-cdrom")
@@ -575,10 +573,6 @@ extern boolean autostart;
 extern boolean testcontrols;
 extern int testcontrols_mousespeed;
 
-// extern int vanilla_savegame_limit;
-// extern int vanilla_demo_limit;
-
-extern int lcd_gamma_fix;	// [JN] Оптимизация палитры Heretic
 
 /*
 ===============================================================================
@@ -702,25 +696,6 @@ void G_Ticker(void);
 boolean G_Responder(event_t * ev);
 
 void G_ScreenShot(void);
-
-
-// [JN] Mouselook
-extern int mlook;
-
-// [JN] Дополнительные параметры игры
-
-// - Интерфейс -
-extern int draw_shadowed_text;      // Элементы меню и тексты отбрасывают тень
-// - Графика -
-extern int brightmaps;              // Брайтмаппинг текстур и спрайтов
-extern int fake_contrast;           // Имитация контрастного освещения стен
-extern int randomly_flipcorpses;    // Произвольное зеркальное отражение трупов
-extern int invul_sky;               // Неуязвимость окрашивает небо
-// - Геймплей -
-extern int automap_stats;           // Отображать статистику уровня на карте
-extern int secret_notification;     // Уведомление об обнаружении тайников
-extern int weapon_bobbing;          // Покачивание оружия при стрельбе в движении
-extern int flip_levels;             // Зеркальное отражение уровней
 
 
 //-----

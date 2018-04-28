@@ -33,6 +33,8 @@
 #include "i_system.h"
 #include "i_video.h"
 #include "v_video.h"
+#include "jn.h"
+
 
 typedef enum
 {

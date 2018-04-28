@@ -23,11 +23,8 @@
 #define __M_MENU__
 
 
-
 #include "d_event.h"
 
-// [JN] Local time widget
-extern int local_time;
 
 //
 // MENUS

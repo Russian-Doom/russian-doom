@@ -42,6 +42,7 @@
 #include "doomstat.h"
 
 #include "crispy.h"
+#include "jn.h"
 #include "p_fix.h"
 
 
@@ -78,8 +79,6 @@ int     detailLevel; // [JN] & [crispy] Необходимо для WiggleFix
 static int      totallines;
 
 boolean canmodify;
-
-extern boolean flip_levels_cmdline;
 
 gameaction_t    gameaction;
 

@@ -39,6 +39,8 @@
 #include "doomstat.h"
 #include "r_state.h"
 
+#include "jn.h"
+
 typedef enum
 {
     F_STAGE_TEXT,

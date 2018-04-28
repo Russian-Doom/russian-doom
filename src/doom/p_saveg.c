@@ -35,13 +35,11 @@
 #include "m_misc.h"
 #include "r_state.h"
 
+#include "jn.h"
+
 FILE *save_stream;
 int savegamelength;
 boolean savegame_error;
-
-extern int artifactcount;   // [JN] Press Beta: amount of artifacts
-extern int lifecount;       // [JN] Press Beta: amount of lifes
-extern boolean flip_levels_cmdline;
 
 
 // Get the filename of a temporary file to write the savegame to.  After

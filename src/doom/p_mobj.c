@@ -37,17 +37,11 @@
 #include "doomstat.h"
 
 #include "crispy.h"
+#include "jn.h"
 
 
 void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);
-
-extern int mlook;
-extern int colored_blood;
-extern int red_resurrection_flash;
-extern int torque;
-extern int floating_powerups;
-extern int agressive_lost_souls;
 
 
 // [JN] Floating amplitude LUT.

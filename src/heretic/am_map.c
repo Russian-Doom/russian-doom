@@ -29,9 +29,10 @@
 #include "am_map.h"
 #include "am_data.h"
 #include "m_misc.h"
-
 #include "doomkeys.h"
 #include "v_video.h"
+#include "jn.h"
+
 
 vertex_t KeyPoints[NUMKEYS];
 

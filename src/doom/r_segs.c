@@ -32,6 +32,7 @@
 #include "g_game.h"
 #include "r_segs.h"
 #include "r_bmaps.h"
+#include "jn.h"
 
 // MACROS ------------------------------------------------------------------
 

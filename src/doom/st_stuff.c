@@ -61,10 +61,8 @@
 #include "dstrings.h"
 #include "sounds.h"
 
-extern int lcd_gamma_fix;
+#include "jn.h"
 
-extern int artifactcount;   // [JN] Press Beta: amount of artifacts
-extern int lifecount;       // [JN] Press Beta: amount of lifes
 
 //
 // STATUS BAR DATA

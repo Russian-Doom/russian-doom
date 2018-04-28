@@ -23,6 +23,8 @@
 #include "deh_str.h"
 #include "i_system.h"
 #include "r_local.h"
+#include "jn.h"
+
 
 planefunction_t floorfunc, ceilingfunc;
 

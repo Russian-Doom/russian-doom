@@ -26,6 +26,8 @@
 #include "i_video.h"
 #include "s_sound.h"
 #include "v_video.h"
+#include "jn.h"
+
 
 int finalestage;                // 0 = text, 1 = art screen
 int finalecount;

@@ -25,6 +25,7 @@
 #include "r_local.h"
 #include "p_local.h"
 #include "tables.h"
+#include "jn.h"
 
 int viewangleoffset;
 

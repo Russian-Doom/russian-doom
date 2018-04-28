@@ -39,10 +39,10 @@
 #include "doomstat.h"
 #include "r_sky.h"
 
-
 #include "r_data.h"
 
-extern int lcd_gamma_fix;
+#include "jn.h"
+
 
 //
 // Graphics.
@@ -179,9 +179,6 @@ lighttable_t	*brightmaps_greenonly2;
 lighttable_t	*brightmaps_greenonly3;
 lighttable_t	*brightmaps_orangeyellow;
 lighttable_t	*brightmaps_dimmeditems;
-
-
-extern int      translucency;
 
 
 //

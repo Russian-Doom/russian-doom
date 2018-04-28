@@ -30,7 +30,6 @@
 #include "g_game.h"
 
 #include "s_sound.h"
-#include "crispy.h"
 
 // Data.
 #include "sounds.h"
@@ -38,6 +37,10 @@
 // State.
 #include "doomstat.h"
 #include "r_state.h"
+
+#include "crispy.h"
+#include "jn.h"
+
 
 
 //

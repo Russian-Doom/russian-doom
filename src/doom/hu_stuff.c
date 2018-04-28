@@ -42,6 +42,8 @@
 #include "dstrings.h"
 #include "sounds.h"
 
+#include "jn.h"
+
 
 //
 // Locally used constants, shortcuts.
@@ -66,12 +68,6 @@
 
 #define HU_COORDX       (ORIGWIDTH - 8 * hu_font['A'-HU_FONTSTART]->width)
 
-extern int draw_shadowed_text;
-extern int crosshair_draw;
-extern int crosshair_health;
-extern int crosshair_scale;
-extern int automap_stats;
-extern int local_time;
 extern int screenblocks;
 
 char *chat_macros[10] =

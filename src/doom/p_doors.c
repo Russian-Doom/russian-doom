@@ -35,7 +35,8 @@
 #include "dstrings.h"
 #include "sounds.h"
 
-extern int blazing_door_fix_sfx;    // [JN] Одиночный звук закрытия быстрой двери
+#include "jn.h"
+
 
 #if 0
 //
