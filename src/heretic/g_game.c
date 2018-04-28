@@ -135,18 +135,23 @@ int testcontrols_mousespeed;
 
 // [JN] Дополнительные параметры игры
 
-// - Интерфейс -
-int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
-// - Графика -
-int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
-int fake_contrast = 0;           // Имитация контрастного освещения стен
-int randomly_flipcorpses = 1;    // Произвольное зеркальное отражение трупов
-int invul_sky = 1;               // Неуязвимость окрашивает небо
-// - Геймплей -
-int automap_stats = 1;           // Отображать статистику уровня на карте
-int secret_notification = 1;     // Уведомление об обнаружении тайников
-int weapon_bobbing = 1;          // Покачивание оружия при стрельбе в движении
-int flip_levels = 0;             // Зеркальное отражение уровней
+// Графика
+int brightmaps = 1;
+int fake_contrast = 0;
+int invul_sky = 1;
+int draw_shadowed_text = 1;
+
+// Тактика
+int automap_stats = 1;
+int secret_notification = 1;
+
+// Физика
+int torque = 1;
+int weapon_bobbing = 1;
+int randomly_flipcorpses = 1;
+
+// Геймплей
+int flip_levels = 0;
 
 
 //

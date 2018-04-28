@@ -120,7 +120,7 @@ void CompatibilitySettings(void)
 
     TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator("Физика")),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Игрок может проходить под и над монстрами",                            &over_under)),
-        TXT_If(gamemission == doom, TXT_NewCheckBox("Трупы соскальзывают с выступов и обрывов",                             &torque)),
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Трупы соскальзывают с выступов и обрывов",   &torque)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Покачивание оружи€ при стрельбе в движении", &weapon_bobbing)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Двуствольное ружье может разрывать врагов",                            &ssg_blast_enemies)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Произвольное зеркальное отражение трупов",   &randomly_flipcorpses)),

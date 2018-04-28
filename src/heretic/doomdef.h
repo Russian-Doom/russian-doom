@@ -161,6 +161,7 @@ typedef struct mobj_s
     struct mobj_s *bnext, *bprev;       // links in blocks (if needed)
     struct subsector_s *subsector;
     fixed_t floorz, ceilingz;   // closest together of contacted secs
+    fixed_t dropoffz;           // killough 11/98: the lowest floor over all contacted Sectors.
     fixed_t radius, height;     // for movement checking
     fixed_t momx, momy, momz;   // momentums
 
@@ -173,6 +174,7 @@ typedef struct mobj_s
     int damage;                 // For missiles
     int flags;
     int flags2;                 // Heretic flags
+    int intflags;               // killough 9/15/98: internal flags
     specialval_t special1;      // Special info
     specialval_t special2;      // Special info
     int health;
@@ -184,12 +186,20 @@ typedef struct mobj_s
     // used by player to freeze a bit after
     // teleporting
     int threshold;              // if >0, the target will be chased
+    short gear;                 // killough 11/98: used in torque simulation
     // no matter what (even if shot)
     struct player_s *player;    // only valid if type == MT_PLAYER
     int lastlook;               // player number last looked for
 
     mapthing_t spawnpoint;      // for nightmare respawn
 } mobj_t;
+
+// killough 11/98:
+// For torque simulation:
+
+void P_ApplyTorque(mobj_t *mo); // killough 9/12/98 
+#define OVERDRIVE 6
+#define MAXGEAR (OVERDRIVE+16)
 
 // each sector has a degenmobj_t in it's center for sound origin purposes
 typedef struct
@@ -274,6 +284,17 @@ typedef struct
 #define MF2_TELESTOMP		0x00040000  // mobj can stomp another
 #define MF2_FLOATBOB		0x00080000  // use float bobbing z movement
 #define MF2_DONTDRAW		0X00100000  // don't generate a vissprite
+
+// --- [JN] Torque internal flags ---
+
+// killough 9/15/98: Same, but internal flags, not intended for .deh
+// (some degree of opaqueness is good, to avoid compatibility woes)
+
+enum {
+  MIF_FALLING = 1,      // Object is falling
+  MIF_ARMED = 2,        // Object is armed (for MF_TOUCHY objects)
+  MIF_LINEDONE = 4,     // Object has activated W1 or S1 linedef via DEH frame
+};
 
 //=============================================================================
 typedef enum

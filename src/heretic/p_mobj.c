@@ -24,6 +24,7 @@
 #include "p_local.h"
 #include "sounds.h"
 #include "s_sound.h"
+#include "crispy.h"
 #include "jn.h"
 
 void G_PlayerReborn(int player);
@@ -421,6 +422,19 @@ void P_XYMovement(mobj_t * mo)
             }
         }
     }
+    
+    // killough 8/11/98: add bouncers
+    // killough 9/15/98: add objects falling off ledges
+    // killough 11/98: only include bouncers hanging off ledges
+    if ((/*(mo->flags & MF_BOUNCES && mo->z > mo->dropoffz) ||*/
+    mo->flags & MF_CORPSE || mo->intflags & MIF_FALLING) 
+    && (mo->momx > FRACUNIT/4 || mo->momx < -FRACUNIT/4
+    ||  mo->momy > FRACUNIT/4 || mo->momy < -FRACUNIT/4) 
+    &&  mo->floorz != mo->subsector->sector->floorheight)
+    {
+        return;  // do not stop sliding if halfway off a step with some momentum
+    }
+    
     if (mo->momx > -STOPSPEED && mo->momx < STOPSPEED
         && mo->momy > -STOPSPEED && mo->momy < STOPSPEED
         && (!player || (player->cmd.forwardmove == 0
@@ -811,6 +825,19 @@ void P_MobjThinker(mobj_t * mobj)
         }
     }
 
+    // killough 9/12/98: objects fall off ledges if they are hanging off
+    // slightly push off of ledge if hanging more than halfway off
+    // [JN] TODO: why it's not working with mobj->z > mobj->dropoffz ?
+    if (singleplayer && !vanillaparm && torque)
+    {
+        if (/*mobj->z > mobj->dropoffz      // Only objects contacting dropoff
+        &&*/ !(mobj->flags & MF_NOGRAVITY)  // Only objects which fall
+        && mobj->flags & MF_CORPSE)         // [JN] And only for corpses
+        P_ApplyTorque(mobj);                // Apply torque
+        else
+        mobj->intflags &= ~MIF_FALLING, mobj->gear = 0;  // Reset torque
+    }
+    
 //
 // cycle through states, calling action functions at transitions
 //

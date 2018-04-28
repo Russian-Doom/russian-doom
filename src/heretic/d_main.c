@@ -784,30 +784,32 @@ void D_BindVariables(void)
     M_BindIntVariable("music_volume",           &snd_MusicVolume);
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_Channels);
-//  M_BindIntVariable("vanilla_savegame_limit", &vanilla_savegame_limit);
-//  M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
     M_BindIntVariable("show_endoom",            &show_endoom);
     M_BindIntVariable("graphical_startup",      &graphical_startup);
     M_BindIntVariable("mlook",                  &mlook);
 
     // [JN] Дополнительные параметры игры
 
-    // - Оптимизация игровой палитры -
-    M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);		// Оптимизация палитры
+    // Оптимизация игровой палитры
+    M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);
 
-    // - Интерфейс -
-    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);   // Элементы меню и тексты отбрасывают тень
-    // - Графика -
-    M_BindIntVariable("brightmaps",             &brightmaps);           // Брайтмаппинг текстур и спрайтов
-    M_BindIntVariable("fake_contrast",          &fake_contrast);        // Имитация контрастного освещения стен
-    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses); // Произвольное зеркальное отражение трупов
-    M_BindIntVariable("invul_sky",              &invul_sky);            // Неуязвимость окрашивает небо
-    // - Геймплей -
-    M_BindIntVariable("automap_stats",          &automap_stats);        // Отображать статистику уровня на карте
-    M_BindIntVariable("secret_notification",    &secret_notification);  // Уведомление об обнаружении тайников
-    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);       // Покачивание оружия при стрельбе в движении
-    M_BindIntVariable("flip_levels",            &flip_levels);          // Зеркальное отражение уровней
+    // Графика
+    M_BindIntVariable("brightmaps",             &brightmaps);
+    M_BindIntVariable("fake_contrast",          &fake_contrast);
+    M_BindIntVariable("invul_sky",              &invul_sky);
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
+    
+    // Тактика
+    M_BindIntVariable("automap_stats",          &automap_stats);
+    M_BindIntVariable("secret_notification",    &secret_notification);
 
+    // Физика
+    M_BindIntVariable("torque",                 &torque);
+    M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
+    M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
+    
+    // Геймплей
+    M_BindIntVariable("flip_levels",            &flip_levels);
 
     for (i=0; i<10; ++i)
     {
