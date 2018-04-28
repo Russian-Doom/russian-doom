@@ -447,6 +447,7 @@ void D_BindVariables(void)
 
     // Геймплей
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);           // Исправлять ошибки оригинальных уровней
+    M_BindIntVariable("over_under",             &over_under);               // Игрок может проходить под и над монстрами
     M_BindIntVariable("automap_stats",          &automap_stats);            // Отображать статистику уровня на карте
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении

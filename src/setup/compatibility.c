@@ -55,6 +55,7 @@ int correct_endlevel_sfx = 0;    // Корректный звук завершения уровня
 int play_exit_sfx = 1;           // Проигрывать звук при выходе из игры
 // - Геймплей -
 int fix_map_errors = 1;           // Исправлять ошибки оригинальных уровней
+int over_under = 0;               // Игрок может проходить под и над монстрами
 int automap_stats = 1;            // Отображать статистику уровня на карте
 int secret_notification = 1;      // Уведомление об обнаружении секрета
 int unlimited_lost_souls = 1;     // Элементаль боли без ограничения
@@ -113,6 +114,7 @@ void CompatibilitySettings(void)
 
     TXT_If(gamemission == doom || gamemission == heretic,    TXT_NewSeparator("ѓеймплей")),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("€справлять ошибки оригинальных уровней",          &fix_map_errors)),
+        TXT_If(gamemission == doom,	TXT_NewCheckBox("€грок может проходить под и над монстрами",       &over_under)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Ћтображать статистику уровня на карте",     &automap_stats)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("“ведомление об обнаружении тайников",       &secret_notification)),
         TXT_If(gamemission == doom || gamemission == heretic,	TXT_NewCheckBox("Џокачивание оружия при стрельбе в движении",&weapon_bobbing)),
@@ -158,6 +160,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);     // Корректный звук завершения уровня
     // - Геймплей -
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);           // Исправлять ошибки оригинальных уровней
+    M_BindIntVariable("over_under",             &over_under);               // Игрок может проходить под и над монстрами
     M_BindIntVariable("secret_notification",    &secret_notification);      // Уведомление об обнаружении секрета
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);           // Покачивание оружия при стрельбе в движении
     M_BindIntVariable("new_ouch_face",          &new_ouch_face);            // Корректная формула "Ouch face"

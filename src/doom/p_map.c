@@ -46,6 +46,7 @@
 
 extern int colored_blood;        // [JN] Кровь разных цветов
 extern int crushed_corpses_sfx;  // [JN] Звук раздавливания трупов
+extern int over_under;           // [JN] Игрок может проходить под и над монстрами
 extern int agressive_lost_souls; // [JN] Повышенная агрессивность Потерянных душ
 
 // Spechit overrun magic value.
@@ -316,6 +317,7 @@ boolean PIT_CheckThing (mobj_t* thing)
 {
     fixed_t		blockdist;
     boolean		solid;
+    boolean		unblocking = false;
     int			damage;
 		
     if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE) ))
@@ -337,6 +339,15 @@ boolean PIT_CheckThing (mobj_t* thing)
     // check for skulls slamming into things
     if (tmthing->flags & MF_SKULLFLY)
     {
+        // [crispy] check if attacking skull flies over player
+        if (singleplayer && !vanillaparm && over_under && thing->player)
+        {
+            if (tmthing->z > thing->z + thing->height)
+            {
+            return true;
+            }
+        }
+
 	damage = ((P_Random()%8)+1)*tmthing->info->damage;
 	
 	P_DamageMobj (thing, tmthing, tmthing, damage);
@@ -417,7 +428,53 @@ boolean PIT_CheckThing (mobj_t* thing)
 	return !solid;
     }
 	
-    return !(thing->flags & MF_SOLID);
+    // [crispy] a solid hanging body will allow sufficiently small things underneath it
+    if (singleplayer && !vanillaparm && over_under && 
+        (thing->flags & (MF_SOLID | MF_SPAWNCEILING)) == (MF_SOLID | MF_SPAWNCEILING) &&
+        tmthing->z + tmthing->height <= thing->z)
+    {
+        tmceilingz = thing->z;
+        return true;
+    }
+
+    // [crispy] allow players to walk over/under shootable objects
+    if (singleplayer && !vanillaparm && over_under &&
+        tmthing->player && thing->flags & MF_SHOOTABLE)
+    {
+        if (tmthing->z >= thing->z + thing->height)
+        {
+            // player walks over object
+            tmfloorz = thing->z + thing->height;
+            thing->ceilingz = tmthing->z;
+            return true;
+        }
+        else
+        if (tmthing->z + tmthing->height <= thing->z)
+        {
+            // player walks underneath object
+            tmceilingz = thing->z;
+            thing->floorz = tmthing->z + tmthing->height;
+            return true;
+        }
+
+        // [crispy] check if things are stuck and allow them to move further apart
+        // taken from doomretro/src/p_map.c:319-332
+        if (tmx == tmthing->x && tmy == tmthing->y)
+            unblocking = true;
+        else
+        {
+            fixed_t newdist = P_AproxDistance(thing->x - tmx, thing->y - tmy);
+            fixed_t olddist = P_AproxDistance(thing->x - tmthing->x, thing->y - tmthing->y);
+
+            if (newdist > olddist)
+            {
+                unblocking = (tmthing->z < thing->z + thing->height
+                           && tmthing->z + tmthing->height > thing->z);
+            }
+        }
+    }
+    
+    return !(thing->flags & MF_SOLID) || unblocking;
 }
 
 //
