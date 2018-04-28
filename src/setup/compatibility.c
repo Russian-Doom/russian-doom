@@ -111,13 +111,13 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom, TXT_NewCheckBox("Проигрывать звук при выходе из игры",      &play_exit_sfx)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Корректный звук завершени€ уровн€",        &correct_endlevel_sfx)),
 
-    TXT_NewSeparator("Тактика"),
+    TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator("Тактика")),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Отображать статистику уровн€ на карте",  &automap_stats)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Уведомление об обнаружении тайников",    &secret_notification)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Отображать отрицательное здоровье",                                &negative_health)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Инфразеленый визор усилени€ освещени€",                            &infragreen_visor)),
 
-    TXT_NewSeparator("Физика"),
+    TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator("Физика")),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Игрок может проходить под и над монстрами",                            &over_under)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Покачивание оружи€ при стрельбе в движении", &weapon_bobbing)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Двуствольное ружье может разрывать врагов",                            &ssg_blast_enemies)),
