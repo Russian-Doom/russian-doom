@@ -265,6 +265,7 @@ int infragreen_visor = 0;
 
 // Физика
 int over_under = 0;
+int torque = 1;
 int weapon_bobbing = 1;
 int ssg_blast_enemies = 1;
 int randomly_flipcorpses = 1;

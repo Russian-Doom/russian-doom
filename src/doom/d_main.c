@@ -447,6 +447,7 @@ void D_BindVariables(void)
 
     // Физика
     M_BindIntVariable("over_under",             &over_under);
+    M_BindIntVariable("torque",                 &torque);
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);

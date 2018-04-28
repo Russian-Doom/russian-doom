@@ -123,6 +123,7 @@ static void SensibleDefaults(void)
 
     // Физика
     over_under = 0;
+    torque = 1;
     weapon_bobbing = 1;
     ssg_blast_enemies = 1;
     randomly_flipcorpses = 1;

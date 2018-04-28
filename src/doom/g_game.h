@@ -110,6 +110,7 @@ extern int infragreen_visor;
 
 // Физика
 extern int over_under;
+extern int torque;
 extern int weapon_bobbing;
 extern int ssg_blast_enemies;
 extern int randomly_flipcorpses;

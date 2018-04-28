@@ -55,6 +55,7 @@ int infragreen_visor = 0;
 
 // ‘изика
 int over_under = 0;
+int torque = 1;
 int weapon_bobbing = 1;
 int ssg_blast_enemies = 1;
 int randomly_flipcorpses = 1;
@@ -119,6 +120,7 @@ void CompatibilitySettings(void)
 
     TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator("Физика")),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Игрок может проходить под и над монстрами",                            &over_under)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Трупы соскальзывают с выступов и обрывов",                             &torque)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Покачивание оружи€ при стрельбе в движении", &weapon_bobbing)),
         TXT_If(gamemission == doom, TXT_NewCheckBox("Двуствольное ружье может разрывать врагов",                            &ssg_blast_enemies)),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Произвольное зеркальное отражение трупов",   &randomly_flipcorpses)),
@@ -170,6 +172,7 @@ void BindCompatibilityVariables(void)
 
     // ‘изика
     M_BindIntVariable("over_under",             &over_under);
+    M_BindIntVariable("torque",                 &torque);
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);

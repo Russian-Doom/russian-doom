@@ -1736,6 +1736,7 @@ static default_t extra_defaults_list[] =
 
     // Физика
     CONFIG_VARIABLE_INT(over_under),
+    CONFIG_VARIABLE_INT(torque),
     CONFIG_VARIABLE_INT(weapon_bobbing),
     CONFIG_VARIABLE_INT(ssg_blast_enemies),
     CONFIG_VARIABLE_INT(randomly_flipcorpses),

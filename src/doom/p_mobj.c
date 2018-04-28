@@ -43,10 +43,12 @@ void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);
 
 extern int mlook;
-extern int floating_powerups;       // [JN] Левитирующие сферы-артефакты
-extern int colored_blood;           // [JN] Кровь разных цветов
-extern int red_resurrection_flash;  // [JN] Одиночный звук закрытия быстрой двери
-extern int agressive_lost_souls;    // [JN] Повышенная агрессивность Потерянных душ
+extern int colored_blood;
+extern int red_resurrection_flash;
+extern int torque;
+extern int floating_powerups;
+extern int agressive_lost_souls;
+
 
 // [JN] Floating amplitude LUT.
 // Initial values are from Heretic, but divided by 3.
@@ -631,7 +633,7 @@ void P_MobjThinker (mobj_t* mobj)
     
 	// killough 9/12/98: objects fall off ledges if they are hanging off
 	// slightly push off of ledge if hanging more than halfway off
-    if (singleplayer)
+    if (singleplayer && !vanillaparm && torque)
     {
         if (mobj->z > mobj->dropoffz        // Only objects contacting dropoff
         && !(mobj->flags & MF_NOGRAVITY)    // Only objects which fall
