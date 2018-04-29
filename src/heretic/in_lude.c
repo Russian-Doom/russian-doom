@@ -159,10 +159,10 @@ extern void AM_Stop(void);
 
 void IN_Start(void)
 {
-    if (lcd_gamma_fix)
-        I_SetPalette(W_CacheLumpName(DEH_String("PALFIX"), PU_CACHE));
-    else
-        I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+    I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 16 ?
+                                            "PALFIX" :
+                                            "PLAYPAL"),
+                                            PU_CACHE));
     IN_LoadPics();
     IN_InitStats();
     intermission = true;

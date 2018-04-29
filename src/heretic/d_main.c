@@ -94,7 +94,6 @@ void D_PageDrawer(void);
 void D_AdvanceDemo(void);
 boolean F_Responder(event_t * ev);
 
-int lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Heretic
 int draw_shadowed_text;     // [JN] Элементы меню и тексты отбрасывают тень
 
 //---------------------------------------------------------------------------
@@ -156,6 +155,15 @@ extern boolean finalestage;
 void D_Display(void)
 {
     extern boolean askforquit;
+
+    // [JN] Set correct palette. Allow finale stages use own palettes.
+    if (gamestate != GS_LEVEL && !finalestage)
+    {
+        I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 16 ?
+                                                "PALFIX" :
+                                                "PLAYPAL"),
+                                                PU_CACHE));
+    }
 
     // Change the view size if needed
     if (setsizeneeded)
@@ -789,9 +797,6 @@ void D_BindVariables(void)
     M_BindIntVariable("mlook",                  &mlook);
 
     // [JN] Дополнительные параметры игры
-
-    // Оптимизация игровой палитры
-    M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);
 
     // Графика
     M_BindIntVariable("brightmaps",             &brightmaps);

@@ -319,7 +319,15 @@ static char *GammaText[] = {
     TXT_GAMMA_LEVEL_3_25,
     TXT_GAMMA_LEVEL_3_50,
     TXT_GAMMA_LEVEL_3_75,
-    TXT_GAMMA_LEVEL_4_0
+    TXT_GAMMA_LEVEL_4_0,
+    TXT_GAMMA_LEVEL_4_25,
+    TXT_GAMMA_LEVEL_4_50,
+    TXT_GAMMA_LEVEL_4_75,
+    TXT_GAMMA_LEVEL_5_0,
+    TXT_GAMMA_LEVEL_5_25,
+    TXT_GAMMA_LEVEL_5_50,
+    TXT_GAMMA_LEVEL_5_75,
+    TXT_GAMMA_LEVEL_6_0
 };
 
 //---------------------------------------------------------------------------
@@ -1182,10 +1190,10 @@ boolean MN_Responder(event_t * event)
                     //set the msg to be cleared
                     players[consoleplayer].message = NULL;
                     paused = false;
-                    if (lcd_gamma_fix)
-                        I_SetPalette(W_CacheLumpName ("PALFIX", PU_CACHE));
-                    else
-                        I_SetPalette(W_CacheLumpName ("PLAYPAL", PU_CACHE));
+                    I_SetPalette(W_CacheLumpName (usegamma <= 16 ?
+                                                  "PALFIX" :
+                                                  "PLAYPAL",
+                                                  PU_CACHE));
                     D_StartTitle();     // go to intro/demo mode.
                     break;
 
@@ -1407,15 +1415,15 @@ boolean MN_Responder(event_t * event)
         else if (key == key_menu_gamma)           // F11 (gamma correction)
         {
             usegamma++;
-            if (usegamma > 16)
+            if (usegamma > 24)
             {
                 usegamma = 0;
             }
-            if (lcd_gamma_fix)
-                I_SetPalette((byte *) W_CacheLumpName("PALFIX", PU_CACHE));
-            else
-                I_SetPalette((byte *) W_CacheLumpName("PLAYPAL", PU_CACHE));
-            
+            I_SetPalette((byte *) W_CacheLumpName(usegamma <= 16 ?
+                                                  "PALFIX" :
+                                                  "PLAYPAL",
+                                                  PU_CACHE));
+
             P_SetMessage(&players[consoleplayer], GammaText[usegamma], false);
             return true;
         }
@@ -1708,10 +1716,11 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-    if (lcd_gamma_fix)
-        I_SetPalette(W_CacheLumpName("PALFIX", PU_CACHE));
-    else
-        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+    I_SetPalette(W_CacheLumpName(usegamma <= 16 ?
+                                 "PALFIX" :
+                                 "PLAYPAL",
+                                 PU_CACHE));
+
     V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("TITLE") + InfoType,
                                    PU_CACHE));
 //      V_DrawPatch(0, 0, W_CacheLumpNum(W_GetNumForName("TITLE")+InfoType,

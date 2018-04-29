@@ -405,10 +405,10 @@ void P_DeathThink(player_t * player)
     {
         if (player == &players[consoleplayer])
         {
-            if (lcd_gamma_fix)
-                I_SetPalette(W_CacheLumpName(DEH_String("PALFIX"), PU_CACHE));
-            else
-                I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+            I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 16 ?
+                                                    "PALFIX" :
+                                                    "PLAYPAL"),
+                                                    PU_CACHE));
             inv_ptr = 0;
             curpos = 0;
             newtorch = 0;
