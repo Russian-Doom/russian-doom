@@ -134,7 +134,6 @@ char mapdir[1024];   // directory of development maps
 
 int show_endoom   = 0;
 int show_diskicon = 1;
-int lcd_gamma_fix = 1; // [JN] Оптимизация палитры Doom
 int translucency  = 1; // [JN] Прозрачность объектов
 int local_time    = 0; // [JN] Local time widget
 
@@ -279,10 +278,10 @@ void D_Display (void)
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
     {
-        if (lcd_gamma_fix)
-        I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
-        else
-        I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+        I_SetPalette (W_CacheLumpName (usegamma <= 16 ? 
+                                       DEH_String("PALFIX") : 
+                                       DEH_String("PLAYPAL"), 
+                                       PU_CACHE));
     }
 
     // see if the border needs to be initially drawn
@@ -420,9 +419,6 @@ void D_BindVariables(void)
 
     // [JN] Дополнительные параметры игры
     
-    // Оптимизация игровой палитры
-    M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);            // Оптимизация игровой палитры
-
     // Графика
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);

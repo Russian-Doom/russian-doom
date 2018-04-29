@@ -114,6 +114,14 @@
 #define GAMMALV35   "ehjdtym ufvvf-rjhhtrwbb 3>50"    // Уровень гамма-коррекции 3.50
 #define GAMMALV37   "ehjdtym ufvvf-rjhhtrwbb 3>75"    // Уровень гамма-коррекции 3.75
 #define GAMMALVL4   "ehjdtym ufvvf-rjhhtrwbb 4>0"     // Уровень гамма-коррекции 4.0
+#define GAMMALV42   "ehjdtym ufvvf-rjhhtrwbb 4>25"    // Уровень гамма-коррекции 4.25
+#define GAMMALV45   "ehjdtym ufvvf-rjhhtrwbb 4>50"    // Уровень гамма-коррекции 4.50
+#define GAMMALV47   "ehjdtym ufvvf-rjhhtrwbb 4>75"    // Уровень гамма-коррекции 4.75
+#define GAMMALVL5   "ehjdtym ufvvf-rjhhtrwbb 5>0"     // Уровень гамма-коррекции 5.0
+#define GAMMALV52   "ehjdtym ufvvf-rjhhtrwbb 5>25"    // Уровень гамма-коррекции 5.25
+#define GAMMALV55   "ehjdtym ufvvf-rjhhtrwbb 5>50"    // Уровень гамма-коррекции 5.50
+#define GAMMALV57   "ehjdtym ufvvf-rjhhtrwbb 5>75"    // Уровень гамма-коррекции 5.75
+#define GAMMALVL6   "ehjdtym ufvvf-rjhhtrwbb 6>0"     // Уровень гамма-коррекции 6.0
 
 #define EMPTYSTRING "gecnjq ckjn"               // Пустой слот
 #define SECRETFOUND "j,yfhe;ty nfqybr!"         // Обнаружен тайник!

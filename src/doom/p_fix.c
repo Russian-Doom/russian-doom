@@ -3973,6 +3973,7 @@ sectorfix_t sectorfix[] =
     { pack_plut,        1,  20,    125, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,  20,    128, "FLOOR7_1","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,  20,    144, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_plut,        1,  20,    164, "",        "FLAT5_4", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,  20,    177, "FLOOR7_1","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,  20,    183, "",        "CRATOP2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_plut,        1,  20,    189, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },

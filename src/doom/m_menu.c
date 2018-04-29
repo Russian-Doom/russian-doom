@@ -104,7 +104,7 @@ boolean QuickSaveTitle;
 
 void (*messageRoutine)(int response);
 
-char gammamsg[17][29] =
+char gammamsg[25][29] =
 {
     GAMMALVL0,
     GAMMALV02,
@@ -122,7 +122,15 @@ char gammamsg[17][29] =
     GAMMALV32,
     GAMMALV35,
     GAMMALV37,
-    GAMMALVL4
+    GAMMALVL4,
+    GAMMALV42,
+    GAMMALV45,
+    GAMMALV47,
+    GAMMALVL5,
+    GAMMALV52,
+    GAMMALV55,
+    GAMMALV57,
+    GAMMALVL6
 };
 
 // we are going to be entering a savegame string
@@ -1887,15 +1895,15 @@ boolean M_Responder (event_t* ev)
         else if (key == key_menu_gamma)    // gamma toggle
         {
             usegamma++;
-            if (usegamma > 16)
+            if (usegamma > 24)
                 usegamma = 0;
             
             players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
+            I_SetPalette ((byte *)W_CacheLumpName (usegamma <= 16 ?
+                                                   DEH_String("PALFIX") :
+                                                   DEH_String("PLAYPAL"),
+                                                   PU_CACHE) + st_palette * 768);
 
-            if (lcd_gamma_fix)
-                I_SetPalette ((byte *)W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE)+st_palette*768);
-            else
-                I_SetPalette ((byte *)W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE)+st_palette*768);
             return true;
         }
         else if (key == key_toggletime)    // [JN] Toggling of local time widget

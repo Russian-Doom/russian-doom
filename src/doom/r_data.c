@@ -840,9 +840,10 @@ void R_InitTranMap()
     // else
     {   
         // Compose a default transparent filter map based on PLAYPAL.
-        unsigned char *playpal = lcd_gamma_fix ?
-                                 W_CacheLumpName("PALFIX", PU_STATIC) :
-                                 W_CacheLumpName("PLAYPAL", PU_STATIC);
+        unsigned char *playpal = (W_CacheLumpName (usegamma <= 16 ? 
+                                                   "PALFIX" :
+                                                   "PLAYPAL",
+                                                   PU_STATIC));
 
         long pal[3][256], tot[256], pal_w1[3][256];
         long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
