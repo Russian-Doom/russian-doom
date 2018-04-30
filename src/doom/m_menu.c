@@ -1120,10 +1120,9 @@ void M_DrawOptions(void)
     V_DrawShadowedPatchDoom(OptionsDef.x + 120, OptionsDef.y + LINEHEIGHT * messages,
         W_CacheLumpName(DEH_String(msgNames[showMessages]), PU_CACHE));
 
-    // [JN] Размер ползунка скорости мыши. Изначальное значение: 10.
-    M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1), 12, mouseSensitivity);
+    M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1), 13, mouseSensitivity);
 
-    M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1), 11,screenSize);
+    M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1), 12,screenSize);
 }
 
 void M_Options(int choice)
@@ -1377,8 +1376,8 @@ M_DrawThermo
     V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
 
     // [JN] from Crispy Doom: also draw numerical representation of slider position.
-    // Also don't draw it for "Screen size" slider, which is a 10 units in width.
-    if (thermWidth > 11)
+    // Also don't draw it for "Screen size" slider, which is a 11 units in width.
+    if (thermWidth > 12)
     {
         M_snprintf(num, 4, "%3d", thermDot);
         M_WriteText(xx + 8, y + 3, num);
