@@ -1253,7 +1253,7 @@ void ST_drawWidgets(boolean refresh)
     STlib_updateNum(&w_ready, refresh);
 
     // [crispy] draw "special widgets" in the Crispy HUD
-    if ((screenblocks == 11 || screenblocks == 12) && !automapactive)
+    if ((screenblocks == 11 || screenblocks == 12 || screenblocks == 13) && !automapactive)
     {
         // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
@@ -1285,8 +1285,17 @@ void ST_drawWidgets(boolean refresh)
 	STlib_updateNum(&w_maxammo[i], refresh);
     }
 
-    // [JN] Signed Crispy HUD
+    // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
     if (screenblocks == 11)
+    {
+        if (netgame)    // [JN] Account player's color in network game
+        V_DrawPatch(ST_FX, 0, BG, faceback);
+        else            // [JN] Use only gray color in single player
+        V_DrawPatchDirect(ST_FX, ST_FY, 0, W_CacheLumpName("STFB1", PU_CACHE));
+    }
+
+    // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
+    if (screenblocks == 11 || screenblocks == 12)
     {
         if (!automapactive) // [JN] Don't draw these patches again in standard HUD while activated automap
         {
@@ -1300,9 +1309,9 @@ void ST_drawWidgets(boolean refresh)
             || plyr->readyweapon == wp_bfg)
             V_DrawPatchDirect(2, 191, 0, W_CacheLumpName("STCHAMMO", PU_CACHE));
 
-            if (deathmatch) // [JN] Frags (孜把忘忍我)
+            if (deathmatch) // [JN] Frags
                 V_DrawPatchDirect(108, 191, 0, W_CacheLumpName("STCHFRGS", PU_CACHE));
-            else            // [JN] Arms (妍把批忪我快)
+            else            // [JN] Arms
                 V_DrawPatchDirect(108, 191, 0, W_CacheLumpName("STCHARMS", PU_CACHE));
 
             // [JN] Health, armor, list of ammo
@@ -1317,32 +1326,32 @@ void ST_drawWidgets(boolean refresh)
         V_DrawPatchDirect(292, 173, 0, W_CacheLumpName("STYSSLSH", PU_CACHE));
     }
 
-    // [JN] Exclusive Crispy HUD
-    if (screenblocks == 12)
+    // [JN] Traditional Crispy HUD
+    if (screenblocks == 13)
     {
-        // [JN] Only yellow slashes in Exclusive HUD. The logics same as above.
+        // [JN] Only yellow slashes in Traditional HUD. The logics same as above.
         if (automapactive)
         V_DrawPatch(292, 173, 0, W_CacheLumpName("STYSSLSH", PU_CACHE));
         else
         V_DrawPatchDirect(292, 173, 0, W_CacheLumpName("STYSSLSH", PU_CACHE));
     }
 
-    STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12);
-    STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12);
+    STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
     if (screenblocks < 11 || automapactive)
     STlib_updateBinIcon(&w_armsbg, refresh);
 
     for (i=0;i<6;i++)
-	STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
+	STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
-    if (screenblocks < 11 || automapactive)
-	STlib_updateMultIcon(&w_faces, refresh);
+    if (screenblocks < 12 || automapactive)
+	STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11);
 
     for (i=0;i<3;i++)
-	STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12);
+	STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
-    STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12);
+    STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
 }
 

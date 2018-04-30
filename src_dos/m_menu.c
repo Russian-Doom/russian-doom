@@ -1067,11 +1067,11 @@ void M_DrawOptions(void)
 		       W_CacheLumpName(msgNames[showMessages],PU_CACHE));
 
     M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(mousesens+1),
-		 10,mouseSensitivity);
+		 12,mouseSensitivity);
 	
-    // [JN] Initially 9. Two new screen sizes for Crispy HUDs.
+    // [JN] Initially 9. Three new screen sizes for Crispy HUDs.
     M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1),
-		 11,screenSize);
+		 12,screenSize);
 }
 
 void M_Options(int choice)
@@ -1282,8 +1282,8 @@ void M_SizeDisplay(int choice)
 	}
 	break;
       case 1:
-    // [JN] Initially 8. Two new screen sizes for Crispy HUDs.
-	if (screenSize < 10)
+    // [JN] Initially 8. Three new screen sizes for Crispy HUDs.
+	if (screenSize < 11)
 	{
 	    screenblocks++;
 	    screenSize++;

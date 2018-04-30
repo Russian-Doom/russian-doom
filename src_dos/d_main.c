@@ -279,8 +279,8 @@ void D_Display (void)
     {
     R_RenderPlayerView (&players[displayplayer]);
 
-    // [JN] Make HUD calculations while active Crispy HUDs
-    if (screenblocks == 11 || screenblocks == 12)
+    // [JN] Make HUD calculations for active Crispy HUDs
+    if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
         ST_Drawer(0, 0);
     }
 
