@@ -1897,13 +1897,13 @@ boolean M_Responder (event_t* ev)
             usegamma++;
             if (usegamma > 24)
                 usegamma = 0;
-            
-            players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
+
             I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 16 ?
                                                              "PALFIX" :
                                                              "PLAYPAL"),
                                                              PU_CACHE) + 
                                                              st_palette * 768);
+            players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
             return true;
         }
         else if (key == key_toggletime)    // [JN] Toggling of local time widget
