@@ -1336,7 +1336,7 @@ void M_SizeDisplay(int choice)
         break;
 
         case 1:
-        if (screenSize < 10)
+        if (screenSize < 11)
         {
             screenblocks++;
             screenSize++;

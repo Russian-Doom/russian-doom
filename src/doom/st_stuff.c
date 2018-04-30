@@ -1405,7 +1405,7 @@ void ST_drawWidgets(boolean refresh)
     STlib_updateNum(&w_ready, refresh);
 
     // [crispy] draw "special widgets" in the Crispy HUD
-    if ((screenblocks == 11 || screenblocks == 12) && !automapactive)
+    if ((screenblocks == 11 || screenblocks == 12 || screenblocks == 13) && !automapactive)
     {
         // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
@@ -1436,39 +1436,48 @@ void ST_drawWidgets(boolean refresh)
         STlib_updateNum(&w_maxammo[i], refresh);
     }
 
-    // [JN] Crispy HUD с подписями
+    // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
     if (screenblocks == 11)
     {
-        if (!automapactive) // [JN] Не нужно рисовать эти патчи на карте
+        if (netgame)    // [JN] Account player's color in network game
+        V_DrawPatch(ST_FX, ST_FY, faceback);
+        else            // [JN] Use only gray color in single player
+        V_DrawPatchDirect(ST_FX, ST_FY, W_CacheLumpName(DEH_String("STFB1"), PU_CACHE));
+    }
+    
+    // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
+    if (screenblocks == 11 || screenblocks == 12)
+    {
+        if (!automapactive) // [JN] Don't draw signs in automap
         {
-            // [JN] Не отображать "патроны" для кулака и бензопилы.
-            if (plyr->readyweapon == wp_pistol ||
-            plyr->readyweapon == wp_shotgun ||
-            plyr->readyweapon == wp_supershotgun ||
-            plyr->readyweapon == wp_chaingun ||
-            plyr->readyweapon == wp_missile ||
-            plyr->readyweapon == wp_plasma ||
-            plyr->readyweapon == wp_bfg)
+            // [JN] Don't draw ammo for fist and chainsaw
+            if (plyr->readyweapon == wp_pistol
+             || plyr->readyweapon == wp_shotgun
+             || plyr->readyweapon == wp_supershotgun
+             || plyr->readyweapon == wp_chaingun
+             || plyr->readyweapon == wp_missile
+             || plyr->readyweapon == wp_plasma
+             || plyr->readyweapon == wp_bfg)
                 V_DrawPatchDirect(2, 191, W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
 
-            if (deathmatch) // [JN] Фраги
-                V_DrawPatchDirect(108, 191, W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
-            else // [JN] Оружие
-                V_DrawPatchDirect(108, 191, W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
+            if (deathmatch) // [JN] Frags
+            V_DrawPatchDirect(108, 191, W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
+            else            // [JN] Arms
+            V_DrawPatchDirect(108, 191, W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
 
-            // [JN] Здоровье, броня, перечисление патронов.
+            // [JN] Health, armor, ammo
             V_DrawPatchDirect(52, 173, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
         }
 
         V_DrawPatchDirect(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
     }
 
-    // [JN] Традиционный Crispy HUD
-    if (screenblocks == 12)
+    // [JN] Traditional Crispy HUD
+    if (screenblocks == 13)
     V_DrawPatchDirect(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
 
-    STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12);
-    STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12);
+    STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
     // [JN] Don't update/draw ARMS background in Press Beta
     if ((screenblocks < 11 || automapactive) && gamemode != pressbeta)
@@ -1478,16 +1487,16 @@ void ST_drawWidgets(boolean refresh)
     if (gamemode != pressbeta)
     {
     for (i=0;i<6;i++)
-    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
+    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
     }
 
-    if (screenblocks < 11 || automapactive)
-    STlib_updateMultIcon(&w_faces, refresh);
+    if (screenblocks < 12 || automapactive)
+    STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11);
 
     for (i=0;i<3;i++)
-    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12);
+    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
-    STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12);
+    STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
     
     // [JN] Press Beta: some special routine. I need to draw Artifacts widet while not in
     // automap and Arms widget while in automap. Plus, background must be redrawn immediately.
@@ -1497,15 +1506,15 @@ void ST_drawWidgets(boolean refresh)
         if (!automapactive)
         {
             // [JN] Draw Artifacts widet
-            STlib_updateNum(&w_artifacts, refresh || screenblocks == 11 || screenblocks == 12);
+            STlib_updateNum(&w_artifacts, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
         }
         else
         {
             // [JN] Draw Arms widet. Background (w_armsbg) and numbers (w_arms)
-            STlib_updateBinIcon(&w_armsbg, refresh || screenblocks == 11 || screenblocks == 12);
+            STlib_updateBinIcon(&w_armsbg, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
             for (i=0;i<6;i++)
-            STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12);
+            STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
         }
 
         // [JN] Draw player's life widget only in traditional HUD and automap

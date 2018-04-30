@@ -268,7 +268,7 @@ void D_Display (void)
     {
         R_RenderPlayerView (&players[displayplayer]);
 
-        if (screenblocks == 11 || screenblocks == 12)
+        if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
         ST_Drawer(0, 0);
     }
 
