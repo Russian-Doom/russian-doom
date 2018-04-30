@@ -244,7 +244,6 @@ static void TextWrite(void)
 
 static void InitializeFade(boolean fadeIn)
 {
-    // [JN] TODO: Fading not working
     unsigned i;
 
     Palette = Z_Malloc(768 * sizeof(fixed_t), PU_STATIC, 0);

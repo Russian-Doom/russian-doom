@@ -894,8 +894,8 @@ void H2_ProcessEvents(void)
 
 static void DrawAndBlit(void)
 {
-    // [JN] Set correct palette
-    if (gamestate != GS_LEVEL)
+    // [JN] Set correct palette. Allow finale stages choose palettes.
+    if (gamestate != GS_LEVEL && gamestate != GS_FINALE)
     {
         I_SetPalette(W_CacheLumpName(usegamma <= 16 ?
                                     "PALFIX" :
