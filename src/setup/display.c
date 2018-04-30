@@ -84,9 +84,6 @@ int graphical_startup = 0; // [JN] Disabled by default
 int show_endoom = 0;
 int png_screenshots = 1;   // [JN] Crispy!
 
-// [JN] Корректор контрастности
-int lcd_gamma_fix = 1;
-
 static int system_video_env_set;
 
 // Set the SDL_VIDEODRIVER environment variable
@@ -206,13 +203,6 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
         TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
             TXT_NewCheckBox("Џоказывать экран ENDOOM при выходе", &show_endoom)),
             
-
-    // [JN] Мой корректор контрастности
-
-    TXT_NewSeparator("ѓамма-коррекция"), 
-    TXT_If(gamemission == doom || gamemission == heretic || gamemission == hexen || gamemission == strife, 
-        TXT_NewCheckBox("Ћптимизация игровой палитры", &lcd_gamma_fix)),
-
     // [JN] Экспериментальные функции
 
     TXT_NewSeparator("ђендеринг"),
@@ -300,13 +290,6 @@ void BindDisplayVariables(void)
      || gamemission == strife)
     {
         M_BindIntVariable("show_endoom",           &show_endoom);
-    }
-
-	// [JN] Корректор контрастности
-
-	if (gamemission == doom || gamemission == heretic || gamemission == hexen)
-    {
-        M_BindIntVariable("lcd_gamma_fix",         &lcd_gamma_fix);
     }
 
     if (gamemission == heretic || gamemission == hexen || gamemission == strife)

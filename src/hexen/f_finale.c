@@ -244,6 +244,7 @@ static void TextWrite(void)
 
 static void InitializeFade(boolean fadeIn)
 {
+    // [JN] TODO: Fading not working
     unsigned i;
 
     Palette = Z_Malloc(768 * sizeof(fixed_t), PU_STATIC, 0);
@@ -261,10 +262,10 @@ static void InitializeFade(boolean fadeIn)
                                                                    "PLAYPAL",
                                                                    PU_CACHE) + i)) << FRACBITS, 
                                                                    70 * FRACUNIT);
-            I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 16 ?
-                                            "PALFIX" :
-                                            "PLAYPAL"),
-                                            PU_CACHE));
+            I_SetPalette(W_CacheLumpName(usegamma <= 16 ?
+                                        "PALFIX" :
+                                        "PLAYPAL",
+                                        PU_CACHE));
         }
     }
     else

@@ -53,8 +53,6 @@
 #include "crispy.h"
 
 
-int lcd_gamma_fix;
-
 // These are (1) the window (or the full screen) that our game is rendered to
 // and (2) the renderer that scales the texture (see below) into this window.
 
@@ -1250,7 +1248,8 @@ static void SetVideoMode(void)
 void I_InitGraphics(void)
 {
     SDL_Event dummy;
-    byte *doompal;
+    byte *doompal1;
+    byte *doompal2;
     char *env;
 
     // Pass through the XSCREENSAVER_WINDOW environment variable to 
@@ -1305,11 +1304,10 @@ void I_InitGraphics(void)
 
     // Set the palette
 
-    if (lcd_gamma_fix)
-        doompal = W_CacheLumpName(DEH_String("PALFIX"), PU_CACHE);
-    else
-        doompal = W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE);
-    I_SetPalette(doompal);
+    doompal1 = W_CacheLumpName(DEH_String("PALFIX"), PU_CACHE);
+    doompal2 = W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE);
+    I_SetPalette(usegamma <= 16 ? doompal1 : doompal2);
+
     SDL_SetPaletteColors(screenbuffer->format->palette, palette, 0, 256);
 
     // SDL2-TODO UpdateFocus();

@@ -67,7 +67,6 @@ int dirtybox[4];
 // This is needed for Chocolate Strife, which clips patches to the screen.
 static vpatchclipfunc_t patchclip_callback = NULL;
 
-extern int lcd_gamma_fix;
 extern int draw_shadowed_text;
 int vanillaparm;
 
@@ -1356,18 +1355,12 @@ void V_ScreenShot(char *format)
 #endif
     {
     // save the pcx file
-    if (lcd_gamma_fix)
-    {
-        WritePCXfile(lbmname, I_VideoBuffer,
-                    SCREENWIDTH, SCREENHEIGHT,
-                    W_CacheLumpName (DEH_String("PALFIX"), PU_CACHE));
-    }
-    else
-    {
-        WritePCXfile(lbmname, I_VideoBuffer,
-                    SCREENWIDTH, SCREENHEIGHT,
-                    W_CacheLumpName (DEH_String("PLAYPAL"), PU_CACHE));
-    }
+    WritePCXfile(lbmname, I_VideoBuffer,
+                SCREENWIDTH, SCREENHEIGHT,
+                W_CacheLumpName (DEH_String(usegamma <= 16 ? 
+                                            "PALFIX" :
+                                            "PLAYPAL"),
+                                            PU_CACHE));
     }
 }
 

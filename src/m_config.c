@@ -1708,9 +1708,6 @@ static default_t extra_defaults_list[] =
     // [JN] Дополнительные параметры игры
     //
 
-    // Оптимизация игровой палитры
-    CONFIG_VARIABLE_INT(lcd_gamma_fix),
-
     // Графика
     CONFIG_VARIABLE_INT(brightmaps),
     CONFIG_VARIABLE_INT(fake_contrast),
