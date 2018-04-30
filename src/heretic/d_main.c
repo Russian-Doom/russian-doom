@@ -157,7 +157,7 @@ void D_Display(void)
     extern boolean askforquit;
 
     // [JN] Set correct palette. Allow finale stages use own palettes.
-    if (gamestate != GS_LEVEL && !finalestage)
+    if (gamestate != GS_LEVEL && gamestate != GS_FINALE)
     {
         I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 16 ?
                                                 "PALFIX" :
