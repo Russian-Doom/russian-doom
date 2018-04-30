@@ -41,6 +41,14 @@
 #define TXT_GAMMA_LEVEL_3_50     "EHJDTYM UFVVF-RJHHTRWBB 3>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.50
 #define TXT_GAMMA_LEVEL_3_75     "EHJDTYM UFVVF-RJHHTRWBB 3>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.75
 #define TXT_GAMMA_LEVEL_4_0      "EHJDTYM UFVVF-RJHHTRWBB 4>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.0
+#define TXT_GAMMA_LEVEL_4_25     "EHJDTYM UFVVF-RJHHTRWBB 4>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.25
+#define TXT_GAMMA_LEVEL_4_50     "EHJDTYM UFVVF-RJHHTRWBB 4>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.50
+#define TXT_GAMMA_LEVEL_4_75     "EHJDTYM UFVVF-RJHHTRWBB 4>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.75
+#define TXT_GAMMA_LEVEL_5_0      "EHJDTYM UFVVF-RJHHTRWBB 5>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.0
+#define TXT_GAMMA_LEVEL_5_25     "EHJDTYM UFVVF-RJHHTRWBB 5>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.25
+#define TXT_GAMMA_LEVEL_5_50     "EHJDTYM UFVVF-RJHHTRWBB 5>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.50
+#define TXT_GAMMA_LEVEL_5_75     "EHJDTYM UFVVF-RJHHTRWBB 5>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.75
+#define TXT_GAMMA_LEVEL_6_0      "EHJDTYM UFVVF-RJHHTRWBB 6>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 6.0
 
 #define	EMPTYSTRING             "GECNJQ CKJN"                       // ПУСТОЙ СЛОТ
 

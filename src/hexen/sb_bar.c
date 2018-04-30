@@ -112,7 +112,10 @@ static int SpinSpeedLump;
 static int SpinDefenseLump;
 
 static int FontBNumBase;
-static int PlayPalette;
+
+// [JN] lumps for PALFIX (1) and PLAYPAL (2)
+static int PlayPalette1;
+static int PlayPalette2;
 
 static patch_t *PatchH2BAR;
 static patch_t *PatchH2TOP;
@@ -303,10 +306,8 @@ void SB_Init(void)
     {
         PatchSmNumbers[i] = W_CacheLumpNum(startLump + i, PU_STATIC);
     }
-    if (lcd_gamma_fix)
-        PlayPalette = W_GetNumForName("PALFIX");
-    else
-        PlayPalette = W_GetNumForName("PLAYPAL");
+    PlayPalette1 = W_GetNumForName("PALFIX");
+    PlayPalette2 = W_GetNumForName("PLAYPAL");
     SpinFlylump = W_GetNumForName("SPFLY0");
     SpinMinotaurLump = W_GetNumForName("SPMINO0");
     SpinSpeedLump = W_GetNumForName("SPBOOT0");
@@ -992,7 +993,10 @@ void SB_PaletteFlash(boolean forceChange)
     if (palette != sb_palette)
     {
         sb_palette = palette;
-        pal = (byte *) W_CacheLumpNum(PlayPalette, PU_CACHE) + palette * 768;
+        pal = (byte *) W_CacheLumpNum(usegamma <= 16 ?
+                                      PlayPalette1 :
+                                      PlayPalette2,
+                                      PU_CACHE) + palette * 768;
         I_SetPalette(pal);
     }
 }

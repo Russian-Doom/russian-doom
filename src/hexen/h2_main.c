@@ -127,8 +127,6 @@ static int demosequence;
 static int pagetic;
 static char *pagename;
 
-int lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Hexen
-
 
 // [JN] Дополнительные параметры игры
 
@@ -183,11 +181,8 @@ void D_BindVariables(void)
 //  M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
     M_BindIntVariable("mlook",                  &mlook);
 
-
     // [JN] Дополнительные параметры игры
 
-    // Оптимизация палитры
-	M_BindIntVariable("lcd_gamma_fix",          &lcd_gamma_fix);
     // - Интерфейс -
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);   // Элементы меню и тексты отбрасывают тень
     // - Графика -
@@ -899,6 +894,15 @@ void H2_ProcessEvents(void)
 
 static void DrawAndBlit(void)
 {
+    // [JN] Set correct palette
+    if (gamestate != GS_LEVEL)
+    {
+        I_SetPalette(W_CacheLumpName(usegamma <= 16 ?
+                                    "PALFIX" :
+                                    "PLAYPAL",
+                                    PU_CACHE));
+    }
+
     // Change the view size if needed
     if (setsizeneeded)
     {

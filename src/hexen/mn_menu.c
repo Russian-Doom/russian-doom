@@ -318,7 +318,15 @@ static char *GammaText[] = {
     TXT_GAMMA_LEVEL_3_25,
     TXT_GAMMA_LEVEL_3_50,
     TXT_GAMMA_LEVEL_3_75,
-    TXT_GAMMA_LEVEL_4_0
+    TXT_GAMMA_LEVEL_4_0,
+    TXT_GAMMA_LEVEL_4_25,
+    TXT_GAMMA_LEVEL_4_50,
+    TXT_GAMMA_LEVEL_4_75,
+    TXT_GAMMA_LEVEL_5_0,
+    TXT_GAMMA_LEVEL_5_25,
+    TXT_GAMMA_LEVEL_5_50,
+    TXT_GAMMA_LEVEL_5_75,
+    TXT_GAMMA_LEVEL_6_0
 };
 
 // CODE --------------------------------------------------------------------
@@ -1281,10 +1289,10 @@ boolean MN_Responder(event_t * event)
                     askforquit = false;
                     typeofask = 0;
                     paused = false;
-                    if (lcd_gamma_fix)
-                        I_SetPalette(W_CacheLumpName("PALFIX", PU_CACHE));
-                    else
-                        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+                    I_SetPalette(W_CacheLumpName(usegamma <= 16 ?
+                                                 "PALFIX" :
+                                                 "PLAYPAL",
+                                                 PU_CACHE));
                     H2_StartTitle();    // go to intro/demo mode.
                     return false;
                 case 3:
@@ -1514,7 +1522,7 @@ boolean MN_Responder(event_t * event)
         else if (key == key_menu_gamma)          // F11 (gamma correction)
         {
             usegamma++;
-            if (usegamma > 16)
+            if (usegamma > 24)
             {
                 usegamma = 0;
             }
@@ -1819,10 +1827,10 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-    if (lcd_gamma_fix)
-        I_SetPalette(W_CacheLumpName("PALFIX", PU_CACHE));
-    else
-        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+    I_SetPalette(W_CacheLumpName(usegamma <= 16 ?
+                                 "PALFIX" :
+                                 "PLAYPAL",
+                                 PU_CACHE));
     V_CopyScaledBuffer(I_VideoBuffer,
            (byte *) W_CacheLumpNum(W_GetNumForName("TITLE") + InfoType,
                                    PU_CACHE), ORIGWIDTH * ORIGHEIGHT);

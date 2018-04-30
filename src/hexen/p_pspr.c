@@ -1192,10 +1192,10 @@ void A_MStaffAttack(player_t * player, pspdef_t * psp)
     {
         player->damagecount = 0;
         player->bonuscount = 0;
-        if (lcd_gamma_fix)
-            I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName("PALFIX"), PU_CACHE) + STARTSCOURGEPAL * 768);
-        else
-            I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName("PLAYPAL"), PU_CACHE) + STARTSCOURGEPAL * 768);
+        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 16 ?
+                                                             "PALFIX" :
+                                                             "PLAYPAL"), 
+                                                             PU_CACHE) + STARTSCOURGEPAL * 768);
     }
 }
 
@@ -1216,10 +1216,10 @@ void A_MStaffPalette(player_t * player, pspdef_t * psp)
         {                       // reset back to original playpal
             pal = 0;
         }
-        if (lcd_gamma_fix)
-            I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName("PALFIX"), PU_CACHE) + pal * 768);
-        else
-            I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName("PLAYPAL"), PU_CACHE) + pal * 768);
+        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 16 ?
+                                                             "PALFIX" :
+                                                             "PLAYPAL"),
+                                                             PU_CACHE) + pal * 768);
     }
 }
 
@@ -1937,10 +1937,10 @@ void A_CHolyAttack(player_t * player, pspdef_t * psp)
     {
         player->damagecount = 0;
         player->bonuscount = 0;
-        if (lcd_gamma_fix)
-            I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName("PALFIX"), PU_CACHE) + STARTHOLYPAL * 768);
-        else
-            I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName("PLAYPAL"), PU_CACHE) + STARTHOLYPAL * 768);
+        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 16 ?
+                                                             "PALFIX" :
+                                                             "PLAYPAL"),
+                                                             PU_CACHE) + STARTHOLYPAL * 768);
     }
     S_StartSound(player->mo, SFX_CHOLY_FIRE);
 }
@@ -1962,10 +1962,10 @@ void A_CHolyPalette(player_t * player, pspdef_t * psp)
         {                       // reset back to original playpal
             pal = 0;
         }
-        if (lcd_gamma_fix)
-            I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName("PALFIX"), PU_CACHE) + pal * 768);
-        else
-            I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName("PLAYPAL"), PU_CACHE) + pal * 768);
+        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 16 ?
+                                                             "PALFIX" :
+                                                             "PLAYPAL"),
+                                                             PU_CACHE) + pal * 768);
     }
 }
 
