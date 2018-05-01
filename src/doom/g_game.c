@@ -461,6 +461,9 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     {
         static char crosshairmsg[24];
 
+        if (vanillaparm) // [JN] No toggling in -vanilla mode
+        return;
+        
         if (!crosshair_draw)
         {
             crosshair_draw = true;

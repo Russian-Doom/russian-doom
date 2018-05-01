@@ -585,7 +585,7 @@ void SB_Drawer(void)
     CPlayer = &players[consoleplayer];
 
     // [JN] Draw crosshair
-    if (screenblocks != 12 && !automapactive && crosshair_draw)
+    if (!vanillaparm && screenblocks != 12 && !automapactive && crosshair_draw)
     {
         if (crosshair_scale)    // Scaled crosshair
         {

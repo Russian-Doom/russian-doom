@@ -558,7 +558,7 @@ void HU_Drawer(void)
     // [JN] Draw crosshair. 
     // Thanks to Fabian Greffrath for ORIGWIDTH, ORIGHEIGHT and ST_HEIGHT values,
     // thanks to Zodomaniac for proper health values!
-    if (!automapactive && crosshair_draw)
+    if (!vanillaparm && !automapactive && crosshair_draw)
     {
         if (crosshair_scale)    // Scaled crosshair
         {

@@ -309,6 +309,10 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     // [JN] Toggle crosshair
     if (gamekeydown[key_togglecrosshair])
     {
+        // [JN] No toggling in -vanilla mode
+        if (vanillaparm)
+        return;
+
         if (!crosshair_draw)
         {
             crosshair_draw = true;
