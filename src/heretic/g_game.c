@@ -153,6 +153,11 @@ int randomly_flipcorpses = 1;
 // Геймплей
 int flip_levels = 0;
 
+// Прицел
+int crosshair_draw = 0;
+int crosshair_health = 0;
+int crosshair_scale = 0;
+
 
 //
 // controls (have defaults)
@@ -405,6 +410,24 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         S_StartSound(NULL, sfx_chat);
 
         gamekeydown[key_toggleautorun] = false;
+    }
+
+    // [JN] Toggle crosshair
+    if (gamekeydown[key_togglecrosshair])
+    {
+        if (!crosshair_draw)
+        {
+            crosshair_draw = true;
+        }
+        else
+        {
+            crosshair_draw = false;
+        }
+
+        P_SetMessage(&players[consoleplayer], crosshair_draw ? TXT_CROSSHAIR_ON : TXT_CROSSHAIR_OFF, false);
+        S_StartSound(NULL, sfx_chat);
+
+        gamekeydown[key_togglecrosshair] = false;
     }
 
 //

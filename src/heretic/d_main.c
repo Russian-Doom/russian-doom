@@ -816,6 +816,11 @@ void D_BindVariables(void)
     // Геймплей
     M_BindIntVariable("flip_levels",            &flip_levels);
 
+    // Прицел
+    M_BindIntVariable("crosshair_draw",         &crosshair_draw);
+    M_BindIntVariable("crosshair_health",       &crosshair_health);
+    M_BindIntVariable("crosshair_scale",        &crosshair_scale);
+
     for (i=0; i<10; ++i)
     {
         char buf[12];

@@ -410,4 +410,7 @@
 #define TXT_MLOOK_ON "J,PJH VSIM. DRK.XTY"            // ОБЗОР МЫШЬЮ ВКЛЮЧЕН
 #define TXT_MLOOK_OFF "J,PJH VSIM. DSRK.XTY"          // ОБЗОР МЫШЬЮ ВЫКЛЮЧЕН
 
+#define TXT_CROSSHAIR_ON "GHBWTK DRK.XTY"             // ПРИЦЕЛ ВКЛЮЧЕН
+#define TXT_CROSSHAIR_OFF "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
+
 #define TXT_SECRET_FOUND "J,YFHE;TY NFQYBR!"          // ОБНАРУЖЕН ТАЙНИК!
