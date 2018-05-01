@@ -1517,8 +1517,8 @@ void ST_drawWidgets(boolean refresh)
             STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
         }
 
-        // [JN] Draw player's life widget only in traditional HUD and automap
-        if (screenblocks <= 10 || automapactive)
+        // [JN] Draw player's life widget only in traditional HUD, Crispy HUD with player's face and automap
+        if (screenblocks <= 11 || automapactive)
         STlib_updateNum(&w_lifes, refresh);
     }
 }
