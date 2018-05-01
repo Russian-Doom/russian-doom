@@ -85,6 +85,9 @@ typedef enum
 // Deaf monsters/do not react to sound.
 #define MTF_AMBUSH  8
 
+// [JN] Muliplayer only flag.
+#define MTF_NETGAME  16
+
 
 //
 // Key cards.
