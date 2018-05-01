@@ -560,65 +560,29 @@ void HU_Drawer(void)
     // thanks to Zodomaniac for proper health values!
     if (!vanillaparm && !automapactive && crosshair_draw)
     {
-        if (crosshair_scale)    // Scaled crosshair
-        {
-            if (crosshair_health)   // Health indication
-            {
-                if (plr->health >= 67)
-                {
-                V_DrawPatch(ORIGWIDTH/2,
-                    ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
-                    W_CacheLumpName(DEH_String("XHAIRSG"), PU_CACHE)); // Green
-                }
-                else if (plr->health >= 34)
-                {
-                V_DrawPatch(ORIGWIDTH/2,
-                    ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
-                    W_CacheLumpName(DEH_String("XHAIRSY"), PU_CACHE)); // Yellow
-                }
-                else if (plr->health <= 33)
-                {
-                V_DrawPatch(ORIGWIDTH/2,
-                    ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
-                    W_CacheLumpName(DEH_String("XHAIRSR"), PU_CACHE)); // Red
-                }
-            }
-            else    // No health indication
-            {
-                V_DrawPatch(ORIGWIDTH/2,
-                    ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
-                    W_CacheLumpName(DEH_String("XHAIRSR"), PU_CACHE)); // Red (only)         
-            }
+        if (crosshair_scale)
+        {   // Scaled crosshair
+            V_DrawPatch(ORIGWIDTH/2,
+                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT)/2 : ORIGHEIGHT/2),
+                W_CacheLumpName(DEH_String(!crosshair_health ?
+                                           "XHAIRSR" :             // Red (only)
+                                           plr->health >= 67 ?
+                                           "XHAIRSG" :             // Green
+                                           plr->health >= 34 ?
+                                           "XHAIRSY" : "XHAIRSR"), // Yellow or Red
+                                           PU_CACHE));
         }
-        else    // Unscaled crosshair
-        {
-            if (crosshair_health)   // Health indication
-            {
-                if (plr->health >= 67)
-                {
-                V_DrawPatchUnscaled(SCREENWIDTH/2,
-                    ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
-                    W_CacheLumpName(DEH_String("XHAIRUG"), PU_CACHE)); // Green
-                }
-                else if (plr->health >= 34)
-                {
-                V_DrawPatchUnscaled(SCREENWIDTH/2,
-                    ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
-                    W_CacheLumpName(DEH_String("XHAIRUY"), PU_CACHE)); // Yellow
-                }
-                else if (plr->health <= 33)
-                {
-                V_DrawPatchUnscaled(SCREENWIDTH/2,
-                    ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
-                    W_CacheLumpName(DEH_String("XHAIRUR"), PU_CACHE)); // Red
-                }
-            }
-            else    // No health indication
-            {
-                V_DrawPatchUnscaled(SCREENWIDTH/2,
-                    ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
-                    W_CacheLumpName(DEH_String("XHAIRUR"), PU_CACHE)); // Red (only)         
-            }
+        else
+        {   // Unscaled crosshair
+            V_DrawPatchUnscaled(SCREENWIDTH/2,
+                ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT)/2 : SCREENHEIGHT/2),
+                W_CacheLumpName(DEH_String(!crosshair_health ? 
+                                           "XHAIRUR":              // Red (only)
+                                           plr->health >= 67 ?
+                                           "XHAIRUG" :             // Green
+                                           plr->health >= 34 ?
+                                           "XHAIRUY": "XHAIRUR"),  // Yellow or Red
+                                           PU_CACHE));
         }
     }
 }
