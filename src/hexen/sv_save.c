@@ -144,8 +144,6 @@ static void SV_WritePtr(void *ptr);
 
 char *SavePath = DEFAULT_SAVEPATH;
 
-// int vanilla_savegame_limit = 1;
-
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 static int MobjCount;

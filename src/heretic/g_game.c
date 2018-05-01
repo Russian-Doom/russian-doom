@@ -228,8 +228,6 @@ boolean *joybuttons = &joyarray[1];     // allow [-1]
 int savegameslot;
 char savedescription[32];
 
-// int vanilla_demo_limit = 1;
-
 int inventoryTics;
 
 // haleyjd: removed WATCOMC
@@ -1935,22 +1933,10 @@ void G_WriteDemoTiccmd(ticcmd_t * cmd)
     // reset demo pointer back
     demo_p = demo_start;
 
+    // [JN] No limits for demo recording
     if (demo_p > demoend - 16)
     {
-/*        if (vanilla_demo_limit)
-        {
-            // no more space
-            G_CheckDemoStatus();
-            return;
-        }
-        else
-        {
-*/
-            // Vanilla demo limit disabled: unlimited
-            // demo lengths!
-
-            IncreaseDemoBuffer();
-//      }
+        IncreaseDemoBuffer();
     }
 
     G_ReadDemoTiccmd(cmd);      // make SURE it is exactly the same

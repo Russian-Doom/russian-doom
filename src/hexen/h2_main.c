@@ -181,28 +181,23 @@ void D_BindVariables(void)
     M_BindIntVariable("messageson",             &messageson);
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_Channels);
-//  M_BindIntVariable("vanilla_savegame_limit", &vanilla_savegame_limit);
-//  M_BindIntVariable("vanilla_demo_limit",     &vanilla_demo_limit);
     M_BindIntVariable("mlook",                  &mlook);
 
     // [JN] Дополнительные параметры игры
 
-    // - Интерфейс -
-    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);   // Элементы меню и тексты отбрасывают тень
-    // - Графика -
-    M_BindIntVariable("brightmaps",             &brightmaps);           // Брайтмаппинг текстур и спрайтов
-    M_BindIntVariable("fake_contrast",          &fake_contrast);        // Имитация контрастного освещения стен
+    // Графика
+    M_BindIntVariable("brightmaps",             &brightmaps);
+    M_BindIntVariable("fake_contrast",          &fake_contrast);
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
 
     // Прицел
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
     M_BindIntVariable("crosshair_health",       &crosshair_health);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);
 
-
     M_BindStringVariable("savedir", &SavePath);
 
     // Multiplayer chat macros
-
     for (i=0; i<10; ++i)
     {
         char buf[12];
