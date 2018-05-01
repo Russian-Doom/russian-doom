@@ -38,6 +38,7 @@
 #include "p_pspr.h"
 
 #include "crispy.h"
+#include "jn.h"
 
 #define LOWERSPEED		FRACUNIT*6
 #define RAISESPEED		FRACUNIT*6
@@ -49,7 +50,6 @@
 // во время обычной атаки и атаки непосредственно противника.
 boolean chainsaw_attack_swing;
 
-extern int mlook;
 
 //
 // P_SetPsprite
