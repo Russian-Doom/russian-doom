@@ -89,9 +89,9 @@ void CompatibilitySettings(void)
     if (gamemission == doom)
         TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features));
     else if (gamemission == heretic)
-        TXT_AddWidget(window, TXT_NewScrollPane(47, 11, window_features));
+        TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features));
     else if (gamemission == hexen)
-        TXT_AddWidget(window, TXT_NewScrollPane(47, 5, window_features));
+        TXT_AddWidget(window, TXT_NewScrollPane(47, 8, window_features));
 
     TXT_AddWidgets(window_features,
 
@@ -134,10 +134,10 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Повышенна€ агрессивность Потер€нных душ",                  &agressive_lost_souls)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox("Не выводить запрос при быстрой загрузке",                  &fast_quickload)),
 
-    TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator("Прицел")),
-        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Отображать прицел",    &crosshair_draw)),
-        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Индикаци€ здоровь€",   &crosshair_health)),
-        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Увеличенный размер",   &crosshair_scale)),
+    TXT_NewSeparator("Прицел"),
+        TXT_NewCheckBox("Отображать прицел",    &crosshair_draw),
+        TXT_NewCheckBox("Индикаци€ здоровь€",   &crosshair_health),
+        TXT_NewCheckBox("Увеличенный размер",   &crosshair_scale),
 
         // TXT_If(gamemission == strife, TXT_NewCheckBox("Показывать значок песочных часов",        &show_diskicon)),
         // TXT_If(gamemission == strife, TXT_NewCheckBox("Показывать заставку при выходе",          &show_exit_sequence)),

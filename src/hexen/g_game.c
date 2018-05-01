@@ -306,6 +306,24 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         gamekeydown[key_toggleautorun] = false;
     }
 
+    // [JN] Toggle crosshair
+    if (gamekeydown[key_togglecrosshair])
+    {
+        if (!crosshair_draw)
+        {
+            crosshair_draw = true;
+        }
+        else
+        {
+            crosshair_draw = false;
+        }
+
+        P_SetMessage(&players[consoleplayer], crosshair_draw ? TXT_CROSSHAIR_ON : TXT_CROSSHAIR_OFF, false);
+        S_StartSound(NULL, SFX_CHAT);
+
+        gamekeydown[key_togglecrosshair] = false;
+    }
+
 //
 // let movement keys cancel each other out
 //

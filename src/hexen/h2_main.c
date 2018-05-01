@@ -135,6 +135,10 @@ int draw_shadowed_text = 1;      // Элементы меню и тексты о
 // - Графика -
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
 int fake_contrast = 0;           // Имитация контрастного освещения стен
+// Прицел
+int crosshair_draw = 0;
+int crosshair_health = 0;
+int crosshair_scale = 0;
 
 // CODE --------------------------------------------------------------------
 
@@ -188,6 +192,11 @@ void D_BindVariables(void)
     // - Графика -
     M_BindIntVariable("brightmaps",             &brightmaps);           // Брайтмаппинг текстур и спрайтов
     M_BindIntVariable("fake_contrast",          &fake_contrast);        // Имитация контрастного освещения стен
+
+    // Прицел
+    M_BindIntVariable("crosshair_draw",         &crosshair_draw);
+    M_BindIntVariable("crosshair_health",       &crosshair_health);
+    M_BindIntVariable("crosshair_scale",        &crosshair_scale);
 
 
     M_BindStringVariable("savedir", &SavePath);

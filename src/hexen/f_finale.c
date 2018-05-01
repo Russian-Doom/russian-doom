@@ -260,7 +260,7 @@ static void InitializeFade(boolean fadeIn)
                                                                    "PALFIX" :
                                                                    "PLAYPAL",
                                                                    PU_CACHE) + i)) << FRACBITS, 
-                                                                   70 * FRACUNIT);
+                                                                   768 * FRACUNIT);
             I_SetPalette(W_CacheLumpName(usegamma <= 16 ?
                                         "PALFIX" :
                                         "PLAYPAL",

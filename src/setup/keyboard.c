@@ -325,11 +325,8 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
     AddSectionLabel(table, "Движение", true);
     AddKeyControl(table, "Посто€нный бег", &key_toggleautorun);
     
-    if (gamemission == doom || gamemission == heretic)
-    {
-        AddSectionLabel(table, "Прицел", true);
-        AddKeyControl(table, "Отображать прицел", &key_togglecrosshair);
-    }
+    AddSectionLabel(table, "Прицел", true);
+    AddKeyControl(table, "Переключение прицела", &key_togglecrosshair);
 }
 
 static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
