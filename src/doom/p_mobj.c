@@ -595,36 +595,34 @@ P_NightmareRespawn (mobj_t* mobj)
 void P_MobjThinker (mobj_t* mobj)
 {
     // momentum movement
-    if (mobj->momx
-	|| mobj->momy
-	|| (mobj->flags&MF_SKULLFLY) )
+    if (mobj->momx ||  mobj->momy || (mobj->flags&MF_SKULLFLY))
     {
-	P_XYMovement (mobj);
+        P_XYMovement (mobj);
 
-	// FIXME: decent NOP/NULL/Nil function pointer please.
-	if (mobj->thinker.function.acv == (actionf_v) (-1))
-	    return;		// mobj was removed
+        // FIXME: decent NOP/NULL/Nil function pointer please.
+        if (mobj->thinker.function.acv == (actionf_v) (-1))
+        return;     // mobj was removed
     }
-    if ( (mobj->z != mobj->floorz)
-	 || mobj->momz )
+
+    if ((mobj->z != mobj->floorz) || mobj->momz)
     {
-	P_ZMovement (mobj);
-	
-	// FIXME: decent NOP/NULL/Nil function pointer please.
-	if (mobj->thinker.function.acv == (actionf_v) (-1))
-	    return;		// mobj was removed
+        P_ZMovement (mobj);
+
+        // FIXME: decent NOP/NULL/Nil function pointer please.
+        if (mobj->thinker.function.acv == (actionf_v) (-1))
+	    return;     // mobj was removed
     }
 
     // [JN] Activation of floating items
-    if (floating_powerups && !vanillaparm && (
-    mobj->type == MT_MEGA   ||  // Megasphere
-    mobj->type == MT_MISC12 ||  // Supercharge
-    mobj->type == MT_INV    ||  // Invulnerability
-    mobj->type == MT_INS))      // Partial invisibility
+    if (floating_powerups && !vanillaparm
+    && (mobj->type == MT_MEGA       // Megasphere
+    ||  mobj->type == MT_MISC12     // Supercharge
+    ||  mobj->type == MT_INV        // Invulnerability
+    ||  mobj->type == MT_INS))      // Partial invisibility
     {
         mobj->z = mobj->floorz + FloatBobOffsets[(mobj->health++) & 63];
     }
-    
+
 	// killough 9/12/98: objects fall off ledges if they are hanging off
 	// slightly push off of ledge if hanging more than halfway off
     if (singleplayer && !vanillaparm && torque)
@@ -632,46 +630,47 @@ void P_MobjThinker (mobj_t* mobj)
         if (mobj->z > mobj->dropoffz        // Only objects contacting dropoff
         && !(mobj->flags & MF_NOGRAVITY)    // Only objects which fall
         && (mobj->flags & MF_CORPSE))       // [JN] And only for corpses
+        {
             P_ApplyTorque(mobj);            // Apply torque
+        }
         else
+        {
             mobj->intflags &= ~MIF_FALLING, mobj->gear = 0;  // Reset torque
+        }
     }
-
 
     // cycle through states,
     // calling action functions at transitions
     if (mobj->tics != -1)
     {
-	mobj->tics--;
-		
-	// you can cycle through multiple states in a tic
-	if (!mobj->tics)
-	    if (!P_SetMobjState (mobj, mobj->state->nextstate) )
-		return;		// freed itself
+        mobj->tics--;
+
+        // you can cycle through multiple states in a tic
+        if (!mobj->tics && !P_SetMobjState (mobj, mobj->state->nextstate) )
+        return;     // freed itself
     }
     else
     {
-	// check for nightmare respawn
-	if (! (mobj->flags & MF_COUNTKILL) )
-	    return;
+        // check for nightmare respawn
+        if (!(mobj->flags & MF_COUNTKILL))
+        return;
 
-	if (!respawnmonsters)
-	    return;
+        if (!respawnmonsters)
+        return;
 
-	mobj->movecount++;
+        mobj->movecount++;
 
-	if (mobj->movecount < 12*TICRATE)
-	    return;
+        if (mobj->movecount < 12*TICRATE)
+        return;
 
-	if ( leveltime&31 )
-	    return;
+        if (leveltime&31)
+        return;
 
-	if (P_Random () > 4)
-	    return;
+        if (P_Random () > 4)
+        return;
 
-	P_NightmareRespawn (mobj);
+        P_NightmareRespawn (mobj);
     }
-
 }
 
 
