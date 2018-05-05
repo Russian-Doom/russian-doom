@@ -1091,38 +1091,33 @@ P_SpawnPuffSafe
 
 
 //
-// P_SpawnBlood
+// P_SpawnColoredBlood
 // 
-// [JN] Модификация функции P_SpawnBlood по методу Фабиана Греффрата.
-// Разноцветная кровь только в случае "colored_blood".
-void
-P_SpawnBlood
-( fixed_t	x,
-  fixed_t	y,
-  fixed_t	z,
-  int		damage,
-  mobj_t*	target ) // [crispy] pass thing type
+// [JN] Spawn colored blood depending on monster type
+//
+void P_SpawnColoredBlood (fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t* target)
 {
     mobj_t*	th;
 
     z += (P_SubRandom() << 10);
 
-    // Какодемон
-    if (gamevariant != freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
+    // Cacodemon
+    if (target->type == MT_HEAD)
     th = P_SpawnMobj (x,y,z, MT_BLOODBLUE);
 
-    // Барон Ада или Рыцарь Ада
-    else if (gamevariant != freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+    // Hell Knight or Baron of Hell
+    else if (target->type == MT_BRUISER || target->type == MT_KNIGHT)
     th = P_SpawnMobj (x,y,z, MT_BLOODGREEN);
 
-    // Все остальные монстры с красной кровью
+    // All other monsters
     else
     th = P_SpawnMobj (x,y,z, MT_BLOOD);
 
     th->momz = FRACUNIT*2;
     th->tics -= P_Random()&3;
-    // Призрачная кровь у призрака
-    if (colored_blood && !vanillaparm && target->flags & MF_SHADOW) 
+
+    // Activate fuzzy blood
+    if (target->flags & MF_SHADOW) 
     th->flags |= MF_SHADOW;
 
     if (th->tics < 1)
@@ -1130,10 +1125,10 @@ P_SpawnBlood
 
     if (damage <= 12 && damage >= 9)
     {
-        if (gamevariant != freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
+        if (target->type == MT_HEAD)
         P_SetMobjState (th,S_BLOODB2);
 
-        else if (gamevariant != freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+        else if (target->type == MT_BRUISER || target->type == MT_KNIGHT)
         P_SetMobjState (th,S_BLOODG2);
 
         else
@@ -1141,10 +1136,10 @@ P_SpawnBlood
     }
     else if (damage < 9)
     {
-        if (gamevariant != freedoom && colored_blood && !vanillaparm && target->type == MT_HEAD)
+        if (target->type == MT_HEAD)
         P_SetMobjState (th,S_BLOODB3);
 
-        else if (gamevariant != freedoom && colored_blood && !vanillaparm && (target->type == MT_BRUISER || target->type == MT_KNIGHT))
+        else if (target->type == MT_BRUISER || target->type == MT_KNIGHT)
         P_SetMobjState (th,S_BLOODG3);
 
         else
@@ -1152,6 +1147,35 @@ P_SpawnBlood
     }
 }
 
+
+//
+// P_SpawnBlood
+// 
+// [JN] Modified using a method by Fabian Greffrath (pass thing type)
+// 
+void P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t* target)
+{
+    mobj_t*	th;
+
+    z += (P_SubRandom() << 10);
+
+    th = P_SpawnMobj (x,y,z, MT_BLOOD);
+
+    th->momz = FRACUNIT*2;
+    th->tics -= P_Random()&3;
+
+    if (th->tics < 1)
+    th->tics = 1;
+
+    if (damage <= 12 && damage >= 9)
+    {
+        P_SetMobjState (th,S_BLOOD2);
+    }
+    else if (damage < 9)
+    {
+        P_SetMobjState (th,S_BLOOD3);
+    }
+}
 
 
 //

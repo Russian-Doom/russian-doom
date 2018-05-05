@@ -1374,10 +1374,17 @@ boolean PTR_ShootTraverse (intercept_t* in)
     // Spawn bullet puffs or blod spots,
     // depending on target type.
     if (in->d.thing->flags & MF_NOBLOOD)
-	P_SpawnPuff (x,y,z);
+    {
+        P_SpawnPuff (x,y,z);
+    }
+    else if (colored_blood && !vanillaparm && gamevariant != freedoom)
+    {
+        P_SpawnColoredBlood (x,y,z, la_damage, th); // [crispy] pass thing type
+    }
     else
-    // [JN] Модификация функции P_SpawnBlood, по методу от Fabian Greffrath
-    P_SpawnBlood (x,y,z, la_damage, th); // [crispy] pass thing type
+    {
+        P_SpawnBlood (x,y,z, la_damage, th); // [crispy] pass thing type
+    }
 
     if (la_damage)
 	P_DamageMobj (th, shootthing, shootthing, la_damage);
