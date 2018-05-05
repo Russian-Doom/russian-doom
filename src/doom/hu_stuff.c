@@ -422,16 +422,11 @@ void HU_Start(void)
     HUlib_initSText(&w_message_time, 294, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
 
     // create the map title widget
-    // [JN] Твик для карты (-1), что бы тень не оставалась
-    // на статус баре после закрытия карты
-    if (draw_shadowed_text && !vanillaparm)
-    {
-        HUlib_initTextLine(&w_title, HU_TITLEX, HU_TITLEY-1, hu_font, HU_FONTSTART);
-    }
-    else
-    {
-        HUlib_initTextLine(&w_title, HU_TITLEX, HU_TITLEY, hu_font, HU_FONTSTART);
-    }
+    // [JN] Place shadowed text 1px higher on automap for preventing shadow to be dropped on HUD
+    HUlib_initTextLine(&w_title, HU_TITLEX, (draw_shadowed_text && !vanillaparm) ?
+                                             HU_TITLEY-1 :
+                                             HU_TITLEY,                                             
+                                             hu_font, HU_FONTSTART);
 
     HUlib_initTextLine(&w_kills,
 		       HU_TITLEX, HU_MSGY + 1 * 8,
