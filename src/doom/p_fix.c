@@ -2457,6 +2457,8 @@ linefix_t linefix[] =
     { doom2,            1,  18,     653,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  18,     654,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  18,     655,    0, "",         "",            "",            DEFAULT,        -8, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  18,     718,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  18,     724,    0, "",         "DOORTRAK",    "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  18,     725,    0, "",         "",            "",                 87,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  18,     742,    0, "",         "",            "",                192,        80, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  18,     743,    0, "",         "",            "",                  0,        80, DEFAULT,                            DEFAULT,                                    DEFAULT },
