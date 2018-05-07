@@ -288,7 +288,7 @@ void P_InitPicAnims(void)
         lastanim->numpics = lastanim->picnum - lastanim->basepic + 1;
         if (lastanim->numpics < 2)
         {
-            I_Error("P_InitPicAnims: bad cycle from %s to %s",
+            I_Error("P_InitPicAnims: некорректный цикл от %s к %s",
                     startname, endname);
         }
         lastanim->speed = animdefs[i].speed;
@@ -1234,7 +1234,7 @@ void P_AddAmbientSfx(int sequence)
 {
     if (AmbSfxCount == MAX_AMBIENT_SFX)
     {
-        I_Error("Too many ambient sound sequences");
+        I_Error("Превышено количество звуков окружения");
     }
     LevelAmbientSfx[AmbSfxCount++] = AmbientSfx[sequence];
 }
@@ -1303,7 +1303,7 @@ void P_AmbientSound(void)
                 done = true;
                 break;
             default:
-                I_Error("P_AmbientSound: Unknown afxcmd %d", cmd);
+                I_Error("P_AmbientSound: неизвестный afxcmd %d", cmd);
                 break;
         }
     }

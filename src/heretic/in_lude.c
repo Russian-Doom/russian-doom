@@ -562,7 +562,7 @@ void IN_Drawer(void)
             }
             break;
         default:
-            I_Error("IN_lude:  Intermission state out of range.\n");
+            I_Error("IN_lude: Ошибка последовательности в межмиссионном экране.\n");
             break;
     }
 }

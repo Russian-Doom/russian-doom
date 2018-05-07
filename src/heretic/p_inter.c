@@ -164,7 +164,7 @@ boolean P_GiveAmmo(player_t * player, ammotype_t ammo, int count)
     }
     if ((unsigned int) ammo > NUMAMMO)
     {
-        I_Error("P_GiveAmmo: bad type %i", ammo);
+        I_Error("P_GiveAmmo: некорректный тип %i", ammo);
     }
     if (player->ammo[ammo] == player->maxammo[ammo])
     {

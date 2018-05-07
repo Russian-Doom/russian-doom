@@ -1169,7 +1169,7 @@ void G_Ticker(void)
                 if (gametic > BACKUPTICS
                     && consistancy[i][buf] != cmd->consistancy)
                 {
-                    I_Error("consistency failure (%i should be %i)",
+                    I_Error("Нарушение последовательности (%i должно быть %i)",
                             cmd->consistancy, consistancy[i][buf]);
                 }
                 if (players[i].mo)
@@ -1465,7 +1465,8 @@ void G_DeathMatchSpawnPlayer(int playernum)
 
     selections = deathmatch_p - deathmatchstarts;
     if (selections < 4)
-        I_Error("Only %i deathmatch spots, 4 required", selections);
+        I_Error ("Обнаружено %i стартовых точек для режима Дефтатч.\n"
+                 "Минимальное необходимое количество: 4", selections); 
 
     for (j = 0; j < 20; j++)
     {
@@ -1700,7 +1701,7 @@ void G_DoLoadGame(void)
 
     if (SV_ReadByte() != SAVE_GAME_TERMINATOR)
     {                           // Missing savegame termination marker
-        I_Error("Bad savegame");
+        I_Error("Некорректный файл сохранения");
     }
 }
 
@@ -2150,8 +2151,8 @@ boolean G_CheckDemoStatus(void)
         endtime = I_GetTime();
         realtics = endtime - starttime;
         fps = ((float) gametic * TICRATE) / realtics;
-        I_Error("timed %i gametics in %i realtics (%f fps)",
-                gametic, realtics, fps);
+        I_Error ("Насчитано %i gametics в %i realtics.\n"
+                 "Среднее значение FPS: %f.", gametic, realtics, fps);
     }
 
     if (demoplayback)
@@ -2171,7 +2172,7 @@ boolean G_CheckDemoStatus(void)
         M_WriteFile(demoname, demobuffer, demo_p - demobuffer);
         Z_Free(demobuffer);
         demorecording = false;
-        I_Error("Demo %s recorded", demoname);
+        I_Error("Демозапись %s завершена",demoname); 
     }
 
     return false;

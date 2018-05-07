@@ -258,7 +258,7 @@ void P_AddMaceSpot(mapthing_t * mthing)
 {
     if (MaceSpotCount == MAX_MACE_SPOTS)
     {
-        I_Error("Too many mace spots.");
+        I_Error("Превышено количество спотов булавы.");
     }
     MaceSpots[MaceSpotCount].x = mthing->x << FRACBITS;
     MaceSpots[MaceSpotCount].y = mthing->y << FRACBITS;
@@ -1660,7 +1660,7 @@ void A_PhoenixPuff(mobj_t * actor)
 
 void A_RemovedPhoenixFunc(mobj_t *actor)
 {
-    I_Error("Action function invoked for removed Phoenix action!");
+    I_Error("Действие вызвано из удаленного действия Феникса!");
 }
 
 //----------------------------------------------------------------------------
