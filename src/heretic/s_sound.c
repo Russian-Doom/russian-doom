@@ -32,6 +32,8 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
+#include "jn.h"
+
 /*
 ===============================================================================
 
@@ -501,8 +503,8 @@ void S_UpdateSounds(mobj_t * listener)
             angle = (angle - viewangle) >> 24;
             sep = angle * 2 - 128;
 
-            // [JN] If we have a "-monosfx" cmd line parameter, activate fixed (mono) separation
-            if (monosfx)
+            // [JN] Support for mono sfx mode
+            if (snd_monomode)
             {
                 sep = 128;            
             }

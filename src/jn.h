@@ -52,6 +52,7 @@ extern int draw_shadowed_text;
 extern int show_diskicon;
 
 // Звук (Audible)
+extern int snd_monomode;
 extern int crushed_corpses_sfx;
 extern int blazing_door_fix_sfx;
 extern int correct_endlevel_sfx;

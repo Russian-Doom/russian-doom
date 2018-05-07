@@ -253,6 +253,7 @@ int draw_shadowed_text = 1;
 // int show_diskicon = 1; (d_main.c)
 
 // Звук
+int snd_monomode = 0;
 int crushed_corpses_sfx = 1;
 int blazing_door_fix_sfx = 1;
 int correct_endlevel_sfx = 0;

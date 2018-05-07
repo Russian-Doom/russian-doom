@@ -162,6 +162,13 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(music_volume),
 
     //!
+    //
+    // [JN] Mono SFX mode
+    //
+
+    CONFIG_VARIABLE_INT(snd_monomode),
+
+    //!
     // @game strife
     //
     // If non-zero, dialogue text is displayed over characters' pictures

@@ -760,8 +760,8 @@ void S_UpdateSounds(mobj_t * listener)
                 (SoundCurve[dist] * (snd_MaxVolume * 8) *
                  Channel[i].volume) >> 14;
 
-            // [JN] If we have a "-monosfx" cmd line parameter, activate fixed (mono) separation
-            if (Channel[i].mo == listener || monosfx)
+            // [JN] Support for mono sfx mode
+            if (Channel[i].mo == listener || snd_monomode)
             {
                 sep = 128;
             }

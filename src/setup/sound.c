@@ -60,6 +60,7 @@ char *snd_dmxoption = "-opl3"; // [crispy] default to OPL3 emulation
 static int numChannels = 8;
 static int sfxVolume = 8;
 static int musicVolume = 8;
+static int snd_monomode = 0; // [JN] Mono SFX
 static int voiceVolume = 15;
 static int show_talk = 0;
 static int use_libsamplerate = 0;
@@ -144,6 +145,13 @@ void ConfigSound(void)
                     TXT_NewStrut(4, 0),
                     TXT_NewCheckBox("Произвольный питч-шифтинг", &snd_pitchshift),
                     NULL))),
+        TXT_If(gamemission == doom || gamemission == heretic
+            || gamemission == hexen,
+            TXT_NewConditional(&snd_sfxdevice, SNDDEVICE_SB,
+                TXT_NewHorizBox(
+                    TXT_NewStrut(4, 0),
+                    TXT_NewCheckBox("Моно режим", &snd_monomode),
+                    NULL))),
         TXT_If(gamemission == strife,
             TXT_NewConditional(&snd_sfxdevice, SNDDEVICE_SB,
                 TXT_NewHorizBox(
@@ -201,6 +209,7 @@ void BindSoundVariables(void)
     M_BindIntVariable("snd_samplerate",           &snd_samplerate);
     M_BindIntVariable("sfx_volume",               &sfxVolume);
     M_BindIntVariable("music_volume",             &musicVolume);
+    M_BindIntVariable("snd_monomode",             &snd_monomode);
 
     M_BindIntVariable("use_libsamplerate",        &use_libsamplerate);
     M_BindFloatVariable("libsamplerate_scale",    &libsamplerate_scale);

@@ -387,10 +387,7 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
     angle >>= ANGLETOFINESHIFT;
 
     // stereo separation
-    // [JN] Добавлен параметр "-monosfx". При его наличии:
-    // true = отключение стерео-разброса
-    // false = использование стандарного разброса S_STEREO_SWING
-    *sep = 128 - (FixedMul(monosfx ? 0 : S_STEREO_SWING, finesine[angle]) >> FRACBITS);
+    *sep = 128 - (FixedMul(S_STEREO_SWING, finesine[angle]) >> FRACBITS);
 
     // volume calculation
     // [STRIFE] Removed gamemap == 8 hack

@@ -135,6 +135,8 @@ int draw_shadowed_text = 1;      // Элементы меню и тексты о
 // - Графика -
 int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
 int fake_contrast = 0;           // Имитация контрастного освещения стен
+// Звук
+int snd_monomode = 0;
 // Прицел
 int crosshair_draw = 0;
 int crosshair_health = 0;
@@ -178,6 +180,7 @@ void D_BindVariables(void)
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);
     M_BindIntVariable("music_volume",           &snd_MusicVolume);
+    M_BindIntVariable("snd_monomode",           &snd_monomode);
     M_BindIntVariable("messageson",             &messageson);
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_Channels);

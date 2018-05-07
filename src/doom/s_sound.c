@@ -42,6 +42,7 @@
 #include "z_zone.h"
 
 #include "crispy.h"
+#include "jn.h"
 
 // when to clip out sounds
 // Does not fit the large outdoor areas.
@@ -413,8 +414,8 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
     angle >>= ANGLETOFINESHIFT;
 
     // stereo separation
-    // [JN] Отключение стерео-разброса при активированном параметре "monosfx".
-    *sep = monosfx ? 128 : 128 - (FixedMul(S_STEREO_SWING, finesine[angle]) >> FRACBITS);
+    // [JN] Support for mono sfx mode
+    *sep = snd_monomode ? 128 : 128 - (FixedMul(S_STEREO_SWING, finesine[angle]) >> FRACBITS);
 
     // volume calculation
     if (approx_dist < S_CLOSE_DIST)

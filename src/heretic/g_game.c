@@ -141,6 +141,9 @@ int fake_contrast = 0;
 int invul_sky = 1;
 int draw_shadowed_text = 1;
 
+// Звук
+int snd_monomode = 0;
+
 // Тактика
 int automap_stats = 1;
 int secret_notification = 1;

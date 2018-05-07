@@ -221,13 +221,6 @@ void I_InitSound(boolean use_sfx_prefix)
 
     nomusic = M_CheckParm("-nomusic") > 0;
 
-    //!
-    //
-    // [JN] Активация эмуляции звукового моно-режима.
-    //
-
-    monosfx = M_CheckParm("-monosfx") > 0;
-
     // Initialize the sound and music subsystems.
 
     if (!nosound && !screensaver_mode)
