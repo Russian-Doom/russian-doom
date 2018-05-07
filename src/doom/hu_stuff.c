@@ -586,7 +586,7 @@ void HU_Drawer(void)
 void HU_Erase(void)
 {
     HUlib_eraseSText(&w_message);
-    if (local_time && !vanillaparm)
+    if (local_time)
     {
         // [JN] Erase local time widget
         HUlib_eraseSText(&w_message_time);
