@@ -1729,10 +1729,23 @@ boolean G_CheckDemoStatus (void)
 {
     int     endtime; 
 
+    // [JN] -timedemo now able to show average FPS.
+    // Adapted from Chocolate Doom.
     if (timingdemo) 
     { 
+        float   fps;
+        int     realtics;
+
         endtime = I_GetTime (); 
-        I_Error ("насчитано %i gametics в %i realtics",gametic, endtime-starttime); 
+        realtics = endtime - starttime;
+        fps = ((float) gametic * TICRATE) / realtics;
+        
+        // Prevent recursive calls
+        timingdemo = false;
+        demoplayback = false;        
+        
+        I_Error ("Насчитано %i gametics в %i realtics.\n"
+                 "Среднее значение FPS: %f.", gametic, realtics, fps);
     } 
 
     if (demoplayback) 
