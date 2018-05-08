@@ -87,9 +87,9 @@ P_SetPsprite
 	
 	// Call action routine.
 	// Modified handling.
-	if (state->action.acp2)
+	if (state->action.acp3)
 	{
-	    state->action.acp2(player, psp);
+	    state->action.acp3(player->mo, player, psp); // [crispy] let mobj action pointers get called from pspr states
 	    if (!psp->state)
 		break;
 	}
@@ -279,12 +279,14 @@ void P_DropWeapon (player_t* player)
 //
 void
 A_WeaponReady
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp )
-{	
+{		
     statenum_t	newstate;
     int		angle;
     
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     // get out of attack state
     if (player->mo->state == &states[S_PLAY_ATK1]
 	|| player->mo->state == &states[S_PLAY_ATK2] )
@@ -340,10 +342,12 @@ A_WeaponReady
 // without lowering it entirely.
 //
 void A_ReFire
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp )
 {
     
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     // check for fire
     //  (if a weaponchange is pending, let it go through instead)
     if ( (player->cmd.buttons & BT_ATTACK) 
@@ -363,9 +367,11 @@ void A_ReFire
 
 void
 A_CheckReload
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp )
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     P_CheckAmmo (player);
 #if 0
     if (player->ammo[am_shell]<2)
@@ -382,9 +388,11 @@ A_CheckReload
 //
 void
 A_Lower
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp )
-{	
+{		
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     psp->sy += LOWERSPEED;
 
     // Is already down.
@@ -420,11 +428,13 @@ A_Lower
 //
 void
 A_Raise
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp )
 {
     statenum_t	newstate;
 	
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     psp->sy -= RAISESPEED;
 
     if (psp->sy > WEAPONTOP )
@@ -446,9 +456,11 @@ A_Raise
 //
 void
 A_GunFlash
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     P_SetMobjState (player->mo, S_PLAY_ATK2);
     P_SetPsprite (player,ps_flash,weaponinfo[player->readyweapon].flashstate);
 }
@@ -465,13 +477,15 @@ A_GunFlash
 //
 void
 A_Punch
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
     angle_t	angle;
     int		damage;
     int		slope;
 	
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     damage = (P_Random ()%10+1)<<1;
 
     if (player->powers[pw_strength])	
@@ -500,13 +514,15 @@ A_Punch
 //
 void
 A_Saw
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
     angle_t	angle;
     int		damage;
     int		slope;
 
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     damage = 2*(P_Random ()%10+1);
     angle = player->mo->angle;
     angle += P_SubRandom() << 18;
@@ -571,9 +587,11 @@ static void DecreaseAmmo(player_t *player, int ammonum, int amount)
 //
 void
 A_FireMissile
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
     P_SpawnPlayerMissile (player->mo, MT_ROCKET);
 }
@@ -584,9 +602,11 @@ A_FireMissile
 //
 void
 A_FireBFG
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 
                  deh_bfg_cells_per_shot);
     P_SpawnPlayerMissile (player->mo, MT_BFG);
@@ -599,9 +619,11 @@ A_FireBFG
 // killough 7/11/98: emulate Doom's beta version, which alternated fireballs
 static void 
 A_FirePlasmaBeta 
-( player_t* player, 
-  pspdef_t* psp) 
+( mobj_t*	mobj,
+  player_t*	player,
+  pspdef_t*	psp ) 
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
 
     P_SetPsprite (player,
@@ -616,12 +638,15 @@ A_FirePlasmaBeta
 //
 void
 A_FirePlasma
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
+
     if (gamemode == pressbeta)
-    return A_FirePlasmaBeta (player, psp);
-    
+    return A_FirePlasmaBeta (mobj, player, psp);
+
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
 
     P_SetPsprite (player,
@@ -694,9 +719,11 @@ P_GunShot
 //
 void
 A_FirePistol
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     S_StartSound (player->mo, sfx_pistol);
 
     P_SetMobjState (player->mo, S_PLAY_ATK2);
@@ -716,11 +743,13 @@ A_FirePistol
 //
 void
 A_FireShotgun
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
     int		i;
 
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     S_StartSound (player->mo, sfx_shotgn);
 
     P_SetMobjState (player->mo, S_PLAY_ATK2);
@@ -744,13 +773,15 @@ A_FireShotgun
 //
 void
 A_FireShotgun2
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
     int		i;
     angle_t	angle;
     int		damage;
 
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     S_StartSound (player->mo, sfx_dshtgn);
 
     P_SetMobjState (player->mo, S_PLAY_ATK2);
@@ -781,9 +812,12 @@ A_FireShotgun2
 //
 void
 A_FireCGun
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp ) 
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
+
     // [JN] Исправление оригинального бага, при котором пулемет
     // издавал два звука выстрела при наличии только одного патрона.
 
@@ -811,18 +845,21 @@ A_FireCGun
 //
 // ?
 //
-void A_Light0 (player_t *player, pspdef_t *psp)
+void A_Light0 (mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     player->extralight = 0;
 }
 
-void A_Light1 (player_t *player, pspdef_t *psp)
+void A_Light1 (mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     player->extralight = 1;
 }
 
-void A_Light2 (player_t *player, pspdef_t *psp)
+void A_Light2 (mobj_t *mobj, player_t *player, pspdef_t *psp)
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     player->extralight = 2;
 }
 
@@ -869,9 +906,11 @@ void A_BFGSpray (mobj_t* mo)
 //
 void
 A_BFGsound
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp )
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     S_StartSound (player->mo, sfx_bfg);
 }
 
