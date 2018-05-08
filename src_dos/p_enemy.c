@@ -1854,32 +1854,39 @@ void A_BabyMetal (mobj_t* mo)
 
 void
 A_OpenShotgun2
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp )
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     S_StartSound (player->mo, sfx_dbopn);
 }
 
 void
 A_LoadShotgun2
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp )
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     S_StartSound (player->mo, sfx_dbload);
 }
 
 void
 A_ReFire
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp );
 
 void
 A_CloseShotgun2
-( player_t*	player,
+( mobj_t*	mobj,
+  player_t*	player,
   pspdef_t*	psp )
 {
+    if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     S_StartSound (player->mo, sfx_dbcls);
-    A_ReFire(player,psp);
+    A_ReFire(NULL,player,psp); // [crispy] let pspr action pointers get called from mobj states
 }
 
 
