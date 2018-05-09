@@ -1376,17 +1376,18 @@ void ST_diffDraw(void)
 
 void ST_Drawer (boolean fullscreen, boolean refresh)
 {
+    // [JN] Redraw whole status bar while in HELP screens.
+    // Fixes a notable delay of HUD redraw after closing HELP screen.
     extern boolean inhelpscreens;
   
     st_statusbaron = (!fullscreen) || automapactive || screenblocks == 11 || screenblocks == 12;
-    st_firsttime = st_firsttime || refresh;
+    st_firsttime = st_firsttime || refresh || inhelpscreens;
 
     // Do red-/gold-shifts from damage/items
     ST_doPaletteStuff();
 
     // If just after ST_Start(), refresh all
-    // [JN] Also redraw whole status bar after closing HELP screens
-    if (st_firsttime || inhelpscreens) ST_doRefresh();
+    if (st_firsttime) ST_doRefresh();
     // Otherwise, update as little as possible
     else ST_diffDraw();
 
