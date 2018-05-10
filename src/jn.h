@@ -41,6 +41,7 @@ extern int local_time;
 // -----------------------------------------------------------------------------
 
 // Графика (Visual)
+extern int uncapped_fps;
 extern int brightmaps;
 extern int fake_contrast;
 extern int translucency;

@@ -421,6 +421,7 @@ void D_BindVariables(void)
     // [JN] Дополнительные параметры игры
     
     // Графика
+    M_BindIntVariable("uncapped_fps",           &uncapped_fps);
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("translucency",           &translucency);
