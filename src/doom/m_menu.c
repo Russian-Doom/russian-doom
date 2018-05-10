@@ -919,7 +919,7 @@ void M_DrawReadThis1(void)
     if (gamemode == pressbeta)
     {
             skullx = 330;
-            skully = 176;
+            skully = 175;
     }
 
     lumpname = DEH_String(lumpname);
