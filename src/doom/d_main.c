@@ -1010,7 +1010,17 @@ void D_SetGameDescription(void)
         }
         else if (gamemode == retail)
         {
-            gamedescription = GetGameName("The Ultimate DOOM");
+            if (gameversion == exe_doom_se) // [JN] Doom 1.9 Special Edition
+            {
+                gamedescription = GetGameName("Doom: Специальное издание");
+
+                // Episode 4 using a sky from Episode 2
+                DEH_AddStringReplacement ("SKY4",   "SKY2");
+            }
+            else
+            {
+                gamedescription = GetGameName("The Ultimate DOOM");
+            }
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-doom1.wad");
         }
@@ -1427,6 +1437,7 @@ static struct
     {"Doom 1.9",             "1.9",        exe_doom_1_9},
 //  {"Hacx",                 "hacx",       exe_hacx},
     {"Ultimate Doom",        "ultimate",   exe_ultimate},
+    {"Doom 1.9 SE",          "doomse",     exe_doom_se},
     {"Final Doom",           "final",      exe_final},
     {"Final Doom (alt)",     "final2",     exe_final2},
 //  {"Chex Quest",           "chex",       exe_chex},

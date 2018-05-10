@@ -130,6 +130,7 @@ static struct {
     { doom,     exe_doom_1_9 },
     { doom,     exe_hacx },
     { doom,     exe_ultimate },
+    { doom,     exe_doom_se },
     { doom,     exe_final },
     { doom,     exe_final2 },
     { doom,     exe_chex },

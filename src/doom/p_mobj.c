@@ -415,8 +415,15 @@ void P_ZMovement (mobj_t* mo)
         //
         // So we need to check that this is either retail or commercial
         // (but not doom2)
+            //
+            // JN - Doom 1.9 Special Edition has no bounce. Since "exe_doom_se" 
+            // have a higher number than "exe_ultimate" for preventing too much 
+            // code changes, it's declared here as an additional condition.
+            // It's safe for Ultimate Doom IWAD internal demos.
+            //
 	
-	int correct_lost_soul_bounce = gameversion >= exe_ultimate;
+	int correct_lost_soul_bounce = gameversion >= exe_ultimate &&
+	                               gameversion != exe_doom_se;
 
 	if (correct_lost_soul_bounce && mo->flags & MF_SKULLFLY)
 	{

@@ -278,13 +278,29 @@ void S_Start(void)
             mus_e1m9,        // Tim          e4m9
         };
 
+        // [JN] Doom 1.9 Special Edition EP4 music
+        const int spmus_se[]=
+        {
+            mus_e2m6,   // e4m1
+            mus_e3m2,   // e4m2
+            mus_e3m3,   // e4m3
+            mus_e1m4,   // e4m4
+            mus_e2m7,   // e4m5
+            mus_e2m4,   // e4m6
+            mus_e1m7,   // e4m7
+            mus_e1m6,   // e4m8
+            mus_e1m6,   // e4m9
+        };
+
         if (gameepisode < 4)
         {
             mnum = mus_e1m1 + (gameepisode-1)*9 + gamemap-1;
         }
         else
         {
-            mnum = spmus[gamemap-1];
+            mnum = gameversion == exe_doom_se ?
+                                  spmus_se[gamemap-1] :
+                                  spmus[gamemap-1];
         }
     }
 
