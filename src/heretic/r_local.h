@@ -24,6 +24,11 @@
 #include "i_video.h"
 #include "v_patch.h"
 
+
+#define LOOKDIRMIN	160 // [crispy] -110, actually // [JN] increased to 160 (i.e. -160)
+#define LOOKDIRMAX	90
+#define LOOKDIRS	(LOOKDIRMIN+1+LOOKDIRMAX) // [crispy] lookdir range: -160..0..90
+
 #define	ANGLETOSKYSHIFT		22      // sky map is 256*128*4 maps
 
 #define	BASEYCENTER			100
@@ -54,6 +59,10 @@
 //#define LIGHTZSHIFT		20
 #define	NUMCOLORMAPS		32      // number of diminishing
 #define	INVERSECOLORMAP		32
+
+// [AM] Fractional part of the current tic, in the half-open
+//      range of [0.0, 1.0).  Used for interpolation.
+extern fixed_t          fractionaltic;
 
 /*
 ==============================================================================
@@ -104,6 +113,24 @@ typedef struct
     // [crispy] WiggleFix: [kb] for R_FixWiggle()
     int cachedheight;
     int scaleindex;    
+
+    // [AM] Previous position of floor and ceiling before
+    //      think.  Used to interpolate between positions.
+    fixed_t	oldfloorheight;
+    fixed_t	oldceilingheight;
+
+    // [AM] Gametic when the old positions were recorded.
+    //      Has a dual purpose; it prevents movement thinkers
+    //      from storing old positions twice in a tic, and
+    //      prevents the renderer from attempting to interpolate
+    //      if old values were not updated recently.
+    int         oldgametic;
+
+    // [AM] Interpolated floor and ceiling height.
+    //      Calculated once per tic and used inside
+    //      the renderer.
+    fixed_t interpfloorheight;
+    fixed_t interpceilingheight;
 } sector_t;
 
 typedef struct
@@ -361,6 +388,8 @@ fixed_t R_PointToDist(fixed_t x, fixed_t y);
 fixed_t R_ScaleFromGlobalAngle(angle_t visangle);
 subsector_t *R_PointInSubsector(fixed_t x, fixed_t y);
 void R_AddPointToBox(int x, int y, fixed_t * box);
+// [AM] Interpolate between two angles.
+angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale);
 
 
 //
@@ -415,7 +444,8 @@ extern int*  lastopening; // [crispy] 32-bit integer math
 extern int floorclip[SCREENWIDTH];   // [crispy] 32-bit integer math
 extern int ceilingclip[SCREENWIDTH]; // [crispy] 32-bit integer math
 
-extern fixed_t yslope[SCREENHEIGHT];
+extern fixed_t* yslope;
+extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
 extern fixed_t distscale[SCREENWIDTH];
 
 void R_InitPlanes(void);

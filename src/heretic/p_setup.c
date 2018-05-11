@@ -263,6 +263,15 @@ void P_LoadSectors(int lump)
         ss->cachedheight = 0;
     }
 
+    // [AM] Sector interpolation.  Even if we're
+    //      not running uncapped, the renderer still
+    //      uses this data.
+    ss->oldfloorheight = ss->floorheight;
+    ss->interpfloorheight = ss->floorheight;
+    ss->oldceilingheight = ss->ceilingheight;
+    ss->interpceilingheight = ss->ceilingheight;
+    ss->oldgametic = 0;
+
     W_ReleaseLumpNum(lump);
 }
 

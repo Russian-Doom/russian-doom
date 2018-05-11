@@ -25,6 +25,7 @@
 #include "r_local.h"
 #include "p_local.h"
 #include "tables.h"
+#include "i_timer.h"
 #include "jn.h"
 
 int viewangleoffset;
@@ -40,6 +41,8 @@ int centerx, centery;
 fixed_t centerxfrac, centeryfrac;
 fixed_t projection;
 
+extern int screenblocks;
+
 int framecount;                 // just for profiling purposes
 
 int sscount, linecount, loopcount;
@@ -48,6 +51,10 @@ fixed_t viewx, viewy, viewz;
 angle_t viewangle;
 fixed_t viewcos, viewsin;
 player_t *viewplayer;
+
+// [AM] Fractional part of the current tic, in the half-open
+//      range of [0.0, 1.0).  Used for interpolation.
+fixed_t fractionaltic;
 
 int detailshift;                // 0 = high, 1 = low
 
@@ -383,6 +390,28 @@ fixed_t R_ScaleFromGlobalAngle(angle_t visangle)
 */
 
 
+// [AM] Interpolate between two angles.
+angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale)
+{
+    if (nangle == oangle)
+        return nangle;
+    else if (nangle > oangle)
+    {
+        if (nangle - oangle < ANG270)
+            return oangle + (angle_t)((nangle - oangle) * FIXED2DOUBLE(scale));
+        else // Wrapped around
+            return oangle - (angle_t)((oangle - nangle) * FIXED2DOUBLE(scale));
+    }
+    else // nangle < oangle
+    {
+        if (oangle - nangle < ANG270)
+            return oangle - (angle_t)((oangle - nangle) * FIXED2DOUBLE(scale));
+        else // Wrapped around
+            return oangle + (angle_t)((nangle - oangle) * FIXED2DOUBLE(scale));
+    }
+}
+
+
 /*
 =================
 =
@@ -633,10 +662,15 @@ void R_ExecuteSetViewSize(void)
 //
     for (i = 0; i < viewheight; i++)
     {
-        dy = ((i - viewheight / 2) << FRACBITS) + FRACUNIT / 2;
+        const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
+        for (j = 0; j < LOOKDIRS; j++)
+        {
+        dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
         dy = abs(dy);
-        yslope[i] = FixedDiv((viewwidth << detailshift) / 2 * FRACUNIT, dy);
+        yslopes[j][i] = FixedDiv (num, dy);
+        }
     }
+    yslope = yslopes[LOOKDIRMIN];
 
     for (i = 0; i < viewwidth; i++)
     {
@@ -764,42 +798,78 @@ subsector_t *R_PointInSubsector(fixed_t x, fixed_t y)
 void R_SetupFrame(player_t * player)
 {
     int i;
-    int tableAngle;
     int tempCentery;
+    int pitch;
 
     //drawbsp = 1;
     viewplayer = player;
     // haleyjd: removed WATCOMC
     // haleyjd FIXME: viewangleoffset handling?
-    viewangle = player->mo->angle + viewangleoffset;
-    tableAngle = viewangle >> ANGLETOFINESHIFT;
-    if (player->chickenTics && player->chickenPeck)
-    {                           // Set chicken attack view position
-        viewx = player->mo->x + player->chickenPeck * finecosine[tableAngle];
-        viewy = player->mo->y + player->chickenPeck * finesine[tableAngle];
+
+    // [AM] Interpolate the player camera if the feature is enabled.
+
+    // Figure out how far into the current tic we're in as a fixed_t
+    if (uncapped_fps)
+        fractionaltic = I_GetTimeMS() * TICRATE % 1000 * FRACUNIT / 1000;
+
+    if (uncapped_fps &&
+        // Don't interpolate on the first tic of a level,
+        // otherwise oldviewz might be garbage.
+        leveltime > 1 &&
+        // Don't interpolate if the player did something
+        // that would necessitate turning it off for a tic.
+        player->mo->interp == true &&
+        // Don't interpolate during a paused state
+        !paused /*&& !menuactive*/)
+    {
+        // Interpolate player camera from their old position to their current one.
+        // [JN] Also for player's chicken mode.
+        if (player->chickenTics && player->chickenPeck)
+        {
+            viewx = player->mo->oldx + FixedMul(player->mo->x - player->mo->oldx, fractionaltic) 
+                  + player->chickenPeck * finecosine[viewangle>>ANGLETOFINESHIFT];
+            viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic)
+                  + player->chickenPeck * finesine[viewangle>>ANGLETOFINESHIFT];
+        }
+        else
+        {
+            viewx = player->mo->oldx + FixedMul(player->mo->x - player->mo->oldx, fractionaltic);
+            viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic);
+        }
+        viewz = player->oldviewz + FixedMul(player->viewz - player->oldviewz, fractionaltic);
+        viewangle = R_InterpolateAngle(player->mo->oldangle, player->mo->angle, fractionaltic) + viewangleoffset;
+
+        pitch = (player->oldlookdir + (player->lookdir - player->oldlookdir) * FIXED2DOUBLE(fractionaltic)) / MLOOKUNIT;
     }
     else
     {                           // Normal view position
         viewx = player->mo->x;
         viewy = player->mo->y;
-    }
-    extralight = player->extralight;
-    viewz = player->viewz;
+        viewz = player->viewz;
+        viewangle = player->mo->angle + viewangleoffset;
 
-    tempCentery = viewheight / 2 + ((player->lookdir / MLOOKUNIT) << hires) * (screenblocks < 11 ? screenblocks : 11) / 10;
+        // [crispy] pitch is actual lookdir /*and weapon pitch*/
+        pitch = player->lookdir / MLOOKUNIT;
+    }
+
+    extralight = player->extralight;
+
+    if (pitch > LOOKDIRMAX)
+    pitch = LOOKDIRMAX;
+    else
+    if (pitch < -LOOKDIRMIN)
+    pitch = -LOOKDIRMIN;
+
+    // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
+    tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10;
     if (centery != tempCentery)
     {
         centery = tempCentery;
         centeryfrac = centery << FRACBITS;
-        for (i = 0; i < viewheight; i++)
-        {
-            yslope[i] = FixedDiv((viewwidth << detailshift) / 2 * FRACUNIT,
-                                 abs(((i - centery) << FRACBITS) +
-                                     FRACUNIT / 2));
-        }
+        yslope = yslopes[LOOKDIRMIN + pitch];
     }
-    viewsin = finesine[tableAngle];
-    viewcos = finecosine[tableAngle];
+    viewsin = finesine[viewangle>>ANGLETOFINESHIFT];
+    viewcos = finecosine[viewangle>>ANGLETOFINESHIFT];
     sscount = 0;
     if (player->fixedcolormap)
     {

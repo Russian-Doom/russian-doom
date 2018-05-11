@@ -192,6 +192,17 @@ typedef struct mobj_s
     int lastlook;               // player number last looked for
 
     mapthing_t spawnpoint;      // for nightmare respawn
+
+    // [AM] If true, ok to interpolate this tic.
+    boolean interp;
+
+    // [AM] Previous position of mobj before think.
+    //      Used to interpolate between positions.
+    fixed_t oldx;
+    fixed_t oldy;
+    fixed_t oldz;
+    angle_t oldangle;
+
 } mobj_t;
 
 // killough 11/98:
@@ -451,7 +462,7 @@ typedef struct player_s
     fixed_t bob;                // bounded/scaled total momentum
 
     int flyheight;
-    int lookdir;
+    int lookdir, oldlookdir;
     boolean centering;
     int health;                 // only used between levels, mo->health
     // is used during levels
@@ -490,6 +501,9 @@ typedef struct player_s
     int chickenPeck;            // chicken peck countdown
     mobj_t *rain1;              // active rain maker 1
     mobj_t *rain2;              // active rain maker 2
+    // [AM] Previous position of viewz before think.
+    //      Used to interpolate between camera positions.
+    angle_t oldviewz;
     // [crispy] squat down weapon sprite a bit after hitting the ground
     fixed_t	psp_dy, psp_dy_max;
 } player_t;
