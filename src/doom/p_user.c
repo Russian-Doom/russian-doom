@@ -211,13 +211,7 @@ void P_MovePlayer (player_t* player)
         }
         else
         {
-            player->lookdir += MLOOKUNIT * 5 * look;
-            
-            if (player->lookdir > LOOKDIRMAX * MLOOKUNIT)
-                player->lookdir = LOOKDIRMAX * MLOOKUNIT;
-            else
-            if (player->lookdir < -LOOKDIRMIN * MLOOKUNIT)
-                player->lookdir = -LOOKDIRMIN * MLOOKUNIT;
+            cmd->lookdir = MLOOKUNIT * 5 * look;
         }
     }
     if (player->centering)
@@ -232,6 +226,12 @@ void P_MovePlayer (player_t* player)
             player->lookdir = 0;
             player->centering = false;
         }
+    }
+    if (!menuactive && !demoplayback)
+    {
+	player->lookdir = BETWEEN(-LOOKDIRMIN * MLOOKUNIT,
+	                          LOOKDIRMAX * MLOOKUNIT,
+	                          player->lookdir + cmd->lookdir);
     }
 }	
 
@@ -341,6 +341,7 @@ void P_PlayerThink (player_t* player)
     player->mo->oldz = player->mo->z;
     player->mo->oldangle = player->mo->angle;
     player->oldviewz = player->viewz;
+    player->oldlookdir = player->lookdir;
 
     // fixme: do this in the cheat code
     if (player->cheats & CF_NOCLIP)

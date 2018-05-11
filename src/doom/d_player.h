@@ -157,7 +157,7 @@ typedef struct player_s
     // [crispy] squat down weapon sprite a bit after hitting the ground
     fixed_t	psp_dy, psp_dy_max;
 
-    int     lookdir;
+    int     lookdir, oldlookdir;
     boolean centering;
     
     // [JN] Local time widget.

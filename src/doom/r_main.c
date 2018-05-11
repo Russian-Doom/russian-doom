@@ -848,6 +848,7 @@ void R_SetupFrame (player_t* player)
 {		
     int i;
     int tempCentery;
+    int pitch;
 
     viewplayer = player;
 
@@ -872,6 +873,8 @@ void R_SetupFrame (player_t* player)
         viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic);
         viewz = player->oldviewz + FixedMul(player->viewz - player->oldviewz, fractionaltic);
         viewangle = R_InterpolateAngle(player->mo->oldangle, player->mo->angle, fractionaltic) + viewangleoffset;
+
+        pitch = (player->oldlookdir + (player->lookdir - player->oldlookdir) * FIXED2DOUBLE(fractionaltic)) / MLOOKUNIT;
     }
     else
     {
@@ -879,16 +882,26 @@ void R_SetupFrame (player_t* player)
         viewy = player->mo->y;
         viewz = player->viewz;
         viewangle = player->mo->angle + viewangleoffset;
+
+        // [crispy] pitch is actual lookdir
+        pitch = player->lookdir / MLOOKUNIT;
     }
 
     extralight = player->extralight;
 
-    tempCentery = viewheight / 2 + ((player->lookdir / MLOOKUNIT) << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10;
+    if (pitch > LOOKDIRMAX)
+    pitch = LOOKDIRMAX;
+    else
+    if (pitch < -LOOKDIRMIN)
+    pitch = -LOOKDIRMIN;
+
+    // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
+    tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10;
     if (centery != tempCentery)
     {
         centery = tempCentery;
         centeryfrac = centery << FRACBITS;
-        yslope = yslopes[LOOKDIRMIN + player->lookdir/MLOOKUNIT];
+        yslope = yslopes[LOOKDIRMIN + pitch];
     }
 
     viewsin = finesine[viewangle>>ANGLETOFINESHIFT];

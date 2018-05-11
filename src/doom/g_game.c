@@ -722,6 +722,16 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     cmd->forwardmove += forward; 
     cmd->sidemove += side;
 
+    // [crispy] lookdir delta is stored in the lower 4 bits of the lookfly variable
+    if (players[consoleplayer].playerstate == PST_LIVE)
+    {
+        if (look < 0)
+        {
+            look += 16;
+        }
+        cmd->lookfly = look;
+    }
+
     // special buttons
     if (sendpause) 
     { 
