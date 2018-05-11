@@ -883,7 +883,7 @@ void R_SetupFrame (player_t* player)
         viewz = player->viewz;
         viewangle = player->mo->angle + viewangleoffset;
 
-        // [crispy] pitch is actual lookdir
+        // [crispy] pitch is actual lookdir /*and weapon pitch*/
         pitch = player->lookdir / MLOOKUNIT;
     }
 
