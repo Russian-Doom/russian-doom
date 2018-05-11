@@ -36,7 +36,8 @@ extern planefunction_t ceilingfunc_t;
 extern int floorclip[SCREENWIDTH];   // [crispy] 32-bit integer math
 extern int ceilingclip[SCREENWIDTH]; // [crispy] 32-bit integer math
 
-extern fixed_t yslope[SCREENHEIGHT];
+extern fixed_t*	yslope;
+extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
 extern fixed_t distscale[SCREENWIDTH];
 
 void R_InitPlanes (void);

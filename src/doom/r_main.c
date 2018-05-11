@@ -736,10 +736,15 @@ void R_ExecuteSetViewSize (void)
     // planes
     for (i=0 ; i<viewheight ; i++)
     {
-        dy = ((i-viewheight/2)<<FRACBITS)+FRACUNIT/2;
+        const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
+        for (j = 0; j < LOOKDIRS; j++)
+        {
+        dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
         dy = abs(dy);
-        yslope[i] = FixedDiv ( (viewwidth<<(detailshift && !hires))/2*FRACUNIT, dy);
+        yslopes[j][i] = FixedDiv (num, dy);
+        }
     }
+    yslope = yslopes[LOOKDIRMIN];
 
     for (i=0 ; i<viewwidth ; i++)
     {
@@ -883,12 +888,7 @@ void R_SetupFrame (player_t* player)
     {
         centery = tempCentery;
         centeryfrac = centery << FRACBITS;
-        for (i = 0; i < viewheight; i++)
-        {
-            yslope[i] = FixedDiv((viewwidth << (detailshift && !hires)) / 2 * FRACUNIT,
-                                abs(((i - centery) << FRACBITS) +
-                                    FRACUNIT / 2));
-        }
+        yslope = yslopes[LOOKDIRMIN + player->lookdir/MLOOKUNIT];
     }
 
     viewsin = finesine[viewangle>>ANGLETOFINESHIFT];
