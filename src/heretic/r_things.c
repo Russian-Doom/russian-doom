@@ -696,8 +696,9 @@ void R_ProjectSprite(mobj_t * thing)
                 vis->colormap = fullbrights_redonly[index];
 
             // - Blue only -
-            if (thing->type == MT_SORCERER1 || // D'Sparil on Serpent
-                thing->type == MT_SORCERER2)   // D'Sparil walking
+            if (thing->type == MT_SORCERER1 ||  // D'Sparil on Serpent
+                thing->type == MT_SORCERER2 ||  // D'Sparil walking
+                thing->type == MT_SOR2TELEFADE) // D'Sparil teleporting
                 vis->colormap = fullbrights_blueonly[index];
 
             // - Not bronze -
