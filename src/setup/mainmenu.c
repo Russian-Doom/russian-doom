@@ -99,7 +99,6 @@ static void SensibleDefaults(void)
     // [JN] Дополнительные параметры игры
 
     // Графика
-    uncapped_fps = 1;
     brightmaps = 1;
     fake_contrast = 0;
     translucency = 1;

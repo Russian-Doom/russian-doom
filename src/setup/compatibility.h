@@ -25,7 +25,6 @@ void BindCompatibilityVariables(void);
 // [JN] Дополнительные параметры игры
 
 // Графика
-extern int uncapped_fps;
 extern int brightmaps;
 extern int fake_contrast;
 extern int translucency;

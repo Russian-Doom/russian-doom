@@ -209,8 +209,8 @@ void D_Display (void)
     }
 
     // save the current screen if about to wipe
-    // [JN] функция стала опциональной. Анимация отключена в режиме разработчика (devparm).
-    if (gamestate != wipegamestate && !disable_screen_wiping && !devparm)
+    // [JN] No wiping while -devparm
+    if (gamestate != wipegamestate && !devparm)
     {
         wipe = true;
         wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);

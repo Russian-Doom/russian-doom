@@ -31,7 +31,6 @@
 // [JN] Дополнительные параметры игры
 
 // Графика
-int uncapped_fps = 1;
 int brightmaps = 1;
 int fake_contrast = 0;
 int translucency = 1;
@@ -97,7 +96,6 @@ void CompatibilitySettings(void)
     TXT_AddWidgets(window_features,
 
     TXT_NewSeparator("ѓрафика"),
-        TXT_NewCheckBox("‘нять ограничение в 35 fps",                                                           &uncapped_fps),
         TXT_NewCheckBox("Ѓрайтмаппинг текстур и спрайтов",                                                      &brightmaps),
         TXT_NewCheckBox("€митация контрастного освещения стен",                                                 &fake_contrast),
         TXT_If(gamemission == doom, TXT_NewCheckBox("ћффект прозрачности у некоторых объектов",                 &translucency)),
@@ -150,7 +148,6 @@ void CompatibilitySettings(void)
 void BindCompatibilityVariables(void)
 {
     // Графика
-    M_BindIntVariable("uncapped_fps",           &uncapped_fps);
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("translucency",           &translucency);

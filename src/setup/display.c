@@ -70,7 +70,6 @@ static char *video_driver = "";
 static char *window_position = "";
 static int aspect_ratio_correct = 1;
 static int smoothing = 0;
-static int disable_screen_wiping = 0;
 static int vga_porch_flash = 0;
 static int integer_scaling = 0;
 static int force_software_renderer = 0;
@@ -80,6 +79,7 @@ static int window_width = 640, window_height = 480;
 static int startup_delay = 1000;
 static int usegamma = 0;
 
+int uncapped_fps = 1;
 int graphical_startup = 0; // [JN] Disabled by default
 int show_endoom = 0;
 int png_screenshots = 1;   // [JN] Crispy!
@@ -183,53 +183,51 @@ static void GenerateSizesTable(TXT_UNCAST_ARG(widget),
     }
 }
 
-static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
-                                  TXT_UNCAST_ARG(sizes_table))
-{
-    TXT_CAST_ARG(txt_table_t, sizes_table);
-    txt_window_t *window;
-    txt_checkbox_t *ar_checkbox;
-
-    window = TXT_NewWindow("Дополнительные настройки");
-
-    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
-
-    TXT_SetColumnWidths(window, 40);
-
-    TXT_AddWidgets(window,
-        ar_checkbox = TXT_NewCheckBox("Фиксировать соотношение сторон", &aspect_ratio_correct),
-        TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
-            TXT_NewCheckBox("Графическа€ загрузка", &graphical_startup)),
-        TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
-            TXT_NewCheckBox("Показывать экран ENDOOM при выходе", &show_endoom)),
-            
-    // [JN] Ёкспериментальные функции
-
-    TXT_NewSeparator("Рендеринг"),
-    TXT_NewCheckBox("Незначительное сглаживание текстур", &smoothing),
-    TXT_If(gamemission == doom,
-        TXT_NewCheckBox("Отключить эффект плавной смены экранов", &disable_screen_wiping)),
-    TXT_NewCheckBox("Программный рендеринг (режим Software)", &force_software_renderer),
-/*
-    TXT_NewCheckBox("Мигать бордюрами экрана (эмул€ци€ VGA)", &vga_porch_flash),
-#if SDL_VERSION_ATLEAST(2, 0, 5)
-        TXT_NewCheckBox("Целочисленное масштабирование окна", &integer_scaling),
-#endif
-*/
-
-#ifdef HAVE_LIBPNG
-        TXT_NewCheckBox("Сохран€ть скриншоты в формате PNG", &png_screenshots),
-#endif
-        NULL);
-
-    TXT_SignalConnect(ar_checkbox, "changed", GenerateSizesTable, sizes_table);
-}
+// [JN] No longer used, moved to ConfigDisplay
+//
+// static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
+//                                   TXT_UNCAST_ARG(sizes_table))
+// {
+//     TXT_CAST_ARG(txt_table_t, sizes_table);
+//     txt_window_t *window;
+//     txt_checkbox_t *ar_checkbox;
+// 
+//     window = TXT_NewWindow("Дополнительные настройки");
+// 
+//     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+// 
+//     TXT_SetColumnWidths(window, 40);
+// 
+//     TXT_AddWidgets(window,
+//         ar_checkbox = TXT_NewCheckBox("Фиксировать соотношение сторон", &aspect_ratio_correct),
+//         TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
+//             TXT_NewCheckBox("Графическа€ загрузка", &graphical_startup)),
+//         TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
+//             TXT_NewCheckBox("Показывать экран ENDOOM при выходе", &show_endoom)),
+//             
+//     // [JN] Ёкспериментальные функции
+// 
+//     TXT_NewSeparator("Рендеринг"),
+//     TXT_NewCheckBox("Незначительное сглаживание текстур", &smoothing),
+//     TXT_NewCheckBox("Программный рендеринг (режим Software)", &force_software_renderer),
+// /*
+//     TXT_NewCheckBox("Мигать бордюрами экрана (эмул€ци€ VGA)", &vga_porch_flash),
+// #if SDL_VERSION_ATLEAST(2, 0, 5)
+//         TXT_NewCheckBox("Целочисленное масштабирование окна", &integer_scaling),
+// #endif
+// */
+// 
+//         NULL);
+// 
+//     TXT_SignalConnect(ar_checkbox, "changed", GenerateSizesTable, sizes_table);
+// }
 
 void ConfigDisplay(void)
 {
     txt_window_t *window;
     txt_table_t *sizes_table;
-    txt_window_action_t *advanced_button;
+    // txt_window_action_t *advanced_button;
+    txt_checkbox_t *ar_checkbox;
 
     // Open the window
 
@@ -240,6 +238,25 @@ void ConfigDisplay(void)
     // Build window:
 
     TXT_AddWidgets(window,
+
+    TXT_NewSeparator("Рендеринг"),
+
+        ar_checkbox = TXT_NewCheckBox("Фиксировать соотношение сторон", &aspect_ratio_correct),
+        TXT_NewCheckBox("Сн€ть ограничение с 35 fps", &uncapped_fps),
+        TXT_NewCheckBox("Программный рендеринг (режим Software)", &force_software_renderer),
+
+    TXT_NewSeparator("Дополнительно"),
+    
+        TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
+            TXT_NewCheckBox("Графическа€ загрузка", &graphical_startup)),
+        TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
+            TXT_NewCheckBox("Показывать экран ENDOOM при выходе", &show_endoom)),
+#ifdef HAVE_LIBPNG
+        TXT_NewCheckBox("Сохран€ть скриншоты в формате PNG", &png_screenshots),
+#endif
+
+    TXT_NewSeparator("Видео"),
+            
         TXT_NewCheckBox("Полноэкранный режим", &fullscreen),
         TXT_NewConditional(&fullscreen, 0,
             sizes_table = TXT_NewTable(3)),
@@ -252,7 +269,7 @@ void ConfigDisplay(void)
     // fullscreen and windowed mode (which causes the window's
     // height to change).
     TXT_SetWindowPosition(window, TXT_HORIZ_CENTER, TXT_VERT_TOP,
-                                  TXT_SCREEN_W / 2, 6);
+                                  TXT_SCREEN_W / 2, 4);
 
     GenerateSizesTable(NULL, sizes_table);
 
@@ -260,18 +277,17 @@ void ConfigDisplay(void)
     // Need to pass a pointer to the window sizes table, as some of the options
     // in there trigger a rebuild of it.
 
-    advanced_button = TXT_NewWindowAction('a', "Дополнительно");
+    // advanced_button = TXT_NewWindowAction('a', "Дополнительно");
 
-    TXT_SetWindowAction(window, TXT_HORIZ_CENTER, advanced_button);
-    TXT_SignalConnect(advanced_button, "pressed",
-                      AdvancedDisplayConfig, sizes_table);
+    // TXT_SetWindowAction(window, TXT_HORIZ_CENTER, advanced_button);
+    // TXT_SignalConnect(advanced_button, "pressed",
+    //                   AdvancedDisplayConfig, sizes_table);
 }
 
 void BindDisplayVariables(void)
 {
     M_BindIntVariable("aspect_ratio_correct",      &aspect_ratio_correct);
     M_BindIntVariable("smoothing",                 &smoothing);
-    M_BindIntVariable("disable_screen_wiping",     &disable_screen_wiping);
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
     M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("fullscreen",                &fullscreen);
@@ -283,6 +299,7 @@ void BindDisplayVariables(void)
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindStringVariable("window_position",        &window_position);
     M_BindIntVariable("usegamma",                  &usegamma);
+    M_BindIntVariable("uncapped_fps",              &uncapped_fps);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
     M_BindIntVariable("force_software_renderer",   &force_software_renderer);
 

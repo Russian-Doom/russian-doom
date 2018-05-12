@@ -37,11 +37,16 @@ extern int local_time;
 
 
 // -----------------------------------------------------------------------------
+// Rendering
+// -----------------------------------------------------------------------------
+
+extern int uncapped_fps;
+
+// -----------------------------------------------------------------------------
 // Optional gameplay features
 // -----------------------------------------------------------------------------
 
 // Графика (Visual)
-extern int uncapped_fps;
 extern int brightmaps;
 extern int fake_contrast;
 extern int translucency;
