@@ -78,7 +78,8 @@ int spanstop[SCREENHEIGHT];
 // Texture mapping
 lighttable_t **planezlight;
 fixed_t planeheight;
-fixed_t yslope[SCREENHEIGHT];
+fixed_t* yslope;
+fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
 fixed_t distscale[SCREENWIDTH];
 fixed_t basexscale, baseyscale;
 fixed_t cachedheight[SCREENHEIGHT];

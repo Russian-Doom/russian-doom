@@ -1064,6 +1064,21 @@ void P_MobjThinker(mobj_t * mobj)
 	if((mobj->flags2&MF2_BLASTED) && (!(mobj->momx)) && (!(mobj->momy)))
 		ResetBlasted(mobj);
 */
+
+    // [AM] Handle interpolation unless we're an active player.
+    if (!(mobj->player != NULL && mobj == mobj->player->mo))
+    {
+        // Assume we can interpolate at the beginning
+        // of the tic.
+        mobj->interp = true;
+
+        // Store starting position for mobj interpolation.
+        mobj->oldx = mobj->x;
+        mobj->oldy = mobj->y;
+        mobj->oldz = mobj->z;
+        mobj->oldangle = mobj->angle;
+    }
+
     // Handle X and Y momentums
     BlockingMobj = NULL;
     if (mobj->momx || mobj->momy || (mobj->flags & MF_SKULLFLY))
@@ -1249,6 +1264,15 @@ mobj_t *P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
     {
         mobj->floorclip = 0;
     }
+
+    // [AM] Do not interpolate on spawn.
+    mobj->interp = false;
+
+    // [AM] Just in case interpolation is attempted...
+    mobj->oldx = mobj->x;
+    mobj->oldy = mobj->y;
+    mobj->oldz = mobj->z;
+    mobj->oldangle = mobj->angle;
 
     mobj->thinker.function = P_MobjThinker;
     P_AddThinker(&mobj->thinker);

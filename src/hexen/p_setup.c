@@ -299,6 +299,14 @@ void P_LoadSectors(int lump)
         ss->tag = SHORT(ms->tag);
         ss->thinglist = NULL;
         ss->seqType = SEQTYPE_STONE;    // default seqType
+        // [AM] Sector interpolation.  Even if we're
+        //      not running uncapped, the renderer still
+        //      uses this data.
+        ss->oldfloorheight = ss->floorheight;
+        ss->interpfloorheight = ss->floorheight;
+        ss->oldceilingheight = ss->ceilingheight;
+        ss->interpceilingheight = ss->ceilingheight;
+        ss->oldgametic = 0;
     }
     W_ReleaseLumpNum(lump);
 }

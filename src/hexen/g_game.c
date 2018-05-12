@@ -691,13 +691,13 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
    // TODO: make it safe for network game
    if (mlook && !netgame && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive && !askforquit && !paused)
    {
-       players[consoleplayer].lookdir += mousey;
+       cmd->lookdir += mousey;
        
-       if (players[consoleplayer].lookdir > 90 * MLOOKUNIT)
-           players[consoleplayer].lookdir = 90 * MLOOKUNIT;
+       if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
+           players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
        else
-       if (players[consoleplayer].lookdir < -160 * MLOOKUNIT)
-           players[consoleplayer].lookdir = -160 * MLOOKUNIT;
+       if (players[consoleplayer].lookdir < -LOOKDIRMIN * MLOOKUNIT)
+           players[consoleplayer].lookdir = -LOOKDIRMIN * MLOOKUNIT;
    }
 
     // [JN] Mouselook: toggling

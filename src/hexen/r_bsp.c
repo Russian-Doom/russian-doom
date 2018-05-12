@@ -22,6 +22,8 @@
 #include "m_bbox.h"
 #include "r_local.h"
 
+#include "jn.h"
+
 seg_t *curline;
 side_t *sidedef;
 line_t *linedef;
@@ -202,6 +204,31 @@ void R_ClearClipSegs(void)
 }
 
 
+// [AM] Interpolate the passed sector, if prudent.
+void R_MaybeInterpolateSector(sector_t* sector)
+{
+    if (uncapped_fps &&
+        // Only if we moved the sector last tic.
+        sector->oldgametic == gametic - 1)
+    {
+        // Interpolate between current and last floor/ceiling position.
+        if (sector->floorheight != sector->oldfloorheight)
+            sector->interpfloorheight = sector->oldfloorheight + FixedMul(sector->floorheight - sector->oldfloorheight, fractionaltic);
+        else
+            sector->interpfloorheight = sector->floorheight;
+        if (sector->ceilingheight != sector->oldceilingheight)
+            sector->interpceilingheight = sector->oldceilingheight + FixedMul(sector->ceilingheight - sector->oldceilingheight, fractionaltic);
+        else
+            sector->interpceilingheight = sector->ceilingheight;
+    }
+    else
+    {
+        sector->interpfloorheight = sector->floorheight;
+        sector->interpceilingheight = sector->ceilingheight;
+    }
+}
+
+
 //=============================================================================
 
 /*
@@ -269,12 +296,17 @@ void R_AddLine(seg_t * line)
     if (!backsector)
         goto clipsolid;         // single sided line
 
-    if (backsector->ceilingheight <= frontsector->floorheight
-        || backsector->floorheight >= frontsector->ceilingheight)
+    // [AM] Interpolate sector movement before
+    //      running clipping tests.  Frontsector
+    //      should already be interpolated.
+    R_MaybeInterpolateSector(backsector);
+
+    if (backsector->interpceilingheight <= frontsector->interpfloorheight
+        || backsector->interpfloorheight >= frontsector->interpceilingheight)
         goto clipsolid;         // closed door
 
-    if (backsector->ceilingheight != frontsector->ceilingheight
-        || backsector->floorheight != frontsector->floorheight)
+    if (backsector->interpceilingheight != frontsector->interpceilingheight
+        || backsector->interpfloorheight != frontsector->interpfloorheight)
         goto clippass;          // window
 
 // reject empty lines used for triggers and special events
@@ -428,9 +460,13 @@ void R_Subsector(int num)
     count = sub->numlines;
     line = &segs[sub->firstline];
 
-    if (frontsector->floorheight < viewz)
+    // [AM] Interpolate sector movement.  Usually only needed
+    //      when you're standing inside the sector.
+    R_MaybeInterpolateSector(frontsector);
+
+    if (frontsector->interpfloorheight < viewz)
     {
-        floorplane = R_FindPlane(frontsector->floorheight,
+        floorplane = R_FindPlane(frontsector->interpfloorheight,
                                  frontsector->floorpic,
                                  frontsector->lightlevel,
                                  frontsector->special);
@@ -440,10 +476,10 @@ void R_Subsector(int num)
         floorplane = NULL;
     }
 
-    if (frontsector->ceilingheight > viewz
+    if (frontsector->interpceilingheight > viewz
         || frontsector->ceilingpic == skyflatnum)
     {
-        ceilingplane = R_FindPlane(frontsector->ceilingheight,
+        ceilingplane = R_FindPlane(frontsector->interpceilingheight,
                                    frontsector->ceilingpic,
                                    frontsector->lightlevel, 0);
     }
