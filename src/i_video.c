@@ -673,6 +673,23 @@ void I_FinishUpdate (void)
         return;
 #endif
 
+    // [crispy] variable rendering framerate
+    // [JN] Modified to have a strict 120 FPS cap
+    if (uncapped_fps && !singletics)
+    {
+        static int halftics_old;
+        int halftics;
+        extern int GetAdjustedTimeN (const int N);
+
+        // [JN] Cap FPS here. 120 FPS is: GetAdjustedTimeN(110 + 1 * 10)
+        while ((halftics = GetAdjustedTimeN(120)) == halftics_old)
+        {
+            I_Sleep(1);
+        }
+
+        halftics_old = halftics;
+    }
+
     // draws little dots on the bottom of the screen
 
     if (display_fps_dots)
