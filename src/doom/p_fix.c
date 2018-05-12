@@ -2949,6 +2949,7 @@ linefix_t linefix[] =
     { doom2,            1,  31,     670,    0, "",         "",            "",                 25,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  31,     672,    0, "",         "",            "",                 25,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
+    { doom2,            1,  32,      30,    0, "",         "",            "",            DEFAULT,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  32,      31,    0, "",         "",            "",            DEFAULT,         0, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
    // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
