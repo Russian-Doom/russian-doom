@@ -592,7 +592,7 @@ void SB_Drawer(void)
             V_DrawPatch(ORIGWIDTH/2,
                 ((screenblocks <= 10) ? (ORIGHEIGHT-31)/2 : (ORIGHEIGHT+8)/2),
                 W_CacheLumpName(DEH_String(!crosshair_health ?
-                                           "XHAIRSR" :             // Red (only)
+                                           "XHAIRUG" :             // Green (only)
                                            CPlayer->health >= 67 ?
                                            "XHAIRSG" :             // Green
                                            CPlayer->health >= 34 ?
@@ -604,7 +604,7 @@ void SB_Drawer(void)
             V_DrawPatchUnscaled(SCREENWIDTH/2,
                 ((screenblocks <= 10) ? (SCREENHEIGHT-68)/2 : (SCREENHEIGHT+16)/2),
                 W_CacheLumpName(DEH_String(!crosshair_health ? 
-                                           "XHAIRUR":              // Red (only)
+                                           "XHAIRUG":              // Green (only)
                                            CPlayer->health >= 67 ?
                                            "XHAIRUG" :             // Green
                                            CPlayer->health >= 34 ?
