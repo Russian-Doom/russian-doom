@@ -51,6 +51,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "crispy.h"
+#include "jn.h"
 
 
 // These are (1) the window (or the full screen) that our game is rendered to
@@ -1150,15 +1151,19 @@ static void SetVideoMode(void)
     // intermediate texture into the upscaled texture.
     renderer_flags = SDL_RENDERER_TARGETTEXTURE;
 
+    // Turn on vsync if we aren't in a -timedemo
+    if (!singletics)
+    {
+        if (!uncapped_fps)
+        {
+            renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
+        }
+    }
+
     if (force_software_renderer)
     {
         renderer_flags |= SDL_RENDERER_SOFTWARE;
-    }
-
-    // Turn on vsync if we aren't in a -timedemo
-    else if (!singletics)
-    {
-        renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
+        renderer_flags &= ~SDL_RENDERER_PRESENTVSYNC;
     }
 
     if (renderer != NULL)
