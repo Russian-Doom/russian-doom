@@ -45,6 +45,9 @@
 
 #include "crispy.h"
 
+
+int uncapped_fps = 1;
+
 // The complete set of data for a particular tic.
 
 typedef struct
@@ -699,8 +702,6 @@ static void SinglePlayerClear(ticcmd_set_t *set)
         }
     }
 }
-
-int uncapped_fps = 0;
 
 //
 // TryRunTics
