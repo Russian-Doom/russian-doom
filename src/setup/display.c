@@ -242,7 +242,7 @@ void ConfigDisplay(void)
     TXT_NewSeparator("Рендеринг"),
 
         ar_checkbox = TXT_NewCheckBox("Фиксировать соотношение сторон", &aspect_ratio_correct),
-        TXT_NewCheckBox("Сн€ть ограничение с 35 fps", &uncapped_fps),
+        TXT_NewCheckBox("Использовать кадровую частоту 120 fps", &uncapped_fps),
         TXT_NewCheckBox("Программный рендеринг (режим Software)", &force_software_renderer),
 
     TXT_NewSeparator("Дополнительно"),
