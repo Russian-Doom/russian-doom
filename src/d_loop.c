@@ -136,6 +136,12 @@ int GetAdjustedTimeN(const int N)
 {
     int time_ms;
 
+    // [JN] Just for sure. Negative values are working as positive ones.
+    if (max_fps < 1)
+        max_fps = 1;
+    if (max_fps > 999)
+        max_fps = 999;
+
     time_ms = I_GetTimeMS();
 
     if (new_sync)
