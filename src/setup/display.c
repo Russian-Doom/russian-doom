@@ -80,6 +80,7 @@ static int startup_delay = 1000;
 static int usegamma = 0;
 
 int uncapped_fps = 1;
+int max_fps = 120;
 int graphical_startup = 0; // [JN] Disabled by default
 int show_endoom = 0;
 int png_screenshots = 1;   // [JN] Crispy!
@@ -300,6 +301,7 @@ void BindDisplayVariables(void)
     M_BindStringVariable("window_position",        &window_position);
     M_BindIntVariable("usegamma",                  &usegamma);
     M_BindIntVariable("uncapped_fps",              &uncapped_fps);
+    M_BindIntVariable("max_fps",                   &max_fps);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
     M_BindIntVariable("force_software_renderer",   &force_software_renderer);
 
