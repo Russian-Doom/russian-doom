@@ -857,6 +857,8 @@ void H2_GameLoop(void)
         // Move positional sounds
         S_UpdateSounds(players[displayplayer].mo);
 
+        // Update display, next frame, with current state.
+        if (screenvisible)
         DrawAndBlit();
     }
 }

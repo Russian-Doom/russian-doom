@@ -281,6 +281,9 @@ void D_DoomLoop(void)
 
         // Move positional sounds
         S_UpdateSounds(players[consoleplayer].mo);
+
+        // Update display, next frame, with current state.
+        if (screenvisible)
         D_Display();
     }
 }

@@ -544,9 +544,7 @@ void D_DoomLoop (void)
         S_UpdateSounds (players[consoleplayer].mo);
 
         // Update display, next frame, with current state.
-        // [JN] Not calling D_Display in uncapped mode making this loop too fast
-        // to compute and leading to awfully high CPU usage in minimized window.
-        // if (screenvisible)
+        if (screenvisible)
         D_Display ();
     }
 }
