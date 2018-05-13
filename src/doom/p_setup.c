@@ -1283,6 +1283,10 @@ P_SetupLevel
 
     leveltime = 0;
     
+    // [crispy] check and log map and nodes format
+    // [JN] No support for non-standard nodes for now, just call I_Error instead of lock up.
+    P_CheckMapFormat(lumpnum);
+
     // note: most of this ordering is important	
     P_LoadBlockMap (lumpnum+ML_BLOCKMAP);
     P_LoadVertexes (lumpnum+ML_VERTEXES);
