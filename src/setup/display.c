@@ -276,7 +276,7 @@ void ConfigDisplay(void)
     // fullscreen and windowed mode (which causes the window's
     // height to change).
     TXT_SetWindowPosition(window, TXT_HORIZ_CENTER, TXT_VERT_TOP,
-                                  TXT_SCREEN_W / 2, 3);
+                                  TXT_SCREEN_W / 2, gamemission == heretic ? 2 : 3);
 
     GenerateSizesTable(NULL, sizes_table);
 
