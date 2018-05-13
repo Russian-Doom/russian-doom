@@ -1166,6 +1166,57 @@ static void P_LoadReject(int lumpnum)
 }
 
 //
+// [JN] Check for non-standard nodes format, call I_Error in case if found one.
+// Adapted from Crispy Doom (p_extnodes.c). Tested nodes so far:
+//
+// No nodes                        | not working
+// BSP-W32 - Fast (no reject)      | working
+// BSP-W32 - Normal                | working
+// DeepBSP - Normal                | working (partially?)
+// glBSP - Fast (no reject)        | not working (identified as uncompressed ZDBSP)
+// glBSP - Normal                  | working
+// ZDBSP - Compressed              | not working
+// ZDBSP - Compressed (UDMF)       | not working (identified as uncompressed ZDBSP)
+// ZDBSP - Normal (no reject)      | working (partially?)
+// ZDBSP - Normal (0 reject)       | working (partially?)
+// ZDBSP - UDMF Normal (no reject) | not working (identified as uncompressed ZDBSP)
+// ZDBSP - UDMF Normal (0 reject)  | not working (identified as uncompressed ZDBSP)
+// ZenNode - Fast (no reject)      | working
+// ZenNode - Normal                | working
+// 
+void P_CheckMapFormat (int lumpnum)
+{
+    byte *nodes = NULL;
+    int b;
+
+    if ((b = lumpnum+ML_BLOCKMAP+1) < numlumps && !strncasecmp(lumpinfo[b]->name, "BEHAVIOR", 8))
+    I_Error ("Уровни формата Hexen не поддерживаются");
+    
+    if (!((b = lumpnum+ML_NODES) < numlumps && (nodes = W_CacheLumpNum(b, PU_CACHE)) && W_LumpLength(b) > 0))
+    {
+        // fprintf(stderr, "no nodes.\n");
+    }
+    else if (!memcmp(nodes, "xNd4\0\0\0\0", 8))
+    {
+        I_Error ("Неподдерживаемый формат нодов: DeePBSP");
+    }
+    else if (!memcmp(nodes, "XNOD", 4))
+    {
+        I_Error ("Неподдерживаемый формат нодов: Uncompressed ZDBSP");
+    }
+    else if (!memcmp(nodes, "ZNOD", 4))
+    {
+        I_Error ("Неподдерживаемый формат нодов: Compressed ZDBSP");
+    }
+
+    if (nodes)
+	W_ReleaseLumpNum(b);
+
+    return;
+}
+
+
+//
 // P_SetupLevel
 //
 void
