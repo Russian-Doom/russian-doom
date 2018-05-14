@@ -515,7 +515,7 @@ void R_ProjectSprite(mobj_t * thing)
 
     // [AM] Interpolate between current and last position,
     //      if prudent.
-    if (uncapped_fps &&
+    if (uncapped_fps && !vanillaparm &&
         // Don't interpolate if the mobj did something
         // that would necessitate turning it off for a tic.
         thing->interp == true &&
