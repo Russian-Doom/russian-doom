@@ -635,6 +635,7 @@ extern boolean netgame;         // only true if >1 player
 
 extern boolean cmdfrag;         // true if a CMD_FRAG packet should be sent out every
                                                 // kill
+extern boolean MenuActive;
 
 extern boolean playeringame[MAXPLAYERS];
 extern pclass_t PlayerClass[MAXPLAYERS];
