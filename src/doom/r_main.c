@@ -952,6 +952,7 @@ void R_SetupFrame (player_t* player)
 void R_RenderPlayerView (player_t* player)
 {	
     extern void V_DrawFilledBox (int x, int y, int w, int h, int c);
+    extern void R_InterpolateTextureOffsets (void);
     extern boolean beneath_door;
 
     R_SetupFrame (player);
@@ -980,6 +981,9 @@ void R_RenderPlayerView (player_t* player)
 
     // check for new console commands.
     NetUpdate ();
+
+    // [crispy] smooth texture scrolling
+    R_InterpolateTextureOffsets();
 
     // The head node is the last node output.
     R_RenderBSPNode (numnodes-1);

@@ -1187,6 +1187,9 @@ void P_UpdateSpecials (void)
     {
         case 48:
         // EFFECT FIRSTCOL SCROLL +
+        // [crispy] smooth texture scrolling
+        sides[line->sidenum[0]].oldtextureoffset =
+        sides[line->sidenum[0]].textureoffset;
         sides[line->sidenum[0]].textureoffset += FRACUNIT;
         break;
 
@@ -1242,6 +1245,34 @@ void P_UpdateSpecials (void)
 	}
 }
 
+// [crispy] smooth texture scrolling
+void R_InterpolateTextureOffsets()
+{
+	int i;
+	fixed_t frac;
+
+	if (uncapped_fps &&
+	    !paused && (!menuactive || demoplayback || netgame))
+	{
+		frac = fractionaltic;
+	}
+	else
+	{
+		frac = FRACUNIT;
+	}
+
+	for (i = 0; i < numlinespecials; i++)
+	{
+		const line_t *line = linespeciallist[i];
+
+		if (line->special == 48)
+		{
+			side_t *const side = &sides[line->sidenum[0]];
+
+			side->textureoffset = side->oldtextureoffset + frac;
+		}
+	}
+}
 
 //
 // Donut overrun emulation

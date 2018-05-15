@@ -187,6 +187,8 @@ typedef struct
     // Sector the SideDef is facing.
     sector_t*	sector;
     
+    // [crispy] smooth texture scrolling
+    fixed_t oldtextureoffset;    
 } side_t;
 
 
