@@ -1003,10 +1003,16 @@ void P_UpdateSpecials(void)
         switch (line->special)
         {
             case 48:           // Effect_Scroll_Left
+                // [crispy] smooth texture scrolling
+                sides[line->sidenum[0]].oldtextureoffset =
+                sides[line->sidenum[0]].textureoffset;
                 sides[line->sidenum[0]].textureoffset += FRACUNIT;
                 break;
             case 99:           // Effect_Scroll_Right
-                sides[line->sidenum[0]].textureoffset -= FRACUNIT;
+                // [crispy] smooth texture scrolling
+                sides[line->sidenum[0]].oldtextureoffset =
+                sides[line->sidenum[0]].textureoffset;
+                sides[line->sidenum[0]].textureoffset += FRACUNIT;
                 break;
         }
     }
@@ -1038,6 +1044,38 @@ void P_UpdateSpecials(void)
             }
         }
     }
+}
+
+// [crispy] smooth texture scrolling
+void R_InterpolateTextureOffsets()
+{
+	int i;
+	fixed_t frac;
+
+	if (uncapped_fps && !vanillaparm &&
+	    !paused && (!MenuActive || demoplayback || netgame))
+	{
+		frac = fractionaltic;
+	}
+	else
+	{
+		frac = FRACUNIT;
+	}
+
+	for (i = 0; i < numlinespecials; i++)
+	{
+		const line_t *line = linespeciallist[i];
+		side_t *const side = &sides[line->sidenum[0]];
+
+		if (line->special == 48)
+		{
+			side->textureoffset = side->oldtextureoffset + frac;
+		}
+		else if (line->special == 99)
+		{
+			side->textureoffset = side->oldtextureoffset - frac;
+		}
+	}
 }
 
 //============================================================
