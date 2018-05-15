@@ -261,11 +261,12 @@ void SB_Ticker(void)
     int delta;
     int curHealth;
 
-    if (leveltime & 1)
+    curHealth = players[consoleplayer].mo->health;
+
+    if (leveltime & 1 && curHealth > 0)
     {
         ChainWiggle = P_Random() & 1;
     }
-    curHealth = players[consoleplayer].mo->health;
     if (curHealth < 0)
     {
         curHealth = 0;
