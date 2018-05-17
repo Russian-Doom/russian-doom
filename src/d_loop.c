@@ -47,7 +47,7 @@
 
 
 int uncapped_fps = 1;
-int max_fps = 120;
+int max_fps = 60;
 
 // The complete set of data for a particular tic.
 

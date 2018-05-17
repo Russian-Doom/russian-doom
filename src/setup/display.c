@@ -80,7 +80,7 @@ static int startup_delay = 1000;
 static int usegamma = 0;
 
 int uncapped_fps = 1;
-int max_fps = 120;
+int max_fps = 60;
 int graphical_startup = 0; // [JN] Disabled by default
 int show_endoom = 0;
 int png_screenshots = 1;   // [JN] Crispy!
