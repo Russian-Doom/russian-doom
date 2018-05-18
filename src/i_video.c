@@ -51,7 +51,6 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "crispy.h"
-#include "jn.h"
 
 
 // These are (1) the window (or the full screen) that our game is rendered to
@@ -669,23 +668,6 @@ void I_FinishUpdate (void)
         return;
 #endif
 
-    // [crispy] variable rendering framerate
-    // [JN] Modified to have a FPS cap
-    if (uncapped_fps && !singletics)
-    {
-        static int halftics_old;
-        int halftics;
-        extern int GetAdjustedTimeN (const int N);
-
-        // [JN] Cap FPS here:
-        while ((halftics = GetAdjustedTimeN(max_fps)) == halftics_old)
-        {
-            I_Sleep(1);
-        }
-
-        halftics_old = halftics;
-    }
-
     // draws little dots on the bottom of the screen
 
     if (display_fps_dots)
@@ -1167,16 +1149,13 @@ static void SetVideoMode(void)
     // Turn on vsync if we aren't in a -timedemo
     if (!singletics)
     {
-        if (!uncapped_fps)
-        {
-            renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
-        }
+        renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
     }
 
     if (force_software_renderer)
     {
+        renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
         renderer_flags |= SDL_RENDERER_SOFTWARE;
-        renderer_flags &= ~SDL_RENDERER_PRESENTVSYNC;
     }
 
     if (renderer != NULL)

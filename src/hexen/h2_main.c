@@ -189,7 +189,6 @@ void D_BindVariables(void)
 
     // Графика
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
-    M_BindIntVariable("max_fps",                &max_fps);
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);

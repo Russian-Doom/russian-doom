@@ -3158,6 +3158,20 @@ linefix_t linefix[] =
     { pack_tnt,         1,  13,    1555,    0, "",         "",            "",            DEFAULT,        32, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  13,    1557,    0, "",         "",            "",            DEFAULT,        32, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
+    { pack_tnt,         1,  15,     380,    0, "",         "",            "",                  6,         3, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,     908,    0, "METAL7",   "",            "METAL6",           12,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,     909,    0, "METAL7",   "",            "METAL6",           32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,     910,    0, "METAL7",   "",            "METAL6",           12,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,     911,    0, "METAL7",   "",            "METAL6",           32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,     912,    0, "METAL7",   "",            "METAL6",           12,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,    1015,    0, "METAL7",   "",            "METAL6",           12,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,    1019,    0, "METAL7",   "",            "METAL6",           12,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,    1020,    0, "METAL7",   "",            "METAL6",           32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,    1176,    0, "METAL7",   "",            "METAL6",           32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,    1345,    1, "",         "",            "GSTVINE1",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,    1386,    1, "",         "",            "GSTVINE1",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,    1388,    1, "",         "",            "GSTVINE1",    DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+
     { pack_tnt,         1,  17,     184,    0, "",         "LITE5",       "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  17,     187,    0, "",         "LITE5",       "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  17,     203,    0, "",         "LITE5",       "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3912,9 +3926,18 @@ sectorfix_t sectorfix[] =
     { pack_tnt,         1,  12,    142, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_tnt,         1,  12,    143, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { pack_tnt,         1,  13,    191, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  14,      1, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_tnt,         1,  14,    143, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_tnt,         1,  14,    163, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_tnt,         1,  14,    175, "FLAT5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  15,    170, "",        "FLAT1",   DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  15,    180, "",        "FLAT19",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  15,    287, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  15,    306, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  15,    307, "FLAT19",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { pack_tnt,         1,  19,     82, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_tnt,         1,  19,     84, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
