@@ -1147,11 +1147,14 @@ static void SetVideoMode(void)
     renderer_flags = SDL_RENDERER_TARGETTEXTURE;
 
     // Turn on vsync if we aren't in a -timedemo
+    // [JN] Note: vsync is always enabled for both capped and uncapped modes.
+    // In -timedemo mode it's always disabled to get a maximum possible fps.
     if (!singletics)
     {
         renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
     }
 
+    // [JN] Note: vsync is always disabled in software rendering mode.
     if (force_software_renderer)
     {
         renderer_flags &= ~SDL_RENDERER_PRESENTVSYNC;
