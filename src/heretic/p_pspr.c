@@ -817,7 +817,7 @@ void P_BulletSlope(mobj_t * mo)
         if (!linetarget)
         {
             an += 2 << 26;
-            bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 173;
+            bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 146;
         }
     }
 }
@@ -1700,12 +1700,12 @@ void A_FirePhoenixPL2(player_t * player, pspdef_t * psp)
     angle = pmo->angle;
     x = pmo->x + (P_SubRandom() << 9);
     y = pmo->y + (P_SubRandom() << 9);
-    z = pmo->z + 26 * FRACUNIT + ((player->lookdir / MLOOKUNIT) << FRACBITS) / 173;
+    z = pmo->z + 26 * FRACUNIT + ((player->lookdir / MLOOKUNIT) << FRACBITS) / 146;
     if (pmo->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;
     }
-    slope = ((player->lookdir / MLOOKUNIT) << FRACBITS) / 173 + (FRACUNIT / 10);
+    slope = ((player->lookdir / MLOOKUNIT) << FRACBITS) / 146 + (FRACUNIT / 10);
     mo = P_SpawnMobj(x, y, z, MT_PHOENIXFX2);
     mo->target = pmo;
     mo->angle = angle;
