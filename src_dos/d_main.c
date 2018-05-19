@@ -321,6 +321,8 @@ void D_Display (void)
     {
         if (automapactive)
         y = 4;
+        else if (gamestate == GS_INTERMISSION)  // [JN] Do not obstruct titles on intermission screen
+        y = 28;
         else
         y = viewwindowy+4;
 
