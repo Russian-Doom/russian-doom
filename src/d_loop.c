@@ -710,6 +710,7 @@ void TryRunTics (void)
     int realtics;
     int	availabletics;
     int	counts;
+    extern int paused;
 
     // get real tics
     entertic = I_GetTime() / ticdup;
@@ -750,7 +751,7 @@ void TryRunTics (void)
 
         // [AM] If we've uncapped the framerate and there are no tics
         //      to run, return early instead of waiting around.
-        if (counts == 0 && uncapped_fps && gametic && screenvisible)
+        if (counts == 0 && uncapped_fps && gametic && screenvisible && !paused)
             return;
 
         if (counts < 1)
