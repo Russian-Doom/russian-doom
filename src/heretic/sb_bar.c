@@ -591,7 +591,7 @@ void SB_Drawer(void)
         if (crosshair_scale)
         {   // Scaled crosshair
             V_DrawPatch(ORIGWIDTH/2,
-                ((screenblocks <= 10) ? (ORIGHEIGHT-31)/2 : (ORIGHEIGHT+8)/2),
+                ((screenblocks <= 10) ? (ORIGHEIGHT-38)/2 : (ORIGHEIGHT+4)/2),
                 W_CacheLumpName(DEH_String(!crosshair_health ?
                                            "XHAIRUG" :             // Green (only)
                                            CPlayer->health >= 67 ?
@@ -603,13 +603,13 @@ void SB_Drawer(void)
         else
         {   // Unscaled crosshair
             V_DrawPatchUnscaled(SCREENWIDTH/2,
-                ((screenblocks <= 10) ? (SCREENHEIGHT-68)/2 : (SCREENHEIGHT+16)/2),
+                ((screenblocks <= 10) ? (SCREENHEIGHT-76)/2 : (SCREENHEIGHT+8)/2),
                 W_CacheLumpName(DEH_String(!crosshair_health ? 
-                                           "XHAIRUG":              // Green (only)
+                                           "XHAIRUG" :              // Green (only)
                                            CPlayer->health >= 67 ?
                                            "XHAIRUG" :             // Green
                                            CPlayer->health >= 34 ?
-                                           "XHAIRUY": "XHAIRUR"),  // Yellow or Red
+                                           "XHAIRUY" : "XHAIRUR"),  // Yellow or Red
                                            PU_CACHE));
         }
     }
