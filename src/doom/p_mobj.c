@@ -40,8 +40,6 @@
 #include "jn.h"
 
 
-extern int screenblocks;
-
 void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);
 

@@ -570,7 +570,6 @@ int playerkeys = 0;
 
 extern boolean automapactive;
 
-extern int screenblocks;
 
 void SB_Drawer(void)
 {

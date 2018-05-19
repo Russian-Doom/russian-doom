@@ -50,8 +50,6 @@
 // во время обычной атаки и атаки непосредственно противника.
 boolean chainsaw_attack_swing;
 
-extern int screenblocks;
-
 
 //
 // P_SetPsprite

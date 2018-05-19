@@ -129,7 +129,6 @@ void MN_LoadSlotText(void);
 // External Data
 
 extern int detailLevel;
-extern int screenblocks;
 
 // Public Data
 

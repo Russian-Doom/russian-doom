@@ -24,8 +24,6 @@
 #include "p_local.h"
 #include "s_sound.h"
 
-extern int screenblocks;
-
 // Macros
 
 #define LOWERSPEED FRACUNIT*6

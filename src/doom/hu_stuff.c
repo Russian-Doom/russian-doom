@@ -68,7 +68,6 @@
 
 #define HU_COORDX       (ORIGWIDTH - 8 * hu_font['A'-HU_FONTSTART]->width)
 
-extern int screenblocks;
 
 char *chat_macros[10] =
 {

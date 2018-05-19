@@ -41,8 +41,6 @@ int centerx, centery;
 fixed_t centerxfrac, centeryfrac;
 fixed_t projection;
 
-extern int screenblocks;
-
 int framecount;                 // just for profiling purposes
 
 int sscount, linecount, loopcount;

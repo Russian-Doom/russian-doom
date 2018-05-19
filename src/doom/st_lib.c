@@ -24,6 +24,7 @@
 
 #include "deh_main.h"
 #include "doomdef.h"
+#include "doomstat.h"
 
 #include "z_zone.h"
 #include "v_video.h"
@@ -37,12 +38,6 @@
 #include "st_lib.h"
 #include "r_local.h"
 #include "m_menu.h"
-
-
-// in AM_map.c
-extern boolean		automapactive; 
-
-
 
 
 //
