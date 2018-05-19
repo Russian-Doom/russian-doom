@@ -27,6 +27,9 @@
 #include "crispy.h"
 #include "jn.h"
 
+
+extern int screenblocks;
+
 void G_PlayerReborn(int player);
 void P_SpawnMapThing(mapthing_t * mthing);
 
@@ -1606,13 +1609,15 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
         if (!linetarget)
         {
             an = source->angle;
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 146;
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
+                     (screenblocks <= 10 ? 161 : 146);
         }
     }
     x = source->x;
     y = source->y;
     z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 146;
+        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
+         (screenblocks <= 10 ? 161 : 146);
     if (source->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;
@@ -1678,13 +1683,15 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
         if (!linetarget)
         {
             an = angle;
-            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 146;
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
+                     (screenblocks <= 10 ? 161 : 146);
         }
     }
     x = source->x;
     y = source->y;
     z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 146;
+        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
+         (screenblocks <= 10 ? 161 : 146);
     if (source->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;

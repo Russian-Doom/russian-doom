@@ -50,6 +50,8 @@
 // во время обычной атаки и атаки непосредственно противника.
 boolean chainsaw_attack_swing;
 
+extern int screenblocks;
+
 
 //
 // P_SetPsprite
@@ -687,7 +689,8 @@ void P_BulletSlope (mobj_t*	mo)
     if (singleplayer && !linetarget && mlook)
 	{
 	    an += 2 << 26;
-	    bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 146;
+	    bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) /
+                      (screenblocks <= 10 ? 160 : 146);
 	}
     }
 }

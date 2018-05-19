@@ -42,6 +42,7 @@
 #define WEAPONTOP		32*FRACUNIT
 
 
+extern int screenblocks;
 extern int mlook;
 boolean chainsaw_attack_swing;
 
@@ -752,7 +753,8 @@ void P_BulletSlope (mobj_t*	mo)
     if (singleplayer && !linetarget && mlook)
 	{
 	    an += 2 << 26;
-	    bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 146;
+	    bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) /
+                      (screenblocks <= 10 ? 160 : 146);
 	}
     }
 }

@@ -34,6 +34,7 @@
 #include "doomstat.h"
 
 
+extern int screenblocks;
 extern int mlook;
 
 void G_PlayerReborn (int player);
@@ -1123,7 +1124,8 @@ P_SpawnPlayerMissile
     if (singleplayer && !linetarget && mlook)
     {
         an = source->angle;
-        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 146;
+        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
+                 (screenblocks <= 10 ? 160 : 146);
     }
 		
     x = source->x;

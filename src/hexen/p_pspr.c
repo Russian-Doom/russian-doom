@@ -652,7 +652,8 @@ void P_BulletSlope (mobj_t *mo)
 		if (!linetarget)
 		{
 			an += 1<<26;
-			bulletslope = (mo->player->lookdir<<FRACBITS)/146;
+			bulletslope = (mo->player->lookdir<<FRACBITS) /
+                          (screenblocks <= 10 ? 158 : 146);
 		}
 	}
 }

@@ -40,6 +40,8 @@
 #include "jn.h"
 
 
+extern int screenblocks;
+
 void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);
 
@@ -1339,7 +1341,8 @@ P_SpawnPlayerMissile
     if (singleplayer && !linetarget && mlook)
     {
         an = source->angle;
-        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 146;
+        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 
+                 (screenblocks <= 10 ? 160 : 146);
     }
     }
 		
