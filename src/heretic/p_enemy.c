@@ -2196,11 +2196,11 @@ void A_NoBlocking(mobj_t * actor)
             break;
         case MT_WIZARD:
             P_DropItem(actor, MT_AMBLSRWIMPY, 10, 84);
-            P_DropItem(actor, MT_ARTITOMEOFPOWER, 0, 4);
+            P_DropItem(actor, MT_ARTITOMEOFPOWER2, 0, 4);   // [JN] no MF_COUNTITEM flag
             break;
         case MT_HEAD:
             P_DropItem(actor, MT_AMBLSRWIMPY, 10, 84);
-            P_DropItem(actor, MT_ARTIEGG, 0, 51);
+            P_DropItem(actor, MT_ARTIEGG2, 0, 51);          // [JN] no MF_COUNTITEM flag
             break;
         case MT_BEAST:
             P_DropItem(actor, MT_AMCBOWWIMPY, 10, 84);
@@ -2212,7 +2212,7 @@ void A_NoBlocking(mobj_t * actor)
             P_DropItem(actor, MT_AMPHRDWIMPY, 5, 84);
             break;
         case MT_MINOTAUR:
-            P_DropItem(actor, MT_ARTISUPERHEAL, 0, 51);
+            P_DropItem(actor, MT_ARTISUPERHEAL2, 0, 51);    // [JN] no MF_COUNTITEM flag
             P_DropItem(actor, MT_AMPHRDWIMPY, 10, 84);
             break;
         default:
