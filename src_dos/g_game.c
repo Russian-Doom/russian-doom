@@ -484,6 +484,14 @@ void G_DoLoadLevel (void)
 {
     int     i; 
 
+    // [JN] Properly remove paused state and resume music playing.
+    // Fixes a bug when pausing intermission screen causes locking up sound.
+    if (paused)
+    {
+        paused = false;
+        S_ResumeSound ();
+    }
+
     // DOOM determines the sky texture to be used
     // depending on the current episode, and the game version.
 
