@@ -1535,6 +1535,11 @@ void WI_checkForAccelerate(void)
 	    }
 	    else
 		player->usedown = false;
+	    // [JN] Pressing PAUSE should not accelerate intermission screen
+	    if (player->cmd.buttons & BTS_PAUSE)
+	    {
+		    acceleratestage = 0;
+	    }
 	}
     }
 }
@@ -1544,6 +1549,12 @@ void WI_checkForAccelerate(void)
 // Updates stuff each tick
 void WI_Ticker(void)
 {
+    // [JN] Make PAUSE working properly on intermission screen
+    if (paused)
+    {
+	    return;
+    }
+
     // counter for general background animation
     bcnt++;  
 
