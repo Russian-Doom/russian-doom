@@ -73,7 +73,6 @@ int fast_quickload = 1;
 int crosshair_draw = 0;
 int crosshair_health = 0;
 int crosshair_scale = 0;
-int autoaiming = 1;
 
 // int show_exit_sequence = 1;  // [Strife]
 
@@ -92,7 +91,7 @@ void CompatibilitySettings(void)
     else if (gamemission == heretic)
         TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features));
     else if (gamemission == hexen)
-        TXT_AddWidget(window, TXT_NewScrollPane(47, 9, window_features));
+        TXT_AddWidget(window, TXT_NewScrollPane(47, 8, window_features));
 
     TXT_AddWidgets(window_features,
 
@@ -137,11 +136,9 @@ void CompatibilitySettings(void)
 
     TXT_NewSeparator("Прицел"),
         TXT_NewCheckBox("Отображать прицел",            &crosshair_draw),
-            TXT_NewConditional(&crosshair_draw, 1,
-                TXT_NewCheckBox("Индикаци€ здоровь€",   &crosshair_health)),
-            TXT_NewConditional(&crosshair_draw, 1,
-                TXT_NewCheckBox("Увеличенный размер",   &crosshair_scale)),
-        TXT_NewCheckBox("Автоприцеливание",             &autoaiming),
+        TXT_NewCheckBox("Индикаци€ здоровь€",           &crosshair_health),
+        TXT_NewCheckBox("Увеличенный размер",           &crosshair_scale),
+
 
         // TXT_If(gamemission == strife, TXT_NewCheckBox("Показывать значок песочных часов",        &show_diskicon)),
         // TXT_If(gamemission == strife, TXT_NewCheckBox("Показывать заставку при выходе",          &show_exit_sequence)),
@@ -194,7 +191,6 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
     M_BindIntVariable("crosshair_health",       &crosshair_health);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);
-    M_BindIntVariable("autoaiming",             &autoaiming);
 
     // M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);    // [Strife]
 }

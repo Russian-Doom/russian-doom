@@ -1320,18 +1320,14 @@ P_SpawnPlayerMissile
     
     if (!linetarget)
     {
-        // [JN] Horizontal autoaiming: make optional
-        if (autoaiming || !singleplayer || vanillaparm)
-        {
-            an += 1<<26;
-            slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
-    
-            if (!linetarget)
-            {
-                an -= 2<<26;
-                slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
-            }
-        }
+	an += 1<<26;
+	slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
+
+	if (!linetarget)
+	{
+	    an -= 2<<26;
+	    slope = P_AimLineAttack (source, an, 16*64*FRACUNIT);
+	}
 
 	if (!linetarget)
 	{

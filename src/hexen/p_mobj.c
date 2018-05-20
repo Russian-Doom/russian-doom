@@ -2256,16 +2256,12 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
     slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
     if (!linetarget)
     {
-        // [JN] Horizontal autoaiming: make optional
-        if (autoaiming || (netgame && demorecording && demoplayback) || vanillaparm)
+        an += 1 << 26;
+        slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+        if (!linetarget)
         {
-            an += 1 << 26;
+            an -= 2 << 26;
             slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
-            if (!linetarget)
-            {
-                an -= 2 << 26;
-                slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
-            }
         }
         if (!linetarget)
         {

@@ -27,7 +27,6 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "crispy.h"
-#include "jn.h"
 
 /*
 ===============================================================================
@@ -1575,13 +1574,8 @@ fixed_t P_AimLineAttack(mobj_t * t1, angle_t angle, fixed_t distance)
     attackrange = distance;
     linetarget = NULL;
 
-    // [JN] Vertical autoaiming: make optional
-    if ((autoaiming || !mlook || !singleplayer || vanillaparm)
-    && (t1->type != MT_PLAYER || t1->type != MT_CHICPLAYER))
-    {
-        P_PathTraverse(t1->x, t1->y, x2, y2, PT_ADDLINES | PT_ADDTHINGS,
-                    PTR_AimTraverse);
-    }
+    P_PathTraverse(t1->x, t1->y, x2, y2, PT_ADDLINES | PT_ADDTHINGS,
+                   PTR_AimTraverse);
 
     if (linetarget)
         return aimslope;

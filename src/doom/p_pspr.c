@@ -676,17 +676,13 @@ void P_BulletSlope (mobj_t*	mo)
 
     if (!linetarget)
     {
-        // [JN] Horizontal autoaiming: make optional
-        if (autoaiming || !singleplayer || vanillaparm)
-        {
-            an += 1<<26;
-            bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
+        an += 1<<26;
+        bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
 
-            if (!linetarget)
-            {
-                an -= 2<<26;
-                bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
-            }
+        if (!linetarget)
+        {
+            an -= 2<<26;
+            bulletslope = P_AimLineAttack (mo, an, 16*64*FRACUNIT);
         }
 
         // [JN] Mouselook: also count vertical angles

@@ -824,7 +824,6 @@ void D_BindVariables(void)
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
     M_BindIntVariable("crosshair_health",       &crosshair_health);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);
-    M_BindIntVariable("autoaiming",             &autoaiming);
 
     for (i=0; i<10; ++i)
     {

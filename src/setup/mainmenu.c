@@ -141,7 +141,6 @@ static void SensibleDefaults(void)
     crosshair_draw = 0;
     crosshair_health = 0;
     crosshair_scale = 0;
-    autoaiming = 1;
 }
 
 static int MainMenuKeyPress(txt_window_t *window, int key, void *user_data)

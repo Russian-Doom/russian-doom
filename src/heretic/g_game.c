@@ -160,7 +160,6 @@ int flip_levels = 0;
 int crosshair_draw = 0;
 int crosshair_health = 0;
 int crosshair_scale = 0;
-int autoaiming = 1;
 
 
 //
@@ -434,28 +433,6 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         S_StartSound(NULL, sfx_chat);
 
         gamekeydown[key_togglecrosshair] = false;
-    }
-
-    // [JN] Toggle autoaim
-    if (gamekeydown[key_toggleautoaim])
-    {
-        // [JN] No toggling in -vanilla mode
-        if (vanillaparm)
-        return;
-
-        if (!autoaiming)
-        {
-            autoaiming = true;
-        }
-        else
-        {
-            autoaiming = false;
-        }
-
-        P_SetMessage(&players[consoleplayer], autoaiming ? TXT_AUTOAIM_ON : TXT_AUTOAIM_OFF, false);
-        S_StartSound(NULL, sfx_chat);
-
-        gamekeydown[key_toggleautoaim] = false;
     }
 
 //

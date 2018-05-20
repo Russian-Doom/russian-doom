@@ -140,7 +140,6 @@ int snd_monomode = 0;
 int crosshair_draw = 0;
 int crosshair_health = 0;
 int crosshair_scale = 0;
-int autoaiming = 1;
 
 // CODE --------------------------------------------------------------------
 
@@ -198,7 +197,6 @@ void D_BindVariables(void)
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
     M_BindIntVariable("crosshair_health",       &crosshair_health);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);
-    M_BindIntVariable("autoaiming",             &autoaiming);
 
     M_BindStringVariable("savedir", &SavePath);
 

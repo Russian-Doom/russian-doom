@@ -1695,12 +1695,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_togglecrosshair),
 
     //!
-    // [JN] Toggle horizontal autoaim.
-    //
-
-    CONFIG_VARIABLE_KEY(key_toggleautoaim),    
-
-    //!
     // [JN] Toggle mouselook.
     //
 
@@ -1760,7 +1754,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(crosshair_draw),
     CONFIG_VARIABLE_INT(crosshair_health),
     CONFIG_VARIABLE_INT(crosshair_scale),
-    CONFIG_VARIABLE_INT(autoaiming),
 
     // CONFIG_VARIABLE_INT(show_exit_sequence),    // [Strife]
 };
