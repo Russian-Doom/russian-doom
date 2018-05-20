@@ -1426,10 +1426,15 @@ P_AimLineAttack
     attackrange = distance;
     linetarget = NULL;
 	
-    P_PathTraverse ( t1->x, t1->y,
-		     x2, y2,
-		     PT_ADDLINES|PT_ADDTHINGS,
-		     PTR_AimTraverse );
+    // [JN] Vertical autoaiming: make optional
+    if ((autoaiming || !mlook || !singleplayer || vanillaparm) 
+        || t1->type != MT_PLAYER)
+    {
+        P_PathTraverse ( t1->x, t1->y,
+                x2, y2,
+                PT_ADDLINES|PT_ADDTHINGS,
+                PTR_AimTraverse );
+    }
 		
     if (linetarget)
 	return aimslope;

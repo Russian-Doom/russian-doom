@@ -324,6 +324,28 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         gamekeydown[key_togglecrosshair] = false;
     }
 
+    // [JN] Toggle autoaim
+    if (gamekeydown[key_toggleautoaim])
+    {
+        // [JN] No toggling in -vanilla mode
+        if (vanillaparm)
+        return;
+
+        if (!autoaiming)
+        {
+            autoaiming = true;
+        }
+        else
+        {
+            autoaiming = false;
+        }
+
+        P_SetMessage(&players[consoleplayer], autoaiming ? TXT_AUTOAIM_ON : TXT_AUTOAIM_OFF, false);
+        S_StartSound(NULL, SFX_CHAT);
+
+        gamekeydown[key_toggleautoaim] = false;
+    }
+
 //
 // let movement keys cancel each other out
 //

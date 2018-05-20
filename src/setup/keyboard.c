@@ -37,7 +37,8 @@ static int always_run = 0;
 // Keys within these groups cannot have the same value.
 
 static int *controls[] = { &key_left, &key_right, &key_up, &key_down,
-                           &key_toggleautorun, &key_togglecrosshair, &key_togglemlook, &key_toggletime,
+                           &key_toggleautorun, &key_togglecrosshair, &key_toggleautoaim, 
+                           &key_togglemlook, &key_toggletime,
                            &key_strafeleft, &key_straferight, &key_fire,
                            &key_use, &key_strafe, &key_speed, &key_jump,
                            &key_flyup, &key_flydown, &key_flycenter,
@@ -327,6 +328,7 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
     
     AddSectionLabel(table, "Прицел", true);
     AddKeyControl(table, "Переключение прицела", &key_togglecrosshair);
+    AddKeyControl(table, "Переключение автоприцеливания", &key_toggleautoaim);
 }
 
 static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))

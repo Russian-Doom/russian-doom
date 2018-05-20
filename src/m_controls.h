@@ -35,6 +35,7 @@ extern int key_speed;
 extern int key_jump;
 extern int key_toggleautorun;
 extern int key_togglecrosshair;
+extern int key_toggleautoaim;
 extern int key_togglemlook;
 extern int key_toggletime;
  

@@ -23,6 +23,8 @@
 #include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
+#include "crispy.h"
+#include "jn.h"
 
 // Macros
 
@@ -807,12 +809,16 @@ void P_BulletSlope(mobj_t * mo)
     bulletslope = P_AimLineAttack(mo, an, 16 * 64 * FRACUNIT);
     if (!linetarget)
     {
-        an += 1 << 26;
-        bulletslope = P_AimLineAttack(mo, an, 16 * 64 * FRACUNIT);
-        if (!linetarget)
+        // [JN] Horizontal autoaiming: make optional
+        if (autoaiming || !singleplayer || vanillaparm)
         {
-            an -= 2 << 26;
+            an += 1 << 26;
             bulletslope = P_AimLineAttack(mo, an, 16 * 64 * FRACUNIT);
+            if (!linetarget)
+            {
+                an -= 2 << 26;
+                bulletslope = P_AimLineAttack(mo, an, 16 * 64 * FRACUNIT);
+            }
         }
         if (!linetarget)
         {

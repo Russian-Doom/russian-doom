@@ -48,6 +48,7 @@ static void PlayerLandedOnThing(mobj_t * mo, mobj_t * onmobj);
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
 extern mobj_t LavaInflictor;
+extern boolean demorecording;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -2255,12 +2256,16 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
     slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
     if (!linetarget)
     {
-        an += 1 << 26;
-        slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
-        if (!linetarget)
+        // [JN] Horizontal autoaiming: make optional
+        if (autoaiming || (netgame && demorecording && demoplayback) || vanillaparm)
         {
-            an -= 2 << 26;
+            an += 1 << 26;
             slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+            if (!linetarget)
+            {
+                an -= 2 << 26;
+                slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+            }
         }
         if (!linetarget)
         {

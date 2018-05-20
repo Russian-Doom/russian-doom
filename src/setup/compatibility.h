@@ -67,6 +67,7 @@ extern int fast_quickload;
 extern int crosshair_draw;
 extern int crosshair_health;
 extern int crosshair_scale;
+extern int autoaiming;
 
 
 #endif /* #ifndef SETUP_COMPATIBILITY_H */

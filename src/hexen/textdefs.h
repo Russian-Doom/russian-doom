@@ -193,3 +193,6 @@
 
 #define TXT_CROSSHAIR_ON "GHBWTK DRK.XTY"             // ПРИЦЕЛ ВКЛЮЧЕН
 #define TXT_CROSSHAIR_OFF "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
+
+#define TXT_AUTOAIM_ON "FDNJGHBWTKBDFYBT DRK.XTYJ"    // АВТОПРИЦЕЛИВАНИЕ ВКЛЮЧЕНО
+#define TXT_AUTOAIM_OFF "FDNJGHBWTKBDFYBT DSRK.XTYJ"  // АВТОПРИЦЕЛИВАНИЕ ВЫКЛЮЧЕНО

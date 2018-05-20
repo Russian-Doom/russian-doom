@@ -285,6 +285,7 @@ int fast_quickload = 1;
 int crosshair_draw = 0;
 int crosshair_health = 0;
 int crosshair_scale = 0;
+int autoaiming = 1;
  
 int G_CmdChecksum (ticcmd_t* cmd) 
 { 
@@ -482,6 +483,32 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
 
         gamekeydown[key_togglecrosshair] = false;
     }
+
+    // [JN] Toggle autoaim
+    if (gamekeydown[key_toggleautoaim])
+    {
+        static char autoaimmsg[27];
+
+        // [JN] No toggling in -vanilla mode
+        if (vanillaparm)
+        return;
+        
+        if (!autoaiming)
+        {
+            autoaiming = true;
+        }
+        else
+        {
+            autoaiming = false;
+        }
+
+        M_snprintf(autoaimmsg, sizeof(autoaimmsg), STSTR_AUTOAIM "%s",
+            autoaiming ? STSTR_AUTOAIM_ON : STSTR_AUTOAIM_OFF);
+        players[consoleplayer].message = autoaimmsg;
+        S_StartSound(NULL,sfx_swtchn);
+
+        gamekeydown[key_toggleautoaim] = false;
+    }    
 
     // let movement keys cancel each other out
     if (strafe) 

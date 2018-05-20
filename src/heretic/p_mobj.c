@@ -1597,12 +1597,16 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
     slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
     if (!linetarget)
     {
-        an += 1 << 26;
-        slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
-        if (!linetarget)
+        // [JN] Horizontal autoaiming: make optional
+        if (autoaiming || !singleplayer || vanillaparm)
         {
-            an -= 2 << 26;
+            an += 1 << 26;
             slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+            if (!linetarget)
+            {
+                an -= 2 << 26;
+                slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+            }
         }
         if (!linetarget)
         {
@@ -1671,12 +1675,16 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
     slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
     if (!linetarget)
     {
-        an += 1 << 26;
-        slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
-        if (!linetarget)
+        // [JN] Horizontal autoaiming: make optional
+        if (autoaiming || !singleplayer || vanillaparm)
         {
-            an -= 2 << 26;
+            an += 1 << 26;
             slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+            if (!linetarget)
+            {
+                an -= 2 << 26;
+                slope = P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+            }
         }
         if (!linetarget)
         {
