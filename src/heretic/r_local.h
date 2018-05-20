@@ -60,6 +60,11 @@
 #define	NUMCOLORMAPS		32      // number of diminishing
 #define	INVERSECOLORMAP		32
 
+// [BH] Compensate for rounding errors in DOOM's renderer by stretching wall
+//  columns by 1px. This eliminates the randomly-colored pixels ("sparkles")
+//  that appear at the bottom of some columns.
+#define SPARKLEFIX          64
+
 // [AM] Fractional part of the current tic, in the half-open
 //      range of [0.0, 1.0).  Used for interpolation.
 extern fixed_t          fractionaltic;
