@@ -327,7 +327,7 @@ void F_DrawUnderwater(void)
                 V_DrawRawScreen(W_CacheLumpName(DEH_String("E2END"), PU_CACHE));
             }
             paused = false;
-            MenuActive = false;
+            menuactive = false;
             askforquit = false;
 
             break;

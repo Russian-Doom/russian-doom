@@ -851,7 +851,7 @@ void SB_Drawer(void);
 // MENU (MN_menu.c)
 //-----------------
 
-extern boolean MenuActive;
+extern boolean menuactive;
 
 void MN_Init(void);
 void MN_ActivateMenu(void);

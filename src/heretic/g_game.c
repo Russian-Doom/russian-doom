@@ -730,7 +730,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
     // [JN] Mouselook: initials
     // TODO: make it safe for network game
-    if (mlook && !netgame && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !MenuActive && !askforquit && !paused)
+    if (mlook && !netgame && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !menuactive && !askforquit && !paused)
     {
         cmd->lookdir += mousey;
         
@@ -1059,7 +1059,7 @@ boolean G_Responder(event_t * ev)
                 }
                 return (true);
             }
-            if (ev->data1 == key_pause && !MenuActive)
+            if (ev->data1 == key_pause && !menuactive)
             {
                 sendpause = true;
                 return (true);

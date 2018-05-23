@@ -134,7 +134,7 @@ extern boolean gamekeydown[256];        // The NUMKEYS macro is local to g_game
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
-boolean MenuActive;
+boolean menuactive;
 int InfoType;
 int messageson = true;
 boolean mn_SuicideConsole;
@@ -340,7 +340,7 @@ static char *GammaText[] = {
 void MN_Init(void)
 {
     InitFonts();
-    MenuActive = false;
+    menuactive = false;
 //      messageson = true;              // Set by defaults in .CFG
     MauloBaseLump = W_GetNumForName("FBULA0");  // ("M_SKL00");
 }
@@ -508,7 +508,7 @@ int MN_TextBWidth(char *text)
 
 void MN_Ticker(void)
 {
-    if (MenuActive == false)
+    if (menuactive == false)
     {
         return;
     }
@@ -537,7 +537,7 @@ void MN_Drawer(void)
     MenuItem_t *item;
     char *selName;
 
-    if (MenuActive == false)
+    if (menuactive == false)
     {
         if (askforquit)
         {
@@ -819,7 +819,7 @@ static void DrawOptions2Menu(void)
 
 static void SCQuitGame(int option)
 {
-    MenuActive = false;
+    menuactive = false;
     askforquit = true;
     typeofask = 1;              //quit game
     if (!netgame && !demoplayback)
@@ -842,7 +842,7 @@ static void SCEndGame(int option)
     }
     if (SCNetCheck(3))
     {
-        MenuActive = false;
+        menuactive = false;
         askforquit = true;
         typeofask = 2;          //endgame
         if (!netgame && !demoplayback)
@@ -899,7 +899,7 @@ static boolean SCNetCheck(int option)
                          "YTDJPVJ;YJ PFRJYXBNM CTNTDE. BUHE!", true);		// НЕВОЗМОЖНО ЗАКОНЧИТЬ СЕТЕВУЮ ИГРУ!
             break;
     }
-    MenuActive = false;
+    menuactive = false;
     S_StartSound(NULL, SFX_CHAT);
     return false;
 }
@@ -1202,7 +1202,7 @@ boolean MN_Responder(event_t * event)
         // First click on close = bring up quit confirm message.
         // Second click = confirm quit.
 
-        if (!MenuActive && askforquit && typeofask == 1)
+        if (!menuactive && askforquit && typeofask == 1)
         {
             G_CheckDemoStatus();
             I_Quit();
@@ -1335,7 +1335,7 @@ boolean MN_Responder(event_t * event)
 
         return false;           // don't let the keys filter thru
     }
-    if (!MenuActive && !chatmodeon)
+    if (!menuactive && !chatmodeon)
     {
         if (key == key_menu_decscreen)
         {
@@ -1364,14 +1364,14 @@ boolean MN_Responder(event_t * event)
         else if (key == key_menu_help)           // F1 (help screen)
         {
             SCInfo(0);      // start up info screens
-            MenuActive = true;
+            menuactive = true;
             return (true);
         }
         else if (key == key_menu_save)           // F2 (save game)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
-                MenuActive = true;
+                menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
                 CurrentMenu = &SaveMenu;
@@ -1389,7 +1389,7 @@ boolean MN_Responder(event_t * event)
         {
             if (SCNetCheck(2))
             {
-                MenuActive = true;
+                menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
                 CurrentMenu = &LoadMenu;
@@ -1405,7 +1405,7 @@ boolean MN_Responder(event_t * event)
         }
         else if (key == key_menu_volume)         // F4 (volume)
         {
-            MenuActive = true;
+            menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
             CurrentMenu = &Options2Menu;
@@ -1420,7 +1420,7 @@ boolean MN_Responder(event_t * event)
         }
         else if (key == key_menu_detail)         // F5 (suicide)
         {
-            MenuActive = false;
+            menuactive = false;
             askforquit = true;
             typeofask = 5;  // suicide
             return true;
@@ -1431,7 +1431,7 @@ boolean MN_Responder(event_t * event)
             {
                 if (!quicksave || quicksave == -1)
                 {
-                    MenuActive = true;
+                    menuactive = true;
                     FileMenuKeySteal = false;
                     MenuTime = 0;
                     CurrentMenu = &SaveMenu;
@@ -1482,7 +1482,7 @@ boolean MN_Responder(event_t * event)
             {
                 if (!quickload || quickload == -1)
                 {
-                    MenuActive = true;
+                    menuactive = true;
                     FileMenuKeySteal = false;
                     MenuTime = 0;
                     CurrentMenu = &LoadMenu;
@@ -1553,7 +1553,7 @@ boolean MN_Responder(event_t * event)
         }
     }
 
-    if (!MenuActive)
+    if (!menuactive)
     {
         if (key == key_menu_activate || gamestate == GS_DEMOSCREEN || demoplayback)
         {
@@ -1772,7 +1772,7 @@ boolean MN_Responder(event_t * event)
 
 void MN_ActivateMenu(void)
 {
-    if (MenuActive)
+    if (menuactive)
     {
         return;
     }
@@ -1780,7 +1780,7 @@ void MN_ActivateMenu(void)
     {
         S_ResumeSound();
     }
-    MenuActive = true;
+    menuactive = true;
     FileMenuKeySteal = false;
     MenuTime = 0;
     CurrentMenu = &MainMenu;
@@ -1806,7 +1806,7 @@ void MN_DeactivateMenu(void)
         CurrentMenu->oldItPos = CurrentItPos;
     }
     S_ResumeSound();    // [JN] Fix vanilla Hexen bug: resume music playing
-    MenuActive = false;
+    menuactive = false;
     if (FileMenuKeySteal)
     {
         I_StopTextInput();

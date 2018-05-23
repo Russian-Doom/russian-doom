@@ -710,7 +710,9 @@ void TryRunTics (void)
     int realtics;
     int	availabletics;
     int	counts;
-    extern int paused;
+    // [JN] Ingame variables for additional capping conditions
+    extern int paused, menuactive, demoplayback, netgame;
+    extern boolean vanillaparm;
 
     // get real tics
     entertic = I_GetTime() / ticdup;
@@ -751,7 +753,10 @@ void TryRunTics (void)
 
         // [AM] If we've uncapped the framerate and there are no tics
         //      to run, return early instead of waiting around.
-        if (counts == 0 && uncapped_fps && gametic && screenvisible && !paused)
+        // [JN] Also don't interpolate while paused state and active menu,
+        //      but interpolate in same conditions in demo playback and network game.
+        if (counts == 0 && uncapped_fps && gametic && screenvisible &&
+            !paused && (!menuactive || demoplayback || netgame) && !vanillaparm)
             return;
 
         if (counts < 1)

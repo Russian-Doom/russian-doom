@@ -132,7 +132,7 @@ extern int detailLevel;
 
 // Public Data
 
-boolean MenuActive;
+boolean menuactive;
 int InfoType;
 boolean messageson;
 
@@ -338,7 +338,7 @@ static char *GammaText[] = {
 void MN_Init(void)
 {
     InitFonts();
-    MenuActive = false;
+    menuactive = false;
     messageson = true;
     SkullBaseLump = W_GetNumForName(DEH_String("M_SKL00"));
 
@@ -485,7 +485,7 @@ int MN_TextBWidth(char *text)
 
 void MN_Ticker(void)
 {
-    if (MenuActive == false)
+    if (menuactive == false)
     {
         return;
     }
@@ -514,7 +514,7 @@ void MN_Drawer(void)
     char *message;
     char *selName;
 
-    if (MenuActive == false)
+    if (menuactive == false)
     {
         if (askforquit)
         {
@@ -780,7 +780,7 @@ static boolean SCNetCheck(int option)
         default:
             break;
     }
-    MenuActive = false;
+    menuactive = false;
     return false;
 }
 
@@ -792,7 +792,7 @@ static boolean SCNetCheck(int option)
 
 static boolean SCQuitGame(int option)
 {
-    MenuActive = false;
+    menuactive = false;
     askforquit = true;
     typeofask = 1;              //quit game
     if (!netgame && !demoplayback)
@@ -814,7 +814,7 @@ static boolean SCEndGame(int option)
     {
         return false;
     }
-    MenuActive = false;
+    menuactive = false;
     askforquit = true;
     typeofask = 2;              //endgame
     if (!netgame && !demoplayback)
@@ -1109,7 +1109,7 @@ boolean MN_Responder(event_t * event)
         // First click on close = bring up quit confirm message.
         // Second click = confirm quit.
 
-        if (!MenuActive && askforquit && typeofask == 1)
+        if (!menuactive && askforquit && typeofask == 1)
         {
             G_CheckDemoStatus();
             I_Quit();
@@ -1235,7 +1235,7 @@ boolean MN_Responder(event_t * event)
         return false;           // don't let the keys filter thru
     }
 
-    if (!MenuActive && !chatmodeon)
+    if (!menuactive && !chatmodeon)
     {
         if (key == key_menu_decscreen)
         {
@@ -1264,14 +1264,14 @@ boolean MN_Responder(event_t * event)
         else if (key == key_menu_help)           // F1
         {
             SCInfo(0);      // start up info screens
-            MenuActive = true;
+            menuactive = true;
             return (true);
         }
         else if (key == key_menu_save)           // F2 (save game)
         {
             if (gamestate == GS_LEVEL && !demoplayback)
             {
-                MenuActive = true;
+                menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
                 CurrentMenu = &SaveMenu;
@@ -1289,7 +1289,7 @@ boolean MN_Responder(event_t * event)
         {
             if (SCNetCheck(2))
             {
-                MenuActive = true;
+                menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
                 CurrentMenu = &LoadMenu;
@@ -1305,7 +1305,7 @@ boolean MN_Responder(event_t * event)
         }
         else if (key == key_menu_volume)         // F4 (volume)
         {
-            MenuActive = true;
+            menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
             CurrentMenu = &Options2Menu;
@@ -1329,7 +1329,7 @@ boolean MN_Responder(event_t * event)
             {
                 if (!quicksave || quicksave == -1)
                 {
-                    MenuActive = true;
+                    menuactive = true;
                     FileMenuKeySteal = false;
                     MenuTime = 0;
                     CurrentMenu = &SaveMenu;
@@ -1375,7 +1375,7 @@ boolean MN_Responder(event_t * event)
         {
             if (!quickload || quickload == -1)
             {
-                MenuActive = true;
+                menuactive = true;
                 FileMenuKeySteal = false;
                 MenuTime = 0;
                 CurrentMenu = &LoadMenu;
@@ -1429,7 +1429,7 @@ boolean MN_Responder(event_t * event)
 
     }
 
-    if (!MenuActive)
+    if (!menuactive)
     {
         if (key == key_menu_activate || gamestate == GS_DEMOSCREEN || demoplayback)
         {
@@ -1654,7 +1654,7 @@ boolean MN_Responder(event_t * event)
 
 void MN_ActivateMenu(void)
 {
-    if (MenuActive)
+    if (menuactive)
     {
         return;
     }
@@ -1662,7 +1662,7 @@ void MN_ActivateMenu(void)
     {
         S_ResumeSound();
     }
-    MenuActive = true;
+    menuactive = true;
     FileMenuKeySteal = false;
     MenuTime = 0;
     CurrentMenu = &MainMenu;
@@ -1688,7 +1688,7 @@ void MN_DeactivateMenu(void)
         CurrentMenu->oldItPos = CurrentItPos;
     }
     S_ResumeSound();    // [JN] Fix vanilla Heretic bug: resume music playing
-    MenuActive = false;
+    menuactive = false;
     if (FileMenuKeySteal)
     {
         I_StopTextInput();

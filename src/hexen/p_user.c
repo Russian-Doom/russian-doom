@@ -270,7 +270,7 @@ void P_MovePlayer(player_t * player)
             player->centering = false;
         }
     }
-    if (!MenuActive && !demoplayback)
+    if (!menuactive && !demoplayback)
     {
     player->lookdir = BETWEEN(-LOOKDIRMIN * MLOOKUNIT,
                             LOOKDIRMAX * MLOOKUNIT,

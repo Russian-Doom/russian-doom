@@ -207,7 +207,7 @@ void D_Display(void)
         V_DrawMouseSpeedBox(testcontrols_mousespeed);
     }
 
-    if (paused && !MenuActive && !askforquit)
+    if (paused && !menuactive && !askforquit)
     {
         if (!netgame)
         {
@@ -242,7 +242,7 @@ boolean D_GrabMouseCallback(void)
 {
     // when menu is active or game is paused, release the mouse
 
-    if (MenuActive || paused)
+    if (menuactive || paused)
         return false;
 
     // only grab mouse when playing levels (but not demos)
