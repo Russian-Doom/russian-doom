@@ -276,19 +276,10 @@ void D_Display (void)
         // Make paused fuzz position dependent on level time,
         // because it's current value is not remembered and we
         // should randomize it somehow for better and more random look.
+        // Fuzz randomization greatly improved by Fabian Greffrath, thanks! (24.05.2018)
         if (!vanillaparm && (paused || (menuactive && !demoplayback && !netgame)))
         {
-            if (leveltime & 1)          fuzzpos = 0;
-            else if (leveltime & 2)     fuzzpos = 5;
-            else if (leveltime & 3)     fuzzpos = 10;
-            else if (leveltime & 4)     fuzzpos = 15;
-            else if (leveltime & 5)     fuzzpos = 20;
-            else if (leveltime & 6)     fuzzpos = 25;
-            else if (leveltime & 7)     fuzzpos = 30;
-            else if (leveltime & 8)     fuzzpos = 35;
-            else if (leveltime & 9)     fuzzpos = 40;
-            else if (leveltime & 10)    fuzzpos = 45;
-            else                        fuzzpos = 49;
+            fuzzpos = leveltime % 50;
         }
     }
 
