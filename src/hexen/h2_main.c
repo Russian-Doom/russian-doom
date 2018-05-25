@@ -127,6 +127,8 @@ static int pagetic;
 static char *pagename;
 
 
+int local_time = 0; // [JN] Local time widget
+
 // [JN] Дополнительные параметры игры
 
 // - Интерфейс -
@@ -184,6 +186,7 @@ void D_BindVariables(void)
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_Channels);
     M_BindIntVariable("mlook",                  &mlook);
+    M_BindIntVariable("local_time",             &local_time);
 
     // [JN] Дополнительные параметры игры
 

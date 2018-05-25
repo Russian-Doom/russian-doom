@@ -145,6 +145,7 @@ boolean demoextend; // from h2def.h
 static int FontABaseLump;
 static int FontAYellowBaseLump;
 static int FontBBaseLump;
+static int FontCBaseLump;
 static int MauloBaseLump;
 static Menu_t *CurrentMenu;
 static int CurrentItPos;
@@ -356,6 +357,7 @@ static void InitFonts(void)
     FontABaseLump = W_GetNumForName("FONTA_S") + 1;
     FontAYellowBaseLump = W_GetNumForName("FONTAY_S") + 1;
     FontBBaseLump = W_GetNumForName("FONTB_S") + 1;
+    FontCBaseLump = W_GetNumForName("FONTC_S") + 1;
 }
 
 //---------------------------------------------------------------------------
@@ -498,6 +500,27 @@ int MN_TextBWidth(char *text)
         }
     }
     return (width);
+}
+
+//---------------------------------------------------------------------------
+//
+// PROC MN_DrTextC
+//
+// [JN] Draw small time digits using font C.
+//
+//---------------------------------------------------------------------------
+
+void MN_DrTextC(char *text, int x, int y)
+{
+    char c;
+    patch_t *p;
+
+    while ((c = *text++) != 0)
+    {
+        p = W_CacheLumpNum(FontCBaseLump + c - 33, PU_CACHE);
+        V_DrawPatch(x, y, p);
+        x += SHORT(p->width);
+    }
 }
 
 //---------------------------------------------------------------------------

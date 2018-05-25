@@ -377,10 +377,7 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 
     AddKeyControl(table, "Показать последнее сообщение ", &key_message_refresh);
     AddKeyControl(table, "Закончить запись демо",         &key_demo_quit);
-    if (gamemission == doom || gamemission == heretic)
-    {   // [JN] Local time widget available only in Doom and Heretic
-        AddKeyControl(table, "Отобразить системное врем€",    &key_toggletime);
-    }
+    AddKeyControl(table, "Отобразить системное врем€",    &key_toggletime);
 
     AddSectionLabel(table, "Карта", true);
     AddKeyControl(table, "Открыть карту",           &key_map_toggle);

@@ -760,6 +760,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         gamekeydown[key_togglemlook] = false;
     }
 
+    mousex = mousey = 0;
+
     // [JN] Toggle local time widget
     if (gamekeydown[key_toggletime])
     {
@@ -774,8 +776,6 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
        
         gamekeydown[key_toggletime] = false;
     }    
-
-    mousex = mousey = 0;
 
     if (forward > MAXPLMOVE)
         forward = MAXPLMOVE;

@@ -19,6 +19,7 @@
 
 // HEADER FILES ------------------------------------------------------------
 
+#include <time.h>
 #include "h2def.h"
 #include "i_cdmus.h"
 #include "i_video.h"
@@ -767,6 +768,18 @@ extern boolean automapactive;
 
 void SB_Drawer(void)
 {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    static char s[64];
+    strftime(s, sizeof(s), "%H:%M", tm);
+
+    // [JN] Draw local time widget
+    if (local_time)
+    {
+        M_snprintf(s, sizeof(s), s);
+        MN_DrTextC(s, 294, 19);
+    }
+
     // Sound info debug stuff
     if (DebugSound == true)
     {
