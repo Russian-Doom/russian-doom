@@ -629,15 +629,15 @@ void M_DrawSaveLoadBorder(int x,int y)
     }
     else
     {
-        V_DrawPatchDirect(x - 8, y + 8, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
+        V_DrawPatch(x - 8, y + 8, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
 
         for (i = 0;i < 24;i++)
         {
-            V_DrawPatchDirect(x, y + 8, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
+            V_DrawPatch(x, y + 8, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
             x += 8;
         }
 
-        V_DrawPatchDirect(x, y + 8,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
+        V_DrawPatch(x, y + 8,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
     }
 }
 
@@ -924,7 +924,7 @@ void M_DrawReadThis1(void)
 
     lumpname = DEH_String(lumpname);
 
-    V_DrawPatchDirect (0, 0, W_CacheLumpName(lumpname, PU_CACHE));
+    V_DrawPatch (0, 0, W_CacheLumpName(lumpname, PU_CACHE));
 
     ReadDef1.x = skullx;
     ReadDef1.y = skully;
@@ -942,9 +942,9 @@ void M_DrawReadThis2(void)
     // gameversion == exe_doom_1_9 and gamemode == registered
 
     if (gamevariant == old_shareware)   // [JN] Red chars for older sharewares
-    V_DrawPatchDirect(0, 0, W_CacheLumpName(DEH_String("HELP1RED"), PU_CACHE));
+    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP1RED"), PU_CACHE));
     else                                // [JN] Green chars
-    V_DrawPatchDirect(0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
+    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
 }
 
 
@@ -1007,7 +1007,7 @@ void M_MusicVol(int choice)
 //
 void M_DrawMainMenu(void)
 {
-    V_DrawPatchDirect(94, 2, W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
+    V_DrawPatch(94, 2, W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
 }
 
 
@@ -1388,16 +1388,16 @@ M_DrawThermo
     if (thermDot >= thermWidth)
     {
         thermDot = thermWidth - 1;
-        V_DrawPatchDirect((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMW"), PU_CACHE));
+        V_DrawPatch((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMW"), PU_CACHE));
     }
     // [JN] А если ползунок в крайнем левом положении, делать его затемненным
     else if (thermDot == 0)
     {
-        V_DrawPatchDirect((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMD"), PU_CACHE));
+        V_DrawPatch((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMD"), PU_CACHE));
     }
     else
     {
-        V_DrawPatchDirect((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));        
+        V_DrawPatch((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));        
     }
 }
 
@@ -1407,7 +1407,7 @@ M_DrawEmptyCell
 ( menu_t*   menu,
   int       item )
 {
-    V_DrawPatchDirect(menu->x - 10, menu->y + item * LINEHEIGHT - 1, W_CacheLumpName(DEH_String("M_CELL1"), PU_CACHE));
+    V_DrawPatch(menu->x - 10, menu->y + item * LINEHEIGHT - 1, W_CacheLumpName(DEH_String("M_CELL1"), PU_CACHE));
 }
 
 void
@@ -1415,7 +1415,7 @@ M_DrawSelCell
 ( menu_t*   menu,
   int       item )
 {
-    V_DrawPatchDirect(menu->x - 10, menu->y + item * LINEHEIGHT - 1, W_CacheLumpName(DEH_String("M_CELL2"), PU_CACHE));
+    V_DrawPatch(menu->x - 10, menu->y + item * LINEHEIGHT - 1, W_CacheLumpName(DEH_String("M_CELL2"), PU_CACHE));
 }
 
 

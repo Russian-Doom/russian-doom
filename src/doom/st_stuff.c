@@ -1442,7 +1442,7 @@ void ST_drawWidgets(boolean refresh)
         if (netgame)    // [JN] Account player's color in network game
         V_DrawPatch(ST_FX, ST_FY, faceback);
         else            // [JN] Use only gray color in single player
-        V_DrawPatchDirect(ST_FX, ST_FY, W_CacheLumpName(DEH_String("STFB1"), PU_CACHE));
+        V_DrawPatch(ST_FX, ST_FY, W_CacheLumpName(DEH_String("STFB1"), PU_CACHE));
     }
     
     // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
@@ -1458,23 +1458,23 @@ void ST_drawWidgets(boolean refresh)
              || plyr->readyweapon == wp_missile
              || plyr->readyweapon == wp_plasma
              || plyr->readyweapon == wp_bfg)
-                V_DrawPatchDirect(2, 191, W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
+                V_DrawPatch(2, 191, W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
 
             if (deathmatch) // [JN] Frags
-            V_DrawPatchDirect(108, 191, W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
+            V_DrawPatch(108, 191, W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
             else            // [JN] Arms
-            V_DrawPatchDirect(108, 191, W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
+            V_DrawPatch(108, 191, W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
 
             // [JN] Health, armor, ammo
-            V_DrawPatchDirect(52, 173, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
+            V_DrawPatch(52, 173, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
         }
 
-        V_DrawPatchDirect(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+        V_DrawPatch(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
     }
 
     // [JN] Traditional Crispy HUD
     if (screenblocks == 13)
-    V_DrawPatchDirect(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+    V_DrawPatch(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
 
     STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
     STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
