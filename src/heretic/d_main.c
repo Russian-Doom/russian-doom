@@ -88,6 +88,8 @@ FILE *debugfile;
 
 static int show_endoom = 0;
 
+int local_time = 0; // [JN] Local time widget
+
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
 void D_PageDrawer(void);
@@ -798,6 +800,7 @@ void D_BindVariables(void)
     M_BindIntVariable("show_endoom",            &show_endoom);
     M_BindIntVariable("graphical_startup",      &graphical_startup);
     M_BindIntVariable("mlook",                  &mlook);
+    M_BindIntVariable("local_time",             &local_time);
 
     // [JN] Дополнительные параметры игры
 

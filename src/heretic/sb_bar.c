@@ -18,6 +18,7 @@
 // Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
+#include <time.h>
 #include "doomdef.h"
 #include "deh_str.h"
 #include "dstrings.h"
@@ -575,6 +576,17 @@ void SB_Drawer(void)
 {
     int frame;
     static boolean hitCenterFrame;
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    static char s[64];
+    strftime(s, sizeof(s), "%H:%M", tm);
+
+    // [JN] Draw local time widget
+    if (local_time)
+    {
+        M_snprintf(s, sizeof(s), s);
+        MN_DrTextC(s, 293, 13);
+    }
 
     // Sound info debug stuff
     if (DebugSound == true)
