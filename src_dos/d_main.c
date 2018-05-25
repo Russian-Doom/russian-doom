@@ -205,7 +205,6 @@ void D_Display (void)
     boolean     done;
     boolean     wipe;
     boolean     redrawsbar;
-    extern int  fuzzpos;    // [JN] For paused fuzz effect
 
     if (nodrawers)
     return; // for comparative timing / profiling
@@ -283,16 +282,6 @@ void D_Display (void)
     // [JN] Make HUD calculations for active Crispy HUDs
     if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
         ST_Drawer(0, 0);
-
-        // [JN] Support for pausing of fuzz effect.
-        // Make paused fuzz position dependent on level time,
-        // because it's current value is not remembered and we
-        // should randomize it somehow for better and more random look.
-        // Fuzz randomization greatly improved by Fabian Greffrath, thanks! (24.05.2018)
-        if (!vanilla && (paused || (menuactive && !demoplayback && !netgame)))
-        {
-            fuzzpos = leveltime % 50;
-        }
     }
 
     if (gamestate == GS_LEVEL && gametic)
