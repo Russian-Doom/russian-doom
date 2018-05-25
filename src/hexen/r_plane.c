@@ -202,11 +202,8 @@ void R_InitPlanes(void)
 
 void R_MapPlane(int y, int x1, int x2)
 {
-    // [crispy] see below
-    // angle_t angle;
-    fixed_t distance;
-    // [JN] also see below    
-    // fixed_t length;
+    angle_t angle;
+    fixed_t distance, length;
     unsigned index;
 
 #ifdef RANGECHECK
@@ -216,18 +213,6 @@ void R_MapPlane(int y, int x1, int x2)
     }
 #endif
 
-    // [crispy] visplanes with the same flats now match up far better than before
-    // adapted from prboom-plus/src/r_plane.c:191-239, translated to fixed-point math
-    
-    distance = FixedMul(planeheight, yslope[y]);
-    
-    ds_xstep = FixedMul(viewsin, planeheight) / abs(centery - y);
-    ds_ystep = FixedMul(viewcos, planeheight) / abs(centery - y);
-    
-    ds_xfrac =  viewx + FixedMul(viewcos, distance) + (x1 - centerx) * ds_xstep;
-    ds_yfrac = -viewy - FixedMul(viewsin, distance) + (x1 - centerx) * ds_ystep;
-
-    /*
     if (planeheight != cachedheight[y])
     {
         cachedheight[y] = planeheight;
@@ -246,7 +231,6 @@ void R_MapPlane(int y, int x1, int x2)
     angle = (viewangle + xtoviewangle[x1]) >> ANGLETOFINESHIFT;
     ds_xfrac = viewx + FixedMul(finecosine[angle], length);
     ds_yfrac = -viewy - FixedMul(finesine[angle], length);
-    */
 
     if (fixedcolormap)
     {
