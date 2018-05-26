@@ -90,14 +90,6 @@
 
 typedef enum
 {
-    GS_LEVEL,
-    GS_INTERMISSION,
-    GS_FINALE,
-    GS_DEMOSCREEN
-} gamestate_t;
-
-typedef enum
-{
     ga_nothing,
     ga_loadlevel,
     ga_newgame,

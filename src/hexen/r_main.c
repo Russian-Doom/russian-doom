@@ -790,7 +790,7 @@ void R_SetupFrame(player_t * player)
         // that would necessitate turning it off for a tic.
         player->mo->interp == true &&
         // Don't interpolate during a paused state
-        !paused && !menuactive)
+        !paused && (!menuactive || demoplayback || netgame))
     {
         // Interpolate player camera from their old position to their current one.
         // [JN] Also for earthquake effect.

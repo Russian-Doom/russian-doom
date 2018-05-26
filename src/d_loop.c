@@ -27,6 +27,7 @@
 #include "d_event.h"
 #include "d_loop.h"
 #include "d_ticcmd.h"
+#include "d_mode.h"
 
 #include "i_system.h"
 #include "i_timer.h"
@@ -44,6 +45,7 @@
 #include "net_loop.h"
 
 #include "crispy.h"
+#include "jn.h"
 
 
 int uncapped_fps = 1;
@@ -712,7 +714,7 @@ void TryRunTics (void)
     int	counts;
     // [JN] Ingame variables for additional capping conditions
     extern int paused, menuactive, demoplayback, netgame;
-    extern boolean vanillaparm;
+    extern int gamestate;
 
     // get real tics
     entertic = I_GetTime() / ticdup;
@@ -756,7 +758,8 @@ void TryRunTics (void)
         // [JN] Also don't interpolate while paused state and active menu,
         //      but interpolate in same conditions in demo playback and network game.
         if (counts == 0 && uncapped_fps && gametic && screenvisible &&
-            !paused && (!menuactive || demoplayback || netgame) && !vanillaparm)
+            !paused && (!menuactive || demoplayback || netgame) && !vanillaparm &&
+            gamestate == GS_LEVEL)
             return;
 
         if (counts < 1)
