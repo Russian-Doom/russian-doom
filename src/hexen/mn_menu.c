@@ -632,9 +632,9 @@ static void DrawMainMenu(void)
     frame = (MenuTime / 5) % 7;
     V_DrawShadowedPatchRaven(88, 0, W_CacheLumpName("M_HTIC", PU_CACHE));
 // Old Gold skull positions: (40, 10) and (232, 10)
-    V_DrawShadowedPatchRaven(37, 80, W_CacheLumpNum(MauloBaseLump + (frame + 2) % 7,
+    V_DrawShadowedPatchRaven(42, 83, W_CacheLumpNum(MauloBaseLump + (frame + 2) % 7,
                                        PU_CACHE));
-    V_DrawShadowedPatchRaven(278, 80, W_CacheLumpNum(MauloBaseLump + frame, PU_CACHE));
+    V_DrawShadowedPatchRaven(273, 83, W_CacheLumpNum(MauloBaseLump + frame, PU_CACHE));
 }
 
 //==========================================================================
