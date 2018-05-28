@@ -31,7 +31,7 @@ extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptextu
 extern int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
 extern int bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15;
 extern int bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20;
-extern int bmaptexture21, bmaptexture22;
+extern int bmaptexture21, bmaptexture22, bmaptexture23;
 extern int bmap_terminator;
 
 // OPTIMIZE: closed two sided lines as single sided
@@ -147,6 +147,9 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
             || curline->sidedef->midtexture == bmaptexture21
             || curline->sidedef->midtexture == bmaptexture22)
             walllights = fullbright_redonly[lightnum];
+            
+            if (curline->sidedef->midtexture == bmaptexture23)
+            walllights = fullbright_flame[lightnum];
         }
     }
 

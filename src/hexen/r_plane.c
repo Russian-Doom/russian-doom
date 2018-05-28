@@ -56,7 +56,7 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05;
 int bmaptexture06, bmaptexture07, bmaptexture08, bmaptexture09, bmaptexture10;
 int bmaptexture11, bmaptexture12, bmaptexture13, bmaptexture14, bmaptexture15;
 int bmaptexture16, bmaptexture17, bmaptexture18, bmaptexture19, bmaptexture20;
-int bmaptexture21, bmaptexture22;
+int bmaptexture21, bmaptexture22, bmaptexture23;
 
 int bmap_terminator;
 
@@ -165,6 +165,7 @@ void R_InitBrightmaps(void)
     bmaptexture20 = R_TextureNumForName("X_FAC10"); // Korax
     bmaptexture21 = R_TextureNumForName("X_FAC11"); // Korax
     bmaptexture22 = R_TextureNumForName("X_FAC12"); // Korax
+    bmaptexture23 = R_TextureNumForName("TPORTX");  // Gate's frame
 
     if (gamemode != shareware)
     bmaptexture07 = R_TextureNumForName("SW51_ON");
