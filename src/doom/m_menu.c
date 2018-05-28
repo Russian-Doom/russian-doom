@@ -1799,6 +1799,20 @@ boolean M_Responder (event_t* ev)
         return true;
     }
 
+    // [JN] Toggling of local time widget
+    if (key == key_toggletime)
+    {
+        if (!local_time)
+        {
+            local_time = true;
+        }
+        else
+        {
+            local_time = false;
+        }
+        return true;
+    }
+
     // F-Keys
     if (!menuactive)
     {
@@ -1903,18 +1917,6 @@ boolean M_Responder (event_t* ev)
                                                              PU_CACHE) + 
                                                              st_palette * 768);
             players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
-            return true;
-        }
-        else if (key == key_toggletime)    // [JN] Toggling of local time widget
-        {
-            if (!local_time)
-            {
-                local_time = true;
-            }
-            else
-            {
-                local_time = false;
-            }
             return true;
         }
     }
