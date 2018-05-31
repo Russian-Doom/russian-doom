@@ -1418,5 +1418,12 @@ static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)
 {
-    P_SetMessage(player, TXT_VERSION, true);
+    static char msg[38];
+
+    M_snprintf(msg, sizeof(msg), "%s%s - %s",
+    TXT_VERSION,
+    TXT_ARCH,
+    TXT_DATE);
+    
+    P_SetMessage(player, msg, true);
 }

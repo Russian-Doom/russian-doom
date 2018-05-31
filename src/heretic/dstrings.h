@@ -402,7 +402,15 @@
 
 // [JN] Специфические сообщения порта
 
-#define TXT_VERSION "DTHCBZ 2>7 (D HFPHF<JNRT)"       // ВЕРСИЯ 2.7 (в разработке)
+#define TXT_VERSION "DTHCBZ 2>7"        // ВЕРСИЯ 2.7
+#if defined (_WIN64)
+#define TXT_ARCH      " - ([64)"        // x64
+#elif defined (_WIN32)
+#define TXT_ARCH      " - ([86)"        // x86
+#else
+#define TXT_ARCH      ""                // ?  
+#endif
+#define TXT_DATE      "D HFPHF,JNRT"    // (в разработке)
 
 #define TXT_ALWAYSRUN_ON "GJCNJZYYSQ ,TU DRK.XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
 #define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ ,TU DSRK.XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
