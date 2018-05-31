@@ -737,7 +737,8 @@ void P_ZMovement(mobj_t * mo)
     if (mo->player && mo->flags2 & MF2_FLY && !(mo->z <= mo->floorz)
         && leveltime & 2)
     {
-        mo->z += finesine[(FINEANGLES / 20 * leveltime >> 2) & FINEMASK];
+        // [JN] Smooth floating
+        mo->z += finesine[(FINEANGLES/160*gametic)&FINEMASK]/16;
     }
 
 //
