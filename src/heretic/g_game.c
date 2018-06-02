@@ -1815,10 +1815,10 @@ void G_InitNew(skill_t skill, int episode, int map)
         // Monster's speed                          // Old value   Who
         mobjinfo[MT_IMP].speed = 17;                // 10          Gargolye
         mobjinfo[MT_IMPLEADER].speed = 17;          // 10          Fire Gargolye
-        mobjinfo[MT_MUMMY].speed = 19;              // 12          Golem
-        mobjinfo[MT_MUMMYGHOST].speed = 19;         // 12          Golem Ghost
-        mobjinfo[MT_MUMMYLEADER].speed = 19;        // 12          Nitrogolem
-        mobjinfo[MT_MUMMYLEADERGHOST].speed = 19;   // 12          Nitrogolem Ghost
+        mobjinfo[MT_MUMMY].speed = 21;              // 12          Golem
+        mobjinfo[MT_MUMMYGHOST].speed = 21;         // 12          Golem Ghost
+        mobjinfo[MT_MUMMYLEADER].speed = 21;        // 12          Nitrogolem
+        mobjinfo[MT_MUMMYLEADERGHOST].speed = 21;   // 12          Nitrogolem Ghost
         mobjinfo[MT_CLINK].speed = 21;              // 14          Sabreclaw
         mobjinfo[MT_KNIGHT].speed = 19;             // 12          Undead Warrior
         mobjinfo[MT_KNIGHTGHOST].speed = 19;        // 12          Undead Warrior Ghost
