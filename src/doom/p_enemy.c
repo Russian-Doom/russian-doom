@@ -853,7 +853,7 @@ void A_PosAttack (mobj_t* actor)
     angle += P_SubRandom() << 20;
     
     if (sk_ultranm && !demorecording && !demoplayback)
-    damage = ((P_Random()%5)+1)*5;
+    damage = ((P_Random()%5)+1)*4;
     else
     damage = ((P_Random()%5)+1)*3;
 
@@ -881,7 +881,7 @@ void A_SPosAttack (mobj_t* actor)
     angle = bangle + (P_SubRandom() << 20);
 
     if (sk_ultranm && !demorecording && !demoplayback)
-    damage = ((P_Random()%5)+1)*5;
+    damage = ((P_Random()%5)+1)*4;
     else
     damage = ((P_Random()%5)+1)*3;
 
@@ -907,7 +907,7 @@ void A_CPosAttack (mobj_t* actor)
     angle = bangle + (P_SubRandom() << 20);
 
     if (sk_ultranm && !demorecording && !demoplayback)
-    damage = ((P_Random()%5)+1)*5;
+    damage = ((P_Random()%5)+1)*4;
     else
     damage = ((P_Random()%5)+1)*3;
 
