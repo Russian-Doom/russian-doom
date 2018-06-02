@@ -1474,40 +1474,6 @@ void G_InitNew (skill_t skill, int episode, int map)
         mobjinfo[MT_HEADSHOT].speed = 20*FRACUNIT;
         mobjinfo[MT_TROOPSHOT].speed = 20*FRACUNIT;
 
-        // [JN] Ultra Nightmare definitions
-        if (skill == sk_ultranm)
-        {
-            // Monster's speed                           Name (initial value)
-            mobjinfo[MT_POSSESSED].speed = 12;           // Zombieman (8)
-            mobjinfo[MT_SHOTGUY].speed = 12;             // Shotgun guy (8)
-            mobjinfo[MT_CHAINGUY].speed = 12;            // Chaingunner (8)
-            mobjinfo[MT_TROOP].speed = 12;               // Imp (8)
-            mobjinfo[MT_SKULL].speed = 12;               // Lost Soul (8)
-            mobjinfo[MT_HEAD].speed = 12;                // Cacodemon (8)
-            mobjinfo[MT_KNIGHT].speed = 12;              // Hell Knight (8)
-            mobjinfo[MT_BRUISER].speed = 12;             // Baron of Hell (8)
-            mobjinfo[MT_BABY].speed = 14;                // Arachnotron (12)
-            mobjinfo[MT_PAIN].speed = 12;                // Pain Elemental (8)
-            mobjinfo[MT_UNDEAD].speed = 12;              // Revenant (8)
-            mobjinfo[MT_FATSO].speed = 10;               // Mancubus (8)
-            mobjinfo[MT_VILE].speed = 17;                // Archvile (15)
-            mobjinfo[MT_SPIDER].speed = 15;              // Spider Mastermind (12)
-            mobjinfo[MT_CYBORG].speed = 18;              // Cyberdemon (16)
-            mobjinfo[MT_WOLFSS].speed = 12;              // Wolf SS (8)
-
-            // Monster's missiles speed                  Name (initial value)
-            mobjinfo[MT_ARACHPLAZ].speed = 30*FRACUNIT;  // Arachnotron (25*FRACUNIT)
-            mobjinfo[MT_FATSHOT].speed = 25*FRACUNIT;    // Mancubus (20*FRACUNIT)
-
-            // Monster's damage                          Name (initial value)
-            mobjinfo[MT_TROOPSHOT].damage = 5;           // Imp (3)
-            mobjinfo[MT_HEADSHOT].damage = 9;            // Cacodemon (5)
-            mobjinfo[MT_BRUISERSHOT].damage = 12;        // Knight / Baron (8) 
-            mobjinfo[MT_ARACHPLAZ].damage = 8;           // Arachnotron (5)
-            mobjinfo[MT_TRACER].damage = 15;             // Revenant (10)
-            mobjinfo[MT_FATSHOT].damage = 15;            // Mancubus (10)
-        }
-
         fast_applied = true;
     }
     else if (!fastparm && skill != sk_nightmare && skill != sk_ultranm && fast_applied)
@@ -1518,6 +1484,73 @@ void G_InitNew (skill_t skill, int episode, int map)
         mobjinfo[MT_HEADSHOT].speed = 10*FRACUNIT;
         mobjinfo[MT_TROOPSHOT].speed = 10*FRACUNIT;
         fast_applied = false;
+    }
+
+    // [JN] Ultra Nightmare definitions
+    if (skill == sk_ultranm)
+    {
+        // Monster's speed                           Who (initial value)
+        mobjinfo[MT_POSSESSED].speed = 12;           // Zombieman (8)
+        mobjinfo[MT_SHOTGUY].speed = 12;             // Shotgun guy (8)
+        mobjinfo[MT_CHAINGUY].speed = 12;            // Chaingunner (8)
+        mobjinfo[MT_TROOP].speed = 13;               // Imp (8)
+        mobjinfo[MT_SKULL].speed = 14;               // Lost Soul (8)
+        mobjinfo[MT_HEAD].speed = 14;                // Cacodemon (8)
+        mobjinfo[MT_KNIGHT].speed = 14;              // Hell Knight (8)
+        mobjinfo[MT_BRUISER].speed = 14;             // Baron of Hell (8)
+        mobjinfo[MT_BABY].speed = 17;                // Arachnotron (12)
+        mobjinfo[MT_PAIN].speed = 14;                // Pain Elemental (8)
+        mobjinfo[MT_UNDEAD].speed = 14;              // Revenant (8)
+        mobjinfo[MT_FATSO].speed = 11;               // Mancubus (8)
+        mobjinfo[MT_VILE].speed = 18;                // Archvile (15)
+        mobjinfo[MT_SPIDER].speed = 17;              // Spider Mastermind (12)
+        mobjinfo[MT_CYBORG].speed = 20;              // Cyberdemon (16)
+        mobjinfo[MT_WOLFSS].speed = 13;              // Wolf SS (8)
+
+        // Monster's missiles speed                  What (initial value)
+        mobjinfo[MT_ARACHPLAZ].speed = 30*FRACUNIT;  // Arachnotron (25*FRACUNIT)
+        mobjinfo[MT_FATSHOT].speed = 25*FRACUNIT;    // Mancubus (20*FRACUNIT)
+
+        // Monster's damage                          What (initial value)
+        mobjinfo[MT_TROOPSHOT].damage = 4;           // Imp (3)
+        mobjinfo[MT_HEADSHOT].damage = 7;            // Cacodemon (5)
+        mobjinfo[MT_BRUISERSHOT].damage = 10;        // Knight / Baron (8) 
+        mobjinfo[MT_ARACHPLAZ].damage = 7;           // Arachnotron (5)
+        mobjinfo[MT_TRACER].damage = 12;             // Revenant (10)
+        mobjinfo[MT_FATSHOT].damage = 12;            // Mancubus (10)
+    }
+    // [JN] Fallback to standard values
+    else
+    {
+        // Monster's speed                          Who
+        mobjinfo[MT_POSSESSED].speed = 8;           // Zombieman
+        mobjinfo[MT_SHOTGUY].speed = 8;             // Shotgun guy
+        mobjinfo[MT_CHAINGUY].speed = 8;            // Chaingunner
+        mobjinfo[MT_TROOP].speed = 8;               // Imp
+        mobjinfo[MT_SKULL].speed = 8;               // Lost Soul
+        mobjinfo[MT_HEAD].speed = 8;                // Cacodemon
+        mobjinfo[MT_KNIGHT].speed = 8;              // Hell Knight
+        mobjinfo[MT_BRUISER].speed = 8;             // Baron of Hell
+        mobjinfo[MT_BABY].speed = 12;               // Arachnotron
+        mobjinfo[MT_PAIN].speed = 8;                // Pain Elemental
+        mobjinfo[MT_UNDEAD].speed = 8;              // Revenant
+        mobjinfo[MT_FATSO].speed = 8;               // Mancubus
+        mobjinfo[MT_VILE].speed = 15;               // Archvile
+        mobjinfo[MT_SPIDER].speed = 12;             // Spider Mastermind
+        mobjinfo[MT_CYBORG].speed = 16;             // Cyberdemon
+        mobjinfo[MT_WOLFSS].speed = 8;              // Wolf SS
+
+        // Monster's missiles speed                 What
+        mobjinfo[MT_ARACHPLAZ].speed = 25*FRACUNIT; // Arachnotron plasma
+        mobjinfo[MT_FATSHOT].speed = 20*FRACUNIT;   // Mancubus fireball
+
+        // Monster's damage                         What
+        mobjinfo[MT_TROOPSHOT].damage = 3;          // Imp fireball
+        mobjinfo[MT_HEADSHOT].damage = 5;           // Cacodemon fireball
+        mobjinfo[MT_BRUISERSHOT].damage = 8;        // Knight / Baron fireball 
+        mobjinfo[MT_ARACHPLAZ].damage = 5;          // Arachnotron plasma
+        mobjinfo[MT_TRACER].damage = 10;            // Revenant fireball
+        mobjinfo[MT_FATSHOT].damage = 10;           // Mancubus fireball
     }
 
     // force players to be initialized upon first level load

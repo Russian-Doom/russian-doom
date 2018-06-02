@@ -716,6 +716,21 @@ void A_Chase (mobj_t*	actor)
 	    actor->threshold--;
     }
     
+    // [JN] Ultra Nightmare speed multipliers.
+    // Adapted from Heretic, thanks Raven Software!
+    if (gameskill == sk_ultranm 
+    && actor->type != MT_SERGEANT
+    && actor->type != MT_SHADOWS
+    && actor->type != MT_UNDEAD
+    && actor->type != MT_VILE)
+    {
+        actor->tics -= actor->tics / 2;
+        if (actor->tics < 3)
+        {
+            actor->tics = 3;
+        }
+    }
+
     // turn towards movement direction if not there yet
     if (actor->movedir < 8)
     {
@@ -844,7 +859,7 @@ void A_PosAttack (mobj_t* actor)
     angle += (P_Random()-P_Random())<<20;
 
     if (sk_ultranm && !demorecording && !demoplayback)
-    damage = ((P_Random()%5)+1)*5;
+    damage = ((P_Random()%5)+1)*4;
     else
     damage = ((P_Random()%5)+1)*3;
 
@@ -872,7 +887,7 @@ void A_SPosAttack (mobj_t* actor)
 	angle = bangle + ((P_Random()-P_Random())<<20);
 
     if (sk_ultranm && !demorecording && !demoplayback)
-    damage = ((P_Random()%5)+1)*5;
+    damage = ((P_Random()%5)+1)*4;
     else
     damage = ((P_Random()%5)+1)*3;
 
@@ -898,7 +913,7 @@ void A_CPosAttack (mobj_t* actor)
     angle = bangle + ((P_Random()-P_Random())<<20);
 
     if (sk_ultranm && !demorecording && !demoplayback)
-    damage = ((P_Random()%5)+1)*5;
+    damage = ((P_Random()%5)+1)*4;
     else
     damage = ((P_Random()%5)+1)*3;
 
