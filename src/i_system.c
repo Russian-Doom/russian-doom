@@ -277,8 +277,10 @@ static boolean already_quitting = false;
 void I_Error (char *error, ...)
 {
     char msgbuf[512];
+#ifdef _WIN32
     wchar_t win_error_message[1000];  // [JN] UTF-8 retranslation of error message
     wchar_t win_error_title[1000];    // [JN] UTF-8 retranslation of window title
+#endif
     va_list argptr;
     atexit_listentry_t *entry;
     boolean exit_gui_popup;
