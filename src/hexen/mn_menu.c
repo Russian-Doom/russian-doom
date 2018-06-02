@@ -247,13 +247,14 @@ static MenuItem_t SkillItems[] = {
     {ITT_EFUNC, NULL, SCSkill, sk_easy, MENU_NONE},
     {ITT_EFUNC, NULL, SCSkill, sk_medium, MENU_NONE},
     {ITT_EFUNC, NULL, SCSkill, sk_hard, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSkill, sk_nightmare, MENU_NONE}
+    {ITT_EFUNC, NULL, SCSkill, sk_nightmare, MENU_NONE},
+    {ITT_EFUNC, NULL, SCSkill, sk_ultranm, MENU_NONE}
 };
 
 static Menu_t SkillMenu = {
     120, 44,
     DrawSkillMenu,
-    5, SkillItems,
+    6, SkillItems,
     2,
     MENU_CLASS
 };
@@ -1035,27 +1036,30 @@ static void SCClass(int option)
     {
         case PCLASS_FIGHTER:
             SkillMenu.x = 120;
-            SkillItems[0].text = "JHE;TYJCTW";	// ОРУЖЕНОСЕЦ
-            SkillItems[1].text = "HSWFHM";		// РЫЦАРЬ
-            SkillItems[2].text = "DJBNTKM";		// ВОИТЕЛЬ
-            SkillItems[3].text = ",THCTHR";		// БЕРСЕРК
-            SkillItems[4].text = "NBNFY";		// ТИТАН
+            SkillItems[0].text = "JHE;TYJCTW";  // ОРУЖЕНОСЕЦ
+            SkillItems[1].text = "HSWFHM";      // РЫЦАРЬ
+            SkillItems[2].text = "DJBNTKM";     // ВОИТЕЛЬ
+            SkillItems[3].text = ",THCTHR";     // БЕРСЕРК
+            SkillItems[4].text = "NBNFY";       // ТИТАН
+            SkillItems[5].text = "DTHIBNTKM";   // ВЕРШИТЕЛЬ
             break;
         case PCLASS_CLERIC:
             SkillMenu.x = 116;
-            SkillItems[0].text = "FKNFHYBR";	// АЛТАРНИК
-            SkillItems[1].text = "CKE;BNTKM";	// СЛУЖИТЕЛЬ  
-            SkillItems[2].text = "CDZOTYYBR";	// СВЯЩЕННИК
-            SkillItems[3].text = "RFHLBYFK";	// КАРДИНАЛ
-            SkillItems[4].text = "TGBCRJG";		// ЕПИСКОП
+            SkillItems[0].text = "FKNFHYBR";    // АЛТАРНИК
+            SkillItems[1].text = "CKE;BNTKM";   // СЛУЖИТЕЛЬ  
+            SkillItems[2].text = "CDZOTYYBR";   // СВЯЩЕННИК
+            SkillItems[3].text = "RFHLBYFK";    // КАРДИНАЛ
+            SkillItems[4].text = "TGBCRJG";     // ЕПИСКОП
+            SkillItems[5].text = "FGJCNJK";     // АПОСТОЛ
             break;
         case PCLASS_MAGE:
             SkillMenu.x = 112;
-			SkillItems[0].text = "EXTYBR";			// УЧЕНИК
-            SkillItems[1].text = "XFHJLTQ";			// ЧАРОДЕЙ
-            SkillItems[2].text = "RJKLEY";			// КОЛДУН
-            SkillItems[3].text = "XTHYJRYB;YBR";	// ЧЕРНОКНИЖНИК
-            SkillItems[4].text = "DTH[JDYSQ VFU";	// ВЕРХОВНЫЙ МАГ
+			SkillItems[0].text = "EXTYBR";          // УЧЕНИК
+            SkillItems[1].text = "XFHJLTQ";         // ЧАРОДЕЙ
+            SkillItems[2].text = "RJKLEY";          // КОЛДУН
+            SkillItems[3].text = "XTHYJRYB;YBR";    // ЧЕРНОКНИЖНИК
+            SkillItems[4].text = "DTH[JDYSQ VFU";   // ВЕРХОВНЫЙ МАГ
+            SkillItems[5].text = "DTKBRBQ FH[BVFU"; // ВЕЛИКИЙ АРХИМАГ
             break;
     }
     SetMenu(MENU_SKILL);

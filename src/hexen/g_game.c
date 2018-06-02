@@ -1918,9 +1918,9 @@ void G_InitNew(skill_t skill, int episode, int map)
     {
         skill = sk_baby;
     }
-    if (skill > sk_nightmare)
+    if (skill > sk_ultranm)
     {
-        skill = sk_nightmare;
+        skill = sk_ultranm;
     }
     if (map < 1)
     {
@@ -1948,6 +1948,34 @@ void G_InitNew(skill_t skill, int episode, int map)
         demoplayback = false;
         usergame = true;            // will be set false if a demo
     }
+
+    // [JN] Ultra-Nightmare definitions
+    if (skill == sk_ultranm)
+    {
+        // Monster's speed                          // Old value   Who
+        mobjinfo[MT_FIREDEMON].speed = 20;          // 13          Affrit
+        
+        // Monster's missiles speed                             // Old value    What
+        mobjinfo[MT_FIREDEMON_FX6].speed = 13 * FRACUNIT;       // 10           Affrit fireball
+        mobjinfo[MT_DEMON2FX1].speed = 18 * FRACUNIT;           // 15           Brown Chaos Serpent fireball
+        mobjinfo[MT_BISH_FX].speed = 13 * FRACUNIT;             // 10           Dark Bishop fireball
+        mobjinfo[MT_DEMONFX1].speed = 18 * FRACUNIT;            // 15           Green Chaos Serpent fireball
+        mobjinfo[MT_WRAITHFX1].speed = 17 * FRACUNIT;           // 14           Reiver fireball
+        mobjinfo[MT_CENTAUR_FX].speed = 23 * FRACUNIT;          // 20           Slaughtaur fireball
+        mobjinfo[MT_SERPENTFX].speed = 18 * FRACUNIT;           // 15           Stalker fireball
+        mobjinfo[MT_ICEGUY_FX].speed = 17 * FRACUNIT;           // 14           Wendige fireball 1
+        mobjinfo[MT_ICEGUY_FX2].speed = 13 * FRACUNIT;          // 10           Wendige fireball 2
+        
+        // Monster's damage                         // Old value   What
+        mobjinfo[MT_FIREDEMON_FX6].damage = 2;      // 1           Fire Gargolye fireball
+        mobjinfo[MT_DEMON2FX1].damage = 6;          // 5           Brown Chaos Serpent fireball
+        mobjinfo[MT_BISH_FX].damage = 1;            // 1           Dark Bishop fireball
+        mobjinfo[MT_DEMONFX1].damage = 6;           // 5           Green Chaos Serpent fireball
+        mobjinfo[MT_WRAITHFX1].damage = 6;          // 5           Reiver fireball
+        mobjinfo[MT_CENTAUR_FX].damage = 5;         // 4           Slaughtaur fireball
+        mobjinfo[MT_SERPENTFX].damage = 5;          // 4           Stalker fireball
+    }
+
     paused = false;
     viewactive = true;
     gameepisode = episode;

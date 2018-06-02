@@ -1207,7 +1207,7 @@ mobj_t *P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type)
     mobj->flags2 = info->flags2;
     mobj->damage = info->damage;
     mobj->health = info->spawnhealth;
-    if (gameskill != sk_nightmare)
+    if (gameskill != sk_nightmare && gameskill != sk_ultranm)
     {
         mobj->reactiontime = info->reactiontime;
     }
@@ -1506,7 +1506,7 @@ void P_SpawnMapThing(mapthing_t * mthing)
     {
         spawnMask = MTF_EASY;
     }
-    else if (gameskill == sk_hard || gameskill == sk_nightmare)
+    else if (gameskill == sk_hard || gameskill == sk_nightmare || gameskill == sk_ultranm)
     {
         spawnMask = MTF_HARD;
     }
