@@ -759,7 +759,7 @@ void A_Chase(mobj_t * actor)
     if (actor->flags & MF_JUSTATTACKED)
     {
         actor->flags &= ~MF_JUSTATTACKED;
-        if (gameskill != sk_nightmare)
+        if (gameskill != sk_nightmare && gameskill != sk_ultranm)
             P_NewChaseDir(actor);
         return;
     }

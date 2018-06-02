@@ -1775,8 +1775,8 @@ void G_InitNew(skill_t skill, int episode, int map)
     }
     if (skill < sk_baby)
         skill = sk_baby;
-    if (skill > sk_nightmare)
-        skill = sk_nightmare;
+    if (skill > sk_ultranm)
+        skill = sk_ultranm;
     if (episode < 1)
         episode = 1;
     // Up to 9 episodes for testing
@@ -1808,6 +1808,53 @@ void G_InitNew(skill_t skill, int episode, int map)
         players[i].playerstate = PST_REBORN;
         players[i].didsecret = false;
     }
+
+    // [JN] Ultra-Nightmare definitions
+    if (skill == sk_ultranm)
+    {
+        // Monster's speed                          // Old value   Who
+        mobjinfo[MT_IMP].speed = 17;                // 10          Gargolye
+        mobjinfo[MT_IMPLEADER].speed = 17;          // 10          Fire Gargolye
+        mobjinfo[MT_MUMMY].speed = 19;              // 12          Golem
+        mobjinfo[MT_MUMMYGHOST].speed = 19;         // 12          Golem Ghost
+        mobjinfo[MT_MUMMYLEADER].speed = 19;        // 12          Nitrogolem
+        mobjinfo[MT_MUMMYLEADERGHOST].speed = 19;   // 12          Nitrogolem Ghost
+        mobjinfo[MT_CLINK].speed = 21;              // 14          Sabreclaw
+        mobjinfo[MT_KNIGHT].speed = 19;             // 12          Undead Warrior
+        mobjinfo[MT_KNIGHTGHOST].speed = 19;        // 12          Undead Warrior Ghost
+        mobjinfo[MT_BEAST].speed = 21;              // 14          Weredragon
+        mobjinfo[MT_SNAKE].speed = 17;              // 10          Ophidian
+        mobjinfo[MT_WIZARD].speed = 19;             // 12          Disciple of D'Sparil
+        mobjinfo[MT_HEAD].speed = 13;               // 6           Iron Lich
+        mobjinfo[MT_MINOTAUR].speed = 21;           // 16          Maolotaur
+        mobjinfo[MT_SORCERER1].speed = 21;          // 16          D'Sparil (riding)
+        mobjinfo[MT_SORCERER2].speed = 20;          // 14          D'Sparil (walking)
+
+        // Monster's missiles speed                     // Old value    What
+        mobjinfo[MT_IMPBALL].speed = 13 * FRACUNIT;     // 10           Fire Gargolye fireball
+        mobjinfo[MT_MUMMYFX1].speed = 12 * FRACUNIT;    // 9            Nitrogolem Ghost fireball
+        mobjinfo[MT_KNIGHTAXE].speed = 12 * FRACUNIT;   // 9            Undead Warrior green axe
+        mobjinfo[MT_REDAXE].speed = 12 * FRACUNIT;      // 9            Undead Warrior green axe
+        mobjinfo[MT_BEASTBALL].speed = 15 * FRACUNIT;   // 12           Weredragon fireball
+        mobjinfo[MT_SNAKEPRO_A].speed = 16 * FRACUNIT;  // 14           Ophidian fireball A
+        mobjinfo[MT_SNAKEPRO_B].speed = 16 * FRACUNIT;  // 14           Ophidian fireball B
+        mobjinfo[MT_WIZFX1].speed = 20 * FRACUNIT;      // 18           Disciple of D'Sparil fireball
+        mobjinfo[MT_HEADFX1].speed = 16 * FRACUNIT;     // 13           Iron Lich missilie 1
+        mobjinfo[MT_HEADFX2].speed = 12 * FRACUNIT;     // 8            Iron Lich missilie 2
+        mobjinfo[MT_HEADFX3].speed = 13 * FRACUNIT;     // 10           Iron Lich missilie 3
+        mobjinfo[MT_HEADFX3].speed = 14 * FRACUNIT;     // 10           Iron Lich whirlwind
+        
+        // Monster's damage                         // Old value   What
+        mobjinfo[MT_IMPBALL].damage = 2;            // 1           Fire Gargolye fireball
+        mobjinfo[MT_MUMMYFX1].damage = 6;           // 4           Nitrogolem Ghost fireball
+        mobjinfo[MT_KNIGHTAXE].damage = 5;          // 3           Undead Warrior green axe
+        mobjinfo[MT_REDAXE].damage = 8;             // 7           Undead Warrior red axe
+        mobjinfo[MT_BEASTBALL].damage = 5;          // 4           Weredragon fireball
+        mobjinfo[MT_SNAKEPRO_A].damage = 2;         // 1           Ophidian fireball A
+        mobjinfo[MT_SNAKEPRO_B].damage = 4;         // 3           Ophidian fireball B
+        mobjinfo[MT_WIZFX1].damage = 4;             // 3           Disciple of D'Sparil fireball
+    }
+
     // Set up a bunch of globals
     usergame = true;            // will be set false if a demo
     paused = false;

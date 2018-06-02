@@ -243,17 +243,18 @@ static Menu_t SaveMenu = {
 };
 
 static MenuItem_t SkillItems[] = {
-    {ITT_EFUNC, "YZYTXRF YFLJ,YF VYT", SCSkill, sk_baby, MENU_NONE},	// НЯНЕЧКА НАДОБНА МНЕ
-    {ITT_EFUNC, "YT CNJKM VE;TCNDTYTY Z", SCSkill, sk_easy, MENU_NONE},	// НЕ СТОЛЬ МУЖЕСТВЕНЕН Я
-    {ITT_EFUNC, "GJLFQNT VYT B[", SCSkill, sk_medium, MENU_NONE},		// ПОДАЙТЕ МНЕ ИХ
-    {ITT_EFUNC, "BCREITY Z CHF;TYBZVB", SCSkill, sk_hard, MENU_NONE},	// ИСКУШЕН Я СРАЖЕНИЯМИ
-    {ITT_EFUNC, "XEVF JDKFLTKF VYJQ", SCSkill, sk_nightmare, MENU_NONE} // ЧУМА ОВЛАДЕЛА МНОЙ
+    {ITT_EFUNC, "YZYTXRF YFLJ,YF VYT", SCSkill, sk_baby, MENU_NONE},    // НЯНЕЧКА НАДОБНА МНЕ
+    {ITT_EFUNC, "YT CNJKM VE;TCNDTYTY Z", SCSkill, sk_easy, MENU_NONE}, // НЕ СТОЛЬ МУЖЕСТВЕНЕН Я
+    {ITT_EFUNC, "GJLFQNT VYT B[", SCSkill, sk_medium, MENU_NONE},       // ПОДАЙТЕ МНЕ ИХ
+    {ITT_EFUNC, "BCREITY Z CHF;TYBZVB", SCSkill, sk_hard, MENU_NONE},   // ИСКУШЕН Я СРАЖЕНИЯМИ
+    {ITT_EFUNC, "XEVF JDKFLTKF VYJQ", SCSkill, sk_nightmare, MENU_NONE},// ЧУМА ОВЛАДЕЛА МНОЙ
+    {ITT_EFUNC, "RJIVFHJV BCGJKYTY Z", SCSkill, sk_ultranm, MENU_NONE}  // КОШМАРОМ ИСПОЛНЕН Я
 };
 
 static Menu_t SkillMenu = {
     38, 30,
     DrawSkillMenu,
-    5, SkillItems,
+    6, SkillItems,
     2,
     MENU_EPISODE
 };
