@@ -1132,7 +1132,8 @@ void G_Ticker(void)
                 break;
             case ga_screenshot:
                 V_ScreenShot("HEXEN%02i.%s");
-                P_SetMessage(&players[consoleplayer], "CYBVJR 'RHFYF", false);	// СНИМОК ЭКРАНА | SCREEN SHOT
+                S_StartSound(NULL, SFX_CHAT);   // [JN] Audio feedback
+                // P_SetMessage(&players[consoleplayer], "CYBVJR 'RHFYF", false);	// СНИМОК ЭКРАНА | SCREEN SHOT
                 gameaction = ga_nothing;
                 break;
             case ga_leavemap:

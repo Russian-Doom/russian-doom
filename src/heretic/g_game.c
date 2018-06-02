@@ -1155,6 +1155,7 @@ void G_Ticker(void)
                 break;
             case ga_screenshot:
                 V_ScreenShot("HTIC%02i.%s");
+                S_StartSound(NULL, sfx_chat);   // [JN] Audio feedback
                 gameaction = ga_nothing;
                 break;
             case ga_completed:
