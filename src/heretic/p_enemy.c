@@ -717,7 +717,7 @@ void A_Chase(mobj_t * actor)
         actor->threshold--;
     }
 
-    if (gameskill == sk_nightmare)
+    if (gameskill == sk_nightmare || gameskill == sk_ultranm)
     {                           // Monsters move faster in nightmare mode
         actor->tics -= actor->tics / 2;
         if (actor->tics < 3)
