@@ -126,6 +126,12 @@ boolean F_Responder(event_t * event)
 
 void F_Ticker(void)
 {
+    // [JN] Make PAUSE working properly on text screen
+    if (paused)
+    {
+        return;
+    }
+
     finalecount++;
     if (!finalestage
         && finalecount > strlen(finaletext) * TEXTSPEED + TEXTWAIT)

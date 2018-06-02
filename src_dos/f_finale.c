@@ -291,13 +291,24 @@ void F_Ticker (void)
 {
     int	    i;
 
+    // [JN] Make PAUSE working properly on text screen
+    if (paused)
+    {
+        return;
+    }
+
     // check for skipping
     if ((commercial) && (finalecount > 50))
     {
         // go on to the next level
         for (i=0 ; i<MAXPLAYERS ; i++)
-        if (players[i].cmd.buttons)
-        break;
+        {
+            // [JN] Pressing PAUSE should not skip text screen
+            if (players[i].cmd.buttons && !(players->cmd.buttons & BTS_PAUSE))
+            {
+                break;
+            }
+        }
 
         if (i < MAXPLAYERS)
         {	
