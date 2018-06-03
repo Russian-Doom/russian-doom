@@ -849,8 +849,9 @@ void H2_GameLoop(void)
 
     while (1)
     {
+        // [JN] Don't call empty function
         // Frame syncronous IO operations
-        I_StartFrame();
+        // I_StartFrame();
 
         // Process one or more tics
         // Will run at least one tic

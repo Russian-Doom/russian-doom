@@ -539,8 +539,12 @@ void D_DoomLoop (void)
 
     while (1)
     {
-        I_StartFrame ();    // frame syncronous IO operations
-        TryRunTics ();      // will run at least one tic
+        // [JN] Don't call empty function
+        // frame syncronous IO operations
+        // I_StartFrame ();
+
+        // will run at least one tic
+        TryRunTics ();
 
         // move positional sounds
         S_UpdateSounds (players[consoleplayer].mo);
