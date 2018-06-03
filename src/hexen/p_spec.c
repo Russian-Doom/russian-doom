@@ -986,7 +986,7 @@ void P_PlayerInSpecialSector(player_t * player)
             break;
         default:
             I_Error("P_PlayerInSpecialSector: "
-                    "unknown special %i", sector->special);
+                    "неизвестная специфика %i", sector->special);
     }
 }
 
@@ -1158,8 +1158,8 @@ void P_SpawnSpecials(void)
                 {
                     if (TaggedLineCount == MAX_TAGGED_LINES)
                     {
-                        I_Error("P_SpawnSpecials: MAX_TAGGED_LINES "
-                                "(%d) exceeded.", MAX_TAGGED_LINES);
+                        I_Error("P_SpawnSpecials: превышен лимит MAX_TAGGED_LINES "
+                                "(%d).", MAX_TAGGED_LINES);
                     }
                     TaggedLines[TaggedLineCount].line = &lines[i];
                     TaggedLines[TaggedLineCount++].lineTag = lines[i].arg1;

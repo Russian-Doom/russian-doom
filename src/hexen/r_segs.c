@@ -425,7 +425,7 @@ void R_StoreWallRange(int start, int stop)
 
 #ifdef RANGECHECK
     if (start >= viewwidth || start > stop)
-        I_Error("Bad R_RenderWallRange: %i to %i", start, stop);
+        I_Error("Bad R_RenderWallRange: %i к %i", start, stop);
 #endif
 
     sidedef = curline->sidedef;

@@ -186,7 +186,7 @@ boolean EV_Teleport(int tid, mobj_t * thing, boolean fog)
     }
     if (mo == NULL)
     {
-        I_Error("Can't find teleport mapspot\n");
+        I_Error("EV_Teleport: не обнаружен спот телепорта\n");
     }
     return P_Teleport(thing, mo->x, mo->y, mo->angle, fog);
 }

@@ -404,8 +404,8 @@ void P_LoadThings(int lump)
     deathSpotsCount = deathmatch_p - deathmatchstarts;
     if (deathSpotsCount < playerCount)
     {
-        I_Error("P_LoadThings: Player count (%d) exceeds deathmatch "
-                "spots (%d)", playerCount, deathSpotsCount);
+        I_Error("P_LoadThings: количество игроков (%d) превысило количество\n"
+                "спотов режима Дефматч (%d).", playerCount, deathSpotsCount);
     }
 }
 
@@ -637,7 +637,7 @@ void P_GroupLines(void)
             }
         }
         if (linebuffer - sector->lines != sector->linecount)
-            I_Error("P_GroupLines: miscounted");
+            I_Error("P_GroupLines: ошибка просчета");
 
         // set the degenmobj_t to the middle of the bounding box
         sector->soundorg.x = (bbox[BOXRIGHT] + bbox[BOXLEFT]) / 2;

@@ -514,7 +514,7 @@ static boolean AddToACSStore(int map, int number, byte * args)
     {                           // Append required
         if (i == MAX_ACS_STORE)
         {
-            I_Error("AddToACSStore: MAX_ACS_STORE (%d) exceeded.",
+            I_Error("AddToACSStore: превышено максимальное значение MAX_ACS_STORE (%d).",
                     MAX_ACS_STORE);
         }
         index = i;
@@ -800,7 +800,7 @@ void CheckACSPresent(int number)
 {
     if (GetACSIndex(number) == -1)
     {
-        I_Error("Required ACS script %d not initialised", number);
+        I_Error("Требуемый скрипт ACS (%d) не инициализирован", number);
     }
 }
 

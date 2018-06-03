@@ -1178,7 +1178,7 @@ void G_Ticker(void)
                 if (gametic > BACKUPTICS
                     && consistancy[i][buf] != cmd->consistancy)
                 {
-                    I_Error("consistency failure (%i should be %i)",
+                    I_Error("Нарушение последовательности (%i должно быть %i)",
                             cmd->consistancy, consistancy[i][buf]);
                 }
                 if (players[i].mo)
@@ -2359,8 +2359,8 @@ boolean G_CheckDemoStatus(void)
         endtime = I_GetTime();
         realtics = endtime - starttime;
         fps = ((float) gametic * TICRATE) / realtics;
-        I_Error("timed %i gametics in %i realtics (%f fps)",
-                gametic, realtics, fps);
+        I_Error ("Насчитано %i gametics в %i realtics.\n"
+                 "Среднее значение FPS: %f.", gametic, realtics, fps);
     }
 
     if (demoplayback)
@@ -2380,7 +2380,7 @@ boolean G_CheckDemoStatus(void)
         M_WriteFile(demoname, demobuffer, demo_p - demobuffer);
         Z_Free(demobuffer);
         demorecording = false;
-        I_Error("Demo %s recorded", demoname);
+        I_Error("Демозапись %s завершена", demoname);
     }
 
     return false;

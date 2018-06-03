@@ -259,7 +259,7 @@ void P_AddActivePlat(plat_t * plat)
             activeplats[i] = plat;
             return;
         }
-    I_Error("P_AddActivePlat: no more plats!");
+    I_Error("P_AddActivePlat: превышен лимит платформ!");
 }
 
 void P_RemoveActivePlat(plat_t * plat)
@@ -274,5 +274,5 @@ void P_RemoveActivePlat(plat_t * plat)
             activeplats[i] = NULL;
             return;
         }
-    I_Error("P_RemoveActivePlat: can't find plat!");
+    I_Error("P_RemoveActivePlat: платформа не обнаружена!");
 }

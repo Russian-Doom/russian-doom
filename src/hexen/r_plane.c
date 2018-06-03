@@ -213,7 +213,7 @@ void R_MapPlane(int y, int x1, int x2)
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= viewwidth || (unsigned) y > viewheight)
     {
-        I_Error("R_MapPlane: %i, %i at %i", x1, x2, y);
+        I_Error("R_MapPlane: %i, %i у %i", x1, x2, y);
     }
 #endif
 
@@ -339,7 +339,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
 
     if (lastvisplane - visplanes == MAXVISPLANES)
     {
-        I_Error("R_FindPlane: no more visplanes");
+        I_Error("R_FindPlane: превышен лимит visplanes");
     }
 
     lastvisplane++;
@@ -477,16 +477,16 @@ void R_DrawPlanes(void)
 #ifdef RANGECHECK
     if (ds_p - drawsegs > MAXDRAWSEGS)
     {
-        I_Error("R_DrawPlanes: drawsegs overflow (%i)", ds_p - drawsegs);
+        I_Error("R_DrawPlanes: превышен лимит drawsegs (%i)", ds_p - drawsegs);
     }
     if (lastvisplane - visplanes > MAXVISPLANES)
     {
-        I_Error("R_DrawPlanes: visplane overflow (%i)",
+        I_Error("R_DrawPlanes: превышен лимит visplane (%i)",
                 lastvisplane - visplanes);
     }
     if (lastopening - openings > MAXOPENINGS)
     {
-        I_Error("R_DrawPlanes: opening overflow (%i)",
+        I_Error("R_DrawPlanes: превышен лимит opening (%i)",
                 lastopening - openings);
     }
 #endif

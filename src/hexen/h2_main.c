@@ -327,9 +327,9 @@ void D_IdentifyVersion(void)
      && gamemode != shareware && W_CheckNumForName("CLUS1MSG") < 0)
     {
         I_Error(
-            "You are trying to use the Hexen v1.0 IWAD. This isn't\n"
-            "supported by " PACKAGE_NAME ". Please upgrade to the v1.1\n"
-            "IWAD file. See here for more information:\n"
+            "Использование IWAD-файла версии 1.0 не рекоммендуется,\n"
+            "так как он содержит ошибки в игре. Просьба обновить IWAD\n"
+            "до версии 1.1. Дополнительная информация доступна по ссылке:\n"
             "  https://www.doomworld.com/classicdoom/info/patches.php");
     }
 }
@@ -473,8 +473,8 @@ void D_DoomMain(void)
 
     if (iwadfile == NULL)
     {
-        I_Error("Game mode indeterminate. No IWAD was found. Try specifying\n"
-                "one with the '-iwad' command line parameter.");
+        I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
+                "Попробуйте указать IWAD-файл командой '-iwad'.\n");
     }
 
     D_AddFile(iwadfile);

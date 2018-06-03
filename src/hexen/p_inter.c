@@ -159,7 +159,7 @@ boolean P_GiveMana(player_t * player, manatype_t mana, int count)
     }
     if ((unsigned int) mana > NUMMANA)
     {
-        I_Error("P_GiveMana: bad type %i", mana);
+        I_Error("P_GiveMana: некорректный тип маны (%i)", mana);
     }
     if (player->mana[mana] == MAX_MANA)
     {
@@ -1224,7 +1224,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             return;
 
         default:
-            I_Error("P_SpecialThing: Unknown gettable thing");
+            I_Error("P_SpecialThing: получен неизвестный предмет");
     }
     if (special->special)
     {

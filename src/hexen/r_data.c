@@ -257,7 +257,7 @@ void R_GenerateLookup(int texnum)
             collump[x] = -1;    // use the cached block
             colofs[x] = texturecompositesize[texnum];
             if (texturecompositesize[texnum] > 0x10000 - texture->height)
-                I_Error("R_GenerateLookup: texture %i is >64k", texnum);
+                I_Error("R_GenerateLookup: текстура %i превысила размер 64 килобайта", texnum);
             texturecompositesize[texnum] += texture->height;
         }
     }
@@ -372,7 +372,7 @@ void R_InitTextures(void)
 
         offset = LONG(*directory);
         if (offset > maxoff)
-            I_Error("R_InitTextures: bad texture directory");
+            I_Error("R_InitTextures: некорректная директория текстур");
         mtexture = (maptexture_t *) ((byte *) maptex + offset);
         texture = textures[i] = Z_Malloc(sizeof(texture_t)
                                          +
@@ -391,7 +391,7 @@ void R_InitTextures(void)
             patch->originy = SHORT(mpatch->originy);
             patch->patch = patchlookup[SHORT(mpatch->patch)];
             if (patch->patch == -1)
-                I_Error("R_InitTextures: Missing patch in texture %s",
+                I_Error("R_InitTextures: отсутствует патч в текстуре %s",
                         texture->name);
         }
         texturecolumnlump[i] = Z_Malloc(texture->width * sizeof(short), PU_STATIC, 0);
@@ -591,7 +591,7 @@ int R_FlatNumForName(char *name)
     {
         namet[8] = 0;
         memcpy(namet, name, 8);
-        I_Error("R_FlatNumForName: %s not found", namet);
+        I_Error("R_FlatNumForName: %s не обнаружена", namet);
     }
     return i - firstflat;
 }

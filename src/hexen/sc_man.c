@@ -309,8 +309,8 @@ boolean SC_GetNumber(void)
         sc_Number = strtol(sc_String, &stopper, 0);
         if (*stopper != 0)
         {
-            I_Error("SC_GetNumber: Bad numeric constant \"%s\".\n"
-                    "Script %s, Line %d", sc_String, ScriptName, sc_Line);
+            I_Error("SC_GetNumber: некорректная цифровая константа \"%s\".\n"
+                    "Скрипт %s, линия %d", sc_String, ScriptName, sc_Line);
         }
         return true;
     }
@@ -454,7 +454,7 @@ void SC_ScriptError(char *message)
     {
         message = "Bad syntax.";
     }
-    I_Error("Script error, \"%s\" line %d: %s", ScriptName, sc_Line, message);
+    I_Error("Ошибка скрипта, \"%s\" линия %d: %s", ScriptName, sc_Line, message);
 }
 
 //==========================================================================
@@ -467,6 +467,6 @@ static void CheckOpen(void)
 {
     if (ScriptOpen == false)
     {
-        I_Error("SC_ call before SC_Open().");
+        I_Error("SC_ вызов перед SC_Open().");
     }
 }
