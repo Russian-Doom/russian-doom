@@ -1970,11 +1970,37 @@ void G_InitNew(skill_t skill, int episode, int map)
         // Monster's damage                         // Old value   What
         mobjinfo[MT_FIREDEMON_FX6].damage = 2;      // 1           Fire Gargolye fireball
         mobjinfo[MT_DEMON2FX1].damage = 6;          // 5           Brown Chaos Serpent fireball
-        mobjinfo[MT_BISH_FX].damage = 1;            // 1           Dark Bishop fireball
+        mobjinfo[MT_BISH_FX].damage = 2;            // 1           Dark Bishop fireball
         mobjinfo[MT_DEMONFX1].damage = 6;           // 5           Green Chaos Serpent fireball
         mobjinfo[MT_WRAITHFX1].damage = 6;          // 5           Reiver fireball
         mobjinfo[MT_CENTAUR_FX].damage = 5;         // 4           Slaughtaur fireball
         mobjinfo[MT_SERPENTFX].damage = 5;          // 4           Stalker fireball
+    }
+    // [JN] Fallback to standard values
+    else
+    {
+        // Monster's speed
+        mobjinfo[MT_FIREDEMON].speed = 13;
+        
+        // Monster's missiles speed
+        mobjinfo[MT_FIREDEMON_FX6].speed = 10 * FRACUNIT;
+        mobjinfo[MT_DEMON2FX1].speed = 15 * FRACUNIT;
+        mobjinfo[MT_BISH_FX].speed = 10 * FRACUNIT;
+        mobjinfo[MT_DEMONFX1].speed = 15 * FRACUNIT;
+        mobjinfo[MT_WRAITHFX1].speed = 14 * FRACUNIT;
+        mobjinfo[MT_CENTAUR_FX].speed = 20 * FRACUNIT;
+        mobjinfo[MT_SERPENTFX].speed = 15 * FRACUNIT;
+        mobjinfo[MT_ICEGUY_FX].speed = 14 * FRACUNIT;
+        mobjinfo[MT_ICEGUY_FX2].speed = 10 * FRACUNIT;
+        
+        // Monster's damage
+        mobjinfo[MT_FIREDEMON_FX6].damage = 1;
+        mobjinfo[MT_DEMON2FX1].damage = 5;
+        mobjinfo[MT_BISH_FX].damage = 1;
+        mobjinfo[MT_DEMONFX1].damage = 5;
+        mobjinfo[MT_WRAITHFX1].damage = 5;
+        mobjinfo[MT_CENTAUR_FX].damage = 4;
+        mobjinfo[MT_SERPENTFX].damage = 4;
     }
 
     paused = false;
