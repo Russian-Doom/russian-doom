@@ -1843,7 +1843,7 @@ void G_InitNew(skill_t skill, int episode, int map)
         mobjinfo[MT_HEADFX1].speed = 16 * FRACUNIT;     // 13           Iron Lich missilie 1
         mobjinfo[MT_HEADFX2].speed = 12 * FRACUNIT;     // 8            Iron Lich missilie 2
         mobjinfo[MT_HEADFX3].speed = 13 * FRACUNIT;     // 10           Iron Lich missilie 3
-        mobjinfo[MT_HEADFX3].speed = 14 * FRACUNIT;     // 10           Iron Lich whirlwind
+        mobjinfo[MT_WHIRLWIND].speed = 14 * FRACUNIT;   // 10           Iron Lich whirlwind
         
         // Monster's damage                         // Old value   What
         mobjinfo[MT_IMPBALL].damage = 2;            // 1           Fire Gargolye fireball
@@ -1854,6 +1854,51 @@ void G_InitNew(skill_t skill, int episode, int map)
         mobjinfo[MT_SNAKEPRO_A].damage = 2;         // 1           Ophidian fireball A
         mobjinfo[MT_SNAKEPRO_B].damage = 4;         // 3           Ophidian fireball B
         mobjinfo[MT_WIZFX1].damage = 4;             // 3           Disciple of D'Sparil fireball
+    }
+    // [JN] Fallback to standard values
+    else
+    {
+        // Monster's speed
+        mobjinfo[MT_IMP].speed = 10;
+        mobjinfo[MT_IMPLEADER].speed = 10;
+        mobjinfo[MT_MUMMY].speed = 12;
+        mobjinfo[MT_MUMMYGHOST].speed = 12;
+        mobjinfo[MT_MUMMYLEADER].speed = 12;
+        mobjinfo[MT_MUMMYLEADERGHOST].speed = 12;
+        mobjinfo[MT_CLINK].speed = 14;
+        mobjinfo[MT_KNIGHT].speed = 12;
+        mobjinfo[MT_KNIGHTGHOST].speed = 12;
+        mobjinfo[MT_BEAST].speed = 14;
+        mobjinfo[MT_SNAKE].speed = 10;
+        mobjinfo[MT_WIZARD].speed = 12;
+        mobjinfo[MT_HEAD].speed = 6;
+        mobjinfo[MT_MINOTAUR].speed = 16;
+        mobjinfo[MT_SORCERER1].speed = 16;
+        mobjinfo[MT_SORCERER2].speed = 14;
+
+        // Monster's missiles speed
+        mobjinfo[MT_IMPBALL].speed = 10 * FRACUNIT;
+        mobjinfo[MT_MUMMYFX1].speed = 9 * FRACUNIT;
+        mobjinfo[MT_KNIGHTAXE].speed = 9 * FRACUNIT;
+        mobjinfo[MT_REDAXE].speed = 9 * FRACUNIT;
+        mobjinfo[MT_BEASTBALL].speed = 12 * FRACUNIT;
+        mobjinfo[MT_SNAKEPRO_A].speed = 14 * FRACUNIT;
+        mobjinfo[MT_SNAKEPRO_B].speed = 14 * FRACUNIT;
+        mobjinfo[MT_WIZFX1].speed = 18 * FRACUNIT;
+        mobjinfo[MT_HEADFX1].speed = 13 * FRACUNIT;
+        mobjinfo[MT_HEADFX2].speed = 8 * FRACUNIT;
+        mobjinfo[MT_HEADFX3].speed = 10 * FRACUNIT;
+        mobjinfo[MT_WHIRLWIND].speed = 10 * FRACUNIT;
+        
+        // Monster's damage
+        mobjinfo[MT_IMPBALL].damage = 1;
+        mobjinfo[MT_MUMMYFX1].damage = 4;
+        mobjinfo[MT_KNIGHTAXE].damage = 2;
+        mobjinfo[MT_REDAXE].damage = 7;
+        mobjinfo[MT_BEASTBALL].damage = 4;
+        mobjinfo[MT_SNAKEPRO_A].damage = 1;
+        mobjinfo[MT_SNAKEPRO_B].damage = 3;
+        mobjinfo[MT_WIZFX1].damage = 3;
     }
 
     // Set up a bunch of globals
