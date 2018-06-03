@@ -97,7 +97,8 @@ static char *heretic_skills[] =
     "Не столь мужественен €",   // "Yellowbellies-R-us"
     "Подайте мне их",           // "Bringest them oneth"
     "Искушен € сражени€ми",     // "Thou art a smite-meister"
-    "Чума овладела мной"        // "Black plague possesses thee"
+    "Чума овладела мной",       // "Black plague possesses thee"
+    "Кошмаром исполнен €"       // "I'm filled with Nightmare"
 };
 
 static char *hexen_fighter_skills[] =
@@ -106,7 +107,8 @@ static char *hexen_fighter_skills[] =
     "Рыцарь",       // "Knight"
     "Воитель",      // "Warrior"
     "Берсерк",      // "Berserker"
-    "Титан"         // "Titan"
+    "Титан",        // "Titan"
+    "Вершитель"     // "The Maker"
 };
 
 static char *hexen_cleric_skills[] =
@@ -115,7 +117,8 @@ static char *hexen_cleric_skills[] =
     "Служитель",    // "Acolyte"
     "Св€щенник",    // "Priest"
     "Кардинал",     // "Cardinal"
-    "Епископ"       // "Pope"
+    "Епископ",      // "Pope"
+    "Апостол"       // "Apostle"
 };
 
 static char *hexen_mage_skills[] =
@@ -124,7 +127,8 @@ static char *hexen_mage_skills[] =
     "Чародей",      // "Enchanter"
     "Колдун",       // "Sorceror"
     "Чернокнижник", // "Warlock"
-    "Верховный маг" // "Archimage"
+    "Верховный маг",// "Higher Mage"
+    "Великий архимаг" // "Great Archimage"
 };
 
 static char *strife_skills[] =
