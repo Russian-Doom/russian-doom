@@ -276,6 +276,7 @@ extern int	key_strafe;
 extern int	key_speed;
 
 extern int	key_mouselook;
+extern int	key_crosshair;
 
 extern int	mousebfire;
 extern int	mousebstrafe;
@@ -386,6 +387,7 @@ default_t	defaults[] =
     {"key_strafe",&key_strafe, SC_RALT, 1},
     {"key_speed",&key_speed, SC_RSHIFT, 1},
     {"key_mouselook",&key_mouselook, SC_TILDE, 1},
+    {"key_crosshair",&key_crosshair, SC_KEY_X, 1},
 
     {"use_mouse",&usemouse, 1},
     {"mouseb_fire",&mousebfire,0},

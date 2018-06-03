@@ -1149,5 +1149,8 @@
 #define STSTR_MLOOK_ON  "j,pjh vsim. drk.xty"                       // Обзор мышью включен
 #define STSTR_MLOOK_OFF "j,pjh vsim. dsrk.xty"                      // Обзор мышью выключен
 
+#define STSTR_CROSSHAIR_ON  "ghbwtk drk.xty"                        // Прицел включен
+#define STSTR_CROSSHAIR_OFF "ghbwtk dsrk.xty"                       // Прицел выключен
+
 
 #endif

@@ -26,6 +26,7 @@
 #include "w_wad.h"
 #include "s_sound.h"
 #include "doomstat.h"
+#include "v_video.h"    // [JN] V_DrawPatchDirect
 
 // Data.
 #include "dstrings.h"
@@ -480,6 +481,9 @@ void HU_Start(void)
 
 void HU_Drawer(void)
 {
+    extern boolean crosshair_draw;
+    extern int screenblocks;
+    
     HUlib_drawSText(&w_message);
     HUlib_drawIText(&w_chat);
 
@@ -521,6 +525,14 @@ void HU_Drawer(void)
                 HUlib_addCharToTextLine(&w_ltime, *(s++));
             HUlib_drawTextLine(&w_ltime, false);
         }
+    }
+
+    // [JN] Draw crosshair
+    if (!vanilla && !automapactive && crosshair_draw)
+    {
+        V_DrawPatchDirect(SCREENWIDTH/2,
+                ((screenblocks <= 10) ? (SCREENHEIGHT-32+4)/2 : (SCREENHEIGHT+4)/2), 0,
+                W_CacheLumpName("XHAIRSR", PU_CACHE));
     }
 }
 

@@ -133,6 +133,8 @@ byte        saveshit[SAVEGAMESIZE];
 
 // [JN] Mouselook: initially disabled
 boolean mlook = false;
+// [JN] Crosshair: initially disabled
+boolean crosshair_draw = false;
 
 //
 // controls (have defaults)
@@ -148,6 +150,7 @@ int     key_use;
 int     key_strafe;
 int     key_speed; 
 int     key_mouselook;
+int     key_crosshair;
 
 int     mousebfire; 
 int     mousebstrafe; 
@@ -447,6 +450,30 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     }
 
     mousex = mousey = 0;
+
+    // [JN] Toggle crosshair
+    if (gamekeydown[key_crosshair])
+    {
+        // [JN] No toggling in -vanilla mode
+        if (vanilla)
+        return;
+
+        if (!crosshair_draw)
+        {
+            crosshair_draw = true;
+        }
+        else
+        {
+            crosshair_draw = false;
+        }
+
+        players[consoleplayer].message =
+            crosshair_draw ? STSTR_CROSSHAIR_ON : STSTR_CROSSHAIR_OFF;
+
+        S_StartSound(NULL,sfx_swtchn);
+
+        gamekeydown[key_crosshair] = false;
+    }
 
     if (forward > MAXPLMOVE)
     forward = MAXPLMOVE;
