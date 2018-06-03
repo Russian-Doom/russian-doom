@@ -468,8 +468,10 @@ void ConfigKeyboard(void)
         TXT_NewSeparator("Дополнительно"),
         run_control = TXT_NewCheckBox("Режим посто€нного бега", &always_run),
         TXT_TABLE_EOL,
-        TXT_NewInvertedCheckBox("Использовать нативную раскладку",
-                                &vanilla_keyboard_mapping),
+        // [JN] Hidden, non-vanilla mapping is not 
+        // very friendly with Russian keyboard layout.
+        // TXT_NewInvertedCheckBox("Использовать нативную раскладку",
+        //                         &vanilla_keyboard_mapping),
         TXT_TABLE_EOL,
         NULL);
 
