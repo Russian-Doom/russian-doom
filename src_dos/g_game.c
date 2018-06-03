@@ -131,10 +131,6 @@ short		consistancy[MAXPLAYERS][BACKUPTICS];
 byte*       savebuffer;
 byte        saveshit[SAVEGAMESIZE];
 
-// [JN] Mouselook: initially disabled
-boolean mlook = false;
-// [JN] Crosshair: initially disabled
-boolean crosshair_draw = false;
 
 //
 // controls (have defaults)
@@ -160,6 +156,11 @@ int     joybfire;
 int     joybstrafe; 
 int     joybuse; 
 int     joybspeed; 
+
+
+// [JN] Russian Doom specific variables 
+int mlook;              // Mouse look
+int crosshair_draw ;    // Crosshair
 
 
 #define MAXPLMOVE       (forwardmove[1]) 
