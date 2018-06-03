@@ -260,8 +260,9 @@ void D_Display (void)
         break;
     }
 
+    // [JN] Don't call empty function
     // draw buffered stuff to screen
-    I_UpdateNoBlit ();
+    // I_UpdateNoBlit ();
 
     // draw the view directly
     if (gamestate == GS_LEVEL && !automapactive && gametic)
@@ -354,7 +355,8 @@ void D_Display (void)
 
     wipestart = nowtime;
     done = wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
-    I_UpdateNoBlit ();
+    // [JN] Don't call empty function
+    // I_UpdateNoBlit ();
     M_Drawer ();        // menu is drawn even on top of wipes
     I_FinishUpdate ();  // page flip or blit buffer
     } while (!done);
