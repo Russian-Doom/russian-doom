@@ -1500,7 +1500,7 @@ void G_InitNew (skill_t skill, int episode, int map)
         mobjinfo[MT_BRUISER].speed = 14;             // Baron of Hell (8)
         mobjinfo[MT_BABY].speed = 17;                // Arachnotron (12)
         mobjinfo[MT_PAIN].speed = 14;                // Pain Elemental (8)
-        mobjinfo[MT_UNDEAD].speed = 14;              // Revenant (8)
+        mobjinfo[MT_UNDEAD].speed = 14;              // Revenant (10)
         mobjinfo[MT_FATSO].speed = 11;               // Mancubus (8)
         mobjinfo[MT_VILE].speed = 18;                // Archvile (15)
         mobjinfo[MT_SPIDER].speed = 17;              // Spider Mastermind (12)
@@ -1517,7 +1517,7 @@ void G_InitNew (skill_t skill, int episode, int map)
         mobjinfo[MT_BRUISERSHOT].damage = 10;        // Knight / Baron (8) 
         mobjinfo[MT_ARACHPLAZ].damage = 7;           // Arachnotron (5)
         mobjinfo[MT_TRACER].damage = 12;             // Revenant (10)
-        mobjinfo[MT_FATSHOT].damage = 12;            // Mancubus (10)
+        mobjinfo[MT_FATSHOT].damage = 12;            // Mancubus (8)
     }
     // [JN] Fallback to standard values
     else
@@ -1533,7 +1533,7 @@ void G_InitNew (skill_t skill, int episode, int map)
         mobjinfo[MT_BRUISER].speed = 8;             // Baron of Hell
         mobjinfo[MT_BABY].speed = 12;               // Arachnotron
         mobjinfo[MT_PAIN].speed = 8;                // Pain Elemental
-        mobjinfo[MT_UNDEAD].speed = 8;              // Revenant
+        mobjinfo[MT_UNDEAD].speed = 10;             // Revenant
         mobjinfo[MT_FATSO].speed = 8;               // Mancubus
         mobjinfo[MT_VILE].speed = 15;               // Archvile
         mobjinfo[MT_SPIDER].speed = 12;             // Spider Mastermind
@@ -1550,7 +1550,7 @@ void G_InitNew (skill_t skill, int episode, int map)
         mobjinfo[MT_BRUISERSHOT].damage = 8;        // Knight / Baron fireball 
         mobjinfo[MT_ARACHPLAZ].damage = 5;          // Arachnotron plasma
         mobjinfo[MT_TRACER].damage = 10;            // Revenant fireball
-        mobjinfo[MT_FATSHOT].damage = 10;           // Mancubus fireball
+        mobjinfo[MT_FATSHOT].damage = 8;            // Mancubus fireball
     }
 
     // force players to be initialized upon first level load
