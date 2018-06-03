@@ -714,7 +714,7 @@ static txt_window_action_t *WadWindowAction(void)
 {
     txt_window_action_t *action;
 
-    action = TXT_NewWindowAction('w', "Добавить WAD-файлы");	// "Add WADs"
+    action = TXT_NewWindowAction('w', "WAD-файлы");	// "Add WADs"
 
     TXT_SignalConnect(action, "pressed", OpenWadsWindow, NULL);
 
@@ -755,7 +755,9 @@ static void StartGameMenu(char *window_title, int multiplayer)
 
     window = TXT_NewWindow(window_title);
     TXT_SetTableColumns(window, 2);
-    TXT_SetColumnWidths(window, 12, 6);
+    TXT_SetColumnWidths(window, 
+                       (gamemission == doom || gamemission == heretic) ? 12 : 24, 
+                        6);
 
     if (multiplayer)
     {
