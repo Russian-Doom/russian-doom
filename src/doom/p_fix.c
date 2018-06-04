@@ -3979,15 +3979,64 @@ sectorfix_t sectorfix[] =
 
     { pack_tnt,         1,  19,     82, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_tnt,         1,  19,     84, "CRATOP1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,    118, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,    212, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_tnt,         1,  19,    362, "CEIL5_1", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,    451, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  19,    446, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  20,    146, "",        "FLOOR7_1",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
     { pack_tnt,         1,  22,    373, "",        "FLOOR3_3",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { pack_tnt,         1,  24,     19, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  25,     39, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,     98, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    118, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    126, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    144, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    169, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    193, "",        "RROCK09", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    237, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    273, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    276, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    277, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    278, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    279, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    292, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    304, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    306, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  25,    319, "",        "RROCK09", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  26,     23, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  26,     35, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  26,     44, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  26,     90, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  26,    234, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  28,     86, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  28,     87, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  28,     89, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
+    { pack_tnt,         1,  29,    129, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  29,    119, "",        "FLAT5_1", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
     { pack_tnt,         1,  30,    283, "FLAT23",  "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
+    { pack_tnt,         1,  31,    131, "",        "FLOOR7_2",DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    137, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    138, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    143, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    231, "",        "CEIL5_2", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  31,    311, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+
     { pack_tnt,         1,  32,     86, "FLOOR3_3","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  32,     81, "RROCK09", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_tnt,         1,  32,     87, "CEIL5_2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { pack_tnt,         1,  32,     94, "FLOOR7_1","",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  32,    201, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { pack_tnt,         1,  32,    247, "",        "FLAT20",  DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
 
    // mission,    episode, map, sector, floorpic, ceilingpic, floorheight, ceilingheight, special,                            oldtag,  newtag
 
