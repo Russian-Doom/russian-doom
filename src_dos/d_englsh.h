@@ -1142,7 +1142,7 @@
 
 
 // Port-specific strings
-#define STSTR_VERSION   "dthcbz 1>5 (d hfphf,jnrt)"                 // Версия 1.5 (в разработке)
+#define STSTR_VERSION   "dthcbz 1>5 (11>06>2018)"                   // Версия 1.5 (в разработке)
 
 #define STSTR_KAADDED   "rk.xb gjkextys"                            // Ключи получены
 

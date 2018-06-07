@@ -1182,7 +1182,7 @@
 #define STSRT_ARCH      ""              // ?  
 #endif
 
-#define STSRT_DATE      "d hfphf,jnrt"  // (в разработке)
+#define STSRT_DATE      "11>06>2018"    // (11.06.2018)
 
 
 #endif

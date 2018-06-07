@@ -410,7 +410,7 @@
 #else
 #define TXT_ARCH      ""                // ?  
 #endif
-#define TXT_DATE      "D HFPHF,JNRT"    // (в разработке)
+#define TXT_DATE      "11>06>2018"      // (11.06.2018)
 
 #define TXT_ALWAYSRUN_ON "GJCNJZYYSQ ,TU DRK.XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
 #define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ ,TU DSRK.XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
