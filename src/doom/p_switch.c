@@ -93,6 +93,9 @@ switchlist_t alphSwitchList[] =
     {"SW1TEK",		"SW2TEK",	3},
     {"SW1MARB",	"SW2MARB",	3},
     {"SW1SKULL",	"SW2SKULL",	3},
+
+    // [JN] Atari Jaguar
+    {"SW1STAR",	"SW2STAR",	3},
 	
     {"\0",		"\0",		0}
 };
