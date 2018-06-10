@@ -1829,11 +1829,12 @@ void A_BossDeath (mobj_t* mo)
 		
     if ( gamemode == commercial)
     {
-	if (gamemap != 7)
+	if (gamemap != 7 && gamemap != 8)
 	    return;
 		
 	if ((mo->type != MT_FATSO)
-	    && (mo->type != MT_BABY))
+	    && (mo->type != MT_BABY)
+	    && (mo->type != MT_BRUISER)) // [JN] Atari Jaguar
 	    return;
     }
     else
@@ -1894,6 +1895,16 @@ void A_BossDeath (mobj_t* mo)
 	        }
 
 	        return;
+	    }
+	}
+    // [JN] Atari Jaguar: MAP08 special case
+	if (gamemap == 8)
+	{
+	    if (mo->type == MT_BRUISER)
+	    {
+		junk.tag = 666;
+		EV_DoFloor (&junk, lowerFloorToLowest);
+		return;
 	    }
 	}
     }
