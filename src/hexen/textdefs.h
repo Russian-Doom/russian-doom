@@ -183,7 +183,7 @@
 
 // [JN] Специфические сообщения порта
 
-#define TXT_VERSION "DTHCBZ 2>7"        // ВЕРСИЯ 2.7
+#define TXT_VERSION "DTHCBZ 2>8"        // ВЕРСИЯ 2.8
 #if defined (_WIN64)
 #define TXT_ARCH      " - ([64)"        // x64
 #elif defined (_WIN32)
@@ -191,7 +191,7 @@
 #else
 #define TXT_ARCH      ""                // ?  
 #endif
-#define TXT_DATE      "11>06>2018"      // (11.06.2018)
+#define TXT_DATE      "D HFPHF,JNRT"    // В РАЗРАБОТКЕ
 
 #define TXT_ALWAYSRUN_ON "GJCNJZYYSQ ,TU DRK.XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
 #define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ ,TU DSRK.XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН

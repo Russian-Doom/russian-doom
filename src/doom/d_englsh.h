@@ -1172,7 +1172,7 @@
 #define STSTR_CROSSHAIR_OFF "dsrk.xty"                              // выключен
 
 // Отображение версии проекта
-#define STSTR_VERSION   "dthcbz 2>7"    // Версия 2.7
+#define STSTR_VERSION   "dthcbz 2>8"    // Версия 2.8
 
 #if defined (_WIN64)
 #define STSRT_ARCH      " - ([64)"      // x64
@@ -1182,7 +1182,7 @@
 #define STSRT_ARCH      ""              // ?  
 #endif
 
-#define STSRT_DATE      "11>06>2018"    // (11.06.2018)
+#define STSRT_DATE      "d hfphf,jnrt"  // в разработке
 
 
 #endif

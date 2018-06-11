@@ -12,7 +12,7 @@ The project, all it's translation materials and source codes are available under
 
 For Windows: [russian-doom-2.7-win32.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.7/russian-doom-2.7-win32.zip/download)<br />
 For Windows (x64): [russian-doom-2.7-win64.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.7/russian-doom-2.7-win64.zip/download)<br />
-For DOS: [russian-doom-dos-1.5.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom%20for%20DOS/1.5/russian-doom-dos-1.5.zip/download)<br />
+For DOS: [russian-doom-dos-1.5.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom%20for%20DOS/1.5/russian-doom-dos-1.5.zip/download)<br /><br />
 Source codes: [russian-doom-2.7-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.7/russian-doom-2.7-source.zip/download)<br />
 PNG font atlases: [russian-doom-fonts-png.zip](https://sourceforge.net/projects/jnechaevsky/files/PNG%20Fonts/russian-doom-fonts-png.zip/download)
 
