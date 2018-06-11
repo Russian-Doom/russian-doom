@@ -8,11 +8,12 @@ DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey
 
 The project, all it's translation materials and source codes are available under the terms and conditions of [GNU General Public License version 2](https://github.com/JNechaevsky/russian-doom/blob/master/LICENSE.txt).
 
-##### Download latest version (updated: April 11, 2018)
+##### Download latest version (updated: June 11, 2018)
 
-For Windows (x86 and x64): [russian-doom-2.6-win32.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.6/russian-doom-2.6-win32.zip/download)<br />
-For DOS: [russian-doom-dos-1.4.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom%20for%20DOS/1.4/russian-doom-dos-1.4.zip/download)<br />
-Source codes: [russian-doom-2.6-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.6/Source/russian-doom-2.6-source.zip/download)<br />
+For Windows: [russian-doom-2.7-win32.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.7/russian-doom-2.7-win32.zip/download)<br />
+For Windows (x64): [russian-doom-2.7-win64.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.7/russian-doom-2.7-win64.zip/download)<br />
+For DOS: [russian-doom-dos-1.5.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom%20for%20DOS/1.5/russian-doom-dos-1.5.zip/download)<br />
+Source codes: [russian-doom-2.7-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/2.7/russian-doom-2.7-source.zip/download)<br />
 PNG font atlases: [russian-doom-fonts-png.zip](https://sourceforge.net/projects/jnechaevsky/files/PNG%20Fonts/russian-doom-fonts-png.zip/download)
 
 Development plans are available in [online spreadsheet](https://docs.google.com/spreadsheets/d/1fID4Dds3SldQwun0npaH22BC7jRvJIj8oQzyK8iJkjQ/edit?usp=sharing).
