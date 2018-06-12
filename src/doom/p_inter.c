@@ -376,6 +376,10 @@ P_TouchSpecialThing
 	if (gamemode != pressbeta) // [JN] No health bonus in Press Beta
 	{
 	player->health++;		// can go over 100%
+	if (gamemission == jaguar)  // [JN] Atari Jaguar: doubled bonus
+	{
+	    player->health++;
+	}
 	if (player->health > deh_max_health)
 	    player->health = deh_max_health;
 	player->mo->health = player->health;
@@ -391,6 +395,10 @@ P_TouchSpecialThing
 	if (gamemode != pressbeta) // [JN] No armor bonus in Press Beta
 	{
 	player->armorpoints++;		// can go over 100%
+	if (gamemission == jaguar)  // [JN] Atari Jaguar: doubled bonus
+	{
+	    player->armorpoints++;
+	}
 	if (player->armorpoints > deh_max_armor)
 	    player->armorpoints = deh_max_armor;
         // deh_green_armor_class only applies to the green armor shirt;
