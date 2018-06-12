@@ -378,6 +378,12 @@ static void EnableLoadingDisk(void)
 {
     char *disk_lump_name;
 
+    // [JN] Atari Jaguar: no loading disk icon
+    if (gamemission == jaguar)
+    {
+        return;
+    }
+
     if (show_diskicon)
     {
         if (M_CheckParm("-cdrom") > 0)
