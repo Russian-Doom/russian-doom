@@ -420,8 +420,18 @@ void R_StoreWallRange(int start, int stop)
     fixed_t vtop;
     int lightnum;
 
-    if (ds_p == &drawsegs[MAXDRAWSEGS])
-        return;                 // don't overflow and crash
+    // [crispy] remove MAXDRAWSEGS Vanilla limit
+    if (ds_p == &drawsegs[numdrawsegs])
+    {
+        int numdrawsegs_old = numdrawsegs;
+   
+        if (numdrawsegs_old == MAXDRAWSEGS)
+        printf("R_StoreWallRange: ????????? ???? MAXDRAWSEGS (%d).\n", MAXDRAWSEGS);
+   
+        numdrawsegs = numdrawsegs ? 2 * numdrawsegs : MAXDRAWSEGS;
+        drawsegs = realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));
+        ds_p = drawsegs + numdrawsegs_old;
+    }
 
 #ifdef RANGECHECK
     if (start >= viewwidth || start > stop)

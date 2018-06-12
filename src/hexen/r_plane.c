@@ -497,7 +497,7 @@ void R_DrawPlanes(void)
     extern int columnofs[MAXWIDTH];
 
 #ifdef RANGECHECK
-    if (ds_p - drawsegs > MAXDRAWSEGS)
+    if (ds_p - drawsegs > numdrawsegs)
     {
         I_Error("R_DrawPlanes: превышен лимит drawsegs (%i)", ds_p - drawsegs);
     }
