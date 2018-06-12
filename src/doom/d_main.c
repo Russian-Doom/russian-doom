@@ -319,14 +319,25 @@ void D_Display (void)
     // draw pause pic
     if (paused)
     {
-        if (automapactive)
-        y = 4;
-        else if (gamestate == GS_INTERMISSION)  // [JN] Do not obstruct titles on intermission screen
-        y = 28;
+        // [JN] Atari Jaguar: draw PAUSE pic independently, offsets done in the sprite
+        if (gamemission == jaguar)
+        {
+            V_DrawShadowedPatchDoom(0, gamestate == GS_INTERMISSION ?
+                                    -40 : 0, // [JN] Do not obstruct titles on intermission screen
+                                    W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+        }
         else
-        y = (viewwindowy >> hires)+4;
+        {
+            if (automapactive)
+            y = 4;
+            else if (gamestate == GS_INTERMISSION)  // [JN] Do not obstruct titles on intermission screen
+            y = 28;
+            else
+            y = (viewwindowy >> hires)+4;
 
-        V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, y, W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+            V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, 
+                                    y, W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+        }
     }
 
     // menus go directly to the screen
