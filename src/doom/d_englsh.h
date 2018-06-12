@@ -409,6 +409,36 @@
 #define THUSTR_31   "ehjdtym 31: afhfjy"                        // Уровень 31: Фараон
 #define THUSTR_32   "ehjdtym 32: rfhb,s"                        // Уровень 32: Карибы
 
+//
+// DOOM для Atari Jaguar
+//
+
+#define JHUSTR_1	"ehjdtym 1: fyufh"                              // Уровень 1: Ангар
+#define JHUSTR_2	"ehjdtym 2: 'ktrnhjcnfywbz"                     // Уровень 2: Электростанция
+#define JHUSTR_3	"ehjdtym 3: pfdjl gj gththf,jnrt"               // Уровень 3: Завод по переработке
+#define JHUSTR_4	"ehjdtym 4: rjvfylysq geyrn"                    // Уровень 4: Командный пункт
+#define JHUSTR_5	"ehjdtym 5: kf,jhfnjhbz yf aj,jct"              // Уровень 5: Лаборатория на Фобосе
+#define JHUSTR_6	"ehjdtym 6: wtynhfkmysq geyrn j,hf,jnrb"        // Уровень 6: Центральный пункт обработки
+#define JHUSTR_7	"ehjdtym 7: dsxbckbntkmysq wtynh"               // Уровень 7: Вычислительный центр
+#define JHUSTR_8	"ehjdtym 8: fyjvfkbz yf aj,jct"                 // Уровень 8: Аномалия на Фобосе
+#define JHUSTR_9	"ehjdtym 9: fyjvfkbz yf ltqvjct"                // Уровень 9: Аномалия на Деймосе
+#define JHUSTR_10	"ehjdtym 10: [hfybkbot"                         // Уровень 10: Хранилище
+#define JHUSTR_11	"ehjdtym 11: jxbcnbntkmysq pfdjl"               // Уровень 11: Очистительный завод
+#define JHUSTR_12	"ehjdtym 12: kf,jhfnjhbz yf ltqvjct"            // Уровень 12: Лаборатория на Деймосе
+#define JHUSTR_13	"ehjdtym 13: rjvfylysq wtynh"                   // Уровень 13: Командный центр
+#define JHUSTR_14	"ehjdtym 14: pfks ghjrkzns["                    // Уровень 14: Залы проклятых
+#define JHUSTR_15	"ehjdtym 15: ythtcnbkbot"                       // Уровень 15: Нерестилище
+#define JHUSTR_16	"ehjdtym 16: dfdbkjycrfz ,fiyz"                 // Уровень 16: Вавилонская башня
+#define JHUSTR_17	"ehjdtym 17: rhtgjcnm flf"                      // Уровень 17: Крепость Ада
+#define JHUSTR_18	"ehjdtym 18: gfyltvjybq"                        // Уровень 18: Пандемоний
+#define JHUSTR_19	"ehjdtym 19: ljv ,jkb"                          // Уровень 19: Дом боли
+#define JHUSTR_20	"ehjdtym 20: ytxtcnbdsq cj,jh"                  // Уровень 20: Нечестивый собор
+#define JHUSTR_21	"ehjdtym 21: ujhf 'ht,"                         // Уровень 21: Гора Эреб
+#define JHUSTR_22	"ehjdtym 22: kbv,"                              // Уровень 22: Лимб
+#define JHUSTR_23	"ehjdtym 23: lbn"                               // Уровень 23: Дит
+#define JHUSTR_24	"ehjdtym 24: djtyyfz ,fpf"                      // Уровень 24: Военная база
+
+
 #define HUSTR_CHATMACRO1    "ujnjd r ,j.!"                  // Готов к бою!
 #define HUSTR_CHATMACRO2    "z d gjhzlrt>"                  // Я в порядке.
 #define HUSTR_CHATMACRO3    "z hfyty!"                      // Я ранен!
@@ -1124,6 +1154,13 @@
 // 
 // Эта миссия завершена.
 
+
+// Doom for Atari Jaguan
+// TODO: make an artistic text
+
+#define J1TEXT \
+"1 2 3\n"\
+"\n"
 
 /* [JN] Текст от Master Levels. В данный момент не используется.
 #define M1TEXT \

@@ -402,6 +402,7 @@ void P_PlayerThink (player_t* player)
 	}
 	
 	if ( (gamemode == commercial)
+        && gamemission != jaguar    // [JN] No Super Shotgun in Atari Jaguar
 	    && newweapon == wp_shotgun 
 	    && player->weaponowned[wp_supershotgun]
 	    && player->readyweapon != wp_supershotgun)

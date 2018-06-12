@@ -1096,6 +1096,10 @@ void D_SetGameDescription(void)
             W_MergeFile("russian/russian-doom-common.wad");
             W_MergeFile("russian/russian-doom-tnt.wad");
         }
+        else if (logical_gamemission == jaguar)
+        {
+            gamedescription = GetGameName("DOOM для Atari Jaguar");
+        }
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
@@ -1655,8 +1659,9 @@ static void LoadIwadDeh(void)
         }
     }
 
-    // [JN] Doom Press Beta have some info in DEHACKED lump, load it.
-    if (gamemode == pressbeta)
+    // [JN] Doom Press Beta and Doom for Atari Jaguar 
+    // have some info in DEHACKED lump, load it.
+    if (gamemode == pressbeta || gamemission == jaguar)
     {
         DEH_LoadLumpByName("DEHACKED", false, true);
     }
@@ -1980,6 +1985,11 @@ void D_DoomMain (void)
     else if (W_CheckNumForName("DOOMPRES") >= 0)
     {
         gamemode = pressbeta;
+    }
+    // [JN] Checking for Atari Jaguar
+    else if (W_CheckNumForName("RDJAGUAR") >= 0)
+    {
+        gamemission = jaguar;
     }
 
     //!

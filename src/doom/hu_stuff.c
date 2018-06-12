@@ -52,7 +52,8 @@
 #define HU_TITLE2       (mapnames_commercial[gamemap-1])
 #define HU_TITLEP       (mapnames_commercial[gamemap-1 + 32])
 #define HU_TITLET       (mapnames_commercial[gamemap-1 + 64])
-#define HU_TITLEN       (mapnames_commercial[gamemap-1 + 96])
+#define HU_TITLEN       (mapnames_commercial[gamemap-1 + 96])       // [JN] No Rest for the Living
+#define HU_TITLEJ       (mapnames_commercial[gamemap-1 + 105])      // [JN] Atari Jaguar
 #define HU_TITLE_CHEX   (mapnames_chex[(gameepisode-1)*9+gamemap-1])
 #define HU_TITLEHEIGHT  1
 #define HU_TITLEX       0
@@ -362,7 +363,33 @@ char* mapnames_commercial[] =
     NHUSTR_6,
     NHUSTR_7,
     NHUSTR_8,
-    NHUSTR_9
+    NHUSTR_9,
+
+    // [JN] Atari Jaguar
+    JHUSTR_1,
+    JHUSTR_2,
+    JHUSTR_3,
+    JHUSTR_4,
+    JHUSTR_5,
+    JHUSTR_6,
+    JHUSTR_7,
+    JHUSTR_8,
+    JHUSTR_9,
+    JHUSTR_10,
+    JHUSTR_11,
+    JHUSTR_12,
+    JHUSTR_13,
+    JHUSTR_14,
+    JHUSTR_15,
+    JHUSTR_16,
+    JHUSTR_17,
+    JHUSTR_18,
+    JHUSTR_19,
+    JHUSTR_20,
+    JHUSTR_21,
+    JHUSTR_22,
+    JHUSTR_23,
+    JHUSTR_24
 };
 
 
@@ -472,6 +499,13 @@ void HU_Start(void)
         s = HU_TITLE2;
         break;
 
+        case jaguar:
+        if (gamemap <= 24)
+        s = HU_TITLEJ;
+        else
+        s = HU_TITLE2;
+        break;
+        
         default:
         s = "ytbpdtcnysq ehjdtym"; // [JN] "Неизвестный уровень"
         break;

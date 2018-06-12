@@ -1829,7 +1829,7 @@ void A_BossDeath (mobj_t* mo)
 		
     if ( gamemode == commercial)
     {
-	if (gamemap != 7 && gamemap != 8)
+	if (gamemap != 7 && (gamemission == jaguar && gamemap != 8))
 	    return;
 		
 	if ((mo->type != MT_FATSO)

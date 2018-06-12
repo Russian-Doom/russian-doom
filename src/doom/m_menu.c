@@ -1254,7 +1254,7 @@ void M_QuitResponse(int key)
     // [JN] Опциональное проигрывание звука при выходе из игры
     if ((!netgame && play_exit_sfx && sfxVolume > 0) || vanillaparm)
     {
-        if (gamemode == commercial)
+        if (gamemode == commercial && gamemission != jaguar)
         S_StartSound(NULL,quitsounds2[(gametic>>2)&7]);
         else
         S_StartSound(NULL,quitsounds[(gametic>>2)&7]);

@@ -798,6 +798,7 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
     char *iwadfile;
     int iwadparm;
     int betaparm;   // [JN] Press Beta
+    int jaguarparm; // [JN] Atari Jaguar
     int i;
 
     // Check for the -iwad parameter
@@ -810,6 +811,7 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
 
     iwadparm = M_CheckParmWithArgs("-iwad", 1);
     betaparm = M_CheckParm("-beta");
+    jaguarparm = M_CheckParm("-jaguar");
 
     if (iwadparm)
     {
@@ -848,6 +850,14 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
         *mission = IdentifyIWADByName(result, mask);
     }
 
+    // [JN] Load Atari Jaguar IWAD if -jaguar command line parameter is given.
+    // All additional -iwad calls will be rejected.
+    if (jaguarparm)
+    {
+        result = D_FindWADByName("russian/russian-doom-jaguar.wad");
+        *mission = IdentifyIWADByName(result, mask);
+    }
+    
     return result;
 }
 

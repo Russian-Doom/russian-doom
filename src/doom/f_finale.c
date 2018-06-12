@@ -99,6 +99,8 @@ static textscreen_t textscreens[] =
     { pack_plut, 1, 31, "RROCK19",   P6TEXT},
 
     { pack_nerve, 1, 8, "SLIME16",   N1TEXT},
+
+    { jaguar,    1, 23, "ROCKS",     J1TEXT},
 };
 
 
@@ -206,6 +208,11 @@ void F_Ticker (void)
             {
                 F_StartCast ();
             }  
+            
+            else if (gamemission == jaguar && gamemap == 23) // [JN] Atari Jaguar
+            {
+                F_StartCast ();
+            }
   
             else if (gamemap == 30)
             {

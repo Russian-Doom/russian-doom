@@ -38,7 +38,8 @@ typedef enum
     heretic,         // Heretic
     hexen,           // Hexen
     strife,          // Strife
-    pack_nerve,      // Doom 2: No Rest For The Living
+    pack_nerve,      // [JN] Doom 2: No Rest For The Living
+    jaguar,          // [JN] Doom for Atari Jaguar
 
     none
 } GameMission_t;

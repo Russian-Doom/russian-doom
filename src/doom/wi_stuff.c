@@ -778,6 +778,12 @@ void WI_drawShowNextLoc(void)
         return;             // ... and don't go any farther.
     }
     
+    // [JN] Atari Jaguar: don't try to load MAP24 after ending MAP23
+    if (gamemission == jaguar && gamemap == 23)
+    {
+        return;
+    }
+
     WI_slamBackground();
 
     // draw animated background

@@ -300,8 +300,10 @@ int G_CmdChecksum (ticcmd_t* cmd)
 static boolean WeaponSelectable(weapontype_t weapon)
 {
     // Can't select the super shotgun in Doom 1.
+    // [JN] Also can't select in Atari Jaguar.
 
-    if (weapon == wp_supershotgun && logical_gamemission == doom)
+    if (weapon == wp_supershotgun && 
+    (logical_gamemission == doom || gamemission == jaguar))
     {
         return false;
     }
@@ -797,17 +799,36 @@ void G_DoLoadLevel (void)
         {
         char *skytexturename;
 
-        if (gamemap < 12)
+        // [JN] Atari Jaguar sky handling
+        if (gamemission == jaguar)
         {
-            skytexturename = "SKY1";
-        }
-        else if (gamemap < 21)
-        {
-            skytexturename = "SKY2";
+            if (gamemap < 9 || gamemap == 24)
+            {
+                skytexturename = "SKY1";
+            }
+            else if (gamemap < 17)
+            {
+                skytexturename = "SKY2";
+            }
+            else
+            {
+                skytexturename = "SKY3";
+            }
         }
         else
         {
-            skytexturename = "SKY3";
+            if (gamemap < 12)
+            {
+                skytexturename = "SKY1";
+            }
+            else if (gamemap < 21)
+            {
+                skytexturename = "SKY2";
+            }
+            else
+            {
+                skytexturename = "SKY3";
+            }
         }
 
         skytexturename = DEH_String(skytexturename);
@@ -1540,6 +1561,14 @@ static int npars[9] =
     75, 105, 120, 105, 210, 105, 165, 105, 135
 };
 
+// [JN] Atari Jaguar Par Times
+static int jpars[24] =
+{ 
+    30, 75, 120,  90, 165, 180, 180, 30,    // Cluster 1
+    90, 90,  90, 120,  90, 360, 240, 30,    // Cluster 2
+    90, 90, 150,  90,  90, 165, 30, 165     // Cluster 3
+}; 
+
 
 //
 // G_DoCompleted 
@@ -1557,7 +1586,8 @@ void G_ExitLevel (void)
 void G_SecretExitLevel (void) 
 {
     // IF NO WOLF3D LEVELS, NO SECRET EXIT!
-    if ((gamemode == commercial) && (W_CheckNumForName("map31")<0))
+    if ((gamemode == commercial) && (W_CheckNumForName("map31")<0)
+    && gamemission != jaguar)   // [JN] No MAP31 in Atari Jaguar
     {
         secretexit = false;
     }
@@ -1646,7 +1676,22 @@ void G_DoCompleted (void)
                 default: wminfo.next = gamemap;
             }
     }
+    // [JN] Atari Jaguar: secret exit from MAP03 leading to MAP24
+    else if (gamemission == jaguar)
+    {
+        if (secretexit)
+        switch(gamemap)
+        {
+            case 3: wminfo.next = 23; break;
+        }
 
+    else
+        switch(gamemap)
+        {
+            case 24: wminfo.next = 3; break;
+            default: wminfo.next = gamemap;
+        }
+    }
     else if ( gamemode == commercial)
     {
         if (secretexit)
@@ -1726,6 +1771,10 @@ void G_DoCompleted (void)
     if (gamemode == pressbeta)
     wminfo.partime = TICRATE*bpars[gameepisode][gamemap];
 
+    // [JN] Atari Jaguar par times
+    if (gamemission == jaguar)
+    wminfo.partime = TICRATE*jpars[gamemap-1];
+
     wminfo.pnum = consoleplayer; 
 
     for (i=0 ; i<MAXPLAYERS ; i++) 
@@ -1770,6 +1819,15 @@ void G_WorldDone (void)
         switch (gamemap)
         {
             case 8:
+            F_StartFinale ();
+            break;
+        }
+    }
+    else if (gamemission == jaguar)
+    {
+        switch (gamemap)
+        {
+            case 23:
             F_StartFinale ();
             break;
         }
