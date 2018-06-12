@@ -209,9 +209,10 @@ void F_Ticker (void)
                 F_StartCast ();
             }  
             
-            else if (gamemission == jaguar && gamemap == 23) // [JN] Atari Jaguar
+            // [JN] Atari Jaguar: don't go farther than MAP23.
+            else if (gamemission == jaguar && gamemap == 23)
             {
-                F_StartCast ();
+                return;
             }
   
             else if (gamemap == 30)
