@@ -292,8 +292,13 @@ void F_TextWrite (void)
 
     V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
 
+    if (gamemission == jaguar)
+    {
+        if (gamemap == 23)  // Leaving MAP23, end game
+        V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("INTERPIC"), PU_CACHE));
+    }
     // [JN] Draw special background on entering Wolfenstein and Grosse levels
-    if (gamemission == doom2 && !vanillaparm)
+    else if (gamemission == doom2 && !vanillaparm)
     {
         if (gamemap == 15)  // Leaving MAP15, entering MAP31
         V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
