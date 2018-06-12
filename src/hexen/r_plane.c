@@ -61,8 +61,10 @@ int bmaptexture21, bmaptexture22, bmaptexture23;
 int bmap_terminator;
 
 // Opening
-visplane_t visplanes[MAXVISPLANES], *lastvisplane;
+visplane_t *visplanes = NULL;
+visplane_t *lastvisplane;
 visplane_t *floorplane, *ceilingplane;
+static int numvisplanes;
 short openings[MAXOPENINGS], *lastopening;
 
 // Clip values are the solid pixel bounding the range.
@@ -302,6 +304,28 @@ void R_ClearPlanes(void)
     baseyscale = -FixedDiv(finesine[angle], centerxfrac);
 }
 
+// [crispy] remove MAXVISPLANES Vanilla limit
+void R_RaiseVisplanes (visplane_t** vp)
+{
+    if (lastvisplane - visplanes == numvisplanes)
+    {
+        int numvisplanes_old = numvisplanes;
+        visplane_t* visplanes_old = visplanes;
+    
+        if (numvisplanes_old == MAXVISPLANES)
+            printf("R_FindPlane: достигнут лимиn MAXVISPLANES (%d).\n", MAXVISPLANES);
+    
+        numvisplanes = numvisplanes ? 2 * numvisplanes : MAXVISPLANES;
+        visplanes = realloc(visplanes, numvisplanes * sizeof(*visplanes));
+        lastvisplane = visplanes + numvisplanes_old;
+        floorplane = visplanes + (floorplane - visplanes_old);
+        ceilingplane = visplanes + (ceilingplane - visplanes_old);
+    
+        if (vp)
+        *vp = visplanes + (*vp - visplanes_old);
+    }
+}
+
 //==========================================================================
 //
 // R_FindPlane
@@ -337,10 +361,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
         return (check);
     }
 
-    if (lastvisplane - visplanes == MAXVISPLANES)
-    {
-        I_Error("R_FindPlane: превышен лимит visplanes");
-    }
+    R_RaiseVisplanes(&check);
 
     lastvisplane++;
     check->height = height;
@@ -402,6 +423,7 @@ visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop)
     }
 
     // Make a new visplane
+    R_RaiseVisplanes(&pl);
     lastvisplane->height = pl->height;
     lastvisplane->picnum = pl->picnum;
     lastvisplane->lightlevel = pl->lightlevel;
@@ -479,7 +501,7 @@ void R_DrawPlanes(void)
     {
         I_Error("R_DrawPlanes: превышен лимит drawsegs (%i)", ds_p - drawsegs);
     }
-    if (lastvisplane - visplanes > MAXVISPLANES)
+    if (lastvisplane - visplanes > numvisplanes)
     {
         I_Error("R_DrawPlanes: превышен лимит visplane (%i)",
                 lastvisplane - visplanes);

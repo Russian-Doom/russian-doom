@@ -238,8 +238,7 @@ typedef struct
 
 typedef byte lighttable_t;      // this could be wider for >8 bit display
 
-// [JN] MAXVISPLANES увеличено в 8 раз
-#define MAXVISPLANES    160*8
+#define MAXVISPLANES    160
 // [JN] MAXOPENINGS увеличено в 4 раза
 #define MAXOPENINGS             SCREENWIDTH*64*4
 
