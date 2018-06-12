@@ -30,6 +30,12 @@
 
 #include "f_wipe.h"
 
+#include "d_mode.h" // [JN] Atari Jaguar: gamemission
+#include "w_wad.h"  // [JN] Atari Jaguar: W_CacheLumpName
+
+extern GameMission_t gamemission;
+extern char *DEH_String(char *s);
+
 //
 // SCREEN WIPE PACKAGE
 //
@@ -267,6 +273,12 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
         (*wipes[wipeno*3+2])(width, height, ticks);
     }
 
+    // Atari Jaguar: draw "Loading" picture
+    if (gamemission == jaguar)
+    {
+        V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
+    }
+    
     return !go;
 }
 
