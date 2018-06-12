@@ -579,6 +579,12 @@ void S_StartSound(void *origin_p, int sfx_id)
         sfx->lumpnum = I_GetSfxLumpNum(sfx);
     }
 
+    // [JN] Atari Jaguar have down-pitched sounds
+    if (gamemission == jaguar)
+    {
+        pitch = 122;
+    }
+
     channels[cnum].pitch = pitch;
     channels[cnum].handle = I_StartSound(sfx, cnum, volume, sep, channels[cnum].pitch);
 }
