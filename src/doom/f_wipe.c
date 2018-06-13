@@ -30,10 +30,11 @@
 
 #include "f_wipe.h"
 
-#include "d_mode.h" // [JN] Atari Jaguar: gamemission
-#include "w_wad.h"  // [JN] Atari Jaguar: W_CacheLumpName
+#include "d_mode.h"     // [JN] Atari Jaguar: gamemission
+#include "w_wad.h"      // [JN] Atari Jaguar: W_CacheLumpName
+#include "doomstat.h"   // [JN] Atari Jaguar: screenblocks
+#include "st_stuff.h"   // [JN] Atari Jaguar: Status bar widgets
 
-extern GameMission_t gamemission;
 extern char *DEH_String(char *s);
 
 //
@@ -179,6 +180,38 @@ int wipe_doMelt (int width, int height, int ticks)
             }
             else if (y[i] < height)
             {
+                // [JN] Atari Jaguar: Godawful hack, but seems to be working fine...
+                if (gamemission == jaguar)
+                {
+                    dy = (y[i] < 16) ? y[i]+1 : 8;
+                    dy = height - y[i];
+                
+                    if (y[i]+dy >= height) 
+                    dy = height - y[i];
+
+                    s = &((short *)wipe_scr_end)[i*height+y[i]];
+                    d = &((short *)wipe_scr)[y[i]*width+i];
+                    idx = 0;
+
+                    y[i] += dy;
+                    s = &((short *)wipe_scr_start)[i*height];
+                    d = &((short *)wipe_scr)[y[i]*width+i];
+                    idx = 0;
+
+                    // Update HUD's background
+                    ST_refreshBackground();
+
+                    // Update widgets only on classic HUD
+                    if (screenblocks <= 10)
+                    {
+                        ST_drawWidgets(true);
+                    }
+
+                    done = false;
+                }
+                // [JN] Standard wiping routine
+                else
+                {
                 dy = (y[i] < 16) ? y[i]+1 : 8;
 
                 if (y[i]+dy >= height) 
@@ -206,6 +239,7 @@ int wipe_doMelt (int width, int height, int ticks)
                 }
 
                 done = false;
+                }
             }
         }
     }
@@ -250,6 +284,8 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
         wipe_initMelt, wipe_doMelt, wipe_exitMelt
     };
 
+    // [JN] Atari Jaguar: let's pretend we are not loading immediately
+    if (gamemission != jaguar)
     ticks <<= hires;
 
     // initial stuff
@@ -273,10 +309,14 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
         (*wipes[wipeno*3+2])(width, height, ticks);
     }
 
-    // Atari Jaguar: draw "Loading" picture
+    // [JN] Atari Jaguar: loading emulation
     if (gamemission == jaguar)
     {
+        // Draw "Loading" picture
         V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
+
+        // Hold on for a moment
+        I_Sleep (250);
     }
     
     return !go;
