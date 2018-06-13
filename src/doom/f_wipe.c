@@ -198,12 +198,10 @@ int wipe_doMelt (int width, int height, int ticks)
                     d = &((short *)wipe_scr)[y[i]*width+i];
                     idx = 0;
 
-                    // Update HUD's background
-                    ST_refreshBackground();
-
-                    // Update widgets only on classic HUD
+                    // Update only classic HUD
                     if (screenblocks <= 10)
                     {
+                        ST_refreshBackground();
                         ST_drawWidgets(true);
                     }
 
