@@ -730,6 +730,10 @@ boolean ST_Responder (event_t* ev)
             {
                 if (cht_CheckCheat(&cheat_powerup[i], ev->data2))
                 {
+                    // [JN] Atari Jaguar: no invisibility sphere and light visor
+                    if (gamemission == jaguar && (i == pw_invisibility || i == pw_infrared))
+                    return false;
+
                     if (!plyr->powers[i])
                     {
                         P_GivePower( plyr, i);
