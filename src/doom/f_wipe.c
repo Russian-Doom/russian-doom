@@ -198,13 +198,6 @@ int wipe_doMelt (int width, int height, int ticks)
                     d = &((short *)wipe_scr)[y[i]*width+i];
                     idx = 0;
 
-                    // Update only classic HUD
-                    if (screenblocks <= 10)
-                    {
-                        ST_refreshBackground();
-                        ST_drawWidgets(true);
-                    }
-
                     done = false;
                 }
                 // [JN] Standard wiping routine
@@ -251,6 +244,12 @@ int wipe_exitMelt (int width, int height, int ticks)
     Z_Free(y);
     Z_Free(wipe_scr_start);
     Z_Free(wipe_scr_end);
+    // Update only classic HUD
+    if (screenblocks <= 10 && gamestate == GS_LEVEL)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+    }
     return 0;
 }
 
