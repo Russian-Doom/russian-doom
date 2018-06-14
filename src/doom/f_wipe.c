@@ -313,7 +313,7 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
         V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
 
         // Hold on for a moment
-        I_Sleep (250);
+        I_Sleep (200);
     }
     
     return !go;
