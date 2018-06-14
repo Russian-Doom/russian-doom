@@ -1066,10 +1066,11 @@ void R_FillBackScreen (void)
 
     if (gamemode == commercial)
     name = name2;
-    else if (gamemission == jaguar)
-    name = name3;    
     else
     name = name1;
+
+    if (gamemission == jaguar)
+    name = name3;  
 
     src = W_CacheLumpName(name, PU_CACHE); 
     dest = background_buffer;

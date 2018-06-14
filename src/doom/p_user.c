@@ -466,8 +466,12 @@ void P_PlayerThink (player_t* player)
 	player->bonuscount--;
 
     
+    //
+    // [JN] Press Beta and Atari Jaguar using a different COLORMAP handling. 
+    //
+
     // Handling colormaps.
-    if (gamemode != pressbeta)
+    if (gamemode != pressbeta && gamemission != jaguar)
     {
     if (player->powers[pw_invulnerability])
     {
