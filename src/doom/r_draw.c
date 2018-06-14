@@ -1038,6 +1038,9 @@ void R_FillBackScreen (void)
     // DOOM II border patch.
     char *name2 = DEH_String("GRNROCK");
 
+    // [JN] Atari Jaguar border patch.
+    char *name3 = DEH_String("FLOOR7_1");
+
     char *name;
 
     // If we are running full screen, there is no need to do any of this,
@@ -1063,6 +1066,8 @@ void R_FillBackScreen (void)
 
     if (gamemode == commercial)
     name = name2;
+    else if (gamemission == jaguar)
+    name = name3;    
     else
     name = name1;
 
