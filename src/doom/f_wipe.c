@@ -189,13 +189,7 @@ int wipe_doMelt (int width, int height, int ticks)
                     if (y[i]+dy >= height) 
                     dy = height - y[i];
 
-                    s = &((short *)wipe_scr_end)[i*height+y[i]];
-                    d = &((short *)wipe_scr)[y[i]*width+i];
-                    idx = 0;
-
                     y[i] += dy;
-                    s = &((short *)wipe_scr_start)[i*height];
-                    d = &((short *)wipe_scr)[y[i]*width+i];
                     idx = 0;
 
                     done = false;
@@ -245,7 +239,7 @@ int wipe_exitMelt (int width, int height, int ticks)
     Z_Free(wipe_scr_start);
     Z_Free(wipe_scr_end);
     // Update only classic HUD
-    if (screenblocks <= 10 && gamestate == GS_LEVEL)
+    if (gamemission == jaguar && screenblocks <= 10 && gamestate == GS_LEVEL)
     {
         ST_refreshBackground();
         ST_drawWidgets(true);
