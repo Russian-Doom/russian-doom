@@ -1354,65 +1354,41 @@ void ST_doPaletteStuff(void)
     {
         palette = (cnt+7)>>3;
 
-        // [JN] Don't replace CYAN palette with RED palette in Atari Jaguar
-        if (gamemission == jaguar &&
-        (plyr->powers[pw_invulnerability] > 4*32 || (plyr->powers[pw_invulnerability]&8)))
-        {
-            return;
-        }
-        else
-        {
-            if (palette >= NUMREDPALS)
-            palette = NUMREDPALS-1;
+        if (palette >= NUMREDPALS)
+        palette = NUMREDPALS-1;
 
-            palette += STARTREDPALS;
-        }
+        palette += STARTREDPALS;
     }
 
     // [JN] Изменение палитры при получении бонусов
     else if (plyr->bonuscount)
     {
-        // [JN] Don't replace CYAN palette with YELLOW palette in Atari Jaguar
-        if (gamemission == jaguar &&
-        (plyr->powers[pw_invulnerability] > 4*32 || (plyr->powers[pw_invulnerability]&8)))
-        {
-            return;
-        }
-        else
-        {
-            palette = (plyr->bonuscount+7)>>3;
-            // [JN] Дополнительный фрейм палитры для более плавного
-            // появления/угасания жёлтого экрана при подборе предметов.
-            // https://doomwiki.org/wiki/PLAYPAL
-            if (palette >= NUMBONUSPALS)
-            palette = NUMBONUSPALS;
+        palette = (plyr->bonuscount+7)>>3;
+        // [JN] Дополнительный фрейм палитры для более плавного
+        // появления/угасания жёлтого экрана при подборе предметов.
+        // https://doomwiki.org/wiki/PLAYPAL
+        if (palette >= NUMBONUSPALS)
+        palette = NUMBONUSPALS;
 
-            palette += STARTBONUSPALS-1;
-        }
+        palette += STARTBONUSPALS-1;
     }
 
     // [JN] Don't replace CYAN palette with GREEN palette in Atari Jaguar
     else if ( plyr->powers[pw_ironfeet] > 4*32 || plyr->powers[pw_ironfeet]&8)
     {
-        if (gamemission == jaguar &&
-        (plyr->powers[pw_invulnerability] > 4*32 || (plyr->powers[pw_invulnerability]&8)))
-        {
-            return;
-        }
-        else
-        {
-            palette = RADIATIONPAL;
-        }
-    }
-    // [JN] Use CYAN invulnerability palette in Atari Jaguar
-    else if (gamemission == jaguar &&
-    (plyr->powers[pw_invulnerability] > 4*32 || (plyr->powers[pw_invulnerability]&8)))
-    {
-        palette = INVULNERABILITYPAL;
+        palette = RADIATIONPAL;
     }
     else
     {
         palette = 0;
+    }
+    
+    // [JN] Use CYAN invulnerability palette in Atari Jaguar,
+    // unbreakable by other palettes
+    if (gamemission == jaguar &&
+    (plyr->powers[pw_invulnerability] > 4*32 || (plyr->powers[pw_invulnerability]&8)))
+    {
+        palette = INVULNERABILITYPAL;
     }
 
     // In Chex Quest, the player never sees red.  Instead, the
