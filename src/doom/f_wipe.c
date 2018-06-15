@@ -180,15 +180,10 @@ int wipe_doMelt (int width, int height, int ticks)
             }
             else if (y[i] < height)
             {
-                // [JN] Atari Jaguar: Godawful hack, but seems to be working fine...
+                // [JN] Atari Jaguar: Loading delay emulation
                 if (gamemission == jaguar)
                 {
-                    dy = (y[i] < 16) ? y[i]+1 : 8;
-                    dy = height - y[i];
-                
-                    if (y[i]+dy >= height) 
-                    dy = height - y[i];
-
+                    dy = 13; // [JN] almost identical to original wipe duration
                     y[i] += dy;
                     idx = 0;
 
@@ -238,7 +233,7 @@ int wipe_exitMelt (int width, int height, int ticks)
     Z_Free(y);
     Z_Free(wipe_scr_start);
     Z_Free(wipe_scr_end);
-    // Update only classic HUD
+    // [JN] Update only classic HUD
     if (gamemission == jaguar && screenblocks <= 10 && gamestate == GS_LEVEL)
     {
         ST_refreshBackground();
@@ -275,8 +270,6 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
         wipe_initMelt, wipe_doMelt, wipe_exitMelt
     };
 
-    // [JN] Atari Jaguar: let's pretend we are not loading immediately
-    if (gamemission != jaguar)
     ticks <<= hires;
 
     // initial stuff
@@ -304,10 +297,7 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     if (gamemission == jaguar)
     {
         // Draw "Loading" picture
-        V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
-
-        // Hold on for a moment
-        I_Sleep (200);
+        V_DrawShadowedPatchDoom (0, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
     }
     
     return !go;
