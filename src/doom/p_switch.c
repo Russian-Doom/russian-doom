@@ -100,16 +100,16 @@ switchlist_t alphSwitchList[] =
 switchlist_t jaguarSwitchList[] =
 {
     // [JN] Atari Jaguar switches
-    {"SW1BRN1",     "SW2BRN1",  1},
-    {"SW1GARG",     "SW2GARG",  1},
-    {"SW1GSTON",    "SW2GSTON", 1},
-    {"SW1HOT",      "SW2HOT",   1},
-    {"SW1HOT",      "SW2HOT",   1},
-    {"SW1STAR",     "SW2STAR",	1},
-    {"SW1WOOD",     "SW2WOOD",	1},
-    {"SW1WOOD",     "SW2WOOD",	1},
+    {"SW1BRN1",     "SW2BRN1",  3},
+    {"SW1GARG",     "SW2GARG",  3},
+    {"SW1GSTON",    "SW2GSTON", 3},
+    {"SW1HOT",      "SW2HOT",   3},
+    {"SW1HOT",      "SW2HOT",   3},
+    {"SW1STAR",     "SW2STAR",  3},
+    {"SW1WOOD",     "SW2WOOD",  3},
+    {"SW1WOOD",     "SW2WOOD",  3},
 
-    {"\0",		"\0",		0}
+    {"\0",          "\0",       0}
 };
 
 int		switchlist[MAXSWITCHES * 2];
@@ -127,7 +127,7 @@ void P_InitSwitchListJaguar(void)
     int		index;
     int		episode;
 
-    episode = 1;
+    episode = 3;
 
     for (index = 0,i = 0;i < MAXSWITCHES;i++)
     {
