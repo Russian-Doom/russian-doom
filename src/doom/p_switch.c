@@ -93,23 +93,58 @@ switchlist_t alphSwitchList[] =
     {"SW1TEK",		"SW2TEK",	3},
     {"SW1MARB",	"SW2MARB",	3},
     {"SW1SKULL",	"SW2SKULL",	3},
+    
+    {"\0",		"\0",		0}
+};
 
+switchlist_t jaguarSwitchList[] =
+{
     // [JN] Atari Jaguar switches
-    {"SW1BRN1",     "SW2BRN1",  4},
-    {"SW1GARG",     "SW2GARG",  4},
-    {"SW1GSTON",    "SW2GSTON", 4},
-    {"SW1HOT",      "SW2HOT",   4},
-    {"SW1HOT",      "SW2HOT",   4},
-    {"SW1STAR",     "SW2STAR",	4},
-    {"SW1WOOD",     "SW2WOOD",	4},
-    {"SW1WOOD",     "SW2WOOD",	4},
-	
+    {"SW1BRN1",     "SW2BRN1",  1},
+    {"SW1GARG",     "SW2GARG",  1},
+    {"SW1GSTON",    "SW2GSTON", 1},
+    {"SW1HOT",      "SW2HOT",   1},
+    {"SW1HOT",      "SW2HOT",   1},
+    {"SW1STAR",     "SW2STAR",	1},
+    {"SW1WOOD",     "SW2WOOD",	1},
+    {"SW1WOOD",     "SW2WOOD",	1},
+
     {"\0",		"\0",		0}
 };
 
 int		switchlist[MAXSWITCHES * 2];
 int		numswitches;
 button_t        buttonlist[MAXBUTTONS];
+
+
+//
+// [JN] P_InitSwitchListJaguar
+// Atari Jaguar exclusive init
+//
+void P_InitSwitchListJaguar(void)
+{
+    int		i;
+    int		index;
+    int		episode;
+
+    episode = 1;
+
+    for (index = 0,i = 0;i < MAXSWITCHES;i++)
+    {
+        if (!jaguarSwitchList[i].episode)
+        {
+            numswitches = index/2;
+            switchlist[index] = -1;
+            break;
+        }
+
+        if (jaguarSwitchList[i].episode <= episode)
+        {
+            switchlist[index++] = R_TextureNumForName(DEH_String(jaguarSwitchList[i].name1));
+            switchlist[index++] = R_TextureNumForName(DEH_String(jaguarSwitchList[i].name2));
+        }
+    }
+}
 
 //
 // P_InitSwitchList
@@ -120,6 +155,10 @@ void P_InitSwitchList(void)
     int		i;
     int		index;
     int		episode;
+
+    // [JN] Atari Jaguar: use own, simplified initialization
+    if (gamemission == jaguar)
+        return P_InitSwitchListJaguar();
 	
     episode = 1;
 
@@ -128,8 +167,6 @@ void P_InitSwitchList(void)
     else
 	if ( gamemode == commercial )
 	    episode = 3;
-    else if (gamemission == jaguar)
-        episode = 4;
 		
     for (index = 0,i = 0;i < MAXSWITCHES;i++)
     {
