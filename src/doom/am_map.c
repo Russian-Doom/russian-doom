@@ -86,6 +86,12 @@
 #define GRIDRANGE        0
 #define XHAIRCOLORS      GRAYS
 
+// [JN] Atari Jaguar automap colors
+#define RED_JAGUAR      32     // dark red
+#define GREEN_JAGUAR    120    // dark green
+#define YELLOW_JAGUAR   163    // dark yellow
+#define MAGENTA_JAGUAR  254    // dark magenta
+
 // drawing stuff
 #define AM_NUMMARKPOINTS 10
 
@@ -1208,6 +1214,66 @@ void AM_drawWalls(void)
 
 
 //
+// [JN] Atari Jaguar: draw walls using Jaguar colors.
+// Adapted from original Jaguar Doom source, AM_Drawer.
+//
+void AM_drawWallsJaguar(void)
+{
+    int i;
+    static mline_t l;
+
+    for (i=0;i<numlines;i++)
+    {
+        l.a.x = lines[i].v1->x;
+        l.a.y = lines[i].v1->y;
+        l.b.x = lines[i].v2->x;
+        l.b.y = lines[i].v2->y;
+        if (cheating || (lines[i].flags & ML_MAPPED))
+        {
+            if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
+            continue;
+
+            if (!lines[i].backsector)
+            {
+                AM_drawMline(&l, RED_JAGUAR);
+            }
+            else
+            {
+                // Teleport line
+                if (lines[i].special == 39 || lines[i].special == 97)
+                AM_drawMline(&l, GREEN_JAGUAR);
+
+                // Secret door
+                else if (lines[i].flags & ML_SECRET)
+                AM_drawMline(&l, RED_JAGUAR);
+
+                // Any special linedef
+                else if (lines[i].special)
+                AM_drawMline(&l, MAGENTA_JAGUAR);
+
+                // Floor level change
+                else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight)
+                AM_drawMline(&l, YELLOW_JAGUAR);
+
+                // Ceiling level change
+                else if (lines[i].backsector->ceilingheight != lines[i].frontsector->ceilingheight)
+                AM_drawMline(&l, YELLOW_JAGUAR);
+
+                // Hidden gray walls
+                else if (cheating)
+                AM_drawMline(&l, TSWALLCOLORS);
+
+            }
+        }
+        else if (plr->powers[pw_allmap])
+        {
+            if (!(lines[i].flags & LINE_NEVERSEE)) AM_drawMline(&l, GRAYS+3);
+        }
+    }
+}
+
+
+//
 // Rotation in 2D.
 // Used to rotate player arrow line character.
 //
@@ -1274,11 +1340,20 @@ void AM_drawPlayers(void)
 
     if (!netgame)
     {
-        if (cheating)
-        AM_drawLineCharacter (cheat_player_arrow, arrlen(cheat_player_arrow), 0, plr->mo->angle, WHITE, plr->mo->x, plr->mo->y);
+        if (gamemission == jaguar)
+        {
+            // [JN] Atari Jaguar: draw dark green, blinking arrow
+            if (leveltime & 8)
+            AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, plr->mo->angle, GREEN_JAGUAR, plr->mo->x, plr->mo->y);
+        }
         else
-        AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, plr->mo->angle, WHITE, plr->mo->x, plr->mo->y);
-
+        {
+            if (cheating)
+            AM_drawLineCharacter (cheat_player_arrow, arrlen(cheat_player_arrow), 0, plr->mo->angle, WHITE, plr->mo->x, plr->mo->y);
+            else
+            AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, plr->mo->angle, WHITE, plr->mo->x, plr->mo->y);
+        }
+        
         return;
     }
 
@@ -1313,7 +1388,11 @@ void AM_drawThings (int colors, int colorrange)
         t = sectors[i].thinglist;
         while (t)
         {
-            AM_drawLineCharacter (thintriangle_guy, arrlen(thintriangle_guy), 16<<FRACBITS, t->angle, colors+lightlev, t->x, t->y);
+            // [JN] Atari Jaguar: use dark green for things drawing
+            AM_drawLineCharacter (thintriangle_guy, arrlen(thintriangle_guy), 16<<FRACBITS, t->angle, 
+                                  gamemission == jaguar ?
+                                  GREEN_JAGUAR : colors+lightlev,
+                                  t->x, t->y);
             t = t->snext;
         }
     }
@@ -1357,13 +1436,27 @@ void AM_Drawer (void)
     if (grid)
     AM_drawGrid(GRIDCOLORS);
 
-    AM_drawWalls();
+    // [JN] Atari Jaguar: use own function
+    if (gamemission == jaguar)
+    {
+        AM_drawWallsJaguar();
+    }
+    else
+    {
+        AM_drawWalls();
+    }
+
     AM_drawPlayers();
 
     if (cheating==2)
 	AM_drawThings(THINGCOLORS, THINGRANGE);
 
-    AM_drawCrosshair(XHAIRCOLORS);
+    // [JN] Atari Jaguar: don't draw single dot
+    if (gamemission != jaguar)
+    {
+        AM_drawCrosshair(XHAIRCOLORS);
+    }
+
     AM_drawMarks();
 
     V_MarkRect(f_x, f_y, f_w, f_h);
