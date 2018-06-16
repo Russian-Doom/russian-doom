@@ -94,8 +94,15 @@ switchlist_t alphSwitchList[] =
     {"SW1MARB",	"SW2MARB",	3},
     {"SW1SKULL",	"SW2SKULL",	3},
 
-    // [JN] Atari Jaguar
-    {"SW1STAR",	"SW2STAR",	3},
+    // [JN] Atari Jaguar switches
+    {"SW1BRN1",     "SW2BRN1",  4},
+    {"SW1GARG",     "SW2GARG",  4},
+    {"SW1GSTON",    "SW2GSTON", 4},
+    {"SW1HOT",      "SW2HOT",   4},
+    {"SW1HOT",      "SW2HOT",   4},
+    {"SW1STAR",     "SW2STAR",	4},
+    {"SW1WOOD",     "SW2WOOD",	4},
+    {"SW1WOOD",     "SW2WOOD",	4},
 	
     {"\0",		"\0",		0}
 };
@@ -121,6 +128,8 @@ void P_InitSwitchList(void)
     else
 	if ( gamemode == commercial )
 	    episode = 3;
+    else if (gamemission == jaguar)
+        episode = 4;
 		
     for (index = 0,i = 0;i < MAXSWITCHES;i++)
     {
