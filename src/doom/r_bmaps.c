@@ -60,6 +60,27 @@ void R_InitBrightmaps(void)
     // for example, no need to lookup Doom 1 textures in TNT.
 
     // -------------------------------------------------------
+    //  Atari Jaguar
+    // -------------------------------------------------------
+    if (gamemission == jaguar)
+    {
+        // Flats
+        bmapflatnum4 = R_FlatNumForName("GATE6");
+
+        // Textures
+        bmaptexture08 = R_TextureNumForName("SW2WOOD");
+        bmaptexture17 = R_TextureNumForName("SW2GSTON");
+        bmaptexture39 = R_TextureNumForName("EXITSIGN");
+        bmaptexture75 = R_TextureNumForName("CBLUE01");
+
+        // Apply terminator
+        bmap_terminator = R_TextureNumForName("BIGDOOR2");
+
+        // Don't look up any farther
+        return;
+    }
+
+    // -------------------------------------------------------
     //  Flats and ceilings (available in all games)
     // -------------------------------------------------------
     {
