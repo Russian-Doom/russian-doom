@@ -458,6 +458,7 @@ void D_BindVariables(void)
     M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);
     M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);
+    M_BindIntVariable("noise_alert_sfx",        &noise_alert_sfx);
 
     // Тактика
     M_BindIntVariable("automap_stats",          &automap_stats);

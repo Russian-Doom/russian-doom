@@ -114,6 +114,7 @@ static void SensibleDefaults(void)
     blazing_door_fix_sfx = 1;
     correct_endlevel_sfx = 0;
     play_exit_sfx = 1;
+    noise_alert_sfx = 0;
 
     // Тактика
     automap_stats = 1;

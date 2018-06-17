@@ -258,6 +258,7 @@ int crushed_corpses_sfx = 1;
 int blazing_door_fix_sfx = 1;
 int correct_endlevel_sfx = 0;
 int play_exit_sfx = 1;
+int noise_alert_sfx = 0;
 
 // Тактика
 int automap_stats = 1;

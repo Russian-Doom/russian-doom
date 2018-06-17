@@ -46,6 +46,7 @@ int crushed_corpses_sfx = 1;
 int blazing_door_fix_sfx = 1;
 int correct_endlevel_sfx = 0;
 int play_exit_sfx = 1;
+int noise_alert_sfx = 0;
 
 // “актика
 int automap_stats = 1;
@@ -107,10 +108,11 @@ void CompatibilitySettings(void)
         TXT_If(gamemission == doom, TXT_NewCheckBox("Показывать значок дискеты",                                &show_diskicon)),
 
     TXT_If(gamemission == doom, TXT_NewSeparator("Звук")), 
-        TXT_If(gamemission == doom, TXT_NewCheckBox("Звук раздавливани€ трупов",                &crushed_corpses_sfx)),
-        TXT_If(gamemission == doom, TXT_NewCheckBox("Одиночный звук закрыти€ быстрой двери",    &blazing_door_fix_sfx)),
-        TXT_If(gamemission == doom, TXT_NewCheckBox("Проигрывать звук при выходе из игры",      &play_exit_sfx)),
-        TXT_If(gamemission == doom, TXT_NewCheckBox("Корректный звук завершени€ уровн€",        &correct_endlevel_sfx)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Звук раздавливани€ трупов",                    &crushed_corpses_sfx)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Одиночный звук закрыти€ быстрой двери",        &blazing_door_fix_sfx)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Проигрывать звук при выходе из игры",          &play_exit_sfx)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Корректный звук завершени€ уровн€",            &correct_endlevel_sfx)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox("Тревога монстра пробуждает других монстров",   &noise_alert_sfx)),
 
     TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator("Тактика")),
         TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox("Отображать статистику уровн€ на карте",  &automap_stats)),
@@ -164,6 +166,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);
     M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);
+    M_BindIntVariable("noise_alert_sfx",        &noise_alert_sfx);
 
     // “актика
     M_BindIntVariable("automap_stats",          &automap_stats);

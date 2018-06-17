@@ -64,6 +64,7 @@ extern int crushed_corpses_sfx;
 extern int blazing_door_fix_sfx;
 extern int correct_endlevel_sfx;
 extern int play_exit_sfx;
+extern int noise_alert_sfx;
 
 // Тактика (Tactical)
 extern int automap_stats;

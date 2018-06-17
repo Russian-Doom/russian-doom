@@ -1727,6 +1727,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(blazing_door_fix_sfx),
     CONFIG_VARIABLE_INT(correct_endlevel_sfx),
     CONFIG_VARIABLE_INT(play_exit_sfx),
+    CONFIG_VARIABLE_INT(noise_alert_sfx),
 
     // Тактика
     CONFIG_VARIABLE_INT(automap_stats),
