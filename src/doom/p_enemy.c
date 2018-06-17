@@ -1834,17 +1834,26 @@ void A_BossDeath (mobj_t* mo)
     mobj_t*	mo2;
     line_t	junk;
     int		i;
-		
-    if ( gamemode == commercial)
+
+    // [JN] Atari Jaguar special cases
+    if (gamemission == jaguar)
     {
-	if (gamemap != 7 && (gamemission == jaguar && gamemap != 8))
-	    return;
-		
-	if ((mo->type != MT_FATSO)
-	    && (mo->type != MT_BABY)
-	    && (mo->type != MT_BRUISER)) // [JN] Atari Jaguar
-	    return;
+        if (gamemap != 8)
+        return;
+
+        if (mo->type != MT_BRUISER)
+        return;        
     }
+    // [JN] Doom 2, MAP07
+    else if (gamemode == commercial)
+    {
+        if (gamemap != 7)
+        return;
+
+        if ((mo->type != MT_FATSO) && (mo->type != MT_BABY))
+        return;
+    }
+    // [JN] Doom 1, ExM8
     else
     {
         if (!CheckBossEnd(mo->type))
@@ -1906,7 +1915,7 @@ void A_BossDeath (mobj_t* mo)
 	    }
 	}
     // [JN] Atari Jaguar: MAP08 special case
-	if (gamemap == 8)
+	if (gamemission == jaguar && gamemap == 8)
 	{
 	    if (mo->type == MT_BRUISER)
 	    {
