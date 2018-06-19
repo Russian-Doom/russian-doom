@@ -69,7 +69,9 @@ void P_AddBossSpot(fixed_t x, fixed_t y, angle_t angle)
 {
     if (BossSpotCount == MAX_BOSS_SPOTS)
     {
-        I_Error("Превышено количество босс-спотов.");
+        I_Error(english_language ?
+                "Too many boss spots." :
+                "Превышено количество босс-спотов.");
     }
     BossSpots[BossSpotCount].x = x;
     BossSpots[BossSpotCount].y = y;
@@ -380,7 +382,9 @@ void P_NewChaseDir(mobj_t * actor)
     dirtype_t tdir, olddir, turnaround;
 
     if (!actor->target)
-        I_Error("P_NewChaseDir: вызов без определенной цели");
+        I_Error(english_language ?
+                "P_NewChaseDir: called with no target" :
+                "P_NewChaseDir: вызов без определенной цели");
 
     olddir = actor->movedir;
     turnaround = opposite[olddir];

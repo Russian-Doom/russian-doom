@@ -1715,7 +1715,10 @@ void P_UnArchiveThinkers(void)
                 break;
 
             default:
-                I_Error("Ошибка сохраненной игры: неизвестный tclass %i", tclass);
+                I_Error(english_language ?
+                        "Could not load savegame %s" :
+                        "Ошибка сохраненной игры: неизвестный tclass %i",
+                        tclass);
         }
 
     }
@@ -1957,8 +1960,10 @@ void P_UnArchiveSpecials(void)
                 break;
 
             default:
-                I_Error ("P_UnarchiveSpecials: неизвестный tclass %i "
-                         "в сохраненной игре",tclass);
+                I_Error (english_language ?
+                         "P_UnarchiveSpecials: unknown tclass %i in savegame" :
+                         "P_UnarchiveSpecials: неизвестный tclass %i в сохраненной игре",
+                         tclass);
         }
 
     }

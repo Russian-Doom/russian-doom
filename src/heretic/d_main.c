@@ -792,6 +792,7 @@ void D_BindVariables(void)
     NET_BindVariables();
 #endif
 
+    M_BindIntVariable("english_language",       &english_language);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);
     M_BindIntVariable("music_volume",           &snd_MusicVolume);
@@ -1037,8 +1038,16 @@ void D_DoomMain(void)
 
     if (iwadfile == NULL)
     {
-        I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
-                "Попробуйте указать IWAD-файл командой '-iwad'.\n");
+        if (english_language)
+        {
+            I_Error("Game mode indeterminate. No IWAD was found. Try specifying\n"
+                    "one with the '-iwad' command line parameter.");
+        }
+        else
+        {
+            I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
+                    "Попробуйте указать IWAD-файл командой '-iwad'.\n");
+        }
     }
 
     D_AddFile(iwadfile);
@@ -1123,25 +1132,51 @@ void D_DoomMain(void)
     if (W_CheckNumForName(DEH_String("E2M1")) == -1)
     {
         gamemode = shareware;
-        gamedescription = "Heretic (Демоверсия)";
-        W_MergeFile("russian/russian-heretic-common.wad");
-        W_MergeFile("russian/russian-heretic-demo.wad");
+        W_MergeFile("base/heretic-common.wad");
+
+        if (english_language)
+        {
+            gamedescription = "Heretic (shareware)";
+        }
+        else
+        {
+            gamedescription = "Heretic (Демоверсия)";
+            W_MergeFile("base/heretic-common-russian.wad");
+            W_MergeFile("base/heretic-shareware-russian.wad");
+        }
     }
     else if (W_CheckNumForName("EXTENDED") != -1)
     {
         // Presence of the EXTENDED lump indicates the retail version
-
         gamemode = retail;
-        gamedescription = "Heretic: Тень Змеиных Всадников";
-        W_MergeFile("russian/russian-heretic-common.wad");
-        W_MergeFile("russian/russian-heretic-retail.wad");
+        W_MergeFile("base/heretic-common.wad");
+        
+        if (english_language)
+        {
+            gamedescription = "Heretic: Shadow of the Serpent Riders";
+        }
+        else
+        {
+            gamedescription = "Heretic: Тень Змеиных Всадников";
+            W_MergeFile("base/heretic-common-russian.wad");
+            W_MergeFile("base/heretic-retail-russian.wad");
+        }
     }
     else
     {
         gamemode = registered;
         gamedescription = "Heretic";
-        W_MergeFile("russian/russian-heretic-common.wad");
-        W_MergeFile("russian/russian-heretic-registered.wad");
+        W_MergeFile("base/heretic-common.wad");
+
+        if (english_language)
+        {
+            // [JN] We are fine.
+        }
+        else
+        {
+            W_MergeFile("base/heretic-common-russian.wad");
+            W_MergeFile("base/heretic-registered-russian.wad");            
+        }
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c

@@ -103,7 +103,8 @@ static signed int totalFrags[MAXPLAYERS];
 static fixed_t dSlideX[MAXPLAYERS];
 static fixed_t dSlideY[MAXPLAYERS];
 
-static char *KillersText[] = { "E", ",", "B", "Q", "W", "S", "" }; // "У", "Б", "И", "Й", "Ц", "Ы", ""
+static char *KillersText[] = { "K", "I", "L", "L", "E", "R", "S" };
+static char *KillersText_Rus[] = { "E", ",", "B", "Q", "W", "S", "" }; // "У", "Б", "И", "Й", "Ц", "Ы", ""
 
 extern char *LevelNames[];
 
@@ -573,6 +574,9 @@ void IN_Drawer(void)
             }
             break;
         default:
+            if (english_language)
+            I_Error("IN_lude:  Intermission state out of range.\n");
+            else
             I_Error("IN_lude: Ошибка последовательности в межмиссионном экране.\n");
             break;
     }
@@ -628,8 +632,13 @@ void IN_DrawOldLevel(void)
                             7) / 2;
     IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
 
-    x = 160 - MN_TextAWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;    // УРОВЕНЬ ЗАВЕРШЕН 
-    MN_DrTextA(DEH_String("EHJDTYM PFDTHITY"), x, 25);              // УРОВЕНЬ ЗАВЕРШЕН
+    x = 160 - MN_TextAWidth(DEH_String(english_language ?
+                                       "FINISHED" :
+                                       "EHJDTYM PFDTHITY")) / 2;    // УРОВЕНЬ ЗАВЕРШЕН
+    
+    MN_DrTextA(DEH_String(english_language ?
+                          "FINISHED" :
+                          "EHJDTYM PFDTHITY"), x, 25);              // УРОВЕНЬ ЗАВЕРШЕН
 
     if (prevmap == 9)
     {
@@ -676,8 +685,12 @@ void IN_DrawYAH(void)
     int i;
     int x;
 
-    x = 160 - MN_TextAWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;		// ЗАГРУЖАЕТСЯ УРОВЕНЬ
-    MN_DrTextA(DEH_String("PFUHE;FTNCZ EHJDTYM"), x, 10);				// ЗАГРУЖАЕТСЯ УРОВЕНЬ
+    x = 160 - MN_TextAWidth(DEH_String(english_language ?
+                                       "NOW ENTERING:" :
+                                       "PFUHE;FTNCZ EHJDTYM")) / 2; // ЗАГРУЖАЕТСЯ УРОВЕНЬ
+    MN_DrTextA(DEH_String(english_language ?
+                          "NOW ENTERING:" :
+                          "PFUHE;FTNCZ EHJDTYM"), x, 10);           // ЗАГРУЖАЕТСЯ УРОВЕНЬ
 
     x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] +
                             7) / 2;
@@ -717,16 +730,26 @@ void IN_DrawSingleStats(void)
 	
 	// int lastlevel = -1, lastepisode = -1;
 
-    IN_DrTextB(DEH_String("DHFUB"), 50, 65);    // ВРАГИ
-    IN_DrTextB(DEH_String("GHTLVTNS"), 50, 90); // ПРЕДМЕТЫ
-    IN_DrTextB(DEH_String("NFQYBRB"), 50, 115); // ТАЙНИКИ
+    IN_DrTextB(DEH_String(english_language ?
+                          "KILLS" :
+                          "DHFUB"), 50, 65);    // ВРАГИ
+    IN_DrTextB(DEH_String(english_language ?
+                          "ITEMS" :
+                          "GHTLVTNS"), 50, 90); // ПРЕДМЕТЫ
+    IN_DrTextB(DEH_String(english_language ?
+                          "SECRETS" :
+                          "NFQYBRB"), 50, 115); // ТАЙНИКИ
 
     x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] +
                             7) / 2;
     IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
 
-    x = 160 - MN_TextAWidth(DEH_String("EHJDTYM PFDTHITY")) / 2; // УРОВЕНЬ ЗАВЕРШЕН
-    MN_DrTextA(DEH_String("EHJDTYM PFDTHITY"), x, 25);           // УРОВЕНЬ ЗАВЕРШЕН
+    x = 160 - MN_TextAWidth(DEH_String(english_language ?
+                                       "FINISHED" :
+                                       "EHJDTYM PFDTHITY")) / 2;    // УРОВЕНЬ ЗАВЕРШЕН
+    MN_DrTextA(DEH_String(english_language ?
+                          "FINISHED" :
+                          "EHJDTYM PFDTHITY"), x, 25);              // УРОВЕНЬ ЗАВЕРШЕН
 
     if (intertime < 30)
     {
@@ -777,14 +800,20 @@ void IN_DrawSingleStats(void)
 
     if (gamemode != retail || gameepisode <= 3)
     {
-        IN_DrTextB(DEH_String("DHTVZ"), 85, 160);	// ВРЕМЯ
+        IN_DrTextB(DEH_String(english_language ? 
+                              "TIME" : 
+                              "DHTVZ"), 85, 160);   // ВРЕМЯ
         IN_DrawTime(155, 160, hours, minutes, seconds);
     }
     else
     {
 
-        x = 160 - MN_TextAWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;	// ЗАГРУЖАЕТСЯ УРОВЕНЬ
-        MN_DrTextA(DEH_String("PFUHE;FTNCZ EHJDTYM"), x, 160);			// ЗАГРУЖАЕТСЯ УРОВЕНЬ
+        x = 160 - MN_TextAWidth(DEH_String(english_language ?
+                                           "NOW ENTERING:" :
+                                           "PFUHE;FTNCZ EHJDTYM")) / 2; // ЗАГРУЖАЕТСЯ УРОВЕНЬ
+        MN_DrTextA(DEH_String(english_language ?
+                              "NOW ENTERING:" :
+                              "PFUHE;FTNCZ EHJDTYM"), x, 160);          // ЗАГРУЖАЕТСЯ УРОВЕНЬ
 
         x = 160 -
             MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] +
@@ -809,15 +838,29 @@ void IN_DrawCoopStats(void)
 
     static int sounds;
 
-    IN_DrTextB(DEH_String("DHFUB"), 81, 35);   // ВРАГИ (95, 35)
-    IN_DrTextB(DEH_String(",JYECS"), 150, 35);  // БОНУСЫ (155, 35)
-    IN_DrTextB(DEH_String("CTRHTNS"), 232, 35); // СЕКРЕТЫ (232, 35)
+    if (english_language)
+    {
+        IN_DrTextB(DEH_String("KILLS"), 95, 35);
+        IN_DrTextB(DEH_String("BONUS"), 155, 35);
+        IN_DrTextB(DEH_String("SECRET"), 232, 35);
+    }
+    else
+    {
+        IN_DrTextB(DEH_String("DHFUB"), 81, 35);    // ВРАГИ (95, 35)
+        IN_DrTextB(DEH_String(",JYECS"), 150, 35);  // БОНУСЫ (155, 35)
+        IN_DrTextB(DEH_String("CTRHTNS"), 232, 35); // СЕКРЕТЫ (232, 35)
+    }
+
     x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] +
                             7) / 2;
     IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
 
-    x = 160 - MN_TextAWidth(DEH_String("EHJDTYM PFDTHITY")) / 2; // УРОВЕНЬ ЗАВЕРШЕН
-    MN_DrTextA(DEH_String("EHJDTYM PFDTHITY"), x, 25);           // УРОВЕНЬ ЗАВЕРШЕН
+    x = 160 - MN_TextAWidth(DEH_String(english_language ?
+                                       "FINISHED" :
+                                       "EHJDTYM PFDTHITY")) / 2;    // УРОВЕНЬ ЗАВЕРШЕН
+    MN_DrTextA(DEH_String(english_language ?
+                          "FINISHED" :
+                          "EHJDTYM PFDTHITY"), x, 25);              // УРОВЕНЬ ЗАВЕРШЕН
 
     ypos = 50;
     for (i = 0; i < MAXPLAYERS; i++)
@@ -838,14 +881,28 @@ void IN_DrawCoopStats(void)
                 S_StartSound(NULL, sfx_dorcls);
                 sounds++;
             }
-			// [JN] Координаты скорректированы в 
-			// соответствии с длинной русских слов.
-            IN_DrawNumber(killPercent[i], 84, ypos + 10, 3);
-            V_DrawShadowedPatch(120, ypos + 10, FontBPercent);
-            IN_DrawNumber(bonusPercent[i], 160, ypos + 10, 3);
-            V_DrawShadowedPatch(196, ypos + 10, FontBPercent);
-            IN_DrawNumber(secretPercent[i], 247, ypos + 10, 3);
-            V_DrawShadowedPatch(283, ypos + 10, FontBPercent);
+
+            if (english_language)
+            {
+                IN_DrawNumber(killPercent[i], 85, ypos + 10, 3);
+                V_DrawShadowedPatch(121, ypos + 10, FontBPercent);
+                IN_DrawNumber(bonusPercent[i], 160, ypos + 10, 3);
+                V_DrawShadowedPatch(196, ypos + 10, FontBPercent);
+                IN_DrawNumber(secretPercent[i], 237, ypos + 10, 3);
+                V_DrawShadowedPatch(273, ypos + 10, FontBPercent);
+            }
+            else
+            {
+                // [JN] Координаты скорректированы в 
+                // соответствии с длинной русских слов.
+                IN_DrawNumber(killPercent[i], 84, ypos + 10, 3);
+                V_DrawShadowedPatch(120, ypos + 10, FontBPercent);
+                IN_DrawNumber(bonusPercent[i], 160, ypos + 10, 3);
+                V_DrawShadowedPatch(196, ypos + 10, FontBPercent);
+                IN_DrawNumber(secretPercent[i], 247, ypos + 10, 3);
+                V_DrawShadowedPatch(283, ypos + 10, FontBPercent);
+            }
+
             ypos += 37;
         }
     }
@@ -870,11 +927,13 @@ void IN_DrawDMStats(void)
     xpos = 90;
     ypos = 55;
 
-    IN_DrTextB(DEH_String("BNJU"), 265, 30);	// ИТОГ
-    MN_DrTextA(DEH_String(";THNDS"), 140, 8);	// ЖЕРТВЫ
+    IN_DrTextB(DEH_String(english_language ? "TOTAL" : "BNJU"), 265, 30);       // ИТОГ
+    MN_DrTextA(DEH_String(english_language ? "VICTIMS" : ";THNDS"), 140, 8);    // ЖЕРТВЫ
     for (i = 0; i < 7; i++)
     {
-        MN_DrTextA(DEH_String(KillersText[i]), 10, 80 + 9 * i);
+        MN_DrTextA(DEH_String(english_language ?
+                              KillersText[i] : KillersText_Rus[i]),
+                              10, 80 + 9 * i);
     }
     if (intertime < 20)
     {

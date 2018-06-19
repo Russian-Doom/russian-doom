@@ -164,6 +164,14 @@ static int quickload;
 int mouseSensitivity = 5;
 
 static MenuItem_t MainItems[] = {
+    {ITT_EFUNC, "NEW GAME", SCNetCheck, 1, MENU_EPISODE},
+    {ITT_SETMENU, "OPTIONS", NULL, 0, MENU_OPTIONS},
+    {ITT_SETMENU, "GAME FILES", NULL, 0, MENU_FILES},
+    {ITT_EFUNC, "INFO", SCInfo, 0, MENU_NONE},
+    {ITT_EFUNC, "QUIT GAME", SCQuitGame, 0, MENU_NONE}
+};
+
+static MenuItem_t MainItems_Rus[] = {
     {ITT_EFUNC, "YJDFZ BUHF", SCNetCheck, 1, MENU_EPISODE},	// НОВАЯ ИГРА
     {ITT_SETMENU, "YFCNHJQRB", NULL, 0, MENU_OPTIONS},		// НАСТРОЙКИ
     {ITT_SETMENU, "AFQKS BUHS", NULL, 0, MENU_FILES},		// ФАЙЛЫ ИГРЫ
@@ -179,7 +187,23 @@ static Menu_t MainMenu = {
     MENU_NONE
 };
 
+static Menu_t MainMenu_Rus = {
+    110, 56,
+    DrawMainMenu,
+    5, MainItems_Rus,
+    0,
+    MENU_NONE
+};
+
 static MenuItem_t EpisodeItems[] = {
+    {ITT_EFUNC, "CITY OF THE DAMNED", SCEpisode, 1, MENU_NONE},
+    {ITT_EFUNC, "HELL'S MAW", SCEpisode, 2, MENU_NONE},
+    {ITT_EFUNC, "THE DOME OF D'SPARIL", SCEpisode, 3, MENU_NONE},
+    {ITT_EFUNC, "THE OSSUARY", SCEpisode, 4, MENU_NONE},
+    {ITT_EFUNC, "THE STAGNANT DEMESNE", SCEpisode, 5, MENU_NONE}
+};
+
+static MenuItem_t EpisodeItems_Rus[] = {
     {ITT_EFUNC, "UJHJL GHJRKZNS[", SCEpisode, 1, MENU_NONE},		// ГОРОД ПРОКЛЯТЫХ
     {ITT_EFUNC, "FLCRFZ ENHJ,F", SCEpisode, 2, MENU_NONE},			// АДСКАЯ УТРОБА
     {ITT_EFUNC, "REGJK L\"CGFHBKF", SCEpisode, 3, MENU_NONE},		// КУПОЛ Д'СПАРИЛА
@@ -195,7 +219,20 @@ static Menu_t EpisodeMenu = {
     MENU_MAIN
 };
 
+static Menu_t EpisodeMenu_Rus = {
+    80, 50,
+    DrawEpisodeMenu,
+    3, EpisodeItems_Rus,
+    0,
+    MENU_MAIN
+};
+
 static MenuItem_t FilesItems[] = {
+    {ITT_EFUNC, "LOAD GAME", SCNetCheck, 2, MENU_LOAD},
+    {ITT_SETMENU, "SAVE GAME", NULL, 0, MENU_SAVE}
+};
+
+static MenuItem_t FilesItems_Rus[] = {
     {ITT_EFUNC, "PFUHEPBNM BUHE", SCNetCheck, 2, MENU_LOAD},	// ЗАГРУЗИТЬ ИГРУ
     {ITT_SETMENU, "CJ[HFYBNM BUHE", NULL, 0, MENU_SAVE}			// СОХРАНИТЬ ИГРУ
 };
@@ -204,6 +241,14 @@ static Menu_t FilesMenu = {
     110, 60,
     DrawFilesMenu,
     2, FilesItems,
+    0,
+    MENU_MAIN
+};
+
+static Menu_t FilesMenu_Rus = {
+    110, 60,
+    DrawFilesMenu,
+    2, FilesItems_Rus,
     0,
     MENU_MAIN
 };
@@ -218,6 +263,14 @@ static MenuItem_t LoadItems[] = {
 };
 
 static Menu_t LoadMenu = {
+    70, 30,
+    DrawLoadMenu,
+    6, LoadItems,
+    0,
+    MENU_FILES
+};
+
+static Menu_t LoadMenu_Rus = {
     70, 30,
     DrawLoadMenu,
     6, LoadItems,
@@ -242,7 +295,24 @@ static Menu_t SaveMenu = {
     MENU_FILES
 };
 
+static Menu_t SaveMenu_Rus = {
+    70, 30,
+    DrawSaveMenu,
+    6, SaveItems,
+    0,
+    MENU_FILES
+};
+
 static MenuItem_t SkillItems[] = {
+    {ITT_EFUNC, "THOU NEEDETH A WET-NURSE", SCSkill, sk_baby, MENU_NONE},
+    {ITT_EFUNC, "YELLOWBELLIES-R-US", SCSkill, sk_easy, MENU_NONE},
+    {ITT_EFUNC, "BRINGEST THEM ONETH", SCSkill, sk_medium, MENU_NONE},
+    {ITT_EFUNC, "THOU ART A SMITE-MEISTER", SCSkill, sk_hard, MENU_NONE},
+    {ITT_EFUNC, "BLACK PLAGUE POSSESSES THEE", SCSkill, sk_nightmare, MENU_NONE},
+    {ITT_EFUNC, "QUICKETH ART THEE, FOUL WRAITH", SCSkill, sk_ultranm, MENU_NONE} // [JN] Thanks to Jon Dowland this :)
+};
+
+static MenuItem_t SkillItems_Rus[] = {
     {ITT_EFUNC, "YZYTXRF YFLJ,YF VYT", SCSkill, sk_baby, MENU_NONE},    // НЯНЕЧКА НАДОБНА МНЕ
     {ITT_EFUNC, "YT CNJKM VE;TCNDTYTY Z", SCSkill, sk_easy, MENU_NONE}, // НЕ СТОЛЬ МУЖЕСТВЕНЕН Я
     {ITT_EFUNC, "GJLFQNT VYT B[", SCSkill, sk_medium, MENU_NONE},       // ПОДАЙТЕ МНЕ ИХ
@@ -259,7 +329,23 @@ static Menu_t SkillMenu = {
     MENU_EPISODE
 };
 
+static Menu_t SkillMenu_Rus = {
+    38, 30,
+    DrawSkillMenu,
+    6, SkillItems_Rus,
+    2,
+    MENU_EPISODE
+};
+
 static MenuItem_t OptionsItems[] = {
+    {ITT_EFUNC, "END GAME", SCEndGame, 0, MENU_NONE},
+    {ITT_EFUNC, "MESSAGES : ", SCMessages, 0, MENU_NONE},
+    {ITT_LRFUNC, "MOUSE SENSITIVITY", SCMouseSensi, 0, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
+    {ITT_SETMENU, "MORE...", NULL, 0, MENU_OPTIONS2}
+};
+
+static MenuItem_t OptionsItems_Rus[] = {
     {ITT_EFUNC, "PFRJYXBNM BUHE", SCEndGame, 0, MENU_NONE},		// ЗАКОНЧИТЬ ИГРУ
     {ITT_EFUNC, "CJJ,OTYBZ: ", SCMessages, 0, MENU_NONE},		// СООБЩЕНИЯ:
     {ITT_LRFUNC, "CRJHJCNM VSIB", SCMouseSensi, 0, MENU_NONE},	// СКОРОСТЬ МЫШИ
@@ -275,7 +361,24 @@ static Menu_t OptionsMenu = {
     MENU_MAIN
 };
 
+static Menu_t OptionsMenu_Rus = {
+    88, 30,
+    DrawOptionsMenu,
+    5, OptionsItems_Rus,
+    0,
+    MENU_MAIN
+};
+
 static MenuItem_t Options2Items[] = {
+    {ITT_LRFUNC, "SCREEN SIZE", SCScreenSize, 0, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
+    {ITT_LRFUNC, "SFX VOLUME", SCSfxVolume, 0, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
+    {ITT_LRFUNC, "MUSIC VOLUME", SCMusicVolume, 0, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE}
+};
+
+static MenuItem_t Options2Items_Rus[] = {
     {ITT_LRFUNC, "HFPVTH 'RHFYF", SCScreenSize, 0, MENU_NONE},		// РАЗМЕР ЭКРАНА
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
     {ITT_LRFUNC, "UHJVRJCNM PDERF", SCSfxVolume, 0, MENU_NONE},		// ГРОМКОСТЬ ЗВУКА
@@ -292,6 +395,14 @@ static Menu_t Options2Menu = {
     MENU_OPTIONS
 };
 
+static Menu_t Options2Menu_Rus = {
+    90, 20,
+    DrawOptions2Menu,
+    6, Options2Items_Rus,
+    0,
+    MENU_OPTIONS
+};
+
 static Menu_t *Menus[] = {
     &MainMenu,
     &EpisodeMenu,
@@ -301,6 +412,17 @@ static Menu_t *Menus[] = {
     &FilesMenu,
     &LoadMenu,
     &SaveMenu
+};
+
+static Menu_t *Menus_Rus[] = {
+    &MainMenu_Rus,
+    &EpisodeMenu_Rus,
+    &SkillMenu_Rus,
+    &OptionsMenu_Rus,
+    &Options2Menu_Rus,
+    &FilesMenu_Rus,
+    &LoadMenu_Rus,
+    &SaveMenu_Rus
 };
 
 static char *GammaText[] = {
@@ -331,6 +453,34 @@ static char *GammaText[] = {
     TXT_GAMMA_LEVEL_6_0
 };
 
+static char *GammaText_Rus[] = {
+    TXT_GAMMA_LEVEL_OFF_RUS,
+    TXT_GAMMA_LEVEL_0_25_RUS,
+    TXT_GAMMA_LEVEL_0_50_RUS,
+    TXT_GAMMA_LEVEL_0_75_RUS,
+    TXT_GAMMA_LEVEL_1_0_RUS,
+    TXT_GAMMA_LEVEL_1_25_RUS,
+    TXT_GAMMA_LEVEL_1_50_RUS,
+    TXT_GAMMA_LEVEL_1_75_RUS,
+    TXT_GAMMA_LEVEL_2_0_RUS,
+    TXT_GAMMA_LEVEL_2_25_RUS,
+    TXT_GAMMA_LEVEL_2_50_RUS,
+    TXT_GAMMA_LEVEL_2_75_RUS,
+    TXT_GAMMA_LEVEL_3_0_RUS,
+    TXT_GAMMA_LEVEL_3_25_RUS,
+    TXT_GAMMA_LEVEL_3_50_RUS,
+    TXT_GAMMA_LEVEL_3_75_RUS,
+    TXT_GAMMA_LEVEL_4_0_RUS,
+    TXT_GAMMA_LEVEL_4_25_RUS,
+    TXT_GAMMA_LEVEL_4_50_RUS,
+    TXT_GAMMA_LEVEL_4_75_RUS,
+    TXT_GAMMA_LEVEL_5_0_RUS,
+    TXT_GAMMA_LEVEL_5_25_RUS,
+    TXT_GAMMA_LEVEL_5_50_RUS,
+    TXT_GAMMA_LEVEL_5_75_RUS,
+    TXT_GAMMA_LEVEL_6_0_RUS
+};
+
 //---------------------------------------------------------------------------
 //
 // PROC MN_Init
@@ -346,8 +496,16 @@ void MN_Init(void)
 
     if (gamemode == retail)
     {                           // Add episodes 4 and 5 to the menu
-        EpisodeMenu.itemCount = 5;
-        EpisodeMenu.y -= ITEM_HEIGHT;
+        if (english_language)
+        {
+            EpisodeMenu.itemCount = 5;
+            EpisodeMenu.y -= ITEM_HEIGHT;
+        }
+        else
+        {
+            EpisodeMenu_Rus.itemCount = 5;
+            EpisodeMenu_Rus.y -= ITEM_HEIGHT;
+        }
     }
 }
 
@@ -523,10 +681,17 @@ void MN_Ticker(void)
 //---------------------------------------------------------------------------
 
 char *QuitEndMsg[] = {
-    "DS LTQCNDBNTKMYJ ;TKFTNT DSQNB?",			// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ВЫЙТИ?
-    "DS LTQCNDBNTKMYJ ;TKFTNT PFRJYXBNM BUHE?",	// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ЗАКОНЧИТЬ ИГРУ?
-    "DSGJKYBNM ,SCNHJT CJ[HFYTYBT BUHS:",		// ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
-    "DSGJKYBNM ,SCNHE. PFUHEPRE BUHS:"			// ВЫПОЛНИТЬ БЫСТРУЮ ЗАГРУЗКУ ИГРЫ:
+    "ARE YOU SURE YOU WANT TO QUIT?",
+    "ARE YOU SURE YOU WANT TO END THE GAME?",
+    "DO YOU WANT TO QUICKSAVE THE GAME NAMED",
+    "DO YOU WANT TO QUICKLOAD THE GAME NAMED"
+};
+
+char *QuitEndMsg_Rus[] = {
+    "DS LTQCNDBNTKMYJ ;TKFTNT DSQNB?",          // ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ВЫЙТИ?
+    "DS LTQCNDBNTKMYJ ;TKFTNT PFRJYXBNM BUHE?", // ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ЗАКОНЧИТЬ ИГРУ?
+    "DSGJKYBNM ,SCNHJT CJ[HFYTYBT BUHS:",       // ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
+    "DSGJKYBNM ,SCNHE. PFUHEPRE BUHS:"          // ВЫПОЛНИТЬ БЫСТРУЮ ЗАГРУЗКУ ИГРЫ:
 };
 
 void MN_Drawer(void)
@@ -542,7 +707,9 @@ void MN_Drawer(void)
     {
         if (askforquit)
         {
-            message = DEH_String(QuitEndMsg[typeofask - 1]);
+            message = DEH_String(english_language ?
+                                 QuitEndMsg[typeofask - 1] :
+                                 QuitEndMsg_Rus[typeofask - 1]);
 
             MN_DrTextA(message, 160 - MN_TextAWidth(message) / 2, 80);
             if (typeofask == 3)
@@ -660,7 +827,9 @@ static void DrawLoadMenu(void)
 {
     char *title;
 
-    title = DEH_String("PFUHEPBNM BUHE");	// ЗАГРУЗИТЬ ИГРУ
+    title = DEH_String(english_language ?
+                       "LOAD GAME" :
+                       "PFUHEPBNM BUHE");   // ЗАГРУЗИТЬ ИГРУ
 
     MN_DrTextB(title, 160 - MN_TextBWidth(title) / 2, 10);
     if (!slottextloaded)
@@ -680,7 +849,9 @@ static void DrawSaveMenu(void)
 {
     char *title;
 
-    title = DEH_String("CJ[HFYBNM BUHE");	// СОХРАНИТЬ ИГРУ
+    title = DEH_String(english_language ?
+                       "SAVE GAME" :    
+                       "CJ[HFYBNM BUHE");   // СОХРАНИТЬ ИГРУ
 
     MN_DrTextB(title, 160 - MN_TextBWidth(title) / 2, 10);
     if (!slottextloaded)
@@ -757,11 +928,17 @@ static void DrawOptionsMenu(void)
 {
     if (messageson)
     {
-        MN_DrTextB(DEH_String("DRK>"), 213, 50);	// ВКЛ.
+        if (english_language)
+        MN_DrTextB(DEH_String("ON"), 196, 50);
+        else
+        MN_DrTextB(DEH_String("DRK>"), 213, 50);    // ВКЛ.
     }
     else
     {
-        MN_DrTextB(DEH_String("DSRK>"), 213, 50);	// ВЫКЛ.
+        if (english_language)
+        MN_DrTextB(DEH_String("OFF"), 196, 50);
+        else
+        MN_DrTextB(DEH_String("DSRK>"), 213, 50);   // ВЫКЛ.
     }
     DrawSlider(&OptionsMenu, 3, 9, mouseSensitivity);
 }
@@ -794,12 +971,16 @@ static boolean SCNetCheck(int option)
     switch (option)
     {
         case 1:
-            P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
+            P_SetMessage(&players[consoleplayer], english_language ?
+                         "YOU CAN'T START A NEW GAME IN NETPLAY!" :
+                         "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
+                         true);
             break;
         case 2:
-            P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
+            P_SetMessage(&players[consoleplayer], english_language ?
+                         "YOU CAN'T LOAD A GAME IN NETPLAY!" :
+                         "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
+                         true);
             break;
         default:
             break;
@@ -859,11 +1040,17 @@ static boolean SCMessages(int option)
     messageson ^= 1;
     if (messageson)
     {
-        P_SetMessage(&players[consoleplayer], DEH_String("CJJ,OTYBZ DRK.XTYS"), true);	// СООБЩЕНИЯ ВКЛЮЧЕНЫ
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                      "MESSAGES ON" :
+                      "CJJ,OTYBZ DRK.XTYS"), // СООБЩЕНИЯ ВКЛЮЧЕНЫ
+                      true);
     }
     else
     {
-        P_SetMessage(&players[consoleplayer], DEH_String("CJJ,OTYBZ DSRK.XTYS"), true);	// СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
+        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                      "MESSAGES OFF" :
+                      "CJJ,OTYBZ DSRK.XTYS"), // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
+                      true);
     }
     S_StartSound(NULL, sfx_chat);
     return true;
@@ -960,8 +1147,10 @@ static boolean SCEpisode(int option)
 {
     if (gamemode == shareware && option > 1)
     {
-        P_SetMessage(&players[consoleplayer],
-                     "'GBPJL YTLJCNEGTY D LTVJDTHCBB", true);	// ЭПИЗОД НЕДОСТУПЕН В ДЕМОВЕРСИИ
+        P_SetMessage(&players[consoleplayer], english_language ?
+                     "ONLY AVAILABLE IN THE REGISTERED VERSION" :
+                     "'GBPJL YTLJCNEGTY D LTVJDTHCBB", // ЭПИЗОД НЕДОСТУПЕН В ДЕМОВЕРСИИ
+                     true);
     }
     else
     {
@@ -1221,16 +1410,20 @@ boolean MN_Responder(event_t * event)
                     break;
 
                 case 3:
-                    P_SetMessage(&players[consoleplayer],
-                                 ",SCNHJT CJ[HFYTYBT>>>", false);   // БЫСТРОЕ СОХРАНЕНИЕ...
+                    P_SetMessage(&players[consoleplayer], english_language ?
+                                  "QUICKSAVING...." :
+                                  ",SCNHJT CJ[HFYTYBT>>>", // БЫСТРОЕ СОХРАНЕНИЕ...
+                                  false);
                     FileMenuKeySteal = true;
                     SCSaveGame(quicksave - 1);
                     BorderNeedRefresh = true;
                     break;
 
                 case 4:
-                    P_SetMessage(&players[consoleplayer],
-                                 ",SCNHFZ PFUHEPRF>>>", false);    // БЫСТРАЯ ЗАГРУЗКА...
+                    P_SetMessage(&players[consoleplayer], english_language ?
+                                  "QUICKLOADING...." :
+                                  ",SCNHFZ PFUHEPRF>>>", // БЫСТРАЯ ЗАГРУЗКА...
+                                  false);
                     SCLoadGame(quickload - 1);
                     BorderNeedRefresh = true;
                     break;
@@ -1365,8 +1558,10 @@ boolean MN_Responder(event_t * event)
                     S_StartSound(NULL, sfx_dorcls);
                     slottextloaded = false; //reload the slot text, when needed
                     quicksave = -1;
-                    P_SetMessage(&players[consoleplayer],
-                                 "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
+                    P_SetMessage(&players[consoleplayer], english_language ?
+                                  "CHOOSE A QUICKSAVE SLOT" : 
+                                  "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ", // ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
+                                  true);
                 }
                 else
                 {
@@ -1411,8 +1606,10 @@ boolean MN_Responder(event_t * event)
                 S_StartSound(NULL, sfx_dorcls);
                 slottextloaded = false;     //reload the slot text, when needed
                 quickload = -1;
-                P_SetMessage(&players[consoleplayer],
-                             "DS,THBNT CKJN ,SCNHJQ PFUHEPRB", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
+                P_SetMessage(&players[consoleplayer], english_language ?
+                             "CHOOSE A QUICKLOAD SLOT" :
+                             "DS,THBNT CKJN ,SCNHJQ PFUHEPRB", // ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
+                             true);
             }
             else
             {
@@ -1447,7 +1644,10 @@ boolean MN_Responder(event_t * event)
                                                   "PLAYPAL",
                                                   PU_CACHE));
 
-            P_SetMessage(&players[consoleplayer], GammaText[usegamma], false);
+            P_SetMessage(&players[consoleplayer], english_language ?
+                                                  GammaText[usegamma] :
+                                                  GammaText_Rus[usegamma],
+                                                  false);
             return true;
         }
 
@@ -1689,7 +1889,7 @@ void MN_ActivateMenu(void)
     menuactive = true;
     FileMenuKeySteal = false;
     MenuTime = 0;
-    CurrentMenu = &MainMenu;
+    CurrentMenu = english_language ? &MainMenu : &MainMenu_Rus;
     CurrentItPos = CurrentMenu->oldItPos;
     if (!netgame && !demoplayback)
     {
@@ -1744,6 +1944,7 @@ void MN_DrawInfo(void)
                                  "PLAYPAL",
                                  PU_CACHE));
 
+    // [JN] TODO: Shareware using paletted screen instead of RAW.
     V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("TITLE") + InfoType,
                                    PU_CACHE));
 //      V_DrawPatch(0, 0, W_CacheLumpNum(W_GetNumForName("TITLE")+InfoType,
@@ -1760,7 +1961,7 @@ void MN_DrawInfo(void)
 static void SetMenu(MenuType_t menu)
 {
     CurrentMenu->oldItPos = CurrentItPos;
-    CurrentMenu = Menus[menu];
+    CurrentMenu = english_language ? Menus[menu] : Menus_Rus[menu];
     CurrentItPos = CurrentMenu->oldItPos;
 }
 
@@ -1795,7 +1996,7 @@ static void DrawSlider(Menu_t * menu, int item, int width, int slot)
     }
     // [JN] Most right position that is "out of bounds" (red gem).
     // Only the mouse sensitivity menu requires this trick.
-    else if (CurrentMenu == &OptionsMenu && slot > 8)
+    else if ((CurrentMenu == &OptionsMenu || CurrentMenu == &OptionsMenu_Rus) && slot > 8)
     {
         slot = 8;
         V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_SLDKR"), PU_CACHE));

@@ -66,23 +66,23 @@ void F_StartFinale(void)
     {
         case 1:
             finaleflat = DEH_String("FLOOR25");
-            finaletext = DEH_String(E1TEXT);
+            finaletext = DEH_String(english_language ? E1TEXT : E1TEXT_RUS);
             break;
         case 2:
             finaleflat = DEH_String("FLATHUH1");
-            finaletext = DEH_String(E2TEXT);
+            finaletext = DEH_String(english_language ? E2TEXT : E2TEXT_RUS);
             break;
         case 3:
             finaleflat = DEH_String("FLTWAWA2");
-            finaletext = DEH_String(E3TEXT);
+            finaletext = DEH_String(english_language ? E3TEXT : E3TEXT_RUS);
             break;
         case 4:
             finaleflat = DEH_String("FLOOR28");
-            finaletext = DEH_String(E4TEXT);
+            finaletext = DEH_String(english_language ? E4TEXT : E4TEXT_RUS);
             break;
         case 5:
             finaleflat = DEH_String("FLOOR08");
-            finaletext = DEH_String(E5TEXT);
+            finaletext = DEH_String(english_language ? E5TEXT : E5TEXT_RUS);
             break;
     }
 

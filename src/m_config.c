@@ -139,6 +139,12 @@ static default_collection_t doom_defaults =
 static default_t extra_defaults_list[] =
 {
     //!
+    // [JN] Support for switching to the English language.
+    //
+
+    CONFIG_VARIABLE_INT(english_language),
+
+    //!
     // Mouse sensitivity.  This value is used to multiply input mouse
     // movement to control the effect of moving the mouse.
     //

@@ -192,7 +192,10 @@ void R_MapPlane(int y, int x1, int x2)
 
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= viewwidth || (unsigned) y > viewheight)
-        I_Error("R_MapPlane: %i, %i в %i", x1, x2, y);
+        I_Error(english_language ?
+                "R_MapPlane: %i, %i at %i" :
+                "R_MapPlane: %i, %i в %i",
+                x1, x2, y);
 #endif
 
     // [crispy] visplanes with the same flats now match up far better than before
@@ -478,12 +481,19 @@ void R_DrawPlanes(void)
 
 #ifdef RANGECHECK
     if (ds_p - drawsegs > numdrawsegs)
-        I_Error("R_DrawPlanes: переполнение drawsegs (%i)", ds_p - drawsegs);
+        I_Error(english_language ?
+                "R_DrawPlanes: drawsegs overflow (%i)" :
+                "R_DrawPlanes: переполнение drawsegs (%i)",
+                ds_p - drawsegs);
     if (lastvisplane - visplanes > numvisplanes)
-        I_Error("R_DrawPlanes: переполнение visplane (%i)",
+        I_Error(english_language ?
+                "R_DrawPlanes: drawsegs overflow (%i)" :
+                "R_DrawPlanes: переполнение visplane (%i)",
                 lastvisplane - visplanes);
     if (lastopening - openings > MAXOPENINGS)
-        I_Error("R_DrawPlanes: переполнение opening (%i)",
+        I_Error(english_language ?
+                "R_DrawPlanes: drawsegs overflow (%i)" :
+                "R_DrawPlanes: переполнение opening (%i)",
                 lastopening - openings);
 #endif
 
@@ -523,8 +533,10 @@ void R_DrawPlanes(void)
 #ifdef RANGECHECK
                     if ((unsigned) dc_x >= SCREENWIDTH || dc_yl < 0
                         || dc_yh >= SCREENHEIGHT)
-                        I_Error("R_DrawColumn: %i к %i в %i", dc_yl, dc_yh,
-                                dc_x);
+                        I_Error(english_language ?
+                                "R_DrawColumn: %i to %i at %i" :
+                                "R_DrawColumn: %i к %i в %i",
+                                dc_yl, dc_yh, dc_x);
 #endif
 
                     dest = ylookup[dc_yl] + columnofs[dc_x];

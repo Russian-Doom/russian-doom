@@ -135,6 +135,8 @@ int testcontrols_mousespeed;
 
 // [JN] Дополнительные параметры игры
 
+int english_language = 0;
+
 // Графика
 int brightmaps = 1;
 int fake_contrast = 0;
@@ -407,7 +409,19 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         }
 
         // [JN] Added audible feedback
-        P_SetMessage(&players[consoleplayer], (joybspeed >= MAX_JOY_BUTTONS) ? TXT_ALWAYSRUN_ON : TXT_ALWAYSRUN_OFF, false);
+        if (english_language)
+        {
+            P_SetMessage(&players[consoleplayer], 
+                        (joybspeed >= MAX_JOY_BUTTONS) ?
+                         TXT_ALWAYSRUN_ON : TXT_ALWAYSRUN_OFF, false);
+        }
+        else
+        {
+            P_SetMessage(&players[consoleplayer],
+                        (joybspeed >= MAX_JOY_BUTTONS) ?
+                        TXT_ALWAYSRUN_ON_RUS : TXT_ALWAYSRUN_OFF_RUS, false);
+        }
+    
         S_StartSound(NULL, sfx_chat);
 
         gamekeydown[key_toggleautorun] = false;
@@ -429,7 +443,17 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             crosshair_draw = false;
         }
 
-        P_SetMessage(&players[consoleplayer], crosshair_draw ? TXT_CROSSHAIR_ON : TXT_CROSSHAIR_OFF, false);
+        if (english_language)
+        {
+            P_SetMessage(&players[consoleplayer], crosshair_draw ? 
+                         TXT_CROSSHAIR_ON : TXT_CROSSHAIR_OFF, false);
+        }
+        else
+        {
+            P_SetMessage(&players[consoleplayer], crosshair_draw ? 
+                         TXT_CROSSHAIR_ON_RUS : TXT_CROSSHAIR_OFF_RUS, false);
+        }
+
         S_StartSound(NULL, sfx_chat);
 
         gamekeydown[key_togglecrosshair] = false;
@@ -754,7 +778,17 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             look = TOCENTER;
         }
 
-        P_SetMessage(&players[consoleplayer], (mlook == true ? TXT_MLOOK_ON : TXT_MLOOK_OFF), false);
+        if (english_language)
+        {
+            P_SetMessage(&players[consoleplayer], 
+                        (mlook == true ? TXT_MLOOK_ON : TXT_MLOOK_OFF), false);
+        }
+        else
+        {
+            P_SetMessage(&players[consoleplayer], 
+                        (mlook == true ? TXT_MLOOK_ON_RUS : TXT_MLOOK_OFF_RUS), false);
+        }
+
         S_StartSound(NULL, sfx_chat);
 
         gamekeydown[key_togglemlook] = false;
@@ -1196,7 +1230,9 @@ void G_Ticker(void)
                 if (gametic > BACKUPTICS
                     && consistancy[i][buf] != cmd->consistancy)
                 {
-                    I_Error("Нарушение последовательности (%i должно быть %i)",
+                    I_Error(english_language ?
+                        "Consistency failure (%i should be %i)" :
+                        "Нарушение последовательности (%i должно быть %i)",
                             cmd->consistancy, consistancy[i][buf]);
                 }
                 if (players[i].mo)
@@ -1492,8 +1528,17 @@ void G_DeathMatchSpawnPlayer(int playernum)
 
     selections = deathmatch_p - deathmatchstarts;
     if (selections < 4)
-        I_Error ("Обнаружено %i стартовых точек для режима Дефтатч.\n"
-                 "Минимальное необходимое количество: 4", selections); 
+    {
+        if (english_language)
+        {
+            I_Error("Only %i deathmatch spots, 4 required", selections);
+        }
+        else
+        {
+            I_Error ("Обнаружено %i стартовых точек для режима Дефтатч.\n"
+                    "Минимальное необходимое количество: 4", selections);
+        }
+    }
 
     for (j = 0; j < 20; j++)
     {
@@ -1728,7 +1773,9 @@ void G_DoLoadGame(void)
 
     if (SV_ReadByte() != SAVE_GAME_TERMINATOR)
     {                           // Missing savegame termination marker
-        I_Error("Некорректный файл сохранения");
+        I_Error(english_language ?
+                "Bad savegame" :
+                "Некорректный файл сохранения");
     }
 }
 
@@ -2270,8 +2317,17 @@ boolean G_CheckDemoStatus(void)
         endtime = I_GetTime();
         realtics = endtime - starttime;
         fps = ((float) gametic * TICRATE) / realtics;
-        I_Error ("Насчитано %i gametics в %i realtics.\n"
-                 "Среднее значение FPS: %f.", gametic, realtics, fps);
+        
+        if (english_language)
+        {
+            I_Error("timed %i gametics in %i realtics (%f fps)",
+                    gametic, realtics, fps);
+        }
+        else
+        {
+            I_Error ("Насчитано %i gametics в %i realtics.\n"
+                    "Среднее значение FPS: %f.", gametic, realtics, fps);
+        }
     }
 
     if (demoplayback)
@@ -2291,7 +2347,9 @@ boolean G_CheckDemoStatus(void)
         M_WriteFile(demoname, demobuffer, demo_p - demobuffer);
         Z_Free(demobuffer);
         demorecording = false;
-        I_Error("Демозапись %s завершена",demoname); 
+        I_Error(english_language ?
+                "Demo %s recorded" :
+                "Демозапись %s завершена",demoname); 
     }
 
     return false;
@@ -2357,7 +2415,9 @@ void G_DoSaveGame(void)
 
     gameaction = ga_nothing;
     savedescription[0] = 0;
-    P_SetMessage(&players[consoleplayer], DEH_String(TXT_GAMESAVED), true);
+    P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
+                                                     TXT_GAMESAVED :
+                                                     TXT_GAMESAVED_RUS), true);
 
     free(filename);
 }

@@ -288,7 +288,9 @@ void P_InitPicAnims(void)
         lastanim->numpics = lastanim->picnum - lastanim->basepic + 1;
         if (lastanim->numpics < 2)
         {
-            I_Error("P_InitPicAnims: некорректный цикл от %s к %s",
+            I_Error(english_language ?
+                    "P_InitPicAnims: bad cycle from %s to %s" :
+                    "P_InitPicAnims: некорректный цикл от %s к %s",
                     startname, endname);
         }
         lastanim->speed = animdefs[i].speed;
@@ -431,7 +433,9 @@ fixed_t P_FindNextHighestFloor(sector_t * sec, int currentheight)
 
     if (h > 20)
     {
-        fprintf(stderr, "P_FindNextHighestFloor: exceeded Vanilla limit\n");
+        fprintf(stderr, english_language ?
+        "P_FindNextHighestFloor: exceeded Vanilla limit\n" :
+        "P_FindNextHighestFloor: достигнут лимит оригинальной игры\n");
     }
 
     return min;
@@ -888,8 +892,10 @@ void P_PlayerInSpecialSector(player_t * player)
 
             if (secret_notification && !vanillaparm)
             {
-                // [JN] Notification of discovered secrets
-                P_SetMessage(&players[consoleplayer], TXT_SECRET_FOUND, false);
+                // [JN] Notification of revealed secrets
+                P_SetMessage(&players[consoleplayer], english_language ?
+                                                      TXT_SECRET_FOUND :
+                                                      TXT_SECRET_FOUND_RUS, false);
                 if (player == &players[consoleplayer])
                 S_StartSound(NULL, sfx_telept);
             }
@@ -1272,7 +1278,9 @@ void P_AddAmbientSfx(int sequence)
 {
     if (AmbSfxCount == MAX_AMBIENT_SFX)
     {
-        I_Error("Превышено количество звуков окружения");
+        I_Error(english_language ?
+                "Too many ambient sound sequences" :
+                "Превышено количество звуков окружения");
     }
     LevelAmbientSfx[AmbSfxCount++] = AmbientSfx[sequence];
 }
@@ -1341,7 +1349,9 @@ void P_AmbientSound(void)
                 done = true;
                 break;
             default:
-                I_Error("P_AmbientSound: неизвестный afxcmd %d", cmd);
+                I_Error(english_language ?
+                        "P_AmbientSound: Unknown afxcmd %d" :
+                        "P_AmbientSound: неизвестный afxcmd %d", cmd);
                 break;
         }
     }

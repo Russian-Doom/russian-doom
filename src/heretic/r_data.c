@@ -266,7 +266,10 @@ void R_GenerateLookup(int texnum)
             collump[x] = -1;    // use the cached block
             colofs[x] = texturecompositesize[texnum];
             if (texturecompositesize[texnum] > 0x10000 - texture->height)
-                I_Error("R_GenerateLookup: текстура %i превышает размер 64 килобайта", texnum);
+                I_Error(english_language ?
+                        "R_GenerateLookup: texture %i is >64k" :
+                        "R_GenerateLookup: текстура %i превышает размер 64 килобайта",
+                        texnum);
             texturecompositesize[texnum] += texture->height;
         }
     }
@@ -325,8 +328,23 @@ void R_InitTextures(void)
     int *directory;
     char *texture1, *texture2, *pnames;
 
-    texture1 = DEH_String("TEXTURE1");
-    texture2 = DEH_String("TEXTURE2");
+    // [JN] Sky textures was converted into taller patches to
+    //  1) fix a tutti-frutti bug
+    //  2) make them affected by gold colormap
+    // Since shareware does not have TEXTURE2 lump, which is
+    // now included to make skies actually working, I have
+    // to NULLify it for shareware. Otherwise, game will
+    // bomb out with error about missing patches.
+    if (gamemode == shareware)
+    {
+        texture1 = DEH_String("TEXTURE1");
+        texture2 = NULL;
+    }
+    else
+    {
+        texture1 = DEH_String("TEXTURE1");
+        texture2 = DEH_String("TEXTURE2");
+    }
     pnames = DEH_String("PNAMES");
 
 //
@@ -404,7 +422,9 @@ void R_InitTextures(void)
 
         offset = LONG(*directory);
         if (offset > maxoff)
-            I_Error("R_InitTextures: некорректная директория текстур");
+            I_Error(english_language ?
+                    "R_InitTextures: bad texture directory" :
+                    "R_InitTextures: некорректная директория текстур");
         mtexture = (maptexture_t *) ((byte *) maptex + offset);
         texture = textures[i] = Z_Malloc(sizeof(texture_t)
                                          +
@@ -423,7 +443,9 @@ void R_InitTextures(void)
             patch->originy = SHORT(mpatch->originy);
             patch->patch = patchlookup[SHORT(mpatch->patch)];
             if (patch->patch == -1)
-                I_Error("R_InitTextures: отсутствует патч в текстуре %s",
+                I_Error(english_language ?
+                        "R_InitTextures: missing patch in texture %s" :
+                        "R_InitTextures: отсутствует патч в текстуре %s",
                         texture->name);
         }
         texturecolumnlump[i] = Z_Malloc(texture->width * sizeof(short),
@@ -665,7 +687,10 @@ int R_FlatNumForName(char *name)
         namet[8] = 0;
         memcpy(namet, name, 8);
         // [crispy] make non-fatal
-        fprintf (stderr, "R_FlatNumForName: текстура поверхности %s не найдена\n", namet);
+        fprintf (stderr, english_language ?
+                         "R_FlatNumForName: %s not found", :
+                         "R_FlatNumForName: текстура поверхности %s не найдена\n",
+                         namet);
         // I_Error("R_FlatNumForName: %s not found", namet);
         // [crispy] since there is no "No Flat" marker,
         // render missing flats as SKY
@@ -716,7 +741,10 @@ int R_TextureNumForName(char *name)
     {
         // I_Error ("R_TextureNumForName: %s not found", name);
         // [crispy] make non-fatal
-        fprintf (stderr, "R_TextureNumForName: текстура %s не найдена", name);
+        fprintf (stderr, english_language ?
+                         "R_TextureNumForName: %s not found" :
+                         "R_TextureNumForName: текстура %s не найдена",
+                         name);
         return 0;
     }
     return i;
