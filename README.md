@@ -2,9 +2,9 @@
 
 #### Russian Doom, Freedoom, Heretic and Hexen translation project 
 
-Russian Doom is Copyright &copy; 2016&ndash;2018 by [Julian Nechaevsky](http://jnechaevsky.users.sourceforge.net/author.html). The project is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard and [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath, and distributes with their permission. 
+Russian Doom is Copyright &copy; 2016&ndash;2018 by [Julian Nechaevsky](http://jnechaevsky.users.sourceforge.net/author.html). The project is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard and [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath, with significant additions from [Doom Retro](http://doomretro.com) by Brad Harding, and distributes with their approval.
 
-DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey Khokholov and [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) by Alexandre-Xavier Labonté-Lamoureux, with significant additions from [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath, and distributes with their permission. 
+DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey Khokholov and [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) by Alexandre-Xavier Labonté-Lamoureux, with significant additions from [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath and [Doom Retro](http://doomretro.com) by Brad Harding, and distributes with their approval. 
 
 The project, all it's translation materials and source codes are available under the terms and conditions of [GNU General Public License version 2](https://github.com/JNechaevsky/russian-doom/blob/master/LICENSE.txt).
 
