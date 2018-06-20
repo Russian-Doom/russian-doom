@@ -293,7 +293,9 @@ boolean P_Move (mobj_t*	actor)
 	return false;
 		
     if ((unsigned)actor->movedir >= 8)
-	I_Error ("Некорректный actor->movedir!");
+	I_Error (english_language ?
+             "Weird actor->movedir!" :
+             "Некорректный actor->movedir!");
 		
     tryx = actor->x + actor->info->speed*xspeed[actor->movedir];
     tryy = actor->y + actor->info->speed*yspeed[actor->movedir];
@@ -413,7 +415,9 @@ void P_NewChaseDir (mobj_t*	actor)
     dirtype_t	turnaround;
 
     if (!actor->target)
-	I_Error ("P_NewChaseDir: вызов без определения цели");
+	I_Error (english_language ?
+             "P_NewChaseDir: called with no target" :
+             "P_NewChaseDir: вызов без определения цели");
 		
     olddir = actor->movedir;
     turnaround=opposite[olddir];

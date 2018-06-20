@@ -27,6 +27,8 @@
 // State.
 #include "r_state.h"
 
+#include "jn.h"
+
 //
 // P_CheckSight
 //
@@ -146,7 +148,9 @@ boolean P_CrossSubsector (int num)
 	
 #ifdef RANGECHECK
     if (num>=numsubsectors)
-	I_Error ("P_CrossSubsector: ss %i с numss = %i",
+	I_Error (english_language ?
+             "P_CrossSubsector: ss %i with numss = %i" :
+             "P_CrossSubsector: ss %i с numss = %i",
 		 num,
 		 numsubsectors);
 #endif

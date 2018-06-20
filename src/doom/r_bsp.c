@@ -530,7 +530,9 @@ void R_Subsector (int num)
 	
 #ifdef RANGECHECK
     if (num>=numsubsectors)
-	I_Error ("R_Subsector: ss %i с numss = %i",
+	I_Error (english_language ?
+             "R_Subsector: ss %i with numss = %i" :
+             "R_Subsector: ss %i с numss = %i",
 		 num,
 		 numsubsectors);
 #endif

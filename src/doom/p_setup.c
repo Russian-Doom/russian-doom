@@ -262,7 +262,9 @@ void P_LoadSegs (int lump)
         // e6y: check for wrong indexes
         if ((unsigned)ldef->sidenum[side] >= (unsigned)numsides)
         {
-            I_Error("P_LoadSegs: линия %d для сегмента %d указывает на несуществующую сторону %d",
+            I_Error(english_language ?
+                    "P_LoadSegs: linedef %d for seg %d references a non-existent sidedef %d" :
+                    "P_LoadSegs: линия %d для сегмента %d указывает на несуществующую сторону %d",
                     linedef, i, (unsigned)ldef->sidenum[side]);
         }
 
@@ -1199,7 +1201,9 @@ void P_CheckMapFormat (int lumpnum)
     int b;
 
     if ((b = lumpnum+ML_BLOCKMAP+1) < numlumps && !strncasecmp(lumpinfo[b]->name, "BEHAVIOR", 8))
-    I_Error ("Уровни формата Hexen не поддерживаются");
+    I_Error (english_language ?
+             "Hexen map format is not supported" :
+             "Уровни формата Hexen не поддерживаются");
     
     if (!((b = lumpnum+ML_NODES) < numlumps && (nodes = W_CacheLumpNum(b, PU_CACHE)) && W_LumpLength(b) > 0))
     {
@@ -1207,15 +1211,21 @@ void P_CheckMapFormat (int lumpnum)
     }
     else if (!memcmp(nodes, "xNd4\0\0\0\0", 8))
     {
-        I_Error ("Неподдерживаемый формат нодов: DeePBSP");
+        I_Error (english_language ?
+                 "DeePBSP nodes not supported" :
+                 "Неподдерживаемый формат нодов: DeePBSP");
     }
     else if (!memcmp(nodes, "XNOD", 4))
     {
-        I_Error ("Неподдерживаемый формат нодов: Uncompressed ZDBSP");
+        I_Error (english_language ?
+                 "Uncompressed ZDBSP nodes not supported" :
+                 "Неподдерживаемый формат нодов: Uncompressed ZDBSP");
     }
     else if (!memcmp(nodes, "ZNOD", 4))
     {
-        I_Error ("Неподдерживаемый формат нодов: Compressed ZDBSP");
+        I_Error (english_language ?
+                 "Compressed ZDBSP nodes not supported" :
+                 "Неподдерживаемый формат нодов: Compressed ZDBSP");
     }
 
     if (nodes)

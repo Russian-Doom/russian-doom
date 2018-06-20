@@ -1175,7 +1175,10 @@ void G_Ticker (void)
                 static char turbomessage[80];
                 extern char *player_names[4];
                 M_snprintf(turbomessage, sizeof(turbomessage),
-                           "%s cdth[crjhjcnm!", player_names[i]); // Сверхскорость!
+                           english_language ?
+                           "%s is turbo!" :
+                           "%s cdth[crjhjcnm!",
+                           player_names[i]); // Сверхскорость!
                 players[consoleplayer].message = turbomessage;
                 turbodetected[i] = false;
             }
@@ -1185,7 +1188,9 @@ void G_Ticker (void)
                 if (gametic > BACKUPTICS 
                 && consistancy[i][buf] != cmd->consistancy) 
                 { 
-                    I_Error ("Нарушение последовательности (%i должно быть %i)",
+                    I_Error (english_language ?
+                             "consistency failure (%i should be %i)" :
+                             "Нарушение последовательности (%i должно быть %i)",
                     cmd->consistancy, consistancy[i][buf]); 
                 } 
             if (players[i].mo) 
@@ -1473,8 +1478,10 @@ void G_DeathMatchSpawnPlayer (int playernum)
 
     selections = deathmatch_p - deathmatchstarts; 
     if (selections < 4) 
-    I_Error ("Обнаружено %i стартовых точек для режима Дефтатч.\n"
-             "Минимальное необходимое количество: 4", selections); 
+    I_Error (english_language ?
+             "Only %i deathmatch spots, 4 required" :
+             "Обнаружено %i стартовых точек для режима Дефтатч.\n Минимальное необходимое количество: 4",
+             selections); 
  
     for (j=0 ; j<20 ; j++) 
     { 
@@ -1938,7 +1945,9 @@ void G_DoLoadGame (void)
     P_RestoreTargets ();
  
     if (!P_ReadSaveGameEOF())
-    I_Error ("Некорректный файл сохранения");
+    I_Error (english_language ?
+             "Bad savegame" :
+             "Некорректный файл сохранения");
 
     fclose(save_stream);
     
@@ -1992,7 +2001,9 @@ void G_DoSaveGame (void)
         save_stream = fopen(recovery_savegame_file, "wb");
         if (save_stream == NULL)
         {
-            I_Error("Невозможно открыть '%s' или '%s' для записи файла сохранения.",
+            I_Error(english_language ?
+                    "Failed to open either '%s' or '%s' to write savegame." :
+                    "Невозможно открыть '%s' или '%s' для записи файла сохранения.",
                     temp_savegame_file, recovery_savegame_file);
         }
     }
@@ -2017,9 +2028,18 @@ void G_DoSaveGame (void)
         // We failed to save to the normal location, but we wrote a
         // recovery file to the temp directory. Now we can bomb out
         // with an error.
-        I_Error("Невозможно открыть файл '%s' для совершения записи.\n"
-                "Сохранение было записано в '%s' для возможности восстановления.",
-                temp_savegame_file, recovery_savegame_file);
+        if (english_language)
+        {
+            I_Error("Failed to open savegame file '%s' for writing.\n"
+                    "But your game has been saved to '%s' for recovery.",
+                    temp_savegame_file, recovery_savegame_file);
+        }
+        else
+        {
+            I_Error("Невозможно открыть файл '%s' для совершения записи.\n"
+                    "Сохранение было записано в '%s' для возможности восстановления.",
+                    temp_savegame_file, recovery_savegame_file);
+        }
     }
 
     // Now rename the temporary savegame file to the actual savegame
@@ -2486,7 +2506,9 @@ int G_VanillaVersionCode(void)
     switch (gameversion)
     {
         case exe_doom_1_2:
-        I_Error("В Doom 1.2 отсутствует код версии!");
+        I_Error(english_language ?
+                "Doom 1.2 does not have a version code!" :
+                "В Doom 1.2 отсутствует код версии!");
 
         case exe_doom_1_666:
         return 106;
@@ -2723,8 +2745,16 @@ boolean G_CheckDemoStatus (void)
         timingdemo = false;
         demoplayback = false;
 
-        I_Error ("Насчитано %i gametics в %i realtics.\n"
-                 "Среднее значение FPS: %f.", gametic, realtics, fps);
+        if (english_language)
+        {
+            I_Error ("timed %i gametics in %i realtics (%f fps)",
+                        gametic, realtics, fps);
+        }
+        else
+        {
+            I_Error ("Насчитано %i gametics в %i realtics.\n"
+                    "Среднее значение FPS: %f.", gametic, realtics, fps);
+        }
     } 
 
     if (demoplayback)
@@ -2755,7 +2785,10 @@ boolean G_CheckDemoStatus (void)
         M_WriteFile (demoname, demobuffer, demo_p - demobuffer); 
         Z_Free (demobuffer); 
         demorecording = false; 
-        I_Error ("Демозапись %s завершена",demoname); 
+        I_Error (english_language ?
+                 "Demo %s recorded" :
+                 "Демозапись %s завершена",
+                 demoname); 
     } 
 
     return false; 

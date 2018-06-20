@@ -802,7 +802,9 @@ EV_SlidingDoor
 	door->whichDoorIndex = P_FindSlidingDoorType(line);
 
 	if (door->whichDoorIndex < 0)
-	    I_Error("EV_SlidingDoor: невозможно использовать текстуру для раздвижной двери!");
+	    I_Error(english_language ?
+                "EV_SlidingDoor: Can't use texture for sliding door!" :
+                "EV_SlidingDoor: невозможно использовать текстуру для раздвижной двери!");
 			
 	door->frontsector = sec;
 	door->backsector = line->backsector;

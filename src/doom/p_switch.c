@@ -239,7 +239,9 @@ P_StartButton
 	}
     }
     
-    I_Error("P_StartButton: превышен лимит слотов для переключателей!");
+    I_Error(english_language ?
+            "P_StartButton: no button slots left!" :
+            "P_StartButton: превышен лимит слотов для переключателей!");
 }
 
 

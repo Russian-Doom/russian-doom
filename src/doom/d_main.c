@@ -933,7 +933,10 @@ static void SetMissionForPackName(char *pack_name)
         printf("\t%s\n", packs[i].name);
     }
 
-    I_Error("Неизвестная серия игры: %s", pack_name);
+    I_Error(english_language ?
+            "Unknown mission pack name: %s" :
+            "Неизвестная серия игры: %s",
+            pack_name);
 }
 
 
@@ -971,7 +974,9 @@ void D_IdentifyVersion(void)
         {
             // Still no idea.  I don't think this is going to work.
 			// Unknown or invalid IWAD file.
-            I_Error("Неопознанный или некорректный IWAD-файл.");
+            I_Error(english_language ?
+                    "Unknown or invalid IWAD file." :
+                    "Неопознанный или некорректный IWAD-файл.");
         }
     }
 
@@ -1645,7 +1650,10 @@ static void InitGameVersion(void)
                 printf("\t%s (%s)\n", gameversions[i].cmdline, gameversions[i].description);
             }
 
-            I_Error("Неизвестная версия игры \"%s\"", myargv[p+1]);
+            I_Error(english_language ?
+                    "Unknown game version '%s'" :
+                    "Неизвестная версия игры \"%s\"",
+                    myargv[p+1]);
         }
     }
     else
@@ -1801,7 +1809,9 @@ static void LoadIwadDeh(void)
         {
             // "DEHACKED lump not found.  Please check that this is the "
             // "Hacx v1.2 IWAD."
-            I_Error("Не найден блок DEHACKED.  Проверьте расположение данного блока в IWAD-файе Hacx v1.2 IWAD.");
+            I_Error(english_language ?
+                    "DEHACKED lump not found.  Please check that this is the Hacx v1.2 IWAD." :
+                    "Не найден блок DEHACKED.  Проверьте расположение данного блока в IWAD-файе Hacx v1.2 IWAD.");
         }
     }
 
@@ -2092,8 +2102,16 @@ void D_DoomMain (void)
 
     if (iwadfile == NULL)
     {
-        I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
-                "Попробуйте указать IWAD-файл командой '-iwad'.\n");
+        if (english_language)
+        {
+            I_Error("Game mode indeterminate.  No IWAD file was found.  Try\n"
+                    "specifying one with the '-iwad' command line parameter.\n");
+        }
+        else
+        {
+            I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
+                    "Попробуйте указать IWAD-файл командой '-iwad'.\n");
+        }
     }
 
     modifiedgame = false;
@@ -2298,15 +2316,18 @@ void D_DoomMain (void)
         int i;
 
         if ( gamemode == shareware)
-            I_Error(DEH_String("\nВы не можете использовать -file в демонстрационной версии."
-                    "Приобретите полную версию!"));
+            I_Error(DEH_String(english_language ?
+                               "\nYou cannot -file with the shareware version. Register!" :
+                               "\nВы не можете использовать -file в демонстрационной версии. Приобретите полную версию!"));
 
         // Check for fake IWAD with right name,
         // but w/o all the lumps of the registered version. 
         if (gamemode == registered)
             for (i = 0;i < 23; i++)
             if (W_CheckNumForName(name[i])<0)
-                I_Error(DEH_String("\nДанная версия не является зарегистрированной."));
+                I_Error(DEH_String(english_language ?
+                                   "\nThis is not the registered version." :
+                                   "\nДанная версия не является зарегистрированной."));
     }
 
     if (W_CheckNumForName("SS_START") >= 0 || W_CheckNumForName("FF_END") >= 0)

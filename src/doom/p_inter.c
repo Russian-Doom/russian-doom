@@ -74,7 +74,10 @@ P_GiveAmmo
 	return false;
 		
     if (ammo > NUMAMMO)
-	I_Error ("P_GiveAmmo: некорректный тип %i", ammo);
+	I_Error (english_language ?
+             "P_GiveAmmo: bad type %i" :
+             "P_GiveAmmo: некорректный тип %i",
+             ammo);
 		
     if ( player->ammo[ammo] == player->maxammo[ammo]  )
 	return false;
@@ -731,7 +734,9 @@ P_TouchSpecialThing
 	break;
 		
       default:
-	I_Error ("P_SpecialThing: неизвестный предмет");
+	I_Error (english_language ?
+             "P_SpecialThing: Unknown gettable thing" :
+             "P_SpecialThing: неизвестный предмет");
     }
 	
     if (special->flags & MF_COUNTITEM)

@@ -37,6 +37,8 @@
 // State.
 #include "doomstat.h"
 
+#include "jn.h"
+
 // ?
 #define MAXWIDTH    1120
 #define MAXHEIGHT   832
@@ -120,7 +122,10 @@ void R_DrawColumn (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error ("R_DrawColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_Error (english_language ?
+                 "R_DrawColumn: %i to %i at %i" :
+                 "R_DrawColumn: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -271,7 +276,10 @@ void R_DrawColumnLow (void)
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error ("R_DrawColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_Error (english_language ?
+                 "R_DrawColumn: %i to %i at %i" :
+                 "R_DrawColumn: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
     }
     //	dccount++; 
 #endif 
@@ -406,7 +414,9 @@ void R_DrawFuzzColumn (void)
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error ("R_DrawFuzzColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_Error (english_language ?
+                 "R_DrawFuzzColumn: %i to %i at %i" :
+                 "R_DrawFuzzColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -481,7 +491,10 @@ void R_DrawFuzzColumnLow (void)
 #ifdef RANGECHECK 
     if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error ("R_DrawFuzzColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_Error (english_language ?
+                 "R_DrawFuzzColumn: %i to %i at %i" :
+                 "R_DrawFuzzColumn: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -564,7 +577,10 @@ void R_DrawTranslatedColumn (void)
 #ifdef RANGECHECK 
     if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error ( "R_DrawColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_Error (english_language ?
+                 "R_DrawColumn: %i to %i at %i" :
+                 "R_DrawColumn: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
     }    
 #endif 
 
@@ -611,7 +627,10 @@ void R_DrawTranslatedColumnLow (void)
 #ifdef RANGECHECK 
     if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error ( "R_DrawColumn: %i к %i у %i", dc_yl, dc_yh, x);
+        I_Error (english_language ?
+                 "R_DrawColumn: %i to %i at %i" :
+                 "R_DrawColumn: %i к %i у %i",
+                 dc_yl, dc_yh, x);
     }
 #endif 
 
@@ -663,7 +682,10 @@ void R_DrawTLColumn (void)
 #ifdef RANGECHECK
     if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error ( "R_DrawColumn: %i к %i у %i", dc_yl, dc_yh, dc_x);
+        I_Error (english_language ?
+                 "R_DrawColumn: %i to %i at %i" :
+                 "R_DrawColumn: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
     }
 #endif
 
@@ -703,7 +725,10 @@ void R_DrawTLColumnLow (void)
 #ifdef RANGECHECK
     if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-        I_Error ( "R_DrawColumn: %i к %i у %i", dc_yl, dc_yh, x);
+        I_Error (english_language ?
+                 "R_DrawColumn: %i to %i at %i" :
+                 "R_DrawColumn: %i к %i у %i",
+                 dc_yl, dc_yh, x);
     }
 #endif
 
@@ -811,7 +836,10 @@ void R_DrawSpan (void)
 #ifdef RANGECHECK
     if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
     {
-        I_Error( "R_DrawSpan: %i к %i у %i", ds_x1,ds_x2,ds_y);
+        I_Error(english_language ?
+                "R_DrawSpan: %i to %i at %i" :
+                "R_DrawSpan: %i к %i у %i",
+                ds_x1,ds_x2,ds_y);
     }
     //	dscount++;
 #endif
@@ -939,7 +967,10 @@ void R_DrawSpanLow (void)
 #ifdef RANGECHECK
     if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
     {
-        I_Error( "R_DrawSpan: %i к %i у %i", ds_x1,ds_x2,ds_y);
+        I_Error(english_language ?
+                "R_DrawSpan: %i to %i at %i" :
+                "R_DrawSpan: %i к %i у %i",
+                ds_x1,ds_x2,ds_y);
     }
     // dscount++; 
 #endif
