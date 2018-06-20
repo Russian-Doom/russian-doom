@@ -1488,14 +1488,10 @@ void WI_drawStats(void)
         {
             const int ttime = wbs->totaltimes / TICRATE;
 
-            // [JN] Perfected x-position for both languages.
-            // For English language two vanilla patches "total" and "time" are
-            // used for compatibility reasons. For Russian, though, it's just
-            // one patch "общее время", which can't be replaced by mods.
+            // [JN] Perfected x-position for both languages
             if (english_language)
             {
-                V_DrawShadowedPatchDoom(SP_TIMEX + 39, SP_TIMEY + 16, total);
-                V_DrawShadowedPatchDoom(SP_TIMEX + 109, SP_TIMEY + 16, timepatch);
+                V_DrawShadowedPatchDoom(SP_TIMEX + 39, SP_TIMEY + 16, overtime);
                 // [crispy] choose x-position depending on width of time string
                 WI_drawTime(281 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
             }

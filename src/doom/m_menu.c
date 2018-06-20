@@ -643,32 +643,33 @@ void M_DrawSaveLoadBorder(int x,int y)
 {
     int i;
 
-    // [JN] Условие if (draw_shadowed_text) необходимо для пиксельного перфикционизма,
-    // чтобы строчки с текстом смотрились одинаково симпатично как с тенью, так и без.
+    // [JN] Russian characters having -1 vertical offset because of "Й" char,
+    // which may go out of vertical bounds. These conditions stands for pixel perfection
+    // in both English and Russian languages, with and without -vanilla game mode.
 
-    if (draw_shadowed_text && !vanillaparm)
+    if (english_language)
+    {
+        V_DrawShadowedPatchDoom(x - 8, y + 8, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
+    
+        for (i = 0;i < 24;i++)
+        {
+            V_DrawShadowedPatchDoom(x, y + 8, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
+            x += 8;
+        }
+    
+        V_DrawShadowedPatchDoom(x, y + 8,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
+    }
+    else
     {
         V_DrawShadowedPatchDoom(x - 8, y + 9, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
-
+    
         for (i = 0;i < 24;i++)
         {
             V_DrawShadowedPatchDoom(x, y + 9, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
             x += 8;
         }
-
-        V_DrawShadowedPatchDoom(x, y + 9,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
-    }
-    else
-    {
-        V_DrawPatch(x - 8, y + 8, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
-
-        for (i = 0;i < 24;i++)
-        {
-            V_DrawPatch(x, y + 8, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
-            x += 8;
-        }
-
-        V_DrawPatch(x, y + 8,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
+    
+        V_DrawShadowedPatchDoom(x, y + 9,  W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));        
     }
 }
 

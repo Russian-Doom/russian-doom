@@ -1145,14 +1145,31 @@ void D_SetGameDescription(void)
             if (is_freedm)
             {
                 gamedescription = GetGameName("FreeDM");
-                W_MergeFile("russian/russian-freedoom-common.wad");
-                W_MergeFile("russian/russian-freedoom-dm.wad");
+                W_MergeFile("base/freedoom-common.wad");
+
+                if (english_language)
+                {
+                    // [JN] We are fine.
+                }
+                else
+                {
+                    W_MergeFile("base/freedoom-common-russian.wad");
+                    W_MergeFile("base/freedoom-dm-russian.wad");
+                }
             }
             else
             {
-                gamedescription = GetGameName("Freedoom: Стадия 2");
-                W_MergeFile("russian/russian-freedoom-common.wad");
-                // DEH_AddStringReplacement ("TITLEPIC", "FDTITLE2");
+                W_MergeFile("base/freedoom-common.wad");
+
+                if (english_language)
+                {
+                    gamedescription = GetGameName("Freedoom: Phase 2");
+                }
+                else
+                {
+                    gamedescription = GetGameName("Freedoom: Стадия 2");
+                    W_MergeFile("base/freedoom-common-russian.wad");
+                }
             }
         }
         else if (logical_gamemission == doom2)
