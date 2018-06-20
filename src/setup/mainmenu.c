@@ -97,6 +97,7 @@ static void SensibleDefaults(void)
     png_screenshots = 1;
 
     // [JN] Дополнительные параметры игры
+    english_language = 0;
 
     // Графика
     brightmaps = 1;

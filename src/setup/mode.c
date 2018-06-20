@@ -115,8 +115,12 @@ static char *back_flat = "F_PAVE01";
 static int comport = 0;
 static char *nickname = NULL;
 
+int english_language = 0;
+
 static void BindMiscVariables(void)
 {
+    M_BindIntVariable("english_language", &english_language);
+
     if (gamemission == doom)
     {
         M_BindIntVariable("detaillevel",   &detailLevel);
@@ -334,6 +338,10 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
         callback();
         return;
     }
+
+    //
+    // [JN] TODO: Draw language section widet
+    //
 
     game_selected_callback = callback;
 }
