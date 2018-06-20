@@ -1249,8 +1249,18 @@ void WI_drawNetgameStats(void)
     WI_drawLF();
 
     // draw stat titles (top line)
-    V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(mp_kills->width), NG_STATSY, mp_kills);
-    V_DrawShadowedPatchDoom(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items->width),	NG_STATSY, mp_items);
+    // [JN] Using a slightly shortened patches for 
+    // Russian language, so they can fit perfectly.
+    if (english_language)
+    {
+        V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(kills->width), NG_STATSY, kills);
+        V_DrawShadowedPatchDoom(NG_STATSX+2*NG_SPACINGX-SHORT(items->width), NG_STATSY, items);
+    }
+    else
+    {
+        V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(mp_kills->width), NG_STATSY, mp_kills);
+        V_DrawShadowedPatchDoom(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items->width),	NG_STATSY, mp_items);
+    }
     V_DrawShadowedPatchDoom(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),NG_STATSY, secret);
 
     if (dofrags)
@@ -1478,10 +1488,23 @@ void WI_drawStats(void)
         {
             const int ttime = wbs->totaltimes / TICRATE;
 
-            V_DrawShadowedPatchDoom(SP_TIMEX + 24, SP_TIMEY + 16, overtime);
-
-            // [crispy] choose x-position depending on width of time string
-            WI_drawTime(296 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+            // [JN] Perfected x-position for both languages.
+            // For English language two vanilla patches "total" and "time" are
+            // used for compatibility reasons. For Russian, though, it's just
+            // one patch "общее время", which can't be replaced by mods.
+            if (english_language)
+            {
+                V_DrawShadowedPatchDoom(SP_TIMEX + 39, SP_TIMEY + 16, total);
+                V_DrawShadowedPatchDoom(SP_TIMEX + 109, SP_TIMEY + 16, timepatch);
+                // [crispy] choose x-position depending on width of time string
+                WI_drawTime(281 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+            }
+            else
+            {
+                V_DrawShadowedPatchDoom(SP_TIMEX + 24, SP_TIMEY + 16, overtime);
+                // [crispy] choose x-position depending on width of time string
+                WI_drawTime(296 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+            }
         }
     }
 }

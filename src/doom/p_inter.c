@@ -362,13 +362,13 @@ P_TouchSpecialThing
       case SPR_ARM1:
 	if (!P_GiveArmor (player, deh_green_armor_class))
 	    return;
-	player->message = DEH_String(GOTARMOR);
+	player->message = DEH_String(english_language ? GOTARMOR : GOTARMOR_RUS);
 	break;
 		
       case SPR_ARM2:
 	if (!P_GiveArmor (player, deh_blue_armor_class))
 	    return;
-	player->message = DEH_String(GOTMEGA);
+	player->message = DEH_String(english_language ? GOTMEGA : GOTMEGA_RUS);
 	break;
 	
 	// bonus items
@@ -388,7 +388,7 @@ P_TouchSpecialThing
 	{
 	artifactcount++;
 	}
-	player->message = DEH_String(GOTHTHBONUS);
+	player->message = DEH_String(english_language ? GOTHTHBONUS : GOTHTHBONUS_RUS);
 	break;
 	
       case SPR_BON2:
@@ -410,7 +410,7 @@ P_TouchSpecialThing
 	{
 	artifactcount++;
 	}
-	player->message = DEH_String(GOTARMBONUS);
+	player->message = DEH_String(english_language ? GOTARMBONUS : GOTARMBONUS_RUS);
 	break;
 
       case SPR_BON3:    // [JN] Evil Sceptre
@@ -430,7 +430,7 @@ P_TouchSpecialThing
 	if (player->health > deh_max_soulsphere)
 	    player->health = deh_max_soulsphere;
 	player->mo->health = player->health;
-	player->message = DEH_String(GOTSUPER);
+	player->message = DEH_String(english_language ? GOTSUPER : GOTSUPER_RUS);
 	sound = sfx_getpow;
 	break;
 	
@@ -442,7 +442,7 @@ P_TouchSpecialThing
         // We always give armor type 2 for the megasphere; dehacked only 
         // affects the MegaArmor.
 	P_GiveArmor (player, 2);
-	player->message = DEH_String(GOTMSPHERE);
+	player->message = DEH_String(english_language ? GOTMSPHERE : GOTMSPHERE_RUS);
 	sound = sfx_getpow;
 	break;
 	
@@ -451,7 +451,7 @@ P_TouchSpecialThing
     // [JN] Don't pick up a key if player already have it
       case SPR_BKEY:
 	if (!player->cards[it_bluecard])
-	    player->message = DEH_String(GOTBLUECARD);
+	    player->message = DEH_String(english_language ? GOTBLUECARD : GOTBLUECARD_RUS);
 	else
 	    return;
 	P_GiveCard (player, it_bluecard);
@@ -461,7 +461,7 @@ P_TouchSpecialThing
 	
       case SPR_YKEY:
 	if (!player->cards[it_yellowcard])
-	    player->message = DEH_String(GOTYELWCARD);
+	    player->message = DEH_String(english_language ? GOTYELWCARD : GOTYELWCARD_RUS);
 	else
 	    return;
 	P_GiveCard (player, it_yellowcard);
@@ -471,7 +471,7 @@ P_TouchSpecialThing
 	
       case SPR_RKEY:
 	if (!player->cards[it_redcard])
-	    player->message = DEH_String(GOTREDCARD);
+	    player->message = DEH_String(english_language ? GOTREDCARD : GOTREDCARD_RUS);
 	else
 	    return;
 	P_GiveCard (player, it_redcard);
@@ -481,7 +481,7 @@ P_TouchSpecialThing
 	
       case SPR_BSKU:
 	if (!player->cards[it_blueskull])
-	    player->message = DEH_String(GOTBLUESKUL);
+	    player->message = DEH_String(english_language ? GOTBLUESKUL : GOTBLUESKUL_RUS);
 	else
 	    return;
 	P_GiveCard (player, it_blueskull);
@@ -491,7 +491,7 @@ P_TouchSpecialThing
 	
       case SPR_YSKU:
 	if (!player->cards[it_yellowskull])
-	    player->message = DEH_String(GOTYELWSKUL);
+	    player->message = DEH_String(english_language ? GOTYELWSKUL : GOTYELWSKUL_RUS);
 	else
 	    return;
 	P_GiveCard (player, it_yellowskull);
@@ -501,7 +501,7 @@ P_TouchSpecialThing
 	
       case SPR_RSKU:
 	if (!player->cards[it_redskull])
-	    player->message = DEH_String(GOTREDSKULL);
+	    player->message = DEH_String(english_language ? GOTREDSKULL : GOTREDSKULL_RUS);
 	else
 	    return;
 	P_GiveCard (player, it_redskull);
@@ -513,7 +513,7 @@ P_TouchSpecialThing
       case SPR_STIM:
 	if (!P_GiveBody (player, 10))
 	    return;
-	player->message = DEH_String(GOTSTIM);
+	player->message = DEH_String(english_language ? GOTSTIM : GOTSTIM_RUS);
 	break;
 	
     // [JN] Фикс для появления строчки "Получена крайне необходимая аптечка!"
@@ -523,9 +523,9 @@ P_TouchSpecialThing
         return;
     
     if (player->health < 25)
-        player->message = GOTMEDINEED;
+        player->message = english_language ? GOTMEDINEED : GOTMEDINEED_RUS;
     else
-        player->message = GOTMEDIKIT;
+        player->message = english_language ? GOTMEDIKIT : GOTMEDIKIT_RUS;
     
     P_GiveBody (player, 25);
     break;
@@ -547,14 +547,14 @@ P_TouchSpecialThing
       case SPR_PINV:
 	if (!P_GivePower (player, pw_invulnerability))
 	    return;
-	player->message = DEH_String(GOTINVUL);
+	player->message = DEH_String(english_language ? GOTINVUL : GOTINVUL_RUS);
 	sound = sfx_getpow;
 	break;
 	
       case SPR_PSTR:
 	if (!P_GivePower (player, pw_strength))
 	    return;
-	player->message = DEH_String(GOTBERSERK);
+	player->message = DEH_String(english_language ? GOTBERSERK : GOTBERSERK_RUS);
 	if (player->readyweapon != wp_fist)
 	    player->pendingweapon = wp_fist;
 	sound = sfx_getpow;
@@ -563,14 +563,14 @@ P_TouchSpecialThing
       case SPR_PINS:
 	if (!P_GivePower (player, pw_invisibility))
 	    return;
-	player->message = DEH_String(GOTINVIS);
+	player->message = DEH_String(english_language ? GOTINVIS : GOTINVIS_RUS);
 	sound = sfx_getpow;
 	break;
 	
       case SPR_SUIT:
 	if (!P_GivePower (player, pw_ironfeet))
 	    return;
-	player->message = DEH_String(GOTSUIT);
+	player->message = DEH_String(english_language ? GOTSUIT : GOTSUIT_RUS);
 	sound = sfx_getpow;
 	break;
 	
@@ -583,14 +583,14 @@ P_TouchSpecialThing
 	// if (!P_GivePower (player, pw_allmap))
 	//     return;
 	P_GivePower (player, pw_allmap);
-	player->message = DEH_String(GOTMAP);
+	player->message = DEH_String(english_language ? GOTMAP : GOTMAP_RUS);
 	sound = sfx_getpow;
 	break;
 	
       case SPR_PVIS:
 	if (!P_GivePower (player, pw_infrared))
 	    return;
-	player->message = DEH_String(GOTVISOR);
+	player->message = DEH_String(english_language ? GOTVISOR : GOTVISOR_RUS);
 	sound = sfx_getpow;
 	break;
 	
@@ -606,13 +606,13 @@ P_TouchSpecialThing
 	    if (!P_GiveAmmo (player,am_clip,1))
 		return;
 	}
-	player->message = DEH_String(GOTCLIP);
+	player->message = DEH_String(english_language ? GOTCLIP : GOTCLIP_RUS);
 	break;
 	
       case SPR_AMMO:
 	if (!P_GiveAmmo (player, am_clip,5))
 	    return;
-	player->message = DEH_String(GOTCLIPBOX);
+	player->message = DEH_String(english_language ? GOTCLIPBOX : GOTCLIPBOX_RUS);
 	break;
 	
       case SPR_ROCK:
@@ -620,30 +620,30 @@ P_TouchSpecialThing
 	    return;
 			if (gameskill == sk_baby || gameskill == sk_nightmare)
 			{   // [JN] "Получено две ракеты." 
-				player->message = DEH_String(GOTROCKET2);
+				player->message = DEH_String(english_language ? GOTROCKET2 : GOTROCKET2_RUS);
 			}
 			else
 			{   // [JN] "Получена ракета."
-				player->message = DEH_String(GOTROCKET);
+				player->message = DEH_String(english_language ? GOTROCKET : GOTROCKET_RUS);
 			}
 	break;
 	
       case SPR_BROK:
 	if (!P_GiveAmmo (player, am_misl,5))
 	    return;
-	player->message = DEH_String(GOTROCKBOX);
+	player->message = DEH_String(english_language ? GOTROCKBOX : GOTROCKBOX_RUS);
 	break;
 	
       case SPR_CELL:
 	if (!P_GiveAmmo (player, am_cell,1))
 	    return;
-	player->message = DEH_String(GOTCELL);
+	player->message = DEH_String(english_language ? GOTCELL : GOTCELL_RUS);
 	break;
 	
       case SPR_CELP:
 	if (!P_GiveAmmo (player, am_cell,5))
 	    return;
-	player->message = DEH_String(GOTCELLBOX);
+	player->message = DEH_String(english_language ? GOTCELLBOX : GOTCELLBOX_RUS);
 	break;
 	
       case SPR_SHEL:
@@ -651,18 +651,18 @@ P_TouchSpecialThing
 	    return;
 			if (gameskill == sk_baby || gameskill == sk_nightmare)
 			{   // [JN] Получено 8 патронов для дробовика.
-				player->message = DEH_String(GOTSHELLS8);
+				player->message = DEH_String(english_language ? GOTSHELLS8 : GOTSHELLS8_RUS);
 			}
 			else
 			{   // [JN] Получено 4 патрона для дробовика.
-				player->message = DEH_String(GOTSHELLS);
+				player->message = DEH_String(english_language ? GOTSHELLS : GOTSHELLS_RUS);
 			}
 	break;
 	
       case SPR_SBOX:
 	if (!P_GiveAmmo (player, am_shell,5))
 	    return;
-	player->message = DEH_String(GOTSHELLBOX);
+	player->message = DEH_String(english_language ? GOTSHELLBOX : GOTSHELLBOX_RUS);
 	break;
 	
       case SPR_BPAK:
@@ -674,14 +674,14 @@ P_TouchSpecialThing
 	}
 	for (i=0 ; i<NUMAMMO ; i++)
 	    P_GiveAmmo (player, i, 1);
-	player->message = DEH_String(GOTBACKPACK);
+	player->message = DEH_String(english_language ? GOTBACKPACK : GOTBACKPACK_RUS);
 	break;
 	
 	// weapons
       case SPR_BFUG:
 	if (!P_GiveWeapon (player, wp_bfg, false) )
 	    return;
-	player->message = DEH_String(GOTBFG9000);
+	player->message = DEH_String(english_language ? GOTBFG9000 : GOTBFG9000_RUS);
 	sound = sfx_wpnup;	
 	break;
 	
@@ -689,28 +689,28 @@ P_TouchSpecialThing
         if (!P_GiveWeapon(player, wp_chaingun,
                           (special->flags & MF_DROPPED) != 0))
             return;
-	player->message = DEH_String(GOTCHAINGUN);
+	player->message = DEH_String(english_language ? GOTCHAINGUN : GOTCHAINGUN_RUS);
 	sound = sfx_wpnup;	
 	break;
 	
       case SPR_CSAW:
 	if (!P_GiveWeapon (player, wp_chainsaw, false) )
 	    return;
-	player->message = DEH_String(GOTCHAINSAW);
+	player->message = DEH_String(english_language ? GOTCHAINSAW : GOTCHAINSAW_RUS);
 	sound = sfx_wpnup;	
 	break;
 	
       case SPR_LAUN:
 	if (!P_GiveWeapon (player, wp_missile, false) )
 	    return;
-	player->message = DEH_String(GOTLAUNCHER);
+	player->message = DEH_String(english_language ? GOTLAUNCHER : GOTLAUNCHER_RUS);
 	sound = sfx_wpnup;	
 	break;
 	
       case SPR_PLAS:
 	if (!P_GiveWeapon (player, wp_plasma, false) )
 	    return;
-	player->message = DEH_String(GOTPLASMA);
+	player->message = DEH_String(english_language ? GOTPLASMA : GOTPLASMA_RUS);
 	sound = sfx_wpnup;	
 	break;
 	
@@ -718,7 +718,7 @@ P_TouchSpecialThing
         if (!P_GiveWeapon(player, wp_shotgun,
                           (special->flags & MF_DROPPED) != 0))
             return;
-	player->message = DEH_String(GOTSHOTGUN);
+	player->message = DEH_String(english_language ? GOTSHOTGUN : GOTSHOTGUN_RUS);
 	sound = sfx_wpnup;	
 	break;
 		
@@ -726,7 +726,7 @@ P_TouchSpecialThing
         if (!P_GiveWeapon(player, wp_supershotgun,
                           (special->flags & MF_DROPPED) != 0))
             return;
-	player->message = DEH_String(GOTSHOTGUN2);
+	player->message = DEH_String(english_language ? GOTSHOTGUN2 : GOTSHOTGUN2_RUS);
 	sound = sfx_wpnup;	
 	break;
 		

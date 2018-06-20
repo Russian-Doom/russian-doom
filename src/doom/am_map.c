@@ -49,6 +49,8 @@
 #include "am_map.h"
 #include "st_stuff.h"   // [JN] ST_refreshBackground and ST_drawWidgets
 
+#include "jn.h"
+
 
 // For use if I do walls with outsides/insides
 #define REDS        (256-5*16)
@@ -715,29 +717,29 @@ boolean AM_Responder (event_t* ev)
             followplayer = !followplayer;
             f_oldloc.x = INT_MAX;
             if (followplayer)
-                plr->message = DEH_String(AMSTR_FOLLOWON);
+                plr->message = DEH_String(english_language ? AMSTR_FOLLOWON : AMSTR_FOLLOWON_RUS);
             else
-                plr->message = DEH_String(AMSTR_FOLLOWOFF);
+                plr->message = DEH_String(english_language ? AMSTR_FOLLOWOFF : AMSTR_FOLLOWOFF_RUS);
         }
         else if (key == key_map_grid)
         {
             grid = !grid;
             if (grid)
-                plr->message = DEH_String(AMSTR_GRIDON);
+                plr->message = DEH_String(english_language ? AMSTR_GRIDON : AMSTR_GRIDON_RUS);
             else
-                plr->message = DEH_String(AMSTR_GRIDOFF);
+                plr->message = DEH_String(english_language ? AMSTR_GRIDOFF : AMSTR_GRIDOFF_RUS);
         }
         else if (key == key_map_mark)
         {
             M_snprintf(buffer, sizeof(buffer), "%s %d",
-                    DEH_String(AMSTR_MARKEDSPOT), markpointnum);
+                    DEH_String(english_language ? AMSTR_MARKEDSPOT : AMSTR_MARKEDSPOT_RUS), markpointnum);
             plr->message = buffer;
             AM_addMark();
         }
         else if (key == key_map_clearmark)
         {
             AM_clearMarks();
-            plr->message = DEH_String(AMSTR_MARKSCLEARED);
+            plr->message = DEH_String(english_language ? AMSTR_MARKSCLEARED : AMSTR_MARKSCLEARED_RUS);
         }
         else
         {

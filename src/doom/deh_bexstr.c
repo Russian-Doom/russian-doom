@@ -349,6 +349,10 @@ static const bex_string_t bex_stringtable[] = {
     {"BGFLAT15", "RROCK13"},
     {"BGFLAT31", "RROCK19"},
     {"BGCASTCALL", "BOSSBACK"},
+    // [JN] part 10 - some Russian specific strings
+    {"HUSTR_E1M1_RUS", HUSTR_E1M1_RUS},
+    {"HUSTR_E2M1_RUS", HUSTR_E2M1_RUS},
+    {"HUSTR_E3M1_RUS", HUSTR_E3M1_RUS},
 };
 
 static void *DEH_BEXStrStart(deh_context_t *context, char *line)

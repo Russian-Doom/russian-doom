@@ -103,6 +103,39 @@ static textscreen_t textscreens[] =
     { jaguar,    1, 23, "ROCKS",     J1TEXT},
 };
 
+static textscreen_t textscreens_rus[] =
+{
+    { doom,      1, 8,  "FLOOR4_8",  E1TEXT_RUS},
+    { doom,      2, 8,  "SFLR6_1",   E2TEXT_RUS},
+    { doom,      3, 8,  "MFLR8_4",   E3TEXT_RUS},
+    { doom,      4, 8,  "MFLR8_3",   E4TEXT_RUS},
+
+    { doom2,     1, 6,  "SLIME16",   C1TEXT_RUS},
+    { doom2,     1, 11, "RROCK14",   C2TEXT_RUS},
+    { doom2,     1, 20, "RROCK07",   C3TEXT_RUS},
+    { doom2,     1, 30, "RROCK17",   C4TEXT_RUS},
+    { doom2,     1, 15, "RROCK13",   C5TEXT_RUS},
+    { doom2,     1, 31, "RROCK19",   C6TEXT_RUS},
+
+    { pack_tnt,  1, 6,  "SLIME16",   T1TEXT_RUS},
+    { pack_tnt,  1, 11, "RROCK14",   T2TEXT_RUS},
+    { pack_tnt,  1, 20, "RROCK07",   T3TEXT_RUS},
+    { pack_tnt,  1, 30, "RROCK17",   T4TEXT_RUS},
+    { pack_tnt,  1, 15, "RROCK13",   T5TEXT_RUS},
+    { pack_tnt,  1, 31, "RROCK19",   T6TEXT_RUS},
+
+    { pack_plut, 1, 6,  "SLIME16",   P1TEXT_RUS},
+    { pack_plut, 1, 11, "RROCK14",   P2TEXT_RUS},
+    { pack_plut, 1, 20, "RROCK07",   P3TEXT_RUS},
+    { pack_plut, 1, 30, "RROCK17",   P4TEXT_RUS},
+    { pack_plut, 1, 15, "RROCK13",   P5TEXT_RUS},
+    { pack_plut, 1, 31, "RROCK19",   P6TEXT_RUS},
+
+    { pack_nerve, 1, 8, "SLIME16",   N1TEXT_RUS},
+
+    { jaguar,    1, 23, "ROCKS",     J1TEXT_RUS},
+};
+
 
 char*   finaletext;
 char*   finaleflat;
@@ -138,7 +171,9 @@ void F_StartFinale (void)
 
     for (i=0; i<arrlen(textscreens); ++i)
     {
-        textscreen_t *screen = &textscreens[i];
+        textscreen_t *screen = english_language ? 
+                               &textscreens[i] :
+                               &textscreens_rus[i];
 
         // Hack for Chex Quest
 
@@ -384,6 +419,28 @@ castinfo_t	castorder[] = {
     {NULL,0}
 };
 
+castinfo_t	castorder_rus[] = {
+    {CC_ZOMBIE_RUS,  MT_POSSESSED},
+    {CC_SHOTGUN_RUS, MT_SHOTGUY},
+    {CC_HEAVY_RUS,   MT_CHAINGUY},
+    {CC_IMP_RUS,     MT_TROOP},
+    {CC_DEMON_RUS,   MT_SERGEANT},
+    {CC_LOST_RUS,    MT_SKULL},
+    {CC_CACO_RUS,    MT_HEAD},
+    {CC_HELL_RUS,    MT_KNIGHT},
+    {CC_BARON_RUS,   MT_BRUISER},
+    {CC_ARACH_RUS,   MT_BABY},
+    {CC_PAIN_RUS,    MT_PAIN},
+    {CC_REVEN_RUS,   MT_UNDEAD},
+    {CC_MANCU_RUS,   MT_FATSO},
+    {CC_ARCH_RUS,    MT_VILE},
+    {CC_SPIDER_RUS,  MT_SPIDER},
+    {CC_CYBER_RUS,   MT_CYBORG},
+    {CC_HERO_RUS,    MT_PLAYER},
+
+    {NULL,0}
+};
+
 
 int         castnum;
 int         casttics;
@@ -621,7 +678,9 @@ void F_CastDrawer (void)
     // erase the entire screen to a background
     V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
 
-    F_CastPrint (DEH_String(castorder[castnum].name));
+    F_CastPrint (DEH_String(english_language ?
+                            castorder[castnum].name :
+                            castorder_rus[castnum].name));
 
     // draw the current frame in the middle of the screen
     sprdef = &sprites[caststate->sprite];

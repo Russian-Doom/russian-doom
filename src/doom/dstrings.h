@@ -37,6 +37,8 @@
 
 extern char* doom1_endmsg[];
 extern char* doom2_endmsg[];
+extern char* doom1_endmsg_rus[];
+extern char* doom2_endmsg_rus[];
 
 
 #endif

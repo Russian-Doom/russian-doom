@@ -48,12 +48,31 @@
 //
 // Locally used constants, shortcuts.
 //
+
+// DOOM 1 map names
 #define HU_TITLE        (mapnames[(gameepisode-1)*9+gamemap-1])
+#define HU_TITLE_RUS    (mapnames_rus[(gameepisode-1)*9+gamemap-1])
+
+// DOOM 2 map names
 #define HU_TITLE2       (mapnames_commercial[gamemap-1])
+#define HU_TITLE2_RUS   (mapnames_commercial_rus[gamemap-1])
+
+// Plutonia map names
 #define HU_TITLEP       (mapnames_commercial[gamemap-1 + 32])
+#define HU_TITLEP_RUS   (mapnames_commercial_rus[gamemap-1 + 32])
+
+// TNT map names
 #define HU_TITLET       (mapnames_commercial[gamemap-1 + 64])
-#define HU_TITLEN       (mapnames_commercial[gamemap-1 + 96])       // [JN] No Rest for the Living
-#define HU_TITLEJ       (mapnames_commercial[gamemap-1 + 105])      // [JN] Atari Jaguar
+#define HU_TITLET_RUS   (mapnames_commercial_rus[gamemap-1 + 64])
+
+// No Rest for the Living map names
+#define HU_TITLEN       (mapnames_commercial[gamemap-1 + 96])
+#define HU_TITLEN_RUS   (mapnames_commercial_rus[gamemap-1 + 96])
+
+// Atari Jaguar map names
+#define HU_TITLEJ       (mapnames_commercial[gamemap-1 + 105])
+#define HU_TITLEJ_RUS   (mapnames_commercial_rus[gamemap-1 + 105])
+
 #define HU_TITLE_CHEX   (mapnames_chex[(gameepisode-1)*9+gamemap-1])
 #define HU_TITLEHEIGHT  1
 #define HU_TITLEX       0
@@ -82,6 +101,20 @@ char *chat_macros[10] =
     HUSTR_CHATMACRO7,
     HUSTR_CHATMACRO8,
     HUSTR_CHATMACRO9
+};
+
+char *chat_macros_rus[10] =
+{
+    HUSTR_CHATMACRO0_RUS,
+    HUSTR_CHATMACRO1_RUS,
+    HUSTR_CHATMACRO2_RUS,
+    HUSTR_CHATMACRO3_RUS,
+    HUSTR_CHATMACRO4_RUS,
+    HUSTR_CHATMACRO5_RUS,
+    HUSTR_CHATMACRO6_RUS,
+    HUSTR_CHATMACRO7_RUS,
+    HUSTR_CHATMACRO8_RUS,
+    HUSTR_CHATMACRO9_RUS
 };
 
 char* player_names[] =
@@ -181,6 +214,60 @@ char* mapnames[] = // DOOM shareware/registered/retail (Ultimate) names.
     "NEWLEVEL",
     "NEWLEVEL",
     "NEWLEVEL"
+};
+
+char* mapnames_rus[] =
+{
+    HUSTR_E1M1_RUS,
+    HUSTR_E1M2_RUS,
+    HUSTR_E1M3_RUS,
+    HUSTR_E1M4_RUS,
+    HUSTR_E1M5_RUS,
+    HUSTR_E1M6_RUS,
+    HUSTR_E1M7_RUS,
+    HUSTR_E1M8_RUS,
+    HUSTR_E1M9_RUS,
+
+    HUSTR_E2M1_RUS,
+    HUSTR_E2M2_RUS,
+    HUSTR_E2M3_RUS,
+    HUSTR_E2M4_RUS,
+    HUSTR_E2M5_RUS,
+    HUSTR_E2M6_RUS,
+    HUSTR_E2M7_RUS,
+    HUSTR_E2M8_RUS,
+    HUSTR_E2M9_RUS,
+
+    HUSTR_E3M1_RUS,
+    HUSTR_E3M2_RUS,
+    HUSTR_E3M3_RUS,
+    HUSTR_E3M4_RUS,
+    HUSTR_E3M5_RUS,
+    HUSTR_E3M6_RUS,
+    HUSTR_E3M7_RUS,
+    HUSTR_E3M8_RUS,
+    HUSTR_E3M9_RUS,
+
+    HUSTR_E4M1_RUS,
+    HUSTR_E4M2_RUS,
+    HUSTR_E4M3_RUS,
+    HUSTR_E4M4_RUS,
+    HUSTR_E4M5_RUS,
+    HUSTR_E4M6_RUS,
+    HUSTR_E4M7_RUS,
+    HUSTR_E4M8_RUS,
+    HUSTR_E4M9_RUS,
+
+    // [JN] "НОВЫЙ УРОВЕНЬ"
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM"
 };
 
 
@@ -392,6 +479,154 @@ char* mapnames_commercial[] =
     JHUSTR_24
 };
 
+char* mapnames_commercial_rus[] =
+{
+    // DOOM 2 map names.
+    HUSTR_1_RUS,
+    HUSTR_2_RUS,
+    HUSTR_3_RUS,
+    HUSTR_4_RUS,
+    HUSTR_5_RUS,
+    HUSTR_6_RUS,
+    HUSTR_7_RUS,
+    HUSTR_8_RUS,
+    HUSTR_9_RUS,
+    HUSTR_10_RUS,
+    HUSTR_11_RUS,
+
+    HUSTR_12_RUS,
+    HUSTR_13_RUS,
+    HUSTR_14_RUS,
+    HUSTR_15_RUS,
+    HUSTR_16_RUS,
+    HUSTR_17_RUS,
+    HUSTR_18_RUS,
+    HUSTR_19_RUS,
+    HUSTR_20_RUS,
+
+    HUSTR_21_RUS,
+    HUSTR_22_RUS,
+    HUSTR_23_RUS,
+    HUSTR_24_RUS,
+    HUSTR_25_RUS,
+    HUSTR_26_RUS,
+    HUSTR_27_RUS,
+    HUSTR_28_RUS,
+    HUSTR_29_RUS,
+    HUSTR_30_RUS,
+    HUSTR_31_RUS,
+    HUSTR_32_RUS,
+
+    // Plutonia WAD map names.
+    PHUSTR_1_RUS,
+    PHUSTR_2_RUS,
+    PHUSTR_3_RUS,
+    PHUSTR_4_RUS,
+    PHUSTR_5_RUS,
+    PHUSTR_6_RUS,
+    PHUSTR_7_RUS,
+    PHUSTR_8_RUS,
+    PHUSTR_9_RUS,
+    PHUSTR_10_RUS,
+    PHUSTR_11_RUS,
+
+    PHUSTR_12_RUS,
+    PHUSTR_13_RUS,
+    PHUSTR_14_RUS,
+    PHUSTR_15_RUS,
+    PHUSTR_16_RUS,
+    PHUSTR_17_RUS,
+    PHUSTR_18_RUS,
+    PHUSTR_19_RUS,
+    PHUSTR_20_RUS,
+
+    PHUSTR_21_RUS,
+    PHUSTR_22_RUS,
+    PHUSTR_23_RUS,
+    PHUSTR_24_RUS,
+    PHUSTR_25_RUS,
+    PHUSTR_26_RUS,
+    PHUSTR_27_RUS,
+    PHUSTR_28_RUS,
+    PHUSTR_29_RUS,
+    PHUSTR_30_RUS,
+    PHUSTR_31_RUS,
+    PHUSTR_32_RUS,
+
+    // TNT WAD map names.
+    THUSTR_1_RUS,
+    THUSTR_2_RUS,
+    THUSTR_3_RUS,
+    THUSTR_4_RUS,
+    THUSTR_5_RUS,
+    THUSTR_6_RUS,
+    THUSTR_7_RUS,
+    THUSTR_8_RUS,
+    THUSTR_9_RUS,
+    THUSTR_10_RUS,
+    THUSTR_11_RUS,
+
+    THUSTR_12_RUS,
+    THUSTR_13_RUS,
+    THUSTR_14_RUS,
+    THUSTR_15_RUS,
+    THUSTR_16_RUS,
+    THUSTR_17_RUS,
+    THUSTR_18_RUS,
+    THUSTR_19_RUS,
+    THUSTR_20_RUS,
+
+    THUSTR_21_RUS,
+    THUSTR_22_RUS,
+    THUSTR_23_RUS,
+    THUSTR_24_RUS,
+    THUSTR_25_RUS,
+    THUSTR_26_RUS,
+    THUSTR_27_RUS,
+    THUSTR_28_RUS,
+    THUSTR_29_RUS,
+    THUSTR_30_RUS,
+    THUSTR_31_RUS,
+    THUSTR_32_RUS,
+
+    // Нет покоя для живых.
+    NHUSTR_1_RUS,
+    NHUSTR_2_RUS,
+    NHUSTR_3_RUS,
+    NHUSTR_4_RUS,
+    NHUSTR_5_RUS,
+    NHUSTR_6_RUS,
+    NHUSTR_7_RUS,
+    NHUSTR_8_RUS,
+    NHUSTR_9_RUS,
+
+    // [JN] Atari Jaguar
+    JHUSTR_1_RUS,
+    JHUSTR_2_RUS,
+    JHUSTR_3_RUS,
+    JHUSTR_4_RUS,
+    JHUSTR_5_RUS,
+    JHUSTR_6_RUS,
+    JHUSTR_7_RUS,
+    JHUSTR_8_RUS,
+    JHUSTR_9_RUS,
+    JHUSTR_10_RUS,
+    JHUSTR_11_RUS,
+    JHUSTR_12_RUS,
+    JHUSTR_13_RUS,
+    JHUSTR_14_RUS,
+    JHUSTR_15_RUS,
+    JHUSTR_16_RUS,
+    JHUSTR_17_RUS,
+    JHUSTR_18_RUS,
+    JHUSTR_19_RUS,
+    JHUSTR_20_RUS,
+    JHUSTR_21_RUS,
+    JHUSTR_22_RUS,
+    JHUSTR_23_RUS,
+    JHUSTR_24_RUS
+};
+
 
 void HU_Init(void)
 {
@@ -477,37 +712,37 @@ void HU_Start(void)
     switch ( logical_gamemission )
     {
         case doom:
-        s = HU_TITLE;
+        s = english_language ? HU_TITLE : HU_TITLE_RUS;
         break;
 
         case doom2:
-        s = HU_TITLE2;
+        s = english_language ? HU_TITLE2 : HU_TITLE2_RUS;
         break;
 
         case pack_plut:
-        s = HU_TITLEP;
+        s = english_language ? HU_TITLEP : HU_TITLEP_RUS;
         break;
 
         case pack_tnt:
-        s = HU_TITLET;
+        s = english_language ? HU_TITLET : HU_TITLET_RUS;
         break;
 
         case pack_nerve:
         if (gamemap <= 9)
-        s = HU_TITLEN;
+        s = english_language ? HU_TITLEN : HU_TITLEN_RUS;
         else
-        s = HU_TITLE2;
+        s = english_language ? HU_TITLE2 : HU_TITLE2_RUS;
         break;
 
         case jaguar:
         if (gamemap <= 24)
-        s = HU_TITLEJ;
+        s = english_language ? HU_TITLEJ : HU_TITLEJ_RUS;
         else
-        s = HU_TITLE2;
+        s = english_language ? HU_TITLE2 : HU_TITLE2_RUS;
         break;
         
         default:
-        s = "ytbpdtcnysq ehjdtym"; // [JN] "Неизвестный уровень"
+        s = english_language ? "Unknown level" : "ytbpdtcnysq ehjdtym"; // [JN] "Неизвестный уровень"
         break;
     }
 
@@ -553,21 +788,27 @@ void HU_Drawer(void)
         // [from-crispy] Show level stats in automap
         if (!vanillaparm && automap_stats)
         {
-            sprintf(str, "dhfub: %d/%d", players[consoleplayer].killcount, totalkills);
+            sprintf(str, english_language ?
+                         "Kills: %d/%d" : "dhfub: %d/%d",
+                         players[consoleplayer].killcount, totalkills);
             HUlib_clearTextLine(&w_kills);
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_kills, *(s++));
             HUlib_drawTextLine(&w_kills, false);
     
-            sprintf(str, "ghtlvtns: %d/%d", players[consoleplayer].itemcount, totalitems);
+            sprintf(str, english_language ?
+                         "Items: %d/%d" : "ghtlvtns: %d/%d",
+                         players[consoleplayer].itemcount, totalitems);
             HUlib_clearTextLine(&w_items);
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_items, *(s++));
             HUlib_drawTextLine(&w_items, false);
     
-            sprintf(str, "nfqybrb: %d/%d", players[consoleplayer].secretcount, totalsecret);
+            sprintf(str, english_language ?
+                         "Secret: %d/%d" : "nfqybrb: %d/%d",
+                         players[consoleplayer].secretcount, totalsecret);
             HUlib_clearTextLine(&w_scrts);
             s = str;
             while (*s)
@@ -727,7 +968,7 @@ void HU_queueChatChar(char c)
 {
     if (((head + 1) & (QUEUESIZE-1)) == tail)
     {
-        plr->message = DEH_String(HUSTR_MSGU);
+        plr->message = DEH_String(english_language ? HUSTR_MSGU : HUSTR_MSGU_RUS);
     }
     else
     {
@@ -831,15 +1072,20 @@ boolean HU_Responder(event_t *ev)
                     {
                         num_nobrainers++;
                         if (num_nobrainers < 3)
-                            plr->message = DEH_String(HUSTR_TALKTOSELF1);
+                            plr->message = DEH_String(english_language ?
+                                                      HUSTR_TALKTOSELF1 : HUSTR_TALKTOSELF1_RUS);
                         else if (num_nobrainers < 6)
-                            plr->message = DEH_String(HUSTR_TALKTOSELF2);
+                            plr->message = DEH_String(english_language ?
+                                                      HUSTR_TALKTOSELF2 : HUSTR_TALKTOSELF2_RUS);
                         else if (num_nobrainers < 9)
-                            plr->message = DEH_String(HUSTR_TALKTOSELF3);
+                            plr->message = DEH_String(english_language ?
+                                                      HUSTR_TALKTOSELF3 : HUSTR_TALKTOSELF3_RUS);
                         else if (num_nobrainers < 32)
-                            plr->message = DEH_String(HUSTR_TALKTOSELF4);
+                            plr->message = DEH_String(english_language ?
+                                                      HUSTR_TALKTOSELF4 : HUSTR_TALKTOSELF4_RUS);
                         else
-                            plr->message = DEH_String(HUSTR_TALKTOSELF5);
+                            plr->message = DEH_String(english_language ?
+                                                      HUSTR_TALKTOSELF5 : HUSTR_TALKTOSELF5_RUS);
                     }
                 }
             }
@@ -854,7 +1100,7 @@ boolean HU_Responder(event_t *ev)
         if (c > 9)
         return false;
         // fprintf(stderr, "got here\n");
-        macromessage = chat_macros[c];
+        macromessage = english_language ? chat_macros[c] : chat_macros_rus[c];
 
         // kill last message with a '\n'
         HU_queueChatChar(KEY_ENTER); // DEBUG!!!
@@ -866,7 +1112,9 @@ boolean HU_Responder(event_t *ev)
 
         // leave chat mode and notify that it was sent
         StopChatInput();
-        M_StringCopy(lastmessage, chat_macros[c], sizeof(lastmessage));
+        M_StringCopy(lastmessage, english_language ?
+                                  chat_macros[c] : chat_macros_rus[c],
+                                  sizeof(lastmessage));
         plr->message = lastmessage;
         eatkey = true;
     }

@@ -452,8 +452,16 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         }
 
         // [JN] Добавлен звуковой фидбек
-        M_snprintf(autorunmsg, sizeof(autorunmsg), STSTR_ALWAYSRUN "%s",
-            (joybspeed >= MAX_JOY_BUTTONS) ? STSTR_ALWRUNON : STSTR_ALWRUNOFF);
+        if (english_language)
+        {
+            M_snprintf(autorunmsg, sizeof(autorunmsg), STSTR_ALWAYSRUN "%s",
+                (joybspeed >= MAX_JOY_BUTTONS) ? STSTR_ALWRUNON : STSTR_ALWRUNOFF);
+        }
+        else
+        {
+            M_snprintf(autorunmsg, sizeof(autorunmsg), STSTR_ALWAYSRUN_RUS "%s",
+                (joybspeed >= MAX_JOY_BUTTONS) ? STSTR_ALWRUNON_RUS : STSTR_ALWRUNOFF_RUS);
+        }
         players[consoleplayer].message = autorunmsg;
         S_StartSound(NULL,sfx_swtchn);
 
@@ -478,8 +486,16 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
             crosshair_draw = false;
         }
 
-        M_snprintf(crosshairmsg, sizeof(crosshairmsg), STSRT_CROSSHAIR "%s",
-            crosshair_draw ? STSTR_CROSSHAIR_ON : STSTR_CROSSHAIR_OFF);
+        if (english_language)
+        {
+            M_snprintf(crosshairmsg, sizeof(crosshairmsg), STSRT_CROSSHAIR "%s",
+                crosshair_draw ? STSTR_CROSSHAIR_ON : STSTR_CROSSHAIR_OFF);
+        }
+        else
+        {
+            M_snprintf(crosshairmsg, sizeof(crosshairmsg), STSRT_CROSSHAIR_RUS "%s",
+                crosshair_draw ? STSTR_CROSSHAIR_ON_RUS : STSTR_CROSSHAIR_OFF_RUS);
+        }
         players[consoleplayer].message = crosshairmsg;
         S_StartSound(NULL,sfx_swtchn);
 
@@ -684,8 +700,16 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
             look = TOCENTER;
         }
 
-        M_snprintf(mlookmsg, sizeof(mlookmsg), STSRT_MOUSELOOK "%s",
-            (mlook == true) ? STSTR_MLOOK_ON : STSTR_MLOOK_OFF);
+        if (english_language)
+        {
+            M_snprintf(mlookmsg, sizeof(mlookmsg), STSRT_MOUSELOOK "%s",
+                (mlook == true) ? STSTR_MLOOK_ON : STSTR_MLOOK_OFF);
+        }
+        else
+        {
+            M_snprintf(mlookmsg, sizeof(mlookmsg), STSRT_MOUSELOOK_RUS "%s",
+                (mlook == true) ? STSTR_MLOOK_ON_RUS : STSTR_MLOOK_OFF_RUS);
+        }
         players[consoleplayer].message = mlookmsg;
         
         S_StartSound(NULL, sfx_swtchn);
@@ -868,7 +892,7 @@ void G_DoLoadLevel (void)
 
     if (testcontrols)
     {
-        players[consoleplayer].message = STSTR_TESTCTRLS;
+        players[consoleplayer].message = english_language ? STSTR_TESTCTRLS : STSTR_TESTCTRLS_RUS;
     }
 }
 
@@ -1103,7 +1127,7 @@ void G_Ticker (void)
             V_ScreenShot("DOOM%02i.%s");
             if (devparm)
             {
-                players[consoleplayer].message = STSTR_SCRNSHT;
+                players[consoleplayer].message = english_language ? STSTR_SCRNSHT : STSTR_SCRNSHT_RUS;
             }
             S_StartSound(NULL,sfx_itemup); // [JN] Звуковой фидбек
             gameaction = ga_nothing;
@@ -1922,7 +1946,7 @@ void G_DoLoadGame (void)
     R_ExecuteSetViewSize ();
     
     // [JN] Дополнительный фидбек о загрузке игры (Игра загружена.)
-    players[consoleplayer].message = DEH_String(GGLOADED);
+    players[consoleplayer].message = DEH_String(english_language ? GGLOADED : GGLOADED_RUS);
     
     // draw the pattern into the back screen
     R_FillBackScreen ();   
@@ -2007,7 +2031,7 @@ void G_DoSaveGame (void)
     gameaction = ga_nothing;
     M_StringCopy(savedescription, "", sizeof(savedescription));
 
-    players[consoleplayer].message = DEH_String(GGSAVED);
+    players[consoleplayer].message = DEH_String(english_language ? GGSAVED : GGSAVED_RUS);
 
     // draw the pattern into the back screen
     R_FillBackScreen ();

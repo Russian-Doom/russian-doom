@@ -131,6 +131,8 @@ boolean main_loop_started = false;
 char wadfile[1024];  // primary wad file
 char mapdir[1024];   // directory of development maps
 
+// [JN] Support for fallback to the English language.
+int english_language = 0;
 
 int show_endoom   = 0;
 int show_diskicon = 1;
@@ -426,6 +428,9 @@ void D_BindVariables(void)
 #ifdef FEATURE_MULTIPLAYER
     NET_BindVariables();
 #endif
+
+    // [JN] Support for fallback to the English language.
+    M_BindIntVariable("english_language",       &english_language);
 
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
     M_BindIntVariable("sfx_volume",             &sfxVolume);
@@ -1023,7 +1028,8 @@ void D_SetGameDescription(void)
     boolean is_freedoom = W_CheckNumForName("FREEDOOM") >= 0,
             is_freedm = W_CheckNumForName("FREEDM") >= 0;
 
-    gamedescription = "Неизвестная игра";
+    gamedescription = english_language ? 
+                      "Unknown game" : "Неизвестная игра";
 
     if (logical_gamemission == doom)
     {
@@ -1031,50 +1037,103 @@ void D_SetGameDescription(void)
 
         if (is_freedoom)
         {
-            gamedescription = GetGameName("Freedoom: Стадия 1");
-            W_MergeFile("russian/russian-freedoom-common.wad");
-            // DEH_AddStringReplacement ("TITLEPIC", "FDTITLE1");
-        }
-        else if (gamemode == retail)
-        {
-            if (gameversion == exe_doom_se) // [JN] Doom 1.9 Special Edition
-            {
-                gamedescription = GetGameName("Doom: Специальное издание");
+            W_MergeFile("base/freedoom-common.wad");
 
-                // Episode 4 using a sky from Episode 2
-                DEH_AddStringReplacement ("SKY4",   "SKY2");
+            if (english_language)
+            {
+                gamedescription = GetGameName("Freedoom: Phase 1");
             }
             else
             {
-                gamedescription = GetGameName("The Ultimate DOOM");
+                gamedescription = GetGameName("Freedoom: Стадия 1");
+                W_MergeFile("base/freedoom-common-russian.wad");
             }
-            W_MergeFile("russian/russian-doom-common.wad");
-            W_MergeFile("russian/russian-doom-doom1.wad");
+        }
+        else if (gamemode == retail)
+        {
+            gamedescription = GetGameName("The Ultimate DOOM");
+
+            W_MergeFile("base/doom-common.wad");
+
+            if (english_language)
+            {
+                // [JN] We are fine.
+            }
+            else
+            {
+                W_MergeFile("base/doom-common-russian.wad");
+                W_MergeFile("base/doom-doom1-russian.wad");
+            }
+
+            if (gameversion == exe_doom_se)
+            {
+                if (english_language)
+                gamedescription = GetGameName("DOOM: Special Edition");
+                else
+                gamedescription = GetGameName("Doom: Специальное издание");
+            
+                // Episode 4 using a sky from Episode 2
+                DEH_AddStringReplacement ("SKY4",   "SKY2");
+            }
         }
         else if (gamemode == registered)
         {
             gamedescription = GetGameName("DOOM");
-            W_MergeFile("russian/russian-doom-common.wad");
-            W_MergeFile("russian/russian-doom-doom1.wad");
+
+            W_MergeFile("base/doom-common.wad");
+
+            if (english_language)
+            {
+                gamedescription = GetGameName("DOOM Registered");
+            }
+            else
+            {
+                W_MergeFile("base/doom-common-russian.wad");
+                W_MergeFile("base/doom-doom1-russian.wad");
+            }
         }
         else if (gamemode == shareware)
         {
-            gamedescription = GetGameName("DOOM (Демоверсия)");
-            W_MergeFile("russian/russian-doom-common.wad");
-            W_MergeFile("russian/russian-doom-doom1.wad");
+            W_MergeFile("base/doom-common.wad");
+
+            if (english_language)
+            {
+                gamedescription = GetGameName("DOOM Shareware");
+            }
+            else
+            {
+                gamedescription = GetGameName("DOOM (Демоверсия)");
+                W_MergeFile("base/doom-common-russian.wad");
+                W_MergeFile("base/doom-doom1-russian.wad");
+            }
         }
         else if (gamemode == pressbeta)
         {
-            gamedescription = GetGameName("DOOM (Бета-версия)");
-            W_MergeFile("russian/russian-doom-common.wad");
+            W_MergeFile("base/doom-common.wad");
+            W_MergeFile("base/doom-beta.wad");
 
-            // [JN] String replacement routine:
             DEH_AddStringReplacement ("M_JKILL",   "M_JKILL2");
             DEH_AddStringReplacement ("STBAR",     "STBARB");
             DEH_AddStringReplacement ("STCHARMS",  "STCHARTS");
-            DEH_AddStringReplacement (GOTHTHBONUS, GOTDAGGER);
-            DEH_AddStringReplacement (GOTARMBONUS, GOTCHEST);
-            DEH_AddStringReplacement (GOTSUPER,    GOTEXTRALIFE);
+
+            if (english_language)
+            {
+                gamedescription = GetGameName("Doom Press Release Beta");
+
+                DEH_AddStringReplacement (GOTHTHBONUS, GOTDAGGER);
+                DEH_AddStringReplacement (GOTARMBONUS, GOTCHEST);
+                DEH_AddStringReplacement (GOTSUPER,    GOTEXTRALIFE);
+            }
+            else
+            {
+                gamedescription = GetGameName("DOOM (Бета-версия)");
+
+                W_MergeFile("base/doom-common-russian.wad");
+                W_MergeFile("base/doom-beta-russian.wad");
+                DEH_AddStringReplacement (GOTHTHBONUS_RUS, GOTDAGGER_RUS);
+                DEH_AddStringReplacement (GOTARMBONUS_RUS, GOTCHEST_RUS);
+                DEH_AddStringReplacement (GOTSUPER_RUS,    GOTEXTRALIFE_RUS);
+            }
         }
     }
     else
@@ -1098,21 +1157,49 @@ void D_SetGameDescription(void)
         }
         else if (logical_gamemission == doom2)
         {
-            gamedescription = GetGameName("DOOM 2: Ад на Земле");
-            W_MergeFile("russian/russian-doom-common.wad");
-            W_MergeFile("russian/russian-doom-doom2.wad");
+            W_MergeFile("base/doom-common.wad");
+
+            if (english_language)
+            {
+                gamedescription = GetGameName("DOOM 2: Hell on Earth");
+            }
+            else
+            {
+                gamedescription = GetGameName("DOOM 2: Ад на Земле");
+                W_MergeFile("base/doom-common-russian.wad");
+                W_MergeFile("base/doom-doom2-russian.wad");
+            }
         }
         else if (logical_gamemission == pack_plut)
         {
-            gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
-            W_MergeFile("russian/russian-doom-common.wad");
-            W_MergeFile("russian/russian-doom-plutonia.wad");
+            W_MergeFile("base/doom-common.wad");
+            
+            if (english_language)
+            {
+                gamedescription = GetGameName("Final DOOM: Plutonia Experiment");
+            }
+            else
+            {
+                gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
+
+                W_MergeFile("base/doom-common-russian.wad");
+                W_MergeFile("base/doom-plutonia-russian.wad");
+            }
         }
         else if (logical_gamemission == pack_tnt)
         {
-            gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
-            W_MergeFile("russian/russian-doom-common.wad");
-            W_MergeFile("russian/russian-doom-tnt.wad");
+            W_MergeFile("base/doom-common.wad");
+
+            if (english_language)
+            {
+                gamedescription = GetGameName("Final DOOM: TNT - Evilution");
+            }
+            else
+            {
+                gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
+                W_MergeFile("base/doom-common-russian.wad");
+                W_MergeFile("base/doom-tnt-russian.wad");
+            }
         }
         else if (logical_gamemission == jaguar)
         {
@@ -1154,10 +1241,19 @@ void D_SetGameDescription(void)
                     check = M_StrCaseStr(myargv[nrv], "nerve.wad");
 
                     if (check != NULL)
-                    {   
-                        gamedescription = "DOOM 2: Нет покоя для живых";
+                    {
                         gamemission = pack_nerve;
-                        W_MergeFile("russian/russian-doom-nerve.wad");
+                        DEH_AddStringReplacement ("TITLEPIC", "DMENUPIC");
+
+                        if (english_language)
+                        {
+                            gamedescription = "DOOM 2: No Rest For The Living";
+                        }
+                        else
+                        {
+                            gamedescription = "DOOM 2: Нет покоя для живых";
+                            W_MergeFile("base/doom-nerve-russian.wad");
+                        }
                     }
                 }
             }
@@ -1193,10 +1289,19 @@ void D_SetGameDescription(void)
                     (M_StrCaseStr(myargv[mlvls], "VIRGIL.WAD"))     );
 
                     if (check)
-                    {   
-                        gamedescription = "Мастер-Уровни для DOOM 2";
-                        W_MergeFile("russian/russian-doom-master.wad");
-    
+                    {
+                        W_MergeFile("base/doom-master.wad");
+
+                        if (english_language)
+                        {
+                            gamedescription = "Master Levels for DOOM 2";
+                        }
+                        else
+                        {
+                            gamedescription = "Мастер-Уровни для DOOM 2";
+                            W_MergeFile("base/doom-master-russian.wad");
+                        }
+
                         // ATTACK.WAD - Нападение
                         if (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))
                         {
@@ -1356,19 +1461,25 @@ void D_SetGameDescription(void)
 
         // Doom 1
         if (gamemode == shareware || gamemode == registered || gamemode == retail)
-        W_MergeFile("russian/russian-doom-doom1-skies.wad");
+        W_MergeFile("base/doom-doom1-skies.wad");
 
         // Doom 2
         else if (gamemission == doom2 || gamemission == pack_nerve)
-        W_MergeFile("russian/russian-doom-doom2-skies.wad");
+        W_MergeFile("base/doom-doom2-skies.wad");
 
         // TNT - Evilution
         else if (gamemission == pack_tnt)
-        W_MergeFile("russian/russian-doom-tnt-skies.wad");
+        W_MergeFile("base/doom-tnt-skies.wad");
 
         // Plutonia
         else if (gamemission == pack_plut)
-        W_MergeFile("russian/russian-doom-plutonia-skies.wad");
+        W_MergeFile("base/doom-plutonia-skies.wad");
+    }
+
+    // [JN] Press Beta have own taller skies, so it's okay to have unscaled sky.
+    if (gamemode == pressbeta)
+    {
+        scaled_sky = false;
     }
 
     // Автоматическая загрузка блока DEHACKED
@@ -1637,11 +1748,11 @@ static void D_Endoom(void)
 	// [JN] Задаём различные экраные ENDOOM для Shareware и
 	// Registered, чтобы избежать дубликации архивов с ресурсами.
 
-    if (gamemode == shareware)
+    if (gamemode == shareware && !english_language)
     {   // [JN] DOOM Shareware
         endoom = W_CacheLumpName(DEH_String("ENDOOMS"), PU_STATIC);
     }
-    else if (gamemode == registered)
+    else if (gamemode == registered && !english_language)
     {   // [JN] DOOM 1 Registered 
         endoom = W_CacheLumpName(DEH_String("ENDOOMR"), PU_STATIC);
     }

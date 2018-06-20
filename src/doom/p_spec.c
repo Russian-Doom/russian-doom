@@ -1102,7 +1102,7 @@ void P_PlayerInSpecialSector (player_t* player)
 	// Звук проигрывается только у обнаружевшего игрока.
 	if (secret_notification && !vanillaparm)
 	{
-	player->message = SECRETFOUND;	 
+	player->message = english_language ? SECRETFOUND : SECRETFOUND_RUS;
 	    if (player == &players[consoleplayer])
 		S_StartSound(0, sfx_getpow);
 	}

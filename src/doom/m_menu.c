@@ -133,6 +133,35 @@ char gammamsg[25][29] =
     GAMMALVL6
 };
 
+char gammamsg_rus[25][29] =
+{
+    GAMMALVL0_RUS,
+    GAMMALV02_RUS,
+    GAMMALV05_RUS,
+    GAMMALV07_RUS,
+    GAMMALVL1_RUS,
+    GAMMALV12_RUS,
+    GAMMALV15_RUS,
+    GAMMALV17_RUS,
+    GAMMALVL2_RUS,
+    GAMMALV22_RUS,
+    GAMMALV25_RUS,
+    GAMMALV27_RUS,
+    GAMMALVL3_RUS,
+    GAMMALV32_RUS,
+    GAMMALV35_RUS,
+    GAMMALV37_RUS,
+    GAMMALVL4_RUS,
+    GAMMALV42_RUS,
+    GAMMALV45_RUS,
+    GAMMALV47_RUS,
+    GAMMALVL5_RUS,
+    GAMMALV52_RUS,
+    GAMMALV55_RUS,
+    GAMMALV57_RUS,
+    GAMMALVL6_RUS
+};
+
 // we are going to be entering a savegame string
 int saveStringEnter;              
 int saveSlot;       // which slot to save in
@@ -575,7 +604,9 @@ void M_ReadSaveStrings(void)
         handle = fopen(name, "rb");
         if (handle == NULL)
         {
-            M_StringCopy(savegamestrings[i], EMPTYSTRING, SAVESTRINGSIZE);
+            M_StringCopy(savegamestrings[i], english_language ?
+                                             EMPTYSTRING : EMPTYSTRING_RUS,
+                                             SAVESTRINGSIZE);
             LoadMenu[i].status = 0;
             continue;
         }
@@ -595,7 +626,7 @@ void M_DrawLoad(void)
     int i;
 
     // [JN] Используется дополнительный тайтл для меню загрузки: "ЗАГРУЗИТЬ ИГРУ"
-    V_DrawShadowedPatchDoom(59, 13, W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(92, 11, W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
 
     for (i = 0;i < load_end; i++)
     {
@@ -663,7 +694,10 @@ void M_LoadGame (int choice)
 {
     if (netgame)
     {
-        M_StartMessage(DEH_String(LOADNET),NULL,false);
+        M_StartMessage(DEH_String(english_language ?
+                                  LOADNET : LOADNET_RUS),
+                                  NULL,false);
+        
         return;
     }
 
@@ -682,12 +716,12 @@ void M_DrawSave(void)
     if (QuickSaveTitle)
     {
         // [JN] Используется дополнительный тайтл для меню сохранения: "БЫСТРОЕ СОХРАНЕНИЕ"
-        V_DrawShadowedPatchDoom(22, 13, W_CacheLumpName(DEH_String("M_QSGTTL"), PU_CACHE));
+        V_DrawShadowedPatchDoom(89, 11, W_CacheLumpName(DEH_String("M_QSGTTL"), PU_CACHE));
     }
     else
     {
         // [JN] Используется дополнительный тайтл для меню сохранения: "СОХРАНИТЬ ИГРУ"
-        V_DrawShadowedPatchDoom(57, 13, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
+        V_DrawShadowedPatchDoom(93, 11, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
     }
 
     for (i = 0;i < load_end; i++)
@@ -742,7 +776,9 @@ void M_SaveGame (int choice)
 {
     if (!usergame)
     {
-        M_StartMessage(DEH_String(SAVEDEAD),NULL,false);
+        M_StartMessage(DEH_String(english_language ?
+                                  SAVEDEAD : SAVEDEAD_RUS),
+                                  NULL,false);
         return;
     }
 
@@ -794,7 +830,9 @@ void M_QuickSave(void)
     }
     else
     {
-        DEH_snprintf(tempstring, 80, QSPROMPT, savegamestrings[quickSaveSlot]);
+        DEH_snprintf(tempstring, 80, english_language ?
+                                     QSPROMPT : QSPROMPT_RUS,
+                                     savegamestrings[quickSaveSlot]);
         M_StartMessage(tempstring,M_QuickSaveResponse,true);
     }
 }
@@ -817,13 +855,17 @@ void M_QuickLoad(void)
 {
     if (netgame)
     {
-        M_StartMessage(DEH_String(QLOADNET),NULL,false);
+        M_StartMessage(DEH_String(english_language ?
+                                  QLOADNET : QLOADNET_RUS),
+                                  NULL,false);
         return;
     }
 
     if (quickSaveSlot < 0)
     {
-        M_StartMessage(DEH_String(QSAVESPOT),NULL,false);
+        M_StartMessage(DEH_String(english_language ?
+                                  QSAVESPOT : QSAVESPOT_RUS),
+                                  NULL,false);
         return;
     }
 
@@ -833,7 +875,9 @@ void M_QuickLoad(void)
     }
     else
     {
-        DEH_snprintf(tempstring, 80, QLPROMPT, savegamestrings[quickSaveSlot]);
+        DEH_snprintf(tempstring, 80, english_language ?
+                                     QLPROMPT : QLPROMPT_RUS,
+                                     savegamestrings[quickSaveSlot]);
         M_StartMessage(tempstring,M_QuickLoadResponse,true);
     }
 }
@@ -954,7 +998,7 @@ void M_DrawReadThis2(void)
 void M_DrawSound(void)
 {   
     // [JN] Используется дополнительный заголовок для меню ГРОМКОСТИ.
-    V_DrawShadowedPatchDoom (90, 40, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
+    V_DrawShadowedPatchDoom (71, 39, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1), 16,sfxVolume);
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(music_vol+1), 16,musicVolume);
@@ -1016,15 +1060,17 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
-    V_DrawShadowedPatchDoom(84, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-    V_DrawShadowedPatchDoom(38, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(99, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+    V_DrawShadowedPatchDoom(42, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
 }
 
 void M_NewGame(int choice)
 {
     if (netgame && !demoplayback)
     {
-        M_StartMessage(DEH_String(NEWGAME),NULL,false);
+        M_StartMessage(DEH_String(english_language ?
+                                  NEWGAME : NEWGAME_RUS),
+                                  NULL,false);
         return;
     }
 
@@ -1044,8 +1090,8 @@ int epi;
 
 void M_DrawEpisode(void)
 {
-    V_DrawShadowedPatchDoom(84, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-    V_DrawShadowedPatchDoom(66, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
+    V_DrawShadowedPatchDoom(99, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+    V_DrawShadowedPatchDoom(73, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
 }
 
 void M_VerifyNightmare(int key)
@@ -1070,12 +1116,16 @@ void M_ChooseSkill(int choice)
 {
     if (choice == nightmare)
     {
-        M_StartMessage(DEH_String(NIGHTMARE),M_VerifyNightmare,true);
+        M_StartMessage(DEH_String(english_language ?
+                                  NIGHTMARE : NIGHTMARE_RUS),
+                                  M_VerifyNightmare,true);
         return;
     }
     if (choice == ultra_nm)
     {
-        M_StartMessage(DEH_String(ULTRANM),M_VerifyUltraNightmare,true);
+        M_StartMessage(DEH_String(english_language ?
+                                  ULTRANM : ULTRANM_RUS),
+                                  M_VerifyUltraNightmare,true);
         return;
     }
 
@@ -1087,7 +1137,9 @@ void M_Episode(int choice)
 {
     if ((gamemode == shareware) && choice)
     {
-        M_StartMessage(DEH_String(SWSTRING),NULL,false);
+        M_StartMessage(DEH_String(english_language ?
+                                  SWSTRING : SWSTRING_RUS),
+                                  NULL,false);
         M_SetupNextMenu(&ReadDef1);
         return;
     }
@@ -1112,7 +1164,7 @@ static char *msgNames[2] = {"M_MSGOFF","M_MSGON"};
 
 void M_DrawOptions(void)
 {
-    V_DrawShadowedPatchDoom(89, 13, W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(110, 11, W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
 
     V_DrawShadowedPatchDoom(OptionsDef.x + 175, OptionsDef.y + LINEHEIGHT * detail,
         W_CacheLumpName(DEH_String(detailNames[detailLevel]), PU_CACHE));
@@ -1141,9 +1193,11 @@ void M_ChangeMessages(int choice)
     showMessages = 1 - showMessages;
 
     if (!showMessages)
-    players[consoleplayer].message = DEH_String(MSGOFF);
+    players[consoleplayer].message = DEH_String(english_language ?
+                                                MSGOFF : MSGOFF_RUS);
     else
-    players[consoleplayer].message = DEH_String(MSGON);
+    players[consoleplayer].message = DEH_String(english_language ?
+                                                MSGON : MSGON_RUS);
 
     message_dontfuckwithme = true;
 }
@@ -1173,11 +1227,14 @@ void M_EndGame(int choice)
 
     if (netgame)
     {
-        M_StartMessage(DEH_String(NETEND),NULL,false);
+        M_StartMessage(DEH_String(english_language ?
+                                  NETEND : NETEND_RUS),NULL,false);
         return;
     }
 
-    M_StartMessage(DEH_String(ENDGAME),M_EndGameResponse,true);
+    M_StartMessage(DEH_String(english_language ?
+                              ENDGAME : ENDGAME_RUS),
+                              M_EndGameResponse,true);
 }
 
 
@@ -1272,11 +1329,11 @@ static char *M_SelectEndMessage(void)
 
     if (logical_gamemission == doom)
     {
-        endmsg = doom1_endmsg; // Doom 1
+        endmsg = english_language ? doom1_endmsg : doom1_endmsg_rus; // Doom 1
     }
     else
     {
-        endmsg = doom2_endmsg; // Doom 2
+        endmsg = english_language ? doom2_endmsg : doom2_endmsg_rus; // Doom 2
     }
 
     return endmsg[gametic % NUM_QUITMESSAGES];
@@ -1285,7 +1342,14 @@ static char *M_SelectEndMessage(void)
 
 void M_QuitDOOM(int choice)
 {
-    DEH_snprintf(endstring, sizeof(endstring), "%s\n\n" DOSY, DEH_String(M_SelectEndMessage()));
+    if (english_language)
+    {
+        DEH_snprintf(endstring, sizeof(endstring),"%s\n\n" DOSY, DEH_String(M_SelectEndMessage()));
+    }
+    else
+    {
+        DEH_snprintf(endstring, sizeof(endstring),"%s\n\n" DOSY_RUS, DEH_String(M_SelectEndMessage()));
+    }
 
     M_StartMessage(endstring,M_QuitResponse,true);
 }
@@ -1316,9 +1380,11 @@ void M_ChangeDetail(int choice)
     R_SetViewSize (screenblocks, detailLevel);
 
     if (!detailLevel)
-    players[consoleplayer].message = DEH_String(DETAILHI);
+    players[consoleplayer].message = DEH_String(english_language ?
+                                                DETAILHI : DETAILHI_RUS);
     else
-    players[consoleplayer].message = DEH_String(DETAILLO);
+    players[consoleplayer].message = DEH_String(english_language ?
+                                                DETAILLO : DETAILLO_RUS);
 }
 
 
@@ -1916,7 +1982,8 @@ boolean M_Responder (event_t* ev)
                                                              "PLAYPAL"),
                                                              PU_CACHE) + 
                                                              st_palette * 768);
-            players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
+            players[consoleplayer].message = DEH_String(english_language ? 
+                                                        gammamsg[usegamma] : gammamsg_rus[usegamma]);
             return true;
         }
     }
@@ -2338,7 +2405,9 @@ void M_ConfirmDeleteGame ()
     // удалить сохраненную игру
     M_StringJoin("ds ltqcndbntkmyj [jnbnt\nelfkbnm cj[hfytyye. buhe\n\n^",
         savegamestrings[itemOn], "^?\n\n",
-        PRESSYN, NULL);
+        english_language ?
+        PRESSYN : PRESSYN_RUS,
+        NULL);
 
     M_StartMessage(savegwarning, M_ConfirmDeleteGameResponse, true);
     messageToPrint = 2;

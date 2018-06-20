@@ -131,6 +131,8 @@ int local_time = 0; // [JN] Local time widget
 
 // [JN] Дополнительные параметры игры
 
+int english_language = 0;
+
 // - Интерфейс -
 int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
 // - Графика -
@@ -178,6 +180,7 @@ void D_BindVariables(void)
 #endif
 
     M_BindIntVariable("graphical_startup",      &graphical_startup);
+    M_BindIntVariable("english_language",       &english_language);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);
     M_BindIntVariable("music_volume",           &snd_MusicVolume);
