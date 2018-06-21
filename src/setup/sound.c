@@ -122,7 +122,9 @@ void ConfigSound(void)
 
     // Build the window
 
-    window = TXT_NewWindow("Настройки звука");
+    window = TXT_NewWindow(english_language ?
+                           "Sound configuration" :
+                           "Настройки звука");
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
     TXT_SetColumnWidths(window, 40);
@@ -130,12 +132,21 @@ void ConfigSound(void)
                                   TXT_SCREEN_W / 2, 3);
 
     TXT_AddWidgets(window,
-        TXT_NewSeparator("Звуковые эффекты"),
-        TXT_NewRadioButton("Отключены", &snd_sfxdevice, SNDDEVICE_NONE),
+        TXT_NewSeparator(english_language ?
+                         "Sound effects" :
+                         "Звуковые эффекты"),
+        TXT_NewRadioButton(english_language ?
+                           "Disabled" :
+                           "Отключены",
+                           &snd_sfxdevice, SNDDEVICE_NONE),
         TXT_If(gamemission == doom,
-            TXT_NewRadioButton("Динамик ПК", &snd_sfxdevice,
-                               SNDDEVICE_PCSPEAKER)),
-        TXT_NewRadioButton("Цифровые",
+            TXT_NewRadioButton(english_language ?
+                               "PC speaker effects" :
+                               "Динамик ПК",
+                               &snd_sfxdevice, SNDDEVICE_PCSPEAKER)),
+        TXT_NewRadioButton(english_language ?
+                           "Digital sound effects" :
+                           "Цифровые",
                            &snd_sfxdevice,
                            SNDDEVICE_SB),
         TXT_If(gamemission == doom || gamemission == heretic
@@ -143,24 +154,37 @@ void ConfigSound(void)
             TXT_NewConditional(&snd_sfxdevice, SNDDEVICE_SB,
                 TXT_NewHorizBox(
                     TXT_NewStrut(4, 0),
-                    TXT_NewCheckBox("Произвольный питч-шифтинг", &snd_pitchshift),
-                    NULL))),
+                    TXT_NewCheckBox(english_language ?
+                                    "Pitch-shifted sounds" :
+                                    "Произвольный питч-шифтинг",
+                                    &snd_pitchshift),
+                                    NULL))),
         TXT_If(gamemission == doom || gamemission == heretic
             || gamemission == hexen,
             TXT_NewConditional(&snd_sfxdevice, SNDDEVICE_SB,
                 TXT_NewHorizBox(
                     TXT_NewStrut(4, 0),
-                    TXT_NewCheckBox("Моно режим", &snd_monomode),
-                    NULL))),
+                    TXT_NewCheckBox(english_language ?
+                                    "Mono sounds" :
+                                    "Моно режим",
+                                    &snd_monomode),
+                                    NULL))),
         TXT_If(gamemission == strife,
             TXT_NewConditional(&snd_sfxdevice, SNDDEVICE_SB,
                 TXT_NewHorizBox(
                     TXT_NewStrut(4, 0),
-                    TXT_NewCheckBox("Показывать субтитры", &show_talk),
-                    NULL))),
+                    TXT_NewCheckBox(english_language ?
+                                    "Show text with voices" :
+                                    "Показывать субтитры", &show_talk),
+                                    NULL))),
 
-        TXT_NewSeparator("Музыка"),
-        TXT_NewRadioButton("Отключена", &snd_musicdevice, SNDDEVICE_NONE),
+        TXT_NewSeparator(english_language ?
+                         "Music" :
+                         "Музыка"),
+        TXT_NewRadioButton(english_language ?
+                           "Disabled" :
+                           "Отключена",
+                           &snd_musicdevice, SNDDEVICE_NONE),
 
         TXT_NewRadioButton("OPL (Adlib/Soundblaster)", &snd_musicdevice,
                            SNDDEVICE_SB),
@@ -171,30 +195,42 @@ void ConfigSound(void)
                 OPLTypeSelector(),
                 NULL)),
 
-        TXT_NewRadioButton("GUS (эмул€ци€)", &snd_musicdevice, SNDDEVICE_GUS),
+        TXT_NewRadioButton(english_language ?
+                           "GUS (emulated)" :
+                           "GUS (эмул€ци€)",
+                           &snd_musicdevice, SNDDEVICE_GUS),
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GUS,
             TXT_NewHorizBox(
                 TXT_NewStrut(4, 0),
-                TXT_NewLabel("Расположение патчей GUS: "),
-                NULL)),
+                TXT_NewLabel(english_language ?
+                             "Select directory containing GUS patches" :
+                             "Расположение патчей GUS: "),
+                             NULL)),
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GUS,
             TXT_NewHorizBox(
                 TXT_NewStrut(4, 0),
-                TXT_NewFileSelector(&gus_patch_path, 34,
+                TXT_NewFileSelector(&gus_patch_path, 34, english_language ?
+                                    "Select directory containing GUS patches" :
                                     "Укажите путь к патчам GUS",
                                     TXT_DIRECTORY),
                 NULL)),
 
-        TXT_NewRadioButton("Системное MIDI", &snd_musicdevice, SNDDEVICE_GENMIDI),
+        TXT_NewRadioButton(english_language ?
+                           "Native MIDI" :
+                           "Системное MIDI",
+                           &snd_musicdevice, SNDDEVICE_GENMIDI),
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GENMIDI,
             TXT_NewHorizBox(
                 TXT_NewStrut(4, 0),
-                TXT_NewLabel("Конфигурационный файл Timidity: "),
-                NULL)),
+                TXT_NewLabel(english_language ?
+                             "Timidity configuration file: " :
+                             "Конфигурационный файл Timidity: "),
+                             NULL)),
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GENMIDI,
             TXT_NewHorizBox(
                 TXT_NewStrut(4, 0),
-                TXT_NewFileSelector(&timidity_cfg_path, 34,
+                TXT_NewFileSelector(&timidity_cfg_path, 34, english_language ?
+                                    "Select Timidity config file" :
                                     "Выберите конфигурационный файл Timidity",
                                     cfg_extension),
                 NULL)),

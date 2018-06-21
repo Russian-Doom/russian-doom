@@ -28,6 +28,8 @@
 #include "txt_label.h"
 #include "txt_window.h"
 
+#include "jn.h"
+
 #define MOUSE_INPUT_WIDTH 8
 
 static int MousePressCallback(txt_window_t *window, 
@@ -57,7 +59,9 @@ static void OpenPromptWindow(txt_mouse_input_t *mouse_input)
     // Silently update when the shift key is held down.
     mouse_input->check_conflicts = !TXT_GetModifierState(TXT_MOD_SHIFT);
 
-    window = TXT_MessageBox(NULL, "àæìèòå êíîïêó ìûøè...");
+    window = TXT_MessageBox(NULL, english_language ?
+                                  "Press the new mouse button..." :
+                                  "àæìèòå êíîïêó ìûøè...");
 
     TXT_SetMouseListener(window, MousePressCallback, mouse_input);
 }
@@ -77,16 +81,27 @@ static void GetMouseButtonDescription(int button, char *buf, size_t buf_len)
     switch (button)
     {
         case 0:
-            M_StringCopy(buf, "‹…‚€¡", buf_len);
+            M_StringCopy(buf, english_language ?
+                              "LEFT" :
+                              "‹…‚€¡",
+                              buf_len);
             break;
         case 1:
-            M_StringCopy(buf, "€‚€¡", buf_len);
+            M_StringCopy(buf, english_language ?
+                              "RIGHT" :
+                              "€‚€¡",
+                              buf_len);
             break;
         case 2:
-            M_StringCopy(buf, "‘…„¡¡", buf_len);
+            M_StringCopy(buf, english_language ?
+                              "MID" :
+                              "‘…„¡¡",
+                              buf_len);
             break;
         default:
-            M_snprintf(buf, buf_len, "ŠŠ€ #%i", button + 1);
+            M_snprintf(buf, buf_len, english_language ?
+                                     "BUTTON #%i" :
+                                     "ŠŠ€ #%i", button + 1);
             break;
     }
 }

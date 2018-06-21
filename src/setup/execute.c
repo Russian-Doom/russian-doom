@@ -361,9 +361,18 @@ static void TestCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(data))
     char *extra_cfg;
     txt_window_t *testwindow;
 
-    testwindow = TXT_MessageBox("Запуск Doom",
-                                "Запуск игры дл€ проверки управлени€.\n"
-                                "Пожалуйста, подождите.");
+    if (english_language)
+    {
+    testwindow = TXT_MessageBox("Starting Doom",
+                                "Starting Doom to test the\n"
+                                "settings.  Please wait.");
+    }
+    else
+    {
+        testwindow = TXT_MessageBox("Запуск Doom",
+                                    "Запуск игры дл€ проверки управлени€.\n"
+                                    "Пожалуйста, подождите.");
+    }
 
     TXT_DrawDesktop();
 
@@ -396,7 +405,9 @@ txt_window_action_t *TestConfigAction(void)
 {
     txt_window_action_t *test_action;
 
-    test_action = TXT_NewWindowAction('t', "Проверка");
+    test_action = TXT_NewWindowAction('t', english_language ?
+                                           "Test" :
+                                           "Проверка");
 
     TXT_SignalConnect(test_action, "pressed", TestCallback, NULL);
 

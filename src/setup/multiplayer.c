@@ -77,12 +77,22 @@ static char *wad_extensions[] = { "wad", "lmp", "deh", NULL };
 
 static char *doom_skills[] =
 {
-    "° слишком молод.",     // "I'm too young to die."
-    "Юй, не так грубо.",    // "Hey, not too rough."
-    "Сделай мне больно.",   // "Hurt me plenty."
-    "Ультранасилие.",       // "Ultra-Violence."
-    "Кошмар.",              // "Nightmare."
-    "Ультра кошмар!",       // "Ultra Nightmare!
+    "I'm too young to die.",
+    "Hey, not too rough.",
+    "Hurt me plenty.",
+    "Ultra-Violence.",
+    "Nightmare.",
+    "Ultra-Nightmare!",
+};
+
+static char *doom_skills_rus[] =
+{
+    "° слишком молод.",
+    "Юй, не так грубо.",
+    "Сделай мне больно.",
+    "Ультранасилие.",
+    "Кошмар.",
+    "Ультра кошмар!",
 };
 
 static char *chex_skills[] =
@@ -93,42 +103,82 @@ static char *chex_skills[] =
 
 static char *heretic_skills[] =
 {
-    "Н€нечка надобна мне",      // "Thou needeth a wet-nurse"
-    "Не столь мужественен €",   // "Yellowbellies-R-us"
-    "Подайте мне их",           // "Bringest them oneth"
-    "Искушен € сражени€ми",     // "Thou art a smite-meister"
-    "Чума овладела мной",       // "Black plague possesses thee"
-    "Кошмаром исполнен €"       // "I'm filled with Nightmare"
+    "Thou needeth a wet-nurse",
+    "Yellowbellies-R-us",
+    "Bringest them oneth",
+    "Thou art a smite-meister",
+    "Black plague possesses thee",
+    "Quicketh art thee, foul wraith"
+};
+
+static char *heretic_skills_rus[] =
+{
+    "Н€нечка надобна мне",
+    "Не столь мужественен €",
+    "Подайте мне их",
+    "Искушен € сражени€ми",
+    "Чума овладела мной",
+    "Кошмаром исполнен €"
 };
 
 static char *hexen_fighter_skills[] =
 {
-    "Оруженосец",   // "Squire"
-    "Рыцарь",       // "Knight"
-    "Воитель",      // "Warrior"
-    "Берсерк",      // "Berserker"
-    "Титан",        // "Titan"
-    "Вершитель"     // "The Maker"
+    "Squire",
+    "Knight",
+    "Warrior",
+    "Berserker",
+    "Titan",
+    "Avatar"
+};
+
+static char *hexen_fighter_skills_rus[] =
+{
+    "Оруженосец",
+    "Рыцарь",
+    "Воитель",
+    "Берсерк",
+    "Титан",
+    "Вершитель"
 };
 
 static char *hexen_cleric_skills[] =
 {
-    "Алтарник",     // "Altar boy"
-    "Служитель",    // "Acolyte"
-    "Св€щенник",    // "Priest"
-    "Кардинал",     // "Cardinal"
-    "Епископ",      // "Pope"
-    "Апостол"       // "Apostle"
+    "Altar boy",
+    "Acolyte",
+    "Priest",
+    "Cardinal",
+    "Pope",
+    "Apostle"
+};
+
+static char *hexen_cleric_skills_rus[] =
+{
+    "Алтарник",
+    "Служитель",
+    "Св€щенник",
+    "Кардинал",
+    "Епископ",
+    "Апостол"
 };
 
 static char *hexen_mage_skills[] =
 {
-    "Ученик",       // "Apprentice"
-    "Чародей",      // "Enchanter"
-    "Колдун",       // "Sorceror"
-    "Чернокнижник", // "Warlock"
-    "Верховный маг",// "Higher Mage"
-    "Великий архимаг" // "Great Archimage"
+    "Apprentice",
+    "Enchanter",
+    "Sorceror",
+    "Warlock",
+    "Higher Mage",
+    "Great Archimage"
+};
+
+static char *hexen_mage_skills_rus[] =
+{
+    "Ученик",
+    "Чародей",
+    "Колдун",
+    "Чернокнижник",
+    "Верховный маг",
+    "Великий архимаг"
 };
 
 static char *strife_skills[] =
@@ -138,23 +188,44 @@ static char *strife_skills[] =
 
 static char *character_classes[] = 
 {
-    "Воин",         // "Fighter"
-    "Клерик",       // "Cleric"
-    "Маг"           // "Mage"
+    "Fighter",
+    "Cleric",
+    "Mage"
+};
+
+static char *character_classes_rus[] = 
+{
+    "Воин",
+    "Клерик",
+    "Маг"
 };
 
 static char *gamemodes[] = 
 { 
-    "Совместное прохождение",   // "Co-operative"
-    "Дефматч",                  // "Deathmatch"
-    "Дефматч 2.0",              // "Deathmatch 2.0"
-    "Дефматч 3.0"               // "Deathmatch 3.0"
+    "Co-operative",
+    "Deathmatch",
+    "Deathmatch 2.0",
+    "Deathmatch 3.0"
+};
+
+static char *gamemodes_rus[] = 
+{ 
+    "Совместное прохождение",
+    "Дефматч",
+    "Дефматч 2.0",
+    "Дефматч 3.0"
 };
 
 static char *strife_gamemodes[] =
 {
-    "Обычный дефматч",              // "Normal deathmatch",
-    "Предметы восстанавливаютс€",   // "Items respawn" (altdeath)
+    "Normal deathmatch",
+    "Items respawn", // (altdeath)
+};
+
+static char *strife_gamemodes_rus[] =
+{
+    "Обычный дефматч",
+    "Предметы восстанавливаютс€",
 };
 
 static char *net_player_name;
@@ -351,7 +422,10 @@ static void UpdateWarpButton(void)
     }
     else if (warptype == WARP_MAPxy)
     {
-        M_snprintf(buf, sizeof(buf), "Уровень %02i", warpmap);	// "MAP%02i"
+        M_snprintf(buf, sizeof(buf), english_language ?
+                                     "MAP%02i" :
+                                     "Уровень %02i",
+                                     warpmap);
     }
 
     TXT_SetButtonLabel(warpbutton, buf);
@@ -369,25 +443,35 @@ static void UpdateSkillButton(void)
     {
         default:
         case doom:
-            skillbutton->values = doom_skills;
+            skillbutton->values = english_language ?
+            doom_skills :
+            doom_skills_rus;
             break;
 
         case heretic:
-            skillbutton->values = heretic_skills;
+            skillbutton->values = english_language ?
+            heretic_skills :
+            heretic_skills_rus;
             break;
 
         case hexen:
             if (character_class == 0)
             {
-                skillbutton->values = hexen_fighter_skills;
+                skillbutton->values = english_language ?
+                hexen_fighter_skills :
+                hexen_fighter_skills_rus;
             }
             else if (character_class == 1)
             {
-                skillbutton->values = hexen_cleric_skills;
+                skillbutton->values = english_language ?
+                hexen_cleric_skills :
+                hexen_cleric_skills_rus;
             }
             else
             {
-                skillbutton->values = hexen_mage_skills;
+                skillbutton->values = english_language ?
+                hexen_mage_skills :
+                hexen_mage_skills_rus;
             }
             break;
 
@@ -438,7 +522,9 @@ static void LevelSelectDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(user_data))
     intptr_t l;
     int i;
 
-    window = TXT_NewWindow("Выбор уровн€");
+    window = TXT_NewWindow(english_language ?
+                           "Select level" :
+                           "Выбор уровн€");
 
     iwad = GetCurrentIWAD();
 
@@ -665,7 +751,9 @@ static txt_window_action_t *StartGameAction(int multiplayer)
     txt_window_action_t *action;
     TxtWidgetSignalFunc callback;
 
-    action = TXT_NewWindowAction(KEY_F10, "Запуск");
+    action = TXT_NewWindowAction(KEY_F10, english_language ?
+                                          "Start" :
+                                          "Запуск");
 
     if (multiplayer)
     {
@@ -686,12 +774,16 @@ static void OpenWadsWindow(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(user_data))
     txt_window_t *window;
     int i;
 
-    window = TXT_NewWindow("Добавить WAD-файлы");
+    window = TXT_NewWindow(english_language ?
+                           "Add WADs" :
+                           "Добавить WAD-файлы");
 
         for (i=0; i<NUM_WADS; ++i)
         {
             TXT_AddWidget(window,
-                        TXT_NewFileSelector(&wads[i], 60, "Выбор WAD-файла",
+                        TXT_NewFileSelector(&wads[i], 60, english_language ?
+                                            "Select a WAD file" :
+                                            "Выбор WAD-файла",
                                             wad_extensions));
         }
 }
@@ -702,7 +794,9 @@ static void OpenExtraParamsWindow(TXT_UNCAST_ARG(widget),
     txt_window_t *window;
     int i;
 
-    window = TXT_NewWindow("Дополнительные параметры командной строки");
+    window = TXT_NewWindow(english_language ?
+                           "Extra command line parameters" :
+                           "Дополнительные параметры командной строки");
 
     for (i=0; i<NUM_EXTRA_PARAMS; ++i)
     {
@@ -714,7 +808,9 @@ static txt_window_action_t *WadWindowAction(void)
 {
     txt_window_action_t *action;
 
-    action = TXT_NewWindowAction('w', "WAD-файлы");	// "Add WADs"
+    action = TXT_NewWindowAction('w', english_language ?
+                                      "Add WADs" :
+                                      "WAD-файлы");
 
     TXT_SignalConnect(action, "pressed", OpenWadsWindow, NULL);
 
@@ -727,20 +823,26 @@ static txt_dropdown_list_t *GameTypeDropdown(void)
     {
         case doom:
         default:
-            return TXT_NewDropdownList(&deathmatch, gamemodes, 4);
+            return TXT_NewDropdownList(&deathmatch, english_language ?
+            gamemodes :
+            gamemodes_rus, 4);
 
         // Heretic and Hexen don't support Deathmatch II:
 
         case heretic:
         case hexen:
-            return TXT_NewDropdownList(&deathmatch, gamemodes, 2);
+            return TXT_NewDropdownList(&deathmatch, english_language ?
+            gamemodes :
+            gamemodes_rus, 2);
 
         // Strife supports both deathmatch modes, but doesn't support
         // multiplayer co-op. Use a different variable to indicate whether
         // to use altdeath or not.
 
         case strife:
-            return TXT_NewDropdownList(&strife_altdeath, strife_gamemodes, 2);
+            return TXT_NewDropdownList(&strife_altdeath, english_language ?
+                                                         strife_gamemodes :
+                                                         strife_gamemodes_rus, 2);
     }
 }
 
@@ -772,7 +874,9 @@ static void StartGameMenu(char *window_title, int multiplayer)
     TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, StartGameAction(multiplayer));
 
     TXT_AddWidgets(window,
-                TXT_NewLabel("Игра"),
+                TXT_NewLabel(english_language ?
+                             "Game" :
+                             "Игра"),
                 iwad_selector = IWADSelector(),
                 NULL);
 
@@ -780,9 +884,13 @@ static void StartGameMenu(char *window_title, int multiplayer)
     {
         txt_dropdown_list_t *cc_dropdown;
         TXT_AddWidgets(window,
-                    TXT_NewLabel("Класс персонажа "),
+                    TXT_NewLabel(english_language ?
+                                 "Character class " :
+                                 "Класс персонажа "),
                     cc_dropdown = TXT_NewDropdownList(&character_class,
-                                                        character_classes, 3),
+                                                      english_language ?
+                                                      character_classes :
+                                                      character_classes_rus, 3),
                     NULL);
 
         // Update skill level dropdown when the character class is changed:
@@ -791,49 +899,78 @@ static void StartGameMenu(char *window_title, int multiplayer)
     }
 
     TXT_AddWidgets(window,
-                TXT_NewLabel("Сложность"),
+                TXT_NewLabel(english_language ?
+                             "Skill" :
+                             "Сложность"),
                 skillbutton = TXT_NewDropdownList(&skill, doom_skills, 6),
-                TXT_NewLabel("Уровень"),
+                TXT_NewLabel(english_language ?
+                             "Level warp" :
+                             "Уровень"),
                 warpbutton = TXT_NewButton2("?", LevelSelectDialog, NULL),
                 NULL);
 
     if (multiplayer)
     {
         TXT_AddWidgets(window,
-            TXT_NewLabel("Тип игры"),
+            TXT_NewLabel(english_language ?
+                         "Game type" :
+                         "Тип игры"),
             GameTypeDropdown(),
-            TXT_NewLabel("Лимит времени "),
+            TXT_NewLabel(english_language ?
+                         "Time limit" :
+                         "Лимит времени "),
             TXT_NewHorizBox(TXT_NewIntInputBox(&timer, 2),
-                            TXT_NewLabel("минут"),
-                            NULL),
+                            TXT_NewLabel(english_language ?
+                                         "minutes" :
+                                         "минут"),
+                                         NULL),
             NULL);
     }
 
     TXT_AddWidgets(window,
-                TXT_NewSeparator("Настройки монстров"),
-                TXT_NewInvertedCheckBox("Монстры в игре", &nomonsters),
+                TXT_NewSeparator(english_language ?
+                                 "Monster options" :
+                                 "Настройки монстров"),
+                TXT_NewInvertedCheckBox(english_language ?
+                                        "Monsters enabled" :
+                                        "Монстры в игре",
+                                        &nomonsters),
                 TXT_TABLE_OVERFLOW_RIGHT,
-                TXT_NewCheckBox("Быстрые монстры", &fast),
+                TXT_NewCheckBox(english_language ?
+                                "Fast monsters" :
+                                "Быстрые монстры",
+                                &fast),
                 TXT_TABLE_OVERFLOW_RIGHT,
-                TXT_NewCheckBox("Монстры воскрешаютс€", &respawn),
+                TXT_NewCheckBox(english_language ?
+                                "Respawning monsters" :
+                                "Монстры воскрешаютс€",
+                                &respawn),
                 TXT_TABLE_OVERFLOW_RIGHT,
                 NULL);
 
     if (multiplayer)
     {
         TXT_AddWidgets(window,
-                    TXT_NewSeparator("Дополнительно"),
-                    TXT_NewLabel("Порт UDP"),
+                    TXT_NewSeparator(english_language ?
+                                     "Advanced" :
+                                     "Дополнительно"),
+                    TXT_NewLabel(english_language ?
+                                 "UDP port" :
+                                 "Порт UDP"),
                     TXT_NewIntInputBox(&udpport, 5),
-                    TXT_NewInvertedCheckBox("Регистраци€ на центральном сервере",
+                    TXT_NewInvertedCheckBox(english_language ?
+                                            "Register with master server" :
+                                            "Регистраци€ на центральном сервере",
                                             &privateserver),
                     TXT_TABLE_OVERFLOW_RIGHT,
                     NULL);
     }
 
     TXT_AddWidgets(window,
-                TXT_NewButton2("Дополнительные параметры...",
-                                OpenExtraParamsWindow, NULL),
+                TXT_NewButton2(english_language ?
+                               "Add extra parameters..." :
+                               "Дополнительные параметры...",
+                               OpenExtraParamsWindow, NULL),
                 TXT_TABLE_OVERFLOW_RIGHT,
                 NULL);
 
@@ -845,12 +982,16 @@ static void StartGameMenu(char *window_title, int multiplayer)
 
 void StartMultiGame(void)
 {
-    StartGameMenu("Начать сетевую игру", 1);
+    StartGameMenu(english_language ?
+                  "Start multiplayer game" :
+                  "Начать сетевую игру", 1);
 }
 
 void WarpMenu(void)
 {
-    StartGameMenu("Выбор уровн€", 0);
+    StartGameMenu(english_language ?
+                  "Level Warp" :
+                  "Выбор уровн€", 0);
 }
 
 static void DoJoinGame(void *unused1, void *unused2)
@@ -859,7 +1000,9 @@ static void DoJoinGame(void *unused1, void *unused2)
 
     if (connect_address == NULL || strlen(connect_address) <= 0)
     {
-        TXT_MessageBox(NULL, "Введите адрес сервера.");
+        TXT_MessageBox(NULL, english_language ?
+        "Please enter a server address\n to connect to." :
+        "Введите адрес сервера.");
         return;
     }
 
@@ -894,7 +1037,9 @@ static txt_window_action_t *JoinGameAction(void)
 {
     txt_window_action_t *action;
 
-    action = TXT_NewWindowAction(KEY_F10, "Соединитьс€");
+    action = TXT_NewWindowAction(KEY_F10, english_language ?
+                                          "Connect" :
+                                          "Соединитьс€");
 
     TXT_SignalConnect(action, "pressed", DoJoinGame, NULL);
 
@@ -910,8 +1055,17 @@ static void SelectQueryAddress(TXT_UNCAST_ARG(button),
 
     if (querydata->server_state != 0)
     {
-        TXT_MessageBox("Невозможно соединитьс€.",
-                       "Игра на данном сервере уже стартовала.");
+        if (english_language)
+        {
+            TXT_MessageBox("Cannot connect to server",
+                           "Gameplay is already in progress\n"
+                           "on this server.");
+        }
+        else
+        {
+            TXT_MessageBox("Невозможно соединитьс€.",
+                           "Игра на данном сервере уже стартовала.");
+        }
         return;
     }
 
@@ -937,17 +1091,35 @@ static void SelectQueryAddress(TXT_UNCAST_ARG(button),
 
         if (found_iwads[i] == NULL)
         {
-            TXT_MessageBox(NULL,
-                "Предположительно, игра на сервере:\n"
-                "\n"
-                "   %s\n"
-                "\n"
-                "Но необходимый IWAD-файл %s не найден!\n"
-                "Без данного файла присоединитьс€ к игре невозможно.",
-                D_SuggestGameName(querydata->gamemission,
-                                  querydata->gamemode),
-                D_SuggestIWADName(querydata->gamemission,
-                                  querydata->gamemode));
+            if (english_language)
+            {
+                TXT_MessageBox(NULL,
+                               "The game on this server seems to be:\n"
+                               "\n"
+                               "   %s\n"
+                               "\n"
+                               "but the IWAD file %s is not found!\n"
+                               "Without the required IWAD file, it may not be\n"
+                               "possible to join this game.",
+                               D_SuggestGameName(querydata->gamemission,
+                                                 querydata->gamemode),
+                               D_SuggestIWADName(querydata->gamemission,
+                                                 querydata->gamemode));
+            }
+            else
+            {
+                TXT_MessageBox(NULL,
+                               "Предположительно, игра на сервере:\n"
+                               "\n"
+                               "   %s\n"
+                               "\n"
+                               "Но необходимый IWAD-файл %s не найден!\n"
+                               "Без данного файла присоединитьс€ к игре невозможно.",
+                               D_SuggestGameName(querydata->gamemission,
+                                                 querydata->gamemode),
+                               D_SuggestIWADName(querydata->gamemission,
+                                                 querydata->gamemode));
+            }
         }
     }
 
@@ -996,7 +1168,9 @@ static void QueryPeriodicCallback(TXT_UNCAST_ARG(results_table))
         if (query_servers_found == 0)
         {
             TXT_AddWidget(results_table, NULL);
-            TXT_AddWidget(results_table, TXT_NewLabel("Серверы не обнаружены."));
+            TXT_AddWidget(results_table, TXT_NewLabel(english_language ?
+                                                      "No compatible servers found." :
+                                                      "Серверы не обнаружены."));
         }
     }
 }
@@ -1028,14 +1202,18 @@ static void FindInternetServer(TXT_UNCAST_ARG(widget),
                                TXT_UNCAST_ARG(user_data))
 {
     NET_StartMasterQuery();
-    ServerQueryWindow("Поиск сервера в Интернет");
+    ServerQueryWindow(english_language ?
+                      "Find Internet server" :
+                      "Поиск сервера в Интернет");
 }
 
 static void FindLANServer(TXT_UNCAST_ARG(widget),
                           TXT_UNCAST_ARG(user_data))
 {
     NET_StartLANQuery();
-    ServerQueryWindow("Поиск сервера в локальной сети");
+    ServerQueryWindow(english_language ?
+                      "Find LAN server" :
+                      "Поиск сервера в локальной сети");
 }
 
 void JoinMultiGame(void)
@@ -1043,41 +1221,57 @@ void JoinMultiGame(void)
     txt_window_t *window;
     txt_inputbox_t *address_box;
     
-    window = TXT_NewWindow("Присоединитьс€ к сетевой игре");
+    window = TXT_NewWindow(english_language ?
+                           "Join multiplayer game" :
+                           "Присоединитьс€ к сетевой игре");
     TXT_SetTableColumns(window, 2);
     TXT_SetColumnWidths(window, 23, 12);
 
     TXT_SetWindowHelpURL(window, MULTI_JOIN_HELP_URL);
 
     TXT_AddWidgets(window,
-                TXT_NewLabel("Игра"),
+                TXT_NewLabel(english_language ?
+                "Game" :
+                "Игра"),
                 IWADSelector(),
         NULL);
 
     if (gamemission == hexen)
     {
         TXT_AddWidgets(window,
-            TXT_NewLabel("Класс персонажа "),
+            TXT_NewLabel(english_language ?
+            "Character class " :
+            "Класс персонажа "),
             TXT_NewDropdownList(&character_class,
                                  character_classes, 3),
         NULL);
     }
 
     TXT_AddWidgets(window,
-        TXT_NewSeparator("Сервер"),
-        TXT_NewLabel("Соединитьс€ с адресом: "),
+        TXT_NewSeparator(english_language ?
+                         "Server" :
+                         "Сервер"),
+        TXT_NewLabel(english_language ?
+                     "Connect to address: " :
+                     "Соединитьс€ с адресом: "),
         address_box = TXT_NewInputBox(&connect_address, 30),
 
-        TXT_NewButton2("Поиск сервера в Интернет...",
-                        FindInternetServer, NULL),
+        TXT_NewButton2(english_language ?
+                       "Find server on Internet..." :
+                       "Поиск сервера в Интернет...",
+                       FindInternetServer, NULL),
         TXT_TABLE_OVERFLOW_RIGHT,
-        TXT_NewButton2("Поиск сервера в локальной сети...",
-                        FindLANServer, NULL),
+        TXT_NewButton2(english_language ?
+                       "Find server on local network..." :
+                       "Поиск сервера в локальной сети...",
+                       FindLANServer, NULL),
         TXT_TABLE_OVERFLOW_RIGHT,
         TXT_NewStrut(0, 1),
         TXT_TABLE_OVERFLOW_RIGHT,
-        TXT_NewButton2("Дополнительные параметры...",
-                        OpenExtraParamsWindow, NULL),
+        TXT_NewButton2(english_language ?
+                       "Add extra parameters..." :
+                       "Дополнительные параметры...",
+                       OpenExtraParamsWindow, NULL),
         NULL);
 
     TXT_SelectWidget(window, address_box);
@@ -1152,12 +1346,16 @@ void MultiplayerConfig(void)
     // char buf[10];
     // int i;
 
-    window = TXT_NewWindow("Настройки сетевой игры");
+    window = TXT_NewWindow(english_language ?
+                           "Multiplayer Configuration" :
+                           "Настройки сетевой игры");
     //  TXT_SetWindowHelpURL(window, MULTI_CONFIG_HELP_URL);
 
     TXT_AddWidgets(window,
                    TXT_NewStrut(0, 1),
-                   TXT_NewHorizBox(TXT_NewLabel("Им€ игрока: "),
+                   TXT_NewHorizBox(TXT_NewLabel(english_language ?
+                                                "Player name:  " :
+                                                "Им€ игрока: "),
                                    TXT_NewInputBox(&net_player_name, 25),
                                    NULL),
 					TXT_NewStrut(0, 1),			   

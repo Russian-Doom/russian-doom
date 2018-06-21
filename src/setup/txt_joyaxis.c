@@ -32,6 +32,8 @@
 #include "txt_io.h"
 #include "txt_joyaxis.h"
 
+#include "jn.h"
+
 #define JOYSTICK_AXIS_WIDTH 20
 
 static char *CalibrationLabel(txt_joystick_axis_t *joystick_axis)
@@ -39,31 +41,36 @@ static char *CalibrationLabel(txt_joystick_axis_t *joystick_axis)
     switch (joystick_axis->config_stage)
     {
         case CONFIG_CENTER:
-            return "Отцентрируйте D-pad или джойстик\n"
-                   "и нажмите любую кнопку.";
+            return english_language ?
+                   "Center the D-pad or joystick,\n" "and press a button." :
+                   "Отцентрируйте D-pad или джойстик\n и нажмите любую кнопку.";
 
         case CONFIG_STAGE1:
             if (joystick_axis->dir == JOYSTICK_AXIS_VERTICAL)
             {
-                return "Нажмите \"вверх\" на джойстике или\n"
-                       "D-pad и нажмите любую кнопку.";
+                return english_language ?
+                       "Push the D-pad or joystick up,\n and press the button." :
+                       "Нажмите \"вверх\" на джойстике или\n D-pad и нажмите любую кнопку.";
             }
             else
             {
-                return "Нажмите \"влево\" на джойстике или\n"
-                       "D-pad и нажмите любую кнопку.";
+                return english_language ?
+                       "Push the D-pad or joystick to the\n left, and press the button." :
+                       "Нажмите \"влево\" на джойстике или\n D-pad и нажмите любую кнопку.";
             }
 
         case CONFIG_STAGE2:
             if (joystick_axis->dir == JOYSTICK_AXIS_VERTICAL)
             {
-                return "Нажмите \"вниз\" на джойстике или\n"
-                       "D-pad и нажмите любую кнопку.";
+                return english_language ?
+                       "Push the D-pad or joystick down,\n and press the button." :
+                       "Нажмите \"вниз\" на джойстике или\n D-pad и нажмите любую кнопку.";
             }
             else
             {
-                return "Нажмите \"вправо\" на джойстике или\n"
-                       "D-pad и нажмите любую кнопку.";
+                return english_language ?
+                       "Push the D-pad or joystick to the\n right, and press the button." :
+                       "Нажмите \"вправо\" на джойстике или\n D-pad и нажмите любую кнопку.";
             }
     }
     return NULL;
@@ -368,7 +375,9 @@ void TXT_ConfigureJoystickAxis(txt_joystick_axis_t *joystick_axis,
     joystick_axis->joystick = SDL_JoystickOpen(joystick_index);
     if (joystick_axis->joystick == NULL)
     {
-        TXT_MessageBox(NULL, "Устройство не выбрано!");
+        TXT_MessageBox(NULL, english_language ?
+                             "Please configure a controller first!" :
+                             "Устройство не выбрано!");
         return;
     }
 
@@ -377,7 +386,9 @@ void TXT_ConfigureJoystickAxis(txt_joystick_axis_t *joystick_axis,
     // Build the prompt window.
 
     joystick_axis->config_window
-        = TXT_NewWindow("Калибровка джойстика/геймпада");
+        = TXT_NewWindow(english_language ?
+                        "Gamepad/Joystick calibration" :
+                        "Калибровка джойстика/геймпада");
 
     TXT_AddWidgets(joystick_axis->config_window,
                    TXT_NewStrut(0, 1),
@@ -433,7 +444,10 @@ static void TXT_JoystickAxisDrawer(TXT_UNCAST_ARG(joystick_axis))
 
     if (*joystick_axis->axis < 0)
     {
-        M_StringCopy(buf, "(отсутствует)", sizeof(buf));
+        M_StringCopy(buf, english_language ?
+                          "(none)" :
+                          "(отсутствует)",
+                          sizeof(buf));
     }
     else if (IS_BUTTON_AXIS(*joystick_axis->axis))
     {
@@ -442,7 +456,10 @@ static void TXT_JoystickAxisDrawer(TXT_UNCAST_ARG(joystick_axis))
         neg = BUTTON_AXIS_NEG(*joystick_axis->axis);
         pos = BUTTON_AXIS_POS(*joystick_axis->axis);
         
-        M_snprintf(buf, sizeof(buf), "КНОПКИ #%i+#%i", neg, pos);
+        M_snprintf(buf, sizeof(buf), english_language ?
+                                     "BUTTONS #%i+#%i" :
+                                     "КНОПКИ #%i+#%i",
+                                     neg, pos);
     }
     else if (IS_HAT_AXIS(*joystick_axis->axis))
     {
@@ -451,12 +468,18 @@ static void TXT_JoystickAxisDrawer(TXT_UNCAST_ARG(joystick_axis))
         hat = HAT_AXIS_HAT(*joystick_axis->axis);
         dir = HAT_AXIS_DIRECTION(*joystick_axis->axis);
 
-        M_snprintf(buf, sizeof(buf), "ХАТКА #%i (%s)", hat,
+        M_snprintf(buf, sizeof(buf), english_language ?
+                                     "HAT #%i (%s)" :
+                                     "ХЭТ #%i (%s)",
+                                     hat,
                    dir == HAT_AXIS_HORIZONTAL ? "horizontal" : "vertical");
     }
     else
     {
-        M_snprintf(buf, sizeof(buf), "СТИК #%i", *joystick_axis->axis);
+        M_snprintf(buf, sizeof(buf), english_language ?
+                                     "AXIS #%i" :
+                                     "СТИК #%i",
+                                     *joystick_axis->axis);
     }
 
     TXT_SetWidgetBG(joystick_axis);

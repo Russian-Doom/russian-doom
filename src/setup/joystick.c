@@ -669,11 +669,15 @@ static void SetJoystickButtonLabel(void)
 
     if (!usejoystick || !strcmp(joystick_guid, ""))
     {
-        name = "Не выбрано";
+        name = english_language ?
+        "None set" :
+        "Не выбрано";
     }
     else
     {
-        name = "Не обнаружено (устройство не подключено?)";
+        name = english_language ?
+        "Not found (device disconnected?)" :
+        "Не обнаружено (устройство не подключено?)";
 
         // Use the device name if the GUID and index match.
         if (joystick_index >= 0 && joystick_index < SDL_NumJoysticks())
@@ -822,10 +826,20 @@ static int CalibrationEventCallback(SDL_Event *event, void *user_data)
 
 static void NoJoystick(void)
 {
-    TXT_MessageBox(NULL, "Джойстик или геймпад не обнаружен.\n\n"
-                         "Убедитесь что устройство установлено\n"
-                         "в операционной системе и имеет\n"
-                         "корректно настроенные драйверы.");        
+    if (english_language)
+    {
+        TXT_MessageBox(NULL, "No gamepads or joysticks could be found.\n\n"
+                            "Try configuring your controller from within\n"
+                            "your OS first. Maybe you need to install\n"
+                            "some drivers or otherwise configure it.");
+    }
+    else
+    {
+        TXT_MessageBox(NULL, "Джойстик или геймпад не обнаружен.\n\n"
+                            "Убедитесь что устройство установлено\n"
+                            "в операционной системе и имеет\n"
+                            "корректно настроенные драйверы.");
+    }
 
     usejoystick = 0;
     joystick_index = -1;
@@ -850,11 +864,14 @@ static void CalibrateJoystick(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
         return;
     }
 
-    calibration_window = TXT_NewWindow("Калибровка джойстика/геймпада");    
+    calibration_window = TXT_NewWindow(english_language ?
+                                       "Gamepad/Joystick calibration" :
+                                       "Калибровка джойстика/геймпада");    
         TXT_AddWidgets(calibration_window,
                TXT_NewStrut(0, 1),
-               TXT_NewLabel("Отцентрируйте D-pad или джойстик\n"
-                            "и нажмите любую кнопку."),
+               TXT_NewLabel(english_language ?
+                            "Center the D-pad or joystick,\n and press a button." :
+                            "Отцентрируйте D-pad или джойстик\n и нажмите любую кнопку."),
                TXT_NewStrut(0, 1),
                NULL);
 
@@ -894,19 +911,27 @@ void ConfigJoystick(void)
 {
     txt_window_t *window;
 
-    window = TXT_NewWindow("Настройки джойстика/геймпада");
+    window = TXT_NewWindow(english_language ?
+                           "Gamepad/Joystick configuration" :
+                           "Настройки джойстика/геймпада");
 
     TXT_SetTableColumns(window, 6);
     TXT_SetColumnWidths(window, 18, 10, 1, 15, 10, 0);
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
     
     TXT_AddWidgets(window,
-        TXT_NewLabel("Устройство"),
+        TXT_NewLabel(english_language ?
+                     "Controller" :
+                     "Устройство"),
         joystick_button = TXT_NewButton("zzzz"),
         TXT_TABLE_EOL,
     
-        TXT_NewSeparator("Руко€ть"),
-        TXT_NewLabel("Вперед/назад"),
+        TXT_NewSeparator(english_language ?
+                         "Axes" :
+                         "Руко€ть"),
+        TXT_NewLabel(english_language ?
+        "Forward/backward" :
+        "Вперед/назад"),
         y_axis_widget = TXT_NewJoystickAxis(&joystick_y_axis,
                                             &joystick_y_invert,
                                             JOYSTICK_AXIS_VERTICAL),
@@ -915,7 +940,9 @@ void ConfigJoystick(void)
         TXT_TABLE_EMPTY,
         TXT_TABLE_EMPTY,
     
-        TXT_NewLabel("Поворот"),
+        TXT_NewLabel(english_language ?
+                     "Turn left/right" :
+                     "Поворот"),
         x_axis_widget =
             TXT_NewJoystickAxis(&joystick_x_axis,
                                 &joystick_x_invert,
@@ -925,7 +952,9 @@ void ConfigJoystick(void)
         TXT_TABLE_EMPTY,
         TXT_TABLE_EMPTY,
     
-        TXT_NewLabel("Движение боком"),
+        TXT_NewLabel(english_language ?
+                     "Strafe left/right" :
+                     "Движение боком"),
         TXT_NewJoystickAxis(&joystick_strafe_axis,
                             &joystick_strafe_invert,
                             JOYSTICK_AXIS_HORIZONTAL),
@@ -934,16 +963,39 @@ void ConfigJoystick(void)
         TXT_TABLE_EMPTY,
         TXT_TABLE_EMPTY,
     
-        TXT_NewSeparator("Кнопки"),
+        TXT_NewSeparator(english_language ?
+                         "Buttons" :
+                         "Кнопки"),
         NULL);
     
-    AddJoystickControl(window, "Атака/стрельба",    &joybfire);
-    AddJoystickControl(window, "Боком влево",       &joybstrafeleft);
-    AddJoystickControl(window, "Использовать",      &joybuse);
-    AddJoystickControl(window, "Боком вправо",      &joybstraferight);
-    AddJoystickControl(window, "Предыдущее оружие", &joybprevweapon);
-    AddJoystickControl(window, "Движение боком",    &joybstrafe);
-    AddJoystickControl(window, "Следующее оружие",  &joybnextweapon);
+    AddJoystickControl(window, english_language ?
+                               "Fire/Attack" :
+                               "Атака/стрельба",
+                               &joybfire);
+    AddJoystickControl(window, english_language ?
+                               "Strafe Left" :
+                               "Боком влево",
+                               &joybstrafeleft);
+    AddJoystickControl(window, english_language ?
+                               "Use" :
+                               "Использовать",
+                               &joybuse);
+    AddJoystickControl(window, english_language ?
+                               "Strafe Right" :
+                               "Боком вправо",
+                               &joybstraferight);
+    AddJoystickControl(window, english_language ?
+                               "Previous weapon" :
+                               "Предыдущее оружие",
+                               &joybprevweapon);
+    AddJoystickControl(window, english_language ?
+                               "Strafe" :
+                               "Движение боком",
+                               &joybstrafe);
+    AddJoystickControl(window, english_language ?
+                               "Next weapon" :
+                               "Следующее оружие",
+                               &joybnextweapon);
     
     // High values of joybspeed are used to activate the "always run mode"
     // trick in Vanilla Doom.  If this has been enabled, not only is the
@@ -951,16 +1003,28 @@ void ConfigJoystick(void)
     
     if (joybspeed < 20)
     {
-        AddJoystickControl(window, "Скорость", &joybspeed);
+        AddJoystickControl(window, english_language ?
+                                   "Speed" :
+                                   "Скорость",
+                                   &joybspeed);
     }
     
     if (gamemission == hexen || gamemission == strife)
     {
-        AddJoystickControl(window, "Прыжок", &joybjump);
+        AddJoystickControl(window, english_language ?
+                                   "Jump" :
+                                   "Прыжок",
+                                   &joybjump);
     }
 
-    AddJoystickControl(window, "Активировать меню ", &joybmenu);
-    AddJoystickControl(window, "Открыть карту",      &joybautomap);
+    AddJoystickControl(window, english_language ?
+                               "Activate menu" :
+                               "Активировать меню ",
+                               &joybmenu);
+    AddJoystickControl(window, english_language ?
+                               "Toggle Automap" :
+                               "Открыть карту",
+                               &joybautomap);
 
     TXT_SignalConnect(joystick_button, "pressed", CalibrateJoystick, NULL);
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, TestConfigAction());

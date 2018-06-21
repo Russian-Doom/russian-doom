@@ -35,6 +35,8 @@
 #include "txt_sdl.h"
 #include "txt_window.h"
 
+#include "jn.h"
+
 #define JOYSTICK_INPUT_WIDTH 10
 
 extern int joystick_physical_buttons[NUM_VIRTUAL_BUTTONS];
@@ -88,7 +90,9 @@ static int VirtualButtonForVariable(int *variable)
         }
     }
 
-    I_Error("Ќе обнаружена виртуальна€ кнопка");
+    I_Error(english_language ?
+            "Couldn't find virtual button" :
+            "Ќе обнаружена виртуальна€ кнопка");
     return -1;
 }
 
@@ -193,7 +197,9 @@ static void PromptWindowClosed(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(joystick))
 
 static void OpenErrorWindow(void)
 {
-    TXT_MessageBox(NULL, "Сперва необходимо выбрать устройство!");
+    TXT_MessageBox(NULL, english_language ?
+                         "Please configure a controller first!" :
+                         "Сперва необходимо выбрать устройство!");
 }
 
 static void OpenPromptWindow(txt_joystick_input_t *joystick_input)
@@ -222,7 +228,9 @@ static void OpenPromptWindow(txt_joystick_input_t *joystick_input)
 
     // Open the prompt window
 
-    window = TXT_MessageBox(NULL, "Нажмите кнопку...");
+    window = TXT_MessageBox(NULL, english_language ?
+                                  "Press the new button on the controller..." :
+                                  "Нажмите кнопку...");
 
     TXT_SDL_SetEventCallback(EventCallback, joystick_input);
     TXT_SignalConnect(window, "closed", PromptWindowClosed, joystick);
@@ -244,7 +252,9 @@ static void TXT_JoystickInputSizeCalc(TXT_UNCAST_ARG(joystick_input))
 static void GetJoystickButtonDescription(int vbutton, char *buf,
                                          size_t buf_len)
 {
-    M_snprintf(buf, buf_len, "КНОПКА #%i",
+    M_snprintf(buf, buf_len, english_language ?
+                             "BUTTON #%i" :
+                             "КНОПКА #%i",
                PhysicalForVirtualButton(vbutton) + 1);
 }
 

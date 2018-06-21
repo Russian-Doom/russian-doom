@@ -191,10 +191,18 @@ static void QuitConfirm(void *unused1, void *unused2)
     window = TXT_NewWindow(NULL);
 
     TXT_AddWidgets(window, 
-                   label = TXT_NewLabel("Выход из программы настроек.\nСохранить внесенные изменени€?"),
+                   label = TXT_NewLabel(english_language ?
+                                        "Exiting setup.\nSave settings?" :
+                                        "Выход из программы настроек.\nСохранить внесенные изменени€?"),
                    TXT_NewStrut(24, 0),
-                   yes_button = TXT_NewButton2(" Сохранить    ", DoQuit, DoQuit),
-                   no_button = TXT_NewButton2(" Не сохран€ть ", DoQuit, NULL),
+                   yes_button = TXT_NewButton2(english_language ?
+                                               "  Yes  " :
+                                               " Сохранить    ",
+                                               DoQuit, DoQuit),
+                   no_button = TXT_NewButton2(english_language ?
+                                              "  No   " :
+                                              " Не сохран€ть ",
+                                              DoQuit, NULL),
                    NULL);
 
     TXT_SetWidgetAlign(label, TXT_HORIZ_CENTER);
@@ -236,19 +244,29 @@ static txt_button_t *GetLaunchButton(void)
     switch (gamemission)
         {
         case doom:
-            label = "Сохранить настройки и запустить DOOM";
+            label = english_language ?
+                    "Save parameters and launch DOOM" :
+                    "Сохранить настройки и запустить DOOM";
             break;
         case heretic:
-            label = "Сохранить настройки и запустить Heretic";
+            label = english_language ?
+                    "Save parameters and launch Heretic" :
+                    "Сохранить настройки и запустить Heretic";
             break;
         case hexen:
-            label = "Сохранить настройки и запустить Hexen";
+            label = english_language ?
+                    "Save parameters and launch Hexen" :
+                    "Сохранить настройки и запустить Hexen";
             break;
         case strife:
-            label = "Сохранить настройки и запустить STRIFE!";
+            label = english_language ?
+                    "Save parameters and launch STRIFE!" :
+                    "Сохранить настройки и запустить STRIFE!";
             break;
         default:
-            label = "Сохранить настройки и запустить игру";
+            label = english_language ?
+                    "Save parameters and launch game" :
+                    "Сохранить настройки и запустить игру";
             break;
         }
 
@@ -261,26 +279,54 @@ void MainMenu(void)
     txt_window_action_t *quit_action;
     txt_window_action_t *warp_action;
 
-    window = TXT_NewWindow("Главное меню");
+    window = TXT_NewWindow(english_language ?
+                           "Main Menu" :
+                           "Главное меню");
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
     TXT_AddWidgets(window,
-    TXT_NewButton2("Настройки экрана",             (TxtWidgetSignalFunc) ConfigDisplay, NULL),
-    TXT_NewButton2("Настройки звука",              (TxtWidgetSignalFunc) ConfigSound, NULL),
-    TXT_NewButton2("Настройки клавиатуры",         (TxtWidgetSignalFunc) ConfigKeyboard, NULL),
-    TXT_NewButton2("Настройки мыши",               (TxtWidgetSignalFunc) ConfigMouse, NULL),
-    TXT_NewButton2("Настройки джойстика/геймпада", (TxtWidgetSignalFunc) ConfigJoystick, NULL),
-    TXT_NewButton2("Дополнительные параметры игры", (TxtWidgetSignalFunc) CompatibilitySettings, NULL),
+    TXT_NewButton2(english_language ?
+                   "Configure Display" : "Настройки экрана",
+                   (TxtWidgetSignalFunc) ConfigDisplay, NULL),
+    TXT_NewButton2(english_language ?
+                   "Configure Sound" :
+                   "Настройки звука",
+                   (TxtWidgetSignalFunc) ConfigSound, NULL),
+    TXT_NewButton2(english_language ?
+                   "Configure Keyboard" :
+                   "Настройки клавиатуры",
+                   (TxtWidgetSignalFunc) ConfigKeyboard, NULL),
+    TXT_NewButton2(english_language ?
+                   "Configure Mouse" :
+                   "Настройки мыши",
+                   (TxtWidgetSignalFunc) ConfigMouse, NULL),
+    TXT_NewButton2(english_language ?
+                   "Configure Gamepad/Joystick" :
+                   "Настройки джойстика/геймпада",
+                   (TxtWidgetSignalFunc) ConfigJoystick, NULL),
+    TXT_NewButton2(english_language ?
+                   "Optional Gameplay Enhacements" :
+                   "Дополнительные параметры игры",
+                   (TxtWidgetSignalFunc) CompatibilitySettings, NULL),
     GetLaunchButton(),
     TXT_NewStrut(0, 1),
-    TXT_NewButton2("Начать сетевую игру",           (TxtWidgetSignalFunc) StartMultiGame, NULL),
-    TXT_NewButton2("Присоединитьс€ к сетевой игре", (TxtWidgetSignalFunc) JoinMultiGame, NULL),
-    TXT_NewButton2("Настройки сетевой игры",        (TxtWidgetSignalFunc) MultiplayerConfig, NULL),
+    TXT_NewButton2(english_language ?
+                   "Start a Network Game" :
+                   "Начать сетевую игру",
+                   (TxtWidgetSignalFunc) StartMultiGame, NULL),
+    TXT_NewButton2(english_language ?
+                   "Join a Network Game" :
+                   "Присоединитьс€ к сетевой игре",
+                   (TxtWidgetSignalFunc) JoinMultiGame, NULL),
+    TXT_NewButton2(english_language ?
+                   "Multiplayer Configuration" :
+                   "Настройки сетевой игры",
+                   (TxtWidgetSignalFunc) MultiplayerConfig, NULL),
     NULL);
 
-    quit_action = TXT_NewWindowAction(KEY_ESCAPE, "Выход");
-    warp_action = TXT_NewWindowAction(KEY_F2,     "Уровень");
+    quit_action = TXT_NewWindowAction(KEY_ESCAPE, english_language ? "Quit" : "Выход");
+    warp_action = TXT_NewWindowAction(KEY_F2,     english_language ? "Warp" : "Уровень");
 
 
     TXT_SignalConnect(quit_action, "pressed", QuitConfirm, NULL);
@@ -350,7 +396,9 @@ static void InitTextscreen(void)
 
     if (!TXT_Init())
         {
-            fprintf(stderr, "Ќевозможно инициализировать интерфейс\n");
+            fprintf(stderr, english_language ?
+                            "Failed to initialize GUI\n" :
+                            "Ќевозможно инициализировать интерфейс\n");
             exit(-1);
         }
 

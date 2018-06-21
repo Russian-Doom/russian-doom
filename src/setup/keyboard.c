@@ -198,7 +198,9 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                       || gamemission == hexen
                       || gamemission == strife;
 
-    window = TXT_NewWindow("Дополнительное управление");
+    window = TXT_NewWindow(english_language ?
+                           "Extra keyboard controls" :
+                           "Дополнительное управление");
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
@@ -213,55 +215,121 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
         scrollpane = TXT_NewScrollPane(0, 13, table);
         TXT_AddWidget(window, scrollpane);
 
-        AddSectionLabel(table, "Взгл€д", false);
+        AddSectionLabel(table, english_language ?
+                               "View" :
+                               "Взгл€д",
+                               false);
 
         if (gamemission == heretic || gamemission == hexen)
         {
-            AddKeyControl(table, "Смотреть вверх", &key_lookup);
-            AddKeyControl(table, "Смотреть вниз",  &key_lookdown);
-            AddKeyControl(table, "Центрировать",   &key_lookcenter);
+            AddKeyControl(table, english_language ?
+                                 "Look up" :
+                                 "Смотреть вверх",
+                                 &key_lookup);
+            AddKeyControl(table, english_language ?
+                                 "Look down" :
+                                 "Смотреть вниз",
+                                 &key_lookdown);
+            AddKeyControl(table, english_language ?
+                                 "Center view" :
+                                 "Центрировать",
+                                 &key_lookcenter);
         }
 
-        AddKeyControl(table, "Обзор мышью",    &key_togglemlook);
+        AddKeyControl(table, english_language ?
+                             "Mouse look" :
+                             "Обзор мышью",
+                             &key_togglemlook);
 
         if (gamemission == heretic || gamemission == hexen)
         {
-            AddSectionLabel(table, "Полет", true);
+            AddSectionLabel(table, english_language ?
+                                   "Flying" :
+                                   "Полет",
+                                   true);
 
-            AddKeyControl(table, "Лететь вверх", &key_flyup);
-            AddKeyControl(table, "Лететь вниз",  &key_flydown);
-            AddKeyControl(table, "Центрировать", &key_flycenter);
+            AddKeyControl(table, english_language ?
+                                 "Fly up" :
+                                 "Лететь вверх",
+                                 &key_flyup);
+            AddKeyControl(table, english_language ?
+                                 "Fly down" :
+                                 "Лететь вниз",
+                                 &key_flydown);
+            AddKeyControl(table, english_language ?
+                                 "Fly center" :
+                                 "Центрировать",
+                                 &key_flycenter);
         }
 
         if (gamemission == heretic || gamemission == hexen)
         {
-            AddSectionLabel(table, "Инвентарь", true);
+            AddSectionLabel(table, english_language ?
+                                   "Inventory" :
+                                   "Инвентарь",
+                                   true);
 
-            AddKeyControl(table, "Пролистать влево",  &key_invleft);
-            AddKeyControl(table, "Пролистать вправо", &key_invright);
+            AddKeyControl(table, english_language ?
+                                 "Inventory left" :
+                                 "Пролистать влево",
+                                 &key_invleft);
+            AddKeyControl(table, english_language ?
+                                 "Inventory right" :
+                                 "Пролистать вправо",
+                                 &key_invright);
 
 
             if (gamemission == strife)
             {
-                AddKeyControl(table, "Пролистать в начало",  &key_invhome);
-                AddKeyControl(table, "Пролистать в конец",   &key_invend);
+                AddKeyControl(table, english_language ?
+                                     "Home" :
+                                     "Пролистать в начало",
+                                     &key_invhome);
+                AddKeyControl(table, english_language ?
+                                     "End" :
+                                     "Пролистать в конец",
+                                     &key_invend);
                 // AddKeyControl(table, "Query",             &key_invquery);
-                AddKeyControl(table, "Бросить предмет",      &key_invdrop);
-                AddKeyControl(table, "Показать оружие",      &key_invpop);
-                AddKeyControl(table, "Показать задани€",     &key_mission);
-                AddKeyControl(table, "Показать ключи",       &key_invkey);
-                AddKeyControl(table, "Использовать предмет", &key_invuse);
-                AddKeyControl(table, "Быстрое лечение",      &key_usehealth);
+                AddKeyControl(table, english_language ?
+                                     "Drop" :
+                                     "Бросить предмет",
+                                     &key_invdrop);
+                AddKeyControl(table, english_language ?
+                                     "Show weapons" :
+                                     "Показать оружие",
+                                     &key_invpop);
+                AddKeyControl(table, english_language ?
+                                     "Show mission" :
+                                     "Показать задани€",
+                                     &key_mission);
+                AddKeyControl(table, english_language ?
+                                     "Show keys" :
+                                     "Показать ключи",
+                                     &key_invkey);
+                AddKeyControl(table, english_language ?
+                                     "Use" :
+                                     "Использовать предмет",
+                                     &key_invuse);
+                AddKeyControl(table, english_language ?
+                                     "Use health" :
+                                     "Быстрое лечение",
+                                     &key_usehealth);
             }
             else
             {
-                AddKeyControl(table, "Использовать артефакт ", &key_useartifact);
+                AddKeyControl(table, english_language ?
+                                     "Use artifact" :
+                                     "Использовать артефакт ",
+                                     &key_useartifact);
             }
         }
 
         if (gamemission == heretic)
         {
-            AddSectionLabel(table, "Артефакты", true);
+            AddSectionLabel(table, english_language ?
+                                   "Artifacts" :
+                                   "Артефакты",
+                                   true);
 
             AddKeyControl(table, "Кварцевый флакон",      &key_arti_quartz);
             AddKeyControl(table, "Мистическа€ урна",      &key_arti_urn);
@@ -277,25 +345,76 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 
         if (gamemission == hexen)
         {
-            AddSectionLabel(table, "Артефакты", true);
+            AddSectionLabel(table, english_language ?
+                                   "Artifacts" :
+                                   "Артефакты",
+                                   true);
 
-            AddKeyControl(table, "Все однократно",   &key_arti_all);
-            AddKeyControl(table, "Кварцевый флакон", &key_arti_health);
-            AddKeyControl(table, "Зелье",            &key_arti_poisonbag);
-            AddKeyControl(table, "Диск отторжени€",  &key_arti_blastradius);
-            AddKeyControl(table, "Юмблема Хаоса",    &key_arti_teleport);
-            AddKeyControl(table, "Юмблема изгнани€", &key_arti_teleportother);
-            AddKeyControl(table, "Свиноморфер",      &key_arti_egg);
-            AddKeyControl(table, "Символ защитника", &key_arti_invulnerability);
+            AddKeyControl(table, english_language ?
+                                 "One of each" :
+                                 "Все однократно",
+                                 &key_arti_all);
+            AddKeyControl(table, english_language ?
+                                 "Quartz Flask" :
+                                 "Кварцевый флакон",
+                                 &key_arti_health);
+            AddKeyControl(table, english_language ?
+                                 "Flechette" :
+                                 "Зелье",
+                                 &key_arti_poisonbag);
+            AddKeyControl(table, english_language ?
+                                 "Disc of Repulsion" :
+                                 "Диск отторжени€",
+                                 &key_arti_blastradius);
+            AddKeyControl(table, english_language ?
+                                 "Chaos Device" :
+                                 "Юмблема Хаоса",
+                                 &key_arti_teleport);
+            AddKeyControl(table, english_language ?
+                                 "Banishment Device" :
+                                 "Юмблема изгнани€",
+                                 &key_arti_teleportother);
+            AddKeyControl(table, english_language ?
+                                 "Porkalator" :
+                                 "Свиноморфер",
+                                 &key_arti_egg);
+            AddKeyControl(table, english_language ?
+                                 "Icon of the Defender" :
+                                 "Символ защитника",
+                                 &key_arti_invulnerability);
             
-            AddKeyControl(table, "Мистическа€ урна",            &key_arti_superhealth);
-            AddKeyControl(table, "Наручи из драконьей кожи",    &key_arti_boostarmor);
-            AddKeyControl(table, "Чаша могущества",             &key_arti_boostmana);
-            AddKeyControl(table, "Темный слуга",                &key_arti_summon);
-            AddKeyControl(table, "Крыль€ гнева",                &key_arti_fly);
-            AddKeyControl(table, "Сапоги-скороходы",            &key_arti_speed);
-            AddKeyControl(table, "Факел",                       &key_arti_torch);
-            AddKeyControl(table, "Чары магического единства ",  &key_arti_healingradius);
+            AddKeyControl(table, english_language ?
+                                 "Mystic Urn" :
+                                 "Мистическа€ урна",
+                                 &key_arti_superhealth);
+            AddKeyControl(table, english_language ?
+                                 "Dragonskin Bracers" :
+                                 "Наручи из драконьей кожи",
+                                 &key_arti_boostarmor);
+            AddKeyControl(table, english_language ?
+                                 "Krater of Might" :
+                                 "Чаша могущества",
+                                 &key_arti_boostmana);
+            AddKeyControl(table, english_language ?
+                                 "Dark Servant" :
+                                 "Темный слуга",
+                                 &key_arti_summon);
+            AddKeyControl(table, english_language ?
+                                 "Wings of Wrath" :
+                                 "Крыль€ гнева",
+                                 &key_arti_fly);
+            AddKeyControl(table, english_language ?
+                                 "Boots of Speed" :
+                                 "Сапоги-скороходы",
+                                 &key_arti_speed);
+            AddKeyControl(table, english_language ?
+                                 "Torch" :
+                                 "Факел",
+                                 &key_arti_torch);
+            AddKeyControl(table, english_language ?
+                                 "Mystic Ambit Incant" :
+                                 "Чары магического единства ",
+                                 &key_arti_healingradius);
         }
     }
     else
@@ -303,30 +422,75 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
         TXT_AddWidget(window, table);
     }
 
-    AddSectionLabel(table, "Оружие", extra_keys);
+    AddSectionLabel(table, english_language ?
+                           "Weapons" :
+                           "Оружие",
+                           extra_keys);
 
-    AddKeyControl(table, "Оружие 1",          &key_weapon1);
-    AddKeyControl(table, "Оружие 2",          &key_weapon2);
-    AddKeyControl(table, "Оружие 3",          &key_weapon3);
-    AddKeyControl(table, "Оружие 4",          &key_weapon4);
+    AddKeyControl(table, english_language ?
+                         "Weapon 1" :
+                         "Оружие 1",
+                         &key_weapon1);
+    AddKeyControl(table, english_language ?
+                         "Weapon 2" :
+                         "Оружие 2",
+                         &key_weapon2);
+    AddKeyControl(table, english_language ?
+                         "Weapon 3" :
+                         "Оружие 3",
+                         &key_weapon3);
+    AddKeyControl(table, english_language ?
+                         "Weapon 4" :
+                         "Оружие 4",
+                         &key_weapon4);
     if (gamemission != hexen)
     {   // [JN] Weapons 5, 6, 7 are not available in Hexen
-        AddKeyControl(table, "Оружие 5",      &key_weapon5);
-        AddKeyControl(table, "Оружие 6",      &key_weapon6);
-        AddKeyControl(table, "Оружие 7",      &key_weapon7);
+        AddKeyControl(table, english_language ?
+                             "Weapon 5" :
+                             "Оружие 5",
+                             &key_weapon5);
+        AddKeyControl(table, english_language ?
+                             "Weapon 6" :
+                             "Оружие 6",
+                             &key_weapon6);
+        AddKeyControl(table, english_language ?
+                             "Weapon 7" :
+                             "Оружие 7",
+                             &key_weapon7);
     }
     if (gamemission == doom)
     {   // [JN] Weapon 8 only available in Doom
-        AddKeyControl(table, "Оружие 8",      &key_weapon8);
+        AddKeyControl(table, english_language ?
+                             "Weapon 8" :
+                             "Оружие 8",
+                             &key_weapon8);
     }
-    AddKeyControl(table, "Предыдущее оружие", &key_prevweapon);
-    AddKeyControl(table, "Следующее оружие",  &key_nextweapon);
+    AddKeyControl(table, english_language ?
+                         "Previous weapon" :
+                         "Предыдущее оружие",
+                         &key_prevweapon);
+    AddKeyControl(table, english_language ?
+                         "Next weapon" :
+                         "Следующее оружие",
+                         &key_nextweapon);
 
-    AddSectionLabel(table, "Движение", true);
-    AddKeyControl(table, "Посто€нный бег", &key_toggleautorun);
+    AddSectionLabel(table, english_language ?
+                           "Movement" :
+                           "Движение",
+                           true);
+    AddKeyControl(table, english_language ?
+                         "Toggle always run" :
+                         "Посто€нный бег",
+                         &key_toggleautorun);
     
-    AddSectionLabel(table, "Прицел", true);
-    AddKeyControl(table, "Переключение прицела", &key_togglecrosshair);
+    AddSectionLabel(table, english_language ?
+                           "Crosshair" :
+                           "Прицел",
+                           true);
+    AddKeyControl(table, english_language ?
+                         "Toggle crosshair" :
+                         "Переключение прицела",
+                         &key_togglecrosshair);
 }
 
 static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
@@ -335,7 +499,9 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
     txt_table_t *table;
     txt_scrollpane_t *scrollpane;
 
-    window = TXT_NewWindow("Другие клавиши");
+    window = TXT_NewWindow(english_language ?
+                           "Other keys" :
+                           "Другие клавиши");
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
@@ -343,70 +509,229 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 
     TXT_SetColumnWidths(table, 25, 9);
 
-    AddSectionLabel(table, "Навигаци€ в меню", false);
+    AddSectionLabel(table, english_language ?
+                           "Menu navigation" :
+                           "Навигаци€ в меню",
+                           false);
 
-    AddKeyControl(table, "Активировать меню",       &key_menu_activate);
-    AddKeyControl(table, "Курсор вверх",            &key_menu_up);
-    AddKeyControl(table, "Курсор вниз",             &key_menu_down);
-    AddKeyControl(table, "Ползунок влево",          &key_menu_left);
-    AddKeyControl(table, "Ползунок вправо",         &key_menu_right);
-    AddKeyControl(table, "Предыдущий экран",        &key_menu_back);
-    AddKeyControl(table, "Активировать пункт меню", &key_menu_forward);
-    AddKeyControl(table, "Подтвердить действие",    &key_menu_confirm);
-    AddKeyControl(table, "Отменить действие",       &key_menu_abort);
+    AddKeyControl(table, english_language ?
+                         "Activate menu" :
+                         "Активировать меню",
+                         &key_menu_activate);
+    AddKeyControl(table, english_language ?
+                         "Move cursor up" :
+                         "Курсор вверх",
+                         &key_menu_up);
+    AddKeyControl(table, english_language ?
+                         "Move cursor down" :
+                         "Курсор вниз",
+                         &key_menu_down);
+    AddKeyControl(table, english_language ?
+                         "Move slider left" :
+                         "Ползунок влево",
+                         &key_menu_left);
+    AddKeyControl(table, english_language ?
+                         "Move slider right" :
+                         "Ползунок вправо",
+                         &key_menu_right);
+    AddKeyControl(table, english_language ?
+                         "Go to previous menu" :
+                         "Предыдущий экран",
+                         &key_menu_back);
+    AddKeyControl(table, english_language ?
+                         "Activate menu item" :
+                         "Активировать пункт меню",
+                         &key_menu_forward);
+    AddKeyControl(table, english_language ?
+                         "Confirm action" :
+                         "Подтвердить действие",
+                         &key_menu_confirm);
+    AddKeyControl(table, english_language ?
+                         "Cancel action" :
+                         "Отменить действие",
+                         &key_menu_abort);
 
-    AddSectionLabel(table, "Клавиши быстрого доступа", true);
+    AddSectionLabel(table, english_language ?
+                           "Shortcut keys" :
+                           "Клавиши быстрого доступа",
+                           true);
 
-    AddKeyControl(table, "Пауза",                   &key_pause);
-    AddKeyControl(table, "Помощь",                  &key_menu_help);
-    AddKeyControl(table, "Сохранение",              &key_menu_save);
-    AddKeyControl(table, "Загрузка",                &key_menu_load);
-    AddKeyControl(table, "Громкость",               &key_menu_volume);
-    AddKeyControl(table, "Детализаци€",             &key_menu_detail);
-    AddKeyControl(table, "Быстрое сохранение",      &key_menu_qsave);
-    AddKeyControl(table, "Закончить игру",          &key_menu_endgame);
-    AddKeyControl(table, "Сообщени€",               &key_menu_messages);
-    AddKeyControl(table, "Быстра€ загрузка",        &key_menu_qload);
-    AddKeyControl(table, "Выход из игры",           &key_menu_quit);
-    AddKeyControl(table, "Гамма-коррекци€",         &key_menu_gamma);
-    AddKeyControl(table, "Вид другого игрока",      &key_spy);
+    AddKeyControl(table, english_language ?
+                         "Pause game" :
+                         "Пауза",
+                         &key_pause);
+    AddKeyControl(table, english_language ?
+                         "Help screen" :
+                         "Помощь",
+                         &key_menu_help);
+    AddKeyControl(table, english_language ?
+                         "Save game" :
+                         "Сохранение",
+                         &key_menu_save);
+    AddKeyControl(table, english_language ?
+                         "Load game" :
+                         "Загрузка",
+                         &key_menu_load);
+    AddKeyControl(table, english_language ?
+                         "Sound volume" :
+                         "Громкость",
+                         &key_menu_volume);
+    AddKeyControl(table, english_language ?
+                         "Toggle detail" :
+                         "Детализаци€",
+                         &key_menu_detail);
+    AddKeyControl(table, english_language ?
+                         "Quick save" :
+                         "Быстрое сохранение",
+                         &key_menu_qsave);
+    AddKeyControl(table, english_language ?
+                         "End game" :
+                         "Закончить игру",
+                         &key_menu_endgame);
+    AddKeyControl(table, english_language ?
+                         "Toggle messages" :
+                         "Сообщени€",
+                         &key_menu_messages);
+    AddKeyControl(table, english_language ?
+                         "Quick load" :
+                         "Быстра€ загрузка",
+                         &key_menu_qload);
+    AddKeyControl(table, english_language ?
+                         "Quit game" :
+                         "Выход из игры",
+                         &key_menu_quit);
+    AddKeyControl(table, english_language ?
+                         "Toggle gamma" :
+                         "Гамма-коррекци€",
+                         &key_menu_gamma);
+    AddKeyControl(table, english_language ?
+                         "Multiplayer spy" :
+                         "Вид другого игрока",
+                         &key_spy);
 
-    AddKeyControl(table, "Увеличить экран",         &key_menu_incscreen);
-    AddKeyControl(table, "Уменьшить экран",         &key_menu_decscreen);
-    AddKeyControl(table, "Скриншот",                &key_menu_screenshot);
+    AddKeyControl(table, english_language ?
+                         "Increase screen size" :
+                         "Увеличить экран",
+                         &key_menu_incscreen);
+    AddKeyControl(table, english_language ?
+                         "Decrease screen size" :
+                         "Уменьшить экран",
+                         &key_menu_decscreen);
+    AddKeyControl(table, english_language ?
+                         "Save a screenshot" :
+                         "Скриншот",
+                         &key_menu_screenshot);
 
-    AddKeyControl(table, "Показать последнее сообщение ", &key_message_refresh);
-    AddKeyControl(table, "Закончить запись демо",         &key_demo_quit);
-    AddKeyControl(table, "Отобразить системное врем€",    &key_toggletime);
+    AddKeyControl(table, english_language ?
+                         "Display last message" :
+                         "Показать последнее сообщение ",
+                         &key_message_refresh);
+    AddKeyControl(table, english_language ?
+                         "Finish recording demo" :
+                         "Закончить запись демо",
+                         &key_demo_quit);
+    AddKeyControl(table, english_language ?
+                         "Toggle local time" :
+                         "Отобразить системное врем€",
+                         &key_toggletime);
 
-    AddSectionLabel(table, "Карта", true);
-    AddKeyControl(table, "Открыть карту",           &key_map_toggle);
-    AddKeyControl(table, "Приблизить",              &key_map_zoomin);
-    AddKeyControl(table, "Отдалить",                &key_map_zoomout);
-    AddKeyControl(table, "Полный масштаб",          &key_map_maxzoom);
-    AddKeyControl(table, "Режим следовани€",        &key_map_follow);
-    AddKeyControl(table, "Прокрутить вверх",        &key_map_north);
-    AddKeyControl(table, "Прокрутить вниз",         &key_map_south);
-    AddKeyControl(table, "Прокрутить вправо",       &key_map_east);
-    AddKeyControl(table, "Прокрутить влево",        &key_map_west);
-    AddKeyControl(table, "Отобразить сетку",        &key_map_grid);
-    AddKeyControl(table, "Поставить отметку",       &key_map_mark);
-    AddKeyControl(table, "Убрать отметки",          &key_map_clearmark);
+    AddSectionLabel(table, english_language ?
+                           "Map" :
+                           "Карта",
+                           true);
+    AddKeyControl(table, english_language ?
+                         "Toggle map" :
+                         "Открыть карту",
+                         &key_map_toggle);
+    AddKeyControl(table, english_language ?
+                         "Zoom in" :
+                         "Приблизить",
+                         &key_map_zoomin);
+    AddKeyControl(table, english_language ?
+                         "Zoom out" :
+                         "Отдалить",
+                         &key_map_zoomout);
+    AddKeyControl(table, english_language ?
+                         "Maximum zoom out" :
+                         "Полный масштаб",
+                         &key_map_maxzoom);
+    AddKeyControl(table, english_language ?
+                         "Follow mode" :
+                         "Режим следовани€",
+                         &key_map_follow);
+    AddKeyControl(table, english_language ?
+                         "Pan north" :
+                         "Прокрутить вверх",
+                         &key_map_north);
+    AddKeyControl(table, english_language ?
+                         "Pan south" :
+                         "Прокрутить вниз",
+                         &key_map_south);
+    AddKeyControl(table, english_language ?
+                         "Pan east" :
+                         "Прокрутить вправо",
+                         &key_map_east);
+    AddKeyControl(table, english_language ?
+                         "Pan west" :
+                         "Прокрутить влево",
+                         &key_map_west);
+    AddKeyControl(table, english_language ?
+                         "Toggle grid" :
+                         "Отобразить сетку",
+                         &key_map_grid);
+    AddKeyControl(table, english_language ?
+                         "Mark location" :
+                         "Поставить отметку",
+                         &key_map_mark);
+    AddKeyControl(table, english_language ?
+                         "Clear all marks" :
+                         "Убрать отметки",
+                         &key_map_clearmark);
 
-    AddSectionLabel(table, "Сетева€ игра", true);
+    AddSectionLabel(table, english_language ?
+                           "Multiplayer" :
+                           "Сетева€ игра",
+                           true);
 
-    AddKeyControl(table, "Отправить сообщение", &key_multi_msg);
-    AddKeyControl(table, "- игроку 1",          &key_multi_msgplayer[0]);
-    AddKeyControl(table, "- игроку 2",          &key_multi_msgplayer[1]);
-    AddKeyControl(table, "- игроку 3",          &key_multi_msgplayer[2]);
-    AddKeyControl(table, "- игроку 4",          &key_multi_msgplayer[3]);
+    AddKeyControl(table, english_language ?
+                         "Send message" :
+                         "Отправить сообщение",
+                         &key_multi_msg);
+    AddKeyControl(table, english_language ?
+                         "- to player 1" :
+                         "- игроку 1",
+                         &key_multi_msgplayer[0]);
+    AddKeyControl(table, english_language ?
+                         "- to player 2" :
+                         "- игроку 2",
+                         &key_multi_msgplayer[1]);
+    AddKeyControl(table, english_language ?
+                         "- to player 3" :
+                         "- игроку 3",
+                         &key_multi_msgplayer[2]);
+    AddKeyControl(table, english_language ?
+                         "- to player 4" :
+                         "- игроку 4",
+                         &key_multi_msgplayer[3]);
 
     if (gamemission == hexen || gamemission == strife)
     {
-        AddKeyControl(table, "- игроку 5",      &key_multi_msgplayer[4]);
-        AddKeyControl(table, "- игроку 6",      &key_multi_msgplayer[5]);
-        AddKeyControl(table, "- игроку 7",      &key_multi_msgplayer[6]);
-        AddKeyControl(table, "- игроку 8",      &key_multi_msgplayer[7]);
+        AddKeyControl(table, english_language ?
+                             "- to player 5" :
+                             "- игроку 5",
+                             &key_multi_msgplayer[4]);
+        AddKeyControl(table, english_language ?
+                             "- to player 6" :
+                             "- игроку 6",
+                             &key_multi_msgplayer[5]);
+        AddKeyControl(table, english_language ?
+                             "- to player 7" :
+                             "- игроку 7",
+                             &key_multi_msgplayer[6]);
+        AddKeyControl(table, english_language ?
+                             "- to player 8" :
+                             "- игроку 8",
+                             &key_multi_msgplayer[7]);
     }
 
     scrollpane = TXT_NewScrollPane(0, 13, table);
@@ -421,7 +746,9 @@ void ConfigKeyboard(void)
 
     always_run = joybspeed >= 20;
 
-    window = TXT_NewWindow("Настройки клавиатуры");
+    window = TXT_NewWindow(english_language ?
+                           "Keyboard configuration" :
+                           "Настройки клавиатуры");
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
@@ -432,41 +759,89 @@ void ConfigKeyboard(void)
     TXT_SetTableColumns(window, 5);
     TXT_SetColumnWidths(window, 16, 8, 2, 16, 8);
 
-    TXT_AddWidget(window, TXT_NewSeparator("Движение"));
-    AddKeyControl(window, "Движение вперед  ", &key_up);
+    TXT_AddWidget(window, TXT_NewSeparator(english_language ?
+                                           "Movement" :
+                                           "Движение"));
+    AddKeyControl(window, english_language ?
+                          "Move Forward" :
+                          "Движение вперед  ",
+                          &key_up);
     TXT_AddWidget(window, TXT_TABLE_EMPTY);
-    AddKeyControl(window, " Боком влево",      &key_strafeleft);
+    AddKeyControl(window, english_language ?
+                          "Strafe Left" :
+                          " Боком влево",
+                          &key_strafeleft);
 
-    AddKeyControl(window, "Движение назад ",   &key_down);
+    AddKeyControl(window, english_language ?
+                          "Move Backward" :
+                          "Движение назад ",
+                          &key_down);
     TXT_AddWidget(window, TXT_TABLE_EMPTY);
-    AddKeyControl(window, " Боком вправо",     &key_straferight);
+    AddKeyControl(window, english_language ?
+                          "Strafe Right" :
+                          " Боком вправо",
+                          &key_straferight);
 
-    AddKeyControl(window, "Поворот налево ",   &key_left);
+    AddKeyControl(window, english_language ?
+                          "Turn Left" :
+                          "Поворот налево ",
+                          &key_left);
     TXT_AddWidget(window, TXT_TABLE_EMPTY);
-    AddKeyControl(window, " Бег", &key_speed);
+    AddKeyControl(window, english_language ?
+                          "Speed On" :
+                          " Бег",
+                          &key_speed);
 
-    AddKeyControl(window, "Поворот направо ",  &key_right);
+    AddKeyControl(window, english_language ?
+                          "Turn Right" :
+                          "Поворот направо ",
+                          &key_right);
     TXT_AddWidget(window, TXT_TABLE_EMPTY);
-    AddKeyControl(window, " Движение боком ",  &key_strafe);
+    AddKeyControl(window, english_language ?
+                          "Strafe On" :
+                          " Движение боком ",
+                          &key_strafe);
 
     if (gamemission == hexen || gamemission == strife)
     {
-        AddKeyControl(window, "Прыжок",        &key_jump);
+        AddKeyControl(window, english_language ?
+        "Jump" :
+        "Прыжок",
+        &key_jump);
     }
 
-    TXT_AddWidget(window, TXT_NewSeparator("Действи€"));
-    AddKeyControl(window, "Атака/стрельба  ",  &key_fire);
+    TXT_AddWidget(window, TXT_NewSeparator(english_language ?
+                                           "Action" :
+                                           "Действи€"));
+    AddKeyControl(window, english_language ?
+                          "Fire/Attack" :
+                          "Атака/стрельба  ",
+                          &key_fire);
     TXT_AddWidget(window, TXT_TABLE_EMPTY);
-    AddKeyControl(window, " Использовать   ",  &key_use);
+    AddKeyControl(window, english_language ?
+                          "Use" :
+                          " Использовать   ",
+    &key_use);
     TXT_AddWidgets(window,
-        TXT_NewButton2("Дополнительно...", ConfigExtraKeys, NULL),
+        TXT_NewButton2(english_language ?
+                       "More controls..." :
+                       "Дополнительно...",
+                       ConfigExtraKeys, NULL),
         TXT_TABLE_OVERFLOW_RIGHT,
         TXT_TABLE_EMPTY,
-        TXT_NewButton2(" Другие клавиши...", OtherKeysDialog, NULL),
+        TXT_NewButton2(english_language ?
+                       "Other keys..." :
+                       " Другие клавиши...",
+                       OtherKeysDialog, NULL),
         TXT_TABLE_OVERFLOW_RIGHT,
 
-        TXT_NewSeparator("Дополнительно"),
-        run_control = TXT_NewCheckBox("Режим посто€нного бега", &always_run),
+        TXT_NewSeparator(english_language ?
+                         "Misc." :
+                         "Дополнительно"),
+        run_control = TXT_NewCheckBox(english_language ?
+                                      "Always run" :
+                                      "Режим посто€нного бега",
+                                      &always_run),
         TXT_TABLE_EOL,
         // [JN] Hidden, non-vanilla mapping is not 
         // very friendly with Russian keyboard layout.

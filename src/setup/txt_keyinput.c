@@ -27,6 +27,8 @@
 #include "txt_label.h"
 #include "txt_window.h"
 
+#include "jn.h"
+
 #define KEY_INPUT_WIDTH 8
 
 static int KeyPressCallback(txt_window_t *window, int key, 
@@ -72,7 +74,9 @@ static void OpenPromptWindow(txt_key_input_t *key_input)
 
     key_input->check_conflicts = !TXT_GetModifierState(TXT_MOD_SHIFT);
 
-    window = TXT_MessageBox(NULL, "Нажмите клавишу...");
+    window = TXT_MessageBox(NULL, english_language ?
+                                  "Press the new key..." :
+                                  "Нажмите клавишу...");
 
     TXT_SetKeyListener(window, KeyPressCallback, key_input);
 

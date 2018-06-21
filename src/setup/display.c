@@ -160,7 +160,9 @@ static void GenerateSizesTable(TXT_UNCAST_ARG(widget),
     TXT_ClearTable(sizes_table);
     TXT_SetColumnWidths(sizes_table, 14, 14, 14);
 
-    TXT_AddWidget(sizes_table, TXT_NewSeparator("Размер окна"));
+    TXT_AddWidget(sizes_table, TXT_NewSeparator(english_language ? 
+                                                "Window size" :
+                                                "Размер окна"));
 
     have_size = false;
 
@@ -231,7 +233,9 @@ void ConfigDisplay(void)
 
     // Open the window
 
-    window = TXT_NewWindow("Настройки экрана");
+    window = TXT_NewWindow(english_language ?
+                           "Display Configuration" :
+                           "Настройки экрана");
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
@@ -239,25 +243,52 @@ void ConfigDisplay(void)
 
     TXT_AddWidgets(window,
 
-    TXT_NewSeparator("Рендеринг"),
+    TXT_NewSeparator(english_language ?
+                     "Rendering" :
+                     "Рендеринг"),
 
-        ar_checkbox = TXT_NewCheckBox("Фиксировать соотношение сторон", &aspect_ratio_correct),
-        TXT_NewCheckBox("Сн€ть ограничение с кадровой частоты", &uncapped_fps),
-        TXT_NewCheckBox("Программный рендеринг (режим Software)", &force_software_renderer),
+        ar_checkbox = TXT_NewCheckBox(english_language ?
+                                      "Fix aspect ratio" :
+                                      "Фиксировать соотношение сторон",
+                                      &aspect_ratio_correct),
+        TXT_NewCheckBox(english_language ?
+                        "Uncapped framerate" :
+                        "Сн€ть ограничение с кадровой частоты",
+                        &uncapped_fps),
+        TXT_NewCheckBox(english_language ?
+                        "Software rendering" :
+                        "Программный рендеринг (режим Software)",
+                        &force_software_renderer),
 
-    TXT_NewSeparator("Дополнительно"),
+    TXT_NewSeparator(english_language ?
+                     "Extra" :
+                     "Дополнительно"),
     
         TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
-            TXT_NewCheckBox("Графическа€ загрузка", &graphical_startup)),
+            TXT_NewCheckBox(english_language ?
+                            "Graphical startup" :
+                            "Графическа€ загрузка",
+                            &graphical_startup)),
         TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
-            TXT_NewCheckBox("Показывать экран ENDOOM при выходе", &show_endoom)),
+            TXT_NewCheckBox(english_language ?
+                            "Show ENDOOM screen on exit" :
+                            "Показывать экран ENDOOM при выходе",
+                            &show_endoom)),
 #ifdef HAVE_LIBPNG
-        TXT_NewCheckBox("Сохран€ть скриншоты в формате PNG", &png_screenshots),
+        TXT_NewCheckBox(english_language ?
+                        "Save screenshots in PNG format" :
+                        "Сохран€ть скриншоты в формате PNG",
+                        &png_screenshots),
 #endif
 
-    TXT_NewSeparator("Видео"),
+    TXT_NewSeparator(english_language ?
+                     "Video" :
+                     "Видео"),
             
-        TXT_NewCheckBox("Полноэкранный режим", &fullscreen),
+        TXT_NewCheckBox(english_language ?
+                        "Full screen" :
+                        "Полноэкранный режим",
+                        &fullscreen),
         TXT_NewConditional(&fullscreen, 0,
             sizes_table = TXT_NewTable(3)),
         NULL);
