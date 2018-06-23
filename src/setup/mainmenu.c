@@ -53,6 +53,13 @@ static const int cheat_sequence[] =
 
 static unsigned int cheat_sequence_index = 0;
 
+static void SetupSelectCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(window))
+{
+    TXT_CAST_ARG(txt_window_t, window);
+
+    TXT_WidgetKeyPress(window, KEY_ENTER);
+}
+
 // I think these are good "sensible" defaults:
 
 static void SensibleDefaults(void)
@@ -209,10 +216,14 @@ static void QuitConfirm(void *unused1, void *unused2)
     TXT_SetWidgetAlign(yes_button, TXT_HORIZ_CENTER);
     TXT_SetWidgetAlign(no_button, TXT_HORIZ_CENTER);
 
-    // Only an "abort" button in the middle.
+    //
+    // [JN] Create translated button ("Cancel" only)
+    //
+
     TXT_SetWindowAction(window, TXT_HORIZ_LEFT, NULL);
-    TXT_SetWindowAction(window, TXT_HORIZ_CENTER, 
-                        TXT_NewWindowAbortAction(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_CENTER, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
     TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, NULL);
 }
 
@@ -278,6 +289,7 @@ void MainMenu(void)
     txt_window_t *window;
     txt_window_action_t *quit_action;
     txt_window_action_t *warp_action;
+    txt_window_action_t *entr_action;
 
     window = TXT_NewWindow(english_language ?
                            "Main Menu" :
@@ -327,13 +339,16 @@ void MainMenu(void)
 
     quit_action = TXT_NewWindowAction(KEY_ESCAPE, english_language ? "Quit" : "Выход");
     warp_action = TXT_NewWindowAction(KEY_F2,     english_language ? "Warp" : "Уровень");
+    entr_action = TXT_NewWindowAction(KEY_ENTER,  english_language ? "Select" : "Выбор");
 
 
     TXT_SignalConnect(quit_action, "pressed", QuitConfirm, NULL);
-    TXT_SignalConnect(warp_action, "pressed",
-                      (TxtWidgetSignalFunc) WarpMenu, NULL);
+    TXT_SignalConnect(warp_action, "pressed", (TxtWidgetSignalFunc) WarpMenu, NULL);
+    TXT_SignalConnect(entr_action, "pressed", SetupSelectCallback, window);
+
     TXT_SetWindowAction(window, TXT_HORIZ_LEFT, quit_action);
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, warp_action);
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, entr_action);
 
     TXT_SetKeyListener(window, MainMenuKeyPress, NULL);
 }

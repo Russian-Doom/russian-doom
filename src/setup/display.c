@@ -304,15 +304,28 @@ void ConfigDisplay(void)
 
     GenerateSizesTable(NULL, sizes_table);
 
-    // Button to open "advanced" window.
-    // Need to pass a pointer to the window sizes table, as some of the options
-    // in there trigger a rebuild of it.
+    /*
+    **    Button to open "advanced" window.
+    ** Need to pass a pointer to the window sizes table, as some of the options
+    ** in there trigger a rebuild of it.
 
-    // advanced_button = TXT_NewWindowAction('a', "Дополнительно");
+    ** advanced_button = TXT_NewWindowAction('a', "Дополнительно");
 
-    // TXT_SetWindowAction(window, TXT_HORIZ_CENTER, advanced_button);
-    // TXT_SignalConnect(advanced_button, "pressed",
-    //                   AdvancedDisplayConfig, sizes_table);
+    ** TXT_SetWindowAction(window, TXT_HORIZ_CENTER, advanced_button);
+    ** TXT_SignalConnect(advanced_button, "pressed",
+    **                   AdvancedDisplayConfig, sizes_table);
+    */
+
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
 }
 
 void BindDisplayVariables(void)

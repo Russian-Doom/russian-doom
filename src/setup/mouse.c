@@ -96,6 +96,17 @@ static void ConfigExtraButtons(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
+
     TXT_AddWidgets(window,
                 buttons_table = TXT_NewTable(2),
                 NULL);
@@ -147,7 +158,18 @@ void ConfigMouse(void)
 
     TXT_SetTableColumns(window, 2);
 
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, TestConfigAction());
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
+
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
     TXT_AddWidgets(window,

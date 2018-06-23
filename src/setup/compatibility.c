@@ -89,6 +89,17 @@ void CompatibilitySettings(void)
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
+
     if (gamemission == doom)
         TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features));
     else if (gamemission == heretic)

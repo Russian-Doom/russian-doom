@@ -204,6 +204,17 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
+
     table = TXT_NewTable(2);
 
     TXT_SetColumnWidths(table, 21, 9);
@@ -504,6 +515,17 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                            "Другие клавиши");
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
 
     table = TXT_NewTable(2);
 
@@ -851,7 +873,18 @@ void ConfigKeyboard(void)
         NULL);
 
     TXT_SignalConnect(run_control, "changed", UpdateJoybSpeed, NULL);
+
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, TestConfigAction());
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
 }
 
 void BindKeyboardVariables(void)

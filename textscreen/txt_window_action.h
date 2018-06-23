@@ -66,6 +66,7 @@ txt_window_action_t *TXT_NewWindowAction(int key, const char *label);
  */
 
 txt_window_action_t *TXT_NewWindowEscapeAction(txt_window_t *window);
+txt_window_action_t *TXT_NewWindowEscapeAction_Rus(txt_window_t *window);
 
 /**
  * Create a new window action that closes the window when the
@@ -76,6 +77,7 @@ txt_window_action_t *TXT_NewWindowEscapeAction(txt_window_t *window);
  */
 
 txt_window_action_t *TXT_NewWindowAbortAction(txt_window_t *window);
+txt_window_action_t *TXT_NewWindowAbortAction_Rus(txt_window_t *window);
 
 /**
  * Create a new "select" window action.  This does not really do
@@ -87,6 +89,7 @@ txt_window_action_t *TXT_NewWindowAbortAction(txt_window_t *window);
  */
 
 txt_window_action_t *TXT_NewWindowSelectAction(txt_window_t *window);
+txt_window_action_t *TXT_NewWindowSelectAction_Rus(txt_window_t *window);
 
 #endif /* #ifndef TXT_WINDOW_ACTION_H */
 

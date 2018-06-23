@@ -1027,7 +1027,18 @@ void ConfigJoystick(void)
                                &joybautomap);
 
     TXT_SignalConnect(joystick_button, "pressed", CalibrateJoystick, NULL);
+
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, TestConfigAction());
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
 
     InitJoystick();
     UpdateJoystickIndex();

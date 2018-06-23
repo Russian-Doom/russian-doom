@@ -778,6 +778,17 @@ static void OpenWadsWindow(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(user_data))
                            "Add WADs" :
                            "Добавить WAD-файлы");
 
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
+
         for (i=0; i<NUM_WADS; ++i)
         {
             TXT_AddWidget(window,
@@ -797,6 +808,17 @@ static void OpenExtraParamsWindow(TXT_UNCAST_ARG(widget),
     window = TXT_NewWindow(english_language ?
                            "Extra command line parameters" :
                            "Дополнительные параметры командной строки");
+
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
 
     for (i=0; i<NUM_EXTRA_PARAMS; ++i)
     {
@@ -870,6 +892,13 @@ static void StartGameMenu(char *window_title, int multiplayer)
         TXT_SetWindowHelpURL(window, LEVEL_WARP_HELP_URL);
     }
 
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, WadWindowAction());
     TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, StartGameAction(multiplayer));
 
@@ -1276,6 +1305,13 @@ void JoinMultiGame(void)
 
     TXT_SelectWidget(window, address_box);
 
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, WadWindowAction());
     TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, JoinGameAction());
 }
@@ -1350,6 +1386,17 @@ void MultiplayerConfig(void)
                            "Multiplayer Configuration" :
                            "Настройки сетевой игры");
     //  TXT_SetWindowHelpURL(window, MULTI_CONFIG_HELP_URL);
+
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
 
     TXT_AddWidgets(window,
                    TXT_NewStrut(0, 1),

@@ -140,6 +140,18 @@ static void WindowSelectCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(window))
 txt_window_action_t *TXT_NewWindowEscapeAction(txt_window_t *window)
 {
     txt_window_action_t *action;
+    action = TXT_NewWindowAction(KEY_ESCAPE, "Close");
+
+    TXT_SignalConnect(action, "pressed", WindowCloseCallback, window);
+
+    return action;
+}
+
+// [JN] Russian translation
+
+txt_window_action_t *TXT_NewWindowEscapeAction_Rus(txt_window_t *window)
+{
+    txt_window_action_t *action;
     action = TXT_NewWindowAction(KEY_ESCAPE, "Назад");
 
     TXT_SignalConnect(action, "pressed", WindowCloseCallback, window);
@@ -152,6 +164,18 @@ txt_window_action_t *TXT_NewWindowEscapeAction(txt_window_t *window)
 txt_window_action_t *TXT_NewWindowAbortAction(txt_window_t *window)
 {
     txt_window_action_t *action;
+    action = TXT_NewWindowAction(KEY_ESCAPE, "Abort");
+
+    TXT_SignalConnect(action, "pressed", WindowCloseCallback, window);
+
+    return action;
+}
+
+// [JN] Russian translation
+
+txt_window_action_t *TXT_NewWindowAbortAction_Rus(txt_window_t *window)
+{
+    txt_window_action_t *action;
     action = TXT_NewWindowAction(KEY_ESCAPE, "Отмена");
 
     TXT_SignalConnect(action, "pressed", WindowCloseCallback, window);
@@ -160,6 +184,18 @@ txt_window_action_t *TXT_NewWindowAbortAction(txt_window_t *window)
 }
 
 txt_window_action_t *TXT_NewWindowSelectAction(txt_window_t *window)
+{
+    txt_window_action_t *action;
+    action = TXT_NewWindowAction(KEY_ENTER, "Select");
+
+    TXT_SignalConnect(action, "pressed", WindowSelectCallback, window);
+
+    return action;
+}
+
+// [JN] Russian translation
+
+txt_window_action_t *TXT_NewWindowSelectAction_Rus(txt_window_t *window)
 {
     txt_window_action_t *action;
     action = TXT_NewWindowAction(KEY_ENTER, "Выбор");

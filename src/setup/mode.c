@@ -294,6 +294,17 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
 
     TXT_AddWidget(window, TXT_NewLabel("Выберите желаемую игру:\n"));
 
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
+
     num_games = 0;
 
     // Add a button for each game.
