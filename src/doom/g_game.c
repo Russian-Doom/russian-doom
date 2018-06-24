@@ -284,7 +284,7 @@ int fast_quickload = 1;
 
 // Прицел
 int crosshair_draw = 0;
-int crosshair_health = 0;
+int crosshair_health = 1;
 int crosshair_scale = 0;
  
 int G_CmdChecksum (ticcmd_t* cmd) 

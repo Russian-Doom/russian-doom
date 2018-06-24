@@ -148,7 +148,7 @@ static void SensibleDefaults(void)
 
     // Прицел
     crosshair_draw = 0;
-    crosshair_health = 0;
+    crosshair_health = 1;
     crosshair_scale = 0;
 }
 

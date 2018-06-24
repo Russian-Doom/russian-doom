@@ -142,7 +142,7 @@ int fake_contrast = 0;           // Имитация контрастного о
 int snd_monomode = 0;
 // Прицел
 int crosshair_draw = 0;
-int crosshair_health = 0;
+int crosshair_health = 1;
 int crosshair_scale = 0;
 
 // CODE --------------------------------------------------------------------
