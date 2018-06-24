@@ -125,6 +125,14 @@ char* player_names[] =
     HUSTR_PLRRED
 };
 
+char* player_names_rus[] =
+{
+    HUSTR_PLRGREEN_RUS,
+    HUSTR_PLRINDIGO_RUS,
+    HUSTR_PLRBROWN_RUS,
+    HUSTR_PLRRED_RUS
+};
+
 char        chat_char; // remove later.
 static      player_t* plr;
 patch_t*    hu_font[HU_FONTSIZE];
@@ -934,7 +942,10 @@ void HU_Ticker(void)
                     {
                         if (w_inputbuffer[i].l.len && (chat_dest[i] == consoleplayer+1 || chat_dest[i] == HU_BROADCAST))
                         {
-                            HUlib_addMessageToSText(&w_message, DEH_String(player_names[i]), w_inputbuffer[i].l.l);
+                            HUlib_addMessageToSText(&w_message, DEH_String(english_language ? 
+                                                                           player_names[i] :
+                                                                           player_names_rus[i]),
+                                                                           w_inputbuffer[i].l.l);
 
                             message_nottobefuckedwith = true;
                             message_on = true;

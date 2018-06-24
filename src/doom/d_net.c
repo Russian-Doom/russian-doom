@@ -41,6 +41,8 @@
 
 #include "d_loop.h"
 
+#include "jn.h"
+
 ticcmd_t *netcmds;
 
 // Called when a player leaves the game
@@ -55,10 +57,16 @@ static void PlayerQuitGame(player_t *player)
     // Do this the same way as Vanilla Doom does, to allow dehacked
     // replacements of this message
 
-    // Игрок № отключился от сервера.
-    M_StringCopy(exitmsg, DEH_String("buhjr 1 jnrk.xbkcz jn cthdthf>"), sizeof(exitmsg));
+    M_StringCopy(exitmsg, DEH_String(english_language ?
+                                     "Player 1 left the game" :
+                                     "buhjr 1 jnrk.xbkcz jn cthdthf>"), // [JN] игрок № отключился от сервера.
+                                     sizeof(exitmsg));
 
-    exitmsg[6] += player_num; // [JN] Номер символа, в котором указывается порядковый № игрока.
+    // [JN] Номер символа, в котором указывается порядковый № игрока.
+    if (english_language)
+    exitmsg[7] += player_num;
+    else
+    exitmsg[6] += player_num;
 
     playeringame[player_num] = false;
     players[consoleplayer].message = exitmsg;

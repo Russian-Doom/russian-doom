@@ -1174,11 +1174,19 @@ void G_Ticker (void)
             {
                 static char turbomessage[80];
                 extern char *player_names[4];
-                M_snprintf(turbomessage, sizeof(turbomessage),
-                           english_language ?
-                           "%s is turbo!" :
-                           "%s cdth[crjhjcnm!",
-                           player_names[i]); // Сверхскорость!
+                extern char *player_names_rus[4];
+
+                if (english_language)
+                {
+                    M_snprintf(turbomessage, sizeof(turbomessage),
+                               "%s is turbo!", player_names[i]);
+                }
+                else
+                {   // Сверхскорость!
+                    M_snprintf(turbomessage, sizeof(turbomessage),
+                               "%s cdth[crjhjcnm!", player_names_rus[i]);
+                }
+
                 players[consoleplayer].message = turbomessage;
                 turbodetected[i] = false;
             }
