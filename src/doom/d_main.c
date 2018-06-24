@@ -1227,7 +1227,15 @@ void D_SetGameDescription(void)
         }
         else if (logical_gamemission == jaguar)
         {
-            gamedescription = GetGameName("DOOM для Atari Jaguar");
+            if (english_language)
+            {
+                gamedescription = GetGameName("DOOM for Atari Jaguar");
+            }
+            else
+            {
+                gamedescription = GetGameName("DOOM для Atari Jaguar");
+                W_MergeFile("base/doom-jaguar-russian.wad");
+            }
         }
     }
 

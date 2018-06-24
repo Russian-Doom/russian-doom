@@ -828,11 +828,21 @@
 "THIS RIDE IS CLOSED."
 
 // Doom for Atari Jaguar
-// TODO: make an artistic text
+// TODO: make some artistic additions?
 
-#define J1TEXT \
-"1 2 3\n"\
-"\n"
+#define J1TEXT              \
+"     id software\n"        \
+"     salutes you!\n"       \
+"\n"                        \
+"  the horrors of hell\n"   \
+"  could not kill you.\n"   \
+"  their most cunning\n"    \
+"  traps were no match\n"   \
+"  for you. you have\n"     \
+"  proven yourself the\n"   \
+"  best of all!\n"          \
+"\n"                        \
+"  congratulations!"        \
 
 //
 // F_FINALE.C
