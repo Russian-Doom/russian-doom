@@ -329,11 +329,23 @@ void D_IdentifyVersion(void)
     if (!M_ParmExists("-v10override")
      && gamemode != shareware && W_CheckNumForName("CLUS1MSG") < 0)
     {
-        I_Error(
+        if (english_language)
+        {
+            I_Error(
+            "You are trying to use the Hexen v1.0 IWAD. This isn't\n"
+            "supported by Russian Hexen. Please upgrade to the v1.1\n"
+            "IWAD file. See here for more information:\n"
+            "  https://www.doomworld.com/classicdoom/info/patches.php");
+        }
+        else
+        {
+            I_Error(
             "Использование IWAD-файла версии 1.0 не рекоммендуется,\n"
             "так как он содержит ошибки в игре. Просьба обновить IWAD\n"
             "до версии 1.1. Дополнительная информация доступна по ссылке:\n"
-            "  https://www.doomworld.com/classicdoom/info/patches.php");
+            "  https://www.doomworld.com/classicdoom/info/patches.php");            
+        }
+
     }
 }
 
@@ -354,16 +366,34 @@ void D_SetGameDescription(void)
 
     if (gamemode == shareware)
     {
-        gamedescription = "Hexen: Демоверсия четырех уровней";
-        W_MergeFile("russian/russian-hexen-common.wad");
-        W_MergeFile("russian/russian-hexen-demo.wad");
+        W_MergeFile("base/hexen-common.wad");
+
+        if (english_language)
+        {
+            gamedescription = "Hexen: 4 Level Demo Version";
+        }
+        else
+        {
+            gamedescription = "Hexen: Демоверсия четырех уровней";
+            W_MergeFile("base/hexen-common-russian.wad");
+            W_MergeFile("base/hexen-demo-russian.wad");
+        }
     }
 
     else
     {
         gamedescription = "Hexen";
-        W_MergeFile("russian/russian-hexen-common.wad");
-        W_MergeFile("russian/russian-hexen-beyond.wad");
+        W_MergeFile("base/hexen-common.wad");
+
+        if (english_language)
+        {
+            // [JN] We are fine.
+        }
+        else
+        {
+            W_MergeFile("base/hexen-common-russian.wad");
+            W_MergeFile("base/hexen-beyond-russian.wad");
+        }
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
@@ -394,8 +424,15 @@ void D_SetGameDescription(void)
             
                     if (check != NULL)
                     {
-                        gamedescription = "Hexen: Короли Смерти Темной Цитадели";
-                        W_MergeFile("russian/russian-hexen-dd.wad");
+                        if (english_language)
+                        {
+                            gamedescription = "Hexen: Deathkings of the Dark Citadel";
+                        }
+                        else
+                        {
+                            gamedescription = "Hexen: Короли Смерти Темной Цитадели";
+                            W_MergeFile("base/hexen-dd-russian.wad");
+                        }
                     }
                 }
             }
@@ -476,8 +513,16 @@ void D_DoomMain(void)
 
     if (iwadfile == NULL)
     {
-        I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
-                "Попробуйте указать IWAD-файл командой '-iwad'.\n");
+        if (english_language)
+        {
+            I_Error("Game mode indeterminate. No IWAD was found. Try specifying\n"
+                    "one with the '-iwad' command line parameter.");
+        }
+        else
+        {
+            I_Error("Невозможно определить игру из за отсутствующего IWAD-файла.\n"
+                    "Попробуйте указать IWAD-файл командой '-iwad'.\n");
+        }
     }
 
     D_AddFile(iwadfile);

@@ -426,7 +426,7 @@ void R_StoreWallRange(int start, int stop)
         int numdrawsegs_old = numdrawsegs;
    
         if (numdrawsegs_old == MAXDRAWSEGS)
-        printf("R_StoreWallRange: ????????? ???? MAXDRAWSEGS (%d).\n", MAXDRAWSEGS);
+        printf("R_StoreWallRange: превышен лимит MAXDRAWSEGS (%d).\n", MAXDRAWSEGS);
    
         numdrawsegs = numdrawsegs ? 2 * numdrawsegs : MAXDRAWSEGS;
         drawsegs = realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));
@@ -435,7 +435,10 @@ void R_StoreWallRange(int start, int stop)
 
 #ifdef RANGECHECK
     if (start >= viewwidth || start > stop)
-        I_Error("Bad R_RenderWallRange: %i к %i", start, stop);
+        I_Error(english_language ?
+                "Bad R_RenderWallRange: %i to %i" :
+                "Bad R_RenderWallRange: %i к %i",
+                start, stop);
 #endif
 
     sidedef = curline->sidedef;

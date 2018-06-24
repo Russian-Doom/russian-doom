@@ -2611,7 +2611,9 @@ static void ArchiveMobjs(void)
     }
     if (count != MobjCount)
     {
-        I_Error("ArchiveMobjs: некорректное количество mobj");
+        I_Error(english_language ?
+                "ArchiveMobjs: bad mobj count" :
+                "ArchiveMobjs: некорректное количество mobj");
     }
 }
 
@@ -2691,7 +2693,9 @@ static void SetMobjPtr(mobj_t **ptr, unsigned int archiveNum)
     {
         if (TargetPlayerCount == MAX_TARGET_PLAYERS)
         {
-            I_Error("RestoreMobj: превышен лимит MAX_TARGET_PLAYERS");
+            I_Error(english_language ?
+                    "RestoreMobj: exceeded MAX_TARGET_PLAYERS" :
+                    "RestoreMobj: превышен лимит MAX_TARGET_PLAYERS");
         }
         TargetPlayerAddrs[TargetPlayerCount++] = ptr;
         *ptr = NULL;
@@ -2874,8 +2878,10 @@ static void UnarchiveThinkers(void)
         }
         if (info->tClass == TC_NULL)
         {
-            I_Error("UnarchiveThinkers: неизвестный tClass %d в "
-                    "сохраненной игре", tClass);
+            I_Error(english_language ?
+                    "UnarchiveThinkers: Unknown tClass %d in savegame" :
+                    "UnarchiveThinkers: неизвестный tClass %d в сохраненной игре",
+                    tClass);
         }
     }
 }
@@ -3155,13 +3161,17 @@ static void UnarchivePolyobjs(void)
     AssertSegment(ASEG_POLYOBJS);
     if (SV_ReadLong() != po_NumPolyobjs)
     {
-        I_Error("UnarchivePolyobjs: некорректное количество полиобъектов");
+        I_Error(english_language ?
+                "UnarchivePolyobjs: Bad polyobj count" :
+                "UnarchivePolyobjs: некорректное количество полиобъектов");
     }
     for (i = 0; i < po_NumPolyobjs; i++)
     {
         if (SV_ReadLong() != polyobjs[i].tag)
         {
-            I_Error("UnarchivePolyobjs: некорректный тэг полиобъекта");
+            I_Error(english_language ?
+                    "UnarchivePolyobjs: Invalid polyobj tag" :
+                    "UnarchivePolyobjs: некорректный тэг полиобъекта");
         }
         PO_RotatePolyobj(polyobjs[i].tag, (angle_t) SV_ReadLong());
         deltaX = SV_ReadLong() - polyobjs[i].startSpot.x;
@@ -3180,7 +3190,9 @@ static void AssertSegment(gameArchiveSegment_t segType)
 {
     if (SV_ReadLong() != segType)
     {
-        I_Error("Поврежденный файл сохранения: сегмент [%d] не может быть корректно расположен",
+        I_Error(english_language ?
+                "Corrupt save game: Segment [%d] failed alignment check" :
+                "Поврежденный файл сохранения: сегмент [%d] не может быть корректно расположен",
                 segType);
     }
 }
@@ -3264,7 +3276,10 @@ static void CopyFile(char *source_name, char *dest_name)
     read_handle = fopen(source_name, "rb");
     if (read_handle == NULL)
     {
-        I_Error ("Невозможно прочитать файл %s", source_name);
+        I_Error (english_language ?
+                 "Could not load savegame %s" :
+                 "Невозможно прочитать файл %s",
+                 source_name);
     }
     /*file_length = */file_remaining = M_FileLength(read_handle);
 
@@ -3286,7 +3301,10 @@ static void CopyFile(char *source_name, char *dest_name)
     write_handle = fopen(dest_name, "wb");
     if (write_handle == NULL)
     {
-        I_Error ("Невозможно прочитать файл %s", dest_name);
+        I_Error (english_language ?
+                 "Couldn't read file %s" :
+                 "Невозможно прочитать файл %s",
+                 dest_name);
     }
 
     buffer = Z_Malloc (BUFFER_CHUNK_SIZE, PU_STATIC, NULL);
@@ -3302,13 +3320,19 @@ static void CopyFile(char *source_name, char *dest_name)
         read_count = fread(buffer, 1, buf_count, read_handle);
         if (read_count < buf_count)
         {
-            I_Error ("Невозможно прочитать файл %s", source_name);
+            I_Error (english_language ?
+                     "Couldn't read file %s" :
+                     "Невозможно прочитать файл %s",
+                     source_name);
         }
 
         write_count = fwrite(buffer, 1, buf_count, write_handle);
         if (write_count < buf_count)
         {
-            I_Error ("Невозможно записать файл %s", dest_name);
+            I_Error (english_language ?
+                     "Couldn't write to file %s" :
+                     "Невозможно записать файл %s",
+                     dest_name);
         }
 
         file_remaining -= buf_count;

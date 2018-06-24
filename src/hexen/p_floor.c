@@ -475,7 +475,9 @@ static void QueueStairSector(sector_t * sec, int type, int height)
 {
     if ((QueueTail + 1) % STAIR_QUEUE_SIZE == QueueHead)
     {
-        I_Error("BuildStairs: превышен лимит ветвей.\n");
+        I_Error(english_language ?
+                "BuildStairs: Too many branches located.\n" :
+                "BuildStairs: превышен лимит ветвей.\n");
     }
     StairQueue[QueueTail].sector = sec;
     StairQueue[QueueTail].type = type;

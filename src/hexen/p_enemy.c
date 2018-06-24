@@ -346,7 +346,9 @@ void P_NewChaseDir(mobj_t * actor)
     dirtype_t tdir, olddir, turnaround;
 
     if (!actor->target)
-        I_Error("P_NewChaseDir: вызов без определенной цели");
+        I_Error(english_language ?
+                "P_NewChaseDir: called with no target" :
+                "P_NewChaseDir: вызов без определенной цели");
 
     olddir = actor->movedir;
     turnaround = opposite[olddir];
@@ -4012,7 +4014,9 @@ void A_SorcBallOrbit(mobj_t * actor)
             angle = baseangle + BALL3_ANGLEOFFSET;
             break;
         default:
-            I_Error("A_SorcBallOrbit: ошибка в атаке Темного священника");
+            I_Error(english_language ?
+                    "corrupted sorcerer" :
+                    "A_SorcBallOrbit: ошибка в атаке Темного священника");
             return;
     }
     actor->angle = angle;

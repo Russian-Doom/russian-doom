@@ -540,7 +540,9 @@ boolean P_UndoPlayerMorph(player_t * player)
             mo = P_SpawnMobj(x, y, z, MT_PLAYER_MAGE);
             break;
         default:
-            I_Error("P_UndoPlayerMorph: неизвестный класс игрока (%d).\n",
+            I_Error(english_language ?
+                    "P_UndoPlayerMorph: Unknown player class %d\n" :
+                    "P_UndoPlayerMorph: неизвестный класс игрока (%d).\n",
                     player->class);
             return false;
     }
@@ -1638,7 +1640,10 @@ boolean P_UseArtifact(player_t * player, artitype_t arti)
             }
             else
             {
-                P_SetYellowMessage(player, TXT_USEPUZZLEFAILED, false);
+                P_SetYellowMessage(player, english_language ?
+                                           TXT_USEPUZZLEFAILED :
+                                           TXT_USEPUZZLEFAILED_RUS,
+                                           false);
                 return false;
             }
             break;

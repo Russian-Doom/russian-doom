@@ -50,6 +50,20 @@ char *TextKeyMessages[] = {
     TXT_KEY_CASTLE
 };
 
+char *TextKeyMessages_Rus[] = {
+    TXT_KEY_STEEL_RUS,
+    TXT_KEY_CAVE_RUS,
+    TXT_KEY_AXE_RUS,
+    TXT_KEY_FIRE_RUS,
+    TXT_KEY_EMERALD_RUS,
+    TXT_KEY_DUNGEON_RUS,
+    TXT_KEY_SILVER_RUS,
+    TXT_KEY_RUSTED_RUS,
+    TXT_KEY_HORN_RUS,
+    TXT_KEY_SWAMP_RUS,
+    TXT_KEY_CASTLE_RUS
+};
+
 static void SetDormantArtifact(mobj_t * arti);
 static void TryPickupArtifact(player_t * player, artitype_t artifactType,
                               mobj_t * artifact);
@@ -159,7 +173,10 @@ boolean P_GiveMana(player_t * player, manatype_t mana, int count)
     }
     if ((unsigned int) mana > NUMMANA)
     {
-        I_Error("P_GiveMana: некорректный тип маны (%i)", mana);
+        I_Error(english_language ?
+                "P_GiveMana: bad type %i" :
+                "P_GiveMana: некорректный тип маны (%i)",
+                mana);
     }
     if (player->mana[mana] == MAX_MANA)
     {
@@ -419,10 +436,20 @@ static void TryPickupWeaponPiece(player_t * player, pclass_t matchClass,
         TXT_WEAPON_C4,
         TXT_WEAPON_M4
     };
+    static char *fourthWeaponText_Rus[] = {
+        TXT_WEAPON_F4_RUS,
+        TXT_WEAPON_C4_RUS,
+        TXT_WEAPON_M4_RUS
+    };
     static char *weaponPieceText[] = {
         TXT_QUIETUS_PIECE,
         TXT_WRAITHVERGE_PIECE,
         TXT_BLOODSCOURGE_PIECE
+    };
+    static char *weaponPieceText_Rus[] = {
+        TXT_QUIETUS_PIECE_RUS,
+        TXT_WRAITHVERGE_PIECE_RUS,
+        TXT_BLOODSCOURGE_PIECE_RUS
     };
     static int pieceValueTrans[] = {
         0,                      // 0: never
@@ -512,13 +539,19 @@ static void TryPickupWeaponPiece(player_t * player, pclass_t matchClass,
 
     if (gaveWeapon)
     {
-        P_SetMessage(player, fourthWeaponText[matchClass], false);
+        P_SetMessage(player, english_language ?
+                             fourthWeaponText[matchClass] :
+                             fourthWeaponText_Rus[matchClass],
+                             false);
         // Play the build-sound full volume for all players
         S_StartSound(NULL, SFX_WEAPON_BUILD);
     }
     else
     {
-        P_SetMessage(player, weaponPieceText[matchClass], false);
+        P_SetMessage(player, english_language ?
+                             weaponPieceText[matchClass] :
+                             weaponPieceText_Rus[matchClass],
+                             false);
         if (player == &players[consoleplayer])
         {
             S_StartSound(NULL, SFX_PICKUP_WEAPON);
@@ -749,10 +782,54 @@ static void TryPickupArtifact(player_t * player, artitype_t artifactType,
         TXT_ARTIPUZZGEAR
     };
 
+    static char *artifactMessages_Rus[NUMARTIFACTS] = {
+        NULL,
+        TXT_ARTIINVULNERABILITY_RUS,
+        TXT_ARTIHEALTH_RUS,
+        TXT_ARTISUPERHEALTH_RUS,
+        TXT_ARTIHEALINGRADIUS_RUS,
+        TXT_ARTISUMMON_RUS,
+        TXT_ARTITORCH_RUS,
+        TXT_ARTIEGG_RUS,
+        TXT_ARTIFLY_RUS,
+        TXT_ARTIBLASTRADIUS_RUS,
+        TXT_ARTIPOISONBAG_RUS,
+        TXT_ARTITELEPORTOTHER_RUS,
+        TXT_ARTISPEED_RUS,
+        TXT_ARTIBOOSTMANA_RUS,
+        TXT_ARTIBOOSTARMOR_RUS,
+        TXT_ARTITELEPORT_RUS,
+        TXT_ARTIPUZZSKULL_RUS,
+        TXT_ARTIPUZZGEMBIG_RUS,
+        TXT_ARTIPUZZGEMRED_RUS,
+        TXT_ARTIPUZZGEMGREEN1_RUS,
+        TXT_ARTIPUZZGEMGREEN2_RUS,
+        TXT_ARTIPUZZGEMBLUE1_RUS,
+        TXT_ARTIPUZZGEMBLUE2_RUS,
+        TXT_ARTIPUZZBOOK1_RUS,
+        TXT_ARTIPUZZBOOK2_RUS,
+        TXT_ARTIPUZZSKULL2_RUS,
+        TXT_ARTIPUZZFWEAPON_RUS,
+        TXT_ARTIPUZZCWEAPON_RUS,
+        TXT_ARTIPUZZMWEAPON_RUS,
+        TXT_ARTIPUZZGEAR_RUS,       // All gear pickups use the same text
+        TXT_ARTIPUZZGEAR_RUS,
+        TXT_ARTIPUZZGEAR_RUS,
+        TXT_ARTIPUZZGEAR_RUS
+    };
+
     if (gamemode == shareware)
     {
-        artifactMessages[arti_blastradius] = TXT_ARTITELEPORT;
-        artifactMessages[arti_teleport] = TXT_ARTIBLASTRADIUS;
+        if (english_language)
+        {
+            artifactMessages[arti_blastradius] = TXT_ARTITELEPORT;
+            artifactMessages[arti_teleport] = TXT_ARTIBLASTRADIUS;
+        }
+        else
+        {
+            artifactMessages_Rus[arti_blastradius] = TXT_ARTITELEPORT;
+            artifactMessages_Rus[arti_teleport] = TXT_ARTIBLASTRADIUS;
+        }
     }
 
     if (P_GiveArtifact(player, artifactType, artifact))
@@ -768,12 +845,18 @@ static void TryPickupArtifact(player_t * player, artitype_t artifactType,
         {
             SetDormantArtifact(artifact);
             S_StartSound(artifact, SFX_PICKUP_ARTIFACT);
-            P_SetMessage(player, artifactMessages[artifactType], false);
+            P_SetMessage(player, english_language ?
+                                 artifactMessages[artifactType] :
+                                 artifactMessages_Rus[artifactType],
+                                 false);
         }
         else
         {                       // Puzzle item
             S_StartSound(NULL, SFX_PICKUP_ITEM);
-            P_SetMessage(player, artifactMessages[artifactType], true);
+            P_SetMessage(player, english_language ?
+                                 artifactMessages[artifactType] :
+                                 artifactMessages_Rus[artifactType],
+                                 true);
             if (!netgame || deathmatch)
             {                   // Remove puzzle items if not cooperative netplay
                 P_RemoveMobj(artifact);
@@ -962,35 +1045,50 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, TXT_ITEMHEALTH, false);
+            P_SetMessage(player, english_language ?
+                                 TXT_ITEMHEALTH :
+                                 TXT_ITEMHEALTH_RUS,
+                                 false);
             break;
         case SPR_ARM1:
             if (!P_GiveArmor(player, ARMOR_ARMOR, -1))
             {
                 return;
             }
-            P_SetMessage(player, TXT_ARMOR1, false);
+            P_SetMessage(player, english_language ?
+                                 TXT_ARMOR1 :
+                                 TXT_ARMOR1_RUS,
+                                 false);
             break;
         case SPR_ARM2:
             if (!P_GiveArmor(player, ARMOR_SHIELD, -1))
             {
                 return;
             }
-            P_SetMessage(player, TXT_ARMOR2, false);
+            P_SetMessage(player, english_language ?
+                                 TXT_ARMOR2 :
+                                 TXT_ARMOR2_RUS,
+                                 false);
             break;
         case SPR_ARM3:
             if (!P_GiveArmor(player, ARMOR_HELMET, -1))
             {
                 return;
             }
-            P_SetMessage(player, TXT_ARMOR3, false);
+            P_SetMessage(player, english_language ?
+                                 TXT_ARMOR3 :
+                                 TXT_ARMOR3_RUS,
+                                 false);
             break;
         case SPR_ARM4:
             if (!P_GiveArmor(player, ARMOR_AMULET, -1))
             {
                 return;
             }
-            P_SetMessage(player, TXT_ARMOR4, false);
+            P_SetMessage(player, english_language ?
+                                 TXT_ARMOR4 :
+                                 TXT_ARMOR4_RUS,
+                                 false);
             break;
 
             // Keys
@@ -1009,7 +1107,9 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, TextKeyMessages[special->sprite - SPR_KEY1],
+            P_SetMessage(player, english_language ?
+                         TextKeyMessages[special->sprite - SPR_KEY1] :
+                         TextKeyMessages_Rus[special->sprite - SPR_KEY1],
                          true);
             sound = SFX_PICKUP_KEY;
 
@@ -1140,14 +1240,20 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, TXT_MANA_1, false);
+            P_SetMessage(player, english_language ?
+                                 TXT_MANA_1 :
+                                 TXT_MANA_1_RUS,
+                                 false);
             break;
         case SPR_MAN2:
             if (!P_GiveMana(player, MANA_2, 15))
             {
                 return;
             }
-            P_SetMessage(player, TXT_MANA_2, false);
+            P_SetMessage(player, english_language ?
+                                 TXT_MANA_2 :
+                                 TXT_MANA_2_RUS,
+                                 false);
             break;
         case SPR_MAN3:         // Double Mana Dodecahedron
             if (!P_GiveMana(player, MANA_1, 20))
@@ -1161,37 +1267,52 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 P_GiveMana(player, MANA_2, 20);
             }
-            P_SetMessage(player, TXT_MANA_BOTH, false);
+            P_SetMessage(player, english_language ?
+                                 TXT_MANA_BOTH :
+                                 TXT_MANA_BOTH_RUS,
+                                 false);
             break;
 
             // 2nd and 3rd Mage Weapons
         case SPR_WMCS:         // Frost Shards
             TryPickupWeapon(player, PCLASS_MAGE, WP_SECOND,
-                            special, TXT_WEAPON_M2);
+                            special, english_language ?
+                                     TXT_WEAPON_M2 :
+                                     TXT_WEAPON_M2_RUS);
             return;
         case SPR_WMLG:         // Arc of Death
             TryPickupWeapon(player, PCLASS_MAGE, WP_THIRD,
-                            special, TXT_WEAPON_M3);
+                            special, english_language ?
+                                     TXT_WEAPON_M3 :
+                                     TXT_WEAPON_M3_RUS);
             return;
 
             // 2nd and 3rd Fighter Weapons
         case SPR_WFAX:         // Timon's Axe
             TryPickupWeapon(player, PCLASS_FIGHTER, WP_SECOND,
-                            special, TXT_WEAPON_F2);
+                            special, english_language ?
+                                     TXT_WEAPON_F2 :
+                                     TXT_WEAPON_F2_RUS);
             return;
         case SPR_WFHM:         // Hammer of Retribution
             TryPickupWeapon(player, PCLASS_FIGHTER, WP_THIRD,
-                            special, TXT_WEAPON_F3);
+                            special, english_language ?
+                                     TXT_WEAPON_F3 :
+                                     TXT_WEAPON_F3_RUS);
             return;
 
             // 2nd and 3rd Cleric Weapons
         case SPR_WCSS:         // Serpent Staff
             TryPickupWeapon(player, PCLASS_CLERIC, WP_SECOND,
-                            special, TXT_WEAPON_C2);
+                            special, english_language ?
+                                     TXT_WEAPON_C2 :
+                                     TXT_WEAPON_C2_RUS);
             return;
         case SPR_WCFM:         // Firestorm
             TryPickupWeapon(player, PCLASS_CLERIC, WP_THIRD,
-                            special, TXT_WEAPON_C3);
+                            special, english_language ?
+                            TXT_WEAPON_C3 :
+                            TXT_WEAPON_C3_RUS);
             return;
 
             // Fourth Weapon Pieces
@@ -1224,7 +1345,9 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             return;
 
         default:
-            I_Error("P_SpecialThing: получен неизвестный предмет");
+            I_Error(english_language ?
+                    "P_SpecialThing: Unknown gettable thing" :
+                    "P_SpecialThing: получен неизвестный предмет");
     }
     if (special->special)
     {

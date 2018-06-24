@@ -528,9 +528,19 @@ boolean AM_Responder(event_t * ev)
         {
             followplayer = !followplayer;
             f_oldloc.x = INT_MAX;
-            P_SetMessage(plr,
-                         followplayer ? AMSTR_FOLLOWON : AMSTR_FOLLOWOFF,
-                         true);
+            
+            if (english_language)
+            {
+                P_SetMessage(plr,
+                            followplayer ? AMSTR_FOLLOWON : AMSTR_FOLLOWOFF,
+                            true);
+            }
+            else
+            {
+                P_SetMessage(plr,
+                            followplayer ? AMSTR_FOLLOWON_RUS : AMSTR_FOLLOWOFF_RUS,
+                            true);
+            }
         }
         else
         {

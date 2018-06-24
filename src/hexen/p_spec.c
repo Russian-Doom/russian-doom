@@ -423,8 +423,10 @@ static boolean CheckedLockedDoor(mobj_t * mo, byte lock)
     }
     if (!(mo->player->keys & (1 << (lock - 1))))
     {
-        M_snprintf(LockedBuffer, sizeof(LockedBuffer),
-                   "LKZ JNRHSNBZ YE;TY %s\n", TextKeyMessages[lock - 1]); // ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n | YOU NEED THE %s\n
+        M_snprintf(LockedBuffer, sizeof(LockedBuffer), english_language ?
+                   "YOU NEED THE %s\n" :
+                   "LKZ JNRHSNBZ YE;TY %s\n", // ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n
+                   TextKeyMessages[lock - 1]);
         P_SetMessage(mo->player, LockedBuffer, true);
         S_StartSound(mo, SFX_DOOR_LOCKED);
         return false;
@@ -985,8 +987,10 @@ void P_PlayerInSpecialSector(player_t * player)
             // Used in (R_plane):R_Drawplanes
             break;
         default:
-            I_Error("P_PlayerInSpecialSector: "
-                    "неизвестная специфика %i", sector->special);
+            I_Error(english_language ?
+                    "P_PlayerInSpecialSector: unknown special %i" :
+                    "P_PlayerInSpecialSector: неизвестная специфика %i",
+                    sector->special);
     }
 }
 
@@ -1158,8 +1162,10 @@ void P_SpawnSpecials(void)
                 {
                     if (TaggedLineCount == MAX_TAGGED_LINES)
                     {
-                        I_Error("P_SpawnSpecials: превышен лимит MAX_TAGGED_LINES "
-                                "(%d).", MAX_TAGGED_LINES);
+                        I_Error(english_language ?
+                                "P_SpawnSpecials: MAX_TAGGED_LINES (%d) exceeded." :
+                                "P_SpawnSpecials: превышен лимит MAX_TAGGED_LINES (%d).",
+                                MAX_TAGGED_LINES);
                     }
                     TaggedLines[TaggedLineCount].line = &lines[i];
                     TaggedLines[TaggedLineCount++].lineTag = lines[i].arg1;

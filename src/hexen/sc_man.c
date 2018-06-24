@@ -309,8 +309,10 @@ boolean SC_GetNumber(void)
         sc_Number = strtol(sc_String, &stopper, 0);
         if (*stopper != 0)
         {
-            I_Error("SC_GetNumber: некорректная цифровая константа \"%s\".\n"
-                    "Скрипт %s, линия %d", sc_String, ScriptName, sc_Line);
+            I_Error(english_language ?
+                    "SC_GetNumber: Bad numeric constant \"%s\".\nScript %s, Line %d" :
+                    "SC_GetNumber: некорректная цифровая константа \"%s\".\nСкрипт %s, линия %d",
+                    sc_String, ScriptName, sc_Line);
         }
         return true;
     }
@@ -452,9 +454,14 @@ void SC_ScriptError(char *message)
 {
     if (message == NULL)
     {
-        message = "Bad syntax.";
+        message = english_language ?
+                  "Bad syntax." :
+                  "Ошибка синтакса.";
     }
-    I_Error("Ошибка скрипта, \"%s\" линия %d: %s", ScriptName, sc_Line, message);
+    I_Error(english_language ?
+            "Script error, \"%s\" line %d: %s" :
+            "Ошибка скрипта, \"%s\" линия %d: %s",
+            ScriptName, sc_Line, message);
 }
 
 //==========================================================================
@@ -467,6 +474,8 @@ static void CheckOpen(void)
 {
     if (ScriptOpen == false)
     {
-        I_Error("SC_ вызов перед SC_Open().");
+        I_Error(english_language ?
+                "SC_ call before SC_Open()." :
+                "SC_ вызов перед SC_Open().");
     }
 }

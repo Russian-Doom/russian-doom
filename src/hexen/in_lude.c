@@ -196,7 +196,10 @@ static void InitStats(void)
                 msgSize = W_LumpLength(msgLump);
                 if (msgSize >= MAX_INTRMSN_MESSAGE_SIZE)
                 {
-                    I_Error("Превышена допустимая длина текста (%s)", msgLumpName);
+                    I_Error(english_language ?
+                    "Cluster message too long (%s)" :
+                    "Превышена допустимая длина текста (%s)",
+                    msgLumpName);
                 }
                 W_ReadLump(msgLump, ClusterMessage);
                 ClusterMessage[msgSize] = 0;    // Append terminator

@@ -77,8 +77,12 @@
 //#define HEXEN_VERSIONTEXT "Version 1.1 "__DATE__" ("VER_ID")"
 //#endif
 #define HEXEN_VERSIONTEXT ((gamemode == shareware) ? \
-                           "LTVJDTHCBZ (16.10.1995)" : \
-                           "DTHCBZ 1.1 (22.03.1996)")
+                           "DEMO 10 16 95" : \
+                           "VERSION 1.1 MAR 22 1996 (BCP)")
+
+#define HEXEN_VERSIONTEXT_RUS ((gamemode == shareware) ? \
+                               "LTVJDTHCBZ (16>10>1995)" : \
+                               "DTHCBZ 1>1 (22>03>1996)")                           
 
 // all exterior data is defined here
 #include "xddefs.h"

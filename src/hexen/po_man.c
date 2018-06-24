@@ -131,7 +131,9 @@ boolean EV_RotatePoly(line_t * line, byte * args, int direction, boolean
     }
     else
     {
-        I_Error("EV_RotatePoly: некорректный номер полиобъекта (%d).\n", polyNum);
+        I_Error(english_language ?
+                "EV_RotatePoly: Invalid polyobj num: %d\n" :
+                "EV_RotatePoly: некорректный номер полиобъекта (%d).\n", polyNum);
     }
     pe = Z_Malloc(sizeof(polyevent_t), PU_LEVSPEC, 0);
     P_AddThinker(&pe->thinker);
@@ -191,7 +193,10 @@ boolean EV_RotatePoly(line_t * line, byte * args, int direction, boolean
         }
         else
         {
-            I_Error("EV_RotatePoly: некорректный номер полиобъекта (%d).\n", polyNum);
+            I_Error(english_language ?
+                    "EV_RotatePoly: Invalid polyobj num: %d\n" :
+                    "EV_RotatePoly: некорректный номер полиобъекта (%d).\n",
+                    polyNum);
         }
         direction = -direction;
         pe->speed = (args[1] * direction * (ANG90 / 64)) >> 3;
@@ -263,7 +268,10 @@ boolean EV_MovePoly(line_t * line, byte * args, boolean timesEight, boolean
     }
     else
     {
-        I_Error("EV_MovePoly: некорректный номер полиобъекта (%d).\n", polyNum);
+        I_Error(english_language ?
+                "EV_MovePoly: Invalid polyobj num: %d\n" :
+                "EV_MovePoly: некорректный номер полиобъекта (%d).\n",
+                polyNum);
     }
     pe = Z_Malloc(sizeof(polyevent_t), PU_LEVSPEC, 0);
     P_AddThinker(&pe->thinker);
@@ -471,7 +479,10 @@ boolean EV_OpenPolyDoor(line_t * line, byte * args, podoortype_t type)
     }
     else
     {
-        I_Error("EV_OpenPolyDoor: некорректный номер полиобъекта (%d).\n", polyNum);
+        I_Error(english_language ?
+                "EV_OpenPolyDoor: Invalid polyobj num: %d\n" :
+                "EV_OpenPolyDoor: некорректный номер полиобъекта (%d).\n",
+                polyNum);
     }
     pd = Z_Malloc(sizeof(polydoor_t), PU_LEVSPEC, 0);
     memset(pd, 0, sizeof(polydoor_t));
@@ -722,7 +733,9 @@ boolean PO_MovePolyobj(int num, int x, int y)
 
     if (!(po = GetPolyobj(num)))
     {
-        I_Error("PO_MovePolyobj: некорректный номер полиобъекта (%d).\n", num);
+        I_Error(english_language ?
+                "PO_MovePolyobj: Invalid polyobj number: %d\n" :
+                "PO_MovePolyobj: некорректный номер полиобъекта (%d).\n", num);
     }
 
     UnLinkPolyobj(po);
@@ -850,7 +863,10 @@ boolean PO_RotatePolyobj(int num, angle_t angle)
 
     if (!(po = GetPolyobj(num)))
     {
-        I_Error("PO_RotatePolyobj: некорректный номер полиобъекта (%d).\n", num);
+        I_Error(english_language ?
+                "PO_RotatePolyobj: Invalid polyobj number: %d\n" :
+                "PO_RotatePolyobj: некорректный номер полиобъекта (%d).\n",
+                num);
     }
     an = (po->angle + angle) >> ANGLETOFINESHIFT;
 
@@ -1192,7 +1208,9 @@ static void IterFindPolySegs(int x, int y, seg_t ** segList)
             return;
         }
     }
-    I_Error("IterFindPolySegs: обнаружен не закрытый полиобъект.\n");
+    I_Error(english_language ?
+            "IterFindPolySegs: Non-closed Polyobj located.\n" :
+            "IterFindPolySegs: обнаружен не закрытый полиобъект.\n");
 }
 
 
@@ -1217,7 +1235,10 @@ static void SpawnPolyobj(int index, int tag, boolean crush)
         {
             if (polyobjs[index].segs)
             {
-                I_Error("SpawnPolyobj: полиобъект %d уже существует.\n", tag);
+                I_Error(english_language ?
+                "SpawnPolyobj: Polyobj %d already spawned.\n" :
+                "SpawnPolyobj: полиобъект %d уже существует.\n",
+                tag);
             }
             segs[i].linedef->special = 0;
             segs[i].linedef->arg1 = 0;
@@ -1257,9 +1278,9 @@ static void SpawnPolyobj(int index, int tag, boolean crush)
                 {
                     if (!segs[i].linedef->arg2)
                     {
-                        I_Error
-                            ("SpawnPolyobj: указанная линия не совпадает с порядковым номером\n"
-                             "(предположительно %d) в полиобъекте %d.\n",
+                        I_Error(english_language? 
+                            "SpawnPolyobj: Explicit line missing order number (probably %d) in poly %d.\n" :
+                            "SpawnPolyobj: указанная линия не совпадает с порядковым номером\n (предположительно %d) в полиобъекте %d.\n",
                              j + 1, tag);
                     }
                     if (segs[i].linedef->arg2 == j)
@@ -1297,9 +1318,10 @@ static void SpawnPolyobj(int index, int tag, boolean crush)
                     if (segs[i].linedef->special == PO_LINE_EXPLICIT &&
                         segs[i].linedef->arg1 == tag)
                     {
-                        I_Error
-                            ("SpawnPolyobj: отсутствует заданная линия %d в полиобъекте %d.\n",
-                             j, tag);
+                        I_Error(english_language ?
+                                "SpawnPolyobj: Missing explicit line %d for poly %d\n" :
+                                "SpawnPolyobj: отсутствует заданная линия %d в полиобъекте %d.\n",
+                                j, tag);
                     }
                 }
             }
@@ -1353,13 +1375,17 @@ static void TranslateToStartSpot(int tag, int originX, int originY)
     }
     if (!po)
     {                           // didn't match the tag with a polyobj tag
-        I_Error("TranslateToStartSpot: несовпадение тэга полиобъекта (%d).\n",
+        I_Error(english_language ?
+                "TranslateToStartSpot: Unable to match polyobj tag: %d\n" :
+                "TranslateToStartSpot: несовпадение тэга полиобъекта (%d).\n",
                 tag);
     }
     if (po->segs == NULL)
     {
         I_Error
-            ("TranslateToStartSpot: указан Anchor-указатель без StartSpot-указателя: %d\n",
+            (english_language ?
+            "TranslateToStartSpot: Anchor point located without a StartSpot point: %d\n" :
+            "TranslateToStartSpot: указан Anchor-указатель без StartSpot-указателя: %d\n",
              tag);
     }
     po->originalPts = Z_Malloc(po->numsegs * sizeof(vertex_t), PU_LEVEL, 0);
@@ -1407,8 +1433,9 @@ static void TranslateToStartSpot(int tag, int originX, int originY)
     sub = R_PointInSubsector(avg.x << FRACBITS, avg.y << FRACBITS);
     if (sub->poly != NULL)
     {
-        I_Error
-            ("PO_TranslateToStartSpot: множественные полиобъекты в одном подсекторе.\n");
+        I_Error(english_language ?
+        "PO_TranslateToStartSpot: Multiple polyobjs in a single subsector.\n" :
+        "PO_TranslateToStartSpot: множественные полиобъекты в одном подсекторе.\n");
     }
     sub->poly = po;
 }
@@ -1474,9 +1501,10 @@ void PO_Init(int lump)
     {
         if (!polyobjs[i].originalPts)
         {
-            I_Error
-                ("PO_Init: обнаружен StartSpot-указатель без Anchor-указателя: %d\n",
-                 polyobjs[i].tag);
+            I_Error(english_language ?
+                    "PO_Init: StartSpot located without an Anchor point: %d\n" :
+                    "PO_Init: обнаружен StartSpot-указатель без Anchor-указателя: %d\n",
+                    polyobjs[i].tag);
         }
     }
     InitBlockMap();

@@ -215,7 +215,10 @@ void R_MapPlane(int y, int x1, int x2)
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= viewwidth || (unsigned) y > viewheight)
     {
-        I_Error("R_MapPlane: %i, %i у %i", x1, x2, y);
+        I_Error(english_language ?
+                "R_MapPlane: %i, %i at %i" :
+                "R_MapPlane: %i, %i у %i",
+                x1, x2, y);
     }
 #endif
 
@@ -499,16 +502,23 @@ void R_DrawPlanes(void)
 #ifdef RANGECHECK
     if (ds_p - drawsegs > numdrawsegs)
     {
-        I_Error("R_DrawPlanes: превышен лимит drawsegs (%i)", ds_p - drawsegs);
+        I_Error(english_language ?
+                "R_DrawPlanes: drawsegs overflow (%i)" :
+                "R_DrawPlanes: превышен лимит drawsegs (%i)",
+                ds_p - drawsegs);
     }
     if (lastvisplane - visplanes > numvisplanes)
     {
-        I_Error("R_DrawPlanes: превышен лимит visplane (%i)",
+        I_Error(english_language ?
+                "R_DrawPlanes: visplane overflow (%i)" :
+                "R_DrawPlanes: превышен лимит visplane (%i)",
                 lastvisplane - visplanes);
     }
     if (lastopening - openings > MAXOPENINGS)
     {
-        I_Error("R_DrawPlanes: превышен лимит opening (%i)",
+        I_Error(english_language ?
+                "R_DrawPlanes: opening overflow (%i)" :
+                "R_DrawPlanes: превышен лимит opening (%i)",
                 lastopening - openings);
     }
 #endif

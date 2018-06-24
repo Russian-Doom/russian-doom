@@ -372,7 +372,9 @@ void P_InitFTAnims(void)
     {
         if (AnimDefCount == MAX_ANIM_DEFS)
         {
-            I_Error("P_InitFTAnims: превышен лимит AnimDefs.");
+            I_Error(english_language ?
+                    "P_InitFTAnims: too many AnimDefs." :
+                    "P_InitFTAnims: превышен лимит AnimDefs.");
         }
         if (SC_Compare(SCI_FLAT))
         {
@@ -420,7 +422,9 @@ void P_InitFTAnims(void)
                 {
                     if (fd == MAX_FRAME_DEFS)
                     {
-                        I_Error("P_InitFTAnims: превышен лимит FrameDefs.");
+                        I_Error(english_language ?
+                                "P_InitFTAnims: too many FrameDefs." :
+                                "P_InitFTAnims: превышен лимит FrameDefs.");
                     }
                     SC_MustGetNumber();
                     if (ignore == false)
@@ -467,7 +471,9 @@ void P_InitFTAnims(void)
         }
         if ((ignore == false) && (fd - ad->startFrameDef < 2))
         {
-            I_Error("P_InitFTAnims: количество кадров AnimDef меньше 2х.");
+            I_Error(english_language ?
+                    "P_InitFTAnims: AnimDef has framecount < 2." :
+                    "P_InitFTAnims: количество кадров AnimDef меньше 2х.");
         }
         if (ignore == false)
         {

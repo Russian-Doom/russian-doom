@@ -514,7 +514,9 @@ static boolean AddToACSStore(int map, int number, byte * args)
     {                           // Append required
         if (i == MAX_ACS_STORE)
         {
-            I_Error("AddToACSStore: превышено максимальное значение MAX_ACS_STORE (%d).",
+            I_Error(english_language ?
+                    "AddToACSStore: MAX_ACS_STORE (%d) exceeded." :
+                    "AddToACSStore: превышено максимальное значение MAX_ACS_STORE (%d).",
                     MAX_ACS_STORE);
         }
         index = i;
@@ -552,7 +554,10 @@ boolean P_StartLockedACS(line_t * line, byte * args, mobj_t * mo, int side)
         if (!(mo->player->keys & (1 << (lock - 1))))
         {
             M_snprintf(LockedBuffer, sizeof(LockedBuffer),
-                       "LKZ JNRHSNBZ YE;TY %s\n", TextKeyMessages[lock - 1]);	// ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n
+                       english_language ?
+                       "YOU NEED THE %s\n" :
+                       "LKZ JNRHSNBZ YE;TY %s\n", // ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n
+                       TextKeyMessages[lock - 1]);
             P_SetMessage(mo->player, LockedBuffer, true);
             S_StartSound(mo, SFX_DOOR_LOCKED);
             return false;
@@ -800,7 +805,10 @@ void CheckACSPresent(int number)
 {
     if (GetACSIndex(number) == -1)
     {
-        I_Error("Требуемый скрипт ACS (%d) не инициализирован", number);
+        I_Error(english_language ?
+                "Required ACS script %d not initialized" :
+                "Требуемый скрипт ACS (%d) не инициализирован",
+                number);
     }
 }
 

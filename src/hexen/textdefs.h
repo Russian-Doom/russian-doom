@@ -21,147 +21,152 @@
 // Памятка по символам: docs_russian/charmap/raven_charmap.xlsx
 //
 
+// -----------------------------------------------------------------------------
+// English language
+// -----------------------------------------------------------------------------
 
-// MN_menu.c ---------------------------------------------------------------
+#define TXT_GAMMA_LEVEL_OFF     "GAMMA CORRECTION OFF"
+#define TXT_GAMMA_LEVEL_0_25    "GAMMA CORRECTION 0.25"
+#define TXT_GAMMA_LEVEL_0_50    "GAMMA CORRECTION 0.50"
+#define TXT_GAMMA_LEVEL_0_75    "GAMMA CORRECTION 0.75"
+#define TXT_GAMMA_LEVEL_1_0     "GAMMA CORRECTION 1.0"
+#define TXT_GAMMA_LEVEL_1_25    "GAMMA CORRECTION 1.25"
+#define TXT_GAMMA_LEVEL_1_50    "GAMMA CORRECTION 1.50"
+#define TXT_GAMMA_LEVEL_1_75    "GAMMA CORRECTION 1.75"
+#define TXT_GAMMA_LEVEL_2_0     "GAMMA CORRECTION 2.0"
+#define TXT_GAMMA_LEVEL_2_25    "GAMMA CORRECTION 2.25"
+#define TXT_GAMMA_LEVEL_2_50    "GAMMA CORRECTION 2.50"
+#define TXT_GAMMA_LEVEL_2_75    "GAMMA CORRECTION 2.75"
+#define TXT_GAMMA_LEVEL_3_0     "GAMMA CORRECTION 3.0"
+#define TXT_GAMMA_LEVEL_3_25    "GAMMA CORRECTION 3.25"
+#define TXT_GAMMA_LEVEL_3_50    "GAMMA CORRECTION 3.50"
+#define TXT_GAMMA_LEVEL_3_75    "GAMMA CORRECTION 3.75"
+#define TXT_GAMMA_LEVEL_4_0     "GAMMA CORRECTION 4.0"
+#define TXT_GAMMA_LEVEL_4_25    "GAMMA CORRECTION 4.25"
+#define TXT_GAMMA_LEVEL_4_50    "GAMMA CORRECTION 4.50"
+#define TXT_GAMMA_LEVEL_4_75    "GAMMA CORRECTION 4.75"
+#define TXT_GAMMA_LEVEL_5_0     "GAMMA CORRECTION 5.0"
+#define TXT_GAMMA_LEVEL_5_25    "GAMMA CORRECTION 5.25"
+#define TXT_GAMMA_LEVEL_5_50    "GAMMA CORRECTION 5.50"
+#define TXT_GAMMA_LEVEL_5_75    "GAMMA CORRECTION 5.75"
+#define TXT_GAMMA_LEVEL_6_0     "GAMMA CORRECTION 6.0"
 
-#define TXT_GAMMA_LEVEL_OFF      "UFVVF-RJHHTRWBZ JNRK.XTYF"        // ГАММА-КОРРЕКЦИЯ ОТКЛЮЧЕНА
-#define TXT_GAMMA_LEVEL_0_25     "EHJDTYM UFVVF-RJHHTRWBB 0>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.25
-#define TXT_GAMMA_LEVEL_0_50     "EHJDTYM UFVVF-RJHHTRWBB 0>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.50
-#define TXT_GAMMA_LEVEL_0_75     "EHJDTYM UFVVF-RJHHTRWBB 0>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.75
-#define TXT_GAMMA_LEVEL_1_0      "EHJDTYM UFVVF-RJHHTRWBB 1>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.0
-#define TXT_GAMMA_LEVEL_1_25     "EHJDTYM UFVVF-RJHHTRWBB 1>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.25
-#define TXT_GAMMA_LEVEL_1_50     "EHJDTYM UFVVF-RJHHTRWBB 1>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.50
-#define TXT_GAMMA_LEVEL_1_75     "EHJDTYM UFVVF-RJHHTRWBB 1>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.75
-#define TXT_GAMMA_LEVEL_2_0      "EHJDTYM UFVVF-RJHHTRWBB 2>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.0
-#define TXT_GAMMA_LEVEL_2_25     "EHJDTYM UFVVF-RJHHTRWBB 2>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.25
-#define TXT_GAMMA_LEVEL_2_50     "EHJDTYM UFVVF-RJHHTRWBB 2>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.50
-#define TXT_GAMMA_LEVEL_2_75     "EHJDTYM UFVVF-RJHHTRWBB 2>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.75
-#define TXT_GAMMA_LEVEL_3_0      "EHJDTYM UFVVF-RJHHTRWBB 3>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.0
-#define TXT_GAMMA_LEVEL_3_25     "EHJDTYM UFVVF-RJHHTRWBB 3>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.25
-#define TXT_GAMMA_LEVEL_3_50     "EHJDTYM UFVVF-RJHHTRWBB 3>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.50
-#define TXT_GAMMA_LEVEL_3_75     "EHJDTYM UFVVF-RJHHTRWBB 3>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.75
-#define TXT_GAMMA_LEVEL_4_0      "EHJDTYM UFVVF-RJHHTRWBB 4>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.0
-#define TXT_GAMMA_LEVEL_4_25     "EHJDTYM UFVVF-RJHHTRWBB 4>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.25
-#define TXT_GAMMA_LEVEL_4_50     "EHJDTYM UFVVF-RJHHTRWBB 4>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.50
-#define TXT_GAMMA_LEVEL_4_75     "EHJDTYM UFVVF-RJHHTRWBB 4>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.75
-#define TXT_GAMMA_LEVEL_5_0      "EHJDTYM UFVVF-RJHHTRWBB 5>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.0
-#define TXT_GAMMA_LEVEL_5_25     "EHJDTYM UFVVF-RJHHTRWBB 5>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.25
-#define TXT_GAMMA_LEVEL_5_50     "EHJDTYM UFVVF-RJHHTRWBB 5>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.50
-#define TXT_GAMMA_LEVEL_5_75     "EHJDTYM UFVVF-RJHHTRWBB 5>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.75
-#define TXT_GAMMA_LEVEL_6_0      "EHJDTYM UFVVF-RJHHTRWBB 6>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 6.0
+#define	EMPTYSTRING             "EMPTY SLOT"
 
-#define	EMPTYSTRING             "GECNJQ CKJN"                       // ПУСТОЙ СЛОТ
 
 // P_inter.c ---------------------------------------------------------------
 
 // Mana
 
-#define TXT_MANA_1				"CBYZZ VFYF"		   // СИНЯЯ МАНА			BLUE MANA
-#define TXT_MANA_2				"PTKTYFZ VFYF"	       // ЗЕЛЕНАЯ МАНА          GREEN MANA 
-#define TXT_MANA_BOTH			"RJV,BYBHJDFYYFZ VFYF" // КОМБИНИРОВАННАЯ МАНА  COMBINED MANA
+#define TXT_MANA_1				"BLUE MANA"
+#define TXT_MANA_2				"GREEN MANA"
+#define TXT_MANA_BOTH			"COMBINED MANA"
 
 // Keys
 
-#define	TXT_KEY_STEEL		"CNFKMYJQ RK.X"			// СТАЛЬНОЙ КЛЮЧ			STEEL KEY
-#define	TXT_KEY_CAVE		"GTOTHYSQ RK.X"			// ПЕЩЕРНЫЙ КЛЮЧ            CAVE KEY
-#define	TXT_KEY_AXE			"RK.X-NJGJH"			// КЛЮЧ-ТОПОР	            AXE KEY
-#define	TXT_KEY_FIRE		"JUYTYYSQ RK.X"			// ОГНЕННЫЙ КЛЮЧ            FIRE KEY
-#define	TXT_KEY_EMERALD		"BPEVHELYSQ RK.X"		// ИЗУМРУДНЫЙ КЛЮЧ          EMERALD KEY
-#define	TXT_KEY_DUNGEON		"RK.X JN GJLPTVTKMZ"	// КЛЮЧ ОТ ПОДЗЕМЕЛЬЯ       DUNGEON KEY
-#define	TXT_KEY_SILVER		"CTHT,HZYSQ RK.X"		// СЕРЕБРЯНЫЙ КЛЮЧ          SILVER KEY
-#define	TXT_KEY_RUSTED		"H;FDSQ RK.X"			// РЖАВЫЙ КЛЮЧ              RUSTED KEY
-#define	TXT_KEY_HORN		"HJUJDJQ RK.X"			// РОГОВОЙ КЛЮЧ             HORN KEY
-#define	TXT_KEY_SWAMP		",JKJNYSQ RK.X"			// БОЛОТНЫЙ КЛЮЧ            SWAMP KEY
-#define TXT_KEY_CASTLE		"RK.X JN PFVRF"			// КЛЮЧ ОТ ЗАМКА            CASTLE KEY
+#define	TXT_KEY_STEEL		"STEEL KEY"
+#define	TXT_KEY_CAVE		"CAVE KEY"
+#define	TXT_KEY_AXE			"AXE KEY"
+#define	TXT_KEY_FIRE		"FIRE KEY"
+#define	TXT_KEY_EMERALD		"EMERALD KEY"
+#define	TXT_KEY_DUNGEON		"DUNGEON KEY"
+#define	TXT_KEY_SILVER		"SILVER KEY"
+#define	TXT_KEY_RUSTED		"RUSTED KEY"
+#define	TXT_KEY_HORN		"HORN KEY"
+#define	TXT_KEY_SWAMP		"SWAMP KEY"
+#define TXT_KEY_CASTLE		"CASTLE KEY"
 
 // Artifacts
 
-#define TXT_ARTIINVULNERABILITY		"CBVDJK PFOBNYBRF"			// СИМВОЛ ЗАЩИТНИКА				ICON OF THE DEFENDER
-#define TXT_ARTIHEALTH				"RDFHWTDSQ AKFRJY"			// КВАРЦЕВЫЙ ФЛАКОН				QUARTZ FLASK
-#define TXT_ARTISUPERHEALTH			"VBCNBXTCRFZ EHYF"			// МИСТИЧЕСКАЯ УРНА				MYSTIC URN
-#define TXT_ARTISUMMON				"NTVYSQ CKEUF"				// ТЕМНЫЙ СЛУГА					DARK SERVANT
-#define TXT_ARTITORCH				"AFRTK"						// ФАКЕЛ						TORCH
-#define TXT_ARTIEGG					"CDBYJVJHATH"				// СВИНОМОРФЕР					PORKALATOR
-#define TXT_ARTIFLY					"RHSKMZ UYTDF"				// КРЫЛЬЯ ГНЕВА					WINGS OF WRATH
-#define TXT_ARTITELEPORT			"'V,KTVF [FJCF"				// ЭМБЛЕМА ХАОСА				CHAOS DEVICE
-#define TXT_ARTIPOISONBAG			"PTKMT"						// ЗЕЛЬЕ 						FLECHETTE
-#define TXT_ARTITELEPORTOTHER		"'V,KTVF BPUYFYBZ"			// ЭМБЛЕМА ИЗГНАНИЯ				BANISHMENT DEVICE
-#define TXT_ARTISPEED				"CFGJUB-CRJHJ[JLS"			// САПОГИ-СКОРОХОДЫ				BOOTS OF SPEED
-#define TXT_ARTIBOOSTMANA			"XFIF VJUEOTCNDF"			// ЧАША МОГУЩЕСТВА				KRATER OF MIGHT
-#define TXT_ARTIBOOSTARMOR			"YFHEXB BP LHFRJYMTQ RJ;B"	// НАРУЧИ ИЗ ДРАКОНЬЕЙ КОЖИ		DRAGONSKIN BRACERS
-#define TXT_ARTIBLASTRADIUS			"LBCR JNNJH;TYBZ"			// ДИСК ОТТОРЖЕНИЯ				DISC OF REPULSION
-#define TXT_ARTIHEALINGRADIUS		"XFHS VFUBXTCRJUJ TLBYCNDF"	// ЧАРЫ МАГИЧЕСКОГО ЕДИНСТВА	MYSTIC AMBIT INCANT
+#define TXT_ARTIINVULNERABILITY		"ICON OF THE DEFENDER"
+#define TXT_ARTIHEALTH				"QUARTZ FLASK"
+#define TXT_ARTISUPERHEALTH			"MYSTIC URN"
+#define TXT_ARTISUMMON				"DARK SERVANT"
+#define TXT_ARTITORCH				"TORCH"
+#define TXT_ARTIEGG					"PORKALATOR"
+#define TXT_ARTIFLY					"WINGS OF WRATH"
+#define TXT_ARTITELEPORT			"CHAOS DEVICE"
+#define TXT_ARTIPOISONBAG			"FLECHETTE"
+#define TXT_ARTITELEPORTOTHER		"BANISHMENT DEVICE"
+#define TXT_ARTISPEED				"BOOTS OF SPEED"
+#define TXT_ARTIBOOSTMANA			"KRATER OF MIGHT"
+#define TXT_ARTIBOOSTARMOR			"DRAGONSKIN BRACERS"
+#define TXT_ARTIBLASTRADIUS			"DISC OF REPULSION"
+#define TXT_ARTIHEALINGRADIUS		"MYSTIC AMBIT INCANT"
 
 // Puzzle artifacts
 
-#define TXT_ARTIPUZZSKULL			"XTHTG QJHBRF"			// ЧЕРЕП ЙОРИКА					YORICK'S SKULL
-#define TXT_ARTIPUZZGEMBIG			"CTHLWT L&CGFHBKF"		// СЕРДЦЕ Д'СПАРИЛА				HEART OF D'SPARIL
-#define TXT_ARTIPUZZGEMRED			"HE,BYJDFZ GKFYTNF"		// РУБИНОВАЯ ПЛАНЕТА			RUBY PLANET
-#define TXT_ARTIPUZZGEMGREEN1		"BPEVHELYFZ GKFYTNF"	// ИЗУМРУДНАЯ ПЛАНЕТА			EMERALD PLANET
-#define TXT_ARTIPUZZGEMGREEN2		"BPEVHELYFZ GKFYTNF"	// ИЗУМРУДНАЯ ПЛАНЕТА			EMERALD PLANET
-#define TXT_ARTIPUZZGEMBLUE1		"CFGABHJDFZ GKFYTNF"	// САПФИРОВАЯ ПЛАНЕТА			SAPPHIRE PLANET
-#define TXT_ARTIPUZZGEMBLUE2		"CFGABHJDFZ GKFYTNF"	// САПФИРОВАЯ ПЛАНЕТА			SAPPHIRE PLANET
-#define TXT_ARTIPUZZBOOK1			"RJLTRC LTVJYF"			// КОДЕКС ДЕМОНА				DAEMON CODEX
-#define TXT_ARTIPUZZBOOK2			"$"						// LIBER OSCURA (не переводить, спец. символ "$")
-#define TXT_ARTIPUZZSKULL2			"VFCRF GKFVTYB"			// МАСКА ПЛАМЕНИ				FLAME MASK
-#define TXT_ARTIPUZZFWEAPON			"GTXFNM DJBNTKZ"		// ПЕЧАТЬ ВОИТЕЛЯ				GLAIVE SEAL
-#define TXT_ARTIPUZZCWEAPON			"CDZNFZ HTKBRDBZ"		// СВЯТАЯ РЕЛИКВИЯ				HOLY RELIC
-#define TXT_ARTIPUZZMWEAPON			"CBVDJK VFUF"			// СИМВОЛ МАГА					SIGIL OF THE MAGUS
-#define TXT_ARTIPUZZGEAR			"XFCJDFZ ITCNTHYZ"		// ЧАСОВАЯ ШЕСТЕРНЯ				CLOCK GEAR
-#define TXT_USEPUZZLEFAILED			"PLTCM 'NJ YTDJPVJ;YJ BCGJKMPJDFNM"	// ЗДЕСЬ ЭТО НЕВОЗМОЖНО ИСПОЛЬЗОВАТЬ  	YOU CANNOT USE THIS HERE
+#define TXT_ARTIPUZZSKULL			"YORICK'S SKULL"
+#define TXT_ARTIPUZZGEMBIG			"HEART OF D'SPARIL"
+#define TXT_ARTIPUZZGEMRED			"RUBY PLANET"
+#define TXT_ARTIPUZZGEMGREEN1		"EMERALD PLANET"
+#define TXT_ARTIPUZZGEMGREEN2		"EMERALD PLANET"
+#define TXT_ARTIPUZZGEMBLUE1		"SAPPHIRE PLANET"
+#define TXT_ARTIPUZZGEMBLUE2		"SAPPHIRE PLANET"
+#define TXT_ARTIPUZZBOOK1			"DAEMON CODEX"
+#define TXT_ARTIPUZZBOOK2			"LIBER OSCURA"
+#define TXT_ARTIPUZZSKULL2			"FLAME MASK"
+#define TXT_ARTIPUZZFWEAPON			"GLAIVE SEAL"
+#define TXT_ARTIPUZZCWEAPON			"HOLY RELIC"
+#define TXT_ARTIPUZZMWEAPON			"SIGIL OF THE MAGUS"
+#define TXT_ARTIPUZZGEAR			"CLOCK GEAR"
+#define TXT_USEPUZZLEFAILED			"YOU CANNOT USE THIS HERE"
 
 // Items
 
-#define TXT_ITEMHEALTH			"RHBCNFKMYSQ AKFRJY"	// КРИСТАЛЬНЫЙ ФЛАКОН		CRYSTAL VIAL
-#define TXT_ITEMBAGOFHOLDING	"YJCBKMYFZ RJITKM"		// НОСИЛЬНЫЙ КОШЕЛЬ         BAG OF HOLDING
-#define TXT_ITEMSHIELD1			"CTHT,HZYSQ OBN"		// СЕРЕБРЯНЫЙ ЩИТ           SILVER SHIELD
-#define TXT_ITEMSHIELD2			"PFXFHJDFYYSQ OBN"		// ЗАЧАРОВАННЫЙ ЩИТ         ENCHANTED SHIELD
-#define TXT_ITEMSUPERMAP		"CDBNJR RFHNS"			// СВИТОК КАРТЫ             MAP SCROLL
-#define TXT_ARMOR1				"RJKMXEUF"				// КОЛЬЧУГА                 MESH ARMOR
-#define TXT_ARMOR2				"CJRJKBYSQ OBN"			// СОКОЛИНЫЙ ЩИТ            FALCON SHIELD
-#define TXT_ARMOR3				"GKFNBYJDSQ IKTV"		// ПЛАТИНОВЫЙ ШЛЕМ          PLATINUM HELMET
-#define TXT_ARMOR4				"FVEKTN CNHF;F"			// АМУЛЕТ СТРАЖА            AMULET OF WARDING
+#define TXT_ITEMHEALTH			"CRYSTAL VIAL"
+#define TXT_ITEMBAGOFHOLDING	"BAG OF HOLDING"
+#define TXT_ITEMSHIELD1			"SILVER SHIELD"
+#define TXT_ITEMSHIELD2			"ENCHANTED SHIELD"
+#define TXT_ITEMSUPERMAP		"MAP SCROLL"
+#define TXT_ARMOR1				"MESH ARMOR"
+#define TXT_ARMOR2				"FALCON SHIELD"
+#define TXT_ARMOR3				"PLATINUM HELMET"
+#define TXT_ARMOR4				"AMULET OF WARDING"
 
 // Weapons
 
-#define TXT_WEAPON_F2			"NJGJH NBVJYF"					 // ТОПОР ТИМОНА					TIMON'S AXE
-#define TXT_WEAPON_F3			"VJKJN DJPVTPLBZ"				 // МОЛОТ ВОЗМЕЗДИЯ                 HAMMER OF RETRIBUTION
-#define TXT_WEAPON_F4			"GJCKTLYBQ LJDJL CJ,HFY DJTLBYJ" // ПОСЛЕДНИЙ ДОВОД СОБРАН ВОЕДИНО  QUIETUS ASSEMBLED
-#define TXT_WEAPON_C2			"PVTBYSQ GJCJ["					 // ЗМЕИНЫЙ ПОСОХ                   SERPENT STAFF
-#define TXT_WEAPON_C3			"JUYTYYSQ INJHV"				 // ОГНЕННЫЙ ШТОРМ                  FIRESTORM
-#define TXT_WEAPON_C4			";TPK LE[JD CJ,HFY DJTLBYJ"		 // ЖЕЗЛ ДУХОВ СОБРАН ВОЕДИНО       WRAITHVERGE ASSEMBLED
-#define TXT_WEAPON_M2			"KTLZYST JCRJKRB"				 // ЛЕДЯНЫЕ ОСКОЛКИ					FROST SHARDS
-#define TXT_WEAPON_M3			"LEUF CVTHNB"					 // ДУГА СМЕРТИ                     ARC OF DEATH
-#define TXT_WEAPON_M4			"RHJDFDSQ ,BX CJ,HFY DJTLBYJ"	 // КРОВАВЫЙ БИЧ СОБРАН ВОЕДИНО     BLOODSCOURGE ASSEMBLED
-#define TXT_QUIETUS_PIECE		"XFCNM GJCKTLYTUJ LJDJLF"		 // ЧАСТЬ ПОСЛЕДНЕГО ДОВОДА         SEGMENT OF QUIETUS
-#define TXT_WRAITHVERGE_PIECE	"XFCNM ;TPKF LE[JD"				 // ЧАСТЬ ЖЕЗЛА ДУХОВ               SEGMENT OF WRAITHVERGE
-#define TXT_BLOODSCOURGE_PIECE	"XFCNM RHJDFDJUJ ,BXF"			 // ЧАСТЬ КРОВАВОГО БИЧА            SEGMENT OF BLOODSCOURGE
+#define TXT_WEAPON_F2			"TIMON'S AXE"
+#define TXT_WEAPON_F3			"HAMMER OF RETRIBUTION"
+#define TXT_WEAPON_F4			"QUIETUS ASSEMBLED"
+#define TXT_WEAPON_C2			"SERPENT STAFF"
+#define TXT_WEAPON_C3			"FIRESTORM"
+#define TXT_WEAPON_C4			"WRAITHVERGE ASSEMBLED"
+#define TXT_WEAPON_M2			"FROST SHARDS"
+#define TXT_WEAPON_M3			"ARC OF DEATH"
+#define TXT_WEAPON_M4			"BLOODSCOURGE ASSEMBLED"
+#define TXT_QUIETUS_PIECE		"SEGMENT OF QUIETUS"
+#define TXT_WRAITHVERGE_PIECE	"SEGMENT OF WRAITHVERGE"
+#define TXT_BLOODSCOURGE_PIECE	"SEGMENT OF BLOODSCOURGE"
+
 
 // SB_bar.c ----------------------------------------------------------------
 
-#define TXT_CHEATGODON			"HT;BV ,JUF"						// РЕЖИМ БОГА							GOD MODE ON
-#define TXT_CHEATGODOFF			"HT;BV ,JUF JNVTYTY"				// РЕЖИМ БОГА ОТМЕНЕН					GOD MODE OFF
-#define TXT_CHEATNOCLIPON		"GHJ[J;LTYBT XTHTP CNTYS"			// ПРОХОЖДЕНИЕ ЧЕРЕЗ СТЕНЫ				NO CLIPPING ON
-#define TXT_CHEATNOCLIPOFF		"GHJ[J;LTYBT XTHTP CNTYS JNVTYTYJ"	// ПРОХОЖДЕНИЕ ЧЕРЕЗ СТЕНЫ ОТМЕНЕНО		NO CLIPPING OFF
-#define TXT_CHEATWEAPONS		"GJKYJT DJJHE;TYBT"					// ПОЛНОЕ ВООРУЖЕНИЕ					ALL WEAPONS
-#define TXT_CHEATHEALTH			"PLJHJDMT DJCCNFYJDKTYJ"			// ЗДОРОВЬЕ ВОССТАНОВЛЕНО				FULL HEALTH
-#define TXT_CHEATKEYS			"DCT RK.XB"							// ВСЕ КЛЮЧИ							ALL KEYS
-#define TXT_CHEATSOUNDON		"JNKFLRF PDERF DRK.XTYF"			// ОТЛАДКА ЗВУКА ВКЛЮЧЕНА				SOUND DEBUG ON
-#define TXT_CHEATSOUNDOFF		"JNKFLRF PDERF JNRK.XTYF"			// ОТЛАДКА ЗВУКА ОТКЛЮЧЕНА				SOUND DEBUG OFF
-#define TXT_CHEATTICKERON		"CXTNXBR RFLHJDJQ XFCNJNS DRK.XTY"	// СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ВКЛЮЧЕН		TICKER ON
-#define TXT_CHEATTICKEROFF		"CXTNXBR RFLHJDJQ XFCNJNS JNRK.XTY"	// СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ОТКЛЮЧЕН	TICKER OFF
-#define TXT_CHEATARTIFACTS3		"DCT FHNTAFRNS"						// ВСЕ АРТЕФАКТЫ						ALL ARTIFACTS
-#define TXT_CHEATARTIFACTSFAIL	"YTRJHHTRNYSQ DDJL"					// НЕКОРРЕНТНЫЙ ВВОД					BAD INPUT
-#define TXT_CHEATWARP			"GTHTVTOTYBT YF EHJDTYM"			// ПЕРЕМЕЩЕНИЕ НА УРОВЕНЬ				LEVEL WARP
-#define TXT_CHEATSCREENSHOT		"CYBVJR 'RHFYF"						// СНИМОК ЭКРАНА						SCREENSHOT
-#define TXT_CHEATIDDQD			"GSNFTIMCZ C[BNHBNM? NFR EVHB ;T!"	// ПЫТАЕШЬСЯ СХИТРИТЬ? ТАК УМРИ ЖЕ!		TRYING TO CHEAT, EH?  NOW YOU DIE!
-#define TXT_CHEATIDKFA			";EKBR< NS YT LJCNJBY CDJTUJ JHE;BZ"// ЖУЛИК, ТЫ НЕ ДОСТОИН СВОЕГО ОРУЖИЯ	CHEATER - YOU DON'T DESERVE WEAPONS
-#define TXT_CHEATBADINPUT		"YTRJHHTRNYSQ DDJL"					// НЕКОРРЕНТНЫЙ ВВОД					BAD INPUT
-#define TXT_CHEATNOMAP			"EHJDTYM YT YFQLTY"					// УРОВЕНЬ НЕ НАЙДЕН					CAN'T FIND MAP
+#define TXT_CHEATGODON			"GOD MODE ON"
+#define TXT_CHEATGODOFF			"GOD MODE OFF"
+#define TXT_CHEATNOCLIPON		"NO CLIPPING ON"
+#define TXT_CHEATNOCLIPOFF		"NO CLIPPING OFF"
+#define TXT_CHEATWEAPONS		"ALL WEAPONS"
+#define TXT_CHEATHEALTH			"FULL HEALTH"
+#define TXT_CHEATKEYS			"ALL KEYS"
+#define TXT_CHEATSOUNDON		"SOUND DEBUG ON"
+#define TXT_CHEATSOUNDOFF		"SOUND DEBUG OFF"
+#define TXT_CHEATTICKERON		"TICKER ON"
+#define TXT_CHEATTICKEROFF		"TICKER OFF"
+#define TXT_CHEATARTIFACTS3		"ALL ARTIFACTS"
+#define TXT_CHEATARTIFACTSFAIL	"BAD INPUT"
+#define TXT_CHEATWARP			"LEVEL WARP"
+#define TXT_CHEATSCREENSHOT		"SCREENSHOT"
+#define TXT_CHEATIDDQD			"TRYING TO CHEAT, EH?  NOW YOU DIE!"
+#define TXT_CHEATIDKFA			"CHEATER - YOU DON'T DESERVE WEAPONS"
+#define TXT_CHEATBADINPUT		"BAD INPUT"
+#define TXT_CHEATNOMAP			"CAN'T FIND MAP"
+
 
 // G_game.c ----------------------------------------------------------------
 
-#define TXT_GAMESAVED			"BUHF CJ[HFYTYF"	// ИГРА СОХРАНЕНА						GAME SAVED
+#define TXT_GAMESAVED			"GAME SAVED"
+
 
 // M_misc.c ----------------------------------------------------------------
 
@@ -176,28 +181,203 @@
 #define HUSTR_CHATMACRO9 "Yes"
 #define HUSTR_CHATMACRO0 "No"
 
+
 // AM_map.c ----------------------------------------------------------------
 
-#define AMSTR_FOLLOWON		"HT;BV CKTLJDFYBZ DRK.XTY"		// РЕЖИМ СЛЕДОВАНИЯ ВКЛЮЧЕН			FOLLOW MODE ON
-#define AMSTR_FOLLOWOFF		"HT;BV CKTLJDFYBZ JNRK.XTY"		// РЕЖИМ СЛЕДОВАНИЯ ОТКЛЮЧЕН		FOLLOW MODE OFF
+#define AMSTR_FOLLOWON		"FOLLOW MODE ON"
+#define AMSTR_FOLLOWOFF		"FOLLOW MODE OFF"
+
+// [JN] Port-specific strings
+
+#define TXT_ALWAYSRUN_ON    "ALWAYS RUN ON"
+#define TXT_ALWAYSRUN_OFF   "ALWAYS RUN OFF"
+
+#define TXT_MLOOK_ON        "MOUSE LOOK ON"
+#define TXT_MLOOK_OFF       "MOUSE LOOK OFF"
+
+#define TXT_CROSSHAIR_ON    "CROSSHAIR ON"
+#define TXT_CROSSHAIR_OFF   "CROSSHAIR OFF"
+
+
+// -----------------------------------------------------------------------------
+// Русский язык
+// -----------------------------------------------------------------------------
+
+// MN_menu.c ---------------------------------------------------------------
+
+#define TXT_GAMMA_LEVEL_OFF_RUS     "UFVVF-RJHHTRWBZ JNRK.XTYF"        // ГАММА-КОРРЕКЦИЯ ОТКЛЮЧЕНА
+#define TXT_GAMMA_LEVEL_0_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 0>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.25
+#define TXT_GAMMA_LEVEL_0_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 0>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.50
+#define TXT_GAMMA_LEVEL_0_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 0>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.75
+#define TXT_GAMMA_LEVEL_1_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 1>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.0
+#define TXT_GAMMA_LEVEL_1_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 1>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.25
+#define TXT_GAMMA_LEVEL_1_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 1>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.50
+#define TXT_GAMMA_LEVEL_1_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 1>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.75
+#define TXT_GAMMA_LEVEL_2_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 2>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.0
+#define TXT_GAMMA_LEVEL_2_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 2>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.25
+#define TXT_GAMMA_LEVEL_2_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 2>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.50
+#define TXT_GAMMA_LEVEL_2_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 2>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.75
+#define TXT_GAMMA_LEVEL_3_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 3>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.0
+#define TXT_GAMMA_LEVEL_3_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 3>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.25
+#define TXT_GAMMA_LEVEL_3_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 3>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.50
+#define TXT_GAMMA_LEVEL_3_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 3>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.75
+#define TXT_GAMMA_LEVEL_4_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 4>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.0
+#define TXT_GAMMA_LEVEL_4_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 4>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.25
+#define TXT_GAMMA_LEVEL_4_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 4>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.50
+#define TXT_GAMMA_LEVEL_4_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 4>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.75
+#define TXT_GAMMA_LEVEL_5_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 5>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.0
+#define TXT_GAMMA_LEVEL_5_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 5>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.25
+#define TXT_GAMMA_LEVEL_5_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 5>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.50
+#define TXT_GAMMA_LEVEL_5_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 5>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.75
+#define TXT_GAMMA_LEVEL_6_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 6>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 6.0
+
+#define	EMPTYSTRING_RUS             "GECNJQ CKJN"                       // ПУСТОЙ СЛОТ
+
+// P_inter.c ---------------------------------------------------------------
+
+// Mana
+
+#define TXT_MANA_1_RUS      "CBYZZ VFYF"            // СИНЯЯ МАНА
+#define TXT_MANA_2_RUS      "PTKTYFZ VFYF"          // ЗЕЛЕНАЯ МАНА
+#define TXT_MANA_BOTH_RUS   "RJV,BYBHJDFYYFZ VFYF"  // КОМБИНИРОВАННАЯ МАНА
+
+// Keys
+
+#define	TXT_KEY_STEEL_RUS   "CNFKMYJQ RK.X"         // СТАЛЬНОЙ КЛЮЧ
+#define	TXT_KEY_CAVE_RUS    "GTOTHYSQ RK.X"         // ПЕЩЕРНЫЙ КЛЮЧ
+#define	TXT_KEY_AXE_RUS     "RK.X-NJGJH"            // КЛЮЧ-ТОПОР
+#define	TXT_KEY_FIRE_RUS    "JUYTYYSQ RK.X"         // ОГНЕННЫЙ КЛЮЧ
+#define	TXT_KEY_EMERALD_RUS "BPEVHELYSQ RK.X"       // ИЗУМРУДНЫЙ КЛЮЧ
+#define	TXT_KEY_DUNGEON_RUS "RK.X JN GJLPTVTKMZ"    // КЛЮЧ ОТ ПОДЗЕМЕЛЬЯ
+#define	TXT_KEY_SILVER_RUS  "CTHT,HZYSQ RK.X"       // СЕРЕБРЯНЫЙ КЛЮЧ
+#define	TXT_KEY_RUSTED_RUS  "H;FDSQ RK.X"           // РЖАВЫЙ КЛЮЧ
+#define	TXT_KEY_HORN_RUS    "HJUJDJQ RK.X"          // РОГОВОЙ КЛЮЧ
+#define	TXT_KEY_SWAMP_RUS   ",JKJNYSQ RK.X"         // БОЛОТНЫЙ КЛЮЧ
+#define TXT_KEY_CASTLE_RUS  "RK.X JN PFVRF"         // КЛЮЧ ОТ ЗАМКА
+
+// Artifacts
+
+#define TXT_ARTIINVULNERABILITY_RUS "CBVDJK PFOBNYBRF"          // СИМВОЛ ЗАЩИТНИКА
+#define TXT_ARTIHEALTH_RUS          "RDFHWTDSQ AKFRJY"          // КВАРЦЕВЫЙ ФЛАКОН
+#define TXT_ARTISUPERHEALTH_RUS     "VBCNBXTCRFZ EHYF"          // МИСТИЧЕСКАЯ УРНА
+#define TXT_ARTISUMMON_RUS          "NTVYSQ CKEUF"              // ТЕМНЫЙ СЛУГА
+#define TXT_ARTITORCH_RUS           "AFRTK"                     // ФАКЕЛ
+#define TXT_ARTIEGG_RUS             "CDBYJVJHATH"               // СВИНОМОРФЕР
+#define TXT_ARTIFLY_RUS             "RHSKMZ UYTDF"              // КРЫЛЬЯ ГНЕВА
+#define TXT_ARTITELEPORT_RUS        "'V,KTVF [FJCF"             // ЭМБЛЕМА ХАОСА
+#define TXT_ARTIPOISONBAG_RUS       "PTKMT"                     // ЗЕЛЬЕ
+#define TXT_ARTITELEPORTOTHER_RUS   "'V,KTVF BPUYFYBZ"          // ЭМБЛЕМА ИЗГНАНИЯ
+#define TXT_ARTISPEED_RUS           "CFGJUB-CRJHJ[JLS"          // САПОГИ-СКОРОХОДЫ
+#define TXT_ARTIBOOSTMANA_RUS       "XFIF VJUEOTCNDF"           // ЧАША МОГУЩЕСТВА
+#define TXT_ARTIBOOSTARMOR_RUS      "YFHEXB BP LHFRJYMTQ RJ;B"  // НАРУЧИ ИЗ ДРАКОНЬЕЙ КОЖИ
+#define TXT_ARTIBLASTRADIUS_RUS     "LBCR JNNJH;TYBZ"           // ДИСК ОТТОРЖЕНИЯ
+#define TXT_ARTIHEALINGRADIUS_RUS   "XFHS VFUBXTCRJUJ TLBYCNDF" // ЧАРЫ МАГИЧЕСКОГО ЕДИНСТВА
+
+// Puzzle artifacts
+
+#define TXT_ARTIPUZZSKULL_RUS       "XTHTG QJHBRF"			// ЧЕРЕП ЙОРИКА
+#define TXT_ARTIPUZZGEMBIG_RUS      "CTHLWT L&CGFHBKF"		// СЕРДЦЕ Д'СПАРИЛА
+#define TXT_ARTIPUZZGEMRED_RUS      "HE,BYJDFZ GKFYTNF"		// РУБИНОВАЯ ПЛАНЕТА
+#define TXT_ARTIPUZZGEMGREEN1_RUS   "BPEVHELYFZ GKFYTNF"	// ИЗУМРУДНАЯ ПЛАНЕТА
+#define TXT_ARTIPUZZGEMGREEN2_RUS   "BPEVHELYFZ GKFYTNF"	// ИЗУМРУДНАЯ ПЛАНЕТА
+#define TXT_ARTIPUZZGEMBLUE1_RUS    "CFGABHJDFZ GKFYTNF"	// САПФИРОВАЯ ПЛАНЕТА
+#define TXT_ARTIPUZZGEMBLUE2_RUS    "CFGABHJDFZ GKFYTNF"	// САПФИРОВАЯ ПЛАНЕТА
+#define TXT_ARTIPUZZBOOK1_RUS       "RJLTRC LTVJYF"			// КОДЕКС ДЕМОНА
+#define TXT_ARTIPUZZBOOK2_RUS       "$"						// LIBER OSCURA (не переводить, спец. символ "$")
+#define TXT_ARTIPUZZSKULL2_RUS      "VFCRF GKFVTYB"			// МАСКА ПЛАМЕНИ
+#define TXT_ARTIPUZZFWEAPON_RUS     "GTXFNM DJBNTKZ"		// ПЕЧАТЬ ВОИТЕЛЯ
+#define TXT_ARTIPUZZCWEAPON_RUS     "CDZNFZ HTKBRDBZ"		// СВЯТАЯ РЕЛИКВИЯ
+#define TXT_ARTIPUZZMWEAPON_RUS     "CBVDJK VFUF"			// СИМВОЛ МАГА
+#define TXT_ARTIPUZZGEAR_RUS        "XFCJDFZ ITCNTHYZ"		// ЧАСОВАЯ ШЕСТЕРНЯ
+#define TXT_USEPUZZLEFAILED_RUS     "PLTCM 'NJ YTDJPVJ;YJ BCGJKMPJDFNM"	// ЗДЕСЬ ЭТО НЕВОЗМОЖНО ИСПОЛЬЗОВАТЬ
+
+// Items
+
+#define TXT_ITEMHEALTH_RUS          "RHBCNFKMYSQ AKFRJY"    // КРИСТАЛЬНЫЙ ФЛАКОН
+#define TXT_ITEMBAGOFHOLDING_RUS    "YJCBKMYFZ RJITKM"      // НОСИЛЬНЫЙ КОШЕЛЬ
+#define TXT_ITEMSHIELD1_RUS         "CTHT,HZYSQ OBN"        // СЕРЕБРЯНЫЙ ЩИТ
+#define TXT_ITEMSHIELD2_RUS         "PFXFHJDFYYSQ OBN"      // ЗАЧАРОВАННЫЙ ЩИТ
+#define TXT_ITEMSUPERMAP_RUS        "CDBNJR RFHNS"          // СВИТОК КАРТЫ
+#define TXT_ARMOR1_RUS              "RJKMXEUF"              // КОЛЬЧУГА
+#define TXT_ARMOR2_RUS              "CJRJKBYSQ OBN"         // СОКОЛИНЫЙ ЩИТ
+#define TXT_ARMOR3_RUS              "GKFNBYJDSQ IKTV"       // ПЛАТИНОВЫЙ ШЛЕМ
+#define TXT_ARMOR4_RUS              "FVEKTN CNHF;F"         // АМУЛЕТ СТРАЖА
+
+// Weapons
+
+#define TXT_WEAPON_F2_RUS           "NJGJH NBVJYF"                      // ТОПОР ТИМОНА
+#define TXT_WEAPON_F3_RUS           "VJKJN DJPVTPLBZ"                   // МОЛОТ ВОЗМЕЗДИЯ
+#define TXT_WEAPON_F4_RUS           "GJCKTLYBQ LJDJL CJ,HFY DJTLBYJ"    // ПОСЛЕДНИЙ ДОВОД СОБРАН ВОЕДИНО
+#define TXT_WEAPON_C2_RUS           "PVTBYSQ GJCJ["                     // ЗМЕИНЫЙ ПОСОХ
+#define TXT_WEAPON_C3_RUS           "JUYTYYSQ INJHV"                    // ОГНЕННЫЙ ШТОРМ
+#define TXT_WEAPON_C4_RUS           ";TPK LE[JD CJ,HFY DJTLBYJ"         // ЖЕЗЛ ДУХОВ СОБРАН ВОЕДИНО
+#define TXT_WEAPON_M2_RUS           "KTLZYST JCRJKRB"                   // ЛЕДЯНЫЕ ОСКОЛКИ
+#define TXT_WEAPON_M3_RUS           "LEUF CVTHNB"                       // ДУГА СМЕРТИ
+#define TXT_WEAPON_M4_RUS           "RHJDFDSQ ,BX CJ,HFY DJTLBYJ"       // КРОВАВЫЙ БИЧ СОБРАН ВОЕДИНО
+#define TXT_QUIETUS_PIECE_RUS       "XFCNM GJCKTLYTUJ LJDJLF"           // ЧАСТЬ ПОСЛЕДНЕГО ДОВОДА
+#define TXT_WRAITHVERGE_PIECE_RUS   "XFCNM ;TPKF LE[JD"                 // ЧАСТЬ ЖЕЗЛА ДУХОВ
+#define TXT_BLOODSCOURGE_PIECE_RUS  "XFCNM RHJDFDJUJ ,BXF"              // ЧАСТЬ КРОВАВОГО БИЧА
+
+// SB_bar.c ----------------------------------------------------------------
+
+#define TXT_CHEATGODON_RUS          "HT;BV ,JUF"                            // РЕЖИМ БОГА
+#define TXT_CHEATGODOFF_RUS         "HT;BV ,JUF JNVTYTY"                    // РЕЖИМ БОГА ОТМЕНЕН
+#define TXT_CHEATNOCLIPON_RUS       "GHJ[J;LTYBT XTHTP CNTYS"               // ПРОХОЖДЕНИЕ ЧЕРЕЗ СТЕНЫ
+#define TXT_CHEATNOCLIPOFF_RUS      "GHJ[J;LTYBT XTHTP CNTYS JNVTYTYJ"      // ПРОХОЖДЕНИЕ ЧЕРЕЗ СТЕНЫ ОТМЕНЕНО
+#define TXT_CHEATWEAPONS_RUS        "GJKYJT DJJHE;TYBT"                     // ПОЛНОЕ ВООРУЖЕНИЕ
+#define TXT_CHEATHEALTH_RUS         "PLJHJDMT DJCCNFYJDKTYJ"                // ЗДОРОВЬЕ ВОССТАНОВЛЕНО
+#define TXT_CHEATKEYS_RUS           "DCT RK.XB"                             // ВСЕ КЛЮЧИ
+#define TXT_CHEATSOUNDON_RUS        "JNKFLRF PDERF DRK.XTYF"                // ОТЛАДКА ЗВУКА ВКЛЮЧЕНА
+#define TXT_CHEATSOUNDOFF_RUS       "JNKFLRF PDERF JNRK.XTYF"               // ОТЛАДКА ЗВУКА ОТКЛЮЧЕНА
+#define TXT_CHEATTICKERON_RUS       "CXTNXBR RFLHJDJQ XFCNJNS DRK.XTY"      // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ВКЛЮЧЕН
+#define TXT_CHEATTICKEROFF_RUS      "CXTNXBR RFLHJDJQ XFCNJNS JNRK.XTY"     // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ ОТКЛЮЧЕН
+#define TXT_CHEATARTIFACTS3_RUS     "DCT FHNTAFRNS"                         // ВСЕ АРТЕФАКТЫ
+#define TXT_CHEATARTIFACTSFAIL_RUS  "YTRJHHTRNYSQ DDJL"                     // НЕКОРРЕНТНЫЙ ВВОД
+#define TXT_CHEATWARP_RUS           "GTHTVTOTYBT YF EHJDTYM"                // ПЕРЕМЕЩЕНИЕ НА УРОВЕНЬ
+#define TXT_CHEATSCREENSHOT_RUS     "CYBVJR 'RHFYF"                         // СНИМОК ЭКРАНА
+#define TXT_CHEATIDDQD_RUS          "GSNFTIMCZ C[BNHBNM? NFR EVHB ;T!"      // ПЫТАЕШЬСЯ СХИТРИТЬ? ТАК УМРИ ЖЕ!
+#define TXT_CHEATIDKFA_RUS          ";EKBR< NS YT LJCNJBY CDJTUJ JHE;BZ"    // ЖУЛИК, ТЫ НЕ ДОСТОИН СВОЕГО ОРУЖИЯ
+#define TXT_CHEATBADINPUT_RUS       "YTRJHHTRNYSQ DDJL"                     // НЕКОРРЕНТНЫЙ ВВОД
+#define TXT_CHEATNOMAP_RUS          "EHJDTYM YT YFQLTY"                     // УРОВЕНЬ НЕ НАЙДЕН
+
+// G_game.c ----------------------------------------------------------------
+
+#define TXT_GAMESAVED_RUS           "BUHF CJ[HFYTYF"    // ИГРА СОХРАНЕНА
+
+// AM_map.c ----------------------------------------------------------------
+
+#define AMSTR_FOLLOWON_RUS          "HT;BV CKTLJDFYBZ DRK.XTY"  // РЕЖИМ СЛЕДОВАНИЯ ВКЛЮЧЕН
+#define AMSTR_FOLLOWOFF_RUS         "HT;BV CKTLJDFYBZ JNRK.XTY" // РЕЖИМ СЛЕДОВАНИЯ ОТКЛЮЧЕН
 
 // [JN] Специфические сообщения порта
 
-#define TXT_VERSION "DTHCBZ 2>8"        // ВЕРСИЯ 2.8
+#define TXT_ALWAYSRUN_ON_RUS        "GJCNJZYYSQ ,TU DRK.XTY"    // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
+#define TXT_ALWAYSRUN_OFF_RUS       "GJCNJZYYSQ ,TU DSRK.XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
+
+#define TXT_MLOOK_ON_RUS            "J,PJH VSIM. DRK.XTY"       // ОБЗОР МЫШЬЮ ВКЛЮЧЕН
+#define TXT_MLOOK_OFF_RUS           "J,PJH VSIM. DSRK.XTY"      // ОБЗОР МЫШЬЮ ВЫКЛЮЧЕН
+
+#define TXT_CROSSHAIR_ON_RUS        "GHBWTK DRK.XTY"            // ПРИЦЕЛ ВКЛЮЧЕН
+#define TXT_CROSSHAIR_OFF_RUS       "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
+
+
+#define TXT_VERSION "VERSION 2.8"
 #if defined (_WIN64)
-#define TXT_ARCH      " - ([64)"        // x64
+#define TXT_ARCH      " - (X64)"
 #elif defined (_WIN32)
-#define TXT_ARCH      " - ([86)"        // x86
+#define TXT_ARCH      " - (X86)"
 #else
-#define TXT_ARCH      ""                // ?  
+#define TXT_ARCH      ""
 #endif
-#define TXT_DATE      "D HFPHF,JNRT"    // В РАЗРАБОТКЕ
+#define TXT_DATE      "IN DEVELOPMENT"
 
-#define TXT_ALWAYSRUN_ON "GJCNJZYYSQ ,TU DRK.XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
-#define TXT_ALWAYSRUN_OFF "GJCNJZYYSQ ,TU DSRK.XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
 
-#define TXT_MLOOK_ON "J,PJH VSIM. DRK.XTY"            // ОБЗОР МЫШЬЮ ВКЛЮЧЕН
-#define TXT_MLOOK_OFF "J,PJH VSIM. DSRK.XTY"          // ОБЗОР МЫШЬЮ ВЫКЛЮЧЕН
-
-#define TXT_CROSSHAIR_ON "GHBWTK DRK.XTY"             // ПРИЦЕЛ ВКЛЮЧЕН
-#define TXT_CROSSHAIR_OFF "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
+#define TXT_VERSION_RUS "DTHCBZ 2>8"        // ВЕРСИЯ 2.8
+#if defined (_WIN64)
+#define TXT_ARCH_RUS      " - ([64)"        // x64
+#elif defined (_WIN32)
+#define TXT_ARCH_RUS      " - ([86)"        // x86
+#else
+#define TXT_ARCH_RUS      ""                // ?  
+#endif
+#define TXT_DATE_RUS      "D HFPHF,JNRT"    // В РАЗРАБОТКЕ

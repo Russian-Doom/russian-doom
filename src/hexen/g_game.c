@@ -296,7 +296,20 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         }
 
         // [JN] Added audible feedback
-        P_SetMessage(&players[consoleplayer], (joybspeed >= MAX_JOY_BUTTONS) ? TXT_ALWAYSRUN_ON : TXT_ALWAYSRUN_OFF, false);
+        if (english_language)
+        {
+            P_SetMessage(&players[consoleplayer], 
+                         (joybspeed >= MAX_JOY_BUTTONS) ? 
+                         TXT_ALWAYSRUN_ON : TXT_ALWAYSRUN_OFF,
+                         false);
+        }
+        else
+        {
+            P_SetMessage(&players[consoleplayer],
+                         (joybspeed >= MAX_JOY_BUTTONS) ? 
+                         TXT_ALWAYSRUN_ON_RUS : TXT_ALWAYSRUN_OFF_RUS,
+                         false);
+        }
         S_StartSound(NULL, SFX_CHAT);
 
         gamekeydown[key_toggleautorun] = false;
@@ -318,7 +331,18 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             crosshair_draw = false;
         }
 
-        P_SetMessage(&players[consoleplayer], crosshair_draw ? TXT_CROSSHAIR_ON : TXT_CROSSHAIR_OFF, false);
+        if (english_language)
+        {
+            P_SetMessage(&players[consoleplayer], crosshair_draw ?
+                         TXT_CROSSHAIR_ON : TXT_CROSSHAIR_OFF,
+                         false);
+        }
+        else
+        {
+            P_SetMessage(&players[consoleplayer], crosshair_draw ?
+                         TXT_CROSSHAIR_ON_RUS : TXT_CROSSHAIR_OFF_RUS,
+                         false);
+        }
         S_StartSound(NULL, SFX_CHAT);
 
         gamekeydown[key_togglecrosshair] = false;
@@ -710,8 +734,21 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             mlook = false;
             look = TOCENTER;
         }
-    
-        P_SetMessage(&players[consoleplayer], (mlook == true ? TXT_MLOOK_ON : TXT_MLOOK_OFF), false);
+
+        if (english_language)
+        {
+            P_SetMessage(&players[consoleplayer],
+                         (mlook == true ? 
+                         TXT_MLOOK_ON : TXT_MLOOK_OFF),
+                         false);
+        }
+        else
+        {
+            P_SetMessage(&players[consoleplayer],
+                         (mlook == true ? 
+                         TXT_MLOOK_ON_RUS : TXT_MLOOK_OFF_RUS),
+                         false);
+        }
         S_StartSound(NULL, SFX_CHAT);
     
         gamekeydown[key_togglemlook] = false;
@@ -1178,7 +1215,9 @@ void G_Ticker(void)
                 if (gametic > BACKUPTICS
                     && consistancy[i][buf] != cmd->consistancy)
                 {
-                    I_Error("Нарушение последовательности (%i должно быть %i)",
+                    I_Error(english_language ?
+                            "Consistency failure (%i should be %i)" :
+                            "Нарушение последовательности (%i должно быть %i)",
                             cmd->consistancy, consistancy[i][buf]);
                 }
                 if (players[i].mo)
@@ -1672,7 +1711,10 @@ void G_Completed(int map, int position)
 {
     if (gamemode == shareware && map > 4)
     {
-        P_SetMessage(&players[consoleplayer], "LTVJDTHCBZ> GHJ{JL DJCGHTOTY>", true);	// ДЕМОВЕРСИЯ. ПРОХОД ВОСПРЕЩЕН.
+        P_SetMessage(&players[consoleplayer], english_language ?
+                     "ACCESS DENIED -- DEMO" :
+                     "LTVJDTHCBZ> GHJ[JL DJCGHTOTY>", // ДЕМОВЕРСИЯ. ПРОХОД ВОСПРЕЩЕН.
+                     true);
         S_StartSound(NULL, SFX_CHAT);
         return;
     }
@@ -1854,7 +1896,10 @@ void G_DoSaveGame(void)
     SV_SaveGame(savegameslot, savedescription);
     gameaction = ga_nothing;
     savedescription[0] = 0;
-    P_SetMessage(&players[consoleplayer], TXT_GAMESAVED, true);
+    P_SetMessage(&players[consoleplayer], english_language ?
+                                          TXT_GAMESAVED :
+                                          TXT_GAMESAVED_RUS,
+                                          true);
 }
 
 //==========================================================================
@@ -2359,8 +2404,10 @@ boolean G_CheckDemoStatus(void)
         endtime = I_GetTime();
         realtics = endtime - starttime;
         fps = ((float) gametic * TICRATE) / realtics;
-        I_Error ("Насчитано %i gametics в %i realtics.\n"
-                 "Среднее значение FPS: %f.", gametic, realtics, fps);
+        I_Error (english_language ?
+                 "Timed %i gametics in %i realtics (%f fps)" :
+                 "Насчитано %i gametics в %i realtics.\n Среднее значение FPS: %f.",
+                 gametic, realtics, fps);
     }
 
     if (demoplayback)
@@ -2380,7 +2427,10 @@ boolean G_CheckDemoStatus(void)
         M_WriteFile(demoname, demobuffer, demo_p - demobuffer);
         Z_Free(demobuffer);
         demorecording = false;
-        I_Error("Демозапись %s завершена", demoname);
+        I_Error(english_language?
+                "Demo %s recorded" :
+                "Демозапись %s завершена",
+                demoname);
     }
 
     return false;

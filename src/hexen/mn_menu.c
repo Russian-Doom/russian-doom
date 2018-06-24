@@ -166,6 +166,14 @@ static int quicksave;
 static int quickload;
 
 static MenuItem_t MainItems[] = {
+    {ITT_SETMENU, "NEW GAME", SCNetCheck2, 1, MENU_CLASS},
+    {ITT_SETMENU, "OPTIONS", NULL, 0, MENU_OPTIONS},
+    {ITT_SETMENU, "GAME FILES", NULL, 0, MENU_FILES},
+    {ITT_EFUNC,   "INFO", SCInfo, 0, MENU_NONE},
+    {ITT_EFUNC,   "QUIT GAME", SCQuitGame, 0, MENU_NONE}
+};
+
+static MenuItem_t MainItems_Rus[] = {
     {ITT_SETMENU, "YJDFZ BUHF", SCNetCheck2, 1, MENU_CLASS},	// НОВАЯ ИГРА
     {ITT_SETMENU, "YFCNHJQRB", NULL, 0, MENU_OPTIONS},			// НАСТРОЙКИ
     {ITT_SETMENU, "AFQKS BUHS", NULL, 0, MENU_FILES},			// ФАЙЛЫ ИГРЫ
@@ -181,7 +189,21 @@ static Menu_t MainMenu = {
     MENU_NONE
 };
 
+static Menu_t MainMenu_Rus = {
+    110, 56,
+    DrawMainMenu,
+    5, MainItems_Rus,
+    0,
+    MENU_NONE
+};
+
 static MenuItem_t ClassItems[] = {
+    {ITT_EFUNC, "FIGHTER", SCClass, 0, MENU_NONE},
+    {ITT_EFUNC, "CLERIC", SCClass, 1, MENU_NONE},
+    {ITT_EFUNC, "MAGE", SCClass, 2, MENU_NONE}
+};
+
+static MenuItem_t ClassItems_Rus[] = {
     {ITT_EFUNC, "DJBY", SCClass, 0, MENU_NONE},		// ВОИН
     {ITT_EFUNC, "RKTHBR", SCClass, 1, MENU_NONE},	// КЛЕРИК
     {ITT_EFUNC, "VFU", SCClass, 2, MENU_NONE}		// МАГ
@@ -195,7 +217,20 @@ static Menu_t ClassMenu = {
     MENU_MAIN
 };
 
+static Menu_t ClassMenu_Rus = {
+    66, 66,
+    DrawClassMenu,
+    3, ClassItems_Rus,
+    0,
+    MENU_MAIN
+};
+
 static MenuItem_t FilesItems[] = {
+    {ITT_SETMENU, "LOAD GAME", SCNetCheck2, 2, MENU_LOAD},
+    {ITT_SETMENU, "SAVE GAME", NULL, 0, MENU_SAVE}
+};
+
+static MenuItem_t FilesItems_Rus[] = {
     {ITT_SETMENU, "PFUHEPBNM BUHE", SCNetCheck2, 2, MENU_LOAD},		// ЗАГРУЗИТЬ ИГРУ
     {ITT_SETMENU, "CJ[HFYBNM BUHE", NULL, 0, MENU_SAVE}				// СОХРАНИТЬ ИГРУ
 };
@@ -204,6 +239,14 @@ static Menu_t FilesMenu = {
     110, 60,
     DrawFilesMenu,
     2, FilesItems,
+    0,
+    MENU_MAIN
+};
+
+static Menu_t FilesMenu_Rus = {
+    110, 60,
+    DrawFilesMenu,
+    2, FilesItems_Rus,
     0,
     MENU_MAIN
 };
@@ -259,7 +302,23 @@ static Menu_t SkillMenu = {
     MENU_CLASS
 };
 
+static Menu_t SkillMenu_Rus = {
+    120, 44,
+    DrawSkillMenu,
+    6, SkillItems,
+    2,
+    MENU_CLASS
+};
+
 static MenuItem_t OptionsItems[] = {
+    {ITT_EFUNC, "END GAME", SCEndGame, 0, MENU_NONE},
+    {ITT_EFUNC, "MESSAGES : ", SCMessages, 0, MENU_NONE},
+    {ITT_LRFUNC, "MOUSE SENSITIVITY", SCMouseSensi, 0, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
+    {ITT_SETMENU, "MORE...", NULL, 0, MENU_OPTIONS2}
+};
+
+static MenuItem_t OptionsItems_Rus[] = {
     {ITT_EFUNC, "PFRJYXBNM BUHE", SCEndGame, 0, MENU_NONE},		// ЗАКОНЧИТЬ ИГРУ
     {ITT_EFUNC, "CJJ,OTYBZ: ", SCMessages, 0, MENU_NONE},		// СООБЩЕНИЯ:
     {ITT_LRFUNC, "CRJHJCNM VSIB", SCMouseSensi, 0, MENU_NONE},	// СКОРОСТЬ МЫШИ
@@ -275,7 +334,24 @@ static Menu_t OptionsMenu = {
     MENU_MAIN
 };
 
+static Menu_t OptionsMenu_Rus = {
+    88, 30,
+    DrawOptionsMenu,
+    5, OptionsItems_Rus,
+    0,
+    MENU_MAIN
+};
+
 static MenuItem_t Options2Items[] = {
+    {ITT_LRFUNC, "SCREEN SIZE", SCScreenSize, 0, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
+    {ITT_LRFUNC, "SFX VOLUME", SCSfxVolume, 0, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
+    {ITT_LRFUNC, "MUSIC VOLUME", SCMusicVolume, 0, MENU_NONE},
+    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE}
+};
+
+static MenuItem_t Options2Items_Rus[] = {
     {ITT_LRFUNC, "HFPVTH 'RHFYF", SCScreenSize, 0, MENU_NONE},		// РАЗМЕР ЭКРАНА
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
     {ITT_LRFUNC, "UHJVRJCNM PDERF", SCSfxVolume, 0, MENU_NONE},		// ГРОМКОСТЬ ЗВУКА
@@ -292,6 +368,14 @@ static Menu_t Options2Menu = {
     MENU_OPTIONS
 };
 
+static Menu_t Options2Menu_Rus = {
+    90, 20,
+    DrawOptions2Menu,
+    6, Options2Items_Rus,
+    0,
+    MENU_OPTIONS
+};
+
 static Menu_t *Menus[] = {
     &MainMenu,
     &ClassMenu,
@@ -299,6 +383,17 @@ static Menu_t *Menus[] = {
     &OptionsMenu,
     &Options2Menu,
     &FilesMenu,
+    &LoadMenu,
+    &SaveMenu
+};
+
+static Menu_t *Menus_Rus[] = {
+    &MainMenu_Rus,
+    &ClassMenu_Rus,
+    &SkillMenu_Rus,
+    &OptionsMenu_Rus,
+    &Options2Menu_Rus,
+    &FilesMenu_Rus,
     &LoadMenu,
     &SaveMenu
 };
@@ -329,6 +424,34 @@ static char *GammaText[] = {
     TXT_GAMMA_LEVEL_5_50,
     TXT_GAMMA_LEVEL_5_75,
     TXT_GAMMA_LEVEL_6_0
+};
+
+static char *GammaText_Rus[] = {
+    TXT_GAMMA_LEVEL_OFF_RUS,
+    TXT_GAMMA_LEVEL_0_25_RUS,
+    TXT_GAMMA_LEVEL_0_50_RUS,
+    TXT_GAMMA_LEVEL_0_75_RUS,
+    TXT_GAMMA_LEVEL_1_0_RUS,
+    TXT_GAMMA_LEVEL_1_25_RUS,
+    TXT_GAMMA_LEVEL_1_50_RUS,
+    TXT_GAMMA_LEVEL_1_75_RUS,
+    TXT_GAMMA_LEVEL_2_0_RUS,
+    TXT_GAMMA_LEVEL_2_25_RUS,
+    TXT_GAMMA_LEVEL_2_50_RUS,
+    TXT_GAMMA_LEVEL_2_75_RUS,
+    TXT_GAMMA_LEVEL_3_0_RUS,
+    TXT_GAMMA_LEVEL_3_25_RUS,
+    TXT_GAMMA_LEVEL_3_50_RUS,
+    TXT_GAMMA_LEVEL_3_75_RUS,
+    TXT_GAMMA_LEVEL_4_0_RUS,
+    TXT_GAMMA_LEVEL_4_25_RUS,
+    TXT_GAMMA_LEVEL_4_50_RUS,
+    TXT_GAMMA_LEVEL_4_75_RUS,
+    TXT_GAMMA_LEVEL_5_0_RUS,
+    TXT_GAMMA_LEVEL_5_25_RUS,
+    TXT_GAMMA_LEVEL_5_50_RUS,
+    TXT_GAMMA_LEVEL_5_75_RUS,
+    TXT_GAMMA_LEVEL_6_0_RUS
 };
 
 // CODE --------------------------------------------------------------------
@@ -546,6 +669,14 @@ void MN_Ticker(void)
 //---------------------------------------------------------------------------
 
 char *QuitEndMsg[] = {
+    "ARE YOU SURE YOU WANT TO QUIT?",
+    "ARE YOU SURE YOU WANT TO END THE GAME?",
+    "DO YOU WANT TO QUICKSAVE THE GAME NAMED",
+    "DO YOU WANT TO QUICKLOAD THE GAME NAMED",
+    "ARE YOU SURE YOU WANT TO SUICIDE?"
+};
+
+char *QuitEndMsg_Rus[] = {
     "DS LTQCNDBNTKMYJ ;TKFTNT DSQNB?",			// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ВЫЙТИ?
     "DS LTQCNDBNTKMYJ ;TKFTNT PFRJYXBNM BUHE?",	// ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ ЗАКОНЧИТЬ ИГРУ?
     "DSGJKYBNM ,SCNHJT CJ[HFYTYBT BUHS:",		// ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
@@ -565,8 +696,17 @@ void MN_Drawer(void)
     {
         if (askforquit)
         {
-            MN_DrTextA(QuitEndMsg[typeofask - 1], 160 -
-                       MN_TextAWidth(QuitEndMsg[typeofask - 1]) / 2, 80);
+            if (english_language)
+            {
+                MN_DrTextA(QuitEndMsg[typeofask - 1], 160 -
+                           MN_TextAWidth(QuitEndMsg[typeofask - 1]) / 2, 80);
+            }
+            else
+            {
+                MN_DrTextA(QuitEndMsg_Rus[typeofask - 1], 160 -
+                           MN_TextAWidth(QuitEndMsg_Rus[typeofask - 1]) / 2, 80);
+            }
+
             if (typeofask == 3)
             {
                 MN_DrTextA(SlotText[quicksave - 1], 160 -
@@ -658,7 +798,14 @@ static void DrawClassMenu(void)
         "m_mwalk1"
     };
 
-    MN_DrTextB("DS,THBNT RKFCC:", 5, 24);	// ВЫБЕРИТЕ КЛАСС:
+    if (english_language)
+    {
+        MN_DrTextB("CHOOSE CLASS:", 34, 24);
+    }
+    else
+    {
+        MN_DrTextB("DS,THBNT RKFCC:", 5, 24);   // ВЫБЕРИТЕ КЛАСС:
+    }
     class = (pclass_t) CurrentMenu->items[CurrentItPos].option;
     V_DrawShadowedPatchRaven(174, 8, W_CacheLumpName(boxLumpName[class], PU_CACHE));
     V_DrawPatch(174 + 24, 8 + 12,
@@ -674,7 +821,14 @@ static void DrawClassMenu(void)
 
 static void DrawSkillMenu(void)
 {
-	MN_DrTextB("EHJDTYM CKJ;YJCNB:", 57, 16);	// УРОВЕНЬ СЛОЖНОСТИ:
+    if (english_language)
+    {
+        MN_DrTextB("CHOOSE SKILL LEVEL:", 74, 16);
+    }
+    else
+    {
+        MN_DrTextB("EHJDTYM CKJ;YJCNB:", 57, 16);   // УРОВЕНЬ СЛОЖНОСТИ:
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -699,7 +853,15 @@ static void DrawFilesMenu(void)
 
 static void DrawLoadMenu(void)
 {
-    MN_DrTextB("PFUHEPBNM BUHE", 160 - MN_TextBWidth("PFUHEPBNM BUHE") / 2, 10);	// ЗАГРУЗИТЬ ИГРУ
+    if (english_language)
+    {
+        MN_DrTextB("LOAD GAME", 160 - MN_TextBWidth("LOAD GAME") / 2, 10);
+    }
+    else
+    {
+        MN_DrTextB("PFUHEPBNM BUHE", 160 - MN_TextBWidth("PFUHEPBNM BUHE") / 2, 10);	// ЗАГРУЗИТЬ ИГРУ
+    }
+
     if (!slottextloaded)
     {
         MN_LoadSlotText();
@@ -715,7 +877,15 @@ static void DrawLoadMenu(void)
 
 static void DrawSaveMenu(void)
 {
-    MN_DrTextB("CJ[HFYBNM BUHE", 160 - MN_TextBWidth("CJ[HFYBNM BUHE") / 2, 10);	// СОХРАНИТЬ ИГРУ
+    if (english_language)
+    {
+        MN_DrTextB("SAVE GAME", 160 - MN_TextBWidth("SAVE GAME") / 2, 10);
+    }
+    else
+    {
+        MN_DrTextB("CJ[HFYBNM BUHE", 160 - MN_TextBWidth("CJ[HFYBNM BUHE") / 2, 10);	// СОХРАНИТЬ ИГРУ
+    }
+    
     if (!slottextloaded)
     {
         MN_LoadSlotText();
@@ -813,11 +983,25 @@ static void DrawOptionsMenu(void)
 {
     if (messageson)
     {
-        MN_DrTextB("DRK>", 213, 50);	// ВКЛ.
+        if (english_language)
+        {
+            MN_DrTextB("ON", 196, 50);
+        }
+        else
+        {
+            MN_DrTextB("DRK>", 213, 50);	// ВКЛ.
+        }
     }
     else
     {
-        MN_DrTextB("DSRK>", 213, 50);	// ВЫКЛ.
+        if (english_language)
+        {
+            MN_DrTextB("OFF", 196, 50);
+        }
+        else
+        {
+            MN_DrTextB("DSRK>", 213, 50);	// ВЫКЛ.
+        }
     }
     DrawSlider(&OptionsMenu, 3, 9, mouseSensitivity);
 }
@@ -887,11 +1071,17 @@ static void SCMessages(int option)
     messageson ^= 1;
     if (messageson)
     {
-        P_SetMessage(&players[consoleplayer], "CJJ,OTYBZ DRK.XTYS", true);	// СООБЩЕНИЯ ВКЛЮЧЕНЫ
+        P_SetMessage(&players[consoleplayer], english_language ?
+        "MESSAGES ON" : // СООБЩЕНИЯ ВКЛЮЧЕНЫ
+        "CJJ,OTYBZ DRK.XTYS",
+        true);
     }
     else
     {
-        P_SetMessage(&players[consoleplayer], "CJJ,OTYBZ DSRK.XTYS", true);	// СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
+        P_SetMessage(&players[consoleplayer], english_language ?
+        "MESSAGES OFF" :
+        "CJJ,OTYBZ DSRK.XTYS", // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
+        true);
     }
     S_StartSound(NULL, SFX_CHAT);
 }
@@ -911,16 +1101,22 @@ static boolean SCNetCheck(int option)
     switch (option)
     {
         case 1:                // new game
-            P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
+            P_SetMessage(&players[consoleplayer], english_language ?
+                         "YOU CAN'T START A NEW GAME IN NETPLAY!" :
+                         "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
+                         true);
             break;
         case 2:                // load game
-            P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", true);	// НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
+            P_SetMessage(&players[consoleplayer], english_language ?
+                         "YOU CAN'T LOAD A GAME IN NETPLAY!" :
+                         "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
+                         true);
             break;
         case 3:                // end game
-            P_SetMessage(&players[consoleplayer],
-                         "YTDJPVJ;YJ PFRJYXBNM CTNTDE. BUHE!", true);		// НЕВОЗМОЖНО ЗАКОНЧИТЬ СЕТЕВУЮ ИГРУ!
+            P_SetMessage(&players[consoleplayer], english_language ?
+                         "YOU CAN'T END A GAME IN NETPLAY!" :
+                         "YTDJPVJ;YJ PFRJYXBNM CTNTDE. BUHE!", // НЕВОЗМОЖНО ЗАКОНЧИТЬ СЕТЕВУЮ ИГРУ!
+                         true);
             break;
     }
     menuactive = false;
@@ -1026,8 +1222,9 @@ static void SCClass(int option)
 {
     if (netgame)
     {
-        P_SetMessage(&players[consoleplayer],
-                     "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!",	// НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
+        P_SetMessage(&players[consoleplayer], english_language ?
+                     "YOU CAN'T START A NEW GAME FROM WITHIN A NETGAME!" :        
+                     "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
                      true);
         return;
     }
@@ -1036,30 +1233,30 @@ static void SCClass(int option)
     {
         case PCLASS_FIGHTER:
             SkillMenu.x = 120;
-            SkillItems[0].text = "JHE;TYJCTW";  // ОРУЖЕНОСЕЦ
-            SkillItems[1].text = "HSWFHM";      // РЫЦАРЬ
-            SkillItems[2].text = "DJBNTKM";     // ВОИТЕЛЬ
-            SkillItems[3].text = ",THCTHR";     // БЕРСЕРК
-            SkillItems[4].text = "NBNFY";       // ТИТАН
-            SkillItems[5].text = "DTHIBNTKM";   // ВЕРШИТЕЛЬ
+            SkillItems[0].text = english_language ? "SQUIRE" : "JHE;TYJCTW";    // ОРУЖЕНОСЕЦ
+            SkillItems[1].text = english_language ? "KNIGHT" : "HSWFHM";        // РЫЦАРЬ
+            SkillItems[2].text = english_language ? "WARRIOR" : "DJBNTKM";      // ВОИТЕЛЬ
+            SkillItems[3].text = english_language ? "BERSERKER" : ",THCTHR";    // БЕРСЕРК
+            SkillItems[4].text = english_language ? "TITAN" : "NBNFY";          // ТИТАН
+            SkillItems[5].text = english_language ? "AVATAR" : "DTHIBNTKM";     // ВЕРШИТЕЛЬ
             break;
         case PCLASS_CLERIC:
             SkillMenu.x = 116;
-            SkillItems[0].text = "FKNFHYBR";    // АЛТАРНИК
-            SkillItems[1].text = "CKE;BNTKM";   // СЛУЖИТЕЛЬ  
-            SkillItems[2].text = "CDZOTYYBR";   // СВЯЩЕННИК
-            SkillItems[3].text = "RFHLBYFK";    // КАРДИНАЛ
-            SkillItems[4].text = "TGBCRJG";     // ЕПИСКОП
-            SkillItems[5].text = "FGJCNJK";     // АПОСТОЛ
+            SkillItems[0].text = english_language ? "ALTAR BOY" : "FKNFHYBR";   // АЛТАРНИК
+            SkillItems[1].text = english_language ? "ACOLYTE" : "CKE;BNTKM";    // СЛУЖИТЕЛЬ  
+            SkillItems[2].text = english_language ? "PRIEST" : "CDZOTYYBR";     // СВЯЩЕННИК
+            SkillItems[3].text = english_language ? "CARDINAL" : "RFHLBYFK";    // КАРДИНАЛ
+            SkillItems[4].text = english_language ? "POPE" : "TGBCRJG";         // ЕПИСКОП
+            SkillItems[5].text = english_language ? "APOSTLE" : "FGJCNJK";      // АПОСТОЛ
             break;
         case PCLASS_MAGE:
             SkillMenu.x = 112;
-			SkillItems[0].text = "EXTYBR";          // УЧЕНИК
-            SkillItems[1].text = "XFHJLTQ";         // ЧАРОДЕЙ
-            SkillItems[2].text = "RJKLEY";          // КОЛДУН
-            SkillItems[3].text = "XTHYJRYB;YBR";    // ЧЕРНОКНИЖНИК
-            SkillItems[4].text = "DTH[JDYSQ VFU";   // ВЕРХОВНЫЙ МАГ
-            SkillItems[5].text = "DTKBRBQ FH[BVFU"; // ВЕЛИКИЙ АРХИМАГ
+			SkillItems[0].text = english_language ? "APPRENTICE" : "EXTYBR";                // УЧЕНИК
+            SkillItems[1].text = english_language ? "ENCHANTER" : "XFHJLTQ";                // ЧАРОДЕЙ
+            SkillItems[2].text = english_language ? "SORCERER" : "RJKLEY";                  // КОЛДУН
+            SkillItems[3].text = english_language ? "WARLOCK" : "XTHYJRYB;YBR";             // ЧЕРНОКНИЖНИК
+            SkillItems[4].text = english_language ? "HIGHER MAGE" : "DTH[JDYSQ VFU";        // ВЕРХОВНЫЙ МАГ
+            SkillItems[5].text = english_language ? "GREAT ARCHMAGE" : "DTKBRBQ FH[BVFU";   // ВЕЛИКИЙ АРХИМАГ
             break;
     }
     SetMenu(MENU_SKILL);
@@ -1323,15 +1520,19 @@ boolean MN_Responder(event_t * event)
                     H2_StartTitle();    // go to intro/demo mode.
                     return false;
                 case 3:
-                    P_SetMessage(&players[consoleplayer],
-                                 ",SCNHJT CJ[HFYTYBT>>>", false);	// БЫСТРОЕ СОХРАНЕНИЕ...
+                    P_SetMessage(&players[consoleplayer], english_language ?
+                                 "QUICKSAVING...." :
+                                 ",SCNHJT CJ[HFYTYBT>>>", // БЫСТРОЕ СОХРАНЕНИЕ...
+                                 false);
                     FileMenuKeySteal = true;
                     SCSaveGame(quicksave - 1);
                     BorderNeedRefresh = true;
                     break;
                 case 4:
-                    P_SetMessage(&players[consoleplayer],
-                                 ",SCNHFZ PFUHEPRF>>>", false);	// БЫСТРАЯ ЗАГРУЗКА...
+                    P_SetMessage(&players[consoleplayer], english_language ?
+                                 "QUICKLOADING...." :
+                                 ",SCNHFZ PFUHEPRF>>>", // БЫСТРАЯ ЗАГРУЗКА...
+                                 false);
                     SCLoadGame(quickload - 1);
                     BorderNeedRefresh = true;
                     break;
@@ -1470,8 +1671,10 @@ boolean MN_Responder(event_t * event)
                     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
                     slottextloaded = false; //reload the slot text
                     quicksave = -1;
-                    P_SetMessage(&players[consoleplayer],
-                                 "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
+                    P_SetMessage(&players[consoleplayer], english_language ?
+                                 "CHOOSE A QUICKSAVE SLOT" :
+                                 "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ", // ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
+                                 true);
                 }
                 else
                 {
@@ -1521,8 +1724,10 @@ boolean MN_Responder(event_t * event)
                     S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
                     slottextloaded = false; // reload the slot text
                     quickload = -1;
-                    P_SetMessage(&players[consoleplayer],
-                                 "DS,THBNT CKJN ,SCNHJQ PFUHEPRB", true);	// ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
+                    P_SetMessage(&players[consoleplayer], english_language ?
+                                 "CHOOSE A QUICKLOAD SLOT" :
+                                 "DS,THBNT CKJN ,SCNHJQ PFUHEPRB", // ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
+                                 true);
                 }
                 else
                 {
@@ -1554,7 +1759,9 @@ boolean MN_Responder(event_t * event)
                 usegamma = 0;
             }
             SB_PaletteFlash(true);  // force change
-            P_SetMessage(&players[consoleplayer], GammaText[usegamma],
+            P_SetMessage(&players[consoleplayer], english_language ?
+                         GammaText[usegamma] :
+                         GammaText_Rus[usegamma],
                          false);
             return true;
         }
@@ -1810,7 +2017,9 @@ void MN_ActivateMenu(void)
     menuactive = true;
     FileMenuKeySteal = false;
     MenuTime = 0;
-    CurrentMenu = &MainMenu;
+    CurrentMenu = english_language ? 
+                  &MainMenu :
+                  &MainMenu_Rus;
     CurrentItPos = CurrentMenu->oldItPos;
     if (!netgame && !demoplayback)
     {
@@ -1875,7 +2084,9 @@ void MN_DrawInfo(void)
 static void SetMenu(MenuType_t menu)
 {
     CurrentMenu->oldItPos = CurrentItPos;
-    CurrentMenu = Menus[menu];
+    CurrentMenu = english_language ?
+                  Menus[menu] :
+                  Menus_Rus[menu];
     CurrentItPos = CurrentMenu->oldItPos;
 }
 
