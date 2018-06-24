@@ -354,6 +354,8 @@ static patch_t* keys[NUMCARDS+3];
 // [JN] Массив удвоен, необходимо для бессмертия.
 // Thanks Brad Harding for help!
 static patch_t* faces[ST_NUMFACES * 2];
+// [JN] If false, we can use an extra GOD faces.
+extern boolean old_godface;
 
 // face background
 static patch_t* faceback;
@@ -971,7 +973,8 @@ void ST_updateFaceWidget(void)
         }
         // [JN] Atari и PSX Doom - дополнительные лице "разорванного" и "раздавленного" игрока.
         // Proper checking for xdeath state has been taken from Crispy Doom, thanks to Fabian Greffrath!
-        if (plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate && !vanillaparm)
+        // Don't use if for possible custom HUD faces.
+        if (!old_godface && plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate && !vanillaparm)
         {
             priority = 9;
             painoffset = 0;
@@ -1009,8 +1012,14 @@ void ST_updateFaceWidget(void)
             {
                 if (oldweaponsowned[i] != plyr->weaponowned[i])
                 {
-                    doevilgrin = true;
-                    oldweaponsowned[i] = plyr->weaponowned[i];
+                    // [BH] no evil grin when invulnerable
+                    // [JN] extra god faces have grin, use them in god mode
+                    if ((old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability])
+                    || !old_godface)
+                    {
+                        doevilgrin = true;
+                        oldweaponsowned[i] = plyr->weaponowned[i];
+                    }
                 }
             }
 
@@ -1192,14 +1201,20 @@ void ST_updateFaceWidget(void)
         // rapid firing
         if (plyr->attackdown)
         {
-            if (lastattackdown==-1)
-                lastattackdown = ST_RAMPAGEDELAY;
-            else if (!--lastattackdown)
+            // [BH] no rampage face when invulnerable
+            // [JN] extra god faces have rampage, use them in god mode
+            if ((old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability])
+            || !old_godface)
             {
-                priority = 5;
-                faceindex = ST_RAMPAGEOFFSET;
-                st_facecount = 1;
-                lastattackdown = 1;
+                if (lastattackdown==-1)
+                    lastattackdown = ST_RAMPAGEDELAY;
+                else if (!--lastattackdown)
+                {
+                    priority = 5;
+                    faceindex = ST_RAMPAGEOFFSET;
+                    st_facecount = 1;
+                    lastattackdown = 1;
+                }
             }
         }
         else
@@ -1232,7 +1247,7 @@ void ST_updateFaceWidget(void)
     st_faceindex = painoffset + faceindex;
 
     // [JN] При наличии бессмертия активируется дополнительный цикл.
-    if ((plyr->powers[pw_invulnerability]) || (plyr->cheats & CF_GODMODE))
+    if (!old_godface && ((plyr->powers[pw_invulnerability]) || (plyr->cheats & CF_GODMODE)))
     {
         st_faceindex = painoffset + faceindex + ST_NUMFACES;
     }
@@ -1698,39 +1713,42 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     ++facenum;
 
     // [JN] Удвоение массива спрайтов лиц, необходимое для бессмертия.
-    for (i = 0; i < ST_NUMPAINFACES; i++)
+    if (!old_godface)
     {
-        for (j = 0; j < ST_NUMSTRAIGHTFACES; j++)
+        for (i = 0; i < ST_NUMPAINFACES; i++)
         {
-            M_snprintf(namebuf, 9, "STFST%i%iG", i, j);
+            for (j = 0; j < ST_NUMSTRAIGHTFACES; j++)
+            {
+                M_snprintf(namebuf, 9, "STFST%i%iG", i, j);
+                callback(namebuf, &faces[facenum++]);
+            }
+
+            M_snprintf(namebuf, 9, "STFTR%i0G", i);          // turn right
+            callback(namebuf, &faces[facenum++]);
+
+            M_snprintf(namebuf, 9, "STFTL%i0G", i);          // turn left
+            callback(namebuf, &faces[facenum++]);
+
+            M_snprintf(namebuf, 9, "STFOUC%iG", i);         // ouch!
+            callback(namebuf, &faces[facenum++]);
+
+            M_snprintf(namebuf, 9, "STFEVL%iG", i);          // evil grin ;)
+            callback(namebuf, &faces[facenum++]);
+
+            M_snprintf(namebuf, 9, "STFKIL%iG", i);         // pissed off
             callback(namebuf, &faces[facenum++]);
         }
 
-        M_snprintf(namebuf, 9, "STFTR%i0G", i);          // turn right
-        callback(namebuf, &faces[facenum++]);
-
-        M_snprintf(namebuf, 9, "STFTL%i0G", i);          // turn left
-        callback(namebuf, &faces[facenum++]);
-
-        M_snprintf(namebuf, 9, "STFOUC%iG", i);         // ouch!
-        callback(namebuf, &faces[facenum++]);
-
-        M_snprintf(namebuf, 9, "STFEVL%iG", i);          // evil grin ;)
-        callback(namebuf, &faces[facenum++]);
-
-        M_snprintf(namebuf, 9, "STFKIL%iG", i);         // pissed off
-        callback(namebuf, &faces[facenum++]);
+        callback("STFGOD0G", &faces[facenum++]);
+        callback("STFDEA0G", &faces[facenum++]);
+        callback("STFEXP0G", &faces[facenum++]);
+        callback("STFEXP1G", &faces[facenum++]);
+        callback("STFEXP2G", &faces[facenum++]);
+        callback("STFEXP3G", &faces[facenum++]);
+        callback("STFEXP4G", &faces[facenum++]);
+        callback("STFEXP5G", &faces[facenum++]);
+        callback("STFCRS0G", &faces[facenum++]);
     }
-
-    callback("STFGOD0G", &faces[facenum++]);
-    callback("STFDEA0G", &faces[facenum++]);
-    callback("STFEXP0G", &faces[facenum++]);
-    callback("STFEXP1G", &faces[facenum++]);
-    callback("STFEXP2G", &faces[facenum++]);
-    callback("STFEXP3G", &faces[facenum++]);
-    callback("STFEXP4G", &faces[facenum++]);
-    callback("STFEXP5G", &faces[facenum++]);
-    callback("STFCRS0G", &faces[facenum++]);
 }
 
 

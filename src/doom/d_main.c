@@ -111,6 +111,7 @@ boolean fastparm;    // checkparm of -fast
 boolean vanillaparm; // [JN] проверка параметра -vanilla
 boolean scaled_sky = false; // [JN] Boolean for sky scaling
 boolean old_slider = false; // [JN] Boolean for dimmed/red thermometer
+boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
 
 
 extern boolean inhelpscreens;
@@ -1510,6 +1511,18 @@ void D_SetGameDescription(void)
     if (W_CheckMultipleLumps("M_THERMO") > 1)
     {
         old_slider = true;
+    }
+
+    // [JN] Check for modified GOD's face. If exist, 
+    // don't use extra GOD faces.
+    if (W_CheckMultipleLumps("STFGOD0") > 1)
+    {
+        old_godface = true;
+    }
+    else
+    {
+        old_godface = false;
+        W_MergeFile("base/doom-godface.wad");
     }
     
     // Автоматическая загрузка блока DEHACKED
