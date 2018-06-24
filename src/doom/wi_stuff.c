@@ -1487,13 +1487,14 @@ void WI_drawStats(void)
         if (sp_state > 8)
         {
             const int ttime = wbs->totaltimes / TICRATE;
+            const boolean wide = (ttime > 61*59) || (SP_TIMEX + SHORT(total->width) >= ORIGWIDTH/4);
 
-            // [JN] Perfected x-position for both languages
+            // [JN] Perfected positioning for both languages
             if (english_language)
             {
-                V_DrawShadowedPatchDoom(SP_TIMEX + 39, SP_TIMEY + 16, overtime);
+                V_DrawShadowedPatchDoom(SP_TIMEX, SP_TIMEY + 16, total);
                 // [crispy] choose x-position depending on width of time string
-                WI_drawTime(281 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+                WI_drawTime((wide ? ORIGWIDTH : ORIGWIDTH/2) - SP_TIMEX, SP_TIMEY + 16, ttime, false);
             }
             else
             {

@@ -58,6 +58,7 @@
 
 #include "m_menu.h"
 
+#include "crispy.h"
 #include "jn.h"
 
 
@@ -621,12 +622,23 @@ void M_ReadSaveStrings(void)
 //
 // M_LoadGame & Cie.
 //
+static int LoadDef_x = 72, LoadDef_y = 28;  // [JN] from Crispy Doom
 void M_DrawLoad(void)
 {
     int i;
 
-    // [JN] Используется дополнительный тайтл для меню загрузки: "ЗАГРУЗИТЬ ИГРУ"
-    V_DrawShadowedPatchDoom(92, 11, W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
+    if (english_language)
+    {
+        // [JN] Use standard centered title "M_LOADG"
+        V_DrawShadowedPatchDoom(LoadDef_x, LoadDef_y,
+                           W_CacheLumpName(DEH_String("M_LOADG"), PU_CACHE));
+    }
+    else
+    {
+        // [JN] Use own Russian capitalized and centered title: "ЗАГРУЗИТЬ ИГРУ"
+        V_DrawShadowedPatchDoom(LoadDef_x, LoadDef_y, 
+                                W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
+    }
 
     for (i = 0;i < load_end; i++)
     {
@@ -710,19 +722,40 @@ void M_LoadGame (int choice)
 //
 //  M_SaveGame & Cie.
 //
+static int SaveDef_x = 72, SaveDef_y = 28;  // [JN] from Crispy Doom
 void M_DrawSave(void)
 {
     int i;
 	
     if (QuickSaveTitle)
     {
-        // [JN] Используется дополнительный тайтл для меню сохранения: "БЫСТРОЕ СОХРАНЕНИЕ"
-        V_DrawShadowedPatchDoom(89, 11, W_CacheLumpName(DEH_String("M_QSGTTL"), PU_CACHE));
+        if (english_language)
+        {
+            // [JN] Use standard centered title "M_SAVEG"
+            V_DrawShadowedPatchDoom(SaveDef_x, SaveDef_y, 
+                                    W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE));
+        }
+        else
+        {
+            // [JN] Use own Russian capitalized and centered title: "БЫСТРОЕ СОХРАНЕНИЕ"
+            V_DrawShadowedPatchDoom(SaveDef_x, SaveDef_y,
+                                    W_CacheLumpName(DEH_String("M_QSGTTL"), PU_CACHE));            
+        }
     }
     else
     {
-        // [JN] Используется дополнительный тайтл для меню сохранения: "СОХРАНИТЬ ИГРУ"
-        V_DrawShadowedPatchDoom(93, 11, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
+        if (english_language)
+        {
+            // [JN] Use standard centered title "M_SAVEG"
+            V_DrawShadowedPatchDoom(SaveDef_x, SaveDef_y,
+                                    W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE));
+        }
+        else
+        {
+            // [JN] Use own Russian capitalized and centered title: "СОХРАНИТЬ ИГРУ"
+            V_DrawShadowedPatchDoom(SaveDef_x, SaveDef_y,
+                                    W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
+        }
     }
 
     for (i = 0;i < load_end; i++)
@@ -1000,8 +1033,16 @@ void M_DrawReadThis2(void)
 //
 void M_DrawSound(void)
 {   
-    // [JN] Используется дополнительный заголовок для меню ГРОМКОСТИ.
-    V_DrawShadowedPatchDoom (71, 39, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
+    if (english_language)
+    {
+        // [JN] Use standard Doom "Sound volume" title
+        V_DrawShadowedPatchDoom (60, 38, W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
+    }
+    else
+    {
+        // [JN] Use own Russian capitalized and centered title: "ГРОМКОСТЬ ЗВУКА"
+        V_DrawShadowedPatchDoom (71, 39, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
+    }
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1), 16,sfxVolume);
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(music_vol+1), 16,musicVolume);
@@ -1429,6 +1470,7 @@ M_DrawThermo
     int     xx;
     int     i;
     char    num[4];
+    extern boolean old_slider;
 
     xx = x;
 
@@ -1457,16 +1499,25 @@ M_DrawThermo
     if (thermDot >= thermWidth)
     {
         thermDot = thermWidth - 1;
-        V_DrawPatch((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMW"), PU_CACHE));
+        V_DrawPatch((x + 8) + thermDot * 8, y, 
+                    W_CacheLumpName(DEH_String(old_slider ?
+                    "M_THERMO" :
+                    "M_THERMW"),
+                    PU_CACHE));
     }
     // [JN] А если ползунок в крайнем левом положении, делать его затемненным
     else if (thermDot == 0)
     {
-        V_DrawPatch((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMD"), PU_CACHE));
+        V_DrawPatch((x + 8) + thermDot * 8, y,
+                    W_CacheLumpName(DEH_String(old_slider ?
+                    "M_THERMO" :
+                    "M_THERMD"),
+                    PU_CACHE));
     }
     else
     {
-        V_DrawPatch((x + 8) + thermDot * 8, y, W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));        
+        V_DrawPatch((x + 8) + thermDot * 8, y,
+                    W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));        
     }
 }
 
@@ -2380,6 +2431,34 @@ void M_Init (void)
     if (gameversion < exe_ultimate)
     {
         EpiDef.numitems--;
+    }
+
+    // [crispy] rearrange Load Game and Save Game menus
+    {
+	const patch_t *patchl, *patchs, *patchm;
+	short captionheight, vstep;
+
+	patchl = W_CacheLumpName(DEH_String("M_LOADG"), PU_CACHE);
+	patchs = W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE);
+	patchm = W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE);
+
+	LoadDef_x = (ORIGWIDTH - SHORT(patchl->width)) / 2 + SHORT(patchl->leftoffset);
+	SaveDef_x = (ORIGWIDTH - SHORT(patchs->width)) / 2 + SHORT(patchs->leftoffset);
+	LoadDef.x = SaveDef.x = (ORIGWIDTH - 24 * 8) / 2 + SHORT(patchm->leftoffset); // [crispy] see M_DrawSaveLoadBorder()
+
+	captionheight = MAX(SHORT(patchl->height), SHORT(patchs->height));
+
+	vstep = ORIGHEIGHT - 32; // [crispy] ST_HEIGHT
+	vstep -= captionheight;
+	vstep -= (load_end - 1) * LINEHEIGHT + SHORT(patchm->height);
+	vstep /= 3;
+
+	if (vstep > 0)
+	{
+		LoadDef_y = vstep + captionheight - SHORT(patchl->height) + SHORT(patchl->topoffset);
+		SaveDef_y = vstep + captionheight - SHORT(patchs->height) + SHORT(patchs->topoffset);
+		LoadDef.y = SaveDef.y = vstep + captionheight + vstep + SHORT(patchm->topoffset) - 7; // [crispy] see M_DrawSaveLoadBorder()
+	}
     }
 
     opldev = M_CheckParm("-opldev") > 0;

@@ -110,6 +110,7 @@ boolean fastparm;    // checkparm of -fast
 
 boolean vanillaparm; // [JN] проверка параметра -vanilla
 boolean scaled_sky = false; // [JN] Boolean for sky scaling
+boolean old_slider = false; // [JN] Boolean for dimmed/red thermometer
 
 
 extern boolean inhelpscreens;
@@ -1504,6 +1505,13 @@ void D_SetGameDescription(void)
         scaled_sky = false;
     }
 
+    // [JN] Check for modified thermometer. If exist, 
+    // don't use dimmed/red in game menus.
+    if (W_CheckMultipleLumps("M_THERMO") > 1)
+    {
+        old_slider = true;
+    }
+    
     // Автоматическая загрузка блока DEHACKED
     //
     // [crispy] load DEHACKED lumps by default, but allow overriding
