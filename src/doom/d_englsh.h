@@ -889,24 +889,6 @@
 #define STSTR_CROSSHAIR_ON  "ON"
 #define STSTR_CROSSHAIR_OFF "OFF"
 
-//
-// Project's version
-//
-
-#define STSTR_VERSION   "Version 2.8"
-
-#if defined (_WIN64)
-#define STSRT_ARCH      " - (x64)"
-#elif defined (_WIN32)
-#define STSRT_ARCH      " - (x86)"
-#else
-#define STSRT_ARCH      ""  // undefined
-#endif
-
-#define STSRT_DATE      "in development"
-
-
-
 
 // -----------------------------------------------------------------------------
 // Русский язык
@@ -2080,8 +2062,19 @@
 // Отображение версии проекта
 //
 
-#define STSTR_VERSION_RUS   "dthcbz 2>8"    // Версия 2.8
+// English
+#define STSTR_VERSION   "Version 2.8"
+#if defined (_WIN64)
+#define STSRT_ARCH      " - (x64)"
+#elif defined (_WIN32)
+#define STSRT_ARCH      " - (x86)"
+#else
+#define STSRT_ARCH      ""
+#endif
+#define STSRT_DATE      "in development"    // (mm/dd/yyyy)
 
+// Русский
+#define STSTR_VERSION_RUS   "dthcbz 2>8"    // Версия 2.8
 #if defined (_WIN64)
 #define STSRT_ARCH_RUS      " - ([64)"      // x64
 #elif defined (_WIN32)
@@ -2089,15 +2082,7 @@
 #else
 #define STSRT_ARCH_RUS      ""              // ?  
 #endif
-
-#define STSRT_DATE_RUS      "d hfphf,jnrt"  // в разработке
-
-
-
-
-
-
-
+#define STSRT_DATE_RUS      "d hfphf,jnrt"  // в разработке (dd.mm.yyyy)
 
 
 #endif
