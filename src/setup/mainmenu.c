@@ -333,15 +333,18 @@ void MainMenu(void)
                    "Настройки сетевой игры",
                    (TxtWidgetSignalFunc) MultiplayerConfig, NULL),
 
+    NULL);
+
     //
     // [JN] Language selection
     //
 
-    TXT_NewSeparator("°зык / Language"),
+    TXT_AddWidget(window, TXT_NewSeparator("°зык / Language")),
+    TXT_SetTableColumns(window, 2);
+        TXT_AddWidgets(window,
         TXT_NewRadioButton("Русский", &english_language, 0),
-        TXT_NewRadioButton("English", &english_language, 1),
-
-    NULL);
+        TXT_NewRadioButton("English    ", &english_language, 1),
+        NULL);
 
     quit_action = TXT_NewWindowAction(KEY_ESCAPE, english_language ? "Quit" : "Выход");
     warp_action = TXT_NewWindowAction(KEY_F2,     english_language ? "Warp" : "Уровень");
