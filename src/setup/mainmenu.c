@@ -103,9 +103,6 @@ static void SensibleDefaults(void)
     snd_dmxoption = "-opl3 -reverse";
     png_screenshots = 1;
 
-    // [JN] ƒополнительные параметры игры
-    english_language = 0;
-
     // √рафика
     brightmaps = 1;
     fake_contrast = 0;
@@ -335,6 +332,15 @@ void MainMenu(void)
                    "Multiplayer Configuration" :
                    "Настройки сетевой игры",
                    (TxtWidgetSignalFunc) MultiplayerConfig, NULL),
+
+    //
+    // [JN] Language selection
+    //
+
+    TXT_NewSeparator("°зык / Language"),
+        TXT_NewRadioButton("Русский", &english_language, 0),
+        TXT_NewRadioButton("English", &english_language, 1),
+
     NULL);
 
     quit_action = TXT_NewWindowAction(KEY_ESCAPE, english_language ? "Quit" : "Выход");

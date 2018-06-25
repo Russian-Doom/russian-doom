@@ -105,6 +105,7 @@ static GameSelectCallback game_selected_callback;
 
 // Miscellaneous variables that aren't used in setup.
 
+int english_language = 0;
 static int showMessages = 1;
 static int screenblocks = 10;
 static int detailLevel = 0;
@@ -115,10 +116,9 @@ static char *back_flat = "F_PAVE01";
 static int comport = 0;
 static char *nickname = NULL;
 
-int english_language = 0;
-
 static void BindMiscVariables(void)
 {
+    // [JN] Initialise language variable first
     M_BindIntVariable("english_language", &english_language);
 
     if (gamemission == doom)
@@ -294,17 +294,6 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
 
     TXT_AddWidget(window, TXT_NewLabel("Выберите желаемую игру:\n"));
 
-    //
-    // [JN] Create translated buttons
-    //
-
-    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
-                        TXT_NewWindowAbortAction(window) :
-                        TXT_NewWindowAbortAction_Rus(window));
-    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
-                        TXT_NewWindowSelectAction(window) :
-                        TXT_NewWindowSelectAction_Rus(window));
-
     num_games = 0;
 
     // Add a button for each game.
@@ -349,10 +338,6 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
         callback();
         return;
     }
-
-    //
-    // [JN] TODO: Draw language section widet
-    //
 
     game_selected_callback = callback;
 }
