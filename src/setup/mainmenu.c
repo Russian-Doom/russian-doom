@@ -332,7 +332,7 @@ void MainMenu(void)
                    "Multiplayer Configuration" :
                    "Настройки сетевой игры",
                    (TxtWidgetSignalFunc) MultiplayerConfig, NULL),
-
+    TXT_NewStrut(0, 1),
     NULL);
 
     //
