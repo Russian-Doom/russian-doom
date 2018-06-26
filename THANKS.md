@@ -6,6 +6,7 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Mike "chungy" Swanson
 - Jonathan "jmtd" Dowland
 - Alex "AlexMax" Mayfield
+- James "Quasar" Haley
 
 #### [Crispy Doom](https://www.chocolate-doom.org/wiki/index.php/Crispy_Doom) source port 
 - Fabian Greffrath
