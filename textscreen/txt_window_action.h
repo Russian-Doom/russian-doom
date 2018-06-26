@@ -56,6 +56,7 @@ struct txt_window_action_s
  */
 
 txt_window_action_t *TXT_NewWindowAction(int key, const char *label);
+txt_window_action_t *TXT_NewWindowActionY(int key, const char *label);
 
 /**
  * Create a new window action that closes the window when the

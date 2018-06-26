@@ -192,7 +192,46 @@ static void DrawDesktopBackground(const char *title)
     TXT_Puts(title);
 }
 
+//
+// [JN] English "F1=Help"
+//
+
 static void DrawHelpIndicator(void)
+{
+    char keybuf[10];
+    int fgcolor;
+    int x, y;
+
+    TXT_GetKeyDescription(HELP_KEY, keybuf, sizeof(keybuf));
+
+    TXT_GetMousePosition(&x, &y);
+
+    if (y == 0 && x >= TXT_SCREEN_W - 16)
+    {
+        fgcolor = TXT_COLOR_GREY;
+        TXT_BGColor(TXT_COLOR_BLACK, 0);
+    }
+    else
+    {
+        fgcolor = TXT_COLOR_BLACK;
+        TXT_BGColor(TXT_COLOR_GREY, 0);
+    }
+
+    TXT_GotoXY(TXT_SCREEN_W - 16, 0);
+
+    TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
+    TXT_DrawString(" ");
+    TXT_DrawString(keybuf);
+
+    TXT_FGColor(fgcolor);
+    TXT_DrawString("=Online help ");
+}
+
+//
+// [JN] Russian "F1=Онлайн справка"
+//
+
+static void DrawHelpIndicatorRus(void)
 {
     char keybuf[10];
     int fgcolor;
@@ -246,9 +285,17 @@ void TXT_DrawDesktop(void)
     DrawDesktopBackground(title);
 
     active_window = TXT_GetActiveWindow();
+
+    // [JN] Draw English "Online help"
     if (active_window != NULL && active_window->help_url != NULL)
     {
         DrawHelpIndicator();
+    }
+
+    // [JN] Draw Russian "Онлайн справка"
+    if (active_window != NULL && active_window->help_url_rus != NULL)
+    {
+        DrawHelpIndicatorRus();
     }
 
     for (i=0; i<num_windows; ++i)

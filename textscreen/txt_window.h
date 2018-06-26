@@ -91,7 +91,8 @@ struct txt_window_s
 
     // URL of a webpage with help about this window. If set, a help key
     // indicator is shown while this window is active.
-    char *help_url;
+    char *help_url;     // [JN] English "Online help"
+    char *help_url_rus; // [JN] Russian "Онлайн справка"
 };
 
 /**
@@ -210,6 +211,7 @@ txt_window_t *TXT_MessageBox(char *title, char *message, ...);
  */
 
 void TXT_SetWindowHelpURL(txt_window_t *window, char *help_url);
+void TXT_SetWindowHelpURL_RUS(txt_window_t *window, char *help_url_rus);
 
 /**
  * Open the help URL for the given window, if one is set.

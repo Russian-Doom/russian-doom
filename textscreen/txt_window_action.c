@@ -64,6 +64,33 @@ static void TXT_WindowActionDrawer(TXT_UNCAST_ARG(action))
     TXT_DrawString(" ");
 }
 
+//
+// [JN] Window Action button with yellow color
+//
+
+static void TXT_WindowActionDrawerY(TXT_UNCAST_ARG(action))
+{
+    TXT_CAST_ARG(txt_window_action_t, action);
+    char buf[10];
+
+    TXT_GetKeyDescription(action->key, buf, sizeof(buf));
+
+    if (TXT_HoveringOverWidget(action))
+    {
+        TXT_BGColor(TXT_COLOR_BLACK, 0);
+    }
+
+    TXT_DrawString(" ");
+    TXT_FGColor(TXT_COLOR_YELLOW);
+    TXT_DrawString(buf);
+    TXT_FGColor(TXT_COLOR_BRIGHT_CYAN);
+    TXT_DrawString("=");
+
+    TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
+    TXT_DrawString(action->label);
+    TXT_DrawString(" ");
+}
+
 static void TXT_WindowActionDestructor(TXT_UNCAST_ARG(action))
 {
     TXT_CAST_ARG(txt_window_action_t, action);
@@ -115,6 +142,34 @@ txt_window_action_t *TXT_NewWindowAction(int key, const char *label)
     action = malloc(sizeof(txt_window_action_t));
 
     TXT_InitWidget(action, &txt_window_action_class);
+    action->key = key;
+    action->label = strdup(label);
+
+    return action;
+}
+
+//
+// [JN] Window Action button with yellow color
+//
+
+txt_widget_class_t txt_window_action_class_y =
+{
+    TXT_AlwaysSelectable,
+    TXT_WindowActionSizeCalc,
+    TXT_WindowActionDrawerY,
+    TXT_WindowActionKeyPress,
+    TXT_WindowActionDestructor,
+    TXT_WindowActionMousePress,
+    NULL,
+};
+
+txt_window_action_t *TXT_NewWindowActionY(int key, const char *label)
+{
+    txt_window_action_t *action;
+
+    action = malloc(sizeof(txt_window_action_t));
+
+    TXT_InitWidget(action, &txt_window_action_class_y);
     action->key = key;
     action->label = strdup(label);
 

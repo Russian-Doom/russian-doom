@@ -292,7 +292,8 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
 	// "Select game"
     window = TXT_NewWindow("Russian Doom");
 
-    TXT_AddWidget(window, TXT_NewLabel("Выберите желаемую игру:\n"));
+    // TXT_AddWidget(window, TXT_NewLabel("Выберите желаемую игру:\n"));
+    TXT_AddWidget(window, TXT_NewLabel(" "));
 
     num_games = 0;
 

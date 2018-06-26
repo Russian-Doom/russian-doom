@@ -885,11 +885,17 @@ static void StartGameMenu(char *window_title, int multiplayer)
 
     if (multiplayer)
     {
+        if (english_language)
         TXT_SetWindowHelpURL(window, MULTI_START_HELP_URL);
+        else
+        TXT_SetWindowHelpURL_RUS(window, MULTI_START_HELP_URL);
     }
     else
     {
+        if (english_language)
         TXT_SetWindowHelpURL(window, LEVEL_WARP_HELP_URL);
+        else
+        TXT_SetWindowHelpURL_RUS(window, LEVEL_WARP_HELP_URL);
     }
 
     //
@@ -1256,7 +1262,10 @@ void JoinMultiGame(void)
     TXT_SetTableColumns(window, 2);
     TXT_SetColumnWidths(window, 23, 12);
 
+    if (english_language)
     TXT_SetWindowHelpURL(window, MULTI_JOIN_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, MULTI_JOIN_HELP_URL);
 
     TXT_AddWidgets(window,
                 TXT_NewLabel(english_language ?

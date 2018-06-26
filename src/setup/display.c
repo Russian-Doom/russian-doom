@@ -237,7 +237,10 @@ void ConfigDisplay(void)
                            "Display Configuration" :
                            "Ќастройки экрана");
 
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     // Build window:
 

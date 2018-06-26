@@ -202,7 +202,10 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                            "Extra keyboard controls" :
                            "Дополнительное управление");
 
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     //
     // [JN] Create translated buttons
@@ -514,7 +517,10 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                            "Other keys" :
                            "Другие клавиши");
 
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     //
     // [JN] Create translated buttons
@@ -772,7 +778,10 @@ void ConfigKeyboard(void)
                            "Keyboard configuration" :
                            "Настройки клавиатуры");
 
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     // The window is on a 5-column grid layout that looks like:
     // Label | Control | | Label | Control

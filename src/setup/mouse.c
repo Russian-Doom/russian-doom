@@ -94,7 +94,10 @@ static void ConfigExtraButtons(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                            "Additional mouse buttons" :
                            "Дополнительные кнопки мыши");
 
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     //
     // [JN] Create translated buttons
@@ -170,7 +173,10 @@ void ConfigMouse(void)
                         TXT_NewWindowSelectAction(window) :
                         TXT_NewWindowSelectAction_Rus(window));
 
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     TXT_AddWidgets(window,
         TXT_NewCheckBox(english_language ?

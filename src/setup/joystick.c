@@ -917,8 +917,12 @@ void ConfigJoystick(void)
 
     TXT_SetTableColumns(window, 6);
     TXT_SetColumnWidths(window, 18, 10, 1, 15, 10, 0);
+
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
-    
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
+
     TXT_AddWidgets(window,
         TXT_NewLabel(english_language ?
                      "Controller" :

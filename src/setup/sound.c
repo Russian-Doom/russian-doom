@@ -125,7 +125,11 @@ void ConfigSound(void)
     window = TXT_NewWindow(english_language ?
                            "Sound configuration" :
                            "Настройки звука");
+
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     TXT_SetColumnWidths(window, 40);
     TXT_SetWindowPosition(window, TXT_HORIZ_CENTER, TXT_VERT_TOP,

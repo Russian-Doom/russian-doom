@@ -44,6 +44,27 @@
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/index.html"
 
 
+//
+// [JN] Prototype for Main Menu
+//
+void MainMenu(void);
+
+//
+// [JN] Language switch
+//
+static void LanguageSelect(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(window))
+{
+    // Switch to next language on invoking
+    english_language++;
+
+    // More than 1 (English)? Jump back to 0 (Russian)
+    if (english_language > 1)
+        english_language = 0;
+
+    // Redraw Main Menu
+    MainMenu();
+}
+
 static const int cheat_sequence[] =
 {
     KEY_UPARROW, KEY_UPARROW, KEY_DOWNARROW, KEY_DOWNARROW,
@@ -52,13 +73,6 @@ static const int cheat_sequence[] =
 };
 
 static unsigned int cheat_sequence_index = 0;
-
-static void SetupSelectCallback(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(window))
-{
-    TXT_CAST_ARG(txt_window_t, window);
-
-    TXT_WidgetKeyPress(window, KEY_ENTER);
-}
 
 // I think these are good "sensible" defaults:
 
@@ -286,13 +300,16 @@ void MainMenu(void)
     txt_window_t *window;
     txt_window_action_t *quit_action;
     txt_window_action_t *warp_action;
-    txt_window_action_t *entr_action;
+    txt_window_action_t *lang_action;
 
     window = TXT_NewWindow(english_language ?
                            "Main Menu" :
                            "Главное меню");
 
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     TXT_AddWidgets(window,
     TXT_NewButton2(english_language ?
@@ -315,7 +332,7 @@ void MainMenu(void)
                    "Настройки джойстика/геймпада",
                    (TxtWidgetSignalFunc) ConfigJoystick, NULL),
     TXT_NewButton2(english_language ?
-                   "Optional Gameplay Enhacements" :
+                   "Optional Gameplay Enhacements       " : // [JN] Some spaces used to make same width for both English and Russian menus :(
                    "Дополнительные параметры игры",
                    (TxtWidgetSignalFunc) CompatibilitySettings, NULL),
     GetLaunchButton(),
@@ -336,28 +353,21 @@ void MainMenu(void)
     NULL);
 
     //
-    // [JN] Language selection
+    // [JN] ESC = Quit, F2 = Warp, F4 = Language selection
     //
-
-    TXT_AddWidget(window, TXT_NewSeparator("°зык / Language")),
-    TXT_SetTableColumns(window, 2);
-        TXT_AddWidgets(window,
-        TXT_NewRadioButton("Русский", &english_language, 0),
-        TXT_NewRadioButton("English    ", &english_language, 1),
-        NULL);
 
     quit_action = TXT_NewWindowAction(KEY_ESCAPE, english_language ? "Quit" : "Выход");
     warp_action = TXT_NewWindowAction(KEY_F2,     english_language ? "Warp" : "Уровень");
-    entr_action = TXT_NewWindowAction(KEY_ENTER,  english_language ? "Select" : "Выбор");
+    lang_action = TXT_NewWindowActionY(KEY_F4,    english_language ? "Русский" : "English");
 
 
     TXT_SignalConnect(quit_action, "pressed", QuitConfirm, NULL);
     TXT_SignalConnect(warp_action, "pressed", (TxtWidgetSignalFunc) WarpMenu, NULL);
-    TXT_SignalConnect(entr_action, "pressed", SetupSelectCallback, window);
+    TXT_SignalConnect(lang_action, "pressed", LanguageSelect, window);
 
     TXT_SetWindowAction(window, TXT_HORIZ_LEFT, quit_action);
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, warp_action);
-    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, entr_action);
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, lang_action);
 
     TXT_SetKeyListener(window, MainMenuKeyPress, NULL);
 }

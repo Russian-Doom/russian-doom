@@ -80,7 +80,8 @@ txt_window_t *TXT_NewWindow(char *title)
     win->vert_align = TXT_VERT_CENTER;
     win->key_listener = NULL;
     win->mouse_listener = NULL;
-    win->help_url = NULL;
+    win->help_url = NULL;       // [JN] English "Online help"
+    win->help_url_rus = NULL;   // [JN] Russian "Онлайн справка"
 
     TXT_AddWidget(win, TXT_NewSeparator(NULL));
 
@@ -512,8 +513,13 @@ void TXT_SetWindowFocus(txt_window_t *window, int focused)
 }
 
 void TXT_SetWindowHelpURL(txt_window_t *window, char *help_url)
-{
+{   // [JN] English "Online help"
     window->help_url = help_url;
+}
+
+void TXT_SetWindowHelpURL_RUS(txt_window_t *window, char *help_url_rus)
+{   // [JN] Russian "Онлайн справка"
+    window->help_url_rus = help_url_rus;
 }
 
 #ifdef _WIN32
@@ -557,9 +563,16 @@ void TXT_OpenURL(char *url)
 
 void TXT_OpenWindowHelpURL(txt_window_t *window)
 {
+    // [JN] English "Online help"
     if (window->help_url != NULL)
     {
         TXT_OpenURL(window->help_url);
+    }
+
+    // [JN] Russian "Онлайн справка"
+    if (window->help_url_rus != NULL)
+    {
+        TXT_OpenURL(window->help_url_rus);
     }
 }
 

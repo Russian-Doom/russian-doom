@@ -87,7 +87,10 @@ void CompatibilitySettings(void)
                            "Дополнительные параметры игры");
     window_features = TXT_NewTable(1);
 
+    if (english_language)
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+    else
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     //
     // [JN] Create translated buttons
