@@ -54,3 +54,5 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Tamás "BlooD2oo1" Mélykuti
 - Pavel "Corak" Zegelman
 - Michael Francis
+- Danfun64
+- Hisymak
