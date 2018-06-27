@@ -27,6 +27,7 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "crispy.h"
+#include "jn.h"
 
 /*
 ===============================================================================

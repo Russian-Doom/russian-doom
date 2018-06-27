@@ -20,12 +20,12 @@
 
 #include "doomdef.h"
 #include "deh_str.h"
-
 #include "i_swap.h"
 #include "i_system.h"
 #include "m_misc.h"
 #include "r_local.h"
 #include "p_local.h"
+#include "jn.h"
 
 extern void CheckAbortStartup(void);
 
@@ -688,7 +688,7 @@ int R_FlatNumForName(char *name)
         memcpy(namet, name, 8);
         // [crispy] make non-fatal
         fprintf (stderr, english_language ?
-                         "R_FlatNumForName: %s not found", :
+                         "R_FlatNumForName: %s not found" :
                          "R_FlatNumForName: текстура поверхности %s не найдена\n",
                          namet);
         // I_Error("R_FlatNumForName: %s not found", namet);
