@@ -505,7 +505,10 @@ boolean D_AddFile(char *file)
 {
     wad_file_t *handle;
 
-    printf(" добавление: %s\n", file);	// "  adding %s\n"
+    printf(english_language ?
+           " adding: %s\n" :
+           " добавление: %s\n",
+           file);
 
     handle = W_AddFile(file);
 
@@ -730,7 +733,9 @@ void tprintf(char *msg, int initflag)
 // haleyjd: moved up, removed WATCOMC code
 void CleanExit(void)
 {
-    DEH_printf("Выполнен выход из HERETIC.\n"); // "Exited from HERETIC.\n"
+    DEH_printf(english_language ?
+    "Exited from HERETIC.\n" :
+    "Выполнен выход из HERETIC.\n");
     exit(1);
 }
 
@@ -989,7 +994,9 @@ void D_DoomMain(void)
 //
 // init subsystems
 //
-    DEH_printf("V_Init: Обнаружение экранов.\n");	// "V_Init: allocate screens.\n"
+    DEH_printf(english_language ?
+               "V_Init: allocate screens.\n" :
+               "V_Init: Обнаружение экранов.\n");
     V_Init();
 
     // Check for -CDROM
@@ -1022,17 +1029,23 @@ void D_DoomMain(void)
     }
 
     // Load defaults before initing other systems
-    DEH_printf("M_LoadDefaults: Загрузка системных стандартов.\n");	// "M_LoadDefaults: Load system defaults.\n"
+    DEH_printf(english_language ?
+               "M_LoadDefaults: Load system defaults.\n" :
+               "M_LoadDefaults: Загрузка системных стандартов.\n");
     D_BindVariables();
     M_SetConfigFilenames(/*"heretic.cfg", */PROGRAM_PREFIX "heretic.cfg");
     M_LoadDefaults();
 
     I_AtExit(M_SaveDefaults, false);
 
-    DEH_printf("Z_Init: Инициализация распределения памяти.\n");	// "Z_Init: Init zone memory allocation daemon.\n"
+    DEH_printf(english_language ?
+               "Z_Init: Init zone memory allocation daemon.\n" :
+               "Z_Init: Инициализация распределения памяти.\n");
     Z_Init();
 
-    DEH_printf("W_Init: Инициализация WAD-файлов.\n");							// "W_Init: Init WADfiles.\n"
+    DEH_printf(english_language ?
+               "W_Init: Init WADfiles.\n" :
+               "W_Init: Инициализация WAD-файлов.\n");
 
     iwadfile = D_FindIWAD(IWAD_MASK_HERETIC, &gamemission);
 
@@ -1114,7 +1127,10 @@ void D_DoomMain(void)
             M_StringCopy(demolumpname, myargv[p + 1], sizeof(demolumpname));
         }
 
-        printf("Проигрывание демозаписи %s.\n", file);	// "Playing demo %s.\n"
+        printf(english_language ?
+               "Playing demo %s.\n" :
+               "Проигрывание демозаписи %s.\n",
+               file);
     }
 
     // [JN] Addition: also generate the WAD hash table.  Speed things up a bit.
@@ -1190,7 +1206,10 @@ void D_DoomMain(void)
         {
         char *filename;
         filename = D_TryFindWADByName(myargv[newpwadfile]);
-        printf(" добавление: %s\n", filename);
+        printf(english_language ?
+               " adding: %s\n" :
+               " добавление: %s\n",
+               filename);
         W_MergeFile(filename);
         }
     }
@@ -1220,7 +1239,9 @@ void D_DoomMain(void)
     I_InitMusic();
 
 #ifdef FEATURE_MULTIPLAYER
-    tprintf("NET_Init: Инициализация сетевой подсистемы.\n", 1);	// "NET_Init: Init network subsystem.\n"
+    tprintf(english_language ?
+            "NET_Init: Init network subsystem.\n" :
+            "NET_Init: Инициализация сетевой подсистемы.\n", 1);
     NET_Init ();
 #endif
 
@@ -1234,54 +1255,75 @@ void D_DoomMain(void)
     //
     smsg[0] = 0;
     if (deathmatch)
-        status(DEH_String("DeathMatch..."));
+        status(DEH_String(english_language ?
+                          "DeathMatch..." :
+                          "Дефматч..."));
     if (nomonsters)
-        status(DEH_String("No Monsters..."));
+        status(DEH_String(english_language ?
+                          "No Monsters..." :
+                          "Без монстров..."));
     if (respawnparm)
-        status(DEH_String("Respawning..."));
+        status(DEH_String(english_language ? 
+                          "Respawning..." :
+                          "Монстры воскрешаются..."));
     if (autostart)
     {
         char temp[64];
-        DEH_snprintf(temp, sizeof(temp),
-                     "Warp to Episode %d, Map %d, Skill %d ",
+        DEH_snprintf(temp, sizeof(temp), english_language ?
+                     "Warp to Episode %d, Map %d, Skill %d " :
+                     "Перемещение в эпизод %d, уровень %d, сложность %d ",
                      startepisode, startmap, startskill + 1);
         status(temp);
     }
     wadprintf();                // print the added wadfiles
 
-    tprintf(DEH_String("MN_Init: Инициализация системы меню.\n"), 1);	// "MN_Init: Init menu system.\n"
+    tprintf(DEH_String(english_language ?
+                       "MN_Init: Init menu system.\n" :
+                       "MN_Init: Инициализация системы меню.\n"), 1);
     MN_Init();
 
     CT_Init();
 
-    tprintf(DEH_String("R_Init: Инициализация процесса запуска Heretic."), 1);		// R_Init: Init Heretic refresh daemon.
+    tprintf(DEH_String(english_language ?
+                       "R_Init: Init Heretic refresh daemon." :
+                       "R_Init: Инициализация процесса запуска Heretic."), 1);
     hprintf(DEH_String("Loading graphics"));
     R_Init();
     tprintf("\n", 0);
 
-    tprintf(DEH_String("P_Init: Инициализация игрового окружения.\n"), 1);			// "P_Init: Init Playloop state.\n"
+    tprintf(DEH_String(english_language ?
+                       "P_Init: Init Playloop state.\n" :
+                       "P_Init: Инициализация игрового окружения.\n"), 1);
     hprintf(DEH_String("Init game engine."));
     P_Init();
     IncThermo();
 
-    tprintf(DEH_String("I_Init: Инициализация состояния компьютера.\n"), 1);		// "I_Init: Setting up machine state.\n"
+    tprintf(DEH_String(english_language ? 
+                       "I_Init: Setting up machine state.\n" :
+                       "I_Init: Инициализация состояния компьютера.\n"), 1);
     I_CheckIsScreensaver();
     I_InitJoystick();
     IncThermo();
 
-    tprintf(DEH_String("S_Init: Активация звуковой системы.\n"), 1);				// "S_Init: Setting up sound.\n"
+    tprintf(DEH_String(english_language ?
+                       "S_Init: Setting up sound.\n" :
+                       "S_Init: Активация звуковой системы.\n"), 1);
     S_Init();
     //IO_StartupTimer();
     S_Start();
 
-    tprintf(DEH_String("D_CheckNetGame: Проверка статуса сетевой игры.\n"), 1);		// "D_CheckNetGame: Checking network game status.\n"
+    tprintf(DEH_String(english_language ?
+                       "D_CheckNetGame: Checking network game status.\n" :
+                       "D_CheckNetGame: Проверка статуса сетевой игры.\n"), 1);
     hprintf(DEH_String("Checking network game status."));
     D_CheckNetGame();
     IncThermo();
 
     // haleyjd: removed WATCOMC
 
-    tprintf(DEH_String("SB_Init: Загрузка патчей.\n"), 1);							// "SB_Init: Loading patches.\n"
+    tprintf(DEH_String(english_language ?
+                       "SB_Init: Loading patches.\n" :
+                       "SB_Init: Загрузка патчей.\n"), 1);
     SB_Init();
     IncThermo();
 

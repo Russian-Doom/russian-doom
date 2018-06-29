@@ -1163,8 +1163,11 @@ void P_SpawnMapThing(mapthing_t * mthing)
     if (i == NUMMOBJTYPES)
     {
         // [crispy] ignore unknown map things
-        printf("P_SpawnMapThing: Unknown type %i at (%i, %i)", mthing->type,
-                mthing->x, mthing->y);
+        printf(english_language ?
+               "P_SpawnMapThing: Unknown type %i at (%i, %i)" :
+               "P_SpawnMapThing: неизвестный предмет %i в (%i, %i)\n",
+               mthing->type,
+               mthing->x, mthing->y);
         return;
     }
 

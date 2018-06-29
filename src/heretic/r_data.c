@@ -256,7 +256,9 @@ void R_GenerateLookup(int texnum)
     {
         if (!patchcount[x])
         {
-            printf("R_GenerateLookup: column without a patch (%s)\n",
+            printf(english_language ?
+                   "R_GenerateLookup: column without a patch (%s)\n" :
+                   "R_GenerateLookup: столбец без патча (%s)\n",
                    texture->name);
             return;
         }
