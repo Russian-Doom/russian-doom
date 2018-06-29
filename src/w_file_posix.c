@@ -32,6 +32,7 @@
 #include "m_misc.h"
 #include "w_file.h"
 #include "z_zone.h"
+#include "jn.h"
 
 typedef struct
 {
