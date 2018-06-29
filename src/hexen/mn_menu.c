@@ -1636,7 +1636,9 @@ boolean MN_Responder(event_t * event)
             menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
-            CurrentMenu = &Options2Menu;
+            CurrentMenu = english_language ?
+                          &Options2Menu :
+                          &Options2Menu_Rus;
             CurrentItPos = CurrentMenu->oldItPos;
             if (!netgame && !demoplayback)
             {
