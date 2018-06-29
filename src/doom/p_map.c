@@ -1832,7 +1832,9 @@ static void SpechitOverrun(line_t *ld)
             nofit = addr; 
             break;
         default:
-            fprintf(stderr, "SpechitOverrun: невозможно съэмулировать переполнение numspechit=%i\n",
+            fprintf(stderr, english_language ?
+                            "SpechitOverrun: Warning: unable to emulate an overrun where numspechit=%i\n" :
+                            "SpechitOverrun: невозможно съэмулировать переполнение numspechit=%i\n",
                             numspechit);
             break;
     }

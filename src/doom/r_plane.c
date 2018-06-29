@@ -240,7 +240,10 @@ static void R_RaiseVisplanes (visplane_t** vp)
 	ceilingplane = visplanes + (ceilingplane - visplanes_old);
 
 	if (numvisplanes_old)
-	    fprintf(stderr, "R_FindPlane: достигнут лимит MAXVISPLANES (%d), увеличен до (%d).\n", numvisplanes_old, numvisplanes);
+	    fprintf(stderr, english_language ?
+                        "R_FindPlane: Hit MAXVISPLANES limit at %d, raised to %d.\n" :
+                        "R_FindPlane: достигнут лимит MAXVISPLANES (%d), увеличен до (%d).\n",
+                        numvisplanes_old, numvisplanes);
 
 	// keep the pointer passed as argument in relation to the visplanes pointer
 	if (vp)

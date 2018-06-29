@@ -574,7 +574,10 @@ void R_StoreWallRange (int start, int stop)
         ds_p = drawsegs + numdrawsegs_old;
 
         if (numdrawsegs_old)
-        fprintf(stderr, "R_StoreWallRange: достигнут лимит MAXDRAWSEGS (%d), увеличен до (%d).\n", numdrawsegs_old, numdrawsegs);
+        fprintf(stderr, english_language ?
+                        "R_StoreWallRange: Hit MAXDRAWSEGS limit at %d, raised to %d.\n" :
+                        "R_StoreWallRange: достигнут лимит MAXDRAWSEGS (%d), увеличен до (%d).\n",
+                        numdrawsegs_old, numdrawsegs);
     }
 
 #ifdef RANGECHECK

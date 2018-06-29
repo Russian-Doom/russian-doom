@@ -778,7 +778,9 @@ void P_LoadLineDefs (int lump)
 	if (ld->sidenum[0] == NO_INDEX)
 	{
 	    ld->sidenum[0] = 0;
-	    fprintf(stderr, "P_LoadLineDefs: у линии %d не назначена первая сторона!\n", i);
+	    fprintf(stderr, english_language ?
+                        "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
+                        "P_LoadLineDefs: у линии %d не назначена первая сторона!\n", i);
 	}
 
 	if (ld->sidenum[0] != NO_INDEX) // [crispy] extended nodes
@@ -1130,7 +1132,9 @@ static void PadRejectArray(byte *array, unsigned int len)
 
     if (len > sizeof(rejectpad))
     {
-        fprintf(stderr, "PadRejectArray: блок REJECT слишком мал для заполнения! (%i > %i)\n",
+        fprintf(stderr, english_language ?
+                        "PadRejectArray: REJECT lump too short to pad! (%i > %i)\n" :
+                        "PadRejectArray: блок REJECT слишком мал для заполнения! (%i > %i)\n",
                         len, (int) sizeof(rejectpad));
 
         // Pad remaining space with 0 (or 0xff, if specified on command line).

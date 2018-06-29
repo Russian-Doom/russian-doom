@@ -472,7 +472,9 @@ EV_VerticalDoor
                 {
                     // This isn't a door OR a plat.  Now we're in trouble.
 
-                    fprintf(stderr, "EV_VerticalDoor: попытка закрыть что-то, что не является дверью.\n");
+                    fprintf(stderr, english_language ?
+                                    "EV_VerticalDoor: Tried to close something that wasn't a door.\n" :
+                                    "EV_VerticalDoor: попытка закрыть что-то, что не является дверью.\n");
 
                     // Try closing it anyway. At least it will work on 32-bit
                     // machines.

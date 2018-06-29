@@ -2050,7 +2050,10 @@ void A_BrainAwake (mobj_t* mo)
 		braintargets = I_Realloc(braintargets, maxbraintargets * sizeof(*braintargets));
 
 		if (maxbraintargets > 32)
-		    fprintf(stderr, "R_BrainAwake: увеличен лимит braintargets до (%d).\n", maxbraintargets);
+		    fprintf(stderr, english_language ?
+                            "R_BrainAwake: Raised braintargets limit to %d.\n" :
+                            "R_BrainAwake: увеличен лимит braintargets до (%d).\n",
+                            maxbraintargets);
 	    }
         
 	    braintargets[numbraintargets] = m;

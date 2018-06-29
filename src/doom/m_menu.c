@@ -1191,7 +1191,9 @@ void M_Episode(int choice)
     // Yet another hack...
     if ( (gamemode == registered) && (choice > 2))
     {
-        fprintf (stderr, "M_Episode: четвертый эпизод доступен только в Ultimate DOOM\n");
+        fprintf (stderr, english_language ?
+                        "M_Episode: fourth episode available only in Ultimate DOOM\n" :
+                        "M_Episode: четвертый эпизод доступен только в Ultimate DOOM\n");
         choice = 0;
     }
 

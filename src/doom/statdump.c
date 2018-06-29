@@ -26,8 +26,8 @@
 #include "d_player.h"
 #include "d_mode.h"
 #include "m_argv.h"
-
 #include "statdump.h"
+#include "jn.h"
 
 /* Par times for E1M1-E1M9. */
 static const int doom1_par_times[] =
@@ -162,24 +162,32 @@ static void PrintPlayerStats(FILE *stream, wbstartstruct_t *stats,
 {
     wbplayerstruct_t *player = &stats->plyr[player_num];
 
-    fprintf(stream, "Player %i (%s):\n", player_num + 1,
-            player_colors[player_num]);
+    fprintf(stream, english_language ?
+                    "Player %i (%s):\n" :
+                    "Игрок %i (%s):\n",
+                    player_num + 1, player_colors[player_num]);
 
     /* Kills percentage */
 
-    fprintf(stream, "\tKills: ");
+    fprintf(stream, english_language ?
+                    "\tKills: " :
+                    "\tВраги: ");
     PrintPercentage(stream, player->skills, stats->maxkills);
     fprintf(stream, "\n");
 
     /* Items percentage */
 
-    fprintf(stream, "\tItems: ");
+    fprintf(stream, english_language ?
+                    "\tItems: " :
+                    "\tПредметы: ");
     PrintPercentage(stream, player->sitems, stats->maxitems);
     fprintf(stream, "\n");
 
     /* Secrets percentage */
 
-    fprintf(stream, "\tSecrets: ");
+    fprintf(stream, english_language ?
+                    "\tSecrets: " :
+                    "\tТайники: ");
     PrintPercentage(stream, player->ssecret, stats->maxsecret);
     fprintf(stream, "\n");
 }
@@ -190,7 +198,9 @@ static void PrintFragsTable(FILE *stream, wbstartstruct_t *stats)
 {
     int x, y;
 
-    fprintf(stream, "Frags:\n");
+    fprintf(stream, english_language ? 
+                    "Frags:\n" :
+                    "Фраги:\n");
 
     /* Print header */
 
@@ -209,7 +219,9 @@ static void PrintFragsTable(FILE *stream, wbstartstruct_t *stats)
 
     fprintf(stream, "\n");
 
-    fprintf(stream, "\t\t-------------------------------- VICTIMS\n");
+    fprintf(stream, english_language ?
+    "\t\t-------------------------------- VICTIMS\n" :
+    "\t\t-------------------------------- ЖЕРТВЫ\n");
 
     /* Print table */
 
@@ -236,7 +248,9 @@ static void PrintFragsTable(FILE *stream, wbstartstruct_t *stats)
     }
 
     fprintf(stream, "\t\t|\n");
-    fprintf(stream, "\t     KILLERS\n");
+    fprintf(stream, english_language ?
+                    "\t     KILLERS\n" :
+                    "\t     УБИЙЦЫ\n");
 }
 
 /* Displays the level name: MAPxy or ExMy, depending on game mode. */
@@ -252,12 +266,17 @@ static void PrintLevelName(FILE *stream, int episode, int level)
             fprintf(stream, "E%iM%i\n", episode + 1, level + 1);
             break;
         case doom2:
-            fprintf(stream, "MAP%02i\n", level + 1);
+            fprintf(stream, english_language ?
+                            "MAP%02i\n" :
+                            "УРОВЕНЬ%02i\n",
+                            level + 1);
             break;
         default:
         case none:
-            fprintf(stream, "E%iM%i / MAP%02i\n", 
-                    episode + 1, level + 1, level + 1);
+            fprintf(stream, english_language ?
+                            "E%iM%i / MAP%02i\n" :
+                            "E%iM%i / УРОВЕНЬ%02i\n",                             
+                            episode + 1, level + 1, level + 1);
             break;
     }
 
@@ -276,8 +295,14 @@ static void PrintStats(FILE *stream, wbstartstruct_t *stats)
 
     leveltime = stats->plyr[0].stime / TICRATE;
     partime = stats->partime / TICRATE;
-    fprintf(stream, "Time: %i:%02i", leveltime / 60, leveltime % 60);
-    fprintf(stream, " (par: %i:%02i)\n", partime / 60, partime % 60);
+    fprintf(stream, english_language ?
+                    "Time: %i:%02i" :
+                    "Время: %i:%02i",
+                    leveltime / 60, leveltime % 60);
+    fprintf(stream, english_language ?
+                    " (par: %i:%02i)\n" :
+                    " (рекорд: %i:%02i)\n",
+                    partime / 60, partime % 60);
     fprintf(stream, "\n");
 
     for (i=0; i<MAXPLAYERS; ++i)
