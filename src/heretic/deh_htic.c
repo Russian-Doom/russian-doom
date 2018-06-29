@@ -27,6 +27,7 @@
 #include "deh_htic.h"
 #include "info.h"
 #include "m_argv.h"
+#include "jn.h"
 
 char *deh_signatures[] =
 {
@@ -88,8 +89,13 @@ static void SetHHEVersionByName(char *name)
         }
     }
 
-    fprintf(stderr, "Unknown Heretic version: %s\n", name);
-    fprintf(stderr, "Valid versions:\n");
+    fprintf(stderr, english_language ?
+                    "Unknown Heretic version: %s\n" :
+                    "Некорректная версия Heretic: %s\n",
+                    name);
+    fprintf(stderr, english_language ?
+                    "Valid versions:\n" :
+                    "Корректные версии:\n");
 
     for (i=0; i<arrlen(hhe_versions); ++i)
     {
@@ -184,16 +190,34 @@ int DEH_MapHereticFrameNumber(int frame)
 
 void DEH_SuggestHereticVersion(deh_hhe_version_t version)
 {
-    fprintf(stderr,
-    "\n"
-    "This patch may be for version %s. You are currently running in\n"
-    "Heretic %s mode. For %s mode, add this to your command line:\n"
-    "\n"
-    "\t-hhever %s\n"
-    "\n",
-    hhe_versions[version],
-    hhe_versions[deh_hhe_version],
-    hhe_versions[version],
-    hhe_versions[version]);
+    if (english_language)
+    {
+        fprintf(stderr,
+        "\n"
+        "This patch may be for version %s. You are currently running in\n"
+        "Heretic %s mode. For %s mode, add this to your command line:\n"
+        "\n"
+        "\t-hhever %s\n"
+        "\n",
+        hhe_versions[version],
+        hhe_versions[deh_hhe_version],
+        hhe_versions[version],
+        hhe_versions[version]);
+    }
+    else
+    {
+        fprintf(stderr,
+        "\n"
+        "Предположительная версия патча Dehacked: %s, игра запущена в\n"
+        "режиме эмуляции версии %s. Для эмуляции версии %s, запустите\n"
+        "игре с параметром:\n"
+        "\n"
+        "\t-hhever %s\n"
+        "\n",
+        hhe_versions[version],
+        hhe_versions[deh_hhe_version],
+        hhe_versions[version],
+        hhe_versions[version]);        
+    }
 }
 
