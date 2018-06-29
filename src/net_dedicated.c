@@ -22,15 +22,13 @@
 #include <stdlib.h>
 
 #include "doomtype.h"
-
 #include "i_system.h"
 #include "i_timer.h"
-
 #include "m_argv.h"
-
 #include "net_defs.h"
 #include "net_sdl.h"
 #include "net_server.h"
+#include "jn.h"
 
 // 
 // People can become confused about how dedicated servers work.  Game
@@ -55,10 +53,21 @@ static void CheckForClientOptions(void)
     {
         if (M_CheckParm(not_dedicated_options[i]) > 0)
         {
-            I_Error("Параметр командной строки '%s' указан выделенному серверу.\n"
-                    "Параметры должны быть указаны первым игроком, присоединившемся\n"
-                    "к серверу, но не заданы самим сервером",
-                    not_dedicated_options[i]);
+            if (english_language)
+            {
+                I_Error("The command line parameter '%s' was specified to a "
+                        "dedicated server.\nGame parameters should be specified "
+                        "to the first player to join a server, \nnot to the "
+                        "server itself. ",
+                        not_dedicated_options[i]);
+            }
+            else
+            {
+                I_Error("Параметр командной строки '%s' указан выделенному серверу.\n"
+                        "Параметры должны быть указаны первым игроком, присоединившемся\n"
+                        "к серверу, но не заданы самим сервером",
+                        not_dedicated_options[i]);
+            }
         }
     }
 }

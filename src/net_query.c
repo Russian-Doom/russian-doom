@@ -26,7 +26,6 @@
 #include "i_system.h"
 #include "i_timer.h"
 #include "m_misc.h"
-
 #include "net_common.h"
 #include "net_defs.h"
 #include "net_io.h"
@@ -34,6 +33,7 @@
 #include "net_query.h"
 #include "net_structrw.h"
 #include "net_sdl.h"
+#include "jn.h"
 
 // DNS address of the Internet master server.
 
@@ -779,7 +779,10 @@ void NET_QueryAddress(char *addr_str)
 
     if (addr == NULL)
     {
-        I_Error("NET_QueryAddress: хост '%s' не найден!", addr_str);
+        I_Error(english_language ?
+                "NET_QueryAddress: Host '%s' not found!" :
+                "NET_QueryAddress: хост '%s' не найден!",
+                addr_str);
     }
 
     // Add the address to the list of targets.
@@ -800,7 +803,10 @@ void NET_QueryAddress(char *addr_str)
     }
     else
     {
-        I_Error("Ответ не получен от '%s'", addr_str);
+        I_Error(english_language ?
+                "No response from '%s'" :
+                "Ответ не получен от '%s'",
+                addr_str);
     }
 }
 

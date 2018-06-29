@@ -32,7 +32,6 @@
 #endif
 
 #include "icon.c"
-
 #include "config.h"
 #include "d_loop.h"
 #include "deh_str.h"
@@ -51,6 +50,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "crispy.h"
+#include "jn.h"
 
 
 // These are (1) the window (or the full screen) that our game is rendered to
@@ -555,7 +555,10 @@ static void CreateUpscaledTexture(boolean force)
     // window size (because of highdpi).
     if (SDL_GetRendererOutputSize(renderer, &w, &h) != 0)
     {
-        I_Error("Невозможно выполнить рендеринг размера: %s", SDL_GetError());
+        I_Error(english_language ?
+                "Failed to get renderer output size: %s" :
+                "Невозможно выполнить рендеринг размера: %s",
+                SDL_GetError());
     }
 
     // When the screen or window dimensions do not match the aspect ratio
@@ -1129,7 +1132,9 @@ static void SetVideoMode(void)
 
         if (screen == NULL)
         {
-            I_Error("Ошибка создания окна для видео-загрузки: %s",
+            I_Error(english_language ?
+                    "Error creating window for video startup: %s" :
+                    "Ошибка создания окна для видео-загрузки: %s",
             SDL_GetError());
         }
 
@@ -1169,7 +1174,9 @@ static void SetVideoMode(void)
 
     if (renderer == NULL)
     {
-        I_Error("Ошибка создания рендеринга для окна: %s",
+        I_Error(english_language ?
+                "Error creating renderer for screen window: %s" :
+                "Ошибка создания рендеринга для окна: %s",
                 SDL_GetError());
     }
 
@@ -1272,7 +1279,10 @@ void I_InitGraphics(void)
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) 
     {
-        I_Error("Ошибка инициализации видео: %s", SDL_GetError());
+        I_Error(english_language ?
+                "Failed to initialize video: %s" :
+                "Ошибка инициализации видео: %s",
+        SDL_GetError());
     }
 
     // When in screensaver mode, run full screen and auto detect

@@ -34,9 +34,7 @@
 #endif
 
 #include "SDL.h"
-
 #include "config.h"
-
 #include "deh_str.h"
 #include "doomtype.h"
 #include "m_argv.h"
@@ -46,11 +44,10 @@
 #include "i_sound.h"
 #include "i_timer.h"
 #include "i_video.h"
-
 #include "i_system.h"
-
 #include "w_wad.h"
 #include "z_zone.h"
+#include "jn.h"
 
 // [JN] Объём необходимой памяти увеличен вдвое
 #define DEFAULT_RAM 16*2 /* MiB */
@@ -107,7 +104,10 @@ static byte *AutoAllocMemory(int *size, int default_ram, int min_ram)
 
         if (default_ram < min_ram)
         {
-            I_Error("Невозможно обнаружить %i МБ памяти для распределения", default_ram);
+            I_Error(english_language ?
+                    "Unable to allocate %i MiB of RAM for zone" :
+                    "Невозможно обнаружить %i МБ памяти для распределения",
+                    default_ram);
         }
 
         // Try to allocate the zone memory.
@@ -362,7 +362,10 @@ void *I_Realloc(void *ptr, size_t size)
 
     if (size != 0 && new_ptr == NULL)
     {
-        I_Error ("I_Realloc: ошибка переобнаружения %i байт", size);
+        I_Error (english_language ?
+                 "I_Realloc: failed on reallocation of %" PRIuPTR " bytes" :
+                 "I_Realloc: ошибка переобнаружения %i байт",
+                 size);
     }
 
     return new_ptr;

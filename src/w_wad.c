@@ -32,8 +32,8 @@
 #include "m_misc.h"
 #include "v_diskicon.h"
 #include "z_zone.h"
-
 #include "w_wad.h"
+#include "jn.h"
 
 typedef struct
 {
@@ -118,8 +118,20 @@ wad_file_t *W_AddFile (char *filename)
     {
         if (reloadname != NULL)
         {
-            I_Error("Использование префикса \"~\" позволяет перезагружать WAD-файлы без перезапуска игры.\n"
-                    "Однако, в данном случае допускается загрузка только одного WAD-файла.");
+            if (english_language)
+            {
+                I_Error("Prefixing a WAD filename with '~' indicates that the "
+                        "WAD should be reloaded\n"
+                        "on each level restart, for use by level authors for "
+                        "rapid development. You\n"
+                        "can only reload one WAD file, and it must be the last "
+                        "file in the -file list.");
+            }
+            else
+            {
+                I_Error("Использование префикса \"~\" позволяет перезагружать WAD-файлы без перезапуска игры.\n"
+                        "Однако, в данном случае допускается загрузка только одного WAD-файла.");
+            }
         }
 
         reloadname = strdup(filename);
@@ -166,7 +178,10 @@ wad_file_t *W_AddFile (char *filename)
 	    if (strncmp(header.identification,"PWAD",4))
 	    {
 		W_CloseFile(wad_file);
-		I_Error ("Wad-файл %s не содержит идентификатора IWAD или PWAD\n", filename);
+		I_Error (english_language ?
+                 "Wad file %s doesn't have IWAD or PWAD id\n" :
+                 "Wad-файл %s не содержит идентификатора IWAD или PWAD\n",
+                 filename);
 	    }
 
 	    // ???modifiedgame = true;
@@ -181,8 +196,10 @@ wad_file_t *W_AddFile (char *filename)
         if (!strncmp(header.identification,"PWAD",4) && header.numlumps > 4046 && false)
         {
                 W_CloseFile(wad_file);
-                I_Error ("Ошибка: превышен оригинальный лимит 4046 блоков в WAD-файле\n"
-                         "PWAD-файл %s содержит %d", filename, header.numlumps);
+                I_Error (english_language ?
+                         "Error: Vanilla limit for lumps in a WAD is 4046, PWAD %s has %d" :
+                         "Ошибка: превышен оригинальный лимит 4046 блоков в WAD-файле\nPWAD-файл %s содержит %d", 
+                         filename, header.numlumps);
         }
 
 	header.infotableofs = LONG(header.infotableofs);
@@ -198,7 +215,9 @@ wad_file_t *W_AddFile (char *filename)
     if (filelumps == NULL)
     {
         W_CloseFile(wad_file);
-        I_Error("Ошибка обнаружения массива для блоков из нового файла.");
+        I_Error(english_language ?
+                "Failed to allocate array for lumps from new file." :
+                "Ошибка обнаружения массива для блоков из нового файла.");
     }
 
     startlump = numlumps;
@@ -207,7 +226,9 @@ wad_file_t *W_AddFile (char *filename)
     if (lumpinfo == NULL)
     {
         W_CloseFile(wad_file);
-        I_Error("Ошибка увеличения lumpinfo[] в размере массива.");
+        I_Error(english_language ?
+                "Failed to allocate array for lumpinfo[]" :
+                "Ошибка увеличения lumpinfo[] в размере массива.");
     }
 
     filerover = fileinfo;
@@ -333,7 +354,10 @@ lumpindex_t W_GetNumForName(char* name)
 
     if (i < 0)
     {
-        I_Error ("W_GetNumForName: %s не обнаружен!", name);
+        I_Error (english_language ?
+                 "W_GetNumForName: %s not found!" :
+                 "W_GetNumForName: %s не обнаружен!",
+                 name);
     }
  
     return i;
@@ -379,7 +403,9 @@ void W_ReadLump(lumpindex_t lump, void *dest)
 
     if (c < l->size)
     {
-        I_Error("W_ReadLump: прочитано только %i из %i в блоке %i",
+        I_Error(english_language ?
+                "W_ReadLump: only read %i of %i on lump %i" :
+                "W_ReadLump: прочитано только %i из %i в блоке %i",
                 c, l->size, lump);
     }
 }

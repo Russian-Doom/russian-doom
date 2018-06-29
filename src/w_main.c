@@ -29,6 +29,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "m_misc.h"
+#include "jn.h"
 
 // Parse the command line, merging WAD files that are sppecified.
 // Returns true if at least one file was added.
@@ -238,14 +239,29 @@ void W_CheckCorrectIWAD(GameMission_t mission)
 
             if (lumpnum >= 0)
             {
-                I_Error("\nВы пытаетесь запусть IWAD-файл %s с исполняемым файлом %s%s.\n"
-                        "Запуск невозможен. Вам необходимо использовать исполняемый файл %s%s.",
-                        D_SuggestGameName(unique_lumps[i].mission,
-                                          indetermined),
-                        PROGRAM_PREFIX,
-                        D_GameMissionString(mission),
-                        PROGRAM_PREFIX,
-                        D_GameMissionString(unique_lumps[i].mission));
+                if (english_language)
+                {
+                    I_Error("\nYou are trying to use a %s IWAD file with "
+                            "the %s%s binary.\nThis isn't going to work.\n"
+                            "You probably want to use the %s%s binary.",
+                            D_SuggestGameName(unique_lumps[i].mission,
+                                            indetermined),
+                            PROGRAM_PREFIX,
+                            D_GameMissionString(mission),
+                            PROGRAM_PREFIX,
+                            D_GameMissionString(unique_lumps[i].mission));
+                }
+                else
+                {
+                    I_Error("\nВы пытаетесь запусть IWAD-файл %s с исполняемым файлом %s%s.\n"
+                            "Запуск невозможен. Вам необходимо использовать исполняемый файл %s%s.",
+                            D_SuggestGameName(unique_lumps[i].mission,
+                                            indetermined),
+                            PROGRAM_PREFIX,
+                            D_GameMissionString(mission),
+                            PROGRAM_PREFIX,
+                            D_GameMissionString(unique_lumps[i].mission));
+                }
             }
         }
     }

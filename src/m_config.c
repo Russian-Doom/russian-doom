@@ -30,15 +30,14 @@
 #include "SDL_filesystem.h"
 
 #include "config.h"
-
 #include "doomtype.h"
 #include "doomkeys.h"
 #include "doomfeatures.h"
 #include "i_system.h"
 #include "m_argv.h"
 #include "m_misc.h"
-
 #include "z_zone.h"
+#include "jn.h"
 
 //
 // DEFAULTS
@@ -2161,7 +2160,10 @@ static default_t *GetDefaultForName(char *name)
 
     if (result == NULL)
     {
-        I_Error("Неизвестная переменная в файле конфигурации: '%s'", name);
+        I_Error(english_language ?
+                "Unknown configuration variable: '%s'" :
+                "Неизвестная переменная в файле конфигурации: '%s'",
+                name);
     }
 
     return result;

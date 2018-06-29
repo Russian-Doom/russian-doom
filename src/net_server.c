@@ -23,14 +23,12 @@
 #include <string.h>
 
 #include "config.h"
-
 #include "doomtype.h"
 #include "d_mode.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "m_argv.h"
 #include "m_misc.h"
-
 #include "net_client.h"
 #include "net_common.h"
 #include "net_defs.h"
@@ -41,6 +39,7 @@
 #include "net_server.h"
 #include "net_sdl.h"
 #include "net_structrw.h"
+#include "jn.h"
 
 // How often to refresh our registration with the master server.
 
@@ -1262,7 +1261,10 @@ static void NET_SV_SendTics(net_client_t *client,
 
         if (i != cmd->seq)
         {
-            I_Error("Попытка отправки %i, но %i расположен некорректно", i, cmd->seq);
+            I_Error(english_language ?
+                    "Wanted to send %i, but %i is in its place" :
+                    "Попытка отправки %i, но %i расположен некорректно",
+                    i, cmd->seq);
         }
 
         // Add command

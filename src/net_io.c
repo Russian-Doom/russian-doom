@@ -25,6 +25,7 @@
 #include "net_defs.h"
 #include "net_io.h"
 #include "z_zone.h"
+#include "jn.h"
 
 #define MAX_MODULES 16
 
@@ -50,7 +51,9 @@ void NET_AddModule(net_context_t *context, net_module_t *module)
 {
     if (context->num_modules >= MAX_MODULES)
     {
-        I_Error("NET_AddModule: превышен лимит контекстных модулей");
+        I_Error(english_language ?
+                "NET_AddModule: No more modules for context" :
+                "NET_AddModule: превышен лимит контекстных модулей");
     }
     
     context->modules[context->num_modules] = module;

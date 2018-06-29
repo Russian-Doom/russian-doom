@@ -32,6 +32,7 @@
 #include "w_merge.h"
 #include "w_wad.h"
 #include "z_zone.h"
+#include "jn.h"
 
 typedef enum 
 { 
@@ -126,13 +127,17 @@ static void SetupLists(void)
 
     if (!SetupList(&iwad_flats, &iwad, "F_START", "F_END", NULL, NULL))
     {
-        I_Error("В IWAD-файле не найден блок текстур поверхностей");
+        I_Error(english_language ?
+                "Flats section not found in IWAD" :
+                "В IWAD-файле не найден блок текстур поверхностей");
     }
 
     if (!SetupList(&iwad_sprites, &iwad, "S_START", "S_END", NULL, NULL))
 
     {
-        I_Error("В IWAD-файле не найден блок спрайтов");
+        I_Error(english_language ?
+                "Sprites section not found in IWAD" :
+                "В IWAD-файле не найден блок спрайтов");
     }
     
     // PWAD

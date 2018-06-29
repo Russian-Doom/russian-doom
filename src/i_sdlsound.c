@@ -41,8 +41,8 @@
 #include "m_misc.h"
 #include "w_wad.h"
 #include "z_zone.h"
-
 #include "doomtype.h"
+#include "jn.h"
 
 #define LOW_PASS_FILTER
 //#define DEBUG_DUMP_WAVS
@@ -266,7 +266,9 @@ static void UnlockAllocatedSound(allocated_sound_t *snd)
 {
     if (snd->use_count <= 0)
     {
-        I_Error("Количество воспроизведения звукового эффекта превысило допустимый лимит...");
+        I_Error(english_language ?
+                "Sound effect released more times than it was locked..." :
+                "Количество воспроизведения звукового эффекта превысило допустимый лимит...");
     }
 
     --snd->use_count;
@@ -1108,7 +1110,9 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
     {
         if (SRC_ConversionMode() < 0)
         {
-            I_Error("I_SDL_InitSound: неизвестная переменная в use_libsamplerate: %i",
+            I_Error(english_language ?
+            "I_SDL_InitSound: Invalid value for use_libsamplerate: %i" :
+            "I_SDL_InitSound: неизвестная переменная в use_libsamplerate: %i",
                     use_libsamplerate);
         }
 

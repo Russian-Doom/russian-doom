@@ -271,7 +271,9 @@ static void D_Disconnected(void)
 
     if (drone)
     {
-        I_Error("Отключение от сервера в режиме разделенного экрана");
+        I_Error(english_language ?
+                "Disconnected from server in drone mode." :
+                "Отключение от сервера в режиме разделенного экрана");
     }
 
     // disconnected from server
@@ -337,13 +339,17 @@ static void BlockUntilStart(net_gamesettings_t *settings,
 
         if (!net_client_connected)
         {
-            I_Error("Потеряно соединение с сервером");
+            I_Error(english_language ?
+                    "Lost connection to server" :
+                    "Потеряно соединение с сервером");
         }
 
         if (callback != NULL && !callback(net_client_wait_data.ready_players,
                                           net_client_wait_data.num_players))
         {
-            I_Error("Запуск сетевой игры отменен");
+            I_Error(english_language ?
+                    "Netgame startup aborted" :
+                    "Запуск сетевой игры отменен");
         }
 
         I_Sleep(100);
@@ -498,7 +504,9 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
             if (addr == NULL)
             {
-                I_Error("Серверы не обнаружены в локальной сети");
+                I_Error(english_language ?
+                        "No server found on local LAN" :
+                        "Серверы не обнаружены в локальной сети");
             }
         }
 
@@ -519,7 +527,10 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
             if (addr == NULL)
             {
-                I_Error("Невозможно получить ответ от '%s'\n", myargv[i+1]);
+                I_Error(english_language ?
+                        "Unable to resolve '%s'\n" :
+                        "Невозможно получить ответ от '%s'\n",
+                        myargv[i+1]);
             }
         }
     }
@@ -533,7 +544,9 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
         if (!NET_CL_Connect(addr, connect_data))
         {
-            I_Error("D_InitNetGame: Невозможно соединиться с %s\n",
+            I_Error(english_language ?
+                    "D_InitNetGame: Failed to connect to %s\n" :
+                    "D_InitNetGame: Невозможно соединиться с %s\n",
                     NET_AddrToString(addr));
         }
 		

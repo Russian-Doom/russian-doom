@@ -27,8 +27,8 @@
 #include "doomtype.h"
 #include "i_system.h"
 #include "m_misc.h"
-
 #include "deh_mapping.h"
+#include "jn.h"
 
 static deh_mapping_entry_t *GetMappingEntryByName(deh_context_t *context,
                                                   deh_mapping_t *mapping,
@@ -194,7 +194,9 @@ void DEH_StructSHA1Sum(sha1_context_t *context, deh_mapping_t *mapping,
                 SHA1_UpdateInt32(context, *((uint32_t *) location));
                 break;
             default:
-                I_Error("Неизвестное поле в блоке Dehacked: '%s' (баг!)", 
+                I_Error(english_language ?
+                        "Unknown dehacked mapping field type for '%s' (BUG)" :
+                        "Неизвестное поле в блоке Dehacked: '%s' (баг!)", 
                         entry->name);
                 break;
         }

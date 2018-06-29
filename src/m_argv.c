@@ -27,6 +27,7 @@
 #include "i_system.h"
 #include "m_misc.h"
 #include "m_argv.h"  // haleyjd 20110212: warning fix
+#include "jn.h"
 
 int		myargc;
 char**		myargv;
@@ -115,7 +116,10 @@ static void LoadResponseFile(int argv_index)
 
         if (k < 0)
         {
-            I_Error("Невозможно прочитать содержимое \"%s\"", response_filename);
+            I_Error(english_language ?
+                    "Failed to read full contents of '%s'" :
+                    "Невозможно прочитать содержимое \"%s\"",
+                    response_filename);
         }
 
         i += k;

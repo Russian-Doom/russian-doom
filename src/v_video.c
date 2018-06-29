@@ -27,9 +27,7 @@
 #include <math.h>
 
 #include "i_system.h"
-
 #include "doomtype.h"
-
 #include "deh_str.h"
 #include "i_input.h"
 #include "i_swap.h"
@@ -44,6 +42,8 @@
 #ifdef HAVE_LIBPNG
 #include <png.h>
 #endif
+
+extern int english_language;
 
 // TODO: There are separate RANGECHECK defines for different games, but this
 // is common code. Fix this.
@@ -113,7 +113,9 @@ void V_CopyRect(int srcx, int srcy, byte *source,
      || desty < 0
      || desty + height > SCREENHEIGHT)
     {
-        I_Error ("Ошибка V_CopyRect");
+        I_Error (english_language ?
+                 "Bad V_CopyRect" :
+                 "Ошибка V_CopyRect");
     }
 #endif 
 
@@ -176,7 +178,9 @@ void V_DrawPatch(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("Ошибка V_DrawPatch");
+        I_Error(english_language ?
+                "Bad V_DrawPatch" :
+                "Ошибка V_DrawPatch");
     }
 #endif
 
@@ -286,7 +290,9 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > ORIGHEIGHT)
     {
-        I_Error("Ошибка V_DrawPatchFlipped");
+        I_Error(english_language ?
+                "Bad V_DrawPatchFlipped" :
+                "Ошибка V_DrawPatchFlipped");
     }
 #endif
 
@@ -359,7 +365,9 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
      || y < 0
      || y + SHORT(patch->height) > ORIGHEIGHT)
     {
-        I_Error("Ошибка V_DrawTLPatch");
+        I_Error(english_language ?
+                "Bad V_DrawTLPatch" :
+                "Ошибка V_DrawTLPatch");
     }
 
     col = 0;
@@ -474,7 +482,9 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("Ошибка V_DrawAltTLPatch");
+        I_Error(english_language ?
+                "Bad V_DrawAltTLPatch" :
+                "Ошибка V_DrawAltTLPatch");
     }
 
     col = 0;
@@ -533,7 +543,9 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > ORIGHEIGHT)
     {
-        I_Error("Ошибка V_DrawShadowedPatch");
+        I_Error(english_language ?
+                "Bad V_DrawShadowedPatch" :
+                "Ошибка V_DrawShadowedPatch");
     }
 
     col = 0;
@@ -600,7 +612,9 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("Ошибка V_DrawShadowedPatchDoom");
+        I_Error(english_language ?
+                "Bad V_DrawShadowedPatchDoom" :
+                "Ошибка V_DrawShadowedPatchDoom");
     }
 
     col = 0;
@@ -690,7 +704,9 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("Ошибка V_DrawShadowedPatchRaven");
+        I_Error(english_language ?
+                "Bad V_DrawShadowedPatchRaven" :
+                "Ошибка V_DrawShadowedPatchRaven");
     }
 
     col = 0;
@@ -780,7 +796,9 @@ void V_DrawShadowedPatchStrife(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("Ошибка V_DrawShadowedPatchStrife");
+        I_Error(english_language ?
+                "Bad V_DrawShadowedPatchStrife" :
+                "Ошибка V_DrawShadowedPatchStrife");
     }
 
     col = 0;
@@ -854,7 +872,9 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
      || y < 0
      || y + SHORT(patch->height) > SCREENHEIGHT)
     {
-        I_Error("Bad V_DrawPatch");
+        I_Error(english_language ?
+        "Bad V_DrawPatchUnscaled" :
+        "Ошибка V_DrawPatchUnscaled");
     }
 #endif
 
@@ -921,7 +941,9 @@ void V_DrawBlock(int x, int y, int width, int height, byte *src)
      || y < 0
      || y + height > SCREENHEIGHT)
     {
-	I_Error ("Ошибка V_DrawBlock");
+	I_Error (english_language ?
+             "Bad V_DrawBlock" :
+             "Ошибка V_DrawBlock");
     }
 #endif 
  
@@ -948,7 +970,9 @@ void V_DrawScaledBlock(int x, int y, int width, int height, byte *src)
      || y < 0
      || y + height > ORIGHEIGHT)
     {
-	I_Error ("Ошибка V_DrawScaledBlock");
+	I_Error (english_language ?
+             "Bad V_DrawScaledBlock" :
+             "Ошибка V_DrawScaledBlock");
     }
 #endif
 
@@ -1033,7 +1057,9 @@ void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
     if (size < 0
      || size > ORIGWIDTH * ORIGHEIGHT)
     {
-        I_Error("Ошибка V_CopyScaledBuffer");
+        I_Error(english_language ?
+                "Bad V_CopyScaledBuffer" :
+                "Ошибка V_CopyScaledBuffer");
     }
 #endif
 
@@ -1341,7 +1367,20 @@ void V_ScreenShot(char *format)
 
     if (i == 100)
     {
-        I_Error ("V_ScreenShot: не удалось создать файл PCX");
+#ifdef HAVE_LIBPNG
+        if (png_screenshots)
+        {
+            I_Error (english_language ? 
+                     "V_ScreenShot: Couldn't create a PNG" :
+                     "V_ScreenShot: не удалось создать файл PNG");
+        }
+        else
+#endif
+        {
+            I_Error (english_language ?
+            "V_ScreenShot: Couldn't create a PCX" :
+            "V_ScreenShot: не удалось создать файл PCX");
+        }
     }
 
 #ifdef HAVE_LIBPNG

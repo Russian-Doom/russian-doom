@@ -26,19 +26,17 @@
 
 #include "config.h"
 #include "doomkeys.h"
-
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_video.h"
 #include "m_argv.h"
 #include "m_misc.h"
-
 #include "net_client.h"
 #include "net_gui.h"
 #include "net_query.h"
 #include "net_server.h"
-
 #include "textscreen.h"
+#include "jn.h"
 
 static txt_window_t *window;
 static int old_max_players;
@@ -423,7 +421,9 @@ void NET_WaitForLaunch(void)
 
         if (!net_client_connected)
         {
-            I_Error("Соединение с сервером потеряно");
+            I_Error(english_language ?
+                    "Lost connection to server" :
+                    "Соединение с сервером потеряно");
         }
 
         TXT_Sleep(100);

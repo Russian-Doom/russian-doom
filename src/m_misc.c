@@ -41,9 +41,7 @@
 #endif
 
 #include "doomtype.h"
-
 #include "deh_str.h"
-
 #include "i_swap.h"
 #include "i_system.h"
 #include "i_video.h"
@@ -51,6 +49,8 @@
 #include "v_video.h"
 #include "w_wad.h"
 #include "z_zone.h"
+#include "jn.h"
+
 
 //
 // Create a directory
@@ -214,7 +214,10 @@ int M_ReadFile(char *name, byte **buffer)
 	
     handle = fopen(name, "rb");
     if (handle == NULL)
-	I_Error ("Невозможно прочитать файл %s", name);
+	I_Error (english_language ?
+             "Couldn't read file %s" :
+             "Невозможно прочитать файл %s",
+             name);
 
     // find the size of the file by seeking to the end and
     // reading the current position
@@ -226,7 +229,10 @@ int M_ReadFile(char *name, byte **buffer)
     fclose (handle);
 	
     if (count < length)
-	I_Error ("Невозможно прочитать файл %s", name);
+	I_Error (english_language ?
+             "Couldn't read file %s" :
+             "Невозможно прочитать файл %s",
+             name);
 		
     *buffer = buf;
     return length;
@@ -388,7 +394,9 @@ char *M_StringDuplicate(const char *orig)
 
     if (result == NULL)
     {
-        I_Error("Невозможно дублировать строку (длина %i)\n",
+        I_Error(english_language ?
+                "Failed to duplicate string (length %" PRIuPTR ")\n" :
+                "Невозможно дублировать строку (длина %i)\n",
                 strlen(orig));
     }
 
@@ -429,7 +437,9 @@ char *M_StringReplace(const char *haystack, const char *needle,
     result = malloc(result_len);
     if (result == NULL)
     {
-        I_Error("M_StringReplace: не удалось обнаружить новую строку");
+        I_Error(english_language ?
+                "M_StringReplace: Failed to allocate new string" :
+                "M_StringReplace: не удалось обнаружить новую строку");
         return NULL;
     }
 
@@ -540,7 +550,9 @@ char *M_StringJoin(const char *s, ...)
 
     if (result == NULL)
     {
-        I_Error("M_StringJoin: не удалось обнаружить новую строку");
+        I_Error(english_language ?
+                "M_StringJoin: Failed to allocate new string." :
+                "M_StringJoin: не удалось обнаружить новую строку");
         return NULL;
     }
 

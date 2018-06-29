@@ -26,12 +26,10 @@
 
 #include "SDL.h"
 #include "SDL_mixer.h"
-
 #include "config.h"
 #include "doomtype.h"
 #include "memio.h"
 #include "mus2mid.h"
-
 #include "deh_str.h"
 #include "gusconf.h"
 #include "i_sound.h"
@@ -43,6 +41,7 @@
 #include "sha1.h"
 #include "w_wad.h"
 #include "z_zone.h"
+#include "jn.h"
 
 #define MAXMIDLENGTH (96 * 1024)
 #define MID_HEADER_MAGIC "MThd"
@@ -745,7 +744,10 @@ static void DumpSubstituteConfig(char *filename)
 
     if (fs == NULL)
     {
-        I_Error("Невозможно открыть %s для записи", filename);
+        I_Error(english_language ?
+                "Failed to open %s for writing" :
+                "Невозможно открыть %s для записи",
+                filename);
         return;
     }
 
