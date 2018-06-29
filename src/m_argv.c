@@ -93,11 +93,16 @@ static void LoadResponseFile(int argv_index)
 
     if (handle == NULL)
     {
-        printf ("\nNo such response file!");
+        printf (english_language ?
+                "\nNo such response file!" :
+                "\nОтветный файл не обнаружен!");
         exit(1);
     }
 
-    printf("Found response file %s!\n", response_filename);
+    printf(english_language ?
+           "Found response file %s!\n" :
+           "Ответный файл %s обнаружен!\n",
+           response_filename);
 
     size = M_FileLength(handle);
 

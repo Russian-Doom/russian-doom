@@ -24,11 +24,11 @@
 #include "doomtype.h"
 #include "d_mode.h"
 #include "i_timer.h"
-
 #include "net_common.h"
 #include "net_io.h"
 #include "net_packet.h"
 #include "net_structrw.h"
+#include "jn.h"
 
 // connections time out after 30 seconds
 
@@ -170,7 +170,9 @@ static void NET_Conn_ParseReject(net_connection_t *conn, net_packet_t *packet)
         conn->state = NET_CONN_STATE_DISCONNECTED;
         conn->disconnect_reason = NET_DISCONNECT_REMOTE;
 
-        printf("Rejected by server: ");
+        printf(english_language ?
+               "Rejected by server: " :
+               "Отказ сервера: ");
         NET_SafePuts(msg);
     }
 }

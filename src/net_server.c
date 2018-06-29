@@ -1886,7 +1886,9 @@ void NET_SV_Shutdown(void)
         return;
     }
     
-    fprintf(stderr, "SV: Shutting down server...\n");
+    fprintf(stderr, english_language ?
+            "SV: Shutting down server...\n" :
+            "SV: выключение сервера...\n");
 
     // Disconnect all clients
     
@@ -1922,7 +1924,9 @@ void NET_SV_Shutdown(void)
         if (I_GetTimeMS() - start_time > 5000)
         {
             running = false;
-            fprintf(stderr, "SV: Timed out waiting for clients to disconnect.\n");
+            fprintf(stderr, english_language ?
+                    "SV: Timed out waiting for clients to disconnect.\n" :
+                    "SV: тайм-аут ожидание отключения клиентов.\n");
         }
 
         // Run the client code in case this is a loopback client.

@@ -144,8 +144,10 @@ wad_file_t *W_AddFile (char *filename)
 
     if (wad_file == NULL)
     {
-	printf (" couldn't open %s\n", filename);
-	return NULL;
+        printf (english_language ?
+        " couldn't open %s\n" :
+        " невозможно открыть %s\n", filename);
+        return NULL;
     }
 
     if (strcasecmp(filename+strlen(filename)-3 , "wad" ) )

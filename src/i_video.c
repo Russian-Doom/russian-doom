@@ -1032,17 +1032,30 @@ static void CenterWindow(int *x, int *y, int w, int h)
     // and if it doesn't, reset it.
     if (video_display < 0 || video_display >= SDL_GetNumVideoDisplays())
     {
-        fprintf(stderr,
-                "CenterWindow: We were configured to run on display #%d, but "
-                "it no longer exists (max %d). Moving to display 0.\n",
-                video_display, SDL_GetNumVideoDisplays() - 1);
+        if (english_language)
+        {
+            fprintf(stderr,
+                    "CenterWindow: We were configured to run on display #%d, but "
+                    "it no longer exists (max %d). Moving to display 0.\n",
+                    video_display, SDL_GetNumVideoDisplays() - 1);
+        }
+        else
+        {
+            fprintf(stderr,
+                    "CenterWindow: программа была настроена для запуска на "
+                    "мониторе #%d, он он более недоступен (max %d). Перемещение на "
+                    "монитор 0.\n",
+                    video_display, SDL_GetNumVideoDisplays() - 1);
+        }
         video_display = 0;
     }
 
     if (SDL_GetDisplayBounds(video_display, &bounds) < 0)
     {
-        fprintf(stderr, "CenterWindow: Failed to read display bounds "
-                        "for display #%d!\n", video_display);
+        fprintf(stderr, english_language ?
+                "CenterWindow: Failed to read display bounds for display #%d!\n" :
+                "CenterWindow: Ошибка обнаружения границ монитора #%d!\n",
+                video_display);
         return;
     }
 
@@ -1078,7 +1091,9 @@ static void GetWindowPosition(int *x, int *y, int w, int h)
     else if (sscanf(window_position, "%i,%i", x, y) != 2)
     {
         // invalid format: revert to default
-        fprintf(stderr, "GetWindowPosition: invalid window_position setting\n");
+        fprintf(stderr, english_language ?
+                "GetWindowPosition: invalid window_position setting\n" :
+                "GetWindowPosition: некорректное значение window_position\n");
         *x = *y = SDL_WINDOWPOS_UNDEFINED;
     }
 }

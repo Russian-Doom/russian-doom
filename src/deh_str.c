@@ -26,8 +26,8 @@
 #include "doomtype.h"
 #include "deh_str.h"
 #include "m_misc.h"
-
 #include "z_zone.h"
+#include "jn.h"
 
 typedef struct 
 {
@@ -377,8 +377,16 @@ static char *FormatStringReplacement(char *s)
 
     if (!ValidFormatReplacement(s, repl))
     {
-        printf("WARNING: Unsafe dehacked replacement provided for "
-               "printf format string: %s\n", s);
+        if (english_language)
+        {
+            printf("WARNING: Unsafe dehacked replacement provided for "
+                   "printf format string: %s\n", s);
+        }
+        else
+        {
+            printf("ВНИМАНИЕ: используется небезопасная printf замена "
+                   "строчки Dehacked в формате: %s\n", s);
+        }
 
         return s;
     }

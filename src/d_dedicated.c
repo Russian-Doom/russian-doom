@@ -41,7 +41,9 @@ void NET_CL_Run(void)
 
 void D_DoomMain(void)
 {
-    printf(PACKAGE_NAME " standalone dedicated server\n");
+    printf(english_language ?
+    PACKAGE_NAME " standalone dedicated server\n" :
+    PACKAGE_NAME " выделенный сервер\n");
 
     Z_Init();
 

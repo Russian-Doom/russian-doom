@@ -101,8 +101,10 @@ net_addr_t *NET_Query_ResolveMaster(net_context_t *context)
 
     if (addr == NULL)
     {
-        fprintf(stderr, "Warning: Failed to resolve address "
-                        "for master server: %s\n", MASTER_SERVER_ADDRESS);
+        fprintf(stderr, english_language ?
+                "Warning: Failed to resolve address for master server: %s\n" :
+                "Внимание: ошибка получения адреса для центрального сервера: %s\n",
+                MASTER_SERVER_ADDRESS);
     }
 
     return addr;
@@ -142,7 +144,9 @@ void NET_Query_MasterResponse(net_packet_t *packet)
 
             if (!registered_with_master)
             {
-                printf("Registered with master server at %s\n",
+                printf(english_language ?
+                       "Registered with master server at %s\n" :
+                       "Произведена регистрация на центральном сервере %s\n",
                        MASTER_SERVER_ADDRESS);
                 registered_with_master = true;
             }
@@ -151,7 +155,9 @@ void NET_Query_MasterResponse(net_packet_t *packet)
         {
             // Always show rejections.
 
-            printf("Failed to register with master server at %s\n",
+            printf(english_language ?
+                   "Failed to register with master server at %s\n" :
+                   "Ошибка регистрации на центральном сервере %s\n",
                    MASTER_SERVER_ADDRESS);
         }
 
@@ -476,8 +482,9 @@ static void CheckTargetTimeouts(void)
 
             if (targets[i].type == QUERY_TARGET_MASTER)
             {
-                fprintf(stderr, "NET_MasterQuery: no response "
-                                "from master server.\n");
+                fprintf(stderr, english_language ?
+                        "NET_MasterQuery: no response from master server.\n" :
+                        "NET_MasterQuery: ответ от центрального сервера не получен.\n");
             }
         }
     }
@@ -738,7 +745,9 @@ static void NET_QueryPrintCallback(net_addr_t *addr,
 
     if (data->server_state)
     {
-        printf("(game running) ");
+        printf(english_language ?
+               "(game running) " :
+               "(игра стартовала) ");
     }
 
     NET_SafePuts(data->description);
@@ -748,11 +757,16 @@ void NET_LANQuery(void)
 {
     if (NET_StartLANQuery())
     {
-        printf("\nSearching for servers on local LAN ...\n");
+        printf(english_language ?
+               "\nSearching for servers on local LAN ...\n" :
+               "\nПоиск серверов в локальной сети...\n");
 
         NET_Query_QueryLoop(NET_QueryPrintCallback, NULL);
 
-        printf("\n%i server(s) found.\n", GetNumResponses());
+        printf(english_language ?
+               "\n%i server(s) found.\n" :
+               "\nобнаружено серверов: %i.\n",
+               GetNumResponses());
     }
 }
 
@@ -760,11 +774,16 @@ void NET_MasterQuery(void)
 {
     if (NET_StartMasterQuery())
     {
-        printf("\nSearching for servers on Internet ...\n");
+        printf(english_language ?
+               "\nSearching for servers on Internet ...\n" :
+               "\nПоиск серверов в Интернет...\n");
 
         NET_Query_QueryLoop(NET_QueryPrintCallback, NULL);
 
-        printf("\n%i server(s) found.\n", GetNumResponses());
+        printf(english_language ?
+               "\n%i server(s) found.\n" :
+               "\nобнаружено серверов: %i.\n",
+               GetNumResponses());
     }
 }
 
@@ -789,7 +808,9 @@ void NET_QueryAddress(char *addr_str)
 
     target = GetTargetForAddr(addr, true);
 
-    printf("\nQuerying '%s'...\n", addr_str);
+    printf(english_language ?
+           "\nQuerying '%s'...\n" :
+           "\nОпрашивание '%s'...\n", addr_str);
 
     // Run query loop.
 

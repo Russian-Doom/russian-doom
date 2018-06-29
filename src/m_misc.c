@@ -302,7 +302,9 @@ void M_ExtractFileBase(char *path, char *dest)
     {
         if (length >= 8)
         {
-            printf("Warning: Truncated '%s' lump name to '%.8s'.\n",
+            printf(english_language ?
+                   "Warning: Truncated '%s' lump name to '%.8s'.\n" :
+                   "Внимание: название блока '%s' сокращено до '%.8s'.\n",
                    filename, dest);
             break;
         }

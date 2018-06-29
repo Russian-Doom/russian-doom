@@ -164,9 +164,9 @@ static void ScanForBlock(void *start, void *end)
             {
                 if (start <= mem[i] && mem[i] <= end)
                 {
-                    fprintf(stderr,
-                            "%p has dangling pointer into freed block "
-                            "%p (%p -> %p)\n",
+                    fprintf(stderr, english_language ?
+                            "%p has dangling pointer into freed block %p (%p -> %p)\n" :
+                            "%p имеет обособленный указатель в освобожденный блок %p (%p -> %p)\n",
                             mem, start, &mem[i], mem[i]);
                 }
             }
@@ -410,17 +410,23 @@ Z_DumpHeap
 {
     memblock_t*	block;
 	
-    printf ("zone size: %i  location: %p\n",
+    printf (english_language ?
+        "zone size: %i  location: %p\n" :
+        "размер зоны: %i  расположение: %p\n",
 	    mainzone->size,mainzone);
     
-    printf ("tag range: %i to %i\n",
+    printf (english_language ?
+        "tag range: %i to %i\n" :
+        "диапазон тегов: %i to %i\n",
 	    lowtag, hightag);
 	
     for (block = mainzone->blocklist.next ; ; block = block->next)
     {
 	if (block->tag >= lowtag && block->tag <= hightag)
-	    printf ("block:%p    size:%7i    user:%p    tag:%3i\n",
-		    block, block->size, block->user, block->tag);
+	    printf (english_language ?
+                "block:%p    size:%7i    user:%p    tag:%3i\n" :
+                "блок:%p    размер:%7i    пользователь:%p    тег:%3i\n",
+                block, block->size, block->user, block->tag);
 		
 	if (block->next == &mainzone->blocklist)
 	{
@@ -429,13 +435,19 @@ Z_DumpHeap
 	}
 	
 	if ( (byte *)block + block->size != (byte *)block->next)
-	    printf ("ERROR: block size does not touch the next block\n");
+	    printf (english_language ?
+                "ERROR: block size does not touch the next block\n" :
+                "ОШИБКА: размер блока не соприкасается со следующим блоком\n");
 
 	if ( block->next->prev != block)
-	    printf ("ERROR: next block doesn't have proper back link\n");
+	    printf (english_language ?
+                "ERROR: next block doesn't have proper back link\n" :
+                "ОШИБКА: следующий блок не имеет корректной обратной связи\n");
 
 	if (block->tag == PU_FREE && block->next->tag == PU_FREE)
-	    printf ("ERROR: two consecutive free blocks\n");
+	    printf (english_language ?
+                "ERROR: two consecutive free blocks\n" :
+                "ОШИБКА: два последовательных свободных блока\n");
     }
 }
 
@@ -447,11 +459,16 @@ void Z_FileDumpHeap (FILE* f)
 {
     memblock_t*	block;
 	
-    fprintf (f,"zone size: %i  location: %p\n",mainzone->size,mainzone);
+    fprintf (f, english_language ?
+                "zone size: %i  location: %p\n" :
+                "размер зоны: %i  расположение: %p\n",
+                mainzone->size,mainzone);
 	
     for (block = mainzone->blocklist.next ; ; block = block->next)
     {
-	fprintf (f,"block:%p    size:%7i    user:%p    tag:%3i\n",
+	fprintf (f, english_language ?
+                "block:%p    size:%7i    user:%p    tag:%3i\n" :
+                "блок:%p    размер:%7i    пользователь:%p    тег:%3i\n",
 		 block, block->size, block->user, block->tag);
 		
 	if (block->next == &mainzone->blocklist)
@@ -461,13 +478,19 @@ void Z_FileDumpHeap (FILE* f)
 	}
 	
 	if ( (byte *)block + block->size != (byte *)block->next)
-	    fprintf (f,"ERROR: block size does not touch the next block\n");
+	    fprintf (f, english_language ?
+                    "ERROR: block size does not touch the next block\n" :
+                    "ОШИБКА: размер блока не соприкасается со следующим блоком\n");
 
 	if ( block->next->prev != block)
-	    fprintf (f,"ERROR: next block doesn't have proper back link\n");
+	    fprintf (f, english_language ?
+                    "ERROR: next block doesn't have proper back link\n" :
+                    "ОШИБКА: следующий блок не имеет корректной обратной связи\n");
 
 	if (block->tag == PU_FREE && block->next->tag == PU_FREE)
-	    fprintf (f,"ERROR: two consecutive free blocks\n");
+	    fprintf (f, english_language ?
+                    "ERROR: two consecutive free blocks\n" :
+                    "ОШИБКА: два последовательных свободных блока\n");
     }
 }
 

@@ -278,7 +278,9 @@ static void D_Disconnected(void)
 
     // disconnected from server
 
-    printf("Отключение от сервера.\n");
+    printf(english_language ?
+           "Disconnected from server.\n" :
+           "Отключение от сервера.\n");
 }
 
 //
@@ -550,8 +552,10 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
                     NET_AddrToString(addr));
         }
 		
-		// "D_InitNetGame: Connected to %s\n"
-        printf("D_InitNetGame: Соединение успешно установлено с %s\n", NET_AddrToString(addr));
+        printf(english_language ?
+               "D_InitNetGame: Connected to %s\n" :
+               "D_InitNetGame: Соединение успешно установлено с %s\n",
+               NET_AddrToString(addr));
 
         // Wait for launch message received from server.
 
@@ -882,9 +886,18 @@ boolean D_NonVanillaRecord(boolean conditional, char *feature)
         return false;
     }
 
-    printf("Warning: Recording a demo file with a non-vanilla extension "
-           "(%s). Use -strictdemos to disable this extension.\n",
-           feature);
+    if (english_language)
+    {
+        printf("Warning: Recording a demo file with a non-vanilla extension "
+               "(%s). Use -strictdemos to disable this extension.\n",
+               feature);
+    }
+    else
+    {
+        printf("Внимание: совершается демозапись с отличным от оригинального "
+               "расширением (%s). Используйте -strictdemos для отключения этого расширения.\n",
+               feature);
+    }
 
     return true;
 }
@@ -922,14 +935,31 @@ boolean D_NonVanillaPlayback(boolean conditional, int lumpnum,
 
     if (!IsDemoFile(lumpnum))
     {
-        printf("Warning: WAD contains demo with a non-vanilla extension "
-               "(%s)\n", feature);
+        if (english_language)
+        {
+            printf("Warning: WAD contains demo with a non-vanilla extension "
+                   "(%s)\n", feature);
+        }
+        else
+        {
+            printf("Внимание: WAD-файл содержит демозапись с расширением, отличным от оригинального "
+                   "(%s)\n", feature);
+        }
         return false;
     }
 
-    printf("Warning: Playing back a demo file with a non-vanilla extension "
-           "(%s). Use -strictdemos to disable this extension.\n",
-           feature);
+    if (english_language)
+    {
+        printf("Warning: Playing back a demo file with a non-vanilla extension "
+               "(%s). Use -strictdemos to disable this extension.\n",
+               feature);
+    }
+    else
+    {
+        printf("Внимание: проигрывается демозапись с отличным от оригинального "
+               "расширением (%s). Используйте -strictdemos для отключения этого расширения.\n",
+               feature);
+    }
 
     return true;
 }

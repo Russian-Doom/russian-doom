@@ -1200,12 +1200,16 @@ void WritePCXfile(char *filename, byte *data,
 
 static void error_fn(png_structp p, png_const_charp s)
 {
-    printf("libpng error: %s\n", s);
+    printf(english_language ?
+           "libpng error: %s\n" :
+           "ошибка libpng: %s\n",s);
 }
 
 static void warning_fn(png_structp p, png_const_charp s)
 {
-    printf("libpng warning: %s\n", s);
+    printf(english_language ?
+           "libpng warning: %s\n" :
+           "предупреждение libpng: %s\n", s);
 }
 
 void WritePNGfile(char *filename, byte *data,

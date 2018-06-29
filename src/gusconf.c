@@ -31,6 +31,7 @@
 #include "m_misc.h"
 #include "w_wad.h"
 #include "z_zone.h"
+#include "jn.h"
 
 #define MAX_INSTRUMENTS 256
 
@@ -281,11 +282,22 @@ boolean GUS_WriteConfig(char *path)
 
     if (!strcmp(gus_patch_path, ""))
     {
-        printf("You haven't configured gus_patch_path.\n");
-        printf("gus_patch_path needs to point to the location of "
-               "your GUS patch set.\n"
-               "To get a copy of the \"standard\" GUS patches, "
-               "download a copy of dgguspat.zip.\n");
+        if (english_language)
+        {
+            printf("You haven't configured gus_patch_path.\n");
+            printf("gus_patch_path needs to point to the location of "
+                   "your GUS patch set.\n"
+                   "To get a copy of the \"standard\" GUS patches, "
+                   "download a copy of dgguspat.zip.\n");
+        }
+        else
+        {
+            printf("Вы не задали переменную gus_patch_path.\n");
+            printf("gus_patch_path необходим для обнаружения "
+                   "патчей GUS.\n"
+                   "Чтобы воспользоваться стандартными патчами, "
+                   "скачайте файл dgguspat.zip.\n");
+        }
 
         return false;
     }

@@ -165,7 +165,9 @@ static void UpdateGUI(void)
 
     if (net_client_wait_data.num_drones > 0)
     {
-        M_snprintf(buf, sizeof(buf), " (+%i наблюдателей)",
+        M_snprintf(buf, sizeof(buf), english_language ?
+                   " (+%i observer clients)" :
+                   " (+%i наблюдателей)",
                    net_client_wait_data.num_drones);
         TXT_SetLabel(drone_label, buf);
     }
@@ -176,7 +178,9 @@ static void UpdateGUI(void)
 
     if (net_client_wait_data.is_controller)
     {
-        startgame = TXT_NewWindowAction(' ', "Ќачать игру");
+        startgame = TXT_NewWindowAction(' ', english_language ?
+                                             "Start game" :
+                                             "Ќачать игру");
         TXT_SignalConnect(startgame, "pressed", StartGame, NULL);
     }
     else
@@ -222,16 +226,37 @@ static void CheckMasterStatus(void)
 
     if (added)
     {
-        TXT_SetLabel(master_msg_label,
+        if (english_language)
+        {
+            TXT_SetLabel(master_msg_label,
+            "Your server is now registered with the global master server.\n"
+            "Other players can find your server online.");
+        }
+        else
+        {
+            TXT_SetLabel(master_msg_label,
             "‚аш сервер зарегистрирован на центральном сервере.\n"
             "„ругие игроки смогут увидеть ваш сервер в режиме онлайн.");
+        }
+        
     }
     else
     {
-        TXT_SetLabel(master_msg_label,
+        if (english_language)
+        {
+            TXT_SetLabel(master_msg_label,
+            "Failed to register with the master server. Your server is not\n"
+            "publicly accessible. You may need to reconfigure your Internet\n"
+            "router to add a port forward for UDP port 2342. Look up\n"
+            "information on port forwarding online.");
+        }
+        else
+        {
+            TXT_SetLabel(master_msg_label,
             "Ќе удалось зарегистрироваться на центральном сервере. ‚аш сервер\n"
             "не будет доступен в режиме онлайн. Џроверьте настройки сетевого\n"
             "оборудования и настройте форвардинг UDP порта 2342.");
+        }
     }
 }
 
@@ -283,29 +308,61 @@ static void CheckSHA1Sums(void)
 
     if (!correct_wad)
     {
-        printf("‚нимание: Љонтрольная сумма WAD-файла SHA1 не совпадает с серверной:\n");
-        PrintSHA1Digest("‹окальная", net_local_wad_sha1sum);
-        PrintSHA1Digest("‘ерверная", net_client_wait_data.wad_sha1sum);
+        if (english_language)
+        {
+            printf("Warning: WAD SHA1 does not match server:\n");
+            PrintSHA1Digest("Local", net_local_wad_sha1sum);
+            PrintSHA1Digest("Server", net_client_wait_data.wad_sha1sum);
+        }
+        else
+        {
+            printf("‚нимание: Љонтрольная сумма WAD-файла SHA1 не совпадает с серверной:\n");
+            PrintSHA1Digest("‹окальная", net_local_wad_sha1sum);
+            PrintSHA1Digest("‘ерверная", net_client_wait_data.wad_sha1sum);
+        }
     }
 
     if (!same_freedoom)
     {
-        printf("‚нимание: ‘мешивание данных Freedoom и не Freedoom\n");
-        printf("‹окальные: %i  ‘ерверные: %i\n", 
-               net_local_is_freedoom, 
-               net_client_wait_data.is_freedoom);
+        if (english_language)
+        {
+            printf("Warning: Mixing Freedoom with non-Freedoom\n");
+            printf("Local: %i  Server: %i\n", 
+                   net_local_is_freedoom, 
+                   net_client_wait_data.is_freedoom);
+        }
+        else
+        {
+            printf("‚нимание: ‘мешивание данных Freedoom и не Freedoom\n");
+            printf("‹окальные: %i  ‘ерверные: %i\n", 
+                   net_local_is_freedoom, 
+                   net_client_wait_data.is_freedoom);
+        }
     }
 
     if (!correct_deh)
     {
-        printf("‚нимание: Љонтрольная сумма SHA1 блока Dehacked не совпадает с серверной:\n");
-        PrintSHA1Digest("‹окальная", net_local_deh_sha1sum);
-        PrintSHA1Digest("‘ерверная", net_client_wait_data.deh_sha1sum);
+        if (english_language)
+        {
+            printf("Warning: Dehacked SHA1 does not match server:\n");
+            PrintSHA1Digest("Local", net_local_deh_sha1sum);
+            PrintSHA1Digest("Server", net_client_wait_data.deh_sha1sum);
+        }
+        else
+        {
+            printf("‚нимание: Љонтрольная сумма SHA1 блока Dehacked не совпадает с серверной:\n");
+            PrintSHA1Digest("‹окальная", net_local_deh_sha1sum);
+            PrintSHA1Digest("‘ерверная", net_client_wait_data.deh_sha1sum);
+        }
     }
 
-    window = TXT_NewWindow("‚Ќ€ЊЂЌ€…!"); // ВНИМАНИЕ!
+    window = TXT_NewWindow(english_language ?
+                           "WARNING!" :
+                           "‚Ќ€ЊЂЌ€…!"); // ВНИМАНИЕ!
 
-    cont_button = TXT_NewWindowAction(KEY_ENTER, "Џродолжить");
+    cont_button = TXT_NewWindowAction(KEY_ENTER, english_language ?
+                                                 "Continue" :
+                                                 "Џродолжить");
     TXT_SignalConnect(cont_button, "pressed", CloseWindow, window);
 
     TXT_SetWindowAction(window, TXT_HORIZ_LEFT, NULL);
@@ -320,37 +377,78 @@ static void CheckSHA1Sums(void)
 
         if (net_local_is_freedoom)
         {
-            TXT_AddWidget(window, TXT_NewLabel
-            ("‚ы используете данные IWAD Freedom, в то время как\n"
-             "другие игроки используют официальный IWAD. “бедитесь,\n"
-             "что играете на тех же игровых уровнях, что и другие игроки.\n"));
+            if (english_language)
+            {
+                TXT_AddWidget(window, TXT_NewLabel
+                ("You are using the Freedoom IWAD to play with players\n"
+                 "using an official Doom IWAD.  Make sure that you are\n"
+                 "playing the same levels as other players.\n"));
+            }
+            else
+            {
+                TXT_AddWidget(window, TXT_NewLabel
+                ("‚ы используете данные IWAD Freedom, в то время как\n"
+                 "другие игроки используют официальный IWAD. “бедитесь,\n"
+                 "что играете на тех же игровых уровнях, что и другие игроки.\n"));
+            }
         }
         else
         {
-            TXT_AddWidget(window, TXT_NewLabel
-            ("‚ы используете данные официального IWAD, в то время как\n"
-             "другие игроки используют данные Freedoom. “бедитесь,\n"
-             "что играете на тех же игровых уровнях, что и другие игроки.\n"));
+            if (english_language)
+            {
+                TXT_AddWidget(window, TXT_NewLabel
+                ("You are using an official IWAD to play with players\n"
+                 "using the Freedoom IWAD.  Make sure that you are\n"
+                 "playing the same levels as other players.\n"));
+            }
+            else
+            {
+                TXT_AddWidget(window, TXT_NewLabel
+                ("‚ы используете данные официального IWAD, в то время как\n"
+                 "другие игроки используют данные Freedoom. “бедитесь,\n"
+                 "что играете на тех же игровых уровнях, что и другие игроки.\n"));
+            }
         }
     }
     else if (!correct_wad)
     {
-        TXT_AddWidget(window, TXT_NewLabel
+        if (english_language)
+        {
+            TXT_AddWidget(window, TXT_NewLabel
+            ("Your WAD directory does not match other players in the game.\n"
+             "Check that you have loaded the exact same WAD files as other\n"
+             "players.\n"));
+        }
+        else
+        {
+            TXT_AddWidget(window, TXT_NewLabel
             ("‘одежримое папки Ваших WAD-файлов не совпадает с содержимым\n"
 			 "папками папок у других игроков. “бедитесь, что используете\n"
              "те же самые WAD-файлы.\n"));
+        }
     }
 
     if (!correct_deh)
     {
-        TXT_AddWidget(window, TXT_NewLabel
+        if (english_language)
+        {
+            TXT_AddWidget(window, TXT_NewLabel
+            ("Your dehacked signature does not match other players in the\n"
+             "game.  Check that you have loaded the same dehacked patches\n"
+             "as other players.\n"));
+        }
+        else
+        {
+            TXT_AddWidget(window, TXT_NewLabel
             ("‘одержимое блока Dehacked не совпадает с содержимым у других\n"
              "игроков. “бедитесь, что используете такой же блок Dehacked,\n"
              "что и другие игроки.\n"));
+        }
     }
 
-    TXT_AddWidget(window, TXT_NewLabel
-            ("‚ случае продолжения могут возникнуть ошибки десинхронизации."));
+    TXT_AddWidget(window, TXT_NewLabel (english_language ?
+                  "If you continue, this may cause your game to desync." :
+                  "‚ случае продолжения могут возникнуть ошибки десинхронизации."));
 
     had_warning = true;
 }
@@ -396,7 +494,9 @@ void NET_WaitForLaunch(void)
 {
     if (!TXT_Init())
     {
-        fprintf(stderr, "Failed to initialize GUI\n");
+        fprintf(stderr, english_language ?
+                "Failed to initialize GUI\n" :
+                "Ошибка инициализации интерфейса\n");
         exit(-1);
     }
 

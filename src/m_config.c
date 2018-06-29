@@ -2106,7 +2106,10 @@ void M_LoadDefaults (void)
     if (i)
     {
 	doom_defaults.filename = myargv[i+1];
-	printf ("	файл конфигурации: %s\n",doom_defaults.filename);
+	printf (english_language ?
+            "	default file: %s\n" :
+            "   файл конфигурации: %s\n",
+            doom_defaults.filename);
     }
     else
     {
@@ -2114,7 +2117,10 @@ void M_LoadDefaults (void)
             = M_StringJoin(configdir, default_extra_config, NULL);
     }
 
-    printf("Сохранение файла конфигурации: %s\n", doom_defaults.filename);
+    printf(english_language ?
+           "saving config in %s\n" :
+           "Сохранение файла конфигурации: %s\n",
+           doom_defaults.filename);
 
     //!
     // @arg <file>
@@ -2128,7 +2134,9 @@ void M_LoadDefaults (void)
     if (i)
     {
         extra_defaults.filename = myargv[i+1];
-        printf("        дополнительный файл конфигурации: %s\n", 
+        printf(english_language ?
+               "        extra configuration file: %s\n" :
+               "        дополнительный файл конфигурации: %s\n", 
                extra_defaults.filename);
     }
     else
@@ -2316,8 +2324,10 @@ void M_SetConfigDir(char *dir)
 
     if (strcmp(configdir, "") != 0)
     {
-        printf("Настройки программы и сохраненные игры будут расположены в папке:\n"
-               "\t%s\n", configdir);
+        printf(english_language ?
+               "Using %s for configuration and saves\n" :
+               "Настройки программы и сохраненные игры будут расположены в папке:\n \t%s\n",
+               configdir);
     }
 
     // Make the directory if it doesn't already exist:

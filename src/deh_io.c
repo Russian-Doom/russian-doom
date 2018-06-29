@@ -27,9 +27,9 @@
 #include "m_misc.h"
 #include "w_wad.h"
 #include "z_zone.h"
-
 #include "deh_defs.h"
 #include "deh_io.h"
+#include "jn.h"
 
 typedef enum
 {
@@ -311,7 +311,10 @@ void DEH_Warning(deh_context_t *context, char *msg, ...)
 
     va_start(args, msg);
 
-    fprintf(stderr, "%s:%i: warning: ", context->filename, context->linenum);
+    fprintf(stderr, english_language ?
+                    "%s:%i: warning: " :
+                    "%s:%i: внимание: ",
+                    context->filename, context->linenum);
     vfprintf(stderr, msg, args);
     fprintf(stderr, "\n");
 

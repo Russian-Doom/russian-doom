@@ -26,6 +26,7 @@
 
 #include "memio.h"
 #include "mus2mid.h"
+#include "jn.h"
 
 #define NUM_CHANNELS 16
 
@@ -708,7 +709,10 @@ int main(int argc, char *argv[])
 
     if (argc != 3)
     {
-        printf("Usage: %s <musfile> <midfile>\n", argv[0]);
+        printf(english_language ?
+               "Usage: %s <musfile> <midfile>\n" :
+               "Используется: %s <musfile> <midfile>\n",
+               argv[0]);
         exit(-1);
     }
 
@@ -721,7 +725,9 @@ int main(int argc, char *argv[])
 
     if (mus2mid(src, dst))
     {
-        fprintf(stderr, "mus2mid() failed\n");
+        fprintf(stderr, english_language ?
+                "mus2mid() failed\n" :
+                "ошибка mus2mid()\n");
         exit(-1);
     }
 
