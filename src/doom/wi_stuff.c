@@ -494,7 +494,10 @@ void WI_drawOnLnode (int n, patch_t* c[])
     else
     {
     // DEBUG
-    printf("Could not place patch on level %d", n+1); 
+    printf(english_language ?
+           "Could not place patch on level %d" :
+           "Невозможно поместить патч на уровень %d",
+           n+1); 
     }
 }
 

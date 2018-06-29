@@ -24,10 +24,10 @@
 
 #include "doomtype.h"
 #include "info.h"
-
 #include "deh_defs.h"
 #include "deh_io.h"
 #include "deh_main.h"
+#include "jn.h"
 
 static actionf_t codeptrs[NUMSTATES];
 
@@ -65,13 +65,18 @@ static void *DEH_PointerStart(deh_context_t *context, char *line)
 
     if (sscanf(line, "Pointer %*i (%*s %i)", &frame_number) != 1)
     {
-        DEH_Warning(context, "Parse error on section start");
+        DEH_Warning(context, english_language ?
+                             "Parse error on section start" :
+                             "Ошибка обработки на начальной стадии");
         return NULL;
     }
 
     if (frame_number < 0 || frame_number >= NUMSTATES)
     {
-        DEH_Warning(context, "Invalid frame number: %i", frame_number);
+        DEH_Warning(context, english_language ?
+                             "Invalid frame number: %i" :
+                             "Некорректный номер фрейма: %i",
+                             frame_number);
         return NULL;
     }
 
@@ -94,7 +99,9 @@ static void DEH_PointerParseLine(deh_context_t *context, char *line, void *tag)
     if (!DEH_ParseAssignment(line, &variable_name, &value))
     {
         // Failed to parse
-        DEH_Warning(context, "Failed to parse assignment");
+        DEH_Warning(context, english_language ?
+        "Failed to parse assignment" :
+        "Ошибка анализа назначения");
         return;
     }
     
@@ -110,7 +117,10 @@ static void DEH_PointerParseLine(deh_context_t *context, char *line, void *tag)
     {
         if (ivalue < 0 || ivalue >= NUMSTATES)
         {
-            DEH_Warning(context, "Invalid state '%i'", ivalue);
+            DEH_Warning(context, english_language ?
+                                 "Invalid state '%i'" :
+                                 "Некорректное положение '%i'",
+                                 ivalue);
         }
         else
         {        
@@ -119,7 +129,10 @@ static void DEH_PointerParseLine(deh_context_t *context, char *line, void *tag)
     }
     else
     {
-        DEH_Warning(context, "Unknown variable name '%s'", variable_name);
+        DEH_Warning(context, english_language ?
+                             "Unknown variable name '%s'" :
+                             "Неизвестная переменная '%s'",
+                             variable_name);
     }
 }
 

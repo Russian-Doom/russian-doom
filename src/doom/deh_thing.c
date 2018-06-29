@@ -22,12 +22,11 @@
 #include <stdlib.h>
 
 #include "doomtype.h"
-
 #include "deh_defs.h"
 #include "deh_main.h"
 #include "deh_mapping.h"
-
 #include "info.h"
+#include "jn.h"
 
 DEH_BEGIN_MAPPING(thing_mapping, mobjinfo_t)
   DEH_MAPPING("ID #",                doomednum)
@@ -62,7 +61,9 @@ static void *DEH_ThingStart(deh_context_t *context, char *line)
     
     if (sscanf(line, "Thing %i", &thing_number) != 1)
     {
-        DEH_Warning(context, "Parse error on section start");
+        DEH_Warning(context, english_language ?
+                             "Parse error on section start" :
+                             "Ошибка обработки на начальной стадии");
         return NULL;
     }
 
@@ -71,7 +72,10 @@ static void *DEH_ThingStart(deh_context_t *context, char *line)
 
     if (thing_number < 0 || thing_number >= NUMMOBJTYPES)
     {
-        DEH_Warning(context, "Invalid thing number: %i", thing_number);
+        DEH_Warning(context, english_language ?
+                             "Invalid thing number: %i" :
+                             "Некорректный номер предмета: %i",
+                             thing_number);
         return NULL;
     }
     
@@ -97,7 +101,9 @@ static void DEH_ThingParseLine(deh_context_t *context, char *line, void *tag)
     {
         // Failed to parse
 
-        DEH_Warning(context, "Failed to parse assignment");
+        DEH_Warning(context, english_language ?
+                             "Failed to parse assignment" :
+                             "Ошибка обработки назначения");
         return;
     }
     

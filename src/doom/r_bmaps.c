@@ -19,6 +19,7 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "r_bmaps.h"
+#include "jn.h"
 
 
 // Floors and ceilings:
@@ -54,7 +55,9 @@ int bmap_terminator;
 void R_InitBrightmaps(void)
 {
     // Print informative message
-    printf("\nR_Init: Инициализация брайтмаппинга.");
+    printf(english_language ?
+           "\nR_Init: Brightmapping initialization." :
+           "\nR_Init: Инициализация брайтмаппинга.");
 
     // Texture lookup. There are many strict definitions,
     // for example, no need to lookup Doom 1 textures in TNT.

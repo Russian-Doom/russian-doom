@@ -532,13 +532,27 @@ void D_DoomLoop (void)
 {
     if (gamevariant == bfgedition && (demorecording || (gameaction == ga_playdemo) || netgame))
     {
-        printf(" ВНИМАНИЕ: Вы используете IWAD от Doom 3: BFG Edition.\n"
-               " Он не совместим с классическим IWAD в сетевой игре и\n" 
-               " имеет проблемы с синхронизацией демозаписей.\n"
-               " \n"
-               " Дополнение No Rest for the Living может работать и\n"
-               " с классическим IWAD, для запуска необходимо указать:\n"
-               " russian-doom -file nerve.wad");
+        if (english_language)
+        {
+            printf(" WARNING: You are playing using one of the Doom Classic\n"
+                   " IWAD files shipped with the Doom 3: BFG Edition. These are\n"
+                   " known to be incompatible with the regular IWAD files and\n"
+                   " may cause demos and network games to get out of sync.\n"
+                   " \n"
+                   " No Rest for the Living addon can be started with vanilla\n"
+                   " IWAD by following command line parameter:\n"
+                   " russian-doom -file nerve.wad");
+        }
+        else
+        {
+            printf(" ВНИМАНИЕ: Вы используете IWAD от Doom 3: BFG Edition.\n"
+                   " Он не совместим с классическим IWAD в сетевой игре и\n" 
+                   " имеет проблемы с синхронизацией демозаписей.\n"
+                   " \n"
+                   " Дополнение No Rest for the Living может работать и\n"
+                   " с классическим IWAD, для запуска необходимо указать:\n"
+                   " russian-doom -file nerve.wad");
+        }
     }
 
     if (demorecording)
@@ -928,7 +942,9 @@ static void SetMissionForPackName(char *pack_name)
         }
     }
 
-    printf("Корректные серии игр:\n");
+    printf(english_language ?
+           "Valid mission packs are:\n" :
+           "Корректные серии игр:\n");
 
     for (i = 0; i < arrlen(packs); ++i)
     {
@@ -1259,7 +1275,9 @@ void D_SetGameDescription(void)
             return;
 
             filename = D_TryFindWADByName(myargv[newpwadfile]);
-            printf(" добавление: %s\n", filename);
+            printf(english_language ?
+                   " adding %s\n" :
+                   " добавление: %s\n", filename);
             W_MergeFile(filename);
 
             // [JN] Поддержка DOOM 2: No Rest for the Living
@@ -1550,7 +1568,9 @@ void D_SetGameDescription(void)
                 loaded++;
             }
         }
-        printf("  Загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
+        printf(english_language ?
+        "  loaded %i DEHACKED lumps from PWAD files.\n" :
+        "  Загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
     }
 }
 
@@ -1562,7 +1582,10 @@ static boolean D_AddFile(char *filename)
 {
     wad_file_t *handle;
 
-    printf(" добавление: %s\n", filename);
+    printf(english_language ?
+           " adding: %s\n" :
+           " добавление: %s\n",
+           filename);
     handle = W_AddFile(filename);
 
     return handle != NULL;
@@ -1672,7 +1695,9 @@ static void InitGameVersion(void)
 
         if (gameversions[i].description == NULL) 
         {
-            printf("Поддерживаемые версии игр:\n");
+            printf(english_language ?
+                   "Supported game versions:\n" :
+                   "Поддерживаемые версии игр:\n");
 
             for (i=0; gameversions[i].description != NULL; ++i)
             {
@@ -1778,7 +1803,10 @@ void PrintGameVersion(void)
     {
         if (gameversions[i].version == gameversion)
         {
-            printf("Режим эмуляции исполняемого файла \"%s\".\n", gameversions[i].description);
+            printf(english_language ?
+                   "Emulating the behavior of the '%s' executable.\n" :
+                   "Режим эмуляции исполняемого файла \"%s\".\n",
+                   gameversions[i].description);
             break;
         }
     }
@@ -1919,7 +1947,9 @@ void D_DoomMain (void)
     // print banner
     I_PrintBanner(PACKAGE_STRING);
 
-    DEH_printf("Z_Init: Инициализация распределения памяти.\n");
+    DEH_printf(english_language ?
+               "Z_Init: Init zone memory allocation daemon. \n" :
+               "Z_Init: Инициализация распределения памяти.\n");
     Z_Init ();
 
 #ifdef FEATURE_MULTIPLAYER
@@ -1932,7 +1962,9 @@ void D_DoomMain (void)
 
     if (M_CheckParm("-dedicated") > 0)
     {
-        printf("Режим выделенного сервера.\n");
+        printf(english_language ?
+               "Dedicated server mode.\n" :
+               "Режим выделенного сервера.\n");
         NET_DedicatedServer();
         // Never returns
     }
@@ -2104,7 +2136,10 @@ void D_DoomMain (void)
         if (scale > 400)
             scale = 400;
         
-        DEH_printf("турбо ускорение: %i%%\n", scale);
+        DEH_printf(english_language ?
+                   "turbo scale: %i%%\n" :
+                   "турбо ускорение: %i%%\n",
+                   scale);
         forwardmove[0] = forwardmove[0]*scale/100;
         forwardmove[1] = forwardmove[1]*scale/100;
         sidemove[0] = sidemove[0]*scale/100;
@@ -2112,11 +2147,15 @@ void D_DoomMain (void)
     }
 
     // init subsystems
-    DEH_printf("V_Init: Обнаружение экранов.\n");
+    DEH_printf(english_language ?
+               "V_Init: allocate screens.\n" :
+               "V_Init: Обнаружение экранов.\n");
     V_Init ();
 
     // Load configuration files before initialising other subsystems.
-    DEH_printf("M_LoadDefaults: Загрузка системных стандартов.\n");
+    DEH_printf(english_language ?
+               "M_LoadDefaults: Load system defaults.\n" :
+               "M_LoadDefaults: Загрузка системных стандартов.\n");
     M_SetConfigFilenames(PROGRAM_PREFIX "doom.cfg");
     D_BindVariables();
     M_LoadDefaults();
@@ -2145,7 +2184,9 @@ void D_DoomMain (void)
 
     modifiedgame = false;
 
-    DEH_printf("W_Init: Инициализация WAD-файлов.\n");
+    DEH_printf(english_language ?
+               "W_Init: Init WADfiles.\n" :
+               "W_Init: Инициализация WAD-файлов.\n");
     D_AddFile(iwadfile);
     numiwadlumps = numlumps;
 
@@ -2208,8 +2249,9 @@ void D_DoomMain (void)
 
     if (gamevariant == bfgedition)
     {
-        // "BFG Edition: Using workarounds as needed.\n"
-        printf("BFG Edition: Применение дополнительной совместимости.\n");
+        printf(english_language ?
+        "BFG Edition: Using workarounds as needed.\n" :
+        "BFG Edition: Применение дополнительной совместимости.\n");
 
         // BFG Edition changes the names of the secret levels to
         // censor the Wolfenstein references. It also has an extra
@@ -2217,9 +2259,15 @@ void D_DoomMain (void)
         // version), MAP33 overflows into the Plutonia level names
         // array, so HUSTR_33 is actually PHUSTR_1.
 
-        DEH_AddStringReplacement(HUSTR_31, "ehjdtym 31: blraf");            // [JN] уровень 31: идкфа
-        DEH_AddStringReplacement(HUSTR_32, "ehjdtym 32: rby");              // [JN] уровень 32: кин
-        DEH_AddStringReplacement(PHUSTR_1, "ehjdtym 33: ghtlfntkmcndj");    // [JN] уровень 33: предательство
+        DEH_AddStringReplacement(HUSTR_31, english_language ? 
+                                           "level 31: idkfa" :
+                                           "ehjdtym 31: blraf");
+        DEH_AddStringReplacement(HUSTR_32, english_language ?
+                                           "level 32: keen" :
+                                           "ehjdtym 32: rby");
+        DEH_AddStringReplacement(PHUSTR_1, english_language ? 
+                                           "level 33: betray" :
+                                           "ehjdtym 33: ghtlfntkmcndj");
 
         // The BFG edition doesn't have the "low detail" menu option (fair
         // enough). But bizarrely, it reuses the M_GDHIGH patch as a label
@@ -2306,7 +2354,9 @@ void D_DoomMain (void)
             M_StringCopy(demolumpname, myargv[p + 1], sizeof(demolumpname));
         }
 
-        printf("Проигрывание демозаписи: %s.\n", file);
+        printf(english_language ?
+               "Playing demo %s.\n" :
+               "Проигрывание демозаписи: %s.\n", file);
     }
 
     I_AtExit(G_CheckDemoStatusAtExit, true);
@@ -2359,13 +2409,25 @@ void D_DoomMain (void)
                                    "\nДанная версия не является зарегистрированной."));
     }
 
+// [crispy] disable meaningless warning, we always use "-merge" anyway
+#if 0
     if (W_CheckNumForName("SS_START") >= 0 || W_CheckNumForName("FF_END") >= 0)
     {
         I_PrintDivider();
-        printf(" ВНИМАНИЕ: Загруженный WAD-файл содержит измененные спрайты\n"
-               " или текстуры поверхностей. Рекоммендуется использовать\n"
-               " команду '-merge' вместо '-file'.\n");
+        if (english_language)
+        {
+            printf(" WARNING: The loaded WAD file contains modified sprites or\n"
+                   " floor textures.  You may want to use the '-merge' command\n"
+                   " line option instead of '-file'.\n");
+        }
+        else
+        {
+            printf(" ВНИМАНИЕ: Загруженный WAD-файл содержит измененные спрайты\n"
+                   " или текстуры поверхностей. Рекоммендуется использовать\n"
+                   " команду '-merge' вместо '-file'.\n");
+        }
     }
+#endif
 
     I_PrintStartupBanner(gamedescription);
     PrintDehackedBanners();
@@ -2375,14 +2437,26 @@ void D_DoomMain (void)
     // message and give a link to the website.
     if (gamevariant == freedoom)
     {
-        printf(" ВНИМАНИЕ: IWAD-файлы Freedoom могут работать некорректно,\n"
-               " с данной версией порта. Ознакомьтесь с дополнительной\n"
-               " информацией по адресу:\n"
-               "   http://www.chocolate-doom.org/wiki/index.php/Freedoom\n");
+        if (english_language)
+        {
+            printf(" WARNING: You are playing using one of the Freedoom IWAD\n"
+                   " files, which might not work in this port. See this page\n"
+                   " for more information on how to play using Freedoom:\n"
+                   "   https://www.chocolate-doom.org/wiki/index.php/Freedoom\n");
+        }
+        else
+        {
+            printf(" ВНИМАНИЕ: IWAD-файлы Freedoom могут работать некорректно,\n"
+                   " с данной версией порта. Ознакомьтесь с дополнительной\n"
+                   " информацией по адресу:\n"
+                   "   http://www.chocolate-doom.org/wiki/index.php/Freedoom\n");
+        }
         I_PrintDivider();
     }
 
-    DEH_printf("I_Init: Инициализация состояния компьютера.\n");
+    DEH_printf(english_language ?
+               "I_Init: Setting up machine state.\n" :
+               "I_Init: Инициализация состояния компьютера.\n");
     I_CheckIsScreensaver();
     I_InitTimer();
     I_InitJoystick();
@@ -2390,7 +2464,9 @@ void D_DoomMain (void)
     I_InitMusic();
 
 #ifdef FEATURE_MULTIPLAYER
-    printf ("NET_Init: Инициализация сетевой подсистемы.\n");
+    printf (english_language ?
+            "NET_Init: Init network subsystem.\n" :
+            "NET_Init: Инициализация сетевой подсистемы.\n");
     NET_Init ();
 #endif
 
@@ -2542,27 +2618,41 @@ void D_DoomMain (void)
         startloadgame = -1;
     }
 
-    DEH_printf("M_Init: Инициализация внутренних данных.\n");
+    DEH_printf(english_language ?
+               "M_Init: Init miscellaneous info.\n" :
+               "M_Init: Инициализация внутренних данных.\n");
     M_Init ();
 
-    DEH_printf("R_Init: Инициализация процесса запуска DOOM - ");
+    DEH_printf(english_language ?
+               "R_Init: Init DOOM refresh daemon - " :
+               "R_Init: Инициализация процесса запуска DOOM - ");
     R_Init ();
 
-    DEH_printf("\nP_Init: Инициализация игрового окружения.\n");
+    DEH_printf(english_language ?
+               "\nP_Init: Init Playloop state.\n" :
+               "\nP_Init: Инициализация игрового окружения.\n");
     P_Init ();
 
-    DEH_printf("S_Init: Активация звуковой системы.\n");
+    DEH_printf(english_language ?
+               "S_Init: Setting up sound.\n" :
+               "S_Init: Активация звуковой системы.\n");
     S_Init (sfxVolume * 8, musicVolume * 8);
 
-    DEH_printf("D_CheckNetGame: Проверка статуса сетевой игры.\n");
+    DEH_printf(english_language ?
+               "D_CheckNetGame: Checking network game status.\n" :
+               "D_CheckNetGame: Проверка статуса сетевой игры.\n");
     D_CheckNetGame ();
 
     PrintGameVersion();
 
-    DEH_printf("HU_Init: Настройка игрового дисплея.\n");
+    DEH_printf(english_language ?
+               "HU_Init: Setting up heads up display.\n" :
+               "HU_Init: Настройка игрового дисплея.\n");
     HU_Init ();
 
-    DEH_printf("ST_Init: Инициализация строки состояния.\n");
+    DEH_printf(english_language ?
+               "ST_Init: Init status bar.\n" :
+               "ST_Init: Инициализация строки состояния.\n");
     ST_Init ();
 
     // If Doom II without a MAP01 lump, this is a store demo.
@@ -2575,7 +2665,9 @@ void D_DoomMain (void)
     if (M_CheckParmWithArgs("-statdump", 1))
     {
         I_AtExit(StatDump, true);
-        DEH_printf("Регистрация внешней статистики.\n");
+        DEH_printf(english_language ?
+                   "External statistics registered.\n" :
+                   "Регистрация внешней статистики.\n");
     }
 
     //!

@@ -397,8 +397,9 @@ P_FindNextHighestFloor
             else if (h == MAX_ADJOINING_SECTORS + 2)
             {
                 // Fatal overflow: game crashes at 22 sectors
-                printf("Sector with more than 22 adjoining sectors. "
-                        "Vanilla will crash here");
+                printf(english_language ?
+                       "Sector with more than 22 adjoining sectors. Vanilla will crash here" :
+                       "Сектору назначено более 22 присоединенных секторов.");
             }
 
             heightlist[h++] = other->floorheight;

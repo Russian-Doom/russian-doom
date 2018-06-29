@@ -1834,7 +1834,10 @@ void P_RestoreTargets (void)
 
     if (restoretargets_fail)
     {
-	printf ("P_RestoreTargets: Failed to restore %d target thinkers.\n", restoretargets_fail);
+	printf (english_language ?
+            "P_RestoreTargets: Failed to restore %d target thinkers.\n" :
+            "P_RestoreTargets: невозможно восстановить цели монстров (%d).\n",
+            restoretargets_fail);
 	restoretargets_fail = 0;
     }
 }

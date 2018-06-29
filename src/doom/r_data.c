@@ -429,9 +429,9 @@ static void R_GenerateLookup(int texnum)
                     if (badcol)
                     {
                         badcol = 0;
-                        printf("\nWarning: Texture %8.8s "
-                        "(height %d) has bad column(s)"
-                        " starting at x = %d.",
+                        printf(english_language ?
+                        "\nWarning: Texture %8.8s (height %d) has bad column(s) starting at x = %d." :
+                        "\nВнимание: текстуре %8.8s (высота %d) назначен некорректный столбец, начинающийся с x = %d.",
                         texture->name, texture->height, x);
                     }
                 break;
@@ -459,8 +459,9 @@ static void R_GenerateLookup(int texnum)
             if (devparm)
             {
                 // killough 8/8/98
-                printf("\nR_GenerateLookup:"
-                " Column %d is without a patch in texture %.8s",
+                printf(english_language ?
+                "\nR_GenerateLookup: Column %d is without a patch in texture %.8s" :
+                "\nR_GenerateLookup: столбцу %d не назначен текстурный патч %.8s",
                 x, texture->name);
             }
 
@@ -493,8 +494,10 @@ static void R_GenerateLookup(int texnum)
 
     if (err)       // killough 10/98: non-verbose output
     {
-        printf("\nR_GenerateLookup: Column without a patch in texture %.8s",
-        texture->name);
+        printf(english_language ?
+               "\nR_GenerateLookup: Column without a patch in texture %.8s" :
+               "\nR_GenerateLookup: столбец без патча в текстуре %.8s",
+               texture->name);
     }
 }
     free(count);                    // killough 4/9/98

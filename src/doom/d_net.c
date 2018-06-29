@@ -135,8 +135,16 @@ static void LoadGameSettings(net_gamesettings_t *settings)
 
     if (lowres_turn)
     {
-        printf("NOTE: Turning resolution is reduced; this is probably "
-               "because there is a client recording a Vanilla demo.\n");
+        if (english_language)
+        {
+            printf("NOTE: Turning resolution is reduced; this is probably "
+                   "because there is a client recording a Vanilla demo.\n");
+        }
+        else
+        {
+            printf("ВНИМАНИЕ: разрешение поворота камеры снижено. Вероятно, "
+                   "это вызвано сохранением демозаписи в оригинальном формате.\n");
+        }
     }
 
     for (i = 0; i < MAXPLAYERS; ++i)
@@ -262,10 +270,14 @@ void D_CheckNetGame (void)
     D_StartNetGame(&settings, NULL);
     LoadGameSettings(&settings);
 
-    DEH_printf("сложность: %i  дефматч: %i  уровень: %i  эпизод: %i\n",
+    DEH_printf(english_language ?
+               "startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n" :
+               "сложность: %i  дефматч: %i  уровень: %i  эпизод: %i\n",
                startskill, deathmatch, startmap, startepisode);
 
-    DEH_printf("игроки: %i из %i (узлов: %i)\n",
+    DEH_printf(english_language ?
+               "player %i of %i (%i nodes)\n" :
+               "игроки: %i из %i (узлов: %i)\n",
                consoleplayer+1, settings.num_players, settings.num_players);
 
     // Show players here; the server might have specified a time limit
@@ -276,12 +288,16 @@ void D_CheckNetGame (void)
 
         if (timelimit == 20 && M_CheckParm("-avg"))
         {
-            DEH_printf("Austin Virtual Gaming: Уровни завершаются "
-                           "после 20 минут игры\n");
+            DEH_printf(english_language ?
+                       "Austin Virtual Gaming: Levels will end after 20 minutes\n" :
+                       "Austin Virtual Gaming: Уровни завершаются после 20 минут игры\n");
         }
         else
         {
-            DEH_printf("Уровни завершаются после %d минут игры", timelimit);
+            DEH_printf(english_language ?
+                       "Levels will end after %d minute" :
+                       "Уровни завершаются после %d минут игры",
+                       timelimit);
             if (timelimit > 1)
                 printf("s");
             printf(".\n");
