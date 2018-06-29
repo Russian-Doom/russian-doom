@@ -6,8 +6,8 @@ execgamesdir = ${bindir}
 
 execgames_PROGRAMS = @PROGRAM_PREFIX@doom     \
                      @PROGRAM_PREFIX@heretic  \
-                     @PROGRAM_PREFIX@hexen    \
-                     @PROGRAM_PREFIX@server
+                     @PROGRAM_PREFIX@hexen
+#                    @PROGRAM_PREFIX@server
 #                    @PROGRAM_PREFIX@strife
 
 noinst_PROGRAMS = @PROGRAM_PREFIX@setup
@@ -36,22 +36,22 @@ m_misc.c             m_misc.h
 
 # Dedicated server (chocolate-server):
 
-DEDSERV_FILES=\
-d_dedicated.c                              \
-d_mode.c             d_mode.h              \
-i_timer.c            i_timer.h             \
-net_common.c         net_common.h          \
-net_dedicated.c      net_dedicated.h       \
-net_io.c             net_io.h              \
-net_packet.c         net_packet.h          \
-net_sdl.c            net_sdl.h             \
-net_query.c          net_query.h           \
-net_server.c         net_server.h          \
-net_structrw.c       net_structrw.h        \
-z_native.c           z_zone.h
+# DEDSERV_FILES=\
+# d_dedicated.c                              \
+# d_mode.c             d_mode.h              \
+# i_timer.c            i_timer.h             \
+# net_common.c         net_common.h          \
+# net_dedicated.c      net_dedicated.h       \
+# net_io.c             net_io.h              \
+# net_packet.c         net_packet.h          \
+# net_sdl.c            net_sdl.h             \
+# net_query.c          net_query.h           \
+# net_server.c         net_server.h          \
+# net_structrw.c       net_structrw.h        \
+# z_native.c           z_zone.h
 
-@PROGRAM_PREFIX@server_SOURCES=$(COMMON_SOURCE_FILES) $(DEDSERV_FILES)
-@PROGRAM_PREFIX@server_LDADD = @LDFLAGS@ @SDLNET_LIBS@
+# @PROGRAM_PREFIX@server_SOURCES=$(COMMON_SOURCE_FILES) $(DEDSERV_FILES)
+# @PROGRAM_PREFIX@server_LDADD = @LDFLAGS@ @SDLNET_LIBS@
 
 # Source files used by the game binaries (chocolate-doom, etc.)
 
