@@ -1552,7 +1552,10 @@ static void DrawWorldTimer(void)
         MN_DrTextA(dayBuffer, 240, 20);
         if (days >= 5)
         {
-            MN_DrTextA("DS CGZNBKB!", 230, 35); // [JN] ВЫ СПЯТИЛИ! (ранее: YOU FREAK!!!) Давайте без хамства, а?
+            MN_DrTextA(english_language ?
+            "YOU FREAK!!!" :
+            "DS CGZNBKB!", // [JN] ВЫ СПЯТИЛИ! Давайте без хамства, а?
+            230, 35);
         }
     }
 }

@@ -135,7 +135,9 @@ void R_InitSkyMap(void)
 void R_InitBrightmaps(void)
 {
     // Print informative message while startup
-    printf("\nR_Init: Инициализация брайтмаппинга.");
+    printf(english_language ?
+           "\nR_Init: Brightmapping initialization." :
+           "\nR_Init: Инициализация брайтмаппинга.");
 
     // -------------------------------------------------------
     //  Textures
@@ -316,7 +318,10 @@ void R_RaiseVisplanes (visplane_t** vp)
         visplane_t* visplanes_old = visplanes;
     
         if (numvisplanes_old == MAXVISPLANES)
-            printf("R_FindPlane: достигнут лимиn MAXVISPLANES (%d).\n", MAXVISPLANES);
+            printf(english_language ?
+                   "R_FindPlane: Hit MAXVISPLANES (%d) Vanilla limit.\n" :
+                   "R_FindPlane: достигнут лимиn MAXVISPLANES (%d).\n",
+                   MAXVISPLANES);
     
         numvisplanes = numvisplanes ? 2 * numvisplanes : MAXVISPLANES;
         visplanes = realloc(visplanes, numvisplanes * sizeof(*visplanes));

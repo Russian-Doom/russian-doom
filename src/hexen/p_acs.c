@@ -467,8 +467,10 @@ boolean P_StartACS(int number, int map, byte * args, mobj_t * activator,
     if (infoIndex == -1)
     {                           // Script not found
         //I_Error("P_StartACS: Unknown script number %d", number);
-        M_snprintf(ErrorMsg, sizeof(ErrorMsg),
-                   "JIB,RF DSGJKYTYBZ CRHBGNF %d", number); // ОШИБКА ВЫПОЛНЕНИЯ СКРИПТА: %d
+        M_snprintf(ErrorMsg, sizeof(ErrorMsg), english_language ?
+                   "P_STARTACS ERROR: UNKNOWN SCRIPT %d" :
+                   "JIB,RF DSGJKYTYBZ CRHBGNF %d", // ОШИБКА ВЫПОЛНЕНИЯ СКРИПТА: %d
+                   number); 
         P_SetMessage(&players[consoleplayer], ErrorMsg, true);
     }
     statePtr = &ACSInfo[infoIndex].state;

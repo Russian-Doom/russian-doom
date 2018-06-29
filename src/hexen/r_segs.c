@@ -426,7 +426,9 @@ void R_StoreWallRange(int start, int stop)
         int numdrawsegs_old = numdrawsegs;
    
         if (numdrawsegs_old == MAXDRAWSEGS)
-        printf("R_StoreWallRange: превышен лимит MAXDRAWSEGS (%d).\n", MAXDRAWSEGS);
+        printf(english_language ?
+               "R_StoreWallRange: Hit MAXDRAWSEGS (%d) Vanilla limit.\n" :
+               "R_StoreWallRange: превышен лимит MAXDRAWSEGS (%d).\n", MAXDRAWSEGS);
    
         numdrawsegs = numdrawsegs ? 2 * numdrawsegs : MAXDRAWSEGS;
         drawsegs = realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));

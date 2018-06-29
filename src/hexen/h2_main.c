@@ -258,11 +258,21 @@ static void AdjustForMacIWAD(void)
 
     if (adjust_music)
     {
-        printf("** Note: You appear to be using the Mac version of the Hexen\n"
-               "** IWAD file. This is missing the lumps required for OPL or\n"
-               "** GUS emulation. Your music configuration is being adjusted\n"
-               "** to a different setting that won't cause the game to "
-               "crash.\n");
+        if (english_language)
+        {
+            printf("** Note: You appear to be using the Mac version of the Hexen\n"
+                   "** IWAD file. This is missing the lumps required for OPL or\n"
+                   "** GUS emulation. Your music configuration is being adjusted\n"
+                   "** to a different setting that won't cause the game to "
+                   "crash.\n");
+        }
+        else
+        {
+            printf("** Внимание: предположительно, вы используете IWAD версии для Mac.\n"
+                   "** В нем отсутствует информация о проигрывании музыки в формате OPL\n"
+                   "** или GUS. Применена настройка дополнительной совместимости, которая\n"
+                   "** позволит проигрывать музыку корректно.\n");
+        }
         snd_musicdevice = SNDDEVICE_GENMIDI;
     }
 }
@@ -294,7 +304,9 @@ static void D_HexenQuitMessage(void)
 
 static void D_AddFile(char *filename)
 {
-    printf(" добавление: %s\n", filename);	// "  adding %s\n"
+    printf(english_language ?
+    " adding: %s\n" :
+    " добавление: %s\n", filename);
 
     W_AddFile(filename);
 }
@@ -409,7 +421,10 @@ void D_SetGameDescription(void)
             int     dd;
 
             filename = D_TryFindWADByName(myargv[newpwadfile]);
-            printf(" добавление: %s\n", filename);
+            printf(english_language ?
+                   " adding: %s\n" :
+                   " добавление: %s\n",
+                   filename);
             W_MergeFile(filename);
 
             // [JN] Поддержка Hexen: Deathkings of the Dark Citadel

@@ -126,8 +126,16 @@ static void LoadGameSettings(net_gamesettings_t *settings)
 
     if (lowres_turn)
     {
-        printf("NOTE: Turning resolution is reduced; this is probably "
-               "because there is a client recording a Vanilla demo.\n");
+        if (english_language)
+        {
+            printf("NOTE: Turning resolution is reduced; this is probably "
+                   "because there is a client recording a Vanilla demo.\n");
+        }
+        else
+        {
+            printf("ВНИМАНИЕ: разрешение поворота камеры снижено. Вероятно, "
+                   "это вызвано сохранением демозаписи в оригинальном формате.\n");
+        }
     }
 
     for (i=0; i<maxplayers; ++i)
