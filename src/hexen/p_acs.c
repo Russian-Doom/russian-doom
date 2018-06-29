@@ -344,11 +344,24 @@ void P_LoadACScripts(int lump)
 
         if (info->argCount > MAX_SCRIPT_ARGS)
         {
-            fprintf(stderr, "Warning: ACS script #%i has %i arguments, more "
-                            "than the maximum of %i. Enforcing limit.\n"
-                            "If you are seeing this message, please report "
-                            "the name of the WAD where you saw it.\n",
-                            i, info->argCount, MAX_SCRIPT_ARGS);
+            if (english_language)
+            {
+                fprintf(stderr, "Warning: ACS script #%i has %i arguments, more "
+                                "than the maximum of %i. Enforcing limit.\n"
+                                "If you are seeing this message, please report "
+                                "the name of the WAD where you saw it.\n",
+                                i, info->argCount, MAX_SCRIPT_ARGS);
+            }
+            else
+            {
+                fprintf(stderr, "Внимание: скрипт ACS #%i использует %i аргумент(ов),"
+                                "что превышает допустимый лимит %i.\n"
+                                "Выполнено увеличение лимита.\n"
+                                "Если вы видите это сообщение, просьба сообщить\n"
+                                "название файла WAD и уровень, в котором появилось\n"
+                                "данное сообщение. Спасибо.\n",
+                                i, info->argCount, MAX_SCRIPT_ARGS);
+            }
             info->argCount = MAX_SCRIPT_ARGS;
         }
 

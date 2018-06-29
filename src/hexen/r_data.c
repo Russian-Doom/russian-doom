@@ -646,9 +646,11 @@ int R_TextureNumForName(char *name)
     i = R_CheckTextureNumForName(name);
     if (i==-1)
     {
-        // I_Error ("R_TextureNumForName: %s not found", name);
         // [crispy] make non-fatal
-        fprintf (stderr, "R_TextureNumForName: текстура %s не найдена", name);
+        fprintf (stderr, english_language ?
+                         "R_TextureNumForName: %s not found" :
+                         "R_TextureNumForName: текстура %s не найдена",
+                         name);
         return 0;
     }
     return i;
