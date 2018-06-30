@@ -1526,12 +1526,6 @@ void D_SetGameDescription(void)
         W_MergeFile("base/doom-plutonia-skies.wad");
     }
 
-    // [JN] Press Beta have own taller skies, so it's okay to have unscaled sky.
-    if (gamemode == pressbeta)
-    {
-        scaled_sky = false;
-    }
-
     // [JN] Check for modified thermometer. If exist, 
     // don't use dimmed/red in game menus.
     if (W_CheckMultipleLumps("M_THERMO") > 1)
@@ -1549,6 +1543,22 @@ void D_SetGameDescription(void)
     {
         old_godface = false;
         W_MergeFile("base/doom-godface.wad");
+    }
+
+    // [JN] Finally, some compatibility mess
+    {
+        // Press Beta and Atari Jaguar have own taller skies, 
+        // so it's okay to have unscaled sky.
+        if (gamemode == pressbeta || gamemission == jaguar)
+            scaled_sky = false;
+
+        // Atari Jaguar is supposed to have
+        // extra GOD faces, as well as exploding ones.
+        if (gamemission == jaguar)
+        {
+            old_godface = false;
+            W_MergeFile("base/doom-godface.wad");
+        }
     }
     
     // Автоматическая загрузка блока DEHACKED
