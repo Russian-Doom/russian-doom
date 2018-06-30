@@ -1546,19 +1546,16 @@ void D_SetGameDescription(void)
     }
 
     // [JN] Finally, some compatibility mess
+    if (gamemode == pressbeta || gamemission == jaguar)
     {
         // Press Beta and Atari Jaguar have own taller skies, 
-        // so it's okay to have unscaled sky.
-        if (gamemode == pressbeta || gamemission == jaguar)
-            scaled_sky = false;
+        // so it's okay to have an unscaled skies.
+        scaled_sky = false;
 
-        // Atari Jaguar is supposed to have
+        // Press Beta and Atari Jaguar are supposed to have
         // extra GOD faces, as well as exploding ones.
-        if (gamemission == jaguar)
-        {
-            old_godface = false;
-            W_MergeFile("base/doom-godface.wad");
-        }
+        old_godface = false;
+        W_MergeFile("base/doom-godface.wad");
     }
     
     // Автоматическая загрузка блока DEHACKED
