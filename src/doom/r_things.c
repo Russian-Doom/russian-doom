@@ -708,6 +708,13 @@ void R_ProjectSprite (mobj_t* thing)
             vis->colormap = fullbrights_notgray[index];
         }
     }	
+
+    // [JN] Atari Jaguar: highlight everything, 
+    //      but only on easiest skill level.
+    if (gamemission == jaguar && gameskill == sk_baby)
+    {
+        vis->colormap = colormaps;
+    }
 }
 
 // -------------------------------------------------------------------------
