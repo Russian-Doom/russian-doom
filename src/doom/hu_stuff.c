@@ -484,7 +484,8 @@ char* mapnames_commercial[] =
     JHUSTR_21,
     JHUSTR_22,
     JHUSTR_23,
-    JHUSTR_24
+    JHUSTR_24,
+    JHUSTR_25
 };
 
 char* mapnames_commercial_rus[] =
@@ -632,7 +633,8 @@ char* mapnames_commercial_rus[] =
     JHUSTR_21_RUS,
     JHUSTR_22_RUS,
     JHUSTR_23_RUS,
-    JHUSTR_24_RUS
+    JHUSTR_24_RUS,
+    JHUSTR_25_RUS
 };
 
 
@@ -743,7 +745,7 @@ void HU_Start(void)
         break;
 
         case jaguar:
-        if (gamemap <= 24)
+        if (gamemap <= 25)
         s = english_language ? HU_TITLEJ : HU_TITLEJ_RUS;
         else
         s = english_language ? HU_TITLE2 : HU_TITLE2_RUS;

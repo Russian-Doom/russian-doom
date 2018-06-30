@@ -424,6 +424,7 @@
 #define JHUSTR_22   "level 22: Limbo"
 #define JHUSTR_23   "level 23: Dis"
 #define JHUSTR_24   "level 24: Military Base"
+#define JHUSTR_25   "level 25: Extra Map"
 
 //
 // Chat macros
@@ -1292,6 +1293,7 @@
 #define JHUSTR_22_RUS   "ehjdtym 22: kbv,"                          // Уровень 22: Лимб
 #define JHUSTR_23_RUS   "ehjdtym 23: lbn"                           // Уровень 23: Дит
 #define JHUSTR_24_RUS   "ehjdtym 24: djtyyfz ,fpf"                  // Уровень 24: Военная база
+#define JHUSTR_25_RUS   "ehjdtym 25: 'rcnhf-ehjdtym"                // Уровень 25: Экстра-уровень
 
 //
 // Макросы для чата

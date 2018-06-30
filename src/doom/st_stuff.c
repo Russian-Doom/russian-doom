@@ -855,8 +855,8 @@ boolean ST_Responder (event_t* ev)
                 {
                     return false;
                 }
-                // [JN] Atari Jaguar: dont warp to map 25 and higher
-                if (map > 24 && gamemission == jaguar)
+                // [JN] Atari Jaguar: dont warp to map 26 and higher
+                if (map > 25 && gamemission == jaguar)
                 {
                     return false;
                 }
