@@ -588,10 +588,10 @@ boolean ST_Responder (event_t* ev)
                     plyr->mo->health = 100;
 
                     plyr->health = deh_god_mode_health;
-                    plyr->message = DEH_String(STSTR_DQDON);
+                    plyr->message = DEH_String(english_language ? STSTR_DQDON : STSTR_DQDON_RUS);
                 }
                 else 
-                plyr->message = DEH_String(STSTR_DQDOFF);
+                plyr->message = DEH_String(english_language ? STSTR_DQDOFF : STSTR_DQDOFF_RUS);
             }
 
             // 'fa' cheat for killer fucking arsenal
@@ -642,7 +642,7 @@ boolean ST_Responder (event_t* ev)
                 for (i=0;i<NUMCARDS;i++)
                     plyr->cards[i] = true;
 
-                plyr->message = DEH_String(STSTR_KFAADDED);
+                plyr->message = DEH_String(english_language ? STSTR_KFAADDED : STSTR_KFAADDED_RUS);
             }
 
             // [JN] 'ka' чит для выдачи ключей
@@ -703,7 +703,7 @@ boolean ST_Responder (event_t* ev)
 
                     // [crispy] prevent crash with IDMUS0x or IDMUSx0
                     if (((buf[0]-'1')*9 + buf[1]-'1') > 31 || buf[0] < '1' || buf[1] < '1')
-                        plyr->message = DEH_String(STSTR_NOMUS);
+                        plyr->message = DEH_String(english_language ? STSTR_NOMUS : STSTR_NOMUS_RUS);
                     else
                         S_ChangeMusic(musnum, 1);
                 }
@@ -757,7 +757,7 @@ boolean ST_Responder (event_t* ev)
             // 'behold' power-up menu
             if (cht_CheckCheat(&cheat_powerup[6], ev->data2))
             {
-                plyr->message = DEH_String(STSTR_BEHOLD);
+                plyr->message = DEH_String(english_language ? STSTR_BEHOLD : STSTR_BEHOLD_RUS);
             }
 
             // 'choppers' invulnerability & chainsaw
@@ -863,7 +863,7 @@ boolean ST_Responder (event_t* ev)
             }
 
             // So be it.
-            plyr->message = DEH_String(STSTR_CLEV);
+            plyr->message = DEH_String(english_language ? STSTR_CLEV : STSTR_CLEV_RUS);
             G_DeferedInitNew(gameskill, epsd, map);
         }
 
@@ -911,9 +911,9 @@ boolean ST_Responder (event_t* ev)
                 plyr->cheats ^= CF_NOCLIP;
 
                 if (plyr->cheats & CF_NOCLIP)
-                    plyr->message = DEH_String(STSTR_NCON);
+                    plyr->message = DEH_String(english_language ? STSTR_NCON : STSTR_NCON_RUS);
                 else
-                    plyr->message = DEH_String(STSTR_NCOFF);
+                    plyr->message = DEH_String(english_language ? STSTR_NCOFF : STSTR_NCOFF_RUS);
             }
         }
     }
