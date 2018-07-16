@@ -468,40 +468,6 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         gamekeydown[key_toggleautorun] = false;
     }
 
-    // [JN] Toggle crosshair
-    if (gamekeydown[key_togglecrosshair])
-    {
-        static char crosshairmsg[24];
-
-        // [JN] No toggling in -vanilla mode
-        if (vanillaparm)
-        return;
-        
-        if (!crosshair_draw)
-        {
-            crosshair_draw = true;
-        }
-        else
-        {
-            crosshair_draw = false;
-        }
-
-        if (english_language)
-        {
-            M_snprintf(crosshairmsg, sizeof(crosshairmsg), STSRT_CROSSHAIR "%s",
-                crosshair_draw ? STSTR_CROSSHAIR_ON : STSTR_CROSSHAIR_OFF);
-        }
-        else
-        {
-            M_snprintf(crosshairmsg, sizeof(crosshairmsg), STSRT_CROSSHAIR_RUS "%s",
-                crosshair_draw ? STSTR_CROSSHAIR_ON_RUS : STSTR_CROSSHAIR_OFF_RUS);
-        }
-        players[consoleplayer].message = crosshairmsg;
-        S_StartSound(NULL,sfx_swtchn);
-
-        gamekeydown[key_togglecrosshair] = false;
-    }
-
     // let movement keys cancel each other out
     if (strafe) 
     { 

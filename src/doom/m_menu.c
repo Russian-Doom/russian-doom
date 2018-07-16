@@ -1935,6 +1935,41 @@ boolean M_Responder (event_t* ev)
         return true;
     }
 
+    // [JN] Toggling of crosshair
+    if (key == key_togglecrosshair)
+    {
+        static char crosshairmsg[24];
+
+        // [JN] No toggling in -vanilla mode
+        if (vanillaparm)
+        return false;
+
+        if (!crosshair_draw)
+        {
+            crosshair_draw = true;
+        }
+        else
+        {
+            crosshair_draw = false;
+        }
+        
+        if (english_language)
+        {
+            M_snprintf(crosshairmsg, sizeof(crosshairmsg), STSRT_CROSSHAIR "%s",
+                crosshair_draw ? STSTR_CROSSHAIR_ON : STSTR_CROSSHAIR_OFF);
+        }
+        else
+        {
+            M_snprintf(crosshairmsg, sizeof(crosshairmsg), STSRT_CROSSHAIR_RUS "%s",
+                crosshair_draw ? STSTR_CROSSHAIR_ON_RUS : STSTR_CROSSHAIR_OFF_RUS);
+        }
+
+        players[consoleplayer].message = crosshairmsg;
+        S_StartSound(NULL,sfx_swtchn);
+
+        return true;
+    }
+
     // F-Keys
     if (!menuactive)
     {
