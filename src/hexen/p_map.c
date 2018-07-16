@@ -1204,7 +1204,7 @@ boolean P_TryMove(mobj_t * thing, fixed_t x, fixed_t y)
 = false will be returned
 ==================
 */
-
+static sector_t *movingsector;
 boolean P_ThingHeightClip(mobj_t * thing)
 {
     boolean onfloor;
@@ -1229,7 +1229,7 @@ boolean P_ThingHeightClip(mobj_t * thing)
         // [JN] Update player's view when on moving platform.
         // Idea by Brad Harding, code by Fabian Greffrath.
         // Thanks again, colleagues! (03.06.2018)
-        if (thing->player)
+        if (thing->player && thing->subsector->sector == movingsector)
         {
             player_t *const player = thing->player;
             player->viewz = player->mo->z + player->viewheight;
@@ -2323,6 +2323,7 @@ boolean P_ChangeSector(sector_t * sector, int crunch)
 
     nofit = false;
     crushchange = crunch;
+    movingsector = sector;
 
 // recheck heights for all things near the moving sector
 

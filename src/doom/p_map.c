@@ -835,6 +835,7 @@ void P_ApplyTorque(mobj_t *mo)
 // the z will be set to the lowest value
 // and false will be returned.
 //
+static sector_t *movingsector;
 boolean P_ThingHeightClip (mobj_t* thing)
 {
     boolean		onfloor;
@@ -855,7 +856,7 @@ boolean P_ThingHeightClip (mobj_t* thing)
     // [JN] Update player's view when on moving platform.
     // Idea by Brad Harding, code by Fabian Greffrath.
     // Thanks, colleagues! (02.04.2018)
-    if (thing->player)
+    if (thing->player && thing->subsector->sector == movingsector)
     {
 	    player_t *const player = thing->player;
 
@@ -1767,7 +1768,8 @@ P_ChangeSector
 	
     nofit = false;
     crushchange = crunch;
-	
+    movingsector = sector;
+    
     // re-check heights for all things near the moving sector
     for (x=sector->blockbox[BOXLEFT] ; x<= sector->blockbox[BOXRIGHT] ; x++)
 	for (y=sector->blockbox[BOXBOTTOM];y<= sector->blockbox[BOXTOP] ; y++)
