@@ -267,27 +267,27 @@ static txt_button_t *GetLaunchButton(void)
         {
         case doom:
             label = english_language ?
-                    "Save parameters and launch DOOM" :
+                    "Save parameters and launch DOOM     " :
                     "Сохранить настройки и запустить DOOM";
             break;
         case heretic:
             label = english_language ?
-                    "Save parameters and launch Heretic" :
+                    "Save parameters and launch Heretic     " :
                     "Сохранить настройки и запустить Heretic";
             break;
         case hexen:
             label = english_language ?
-                    "Save parameters and launch Hexen" :
+                    "Save parameters and launch Hexen     " :
                     "Сохранить настройки и запустить Hexen";
             break;
         case strife:
             label = english_language ?
-                    "Save parameters and launch STRIFE!" :
+                    "Save parameters and launch STRIFE!     " :
                     "Сохранить настройки и запустить STRIFE!";
             break;
         default:
             label = english_language ?
-                    "Save parameters and launch game" :
+                    "Save parameters and launch game     " :
                     "Сохранить настройки и запустить игру";
             break;
         }
@@ -332,7 +332,7 @@ void MainMenu(void)
                    "Настройки джойстика/геймпада",
                    (TxtWidgetSignalFunc) ConfigJoystick, NULL),
     TXT_NewButton2(english_language ?
-                   "Optional Gameplay Enhacements       " : // [JN] Some spaces used to make same width for both English and Russian menus :(
+                   "Optional Gameplay Enhacements" :
                    "Дополнительные параметры игры",
                    (TxtWidgetSignalFunc) CompatibilitySettings, NULL),
     GetLaunchButton(),
