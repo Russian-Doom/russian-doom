@@ -195,7 +195,9 @@ void ConfigSound(void)
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_SB,
             TXT_NewHorizBox(
                 TXT_NewStrut(4, 0),
-                TXT_NewLabel("Режим: "),
+                TXT_NewLabel(english_language ?
+                "Chip type: " :
+                "Режим: "),
                 OPLTypeSelector(),
                 NULL)),
 
