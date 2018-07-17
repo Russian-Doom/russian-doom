@@ -465,71 +465,65 @@ void P_PlayerThink (player_t* player)
     if (player->bonuscount)
 	player->bonuscount--;
 
-    
     //
-    // [JN] Press Beta and Atari Jaguar using a different COLORMAP handling. 
+    // Handling colormaps.
     //
 
-    // Handling colormaps.
-    if (gamemode != pressbeta && gamemission != jaguar)
-    {
     if (player->powers[pw_invulnerability])
     {
-	if (player->powers[pw_invulnerability] > 4*32
-	    || (player->powers[pw_invulnerability]&8) )
-	    player->fixedcolormap = INVERSECOLORMAP;
-	else
+        if ((player->powers[pw_invulnerability] > 4*32 || (player->powers[pw_invulnerability]&8))
+        && gamemission != jaguar)   // [JN] Atari Jaguar: no full bright effect while invulnerability
+        player->fixedcolormap = INVERSECOLORMAP;
+
         // [JN] & [crispy] Если у игрока активирован визор и неуязвимость,
         // при спадании неузязвимости неинвертированные цвета должны
         // быть в полной яркости.
         // [JN] Also care about infra green light visor.
-        
-        if (infragreen_visor && !vanillaparm)
-        {
-            player->fixedcolormap = player->powers[pw_infrared] ? 33 : 0;
-        }
+        else if (infragreen_visor && !vanillaparm)
+        player->fixedcolormap = player->powers[pw_infrared] ? 33 : 0;
+
         else
-        {
-            player->fixedcolormap = player->powers[pw_infrared] ? 1 : 0;
-        }
+        player->fixedcolormap = player->powers[pw_infrared] ? 1 : 0;
     }
     else if (player->powers[pw_infrared])	
     {
-	if (player->powers[pw_infrared] > 4*32
-	    || (player->powers[pw_infrared]&8) )
-	{
-        if (infragreen_visor && !vanillaparm)
-        {   // [JN] Infra green visor: COLORMAP 33
+        if (player->powers[pw_infrared] > 4*32 || (player->powers[pw_infrared]&8))
+        {
+            // [JN] Infra green visor: COLORMAP 33
+            if (infragreen_visor && !vanillaparm)
             player->fixedcolormap = INFRAGREENCOLORMAP;
-        }
-        else
-        {   // almost full bright
+
+            // almost full bright
+            else
             player->fixedcolormap = 1;
         }
-	}
-	else
-	    player->fixedcolormap = 0;
+        else
+        {
+            player->fixedcolormap = 0;
+        }
     }
     else
-	player->fixedcolormap = 0;
+    {
+        player->fixedcolormap = 0;
     }
 
     // [JN] Press Beta colormaps maze
-    else 
-    {
-        // [JN] Light Amplification Visor using green colormap (33)
-        // In Beta INVERSECOLORMAP have a higher priority than INFRAGREENCOLORMAP. Account this.
-        if (player->powers[pw_infrared] > 4*32 || player->powers[pw_infrared] & 8)
-        player->fixedcolormap = player->powers[pw_invisibility] ? INVERSECOLORMAP : INFRAGREENCOLORMAP;
-
-        // [JN] Invisibility using inverse colormap (32)
-        else if (player->powers[pw_invisibility] > 4*32 || player->powers[pw_invisibility] & 8)
-        player->fixedcolormap = INVERSECOLORMAP;
-
-        // [JN] Diminished lightning
-        else
-        player->fixedcolormap = 0;
-    }
+    // TODO: Broken, not working properly for some reason
+    // else 
+    // {
+    //     // [JN] Light Amplification Visor using green colormap (33)
+    //     // In Beta INVERSECOLORMAP have a higher priority than INFRAGREENCOLORMAP. Account this.
+    //     if (player->powers[pw_infrared] > 4*32 || player->powers[pw_infrared] & 8)
+    //     player->fixedcolormap = player->powers[pw_invisibility] ? INVERSECOLORMAP : INFRAGREENCOLORMAP;
+    // 
+    //     // [JN] Invisibility using inverse colormap (32)
+    //     else if (player->powers[pw_invisibility] > 4*32 || player->powers[pw_invisibility] & 8)
+    //     player->fixedcolormap = INVERSECOLORMAP;
+    // 
+    //     // [JN] Diminished lightning
+    //     else
+    //     player->fixedcolormap = 0;
+    // }
 }
 
 
