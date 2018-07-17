@@ -829,7 +829,6 @@
 "THIS RIDE IS CLOSED."
 
 // Doom for Atari Jaguar
-// TODO: make some artistic additions?
 
 #define J1TEXT              \
 "     id software\n"        \
@@ -2008,12 +2007,41 @@
 // Эта миссия завершена.
 
 
-// Doom for Atari Jaguar
-// TODO: make an artistic text
+// Doom для Atari Jaguar
 
-#define J1TEXT_RUS \
-"1 2 3\n"\
-"\n"
+#define J1TEXT_RUS              \
+"     ds cghfdbkbcm!\n"         \
+"\n"                            \
+"  lf;t cfvst e;fcf.obt\n"      \
+"  gjhj;ltybz flf b b[\n"       \
+"  cvthnjyjcyst kjdeirb\n"      \
+"  yt cvjukb dfc jcnfyjdbnm>\n" \
+"\n"                            \
+"  ds d jxthtlyjq hfp\n"        \
+"  ghjzdbkb gjlkbyysq\n"        \
+"  uthjbpv b bcnbyyjt\n"        \
+"  ,tccnhfibt< ljrfpfd<\n"      \
+"  xnj ds - kexibq bp\n"        \
+"  kexib[!\n"                   \
+"\n"                            \
+"  gjplhfdkztv!"                \
+
+//     Вы справились!
+//
+//  Даже самые ужасающие
+//  порождения ада и их
+//  смертоносные ловушки 
+//  не смогли вас остановить.
+//
+//  Вы в очередной раз
+//  проявили подлинный
+//  героизм и истинное
+//  бесстрашие, доказав,
+//  что вы - лучший из
+//  лучших!
+//  
+//  Поздравляем!
+
 
 //
 // F_FINALE.C
