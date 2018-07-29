@@ -637,6 +637,10 @@ static void CreateUpscaledTexture(boolean force)
                                 h_upscale*SCREENHEIGHT);
 }
 
+// [AM] Fractional part of the current tic, in the half-open
+//      range of [0.0, 1.0).  Used for interpolation.
+fixed_t fractionaltic;
+
 //
 // I_FinishUpdate
 //
@@ -729,6 +733,12 @@ void I_FinishUpdate (void)
     // Draw!
 
     SDL_RenderPresent(renderer);
+
+    // [AM] Figure out how far into the current tic we're in as a fixed_t.
+    if (uncapped_fps)
+    {
+        fractionaltic = I_GetTimeMS() * TICRATE % 1000 * FRACUNIT / 1000;
+    }
 
     // Restore background and undo the disk indicator, if it was drawn.
     V_RestoreDiskBackground();
