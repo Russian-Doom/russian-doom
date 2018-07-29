@@ -2123,7 +2123,7 @@ static void DrawSlider(Menu_t * menu, int item, int width, int slot)
     }
     // [JN] Most right position that is "out of bounds" (red gem).
     // Only the mouse sensitivity menu requires this trick.
-    else if (CurrentMenu == &OptionsMenu && slot > 8)
+    else if ((CurrentMenu == &OptionsMenu || CurrentMenu == &OptionsMenu_Rus) && slot > 8)
     {
         slot = 8;
         V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName("M_SLDKR", PU_CACHE));
