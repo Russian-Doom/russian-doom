@@ -1534,8 +1534,10 @@ void D_SetGameDescription(void)
     }
 
     // [JN] Check for modified GOD's face. If exist, 
-    // don't use extra GOD faces.
-    if (W_CheckMultipleLumps("STFGOD0") > 1)
+    // don't use extra GOD faces. Note that Freedoom 
+    // should not have extra faces.
+    if (W_CheckMultipleLumps("STFGOD0") > 1
+        || is_freedoom || is_freedm)
     {
         old_godface = true;
     }
