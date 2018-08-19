@@ -2520,10 +2520,12 @@ static void M_ConfirmDeleteGameResponse (int key)
 void M_ConfirmDeleteGame ()
 {
     savegwarning =
-    // Вы действительно хотите
-    // удалить сохраненную игру
-    M_StringJoin("ds ltqcndbntkmyj [jnbnt\nelfkbnm cj[hfytyye. buhe\n\n^",
-        savegamestrings[itemOn], "^?\n\n",
+    M_StringJoin(english_language ?
+        "are you sure you want to\ndelete saved game\n\n\"" :
+        "ds ltqcndbntkmyj [jnbnt\nelfkbnm cj[hfytyye. buhe\n\n^",
+        savegamestrings[itemOn], english_language ?
+        "\"?\n\n" :
+        "^?\n\n",
         english_language ?
         PRESSYN : PRESSYN_RUS,
         NULL);
