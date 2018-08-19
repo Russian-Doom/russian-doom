@@ -73,6 +73,7 @@ void R_InitBrightmaps(void)
         // Textures
         bmaptexture08 = R_TextureNumForName("SW2WOOD");
         bmaptexture17 = R_TextureNumForName("SW2GSTON");
+        bmaptexture23 = R_TextureNumForName("WOODGARG");
         bmaptexture39 = R_TextureNumForName("EXITSIGN");
         bmaptexture75 = R_TextureNumForName("CBLUE01");
 
