@@ -1688,13 +1688,17 @@ void G_DoCompleted (void)
         if (secretexit)
         switch(gamemap)
         {
-            case 3: wminfo.next = 23; break;
+            case 3:  wminfo.next = 23;  // [JN] Sectet exit from Toxin Refinery to Military Base
+            case 13: wminfo.next = 24;  // [JN] Sectet exit from Command Center to Extra Map
+            break;
         }
 
-    else
+        else
         switch(gamemap)
         {
-            case 24: wminfo.next = 3; break;
+            case 24: wminfo.next = 3;   // [JN] After Military Base go to Command Control
+            case 25: wminfo.next = 13;  // [JN] After Extra Map go to Halls of the Damned
+            break;
             default: wminfo.next = gamemap;
         }
     }
