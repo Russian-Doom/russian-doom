@@ -797,7 +797,7 @@ void G_DoLoadLevel (void)
             {
                 skytexturename = "SKY1";
             }
-            else if (gamemap < 18)
+            else if (gamemap < 17 || gamemap == 25)
             {
                 skytexturename = "SKY2";
             }
