@@ -87,7 +87,7 @@ void P_DropWeapon (player_t* player);
 // P_USER
 //
 #define MLOOKUNIT	8
-void	P_CalcHeight (player_t *player);
+void	P_CalcHeight (player_t *player, boolean safe);
 void	P_PlayerThink (player_t* player);
 
 
