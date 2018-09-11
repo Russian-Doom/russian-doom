@@ -685,7 +685,7 @@
 //
 
 // English
-#define TXT_VERSION "VERSION 2.8"
+#define TXT_VERSION "VERSION 3.0"
 #if defined (_WIN64)
 #define TXT_ARCH      " - (X64)"
 #elif defined (_WIN32)
@@ -693,10 +693,10 @@
 #else
 #define TXT_ARCH      ""
 #endif
-#define TXT_DATE      "IN DEVELOPMENT"
+#define TXT_DATE      "09/16/2018"      // MM/DD/YYYY
 
 // Русский
-#define TXT_VERSION_RUS "DTHCBZ 2>8"        // ВЕРСИЯ 2.8
+#define TXT_VERSION_RUS "DTHCBZ 3>0"        // ВЕРСИЯ 3.0
 #if defined (_WIN64)
 #define TXT_ARCH_RUS      " - ([64)"        // x64
 #elif defined (_WIN32)
@@ -704,4 +704,4 @@
 #else
 #define TXT_ARCH_RUS      ""                // ?  
 #endif
-#define TXT_DATE_RUS      "D HFPHF,JNRT"    // В РАЗРАБОТКЕ
+#define TXT_DATE_RUS      "16>09>2018"      // DD.MM.YYYY

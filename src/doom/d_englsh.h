@@ -2093,7 +2093,7 @@
 //
 
 // English
-#define STSTR_VERSION   "Version 2.8"
+#define STSTR_VERSION   "Version 3.0"
 #if defined (_WIN64)
 #define STSRT_ARCH      " - (x64)"
 #elif defined (_WIN32)
@@ -2101,10 +2101,10 @@
 #else
 #define STSRT_ARCH      ""
 #endif
-#define STSRT_DATE      "in development"    // (mm/dd/yyyy)
+#define STSRT_DATE      "09/16/2018"    // (mm/dd/yyyy)
 
 // Русский
-#define STSTR_VERSION_RUS   "dthcbz 2>8"    // Версия 2.8
+#define STSTR_VERSION_RUS   "dthcbz 3>0"    // Версия 3.0
 #if defined (_WIN64)
 #define STSRT_ARCH_RUS      " - ([64)"      // x64
 #elif defined (_WIN32)
@@ -2112,7 +2112,7 @@
 #else
 #define STSRT_ARCH_RUS      ""              // ?  
 #endif
-#define STSRT_DATE_RUS      "d hfphf,jnrt"  // в разработке (dd.mm.yyyy)
+#define STSRT_DATE_RUS      "16>09>2018"    // (dd.mm.yyyy)
 
 
 #endif
