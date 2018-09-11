@@ -371,6 +371,8 @@ void P_ZMovement (mobj_t* mo)
 		// and utter appropriate sound.
 		mo->player->deltaviewheight = mo->momz>>3;
 		// [crispy] squat down weapon sprite as well
+        // [JN] no squatting in vanilla mode
+        if (!vanilla)
  		mo->player->psp_dy_max = mo->momz>>2;
 		if (mo->health > 0)
 		{

@@ -563,7 +563,10 @@ void P_ZMovement(mobj_t * mo)
             if (mo->player && mo->momz < -GRAVITY * 8 && !(mo->flags2 & MF2_FLY))       // squat down
             {
                 mo->player->deltaviewheight = mo->momz >> 3;
+
                 // [crispy] squat down weapon sprite as well
+                // [JN] no squatting in vanilla mode
+                if (!vanillaparm)
                 mo->player->psp_dy_max = mo->momz>>2;
 
                 // [JN] Dead men does not say "off"
