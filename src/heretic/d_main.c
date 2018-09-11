@@ -482,7 +482,7 @@ void D_CheckRecordFrom(void)
 
 char *iwadfile;
 
-char *basedefault = "heretic.cfg";
+char *basedefault = "heretic.ini";
 
 void wadprintf(void)
 {
@@ -925,7 +925,7 @@ void D_DoomMain(void)
     //
     // [JN] Activate vanilla gameplay mode.
     // All optional enhancements will be disabled without 
-    // modifying configuration file (russian-heretic.cfg)
+    // modifying configuration file (russian-heretic.ini)
     //
 
     vanillaparm = M_ParmExists("-vanilla");
@@ -1033,7 +1033,7 @@ void D_DoomMain(void)
                "M_LoadDefaults: Load system defaults.\n" :
                "M_LoadDefaults: Загрузка системных стандартов.\n");
     D_BindVariables();
-    M_SetConfigFilenames(/*"heretic.cfg", */PROGRAM_PREFIX "heretic.cfg");
+    M_SetConfigFilenames(/*"heretic.ini", */PROGRAM_PREFIX "heretic.ini");
     M_LoadDefaults();
 
     I_AtExit(M_SaveDefaults, false);

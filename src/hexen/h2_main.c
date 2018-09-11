@@ -508,7 +508,7 @@ void D_DoomMain(void)
     }
 
     D_SetDefaultSavePath();
-    M_SetConfigFilenames(/*"hexen.cfg", */PROGRAM_PREFIX "hexen.cfg");
+    M_SetConfigFilenames(/*"hexen.ini", */PROGRAM_PREFIX "hexen.ini");
     M_LoadDefaults();
 
     I_AtExit(M_SaveDefaults, false);
@@ -725,7 +725,7 @@ static void HandleArgs(void)
     //
     // [JN] Activate vanilla gameplay mode.
     // All optional enhancements will be disabled without 
-    // modifying configuration file (russian-heretic.cfg)
+    // modifying configuration file (russian-heretic.ini)
     //
 
     vanillaparm = M_ParmExists("-vanilla");

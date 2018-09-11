@@ -67,8 +67,8 @@ static mission_config_t mission_configs[] =
         doom,
         IWAD_MASK_DOOM,
         "doom",
-        // "default.cfg",
-        PROGRAM_PREFIX "doom.cfg",
+        // "default.ini",
+        PROGRAM_PREFIX "doom.ini",
         PROGRAM_PREFIX "doom"
     },
     {
@@ -76,8 +76,8 @@ static mission_config_t mission_configs[] =
         heretic,
         IWAD_MASK_HERETIC,
         "heretic",
-        // "heretic.cfg",
-        PROGRAM_PREFIX "heretic.cfg",
+        // "heretic.ini",
+        PROGRAM_PREFIX "heretic.ini",
         PROGRAM_PREFIX "heretic"
     },
     {
@@ -85,8 +85,8 @@ static mission_config_t mission_configs[] =
         hexen,
         IWAD_MASK_HEXEN,
         "hexen",
-        // "hexen.cfg",
-        PROGRAM_PREFIX "hexen.cfg",
+        // "hexen.ini",
+        PROGRAM_PREFIX "hexen.ini",
         PROGRAM_PREFIX "hexen"
     },
 	
@@ -95,8 +95,8 @@ static mission_config_t mission_configs[] =
         strife,
         IWAD_MASK_STRIFE,
         "strife",
-        // "strife.cfg",
-        PROGRAM_PREFIX "strife.cfg",
+        // "strife.ini",
+        PROGRAM_PREFIX "strife.ini",
         PROGRAM_PREFIX "strife"
     }
 };
