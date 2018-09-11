@@ -272,8 +272,12 @@ P_GiveCard
 {
     if (player->cards[card])
 	return;
-    
-    player->bonuscount = BONUSADD;
+
+    if (vanillaparm)
+    player->bonuscount = BONUSADD; // [JN] Keep this bug in vanilla mode
+    else
+    player->bonuscount += netgame ? BONUSADD : 0; // [crispy] Fix "Key pickup resets palette"
+
     player->cards[card] = 1;
 }
 
