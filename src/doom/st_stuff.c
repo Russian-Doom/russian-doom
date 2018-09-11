@@ -1380,13 +1380,18 @@ void ST_doPaletteStuff(void)
     else if (plyr->bonuscount)
     {
         palette = (plyr->bonuscount+7)>>3;
+        
         // [JN] Дополнительный фрейм палитры для более плавного
         // появления/угасания жёлтого экрана при подборе предметов.
         // https://doomwiki.org/wiki/PLAYPAL
-        if (palette >= NUMBONUSPALS)
-        palette = NUMBONUSPALS;
+        // [JN] 11.09.2018 - не применять фикс в режиме -vanilla и для Atari Jaguar.
 
-        palette += STARTBONUSPALS-1;
+        if (palette >= NUMBONUSPALS)
+        palette = (vanillaparm || gamemission == jaguar) ?
+                   NUMBONUSPALS-1 : NUMBONUSPALS;
+
+        palette += (vanillaparm || gamemission == jaguar) ?
+                    STARTBONUSPALS : STARTBONUSPALS-1;
     }
 
     // [JN] Don't replace CYAN palette with GREEN palette in Atari Jaguar

@@ -1214,15 +1214,9 @@ void ST_doPaletteStuff(void)
 	// [JN] Added one extra palette for more smoothing fade in/out
 	// https://doomwiki.org/wiki/PLAYPAL
 	if (palette >= NUMBONUSPALS)
-	    if (!vanilla)
-	    palette = NUMBONUSPALS;
-	    else
-	    palette = NUMBONUSPALS-1;
+	    palette = vanilla ? NUMBONUSPALS-1 : NUMBONUSPALS;
 
-	if (!vanilla)
-	palette += STARTBONUSPALS-1;
-	else
-	palette += STARTBONUSPALS;
+    palette += vanilla ? STARTBONUSPALS : STARTBONUSPALS-1;
     }
 
     else if ( plyr->powers[pw_ironfeet] > 4*32
