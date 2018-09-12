@@ -59,4 +59,3 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Pavel "Corak" Zegelman
 - Michael Francis
 - Danfun64
-- Hisymak
