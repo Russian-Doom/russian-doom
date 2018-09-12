@@ -40,6 +40,9 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - The DOSBox Team
 - SDL2 patch by NY00123
 
+#### [GENMIDI](https://www.doomworld.com/forum/topic/97388-update-hisymaks-genmidi-an-enhanced-genmidi-lump-for-opl-synth/) sound bank for Atari Jaguar TC
+- Hisymak
+
 ##### And also:
 - Maxim "MaxLeon" Pyanov, Oleg Zik and Oleg “Kai” Sudarikov
 - [LeD] Jake Crusher
