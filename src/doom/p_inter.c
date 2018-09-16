@@ -422,12 +422,12 @@ P_TouchSpecialThing
 
       case SPR_BON3:    // [JN] Evil Sceptre
 	artifactcount++;
-	player->message = DEH_String(GOTSCEPTRE);
+	player->message = DEH_String(english_language ? GOTSCEPTRE : GOTSCEPTRE_RUS);
 	break;
 	
       case SPR_BON4:    // [JN] Unholy bible
 	artifactcount++;
-	player->message = DEH_String(GOTBIBLE);
+	player->message = DEH_String(english_language ? GOTBIBLE : GOTBIBLE_RUS);
 	break;
 	
       case SPR_SOUL:
