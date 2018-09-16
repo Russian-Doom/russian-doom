@@ -27,6 +27,7 @@
 #include "hu_lib.h"
 #include "r_local.h"
 #include "r_draw.h"
+#include "jn.h"
 
 // boolean : whether the screen is always erased
 #define noterased viewwindowx
@@ -141,7 +142,12 @@ void HUlib_eraseTextLine(hu_textline_t* l)
     if (!automapactive &&
     viewwindowx && l->needsupdate)
     {
-        lh = (SHORT(l->f[0]->height) + 1) << hires;
+        // [JN] Russian language: clear two extra pixel lines in bordered view.
+        // Fixes remainings of text shadows for chars "Д", "Ц" and "Щ".
+        lh = english_language ? 
+             (SHORT(l->f[0]->height) + 1) : // [JN] Standard line
+             (SHORT(l->f[0]->height+2) + 1) // [JN] Two extra pixels for Russian chars
+             << hires;
 
         for (y=(l->y << hires),yoffset=y*SCREENWIDTH ; y<(l->y << hires)+lh ; y++,yoffset+=SCREENWIDTH)
         {
