@@ -916,7 +916,9 @@ void R_SetupFrame (player_t* player)
         {
             fixedcolormap = colormaps + player->fixedcolormap * 256;
         }
-        else if (infragreen_visor && player->powers[pw_infrared])
+        // [JN] Support for Press Beta and Infragreen Visor
+        else if ((gamemode == pressbeta && player->powers[pw_invisibility])
+        || ((infragreen_visor || gamemode == pressbeta) && player->powers[pw_infrared]))
         {
             fixedcolormap = colormaps_beta + player->fixedcolormap * 256;
         }

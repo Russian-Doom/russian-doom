@@ -485,8 +485,9 @@ void P_PlayerThink (player_t* player)
         // при спадании неузязвимости неинвертированные цвета должны
         // быть в полной яркости.
         // [JN] Also care about infra green light visor.
-        else if (infragreen_visor && !vanillaparm)
-        player->fixedcolormap = player->powers[pw_infrared] ? 33 : 0;
+        // TODO: fixme, full bright is not green
+        // else if (infragreen_visor && !vanillaparm)
+        // player->fixedcolormap = player->powers[pw_infrared] ? 33 : 0;
 
         else
         player->fixedcolormap = player->powers[pw_infrared] ? 1 : 0;
@@ -514,22 +515,21 @@ void P_PlayerThink (player_t* player)
     }
 
     // [JN] Press Beta colormaps maze
-    // TODO: Broken, not working properly for some reason
-    // else 
-    // {
-    //     // [JN] Light Amplification Visor using green colormap (33)
-    //     // In Beta INVERSECOLORMAP have a higher priority than INFRAGREENCOLORMAP. Account this.
-    //     if (player->powers[pw_infrared] > 4*32 || player->powers[pw_infrared] & 8)
-    //     player->fixedcolormap = player->powers[pw_invisibility] ? INVERSECOLORMAP : INFRAGREENCOLORMAP;
-    // 
-    //     // [JN] Invisibility using inverse colormap (32)
-    //     else if (player->powers[pw_invisibility] > 4*32 || player->powers[pw_invisibility] & 8)
-    //     player->fixedcolormap = INVERSECOLORMAP;
-    // 
-    //     // [JN] Diminished lightning
-    //     else
-    //     player->fixedcolormap = 0;
-    // }
+    if (gamemode == pressbeta)
+    {
+        // [JN] Light Amplification Visor using green colormap (33)
+        // In Beta INVERSECOLORMAP have a higher priority than INFRAGREENCOLORMAP. Account this.
+        if (player->powers[pw_infrared] > 4*32 || player->powers[pw_infrared] & 8)
+        player->fixedcolormap = player->powers[pw_invisibility] ? INVERSECOLORMAP : INFRAGREENCOLORMAP;
+    
+        // [JN] Invisibility using inverse colormap (32)
+        else if (player->powers[pw_invisibility] > 4*32 || player->powers[pw_invisibility] & 8)
+        player->fixedcolormap = INVERSECOLORMAP;
+    
+        // [JN] Diminished lightning
+        else
+        player->fixedcolormap = 0;
+    }
 }
 
 
