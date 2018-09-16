@@ -142,12 +142,9 @@ void HUlib_eraseTextLine(hu_textline_t* l)
     if (!automapactive &&
     viewwindowx && l->needsupdate)
     {
-        // [JN] Russian language: clear two extra pixel lines in bordered view.
+        // [JN] Russian language: clear two extra pixel lines in bordered view (height+2).
         // Fixes remainings of text shadows for chars "Д", "Ц" and "Щ".
-        lh = english_language ? 
-             (SHORT(l->f[0]->height) + 1) : // [JN] Standard line
-             (SHORT(l->f[0]->height+2) + 1) // [JN] Two extra pixels for Russian chars
-             << hires;
+        lh = (SHORT(l->f[0]->height+2) + 1) << hires;
 
         for (y=(l->y << hires),yoffset=y*SCREENWIDTH ; y<(l->y << hires)+lh ; y++,yoffset+=SCREENWIDTH)
         {
