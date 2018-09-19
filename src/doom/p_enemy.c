@@ -704,7 +704,7 @@ void A_Look (mobj_t* actor)
     // [JN] Original id Software's idea: 
     // If a monster yells at a player, it will 
     // alert other monsters to the player.
-    if (noise_alert_sfx)
+    if (!vanillaparm && noise_alert_sfx)
     {
         P_NoiseAlert (actor->target, actor);
     }
