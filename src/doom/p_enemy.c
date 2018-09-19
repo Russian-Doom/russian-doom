@@ -1413,7 +1413,9 @@ void A_VileTarget (mobj_t*	actor)
     fog->tracer = actor->target;
 
     // [F.G.B.H.J.N.] play D(S/P)FLAMST sound when Arch-Vile spawns fire attack
+    if (!vanillaparm)
     S_StartSound(fog, sfx_flamst);
+
     A_Fire (fog);
 }
 
