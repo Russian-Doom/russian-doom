@@ -61,15 +61,12 @@ extern int loopcount;
 #define LIGHTSCALESHIFT     12
 
 // [crispy] & [JN] smoother diminished lighting
-// TODO: make optional or -vanilla mode friendly
 #define MAXLIGHTZ           1024
 #define LIGHTZSHIFT         17
-// #define LIGHTBRIGHT      2
 
 // [JN] Vanilla values
-// #define MAXLIGHTZ        128
-// #define LIGHTZSHIFT      20
-// #define LIGHTBRIGHT      1
+#define MAXLIGHTZ_VANILLA   128
+#define LIGHTZSHIFT_VANILLA 20
 
 
 extern lighttable_t*    scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
