@@ -26,10 +26,12 @@
 #include "doomdef.h"
 #include "p_local.h"
 
-
 // State.
-#include "doomstat.h"
 #include "r_state.h"
+
+#include "doomstat.h"
+#include "jn.h"
+
 
 //
 // FIRELIGHT FLICKER
@@ -195,7 +197,7 @@ P_SpawnStrobeFlash
     if (flash->minlight == flash->maxlight)
     {
         // [JN] Apply special fix for E2M4 secret door
-        if (canmodify && gamemission == doom && gameepisode == 2 && gamemap == 4)
+        if (canmodify && fix_map_errors && gamemission == doom && gameepisode == 2 && gamemap == 4)
         flash->minlight = 112;
 
         else
