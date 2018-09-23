@@ -28,6 +28,7 @@
 
 
 // State.
+#include "doomstat.h"
 #include "r_state.h"
 
 //
@@ -178,6 +179,7 @@ P_SpawnStrobeFlash
   int		inSync )
 {
     strobe_t*	flash;
+    extern boolean canmodify;
 	
     flash = Z_Malloc ( sizeof(*flash), PU_LEVSPEC, 0);
 
@@ -191,7 +193,14 @@ P_SpawnStrobeFlash
     flash->minlight = P_FindMinSurroundingLight(sector, sector->lightlevel);
 		
     if (flash->minlight == flash->maxlight)
-	flash->minlight = 0;
+    {
+        // [JN] Apply special fix for E2M4 secret door
+        if (canmodify && gamemission == doom && gameepisode == 2 && gamemap == 4)
+        flash->minlight = 112;
+
+        else
+        flash->minlight = 0;
+    }
 
     // nothing special about it during gameplay
     sector->special = 0;	
