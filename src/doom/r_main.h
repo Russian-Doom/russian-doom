@@ -86,6 +86,7 @@ extern lighttable_t*    fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_brighttan[LIGHTLEVELS][MAXLIGHTSCALE];
 
 extern int extralight;
 extern lighttable_t* fixedcolormap;
