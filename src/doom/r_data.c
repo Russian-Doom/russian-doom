@@ -469,7 +469,8 @@ static void R_GenerateLookup(int texnum)
             err = 1;               // killough 10/98
         }
 
-        if (count[x].patches > 1)       // killough 4/9/98
+        // [crispy] treat patch-less columns the same as multi-patched
+        if (count[x].patches > 1 || !count[x].patches)       // killough 4/9/98
         // [crispy] moved up here, the rest in this loop
         // applies to single-patched textures as well
         collump[x] = -1;              // mark lump as multipatched
