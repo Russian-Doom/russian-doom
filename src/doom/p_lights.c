@@ -197,7 +197,7 @@ P_SpawnStrobeFlash
     if (flash->minlight == flash->maxlight)
     {
         // [JN] Apply special fix for E2M4 secret door
-        if (canmodify && fix_map_errors && gamemission == doom && gameepisode == 2 && gamemap == 4)
+        if (gameepisode == 2 && gamemap == 4 && gamemission == doom && canmodify && fix_map_errors)
         flash->minlight = 112;
 
         else
