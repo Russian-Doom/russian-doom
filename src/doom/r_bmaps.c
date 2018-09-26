@@ -77,6 +77,7 @@ void R_InitBrightmaps(void)
         bmaptexture23 = R_TextureNumForName("WOODGARG");
         bmaptexture39 = R_TextureNumForName("EXITSIGN");
         bmaptexture75 = R_TextureNumForName("CBLUE01");
+        bmaptexture88 = R_TextureNumForName("SW2GARG");
 
         // Apply terminator
         bmap_terminator = R_TextureNumForName("BIGDOOR2");
