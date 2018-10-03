@@ -49,14 +49,13 @@ extern int english_language;
 // is common code. Fix this.
 #define RANGECHECK
 
-// Blending table used for fuzzpatch, etc.
-// Only used in Heretic/Hexen
-
-byte *tinttable = NULL;
-
 // [JN] Blending table used for shadowed text.
 // Only used in Doom.
 byte *tintmap = NULL;
+
+// Blending table used for fuzzpatch, etc.
+// Only used in Heretic/Hexen
+byte *tinttable = NULL;
 
 // villsa [STRIFE] Blending table used for Strife
 byte *xlatab = NULL;
@@ -696,8 +695,6 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
     byte *desttop2, *dest2;
     int w, f;
 
-    tinttable = W_CacheLumpName("TINTTAB", PU_STATIC);
-
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
@@ -839,21 +836,21 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
 }
 
 //
-// Load tint table from TINTTAB lump.
-//
-
-void V_LoadTintTable(void)
-{
-    tinttable = W_CacheLumpName("TINTTAB", PU_STATIC);
-}
-
-//
 // [JN] Load tint map from TINMAP lump (Doom only).
 //
 
 void V_LoadTintMap(void)
 {
     tintmap = W_CacheLumpName("TINTMAP", PU_STATIC);
+}
+
+//
+// Load tint table from TINTTAB lump.
+//
+
+void V_LoadTintTable(void)
+{
+    tinttable = W_CacheLumpName("TINTTAB", PU_STATIC);
 }
 
 //
