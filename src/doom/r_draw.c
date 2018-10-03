@@ -771,6 +771,9 @@ void R_InitTranslationTables (void)
 {
     int i;
 
+    // [JN] Set a tint map for shadowed text
+    V_LoadTintMap();
+
     translationtables = Z_Malloc (256*3, PU_STATIC, 0);
 
     // translate just the 16 green colors

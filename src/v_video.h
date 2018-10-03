@@ -104,6 +104,10 @@ void V_ScreenShot(char *format);
 
 void V_LoadTintTable(void);
 
+// [JN] Load the lookup table for shadowed text from the TINTMAP lump.
+
+void V_LoadTintMap(void);
+
 // villsa [STRIFE]
 // Load the lookup table for translucency calculations from the XLATAB
 // lump.

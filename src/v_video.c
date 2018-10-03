@@ -54,6 +54,10 @@ extern int english_language;
 
 byte *tinttable = NULL;
 
+// [JN] Blending table used for shadowed text.
+// Only used in Doom.
+byte *tintmap = NULL;
+
 // villsa [STRIFE] Blending table used for Strife
 byte *xlatab = NULL;
 
@@ -602,8 +606,6 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
     byte *desttop2, *dest2;
     int w, f;
 
-    tinttable = W_CacheLumpName("TINTMAP", PU_STATIC);
-
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
@@ -659,7 +661,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
                     {
                         if (draw_shadowed_text && !vanillaparm)
                         {
-                            *dest2 = tinttable[((*dest2) << 8)];
+                            *dest2 = tintmap[((*dest2) << 8)];
                             dest2 += SCREENWIDTH;
                         }
                         *dest = *source;
@@ -668,7 +670,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
 
                     if (draw_shadowed_text && !vanillaparm)
                     {
-                        *dest2 = tinttable[((*dest2) << 8)];
+                        *dest2 = tintmap[((*dest2) << 8)];
                         dest2 += SCREENWIDTH;
                     }
                     *dest = *source++;
@@ -913,6 +915,15 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
 void V_LoadTintTable(void)
 {
     tinttable = W_CacheLumpName("TINTTAB", PU_STATIC);
+}
+
+//
+// [JN] Load tint map from TINMAP lump (Doom only).
+//
+
+void V_LoadTintMap(void)
+{
+    tintmap = W_CacheLumpName("TINTMAP", PU_STATIC);
 }
 
 //
