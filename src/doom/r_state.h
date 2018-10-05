@@ -54,6 +54,7 @@ extern lighttable_t* brightmaps_greenonly3;
 extern lighttable_t* brightmaps_orangeyellow;
 extern lighttable_t* brightmaps_dimmeditems;
 extern lighttable_t* brightmaps_brighttan;
+extern lighttable_t* brightmaps_redonly1;
 
 extern int viewwidth;
 extern int scaledviewwidth;

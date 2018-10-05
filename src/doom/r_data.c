@@ -180,6 +180,7 @@ lighttable_t	*brightmaps_greenonly3;
 lighttable_t	*brightmaps_orangeyellow;
 lighttable_t	*brightmaps_dimmeditems;
 lighttable_t	*brightmaps_brighttan;
+lighttable_t	*brightmaps_redonly1;
 
 
 //
@@ -915,7 +916,7 @@ void R_InitTranMap()
 //
 void R_InitColormaps (void)
 {
-    int	lump, lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10;
+    int	lump, lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -957,6 +958,9 @@ void R_InitColormaps (void)
 
     lump10 = W_GetNumForName(DEH_String("BRTMAP9"));
     brightmaps_brighttan = W_CacheLumpNum(lump10, PU_STATIC);
+
+    lump11 = W_GetNumForName(DEH_String("BRTMAP10"));
+    brightmaps_redonly1 = W_CacheLumpNum(lump11, PU_STATIC);
 }
 
 

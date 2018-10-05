@@ -43,7 +43,7 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
     bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74, bmaptexture75,
     bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
     bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
-    bmaptexture86, bmaptexture87, bmaptexture88;
+    bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90;
 
 // Terminator:
 int bmap_terminator;
@@ -142,6 +142,10 @@ void R_InitBrightmaps(void)
         bmaptexture41 = R_TextureNumForName("COMPUTE2");
         bmaptexture43 = R_TextureNumForName("COMPUTE1");
         bmaptexture44 = R_TextureNumForName("COMPUTE3");
+
+        // Red only 1
+        bmaptexture89 = R_TextureNumForName("TEKWALL2");
+        bmaptexture90 = R_TextureNumForName("TEKWALL5");
     }
 
     // -------------------------------------------------------

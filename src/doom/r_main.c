@@ -111,6 +111,7 @@ lighttable_t* fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_brighttan[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_redonly1[LIGHTLEVELS][MAXLIGHTSCALE];
 
 // bumped light from gun blasts
 int extralight;			
@@ -781,6 +782,7 @@ void R_ExecuteSetViewSize (void)
             fullbright_orangeyellow[i][j] = brightmaps_orangeyellow + level*256;
             fullbright_dimmeditems[i][j] = brightmaps_dimmeditems + level*256;
             fullbright_brighttan[i][j] = brightmaps_brighttan + level*256;
+            fullbright_redonly1[i][j] = brightmaps_redonly1 + level*256;
         }
     }
 }
