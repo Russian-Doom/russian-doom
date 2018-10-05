@@ -53,15 +53,15 @@ int bmap_terminator;
 // This function is called at startup, see R_Init.
 //
 
-void R_InitBrightmaps(void)
+void R_LookupBrightmaps(void)
 {
-    // Print informative message
-    printf(english_language ?
-           "\nR_Init: Brightmapping initialization." :
-           "\nR_Init: Инициализация брайтмаппинга.");
-
     // Texture lookup. There are many strict definitions,
     // for example, no need to lookup Doom 1 textures in TNT.
+
+    // Print informative message
+    printf(english_language ?
+           "\nR_Init: Brightmapping textures lookup." :
+           "\nR_Init: Определение текстур для брайтмаппинга.");
 
     // -------------------------------------------------------
     //  Atari Jaguar

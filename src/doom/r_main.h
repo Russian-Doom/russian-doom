@@ -178,6 +178,7 @@ void R_SetViewSize (int blocks, int detail);
 
 // [JN] Brightmaps
 void R_InitBrightmaps (void);
+void R_LookupBrightmaps (void);
 
 #endif
 
