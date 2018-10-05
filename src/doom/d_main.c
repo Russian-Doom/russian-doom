@@ -1537,7 +1537,7 @@ void D_SetGameDescription(void)
     // don't use extra GOD faces. Note that Freedoom 
     // should not have extra faces.
     if (W_CheckMultipleLumps("STFGOD0") > 1
-        || is_freedoom || is_freedm)
+        || is_freedoom || is_freedm || vanillaparm)
     {
         old_godface = true;
     }
