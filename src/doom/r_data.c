@@ -917,6 +917,7 @@ void R_InitTranMap()
 void R_InitColormaps (void)
 {
     int	lump, lump_beta;
+    int lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -927,22 +928,10 @@ void R_InitColormaps (void)
     // [JN] COLORMAP (№33) from Press Release Beta for infra green visor
     lump_beta  = W_GetNumForName(DEH_String("COLORMAB"));
     colormaps_beta  = W_CacheLumpNum(lump_beta, PU_STATIC);
-}
 
-
-//
-// [JN] Initialization of brightmaps.
-// Note: tables as well as it's valuaes are taken from Doom Retro (r_data.c).
-// Many thanks to Brad Harding for his amazing research of brightmap tables and colors!
-//
-void R_InitBrightmaps (void)
-{
-    int	lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10;
-
-    // Print informative message
-    printf(english_language ?
-           "\nR_Init: Brightmapping initialization." :
-           "\nR_Init: Инициализация брайтмаппинга.");
+    // [JN] Load in the brightmaps.
+    // Note: tables as well as it's valuaes are taken from Doom Retro (r_data.c).
+    // Many thanks to Brad Harding for his amazing research of brightmap tables and colors!
 
     lump1 = W_GetNumForName(DEH_String("BRTMAP1"));
     brightmaps_notgray = W_CacheLumpNum(lump1, PU_STATIC);
@@ -964,7 +953,7 @@ void R_InitBrightmaps (void)
 
     lump7 = W_GetNumForName(DEH_String("BRTMAP7"));
     brightmaps_orangeyellow = W_CacheLumpNum(lump7, PU_STATIC);
-    
+
     lump8 = W_GetNumForName(DEH_String("BRTMAP8"));
     brightmaps_dimmeditems = W_CacheLumpNum(lump8, PU_STATIC);
 
