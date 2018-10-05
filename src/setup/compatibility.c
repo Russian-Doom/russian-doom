@@ -65,7 +65,7 @@ int floating_powerups = 0;
 // √еймплей
 int fix_map_errors = 1;
 int flip_levels = 0;
-int new_ouch_face = 1;
+int extra_player_faces = 1;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
 int fast_quickload = 1;
@@ -236,9 +236,9 @@ void CompatibilitySettings(void)
             "Зеркальное отражение уровней",
             &flip_levels)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox(english_language ?
-            "Correct \"Ouch face\" formula" :
-            "Корректна€ формула \"Ouch face\"",
-            &new_ouch_face)),
+            "Extra player faces on the HUD" :
+            "Дополнительные лица игрока в HUD",
+            &extra_player_faces)),
         TXT_If(gamemission == doom,	TXT_NewCheckBox(english_language ?
             "Pain Elemental without Souls limit" :
             "Юлементаль Боли без ограничени€ душ",
@@ -311,7 +311,7 @@ void BindCompatibilityVariables(void)
     // √еймплей
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);
     M_BindIntVariable("flip_levels",            &flip_levels);
-    M_BindIntVariable("new_ouch_face",          &new_ouch_face);
+    M_BindIntVariable("extra_player_faces",     &extra_player_faces);
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
     M_BindIntVariable("fast_quickload",         &fast_quickload);

@@ -484,7 +484,7 @@ void D_BindVariables(void)
     // Геймплей
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);
     M_BindIntVariable("flip_levels",            &flip_levels);
-    M_BindIntVariable("new_ouch_face",          &new_ouch_face);
+    M_BindIntVariable("extra_player_faces",     &extra_player_faces);
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
     M_BindIntVariable("fast_quickload",         &fast_quickload);
@@ -1533,11 +1533,14 @@ void D_SetGameDescription(void)
         old_slider = true;
     }
 
-    // [JN] Check for modified GOD's face. If exist, 
-    // don't use extra GOD faces. Note that Freedoom 
-    // should not have extra faces.
-    if (W_CheckMultipleLumps("STFGOD0") > 1
-        || is_freedoom || is_freedm || vanillaparm)
+    // [JN] Check for modified player's face. If exist, 
+    // don't use extra faces. Note that Freedoom should 
+    // not have extra faces, as well as vanilla game mode 
+    // and if this feature is disabled.
+    if (W_CheckMultipleLumps("STFST01") > 1
+       || W_CheckMultipleLumps("STFGOD0") > 1
+       || is_freedoom || is_freedm
+       || vanillaparm || !extra_player_faces)
     {
         old_godface = true;
     }

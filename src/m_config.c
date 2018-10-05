@@ -1751,7 +1751,7 @@ static default_t extra_defaults_list[] =
     // Геймплей
     CONFIG_VARIABLE_INT(fix_map_errors),
     CONFIG_VARIABLE_INT(flip_levels),
-    CONFIG_VARIABLE_INT(new_ouch_face),
+    CONFIG_VARIABLE_INT(extra_player_faces),
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(agressive_lost_souls),
     CONFIG_VARIABLE_INT(fast_quickload),

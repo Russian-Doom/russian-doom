@@ -59,7 +59,7 @@ extern int floating_powerups;
 // Геймплей
 extern int fix_map_errors;
 extern int flip_levels;
-extern int new_ouch_face;
+extern int extra_player_faces;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
 extern int fast_quickload;

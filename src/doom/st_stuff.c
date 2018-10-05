@@ -1043,8 +1043,8 @@ void ST_updateFaceWidget(void)
             // [JN] Исправление бага с отсутствующим Ouch Face.
             // По методу Brad Harding (Doom Retro).
 
-            // [JN] Корректная формула "new_ouch_face"
-            if (new_ouch_face && !vanillaparm && gamemode != pressbeta)
+            // [JN] Корректная формула "Ouch face"
+            if (!vanillaparm && gamemode != pressbeta)
             {
                 // [BH] fix ouch-face when damage > 20
                 if (st_oldhealth - plyr->health > ST_MUCHPAIN)
@@ -1149,7 +1149,7 @@ void ST_updateFaceWidget(void)
         {
             if (gamemode != pressbeta)
             {
-            if (new_ouch_face && !vanillaparm)
+            if (extra_player_faces && !vanillaparm)
             {
                 if (st_oldhealth - plyr->health > ST_MUCHPAIN)
                 {

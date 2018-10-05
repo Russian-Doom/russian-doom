@@ -152,7 +152,7 @@ static void SensibleDefaults(void)
     // Геймплей
     fix_map_errors = 1;
     flip_levels = 0;
-    new_ouch_face = 1;
+    extra_player_faces = 1;
     unlimited_lost_souls = 1;
     agressive_lost_souls = 0;
     fast_quickload = 1;

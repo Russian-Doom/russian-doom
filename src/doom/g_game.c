@@ -280,7 +280,7 @@ int floating_powerups = 0;
 // Геймплей
 int fix_map_errors = 1;
 int flip_levels = 0;
-int new_ouch_face = 1;
+int extra_player_faces = 1;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
 int fast_quickload = 1;
