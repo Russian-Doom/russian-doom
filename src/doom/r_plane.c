@@ -98,10 +98,10 @@ int detailLevel; // [JN] & [crispy] Необходимо для R_MapPlane
 // R_InitPlanes
 // Only at game startup.
 //
-void R_InitPlanes (void)
-{
-    // Doh!
-}
+// void R_InitPlanes (void)
+// {
+//     // Doh!
+// }
 
 
 //

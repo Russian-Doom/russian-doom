@@ -802,7 +802,8 @@ void R_Init (void)
     printf (".");
 
     R_SetViewSize (screenblocks, detailLevel);
-    R_InitPlanes ();
+    // [JN] Don't call empty function
+    // R_InitPlanes ();
     printf (".");
     R_InitLightTables ();
     printf (".");
