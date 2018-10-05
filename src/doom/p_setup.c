@@ -118,6 +118,7 @@ byte*		rejectmatrix;
 mapthing_t	deathmatchstarts[MAX_DEATHMATCH_STARTS];
 mapthing_t*	deathmatch_p;
 mapthing_t	playerstarts[MAXPLAYERS];
+boolean     playerstartsingame[MAXPLAYERS];
 
 // [crispy] recalculate seg offsets
 // adapted from prboom-plus/src/p_setup.c:474-482
@@ -688,6 +689,13 @@ void P_LoadThings (int lump)
 	
 	P_SpawnMapThing(&spawnthing);
     }
+
+    if (!deathmatch)
+        for (i = 0; i < MAXPLAYERS; i++)
+            if (playeringame[i] && !playerstartsingame[i])
+                I_Error(english_language ? 
+                        "P_LoadThings: Player %d start missing" :
+                        "P_LoadThings: Отсутствует стартовая точка игрока №%d", i + 1);
 
     W_ReleaseLumpNum(lump);
 }
