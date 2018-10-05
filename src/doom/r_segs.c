@@ -882,7 +882,7 @@ void R_StoreWallRange (int start, int stop)
             walllights_bottom = scalelight[lightnum];
             
             // [JN] Applying brightmaps to walls...
-            if (brightmaps && !vanillaparm)
+            if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
             {
                 // -------------------------------------------------------
                 //  Not in Shareware

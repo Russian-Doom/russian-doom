@@ -810,7 +810,7 @@ void R_Init (void)
     R_InitTranslationTables ();
     printf (".");
     // [JN] Lookup all the textures for brightmapping
-    if (brightmaps && !vanillaparm)
+    if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
     {
         R_InitBrightmaps ();
     }
