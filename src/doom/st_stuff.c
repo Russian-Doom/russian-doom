@@ -1232,9 +1232,18 @@ void ST_updateFaceWidget(void)
         if ((plyr->cheats & CF_GODMODE) || plyr->powers[pw_invulnerability])
         {
             priority = 4;
-            painoffset = 0;
             faceindex = ST_GODFACE;
-            st_facecount = 1;
+            if (old_godface)
+            {
+                // [JN] Standard god mode face behaviour
+                st_facecount = 1;
+                painoffset = 0;
+            }
+            else
+            {
+                // [JN] Activate extra bloody god mode faces
+                st_facecount = 0;
+            }
         }
     }
 
