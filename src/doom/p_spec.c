@@ -1013,6 +1013,7 @@ P_ShootSpecialLine
   line_t*	line )
 {
     int		ok;
+    extern boolean canmodify;   // [JN] For safe checking
     
     //	Impacts that other things can activate.
     if (!thing->player)
@@ -1039,9 +1040,9 @@ P_ShootSpecialLine
 	
       case 46:
 	// OPEN DOOR
-	// [JN] Specific changed to "once only"
+	// [JN] Specific changed to "once only" for vanilla maps
 	EV_DoDoor(line,vld_open);
-	P_ChangeSwitchTexture(line,0);
+	P_ChangeSwitchTexture(line, canmodify ? 0 : 1);
 	break;
 	
       case 47:
