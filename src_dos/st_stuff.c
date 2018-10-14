@@ -1071,11 +1071,19 @@ void ST_updateFaceWidget(void)
 	    || plyr->powers[pw_invulnerability])
 	{
 	    priority = 4;
-
-	    painoffset = 0;
 	    faceindex = ST_GODFACE;
-	    st_facecount = 1;
 
+	    if (vanilla)
+	    {
+	        // [JN] Standard god mode face behaviour
+	        st_facecount = 1;
+	        painoffset = 0;
+	    }
+	    else
+	    {
+	        // [JN] Activate extra bloody god mode faces
+	        st_facecount = 0;
+	    }
 	}
 
     }
@@ -1094,7 +1102,7 @@ void ST_updateFaceWidget(void)
     st_faceindex = painoffset + faceindex;
     
     // [JN] Additional array of faces for GOD mode
-    if ((plyr->powers[pw_invulnerability]) || (plyr->cheats & CF_GODMODE))
+    if (!vanilla && (plyr->powers[pw_invulnerability]) || (plyr->cheats & CF_GODMODE))
     {
         st_faceindex = painoffset + faceindex + ST_NUMFACES;
     }
