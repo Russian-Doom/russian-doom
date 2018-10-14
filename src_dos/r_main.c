@@ -976,6 +976,8 @@ void R_RenderPlayerView (player_t* player)
     NetUpdate ();
     
     // [crispy] draw fuzz effect independent of rendering frame rate
+    // [JN] Continue fuzz animation in paused states in -vanilla mode
+    if (!vanilla)
     R_SetFuzzPosDraw();
 
     R_DrawMasked ();
