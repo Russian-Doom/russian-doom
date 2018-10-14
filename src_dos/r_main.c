@@ -657,9 +657,12 @@ void R_InitLightTables (void)
     for (i=0 ; i< LIGHTLEVELS ; i++)
     {
 	startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
-	for (j=0 ; j<MAXLIGHTZ ; j++)
+	// [JN] No smoother diminished lighting in -vanilla mode
+	for (j=0 ; vanilla ? j<MAXLIGHTZ_VANILLA : j<MAXLIGHTZ ; j++)
 	{
-	    scale = FixedDiv ((SCREENWIDTH/2*FRACUNIT), (j+1)<<LIGHTZSHIFT);
+	    scale = FixedDiv ((SCREENWIDTH/2*FRACUNIT), vanilla ?
+                                                    ((j+1)<<LIGHTZSHIFT_VANILLA) : 
+                                                    ((j+1)<<LIGHTZSHIFT));
 	    scale >>= LIGHTSCALESHIFT;
 	    level = startmap - scale/DISTMAP;
 	    
