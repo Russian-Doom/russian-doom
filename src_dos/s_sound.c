@@ -698,6 +698,51 @@ S_StartSound
 */
  
 }
+
+//
+// [JN] Play unbreakable NULL-origin sound.
+// Used by Icon of Sin for preventing it's sounds
+// being breaked by player's "oof" and few others. 
+//
+void S_StartSoundNoBreak(int sfx_id)
+{
+    int sep;
+    int pitch;
+    int priority;
+    int cnum;
+    int volume;
+    sfxinfo_t *sfx;
+  
+    sfx = &S_sfx[sfx_id];           // Sfx id to play
+    cnum = S_getChannel(NULL, sfx); // Try to find a channel (always NULL origin)
+    volume = snd_SfxVolume;         // Use maximum sound volume
+    sep = NORM_SEP;                 // Don't use stereo separation (128)
+    pitch = NORM_PITCH;             // Don't use pitch (127)
+    priority = NORM_PRIORITY;       // Use standard priority (64)
+
+    // Put non-breakable sound into last channel. Duh.
+    cnum = 8;
+
+    // Sfx to play
+    sfx->lumpnum = I_GetSfxLumpNum(sfx);
+
+    // cache data if necessary
+    if (!sfx->data)
+    {
+        sfx->data = (void *) W_CacheLumpNum(sfx->lumpnum, PU_MUSIC);
+        _dpmi_lockregion(sfx->data, lumpinfo[sfx->lumpnum].size);
+    }
+  
+    // Assigns the handle to one of the channels in the
+    //  mix/output buffer.
+    channels[cnum].handle = I_StartSound(sfx_id,
+                                         sfx->data,
+                                         volume,
+                                         sep,
+                                         pitch,
+                                         priority);
+}
+
 //
 // Updates music & sounds
 //

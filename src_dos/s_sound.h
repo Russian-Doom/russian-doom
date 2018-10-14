@@ -54,6 +54,9 @@ S_StartSound
 ( void*		origin,
   int		sfx_id );
 
+void
+S_StartSoundNoBreak
+( int		sfx_id );
 
 void 
 S_StartSoundOnce
