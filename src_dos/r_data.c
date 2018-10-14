@@ -161,6 +161,7 @@ lighttable_t	*brightmaps_greenonly3;
 lighttable_t	*brightmaps_orangeyellow;
 lighttable_t	*brightmaps_dimmeditems;
 lighttable_t	*brightmaps_brighttan;
+lighttable_t	*brightmaps_redonly1;
 
 //
 // MAPTEXTURE_T CACHING
@@ -660,6 +661,7 @@ void R_InitColormaps (void)
     int	lump8, length8;
     int	lump9, length9;
     int	lump10, length10;
+    int	lump11, length11;
     
     // Load in the light tables, 
     //  256 byte align tables.
@@ -726,6 +728,12 @@ void R_InitColormaps (void)
     brightmaps_brighttan = Z_Malloc (length10, PU_STATIC, 0); 
     brightmaps_brighttan = (byte *)( ((int)brightmaps_brighttan + 255)&~0xff); 
     W_ReadLump (lump10,brightmaps_brighttan);
+
+    lump11 = W_GetNumForName("BRTMAP10"); 
+    length11 = W_LumpLength (lump11) + 255; 
+    brightmaps_redonly1 = Z_Malloc (length11, PU_STATIC, 0); 
+    brightmaps_redonly1 = (byte *)( ((int)brightmaps_redonly1 + 255)&~0xff); 
+    W_ReadLump (lump11,brightmaps_redonly1);
 }
 
 
