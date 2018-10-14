@@ -170,6 +170,9 @@ fixed_t     forwardmove[2] = {0x19, 0x32};
 fixed_t     sidemove[2]    = {0x18, 0x28};
 fixed_t     angleturn[3]   = {640, 1280, 320};  // + slow turn
 
+// [JN] If true, activate maximum weapon bobbing
+boolean max_bobbing;
+
 #define SLOWTURNTICS    6
 #define NUMKEYS         256
 
@@ -476,14 +479,30 @@ void G_BuildTiccmd (ticcmd_t* cmd)
         gamekeydown[key_crosshair] = false;
     }
 
+    // [JN] "false" must be set as initial and returning condition.
+    max_bobbing = false; 
+
     if (forward > MAXPLMOVE)
+    {
     forward = MAXPLMOVE;
+    max_bobbing = true;
+    }
     else if (forward < -MAXPLMOVE)
+    {
     forward = -MAXPLMOVE;
+    max_bobbing = false;
+    }
+
     if (side > MAXPLMOVE)
+    {
     side = MAXPLMOVE;
+    max_bobbing = true;
+    }
     else if (side < -MAXPLMOVE)
+    {
     side = -MAXPLMOVE;
+    max_bobbing = false;
+    }
 
     cmd->forwardmove += forward;
     cmd->sidemove += side;

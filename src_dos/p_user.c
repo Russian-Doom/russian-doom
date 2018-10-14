@@ -74,6 +74,7 @@ void P_CalcHeight (player_t* player, boolean safe)
 {
     int		angle;
     fixed_t	bob;
+    extern boolean max_bobbing;
     
     // Regular movement bobbing
     // (needs to be calculated for gun swing
@@ -87,6 +88,11 @@ void P_CalcHeight (player_t* player, boolean safe)
 	FixedMul (player->mo->momx, player->mo->momx)
 	+ FixedMul (player->mo->momy,player->mo->momy);
     
+    // [JN] Reduce bobbing amplitude while not in full
+    // speed movement. Affects both camera and weapon bobbing.
+    if (singleplayer && !max_bobbing && !vanilla)
+    player->bob >>= 3;
+    else
     player->bob >>= 2;
 
     if (player->bob>MAXBOB)
