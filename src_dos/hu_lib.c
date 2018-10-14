@@ -150,7 +150,9 @@ void HUlib_eraseTextLine(hu_textline_t* l)
     if (!automapactive &&
 	viewwindowx && l->needsupdate)
     {
-	lh = SHORT(l->f[0]->height) + 1;
+	// [JN] Clear two extra pixel lines in bordered view.
+	// Fixes remainings of text shadows for chars "Д", "Ц" and "Щ".
+	lh = SHORT(l->f[0]->height+2) + 1;
 	for (y=l->y,yoffset=y*SCREENWIDTH ; y<l->y+lh ; y++,yoffset+=SCREENWIDTH)
 	{
 	    if (y < viewwindowy || y >= viewwindowy + viewheight)
