@@ -1280,7 +1280,7 @@ void ST_drawWidgets(boolean refresh)
     }
 
     // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
-    if (screenblocks == 11)
+    if (screenblocks == 11 && !automapactive)
     {
         if (netgame)    // [JN] Account player's color in network game
         V_DrawPatch(ST_FX, 0, BG, faceback);
