@@ -914,6 +914,16 @@ R_StoreWallRange
 
                     if (bottomtexture == bmaptexture73)
                     walllights_bottom = fullbright_greenonly1[lightnum];
+
+                    // Bright tan
+                    if (midtexture == bmaptexture86 || midtexture == bmaptexture87 || midtexture == bmaptexture88)
+                    walllights_middle = fullbright_brighttan[lightnum];
+
+                    if (toptexture == bmaptexture86 || toptexture == bmaptexture87 || toptexture == bmaptexture88)
+                    walllights_top = fullbright_brighttan[lightnum];
+
+                    if (bottomtexture == bmaptexture86 || bottomtexture == bmaptexture87 || bottomtexture == bmaptexture88)
+                    walllights_bottom = fullbright_brighttan[lightnum];
                 }
 
                 // -------------------------------------------------------
