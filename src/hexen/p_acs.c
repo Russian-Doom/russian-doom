@@ -558,6 +558,7 @@ boolean P_StartLockedACS(line_t * line, byte * args, mobj_t * mo, int side)
     char LockedBuffer[80];
 
     extern char *TextKeyMessages[11];
+    extern char *TextKeyMessages_Rus[11];
 
     lock = args[4];
     if (!mo->player)
@@ -572,7 +573,9 @@ boolean P_StartLockedACS(line_t * line, byte * args, mobj_t * mo, int side)
                        english_language ?
                        "YOU NEED THE %s\n" :
                        "LKZ JNRHSNBZ YE;TY %s\n", // ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n
-                       TextKeyMessages[lock - 1]);
+                       english_language ?
+                       TextKeyMessages[lock - 1] :
+                       TextKeyMessages_Rus[lock - 1]);
             P_SetMessage(mo->player, LockedBuffer, true);
             S_StartSound(mo, SFX_DOOR_LOCKED);
             return false;

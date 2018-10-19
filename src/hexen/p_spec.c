@@ -411,6 +411,7 @@ boolean EV_SectorSoundChange(byte * args)
 static boolean CheckedLockedDoor(mobj_t * mo, byte lock)
 {
     extern char *TextKeyMessages[11];
+    extern char *TextKeyMessages_Rus[11];
     char LockedBuffer[80];
 
     if (!mo->player)
@@ -426,7 +427,9 @@ static boolean CheckedLockedDoor(mobj_t * mo, byte lock)
         M_snprintf(LockedBuffer, sizeof(LockedBuffer), english_language ?
                    "YOU NEED THE %s\n" :
                    "LKZ JNRHSNBZ YE;TY %s\n", // ДЛЯ ОТКРЫТИЯ НУЖЕН %s\n
-                   TextKeyMessages[lock - 1]);
+                   english_language ?
+                   TextKeyMessages[lock - 1] :
+                   TextKeyMessages_Rus[lock - 1]);
         P_SetMessage(mo->player, LockedBuffer, true);
         S_StartSound(mo, SFX_DOOR_LOCKED);
         return false;
