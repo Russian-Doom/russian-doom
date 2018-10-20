@@ -408,7 +408,7 @@ void P_DeathThink(player_t * player)
     {
         if (player == &players[consoleplayer])
         {
-            I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 16 ?
+            I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 8 ?
                                                     "PALFIX" :
                                                     "PLAYPAL"),
                                                     PU_CACHE));

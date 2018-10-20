@@ -399,59 +399,45 @@ static Menu_t *Menus_Rus[] = {
 };
 
 static char *GammaText[] = {
-    TXT_GAMMA_LEVEL_OFF,
-    TXT_GAMMA_LEVEL_0_25,
-    TXT_GAMMA_LEVEL_0_50,
-    TXT_GAMMA_LEVEL_0_75,
-    TXT_GAMMA_LEVEL_1_0,
-    TXT_GAMMA_LEVEL_1_25,
-    TXT_GAMMA_LEVEL_1_50,
-    TXT_GAMMA_LEVEL_1_75,
-    TXT_GAMMA_LEVEL_2_0,
-    TXT_GAMMA_LEVEL_2_25,
-    TXT_GAMMA_LEVEL_2_50,
-    TXT_GAMMA_LEVEL_2_75,
-    TXT_GAMMA_LEVEL_3_0,
-    TXT_GAMMA_LEVEL_3_25,
-    TXT_GAMMA_LEVEL_3_50,
-    TXT_GAMMA_LEVEL_3_75,
-    TXT_GAMMA_LEVEL_4_0,
-    TXT_GAMMA_LEVEL_4_25,
-    TXT_GAMMA_LEVEL_4_50,
-    TXT_GAMMA_LEVEL_4_75,
-    TXT_GAMMA_LEVEL_5_0,
-    TXT_GAMMA_LEVEL_5_25,
-    TXT_GAMMA_LEVEL_5_50,
-    TXT_GAMMA_LEVEL_5_75,
-    TXT_GAMMA_LEVEL_6_0
+    TXT_GAMMA_IMPROVED_OFF,
+    TXT_GAMMA_IMPROVED_05,
+    TXT_GAMMA_IMPROVED_1,
+    TXT_GAMMA_IMPROVED_15,
+    TXT_GAMMA_IMPROVED_2,
+    TXT_GAMMA_IMPROVED_25,
+    TXT_GAMMA_IMPROVED_3,
+    TXT_GAMMA_IMPROVED_35,
+    TXT_GAMMA_IMPROVED_4,
+    TXT_GAMMA_ORIGINAL_OFF,
+    TXT_GAMMA_ORIGINAL_05,
+    TXT_GAMMA_ORIGINAL_1,
+    TXT_GAMMA_ORIGINAL_15,
+    TXT_GAMMA_ORIGINAL_2,
+    TXT_GAMMA_ORIGINAL_25,
+    TXT_GAMMA_ORIGINAL_3,
+    TXT_GAMMA_ORIGINAL_35,
+    TXT_GAMMA_ORIGINAL_4
 };
 
 static char *GammaText_Rus[] = {
-    TXT_GAMMA_LEVEL_OFF_RUS,
-    TXT_GAMMA_LEVEL_0_25_RUS,
-    TXT_GAMMA_LEVEL_0_50_RUS,
-    TXT_GAMMA_LEVEL_0_75_RUS,
-    TXT_GAMMA_LEVEL_1_0_RUS,
-    TXT_GAMMA_LEVEL_1_25_RUS,
-    TXT_GAMMA_LEVEL_1_50_RUS,
-    TXT_GAMMA_LEVEL_1_75_RUS,
-    TXT_GAMMA_LEVEL_2_0_RUS,
-    TXT_GAMMA_LEVEL_2_25_RUS,
-    TXT_GAMMA_LEVEL_2_50_RUS,
-    TXT_GAMMA_LEVEL_2_75_RUS,
-    TXT_GAMMA_LEVEL_3_0_RUS,
-    TXT_GAMMA_LEVEL_3_25_RUS,
-    TXT_GAMMA_LEVEL_3_50_RUS,
-    TXT_GAMMA_LEVEL_3_75_RUS,
-    TXT_GAMMA_LEVEL_4_0_RUS,
-    TXT_GAMMA_LEVEL_4_25_RUS,
-    TXT_GAMMA_LEVEL_4_50_RUS,
-    TXT_GAMMA_LEVEL_4_75_RUS,
-    TXT_GAMMA_LEVEL_5_0_RUS,
-    TXT_GAMMA_LEVEL_5_25_RUS,
-    TXT_GAMMA_LEVEL_5_50_RUS,
-    TXT_GAMMA_LEVEL_5_75_RUS,
-    TXT_GAMMA_LEVEL_6_0_RUS
+    TXT_GAMMA_IMPROVED_OFF_RUS,
+    TXT_GAMMA_IMPROVED_05_RUS,
+    TXT_GAMMA_IMPROVED_1_RUS,
+    TXT_GAMMA_IMPROVED_15_RUS,
+    TXT_GAMMA_IMPROVED_2_RUS,
+    TXT_GAMMA_IMPROVED_25_RUS,
+    TXT_GAMMA_IMPROVED_3_RUS,
+    TXT_GAMMA_IMPROVED_35_RUS,
+    TXT_GAMMA_IMPROVED_4_RUS,
+    TXT_GAMMA_ORIGINAL_OFF_RUS,
+    TXT_GAMMA_ORIGINAL_05_RUS,
+    TXT_GAMMA_ORIGINAL_1_RUS,
+    TXT_GAMMA_ORIGINAL_15_RUS,
+    TXT_GAMMA_ORIGINAL_2_RUS,
+    TXT_GAMMA_ORIGINAL_25_RUS,
+    TXT_GAMMA_ORIGINAL_3_RUS,
+    TXT_GAMMA_ORIGINAL_35_RUS,
+    TXT_GAMMA_ORIGINAL_4_RUS
 };
 
 // CODE --------------------------------------------------------------------
@@ -1513,7 +1499,7 @@ boolean MN_Responder(event_t * event)
                     askforquit = false;
                     typeofask = 0;
                     paused = false;
-                    I_SetPalette(W_CacheLumpName(usegamma <= 16 ?
+                    I_SetPalette(W_CacheLumpName(usegamma <= 8 ?
                                                  "PALFIX" :
                                                  "PLAYPAL",
                                                  PU_CACHE));
@@ -1756,7 +1742,7 @@ boolean MN_Responder(event_t * event)
         else if (key == key_menu_gamma)          // F11 (gamma correction)
         {
             usegamma++;
-            if (usegamma > 24)
+            if (usegamma > 17)
             {
                 usegamma = 0;
             }
@@ -2065,7 +2051,7 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-    I_SetPalette(W_CacheLumpName(usegamma <= 16 ?
+    I_SetPalette(W_CacheLumpName(usegamma <= 8 ?
                                  "PALFIX" :
                                  "PLAYPAL",
                                  PU_CACHE));

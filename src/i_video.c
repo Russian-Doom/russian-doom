@@ -762,7 +762,7 @@ void I_SetPalette (byte *doompalette)
     int i;
 
     // [JN] Check for incorrect gamma levels while startup
-    if (usegamma < 0 || usegamma > 24)
+    if (usegamma < 0 || usegamma > 17)
     usegamma = 0;
 
     for (i=0; i<256; ++i)
@@ -1340,7 +1340,7 @@ void I_InitGraphics(void)
 
     doompal1 = W_CacheLumpName(DEH_String("PALFIX"), PU_CACHE);
     doompal2 = W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE);
-    I_SetPalette(usegamma <= 16 ? doompal1 : doompal2);
+    I_SetPalette(usegamma <= 8 ? doompal1 : doompal2);
 
     SDL_SetPaletteColors(screenbuffer->format->palette, palette, 0, 256);
 

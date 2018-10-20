@@ -1193,7 +1193,7 @@ void A_MStaffAttack(player_t * player, pspdef_t * psp)
     {
         player->damagecount = 0;
         player->bonuscount = 0;
-        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 16 ?
+        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 8 ?
                                                              "PALFIX" :
                                                              "PLAYPAL"), 
                                                              PU_CACHE) + STARTSCOURGEPAL * 768);
@@ -1217,7 +1217,7 @@ void A_MStaffPalette(player_t * player, pspdef_t * psp)
         {                       // reset back to original playpal
             pal = 0;
         }
-        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 16 ?
+        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 8 ?
                                                              "PALFIX" :
                                                              "PLAYPAL"),
                                                              PU_CACHE) + pal * 768);
@@ -1938,7 +1938,7 @@ void A_CHolyAttack(player_t * player, pspdef_t * psp)
     {
         player->damagecount = 0;
         player->bonuscount = 0;
-        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 16 ?
+        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 8 ?
                                                              "PALFIX" :
                                                              "PLAYPAL"),
                                                              PU_CACHE) + STARTHOLYPAL * 768);
@@ -1963,7 +1963,7 @@ void A_CHolyPalette(player_t * player, pspdef_t * psp)
         {                       // reset back to original playpal
             pal = 0;
         }
-        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 16 ?
+        I_SetPalette((byte *) W_CacheLumpNum(W_GetNumForName(usegamma <= 8 ?
                                                              "PALFIX" :
                                                              "PLAYPAL"),
                                                              PU_CACHE) + pal * 768);

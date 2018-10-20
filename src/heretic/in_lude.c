@@ -160,7 +160,7 @@ extern void AM_Stop(void);
 
 void IN_Start(void)
 {
-    I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 16 ?
+    I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 8 ?
                                             "PALFIX" :
                                             "PLAYPAL"),
                                             PU_CACHE));

@@ -283,7 +283,7 @@ void D_Display (void)
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
     {
-        I_SetPalette (W_CacheLumpName(DEH_String(usegamma <= 16 ? 
+        I_SetPalette (W_CacheLumpName(DEH_String(usegamma <= 8 ? 
                                                  "PALFIX" : 
                                                  "PLAYPAL"),
                                                  PU_CACHE));

@@ -25,31 +25,25 @@
 // English language
 // -----------------------------------------------------------------------------
 
-#define TXT_GAMMA_LEVEL_OFF     "GAMMA CORRECTION OFF"
-#define TXT_GAMMA_LEVEL_0_25    "GAMMA CORRECTION 0.25"
-#define TXT_GAMMA_LEVEL_0_50    "GAMMA CORRECTION 0.50"
-#define TXT_GAMMA_LEVEL_0_75    "GAMMA CORRECTION 0.75"
-#define TXT_GAMMA_LEVEL_1_0     "GAMMA CORRECTION 1.0"
-#define TXT_GAMMA_LEVEL_1_25    "GAMMA CORRECTION 1.25"
-#define TXT_GAMMA_LEVEL_1_50    "GAMMA CORRECTION 1.50"
-#define TXT_GAMMA_LEVEL_1_75    "GAMMA CORRECTION 1.75"
-#define TXT_GAMMA_LEVEL_2_0     "GAMMA CORRECTION 2.0"
-#define TXT_GAMMA_LEVEL_2_25    "GAMMA CORRECTION 2.25"
-#define TXT_GAMMA_LEVEL_2_50    "GAMMA CORRECTION 2.50"
-#define TXT_GAMMA_LEVEL_2_75    "GAMMA CORRECTION 2.75"
-#define TXT_GAMMA_LEVEL_3_0     "GAMMA CORRECTION 3.0"
-#define TXT_GAMMA_LEVEL_3_25    "GAMMA CORRECTION 3.25"
-#define TXT_GAMMA_LEVEL_3_50    "GAMMA CORRECTION 3.50"
-#define TXT_GAMMA_LEVEL_3_75    "GAMMA CORRECTION 3.75"
-#define TXT_GAMMA_LEVEL_4_0     "GAMMA CORRECTION 4.0"
-#define TXT_GAMMA_LEVEL_4_25    "GAMMA CORRECTION 4.25"
-#define TXT_GAMMA_LEVEL_4_50    "GAMMA CORRECTION 4.50"
-#define TXT_GAMMA_LEVEL_4_75    "GAMMA CORRECTION 4.75"
-#define TXT_GAMMA_LEVEL_5_0     "GAMMA CORRECTION 5.0"
-#define TXT_GAMMA_LEVEL_5_25    "GAMMA CORRECTION 5.25"
-#define TXT_GAMMA_LEVEL_5_50    "GAMMA CORRECTION 5.50"
-#define TXT_GAMMA_LEVEL_5_75    "GAMMA CORRECTION 5.75"
-#define TXT_GAMMA_LEVEL_6_0     "GAMMA CORRECTION 6.0"
+// Improved (PALFIX) and standard (PLAYPAL) gamma correction
+#define TXT_GAMMA_IMPROVED_OFF  "IMPROVED GAMMA CORRECTION OFF"
+#define TXT_GAMMA_IMPROVED_05   "IMPROVED GAMMA CORRECTION LEVEL 0.5"
+#define TXT_GAMMA_IMPROVED_1    "IMPROVED GAMMA CORRECTION LEVEL 1.0"
+#define TXT_GAMMA_IMPROVED_15   "IMPROVED GAMMA CORRECTION LEVEL 1.5"
+#define TXT_GAMMA_IMPROVED_2    "IMPROVED GAMMA CORRECTION LEVEL 2.0"
+#define TXT_GAMMA_IMPROVED_25   "IMPROVED GAMMA CORRECTION LEVEL 2.5"
+#define TXT_GAMMA_IMPROVED_3    "IMPROVED GAMMA CORRECTION LEVEL 3.0"
+#define TXT_GAMMA_IMPROVED_35   "IMPROVED GAMMA CORRECTION LEVEL 3.5"
+#define TXT_GAMMA_IMPROVED_4    "IMPROVED GAMMA CORRECTION LEVEL 4.0"
+#define TXT_GAMMA_ORIGINAL_OFF  "STANDARD GAMMA CORRECTION OFF"
+#define TXT_GAMMA_ORIGINAL_05   "STANDARD GAMMA CORRECTION LEVEL 0.5"
+#define TXT_GAMMA_ORIGINAL_1    "STANDARD GAMMA CORRECTION LEVEL 1.0"
+#define TXT_GAMMA_ORIGINAL_15   "STANDARD GAMMA CORRECTION LEVEL 1.5"
+#define TXT_GAMMA_ORIGINAL_2    "STANDARD GAMMA CORRECTION LEVEL 2.0"
+#define TXT_GAMMA_ORIGINAL_25   "STANDARD GAMMA CORRECTION LEVEL 2.5"
+#define TXT_GAMMA_ORIGINAL_3    "STANDARD GAMMA CORRECTION LEVEL 3.0"
+#define TXT_GAMMA_ORIGINAL_35   "STANDARD GAMMA CORRECTION LEVEL 3.5"
+#define TXT_GAMMA_ORIGINAL_4    "STANDARD GAMMA CORRECTION LEVEL 4.0"
 
 #define	EMPTYSTRING             "EMPTY SLOT"
 
@@ -205,31 +199,25 @@
 
 // MN_menu.c ---------------------------------------------------------------
 
-#define TXT_GAMMA_LEVEL_OFF_RUS     "UFVVF-RJHHTRWBZ JNRK.XTYF"        // ГАММА-КОРРЕКЦИЯ ОТКЛЮЧЕНА
-#define TXT_GAMMA_LEVEL_0_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 0>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.25
-#define TXT_GAMMA_LEVEL_0_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 0>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.50
-#define TXT_GAMMA_LEVEL_0_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 0>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 0.75
-#define TXT_GAMMA_LEVEL_1_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 1>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.0
-#define TXT_GAMMA_LEVEL_1_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 1>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.25
-#define TXT_GAMMA_LEVEL_1_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 1>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.50
-#define TXT_GAMMA_LEVEL_1_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 1>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 1.75
-#define TXT_GAMMA_LEVEL_2_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 2>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.0
-#define TXT_GAMMA_LEVEL_2_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 2>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.25
-#define TXT_GAMMA_LEVEL_2_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 2>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.50
-#define TXT_GAMMA_LEVEL_2_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 2>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 2.75
-#define TXT_GAMMA_LEVEL_3_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 3>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.0
-#define TXT_GAMMA_LEVEL_3_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 3>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.25
-#define TXT_GAMMA_LEVEL_3_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 3>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.50
-#define TXT_GAMMA_LEVEL_3_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 3>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 3.75
-#define TXT_GAMMA_LEVEL_4_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 4>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.0
-#define TXT_GAMMA_LEVEL_4_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 4>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.25
-#define TXT_GAMMA_LEVEL_4_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 4>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.50
-#define TXT_GAMMA_LEVEL_4_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 4>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 4.75
-#define TXT_GAMMA_LEVEL_5_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 5>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.0
-#define TXT_GAMMA_LEVEL_5_25_RUS    "EHJDTYM UFVVF-RJHHTRWBB 5>25"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.25
-#define TXT_GAMMA_LEVEL_5_50_RUS    "EHJDTYM UFVVF-RJHHTRWBB 5>50"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.50
-#define TXT_GAMMA_LEVEL_5_75_RUS    "EHJDTYM UFVVF-RJHHTRWBB 5>75"     // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 5.75
-#define TXT_GAMMA_LEVEL_6_0_RUS     "EHJDTYM UFVVF-RJHHTRWBB 6>0"      // УРОВЕНЬ ГАММА-КОРРЕКЦИИ 6.0
+// Улучшенная (PALFIX) и стандартная (PLAYPAL) гамма-коррекция 
+#define TXT_GAMMA_IMPROVED_OFF_RUS  "EKEXITYYFZ UFVVF-RJHHTRWBZ JNRK.XTYF"     // Улучшенная гамма-коррекция отключена
+#define TXT_GAMMA_IMPROVED_05_RUS   "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 0>5"   // Уровень улучшенной гамма-коррекции: 0.5
+#define TXT_GAMMA_IMPROVED_1_RUS    "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 1>0"   // Уровень улучшенной гамма-коррекции: 1.0
+#define TXT_GAMMA_IMPROVED_15_RUS   "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 1>5"   // Уровень улучшенной гамма-коррекции: 1.5
+#define TXT_GAMMA_IMPROVED_2_RUS    "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 2>0"   // Уровень улучшенной гамма-коррекции: 2.0
+#define TXT_GAMMA_IMPROVED_25_RUS   "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 2>5"   // Уровень улучшенной гамма-коррекции: 2.5
+#define TXT_GAMMA_IMPROVED_3_RUS    "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 3>0"   // Уровень улучшенной гамма-коррекции: 3.0
+#define TXT_GAMMA_IMPROVED_35_RUS   "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 3>5"   // Уровень улучшенной гамма-коррекции: 3.5
+#define TXT_GAMMA_IMPROVED_4_RUS    "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 4>0"   // Уровень улучшенной гамма-коррекции: 4.0
+#define TXT_GAMMA_ORIGINAL_OFF_RUS  "CNFYLFHNYFZ UFVVF-RJHHTRWBZ JNRK.XTYF"    // Стандартная гамма-коррекция отключена
+#define TXT_GAMMA_ORIGINAL_05_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 0>5"  // Уровень стандартной гамма-коррекции: 0.5
+#define TXT_GAMMA_ORIGINAL_1_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 1>0"  // Уровень стандартной гамма-коррекции: 1.0
+#define TXT_GAMMA_ORIGINAL_15_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 1>5"  // Уровень стандартной гамма-коррекции: 1.5
+#define TXT_GAMMA_ORIGINAL_2_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 2>0"  // Уровень стандартной гамма-коррекции: 2.0
+#define TXT_GAMMA_ORIGINAL_25_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 2>5"  // Уровень стандартной гамма-коррекции: 2.5
+#define TXT_GAMMA_ORIGINAL_3_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 3>0"  // Уровень стандартной гамма-коррекции: 3.0
+#define TXT_GAMMA_ORIGINAL_35_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 3>5"  // Уровень стандартной гамма-коррекции: 3.5
+#define TXT_GAMMA_ORIGINAL_4_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 4>0"  // Уровень стандартной гамма-коррекции: 4.0
 
 #define	EMPTYSTRING_RUS             "GECNJQ CKJN"                       // ПУСТОЙ СЛОТ
 

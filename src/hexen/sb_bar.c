@@ -1040,7 +1040,7 @@ void SB_PaletteFlash(boolean forceChange)
     if (palette != sb_palette)
     {
         sb_palette = palette;
-        pal = (byte *) W_CacheLumpNum(usegamma <= 16 ?
+        pal = (byte *) W_CacheLumpNum(usegamma <= 8 ?
                                       PlayPalette1 :
                                       PlayPalette2,
                                       PU_CACHE) + palette * 768;

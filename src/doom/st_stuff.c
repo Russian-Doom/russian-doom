@@ -1437,7 +1437,7 @@ void ST_doPaletteStuff(void)
     if (palette != st_palette)
     {
         st_palette = palette;
-        pal = (byte *) W_CacheLumpNum ((usegamma <= 16 ? 
+        pal = (byte *) W_CacheLumpNum ((usegamma <= 8 ? 
                                         lu_palette1 : 
                                         lu_palette2), 
                                         PU_CACHE) + palette * 768;
@@ -2034,7 +2034,7 @@ void ST_Stop (void)
     if (st_stopped)
     return;
 
-    I_SetPalette (W_CacheLumpNum ((usegamma <= 16 ? 
+    I_SetPalette (W_CacheLumpNum ((usegamma <= 8 ? 
                                    lu_palette1 : 
                                    lu_palette2), 
                                    PU_CACHE));

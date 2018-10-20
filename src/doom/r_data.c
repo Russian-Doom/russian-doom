@@ -849,7 +849,7 @@ void R_InitTranMap()
     // else
     {   
         // Compose a default transparent filter map based on PLAYPAL.
-        unsigned char *playpal = (W_CacheLumpName (usegamma <= 16 ? 
+        unsigned char *playpal = (W_CacheLumpName (usegamma <= 8 ? 
                                                    "PALFIX" :
                                                    "PLAYPAL",
                                                    PU_STATIC));

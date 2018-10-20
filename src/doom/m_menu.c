@@ -105,62 +105,48 @@ boolean QuickSaveTitle;
 
 void (*messageRoutine)(int response);
 
-char gammamsg[25][29] =
+char gammamsg[18][41] =
 {
-    GAMMALVL0,
-    GAMMALV02,
-    GAMMALV05,
-    GAMMALV07,
-    GAMMALVL1,
-    GAMMALV12,
-    GAMMALV15,
-    GAMMALV17,
-    GAMMALVL2,
-    GAMMALV22,
-    GAMMALV25,
-    GAMMALV27,
-    GAMMALVL3,
-    GAMMALV32,
-    GAMMALV35,
-    GAMMALV37,
-    GAMMALVL4,
-    GAMMALV42,
-    GAMMALV45,
-    GAMMALV47,
-    GAMMALVL5,
-    GAMMALV52,
-    GAMMALV55,
-    GAMMALV57,
-    GAMMALVL6
+    GAMMA_IMPROVED_OFF,
+    GAMMA_IMPROVED_05,
+    GAMMA_IMPROVED_1,
+    GAMMA_IMPROVED_15,
+    GAMMA_IMPROVED_2,
+    GAMMA_IMPROVED_25,
+    GAMMA_IMPROVED_3,
+    GAMMA_IMPROVED_35,
+    GAMMA_IMPROVED_4,
+    GAMMA_ORIGINAL_OFF,
+    GAMMA_ORIGINAL_05,
+    GAMMA_ORIGINAL_1,
+    GAMMA_ORIGINAL_15,
+    GAMMA_ORIGINAL_2,
+    GAMMA_ORIGINAL_25,
+    GAMMA_ORIGINAL_3,
+    GAMMA_ORIGINAL_35,
+    GAMMA_ORIGINAL_4
 };
 
-char gammamsg_rus[25][29] =
+char gammamsg_rus[18][41] =
 {
-    GAMMALVL0_RUS,
-    GAMMALV02_RUS,
-    GAMMALV05_RUS,
-    GAMMALV07_RUS,
-    GAMMALVL1_RUS,
-    GAMMALV12_RUS,
-    GAMMALV15_RUS,
-    GAMMALV17_RUS,
-    GAMMALVL2_RUS,
-    GAMMALV22_RUS,
-    GAMMALV25_RUS,
-    GAMMALV27_RUS,
-    GAMMALVL3_RUS,
-    GAMMALV32_RUS,
-    GAMMALV35_RUS,
-    GAMMALV37_RUS,
-    GAMMALVL4_RUS,
-    GAMMALV42_RUS,
-    GAMMALV45_RUS,
-    GAMMALV47_RUS,
-    GAMMALVL5_RUS,
-    GAMMALV52_RUS,
-    GAMMALV55_RUS,
-    GAMMALV57_RUS,
-    GAMMALVL6_RUS
+    GAMMA_IMPROVED_OFF_RUS,
+    GAMMA_IMPROVED_05_RUS,
+    GAMMA_IMPROVED_1_RUS,
+    GAMMA_IMPROVED_15_RUS,
+    GAMMA_IMPROVED_2_RUS,
+    GAMMA_IMPROVED_25_RUS,
+    GAMMA_IMPROVED_3_RUS,
+    GAMMA_IMPROVED_35_RUS,
+    GAMMA_IMPROVED_4_RUS,
+    GAMMA_ORIGINAL_OFF_RUS,
+    GAMMA_ORIGINAL_05_RUS,
+    GAMMA_ORIGINAL_1_RUS,
+    GAMMA_ORIGINAL_15_RUS,
+    GAMMA_ORIGINAL_2_RUS,
+    GAMMA_ORIGINAL_25_RUS,
+    GAMMA_ORIGINAL_3_RUS,
+    GAMMA_ORIGINAL_35_RUS,
+    GAMMA_ORIGINAL_4_RUS
 };
 
 // we are going to be entering a savegame string
@@ -2065,10 +2051,10 @@ boolean M_Responder (event_t* ev)
         else if (key == key_menu_gamma)    // gamma toggle
         {
             usegamma++;
-            if (usegamma > 24)
+            if (usegamma > 17)
                 usegamma = 0;
 
-            I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 16 ?
+            I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
                                                              "PALFIX" :
                                                              "PLAYPAL"),
                                                              PU_CACHE) + 
