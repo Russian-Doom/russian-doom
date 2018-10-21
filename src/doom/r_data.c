@@ -248,49 +248,50 @@ int position = originy + patch->topdelta;
 //
 // Rewritten by Lee Killough for performance and to fix Medusa bug
 
-static void R_GenerateComposite(int texnum)
-
+static void R_GenerateComposite (int texnum)
 {
-  byte *block = Z_Malloc(texturecompositesize[texnum], PU_STATIC,
-                         (void **) &texturecomposite[texnum]);
-  texture_t *texture = textures[texnum];
-  // Composite the columns together.
-  texpatch_t *patch = texture->patches;
-  short *collump = texturecolumnlump[texnum];
-  unsigned *colofs = texturecolumnofs[texnum]; // killough 4/9/98: make 32-bit
-  int i = texture->patchcount;
-  // killough 4/9/98: marks to identify transparent regions in merged textures
-  byte *marks = calloc(texture->width, texture->height), *source;
-  
+    byte *block = Z_Malloc(texturecompositesize[texnum], PU_STATIC, 
+                          (void **) &texturecomposite[texnum]);
+    texture_t *texture = textures[texnum];
+
+    // Composite the columns together.
+    texpatch_t *patch = texture->patches;
+    short *collump = texturecolumnlump[texnum];
+    unsigned *colofs = texturecolumnofs[texnum]; // killough 4/9/98: make 32-bit
+    int i = texture->patchcount;
+
+    // killough 4/9/98: marks to identify transparent regions in merged textures
+    byte *marks = calloc(texture->width, texture->height), *source;
+
     // [crispy] initialize composite background to black (index 0)
     memset(block, 0, texturecompositesize[texnum]);
 
-  for (; --i >=0; patch++)
+    for (; --i >=0; patch++)
     {
-      patch_t *realpatch = W_CacheLumpNum(patch->patch, PU_CACHE);
-      int x, x1 = patch->originx, x2 = x1 + SHORT(realpatch->width);
-      const int *cofs = realpatch->columnofs - x1;
+        patch_t *realpatch = W_CacheLumpNum(patch->patch, PU_CACHE);
+        int x, x1 = patch->originx, x2 = x1 + SHORT(realpatch->width);
+        const int *cofs = realpatch->columnofs - x1;
 
-      if (x1 < 0)
+        if (x1 < 0)
         x1 = 0;
-      if (x2 > texture->width)
+        if (x2 > texture->width)
         x2 = texture->width;
-      for (x = x1; x < x2 ; x++)
-    // [crispy] generate composites for single-patched textures as well
-    // if (collump[x] == -1)      // Column has multiple patches?
-          // killough 1/25/98, 4/9/98: Fix medusa bug.
-          R_DrawColumnInCache((column_t*)((byte*) realpatch + LONG(cofs[x])),
-                              block + colofs[x], patch->originy,
-			      texture->height, marks + x*texture->height);
+
+        for (x = x1; x < x2 ; x++)
+        // [crispy] generate composites for single-patched textures as well
+        // killough 1/25/98, 4/9/98: Fix medusa bug.
+        R_DrawColumnInCache((column_t*)((byte*) realpatch + LONG(cofs[x])),
+                            block + colofs[x], patch->originy,
+                            texture->height, marks + x*texture->height);
     }
 
-  // killough 4/9/98: Next, convert multipatched columns into true columns,
-  // to fix Medusa bug while still allowing for transparent regions.	
+    // killough 4/9/98: Next, convert multipatched columns into true columns,
+    // to fix Medusa bug while still allowing for transparent regions.	
 
-  source = malloc(texture->height);       // temporary column
-  for (i=0; i < texture->width; i++)
+    source = malloc(texture->height);       // temporary column
+    for (i=0; i < texture->width; i++)
     if (collump[i] == -1)                 // process only multipatched columns
-      {
+    {
         column_t *col = (column_t *)(block + colofs[i] - 3);  // cached column
         const byte *mark = marks + i * texture->height;
         int j = 0;
@@ -299,42 +300,42 @@ static void R_GenerateComposite(int texnum)
         memcpy(source, (byte *) col + 3, texture->height);
 
         for (;;)  // reconstruct the column by scanning transparency marks
-          {
-	    unsigned len;        // killough 12/98
+        {
+            unsigned len;        // killough 12/98
 
             while (j < texture->height && !mark[j]) // skip transparent cells
-              j++;
+            j++;
 
             if (j >= texture->height)           // if at end of column
-              {
+            {
                 col->topdelta = -1;             // end-of-column marker
                 break;
-              }
+            }
 
             col->topdelta = j;                  // starting offset of post
 
-	    // killough 12/98:
-	    // Use 32-bit len counter, to support tall 1s multipatched textures
+            // killough 12/98:
+            // Use 32-bit len counter, to support tall 1s multipatched textures
 
-	    for (len = 0; j < texture->height && mark[j]; j++)
-              len++;                    // count opaque cells
+            for (len = 0; j < texture->height && mark[j]; j++)
+            len++;                    // count opaque cells
 
-	    col->length = len; // killough 12/98: intentionally truncate length
+            col->length = len; // killough 12/98: intentionally truncate length
 
             // copy opaque cells from the temporary back into the column
             memcpy((byte *) col + 3, source + col->topdelta, len);
             col = (column_t *)((byte *) col + len + 4); // next post
-          }
-      }
-  free(source);         // free temporary column
-  free(marks);          // free transparency marks
+        }
+    }
 
-  // Now that the texture has been built in column cache,
-  // it is purgable from zone memory.
+    free(source);         // free temporary column
+    free(marks);          // free transparency marks
 
-  Z_ChangeTag(block, PU_CACHE);
+    // Now that the texture has been built in column cache,
+    // it is purgable from zone memory.
+
+    Z_ChangeTag(block, PU_CACHE);
 }
-
 
 
 //
@@ -821,7 +822,6 @@ void R_InitSpriteLumps (void)
 }
 
 // [crispy] from boom202s/R_DATA.C:676-787
-  
 byte *tranmap;
 
 //
@@ -832,7 +832,7 @@ byte *tranmap;
 // By Lee Killough 2/21/98
 //
 
-// [JN] Изначально 66. Значение непрозрачности увеличено до 82.
+// [JN] Изначально 66. Значение непрозрачности увеличено до 80.
 int tran_filter_pct = 80;       // filter percent
 
 #define TSC 12        /* number of fixed point digits in filter percent */
@@ -840,75 +840,64 @@ int tran_filter_pct = 80;       // filter percent
 void R_InitTranMap()
 {
     // [JN] Don't lookup for TRANMAP lump, generate tranlucency dynamically
+    // Compose a default transparent filter map based on PLAYPAL.
+    unsigned char *playpal = (W_CacheLumpName (usegamma <= 8 ? 
+                                               "PALFIX" :
+                                               "PLAYPAL",
+                                               PU_STATIC));
 
-    // If a tranlucency filter map lump is present, use it
-    // int lump = W_CheckNumForName("TRANMAP");
+    long pal[3][256], tot[256], pal_w1[3][256];
+    long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
+    long w2 = (1l<<TSC)-w1;
+    tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
 
-    // if (lump != -1)  // Set a pointer to the translucency filter maps.
-    // tranmap = W_CacheLumpNum(lump, PU_STATIC);   // killough 4/11/98
-    // else
-    {   
-        // Compose a default transparent filter map based on PLAYPAL.
-        unsigned char *playpal = (W_CacheLumpName (usegamma <= 8 ? 
-                                                   "PALFIX" :
-                                                   "PLAYPAL",
-                                                   PU_STATIC));
-
-        long pal[3][256], tot[256], pal_w1[3][256];
-        long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
-        long w2 = (1l<<TSC)-w1;
-        tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
-
-        // First, convert playpal into long int type, and transpose array,
-        // for fast inner-loop calculations. Precompute tot array.
-
+    // First, convert playpal into long int type, and transpose array,
+    // for fast inner-loop calculations. Precompute tot array.
+    {
+        register int i = 255;
+        register const unsigned char *p = playpal+255*3;
+        do
         {
-            register int i = 255;
-            register const unsigned char *p = playpal+255*3;
-            do
-            {
-                register long t,d;
-                pal_w1[0][i] = (pal[0][i] = t = p[0]) * w1;
-                d = t*t;
-                pal_w1[1][i] = (pal[1][i] = t = p[1]) * w1;
-                d += t*t;
-                pal_w1[2][i] = (pal[2][i] = t = p[2]) * w1;
-                d += t*t;
-                p -= 3;
-                tot[i] = d << (TSC-1);
-            }
-            while (--i>=0);
+            register long t,d;
+            pal_w1[0][i] = (pal[0][i] = t = p[0]) * w1;
+            d = t*t;
+            pal_w1[1][i] = (pal[1][i] = t = p[1]) * w1;
+            d += t*t;
+            pal_w1[2][i] = (pal[2][i] = t = p[2]) * w1;
+            d += t*t;
+            p -= 3;
+            tot[i] = d << (TSC-1);
         }
-
-        // Next, compute all entries using minimum arithmetic.
-
-        {
-            int i,j;
-            byte *tp = tranmap;
-            for (i=0;i<256;i++)
-            {
-                long r1 = pal[0][i] * w2;
-                long g1 = pal[1][i] * w2;
-                long b1 = pal[2][i] * w2;
-                for (j=0;j<256;j++,tp++)
-                {
-                    register int color = 255;
-                    register long err;
-                    long r = pal_w1[0][j] + r1;
-                    long g = pal_w1[1][j] + g1;
-                    long b = pal_w1[2][j] + b1;
-                    long best = LONG_MAX;
-                    do
-                        if ((err = tot[color] - pal[0][color]*r
-                            - pal[1][color]*g - pal[2][color]*b) < best)
-                            best = err, *tp = color;
-                        while (--color >= 0);
-                }
-            }
-        }
-
-        Z_ChangeTag(playpal, PU_CACHE);
+        while (--i>=0);
     }
+
+    // Next, compute all entries using minimum arithmetic.
+    {
+        int i,j;
+        byte *tp = tranmap;
+        for (i=0;i<256;i++)
+        {
+            long r1 = pal[0][i] * w2;
+            long g1 = pal[1][i] * w2;
+            long b1 = pal[2][i] * w2;
+            for (j=0;j<256;j++,tp++)
+            {
+                register int color = 255;
+                register long err;
+                long r = pal_w1[0][j] + r1;
+                long g = pal_w1[1][j] + g1;
+                long b = pal_w1[2][j] + b1;
+                long best = LONG_MAX;
+                do
+                    if ((err = tot[color] - pal[0][color]*r
+                        - pal[1][color]*g - pal[2][color]*b) < best)
+                        best = err, *tp = color;
+                    while (--color >= 0);
+            }
+        }
+    }
+
+    Z_ChangeTag(playpal, PU_CACHE);
 }
 
 //
