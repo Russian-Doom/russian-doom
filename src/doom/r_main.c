@@ -101,7 +101,7 @@ lighttable_t* zlight[LIGHTLEVELS][MAXLIGHTZ];
 lighttable_t* fullbright_notgrayorbrown_floor[LIGHTLEVELS][MAXLIGHTZ];
 lighttable_t* fullbright_orangeyellow_floor[LIGHTLEVELS][MAXLIGHTZ];
 
-// [JN] Brightmaps
+// [JN] Wall and sprite brightmaps
 lighttable_t* fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
@@ -400,91 +400,6 @@ R_PointToDist (fixed_t x, fixed_t y)
 }
 
 
-//
-// R_InitPointToAngle
-//
-// void R_InitPointToAngle (void)
-// {
-//     // UNUSED - now getting from tables.c
-// #if 0
-//     int     i;
-//     long    t;
-//     float   f;
-// //
-// // slope (tangent) to angle lookup
-// //
-//     for (i=0 ; i<=SLOPERANGE ; i++)
-//     {
-//         f = atan( (float)i/SLOPERANGE )/(3.141592657*2);
-//         t = 0xffffffff*f;
-//         tantoangle[i] = t;
-//     }
-// #endif
-// }
-
-
-// [crispy] WiggleFix: move R_ScaleFromGlobalAngle function to r_segs.c,
-// above R_StoreWallRange
-/*
-//
-// R_ScaleFromGlobalAngle
-// Returns the texture mapping scale
-//  for the current line (horizontal span)
-//  at the given angle.
-// rw_distance must be calculated first.
-//
-fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
-{
-    fixed_t		scale;
-    angle_t		anglea;
-    angle_t		angleb;
-    int			sinea;
-    int			sineb;
-    fixed_t		num;
-    int			den;
-
-    // UNUSED
-#if 0
-{
-    fixed_t		dist;
-    fixed_t		z;
-    fixed_t		sinv;
-    fixed_t		cosv;
-	
-    sinv = finesine[(visangle-rw_normalangle)>>ANGLETOFINESHIFT];	
-    dist = FixedDiv (rw_distance, sinv);
-    cosv = finecosine[(viewangle-visangle)>>ANGLETOFINESHIFT];
-    z = abs(FixedMul (dist, cosv));
-    scale = FixedDiv(projection, z);
-    return scale;
-}
-#endif
-
-    anglea = ANG90 + (visangle-viewangle);
-    angleb = ANG90 + (visangle-rw_normalangle);
-
-    // both sines are allways positive
-    sinea = finesine[anglea>>ANGLETOFINESHIFT];	
-    sineb = finesine[angleb>>ANGLETOFINESHIFT];
-    num = FixedMul(projection,sineb)<<detailshift;
-    den = FixedMul(rw_distance,sinea);
-
-    if (den > num>>FRACBITS)
-    {
-	scale = FixedDiv (num, den);
-
-	if (scale > 64*FRACUNIT)
-	    scale = 64*FRACUNIT;
-	else if (scale < 256)
-	    scale = 256;
-    }
-    else
-	scale = 64*FRACUNIT;
-	
-    return scale;
-}
-*/
-
 // [AM] Interpolate between two angles.
 angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale)
 {
@@ -505,40 +420,6 @@ angle_t R_InterpolateAngle(angle_t oangle, angle_t nangle, fixed_t scale)
             return oangle + (angle_t)((nangle - oangle) * FIXED2DOUBLE(scale));
     }
 }
-
-//
-// R_InitTables
-//
-// void R_InitTables (void)
-// {
-//     // UNUSED: now getting from tables.c
-// #if 0
-//     int     i;
-//     float   a;
-//     float   fv;
-//     int     t;
-// 
-//     // viewangle tangent table
-//     for (i=0 ; i<FINEANGLES/2 ; i++)
-//     {
-//         a = (i-FINEANGLES/4+0.5)*PI*2/FINEANGLES;
-//         fv = FRACUNIT*tan (a);
-//         t = fv;
-//         finetangent[i] = t;
-//     }
-// 
-//     // finesine table
-//     for (i=0 ; i<5*FINEANGLES/4 ; i++)
-//     {
-//         // OPTIMIZE: mirror...
-//         a = (i+0.5)*PI*2/FINEANGLES;
-//         t = FRACUNIT*sin (a);
-//         finesine[i] = t;
-//     }
-// #endif
-// 
-// }
-
 
 //
 // R_InitTextureMapping
@@ -686,7 +567,7 @@ void R_ExecuteSetViewSize (void)
 
     setsizeneeded = false;
 
-    if (setblocks == 11 || setblocks == 12 || setblocks == 13 || setblocks == 14)
+    if (setblocks >= 11)
     {
         scaledviewwidth = SCREENWIDTH;
         scaledviewheight = SCREENHEIGHT;
@@ -772,7 +653,7 @@ void R_ExecuteSetViewSize (void)
 
             scalelight[i][j] = colormaps + level*256;
 
-            // [JN] Brightmaps
+            // [JN] Wall and sprite brightmaps
             fullbright_redonly[i][j] = brightmaps_redonly + level*256;
             fullbright_notgray[i][j] = brightmaps_notgray + level*256;
             fullbright_notgrayorbrown[i][j] = brightmaps_notgrayorbrown + level*256;
@@ -795,27 +676,19 @@ void R_Init (void)
 {
     R_InitData ();
     printf (".");
-    // [JN] Don't call empty function
-    // R_InitPointToAngle ();
-    printf (".");
-    // [JN] Don't call empty function
-    // R_InitTables ();
-    // viewwidth / viewheight / detailLevel are set by the defaults
-    printf (".");
-
-    R_SetViewSize (screenblocks, detailLevel);
-    // [JN] Don't call empty function
-    // R_InitPlanes ();
+    R_SetViewSize (screenblocks, detailLevel);  // viewwidth / viewheight / detailLevel are set by the defaults
     printf (".");
     R_InitLightTables ();
     printf (".");
     R_InitSkyMap ();
+    printf (".");
     R_InitTranslationTables ();
     printf (".");
     // [JN] Lookup all the textures for brightmapping
     if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
     {
         R_InitBrightmaps ();
+        printf (".");
     }
     framecount = 0;
 }
