@@ -447,7 +447,14 @@ void P_ZMovement (mobj_t* mo)
         // [crispy] squat down weapon sprite as well
         // [JN] no squatting in vanilla mode
         if (!vanillaparm)
-        mo->player->psp_dy_max = mo->momz>>2;
+        {
+            // [JN] Suqat BFG9000 heavier and slower
+            if (mo->player->readyweapon == wp_bfg)
+            mo->player->psp_dy_max = mo->momz>>1;
+
+            else
+            mo->player->psp_dy_max = mo->momz>>2;
+        }
         
             // [JN] Издавать звук "Ууф" только в том случае, если игрок живой.
             if (mo->health > 0)

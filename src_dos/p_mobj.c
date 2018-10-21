@@ -372,8 +372,15 @@ void P_ZMovement (mobj_t* mo)
 		mo->player->deltaviewheight = mo->momz>>3;
 		// [crispy] squat down weapon sprite as well
         // [JN] no squatting in vanilla mode
-        if (!vanilla)
- 		mo->player->psp_dy_max = mo->momz>>2;
+	    if (!vanilla)
+	    {
+	        // [JN] Suqat BFG9000 heavier and slower
+	        if (mo->player->readyweapon == wp_bfg)
+	        mo->player->psp_dy_max = mo->momz>>1;
+
+	        else
+	        mo->player->psp_dy_max = mo->momz>>2;
+	    }
 		if (mo->health > 0)
 		{
             // [JN] Do not break firing sounds by falling "oof" sound
