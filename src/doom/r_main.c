@@ -403,24 +403,24 @@ R_PointToDist (fixed_t x, fixed_t y)
 //
 // R_InitPointToAngle
 //
-void R_InitPointToAngle (void)
-{
-    // UNUSED - now getting from tables.c
-#if 0
-    int     i;
-    long    t;
-    float   f;
-//
-// slope (tangent) to angle lookup
-//
-    for (i=0 ; i<=SLOPERANGE ; i++)
-    {
-        f = atan( (float)i/SLOPERANGE )/(3.141592657*2);
-        t = 0xffffffff*f;
-        tantoangle[i] = t;
-    }
-#endif
-}
+// void R_InitPointToAngle (void)
+// {
+//     // UNUSED - now getting from tables.c
+// #if 0
+//     int     i;
+//     long    t;
+//     float   f;
+// //
+// // slope (tangent) to angle lookup
+// //
+//     for (i=0 ; i<=SLOPERANGE ; i++)
+//     {
+//         f = atan( (float)i/SLOPERANGE )/(3.141592657*2);
+//         t = 0xffffffff*f;
+//         tantoangle[i] = t;
+//     }
+// #endif
+// }
 
 
 // [crispy] WiggleFix: move R_ScaleFromGlobalAngle function to r_segs.c,
@@ -795,7 +795,8 @@ void R_Init (void)
 {
     R_InitData ();
     printf (".");
-    R_InitPointToAngle ();
+    // [JN] Don't call empty function
+    // R_InitPointToAngle ();
     printf (".");
     R_InitTables ();
     // viewwidth / viewheight / detailLevel are set by the defaults
