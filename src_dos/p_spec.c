@@ -1040,12 +1040,13 @@ void P_PlayerInSpecialSector (player_t* player)
 	player->secretcount++;
 	sector->special = 0;
 
-    // [JN] Notification of discovered secrets
+    // [JN] Notification of revealed secrets
     if (!vanilla)
     {
 	player->message = SECRETFOUND;	 
+    // [JN] Don't break revealed's secret sound by any others
     if (player == &players[consoleplayer])
-        S_StartSound(0, sfx_getpow);
+        S_StartSoundNoBreak(sfx_getpow);
     }
 
 	break;
