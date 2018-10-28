@@ -682,7 +682,7 @@ void D_DoAdvanceDemo (void)
 
             gamestate = GS_DEMOSCREEN;
 
-            if (gamemode == shareware)
+            if (gamemode == shareware && !english_language)
                 pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
             else
                 pagename = DEH_String("TITLEPIC");
