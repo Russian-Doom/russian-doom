@@ -717,15 +717,18 @@ void D_DoAdvanceDemo (void)
 
             gamestate = GS_DEMOSCREEN;
 
-            // [JN] Я использую разные названия экранов для разных версий
-            if (gamemode == shareware)
+            if (english_language)
+            {
+                pagename = DEH_String("CREDIT");
+            }
+            else
+            {
+                // [JN] Different screens in Russian language, packed into one PWAD.
+                if (gamemode == shareware || gamemode == registered)
                 pagename = DEH_String("CREDITS");
-            if (gamemode == registered)
-                pagename = DEH_String("CREDITS");
-            if (gamemode == retail)
+                else
                 pagename = DEH_String("CREDIT"); 
-            if (gamemode == commercial)
-                pagename = DEH_String("CREDIT"); 
+            }
             break;
         }
 
