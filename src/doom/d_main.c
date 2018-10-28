@@ -769,11 +769,12 @@ void D_DoAdvanceDemo (void)
 
                 if (gameversion >= exe_ultimate)
                     pagename = DEH_String("CREDIT");
-                else if (gamemode == registered)
-                    pagename = DEH_String("CREDITS");
+                // [JN] Different screens in Russian language, packed into one PWAD.
+                else if (!english_language && gamemode == registered)
+                pagename = DEH_String("CREDITS");
                 else
                 {
-                    if (gamevariant == old_shareware)       // [JN] Red chars for older sharewares
+                    if (!english_language && gamevariant == old_shareware)       // [JN] Red chars for older sharewares
                         pagename = DEH_String("HELP2RED");
                     else                                    // [JN] Green chars
                         pagename = DEH_String("HELP2");
