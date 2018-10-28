@@ -397,6 +397,9 @@ static patch_t*     background;
 // slam background
 void WI_slamBackground(void)
 {
+    // [JN] Remove level's remaining  background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+
     V_DrawPatch(0, 0, background);
 }
 
