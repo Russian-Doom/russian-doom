@@ -308,7 +308,7 @@ menu_t  MainDef =
     NULL,
     MainMenu,
     M_DrawMainMenu,
-    97,70,
+    97+ORIGWIDTH_DELTA,70,
     0
 };
 
@@ -319,7 +319,7 @@ menu_t  MainDefBeta =
     NULL,
     MainMenuBeta,
     M_DrawMainMenu,
-    97,70,
+    97+ORIGWIDTH_DELTA,70,
     0
 };
 
@@ -351,7 +351,7 @@ menu_t  EpiDef =
     &MainDef,       // previous menu
     EpisodeMenu,    // menuitem_t ->
     M_DrawEpisode,  // drawing routine ->
-    48,63,          // x,y
+    48+ORIGWIDTH_DELTA,63,          // x,y
     ep1             // lastOn
 };
 
@@ -386,7 +386,7 @@ menu_t  NewDef =
     &EpiDef,        // previous menu
     NewGameMenu,    // menuitem_t ->
     M_DrawNewGame,  // drawing routine ->
-    48,63,          // x,y
+    48+ORIGWIDTH_DELTA,63,          // x,y
     hurtme          // lastOn
 };
 
@@ -426,7 +426,7 @@ menu_t  OptionsDef =
     &MainDef,
     OptionsMenu,
     M_DrawOptions,
-    60,37,
+    60+ORIGWIDTH_DELTA,37,
     0
 };
 
@@ -503,7 +503,7 @@ menu_t  SoundDef =
     &OptionsDef,
     SoundMenu,
     M_DrawSound,
-    88,64,  // [JN] Отцентрированы полосы громкости
+    88+ORIGWIDTH_DELTA,64,  // [JN] Отцентрированы полосы громкости
     0
 };
 
@@ -1022,12 +1022,12 @@ void M_DrawSound(void)
     if (english_language)
     {
         // [JN] Use standard Doom "Sound volume" title
-        V_DrawShadowedPatchDoom (60, 38, W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
+        V_DrawShadowedPatchDoom (60+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
     }
     else
     {
         // [JN] Use own Russian capitalized and centered title: "ГРОМКОСТЬ ЗВУКА"
-        V_DrawShadowedPatchDoom (71, 39, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
+        V_DrawShadowedPatchDoom (71+ORIGWIDTH_DELTA, 39, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
     }
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1), 16,sfxVolume);
@@ -1081,7 +1081,7 @@ void M_MusicVol(int choice)
 //
 void M_DrawMainMenu(void)
 {
-    V_DrawPatch(94, 2, W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
+    V_DrawPatch(94+ORIGWIDTH_DELTA, 2, W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
 }
 
 
@@ -1090,8 +1090,8 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
-    V_DrawShadowedPatchDoom(99, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-    V_DrawShadowedPatchDoom(42, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(99+ORIGWIDTH_DELTA, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+    V_DrawShadowedPatchDoom(42+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
 }
 
 void M_NewGame(int choice)
@@ -1120,8 +1120,8 @@ int epi;
 
 void M_DrawEpisode(void)
 {
-    V_DrawShadowedPatchDoom(99, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-    V_DrawShadowedPatchDoom(73, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
+    V_DrawShadowedPatchDoom(99+ORIGWIDTH_DELTA, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+    V_DrawShadowedPatchDoom(73+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
 }
 
 void M_VerifyNightmare(int key)
@@ -1196,7 +1196,7 @@ static char *msgNames[2] = {"M_MSGOFF","M_MSGON"};
 
 void M_DrawOptions(void)
 {
-    V_DrawShadowedPatchDoom(110, 11, W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(110+ORIGWIDTH_DELTA, 11, W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
 
     V_DrawShadowedPatchDoom(OptionsDef.x + 175, OptionsDef.y + LINEHEIGHT * detail,
         W_CacheLumpName(DEH_String(detailNames[detailLevel]), PU_CACHE));
@@ -2320,7 +2320,7 @@ void M_Drawer (void)
             }
 
             x = 160 - M_StringWidth(string) / 2;
-            M_WriteText(x, y, string);
+            M_WriteText(x+ORIGWIDTH_DELTA, y, string);
             y += SHORT(hu_font[0]->height);
         }
 

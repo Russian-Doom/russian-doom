@@ -1416,8 +1416,10 @@ P_AimLineAttack
     shootz = t1->z + (t1->height>>1) + 8*FRACUNIT;
 
     // can't shoot outside view angles
-    topslope = (SCREENHEIGHT/2)*FRACUNIT/(SCREENWIDTH/2);	
-    bottomslope = -(SCREENHEIGHT/2)*FRACUNIT/(SCREENWIDTH/2);
+    // [JN] Wide screen: Changing value 320 (SCREENWIDTH_OLD)
+    // is causing demo desyncs. It must not be changed.
+    topslope = (SCREENHEIGHT/2)*FRACUNIT/(SCREENWIDTH_OLD/2);	
+    bottomslope = -(SCREENHEIGHT/2)*FRACUNIT/(SCREENWIDTH_OLD/2);
     
     attackrange = distance;
     linetarget = NULL;

@@ -921,7 +921,8 @@ void R_DrawPSprite (pspdef_t* psp)
     psp_sy += abs(viewplayer->psp_dy);
 
     // calculate edges of the shape
-    tx = psp_sx-(ORIGWIDTH/2)*FRACUNIT;
+    // [JN] Wide screen: center weapon properly
+    tx = psp_sx-((ORIGWIDTH/2)-ORIGWIDTH_DELTA)*FRACUNIT;
 
     tx -= spriteoffset[lump];	
     x1 = (centerxfrac + FixedMul (tx,pspritescale) ) >>FRACBITS;

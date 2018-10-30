@@ -38,6 +38,7 @@
 
 #include "doomstat.h"
 #include "r_state.h"
+#include "r_main.h"
 
 #include "jn.h"
 
@@ -330,16 +331,28 @@ void F_TextWrite (void)
     if (gamemission == jaguar)
     {
         if (gamemap == 23)  // Leaving MAP23, end game. Special background.
-        V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
+        {
+            // [JN] Wide screen: remove tiled background, fill it with black color
+            V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+            V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
+        }
     }
     // [JN] Draw special background on entering Wolfenstein and Grosse levels
     else if (gamemission == doom2 && !vanillaparm)
     {
         if (gamemap == 15)  // Leaving MAP15, entering MAP31
-        V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
+        {
+            // [JN] Wide screen: remove tiled background, fill it with black color
+            V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+            V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
+        }
 
         if (gamemap == 31)  // Leaving MAP31, entering MAP32
-        V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE));
+        {
+            // [JN] Wide screen: remove tiled background, fill it with black color
+            V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+            V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE));
+        }
     }
 
     // draw some of the text onto the screen
@@ -378,7 +391,7 @@ void F_TextWrite (void)
         if (cx+w > ORIGWIDTH)
 	    break;
 
-        V_DrawShadowedPatchDoom(cx, cy, hu_font[c]);
+        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font[c]);
 
         cx+=w;
     }
@@ -675,8 +688,11 @@ void F_CastDrawer (void)
     boolean         flip;
     patch_t*        patch;
 
+    // [JN] Remove level's remaining  background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+
     // erase the entire screen to a background
-    V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
+    V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
 
     F_CastPrint (DEH_String(english_language ?
                             castorder[castnum].name :
