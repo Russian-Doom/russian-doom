@@ -28,13 +28,19 @@
 
 #define hires 1
 
-#define ORIGWIDTH  320
+#define ORIGWIDTH  426  // [JN] Wide screen: initially 320
 #define ORIGHEIGHT 200
 
 #define SCREENWIDTH  (ORIGWIDTH << hires)
 #define SCREENHEIGHT (ORIGHEIGHT << hires)
 
 #define SCREENWIDTH_4_3 (256 << hires)
+
+// [JN] Macroses for wide screen
+
+#define ORIGWIDTH_DELTA 53
+#define ORIGWIDTH_OLD   320
+#define SCREENWIDTH_OLD (ORIGWIDTH_OLD << hires)
 
 // Screen height used when aspect_ratio_correct=true.
 
