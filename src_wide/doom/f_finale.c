@@ -770,19 +770,19 @@ void F_BunnyScroll (void)
 
     V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
 
-    scrolled = (ORIGWIDTH - ((signed int) finalecount-230)/2);
+    scrolled = (ORIGWIDTH_OLD - ((signed int) finalecount-230)/2);
 
-    if (scrolled > ORIGWIDTH)
-    scrolled = ORIGWIDTH;
+    if (scrolled > ORIGWIDTH_OLD)
+    scrolled = ORIGWIDTH_OLD;
     if (scrolled < 0)
     scrolled = 0;
 
-    for ( x=0 ; x<ORIGWIDTH  ; x++)
+    for ( x=0 ; x<ORIGWIDTH_OLD  ; x++)
     {
-        if (x+scrolled < ORIGWIDTH)
-        F_DrawPatchCol (x, p1, x+scrolled);
+        if (x+scrolled < ORIGWIDTH_OLD)
+        F_DrawPatchCol (x+ORIGWIDTH_DELTA, p1, x+scrolled);
         else
-        F_DrawPatchCol (x, p2, x+scrolled - ORIGWIDTH);		
+        F_DrawPatchCol (x+ORIGWIDTH_DELTA, p2, x+scrolled - ORIGWIDTH_OLD);		
     }
 
     if (finalecount < 1130)
@@ -790,7 +790,7 @@ void F_BunnyScroll (void)
 
     if (finalecount < 1180)
     {
-        V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2,
+        V_DrawShadowedPatchDoom(((ORIGWIDTH_OLD - 13 * 8) / 2)+ORIGWIDTH_DELTA,
             (ORIGHEIGHT - 8 * 8) / 2, 
             W_CacheLumpName(DEH_String("END0"), PU_CACHE));
 
@@ -811,7 +811,7 @@ void F_BunnyScroll (void)
 
     DEH_snprintf(name, 10, "END%i", stage);
 
-    V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2, 
+    V_DrawShadowedPatchDoom(((ORIGWIDTH_OLD - 13 * 8) / 2)+ORIGWIDTH_DELTA,
             (ORIGHEIGHT - 8 * 8) / 2, 
             W_CacheLumpName (name,PU_CACHE));
 }
@@ -820,6 +820,9 @@ void F_BunnyScroll (void)
 static void F_ArtScreenDrawer(void)
 {
     char *lumpname;
+
+    // [JN] Wide screen: remove remaining background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
 
     if (gameepisode == 3)
     {
@@ -854,7 +857,7 @@ static void F_ArtScreenDrawer(void)
 
         lumpname = DEH_String(lumpname);
 
-        V_DrawPatch (0, 0, W_CacheLumpName(lumpname, PU_CACHE));
+        V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName(lumpname, PU_CACHE));
     }
 }
 
