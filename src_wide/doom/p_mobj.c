@@ -1354,8 +1354,8 @@ P_SpawnPlayerMissile
     if (singleplayer && !linetarget && mlook)
     {
         an = source->angle;
-        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 
-                 (screenblocks <= 10 ? 160 : 146);
+        slope = ((source->player->lookdir / 
+                  MLOOKUNIT) << FRACBITS) / 240; // [JN] Wide screen: new magic number :(
     }
     }
 		

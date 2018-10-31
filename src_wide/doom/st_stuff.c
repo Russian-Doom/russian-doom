@@ -470,7 +470,7 @@ void ST_Stop(void);
 
 void ST_refreshBackground(void)
 {
-    if (screenblocks >= 11 && !automapactive)
+    if (screenblocks >= 9 && !automapactive)
     return;
 
     if (st_statusbaron)
@@ -1461,6 +1461,37 @@ void ST_drawWidgets(boolean refresh)
     // [JN] used by w_artifacts widget
     st_artifactson = !deathmatch && st_statusbaron; 
 
+    // [JN] Wide screen: draw STBAR on "full screen" mode ----------------------
+    if (screenblocks == 9 || screenblocks == 10)
+    {
+        V_DrawPatch(ORIGWIDTH_DELTA, ST_Y, W_CacheLumpName(DEH_String("STBAR"), PU_CACHE));
+
+        if (!deathmatch)
+        V_DrawPatch(104+ORIGWIDTH_DELTA, ST_Y, W_CacheLumpName(DEH_String("STARMS"), PU_CACHE));
+    }
+
+    // [JN] Wide screen: Side bezel for reconstructed standard HUD -------------
+    if (screenblocks == 9 || automapactive)
+    {
+        if (gamemode == commercial)                 
+        {   // Doom 2
+            V_DrawPatch(0, 168, W_CacheLumpName     // left border
+                                (DEH_String("RDWBD2LF"), PU_CACHE));
+        
+            V_DrawPatch(373, 168, W_CacheLumpName   // right border
+                                (DEH_String("RDWBD2RT"), PU_CACHE));
+        }
+        else
+        {   // Doom 1
+            V_DrawPatch(0, 168, W_CacheLumpName     // left border
+                                (DEH_String("RDWBD1LF"), PU_CACHE));
+        
+            V_DrawPatch(373, 168, W_CacheLumpName   // right border
+                                (DEH_String("RDWBD1RT"), PU_CACHE));            
+        }
+
+    }
+    
     STlib_updateNum(&w_ready, refresh);
 
     // [crispy] draw "special widgets" in the Crispy HUD
@@ -1482,7 +1513,7 @@ void ST_drawWidgets(boolean refresh)
             if (patch)
             {
                 // [crispy] (23,179) is the center of the Ammo widget
-                V_DrawPatch(23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
+                V_DrawPatch((23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset))+ORIGWIDTH_DELTA,
                             179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
                             patch);
             }
@@ -1496,7 +1527,7 @@ void ST_drawWidgets(boolean refresh)
     }
 
     // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
-    if (screenblocks == 11 && !automapactive)
+    if ((screenblocks == 9 || screenblocks == 10 || screenblocks == 11) /*&& !automapactive*/)
     {
         if (netgame)    // [JN] Account player's color in network game
         V_DrawPatch(ST_FX+ORIGWIDTH_DELTA, ST_FY, faceback);
@@ -1505,7 +1536,7 @@ void ST_drawWidgets(boolean refresh)
     }
     
     // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
-    if (screenblocks == 11 || screenblocks == 12)
+    if (screenblocks == 10 || screenblocks == 11 || screenblocks == 12)
     {
         if (!automapactive) // [JN] Don't draw signs in automap
         {
@@ -1527,16 +1558,16 @@ void ST_drawWidgets(boolean refresh)
             // [JN] Health, armor, ammo
             V_DrawPatch(52+ORIGWIDTH_DELTA, 173, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
         }
+    }
 
+    // [JN] Wide screen: draw yellow slhased only on Signed Crispy HUD ---------
+    if (screenblocks == 11 || screenblocks == 12)
+    {
         V_DrawPatch(292+ORIGWIDTH_DELTA, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
     }
 
-    // [JN] Traditional Crispy HUD
-    if (screenblocks == 13)
-    V_DrawPatch(292+ORIGWIDTH_DELTA, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
-
-    STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
-    STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(&w_health, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(&w_armor, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
     // [JN] Don't update/draw ARMS background in Press Beta
     if ((screenblocks < 11 || automapactive) && gamemode != pressbeta)
@@ -1546,16 +1577,16 @@ void ST_drawWidgets(boolean refresh)
     if (gamemode != pressbeta)
     {
     for (i=0;i<6;i++)
-    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
     }
 
     if (screenblocks < 12 || automapactive)
-    STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11);
+    STlib_updateMultIcon(&w_faces, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11);
 
     for (i=0;i<3;i++)
-    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
-    STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updateNum(&w_frags, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
     
     // [JN] Press Beta: some special routine. I need to draw Artifacts widet while not in
     // automap and Arms widget while in automap. Plus, background must be redrawn immediately.
@@ -1608,7 +1639,7 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
     // Fixes a notable delay of HUD redraw after closing HELP screen.
     extern boolean inhelpscreens;
     
-    st_statusbaron = (!fullscreen) || automapactive || screenblocks == 11 || screenblocks == 12;
+    st_statusbaron = (!fullscreen) || automapactive || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12;
     st_firsttime = st_firsttime || refresh || inhelpscreens;
 
     // Do red-/gold-shifts from damage/items

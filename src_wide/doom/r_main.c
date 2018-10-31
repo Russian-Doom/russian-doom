@@ -567,7 +567,9 @@ void R_ExecuteSetViewSize (void)
 
     setsizeneeded = false;
 
-    if (setblocks >= 11)
+    // [JN] Wide screen: initially 11.
+    // Consider "screenblocks 9" and higher as full screen mode with standard HUD.
+    if (setblocks >= 9)
     {
         scaledviewwidth = SCREENWIDTH;
         scaledviewheight = SCREENHEIGHT;
@@ -623,7 +625,7 @@ void R_ExecuteSetViewSize (void)
         const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
         for (j = 0; j < LOOKDIRS; j++)
         {
-        dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
+        dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
         dy = abs(dy);
         yslopes[j][i] = FixedDiv (num, dy);
         }
@@ -772,7 +774,7 @@ void R_SetupFrame (player_t* player)
     pitch = -LOOKDIRMIN;
 
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
-    tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10;
+    tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10;
     if (centery != tempCentery)
     {
         centery = tempCentery;

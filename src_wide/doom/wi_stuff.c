@@ -1500,7 +1500,7 @@ void WI_drawStats(void)
             {
                 V_DrawShadowedPatchDoom((SP_TIMEX)+ORIGWIDTH_DELTA, SP_TIMEY + 16, total);
                 // [crispy] choose x-position depending on width of time string
-                WI_drawTime((wide ? ORIGWIDTH : ORIGWIDTH/2) - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+                WI_drawTime((wide ? ORIGWIDTH : ORIGWIDTH/2) - SP_TIMEX + (wide ? 0 : ORIGWIDTH_DELTA), SP_TIMEY + 16, ttime, false);
             }
             else
             {

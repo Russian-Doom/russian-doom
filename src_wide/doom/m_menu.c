@@ -910,9 +910,12 @@ void M_QuickLoad(void)
 void M_DrawReadThis1(void)
 {
     char *lumpname = "CREDIT";
-    int skullx = 330, skully = 175;
+    int skullx = 330+ORIGWIDTH_DELTA, skully = 175;
 
     inhelpscreens = true;
+
+    // [JN] Wide screen: remove background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
 
     // [JN] Различные экраны помощи и скорректированное положение M_SKULL для разных версий игры
 
@@ -926,7 +929,7 @@ void M_DrawReadThis1(void)
         {
             // Doom 2
             lumpname = "HELP";
-            skullx = 330;
+            skullx = 330+ORIGWIDTH_DELTA;
             skully = 162;
         }
 
@@ -938,7 +941,7 @@ void M_DrawReadThis1(void)
             lumpname = "HELP2RED";  
             else                                // [JN] Green chars
             lumpname = "HELP2";
-            skullx = 280;
+            skullx = 280+ORIGWIDTH_DELTA;
             skully = 185;
         }
         break;
@@ -962,7 +965,7 @@ void M_DrawReadThis1(void)
         // чтобы не загораживать фразу "джойстика 2".
 
         lumpname = "HELP";
-        skullx = 330;
+        skullx = 330+ORIGWIDTH_DELTA;
         skully = 165;
         break;
 
@@ -977,20 +980,20 @@ void M_DrawReadThis1(void)
     // черепа. Так, чтобы он не перекрывал надписb "ПКМ" и "E".
     if (gamevariant == freedoom)
     {
-        skullx = 323;
+        skullx = 323+ORIGWIDTH_DELTA;
         skully = 183;
     }
 
     // [JN] Pixel-perfect position for skull in Press Beta
     if (gamemode == pressbeta)
     {
-            skullx = 330;
+            skullx = 330+ORIGWIDTH_DELTA;
             skully = 175;
     }
 
     lumpname = DEH_String(lumpname);
 
-    V_DrawPatch (0, 0, W_CacheLumpName(lumpname, PU_CACHE));
+    V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName(lumpname, PU_CACHE));
 
     ReadDef1.x = skullx;
     ReadDef1.y = skully;
@@ -1206,7 +1209,8 @@ void M_DrawOptions(void)
 
     M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1), 13, mouseSensitivity);
 
-    M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1), 12,screenSize);
+    // [JN] Wide screen: only 6 sizes are available
+    M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1), 6,screenSize);
 }
 
 void M_Options(int choice)
@@ -1441,6 +1445,19 @@ void M_SizeDisplay(int choice)
         break;
     }
 
+    // [JN] Wide screen: don't allow unsupported (bordered) views
+    // screenblocks - config file variable
+    if (screenblocks < 9)
+        screenblocks = 9;
+    if (screenblocks > 14)
+        screenblocks = 14;
+    
+    // screenSize - slider variable/lenght
+    if (screenSize < 0)
+        screenSize = 0;
+    if (screenSize > 5)
+        screenSize = 5;
+    
     R_SetViewSize (screenblocks, detailLevel);
 }
 
@@ -2405,7 +2422,7 @@ void M_Init (void)
     itemOn = currentMenu->lastOn;
     whichSkull = 0;
     skullAnimCounter = 10;
-    screenSize = screenblocks - 3;
+    screenSize = screenblocks - 9;
     messageToPrint = 0;
     messageString = NULL;
     messageLastMenuActive = menuactive;

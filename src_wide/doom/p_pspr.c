@@ -689,8 +689,8 @@ void P_BulletSlope (mobj_t*	mo)
         if (singleplayer && !linetarget && mlook)
         {
             an += 2 << 26;
-            bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) /
-                        (screenblocks <= 10 ? 160 : 146);
+            bulletslope = (mo->player->lookdir / 
+                           MLOOKUNIT << FRACBITS) / 240; // [JN] Wide screen: new magic number :(
         }
     }
 }
