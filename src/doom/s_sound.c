@@ -403,11 +403,8 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
     // From _GG1_ p.428. Appox. eucledian distance fast.
     approx_dist = adx + ady - ((adx < ady ? adx : ady)>>1);
 
-    // [JN] Клиппинг звука будет применяться только к
-    // DOOM2/Final Doom. Для первой части останется "как есть",
-    // т.к. вполне очевидно, что это было сделано для карт с боссами.
-    if ((gamemap != 8 || gamemode == commercial) && approx_dist > 
-        S_CLIPPING_DIST)
+    // [crispy] proper sound clipping in Doom 2 MAP08 and The Ultimate Doom E4M8
+    if ((gamemap != 8 || (!vanillaparm && (gamemode == commercial || gameepisode == 4))) && approx_dist > S_CLIPPING_DIST)
     {
         return 0;
     }
@@ -438,7 +435,8 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
     {
         *vol = snd_SfxVolume;
     }
-    else if (gamemap == 8)
+    // [crispy] proper sound clipping in Doom 2 MAP08 and The Ultimate Doom E4M8
+    else if (gamemap == 8 && ((gamemode != commercial && gameepisode != 4) || vanillaparm))
     {
         if (approx_dist > S_CLIPPING_DIST)
         {

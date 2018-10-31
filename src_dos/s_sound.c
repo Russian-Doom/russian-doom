@@ -307,8 +307,8 @@ S_AdjustSoundParams
     // From _GG1_ p.428. Appox. eucledian distance fast.
     approx_dist = adx + ady - ((adx < ady ? adx : ady)>>1);
     
-    if ((gamemap != 8 || commercial)
-	&& approx_dist > S_CLIPPING_DIST)
+    // [crispy] proper sound clipping in Doom 2 MAP08 and The Ultimate Doom E4M8
+    if ((gamemap != 8 || (!vanilla && (!commercial || gameepisode == 4))) && approx_dist > S_CLIPPING_DIST)
     {
 	return 0;
     }
@@ -341,8 +341,8 @@ S_AdjustSoundParams
     {
 	*vol = snd_SfxVolume;
     }
-    // [crispy] proper sound clipping in non-Doom1 MAP08
-    else if (gamemap == 8 && !commercial)
+    // [crispy] proper sound clipping in Doom 2 MAP08 and The Ultimate Doom E4M8
+    else if (gamemap == 8 && ((!commercial && gameepisode != 4) || vanilla))
     {
 	if (approx_dist > S_CLIPPING_DIST)
 	    approx_dist = S_CLIPPING_DIST;
