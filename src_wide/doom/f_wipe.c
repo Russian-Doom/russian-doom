@@ -233,12 +233,6 @@ int wipe_exitMelt (int width, int height, int ticks)
     Z_Free(y);
     Z_Free(wipe_scr_start);
     Z_Free(wipe_scr_end);
-    // [JN] Update only classic HUD
-    if (gamemission == jaguar && screenblocks <= 10 && gamestate == GS_LEVEL)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
     return 0;
 }
 
@@ -297,7 +291,7 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     if (gamemission == jaguar)
     {
         // Draw "Loading" picture
-        V_DrawShadowedPatchDoom (0, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
+        V_DrawShadowedPatchDoom (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
     }
     
     return !go;
