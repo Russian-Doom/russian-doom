@@ -1469,11 +1469,11 @@ void WI_drawStats(void)
             V_DrawShadowedPatchDoom((ORIGWIDTH - 76)-ORIGWIDTH_DELTA, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTOF"), PU_CACHE));            
             // [JN] Overall amount of artifacts, different for each level
             if (gameepisode == 1 && gamemap == 1)
-            WI_drawNum((ORIGWIDTH - 39)-ORIGWIDTH_DELTA, SP_STATSY+3*lh, 36, 2);  // Map 1: 36 artifacts
+            WI_drawNum((ORIGWIDTH - 39), SP_STATSY+3*lh, 36, 2);  // Map 1: 36 artifacts
             else if (gameepisode == 2 && gamemap == 1)
-            WI_drawNum((ORIGWIDTH - 39)-ORIGWIDTH_DELTA, SP_STATSY+3*lh, 29, 2);  // Map 2: 29 artifacts
+            WI_drawNum((ORIGWIDTH - 39), SP_STATSY+3*lh, 29, 2);  // Map 2: 29 artifacts
             else if (gameepisode == 3 && gamemap == 1)
-            WI_drawNum((ORIGWIDTH - 39)-ORIGWIDTH_DELTA, SP_STATSY+3*lh, 25, 2);  // Map 3: 25 artifacts
+            WI_drawNum((ORIGWIDTH - 39), SP_STATSY+3*lh, 25, 2);  // Map 3: 25 artifacts
         }
     }
 
