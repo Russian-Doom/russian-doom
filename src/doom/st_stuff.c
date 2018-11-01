@@ -387,6 +387,9 @@ static st_binicon_t     w_armsbg;
 // weapon ownership widgets
 static st_multicon_t    w_arms[6];
 
+// [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
+static int st_shotguns;
+
 // face status widget
 static st_multicon_t    w_faces; 
 
@@ -1542,6 +1545,9 @@ void ST_drawWidgets(boolean refresh)
     if ((screenblocks < 11 || automapactive) && gamemode != pressbeta)
     STlib_updateBinIcon(&w_armsbg, refresh);
 
+    // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
+    st_shotguns = plyr->weaponowned[wp_shotgun] | plyr->weaponowned[wp_supershotgun];
+
     // [JN] Don't update/draw ARMS section in Press Beta
     if (gamemode != pressbeta)
     {
@@ -1884,6 +1890,9 @@ void ST_createWidgets(void)
             &plyr->weaponowned[i+1],
             &st_armson);
     }
+
+    // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
+    w_arms[1].inum = &st_shotguns;
 
     // frags sum
     STlib_initNum(&w_frags,
