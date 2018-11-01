@@ -712,6 +712,9 @@ void D_DoAdvanceDemo (void)
 
         case 2:
         {
+            if (gamemode == pressbeta)
+            break;
+
             if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
                 pagetic = 1000;
             else
@@ -769,7 +772,8 @@ void D_DoAdvanceDemo (void)
             {
                 pagetic = 200;
 
-                if (gameversion >= exe_ultimate)
+                if (gameversion >= exe_ultimate
+                || gamemode == pressbeta)
                     pagename = DEH_String("CREDIT");
                 // [JN] Different screens in Russian language, packed into one PWAD.
                 else if (!english_language && gamemode == registered)

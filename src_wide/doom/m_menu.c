@@ -1011,9 +1011,9 @@ void M_DrawReadThis2(void)
     // gameversion == exe_doom_1_9 and gamemode == registered
 
     if (gamevariant == old_shareware)   // [JN] Red chars for older sharewares
-    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP1RED"), PU_CACHE));
+    V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("HELP1RED"), PU_CACHE));
     else                                // [JN] Green chars
-    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
+    V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
 }
 
 
