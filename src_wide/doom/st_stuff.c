@@ -1466,7 +1466,7 @@ void ST_drawWidgets(boolean refresh)
     {
         V_DrawPatch(ORIGWIDTH_DELTA, ST_Y, W_CacheLumpName(DEH_String("STBAR"), PU_CACHE));
 
-        if (!deathmatch)
+        if (!deathmatch && gamemode != pressbeta)
         V_DrawPatch(104+ORIGWIDTH_DELTA, ST_Y, W_CacheLumpName(DEH_String("STARMS"), PU_CACHE));
     }
 
@@ -1596,15 +1596,15 @@ void ST_drawWidgets(boolean refresh)
         if (!automapactive)
         {
             // [JN] Draw Artifacts widet
-            STlib_updateNum(&w_artifacts, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            STlib_updateNum(&w_artifacts, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
         }
         else
         {
             // [JN] Draw Arms widet. Background (w_armsbg) and numbers (w_arms)
-            STlib_updateBinIcon(&w_armsbg, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            STlib_updateBinIcon(&w_armsbg, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
 
             for (i=0;i<6;i++)
-            STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
         }
 
         // [JN] Draw player's life widget only in traditional HUD, Crispy HUD with player's face and automap

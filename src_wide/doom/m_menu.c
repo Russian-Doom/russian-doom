@@ -1007,6 +1007,9 @@ void M_DrawReadThis2(void)
 {
     inhelpscreens = true;
 
+    // [JN] Wide screen: remove background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+
     // We only ever draw the second page if this is 
     // gameversion == exe_doom_1_9 and gamemode == registered
 
@@ -1014,6 +1017,13 @@ void M_DrawReadThis2(void)
     V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("HELP1RED"), PU_CACHE));
     else                                // [JN] Green chars
     V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
+
+    // [JN] Wide screen: proper position for second HELP screen
+    if (gamemode == pressbeta)
+    {
+        ReadDef2.x = 330+ORIGWIDTH_DELTA;
+        ReadDef2.y = 175;
+    }
 }
 
 
