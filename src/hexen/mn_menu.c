@@ -1770,7 +1770,10 @@ boolean MN_Responder(event_t * event)
                 nomonsters = true;
             }
             G_DeferedInitNew(gameskill, gameepisode, gamemap);
-            P_SetMessage(&players[consoleplayer], TXT_CHEATWARP, false);
+            P_SetMessage(&players[consoleplayer], english_language ?
+                                                  TXT_CHEATWARP : 
+                                                  TXT_CHEATWARP_RUS,
+                                                  false);
             return true;
         }
     }
