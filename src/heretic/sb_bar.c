@@ -1251,7 +1251,9 @@ static void CheatPowerFunc(player_t * player, Cheat_t * cheat)
     if (player->powers[pw_weaponlevel2])
     {
         player->powers[pw_weaponlevel2] = 0;
-        P_SetMessage(player, DEH_String(TXT_CHEATPOWEROFF), false);
+        P_SetMessage(player, DEH_String(english_language ?
+                                        TXT_CHEATPOWEROFF :
+                                        TXT_CHEATPOWEROFF_RUS), false);
     }
     else
     {

@@ -928,7 +928,10 @@ void G_DoLoadLevel(void)
 
     if (testcontrols)
     {
-        P_SetMessage(&players[consoleplayer], "HT;BV GHJDTHRB EGHFDKTYBZ", false);	// РЕЖИМ ПРОВЕРКИ УПРАВЛЕНИЯ
+        P_SetMessage(&players[consoleplayer], english_language ? 
+        "PRESS ESCAPE TO QUIT." :
+        "HT;BV GHJDTHRB EGHFDKTYBZ", // РЕЖИМ ПРОВЕРКИ УПРАВЛЕНИЯ
+        false);
     }
 }
 

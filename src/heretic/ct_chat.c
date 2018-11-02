@@ -317,13 +317,18 @@ void CT_Ticker(void)
                     if (numplayers > 1)
                     {
                         P_SetMessage(&players[consoleplayer],
-                                     DEH_String("-CJJ<OTYBT JNGHFDKTYJ-"), true);	// -СООБЩЕНИЕ ОТПРАВЛЕНО-
+                                     DEH_String(english_language ?
+                                     "-MESSAGE SENT-" :
+                                     "-CJJ<OTYBT JNGHFDKTYJ-"), // -СООБЩЕНИЕ ОТПРАВЛЕНО-
+                                     true);
                         S_StartSound(NULL, sfx_chat);
                     }
                     else
                     {
                         P_SetMessage(&players[consoleplayer],
-                                     DEH_String("D BUHT YTN LHEUB{ BUHJRJD!"),	 // В ИГРЕ НЕТ ДРУГИХ ИГРОКОВ!
+                                     DEH_String(english_language ?
+                                     "THERE ARE NO OTHER PLAYERS IN THE GAME!" :
+                                     "D BUHT YTN LHEUB{ BUHJRJD!"), // В ИГРЕ НЕТ ДРУГИХ ИГРОКОВ!
                                      true);
                         S_StartSound(NULL, sfx_chat);
                     }
