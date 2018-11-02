@@ -1019,11 +1019,8 @@ void M_DrawReadThis2(void)
     V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
 
     // [JN] Wide screen: proper position for second HELP screen
-    if (gamemode == pressbeta)
-    {
-        ReadDef2.x = 330+ORIGWIDTH_DELTA;
-        ReadDef2.y = 175;
-    }
+    ReadDef2.x = 330+ORIGWIDTH_DELTA;
+    ReadDef2.y = 175;
 }
 
 
