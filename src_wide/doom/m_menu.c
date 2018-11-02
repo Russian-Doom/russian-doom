@@ -2435,6 +2435,12 @@ void M_Init (void)
     messageLastMenuActive = menuactive;
     quickSaveSlot = -1;
 
+    // [JN] Wide screen: place screen size slider correctly at starup
+    if (screenSize < 0)
+        screenSize = 0;
+    if (screenSize > 5)
+        screenSize = 5;
+    
     // Here we could catch other version dependencies,
     //  like HELP1/2, and four episodes.
 

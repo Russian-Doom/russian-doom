@@ -567,18 +567,10 @@ void R_ExecuteSetViewSize (void)
 
     setsizeneeded = false;
 
-    // [JN] Wide screen: initially 11.
-    // Consider "screenblocks 9" and higher as full screen mode with standard HUD.
-    if (setblocks >= 9)
-    {
-        scaledviewwidth = SCREENWIDTH;
-        scaledviewheight = SCREENHEIGHT;
-    }
-    else
-    {
-        scaledviewwidth = (setblocks*32)<<hires;
-        scaledviewheight = ((setblocks*168/10)&~7)<<hires;
-    }
+    // [JN] Wide screen: use only SCREENWIDTH and SCREENHEIGHT sizes,
+    // there is no bordered view and effective screen size is always same.
+    scaledviewwidth = SCREENWIDTH;
+    scaledviewheight = SCREENHEIGHT;
 
     detailshift = setdetail;
     viewwidth = scaledviewwidth>>detailshift;
@@ -692,6 +684,14 @@ void R_Init (void)
         R_InitBrightmaps ();
         printf (".");
     }
+    // [JN] Wide screen: don't allow unsupported (bordered) view modes at startup
+    {
+        if (screenblocks < 9)
+            screenblocks = 9;
+        if (screenblocks > 14)
+            screenblocks = 14;
+    }
+    
     framecount = 0;
 }
 
