@@ -57,8 +57,16 @@ static void PlayerQuitGame(player_t *player)
 
     player_num = player - players;
 
-    M_StringCopy(exitmsg, "BUHJR 1 JNRK>XBKCZ JN CTHDTHF", sizeof(exitmsg)); // ИГРОК № ОТКЛЮЧИЛСЯ ОТ СЕРВЕРА
+    M_StringCopy(exitmsg, english_language ?
+                          "PLAYER 1 LEFT THE GAME" :
+                          "BUHJR 1 JNRK>XBKCZ JN CTHDTHF", // ИГРОК № ОТКЛЮЧИЛСЯ ОТ СЕРВЕРА
+                          sizeof(exitmsg));
+
+    if (english_language)
     exitmsg[7] += player_num;
+    else
+    exitmsg[6] += player_num;
+
     P_SetMessage(&players[consoleplayer], exitmsg, true);
     S_StartSound(NULL, SFX_CHAT);
 

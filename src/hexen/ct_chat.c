@@ -346,7 +346,8 @@ void CT_Ticker(void)
                 {
                     if (numplayers <= 1)
                     {
-                        P_SetMessage(&players[consoleplayer],
+                        P_SetMessage(&players[consoleplayer], english_language ?
+                                     "THERE ARE NO OTHER PLAYERS IN THE GAME!" :
                                      "D BUHT YTN LHEUB{ BUHJRJD!", // В ИГРЕ НЕТ ДРУГИХ ИГРОКОВ!
                                      true);
                         S_StartSound(NULL, SFX_CHAT);
