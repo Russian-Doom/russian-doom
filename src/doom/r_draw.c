@@ -64,7 +64,6 @@ int     viewwindowx;
 int     viewwindowy; 
 byte*   ylookup[MAXHEIGHT]; 
 int     columnofs[MAXWIDTH]; 
-int     linesize = SCREENWIDTH;
 
 
 // Color tables for different players,
@@ -170,7 +169,7 @@ void R_DrawColumn (void)
                 // heightmask is the Tutti-Frutti fix -- killough
 
                 *dest = colormap[source[frac>>FRACBITS]];
-                dest += linesize;                     // killough 11/98
+                dest += SCREENWIDTH;                     // killough 11/98
                 if ((frac += fracstep) >= heightmask)
                 frac -= heightmask;
             }
@@ -181,10 +180,10 @@ void R_DrawColumn (void)
             while ((count-=2)>=0)   // texture height is a power of 2 -- killough
             {
                 *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
-                dest += linesize;   // killough 11/98
+                dest += SCREENWIDTH;   // killough 11/98
                 frac += fracstep;
                 *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
-                dest += linesize;   // killough 11/98
+                dest += SCREENWIDTH;   // killough 11/98
                 frac += fracstep;
             }
             if (count & 1)
