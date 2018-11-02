@@ -34,6 +34,8 @@
 #include "s_sound.h"
 #include "v_video.h"
 
+#include "jn.h"
+
 #define QUEUESIZE		128
 #define MESSAGESIZE	128
 #define MESSAGELEN 	265
@@ -316,19 +318,17 @@ void CT_Ticker(void)
                 {
                     if (numplayers > 1)
                     {
-                        P_SetMessage(&players[consoleplayer],
-                                     DEH_String(english_language ?
+                        P_SetMessage(&players[consoleplayer], english_language ?
                                      "-MESSAGE SENT-" :
-                                     "-CJJ<OTYBT JNGHFDKTYJ-"), // -СООБЩЕНИЕ ОТПРАВЛЕНО-
+                                     "-CJJ<OTYBT JNGHFDKTYJ-", // -СООБЩЕНИЕ ОТПРАВЛЕНО-
                                      true);
                         S_StartSound(NULL, sfx_chat);
                     }
                     else
                     {
-                        P_SetMessage(&players[consoleplayer],
-                                     DEH_String(english_language ?
+                        P_SetMessage(&players[consoleplayer], english_language ?
                                      "THERE ARE NO OTHER PLAYERS IN THE GAME!" :
-                                     "D BUHT YTN LHEUB{ BUHJRJD!"), // В ИГРЕ НЕТ ДРУГИХ ИГРОКОВ!
+                                     "D BUHT YTN LHEUB[ BUHJRJD!", // В ИГРЕ НЕТ ДРУГИХ ИГРОКОВ!
                                      true);
                         S_StartSound(NULL, sfx_chat);
                     }
