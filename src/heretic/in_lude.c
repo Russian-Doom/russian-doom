@@ -107,6 +107,7 @@ static char *KillersText[] = { "K", "I", "L", "L", "E", "R", "S" };
 static char *KillersText_Rus[] = { "E", ",", "B", "Q", "W", "S", "" }; // "У", "Б", "И", "Й", "Ц", "Ы", ""
 
 extern char *LevelNames[];
+extern char *LevelNames_Rus[];
 
 typedef struct
 {
@@ -628,9 +629,16 @@ void IN_DrawOldLevel(void)
 	// boolean secret;
 	// secret = false;
 
-    x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] +
-                            7) / 2;
-    IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
+    if (english_language)
+    {
+        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
+    }
+    else
+    {
+        x = 160 - MN_TextBWidth(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
+    }
 
     x = 160 - MN_TextAWidth(DEH_String(english_language ?
                                        "FINISHED" :
@@ -692,9 +700,16 @@ void IN_DrawYAH(void)
                           "NOW ENTERING:" :
                           "PFUHE;FTNCZ EHJDTYM"), x, 10);           // ЗАГРУЖАЕТСЯ УРОВЕНЬ
 
-    x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] +
-                            7) / 2;
-    IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7, x, 20);
+    if (english_language)
+    {
+        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7, x, 20);
+    }
+    else
+    {
+        x = 160 - MN_TextBWidth(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7, x, 20);
+    }
 
     if (prevmap == 9)
     {
@@ -740,9 +755,16 @@ void IN_DrawSingleStats(void)
                           "SECRETS" :
                           "NFQYBRB"), 50, 115); // ТАЙНИКИ
 
-    x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] +
-                            7) / 2;
-    IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
+    if (english_language)
+    {
+        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
+    }
+    else
+    {
+        x = 160 - MN_TextBWidth(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
+    }
 
     x = 160 - MN_TextAWidth(DEH_String(english_language ?
                                        "FINISHED" :
@@ -815,11 +837,16 @@ void IN_DrawSingleStats(void)
                               "NOW ENTERING:" :
                               "PFUHE;FTNCZ EHJDTYM"), x, 160);          // ЗАГРУЖАЕТСЯ УРОВЕНЬ
 
-        x = 160 -
-            MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] +
-                          7) / 2;
-        IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7, x,
-                   170);
+        if (english_language)
+        {
+            x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
+            IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7, x, 170);
+        }
+        else
+        {
+            x = 160 - MN_TextBWidth(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
+            IN_DrTextB(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7, x, 170);
+        }
         skipintermission = false;
     }
 }
@@ -851,9 +878,16 @@ void IN_DrawCoopStats(void)
         IN_DrTextB(DEH_String("CTRHTNS"), 232, 35); // СЕКРЕТЫ (232, 35)
     }
 
-    x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] +
-                            7) / 2;
-    IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
+    if (english_language)
+    {
+        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
+    }
+    else
+    {
+        x = 160 - MN_TextBWidth(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x, 3);
+    }
 
     x = 160 - MN_TextAWidth(DEH_String(english_language ?
                                        "FINISHED" :
