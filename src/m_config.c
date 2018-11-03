@@ -1755,6 +1755,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(agressive_lost_souls),
     CONFIG_VARIABLE_INT(fast_quickload),
+    CONFIG_VARIABLE_INT(no_internal_demos),
 
     // Прицел
     CONFIG_VARIABLE_INT(crosshair_draw),

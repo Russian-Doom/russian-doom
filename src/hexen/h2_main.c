@@ -118,6 +118,7 @@ int UpdateState;
 int maxplayers = MAXPLAYERS;
 
 boolean vanillaparm; // [JN] проверка параметра -vanilla
+boolean title_mus_played = false;
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
@@ -140,6 +141,8 @@ int brightmaps = 1;              // Брайтмаппинг текстур и �
 int fake_contrast = 0;           // Имитация контрастного освещения стен
 // Звук
 int snd_monomode = 0;
+// Геймплей
+int no_internal_demos = 0;
 // Прицел
 int crosshair_draw = 0;
 int crosshair_health = 1;
@@ -198,6 +201,9 @@ void D_BindVariables(void)
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
+
+    // Геймплей
+    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
     // Прицел
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
@@ -1140,7 +1146,10 @@ void H2_DoAdvanceDemo(void)
             pagetic = 280;
             gamestate = GS_DEMOSCREEN;
             pagename = "TITLE";
-            S_StartSongName("hexen", true);
+            if (!title_mus_played)
+            S_StartSongName("hexen", false);
+            if (no_internal_demos)
+            title_mus_played = true;
             break;
         case 1:
             pagetic = 210;
@@ -1150,6 +1159,7 @@ void H2_DoAdvanceDemo(void)
         case 2:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
+            if (!no_internal_demos)
             G_DeferedPlayDemo("demo1");
             break;
         case 3:
@@ -1160,6 +1170,7 @@ void H2_DoAdvanceDemo(void)
         case 4:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
+            if (!no_internal_demos)
             G_DeferedPlayDemo("demo2");
             break;
         case 5:
@@ -1170,6 +1181,7 @@ void H2_DoAdvanceDemo(void)
         case 6:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
+            if (!no_internal_demos)
             G_DeferedPlayDemo("demo3");
             break;
     }

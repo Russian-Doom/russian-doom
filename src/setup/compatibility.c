@@ -69,6 +69,7 @@ int extra_player_faces = 1;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
 int fast_quickload = 1;
+int no_internal_demos = 0;
 
 // ѕрицел
 int crosshair_draw = 0;
@@ -108,7 +109,7 @@ void CompatibilitySettings(void)
     else if (gamemission == heretic)
         TXT_AddWidget(window, TXT_NewScrollPane(47, 15, window_features));
     else if (gamemission == hexen)
-        TXT_AddWidget(window, TXT_NewScrollPane(47, 8, window_features));
+        TXT_AddWidget(window, TXT_NewScrollPane(47, 10, window_features));
 
     TXT_AddWidgets(window_features,
 
@@ -224,9 +225,9 @@ void CompatibilitySettings(void)
             "Левитирующие сферы-артефакты",
             &floating_powerups)),
 
-    TXT_If(gamemission == doom || gamemission == heretic, TXT_NewSeparator(english_language ?
+    TXT_NewSeparator(english_language ?
     "Gameplay" :
-    "Геймплей")),
+    "Геймплей"),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Fix errors of vanilla maps" :
             "Исправл€ть ошибки оригинальных уровней",
@@ -251,6 +252,10 @@ void CompatibilitySettings(void)
             "Don't prompt for quick loading/saving" :
             "Не выводить запрос при быстрой загрузке",
             &fast_quickload)),
+        TXT_NewCheckBox(english_language ?
+            "Don't play internal demos" :
+            "Не проигрывать внутренние демозаписи",
+            &no_internal_demos),
 
     TXT_NewSeparator(english_language ?
     "Crosshair" :
@@ -315,6 +320,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
     M_BindIntVariable("fast_quickload",         &fast_quickload);
+    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
     // ѕрицел
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);

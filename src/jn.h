@@ -93,6 +93,7 @@ extern int extra_player_faces;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
 extern int fast_quickload;
+extern int no_internal_demos;
 
 // Прицел (Crosshair)
 extern int crosshair_draw;

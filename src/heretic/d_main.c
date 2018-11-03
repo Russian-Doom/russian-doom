@@ -378,7 +378,7 @@ void D_DoAdvanceDemo(void)
         case 2:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
-            if (!flip_levels || !flip_levels_cmdline)
+            if (!flip_levels && !flip_levels_cmdline && !no_internal_demos)
             G_DeferedPlayDemo(DEH_String("demo1"));
             break;
         case 3:
@@ -389,7 +389,7 @@ void D_DoAdvanceDemo(void)
         case 4:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
-            if (!flip_levels || !flip_levels_cmdline)
+            if (!flip_levels && !flip_levels_cmdline && !no_internal_demos)
             G_DeferedPlayDemo(DEH_String("demo2"));
             break;
         case 5:
@@ -407,7 +407,7 @@ void D_DoAdvanceDemo(void)
         case 6:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
-            if (!flip_levels || !flip_levels_cmdline)
+            if (!flip_levels && !flip_levels_cmdline && !no_internal_demos)
             G_DeferedPlayDemo(DEH_String("demo3"));
             break;
     }
@@ -829,6 +829,7 @@ void D_BindVariables(void)
     
     // Геймплей
     M_BindIntVariable("flip_levels",            &flip_levels);
+    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
     // Прицел
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);

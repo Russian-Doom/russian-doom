@@ -156,6 +156,7 @@ static void SensibleDefaults(void)
     unlimited_lost_souls = 1;
     agressive_lost_souls = 0;
     fast_quickload = 1;
+    no_internal_demos = 0;
 
     // Прицел
     crosshair_draw = 0;

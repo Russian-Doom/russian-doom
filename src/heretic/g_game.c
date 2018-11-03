@@ -157,6 +157,7 @@ int randomly_flipcorpses = 1;
 
 // Геймплей
 int flip_levels = 0;
+int no_internal_demos = 0;
 
 // Прицел
 int crosshair_draw = 0;

@@ -488,6 +488,7 @@ void D_BindVariables(void)
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
     M_BindIntVariable("fast_quickload",         &fast_quickload);
+    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
     // Прицел
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
@@ -700,7 +701,8 @@ void D_DoAdvanceDemo (void)
             if (gamemode == pressbeta       // [JN] No demos in Press Beta
             || gamemission == pack_nerve    // ... no demos in NERVE
             || flip_levels                  // ... no demos in flipped levels (boolean)
-            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            || flip_levels_cmdline          // ... no demos in flipped levels (cmd line)
+            || no_internal_demos)           // ... no demos if they are disabled
             break;
 
             G_DeferedPlayDemo(DEH_String("demo1"));
@@ -740,7 +742,8 @@ void D_DoAdvanceDemo (void)
             if (gamemode == pressbeta       // [JN] No demos in Press Beta
             || gamemission == pack_nerve    // ... no demos in NERVE
             || flip_levels                  // ... no demos in flipped levels (boolean)
-            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            || flip_levels_cmdline          // ... no demos in flipped levels (cmd line)
+            || no_internal_demos)           // ... no demos if they are disabled
             break;
 
             else
@@ -793,7 +796,8 @@ void D_DoAdvanceDemo (void)
             if (gamemode == pressbeta       // [JN] No demos in Press Beta
             || gamemission == pack_nerve    // ... no demos in NERVE
             || flip_levels                  // ... no demos in flipped levels (boolean)
-            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            || flip_levels_cmdline          // ... no demos in flipped levels (cmd line)
+            || no_internal_demos)           // ... no demos if they are disabled
             break;
 
             G_DeferedPlayDemo(DEH_String("demo3"));
@@ -806,7 +810,8 @@ void D_DoAdvanceDemo (void)
             if (gamemode == pressbeta       // [JN] No demos in Press Beta
             || gamemission == pack_nerve    // ... no demos in NERVE
             || flip_levels                  // ... no demos in flipped levels (boolean)
-            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            || flip_levels_cmdline          // ... no demos in flipped levels (cmd line)
+            || no_internal_demos)           // ... no demos if they are disabled
             break;
 
             G_DeferedPlayDemo(DEH_String("demo4"));
