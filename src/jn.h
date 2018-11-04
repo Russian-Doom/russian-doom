@@ -60,7 +60,6 @@ extern int translucency;
 extern int swirling_liquids;
 extern int invul_sky;
 extern int colored_blood;
-extern int extra_rotations;
 extern int red_resurrection_flash;
 extern int draw_shadowed_text;
 extern int show_diskicon;
