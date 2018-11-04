@@ -37,6 +37,7 @@ int translucency = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
 int colored_blood = 1;
+int extra_rotations = 1;
 int red_resurrection_flash = 1;
 int draw_shadowed_text = 1;
 int show_diskicon = 1;
@@ -140,6 +141,10 @@ void CompatibilitySettings(void)
             "Colored blood and corpses" :
             "Разноцветна€ кровь и трупы",
             &colored_blood)),
+        TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
+            "Extra monsters rotations" :
+            "Дополнительные кадры вращени€ монстров",
+            &extra_rotations)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Red resurrection flash" :
             "Красна€ вспышка воскрешени€ монстров",
@@ -288,6 +293,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("colored_blood",          &colored_blood);
+    M_BindIntVariable("extra_rotations",        &extra_rotations);
     M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("show_diskicon",          &show_diskicon);

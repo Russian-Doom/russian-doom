@@ -124,6 +124,7 @@ static void SensibleDefaults(void)
     swirling_liquids = 1;
     invul_sky = 1;
     colored_blood = 1;
+    extra_rotations = 1;
     red_resurrection_flash = 1;
     draw_shadowed_text = 1;
     show_diskicon = 1;

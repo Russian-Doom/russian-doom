@@ -456,6 +456,7 @@ void D_BindVariables(void)
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("colored_blood",          &colored_blood);
+    M_BindIntVariable("extra_rotations",        &extra_rotations);
     M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("show_diskicon",          &show_diskicon);
@@ -1266,6 +1267,13 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/doom-jaguar-russian.wad");
             }
         }
+    }
+
+    // [JN] Extra rotations for Player (PLAY), Zombieman (POSS)
+    // and Shotgun Guy (SPOS). Must be loaded before initial "-file".
+    if (extra_rotations && !vanillaparm && gamemode != pressbeta)
+    {
+        W_MergeFile("base/doom-rotations.wad");
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
