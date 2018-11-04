@@ -1539,7 +1539,7 @@ void ST_drawWidgets(boolean refresh)
     }
     
     // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
-    if (screenblocks == 10 || screenblocks == 11 || screenblocks == 12)
+    if (screenblocks == 11 || screenblocks == 12)
     {
         if (!automapactive) // [JN] Don't draw signs in automap
         {
