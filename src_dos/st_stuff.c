@@ -614,8 +614,8 @@ ST_Responder (event_t* ev)
 	plyr->armortype = 2;
 	
 	// [JN] Give all weapons properly.
-	// Don't give SSG, Plasmagun and BFG in Shareware. Give SSG only in Doom 2.
-	// leave their indication on HUD as gray numbers.
+	// Don't give SSG, Plasmagun and BFG in Shareware, leave their
+	// indication on HUD as gray numbers. Give SSG only in Doom 2.
 	plyr->weaponowned[wp_fist] = true;
 	plyr->weaponowned[wp_chainsaw] = true;
 	plyr->weaponowned[wp_pistol] = true;
@@ -646,8 +646,8 @@ ST_Responder (event_t* ev)
 	plyr->armortype = 2;
 	
 	// [JN] Give all weapons properly.
-	// Don't give SSG, Plasmagun and BFG in Shareware. Give SSG only in Doom 2.
-	// leave their indication on HUD as gray numbers.
+	// Don't give SSG, Plasmagun and BFG in Shareware, leave their
+	// indication on HUD as gray numbers. Give SSG only in Doom 2.
 	plyr->weaponowned[wp_fist] = true;
 	plyr->weaponowned[wp_chainsaw] = true;
 	plyr->weaponowned[wp_pistol] = true;
