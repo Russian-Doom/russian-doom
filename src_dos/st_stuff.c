@@ -614,13 +614,13 @@ ST_Responder (event_t* ev)
 	plyr->armortype = 2;
 	
 	// [JN] Give all weapons properly.
-	// Don't give SSG, Plasmagun and BFG in Shareware, 
+	// Don't give SSG, Plasmagun and BFG in Shareware. Give SSG only in Doom 2.
 	// leave their indication on HUD as gray numbers.
 	plyr->weaponowned[wp_fist] = true;
 	plyr->weaponowned[wp_chainsaw] = true;
 	plyr->weaponowned[wp_pistol] = true;
 	plyr->weaponowned[wp_shotgun] = true;
-	plyr->weaponowned[wp_supershotgun] = shareware ? false : true;
+	plyr->weaponowned[wp_supershotgun] = commercial ? true : false;
 	plyr->weaponowned[wp_chaingun] = true;
 	plyr->weaponowned[wp_missile] = true;
 	plyr->weaponowned[wp_plasma] = shareware ? false : true;
@@ -646,13 +646,13 @@ ST_Responder (event_t* ev)
 	plyr->armortype = 2;
 	
 	// [JN] Give all weapons properly.
-	// Don't give SSG, Plasmagun and BFG in Shareware, 
+	// Don't give SSG, Plasmagun and BFG in Shareware. Give SSG only in Doom 2.
 	// leave their indication on HUD as gray numbers.
 	plyr->weaponowned[wp_fist] = true;
 	plyr->weaponowned[wp_chainsaw] = true;
 	plyr->weaponowned[wp_pistol] = true;
 	plyr->weaponowned[wp_shotgun] = true;
-	plyr->weaponowned[wp_supershotgun] = shareware ? false : true;
+	plyr->weaponowned[wp_supershotgun] = commercial ? true : false;
 	plyr->weaponowned[wp_chaingun] = true;
 	plyr->weaponowned[wp_missile] = true;
 	plyr->weaponowned[wp_plasma] = shareware ? false : true;
