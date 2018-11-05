@@ -603,8 +603,18 @@ boolean ST_Responder (event_t* ev)
                 plyr->armorpoints = deh_idfa_armor;
                 plyr->armortype = deh_idfa_armor_class;
 
-                for (i=0;i<NUMWEAPONS;i++)
-                    plyr->weaponowned[i] = true;
+                // [JN] Give all weapons properly.
+                // Don't give SSG, Plasmagun and BFG in Shareware, 
+                // leave their indication on HUD as gray numbers.
+                plyr->weaponowned[wp_fist] = true;
+                plyr->weaponowned[wp_chainsaw] = true;
+                plyr->weaponowned[wp_pistol] = true;
+                plyr->weaponowned[wp_shotgun] = true;
+                plyr->weaponowned[wp_supershotgun] = gamemode == shareware ? false : true;
+                plyr->weaponowned[wp_chaingun] = true;
+                plyr->weaponowned[wp_missile] = true;
+                plyr->weaponowned[wp_plasma] = gamemode == shareware ? false : true;
+                plyr->weaponowned[wp_bfg] = gamemode == shareware ? false : true;
 
                 // [JN] Проверяем, есть ли у игрока рюкзак. Если нет - выдаём.
                 if (!plyr->backpack)
@@ -627,8 +637,18 @@ boolean ST_Responder (event_t* ev)
                 plyr->armorpoints = deh_idkfa_armor;
                 plyr->armortype = deh_idkfa_armor_class;
 
-                for (i=0;i<NUMWEAPONS;i++)
-                    plyr->weaponowned[i] = true;
+                // [JN] Give all weapons properly.
+                // Don't give SSG, Plasmagun and BFG in Shareware, 
+                // leave their indication on HUD as gray numbers.
+                plyr->weaponowned[wp_fist] = true;
+                plyr->weaponowned[wp_chainsaw] = true;
+                plyr->weaponowned[wp_pistol] = true;
+                plyr->weaponowned[wp_shotgun] = true;
+                plyr->weaponowned[wp_supershotgun] = gamemode == shareware ? false : true;
+                plyr->weaponowned[wp_chaingun] = true;
+                plyr->weaponowned[wp_missile] = true;
+                plyr->weaponowned[wp_plasma] = gamemode == shareware ? false : true;
+                plyr->weaponowned[wp_bfg] = gamemode == shareware ? false : true;
 	
                 // [JN] Проверяем, есть ли у игрока рюкзак. Если нет - выдаём.
                 if (!plyr->backpack)

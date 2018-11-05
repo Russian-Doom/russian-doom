@@ -613,8 +613,18 @@ ST_Responder (event_t* ev)
 	plyr->armorpoints = 200;
 	plyr->armortype = 2;
 	
-	for (i=0;i<NUMWEAPONS;i++)
-	  plyr->weaponowned[i] = true;
+	// [JN] Give all weapons properly.
+	// Don't give SSG, Plasmagun and BFG in Shareware, 
+	// leave their indication on HUD as gray numbers.
+	plyr->weaponowned[wp_fist] = true;
+	plyr->weaponowned[wp_chainsaw] = true;
+	plyr->weaponowned[wp_pistol] = true;
+	plyr->weaponowned[wp_shotgun] = true;
+	plyr->weaponowned[wp_supershotgun] = shareware ? false : true;
+	plyr->weaponowned[wp_chaingun] = true;
+	plyr->weaponowned[wp_missile] = true;
+	plyr->weaponowned[wp_plasma] = shareware ? false : true;
+	plyr->weaponowned[wp_bfg] = shareware ? false : true;
 
     // [JN] Checking: does player have a backpack?
     if (!plyr->backpack && !vanilla)
@@ -635,8 +645,18 @@ ST_Responder (event_t* ev)
 	plyr->armorpoints = 200;
 	plyr->armortype = 2;
 	
-	for (i=0;i<NUMWEAPONS;i++)
-	  plyr->weaponowned[i] = true;
+	// [JN] Give all weapons properly.
+	// Don't give SSG, Plasmagun and BFG in Shareware, 
+	// leave their indication on HUD as gray numbers.
+	plyr->weaponowned[wp_fist] = true;
+	plyr->weaponowned[wp_chainsaw] = true;
+	plyr->weaponowned[wp_pistol] = true;
+	plyr->weaponowned[wp_shotgun] = true;
+	plyr->weaponowned[wp_supershotgun] = shareware ? false : true;
+	plyr->weaponowned[wp_chaingun] = true;
+	plyr->weaponowned[wp_missile] = true;
+	plyr->weaponowned[wp_plasma] = shareware ? false : true;
+	plyr->weaponowned[wp_bfg] = shareware ? false : true;
 
     // [JN] Checking: does player have a backpack?
     if (!plyr->backpack && !vanilla)
