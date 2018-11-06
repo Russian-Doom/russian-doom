@@ -84,6 +84,9 @@ void 	R_DrawSpan (void);
 // Low resolution mode, 160x200?
 void 	R_DrawSpanLow (void);
 
+// [JN] Draws the actual span as single color.
+void 	R_DrawSpanNoTexture (void);
+void 	R_DrawSpanLowNoTexture (void);
 
 void
 R_InitBuffer

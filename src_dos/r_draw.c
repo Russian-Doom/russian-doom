@@ -598,6 +598,85 @@ void R_DrawSpanLow (void)
         }
 }
 
+
+//
+// [JN] Draws the actual span as single color.
+// Activated if "-noflats" command line parameter is present
+//
+void R_DrawSpanNoTexture (void)
+{
+    byte*   dest;
+    int     i;
+    int     dsp_x1, dsp_x2;
+    int     countp;
+
+#ifdef RANGECHECK
+    if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
+    I_Error( "R_DrawSpan: %i ª %i ¢ %i", ds_x1,ds_x2,ds_y);
+#endif
+
+    for (i = 0; i < 4; i++)
+    {
+        outp (SC_INDEX+1, 1<<i);
+        dsp_x1 = (ds_x1-i)/4;
+
+        if (dsp_x1*4+i < ds_x1)
+        dsp_x1++;
+
+        dest = destview + ds_y*80 + dsp_x1;
+        dsp_x2 = (ds_x2-i)/4;
+        countp = dsp_x2 - dsp_x1;
+
+        if (countp < 0)
+        continue;
+
+        do
+        {
+            *dest++ = ds_colormap[ds_source[0]];
+        }
+        while (countp--);
+    }
+}
+
+//
+// [JN] And again..
+//
+void R_DrawSpanLowNoTexture (void)
+{
+    byte*   dest; 
+    int     i;
+    int     dsp_x1, dsp_x2;
+    int     countp;
+
+#ifdef RANGECHECK
+    if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
+    I_Error( "R_DrawSpan: %i ª %i ¢ %i", ds_x1,ds_x2,ds_y);
+#endif 
+
+    for (i = 0; i < 2; i++)
+    {
+        outp (SC_INDEX+1, 3<<(i*2));
+        dsp_x1 = (ds_x1-i)/2;
+
+        if (dsp_x1*2+i < ds_x1)
+        dsp_x1++;
+
+        dest = destview + ds_y*80 + dsp_x1;
+        dsp_x2 = (ds_x2-i)/2;
+        countp = dsp_x2 - dsp_x1;
+
+        if (countp < 0)
+        continue;
+
+        do
+        {
+            *dest++ = ds_colormap[ds_source[0]];
+        }
+        while (countp--);
+    }
+}
+
+
 //
 // R_InitBuffer 
 // Creats lookup tables that avoid
