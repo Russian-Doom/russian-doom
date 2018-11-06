@@ -27,6 +27,7 @@
 
 
 #include "doomdef.h"
+#include "doomstat.h"
 #include "d_net.h"
 
 #include "m_misc.h"
@@ -953,9 +954,11 @@ void R_SetupFrame (player_t* player)
 //
 void R_RenderPlayerView (player_t* player)
 {	
-    extern boolean automapactive;
-
     R_SetupFrame (player);
+
+    // [JN] Don't render game screen while in help screens.
+    if (inhelpscreens)
+    return;
 
     // Clear buffers.
     R_ClearClipSegs ();

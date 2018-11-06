@@ -98,7 +98,6 @@ static hu_stext_t   w_message;
 static int          message_counter;
 
 extern int      showMessages;
-extern boolean  automapactive;
 
 static boolean  headsupactive = false;
 
@@ -483,6 +482,10 @@ void HU_Drawer(void)
 {
     extern boolean crosshair_draw;
     extern int screenblocks;
+
+    // [JN] Don't draw HUD stuff while in help screens.
+    if (inhelpscreens)
+    return;
     
     HUlib_drawSText(&w_message);
     HUlib_drawIText(&w_chat);

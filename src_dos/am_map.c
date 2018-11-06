@@ -1293,6 +1293,10 @@ void AM_Drawer (void)
     if (!automapactive)
     return;
 
+    // [JN] Don't draw Automap while in help screens.
+    if (inhelpscreens)
+    return;
+
     AM_clearFB(BACKGROUND);
 
     if (grid)
