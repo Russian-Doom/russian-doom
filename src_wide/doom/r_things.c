@@ -1031,7 +1031,7 @@ void R_DrawPlayerSprites (void)
         spritelights = scalelight[lightnum];
 
         // [JN] Applying brightmaps to HUD weapons...
-        if (brightmaps && !vanillaparm)
+        if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
         {
             // BFG9000
             if (state == S_BFG1 || state == S_BFG2 || state == S_BFG3 || state == S_BFG4)
