@@ -278,6 +278,11 @@ extern fixed_t		bmaporgy;	// origin of block map
 extern mobj_t**		blocklinks;	// for thing chains
 
 
+// [crispy] blinking key or skull in the status bar
+#define KEYBLINKMASK 0x8
+#define KEYBLINKTICS (7*KEYBLINKMASK)
+extern int st_keyorskull[3];
+
 
 //
 // P_INTER

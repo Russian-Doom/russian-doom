@@ -94,6 +94,7 @@ typedef struct player_s
     // Power ups. invinc and invis are tic counters.
     int     powers[NUMPOWERS];
     boolean cards[NUMCARDS];
+    boolean tryopen[NUMCARDS]; // [crispy] blinking key or skull in the status bar
     boolean backpack;
 
     // Frags, kills of other players.
