@@ -1848,7 +1848,8 @@ void G_InitNew(skill_t skill, int episode, int map)
         respawnmonsters = false;
     }
     // Set monster missile speeds
-    speed = skill == sk_nightmare;
+    // [JN] Speed up for 5th and 6th skill levels
+    speed = (skill == sk_nightmare || skill == sk_ultranm);
     for (i = 0; MonsterMissileInfo[i].type != -1; i++)
     {
         mobjinfo[MonsterMissileInfo[i].type].speed
@@ -1882,20 +1883,6 @@ void G_InitNew(skill_t skill, int episode, int map)
         mobjinfo[MT_SORCERER1].speed = 21;          // 16          D'Sparil (riding)
         mobjinfo[MT_SORCERER2].speed = 20;          // 14          D'Sparil (walking)
 
-        // Monster's missiles speed                     // Old value    What
-        mobjinfo[MT_IMPBALL].speed = 13 * FRACUNIT;     // 10           Fire Gargolye fireball
-        mobjinfo[MT_MUMMYFX1].speed = 12 * FRACUNIT;    // 9            Nitrogolem Ghost fireball
-        mobjinfo[MT_KNIGHTAXE].speed = 12 * FRACUNIT;   // 9            Undead Warrior green axe
-        mobjinfo[MT_REDAXE].speed = 12 * FRACUNIT;      // 9            Undead Warrior green axe
-        mobjinfo[MT_BEASTBALL].speed = 15 * FRACUNIT;   // 12           Weredragon fireball
-        mobjinfo[MT_SNAKEPRO_A].speed = 16 * FRACUNIT;  // 14           Ophidian fireball A
-        mobjinfo[MT_SNAKEPRO_B].speed = 16 * FRACUNIT;  // 14           Ophidian fireball B
-        mobjinfo[MT_WIZFX1].speed = 20 * FRACUNIT;      // 18           Disciple of D'Sparil fireball
-        mobjinfo[MT_HEADFX1].speed = 16 * FRACUNIT;     // 13           Iron Lich missilie 1
-        mobjinfo[MT_HEADFX2].speed = 12 * FRACUNIT;     // 8            Iron Lich missilie 2
-        mobjinfo[MT_HEADFX3].speed = 13 * FRACUNIT;     // 10           Iron Lich missilie 3
-        mobjinfo[MT_WHIRLWIND].speed = 14 * FRACUNIT;   // 10           Iron Lich whirlwind
-        
         // Monster's damage                         // Old value   What
         mobjinfo[MT_IMPBALL].damage = 2;            // 1           Fire Gargolye fireball
         mobjinfo[MT_MUMMYFX1].damage = 6;           // 4           Nitrogolem Ghost fireball
@@ -1927,20 +1914,6 @@ void G_InitNew(skill_t skill, int episode, int map)
         mobjinfo[MT_SORCERER1].speed = 16;
         mobjinfo[MT_SORCERER2].speed = 14;
 
-        // Monster's missiles speed
-        mobjinfo[MT_IMPBALL].speed = 10 * FRACUNIT;
-        mobjinfo[MT_MUMMYFX1].speed = 9 * FRACUNIT;
-        mobjinfo[MT_KNIGHTAXE].speed = 9 * FRACUNIT;
-        mobjinfo[MT_REDAXE].speed = 9 * FRACUNIT;
-        mobjinfo[MT_BEASTBALL].speed = 12 * FRACUNIT;
-        mobjinfo[MT_SNAKEPRO_A].speed = 14 * FRACUNIT;
-        mobjinfo[MT_SNAKEPRO_B].speed = 14 * FRACUNIT;
-        mobjinfo[MT_WIZFX1].speed = 18 * FRACUNIT;
-        mobjinfo[MT_HEADFX1].speed = 13 * FRACUNIT;
-        mobjinfo[MT_HEADFX2].speed = 8 * FRACUNIT;
-        mobjinfo[MT_HEADFX3].speed = 10 * FRACUNIT;
-        mobjinfo[MT_WHIRLWIND].speed = 10 * FRACUNIT;
-        
         // Monster's damage
         mobjinfo[MT_IMPBALL].damage = 1;
         mobjinfo[MT_MUMMYFX1].damage = 4;
