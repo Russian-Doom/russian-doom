@@ -60,3 +60,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Michael Francis
 - Danfun64
 - Sabhotep
+- mykola-ambar
