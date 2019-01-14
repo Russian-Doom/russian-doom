@@ -2,13 +2,15 @@
 
 #### Russian Doom, Freedoom, Heretic and Hexen translation project 
 
-Russian Doom is Copyright &copy; 2016&ndash;2018 by [Julian Nechaevsky](http://jnechaevsky.users.sourceforge.net/author.html). The project is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard and [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath, with significant additions from [Doom Retro](http://doomretro.com) by Brad Harding, and distributes with their approval.
+Copyright &copy; 2016&ndash;2019 [Julian Nechaevsky](http://jnechaevsky.users.sourceforge.net/author.html)
 
-DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey Khokholov and [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) by Alexandre-Xavier Labonté-Lamoureux, with significant additions from [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath and [Doom Retro](http://doomretro.com) by Brad Harding, and distributes with their approval. 
+Russian Doom is based on [Chocolate Doom](https://www.chocolate-doom.org) by Simon Howard and [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath, with significant additions from [Doom Retro](http://doomretro.com) by Brad Harding, and is distributed with their approval.
 
-The project, all it's translation materials and source codes are available under the terms and conditions of [GNU General Public License version 2](https://github.com/JNechaevsky/russian-doom/blob/master/LICENSE.txt).
+DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey Khokholov and [Doom Vanille](https://github.com/AXDOOMER/doom-vanille) by Alexandre-Xavier Labonté-Lamoureux, with significant additions from [Crispy Doom](http://fabiangreffrath.github.io/crispy-doom) by Fabian Greffrath and [Doom Retro](http://doomretro.com) by Brad Harding, and is distributed with their approval. 
 
-Starting from version 3.0 for Windows, English language is availbe for all supported games. It can be choosen in the Main Menu of Setup executable by pressing F4 (don't forget to save the changes before quit), or by setting: `english_language` to `1` in configuration file. The language is chosen individually for each game.
+The project, along with all its translation materials and source code, are available under the terms and conditions of [GNU General Public License version 2](https://github.com/JNechaevsky/russian-doom/blob/master/LICENSE.txt).
+
+Starting from version 3.0 for Windows, English is available for all supported games. It can be selected in the Main Menu of the Setup executable by pressing F4 (don’t forget to save all changes before exiting) or by setting `english_language` to `1` in the configuration file. Language options are set individually for each game.
 
 ##### Download latest version (updated: November 25, 2018)
 
