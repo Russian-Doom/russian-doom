@@ -750,6 +750,8 @@ P_SetupLevel
     P_RemoveSlimeTrails();
     // [crispy] fix long wall wobble
     P_SegLengths();
+    // [crispy] blinking key or skull in the status bar
+    memset(st_keyorskull, 0, sizeof(st_keyorskull));
 
     bodyqueslot = 0;
     deathmatch_p = deathmatchstarts;
