@@ -1348,11 +1348,11 @@ void ST_updateWidgets(void)
                 st_firsttime = true;
             }
             
-            plyr->tryopen[i]--;
+            keyboxes[i] = (--plyr->tryopen[i] & KEYBLINKMASK) ? i + st_keyorskull[i] : -1;
             
-            if (screenblocks < 14)
+            if (!plyr->tryopen[i])
             {
-                keyboxes[i] = (plyr->tryopen[i] & KEYBLINKMASK) ? i + st_keyorskull[i] : -1;
+                w_keyboxes[i].oldinum = -1;
             }
         }
     }
