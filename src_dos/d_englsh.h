@@ -2,7 +2,7 @@
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
 // Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
-// Copyright (C) 2017-2018 Julian Nechaevsky
+// Copyright (C) 2017-2019 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -1142,7 +1142,7 @@
 
 
 // Port-specific strings
-#define STSTR_VERSION   "dthcbz 1>666 (25>11>2018)"                 // Версия 1.666 (25.11.2018)
+#define STSTR_VERSION   "dthcbz 1>666f (d hfphf,jnrt)"              // Версия 1.666а (в разработке)
 
 #define STSTR_KAADDED   "rk.xb gjkextys"                            // Ключи получены
 

@@ -3,7 +3,7 @@
 // Copyright (C) 1993-2008 Raven Software
 // Copyright (C) 2016-2017 Alexey Khokholov (Nuke.YKT)
 // Copyright (C) 2017 Alexandre-Xavier Labonte-Lamoureux
-// Copyright (C) 2017-2018 Julian Nechaevsky
+// Copyright (C) 2017-2019 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
