@@ -1172,7 +1172,8 @@ void ST_updateWidgets(void)
 	    keyboxes[i] = (keyboxes[i]==-1) ? i+3 : i+6;
 
 	// [crispy] blinking key or skull in the status bar
-	if (plyr->tryopen[i])
+    // [JN] blink in any HUD size, except full screen (no HUD) and vanilla
+	if (plyr->tryopen[i] && !vanilla)
 	{
 
 		if (!(plyr->tryopen[i] & (2*KEYBLINKMASK-1)))
