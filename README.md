@@ -16,6 +16,6 @@ Starting from version 3.0 for Windows, English is available for all supported ga
 
 For Windows: [russian-doom-3.1a-win32.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.1a/russian-doom-3.1a-win32.zip/download)<br />
 For Windows (x64): [russian-doom-3.1a-win64.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.1a/russian-doom-3.1a-win64.zip/download)<br />
-For DOS: [russian-doom-dos-1.666a.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom%20for%20DOS/1.666a/russian-doom-dos-1.666.zipa/download)<br /><br />
+For DOS: [russian-doom-dos-1.666a.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom%20for%20DOS/1.666a/russian-doom-dos-1.666a.zip/download)<br /><br />
 Source codes: [russian-doom-3.1a-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.1a/russian-doom-3.1a-source.zip/download)<br />
 PNG font atlases: [russian-doom-fonts-png.zip](https://sourceforge.net/projects/jnechaevsky/files/PNG%20Fonts/russian-doom-fonts-png.zip/download)
