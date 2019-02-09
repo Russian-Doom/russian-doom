@@ -43,6 +43,10 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [GENMIDI](https://www.doomworld.com/forum/topic/97388-update-hisymaks-genmidi-an-enhanced-genmidi-lump-for-opl-synth/) sound bank for Atari Jaguar TC
 - Hisymak
 
+#### Korax Russian voiceover
+- Andrew Grischenko
+- Nemrtvi
+
 ##### And also:
 - Maxim "MaxLeon" Pyanov, Oleg Zik and Oleg “Kai” Sudarikov
 - [LeD] Jake Crusher
@@ -61,3 +65,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Danfun64
 - Sabhotep
 - mykola-ambar
+- Nemrtvi
