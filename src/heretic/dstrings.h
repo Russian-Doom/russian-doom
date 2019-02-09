@@ -681,7 +681,7 @@
 #else
 #define TXT_ARCH      ""
 #endif
-#define TXT_DATE      "12/31/2018"          // MM/DD/YYYY
+#define TXT_DATE      "09/02/2019"          // MM/DD/YYYY
 
 // Русский
 #define TXT_VERSION_RUS "DTHCBZ 3>1F"       // ВЕРСИЯ 3.1a
@@ -692,4 +692,4 @@
 #else
 #define TXT_ARCH_RUS      ""                // ?  
 #endif
-#define TXT_DATE_RUS      "31>12>2018"      // DD.MM.YYYY
+#define TXT_DATE_RUS      "09>02>2019"      // DD.MM.YYYY
