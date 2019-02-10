@@ -19,3 +19,6 @@ For Windows (x64): [russian-doom-3.1a-win64.zip](https://sourceforge.net/project
 For DOS: [russian-doom-dos-1.666a.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom%20for%20DOS/1.666a/russian-doom-dos-1.666a.zip/download)<br /><br />
 Source codes: [russian-doom-3.1a-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.1a/russian-doom-3.1a-source.zip/download)<br />
 PNG font atlases: [russian-doom-fonts-png.zip](https://sourceforge.net/projects/jnechaevsky/files/PNG%20Fonts/russian-doom-fonts-png.zip/download)
+
+
+History of changes for [Windows](http://jnechaevsky.users.sourceforge.net/projects/rusdoom/files/changelog_eng.html) and [DOS](http://jnechaevsky.users.sourceforge.net/projects/rusdoom/files/changelog_dos_rus.html) versions.
