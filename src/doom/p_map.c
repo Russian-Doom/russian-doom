@@ -1710,19 +1710,22 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         // spray blood in a random direction
 
         // [JN] Бочка не должна кровоточить от крашера
-        if (thing->type == MT_BARREL)
+        if (thing->type == MT_BARREL && !vanillaparm)
         return true;
     
-        // [JN] Призрак
-        else if (colored_blood && !vanillaparm && thing->type == MT_SHADOWS)
-        mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODFUZZ);
-
         // [JN] Все остальные монстры
         else
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOOD);
 
         mo->momx = P_SubRandom() << 12;
         mo->momy = P_SubRandom() << 12;
+
+        // [crispy] connect blood object with the monster that bleeds it
+        mo->target = thing;
+
+        // [crispy] Spectres bleed spectre blood
+        if (colored_blood && !vanillaparm)
+        mo->flags |= (thing->flags & MF_SHADOW);
     }
 
     // keep checking (crush other things)	

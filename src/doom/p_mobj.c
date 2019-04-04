@@ -1174,6 +1174,10 @@ void P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t* target)
 
     // [crispy] connect blood object with the monster that bleeds it
     th->target = target;
+
+    // [crispy] Spectres bleed spectre blood
+    if (colored_blood && !vanillaparm)
+	th->flags |= (target->flags & MF_SHADOW);
 }
 
 
