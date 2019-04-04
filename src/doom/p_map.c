@@ -1377,10 +1377,6 @@ boolean PTR_ShootTraverse (intercept_t* in)
     {
         P_SpawnPuff (x,y,z);
     }
-    else if (colored_blood && !vanillaparm && gamevariant != freedoom)
-    {
-        P_SpawnColoredBlood (x,y,z, la_damage, th); // [crispy] pass thing type
-    }
     else
     {
         P_SpawnBlood (x,y,z, la_damage, th); // [crispy] pass thing type
@@ -1650,16 +1646,8 @@ boolean PIT_ChangeSector (mobj_t*	thing)
 
     if (thing->health <= 0)
     {
-        // [JN] Синее мясцо
-        if (gamevariant != freedoom && colored_blood && !vanillaparm && thing->type == MT_HEAD)
-        P_SetMobjState (thing, S_GIBSB);
-
-        // [JN] Зеленое мясцо
-        else if (gamevariant != freedoom && colored_blood && !vanillaparm && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
-        P_SetMobjState (thing, S_GIBSG);
-
         // [JN] Специальное мясцо для Паука-Предводителя
-        else if (gamevariant != freedoom && colored_blood && !vanillaparm && thing->type == MT_SPIDER)
+        if (gamevariant != freedoom && colored_blood && !vanillaparm && thing->type == MT_SPIDER)
         P_SetMobjState (thing, S_GIBSM);
 
         // [JN] Не оставляют мясца
@@ -1691,6 +1679,9 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         if (crushed_corpses_sfx && !vanillaparm && thing->type == MT_PLAYER)
         S_StartSound(singleplayer? NULL : thing, sfx_slop2);
 
+        // [crispy] connect giblet object with the crushed monster
+        thing->target = thing;
+
         // keep checking
         return true;		
     }
@@ -1699,7 +1690,7 @@ boolean PIT_ChangeSector (mobj_t*	thing)
     if (thing->flags & MF_DROPPED)
     {
 	P_RemoveMobj (thing);
-	
+
 	// keep checking
 	return true;		
     }
@@ -1722,14 +1713,6 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         if (thing->type == MT_BARREL)
         return true;
     
-        // [JN] Какодемон
-        else if (gamevariant != freedoom && colored_blood && !vanillaparm && thing->type == MT_HEAD)
-        mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODBLUE);
-
-        // [JN] Рыцарь Ада и Барон Ада
-        else if (gamevariant != freedoom && colored_blood && !vanillaparm && (thing->type == MT_BRUISER || thing->type == MT_KNIGHT))
-        mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODGREEN);
-
         // [JN] Призрак
         else if (colored_blood && !vanillaparm && thing->type == MT_SHADOWS)
         mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOODFUZZ);

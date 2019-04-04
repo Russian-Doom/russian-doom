@@ -1144,65 +1144,6 @@ P_SpawnPuffSafe
 }
 
 
-
-//
-// P_SpawnColoredBlood
-// 
-// [JN] Spawn colored blood depending on monster type
-//
-void P_SpawnColoredBlood (fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t* target)
-{
-    mobj_t*	th;
-
-    z += (P_SubRandom() << 10);
-
-    // Cacodemon
-    if (target->type == MT_HEAD)
-    th = P_SpawnMobj (x,y,z, MT_BLOODBLUE);
-
-    // Hell Knight or Baron of Hell
-    else if (target->type == MT_BRUISER || target->type == MT_KNIGHT)
-    th = P_SpawnMobj (x,y,z, MT_BLOODGREEN);
-
-    // All other monsters
-    else
-    th = P_SpawnMobj (x,y,z, MT_BLOOD);
-
-    th->momz = FRACUNIT*2;
-    th->tics -= P_Random()&3;
-
-    // Activate fuzzy blood
-    if (target->flags & MF_SHADOW) 
-    th->flags |= MF_SHADOW;
-
-    if (th->tics < 1)
-    th->tics = 1;
-
-    if (damage <= 12 && damage >= 9)
-    {
-        if (target->type == MT_HEAD)
-        P_SetMobjState (th,S_BLOODB2);
-
-        else if (target->type == MT_BRUISER || target->type == MT_KNIGHT)
-        P_SetMobjState (th,S_BLOODG2);
-
-        else
-        P_SetMobjState (th,S_BLOOD2);
-    }
-    else if (damage < 9)
-    {
-        if (target->type == MT_HEAD)
-        P_SetMobjState (th,S_BLOODB3);
-
-        else if (target->type == MT_BRUISER || target->type == MT_KNIGHT)
-        P_SetMobjState (th,S_BLOODG3);
-
-        else
-        P_SetMobjState (th,S_BLOOD3);
-    }
-}
-
-
 //
 // P_SpawnBlood
 // 
@@ -1230,6 +1171,9 @@ void P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t* target)
     {
         P_SetMobjState (th,S_BLOOD3);
     }
+
+    // [crispy] connect blood object with the monster that bleeds it
+    th->target = target;
 }
 
 

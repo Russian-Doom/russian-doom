@@ -47,8 +47,8 @@ char *sprnames[] = {
     "POL3","POL1","POL6","GOR2","GOR3","GOR4","GOR5","SMIT","COL1","COL2",
     "COL3","COL4","CAND","CBRA","COL6","TRE1","TRE2","ELEC","CEYE","FSKU",
     "COL5","TBLU","TGRN","TRED","SMBT","SMGT","SMRT","HDB1","HDB2","HDB3",
-    "HDB4","HDB5","HDB6","POB1","POB2","BRS1","TLMP","TLP2","BLUB","BLUG",
-    "POLB","POLG","POLM","RFOG","CANA","CADA","BON3","BON4",
+    "HDB4","HDB5","HDB6","POB1","POB2","BRS1","TLMP","TLP2","POLM","RFOG",
+    "CANA","CADA","BON3","BON4",
     NULL
 };
 
@@ -1105,18 +1105,6 @@ state_t	states[NUMSTATES] = {
     {SPR_TLP2,32769,4,{NULL},S_TECH2LAMP3,0,0},	// S_TECH2LAMP2
     {SPR_TLP2,32770,4,{NULL},S_TECH2LAMP4,0,0},	// S_TECH2LAMP3
     {SPR_TLP2,32771,4,{NULL},S_TECH2LAMP,0,0},	// S_TECH2LAMP4
-    // [JN] Синяя кровь
-    {SPR_BLUB,2,8,{NULL},S_BLOODB2,0,0},    // S_BLOODB1
-    {SPR_BLUB,1,8,{NULL},S_BLOODB3,0,0},    // S_BLOODB2
-    {SPR_BLUB,0,8,{NULL},S_NULL,0,0},       // S_BLOODB3
-    // [JN] Зеленая кровь
-    {SPR_BLUG,2,8,{NULL},S_BLOODG2,0,0},    // S_BLOODG1
-    {SPR_BLUG,1,8,{NULL},S_BLOODG3,0,0},    // S_BLOODG2
-    {SPR_BLUG,0,8,{NULL},S_NULL,0,0},       // S_BLOODG3    
-    // [JN] Синее мясцо
-    {SPR_POLB,0,-1,{NULL},S_NULL,0,0},      // S_GIBSB
-    // [JN] Зеленое мясцо
-    {SPR_POLG,0,-1,{NULL},S_NULL,0,0},      // S_GIBSG
     // [JN] Специальное мясцо для Паука-Предводителя
     {SPR_POLM,0,-1,{NULL},S_NULL,0,0},      // S_GIBSM
     // [JN] Красная вспышка воскрешения монстров
@@ -4712,110 +4700,6 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
 	S_NULL		// raisestate
     },
     
-    {		        // MT_BLOODBLUE
-	-1,		        // doomednum
-	S_BLOODB1,	    // spawnstate
-	1000,		    // spawnhealth
-	S_NULL,		    // seestate
-	sfx_None,	    // seesound
-	8,		        // reactiontime
-	sfx_None,	    // attacksound
-	S_NULL,		    // painstate
-	0,		        // painchance
-	sfx_None,	    // painsound
-	S_NULL,		    // meleestate
-	S_NULL,		    // missilestate
-	S_NULL,		    // deathstate
-	S_NULL,		    // xdeathstate
-	sfx_None,	    // deathsound
-	0,		        // speed
-	20*FRACUNIT,    // radius
-	16*FRACUNIT,    // height
-	100,		    // mass
-	0,		        // damage
-	sfx_None,	    // activesound
-	MF_NOBLOCKMAP,  // flags
-	S_NULL		    // raisestate
-    },
-    
-    {		        // MT_BLOODGREEN
-	-1,		        // doomednum
-	S_BLOODG1,	    // spawnstate
-	1000,		    // spawnhealth
-	S_NULL,		    // seestate
-	sfx_None,	    // seesound
-	8,		        // reactiontime
-	sfx_None,	    // attacksound
-	S_NULL,		    // painstate
-	0,		        // painchance
-	sfx_None,	    // painsound
-	S_NULL,		    // meleestate
-	S_NULL,		    // missilestate
-	S_NULL,		    // deathstate
-	S_NULL,		    // xdeathstate
-	sfx_None,	    // deathsound
-	0,		        // speed
-	20*FRACUNIT,    // radius
-	16*FRACUNIT,    // height
-	100,		    // mass
-	0,		        // damage
-	sfx_None,	    // activesound
-	MF_NOBLOCKMAP,  // flags
-	S_NULL		    // raisestate
-    },
-    
-    {		        // MT_GIBSBLUE
-	-1,		        // doomednum
-	S_GIBSB,	    // spawnstate
-	1000,		    // spawnhealth
-	S_NULL,		    // seestate
-	sfx_None,	    // seesound
-	8,		        // reactiontime
-	sfx_None,       // attacksound
-	S_NULL,		    // painstate
-	0,		        // painchance
-	sfx_None,	    // painsound
-	S_NULL,		    // meleestate
-	S_NULL,		    // missilestate
-	S_NULL,		    // deathstate
-	S_NULL,		    // xdeathstate
-	sfx_None,       // deathsound
-	0,              // speed
-	20*FRACUNIT,    // radius
-	16*FRACUNIT,    // height
-	100,            // mass
-	0,              // damage
-	sfx_None,		// activesound
-	0,              // flags
-	S_NULL          // raisestate
-    },
-    
-    {		        // MT_GIBSGREEN
-	-1,		        // doomednum
-	S_GIBSG,	    // spawnstate
-	1000,		    // spawnhealth
-	S_NULL,		    // seestate
-	sfx_None,	    // seesound
-	8,		        // reactiontime
-	sfx_None,       // attacksound
-	S_NULL,		    // painstate
-	0,		        // painchance
-	sfx_None,	    // painsound
-	S_NULL,		    // meleestate
-	S_NULL,		    // missilestate
-	S_NULL,		    // deathstate
-	S_NULL,		    // xdeathstate
-	sfx_None,       // deathsound
-	0,              // speed
-	20*FRACUNIT,    // radius
-	16*FRACUNIT,    // height
-	100,            // mass
-	0,              // damage
-	sfx_None,		// activesound
-	0,              // flags
-	S_NULL          // raisestate
-    },
-
     {		        // MT_GIBSMASTERMIND
 	-1,		        // doomednum
 	S_GIBSM,	    // spawnstate

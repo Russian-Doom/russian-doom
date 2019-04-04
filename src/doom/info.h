@@ -167,10 +167,6 @@ typedef enum
     SPR_BRS1,
     SPR_TLMP,
     SPR_TLP2,
-    SPR_BLUB,
-    SPR_BLUG,
-    SPR_POLB,
-    SPR_POLG,
     SPR_POLM,
     SPR_RFOG,
     SPR_CANA,
@@ -1150,14 +1146,6 @@ typedef enum
     S_TECH2LAMP2,
     S_TECH2LAMP3,
     S_TECH2LAMP4,
-    S_BLOODB1, //
-    S_BLOODB2, // [JN] Синяя кровь
-    S_BLOODB3, // 
-    S_BLOODG1, //
-    S_BLOODG2, // [JN] Зеленая кровь
-    S_BLOODG3, //
-    S_GIBSB,   // [JN] Синее мясцо
-    S_GIBSG,   // [JN] Зеленое мясцо
     S_GIBSM,   // [JN] Специальное мясцо для Паука-Предводителя
     S_RFOG,
     S_RFOG01,
@@ -1337,10 +1325,6 @@ typedef enum {
     MT_MISC84,
     MT_MISC85,
     MT_MISC86,
-    MT_BLOODBLUE,
-    MT_BLOODGREEN,
-    MT_GIBSBLUE,
-    MT_GIBSGREEN,
     MT_GIBSMASTERMIND,
 	MT_BLOODFUZZ,
     MT_RFOG,

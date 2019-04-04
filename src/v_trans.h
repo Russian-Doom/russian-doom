@@ -30,33 +30,23 @@
 //
 //-----------------------------------------------------------------------------
 
-// Russian Doom (C) 2016-2018 Julian Nechaevsky
-
 
 #ifndef __V_TRANS__
 #define __V_TRANS__
 
 #include "doomtype.h"
 
+
 enum
 {
-    CR_NONE,
-    CR_DARK,
-    CR_GRAY,
-    CR_GREEN,
-    CR_GOLD,
-    CR_RED,
-    CR_BLUE,
     CR_RED2BLUE,
     CR_RED2GREEN,
     CRMAX
 } cr_t;
 
-extern byte *cr[CRMAX];
+extern byte  *cr[CRMAX];
 extern char **crstr;
+extern byte  *tranmap;
 
-extern byte *tranmap;
 
-void CrispyReplaceColor (char *str, const int cr, const char *col);
-
-#endif // __V_TRANS__
+#endif // __V_TRANS__ 

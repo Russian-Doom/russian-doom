@@ -85,6 +85,7 @@ tables.c             tables.h              \
 v_diskicon.c         v_diskicon.h          \
 v_video.c            v_video.h             \
                      v_patch.h             \
+v_trans.c            v_trans.h             \
 w_checksum.c         w_checksum.h          \
 w_main.c             w_main.h              \
 w_wad.c              w_wad.h               \

@@ -33,6 +33,7 @@
 #include "r_local.h"
 #include "doomstat.h"
 #include "g_game.h"
+#include "v_trans.h"
 #include "crispy.h"
 #include "jn.h"
 
@@ -443,6 +444,11 @@ void R_DrawVisSprite (vissprite_t* vis, int x1, int x2)
         colfunc = transcolfunc;
         dc_translation = translationtables - 256 + ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT-8));
     }
+    else if (vis->translation)
+    {
+        colfunc = transcolfunc;
+        dc_translation = vis->translation;
+    }
 
     // [crispy] translucent sprites
     if (translucency && !vanillaparm && (vis->mobjflags & MF_TRANSLUCENT))
@@ -610,6 +616,7 @@ void R_ProjectSprite (mobj_t* thing)
 
     // store information in a vissprite
     vis = R_NewVisSprite ();
+    vis->translation = NULL;
     vis->mobjflags = thing->flags;
     vis->scale = xscale<<(detailshift && !hires);
     vis->gx = interpx;
@@ -708,6 +715,19 @@ void R_ProjectSprite (mobj_t* thing)
             vis->colormap = fullbrights_notgray[index];
         }
     }	
+
+    // [crispy] colored blood
+    if (colored_blood && !vanillaparm &&
+       (thing->type == MT_BLOOD || thing->state - states == S_GIBS) &&
+       thing->target)
+    { 
+        if (thing->target->type == MT_HEAD)
+            vis->translation =  cr[CR_RED2BLUE];
+        else
+        if (thing->target->type == MT_BRUISER ||
+            thing->target->type == MT_KNIGHT)
+            vis->translation = cr[CR_RED2GREEN];
+    }
 
     // [JN] Atari Jaguar: highlight everything, 
     //      but only on easiest skill level.
@@ -939,6 +959,7 @@ void R_DrawPSprite (pspdef_t* psp)
 
     // store information in a vissprite
     vis = &avis;
+    vis->translation = NULL;
     vis->mobjflags = 0;
     // [crispy] weapons drawn 1 pixel too high when player is idle
     vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
