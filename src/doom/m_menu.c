@@ -308,7 +308,7 @@ menu_t  MainDef =
     NULL,
     MainMenu,
     M_DrawMainMenu,
-    97,70,
+    97+ORIGWIDTH_DELTA,70,  // [JN] Wide screen support
     0
 };
 
@@ -319,7 +319,7 @@ menu_t  MainDefBeta =
     NULL,
     MainMenuBeta,
     M_DrawMainMenu,
-    97,70,
+    97+ORIGWIDTH_DELTA,70,  // [JN] Wide screen support
     0
 };
 
@@ -347,12 +347,12 @@ menuitem_t EpisodeMenu[]=
 
 menu_t  EpiDef =
 {
-    ep_end,         // # of menu items
-    &MainDef,       // previous menu
-    EpisodeMenu,    // menuitem_t ->
-    M_DrawEpisode,  // drawing routine ->
-    48,63,          // x,y
-    ep1             // lastOn
+    ep_end,                 // # of menu items
+    &MainDef,               // previous menu
+    EpisodeMenu,            // menuitem_t ->
+    M_DrawEpisode,          // drawing routine ->
+    48+ORIGWIDTH_DELTA,63,  // x,y // [JN] Wide screen support
+    ep1                     // lastOn
 };
 
 //
@@ -382,12 +382,12 @@ menuitem_t NewGameMenu[]=
 
 menu_t  NewDef =
 {
-    newg_end,       // # of menu items
-    &EpiDef,        // previous menu
-    NewGameMenu,    // menuitem_t ->
-    M_DrawNewGame,  // drawing routine ->
-    48,63,          // x,y
-    hurtme          // lastOn
+    newg_end,               // # of menu items
+    &EpiDef,                // previous menu
+    NewGameMenu,            // menuitem_t ->
+    M_DrawNewGame,          // drawing routine ->
+    48+ORIGWIDTH_DELTA,63,  // x,y  // [JN] Wide screen support
+    hurtme                  // lastOn
 };
 
 
@@ -426,7 +426,7 @@ menu_t  OptionsDef =
     &MainDef,
     OptionsMenu,
     M_DrawOptions,
-    60,37,
+    60+ORIGWIDTH_DELTA,37,  // [JN] Wide screen support
     0
 };
 
@@ -503,7 +503,7 @@ menu_t  SoundDef =
     &OptionsDef,
     SoundMenu,
     M_DrawSound,
-    88,64,  // [JN] Отцентрированы полосы громкости
+    88+ORIGWIDTH_DELTA,64,  // [JN] Wide screen support
     0
 };
 
@@ -911,9 +911,12 @@ void M_QuickLoad(void)
 void M_DrawReadThis1(void)
 {
     char *lumpname = "CREDIT";
-    int skullx = 330, skully = 175;
+    int skullx = 330+ORIGWIDTH_DELTA, skully = 175; // [JN] Wide screen support
 
     inhelpscreens = true;
+
+    // [JN] Wide screen: remove background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
 
     // [JN] Различные экраны помощи и скорректированное положение M_SKULL для разных версий игры
 
@@ -927,7 +930,7 @@ void M_DrawReadThis1(void)
         {
             // Doom 2
             lumpname = "HELP";
-            skullx = 330;
+            skullx = 330+ORIGWIDTH_DELTA; // [JN] Wide screen support
             skully = 162;
         }
 
@@ -939,7 +942,7 @@ void M_DrawReadThis1(void)
             lumpname = "HELP2RED";  
             else                                // [JN] Green chars
             lumpname = "HELP2";
-            skullx = 280;
+            skullx = 280+ORIGWIDTH_DELTA;   // [JN] Wide screen support
             skully = 185;
         }
         break;
@@ -963,7 +966,7 @@ void M_DrawReadThis1(void)
         // чтобы не загораживать фразу "джойстика 2".
 
         lumpname = "HELP";
-        skullx = 330;
+        skullx = 330+ORIGWIDTH_DELTA;   // [JN] Wide screen support
         skully = 165;
         break;
 
@@ -978,20 +981,21 @@ void M_DrawReadThis1(void)
     // черепа. Так, чтобы он не перекрывал надписb "ПКМ" и "E".
     if (gamevariant == freedoom)
     {
-        skullx = 323;
+        skullx = 323+ORIGWIDTH_DELTA;   // [JN] Wide screen support
         skully = 183;
     }
 
     // [JN] Pixel-perfect position for skull in Press Beta
     if (gamemode == pressbeta)
     {
-            skullx = 330;
+            skullx = 330+ORIGWIDTH_DELTA;   // [JN] Wide screen support
             skully = 175;
     }
 
     lumpname = DEH_String(lumpname);
 
-    V_DrawPatch (0, 0, W_CacheLumpName(lumpname, PU_CACHE));
+    // [JN] Wide screen support
+    V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName(lumpname, PU_CACHE));
 
     ReadDef1.x = skullx;
     ReadDef1.y = skully;
@@ -1005,13 +1009,22 @@ void M_DrawReadThis2(void)
 {
     inhelpscreens = true;
 
+    // [JN] Wide screen: remove background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+
     // We only ever draw the second page if this is 
     // gameversion == exe_doom_1_9 and gamemode == registered
+    // [JN] Wide screen support
 
     if (gamevariant == old_shareware)   // [JN] Red chars for older sharewares
-    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP1RED"), PU_CACHE));
+    V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("HELP1RED"), PU_CACHE));
     else                                // [JN] Green chars
-    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
+    V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
+
+    // [JN] Wide screen: proper position for second HELP screen
+    // TODO - needed?
+    ReadDef2.x = 330+ORIGWIDTH_DELTA;
+    ReadDef2.y = 175;
 }
 
 
@@ -1023,12 +1036,12 @@ void M_DrawSound(void)
     if (english_language)
     {
         // [JN] Use standard Doom "Sound volume" title
-        V_DrawShadowedPatchDoom (60, 38, W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
+        V_DrawShadowedPatchDoom (60+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
     }
     else
     {
         // [JN] Use own Russian capitalized and centered title: "ГРОМКОСТЬ ЗВУКА"
-        V_DrawShadowedPatchDoom (71, 39, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
+        V_DrawShadowedPatchDoom (71+ORIGWIDTH_DELTA, 39, W_CacheLumpName(DEH_String("M_SVLTTL"), PU_CACHE));
     }
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1), 16,sfxVolume);
@@ -1082,7 +1095,7 @@ void M_MusicVol(int choice)
 //
 void M_DrawMainMenu(void)
 {
-    V_DrawPatch(94, 2, W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
+    V_DrawPatch(94+ORIGWIDTH_DELTA, 2, W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
 }
 
 
@@ -1091,8 +1104,8 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
-    V_DrawShadowedPatchDoom(99, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-    V_DrawShadowedPatchDoom(42, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(99+ORIGWIDTH_DELTA, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+    V_DrawShadowedPatchDoom(42+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
 }
 
 void M_NewGame(int choice)
@@ -1121,8 +1134,8 @@ int epi;
 
 void M_DrawEpisode(void)
 {
-    V_DrawShadowedPatchDoom(99, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-    V_DrawShadowedPatchDoom(73, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
+    V_DrawShadowedPatchDoom(99+ORIGWIDTH_DELTA, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+    V_DrawShadowedPatchDoom(73+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
 }
 
 void M_VerifyNightmare(int key)
@@ -1197,7 +1210,7 @@ static char *msgNames[2] = {"M_MSGOFF","M_MSGON"};
 
 void M_DrawOptions(void)
 {
-    V_DrawShadowedPatchDoom(110, 11, W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
+    V_DrawShadowedPatchDoom(110+ORIGWIDTH_DELTA, 11, W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
 
     V_DrawShadowedPatchDoom(OptionsDef.x + 175, OptionsDef.y + LINEHEIGHT * detail,
         W_CacheLumpName(DEH_String(detailNames[detailLevel]), PU_CACHE));
@@ -1207,7 +1220,13 @@ void M_DrawOptions(void)
 
     M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1), 13, mouseSensitivity);
 
+#ifdef WIDESCREEN
+    // [JN] Wide screen: only 6 sizes are available
+    M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1), 6,screenSize);
+#else
     M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1), 12,screenSize);
+#endif
+
 }
 
 void M_Options(int choice)
@@ -1441,6 +1460,21 @@ void M_SizeDisplay(int choice)
         }
         break;
     }
+
+#ifdef WIDESCREEN
+    // [JN] Wide screen: don't allow unsupported (bordered) views
+    // screenblocks - config file variable
+    if (screenblocks < 9)
+        screenblocks = 9;
+    if (screenblocks > 14)
+        screenblocks = 14;
+    
+    // screenSize - slider variable/lenght
+    if (screenSize < 0)
+        screenSize = 0;
+    if (screenSize > 5)
+        screenSize = 5;
+#endif
 
     R_SetViewSize (screenblocks, detailLevel);
 }
@@ -2321,7 +2355,7 @@ void M_Drawer (void)
             }
 
             x = 160 - M_StringWidth(string) / 2;
-            M_WriteText(x, y, string);
+            M_WriteText(x+ORIGWIDTH_DELTA, y, string);
             y += SHORT(hu_font[0]->height);
         }
 
@@ -2406,11 +2440,23 @@ void M_Init (void)
     itemOn = currentMenu->lastOn;
     whichSkull = 0;
     skullAnimCounter = 10;
+#ifdef WIDESCREEN
+    screenSize = screenblocks - 9;
+#else
     screenSize = screenblocks - 3;
+#endif
     messageToPrint = 0;
     messageString = NULL;
     messageLastMenuActive = menuactive;
     quickSaveSlot = -1;
+
+#ifdef WIDESCREEN
+    // [JN] Wide screen: place screen size slider correctly at starup
+    if (screenSize < 0)
+        screenSize = 0;
+    if (screenSize > 5)
+        screenSize = 5;
+#endif
 
     // Here we could catch other version dependencies,
     //  like HELP1/2, and four episodes.

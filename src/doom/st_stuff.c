@@ -131,7 +131,7 @@
 // [JN] PSX Doom - дополнительное лицо "раздавленного" игрока
 #define ST_CRSHFACE0        (ST_EXPLFACE5+1)
 
-#define ST_FACESX           143
+#define ST_FACESX           143+ORIGWIDTH_DELTA
 #define ST_FACESY           168
 
 #define ST_EVILGRINCOUNT        (2*TICRATE)
@@ -153,110 +153,110 @@
 
 // AMMO number pos.
 #define ST_AMMOWIDTH        3	
-#define ST_AMMOX            44
+#define ST_AMMOX            44+ORIGWIDTH_DELTA
 #define ST_AMMOY            171
 
 // HEALTH number pos.
 #define ST_HEALTHWIDTH      3	
-#define ST_HEALTHX          90
+#define ST_HEALTHX          90+ORIGWIDTH_DELTA
 #define ST_HEALTHY          171
 
 // Weapon pos.
-#define ST_ARMSX            111
+#define ST_ARMSX            111+ORIGWIDTH_DELTA
 #define ST_ARMSY            172
-#define ST_ARMSBGX          104
+#define ST_ARMSBGX          104+ORIGWIDTH_DELTA
 #define ST_ARMSBGY          168
 #define ST_ARMSXSPACE       12
 #define ST_ARMSYSPACE       10
 
 // Frags pos.
-#define ST_FRAGSX           138
+#define ST_FRAGSX           138+ORIGWIDTH_DELTA
 #define ST_FRAGSY           171	
 #define ST_FRAGSWIDTH       2
 
 // [JN] Press Beta: player's life pos.
-#define ST_LIFESX           177
+#define ST_LIFESX           177+ORIGWIDTH_DELTA
 #define ST_LIFESY           193
 #define ST_LIFESWIDTH       1
 
 // ARMOR number pos.
 #define ST_ARMORWIDTH       3
-#define ST_ARMORX           221
+#define ST_ARMORX           221+ORIGWIDTH_DELTA
 #define ST_ARMORY           171
 
 // Key icon positions.
 #define ST_KEY0WIDTH        8
 #define ST_KEY0HEIGHT       5
-#define ST_KEY0X            239
+#define ST_KEY0X            239+ORIGWIDTH_DELTA
 #define ST_KEY0Y            171
 #define ST_KEY1WIDTH        ST_KEY0WIDTH
-#define ST_KEY1X            239
+#define ST_KEY1X            239+ORIGWIDTH_DELTA
 #define ST_KEY1Y            181
 #define ST_KEY2WIDTH        ST_KEY0WIDTH
-#define ST_KEY2X            239
+#define ST_KEY2X            239+ORIGWIDTH_DELTA
 #define ST_KEY2Y            191
 
 // Ammunition counter.
 #define ST_AMMO0WIDTH       3
 #define ST_AMMO0HEIGHT      6
-#define ST_AMMO0X           288
+#define ST_AMMO0X           288+ORIGWIDTH_DELTA
 #define ST_AMMO0Y           173
 #define ST_AMMO1WIDTH       ST_AMMO0WIDTH
-#define ST_AMMO1X           288
+#define ST_AMMO1X           288+ORIGWIDTH_DELTA
 #define ST_AMMO1Y           179
 #define ST_AMMO2WIDTH       ST_AMMO0WIDTH
-#define ST_AMMO2X           288
+#define ST_AMMO2X           288+ORIGWIDTH_DELTA
 #define ST_AMMO2Y           191
 #define ST_AMMO3WIDTH       ST_AMMO0WIDTH
-#define ST_AMMO3X           288
+#define ST_AMMO3X           288+ORIGWIDTH_DELTA
 #define ST_AMMO3Y           185
 
 // Indicate maximum ammunition.
 // Only needed because backpack exists.
 #define ST_MAXAMMO0WIDTH    3
 #define ST_MAXAMMO0HEIGHT   5
-#define ST_MAXAMMO0X        314
+#define ST_MAXAMMO0X        314+ORIGWIDTH_DELTA
 #define ST_MAXAMMO0Y        173
 #define ST_MAXAMMO1WIDTH    ST_MAXAMMO0WIDTH
-#define ST_MAXAMMO1X        314
+#define ST_MAXAMMO1X        314+ORIGWIDTH_DELTA
 #define ST_MAXAMMO1Y        179
 #define ST_MAXAMMO2WIDTH    ST_MAXAMMO0WIDTH
-#define ST_MAXAMMO2X        314
+#define ST_MAXAMMO2X        314+ORIGWIDTH_DELTA
 #define ST_MAXAMMO2Y        191
 #define ST_MAXAMMO3WIDTH    ST_MAXAMMO0WIDTH
-#define ST_MAXAMMO3X        314
+#define ST_MAXAMMO3X        314+ORIGWIDTH_DELTA
 #define ST_MAXAMMO3Y        185
 
 // pistol
-#define ST_WEAPON0X         110 
+#define ST_WEAPON0X         110+ORIGWIDTH_DELTA
 #define ST_WEAPON0Y         172
 
 // shotgun
-#define ST_WEAPON1X         122 
+#define ST_WEAPON1X         122+ORIGWIDTH_DELTA
 #define ST_WEAPON1Y         172
 
 // chain gun
-#define ST_WEAPON2X	        134 
+#define ST_WEAPON2X	        134+ORIGWIDTH_DELTA
 #define ST_WEAPON2Y	        172
 
 // missile launcher
-#define ST_WEAPON3X         110 
+#define ST_WEAPON3X         110+ORIGWIDTH_DELTA
 #define ST_WEAPON3Y         181
 
 // plasma gun
-#define ST_WEAPON4X         122 
+#define ST_WEAPON4X         122+ORIGWIDTH_DELTA
 #define ST_WEAPON4Y         181
 
 // bfg
-#define ST_WEAPON5X	        134
+#define ST_WEAPON5X	        134+ORIGWIDTH_DELTA
 #define ST_WEAPON5Y	        181
 
 // WPNS title
-#define ST_WPNSX            109 
+#define ST_WPNSX            109+ORIGWIDTH_DELTA
 #define ST_WPNSY            191
 
 // DETH title
-#define ST_DETHX            109
+#define ST_DETHX            109+ORIGWIDTH_DELTA
 #define ST_DETHY            191
 
 
@@ -482,14 +482,14 @@ void ST_refreshBackground(void)
     if (st_statusbaron)
     {
         V_UseBuffer(st_backing_screen);
-        V_DrawPatch(ST_X, 0, sbar);
+        V_DrawPatch(ST_X+ORIGWIDTH_DELTA, 0, sbar);
 
         // [crispy] back up arms widget background
         if (!deathmatch && gamemode != pressbeta)
         V_DrawPatch(ST_ARMSBGX, 0, armsbg);
 
         if (netgame)
-        V_DrawPatch(ST_FX, 0, faceback);
+        V_DrawPatch(ST_FX+ORIGWIDTH_DELTA, 0, faceback);
 
         V_RestoreBuffer();
 
@@ -1509,6 +1509,38 @@ void ST_drawWidgets(boolean refresh)
     // [JN] used by w_artifacts widget
     st_artifactson = !deathmatch && st_statusbaron; 
 
+#ifdef WIDESCREEN // [JN] TODO - Cleanup!!!
+    // [JN] Wide screen: draw STBAR on "full screen" mode ----------------------
+    if (screenblocks == 9 || screenblocks == 10)
+    {
+        V_DrawPatch(ORIGWIDTH_DELTA, ST_Y, W_CacheLumpName(DEH_String("STBAR"), PU_CACHE));
+
+        if (!deathmatch && gamemode != pressbeta)
+        V_DrawPatch(104+ORIGWIDTH_DELTA, ST_Y, W_CacheLumpName(DEH_String("STARMS"), PU_CACHE));
+    }
+
+    // [JN] Wide screen: Side bezel for reconstructed standard HUD -------------
+    if (screenblocks == 9 || automapactive)
+    {
+        if (gamemode == commercial)                 
+        {   // Doom 2
+            V_DrawPatch(0, 168, W_CacheLumpName     // left border
+                                (DEH_String("RDWBD2LF"), PU_CACHE));
+        
+            V_DrawPatch(373, 168, W_CacheLumpName   // right border
+                                (DEH_String("RDWBD2RT"), PU_CACHE));
+        }
+        else
+        {   // Doom 1
+            V_DrawPatch(0, 168, W_CacheLumpName     // left border
+                                (DEH_String("RDWBD1LF"), PU_CACHE));
+        
+            V_DrawPatch(373, 168, W_CacheLumpName   // right border
+                                (DEH_String("RDWBD1RT"), PU_CACHE));            
+        }
+    }
+#endif
+
     STlib_updateNum(&w_ready, refresh);
 
     // [crispy] draw "special widgets" in the Crispy HUD
@@ -1530,7 +1562,7 @@ void ST_drawWidgets(boolean refresh)
             if (patch)
             {
                 // [crispy] (23,179) is the center of the Ammo widget
-                V_DrawPatch(23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
+                V_DrawPatch((23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset))+ORIGWIDTH_DELTA,
                             179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
                             patch);
             }
@@ -1544,12 +1576,16 @@ void ST_drawWidgets(boolean refresh)
     }
 
     // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
+#ifdef WIDESCREEN
+    if ((screenblocks == 9 || screenblocks == 10 || screenblocks == 11) /*&& !automapactive*/)
+#else
     if (screenblocks == 11 && !automapactive)
+#endif
     {
         if (netgame)    // [JN] Account player's color in network game
-        V_DrawPatch(ST_FX, ST_FY, faceback);
+        V_DrawPatch(ST_FX+ORIGWIDTH_DELTA, ST_FY, faceback);
         else            // [JN] Use only gray color in single player
-        V_DrawPatch(ST_FX, ST_FY, W_CacheLumpName(DEH_String("STFB1"), PU_CACHE));
+        V_DrawPatch(ST_FX+ORIGWIDTH_DELTA, ST_FY, W_CacheLumpName(DEH_String("STFB1"), PU_CACHE));
     }
     
     // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
@@ -1565,26 +1601,31 @@ void ST_drawWidgets(boolean refresh)
              || plyr->readyweapon == wp_missile
              || plyr->readyweapon == wp_plasma
              || plyr->readyweapon == wp_bfg)
-                V_DrawPatch(2, 191, W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
+                V_DrawPatch(2+ORIGWIDTH_DELTA, 191, W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
 
             if (deathmatch) // [JN] Frags
-            V_DrawPatch(108, 191, W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
+            V_DrawPatch(108+ORIGWIDTH_DELTA, 191, W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
             else            // [JN] Arms
-            V_DrawPatch(108, 191, W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
+            V_DrawPatch(108+ORIGWIDTH_DELTA, 191, W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
 
             // [JN] Health, armor, ammo
-            V_DrawPatch(52, 173, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
+            V_DrawPatch(52+ORIGWIDTH_DELTA, 173, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
         }
 
-        V_DrawPatch(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+        V_DrawPatch(292+ORIGWIDTH_DELTA, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
     }
 
     // [JN] Traditional Crispy HUD
     if (screenblocks == 13)
-    V_DrawPatch(292, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+    V_DrawPatch(292+ORIGWIDTH_DELTA, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
 
+#ifdef WIDESCREEN
+    STlib_updatePercent(&w_health, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(&w_armor, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#else
     STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
     STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#endif
 
     // [JN] Don't update/draw ARMS background in Press Beta
     if ((screenblocks < 11 || automapactive) && gamemode != pressbeta)
@@ -1597,16 +1638,32 @@ void ST_drawWidgets(boolean refresh)
     if (gamemode != pressbeta)
     {
     for (i=0;i<6;i++)
+#ifdef WIDESCREEN
+    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#else
     STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#endif
     }
 
     if (screenblocks < 12 || automapactive)
+#ifdef WIDESCREEN
+    STlib_updateMultIcon(&w_faces, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11);
+#else
     STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11);
+#endif
 
     for (i=0;i<3;i++)
+#ifdef WIDESCREEN
+    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#else
     STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#endif
 
+#ifdef WIDESCREEN
+    STlib_updateNum(&w_frags, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#else
     STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#endif
     
     // [JN] Press Beta: some special routine. I need to draw Artifacts widet while not in
     // automap and Arms widget while in automap. Plus, background must be redrawn immediately.
@@ -1616,15 +1673,27 @@ void ST_drawWidgets(boolean refresh)
         if (!automapactive)
         {
             // [JN] Draw Artifacts widet
+#ifdef WIDESCREEN
+            STlib_updateNum(&w_artifacts, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#else
             STlib_updateNum(&w_artifacts, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#endif
         }
         else
         {
             // [JN] Draw Arms widet. Background (w_armsbg) and numbers (w_arms)
+#ifdef WIDESCREEN
+            STlib_updateBinIcon(&w_armsbg, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#else
             STlib_updateBinIcon(&w_armsbg, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#endif
 
             for (i=0;i<6;i++)
+#ifdef WIDESCREEN
+            STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#else
             STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+#endif
         }
 
         // [JN] Draw player's life widget only in traditional HUD, Crispy HUD with player's face and automap
@@ -1658,8 +1727,12 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
     // [JN] Redraw whole status bar while in HELP screens.
     // Fixes a notable delay of HUD redraw after closing HELP screen.
     extern boolean inhelpscreens;
-    
+
+#ifdef WIDESCREEN
+    st_statusbaron = (!fullscreen) || automapactive || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12;
+#else
     st_statusbaron = (!fullscreen) || automapactive || screenblocks == 11 || screenblocks == 12;
+#endif
     st_firsttime = st_firsttime || refresh || inhelpscreens;
 
     // Do red-/gold-shifts from damage/items

@@ -400,7 +400,7 @@ void WI_slamBackground(void)
     // [JN] Remove level's remaining  background, fill it with black color
     V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
 
-    V_DrawPatch(0, 0, background);
+    V_DrawPatch(ORIGWIDTH_DELTA, 0, background);
 }
 
 
@@ -492,7 +492,7 @@ void WI_drawOnLnode (int n, patch_t* c[])
     // [JN] Кровавое пятно и надпись "ВЫ ЗДЕСЬ"
     if (fits && i<2)
     {
-        V_DrawShadowedPatchDoom(lnodes[wbs->epsd][n].x, lnodes[wbs->epsd][n].y, c[i]);
+        V_DrawShadowedPatchDoom((lnodes[wbs->epsd][n].x)+ORIGWIDTH_DELTA, lnodes[wbs->epsd][n].y, c[i]);
     }
     else
     {
@@ -599,14 +599,14 @@ void WI_drawAnimatedBack(void)
         a = &anims[wbs->epsd][i];
 
         if (a->ctr >= 0)
-        V_DrawPatch(a->loc.x, a->loc.y, a->p[a->ctr]);
+        V_DrawPatch((a->loc.x)+ORIGWIDTH_DELTA, a->loc.y, a->p[a->ctr]);
     }
 
     // [crispy] show Fortress of Mystery if it has been completed
     if (wbs->epsd == 1 && wbs->didsecret)
     {
         a = &anims[1][7];
-        V_DrawPatch(a->loc.x, a->loc.y, a->p[2]);
+        V_DrawPatch((a->loc.x)+ORIGWIDTH_DELTA, a->loc.y, a->p[2]);
     }
 }
 
@@ -657,13 +657,13 @@ int WI_drawNum (int x, int y, int n, int digits)
     while (digits--)
     {
         x -= fontwidth;
-        V_DrawShadowedPatchDoom(x, y, num[ n % 10 ]);
+        V_DrawShadowedPatchDoom(x-ORIGWIDTH_DELTA, y, num[ n % 10 ]);
         n /= 10;
     }
 
     // draw a minus sign if necessary
     if (neg)
-    V_DrawShadowedPatchDoom(x-=8, y, wiminus);
+    V_DrawShadowedPatchDoom((x-=8)-ORIGWIDTH_DELTA, y, wiminus);
 
     return x;
 }
@@ -674,7 +674,7 @@ void WI_drawPercent (int x, int y, int p)
     if (p < 0)
     return;
 
-    V_DrawShadowedPatchDoom(x, y, percent);
+    V_DrawShadowedPatchDoom(x-ORIGWIDTH_DELTA, y, percent);
 
     WI_drawNum(x, y, p, -1);
 }
@@ -705,14 +705,14 @@ void WI_drawTime (int x, int y, int t, boolean suck)
             // draw
             if (div==60 || t / div)
             {
-                V_DrawShadowedPatchDoom(x, y, colon);
+                V_DrawShadowedPatchDoom(x-ORIGWIDTH_DELTA, y, colon);
             }
         } while (t / div);
     }
     else
     {
         // "sucks"
-        V_DrawShadowedPatchDoom(x - SHORT(sucks->width), y, sucks); 
+        V_DrawShadowedPatchDoom((x - SHORT(sucks->width))-ORIGWIDTH_DELTA, y, sucks);
     }
 }
 
@@ -1013,13 +1013,13 @@ void WI_drawDeathmatchStats(void)
         // [JN] Портрет игровка в режиме Дефматч
         if (playeringame[i])
         {
-            V_DrawPatch(x-SHORT(p[i]->width)/2, DM_MATRIXY - WI_SPACINGY, p[i]);
-            V_DrawPatch(DM_MATRIXX-SHORT(p[i]->width)/2, y, p[i]);
+            V_DrawPatch((x-SHORT(p[i]->width)/2)+ORIGWIDTH_DELTA, DM_MATRIXY - WI_SPACINGY, p[i]);
+            V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+ORIGWIDTH_DELTA, y, p[i]);
 
             if (i == me)
             {
-                V_DrawPatch(x-SHORT(p[i]->width)/2, DM_MATRIXY - WI_SPACINGY, bstar);
-                V_DrawPatch(DM_MATRIXX-SHORT(p[i]->width)/2, y, star);
+                V_DrawPatch((x-SHORT(p[i]->width)/2)+ORIGWIDTH_DELTA, DM_MATRIXY - WI_SPACINGY, bstar);
+                V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+ORIGWIDTH_DELTA, y, star);
             }
         }
         else
@@ -1283,10 +1283,10 @@ void WI_drawNetgameStats(void)
         x = NG_STATSX;
 
         // [JN] Портрет игрока в режиме совместного прохождения
-        V_DrawPatch(x-SHORT(p[i]->width), y, p[i]);
+        V_DrawPatch((x-SHORT(p[i]->width))+ORIGWIDTH_DELTA, y, p[i]);
 
         if (i == me)
-        V_DrawPatch(x-SHORT(p[i]->width), y, star);
+        V_DrawPatch((x-SHORT(p[i]->width))+ORIGWIDTH_DELTA, y, star);
 
         x += NG_SPACINGX;
         WI_drawPercent(x-pwidth, y+10, cnt_kills[i]);	x += NG_SPACINGX;
@@ -1434,11 +1434,11 @@ void WI_drawStats(void)
     
     WI_drawLF();
 
-    V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY, kills);
+    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY, kills);
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
-    V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY+lh, items);
+    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+lh, items);
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
@@ -1446,18 +1446,18 @@ void WI_drawStats(void)
     // Adaptaken from Doom Retro, thanks Brad Harding!
     if (totalsecret || vanillaparm)
     {
-    V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY+2*lh, sp_secret);
+    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+2*lh, sp_secret);
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
     }
 
-    V_DrawShadowedPatchDoom(SP_TIMEX, SP_TIMEY, timepatch);
+    V_DrawShadowedPatchDoom(SP_TIMEX+ORIGWIDTH_DELTA, SP_TIMEY, timepatch);
     
     // [JN] Press Beta: draw additional "Artifacts" counter
     if (gamemode == pressbeta)
     {
         // [JN] Draw "Артефакты" title
-        V_DrawShadowedPatchDoom(SP_STATSX, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTIF"), PU_CACHE));
+        V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTIF"), PU_CACHE));
         
         // [JN] Don't start counting immediately
         if (sp_state > 7)
@@ -1466,7 +1466,7 @@ void WI_drawStats(void)
             WI_drawNum(ORIGWIDTH - 78, SP_STATSY+3*lh, artifactcount, -1);
 
             // [JN] Draw "из" patch ("of")
-            V_DrawShadowedPatchDoom(ORIGWIDTH - 76, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTOF"), PU_CACHE));            
+            V_DrawShadowedPatchDoom((ORIGWIDTH - 76)-ORIGWIDTH_DELTA, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTOF"), PU_CACHE));
             // [JN] Overall amount of artifacts, different for each level
             if (gameepisode == 1 && gamemap == 1)
             WI_drawNum(ORIGWIDTH - 39, SP_STATSY+3*lh, 36, 2);  // Map 1: 36 artifacts
@@ -1477,7 +1477,7 @@ void WI_drawStats(void)
         }
     }
 
-    WI_drawTime(ORIGWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time, true);
+    WI_drawTime((ORIGWIDTH/2 - SP_TIMEX)+ORIGWIDTH_DELTA, SP_TIMEY, cnt_time, true);
 
     if (wbs->epsd < 4)
     {
@@ -1498,15 +1498,15 @@ void WI_drawStats(void)
             // [JN] Perfected positioning for both languages
             if (english_language)
             {
-                V_DrawShadowedPatchDoom(SP_TIMEX, SP_TIMEY + 16, total);
+                V_DrawShadowedPatchDoom((SP_TIMEX)+ORIGWIDTH_DELTA, SP_TIMEY + 16, total);
                 // [crispy] choose x-position depending on width of time string
-                WI_drawTime((wide ? ORIGWIDTH : ORIGWIDTH/2) - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+                WI_drawTime((wide ? ORIGWIDTH : ORIGWIDTH/2) - SP_TIMEX + (wide ? 0 : ORIGWIDTH_DELTA), SP_TIMEY + 16, ttime, false);
             }
             else
             {
-                V_DrawShadowedPatchDoom(SP_TIMEX + 24, SP_TIMEY + 16, overtime);
+                V_DrawShadowedPatchDoom((SP_TIMEX + 24)+ORIGWIDTH_DELTA, SP_TIMEY + 16, overtime);
                 // [crispy] choose x-position depending on width of time string
-                WI_drawTime(296 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+                WI_drawTime((296 - SP_TIMEX)+(ORIGWIDTH_DELTA*2), SP_TIMEY + 16, ttime, false);
             }
         }
     }

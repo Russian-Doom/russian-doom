@@ -296,8 +296,8 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     // [JN] Atari Jaguar: loading emulation
     if (gamemission == jaguar)
     {
-        // Draw "Loading" picture
-        V_DrawShadowedPatchDoom (0, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
+        // Draw "Loading" picture, with wide screen support
+        V_DrawShadowedPatchDoom (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
     }
     
     return !go;

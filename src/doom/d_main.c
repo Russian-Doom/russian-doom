@@ -273,7 +273,11 @@ void D_Display (void)
     {
         R_RenderPlayerView (&players[displayplayer]);
 
+#ifdef WIDESCREEN
+        if (screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
+#else
         if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
+#endif
         ST_Drawer(0, 0);
     }
 
@@ -624,7 +628,9 @@ void D_PageTicker (void)
 
 void D_PageDrawer (void)
 {
-    V_DrawPatch (0, 0, W_CacheLumpName(pagename, PU_CACHE));
+    // [JN] Wide screen: remove remaining background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+    V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName(pagename, PU_CACHE));
 }
 
 

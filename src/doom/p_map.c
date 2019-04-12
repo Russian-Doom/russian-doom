@@ -1412,8 +1412,10 @@ P_AimLineAttack
     shootz = t1->z + (t1->height>>1) + 8*FRACUNIT;
 
     // can't shoot outside view angles
-    topslope = (SCREENHEIGHT/2)*FRACUNIT/(SCREENWIDTH/2);	
-    bottomslope = -(SCREENHEIGHT/2)*FRACUNIT/(SCREENWIDTH/2);
+    // [JN] Widescreen support: SCREENWIDTH is replaced with (320 << hires),
+    // this value must not be changed for demo compatibily and other stuff.
+    topslope = (SCREENHEIGHT/2)*FRACUNIT/((320 << hires)/2);	
+    bottomslope = -(SCREENHEIGHT/2)*FRACUNIT/((320 << hires)/2);
     
     attackrange = distance;
     linetarget = NULL;

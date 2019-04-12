@@ -924,14 +924,14 @@
 "lf;t yt ,kbpjr r xtcnyjve>\n\n"PRESSYN_RUS 
 
 // Монстры не воскрешаются, однако
-// их скорость и диапазон урона,
-// наносимого игроку, увеличены.
+// их скорость и степень наносимого 
+// ими урона, увеличены.
 //
 // Уверены, что сможете выжить?
 #define ULTRANM_RUS                \
 "vjycnhs yt djcrhtif.ncz< jlyfrj\n"\
-"b[ crjhjcnm b lbfgfpjy ehjyf<\n"  \
-"yfyjcbvjuj buhjre< edtkbxtys>\n\n"\
+"b[ crjhjcnm b cntgtym yfyjcbvjuj\n"  \
+"bvb ehjyf< edtkbxtys>\n\n"\
 "edthtys< xnj cvj;tnt ds;bnm?\n\n"PRESSYN_RUS
 
 // Это демонстрационная версия игры.

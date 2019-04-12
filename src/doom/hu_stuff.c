@@ -690,7 +690,11 @@ void HU_Start(void)
     HUlib_initSText(&w_message, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, hu_font, HU_FONTSTART, &message_on);
 
     // [JN] Create the local time widget
+#ifdef WIDESCREEN
+    HUlib_initSText(&w_message_time, 400, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
+#else
     HUlib_initSText(&w_message_time, 294, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
+#endif
 
     // create the map title widget
     // [JN] Place shadowed text 1px higher on automap for preventing shadow to be dropped on HUD
@@ -839,9 +843,35 @@ void HU_Drawer(void)
     // thanks to Zodomaniac for proper health values!
     if (!vanillaparm && !automapactive && crosshair_draw)
     {
+#ifdef WIDESCREEN
         if (crosshair_scale)
         {   // Scaled crosshair
             V_DrawPatch(ORIGWIDTH/2,
+                       (ORIGHEIGHT+2)/2,
+                W_CacheLumpName(DEH_String(!crosshair_health ?
+                                           "XHAIRSR" :             // Red (only)
+                                           plr->health >= 67 ?
+                                           "XHAIRSG" :             // Green
+                                           plr->health >= 34 ?
+                                           "XHAIRSY" : "XHAIRSR"), // Yellow or Red
+                                           PU_CACHE));
+        }
+        else
+        {   // Unscaled crosshair
+            V_DrawPatchUnscaled(SCREENWIDTH/2,
+                               (SCREENHEIGHT+4)/2,
+                W_CacheLumpName(DEH_String(!crosshair_health ? 
+                                           "XHAIRUR" :              // Red (only)
+                                           plr->health >= 67 ?
+                                           "XHAIRUG" :              // Green
+                                           plr->health >= 34 ?
+                                           "XHAIRUY" : "XHAIRUR"),  // Yellow or Red
+                                           PU_CACHE));
+        }
+#else
+        if (crosshair_scale)
+        {   // Scaled crosshair
+            V_DrawPatch(ORIGWIDTH/2, 
                 ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT+2)/2 : (ORIGHEIGHT+2)/2),
                 W_CacheLumpName(DEH_String(!crosshair_health ?
                                            "XHAIRSR" :             // Red (only)
@@ -863,6 +893,7 @@ void HU_Drawer(void)
                                            "XHAIRUY" : "XHAIRUR"),  // Yellow or Red
                                            PU_CACHE));
         }
+#endif
     }
 }
 

@@ -28,8 +28,27 @@
 
 #define hires 1
 
-#define ORIGWIDTH  320
-#define ORIGHEIGHT 200
+// -----------------------------------------------------------------------------
+// [JN] Wide screen executable building definition. In fact, it's not a real
+// wide screen mode, it's just a way to get wide picture on resolutions like:
+// - 1920x1080
+// - 1366x768
+// - 1600x900
+//
+// There are three simple steps to turn building executable into wide mode:
+
+// 1) Uncomment following macro to define some code to be built as wide:
+// #define WIDESCREEN
+
+// 2) Change ORIGWIDTH value. Original is 320, wide is 426:
+#define ORIGWIDTH       320
+#define ORIGHEIGHT      200
+
+// 3) Set delta (pixel width from left size of the screen) to 53 to get a
+// proper centering in wide mode. In original mode, set it to 0:
+#define ORIGWIDTH_DELTA 0
+
+// -----------------------------------------------------------------------------
 
 #define SCREENWIDTH  (ORIGWIDTH << hires)
 #define SCREENHEIGHT (ORIGHEIGHT << hires)

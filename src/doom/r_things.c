@@ -941,7 +941,7 @@ void R_DrawPSprite (pspdef_t* psp)
     psp_sy += abs(viewplayer->psp_dy);
 
     // calculate edges of the shape
-    tx = psp_sx-(ORIGWIDTH/2)*FRACUNIT;
+    tx = psp_sx-((ORIGWIDTH/2)-ORIGWIDTH_DELTA)*FRACUNIT;
 
     tx -= spriteoffset[lump];	
     x1 = (centerxfrac + FixedMul (tx,pspritescale) ) >>FRACBITS;
@@ -962,7 +962,15 @@ void R_DrawPSprite (pspdef_t* psp)
     vis->translation = NULL;
     vis->mobjflags = 0;
     // [crispy] weapons drawn 1 pixel too high when player is idle
+#ifdef WIDESCREEN
+    // [JN] Wide screen: weapon positioning for HUD and non-HUD view
+    if (screenblocks <= 10)
+    vis->texturemid = (BASEYCENTER<<FRACBITS)+(FRACUNIT*16)+(FRACUNIT/4)-(psp_sy-spritetopoffset[lump]);
+    else
     vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
+#else
+    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
+#endif
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth-1 : x2;	
     vis->scale = pspritescale<<(detailshift && !hires);

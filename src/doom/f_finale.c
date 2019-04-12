@@ -38,6 +38,7 @@
 
 #include "doomstat.h"
 #include "r_state.h"
+#include "r_main.h"
 
 #include "jn.h"
 
@@ -330,16 +331,28 @@ void F_TextWrite (void)
     if (gamemission == jaguar)
     {
         if (gamemap == 23)  // Leaving MAP23, end game. Special background.
-        V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
+        {
+            // [JN] Wide screen: remove tiled background, fill it with black color
+            V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+            V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
+        }
     }
     // [JN] Draw special background on entering Wolfenstein and Grosse levels
     else if (gamemission == doom2 && !vanillaparm)
     {
         if (gamemap == 15)  // Leaving MAP15, entering MAP31
-        V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
+        {
+            // [JN] Wide screen: remove tiled background, fill it with black color
+            V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+            V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
+        }
 
         if (gamemap == 31)  // Leaving MAP31, entering MAP32
-        V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE));
+        {
+            // [JN] Wide screen: remove tiled background, fill it with black color
+            V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+            V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE));
+        }
     }
 
     // draw some of the text onto the screen
@@ -378,7 +391,8 @@ void F_TextWrite (void)
         if (cx+w > ORIGWIDTH)
 	    break;
 
-        V_DrawShadowedPatchDoom(cx, cy, hu_font[c]);
+        // [JN] Wide screen support
+        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font[c]);
 
         cx+=w;
     }
@@ -675,8 +689,12 @@ void F_CastDrawer (void)
     boolean         flip;
     patch_t*        patch;
 
+    // [JN] Remove level's remaining  background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+
     // erase the entire screen to a background
-    V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
+    // [JN] Wide screen support
+    V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
 
     F_CastPrint (DEH_String(english_language ?
                             castorder[castnum].name :
@@ -754,19 +772,21 @@ void F_BunnyScroll (void)
 
     V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
 
-    scrolled = (ORIGWIDTH - ((signed int) finalecount-230)/2);
+    // [JN] Widescreen support: ORIGWIDTH is replaced with 320.
+    // This value must not be changed, otherwise bunny scroll will crash.
+    scrolled = (320 - ((signed int) finalecount-230)/2);
 
-    if (scrolled > ORIGWIDTH)
-    scrolled = ORIGWIDTH;
+    if (scrolled > 320)
+    scrolled = 320;
     if (scrolled < 0)
     scrolled = 0;
 
-    for ( x=0 ; x<ORIGWIDTH  ; x++)
+    for ( x=0 ; x<320  ; x++)
     {
-        if (x+scrolled < ORIGWIDTH)
-        F_DrawPatchCol (x, p1, x+scrolled);
+        if (x+scrolled < 320)
+        F_DrawPatchCol (x+ORIGWIDTH_DELTA, p1, x+scrolled);
         else
-        F_DrawPatchCol (x, p2, x+scrolled - ORIGWIDTH);		
+        F_DrawPatchCol (x+ORIGWIDTH_DELTA, p2, x+scrolled - 320);		
     }
 
     if (finalecount < 1130)
@@ -774,7 +794,7 @@ void F_BunnyScroll (void)
 
     if (finalecount < 1180)
     {
-        V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2,
+        V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + ORIGWIDTH_DELTA,
             (ORIGHEIGHT - 8 * 8) / 2, 
             W_CacheLumpName(DEH_String("END0"), PU_CACHE));
 
@@ -795,7 +815,7 @@ void F_BunnyScroll (void)
 
     DEH_snprintf(name, 10, "END%i", stage);
 
-    V_DrawShadowedPatchDoom((ORIGWIDTH - 13 * 8) / 2, 
+    V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + ORIGWIDTH_DELTA,
             (ORIGHEIGHT - 8 * 8) / 2, 
             W_CacheLumpName (name,PU_CACHE));
 }
@@ -804,6 +824,9 @@ void F_BunnyScroll (void)
 static void F_ArtScreenDrawer(void)
 {
     char *lumpname;
+
+    // [JN] Wide screen: remove remaining background, fill it with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
 
     if (gameepisode == 3)
     {
@@ -838,7 +861,8 @@ static void F_ArtScreenDrawer(void)
 
         lumpname = DEH_String(lumpname);
 
-        V_DrawPatch (0, 0, W_CacheLumpName(lumpname, PU_CACHE));
+        // [JN] Wide screen support
+        V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName(lumpname, PU_CACHE));
     }
 }
 
