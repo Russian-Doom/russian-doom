@@ -3338,6 +3338,7 @@ linefix_t linefix[] =
     { pack_plut,        1,   8,     239,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,   8,     247,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,   8,     249,    1, "",         "A-RAIL1",     "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_plut,        1,   8,     857,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
 
     { pack_plut,        1,   9,     849,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_plut,        1,   9,     850,    0, "",         "",            "",                 32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
