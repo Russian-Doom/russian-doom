@@ -30,6 +30,7 @@ extern int fake_contrast;
 extern int translucency;
 extern int swirling_liquids;
 extern int invul_sky;
+extern int colored_hud;
 extern int colored_blood;
 extern int red_resurrection_flash;
 extern int draw_shadowed_text;

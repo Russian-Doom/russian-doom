@@ -36,6 +36,7 @@ int fake_contrast = 0;
 int translucency = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
+int colored_hud = 0;
 int colored_blood = 1;
 int red_resurrection_flash = 1;
 int draw_shadowed_text = 1;
@@ -136,6 +137,10 @@ void CompatibilitySettings(void)
             "Invulberability affects sky" :
             "Неу€звимость окрашивает небо",
             &invul_sky)),    
+        TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
+            "Colored HUD elements" :
+            "Разноцветные элементы HUD",
+            &colored_hud)),
         TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
             "Colored blood and corpses" :
             "Разноцветна€ кровь и трупы",
@@ -287,6 +292,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("translucency",           &translucency);
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
+    M_BindIntVariable("colored_hud",            &colored_hud);
     M_BindIntVariable("colored_blood",          &colored_blood);
     M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);

@@ -39,6 +39,10 @@
 #include "r_local.h"
 #include "m_menu.h"
 
+#include "v_trans.h"
+
+#include "jn.h"
+
 
 //
 // Hack display negative frags.
@@ -177,10 +181,16 @@ STlib_updatePercent
 ( st_percent_t*		per,
   int			refresh )
 {
+
+    STlib_updateNum(&per->n, refresh); // [crispy] moved here
+
+    if (colored_hud && !vanillaparm)
+        dp_translation = cr[CR_GRAY];
+
     if (refresh && *per->n.on)
 	V_DrawPatch(per->n.x, per->n.y, per->p);
-    
-    STlib_updateNum(&per->n, refresh);
+
+    dp_translation = NULL;
 }
 
 

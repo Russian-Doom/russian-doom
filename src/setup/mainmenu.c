@@ -123,6 +123,7 @@ static void SensibleDefaults(void)
     translucency = 1;
     swirling_liquids = 1;
     invul_sky = 1;
+    colored_hud = 0;
     colored_blood = 1;
     red_resurrection_flash = 1;
     draw_shadowed_text = 1;
