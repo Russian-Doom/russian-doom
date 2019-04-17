@@ -282,6 +282,7 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
     byte *desttop;
     byte *dest;
     byte *source; 
+    byte *sourcetrans;
     int w, f; 
  
     y -= SHORT(patch->topoffset); 
@@ -322,18 +323,21 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
         {
             for (f = 0; f <= hires; f++)
             {
-            source = (byte *)column + 3;
+            source = sourcetrans = (byte *)column + 3;
             dest = desttop + column->topdelta*(SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
             while (count--)
             {
+                if (dp_translation)
+                sourcetrans = &dp_translation[*source++];
+
                 if (hires)
                 {
-                    *dest = *source;
+                    *dest = *sourcetrans;
                     dest += SCREENWIDTH;
                 }
-                *dest = *source++;
+                *dest = *sourcetrans++;
                 dest += SCREENWIDTH;
             }
             }
@@ -541,7 +545,7 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
 {
     int count, col;
     column_t *column;
-    byte *desttop, *dest, *source;
+    byte *desttop, *dest, *source, *sourcetrans;
     byte *desttop2, *dest2;
     int w, f;
 
@@ -573,23 +577,26 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
         {
             for (f = 0; f <= hires; f++)
             {
-            source = (byte *) column + 3;
+            source = sourcetrans = (byte *) column + 3;
             dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
             dest2 = desttop2 + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
             count = column->length;
 
             while (count--)
             {
+                if (dp_translation)
+                sourcetrans = &dp_translation[*source++];
+
                 if (hires)
                 {
                     *dest2 = tinttable[((*dest2) << 8)];
                     dest2 += SCREENWIDTH;
-                    *dest = *source;
+                    *dest = *sourcetrans;
                     dest += SCREENWIDTH;
                 }
                 *dest2 = tinttable[((*dest2) << 8)];
                 dest2 += SCREENWIDTH;
-                *dest = *source++;
+                *dest = *sourcetrans++;
                 dest += SCREENWIDTH;
 
             }
@@ -608,7 +615,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
 {
     int count, col;
     column_t *column;
-    byte *desttop, *dest, *source;
+    byte *desttop, *dest, *source, *sourcetrans;
     byte *desttop2, *dest2;
     int w, f;
 
@@ -647,7 +654,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
         {
             for (f = 0; f <= hires; f++)
             {
-                source = (byte *) column + 3;
+                source = sourcetrans = (byte *) column + 3;
                 dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
 
                 if (draw_shadowed_text && !vanillaparm)
@@ -663,6 +670,9 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
 
                 while (count--)
                 {
+                    if (dp_translation)
+                    sourcetrans = &dp_translation[*source++];
+
                     if (hires)
                     {
                         if (draw_shadowed_text && !vanillaparm)
@@ -670,7 +680,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
                             *dest2 = tintmap[((*dest2) << 8)];
                             dest2 += SCREENWIDTH;
                         }
-                        *dest = *source;
+                        *dest = *sourcetrans;
                         dest += SCREENWIDTH;
                     }
 
@@ -679,7 +689,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
                         *dest2 = tintmap[((*dest2) << 8)];
                         dest2 += SCREENWIDTH;
                     }
-                    *dest = *source++;
+                    *dest = *sourcetrans++;
                     dest += SCREENWIDTH;
                 }
             }
@@ -698,7 +708,7 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
 {
     int count, col;
     column_t *column;
-    byte *desttop, *dest, *source;
+    byte *desttop, *dest, *source, *sourcetrans;
     byte *desttop2, *dest2;
     int w, f;
 
@@ -737,7 +747,7 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
         {
           for (f = 0; f <= hires; f++)
           {
-            source = (byte *) column + 3;
+            source = sourcetrans = (byte *) column + 3;
             dest = desttop + column->topdelta * (SCREENWIDTH << hires) + (x * hires) + f;
 
             if (draw_shadowed_text && !vanillaparm)
@@ -753,6 +763,9 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
 
             while (count--)
             {
+                if (dp_translation)
+                sourcetrans = &dp_translation[*source++];
+
                 if (hires)
                 {
                     if (draw_shadowed_text && !vanillaparm)
@@ -760,7 +773,7 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
                         *dest2 = tinttable[((*dest2) << 8)];
                         dest2 += SCREENWIDTH;
                     }
-                    *dest = *source;
+                    *dest = *sourcetrans;
                     dest += SCREENWIDTH;
                 }
 
@@ -769,7 +782,7 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
                     *dest2 = tinttable[((*dest2) << 8)];
                     dest2 += SCREENWIDTH;
                 }
-                *dest = *source++;
+                *dest = *sourcetrans++;
                 dest += SCREENWIDTH;
             }
           }
