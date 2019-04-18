@@ -30,6 +30,7 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_video.h"
+#include "v_trans.h"
 #include "jn.h"
 
 // Types
@@ -342,6 +343,10 @@ static void DrINumber(signed int val, int x, int y)
     val = val % 10;
     patch = PatchINumbers[val];
     V_DrawPatch(x + 18, y, patch);
+
+    // [JN] Reset color translation if colored hud activated
+    if (colored_hud)
+    dp_translation = NULL;
 }
 
 //---------------------------------------------------------------------------
@@ -391,6 +396,10 @@ static void DrBNumber(signed int val, int x, int y)
     xpos += 12;
     patch = W_CacheLumpNum(FontBNumBase + val, PU_CACHE);
     V_DrawShadowedPatch(xpos + 6 - SHORT(patch->width) / 2, y, patch);
+
+    // [JN] Reset color translation if colored hud activated
+    if (colored_hud)
+    dp_translation = NULL;
 }
 
 //---------------------------------------------------------------------------
@@ -886,9 +895,22 @@ void DrawMainBar(void)
         {
             temp += CPlayer->frags[i];
         }
-        if (temp != oldfrags)
+
+        // [JN] Always update frags value, needed for colored HUD
+        // if (temp != oldfrags)
         {
             V_DrawPatch(57, 171, PatchARMCLEAR);
+
+            // [JN] Colored HUD: Frags
+            if (colored_hud && !vanillaparm)
+            {
+                if (temp < 0)
+                dp_translation = cr[CR_GOLD2RED_HERETIC];
+                else if (temp == 0)
+                dp_translation = NULL;
+                else
+                dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+            }
             DrINumber(temp, 61, 170);
             oldfrags = temp;
             UpdateState |= I_STATBAR;
@@ -905,10 +927,26 @@ void DrawMainBar(void)
         {
             temp = 100;
         }
-        if (oldlife != temp)
+
+        // [JN] Always update health value, needed for colored HUD
+        // if (oldlife != temp)
         {
             oldlife = temp;
             V_DrawPatch(57, 171, PatchARMCLEAR);
+
+            // [JN] Colored HUD: Health
+            if (colored_hud && !vanillaparm)
+            {
+                if ((CPlayer->cheats & CF_GODMODE) || CPlayer->powers[pw_invulnerability])
+                dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                else if (CPlayer->mo->health >= 67)
+                dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                else if (CPlayer->mo->health >= 34)
+                dp_translation = NULL;
+                else
+                dp_translation = cr[CR_GOLD2RED_HERETIC];
+            }
+
             DrINumber(temp, 61, 170);
             UpdateState |= I_STATBAR;
         }
@@ -917,6 +955,10 @@ void DrawMainBar(void)
     // Keys
     if (oldkeys != playerkeys)
     {
+        // [JN] Reset color translation if colored hud activated
+        if (colored_hud)
+        dp_translation = NULL;
+        
         if (CPlayer->keys[key_yellow])
         {
             V_DrawPatch(153, 164, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
@@ -939,6 +981,22 @@ void DrawMainBar(void)
         V_DrawPatch(108, 161, PatchBLACKSQ);
         if (temp && CPlayer->readyweapon > 0 && CPlayer->readyweapon < 7)
         {
+            // [JN] Colored HUD: Ammo
+            if (colored_hud && !vanillaparm)
+            {
+                int ammo =  CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
+                int fullammo = maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
+                
+                if (ammo < fullammo/4)
+                dp_translation = cr[CR_GOLD2RED_HERETIC];
+                else if (ammo < fullammo/2)
+                dp_translation = NULL;
+                else if (ammo <= fullammo)
+                dp_translation = cr[CR_GOLD2GREEN_HERETIC]; 
+                else
+                dp_translation = cr[CR_GOLD2BLUE_HERETIC];
+            }
+            
             DrINumber(temp, 109, 162);
             V_DrawPatch(111, 172,
                         W_CacheLumpName(DEH_String(ammopic[CPlayer->readyweapon - 1]),
@@ -950,9 +1008,24 @@ void DrawMainBar(void)
     }
 
     // Armor
-    if (oldarmor != CPlayer->armorpoints)
+    // [JN] Always update armor value, needed for colored HUD
+    // if (oldarmor != CPlayer->armorpoints)
     {
         V_DrawPatch(224, 171, PatchARMCLEAR);
+
+        // [JN] Colored HUD: Armor
+        if (colored_hud && !vanillaparm)
+        {
+            if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
+            dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+            else if (CPlayer->armortype >= 2)
+            dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+            else if (CPlayer->armortype == 1)
+            dp_translation = NULL;
+            else
+            dp_translation = cr[CR_GOLD2RED_HERETIC];
+        }
+
         DrINumber(CPlayer->armorpoints, 228, 170);
         oldarmor = CPlayer->armorpoints;
         UpdateState |= I_STATBAR;
@@ -1008,19 +1081,53 @@ void DrawFullScreenStuff(void)
     int fs_ammo = CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo]; // [JN] Definition of full screen ammo
 
     UpdateState |= I_FULLSCRN;
+
     if (CPlayer->mo->health > 0)
     {
-        // [JN] Draw ammount of health
+        // [JN] Colored HUD: Health
+        if (colored_hud && !vanillaparm)
+        {
+            if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
+            dp_translation = cr[CR_GREEN2GRAY_HERETIC];
+            else if (CPlayer->mo->health >= 67)
+            dp_translation = NULL;
+            else if (CPlayer->mo->health >= 34)
+            dp_translation = cr[CR_GREEN2GOLD_HERETIC];
+            else
+            dp_translation = cr[CR_GREEN2RED_HERETIC];
+        }
+
         DrBNumber(CPlayer->mo->health, 5, 176);
     }
     else
     {
+        // [JN] Colored HUD: Zero health
+        if (colored_hud && !vanillaparm)
+        {
+            dp_translation = cr[CR_GREEN2RED_HERETIC];
+        }
         DrBNumber(0, 5, 176);
     }
 
     // [JN] Always draw ammo in full screen HUD
     if (fs_ammo && CPlayer->readyweapon > 0 && CPlayer->readyweapon < 7)
     {
+        // [JN] Colored HUD: Health
+        if (colored_hud && !vanillaparm)
+        {
+            int ammo =  CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
+            int fullammo = maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
+
+            if (ammo < fullammo/4)
+            dp_translation = cr[CR_GREEN2RED_HERETIC];
+            else if (ammo < fullammo/2)
+            dp_translation = cr[CR_GREEN2GOLD_HERETIC];
+            else if (ammo <= fullammo)
+            dp_translation = NULL;
+            else
+            dp_translation = cr[CR_GREEN2BLUE_HERETIC];
+        }
+
         DrBNumber(fs_ammo, 274, 176);
     }
 
@@ -1039,6 +1146,18 @@ void DrawFullScreenStuff(void)
                     temp += CPlayer->frags[i];
                 }
             }
+
+            // [JN] Colored HUD: Frags
+            if (colored_hud && !vanillaparm)
+            {
+                if (temp < 0)
+                dp_translation = cr[CR_GREEN2RED_HERETIC];
+                else if (temp == 0)
+                dp_translation = cr[CR_GREEN2GOLD_HERETIC];
+                else
+                dp_translation = NULL;
+            }
+
             DrBNumber(temp, 173, 176);
         }
         
@@ -1084,6 +1203,19 @@ void DrawFullScreenStuff(void)
             // [JN] Player have Enchanted Shield
             else if (CPlayer->armortype == 2)
                 V_DrawShadowedPatch(108, 216, W_CacheLumpName("SHD2A0", PU_CACHE));
+
+            // [JN] Colored HUD: Armor
+            if (colored_hud && !vanillaparm)
+            {
+                if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
+                dp_translation = cr[CR_GREEN2GRAY_HERETIC];
+                else if (CPlayer->armortype >= 2)
+                dp_translation = NULL;    
+                else if (CPlayer->armortype == 1)
+                dp_translation = cr[CR_GREEN2GOLD_HERETIC];
+                else
+                dp_translation = cr[CR_GREEN2RED_HERETIC];
+            }
 
             // [JN] Draw ammount of armor
             DrBNumber(CPlayer->armorpoints, 57, 176);

@@ -137,7 +137,7 @@ void CompatibilitySettings(void)
             "Invulberability affects sky" :
             "Неу€звимость окрашивает небо",
             &invul_sky)),    
-        TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Colored HUD elements" :
             "Разноцветные элементы HUD",
             &colored_hud)),
