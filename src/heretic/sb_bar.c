@@ -648,13 +648,6 @@ void SB_Drawer(void)
         if (SB_state == -1)
         {
             V_DrawPatch(0, 158, PatchBARBACK);
-            if (players[consoleplayer].cheats & CF_GODMODE)
-            {
-                V_DrawPatch(16, 167,
-                            W_CacheLumpName(DEH_String("GOD1"), PU_CACHE));
-                V_DrawPatch(287, 167,
-                            W_CacheLumpName(DEH_String("GOD2"), PU_CACHE));
-            }
             oldhealth = -1;
         }
         DrawCommonBar();
@@ -686,6 +679,18 @@ void SB_Drawer(void)
         }
     }
     SB_PaletteFlash();
+
+    // [JN] Apply golden eyes to HUD gargoyles while Ring of Invincibility
+    if (screenblocks <= 10 && (players[consoleplayer].cheats & CF_GODMODE
+    || (CPlayer->powers[pw_invulnerability] && !vanillaparm)))
+    {
+        V_DrawPatch(16, 167,
+                    W_CacheLumpName(DEH_String("GOD1"), PU_CACHE));
+        V_DrawPatch(287, 167,
+                    W_CacheLumpName(DEH_String("GOD2"), PU_CACHE));
+
+        SB_state = -1;
+    }
 
     // Flight icons
     if (CPlayer->powers[pw_flight])
