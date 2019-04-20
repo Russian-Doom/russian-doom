@@ -447,7 +447,7 @@ boolean I_MusicIsPlaying(void)
 void I_BindSoundVariables(void)
 {
     extern char *snd_dmxoption;
-    extern int use_libsamplerate;
+    // extern int use_libsamplerate;
     extern float libsamplerate_scale;
 
     M_BindIntVariable("snd_musicdevice",         &snd_musicdevice);
@@ -469,7 +469,9 @@ void I_BindSoundVariables(void)
     M_BindIntVariable("gus_ram_kb",              &gus_ram_kb);
 
 #ifdef FEATURE_SOUND
-    M_BindIntVariable("use_libsamplerate",       &use_libsamplerate);
+    // [JN] Disable "use_libsamplerate" config variable,
+    // always preffering a best sound quality.
+    // M_BindIntVariable("use_libsamplerate",       &use_libsamplerate);
     M_BindFloatVariable("libsamplerate_scale",   &libsamplerate_scale);
 #endif
 }

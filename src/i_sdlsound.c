@@ -83,6 +83,7 @@ static int allocated_sounds_size = 0;
 // [crispy] values 3 and higher might reproduce DOOM.EXE more accurately,
 // but 1 is closer to "use_libsamplerate = 0" which is the default in Choco
 // and causes only a short delay at startup
+// [JN] Now it's only one and unchangeable, for getting a best sound quality.
 int use_libsamplerate = 1;
 
 // Scale factor used when converting libsamplerate floating point numbers

@@ -63,7 +63,9 @@ static int musicVolume = 8;
 static int snd_monomode = 0; // [JN] Mono SFX
 static int voiceVolume = 15;
 static int show_talk = 0;
-static int use_libsamplerate = 0;
+// [JN] Disable "use_libsamplerate" config variable,
+// always preffering a best sound quality.
+// static int use_libsamplerate = 0;
 static float libsamplerate_scale = 0.65;
 
 static char *timidity_cfg_path = NULL;
@@ -264,7 +266,9 @@ void BindSoundVariables(void)
     M_BindIntVariable("music_volume",             &musicVolume);
     M_BindIntVariable("snd_monomode",             &snd_monomode);
 
-    M_BindIntVariable("use_libsamplerate",        &use_libsamplerate);
+    // [JN] Disable "use_libsamplerate" config variable,
+    // always preffering a best sound quality.
+    // M_BindIntVariable("use_libsamplerate",        &use_libsamplerate);
     M_BindFloatVariable("libsamplerate_scale",    &libsamplerate_scale);
 
     M_BindIntVariable("gus_ram_kb",               &gus_ram_kb);

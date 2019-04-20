@@ -1196,7 +1196,10 @@ static default_t extra_defaults_list[] =
     // Sinc filter = 4; High quality Sinc filter = 5.
     //
 
-    CONFIG_VARIABLE_INT(use_libsamplerate),
+    // [JN] Disable "use_libsamplerate" config variable,
+    // always preffering a best sound quality.
+
+    // CONFIG_VARIABLE_INT(use_libsamplerate),
 
     //!
     // Scaling factor used by libsamplerate. This is used when converting
