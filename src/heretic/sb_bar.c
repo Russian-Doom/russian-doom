@@ -681,7 +681,7 @@ void SB_Drawer(void)
     SB_PaletteFlash();
 
     // [JN] Apply golden eyes to HUD gargoyles while Ring of Invincibility
-    if (screenblocks <= 10 && (players[consoleplayer].cheats & CF_GODMODE
+    if ((screenblocks <= 10 || automapactive) && (players[consoleplayer].cheats & CF_GODMODE
     || (CPlayer->powers[pw_invulnerability] && !vanillaparm)))
     {
         V_DrawPatch(16, 167,
