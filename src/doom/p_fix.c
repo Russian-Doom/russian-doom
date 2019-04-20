@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2013-2018 Brad Harding
-// Copyright(C) 2018 Julian Nechaevsky
+// Copyright(C) 2018-2019 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

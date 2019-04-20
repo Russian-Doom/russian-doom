@@ -1,5 +1,6 @@
 //
 // Copyright(C) 2005-2014 Simon Howard
+// Copyright(C) 2016-2019 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -15,7 +16,6 @@
 //     Networking module which uses SDL_net
 //
 
-// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef NET_SDL_H

@@ -1,6 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 1993-2008 Raven Software
+// Copyright(C) 2016-2019 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -14,7 +15,6 @@
 //
 // i_cdmus.h
 
-// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef __ICDMUS__

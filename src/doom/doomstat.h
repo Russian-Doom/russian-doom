@@ -1,6 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
+// Copyright(C) 2016-2019 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -21,7 +22,6 @@
 //   In practice, things are a bit messy.
 //
 
-// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #ifndef __D_STATE__

@@ -1,3 +1,7 @@
+//
+// Copyright(C) 2016-2019 Julian Nechaevsky
+//
+
 /* sha1.c - SHA1 hash function
  *	Copyright (C) 1998, 1999, 2000, 2001 Free Software Foundation, Inc.
  *
@@ -31,7 +35,6 @@
  *  8498 3E44 1C3B D26E BAAE  4AA1 F951 29E5 E546 70F1
  */
 
-// Russian Doom (C) 2016-2018 Julian Nechaevsky
 
 
 #include <stdio.h>
