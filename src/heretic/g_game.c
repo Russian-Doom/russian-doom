@@ -110,6 +110,7 @@ int consoleplayer;              // player taking events and displaying
 int displayplayer;              // view being displayed
 int levelstarttic;              // gametic at level start
 int totalkills, totalitems, totalsecret;        // for intermission
+int totalleveltimes;            // [crispy] CPhipps - total time for all completed levels
 
 int mouseSensitivity;
 
@@ -1691,6 +1692,14 @@ void G_DoCompleted(void)
     {
         gamemap++;
     }
+
+    // [crispy] CPhipps - total time for all completed levels
+    // cph - modified so that only whole seconds are added to the totalleveltimes
+    // value; so our total is compatible with the "naive" total of just adding
+    // the times in seconds shown for each level. Also means our total time
+    // will agree with Compet-n.
+    totaltimes = (totalleveltimes += (leveltime - leveltime % TICRATE));
+
     gamestate = GS_INTERMISSION;
     IN_Start();
 }
@@ -1750,6 +1759,7 @@ void G_DoLoadGame(void)
 {
     int i;
     int a, b, c;
+    int d, e, f;
     char savestr[SAVESTRINGSIZE];
     char vcheck[VERSIONSIZE], readversion[VERSIONSIZE];
 
@@ -1786,6 +1796,12 @@ void G_DoLoadGame(void)
     b = SV_ReadByte();
     c = SV_ReadByte();
     leveltime = (a << 16) + (b << 8) + c;
+
+    // [JN] Get total level times
+    d = SV_ReadByte();
+    e = SV_ReadByte();
+    f = SV_ReadByte();
+    totalleveltimes = (d<<16) + (e<<8) + f;
 
     // De-archive all the modifications
     P_UnArchivePlayers();
@@ -1955,6 +1971,9 @@ void G_InitNew(skill_t skill, int episode, int map)
     gameskill = skill;
     viewactive = true;
     BorderNeedRefresh = true;
+
+    // [crispy] CPhipps - total time for all completed levels
+    totalleveltimes = 0;
 
     // Set the sky map
     if (episode > 5)
@@ -2403,6 +2422,10 @@ void G_DoSaveGame(void)
     SV_WriteByte(leveltime >> 16);
     SV_WriteByte(leveltime >> 8);
     SV_WriteByte(leveltime);
+    // [JN] Write total level times
+    SV_WriteByte(totalleveltimes >> 16);
+    SV_WriteByte(totalleveltimes >> 8);
+    SV_WriteByte(totalleveltimes);
     P_ArchivePlayers();
     P_ArchiveWorld();
     P_ArchiveThinkers();

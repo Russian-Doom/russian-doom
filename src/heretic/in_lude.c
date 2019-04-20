@@ -742,18 +742,22 @@ void IN_DrawSingleStats(void)
 {
     int x;
     static int sounds;
+    const int ttime = totaltimes / 35;  // [crispy] total time after level time
 	
+    // [JN] There is no intermission background in episodes 4-5, and thus,
+    // all the stats including "Now Enterering" are placed in one screen.
+    // I need a slightly different aligment to have enough space for
+    // placing traditional K/I/S stats and also level time and total time.
+    int classic_stats = (gamemode != retail || gameepisode <= 3);
+
 	// int lastlevel = -1, lastepisode = -1;
 
-    IN_DrTextB(DEH_String(english_language ?
-                          "KILLS" :
-                          "DHFUB"), 50, 65);    // ВРАГИ
-    IN_DrTextB(DEH_String(english_language ?
-                          "ITEMS" :
-                          "GHTLVTNS"), 50, 90); // ПРЕДМЕТЫ
-    IN_DrTextB(DEH_String(english_language ?
-                          "SECRETS" :
-                          "NFQYBRB"), 50, 115); // ТАЙНИКИ
+    IN_DrTextB(DEH_String(english_language ? "KILLS" : "DHFUB"), 50,        // ВРАГИ
+                          classic_stats ? 65 : 44);
+    IN_DrTextB(DEH_String(english_language ? "ITEMS" : "GHTLVTNS"), 50,     // ПРЕДМЕТЫ
+                          classic_stats ? 90 : 66);
+    IN_DrTextB(DEH_String(english_language ? "SECRETS" : "NFQYBRB"), 50,    // ТАЙНИКИ
+                          classic_stats ? 115 : 88);
 
     if (english_language)
     {
@@ -783,9 +787,11 @@ void IN_DrawSingleStats(void)
         S_StartSound(NULL, sfx_dorcls);
         sounds++;
     }
-    IN_DrawNumber(players[consoleplayer].killcount, 200, 65, 3);
-    V_DrawShadowedPatch(237, 65, FontBSlash);
-    IN_DrawNumber(totalkills, 248, 65, 3);
+
+    IN_DrawNumber(players[consoleplayer].killcount, 200, classic_stats ? 65 : 44, 3);
+    V_DrawShadowedPatch(237, classic_stats ? 65 : 44, FontBSlash);
+    IN_DrawNumber(totalkills, 248, classic_stats ? 65 : 44, 3);
+
     if (intertime < 60)
     {
         return;
@@ -795,9 +801,11 @@ void IN_DrawSingleStats(void)
         S_StartSound(NULL, sfx_dorcls);
         sounds++;
     }
-    IN_DrawNumber(players[consoleplayer].itemcount, 200, 90, 3);
-    V_DrawShadowedPatch(237, 90, FontBSlash);
-    IN_DrawNumber(totalitems, 248, 90, 3);
+
+    IN_DrawNumber(players[consoleplayer].itemcount, 200, classic_stats ? 90 : 66, 3);
+    V_DrawShadowedPatch(237, classic_stats ? 90 : 66, FontBSlash);
+    IN_DrawNumber(totalitems, 248, classic_stats ? 90 : 66, 3);
+
     if (intertime < 90)
     {
         return;
@@ -807,9 +815,11 @@ void IN_DrawSingleStats(void)
         S_StartSound(NULL, sfx_dorcls);
         sounds++;
     }
-    IN_DrawNumber(players[consoleplayer].secretcount, 200, 115, 3);
-    V_DrawShadowedPatch(237, 115, FontBSlash);
-    IN_DrawNumber(totalsecret, 248, 115, 3);
+
+    IN_DrawNumber(players[consoleplayer].secretcount, 200, classic_stats ? 115 : 88, 3);
+    V_DrawShadowedPatch(237, classic_stats ? 115 : 88, FontBSlash);
+    IN_DrawNumber(totalsecret, 248, classic_stats ? 115 : 88, 3);
+
     if (intertime < 150)
     {
         return;
@@ -820,16 +830,16 @@ void IN_DrawSingleStats(void)
         sounds++;
     }
 
-    if (gamemode != retail || gameepisode <= 3)
-    {
-        IN_DrTextB(DEH_String(english_language ? 
-                              "TIME" : 
-                              "DHTVZ"), 85, 160);   // ВРЕМЯ
-        IN_DrawTime(155, 160, hours, minutes, seconds);
-    }
-    else
-    {
+    // [JN] Draw level time and total time even for 4 and 5 episodes!
+    IN_DrTextB(DEH_String(english_language ? "TIME" : "DHTVZ"), 50, classic_stats ? 145 : 114);
+    IN_DrawTime(192, classic_stats ? 145 : 114, hours, minutes, seconds);
 
+    IN_DrTextB(DEH_String(english_language ? "TOTAL TIME" : "J,OTT DHTVZ"), 50, classic_stats ? 165 : 134);
+    IN_DrawTime(192, classic_stats ? 165 : 134, ttime/3600, (ttime%3600)/60, ttime%60);
+
+
+    if (!classic_stats)
+    {
         x = 160 - MN_TextAWidth(DEH_String(english_language ?
                                            "NOW ENTERING:" :
                                            "PFUHE;FTNCZ EHJDTYM")) / 2; // ЗАГРУЖАЕТСЯ УРОВЕНЬ
@@ -1070,6 +1080,13 @@ void IN_DrawTime(int x, int y, int h, int m, int s)
     {
         IN_DrTextB(DEH_String(":"), x - 8, y);
         IN_DrawNumber(s, x, y, 2);
+    }
+
+    // [JN] If seconds = 0 (i.e. 23:00), draw it as "23:00", not as "23:".
+    if (s == 0)
+    {
+        IN_DrTextB(DEH_String(":"), x - 8, y);
+        IN_DrTextB(DEH_String("00"), x, y);
     }
 }
 
