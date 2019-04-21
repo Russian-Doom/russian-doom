@@ -1683,11 +1683,14 @@ void G_DoCompleted(void)
     {                           // Finished secret level
         gamemap = afterSecret[gameepisode - 1];
     }
+    // [crispy] display tally screen after ExM8
+    /*
     else if (gamemap == 8)
     {
         gameaction = ga_victory;
         return;
     }
+    */
     else
     {
         gamemap++;

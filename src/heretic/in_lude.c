@@ -476,6 +476,11 @@ void IN_CheckForSkip(void)
     int i;
     player_t *player;
 
+    // [crispy] display tally screen after ExM8
+    // [JN] Don't allow to skip ExM8 tally screen
+    if (prevmap == 8)
+    return;
+
     for (i = 0, player = players; i < MAXPLAYERS; i++, player++)
     {
         if (playeringame[i])
@@ -837,8 +842,8 @@ void IN_DrawSingleStats(void)
     IN_DrTextB(DEH_String(english_language ? "TOTAL TIME" : "J,OTT DHTVZ"), 50, classic_stats ? 165 : 134);
     IN_DrawTime(192, classic_stats ? 165 : 134, ttime/3600, (ttime%3600)/60, ttime%60);
 
-
-    if (!classic_stats)
+    // [JN] Do not display "Now entering" after finishing ExM8
+    if (!classic_stats && prevmap != 8)
     {
         x = 160 - MN_TextAWidth(DEH_String(english_language ?
                                            "NOW ENTERING:" :
@@ -858,6 +863,14 @@ void IN_DrawSingleStats(void)
             IN_DrTextB(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7, x, 170);
         }
         skipintermission = false;
+    }
+
+    // [crispy] display tally screen after ExM8
+    // [JN] Perfected timing for changing music
+    if (intertime >= 260 && prevmap == 8)
+    {
+        F_StartFinale();
+        return;
     }
 }
 
