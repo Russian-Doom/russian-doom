@@ -179,7 +179,8 @@ void V_DrawPatch(int x, int y, patch_t *patch)
             return;
     }
 
-#ifdef RANGECHECK
+// [JN] Do not crash if patch goes out of screen bounds.
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
@@ -295,7 +296,8 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
             return;
     }
 
-#ifdef RANGECHECK 
+// [JN] Do not crash if patch goes out of screen bounds.
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > ORIGWIDTH
      || y < 0
@@ -374,6 +376,8 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
+// [JN] Do not crash if patch goes out of screen bounds.
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > ORIGWIDTH 
      || y < 0
@@ -383,6 +387,7 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
                 "Bad V_DrawTLPatch" :
                 "Ошибка V_DrawTLPatch");
     }
+#endif
 
     col = 0;
     desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
@@ -491,6 +496,8 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
+// [JN] Do not crash if patch goes out of screen bounds.
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
@@ -500,6 +507,7 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
                 "Bad V_DrawAltTLPatch" :
                 "Ошибка V_DrawAltTLPatch");
     }
+#endif
 
     col = 0;
     desttop = dest_screen + y * SCREENWIDTH + x;
@@ -552,6 +560,8 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
+// [JN] Do not crash if patch goes out of screen bounds.
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > ORIGWIDTH
      || y < 0
@@ -561,6 +571,7 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
                 "Bad V_DrawShadowedPatch" :
                 "Ошибка V_DrawShadowedPatch");
     }
+#endif
 
     col = 0;
     desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
@@ -622,6 +633,8 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
+// [JN] Do not crash if patch goes out of screen bounds.
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
@@ -631,6 +644,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
                 "Bad V_DrawShadowedPatchDoom" :
                 "Ошибка V_DrawShadowedPatchDoom");
     }
+#endif
 
     col = 0;
     desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
@@ -715,6 +729,8 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
+// [JN] Do not crash if patch goes out of screen bounds.
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
@@ -724,6 +740,7 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
                 "Bad V_DrawShadowedPatchRaven" :
                 "Ошибка V_DrawShadowedPatchRaven");
     }
+#endif
 
     col = 0;
     desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
@@ -815,7 +832,8 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
             return;
     }
 
-#ifdef RANGECHECK
+// [JN] Do not crash if patch goes out of screen bounds.
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
