@@ -35,18 +35,27 @@
 // - 1366x768
 // - 1600x900
 //
-// There are three simple steps to turn building executable into wide mode:
-
-// 1) Uncomment following macro to define some code to be built as wide:
+// There is one simple step to turn building executable into wide mode -
+// uncomment following macro to define some code to be built as wide.
 // #define WIDESCREEN
 
-// 2) Change ORIGWIDTH value. Original is 320, wide is 426:
+// In case of building wide screen executable, extend screen width to new value.
+#ifdef WIDESCREEN
+#define ORIGWIDTH       426
+#else
 #define ORIGWIDTH       320
+#endif
+
 #define ORIGHEIGHT      200
 
-// 3) Set delta (pixel width from left size of the screen) to 53 to get a
-// proper centering in wide mode. In original mode, set it to 0:
+// Delta is a pixel width from left size of the screen to the standard 320
+// pixel canvas. It stands for moving some elements to the right to get a
+// proper centering in wide mode.
+#ifdef WIDESCREEN
+#define ORIGWIDTH_DELTA 53
+#else
 #define ORIGWIDTH_DELTA 0
+#endif
 
 // -----------------------------------------------------------------------------
 
