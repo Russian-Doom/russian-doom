@@ -1106,6 +1106,11 @@ void D_SetGameDescription(void)
             {
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom1-russian.wad");
+
+#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
+                DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
+                W_MergeFile("base/wide/doom-doom1-wide.wad");
+#endif
             }
 
             if (gameversion == exe_doom_se)
@@ -1133,6 +1138,9 @@ void D_SetGameDescription(void)
             {
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom1-russian.wad");
+#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
+                W_MergeFile("base/wide/doom-doom1-wide.wad");
+#endif
             }
         }
         else if (gamemode == shareware)
@@ -1148,6 +1156,9 @@ void D_SetGameDescription(void)
                 gamedescription = GetGameName("DOOM (Демоверсия)");
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom1-russian.wad");
+#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
+                W_MergeFile("base/wide/doom-doom1-wide.wad");
+#endif
             }
         }
         else if (gamemode == pressbeta)

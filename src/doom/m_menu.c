@@ -942,7 +942,19 @@ void M_DrawReadThis1(void)
             lumpname = "HELP2RED";  
             else                                // [JN] Green chars
             lumpname = "HELP2";
-            skullx = 280+ORIGWIDTH_DELTA;   // [JN] Wide screen support
+
+            if (english_language)
+            {
+                skullx = 280+ORIGWIDTH_DELTA;
+            }
+            else
+            {
+#ifdef WIDESCREEN
+                skullx = 359;
+#else
+                skullx = 280;
+#endif
+            }
             skully = 185;
         }
         break;
