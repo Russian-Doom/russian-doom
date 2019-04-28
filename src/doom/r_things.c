@@ -80,6 +80,7 @@ lighttable_t** fullbrights_greenonly2;
 lighttable_t** fullbrights_greenonly3;
 lighttable_t** fullbrights_orangeyellow;
 lighttable_t** fullbrights_dimmeditems;
+lighttable_t** fullbrights_explosivebarrel;
 
 // constant arrays used for psprite clipping and initializing clipping
 int negonearray[SCREENWIDTH];
@@ -709,6 +710,10 @@ void R_ProjectSprite (mobj_t* thing)
             // Plasmagun
             else if (thing->type == MT_MISC28)
             vis->colormap = fullbrights_redonly[index];
+
+            // Explosive barrel
+            else if (thing->type == MT_BARREL)
+            vis->colormap = fullbrights_explosivebarrel[index];
         
             // Press Beta's Lost Soul
             if (thing->type == MT_SKULL && gamemode == pressbeta)
@@ -770,6 +775,7 @@ void R_AddSprites (sector_t* sec)
         fullbrights_greenonly1 = fullbright_greenonly1[0];
         fullbrights_dimmeditems = fullbright_dimmeditems[0];
         fullbrights_redonly = fullbright_redonly[0];
+        fullbrights_explosivebarrel = fullbright_explosivebarrel[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
@@ -780,6 +786,7 @@ void R_AddSprites (sector_t* sec)
         fullbrights_greenonly1 = fullbright_greenonly1[LIGHTLEVELS-1];
         fullbrights_dimmeditems = fullbright_dimmeditems[LIGHTLEVELS-1];
         fullbrights_redonly = fullbright_redonly[LIGHTLEVELS-1];
+        fullbrights_explosivebarrel = fullbright_explosivebarrel[LIGHTLEVELS-1];
     }
     else
     {
@@ -790,6 +797,7 @@ void R_AddSprites (sector_t* sec)
         fullbrights_greenonly1 = fullbright_greenonly1[lightnum];
         fullbrights_dimmeditems = fullbright_dimmeditems[lightnum];
         fullbrights_redonly = fullbright_redonly[lightnum];
+        fullbrights_explosivebarrel = fullbright_explosivebarrel[lightnum];
     }
 
     // Handle all things in sector.
