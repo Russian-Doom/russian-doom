@@ -1135,17 +1135,17 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
     if (yy == oldyy + 1)
     {
         oldyy++;
-        oldyyshifted += (320 << hires);
+        oldyyshifted += (ORIGWIDTH << hires);
     }
     else if (yy == oldyy - 1)
     {
         oldyy--;
-        oldyyshifted -= (320 << hires);
+        oldyyshifted -= (ORIGWIDTH << hires);
     }
     else if (yy != oldyy)
     {
         oldyy = yy;
-        oldyyshifted = yy * (320 << hires);
+        oldyyshifted = yy * (ORIGWIDTH << hires);
     }
     fb[oldyyshifted + xx] = *(cc);
 //      fb[(yy)*f_w+(xx)]=*(cc);
