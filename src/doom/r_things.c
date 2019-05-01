@@ -81,6 +81,7 @@ lighttable_t** fullbrights_greenonly3;
 lighttable_t** fullbrights_orangeyellow;
 lighttable_t** fullbrights_dimmeditems;
 lighttable_t** fullbrights_explosivebarrel;
+lighttable_t** fullbrights_burningbarrel;
 
 // constant arrays used for psprite clipping and initializing clipping
 int negonearray[SCREENWIDTH];
@@ -714,10 +715,22 @@ void R_ProjectSprite (mobj_t* thing)
             // Explosive barrel
             else if (thing->type == MT_BARREL)
             vis->colormap = fullbrights_explosivebarrel[index];
+
+            // Burning barrel
+            else if (thing->type == MT_MISC77)
+            vis->colormap = fullbrights_burningbarrel[index];
         
             // Press Beta's Lost Soul
             if (thing->type == MT_SKULL && gamemode == pressbeta)
             vis->colormap = fullbrights_notgray[index];
+        }
+        // [JN] Fallback. If we are not using brightmaps, apply full brightness
+        // to the objects, thats no longer lit in info.c.
+        else
+        {
+            // Burning barrel
+            if (thing->type == MT_MISC77)
+            vis->colormap = colormaps;
         }
     }	
 
@@ -776,6 +789,7 @@ void R_AddSprites (sector_t* sec)
         fullbrights_dimmeditems = fullbright_dimmeditems[0];
         fullbrights_redonly = fullbright_redonly[0];
         fullbrights_explosivebarrel = fullbright_explosivebarrel[0];
+        fullbrights_burningbarrel = fullbright_burningbarrel[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
@@ -787,6 +801,7 @@ void R_AddSprites (sector_t* sec)
         fullbrights_dimmeditems = fullbright_dimmeditems[LIGHTLEVELS-1];
         fullbrights_redonly = fullbright_redonly[LIGHTLEVELS-1];
         fullbrights_explosivebarrel = fullbright_explosivebarrel[LIGHTLEVELS-1];
+        fullbrights_burningbarrel = fullbright_burningbarrel[LIGHTLEVELS-1];
     }
     else
     {
@@ -798,6 +813,7 @@ void R_AddSprites (sector_t* sec)
         fullbrights_dimmeditems = fullbright_dimmeditems[lightnum];
         fullbrights_redonly = fullbright_redonly[lightnum];
         fullbrights_explosivebarrel = fullbright_explosivebarrel[lightnum];
+        fullbrights_burningbarrel = fullbright_burningbarrel[lightnum];
     }
 
     // Handle all things in sector.

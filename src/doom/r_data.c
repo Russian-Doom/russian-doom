@@ -182,6 +182,7 @@ lighttable_t	*brightmaps_dimmeditems;
 lighttable_t	*brightmaps_brighttan;
 lighttable_t	*brightmaps_redonly1;
 lighttable_t	*brightmaps_explosivebarrel;
+lighttable_t	*brightmaps_burningbarrel;
 
 
 //
@@ -907,7 +908,7 @@ void R_InitTranMap()
 void R_InitColormaps (void)
 {
     int	lump, lump_beta;
-    int lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11;
+    int lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11, lump12;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -955,6 +956,9 @@ void R_InitColormaps (void)
 
     lump11 = W_GetNumForName(DEH_String("BRTMAP11"));
     brightmaps_explosivebarrel = W_CacheLumpNum(lump11, PU_STATIC);
+
+    lump12 = W_GetNumForName(DEH_String("BRTMAP12"));
+    brightmaps_burningbarrel = W_CacheLumpNum(lump12, PU_STATIC);
 }
 
 
