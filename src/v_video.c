@@ -1027,7 +1027,7 @@ void V_DrawBox(int x, int y, int w, int h, int c)
 
 void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
 {
-    int i, j;
+    int i, j, k;
 
 #ifdef RANGECHECK
     if (size < 0
@@ -1039,13 +1039,15 @@ void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
     }
 #endif
 
-    while (size--)
+    for (k = 0; k < size; k++)
     {
+        const int l = k / SRCWIDTH; // current line in the source screen
+        const int p = k - l * SRCWIDTH; // current pixel in this line
         for (i = 0; i <= hires; i++)
         {
             for (j = 0; j <= hires; j++)
             {
-                *(dest + (size << hires) + (hires * (int) (size / ORIGWIDTH) + i) * SCREENWIDTH + j) = *(src + size);
+                *(dest + (p << hires) + ((l << hires) + i) * SCREENWIDTH + j + (ORIGWIDTH_DELTA << hires)) = *(src + k);
             }
         }
     }
@@ -1053,7 +1055,7 @@ void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
  
 void V_DrawRawScreen(byte *raw)
 {
-    V_CopyScaledBuffer(dest_screen, raw, ORIGWIDTH * ORIGHEIGHT);
+    V_CopyScaledBuffer(dest_screen, raw, SRCWIDTH * ORIGHEIGHT);
 }
 
 //
