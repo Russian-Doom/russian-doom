@@ -47,6 +47,10 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Andrew Grischenko
 - Nemrtvi
 
+#### Special thanks
+- theleo_ua
+- Nemrtvi
+
 ##### And also:
 - Maxim "MaxLeon" Pyanov, Oleg Zik and Oleg “Kai” Sudarikov
 - [LeD] Jake Crusher
@@ -58,11 +62,10 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Sergey "Districh" Ivanov
 - Zodomaniac
 - David Carlier
-- theleo_ua
 - Tamás "BlooD2oo1" Mélykuti
 - Pavel "Corak" Zegelman
 - Michael Francis
 - Danfun64
 - Sabhotep
 - mykola-ambar
-- Nemrtvi
+- Heretic widescreen HUD by Hellser, Neoworm, TerminusEst13 and PSTrooper

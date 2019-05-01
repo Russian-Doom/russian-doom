@@ -1601,7 +1601,11 @@ void AM_Drawer(void)
         level_name = english_language ?
                      LevelNames[(gameepisode - 1) * 9 + gamemap - 1] :
                      LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1];
+#ifdef WIDESCREEN
+        MN_DrTextA(DEH_String(level_name), 20, 135);
+#else
         MN_DrTextA(DEH_String(level_name), 20, 145);
+#endif
     }
 
     // [JN] Show level stats in automap

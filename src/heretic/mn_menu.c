@@ -180,7 +180,7 @@ static MenuItem_t MainItems_Rus[] = {
 };
 
 static Menu_t MainMenu = {
-    110, 56,
+    110 + ORIGWIDTH_DELTA, 56,
     DrawMainMenu,
     5, MainItems,
     0,
@@ -188,7 +188,7 @@ static Menu_t MainMenu = {
 };
 
 static Menu_t MainMenu_Rus = {
-    110, 56,
+    110 + ORIGWIDTH_DELTA, 56,
     DrawMainMenu,
     5, MainItems_Rus,
     0,
@@ -212,7 +212,7 @@ static MenuItem_t EpisodeItems_Rus[] = {
 };
 
 static Menu_t EpisodeMenu = {
-    80, 50,
+    80 + ORIGWIDTH_DELTA, 50,
     DrawEpisodeMenu,
     3, EpisodeItems,
     0,
@@ -220,7 +220,7 @@ static Menu_t EpisodeMenu = {
 };
 
 static Menu_t EpisodeMenu_Rus = {
-    80, 50,
+    80 + ORIGWIDTH_DELTA, 50,
     DrawEpisodeMenu,
     3, EpisodeItems_Rus,
     0,
@@ -238,7 +238,7 @@ static MenuItem_t FilesItems_Rus[] = {
 };
 
 static Menu_t FilesMenu = {
-    110, 60,
+    110 + ORIGWIDTH_DELTA, 60,
     DrawFilesMenu,
     2, FilesItems,
     0,
@@ -246,7 +246,7 @@ static Menu_t FilesMenu = {
 };
 
 static Menu_t FilesMenu_Rus = {
-    110, 60,
+    110 + ORIGWIDTH_DELTA, 60,
     DrawFilesMenu,
     2, FilesItems_Rus,
     0,
@@ -263,7 +263,7 @@ static MenuItem_t LoadItems[] = {
 };
 
 static Menu_t LoadMenu = {
-    70, 30,
+    70 + ORIGWIDTH_DELTA, 30,
     DrawLoadMenu,
     6, LoadItems,
     0,
@@ -271,7 +271,7 @@ static Menu_t LoadMenu = {
 };
 
 static Menu_t LoadMenu_Rus = {
-    70, 30,
+    70 + ORIGWIDTH_DELTA, 30,
     DrawLoadMenu,
     6, LoadItems,
     0,
@@ -288,7 +288,7 @@ static MenuItem_t SaveItems[] = {
 };
 
 static Menu_t SaveMenu = {
-    70, 30,
+    70 + ORIGWIDTH_DELTA, 30,
     DrawSaveMenu,
     6, SaveItems,
     0,
@@ -296,7 +296,7 @@ static Menu_t SaveMenu = {
 };
 
 static Menu_t SaveMenu_Rus = {
-    70, 30,
+    70 + ORIGWIDTH_DELTA, 30,
     DrawSaveMenu,
     6, SaveItems,
     0,
@@ -322,7 +322,7 @@ static MenuItem_t SkillItems_Rus[] = {
 };
 
 static Menu_t SkillMenu = {
-    38, 30,
+    38 + ORIGWIDTH_DELTA, 30,
     DrawSkillMenu,
     6, SkillItems,
     2,
@@ -330,7 +330,7 @@ static Menu_t SkillMenu = {
 };
 
 static Menu_t SkillMenu_Rus = {
-    38, 30,
+    38 + ORIGWIDTH_DELTA, 30,
     DrawSkillMenu,
     6, SkillItems_Rus,
     2,
@@ -354,7 +354,7 @@ static MenuItem_t OptionsItems_Rus[] = {
 };
 
 static Menu_t OptionsMenu = {
-    88, 30,
+    88 + ORIGWIDTH_DELTA, 30,
     DrawOptionsMenu,
     5, OptionsItems,
     0,
@@ -362,7 +362,7 @@ static Menu_t OptionsMenu = {
 };
 
 static Menu_t OptionsMenu_Rus = {
-    88, 30,
+    88 + ORIGWIDTH_DELTA, 30,
     DrawOptionsMenu,
     5, OptionsItems_Rus,
     0,
@@ -388,7 +388,7 @@ static MenuItem_t Options2Items_Rus[] = {
 };
 
 static Menu_t Options2Menu = {
-    90, 20,
+    90 + ORIGWIDTH_DELTA, 20,
     DrawOptions2Menu,
     6, Options2Items,
     0,
@@ -396,7 +396,7 @@ static Menu_t Options2Menu = {
 };
 
 static Menu_t Options2Menu_Rus = {
-    90, 20,
+    90 + ORIGWIDTH_DELTA, 20,
     DrawOptions2Menu,
     6, Options2Items_Rus,
     0,
@@ -697,20 +697,20 @@ void MN_Drawer(void)
                                  QuitEndMsg[typeofask - 1] :
                                  QuitEndMsg_Rus[typeofask - 1]);
 
-            MN_DrTextA(message, 160 - MN_TextAWidth(message) / 2, 80);
+            MN_DrTextA(message, 160 - MN_TextAWidth(message) / 2 + ORIGWIDTH_DELTA, 80);
             if (typeofask == 3)
             {
                 MN_DrTextA(SlotText[quicksave - 1], 160 -
-                           MN_TextAWidth(SlotText[quicksave - 1]) / 2, 90);
+                           MN_TextAWidth(SlotText[quicksave - 1]) / 2 + ORIGWIDTH_DELTA, 90);
                 MN_DrTextA(DEH_String("?"), 160 +
-                           MN_TextAWidth(SlotText[quicksave - 1]) / 2, 90);
+                           MN_TextAWidth(SlotText[quicksave - 1]) / 2 + ORIGWIDTH_DELTA, 90);
             }
             if (typeofask == 4)
             {
                 MN_DrTextA(SlotText[quickload - 1], 160 -
-                           MN_TextAWidth(SlotText[quickload - 1]) / 2, 90);
+                           MN_TextAWidth(SlotText[quickload - 1]) / 2 + ORIGWIDTH_DELTA, 90);
                 MN_DrTextA(DEH_String("?"), 160 +
-                           MN_TextAWidth(SlotText[quickload - 1]) / 2, 90);
+                           MN_TextAWidth(SlotText[quickload - 1]) / 2 + ORIGWIDTH_DELTA, 90);
             }
             UpdateState |= I_FULLSCRN;
         }
@@ -762,10 +762,10 @@ static void DrawMainMenu(void)
     int frame;
 
     frame = (MenuTime / 3) % 18;
-    V_DrawShadowedPatchRaven(88, 0, W_CacheLumpName(DEH_String("M_HTIC"), PU_CACHE));
-    V_DrawShadowedPatchRaven(40, 10, W_CacheLumpNum(SkullBaseLump + (17 - frame),
+    V_DrawShadowedPatchRaven(88 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("M_HTIC"), PU_CACHE));
+    V_DrawShadowedPatchRaven(40 + ORIGWIDTH_DELTA, 10, W_CacheLumpNum(SkullBaseLump + (17 - frame),
                                        PU_CACHE));
-    V_DrawShadowedPatchRaven(232, 10, W_CacheLumpNum(SkullBaseLump + frame, PU_CACHE));
+    V_DrawShadowedPatchRaven(232 + ORIGWIDTH_DELTA, 10, W_CacheLumpNum(SkullBaseLump + frame, PU_CACHE));
 }
 
 //---------------------------------------------------------------------------
@@ -817,7 +817,7 @@ static void DrawLoadMenu(void)
                        "LOAD GAME" :
                        "PFUHEPBNM BUHE");   // ЗАГРУЗИТЬ ИГРУ
 
-    MN_DrTextB(title, 160 - MN_TextBWidth(title) / 2, 10);
+    MN_DrTextB(title, 160 - MN_TextBWidth(title) / 2 + ORIGWIDTH_DELTA, 10);
     if (!slottextloaded)
     {
         MN_LoadSlotText();
@@ -839,7 +839,7 @@ static void DrawSaveMenu(void)
                        "SAVE GAME" :    
                        "CJ[HFYBNM BUHE");   // СОХРАНИТЬ ИГРУ
 
-    MN_DrTextB(title, 160 - MN_TextBWidth(title) / 2, 10);
+    MN_DrTextB(title, 160 - MN_TextBWidth(title) / 2 + ORIGWIDTH_DELTA, 10);
     if (!slottextloaded)
     {
         MN_LoadSlotText();
@@ -916,16 +916,16 @@ static void DrawOptionsMenu(void)
     if (messageson)
     {
         if (english_language)
-        MN_DrTextB(DEH_String("ON"), 196, 50);
+        MN_DrTextB(DEH_String("ON"), 196 + ORIGWIDTH_DELTA, 50);
         else
-        MN_DrTextB(DEH_String("DRK>"), 213, 50);    // ВКЛ.
+        MN_DrTextB(DEH_String("DRK>"), 213 + ORIGWIDTH_DELTA, 50);    // ВКЛ.
     }
     else
     {
         if (english_language)
-        MN_DrTextB(DEH_String("OFF"), 196, 50);
+        MN_DrTextB(DEH_String("OFF"), 196 + ORIGWIDTH_DELTA, 50);
         else
-        MN_DrTextB(DEH_String("DSRK>"), 213, 50);   // ВЫКЛ.
+        MN_DrTextB(DEH_String("DSRK>"), 213 + ORIGWIDTH_DELTA, 50);   // ВЫКЛ.
     }
     DrawSlider(&OptionsMenu, 3, 9, mouseSensitivity);
 }
@@ -938,7 +938,11 @@ static void DrawOptionsMenu(void)
 
 static void DrawOptions2Menu(void)
 {
+#ifdef WIDESCREEN
+    DrawSlider(&Options2Menu, 1, 4, screenblocks - 9);
+#else
     DrawSlider(&Options2Menu, 1, 10, screenblocks - 3);
+#endif
     DrawSlider(&Options2Menu, 3, 16, snd_MaxVolume);
     DrawSlider(&Options2Menu, 5, 16, snd_MusicVolume);
 }
@@ -1248,6 +1252,16 @@ static boolean SCScreenSize(int option)
     {
         screenblocks--;
     }
+
+#ifdef WIDESCREEN
+    // [JN] Wide screen: don't allow unsupported (bordered) views
+    // screenblocks - config file variable
+    if (screenblocks < 9)
+        screenblocks = 9;
+    if (screenblocks > 12)
+        screenblocks = 12;
+#endif
+
     R_SetViewSize(screenblocks, detailLevel);
     return true;
 }

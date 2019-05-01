@@ -466,8 +466,8 @@ static void ShadeChain(void)
 
     for (i = 0; i < 16; i++)
     {
-        ShadeLine(277 + i, 190, 10, i / 2);
-        ShadeLine(19 + i, 190, 10, 7 - (i / 2));
+        ShadeLine(277 + i + ORIGWIDTH_DELTA, 190, 10, i / 2);
+        ShadeLine(19 + i + ORIGWIDTH_DELTA, 190, 10, 7 - (i / 2));
     }
 }
 
@@ -611,6 +611,30 @@ void SB_Drawer(void)
     // [JN] Draw crosshair
     if (!vanillaparm && screenblocks != 12 && !automapactive && crosshair_draw)
     {
+#ifdef WIDESCREEN // [JN] TODO - Cleanup!!!
+        if (crosshair_scale)
+        {   // Scaled crosshair
+            V_DrawPatch(ORIGWIDTH/2, ((ORIGHEIGHT+4)/2),
+                W_CacheLumpName(DEH_String(!crosshair_health ?
+                                           "XHAIRUG" :             // Green (only)
+                                           CPlayer->health >= 67 ?
+                                           "XHAIRSG" :             // Green
+                                           CPlayer->health >= 34 ?
+                                           "XHAIRSY" : "XHAIRSR"), // Yellow or Red
+                                           PU_CACHE));
+        }
+        else
+        {   // Unscaled crosshair
+            V_DrawPatchUnscaled(SCREENWIDTH/2, ((SCREENHEIGHT+8)/2),
+                W_CacheLumpName(DEH_String(!crosshair_health ? 
+                                           "XHAIRUG" :              // Green (only)
+                                           CPlayer->health >= 67 ?
+                                           "XHAIRUG" :             // Green
+                                           CPlayer->health >= 34 ?
+                                           "XHAIRUY" : "XHAIRUR"),  // Yellow or Red
+                                           PU_CACHE));
+        }
+#else
         if (crosshair_scale)
         {   // Scaled crosshair
             V_DrawPatch(ORIGWIDTH/2,
@@ -635,7 +659,49 @@ void SB_Drawer(void)
                                            "XHAIRUY" : "XHAIRUR"),  // Yellow or Red
                                            PU_CACHE));
         }
+#endif
     }
+
+#ifdef WIDESCREEN
+    if (screenblocks == 9 || screenblocks == 10)
+    {
+        SB_state = -1; // [JN] Always do full update
+        V_DrawPatch(0 + ORIGWIDTH_DELTA, 158, PatchBARBACK);
+
+        // [JN] Draw extended skulls and stone border
+        if (screenblocks == 9 || automapactive)
+        {
+            V_DrawPatch(0, 147, W_CacheLumpName(DEH_String("WDBARLF"), PU_CACHE));
+            V_DrawPatch(344, 147, W_CacheLumpName(DEH_String("WDBARRT"), PU_CACHE));
+        }
+        else
+        {
+            V_DrawPatch(24, 148, W_CacheLumpName(DEH_String("WDBATLF"), PU_CACHE));
+            V_DrawPatch(344, 147, W_CacheLumpName(DEH_String("WDBATRT"), PU_CACHE));            
+        }
+        oldhealth = -1;
+        DrawCommonBar();
+
+        if (!inventory)
+        {
+            // Main interface
+            V_DrawPatch(34 + ORIGWIDTH_DELTA, 160, PatchSTATBAR);
+            oldarti = 0;
+            oldammo = -1;
+            oldarmor = -1;
+            oldweapon = -1;
+            oldfrags = -9999;       //can't use -1, 'cuz of negative frags
+            oldlife = -1;
+            oldkeys = -1;
+            DrawMainBar();
+        }
+        else
+        {
+            V_DrawPatch(34 + ORIGWIDTH_DELTA, 160, PatchINVBAR);
+            DrawInventoryBar();
+        }
+}
+#endif
 
     if (viewheight == SCREENHEIGHT && !automapactive)
     {
@@ -647,7 +713,7 @@ void SB_Drawer(void)
     {
         if (SB_state == -1)
         {
-            V_DrawPatch(0, 158, PatchBARBACK);
+            V_DrawPatch(0 + ORIGWIDTH_DELTA, 158, PatchBARBACK);
             oldhealth = -1;
         }
         DrawCommonBar();
@@ -656,7 +722,7 @@ void SB_Drawer(void)
             if (SB_state != 0)
             {
                 // Main interface
-                V_DrawPatch(34, 160, PatchSTATBAR);
+                V_DrawPatch(34 + ORIGWIDTH_DELTA, 160, PatchSTATBAR);
                 oldarti = 0;
                 oldammo = -1;
                 oldarmor = -1;
@@ -672,7 +738,7 @@ void SB_Drawer(void)
         {
             if (SB_state != 1)
             {
-                V_DrawPatch(34, 160, PatchINVBAR);
+                V_DrawPatch(34 +ORIGWIDTH_DELTA, 160, PatchINVBAR);
             }
             DrawInventoryBar();
             SB_state = 1;
@@ -684,9 +750,9 @@ void SB_Drawer(void)
     if ((screenblocks <= 10 || automapactive) && (players[consoleplayer].cheats & CF_GODMODE
     || (CPlayer->powers[pw_invulnerability] && !vanillaparm)))
     {
-        V_DrawPatch(16, 167,
+        V_DrawPatch(16 + ORIGWIDTH_DELTA, 167,
                     W_CacheLumpName(DEH_String("GOD1"), PU_CACHE));
-        V_DrawPatch(287, 167,
+        V_DrawPatch(287 + ORIGWIDTH_DELTA, 167,
                     W_CacheLumpName(DEH_String("GOD2"), PU_CACHE));
 
         SB_state = -1;
@@ -825,8 +891,8 @@ void DrawCommonBar(void)
     int chainY;
     int healthPos;
 
-    V_DrawPatch(0, 148, PatchLTFCTOP);
-    V_DrawPatch(290, 148, PatchRTFCTOP);
+    V_DrawPatch(0 + ORIGWIDTH_DELTA, 148, PatchLTFCTOP);
+    V_DrawPatch(290 + ORIGWIDTH_DELTA, 148, PatchRTFCTOP);
 
     if (oldhealth != HealthMarker)
     {
@@ -843,11 +909,11 @@ void DrawCommonBar(void)
         healthPos = (healthPos * 256) / 100;
         chainY =
             (HealthMarker == CPlayer->mo->health) ? 191 : 191 + ChainWiggle;
-        V_DrawPatch(0, 190, PatchCHAINBACK);
-        V_DrawPatch(2 + (healthPos % 17), chainY, PatchCHAIN);
-        V_DrawPatch(17 + healthPos, chainY, PatchLIFEGEM);
-        V_DrawPatch(0, 190, PatchLTFACE);
-        V_DrawPatch(276, 190, PatchRTFACE);
+        V_DrawPatch(0 + ORIGWIDTH_DELTA, 190, PatchCHAINBACK);
+        V_DrawPatch(2 + (healthPos % 17) + ORIGWIDTH_DELTA, chainY, PatchCHAIN);
+        V_DrawPatch(17 + healthPos + ORIGWIDTH_DELTA, chainY, PatchLIFEGEM);
+        V_DrawPatch(0 + ORIGWIDTH_DELTA, 190, PatchLTFACE);
+        V_DrawPatch(276 + ORIGWIDTH_DELTA, 190, PatchRTFACE);
         ShadeChain();
         UpdateState |= I_STATBAR;
     }
@@ -867,11 +933,11 @@ void DrawMainBar(void)
     // Ready artifact
     if (ArtifactFlash)
     {
-        V_DrawPatch(180, 161, PatchBLACKSQ);
+        V_DrawPatch(180 + ORIGWIDTH_DELTA, 161, PatchBLACKSQ);
 
         temp = W_GetNumForName(DEH_String("useartia")) + ArtifactFlash - 1;
 
-        V_DrawPatch(182, 161, W_CacheLumpNum(temp, PU_CACHE));
+        V_DrawPatch(182 + ORIGWIDTH_DELTA, 161, W_CacheLumpNum(temp, PU_CACHE));
         ArtifactFlash--;
         oldarti = -1;           // so that the correct artifact fills in after the flash
         UpdateState |= I_STATBAR;
@@ -879,13 +945,13 @@ void DrawMainBar(void)
     else if (oldarti != CPlayer->readyArtifact
              || oldartiCount != CPlayer->inventory[inv_ptr].count)
     {
-        V_DrawPatch(180, 161, PatchBLACKSQ);
+        V_DrawPatch(180 + ORIGWIDTH_DELTA, 161, PatchBLACKSQ);
         if (CPlayer->readyArtifact > 0)
         {
-            V_DrawPatch(179, 160,
+            V_DrawPatch(179 + ORIGWIDTH_DELTA, 160,
                         W_CacheLumpName(DEH_String(patcharti[CPlayer->readyArtifact]),
                                         PU_CACHE));
-            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 201, 182);
+            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 201 + ORIGWIDTH_DELTA, 182);
         }
         oldarti = CPlayer->readyArtifact;
         oldartiCount = CPlayer->inventory[inv_ptr].count;
@@ -916,7 +982,7 @@ void DrawMainBar(void)
                 else
                 dp_translation = cr[CR_GOLD2GREEN_HERETIC];
             }
-            DrINumber(temp, 61, 170);
+            DrINumber(temp, 61 + ORIGWIDTH_DELTA, 170);
             oldfrags = temp;
             UpdateState |= I_STATBAR;
         }
@@ -937,7 +1003,7 @@ void DrawMainBar(void)
         // if (oldlife != temp)
         {
             oldlife = temp;
-            V_DrawPatch(57, 171, PatchARMCLEAR);
+            V_DrawPatch(57 + ORIGWIDTH_DELTA, 171, PatchARMCLEAR);
 
             // [JN] Colored HUD: Health
             if (colored_hud && !vanillaparm)
@@ -952,7 +1018,7 @@ void DrawMainBar(void)
                 dp_translation = cr[CR_GOLD2RED_HERETIC];
             }
 
-            DrINumber(temp, 61, 170);
+            DrINumber(temp, 61 + ORIGWIDTH_DELTA, 170);
             UpdateState |= I_STATBAR;
         }
     }
@@ -966,15 +1032,15 @@ void DrawMainBar(void)
         
         if (CPlayer->keys[key_yellow])
         {
-            V_DrawPatch(153, 164, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            V_DrawPatch(153 + ORIGWIDTH_DELTA, 164, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
         }
         if (CPlayer->keys[key_green])
         {
-            V_DrawPatch(153, 172, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            V_DrawPatch(153 + ORIGWIDTH_DELTA, 172, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
         }
         if (CPlayer->keys[key_blue])
         {
-            V_DrawPatch(153, 180, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+            V_DrawPatch(153 + ORIGWIDTH_DELTA, 180, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
         }
         oldkeys = playerkeys;
         UpdateState |= I_STATBAR;
@@ -983,7 +1049,7 @@ void DrawMainBar(void)
     temp = CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
     if (oldammo != temp || oldweapon != CPlayer->readyweapon)
     {
-        V_DrawPatch(108, 161, PatchBLACKSQ);
+        V_DrawPatch(108 + ORIGWIDTH_DELTA, 161, PatchBLACKSQ);
         if (temp && CPlayer->readyweapon > 0 && CPlayer->readyweapon < 7)
         {
             // [JN] Colored HUD: Ammo
@@ -1002,8 +1068,8 @@ void DrawMainBar(void)
                 dp_translation = cr[CR_GOLD2BLUE_HERETIC];
             }
             
-            DrINumber(temp, 109, 162);
-            V_DrawPatch(111, 172,
+            DrINumber(temp, 109 + ORIGWIDTH_DELTA, 162);
+            V_DrawPatch(111 + ORIGWIDTH_DELTA, 172,
                         W_CacheLumpName(DEH_String(ammopic[CPlayer->readyweapon - 1]),
                                         PU_CACHE));
         }
@@ -1016,7 +1082,7 @@ void DrawMainBar(void)
     // [JN] Always update armor value, needed for colored HUD
     // if (oldarmor != CPlayer->armorpoints)
     {
-        V_DrawPatch(224, 171, PatchARMCLEAR);
+        V_DrawPatch(224 + ORIGWIDTH_DELTA, 171, PatchARMCLEAR);
 
         // [JN] Colored HUD: Armor
         if (colored_hud && !vanillaparm)
@@ -1031,7 +1097,7 @@ void DrawMainBar(void)
             dp_translation = cr[CR_GOLD2RED_HERETIC];
         }
 
-        DrINumber(CPlayer->armorpoints, 228, 170);
+        DrINumber(CPlayer->armorpoints, 228 + ORIGWIDTH_DELTA, 170);
         oldarmor = CPlayer->armorpoints;
         UpdateState |= I_STATBAR;
     }
@@ -1051,7 +1117,7 @@ void DrawInventoryBar(void)
 
     x = inv_ptr - curpos;
     UpdateState |= I_STATBAR;
-    V_DrawPatch(34, 160, PatchINVBAR);
+    V_DrawPatch(34 + ORIGWIDTH_DELTA, 160, PatchINVBAR);
     for (i = 0; i < 7; i++)
     {
         //V_DrawPatch(50+i*31, 160, W_CacheLumpName("ARTIBOX", PU_CACHE));
@@ -1060,19 +1126,19 @@ void DrawInventoryBar(void)
         {
             patch = DEH_String(patcharti[CPlayer->inventory[x + i].type]);
 
-            V_DrawPatch(50 + i * 31, 160, W_CacheLumpName(patch, PU_CACHE));
-            DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31, 182);
+            V_DrawPatch(50 + i * 31 + ORIGWIDTH_DELTA, 160, W_CacheLumpName(patch, PU_CACHE));
+            DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31 + ORIGWIDTH_DELTA, 182);
         }
     }
-    V_DrawPatch(50 + curpos * 31, 189, PatchSELECTBOX);
+    V_DrawPatch(50 + curpos * 31 + ORIGWIDTH_DELTA, 189, PatchSELECTBOX);
     if (x != 0)
     {
-        V_DrawPatch(38, 159, !(leveltime & 4) ? PatchINVLFGEM1 :
+        V_DrawPatch(38 + ORIGWIDTH_DELTA, 159, !(leveltime & 4) ? PatchINVLFGEM1 :
                     PatchINVLFGEM2);
     }
     if (CPlayer->inventorySlotNum - x > 7)
     {
-        V_DrawPatch(269, 159, !(leveltime & 4) ?
+        V_DrawPatch(269 + ORIGWIDTH_DELTA, 159, !(leveltime & 4) ?
                     PatchINVRTGEM1 : PatchINVRTGEM2);
     }
 }
@@ -1133,7 +1199,7 @@ void DrawFullScreenStuff(void)
             dp_translation = cr[CR_GREEN2BLUE_HERETIC];
         }
 
-        DrBNumber(fs_ammo, 274, 176);
+        DrBNumber(fs_ammo, 274 + (ORIGWIDTH_DELTA * 2), 176);
     }
 
     if (deathmatch)
@@ -1163,16 +1229,16 @@ void DrawFullScreenStuff(void)
                 dp_translation = NULL;
             }
 
-            DrBNumber(temp, 173, 176);
+            DrBNumber(temp, 173 + (ORIGWIDTH_DELTA * 2), 176);
         }
         
         // [JN] Always draw keys in Deathmatch, but only if player alive,
         // and not while opened inventory. Just as visual reminder.
         if (CPlayer->mo->health > 0 && !inventory)
         {
-            V_DrawShadowedPatch(219, 174, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
-            V_DrawShadowedPatch(219, 182, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
-            V_DrawShadowedPatch(219, 190, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (ORIGWIDTH_DELTA * 2), 174, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (ORIGWIDTH_DELTA * 2), 182, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (ORIGWIDTH_DELTA * 2), 190, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
         }
     }
     if (!inventory)
@@ -1207,11 +1273,11 @@ void DrawFullScreenStuff(void)
         if (!deathmatch)
         {
             if (CPlayer->keys[key_yellow])
-            V_DrawShadowedPatch(219, 174, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (ORIGWIDTH_DELTA * 2), 174, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
             if (CPlayer->keys[key_green])
-            V_DrawShadowedPatch(219, 182, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (ORIGWIDTH_DELTA * 2), 182, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
             if (CPlayer->keys[key_blue])
-            V_DrawShadowedPatch(219, 190, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (ORIGWIDTH_DELTA * 2), 190, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
         }
 
         if (CPlayer->readyArtifact > 0)
@@ -1219,8 +1285,8 @@ void DrawFullScreenStuff(void)
             patch = DEH_String(patcharti[CPlayer->readyArtifact]);
             
             // [JN] Draw Artifacts
-            V_DrawShadowedPatch(238, 170, W_CacheLumpName(patch, PU_CACHE));
-            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 259, 191);
+            V_DrawShadowedPatch(238 + (ORIGWIDTH_DELTA * 2), 170, W_CacheLumpName(patch, PU_CACHE));
+            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 259 + (ORIGWIDTH_DELTA * 2), 191);
         }
 
         if (CPlayer->armorpoints > 0)
@@ -1254,27 +1320,27 @@ void DrawFullScreenStuff(void)
         x = inv_ptr - curpos;
         for (i = 0; i < 7; i++)
         {
-            V_DrawTLPatch(50 + i * 31, 168,
+            V_DrawTLPatch(50 + i * 31 + ORIGWIDTH_DELTA, 168,
                           W_CacheLumpName(DEH_String("ARTIBOX"), PU_CACHE));
             if (CPlayer->inventorySlotNum > x + i
                 && CPlayer->inventory[x + i].type != arti_none)
             {
                 patch = DEH_String(patcharti[CPlayer->inventory[x + i].type]);
-                V_DrawPatch(50 + i * 31, 168,
+                V_DrawPatch(50 + i * 31 + ORIGWIDTH_DELTA, 168,
                             W_CacheLumpName(patch, PU_CACHE));
-                DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31,
+                DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31 + ORIGWIDTH_DELTA,
                               190);
             }
         }
-        V_DrawPatch(50 + curpos * 31, 197, PatchSELECTBOX);
+        V_DrawPatch(50 + curpos * 31 + ORIGWIDTH_DELTA, 197, PatchSELECTBOX);
         if (x != 0)
         {
-            V_DrawPatch(38, 167, !(leveltime & 4) ? PatchINVLFGEM1 :
+            V_DrawPatch(38 + ORIGWIDTH_DELTA, 167, !(leveltime & 4) ? PatchINVLFGEM1 :
                         PatchINVLFGEM2);
         }
         if (CPlayer->inventorySlotNum - x > 7)
         {
-            V_DrawPatch(269, 167, !(leveltime & 4) ?
+            V_DrawPatch(269 + ORIGWIDTH_DELTA, 167, !(leveltime & 4) ?
                         PatchINVRTGEM1 : PatchINVRTGEM2);
         }
     }

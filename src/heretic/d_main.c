@@ -139,7 +139,7 @@ void DrawMessage(void)
     {                           // No message
         return;
     }
-    MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2, 1);
+    MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2 + ORIGWIDTH_DELTA, 1);
 }
 
 //---------------------------------------------------------------------------
@@ -213,12 +213,12 @@ void D_Display(void)
     {
         if (!netgame)
         {
-            V_DrawShadowedPatchRaven(160, (viewwindowy >> hires) + 5, W_CacheLumpName(DEH_String("PAUSED"),
+            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, (viewwindowy >> hires) + 5, W_CacheLumpName(DEH_String("PAUSED"),
                                                               PU_CACHE));
         }
         else
         {
-            V_DrawShadowedPatchRaven(160, 70, W_CacheLumpName(DEH_String("PAUSED"), PU_CACHE));
+            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, 70, W_CacheLumpName(DEH_String("PAUSED"), PU_CACHE));
         }
     }
     // Handle player messages

@@ -820,8 +820,15 @@ void P_BulletSlope(mobj_t * mo)
         if (!linetarget)
         {
             an += 2 << 26;
+
+#ifdef WIDESCREEN
+            // [JN] Wide screen: new magic number :(
+            bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 240;
+#else
             bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) /
                           (screenblocks <= 10 ? 161 : 146);
+#endif
+
         }
     }
 }
