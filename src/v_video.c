@@ -1335,7 +1335,7 @@ void V_ScreenShot(char *format)
         ext = "pcx";
     }
 
-    for (i=0; i<=99; i++)
+    for (i=0; i<=9999; i++) // [crispy] increase screenshot filename limit
     {
         M_snprintf(lbmname, sizeof(lbmname), format, i, ext);
 
@@ -1345,21 +1345,21 @@ void V_ScreenShot(char *format)
         }
     }
 
-    if (i == 100)
+    if (i == 10000) // [crispy] increase screenshot filename limit
     {
 #ifdef HAVE_LIBPNG
         if (png_screenshots)
         {
             I_Error (english_language ? 
                      "V_ScreenShot: Couldn't create a PNG" :
-                     "V_ScreenShot: не удалось создать файл PNG");
+                     "V_ScreenShot: ошибка сохранения PNG скриншота");
         }
         else
 #endif
         {
             I_Error (english_language ?
             "V_ScreenShot: Couldn't create a PCX" :
-            "V_ScreenShot: не удалось создать файл PCX");
+            "V_ScreenShot: ошибка сохранения PCX скриншота");
         }
     }
 
@@ -1368,7 +1368,10 @@ void V_ScreenShot(char *format)
     {
     WritePNGfile(lbmname, I_VideoBuffer,
                  SCREENWIDTH, SCREENHEIGHT,
-                 W_CacheLumpName (DEH_String("PLAYPAL"), PU_CACHE));
+                W_CacheLumpName (DEH_String(usegamma <= 16 ? 
+                                            "PALFIX" :
+                                            "PLAYPAL"),
+                                            PU_CACHE));
     }
     else
 #endif
