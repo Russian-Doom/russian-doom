@@ -852,6 +852,14 @@ void AM_clearFB(int color)
     int dmapx;
     int dmapy;
 
+// [JN] Use static automap background for automap.
+// TODO - FIXME
+#ifdef WIDESCREEN
+    int x, y;
+    byte *src = W_CacheLumpName(DEH_String("AUTOPAGE"), PU_CACHE);
+    byte *dest = I_VideoBuffer;
+#endif
+
     if (followplayer)
     {
         dmapx = (MTOF(plr->mo->x) - MTOF(oldplr.x));    //fixed point
@@ -888,6 +896,21 @@ void AM_clearFB(int color)
             mapystart += (finit_height >> hires);
     }
 
+#ifdef WIDESCREEN
+    for (y = 0; y < SCREENHEIGHT; y++)
+    {
+        for (x = 0; x < SCREENWIDTH / 64; x++)
+        {
+            memcpy(dest, src + ((y & 63) << 6), 64);
+            dest += 64;
+        }
+        if (SCREENWIDTH & 63)
+        {
+            memcpy(dest, src + ((y & 63) << 6), SCREENWIDTH & 63);
+            dest += (SCREENWIDTH & 63);
+        }
+    }
+#else
     //blit the automap background to the screen.
     j = (mapystart & ~hires) * (finit_width >> hires);
     for (i = 0; i < finit_height; i++)
@@ -900,6 +923,7 @@ void AM_clearFB(int color)
         if (j >= (finit_height >> hires) * (finit_width >> hires))
             j = 0;
     }
+#endif
 
 //       memcpy(I_VideoBuffer, maplump, finit_width*finit_height);
 //  memset(fb, color, f_w*f_h);

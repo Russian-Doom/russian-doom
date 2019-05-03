@@ -331,6 +331,12 @@ void D_PageTicker(void)
 
 void D_PageDrawer(void)
 {
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before
+    // drawing any new RAW screen.
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
+
     V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
     if (demosequence == 1)
     {

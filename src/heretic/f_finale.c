@@ -268,16 +268,23 @@ void F_DrawPatchCol(int x, patch_t * patch, int col)
 
 void F_DemonScroll(void)
 {
-    byte *p1, *p2;
-    static int yval = 0;
+    // [JN] TODO - fix scrolling for new V_CopyScaledBuffer
+    // byte *p1;
+    byte *p2;
+    // static int yval = 0;
     static int nextscroll = 0;
 
     if (finalecount < nextscroll)
     {
         return;
     }
-    p1 = W_CacheLumpName(DEH_String("FINAL1"), PU_LEVEL);
+    // p1 = W_CacheLumpName(DEH_String("FINAL1"), PU_LEVEL);
     p2 = W_CacheLumpName(DEH_String("FINAL2"), PU_LEVEL);
+
+    // [JN] Only single static picture for now.
+    V_CopyScaledBuffer(I_VideoBuffer, p2, SRCWIDTH * ORIGHEIGHT);
+
+    /*
     if (finalecount < 70)
     {
         V_CopyScaledBuffer(I_VideoBuffer, p1, ORIGHEIGHT * ORIGWIDTH);
@@ -295,6 +302,7 @@ void F_DemonScroll(void)
     {                           //else, we'll just sit here and wait, for now
         V_CopyScaledBuffer(I_VideoBuffer, p2, ORIGWIDTH * ORIGHEIGHT);
     }
+    */
 }
 
 /*
@@ -433,6 +441,8 @@ void F_Drawer(void)
         switch (gameepisode)
         {
             case 1:
+                // [JN] Clean up remainings of the wide screen
+                V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
                 if (gamemode == shareware)
                 {
                     V_DrawRawScreen(W_CacheLumpName("ORDER", PU_CACHE));
@@ -443,13 +453,18 @@ void F_Drawer(void)
                 }
                 break;
             case 2:
+                // [JN] No need to cleanup screen here, it is done in F_DrawUnderwater.
+                // V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
                 F_DrawUnderwater();
                 break;
             case 3:
+                // [JN] Clean up remainings of the wide screen
+                V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
                 F_DemonScroll();
                 break;
             case 4:            // Just show credits screen for extended episodes
             case 5:
+                V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
                 V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
                 break;
         }

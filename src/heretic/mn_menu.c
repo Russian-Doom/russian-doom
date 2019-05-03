@@ -1942,6 +1942,12 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before 
+    // drawing a HELP or TITLE screens.
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
+
     I_SetPalette(W_CacheLumpName(usegamma <= 8 ?
                                  "PALFIX" :
                                  "PLAYPAL",
