@@ -1239,6 +1239,9 @@ void D_SetGameDescription(void)
                 gamedescription = GetGameName("DOOM 2: Ад на Земле");
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom2-russian.wad");
+#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
+                W_MergeFile("base/wide/doom-doom2-wide.wad");
+#endif
             }
         }
         else if (logical_gamemission == pack_plut)
