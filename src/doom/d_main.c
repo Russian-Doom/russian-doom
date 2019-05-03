@@ -1258,6 +1258,9 @@ void D_SetGameDescription(void)
 
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-plutonia-russian.wad");
+#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
+                W_MergeFile("base/wide/doom-plutonia-wide.wad");
+#endif
             }
         }
         else if (logical_gamemission == pack_tnt)
