@@ -1156,7 +1156,7 @@ void D_DoomMain(void)
     if (W_CheckNumForName(DEH_String("E2M1")) == -1)
     {
         gamemode = shareware;
-        W_MergeFile("base/heretic-common.wad");
+        W_MergeFile("base/common/heretic-common.wad");
 
         if (english_language)
         {
@@ -1165,15 +1165,15 @@ void D_DoomMain(void)
         else
         {
             gamedescription = "Heretic (Демоверсия)";
-            W_MergeFile("base/heretic-common-russian.wad");
-            W_MergeFile("base/heretic-shareware-russian.wad");
+            W_MergeFile("base/common/heretic-common-russian.wad");
+            W_MergeFile("base/common/heretic-shareware-russian.wad");
         }
     }
     else if (W_CheckNumForName("EXTENDED") != -1)
     {
         // Presence of the EXTENDED lump indicates the retail version
         gamemode = retail;
-        W_MergeFile("base/heretic-common.wad");
+        W_MergeFile("base/common/heretic-common.wad");
         
         if (english_language)
         {
@@ -1182,15 +1182,15 @@ void D_DoomMain(void)
         else
         {
             gamedescription = "Heretic: Тень Змеиных Всадников";
-            W_MergeFile("base/heretic-common-russian.wad");
-            W_MergeFile("base/heretic-retail-russian.wad");
+            W_MergeFile("base/common/heretic-common-russian.wad");
+            W_MergeFile("base/common/heretic-retail-russian.wad");
         }
     }
     else
     {
         gamemode = registered;
         gamedescription = "Heretic";
-        W_MergeFile("base/heretic-common.wad");
+        W_MergeFile("base/common/heretic-common.wad");
 
         if (english_language)
         {
@@ -1198,8 +1198,8 @@ void D_DoomMain(void)
         }
         else
         {
-            W_MergeFile("base/heretic-common-russian.wad");
-            W_MergeFile("base/heretic-registered-russian.wad");            
+            W_MergeFile("base/common/heretic-common-russian.wad");
+            W_MergeFile("base/common/heretic-registered-russian.wad");            
         }
     }
 

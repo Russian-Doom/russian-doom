@@ -384,7 +384,7 @@ void D_SetGameDescription(void)
 
     if (gamemode == shareware)
     {
-        W_MergeFile("base/hexen-common.wad");
+        W_MergeFile("base/common/hexen-common.wad");
 
         if (english_language)
         {
@@ -393,15 +393,15 @@ void D_SetGameDescription(void)
         else
         {
             gamedescription = "Hexen: Демоверсия четырех уровней";
-            W_MergeFile("base/hexen-common-russian.wad");
-            W_MergeFile("base/hexen-demo-russian.wad");
+            W_MergeFile("base/common/hexen-common-russian.wad");
+            W_MergeFile("base/common/hexen-demo-russian.wad");
         }
     }
 
     else
     {
         gamedescription = "Hexen";
-        W_MergeFile("base/hexen-common.wad");
+        W_MergeFile("base/common/hexen-common.wad");
 
         if (english_language)
         {
@@ -409,8 +409,8 @@ void D_SetGameDescription(void)
         }
         else
         {
-            W_MergeFile("base/hexen-common-russian.wad");
-            W_MergeFile("base/hexen-beyond-russian.wad");
+            W_MergeFile("base/common/hexen-common-russian.wad");
+            W_MergeFile("base/common/hexen-beyond-russian.wad");
         }
     }
 
@@ -452,7 +452,7 @@ void D_SetGameDescription(void)
                         else
                         {
                             gamedescription = "Hexen: Короли Смерти Темной Цитадели";
-                            W_MergeFile("base/hexen-dd-russian.wad");
+                            W_MergeFile("base/common/hexen-dd-russian.wad");
                         }
                     }
                 }
