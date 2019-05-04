@@ -1109,7 +1109,7 @@ void D_SetGameDescription(void)
 
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
-                W_MergeFile("base/wide/doom-doom1-wide.wad");
+                W_MergeFile("base/widescreen/doom-doom1-wide.wad");
 #endif
             }
 
@@ -1139,7 +1139,7 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom1-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-doom1-wide.wad");
+                W_MergeFile("base/widesreen/doom-doom1-wide.wad");
 #endif
             }
         }
@@ -1157,7 +1157,7 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom1-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-doom1-wide.wad");
+                W_MergeFile("base/widesreen/doom-doom1-wide.wad");
 #endif
             }
         }
@@ -1240,7 +1240,7 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom2-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-doom2-wide.wad");
+                W_MergeFile("base/widescreen/doom-doom2-wide.wad");
 #endif
             }
         }
@@ -1259,7 +1259,7 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-plutonia-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-plutonia-wide.wad");
+                W_MergeFile("base/widesreen/doom-plutonia-wide.wad");
 #endif
             }
         }
