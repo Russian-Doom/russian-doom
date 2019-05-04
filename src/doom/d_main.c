@@ -1109,7 +1109,7 @@ void D_SetGameDescription(void)
 
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
-                W_MergeFile("base/widescreen/doom-doom1-wide.wad");
+                W_MergeFile("base/wide/doom-doom1-wide.wad");
 #endif
             }
 
@@ -1139,7 +1139,7 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom1-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/widesreen/doom-doom1-wide.wad");
+                W_MergeFile("base/wide/doom-doom1-wide.wad");
 #endif
             }
         }
@@ -1157,7 +1157,7 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom1-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/widesreen/doom-doom1-wide.wad");
+                W_MergeFile("base/wide/doom-doom1-wide.wad");
 #endif
             }
         }
@@ -1240,7 +1240,7 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-doom2-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/widescreen/doom-doom2-wide.wad");
+                W_MergeFile("base/wide/doom-doom2-wide.wad");
 #endif
             }
         }
@@ -1259,7 +1259,7 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/doom-common-russian.wad");
                 W_MergeFile("base/doom-plutonia-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/widesreen/doom-plutonia-wide.wad");
+                W_MergeFile("base/wide/doom-plutonia-wide.wad");
 #endif
             }
         }
@@ -1548,19 +1548,19 @@ void D_SetGameDescription(void)
 
         // Doom 1
         if (gamemode == shareware || gamemode == registered || gamemode == retail)
-        W_MergeFile("base/doom-doom1-skies.wad");
+        W_MergeFile("base/extra/doom-doom1-skies.wad");
 
         // Doom 2
         else if (gamemission == doom2 || gamemission == pack_nerve)
-        W_MergeFile("base/doom-doom2-skies.wad");
+        W_MergeFile("base/extra/doom-doom2-skies.wad");
 
         // TNT - Evilution
         else if (gamemission == pack_tnt)
-        W_MergeFile("base/doom-tnt-skies.wad");
+        W_MergeFile("base/extra/doom-tnt-skies.wad");
 
         // Plutonia
         else if (gamemission == pack_plut)
-        W_MergeFile("base/doom-plutonia-skies.wad");
+        W_MergeFile("base/extra/doom-plutonia-skies.wad");
     }
 
     // [JN] Check for modified thermometer. If exist, 
@@ -1584,7 +1584,7 @@ void D_SetGameDescription(void)
     else
     {
         old_godface = false;
-        W_MergeFile("base/doom-godface.wad");
+        W_MergeFile("base/extra/doom-godface.wad");
     }
 
     // [JN] Finally, some compatibility mess
@@ -1597,7 +1597,7 @@ void D_SetGameDescription(void)
         // Press Beta and Atari Jaguar are supposed to have
         // extra GOD faces, as well as exploding ones.
         old_godface = false;
-        W_MergeFile("base/doom-godface.wad");
+        W_MergeFile("base/extra/doom-godface.wad");
     }
     
     // Автоматическая загрузка блока DEHACKED
