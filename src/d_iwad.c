@@ -850,7 +850,7 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
     // All additional -iwad calls will be rejected.
     if (betaparm)
     {
-        result = D_FindWADByName("base/doom-beta.wad");
+        result = D_FindWADByName("base/games/doom-beta.wad");
         *mission = IdentifyIWADByName(result, mask);
     }
 
@@ -858,7 +858,7 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
     // All additional -iwad calls will be rejected.
     if (jaguarparm)
     {
-        result = D_FindWADByName("base/doom-jaguar.wad");
+        result = D_FindWADByName("base/games/doom-jaguar.wad");
         *mission = IdentifyIWADByName(result, mask);
     }
     

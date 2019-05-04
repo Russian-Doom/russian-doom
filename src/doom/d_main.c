@@ -1164,7 +1164,7 @@ void D_SetGameDescription(void)
         else if (gamemode == pressbeta)
         {
             W_MergeFile("base/doom-common.wad");
-            W_MergeFile("base/doom-beta.wad");
+            W_MergeFile("base/games/doom-beta.wad");
 
             DEH_AddStringReplacement ("M_JKILL",   "M_JKILL2");
             DEH_AddStringReplacement ("STBAR",     "STBARB");
@@ -1183,7 +1183,7 @@ void D_SetGameDescription(void)
                 gamedescription = GetGameName("DOOM (Бета-версия)");
 
                 W_MergeFile("base/doom-common-russian.wad");
-                W_MergeFile("base/doom-beta-russian.wad");
+                W_MergeFile("base/games/doom-beta-russian.wad");
                 DEH_AddStringReplacement (GOTHTHBONUS_RUS, GOTDAGGER_RUS);
                 DEH_AddStringReplacement (GOTARMBONUS_RUS, GOTCHEST_RUS);
                 DEH_AddStringReplacement (GOTSUPER_RUS,    GOTEXTRALIFE_RUS);
@@ -1287,7 +1287,7 @@ void D_SetGameDescription(void)
             else
             {
                 gamedescription = GetGameName("DOOM для Atari Jaguar");
-                W_MergeFile("base/doom-jaguar-russian.wad");
+                W_MergeFile("base/games/doom-jaguar-russian.wad");
             }
         }
     }
