@@ -597,7 +597,7 @@ void SB_Drawer(void)
     if (local_time)
     {
         M_snprintf(s, sizeof(s), s);
-        MN_DrTextC(s, 293, 13);
+        MN_DrTextC(s, 293 + (ORIGWIDTH_DELTA * 2), 13);
     }
 
     // Sound info debug stuff
@@ -810,7 +810,7 @@ void SB_Drawer(void)
             || !(CPlayer->powers[pw_weaponlevel2] & 16))
         {
             frame = (leveltime / 3) & 15;
-            V_DrawPatch(300, 17,
+            V_DrawPatch(300 + ORIGWIDTH_DELTA, 17, // [JN] Do not obstruct clock widget
                         W_CacheLumpNum(spinbooklump + frame, PU_CACHE));
             BorderTopRefresh = true;
             UpdateState |= I_MESSAGES;
