@@ -53,7 +53,7 @@ int bmap_terminator;
 // This function is called at startup, see R_Init.
 //
 
-void R_InitBrightmaps(void)
+void R_InitBrightmappedTextures(void)
 {
     // Texture lookup. There are many strict definitions,
     // for example, no need to lookup Doom 1 textures in TNT.

@@ -40,8 +40,14 @@
 #include "r_sky.h"
 
 #include "r_data.h"
+#include "r_bmaps.h"
 
 #include "jn.h"
+
+
+
+// [JN] Prorotype for merging brightmaps PWAD
+extern void W_MergeFile(char *filename);
 
 
 //
@@ -908,7 +914,6 @@ void R_InitTranMap()
 void R_InitColormaps (void)
 {
     int	lump, lump_beta;
-    int lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11, lump12;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -919,6 +924,16 @@ void R_InitColormaps (void)
     // [JN] COLORMAP (№33) from Press Release Beta for infra green visor
     lump_beta  = W_GetNumForName(DEH_String("COLORMAB"));
     colormaps_beta  = W_CacheLumpNum(lump_beta, PU_STATIC);
+}
+
+
+//
+// R_InitBrightmaps
+//
+void R_InitBrightmaps (void)
+{
+    int lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9;
+    int lump10, lump11, lump12;
 
     // [JN] Load in the brightmaps.
     // Note: tables as well as it's valuaes are taken from Doom Retro (r_data.c).
@@ -958,9 +973,8 @@ void R_InitColormaps (void)
     brightmaps_explosivebarrel = W_CacheLumpNum(lump11, PU_STATIC);
 
     lump12 = W_GetNumForName(DEH_String("BRTMAP12"));
-    brightmaps_burningbarrel = W_CacheLumpNum(lump12, PU_STATIC);
+    brightmaps_burningbarrel = W_CacheLumpNum(lump12, PU_STATIC);    
 }
-
 
 //
 // R_InitData
@@ -982,6 +996,13 @@ void R_InitData (void)
         printf (".");
     }
     R_InitColormaps ();
+
+    if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+    {
+        W_MergeFile("base/brightmaps/doom-brightmaps.wad");
+        R_InitBrightmaps ();
+        R_InitBrightmappedTextures ();
+    }
 }
 
 

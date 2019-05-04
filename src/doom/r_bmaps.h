@@ -21,6 +21,10 @@
 #include "r_data.h"
 
 
+// Prototypes
+void R_InitBrightmaps (void);
+void R_InitBrightmappedTextures (void);
+
 // Floors and ceilings:
 extern int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4;
 

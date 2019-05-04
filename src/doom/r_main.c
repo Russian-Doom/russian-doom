@@ -699,12 +699,6 @@ void R_Init (void)
     printf (".");
     R_InitTranslationTables ();
     printf (".");
-    // [JN] Lookup all the textures for brightmapping
-    if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
-    {
-        R_InitBrightmaps ();
-        printf (".");
-    }
 
 #ifdef WIDESCREEN
     // [JN] Wide screen: don't allow unsupported (bordered) view modes at startup

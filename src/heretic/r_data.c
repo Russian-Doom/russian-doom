@@ -25,9 +25,13 @@
 #include "m_misc.h"
 #include "r_local.h"
 #include "p_local.h"
+#include "r_bmaps.h"
 #include "jn.h"
 
 extern void CheckAbortStartup(void);
+
+// [JN] Prorotype for merging brightmaps PWAD
+extern void W_MergeFile(char *filename);
 
 typedef struct
 {
@@ -560,8 +564,7 @@ void R_InitSpriteLumps(void)
 
 void R_InitColormaps(void)
 {
-    int lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11, lump12;
-    int length, length2, length3, length4, length5, length6, length7, length8, length9, length10, length11, length12;
+    int lump, length;
 //
 // load in the light tables
 // 256 byte align tables
@@ -570,8 +573,21 @@ void R_InitColormaps(void)
     length = W_LumpLength(lump);
     colormaps = Z_Malloc(length, PU_STATIC, 0);
     W_ReadLump(lump, colormaps);
+}
 
-    // [JN] Loading brightmaps...
+
+/*
+================
+=
+= R_InitColormaps
+=
+=================
+*/
+
+void R_InitBrightmaps(void)
+{
+    int lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11, lump12;
+    int length2, length3, length4, length5, length6, length7, length8, length9, length10, length11, length12;
 
     // Green only
     lump2 = W_GetNumForName(DEH_String("BRTMAP1"));
@@ -665,6 +681,14 @@ void R_InitData(void)
     IncThermo();
     printf (".");
     R_InitColormaps();
+
+    // [JN] Lookup and init all the textures for brightmapping
+    if (brightmaps && !vanillaparm)
+    {
+        W_MergeFile("base/brightmaps/heretic-brightmaps.wad");
+        R_InitBrightmaps();
+        R_InitBrightmappedTextures ();
+    }
 }
 
 

@@ -756,11 +756,6 @@ void R_Init(void)
     R_InitSkyMap();
     printf (".");
     R_InitTranslationTables();
-    // [JN] Lookup and init all the textures for brightmapping
-    if (brightmaps && !vanillaparm)
-    {
-        R_InitBrightmaps();
-    }
 
 #ifdef WIDESCREEN
     // [JN] Wide screen: don't allow unsupported (bordered) view modes at startup
