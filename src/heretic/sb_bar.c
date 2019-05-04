@@ -663,7 +663,7 @@ void SB_Drawer(void)
     }
 
 #ifdef WIDESCREEN
-    if (screenblocks == 9 || screenblocks == 10)
+    if (screenblocks == 9 || screenblocks == 10 || automapactive)
     {
         SB_state = -1; // [JN] Always do full update
         V_DrawPatch(0 + ORIGWIDTH_DELTA, 158, PatchBARBACK);
