@@ -848,7 +848,10 @@ void AM_Ticker(void)
 
 void AM_clearFB(int color)
 {
+// [JN] Do not initialize for wide screen unused variables
+#ifndef WIDESCREEN
     int i, j;
+#endif
     int dmapx;
     int dmapy;
 
