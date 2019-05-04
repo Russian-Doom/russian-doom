@@ -872,12 +872,12 @@ void R_RenderPlayerView (player_t* player)
     if (beneath_door == true)
     {
         // [JN] fill whole screen with black color and don't go any farther
-        V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+        V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
         return;
     }    
 
     // [JN] Draw map's "out of bounds" as a black color
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
 
     R_ClearPlanes ();
     R_ClearSprites ();

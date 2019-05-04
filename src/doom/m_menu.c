@@ -915,8 +915,10 @@ void M_DrawReadThis1(void)
 
     inhelpscreens = true;
 
-    // [JN] Wide screen: remove background, fill it with black color
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before drawing
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
 
     // [JN] Различные экраны помощи и скорректированное положение M_SKULL для разных версий игры
 
@@ -1021,8 +1023,10 @@ void M_DrawReadThis2(void)
 {
     inhelpscreens = true;
 
-    // [JN] Wide screen: remove background, fill it with black color
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before drawing
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
 
     // We only ever draw the second page if this is 
     // gameversion == exe_doom_1_9 and gamemode == registered

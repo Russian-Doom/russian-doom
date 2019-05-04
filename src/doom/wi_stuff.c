@@ -397,8 +397,10 @@ static patch_t*     background;
 // slam background
 void WI_slamBackground(void)
 {
-    // [JN] Remove level's remaining  background, fill it with black color
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before drawing
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
 
     V_DrawPatch(ORIGWIDTH_DELTA, 0, background);
 }

@@ -332,8 +332,10 @@ void F_TextWrite (void)
     {
         if (gamemap == 23)  // Leaving MAP23, end game. Special background.
         {
-            // [JN] Wide screen: remove tiled background, fill it with black color
-            V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+#ifdef WIDESCREEN
+            // [JN] Clean up remainings of the wide screen before drawing
+            V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
             V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
         }
     }
@@ -342,15 +344,19 @@ void F_TextWrite (void)
     {
         if (gamemap == 15)  // Leaving MAP15, entering MAP31
         {
-            // [JN] Wide screen: remove tiled background, fill it with black color
-            V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+#ifdef WIDESCREEN
+            // [JN] Clean up remainings of the wide screen before drawing
+            V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
             V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
         }
 
         if (gamemap == 31)  // Leaving MAP31, entering MAP32
         {
-            // [JN] Wide screen: remove tiled background, fill it with black color
-            V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+#ifdef WIDESCREEN
+            // [JN] Clean up remainings of the wide screen before drawing
+            V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
             V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE));
         }
     }
@@ -689,8 +695,10 @@ void F_CastDrawer (void)
     boolean         flip;
     patch_t*        patch;
 
-    // [JN] Remove level's remaining  background, fill it with black color
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before drawing
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
 
     // erase the entire screen to a background
     // [JN] Wide screen support
@@ -869,8 +877,10 @@ static void F_ArtScreenDrawer(void)
 {
     char *lumpname;
 
-    // [JN] Wide screen: remove remaining background, fill it with black color
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before drawing
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
 
     if (gameepisode == 3)
     {

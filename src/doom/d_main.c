@@ -629,8 +629,10 @@ void D_PageTicker (void)
 
 void D_PageDrawer (void)
 {
-    // [JN] Wide screen: remove remaining background, fill it with black color
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before drawing
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
     V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName(pagename, PU_CACHE));
 }
 
