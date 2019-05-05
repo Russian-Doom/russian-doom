@@ -510,7 +510,7 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
 #endif
 
     col = 0;
-    desttop = dest_screen + y * SCREENWIDTH + x;
+    desttop = dest_screen + (y << hires) * SCREENWIDTH + x;
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop++)
