@@ -588,6 +588,12 @@ void R_ExecuteSetViewSize(void)
 
     setsizeneeded = false;
 
+#ifdef WIDESCREEN
+    // [JN] Wide screen: use only SCREENWIDTH and SCREENHEIGHT sizes,
+    // there is no bordered view and effective screen size is always same.
+    scaledviewwidth = SCREENWIDTH;
+    viewheight = SCREENHEIGHT;
+#else
     if (setblocks == 11 || setblocks == 12) // [JN] Sizes 11 and 12 are the full screen mode
     {
         scaledviewwidth = SCREENWIDTH;
@@ -598,6 +604,7 @@ void R_ExecuteSetViewSize(void)
         scaledviewwidth = (setblocks * 32) << hires;
         viewheight = (setblocks * 161 / 10) << hires;
     }
+#endif
 
     detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;
@@ -647,7 +654,11 @@ void R_ExecuteSetViewSize(void)
         const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
         for (j = 0; j < LOOKDIRS; j++)
         {
+#ifdef WIDESCREEN
+        dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
+#else
         dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
+#endif
         dy = abs(dy);
         yslopes[j][i] = FixedDiv (num, dy);
         }
@@ -717,6 +728,17 @@ void R_Init(void)
     R_InitLightTables();
     R_InitSkyMap();
     R_InitTranslationTables();
+
+#ifdef WIDESCREEN
+    // [JN] Wide screen: don't allow unsupported (bordered) view modes at startup
+    {
+        if (screenblocks < 9)
+            screenblocks = 9;
+        if (screenblocks > 12)
+            screenblocks = 12;
+    }
+#endif
+
     framecount = 0;
 }
 
@@ -820,7 +842,11 @@ void R_SetupFrame(player_t * player)
     pitch = -LOOKDIRMIN;
 
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
+#ifdef WIDESCREEN
+    tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10;
+#else
     tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10;
+#endif
     if (centery != tempCentery)
     {
         centery = tempCentery;

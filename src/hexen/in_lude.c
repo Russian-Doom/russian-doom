@@ -422,8 +422,14 @@ void IN_Drawer(void)
     {
         return;
     }
+
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before drawing
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
+
     UpdateState |= I_FULLSCRN;
-    V_CopyScaledBuffer(I_VideoBuffer, (byte *) patchINTERPIC, ORIGWIDTH * ORIGHEIGHT);
+    V_CopyScaledBuffer(I_VideoBuffer, (byte *) patchINTERPIC, SRCWIDTH * ORIGHEIGHT);
 
     if (gametype == SINGLE)
     {
@@ -625,7 +631,7 @@ static void DrawHubText(void)
         {
             break;
         }
-        V_DrawShadowedPatchRaven(cx, cy, w);
+        V_DrawShadowedPatchRaven(cx + ORIGWIDTH_DELTA, cy, w);
         cx += SHORT(w->width);
     }
 }

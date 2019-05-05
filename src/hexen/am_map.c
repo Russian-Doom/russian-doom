@@ -691,9 +691,19 @@ void AM_Ticker(void)
 
 void AM_clearFB(int color)
 {
+#ifndef WIDESCREEN
     int i, j;
+#endif
     int dmapx;
     int dmapy;
+
+// [JN] Use static automap background for automap.
+// TODO - FIXME
+#ifdef WIDESCREEN
+    int x, y;
+    byte *src = W_CacheLumpName("AUTOPAGE", PU_CACHE);
+    byte *dest = I_VideoBuffer;
+#endif
 
     if (followplayer)
     {
@@ -731,6 +741,21 @@ void AM_clearFB(int color)
     }
 
     //blit the automap background to the screen.
+#ifdef WIDESCREEN
+    for (y = 0; y < SCREENHEIGHT; y++)
+    {
+        for (x = 0; x < SCREENWIDTH / 320; x++)
+        {
+            memcpy(dest, src + ((y & 127) << 6), 320);
+            dest += 320;
+        }
+        if (SCREENWIDTH & 127)
+        {
+            memcpy(dest, src + ((y & 127) << 6), SCREENWIDTH & 127);
+            dest += (SCREENWIDTH & 127);
+        }
+    }
+#else
     j = (mapystart & ~hires) * (finit_width >> hires);
     for (i = 0; i < SCREENHEIGHT - SBARHEIGHT; i++)
     {
@@ -742,6 +767,7 @@ void AM_clearFB(int color)
         if (j >= (finit_height >> hires) * (finit_width >> hires))
             j = 0;
     }
+#endif
 
 //       memcpy(I_VideoBuffer, maplump, finit_width*finit_height);
 //  memset(fb, color, f_w*f_h);
@@ -1414,7 +1440,12 @@ void AM_Drawer(void)
 //  AM_drawMarks();
 //      if(gameskill == sk_baby) AM_drawkeys();
 
+#ifdef WIDESCREEN
+    MN_DrTextA(P_GetMapName(gamemap), 74, 142);
+#else
     MN_DrTextA(P_GetMapName(gamemap), 38, 144);
+#endif
+
     if (ShowKills && netgame && deathmatch)
     {
         AM_DrawDeathmatchStats();
@@ -1537,7 +1568,7 @@ static void DrawWorldTimer(void)
 
     M_snprintf(timeBuffer, sizeof(timeBuffer),
                "%.2d : %.2d : %.2d", hours, minutes, seconds);
-    MN_DrTextA(timeBuffer, 237, 8); // [JN] Небольшая корректировка позиции
+    MN_DrTextA(timeBuffer, 237 + (ORIGWIDTH_DELTA * 2), 8); // [JN] Небольшая корректировка позиции
 
     if (days)
     {
@@ -1549,13 +1580,13 @@ static void DrawWorldTimer(void)
         {
             M_snprintf(dayBuffer, sizeof(dayBuffer), "%.2d LYTQ", days); // "%.2d DAYS"
         }
-        MN_DrTextA(dayBuffer, 240, 20);
+        MN_DrTextA(dayBuffer, 240 + (ORIGWIDTH_DELTA * 2), 20);
         if (days >= 5)
         {
             MN_DrTextA(english_language ?
             "YOU FREAK!!!" :
             "DS CGZNBKB!", // [JN] ВЫ СПЯТИЛИ! Давайте без хамства, а?
-            230, 35);
+            230 + (ORIGWIDTH_DELTA * 2), 35);
         }
     }
 }

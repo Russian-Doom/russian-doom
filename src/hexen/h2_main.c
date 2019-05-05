@@ -1033,12 +1033,13 @@ static void DrawAndBlit(void)
     {
         if (!netgame)
         {
-            V_DrawShadowedPatchRaven(160, (viewwindowy >> hires) + 5, W_CacheLumpName("PAUSED",
-                                                              PU_CACHE));
+            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, (viewwindowy >> hires) + 5,
+                                     W_CacheLumpName("PAUSED", PU_CACHE));
         }
         else
         {
-            V_DrawShadowedPatchRaven(160, 70, W_CacheLumpName("PAUSED", PU_CACHE));
+            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, 70,
+                                    W_CacheLumpName("PAUSED", PU_CACHE));
         }
     }
 
@@ -1073,12 +1074,13 @@ static void DrawMessage(void)
     if (player->yellowMessage)
     {
         MN_DrTextAYellow(player->message,
-                         160 - MN_TextAWidth(player->message) / 2, 1);
+                         160 - MN_TextAWidth(player->message) / 2 
+                         + ORIGWIDTH_DELTA, 1);
     }
     else
     {
-        MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2,
-                   1);
+        MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2
+                   + ORIGWIDTH_DELTA, 1);
     }
 }
 
@@ -1104,6 +1106,11 @@ void H2_PageTicker(void)
 
 static void PageDrawer(void)
 {
+#ifdef WIDESCREEN
+    // [JN] Clean up remainings of the wide screen before drawing
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
+
     V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
     if (demosequence == 1)
     {

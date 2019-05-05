@@ -934,7 +934,15 @@ void R_DrawPSprite(pspdef_t * psp)
     vis->class = 0;
     vis->psprite = true;
     // [crispy] weapons drawn 1 pixel too high when player is idle
+#ifdef WIDESCREEN
+    // [JN] Wide screen: weapon positioning for HUD and non-HUD view
+    if (screenblocks <= 10)
+    vis->texturemid = (BASEYCENTER<<FRACBITS)+(FRACUNIT*26)+(FRACUNIT/4)-(psp->sy-spritetopoffset[lump]);
+    else
     vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp->sy-spritetopoffset[lump]);
+#else
+    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp->sy-spritetopoffset[lump]);
+#endif
     if (viewheight == SCREENHEIGHT)
     {
         vis->texturemid -= PSpriteSY[viewplayer->class]

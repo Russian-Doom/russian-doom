@@ -2275,8 +2275,13 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
         if (!linetarget)
         {
             an = source->angle;
+#ifdef WIDESCREEN
+            // [JN] Wide screen: new magic number :(
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
+#else
             slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
                      (screenblocks <= 10 ? 158 : 146);
+#endif
         }
     }
     x = source->x;
@@ -2293,9 +2298,14 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
     }
     else
     {
+#ifdef WIDESCREEN
+        z = source->z + 4 * 8 * FRACUNIT +
+            ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
+#else
         z = source->z + 4 * 8 * FRACUNIT +
             ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
              (screenblocks <= 10 ? 158 : 146);
+#endif
         z -= source->floorclip;
     }
     MissileMobj = P_SpawnMobj(x, y, z, type);
@@ -2407,15 +2417,25 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
         if (!linetarget)
         {
             an = angle;
+#ifdef WIDESCREEN
+            // [JN] Wide screen: new magic number :(
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
+#else
             slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
                      (screenblocks <= 10 ? 158 : 146);
+#endif
         }
     }
     x = source->x;
     y = source->y;
+#ifdef WIDESCREEN
+    z = source->z + 4 * 8 * FRACUNIT +
+        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
+#else
     z = source->z + 4 * 8 * FRACUNIT +
         ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
          (screenblocks <= 10 ? 158 : 146);
+#endif
     z -= source->floorclip;
     th = P_SpawnMobj(x, y, z, type);
 //      if(th->info->seesound)
@@ -2460,12 +2480,21 @@ mobj_t *P_SPMAngleXYZ(mobj_t * source, fixed_t x, fixed_t y,
         if (!linetarget)
         {
             an = angle;
+#ifdef WIDESCREEN
+            // [JN] Wide screen: new magic number :(
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
+#else
             slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
                      (screenblocks <= 10 ? 158 : 146);
+#endif
         }
     }
+#ifdef WIDESCREEN
+    z += 4 * 8 * FRACUNIT + ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
+#else
     z += 4 * 8 * FRACUNIT + ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
                              (screenblocks <= 10 ? 158 : 146);
+#endif
     z -= source->floorclip;
     th = P_SpawnMobj(x, y, z, type);
 //      if(th->info->seesound)

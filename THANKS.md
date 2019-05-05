@@ -69,3 +69,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Sabhotep
 - mykola-ambar
 - Heretic widescreen HUD by Hellser, Neoworm, TerminusEst13 and PSTrooper
+- Hexen widescreen HUD and weapons by neoworm
