@@ -1128,7 +1128,8 @@ void P_PlayerInSpecialSector (player_t* player)
 	break;
 			
       default:
-	I_Error (english_language ?
+    // [JN] Made non-fatal
+	fprintf(stderr, english_language ?
              "P_PlayerInSpecialSector: unknown special %i\n" :
              "P_PlayerInSpecialSector: неизвестная специфика %i",
 		 sector->special);
