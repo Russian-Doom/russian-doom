@@ -1326,7 +1326,6 @@ typedef enum {
     MT_MISC85,
     MT_MISC86,
     MT_GIBSMASTERMIND,
-	MT_BLOODFUZZ,
     MT_RFOG,
     MT_MISC49_A,    // Animated candle
     MT_MISC50_A,    // Animated candelabra
