@@ -66,7 +66,8 @@ static int show_talk = 0;
 // [JN] Disable "use_libsamplerate" config variable,
 // always preffering a best sound quality.
 // static int use_libsamplerate = 0;
-static float libsamplerate_scale = 0.65;
+// [JN] Initialy 0.65. Using 1.0 makes sound volume much more original-like.
+static float libsamplerate_scale = 1.0;
 
 static char *timidity_cfg_path = NULL;
 static char *gus_patch_path = NULL;
