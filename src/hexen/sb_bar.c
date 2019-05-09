@@ -1592,9 +1592,9 @@ void DrawFullScreenStuff(void)
             V_DrawShadowedPatchRaven(301 + (ORIGWIDTH_DELTA * 2), 184, W_CacheLumpName("MANABRT2", PU_CACHE));
         }        
 
-        // [JN] Draw ammounts of mana
-        DrINumber(mana_blue, 273 + (ORIGWIDTH_DELTA * 2), 170);
-        DrINumber(mana_green, 273 + (ORIGWIDTH_DELTA * 2), 184);
+        // [JN] Draw mana points. Do not draw negative values.
+        DrINumber(mana_blue >= 0 ? mana_blue : 0, 273 + (ORIGWIDTH_DELTA * 2), 170); 
+        DrINumber(mana_green >= 0 ? mana_green : 0, 273 + (ORIGWIDTH_DELTA * 2), 184); 
     }
 
     if (deathmatch)
