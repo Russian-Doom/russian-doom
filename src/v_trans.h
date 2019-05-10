@@ -42,6 +42,7 @@ enum
     CR_BRICK,
     CR_TAN,
     CR_GRAY,
+    CR_DARKRED,
     CR_GREEN,
     CR_BROWN,
     CR_GOLD,
