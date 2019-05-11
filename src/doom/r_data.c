@@ -990,14 +990,14 @@ void R_InitData (void)
     printf (".");
     R_InitSpriteLumps ();
     printf (".");
-    if (translucency && !vanillaparm)
+    if (!vanillaparm)
     {
         R_InitTranMap();
         printf (".");
     }
     R_InitColormaps ();
 
-    if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+    if (!vanillaparm && gamevariant != freedoom && gamevariant != freedm)
     {
         W_MergeFile("base/brightmaps/doom-brightmaps.wad");
         R_InitBrightmaps ();
