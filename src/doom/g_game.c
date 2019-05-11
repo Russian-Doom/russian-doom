@@ -247,7 +247,7 @@ int             bodyqueslot;
 // Графика
 int brightmaps = 1;
 int fake_contrast = 0;
-// int translucency = 1; (d_main.c)
+int translucency = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
 int colored_hud = 0;

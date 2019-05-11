@@ -59,6 +59,15 @@
 #define QSPROMPT    "quicksave over your game named\n\n'%s'?\n\n"PRESSYN
 #define QLPROMPT    "do you want to quickload the game named\n\n'%s'?\n\n"PRESSYN
 
+#define RD_ON       "on"
+#define RD_OFF      "off"
+
+#define RD_DEFAULTS                                 \
+"ingame settings will reset to their defaults.\n"   \
+"\n"                                                \
+"are you sure you want to continue?\n\n"            \
+PRESSYN
+
 #define NEWGAME               \
 "you can't start a new game\n"\
 "while in a network game.\n\n"PRESSKEY
@@ -910,6 +919,22 @@
 #define SAVEDEAD_RUS    "ytdjpvj;yj cj[hfybnm buhe< yt yfxfd tt!\n\n"PRESSKEY_RUS                   // Невозможно сохранить игру, не начав её!
 #define QSPROMPT_RUS    "gthtpfgbcfnm ,scnhjt cj[hfytybt\n^%s^?\n\n"PRESSKEY_RUS                     // quicksave over your game named\n\n'%s'?\n\n
 #define QLPROMPT_RUS    "pfuhepbnm ,scnhjt cj[hfytybt\n^%s^?\n\n"PRESSKEY_RUS                        // do you want to quickload the game named\n'%s'?\n\n
+
+#define RD_ON_RUS       "drk"       // вкл
+#define RD_OFF_RUS      "dsrk"      // выкл
+#define RD_NEXT_RUS     "lfktt )"   // далее >
+#define RD_PREV_RUS     "( yfpfl"   // < назад
+
+// Внутриигровые настройки будут
+// сброшены на стандартные значения.
+//
+// Уверены, что хотите продолжить?
+#define RD_DEFAULTS_RUS                 \
+"dyenhbbuhjdst yfcnhjqrb ,elen\n"       \
+"c,hjitys yf cnfylfhnyst pyfxtybz>\n"   \
+"\n"                                    \
+"edthtys< xnj [jnbnt ghjljk;bnm?\n\n"   \
+PRESSYN_RUS
 
 // Невозможно начать новую игру
 // при активной сетевой игре.

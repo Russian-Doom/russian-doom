@@ -138,7 +138,6 @@ int english_language = 0;
 
 int show_endoom   = 0;
 int show_diskicon = 1;
-int translucency  = 1; // [JN] Прозрачность объектов
 int local_time    = 0; // [JN] Local time widget
 
 boolean flip_levels_cmdline = false;
@@ -1086,6 +1085,7 @@ void D_SetGameDescription(void)
         if (is_freedoom)
         {
             W_MergeFile("base/common/freedoom-common.wad");
+            W_MergeFile("base/common/doom-sysfont.wad");
 
             if (english_language)
             {
@@ -1095,6 +1095,7 @@ void D_SetGameDescription(void)
             {
                 gamedescription = GetGameName("Freedoom: Стадия 1");
                 W_MergeFile("base/common/freedoom-common-russian.wad");
+                W_MergeFile("base/common/doom-sysfont-russian.wad");
             }
         }
         else if (gamemode == retail)
@@ -1102,6 +1103,7 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("The Ultimate DOOM");
 
             W_MergeFile("base/common/doom-common.wad");
+            W_MergeFile("base/common/doom-sysfont.wad");
 
             if (english_language)
             {
@@ -1110,6 +1112,7 @@ void D_SetGameDescription(void)
             else
             {
                 W_MergeFile("base/common/doom-common-russian.wad");
+                W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-doom1-russian.wad");
 
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
@@ -1134,6 +1137,7 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("DOOM");
 
             W_MergeFile("base/common/doom-common.wad");
+            W_MergeFile("base/common/doom-sysfont.wad");
 
             if (english_language)
             {
@@ -1142,6 +1146,7 @@ void D_SetGameDescription(void)
             else
             {
                 W_MergeFile("base/common/doom-common-russian.wad");
+                W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-doom1-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom1-wide.wad");
@@ -1151,6 +1156,7 @@ void D_SetGameDescription(void)
         else if (gamemode == shareware)
         {
             W_MergeFile("base/common/doom-common.wad");
+            W_MergeFile("base/common/doom-sysfont.wad");
 
             if (english_language)
             {
@@ -1160,6 +1166,7 @@ void D_SetGameDescription(void)
             {
                 gamedescription = GetGameName("DOOM (Демоверсия)");
                 W_MergeFile("base/common/doom-common-russian.wad");
+                W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-doom1-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom1-wide.wad");
@@ -1169,6 +1176,7 @@ void D_SetGameDescription(void)
         else if (gamemode == pressbeta)
         {
             W_MergeFile("base/common/doom-common.wad");
+            W_MergeFile("base/common/doom-sysfont.wad");
             W_MergeFile("base/games/doom-beta.wad");
 
             DEH_AddStringReplacement ("M_JKILL",   "M_JKILL2");
@@ -1188,6 +1196,7 @@ void D_SetGameDescription(void)
                 gamedescription = GetGameName("DOOM (Бета-версия)");
 
                 W_MergeFile("base/common/doom-common-russian.wad");
+                W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/games/doom-beta-russian.wad");
                 DEH_AddStringReplacement (GOTHTHBONUS_RUS, GOTDAGGER_RUS);
                 DEH_AddStringReplacement (GOTARMBONUS_RUS, GOTCHEST_RUS);
@@ -1205,6 +1214,7 @@ void D_SetGameDescription(void)
             {
                 gamedescription = GetGameName("FreeDM");
                 W_MergeFile("base/common/freedoom-common.wad");
+                W_MergeFile("base/common/doom-sysfont.wad");
 
                 if (english_language)
                 {
@@ -1213,12 +1223,14 @@ void D_SetGameDescription(void)
                 else
                 {
                     W_MergeFile("base/common/freedoom-common-russian.wad");
+                    W_MergeFile("base/common/doom-sysfont-russian.wad");
                     W_MergeFile("base/common/freedoom-dm-russian.wad");
                 }
             }
             else
             {
                 W_MergeFile("base/common/freedoom-common.wad");
+                W_MergeFile("base/common/doom-sysfont.wad");
 
                 if (english_language)
                 {
@@ -1228,12 +1240,14 @@ void D_SetGameDescription(void)
                 {
                     gamedescription = GetGameName("Freedoom: Стадия 2");
                     W_MergeFile("base/common/freedoom-common-russian.wad");
+                    W_MergeFile("base/common/doom-sysfont-russian.wad");
                 }
             }
         }
         else if (logical_gamemission == doom2)
         {
             W_MergeFile("base/common/doom-common.wad");
+            W_MergeFile("base/common/doom-sysfont.wad");
 
             if (english_language)
             {
@@ -1243,6 +1257,7 @@ void D_SetGameDescription(void)
             {
                 gamedescription = GetGameName("DOOM 2: Ад на Земле");
                 W_MergeFile("base/common/doom-common-russian.wad");
+                W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-doom2-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom2-wide.wad");
@@ -1252,6 +1267,7 @@ void D_SetGameDescription(void)
         else if (logical_gamemission == pack_plut)
         {
             W_MergeFile("base/common/doom-common.wad");
+            W_MergeFile("base/common/doom-sysfont.wad");
             
             if (english_language)
             {
@@ -1262,6 +1278,7 @@ void D_SetGameDescription(void)
                 gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
 
                 W_MergeFile("base/common/doom-common-russian.wad");
+                W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-plutonia-russian.wad");
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-plutonia-wide.wad");
@@ -1271,6 +1288,7 @@ void D_SetGameDescription(void)
         else if (logical_gamemission == pack_tnt)
         {
             W_MergeFile("base/common/doom-common.wad");
+            W_MergeFile("base/common/doom-sysfont.wad");
 
             if (english_language)
             {
@@ -1280,11 +1298,14 @@ void D_SetGameDescription(void)
             {
                 gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
                 W_MergeFile("base/common/doom-common-russian.wad");
+                W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-tnt-russian.wad");
             }
         }
         else if (logical_gamemission == jaguar)
         {
+            W_MergeFile("base/common/doom-sysfont.wad");
+
             if (english_language)
             {
                 gamedescription = GetGameName("DOOM for Atari Jaguar");
@@ -1293,6 +1314,7 @@ void D_SetGameDescription(void)
             {
                 gamedescription = GetGameName("DOOM для Atari Jaguar");
                 W_MergeFile("base/games/doom-jaguar-russian.wad");
+                W_MergeFile("base/common/doom-sysfont-russian.wad");
             }
         }
     }

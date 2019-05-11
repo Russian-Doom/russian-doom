@@ -1380,6 +1380,125 @@ void I_InitGraphics(void)
     I_AtExit(I_ShutdownGraphics, true);
 }
 
+// [crispy] re-initialize only the parts of the rendering stack that are really necessary
+
+void I_ReInitGraphics (int reinit)
+{
+	// [crispy] re-set rendering resolution and re-create framebuffers
+	if (reinit & REINIT_FRAMEBUFFERS)
+	{
+		unsigned int rmask, gmask, bmask, amask;
+		int unused_bpp;
+
+        // [JN] Uhh... Needed?
+        /*
+		if (hires)
+		{
+			SCREENWIDTH = MAXWIDTH;
+			SCREENHEIGHT = MAXHEIGHT;
+			SCREENHEIGHT_4_3 = MAXHEIGHT_4_3;
+		}
+		else
+		{
+			SCREENWIDTH = ORIGWIDTH;
+			SCREENHEIGHT = ORIGHEIGHT;
+			SCREENHEIGHT_4_3 = ORIGHEIGHT_4_3;
+		}
+        */
+
+		// [crispy] re-initialize resolution-agnostic patch drawing
+		V_Init();
+
+		SDL_FreeSurface(rgbabuffer);
+		SDL_PixelFormatEnumToMasks(pixel_format, &unused_bpp,
+		                           &rmask, &gmask, &bmask, &amask);
+		rgbabuffer = SDL_CreateRGBSurface(0,
+		                                  SCREENWIDTH, SCREENHEIGHT, 32,
+		                                  rmask, gmask, bmask, amask);
+
+		I_VideoBuffer = rgbabuffer->pixels;
+
+		V_RestoreBuffer();
+
+		// [crispy] it will get re-created below with the new resolution
+		SDL_DestroyTexture(texture);
+	}
+
+	// [crispy] re-create renderer
+	if (reinit & REINIT_RENDERER)
+	{
+		SDL_RendererInfo info = {0};
+		int flags;
+
+		SDL_GetRendererInfo(renderer, &info);
+		flags = info.flags;
+
+        // [JN] Err... Needed?
+        /*
+		// if (crispy->vsync && !(flags & SDL_RENDERER_SOFTWARE))
+		// {
+		// 	flags |= SDL_RENDERER_PRESENTVSYNC;
+		// }
+		// else
+		// {
+		// 	flags &= ~SDL_RENDERER_PRESENTVSYNC;
+		// }
+        */
+
+		SDL_DestroyRenderer(renderer);
+		renderer = SDL_CreateRenderer(screen, -1, flags);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+		// [crispy] the texture gets destroyed in SDL_DestroyRenderer(), force its re-creation
+		texture_upscaled = NULL;
+	}
+
+	// [crispy] re-create textures
+	if (reinit & REINIT_TEXTURES)
+	{
+		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+
+		texture = SDL_CreateTexture(renderer,
+		                            pixel_format,
+		                            SDL_TEXTUREACCESS_STREAMING,
+		                            SCREENWIDTH, SCREENHEIGHT);
+
+		// [crispy] force its re-creation
+		CreateUpscaledTexture(true);
+	}
+
+	// [crispy] re-set logical rendering resolution
+	if (reinit & REINIT_ASPECTRATIO)
+	{
+		if (aspect_ratio_correct == 1)
+		{
+			actualheight = SCREENHEIGHT_4_3;
+		}
+		else
+		{
+			actualheight = SCREENHEIGHT;
+		}
+
+		if (aspect_ratio_correct || integer_scaling)
+		{
+			SDL_RenderSetLogicalSize(renderer,
+			                         SCREENWIDTH,
+			                         actualheight);
+		}
+		else
+		{
+			SDL_RenderSetLogicalSize(renderer, 0, 0);
+		}
+
+		#if SDL_VERSION_ATLEAST(2, 0, 5)
+		SDL_RenderSetIntegerScale(renderer, integer_scaling);
+		#endif
+	}
+
+	// [crispy] adjust the window size and re-set the palette
+	need_resize = true;
+}
+
 void I_RenderReadPixels(byte **data, int *w, int *h, int *p)
 {
 	SDL_Rect rect;

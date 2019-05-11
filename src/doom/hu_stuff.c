@@ -136,7 +136,9 @@ char* player_names_rus[] =
 char        chat_char; // remove later.
 static      player_t* plr;
 patch_t*    hu_font[HU_FONTSIZE];
-patch_t*    hu_font_gray[HU_FONTSIZE];    // [JN] Small gray font
+patch_t*    hu_font_small[HU_FONTSIZE]; // [JN] Small, unchangeable STCFS font
+patch_t*    hu_font_big[HU_FONTSIZE2];  // [JN] Big, unchangeable STCFB font
+patch_t*    hu_font_gray[HU_FONTSIZE];  // [JN] Small gray STCFG font, used for local time widget
 
 static      hu_textline_t w_title;
 static      hu_textline_t w_kills;
@@ -642,11 +644,15 @@ void HU_Init(void)
 {
     int     i;
     int     j;
+    int     n;
+    int     o;
     int     g;
     char    buffer[9];
 
     // load the heads-up font
     j = HU_FONTSTART;
+    o = HU_FONTSTART;
+    n = HU_FONTSTART2;
     g = HU_FONTSTART_GRAY;
 
     // [JN] Standard STCFN font
@@ -656,7 +662,21 @@ void HU_Init(void)
         hu_font[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 
-    // [JN] Small gray STCFG font
+    // [JN] Small, unchangeable STCFS font
+    for (i=0;i<HU_FONTSIZE;i++)
+    {
+        DEH_snprintf(buffer, 9, "STCFS%.3d", o++);
+        hu_font_small[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    // [JN] Big, unchangeable STCFB font
+    for (i=0;i<HU_FONTSIZE2;i++)
+    {
+        DEH_snprintf(buffer, 9, "STCFB%.3d", n++);
+        hu_font_big[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    // [JN] Small gray STCFG font, used for local time widget
     for (i=0;i<HU_FONTSIZE_GRAY;i++)
     {
         DEH_snprintf(buffer, 9, "STCFG%.3d", g++);

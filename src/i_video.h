@@ -76,6 +76,9 @@ typedef boolean (*grabmouse_callback_t)(void);
 // and sets up the video mode
 void I_InitGraphics (void);
 
+// [crispy] re-initialize only the parts of the rendering stack that are really necessary
+void I_ReInitGraphics (int reinit);
+
 void I_GraphicsCheckCommandLine(void);
 
 void I_ShutdownGraphics(void);
