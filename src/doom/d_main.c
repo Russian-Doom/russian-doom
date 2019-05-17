@@ -2032,6 +2032,9 @@ void D_DoomMain (void)
     // print banner
     I_PrintBanner(PACKAGE_STRING);
 
+    if (devparm)
+    DEH_printf(english_language ? D_DEVSTR : D_DEVSTR_RUS);
+
     DEH_printf(english_language ?
                "Z_Init: Init zone memory allocation daemon. \n" :
                "Z_Init: Инициализация распределения памяти.\n");
@@ -2164,9 +2167,6 @@ void D_DoomMain (void)
     if (M_CheckParm ("-dm3"))
         deathmatch = 3;
 
-    if (devparm)
-        DEH_printf(D_DEVSTR);
-    
     // find which dir to use for config files
 
 #ifdef _WIN32
@@ -2723,7 +2723,7 @@ void D_DoomMain (void)
 
     DEH_printf(english_language ?
                "HU_Init: Setting up heads up display.\n" :
-               "HU_Init: Настройка игрового дисплея.\n");
+               "HU_Init: Инициализация HUD.\n");
     HU_Init ();
 
     DEH_printf(english_language ?
