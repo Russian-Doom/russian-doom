@@ -99,6 +99,7 @@ GameMode_t gamemode;
 char *gamedescription;
 char *iwadfile;
 static char demolumpname[9];    // Demo lump to start playing.
+boolean devparm;                // started game with -devparm
 boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
 boolean randomclass;            // checkparm of -randclass
@@ -472,6 +473,15 @@ void D_DoomMain(void)
 {
     GameMission_t gamemission;
     int p;
+
+    // [JN] Developer mode, changed for RD needs.
+    devparm = M_CheckParm ("-devparm");
+
+    // [JN] Create a system console for -devparm mode. For Windows OS only.
+#ifdef _WIN32
+    if (devparm)
+    I_RD_Windows_Devparm_Console();
+#endif 
 
     I_AtExit(D_HexenQuitMessage, false);
     startepisode = 1;

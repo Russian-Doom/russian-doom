@@ -2018,6 +2018,15 @@ void D_DoomMain (void)
     char    file[256];
     char    demolumpname[9];
 
+    // [JN] Developer mode, changed for RD needs.
+    devparm = M_CheckParm ("-devparm");
+
+    // [JN] Create a system console for -devparm mode. For Windows OS only.
+#ifdef _WIN32
+    if (devparm)
+    I_RD_Windows_Devparm_Console();
+#endif 
+
     I_AtExit(D_Endoom, false);
 
     // print banner
@@ -2111,15 +2120,6 @@ void D_DoomMain (void)
     //
 
     fastparm = M_CheckParm ("-fast");
-
-    //! 
-    // @vanilla
-    //
-    // Developer mode.  F1 saves a screenshot in the current working
-    // directory.
-    //
-
-    devparm = M_CheckParm ("-devparm");
 
     //!
     // @vanilla

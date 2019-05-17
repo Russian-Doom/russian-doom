@@ -62,6 +62,13 @@ void *I_Realloc(void *ptr, size_t size);
 
 boolean I_GetMemoryValue(unsigned int offset, void *value, int size);
 
+// -----------------------------------------------------------------------------
+// I_RD_Windows_Devparm_Console
+// [JN] Creates a system console for -devparm mode. Used for Windows OS only.
+// -----------------------------------------------------------------------------
+
+void I_RD_Windows_Devparm_Console(void);
+
 // Schedule a function to be called when the program exits.
 // If run_if_error is true, the function is called if the exit
 // is due to an error (I_Error)

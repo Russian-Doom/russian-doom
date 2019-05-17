@@ -63,6 +63,7 @@
 GameMode_t gamemode = indetermined;
 char *gamedescription = "unknown";
 
+boolean devparm;                // started game with -devparm
 boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
 boolean debugmode;              // checkparm of -debug
@@ -885,6 +886,15 @@ void D_DoomMain(void)
     char file[256];
     char demolumpname[9];
     int newpwadfile;
+
+    // [JN] Developer mode, changed for RD needs.
+    devparm = M_CheckParm ("-devparm");
+
+    // [JN] Create a system console for -devparm mode. For Windows OS only.
+#ifdef _WIN32
+    if (devparm)
+    I_RD_Windows_Devparm_Console();
+#endif 
 
     I_PrintBanner(PACKAGE_STRING);
 

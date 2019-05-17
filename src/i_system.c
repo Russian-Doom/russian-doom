@@ -65,6 +65,27 @@ struct atexit_listentry_s
 
 static atexit_listentry_t *exit_funcs = NULL;
 
+// -----------------------------------------------------------------------------
+// I_RD_Windows_Devparm_Console
+// [JN] Creates a system console for -devparm mode. Used for Windows OS only.
+// -----------------------------------------------------------------------------
+
+void I_RD_Windows_Devparm_Console(void)
+{
+    // Create a console window
+    AllocConsole();
+
+    // Head outputs
+    freopen("CONIN$", "r",stdin); 
+    freopen("CONOUT$","w",stdout); 
+    freopen("CONOUT$","w",stderr);  
+
+    // Set a proper codepage
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+}
+
+
 void I_AtExit(atexit_func_t func, boolean run_on_error)
 {
     atexit_listentry_t *entry;
