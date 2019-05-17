@@ -480,11 +480,6 @@ void D_DoomMain(void)
     startmap = 1;
     gamemode = commercial;
 
-// [JN] Change codepage of Windows console output from CP866 to UTF-8
-#ifdef _WIN32
-    I_RD_Windows_Console_UTF8();
-#endif
-
     I_PrintBanner(PACKAGE_STRING);
 
     // Initialize subsystems

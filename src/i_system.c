@@ -65,17 +65,6 @@ struct atexit_listentry_s
 
 static atexit_listentry_t *exit_funcs = NULL;
 
-// -----------------------------------------------------------------------------
-// I_RD_Windows_Console_UTF8
-// [JN] Changes codepage of Windows console output from CP866 to UTF-8
-// -----------------------------------------------------------------------------
-
-void I_RD_Windows_Console_UTF8(void)
-{
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
-}
-
 void I_AtExit(atexit_func_t func, boolean run_on_error)
 {
     atexit_listentry_t *entry;

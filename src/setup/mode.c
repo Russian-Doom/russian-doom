@@ -289,11 +289,6 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
     int num_games;
     int i;
 
-// [JN] Change codepage of Windows console output from CP866 to UTF-8
-#ifdef _WIN32
-    I_RD_Windows_Console_UTF8();
-#endif
-
 	// "Select game"
     window = TXT_NewWindow("Russian Doom");
 

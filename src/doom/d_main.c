@@ -2018,11 +2018,6 @@ void D_DoomMain (void)
     char    file[256];
     char    demolumpname[9];
 
-// [JN] Change codepage of Windows console output from CP866 to UTF-8
-#ifdef _WIN32
-    I_RD_Windows_Console_UTF8();
-#endif
-
     I_AtExit(D_Endoom, false);
 
     // print banner

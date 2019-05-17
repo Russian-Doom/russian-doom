@@ -62,13 +62,6 @@ void *I_Realloc(void *ptr, size_t size);
 
 boolean I_GetMemoryValue(unsigned int offset, void *value, int size);
 
-// -----------------------------------------------------------------------------
-// I_RD_Windows_Console_UTF8
-// [JN] Changes codepage of Windows console output from CP866 to UTF-8
-// -----------------------------------------------------------------------------
-
-void I_RD_Windows_Console_UTF8(void);
-
 // Schedule a function to be called when the program exits.
 // If run_if_error is true, the function is called if the exit
 // is due to an error (I_Error)
