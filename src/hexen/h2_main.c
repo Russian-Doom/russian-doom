@@ -649,17 +649,6 @@ void D_DoomMain(void)
     R_Init();
     ST_Message("\n");
 
-    // [JN] Lookup and init all the textures for brightmapping
-    if (brightmaps && !vanillaparm)
-    {
-        ST_Message(english_language ?
-                   "R_Init: Brightmapping initialization.\n" :
-                   "R_Init: Инициализация брайтмаппинга.\n");
-        W_MergeFile("base/brightmaps/hexen-brightmaps.wad");
-        R_InitBrightmaps();
-        R_InitBrightmappedTextures ();
-    }
-
     //if (M_CheckParm("-net"))
     //    ST_NetProgress();       // Console player found
 

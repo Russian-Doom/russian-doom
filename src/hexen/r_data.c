@@ -23,6 +23,7 @@
 #include "m_misc.h"
 #include "r_local.h"
 #include "p_local.h"
+#include "r_bmaps.h"
 
 
 // [JN] Prorotype for merging brightmaps PWAD
@@ -593,6 +594,14 @@ void R_InitData(void)
     R_InitFlats();
     R_InitSpriteLumps();
     R_InitColormaps();
+
+    // [JN] Lookup and init all the textures for brightmapping
+    if (brightmaps && !vanillaparm)
+    {
+        W_MergeFile("base/brightmaps/hexen-brightmaps.wad");
+        R_InitBrightmaps();
+        R_InitBrightmappedTextures ();
+    }
 }
 
 //=============================================================================

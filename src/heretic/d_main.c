@@ -56,7 +56,6 @@
 #include "w_main.h"
 #include "v_video.h"
 #include "w_merge.h"
-#include "r_bmaps.h"
 #include "jn.h"
 
 
@@ -1330,17 +1329,6 @@ void D_DoomMain(void)
     hprintf(DEH_String("Loading graphics"));
     R_Init();
     tprintf("\n", 0);
-
-    if (brightmaps && !vanillaparm)
-    {
-        tprintf(DEH_String(english_language ?
-                        "R_Init: Brightmapping initialization.\n" :
-                        "R_Init: Инициализация брайтмаппинга.\n"), 1);
-
-        W_MergeFile("base/brightmaps/heretic-brightmaps.wad");
-        R_InitBrightmaps();
-        R_InitBrightmappedTextures ();
-    }
 
     tprintf(DEH_String(english_language ?
                        "P_Init: Init Playloop state.\n" :

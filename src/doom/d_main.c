@@ -85,7 +85,6 @@
 #include "statdump.h"
 
 #include "d_main.h"
-#include "r_bmaps.h"
 #include "jn.h"
 
 // [JN] Сделана глобальной, нужна для функции автоподргузки 
@@ -2702,21 +2701,6 @@ void D_DoomMain (void)
                "R_Init: Init DOOM refresh daemon - " :
                "R_Init: Инициализация процесса запуска DOOM - ");
     R_Init ();
-
-    DEH_printf(english_language ?
-               "\nR_Init: Init transparency.\n" :
-               "\nR_Init: Инициализация прозрачности.\n");
-    R_InitTranMap ();
-
-    DEH_printf(english_language ?
-               "R_Init: Init brightmapping." :
-               "R_Init: Инициализация брайтмаппинга.");
-    if (gamevariant != freedoom && gamevariant != freedm)
-    {
-        W_MergeFile("base/brightmaps/doom-brightmaps.wad");
-        R_InitBrightmaps ();
-        R_InitBrightmappedTextures ();
-    }
 
     DEH_printf(english_language ?
                "\nP_Init: Init Playloop state.\n" :
