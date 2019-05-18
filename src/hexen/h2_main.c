@@ -24,6 +24,13 @@
 #include <stdlib.h>
 #include <time.h>
 
+#ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#endif
+
 #include "config.h"
 #include "doomfeatures.h"
 
@@ -45,6 +52,7 @@
 #include "v_video.h"
 #include "w_main.h"
 #include "w_merge.h"
+#include "r_bmaps.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -477,10 +485,28 @@ void D_DoomMain(void)
     // [JN] Developer mode, changed for RD needs.
     devparm = M_CheckParm ("-devparm");
 
-    // [JN] Create a system console for -devparm mode. For Windows OS only.
+    // [JN] Console colorization, for Windows OS only.
 #ifdef _WIN32
+    // Show system console
     if (devparm)
     I_RD_Windows_Devparm_Console();
+
+    // Print colored title (bright red)
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_INTENSITY);
+    ST_Message("                ");
+    ST_Message(PACKAGE_NAME);
+    ST_Message(" ");
+
+    // Print colored version (yellow)
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    ST_Message(PACKAGE_VERSION);
+    ST_Message("\n");
+
+    // Fallback to common console colos
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+#else
+    // Just print a common banner
+    I_PrintBanner(PACKAGE_STRING);    
 #endif 
 
     I_AtExit(D_HexenQuitMessage, false);
@@ -490,15 +516,17 @@ void D_DoomMain(void)
     startmap = 1;
     gamemode = commercial;
 
-    I_PrintBanner(PACKAGE_STRING);
-
     // Initialize subsystems
 
-    ST_Message("V_Init: Обнаружение экранов.\n");			// "V_Init: allocate screens.\n"
+    ST_Message(english_language ?
+               "V_Init: allocate screens.\n" :
+               "V_Init: Инициализация видео.\n");
     V_Init();
 
     // Load defaults before initing other systems
-    ST_Message("M_LoadDefaults: Загрузка системных стандартов.\n");	// "M_LoadDefaults: Load system defaults.\n"
+    ST_Message(english_language ?
+               "M_LoadDefaults: Load system defaults.\n" :
+               "M_LoadDefaults: Загрузка системных стандартов.\n");
     D_BindVariables();
 
 #ifdef _WIN32
@@ -533,12 +561,16 @@ void D_DoomMain(void)
     // Now that the savedir is loaded from .CFG, make sure it exists
     CreateSavePath();
 
-    ST_Message("Z_Init: Инициализация распределения памяти.\n");	// "Z_Init: Init zone memory allocation daemon.\n"
+    ST_Message(english_language ?
+               "Z_Init: Init zone memory allocation daemon.\n" :
+               "Z_Init: Инициализация распределения памяти.\n");
     Z_Init();
 
     // haleyjd: removed WATCOMC
 
-    ST_Message("W_Init: Инициализация WAD-файлов.\n");				// "W_Init: Init WADfiles.\n"
+    ST_Message(english_language ?
+               "W_Init: Init WADfiles.\n" :
+               "W_Init: Инициализация WAD-файлов.\n");
 
     iwadfile = D_FindIWAD(IWAD_MASK_HEXEN, &gamemission);
 
@@ -564,22 +596,30 @@ void D_DoomMain(void)
 
     HandleArgs();
 
-    I_PrintStartupBanner(gamedescription);
-
-    ST_Message("MN_Init: Инициализация системы меню.\n");					// "MN_Init: Init menu system.\n"
+    ST_Message(english_language ?
+               "MN_Init: Init menu system.\n" :
+               "MN_Init: Инициализация системы меню.\n");
     MN_Init();
 
-    ST_Message("CT_Init: Инициализация данных режима чата.\n");				// "CT_Init: Init chat mode data.\n"
+    ST_Message(english_language ?
+               "CT_Init: Init chat mode data.\n" :
+               "CT_Init: Инициализация данных режима чата.\n");
     CT_Init();
 
     InitMapMusicInfo();         // Init music fields in mapinfo
 
-    ST_Message("S_InitScript\n");
+    ST_Message(english_language ?
+               "S_InitScript: Init script system.\n" :
+               "S_InitScript: Инициализация системы скриптов.\n");
     S_InitScript();
 
-    ST_Message("SN_InitSequenceScript: Регистрация наборов звуковых событий.\n");	// "SN_InitSequenceScript: Registering sound sequences.\n"
+    ST_Message(english_language ?
+               "SN_InitSequenceScript: Registering sound sequences.\n" :
+               "SN_InitSequenceScript: Регистрация наборов звуковых событий.\n");
     SN_InitSequenceScript();
-    ST_Message("I_Init: Инициализация состояния компьютера.\n");					// "I_Init: Setting up machine state.\n"
+    ST_Message(english_language ?
+               "I_Init: Setting up machine state.\n" :
+               "I_Init: Инициализация состояния компьютера.\n");
     I_CheckIsScreensaver();
     I_InitTimer();
     I_InitJoystick();
@@ -587,7 +627,9 @@ void D_DoomMain(void)
     I_InitMusic();
 
 #ifdef FEATURE_MULTIPLAYER
-    ST_Message("NET_Init: Инициализация сетевой подсистемы.\n");					// "NET_Init: Init networking subsystem.\n"
+    ST_Message(english_language ?
+               "NET_Init: Init networking subsystem.\n" :
+               "NET_Init: Инициализация сетевой подсистемы.\n");
     NET_Init();
 #endif
     D_ConnectNetGame();
@@ -595,35 +637,58 @@ void D_DoomMain(void)
     S_Init();
     S_Start();
 
-    ST_Message("ST_Init: Инициализация загрузочного экрана.\n");	// "ST_Init: Init startup screen.\n"
+    ST_Message(english_language ?
+               "ST_Init: Init startup screen.\n" :
+               "ST_Init: Инициализация загрузочного экрана.\n");
     ST_Init();
 
     // Show version message now, so it's visible during R_Init()
-    ST_Message("R_Init: Инициализация процесса запуска Hexen");		// "R_Init: Init Hexen refresh daemon"
+    ST_Message(english_language ?
+               "R_Init: Init Hexen refresh daemon" :
+               "R_Init: Инициализация процесса запуска Hexen");
     R_Init();
     ST_Message("\n");
+
+    // [JN] Lookup and init all the textures for brightmapping
+    if (brightmaps && !vanillaparm)
+    {
+        ST_Message(english_language ?
+                   "R_Init: Brightmapping initialization.\n" :
+                   "R_Init: Инициализация брайтмаппинга.\n");
+        W_MergeFile("base/brightmaps/hexen-brightmaps.wad");
+        R_InitBrightmaps();
+        R_InitBrightmappedTextures ();
+    }
 
     //if (M_CheckParm("-net"))
     //    ST_NetProgress();       // Console player found
 
-    ST_Message("P_Init: Инициализация игрового окружения.\n");		// "P_Init: Init Playloop state.\n"
+    ST_Message(english_language ?
+               "P_Init: Init Playloop state.\n" :
+               "P_Init: Инициализация игрового окружения.\n");
     P_Init();
 
     // Check for command line warping. Follows P_Init() because the
     // MAPINFO.TXT script must be already processed.
     WarpCheck();
 
-    ST_Message("D_CheckNetGame: Проверка статуса сетевой игры.\n");	// "D_CheckNetGame: Checking network game status.\n"
+    ST_Message(english_language ?
+               "D_CheckNetGame: Checking network game status.\n" :
+               "D_CheckNetGame: Проверка статуса сетевой игры.\n");
     D_CheckNetGame();
 
-    ST_Message("SB_Init: Загрузка патчей.\n");						// "SB_Init: Loading patches.\n"
+    ST_Message(english_language ?
+               "SB_Init: Loading patches.\n" :
+               "SB_Init: Загрузка патчей.\n");
     SB_Init();
 
     ST_Done();
 
     if (autostart)
     {
-        ST_Message("Перемещение на уровень: %d (\"%s\":%d), сложность: %d\n",		// "Warp to Map %d (\"%s\":%d), Skill %d\n"
+        ST_Message(english_language ?
+                   "Warp to Map %d (\"%s\":%d), Skill %d\n" :
+                   "Перемещение на уровень: %d (\"%s\":%d), сложность: %d\n",
                    WarpMap, P_GetMapName(startmap), startmap, startskill + 1);
     }
 
@@ -678,6 +743,13 @@ void D_DoomMain(void)
             H2_StartTitle();
         }
     }
+
+    // [JN] Show the game we are playing
+    ST_Message(english_language ? "Starting game: " : "Запуск игры: ");
+    ST_Message("\"");
+    ST_Message(gamedescription);
+    ST_Message("\"");
+    ST_Message("\n");
 
     H2_GameLoop();              // Never returns
 }
