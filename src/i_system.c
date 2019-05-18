@@ -72,6 +72,7 @@ static atexit_listentry_t *exit_funcs = NULL;
 
 void I_RD_Windows_Devparm_Console(void)
 {
+#ifdef _WIN32
     // Create a console window
     AllocConsole();
 
@@ -83,6 +84,7 @@ void I_RD_Windows_Devparm_Console(void)
     // Set a proper codepage
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
+#endif
 }
 
 
