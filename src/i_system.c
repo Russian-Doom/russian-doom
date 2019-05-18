@@ -181,7 +181,7 @@ byte *I_ZoneBase (int *size)
 
     printf(english_language ?
            "zone memory: %p, %x allocated for zone\n" :
-           "Распределение памяти: %p, %x обнаружено.\n", 
+           "Распределение памяти: выделено %p байт.\n", 
            zonemem, *size);
 
     return zonemem;

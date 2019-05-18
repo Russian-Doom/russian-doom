@@ -271,13 +271,13 @@ void D_CheckNetGame (void)
     LoadGameSettings(&settings);
 
     DEH_printf(english_language ?
-               "startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n" :
-               "сложность: %i  дефматч: %i  уровень: %i  эпизод: %i\n",
+               " startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n" :
+               " сложность: %i  дефматч: %i  уровень: %i  эпизод: %i\n",
                startskill, deathmatch, startmap, startepisode);
 
     DEH_printf(english_language ?
-               "player %i of %i (%i nodes)\n" :
-               "игроки: %i из %i (узлов: %i)\n",
+               " player %i of %i (%i nodes)\n" :
+               " игроки: %i из %i (узлов: %i)\n",
                consoleplayer+1, settings.num_players, settings.num_players);
 
     // Show players here; the server might have specified a time limit

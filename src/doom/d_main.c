@@ -27,6 +27,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#endif
+
 #include "config.h"
 #include "deh_main.h"
 #include "doomdef.h"
@@ -78,7 +85,7 @@
 #include "statdump.h"
 
 #include "d_main.h"
-
+#include "r_bmaps.h"
 #include "jn.h"
 
 // [JN] Сделана глобальной, нужна для функции автоподргузки 
@@ -1645,8 +1652,8 @@ void D_SetGameDescription(void)
             }
         }
         printf(english_language ?
-        "  loaded %i DEHACKED lumps from PWAD files.\n" :
-        "  Загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
+        " loaded %i DEHACKED lumps from PWAD files.\n" :
+        " загружено блоков Dehacked из WAD-файлов: %i.\n", loaded);
     }
 }
 
@@ -2021,16 +2028,31 @@ void D_DoomMain (void)
     // [JN] Developer mode, changed for RD needs.
     devparm = M_CheckParm ("-devparm");
 
-    // [JN] Create a system console for -devparm mode. For Windows OS only.
+    // [JN] Console colorization, for Windows OS only.
 #ifdef _WIN32
+    // Show system console
     if (devparm)
     I_RD_Windows_Devparm_Console();
+
+    // Print colored title (bright blue)
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    DEH_printf("                ");
+    DEH_printf(PACKAGE_NAME);
+    DEH_printf(" ");
+
+    // Print colored version (yellow)
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    DEH_printf(PACKAGE_VERSION);
+    DEH_printf("\n");
+
+    // Fallback to common console colos
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+#else
+    // Just print a common banner
+    I_PrintBanner(PACKAGE_STRING);    
 #endif 
 
     I_AtExit(D_Endoom, false);
-
-    // print banner
-    I_PrintBanner(PACKAGE_STRING);
 
     if (devparm)
     DEH_printf(english_language ? D_DEVSTR : D_DEVSTR_RUS);
@@ -2225,7 +2247,7 @@ void D_DoomMain (void)
     // init subsystems
     DEH_printf(english_language ?
                "V_Init: allocate screens.\n" :
-               "V_Init: Обнаружение экранов.\n");
+               "V_Init: Инициализация видео.\n");
     V_Init ();
 
     // Load configuration files before initialising other subsystems.
@@ -2505,30 +2527,7 @@ void D_DoomMain (void)
     }
 #endif
 
-    I_PrintStartupBanner(gamedescription);
     PrintDehackedBanners();
-
-    // Freedoom's IWADs are Boom-compatible, which means they usually
-    // don't work in Vanilla (though FreeDM is okay). Show a warning
-    // message and give a link to the website.
-    if (gamevariant == freedoom)
-    {
-        if (english_language)
-        {
-            printf(" WARNING: You are playing using one of the Freedoom IWAD\n"
-                   " files, which might not work in this port. See this page\n"
-                   " for more information on how to play using Freedoom:\n"
-                   "   https://www.chocolate-doom.org/wiki/index.php/Freedoom\n");
-        }
-        else
-        {
-            printf(" ВНИМАНИЕ: IWAD-файлы Freedoom могут работать некорректно,\n"
-                   " с данной версией порта. Ознакомьтесь с дополнительной\n"
-                   " информацией по адресу:\n"
-                   "   http://www.chocolate-doom.org/wiki/index.php/Freedoom\n");
-        }
-        I_PrintDivider();
-    }
 
     DEH_printf(english_language ?
                "I_Init: Setting up machine state.\n" :
@@ -2705,6 +2704,21 @@ void D_DoomMain (void)
     R_Init ();
 
     DEH_printf(english_language ?
+               "\nR_Init: Init transparency.\n" :
+               "\nR_Init: Инициализация прозрачности.\n");
+    R_InitTranMap ();
+
+    DEH_printf(english_language ?
+               "R_Init: Init brightmapping." :
+               "R_Init: Инициализация брайтмаппинга.");
+    if (gamevariant != freedoom && gamevariant != freedm)
+    {
+        W_MergeFile("base/brightmaps/doom-brightmaps.wad");
+        R_InitBrightmaps ();
+        R_InitBrightmappedTextures ();
+    }
+
+    DEH_printf(english_language ?
                "\nP_Init: Init Playloop state.\n" :
                "\nP_Init: Инициализация игрового окружения.\n");
     P_Init ();
@@ -2790,6 +2804,13 @@ void D_DoomMain (void)
         else
             D_StartTitle ();    // start up intro loop
     }
+
+    // [JN] Show the game we are playing
+    DEH_printf(english_language ? "Starting game: " : "Запуск игры: ");
+    DEH_printf("\"");
+    DEH_printf(gamedescription);
+    DEH_printf("\"");
+    DEH_printf("\n");
 
     D_DoomLoop ();  // never returns
 }

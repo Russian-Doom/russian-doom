@@ -56,4 +56,7 @@ int R_FlatNumForName (char* name);
 int R_TextureNumForName (char *name);
 int R_CheckTextureNumForName (char *name);
 
+// [JN] Transparency initialization.
+void R_InitTranMap (void);
+
 #endif

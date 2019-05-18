@@ -58,11 +58,6 @@ void R_InitBrightmappedTextures(void)
     // Texture lookup. There are many strict definitions,
     // for example, no need to lookup Doom 1 textures in TNT.
 
-    // Print informative message
-    printf(english_language ?
-           "\nR_Init: Brightmapping initialization." :
-           "\nR_Init: Инициализация брайтмаппинга.");
-
     // -------------------------------------------------------
     //  Atari Jaguar
     // -------------------------------------------------------

@@ -40,14 +40,8 @@
 #include "r_sky.h"
 
 #include "r_data.h"
-#include "r_bmaps.h"
 
 #include "jn.h"
-
-
-
-// [JN] Prorotype for merging brightmaps PWAD
-extern void W_MergeFile(char *filename);
 
 
 //
@@ -990,19 +984,7 @@ void R_InitData (void)
     printf (".");
     R_InitSpriteLumps ();
     printf (".");
-    if (!vanillaparm)
-    {
-        R_InitTranMap();
-        printf (".");
-    }
     R_InitColormaps ();
-
-    if (!vanillaparm && gamevariant != freedoom && gamevariant != freedm)
-    {
-        W_MergeFile("base/brightmaps/doom-brightmaps.wad");
-        R_InitBrightmaps ();
-        R_InitBrightmappedTextures ();
-    }
 }
 
 
