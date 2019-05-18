@@ -748,7 +748,7 @@ void D_DoomMain(void)
     ST_Message(english_language ? "Starting game: " : "Запуск игры: ");
     ST_Message("\"");
     ST_Message(gamedescription);
-    ST_Message("\"");
+    ST_Message("\".");
     ST_Message("\n");
 
     H2_GameLoop();              // Never returns

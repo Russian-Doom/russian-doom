@@ -2809,7 +2809,7 @@ void D_DoomMain (void)
     DEH_printf(english_language ? "Starting game: " : "Запуск игры: ");
     DEH_printf("\"");
     DEH_printf(gamedescription);
-    DEH_printf("\"");
+    DEH_printf("\".");
     DEH_printf("\n");
 
     D_DoomLoop ();  // never returns
