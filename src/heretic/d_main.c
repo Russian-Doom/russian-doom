@@ -21,6 +21,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#endif
+
 #include "doomfeatures.h"
 
 #include "txt_main.h"
@@ -49,6 +56,7 @@
 #include "w_main.h"
 #include "v_video.h"
 #include "w_merge.h"
+#include "r_bmaps.h"
 #include "jn.h"
 
 
@@ -890,13 +898,29 @@ void D_DoomMain(void)
     // [JN] Developer mode, changed for RD needs.
     devparm = M_CheckParm ("-devparm");
 
-    // [JN] Create a system console for -devparm mode. For Windows OS only.
+    // [JN] Console colorization, for Windows OS only.
 #ifdef _WIN32
+    // Show system console
     if (devparm)
     I_RD_Windows_Devparm_Console();
-#endif 
 
-    I_PrintBanner(PACKAGE_STRING);
+    // Print colored title (bright green)
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    DEH_printf("                ");
+    DEH_printf(PACKAGE_NAME);
+    DEH_printf(" ");
+
+    // Print colored version (yellow)
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    DEH_printf(PACKAGE_VERSION);
+    DEH_printf("\n");
+
+    // Fallback to common console colos
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+#else
+    // Just print a common banner
+    I_PrintBanner(PACKAGE_STRING);    
+#endif 
 
     I_AtExit(D_Endoom, false);
 
@@ -1014,7 +1038,7 @@ void D_DoomMain(void)
 //
     DEH_printf(english_language ?
                "V_Init: allocate screens.\n" :
-               "V_Init: Обнаружение экранов.\n");
+               "V_Init: Инициализация видео.\n");
     V_Init();
 
     // Check for -CDROM
@@ -1236,8 +1260,6 @@ void D_DoomMain(void)
 
     savegamedir = M_GetSaveGameDir("heretic.wad");
 
-    I_PrintStartupBanner(gamedescription);
-
     if (M_ParmExists("-testcontrols"))
     {
         startepisode = 1;
@@ -1297,7 +1319,7 @@ void D_DoomMain(void)
 
     tprintf(DEH_String(english_language ?
                        "MN_Init: Init menu system.\n" :
-                       "MN_Init: Инициализация системы меню.\n"), 1);
+                       "MN_Init: Инициализация игрового меню.\n"), 1);
     MN_Init();
 
     CT_Init();
@@ -1308,6 +1330,17 @@ void D_DoomMain(void)
     hprintf(DEH_String("Loading graphics"));
     R_Init();
     tprintf("\n", 0);
+
+    if (brightmaps && !vanillaparm)
+    {
+        tprintf(DEH_String(english_language ?
+                        "R_Init: Brightmapping initialization.\n" :
+                        "R_Init: Инициализация брайтмаппинга.\n"), 1);
+
+        W_MergeFile("base/brightmaps/heretic-brightmaps.wad");
+        R_InitBrightmaps();
+        R_InitBrightmappedTextures ();
+    }
 
     tprintf(DEH_String(english_language ?
                        "P_Init: Init Playloop state.\n" :
@@ -1423,6 +1456,13 @@ void D_DoomMain(void)
     }
 
     finishStartup();
+
+    // [JN] Show the game we are playing
+    DEH_printf(english_language ? "Starting game: " : "Запуск игры: ");
+    DEH_printf("\"");
+    DEH_printf(gamedescription);
+    DEH_printf("\"");
+    DEH_printf("\n");
 
     D_DoomLoop();               // Never returns
 }

@@ -25,7 +25,6 @@
 #include "m_misc.h"
 #include "r_local.h"
 #include "p_local.h"
-#include "r_bmaps.h"
 #include "jn.h"
 
 extern void CheckAbortStartup(void);
@@ -681,14 +680,6 @@ void R_InitData(void)
     IncThermo();
     printf (".");
     R_InitColormaps();
-
-    // [JN] Lookup and init all the textures for brightmapping
-    if (brightmaps && !vanillaparm)
-    {
-        W_MergeFile("base/brightmaps/heretic-brightmaps.wad");
-        R_InitBrightmaps();
-        R_InitBrightmappedTextures ();
-    }
 }
 
 

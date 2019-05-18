@@ -41,11 +41,6 @@ int bmap_terminator;
 
 void R_InitBrightmappedTextures(void)
 {
-    // Print informative message while startup
-    printf(english_language ?
-           "\nR_Init: Brightmapping initialization." :
-           "\nR_Init: Инициализация брайтмаппинга.");
-
     // -------------------------------------------------------
     //  Flats and ceilings
     // -------------------------------------------------------

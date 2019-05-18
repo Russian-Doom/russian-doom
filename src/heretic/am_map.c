@@ -902,15 +902,15 @@ void AM_clearFB(int color)
 #ifdef WIDESCREEN
     for (y = 0; y < SCREENHEIGHT; y++)
     {
-        for (x = 0; x < SCREENWIDTH / 64; x++)
+        for (x = 0; x < SCREENWIDTH / 320; x++)
         {
-            memcpy(dest, src + ((y & 63) << 6), 64);
-            dest += 64;
+            memcpy(dest, src + ((y & 127) << 6), 320);
+            dest += 320;
         }
-        if (SCREENWIDTH & 63)
+        if (SCREENWIDTH & 127)
         {
-            memcpy(dest, src + ((y & 63) << 6), SCREENWIDTH & 63);
-            dest += (SCREENWIDTH & 63);
+            memcpy(dest, src + ((y & 127) << 6), SCREENWIDTH & 127);
+            dest += (SCREENWIDTH & 127);
         }
     }
 #else
