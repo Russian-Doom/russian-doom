@@ -71,7 +71,7 @@ EXTRA_DIST=                             \
 MAINTAINERCLEANFILES =  $(AUX_DIST_GEN)
 
 # [JN] Not used: man
-SUBDIRS=textscreen opl pcsound data src
+SUBDIRS=textscreen midiproc opl pcsound data src
 
 DIST_SUBDIRS=pkg $(SUBDIRS)
 

@@ -70,6 +70,7 @@ i_endoom.c           i_endoom.h            \
 i_input.c            i_input.h             \
 i_joystick.c         i_joystick.h          \
                      i_swap.h              \
+i_midipipe.c         i_midipipe.h          \
 i_sound.c            i_sound.h             \
 i_timer.c            i_timer.h             \
 i_video.c            i_video.h             \
