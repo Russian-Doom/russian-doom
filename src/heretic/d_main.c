@@ -70,7 +70,6 @@
 GameMode_t gamemode = indetermined;
 char *gamedescription = "unknown";
 
-boolean devparm;                // started game with -devparm
 boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
 boolean debugmode;              // checkparm of -debug
@@ -893,33 +892,6 @@ void D_DoomMain(void)
     char file[256];
     char demolumpname[9];
     int newpwadfile;
-
-    // [JN] Developer mode, changed for RD needs.
-    devparm = M_CheckParm ("-devparm");
-
-    // [JN] Console colorization, for Windows OS only.
-#ifdef _WIN32
-    // Show system console
-    if (devparm)
-    I_RD_Windows_Devparm_Console();
-
-    // Print colored title
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN | 
-                            FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-    DEH_printf("                              ");
-    DEH_printf(PACKAGE_NAME);
-    DEH_printf(" ");
-    DEH_printf(PACKAGE_VERSION);
-    DEH_printf("                               ");
-
-    DEH_printf("\n");
-
-    // Fallback to common console colos
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-#else
-    // Just print a common banner
-    I_PrintBanner(PACKAGE_STRING);    
-#endif 
 
     I_AtExit(D_Endoom, false);
 

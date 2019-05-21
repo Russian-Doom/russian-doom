@@ -64,14 +64,17 @@ void R_InitBrightmappedTextures(void)
     if (gamemission == jaguar)
     {
         // Flats
-        bmapflatnum4 = R_FlatNumForName("GATE6");
+        bmapflatnum4 = R_FlatNumForName("GATE5");
 
         // Textures
+
+        // Red only:
+        bmaptexture39 = R_TextureNumForName("EXITSIGN");
         bmaptexture08 = R_TextureNumForName("SW2WOOD");
         bmaptexture17 = R_TextureNumForName("SW2GSTON");
-        bmaptexture23 = R_TextureNumForName("WOODGARG");
-        bmaptexture39 = R_TextureNumForName("EXITSIGN");
-        bmaptexture75 = R_TextureNumForName("CBLUE01");
+        bmaptexture34 = R_TextureNumForName("SW2HOT");
+
+        // Bright tan:
         bmaptexture88 = R_TextureNumForName("SW2GARG");
 
         // Apply terminator

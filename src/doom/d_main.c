@@ -27,13 +27,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef _WIN32
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
-#endif
-
 #include "config.h"
 #include "deh_main.h"
 #include "doomdef.h"
@@ -2023,33 +2016,6 @@ void D_DoomMain (void)
     int     p;
     char    file[256];
     char    demolumpname[9];
-
-    // [JN] Developer mode, changed for RD needs.
-    devparm = M_CheckParm ("-devparm");
-
-    // [JN] Console colorization, for Windows OS only.
-#ifdef _WIN32
-    // Show system console
-    if (devparm)
-    I_RD_Windows_Devparm_Console();
-
-    // Print colored title
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_BLUE | 
-                            FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-    DEH_printf("                                ");
-    DEH_printf(PACKAGE_NAME);
-    DEH_printf(" ");
-    DEH_printf(PACKAGE_VERSION);
-    DEH_printf("                               ");
-
-    DEH_printf("\n");
-
-    // Fallback to common console colos
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-#else
-    // Just print a common banner
-    I_PrintBanner(PACKAGE_STRING);    
-#endif 
 
     I_AtExit(D_Endoom, false);
 
