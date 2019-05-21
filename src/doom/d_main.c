@@ -2033,15 +2033,15 @@ void D_DoomMain (void)
     if (devparm)
     I_RD_Windows_Devparm_Console();
 
-    // Print colored title (bright blue)
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-    DEH_printf("                ");
+    // Print colored title
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_BLUE | 
+                            FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    DEH_printf("                                ");
     DEH_printf(PACKAGE_NAME);
     DEH_printf(" ");
-
-    // Print colored version (yellow)
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     DEH_printf(PACKAGE_VERSION);
+    DEH_printf("                               ");
+
     DEH_printf("\n");
 
     // Fallback to common console colos
