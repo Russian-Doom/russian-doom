@@ -27,6 +27,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#endif
+
 #include "config.h"
 #include "deh_main.h"
 #include "doomdef.h"
@@ -102,7 +109,8 @@ char* savegamedir;
 // location of IWAD and WAD files
 char* iwadfile;
 
-boolean devparm;     // started game with -devparm
+// [JN] Devparm now global and available for all three games (see i_main.c)
+// boolean devparm;     // started game with -devparm
 boolean nomonsters;  // checkparm of -nomonsters
 boolean respawnparm; // checkparm of -respawn
 boolean fastparm;    // checkparm of -fast
@@ -2016,6 +2024,26 @@ void D_DoomMain (void)
     int     p;
     char    file[256];
     char    demolumpname[9];
+
+#ifdef _WIN32
+    // [JN] Print colorized title
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_BLUE 
+                                                           | FOREGROUND_RED
+                                                           | FOREGROUND_GREEN
+                                                           | FOREGROUND_BLUE
+                                                           | FOREGROUND_INTENSITY);
+    DEH_printf("                                Russian Doom " PACKAGE_VERSION
+               "                                ");
+    DEH_printf("\n");
+
+    // [JN] Fallback to standard console colos
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED
+                                                           | FOREGROUND_GREEN
+                                                           | FOREGROUND_BLUE);
+#else
+    // [JN] Just print an uncolored banner
+    I_PrintBanner(PACKAGE_STRING);    
+#endif
 
     I_AtExit(D_Endoom, false);
 

@@ -893,6 +893,26 @@ void D_DoomMain(void)
     char demolumpname[9];
     int newpwadfile;
 
+#ifdef _WIN32
+    // [JN] Print colorized title
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN
+                                                           | FOREGROUND_RED
+                                                           | FOREGROUND_GREEN
+                                                           | FOREGROUND_BLUE
+                                                           | FOREGROUND_INTENSITY);
+    DEH_printf("                              Russian Heretic " PACKAGE_VERSION
+               "                               ");
+    DEH_printf("\n");
+
+    // [JN] Fallback to standard console colos
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED
+                                                           | FOREGROUND_GREEN
+                                                           | FOREGROUND_BLUE);
+#else
+    // [JN] Just print an uncolored banner
+    I_PrintBanner(PACKAGE_STRING);    
+#endif 
+
     I_AtExit(D_Endoom, false);
 
     //!
