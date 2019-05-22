@@ -843,7 +843,7 @@ void IN_DrawSingleStats(void)
     IN_DrTextB(DEH_String(english_language ? "TIME" : "DHTVZ"), 50 + ORIGWIDTH_DELTA, classic_stats ? 145 : 114);
     IN_DrawTime(192 + ORIGWIDTH_DELTA, classic_stats ? 145 : 114, hours, minutes, seconds);
 
-    IN_DrTextB(DEH_String(english_language ? "TOTAL TIME" : "J,OTT DHTVZ"), 50 + ORIGWIDTH_DELTA, classic_stats ? 165 : 134);
+    IN_DrTextB(DEH_String(english_language ? "TOTAL" : "J,OTT DHTVZ"), 50 + ORIGWIDTH_DELTA, classic_stats ? 165 : 134);
     IN_DrawTime(192 + ORIGWIDTH_DELTA, classic_stats ? 165 : 134, ttime/3600, (ttime%3600)/60, ttime%60);
 
     // [JN] Do not display "Now entering" after finishing ExM8
