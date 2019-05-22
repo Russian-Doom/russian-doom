@@ -1611,7 +1611,7 @@ void D_SetGameDescription(void)
     if (W_CheckMultipleLumps("STFST01") > 1
        || W_CheckMultipleLumps("STFGOD0") > 1
        || is_freedoom || is_freedm
-       || vanillaparm || !extra_player_faces)
+       || vanillaparm)
     {
         old_godface = true;
     }

@@ -1048,7 +1048,7 @@ void ST_updateFaceWidget(void)
                     // [BH] no evil grin when invulnerable
                     // [JN] extra god faces have grin, use them in god mode
                     if ((old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability])
-                    || !old_godface)
+                    || (!old_godface && extra_player_faces))
                     {
                         doevilgrin = true;
                         oldweaponsowned[i] = plyr->weaponowned[i];
@@ -1237,7 +1237,7 @@ void ST_updateFaceWidget(void)
             // [BH] no rampage face when invulnerable
             // [JN] extra god faces have rampage, use them in god mode
             if ((old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability])
-            || !old_godface)
+            || (!old_godface && extra_player_faces))
             {
                 if (lastattackdown==-1)
                     lastattackdown = ST_RAMPAGEDELAY;
@@ -1263,7 +1263,7 @@ void ST_updateFaceWidget(void)
         {
             priority = 4;
             faceindex = ST_GODFACE;
-            if (old_godface)
+            if (!extra_player_faces || old_godface)
             {
                 // [JN] Standard god mode face behaviour
                 st_facecount = 1;
