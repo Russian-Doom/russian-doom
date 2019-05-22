@@ -2031,7 +2031,7 @@ void D_DoomMain (void)
                                                            | FOREGROUND_BLUE
                                                            | FOREGROUND_INTENSITY);
     DEH_printf("                                Russian Doom " PACKAGE_VERSION
-               "                                ");
+               "                               ");
     DEH_printf("\n");
 
     // [JN] Fallback to standard console colos

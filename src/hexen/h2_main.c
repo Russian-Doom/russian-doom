@@ -490,7 +490,7 @@ void D_DoomMain(void)
                                                            | FOREGROUND_BLUE
                                                            | FOREGROUND_INTENSITY);
     ST_Message("                               Russian Hexen " PACKAGE_VERSION
-               "                                ");
+               "                               ");
     ST_Message("\n");
 
     // [JN] Fallback to standard console colos

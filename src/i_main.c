@@ -49,6 +49,7 @@ boolean devparm;
 
 void D_DoomMain (void);
 
+/* [JN] TODO - implement a proper return to cmd.exe
 void I_RD_SendReturn (void)
 {
     keybd_event(VK_RETURN,
@@ -56,6 +57,7 @@ void I_RD_SendReturn (void)
                 KEYEVENTF_EXTENDEDKEY,
                 0);
 }
+*/
 
 int main(int argc, char **argv)
 {
@@ -79,6 +81,7 @@ int main(int argc, char **argv)
     {   // Create a separate console window
         AllocConsole();
     }
+    /* [JN] TODO - implement a proper return to cmd.exe
     else
     {
         // Use an existing console window
@@ -92,6 +95,7 @@ int main(int argc, char **argv)
         // for proper return to command prompt
         I_AtExit(I_RD_SendReturn, false);
     }
+    */
 
     // Head text outputs
     freopen("CONIN$", "r",stdin); 
