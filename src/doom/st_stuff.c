@@ -1007,7 +1007,8 @@ void ST_updateFaceWidget(void)
         // [JN] Atari и PSX Doom - дополнительные лице "разорванного" и "раздавленного" игрока.
         // Proper checking for xdeath state has been taken from Crispy Doom, thanks to Fabian Greffrath!
         // Don't use if for possible custom HUD faces.
-        if (!old_godface && plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate && !vanillaparm)
+        if (!old_godface && extra_player_faces && !vanillaparm
+        && plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate)
         {
             priority = 9;
             painoffset = 0;
@@ -1047,8 +1048,9 @@ void ST_updateFaceWidget(void)
                 {
                     // [BH] no evil grin when invulnerable
                     // [JN] extra god faces have grin, use them in god mode
-                    if ((old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability])
-                    || (!old_godface && extra_player_faces))
+                    if (extra_player_faces
+                    || old_godface
+                    || (!old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability]))
                     {
                         doevilgrin = true;
                         oldweaponsowned[i] = plyr->weaponowned[i];
@@ -1236,8 +1238,9 @@ void ST_updateFaceWidget(void)
         {
             // [BH] no rampage face when invulnerable
             // [JN] extra god faces have rampage, use them in god mode
-            if ((old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability])
-            || (!old_godface && extra_player_faces))
+            if (extra_player_faces
+            || old_godface
+            || (!old_godface && !(plyr->cheats & CF_GODMODE) && !plyr->powers[pw_invulnerability]))
             {
                 if (lastattackdown==-1)
                     lastattackdown = ST_RAMPAGEDELAY;
