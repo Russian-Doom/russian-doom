@@ -1618,7 +1618,6 @@ void D_SetGameDescription(void)
     else
     {
         old_godface = false;
-        W_MergeFile("base/extra/doom-godface.wad");
     }
 
     // [JN] Finally, some compatibility mess
@@ -1631,7 +1630,6 @@ void D_SetGameDescription(void)
         // Press Beta and Atari Jaguar are supposed to have
         // extra GOD faces, as well as exploding ones.
         old_godface = false;
-        W_MergeFile("base/extra/doom-godface.wad");
     }
     
     // Автоматическая загрузка блока DEHACKED
