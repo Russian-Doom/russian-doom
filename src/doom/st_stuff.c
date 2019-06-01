@@ -1538,7 +1538,8 @@ enum
     hudcolor_ammo,
     hudcolor_health,
     hudcolor_frags,
-    hudcolor_armor
+    hudcolor_armor,
+    hudcolor_artifacts
 } hudcolor_t;
 
 // [crispy] return ammo/health/armor widget color
@@ -1617,6 +1618,26 @@ static byte* ST_WidgetColor(int i)
                 return cr[CR_GREEN];
 	    else if (plyr->armortype == 0)
                 return cr[CR_RED];
+            break;
+        }
+        case hudcolor_artifacts:
+        {
+            // [JN] Press Beta: colorize artifacts widget.
+            // There is no internal counter for amount of collected artifacts,
+            // so the values are hardcoded (same on intermission screen).
+            // Also, there is only one map per each episode, which making
+            // definition of 'gamemap' unnecessary.
+            if ((gameepisode == 1 && st_artifactscount == 36)
+            ||  (gameepisode == 2 && st_artifactscount == 29)
+            ||  (gameepisode == 3 && st_artifactscount == 25))
+            return cr[CR_GREEN];
+
+            else if (st_artifactscount > 0)
+            return cr[CR_GOLD];
+
+            else
+            return cr[CR_RED];
+
             break;
         }
     }
@@ -1817,9 +1838,13 @@ void ST_drawWidgets(boolean refresh)
         {
             // [JN] Draw Artifacts widet
 #ifdef WIDESCREEN
+            dp_translation = ST_WidgetColor(hudcolor_artifacts);
             STlib_updateNum(&w_artifacts, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            dp_translation = NULL;
 #else
+            dp_translation = ST_WidgetColor(hudcolor_artifacts);
             STlib_updateNum(&w_artifacts, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            dp_translation = NULL;
 #endif
         }
         else
