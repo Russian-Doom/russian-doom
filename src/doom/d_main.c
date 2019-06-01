@@ -1123,7 +1123,6 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/common/doom-doom1-russian.wad");
 
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
                 W_MergeFile("base/wide/doom-doom1-wide.wad");
 #endif
             }
@@ -1593,6 +1592,20 @@ void D_SetGameDescription(void)
         else if (gamemission == pack_plut)
         W_MergeFile("base/extra/doom-plutonia-skies.wad");
     }
+
+    // [JN] Check if we have exactly two TITLEPICs loaded in Russian version
+    // of Ultimate Doom. If two, we are free to use wide version: TITLEPIU,
+    // since there is a TITLEPIC for registered game mode already. More clear:
+    // 1) placed inside IWAD.
+    // 2) placed inside doom-doom1-wide.wad.
+    // 3 or more) modified titlepic inside PWAD.
+#ifdef WIDESCREEN
+    if (!english_language && gamemode == retail 
+    &&   W_CheckMultipleLumps("TITLEPIC") <= 2)
+    {
+        DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
+    }
+#endif
 
     // [JN] Check for modified thermometer. If exist, 
     // don't use dimmed/red in game menus.
