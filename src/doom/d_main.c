@@ -1306,6 +1306,9 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/common/doom-common-russian.wad");
                 W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-tnt-russian.wad");
+#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
+                W_MergeFile("base/wide/doom-tnt-wide.wad");
+#endif
             }
         }
         else if (logical_gamemission == jaguar)
