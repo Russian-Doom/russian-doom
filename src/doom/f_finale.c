@@ -849,66 +849,20 @@ void F_BunnyScroll (void)
 
     V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
 
-    // [JN] Widescreen support: this is where hard part starts.
-    // There are three possible following ways:
-    // 1) In English, there are no wide backgrounds at all, so code is using standard 320.
-    // 2) In Russian, in case of using wide build, code is using 426.
-    // 3) In Russian, in case of using standard build, code is using standard 320.
+    scrolled = (320 - ((signed int) finalecount-230)/2);
 
-    // 1) English language, no wide backgrounds
-    if (english_language)
+    if (scrolled > 320)
+    scrolled = 320;
+    if (scrolled < 0)
+    scrolled = 0;
+
+    for ( x=0 ; x<320  ; x++)
     {
-        scrolled = (320 - ((signed int) finalecount-230)/2);
-
-        if (scrolled > 320)
-        scrolled = 320;
-        if (scrolled < 0)
-        scrolled = 0;
-
-        for ( x=0 ; x<320  ; x++)
-        {
-            if (x+scrolled < 320)
-            F_DrawPatchCol (x+ORIGWIDTH_DELTA, p1, x+scrolled);
-            else
-            F_DrawPatchCol (x+ORIGWIDTH_DELTA, p2, x+scrolled - 320);		
-        }
-    }
-    else
-    {
-    // 2) Russian language, wide backgrounds
-#ifdef WIDESCREEN
-        scrolled = (ORIGWIDTH - ((signed int) finalecount-230)/2);
-
-        if (scrolled > ORIGWIDTH)
-        scrolled = ORIGWIDTH;
-        if (scrolled < 0)
-        scrolled = 0;
-
-        for ( x=0 ; x<ORIGWIDTH  ; x++)
-        {
-            if (x+scrolled < ORIGWIDTH)
-            F_DrawPatchCol (x, p1, x+scrolled);
-            else
-            F_DrawPatchCol (x, p2, x+scrolled - ORIGWIDTH);		
-        }
-#else
-    // 3) Russian language, standard backgrounds
-        scrolled = (320 - ((signed int) finalecount-230)/2);
-
-        if (scrolled > 320)
-        scrolled = 320;
-        if (scrolled < 0)
-        scrolled = 0;
-
-        for ( x=0 ; x<320  ; x++)
-        {
-            if (x+scrolled < 320)
-            F_DrawPatchCol (x, p1, x+scrolled);
-            else
-            F_DrawPatchCol (x, p2, x+scrolled - 320);		
-        }
-#endif
-    }
+        if (x+scrolled < 320)
+        F_DrawPatchCol (x + ORIGWIDTH_DELTA, p1, x+scrolled);
+        else
+        F_DrawPatchCol (x + ORIGWIDTH_DELTA, p2, x+scrolled - 320);
+     }
 
     if (finalecount < 1130)
     return;
