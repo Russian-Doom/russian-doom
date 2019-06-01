@@ -249,6 +249,8 @@ void T_MoveFloor(floormove_t* floor)
 	}
 	P_RemoveThinker(&floor->thinker);
 
+    // [JN] Jaguar: no stop sound
+    if (gamemission != jaguar)
 	S_StartSound(&floor->sector->soundorg, sfx_pstop);
     }
 

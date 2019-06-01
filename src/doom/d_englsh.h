@@ -428,6 +428,7 @@ PRESSYN
 #define JHUSTR_23   "level 23: Dis"
 #define JHUSTR_24   "level 24: Military Base"
 #define JHUSTR_25   "level 25: Extra Map"
+#define JHUSTR_26   "level 26: Warrens"
 
 //
 // Chat macros
@@ -1308,6 +1309,7 @@ PRESSYN_RUS
 #define JHUSTR_23_RUS   "ehjdtym 23: lbn"                           // Уровень 23: Дит
 #define JHUSTR_24_RUS   "ehjdtym 24: djtyyfz ,fpf"                  // Уровень 24: Военная база
 #define JHUSTR_25_RUS   "ehjdtym 25: 'rcnhf-htfkmyjcnm"             // Уровень 25: Экстра-реальность
+#define JHUSTR_26_RUS   "ehjdtym 26: rhjkbxbq cfl"                  // Уровень 26: Кроличий сад
 
 //
 // Макросы для чата
@@ -2028,35 +2030,35 @@ PRESSYN_RUS
 #define J1TEXT_RUS              \
 "     ds cghfdbkbcm!\n"         \
 "\n"                            \
-"  lf;t cfvst e;fcf.obt\n"      \
+"  lf;t cfvst e;fcyst\n"      \
 "  gjhj;ltybz flf b b[\n"       \
-"  cvthnjyjcyst kjdeirb\n"      \
-"  yt cvjukb dfc jcnfyjdbnm>\n" \
+"  cvthntkmyst kjdeirb\n"      \
+"  yt jcnfyjdbkb dfc/\n"        \
 "\n"                            \
 "  ds d jxthtlyjq hfp\n"        \
 "  ghjzdbkb gjlkbyysq\n"        \
 "  uthjbpv b bcnbyyjt\n"        \
-"  ,tccnhfibt< ljrfpfd<\n"      \
+"  ,tccnhfibt^ ljrfpfd^\n"      \
 "  xnj ds - kexibq bp\n"        \
-"  kexib[!\n"                   \
-"\n"                            \
-"  gjplhfdkztv!"                \
+"  kexib[! gjplhfdkztv!"        \
 
-//     Вы справились!
+//     вы справились!
 //
-//  Даже самые ужасающие
+//  даже самые ужасные
 //  порождения ада и их
-//  смертоносные ловушки 
-//  не смогли вас остановить.
+//  смертельные ловушки 
+//  не остановили вас.
 //
-//  Вы в очередной раз
+//  вы в очередной раз
 //  проявили подлинный
 //  героизм и истинное
 //  бесстрашие, доказав,
 //  что вы - лучший из
-//  лучших!
-//  
-//  Поздравляем!
+//  лучших! поздравляем!
+//
+//  [JN] note: 
+//  STCFB047: / = .
+//  STCFB094: ^ = ,
 
 
 //

@@ -583,7 +583,9 @@ void R_ExecuteSetViewSize (void)
     else
     {
         scaledviewwidth = (setblocks*32)<<hires;
-        scaledviewheight = ((setblocks*168/10)&~7)<<hires;
+        // [JN] Jaguar: status bar is 40 px tall, instead of standard 32
+        scaledviewheight = ((setblocks * (gamemission == jaguar ?
+                                          163: 168) / 10) & ~7) << hires;
     }
 #endif
 

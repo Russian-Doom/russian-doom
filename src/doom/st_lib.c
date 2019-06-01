@@ -114,7 +114,7 @@ STlib_drawNum
     // clear the area
     x = n->x - numdigits*w;
 
-    if (n->y - ST_Y < 0)
+    if (n->y - (gamemission == jaguar ? ST_Y_JAG : ST_Y) < 0)
 	I_Error("drawNum: n->y - ST_Y < 0");
 
 #ifdef WIDESCREEN
@@ -122,7 +122,8 @@ STlib_drawNum
 #else
     if (screenblocks < 11 || automapactive)
 #endif
-    V_CopyRect(x, n->y - ST_Y, st_backing_screen, w*numdigits, h, x, n->y);
+    V_CopyRect(x, n->y - (gamemission == jaguar ? ST_Y_JAG : ST_Y), 
+                          st_backing_screen, w*numdigits, h, x, n->y);
 
     // if non-number, do not draw it
     if (num == 1994)
@@ -235,7 +236,7 @@ STlib_updateMultIcon
 	    w = SHORT(mi->p[mi->oldinum]->width);
 	    h = SHORT(mi->p[mi->oldinum]->height);
 
-	    if (y - ST_Y < 0)
+	    if (y - (gamemission == jaguar ? ST_Y_JAG : ST_Y) < 0)
 		I_Error("updateMultIcon: y - ST_Y < 0");
 
 #ifdef WIDESCREEN
@@ -243,7 +244,8 @@ STlib_updateMultIcon
 #else
         if (screenblocks < 11 || automapactive)
 #endif
-	    V_CopyRect(x, y-ST_Y, st_backing_screen, w, h, x, y);
+	    V_CopyRect(x, y - (gamemission == jaguar ? ST_Y_JAG : ST_Y),
+                           st_backing_screen, w, h, x, y);
 	}
 	V_DrawPatch(mi->x, mi->y, mi->p[*mi->inum]);
 	mi->oldinum = *mi->inum;
@@ -289,7 +291,7 @@ STlib_updateBinIcon
 	w = SHORT(bi->p->width);
 	h = SHORT(bi->p->height);
 
-	if (y - ST_Y < 0)
+    if (y - (gamemission == jaguar ? ST_Y_JAG : ST_Y) < 0)
 	    I_Error("updateBinIcon: y - ST_Y < 0");
 
 	if (*bi->val)
@@ -300,7 +302,8 @@ STlib_updateBinIcon
 #else
         if (screenblocks < 11 || automapactive)
 #endif
-	    V_CopyRect(x, y-ST_Y, st_backing_screen, w, h, x, y);
+	    V_CopyRect(x, y - (gamemission == jaguar ? ST_Y_JAG : ST_Y),
+                           st_backing_screen, w, h, x, y);
 
 	bi->oldval = *bi->val;
     }

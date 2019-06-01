@@ -44,6 +44,11 @@
 
 #include "jn.h"
 
+// [JN] Jaguar: prototypes
+void WI_drawStatsJaguar(void);
+void WI_updateStatsJaguar(void);
+extern void M_WriteTextBig();
+extern void M_WriteTextBigCentered();
 
 //
 // Data needed to add patches to full screen intermission pics.
@@ -793,8 +798,8 @@ void WI_drawShowNextLoc(void)
         return;             // ... and don't go any farther.
     }
     
-    // [JN] Atari Jaguar: don't try to load MAP24 after ending MAP23
-    if (gamemission == jaguar && gamemap == 23)
+    // [JN] Jaguar: do not erase stats, draw everything in one screen.
+    if (gamemission == jaguar)
     {
         return;
     }
@@ -1327,6 +1332,12 @@ void WI_initStats(void)
 
 void WI_updateStats(void)
 {
+    if (gamemission == jaguar)
+    {
+        WI_updateStatsJaguar();
+        return;
+    }
+
     WI_updateAnimatedBack();
 
     if (acceleratestage && sp_state != 10)
@@ -1433,6 +1444,12 @@ void WI_updateStats(void)
 void WI_drawStats(void)
 {
     int lh;	// line height
+
+    if (gamemission == jaguar)
+    {
+        WI_drawStatsJaguar();
+        return;
+    }
 
     lh = (3*SHORT(num[0]->height))/2;
 
@@ -1906,3 +1923,234 @@ void WI_Start(wbstartstruct_t* wbstartstruct)
     WI_initStats();
 }
 
+
+// =============================================================================
+//
+// [JN] Jaguar Doom code
+//
+// =============================================================================
+
+// 
+// Level names for Jaguar, used on intermission screen
+// 
+
+char *LevelNamesJaguar[] = {
+    "",
+    "Hangar",
+    "Plant",
+    "Toxin Refinery",
+    "Command Control",
+    "Phobos Lab",
+    "Central Processing",
+    "Computer Station",
+    "Phobos Anomaly",
+    "Deimos Anomaly",
+    "Containment Area",
+    "Refinery",
+    "Deimos Lab",
+    "Command Center",
+    "Halls of the Damned",
+    "Spawning Vats",
+    "Tower of Babel",
+    "Hell Keep",
+    "Pandemonium",
+    "House of Pain",
+    "Unholy Cathedral",
+    "Mt. Erebus",
+    "Limbo",
+    "Dis",
+    "Military Base",
+    "Extra Map",
+    "Warrens",
+};
+
+char *LevelNamesJaguar_Russian[] = {
+    "",
+    "Fyufh",                        // Ангар
+    "\"ktrnhjcnfywbz",              // Электростанция
+    "Pfdjl gj gththf,jnrt",         // Завод по переработке
+    "Rjvfylysq geyrn",              // Командный пункт
+    "Kf,jhfnjhbz yf Aj,jct",        // Лаборатория на Фобосе
+    "Geyrn j,hf,jnrb",              // Пункт обработки
+    "Dsxbckbntkmysq wtynh",         // Вычислительный центр
+    "Fyjvfkbz yf Aj,jct",           // Аномалия на Фобосе
+    "Fyjvfkbz yf Ltqvjct",          // Аномалия на Деймосе
+    "{hfybkbot",                    // Хранилище
+    "Jxbcnbntkmysq pfdjl",          // Очистительный завод
+    "Kf,-hbz yf Ltqvjct",           // Лаб-рия на Деймосе
+    "Rjvfylysq wtynh",              // Командный центр
+    "Pfks ghjrkzns[",               // Залы проклятых
+    "Ythtcnbkbot",                  // Нерестилище
+    "Dfdbkjycrfz ,fiyz",            // Вавилонская башня
+    "Rhtgjcnm Flf",                 // Крепость Ада
+    "Gfyltvjybq",                   // Пандемоний
+    "Ljv ,jkb",                     // Дом боли
+    "Ytxtcnbdsq cj,jh",             // Нечестивый собор
+    "Ujhf \"ht,",                   // Гора Эреб
+    "Kbv,",                         // Лимб
+    "Lbn",                          // Дит
+    "Djtyyfz ,fpf",                 // Военная база
+    "\"rcnhf-htfkmyjcnm",           // Экстра-реальность
+    "Rhjkbxbq cfl",                 // Кроличий сад
+};
+
+
+// -----------------------------------------------------------------------------
+// [JN] WI_updateStatsJaguar
+// Emulates Jaguar intermission screen
+// -----------------------------------------------------------------------------
+
+void WI_updateStatsJaguar(void)
+{
+    if (acceleratestage && sp_state != 10)
+    {
+        acceleratestage = 0;
+        cnt_kills[0] = (plrs[me].skills * 100) / wbs->maxkills;
+        cnt_items[0] = (plrs[me].sitems * 100) / wbs->maxitems;
+        cnt_secret[0] = (plrs[me].ssecret * 100) / wbs->maxsecret;
+        cnt_time = plrs[me].stime / TICRATE;
+        sp_state = 10;
+    }
+
+    // Count everything simultaneously:
+    if (sp_state == 2)
+    {
+        cnt_kills[0] += 2;
+        cnt_items[0] += 2;
+        cnt_secret[0] += 2;
+        cnt_time += 4;  // Count time 2x faster
+
+        // Don't go higher than 100%
+        if (cnt_kills[0] >= (plrs[me].skills * 100) / wbs->maxkills)
+            cnt_kills[0] = (plrs[me].skills * 100) / wbs->maxkills;
+
+        if (cnt_items[0] >= (plrs[me].sitems * 100) / wbs->maxitems)
+            cnt_items[0] = (plrs[me].sitems * 100) / wbs->maxitems;
+
+        if (cnt_secret[0] >= (plrs[me].ssecret * 100) / wbs->maxsecret)
+            cnt_secret[0] = (plrs[me].ssecret * 100) / wbs->maxsecret;
+
+        if (cnt_time >= plrs[me].stime / TICRATE)
+            cnt_time = plrs[me].stime / TICRATE;
+
+        // Now, if all countings performed, ready to go to next level.
+        // If not performed, i.e. still counting, pressing 'use' will
+        // finish counting and allows to go to next level. Any questions?
+        if (cnt_kills[0] == (plrs[me].skills * 100) / wbs->maxkills
+        &&  cnt_items[0] == (plrs[me].sitems * 100) / wbs->maxitems
+        &&  cnt_secret[0] == (plrs[me].ssecret * 100) / wbs->maxsecret
+        &&  cnt_time == plrs[me].stime / TICRATE)
+        {
+            sp_state = 10;
+        }
+    }
+
+    else if (sp_state == 10)
+    {
+        if (acceleratestage)
+        {
+            // Feedback sound
+            S_StartSound(0, sfx_sgcock);
+            WI_initNoState();
+        }
+    }
+    else if (sp_state & 1)
+    {
+        if (!--cnt_pause)
+        {
+            sp_state++;
+            cnt_pause = 1;
+        }
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// [JN] WI_drawStatsJaguar
+// Emulates Jaguar intermission screen
+// -----------------------------------------------------------------------------
+
+void WI_drawStatsJaguar(void)
+{
+    int lh = (3*SHORT(num[0]->height))/2;   // line height
+
+    WI_slamBackground();
+
+    // Finished level stuff
+    if (wbs->last < NUMCMAPS)
+    {
+        // Write level name
+        M_WriteTextBigCentered (2, (english_language ? 
+                                    LevelNamesJaguar[gamemap] :
+                                    LevelNamesJaguar_Russian[gamemap]));
+        
+        // Write "Finished" | "уровень завершен"
+        M_WriteTextBigCentered (20, english_language ? 
+                                    "Finished" : 
+                                    "ehjdtym pfdthity");
+    }
+
+    // Kills | Враги
+    if (english_language)
+    M_WriteTextBig(71 + ORIGWIDTH_DELTA, 50, "Kills");
+    else
+    M_WriteTextBig(80 + ORIGWIDTH_DELTA, 50, "Dhfub");
+
+    WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
+
+    // Items | Предметы
+    if (english_language)
+    M_WriteTextBig(66 + ORIGWIDTH_DELTA, 68, "Items");
+    else
+    M_WriteTextBig(32 + ORIGWIDTH_DELTA, 68, "Ghtlvtns");
+
+    WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
+
+    // Secrets | Тайники
+    if (english_language)
+    M_WriteTextBig(30 + ORIGWIDTH_DELTA, 86, "Secrets");
+    else
+    M_WriteTextBig(45 + ORIGWIDTH_DELTA, 86, "Nfqybrb");
+
+    WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
+
+    // Time
+    if (english_language)
+    M_WriteTextBig(74 + ORIGWIDTH_DELTA, 113, "Time");
+    else
+    M_WriteTextBig(77 + ORIGWIDTH_DELTA, 113, "Dhtvz");
+
+    WI_drawTime(ORIGWIDTH - SP_STATSX, SP_STATSY+4*lh-8+2, cnt_time, true);
+
+    // Draw total times only after finishing last level
+    if (gamemap == 23)
+    {
+        // [crispy] draw total time after level time and par time
+        const int ttime = wbs->totaltimes / TICRATE;
+
+        // Total | Итог
+        if (english_language)
+        M_WriteTextBig(59 + ORIGWIDTH_DELTA, 131, "Total");
+        else
+        M_WriteTextBig(95 + ORIGWIDTH_DELTA, 131, "Bnju");
+        
+        // Show total time only after level time is counted
+        if (cnt_time == plrs[me].stime / TICRATE)
+        WI_drawTime(ORIGWIDTH - SP_STATSX, SP_STATSY+5*lh-8+2, ttime, false);
+    }
+
+    // Draws which level you are entering...
+    // Note: do not draw "Entering Military Base" after finishing map 23
+    if (gamemap != 23)
+    {
+        // Write "Entering" | "загружается уровень"
+        M_WriteTextBigCentered (146, english_language ? 
+                                     "Entering" :
+                                     "pfuhe;ftncz ehjdtym");
+
+        // Write next level name
+        M_WriteTextBigCentered (164, (english_language ? 
+                                    LevelNamesJaguar[wminfo.next+1] :
+                                    LevelNamesJaguar_Russian[wminfo.next+1]));
+    }
+}

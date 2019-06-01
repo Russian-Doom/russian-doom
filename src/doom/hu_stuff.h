@@ -32,7 +32,7 @@
 
 // [JN] Big STCFB font
 #define HU_FONTSTART2   '!'	// the first font characters
-#define HU_FONTEND2     'z'	// the last font characters
+#define HU_FONTEND2     '}'	// the last font characters
 #define HU_FONTSIZE2    (HU_FONTEND2 - HU_FONTSTART2 + 1)
 
 // [JN] Definitions of small gray font (note: this is not full array)

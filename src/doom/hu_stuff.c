@@ -76,9 +76,12 @@
 #define HU_TITLE_CHEX   (mapnames_chex[(gameepisode-1)*9+gamemap-1])
 #define HU_TITLEHEIGHT  1
 #define HU_TITLEX       0
-// [JN] Ранее HU_TITLEY был равен 167. 
-// Смещение на 1 px вверх, что бы буквы "Щ" и "Ц" не наезжали на HUD
-#define HU_TITLEY       (166 - SHORT(hu_font[0]->height))
+// [JN] Initially HU_TITLEY is 167. 
+// Moved a bit higher for possible non-standard font compatibility,
+// and for preventing text shadows being dropped on status bar.
+#define HU_TITLEY       (165 - SHORT(hu_font[0]->height))
+// [JN] Jaguar: draw level name slightly higher
+#define HU_TITLEY_JAG   (158 - SHORT(hu_font[0]->height))
 
 #define HU_INPUTTOGGLE  't'
 #define HU_INPUTX       HU_MSGX
@@ -487,7 +490,8 @@ char* mapnames_commercial[] =
     JHUSTR_22,
     JHUSTR_23,
     JHUSTR_24,
-    JHUSTR_25
+    JHUSTR_25,
+    JHUSTR_26
 };
 
 char* mapnames_commercial_rus[] =
@@ -636,7 +640,8 @@ char* mapnames_commercial_rus[] =
     JHUSTR_22_RUS,
     JHUSTR_23_RUS,
     JHUSTR_24_RUS,
-    JHUSTR_25_RUS
+    JHUSTR_25_RUS,
+    JHUSTR_26_RUS
 };
 
 
@@ -717,10 +722,9 @@ void HU_Start(void)
 #endif
 
     // create the map title widget
-    // [JN] Place shadowed text 1px higher on automap for preventing shadow to be dropped on HUD
-    HUlib_initTextLine(&w_title, HU_TITLEX, (draw_shadowed_text && !vanillaparm) ?
-                                             HU_TITLEY-1 :
-                                             HU_TITLEY,                                             
+    HUlib_initTextLine(&w_title, HU_TITLEX, (gamemission == jaguar ?
+                                             HU_TITLEY_JAG :
+                                             HU_TITLEY),
                                              hu_font, HU_FONTSTART);
 
     HUlib_initTextLine(&w_kills,
@@ -769,7 +773,7 @@ void HU_Start(void)
         break;
 
         case jaguar:
-        if (gamemap <= 25)
+        if (gamemap <= 26)
         s = english_language ? HU_TITLEJ : HU_TITLEJ_RUS;
         else
         s = english_language ? HU_TITLE2 : HU_TITLE2_RUS;

@@ -67,6 +67,7 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch);
 void V_DrawXlaPatch(int x, int y, patch_t * patch);     // villsa [STRIFE]
 void V_DrawPatchDirect(int x, int y, patch_t *patch);
 void V_DrawPatchUnscaled(int x, int y, patch_t *patch);
+void V_DrawPatchFinale(int x, int y, patch_t *patch);
 
 // Draw a linear block of pixels into the view buffer.
 

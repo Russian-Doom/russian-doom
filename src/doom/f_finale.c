@@ -47,6 +47,7 @@ typedef enum
     F_STAGE_TEXT,
     F_STAGE_ARTSCREEN,
     F_STAGE_CAST,
+    F_STAGE_CAST_JAGUAR,
 } finalestage_t;
 
 // ?
@@ -146,6 +147,12 @@ void    F_CastTicker (void);
 boolean F_CastResponder (event_t *ev);
 void    F_CastDrawer (void);
 
+// [JN] Jaguar: prototypes
+void F_TextWriteJaguar (void);
+void F_CastTickerJaguar (void);
+void F_CastPrintJaguar (char *text);
+void F_CastDrawerJaguar (void);
+
 
 //
 // F_StartFinale
@@ -204,7 +211,7 @@ void F_StartFinale (void)
 
 boolean F_Responder (event_t *event)
 {
-    if (finalestage == F_STAGE_CAST)
+    if (finalestage == F_STAGE_CAST || finalestage == F_STAGE_CAST_JAGUAR)
     return F_CastResponder (event);
 
     return false;
@@ -245,10 +252,10 @@ void F_Ticker (void)
                 F_StartCast ();
             }  
             
-            // [JN] Atari Jaguar: don't go farther than MAP23.
+            // [JN] Jaguar: after beating MAP23, don't go any farther
             else if (gamemission == jaguar && gamemap == 23)
             {
-                return;
+                F_StartCast ();
             }
   
             else if (gamemap == 30)
@@ -269,6 +276,11 @@ void F_Ticker (void)
     if (finalestage == F_STAGE_CAST)
     {
         F_CastTicker ();
+        return;
+    }
+    else if (finalestage == F_STAGE_CAST_JAGUAR)
+    {
+        F_CastTickerJaguar ();
         return;
     }
 
@@ -294,6 +306,7 @@ void F_Ticker (void)
 
 #include "hu_stuff.h"
 extern patch_t *hu_font[HU_FONTSIZE];
+extern patch_t *hu_font_big[HU_FONTSIZE];
 
 
 void F_TextWrite (void)
@@ -307,6 +320,12 @@ void F_TextWrite (void)
     int     c;
     int     cx;
     int     cy;
+
+    if (gamemission == jaguar)
+    {
+        F_TextWriteJaguar();
+        return;
+    }
 
     // erase the entire screen to a tiled background
     src = W_CacheLumpName ( finaleflat , PU_CACHE);
@@ -461,6 +480,31 @@ castinfo_t	castorder_rus[] = {
     {NULL,0}
 };
 
+// [JN] Jaguar: own casting order
+castinfo_t	castorder_jaguar[] = {
+    {CC_ZOMBIE,  MT_POSSESSED},
+    {CC_SHOTGUN, MT_SHOTGUY},
+    {CC_IMP,     MT_TROOP},
+    {CC_DEMON,   MT_SERGEANT},
+    {CC_LOST,    MT_SKULL},
+    {CC_CACO,    MT_HEAD},
+    {CC_BARON,   MT_BRUISER},
+    {CC_HERO,    MT_PLAYER},
+    {NULL,0}
+};
+
+castinfo_t	castorder_jaguar_russian[] = {
+    {CC_ZOMBIE_RUS,  MT_POSSESSED},
+    {CC_SHOTGUN_RUS, MT_SHOTGUY},
+    {CC_IMP_RUS,     MT_TROOP},
+    {CC_DEMON_RUS,   MT_SERGEANT},
+    {CC_LOST_RUS,    MT_SKULL},
+    {CC_CACO_RUS,    MT_HEAD},
+    {CC_BARON_RUS,   MT_BRUISER},
+    {CC_HERO_RUS,    MT_PLAYER},
+    {NULL,0}
+};
+
 
 int         castnum;
 int         casttics;
@@ -478,14 +522,26 @@ void F_StartCast (void)
 {
     wipegamestate = -1; // force a screen wipe
     castnum = 0;
+
+    if (gamemission == jaguar)
+    caststate = &states[mobjinfo[castorder_jaguar[castnum].type].seestate];
+    else
     caststate = &states[mobjinfo[castorder[castnum].type].seestate];
+
     casttics = caststate->tics;
     castdeath = false;
+
+    if (gamemission == jaguar)
+    finalestage = F_STAGE_CAST_JAGUAR;
+    else
     finalestage = F_STAGE_CAST;
+
     castframes = 0;
     castonmelee = 0;
     castattacking = false;
-    S_ChangeMusic(mus_evil, true);
+    S_ChangeMusic((gamemission == jaguar ? 
+                   mus_adrian : // [JN] Jaguar: Unreleased Doom MIDI: un20.mid
+                   mus_evil), true);
 }
 
 
@@ -613,13 +669,26 @@ boolean F_CastResponder (event_t* ev)
 
     // go into death frame
     castdeath = true;
+
+    if (gamemission == jaguar)
+    caststate = &states[mobjinfo[castorder_jaguar[castnum].type].deathstate];
+    else
     caststate = &states[mobjinfo[castorder[castnum].type].deathstate];
+
     casttics = caststate->tics;
     castframes = 0;
     castattacking = false;
 
-    if (mobjinfo[castorder[castnum].type].deathsound)
-    S_StartSound (NULL, mobjinfo[castorder[castnum].type].deathsound);
+    if (gamemission == jaguar)
+    {
+        if (mobjinfo[castorder_jaguar[castnum].type].deathsound)
+        S_StartSound (NULL, mobjinfo[castorder_jaguar[castnum].type].deathsound);
+    }
+    else
+    {
+        if (mobjinfo[castorder[castnum].type].deathsound)
+        S_StartSound (NULL, mobjinfo[castorder[castnum].type].deathsound);
+    }
 
     return true;
 }
@@ -932,6 +1001,10 @@ void F_Drawer (void)
         F_CastDrawer();
         break;
 
+        case F_STAGE_CAST_JAGUAR:
+        F_CastDrawerJaguar();
+        break;
+
         case F_STAGE_TEXT:
         F_TextWrite();
         break;
@@ -942,3 +1015,279 @@ void F_Drawer (void)
     }
 }
 
+
+// =============================================================================
+//
+// [JN] Jaguar Doom code
+//
+// =============================================================================
+
+
+// -----------------------------------------------------------------------------
+// [JN] F_TextWriteJaguar
+// -----------------------------------------------------------------------------
+
+void F_TextWriteJaguar (void)
+{
+    byte       *src, *dest;
+    int         x, y, w, c, cx, cy;
+    signed int  count;
+    char       *ch;
+
+    // erase the entire screen to a tiled background
+    src = W_CacheLumpName(finaleflat, PU_CACHE);
+    dest = I_VideoBuffer;
+
+    for (y=0 ; y<SCREENHEIGHT ; y++)
+    {
+        for (x=0 ; x<SCREENWIDTH/64 ; x++)
+        {
+            memcpy (dest, src+((y&63)<<6), 64);
+            dest += 64;
+        }
+        if (SCREENWIDTH&63)
+        {
+            memcpy (dest, src+((y&63)<<6), SCREENWIDTH&63);
+            dest += (SCREENWIDTH&63);
+        }
+    }
+
+    V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
+
+    if (gamemap == 23)  // Leaving MAP23, end game. Special background.
+    {
+#ifdef WIDESCREEN
+        // Clean up remainings of the wide screen before drawing
+        V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
+        V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
+    }
+
+    // draw some of the text onto the screen
+    cx = 10;
+    cy = 10;
+    ch = finaletext;
+
+    count = ((signed int) finalecount - 10) / TEXTSPEED;
+
+    if (count < 0)
+	count = 0;
+
+    for ( ; count ; count-- )
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        if (c == '\n')
+        {
+            cx = 10;
+            cy += 14;
+            continue;
+        }
+
+        c = c - HU_FONTSTART2;
+        if (c < 0 || c> HU_FONTSIZE2)
+        {
+            cx += 7;
+            continue;
+        }
+
+        w = SHORT (hu_font_big[c]->width);
+
+        if (cx+w > ORIGWIDTH)
+	    break;
+
+        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font_big[c]);
+
+        cx+=w;
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// [JN] F_CastTickerJaguar
+// -----------------------------------------------------------------------------
+
+void F_CastTickerJaguar (void)
+{
+    int st;
+    int sfx;
+
+    if (--casttics > 0)
+    return;			// not time to change state yet
+
+    if (caststate->tics == -1 || caststate->nextstate == S_NULL)
+    {
+        // switch from deathstate to next monster
+        castnum++;
+        castdeath = false;
+
+        if (castorder_jaguar[castnum].name == NULL)
+        castnum = 0;
+
+        if (mobjinfo[castorder_jaguar[castnum].type].seesound)
+        S_StartSound (NULL, mobjinfo[castorder_jaguar[castnum].type].seesound);
+
+        caststate = &states[mobjinfo[castorder_jaguar[castnum].type].seestate];
+        castframes = 0;
+    }
+    else
+    {
+        // just advance to next state in animation
+        if (caststate == &states[S_PLAY_ATK1])
+        goto stopattack;	// Oh, gross hack!
+
+        st = caststate->nextstate;
+        caststate = &states[st];
+        castframes++;
+
+        // sound hacks....
+        switch (st)
+        {
+            case S_PLAY_ATK1:	sfx = sfx_dshtgn; break;
+            case S_POSS_ATK2:	sfx = sfx_pistol; break;
+            case S_SPOS_ATK2:	sfx = sfx_shotgn; break;
+
+            case S_TROO_ATK3:	sfx = sfx_claw; break;
+            case S_SARG_ATK2:	sfx = sfx_sgtatk; break;
+            case S_BOSS_ATK2:
+            case S_HEAD_ATK2:	sfx = sfx_firsht; break;
+            case S_SKULL_ATK2:	sfx = sfx_sklatk; break;
+
+            default: sfx = 0; break;
+        }
+		
+        if (sfx)
+        S_StartSound (NULL, sfx);
+    }
+	
+    if (castframes == 12)
+    {
+        // go into attack frame
+        castattacking = true;
+
+        if (castonmelee)
+        caststate=&states[mobjinfo[castorder_jaguar[castnum].type].meleestate];
+        else
+        caststate=&states[mobjinfo[castorder_jaguar[castnum].type].missilestate];
+
+        castonmelee ^= 1;
+        if (caststate == &states[S_NULL])
+        {
+            if (castonmelee)
+            caststate = &states[mobjinfo[castorder_jaguar[castnum].type].meleestate];
+            else
+            caststate = &states[mobjinfo[castorder_jaguar[castnum].type].missilestate];
+        }
+    }
+
+    if (castattacking)
+    {
+        if (castframes == 24 ||	caststate == &states[mobjinfo[castorder_jaguar[castnum].type].seestate] )
+        {
+            stopattack:
+            castattacking = false;
+            castframes = 0;
+            caststate = &states[mobjinfo[castorder_jaguar[castnum].type].seestate];
+        }
+    }
+
+    casttics = caststate->tics;
+
+    if (casttics == -1)
+    casttics = 15;
+}
+
+
+// -----------------------------------------------------------------------------
+// F_CastPrint
+// -----------------------------------------------------------------------------
+
+void F_CastPrintJaguar (char *text)
+{
+    int	     c, cx, w, width;
+    char    *ch;
+
+    // find width
+    ch = text;
+    width = 0;
+
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = tolower(c) - HU_FONTSTART2;
+
+        if (c < 0 || c> HU_FONTSIZE2)
+        {
+            width += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big[c]->width);
+        width += w;
+    }
+
+    // draw it
+    cx = ORIGWIDTH/2-width/2;
+    ch = text;
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = tolower(c) - HU_FONTSTART2;
+
+        if (c < 0 || c> HU_FONTSIZE2)
+        {
+            cx += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big[c]->width);
+
+        V_DrawShadowedPatchDoom(cx, 15, hu_font_big[c]);
+
+        cx+=w;
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// F_CastDrawerJaguar
+// -----------------------------------------------------------------------------
+
+void F_CastDrawerJaguar (void)
+{
+    spritedef_t     *sprdef;
+    spriteframe_t   *sprframe;
+    int              lump;
+    patch_t         *patch;
+
+#ifdef WIDESCREEN
+    // Clean up remainings of the wide screen before drawing
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+#endif
+
+    // erase the entire screen to a background
+    V_DrawPatch (0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("VICPIC"), PU_CACHE));
+
+    F_CastPrintJaguar (DEH_String(english_language ?
+                                  castorder_jaguar[castnum].name :
+                                  castorder_jaguar_russian[castnum].name));
+    
+    // draw the current frame in the middle of the screen
+    sprdef = &sprites[caststate->sprite];
+    sprframe = &sprdef->spriteframes[ caststate->frame & FF_FRAMEMASK];
+    lump = sprframe->lump[0];
+    patch = W_CacheLumpNum (lump+firstspritelump, PU_CACHE);
+
+    V_DrawPatchFinale(80 + (ORIGWIDTH_DELTA/2), 90, patch);
+}

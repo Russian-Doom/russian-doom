@@ -473,9 +473,6 @@ void M_WriteTextBig (int x, int y, char *string)
             continue;
         }
 
-        // Spacing between characters
-        // Note: DON'T use toupper here, it capitalizes font.
-        // c = toupper(c) - HU_FONTSTART2;
         c = c - HU_FONTSTART2;
         if (c < 0 || c>= HU_FONTSIZE2)
         {
@@ -522,7 +519,7 @@ void M_WriteTextBigCentered (int y, char *string)
         if (!c)
         break;
 
-        c = toupper(c) - HU_FONTSTART2;
+        c = c - HU_FONTSTART2;
 
         if (c < 0 || c> HU_FONTSIZE2)
         {
@@ -544,7 +541,7 @@ void M_WriteTextBigCentered (int y, char *string)
         if (!c)
         break;
 
-        c = toupper(c) - HU_FONTSTART2;
+        c = c - HU_FONTSTART2;
 
         if (c < 0 || c> HU_FONTSIZE2)
         {
@@ -765,7 +762,7 @@ menuitem_t RD_Options_Menu[]=
     {1,"Controls",  M_RD_Choose_Controls,       'c'},
     {1,"Gameplay",  M_RD_Choose_Gameplay_1,     'g'},
     {1,"End Game",  M_EndGame,                  'e'},
-    {1,"Back to defaults", M_RD_BackToDefaults, 'b'},
+    {1,"Reset settings", M_RD_BackToDefaults,   'r'},
     {-1,"",0,'\0'}
 };
 
@@ -1814,8 +1811,22 @@ void M_RD_Choose_Gameplay_4(int choice)
                     &RD_Gameplay_Def_4_Rus);
 }
 
+void M_RD_Jaguar_Menu_Background(void)
+{
+    if (gamemission != jaguar)
+    return;
+
+    inhelpscreens = true;
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+    V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("INTERPIC"), 
+                                                        PU_CACHE));
+}
+
 void M_RD_Draw_Gameplay_1(void)
 {   
+    // Jaguar: hide game background, don't draw lines over the HUD
+    M_RD_Jaguar_Menu_Background();
+
     if (english_language)
     M_WriteTextBigCentered(10, "GAMEPLAY FEATURES");
     else
@@ -1908,6 +1919,9 @@ void M_RD_Draw_Gameplay_1(void)
 
 void M_RD_Draw_Gameplay_2(void)
 {   
+    // Jaguar: hide game background, don't draw lines over the HUD
+    M_RD_Jaguar_Menu_Background();
+
     if (english_language)
     M_WriteTextBigCentered(10, "GAMEPLAY FEATURES");
     else
@@ -2002,6 +2016,9 @@ void M_RD_Draw_Gameplay_2(void)
 
 void M_RD_Draw_Gameplay_3(void)
 {   
+    // Jaguar: hide game background, don't draw lines over the HUD
+    M_RD_Jaguar_Menu_Background();
+
     if (english_language)
     M_WriteTextBigCentered(10, "GAMEPLAY FEATURES");
     else
@@ -2102,6 +2119,9 @@ void M_RD_Draw_Gameplay_3(void)
 
 void M_RD_Draw_Gameplay_4(void)
 {   
+    // Jaguar: hide game background, don't draw lines over the HUD
+    M_RD_Jaguar_Menu_Background();
+
     if (english_language)
     M_WriteTextBigCentered(10, "GAMEPLAY FEATURES");
     else
@@ -4219,7 +4239,9 @@ void M_Drawer (void)
         if (whichSkull == 0)
         dp_translation = cr[CR_DARKRED];
 
+        // [JN] Jaguar: no font color translation, draw SKULL1 as an empty symbol.
         M_WriteTextSmall(x + SKULLXOFF + 24, currentMenu->y + itemOn*LINEHEIGHT_SML,
+                                             gamemission == jaguar && whichSkull == 0 ? " " :
                                              english_language ? ">" : ")");
 
         // [JN] Clear translation

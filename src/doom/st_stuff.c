@@ -66,6 +66,10 @@
 #include "jn.h"
 
 
+// [JN] Jaguar: prototypes
+void ST_drawWidgetsJaguar (boolean refresh);
+void ST_createWidgetsJaguar (void);
+
 //
 // STATUS BAR DATA
 //
@@ -374,6 +378,9 @@ static st_number_t      w_ready;
  // in deathmatch only, summary of frags stats
 static st_number_t      w_frags;
 
+// [JN] Jaguar: current map widget
+static st_number_t w_currentmap;
+
 // [JN] Press Beta: artifacts widget
 static st_number_t      w_artifacts;
 
@@ -495,6 +502,10 @@ void ST_refreshBackground(void)
 
         V_RestoreBuffer();
 
+        // [JN] Jaguar: use different height of status bar
+        if (gamemission == jaguar)
+        V_CopyRect(ST_X, 0, st_backing_screen, ST_WIDTH, ST_HEIGHT_JAG, ST_X, ST_Y_JAG);
+        else
         V_CopyRect(ST_X, 0, st_backing_screen, ST_WIDTH, ST_HEIGHT, ST_X, ST_Y);
     }
 }
@@ -592,10 +603,13 @@ boolean ST_Responder (event_t* ev)
 
                 if (plyr->cheats & CF_GODMODE)
                 {
-                    if (plyr->mo)
-                    plyr->mo->health = 100;
-
-                    plyr->health = deh_god_mode_health;
+                    // [JN] Jaguar: no healing!
+                    if (gamemission != jaguar)
+                    {
+                        if (plyr->mo)
+                        plyr->mo->health = 100;
+                        plyr->health = deh_god_mode_health;
+                    }
                     plyr->message = DEH_String(english_language ? STSTR_DQDON : STSTR_DQDON_RUS);
                 }
                 else 
@@ -631,7 +645,13 @@ boolean ST_Responder (event_t* ev)
 
                 // [JN] ...и лишь затем пополняем боезапас.
                 for (i=0;i<NUMAMMO;i++)
+                {
+                    // [JN] Jaguar: happy 500 ammo for everything!
+                    if (gamemission == jaguar)
+                    plyr->ammo[i] = plyr->maxammo[i] = 500;
+                    else
                     plyr->ammo[i] = plyr->maxammo[i];
+                }
 
                 plyr->message = DEH_String(english_language ? STSTR_FAADDED : STSTR_FAADDED_RUS);
             }
@@ -665,7 +685,13 @@ boolean ST_Responder (event_t* ev)
 
                 // [JN] ...и лишь затем пополняем боезапас.
                 for (i=0;i<NUMAMMO;i++)
+                {
+                    // [JN] Jaguar: happy 500 ammo for everything!
+                    if (gamemission == jaguar)
+                    plyr->ammo[i] = plyr->maxammo[i] = 500;
+                    else
                     plyr->ammo[i] = plyr->maxammo[i];
+                }
 
                 for (i=0;i<NUMCARDS;i++)
                     plyr->cards[i] = true;
@@ -722,7 +748,9 @@ boolean ST_Responder (event_t* ev)
                     musnum = mus_runnin + (buf[0]-'0')*10 + buf[1]-'0' - 1;
 
                     // [crispy] prevent crash with IDMUS00
-                    if ((((buf[0]-'0')*10 + buf[1]-'0') > 35 || musnum < mus_runnin) && gameversion >= exe_doom_1_8)
+                    // [JN] Jaguar: do not try to play D_ROMER2 (map27) and higher
+                    if (((((buf[0]-'0')*10 + buf[1]-'0') > 35 || musnum < mus_runnin) && gameversion >= exe_doom_1_8)
+                    ||  ((((buf[0]-'0')*10 + buf[1]-'0') > 26 || musnum < mus_runnin) && gamemission == jaguar))
                         plyr->message = DEH_String(english_language ? STSTR_NOMUS : STSTR_NOMUS_RUS);
                     else
                         S_ChangeMusic(musnum, 1);
@@ -888,8 +916,8 @@ boolean ST_Responder (event_t* ev)
                 {
                     return false;
                 }
-                // [JN] Atari Jaguar: dont warp to map 26 and higher
-                if (map > 25 && gamemission == jaguar)
+                // [JN] Jaguar: dont warp to map 27 and higher
+                if (map > 26 && gamemission == jaguar)
                 {
                     return false;
                 }
@@ -1383,6 +1411,10 @@ void ST_updateWidgets(void)
             st_fragscount -= plyr->frags[i];
     }
 
+    // [JN] Jaguar: current map
+    if (gamemission == jaguar)
+    w_currentmap.data = gamemap;
+
     // [JN] Press Beta: artifacts counter routines
     if (gamemode == pressbeta)
     {   
@@ -1596,6 +1628,12 @@ static byte* ST_WidgetColor(int i)
 void ST_drawWidgets(boolean refresh)
 {
     int     i;
+
+    if (gamemission == jaguar)
+    {
+        ST_drawWidgetsJaguar(refresh);
+        return;
+    }
 
     // used by w_arms[] widgets
     st_armson = st_statusbaron && !deathmatch;
@@ -2258,7 +2296,12 @@ void ST_Start (void)
     ST_Stop();
 
     ST_initData();
+
+    if (gamemission == jaguar)
+    ST_createWidgetsJaguar();
+    else
     ST_createWidgets();
+
     st_stopped = false;
 }
 
@@ -2280,6 +2323,249 @@ void ST_Stop (void)
 void ST_Init (void)
 {
     ST_loadData();
-    st_backing_screen = (byte *) Z_Malloc((ST_WIDTH << hires) * (ST_HEIGHT << hires), PU_STATIC, 0);
+
+    // [JN] Jaguar: use different height of status bar
+
+    st_backing_screen = (byte *) Z_Malloc((ST_WIDTH << hires) *
+                                         ((gamemission == jaguar ? ST_HEIGHT_JAG : ST_HEIGHT) << hires),
+                                           PU_STATIC, 0);
 }
 
+
+// =============================================================================
+//
+// [JN] Jaguar Doom code
+//
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// [JN] ST_drawWidgetsJaguar
+// Widget drawing routines for Jaguar
+// -----------------------------------------------------------------------------
+
+void ST_drawWidgetsJaguar (boolean refresh)
+{
+    int i;
+    st_armson = st_statusbaron; // used by w_arms[] widgets
+
+#ifdef WIDESCREEN
+    // Wide screen: draw STBAR on "full screen" mode
+    if (screenblocks == 9 || screenblocks == 10)
+    {
+        V_DrawPatch(0 + ORIGWIDTH_DELTA, ST_Y_JAG, 
+                    W_CacheLumpName(DEH_String("STBAR"), PU_CACHE));
+    }
+
+    // Wide screen: Side bezel for reconstructed standard HUD
+    if (screenblocks == 9 || automapactive)
+    {
+        V_DrawPatch(0, 160, W_CacheLumpName(DEH_String("RDWBJGLF"), PU_CACHE));
+        V_DrawPatch(373, 160, W_CacheLumpName(DEH_String("RDWBJGRT"), PU_CACHE));
+    }
+#endif
+
+    STlib_updateNum(&w_ready, refresh);
+
+    // [crispy] draw "special widgets" in the Crispy HUD
+    if ((screenblocks == 11 || screenblocks == 12 || screenblocks == 13) 
+    && !automapactive)
+    {
+        // [crispy] draw berserk pack instead of no ammo if appropriate
+        if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
+        {
+            static patch_t *patch;
+
+            if (!patch)
+            {
+                const int lump = W_CheckNumForName(DEH_String("PSTRA0"));
+
+                if (lump >= 0)
+                patch = W_CacheLumpNum(lump, PU_STATIC);
+            }
+
+            if (patch)
+            {
+                // [crispy] (23,179) is the center of the Ammo widget
+                V_DrawPatch(ORIGWIDTH_DELTA + 
+                            23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
+                            179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
+                            patch);
+            }
+        }
+    }
+
+    // Signed Crispy HUD: no STBAR backbround, with player's face/background
+    if (screenblocks == 11 && !automapactive)
+    {
+        V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("STPBG"), PU_CACHE));
+    } 
+
+    // Signed Crispy HUD: no STBAR backbround, without player's 
+    // face/background. Also don't draw signs in automap.
+    if ((screenblocks == 11 || screenblocks == 12) && !automapactive)
+    {
+        // Don't draw ammo for fist and chainsaw
+        if (plyr->readyweapon != wp_fist && plyr->readyweapon != wp_chainsaw)
+        V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
+
+        //  Health, armor, ammo
+        V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
+    }
+
+    // Health and Armor widgets ------------------------------------------------
+#ifdef WIDESCREEN
+    STlib_updatePercent(&w_health, refresh || screenblocks == 9
+                                           || screenblocks == 10
+                                           || screenblocks == 11
+                                           || screenblocks == 12
+                                           || screenblocks == 13);
+
+    STlib_updatePercent(&w_armor, refresh  || screenblocks == 9
+                                           || screenblocks == 10
+                                           || screenblocks == 11
+                                           || screenblocks == 12
+                                           || screenblocks == 13);
+#else
+    STlib_updatePercent(&w_health, refresh || screenblocks == 11
+                                           || screenblocks == 12
+                                           || screenblocks == 13);
+
+    STlib_updatePercent(&w_armor, refresh  || screenblocks == 11
+                                           || screenblocks == 12
+                                           || screenblocks == 13);
+#endif
+
+    // ARMS widget -------------------------------------------------------------
+    for (i=0;i<6;i++)
+#ifdef WIDESCREEN
+    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 9
+                                             || screenblocks == 10
+                                             || screenblocks == 11
+                                             || screenblocks == 12
+                                             || screenblocks == 13);
+#else
+    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11
+                                             || screenblocks == 12
+                                             || screenblocks == 13);
+#endif
+
+    // Faces widet (don't draw in Traditional Crispy HUD / full screen) --------
+    if (screenblocks < 12 || automapactive)
+#ifdef WIDESCREEN
+    STlib_updateMultIcon(&w_faces, refresh || screenblocks == 9
+                                           || screenblocks == 10
+                                           || screenblocks == 11);
+#else
+    STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11);
+#endif
+
+    // Key boxes widget --------------------------------------------------------
+    for (i=0;i<3;i++)
+#ifdef WIDESCREEN
+    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 9
+                                                 || screenblocks == 10
+                                                 || screenblocks == 11
+                                                 || screenblocks == 12
+                                                 || screenblocks == 13);
+#else
+    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11
+                                                 || screenblocks == 12
+                                                 || screenblocks == 13);
+#endif
+
+    // Current map widget ------------------------------------------------------
+    STlib_updateNum(&w_currentmap, refresh);
+}
+
+
+// -----------------------------------------------------------------------------
+// [JN] ST_createWidgetsJaguar
+// Widget creating routines for Jaguar
+// -----------------------------------------------------------------------------
+
+void ST_createWidgetsJaguar(void)
+{
+    int i;
+
+    // ready weapon ammo
+    STlib_initNum(&w_ready,
+        51 + ORIGWIDTH_DELTA,
+        174,
+        tallnum,
+        &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
+        &st_statusbaron,
+        3);
+
+    // the last weapon type
+    w_ready.data = plyr->readyweapon; 
+
+    // health percentage
+    STlib_initPercent(&w_health,
+        104 + ORIGWIDTH_DELTA,
+        174,
+        tallnum,
+        &plyr->health,
+        &st_statusbaron,
+        tallpercent);
+
+    // weapons owned
+    for(i=0;i<6;i++)
+    {
+        STlib_initMultIcon(&w_arms[i],
+            ORIGWIDTH_DELTA + 249+(i%3)*12,
+            175+(i/3)*10,
+            arms[i],
+            &plyr->weaponowned[i+1],
+            &st_armson);
+    }
+
+    // faces
+    STlib_initMultIcon(&w_faces,
+        143 + ORIGWIDTH_DELTA,
+        166,
+        faces,
+        &st_faceindex,
+        &st_statusbaron);
+
+    // armor percentage - should be colored later
+    STlib_initPercent(&w_armor,
+        225 + ORIGWIDTH_DELTA,
+        174,
+        tallnum,
+        &plyr->armorpoints,
+        &st_statusbaron, tallpercent);
+
+    // keyboxes 0-2
+    // Blue
+    STlib_initMultIcon(&w_keyboxes[0],
+        124 + ORIGWIDTH_DELTA,
+        175,
+        keys,
+        &keyboxes[0],
+        &st_statusbaron);
+
+    // Yellow
+    STlib_initMultIcon(&w_keyboxes[1],
+        124 + ORIGWIDTH_DELTA,
+        187,
+        keys,
+        &keyboxes[1],
+        &st_statusbaron);
+
+    // Red
+    STlib_initMultIcon(&w_keyboxes[2],
+        124 + ORIGWIDTH_DELTA,
+        163,
+        keys,
+        &keyboxes[2],
+        &st_statusbaron);
+
+    // сurrent map
+    STlib_initNum(&w_currentmap,
+		  ORIGWIDTH_DELTA + (gamemap >= 10 ? 317 : 309),
+		  174,
+		  tallnum,
+		  &gamemap,
+		  &st_statusbaron,
+		  gamemap >= 10 ? 2 : 1);
+}

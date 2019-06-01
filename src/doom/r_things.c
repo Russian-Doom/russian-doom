@@ -989,10 +989,20 @@ void R_DrawPSprite (pspdef_t* psp)
 #ifdef WIDESCREEN
     // [JN] Wide screen: weapon positioning for HUD and non-HUD view
     if (screenblocks <= 10)
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+(FRACUNIT*16)+(FRACUNIT/4)-(psp_sy-spritetopoffset[lump]);
+    {
+        // [JN] Jaguar weapon placement: 10 px higher above STBAR, not in full screen mode.
+        if (gamemission == jaguar)
+        vis->texturemid = (BASEYCENTER<<FRACBITS) + FRACUNIT/4 + FRACUNIT*23 - (psp_sy-spritetopoffset[lump]);
+        else
+        vis->texturemid = (BASEYCENTER<<FRACBITS)+(FRACUNIT*16)+(FRACUNIT/4)-(psp_sy-spritetopoffset[lump]);
+    }
     else
     vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
 #else
+    // [JN] Jaguar weapon placement: 10 px higher above STBAR, not in full screen mode.
+    if (gamemission == jaguar && screenblocks <= 10)
+    vis->texturemid = (BASEYCENTER<<FRACBITS) + FRACUNIT/4 + FRACUNIT*10 - (psp_sy-spritetopoffset[lump]);
+    else
     vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
 #endif
     vis->x1 = x1 < 0 ? 0 : x1;

@@ -1590,13 +1590,6 @@ static int npars[9] =
     75, 105, 120, 105, 210, 105, 165, 105, 135
 };
 
-// [JN] Atari Jaguar Par Times
-static int jpars[24] =
-{ 
-    30, 75, 120,  90, 165, 180, 180, 30,    // Cluster 1
-    90, 90,  90, 120,  90, 360, 240, 30,    // Cluster 2
-    90, 90, 150,  90,  90, 165, 30, 165     // Cluster 3
-}; 
 
 
 //
@@ -1715,21 +1708,37 @@ void G_DoCompleted (void)
     else if (gamemission == jaguar)
     {
         if (secretexit)
-        switch(gamemap)
-        {
-            case 3:  wminfo.next = 23;  // [JN] Sectet exit from Toxin Refinery to Military Base
-            case 13: wminfo.next = 24;  // [JN] Sectet exit from Command Center to Extra Map
-            break;
-        }
+	    switch(gamemap)
+	    {
+	      // Secret exit from Toxin Refinery (3) to Military Base (24-1)
+	      case 3:  wminfo.next = 23;
+          break;
 
+	      // Secret exit from Command Controls (13) to Extra Map (25-1)
+	      case 13:  wminfo.next = 24;
+	      break;
+
+	      // Secret exit from Mt. Erebus (21) to Warrens (26-1)
+	      case 21:  wminfo.next = 25;
+	      break;
+	    }
         else
-        switch(gamemap)
-        {
-            case 24: wminfo.next = 3;   // [JN] After Military Base go to Command Control
-            case 25: wminfo.next = 13;  // [JN] After Extra Map go to Halls of the Damned
-            break;
-            default: wminfo.next = gamemap;
-        }
+	    switch(gamemap)
+	    {
+	      // After Military Base (24) go to Command Control (4-1)
+	      case 24: wminfo.next = 3;
+	      break;
+
+	      // After Extra Map (25) go to Halls of the Damned (14-1)
+	      case 25: wminfo.next = 13;
+	      break;
+
+	      // After Warrens (26) go to Limbo (22-1)
+	      case 26: wminfo.next = 21;
+	      break;
+
+	      default: wminfo.next = gamemap;
+	    }
     }
     else if ( gamemode == commercial)
     {
@@ -1809,10 +1818,6 @@ void G_DoCompleted (void)
     // [JN] Press Beta par times
     if (gamemode == pressbeta)
     wminfo.partime = TICRATE*bpars[gameepisode][gamemap];
-
-    // [JN] Atari Jaguar par times
-    if (gamemission == jaguar)
-    wminfo.partime = TICRATE*jpars[gamemap-1];
 
     wminfo.pnum = consoleplayer; 
 

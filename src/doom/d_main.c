@@ -1311,8 +1311,6 @@ void D_SetGameDescription(void)
         }
         else if (logical_gamemission == jaguar)
         {
-            W_MergeFile("base/common/doom-sysfont.wad");
-
             if (english_language)
             {
                 gamedescription = GetGameName("DOOM for Atari Jaguar");
@@ -1321,7 +1319,6 @@ void D_SetGameDescription(void)
             {
                 gamedescription = GetGameName("DOOM для Atari Jaguar");
                 W_MergeFile("base/games/doom-jaguar-russian.wad");
-                W_MergeFile("base/common/doom-sysfont-russian.wad");
             }
         }
     }

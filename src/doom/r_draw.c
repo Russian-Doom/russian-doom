@@ -46,6 +46,10 @@
 // status bar height at bottom of screen
 #define SBARHEIGHT  (32 << hires)
 
+// [JN] Jaguar: use different height of status bar
+// For some reason, value 40 leaving one pixel trash line on bezel, so 39 here.
+#define SBARHEIGHT_JAG (39 << hires)
+
 //
 // All drawing to the view buffer is accomplished in this file.
 // The other refresh files only know about ccordinates,
@@ -892,7 +896,9 @@ void R_InitBuffer (int width, int height)
     if (width == SCREENWIDTH) 
     viewwindowy = 0; 
     else 
-    viewwindowy = (SCREENHEIGHT-SBARHEIGHT-height) >> 1; 
+    viewwindowy = (SCREENHEIGHT - (gamemission == jaguar ? 
+                                   SBARHEIGHT_JAG : SBARHEIGHT)
+                                  - height) >> 1; 
 
     // Preclaculate all row offsets.
     for (i=0 ; i<height ; i++) 
@@ -943,7 +949,10 @@ void R_FillBackScreen (void)
 
     if (background_buffer == NULL)
     {
-        background_buffer = Z_Malloc(SCREENWIDTH * (SCREENHEIGHT - SBARHEIGHT) * sizeof(*background_buffer), PU_STATIC, NULL);
+        background_buffer = Z_Malloc(SCREENWIDTH * (SCREENHEIGHT - (gamemission == jaguar ? 
+                                                    SBARHEIGHT_JAG : SBARHEIGHT))
+                                                    *sizeof(*background_buffer),
+                                                    PU_STATIC, NULL);
     }
 
     if (gamemode == commercial)
@@ -957,7 +966,7 @@ void R_FillBackScreen (void)
     src = W_CacheLumpName(name, PU_CACHE); 
     dest = background_buffer;
 
-    for (y=0 ; y<SCREENHEIGHT-SBARHEIGHT ; y++) 
+    for (y=0 ; y<SCREENHEIGHT - (gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT) ; y++) 
     { 
         for (x=0 ; x<SCREENWIDTH/64 ; x++) 
         { 
@@ -1047,7 +1056,7 @@ void R_DrawViewBorder (void)
     if (scaledviewwidth == SCREENWIDTH) 
     return; 
 
-    top = ((SCREENHEIGHT-SBARHEIGHT)-scaledviewheight)/2; 
+    top = ((SCREENHEIGHT - (gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT))-scaledviewheight)/2; 
     side = (SCREENWIDTH-scaledviewwidth)/2; 
 
     // copy top and one line of left side 
@@ -1068,6 +1077,6 @@ void R_DrawViewBorder (void)
     } 
 
     // ? 
-    V_MarkRect (0,0,SCREENWIDTH, SCREENHEIGHT-SBARHEIGHT); 
+    V_MarkRect (0,0,SCREENWIDTH, SCREENHEIGHT - (gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT)); 
 }
 

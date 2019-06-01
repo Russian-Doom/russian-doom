@@ -34,6 +34,10 @@
 #define ST_WIDTH	ORIGWIDTH
 #define ST_Y		(ORIGHEIGHT - ST_HEIGHT)
 
+// [JN] Jaguar status bar is 40 px tall
+#define ST_HEIGHT_JAG   40
+#define ST_Y_JAG        (ORIGHEIGHT - ST_HEIGHT_JAG)
+
 
 //
 // STATUS BAR

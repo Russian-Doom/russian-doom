@@ -622,7 +622,8 @@ void P_LoadThings (int lump)
 	    }
 	    // [JN] Replace static candles and candelabras with animated ones.
         // It's *very* unsafe for internal demos, so there is also "reversive" condition.
-	    if (canmodify)
+        // [JN] Jaguar: can have animated replacements.
+	    if (canmodify || gamemission == jaguar)
 	    {
             if (gameaction == ga_newgame || gameaction == ga_loadgame || gameaction == ga_worlddone)
             {

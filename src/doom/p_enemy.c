@@ -2245,6 +2245,7 @@ void A_PlayerScream (mobj_t* mo)
     int		sound = sfx_pldeth;
 	
     if ( (gamemode == commercial)
+	&&  (gamemission != jaguar) // [JN] Jaguar: not present in Jaguar Doom
 	&& 	(mo->health < -50))
     {
 	// IF THE PLAYER DIES

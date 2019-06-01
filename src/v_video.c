@@ -873,6 +873,86 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
     }
 }
 
+// -----------------------------------------------------------------------------
+// [JN] V_DrawPatchFinale
+// Draws pixel-doubled sprite. Used exclusively on casting sequence screen.
+// Written with extensive support of Fabian Greffrath, thanks! (16.01.2019)
+// -----------------------------------------------------------------------------
+
+void V_DrawPatchFinale(int x, int y, patch_t *patch)
+{ 
+    int       count, col, w, f;
+    column_t *column;
+    byte     *desttop;
+    byte     *dest;
+    byte     *source;
+
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
+
+    // haleyjd 08/28/10: Strife needs silent error checking here.
+    if(patchclip_callback)
+    {
+        if(!patchclip_callback(patch, x, y))
+            return;
+    }
+
+#ifdef RANGECHECK_NO_THANKS
+    if (x < 0
+     || x + SHORT(patch->width) > SCREENWIDTH
+     || y < 0
+     || y + SHORT(patch->height) > SCREENHEIGHT)
+    {
+        I_Error("Bad V_DrawPatchFinale");
+    }
+#endif
+
+    V_MarkRect(x, y, SHORT(patch->width), SHORT(patch->height));
+
+    col = 0;
+    desttop = dest_screen 
+            + (y * 4)                   // Proper vertical offset for Y * 4 factor
+            * SCREENWIDTH + x;
+
+    w = SHORT(patch->width);
+
+    for ( ; col<w ; x++, col++, desttop++)
+    {
+        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
+
+        // step through the posts in a column
+        while (column->topdelta != 0xff)
+        {
+            for (f = 0; f <= 3; f++)    // Make X scale factor * 4 (0, 1, 2, 3)
+            {
+            source = (byte *)column + 3;
+
+            dest = desttop 
+                 + column->topdelta 
+                 * (SCREENWIDTH * 4)    // Scale Y by 4
+                 + (x * 3)              // Scale X by 4
+                 + f;
+
+            count = column->length;
+
+            while (count--)
+            {
+                int g;
+
+                for (g = 0; g <= 3; g++)
+                {
+                    *dest = *source;
+                    dest += SCREENWIDTH;
+                }
+                source++;
+            }
+
+            }
+            column = (column_t *)((byte *)column + column->length + 4);
+        }
+    }
+}
+
 //
 // [JN] Load tint map from TINMAP lump (Doom only).
 //

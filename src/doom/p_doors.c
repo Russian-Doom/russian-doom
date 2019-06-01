@@ -543,7 +543,13 @@ EV_VerticalDoor
       case 33:
       case 34:
 	door->type = vld_open;
-	line->special = 0;
+    // [JN] following line is not existing in Jaguar source code,
+    // which explains an ability to press "use" multiple times on D1 door
+    // types, speed it up and hear opening sound while every "use" action.
+    if (gamemission != jaguar)
+    {
+        line->special = 0;
+    }
 	break;
 	
       case 117:	// blazing door raise
