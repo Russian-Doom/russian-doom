@@ -1336,6 +1336,7 @@ void D_SetGameDescription(void)
             char    *filename;
             int     nrv;
             int     mlvls;
+            int     sgl;
 
             // [JN] Using -file for Press Beta is strictly prohibited
             if (gamemode == pressbeta)
@@ -1552,6 +1553,31 @@ void D_SetGameDescription(void)
                 }
                 // [JN] Still in mlvls loop, enable sky scaling for Master Levels
                 scaled_sky = true;
+            }
+            
+            // [JN] Support for SIGIL (compat version)
+            sgl = M_CheckParmWithArgs ("-file", 1);
+
+            if (sgl)
+            {
+                while (++sgl != myargc && myargv[sgl][0] != '-')
+                {
+                    char *check;
+                    check = M_StrCaseStr(myargv[sgl], "sigil_compat.wad");
+
+                    if (check != NULL)
+                    {
+                        if (english_language)
+                        {
+                            gamedescription = "SIGIL";
+                        }
+                        else
+                        {
+                            gamedescription = "СИГИЛ";
+                            W_MergeFile("base/common/doom-sigil-russian.wad");
+                        }
+                    }
+                }
             }
         }
     }
