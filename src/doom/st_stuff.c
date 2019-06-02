@@ -1646,40 +1646,42 @@ static byte* ST_WidgetColor(int i)
 }
 
 
+// -----------------------------------------------------------------------------
+// ST_drawWidgets
+// -----------------------------------------------------------------------------
+
 void ST_drawWidgets(boolean refresh)
 {
     int     i;
 
+    // [JN] Jaguar: use own widgets drawing function
     if (gamemission == jaguar)
     {
         ST_drawWidgetsJaguar(refresh);
         return;
     }
 
-    // used by w_arms[] widgets
-    st_armson = st_statusbaron && !deathmatch;
+    st_armson = st_statusbaron && !deathmatch;  // used by w_arms[] widgets
+    st_fragson = deathmatch && st_statusbaron;  // used by w_frags widget
+    st_artifactson = !deathmatch && st_statusbaron;  // [JN] used by w_artifacts widget
 
-    // used by w_frags widget
-    st_fragson = deathmatch && st_statusbaron; 
-
-    // [JN] used by w_artifacts widget
-    st_artifactson = !deathmatch && st_statusbaron; 
-
-#ifdef WIDESCREEN // [JN] TODO - Cleanup!!!
-    // [JN] Wide screen: draw STBAR on "full screen" mode ----------------------
+#ifdef WIDESCREEN
+    // [JN] Wide screen: draw STBAR on "full screen" mode
     if (screenblocks == 9 || screenblocks == 10)
     {
-        V_DrawPatch(ORIGWIDTH_DELTA, ST_Y, W_CacheLumpName(DEH_String("STBAR"), PU_CACHE));
+        V_DrawPatch(ORIGWIDTH_DELTA, ST_Y, 
+                    W_CacheLumpName(DEH_String("STBAR"), PU_CACHE));
 
         if (!deathmatch && gamemode != pressbeta)
-        V_DrawPatch(104+ORIGWIDTH_DELTA, ST_Y, W_CacheLumpName(DEH_String("STARMS"), PU_CACHE));
+        V_DrawPatch(ORIGWIDTH_DELTA + 104, ST_Y, 
+                    W_CacheLumpName(DEH_String("STARMS"), PU_CACHE));
     }
 
-    // [JN] Wide screen: Side bezel for reconstructed standard HUD -------------
+    // [JN] Wide screen: Side bezel for reconstructed standard HUD
     if (screenblocks == 9 || automapactive)
     {
         if (gamemode == commercial)                 
-        {   // Doom 2
+        {
             V_DrawPatch(0, 168, W_CacheLumpName     // left border
                                 (DEH_String("RDWBD2LF"), PU_CACHE));
         
@@ -1687,7 +1689,7 @@ void ST_drawWidgets(boolean refresh)
                                 (DEH_String("RDWBD2RT"), PU_CACHE));
         }
         else
-        {   // Doom 1
+        {
             V_DrawPatch(0, 168, W_CacheLumpName     // left border
                                 (DEH_String("RDWBD1LF"), PU_CACHE));
         
@@ -1702,7 +1704,7 @@ void ST_drawWidgets(boolean refresh)
     dp_translation = NULL;
 
     // [crispy] draw "special widgets" in the Crispy HUD
-    if ((screenblocks == 11 || screenblocks == 12 || screenblocks == 13) && !automapactive)
+    if ((screenblocks >= 11 && screenblocks <= 13) && !automapactive)
     {
         // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
@@ -1720,7 +1722,7 @@ void ST_drawWidgets(boolean refresh)
             if (patch)
             {
                 // [crispy] (23,179) is the center of the Ammo widget
-                V_DrawPatch((23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset))+ORIGWIDTH_DELTA,
+                V_DrawPatch((23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset)) + ORIGWIDTH_DELTA,
                             179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
                             patch);
             }
@@ -1735,15 +1737,16 @@ void ST_drawWidgets(boolean refresh)
 
     // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
 #ifdef WIDESCREEN
-    if ((screenblocks == 9 || screenblocks == 10 || screenblocks == 11) /*&& !automapactive*/)
+    if ((screenblocks >= 9 && screenblocks <= 11) && !automapactive)
 #else
     if (screenblocks == 11 && !automapactive)
 #endif
     {
         if (netgame)    // [JN] Account player's color in network game
-        V_DrawPatch(ST_FX+ORIGWIDTH_DELTA, ST_FY, faceback);
+        V_DrawPatch(ORIGWIDTH_DELTA + ST_FX, ST_FY, faceback);
         else            // [JN] Use only gray color in single player
-        V_DrawPatch(ST_FX+ORIGWIDTH_DELTA, ST_FY, W_CacheLumpName(DEH_String("STFB1"), PU_CACHE));
+        V_DrawPatch(ORIGWIDTH_DELTA + ST_FX, ST_FY, 
+                    W_CacheLumpName(DEH_String("STFB1"), PU_CACHE));
     }
     
     // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
@@ -1753,41 +1756,51 @@ void ST_drawWidgets(boolean refresh)
         {
             // [JN] Don't draw ammo for fist and chainsaw
             if (plyr->readyweapon == wp_pistol
-             || plyr->readyweapon == wp_shotgun
-             || plyr->readyweapon == wp_supershotgun
-             || plyr->readyweapon == wp_chaingun
-             || plyr->readyweapon == wp_missile
-             || plyr->readyweapon == wp_plasma
-             || plyr->readyweapon == wp_bfg)
-                V_DrawPatch(2+ORIGWIDTH_DELTA, 191, W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
+            ||  plyr->readyweapon == wp_shotgun
+            ||  plyr->readyweapon == wp_supershotgun
+            ||  plyr->readyweapon == wp_chaingun
+            ||  plyr->readyweapon == wp_missile
+            ||  plyr->readyweapon == wp_plasma
+            ||  plyr->readyweapon == wp_bfg)
+            V_DrawPatch(ORIGWIDTH_DELTA + 2, 191, 
+                        W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
 
             if (deathmatch) // [JN] Frags
-            V_DrawPatch(108+ORIGWIDTH_DELTA, 191, W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
+            V_DrawPatch(ORIGWIDTH_DELTA + 108, 191, 
+                        W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
             else            // [JN] Arms
-            V_DrawPatch(108+ORIGWIDTH_DELTA, 191, W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
+            V_DrawPatch(ORIGWIDTH_DELTA + 108, 191, 
+                        W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
 
             // [JN] Health, armor, ammo
-            V_DrawPatch(52+ORIGWIDTH_DELTA, 173, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
+            V_DrawPatch(ORIGWIDTH_DELTA + 52, 173, 
+                        W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
         }
 
-        V_DrawPatch(292+ORIGWIDTH_DELTA, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+        V_DrawPatch(ORIGWIDTH_DELTA + 292, 173, 
+                    W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
     }
 
     // [JN] Traditional Crispy HUD
     if (screenblocks == 13)
-    V_DrawPatch(292+ORIGWIDTH_DELTA, 173, W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+    V_DrawPatch(ORIGWIDTH_DELTA + 292, 173, 
+                W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
 
 #ifdef WIDESCREEN
     dp_translation = ST_WidgetColor(hudcolor_health);
-    STlib_updatePercent(&w_health, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(&w_health, refresh || (screenblocks >= 9 
+                                           &&  screenblocks <= 13));
     dp_translation = ST_WidgetColor(hudcolor_armor);
-    STlib_updatePercent(&w_armor, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(&w_armor, refresh || (screenblocks >= 9 
+                                          &&  screenblocks <= 13));
     dp_translation = NULL;
 #else
     dp_translation = ST_WidgetColor(hudcolor_health);
-    STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(&w_health, refresh || (screenblocks >= 11
+                                           &&  screenblocks <= 13));
     dp_translation = ST_WidgetColor(hudcolor_armor);
-    STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(&w_armor, refresh || (screenblocks >= 11 
+                                          &&  screenblocks <= 13));
     dp_translation = NULL;
 #endif
 
@@ -1803,35 +1816,42 @@ void ST_drawWidgets(boolean refresh)
     {
     for (i=0;i<6;i++)
 #ifdef WIDESCREEN
-    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updateMultIcon(&w_arms[i], refresh || (screenblocks >= 9 
+                                             &&  screenblocks <= 13));
 #else
-    STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updateMultIcon(&w_arms[i], refresh || (screenblocks >= 11 
+                                             &&  screenblocks <= 13));
 #endif
     }
 
     if (screenblocks < 12 || automapactive)
 #ifdef WIDESCREEN
-    STlib_updateMultIcon(&w_faces, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11);
+    STlib_updateMultIcon(&w_faces, refresh || (screenblocks >= 9 
+                                           &&  screenblocks <= 11));
 #else
     STlib_updateMultIcon(&w_faces, refresh || screenblocks == 11);
 #endif
 
     for (i=0;i<3;i++)
 #ifdef WIDESCREEN
-    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updateMultIcon(&w_keyboxes[i], refresh || (screenblocks >= 9 
+                                                 &&  screenblocks <= 13));
 #else
-    STlib_updateMultIcon(&w_keyboxes[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updateMultIcon(&w_keyboxes[i], refresh || (screenblocks >= 11 
+                                                 &&  screenblocks <= 13));
 #endif
 
 #ifdef WIDESCREEN
-    STlib_updateNum(&w_frags, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updateNum(&w_frags, refresh || (screenblocks >= 9 
+                                      &&  screenblocks <= 13));
 #else
-    STlib_updateNum(&w_frags, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updateNum(&w_frags, refresh || (screenblocks >= 11 
+                                      &&  screenblocks <= 13));
 #endif
     
-    // [JN] Press Beta: some special routine. I need to draw Artifacts widet while not in
-    // automap and Arms widget while in automap. Plus, background must be redrawn immediately.
-    // Also see AM_Stop at am_map.c
+    // [JN] Press Beta: some special routine. I need to draw Artifacts widet
+    // while not in automap and Arms widget while in automap. Plus, background 
+    // must be redrawn immediately. Also see AM_Stop at am_map.c.
     if (gamemode == pressbeta)
     {
         if (!automapactive)
@@ -1839,11 +1859,13 @@ void ST_drawWidgets(boolean refresh)
             // [JN] Draw Artifacts widet
 #ifdef WIDESCREEN
             dp_translation = ST_WidgetColor(hudcolor_artifacts);
-            STlib_updateNum(&w_artifacts, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            STlib_updateNum(&w_artifacts, refresh || (screenblocks >= 9 
+                                                  && screenblocks <= 13));
             dp_translation = NULL;
 #else
             dp_translation = ST_WidgetColor(hudcolor_artifacts);
-            STlib_updateNum(&w_artifacts, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            STlib_updateNum(&w_artifacts, refresh || (screenblocks >= 11 
+                                                  &&  screenblocks <= 13));
             dp_translation = NULL;
 #endif
         }
@@ -1851,20 +1873,25 @@ void ST_drawWidgets(boolean refresh)
         {
             // [JN] Draw Arms widet. Background (w_armsbg) and numbers (w_arms)
 #ifdef WIDESCREEN
-            STlib_updateBinIcon(&w_armsbg, refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            STlib_updateBinIcon(&w_armsbg, refresh || (screenblocks >= 9 
+                                                   &&  screenblocks <= 13));
 #else
-            STlib_updateBinIcon(&w_armsbg, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            STlib_updateBinIcon(&w_armsbg, refresh || (screenblocks >= 11
+                                                   && screenblocks <= 13));
 #endif
 
             for (i=0;i<6;i++)
 #ifdef WIDESCREEN
-            STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            STlib_updateMultIcon(&w_arms[i], refresh || (screenblocks >= 9 
+                                                     &&  screenblocks <= 13));
 #else
-            STlib_updateMultIcon(&w_arms[i], refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+            STlib_updateMultIcon(&w_arms[i], refresh || (screenblocks >= 11 
+                                                     &&  screenblocks <= 13));
 #endif
         }
 
-        // [JN] Draw player's life widget only in traditional HUD, Crispy HUD with player's face and automap
+        // [JN] Draw player's life widget only in traditional HUD, 
+        // Crispy HUD with player's face and automap
         if (screenblocks <= 11 || automapactive)
         STlib_updateNum(&w_lifes, refresh);
     }
