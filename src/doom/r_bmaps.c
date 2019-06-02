@@ -129,7 +129,8 @@ void R_InitBrightmappedTextures(void)
     // -------------------------------------------------------
     //  Doom 1 only
     // -------------------------------------------------------
-    if (gamemode == shareware || gamemode == registered || gamemode == retail)
+    if (gamemode == shareware || gamemode == registered || gamemode == retail 
+    ||  gamemode == pressbeta)
     {
         // Not gray
         bmaptexture30 = R_TextureNumForName("PLANET1");

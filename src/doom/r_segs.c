@@ -939,7 +939,8 @@ void R_StoreWallRange (int start, int stop)
                 // -------------------------------------------------------
                 //  Doom 1 only (bmaptexture24 = Doom 1: red only)
                 // -------------------------------------------------------
-                if (gamemode == shareware || gamemode == registered || gamemode == retail)
+                if (gamemode == shareware || gamemode == registered || gamemode == retail 
+                ||  gamemode == pressbeta)
                 {
                     // Red only
                     if (midtexture == bmaptexture24)
