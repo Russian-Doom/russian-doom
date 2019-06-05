@@ -1443,8 +1443,11 @@ void M_RD_Change_Smoothing(int choice)
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
     // Update background of classic HUD and player face 
-    ST_refreshBackground();
-    ST_drawWidgets(true);
+    if (gamestate == GS_LEVEL)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+    }
 }
 
 void M_RD_Change_Renderer(int choice)
@@ -1455,8 +1458,11 @@ void M_RD_Change_Renderer(int choice)
     // Do a full graphics reinitialization
     I_InitGraphics();
     // Update background of classic HUD and player face 
-    ST_refreshBackground();
-    ST_drawWidgets(true);
+    if (gamestate == GS_LEVEL)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+    }
 }
 
 
