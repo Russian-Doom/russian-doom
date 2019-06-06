@@ -451,6 +451,7 @@ EV_VerticalDoor
 	    {
 		door->direction = 1;	// go back up
 		// [crispy] play sound effect when the door is opened again while going down
+		if (!vanillaparm)
 		S_StartSound(&door->sector->soundorg, line->special == 117 ? sfx_bdopn : sfx_doropn);
 	    }
 	    else
@@ -465,6 +466,9 @@ EV_VerticalDoor
                 if (door->thinker.function.acp1 == (actionf_p1) T_VerticalDoor)
                 {
                     door->direction = -1;	// start going down immediately
+                    // [crispy] play sound effect when the door is closed manually
+                    if (!vanillaparm)
+                    S_StartSound(&door->sector->soundorg, line->special == 117 ? sfx_bdcls : sfx_dorcls);
                 }
                 else if (door->thinker.function.acp1 == (actionf_p1) T_PlatRaise)
                 {
@@ -493,8 +497,6 @@ EV_VerticalDoor
 
                     door->direction = -1;
                 }
-                // [crispy] play sound effect when the door is closed manually
-                S_StartSound(&door->sector->soundorg, line->special == 117 ? sfx_bdcls : sfx_dorcls);
 	    }
 	    return;
 	}
