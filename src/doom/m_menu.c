@@ -1136,9 +1136,9 @@ menuitem_t RD_Gameplay_Menu_1[]=
     {1,"Colored HUD elements:",             M_RD_Change_ColoredHUD,     'c'},
     {1,"Colored blood and corpses:",        M_RD_Change_ColoredBlood,   'c'},
     {1,"Swirling liquids:",                 M_RD_Change_SwirlingLiquids,'s'},
-    {1,"Invulnerability affecting sky:",    M_RD_Change_InvulSky,       'i'},
+    {1,"Invulnerability affects sky:",      M_RD_Change_InvulSky,       'i'},
     {1,"Red resurrection flash:",           M_RD_Change_RedRussurection,'r'},
-    {1,"Texts are dropping shadows:",       M_RD_Change_ShadowedText,   't'},
+    {1,"Text casts shadows:",               M_RD_Change_ShadowedText,   't'},
     {-1,"",0,'\0'},
     {1,"", /* Next page > */                M_RD_Choose_Gameplay_2,     'n'},
     {1,"", /* < Last page */                M_RD_Choose_Gameplay_4,     'l'},
@@ -1163,7 +1163,7 @@ menuitem_t RD_Gameplay_Menu_2[]=
     {1,"Monster alert waking up others:",   M_RD_Change_AlertSfx,           'm'},
     {-1,"",0,'\0'},
     {1,"Show level stats on automap:",      M_RD_Change_AutoMapStats,       's'},
-    {1,"Notification of revealed secrets:", M_RD_Change_SecretNotify,       'n'},
+    {1,"Notify of revealed secrets:",       M_RD_Change_SecretNotify,       'n'},
     {1,"Show negative health:",             M_RD_Change_NegativeHealth,     's'},
     {1,"Infragreen light amp. visor:",      M_RD_Change_InfraGreenVisor,    'i'},
     {-1,"",0,'\0'},
@@ -1217,7 +1217,7 @@ menuitem_t RD_Gameplay_Menu_4[]=
     {1,"Pain Elemental without Souls limit:",   M_RD_Change_LostSoulsQty,       'p'},
     {1,"More agressive lost souls:",            M_RD_Change_LostSoulsAgr,       'm'},
     {1,"Don't prompt for q. saving/loading:",   M_RD_Change_FastQSaveLoad,      'd'},
-    {1,"Don't play internal demos:",            M_RD_Change_NoInternalDemos,    'd'},
+    {1,"Play internal demos:",                  M_RD_Change_NoInternalDemos,    'd'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
@@ -1330,7 +1330,7 @@ menuitem_t RD_Gameplay_Menu_4_Rus[]=
     {1,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       'a'},   // Элементаль без ограничения душ
     {1,"gjdsityyfz fuhtccbdyjcnm lei:",     M_RD_Change_LostSoulsAgr,       'a'},   // Повышенная агрессивность душ
     {1,"jnrk.xbnm pfghjc ,> pfuheprb:",     M_RD_Change_FastQSaveLoad,      'a'},   // Отключить запрос б. загрузки
-    {1,"Yt ghjbuhsdfnm ltvjpfgbcb:",        M_RD_Change_NoInternalDemos,    'a'},   // Не проигрывать демозаписи
+    {1,"Ghjbuhsdfnm ltvjpfgbcb:",           M_RD_Change_NoInternalDemos,    'a'},   // Проигрывать демозаписи
     {-1,"",0,'\0'},                                                                 //
     {-1,"",0,'\0'},                                                                 //
     {-1,"",0,'\0'},                                                                 //
@@ -1863,15 +1863,15 @@ void M_RD_Draw_Gameplay_1(void)
         // Swirling liquids
         if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(160 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(160 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
-        // Invulnerability affecting sky
-        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(259 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(259 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
+        // Invulnerability affects sky
+        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(247 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(247 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
         // Red resurrection flash
         if (red_resurrection_flash) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(215 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(215 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
-        // Texts are dropping shadows
-        if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(244 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(244 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
+        // Text casts shadows
+        if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(187 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(187 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
 
         // Footer
         dp_translation = cr[CR_GOLD];
@@ -1960,9 +1960,9 @@ void M_RD_Draw_Gameplay_2(void)
         // Show level stats on automap
         if (automap_stats) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(251 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(251 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
-        // Notification of revealed secrets
-        if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(282 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(282 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
+        // Notify of revealed secrets
+        if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(242 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(242 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
         // Show negative health
         if (negative_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
@@ -2164,9 +2164,9 @@ void M_RD_Draw_Gameplay_4(void)
         if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(291 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(291 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
 
-        // Don't play internal demos
-        if (no_internal_demos) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(233 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(233 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+        // Play internal demos
+        if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(193 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+        else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(193 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
 
         // Footer
         dp_translation = cr[CR_GOLD];
@@ -2204,9 +2204,9 @@ void M_RD_Draw_Gameplay_4(void)
         if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(263 + ORIGWIDTH_DELTA, 85, RD_ON_RUS); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(263 + ORIGWIDTH_DELTA, 85, RD_OFF_RUS); dp_translation = NULL; }
 
-        // Don't play internal demos
-        if (no_internal_demos) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(249 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(249 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
+        // Play internal demos
+        if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(229 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(229 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
 
         // Footer
         dp_translation = cr[CR_GOLD];
