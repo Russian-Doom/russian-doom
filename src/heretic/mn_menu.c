@@ -498,7 +498,7 @@ static MenuItem_t DisplayItems_Rus[] = {
 };
 
 static Menu_t DisplayMenu = {
-    60 + ORIGWIDTH_DELTA, 16,
+    72 + ORIGWIDTH_DELTA, 16,
     DrawDisplayMenu,
     6, DisplayItems,
     0,
@@ -506,7 +506,7 @@ static Menu_t DisplayMenu = {
 };
 
 static Menu_t DisplayMenu_Rus = {
-    60 + ORIGWIDTH_DELTA, 16,
+    66 + ORIGWIDTH_DELTA, 16,
     DrawDisplayMenu,
     6, DisplayItems_Rus,
     0,
@@ -544,7 +544,7 @@ static Menu_t SoundMenu = {
 };
 
 static Menu_t SoundMenu_Rus = {
-    72 + ORIGWIDTH_DELTA, 16,
+    61 + ORIGWIDTH_DELTA, 16,
     DrawSoundMenu,
     6, SoundItems_Rus,
     0,
@@ -570,7 +570,7 @@ static MenuItem_t ControlsItems_Rus[] = {
 };
 
 static Menu_t ControlsMenu = {
-    88 + ORIGWIDTH_DELTA, 16,
+    87 + ORIGWIDTH_DELTA, 16, // 88
     DrawControlsMenu,
     4, ControlsItems,
     0,
@@ -1367,13 +1367,13 @@ static void DrawDisplayMenu(void)
     DrawSlider((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 4, screenblocks - 9);
     M_snprintf(num, 4, "%3d", screenblocks);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 148 : 148) + ORIGWIDTH_DELTA, 41);
+    MN_DrTextA(num, (english_language ? 160 : 154) + ORIGWIDTH_DELTA, 41);
     dp_translation = NULL;
 #else
     DrawSlider((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 10, screenblocks - 3);
     M_snprintf(num, 4, "%3d", screenblocks);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 196 : 196) + ORIGWIDTH_DELTA, 41);
+    MN_DrTextA(num, (english_language ? 208 : 202) + ORIGWIDTH_DELTA, 41);
     dp_translation = NULL;
 #endif
 
@@ -1384,24 +1384,24 @@ static void DrawDisplayMenu(void)
     if (messageson)
     {
         MN_DrTextB(DEH_String(english_language ?  "ON" : "DRK>"),
-                             (english_language ? 158 : 185) + ORIGWIDTH_DELTA, 96);
+                             (english_language ? 170 : 191) + ORIGWIDTH_DELTA, 96);
     }
     else
     {
         MN_DrTextB(DEH_String(english_language ? "OFF" : "DSRK>"),
-                             (english_language ? 158 : 185) + ORIGWIDTH_DELTA, 96);
+                             (english_language ? 170 : 191) + ORIGWIDTH_DELTA, 96);
     }
 
     // Local time:
     if (local_time)
     {
         MN_DrTextB(DEH_String(english_language ?  "ON" : "DRK>"),
-                             (english_language ? 161 : 134) + ORIGWIDTH_DELTA, 116);
+                             (english_language ? 173 : 140) + ORIGWIDTH_DELTA, 116);
     }
     else
     {
         MN_DrTextB(DEH_String(english_language ? "OFF" : "DSRK>"),
-                             (english_language ? 161 : 134) + ORIGWIDTH_DELTA, 116);
+                             (english_language ? 173 : 140) + ORIGWIDTH_DELTA, 116);
     }
 }
 
@@ -1495,41 +1495,41 @@ static void DrawSoundMenu(void)
     static char num[4];
 
     // SFX Volume
-    DrawSlider(&SoundMenu, 1, 16, snd_MaxVolume);
+    DrawSlider((english_language ? &SoundMenu : &SoundMenu_Rus), 1, 16, snd_MaxVolume);
     M_snprintf(num, 4, "%3d", snd_MaxVolume);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, 251 + ORIGWIDTH_DELTA, 41);
+    MN_DrTextA(num, (english_language ? 251 : 240) + ORIGWIDTH_DELTA, 41);
     dp_translation = NULL;
 
     // Music Volume
-    DrawSlider(&SoundMenu, 3, 16, snd_MusicVolume);
+    DrawSlider((english_language ? &SoundMenu : &SoundMenu_Rus), 3, 16, snd_MusicVolume);
     M_snprintf(num, 4, "%3d", snd_MusicVolume);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, 251 + ORIGWIDTH_DELTA, 81);
+    MN_DrTextA(num, (english_language ? 251 : 240) + ORIGWIDTH_DELTA, 81);
     dp_translation = NULL;
 
     // SFX Mode
     if (snd_monomode)
     {
         MN_DrTextB(DEH_String(english_language ?  "MONO" : "VJYJ"),
-                             (english_language ? 169 : 215) + ORIGWIDTH_DELTA, 96);
+                             (english_language ? 169 : 204) + ORIGWIDTH_DELTA, 96);
     }
     else
     {
         MN_DrTextB(DEH_String(english_language ? "STEREO" : "CNTHTJ"),
-                             (english_language ? 169 : 215) + ORIGWIDTH_DELTA, 96);
+                             (english_language ? 169 : 204) + ORIGWIDTH_DELTA, 96);
     }    
 
     // Pitch-shifting
     if (snd_pitchshift)
     {
         MN_DrTextB(DEH_String(english_language ? "ON" : "DRK>"),
-                             (english_language ? 208 : 242) + ORIGWIDTH_DELTA, 116);
+                             (english_language ? 208 : 231) + ORIGWIDTH_DELTA, 116);
     }
     else
     {
         MN_DrTextB(DEH_String(english_language ? "OFF" : "DSRK>"),
-                             (english_language ? 208 : 242) + ORIGWIDTH_DELTA, 116);
+                             (english_language ? 208 : 231) + ORIGWIDTH_DELTA, 116);
     }    
 }
 
@@ -1594,31 +1594,31 @@ static void DrawControlsMenu(void)
     DrawSlider((english_language ? &ControlsMenu : &ControlsMenu_Rus), 3, 12, mouseSensitivity);
     M_snprintf(num, 4, "%3d", mouseSensitivity);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 235 : 215) + ORIGWIDTH_DELTA, 81);
+    MN_DrTextA(num, (english_language ? 234 : 215) + ORIGWIDTH_DELTA, 81);
     dp_translation = NULL;
 
     // Always run
     if (joybspeed >= 20)
     {
         MN_DrTextB(DEH_String(english_language ?  "ON" : "DRK>"),
-                             (english_language ? 201 : 246) + ORIGWIDTH_DELTA, 16);
+                             (english_language ? 200 : 246) + ORIGWIDTH_DELTA, 16);
     }
     else
     {
         MN_DrTextB(DEH_String(english_language ? "OFF" : "DSRK>"),
-                             (english_language ? 201 : 246) + ORIGWIDTH_DELTA, 16);
+                             (english_language ? 200 : 246) + ORIGWIDTH_DELTA, 16);
     }
 
     // Mouse look
     if (mlook)
     {
         MN_DrTextB(DEH_String(english_language ?  "ON" : "DRK>"),
-                             (english_language ? 208 : 227) + ORIGWIDTH_DELTA, 36);
+                             (english_language ? 207 : 227) + ORIGWIDTH_DELTA, 36);
     }
     else
     {
         MN_DrTextB(DEH_String(english_language ? "OFF" : "DSRK>"),
-                             (english_language ? 208 : 227) + ORIGWIDTH_DELTA, 36);
+                             (english_language ? 207 : 227) + ORIGWIDTH_DELTA, 36);
     }
 }
 
