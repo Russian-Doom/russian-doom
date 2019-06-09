@@ -303,6 +303,7 @@ void M_RD_Draw_Audio(void);
 void M_RD_Change_SfxVol(int choice);
 void M_RD_Change_MusicVol(int choice);
 void M_RD_Change_SndMode(int choice);
+void M_RD_Change_PitchShifting(int choice);
 
 // Controls
 void M_RD_Choose_Controls(int choice);
@@ -943,6 +944,7 @@ enum
     rd_audio_musvolume,
     rd_audio_empty2,
     rd_audio_sndmode,
+    rd_audio_sndpitch,
     rd_audio_end
 } rd_audio_e;
 
@@ -957,6 +959,7 @@ menuitem_t RD_Audio_Menu[]=
     {2,"Music volume",  M_RD_Change_MusicVol,   'm'},
     {-1,"",0,'\0'},
     {1,"Sfx mode:",     M_RD_Change_SndMode,    's'},
+    {1,"Pitch-shifting:",M_RD_Change_PitchShifting,    'p'},
     {-1,"",0,'\0'}
 };
 
@@ -981,6 +984,7 @@ menuitem_t RD_Audio_Menu_Rus[]=
     {2,"Uhjvrjcnm vepsrb",  M_RD_Change_MusicVol,   'm'},   // Громкость музыки
     {-1,"",0,'\0'},                                         //
     {1,"Ht;bv pderf:",      M_RD_Change_SndMode,    's'},   // Режим звука
+    {1,"Gbnx-ibanbyu:",     M_RD_Change_PitchShifting, 'g'},   // Питч-шифтинг
     {-1,"",0,'\0'}
 };
 
@@ -1656,10 +1660,12 @@ void M_RD_Draw_Audio(void)
     if (english_language)
     {
         M_WriteTextBig(172 + ORIGWIDTH_DELTA, 101, snd_monomode == 1 ? "mono" : "stereo");
+        M_WriteTextBig(231 + ORIGWIDTH_DELTA, 117, snd_pitchshift == 1 ? "on" : "off");
     }
     else
     {
         M_WriteTextBig(219 + ORIGWIDTH_DELTA, 101, snd_monomode == 1 ? "vjyj" : "cnthtj");
+        M_WriteTextBig(236 + ORIGWIDTH_DELTA, 117, snd_pitchshift == 1 ? "drk" : "dsrk");
     }
 }
 
@@ -1703,6 +1709,12 @@ void M_RD_Change_SndMode(int choice)
 {
     choice = 0;
     snd_monomode = 1 - snd_monomode;
+}
+
+void M_RD_Change_PitchShifting(int choice)
+{
+    choice = 0;
+    snd_pitchshift = 1 - snd_pitchshift;
 }
 
 
