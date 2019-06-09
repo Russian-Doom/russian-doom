@@ -1198,27 +1198,18 @@ void DrawFullScreenStuff(void)
 
         DrBNumber(CPlayer->mo->health, 5, 176);
     }
-    // [JN] Negative health: can't drop below -99, drawing, colorizing
-    else if (negative_health && !vanillaparm)
+    // [JN] Negative and zero health: can't drop below -99, drawing, colorizing
+    else if (CPlayer->mo->health <= 0)
     {
-        if (CPlayer->mo->health < 0)
-        {
-            if (colored_hud)
-            dp_translation = cr[CR_GREEN2RED_HERETIC];
-
-            if (CPlayer->mo->health <= -99)
-            CPlayer->mo->health = -99;
-
-            DrBNumber(CPlayer->mo->health, 5, 176);
-        }
-    }
-    else
-    {
-        // [JN] Colored HUD: Zero health
         if (colored_hud && !vanillaparm)
-        {
-            dp_translation = cr[CR_GREEN2RED_HERETIC];
-        }
+        dp_translation = cr[CR_GREEN2RED_HERETIC];
+
+        if (CPlayer->mo->health <= -99)
+        CPlayer->mo->health = -99;
+
+        if (negative_health && !vanillaparm)
+        DrBNumber(CPlayer->mo->health, 5, 176);
+        else
         DrBNumber(0, 5, 176);
     }
 
