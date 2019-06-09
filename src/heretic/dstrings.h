@@ -310,7 +310,7 @@
 #define TXT_ARTIINVULNERABILITY_RUS "RJKMWJ YTEZPDBVJCNB"   // КОЛЬЦО НЕУЯЗВИМОСТИ
 #define TXT_ARTITOMEOFPOWER_RUS     "NJV VJUEOTCNDF"        // ТОМ МОГУЩЕСТВА
 #define TXT_ARTIINVISIBILITY_RUS    "NTYTDFZ CATHF"         // ТЕНЕВАЯ СФЕРА
-#define TXT_ARTIEGG_RUS             "VJHABQYJT ZQWJ"        // МОРФИЙНОЕ ЯЙЦО
+#define TXT_ARTIEGG_RUS             "ZQWJ GHTDHFOTYBQ"      // ЯЙЦО ПРЕВРАЩЕНИЙ
 #define TXT_ARTISUPERHEALTH_RUS     "VBCNBXTCRFZ EHYF"      // МИСТИЧЕСКАЯ УРНА
 #define TXT_ARTITORCH_RUS           "AFRTK"                 // ФАКЕЛ
 #define TXT_ARTIFIREBOMB_RUS        "XFCJDFZ ,JV,F LHTDYB[" // ЧАСОВАЯ БОМБА ДРЕВНИХ
