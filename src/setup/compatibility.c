@@ -141,7 +141,7 @@ void CompatibilitySettings(void)
             "Colored HUD elements" :
             "Разноцветные элементы HUD",
             &colored_hud)),
-        TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Colored blood and corpses" :
             "Разноцветна€ кровь и трупы",
             &colored_blood)),

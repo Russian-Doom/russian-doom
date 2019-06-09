@@ -143,6 +143,7 @@ int brightmaps = 1;
 int fake_contrast = 0;
 int invul_sky = 1;
 int colored_hud = 0;
+int colored_blood = 1;
 int draw_shadowed_text = 1;
 
 // Звук

@@ -682,7 +682,7 @@ void R_InitData(void)
     printf (".");
     R_InitColormaps();
 
-    if (brightmaps && !vanillaparm)
+    if (!vanillaparm)
     {
         W_MergeFile("base/brightmaps/heretic-brightmaps.wad");
         R_InitBrightmaps();

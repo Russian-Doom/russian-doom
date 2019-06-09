@@ -25,6 +25,7 @@
 #include "i_swap.h"
 #include "i_system.h"
 #include "r_local.h"
+#include "v_trans.h"
 #include "crispy.h"
 #include "jn.h"
 
@@ -449,6 +450,11 @@ void R_DrawVisSprite(vissprite_t * vis, int x1, int x2)
         dc_translation = translationtables - 256 +
             ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT - 8));
     }
+    else if (vis->translation)
+    {
+        colfunc = R_DrawTranslatedColumn;
+        dc_translation = vis->translation;
+    }
 
     dc_iscale = abs(vis->xiscale) >> detailshift;
     dc_texturemid = vis->texturemid;
@@ -555,6 +561,14 @@ void R_ProjectSprite(mobj_t * thing)
         return;
     }
 
+    // [JN] Never draw a blood splat for Liches if colored blood is not set
+    if ((!colored_blood || vanillaparm) 
+    &&  thing->type == MT_BLOODSPLATTER &&  thing->target
+    &&  thing->target->type == MT_HEAD)
+    {
+        return;
+    }
+
 //
 // transform the origin point
 //
@@ -625,6 +639,7 @@ void R_ProjectSprite(mobj_t * thing)
 // store information in a vissprite
 //
     vis = R_NewVisSprite();
+    vis->translation = NULL;
     vis->mobjflags = thing->flags;
     vis->psprite = false;
     vis->scale = xscale << detailshift;
@@ -785,6 +800,17 @@ void R_ProjectSprite(mobj_t * thing)
                 thing->type == MT_MISC10)   // S_WALLTORCH*
                 vis->colormap = colormaps;
         }
+    }
+
+    // [JN] Colored blood
+    if (colored_blood && !vanillaparm
+    &&  thing->type == MT_BLOODSPLATTER && thing->target)
+    {
+        if (thing->target->type == MT_WIZARD)
+        vis->translation = cr[CR_RED2MAGENTA_HERETIC];
+
+        else if (thing->target->type == MT_HEAD)
+        vis->translation = cr[CR_RED2GRAY_HERETIC];
     }
 }
 
@@ -1068,6 +1094,7 @@ void R_DrawPSprite(pspdef_t * psp)
 // store information in a vissprite
 //
     vis = &avis;
+    vis->translation = NULL;
     vis->mobjflags = 0;
     vis->psprite = true;
     // [crispy] weapons drawn 1 pixel too high when player is idle

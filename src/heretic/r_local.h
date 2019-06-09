@@ -260,6 +260,7 @@ typedef struct vissprite_s
     int mobjflags;              // for color translation and shadow draw
     boolean psprite;            // true if psprite
     fixed_t footclip;           // foot clipping
+    byte *translation;
 } vissprite_t;
 
 

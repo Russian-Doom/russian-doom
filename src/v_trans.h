@@ -61,6 +61,14 @@ enum
     CR_GOLD2RED_HERETIC,
     CR_GOLD2BLUE_HERETIC,
     CR_GOLD2GRAY_HERETIC,
+    // Heretic (small font)
+    CR_GRAY2GDARKGRAY_HERETIC,  // Menu digits
+    CR_GRAY2DARKGOLD_HERETIC,   // Gameplay features headers
+    CR_GRAY2GREEN_HERETIC,      // Gameplay features "ON"
+    CR_GRAY2RED_HERETIC,        // Gameplay features "OFF"
+    // Heretic (colored blood)
+    CR_RED2MAGENTA_HERETIC,     // Magenta blood for Wizards
+    CR_RED2GRAY_HERETIC,        // Gray blood for Iron Liches
     CRMAX
 } cr_t;
 

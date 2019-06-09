@@ -4393,6 +4393,10 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
      MF2_NOTELEPORT             // flags2
      },
 
+    // [JN] MF_NOBLOOD is disabled, needed for dynamical swapping 
+    // of colored blood. Now it behaves as:
+    // - Colored blood ON: Liches are bleeding gray blood
+    // - Colored blood OFF (or vanillaparm): Liches bleeding invisible blood
     {                           // MT_HEAD
      6,                         // doomednum
      S_HEAD_LOOK,               // spawnstate
@@ -4416,7 +4420,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {
      325,                       // mass
      0,                         // damage
      sfx_hedact,                // activesound
-     MF_SOLID | MF_SHOOTABLE | MF_COUNTKILL | MF_NOBLOOD,       // flags
+     MF_SOLID | MF_SHOOTABLE | MF_COUNTKILL /*| MF_NOBLOOD*/,   // flags
      MF2_PASSMOBJ               // flags2
      },
 
