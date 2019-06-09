@@ -153,6 +153,7 @@ static void DrawSoundMenu(void);
 static boolean M_RD_SfxVolume(int option);
 static boolean M_RD_MusVolume(int option);
 static boolean M_RD_SndMode(int option);
+static boolean M_RD_PitchShift(int option);
 
 // Controls
 static void DrawControlsMenu(void);
@@ -521,7 +522,8 @@ static MenuItem_t SoundItems[] = {
     {ITT_EMPTY,     NULL,               NULL,           0,  MENU_NONE   },
     {ITT_LRFUNC,    "MUSIC VOLUME",     M_RD_MusVolume, 0,  MENU_NONE   },
     {ITT_EMPTY,     NULL,               NULL,           0,  MENU_NONE   },
-    {ITT_EFUNC,     "SFX MODE:",        M_RD_SndMode,   0,  MENU_NONE   }
+    {ITT_EFUNC,     "SFX MODE:",        M_RD_SndMode,   0,  MENU_NONE   },
+    {ITT_EFUNC,     "PITCH-SHIFTING:",  M_RD_PitchShift,0,  MENU_NONE   }
 };
 
 static MenuItem_t SoundItems_Rus[] = {
@@ -529,13 +531,14 @@ static MenuItem_t SoundItems_Rus[] = {
     {ITT_EMPTY,     NULL,               NULL,           0,  MENU_NONE   },      //
     {ITT_LRFUNC,    "UHJVRJCNM VEPSRB", M_RD_MusVolume, 0,  MENU_NONE   },      // ГРОМКОСТЬ МУЗЫКИ
     {ITT_EMPTY,     NULL,               NULL,           0,  MENU_NONE   },      //
-    {ITT_EFUNC,     "HT;BV PDERF:",     M_RD_SndMode,   0,  MENU_NONE   }       // РЕЖИМ ЗВУКА
+    {ITT_EFUNC,     "HT;BV PDERF:",     M_RD_SndMode,   0,  MENU_NONE   },      // РЕЖИМ ЗВУКА
+    {ITT_EFUNC,     "GBNX-IBANBYU:",    M_RD_PitchShift,0,  MENU_NONE   }       // ПИТЧ-ШИФТИНГ
 };
 
 static Menu_t SoundMenu = {
     72 + ORIGWIDTH_DELTA, 16,
     DrawSoundMenu,
-    5, SoundItems,
+    6, SoundItems,
     0,
     MENU_OPTIONS
 };
@@ -543,7 +546,7 @@ static Menu_t SoundMenu = {
 static Menu_t SoundMenu_Rus = {
     72 + ORIGWIDTH_DELTA, 16,
     DrawSoundMenu,
-    5, SoundItems_Rus,
+    6, SoundItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -1516,6 +1519,18 @@ static void DrawSoundMenu(void)
         MN_DrTextB(DEH_String(english_language ? "STEREO" : "CNTHTJ"),
                              (english_language ? 169 : 215) + ORIGWIDTH_DELTA, 96);
     }    
+
+    // Pitch-shifting
+    if (snd_pitchshift)
+    {
+        MN_DrTextB(DEH_String(english_language ? "ON" : "DRK>"),
+                             (english_language ? 208 : 242) + ORIGWIDTH_DELTA, 116);
+    }
+    else
+    {
+        MN_DrTextB(DEH_String(english_language ? "OFF" : "DSRK>"),
+                             (english_language ? 208 : 242) + ORIGWIDTH_DELTA, 116);
+    }    
 }
 
 static boolean M_RD_SfxVolume(int option)
@@ -1558,6 +1573,12 @@ static boolean M_RD_MusVolume(int option)
 static boolean M_RD_SndMode(int option)
 {
     snd_monomode ^= 1;
+    return true;
+}
+
+static boolean M_RD_PitchShift(int option)
+{
+    snd_pitchshift ^= 1;
     return true;
 }
 
