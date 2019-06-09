@@ -1629,9 +1629,9 @@ void AM_Drawer(void)
                      LevelNames[(gameepisode - 1) * 9 + gamemap - 1] :
                      LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1];
 #ifdef WIDESCREEN
-        MN_DrTextA(DEH_String(level_name), 20, 135);
+        MN_DrTextA(DEH_String(level_name), 20, 136);
 #else
-        MN_DrTextA(DEH_String(level_name), 20, 145);
+        MN_DrTextA(DEH_String(level_name), 20, 146);
 #endif
     }
 
