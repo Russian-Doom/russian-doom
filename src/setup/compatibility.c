@@ -193,7 +193,7 @@ void CompatibilitySettings(void)
             "Notification of revealed secters" :
             "Уведомление об обнаружении тайников",
             &secret_notification)),
-        TXT_If(gamemission == doom, TXT_NewCheckBox(english_language ?
+        TXT_If(gamemission == doom || gamemission == heretic, TXT_NewCheckBox(english_language ?
             "Show negative health" :
             "Отображать отрицательное здоровье",
             &negative_health)),

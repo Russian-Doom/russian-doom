@@ -845,6 +845,7 @@ void D_BindVariables(void)
     // Геймплей
     M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
+    M_BindIntVariable("negative_health",        &negative_health);
 
     // Прицел
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);

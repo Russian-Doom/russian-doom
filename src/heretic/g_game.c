@@ -152,6 +152,7 @@ int snd_monomode = 0;
 // Тактика
 int automap_stats = 1;
 int secret_notification = 1;
+int negative_health = 0;
 
 // Физика
 int torque = 1;

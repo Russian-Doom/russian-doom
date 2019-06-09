@@ -319,7 +319,30 @@ static void DrINumber(signed int val, int x, int y)
     {
         if (val < -9)
         {
-            V_DrawPatch(x + 1, y + 1, W_CacheLumpName(DEH_String("LAME"), PU_CACHE));
+            // [JN] Negative health: Leave "LAME" sign for Deathmatch
+            if (deathmatch)
+            {
+                V_DrawPatch(x + 1, y + 1, W_CacheLumpName(DEH_String("LAME"), PU_CACHE));
+            }
+            // [JN] Negative health: -10 and below routine
+            else if (negative_health && !vanillaparm)
+            {
+                // [JN] Can't draw -100 and below
+                if (val <= -99)
+                val = -99;
+
+                val = -val % 100;
+                if (val < 9 || oldval < 99)
+                {
+                    patch = PatchINumbers[val / 10];
+                    V_DrawPatch(x + 9, y, patch);
+                }
+                val = val % 10;
+                patch = PatchINumbers[val];
+                V_DrawPatch(x + 18, y, patch);
+
+                V_DrawPatch(x + 1, y, PatchNEGATIVE);
+            }
         }
         else
         {
@@ -994,6 +1017,11 @@ void DrawMainBar(void)
         {
             temp = 0;
         }
+        // [JN] Negative health: use actual value
+        else if (negative_health && !vanillaparm)
+        {
+            temp = CPlayer->mo->health;
+        }
         else if (temp > 100)
         {
             temp = 100;
@@ -1169,6 +1197,20 @@ void DrawFullScreenStuff(void)
         }
 
         DrBNumber(CPlayer->mo->health, 5, 176);
+    }
+    // [JN] Negative health: can't drop below -99, drawing, colorizing
+    else if (negative_health && !vanillaparm)
+    {
+        if (CPlayer->mo->health < 0)
+        {
+            if (colored_hud)
+            dp_translation = cr[CR_GREEN2RED_HERETIC];
+
+            if (CPlayer->mo->health <= -99)
+            CPlayer->mo->health = -99;
+
+            DrBNumber(CPlayer->mo->health, 5, 176);
+        }
     }
     else
     {
