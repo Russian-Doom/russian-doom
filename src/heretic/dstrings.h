@@ -285,6 +285,9 @@
 
 #define TXT_SECRET_FOUND    "A SECRET IS REVEALED!"
 
+#define RD_ON   "ON"
+#define RD_OFF  "OFF"
+
 
 // -----------------------------------------------------------------------------
 // Русский язык
@@ -667,6 +670,9 @@
 #define TXT_CROSSHAIR_OFF_RUS "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
 
 #define TXT_SECRET_FOUND_RUS "J,YFHE;TY NFQYBR!"          // ОБНАРУЖЕН ТАЙНИК!
+
+#define RD_ON_RUS   "DRK"   // ВКЛ
+#define RD_OFF_RUS  "DSRK"  // ВЫКЛ
 
 //
 // Version stuff (better keep it in one place)
