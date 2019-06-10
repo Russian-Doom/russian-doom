@@ -596,7 +596,7 @@ void R_InitData(void)
     R_InitColormaps();
 
     // [JN] Lookup and init all the textures for brightmapping
-    if (brightmaps && !vanillaparm)
+    if (!vanillaparm)
     {
         W_MergeFile("base/brightmaps/hexen-brightmaps.wad");
         R_InitBrightmaps();
