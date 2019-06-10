@@ -69,6 +69,10 @@ enum
     // Heretic (colored blood)
     CR_RED2MAGENTA_HERETIC,     // Magenta blood for Wizards
     CR_RED2GRAY_HERETIC,        // Gray blood for Iron Liches
+    // Hexen (small font)
+    CR_GRAY2DARKGOLD_HEXEN,     // Gameplay features headers
+    CR_GRAY2GREEN_HEXEN,        // Gameplay features "ON"
+    CR_GRAY2RED_HEXEN,          // Gameplay features "OFF"
     CRMAX
 } cr_t;
 
