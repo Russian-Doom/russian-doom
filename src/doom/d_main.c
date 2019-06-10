@@ -144,7 +144,6 @@ char mapdir[1024];   // directory of development maps
 int english_language = 0;
 
 int show_endoom   = 0;
-int show_diskicon = 1;
 int local_time    = 0; // [JN] Local time widget
 
 boolean flip_levels_cmdline = false;
@@ -401,16 +400,12 @@ static void EnableLoadingDisk(void)
         return;
     }
 
-    if (show_diskicon)
-    {
-        if (M_CheckParm("-cdrom") > 0)
-        disk_lump_name = DEH_String("STCDROM");
+    if (M_CheckParm("-cdrom") > 0)
+    disk_lump_name = DEH_String("STCDROM");
+    else
+    disk_lump_name = DEH_String("STDISK");
 
-        else
-        disk_lump_name = DEH_String("STDISK");
-
-        V_EnableLoadingDisk(disk_lump_name,SCREENWIDTH - LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
-    }
+    V_EnableLoadingDisk(disk_lump_name,SCREENWIDTH - LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
 }
 
 

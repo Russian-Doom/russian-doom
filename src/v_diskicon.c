@@ -30,6 +30,9 @@
 
 #include "v_diskicon.h"
 
+// [JN] Moved from d_main.c for hot swapping.
+int show_diskicon = 1;
+
 // Only display the disk icon if more then this much bytes have been read
 // during the previous tic.
 
@@ -116,6 +119,9 @@ static byte *DiskRegionPointer(void)
 
 void V_DrawDiskIcon(void)
 {
+    if (show_diskicon == 0)
+    return;
+
     if (disk_data != NULL && recent_bytes_read > diskicon_threshold)
     {
         // Save the background behind the disk before we draw it.
