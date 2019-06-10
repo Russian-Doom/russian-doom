@@ -799,7 +799,7 @@ void SB_Drawer(void)
         {   // Scaled crosshair
             V_DrawPatch(ORIGWIDTH/2, ((ORIGHEIGHT+4)/2),
                 W_CacheLumpName((!crosshair_health ?
-                                           "XHAIRUG" :             // Green (only)
+                                           "XHAIRSG" :             // Green (only)
                                            CPlayer->health >= 67 ?
                                            "XHAIRSG" :             // Green
                                            CPlayer->health >= 34 ?
