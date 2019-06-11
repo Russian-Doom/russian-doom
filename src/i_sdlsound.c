@@ -92,8 +92,9 @@ int use_libsamplerate = 1;
 // of the time: with all the Doom IWAD sound effects, at least. If a PWAD
 // is used, clipping might occur.
 
-// [JN] Initialy 0.65f. Using 1.0 makes sound volume much more original-like.
-float libsamplerate_scale = 1.0;
+// [JN] Using 1.0 makes sound volume much more original-like,
+// but also will make sfx volume notably higher than music volume.
+float libsamplerate_scale = 0.65f;
 
 // Hook a sound into the linked list at the head.
 
