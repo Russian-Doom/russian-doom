@@ -2447,6 +2447,8 @@ void M_RD_Change_NoInternalDemos(int choice)
 
 void M_RD_BackToDefaultsResponse(int key)
 {
+    static char resetmsg[24];
+
     if (key != key_menu_confirm)
     return;
 
@@ -2523,6 +2525,12 @@ void M_RD_BackToDefaultsResponse(int key)
         ST_refreshBackground();
         ST_drawWidgets(true);
     }
+
+    // Print informative message
+    M_snprintf(resetmsg, sizeof(resetmsg), english_language ? 
+                                           "Settings reset" :
+                                           "Yfcnhjqrb c,hjitys");
+    players[consoleplayer].message = resetmsg;
 }
 
 void M_RD_BackToDefaults(int choice)
