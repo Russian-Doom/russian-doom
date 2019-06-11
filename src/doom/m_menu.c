@@ -3336,14 +3336,9 @@ static char *M_SelectEndMessage(void)
 
 void M_QuitDOOM(int choice)
 {
-    if (english_language)
-    {
-        DEH_snprintf(endstring, sizeof(endstring),"%s\n\n" DOSY, DEH_String(M_SelectEndMessage()));
-    }
-    else
-    {
-        DEH_snprintf(endstring, sizeof(endstring),"%s\n\n" DOSY_RUS, DEH_String(M_SelectEndMessage()));
-    }
+    DEH_snprintf(endstring, sizeof(endstring),
+                (english_language ? ("%s\n\n" DOSY) : ("%s\n\n" DOSY_RUS)),
+                 DEH_String(M_SelectEndMessage()));
 
     M_StartMessage(endstring,M_QuitResponse,true);
 }
