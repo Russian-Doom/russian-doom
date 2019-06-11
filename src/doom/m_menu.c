@@ -2666,7 +2666,14 @@ void M_DrawLoad(void)
     for (i = 0;i < load_end; i++)
     {
         M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
+
+        // [crispy] shade empty savegame slots
+        if (!LoadMenu[i].status && colored_hud && !vanillaparm)
+        dp_translation = cr[CR_DARKRED];
+
         M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+
+        dp_translation = NULL;
     }
 }
 
