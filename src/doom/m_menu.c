@@ -2252,8 +2252,11 @@ void M_RD_Change_ColoredHUD(int choice)
     colored_hud = 1 - colored_hud;
     
     // Update background of classic HUD and player face 
-    ST_refreshBackground();
-    ST_drawWidgets(true);
+    if (gamestate == GS_LEVEL)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+    }
 }
 
 void M_RD_Change_ColoredBlood(int choice)
@@ -2515,8 +2518,11 @@ void M_RD_BackToDefaultsResponse(int key)
     // Do a full graphics reinitialization
     I_InitGraphics();
     // Update background of classic HUD and player face 
-    ST_refreshBackground();
-    ST_drawWidgets(true);
+    if (gamestate == GS_LEVEL)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+    }
 }
 
 void M_RD_BackToDefaults(int choice)
