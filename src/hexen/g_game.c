@@ -1159,6 +1159,9 @@ void G_Ticker(void)
             case ga_loadgame:
                 Draw_LoadIcon();
                 G_DoLoadGame();
+                // [JN] Reset looking direction if game is loaded without mouse look
+                if (!mlook)
+                players[consoleplayer].lookdir = 0;
                 break;
             case ga_savegame:
                 Draw_SaveIcon();
