@@ -1553,7 +1553,8 @@ static void DrawWorldTimer(void)
     int seconds;
     int worldTimer;
     char timeBuffer[15];
-    char dayBuffer[20];
+    // char dayBuffer[20];
+    char skill[15];
 
     worldTimer = players[consoleplayer].worldTimer;
 
@@ -1570,6 +1571,8 @@ static void DrawWorldTimer(void)
                "%.2d : %.2d : %.2d", hours, minutes, seconds);
     MN_DrTextA(timeBuffer, 237 + (ORIGWIDTH_DELTA * 2), 8); // [JN] Небольшая корректировка позиции
 
+    // [JN] No good place for days indication, there is also a local time widget.
+    /*
     if (days)
     {
         if (days == 1)
@@ -1589,4 +1592,13 @@ static void DrawWorldTimer(void)
             230 + (ORIGWIDTH_DELTA * 2), 35);
         }
     }
+    */
+
+    // [JN] Draw skill level
+    M_snprintf(skill, sizeof(skill), english_language ?
+                                     "SKILL: %d" :
+                                     "CKJ;YJCNM: %d",   // СЛОЖНОСТЬ:
+                                     gameskill + 1);
+    MN_DrTextA(skill, (english_language ? 265 : 223) 
+                    + (ORIGWIDTH_DELTA * 2), 26);
 }
