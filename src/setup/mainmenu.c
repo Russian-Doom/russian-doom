@@ -443,6 +443,13 @@ static void InitTextscreen(void)
             exit(-1);
         }
 
+    // [JN] Use RD branded colors
+    TXT_SetColor(TXT_COLOR_BLUE, 0, 63, 148);           // Background
+    TXT_SetColor(TXT_COLOR_BRIGHT_CYAN, 84, 206, 254);  // Borders
+    TXT_SetColor(TXT_COLOR_BRIGHT_GREEN, 255, 232, 59); // FN buttons
+    TXT_SetColor(TXT_COLOR_CYAN, 70, 176, 219);         // Highlighted item
+    TXT_SetColor(TXT_COLOR_GREEN, 0, 255, 0);           // Language switching text
+
     SetIcon();
     SetWindowTitle();
 }

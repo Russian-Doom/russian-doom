@@ -311,6 +311,15 @@ void TXT_Shutdown(void)
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
+void TXT_SetColor(txt_color_t color, int r, int g, int b)
+{
+    SDL_Color c = {r, g, b, 0xff};
+
+    SDL_LockSurface(screenbuffer);
+    SDL_SetPaletteColors(screenbuffer->format->palette, &c, color, 1);
+    SDL_UnlockSurface(screenbuffer);
+}
+
 unsigned char *TXT_GetScreenData(void)
 {
     return screendata;
