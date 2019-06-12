@@ -81,7 +81,8 @@ lighttable_t** fullbrights_greenonly3;
 lighttable_t** fullbrights_orangeyellow;
 lighttable_t** fullbrights_dimmeditems;
 lighttable_t** fullbrights_explosivebarrel;
-lighttable_t** fullbrights_burningbarrel;
+lighttable_t** fullbrights_alllights;
+lighttable_t** fullbrights_candles;
 
 // constant arrays used for psprite clipping and initializing clipping
 int negonearray[SCREENWIDTH];
@@ -716,9 +717,61 @@ void R_ProjectSprite (mobj_t* thing)
             else if (thing->type == MT_BARREL)
             vis->colormap = fullbrights_explosivebarrel[index];
 
-            // Burning barrel
+            // Candlestick (34)
+            else if (thing->type == MT_MISC49)
+            vis->colormap = fullbrights_candles[index];
+        
+            // Animated candlestick
+            else if (thing->type == MT_MISC49_A)
+            vis->colormap = fullbrights_candles[index];
+
+            // Candelabra (35)
+            else if (thing->type == MT_MISC50)
+            vis->colormap = fullbrights_candles[index];
+
+            // Animated candelabra
+            else if (thing->type == MT_MISC50_A)
+            vis->colormap = fullbrights_candles[index];
+
+            // Tall blue torch (44)
+            else if (thing->type == MT_MISC41)
+            vis->colormap = fullbrights_alllights[index];
+            
+            // Tall green torch (45)
+            else if (thing->type == MT_MISC42)
+            vis->colormap = fullbrights_alllights[index];
+
+            // Tall red torch (46)
+            else if (thing->type == MT_MISC43)
+            vis->colormap = fullbrights_alllights[index];
+
+            // Short blue torch (55)
+            else if (thing->type == MT_MISC44)
+            vis->colormap = fullbrights_alllights[index];
+
+            // Short green torch (56)
+            else if (thing->type == MT_MISC45)
+            vis->colormap = fullbrights_alllights[index];
+
+            // Short red torch (57)
+            else if (thing->type == MT_MISC46)
+            vis->colormap = fullbrights_alllights[index];
+
+            // Burning barrel (70)
             else if (thing->type == MT_MISC77)
-            vis->colormap = fullbrights_burningbarrel[index];
+            vis->colormap = fullbrights_alllights[index];
+
+            // Tall tech lamp (85)
+            else if (thing->type == MT_MISC29)
+            vis->colormap = fullbrights_alllights[index];
+
+            // Short tech lamp (86)
+            else if (thing->type == MT_MISC30)
+            vis->colormap = fullbrights_alllights[index];
+
+            // Floor lamp (2028)
+            else if (thing->type == MT_MISC31)
+            vis->colormap = fullbrights_alllights[index];
         
             // Press Beta's Lost Soul
             if (thing->type == MT_SKULL && gamemode == pressbeta)
@@ -728,8 +781,20 @@ void R_ProjectSprite (mobj_t* thing)
         // to the objects, thats no longer lit in info.c.
         else
         {
-            // Burning barrel
-            if (thing->type == MT_MISC77)
+            if (thing->type == MT_MISC49    // Candlestick
+            ||  thing->type == MT_MISC49_A  // Animated candlestick
+            ||  thing->type == MT_MISC50    // Candelabra
+            ||  thing->type == MT_MISC50_A  // Animated candelabra
+            ||  thing->type == MT_MISC41    // Tall blue torch
+            ||  thing->type == MT_MISC42    // Tall green torch
+            ||  thing->type == MT_MISC43    // Tall red torch
+            ||  thing->type == MT_MISC44    // Short blue torch
+            ||  thing->type == MT_MISC45    // Short green torch
+            ||  thing->type == MT_MISC46    // Short red torch
+            ||  thing->type == MT_MISC77    // Burning barrel
+            ||  thing->type == MT_MISC29    // Tall tech lamp
+            ||  thing->type == MT_MISC30    // Short tech lamp
+            ||  thing->type == MT_MISC31)   // Floor lamp
             vis->colormap = colormaps;
         }
     }	
@@ -789,7 +854,8 @@ void R_AddSprites (sector_t* sec)
         fullbrights_dimmeditems = fullbright_dimmeditems[0];
         fullbrights_redonly = fullbright_redonly[0];
         fullbrights_explosivebarrel = fullbright_explosivebarrel[0];
-        fullbrights_burningbarrel = fullbright_burningbarrel[0];
+        fullbrights_alllights = fullbright_alllights[0];
+        fullbrights_candles = fullbright_candles[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
@@ -801,7 +867,8 @@ void R_AddSprites (sector_t* sec)
         fullbrights_dimmeditems = fullbright_dimmeditems[LIGHTLEVELS-1];
         fullbrights_redonly = fullbright_redonly[LIGHTLEVELS-1];
         fullbrights_explosivebarrel = fullbright_explosivebarrel[LIGHTLEVELS-1];
-        fullbrights_burningbarrel = fullbright_burningbarrel[LIGHTLEVELS-1];
+        fullbrights_alllights = fullbright_alllights[LIGHTLEVELS-1];
+        fullbrights_candles = fullbright_candles[LIGHTLEVELS-1];
     }
     else
     {
@@ -813,7 +880,8 @@ void R_AddSprites (sector_t* sec)
         fullbrights_dimmeditems = fullbright_dimmeditems[lightnum];
         fullbrights_redonly = fullbright_redonly[lightnum];
         fullbrights_explosivebarrel = fullbright_explosivebarrel[lightnum];
-        fullbrights_burningbarrel = fullbright_burningbarrel[lightnum];
+        fullbrights_alllights = fullbright_alllights[lightnum];
+        fullbrights_candles = fullbright_candles[lightnum];
     }
 
     // Handle all things in sector.
