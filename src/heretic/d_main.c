@@ -93,8 +93,9 @@ boolean advancedemo;
 
 FILE *debugfile;
 
+// [JN] Support for fallback to the English language.
+int english_language = 0;
 static int show_endoom = 0;
-
 int local_time = 0; // [JN] Local time widget
 
 void D_ConnectNetGame(void);
@@ -810,47 +811,54 @@ void D_BindVariables(void)
     NET_BindVariables();
 #endif
 
+    // [JN] Support for fallback to the English language.
     M_BindIntVariable("english_language",       &english_language);
-    M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
+
+    // Rendering
+    M_BindIntVariable("uncapped_fps",           &uncapped_fps);
+    M_BindIntVariable("show_endoom",            &show_endoom);
+    M_BindIntVariable("graphical_startup",      &graphical_startup);
+
+    // Display
+    M_BindIntVariable("screenblocks",           &screenblocks);
+    M_BindIntVariable("local_time",             &local_time);
+
+    // Sound
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);
     M_BindIntVariable("music_volume",           &snd_MusicVolume);
     M_BindIntVariable("snd_monomode",           &snd_monomode);
-    M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_Channels);
-    M_BindIntVariable("show_endoom",            &show_endoom);
-    M_BindIntVariable("graphical_startup",      &graphical_startup);
+
+    // Controls
     M_BindIntVariable("mlook",                  &mlook);
-    M_BindIntVariable("local_time",             &local_time);
+    M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
 
-    // [JN] Дополнительные параметры игры
-
-    // Графика
-    M_BindIntVariable("uncapped_fps",           &uncapped_fps);
+    // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
-    M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("colored_hud",            &colored_hud);
     M_BindIntVariable("colored_blood",          &colored_blood);
+    M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
-    
-    // Тактика
+
+    // Gameplay: Tactical
     M_BindIntVariable("automap_stats",          &automap_stats);
     M_BindIntVariable("secret_notification",    &secret_notification);
+    M_BindIntVariable("negative_health",        &negative_health);
 
-    // Физика
+    // Gameplay: Physical
     M_BindIntVariable("torque",                 &torque);
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
-    
-    // Геймплей
-    M_BindIntVariable("flip_levels",            &flip_levels);
-    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
-    M_BindIntVariable("negative_health",        &negative_health);
 
-    // Прицел
+    // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
     M_BindIntVariable("crosshair_health",       &crosshair_health);
-    M_BindIntVariable("crosshair_scale",        &crosshair_scale);
+    M_BindIntVariable("crosshair_scale",        &crosshair_scale);    
+
+    // Геймплей
+    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
+    M_BindIntVariable("flip_levels",            &flip_levels);
 
     for (i=0; i<10; ++i)
     {

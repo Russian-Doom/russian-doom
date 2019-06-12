@@ -46,6 +46,7 @@ extern int uncapped_fps;
 // -----------------------------------------------------------------------------
 // Language (0 = Russian, 1 = English)
 // -----------------------------------------------------------------------------
+
 extern int english_language;
 
 
@@ -53,33 +54,38 @@ extern int english_language;
 // Optional gameplay features
 // -----------------------------------------------------------------------------
 
-// Графика (Visual)
+// Rendering
+extern int show_diskicon;
+extern int screen_wiping;
+
+// Sound
+extern int snd_monomode;
+
+// Gameplay: Graphical
 extern int brightmaps;
 extern int fake_contrast;
 extern int translucency;
-extern int swirling_liquids;
-extern int invul_sky;
 extern int colored_hud;
 extern int colored_blood;
+extern int swirling_liquids;
+extern int invul_sky;
 extern int red_resurrection_flash;
 extern int draw_shadowed_text;
-extern int show_diskicon;
 
-// Звук (Audible)
-extern int snd_monomode;
+// Gameplay: Audible
+extern int play_exit_sfx;
 extern int crushed_corpses_sfx;
 extern int blazing_door_fix_sfx;
-extern int correct_endlevel_sfx;
-extern int play_exit_sfx;
 extern int noise_alert_sfx;
+extern int correct_endlevel_sfx;
 
-// Тактика (Tactical)
+// Gameplay: Tactical
 extern int automap_stats;
 extern int secret_notification;
 extern int negative_health;
 extern int infragreen_visor;
 
-// Физика (Physical)
+// Gameplay: Physical
 extern int over_under;
 extern int torque;
 extern int weapon_bobbing;
@@ -87,19 +93,19 @@ extern int ssg_blast_enemies;
 extern int randomly_flipcorpses;
 extern int floating_powerups;
 
-// Геймплей (Gamepley)
+// Gameplay: Crosshair
+extern int crosshair_draw;
+extern int crosshair_health;
+extern int crosshair_scale;
+
+// Gameplay: Gameplay
 extern int fix_map_errors;
-extern int flip_levels;
 extern int extra_player_faces;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
 extern int fast_quickload;
 extern int no_internal_demos;
-
-// Прицел (Crosshair)
-extern int crosshair_draw;
-extern int crosshair_health;
-extern int crosshair_scale;
+extern int flip_levels;
 
 
 // -----------------------------------------------------------------------------

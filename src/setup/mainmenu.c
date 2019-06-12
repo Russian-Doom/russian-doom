@@ -117,32 +117,34 @@ static void SensibleDefaults(void)
     snd_dmxoption = "-opl3 -reverse";
     png_screenshots = 1;
 
-    // Графика
+    // Rendering
+    show_diskicon = 1;
+
+    // Gameplay: Graphical
     brightmaps = 1;
     fake_contrast = 0;
     translucency = 1;
-    swirling_liquids = 1;
-    invul_sky = 1;
     colored_hud = 0;
     colored_blood = 1;
+    swirling_liquids = 1;
+    invul_sky = 1;
     red_resurrection_flash = 1;
     draw_shadowed_text = 1;
-    show_diskicon = 1;
 
-    // Звук
+    // Gameplay: Audible
+    play_exit_sfx = 1;
     crushed_corpses_sfx = 1;
     blazing_door_fix_sfx = 1;
-    correct_endlevel_sfx = 0;
-    play_exit_sfx = 1;
     noise_alert_sfx = 0;
+    correct_endlevel_sfx = 0;
 
-    // Тактика
+    // Gameplay: Tactical
     automap_stats = 1;
     secret_notification = 1;
     negative_health = 0;
     infragreen_visor = 0;
 
-    // Физика
+    // Gameplay: Physical
     over_under = 0;
     torque = 1;
     weapon_bobbing = 1;
@@ -150,7 +152,12 @@ static void SensibleDefaults(void)
     randomly_flipcorpses = 1;
     floating_powerups = 0;
 
-    // Геймплей
+    // Gameplay: Crosshair
+    crosshair_draw = 0;
+    crosshair_health = 1;
+    crosshair_scale = 0;
+
+    // Gameplay: Gameplay
     fix_map_errors = 1;
     flip_levels = 0;
     extra_player_faces = 1;
@@ -158,11 +165,6 @@ static void SensibleDefaults(void)
     agressive_lost_souls = 0;
     fast_quickload = 1;
     no_internal_demos = 0;
-
-    // Прицел
-    crosshair_draw = 0;
-    crosshair_health = 1;
-    crosshair_scale = 0;
 }
 
 static int MainMenuKeyPress(txt_window_t *window, int key, void *user_data)
@@ -333,10 +335,13 @@ void MainMenu(void)
                    "Configure Gamepad/Joystick" :
                    "Ќастройки джойстика/геймпада",
                    (TxtWidgetSignalFunc) ConfigJoystick, NULL),
+    // [JN] No longer used, now using in-game menu
+    /*
     TXT_NewButton2(english_language ?
                    "Optional Gameplay Enhacements" :
                    "„ополнительные параметры игры",
                    (TxtWidgetSignalFunc) CompatibilitySettings, NULL),
+    */
     GetLaunchButton(),
     TXT_NewStrut(0, 1),
     TXT_NewButton2(english_language ?

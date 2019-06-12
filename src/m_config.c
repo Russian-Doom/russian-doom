@@ -144,36 +144,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(english_language),
 
     //!
-    // Mouse sensitivity.  This value is used to multiply input mouse
-    // movement to control the effect of moving the mouse.
-    //
-    // The "normal" maximum value available for this through the
-    // in-game options menu is 9. A value of 31 or greater will cause
-    // the game to crash when entering the options menu.
-    //
-
-    CONFIG_VARIABLE_INT(mouse_sensitivity),
-
-    //!
-    // Volume of sound effects, range 0-15.
-    //
-
-    CONFIG_VARIABLE_INT(sfx_volume),
-
-    //!
-    // Volume of in-game music, range 0-15.
-    //
-
-    CONFIG_VARIABLE_INT(music_volume),
-
-    //!
-    //
-    // [JN] Mono SFX mode
-    //
-
-    CONFIG_VARIABLE_INT(snd_monomode),
-
-    //!
     // @game strife
     //
     // If non-zero, dialogue text is displayed over characters' pictures
@@ -198,7 +168,7 @@ static default_t extra_defaults_list[] =
     // are not displayed.
     //
 
-    CONFIG_VARIABLE_INT(show_messages),
+    
 
     //!
     // Keyboard key to turn right.
@@ -508,34 +478,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(joyb_use),
 
     //!
-    // Joystick virtual button that makes the player run while held
-    // down.
-    //
-    // If this has a value of 20 or greater, the player will always run,
-    // even if use_joystick is 0.
-    //
-
-    CONFIG_VARIABLE_INT(joyb_speed),
-
-    //!
     // @game hexen strife
     //
     // Joystick virtual button that makes the player jump.
     //
 
     CONFIG_VARIABLE_INT(joyb_jump),
-
-    //!
-    // @game doom heretic hexen
-    //
-    // Screen size, range 3-11.
-    //
-    // A value of 11 gives a full-screen view with the status bar not
-    // displayed.  A value of 10 gives a full-screen view with the
-    // status bar displayed.
-    //
-
-    CONFIG_VARIABLE_INT(screenblocks),
 
     //!
     // @game strife
@@ -548,15 +496,6 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(screensize),
-
-    //!
-    // @game doom
-    //
-    // Screen detail.  Zero gives normal "high detail" mode, while
-    // a non-zero value gives "low detail" mode.
-    //
-
-    CONFIG_VARIABLE_INT(detaillevel),
 
     //!
     // Number of sounds that will be played simultaneously.
@@ -605,29 +544,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(snd_mport),
 
     //!
-    // Gamma correction level.  A value of zero disables gamma
-    // correction, while a value in the range 1-4 gives increasing
-    // levels of gamma correction.
-    //
-
-    CONFIG_VARIABLE_INT(usegamma),
-
-    //!
     // @game hexen
     //
     // Directory in which to store savegames.
     //
 
     CONFIG_VARIABLE_STRING(savedir),
-
-    //!
-    // @game hexen
-    //
-    // Controls whether messages are displayed in the heads-up display.
-    // If this has a non-zero value, messages are displayed.
-    //
-
-    CONFIG_VARIABLE_INT(messageson),
 
     //!
     // @game strife
@@ -737,18 +659,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(video_display),
 
     //!
-    // If non-zero, the screen will be stretched vertically to display
-    // correctly on a square pixel video mode.
-    //
-
-    CONFIG_VARIABLE_INT(aspect_ratio_correct),
-
-    //!
-    // [JN] Эксперементальное сглаживание текстур.
-
-    CONFIG_VARIABLE_INT(smoothing),
-    
-    //!
     // If non-zero, any pillar/letter boxes drawn around the game area
     // will "flash" when the game palette changes, simulating the VGA
     // "porch"
@@ -814,18 +724,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(novert),
 
     //!
-    // [JN] Mouselook: config variable initialization.
-    //
-
-    CONFIG_VARIABLE_INT(mlook),
-
-    //!
-    // [JN] Local time widget variable.
-    //
-
-    CONFIG_VARIABLE_INT(local_time),
-
-    //!
     // Mouse acceleration factor.  When the speed of mouse movement
     // exceeds the threshold value (mouse_threshold), the speed is
     // multiplied by this value.
@@ -863,14 +761,6 @@ static default_t extra_defaults_list[] =
     // 35fps timer).
 
     CONFIG_VARIABLE_INT(snd_maxslicetime_ms),
-
-    //!
-    // If non-zero, sound effects will have their pitch varied up or
-    // down by a random amount during play. If zero, sound effects
-    // play back at their default pitch. The default is zero.
-    //
-
-    CONFIG_VARIABLE_INT(snd_pitchshift),
 
     //!
     // External command to invoke to perform MIDI playback. If set to
@@ -955,12 +845,6 @@ static default_t extra_defaults_list[] =
     // window at the specified coordinates.
 
     CONFIG_VARIABLE_STRING(window_position),
-
-    //!
-    // If non-zero, force the use of a software renderer. For use on
-    // systems lacking hardware acceleration.
-    //
-    CONFIG_VARIABLE_INT(force_software_renderer),
 
 #ifdef FEATURE_MULTIPLAYER
 
@@ -1715,37 +1599,60 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_toggletime),
 
     //!
-    // [JN] Дополнительные параметры игры
+    // [JN] Russian Doom menu
     //
 
-    // Графика
+    // Rendering
+    CONFIG_VARIABLE_INT(aspect_ratio_correct),
     CONFIG_VARIABLE_INT(uncapped_fps),
+    CONFIG_VARIABLE_INT(show_diskicon),
+    CONFIG_VARIABLE_INT(smoothing),
+    CONFIG_VARIABLE_INT(screen_wiping),
+    CONFIG_VARIABLE_INT(force_software_renderer),
+
+    // Display
+    CONFIG_VARIABLE_INT(screenblocks),
+    CONFIG_VARIABLE_INT(usegamma),
+    CONFIG_VARIABLE_INT(detaillevel),
+    CONFIG_VARIABLE_INT(show_messages), CONFIG_VARIABLE_INT(messageson),
+    CONFIG_VARIABLE_INT(local_time),
+
+    // Sound
+    CONFIG_VARIABLE_INT(sfx_volume),
+    CONFIG_VARIABLE_INT(music_volume),
+    CONFIG_VARIABLE_INT(snd_monomode),
+    CONFIG_VARIABLE_INT(snd_pitchshift),
+
+    // Controls
+    CONFIG_VARIABLE_INT(joyb_speed),
+    CONFIG_VARIABLE_INT(mlook),
+    CONFIG_VARIABLE_INT(mouse_sensitivity),
+
+    // Gameplay: Graphical
     CONFIG_VARIABLE_INT(brightmaps),
     CONFIG_VARIABLE_INT(fake_contrast),
     CONFIG_VARIABLE_INT(translucency),
-    CONFIG_VARIABLE_INT(swirling_liquids),
-    CONFIG_VARIABLE_INT(invul_sky),
     CONFIG_VARIABLE_INT(colored_hud),
     CONFIG_VARIABLE_INT(colored_blood),
+    CONFIG_VARIABLE_INT(swirling_liquids),
+    CONFIG_VARIABLE_INT(invul_sky),
     CONFIG_VARIABLE_INT(red_resurrection_flash),
     CONFIG_VARIABLE_INT(draw_shadowed_text),
-    CONFIG_VARIABLE_INT(show_diskicon),
-    CONFIG_VARIABLE_INT(screen_wiping),
 
-    // Звук
+    // Gameplay: Audible
+    CONFIG_VARIABLE_INT(play_exit_sfx),
     CONFIG_VARIABLE_INT(crushed_corpses_sfx),
     CONFIG_VARIABLE_INT(blazing_door_fix_sfx),
-    CONFIG_VARIABLE_INT(correct_endlevel_sfx),
-    CONFIG_VARIABLE_INT(play_exit_sfx),
     CONFIG_VARIABLE_INT(noise_alert_sfx),
+    CONFIG_VARIABLE_INT(correct_endlevel_sfx),
 
-    // Тактика
+    // Gameplay: Tactical
     CONFIG_VARIABLE_INT(automap_stats),
     CONFIG_VARIABLE_INT(secret_notification),
     CONFIG_VARIABLE_INT(negative_health),
     CONFIG_VARIABLE_INT(infragreen_visor),
 
-    // Физика
+    // Gameplay: Physical
     CONFIG_VARIABLE_INT(over_under),
     CONFIG_VARIABLE_INT(torque),
     CONFIG_VARIABLE_INT(weapon_bobbing),
@@ -1753,21 +1660,19 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(randomly_flipcorpses),
     CONFIG_VARIABLE_INT(floating_powerups),
 
-    // Геймплей
+    // Gameplay: Crosshair
+    CONFIG_VARIABLE_INT(crosshair_draw),
+    CONFIG_VARIABLE_INT(crosshair_health),
+    CONFIG_VARIABLE_INT(crosshair_scale),
+
+    // Gameplay: Gameplay
     CONFIG_VARIABLE_INT(fix_map_errors),
-    CONFIG_VARIABLE_INT(flip_levels),
     CONFIG_VARIABLE_INT(extra_player_faces),
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(agressive_lost_souls),
     CONFIG_VARIABLE_INT(fast_quickload),
     CONFIG_VARIABLE_INT(no_internal_demos),
-
-    // Прицел
-    CONFIG_VARIABLE_INT(crosshair_draw),
-    CONFIG_VARIABLE_INT(crosshair_health),
-    CONFIG_VARIABLE_INT(crosshair_scale),
-
-    // CONFIG_VARIABLE_INT(show_exit_sequence),    // [Strife]
+    CONFIG_VARIABLE_INT(flip_levels),
 };
 
 static default_collection_t extra_defaults =

@@ -134,39 +134,35 @@ boolean testcontrols = false;
 int testcontrols_mousespeed;
 
 
-// [JN] Дополнительные параметры игры
-
-int english_language = 0;
-
-// Графика
-int brightmaps = 1;
-int fake_contrast = 0;
-int invul_sky = 1;
-int colored_hud = 0;
-int colored_blood = 1;
-int draw_shadowed_text = 1;
-
-// Звук
+// Sound
 int snd_monomode = 0;
 
-// Тактика
+// Gameplay: Graphical
+int brightmaps = 1;
+int fake_contrast = 0;
+int colored_hud = 0;
+int colored_blood = 1;
+int invul_sky = 1;
+int draw_shadowed_text = 1;
+
+// Gameplay: Tactical
 int automap_stats = 1;
 int secret_notification = 1;
 int negative_health = 0;
 
-// Физика
+// Gameplay: Physical
 int torque = 1;
 int weapon_bobbing = 1;
 int randomly_flipcorpses = 1;
 
-// Геймплей
-int flip_levels = 0;
-int no_internal_demos = 0;
-
-// Прицел
+// Gameplay: Crosshair
 int crosshair_draw = 0;
 int crosshair_health = 1;
 int crosshair_scale = 0;
+
+// Gameplay: Gameplay
+int no_internal_demos = 0;
+int flip_levels = 0;
 
 
 //

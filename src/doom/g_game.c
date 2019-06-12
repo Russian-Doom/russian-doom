@@ -242,36 +242,37 @@ mobj_t*         bodyque[BODYQUESIZE];
 int             bodyqueslot; 
 
 
-// [JN] Дополнительные параметры игры
+// Sound
+int snd_monomode = 0;
 
-// Графика
+// Display
+int screen_wiping = 1;
+
+// Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
 int translucency = 1;
-int swirling_liquids = 1;
-int invul_sky = 1;
 int colored_hud = 0;
 int colored_blood = 1;
+int swirling_liquids = 1;
+int invul_sky = 1;
 int red_resurrection_flash = 1;
 int draw_shadowed_text = 1;
-int screen_wiping = 1;
-// int show_diskicon = 1; (d_main.c)
 
-// Звук
-int snd_monomode = 0;
+// Gameplay: Audible
+int play_exit_sfx = 1;
 int crushed_corpses_sfx = 1;
 int blazing_door_fix_sfx = 1;
-int correct_endlevel_sfx = 0;
-int play_exit_sfx = 1;
 int noise_alert_sfx = 0;
+int correct_endlevel_sfx = 0;
 
-// Тактика
+// Gameplay: Tactical
 int automap_stats = 1;
 int secret_notification = 1;
 int negative_health = 0;
 int infragreen_visor = 0;
 
-// Физика
+// Gameplay: Physical
 int over_under = 0;
 int torque = 1;
 int weapon_bobbing = 1;
@@ -279,19 +280,20 @@ int ssg_blast_enemies = 1;
 int randomly_flipcorpses = 1;
 int floating_powerups = 0;
 
-// Геймплей
+// Gameplay: Crosshair
+int crosshair_draw = 0;
+int crosshair_health = 1;
+int crosshair_scale = 0;
+
+// Gameplay: Gameplay
 int fix_map_errors = 1;
-int flip_levels = 0;
 int extra_player_faces = 1;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
 int fast_quickload = 1;
 int no_internal_demos = 0;
+int flip_levels = 0;
 
-// Прицел
-int crosshair_draw = 0;
-int crosshair_health = 1;
-int crosshair_scale = 0;
  
 int G_CmdChecksum (ticcmd_t* cmd) 
 { 

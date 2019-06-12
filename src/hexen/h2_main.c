@@ -129,33 +129,35 @@ int maxplayers = MAXPLAYERS;
 boolean vanillaparm; // [JN] проверка параметра -vanilla
 boolean title_mus_played = false;
 
+// [JN] Support for fallback to the English language.
+int english_language = 0;
+
+// [JN] Local time widget
+int local_time = 0; 
+
+// Sound
+int snd_monomode = 0;
+
+// Gameplay: Graphical
+int brightmaps = 1;
+int fake_contrast = 0;
+int draw_shadowed_text = 1;
+
+// Gameplay: Crosshair
+int crosshair_draw = 0;
+int crosshair_health = 1;
+int crosshair_scale = 0;
+
+// Gameplay: Gameplay
+int no_internal_demos = 0;
+
+
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 static int WarpMap;
 static int demosequence;
 static int pagetic;
 static char *pagename;
-
-
-int local_time = 0; // [JN] Local time widget
-
-// [JN] Дополнительные параметры игры
-
-int english_language = 0;
-
-// - Интерфейс -
-int draw_shadowed_text = 1;      // Элементы меню и тексты отбрасывают тень
-// - Графика -
-int brightmaps = 1;              // Брайтмаппинг текстур и спрайтов
-int fake_contrast = 0;           // Имитация контрастного освещения стен
-// Звук
-int snd_monomode = 0;
-// Геймплей
-int no_internal_demos = 0;
-// Прицел
-int crosshair_draw = 0;
-int crosshair_health = 1;
-int crosshair_scale = 0;
 
 // CODE --------------------------------------------------------------------
 

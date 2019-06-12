@@ -47,6 +47,9 @@
 
 #define	EMPTYSTRING             "EMPTY SLOT"
 
+#define RD_ON   "ON"
+#define RD_OFF  "OFF"
+
 
 // P_inter.c ---------------------------------------------------------------
 
@@ -220,6 +223,9 @@
 #define TXT_GAMMA_ORIGINAL_4_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 4>0"  // Уровень стандартной гамма-коррекции: 4.0
 
 #define	EMPTYSTRING_RUS             "GECNJQ CKJN"                       // ПУСТОЙ СЛОТ
+
+#define RD_ON_RUS   "DRK"   // ВКЛ
+#define RD_OFF_RUS  "DSRK"  // ВЫКЛ
 
 // P_inter.c ---------------------------------------------------------------
 

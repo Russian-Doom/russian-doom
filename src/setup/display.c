@@ -80,7 +80,9 @@ static int startup_delay = 1000;
 static int usegamma = 0;
 
 int uncapped_fps = 1;
+int show_diskicon = 1;
 int graphical_startup = 0; // [JN] Disabled by default
+int screen_wiping = 1;
 int show_endoom = 0;
 int png_screenshots = 1;   // [JN] Crispy!
 
@@ -250,14 +252,29 @@ void ConfigDisplay(void)
                      "Rendering" :
                      "Рендеринг"),
 
-        ar_checkbox = TXT_NewCheckBox(english_language ?
-                                      "Fix aspect ratio" :
-                                      "Фиксировать соотношение сторон",
-                                      &aspect_ratio_correct),
+        ar_checkbox = 
+        TXT_NewCheckBox(english_language ?
+                        "Fix aspect ratio" :
+                        "Фиксировать соотношение сторон",
+                        &aspect_ratio_correct),
         TXT_NewCheckBox(english_language ?
                         "Uncapped framerate" :
                         "Сн€ть ограничение с кадровой частоты",
                         &uncapped_fps),
+        TXT_If(gamemission == doom,
+        TXT_NewCheckBox(english_language ?
+                        "Show Disk icon" :
+                        "Отображать значок дискеты",
+                        &show_diskicon)),
+        TXT_NewCheckBox(english_language ?
+                        "Smooth pixel scaling" :
+                        "Пиксельное сглаживание",
+                        &smoothing),
+        TXT_If(gamemission == doom,
+        TXT_NewCheckBox(english_language ?
+                        "Screen wiping effect" :
+                        "Плавна€ смена экранов",
+                        &screen_wiping)),
         TXT_NewCheckBox(english_language ?
                         "Software rendering" :
                         "Программный рендеринг (режим Software)",
@@ -303,7 +320,9 @@ void ConfigDisplay(void)
     // fullscreen and windowed mode (which causes the window's
     // height to change).
     TXT_SetWindowPosition(window, TXT_HORIZ_CENTER, TXT_VERT_TOP,
-                                  TXT_SCREEN_W / 2, gamemission == heretic ? 3 : 4);
+                                  TXT_SCREEN_W / 2, 
+                                  (gamemission == heretic || gamemission == hexen ? 
+                                  2 : 1));
 
     GenerateSizesTable(NULL, sizes_table);
 
