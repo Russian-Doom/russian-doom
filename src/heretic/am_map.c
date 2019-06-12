@@ -1641,25 +1641,43 @@ void AM_Drawer(void)
         char text[32];
         int time = leveltime / TICRATE;
 
-        M_snprintf(text, sizeof(text), english_language ?
-                                       "KILLS: %d/ %d" :
-                                       "DHFUB: %d/ %d",
-                                       players[consoleplayer].killcount, totalkills);
+        M_snprintf(text, sizeof(text),
+                   english_language ?
+                   "KILLS: %d/ %d" :
+                   "DHFUB: %d/ %d",
+                   players[consoleplayer].killcount,
+                   totalkills);
         MN_DrTextA(text, 20, 16);
 
-        M_snprintf(text, sizeof(text), english_language ?
-                                       "ITEMS: %d/ %d" :
-                                       "GHTLVTNS: %d/ %d",
-                                       players[consoleplayer].itemcount, totalitems);
+        M_snprintf(text, sizeof(text),
+                   english_language ?
+                   "ITEMS: %d/ %d" :
+                   "GHTLVTNS: %d/ %d",
+                   players[consoleplayer].itemcount,
+                   totalitems);
         MN_DrTextA(text, 20, 26);
 
-        M_snprintf(text, sizeof(text), english_language ?
-                                       "SECRETS: %d/ %d" :
-                                       "NFQYBRB: %d/ %d", players[consoleplayer].secretcount, totalsecret);
+        M_snprintf(text, sizeof(text),
+                   english_language ?
+                   "SECRETS: %d/ %d" :
+                   "NFQYBRB: %d/ %d",
+                   players[consoleplayer].secretcount,
+                   totalsecret);
         MN_DrTextA(text, 20, 36);
 
-        M_snprintf(text, sizeof(text), "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
-        MN_DrTextA(text, 20, 53);
+        M_snprintf(text, sizeof(text), 
+                   english_language ?
+                   "SKILL: %d" :
+                   "CKJ;YJCNM: %d", 
+                   gameskill +1);
+        MN_DrTextA(text, 20, 46);
+
+        M_snprintf(text, sizeof(text),
+                   "%02d:%02d:%02d",
+                   time/3600,
+                   (time%3600)/60,
+                   time%60);
+        MN_DrTextA(text, 20, 63);
      }
 
 //  I_Update();
