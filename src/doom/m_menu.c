@@ -286,6 +286,7 @@ void M_RD_Change_AspectRatio(int choice);
 void M_RD_Change_Uncapped(int choice);
 void M_RD_Change_DiskIcon(int choice);
 void M_RD_Change_Smoothing(int choice);
+void M_RD_Change_Wiping(int choice);
 void M_RD_Change_Renderer(int choice);
 
 // Display
@@ -811,8 +812,9 @@ enum
 {
     rd_rendering_aspect,
     rd_rendering_uncapped,
-    rd_rendering_smoothing,
     rd_rendering_diskicon,
+    rd_rendering_smoothing,
+    rd_rendering_wiping,
     rd_rendering_software,
     rd_rendering_end
 } rd_rendering_e;
@@ -827,6 +829,7 @@ menuitem_t RD_Rendering_Menu[]=
     {1,"Uncapped FPS:",     M_RD_Change_Uncapped,   'u'},
     {1,"Show Disk icon:",   M_RD_Change_DiskIcon,   's'},
     {1,"Pixel scaling:",    M_RD_Change_Smoothing,  'p'},
+    {1,"Screen wiping:",    M_RD_Change_Wiping,     'w'},
     {1,"Video renderer:",   M_RD_Change_Renderer,   'v'},
     {-1,"",0,'\0'}
 };
@@ -851,6 +854,7 @@ menuitem_t RD_Rendering_Menu_Rus[]=
     {1,"Juhfybxtybt rflhjdjq xfcnjns:",     M_RD_Change_Uncapped,   'j'},   // Ограничение кадровой частоты
     {1,"Jnj,hf;fnm pyfxjr lbcrtns:",        M_RD_Change_DiskIcon,   'j'},   // Отображать значок дискеты
     {1,"Gbrctkmyjt cukf;bdfybt:",           M_RD_Change_Smoothing,  'g'},   // Пиксельное сглаживание
+    {1,"Gkfdyfz cvtyf \'rhfyjd:",           M_RD_Change_Wiping,     'g'},   // Плавная смена экранов
     {1,"J,hf,jnrf dbltj:",                  M_RD_Change_Renderer,   'j'},   // Обработка видео
     {-1,"",0,'\0'}
 };
@@ -1396,7 +1400,8 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextBig(213 + ORIGWIDTH_DELTA, 53, uncapped_fps == 1 ? "on" : "off");
         M_WriteTextBig(225 + ORIGWIDTH_DELTA, 69, show_diskicon == 1 ? "on" : "off");
         M_WriteTextBig(202 + ORIGWIDTH_DELTA, 85, smoothing == 1 ? "smooth" : "sharp");
-        M_WriteTextBig(233 + ORIGWIDTH_DELTA, 101, force_software_renderer == 1 ? "cpu" : "gpu");
+        M_WriteTextBig(217 + ORIGWIDTH_DELTA, 101, screen_wiping == 1 ? "on" : "off");
+        M_WriteTextBig(233 + ORIGWIDTH_DELTA, 117, force_software_renderer == 1 ? "cpu" : "gpu");
     }
     else
     {
@@ -1404,7 +1409,8 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextSmall(260 + ORIGWIDTH_DELTA, 47, uncapped_fps == 1 ? "dsrk" : "drk");
         M_WriteTextSmall(241 + ORIGWIDTH_DELTA, 57, show_diskicon == 1 ? "drk" : "dsrk");
         M_WriteTextSmall(219 + ORIGWIDTH_DELTA, 67, smoothing == 1 ? "drk" : "dsrk");
-        M_WriteTextSmall(160 + ORIGWIDTH_DELTA, 77, force_software_renderer == 1 ? "ghjuhfvvyfz" : "fggfhfnyfz");
+        M_WriteTextSmall(204 + ORIGWIDTH_DELTA, 77, screen_wiping == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall(160 + ORIGWIDTH_DELTA, 87, force_software_renderer == 1 ? "ghjuhfvvyfz" : "fggfhfnyfz");
     }
 }
 
@@ -1433,10 +1439,6 @@ void M_RD_Change_DiskIcon(int choice)
 {
     choice = 0;
     show_diskicon = 1 - show_diskicon;
-    
-    // TODO
-    // [crispy] re-calculate disk icon coordinates
-    // EnableLoadingDisk();
 }
 
 void M_RD_Change_Smoothing(int choice)
@@ -1452,6 +1454,12 @@ void M_RD_Change_Smoothing(int choice)
         ST_refreshBackground();
         ST_drawWidgets(true);
     }
+}
+
+void M_RD_Change_Wiping(int choice)
+{
+    choice = 0;
+    screen_wiping = 1 - screen_wiping;
 }
 
 void M_RD_Change_Renderer(int choice)

@@ -1730,6 +1730,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(red_resurrection_flash),
     CONFIG_VARIABLE_INT(draw_shadowed_text),
     CONFIG_VARIABLE_INT(show_diskicon),
+    CONFIG_VARIABLE_INT(screen_wiping),
 
     // Звук
     CONFIG_VARIABLE_INT(crushed_corpses_sfx),

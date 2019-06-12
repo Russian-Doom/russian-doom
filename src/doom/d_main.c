@@ -218,8 +218,8 @@ void D_Display (void)
     }
 
     // save the current screen if about to wipe
-    // [JN] No wiping while -devparm
-    if (gamestate != wipegamestate && !devparm)
+    // [JN] Wiping: make optional
+    if (gamestate != wipegamestate && screen_wiping)
     {
         wipe = true;
         wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
@@ -468,6 +468,7 @@ void D_BindVariables(void)
     M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     M_BindIntVariable("show_diskicon",          &show_diskicon);
+    M_BindIntVariable("screen_wiping",            &screen_wiping);
 
     // Звук
     M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);

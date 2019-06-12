@@ -254,6 +254,7 @@ int colored_hud = 0;
 int colored_blood = 1;
 int red_resurrection_flash = 1;
 int draw_shadowed_text = 1;
+int screen_wiping = 1;
 // int show_diskicon = 1; (d_main.c)
 
 // Звук
