@@ -1044,7 +1044,7 @@ PRESSYN_RUS
 #define GOTSHELLBOX_RUS "gjkextyf rjhj,rf gfnhjyjd lkz lhj,jdbrf>"  // Получена коробка патронов для дробовика.
 #define GOTBACKPACK_RUS "gjkexty h.rpfr c fvveybwbtq!"              // Получен рюкзак с амуницией!
 
-#define GOTBFG9000_RUS  "gjkextyj $9000! j< lf>"        // Получено BFG9000! О, да.
+#define GOTBFG9000_RUS  "gjkextyj $9000! j lf>"         // Получено BFG9000! О да.
 #define GOTCHAINGUN_RUS "gjkexty gektvtn!"              // Получен пулемет!
 #define GOTCHAINSAW_RUS ",typjgbkf! yfqlb ytvyjuj vzcf!"// Бензопила! Найди немного мяса!
 #define GOTLAUNCHER_RUS "gjkextyf hfrtnybwf!"           // Получена ракетница!
