@@ -702,7 +702,7 @@ void D_DoAdvanceDemo (void)
 
             gamestate = GS_DEMOSCREEN;
 
-            if (gamemode == shareware && !english_language)
+            if (gamemode == shareware)
                 pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
             else
                 pagename = DEH_String("TITLEPIC");
@@ -1122,11 +1122,13 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/common/doom-common-russian.wad");
                 W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-doom1-russian.wad");
+            }
 
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom1-wide.wad");
+                if (!english_language)
+                W_MergeFile("base/wide/doom-doom1-wide-russian.wad");
 #endif
-            }
 
             if (gameversion == exe_doom_se)
             {
@@ -1155,10 +1157,13 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/common/doom-common-russian.wad");
                 W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-doom1-russian.wad");
+            }
+
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom1-wide.wad");
+                if (!english_language)
+                W_MergeFile("base/wide/doom-doom1-wide-russian.wad");
 #endif
-            }
         }
         else if (gamemode == shareware)
         {
@@ -1175,10 +1180,13 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/common/doom-common-russian.wad");
                 W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-doom1-russian.wad");
+            }
+
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom1-wide.wad");
+                if (!english_language)
+                W_MergeFile("base/wide/doom-doom1-wide-russian.wad");
 #endif
-            }
         }
         else if (gamemode == pressbeta)
         {
@@ -1266,10 +1274,13 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/common/doom-common-russian.wad");
                 W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-doom2-russian.wad");
+            }
+
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom2-wide.wad");
+                if (!english_language)
+                W_MergeFile("base/wide/doom-doom2-wide-russian.wad");
 #endif
-            }
         }
         else if (logical_gamemission == pack_plut)
         {
@@ -1287,10 +1298,12 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/common/doom-common-russian.wad");
                 W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-plutonia-russian.wad");
+            }
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-plutonia-wide.wad");
+                if (!english_language)
+                W_MergeFile("base/wide/doom-plutonia-wide-russian.wad");
 #endif
-            }
         }
         else if (logical_gamemission == pack_tnt)
         {
@@ -1307,10 +1320,12 @@ void D_SetGameDescription(void)
                 W_MergeFile("base/common/doom-common-russian.wad");
                 W_MergeFile("base/common/doom-sysfont-russian.wad");
                 W_MergeFile("base/common/doom-tnt-russian.wad");
+            }
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-tnt-wide.wad");
+                if (!english_language)
+                W_MergeFile("base/wide/doom-tnt-wide-russian.wad");
 #endif
-            }
         }
         else if (logical_gamemission == jaguar)
         {
@@ -1630,8 +1645,7 @@ void D_SetGameDescription(void)
     // 2) placed inside doom-doom1-wide.wad.
     // 3 or more) modified titlepic inside PWAD.
 #ifdef WIDESCREEN
-    if (!english_language && gamemode == retail 
-    &&   W_CheckMultipleLumps("TITLEPIC") <= 2)
+    if (gamemode == retail && W_CheckMultipleLumps("TITLEPIC") <= 2)
     {
         DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
     }
