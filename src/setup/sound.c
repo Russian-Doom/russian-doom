@@ -226,8 +226,8 @@ void ConfigSound(void)
                 NULL)),
 
         TXT_NewRadioButton(english_language ?
-                           "Native MIDI" :
-                           "Системное MIDI",
+                           "MIDI/MP3/OGG/FLAC" : // [crispy] improve ambigious music backend name
+                           "MIDI/MP3/OGG/FLAC",  // [JN] yes!
                            &snd_musicdevice, SNDDEVICE_GENMIDI),
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GENMIDI,
             TXT_NewHorizBox(
