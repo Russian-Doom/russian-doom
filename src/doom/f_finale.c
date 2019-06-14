@@ -843,26 +843,52 @@ void F_BunnyScroll (void)
     char        name[10];
     int	        stage;
     static int  laststage;
+    extern boolean wide_loaded;
 
-    p1 = W_CacheLumpName (DEH_String("PFUB2"), PU_LEVEL);
-    p2 = W_CacheLumpName (DEH_String("PFUB1"), PU_LEVEL);
-
-    V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
-
-    scrolled = (320 - ((signed int) finalecount-230)/2);
-
-    if (scrolled > 320)
-    scrolled = 320;
-    if (scrolled < 0)
-    scrolled = 0;
-
-    for ( x=0 ; x<320  ; x++)
+    if (wide_loaded)
     {
-        if (x+scrolled < 320)
-        F_DrawPatchCol (x + ORIGWIDTH_DELTA, p1, x+scrolled);
-        else
-        F_DrawPatchCol (x + ORIGWIDTH_DELTA, p2, x+scrolled - 320);
-     }
+        p1 = W_CacheLumpName (DEH_String("PFUB2WD"), PU_LEVEL);
+        p2 = W_CacheLumpName (DEH_String("PFUB1WD"), PU_LEVEL);
+
+        V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
+
+        scrolled = (426 - ((signed int) finalecount-230)/2);
+
+        if (scrolled > 426)
+        scrolled = 426;
+        if (scrolled < 0)
+        scrolled = 0;
+
+        for ( x=0 ; x<426  ; x++)
+        {
+            if (x+scrolled < 426)
+            F_DrawPatchCol (x, p1, x+scrolled);
+            else
+            F_DrawPatchCol (x, p2, x+scrolled - 426);
+        }
+    }
+    else
+    {
+        p1 = W_CacheLumpName (DEH_String("PFUB2"), PU_LEVEL);
+        p2 = W_CacheLumpName (DEH_String("PFUB1"), PU_LEVEL);
+
+        V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
+
+        scrolled = (320 - ((signed int) finalecount-230)/2);
+
+        if (scrolled > 320)
+        scrolled = 320;
+        if (scrolled < 0)
+        scrolled = 0;
+
+        for ( x=0 ; x<320  ; x++)
+        {
+            if (x+scrolled < 320)
+            F_DrawPatchCol (x + ORIGWIDTH_DELTA, p1, x+scrolled);
+            else
+            F_DrawPatchCol (x + ORIGWIDTH_DELTA, p2, x+scrolled - 320);
+        }
+    }
 
     if (finalecount < 1130)
     return;

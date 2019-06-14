@@ -119,6 +119,7 @@ boolean vanillaparm; // [JN] проверка параметра -vanilla
 boolean scaled_sky = false; // [JN] Boolean for sky scaling
 boolean old_slider = false; // [JN] Boolean for dimmed/red thermometer
 boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
+boolean wide_loaded = false; // [JN] Boolen only for wide bunny screen
 
 
 extern boolean inhelpscreens;
@@ -1673,6 +1674,22 @@ void D_SetGameDescription(void)
     {
         old_godface = false;
     }
+
+    // [JN] Wide screen: check for modified bunny backgrounds.
+    // If modified, use old scrolling code for 320x200 screens
+    // and modified backgrounds.
+    // If not modified, use wide scrolling code 426x200 and
+    // wide bunny backgrounds. See F_BunnyScroll (f_finale.c).
+#ifdef WIDESCREEN
+    if (W_CheckMultipleLumps("PFUB1") > 1 || W_CheckMultipleLumps("PFUB2") > 1)
+    {
+        wide_loaded = false;
+    }
+    else
+    {
+        wide_loaded = true;
+    }
+#endif
 
     // [JN] Finally, some compatibility mess
     if (gamemode == pressbeta || gamemission == jaguar)
