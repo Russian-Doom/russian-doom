@@ -1614,8 +1614,31 @@ void DrawFullScreenStuff(void)
     }
     if (!inventory)
     {
-        // [JN] Draw health vial
-        V_DrawShadowedPatch(48, 218, W_CacheLumpName("PTN1A0", PU_CACHE));
+        // [JN] Draw health vial, representing player's health
+        if (CPlayer->mo->health == 100)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT00", PU_CACHE));
+        else if (CPlayer->mo->health >= 90)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT01", PU_CACHE));
+        else if (CPlayer->mo->health >= 80)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT02", PU_CACHE));
+        else if (CPlayer->mo->health >= 70)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT03", PU_CACHE));
+        else if (CPlayer->mo->health >= 60)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT04", PU_CACHE));
+        else if (CPlayer->mo->health >= 50)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT05", PU_CACHE));
+        else if (CPlayer->mo->health >= 40)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT06", PU_CACHE));
+        else if (CPlayer->mo->health >= 30)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT07", PU_CACHE));
+        else if (CPlayer->mo->health >= 20)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT08", PU_CACHE));
+        else if (CPlayer->mo->health >= 10)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT09", PU_CACHE));
+        else if (CPlayer->mo->health >= 1)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT10", PU_CACHE));
+        else if (CPlayer->mo->health <= 0)
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT11", PU_CACHE));
 
         if (CPlayer->readyArtifact > 0)
         {
