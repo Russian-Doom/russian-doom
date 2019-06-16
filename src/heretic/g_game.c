@@ -1212,8 +1212,8 @@ void G_Ticker(void)
             case ga_playdemo:
                 G_DoPlayDemo();
                 break;
-            case ga_screenshot:
-                V_ScreenShot("HTIC%02i.%s");
+            case ga_screenshot:  // [JN] Extended name from "HTIC%02i.%s"
+                V_ScreenShot("screenshot-heretic-%02i.%s");
                 S_StartSound(NULL, sfx_chat);   // [JN] Audio feedback
                 gameaction = ga_nothing;
                 break;

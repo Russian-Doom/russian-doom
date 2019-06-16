@@ -1112,8 +1112,8 @@ void G_Ticker (void)
             G_DoWorldDone ();
             break; 
 
-            case ga_screenshot:
-            V_ScreenShot("DOOM%02i.%s");
+            case ga_screenshot: // [JN] Extended name from "DOOM%02i.%s"
+            V_ScreenShot("screenshot-doom-%02i.%s");
             if (devparm)
             {
                 players[consoleplayer].message = english_language ? STSTR_SCRNSHT : STSTR_SCRNSHT_RUS;

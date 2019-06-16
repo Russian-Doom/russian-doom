@@ -1400,8 +1400,8 @@ void WritePNGfile(char *filename, byte *data,
 void V_ScreenShot(char *format)
 {
     int i;
-    char lbmname[16]; // haleyjd 20110213: BUG FIX - 12 is too small!
-    char *ext;
+    char lbmname[32]; // haleyjd 20110213: BUG FIX - 12 is too small!
+    char *ext;        // [JN] lbmname extended from 16 to 32
     
     // find a file name to save it to
 

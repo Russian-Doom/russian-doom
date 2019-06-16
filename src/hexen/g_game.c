@@ -1173,8 +1173,8 @@ void G_Ticker(void)
             case ga_playdemo:
                 G_DoPlayDemo();
                 break;
-            case ga_screenshot:
-                V_ScreenShot("HEXEN%02i.%s");
+            case ga_screenshot: // [JN] Extended name from "HEXEN%02i.%s"
+                V_ScreenShot("screenshot-hexen-%02i.%s");
                 S_StartSound(NULL, SFX_CHAT);   // [JN] Audio feedback
                 // P_SetMessage(&players[consoleplayer], "CYBVJR 'RHFYF", false);	// СНИМОК ЭКРАНА | SCREEN SHOT
                 gameaction = ga_nothing;
