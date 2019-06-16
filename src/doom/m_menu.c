@@ -1400,7 +1400,7 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextBig(213 + ORIGWIDTH_DELTA, 53, uncapped_fps == 1 ? "on" : "off");
         M_WriteTextBig(225 + ORIGWIDTH_DELTA, 69, show_diskicon == 1 ? "on" : "off");
         M_WriteTextBig(202 + ORIGWIDTH_DELTA, 85, smoothing == 1 ? "smooth" : "sharp");
-        M_WriteTextBig(217 + ORIGWIDTH_DELTA, 101, screen_wiping == 1 ? "on" : "off");
+        M_WriteTextBig(211 + ORIGWIDTH_DELTA, 101, screen_wiping == 1 ? "on" : "off");
         M_WriteTextBig(233 + ORIGWIDTH_DELTA, 117, force_software_renderer == 1 ? "cpu" : "gpu");
     }
     else
