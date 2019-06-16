@@ -566,6 +566,7 @@ void D_DoomMain(void)
     M_SetConfigFilenames(/*"hexen.ini", */PROGRAM_PREFIX "hexen.ini");
     M_LoadDefaults();
 
+    I_AtExit(M_SaveDefaults, false);
     D_SetDefaultSavePath();
 
 
