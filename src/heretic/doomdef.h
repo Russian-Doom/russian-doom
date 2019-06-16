@@ -61,7 +61,8 @@
 
 #include "d_loop.h"
 
-#define	SAVEGAMENAME "hticsav"
+// [JN] Extended name from "hticsav".
+#define	SAVEGAMENAME "heretic-save-"
 
 /*
 ===============================================================================

@@ -119,7 +119,7 @@ static byte *DiskRegionPointer(void)
 
 void V_DrawDiskIcon(void)
 {
-    if (show_diskicon == 0)
+    if (show_diskicon != 1)
     return;
 
     if (disk_data != NULL && recent_bytes_read > diskicon_threshold)

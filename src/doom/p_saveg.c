@@ -52,7 +52,7 @@ char *P_TempSaveGameFile(void)
 
     if (filename == NULL)
     {
-        filename = M_StringJoin(savegamedir, "temp.dsg", NULL);
+        filename = M_StringJoin(savegamedir, "temp.sav", NULL);
     }
 
     return filename;
@@ -72,7 +72,7 @@ char *P_SaveGameFile(int slot)
         filename = malloc(filename_size);
     }
 
-    DEH_snprintf(basename, 32, SAVEGAMENAME "%d.dsg", slot);
+    DEH_snprintf(basename, 32, SAVEGAMENAME "%d.sav", slot);
     M_snprintf(filename, filename_size, "%s%s", savegamedir, basename);
 
     return filename;

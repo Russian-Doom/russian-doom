@@ -28,7 +28,8 @@
 #include "d_englsh.h"
 
 // Misc. other strings.
-#define SAVEGAMENAME "doomsav"
+// [JN] Extended name from "doomsav".
+#define SAVEGAMENAME "doom-save-"
 
 
 // QuitDOOM messages

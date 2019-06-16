@@ -2259,9 +2259,29 @@ char *M_GetSaveGameDir(char *iwadname)
     // If not "doing" a configuration directory (Windows), don't "do"
     // a savegame directory, either.
 
+    // [JN] Modified a bit for RD needs. 
+    // Always use "savegames" dir, but without IWAD subfolders,
+    // to emulate standard Windows behavior.
+
     if (!strcmp(configdir, ""))
     {
-	savegamedir = M_StringDuplicate("");
+        // add separator at end just in case
+        savegamedir = M_StringJoin(configdir, "savegames", DIR_SEPARATOR_S, NULL);
+
+        if (!M_FileExists(savegamedir))
+        {
+            M_MakeDirectory(savegamedir);
+        }
+
+#ifdef _WIN32
+    // In -cdrom mode, we write savegames to a specific directory
+    // in addition to configs.
+
+    if (M_ParmExists("-cdrom"))
+    {
+        savegamedir = configdir;
+    }
+#endif
     }
     else
     {
