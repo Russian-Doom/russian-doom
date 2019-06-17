@@ -209,7 +209,12 @@ void P_FloorBounceMissile(mobj_t * mo)
             mo->momz = FixedMul(mo->momz, -0.3 * FRACUNIT);
             if (abs(mo->momz) < (FRACUNIT / 2))
             {
-                P_SetMobjState(mo, S_NULL);
+                // [JN] Do not remove glass shards...
+                // P_SetMobjState(mo, S_NULL);
+                // [JN] ...initialize their X/Y/Z momentum to let them lay calmly.
+                mo->momx = 0;
+                mo->momy = 0;
+                mo->momz = 0;
                 return;
             }
             break;
