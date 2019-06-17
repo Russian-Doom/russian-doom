@@ -44,6 +44,7 @@
 #include "deh_str.h"
 #include "i_swap.h"
 #include "i_system.h"
+#include "i_timer.h"
 #include "i_video.h"
 #include "m_misc.h"
 #include "v_video.h"
@@ -201,6 +202,22 @@ boolean M_WriteFile(const char *name, void *source, int length)
     return true;
 }
 
+boolean M_WriteFileTimeout(const char *name, void *source, int length, int delay)
+{
+    boolean res;
+    int timeout = I_GetTimeMS() + delay;
+
+    res = M_WriteFile(name, source, length);
+
+    // tolerate the given delay when opening a file for writing
+    while (res == false && I_GetTimeMS() < timeout)
+    {
+        I_Sleep(10);
+        res = M_WriteFile(name, source, length);
+    }
+
+    return res;
+}
 
 //
 // M_ReadFile

@@ -28,6 +28,7 @@
 #include "doomtype.h"
 
 boolean M_WriteFile(const char *name, void *source, int length);
+boolean M_WriteFileTimeout(const char *name, void *source, int length, int delay);
 int M_ReadFile(char *name, byte **buffer);
 void M_MakeDirectory(char *dir);
 char *M_TempFile(char *s);

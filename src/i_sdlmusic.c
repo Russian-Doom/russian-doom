@@ -365,6 +365,8 @@ static boolean IsMid(byte *mem, int len)
 }
 */
 
+#define WRITE_TIMEOUT 1000 // ms
+
 static boolean ConvertMus(byte *musdata, int len, const char *filename)
 {
     MEMFILE *instream;
@@ -382,7 +384,7 @@ static boolean ConvertMus(byte *musdata, int len, const char *filename)
     {
         mem_get_buf(outstream, &outbuf, &outbuf_len);
 
-        M_WriteFile(filename, outbuf, outbuf_len);
+        M_WriteFileTimeout(filename, outbuf, outbuf_len, WRITE_TIMEOUT);
     }
 
     mem_fclose(instream);
@@ -414,7 +416,7 @@ static void *I_SDL_RegisterSong(void *data, int len)
 */
     if (len < 4 || memcmp(data, "MUS\x1a", 4)) // [crispy] MUS_HEADER_MAGIC
     {
-        M_WriteFile(filename, data, len);
+        M_WriteFileTimeout(filename, data, len, WRITE_TIMEOUT);
     }
     else
     {
