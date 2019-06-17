@@ -502,11 +502,17 @@ void ST_refreshBackground(void)
 
         V_RestoreBuffer();
 
+        // [JN] Do not call V_CopyRect in wide screen mode, because of
+        // different status bar drawing routines and effective screen size.
+        // Following condition preventing from black bars appering in some 
+        // cases like holding 'ENTER' on aspect ratio changing.
+#ifndef WIDESCREEN
         // [JN] Jaguar: use different height of status bar
         if (gamemission == jaguar)
         V_CopyRect(ST_X, 0, st_backing_screen, ST_WIDTH, ST_HEIGHT_JAG, ST_X, ST_Y_JAG);
         else
         V_CopyRect(ST_X, 0, st_backing_screen, ST_WIDTH, ST_HEIGHT, ST_X, ST_Y);
+#endif
     }
 }
 
