@@ -635,7 +635,8 @@ boolean ST_Responder (event_t* ev)
                 plyr->weaponowned[wp_chainsaw] = true;
                 plyr->weaponowned[wp_pistol] = true;
                 plyr->weaponowned[wp_shotgun] = true;
-                plyr->weaponowned[wp_supershotgun] = gamemode == commercial ? true : false;
+                if (gamemode == commercial && gamemission != jaguar)
+                plyr->weaponowned[wp_supershotgun] = true;
                 plyr->weaponowned[wp_chaingun] = true;
                 plyr->weaponowned[wp_missile] = true;
                 plyr->weaponowned[wp_plasma] = gamemode == shareware ? false : true;
@@ -675,7 +676,8 @@ boolean ST_Responder (event_t* ev)
                 plyr->weaponowned[wp_chainsaw] = true;
                 plyr->weaponowned[wp_pistol] = true;
                 plyr->weaponowned[wp_shotgun] = true;
-                plyr->weaponowned[wp_supershotgun] = gamemode == commercial ? true : false;
+                if (gamemode == commercial && gamemission != jaguar)
+                plyr->weaponowned[wp_supershotgun] = true;
                 plyr->weaponowned[wp_chaingun] = true;
                 plyr->weaponowned[wp_missile] = true;
                 plyr->weaponowned[wp_plasma] = gamemode == shareware ? false : true;
