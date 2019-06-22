@@ -60,7 +60,7 @@ static int cd_track_end_time = 0;
 ===============================================================================
 */
 
-//static channel_t channel[MAX_CHANNELS];
+static channel_t channel[MAX_CHANNELS];
 
 //static int rs; //the current registered song.
 //int mus_song = -1;
@@ -80,7 +80,7 @@ static byte *SoundCurve;
 
 int snd_MaxVolume = 10;                // maximum volume for sound
 int snd_MusicVolume = 10;              // maximum volume for music
-int snd_Channels = 64;
+int snd_Channels = 32;
 
 // int AmbChan;
 
@@ -796,10 +796,24 @@ void S_Init(void)
     SoundCurve = W_CacheLumpName("SNDCURVE", PU_STATIC);
 //      SoundCurve = Z_Malloc(MAX_SND_DIST, PU_STATIC, NULL);
 
-    if (snd_Channels > 8)
-    {
-        snd_Channels = 8;
-    }
+    // [JN] Make sound channels multiple by four, correct invalid values.
+         if (snd_Channels <= 4)  snd_Channels = 4;
+    else if (snd_Channels <= 8)  snd_Channels = 8;
+    else if (snd_Channels <= 12) snd_Channels = 12;
+    else if (snd_Channels <= 16) snd_Channels = 16;
+    else if (snd_Channels <= 20) snd_Channels = 20;
+    else if (snd_Channels <= 24) snd_Channels = 24;
+    else if (snd_Channels <= 32) snd_Channels = 32;
+    else if (snd_Channels <= 36) snd_Channels = 36;
+    else if (snd_Channels <= 40) snd_Channels = 40;
+    else if (snd_Channels <= 44) snd_Channels = 44;
+    else if (snd_Channels <= 48) snd_Channels = 48;
+    else if (snd_Channels <= 52) snd_Channels = 52;
+    else if (snd_Channels <= 56) snd_Channels = 56;
+    else if (snd_Channels <= 60) snd_Channels = 60;
+    else if (snd_Channels <= 64) snd_Channels = 64;
+    else if (snd_Channels >= 64) snd_Channels = 64;
+
     I_SetMusicVolume(snd_MusicVolume * 8);
 
     I_AtExit(S_ShutDown, true);
@@ -837,6 +851,30 @@ void S_Init(void)
 
         I_CDMusPrintStartup();
     }
+}
+
+// -----------------------------------------------------------------------------
+// S_ChannelsRealloc
+// [JN] Reallocates sound channels, needed for hot-swapping.
+// -----------------------------------------------------------------------------
+void S_ChannelsRealloc(void)
+{
+    int i;
+
+    // Safeguard conditions:
+    if (snd_Channels < 4)
+        snd_Channels = 4;
+    if (snd_Channels > 64)
+        snd_Channels = 64;
+
+    for (i = 0; i < snd_Channels; i++)
+    {
+        if (channel[i].handle)
+        {
+            S_StopSound(channel[i].mo);
+        }
+    }
+    memset(channel, 0, 8 * sizeof(channel_t));
 }
 
 //==========================================================================
