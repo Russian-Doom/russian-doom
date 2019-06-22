@@ -39,6 +39,8 @@ void S_Init(int sfxVolume, int musicVolume);
 void S_Shutdown(void);
 
 
+// [JN] Channels reallocation
+void S_ChannelsRealloc(void);
 
 //
 // Per level startup code.

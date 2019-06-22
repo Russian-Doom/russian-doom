@@ -303,6 +303,7 @@ void M_RD_Choose_Audio(int choice);
 void M_RD_Draw_Audio(void);
 void M_RD_Change_SfxVol(int choice);
 void M_RD_Change_MusicVol(int choice);
+void M_RD_Change_SfxChannels(int choice);
 void M_RD_Change_SndMode(int choice);
 void M_RD_Change_PitchShifting(int choice);
 
@@ -947,6 +948,8 @@ enum
     rd_audio_empty1,
     rd_audio_musvolume,
     rd_audio_empty2,
+    rd_audio_sfxchannels,
+    rd_audio_empty3,
     rd_audio_sndmode,
     rd_audio_sndpitch,
     rd_audio_end
@@ -961,6 +964,8 @@ menuitem_t RD_Audio_Menu[]=
     {2,"Sfx volume",    M_RD_Change_SfxVol,     's'},
     {-1,"",0,'\0'},
     {2,"Music volume",  M_RD_Change_MusicVol,   'm'},
+    {-1,"",0,'\0'},
+    {2,"Sfx channels",  M_RD_Change_SfxChannels,'s'},
     {-1,"",0,'\0'},
     {1,"Sfx mode:",     M_RD_Change_SndMode,    's'},
     {1,"Pitch-shifting:",M_RD_Change_PitchShifting,    'p'},
@@ -983,11 +988,13 @@ menu_t RD_Audio_Def =
 
 menuitem_t RD_Audio_Menu_Rus[]=
 {
-    {2,"Uhjvrjcnm pderf",   M_RD_Change_SfxVol,     's'},   // Громкость звука
+    {2,"Uhjvrjcnm pderf",   M_RD_Change_SfxVol,     'u'},   // Громкость звука
     {-1,"",0,'\0'},                                         //
-    {2,"Uhjvrjcnm vepsrb",  M_RD_Change_MusicVol,   'm'},   // Громкость музыки
+    {2,"Uhjvrjcnm vepsrb",  M_RD_Change_MusicVol,   'u'},   // Громкость музыки
     {-1,"",0,'\0'},                                         //
-    {1,"Ht;bv pderf:",      M_RD_Change_SndMode,    's'},   // Режим звука
+    {2,"Pderjdst rfyfks",   M_RD_Change_SfxChannels,'p'},   // Звуковые каналы
+    {-1,"",0,'\0'},
+    {1,"Ht;bv pderf:",      M_RD_Change_SndMode,    'h'},   // Режим звука
     {1,"Gbnx-ibanbyu:",     M_RD_Change_PitchShifting, 'g'},   // Питч-шифтинг
     {-1,"",0,'\0'}
 };
@@ -1664,16 +1671,37 @@ void M_RD_Draw_Audio(void)
     M_snprintf(num, 4, "%3d", musicVolume);
     M_WriteText(202+ORIGWIDTH_DELTA, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_musvolume+1) + 2, num);
 
+    // Draw SFX channels slider
+    M_DrawThermo(60+ORIGWIDTH_DELTA, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1), 16, 
+                                                                  snd_channels == 4 ? 0 :
+                                                                  snd_channels == 8 ? 1 :
+                                                                  snd_channels == 12 ? 2 :
+                                                                  snd_channels == 16 ? 3 :
+                                                                  snd_channels == 20 ? 4 :
+                                                                  snd_channels == 24 ? 5 :
+                                                                  snd_channels == 28 ? 6 :
+                                                                  snd_channels == 32 ? 7 :
+                                                                  snd_channels == 36 ? 8 :
+                                                                  snd_channels == 40 ? 9 :
+                                                                  snd_channels == 44 ? 10 :
+                                                                  snd_channels == 48 ? 11 :
+                                                                  snd_channels == 52 ? 12 :
+                                                                  snd_channels == 56 ? 13 :
+                                                                  snd_channels == 60 ? 14 : 15);
+    // Draw numerical representation of channels
+    M_snprintf(num, 4, "%3d", snd_channels);
+    M_WriteText(202+ORIGWIDTH_DELTA, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1) + 2, num);
+
     // Write "on" / "off" strings for features
     if (english_language)
     {
-        M_WriteTextBig(172 + ORIGWIDTH_DELTA, 101, snd_monomode == 1 ? "mono" : "stereo");
-        M_WriteTextBig(231 + ORIGWIDTH_DELTA, 117, snd_pitchshift == 1 ? "on" : "off");
+        M_WriteTextBig(172 + ORIGWIDTH_DELTA, 133, snd_monomode == 1 ? "mono" : "stereo");
+        M_WriteTextBig(231 + ORIGWIDTH_DELTA, 149, snd_pitchshift == 1 ? "on" : "off");
     }
     else
     {
-        M_WriteTextBig(219 + ORIGWIDTH_DELTA, 101, snd_monomode == 1 ? "vjyj" : "cnthtj");
-        M_WriteTextBig(236 + ORIGWIDTH_DELTA, 117, snd_pitchshift == 1 ? "drk" : "dsrk");
+        M_WriteTextBig(219 + ORIGWIDTH_DELTA, 133, snd_monomode == 1 ? "vjyj" : "cnthtj");
+        M_WriteTextBig(236 + ORIGWIDTH_DELTA, 149, snd_pitchshift == 1 ? "drk" : "dsrk");
     }
 }
 
@@ -1711,6 +1739,25 @@ void M_RD_Change_MusicVol(int choice)
     }
 
     S_SetMusicVolume(musicVolume * 8);
+}
+
+void M_RD_Change_SfxChannels(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        if (snd_channels > 4)
+            snd_channels -= 4;
+        break;
+    
+        case 1:
+        if (snd_channels < 64)
+            snd_channels += 4;
+        break;
+    }
+
+    // Reallocate sound channels
+    S_ChannelsRealloc();
 }
 
 void M_RD_Change_SndMode(int choice)

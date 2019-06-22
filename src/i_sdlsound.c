@@ -46,6 +46,7 @@
 
 #define LOW_PASS_FILTER
 //#define DEBUG_DUMP_WAVS
+// [JN] Extended from 16 to 64
 #define NUM_CHANNELS 64
 
 typedef struct allocated_sound_s allocated_sound_t;
