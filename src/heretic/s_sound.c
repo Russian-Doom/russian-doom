@@ -55,7 +55,7 @@ byte *soundCurve;
 
 int snd_MaxVolume = 10;
 int snd_MusicVolume = 10;
-int snd_Channels = 64;
+int snd_Channels = 32;
 
 int AmbChan;
 
@@ -529,10 +529,25 @@ void S_Init(void)
 {
     I_SetOPLDriverVer(opl_doom2_1_666);
     soundCurve = Z_Malloc(MAX_SND_DIST, PU_STATIC, NULL);
-    if (snd_Channels > 8)
-    {
-        snd_Channels = 8;
-    }
+
+    // [JN] Make sound channels multiple by four, correct invalid values.
+         if (snd_Channels <= 4)  snd_Channels = 4;
+    else if (snd_Channels <= 8)  snd_Channels = 8;
+    else if (snd_Channels <= 12) snd_Channels = 12;
+    else if (snd_Channels <= 16) snd_Channels = 16;
+    else if (snd_Channels <= 20) snd_Channels = 20;
+    else if (snd_Channels <= 24) snd_Channels = 24;
+    else if (snd_Channels <= 32) snd_Channels = 32;
+    else if (snd_Channels <= 36) snd_Channels = 36;
+    else if (snd_Channels <= 40) snd_Channels = 40;
+    else if (snd_Channels <= 44) snd_Channels = 44;
+    else if (snd_Channels <= 48) snd_Channels = 48;
+    else if (snd_Channels <= 52) snd_Channels = 52;
+    else if (snd_Channels <= 56) snd_Channels = 56;
+    else if (snd_Channels <= 60) snd_Channels = 60;
+    else if (snd_Channels <= 64) snd_Channels = 64;
+    else if (snd_Channels >= 64) snd_Channels = 64;
+
     I_SetMusicVolume(snd_MusicVolume * 8);
     S_SetMaxVolume(true);
 
