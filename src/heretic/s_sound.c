@@ -55,7 +55,7 @@ byte *soundCurve;
 
 int snd_MaxVolume = 10;
 int snd_MusicVolume = 10;
-int snd_Channels = 16;
+int snd_Channels = 64;
 
 int AmbChan;
 

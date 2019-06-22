@@ -80,7 +80,7 @@ static byte *SoundCurve;
 
 int snd_MaxVolume = 10;                // maximum volume for sound
 int snd_MusicVolume = 10;              // maximum volume for music
-int snd_Channels = 16;
+int snd_Channels = 64;
 
 // int AmbChan;
 
