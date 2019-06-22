@@ -562,6 +562,30 @@ void S_Init(void)
     I_PrecacheSounds(S_sfx, NUMSFX);
 }
 
+// -----------------------------------------------------------------------------
+// S_ChannelsRealloc
+// [JN] Reallocates sound channels, needed for hot-swapping.
+// -----------------------------------------------------------------------------
+void S_ChannelsRealloc(void)
+{
+    int i;
+
+    // Safeguard conditions:
+    if (snd_Channels < 4)
+        snd_Channels = 4;
+    if (snd_Channels > 64)
+        snd_Channels = 64;
+
+    for (i = 0; i < snd_Channels; i++)
+    {
+        if (channel[i].handle)
+        {
+            S_StopSound(channel[i].mo);
+        }
+    }
+    memset(channel, 0, 8 * sizeof(channel_t));
+}
+
 void S_GetChannelInfo(SoundInfo_t * s)
 {
     int i;

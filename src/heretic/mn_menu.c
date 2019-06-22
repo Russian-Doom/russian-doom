@@ -1597,6 +1597,9 @@ static boolean M_RD_SfxChannels(int option)
         snd_Channels -= 4;
     }
 
+    // Reallocate sound channels
+    S_ChannelsRealloc();
+
     return true;
 }
 
