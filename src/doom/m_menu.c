@@ -2523,8 +2523,13 @@ void M_RD_BackToDefaultsResponse(int key)
 
     // Audio
     sfxVolume       = 8;
+    S_SetSfxVolume(sfxVolume * 8);
     musicVolume     = 8;
+    S_SetMusicVolume(musicVolume * 8);
+    snd_channels    = 32;
+    S_ChannelsRealloc();
     snd_monomode    = 0;
+    snd_pitchshift  = 0;
 
     // Controls
     joybspeed           = 29;

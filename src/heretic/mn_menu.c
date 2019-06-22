@@ -2134,6 +2134,8 @@ void M_RD_DoResetSettings(void)
     soundchanged = true;        // we'll set it when we leave the menu
     snd_MusicVolume = 8;
     S_SetMusicVolume();
+    snd_Channels    = 32;
+    S_ChannelsRealloc();
     snd_monomode    = 0;
 
     // Controls
