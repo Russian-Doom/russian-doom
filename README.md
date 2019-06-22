@@ -12,12 +12,12 @@ The project, along with all its translation materials and source code, are avail
 
 Starting from version 3.0 for Windows, English is available for all supported games. It can be selected in the Main Menu of the Setup executable by pressing F4 (don’t forget to save all changes before exiting) or by setting `english_language` to `1` in the configuration file. Language options are set individually for each game.
 
-##### Download latest version (updated: February 9, 2019)
+##### Download latest version (updated: June 22, 2019)
 
-For Windows: [russian-doom-3.1a-win32.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.1a/russian-doom-3.1a-win32.zip/download)<br />
-For Windows (x64): [russian-doom-3.1a-win64.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.1a/russian-doom-3.1a-win64.zip/download)<br />
+For Windows: [russian-doom-3.2-win32.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.2/russian-doom-3.2-win32.zip/download)<br />
+For Windows (x64): [russian-doom-3.2-win64.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.2/russian-doom-3.2-win64.zip/download)<br />
 For DOS: [russian-doom-dos-1.666a.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom%20for%20DOS/1.666a/russian-doom-dos-1.666a.zip/download)<br /><br />
-Source codes: [russian-doom-3.1a-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.1a/russian-doom-3.1a-source.zip/download)<br />
+Source codes: [russian-doom-3.2-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.2/russian-doom-3.2-source.zip/download)<br />
 PNG font atlases: [russian-doom-fonts-png.zip](https://sourceforge.net/projects/jnechaevsky/files/PNG%20Fonts/russian-doom-fonts-png.zip/download)
 
 
