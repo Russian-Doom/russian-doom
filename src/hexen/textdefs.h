@@ -355,7 +355,7 @@
 #define TXT_CROSSHAIR_OFF_RUS       "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
 
 
-#define TXT_VERSION "VERSION 3.2"
+#define TXT_VERSION "VERSION 3.2.1"
 #if defined (_WIN64)
 #define TXT_ARCH      " - (X64)"
 #elif defined (_WIN32)
@@ -363,10 +363,10 @@
 #else
 #define TXT_ARCH      ""
 #endif
-#define TXT_DATE      "6/22/2019"      // MM/DD/YYYY
+#define TXT_DATE      "IN DEVELOPMENT"      // YYYY-MM-DD
 
 
-#define TXT_VERSION_RUS "DTHCBZ 3>2"       // ВЕРСИЯ 3.2
+#define TXT_VERSION_RUS "DTHCBZ 3>2>1"      // ВЕРСИЯ 3.2.1
 #if defined (_WIN64)
 #define TXT_ARCH_RUS      " - ([64)"        // x64
 #elif defined (_WIN32)
@@ -374,5 +374,5 @@
 #else
 #define TXT_ARCH_RUS      ""                // ?  
 #endif
-#define TXT_DATE_RUS      "22>06>2019"    // DD.MM.YYYY
+#define TXT_DATE_RUS      "D HFPHF,JNRT"    // YYYY-MM-DD
 
