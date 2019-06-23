@@ -2883,6 +2883,22 @@ boolean MN_Responder(event_t * event)
             }
             return (true);
         }
+        // [JN] Scroll Gameplay features menu by PgUp/PgDn keys
+        else if (key == KEY_PGUP || key == KEY_PGDN)
+        {
+            if (CurrentMenu == &Gameplay1Menu || CurrentMenu == &Gameplay1Menu_Rus)
+            {
+                SetMenu(MENU_GAMEPLAY2);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+            if (CurrentMenu == &Gameplay2Menu || CurrentMenu == &Gameplay2Menu_Rus)
+            {
+                SetMenu(MENU_GAMEPLAY1);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+        }
         else if (charTyped != 0)
         {
             // Jump to menu item based on first letter:
