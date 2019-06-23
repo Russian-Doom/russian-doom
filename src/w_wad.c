@@ -365,6 +365,20 @@ lumpindex_t W_GetNumForName(char* name)
     return i;
 }
 
+lumpindex_t W_CheckNumForNameFromTo(const char *name, int from, int to)
+{
+    lumpindex_t i;
+
+    for (i = from; i >= to; i--)
+    {
+        if (!strncasecmp(lumpinfo[i]->name, name, 8))
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 //
 // W_LumpLength
