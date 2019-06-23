@@ -4094,6 +4094,86 @@ boolean M_Responder (event_t* ev)
         }
     }
 
+    // [JN] Scroll Gameplay features menu by PgUp/PgDn keys
+    else if (key == KEY_PGUP)
+    {
+        if (currentMenu == &RD_Gameplay_Def_1
+        ||  currentMenu == &RD_Gameplay_Def_1_Rus)
+        {
+            M_SetupNextMenu(english_language ?
+                           &RD_Gameplay_Def_4 :
+                           &RD_Gameplay_Def_4_Rus);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_2
+        ||  currentMenu == &RD_Gameplay_Def_2_Rus)
+        {
+            M_SetupNextMenu(english_language ?
+                           &RD_Gameplay_Def_1 :
+                           &RD_Gameplay_Def_1_Rus);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_3
+        ||  currentMenu == &RD_Gameplay_Def_3_Rus)
+        {
+            M_SetupNextMenu(english_language ?
+                           &RD_Gameplay_Def_2 :
+                           &RD_Gameplay_Def_2_Rus);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_4
+        ||  currentMenu == &RD_Gameplay_Def_4_Rus)
+        {
+            M_SetupNextMenu(english_language ?
+                           &RD_Gameplay_Def_3 :
+                           &RD_Gameplay_Def_3_Rus);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+    }
+    else if (key == KEY_PGDN)
+    {
+        if (currentMenu == &RD_Gameplay_Def_1
+        ||  currentMenu == &RD_Gameplay_Def_1_Rus)
+        {
+            M_SetupNextMenu(english_language ?
+                           &RD_Gameplay_Def_2 :
+                           &RD_Gameplay_Def_2_Rus);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_2
+        ||  currentMenu == &RD_Gameplay_Def_2_Rus)
+        {
+            M_SetupNextMenu(english_language ?
+                           &RD_Gameplay_Def_3 :
+                           &RD_Gameplay_Def_3_Rus);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_3
+        ||  currentMenu == &RD_Gameplay_Def_3_Rus)
+        {
+            M_SetupNextMenu(english_language ?
+                           &RD_Gameplay_Def_4 :
+                           &RD_Gameplay_Def_4_Rus);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_4
+        ||  currentMenu == &RD_Gameplay_Def_4_Rus)
+        {
+            M_SetupNextMenu(english_language ?
+                           &RD_Gameplay_Def_1 :
+                           &RD_Gameplay_Def_1_Rus);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+    }
+
     // Keyboard shortcut?
     // Vanilla Doom has a weird behavior where it jumps to the scroll bars
     // when the certain keys are pressed, so emulate this.
