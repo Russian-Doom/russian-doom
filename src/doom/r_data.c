@@ -1084,7 +1084,7 @@ int	R_TextureNumForName (char* name)
     // [crispy] make non-fatal
     fprintf (stderr, english_language ?
                      "R_TextureNumForName: %s not found\n" :
-                     "R_TextureNumForName: текстура %s не найдена",
+                     "R_TextureNumForName: текстура %s не найдена\n",
                      name);
  	return 0;
     }
