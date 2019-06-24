@@ -1512,22 +1512,7 @@ static void DrawSoundMenu(void)
     dp_translation = NULL;
 
     // SFX Channels
-    DrawSlider((english_language ? &SoundMenu : &SoundMenu_Rus), 5, 16,
-                                                 snd_Channels == 4 ? 0 :
-                                                 snd_Channels == 8 ? 1 :
-                                                 snd_Channels == 12 ? 2 :
-                                                 snd_Channels == 16 ? 3 :
-                                                 snd_Channels == 20 ? 4 :
-                                                 snd_Channels == 24 ? 5 :
-                                                 snd_Channels == 28 ? 6 :
-                                                 snd_Channels == 32 ? 7 :
-                                                 snd_Channels == 36 ? 8 :
-                                                 snd_Channels == 40 ? 9 :
-                                                 snd_Channels == 44 ? 10 :
-                                                 snd_Channels == 48 ? 11 :
-                                                 snd_Channels == 52 ? 12 :
-                                                 snd_Channels == 56 ? 13 :
-                                                 snd_Channels == 60 ? 14 : 15);
+    DrawSlider((english_language ? &SoundMenu : &SoundMenu_Rus), 5, 16, snd_Channels / 4 - 1);
     M_snprintf(num, 4, "%3d", snd_Channels);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
     MN_DrTextA(num, (english_language ? 251 : 240) + ORIGWIDTH_DELTA, 121);

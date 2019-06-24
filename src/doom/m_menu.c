@@ -1672,22 +1672,7 @@ void M_RD_Draw_Audio(void)
     M_WriteText(202+ORIGWIDTH_DELTA, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_musvolume+1) + 2, num);
 
     // Draw SFX channels slider
-    M_DrawThermo(60+ORIGWIDTH_DELTA, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1), 16, 
-                                                                  snd_channels == 4 ? 0 :
-                                                                  snd_channels == 8 ? 1 :
-                                                                  snd_channels == 12 ? 2 :
-                                                                  snd_channels == 16 ? 3 :
-                                                                  snd_channels == 20 ? 4 :
-                                                                  snd_channels == 24 ? 5 :
-                                                                  snd_channels == 28 ? 6 :
-                                                                  snd_channels == 32 ? 7 :
-                                                                  snd_channels == 36 ? 8 :
-                                                                  snd_channels == 40 ? 9 :
-                                                                  snd_channels == 44 ? 10 :
-                                                                  snd_channels == 48 ? 11 :
-                                                                  snd_channels == 52 ? 12 :
-                                                                  snd_channels == 56 ? 13 :
-                                                                  snd_channels == 60 ? 14 : 15);
+    M_DrawThermo(60+ORIGWIDTH_DELTA, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1), 16, snd_channels / 4 - 1);
     // Draw numerical representation of channels
     M_snprintf(num, 4, "%3d", snd_channels);
     M_WriteText(202+ORIGWIDTH_DELTA, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1) + 2, num);

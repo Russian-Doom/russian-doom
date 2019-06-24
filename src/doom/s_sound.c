@@ -143,23 +143,15 @@ void S_Init(int sfxVolume, int musicVolume)
     S_SetSfxVolume(sfxVolume);
     S_SetMusicVolume(musicVolume);
 
-    // [JN] Make sound channels multiple by four, correct invalid values.
-         if (snd_channels <= 4)  snd_channels = 4;
-    else if (snd_channels <= 8)  snd_channels = 8;
-    else if (snd_channels <= 12) snd_channels = 12;
-    else if (snd_channels <= 16) snd_channels = 16;
-    else if (snd_channels <= 20) snd_channels = 20;
-    else if (snd_channels <= 24) snd_channels = 24;
-    else if (snd_channels <= 32) snd_channels = 32;
-    else if (snd_channels <= 36) snd_channels = 36;
-    else if (snd_channels <= 40) snd_channels = 40;
-    else if (snd_channels <= 44) snd_channels = 44;
-    else if (snd_channels <= 48) snd_channels = 48;
-    else if (snd_channels <= 52) snd_channels = 52;
-    else if (snd_channels <= 56) snd_channels = 56;
-    else if (snd_channels <= 60) snd_channels = 60;
-    else if (snd_channels <= 64) snd_channels = 64;
-    else if (snd_channels >= 64)  snd_channels = 64;
+    // [JN] Make sound channels multiple by four:
+    snd_channels -= snd_channels % 4;
+
+    // [JN] Correct unacceptable values:
+    if (snd_channels <= 4)  
+        snd_channels = 4;
+    else
+    if (snd_channels >= 64)
+        snd_channels = 64;
 
     // Allocating the internal channels for mixing
     // (the maximum numer of sounds rendered
