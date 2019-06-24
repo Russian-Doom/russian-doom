@@ -2004,16 +2004,20 @@ mapformat_t P_CheckMapFormat (int lumpnum)
     if ((b = lumpnum+ML_BLOCKMAP+1) < numlumps &&
         !strncasecmp(lumpinfo[b]->name, "BEHAVIOR", 8))
     {
-	fprintf(stderr, "Hexen (");
+	fprintf(stderr, english_language ? 
+            "P_CheckMapFormat: Hexen format (" :
+            "P_CheckMapFormat: формат Hexen (");
 	format |= HEXEN;
     }
     else
-	fprintf(stderr, "Doom (");
+	fprintf(stderr, english_language ?
+            "P_CheckMapFormat: Doom format (" :
+            "P_CheckMapFormat: формат Doom (");
 
     if (!((b = lumpnum+ML_NODES) < numlumps &&
         (nodes = W_CacheLumpNum(b, PU_CACHE)) &&
         W_LumpLength(b) > 0))
-	fprintf(stderr, "no nodes");
+	fprintf(stderr, english_language ? "no nodes" : "ноды отсутствуют");
     else
     if (!memcmp(nodes, "xNd4\0\0\0\0", 8))
     {
@@ -2029,7 +2033,7 @@ mapformat_t P_CheckMapFormat (int lumpnum)
     else
     if (!memcmp(nodes, "ZNOD", 4))
     {
-	fprintf(stderr, "compressed ZDBSP");
+	fprintf(stderr, english_language ? "compressed ZDBSP" : "сжатые ZDBSP");
 	format |= ZDBSPZ;
     }
     else
