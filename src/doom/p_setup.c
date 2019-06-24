@@ -307,7 +307,9 @@ void P_LoadSegs (int lump)
                 if (li->sidedef->midtexture)
                 {
                     li->backsector = 0;
-                    fprintf(stderr, "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n", i);
+                    fprintf(stderr, english_language ? 
+                            "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
+                            "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
                 }
                 else
                 li->backsector = GetSectorAtNullAddress();
@@ -435,7 +437,9 @@ static void P_LoadSegs_DeePBSP (int lump)
 		if (li->sidedef->midtexture)
 		{
 		    li->backsector = 0;
-		    fprintf(stderr, "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n", i);
+		    fprintf(stderr, english_language ?
+                    "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
+                    "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
 		}
 		else
 		    li->backsector = GetSectorAtNullAddress();
@@ -687,9 +691,13 @@ static void P_LoadNodes_DeePBSP (int lump)
     if (!data || !numnodes)
     {
 	if (numsubsectors == 1)
-	    fprintf(stderr, "P_LoadNodes: No nodes in map, but only one subsector\n");
+	    fprintf(stderr, english_language ?
+                "P_LoadNodes: No nodes in map, but only one subsector\n" :
+                "P_LoadNodes: у уровня отсутствуют ноды, доступен только один подсектор\n");
 	else
-	    I_Error("P_LoadNodes: No nodes in map!");
+	    I_Error(english_language ? 
+                "P_LoadNodes: No nodes in map!" :
+                "P_LoadNodes: у уровня отсутсвуют ноды!");
     }
 
     // skip header
@@ -782,7 +790,9 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 	zstream->avail_out = outlen;
 
 	if (inflateInit(zstream) != Z_OK)
-	    I_Error("P_LoadNodes: Error during ZDBSP nodes decompression initialization!");
+	    I_Error(english_language ?
+                "P_LoadNodes: Error during ZDBSP nodes decompression initialization!" :
+                "P_LoadNodes: ошибка при инициализации распаковки нодов ZDBSP!");
 
 	// resize if output buffer runs full
 	while ((err = inflate(zstream, Z_SYNC_FLUSH)) == Z_OK)
@@ -795,22 +805,30 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 	}
 
 	if (err != Z_STREAM_END)
-	    I_Error("P_LoadNodes: Error during ZDBSP nodes decompression!");
+	    I_Error(english_language ?
+                "P_LoadNodes: Error during ZDBSP nodes decompression!" :
+                "P_LoadNodes: ошибка при распаковке нодов ZDBSP!");
 
-	fprintf(stderr, "P_LoadNodes: ZDBSP nodes compression ratio %.3f\n",
+	fprintf(stderr, english_language ?
+            "P_LoadNodes: ZDBSP nodes compression ratio %.3f\n" :
+            "P_LoadNodes: степень сжатия нодов ZDBSP: %.3f\n",
 	        (float)zstream->total_out/zstream->total_in);
 
 	data = output;
 	len = zstream->total_out;
 
 	if (inflateEnd(zstream) != Z_OK)
-	    I_Error("P_LoadNodes: Error during ZDBSP nodes decompression shut-down!");
+	    I_Error(english_language ?
+                "P_LoadNodes: Error during ZDBSP nodes decompression shut-down!" :
+                "P_LoadNodes: ошибка при завершении распаковки нодов ZDBSP!");
 
 	// release the original data lump
 	W_ReleaseLumpNum(lump);
 	free(zstream);
 #else
-	I_Error("P_LoadNodes: Compressed ZDBSP nodes are not supported!");
+	I_Error(english_language ?
+            "P_LoadNodes: Compressed ZDBSP nodes are not supported!" :
+            "P_LoadNodes: сжатые ноды формата ZDBSP не поддерживаются!");
 #endif
     }
     else
@@ -874,7 +892,9 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
     data += sizeof(numSubs);
 
     if (numSubs < 1)
-	I_Error("P_LoadNodes: No subsectors in map!");
+	I_Error(english_language ?
+            "P_LoadNodes: No subsectors in map!" :
+            "P_LoadNodes: на уровне отсутствуют подсекторы!");
 
     numsubsectors = numSubs;
     subsectors = Z_Malloc(numsubsectors * sizeof(subsector_t), PU_LEVEL, 0);
@@ -898,7 +918,9 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
     // The number of stored segs should match the number of segs used by subsectors
     if (numSegs != currSeg)
     {
-	I_Error("P_LoadNodes: Incorrect number of segs in ZDBSP nodes!");
+	I_Error(english_language ?
+            "P_LoadNodes: Incorrect number of segs in ZDBSP nodes!" :
+            "P_LoadNodes: некорректное количество сегментов в нодах ZDBSP!");
     }
 
     numsegs = numSegs;
@@ -942,7 +964,9 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 		if (li->sidedef->midtexture)
 		{
 		    li->backsector = 0;
-		    fprintf(stderr, "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n", i);
+		    fprintf(stderr, english_language ?
+                    "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
+                    "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
 		}
 		else
 		    li->backsector = GetSectorAtNullAddress();
@@ -1276,7 +1300,7 @@ void P_LoadLineDefs (int lump)
 	    ld->sidenum[0] = 0;
 	    fprintf(stderr, english_language ?
                         "P_LoadSegs: Linedef %d has two-sided flag set, but no second sidedef\n" :
-                        "P_LoadLineDefs: у линии %d не назначена первая сторона!\n", i);
+                        "P_LoadSegs: линия %d помечена как двусторонняя, но вторая сторона отсутствует\n", i);
 	}
 
 	if (ld->sidenum[0] != NO_INDEX) // [crispy] extended nodes
@@ -1352,7 +1376,10 @@ static void P_LoadLineDefs_Hexen (int lump)
 	// [crispy] warn about unknown linedef types
 	if ((unsigned short) ld->special > 141)
 	{
-	    fprintf(stderr, "P_LoadLineDefs: Unknown special %d at line %d\n", ld->special, i);
+	    fprintf(stderr, english_language ?
+                "P_LoadLineDefs: Unknown special %d at line %d\n" :
+                "P_LoadLineDefs: неизвестная специфика %d у линии %d\n",
+                ld->special, i);
 	    warn++;
 	}
 

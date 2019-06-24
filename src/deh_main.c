@@ -304,7 +304,9 @@ static void DEH_ParseContext(deh_context_t *context)
     if (!CheckSignatures(context))
     {
         // [crispy] make non-fatal
-        fprintf(stderr, "This is not a valid dehacked patch file!\n");
+        fprintf(stderr, english_language ?
+                        "This is not a valid dehacked patch file!\n" :
+                        "Загруженный блок Dehacked содержит ошибки!\n");
     }
 
     // Read the file
