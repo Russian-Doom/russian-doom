@@ -203,11 +203,17 @@ boolean DEH_ParseAssignment(char *line, char **variable_name, char **value)
     return true;
 }
 
+extern void DEH_SaveLineStart (deh_context_t *context);
+extern void DEH_RestoreLineStart (deh_context_t *context);
+
 static boolean CheckSignatures(deh_context_t *context)
 {
     size_t i;
     char *line;
     
+    // [crispy] save pointer to start of line (should be 0 here)
+    DEH_SaveLineStart(context);    
+
     // Read the first line
 
     line = DEH_ReadLine(context, false);
@@ -226,6 +232,10 @@ static boolean CheckSignatures(deh_context_t *context)
             return true;
         }
     }
+
+    // [crispy] not a valid signature, try parsing this line again
+    // and see if it starts with a section marker
+    DEH_RestoreLineStart(context);
 
     return false;
 }
@@ -293,7 +303,8 @@ static void DEH_ParseContext(deh_context_t *context)
 
     if (!CheckSignatures(context))
     {
-        DEH_Error(context, "This is not a valid dehacked patch file!");
+        // [crispy] make non-fatal
+        fprintf(stderr, "This is not a valid dehacked patch file!\n");
     }
 
     // Read the file
