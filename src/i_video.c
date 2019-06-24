@@ -1300,10 +1300,6 @@ void I_InitGraphics(void)
         putenv(winenv);
     }
 
-    // [BH] There's a known bug in SDL 2.0.9 that causes framerate to intermittently drop.
-    //  This is a workaround for this bug, even if no joysticks are in use. Should be fixed in SDL 2.0.10.
-    SDL_Init(SDL_INIT_JOYSTICK);
-
     SetSDLVideoDriver();
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) 
