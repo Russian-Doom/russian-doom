@@ -71,3 +71,5 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - hfc2x
 - Heretic widescreen HUD by Hellser, Neoworm, TerminusEst13 and PSTrooper
 - Hexen widescreen HUD and weapons by Neoworm
+- Invisible Warrior
+- NormanSeven
