@@ -203,6 +203,9 @@ lighttable_t	*brightmaps_candles;
 
 
 
+// [crispy] replace R_DrawColumnInCache(), R_GenerateComposite() and R_GenerateLookup()
+// with Lee Killough's implementations found in MBF to fix Medusa bug
+// taken from mbfsrc/R_DATA.C:136-425
 //
 // R_DrawColumnInCache
 // Clip and draw a column
@@ -211,36 +214,55 @@ lighttable_t	*brightmaps_candles;
 // Rewritten by Lee Killough for performance and to fix Medusa bug
 //
 
-static void R_DrawColumnInCache(const column_t *patch, byte *cache,
-				int originy, int cacheheight, byte *marks)
+void
+R_DrawColumnInCache
+( column_t*	patch,
+  byte*		cache,
+  int		originy,
+  int		cacheheight,
+  byte*		marks )
 {
-  while (patch->topdelta != 0xff)
+    int		count;
+    int		position;
+    byte*	source;
+    int		top = -1;
+
+    while (patch->topdelta != 0xff)
     {
-int count = patch->length;
-int position = originy + patch->topdelta;
+	// [crispy] support for DeePsea tall patches
+	if (patch->topdelta <= top)
+	{
+		top += patch->topdelta;
+	}
+	else
+	{
+		top = patch->topdelta;
+	}
+	source = (byte *)patch + 3;
+	count = patch->length;
+	position = originy + top;
 
+	if (position < 0)
+	{
+	    count += position;
+	    position = 0;
+	}
 
-      if (position < 0)
-        {
-          count += position;
-          position = 0;
-        }
+	if (position + count > cacheheight)
+	    count = cacheheight - position;
 
-      if (position + count > cacheheight)
-        count = cacheheight - position;
+	if (count > 0)
+	{
+	    memcpy (cache + position, source, count);
 
-      if (count > 0)
-        {
-          memcpy (cache + position, (byte *)patch + 3, count);
+	    // killough 4/9/98: remember which cells in column have been drawn,
+	    // so that column can later be converted into a series of posts, to
+	    // fix the Medusa bug.
 
-          // killough 4/9/98: remember which cells in column have been drawn,
-          // so that column can later be converted into a series of posts, to
-          // fix the Medusa bug.
-
-          memset (marks + position, 0xff, count);
-        }
-
-      patch = (column_t *)((byte *) patch + patch->length + 4);
+	    memset (marks + position, 0xff, count);
+	}
+		
+	patch = (column_t *)(  (byte *)patch + patch->length + 4); 
     }
 }
 
