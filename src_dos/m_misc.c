@@ -436,6 +436,7 @@ default_t	defaults[] =
     {"colored_hud", &colored_hud, 0},
     {"colored_blood", &colored_blood, 1},
     {"swirling_liquids", &swirling_liquids, 1},
+    {"invul_sky", &invul_sky, 1},
 
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}

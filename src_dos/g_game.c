@@ -169,6 +169,7 @@ int fake_contrast;
 int colored_hud;
 int colored_blood;
 int swirling_liquids;
+int invul_sky;
 
 // Gameplay: Crosshair
 int crosshair_draw;
