@@ -33,6 +33,8 @@
 
 #include "v_video.h"
 
+#include "jn.h"
+
 
 // Each screen is [SCREENWIDTH*SCREENHEIGHT]; 
 byte*				screens[5];	
@@ -672,7 +674,7 @@ V_DrawShadow
     byte*	source; 
     int		w; 
 
-    if (vanilla)
+    if (!draw_shadowed_text || vanilla)
     return;
 
     y -= SHORT(patch->topoffset); 
@@ -736,7 +738,7 @@ V_DrawShadowDirect
     byte*	source; 
     int		w; 
     
-    if (vanilla)
+    if (!draw_shadowed_text || vanilla)
     return;
 
     y -= SHORT(patch->topoffset); 

@@ -44,6 +44,7 @@ extern int colored_hud;
 extern int colored_blood;
 extern int swirling_liquids;
 extern int invul_sky;
+extern int draw_shadowed_text;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;
