@@ -33,9 +33,10 @@
 
 #include "doomstat.h"
 
+#include "jn.h"
+
 
 extern int screenblocks;
-extern int mlook;
 
 void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);

@@ -34,6 +34,7 @@
 #include "r_sky.h"
 #include "r_segs.h"
 #include "r_bmaps.h"
+#include "jn.h"
 
 
 // OPTIMIZE: closed two sided lines as single sided
@@ -888,7 +889,7 @@ R_StoreWallRange
             walllights_bottom = scalelight[lightnum];
 
             // [JN] Applying brightmaps to walls...
-            if (!vanilla)
+            if (brightmaps && !vanilla)
             {
                 // -------------------------------------------------------
                 //  Not in Shareware

@@ -159,8 +159,15 @@ int     joybspeed;
 
 
 // [JN] Russian Doom specific variables 
-int mlook;              // Mouse look
-int crosshair_draw ;    // Crosshair
+
+// Controls
+int mlook;
+
+// Gameplay: Graphical
+int brightmaps;
+
+// Gameplay: Crosshair
+int crosshair_draw;
 
 
 #define MAXPLMOVE       (forwardmove[1]) 

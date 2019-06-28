@@ -35,6 +35,7 @@
 #include "doomstat.h"
 
 #include "v_trans.h"
+#include "jn.h"
 
 
 #define MINZ				(FRACUNIT*4)
@@ -623,7 +624,7 @@ void R_ProjectSprite (mobj_t* thing)
 	vis->colormap = spritelights[index];
 
     // [JN] Applying brightmaps to sprites...
-    if (!vanilla)
+    if (brightmaps && !vanilla)
     {
         // Armor Bonus
         if (thing->type == MT_MISC3)

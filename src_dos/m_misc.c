@@ -48,6 +48,8 @@
 
 #include "m_misc.h"
 
+#include "jn.h"
+
 
 int		myargc;
 char**		myargv;
@@ -309,10 +311,6 @@ extern int snd_Mport;
 
 extern char*	chat_macros[];
 
-// [JN] Russian Doom specific variables
-extern int mlook;
-extern int crosshair_draw;
-
 
 typedef struct
 {
@@ -428,7 +426,14 @@ default_t	defaults[] =
     {"chatmacro9", (int *) &chat_macros[9], (int) HUSTR_CHATMACRO9 },
 
     // [JN] Russian Doom specific variables
+
+    // Controls
     {"mlook", &mlook, 0},
+
+    // Gameplay: Graphical
+    {"brightmaps", &brightmaps, 1},
+
+    // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}
 };
 

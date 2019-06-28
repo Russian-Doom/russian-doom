@@ -35,6 +35,8 @@
 
 #include "p_pspr.h"
 
+#include "jn.h"
+
 #define LOWERSPEED		FRACUNIT*6
 #define RAISESPEED		FRACUNIT*6
 
@@ -43,7 +45,6 @@
 
 
 extern int screenblocks;
-extern int mlook;
 boolean chainsaw_attack_swing;
 
 

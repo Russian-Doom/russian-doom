@@ -32,9 +32,9 @@
 #include "r_local.h"
 #include "r_sky.h"
 #include "r_bmaps.h"
+#include "jn.h"
 
 
-extern int mlook;
 
 planefunction_t		floorfunc;
 planefunction_t		ceilingfunc;
@@ -533,8 +533,8 @@ void R_DrawPlanes (void)
 
 	planezlight = zlight[light];
 
-    // [JN] Apply brightmaps to floor/ceiling...
-    if (!vanilla &&
+    // [JN] Applying brightmaps to floor/ceiling...
+    if (brightmaps && !vanilla &&
     (pl->picnum == bmapflatnum1     // CONS1_1
     || pl->picnum == bmapflatnum2   // CONS1_5
     || pl->picnum == bmapflatnum3)) // CONS1_7
