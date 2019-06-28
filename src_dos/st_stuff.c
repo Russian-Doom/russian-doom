@@ -55,6 +55,9 @@
 #include "sounds.h"
 #include "m_menu.h"
 
+#include "v_trans.h"
+#include "jn.h"
+
 //
 // STATUS BAR DATA
 //
@@ -1290,6 +1293,97 @@ void ST_doPaletteStuff(void)
 
 }
 
+enum
+{
+    hudcolor_ammo,
+    hudcolor_health,
+    hudcolor_frags,
+    hudcolor_armor
+} hudcolor_t;
+
+// [crispy] return ammo/health/armor widget color
+static byte* ST_WidgetColor(int i)
+{
+    if (!colored_hud || vanilla)
+        return NULL;
+
+    switch (i)
+    {
+        case hudcolor_ammo:
+        {
+            if (weaponinfo[plyr->readyweapon].ammo == am_noammo)
+            {
+                return NULL;
+            }
+            else
+            {
+                int ammo =  plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
+                int fullammo = maxammo[weaponinfo[plyr->readyweapon].ammo];
+
+                if (ammo < fullammo/4)
+                    return cr[CR_RED];
+                else if (ammo < fullammo/2)
+                    return cr[CR_GOLD];
+                else if (ammo <= fullammo)
+                    return cr[CR_GREEN];
+                else
+                    return cr[CR_BLUE2];
+            }
+            break;
+        }
+        case hudcolor_health:
+        {
+            int health = plyr->health;
+
+            // [crispy] Invulnerability powerup and God Mode cheat turn Health values gray
+            // [JN] I'm using different health values, represented by crosshair,
+            // and thus a little bit different logic.
+            if (plyr->cheats & CF_GODMODE ||
+                plyr->powers[pw_invulnerability])
+                return cr[CR_GRAY];
+            else if (health > 100)
+                return cr[CR_BLUE2];
+            else if (health >= 67)
+                return cr[CR_GREEN];
+            else if (health >= 34)
+                return cr[CR_GOLD];            
+            else
+                return cr[CR_RED];
+            break;
+        }
+        case hudcolor_frags:
+        {
+            int frags = st_fragscount;
+
+            if (frags < 0)
+                return cr[CR_RED];
+            else if (frags == 0)
+                return cr[CR_GOLD];
+            else
+                return cr[CR_GREEN];
+
+            break;
+        }
+        case hudcolor_armor:
+        {
+	    // [crispy] Invulnerability powerup and God Mode cheat turn Armor values gray
+	    if (plyr->cheats & CF_GODMODE ||
+                plyr->powers[pw_invulnerability])
+                return cr[CR_GRAY];
+	    // [crispy] color by armor type
+	    else if (plyr->armortype >= 2)
+                return cr[CR_BLUE2];
+	    else if (plyr->armortype == 1)
+                return cr[CR_GREEN];
+	    else if (plyr->armortype == 0)
+                return cr[CR_RED];
+            break;
+        }
+    }
+
+    return NULL;
+}
+
 void ST_drawWidgets(boolean refresh)
 {
     int		i;
@@ -1300,7 +1394,9 @@ void ST_drawWidgets(boolean refresh)
     // used by w_frags widget
     st_fragson = deathmatch && st_statusbaron; 
 
+    dp_translation = ST_WidgetColor(hudcolor_ammo);
     STlib_updateNum(&w_ready, refresh);
+    dp_translation = NULL;
 
     // [crispy] draw "special widgets" in the Crispy HUD
     if ((screenblocks == 11 || screenblocks == 12 || screenblocks == 13) && !automapactive)
@@ -1386,8 +1482,11 @@ void ST_drawWidgets(boolean refresh)
         V_DrawPatchDirect(292, 173, 0, W_CacheLumpName("STYSSLSH", PU_CACHE));
     }
 
+    dp_translation = ST_WidgetColor(hudcolor_health);
     STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    dp_translation = ST_WidgetColor(hudcolor_armor);
     STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    dp_translation = NULL;
 
     if (screenblocks < 11 || automapactive)
     STlib_updateBinIcon(&w_armsbg, refresh);

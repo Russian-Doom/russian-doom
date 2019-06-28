@@ -654,11 +654,11 @@ void R_ProjectSprite (mobj_t* thing)
     {
         // [crispy] Cacodemons bleed blue blood
         if (thing->target->type == MT_HEAD)
-        vis->translation = (byte *) &cr_blue2;
+        vis->translation = cr[CR_BLUE2];
 
         // [crispy] Barons of Hell and Hell Knights bleed green blood
         else if (thing->target->type == MT_BRUISER || thing->target->type == MT_KNIGHT)
-        vis->translation = (byte *) &cr_green;
+        vis->translation = cr[CR_GREEN];
     }
 }
 

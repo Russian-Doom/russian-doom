@@ -32,6 +32,8 @@
 #include "st_lib.h"
 #include "r_local.h"
 #include "m_menu.h"
+#include "v_trans.h"
+#include "jn.h"
 
 
 // in AM_map.c
@@ -191,6 +193,11 @@ STlib_updatePercent
 ( st_percent_t*		per,
   int			refresh )
 {
+    STlib_updateNum(&per->n, refresh); // [crispy] moved here
+
+    if (colored_hud && !vanilla)
+        dp_translation = cr[CR_GRAY];
+
     if (refresh && *per->n.on)
     {
         if (screenblocks < 11 || automapactive)
@@ -199,7 +206,7 @@ STlib_updatePercent
         V_DrawPatchDirect(per->n.x, per->n.y, 0, per->p);
     }
     
-    STlib_updateNum(&per->n, refresh);
+    dp_translation = NULL;
 }
 
 

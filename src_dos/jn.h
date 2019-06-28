@@ -21,6 +21,12 @@
 
 
 // -----------------------------------------------------------------------------
+// Global variables
+// -----------------------------------------------------------------------------
+
+extern int vanilla;
+
+// -----------------------------------------------------------------------------
 // Controls
 // -----------------------------------------------------------------------------
 
@@ -34,6 +40,7 @@ extern int mlook;
 // Gameplay: Graphical
 extern int brightmaps;
 extern int fake_contrast;
+extern int colored_hud;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;
