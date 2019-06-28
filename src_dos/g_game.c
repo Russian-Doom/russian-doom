@@ -165,6 +165,7 @@ int mlook;
 
 // Gameplay: Graphical
 int brightmaps;
+int fake_contrast;
 
 // Gameplay: Crosshair
 int crosshair_draw;

@@ -217,8 +217,8 @@ R_RenderMaskedSegRange
 	
     lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
-    // [JN] Fake contrast: make vanilla only.
-    if (vanilla)
+    // [JN] Fake contrast: make optional.
+    if (fake_contrast || vanilla)
     {
         if (curline->v1->y == curline->v2->y)
         lightnum--;
@@ -852,9 +852,8 @@ R_StoreWallRange
 	{
 	    lightnum = (frontsector->lightlevel >> LIGHTSEGSHIFT)+extralight;
 
-        // [JN] Fake contrast: make vanilla only.
-        // It also not very friendly with brightmaps.
-        if (vanilla)
+        // [JN] Fake contrast: make optional.
+        if (fake_contrast || vanilla)
         {
             if (curline->v1->y == curline->v2->y)
             lightnum--;

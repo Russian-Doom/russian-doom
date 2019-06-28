@@ -33,6 +33,7 @@ extern int mlook;
 
 // Gameplay: Graphical
 extern int brightmaps;
+extern int fake_contrast;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;
