@@ -650,7 +650,7 @@ void R_ProjectSprite (mobj_t* thing)
 
     // [crispy] colored blood 
     // [JN] ...but not in vanilla mode
-    if (!vanilla && (thing->type == MT_BLOOD || thing->sprite == SPR_POL5) && thing->target)
+    if (colored_blood && !vanilla && (thing->type == MT_BLOOD || thing->sprite == SPR_POL5) && thing->target)
     {
         // [crispy] Cacodemons bleed blue blood
         if (thing->target->type == MT_HEAD)

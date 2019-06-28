@@ -167,6 +167,7 @@ int mlook;
 int brightmaps;
 int fake_contrast;
 int colored_hud;
+int colored_blood;
 
 // Gameplay: Crosshair
 int crosshair_draw;

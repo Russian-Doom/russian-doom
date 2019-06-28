@@ -434,6 +434,7 @@ default_t	defaults[] =
     {"brightmaps", &brightmaps, 1},
     {"fake_contrast", &fake_contrast, 0},
     {"colored_hud", &colored_hud, 0},
+    {"colored_blood", &colored_blood, 1},
 
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}
