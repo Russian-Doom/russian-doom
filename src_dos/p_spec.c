@@ -47,6 +47,8 @@
 
 #include "d_englsh.h"
 
+#include "jn.h"
+
 //
 // Animating textures and planes
 // There is another anim_t used in wi_stuff, unrelated.
@@ -1112,7 +1114,7 @@ void P_UpdateSpecials (void)
         // [JN] Small hack: animate only surface with animation
         // speed > 8, i.e. only those ones, which defined in animdefs.
         // Also do not apply swirling animation for "-noflats" mode.
-        if (!vanilla && anim->speed > 8 && !noflats)
+        if (swirling_liquids && !vanilla && anim->speed > 8 && !noflats)
         {
             flattranslation[i] = -1;
         }

@@ -168,6 +168,7 @@ int brightmaps;
 int fake_contrast;
 int colored_hud;
 int colored_blood;
+int swirling_liquids;
 
 // Gameplay: Crosshair
 int crosshair_draw;
