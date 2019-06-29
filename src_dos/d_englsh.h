@@ -155,7 +155,7 @@
 #define GOTSHELLBOX "gjkextyf rjhj,rf gfnhjyjd lkz lhj,jdbrf>"  // Получена коробка патронов для дробовика.
 #define GOTBACKPACK "gjkexty h.rpfr c fvveybwbtq!"              // Получен рюкзак с амуницией!
 
-#define GOTBFG9000  "gjkextyj $9000! j< lf>"        // Получено BFG9000! О, да.
+#define GOTBFG9000  "gjkextyj $9000! j lf>"         // Получено BFG9000! О да.
 #define GOTCHAINGUN "gjkexty gektvtn!"              // Получен пулемет!
 #define GOTCHAINSAW ",typjgbkf! yfqlb ytvyjuj vzcf!"// Бензопила! Найди немного мяса!
 #define GOTLAUNCHER "gjkextyf hfrtnybwf!"           // Получена ракетница!
