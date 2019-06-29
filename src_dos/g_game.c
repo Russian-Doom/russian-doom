@@ -162,6 +162,7 @@ int     joybspeed;
 
 // Rendering
 int show_diskicon;
+int screen_wiping;
 
 // Controls
 int mlook;

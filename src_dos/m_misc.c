@@ -429,6 +429,7 @@ default_t	defaults[] =
 
     // Rendering
     {"show_diskicon", &show_diskicon, 1},
+    {"screen_wiping", &screen_wiping, 1},
 
     // Controls
     {"mlook", &mlook, 0},
