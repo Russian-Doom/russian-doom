@@ -1224,7 +1224,7 @@ void M_RD_Draw_Audio(void)
     M_WriteText(202, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1) + 2, num);
 
     // Write "on" / "off" strings for features
-    // M_WriteTextBig(219, 133, snd_monomode == 1 ? "vjyj" : "cnthtj");
+    M_WriteTextBig(219, 133, snd_monomode == 1 ? "vjyj" : "cnthtj");
 }
 
 void M_RD_Change_SfxVol(int choice)
@@ -1284,10 +1284,8 @@ void M_RD_Change_SfxChannels(int choice)
 
 void M_RD_Change_SndMode(int choice)
 {
-    /*
     choice = 0;
     snd_monomode = 1 - snd_monomode;
-    */
 }
 
 // -----------------------------------------------------------------------------

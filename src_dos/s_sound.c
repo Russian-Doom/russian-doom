@@ -37,6 +37,8 @@
 #include "doomstat.h"
 #include "dmx.h"
 #include "dpmiapi.h"
+#include "jn.h"
+
 
 #define S_MAX_VOLUME		127
 
@@ -327,7 +329,7 @@ S_AdjustSoundParams
     angle >>= ANGLETOFINESHIFT;
 
     // stereo separation
-    if (monosfx)
+    if (snd_monomode)
     {
         *sep = 128;
     }

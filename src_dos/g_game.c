@@ -164,6 +164,9 @@ int     joybspeed;
 int show_diskicon;
 int screen_wiping;
 
+// Audio
+int snd_monomode;
+
 // Controls
 int mlook;
 

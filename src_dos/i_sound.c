@@ -37,8 +37,6 @@
 // Random sound pitch
 boolean         soundpitch;
 
-// [JN] Mono-speaker emulation
-boolean         monosfx;
 
 //
 // I_StartupTimer
@@ -245,11 +243,6 @@ void I_sndArbitrateCards(void)
     if (M_CheckParm("-nomusic"))
     {
         snd_MusicDevice = snd_none;
-    }
-    // [JN] Mono-speaker emulation
-    if (M_CheckParm("-monosfx"))
-    {
-        monosfx = true;
     }
     // Check if the user wants randomly pitched sounds
     if (M_CheckParm("-pitch"))
