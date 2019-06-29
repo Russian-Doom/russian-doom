@@ -711,7 +711,8 @@ void M_ScreenShot (void)
     // save the pcx file
     WritePCXfile (lbmname, linear,
 		  SCREENWIDTH, SCREENHEIGHT,
-		  W_CacheLumpName ("PLAYPAL",PU_CACHE));
+		  W_CacheLumpName (usegamma <= 8 ? 
+                           "PALFIX" : "PLAYPAL",PU_CACHE));
 	
     players[consoleplayer].message = "cybvjr 'rhfyf"; // снимок экрана
 }

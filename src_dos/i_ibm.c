@@ -323,7 +323,7 @@ void I_SetPalette(byte *palette)
 	int i;
 
     // [JN] Check for incorrect gamma levels while startup
-    if (usegamma < 0 || usegamma > 16)
+    if (usegamma < 0 || usegamma > 17)
     usegamma = 0;    
 
 	if(novideo)
@@ -528,7 +528,8 @@ void I_InitGraphics(void)
     outp(CRTC_INDEX + 1, inp(CRTC_INDEX + 1) | 0x40);
     outp(GC_INDEX, GC_READMAP);
 
-    I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
+    I_SetPalette(W_CacheLumpName(usegamma <= 8 ? 
+                                 "PALFIX" : "PLAYPAL", PU_CACHE));
     I_InitDiskFlash();
 }
 

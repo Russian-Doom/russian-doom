@@ -110,25 +110,26 @@ void    (*messageRoutine)(int response);
 
 #define SAVESTRINGSIZE 	24
 
-char gammamsg[17][29] =
+char gammamsg[18][41] =
 {
-    GAMMALVL0,
-    GAMMALV02,
-    GAMMALV05,
-    GAMMALV07,
-    GAMMALVL1,
-    GAMMALV12,
-    GAMMALV15,
-    GAMMALV17,
-    GAMMALVL2,
-    GAMMALV22,
-    GAMMALV25,
-    GAMMALV27,
-    GAMMALVL3,
-    GAMMALV32,
-    GAMMALV35,
-    GAMMALV37,
-    GAMMALVL4
+    GAMMA_IMPROVED_OFF,
+    GAMMA_IMPROVED_05,
+    GAMMA_IMPROVED_1,
+    GAMMA_IMPROVED_15,
+    GAMMA_IMPROVED_2,
+    GAMMA_IMPROVED_25,
+    GAMMA_IMPROVED_3,
+    GAMMA_IMPROVED_35,
+    GAMMA_IMPROVED_4,
+    GAMMA_ORIGINAL_OFF,
+    GAMMA_ORIGINAL_05,
+    GAMMA_ORIGINAL_1,
+    GAMMA_ORIGINAL_15,
+    GAMMA_ORIGINAL_2,
+    GAMMA_ORIGINAL_25,
+    GAMMA_ORIGINAL_3,
+    GAMMA_ORIGINAL_35,
+    GAMMA_ORIGINAL_4
 };
 
 char endmsg1[NUM_QUITMESSAGES][80] =
@@ -1146,7 +1147,6 @@ void M_RD_Change_ScreenSize(int choice)
 
 void M_RD_Change_Gamma(int choice)
 {
-    /*
     switch(choice)
     {
         case 0:
@@ -1159,15 +1159,12 @@ void M_RD_Change_Gamma(int choice)
             usegamma++;
         break;
     }
-    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
-                                                     "PALFIX" :
-                                                     "PLAYPAL"),
-                                                     PU_CACHE) + 
-                                                     st_palette * 768);
-    players[consoleplayer].message = DEH_String(english_language ? 
-                                               gammamsg[usegamma] :
-                                               gammamsg_rus[usegamma]);
-    */
+    I_SetPalette ((byte *)W_CacheLumpName(usegamma <= 8 ?
+                                          "PALFIX" :
+                                          "PLAYPAL",
+                                          PU_CACHE) + 
+                                          st_palette * 768);
+    players[consoleplayer].message = gammamsg[usegamma];
 }
 
 void M_RD_Change_Detail(int choice)
@@ -3112,10 +3109,12 @@ boolean M_Responder (event_t* ev)
 				
 	  case KEY_F11:           // gamma toggle
 	    usegamma++;
-	    if (usegamma > 16)
+	    if (usegamma > 17)
 		usegamma = 0;
 	    players[consoleplayer].message = gammamsg[usegamma];
-        pal = (byte *) W_CacheLumpName ("PLAYPAL", PU_CACHE)+st_palette*768;
+        pal = (byte *) W_CacheLumpName (usegamma <= 8 ? 
+                                        "PALFIX" : "PLAYPAL", PU_CACHE)
+                                        +st_palette*768;
 	    I_SetPalette (pal);
 	    return true;
 				
