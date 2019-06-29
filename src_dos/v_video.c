@@ -483,9 +483,12 @@ V_DrawPatch
 	|| y+SHORT(patch->height)>SCREENHEIGHT 
 	|| (unsigned)scrn>4)
     {
+      // [JN] Disabled for preventing text mess appearing on the screen.
+      /*
       fprintf( stderr, "Patch at %d,%d exceeds LFB\n", x,y );
       // No I_Error abort - what is up with TNT.WAD?
       fprintf( stderr, "V_DrawPatch: bad patch (ignored)\n");
+      */
       return;
     }
 #endif 
@@ -554,8 +557,13 @@ V_DrawPatchFlipped
 	|| y+SHORT(patch->height)>SCREENHEIGHT 
 	|| (unsigned)scrn>4)
     {
+      // [JN] Disabled for preventing text mess appearing on the screen,
+      // make non-fatal.
+      /*
       fprintf( stderr, "Patch origin %d,%d exceeds LFB\n", x,y );
       I_Error ("Žè¨¡ª  V_DrawPatch ¢ V_DrawPatchFlipped");
+      */
+      return;
     }
 #endif 
  
@@ -624,7 +632,9 @@ V_DrawPatchDirect
 	|| y+SHORT(patch->height)>SCREENHEIGHT 
 	|| (unsigned)scrn>4)
     {
-	I_Error ("Žè¨¡ª  V_DrawPatchDirect");
+    // [JN] Make non-fatal
+	// I_Error ("Žè¨¡ª  V_DrawPatchDirect");
+    return;
     }
 #endif 
  
@@ -690,9 +700,12 @@ V_DrawShadow
 #ifdef RANGECHECK 
     if (x<0 ||x+SHORT(patch->width) >SCREENWIDTH || y<0 || y+SHORT(patch->height)>SCREENHEIGHT  || (unsigned)scrn>4)
     {
+      // [JN] Disabled for preventing text mess appearing on the screen.
+      /*
       fprintf( stderr, "Shadow at %d,%d exceeds LFB\n", x,y );
       // No I_Error abort - what is up with TNT.WAD?
       fprintf( stderr, "V_DrawShadow: bad patch (ignored)\n");
+      */
       return;
     }
 #endif 
@@ -755,7 +768,9 @@ V_DrawShadowDirect
 #ifdef RANGECHECK 
     if (x<0 ||x+SHORT(patch->width) >SCREENWIDTH || y<0 || y+SHORT(patch->height)>SCREENHEIGHT || (unsigned)scrn>4)
     {
-	I_Error ("Žè¨¡ª  V_DrawShadowDirect");
+	// [JN] Make non-fatal.
+	// I_Error ("Žè¨¡ª  V_DrawShadowDirect");
+    return;
     }
 #endif 
  
