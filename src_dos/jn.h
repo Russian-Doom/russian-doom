@@ -59,6 +59,7 @@ extern int negative_health;
 extern int torque;
 extern int weapon_bobbing;
 extern int ssg_blast_enemies;
+extern int randomly_flipcorpses;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;

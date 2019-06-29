@@ -575,7 +575,7 @@ void R_ProjectSprite (mobj_t* thing)
         thing->info->spawnstate == S_PLAY_DIE7 ||
         thing->info->spawnstate == S_PLAY_XDIE9)
     {
-        if ((thing->health & 1) && !vanilla)
+        if ((thing->health & 1) && randomly_flipcorpses && !vanilla)
         {
             flip = true;
         }

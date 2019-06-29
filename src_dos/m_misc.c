@@ -452,6 +452,7 @@ default_t	defaults[] =
     {"torque", &torque, 1},
     {"weapon_bobbing", &weapon_bobbing, 1},
     {"ssg_blast_enemies", &ssg_blast_enemies, 1},
+    {"randomly_flipcorpses", &randomly_flipcorpses, 1},
 
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}
