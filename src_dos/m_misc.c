@@ -445,6 +445,7 @@ default_t	defaults[] =
 
     // Gameplay: Tactical
     {"automap_stats", &automap_stats, 1},
+    {"secret_notification", &secret_notification, 1},
 
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}

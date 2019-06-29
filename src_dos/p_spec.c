@@ -1043,7 +1043,7 @@ void P_PlayerInSpecialSector (player_t* player)
 	sector->special = 0;
 
     // [JN] Notification of revealed secrets
-    if (!vanilla)
+    if (secret_notification && !vanilla)
     {
 	player->message = SECRETFOUND;	 
     // [JN] Don't break revealed's secret sound by any others
