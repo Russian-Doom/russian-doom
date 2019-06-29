@@ -192,6 +192,9 @@ int floating_powerups;
 int crosshair_draw;
 int crosshair_health;
 
+// Gameplay: Gameplay
+int extra_player_faces;
+
 
 #define MAXPLMOVE       (forwardmove[1]) 
 #define TURBOTHRESHOLD  0x32

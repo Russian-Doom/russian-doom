@@ -66,5 +66,8 @@ extern int floating_powerups;
 extern int crosshair_draw;
 extern int crosshair_health;
 
+// Gameplay: Gameplay
+extern int extra_player_faces;
+
 
 #endif

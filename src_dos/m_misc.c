@@ -457,7 +457,10 @@ default_t	defaults[] =
 
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0},
-    {"crosshair_health", &crosshair_health, 1}
+    {"crosshair_health", &crosshair_health, 1},
+
+    // Gameplay: Gameplay
+    {"extra_player_faces", &extra_player_faces, 1}
 };
 
 int	numdefaults;

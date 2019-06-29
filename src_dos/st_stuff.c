@@ -871,7 +871,8 @@ void ST_updateFaceWidget(void)
 	}
     // [JN] Atari и PSX Doom - extra faces of exploded and squished player.
 	// Proper checking for xdeath state has been taken from Crispy Doom, thanks to Fabian Greffrath!
-	if (plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate && !vanilla)
+	if (extra_player_faces && !vanilla &&
+    plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate)
 	{
 	    priority = 9;
 	    painoffset = 0;
@@ -909,8 +910,13 @@ void ST_updateFaceWidget(void)
 	    {
 		if (oldweaponsowned[i] != plyr->weaponowned[i])
 		{
-		    doevilgrin = true;
-		    oldweaponsowned[i] = plyr->weaponowned[i];
+            // [BH] no evil grin when invulnerable
+            // [JN] extra god faces have grin, use them in god mode
+            if (extra_player_faces && !vanilla)
+            {
+                doevilgrin = true;
+                oldweaponsowned[i] = plyr->weaponowned[i];
+            }
 		}
 	    }
 	    if (doevilgrin) 
@@ -1039,7 +1045,7 @@ void ST_updateFaceWidget(void)
     // getting hurt because of your own damn stupidity
     if (plyr->damagecount)
     {
-        if (!vanilla)
+        if (extra_player_faces && !vanilla)
         {
             if (st_oldhealth - plyr->health > ST_MUCHPAIN)
             {
@@ -1078,15 +1084,20 @@ void ST_updateFaceWidget(void)
 	// rapid firing
 	if (plyr->attackdown)
 	{
-	    if (lastattackdown==-1)
-		lastattackdown = ST_RAMPAGEDELAY;
-	    else if (!--lastattackdown)
-	    {
-		priority = 5;
-		faceindex = ST_RAMPAGEOFFSET;
-		st_facecount = 1;
-		lastattackdown = 1;
-	    }
+        // [BH] no rampage face when invulnerable
+        // [JN] extra god faces have rampage, use them in god mode
+        if (extra_player_faces && !vanilla)
+        {
+            if (lastattackdown==-1)
+                lastattackdown = ST_RAMPAGEDELAY;
+            else if (!--lastattackdown)
+            {
+                priority = 5;
+                faceindex = ST_RAMPAGEOFFSET;
+                st_facecount = 1;
+                lastattackdown = 1;
+            }
+        }
 	}
 	else
 	    lastattackdown = -1;
@@ -1102,7 +1113,7 @@ void ST_updateFaceWidget(void)
 	    priority = 4;
 	    faceindex = ST_GODFACE;
 
-	    if (vanilla)
+	    if (!extra_player_faces || vanilla)
 	    {
 	        // [JN] Standard god mode face behaviour
 	        st_facecount = 1;
