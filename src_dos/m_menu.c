@@ -796,7 +796,7 @@ void M_QuickSave(void)
 	return;
     }
 
-    if (!vanilla)
+    if (fast_quickload)
     {
         // [JN] Don't ask for overwriting, just save it.
         M_DoSave(quickSaveSlot);
@@ -837,7 +837,7 @@ void M_QuickLoad(void)
 	return;
     }
 
-    if (!vanilla)
+    if (fast_quickload)
     {
         // [JN] Don't ask for loading, just load it.
         M_LoadSelect(quickSaveSlot);
