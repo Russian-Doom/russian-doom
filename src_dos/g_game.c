@@ -1160,9 +1160,12 @@ void G_DoCompleted (void)
     if (!commercial)
     switch(gamemap)
     {
+        // [crispy] display tally screen after ExM8
+        /*
         case 8:
         gameaction = ga_victory;
         return;
+        */
 
         case 9:
         for (i=0 ; i<MAXPLAYERS ; i++)
@@ -1303,6 +1306,11 @@ void G_WorldDone (void)
             F_StartFinale();
             break;
         }
+    }
+    // [crispy] display tally screen after ExM8
+    else if (gamemap == 8)
+    {
+        gameaction = ga_victory;
     }
 }
 
