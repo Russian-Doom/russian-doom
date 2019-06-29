@@ -35,6 +35,7 @@
 // Data.
 #include "sounds.h"
 
+#include "jn.h"
 
 fixed_t		tmbbox[4];
 mobj_t*		tmthing;
@@ -1516,7 +1517,8 @@ boolean PIT_ChangeSector (mobj_t*	thing)
         }
         else
         {
-            if (!vanilla) // [JN] *Squish!*
+            // [JN] *Squish!* sound, not for barrel and Lost Soul.
+            if (crushed_corpses_sfx && !vanilla && !(thing->type == MT_BARREL || thing->type == MT_SKULL))
             S_StartSound(thing, sfx_slop2);
 
             // [JN] Player's squishing sound NULLified.

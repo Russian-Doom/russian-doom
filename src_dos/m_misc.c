@@ -441,6 +441,7 @@ default_t	defaults[] =
 
     // Gameplay: Audible
     {"play_exit_sfx", &play_exit_sfx, 1},
+    {"crushed_corpses_sfx", &crushed_corpses_sfx, 1},
 
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}

@@ -48,6 +48,7 @@ extern int draw_shadowed_text;
 
 // Gameplay: Audible
 extern int play_exit_sfx;
+extern int crushed_corpses_sfx;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;

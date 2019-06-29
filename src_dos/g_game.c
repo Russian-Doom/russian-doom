@@ -174,6 +174,7 @@ int draw_shadowed_text;
 
 // Gameplay: Audible
 int play_exit_sfx;
+int crushed_corpses_sfx;
 
 // Gameplay: Crosshair
 int crosshair_draw;
