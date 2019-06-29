@@ -46,6 +46,9 @@ extern int swirling_liquids;
 extern int invul_sky;
 extern int draw_shadowed_text;
 
+// Gameplay: Audible
+extern int play_exit_sfx;
+
 // Gameplay: Crosshair
 extern int crosshair_draw;
 

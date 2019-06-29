@@ -56,6 +56,7 @@
 
 #include "m_menu.h"
 
+#include "jn.h"
 
 
 extern patch_t*		hu_font[HU_FONTSIZE];
@@ -1191,7 +1192,7 @@ void M_QuitResponse(int ch)
     if (ch != 'y')
 	return;
     // [JN] No need to play exit sfx if it's volume set to 0.
-    if (!netgame && sfxVolume > 0)
+    if (!netgame && play_exit_sfx && sfxVolume > 0)
     {
 	if (commercial)
 	    S_StartSound(NULL,quitsounds2[(gametic>>2)&7]);

@@ -172,6 +172,9 @@ int swirling_liquids;
 int invul_sky;
 int draw_shadowed_text;
 
+// Gameplay: Audible
+int play_exit_sfx;
+
 // Gameplay: Crosshair
 int crosshair_draw;
 

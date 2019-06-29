@@ -439,6 +439,9 @@ default_t	defaults[] =
     {"invul_sky", &invul_sky, 1},
     {"draw_shadowed_text", &draw_shadowed_text, 1},
 
+    // Gameplay: Audible
+    {"play_exit_sfx", &play_exit_sfx, 1},
+
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}
 };
