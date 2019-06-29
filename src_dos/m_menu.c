@@ -331,6 +331,7 @@ void M_RD_Change_SfxVol(int choice);
 void M_RD_Change_MusicVol(int choice);
 void M_RD_Change_SfxChannels(int choice);
 void M_RD_Change_SndMode(int choice);
+void M_RD_Change_PitchShifting(int choice);
 
 // Controls
 void M_RD_Choose_Controls(int choice);
@@ -809,6 +810,7 @@ enum
     rd_audio_sfxchannels,
     rd_audio_empty3,
     rd_audio_sndmode,
+    rd_audio_sndpitch,
     rd_audio_end
 } rd_audio_e;
 
@@ -821,6 +823,7 @@ menuitem_t RD_Audio_Menu[]=
     {2,"Pderjdst rfyfks",  M_RD_Change_SfxChannels, 'p'},   // Звуковые каналы
     {-1,"",0,'\0'},                                         //
     {1,"Ht;bv pderf:",     M_RD_Change_SndMode,     'h'},   // Режим звука
+    {1,"Gbnx-ibanbyu:",    M_RD_Change_PitchShifting, 'g'}, // Питч-шифтинг
     {-1,"",0,'\0'}
 };
 
@@ -1225,6 +1228,7 @@ void M_RD_Draw_Audio(void)
 
     // Write "on" / "off" strings for features
     M_WriteTextBig(219, 133, snd_monomode == 1 ? "vjyj" : "cnthtj");
+    M_WriteTextBig(236, 149, snd_pitchshift == 1 ? "drk" : "dsrk");
 }
 
 void M_RD_Change_SfxVol(int choice)
@@ -1287,6 +1291,13 @@ void M_RD_Change_SndMode(int choice)
     choice = 0;
     snd_monomode = 1 - snd_monomode;
 }
+
+void M_RD_Change_PitchShifting(int choice)
+{
+    choice = 0;
+    snd_pitchshift = 1 - snd_pitchshift;
+}
+
 
 // -----------------------------------------------------------------------------
 // Keyboard and Mouse

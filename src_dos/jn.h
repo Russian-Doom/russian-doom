@@ -49,6 +49,7 @@ extern int mlook;
 
 extern int numChannels;
 extern int snd_monomode;
+extern int snd_pitchshift;
 
 
 // -----------------------------------------------------------------------------

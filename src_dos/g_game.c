@@ -166,6 +166,7 @@ int screen_wiping;
 
 // Audio
 int snd_monomode;
+int snd_pitchshift;
 
 // Controls
 int mlook;

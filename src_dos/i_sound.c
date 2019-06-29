@@ -33,9 +33,8 @@
 
 #include "doomdef.h"
 #include "doomstat.h"
+#include "jn.h"
 
-// Random sound pitch
-boolean         soundpitch;
 
 
 //
@@ -196,7 +195,7 @@ int I_StartSound(int id, void *data, int vol, int sep, int pitch, int priority)
     {
         return -1;
     }
-    if (soundpitch)
+    if (snd_pitchshift)
         return SFX_PlayPatch(data, pitch, sep, vol, 0, 100);
     return SFX_PlayPatch(data, sep, pitch, vol, 0, 100);
 }
@@ -243,11 +242,6 @@ void I_sndArbitrateCards(void)
     if (M_CheckParm("-nomusic"))
     {
         snd_MusicDevice = snd_none;
-    }
-    // Check if the user wants randomly pitched sounds
-    if (M_CheckParm("-pitch"))
-    {
-        soundpitch = true;
     }
 
     if (snd_MusicDevice > snd_MPU && snd_MusicDevice <= snd_MPU3)

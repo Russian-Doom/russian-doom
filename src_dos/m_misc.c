@@ -375,6 +375,7 @@ default_t	defaults[] =
     {"sfx_volume",&sfxVolume, 8},
     {"music_volume",&musicVolume, 8},
     {"snd_monomode",&snd_monomode, 0},
+    {"snd_pitchshift",&snd_pitchshift, 0},
     {"show_messages",&showMessages, 1},
     
     {"key_right",&key_right, SC_RIGHTARROW, 1},
