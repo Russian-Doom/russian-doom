@@ -450,6 +450,7 @@ default_t	defaults[] =
 
     // Gameplay: Physical
     {"torque", &torque, 1},
+    {"weapon_bobbing", &weapon_bobbing, 1},
 
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}

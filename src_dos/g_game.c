@@ -183,6 +183,7 @@ int negative_health;
 
 // Gameplay: Physical
 int torque;
+int weapon_bobbing;
 
 // Gameplay: Crosshair
 int crosshair_draw;

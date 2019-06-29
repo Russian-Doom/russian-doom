@@ -813,7 +813,7 @@ void R_DrawPSprite (pspdef_t* psp)
 
     // [crispy] Smoothen Chainsaw idle animation
     // [JN] ...and also apply standard bobbing for some frames of weapons
-    if (!vanilla && (
+    if (weapon_bobbing && !vanilla && (
     /* Chainsaw  */ state == S_SAW      || state == S_SAWB     ||
     /* Shotgun   */ state == S_SGUN8    || state == S_SGUN9    ||
     /* SSG       */ state == S_DSGUN9   || state == S_DSGUN10  ||
@@ -824,7 +824,7 @@ void R_DrawPSprite (pspdef_t* psp)
     }
     
     // [JN] Halfed amplitude for bobbing while moving and shooting
-    if (!vanilla && (
+    if (weapon_bobbing && !vanilla && (
     /* Fist      */ state == S_PUNCH1   || state == S_PUNCH2   || state == S_PUNCH3   || state == S_PUNCH4  || state == S_PUNCH5 ||
     /* Chainsaw  */ state == S_SAW1     || state == S_SAW2     ||
     /* Pistol    */ state == S_PISTOL1  || state == S_PISTOL2  || state == S_PISTOL3  || state == S_PISTOL4 ||
@@ -839,7 +839,7 @@ void R_DrawPSprite (pspdef_t* psp)
     }
 
     // [crispy] squat down weapon sprite a bit after hitting the ground
-    if (!vanilla)
+    if (weapon_bobbing && !vanilla)
     psp_sy += abs(viewplayer->psp_dy);
 
     // calculate edges of the shape

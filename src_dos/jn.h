@@ -57,6 +57,7 @@ extern int negative_health;
 
 // Gameplay: Physical
 extern int torque;
+extern int weapon_bobbing;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;
