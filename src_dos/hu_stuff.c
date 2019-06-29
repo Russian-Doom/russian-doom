@@ -32,6 +32,8 @@
 #include "dstrings.h"
 #include "sounds.h"
 
+#include "jn.h"
+
 //
 // Locally used constants, shortcuts.
 //
@@ -83,6 +85,7 @@ static          hu_textline_t w_title;
 static          hu_textline_t w_kills;
 static          hu_textline_t w_items;
 static          hu_textline_t w_scrts;
+static          hu_textline_t w_skill;
 static          hu_textline_t w_ltime;
 boolean         chat_on;
 static          hu_itext_t w_chat;
@@ -440,8 +443,13 @@ void HU_Start(void)
                         hu_font,
                         HU_FONTSTART);
     
+    HUlib_initTextLine(&w_skill,
+		                HU_TITLEX, HU_MSGY + 4 * 8,
+		                hu_font,
+		                HU_FONTSTART);
+
     HUlib_initTextLine(&w_ltime,
-                        HU_TITLEX, HU_MSGY + 5 * 8,
+                        HU_TITLEX, HU_MSGY + 6 * 8,
                         hu_font,
                         HU_FONTSTART);
 
@@ -498,7 +506,7 @@ void HU_Drawer(void)
         HUlib_drawTextLine(&w_title, false);
 
         // [from-crispy] Show level stats in automap
-        if (!vanilla)
+        if (automap_stats && !vanilla)
         {
             sprintf(str, "dhfub: %d/%d", players[consoleplayer].killcount, totalkills);
             HUlib_clearTextLine(&w_kills);
@@ -520,6 +528,13 @@ void HU_Drawer(void)
             while (*s)
                 HUlib_addCharToTextLine(&w_scrts, *(s++));
             HUlib_drawTextLine(&w_scrts, false);
+
+            sprintf(str, "ckj;yjcnm: %d", gameskill+1);
+            HUlib_clearTextLine(&w_skill);
+            s = str;
+            while (*s)
+                HUlib_addCharToTextLine(&w_skill, *(s++));
+            HUlib_drawTextLine(&w_skill, false);
 
             sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
             HUlib_clearTextLine(&w_ltime);

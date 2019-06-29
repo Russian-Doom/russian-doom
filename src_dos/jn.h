@@ -50,6 +50,9 @@ extern int draw_shadowed_text;
 extern int play_exit_sfx;
 extern int crushed_corpses_sfx;
 
+// Gameplay: Tactical
+extern int automap_stats;
+
 // Gameplay: Crosshair
 extern int crosshair_draw;
 

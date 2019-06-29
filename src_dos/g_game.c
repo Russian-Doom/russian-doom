@@ -176,6 +176,9 @@ int draw_shadowed_text;
 int play_exit_sfx;
 int crushed_corpses_sfx;
 
+// Gameplay: Tactical
+int automap_stats;
+
 // Gameplay: Crosshair
 int crosshair_draw;
 

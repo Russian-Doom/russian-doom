@@ -443,6 +443,9 @@ default_t	defaults[] =
     {"play_exit_sfx", &play_exit_sfx, 1},
     {"crushed_corpses_sfx", &crushed_corpses_sfx, 1},
 
+    // Gameplay: Tactical
+    {"automap_stats", &automap_stats, 1},
+
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}
 };
