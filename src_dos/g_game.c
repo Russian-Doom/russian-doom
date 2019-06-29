@@ -160,6 +160,9 @@ int     joybspeed;
 
 // [JN] Russian Doom specific variables 
 
+// Rendering
+int show_diskicon;
+
 // Controls
 int mlook;
 

@@ -37,6 +37,8 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "dpmiapi.h"
+#include "jn.h"
+
 //
 // Macros
 //
@@ -1288,6 +1290,8 @@ void I_InitDiskFlash(void)
     }
     temp = destscreen;
     destscreen = (byte *)0xac000;
+    // [JN] Disk icon - make optional
+    if (show_diskicon || vanilla)
     V_DrawPatchDirect(SCREENWIDTH - 16, SCREENHEIGHT - 16, 0, pic);
     destscreen = temp;
 }

@@ -427,6 +427,9 @@ default_t	defaults[] =
 
     // [JN] Russian Doom specific variables
 
+    // Rendering
+    {"show_diskicon", &show_diskicon, 1},
+
     // Controls
     {"mlook", &mlook, 0},
 
