@@ -314,6 +314,7 @@ void M_RD_Draw_Options(void);
 void M_RD_Choose_Rendering(int choice);
 void M_RD_Draw_Rendering(void);
 void M_RD_Change_DiskIcon(int choice);
+void M_RD_Change_NoFlats(int choice);
 void M_RD_Change_Wiping(int choice);
 
 // Display
@@ -740,6 +741,7 @@ menu_t  RD_Options_Def =
 enum
 {
     rd_rendering_diskicon,
+    rd_rendering_noflats,
     rd_rendering_wiping,
     rd_rendering_end
 } rd_rendering_e;
@@ -747,6 +749,7 @@ enum
 menuitem_t RD_Rendering_Menu[]=
 {
     {1,"Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon, 'j'}, // Отображать значок дискеты
+    {1,"Ntrcnehs gjkf b gjnjkrf:",   M_RD_Change_NoFlats,  'n'}, // Текстуры пола и потолка
     {1,"Gkfdyfz cvtyf \'rhfyjd:",    M_RD_Change_Wiping,   'g'}, // Плавная смена экранов
     {-1,"",0,'\0'}
 };
@@ -1076,13 +1079,23 @@ void M_RD_Draw_Rendering(void)
 
     // Write "on" / "off" strings for features
     M_WriteTextSmall(241, 37, show_diskicon == 1 ? "drk" : "dsrk");
-    M_WriteTextSmall(204, 47, screen_wiping == 1 ? "drk" : "dsrk");
+    M_WriteTextSmall(217, 47, noflats == 1 ? "dsrk" : "drk");
+    M_WriteTextSmall(204, 57, screen_wiping == 1 ? "drk" : "dsrk");
 }
 
 void M_RD_Change_DiskIcon(int choice)
 {
     choice = 0;
     show_diskicon = 1 - show_diskicon;
+}
+
+void M_RD_Change_NoFlats(int choice)
+{
+    choice = 0;
+    noflats = 1 - noflats;
+
+    // Reinitialize drawing functions
+    R_ExecuteSetViewSize();
 }
 
 void M_RD_Change_Wiping(int choice)
@@ -1187,8 +1200,7 @@ void M_RD_Change_Messages(int choice)
 
     players[consoleplayer].message = showMessages ? MSGON : MSGOFF;
 
-    // [JN] Not needed here, don't keep this message visible.
-    // message_dontfuckwithme = true;
+    message_dontfuckwithme = true;
 }
 
 // -----------------------------------------------------------------------------

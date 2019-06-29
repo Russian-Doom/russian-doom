@@ -84,7 +84,6 @@ boolean     respawnparm; // checkparm of -respawn
 boolean     fastparm;    // checkparm of -fast
 boolean     drone;
 boolean	    singletics = false; // debug flag to cancel adaptiveness
-boolean	    noflats;     // [JN] draw visplanes as single color
 
 //extern int soundVolume;
 extern int  sfxVolume;
@@ -1024,7 +1023,6 @@ void D_DoomMain (void)
     respawnparm = M_CheckParm("-respawn");
     fastparm = M_CheckParm("-fast");
     devparm = M_CheckParm("-devparm");
-    noflats = M_CheckParm("-noflats");
 
     if (M_CheckParm("-dm3"))
     deathmatch = 3;

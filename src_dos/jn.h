@@ -32,6 +32,7 @@ extern boolean vanilla;
 // -----------------------------------------------------------------------------
 
 extern int show_diskicon;
+extern int noflats;
 extern int screen_wiping;
 
 

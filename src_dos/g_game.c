@@ -162,6 +162,7 @@ int     joybspeed;
 
 // Rendering
 int show_diskicon;
+int noflats;
 int screen_wiping;
 
 // Audio
