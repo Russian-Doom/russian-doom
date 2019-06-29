@@ -162,6 +162,9 @@ lighttable_t	*brightmaps_orangeyellow;
 lighttable_t	*brightmaps_dimmeditems;
 lighttable_t	*brightmaps_brighttan;
 lighttable_t	*brightmaps_redonly1;
+lighttable_t	*brightmaps_explosivebarrel;
+lighttable_t	*brightmaps_alllights;
+lighttable_t	*brightmaps_candles;
 
 //
 // MAPTEXTURE_T CACHING
@@ -651,7 +654,8 @@ void R_InitSpriteLumps (void)
 //
 void R_InitColormaps (void)
 {
-    int lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11;
+    int lump, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9;
+    int lump10, lump11, lump12, lump13, lump14;
     int length;
     
     // Load in the light tables, 
@@ -715,6 +719,21 @@ void R_InitColormaps (void)
     brightmaps_redonly1 = Z_Malloc (length, PU_STATIC, 0); 
     brightmaps_redonly1 = (byte *)( ((int)brightmaps_redonly1 + 255)&~0xff); 
     W_ReadLump (lump11,brightmaps_redonly1);
+
+    lump12 = W_GetNumForName("BRTMAP11"); 
+    brightmaps_explosivebarrel = Z_Malloc (length, PU_STATIC, 0); 
+    brightmaps_explosivebarrel = (byte *)( ((int)brightmaps_explosivebarrel + 255)&~0xff); 
+    W_ReadLump (lump12,brightmaps_explosivebarrel);
+
+    lump13 = W_GetNumForName("BRTMAP12"); 
+    brightmaps_alllights = Z_Malloc (length, PU_STATIC, 0); 
+    brightmaps_alllights = (byte *)( ((int)brightmaps_alllights + 255)&~0xff); 
+    W_ReadLump (lump13,brightmaps_alllights);
+
+    lump14 = W_GetNumForName("BRTMAP13"); 
+    brightmaps_candles = Z_Malloc (length, PU_STATIC, 0); 
+    brightmaps_candles = (byte *)( ((int)brightmaps_candles + 255)&~0xff); 
+    W_ReadLump (lump14,brightmaps_candles);    
 }
 
 
