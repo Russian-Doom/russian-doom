@@ -39,6 +39,7 @@ extern int screen_wiping;
 // Controls
 // -----------------------------------------------------------------------------
 
+extern int joybspeed;
 extern int mlook;
 
 

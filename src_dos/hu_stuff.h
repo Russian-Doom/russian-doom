@@ -29,6 +29,11 @@
 #define HU_FONTSTART    '!' // the first font characters
 #define HU_FONTEND      '_' // the last font characters
 
+// [JN] Big STCFB font
+#define HU_FONTSTART2   '!'	// the first font characters
+#define HU_FONTEND2     '{'	// the last font characters
+#define HU_FONTSIZE2    (HU_FONTEND2 - HU_FONTSTART2 + 1)
+
 // Calculate # of glyphs in font.
 #define HU_FONTSIZE     (HU_FONTEND - HU_FONTSTART + 1)	
 

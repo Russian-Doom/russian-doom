@@ -327,8 +327,9 @@ void D_Display (void)
         else
         y = viewwindowy+4;
 
-        V_DrawShadowDirect(viewwindowx+1+(scaledviewwidth-68)/2,y+1,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
-        V_DrawPatchDirect(viewwindowx+(scaledviewwidth-68)/2,y,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
+        // [JN] Draw "Пауза" a bit lower to don't obstruct message line
+        // Пауза
+        M_WriteTextBigCentered(y+7, "Gfepf");
     }
 
     // menus go directly to the screen

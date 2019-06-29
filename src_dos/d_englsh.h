@@ -56,6 +56,22 @@
 #define QSPROMPT    "gthtpfgbcfnm ,scnhjt cj[hfytybt\n^%s^?\n\n"PRESSYN                     // quicksave over your game named\n\n'%s'?\n\n
 #define QLPROMPT    "pfuhepbnm ,scnhjt cj[hfytybt\n^%s^?\n\n"PRESSYN                        // do you want to quickload the game named\n'%s'?\n\n
 
+#define RD_ON       "drk"       // вкл
+#define RD_OFF      "dsrk"      // выкл
+#define RD_NEXT     "lfktt )"   // далее >
+#define RD_PREV     "( yfpfl"   // < назад
+
+// Внутриигровые настройки будут
+// сброшены на стандартные значения.
+//
+// Уверены, что хотите продолжить?
+#define RD_DEFAULTS_RUS                 \
+"dyenhbbuhjdst yfcnhjqrb ,elen\n"       \
+"c,hjitys yf cnfylfhnyst pyfxtybz>\n"   \
+"\n"                                    \
+"edthtys< xnj [jnbnt ghjljk;bnm?\n\n"   \
+PRESSYN
+
 // Невозможно начать новую игру
 // при активной сетевой игре.
 #define NEWGAME	\
