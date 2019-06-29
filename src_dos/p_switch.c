@@ -204,6 +204,7 @@ P_ChangeSwitchTexture
     int     texBot;
     int     i;
     int     sound;
+    boolean playsound = false;
 	
     texTop = sides[line->sidenum[0]].toptexture;
     texMid = sides[line->sidenum[0]].midtexture;
@@ -235,7 +236,8 @@ P_ChangeSwitchTexture
     {
 	if (switchlist[i] == texTop)
 	{
-	    S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
+	    // S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
+        playsound = true;
 	    sides[line->sidenum[0]].toptexture = switchlist[i^1];
 
 	    if (useAgain)
@@ -248,7 +250,8 @@ P_ChangeSwitchTexture
 	{
 	    if (switchlist[i] == texMid)
 	    {
-		S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
+		// S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
+        playsound = true;
 		sides[line->sidenum[0]].midtexture = switchlist[i^1];
 
 		if (useAgain)
@@ -261,7 +264,8 @@ P_ChangeSwitchTexture
 	    {
 		if (switchlist[i] == texBot)
 		{
-		    S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
+		    // S_StartSoundOnce(&line->soundorg,sound); // [from-crispy] Corrected sound source
+            playsound = true;
 		    sides[line->sidenum[0]].bottomtexture = switchlist[i^1];
 
 		    if (useAgain)
@@ -271,6 +275,16 @@ P_ChangeSwitchTexture
 		}
 	    }
 	}
+    }
+
+    // [crispy] corrected sound source
+    // [JN] Divided to if/else, Watcom gives a warning about "?" operator.
+    if (playsound)
+    {
+        if (vanilla)
+        S_StartSound(&line->soundorg, sound);
+        else
+        S_StartSound(buttonlist->soundorg, sound);
     }
 }
 
