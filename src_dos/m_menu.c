@@ -1217,13 +1217,11 @@ void M_RD_Draw_Audio(void)
     snprintf(num, 4, "%3d", musicVolume);
     M_WriteText(202, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_musvolume+1) + 2, num);
 
-    /*
     // Draw SFX channels slider
-    M_DrawThermo(60+ORIGWIDTH_DELTA, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1), 16, snd_channels / 4 - 1);
+    M_DrawThermo(60, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1), 16, numChannels / 4 - 1);
     // Draw numerical representation of channels
-    M_snprintf(num, 4, "%3d", snd_channels);
-    M_WriteText(202+ORIGWIDTH_DELTA, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1) + 2, num);
-    */
+    snprintf(num, 4, "%3d", numChannels);
+    M_WriteText(202, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1) + 2, num);
 
     // Write "on" / "off" strings for features
     // M_WriteTextBig(219, 133, snd_monomode == 1 ? "vjyj" : "cnthtj");
@@ -1267,23 +1265,21 @@ void M_RD_Change_MusicVol(int choice)
 
 void M_RD_Change_SfxChannels(int choice)
 {
-    /*
     switch(choice)
     {
         case 0:
-        if (snd_channels > 4)
-            snd_channels -= 4;
+        if (numChannels > 4)
+            numChannels -= 4;
         break;
     
         case 1:
-        if (snd_channels < 64)
-            snd_channels += 4;
+        if (numChannels < 64)
+            numChannels += 4;
         break;
     }
 
     // Reallocate sound channels
     S_ChannelsRealloc();
-    */
 }
 
 void M_RD_Change_SndMode(int choice)

@@ -880,6 +880,28 @@ void S_Init
     S_sfx[i].lumpnum = S_sfx[i].usefulness = -1;
 }
 
+// -----------------------------------------------------------------------------
+// S_ChannelsRealloc
+// [JN] Reallocates sound channels, needed for hot-swapping.
+// -----------------------------------------------------------------------------
+
+void S_ChannelsRealloc(void)
+{
+    int i;
+
+    // Safeguard conditions:
+    if (numChannels < 4)
+        numChannels = 4;
+    if (numChannels > 64)
+        numChannels = 64;
+
+    channels = (channel_t *) Z_Malloc(numChannels*sizeof(channel_t), PU_STATIC, 0);
+    for (i=0 ; i<numChannels ; i++)
+    {
+        channels[i].sfxinfo = 0;
+    }
+}
+
 //
 // Per level startup code.
 // Kills playing sounds at start of level,

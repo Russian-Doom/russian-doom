@@ -404,7 +404,7 @@ default_t	defaults[] =
     {"screenblocks",&screenblocks, 10},
     {"detaillevel",&detailLevel, 0},
 
-    {"snd_channels",&numChannels, 8},
+    {"snd_channels",&numChannels, 32},
     {"snd_musicdevice",&snd_DesiredMusicDevice, 3},
     {"snd_sfxdevice",&snd_DesiredSfxDevice, 3},
     {"snd_sbport",&snd_SBport, 0x220},
