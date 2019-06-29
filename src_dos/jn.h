@@ -55,6 +55,9 @@ extern int automap_stats;
 extern int secret_notification;
 extern int negative_health;
 
+// Gameplay: Physical
+extern int torque;
+
 // Gameplay: Crosshair
 extern int crosshair_draw;
 

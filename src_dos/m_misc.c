@@ -448,6 +448,9 @@ default_t	defaults[] =
     {"secret_notification", &secret_notification, 1},
     {"negative_health", &negative_health, 0},
 
+    // Gameplay: Physical
+    {"torque", &torque, 1},
+
     // Gameplay: Crosshair
     {"crosshair_draw", &crosshair_draw, 0}
 };

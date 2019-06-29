@@ -181,6 +181,9 @@ int automap_stats;
 int secret_notification;
 int negative_health;
 
+// Gameplay: Physical
+int torque;
+
 // Gameplay: Crosshair
 int crosshair_draw;
 
