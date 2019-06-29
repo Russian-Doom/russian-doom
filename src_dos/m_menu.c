@@ -55,6 +55,7 @@
 #include "sounds.h"
 
 #include "m_menu.h"
+#include "v_trans.h"
 
 #include "jn.h"
 
@@ -613,11 +614,18 @@ void M_DrawLoad(void)
     for (i = 0;i < load_end; i++)
     {
     if (!vanilla)
+    // [JN] TODO - cleanup
     M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
     else
     M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y-1+LINEHEIGHT*i);
 
+	// [crispy] shade empty savegame slots
+	if (!LoadMenu[i].status && colored_hud && !vanilla)
+	dp_translation = cr[CR_DARKRED];
+
 	M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+
+	dp_translation = NULL;
     }
 }
 
