@@ -32,6 +32,7 @@
 #include "dstrings.h"
 #include "sounds.h"
 
+#include "v_trans.h"
 #include "jn.h"
 
 //
@@ -548,9 +549,23 @@ void HU_Drawer(void)
     // [JN] Draw crosshair
     if (!vanilla && !automapactive && crosshair_draw)
     {
+        if (crosshair_health)
+        {
+            if (plr->health >= 67)
+            dp_translation = cr[CR_GREEN];
+            else if (plr->health >= 34)
+            dp_translation = cr[CR_GOLD];
+            else
+            dp_translation = cr[CR_RED];
+            
+        }
+
         V_DrawPatchDirect(SCREENWIDTH/2,
                 ((screenblocks <= 10) ? (SCREENHEIGHT-32+4)/2 : (SCREENHEIGHT+4)/2), 0,
                 W_CacheLumpName("XHAIRSR", PU_CACHE));
+
+        if (crosshair_health)
+            dp_translation = NULL;
     }
 }
 

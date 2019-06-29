@@ -456,7 +456,8 @@ default_t	defaults[] =
     {"floating_powerups", &floating_powerups, 0},
 
     // Gameplay: Crosshair
-    {"crosshair_draw", &crosshair_draw, 0}
+    {"crosshair_draw", &crosshair_draw, 0},
+    {"crosshair_health", &crosshair_health, 1}
 };
 
 int	numdefaults;

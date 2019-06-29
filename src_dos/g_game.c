@@ -190,6 +190,7 @@ int floating_powerups;
 
 // Gameplay: Crosshair
 int crosshair_draw;
+int crosshair_health;
 
 
 #define MAXPLMOVE       (forwardmove[1]) 

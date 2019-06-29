@@ -542,6 +542,7 @@ V_DrawPatchFlipped
     byte*	desttop;
     byte*	dest;
     byte*	source; 
+    byte*	sourcetrans;
     int		w; 
 	 
     y -= SHORT(patch->topoffset); 
@@ -573,13 +574,16 @@ V_DrawPatchFlipped
 	// step through the posts in a column 
 	while (column->topdelta != 0xff ) 
 	{ 
-	    source = (byte *)column + 3; 
+	    source = sourcetrans = (byte *)column + 3; 
 	    dest = desttop + column->topdelta*SCREENWIDTH; 
 	    count = column->length; 
 			 
 	    while (count--) 
 	    { 
-		*dest = *source++; 
+		if (dp_translation)
+		sourcetrans = &dp_translation[*source++];
+
+		*dest = *sourcetrans++; 
 		dest += SCREENWIDTH; 
 	    } 
 	    column = (column_t *)(  (byte *)column + column->length 
@@ -607,6 +611,7 @@ V_DrawPatchDirect
     byte*	desttop;
     byte*	dest;
     byte*	source; 
+    byte*	sourcetrans;
     int		w; 
 	 
     y -= SHORT(patch->topoffset); 
@@ -636,13 +641,16 @@ V_DrawPatchDirect
 	 
 	while (column->topdelta != 0xff ) 
 	{ 
-	    source = (byte *)column + 3; 
+	    source = sourcetrans = (byte *)column + 3; 
 	    dest = desttop + column->topdelta*SCREENWIDTH/4; 
 	    count = column->length; 
  
 	    while (count--) 
 	    { 
-		*dest = *source++; 
+		if (dp_translation)
+		sourcetrans = &dp_translation[*source++];
+
+		*dest = *sourcetrans++; 
 		dest += SCREENWIDTH/4; 
 	    } 
 	    column = (column_t *)(  (byte *)column + column->length + 4 ); 
