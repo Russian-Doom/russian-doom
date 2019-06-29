@@ -901,6 +901,7 @@ void G_InitPlayer (int player)
 //
 void G_PlayerFinishLevel (int player)
 {
+    extern int st_palette;
     player_t*   p;
     p = &players[player];
 
@@ -912,6 +913,7 @@ void G_PlayerFinishLevel (int player)
     p->fixedcolormap = 0;       // cancel ir gogles
     p->damagecount = 0;         // no palette changes
     p->bonuscount = 0;
+    st_palette = 0;             // [JN] Also no inner palette changes
 }
 
 
