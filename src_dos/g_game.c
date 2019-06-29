@@ -245,6 +245,7 @@ int         bodyqueslot;
 void*       statcopy;       // for statistics driver
 
 extern int isCyberPresent;  // is CyberMan present?
+extern int screenblocks;
 void I_ReadCyberCmd(ticcmd_t *cmd);
 
 int G_CmdChecksum (ticcmd_t* cmd)
@@ -1403,6 +1404,7 @@ void G_DoLoadGame (void)
     players[consoleplayer].message = GGLOADED;
 
     // draw the pattern into the back screen
+    if (screenblocks < 10) // [JN] Invoke only for appropriate screen sizes
     R_FillBackScreen ();
 }
 
@@ -1475,6 +1477,7 @@ void G_DoSaveGame (void)
     players[consoleplayer].message = GGSAVED;
 
     // draw the pattern into the back screen
+    if (screenblocks < 10) // [JN] Invoke only for appropriate screen sizes
     R_FillBackScreen();
 }
 

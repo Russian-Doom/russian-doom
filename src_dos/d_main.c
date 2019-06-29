@@ -298,6 +298,7 @@ void D_Display (void)
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
     {
         viewactivestate = false; // view was not active
+        if (screenblocks < 10)   // [JN] Invoke only for appropriate screen sizes
         R_FillBackScreen ();     // draw the pattern into the back screen
     }
 
