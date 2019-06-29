@@ -58,6 +58,8 @@
 
 #include "d_main.h"
 
+#include "jn.h"
+
 // [JN] Default banner colors. Background changed to
 // black for prevention of color blinking in slow CPUs
 #define BGCOLOR     0
@@ -501,8 +503,11 @@ void D_DoAdvanceDemo (void)
         break;
 
         case 1:
+        {
+        if (!no_internal_demos)
         G_DeferedPlayDemo ("demo1");
         break;
+        }
 
         case 2:
         pagetic = 200;
@@ -517,8 +522,11 @@ void D_DoAdvanceDemo (void)
         break;
 
         case 3:
+        {
+        if (!no_internal_demos)
         G_DeferedPlayDemo ("demo2");
         break;
+        }
 
         case 4:
         gamestate = GS_DEMOSCREEN;
@@ -550,12 +558,18 @@ void D_DoAdvanceDemo (void)
         break;
 
         case 5:
+        {
+        if (!no_internal_demos)
         G_DeferedPlayDemo ("demo3");
         break;
+        }
 
         case 6: // THE DEFINITIVE DOOM Special Edition demo
+        {
+        if (!no_internal_demos)
         G_DeferedPlayDemo ("demo4");
         break;
+        }
     }
 
     // The Doom 3: BFG Edition version of doom2.wad does not have a

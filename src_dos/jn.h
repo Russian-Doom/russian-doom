@@ -69,6 +69,8 @@ extern int crosshair_health;
 // Gameplay: Gameplay
 extern int extra_player_faces;
 extern int unlimited_lost_souls;
+extern int fast_quickload;
+extern int no_internal_demos;
 
 
 #endif

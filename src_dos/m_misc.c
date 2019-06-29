@@ -461,7 +461,9 @@ default_t	defaults[] =
 
     // Gameplay: Gameplay
     {"extra_player_faces", &extra_player_faces, 1},
-    {"unlimited_lost_souls", &unlimited_lost_souls, 1}
+    {"unlimited_lost_souls", &unlimited_lost_souls, 1},
+    {"fast_quickload", &fast_quickload, 1},
+    {"no_internal_demos", &no_internal_demos, 0},
 };
 
 int	numdefaults;
