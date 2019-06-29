@@ -194,6 +194,7 @@ int crosshair_health;
 
 // Gameplay: Gameplay
 int extra_player_faces;
+int unlimited_lost_souls;
 
 
 #define MAXPLMOVE       (forwardmove[1]) 

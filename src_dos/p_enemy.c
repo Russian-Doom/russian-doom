@@ -39,6 +39,7 @@
 // Data.
 #include "sounds.h"
 
+#include "jn.h"
 
 
 
@@ -1548,9 +1549,11 @@ A_PainShootSkull
 
     // if there are allready 20 skulls on the level,
     // don't spit another one
-    if (count > 20)
-	return;
-
+    // [JN] Optionally disable limit of 20 skulls. 
+    if (unlimited_lost_souls && !vanilla && singleplayer && count > 4096)
+    return;
+    else if (!unlimited_lost_souls && count > 20)
+    return;
 
     // okay, there's playe for another one
     an = angle >> ANGLETOFINESHIFT;

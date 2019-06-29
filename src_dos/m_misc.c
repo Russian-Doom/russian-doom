@@ -460,7 +460,8 @@ default_t	defaults[] =
     {"crosshair_health", &crosshair_health, 1},
 
     // Gameplay: Gameplay
-    {"extra_player_faces", &extra_player_faces, 1}
+    {"extra_player_faces", &extra_player_faces, 1},
+    {"unlimited_lost_souls", &unlimited_lost_souls, 1}
 };
 
 int	numdefaults;
