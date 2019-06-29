@@ -861,7 +861,8 @@ void ST_updateFaceWidget(void)
     if (priority < 10)
     {
 	// dead
-	if (!plyr->health)
+	// [crispy] negative player health
+	if (plyr->health <= 0)
 	{
 	    priority = 9;
 	    painoffset = 0;

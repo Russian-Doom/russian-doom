@@ -37,6 +37,8 @@
 
 #include "p_inter.h"
 
+#include "jn.h"
+
 
 #define BONUSADD	6
 
@@ -910,8 +912,18 @@ P_DamageMobj
 	    damage -= saved;
 	}
 	player->health -= damage; 	// mirror mobj health here for Dave
-	if (player->health < 0)
-	    player->health = 0;
+
+    // [crispy] negative player health
+    if (negative_health && !vanilla)
+    {
+        if (player->health < -99)
+            player->health = -99;
+    }
+    else
+    {
+        if (player->health < 0)
+            player->health = 0;
+    }
 	
 	player->attacker = source;
 	player->damagecount += damage;	// add damage after armor / invuln

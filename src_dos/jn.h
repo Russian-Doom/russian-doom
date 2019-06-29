@@ -53,6 +53,7 @@ extern int crushed_corpses_sfx;
 // Gameplay: Tactical
 extern int automap_stats;
 extern int secret_notification;
+extern int negative_health;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;

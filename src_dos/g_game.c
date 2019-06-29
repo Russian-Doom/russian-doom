@@ -179,6 +179,7 @@ int crushed_corpses_sfx;
 // Gameplay: Tactical
 int automap_stats;
 int secret_notification;
+int negative_health;
 
 // Gameplay: Crosshair
 int crosshair_draw;
