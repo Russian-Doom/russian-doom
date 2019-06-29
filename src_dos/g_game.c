@@ -186,6 +186,7 @@ int torque;
 int weapon_bobbing;
 int ssg_blast_enemies;
 int randomly_flipcorpses;
+int floating_powerups;
 
 // Gameplay: Crosshair
 int crosshair_draw;

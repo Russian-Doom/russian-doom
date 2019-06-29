@@ -41,6 +41,26 @@ extern int screenblocks;
 void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);
 
+// [JN] Floating amplitude LUT.
+// Initial values are from Heretic, but divided by 3.
+static fixed_t FloatBobOffsets[64] = {
+          0,   17129,   34094,   50730,
+      66878,   82382,   97092,  110868,
+     123575,  135093,  145309,  154126,
+     161459,  167237,  171404,  173921,
+     174762,  173921,  171404,  167237,
+     161459,  154126,  145309,  135093,
+     123575,  110868,   97092,   82382,
+      66878,   50730,   34094,   17129,
+         -1,  -17130,  -34094,  -50731,
+     -66879,  -82382,  -97093, -110868,
+    -123576, -135093, -145310, -154127,
+    -161460, -167237, -171405, -173921,
+    -174762, -173921, -171404, -167237,
+    -161459, -154127, -145310, -135093,
+    -123576, -110868,  -97093,  -82382,
+     -66879,  -50731,  -34094,  -17129
+};
 
 //
 // P_SetMobjState
@@ -542,6 +562,15 @@ void P_MobjThinker (mobj_t* mobj)
             mobj->intflags &= ~MIF_FALLING, mobj->gear = 0;  // Reset torque
     }
 
+    // [JN] Activate floating powerups
+    if (floating_powerups && !vanilla && (
+    mobj->type == MT_MEGA   ||  // Megasphere
+    mobj->type == MT_MISC12 ||  // Supercharge
+    mobj->type == MT_INV    ||  // Invulnerability
+    mobj->type == MT_INS))      // Partial invisibility
+    {
+        mobj->z = mobj->floorz + FloatBobOffsets[(mobj->health++) & 63];
+    }
     
     // cycle through states,
     // calling action functions at transitions

@@ -60,6 +60,7 @@ extern int torque;
 extern int weapon_bobbing;
 extern int ssg_blast_enemies;
 extern int randomly_flipcorpses;
+extern int floating_powerups;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;
