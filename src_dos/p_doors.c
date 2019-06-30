@@ -126,9 +126,15 @@ void T_VerticalDoor (vldoor_t* door)
 		P_RemoveThinker (&door->thinker);  // unlink and free
         // [crispy] fix "fast doors make two closing sounds"
         // [JN] No fix for vanilla option
-        if (blazing_door_fix_sfx && !vanilla)
-		S_StartSound((mobj_t *)&door->sector->soundorg,sfx_bdcls);
-		break;
+        if (!blazing_door_fix_sfx || vanilla)
+        {
+            S_StartSound((mobj_t *)&door->sector->soundorg,sfx_bdcls);
+            break;
+        }
+        else
+        {
+            break;
+        }
 		
 	      case normal:
 	      case close:
