@@ -329,6 +329,8 @@ void I_sndArbitrateCards(void)
         {
             printf("SB не отвечает по каналам p=0x%x, i=%d, d=%d\n",
                    snd_SBport, snd_SBirq, snd_SBdma);
+            // [JN] Try to set again
+            SB_SetCard(snd_SBport, snd_SBirq, snd_SBdma);
         }
         else
         {
@@ -350,6 +352,8 @@ void I_sndArbitrateCards(void)
         if (AL_Detect(&wait, 0))
         {
             printf("Внимание! Устройство Adlib не отвечает.\n");
+            // [JN] Try to set again
+            AL_SetCard(wait, W_CacheLumpName("genmidi", PU_STATIC));
         }
         else
         {

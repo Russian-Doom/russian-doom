@@ -278,10 +278,11 @@ void AL_SetCard(int port, void *data) {
     cdata = (unsigned char *)data;
     tmb = malloc(13 * 256);
     memset(tmb, 0, 13 * 256);
-    if (!tmb)
-    {
-        return;
-    }
+    // [JN] Commented out, see below.
+    // if (!tmb)
+    // {
+    //     return;
+    // }
     for (i = 0; i < 128; i++)
     {
         tmb[i * 13 + 0] = cdata[8 + i * 36 + 4 + 0];
@@ -319,7 +320,19 @@ void AL_SetCard(int port, void *data) {
                                 + cdata[8 + i * 36 + 4 + 14] + 12;
         tmb[(i + 35) * 13 + 12] = 0;
     }
+
+    // [JN] There is odd bug with in combination of DMX and Apogee AUDIO_WF.LIB,
+    // making music instruments randomly set wrong while startup process.
+    // It does not seems to be related to amount of CPU cycles.
+    // To avoid it, registering of Timbre bank is called two more times,
+    // which is seems to be enough for fixing.
+
     AL_RegisterTimbreBank(tmb);
+    I_WaitVBL (1);
+    AL_RegisterTimbreBank(tmb);
+    I_WaitVBL (1);
+    AL_RegisterTimbreBank(tmb);
+
     free(tmb);
 }
 int MPU_Detect(int *port, int *unk) {
