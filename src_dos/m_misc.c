@@ -449,6 +449,8 @@ default_t	defaults[] =
     // Gameplay: Audible
     {"play_exit_sfx", &play_exit_sfx, 1},
     {"crushed_corpses_sfx", &crushed_corpses_sfx, 1},
+    {"blazing_door_fix_sfx", &blazing_door_fix_sfx, 1},
+    {"noise_alert_sfx", &noise_alert_sfx, 0},
 
     // Gameplay: Tactical
     {"automap_stats", &automap_stats, 1},
@@ -456,6 +458,7 @@ default_t	defaults[] =
     {"negative_health", &negative_health, 0},
 
     // Gameplay: Physical
+    {"over_under", &over_under, 0},
     {"torque", &torque, 1},
     {"weapon_bobbing", &weapon_bobbing, 1},
     {"ssg_blast_enemies", &ssg_blast_enemies, 1},

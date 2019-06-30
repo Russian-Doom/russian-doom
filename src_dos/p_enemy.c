@@ -182,7 +182,22 @@ boolean P_CheckMeleeRange (mobj_t*	actor)
 	
     if (! P_CheckSight (actor, actor->target) )
 	return false;
-							
+
+    // [crispy] height check for melee attacks (from Hexen)
+    if (singleplayer && !vanilla && over_under && pl->player)
+    {
+	// [crispy] Target is higher than the attacker
+	if (pl->z > actor->z + actor->height)
+	{
+	    return false;
+	}
+	// [crispy] Attacker is higher
+	else if (actor->z > pl->z + pl->height)
+	{
+	    return false;
+	}
+    }
+
     return true;		
 }
 
@@ -686,6 +701,14 @@ void A_Look (mobj_t* actor)
 	}
 	else
 	    S_StartSound (actor, sound);
+    }
+
+    // [JN] Original id Software's idea: 
+    // If a monster yells at a player, it will 
+    // alert other monsters to the player.
+    if (noise_alert_sfx && !vanilla)
+    {
+        P_NoiseAlert (actor->target, actor);
     }
 
     P_SetMobjState (actor, actor->info->seestate);

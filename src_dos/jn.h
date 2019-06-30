@@ -69,6 +69,8 @@ extern int draw_shadowed_text;
 // Gameplay: Audible
 extern int play_exit_sfx;
 extern int crushed_corpses_sfx;
+extern int blazing_door_fix_sfx;
+extern int noise_alert_sfx;
 
 // Gameplay: Tactical
 extern int automap_stats;
@@ -76,6 +78,7 @@ extern int secret_notification;
 extern int negative_health;
 
 // Gameplay: Physical
+extern int over_under;
 extern int torque;
 extern int weapon_bobbing;
 extern int ssg_blast_enemies;

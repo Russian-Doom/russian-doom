@@ -216,6 +216,10 @@ typedef enum
 
 #define KEY_LALT        KEY_RALT
 
+// [JN] Make global, needed for Gameplay Features menu scrolling
+#define KEY_PGUP        (0x80+0x49)
+#define KEY_PGDN        (0x80+0x51)
+
 fixed_t FixedMul  (fixed_t a, fixed_t b);
 fixed_t FixedDiv  (fixed_t a, fixed_t b);
 fixed_t FixedDiv2 (fixed_t a, fixed_t b);

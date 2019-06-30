@@ -262,12 +262,8 @@ void M_ReadThis(int choice);
 void M_ReadThis2(int choice);
 void M_QuitDOOM(int choice);
 
-void M_ChangeMessages(int choice);
-void M_ChangeSensitivity(int choice);
 void M_SfxVol(int choice);
 void M_MusicVol(int choice);
-void M_ChangeDetail(int choice);
-void M_SizeDisplay(int choice);
 void M_StartGame(int choice);
 void M_Sound(int choice);
 
@@ -359,6 +355,7 @@ void M_RD_Change_ColoredBlood(int choice);
 void M_RD_Change_SwirlingLiquids(int choice);
 void M_RD_Change_InvulSky(int choice);
 void M_RD_Change_ShadowedText(int choice);
+
 void M_RD_Change_ExitSfx(int choice);
 void M_RD_Change_CrushingSfx(int choice);
 void M_RD_Change_BlazingSfx(int choice);
@@ -366,21 +363,19 @@ void M_RD_Change_AlertSfx(int choice);
 void M_RD_Change_AutoMapStats(int choice);
 void M_RD_Change_SecretNotify(int choice);
 void M_RD_Change_NegativeHealth(int choice);
-void M_RD_Change_InfraGreenVisor(int choice);
+
 void M_RD_Change_WalkOverUnder(int choice);
 void M_RD_Change_Torque(int choice);
 void M_RD_Change_Bobbing(int choice);
 void M_RD_Change_SSGBlast(int choice);
 void M_RD_Change_FlipCorpses(int choice);
 void M_RD_Change_FloatPowerups(int choice);
+
 void M_RD_Change_CrosshairDraw(int choice);
 void M_RD_Change_CrosshairHealth(int choice);
-void M_RD_Change_CrosshairScale(int choice);
-void M_RD_Change_FixMapErrors(int choice);
-// void M_RD_Change_FlipLevels(int choice);     // [JN] Not safe for hot swapping
+
 void M_RD_Change_ExtraPlayerFaces(int choice);
 void M_RD_Change_LostSoulsQty(int choice);
-void M_RD_Change_LostSoulsAgr(int choice);
 void M_RD_Change_FastQSaveLoad(int choice);
 void M_RD_Change_NoInternalDemos(int choice);
 
@@ -885,6 +880,8 @@ enum
     rd_gameplay_1_invul_sky,
     rd_gameplay_1_draw_shadowed_text,
     rd_gameplay_1_empty1,
+    rd_gameplay_1_empty2,
+    rd_gameplay_1_empty3,
     rd_gameplay_1_next_page,
     rd_gameplay_1_last_page,
     rd_gameplay_1_end
@@ -900,8 +897,8 @@ enum
     rd_gameplay_2_automap_stats,
     rd_gameplay_2_secret_notification,
     rd_gameplay_2_negative_health,
-    rd_gameplay_2_infragreen_visor,
-    rd_gameplay_2_empty1_2,
+    rd_gameplay_2_empty2,
+    rd_gameplay_2_empty3,
     rd_gameplay_2_next_page,
     rd_gameplay_2_prev_page,
     rd_gameplay_2_end
@@ -918,7 +915,6 @@ enum
     rd_gameplay_3_empty1,
     rd_gameplay_3_crosshair_draw,
     rd_gameplay_3_crosshair_health,
-    rd_gameplay_3_crosshair_scale,
     rd_gameplay_3_next_page,
     rd_gameplay_3_prev_page,
     rd_gameplay_3_end
@@ -926,10 +922,8 @@ enum
 
 enum
 {
-    rd_gameplay_4_fix_map_errors,
     rd_gameplay_4_extra_player_faces,
     rd_gameplay_4_unlimited_lost_souls,
-    rd_gameplay_4_agressive_lost_souls,
     rd_gameplay_4_fast_quickload,
     rd_gameplay_4_no_internal_demos,
     rd_gameplay_4_empty1,
@@ -951,6 +945,8 @@ menuitem_t RD_Gameplay_Menu_1[]=
     {1,"ytezpdbvjcnm jrhfibdftn yt,j:",     M_RD_Change_InvulSky,       'y'},   // Неуязвимость окрашивает небо
     {1,"ntrcns jn,hfcsdf.n ntym:",          M_RD_Change_ShadowedText,   'n'},   // Тексты отбрасывают тень
     {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
     {1,"",                                  M_RD_Choose_Gameplay_2,     'l'},   // Далее >
     {1,"",                                  M_RD_Choose_Gameplay_4,     'y'},   // < Назад
     {-1,"",0,'\0'}
@@ -968,18 +964,18 @@ menu_t  RD_Gameplay_Def_1 =
 
 menuitem_t RD_Gameplay_Menu_2[]=
 {
-    {1,"Pderb ghb ds[jlt bp buhs:",         M_RD_Change_ExitSfx,            'p'},   // Звук при выходе из игры
-    {1,"Pder hfplfdkbdfybz nhegjd:",        M_RD_Change_CrushingSfx,        'p'},   // Звук раздавливания трупов
-    {1,"Jlbyjxysq pder ,scnhjq ldthb:",     M_RD_Change_BlazingSfx,         'j'},   // Одиночный звук быстрой двери
-    {1,"J,ofz nhtdjuf e vjycnhjd:",         M_RD_Change_AlertSfx,           'j'},   // Общая тревога у монстров
-    {-1,"",0,'\0'},                                                                 //
-    {1,"Cnfnbcnbrf ehjdyz yf rfhnt:",       M_RD_Change_AutoMapStats,       'c'},   // Статистика уровня на карте
-    {1,"Cjj,ofnm j yfqltyyjv nfqybrt:",     M_RD_Change_SecretNotify,       'c'},   // Сообщать о найденном тайнике
-    {1,"jnhbwfntkmyjt pljhjdmt d $:",       M_RD_Change_NegativeHealth,     'j'},   // Отрицательное здоровье в HUD
-    {1,"Byahfptktysq dbpjh jcdtotybz:",     M_RD_Change_InfraGreenVisor,    'b'},   // Инфразеленый визор освещения
-    {-1,"",0,'\0'},
-    {1,"",                                  M_RD_Choose_Gameplay_3,         'l'},   // Далее >
-    {1,"",                                  M_RD_Choose_Gameplay_1,         'y'},   // < Назад
+    {1,"Pderb ghb ds[jlt bp buhs:",     M_RD_Change_ExitSfx,        'p'},   // Звук при выходе из игры
+    {1,"Pder hfplfdkbdfybz nhegjd:",    M_RD_Change_CrushingSfx,    'p'},   // Звук раздавливания трупов
+    {1,"Jlbyjxysq pder ,scnhjq ldthb:", M_RD_Change_BlazingSfx,     'j'},   // Одиночный звук быстрой двери
+    {1,"J,ofz nhtdjuf e vjycnhjd:",     M_RD_Change_AlertSfx,       'j'},   // Общая тревога у монстров
+    {-1,"",0,'\0'},                                                         //
+    {1,"Cnfnbcnbrf ehjdyz yf rfhnt:",   M_RD_Change_AutoMapStats,   'c'},   // Статистика уровня на карте
+    {1,"Cjj,ofnm j yfqltyyjv nfqybrt:", M_RD_Change_SecretNotify,   'c'},   // Сообщать о найденном тайнике
+    {1,"jnhbwfntkmyjt pljhjdmt d $:",   M_RD_Change_NegativeHealth, 'j'},   // Отрицательное здоровье в HUD
+    {-1,"",0,'\0'},                                                         //
+    {-1,"",0,'\0'},                                                         //
+    {1,"",                              M_RD_Choose_Gameplay_3,     'l'},   // Далее >
+    {1,"",                              M_RD_Choose_Gameplay_1,     'y'},   // < Назад
     {-1,"",0,'\0'}
 };
 
@@ -1004,7 +1000,6 @@ menuitem_t RD_Gameplay_Menu_3[]=
     {-1,"",0,'\0'},                                                                 //
     {1,"Jnj,hf;fnm ghbwtk:",                M_RD_Change_CrosshairDraw,      'j'},   // Отображать прицел
     {1,"Bylbrfwbz pljhjdmz:",               M_RD_Change_CrosshairHealth,    'b'},   // Индикация здоровья
-    {1,"Edtkbxtyysq hfpvth:",               M_RD_Change_CrosshairScale,     'e'},   // Увеличенный размер
     {1,"",                                  M_RD_Choose_Gameplay_4,         'l'},   // Далее >
     {1,"",                                  M_RD_Choose_Gameplay_2,         'y'},   // < Назад
     {-1,"",0,'\0'}
@@ -1022,11 +1017,8 @@ menu_t  RD_Gameplay_Def_3 =
 
 menuitem_t RD_Gameplay_Menu_4[]=
 {
-    {1,"ecnhfyznm jib,rb jhbu> ehjdytq:",   M_RD_Change_FixMapErrors,       'b'},   // Устранять ошибки ориг. уровней
-    // {1,"Pthrfkmyjt jnhf;tybt ehjdytq:",     M_RD_Change_FlipLevels,         'b'},   // Зеркальное отражение уровней
     {1,"Ljgjkybntkmyst kbwf buhjrf:",       M_RD_Change_ExtraPlayerFaces,   'a'},   // Дополнительные лица игрока
     {1,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       'a'},   // Элементаль без ограничения душ
-    {1,"gjdsityyfz fuhtccbdyjcnm lei:",     M_RD_Change_LostSoulsAgr,       'a'},   // Повышенная агрессивность душ
     {1,"jnrk.xbnm pfghjc ,> pfuheprb:",     M_RD_Change_FastQSaveLoad,      'a'},   // Отключить запрос б. загрузки
     {1,"Ghjbuhsdfnm ltvjpfgbcb:",           M_RD_Change_NoInternalDemos,    'a'},   // Проигрывать демозаписи
     {-1,"",0,'\0'},                                                                 //
@@ -1432,8 +1424,8 @@ void M_RD_Draw_Gameplay_1(void)
     if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(272, 95, RD_ON); dp_translation = NULL; }
     else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(272, 95, RD_OFF); dp_translation = NULL; }
     // Тексты отбрасывают тень
-    // if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(236 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
-    // else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(236 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
+     if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(236, 105, RD_ON); dp_translation = NULL; }
+     else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(236, 105, RD_OFF); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
@@ -1447,48 +1439,44 @@ void M_RD_Draw_Gameplay_2(void)
     // Write capitalized title (НАСТРОЙКИ ГЕЙМПЛЕЯ)
     M_WriteTextBigCentered(10, "YFCNHJQRB UTQVGKTZ");
 
-    /*
+
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 35, "Pder");  // Звук
+    M_WriteTextSmall(45, 35, "Pder");  // Звук
     dp_translation = NULL;
 
     // Play exit sounds
-    if (play_exit_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(235 + ORIGWIDTH_DELTA, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(235 + ORIGWIDTH_DELTA, 45, RD_OFF); dp_translation = NULL; }
+    if (play_exit_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(235, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(235, 45, RD_OFF); dp_translation = NULL; }
     // Sound of crushing corpses
-    if (crushed_corpses_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(246 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(246 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
+    if (crushed_corpses_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(246, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(246, 55, RD_OFF); dp_translation = NULL; }
     // Single sound of closing blazing door
-    if (blazing_door_fix_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(270 + ORIGWIDTH_DELTA, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(270 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
+    if (blazing_door_fix_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(270, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(270, 65, RD_OFF); dp_translation = NULL; }
     // Monster alert waking up other monsters
-    if (noise_alert_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(237 + ORIGWIDTH_DELTA, 75,RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(237 + ORIGWIDTH_DELTA, 75, RD_OFF); dp_translation = NULL; }
-    
+    if (noise_alert_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(237, 75,RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(237, 75, RD_OFF); dp_translation = NULL; }
+
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 85, "Nfrnbrf"); // Тактика
+    M_WriteTextSmall(45, 85, "Nfrnbrf"); // Тактика
     dp_translation = NULL;
 
     // Show level stats on automap
-    if (automap_stats) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(249 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(249 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+    if (automap_stats) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(249, 95, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(249, 95, RD_OFF); dp_translation = NULL; }
     // Notification of revealed secrets
-    if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(270 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(270 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
+    if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(270, 105, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(270, 105, RD_OFF); dp_translation = NULL; }
     // Show negative health
-    if (negative_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(265 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(265 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
-    // Infragreen light amp. visor
-    if (infragreen_visor) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(276 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(276 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
+    if (negative_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(265, 115, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(265, 115, RD_OFF); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 145, RD_NEXT);
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 155, RD_PREV);
+    M_WriteTextSmall(45, 145, RD_NEXT);
+    M_WriteTextSmall(45, 155, RD_PREV);
     dp_translation = NULL;
-    */
 }
 
 void M_RD_Draw_Gameplay_3(void)
@@ -1496,51 +1484,47 @@ void M_RD_Draw_Gameplay_3(void)
     // Write capitalized title (НАСТРОЙКИ ГЕЙМПЛЕЯ)
     M_WriteTextBigCentered(10, "YFCNHJQRB UTQVGKTZ");
 
-    /*
+
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 35, "Abpbrf");     // Физика
+    M_WriteTextSmall(45, 35, "Abpbrf");     // Физика
     dp_translation = NULL;
 
     // Walk over and under monsters
-    if (over_under) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(284 + ORIGWIDTH_DELTA, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(284 + ORIGWIDTH_DELTA, 45, RD_OFF); dp_translation = NULL; }
+    if (over_under) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(284, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(284, 45, RD_OFF); dp_translation = NULL; }
     // Corpses sliding from the ledges
-    if (torque) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(266 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(266 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
+    if (torque) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(266, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(266, 55, RD_OFF); dp_translation = NULL; }
     // Weapon bobbing while firing
-    if (weapon_bobbing) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(281 + ORIGWIDTH_DELTA, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(281 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
+    if (weapon_bobbing) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(281, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(281, 65, RD_OFF); dp_translation = NULL; }
     // Lethal pellet of a point-blank SSG
-    if (ssg_blast_enemies) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(264 + ORIGWIDTH_DELTA, 75, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(264 + ORIGWIDTH_DELTA, 75, RD_OFF); dp_translation = NULL; }
+    if (ssg_blast_enemies) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(264, 75, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(264, 75, RD_OFF); dp_translation = NULL; }
     // Randomly mirrored corpses
-    if (randomly_flipcorpses) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(217 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(217 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
+    if (randomly_flipcorpses) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(217, 85, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(217, 85, RD_OFF); dp_translation = NULL; }
     // Floating powerups
-    if (floating_powerups) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(285 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(285 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+    if (floating_powerups) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(285, 95, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(285, 95, RD_OFF); dp_translation = NULL; }
 
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 105, "Ghbwtk");   // Прицел
+    M_WriteTextSmall(45, 105, "Ghbwtk");   // Прицел
     dp_translation = NULL;
 
     // Draw crosshair
-    if (crosshair_draw) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(190 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(190 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
+    if (crosshair_draw) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(190, 115, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(190, 115, RD_OFF); dp_translation = NULL; }
     // Health indication
-    if (crosshair_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(196 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(196 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
-    // Increased size
-    if (crosshair_scale) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(195 + ORIGWIDTH_DELTA, 135, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(195 + ORIGWIDTH_DELTA, 135, RD_OFF); dp_translation = NULL; }
+    if (crosshair_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(196, 125, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(196, 125, RD_OFF); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 145, RD_NEXT);
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 155, RD_PREV);
+    M_WriteTextSmall(45, 145, RD_NEXT);
+    M_WriteTextSmall(45, 155, RD_PREV);
     dp_translation = NULL;
-    */
 }
 
 void M_RD_Draw_Gameplay_4(void)
@@ -1548,46 +1532,32 @@ void M_RD_Draw_Gameplay_4(void)
     // Write capitalized title (НАСТРОЙКИ ГЕЙМПЛЕЯ)
     M_WriteTextBigCentered(10, "YFCNHJQRB UTQVGKTZ");
 
-    /*
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 35, "Utqvgktq"); // Геймплей
+    M_WriteTextSmall(45, 35, "Utqvgktq"); // Геймплей
     dp_translation = NULL;
 
-    // Fix errors of vanilla maps
-    if (fix_map_errors) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(279 + ORIGWIDTH_DELTA, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(279 + ORIGWIDTH_DELTA, 45, RD_OFF); dp_translation = NULL; }
-
-    // Flip game levels // [JN] Not safe for hot swapping
-    // if (flip_levels) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(273 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
-    // else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(273 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
-
     // Extra player faces on the HUD
-    if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(257 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(257 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
+    if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(257, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(257, 45, RD_OFF); dp_translation = NULL; }
 
     // Pain Elemental without Souls limit
-    if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(284 + ORIGWIDTH_DELTA, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(284 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
-
-    // More agressive lost souls
-    if (agressive_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(276 + ORIGWIDTH_DELTA, 75, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(276 + ORIGWIDTH_DELTA, 75, RD_OFF); dp_translation = NULL; }
+    if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(284, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(284, 55, RD_OFF); dp_translation = NULL; }
 
     // Don't prompt for q. saving/loading
-    if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(263 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(263 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
+    if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(263, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(263, 65, RD_OFF); dp_translation = NULL; }
 
     // Play internal demos
-    if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(229 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
-    else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(229 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
+    if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(229, 75, RD_OFF); dp_translation = NULL; }
+    else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(229, 75, RD_ON); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 145, RD_NEXT);
-    M_WriteTextSmall(45 + ORIGWIDTH_DELTA, 155, RD_PREV);
+    M_WriteTextSmall(45, 145, RD_NEXT);
+    M_WriteTextSmall(45, 155, RD_PREV);
     dp_translation = NULL;
-    */
 }
 
 void M_RD_Change_Brightmaps(int choice)
@@ -1635,285 +1605,202 @@ void M_RD_Change_InvulSky(int choice)
 
 void M_RD_Change_ShadowedText(int choice)
 {
-    /*
     choice = 0;
     draw_shadowed_text = 1 - draw_shadowed_text;
-    */
 }
 
 void M_RD_Change_ExitSfx(int choice)
 {
-    /*
     choice = 0;
     play_exit_sfx = 1 - play_exit_sfx;
-    */
 }
 
 void M_RD_Change_CrushingSfx(int choice)
 {
-    /*
     choice = 0;
     crushed_corpses_sfx = 1 - crushed_corpses_sfx;
-    */
 }
 
 void M_RD_Change_BlazingSfx(int choice)
 {
-    /*
     choice = 0;
     blazing_door_fix_sfx = 1 - blazing_door_fix_sfx;
-    */
 }
 
 void M_RD_Change_AlertSfx(int choice)
 {
-    /*
     choice = 0;
     noise_alert_sfx = 1 - noise_alert_sfx;
-    */
 }
 
 void M_RD_Change_AutoMapStats(int choice)
 {
-    /*
     choice = 0;
     automap_stats = 1 - automap_stats;
-    */
 }
 
 void M_RD_Change_SecretNotify(int choice)
 {
-    /*
     choice = 0;
     secret_notification = 1 - secret_notification;
-    */
 }
 
 void M_RD_Change_NegativeHealth(int choice)
 {
-    /*
     choice = 0;
     negative_health = 1 - negative_health;
-    */
-}
-
-void M_RD_Change_InfraGreenVisor(int choice)
-{
-    /*
-    choice = 0;
-    infragreen_visor = 1 - infragreen_visor;
-
-    // Update current COLORMAP
-    if (infragreen_visor && players[consoleplayer].powers[pw_infrared])
-    players[consoleplayer].fixedcolormap = 33;
-    else if (!infragreen_visor && players[consoleplayer].powers[pw_infrared])
-    players[consoleplayer].fixedcolormap = 1;
-    */
 }
 
 void M_RD_Change_WalkOverUnder(int choice)
 {
-    /*
     choice = 0;
     over_under = 1 - over_under;
-    */
 }
 
 void M_RD_Change_Torque(int choice)
 {
-    /*
     choice = 0;
     torque = 1 - torque;
-    */
 }
 
 void M_RD_Change_Bobbing(int choice)
 {
-    /*
     choice = 0;
     weapon_bobbing = 1 - weapon_bobbing;
-    */
 }
 
 void M_RD_Change_SSGBlast(int choice)
 {
-    /*
     choice = 0;
     ssg_blast_enemies = 1 - ssg_blast_enemies;
-    */
 }
 
 void M_RD_Change_FlipCorpses(int choice)
 {
-    /*
     choice = 0;
     randomly_flipcorpses = 1 - randomly_flipcorpses;
-    */
 }
 
 void M_RD_Change_FloatPowerups(int choice)
 {
-    /*
     choice = 0;
     floating_powerups = 1 - floating_powerups;
-    */
 }
 
 void M_RD_Change_CrosshairDraw(int choice)
 {
-    /*
     choice = 0;
     crosshair_draw = 1 - crosshair_draw;
-    */
 }
 
 void M_RD_Change_CrosshairHealth(int choice)
 {
-    /*
     choice = 0;
     crosshair_health = 1 - crosshair_health;
-    */
-}
-
-void M_RD_Change_CrosshairScale(int choice)
-{
-    /*
-    choice = 0;
-    crosshair_scale = 1 - crosshair_scale;
-    */
-}
-
-void M_RD_Change_FixMapErrors(int choice)
-{
-    /*
-    choice = 0;
-    fix_map_errors = 1 - fix_map_errors;
-    */
 }
 
 void M_RD_Change_ExtraPlayerFaces(int choice)
 {
-    /*
     choice = 0;
     extra_player_faces = 1 - extra_player_faces;
-    */
 }
 
 void M_RD_Change_LostSoulsQty(int choice)
 {
-    /*
     choice = 0;
     unlimited_lost_souls = 1 - unlimited_lost_souls;
-    */
-}
-
-void M_RD_Change_LostSoulsAgr(int choice)
-{
-    /*
-    choice = 0;
-    agressive_lost_souls = 1 - agressive_lost_souls;
-    */
 }
 
 void M_RD_Change_FastQSaveLoad(int choice)
 {
-    /*
     choice = 0;
     fast_quickload = 1 - fast_quickload;
-    */
 }
 
 void M_RD_Change_NoInternalDemos(int choice)
 {
-    /*
     choice = 0;
     no_internal_demos = 1 - no_internal_demos;
-    */
 }
 
 // -----------------------------------------------------------------------------
 // Back to Defaults
 // -----------------------------------------------------------------------------
 
-void M_RD_BackToDefaultsResponse(int key)
+void M_RD_BackToDefaultsResponse(int ch)
 {
-    /*
     static char resetmsg[24];
 
-    if (key != key_menu_confirm)
+    if (ch != 'y')
     return;
 
     // Rendering
-    aspect_ratio_correct    = 1;
-    uncapped_fps            = 1;
-    show_diskicon           = 1;
-    smoothing               = 0;
-    force_software_renderer = 0;
+    show_diskicon = 1;
+    noflats       = 0;
+    screen_wiping = 1;
 
     // Display
-    screenSize      = 10;
-    usegamma        = 0;
-    detailLevel     = 0;
-    showMessages    = 1;
-    local_time      = 0;
+    screenblocks = 10;
+    screenSize = screenblocks - 3;
+    usegamma     = 0;
+    detailLevel  = 0;
+    showMessages = 1;
 
     // Audio
-    sfxVolume       = 8;
-    S_SetSfxVolume(sfxVolume * 8);
-    musicVolume     = 8;
-    S_SetMusicVolume(musicVolume * 8);
-    snd_channels    = 32;
-    S_ChannelsRealloc();
+    sfxVolume       = 8;  S_SetSfxVolume(sfxVolume * 8);
+    musicVolume     = 8;  S_SetMusicVolume(musicVolume * 8);
+    numChannels     = 32; S_ChannelsRealloc();
     snd_monomode    = 0;
     snd_pitchshift  = 0;
 
     // Controls
-    joybspeed           = 29;
-    mlook               = 0;
-    players[consoleplayer].centering = true;
-    mouseSensitivity    = 5;
+    joybspeed        = 29;
+    mlook            = 0; players[consoleplayer].centering = true;
+    mouseSensitivity = 5;
 
     // Gameplay
-    brightmaps              = 1;
-    fake_contrast           = 0;
-    translucency            = 1;    
-    colored_hud             = 0;
-    colored_blood           = 1;
-    swirling_liquids        = 1;
-    invul_sky               = 1;
-    red_resurrection_flash  = 1;
-    draw_shadowed_text      = 1;
+    brightmaps         = 1;
+    fake_contrast      = 0;
+    colored_hud        = 0;
+    colored_blood      = 1;
+    swirling_liquids   = 1;
+    invul_sky          = 1;
+    draw_shadowed_text = 1;
 
-    play_exit_sfx = 1;
-    crushed_corpses_sfx = 1;
+    play_exit_sfx        = 1;
+    crushed_corpses_sfx  = 1;
     blazing_door_fix_sfx = 1;
-    noise_alert_sfx     = 0;
+    noise_alert_sfx      = 0;
 
-    automap_stats = 1;
+    automap_stats       = 1;
     secret_notification = 1;
-    negative_health = 0;
-    infragreen_visor = 0;
+    negative_health     = 0;
 
-    over_under = 0;
-    torque = 1;
-    weapon_bobbing = 1;
-    ssg_blast_enemies = 1;
+    over_under           = 0;
+    torque               = 1;
+    weapon_bobbing       = 1;
+    ssg_blast_enemies    = 1;
     randomly_flipcorpses = 1;
-    floating_powerups = 0;
+    floating_powerups    = 0;
 
-    crosshair_draw = 0;
+    crosshair_draw   = 0;
     crosshair_health = 1;
-    crosshair_scale = 0;
 
-    fix_map_errors = 1;
-    extra_player_faces = 1;
+    extra_player_faces   = 1;
     unlimited_lost_souls = 1;
-    agressive_lost_souls = 0;
-    fast_quickload = 1;
-    no_internal_demos = 0;
+    fast_quickload       = 1;
+    no_internal_demos    = 0;
 
-    // Do a full graphics reinitialization
-    I_InitGraphics();
+    // Set view size, execute drawing functions
+    R_SetViewSize (screenblocks, detailLevel); 
+
+    // Set palette
+    I_SetPalette ((byte *)W_CacheLumpName(usegamma <= 8 ?
+                                          "PALFIX" :
+                                          "PLAYPAL",
+                                          PU_CACHE) + 
+                                          st_palette * 768);
+
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
@@ -1922,17 +1809,14 @@ void M_RD_BackToDefaultsResponse(int key)
     }
 
     // Print informative message (настройки сброшены)
-    M_snprintf(resetmsg, sizeof(resetmsg), "Yfcnhjqrb c,hjitys");
+    snprintf(resetmsg, sizeof(resetmsg), "Yfcnhjqrb c,hjitys");
     players[consoleplayer].message = resetmsg;
-    */
 }
 
 void M_RD_BackToDefaults(int choice)
 {
-    /*
     choice = 0;
     M_StartMessage(RD_DEFAULTS, M_RD_BackToDefaultsResponse,true);
-    */
 }
 
 
@@ -2512,25 +2396,6 @@ void M_Options(int choice)
 }
 
 
-
-//
-//      Toggle messages on/off
-//
-void M_ChangeMessages(int choice)
-{
-    // warning: unused parameter `int choice'
-    choice = 0;
-    showMessages = 1 - showMessages;
-	
-    if (!showMessages)
-	players[consoleplayer].message = MSGOFF;
-    else
-	players[consoleplayer].message = MSGON ;
-
-    message_dontfuckwithme = true;
-}
-
-
 //
 // M_EndGame
 //
@@ -2664,69 +2529,6 @@ void M_QuitDOOM(int choice)
   else
   M_StartMessage(endstring,M_QuitResponse,true);
 }
-
-
-
-
-void M_ChangeSensitivity(int choice)
-{
-    switch(choice)
-    {
-      case 0:
-	if (mouseSensitivity)
-	    mouseSensitivity--;
-	break;
-      case 1:
-	if (mouseSensitivity < 255) // [crispy] extended range
-	    mouseSensitivity++;
-	break;
-    }
-}
-
-
-
-
-void M_ChangeDetail(int choice)
-{
-    choice = 0;
-    detailLevel = 1 - detailLevel;
-
-    R_SetViewSize (screenblocks, detailLevel);
-
-    if (!detailLevel)
-	players[consoleplayer].message = DETAILHI;
-    else
-	players[consoleplayer].message = DETAILLO;
-}
-
-
-
-
-void M_SizeDisplay(int choice)
-{
-    switch(choice)
-    {
-      case 0:
-	if (screenSize > 0)
-	{
-	    screenblocks--;
-	    screenSize--;
-	}
-	break;
-      case 1:
-    // [JN] Initially 8. Three new screen sizes for Crispy HUDs.
-	if (screenSize < 11)
-	{
-	    screenblocks++;
-	    screenSize++;
-	}
-	break;
-    }
-	
-
-    R_SetViewSize (screenblocks, detailLevel);
-}
-
 
 
 
@@ -3053,14 +2855,14 @@ boolean M_Responder (event_t* ev)
 	  case KEY_MINUS:         // Screen size down
 	    if (automapactive || chat_on)
 		return false;
-	    M_SizeDisplay(0);
+	    M_RD_Change_ScreenSize(0);
 	    S_StartSound(NULL,sfx_stnmov);
 	    return true;
 				
 	  case KEY_EQUALS:        // Screen size up
 	    if (automapactive || chat_on)
 		return false;
-	    M_SizeDisplay(1);
+	    M_RD_Change_ScreenSize(1);
 	    S_StartSound(NULL,sfx_stnmov);
 	    return true;
 				
@@ -3094,7 +2896,7 @@ boolean M_Responder (event_t* ev)
 	    return true;
 				
 	  case KEY_F5:            // Detail toggle
-	    M_ChangeDetail(0);
+	    M_RD_Change_Detail(0);
 	    S_StartSound(NULL,sfx_swtchn);
 	    return true;
 				
@@ -3110,7 +2912,7 @@ boolean M_Responder (event_t* ev)
 	    return true;
 				
 	  case KEY_F8:            // Toggle messages
-	    M_ChangeMessages(0);
+	    M_RD_Change_Messages(0);
 	    S_StartSound(NULL,sfx_swtchn);
 	    return true;
 				
@@ -3226,6 +3028,66 @@ boolean M_Responder (event_t* ev)
 	}
 	return true;
 	
+    // [JN] Scroll Gameplay features menu by PgUp/PgDn keys
+    case KEY_PGUP:
+    {
+        currentMenu->lastOn = itemOn;
+
+        if (currentMenu == &RD_Gameplay_Def_1)
+        {
+            M_SetupNextMenu(&RD_Gameplay_Def_4);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_2)
+        {
+            M_SetupNextMenu(&RD_Gameplay_Def_1);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_3)
+        {
+            M_SetupNextMenu(&RD_Gameplay_Def_2);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_4)
+        {
+            M_SetupNextMenu(&RD_Gameplay_Def_3);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+    }
+    case KEY_PGDN:
+    {
+        currentMenu->lastOn = itemOn;
+
+        if (currentMenu == &RD_Gameplay_Def_1)
+        {
+            M_SetupNextMenu(&RD_Gameplay_Def_2);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_2)
+        {
+            M_SetupNextMenu(&RD_Gameplay_Def_3);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_3)
+        {
+            M_SetupNextMenu(&RD_Gameplay_Def_4);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+        if (currentMenu == &RD_Gameplay_Def_4)
+        {
+            M_SetupNextMenu(&RD_Gameplay_Def_1);
+            S_StartSound(NULL,sfx_pistol);
+            return true;
+        }
+    }
+
       case 0:
 	break;
 	

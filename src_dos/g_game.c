@@ -184,6 +184,8 @@ int draw_shadowed_text;
 // Gameplay: Audible
 int play_exit_sfx;
 int crushed_corpses_sfx;
+int blazing_door_fix_sfx;
+int noise_alert_sfx;
 
 // Gameplay: Tactical
 int automap_stats;
@@ -191,6 +193,7 @@ int secret_notification;
 int negative_health;
 
 // Gameplay: Physical
+int over_under;
 int torque;
 int weapon_bobbing;
 int ssg_blast_enemies;

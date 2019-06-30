@@ -65,7 +65,7 @@
 // сброшены на стандартные значения.
 //
 // Уверены, что хотите продолжить?
-#define RD_DEFAULTS_RUS                 \
+#define RD_DEFAULTS                     \
 "dyenhbbuhjdst yfcnhjqrb ,elen\n"       \
 "c,hjitys yf cnfylfhnyst pyfxtybz>\n"   \
 "\n"                                    \
