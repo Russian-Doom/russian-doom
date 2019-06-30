@@ -76,6 +76,9 @@
 //
 void D_DoomLoop (void);
 
+// [JN] Prototype for text writing ("Пауза").
+extern void M_WriteTextBigCentered(int y, char *string);
+
 char*       wadfiles[MAXWADFILES];
 
 boolean     devparm;     // started game with -devparm

@@ -36,6 +36,8 @@ S_Init
 
 
 
+// [JN] Called in m_menu.c.
+void S_ChannelsRealloc(void);
 
 //
 // Per level startup code.

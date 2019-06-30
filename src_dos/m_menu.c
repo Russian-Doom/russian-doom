@@ -57,6 +57,9 @@
 #include "m_menu.h"
 #include "v_trans.h"
 
+#include "r_main.h"     // R_ExecuteSetViewSize
+#include "s_sound.h"    // S_ChannelsRealloc
+#include "st_stuff.h"   // ST_refreshBackground and ST_drawWidgets
 #include "jn.h"
 
 

@@ -184,6 +184,9 @@ void R_Init (void);
 // Called by M_Responder.
 void R_SetViewSize (int blocks, int detail);
 
+// [JN] Called in m_menu.c.
+void R_ExecuteSetViewSize (void);
+
 // [JN] Brightmaps
 void R_InitBrightmaps (void);
 
