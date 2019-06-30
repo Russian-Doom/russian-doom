@@ -4083,6 +4083,7 @@ boolean M_Responder (event_t* ev)
     // [JN] Scroll Gameplay features menu by PgUp/PgDn keys
     else if (key == KEY_PGUP)
     {
+        currentMenu->lastOn = itemOn;
         if (currentMenu == &RD_Gameplay_Def_1
         ||  currentMenu == &RD_Gameplay_Def_1_Rus)
         {
@@ -4122,6 +4123,7 @@ boolean M_Responder (event_t* ev)
     }
     else if (key == KEY_PGDN)
     {
+        currentMenu->lastOn = itemOn;
         if (currentMenu == &RD_Gameplay_Def_1
         ||  currentMenu == &RD_Gameplay_Def_1_Rus)
         {
