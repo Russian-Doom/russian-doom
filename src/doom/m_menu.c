@@ -2497,6 +2497,7 @@ void M_RD_BackToDefaultsResponse(int key)
     uncapped_fps            = 1;
     show_diskicon           = 1;
     smoothing               = 0;
+    screen_wiping           = 1;
     force_software_renderer = 0;
 
     // Display
