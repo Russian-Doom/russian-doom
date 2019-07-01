@@ -45,6 +45,11 @@
 
 #include "wi_stuff.h"
 
+
+// [JN] Big font prototypes
+extern void RD_WriteTextBig(int x, int y, char *string);
+extern void RD_WriteTextBigCentered(int y, char *string);
+
 //
 // Data needed to add patches to full screen intermission pics.
 // Patches are statistics messages, and animations.
@@ -426,7 +431,8 @@ void WI_drawLF(void)
         // draw "Finished!"
         y += (5*SHORT(lnames[wbs->last]->height))/4;
 
-        V_DrawPatch((SCREENWIDTH - SHORT(finished->width)) / 2, y, finished);
+        // [JN] Write centered title "уровень завершен"
+        RD_WriteTextBigCentered (14, "ehjdtym pfdthity");
     }
     else if (wbs->last == NUMCMAPS)
     {
@@ -453,10 +459,8 @@ void WI_drawEL(void)
 {
     int y = WI_TITLEY;
 
-    // draw "Entering"
-    V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2,
-		y,
-                entering);
+    // [JN] Write centered "загружается уровень"
+    RD_WriteTextBigCentered(-1, "pfuhe;ftncz ehjdtym");
 
     // draw level
     y += (5*SHORT(lnames[wbs->next]->height))/4;
@@ -731,8 +735,8 @@ WI_drawTime
     }
     else
     {
-	// "sucks"
-	V_DrawPatch(x - SHORT(sucks->width), y, sucks); 
+	// [JN] Write ":ужас"
+    RD_WriteTextBig(85, 165, ":e;fc");
     }
 }
 
@@ -1458,21 +1462,26 @@ void WI_drawStats(void)
     
     WI_drawLF();
 
-    V_DrawPatch(SP_STATSX, SP_STATSY, kills);
+    // [JN] Write "враги"
+    RD_WriteTextBig(50, 47, "dhfub");
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
-    V_DrawPatch(SP_STATSX, SP_STATSY+lh, items);
+    // [JN] Write "предметы"
+    RD_WriteTextBig(50, 65, "ghtlvtns");
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
-    V_DrawPatch(SP_STATSX, SP_STATSY+2*lh, sp_secret);
+    // [JN] Write "тайники"
+    RD_WriteTextBig(50, 83, "nfqybrb");
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
 
-    V_DrawPatch(SP_TIMEX, SP_TIMEY, timepatch);
+    // [JN] Write "время"
+    RD_WriteTextBig(16, 165, "dhtvz");
     WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time);
 
     if (wbs->epsd < 3)
     {
-	V_DrawPatch(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, par);
+	// [JN] Write "рекорд"
+	RD_WriteTextBig(158, 165, "htrjhl");
 	WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par);
     }
 
