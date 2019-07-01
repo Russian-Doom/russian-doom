@@ -138,7 +138,8 @@ typedef struct
     // 0 = no cursor here, 1 = ok, 2 = arrows ok
     short	status;
     
-    char	name[10];
+    // [JN] Increased from 10 to 32, so long string may appear
+    char	name[32];
     
     // choice = menu item #.
     // if status = 2,
@@ -226,6 +227,9 @@ void M_StopMessage(void);
 void M_ClearMenus (void);
 
 
+// [JN] Font drawing prototypes
+void RD_WriteTextBig (int x, int y, char *string);
+void RD_WriteTextBigCentered (int y, char *string);
 
 
 //
@@ -244,13 +248,13 @@ enum
 
 menuitem_t MainMenu[]=
 {
-    {1,"M_NGAME",M_NewGame,'n'},
-    {1,"M_OPTION",M_Options,'o'},
-    {1,"M_LOADG",M_LoadGame,'l'},
-    {1,"M_SAVEG",M_SaveGame,'s'},
+    {1,"Yjdfz buhf",  M_NewGame,  'y'},    // Новая игра
+    {1,"Yfcnhjqrb",   M_Options,  'y'},    // Настройки
+    {1,"Pfuheprf",    M_LoadGame, 'p'},    // Загрузка
+    {1,"Cj[hfytybt",  M_SaveGame, 'c'},    // Сохранение
     // Another hickup with Special edition.
-    {1,"M_RDTHIS",M_ReadThis,'r'},
-    {1,"M_QUITG",M_QuitDOOM,'q'}
+    {1,"Byajhvfwbz!", M_ReadThis, 'b'},    // Информация!
+    {1,"Ds[jl",       M_QuitDOOM, 'd'}     // Выход
 };
 
 menu_t  MainDef =
@@ -278,10 +282,10 @@ enum
 
 menuitem_t EpisodeMenu[]=
 {
-    {1,"M_EPI1", M_Episode,'k'},
-    {1,"M_EPI2", M_Episode,'t'},
-    {1,"M_EPI3", M_Episode,'i'},
-    {1,"M_EPI4", M_Episode,'t'}
+    {1,"Gj rjktyj d nhegf[",  M_Episode, 'g'},    // По колено в трупах
+    {1,"Ghb,ht;mt Flf",       M_Episode, 'g'},    // Прибрежье Ада
+    {1,"Byathyj",             M_Episode, 'b'},    // Инферно
+    {1,"Ndjz gkjnm bcnjotyf", M_Episode, 'n'}     // Твоя плоть истощена
 };
 
 menu_t  EpiDef =
@@ -309,11 +313,11 @@ enum
 
 menuitem_t NewGameMenu[]=
 {
-    {1,"M_JKILL",	M_ChooseSkill, 'i'},
-    {1,"M_ROUGH",	M_ChooseSkill, 'h'},
-    {1,"M_HURT",	M_ChooseSkill, 'h'},
-    {1,"M_ULTRA",	M_ChooseSkill, 'u'},
-    {1,"M_NMARE",	M_ChooseSkill, 'n'}
+    {1,"M_JKILL",	M_ChooseSkill, 'v'},    // Мне рано умирать.
+    {1,"M_ROUGH",	M_ChooseSkill, '\''},   // Эй, не так грубо.
+    {1,"M_HURT",	M_ChooseSkill, 'c'},    // Сделай мне больно.
+    {1,"M_ULTRA",	M_ChooseSkill, 'e'},    // Ультранасилие.
+    {1,"M_NMARE",	M_ChooseSkill, 'r'}     // Кошмар!
 };
 
 menu_t  NewDef =
@@ -346,14 +350,14 @@ enum
 
 menuitem_t OptionsMenu[]=
 {
-    {1,"M_ENDGAM",	M_EndGame,'e'},
-    {1,"M_MESSG",	M_ChangeMessages,'m'},
-    {1,"M_DETAIL",	M_ChangeDetail,'g'},
-    {2,"M_SCRNSZ",	M_SizeDisplay,'s'},
-    {-1,"",0,'\0'},
-    {2,"M_MSENS",	M_ChangeSensitivity,'m'},
-    {-1,"",0,'\0'},
-    {1,"M_SVOL",	M_Sound,'s'}
+    {1,"Pfrjyxbnm buhe", M_EndGame,           'p'},    // Закончить игру
+    {1,"Cjj,otybz:",     M_ChangeMessages,    'c'},    // Сообщения:
+    {1,"Ltnfkbpfwbz:",   M_ChangeDetail,      'l'},    // Детализация:
+    {2,"Hfpvth \'rhfyf", M_SizeDisplay,       'h'},    // Размер экрана
+    {-1,"",0,'\0'},                                    //
+    {2,"Crjhjcnm vsib",  M_ChangeSensitivity, 'c'},    // Скорость мыши
+    {-1,"",0,'\0'},                                    //
+    {1,"Uhjvrjcnm",      M_Sound,             'u'}     // Громкость
 };
 
 menu_t  OptionsDef =
@@ -425,10 +429,10 @@ enum
 
 menuitem_t SoundMenu[]=
 {
-    {2,"M_SFXVOL",M_SfxVol,'s'},
-    {-1,"",0,'\0'},
-    {2,"M_MUSVOL",M_MusicVol,'m'},
-    {-1,"",0,'\0'}
+    {2,"Pder",   M_SfxVol, 's'},     // Звук
+    {-1,"",0,'\0'},                  //
+    {2,"Vepsrf", M_MusicVol,'m'},    // Музыка
+    {-1,"",0,'\0'}                   //
 };
 
 menu_t  SoundDef =
@@ -534,8 +538,8 @@ void M_DrawLoad(void)
 {
     int             i;
 	
-    V_DrawPatchDirect(72, 28, 
-                      W_CacheLumpName(DEH_String("M_LOADG"), PU_CACHE));
+    // [JN] Write centered title "ЗАГРУЗИТЬ ИГРУ"
+    RD_WriteTextBigCentered(28, "PFUHEPBNM BUHE");
 
     for (i = 0;i < load_end; i++)
     {
@@ -605,7 +609,9 @@ void M_DrawSave(void)
 {
     int             i;
 	
-    V_DrawPatchDirect(72, 28, W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE));
+    // [JN] Write centered title "СОХРАНИТЬ ИГРУ"
+    RD_WriteTextBigCentered(28, "CJ{HFYBNM BUHE");
+
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
@@ -638,6 +644,7 @@ void M_DoSave(int slot)
 //
 static void SetDefaultSaveName(int slot)
 {
+    // [JN] TODO: what is this?
     M_snprintf(savegamestrings[itemOn], SAVESTRINGSIZE - 1,
                "JOYSTICK SLOT %i", itemOn + 1);
     joypadSave = false;
@@ -803,7 +810,8 @@ void M_DrawReadThisCommercial(void)
 //
 void M_DrawSound(void)
 {
-    V_DrawPatchDirect (60, 38, W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
+    // [JN] Write centered title "ГРОМКОСТЬ"
+    RD_WriteTextBigCentered(38, "UHJVRJCNM");
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1),
 		 16,sfxVolume);
@@ -871,8 +879,11 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
-    V_DrawPatchDirect(96, 14, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-    V_DrawPatchDirect(54, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
+    // [JN] Write centered title "НОВАЯ ИГРА"
+    RD_WriteTextBigCentered(15, "YJDFZ BUHF");
+
+    // [JN] Write centered title "Уровень сложности:"
+    RD_WriteTextBigCentered(38, "Ehjdtym ckj;yjcnb:");
 }
 
 void M_NewGame(int choice)
@@ -899,7 +910,11 @@ int     epi;
 
 void M_DrawEpisode(void)
 {
-    V_DrawPatchDirect(54, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
+    // [JN] Write centered title "НОВАЯ ИГРА"
+    RD_WriteTextBigCentered(15, "YJDFZ BUHF");
+
+    // [JN] Write centered title "Какой эпизод?"
+    RD_WriteTextBigCentered(38, "Rfrjq \'gbpjl?");
 }
 
 void M_VerifyNightmare(int key)
@@ -942,22 +957,22 @@ void M_Episode(int choice)
 //
 // M_Options
 //
-static char *detailNames[2] = {"M_GDHIGH","M_GDLOW"};
-static char *msgNames[2] = {"M_MSGOFF","M_MSGON"};
+static char *msgNames[2] = {"dsrk>","drk>"};
+static char *detailNames[2] = {"dsc>","ybp>"};
 
 void M_DrawOptions(void)
 {
-    V_DrawPatchDirect(108, 15, W_CacheLumpName(DEH_String("M_OPTTTL"),
-                                               PU_CACHE));
+    // [JN] Write centered title "НАСТРОЙКИ"
+    RD_WriteTextBigCentered(15, "YFCNHJQRB");
 	
-    V_DrawPatchDirect(OptionsDef.x + 175, OptionsDef.y + LINEHEIGHT * detail,
-		      W_CacheLumpName(DEH_String(detailNames[detailLevel]),
-			              PU_CACHE));
+    // [JN] Write "вкл." / "выкл." for messages
+    RD_WriteTextBig (OptionsDef.x + 146, OptionsDef.y + LINEHEIGHT * messages,
+                     msgNames[showMessages]);
 
-    V_DrawPatchDirect(OptionsDef.x + 120, OptionsDef.y + LINEHEIGHT * messages,
-                      W_CacheLumpName(DEH_String(msgNames[showMessages]),
-                                      PU_CACHE));
-
+    // [JN] Write "выс." / "низ." for detail level
+    RD_WriteTextBig (OptionsDef.x + 164, OptionsDef.y + LINEHEIGHT * detail,
+                     detailNames[detailLevel]);
+    
     M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1),
 		 10, mouseSensitivity);
 
@@ -2121,7 +2136,11 @@ void M_Drawer (void)
 
 	if (name[0])
 	{
+	    // [JN] Write only skill levels with GFX patches
+	    if (currentMenu == &NewDef)
 	    V_DrawPatchDirect (x, y, W_CacheLumpName(name, PU_CACHE));
+	    else
+	    RD_WriteTextBig (x, y, name);
 	}
 	y += LINEHEIGHT;
     }
