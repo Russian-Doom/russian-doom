@@ -87,6 +87,7 @@ char*	player_names[] =
 char			chat_char; // remove later.
 static player_t*	plr;
 patch_t*		hu_font[HU_FONTSIZE];
+patch_t*		hu_font_big[HU_FONTSIZE_BIG];   // [JN] Big font
 static hu_textline_t	w_title;
 boolean			chat_on;
 static hu_itext_t	w_chat;
@@ -343,16 +344,26 @@ void HU_Init(void)
 
     int		i;
     int		j;
+    int		k;
     char	buffer[9];
 
     // load the heads-up font
     j = HU_FONTSTART;
+
+    // [JN] Load big heads-up font
+    k = HU_FONTSTART_BIG;
+
     for (i=0;i<HU_FONTSIZE;i++)
     {
 	DEH_snprintf(buffer, 9, "STCFN%.3d", j++);
 	hu_font[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 
+    for (i=0;i<HU_FONTSIZE_BIG;i++)
+    {
+	DEH_snprintf(buffer, 9, "STCFB%.3d", k++);
+	hu_font_big[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
 }
 
 void HU_Stop(void)

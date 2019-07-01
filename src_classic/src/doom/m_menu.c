@@ -61,6 +61,7 @@
 
 
 extern patch_t*		hu_font[HU_FONTSIZE];
+extern patch_t*		hu_font_big[HU_FONTSIZE_BIG];   // [JN] Big font
 extern boolean		message_dontfuckwithme;
 
 extern boolean		chat_on;		// in heads-up code
@@ -1344,6 +1345,112 @@ M_WriteText
 	cx+=w;
     }
 }
+
+// -----------------------------------------------------------------------------
+// [JN] RD_WriteTextBig
+// Write a string using a big STCFB font
+// -----------------------------------------------------------------------------
+
+void RD_WriteTextBig (int x, int y, char *string)
+{
+    int    w, c, cx, cy;
+    char  *ch;
+
+    ch = string;
+    cx = x;
+    cy = y;
+
+    while(1)
+    {
+        c = *ch++;
+        if (!c)
+        break;
+
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
+        c = c - HU_FONTSTART_BIG;
+        if (c < 0 || c>= HU_FONTSIZE_BIG)
+        {
+            cx += 7;
+            continue;
+        }
+
+        w = SHORT (hu_font_big[c]->width);
+        if (cx+w > SCREENWIDTH)
+        break;
+
+        V_DrawPatch(cx, cy, hu_font_big[c]);
+
+        // Place one char to another with one pixel
+        cx += w-1;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// [JN] RD_WriteTextBigCentered
+// Write a centered string using a BIG hu_font_big. Only Y coord is set.
+// -----------------------------------------------------------------------------
+
+void RD_WriteTextBigCentered (int y, char *string)
+{
+    int      c, cx, cy, w, width;
+    char    *ch;
+
+    // find width
+    ch = string;
+    width = 0;
+    cy = y;
+
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = c - HU_FONTSTART_BIG;
+
+        if (c < 0 || c> HU_FONTSIZE_BIG)
+        {
+            width += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big[c]->width);
+        width += w;
+    }
+
+    // draw it
+    cx = SCREENWIDTH/2-width/2;
+    ch = string;
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = c - HU_FONTSTART_BIG;
+
+        if (c < 0 || c> HU_FONTSIZE_BIG)
+        {
+            cx += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big[c]->width);
+
+        V_DrawPatch(cx, cy, hu_font_big[c]);
+
+        cx+=w;
+    }
+}
+
 
 // These keys evaluate to a "null" key in Vanilla Doom that allows weird
 // jumping in the menus. Preserve this behavior for accuracy.
