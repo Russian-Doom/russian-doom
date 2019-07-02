@@ -313,11 +313,11 @@ enum
 
 menuitem_t NewGameMenu[]=
 {
-    {1,"M_JKILL",	M_ChooseSkill, 'v'},    // Мне рано умирать.
-    {1,"M_ROUGH",	M_ChooseSkill, '\''},   // Эй, не так грубо.
-    {1,"M_HURT",	M_ChooseSkill, 'c'},    // Сделай мне больно.
-    {1,"M_ULTRA",	M_ChooseSkill, 'e'},    // Ультранасилие.
-    {1,"M_NMARE",	M_ChooseSkill, 'r'}     // Кошмар!
+    {1,"Vyt hfyj evbhfnm/",  M_ChooseSkill, 'v'},    // Мне рано умирать.
+    {1,"\"q+ yt nfr uhe,j/", M_ChooseSkill, '\''},   // Эй, не так грубо.
+    {1,"Cltkfq vyt ,jkmyj/", M_ChooseSkill, 'c'},    // Сделай мне больно.
+    {1,"Ekmnhfyfcbkbt/",     M_ChooseSkill, 'e'},    // Ультранасилие.
+    {1,"",                   M_ChooseSkill, 'r'}     // Кошмар! (draw in M_DrawNewGame)
 };
 
 menu_t  NewDef =
@@ -884,6 +884,9 @@ void M_DrawNewGame(void)
 
     // [JN] Write centered title "Уровень сложности:"
     RD_WriteTextBigCentered(38, "Ehjdtym ckj;yjcnb:");
+
+    // [JN] Draw "Кошмар!" as unmodifiable patch
+    V_DrawPatch(48, 127, W_CacheLumpName(DEH_String("M_NMARE!"), PU_CACHE));
 }
 
 void M_NewGame(int choice)
@@ -957,8 +960,8 @@ void M_Episode(int choice)
 //
 // M_Options
 //
-static char *msgNames[2] = {"dsrk>","drk>"};
-static char *detailNames[2] = {"dsc>","ybp>"};
+static char *msgNames[2] = {"dsrk/","drk/"};
+static char *detailNames[2] = {"dsc/","ybp/"};
 
 void M_DrawOptions(void)
 {
@@ -2140,10 +2143,7 @@ void M_Drawer (void)
 
 	if (name[0])
 	{
-	    // [JN] Write only skill levels with GFX patches
-	    if (currentMenu == &NewDef)
-	    V_DrawPatchDirect (x, y, W_CacheLumpName(name, PU_CACHE));
-	    else
+	    // [JN] Write every menu with text
 	    RD_WriteTextBig (x, y, name);
 	}
 	y += LINEHEIGHT;
