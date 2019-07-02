@@ -1853,6 +1853,10 @@ boolean M_Responder (event_t* ev)
         else if (key == key_menu_quit)     // Quit DOOM
         {
 	    S_StartSound(NULL,sfx_swtchn);
+	    // [JN] devparm: quit immediately
+	    if (devparm)
+	    I_Quit();
+	    else
 	    M_QuitDOOM(0);
 	    return true;
         }
