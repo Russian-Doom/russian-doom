@@ -1107,6 +1107,8 @@ void P_UpdateSpecials (void)
     }
     
     //	ANIMATE FLATS AND TEXTURES GLOBALLY
+    // [JN] Call animation only every 8th tic (from Jaguar Doom).
+    if (!(gametic&7))
     for (anim = anims ; anim < lastanim ; anim++)
     {
 	for (i=anim->basepic ; i<anim->basepic+anim->numpics ; i++)
