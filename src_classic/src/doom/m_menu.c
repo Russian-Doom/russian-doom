@@ -557,18 +557,18 @@ void M_DrawSaveLoadBorder(int x,int y)
 {
     int             i;
 	
-    V_DrawPatchDirect(x - 8, y + 7,
-                      W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
+    V_DrawShadowedPatch(x - 8, y + 7,
+                        W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
 	
     for (i = 0;i < 24;i++)
     {
-	V_DrawPatchDirect(x, y + 7,
-                          W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
+    V_DrawShadowedPatch(x, y + 7, 
+                        W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
 	x += 8;
     }
 
-    V_DrawPatchDirect(x, y + 7, 
-                      W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
+    V_DrawShadowedPatch(x, y + 7, 
+                        W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
 }
 
 
@@ -886,7 +886,7 @@ void M_DrawNewGame(void)
     RD_WriteTextBigCentered(38, "Ehjdtym ckj;yjcnb:");
 
     // [JN] Draw "Кошмар!" as unmodifiable patch
-    V_DrawPatch(48, 127, W_CacheLumpName(DEH_String("M_NMARE!"), PU_CACHE));
+    V_DrawShadowedPatch(48, 127, W_CacheLumpName(DEH_String("M_NMARE!"), PU_CACHE));
 }
 
 void M_NewGame(int choice)
@@ -1218,14 +1218,14 @@ M_DrawThermo
     int		i;
 
     xx = x;
-    V_DrawPatchDirect(xx, y, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
+    V_DrawShadowedPatch(xx, y, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
     xx += 8;
     for (i=0;i<thermWidth;i++)
     {
-	V_DrawPatchDirect(xx, y, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
+	V_DrawShadowedPatch(xx, y, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
 	xx += 8;
     }
-    V_DrawPatchDirect(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
+    V_DrawShadowedPatch(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
 
     V_DrawPatchDirect((x + 8) + thermDot * 8, y,
 		      W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));
@@ -1359,7 +1359,7 @@ M_WriteText
 	w = SHORT (hu_font[c]->width);
 	if (cx+w > SCREENWIDTH)
 	    break;
-	V_DrawPatchDirect(cx, cy, hu_font[c]);
+	V_DrawShadowedPatch(cx, cy, hu_font[c]);
 	cx+=w;
     }
 }
@@ -1402,7 +1402,7 @@ void RD_WriteTextBig (int x, int y, char *string)
         if (cx+w > SCREENWIDTH)
         break;
 
-        V_DrawPatch(cx, cy, hu_font_big[c]);
+        V_DrawShadowedPatch(cx, cy, hu_font_big[c]);
 
         // Place one char to another with one pixel
         cx += w-1;
@@ -1463,7 +1463,7 @@ void RD_WriteTextBigCentered (int y, char *string)
 
         w = SHORT (hu_font_big[c]->width);
 
-        V_DrawPatch(cx, cy, hu_font_big[c]);
+        V_DrawShadowedPatch(cx, cy, hu_font_big[c]);
 
         cx+=w;
     }
@@ -2151,9 +2151,9 @@ void M_Drawer (void)
 
     
     // DRAW SKULL
-    V_DrawPatchDirect(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
-		      W_CacheLumpName(DEH_String(skullName[whichSkull]),
-				      PU_CACHE));
+    V_DrawShadowedPatch(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
+		                W_CacheLumpName(DEH_String(skullName[whichSkull]),
+				        PU_CACHE));
 }
 
 
