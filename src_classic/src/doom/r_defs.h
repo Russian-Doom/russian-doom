@@ -369,6 +369,7 @@ typedef struct vissprite_s
    
     int			mobjflags;
     
+    byte*		translation;
 } vissprite_t;
 
 

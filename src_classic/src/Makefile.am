@@ -90,6 +90,7 @@ sha1.c               sha1.h                \
 memio.c              memio.h               \
 tables.c             tables.h              \
 v_diskicon.c         v_diskicon.h          \
+v_trans.c            v_trans.h             \
 v_video.c            v_video.h             \
                      v_patch.h             \
 w_checksum.c         w_checksum.h          \

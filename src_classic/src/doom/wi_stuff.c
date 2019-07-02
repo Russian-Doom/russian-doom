@@ -45,6 +45,7 @@
 
 #include "wi_stuff.h"
 
+#include "v_trans.h"
 
 // [JN] Big font prototypes
 extern void RD_WriteTextBig(int x, int y, char *string);
@@ -577,6 +578,7 @@ boolean WI_Responder(event_t* ev)
 void WI_drawLF(void)
 {
     // [JN] Write centered level name
+    dp_translation = cr[CR_GRAY];
     if (logical_gamemission == doom)
     {
         RD_WriteTextBigCentered (-1, gameepisode == 1 ?
@@ -599,6 +601,7 @@ void WI_drawLF(void)
     {
         RD_WriteTextBigCentered (-1, LevelNames_TNT[gamemap]);
     }
+    dp_translation = NULL;
 
     // [JN] Write centered title "уровень завершен"
     RD_WriteTextBigCentered (14, "ehjdtym pfdthity");
@@ -613,6 +616,7 @@ void WI_drawEL(void)
     RD_WriteTextBigCentered(-1, "pfuhe;ftncz ehjdtym");
 
     // [JN] Write centered level name
+    dp_translation = cr[CR_GRAY];
     if (logical_gamemission == doom)
     {
         RD_WriteTextBigCentered (14, gameepisode == 1 ? 
@@ -635,6 +639,7 @@ void WI_drawEL(void)
     {
         RD_WriteTextBigCentered (14, LevelNames_TNT[wbs->next+1]);
     }
+    dp_translation = NULL;
 }
 
 void

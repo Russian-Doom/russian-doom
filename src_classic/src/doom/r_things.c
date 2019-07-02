@@ -35,6 +35,7 @@
 
 #include "doomstat.h"
 
+#include "v_trans.h"
 
 
 #define MINZ				(FRACUNIT*4)
@@ -412,6 +413,11 @@ R_DrawVisSprite
 	dc_translation = translationtables - 256 +
 	    ( (vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT-8) );
     }
+    else if (vis->translation)
+    {
+	colfunc = transcolfunc;
+	dc_translation = vis->translation;
+    }
 	
     dc_iscale = abs(vis->xiscale)>>detailshift;
     dc_texturemid = vis->texturemid;
@@ -540,6 +546,7 @@ void R_ProjectSprite (mobj_t* thing)
     
     // store information in a vissprite
     vis = R_NewVisSprite ();
+    vis->translation = NULL;
     vis->mobjflags = thing->flags;
     vis->scale = xscale<<detailshift;
     vis->gx = thing->x;
@@ -683,6 +690,7 @@ void R_DrawPSprite (pspdef_t* psp)
     
     // store information in a vissprite
     vis = &avis;
+    vis->translation = NULL;
     vis->mobjflags = 0;
     vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/2-(psp->sy-spritetopoffset[lump]);
     vis->x1 = x1 < 0 ? 0 : x1;
