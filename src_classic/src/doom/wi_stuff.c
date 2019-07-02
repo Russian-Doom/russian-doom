@@ -50,6 +50,43 @@
 extern void RD_WriteTextBig(int x, int y, char *string);
 extern void RD_WriteTextBigCentered(int y, char *string);
 
+// [JN] Level names: Doom 2
+char *LevelNames_Doom2[] = {
+    "",
+    "gfhflysq d[jl",        //  1: парадный вход
+    "gjlptvyst pfks",       //  2: подземные залы
+    "dspjd ,hjity",         //  3: вызов брошен
+    "chtljnjxbt",           //  4: средоточие
+    "cnjxyst neyytkb",      //  5: сточные туннели
+    "ghtcc",                //  6: пресс
+    "cvthntkmyj ghjcnjq",   //  7: смертельно простой
+    "ekjdrb b kjdeirb",     //  8: уловки и ловушки
+    "zvf",                  //  9: яма
+    "pfghfdjxyfz ,fpf",     // 10: pаправочная база
+    "rheu cvthnb",          // 11: круг смерти
+    "af,hbrf",              // 12: фабрика
+    "ltkjdjq hfqjy",        // 13: деловой район
+    "uke,jxfqibt kjujdbof", // 14: глубочайшие логовища
+    "ghjvsiktyyfz pjyf",    // 15: промышленная зона
+    "ghbujhjl",             // 16: пригород
+    "dkfltybz",             // 17: владения
+    "dyenhtyybq ldjh",      // 18: внутренний двор
+    "wbnfltkm",             // 19: цитадель
+    "gjgfkcz",              // 20: попался
+    "ybhdfyf",              // 21: нирвана
+    "rfnfrjv,s",            // 22: катакомбы
+    "wtkst ,jxrb dtctkmz",  // 23: целые бочки веселья
+    "ghjgfcnm",             // 24: пропасть
+    "rhjdjgfls",            // 25: кровопады
+    "pf,hjityyst if[ns",    // 26: заброшенные шахты
+    "rjyljvbybev vjycnhjd", // 27: кондоминиум монстров
+    "vbh le[jd",            // 28: мир духов
+    "rjytw dctuj ;bdjuj",   // 29: конец всего живого
+    "brjyf uht[f",          // 30: икона греха
+    "djkmatyinfqy",         // 31: вольфенштайн
+    "uhjcct",               // 32: гроссе
+};
+
 //
 // Data needed to add patches to full screen intermission pics.
 // Patches are statistics messages, and animations.
@@ -424,7 +461,10 @@ void WI_drawLF(void)
 
     if (gamemode != commercial || wbs->last < NUMCMAPS)
     {
-        // draw <LevelName> 
+        // [JN] Write centered level name
+        if (logical_gamemission == doom2)
+        RD_WriteTextBigCentered (-1, LevelNames_Doom2[gamemap]);
+        else
         V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2,
                     y, lnames[wbs->last]);
 
@@ -465,6 +505,10 @@ void WI_drawEL(void)
     // draw level
     y += (5*SHORT(lnames[wbs->next]->height))/4;
 
+    // [JN] Write centered level name
+    if (logical_gamemission == doom2)
+    RD_WriteTextBigCentered (14, LevelNames_Doom2[wbs->next+1]);
+    else
     V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2,
 		y, 
                 lnames[wbs->next]);
