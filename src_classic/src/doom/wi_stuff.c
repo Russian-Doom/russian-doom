@@ -501,8 +501,6 @@ static int		cnt_time;
 static int		cnt_par;
 static int		cnt_pause;
 
-// # of commercial levels
-static int		NUMCMAPS; 
 
 
 //
@@ -524,12 +522,6 @@ static patch_t*		num[10];
 
 // minus sign
 static patch_t*		wiminus;
-
-// "Finished!" graphics
-static patch_t*		finished;
-
-// "Entering" graphic
-static patch_t*		entering; 
 
 // "secret"
 static patch_t*		sp_secret;
@@ -560,9 +552,6 @@ static patch_t*		p[MAXPLAYERS];
 // "gray P[1..MAXPLAYERS]"
 static patch_t*		bp[MAXPLAYERS];
 
- // Name graphics of each level (centered)
-static patch_t**	lnames;
-
 // Buffer storing the backdrop
 static patch_t *background;
 
@@ -587,56 +576,32 @@ boolean WI_Responder(event_t* ev)
 // Draws "<Levelname> Finished!"
 void WI_drawLF(void)
 {
-    int y = WI_TITLEY;
-
-    if (gamemode != commercial || wbs->last < NUMCMAPS)
+    // [JN] Write centered level name
+    if (logical_gamemission == doom)
     {
-        // [JN] Write centered level name
-        if (logical_gamemission == doom)
-        {
-            RD_WriteTextBigCentered (-1, gameepisode == 1 ?
-                                         LevelNames_Doom1_E1[gamemap] :
-                                         gameepisode == 2 ?
-                                         LevelNames_Doom1_E2[gamemap] :
-                                         gameepisode == 3 ?
-                                         LevelNames_Doom1_E3[gamemap] :
-                                         LevelNames_Doom1_E4[gamemap]);
-        }
-        else if (logical_gamemission == doom2)
-        {
-            RD_WriteTextBigCentered (-1, LevelNames_Doom2[gamemap]);
-        }
-        else if (logical_gamemission == pack_plut)
-        {
-            RD_WriteTextBigCentered (-1, LevelNames_Plutonia[gamemap]);
-        }
-        else if (logical_gamemission == pack_tnt)
-        {
-            RD_WriteTextBigCentered (-1, LevelNames_TNT[gamemap]);
-        }
-
-        // draw "Finished!"
-        y += (5*SHORT(lnames[wbs->last]->height))/4;
-
-        // [JN] Write centered title "уровень завершен"
-        RD_WriteTextBigCentered (14, "ehjdtym pfdthity");
+        RD_WriteTextBigCentered (-1, gameepisode == 1 ?
+                                     LevelNames_Doom1_E1[gamemap] :
+                                     gameepisode == 2 ?
+                                     LevelNames_Doom1_E2[gamemap] :
+                                     gameepisode == 3 ?
+                                     LevelNames_Doom1_E3[gamemap] :
+                                     LevelNames_Doom1_E4[gamemap]);
     }
-    else if (wbs->last == NUMCMAPS)
+    else if (logical_gamemission == doom2)
     {
-        // MAP33 - nothing is displayed!
+        RD_WriteTextBigCentered (-1, LevelNames_Doom2[gamemap]);
     }
-    else if (wbs->last > NUMCMAPS)
+    else if (logical_gamemission == pack_plut)
     {
-        // > MAP33.  Doom bombs out here with a Bad V_DrawPatch error.
-        // I'm pretty sure that doom2.exe is just reading into random
-        // bits of memory at this point, but let's try to be accurate
-        // anyway.  This deliberately triggers a V_DrawPatch error.
-
-        patch_t tmp = { SCREENWIDTH, SCREENHEIGHT, 1, 1, 
-                        { 0, 0, 0, 0, 0, 0, 0, 0 } };
-
-        V_DrawPatch(0, y, &tmp);
+        RD_WriteTextBigCentered (-1, LevelNames_Plutonia[gamemap]);
     }
+    else if (logical_gamemission == pack_tnt)
+    {
+        RD_WriteTextBigCentered (-1, LevelNames_TNT[gamemap]);
+    }
+
+    // [JN] Write centered title "уровень завершен"
+    RD_WriteTextBigCentered (14, "ehjdtym pfdthity");
 }
 
 
@@ -644,13 +609,8 @@ void WI_drawLF(void)
 // Draws "Entering <LevelName>"
 void WI_drawEL(void)
 {
-    int y = WI_TITLEY;
-
     // [JN] Write centered "загружается уровень"
     RD_WriteTextBigCentered(-1, "pfuhe;ftncz ehjdtym");
-
-    // draw level
-    y += (5*SHORT(lnames[wbs->next]->height))/4;
 
     // [JN] Write centered level name
     if (logical_gamemission == doom)
@@ -1772,22 +1732,8 @@ static void WI_loadUnloadData(load_callback_t callback)
     char name[9];
     anim_t *a;
 
-    if (gamemode == commercial)
+    if (gamemode != commercial)
     {
-	for (i=0 ; i<NUMCMAPS ; i++)
-	{
-	    DEH_snprintf(name, 9, "CWILV%2.2d", i);
-            callback(name, &lnames[i]);
-	}
-    }
-    else
-    {
-	for (i=0 ; i<NUMMAPS ; i++)
-	{
-	    DEH_snprintf(name, 9, "WILV%d%d", wbs->epsd, i);
-            callback(name, &lnames[i]);
-	}
-
 	// you are here
         callback(DEH_String("WIURH0"), &yah[0]);
 
@@ -1833,12 +1779,6 @@ static void WI_loadUnloadData(load_callback_t callback)
 
     // percent sign
     callback(DEH_String("WIPCNT"), &percent);
-
-    // "finished"
-    callback(DEH_String("WIF"), &finished);
-
-    // "entering"
-    callback(DEH_String("WIENTER"), &entering);
 
     // "kills"
     callback(DEH_String("WIOSTK"), &kills);
@@ -1923,18 +1863,6 @@ static void WI_loadCallback(char *name, patch_t **variable)
 
 void WI_loadData(void)
 {
-    if (gamemode == commercial)
-    {
-	NUMCMAPS = 32;
-	lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS,
-				       PU_STATIC, NULL);
-    }
-    else
-    {
-	lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMMAPS,
-				       PU_STATIC, NULL);
-    }
-
     WI_loadUnloadData(WI_loadCallback);
 
     // These two graphics are special cased because we're sharing
