@@ -1432,7 +1432,7 @@ void RD_WriteTextBigCentered (int y, char *string)
 
         if (c < 0 || c> HU_FONTSIZE_BIG)
         {
-            width += 10;
+            width += 6;
             continue;
         }
 
@@ -1454,7 +1454,7 @@ void RD_WriteTextBigCentered (int y, char *string)
 
         if (c < 0 || c> HU_FONTSIZE_BIG)
         {
-            cx += 10;
+            cx += 6;
             continue;
         }
 
