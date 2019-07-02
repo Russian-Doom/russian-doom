@@ -458,7 +458,7 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
 
     col = 0;
     desttop = dest_screen + y * SCREENWIDTH + x;
-    desttop2 = dest_screen + (y + 2) * SCREENWIDTH + x + 2;
+    desttop2 = dest_screen + (y + 1) * SCREENWIDTH + x + 1;
 
     w = SHORT(patch->width);
     for (; col < w; x++, col++, desttop++, desttop2++)
@@ -493,7 +493,7 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
 
 void V_LoadTintTable(void)
 {
-    tinttable = W_CacheLumpName("TINTTAB", PU_STATIC);
+    tinttable = W_CacheLumpName("TINTMAP", PU_STATIC);
 }
 
 //
