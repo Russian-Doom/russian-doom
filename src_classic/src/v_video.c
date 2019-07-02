@@ -442,6 +442,7 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
     column_t *column;
     pixel_t *desttop, *dest;
     byte *source;
+    byte *sourcetrans;
     pixel_t *desttop2, *dest2;
     int w;
 
@@ -469,16 +470,19 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
 
         while (column->topdelta != 0xff)
         {
-            source = (byte *) column + 3;
+            source = sourcetrans = (byte *) column + 3;
             dest = desttop + column->topdelta * SCREENWIDTH;
             dest2 = desttop2 + column->topdelta * SCREENWIDTH;
             count = column->length;
 
             while (count--)
             {
+                if (dp_translation)
+                sourcetrans = &dp_translation[*source++];
+
                 *dest2 = tinttable[((*dest2) << 8)];
                 dest2 += SCREENWIDTH;
-                *dest = *source++;
+                *dest = *sourcetrans++;
                 dest += SCREENWIDTH;
 
             }
