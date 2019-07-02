@@ -867,8 +867,12 @@ void M_MusicVol(int choice)
 //
 void M_DrawMainMenu(void)
 {
-    V_DrawPatchDirect(94, 2,
-                      W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
+    // [JN] Use different, translated M_DOOM for Plutonia and TNT
+    V_DrawPatch(94, 2, W_CacheLumpName(DEH_String
+                                      (logical_gamemission == pack_plut ?
+                                       "M_PLT" :
+                                       logical_gamemission == pack_tnt ?
+                                       "M_TNT" : "M_DOOM"), PU_CACHE));
 }
 
 

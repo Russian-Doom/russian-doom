@@ -547,7 +547,10 @@ void F_CastDrawer (void)
     patch_t*		patch;
     
     // erase the entire screen to a background
-    V_DrawPatch (0, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
+    // [JN] Use different, translated boss back picture for Plutonia
+    V_DrawPatch (0, 0, W_CacheLumpName(DEH_String
+                                      (logical_gamemission == pack_plut ?
+                                      "BOSSBPLT" : "BOSSBACK"), PU_CACHE));
 
     F_CastPrint (DEH_String(castorder[castnum].name));
     

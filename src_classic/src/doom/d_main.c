@@ -485,6 +485,8 @@ void D_DoomLoop (void)
 int             demosequence;
 int             pagetic;
 char                    *pagename;
+char                    *whichtitle;
+char                    *whichcredits;
 
 
 //
@@ -524,6 +526,37 @@ void D_AdvanceDemo (void)
 //
 void D_DoAdvanceDemo (void)
 {
+    // [JN] Use different titlepic for different games
+    if (logical_gamemission == doom && gamemode == shareware)
+    {
+        whichtitle = DEH_String("TITLESRW");
+    }
+    else if (logical_gamemission == pack_plut)
+    {
+        whichtitle = DEH_String("TITLEPLT");
+    }
+    else if (logical_gamemission == pack_tnt)
+    {
+        whichtitle = DEH_String("TITLETNT");
+    }    
+    else
+    {
+        whichtitle = DEH_String("TITLEPIC");
+    }
+
+    // [JN] Use different credits for different games
+    if (logical_gamemission == doom)
+    {
+        if (gamemode == shareware || gamemode == registered)
+        whichcredits = DEH_String("CREDITS");
+        else
+        whichcredits = DEH_String("CREDITU");
+    }
+    else
+    {
+        whichcredits = DEH_String("CREDIT");
+    }
+
     players[consoleplayer].playerstate = PST_LIVE;  // not reborn
     advancedemo = false;
     usergame = false;               // no save / end game here
@@ -552,7 +585,7 @@ void D_DoAdvanceDemo (void)
 	else
 	    pagetic = 170;
 	gamestate = GS_DEMOSCREEN;
-	pagename = DEH_String("TITLEPIC");
+	pagename = whichtitle;
 	if ( gamemode == commercial )
 	  S_StartMusic(mus_dm2ttl);
 	else
@@ -564,7 +597,7 @@ void D_DoAdvanceDemo (void)
       case 2:
 	pagetic = 200;
 	gamestate = GS_DEMOSCREEN;
-	pagename = DEH_String("CREDIT");
+	pagename = whichcredits;
 	break;
       case 3:
 	G_DeferedPlayDemo(DEH_String("demo2"));
@@ -574,7 +607,7 @@ void D_DoAdvanceDemo (void)
 	if ( gamemode == commercial)
 	{
 	    pagetic = TICRATE * 11;
-	    pagename = DEH_String("TITLEPIC");
+	    pagename = whichtitle;
 	    S_StartMusic(mus_dm2ttl);
 	}
 	else
@@ -582,7 +615,7 @@ void D_DoAdvanceDemo (void)
 	    pagetic = 200;
 
 	    if (gameversion >= exe_ultimate)
-	      pagename = DEH_String("CREDIT");
+	      pagename = whichcredits;
 	    else
 	      pagename = DEH_String("HELP2");
 	}
