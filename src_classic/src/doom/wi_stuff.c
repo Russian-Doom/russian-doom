@@ -50,41 +50,171 @@
 extern void RD_WriteTextBig(int x, int y, char *string);
 extern void RD_WriteTextBigCentered(int y, char *string);
 
+// [JN] Level names: Doom 1 (По колено в трупах)
+char *LevelNames_Doom1_E1[] = {
+    "",
+    "fyufh",                    // e1m1: ангар
+    "fnjvyfz 'ktrnhjcnfywbz",   // e1m2: атомная электростанция
+    "pfdjl gj gththf,jnrt",     // e1m3: завод по переработке
+    "rjvfylysq geyrn",          // e1m4: командный пункт
+    "kf,jhfnjhbz yf aj,jct",    // e1m5: лаборатория на фобосе
+    "geyrn j,hf,jnrb",          // e1m6: пункт обработки
+    "dsxbckbntkmysq wtynh",     // e1m7: вычислительный центр
+    "fyjvfkbz yf aj,jct",       // e1m8: аномалия на фобосе
+    "djtyyfz ,fpf",             // e1m9: dоенная база
+};
+
+// [JN] Level names: Doom 1 (Прибрежье Ада)
+char *LevelNames_Doom1_E2[] = {
+    "",
+    "fyjvfkbz yf ltqvjct",      // e2m1: аномалия на деймосе
+    "[hfybkbot",                // e2m2: хранилище
+    "jxbcnbntkmysq pfdjl",      // e2m3: очистительный завод
+    "kf,jhfnjhbz yf ltqvjct",   // e2m4: лаборатория на деймосе
+    "rjvfylysq wtynh",          // e2m5: командный центр
+    "pfks ghjrkzns[",           // e2m6: залы проклятых
+    "ythtcnbkbot",              // e2m7: нерестилище
+    "dfdbkjycrfz ,fiyz",        // e2m8: вавилонская башня
+    "rhtgjcnm nfqy",            // e2m9: крепость тайн
+};
+
+// [JN] Level names: Doom 1 (Инферно)
+char *LevelNames_Doom1_E3[] = {
+    "",
+    "rhtgjcnm flf",             // e3m1: крепость ада
+    "nhzcbyf jnxfzybz",         // e3m2: трясина отчаяния
+    "gfyltvjybq",               // e3m3: пандемоний
+    "ljv ,jkb",                 // e3m4: дом боли
+    "ytxtcnbdsq cj,jh",         // e3m5: нечестивый собор
+    "ujhf 'ht,",                // e3m6: гора эреб
+    "dhfnf d kbv,",             // e3m7: врата в лимб
+    "lbn",                      // e3m8: дит
+    "rhjkbxbq cfl",             // e3m9: кроличий сад
+};
+
+// [JN] Level names: Doom 1 (Твоя плоть истощена)
+char *LevelNames_Doom1_E4[] = {
+    "",
+    "gjl fljv",                 // e4m1: под адом
+    "bcnbyyfz ytyfdbcnm",       // e4m2: истинная ненависть
+    "bcnzpfybt ytxtcnbds[",     // e4m3: истязание нечестивых
+    "ytelth;bvjt pkj",          // e4m4: неудержимое зло
+    "jyb gjrf.ncz",             // e4m5: они покаются
+    "ceghjnbd cb[ ytxtcnbds[",  // e4m6: супротив сих нечестивых
+    "b gjcktljdfk fl",          // e4m7: и последовал ад
+    "lj ,tccthltxbz",           // e4m8: до бессердечия
+    "cnhf[",                    // e4m9: страх
+};
+
 // [JN] Level names: Doom 2
 char *LevelNames_Doom2[] = {
     "",
-    "gfhflysq d[jl",        //  1: парадный вход
-    "gjlptvyst pfks",       //  2: подземные залы
-    "dspjd ,hjity",         //  3: вызов брошен
-    "chtljnjxbt",           //  4: средоточие
-    "cnjxyst neyytkb",      //  5: сточные туннели
-    "ghtcc",                //  6: пресс
-    "cvthntkmyj ghjcnjq",   //  7: смертельно простой
-    "ekjdrb b kjdeirb",     //  8: уловки и ловушки
-    "zvf",                  //  9: яма
-    "pfghfdjxyfz ,fpf",     // 10: pаправочная база
-    "rheu cvthnb",          // 11: круг смерти
-    "af,hbrf",              // 12: фабрика
-    "ltkjdjq hfqjy",        // 13: деловой район
-    "uke,jxfqibt kjujdbof", // 14: глубочайшие логовища
-    "ghjvsiktyyfz pjyf",    // 15: промышленная зона
-    "ghbujhjl",             // 16: пригород
-    "dkfltybz",             // 17: владения
-    "dyenhtyybq ldjh",      // 18: внутренний двор
-    "wbnfltkm",             // 19: цитадель
-    "gjgfkcz",              // 20: попался
-    "ybhdfyf",              // 21: нирвана
-    "rfnfrjv,s",            // 22: катакомбы
-    "wtkst ,jxrb dtctkmz",  // 23: целые бочки веселья
-    "ghjgfcnm",             // 24: пропасть
-    "rhjdjgfls",            // 25: кровопады
-    "pf,hjityyst if[ns",    // 26: заброшенные шахты
-    "rjyljvbybev vjycnhjd", // 27: кондоминиум монстров
-    "vbh le[jd",            // 28: мир духов
-    "rjytw dctuj ;bdjuj",   // 29: конец всего живого
-    "brjyf uht[f",          // 30: икона греха
-    "djkmatyinfqy",         // 31: вольфенштайн
-    "uhjcct",               // 32: гроссе
+    "gfhflysq d[jl",            //  1: парадный вход
+    "gjlptvyst pfks",           //  2: подземные залы
+    "dspjd ,hjity",             //  3: вызов брошен
+    "chtljnjxbt",               //  4: средоточие
+    "cnjxyst neyytkb",          //  5: сточные туннели
+    "ghtcc",                    //  6: пресс
+    "cvthntkmyj ghjcnjq",       //  7: смертельно простой
+    "ekjdrb b kjdeirb",         //  8: уловки и ловушки
+    "zvf",                      //  9: яма
+    "pfghfdjxyfz ,fpf",         // 10: pаправочная база
+    "rheu cvthnb",              // 11: круг смерти
+    "af,hbrf",                  // 12: фабрика
+    "ltkjdjq hfqjy",            // 13: деловой район
+    "uke,jxfqibt kjujdbof",     // 14: глубочайшие логовища
+    "ghjvsiktyyfz pjyf",        // 15: промышленная зона
+    "ghbujhjl",                 // 16: пригород
+    "dkfltybz",                 // 17: владения
+    "dyenhtyybq ldjh",          // 18: внутренний двор
+    "wbnfltkm",                 // 19: цитадель
+    "gjgfkcz",                  // 20: попался
+    "ybhdfyf",                  // 21: нирвана
+    "rfnfrjv,s",                // 22: катакомбы
+    "wtkst ,jxrb dtctkmz",      // 23: целые бочки веселья
+    "ghjgfcnm",                 // 24: пропасть
+    "rhjdjgfls",                // 25: кровопады
+    "pf,hjityyst if[ns",        // 26: заброшенные шахты
+    "rjyljvbybev vjycnhjd",     // 27: кондоминиум монстров
+    "vbh le[jd",                // 28: мир духов
+    "rjytw dctuj ;bdjuj",       // 29: конец всего живого
+    "brjyf uht[f",              // 30: икона греха
+    "djkmatyinfqy",             // 31: вольфенштайн
+    "uhjcct",                   // 32: гроссе
+};
+
+// [JN] Level names: Plutonia
+char *LevelNames_Plutonia[] = {
+    "",
+    "rjyuj",                    //  1: Конго
+    "rjkjltw lei",              //  2: Колодец душ
+    "fwntr",                    //  3: Ацтек
+    "pfgthnsq d rktnrt",        //  4: Запертый в клетке
+    "ujhjl-ghbphfr",            //  5: Город-призрак
+    "kjujdj ,fhjyf",            //  6: Логово Барона
+    "ldjh-kjdeirf",             //  7: Двор-ловушка
+    "wfhcndj",                  //  8: Царство
+    "f,,fncndj",                //  9: Аббатство
+    "yfnbcr",                   // 10: Натиск
+    "ghtcktletvsq",             // 11: Преследуемый
+    "crjhjcnm",                 // 12: Скорость
+    "crktg",                    // 13: Склеп
+    "pfhj;ltybt",               // 14: Зарождение
+    "cevthrb",                  // 15: Сумерки
+    "ghtlpyfvtyjdfybt",         // 16: Предзнаменование
+    "rjvgfeyl",                 // 17: Компаунд
+    "ytqhjcathf",               // 18: Нейросфера
+    "d>h>f>u>",                 // 19: В.Р.А.Г.
+    "j,bntkm cvthnb",           // 20: Обитель Смерти
+    "e,bqwf",                   // 21: Убийца
+    "ytdsgjkybvjt pflfybt",     // 22: Невыполнимое задание
+    "yfluhj,bt",                // 23: Надгробие
+    "gjcktlybq he,t;",          // 24: Последний рубеж
+    "[hfv nmvs",                // 25: Храм тьмы
+    ",eyrth",                   // 26: Бункер
+    "fynb[hbcn",                // 27: Антихрист
+    "rfyfkbpfwbz",              // 28: Канализация
+    "jlbcctz ievjd",            // 29: Одиссея шумов
+    "dhfnf flf",                // 30: Врата Ада
+    "rb,thkjujdj",              // 31: Киберлогово
+    "blb r ctve",               // 32: Иди к сему
+};
+
+// [JN] Level names: TNT
+char *LevelNames_TNT[] = {
+    "",
+    "eghfdktybt cbcntvjq",      //  1: управление системой
+    ",fh,tr. bp xtkjdtxbys",    //  2: Барбекю из человечины
+    "eghfdktybt gbnfybtv",      //  3: управление питанием
+    "lshf dj dhtvtyb",          //  4: Дыра во времени
+    "dbctkbwf",                 //  5: Виселица
+    "jnrhsnsq ctpjy",           //  6: Открытый сезон
+    "n.hmvf",                   //  7: Тюрьма
+    "vtnfkk",                   //  8: Металл
+    "rhtgjcnm",                 //  9: Крепость
+    "bcregktybt",               // 10: Искупление
+    "crkfl",                    // 11: Склад
+    "rhfnth",                   // 12: Кратер
+    "gththf,jnrf jn[jljd",      // 13: Переработка отходов
+    "cnfktkbntqysq pfdjl",      // 14: Cталелитейный завод
+    "vthndfz pjyf",             // 15: Мертвая зона
+    "uke,jxfqibt ljcnb;tybz",   // 16: Глубочайшие достижения
+    "pjyf j,hf,jnrb",           // 17: Зона обработки
+    "pfdjl",                    // 18: Завод
+    "gjuheprf-jnghfdrf",        // 19: Погрузка-отправка
+    "geyrn j,hf,jnrb",          // 20: пункт обработки
+    "eflvbybcnhfnbdysq wtynh",  // 21: Административный центр
+    "j,bnfkbot",                // 22: Обиталище
+    "keyysq ujhysq ghjtrn",     // 23: Лунный горный проект
+    "rfhmth",                   // 24: Карьер
+    "kjujdj ,fhjyf",            // 25: Логово Барона
+    ",fkkbcnbrc",               // 26: Баллистикс
+    "ujhf ,jkm",                // 27: Гора Боль
+    "xthnjdobyf",               // 28: Чертовщина
+    "htrf cnbrc",               // 29: Река Стикс
+    "gjcktlybq dspjd",          // 30: Последний вызов
+    "afhfjy",                   // 31: Фараон
+    "rfhb,s",                   // 32: Карибы
 };
 
 //
@@ -462,11 +592,28 @@ void WI_drawLF(void)
     if (gamemode != commercial || wbs->last < NUMCMAPS)
     {
         // [JN] Write centered level name
-        if (logical_gamemission == doom2)
-        RD_WriteTextBigCentered (-1, LevelNames_Doom2[gamemap]);
-        else
-        V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2,
-                    y, lnames[wbs->last]);
+        if (logical_gamemission == doom)
+        {
+            RD_WriteTextBigCentered (-1, gameepisode == 1 ?
+                                         LevelNames_Doom1_E1[gamemap] :
+                                         gameepisode == 2 ?
+                                         LevelNames_Doom1_E2[gamemap] :
+                                         gameepisode == 3 ?
+                                         LevelNames_Doom1_E3[gamemap] :
+                                         LevelNames_Doom1_E4[gamemap]);
+        }
+        else if (logical_gamemission == doom2)
+        {
+            RD_WriteTextBigCentered (-1, LevelNames_Doom2[gamemap]);
+        }
+        else if (logical_gamemission == pack_plut)
+        {
+            RD_WriteTextBigCentered (-1, LevelNames_Plutonia[gamemap]);
+        }
+        else if (logical_gamemission == pack_tnt)
+        {
+            RD_WriteTextBigCentered (-1, LevelNames_TNT[gamemap]);
+        }
 
         // draw "Finished!"
         y += (5*SHORT(lnames[wbs->last]->height))/4;
@@ -506,13 +653,28 @@ void WI_drawEL(void)
     y += (5*SHORT(lnames[wbs->next]->height))/4;
 
     // [JN] Write centered level name
-    if (logical_gamemission == doom2)
-    RD_WriteTextBigCentered (14, LevelNames_Doom2[wbs->next+1]);
-    else
-    V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2,
-		y, 
-                lnames[wbs->next]);
-
+    if (logical_gamemission == doom)
+    {
+        RD_WriteTextBigCentered (14, gameepisode == 1 ? 
+                                     LevelNames_Doom1_E1[wbs->next+1] :
+                                     gameepisode == 2 ?
+                                     LevelNames_Doom1_E2[wbs->next+1] :
+                                     gameepisode == 3 ?
+                                     LevelNames_Doom1_E3[wbs->next+1] :
+                                     LevelNames_Doom1_E4[wbs->next+1]);
+    }
+    else if (logical_gamemission == doom2)
+    {
+        RD_WriteTextBigCentered (14, LevelNames_Doom2[wbs->next+1]);
+    }
+    else if (logical_gamemission == pack_plut)
+    {
+        RD_WriteTextBigCentered (14, LevelNames_Plutonia[wbs->next+1]);
+    }
+    else if (logical_gamemission == pack_tnt)
+    {
+        RD_WriteTextBigCentered (14, LevelNames_TNT[wbs->next+1]);
+    }
 }
 
 void
