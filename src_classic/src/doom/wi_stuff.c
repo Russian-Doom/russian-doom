@@ -678,7 +678,7 @@ WI_drawOnLnode
 
     if (fits && i<2)
     {
-	V_DrawPatch(lnodes[wbs->epsd][n].x,
+	V_DrawShadowedPatch(lnodes[wbs->epsd][n].x,
                     lnodes[wbs->epsd][n].y,
 		    c[i]);
     }
@@ -844,13 +844,13 @@ WI_drawNum
     while (digits--)
     {
 	x -= fontwidth;
-	V_DrawPatch(x, y, num[ n % 10 ]);
+	V_DrawShadowedPatch(x, y, num[ n % 10 ]);
 	n /= 10;
     }
 
     // draw a minus sign if necessary
     if (neg)
-	V_DrawPatch(x-=8, y, wiminus);
+	V_DrawShadowedPatch(x-=8, y, wiminus);
 
     return x;
 
@@ -865,7 +865,7 @@ WI_drawPercent
     if (p < 0)
 	return;
 
-    V_DrawPatch(x, y, percent);
+    V_DrawShadowedPatch(x, y, percent);
     WI_drawNum(x, y, p, -1);
 }
 
@@ -900,7 +900,7 @@ WI_drawTime
 
 	    // draw
 	    if (div==60 || t / div)
-		V_DrawPatch(x, y, colon);
+		V_DrawShadowedPatch(x, y, colon);
 	    
 	} while (t / div);
     }
