@@ -132,6 +132,7 @@ void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
 
 extern void W_MergeFile(char *filename);
+extern void RD_WriteTextBigCentered (int y, char *string);
 
 //
 // D_ProcessEvents
@@ -178,7 +179,6 @@ void D_Display (void)
     int				nowtime;
     int				tics;
     int				wipestart;
-    int				y;
     boolean			done;
     boolean			wipe;
     boolean			redrawsbar;
@@ -284,15 +284,10 @@ void D_Display (void)
     inhelpscreensstate = inhelpscreens;
     oldgamestate = wipegamestate = gamestate;
     
-    // draw pause pic
+    // [JN] Write centered "Пауза"
     if (paused)
     {
-	if (automapactive)
-	    y = 4;
-	else
-	    y = viewwindowy+4;
-	V_DrawPatchDirect(viewwindowx + (scaledviewwidth - 68) / 2, y,
-                          W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+        RD_WriteTextBigCentered (8, "Gfepf");
     }
 
 
