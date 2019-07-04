@@ -2852,7 +2852,8 @@ boolean M_Responder (event_t* ev)
 		
     
     // F-Keys
-    if (!menuactive)
+    // [JN] Allow gamma-correction to be toggled in any menu
+    if (!menuactive || ch == KEY_F11)
 	switch(ch)
 	{
 	  case KEY_MINUS:         // Screen size down
