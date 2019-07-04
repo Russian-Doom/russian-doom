@@ -131,6 +131,7 @@ int             show_diskicon = 1;
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
 
+extern void W_MergeFile(char *filename);
 
 //
 // D_ProcessEvents
@@ -915,6 +916,9 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("DOOM 2: TNT - Evilution");
         }
     }
+
+    // [JN] Autoload RD translation wad.
+    W_MergeFile("rusdoom.wad");
 }
 
 //      print title for every printed line
