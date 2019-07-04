@@ -51,7 +51,9 @@
 #define HU_TITLET	(mapnames_commercial[gamemap-1 + 64])
 #define HU_TITLEHEIGHT	1
 #define HU_TITLEX	0
-#define HU_TITLEY	(167 - SHORT(hu_font[0]->height))
+// [JN] Initially HU_TITLEY is 167. 
+// Moved a bit higher preventing text shadows being dropped on status bar.
+#define HU_TITLEY	(165 - SHORT(hu_font[0]->height))
 
 #define HU_INPUTTOGGLE	't'
 #define HU_INPUTX	HU_MSGX
