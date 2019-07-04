@@ -902,9 +902,7 @@ void M_NewGame(int choice)
 	return;
     }
 	
-    // Chex Quest disabled the episode select screen, as did Doom II.
-
-    if (gamemode == commercial || gameversion == exe_chex)
+    if (gamemode == commercial)
 	M_SetupNextMenu(&NewDef);
     else
 	M_SetupNextMenu(&EpiDef);
@@ -2250,11 +2248,6 @@ void M_Init (void)
     if (gameversion < exe_ultimate)
     {
         EpiDef.numitems--;
-    }
-    // chex.exe shows only one episode.
-    else if (gameversion == exe_chex)
-    {
-        EpiDef.numitems = 1;
     }
 
     opldev = M_CheckParm("-opldev") > 0;

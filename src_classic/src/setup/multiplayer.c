@@ -77,12 +77,6 @@ static char *doom_skills[] =
     "Ultra-Violence.", "NIGHTMARE!",
 };
 
-static char *chex_skills[] =
-{
-    "Easy does it", "Not so sticky", "Gobs of goo", "Extreme ooze",
-    "SUPER SLIMEY!"
-};
-
 static char *heretic_skills[] =
 {
     "Thou needeth a wet-nurse", "Yellowbellies-R-us", "Bringest them oneth",
@@ -153,13 +147,6 @@ static int query_servers_found;
 static const iwad_t *GetCurrentIWAD(void)
 {
     return found_iwads[found_iwad_selected];
-}
-
-// Is the currently selected IWAD the Chex Quest chex.wad?
-
-static boolean IsChexQuest(const iwad_t *iwad)
-{
-    return !strcmp(iwad->name, "chex.wad");
 }
 
 static void AddWADs(execute_context_t *exec)
@@ -317,13 +304,7 @@ static void UpdateWarpButton(void)
 
 static void UpdateSkillButton(void)
 {
-    const iwad_t *iwad = GetCurrentIWAD();
-
-    if (IsChexQuest(iwad))
-    {
-        skillbutton->values = chex_skills;
-    }
-    else switch(gamemission)
+    switch(gamemission)
     {
         default:
         case doom:
@@ -410,11 +391,6 @@ static void LevelSelectDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(user_data))
         {
             for (x=1; x<=episodes; ++x)
             {
-                if (IsChexQuest(iwad) && (x > 1 || y > 5))
-                {
-                    continue;
-                }
-
                 if (!D_ValidEpisodeMap(iwad->mission, iwad->mode, x, y))
                 {
                     TXT_AddWidget(window, NULL);

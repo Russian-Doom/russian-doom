@@ -615,8 +615,7 @@ void G_DoLoadLevel (void)
 
     // The "Sky never changes in Doom II" bug was fixed in
     // the id Anthology version of doom2.exe for Final Doom.
-    if ((gamemode == commercial)
-     && (gameversion == exe_final2 || gameversion == exe_chex))
+    if ((gamemode == commercial) && (gameversion == exe_final2))
     {
         char *skytexturename;
 
@@ -1359,28 +1358,15 @@ void G_DoCompleted (void)
 	
     if (gamemode != commercial)
     {
-        // Chex Quest ends after 5 levels, rather than 8.
-
-        if (gameversion == exe_chex)
+        switch(gamemap)
         {
-            if (gamemap == 5)
-            {
-                gameaction = ga_victory;
-                return;
-            }
-        }
-        else
-        {
-            switch(gamemap)
-            {
-              case 8:
-                gameaction = ga_victory;
-                return;
-              case 9: 
-                for (i=0 ; i<MAXPLAYERS ; i++) 
-                    players[i].didsecret = true; 
-                break;
-            }
+          case 8:
+            gameaction = ga_victory;
+            return;
+          case 9: 
+            for (i=0 ; i<MAXPLAYERS ; i++) 
+                players[i].didsecret = true; 
+            break;
         }
     }
 

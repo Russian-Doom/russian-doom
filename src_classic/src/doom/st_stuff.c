@@ -618,20 +618,6 @@ ST_Responder (event_t* ev)
       {
 	epsd = buf[0] - '0';
 	map = buf[1] - '0';
-
-        // Chex.exe always warps to episode 1.
-
-        if (gameversion == exe_chex)
-        {
-            if (epsd > 1)
-            {
-                epsd = 1;
-            }
-            if (map > 5)
-            {
-                map = 5;
-            }
-        }
       }
 
       // Catch invalid maps.
@@ -995,17 +981,6 @@ void ST_doPaletteStuff(void)
 	palette = RADIATIONPAL;
     else
 	palette = 0;
-
-    // In Chex Quest, the player never sees red.  Instead, the
-    // radiation suit palette is used to tint the screen green,
-    // as though the player is being covered in goo by an
-    // attacking flemoid.
-
-    if (gameversion == exe_chex
-     && palette >= STARTREDPALS && palette < STARTREDPALS + NUMREDPALS)
-    {
-        palette = RADIATIONPAL;
-    }
 
     if (palette != st_palette)
     {

@@ -129,13 +129,6 @@ void F_StartFinale (void)
     {
         textscreen_t *screen = &textscreens[i];
 
-        // Hack for Chex Quest
-
-        if (gameversion == exe_chex && screen->mission == doom)
-        {
-            screen->level = 5;
-        }
-
         if (logical_gamemission == screen->mission
          && (logical_gamemission != doom || gameepisode == screen->episode)
          && gamemap == screen->level)
