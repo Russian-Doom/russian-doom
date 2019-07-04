@@ -100,7 +100,8 @@ boolean			messageNeedsInput;
 
 void    (*messageRoutine)(int response);
 
-char gammamsg[5][26] =
+// [JN] Externded to Russian strings
+char gammamsg[5][32] =
 {
     GAMMALVL0,
     GAMMALVL1,
