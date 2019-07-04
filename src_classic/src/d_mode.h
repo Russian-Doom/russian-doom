@@ -30,7 +30,6 @@ typedef enum
     doom2,           // Doom 2
     pack_tnt,        // Final Doom: TNT: Evilution
     pack_plut,       // Final Doom: The Plutonia Experiment
-    pack_hacx,       // Hacx (modded doom2)
     heretic,         // Heretic
     hexen,           // Hexen
     strife,          // Strife
@@ -60,7 +59,6 @@ typedef enum
     exe_doom_1_7,    // Doom 1.7/1.7a: "
     exe_doom_1_8,    // Doom 1.8: "
     exe_doom_1_9,    // Doom 1.9: "
-    exe_hacx,        // Hacx
     exe_ultimate,    // Ultimate Doom (retail)
     exe_final,       // Final Doom
     exe_final2,      // Final Doom (alternate exe)
