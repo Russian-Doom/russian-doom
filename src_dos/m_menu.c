@@ -2852,8 +2852,7 @@ boolean M_Responder (event_t* ev)
 		
     
     // F-Keys
-    // [JN] Allow gamma-correction to be toggled in any menu
-    if (!menuactive || ch == KEY_F11)
+    if (!menuactive)
 	switch(ch)
 	{
 	  case KEY_MINUS:         // Screen size down
@@ -2929,20 +2928,19 @@ boolean M_Responder (event_t* ev)
 	    S_StartSound(NULL,sfx_swtchn);
 	    M_QuitDOOM(0);
 	    return true;
-				
-	  case KEY_F11:           // gamma toggle
-	    usegamma++;
-	    if (usegamma > 17)
-		usegamma = 0;
-	    players[consoleplayer].message = gammamsg[usegamma];
-        pal = (byte *) W_CacheLumpName (usegamma <= 8 ? 
-                                        "PALFIX" : "PLAYPAL", PU_CACHE)
-                                        +st_palette*768;
-	    I_SetPalette (pal);
-	    return true;
-				
 	}
 
+    if (ch == KEY_F11)    // gamma toggle
+    {
+        usegamma++;
+        if (usegamma > 17)
+        usegamma = 0;
+        players[consoleplayer].message = gammamsg[usegamma];
+        pal = (byte *) W_CacheLumpName (usegamma <= 8 ?  "PALFIX" : "PLAYPAL",
+                                        PU_CACHE) + st_palette * 768;
+        I_SetPalette (pal);
+        return true;
+    }
     
     // Pop-up menu?
     if (!menuactive)

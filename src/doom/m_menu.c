@@ -3844,8 +3844,7 @@ boolean M_Responder (event_t* ev)
     }
 
     // F-Keys
-    // [JN] Allow gamma-correction to be toggled in any menu
-    if (!menuactive || key == key_menu_gamma)
+    if (!menuactive)
     {
         if (key == key_menu_decscreen)      // Screen size down
         {
@@ -3938,21 +3937,24 @@ boolean M_Responder (event_t* ev)
             M_QuitDOOM(0);
             return true;
         }
-        else if (key == key_menu_gamma)    // gamma toggle
-        {
-            usegamma++;
-            if (usegamma > 17)
-                usegamma = 0;
+        // [JN] gamma toggling moved below for making 
+        // possible to change gamma even while active menu.
+    }
 
-            I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
-                                                             "PALFIX" :
-                                                             "PLAYPAL"),
-                                                             PU_CACHE) + 
-                                                             st_palette * 768);
-            players[consoleplayer].message = DEH_String(english_language ? 
-                                                        gammamsg[usegamma] : gammamsg_rus[usegamma]);
-            return true;
-        }
+    if (key == key_menu_gamma)    // gamma toggle
+    {
+        usegamma++;
+        if (usegamma > 17)
+            usegamma = 0;
+
+        I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
+                                              "PALFIX" : "PLAYPAL"), PU_CACHE) +
+                                              st_palette * 768);
+
+        players[consoleplayer].message = DEH_String(english_language ? 
+                                                    gammamsg[usegamma] : 
+                                                    gammamsg_rus[usegamma]);
+        return true;
     }
 
     // Pop-up menu?

@@ -1773,8 +1773,7 @@ boolean M_Responder (event_t* ev)
     }
 
     // F-Keys
-    // [JN] Allow gamma-correction to be toggled in any menu
-    if (!menuactive || key == key_menu_gamma)
+    if (!menuactive)
     {
 	if (key == key_menu_decscreen)      // Screen size down
         {
@@ -1867,15 +1866,18 @@ boolean M_Responder (event_t* ev)
 	    M_QuitDOOM(0);
 	    return true;
         }
-        else if (key == key_menu_gamma)    // gamma toggle
-        {
-	    usegamma++;
-	    if (usegamma > 4)
-		usegamma = 0;
-	    players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
-            I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
-	    return true;
-	}
+	    // [JN] gamma toggling moved below for making 
+	    // possible to change gamma even while active menu.
+    }
+
+    if (key == key_menu_gamma)    // gamma toggle
+    {
+        usegamma++;
+        if (usegamma > 4)
+        usegamma = 0;
+        players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
+        I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+        return true;
     }
 
     // Pop-up menu?
