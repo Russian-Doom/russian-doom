@@ -12,7 +12,6 @@ d_net.c                         \
 doomdef.c          doomdef.h    \
 doomstat.c         doomstat.h   \
                    d_player.h   \
-dstrings.c         dstrings.h   \
                    d_textur.h   \
                    d_think.h    \
 f_finale.c         f_finale.h   \
