@@ -39,7 +39,7 @@
 #include "doomdef.h"
 #include "doomstat.h"
 
-#include "dstrings.h"
+#include "d_englsh.h"
 #include "doomfeatures.h"
 #include "sounds.h"
 

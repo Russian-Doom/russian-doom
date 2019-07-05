@@ -26,7 +26,7 @@
 #include "deh_io.h"
 #include "deh_main.h"
 
-#include "dstrings.h"
+#include "d_englsh.h"
 
 typedef struct {
     char *macro;

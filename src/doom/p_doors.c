@@ -32,7 +32,7 @@
 #include "r_state.h"
 
 // Data.
-#include "dstrings.h"
+#include "d_englsh.h"
 #include "sounds.h"
 
 #include "jn.h"

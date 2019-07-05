@@ -25,7 +25,7 @@
 
 #include "doomdef.h"
 #include "doomkeys.h"
-#include "dstrings.h"
+#include "d_englsh.h"
 
 #include "d_main.h"
 #include "deh_main.h"
@@ -152,6 +152,91 @@ char gammamsg_rus[18][41] =
     GAMMA_ORIGINAL_3_RUS,
     GAMMA_ORIGINAL_35_RUS,
     GAMMA_ORIGINAL_4_RUS
+};
+
+#define NUM_QUITMESSAGES 8
+
+// Quit DOOM I messages
+char *doom1_endmsg[] =
+{
+    "are you sure you want to\nquit this great game?",
+    "please don't leave, there's more\ndemons to toast!",
+    "let's beat it -- this is turning\ninto a bloodbath!",
+    "i wouldn't leave if i were you.\ndos is much worse.",
+    "you're trying to say you like dos\nbetter than me, right?",
+    "don't leave yet -- there's a\ndemon around that corner!",
+    "ya know, next time you come in here\ni'm gonna toast ya.",
+    "go ahead and leave. see if i care.",
+};
+
+
+// Quit DOOM II messages
+char *doom2_endmsg[] =
+{
+    "are you sure you want to\nquit this great game?",
+    "you want to quit?\nthen, thou hast lost an eighth!",
+    "don't go now, there's a \ndimensional shambler waiting\nat the dos prompt!",
+    "get outta here and go back\nto your boring programs.",
+    "if i were your boss, i'd \n deathmatch ya in a minute!",
+    "look, bud. you leave now\nand you forfeit your body count!",
+    "just leave. when you come\nback, i'll be waiting with a bat.",
+    "you're lucky i don't smack\nyou for thinking about leaving.",
+};
+
+// [JN] Russian quit DOOM I messages
+char *doom1_endmsg_rus[] =
+{
+    // Вы действительно хотите выйти \n из этой замечательной игры?
+    "ds ltqcndbntkmyj [jnbnt dsqnb\nbp 'njq pfvtxfntkmyjq buhs?",
+
+    // Пожалуйста, не уходите! \n Здесь осталось ещё много демонов!
+    "gj;fkeqcnf< yt e[jlbnt!\npltcm jcnfkjcm tot vyjuj ltvjyjd!",
+
+    // Давайте определимся, это будет \n ваша первая и последняя попытка!
+    "lfdfqnt jghtltkbvcz< 'nj ,eltn\n dfif gthdfz b gjcktlyzz gjgsnrf!",
+
+    // На вашем месте я не уходил. \n Работать намного скучнее.
+    "yf dfitv vtcnt z ,s yt e[jlbk>\nhf,jnfnm yfvyjuj crexytt>",
+
+    // Вы хотите сказать, что операционная \n система лучше чем я, да?
+    "ds [jnbnt crfpfnm< xnj jgthfwbjyyfz\ncbcntvf kexit xtv z< lf?",
+
+    // Не уходите, в дальнем углу \n притаился еще один монстр!
+    "yt e[jlbnt< d lfkmytv euke\nghbnfbkcz tot jlby vjycnh!",
+
+    // Знаете, когда вы вернётесь, \n вас будут ждать большие неприятности.
+    "pyftnt< rjulf ds dthytntcm<\ndfc ,elen ;lfnm ,jkmibt ytghbznyjcnb>",
+
+    // Давайте, уходите. \n Мне совершенно всё равно.
+    "lfdfqnt< e[jlbnt>\nvyt cjdthityyj dct hfdyj>",
+};
+
+// [JN] Russian quit DOOM II messages
+char *doom2_endmsg_rus[] =
+{
+    //Вы действительно хотите выйти \n из этой замечательной игры?
+    "ds ltqcndbntkmyj [jnbnt dsqnb\nbp 'njq pfvtxfntkmyjq buhs?", 
+
+    // Всерьез задумали выйти? \n Полагаю, это не очень-то разумно!
+    "dcthmtp pflevfkb dsqnb?\ngjkfuf.< 'nj yt jxtym-nj hfpevyj!", 
+
+    // Не уходите, в операционной системе \n вас ждут ужасные демоны!
+    "yt e[jlbnt< d jgthfwbjyyjq cbcntvt\ndfc ;len e;fcyst ltvjys!",
+
+    // Отлично, вот и убирайтесь отсюда к \n своим скучным программам!
+    "jnkbxyj< djn b e,bhfqntcm jnc.lf\nr cdjbv crexysv ghjuhfvvfv!", 
+
+    // Вам определённо следует \n остаться на сверхурочное время!
+    "dfv jghtltktyyj cktletn\njcnfnmcz yf cdth[ehjxyjt dhtvz!",
+
+    // Слушайте, лучше останьтесь, иначе \n может случится что-то страшное.
+    "ckeifqnt< kexit jcnfymntcm< byfxt\nvj;tn ckexbnmcz xnj-nj cnhfiyjt>",
+
+    // Просто уходите. когда вернётесь, \n вам крупно не поздоровится.
+    "ghjcnj e[jlbnt> rjulf dthytntcm<\ndfv rhegyj yt gjpljhjdbncz>", 
+
+    // Вам очень повезло, что за это \n с вами совершенно ничего не случится!
+    "dfv jxtym gjdtpkj< xnj pf 'nj\nc dfvb ybxtuj yt ckexbncz!", 
 };
 
 // we are going to be entering a savegame string

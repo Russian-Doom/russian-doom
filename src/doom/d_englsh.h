@@ -34,6 +34,10 @@
 #ifndef __D_ENGLSH__
 #define __D_ENGLSH__
 
+
+// [JN] Extended name from "doomsav".
+#define SAVEGAMENAME "doom-save-"
+
 // -----------------------------------------------------------------------------
 // English language
 // -----------------------------------------------------------------------------
