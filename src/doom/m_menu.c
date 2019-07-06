@@ -1928,6 +1928,10 @@ void M_RD_Change_Sensitivity(int choice)
 
 void M_RD_Choose_Gameplay_1(int choice)
 {
+    // [JN] Don't allow to enter in -vanilla mode
+    if (vanillaparm)
+    return;
+
     M_SetupNextMenu(english_language ? 
                     &RD_Gameplay_Def_1 :
                     &RD_Gameplay_Def_1_Rus);
@@ -4408,6 +4412,12 @@ void M_Drawer (void)
 
         if (name[0])
         {
+            // [JN] Shade Gameplay menu in -vanilla mode
+            if (vanillaparm && i == rd_gameplay 
+            && (currentMenu == &RD_Options_Def 
+            ||  currentMenu == &RD_Options_Def_Rus))
+            dp_translation = cr[CR_DARKRED];
+            
             // [JN] Write common menus by using standard graphical patches:
             if (currentMenu == &MainDef     // Main Menu
             ||  currentMenu == &MainDefBeta // Main Menu (Press Beta) 
@@ -4439,6 +4449,9 @@ void M_Drawer (void)
                     M_WriteTextSmall(x, y, name);
                 }
             }
+
+            // [JN] Clear shading
+            dp_translation = NULL;
         }
 
         // [JN] And another difference. Listed above menus requre
