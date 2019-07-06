@@ -4451,6 +4451,7 @@ void M_Drawer (void)
             }
 
             // [JN] Clear shading
+            if (vanillaparm)
             dp_translation = NULL;
         }
 

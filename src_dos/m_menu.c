@@ -1379,6 +1379,10 @@ void M_RD_Change_Sensitivity(int choice)
 
 void M_RD_Choose_Gameplay_1(int choice)
 {
+    // [JN] Don't allow to enter in -vanilla mode
+    if (vanilla)
+    return;
+
     M_SetupNextMenu(&RD_Gameplay_Def_1);
 }
 
@@ -3191,6 +3195,10 @@ void M_Drawer (void)
 
     for (i=0;i<max;i++)
     {
+        // [JN] Shade Gameplay menu in -vanilla mode
+        if (vanilla && currentMenu == &RD_Options_Def && i == rd_gameplay)
+        dp_translation = cr[CR_DARKRED];
+
         // [JN] Write only skill levels with GFX patches
         if (currentMenu == &NewDef)
         {
@@ -3216,6 +3224,10 @@ void M_Drawer (void)
                 M_WriteTextSmall(x, y, currentMenu->menuitems[i].name);
             }
         }
+
+        // [JN] Clear shading
+        if (vanilla)
+        dp_translation = NULL;
         
         // [JN] And another difference. Listed above menus requre
         // different vertical line spacing because of different font.
