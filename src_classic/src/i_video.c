@@ -875,7 +875,8 @@ void I_InitWindowTitle(void)
 {
     char *buf;
 
-    buf = M_StringJoin(window_title, " - ", PACKAGE_STRING, NULL);
+    // [JN] Set only game name in window title, nothing else.
+    buf = M_StringJoin(window_title,/* " - ", PACKAGE_STRING,*/ NULL);
     SDL_SetWindowTitle(screen, buf);
     free(buf);
 }

@@ -879,11 +879,11 @@ void D_SetGameDescription(void)
         }
         else if (gamemode == registered)
         {
-            gamedescription = GetGameName("DOOM Registered");
+            gamedescription = GetGameName("DOOM");
         }
         else if (gamemode == shareware)
         {
-            gamedescription = GetGameName("DOOM Shareware");
+            gamedescription = GetGameName("DOOM (Демоверсия)");
         }
     }
     else
@@ -900,15 +900,15 @@ void D_SetGameDescription(void)
         }
         else if (logical_gamemission == doom2)
         {
-            gamedescription = GetGameName("DOOM 2: Hell on Earth");
+            gamedescription = GetGameName("DOOM 2: Ад на Земле");
         }
         else if (logical_gamemission == pack_plut)
         {
-            gamedescription = GetGameName("DOOM 2: Plutonia Experiment"); 
+            gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”"); 
         }
         else if (logical_gamemission == pack_tnt)
         {
-            gamedescription = GetGameName("DOOM 2: TNT - Evilution");
+            gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
         }
     }
 
