@@ -422,6 +422,10 @@ void ST_refreshBackground(void)
 
 	V_DrawPatch(ST_X, 0, sbar);
 
+	// [crispy] back up arms widget background
+	if (!deathmatch)
+	    V_DrawPatch(ST_ARMSBGX, 0, armsbg);
+
 	if (netgame)
 	    V_DrawPatch(ST_FX, 0, faceback);
 
@@ -1048,8 +1052,12 @@ void ST_diffDraw(void)
 void ST_Drawer (boolean fullscreen, boolean refresh)
 {
   
+    // [JN] Redraw whole status bar while in HELP screens.
+    // Fixes a notable delay of HUD redraw after closing HELP screen.
+    extern boolean inhelpscreens;
+
     st_statusbaron = (!fullscreen) || automapactive;
-    st_firsttime = st_firsttime || refresh;
+    st_firsttime = st_firsttime || refresh || inhelpscreens;
 
     // Do red-/gold-shifts from damage/items
     ST_doPaletteStuff();
