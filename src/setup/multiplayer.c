@@ -1355,6 +1355,9 @@ void SetChatMacroDefaults(void)
 
 void SetPlayerNameDefault(void)
 {
+    // [JN] Always use "Player" for player name in multiplayer lobby.
+
+    /*
     if (net_player_name == NULL)
     {
         net_player_name = getenv("USER");
@@ -1364,10 +1367,11 @@ void SetPlayerNameDefault(void)
     {
         net_player_name = getenv("USERNAME");
     }
+    */
 
     if (net_player_name == NULL)
     {
-        net_player_name = "player";
+        net_player_name = "Player";
     }
 
     // Now strdup() the string so that it's in a mutable form
