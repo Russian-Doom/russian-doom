@@ -52,6 +52,7 @@
 // [JN] Файл со строчкой о найденном секрете.
 #include "d_englsh.h"
 
+#include "r_swirl.h"
 #include "crispy.h"
 #include "jn.h"
 
@@ -210,6 +211,9 @@ void P_InitPicAnims (void)
 	lastanim++;
     }
 	
+    // [JN] Not needed in "-vanilla", since there is no swirling flats
+    if (!vanillaparm)
+    R_InitDistortedFlats();
 }
 
 

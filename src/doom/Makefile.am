@@ -54,6 +54,7 @@ r_plane.c          r_plane.h    \
 r_segs.c           r_segs.h     \
 r_sky.c            r_sky.h      \
                    r_state.h    \
+r_swirl.c          r_swirl.h    \
 r_things.c         r_things.h   \
 s_sound.c          s_sound.h    \
 sounds.c           sounds.h     \

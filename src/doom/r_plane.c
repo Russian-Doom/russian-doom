@@ -407,66 +407,6 @@ unsigned int		b2  // [crispy] 32-bit integer math
 }
 
 
-// [crispy] add support for SMMU swirling flats
-// adapted from smmu/r_ripple.c, by Simon Howard
-static char *R_DistortedFlat (int flatnum)
-{
-    const int swirlfactor = 8192 / 64;
-    const int swirlfactor2 = 8192 / 32;
-    const int amp = 2;
-    const int amp2 = 2;
-    const int speed = 40;
-
-    static int swirltic;
-    static int offset[4096];
-
-    static char distortedflat[4096];
-    char *normalflat;
-    int i;
-
-    if (swirltic != gametic)
-    {
-        int x, y;
-
-        for (x = 0; x < 64; x++)
-        {
-            for (y = 0; y < 64; y++)
-            {
-                int x1, y1;
-                int sinvalue, sinvalue2;
-
-                sinvalue = (y * swirlfactor + leveltime * speed * 5 + 900) & 8191;
-                sinvalue2 = (x * swirlfactor2 + leveltime * speed * 4 + 300) & 8191;
-                x1 = x + 128 + ((finesine[sinvalue] * amp) >> FRACBITS) + ((finesine[sinvalue2] * amp2) >> FRACBITS);
-
-                sinvalue = (x * swirlfactor + leveltime * speed * 3 + 700) & 8191;
-                sinvalue2 = (y * swirlfactor2 + leveltime * speed * 4 + 1200) & 8191;
-                y1 = y + 128 + ((finesine[sinvalue] * amp) >> FRACBITS) + ((finesine[sinvalue2] * amp2) >> FRACBITS);
-
-                x1 &= 63;
-                y1 &= 63;
-
-                offset[(y << 6) + x] = (y1 << 6) + x1;
-            }
-        }
-
-    swirltic = gametic;
-    }
-
-    // [JN] Использовать конкретную поверхность
-    normalflat = W_CacheLumpNum(firstflat + flatnum, PU_LEVEL);
-
-    for (i = 0; i < 4096; i++)
-    {
-        distortedflat[i] = normalflat[offset[i]];
-    }
-
-    Z_ChangeTag(normalflat, PU_CACHE);
-
-    return distortedflat;
-}
-
-
 //
 // R_DrawPlanes
 // At the end of each frame.
