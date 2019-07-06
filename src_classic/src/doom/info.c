@@ -161,7 +161,8 @@ state_t	states[NUMSTATES] = {
     {SPR_SHT2,0,1,{A_Lower},S_DSGUNDOWN,0,0},	// S_DSGUNDOWN
     {SPR_SHT2,0,1,{A_Raise},S_DSGUNUP,0,0},	// S_DSGUNUP
     {SPR_SHT2,0,3,{NULL},S_DSGUN2,0,0},	// S_DSGUN1
-    {SPR_SHT2,0,7,{A_FireShotgun2},S_DSGUN3,0,0},	// S_DSGUN2
+    // [crispy] killough 9/5/98: make SSG lighting flash more uniform along super shotgun
+    {SPR_SHT2,0|0x8000,7,{A_FireShotgun2},S_DSGUN3,0,0},    // S_DSGUN2
     {SPR_SHT2,1,7,{NULL},S_DSGUN4,0,0},	// S_DSGUN3
     {SPR_SHT2,2,7,{A_CheckReload},S_DSGUN5,0,0},	// S_DSGUN4
     {SPR_SHT2,3,7,{A_OpenShotgun2},S_DSGUN6,0,0},	// S_DSGUN5
@@ -172,7 +173,9 @@ state_t	states[NUMSTATES] = {
     {SPR_SHT2,0,5,{A_ReFire},S_DSGUN,0,0},	// S_DSGUN10
     {SPR_SHT2,1,7,{NULL},S_DSNR2,0,0},	// S_DSNR1
     {SPR_SHT2,0,3,{NULL},S_DSGUNDOWN,0,0},	// S_DSNR2
-    {SPR_SHT2,32776,5,{A_Light1},S_DSGUNFLASH2,0,0},	// S_DSGUNFLASH1
+    // [crispy] killough 8/20/98: reduce first SSG flash frame one tic, to fix
+    // Doom II SSG flash bug, in which SSG raises before flash finishes
+    {SPR_SHT2,32776,5-1,{A_Light1},S_DSGUNFLASH2,0,0},	// S_DSGUNFLASH1
     {SPR_SHT2,32777,4,{A_Light2},S_LIGHTDONE,0,0},	// S_DSGUNFLASH2
     {SPR_CHGG,0,1,{A_WeaponReady},S_CHAIN,0,0},	// S_CHAIN
     {SPR_CHGG,0,1,{A_Lower},S_CHAINDOWN,0,0},	// S_CHAINDOWN
@@ -310,7 +313,8 @@ state_t	states[NUMSTATES] = {
     {SPR_POSS,3,4,{A_Chase},S_POSS_RUN8,0,0},	// S_POSS_RUN7
     {SPR_POSS,3,4,{A_Chase},S_POSS_RUN1,0,0},	// S_POSS_RUN8
     {SPR_POSS,4,10,{A_FaceTarget},S_POSS_ATK2,0,0},	// S_POSS_ATK1
-    {SPR_POSS,5,8,{A_PosAttack},S_POSS_ATK3,0,0},	// S_POSS_ATK2
+    // [crispy] and [JN] Zombieman firing frame is fullbright
+    {SPR_POSS,5|0x8000,8,{A_PosAttack},S_POSS_ATK3,0,0},	// S_POSS_ATK2
     {SPR_POSS,4,8,{NULL},S_POSS_RUN1,0,0},	// S_POSS_ATK3
     {SPR_POSS,6,3,{NULL},S_POSS_PAIN2,0,0},	// S_POSS_PAIN
     {SPR_POSS,6,3,{A_Pain},S_POSS_RUN1,0,0},	// S_POSS_PAIN2
@@ -809,12 +813,13 @@ state_t	states[NUMSTATES] = {
     {SPR_CYBR,2,3,{A_Chase},S_CYBER_RUN7,0,0},	// S_CYBER_RUN6
     {SPR_CYBR,3,3,{A_Metal},S_CYBER_RUN8,0,0},	// S_CYBER_RUN7
     {SPR_CYBR,3,3,{A_Chase},S_CYBER_RUN1,0,0},	// S_CYBER_RUN8
+    // [crispy] and [JN] Cyberdemon firing frames are fullbright
     {SPR_CYBR,4,6,{A_FaceTarget},S_CYBER_ATK2,0,0},	// S_CYBER_ATK1
-    {SPR_CYBR,5,12,{A_CyberAttack},S_CYBER_ATK3,0,0},	// S_CYBER_ATK2
+    {SPR_CYBR,5|0x8000,12,{A_CyberAttack},S_CYBER_ATK3,0,0},  // S_CYBER_ATK2
     {SPR_CYBR,4,12,{A_FaceTarget},S_CYBER_ATK4,0,0},	// S_CYBER_ATK3
-    {SPR_CYBR,5,12,{A_CyberAttack},S_CYBER_ATK5,0,0},	// S_CYBER_ATK4
+    {SPR_CYBR,5|0x8000,12,{A_CyberAttack},S_CYBER_ATK5,0,0},  // S_CYBER_ATK4
     {SPR_CYBR,4,12,{A_FaceTarget},S_CYBER_ATK6,0,0},	// S_CYBER_ATK5
-    {SPR_CYBR,5,12,{A_CyberAttack},S_CYBER_RUN1,0,0},	// S_CYBER_ATK6
+    {SPR_CYBR,5|0x8000,12,{A_CyberAttack},S_CYBER_RUN1,0,0},  // S_CYBER_ATK6
     {SPR_CYBR,6,10,{A_Pain},S_CYBER_RUN1,0,0},	// S_CYBER_PAIN
     {SPR_CYBR,7,10,{NULL},S_CYBER_DIE2,0,0},	// S_CYBER_DIE1
     {SPR_CYBR,8,10,{A_Scream},S_CYBER_DIE3,0,0},	// S_CYBER_DIE2
