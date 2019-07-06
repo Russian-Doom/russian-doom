@@ -118,7 +118,9 @@ dnl Without a hyphen. This is used for the bash-completion scripts.
 PROGRAM_SPREFIX=$(echo $PACKAGE_SHORTNAME | tr A-Z a-z)
 
 dnl With a hyphen, used almost everywhere else.
-PROGRAM_PREFIX=${PROGRAM_SPREFIX}-
+# [JN] Don't use prefix, always use short names like "doom.exe" and "setup.exe".
+# PROGRAM_PREFIX=${PROGRAM_SPREFIX}-
+PROGRAM_PREFIX=
 
 AC_SUBST(PROGRAM_PREFIX)
 AC_DEFINE_UNQUOTED(PROGRAM_PREFIX, "$PROGRAM_PREFIX",
