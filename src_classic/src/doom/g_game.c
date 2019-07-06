@@ -622,9 +622,8 @@ void G_DoLoadLevel (void)
 
     skyflatnum = R_FlatNumForName(DEH_String(SKYFLATNAME));
 
-    // The "Sky never changes in Doom II" bug was fixed in
-    // the id Anthology version of doom2.exe for Final Doom.
-    if ((gamemode == commercial) && (gameversion == exe_final2))
+    // [JN] Fix "Sky never changes in Doom II".
+    if (gamemode == commercial)
     {
         char *skytexturename;
 
