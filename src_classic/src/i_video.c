@@ -190,7 +190,9 @@ static boolean window_focused = true;
 
 static boolean need_resize = false;
 static unsigned int last_resize_time;
-#define RESIZE_DELAY 500
+
+// [JN] Initially 500, shorten to 35.
+#define RESIZE_DELAY 35
 
 // Gamma correction level to use
 
