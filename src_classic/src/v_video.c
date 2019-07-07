@@ -267,17 +267,6 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
 }
 
 
-
-//
-// V_DrawPatchDirect
-// Draws directly to the screen on the pc. 
-//
-
-void V_DrawPatchDirect(int x, int y, patch_t *patch)
-{
-    V_DrawPatch(x, y, patch); 
-} 
-
 //
 // V_DrawTLPatch
 //
