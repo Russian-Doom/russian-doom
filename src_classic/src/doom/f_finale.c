@@ -279,7 +279,7 @@ void F_TextWrite (void)
 	w = SHORT (hu_font[c]->width);
 	if (cx+w > SCREENWIDTH)
 	    break;
-	V_DrawPatch(cx, cy, hu_font[c]);
+	V_DrawShadowedPatch(cx, cy, hu_font[c]);
 	cx+=w;
     }
 	
@@ -520,7 +520,7 @@ void F_CastPrint (char* text)
 	}
 		
 	w = SHORT (hu_font[c]->width);
-	V_DrawPatch(cx, 180, hu_font[c]);
+	V_DrawShadowedPatch(cx, 180, hu_font[c]);
 	cx+=w;
     }
 	
@@ -632,9 +632,9 @@ void F_BunnyScroll (void)
 	return;
     if (finalecount < 1180)
     {
-        V_DrawPatch((SCREENWIDTH - 13 * 8) / 2,
-                    (SCREENHEIGHT - 8 * 8) / 2, 
-                    W_CacheLumpName(DEH_String("END0"), PU_CACHE));
+        V_DrawShadowedPatch((SCREENWIDTH - 13 * 8) / 2,
+                            (SCREENHEIGHT - 8 * 8) / 2, 
+                            W_CacheLumpName(DEH_String("END0"), PU_CACHE));
 	laststage = 0;
 	return;
     }
@@ -649,9 +649,9 @@ void F_BunnyScroll (void)
     }
 	
     DEH_snprintf(name, 10, "END%i", stage);
-    V_DrawPatch((SCREENWIDTH - 13 * 8) / 2, 
-                (SCREENHEIGHT - 8 * 8) / 2, 
-                W_CacheLumpName (name,PU_CACHE));
+    V_DrawShadowedPatch((SCREENWIDTH - 13 * 8) / 2, 
+                        (SCREENHEIGHT - 8 * 8) / 2, 
+                        W_CacheLumpName (name,PU_CACHE));
 }
 
 static void F_ArtScreenDrawer(void)
