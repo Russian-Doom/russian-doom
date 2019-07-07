@@ -1,13 +1,13 @@
-AC_INIT(Chocolate Doom, 3.0.0,
-        chocolate-doom-dev-list@chocolate-doom.org, chocolate-doom)
+AC_INIT(Russian Doom Classic, 0.99,
+        julian.nechaevsky@outlook.com, russian-doom)
 
 PACKAGE_SHORTNAME=${PACKAGE_NAME% Doom}
 PACKAGE_SHORTDESC="Conservative source port"
-PACKAGE_COPYRIGHT="Copyright (C) 1993-2017"
+PACKAGE_COPYRIGHT="Copyright (C) 2019"
 PACKAGE_LICENSE="GNU General Public License, version 2"
-PACKAGE_MAINTAINER="Simon Howard"
-PACKAGE_URL="https://www.chocolate-doom.org/"
-PACKAGE_ISSUES="https://github.com/chocolate-doom/chocolate-doom/issues"
+PACKAGE_MAINTAINER="Julian Nechaevsky"
+PACKAGE_URL="http://jnechaevsky.sf.net/rusdoom"
+PACKAGE_ISSUES="https://github.com/jnechaevsky/russian-doom/"
 
 AC_CONFIG_AUX_DIR(autotools)
 AC_CANONICAL_HOST
@@ -118,9 +118,7 @@ dnl Without a hyphen. This is used for the bash-completion scripts.
 PROGRAM_SPREFIX=$(echo $PACKAGE_SHORTNAME | tr A-Z a-z)
 
 dnl With a hyphen, used almost everywhere else.
-# [JN] Don't use prefix, always use short names like "doom.exe" and "setup.exe".
-# PROGRAM_PREFIX=${PROGRAM_SPREFIX}-
-PROGRAM_PREFIX=
+PROGRAM_PREFIX=rus
 
 AC_SUBST(PROGRAM_PREFIX)
 AC_DEFINE_UNQUOTED(PROGRAM_PREFIX, "$PROGRAM_PREFIX",
