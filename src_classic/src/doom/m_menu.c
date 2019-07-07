@@ -120,6 +120,7 @@ char			saveOldString[SAVESTRINGSIZE];
 
 boolean			inhelpscreens;
 boolean			menuactive;
+boolean			qsave_title;    // [JN] Quick Save menu using different title
 
 #define SKULLXOFF		-32
 #define LINEHEIGHT		16
@@ -457,6 +458,8 @@ enum
     load4,
     load5,
     load6,
+    load7,
+    load8,
     load_end
 } load_e;
 
@@ -467,7 +470,9 @@ menuitem_t LoadMenu[]=
     {1,"", M_LoadSelect,'3'},
     {1,"", M_LoadSelect,'4'},
     {1,"", M_LoadSelect,'5'},
-    {1,"", M_LoadSelect,'6'}
+    {1,"", M_LoadSelect,'6'},
+    {1,"", M_LoadSelect,'7'},
+    {1,"", M_LoadSelect,'8'}
 };
 
 menu_t  LoadDef =
@@ -476,7 +481,7 @@ menu_t  LoadDef =
     &MainDef,
     LoadMenu,
     M_DrawLoad,
-    80,54,
+    67,40,
     0
 };
 
@@ -490,7 +495,9 @@ menuitem_t SaveMenu[]=
     {1,"", M_SaveSelect,'3'},
     {1,"", M_SaveSelect,'4'},
     {1,"", M_SaveSelect,'5'},
-    {1,"", M_SaveSelect,'6'}
+    {1,"", M_SaveSelect,'6'},
+    {1,"", M_SaveSelect,'7'},
+    {1,"", M_SaveSelect,'8'}
 };
 
 menu_t  SaveDef =
@@ -499,7 +506,7 @@ menu_t  SaveDef =
     &MainDef,
     SaveMenu,
     M_DrawSave,
-    80,54,
+    67,40,
     0
 };
 
@@ -540,12 +547,12 @@ void M_DrawLoad(void)
     int             i;
 	
     // [JN] Write centered title "ЗАГРУЗИТЬ ИГРУ"
-    RD_WriteTextBigCentered(28, "PFUHEPBNM BUHE");
+    RD_WriteTextBigCentered(15, "PFUHEPBNM BUHE");
 
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
-	M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+	M_WriteText(LoadDef.x,LoadDef.y-1+LINEHEIGHT*i,savegamestrings[i]);
     }
 }
 
@@ -610,19 +617,21 @@ void M_DrawSave(void)
 {
     int             i;
 	
-    // [JN] Write centered title "СОХРАНИТЬ ИГРУ"
-    RD_WriteTextBigCentered(28, "CJ{HFYBNM BUHE");
+    // [JN] Write centered title "СОХРАНИТЬ ИГРУ" or "БЫСТРОЕ СОХРАНЕНИЕ"
+    RD_WriteTextBigCentered(15, qsave_title ? 
+                                "<SCNHJT CJ{HFYTYBT" :
+                                "CJ{HFYBNM BUHE");
 
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
-	M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+	M_WriteText(LoadDef.x,LoadDef.y-1+LINEHEIGHT*i,savegamestrings[i]);
     }
 	
     if (saveStringEnter)
     {
 	i = M_StringWidth(savegamestrings[saveSlot]);
-	M_WriteText(LoadDef.x + i,LoadDef.y+LINEHEIGHT*saveSlot,"_");
+	M_WriteText(LoadDef.x + i,LoadDef.y-1+LINEHEIGHT*saveSlot,"_");
     }
 }
 
@@ -1786,6 +1795,7 @@ boolean M_Responder (event_t* ev)
 	}
         else if (key == key_menu_save)     // Save
         {
+	    qsave_title = false;
 	    M_StartControlPanel();
 	    S_StartSound(NULL,sfx_swtchn);
 	    M_SaveGame(0);
@@ -1814,6 +1824,7 @@ boolean M_Responder (event_t* ev)
         }
         else if (key == key_menu_qsave)    // Quicksave
         {
+	    qsave_title = true;
 	    S_StartSound(NULL,sfx_swtchn);
 	    M_QuickSave();
 	    return true;
