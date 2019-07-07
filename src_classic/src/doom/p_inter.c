@@ -654,6 +654,11 @@ P_TouchSpecialThing
     if (special->flags & MF_COUNTITEM)
 	player->itemcount++;
     P_RemoveMobj (special);
+
+    // [JN] Limit bonus palette duration to 4 seconds
+    if (player->bonuscount >= 140)
+        player->bonuscount = 140;
+
     player->bonuscount += BONUSADD;
     if (player == &players[consoleplayer])
 	S_StartSound (NULL, sound);
