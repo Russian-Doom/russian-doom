@@ -137,7 +137,7 @@
 #define PD_YELLOWO  "lkz frnbdfwbb ye;ty ;tknsq rk.x>"  // Для активации нужен желтый ключ.
 #define PD_BLUEK    "lkz jnrhsnbz ye;ty cbybq rk.x>"    // Для открытия нужен синий ключ.
 #define PD_REDK     "lkz jnrhsnbz ye;ty rhfcysq rk.x>"  // Для открытия нужен красный ключ.
-#define PD_YELLOWK	"You need a yellow key to open this door"
+#define PD_YELLOWK  "lkz jnrhsnbz ye;ty ;tknsq rk.x>"   // Для открытия нужен жёлтый ключ.
 
 //
 //	G_game.C
