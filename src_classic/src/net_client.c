@@ -155,10 +155,6 @@ static unsigned int gamedata_recv_time;
 sha1_digest_t net_local_wad_sha1sum;
 sha1_digest_t net_local_deh_sha1sum;
 
-// Are we playing with the freedoom IWAD?
-
-unsigned int net_local_is_freedoom;
-
 // Average time between sending our ticcmd and receiving from the server
 
 static fixed_t average_latency;
@@ -975,7 +971,6 @@ boolean NET_CL_Connect(net_addr_t *addr, net_connect_data_t *data)
 
     memcpy(net_local_wad_sha1sum, data->wad_sha1sum, sizeof(sha1_digest_t));
     memcpy(net_local_deh_sha1sum, data->deh_sha1sum, sizeof(sha1_digest_t));
-    net_local_is_freedoom = data->is_freedoom;
 
     // create a new network I/O context and add just the
     // necessary module

@@ -67,33 +67,6 @@ static mission_config_t mission_configs[] =
         "default.cfg",
         PROGRAM_PREFIX "doom.cfg",
         PROGRAM_PREFIX "doom"
-    },
-    {
-        "Heretic",
-        heretic,
-        IWAD_MASK_HERETIC,
-        "heretic",
-        "heretic.cfg",
-        PROGRAM_PREFIX "heretic.cfg",
-        PROGRAM_PREFIX "heretic"
-    },
-    {
-        "Hexen",
-        hexen,
-        IWAD_MASK_HEXEN,
-        "hexen",
-        "hexen.cfg",
-        PROGRAM_PREFIX "hexen.cfg",
-        PROGRAM_PREFIX "hexen"
-    },
-    {
-        "Strife",
-        strife,
-        IWAD_MASK_STRIFE,
-        "strife",
-        "strife.cfg",
-        PROGRAM_PREFIX "strife.cfg",
-        PROGRAM_PREFIX "strife"
     }
 };
 
@@ -104,56 +77,14 @@ static GameSelectCallback game_selected_callback;
 static int showMessages = 1;
 static int screenblocks = 9;
 static int detailLevel = 0;
-static char *savedir = NULL;
 static char *executable = NULL;
 static char *game_title = "Doom";
-static char *back_flat = "F_PAVE01";
-static int comport = 0;
-static char *nickname = NULL;
 
 static void BindMiscVariables(void)
 {
-    if (gamemission == doom)
-    {
-        M_BindIntVariable("detaillevel",   &detailLevel);
-        M_BindIntVariable("show_messages", &showMessages);
-    }
-
-    if (gamemission == hexen)
-    {
-        M_BindStringVariable("savedir", &savedir);
-        M_BindIntVariable("messageson", &showMessages);
-
-        // Hexen has a variable to control the savegame directory
-        // that is used.
-
-        savedir = M_GetSaveGameDir("hexen.wad");
-
-        // On Windows, hexndata\ is the default.
-
-        if (!strcmp(savedir, ""))
-        {
-            free(savedir);
-            savedir = "hexndata" DIR_SEPARATOR_S;
-        }
-    }
-
-    if (gamemission == strife)
-    {
-        // Strife has a different default value than the other games
-        screenblocks = 10;
-
-        M_BindStringVariable("back_flat",   &back_flat);
-        M_BindStringVariable("nickname",    &nickname);
-
-        M_BindIntVariable("screensize",     &screenblocks);
-        M_BindIntVariable("comport",        &comport);
-    }
-    else
-    {
-        M_BindIntVariable("screenblocks",   &screenblocks);
-    }
-
+    M_BindIntVariable("detaillevel",   &detailLevel);
+    M_BindIntVariable("show_messages", &showMessages);
+    M_BindIntVariable("screenblocks",   &screenblocks);
 }
 
 //
@@ -170,21 +101,6 @@ void InitBindings(void)
     M_BindWeaponControls();
     M_BindMapControls();
     M_BindMenuControls();
-
-    if (gamemission == heretic || gamemission == hexen)
-    {
-        M_BindHereticControls();
-    }
-
-    if (gamemission == hexen)
-    {
-        M_BindHexenControls();
-    }
-
-    if (gamemission == strife)
-    {
-        M_BindStrifeControls();
-    }
 
     // All other variables
 

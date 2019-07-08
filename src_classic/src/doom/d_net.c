@@ -203,10 +203,6 @@ static void InitConnectData(net_connect_data_t *connect_data)
 
     W_Checksum(connect_data->wad_sha1sum);
     DEH_Checksum(connect_data->deh_sha1sum);
-
-    // Are we playing with the Freedoom IWAD?
-
-    connect_data->is_freedoom = W_CheckNumForName("FREEDOOM") >= 0;
 }
 
 void D_ConnectNetGame(void)

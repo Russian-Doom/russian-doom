@@ -98,9 +98,6 @@ static const char *subst_config_filenames[] =
     "doom1-music.cfg",
     "doom2-music.cfg",
     "tnt-music.cfg",
-    "heretic-music.cfg",
-    "hexen-music.cfg",
-    "strife-music.cfg",
 };
 
 static boolean music_initialized = false;

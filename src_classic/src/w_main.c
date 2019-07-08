@@ -201,9 +201,6 @@ static const struct
     char *lumpname;
 } unique_lumps[] = {
     { doom,    "POSSA1" },
-    { heretic, "IMPXA1" },
-    { hexen,   "ETTNA1" },
-    { strife,  "AGRDA1" },
 };
 
 void W_CheckCorrectIWAD(GameMission_t mission)

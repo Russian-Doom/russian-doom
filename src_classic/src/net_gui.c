@@ -259,7 +259,6 @@ static void CloseWindow(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(window))
 static void CheckSHA1Sums(void)
 {
     boolean correct_wad, correct_deh;
-    boolean same_freedoom;
     txt_window_t *window;
     txt_window_action_t *cont_button;
 
@@ -274,9 +273,8 @@ static void CheckSHA1Sums(void)
     correct_deh = memcmp(net_local_deh_sha1sum,
                          net_client_wait_data.deh_sha1sum, 
                          sizeof(sha1_digest_t)) == 0;
-    same_freedoom = net_client_wait_data.is_freedoom == net_local_is_freedoom;
 
-    if (correct_wad && correct_deh && same_freedoom)
+    if (correct_wad && correct_deh)
     {
         return;
     }
@@ -286,14 +284,6 @@ static void CheckSHA1Sums(void)
         printf("Warning: WAD SHA1 does not match server:\n");
         PrintSHA1Digest("Local", net_local_wad_sha1sum);
         PrintSHA1Digest("Server", net_client_wait_data.wad_sha1sum);
-    }
-
-    if (!same_freedoom)
-    {
-        printf("Warning: Mixing Freedoom with non-Freedoom\n");
-        printf("Local: %i  Server: %i\n", 
-               net_local_is_freedoom, 
-               net_client_wait_data.is_freedoom);
     }
 
     if (!correct_deh)
@@ -312,28 +302,7 @@ static void CheckSHA1Sums(void)
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, cont_button);
     TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, NULL);
 
-    if (!same_freedoom)
-    {
-        // If Freedoom and Doom IWADs are mixed, the WAD directory
-        // will be wrong, but this is not neccessarily a problem.
-        // Display a different message to the WAD directory message.
-
-        if (net_local_is_freedoom)
-        {
-            TXT_AddWidget(window, TXT_NewLabel
-            ("You are using the Freedoom IWAD to play with players\n"
-             "using an official Doom IWAD.  Make sure that you are\n"
-             "playing the same levels as other players.\n"));
-        }
-        else
-        {
-            TXT_AddWidget(window, TXT_NewLabel
-            ("You are using an official IWAD to play with players\n"
-             "using the Freedoom IWAD.  Make sure that you are\n"
-             "playing the same levels as other players.\n"));
-        }
-    }
-    else if (!correct_wad)
+    if (!correct_wad)
     {
         TXT_AddWidget(window, TXT_NewLabel
             ("Your WAD directory does not match other players in the game.\n"

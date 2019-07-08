@@ -41,10 +41,8 @@ void NET_WriteConnectData(net_packet_t *packet, net_connect_data_t *data)
     NET_WriteInt8(packet, data->lowres_turn);
     NET_WriteInt8(packet, data->drone);
     NET_WriteInt8(packet, data->max_players);
-    NET_WriteInt8(packet, data->is_freedoom);
     NET_WriteSHA1Sum(packet, data->wad_sha1sum);
     NET_WriteSHA1Sum(packet, data->deh_sha1sum);
-    NET_WriteInt8(packet, data->player_class);
 }
 
 boolean NET_ReadConnectData(net_packet_t *packet, net_connect_data_t *data)
@@ -54,10 +52,8 @@ boolean NET_ReadConnectData(net_packet_t *packet, net_connect_data_t *data)
         && NET_ReadInt8(packet, (unsigned int *) &data->lowres_turn)
         && NET_ReadInt8(packet, (unsigned int *) &data->drone)
         && NET_ReadInt8(packet, (unsigned int *) &data->max_players)
-        && NET_ReadInt8(packet, (unsigned int *) &data->is_freedoom)
         && NET_ReadSHA1Sum(packet, data->wad_sha1sum)
-        && NET_ReadSHA1Sum(packet, data->deh_sha1sum)
-        && NET_ReadInt8(packet, (unsigned int *) &data->player_class);
+        && NET_ReadSHA1Sum(packet, data->deh_sha1sum);
 }
 
 void NET_WriteSettings(net_packet_t *packet, net_gamesettings_t *settings)
@@ -201,16 +197,6 @@ void NET_WriteTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff,
         NET_WriteInt8(packet, diff->cmd.consistancy);
     if (diff->diff & NET_TICDIFF_CHATCHAR)
         NET_WriteInt8(packet, diff->cmd.chatchar);
-    if (diff->diff & NET_TICDIFF_RAVEN)
-    {
-        NET_WriteInt8(packet, diff->cmd.lookfly);
-        NET_WriteInt8(packet, diff->cmd.arti);
-    }
-    if (diff->diff & NET_TICDIFF_STRIFE)
-    {
-        NET_WriteInt8(packet, diff->cmd.buttons2);
-        NET_WriteInt16(packet, diff->cmd.inventory);
-    }
 }
 
 boolean NET_ReadTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff,
@@ -277,28 +263,6 @@ boolean NET_ReadTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff,
         diff->cmd.chatchar = val;
     }
 
-    if (diff->diff & NET_TICDIFF_RAVEN)
-    {
-        if (!NET_ReadInt8(packet, &val))
-            return false;
-        diff->cmd.lookfly = val;
-
-        if (!NET_ReadInt8(packet, &val))
-            return false;
-        diff->cmd.arti = val;
-    }
-
-    if (diff->diff & NET_TICDIFF_STRIFE)
-    {
-        if (!NET_ReadInt8(packet, &val))
-            return false;
-        diff->cmd.buttons2 = val;
-
-        if (!NET_ReadInt16(packet, &val))
-            return false;
-        diff->cmd.inventory = val;
-    }
-
     return true;
 }
 
@@ -319,16 +283,6 @@ void NET_TiccmdDiff(ticcmd_t *tic1, ticcmd_t *tic2, net_ticdiff_t *diff)
         diff->diff |= NET_TICDIFF_CONSISTANCY;
     if (tic2->chatchar != 0)
         diff->diff |= NET_TICDIFF_CHATCHAR;
-
-    // Heretic/Hexen-specific
-
-    if (tic1->lookfly != tic2->lookfly || tic2->arti != 0)
-        diff->diff |= NET_TICDIFF_RAVEN;
-
-    // Strife-specific
-
-    if (tic1->buttons2 != tic2->buttons2 || tic2->inventory != 0)
-        diff->diff |= NET_TICDIFF_STRIFE;
 }
 
 void NET_TiccmdPatch(ticcmd_t *src, net_ticdiff_t *diff, ticcmd_t *dest)
@@ -352,30 +306,6 @@ void NET_TiccmdPatch(ticcmd_t *src, net_ticdiff_t *diff, ticcmd_t *dest)
         dest->chatchar = diff->cmd.chatchar;
     else
         dest->chatchar = 0;
-
-    // Heretic/Hexen specific:
-
-    if (diff->diff & NET_TICDIFF_RAVEN)
-    {
-        dest->lookfly = diff->cmd.lookfly;
-        dest->arti = diff->cmd.arti;
-    }
-    else
-    {
-        dest->arti = 0;
-    }
-
-    // Strife-specific:
-
-    if (diff->diff & NET_TICDIFF_STRIFE)
-    {
-        dest->buttons2 = diff->cmd.buttons2;
-        dest->inventory = diff->cmd.inventory;
-    }
-    else
-    {
-        dest->inventory = 0;
-    }
 }
 
 // 
@@ -476,7 +406,6 @@ void NET_WriteWaitData(net_packet_t *packet, net_waitdata_t *data)
 
     NET_WriteSHA1Sum(packet, data->wad_sha1sum);
     NET_WriteSHA1Sum(packet, data->deh_sha1sum);
-    NET_WriteInt8(packet, data->is_freedoom);
 }
 
 boolean NET_ReadWaitData(net_packet_t *packet, net_waitdata_t *data)
@@ -516,8 +445,7 @@ boolean NET_ReadWaitData(net_packet_t *packet, net_waitdata_t *data)
     }
 
     return NET_ReadSHA1Sum(packet, data->wad_sha1sum)
-        && NET_ReadSHA1Sum(packet, data->deh_sha1sum)
-        && NET_ReadInt8(packet, (unsigned int *) &data->is_freedoom);
+        && NET_ReadSHA1Sum(packet, data->deh_sha1sum);
 }
 
 static boolean NET_ReadBlob(net_packet_t *packet, uint8_t *buf, size_t len)

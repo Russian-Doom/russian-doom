@@ -57,21 +57,9 @@ static void SensibleDefaults(void)
     key_down = 's';
     key_strafeleft = 'a';
     key_straferight = 'd';
-    key_jump = '/';
-    key_lookup = KEY_PGUP;
-    key_lookdown = KEY_PGDN;
-    key_lookcenter = KEY_HOME;
-    key_flyup = KEY_INS;
-    key_flydown = KEY_DEL;
-    key_flycenter = KEY_END;
     key_prevweapon = ',';
     key_nextweapon = '.';
-    key_invleft = '[';
-    key_invright = ']';
     key_message_refresh = '\'';
-    key_mission = 'i';              // Strife keys
-    key_invpop = 'o';
-    key_invkey = 'p';
     key_multi_msgplayer[0] = 'g';
     key_multi_msgplayer[1] = 'h';
     key_multi_msgplayer[2] = 'j';
@@ -187,15 +175,6 @@ static txt_button_t *GetLaunchButton(void)
     {
         case doom:
             label = "Save parameters and launch DOOM";
-            break;
-        case heretic:
-            label = "Save parameters and launch Heretic";
-            break;
-        case hexen:
-            label = "Save parameters and launch Hexen";
-            break;
-        case strife:
-            label = "Save parameters and launch STRIFE!";
             break;
         default:
             label = "Save parameters and launch game";

@@ -51,9 +51,6 @@ typedef enum
 
 static const iwad_t fallback_iwads[] = {
     { "doom.wad",     doom,     registered,  "Doom" },
-    { "heretic.wad",  heretic,  retail,      "Heretic" },
-    { "hexen.wad",    hexen,    commercial,  "Hexen" },
-    { "strife1.wad",  strife,   commercial,  "Strife" },
 };
 
 // Array of IWADs found to be installed
@@ -77,48 +74,13 @@ static char *doom_skills[] =
     "Ultra-Violence.", "NIGHTMARE!",
 };
 
-static char *heretic_skills[] =
-{
-    "Thou needeth a wet-nurse", "Yellowbellies-R-us", "Bringest them oneth",
-    "Thou art a smite-meister", "Black plague possesses thee"
-};
-
-static char *hexen_fighter_skills[] =
-{
-    "Squire", "Knight", "Warrior", "Berserker", "Titan"
-};
-
-static char *hexen_cleric_skills[] =
-{
-    "Altar boy", "Acolyte", "Priest", "Cardinal", "Pope"
-};
-
-static char *hexen_mage_skills[] =
-{
-    "Apprentice", "Enchanter", "Sorceror", "Warlock", "Archimage"
-};
-
-static char *strife_skills[] =
-{
-    "Training", "Rookie", "Veteran", "Elite", "Bloodbath"
-};
-
-static char *character_classes[] = { "Fighter", "Cleric", "Mage" };
-
 static char *gamemodes[] = { "Co-operative", "Deathmatch", "Deathmatch 2.0" };
-
-static char *strife_gamemodes[] =
-{
-    "Normal deathmatch",
-    "Items respawn", // (altdeath)
-};
 
 static char *net_player_name;
 static char *chat_macros[10];
 
 static char *wads[NUM_WADS];
 static char *extra_params[NUM_EXTRA_PARAMS];
-static int character_class = 0;
 static int skill = 2;
 static int nomonsters = 0;
 static int deathmatch = 0;
@@ -206,11 +168,6 @@ static void StartGame(int multiplayer)
 
     AddIWADParameter(exec);
     AddCmdLineParameter(exec, "-skill %i", skill + 1);
-
-    if (gamemission == hexen)
-    {
-        AddCmdLineParameter(exec, "-class %i", character_class);
-    }
 
     if (nomonsters)
     {
@@ -309,29 +266,6 @@ static void UpdateSkillButton(void)
         default:
         case doom:
             skillbutton->values = doom_skills;
-            break;
-
-        case heretic:
-            skillbutton->values = heretic_skills;
-            break;
-
-        case hexen:
-            if (character_class == 0)
-            {
-                skillbutton->values = hexen_fighter_skills;
-            }
-            else if (character_class == 1)
-            {
-                skillbutton->values = hexen_cleric_skills;
-            }
-            else
-            {
-                skillbutton->values = hexen_mage_skills;
-            }
-            break;
-
-        case strife:
-            skillbutton->values = strife_skills;
             break;
     }
 }
@@ -660,19 +594,6 @@ static txt_dropdown_list_t *GameTypeDropdown(void)
         case doom:
         default:
             return TXT_NewDropdownList(&deathmatch, gamemodes, 3);
-
-        // Heretic and Hexen don't support Deathmatch II:
-
-        case heretic:
-        case hexen:
-            return TXT_NewDropdownList(&deathmatch, gamemodes, 2);
-
-        // Strife supports both deathmatch modes, but doesn't support
-        // multiplayer co-op. Use a different variable to indicate whether
-        // to use altdeath or not.
-
-        case strife:
-            return TXT_NewDropdownList(&strife_altdeath, strife_gamemodes, 2);
     }
 }
 
@@ -705,20 +626,6 @@ static void StartGameMenu(char *window_title, int multiplayer)
                    TXT_NewLabel("Game"),
                    iwad_selector = IWADSelector(),
                    NULL);
-
-    if (gamemission == hexen)
-    {
-        txt_dropdown_list_t *cc_dropdown;
-        TXT_AddWidgets(window,
-                       TXT_NewLabel("Character class "),
-                       cc_dropdown = TXT_NewDropdownList(&character_class,
-                                                         character_classes, 3),
-                       NULL);
-
-        // Update skill level dropdown when the character class is changed:
-
-        TXT_SignalConnect(cc_dropdown, "changed", UpdateWarpType, NULL);
-    }
 
     TXT_AddWidgets(window,
                    TXT_NewLabel("Skill"),
@@ -797,11 +704,6 @@ static void DoJoinGame(void *unused1, void *unused2)
     exec = NewExecuteContext();
 
     AddCmdLineParameter(exec, "-connect %s", connect_address);
-
-    if (gamemission == hexen)
-    {
-        AddCmdLineParameter(exec, "-class %i", character_class);
-    }
 
     // Extra parameters come first, so that they can be used to override
     // the other parameters.
@@ -1007,15 +909,6 @@ void JoinMultiGame(void)
                    IWADSelector(),
                    NULL);
 
-    if (gamemission == hexen)
-    {
-        TXT_AddWidgets(window,
-                       TXT_NewLabel("Character class "),
-                       TXT_NewDropdownList(&character_class,
-                                           character_classes, 3),
-                       NULL);
-    }
-
     TXT_AddWidgets(window,
                    TXT_NewSeparator("Server"),
                    TXT_NewLabel("Connect to address: "),
@@ -1155,26 +1048,6 @@ void BindMultiplayerVariables(void)
             key_multi_msgplayer[1] = 'i';
             key_multi_msgplayer[2] = 'b';
             key_multi_msgplayer[3] = 'r';
-            break;
-
-        case heretic:
-            M_BindChatControls(4);
-            key_multi_msgplayer[0] = 'g';
-            key_multi_msgplayer[1] = 'y';
-            key_multi_msgplayer[2] = 'r';
-            key_multi_msgplayer[3] = 'b';
-            break;
-
-        case hexen:
-            M_BindChatControls(8);
-            key_multi_msgplayer[0] = 'b';
-            key_multi_msgplayer[1] = 'r';
-            key_multi_msgplayer[2] = 'y';
-            key_multi_msgplayer[3] = 'g';
-            key_multi_msgplayer[4] = 'j';
-            key_multi_msgplayer[5] = 'w';
-            key_multi_msgplayer[6] = 'h';
-            key_multi_msgplayer[7] = 'p';
             break;
 
         default:

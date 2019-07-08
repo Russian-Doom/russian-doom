@@ -114,14 +114,6 @@ typedef struct
     sha1_digest_t wad_sha1sum;
     sha1_digest_t deh_sha1sum;
 
-    // Is this client is playing with the Freedoom IWAD?
-
-    unsigned int is_freedoom;
-
-    // Player class (for Hexen)
-
-    int player_class;
-
 } net_client_t;
 
 // structure used for the recv window
@@ -414,7 +406,6 @@ static void NET_SV_SendWaitingData(net_client_t *client)
            sizeof(sha1_digest_t));
     memcpy(&wait_data.deh_sha1sum, &controller->deh_sha1sum,
            sizeof(sha1_digest_t));
-    wait_data.is_freedoom = controller->is_freedoom;
 
     // set name and address of each player:
 
@@ -734,12 +725,10 @@ static void NET_SV_ParseSYN(net_packet_t *packet, net_client_t *client,
     // Save the SHA1 checksums and other details.
     memcpy(client->wad_sha1sum, data.wad_sha1sum, sizeof(sha1_digest_t));
     memcpy(client->deh_sha1sum, data.deh_sha1sum, sizeof(sha1_digest_t));
-    client->is_freedoom = data.is_freedoom;
     client->max_players = data.max_players;
     client->name = M_StringDuplicate(player_name);
     client->recording_lowres = data.lowres_turn;
     client->drone = data.drone;
-    client->player_class = data.player_class;
 
     // Send a reply back to the client, indicating a successful connection
     // and specifying the protocol that will be used for communications.
@@ -818,20 +807,6 @@ static void StartGame(void)
     }
 
     sv_settings.num_players = NET_SV_NumPlayers();
-
-    // Copy player classes:
-
-    for (i = 0; i < NET_MAXPLAYERS; ++i)
-    {
-        if (sv_players[i] != NULL)
-        {
-            sv_settings.player_classes[i] = sv_players[i]->player_class;
-        }
-        else
-        {
-            sv_settings.player_classes[i] = 0;
-        }
-    }
 
     nowtime = I_GetTimeMS();
 

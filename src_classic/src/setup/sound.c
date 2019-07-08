@@ -57,8 +57,6 @@ char *snd_dmxoption = "";
 static int numChannels = 8;
 static int sfxVolume = 8;
 static int musicVolume = 8;
-static int voiceVolume = 15;
-static int show_talk = 0;
 static int use_libsamplerate = 0;
 static float libsamplerate_scale = 0.65;
 
@@ -135,18 +133,11 @@ void ConfigSound(void)
         TXT_NewRadioButton("Digital sound effects",
                            &snd_sfxdevice,
                            SNDDEVICE_SB),
-        TXT_If(gamemission == doom || gamemission == heretic
-            || gamemission == hexen,
+        TXT_If(gamemission,
             TXT_NewConditional(&snd_sfxdevice, SNDDEVICE_SB,
                 TXT_NewHorizBox(
                     TXT_NewStrut(4, 0),
                     TXT_NewCheckBox("Pitch-shifted sounds", &snd_pitchshift),
-                    NULL))),
-        TXT_If(gamemission == strife,
-            TXT_NewConditional(&snd_sfxdevice, SNDDEVICE_SB,
-                TXT_NewHorizBox(
-                    TXT_NewStrut(4, 0),
-                    TXT_NewCheckBox("Show text with voices", &show_talk),
                     NULL))),
 
         TXT_NewSeparator("Music"),
@@ -222,19 +213,9 @@ void BindSoundVariables(void)
 
     M_BindIntVariable("snd_pitchshift",           &snd_pitchshift);
 
-    if (gamemission == strife)
-    {
-        M_BindIntVariable("voice_volume",         &voiceVolume);
-        M_BindIntVariable("show_talk",            &show_talk);
-    }
-
     music_pack_path = M_StringDuplicate("");
     timidity_cfg_path = M_StringDuplicate("");
     gus_patch_path = M_StringDuplicate("");
-
-    // All versions of Heretic and Hexen did pitch-shifting.
-    // Most versions of Doom did not and Strife never did.
-    snd_pitchshift = gamemission == heretic || gamemission == hexen;
 
     // Default sound volumes - different games use different values.
 
@@ -243,13 +224,6 @@ void BindSoundVariables(void)
         case doom:
         default:
             sfxVolume = 8;  musicVolume = 8;
-            break;
-        case heretic:
-        case hexen:
-            sfxVolume = 10; musicVolume = 10;
-            break;
-        case strife:
-            sfxVolume = 8;  musicVolume = 13;
             break;
     }
 }

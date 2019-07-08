@@ -1030,20 +1030,6 @@ void ConfigJoystick(void)
                    TXT_TABLE_EMPTY,
                    NULL);
 
-    if (gamemission == heretic || gamemission == hexen || gamemission == strife)
-    {
-        TXT_AddWidgets(window,
-                   TXT_NewLabel("Look up/down"),
-                   TXT_NewJoystickAxis(&joystick_look_axis,
-                                       &joystick_look_invert,
-                                        JOYSTICK_AXIS_VERTICAL),
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_TABLE_OVERFLOW_RIGHT,
-                   TXT_TABLE_EMPTY,
-                   TXT_TABLE_EMPTY,
-                   NULL);
-    }
-
     TXT_AddWidget(window, TXT_NewSeparator("Buttons"));
 
     AddJoystickControl(window, "Fire/Attack", &joybfire);
@@ -1064,11 +1050,6 @@ void ConfigJoystick(void)
     if (joybspeed < 20)
     {
         AddJoystickControl(window, "Speed", &joybspeed);
-    }
-
-    if (gamemission == hexen || gamemission == strife)
-    {
-        AddJoystickControl(window, "Jump", &joybjump);
     }
 
     AddJoystickControl(window, "Activate menu", &joybmenu);

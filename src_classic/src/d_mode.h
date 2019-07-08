@@ -30,9 +30,6 @@ typedef enum
     doom2,           // Doom 2
     pack_tnt,        // Final Doom: TNT: Evilution
     pack_plut,       // Final Doom: The Plutonia Experiment
-    heretic,         // Heretic
-    hexen,           // Hexen
-    strife,          // Strife
 
     none
 } GameMission_t;
@@ -63,11 +60,6 @@ typedef enum
     exe_final,       // Final Doom
     exe_final2,      // Final Doom (alternate exe)
 
-    exe_heretic_1_3, // Heretic 1.3
-
-    exe_hexen_1_1,   // Hexen 1.1
-    exe_strife_1_2,  // Strife v1.2
-    exe_strife_1_31  // Strife v1.31
 } GameVersion_t;
 
 // What IWAD variant are we using?
@@ -75,8 +67,6 @@ typedef enum
 typedef enum
 {
     vanilla,    // Vanilla Doom
-    freedoom,   // FreeDoom: Phase 1 + 2
-    freedm,     // FreeDM
     bfgedition, // Doom Classic (Doom 3: BFG Edition)
 } GameVariant_t;
 

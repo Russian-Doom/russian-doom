@@ -36,11 +36,6 @@ static struct
     { doom2,     commercial, 1, 32 },
     { pack_tnt,  commercial, 1, 32 },
     { pack_plut, commercial, 1, 32 },
-    { heretic,   shareware,  1, 9 },
-    { heretic,   registered, 3, 9 },
-    { heretic,   retail,     5, 9 },
-    { hexen,     commercial, 1, 60 },
-    { strife,    commercial, 1, 34 },
 };
 
 // Check that a gamemode+gamemission received over the network is valid.
@@ -64,20 +59,6 @@ boolean D_ValidEpisodeMap(GameMission_t mission, GameMode_t mode,
                           int episode, int map)
 {
     int i;
-
-    // Hacks for Heretic secret episodes
-
-    if (mission == heretic)
-    {
-        if (mode == retail && episode == 6)
-        {
-            return map >= 1 && map <= 3;
-        }
-        else if (mode == registered && episode == 4)
-        {
-            return map == 1;
-        }
-    }
 
     // Find the table entry for this mission/mode combination.
 
@@ -125,10 +106,6 @@ static struct {
     { doom,     exe_ultimate },
     { doom,     exe_final },
     { doom,     exe_final2 },
-    { heretic,  exe_heretic_1_3 },
-    { hexen,    exe_hexen_1_1 },
-    { strife,   exe_strife_1_2 },
-    { strife,   exe_strife_1_31 },
 };
 
 boolean D_ValidGameVersion(GameMission_t mission, GameVersion_t version)
@@ -161,15 +138,12 @@ boolean D_IsEpisodeMap(GameMission_t mission)
     switch (mission)
     {
         case doom:
-        case heretic:
             return true;
 
         case none:
-        case hexen:
         case doom2:
         case pack_tnt:
         case pack_plut:
-        case strife:
         default:
             return false;
     }
@@ -190,12 +164,6 @@ char *D_GameMissionString(GameMission_t mission)
             return "tnt";
         case pack_plut:
             return "plutonia";
-        case heretic:
-            return "heretic";
-        case hexen:
-            return "hexen";
-        case strife:
-            return "strife";
     }
 }
 

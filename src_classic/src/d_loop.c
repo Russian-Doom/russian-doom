@@ -441,8 +441,6 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 
     I_AtExit(D_QuitNetGame, true);
 
-    player_class = connect_data->player_class;
-
     //!
     // @category net
     //

@@ -677,12 +677,6 @@ static char *GameDescription(GameMode_t mode, GameMission_t mission)
             return "tnt";
         case pack_plut:
             return "plutonia";
-        case heretic:
-            return "heretic";
-        case hexen:
-            return "hexen";
-        case strife:
-            return "strife";
         default:
             return "?";
     }

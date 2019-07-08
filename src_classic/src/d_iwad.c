@@ -38,14 +38,6 @@ static const iwad_t iwads[] =
     { "tnt.wad",      pack_tnt,  commercial, "Final Doom: TNT: Evilution" },
     { "doom.wad",     doom,      retail,     "Doom" },
     { "doom1.wad",    doom,      shareware,  "Doom Shareware" },
-    { "freedm.wad",   doom2,     commercial, "FreeDM" },
-    { "freedoom2.wad", doom2,    commercial, "Freedoom: Phase 2" },
-    { "freedoom1.wad", doom,     retail,     "Freedoom: Phase 1" },
-    { "heretic.wad",  heretic,   retail,     "Heretic" },
-    { "heretic1.wad", heretic,   shareware,  "Heretic Shareware" },
-    { "hexen.wad",    hexen,     commercial, "Hexen" },
-    //{ "strife0.wad",  strife,    commercial, "Strife" }, // haleyjd: STRIFE-FIXME
-    { "strife1.wad",  strife,    commercial, "Strife" },
 };
 
 // Array of locations to search for IWAD files
@@ -222,17 +214,10 @@ static char *steam_install_subdirs[] =
     "steamapps\\common\\doom 2\\base",
     "steamapps\\common\\final doom\\base",
     "steamapps\\common\\ultimate doom\\base",
-    "steamapps\\common\\heretic shadow of the serpent riders\\base",
-    "steamapps\\common\\hexen\\base",
-    "steamapps\\common\\hexen deathkings of the dark citadel\\base",
 
     // From Doom 3: BFG Edition:
 
     "steamapps\\common\\DOOM 3 BFG Edition\\base\\wads",
-
-    // From Strife: Veteran Edition:
-
-    "steamapps\\common\\Strife",
 };
 
 #define STEAM_BFG_GUS_PATCHES \
@@ -431,14 +416,6 @@ static void CheckDOSDefaults(void)
     AddIWADDir("\\doom");               // Shareware / Registered Doom
     AddIWADDir("\\dooms");              // Shareware versions
     AddIWADDir("\\doomsw");
-
-    AddIWADDir("\\heretic");            // Heretic
-    AddIWADDir("\\hrtic_se");           // Heretic Shareware from Quake disc
-
-    AddIWADDir("\\hexen");              // Hexen
-    AddIWADDir("\\hexendk");            // Hexen Deathkings of the Dark Citadel
-
-    AddIWADDir("\\strife");             // Strife
 }
 
 #endif

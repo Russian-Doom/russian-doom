@@ -871,14 +871,8 @@ void D_SetGameDescription(void)
     {
         // Doom 1.  But which version?
 
-        if (gamevariant == freedoom)
+        if (gamemode == retail)
         {
-            gamedescription = GetGameName("Freedoom: Phase 1");
-        }
-        else if (gamemode == retail)
-        {
-            // Ultimate Doom
-
             gamedescription = GetGameName("The Ultimate DOOM");
         }
         else if (gamemode == registered)
@@ -894,15 +888,7 @@ void D_SetGameDescription(void)
     {
         // Doom 2 of some kind.  But which mission?
 
-        if (gamevariant == freedm)
-        {
-            gamedescription = GetGameName("FreeDM");
-        }
-        else if (gamevariant == freedoom)
-        {
-            gamedescription = GetGameName("Freedoom: Phase 2");
-        }
-        else if (logical_gamemission == doom2)
+        if (logical_gamemission == doom2)
         {
             gamedescription = GetGameName("DOOM 2: Ад на Земле");
         }
@@ -1157,19 +1143,6 @@ static void D_Endoom(void)
     I_Endoom(endoom);
 }
 
-// Load dehacked patches needed for certain IWADs.
-static void LoadIwadDeh(void)
-{
-    // The Freedoom IWADs have DEHACKED lumps that must be loaded.
-    if (gamevariant == freedoom || gamevariant == freedm)
-    {
-        // Old versions of Freedoom (before 2014-09) did not have technically
-        // valid DEHACKED lumps, so ignore errors and just continue if this
-        // is an old IWAD.
-        DEH_LoadLumpByName("DEHACKED", false, true);
-    }
-}
-
 static void G_CheckDemoStatusAtExit (void)
 {
     G_CheckDemoStatus();
@@ -1401,33 +1374,9 @@ void D_DoomMain (void)
 
     // Check which IWAD variant we are using.
 
-    if (W_CheckNumForName("FREEDOOM") >= 0)
-    {
-        if (W_CheckNumForName("FREEDM") >= 0)
-        {
-            gamevariant = freedm;
-        }
-        else
-        {
-            gamevariant = freedoom;
-        }
-    }
-    else if (W_CheckNumForName("DMENUPIC") >= 0)
+    if (W_CheckNumForName("DMENUPIC") >= 0)
     {
         gamevariant = bfgedition;
-    }
-
-    //!
-    // @category mod
-    //
-    // Disable automatic loading of Dehacked patches for certain
-    // IWAD files.
-    //
-    if (!M_ParmExists("-nodeh"))
-    {
-        // Some IWADs have dehacked patches that need to be loaded for
-        // them to be played properly.
-        LoadIwadDeh();
     }
 
     // Doom 3: BFG Edition includes modified versions of the classic
@@ -1580,7 +1529,7 @@ void D_DoomMain (void)
     savegamedir = M_GetSaveGameDir(D_SaveGameIWADName(gamemission));
 
     // Check for -file in shareware
-    if (modifiedgame && (gamevariant != freedoom))
+    if (modifiedgame)
     {
 	// These are the lumps that will be checked in IWAD,
 	// if any one is not present, execution will be aborted.
@@ -1615,18 +1564,6 @@ void D_DoomMain (void)
 
     I_PrintStartupBanner(gamedescription);
     PrintDehackedBanners();
-
-    // Freedoom's IWADs are Boom-compatible, which means they usually
-    // don't work in Vanilla (though FreeDM is okay). Show a warning
-    // message and give a link to the website.
-    if (gamevariant == freedoom)
-    {
-        printf(" WARNING: You are playing using one of the Freedoom IWAD\n"
-               " files, which might not work in this port. See this page\n"
-               " for more information on how to play using Freedoom:\n"
-               "   https://www.chocolate-doom.org/wiki/index.php/Freedoom\n");
-        I_PrintDivider();
-    }
 
     DEH_printf("I_Init: Setting up machine state.\n");
     I_CheckIsScreensaver();

@@ -35,20 +35,10 @@ static int always_run = 0;
 
 static int *controls[] = { &key_left, &key_right, &key_up, &key_down,
                            &key_strafeleft, &key_straferight, &key_fire,
-                           &key_use, &key_strafe, &key_speed, &key_jump,
-                           &key_flyup, &key_flydown, &key_flycenter,
-                           &key_lookup, &key_lookdown, &key_lookcenter,
-                           &key_invleft, &key_invright, &key_invquery,
-                           &key_invuse, &key_invpop, &key_mission, &key_invkey,
-                           &key_invhome, &key_invend, &key_invdrop,
-                           &key_useartifact, &key_pause, &key_usehealth,
+                           &key_use, &key_strafe, &key_speed, &key_pause,
                            &key_weapon1, &key_weapon2, &key_weapon3,
                            &key_weapon4, &key_weapon5, &key_weapon6,
                            &key_weapon7, &key_weapon8,
-                           &key_arti_all, &key_arti_health, &key_arti_poisonbag,
-                           &key_arti_blastradius, &key_arti_teleport,
-                           &key_arti_teleportother, &key_arti_egg,
-                           &key_arti_invulnerability,
                            &key_prevweapon, &key_nextweapon, NULL };
 
 static int *menu_nav[] = { &key_menu_activate, &key_menu_up, &key_menu_down,
@@ -182,11 +172,7 @@ static void AddSectionLabel(TXT_UNCAST_ARG(table), char *title,
 static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 {
     txt_window_t *window;
-    txt_scrollpane_t *scrollpane;
     txt_table_t *table;
-    boolean extra_keys = gamemission == heretic
-                      || gamemission == hexen
-                      || gamemission == strife;
 
     window = TXT_NewWindow("Extra keyboard controls");
 
@@ -196,71 +182,9 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
 
     TXT_SetColumnWidths(table, 21, 9);
 
-    if (extra_keys)
-    {
-        // When we have extra controls, a scrollable pane must be used.
+    TXT_AddWidget(window, table);
 
-        scrollpane = TXT_NewScrollPane(0, 13, table);
-        TXT_AddWidget(window, scrollpane);
-
-        AddSectionLabel(table, "View", false);
-
-        AddKeyControl(table, "Look up", &key_lookup);
-        AddKeyControl(table, "Look down", &key_lookdown);
-        AddKeyControl(table, "Center view", &key_lookcenter);
-
-        if (gamemission == heretic || gamemission == hexen)
-        {
-            AddSectionLabel(table, "Flying", true);
-
-            AddKeyControl(table, "Fly up", &key_flyup);
-            AddKeyControl(table, "Fly down", &key_flydown);
-            AddKeyControl(table, "Fly center", &key_flycenter);
-        }
-
-        AddSectionLabel(table, "Inventory", true);
-
-        AddKeyControl(table, "Inventory left", &key_invleft);
-        AddKeyControl(table, "Inventory right", &key_invright);
-
-        if (gamemission == strife)
-        {
-            AddKeyControl(table, "Home", &key_invhome);
-            AddKeyControl(table, "End", &key_invend);
-            AddKeyControl(table, "Query", &key_invquery);
-            AddKeyControl(table, "Drop", &key_invdrop);
-            AddKeyControl(table, "Show weapons", &key_invpop);
-            AddKeyControl(table, "Show mission", &key_mission);
-            AddKeyControl(table, "Show keys", &key_invkey);
-            AddKeyControl(table, "Use", &key_invuse);
-            AddKeyControl(table, "Use health", &key_usehealth);
-        }
-        else
-        {
-            AddKeyControl(table, "Use artifact", &key_useartifact);
-        }
-
-        if (gamemission == hexen)
-        {
-            AddSectionLabel(table, "Artifacts", true);
-
-            AddKeyControl(table, "One of each", &key_arti_all);
-            AddKeyControl(table, "Quartz Flask", &key_arti_health);
-            AddKeyControl(table, "Flechette", &key_arti_poisonbag);
-            AddKeyControl(table, "Disc of Repulsion", &key_arti_blastradius);
-            AddKeyControl(table, "Chaos Device", &key_arti_teleport);
-            AddKeyControl(table, "Banishment Device", &key_arti_teleportother);
-            AddKeyControl(table, "Porkalator", &key_arti_egg);
-            AddKeyControl(table, "Icon of the Defender",
-                          &key_arti_invulnerability);
-        }
-    }
-    else
-    {
-        TXT_AddWidget(window, table);
-    }
-
-    AddSectionLabel(table, "Weapons", extra_keys);
+    AddSectionLabel(table, "Weapons", false);
 
     AddKeyControl(table, "Weapon 1", &key_weapon1);
     AddKeyControl(table, "Weapon 2", &key_weapon2);
@@ -345,14 +269,6 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
     AddKeyControl(table, "- to player 3",         &key_multi_msgplayer[2]);
     AddKeyControl(table, "- to player 4",         &key_multi_msgplayer[3]);
 
-    if (gamemission == hexen || gamemission == strife)
-    {
-        AddKeyControl(table, "- to player 5",     &key_multi_msgplayer[4]);
-        AddKeyControl(table, "- to player 6",     &key_multi_msgplayer[5]);
-        AddKeyControl(table, "- to player 7",     &key_multi_msgplayer[6]);
-        AddKeyControl(table, "- to player 8",     &key_multi_msgplayer[7]);
-    }
-
     scrollpane = TXT_NewScrollPane(0, 13, table);
 
     TXT_AddWidget(window, scrollpane);
@@ -392,11 +308,6 @@ void ConfigKeyboard(void)
     AddKeyControl(window, "Turn Right", &key_right);
     TXT_AddWidget(window, TXT_TABLE_EMPTY);
     AddKeyControl(window, "Strafe On", &key_strafe);
-
-    if (gamemission == hexen || gamemission == strife)
-    {
-        AddKeyControl(window, "Jump", &key_jump);
-    }
 
     TXT_AddWidget(window, TXT_NewSeparator("Action"));
     AddKeyControl(window, "Fire/Attack", &key_fire);
