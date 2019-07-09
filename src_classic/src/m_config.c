@@ -48,7 +48,6 @@ char *configdir;
 
 // Default filenames for configuration files.
 
-static char *default_main_config;
 static char *default_extra_config;
 
 typedef enum 
@@ -115,6 +114,20 @@ typedef struct
 //! @begin_config_file default
 
 static default_t	doom_defaults_list[] =
+{
+    // [JN] Все стандартное управление перенесено в
+    // extra_defaults_list, что бы создать единый
+    // конфигурационный файл для каждой игры.
+};
+
+static default_collection_t doom_defaults =
+{
+    doom_defaults_list,
+    arrlen(doom_defaults_list),
+    NULL,
+};
+
+static default_t	extra_defaults_list[] =
 {
     //!
     // Mouse sensitivity.  This value is used to multiply input mouse
@@ -468,19 +481,7 @@ static default_t	doom_defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(comport),
-};
 
-static default_collection_t doom_defaults =
-{
-    doom_defaults_list,
-    arrlen(doom_defaults_list),
-    NULL,
-};
-
-//! @begin_config_file extended
-
-static default_t extra_defaults_list[] =
-{
     //!
     // Name of the SDL video driver to use.  If this is an empty string,
     // the default video driver is used.
@@ -1617,9 +1618,8 @@ static void LoadDefaultCollection(default_collection_t *collection)
 
 // Set the default filenames to use for configuration files.
 
-void M_SetConfigFilenames(char *main_config, char *extra_config)
+void M_SetConfigFilenames(char *extra_config)
 {
-    default_main_config = main_config;
     default_extra_config = extra_config;
 }
 
@@ -1686,7 +1686,7 @@ void M_LoadDefaults (void)
     else
     {
         doom_defaults.filename
-            = M_StringJoin(configdir, default_main_config, NULL);
+            = M_StringJoin(configdir, default_extra_config, NULL);
     }
 
     printf("saving config in %s\n", doom_defaults.filename);

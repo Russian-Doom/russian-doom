@@ -48,7 +48,6 @@ typedef struct
     GameMission_t mission;
     int mask;
     char *name;
-    char *config_file;
     char *extra_config_file;
     char *executable;
 } mission_config_t;
@@ -64,8 +63,7 @@ static mission_config_t mission_configs[] =
         doom,
         IWAD_MASK_DOOM,
         "doom",
-        "default.cfg",
-        PROGRAM_PREFIX "doom.cfg",
+        "rusdoom.ini",
         PROGRAM_PREFIX "doom"
     }
 };
@@ -138,7 +136,7 @@ static void SetMission(mission_config_t *config)
     gamemission = config->mission;
     SetExecutable(config);
     game_title = config->label;
-    M_SetConfigFilenames(config->config_file, config->extra_config_file);
+    M_SetConfigFilenames(config->extra_config_file);
 }
 
 static mission_config_t *GetMissionForName(char *name)
