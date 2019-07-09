@@ -75,7 +75,8 @@ static GameSelectCallback game_selected_callback;
 // Miscellaneous variables that aren't used in setup.
 
 static int showMessages = 1;
-static int screenblocks = 9;
+// [JN] Don't use belezed view by default.
+static int screenblocks = 10;
 static int detailLevel = 0;
 static char *executable = NULL;
 static char *game_title = "Doom";

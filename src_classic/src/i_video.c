@@ -145,8 +145,9 @@ int force_software_renderer = false;
 
 // Time to wait for the screen to settle on startup before starting the
 // game (ms)
+// [JN] Reduced to 35 ms.
 
-static int startup_delay = 1000;
+static int startup_delay = 35;
 
 // Grab the mouse? (int type for config code). nograbmouse_override allows
 // this to be temporarily disabled via the command line.
@@ -195,8 +196,8 @@ static unsigned int last_resize_time;
 #define RESIZE_DELAY 35
 
 // Gamma correction level to use
-
-int usegamma = 0;
+// [JN] Use disabled gamma correction of standard palette by default.
+int usegamma = 9;
 
 // Joystick/gamepad hysteresis
 unsigned int joywait = 0;

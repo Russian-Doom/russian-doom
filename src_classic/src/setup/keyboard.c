@@ -29,7 +29,8 @@
 
 int vanilla_keyboard_mapping = 1;
 
-static int always_run = 0;
+// [JN] Enable always run by default
+static int always_run = 1;
 
 // Keys within these groups cannot have the same value.
 

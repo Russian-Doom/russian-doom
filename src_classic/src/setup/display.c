@@ -72,12 +72,15 @@ static int force_software_renderer = 0;
 static int fullscreen = 1;
 static int fullscreen_width = 0, fullscreen_height = 0;
 static int window_width = 640, window_height = 480;
-static int startup_delay = 1000;
+// [JN] Reduced to 35 ms.
+static int startup_delay = 35;
 static int max_scaling_buffer_pixels = 16000000;
-static int usegamma = 0;
+// [JN] Use disabled gamma correction of standard palette by default.
+static int usegamma = 9;
 
 int graphical_startup = 1;
-int show_endoom = 1;
+// [JN] Don't show ENDOOM by default.
+int show_endoom = 0;
 int show_diskicon = 1;
 int png_screenshots = 0;
 
