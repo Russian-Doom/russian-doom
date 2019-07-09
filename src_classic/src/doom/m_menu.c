@@ -988,6 +988,8 @@ static char *detailNames[2] = {"dsc/","ybp/"};
 
 void M_DrawOptions(void)
 {
+    char num[4];
+
     // [JN] Write centered title "НАСТРОЙКИ"
     RD_WriteTextBigCentered(15, "YFCNHJQRB");
 	
@@ -999,8 +1001,13 @@ void M_DrawOptions(void)
     RD_WriteTextBig (OptionsDef.x + 164, OptionsDef.y + LINEHEIGHT * detail,
                      detailNames[detailLevel]);
     
+    // [JN] Mouse sensivity slider (extended from 10 to 14)
     M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1),
-		 10, mouseSensitivity);
+		 14, mouseSensitivity);
+
+    // [JN] Draw numerical representation of mouse sensivity
+    M_snprintf(num, 4, "%3d", mouseSensitivity);
+    M_WriteText(128 + OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1) + 2, num);
 
     // [JN] Gamma-correction slider
     M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(gamma+1), 18, usegamma);
@@ -1175,7 +1182,7 @@ void M_ChangeSensitivity(int choice)
 	    mouseSensitivity--;
 	break;
       case 1:
-	if (mouseSensitivity < 9)
+	if (mouseSensitivity < 255) // [crispy] extended range
 	    mouseSensitivity++;
 	break;
     }
@@ -1268,6 +1275,12 @@ M_DrawThermo
 	xx += 8;
     }
     V_DrawShadowedPatch(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
+
+    // [crispy] do not crash anymore if value exceeds thermometer range
+    if (thermDot >= thermWidth)
+    {
+        thermDot = thermWidth - 1;
+    }
 
     V_DrawPatch((x + 8) + thermDot * 8, y,
 		      W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));
