@@ -74,11 +74,25 @@
 #define DETAILHI    "dscjrfz ltnfkbpfwbz"   // Высокая детализация
 #define DETAILLO    "ybprfz ltnfkbpfwbz"    // Низкая детализация
 
-#define GAMMALVL0   "ufvvf-rjhhtrwbz jnrk.xtyf"     // Гамма-коррекция отключена
-#define GAMMALVL1   "ehjdtym ufvvf-rjhhtrwbb 1"    // Уровень гамма-коррекции 1
-#define GAMMALVL2   "ehjdtym ufvvf-rjhhtrwbb 2"    // Уровень гамма-коррекции 2
-#define GAMMALVL3   "ehjdtym ufvvf-rjhhtrwbb 3"    // Уровень гамма-коррекции 3
-#define GAMMALVL4   "ehjdtym ufvvf-rjhhtrwbb 4"    // Уровень гамма-коррекции 4
+// [JN] Improved (GAMEPAL) and standard (PLAYPAL) gamma correction
+#define GAMMA_IMPROVED_OFF  "ekexityyfz ufvvf-rjhhtrwbz jnrk.xtyf"     // Улучшенная гамма-коррекция отключена
+#define GAMMA_IMPROVED_05   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 0>5"   // Уровень улучшенной гамма-коррекции 0.5
+#define GAMMA_IMPROVED_1    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 1>0"   // Уровень улучшенной гамма-коррекции 1.0
+#define GAMMA_IMPROVED_15   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 1>5"   // Уровень улучшенной гамма-коррекции 1.5
+#define GAMMA_IMPROVED_2    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 2>0"   // Уровень улучшенной гамма-коррекции 2.0
+#define GAMMA_IMPROVED_25   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 2>5"   // Уровень улучшенной гамма-коррекции 2.5
+#define GAMMA_IMPROVED_3    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 3>0"   // Уровень улучшенной гамма-коррекции 3.0
+#define GAMMA_IMPROVED_35   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 3>5"   // Уровень улучшенной гамма-коррекции 3.5
+#define GAMMA_IMPROVED_4    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 4>0"   // Уровень улучшенной гамма-коррекции 4.0
+#define GAMMA_ORIGINAL_OFF  "cnfylfhnyfz ufvvf-rjhhtrwbz jnrk.xtyf"    // Стандартная гамма-коррекция отключена
+#define GAMMA_ORIGINAL_05   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 0>5"  // Уровень стандартной гамма-коррекции 0.5
+#define GAMMA_ORIGINAL_1    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 1>0"  // Уровень стандартной гамма-коррекции 1.0
+#define GAMMA_ORIGINAL_15   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 1>5"  // Уровень стандартной гамма-коррекции 1.5
+#define GAMMA_ORIGINAL_2    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 2>0"  // Уровень стандартной гамма-коррекции 2.0
+#define GAMMA_ORIGINAL_25   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 2>5"  // Уровень стандартной гамма-коррекции 2.5
+#define GAMMA_ORIGINAL_3    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 3>0"  // Уровень стандартной гамма-коррекции 3.0
+#define GAMMA_ORIGINAL_35   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 3>5"  // Уровень стандартной гамма-коррекции 3.5
+#define GAMMA_ORIGINAL_4    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 4>0"  // Уровень стандартной гамма-коррекции 4.0
 
 #define EMPTYSTRING "gecnjq ckjn"       // Пустой слот
 

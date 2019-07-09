@@ -268,8 +268,9 @@ static player_t*	plyr;
 // ST_Start() has just been called
 static boolean		st_firsttime;
 
-// lump number for PLAYPAL
-static int		lu_palette;
+// [JN] lump number for GAMEPAL (1) and PLAYPAL (2)
+static int		lu_palette1;
+static int		lu_palette2;
 
 // used for timing
 static unsigned int	st_clock;
@@ -1002,7 +1003,9 @@ void ST_doPaletteStuff(void)
     if (palette != st_palette)
     {
 	st_palette = palette;
-	pal = (byte *) W_CacheLumpNum (lu_palette, PU_CACHE)+palette*768;
+	pal = (byte *) W_CacheLumpNum (usegamma <= 8 ? lu_palette1 : 
+	                                               lu_palette2, PU_CACHE)
+	                                               + palette * 768;
 	I_SetPalette (pal);
     }
 
@@ -1188,7 +1191,8 @@ void ST_loadGraphics(void)
 
 void ST_loadData(void)
 {
-    lu_palette = W_GetNumForName (DEH_String("PLAYPAL"));
+    lu_palette1 = W_GetNumForName (DEH_String("GAMEPAL"));
+    lu_palette2 = W_GetNumForName (DEH_String("PLAYPAL"));
     ST_loadGraphics();
 }
 
@@ -1423,7 +1427,8 @@ void ST_Stop (void)
     if (st_stopped)
 	return;
 
-    I_SetPalette (W_CacheLumpNum (lu_palette, PU_CACHE));
+    I_SetPalette (W_CacheLumpNum (usegamma <= 8 ? lu_palette1 : 
+                                                  lu_palette2, PU_CACHE));
 
     st_stopped = true;
 }

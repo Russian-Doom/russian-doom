@@ -51,11 +51,14 @@ static const bex_string_t bex_stringtable[] = {
     {"ENDGAME", ENDGAME},
     {"DETAILHI", DETAILHI},
     {"DETAILLO", DETAILLO},
+    // [JN] Replacement disabled
+    /*
     {"GAMMALVL0", GAMMALVL0},
     {"GAMMALVL1", GAMMALVL1},
     {"GAMMALVL2", GAMMALVL2},
     {"GAMMALVL3", GAMMALVL3},
     {"GAMMALVL4", GAMMALVL4},
+    */
     {"EMPTYSTRING", EMPTYSTRING},
     {"GGSAVED", GGSAVED},
     {"SAVEGAMENAME", SAVEGAMENAME},

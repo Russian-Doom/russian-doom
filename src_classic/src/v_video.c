@@ -824,7 +824,8 @@ void V_ScreenShot(char *format)
     // save the pcx file
     WritePCXfile(lbmname, I_VideoBuffer,
                  SCREENWIDTH, SCREENHEIGHT,
-                 W_CacheLumpName (DEH_String("PLAYPAL"), PU_CACHE));
+                 W_CacheLumpName (DEH_String(usegamma <= 8 ? 
+                                             "GAMEPAL" : "PLAYPAL"), PU_CACHE));
     }
 }
 

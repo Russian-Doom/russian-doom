@@ -100,14 +100,27 @@ boolean			messageNeedsInput;
 
 void    (*messageRoutine)(int response);
 
-// [JN] Externded to Russian strings
-char gammamsg[5][32] =
+// [JN] Externded to Russian strings, both improved and standard palettes.
+char gammamsg[18][48] =
 {
-    GAMMALVL0,
-    GAMMALVL1,
-    GAMMALVL2,
-    GAMMALVL3,
-    GAMMALVL4
+    GAMMA_IMPROVED_OFF,
+    GAMMA_IMPROVED_05,
+    GAMMA_IMPROVED_1,
+    GAMMA_IMPROVED_15,
+    GAMMA_IMPROVED_2,
+    GAMMA_IMPROVED_25,
+    GAMMA_IMPROVED_3,
+    GAMMA_IMPROVED_35,
+    GAMMA_IMPROVED_4,
+    GAMMA_ORIGINAL_OFF,
+    GAMMA_ORIGINAL_05,
+    GAMMA_ORIGINAL_1,
+    GAMMA_ORIGINAL_15,
+    GAMMA_ORIGINAL_2,
+    GAMMA_ORIGINAL_25,
+    GAMMA_ORIGINAL_3,
+    GAMMA_ORIGINAL_35,
+    GAMMA_ORIGINAL_4
 };
 
 // we are going to be entering a savegame string
@@ -194,6 +207,7 @@ void M_SfxVol(int choice);
 void M_MusicVol(int choice);
 void M_ChangeDetail(int choice);
 void M_SizeDisplay(int choice);
+void M_GammaCorrection(int choice);
 void M_StartGame(int choice);
 void M_Sound(int choice);
 
@@ -338,7 +352,7 @@ enum
     endgame,
     messages,
     detail,
-    scrnsize,
+    gamma,
     option_empty1,
     mousesens,
     option_empty2,
@@ -351,7 +365,7 @@ menuitem_t OptionsMenu[]=
     {1,"Pfrjyxbnm buhe", M_EndGame,           'p'},    // Закончить игру
     {1,"Cjj,otybz:",     M_ChangeMessages,    'c'},    // Сообщения:
     {1,"Ltnfkbpfwbz:",   M_ChangeDetail,      'l'},    // Детализация:
-    {2,"Hfpvth \'rhfyf", M_SizeDisplay,       'h'},    // Размер экрана
+    {2,"Ufvvf-rjhhtrwbz",M_GammaCorrection,   'u'},    // Гамма-коррекция
     {-1,"",0,'\0'},                                    //
     {2,"Crjhjcnm vsib",  M_ChangeSensitivity, 'c'},    // Скорость мыши
     {-1,"",0,'\0'},                                    //
@@ -987,8 +1001,8 @@ void M_DrawOptions(void)
     M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1),
 		 10, mouseSensitivity);
 
-    M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1),
-		 9,screenSize);
+    // [JN] Gamma-correction slider
+    M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(gamma+1), 18, usegamma);
 }
 
 void M_Options(int choice)
@@ -1209,6 +1223,25 @@ void M_SizeDisplay(int choice)
     R_SetViewSize (screenblocks, detailLevel);
 }
 
+void M_GammaCorrection(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        if (usegamma > 0) 
+            usegamma--;
+        break;
+
+        case 1:
+        if (usegamma < 17) 
+            usegamma++;
+        break;
+    }
+        I_SetPalette (W_CacheLumpName (DEH_String(usegamma <= 8 ? 
+                                                  "GAMEPAL" :
+                                                  "PLAYPAL"), PU_CACHE));
+    players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
+}
 
 
 
@@ -1860,10 +1893,12 @@ boolean M_Responder (event_t* ev)
     if (key == key_menu_gamma)    // gamma toggle
     {
         usegamma++;
-        if (usegamma > 4)
+        if (usegamma > 17)
         usegamma = 0;
         players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
-        I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+        I_SetPalette (W_CacheLumpName (DEH_String(usegamma <= 8 ? 
+                                                  "GAMEPAL" :
+                                                  "PLAYPAL"), PU_CACHE));
         return true;
     }
 
