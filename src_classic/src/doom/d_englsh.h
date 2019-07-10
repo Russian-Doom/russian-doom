@@ -197,7 +197,7 @@
 #define HUSTR_E4M3  "t4v3: bcnzpfybt ytxtcnbds["                // E4M3: Истязание нечестивых
 #define HUSTR_E4M4  "t4v4: ytelth;bvjt pkj"                     // E4M4: Неудержимое зло
 #define HUSTR_E4M5  "t4v5: jyb gjrf.ncz"                        // E4M5: Они покаются
-#define HUSTR_E4M6  "t4v6: ceghjnbd cb[ ytxtcnbds["             // E4M6: Супротив сих нечестивых
+#define HUSTR_E4M6  "t4v6: ceghjnbd ytxtcnbds["                 // E4M6: Супротив нечестивых
 #define HUSTR_E4M7  "t4v7: b gjcktljdfk fl"                     // E4M7: И последовал Ад
 #define HUSTR_E4M8  "t4v8: lj ,tccthltxbz"                      // E4M8: До бессердечия
 #define HUSTR_E4M9  "t4v9: cnhf["                               // E4M9: Страх

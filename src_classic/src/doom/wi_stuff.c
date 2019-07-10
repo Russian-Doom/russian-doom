@@ -101,7 +101,7 @@ char *LevelNames_Doom1_E4[] = {
     "bcnzpfybt ytxtcnbds[",     // e4m3: истязание нечестивых
     "ytelth;bvjt pkj",          // e4m4: неудержимое зло
     "jyb gjrf.ncz",             // e4m5: они покаются
-    "ceghjnbd cb[ ytxtcnbds[",  // e4m6: супротив сих нечестивых
+    "ceghjnbd ytxtcnbds[",      // e4m6: супротив нечестивых
     "b gjcktljdfk fl",          // e4m7: и последовал ад
     "lj ,tccthltxbz",           // e4m8: до бессердечия
     "cnhf[",                    // e4m9: страх
