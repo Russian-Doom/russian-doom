@@ -158,7 +158,7 @@ void V_DrawPatch(int x, int y, patch_t *patch)
             return;
     }
 
-#ifdef RANGECHECK
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
@@ -225,7 +225,7 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
             return;
     }
 
-#ifdef RANGECHECK 
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
@@ -281,6 +281,7 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH 
      || y < 0
@@ -288,6 +289,7 @@ void V_DrawTLPatch(int x, int y, patch_t * patch)
     {
         I_Error("Bad V_DrawTLPatch");
     }
+#endif
 
     col = 0;
     desttop = dest_screen + y * SCREENWIDTH + x;
@@ -332,6 +334,7 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
@@ -339,6 +342,7 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
     {
         I_Error("Bad V_DrawAltTLPatch");
     }
+#endif
 
     col = 0;
     desttop = dest_screen + y * SCREENWIDTH + x;
@@ -385,6 +389,7 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
+#ifdef RANGECHECK_NO_THANKS
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
@@ -392,6 +397,7 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
     {
         I_Error("Bad V_DrawShadowedPatch");
     }
+#endif
 
     col = 0;
     desttop = dest_screen + y * SCREENWIDTH + x;
