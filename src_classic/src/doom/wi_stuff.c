@@ -204,7 +204,7 @@ char *LevelNames_TNT[] = {
     "pfdjl",                    // 18: Завод
     "gjuheprf-jnghfdrf",        // 19: Погрузка-отправка
     "geyrn j,hf,jnrb",          // 20: пункт обработки
-    "eflvbybcnhfnbdysq wtynh",  // 21: Административный центр
+    "flvbybcnhfnbdysq wtynh",   // 21: Административный центр
     "j,bnfkbot",                // 22: Обиталище
     "keyysq ujhysq ghjtrn",     // 23: Лунный горный проект
     "rfhmth",                   // 24: Карьер
