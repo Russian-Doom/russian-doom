@@ -254,8 +254,9 @@ int IOperm_InstallDriver(void)
 
         if (error != ERROR_SERVICE_ALREADY_RUNNING)
         {
-            fprintf(stderr, "IOperm_InstallDriver: Failed to start service (%i).\n",
-                            error);
+            // [JN] Do not print useless warning.
+            // fprintf(stderr, "IOperm_InstallDriver: Failed to start service (%i).\n",
+            //                 error);
 
             result = 0;
         }
