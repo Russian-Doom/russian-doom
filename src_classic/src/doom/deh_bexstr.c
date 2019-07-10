@@ -30,8 +30,10 @@ typedef struct {
     char *string;
 } bex_string_t;
 
+// [JN] Dehacked replacements disabled
 // mnemonic keys table
 static const bex_string_t bex_stringtable[] = {
+    /*
     // part 1 - general initialization and prompts
     {"D_DEVSTR", D_DEVSTR},
     {"D_CDROM", D_CDROM},
@@ -51,14 +53,11 @@ static const bex_string_t bex_stringtable[] = {
     {"ENDGAME", ENDGAME},
     {"DETAILHI", DETAILHI},
     {"DETAILLO", DETAILLO},
-    // [JN] Replacement disabled
-    /*
     {"GAMMALVL0", GAMMALVL0},
     {"GAMMALVL1", GAMMALVL1},
     {"GAMMALVL2", GAMMALVL2},
     {"GAMMALVL3", GAMMALVL3},
     {"GAMMALVL4", GAMMALVL4},
-    */
     {"EMPTYSTRING", EMPTYSTRING},
     {"GGSAVED", GGSAVED},
     {"SAVEGAMENAME", SAVEGAMENAME},
@@ -334,6 +333,7 @@ static const bex_string_t bex_stringtable[] = {
     {"BGFLAT15", "RROCK13"},
     {"BGFLAT31", "RROCK19"},
     {"BGCASTCALL", "BOSSBACK"},
+    */
 };
 
 static void *DEH_BEXStrStart(deh_context_t *context, char *line)
