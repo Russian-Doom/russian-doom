@@ -921,6 +921,8 @@ static boolean D_AddFile(char *filename)
     return handle != NULL;
 }
 
+// [JN] Unused. Do not print Dehacked banners.
+/*
 // Copyright message banners
 // Some dehacked mods replace these.  These are only displayed if they are 
 // replaced by dehacked.
@@ -970,6 +972,7 @@ void PrintDehackedBanners(void)
         }
     }
 }
+*/
 
 static struct 
 {
@@ -1164,7 +1167,8 @@ void D_DoomMain (void)
 
     // print banner
 
-    I_PrintBanner(PACKAGE_STRING);
+    // [JN] Do not print startup banner
+    // I_PrintBanner(PACKAGE_STRING);
 
     DEH_printf("Z_Init: Init zone memory allocation daemon. \n");
     Z_Init ();
@@ -1555,6 +1559,8 @@ void D_DoomMain (void)
 		    I_Error(DEH_String("\nThis is not the registered version."));
     }
 
+    // [JN] TODO: Not needed, W_Merge is used for -file
+    /*
     if (W_CheckNumForName("SS_START") >= 0
      || W_CheckNumForName("FF_END") >= 0)
     {
@@ -1563,9 +1569,13 @@ void D_DoomMain (void)
                " floor textures.  You may want to use the '-merge' command\n"
                " line option instead of '-file'.\n");
     }
+    */
 
-    I_PrintStartupBanner(gamedescription);
-    PrintDehackedBanners();
+    // [JN] Do not print startup banner
+    // I_PrintStartupBanner(gamedescription);
+
+    // [JN] Do not print Dehacked banners
+    // PrintDehackedBanners();
 
     DEH_printf("I_Init: Setting up machine state.\n");
     I_CheckIsScreensaver();

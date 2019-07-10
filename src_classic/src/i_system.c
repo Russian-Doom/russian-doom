@@ -157,6 +157,8 @@ byte *I_ZoneBase (int *size)
     return zonemem;
 }
 
+// [JN] Unused. Do not print startup banner.
+/*
 void I_PrintBanner(char *msg)
 {
     int i;
@@ -194,6 +196,7 @@ void I_PrintStartupBanner(char *gamedescription)
 
     I_PrintDivider();
 }
+*/
 
 // 
 // I_ConsoleStdout

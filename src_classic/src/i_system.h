@@ -70,6 +70,8 @@ void I_AtExit(atexit_func_t func, boolean run_if_error);
 
 void I_BindVariables(void);
 
+// [JN] Unused. Do not print startup banner.
+/*
 // Print startup banner copyright message.
 
 void I_PrintStartupBanner(char *gamedescription);
@@ -81,6 +83,7 @@ void I_PrintBanner(char *text);
 // Print a dividing line for startup banners.
 
 void I_PrintDivider(void);
+*/
 
 #endif
 
