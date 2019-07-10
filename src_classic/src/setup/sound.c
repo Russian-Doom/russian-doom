@@ -52,7 +52,7 @@ int snd_cachesize = 64 * 1024 * 1024;
 int snd_maxslicetime_ms = 28;
 char *snd_musiccmd = "";
 int snd_pitchshift = 0;
-char *snd_dmxoption = "";
+char *snd_dmxoption = "-opl3";  // [JN] Use OPL3 by default
 
 static int numChannels = 8;
 static int sfxVolume = 8;
