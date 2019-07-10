@@ -1559,7 +1559,7 @@ void D_DoomMain (void)
 		    I_Error(DEH_String("\nThis is not the registered version."));
     }
 
-    // [JN] TODO: Not needed, W_Merge is used for -file
+    // [JN] Not needed, W_Merge is used for -file
     /*
     if (W_CheckNumForName("SS_START") >= 0
      || W_CheckNumForName("FF_END") >= 0)
