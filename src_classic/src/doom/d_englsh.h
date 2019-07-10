@@ -305,7 +305,7 @@
 #define THUSTR_16   "ehjdtym 16: uke,jrbt ljcnb;tybz"           // Уровень 16: Глубокие достижения
 #define THUSTR_17   "ehjdtym 17: pjyf j,hf,jnrb"                // Уровень 17: Зона обработки
 #define THUSTR_18   "ehjdtym 18: pfdjl"                         // Уровень 18: Завод
-#define THUSTR_19   "ehjdtym 19: gjuheprf/jnghfdrf"             // Уровень 19: Погрузка/отправка
+#define THUSTR_19   "ehjdtym 19: gjuheprf-jnghfdrf"             // Уровень 19: Погрузка-отправка
 #define THUSTR_20   "ehjdtym 20: wtynhfkmysq geyrn j,hf,jnrb"   // Уровень 20: Центральный пункт обработки
 
 #define THUSTR_21   "ehjdtym 21: flvbybcnhfnbdysq wtynh"        // Уровень 21: Административный центр
