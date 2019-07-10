@@ -42,14 +42,16 @@ planefunction_t		ceilingfunc;
 //
 
 // Here comes the obnoxious "visplane".
-#define MAXVISPLANES	128
+// [JN] Doom+ limits: increased from 128 to 1024
+#define MAXVISPLANES	1024
 visplane_t		visplanes[MAXVISPLANES];
 visplane_t*		lastvisplane;
 visplane_t*		floorplane;
 visplane_t*		ceilingplane;
 
 // ?
-#define MAXOPENINGS	SCREENWIDTH*64
+// [JN] Doom+ limits: increased from SCREENWIDTH*64 (20480) to 65536
+#define MAXOPENINGS	65536
 short			openings[MAXOPENINGS];
 short*			lastopening;
 

@@ -165,7 +165,7 @@ char *LevelNames_Plutonia[] = {
     "ghtlpyfvtyjdfybt",         // 16: Предзнаменование
     "rjvgfeyl",                 // 17: Компаунд
     "ytqhjcathf",               // 18: Нейросфера
-    "d>h>f>u>",                 // 19: В.Р.А.Г.
+    "d/h/f/u/",                 // 19: В.Р.А.Г.
     "j,bntkm cvthnb",           // 20: Обитель Смерти
     "e,bqwf",                   // 21: Убийца
     "ytdsgjkybvjt pflfybt",     // 22: Невыполнимое задание

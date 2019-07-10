@@ -48,7 +48,8 @@
 #define SIL_TOP			2
 #define SIL_BOTH		3
 
-#define MAXDRAWSEGS		256
+// [JN] Doom+ limits: increased from 256 to 2048
+#define MAXDRAWSEGS		2048
 
 
 
