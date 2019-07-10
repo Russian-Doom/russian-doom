@@ -1309,13 +1309,14 @@ void G_ScreenShot (void)
  
 
 
-// DOOM Par Times
-int pars[4][10] = 
+// [JN] DOOM Par Times, 4th episode included.
+int pars[5][10] = 
 { 
     {0}, 
     {0,30,75,120,90,165,180,180,30,165}, 
     {0,90,90,90,120,90,360,240,30,170}, 
-    {0,90,45,90,150,90,90,165,30,135} 
+    {0,90,45,90,150,90,90,165,30,135}, 
+    {0,165,255,135,150,180,390,135,360,180}
 }; 
 
 // DOOM II Par Times
@@ -1451,15 +1452,11 @@ void G_DoCompleted (void)
     wminfo.maxsecret = totalsecret; 
     wminfo.maxfrags = 0; 
 
-    // Set par time. Doom episode 4 doesn't have a par time, so this
-    // overflows into the cpars array. It's necessary to emulate this
-    // for statcheck regression testing.
+    // [JN] Set par time, 4th episode included.
     if (gamemode == commercial)
 	wminfo.partime = TICRATE*cpars[gamemap-1];
-    else if (gameepisode < 4)
-	wminfo.partime = TICRATE*pars[gameepisode][gamemap];
     else
-        wminfo.partime = TICRATE*cpars[gamemap];
+	wminfo.partime = TICRATE*pars[gameepisode][gamemap];
 
     wminfo.pnum = consoleplayer; 
  

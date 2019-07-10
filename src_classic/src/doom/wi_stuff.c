@@ -1649,9 +1649,9 @@ void WI_drawStats(void)
     RD_WriteTextBig(16, 165, "dhtvz");
     WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time);
 
-    if (wbs->epsd < 3)
+    // [JN] Write "рекорд", added support for 4th episode par times.
+    if (wbs->epsd < 4)
     {
-	// [JN] Write "рекорд"
 	RD_WriteTextBig(158, 165, "htrjhl");
 	WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par);
     }
