@@ -302,7 +302,7 @@
 #define THUSTR_13   "ehjdtym 13: gththf,jnrf zlthys[ jn[jljd"   // Уровень 13: Переработка ядерных отходов
 #define THUSTR_14   "ehjdtym 14: cnfktkbntqysq pfdjl"           // Уровень 14: Cталелитейный завод
 #define THUSTR_15   "ehjdtym 15: vthndfz pjyf"                  // Уровень 15: Мертвая зона
-#define THUSTR_16   "ehjdtym 16: uke,jxfqibt ljcnb;tybz"        // Уровень 16: Глубочайшие достижения
+#define THUSTR_16   "ehjdtym 16: uke,jrbt ljcnb;tybz"           // Уровень 16: Глубокие достижения
 #define THUSTR_17   "ehjdtym 17: pjyf j,hf,jnrb"                // Уровень 17: Зона обработки
 #define THUSTR_18   "ehjdtym 18: pfdjl"                         // Уровень 18: Завод
 #define THUSTR_19   "ehjdtym 19: gjuheprf/jnghfdrf"             // Уровень 19: Погрузка/отправка

@@ -199,7 +199,7 @@ char *LevelNames_TNT[] = {
     "gththf,jnrf jn[jljd",      // 13: Переработка отходов
     "cnfktkbntqysq pfdjl",      // 14: Cталелитейный завод
     "vthndfz pjyf",             // 15: Мертвая зона
-    "uke,jxfqibt ljcnb;tybz",   // 16: Глубочайшие достижения
+    "uke,jrbt ljcnb;tybz",      // 16: Глубокие достижения
     "pjyf j,hf,jnrb",           // 17: Зона обработки
     "pfdjl",                    // 18: Завод
     "gjuheprf-jnghfdrf",        // 19: Погрузка-отправка
