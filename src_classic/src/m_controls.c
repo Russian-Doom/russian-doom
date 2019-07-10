@@ -122,7 +122,7 @@ int key_menu_gamma     = KEY_F11;
 
 int key_menu_incscreen = KEY_EQUALS;
 int key_menu_decscreen = KEY_MINUS;
-int key_menu_screenshot = 0;
+int key_menu_screenshot = KEY_PRTSCR;  // [JN] Use PrintScreen key by default
 
 //
 // Joystick controls

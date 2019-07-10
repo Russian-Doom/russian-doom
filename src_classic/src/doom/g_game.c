@@ -901,7 +901,8 @@ void G_Ticker (void)
 	    break; 
 	  case ga_screenshot: 
 	    V_ScreenShot("DOOM%02i.%s"); 
-            players[consoleplayer].message = DEH_String("screen shot");
+            players[consoleplayer].message = 
+                                   DEH_String("crhbyijn");  // [JN] скриншот
 	    gameaction = ga_nothing; 
 	    break; 
 	  case ga_nothing: 
