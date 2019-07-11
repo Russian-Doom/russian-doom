@@ -521,15 +521,6 @@ static patch_t*		num[10];
 // minus sign
 static patch_t*		wiminus;
 
-// "secret"
-static patch_t*		sp_secret;
-
- // "Kills", "Scrt", "Items", "Frags"
-static patch_t*		kills;
-static patch_t*		secret;
-static patch_t*		items;
-static patch_t*		frags;
-
 // Time sucks.
 static patch_t*		timepatch;
 static patch_t*		par;
@@ -1456,22 +1447,17 @@ void WI_drawNetgameStats(void)
 
     WI_drawLF();
 
-    // draw stat titles (top line)
-    V_DrawPatch(NG_STATSX+NG_SPACINGX-SHORT(kills->width),
-		NG_STATSY, kills);
 
-    V_DrawPatch(NG_STATSX+2*NG_SPACINGX-SHORT(items->width),
-		NG_STATSY, items);
-
-    V_DrawPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),
-		NG_STATSY, secret);
+    // [JN] Write short names
+    RD_WriteTextBig(NG_STATSX+NG_SPACINGX-52,   47, "dhfu");  // враг
+    RD_WriteTextBig(NG_STATSX+2*NG_SPACINGX-59, 47, "ghtl");  // пред
+    RD_WriteTextBig(NG_STATSX+3*NG_SPACINGX-54, 47, "ctrh");  // секр
     
     if (dofrags)
-	V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width),
-		    NG_STATSY, frags);
+    RD_WriteTextBig(274, 47, "ahu");   // фрг
 
     // draw stats
-    y = NG_STATSY + SHORT(kills->height);
+    y = NG_STATSY + 12;
 
     for (i=0 ; i<MAXPLAYERS ; i++)
     {
@@ -1782,30 +1768,6 @@ static void WI_loadUnloadData(load_callback_t callback)
 
     // percent sign
     callback(DEH_String("WIPCNT"), &percent);
-
-    // "kills"
-    callback(DEH_String("WIOSTK"), &kills);
-
-    // "scrt"
-    callback(DEH_String("WIOSTS"), &secret);
-
-     // "secret"
-    callback(DEH_String("WISCRT2"), &sp_secret);
-
-    // french wad uses WIOBJ (?)
-    if (W_CheckNumForName(DEH_String("WIOBJ")) >= 0)
-    {
-    	// "items"
-    	if (netgame && !deathmatch)
-            callback(DEH_String("WIOBJ"), &items);
-    	else
-            callback(DEH_String("WIOSTI"), &items);
-    } else {
-        callback(DEH_String("WIOSTI"), &items);
-    }
-
-    // "frgs"
-    callback(DEH_String("WIFRGS"), &frags);
 
     // ":"
     callback(DEH_String("WICOLON"), &colon);
