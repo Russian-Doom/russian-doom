@@ -47,7 +47,8 @@
 
 #include "v_trans.h"
 
-// [JN] Big font prototypes
+// [JN] Font writing externs
+extern void M_WriteText(int x, int y, char *string);
 extern void RD_WriteTextBig(int x, int y, char *string);
 extern void RD_WriteTextBigCentered(int y, char *string);
 
@@ -271,10 +272,6 @@ char *LevelNames_TNT[] = {
 
 #define DM_TOTALSX		269
 
-#define DM_KILLERSX		10
-#define DM_KILLERSY		100
-#define DM_VICTIMSX    		5
-#define DM_VICTIMSY		50
 
 
 
@@ -538,12 +535,8 @@ static patch_t*		timepatch;
 static patch_t*		par;
 static patch_t*		sucks;
 
-// "killers", "victims"
-static patch_t*		killers;
-static patch_t*		victims; 
 
 // "Total", your face, your dead face
-static patch_t*		total;
 static patch_t*		star;
 static patch_t*		bstar;
 
@@ -1188,13 +1181,18 @@ void WI_drawDeathmatchStats(void)
     WI_drawAnimatedBack(); 
     WI_drawLF();
 
-    // draw stat titles (top line)
-    V_DrawPatch(DM_TOTALSX-SHORT(total->width)/2,
-		DM_MATRIXY-WI_SPACINGY+10,
-		total);
+    // [JN] Write "итог"
+    RD_WriteTextBig(242, 42, "bnju");
     
-    V_DrawPatch(DM_KILLERSX, DM_KILLERSY, killers);
-    V_DrawPatch(DM_VICTIMSX, DM_VICTIMSY, victims);
+    // [JN] Write small "жертвы"
+    M_WriteText(5, 49, ";thnds");
+    // [JN] Write small "убийцы"
+    M_WriteText(10, 99, "e");  // у
+    M_WriteText(10, 107, ","); // б
+    M_WriteText(10, 115, "b"); // и
+    M_WriteText(10, 123, "q"); // й
+    M_WriteText(10, 131, "w"); // ц
+    M_WriteText(10, 139, "s"); // ы
 
     // draw P?
     x = DM_MATRIXX + DM_SPACINGX;
@@ -1821,14 +1819,6 @@ static void WI_loadUnloadData(load_callback_t callback)
     // "par"
     callback(DEH_String("WIPAR"), &par);
 
-    // "killers" (vertical)
-    callback(DEH_String("WIKILRS"), &killers);
-
-    // "victims" (horiz)
-    callback(DEH_String("WIVCTMS"), &victims);
-
-    // "total"
-    callback(DEH_String("WIMSTT"), &total);
 
     for (i=0 ; i<MAXPLAYERS ; i++)
     {
