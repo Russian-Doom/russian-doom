@@ -1519,6 +1519,10 @@ void P_ArchiveWorld (void)
 	    saveg_write16(si->midtexture);	
 	}
     }
+
+    saveg_write8((totalleveltimes >> 16) & 0xff);
+    saveg_write8((totalleveltimes >> 8) & 0xff);
+    saveg_write8(totalleveltimes & 0xff);
 }
 
 
@@ -1533,6 +1537,7 @@ void P_UnArchiveWorld (void)
     sector_t*		sec;
     line_t*		li;
     side_t*		si;
+    byte a, b, c; 
     
     // do sectors
     for (i=0, sec = sectors ; i<numsectors ; i++,sec++)
@@ -1566,6 +1571,11 @@ void P_UnArchiveWorld (void)
 	    si->midtexture = saveg_read16();
 	}
     }
+
+    a = saveg_read8();
+    b = saveg_read8();
+    c = saveg_read8();
+    totalleveltimes = (a<<16) + (b<<8) + c;
 }
 
 

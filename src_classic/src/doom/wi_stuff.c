@@ -863,7 +863,8 @@ void
 WI_drawTime
 ( int		x,
   int		y,
-  int		t )
+  int		t,
+  boolean	suck )
 {
 
     int		div;
@@ -872,7 +873,7 @@ WI_drawTime
     if (t<0)
 	return;
 
-    if (t <= 61*59)
+    if (t <= 61*59 || !suck)
     {
 	div = 1;
 
@@ -1631,15 +1632,25 @@ void WI_drawStats(void)
 
     // [JN] Write "время"
     RD_WriteTextBig(16, 165, "dhtvz");
-    WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time);
+    WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time, true);
 
     // [JN] Write "рекорд", added support for 4th episode par times.
     if (wbs->epsd < 4)
     {
 	RD_WriteTextBig(158, 165, "htrjhl");
-	WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par);
+	WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par, true);
     }
 
+    // [crispy] draw total time after level time and par time
+    if (sp_state > 8)
+    {
+    const int ttime = wbs->totaltimes / TICRATE;
+
+	// [JN] Write "общее время"
+	RD_WriteTextBig(SP_TIMEX + 24, SP_TIMEY + 13, "j,ott dhtvz");
+	// [crispy] choose x-position depending on width of time string
+	WI_drawTime(296 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+    }
 }
 
 void WI_checkForAccelerate(void)
