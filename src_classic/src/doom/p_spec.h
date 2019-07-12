@@ -194,6 +194,7 @@ EV_LightTurnOn
 ( line_t*	line,
   int		bright );
 
+void    T_FireFlicker(fireflicker_t* flick);
 void    T_Glow(glow_t* g);
 void    P_SpawnGlowingLight(sector_t* sector);
 
