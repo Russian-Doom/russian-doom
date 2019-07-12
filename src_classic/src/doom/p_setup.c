@@ -819,6 +819,9 @@ P_SetupLevel
     P_GroupLines ();
     P_LoadReject (lumpnum+ML_REJECT);
 
+    // [crispy] blinking key or skull in the status bar
+    memset(st_keyorskull, 0, sizeof(st_keyorskull));
+
     bodyqueslot = 0;
     deathmatch_p = deathmatchstarts;
     P_LoadThings (lumpnum+ML_THINGS);

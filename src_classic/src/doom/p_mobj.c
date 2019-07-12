@@ -852,6 +852,16 @@ void P_SpawnMapThing (mapthing_t* mthing)
     mobj->angle = ANG45 * (mthing->angle/45);
     if (mthing->options & MTF_AMBUSH)
 	mobj->flags |= MF_AMBUSH;
+
+	// [crispy] blinking key or skull in the status bar
+	if (mobj->sprite == SPR_BSKU)
+	st_keyorskull[it_bluecard] = 3;
+	else
+	if (mobj->sprite == SPR_RSKU)
+	st_keyorskull[it_redcard] = 3;
+	else
+	if (mobj->sprite == SPR_YSKU)
+	st_keyorskull[it_yellowcard] = 3;
 }
 
 

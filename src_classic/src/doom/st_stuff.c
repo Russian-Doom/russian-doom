@@ -386,6 +386,9 @@ static int	st_faceindex = 0;
 // holds key-type for each key box on bar
 static int	keyboxes[3]; 
 
+// [crispy] blinking key or skull in the status bar
+int st_keyorskull[3];
+
 // a random number per tick
 static int	st_randomnumber;  
 
@@ -882,6 +885,7 @@ void ST_updateWidgets(void)
 {
     static int	largeammo = 1994; // means "n/a"
     int		i;
+    extern int screenblocks;
 
     // must redirect the pointer if the ready weapon has changed.
     //  if (w_ready.data != plyr->readyweapon)
@@ -913,6 +917,28 @@ void ST_updateWidgets(void)
 
 	if (plyr->cards[i+3])
 	    keyboxes[i] = i+3;
+
+    // [crispy] blinking key or skull in the status bar
+    // [JN] blink in any HUD size, except full screen (no HUD) and vanilla
+    if (plyr->tryopen[i])
+    {
+        if (!(plyr->tryopen[i] & (2*KEYBLINKMASK-1)))
+        {
+            S_StartSound(NULL, sfx_itemup);
+        }
+    
+        if (screenblocks < 11 && !(plyr->tryopen[i] & (KEYBLINKMASK-1)))
+        {
+            st_firsttime = true;
+        }
+        
+        keyboxes[i] = (--plyr->tryopen[i] & KEYBLINKMASK) ? i + st_keyorskull[i] : -1;
+        
+        if (!plyr->tryopen[i])
+        {
+            w_keyboxes[i].oldinum = -1;
+        }
+    }
     }
 
     // refresh everything if this is him coming back to life
