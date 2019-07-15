@@ -46,7 +46,8 @@ bmaptexture66, bmaptexture67, bmaptexture68, bmaptexture69, bmaptexture70,
 bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74, bmaptexture75,
 bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
 bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
-bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90;
+bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
+bmaptexture91;
 
 // Terminator:
 extern int bmap_terminator;

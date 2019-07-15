@@ -989,13 +989,13 @@ void R_StoreWallRange (int start, int stop)
                 if (gamemode == commercial)
                 {
                     // Red only
-                    if (midtexture == bmaptexture01 || midtexture == bmaptexture02 || midtexture == bmaptexture06 || midtexture == bmaptexture12 || midtexture == bmaptexture14 || midtexture == bmaptexture18 || midtexture == bmaptexture19 || midtexture == bmaptexture20 || midtexture == bmaptexture25 || midtexture == bmaptexture26)
+                    if (midtexture == bmaptexture01 || midtexture == bmaptexture02 || midtexture == bmaptexture06 || midtexture == bmaptexture12 || midtexture == bmaptexture14 || midtexture == bmaptexture18 || midtexture == bmaptexture19 || midtexture == bmaptexture20 || midtexture == bmaptexture25 || midtexture == bmaptexture26 || midtexture == bmaptexture91)
                     walllights_middle = fullbright_redonly[lightnum];
 
-                    if (toptexture == bmaptexture01 || toptexture == bmaptexture02 || toptexture == bmaptexture06 || toptexture == bmaptexture12 || toptexture == bmaptexture14 || toptexture == bmaptexture18 || toptexture == bmaptexture19 || toptexture == bmaptexture20 || toptexture == bmaptexture25 || toptexture == bmaptexture26)
+                    if (toptexture == bmaptexture01 || toptexture == bmaptexture02 || toptexture == bmaptexture06 || toptexture == bmaptexture12 || toptexture == bmaptexture14 || toptexture == bmaptexture18 || toptexture == bmaptexture19 || toptexture == bmaptexture20 || toptexture == bmaptexture25 || toptexture == bmaptexture26 || toptexture == bmaptexture91)
                     walllights_top = fullbright_redonly[lightnum];
 
-                    if (bottomtexture == bmaptexture01 || bottomtexture == bmaptexture02 || bottomtexture == bmaptexture06 || bottomtexture == bmaptexture12 || bottomtexture == bmaptexture14 || bottomtexture == bmaptexture18 || bottomtexture == bmaptexture19 || bottomtexture == bmaptexture20 || bottomtexture == bmaptexture25 || bottomtexture == bmaptexture26)
+                    if (bottomtexture == bmaptexture01 || bottomtexture == bmaptexture02 || bottomtexture == bmaptexture06 || bottomtexture == bmaptexture12 || bottomtexture == bmaptexture14 || bottomtexture == bmaptexture18 || bottomtexture == bmaptexture19 || bottomtexture == bmaptexture20 || bottomtexture == bmaptexture25 || bottomtexture == bmaptexture26 || bottomtexture == bmaptexture91)
                     walllights_bottom = fullbright_redonly[lightnum];
 
                     // Not gray or brown

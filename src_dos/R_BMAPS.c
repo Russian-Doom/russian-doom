@@ -42,7 +42,8 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
     bmaptexture71, bmaptexture72, bmaptexture73, bmaptexture74, bmaptexture75,
     bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
     bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
-    bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90;
+    bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
+    bmaptexture91;
 
 // Terminator:
 int bmap_terminator;
@@ -137,6 +138,7 @@ void R_InitBrightmaps(void)
         bmaptexture20 = R_TextureNumForName("SW2ZIM");
         bmaptexture25 = R_TextureNumForName("SW1BRN1");
         bmaptexture26 = R_TextureNumForName("SW1STON2");
+        bmaptexture91 = R_TextureNumForName("METAL3");
 
         // Not gray or brown
         bmaptexture35 = R_TextureNumForName("SILVER2");
