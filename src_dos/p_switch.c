@@ -431,6 +431,11 @@ P_UseSpecialLine
 	    P_ChangeSwitchTexture(line,0);
 	break;
 	
+      case 24:
+	// [JN] Play "oof" sound for "Floor Raise to Lowest Ceiling".
+	    S_StartSound(NULL,sfx_oof);
+	break;
+
       case 29:
 	// Raise Door
 	if (EV_DoDoor(line,normal))
@@ -452,6 +457,11 @@ P_UseSpecialLine
       case 46:
 	// [JN] Play "oof" sound for "Open Door Impact", while it's closed.
 	if (line->special != 0)
+	    S_StartSound(NULL,sfx_oof);
+	break;
+
+      case 47:
+	// [JN] Play "oof" sound for "Floor Raise to Next Higher Floor (changes texture)".
 	    S_StartSound(NULL,sfx_oof);
 	break;
 
