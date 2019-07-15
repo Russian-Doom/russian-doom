@@ -76,7 +76,7 @@ static int force_software_renderer = 0;
 static int fullscreen = 1;
 static int fullscreen_width = 0, fullscreen_height = 0;
 static int window_width = 640, window_height = 480;
-static int startup_delay = 1000;
+static int startup_delay = 35;  // [JN] Redused from 1000 to 35
 static int usegamma = 0;
 
 int uncapped_fps = 1;
