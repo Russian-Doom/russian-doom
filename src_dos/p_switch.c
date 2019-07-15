@@ -376,6 +376,14 @@ P_UseSpecialLine
 	// EV_SlidingDoor (line, thing);
 	// break;
 
+    // [JN] Non-switches, just play an "oof" sound by pressing "use":
+      case 24:  // Floor Raise to Lowest Ceiling
+      case 46:  // Open Door Impact
+      case 47:  // Floor Raise to Next Higher Floor (changes texture)
+      case 48:  // Scroll Texture Left
+	    S_StartSound(NULL,sfx_oof);
+	break;
+
 	// SWITCHES
       case 7:
 	// Build Stairs
@@ -431,11 +439,6 @@ P_UseSpecialLine
 	    P_ChangeSwitchTexture(line,0);
 	break;
 	
-      case 24:
-	// [JN] Play "oof" sound for "Floor Raise to Lowest Ceiling".
-	    S_StartSound(NULL,sfx_oof);
-	break;
-
       case 29:
 	// Raise Door
 	if (EV_DoDoor(line,normal))
@@ -454,16 +457,6 @@ P_UseSpecialLine
 	    P_ChangeSwitchTexture(line,0);
 	break;
 	
-      case 46:
-	// [JN] Play "oof" sound for "Open Door Impact".
-	    S_StartSound(NULL,sfx_oof);
-	break;
-
-      case 47:
-	// [JN] Play "oof" sound for "Floor Raise to Next Higher Floor (changes texture)".
-	    S_StartSound(NULL,sfx_oof);
-	break;
-
       case 49:
 	// Ceiling Crush And Raise
 	if (EV_DoCeiling(line,crushAndRaise))
