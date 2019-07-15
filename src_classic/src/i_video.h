@@ -64,11 +64,6 @@ void I_BindVideoVariables(void);
 void I_InitWindowTitle(void);
 void I_InitWindowIcon(void);
 
-// Called before processing any tics in a frame (just after displaying a frame).
-// Time consuming syncronous operations are performed here (joystick reading).
-
-void I_StartFrame (void);
-
 // Called before processing each tic in a frame.
 // Quick syncronous operations are performed here.
 

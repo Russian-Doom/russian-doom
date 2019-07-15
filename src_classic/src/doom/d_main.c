@@ -83,7 +83,7 @@
 //  called by D_DoomMain, never exits.
 // Manages timing and IO,
 //  calls all ?_Responder, ?_Ticker, and ?_Drawer,
-//  calls I_GetTime, I_StartFrame, and I_StartTic
+//  calls I_GetTime and I_StartTic
 //
 void D_DoomLoop (void);
 
@@ -466,9 +466,6 @@ void D_DoomLoop (void)
 
     while (1)
     {
-	// frame syncronous IO operations
-	I_StartFrame ();
-
         TryRunTics (); // will run at least one tic
 
 	S_UpdateSounds (players[consoleplayer].mo);// move positional sounds

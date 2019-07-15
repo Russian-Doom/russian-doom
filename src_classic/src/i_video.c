@@ -279,16 +279,6 @@ void I_ShutdownGraphics(void)
 }
 
 
-
-//
-// I_StartFrame
-//
-void I_StartFrame (void)
-{
-    // er?
-
-}
-
 // Adjust window_width / window_height variables to be an an aspect
 // ratio consistent with the aspect_ratio_correct variable.
 static void AdjustWindowSize(void)
