@@ -941,6 +941,25 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 	}
 }
 
+// -----------------------------------------------------------------------------
+// [JN] Smooth bobbing for raise and lowering weapons
+// -----------------------------------------------------------------------------
+
+static inline void R_ApplyRaiseLowerBob (fixed_t *sx, boolean bobx)
+{
+	const angle_t angle = (128 * leveltime) & FINEMASK;
+
+	if (sx)
+	{
+		*sx = FRACUNIT;
+
+		if (bobx)
+		{
+			 *sx += FixedMul(viewplayer->bob, finecosine[angle]);
+		}
+	}
+}
+
 // -------------------------------------------------------------------------
 //
 // [crispy] & [JN] Уполовиненная амплитуда при стрельбе в движении
@@ -1032,6 +1051,21 @@ void R_DrawPSprite (pspdef_t* psp)
     /* BFG9000    */ state == S_BFG3     || state == S_BFG4 ))
     {
         R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
+    }
+    
+    // [JN] Smoothen bobbing while weapon changing (raising and lowering).
+    if (!vanillaparm && weapon_bobbing && (
+    /* Кулак      */ state == S_PUNCHDOWN   || state == S_PUNCHUP   ||
+    /* Бензопила  */ state == S_SAWDOWN     || state == S_SAWUP     ||
+    /* Пистолет   */ state == S_PISTOLDOWN  || state == S_PISTOLUP  ||
+    /* Дробовик   */ state == S_SGUNDOWN    || state == S_SGUNUP    ||
+    /* Двустволка */ state == S_DSGUNDOWN   || state == S_DSGUNUP   ||
+    /* Пулемет    */ state == S_CHAINDOWN   || state == S_CHAINUP   ||
+    /* Ракетница  */ state == S_MISSILEDOWN || state == S_MISSILEUP ||
+    /* Плазмаган  */ state == S_PLASMADOWN  || state == S_PLASMAUP  ||
+    /* BFG9000    */ state == S_BFGDOWN     || state == S_BFGUP ))
+    {
+        R_ApplyRaiseLowerBob(&psp_sx, true);
     }
     
     // [JN] Уполовиненная амплитуда покачия оружия при стрельбе в движении

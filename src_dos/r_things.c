@@ -833,6 +833,22 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 	}
 }
 
+// [JN] Smooth bobbing for raise and lowering weapons
+static inline void R_ApplyRaiseLowerBob (fixed_t *sx, boolean bobx)
+{
+	const angle_t angle = (128 * leveltime) & FINEMASK;
+
+	if (sx)
+	{
+		*sx = FRACUNIT;
+
+		if (bobx)
+		{
+			 *sx += FixedMul(viewplayer->bob, finecosine[angle]);
+		}
+	}
+}
+
 // [crispy] & [JN] Halfed amplitude and special SAW'ing amplitude
 static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
 {
@@ -913,6 +929,21 @@ void R_DrawPSprite (pspdef_t* psp)
         R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
     }
     
+    // [JN] Smoothen bobbing while weapon changing (raising and lowering).
+    if (weapon_bobbing && !vanilla && (
+    /* Fist       */ state == S_PUNCHDOWN   || state == S_PUNCHUP   ||
+    /* Chainsaw   */ state == S_SAWDOWN     || state == S_SAWUP     ||
+    /* Pistol     */ state == S_PISTOLDOWN  || state == S_PISTOLUP  ||
+    /* Shotgun    */ state == S_SGUNDOWN    || state == S_SGUNUP    ||
+    /* SSG        */ state == S_DSGUNDOWN   || state == S_DSGUNUP   ||
+    /* Chaingun   */ state == S_CHAINDOWN   || state == S_CHAINUP   ||
+    /* RLauncher  */ state == S_MISSILEDOWN || state == S_MISSILEUP ||
+    /* Plasmagun  */ state == S_PLASMADOWN  || state == S_PLASMAUP  ||
+    /* BFG9000    */ state == S_BFGDOWN     || state == S_BFGUP ))
+    {
+        R_ApplyRaiseLowerBob(&psp_sx, true);
+    }
+
     // [JN] Halfed amplitude for bobbing while moving and shooting
     if (weapon_bobbing && !vanilla && (
     /* Fist      */ state == S_PUNCH1   || state == S_PUNCH2   || state == S_PUNCH3   || state == S_PUNCH4  || state == S_PUNCH5 ||
