@@ -535,8 +535,7 @@ P_UseSpecialLine
 	break;
 	
       case 46:
-	// [JN] Play "oof" sound for "Open Door Impact", while it's closed.
-	if (line->special != 0)
+	// [JN] Play "oof" sound for "Open Door Impact".
 	    S_StartSound(NULL,sfx_oof);
 	break;
 
