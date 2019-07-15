@@ -31,6 +31,7 @@
 #include "doomstat.h"
 #include "r_local.h"
 #include "r_sky.h"
+#include "r_swirl.h"
 #include "r_bmaps.h"
 
 #include "jn.h"
