@@ -433,12 +433,27 @@ A_Raise
   pspdef_t*	psp )
 {
     statenum_t	newstate;
+    int angle;
 	
+    // [JN] Define bobbing angles
+    angle = (128*leveltime)&FINEMASK;
+    angle &= FINEANGLES/2-1;
+    
     if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     psp->sy -= RAISESPEED;
 
-    if (psp->sy > WEAPONTOP )
-	return;
+    // [JN] Smoothen bobbing while weapon raising.
+    // Accout Y bobbing for WEAPONTOP position. Not safe for internal demos!
+    if (singleplayer && weapon_bobbing && !vanillaparm)
+    {
+        if (psp->sy > WEAPONTOP + FixedMul (player->bob, finesine[angle]))
+        return;
+    }
+    else
+    {
+        if (psp->sy > WEAPONTOP)
+        return;
+    }
     
     psp->sy = WEAPONTOP;
     
