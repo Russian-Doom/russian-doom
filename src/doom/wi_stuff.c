@@ -714,7 +714,13 @@ void WI_drawTime (int x, int y, int t, boolean suck)
             {
                 V_DrawShadowedPatchDoom(x-ORIGWIDTH_DELTA, y, colon);
             }
-        } while (t / div);
+        } while (t / div && div < 3600);
+
+        // [crispy] print at most in hhhh:mm:ss format
+        if ((n = (t / div)))
+        {
+            x = WI_drawNum(x, y, n, -1);
+        }
     }
     else
     {
@@ -1530,9 +1536,12 @@ void WI_drawStats(void)
             }
             else
             {
-                V_DrawShadowedPatchDoom((SP_TIMEX + 24)+ORIGWIDTH_DELTA, SP_TIMEY + 16, overtime);
+                // [JN] Choose x-position for long Russian "Общее время"
+                V_DrawShadowedPatchDoom(SP_TIMEX + (wide ? 0 : 24) + ORIGWIDTH_DELTA,
+                                        SP_TIMEY + 16, overtime);
                 // [crispy] choose x-position depending on width of time string
-                WI_drawTime((296 - SP_TIMEX)+(ORIGWIDTH_DELTA*2), SP_TIMEY + 16, ttime, false);
+                WI_drawTime(SP_TIMEX + (wide ? 288 : 264) + (ORIGWIDTH_DELTA * 2),
+                            SP_TIMEY + 16, ttime, false);
             }
         }
     }

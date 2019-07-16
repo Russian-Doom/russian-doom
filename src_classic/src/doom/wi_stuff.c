@@ -887,7 +887,13 @@ WI_drawTime
 	    if (div==60 || t / div)
 		V_DrawShadowedPatch(x, y, colon);
 	    
-	} while (t / div);
+	} while (t / div && div < 3600);
+
+    // [crispy] print at most in hhhh:mm:ss format
+    if ((n = (t / div)))
+    {
+        x = WI_drawNum(x, y, n, -1);
+    }
     }
     else
     {
@@ -1645,11 +1651,15 @@ void WI_drawStats(void)
     if (sp_state > 8)
     {
     const int ttime = wbs->totaltimes / TICRATE;
+    const boolean wide = (ttime > 61*59);
 
-	// [JN] Write "общее время"
-	RD_WriteTextBig(SP_TIMEX + 24, SP_TIMEY + 13, "j,ott dhtvz");
+    // [JN] Write "общее время", choose x-position
+	RD_WriteTextBig(SP_TIMEX + (wide ? 0 : 24),
+                    SP_TIMEY + 13, "j,ott dhtvz");
+
 	// [crispy] choose x-position depending on width of time string
-	WI_drawTime(296 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+    WI_drawTime(SP_TIMEX + (wide ? 288 : 264),
+                SP_TIMEY + 16, ttime, false);
     }
 }
 

@@ -724,7 +724,13 @@ WI_drawTime
             V_DrawPatch(x, y, FB, colon);
         }
 	    
-	} while (t / div);
+	} while (t / div && div < 3600);
+
+        // [crispy] print at most in hhhh:mm:ss format
+        if ((n = (t / div)))
+        {
+            x = WI_drawNum(x, y, n, -1);
+        }
     }
     else
     {
@@ -1503,14 +1509,19 @@ void WI_drawStats(void)
     if (sp_state > 8)
     {
         const int ttime = wbs->totaltimes / TICRATE;
+        const boolean wide = (ttime > 61*59) || (SP_TIMEX + SHORT(total->width) >= SCREENWIDTH/4);
 
         if (!vanilla)
         {
-        V_DrawShadow(SP_TIMEX + 25, SP_TIMEY + 17, FB, overtime);
-        V_DrawPatch(SP_TIMEX + 24, SP_TIMEY + 16, FB, overtime);
-        //V_DrawPatch(SP_TIMEX, SP_TIMEY + 16, total);
-        // [crispy] choose x-position depending on width of time string
-        WI_drawTime(296 - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+            // [JN] Choose x-position for long Russian "Общее время"
+            V_DrawShadow(SP_TIMEX + (wide ? 1 : 25),
+                         SP_TIMEY + 17, FB, overtime);
+            V_DrawPatch(SP_TIMEX + (wide ? 0 : 24),
+                        SP_TIMEY + 16, FB, overtime);
+
+            // [crispy] choose x-position depending on width of time string
+            WI_drawTime(SP_TIMEX + (wide ? 288 : 264),
+                        SP_TIMEY + 16, ttime, false);
         }
     }
 
