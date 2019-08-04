@@ -728,8 +728,7 @@ boolean ST_Responder (event_t* ev)
             {
                 M_snprintf(msg, sizeof(msg), "%s%s - %s",
                 english_language ? STSTR_VERSION : STSTR_VERSION_RUS,
-                english_language ? STSRT_ARCH : STSRT_ARCH_RUS,
-                english_language ? STSRT_DATE : STSRT_DATE_RUS);
+                english_language ? STSRT_ARCH : STSRT_ARCH_RUS, STSRT_DATE);
 
                 plyr->message = msg;
             }

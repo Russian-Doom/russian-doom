@@ -363,7 +363,7 @@
 #else
 #define TXT_ARCH      ""
 #endif
-#define TXT_DATE      "IN DEVELOPMENT"      // YYYY-MM-DD
+#define TXT_DATE      "2019-08-04"          // YYYY-MM-DD
 
 
 #define TXT_VERSION_RUS "DTHCBZ 3>2>1"      // ВЕРСИЯ 3.2.1
@@ -374,5 +374,4 @@
 #else
 #define TXT_ARCH_RUS      ""                // ?  
 #endif
-#define TXT_DATE_RUS      "D HFPHF,JNRT"    // YYYY-MM-DD
 

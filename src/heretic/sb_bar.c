@@ -1744,7 +1744,7 @@ static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)
         M_snprintf(msg, sizeof(msg), "%s%s - %s",
         TXT_VERSION_RUS,
         TXT_ARCH_RUS,
-        TXT_DATE_RUS);
+        TXT_DATE);
     }
     
     P_SetMessage(player, msg, true);

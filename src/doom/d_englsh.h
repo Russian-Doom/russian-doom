@@ -2123,7 +2123,7 @@ PRESSYN_RUS
 #else
 #define STSRT_ARCH      ""
 #endif
-#define STSRT_DATE      "in development"    // YYYY-MM-DD
+#define STSRT_DATE      "2019-08-04"        // YYYY-MM-DD
 
 // Русский
 #define STSTR_VERSION_RUS   "dthcbz 3>2>1"  // Версия 3.2.1
@@ -2135,6 +2135,5 @@ PRESSYN_RUS
 #define STSRT_ARCH_RUS      ""              // ?  
 #endif
 
-#define STSRT_DATE_RUS      "d hfphf,jnrt"  // YYYY-MM-DD
 
 #endif
