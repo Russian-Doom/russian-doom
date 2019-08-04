@@ -1160,7 +1160,7 @@ PRESSYN
 
 
 // Port-specific strings
-#define STSTR_VERSION   "dthcbz 1>666f (09>02>2019)"                // Версия 1.666а (09.02.2019)
+#define STSTR_VERSION   "dthcbz 1>7 (2019-08-04)"                   // Версия 1.7 (2019-08-04)
 
 #define STSTR_KAADDED   "rk.xb gjkextys"                            // Ключи получены
 
