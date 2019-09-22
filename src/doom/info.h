@@ -1168,7 +1168,9 @@ typedef enum
     S_CANDELABRA_A4,
     S_BON3,         // (Press Beta)
     S_BON4,         // (Press Beta)
-    NUMSTATES
+    // [BH] extra dehacked states
+    EXTRASTATES = 1089,
+    NUMSTATES = 4000
 } statenum_t;
 
 

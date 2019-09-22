@@ -1626,6 +1626,7 @@ void G_SecretExitLevel (void)
 void G_DoCompleted (void) 
 { 
     int i; 
+    extern int bex_pars[4][10], bex_cpars[32]; // [crispy] support [PARS] sections in BEX files
 
     gameaction = ga_nothing; 
 
@@ -1803,10 +1804,34 @@ void G_DoCompleted (void)
     // for statcheck regression testing.
 
     if (gamemode == commercial)
-    wminfo.partime = TICRATE*cpars[gamemap-1];
+    {
+        // map33 has no official time: initialize to zero
+        if (gamemap == 33)
+        {
+            wminfo.partime = 0;
+        }
+        else
+        // [crispy] support [PARS] sections in BEX files
+        if (bex_cpars[gamemap-1])
+        {
+            wminfo.partime = TICRATE*bex_cpars[gamemap-1];
+        }
+        else
+        {
+            wminfo.partime = TICRATE*cpars[gamemap-1];
+        }
+    }
 
     else if (gameepisode < 4)
-    wminfo.partime = TICRATE*pars[gameepisode][gamemap];
+    {
+        // [crispy] support [PARS] sections in BEX files
+        if (bex_pars[gameepisode][gamemap])
+        {
+            wminfo.partime = TICRATE*bex_pars[gameepisode][gamemap];
+        }
+        else
+        wminfo.partime = TICRATE*pars[gameepisode][gamemap];
+    }
 
     else if (gameepisode == 4 && singleplayer)
 	wminfo.partime = TICRATE*e4pars[gamemap];
