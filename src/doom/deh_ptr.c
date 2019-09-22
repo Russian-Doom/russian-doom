@@ -27,6 +27,7 @@
 #include "deh_defs.h"
 #include "deh_io.h"
 #include "deh_main.h"
+#include "jn.h"
 
 actionf_t codeptrs[NUMSTATES]; // [crispy] share with deh_bexptr.c
 
