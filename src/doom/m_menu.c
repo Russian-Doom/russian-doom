@@ -413,6 +413,7 @@ void M_RD_Change_Brightmaps(int choice);
 void M_RD_Change_FakeContrast(int choice);
 void M_RD_Change_Transparency(int choice);
 void M_RD_Change_ColoredHUD(int choice);
+void M_RD_Change_MessagesColor(int choice);
 void M_RD_Change_ColoredBlood(int choice);
 void M_RD_Change_SwirlingLiquids(int choice);
 void M_RD_Change_InvulSky(int choice);
@@ -1161,12 +1162,12 @@ enum
     rd_gameplay_1_fake_contrast,
     rd_gameplay_1_translucency,
     rd_gameplay_1_colored_hud,
+    rd_gameplay_1_colored_messages,
     rd_gameplay_1_colored_blood,
     rd_gameplay_1_swirling_liquids,
     rd_gameplay_1_invul_sky,
     rd_gameplay_1_red_resurrection_flash,
     rd_gameplay_1_draw_shadowed_text,
-    rd_gameplay_1_empty1,
     rd_gameplay_1_next_page,
     rd_gameplay_1_last_page,
     rd_gameplay_1_end
@@ -1234,12 +1235,12 @@ menuitem_t RD_Gameplay_Menu_1[]=
     {1,"Fake contrast:",                    M_RD_Change_FakeContrast,   'f'},
     {1,"Transparency:",                     M_RD_Change_Transparency,   't'},
     {1,"Colored HUD elements:",             M_RD_Change_ColoredHUD,     'c'},
+    {1,"Pickup message color:",             M_RD_Change_MessagesColor,  'p'},
     {1,"Colored blood and corpses:",        M_RD_Change_ColoredBlood,   'c'},
     {1,"Swirling liquids:",                 M_RD_Change_SwirlingLiquids,'s'},
     {1,"Invulnerability affects sky:",      M_RD_Change_InvulSky,       'i'},
     {1,"Red resurrection flash:",           M_RD_Change_RedRussurection,'r'},
     {1,"Text casts shadows:",               M_RD_Change_ShadowedText,   't'},
-    {-1,"",0,'\0'},
     {1,"", /* Next page > */                M_RD_Choose_Gameplay_2,     'n'},
     {1,"", /* < Last page */                M_RD_Choose_Gameplay_4,     'l'},
     {-1,"",0,'\0'}
@@ -1347,12 +1348,12 @@ menuitem_t RD_Gameplay_Menu_1_Rus[]=
     {1,"Bvbnfwbz rjynhfcnyjcnb:",           M_RD_Change_FakeContrast,   'b'},   // Имитация контрастности
     {1,"Ghjphfxyjcnm j,]trnjd:",            M_RD_Change_Transparency,   'g'},   // Прозрачность объектов
     {1,"Hfpyjwdtnyst 'ktvtyns $:",          M_RD_Change_ColoredHUD,     'h'},   // Разноцветные элементы HUD
+    {1,"Wdtn cjj,otybq d $:",               M_RD_Change_MessagesColor,  'w'},   // Цвет сообщений в HUD
     {1,"Hfpyjwdtnyfz rhjdm b nhegs:",       M_RD_Change_ColoredBlood,   'h'},   // Разноцветная кровь и трупы
     {1,"ekexityyfz fybvfwbz ;blrjcntq:",    M_RD_Change_SwirlingLiquids,'e'},   // Улучшенная анимация жидкостей
     {1,"ytezpdbvjcnm jrhfibdftn yt,j:",     M_RD_Change_InvulSky,       'y'},   // Неуязвимость окрашивает небо
     {1,"rhfcyfz dcgsirf djcrhtitybz:",      M_RD_Change_RedRussurection,'r'},   // Красная вспышка воскрешения
     {1,"ntrcns jn,hfcsdf.n ntym:",          M_RD_Change_ShadowedText,   'n'},   // Тексты отбрасывают тень
-    {-1,"",0,'\0'},
     {1,"",                                  M_RD_Choose_Gameplay_2,     'l'},   // Далее >
     {1,"",                                  M_RD_Choose_Gameplay_4,     'y'},   // < Назад
     {-1,"",0,'\0'}
@@ -1998,21 +1999,38 @@ void M_RD_Draw_Gameplay_1(void)
         // Colored HUD
         if (colored_hud) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(205 + ORIGWIDTH_DELTA, 75, RD_ON); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(205 + ORIGWIDTH_DELTA, 75, RD_OFF); dp_translation = NULL; }
+        // Pickup message color
+        if (colored_messages == 1)
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 85, "green"); dp_translation = NULL; }
+        else if (colored_messages == 2)
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 85, "blue"); dp_translation = NULL; }
+        else if (colored_messages == 3)
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 85, "yellow"); dp_translation = NULL; }
+        else if (colored_messages == 4)
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 85, "white"); dp_translation = NULL; }
+        else if (colored_messages == 5)
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 85, "tan"); dp_translation = NULL; }
+        else if (colored_messages == 6)
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 85, "brown"); dp_translation = NULL; }
+        else if (colored_messages == 7)
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 85, "brick"); dp_translation = NULL; }
+        else
+        { dp_translation = NULL; M_WriteTextSmall(200 + ORIGWIDTH_DELTA, 85, "standard"); }
         // Colored blood and corpses
-        if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(239 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(239 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
+        if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(239 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(239 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
         // Swirling liquids
-        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(160 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(160 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(160 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(160 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
         // Invulnerability affects sky
-        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(247 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(247 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
+        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(247 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(247 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
         // Red resurrection flash
-        if (red_resurrection_flash) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(215 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(215 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
+        if (red_resurrection_flash) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(215 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(215 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
         // Text casts shadows
-        if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(187 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(187 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
+        if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(187 + ORIGWIDTH_DELTA, 135, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(187 + ORIGWIDTH_DELTA, 135, RD_OFF); dp_translation = NULL; }
 
         // Footer
         dp_translation = cr[CR_GOLD];
@@ -2039,21 +2057,38 @@ void M_RD_Draw_Gameplay_1(void)
         // Разноцветные элементы HUD
         if (colored_hud) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(249 + ORIGWIDTH_DELTA, 75, RD_ON_RUS); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(249 + ORIGWIDTH_DELTA, 75, RD_OFF_RUS); dp_translation = NULL; }
+        // Цвет сообщений в HUD
+        if (colored_messages == 1) // Зеленый
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(203 + ORIGWIDTH_DELTA, 85, "ptktysq"); dp_translation = NULL; }
+        else if (colored_messages == 2) // Синий
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall(203 + ORIGWIDTH_DELTA, 85, "cbybq"); dp_translation = NULL; }
+        else if (colored_messages == 3) // Желтый
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall(203 + ORIGWIDTH_DELTA, 85, ";tknsq"); dp_translation = NULL; }
+        else if (colored_messages == 4) // Белый
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall(203 + ORIGWIDTH_DELTA, 85, ",tksq"); dp_translation = NULL; }
+        else if (colored_messages == 5) // Бежевый
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall(203 + ORIGWIDTH_DELTA, 85, ",t;tdsq"); dp_translation = NULL; }
+        else if (colored_messages == 6) // Коричневый
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall(203 + ORIGWIDTH_DELTA, 85, "rjhbxytdsq"); dp_translation = NULL; }
+        else if (colored_messages == 7) // Розовый
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall(203 + ORIGWIDTH_DELTA, 85, "hjpjdsq"); dp_translation = NULL; }
+        else                            // Стандартный (красный)
+        { dp_translation = NULL; M_WriteTextSmall(203 + ORIGWIDTH_DELTA, 85, "cnfylfhnysq"); }
         // Разноцветная кровь и трупы
-        if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(252 + ORIGWIDTH_DELTA, 85, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(252 + ORIGWIDTH_DELTA, 85, RD_OFF_RUS); dp_translation = NULL; }
+        if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(252 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(252 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
         // Улучшенная анимация жидкостей
-        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(285 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(285 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
+        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(285 + ORIGWIDTH_DELTA, 105, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(285 + ORIGWIDTH_DELTA, 105, RD_OFF_RUS); dp_translation = NULL; }
         // Неуязвимость окрашивает небо
-        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(272 + ORIGWIDTH_DELTA, 105, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(272 + ORIGWIDTH_DELTA, 105, RD_OFF_RUS); dp_translation = NULL; }
+        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(272 + ORIGWIDTH_DELTA, 115, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(272 + ORIGWIDTH_DELTA, 115, RD_OFF_RUS); dp_translation = NULL; }
         // Красная вспышка воскрешения
-        if (red_resurrection_flash) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(267 + ORIGWIDTH_DELTA, 115, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(267 + ORIGWIDTH_DELTA, 115, RD_OFF_RUS); dp_translation = NULL; }
+        if (red_resurrection_flash) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(267 + ORIGWIDTH_DELTA, 125, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(267 + ORIGWIDTH_DELTA, 125, RD_OFF_RUS); dp_translation = NULL; }
         // Тексты отбрасывают тень
-        if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(236 + ORIGWIDTH_DELTA, 125, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(236 + ORIGWIDTH_DELTA, 125, RD_OFF_RUS); dp_translation = NULL; }
+        if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(236 + ORIGWIDTH_DELTA, 135, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(236 + ORIGWIDTH_DELTA, 135, RD_OFF_RUS); dp_translation = NULL; }
 
 
         // Footer
@@ -2388,6 +2423,22 @@ void M_RD_Change_ColoredHUD(int choice)
     }
 }
 
+void M_RD_Change_MessagesColor(int choice)
+{
+    static char msgcolor[32];
+    choice = 0;
+    colored_messages++;
+    
+    if (colored_messages > 7)
+        colored_messages = 0;
+
+    // Print example message
+    M_snprintf(msgcolor, sizeof(msgcolor), english_language ? 
+                                           "Pickup message example" :
+                                           "ghjdthrf wdtnf cjj,otybz");
+    players[consoleplayer].message = msgcolor;
+}
+
 void M_RD_Change_ColoredBlood(int choice)
 {
     choice = 0;
@@ -2617,6 +2668,7 @@ void M_RD_BackToDefaultsResponse(int key)
     fake_contrast           = 0;
     translucency            = 1;    
     colored_hud             = 0;
+    colored_messages        = 0;
     colored_blood           = 1;
     swirling_liquids        = 1;
     invul_sky               = 1;
@@ -4570,6 +4622,10 @@ void M_Init (void)
     if (screenSize > 5)
         screenSize = 5;
 #endif
+
+    // [JN] Safeguard: correct invalid pickup message colors
+    if (colored_messages < 0 || colored_messages > 7)
+        colored_messages = 0;
 
     // Here we could catch other version dependencies,
     //  like HELP1/2, and four episodes.

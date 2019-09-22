@@ -827,7 +827,7 @@ void HU_Drawer(void)
         static char str[32], *s;
         int time = leveltime / TICRATE;
 
-        HUlib_drawTextLine(&w_title, false);
+        HUlib_drawTextLineUncolored(&w_title, false);
 
         // [from-crispy] Show level stats in automap
         if (!vanillaparm && automap_stats)
@@ -839,7 +839,7 @@ void HU_Drawer(void)
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_kills, *(s++));
-            HUlib_drawTextLine(&w_kills, false);
+            HUlib_drawTextLineUncolored(&w_kills, false);
     
             sprintf(str, english_language ?
                          "Items: %d/%d" : "ghtlvtns: %d/%d",
@@ -848,7 +848,7 @@ void HU_Drawer(void)
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_items, *(s++));
-            HUlib_drawTextLine(&w_items, false);
+            HUlib_drawTextLineUncolored(&w_items, false);
     
             sprintf(str, english_language ?
                          "Secret: %d/%d" : "nfqybrb: %d/%d",
@@ -857,7 +857,7 @@ void HU_Drawer(void)
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_scrts, *(s++));
-            HUlib_drawTextLine(&w_scrts, false);
+            HUlib_drawTextLineUncolored(&w_scrts, false);
             sprintf(str, english_language ?
                          "Skill: %d" : "ckj;yjcnm: %d",
                          gameskill+1);
@@ -865,13 +865,13 @@ void HU_Drawer(void)
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_skill, *(s++));
-            HUlib_drawTextLine(&w_skill, false);
+            HUlib_drawTextLineUncolored(&w_skill, false);
             sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
             HUlib_clearTextLine(&w_ltime);
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_ltime, *(s++));
-            HUlib_drawTextLine(&w_ltime, false);
+            HUlib_drawTextLineUncolored(&w_ltime, false);
         }
     }
 

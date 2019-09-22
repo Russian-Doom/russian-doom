@@ -27,6 +27,7 @@
 #include "hu_lib.h"
 #include "r_local.h"
 #include "r_draw.h"
+#include "v_trans.h"
 #include "jn.h"
 
 // boolean : whether the screen is always erased
@@ -88,6 +89,78 @@ boolean HUlib_delCharFromTextLine(hu_textline_t* t)
 
 void
 HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
+{
+    int i;
+    int w;
+    int x;
+    unsigned char c;
+
+    // draw the new stuff
+    x = l->x;
+    for (i=0;i<l->len;i++)
+    {
+        c = toupper(l->l[i]);
+
+        if (c != ' ' && c >= l->sc && c <= '_')
+        {
+            w = SHORT(l->f[c - l->sc]->width);
+
+            if (x+w > ORIGWIDTH)
+            break;
+
+            // [JN] Colorize message if necessary
+            if (colored_messages > 0 && !vanillaparm)
+            {
+                colored_messages == 1 ? dp_translation = cr[CR_GREEN] :
+                colored_messages == 2 ? dp_translation = cr[CR_BLUE2] :
+                colored_messages == 3 ? dp_translation = cr[CR_GOLD]  :
+                colored_messages == 4 ? dp_translation = cr[CR_GRAY]  :
+                colored_messages == 5 ? dp_translation = cr[CR_TAN]   :
+                colored_messages == 6 ? dp_translation = cr[CR_BROWN] :
+                colored_messages == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+            }
+        
+            V_DrawShadowedPatchDoom(x, l->y, l->f[c - l->sc]);
+
+            // [JN] Clear color translation if necessary
+            if (colored_messages > 0 && !vanillaparm)
+            dp_translation = NULL;
+
+            x += w;
+        }
+        else
+        {
+        x += 4;
+
+        if (x >= ORIGWIDTH)
+        break;
+        }
+    }
+
+    // draw the cursor if requested
+    if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= ORIGWIDTH)
+    {
+        // [JN] Colorize message if necessary
+        if (colored_messages > 0 && !vanillaparm)
+        {
+            colored_messages == 1 ? dp_translation = cr[CR_GREEN] :
+            colored_messages == 2 ? dp_translation = cr[CR_BLUE2] :
+            colored_messages == 3 ? dp_translation = cr[CR_GOLD]  :
+            colored_messages == 4 ? dp_translation = cr[CR_GRAY]  :
+            colored_messages == 5 ? dp_translation = cr[CR_TAN]   :
+            colored_messages == 6 ? dp_translation = cr[CR_BROWN] :
+            colored_messages == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+        }
+
+        V_DrawShadowedPatchDoom(x, l->y, l->f['_' - l->sc]);
+
+        // [JN] Clear color translation if necessary
+        if (colored_messages > 0 && !vanillaparm)
+        dp_translation = NULL;
+    }
+}
+
+void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
 {
     int i;
     int w;

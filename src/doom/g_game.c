@@ -253,6 +253,7 @@ int brightmaps = 1;
 int fake_contrast = 0;
 int translucency = 1;
 int colored_hud = 0;
+int colored_messages = 0;
 int colored_blood = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
