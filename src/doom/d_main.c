@@ -1582,10 +1582,11 @@ void D_SetGameDescription(void)
             {
                 while (++sgl != myargc && myargv[sgl][0] != '-')
                 {
-                    char *check;
-                    check = M_StrCaseStr(myargv[sgl], "sigil_compat.wad");
+                    boolean check;
+                    check = (M_StrCaseStr(myargv[sgl], "sigil_compat.wad") ||
+                            (M_StrCaseStr(myargv[sgl], "sigil_compat_v1_2.wad")));
 
-                    if (check != NULL)
+                    if (check)
                     {
                         if (english_language)
                         {
