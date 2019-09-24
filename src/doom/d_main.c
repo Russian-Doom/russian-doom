@@ -1585,7 +1585,8 @@ void D_SetGameDescription(void)
                 {
                     boolean check;
                     check = (M_StrCaseStr(myargv[sgl], "sigil_compat.wad") ||
-                            (M_StrCaseStr(myargv[sgl], "sigil_compat_v1_2.wad")));
+                            (M_StrCaseStr(myargv[sgl], "sigil_compat_v1_2.wad")) ||
+                            (M_StrCaseStr(myargv[sgl], "sigil_compat_v1_21.wad")) );
 
                     if (check)
                     {
