@@ -563,6 +563,7 @@ void AM_clearMarks(void)
 //
 void AM_LevelInit(void)
 {
+    fixed_t a, b;
     leveljuststarted = 0;
 
     f_x = f_y = 0;
@@ -573,7 +574,11 @@ void AM_LevelInit(void)
     AM_clearMarks();
 
     AM_findMinMaxBoundaries();
-    scale_mtof = FixedDiv(min_scale_mtof, (int) (0.7*FRACUNIT));
+    // [crispy] initialize zoomlevel on all maps so that a 4096 units
+    // square map would just fit in (MAP01 is 3376x3648 units)
+    a = FixedDiv(f_w, (max_w>>FRACBITS < 2048) ? 2*(max_w>>FRACBITS) : 4096);
+    b = FixedDiv(f_h, (max_h>>FRACBITS < 2048) ? 2*(max_h>>FRACBITS) : 4096);
+    scale_mtof = FixedDiv(a < b ? a : b, (int) (0.7*FRACUNIT));
 
     if (scale_mtof > max_scale_mtof)
     scale_mtof = min_scale_mtof;
