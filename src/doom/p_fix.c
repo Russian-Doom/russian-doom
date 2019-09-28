@@ -820,6 +820,8 @@ linefix_t linefix[] =
     { doom,             4,   1,     195,    0, "",         "",            "",                 -8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     202,    0, "",         "",            "",                 64,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     203,    0, "",         "",            "",                 56,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   1,     214,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   1,     215,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     227,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     230,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     232,    0, "",         "",            "",                160,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
