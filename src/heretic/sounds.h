@@ -24,7 +24,7 @@
 #include "i_sound.h"
 
 #define MAX_SND_DIST 	1600
-#define MAX_CHANNELS	16
+#define MAX_CHANNELS	64
 
 // Music identifiers
 
