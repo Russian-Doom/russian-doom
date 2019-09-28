@@ -1863,7 +1863,7 @@ void ST_drawWidgets(boolean refresh)
     // must be redrawn immediately. Also see AM_Stop at am_map.c.
     if (gamemode == pressbeta)
     {
-        if (!automapactive)
+        if (!automapactive || crispy_automapoverlay)
         {
             // [JN] Draw Artifacts widet
 #ifdef WIDESCREEN
