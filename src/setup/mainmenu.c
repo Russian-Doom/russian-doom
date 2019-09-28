@@ -125,6 +125,7 @@ static void SensibleDefaults(void)
     fake_contrast = 0;
     translucency = 1;
     colored_hud = 0;
+    colored_messages = 0;
     colored_blood = 1;
     swirling_liquids = 1;
     invul_sky = 1;
