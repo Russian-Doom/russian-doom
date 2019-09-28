@@ -148,6 +148,7 @@ int show_endoom   = 0;
 int local_time    = 0; // [JN] Local time widget
 
 boolean flip_levels_cmdline = false;
+boolean crispy_automapoverlay = false;
 
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
@@ -240,7 +241,7 @@ void D_Display (void)
         if (!gametic)
         break;
 
-        if (automapactive)
+        if (automapactive && !crispy_automapoverlay)
         {
             // [crispy] update automap while playing
             R_RenderPlayerView (&players[displayplayer]);
@@ -275,7 +276,7 @@ void D_Display (void)
     // I_UpdateNoBlit ();
 
     // draw the view directly
-    if (gamestate == GS_LEVEL && !automapactive && gametic)
+    if (gamestate == GS_LEVEL && (!automapactive || crispy_automapoverlay) && gametic)
     {
         R_RenderPlayerView (&players[displayplayer]);
 
@@ -287,7 +288,9 @@ void D_Display (void)
         ST_Drawer(0, 0);
     }
 
-    if (gamestate == GS_LEVEL && gametic)
+    // [crispy] in automap overlay mode,
+    // the HUD is drawn on top of everything else
+    if (gamestate == GS_LEVEL && gametic && !(automapactive && crispy_automapoverlay))
     HU_Drawer ();
 
     // clean up border stuff
@@ -310,7 +313,7 @@ void D_Display (void)
     }
 
     // see if the border needs to be updated to the screen
-    if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != (320 << hires))
+    if (gamestate == GS_LEVEL && (!automapactive || crispy_automapoverlay) && scaledviewwidth != (320 << hires))
     {
         if (menuactive || menuactivestate || !viewactivestate)
         borderdrawcount = 3;
@@ -333,6 +336,18 @@ void D_Display (void)
     inhelpscreensstate = inhelpscreens;
     oldgamestate = wipegamestate = gamestate;
 
+    // [crispy] in automap overlay mode,
+    // draw the automap and HUD on top of everything else
+    if (automapactive && crispy_automapoverlay)
+    {
+        AM_Drawer ();
+        HU_Drawer ();
+
+        // [crispy] force redraw of status bar and border
+        viewactivestate = false;
+        inhelpscreensstate = true;
+    }
+
     // draw pause pic
     if (paused)
     {
@@ -345,7 +360,7 @@ void D_Display (void)
         }
         else
         {
-            if (automapactive)
+            if (automapactive && !crispy_automapoverlay)
             y = 4;
             else if (gamestate == GS_INTERMISSION)  // [JN] Do not obstruct titles on intermission screen
             y = 28;

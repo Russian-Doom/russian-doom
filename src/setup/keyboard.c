@@ -78,6 +78,7 @@ static int *map_keys[] = { &key_map_north, &key_map_south, &key_map_east,
                            &key_map_west, &key_map_zoomin, &key_map_zoomout,
                            &key_map_toggle, &key_map_maxzoom, &key_map_follow,
                            &key_map_grid, &key_map_mark, &key_map_clearmark,
+                           &key_map_overlay,
                            NULL };
 
 static void UpdateJoybSpeed(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(var))
@@ -687,6 +688,10 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                          "Follow mode" :
                          "Режим следовани€",
                          &key_map_follow);
+    AddKeyControl(table, english_language ?
+                         "Overlay mode" :
+                         "Режим наложени€",
+                         &key_map_overlay);
     AddKeyControl(table, english_language ?
                          "Pan north" :
                          "Прокрутить вверх",

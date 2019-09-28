@@ -119,6 +119,7 @@ extern int key_map_follow;
 extern int key_map_grid;
 extern int key_map_mark;
 extern int key_map_clearmark;
+extern int key_map_overlay;
 
 // menu keys:
 

@@ -35,6 +35,7 @@
 #include "r_sky.h"
 #include "g_game.h"
 
+#include "crispy.h"
 #include "jn.h"
 
 
@@ -867,7 +868,7 @@ void R_RenderPlayerView (player_t* player)
     // Clear buffers.
     R_ClearClipSegs ();
     R_ClearDrawSegs ();
-    if (automapactive)
+    if (automapactive && !crispy_automapoverlay)
     {
         R_RenderBSPNode (numnodes-1);
         return;

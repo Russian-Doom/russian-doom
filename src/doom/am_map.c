@@ -49,6 +49,7 @@
 #include "am_map.h"
 #include "st_stuff.h"   // [JN] ST_refreshBackground and ST_drawWidgets
 
+#include "crispy.h"
 #include "jn.h"
 
 
@@ -743,6 +744,18 @@ boolean AM_Responder (event_t* ev)
             AM_clearMarks();
             plr->message = DEH_String(english_language ? AMSTR_MARKSCLEARED : AMSTR_MARKSCLEARED_RUS);
         }
+        else if (key == key_map_overlay)
+        {
+            // [crispy] force redraw status bar
+            extern boolean inhelpscreens;
+            inhelpscreens = true;
+            
+            crispy_automapoverlay = !crispy_automapoverlay;
+            if (crispy_automapoverlay)
+                plr->message = DEH_String(english_language ? AMSTR_OVERLAYON : AMSTR_OVERLAYON_RUS);
+            else
+                plr->message = DEH_String(english_language ? AMSTR_OVERLAYOFF : AMSTR_OVERLAYOFF_RUS);
+        }
         else
         {
             rc = false;
@@ -1435,6 +1448,7 @@ void AM_Drawer (void)
     if (!automapactive)
     return;
 
+    if (!crispy_automapoverlay)
     AM_clearFB(BACKGROUND);
 
     if (grid)

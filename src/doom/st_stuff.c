@@ -63,6 +63,7 @@
 
 #include "v_trans.h"
 
+#include "crispy.h"
 #include "jn.h"
 
 
@@ -486,10 +487,11 @@ void ST_Stop(void);
 void ST_refreshBackground(void)
 {
 #ifdef WIDESCREEN
-    if (!automapactive)
+    // [JN] Prevent status bar blinking after switching automap overlay mode
+    if (!automapactive || (automapactive && crispy_automapoverlay))
     return;
 #else
-    if (screenblocks >= 11 && !automapactive)
+    if (screenblocks >= 11 && (!automapactive || (automapactive && crispy_automapoverlay)))
     return;    
 #endif
 
@@ -1684,7 +1686,7 @@ void ST_drawWidgets(boolean refresh)
     }
 
     // [JN] Wide screen: Side bezel for reconstructed standard HUD
-    if (screenblocks == 9 || automapactive)
+    if (screenblocks == 9 || (automapactive && !crispy_automapoverlay))
     {
         if (gamemode == commercial)                 
         {
@@ -1710,7 +1712,8 @@ void ST_drawWidgets(boolean refresh)
     dp_translation = NULL;
 
     // [crispy] draw "special widgets" in the Crispy HUD
-    if ((screenblocks >= 11 && screenblocks <= 13) && !automapactive)
+    if ((screenblocks >= 11 && screenblocks <= 13)
+    && (!automapactive || (automapactive && crispy_automapoverlay)))
     {
         // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
@@ -1743,9 +1746,9 @@ void ST_drawWidgets(boolean refresh)
 
     // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
 #ifdef WIDESCREEN
-    if ((screenblocks >= 9 && screenblocks <= 11) && !automapactive)
+    if ((screenblocks >= 9 && screenblocks <= 11) && (!automapactive || (automapactive && crispy_automapoverlay)))
 #else
-    if (screenblocks == 11 && !automapactive)
+    if (screenblocks == 11 && (!automapactive || (automapactive && crispy_automapoverlay)))
 #endif
     {
         if (netgame)    // [JN] Account player's color in network game
@@ -1758,7 +1761,7 @@ void ST_drawWidgets(boolean refresh)
     // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
     if (screenblocks == 11 || screenblocks == 12)
     {
-        if (!automapactive) // [JN] Don't draw signs in automap
+        if (!automapactive || (automapactive && crispy_automapoverlay)) // [JN] Don't draw signs in automap
         {
             // [JN] Don't draw ammo for fist and chainsaw
             if (plyr->readyweapon == wp_pistol
@@ -1811,7 +1814,7 @@ void ST_drawWidgets(boolean refresh)
 #endif
 
     // [JN] Don't update/draw ARMS background in Press Beta
-    if ((screenblocks < 11 || automapactive) && gamemode != pressbeta)
+    if ((screenblocks < 11 || (automapactive && !crispy_automapoverlay)) && gamemode != pressbeta)
     STlib_updateBinIcon(&w_armsbg, refresh);
 
     // [Doom Retro] & [crispy] show SSG availability in the Shotgun slot of the arms widget
@@ -1830,7 +1833,7 @@ void ST_drawWidgets(boolean refresh)
 #endif
     }
 
-    if (screenblocks < 12 || automapactive)
+    if (screenblocks < 12 || (automapactive && !crispy_automapoverlay))
 #ifdef WIDESCREEN
     STlib_updateMultIcon(&w_faces, refresh || (screenblocks >= 9 
                                            &&  screenblocks <= 11));
@@ -1930,9 +1933,9 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
     extern boolean inhelpscreens;
 
 #ifdef WIDESCREEN
-    st_statusbaron = (!fullscreen) || automapactive || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12;
+    st_statusbaron = (!fullscreen) || (automapactive && !crispy_automapoverlay) || screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12;
 #else
-    st_statusbaron = (!fullscreen) || automapactive || screenblocks == 11 || screenblocks == 12;
+    st_statusbaron = (!fullscreen) || (automapactive && !crispy_automapoverlay) || screenblocks == 11 || screenblocks == 12;
 #endif
     st_firsttime = st_firsttime || refresh || inhelpscreens;
 
@@ -2415,7 +2418,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
     }
 
     // Wide screen: Side bezel for reconstructed standard HUD
-    if (screenblocks == 9 || automapactive)
+    if (screenblocks == 9 || (automapactive && !crispy_automapoverlay))
     {
         V_DrawPatch(0, 160, W_CacheLumpName(DEH_String("RDWBJGLF"), PU_CACHE));
         V_DrawPatch(373, 160, W_CacheLumpName(DEH_String("RDWBJGRT"), PU_CACHE));
@@ -2426,7 +2429,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
 
     // [crispy] draw "special widgets" in the Crispy HUD
     if ((screenblocks == 11 || screenblocks == 12 || screenblocks == 13) 
-    && !automapactive)
+    && (!automapactive || (automapactive && crispy_automapoverlay)))
     {
         // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
@@ -2453,14 +2456,15 @@ void ST_drawWidgetsJaguar (boolean refresh)
     }
 
     // Signed Crispy HUD: no STBAR backbround, with player's face/background
-    if (screenblocks == 11 && !automapactive)
+    if (screenblocks == 11 && (!automapactive || (automapactive && crispy_automapoverlay)))
     {
         V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("STPBG"), PU_CACHE));
     } 
 
     // Signed Crispy HUD: no STBAR backbround, without player's 
     // face/background. Also don't draw signs in automap.
-    if ((screenblocks == 11 || screenblocks == 12) && !automapactive)
+    if ((screenblocks == 11 || screenblocks == 12) 
+    && (!automapactive || (automapactive && crispy_automapoverlay)))
     {
         // Don't draw ammo for fist and chainsaw
         if (plyr->readyweapon != wp_fist && plyr->readyweapon != wp_chainsaw)
@@ -2508,7 +2512,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
 #endif
 
     // Faces widet (don't draw in Traditional Crispy HUD / full screen) --------
-    if (screenblocks < 12 || automapactive)
+    if (screenblocks < 12 || (automapactive && !crispy_automapoverlay))
 #ifdef WIDESCREEN
     STlib_updateMultIcon(&w_faces, refresh || screenblocks == 9
                                            || screenblocks == 10

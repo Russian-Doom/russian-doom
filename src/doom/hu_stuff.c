@@ -42,6 +42,7 @@
 #include "d_englsh.h"
 #include "sounds.h"
 
+#include "crispy.h"
 #include "jn.h"
 
 

@@ -32,6 +32,7 @@
 #include "g_game.h"
 #include "r_segs.h"
 #include "r_bmaps.h"
+#include "crispy.h"
 #include "jn.h"
 
 // MACROS ------------------------------------------------------------------
@@ -594,7 +595,7 @@ void R_StoreWallRange (int start, int stop)
     linedef->flags |= ML_MAPPED;
 
     // [crispy] (flags & ML_MAPPED) is all we need to know for automap
-    if (automapactive)
+    if (automapactive && !crispy_automapoverlay)
     return;
 
     // calculate rw_distance for scale calculation
