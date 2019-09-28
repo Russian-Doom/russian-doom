@@ -485,6 +485,8 @@ PRESSYN
 #define AMSTR_MARKSCLEARED  "All Marks Cleared"
 #define AMSTR_OVERLAYON     "Overlay Mode ON"
 #define AMSTR_OVERLAYOFF    "Overlay Mode OFF"
+#define AMSTR_ROTATEON      "Rotate Mode ON"
+#define AMSTR_ROTATEOFF     "Rotate Mode OFF"
 
 //
 // ST_stuff.C
@@ -1361,6 +1363,8 @@ PRESSYN_RUS
 #define AMSTR_MARKSCLEARED_RUS  "jnvtnrb jxbotys"           // Отметки очищены
 #define AMSTR_OVERLAYON_RUS     "ht;bv yfkj;tybz drk.xty"   // Режим наложения включен
 #define AMSTR_OVERLAYOFF_RUS    "ht;bv yfkj;tybz dsrk.xty"  // Режим наложения выключен
+#define AMSTR_ROTATEON_RUS      "ht;bv dhfotybz drk.xty"    // Режим вращения включен
+#define AMSTR_ROTATEOFF_RUS     "ht;bv dhfotybz dsrk.xty"   // Режим вращения выключен
 
 //
 // ST_stuff.C

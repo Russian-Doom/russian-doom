@@ -173,6 +173,7 @@ int key_map_grid      = 'g';
 int key_map_mark      = 'm';
 int key_map_clearmark = 'c';
 int key_map_overlay   = 'o';
+int key_map_rotate    = 'r';
 
 // menu keys:
 
@@ -397,6 +398,7 @@ void M_BindMapControls(void)
     M_BindIntVariable("key_map_mark",       &key_map_mark);
     M_BindIntVariable("key_map_clearmark",  &key_map_clearmark);
     M_BindIntVariable("key_map_overlay",    &key_map_overlay);
+    M_BindIntVariable("key_map_rotate",     &key_map_rotate);
 }
 
 void M_BindMenuControls(void)

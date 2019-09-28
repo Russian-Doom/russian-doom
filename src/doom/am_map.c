@@ -284,6 +284,14 @@ cheatseq_t cheat_amap_beta = CHEAT("eek", 0);
 
 static boolean stopped = true;
 
+// [crispy] automap rotate mode ...
+static boolean crispy_automaprotate = false;
+// ... needs these early on
+void AM_rotate (int64_t *x, int64_t *y, angle_t a);
+static void AM_rotatePoint (mpoint_t *pt);
+static mpoint_t mapcenter;
+static angle_t mapangle;
+
 // Calculates the slope and slope according to the x-axis of a line
 // segment in map coordinates (with the upright y-axis n' all) so
 // that it can be used with the brain-dead drawing stuff.
@@ -361,8 +369,18 @@ void AM_restoreScaleAndLoc(void)
 //
 void AM_addMark(void)
 {
-    markpoints[markpointnum].x = m_x + m_w/2;
-    markpoints[markpointnum].y = m_y + m_h/2;
+    // [crispy] keep the map static in overlay mode
+    // if not following the player
+    if (!(!followplayer && crispy_automapoverlay))
+    {
+        markpoints[markpointnum].x = m_x + m_w/2;
+        markpoints[markpointnum].y = m_y + m_h/2;
+    }
+    else
+    {
+        markpoints[markpointnum].x = plr->mo->x;
+        markpoints[markpointnum].y = plr->mo->y;
+    }
     markpointnum = (markpointnum + 1) % AM_NUMMARKPOINTS;
 }
 
@@ -412,14 +430,22 @@ void AM_findMinMaxBoundaries(void)
 //
 void AM_changeWindowLoc(void)
 {
+    int64_t incx, incy;
+
     if (m_paninc.x || m_paninc.y)
     {
         followplayer = 0;
         f_oldloc.x = INT_MAX;
     }
 
-    m_x += m_paninc.x;
-    m_y += m_paninc.y;
+    incx = m_paninc.x;
+    incy = m_paninc.y;
+    if (crispy_automaprotate)
+    {
+        AM_rotate(&incx, &incy, -mapangle);
+    }
+    m_x += incx;
+    m_y += incy;
 
     if (m_x + m_w/2 > max_x)
     m_x = max_x - m_w/2;
@@ -671,22 +697,24 @@ boolean AM_Responder (event_t* ev)
 
         if (key == key_map_east)        // pan right
         {
-            if (!followplayer) m_paninc.x = FTOM(F_PANINC);
+            // [crispy] keep the map static in overlay mode
+            // if not following the player
+            if (!followplayer && !crispy_automapoverlay) m_paninc.x = FTOM(F_PANINC);
             else rc = false;
         }
         else if (key == key_map_west)   // pan left
         {
-            if (!followplayer) m_paninc.x = -FTOM(F_PANINC);
+            if (!followplayer && !crispy_automapoverlay) m_paninc.x = -FTOM(F_PANINC);
             else rc = false;
         }
         else if (key == key_map_north)  // pan up
         {
-            if (!followplayer) m_paninc.y = FTOM(F_PANINC);
+            if (!followplayer && !crispy_automapoverlay) m_paninc.y = FTOM(F_PANINC);
             else rc = false;
         }
         else if (key == key_map_south)  // pan down
         {
-            if (!followplayer) m_paninc.y = -FTOM(F_PANINC);
+            if (!followplayer && !crispy_automapoverlay) m_paninc.y = -FTOM(F_PANINC);
             else rc = false;
         }
         else if (key == key_map_zoomout)  // zoom out
@@ -755,6 +783,14 @@ boolean AM_Responder (event_t* ev)
                 plr->message = DEH_String(english_language ? AMSTR_OVERLAYON : AMSTR_OVERLAYON_RUS);
             else
                 plr->message = DEH_String(english_language ? AMSTR_OVERLAYOFF : AMSTR_OVERLAYOFF_RUS);
+        }
+        else if (key == key_map_rotate)
+        {
+            crispy_automaprotate = !crispy_automaprotate;
+            if (crispy_automaprotate)
+                plr->message = DEH_String(english_language ? AMSTR_ROTATEON : AMSTR_ROTATEON_RUS);
+            else
+                plr->message = DEH_String(english_language ? AMSTR_ROTATEOFF : AMSTR_ROTATEOFF_RUS);
         }
         else
         {
@@ -891,6 +927,17 @@ void AM_Ticker (void)
 
     // Update light level
     // AM_updateLightLev();
+
+    // [crispy] required for AM_rotatePoint()
+    if (crispy_automaprotate)
+    {
+        mapcenter.x = m_x + m_w / 2;
+        mapcenter.y = m_y + m_h / 2;
+        // [crispy] keep the map static in overlay mode
+        // if not following the player
+        if (!(!followplayer && crispy_automapoverlay))
+        mapangle = ANG90 - viewangle;
+    }
 }
 
 
@@ -1137,37 +1184,69 @@ void AM_drawGrid(int color)
 
     // Figure out start of vertical gridlines
     start = m_x;
+    if (crispy_automaprotate)
+    {
+        start -= m_h / 2;
+    }
 
     if ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS))
     start += (MAPBLOCKUNITS<<FRACBITS) - ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
 
     end = m_x + m_w;
+    if (crispy_automaprotate)
+    {
+        end += m_h / 2;
+    }
 
     // draw vertical gridlines
-    ml.a.y = m_y;
-    ml.b.y = m_y+m_h;
     for (x=start; x<end; x+=(MAPBLOCKUNITS<<FRACBITS))
     {
         ml.a.x = x;
         ml.b.x = x;
+        // [crispy] moved here
+        ml.a.y = m_y;
+        ml.b.y = m_y+m_h;
+        if (crispy_automaprotate)
+        {
+            ml.a.y -= m_w / 2;
+            ml.b.y += m_w / 2;
+            AM_rotatePoint(&ml.a);
+            AM_rotatePoint(&ml.b);
+        }
         AM_drawMline(&ml, color);
     }
 
     // Figure out start of horizontal gridlines
     start = m_y;
+    if (crispy_automaprotate)
+    {
+        start -= m_w / 2;
+    }
 
     if ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS))
     start += (MAPBLOCKUNITS<<FRACBITS) - ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
 
     end = m_y + m_h;
+    if (crispy_automaprotate)
+    {
+        end += m_w / 2;
+    }
 
     // draw horizontal gridlines
-    ml.a.x = m_x;
-    ml.b.x = m_x + m_w;
     for (y=start; y<end; y+=(MAPBLOCKUNITS<<FRACBITS))
     {
         ml.a.y = y;
         ml.b.y = y;
+        // [crispy] moved here
+        ml.a.x = m_x;
+        ml.b.x = m_x + m_w;
+        if (crispy_automaprotate)
+        {
+            ml.a.x -= m_h / 2;
+            ml.b.x += m_h / 2;
+            AM_rotatePoint(&ml.a);
+            AM_rotatePoint(&ml.b);
+        }
         AM_drawMline(&ml, color);
     }
 }
@@ -1188,6 +1267,11 @@ void AM_drawWalls(void)
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
+        if (crispy_automaprotate)
+        {
+            AM_rotatePoint(&l.a);
+            AM_rotatePoint(&l.b);
+        }
         if (cheating || (lines[i].flags & ML_MAPPED))
         {
             if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
@@ -1245,6 +1329,11 @@ void AM_drawWallsJaguar(void)
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
+        if (crispy_automaprotate)
+        {
+            AM_rotatePoint(&l.a);
+            AM_rotatePoint(&l.b);
+        }
         if (cheating || (lines[i].flags & ML_MAPPED))
         {
             if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
@@ -1303,12 +1392,36 @@ void AM_rotate (int64_t* x, int64_t* y, angle_t a)
     *x = tmpx;
 }
 
+// [crispy] rotate point around map center
+// adapted from prboom-plus/src/am_map.c:898-920
+static void AM_rotatePoint (mpoint_t *pt)
+{
+    fixed_t tmpx;
+
+    pt->x -= mapcenter.x;
+    pt->y -= mapcenter.y;
+
+    tmpx = FixedMul(pt->x, finecosine[mapangle>>ANGLETOFINESHIFT])
+         - FixedMul(pt->y, finesine[mapangle>>ANGLETOFINESHIFT])
+         + mapcenter.x;
+
+    pt->y = FixedMul(pt->x, finesine[mapangle>>ANGLETOFINESHIFT])
+         + FixedMul(pt->y, finecosine[mapangle>>ANGLETOFINESHIFT])
+         + mapcenter.y;
+
+    pt->x = tmpx;
+}
 
 void
 AM_drawLineCharacter (mline_t* lineguy, int lineguylines, fixed_t scale, angle_t angle, int color, fixed_t x, fixed_t y)
 {
     int     i;
     mline_t l;
+
+    if (crispy_automaprotate)
+    {
+        angle += mapangle;
+    }
 
     for (i=0;i<lineguylines;i++)
     {
@@ -1354,9 +1467,17 @@ void AM_drawPlayers(void)
     static int their_colors[] = { GREENS, GRAYS, BROWNS, REDS };
     int their_color = -1;
     int	color;
+    mpoint_t	pt;
 
     if (!netgame)
     {
+        pt.x = plr->mo->x;
+        pt.y = plr->mo->y;
+        if (crispy_automaprotate)
+        {
+            AM_rotatePoint(&pt);
+        }
+    
         if (gamemission == jaguar)
         {
             // [JN] Atari Jaguar: draw dark green, blinking arrow
@@ -1366,9 +1487,9 @@ void AM_drawPlayers(void)
         else
         {
             if (cheating)
-            AM_drawLineCharacter (cheat_player_arrow, arrlen(cheat_player_arrow), 0, plr->mo->angle, WHITE, plr->mo->x, plr->mo->y);
+            AM_drawLineCharacter (cheat_player_arrow, arrlen(cheat_player_arrow), 0, plr->mo->angle, WHITE, pt.x, pt.y);
             else
-            AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, plr->mo->angle, WHITE, plr->mo->x, plr->mo->y);
+            AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, plr->mo->angle, WHITE, pt.x, pt.y);
         }
         
         return;
@@ -1378,6 +1499,13 @@ void AM_drawPlayers(void)
     {
         their_color++;
         p = &players[i];
+
+        pt.x = p->mo->x;
+        pt.y = p->mo->y;
+        if (crispy_automaprotate)
+        {
+            AM_rotatePoint(&pt);
+        }
 
         if ((deathmatch && !singledemo) && p != plr)
         continue;
@@ -1390,7 +1518,7 @@ void AM_drawPlayers(void)
         else
         color = their_colors[their_color];
 
-        AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, p->mo->angle, color, p->mo->x, p->mo->y);
+        AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, p->mo->angle, color,pt.x, pt.y);
     }
 }
 
@@ -1399,17 +1527,32 @@ void AM_drawThings (int colors, int colorrange)
 {
     int     i;
     mobj_t* t;
+    mpoint_t	pt;
 
     for (i=0;i<numsectors;i++)
     {
         t = sectors[i].thinglist;
         while (t)
         {
+            // [crispy] do not draw an extra triangle for the player
+            if (t == plr->mo)
+            {
+                t = t->snext;
+                continue;
+            }
+    
+            pt.x = t->x;
+            pt.y = t->y;
+            if (crispy_automaprotate)
+            {
+                AM_rotatePoint(&pt);
+            }
+            
             // [JN] Atari Jaguar: use dark green for things drawing
             AM_drawLineCharacter (thintriangle_guy, arrlen(thintriangle_guy), 16<<FRACBITS, t->angle, 
                                   gamemission == jaguar ?
                                   GREEN_JAGUAR : colors+lightlev,
-                                  t->x, t->y);
+                                  pt.x, pt.y);
             t = t->snext;
         }
     }
@@ -1419,6 +1562,7 @@ void AM_drawThings (int colors, int colorrange)
 void AM_drawMarks(void)
 {
     int i, fx, fy, w, h;
+    mpoint_t pt;
 
     for (i=0;i<AM_NUMMARKPOINTS;i++)
     {
@@ -1428,11 +1572,18 @@ void AM_drawMarks(void)
             //      h = SHORT(marknums[i]->height);
             w = 5; // because something's wrong with the wad, i guess
             h = 6; // because something's wrong with the wad, i guess
-            fx = CXMTOF(markpoints[i].x);
-            fy = CYMTOF(markpoints[i].y);
+            // [crispy] center marks around player
+            pt.x = markpoints[i].x;
+            pt.y = markpoints[i].y;
+            if (crispy_automaprotate)
+            {
+                AM_rotatePoint(&pt);
+            }
+            fx = (CXMTOF(pt.x) >> hires) - 1;
+            fy = (CYMTOF(pt.y) >> hires) - 2;
 
-            if (fx >= f_x && fx <= f_w - w && fy >= f_y && fy <= f_h - h)
-            V_DrawPatch(fx >> hires, fy >> hires, marknums[i]);
+            if (fx >= f_x && fx <= (f_w >> hires) - w && fy >= f_y && fy <= (f_h >> hires) - h)
+            V_DrawPatch(fx, fy, marknums[i]);
         }
     }
 }
