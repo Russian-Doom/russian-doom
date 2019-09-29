@@ -120,6 +120,12 @@ static void SensibleDefaults(void)
     // Rendering
     show_diskicon = 1;
 
+    // Automap
+    automap_follow = 0;
+    automap_overlay = 0;
+    automap_rotate = 0;
+    automap_grid = 0;
+
     // Gameplay: Graphical
     brightmaps = 1;
     fake_contrast = 0;

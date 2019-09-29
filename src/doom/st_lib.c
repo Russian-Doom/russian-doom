@@ -41,7 +41,6 @@
 
 #include "v_trans.h"
 
-#include "crispy.h"
 #include "jn.h"
 
 
@@ -119,9 +118,9 @@ STlib_drawNum
 	I_Error("drawNum: n->y - ST_Y < 0");
 
 #ifdef WIDESCREEN
-    if (screenblocks < 9 || (automapactive && !crispy_automapoverlay))
+    if (screenblocks < 9 || (automapactive && !automap_overlay))
 #else
-    if (screenblocks < 11 || (automapactive && !crispy_automapoverlay))
+    if (screenblocks < 11 || (automapactive && !automap_overlay))
 #endif
     V_CopyRect(x, n->y - (gamemission == jaguar ? ST_Y_JAG : ST_Y), 
                           st_backing_screen, w*numdigits, h, x, n->y);
@@ -241,9 +240,9 @@ STlib_updateMultIcon
 		I_Error("updateMultIcon: y - ST_Y < 0");
 
 #ifdef WIDESCREEN
-        if (screenblocks < 9 || (automapactive && !crispy_automapoverlay))
+        if (screenblocks < 9 || (automapactive && !automap_overlay))
 #else
-        if (screenblocks < 11 || (automapactive && !crispy_automapoverlay))
+        if (screenblocks < 11 || (automapactive && !automap_overlay))
 #endif
 	    V_CopyRect(x, y - (gamemission == jaguar ? ST_Y_JAG : ST_Y),
                            st_backing_screen, w, h, x, y);
@@ -299,9 +298,9 @@ STlib_updateBinIcon
 	    V_DrawPatch(bi->x, bi->y, bi->p);
 	else
 #ifdef WIDESCREEN
-        if (screenblocks < 9 || (automapactive && !crispy_automapoverlay))
+        if (screenblocks < 9 || (automapactive && !automap_overlay))
 #else
-        if (screenblocks < 11 || (automapactive && !crispy_automapoverlay))
+        if (screenblocks < 11 || (automapactive && !automap_overlay))
 #endif
 	    V_CopyRect(x, y - (gamemission == jaguar ? ST_Y_JAG : ST_Y),
                            st_backing_screen, w, h, x, y);

@@ -24,6 +24,12 @@ void BindCompatibilityVariables(void);
 
 // [JN] Дополнительные параметры игры
 
+// Automap
+extern int automap_follow;
+extern int automap_overlay;
+extern int automap_rotate;
+extern int automap_grid;
+
 // Графика
 extern int brightmaps;
 extern int fake_contrast;

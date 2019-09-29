@@ -1611,6 +1611,14 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_toggletime),
 
     //!
+    // [JN] Automap specific variables
+    //
+    CONFIG_VARIABLE_INT(automap_follow),
+    CONFIG_VARIABLE_INT(automap_overlay),
+    CONFIG_VARIABLE_INT(automap_rotate),
+    CONFIG_VARIABLE_INT(automap_grid),
+
+    //!
     // [JN] Russian Doom menu
     //
 

@@ -49,7 +49,6 @@
 #include "am_map.h"
 #include "st_stuff.h"   // [JN] ST_refreshBackground and ST_drawWidgets
 
-#include "crispy.h"
 #include "jn.h"
 
 
@@ -207,7 +206,6 @@ mline_t thintriangle_guy[] = {
 
 
 static int cheating = 0;
-static int grid = 0;
 static int leveljuststarted = 1; // kluge until AM_LevelInit() is called
 
 boolean automapactive = false;
@@ -275,7 +273,6 @@ static patch_t *marknums[10]; // numbers used for marking by the automap
 static mpoint_t markpoints[AM_NUMMARKPOINTS]; // where the points are
 static int markpointnum = 0; // next point to be assigned
 
-static int followplayer = 1; // specifies whether to follow the player around
 
 cheatseq_t cheat_amap = CHEAT("iddt", 0);
 
@@ -285,7 +282,6 @@ cheatseq_t cheat_amap_beta = CHEAT("eek", 0);
 static boolean stopped = true;
 
 // [crispy] automap rotate mode ...
-static boolean crispy_automaprotate = false;
 // ... needs these early on
 void AM_rotate (int64_t *x, int64_t *y, angle_t a);
 static void AM_rotatePoint (mpoint_t *pt);
@@ -347,7 +343,7 @@ void AM_restoreScaleAndLoc(void)
 {
     m_w = old_m_w;
     m_h = old_m_h;
-    if (!followplayer)
+    if (!automap_follow)
     {
         m_x = old_m_x;
         m_y = old_m_y;
@@ -371,7 +367,7 @@ void AM_addMark(void)
 {
     // [crispy] keep the map static in overlay mode
     // if not following the player
-    if (!(!followplayer && crispy_automapoverlay))
+    if (!(!automap_follow && automap_overlay))
     {
         markpoints[markpointnum].x = m_x + m_w/2;
         markpoints[markpointnum].y = m_y + m_h/2;
@@ -434,13 +430,13 @@ void AM_changeWindowLoc(void)
 
     if (m_paninc.x || m_paninc.y)
     {
-        followplayer = 0;
+        automap_follow = 0;
         f_oldloc.x = INT_MAX;
     }
 
     incx = m_paninc.x;
     incy = m_paninc.y;
-    if (crispy_automaprotate)
+    if (automap_rotate)
     {
         AM_rotate(&incx, &incy, -mapangle);
     }
@@ -704,22 +700,22 @@ boolean AM_Responder (event_t* ev)
         {
             // [crispy] keep the map static in overlay mode
             // if not following the player
-            if (!followplayer && !crispy_automapoverlay) m_paninc.x = FTOM(F_PANINC);
+            if (!automap_follow && !automap_overlay) m_paninc.x = FTOM(F_PANINC);
             else rc = false;
         }
         else if (key == key_map_west)   // pan left
         {
-            if (!followplayer && !crispy_automapoverlay) m_paninc.x = -FTOM(F_PANINC);
+            if (!automap_follow && !automap_overlay) m_paninc.x = -FTOM(F_PANINC);
             else rc = false;
         }
         else if (key == key_map_north)  // pan up
         {
-            if (!followplayer && !crispy_automapoverlay) m_paninc.y = FTOM(F_PANINC);
+            if (!automap_follow && !automap_overlay) m_paninc.y = FTOM(F_PANINC);
             else rc = false;
         }
         else if (key == key_map_south)  // pan down
         {
-            if (!followplayer && !crispy_automapoverlay) m_paninc.y = -FTOM(F_PANINC);
+            if (!automap_follow && !automap_overlay) m_paninc.y = -FTOM(F_PANINC);
             else rc = false;
         }
         else if (key == key_map_zoomout)  // zoom out
@@ -750,17 +746,17 @@ boolean AM_Responder (event_t* ev)
         }
         else if (key == key_map_follow)
         {
-            followplayer = !followplayer;
+            automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
-            if (followplayer)
+            if (automap_follow)
                 plr->message = DEH_String(english_language ? AMSTR_FOLLOWON : AMSTR_FOLLOWON_RUS);
             else
                 plr->message = DEH_String(english_language ? AMSTR_FOLLOWOFF : AMSTR_FOLLOWOFF_RUS);
         }
         else if (key == key_map_grid)
         {
-            grid = !grid;
-            if (grid)
+            automap_grid = !automap_grid;
+            if (automap_grid)
                 plr->message = DEH_String(english_language ? AMSTR_GRIDON : AMSTR_GRIDON_RUS);
             else
                 plr->message = DEH_String(english_language ? AMSTR_GRIDOFF : AMSTR_GRIDOFF_RUS);
@@ -783,16 +779,16 @@ boolean AM_Responder (event_t* ev)
             extern boolean inhelpscreens;
             inhelpscreens = true;
             
-            crispy_automapoverlay = !crispy_automapoverlay;
-            if (crispy_automapoverlay)
+            automap_overlay = !automap_overlay;
+            if (automap_overlay)
                 plr->message = DEH_String(english_language ? AMSTR_OVERLAYON : AMSTR_OVERLAYON_RUS);
             else
                 plr->message = DEH_String(english_language ? AMSTR_OVERLAYOFF : AMSTR_OVERLAYOFF_RUS);
         }
         else if (key == key_map_rotate)
         {
-            crispy_automaprotate = !crispy_automaprotate;
-            if (crispy_automaprotate)
+            automap_rotate = !automap_rotate;
+            if (automap_rotate)
                 plr->message = DEH_String(english_language ? AMSTR_ROTATEON : AMSTR_ROTATEON_RUS);
             else
                 plr->message = DEH_String(english_language ? AMSTR_ROTATEOFF : AMSTR_ROTATEOFF_RUS);
@@ -823,19 +819,19 @@ boolean AM_Responder (event_t* ev)
 
         if (key == key_map_east)
         {
-            if (!followplayer) m_paninc.x = 0;
+            if (!automap_follow) m_paninc.x = 0;
         }
         else if (key == key_map_west)
         {
-            if (!followplayer) m_paninc.x = 0;
+            if (!automap_follow) m_paninc.x = 0;
         }
         else if (key == key_map_north)
         {
-            if (!followplayer) m_paninc.y = 0;
+            if (!automap_follow) m_paninc.y = 0;
         }
         else if (key == key_map_south)
         {
-            if (!followplayer) m_paninc.y = 0;
+            if (!automap_follow) m_paninc.y = 0;
         }
         else if (key == key_map_zoomout || key == key_map_zoomin)
         {
@@ -919,7 +915,7 @@ void AM_Ticker (void)
 
     amclock++;
 
-    if (followplayer)
+    if (automap_follow)
     AM_doFollowPlayer();
 
     // Change the zoom if necessary
@@ -934,13 +930,13 @@ void AM_Ticker (void)
     // AM_updateLightLev();
 
     // [crispy] required for AM_rotatePoint()
-    if (crispy_automaprotate)
+    if (automap_rotate)
     {
         mapcenter.x = m_x + m_w / 2;
         mapcenter.y = m_y + m_h / 2;
         // [crispy] keep the map static in overlay mode
         // if not following the player
-        if (!(!followplayer && crispy_automapoverlay))
+        if (!(!automap_follow && automap_overlay))
         mapangle = ANG90 - viewangle;
     }
 }
@@ -1189,7 +1185,7 @@ void AM_drawGrid(int color)
 
     // Figure out start of vertical gridlines
     start = m_x;
-    if (crispy_automaprotate)
+    if (automap_rotate)
     {
         start -= m_h / 2;
     }
@@ -1198,7 +1194,7 @@ void AM_drawGrid(int color)
     start += (MAPBLOCKUNITS<<FRACBITS) - ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
 
     end = m_x + m_w;
-    if (crispy_automaprotate)
+    if (automap_rotate)
     {
         end += m_h / 2;
     }
@@ -1211,7 +1207,7 @@ void AM_drawGrid(int color)
         // [crispy] moved here
         ml.a.y = m_y;
         ml.b.y = m_y+m_h;
-        if (crispy_automaprotate)
+        if (automap_rotate)
         {
             ml.a.y -= m_w / 2;
             ml.b.y += m_w / 2;
@@ -1223,7 +1219,7 @@ void AM_drawGrid(int color)
 
     // Figure out start of horizontal gridlines
     start = m_y;
-    if (crispy_automaprotate)
+    if (automap_rotate)
     {
         start -= m_w / 2;
     }
@@ -1232,7 +1228,7 @@ void AM_drawGrid(int color)
     start += (MAPBLOCKUNITS<<FRACBITS) - ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
 
     end = m_y + m_h;
-    if (crispy_automaprotate)
+    if (automap_rotate)
     {
         end += m_w / 2;
     }
@@ -1245,7 +1241,7 @@ void AM_drawGrid(int color)
         // [crispy] moved here
         ml.a.x = m_x;
         ml.b.x = m_x + m_w;
-        if (crispy_automaprotate)
+        if (automap_rotate)
         {
             ml.a.x -= m_h / 2;
             ml.b.x += m_h / 2;
@@ -1272,7 +1268,7 @@ void AM_drawWalls(void)
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
-        if (crispy_automaprotate)
+        if (automap_rotate)
         {
             AM_rotatePoint(&l.a);
             AM_rotatePoint(&l.b);
@@ -1334,7 +1330,7 @@ void AM_drawWallsJaguar(void)
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
-        if (crispy_automaprotate)
+        if (automap_rotate)
         {
             AM_rotatePoint(&l.a);
             AM_rotatePoint(&l.b);
@@ -1423,7 +1419,7 @@ AM_drawLineCharacter (mline_t* lineguy, int lineguylines, fixed_t scale, angle_t
     int     i;
     mline_t l;
 
-    if (crispy_automaprotate)
+    if (automap_rotate)
     {
         angle += mapangle;
     }
@@ -1478,7 +1474,7 @@ void AM_drawPlayers(void)
     {
         pt.x = plr->mo->x;
         pt.y = plr->mo->y;
-        if (crispy_automaprotate)
+        if (automap_rotate)
         {
             AM_rotatePoint(&pt);
         }
@@ -1507,7 +1503,7 @@ void AM_drawPlayers(void)
 
         pt.x = p->mo->x;
         pt.y = p->mo->y;
-        if (crispy_automaprotate)
+        if (automap_rotate)
         {
             AM_rotatePoint(&pt);
         }
@@ -1548,7 +1544,7 @@ void AM_drawThings (int colors, int colorrange)
     
             pt.x = t->x;
             pt.y = t->y;
-            if (crispy_automaprotate)
+            if (automap_rotate)
             {
                 AM_rotatePoint(&pt);
             }
@@ -1580,7 +1576,7 @@ void AM_drawMarks(void)
             // [crispy] center marks around player
             pt.x = markpoints[i].x;
             pt.y = markpoints[i].y;
-            if (crispy_automaprotate)
+            if (automap_rotate)
             {
                 AM_rotatePoint(&pt);
             }
@@ -1604,10 +1600,10 @@ void AM_Drawer (void)
     if (!automapactive)
     return;
 
-    if (!crispy_automapoverlay)
+    if (!automap_overlay)
     AM_clearFB(BACKGROUND);
 
-    if (grid)
+    if (automap_grid)
     AM_drawGrid(GRIDCOLORS);
 
     // [JN] Atari Jaguar: use own function

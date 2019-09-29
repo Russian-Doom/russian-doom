@@ -25,6 +25,12 @@
 #define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/gameplay.html"
 
 
+// Automap
+int automap_follow = 0;
+int automap_overlay = 0;
+int automap_rotate = 0;
+int automap_grid = 0;
+
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
@@ -287,6 +293,12 @@ void BindCompatibilityVariables(void)
 {
     // Rendering
     M_BindIntVariable("show_diskicon",          &show_diskicon);
+
+    // Automap
+    M_BindIntVariable("automap_follow",         &automap_follow);
+    M_BindIntVariable("automap_overlay",        &automap_overlay);
+    M_BindIntVariable("automap_rotate",         &automap_rotate);
+    M_BindIntVariable("automap_grid",           &automap_grid);
 
     // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);

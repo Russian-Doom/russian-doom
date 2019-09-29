@@ -147,8 +147,13 @@ int english_language = 0;
 int show_endoom   = 0;
 int local_time    = 0; // [JN] Local time widget
 
+// [JN] Automap specific variables.
+int automap_follow  = 0;
+int automap_overlay = 0;
+int automap_rotate  = 0;
+int automap_grid    = 0;
+
 boolean flip_levels_cmdline = false;
-boolean crispy_automapoverlay = false;
 
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
@@ -241,7 +246,7 @@ void D_Display (void)
         if (!gametic)
         break;
 
-        if (automapactive && !crispy_automapoverlay)
+        if (automapactive && !automap_overlay)
         {
             // [crispy] update automap while playing
             R_RenderPlayerView (&players[displayplayer]);
@@ -276,7 +281,7 @@ void D_Display (void)
     // I_UpdateNoBlit ();
 
     // draw the view directly
-    if (gamestate == GS_LEVEL && (!automapactive || crispy_automapoverlay) && gametic)
+    if (gamestate == GS_LEVEL && (!automapactive || automap_overlay) && gametic)
     {
         R_RenderPlayerView (&players[displayplayer]);
 
@@ -290,7 +295,7 @@ void D_Display (void)
 
     // [crispy] in automap overlay mode,
     // the HUD is drawn on top of everything else
-    if (gamestate == GS_LEVEL && gametic && !(automapactive && crispy_automapoverlay))
+    if (gamestate == GS_LEVEL && gametic && !(automapactive && automap_overlay))
     HU_Drawer ();
 
     // clean up border stuff
@@ -313,7 +318,7 @@ void D_Display (void)
     }
 
     // see if the border needs to be updated to the screen
-    if (gamestate == GS_LEVEL && (!automapactive || crispy_automapoverlay) && scaledviewwidth != (320 << hires))
+    if (gamestate == GS_LEVEL && (!automapactive || automap_overlay) && scaledviewwidth != (320 << hires))
     {
         if (menuactive || menuactivestate || !viewactivestate)
         borderdrawcount = 3;
@@ -338,7 +343,7 @@ void D_Display (void)
 
     // [crispy] in automap overlay mode,
     // draw the automap and HUD on top of everything else
-    if (automapactive && crispy_automapoverlay)
+    if (automapactive && automap_overlay)
     {
         AM_Drawer ();
         HU_Drawer ();
@@ -360,7 +365,7 @@ void D_Display (void)
         }
         else
         {
-            if (automapactive && !crispy_automapoverlay)
+            if (automapactive && !automap_overlay)
             y = 4;
             else if (gamestate == GS_INTERMISSION)  // [JN] Do not obstruct titles on intermission screen
             y = 28;
@@ -479,6 +484,12 @@ void D_BindVariables(void)
     // Controls
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
+
+    // Automap
+    M_BindIntVariable("automap_follow",         &automap_follow);
+    M_BindIntVariable("automap_overlay",        &automap_overlay);
+    M_BindIntVariable("automap_rotate",         &automap_rotate);
+    M_BindIntVariable("automap_grid",           &automap_grid);
 
     // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);
