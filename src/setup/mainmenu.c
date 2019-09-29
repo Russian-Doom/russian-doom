@@ -121,7 +121,7 @@ static void SensibleDefaults(void)
     show_diskicon = 1;
 
     // Automap
-    automap_follow = 0;
+    automap_follow = 1;
     automap_overlay = 0;
     automap_rotate = 0;
     automap_grid = 0;

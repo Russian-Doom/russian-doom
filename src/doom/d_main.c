@@ -148,7 +148,7 @@ int show_endoom   = 0;
 int local_time    = 0; // [JN] Local time widget
 
 // [JN] Automap specific variables.
-int automap_follow  = 0;
+int automap_follow  = 1;
 int automap_overlay = 0;
 int automap_rotate  = 0;
 int automap_grid    = 0;

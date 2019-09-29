@@ -26,7 +26,7 @@
 
 
 // Automap
-int automap_follow = 0;
+int automap_follow = 1;
 int automap_overlay = 0;
 int automap_rotate = 0;
 int automap_grid = 0;
