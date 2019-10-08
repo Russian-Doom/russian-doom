@@ -1014,22 +1014,6 @@ void HU_Ticker(void)
 
     if (showMessages || message_dontfuckwithme)
     {
-        // [JN] Handling local time widget
-        if (plr->message_time)
-        {
-            HUlib_addMessageToSText(&w_message_time, 0, plr->message_time);
-            plr->message_time = 0;
-            message_on_time = true;
-        }
-
-        // [JN] Handling local time widget
-        if (plr->message_fps)
-        {
-            HUlib_addMessageToSText(&w_message_fps, 0, plr->message_fps);
-            plr->message_fps = 0;
-            message_on_fps = true;
-        }
-
         // display message if necessary
         if ((plr->message && !message_nottobefuckedwith) || (plr->message && message_dontfuckwithme))
         {
@@ -1041,6 +1025,22 @@ void HU_Ticker(void)
             message_dontfuckwithme = 0;
         }
     } // else message_on = false;
+
+    // [JN] Handling local time widget
+    if (plr->message_time)
+    {
+        HUlib_addMessageToSText(&w_message_time, 0, plr->message_time);
+        plr->message_time = 0;
+        message_on_time = true;
+    }
+
+    // [JN] Handling local time widget
+    if (plr->message_fps)
+    {
+        HUlib_addMessageToSText(&w_message_fps, 0, plr->message_fps);
+        plr->message_fps = 0;
+        message_on_fps = true;
+    }
 
     // check for incoming chat characters
     if (netgame)
