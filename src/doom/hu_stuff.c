@@ -140,8 +140,10 @@ char* player_names_rus[] =
 char        chat_char; // remove later.
 static      player_t* plr;
 patch_t*    hu_font[HU_FONTSIZE];
-patch_t*    hu_font_small[HU_FONTSIZE]; // [JN] Small, unchangeable STCFS font
-patch_t*    hu_font_big[HU_FONTSIZE2];  // [JN] Big, unchangeable STCFB font
+patch_t*    hu_font_small_eng[HU_FONTSIZE]; // [JN] Small, unchangeable English font (FNTSE)
+patch_t*    hu_font_small_rus[HU_FONTSIZE]; // [JN] Small, unchangeable Russian font (FNTSR)
+patch_t*    hu_font_big_eng[HU_FONTSIZE2];  // [JN] Big, unchangeable English font (FNTBE)
+patch_t*    hu_font_big_rus[HU_FONTSIZE2];  // [JN] Big, unchangeable Russian font (FNTBR)
 patch_t*    hu_font_gray[HU_FONTSIZE];  // [JN] Small gray STCFG font, used for local time widget
 
 static      hu_textline_t w_title;
@@ -167,6 +169,10 @@ static int message_counter;
 // [JN] Local time widget
 static boolean  message_on_time;
 static hu_stext_t w_message_time;
+
+// [JN] FPS counter
+static boolean  message_on_fps;
+static hu_stext_t w_message_fps;
 
 extern int showMessages;
 
@@ -651,15 +657,18 @@ void HU_Init(void)
 {
     int     i;
     int     j;
-    int     n;
-    int     o;
+    int     o, p;
+    int     q, r;
+    
     int     g;
     char    buffer[9];
 
     // load the heads-up font
     j = HU_FONTSTART;
     o = HU_FONTSTART;
-    n = HU_FONTSTART2;
+    p = HU_FONTSTART;
+    q = HU_FONTSTART2;
+    r = HU_FONTSTART2;
     g = HU_FONTSTART_GRAY;
 
     // [JN] Standard STCFN font
@@ -669,21 +678,35 @@ void HU_Init(void)
         hu_font[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 
-    // [JN] Small, unchangeable STCFS font
+    // [JN] Small, unchangeable English font (FNTSE)
     for (i=0;i<HU_FONTSIZE;i++)
     {
-        DEH_snprintf(buffer, 9, "STCFS%.3d", o++);
-        hu_font_small[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+        DEH_snprintf(buffer, 9, "FNTSE%.3d", o++);
+        hu_font_small_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 
-    // [JN] Big, unchangeable STCFB font
+    // [JN] Small, unchangeable Russian font (FNTSR)
+    for (i=0;i<HU_FONTSIZE;i++)
+    {
+        DEH_snprintf(buffer, 9, "FNTSR%.3d", p++);
+        hu_font_small_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    // [JN] Big, unchangeable English font (FNTBE)
     for (i=0;i<HU_FONTSIZE2;i++)
     {
-        DEH_snprintf(buffer, 9, "STCFB%.3d", n++);
-        hu_font_big[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+        DEH_snprintf(buffer, 9, "FNTBE%.3d", q++);
+        hu_font_big_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 
-    // [JN] Small gray STCFG font, used for local time widget
+    // [JN] Big, unchangeable Russian font (FNTBR)
+    for (i=0;i<HU_FONTSIZE2;i++)
+    {
+        DEH_snprintf(buffer, 9, "FNTBR%.3d", r++);
+        hu_font_big_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }    
+
+    // [JN] Small gray STCFG font, used for local time widget and FPS counter
     for (i=0;i<HU_FONTSIZE_GRAY;i++)
     {
         DEH_snprintf(buffer, 9, "STCFG%.3d", g++);
@@ -709,6 +732,7 @@ void HU_Start(void)
     plr = &players[consoleplayer];
     message_on = false;
     message_on_time = true; // [JN] Local time widget
+    message_on_fps = true;  // [JN] FPS counter
     message_dontfuckwithme = false;
     message_nottobefuckedwith = false;
     chat_on = false;
@@ -719,8 +743,10 @@ void HU_Start(void)
     // [JN] Create the local time widget
 #ifdef WIDESCREEN
     HUlib_initSText(&w_message_time, 400, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
+    HUlib_initSText(&w_message_fps, 390, 20, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 #else
     HUlib_initSText(&w_message_time, 294, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
+    HUlib_initSText(&w_message_fps, 294, 20, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 #endif
 
     // create the map title widget
@@ -820,6 +846,11 @@ void HU_Drawer(void)
     {
         // [JN] Draw local time widget
         HUlib_drawSText(&w_message_time);
+    }
+    if (show_fps)
+    {
+        // [JN] Draw FPS counter
+        HUlib_drawSText(&w_message_fps);
     }
     HUlib_drawIText(&w_chat);
 
@@ -944,6 +975,11 @@ void HU_Erase(void)
         // [JN] Erase local time widget
         HUlib_eraseSText(&w_message_time);
     }
+    if (show_fps)
+    {
+        // [JN] Erase FPS counter
+        HUlib_eraseSText(&w_message_fps);
+    }
     HUlib_eraseIText(&w_chat);
     HUlib_eraseTextLine(&w_title);
 }
@@ -956,11 +992,18 @@ void HU_Ticker(void)
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
     static char s[64];
+    static char f[64];
     strftime(s, sizeof(s), "%H:%M", tm);
 
     // [JN] Start local time widget
     if (local_time)
     plr->message_time = (s);
+
+    if (show_fps)
+    {
+        M_snprintf(f, sizeof(f), "! %d", real_fps); // [JN] 1 = FPS, see STCFG033 (doom-sysfont.wad)
+        plr->message_fps = (f);
+    }
 
     // tick down message counter if message is up
     if (message_counter && !--message_counter)
@@ -977,6 +1020,14 @@ void HU_Ticker(void)
             HUlib_addMessageToSText(&w_message_time, 0, plr->message_time);
             plr->message_time = 0;
             message_on_time = true;
+        }
+
+        // [JN] Handling local time widget
+        if (plr->message_fps)
+        {
+            HUlib_addMessageToSText(&w_message_fps, 0, plr->message_fps);
+            plr->message_fps = 0;
+            message_on_fps = true;
         }
 
         // display message if necessary

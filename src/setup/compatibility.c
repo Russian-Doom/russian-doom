@@ -26,6 +26,7 @@
 
 
 // Automap
+int automap_color = 0;
 int automap_follow = 1;
 int automap_overlay = 0;
 int automap_rotate = 0;
@@ -36,7 +37,7 @@ int brightmaps = 1;
 int fake_contrast = 0;
 int translucency = 1;
 int colored_hud = 0;
-int colored_messages = 0;
+int messages_color = 0;
 int colored_blood = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
@@ -291,10 +292,8 @@ void CompatibilitySettings(void)
 
 void BindCompatibilityVariables(void)
 {
-    // Rendering
-    M_BindIntVariable("show_diskicon",          &show_diskicon);
-
     // Automap
+    M_BindIntVariable("automap_color",          &automap_color);
     M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_overlay",        &automap_overlay);
     M_BindIntVariable("automap_rotate",         &automap_rotate);
@@ -305,7 +304,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("translucency",           &translucency);
     M_BindIntVariable("colored_hud",            &colored_hud);
-    M_BindIntVariable("colored_messages",       &colored_messages);
+    M_BindIntVariable("messages_color",         &messages_color);
     M_BindIntVariable("colored_blood",          &colored_blood);
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);

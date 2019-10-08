@@ -109,21 +109,21 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
             break;
 
             // [JN] Colorize message if necessary
-            if (colored_messages > 0 && !vanillaparm)
+            if (messages_color > 0 && !vanillaparm)
             {
-                colored_messages == 1 ? dp_translation = cr[CR_GREEN] :
-                colored_messages == 2 ? dp_translation = cr[CR_BLUE2] :
-                colored_messages == 3 ? dp_translation = cr[CR_GOLD]  :
-                colored_messages == 4 ? dp_translation = cr[CR_GRAY]  :
-                colored_messages == 5 ? dp_translation = cr[CR_TAN]   :
-                colored_messages == 6 ? dp_translation = cr[CR_BROWN] :
-                colored_messages == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+                messages_color == 1 ? dp_translation = cr[CR_GREEN] :
+                messages_color == 2 ? dp_translation = cr[CR_BLUE2] :
+                messages_color == 3 ? dp_translation = cr[CR_GOLD]  :
+                messages_color == 4 ? dp_translation = cr[CR_GRAY]  :
+                messages_color == 5 ? dp_translation = cr[CR_TAN]   :
+                messages_color == 6 ? dp_translation = cr[CR_BROWN] :
+                messages_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
             }
         
             V_DrawShadowedPatchDoom(x, l->y, l->f[c - l->sc]);
 
             // [JN] Clear color translation if necessary
-            if (colored_messages > 0 && !vanillaparm)
+            if (messages_color > 0 && !vanillaparm)
             dp_translation = NULL;
 
             x += w;
@@ -141,21 +141,21 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
     if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= ORIGWIDTH)
     {
         // [JN] Colorize message if necessary
-        if (colored_messages > 0 && !vanillaparm)
+        if (messages_color > 0 && !vanillaparm)
         {
-            colored_messages == 1 ? dp_translation = cr[CR_GREEN] :
-            colored_messages == 2 ? dp_translation = cr[CR_BLUE2] :
-            colored_messages == 3 ? dp_translation = cr[CR_GOLD]  :
-            colored_messages == 4 ? dp_translation = cr[CR_GRAY]  :
-            colored_messages == 5 ? dp_translation = cr[CR_TAN]   :
-            colored_messages == 6 ? dp_translation = cr[CR_BROWN] :
-            colored_messages == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+            messages_color == 1 ? dp_translation = cr[CR_GREEN] :
+            messages_color == 2 ? dp_translation = cr[CR_BLUE2] :
+            messages_color == 3 ? dp_translation = cr[CR_GOLD]  :
+            messages_color == 4 ? dp_translation = cr[CR_GRAY]  :
+            messages_color == 5 ? dp_translation = cr[CR_TAN]   :
+            messages_color == 6 ? dp_translation = cr[CR_BROWN] :
+            messages_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
         }
 
         V_DrawShadowedPatchDoom(x, l->y, l->f['_' - l->sc]);
 
         // [JN] Clear color translation if necessary
-        if (colored_messages > 0 && !vanillaparm)
+        if (messages_color > 0 && !vanillaparm)
         dp_translation = NULL;
     }
 }

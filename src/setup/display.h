@@ -22,6 +22,8 @@ void ConfigDisplay(void);
 void SetDisplayDriver(void);
 void BindDisplayVariables(void);
 
+extern int vsync;
+extern int show_fps;
 extern int show_endoom;
 extern int graphical_startup;
 // extern int show_exit_sequence;

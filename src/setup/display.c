@@ -80,6 +80,8 @@ static int startup_delay = 35;  // [JN] Redused from 1000 to 35
 static int usegamma = 0;
 
 int uncapped_fps = 1;
+int vsync = 1;
+int show_fps = 0;
 int show_diskicon = 1;
 int graphical_startup = 0; // [JN] Disabled by default
 int screen_wiping = 1;
@@ -368,6 +370,9 @@ void BindDisplayVariables(void)
     M_BindIntVariable("uncapped_fps",              &uncapped_fps);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
     M_BindIntVariable("force_software_renderer",   &force_software_renderer);
+    M_BindIntVariable("show_diskicon",             &show_diskicon);
+    M_BindIntVariable("vsync",                     &vsync);
+    M_BindIntVariable("show_fps",                  &show_fps);
 
     if (gamemission == doom || gamemission == heretic
      || gamemission == strife)

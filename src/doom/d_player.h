@@ -163,6 +163,9 @@ typedef struct player_s
     
     // [JN] Local time widget.
     char* message_time;
+
+    // [JN] FPS counter.
+    char* message_fps;
 } player_t;
 
 

@@ -54,6 +54,7 @@ extern int english_language;
 // Automap specific variables
 // -----------------------------------------------------------------------------
 
+extern int automap_color;
 extern int automap_follow;
 extern int automap_overlay;
 extern int automap_rotate;
@@ -64,8 +65,12 @@ extern int automap_grid;
 // -----------------------------------------------------------------------------
 
 // Rendering
+extern int vsync;
+extern int show_fps;
+extern int real_fps;
 extern int show_diskicon;
 extern int screen_wiping;
+extern int png_screenshots;
 
 // Sound
 extern int snd_monomode;
@@ -75,7 +80,7 @@ extern int brightmaps;
 extern int fake_contrast;
 extern int translucency;
 extern int colored_hud;
-extern int colored_messages;
+extern int messages_color;
 extern int colored_blood;
 extern int swirling_liquids;
 extern int invul_sky;

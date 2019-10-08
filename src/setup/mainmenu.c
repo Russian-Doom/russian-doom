@@ -118,9 +118,12 @@ static void SensibleDefaults(void)
     png_screenshots = 1;
 
     // Rendering
+    vsync = 1;
+    show_fps = 0;
     show_diskicon = 1;
 
     // Automap
+    automap_color = 0;
     automap_follow = 1;
     automap_overlay = 0;
     automap_rotate = 0;
@@ -131,7 +134,7 @@ static void SensibleDefaults(void)
     fake_contrast = 0;
     translucency = 1;
     colored_hud = 0;
-    colored_messages = 0;
+    messages_color = 0;
     colored_blood = 1;
     swirling_liquids = 1;
     invul_sky = 1;

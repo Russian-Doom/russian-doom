@@ -1613,6 +1613,7 @@ static default_t extra_defaults_list[] =
     //!
     // [JN] Automap specific variables
     //
+    CONFIG_VARIABLE_INT(automap_color),
     CONFIG_VARIABLE_INT(automap_follow),
     CONFIG_VARIABLE_INT(automap_overlay),
     CONFIG_VARIABLE_INT(automap_rotate),
@@ -1623,8 +1624,10 @@ static default_t extra_defaults_list[] =
     //
 
     // Rendering
+    CONFIG_VARIABLE_INT(vsync),
     CONFIG_VARIABLE_INT(aspect_ratio_correct),
     CONFIG_VARIABLE_INT(uncapped_fps),
+    CONFIG_VARIABLE_INT(show_fps),
     CONFIG_VARIABLE_INT(show_diskicon),
     CONFIG_VARIABLE_INT(smoothing),
     CONFIG_VARIABLE_INT(screen_wiping),
@@ -1653,7 +1656,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(fake_contrast),
     CONFIG_VARIABLE_INT(translucency),
     CONFIG_VARIABLE_INT(colored_hud),
-    CONFIG_VARIABLE_INT(colored_messages),
+    CONFIG_VARIABLE_INT(messages_color),
     CONFIG_VARIABLE_INT(colored_blood),
     CONFIG_VARIABLE_INT(swirling_liquids),
     CONFIG_VARIABLE_INT(invul_sky),

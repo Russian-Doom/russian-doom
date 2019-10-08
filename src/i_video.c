@@ -128,10 +128,18 @@ int fullscreen_width = 0, fullscreen_height = 0;
 
 int fullscreen = true;
 
+// [JN] Vertical Sync
+int vsync = true;
+
 // Aspect ratio correction mode
 
 int aspect_ratio_correct = true;
 static int actualheight;
+
+// [JN] Show FPS counter
+
+int show_fps = false;
+int real_fps;
 
 // [JN] Незначительное сглаживание текстур
 
@@ -689,6 +697,32 @@ void I_FinishUpdate (void)
 	    I_VideoBuffer[ (SCREENHEIGHT-1)*SCREENWIDTH + i] = 0x0;
     }
 
+	// [crispy] [AM] Real FPS counter
+	{
+		static int lastmili;
+		static int fpscount;
+		int mili;
+
+		fpscount++;
+
+		i = SDL_GetTicks();
+		mili = i - lastmili;
+
+		// Update FPS counter every second
+        // [JN] Update 10x time faster (1000 reduced to 100)
+		if (mili >= 100)
+		{
+			real_fps = (fpscount * 1000) / mili;
+			fpscount = 0;
+			lastmili = i;
+            
+            if (real_fps >= 999)    // [JN] Do not draw four FPS digits
+                real_fps  = 999;
+            if (real_fps <= 0)      // [JN] Just in case
+                real_fps  = 0;
+		}
+	}
+
     // Draw disk icon before blit, if necessary.
     V_DrawDiskIcon();
 
@@ -1176,11 +1210,14 @@ static void SetVideoMode(void)
     renderer_flags = SDL_RENDERER_TARGETTEXTURE;
 
     // Turn on vsync if we aren't in a -timedemo
-    // [JN] Note: vsync is always enabled for both capped and uncapped modes.
     // In -timedemo mode it's always disabled to get a maximum possible fps.
-    if (!singletics)
+    if (!singletics && vsync)
     {
         renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
+    }
+    else
+    {
+        renderer_flags &= ~SDL_RENDERER_PRESENTVSYNC;
     }
 
     // [JN] Note: vsync is always disabled in software rendering mode.
@@ -1433,17 +1470,14 @@ void I_ReInitGraphics (int reinit)
 		SDL_GetRendererInfo(renderer, &info);
 		flags = info.flags;
 
-        // [JN] Err... Needed?
-        /*
-		// if (crispy->vsync && !(flags & SDL_RENDERER_SOFTWARE))
-		// {
-		// 	flags |= SDL_RENDERER_PRESENTVSYNC;
-		// }
-		// else
-		// {
-		// 	flags &= ~SDL_RENDERER_PRESENTVSYNC;
-		// }
-        */
+		if (vsync && !(flags & SDL_RENDERER_SOFTWARE))
+		{
+			flags |= SDL_RENDERER_PRESENTVSYNC;
+		}
+		else
+		{
+			flags &= ~SDL_RENDERER_PRESENTVSYNC;
+		}
 
 		SDL_DestroyRenderer(renderer);
 		renderer = SDL_CreateRenderer(screen, -1, flags);
@@ -1569,6 +1603,8 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("use_mouse",                 &usemouse);
     M_BindIntVariable("fullscreen",                &fullscreen);
     M_BindIntVariable("video_display",             &video_display);
+    M_BindIntVariable("vsync",                     &vsync);
+    M_BindIntVariable("show_fps",                  &show_fps);
     M_BindIntVariable("aspect_ratio_correct",      &aspect_ratio_correct);
     M_BindIntVariable("smoothing",                 &smoothing);
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);

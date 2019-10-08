@@ -306,7 +306,8 @@ void F_Ticker (void)
 
 #include "hu_stuff.h"
 extern patch_t *hu_font[HU_FONTSIZE];
-extern patch_t *hu_font_big[HU_FONTSIZE];
+extern patch_t *hu_font_big_eng[HU_FONTSIZE];
+extern patch_t *hu_font_big_rus[HU_FONTSIZE];
 
 
 void F_TextWrite (void)
@@ -1074,12 +1075,18 @@ void F_TextWriteJaguar (void)
             continue;
         }
 
-        w = SHORT (hu_font_big[c]->width);
+        if (english_language)
+        w = SHORT (hu_font_big_eng[c]->width);
+        else
+        w = SHORT (hu_font_big_rus[c]->width);
 
         if (cx+w > ORIGWIDTH)
 	    break;
 
-        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font_big[c]);
+        if (english_language)
+        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font_big_eng[c]);
+        else
+        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font_big_rus[c]);
 
         cx+=w;
     }
@@ -1209,7 +1216,10 @@ void F_CastPrintJaguar (char *text)
             continue;
         }
 
-        w = SHORT (hu_font_big[c]->width);
+        if (english_language)
+        w = SHORT (hu_font_big_eng[c]->width);
+        else
+        w = SHORT (hu_font_big_rus[c]->width);
         width += w;
     }
 
@@ -1231,9 +1241,16 @@ void F_CastPrintJaguar (char *text)
             continue;
         }
 
-        w = SHORT (hu_font_big[c]->width);
-
-        V_DrawShadowedPatchDoom(cx, 15, hu_font_big[c]);
+        if (english_language)
+        {
+            w = SHORT (hu_font_big_eng[c]->width);
+            V_DrawShadowedPatchDoom(cx, 15, hu_font_big_eng[c]);
+        }
+        else
+        {
+            w = SHORT (hu_font_big_rus[c]->width);
+            V_DrawShadowedPatchDoom(cx, 15, hu_font_big_rus[c]);
+        }
 
         cx+=w;
     }

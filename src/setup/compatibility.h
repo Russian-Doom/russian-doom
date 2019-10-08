@@ -25,6 +25,7 @@ void BindCompatibilityVariables(void);
 // [JN] Дополнительные параметры игры
 
 // Automap
+extern int automap_color;
 extern int automap_follow;
 extern int automap_overlay;
 extern int automap_rotate;
@@ -37,7 +38,7 @@ extern int translucency;
 extern int swirling_liquids;
 extern int invul_sky;
 extern int colored_hud;
-extern int colored_messages;
+extern int messages_color;
 extern int colored_blood;
 extern int red_resurrection_flash;
 extern int draw_shadowed_text;

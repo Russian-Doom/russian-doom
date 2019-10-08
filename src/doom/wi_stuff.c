@@ -47,8 +47,10 @@
 // [JN] Jaguar: prototypes
 void WI_drawStatsJaguar(void);
 void WI_updateStatsJaguar(void);
-extern void M_WriteTextBig();
-extern void M_WriteTextBigCentered();
+extern void M_WriteTextBig_ENG();
+extern void M_WriteTextBig_RUS();
+extern void M_WriteTextBigCentered_ENG();
+extern void M_WriteTextBigCentered_RUS();
 
 //
 // Data needed to add patches to full screen intermission pics.
@@ -2088,46 +2090,47 @@ void WI_drawStatsJaguar(void)
     // Finished level stuff
     if (wbs->last < NUMCMAPS)
     {
-        // Write level name
-        M_WriteTextBigCentered (2, (english_language ? 
-                                    LevelNamesJaguar[gamemap] :
-                                    LevelNamesJaguar_Russian[gamemap]));
-        
-        // Write "Finished" | "уровень завершен"
-        M_WriteTextBigCentered (20, english_language ? 
-                                    "Finished" : 
-                                    "ehjdtym pfdthity");
+        if (english_language)
+        {
+            M_WriteTextBigCentered_ENG(2, LevelNamesJaguar[gamemap]);
+            M_WriteTextBigCentered_ENG (20, "Finished");
+        }
+        else
+        {
+            M_WriteTextBigCentered_RUS(2,LevelNamesJaguar_Russian[gamemap]);
+            M_WriteTextBigCentered_RUS (20, "ehjdtym pfdthity");
+        }
     }
 
     // Kills | Враги
     if (english_language)
-    M_WriteTextBig(71 + ORIGWIDTH_DELTA, 50, "Kills");
+    M_WriteTextBig_ENG(71 + ORIGWIDTH_DELTA, 50, "Kills");
     else
-    M_WriteTextBig(80 + ORIGWIDTH_DELTA, 50, "Dhfub");
+    M_WriteTextBig_RUS(80 + ORIGWIDTH_DELTA, 50, "Dhfub");
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
     // Items | Предметы
     if (english_language)
-    M_WriteTextBig(66 + ORIGWIDTH_DELTA, 68, "Items");
+    M_WriteTextBig_ENG(66 + ORIGWIDTH_DELTA, 68, "Items");
     else
-    M_WriteTextBig(32 + ORIGWIDTH_DELTA, 68, "Ghtlvtns");
+    M_WriteTextBig_RUS(32 + ORIGWIDTH_DELTA, 68, "Ghtlvtns");
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
     // Secrets | Тайники
     if (english_language)
-    M_WriteTextBig(30 + ORIGWIDTH_DELTA, 86, "Secrets");
+    M_WriteTextBig_ENG(30 + ORIGWIDTH_DELTA, 86, "Secrets");
     else
-    M_WriteTextBig(45 + ORIGWIDTH_DELTA, 86, "Nfqybrb");
+    M_WriteTextBig_RUS(45 + ORIGWIDTH_DELTA, 86, "Nfqybrb");
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
 
     // Time
     if (english_language)
-    M_WriteTextBig(74 + ORIGWIDTH_DELTA, 113, "Time");
+    M_WriteTextBig_ENG(74 + ORIGWIDTH_DELTA, 113, "Time");
     else
-    M_WriteTextBig(77 + ORIGWIDTH_DELTA, 113, "Dhtvz");
+    M_WriteTextBig_RUS(77 + ORIGWIDTH_DELTA, 113, "Dhtvz");
 
     WI_drawTime(ORIGWIDTH - SP_STATSX, SP_STATSY+4*lh-8+2, cnt_time, true);
 
@@ -2139,9 +2142,9 @@ void WI_drawStatsJaguar(void)
 
         // Total | Итог
         if (english_language)
-        M_WriteTextBig(59 + ORIGWIDTH_DELTA, 131, "Total");
+        M_WriteTextBig_ENG(59 + ORIGWIDTH_DELTA, 131, "Total");
         else
-        M_WriteTextBig(95 + ORIGWIDTH_DELTA, 131, "Bnju");
+        M_WriteTextBig_RUS(95 + ORIGWIDTH_DELTA, 131, "Bnju");
         
         // Show total time only after level time is counted
         if (cnt_time == plrs[me].stime / TICRATE)
@@ -2152,14 +2155,16 @@ void WI_drawStatsJaguar(void)
     // Note: do not draw "Entering Military Base" after finishing map 23
     if (gamemap != 23)
     {
-        // Write "Entering" | "загружается уровень"
-        M_WriteTextBigCentered (146, english_language ? 
-                                     "Entering" :
-                                     "pfuhe;ftncz ehjdtym");
+        if (english_language)
+        {
+            M_WriteTextBigCentered_ENG (146, "Entering");
+            M_WriteTextBigCentered_ENG (164, LevelNamesJaguar[wminfo.next+1]);
+        }
+        else
+        {
+            M_WriteTextBigCentered_RUS (146, "pfuhe;ftncz ehjdtym");
+            M_WriteTextBigCentered_RUS (164, LevelNamesJaguar_Russian[wminfo.next+1]);
+        }
 
-        // Write next level name
-        M_WriteTextBigCentered (164, (english_language ? 
-                                    LevelNamesJaguar[wminfo.next+1] :
-                                    LevelNamesJaguar_Russian[wminfo.next+1]));
     }
 }
