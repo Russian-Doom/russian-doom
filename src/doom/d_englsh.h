@@ -1050,7 +1050,7 @@ PRESSYN_RUS
 #define GOTSHELLS_RUS   "gjkextyj 4 gfnhjyf lkz lhj,jdbrf>"         // Получено 4 патрона для дробовика.
 #define GOTSHELLS8_RUS  "gjkextyj 8 gfnhjyjd lkz lhj,jdbrf>"        // Получено 8 патронов для дробовика.
 #define GOTSHELLBOX_RUS "gjkextyf rjhj,rf gfnhjyjd lkz lhj,jdbrf>"  // Получена коробка патронов для дробовика.
-#define GOTBACKPACK_RUS "gjkexty h.rpfr c fvveybwbtq!"              // Получен рюкзак с амуницией!
+#define GOTBACKPACK_RUS "gjkexty h.rpfr c ,jtghbgfcfvb!"            // Получен рюкзак с боеприпасами!
 
 #define GOTBFG9000_RUS  "gjkextyj $9000! j lf>"         // Получено BFG9000! О да.
 #define GOTCHAINGUN_RUS "gjkexty gektvtn!"              // Получен пулемет!
