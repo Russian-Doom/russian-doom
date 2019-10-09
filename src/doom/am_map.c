@@ -1885,15 +1885,15 @@ void AM_Drawer (void)
     }
     else
     {
-        if (automap_color == 0)         // Doom
+        if (automap_color == 0 || vanillaparm) // Doom
         AM_drawWalls();
-        else if (automap_color == 1)    // Boom
+        else if (automap_color == 1)           // Boom
         AM_drawWallsBoom();
-        else if (automap_color == 2)    // Jaguar
+        else if (automap_color == 2)           // Jaguar
         AM_drawWallsJaguar();
-        else if (automap_color == 3)    // Raven (Heretic)
+        else if (automap_color == 3)           // Raven (Heretic)
         AM_drawWallsRaven();
-        else                            // Strife
+        else                                   // Strife
         AM_drawWallsStrife();
     }
 
