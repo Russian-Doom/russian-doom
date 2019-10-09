@@ -1664,18 +1664,18 @@ void AM_rotate (int64_t* x, int64_t* y, angle_t a)
 // adapted from prboom-plus/src/am_map.c:898-920
 static void AM_rotatePoint (mpoint_t *pt)
 {
-    fixed_t tmpx;
+    int64_t tmpx;
 
     pt->x -= mapcenter.x;
     pt->y -= mapcenter.y;
 
-    tmpx = FixedMul(pt->x, finecosine[mapangle>>ANGLETOFINESHIFT])
-         - FixedMul(pt->y, finesine[mapangle>>ANGLETOFINESHIFT])
+    tmpx = (int64_t)FixedMul(pt->x, finecosine[mapangle>>ANGLETOFINESHIFT])
+         - (int64_t)FixedMul(pt->y, finesine[mapangle>>ANGLETOFINESHIFT])
          + mapcenter.x;
 
-    pt->y = FixedMul(pt->x, finesine[mapangle>>ANGLETOFINESHIFT])
-         + FixedMul(pt->y, finecosine[mapangle>>ANGLETOFINESHIFT])
-         + mapcenter.y;
+    pt->y = (int64_t)FixedMul(pt->x, finesine[mapangle>>ANGLETOFINESHIFT])
+          + (int64_t)FixedMul(pt->y, finecosine[mapangle>>ANGLETOFINESHIFT])
+          + mapcenter.y;
 
     pt->x = tmpx;
 }
