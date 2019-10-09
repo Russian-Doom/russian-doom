@@ -4886,6 +4886,10 @@ boolean M_Responder (event_t* ev)
     {
         static char crosshairmsg[24];
 
+        // [JN] Crosshair is not appearing in vanilla mode, toggling disabled.
+        if (vanillaparm)
+        return false;
+
         if (!crosshair_draw)
         {
             crosshair_draw = true;
