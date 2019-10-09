@@ -847,7 +847,7 @@ void HU_Drawer(void)
         // [JN] Draw local time widget
         HUlib_drawSText(&w_message_time);
     }
-    if (show_fps)
+    if (show_fps && !vanillaparm)
     {
         // [JN] Draw FPS counter
         HUlib_drawSText(&w_message_fps);
@@ -975,7 +975,7 @@ void HU_Erase(void)
         // [JN] Erase local time widget
         HUlib_eraseSText(&w_message_time);
     }
-    if (show_fps)
+    if (show_fps && !vanillaparm)
     {
         // [JN] Erase FPS counter
         HUlib_eraseSText(&w_message_fps);
@@ -999,7 +999,7 @@ void HU_Ticker(void)
     if (local_time)
     plr->message_time = (s);
 
-    if (show_fps)
+    if (show_fps && !vanillaparm)
     {
         M_snprintf(f, sizeof(f), "! %d", real_fps); // [JN] 1 = FPS, see STCFG033 (doom-sysfont.wad)
         plr->message_fps = (f);
