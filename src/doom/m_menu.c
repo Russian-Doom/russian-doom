@@ -466,6 +466,13 @@ void M_RD_Change_NoInternalDemos(int choice);
 void M_RD_BackToDefaultsResponse(int key);
 void M_RD_BackToDefaults(int choice);
 
+// -----------------------------------------------------------------------------
+// [JN] Vanilla menu prototypes
+// -----------------------------------------------------------------------------
+
+void M_Vanilla_DrawOptions(void);
+void M_Vanilla_DrawSound(void);
+
 
 // -----------------------------------------------------------------------------
 // M_WriteText
@@ -1722,6 +1729,204 @@ menu_t  RD_Gameplay_Def_4_Rus =
 
 
 // =============================================================================
+// [JN] VANILLA OPTIONS MENU
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Main Menu
+// -----------------------------------------------------------------------------
+
+enum
+{
+    vanilla_endgame,
+    vanilla_messages,
+    vanilla_detail,
+    vanilla_scrnsize,
+    vanilla_option_empty1,
+    vanilla_mousesens,
+    vanilla_option_empty2,
+    vanilla_soundvol,
+    vanilla_opt_end
+} vanilla_options_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t Vanilla_Options_Menu[]=
+{
+    {1,"M_ENDGAM", M_EndGame,               'e'},
+    {1,"M_MESSG",  M_RD_Change_Messages,    'm'},
+    {1,"M_DETAIL", M_RD_Change_Detail,      'g'},
+    {2,"M_SCRNSZ", M_RD_Change_ScreenSize,  's'},
+    {-1,"",0,'\0'},
+    {2,"M_MSENS",  M_RD_Change_Sensitivity, 'm'},
+    {-1,"",0,'\0'},
+    {1,"M_SVOL",   M_RD_Choose_Audio,       's'}
+};
+
+menu_t  Vanilla_OptionsDef =
+{
+    vanilla_opt_end,
+    &MainDef,
+    Vanilla_Options_Menu,
+    M_Vanilla_DrawOptions,
+    60+ORIGWIDTH_DELTA,37,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t Vanilla_Options_Menu_Rus[]=
+{
+    {1,"Pfrjyxbnm buhe", M_EndGame,               'p'}, // Закончить игру
+    {1,"Cjj,otybz# ",    M_RD_Change_Messages,    'c'}, // Сообщения
+    {1,"Ltnfkbpfwbz#",   M_RD_Change_Detail,      'l'}, // Детализация:
+    {2,"Hfpvth \'rhfyf", M_RD_Change_ScreenSize,  'h'}, // Размер экрана
+    {-1,"",0,'\0'},
+    {2,"Crjhjcnm vsib",  M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
+    {-1,"",0,'\0'},
+    {1,"Uhjvrjcnm",      M_RD_Choose_Audio,       'u'}  // Громкость
+};
+
+menu_t  Vanilla_OptionsDef_Rus =
+{
+    vanilla_opt_end,
+    &MainDef,
+    Vanilla_Options_Menu_Rus,
+    M_Vanilla_DrawOptions,
+    60+ORIGWIDTH_DELTA,37,
+    0
+};
+
+// -----------------------------------------------------------------------------
+// Sound Menu
+// -----------------------------------------------------------------------------
+
+enum
+{
+    vanilla_sfx_vol,
+    vanilla_sfx_empty1,
+    vanilla_music_vol,
+    vanilla_sfx_empty2,
+    vanilla_sound_end
+} vanilla_sound_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t Vanilla_SoundMenu[]=
+{
+    {2,"M_SFXVOL", M_RD_Change_SfxVol,   's'},
+    {-1,"",0,'\0'},
+    {2,"M_MUSVOL", M_RD_Change_MusicVol, 'm'},
+    {-1,"",0,'\0'}
+};
+
+menu_t  Vanilla_Audio_Def =
+{
+    vanilla_sound_end,
+    &Vanilla_OptionsDef,
+    Vanilla_SoundMenu,
+    M_Vanilla_DrawSound,
+    80+ORIGWIDTH_DELTA,64,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t Vanilla_SoundMenu_Rus[]=
+{
+    {2,"Pder",   M_RD_Change_SfxVol,   's'},  // Звук
+    {-1,"",0,'\0'},
+    {2,"Vepsrf", M_RD_Change_MusicVol, 'm'}, // Музыка
+    {-1,"",0,'\0'}
+};
+
+menu_t  Vanilla_Audio_Def_Rus =
+{
+    vanilla_sound_end,
+    &Vanilla_OptionsDef_Rus,
+    Vanilla_SoundMenu_Rus,
+    M_Vanilla_DrawSound,
+    80+ORIGWIDTH_DELTA,64,
+    0
+};
+
+
+// =============================================================================
+// [JN] VANILLA OPTIONS MENU: DRAWING
+// =============================================================================
+
+void M_Vanilla_DrawOptions(void)
+{
+    if (english_language)
+    {
+    // - "OPTIONS" title -------------------------------------------------------
+    V_DrawPatch(108 + ORIGWIDTH_DELTA, 15, 
+                W_CacheLumpName(DEH_String("M_OPTTTL"), PU_CACHE));
+
+    // - Messages --------------------------------------------------------------
+    V_DrawPatch(179 + ORIGWIDTH_DELTA, 53, 
+                W_CacheLumpName(DEH_String(showMessages == 1 ?
+                                           "M_MSGON" : "M_MSGOFF"), PU_CACHE));
+
+    // - Graphic Detail --------------------------------------------------------
+    V_DrawPatch(235 + ORIGWIDTH_DELTA, 69, 
+                W_CacheLumpName(DEH_String(detailLevel == 1 ?
+                                           "M_GDLOW" : "M_GDHIGH"), PU_CACHE));
+    }
+    else
+    {
+    // - "НАСТРОЙКИ" title -----------------------------------------------------
+    M_WriteTextBigCentered_RUS(15, "YFCNHJQRB");
+    
+    M_WriteTextBig_RUS(206 + ORIGWIDTH_DELTA, 53, 
+                       showMessages == 1 ? "drk/" : "dsrk/");
+
+    M_WriteTextBig_RUS(224 + ORIGWIDTH_DELTA, 69, 
+                       detailLevel == 1 ? "ybp/" : "dsc/");
+    }
+
+    // - Screen size slider ----------------------------------------------------
+#ifdef WIDESCREEN
+    // [JN] Wide screen: only 6 sizes are available
+    M_DrawThermo(60 + ORIGWIDTH_DELTA, 102, 6, screenSize);
+#else
+    M_DrawThermo(60 + ORIGWIDTH_DELTA, 102, 12, screenSize);
+#endif
+
+    // - Mouse sensivity slider ------------------------------------------------
+    M_DrawThermo(60 + ORIGWIDTH_DELTA, 134, 10, mouseSensitivity);
+}
+
+void M_Vanilla_DrawSound(void)
+{
+    if (english_language)
+    {
+    // - "Sound volume" title --------------------------------------------------
+    V_DrawPatch (60 + ORIGWIDTH_DELTA, 38, 
+                 W_CacheLumpName(DEH_String("M_SVOL"), PU_CACHE));
+    }
+    else
+    {
+    // - "ГРОМКОСТЬ" title -----------------------------------------------------
+    M_WriteTextBigCentered_RUS(38, "UHJVRJCNM");
+    }
+
+    // - Sfx volume slider -----------------------------------------------------
+    M_DrawThermo(80+ORIGWIDTH_DELTA, 81, 16, sfxVolume);
+
+    // - Music volume slider ---------------------------------------------------
+    M_DrawThermo(80+ORIGWIDTH_DELTA, 113, 16, musicVolume);
+}
+
+// =============================================================================
 // [JN] NEW OPTIONS MENU: DRAWING
 // =============================================================================
 
@@ -2377,9 +2582,18 @@ void M_RD_Change_AutomapGrid(int choice)
 
 void M_RD_Choose_Audio(int choice)
 {
-    M_SetupNextMenu(english_language ?
-                    &RD_Audio_Def :
-                    &RD_Audio_Def_Rus);
+    if (vanillaparm)
+    {
+        M_SetupNextMenu(english_language ?
+                        &Vanilla_Audio_Def :
+                        &Vanilla_Audio_Def_Rus);
+    }
+    else
+    {
+        M_SetupNextMenu(english_language ?
+                        &RD_Audio_Def :
+                        &RD_Audio_Def_Rus);
+    }
 }
 
 void M_RD_Draw_Audio(void)
@@ -4061,9 +4275,18 @@ void M_Episode(int choice)
 
 void M_Options(int choice)
 {
-    M_SetupNextMenu(english_language ? 
-                    &RD_Options_Def : 
-                    &RD_Options_Def_Rus);
+    if (vanillaparm)
+    {
+        M_SetupNextMenu(english_language ? 
+                        &Vanilla_OptionsDef : 
+                        &Vanilla_OptionsDef_Rus);
+    }
+    else
+    {
+        M_SetupNextMenu(english_language ? 
+                        &RD_Options_Def : 
+                        &RD_Options_Def_Rus);
+    }
 }
 
 
@@ -4739,9 +4962,18 @@ boolean M_Responder (event_t* ev)
         else if (key == key_menu_volume)   // Sound Volume
         {
             M_StartControlPanel ();
+            if (vanillaparm)
+            {
+            currentMenu = english_language ?
+                          &Vanilla_Audio_Def : 
+                          &Vanilla_Audio_Def_Rus;
+            }
+            else
+            {
             currentMenu = english_language ?
                           &RD_Audio_Def : 
                           &RD_Audio_Def_Rus;
+            }
             itemOn = rd_audio_sfxvolume;
             S_StartSound(NULL,sfx_swtchn);
             return true;
@@ -5172,10 +5404,12 @@ void M_Drawer (void)
             // -----------------------------------------------------------------
             // [JN] Write common menus by using standard graphical patches:
             // -----------------------------------------------------------------
-            if (currentMenu == &MainDef     // Main Menu
-            ||  currentMenu == &MainDefBeta // Main Menu (Press Beta) 
-            ||  currentMenu == &EpiDef      // Episode selection
-            ||  currentMenu == &NewDef)     // Skill level
+            if (currentMenu == &MainDef                // Main Menu
+            ||  currentMenu == &MainDefBeta            // Main Menu (Press Beta) 
+            ||  currentMenu == &EpiDef                 // Episode selection
+            ||  currentMenu == &NewDef                 // Skill level
+            ||  currentMenu == &Vanilla_OptionsDef     // Vanilla options menu
+            ||  currentMenu == &Vanilla_Audio_Def)     // Vanilla sound menu
             {
                 V_DrawShadowedPatchDoom (x, y, W_CacheLumpName(name, PU_CACHE));
 
@@ -5199,7 +5433,9 @@ void M_Drawer (void)
             // [JN] Write Russian options menu with big Russian font
             // -----------------------------------------------------------------
             else 
-            if (currentMenu == &RD_Options_Def_Rus)
+            if (currentMenu == &RD_Options_Def_Rus
+            ||  currentMenu == &Vanilla_OptionsDef_Rus
+            ||  currentMenu == &Vanilla_Audio_Def_Rus)
             {
                 M_WriteTextBig_RUS(x, y, name);
 
@@ -5272,12 +5508,16 @@ void M_Drawer (void)
         }
 
         // [JN] Properly add vertical spacing to menus
-        if (currentMenu != &MainDef             // Main Menu
-        &&  currentMenu != &MainDefBeta         // Main Menu (Press Beta) 
-        &&  currentMenu != &EpiDef              // Episode selection
-        &&  currentMenu != &NewDef              // New game (skill level)
-        &&  currentMenu != &RD_Options_Def      // Options menu (ENG)
-        &&  currentMenu != &RD_Options_Def_Rus) // Options menu (RUS)
+        if (currentMenu != &MainDef                    // Main Menu
+        &&  currentMenu != &MainDefBeta                // Main Menu (Press Beta) 
+        &&  currentMenu != &EpiDef                     // Episode selection
+        &&  currentMenu != &NewDef                     // New game (skill level)
+        &&  currentMenu != &RD_Options_Def             // Options menu (ENG)
+        &&  currentMenu != &RD_Options_Def_Rus         // Options menu (RUS)
+        &&  currentMenu != &Vanilla_OptionsDef         // Vanilla options menu (ENG)
+        &&  currentMenu != &Vanilla_OptionsDef_Rus     // Vanilla options menu (RUS)
+        &&  currentMenu != &Vanilla_Audio_Def          // Vanilla sound menu (ENG)
+        &&  currentMenu != &Vanilla_Audio_Def_Rus)     // Vanilla sound menu (RUS)
         {
             y += LINEHEIGHT_SML;
         }
