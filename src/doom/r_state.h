@@ -64,9 +64,6 @@ extern int scaledviewwidth;
 extern int viewheight;
 extern int scaledviewheight;
 
-#define MAXWIDTH  (ORIGWIDTH << 1) // [crispy]
-#define MAXHEIGHT (ORIGHEIGHT << 1) // [crispy]
-
 // [crispy] lookup table for horizontal screen coordinates
 extern int flipwidth[MAXWIDTH];
 

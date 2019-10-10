@@ -49,6 +49,9 @@
 #define ORIGHEIGHT      200
 #define SRCWIDTH        320
 
+#define MAXWIDTH  (ORIGWIDTH << 1) // [crispy]
+#define MAXHEIGHT (ORIGHEIGHT << 1) // [crispy]
+
 // Delta is a pixel width from left size of the screen to the standard 320
 // pixel canvas. It stands for moving some elements to the right to get a
 // proper centering in wide mode.

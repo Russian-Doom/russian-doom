@@ -31,8 +31,8 @@
 
 #define BASEYCENTER                     100
 
-#define MAXWIDTH                        1120
-#define MAXHEIGHT                       832
+// #define MAXWIDTH                        1120
+// #define MAXHEIGHT                       832
 
 #define PI                                      3.141592657
 
