@@ -154,7 +154,6 @@ int automap_overlay = 0;
 int automap_rotate  = 0;
 int automap_grid    = 0;
 
-boolean flip_levels_cmdline = false;
 
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
@@ -727,7 +726,7 @@ void D_DoAdvanceDemo (void)
             else
                 pagetic = 170;
 
-            if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
+            if (gamemission == pack_nerve)
                 pagetic = 1000;
 
             gamestate = GS_DEMOSCREEN;
@@ -749,8 +748,6 @@ void D_DoAdvanceDemo (void)
         {
             if (gamemode == pressbeta       // [JN] No demos in Press Beta
             || gamemission == pack_nerve    // ... no demos in NERVE
-            || flip_levels                  // ... no demos in flipped levels (boolean)
-            || flip_levels_cmdline          // ... no demos in flipped levels (cmd line)
             || no_internal_demos)           // ... no demos if they are disabled
             break;
 
@@ -764,7 +761,7 @@ void D_DoAdvanceDemo (void)
             if (gamemode == pressbeta)
             break;
 
-            if (gamemission == pack_nerve || flip_levels || flip_levels_cmdline)
+            if (gamemission == pack_nerve)
                 pagetic = 1000;
             else
                 pagetic = 200;
@@ -790,8 +787,6 @@ void D_DoAdvanceDemo (void)
         {
             if (gamemode == pressbeta       // [JN] No demos in Press Beta
             || gamemission == pack_nerve    // ... no demos in NERVE
-            || flip_levels                  // ... no demos in flipped levels (boolean)
-            || flip_levels_cmdline          // ... no demos in flipped levels (cmd line)
             || no_internal_demos)           // ... no demos if they are disabled
             break;
 
@@ -804,9 +799,7 @@ void D_DoAdvanceDemo (void)
         case 4:
         {
             if (gamemode == pressbeta       // [JN] No demos in Press Beta
-            || gamemission == pack_nerve    // ... no demos in NERVE
-            || flip_levels                  // ... no demos in flipped levels (boolean)
-            || flip_levels_cmdline)         // ... no demos in flipped levels (cmd line)
+            || gamemission == pack_nerve)    // ... no demos in NERVE
             break;
 
             gamestate = GS_DEMOSCREEN;
@@ -844,8 +837,6 @@ void D_DoAdvanceDemo (void)
         {
             if (gamemode == pressbeta       // [JN] No demos in Press Beta
             || gamemission == pack_nerve    // ... no demos in NERVE
-            || flip_levels                  // ... no demos in flipped levels (boolean)
-            || flip_levels_cmdline          // ... no demos in flipped levels (cmd line)
             || no_internal_demos)           // ... no demos if they are disabled
             break;
 
@@ -858,8 +849,6 @@ void D_DoAdvanceDemo (void)
         {
             if (gamemode == pressbeta       // [JN] No demos in Press Beta
             || gamemission == pack_nerve    // ... no demos in NERVE
-            || flip_levels                  // ... no demos in flipped levels (boolean)
-            || flip_levels_cmdline          // ... no demos in flipped levels (cmd line)
             || no_internal_demos)           // ... no demos if they are disabled
             break;
 
@@ -2726,15 +2715,6 @@ void D_DoomMain (void)
         startmap = 1;
         autostart = true;
         testcontrols = true;
-    }
-
-    // [crispy] port level flipping feature over from Strawberry Doom
-
-    p = M_CheckParm("-fliplevels");
-
-    if (p > 0)
-    {
-        flip_levels_cmdline = !flip_levels_cmdline;
     }
 
     // Check for load game parameter
