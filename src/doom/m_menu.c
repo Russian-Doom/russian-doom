@@ -456,6 +456,7 @@ void M_RD_Change_CrosshairDraw(int choice);
 void M_RD_Change_CrosshairHealth(int choice);
 void M_RD_Change_CrosshairScale(int choice);
 void M_RD_Change_FixMapErrors(int choice);
+void M_RD_Change_FlipLevels(int choice);
 void M_RD_Change_ExtraPlayerFaces(int choice);
 void M_RD_Change_LostSoulsQty(int choice);
 void M_RD_Change_LostSoulsAgr(int choice);
@@ -1489,6 +1490,7 @@ enum
 enum
 {
     rd_gameplay_4_fix_map_errors,
+    rd_gameplay_4_flip_levels,
     rd_gameplay_4_extra_player_faces,
     rd_gameplay_4_unlimited_lost_souls,
     rd_gameplay_4_agressive_lost_souls,
@@ -1497,7 +1499,6 @@ enum
     rd_gameplay_4_empty1,
     rd_gameplay_4_empty2,
     rd_gameplay_4_empty3,
-    rd_gameplay_4_empty4,
     rd_gameplay_4_first_page,
     rd_gameplay_4_prev_page,
     rd_gameplay_4_end
@@ -1591,12 +1592,12 @@ menu_t  RD_Gameplay_Def_3 =
 menuitem_t RD_Gameplay_Menu_4[]=
 {
     {1,"Fix errors of vanilla maps:",         M_RD_Change_FixMapErrors,     'f'},
+    {1,"Flip game levels:",                   M_RD_Change_FlipLevels,       'f'},
     {1,"Extra player faces on the HUD:",      M_RD_Change_ExtraPlayerFaces, 'e'},
     {1,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
     {1,"More agressive lost souls:",          M_RD_Change_LostSoulsAgr,     'm'},
     {1,"Don't prompt for q. saving/loading:", M_RD_Change_FastQSaveLoad,    'd'},
     {1,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'd'},
-    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
@@ -1703,12 +1704,12 @@ menu_t  RD_Gameplay_Def_3_Rus =
 menuitem_t RD_Gameplay_Menu_4_Rus[]=
 {
     {1,"ecnhfyznm jib,rb jhbu> ehjdytq:",   M_RD_Change_FixMapErrors,       'b'},   // Устранять ошибки ориг. уровней
+    {1,"pthrfkmyjt jnhf;tybt ehjdytq:",     M_RD_Change_FlipLevels,         'p'},   // Зеркальное отражение уровней
     {1,"Ljgjkybntkmyst kbwf buhjrf:",       M_RD_Change_ExtraPlayerFaces,   'a'},   // Дополнительные лица игрока
     {1,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       'a'},   // Элементаль без ограничения душ
     {1,"gjdsityyfz fuhtccbdyjcnm lei:",     M_RD_Change_LostSoulsAgr,       'a'},   // Повышенная агрессивность душ
     {1,"jnrk.xbnm pfghjc ,> pfuheprb:",     M_RD_Change_FastQSaveLoad,      'a'},   // Отключить запрос б. загрузки
     {1,"Ghjbuhsdfnm ltvjpfgbcb:",           M_RD_Change_NoInternalDemos,    'a'},   // Проигрывать демозаписи
-    {-1,"",0,'\0'},                                                                 //
     {-1,"",0,'\0'},                                                                 //
     {-1,"",0,'\0'},                                                                 //
     {-1,"",0,'\0'},                                                                 //
@@ -3237,25 +3238,29 @@ void M_RD_Draw_Gameplay_4(void)
         if (fix_map_errors) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(226 + ORIGWIDTH_DELTA, 45, RD_ON); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(226 + ORIGWIDTH_DELTA, 45, RD_OFF); dp_translation = NULL; }
 
+        // - Flip game levels --------------------------------------------------
+        if (flip_levels) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(158 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(158 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
+
         // - Extra player faces on the HUD -------------------------------------
-        if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(255 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(255 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
+        if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(255 + ORIGWIDTH_DELTA, 65, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(255 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
 
         // - Pain Elemental without Souls limit --------------------------------
-        if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(284 + ORIGWIDTH_DELTA, 65, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(284 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
+        if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(284 + ORIGWIDTH_DELTA, 75, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(284 + ORIGWIDTH_DELTA, 75, RD_OFF); dp_translation = NULL; }
 
         // - More agressive lost souls -----------------------------------------
-        if (agressive_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(222 + ORIGWIDTH_DELTA, 75, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(222 + ORIGWIDTH_DELTA, 75, RD_OFF); dp_translation = NULL; }
+        if (agressive_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(222 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(222 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
 
         // - Don't prompt for q. saving/loading --------------------------------
-        if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(281 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(281 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
+        if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(281 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(281 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
 
         // - Play internal demos -----------------------------------------------
-        if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(183 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
-        else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(183 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
+        if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(183 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
+        else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(183 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
 
         // Footer
         dp_translation = cr[CR_GOLD];
@@ -3276,25 +3281,29 @@ void M_RD_Draw_Gameplay_4(void)
         if (fix_map_errors) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(269 + ORIGWIDTH_DELTA, 45, RD_ON_RUS); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(269 + ORIGWIDTH_DELTA, 45, RD_OFF_RUS); dp_translation = NULL; }
 
+        // - Зеркальное отражение уровней ------------------------------------
+        if (flip_levels) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(263 + ORIGWIDTH_DELTA, 55, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(263 + ORIGWIDTH_DELTA, 55, RD_OFF_RUS); dp_translation = NULL; }
+
         // - Дополнительные лица игрока ----------------------------------------
-        if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(247 + ORIGWIDTH_DELTA, 55, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(247 + ORIGWIDTH_DELTA, 55, RD_OFF_RUS); dp_translation = NULL; }
+        if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(247 + ORIGWIDTH_DELTA, 65, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(247 + ORIGWIDTH_DELTA, 65, RD_OFF_RUS); dp_translation = NULL; }
 
         // - Элементаль без ограничения Душ ------------------------------------
-        if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 65, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 65, RD_OFF_RUS); dp_translation = NULL; }
+        if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 75, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 75, RD_OFF_RUS); dp_translation = NULL; }
 
         // - Повышенная агрессивность Душ --------------------------------------
-        if (agressive_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 75, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 75, RD_OFF_RUS); dp_translation = NULL; }
+        if (agressive_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 85, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 85, RD_OFF_RUS); dp_translation = NULL; }
 
         // - Отключить запрос б. загрузки --------------------------------------
-        if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(253 + ORIGWIDTH_DELTA, 85, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(253 + ORIGWIDTH_DELTA, 85, RD_OFF_RUS); dp_translation = NULL; }
+        if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(253 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(253 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
 
         // - Проигрывать демозаписи --------------------------------------------
-        if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
+        if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 105, RD_OFF_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 105, RD_ON_RUS); dp_translation = NULL; }
 
         // Footer
         dp_translation = cr[CR_GOLD];
@@ -3479,6 +3488,16 @@ void M_RD_Change_FixMapErrors(int choice)
     fix_map_errors = 1 - fix_map_errors;
 }
 
+void M_RD_Change_FlipLevels(int choice)
+{
+    extern void R_ExecuteSetViewSize();
+    choice = 0;
+    flip_levels = 1 - flip_levels;
+
+    // Redraw game screen
+    R_ExecuteSetViewSize();
+}
+
 void M_RD_Change_ExtraPlayerFaces(int choice)
 {
     choice = 0;
@@ -3595,6 +3614,7 @@ void M_RD_BackToDefaultsResponse(int key)
     crosshair_scale = 0;
 
     fix_map_errors = 1;
+    flip_levels = 0;
     extra_player_faces = 1;
     unlimited_lost_souls = 1;
     agressive_lost_souls = 0;
