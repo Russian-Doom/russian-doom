@@ -460,7 +460,10 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
 
     // stereo separation
     // [JN] Support for mono sfx mode
-    *sep = snd_monomode ? 128 : 128 - (FixedMul(S_STEREO_SWING, finesine[angle]) >> FRACBITS);
+    *sep = snd_monomode ? 128 : 128 
+                        - (FixedMul(flip_levels ? 
+                        - S_STEREO_SWING :
+                          S_STEREO_SWING, finesine[angle]) >> FRACBITS);
 
     // volume calculation
     if (approx_dist < S_CLOSE_DIST)

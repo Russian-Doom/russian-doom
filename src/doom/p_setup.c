@@ -198,9 +198,6 @@ void P_LoadVertexes (int lump)
         }
     }
 
-	if ((flip_levels || flip_levels_cmdline) && singleplayer)
-	    li->x = -li->x;
-    
     // [crispy] initialize pseudovertexes with actual vertex coordinates
     li->px = li->x;
     li->py = li->y;
@@ -256,17 +253,7 @@ void P_LoadSegs (int lump)
     li->v1 = &vertexes[(unsigned short)SHORT(ml->v1)]; // [crispy] extended nodes
     li->v2 = &vertexes[(unsigned short)SHORT(ml->v2)]; // [crispy] extended nodes
 
-	if ((flip_levels || flip_levels_cmdline) && singleplayer)
-	{
-            vertex_t* tmp = li->v1;
-            li->v1 = li->v2;
-            li->v2 = tmp;
-	}
-    
 	li->angle = (SHORT(ml->angle))<<FRACBITS;
-    
-	if ((flip_levels || flip_levels_cmdline) && singleplayer)
-            li->angle = -li->angle;
     
 //	li->offset = (SHORT(ml->offset))<<FRACBITS; // [crispy] recalculated below
 	linedef = (unsigned short)SHORT(ml->linedef); // [crispy] extended nodes
@@ -286,8 +273,7 @@ void P_LoadSegs (int lump)
 	li->sidedef = &sides[ldef->sidenum[side]];
 	li->frontsector = sides[ldef->sidenum[side]].sector;
 	// [crispy] recalculate
-    if (singleplayer)
-    li->offset = GetOffset(li->v1, ((ml->side ^ (flip_levels || flip_levels_cmdline) ? ldef->v2 : ldef->v1)));
+    li->offset = GetOffset(li->v1, (ml->side ? ldef->v2 : ldef->v1));
 
         if (ldef-> flags & ML_TWOSIDED)
         {
@@ -348,7 +334,7 @@ void P_LoadSegs (int lump)
                         li->sidedef->bottomtexture = R_TextureNumForName(linefix[j].bottomtexture);
                     }
 
-                    if (linefix[j].offset != DEFAULT && !flip_levels && !flip_levels_cmdline )
+                    if (linefix[j].offset != DEFAULT)
                     {
                         li->offset = SHORT(linefix[j].offset) << FRACBITS;
                         li->sidedef->textureoffset = 0;
@@ -406,17 +392,7 @@ static void P_LoadSegs_DeePBSP (int lump)
 	li->v1 = &vertexes[ml->v1];
 	li->v2 = &vertexes[ml->v2];
 
-	if (flip_levels || flip_levels_cmdline)
-	{
-	    vertex_t* tmp = li->v1;
-	    li->v1 = li->v2;
-	    li->v2 = tmp;
-	}
-
 	li->angle = (SHORT(ml->angle))<<16;
-
-	if (flip_levels || flip_levels_cmdline)
-	    li->angle = -li->angle;
 
 //	li->offset = (SHORT(ml->offset))<<16; // [crispy] recalculated below
 	linedef = (unsigned short)SHORT(ml->linedef);
@@ -426,7 +402,7 @@ static void P_LoadSegs_DeePBSP (int lump)
 	li->sidedef = &sides[ldef->sidenum[side]];
 	li->frontsector = sides[ldef->sidenum[side]].sector;
 	// [crispy] recalculate
-	li->offset = GetOffset(li->v1, (ml->side^(flip_levels || flip_levels_cmdline) ? ldef->v2 : ldef->v1));
+	li->offset = GetOffset(li->v1, (ml->side ? ldef->v2 : ldef->v1));
 
 	if (ldef->flags & ML_TWOSIDED)
 	{
@@ -635,14 +611,6 @@ void P_LoadNodes (int lump)
 	no->dx = SHORT(mn->dx)<<FRACBITS;
 	no->dy = SHORT(mn->dy)<<FRACBITS;
     
-	if ((flip_levels || flip_levels_cmdline) && singleplayer)
-	{
-	    no->x += no->dx;
-	    no->y += no->dy;
-	    no->x = -no->x;
-	    no->dy = -no->dy;
-	}
-    
 	for (j=0 ; j<2 ; j++)
 	{
 	    no->children[j] = (unsigned short)SHORT(mn->children[j]);
@@ -663,13 +631,6 @@ void P_LoadNodes (int lump)
         
 	    for (k=0 ; k<4 ; k++)
 		no->bbox[j][k] = SHORT(mn->bbox[j][k])<<FRACBITS;
-    
-	    if ((flip_levels || flip_levels_cmdline) && singleplayer)
-	    {
-		fixed_t tmp = no->bbox[j][2];
-		no->bbox[j][2] = -no->bbox[j][3];
-		no->bbox[j][3] = -tmp;
-	    }    
 	}
     }
 	
@@ -714,14 +675,6 @@ static void P_LoadNodes_DeePBSP (int lump)
 	no->dx = SHORT(mn->dx)<<FRACBITS;
 	no->dy = SHORT(mn->dy)<<FRACBITS;
 
-	if (flip_levels || flip_levels_cmdline)
-	{
-	    no->x += no->dx;
-	    no->y += no->dy;
-	    no->x = -no->x;
-	    no->dy = -no->dy;
-	}
-
 	for (j = 0; j < 2; j++)
 	{
 	    int k;
@@ -729,13 +682,6 @@ static void P_LoadNodes_DeePBSP (int lump)
 
 	    for (k = 0; k < 4; k++)
 		no->bbox[j][k] = SHORT(mn->bbox[j][k])<<FRACBITS;
-
-	    if (flip_levels || flip_levels_cmdline)
-	    {
-		fixed_t tmp = no->bbox[j][2];
-		no->bbox[j][2] = -no->bbox[j][3];
-		no->bbox[j][3] = -tmp;
-	    }
 	}
     }
 
@@ -861,12 +807,6 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 	newvertarray[i + orgVerts].x = *((unsigned int*)data);
 	data += sizeof(newvertarray[0].x);
 
-	if (flip_levels || flip_levels_cmdline)
-	{
-	    newvertarray[i + orgVerts].px =
-	    newvertarray[i + orgVerts].x = -newvertarray[i + orgVerts].x;
-	}
-
 	newvertarray[i + orgVerts].py =
 	newvertarray[i + orgVerts].y = *((unsigned int*)data);
 	data += sizeof(newvertarray[0].y);
@@ -936,13 +876,6 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 	li->v1 = &vertexes[ml->v1];
 	li->v2 = &vertexes[ml->v2];
 
-	if (flip_levels || flip_levels_cmdline)
-	{
-	    vertex_t* tmp = li->v1;
-	    li->v1 = li->v2;
-	    li->v2 = tmp;
-	}
-
 	linedef = (unsigned short)SHORT(ml->linedef);
 	ldef = &lines[linedef];
 	li->linedef = ldef;
@@ -998,27 +931,12 @@ static void P_LoadNodes_ZDBSP (int lump, boolean compressed)
 	no->dx = SHORT(mn->dx)<<FRACBITS;
 	no->dy = SHORT(mn->dy)<<FRACBITS;
 
-	if (flip_levels || flip_levels_cmdline)
-	{
-	    no->x += no->dx;
-	    no->y += no->dy;
-	    no->x = -no->x;
-	    no->dy = -no->dy;
-	}
-
 	for (j = 0; j < 2; j++)
 	{
 	    no->children[j] = (unsigned int)(mn->children[j]);
 
 	    for (k = 0; k < 4; k++)
 		no->bbox[j][k] = SHORT(mn->bbox[j][k])<<FRACBITS;
-
-	    if (flip_levels || flip_levels_cmdline)
-	    {
-		fixed_t tmp = no->bbox[j][2];
-		no->bbox[j][2] = -no->bbox[j][3];
-		no->bbox[j][3] = -tmp;
-	    }
 	}
     }
 
@@ -1149,12 +1067,6 @@ void P_LoadThings (int lump)
             }
         }
     }
-
-	if ((flip_levels || flip_levels_cmdline) && singleplayer)
-	{
-	    spawnthing.x = -spawnthing.x;
-	    spawnthing.angle = 180 - spawnthing.angle;
-	}
 	
 	P_SpawnMapThing(&spawnthing);
     }
@@ -1200,12 +1112,6 @@ static void P_LoadThings_Hexen (int lump)
 //	spawnthing.arg4 = mt->arg4;
 //	spawnthing.arg5 = mt->arg5;
 
-	if (flip_levels || flip_levels_cmdline)
-	{
-	    spawnthing.x = -spawnthing.x;
-	    spawnthing.angle = 180 - spawnthing.angle;
-	}
-
 	P_SpawnMapThing(&spawnthing);
     }
 
@@ -1238,16 +1144,8 @@ void P_LoadLineDefs (int lump)
 	ld->special = SHORT(mld->special);
 	ld->tag = SHORT(mld->tag);
 
-	if ((flip_levels || flip_levels_cmdline) && singleplayer)
-	{
-	    v1 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)]; // [crispy] extended nodes
-	    v2 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)]; // [crispy] extended nodes
-	}
-	else
-	{
 	v1 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)]; // [crispy] extended nodes
 	v2 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)]; // [crispy] extended nodes
-	}
 
 	ld->dx = v2->x - v1->x;
 	ld->dy = v2->y - v1->y;
@@ -1382,16 +1280,9 @@ static void P_LoadLineDefs_Hexen (int lump)
 	    warn++;
 	}
 
-	if (flip_levels || flip_levels_cmdline)
-	{
-	    v1 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)];
-	    v2 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)];
-	}
-	else
-	{
-	    v1 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)];
-	    v2 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)];
-	}
+	v1 = ld->v1 = &vertexes[(unsigned short)SHORT(mld->v1)];
+	v2 = ld->v2 = &vertexes[(unsigned short)SHORT(mld->v2)];
+
 	ld->dx = v2->x - v1->x;
 	ld->dy = v2->y - v1->y;
 	if (!ld->dx)
@@ -1535,16 +1426,8 @@ static void P_CreateBlockMap(void)
             int dx, dy, diff, b;
 
         // starting coordinates
-        if (flip_levels || flip_levels_cmdline)
-        {
-            x = (lines[i].v2->x >> FRACBITS) - minx;
-            y = (lines[i].v2->y >> FRACBITS) - miny;
-        }
-        else
-        {
-            x = (lines[i].v1->x >> FRACBITS) - minx;
-            y = (lines[i].v1->y >> FRACBITS) - miny;
-        }
+        x = (lines[i].v1->x >> FRACBITS) - minx;
+        y = (lines[i].v1->y >> FRACBITS) - miny;
 
         // x-y deltas
         adx = lines[i].dx >> FRACBITS, dx = adx < 0 ? -1 : 1;
@@ -1561,16 +1444,8 @@ static void P_CreateBlockMap(void)
         b = (y >> MAPBTOFRAC)*bmapwidth + (x >> MAPBTOFRAC);
 
         // ending block
-        if (flip_levels || flip_levels_cmdline)
-        {
-            bend = (((lines[i].v1->y >> FRACBITS) - miny) >> MAPBTOFRAC) *
-                bmapwidth + (((lines[i].v1->x >> FRACBITS) - minx) >> MAPBTOFRAC);
-        }
-        else
-        {
-            bend = (((lines[i].v2->y >> FRACBITS) - miny) >> MAPBTOFRAC) *
-                bmapwidth + (((lines[i].v2->x >> FRACBITS) - minx) >> MAPBTOFRAC);
-        }
+        bend = (((lines[i].v2->y >> FRACBITS) - miny) >> MAPBTOFRAC) *
+            bmapwidth + (((lines[i].v2->x >> FRACBITS) - minx) >> MAPBTOFRAC);
 
         // delta for pointer when moving across y
         dy *= bmapwidth;
@@ -1706,31 +1581,6 @@ boolean P_LoadBlockMap (int lump)
     bmapwidth = blockmaplump[2];
     bmapheight = blockmaplump[3];
     
-    if ((flip_levels || flip_levels_cmdline) && singleplayer)
-    {
-	int x, y;
-	long* rowoffset; // [crispy] BLOCKMAP limit
-	// int32_t* rowoffset; // [crispy] BLOCKMAP limit
-	// [JN] TODO: assignment to 'int32_t *' {aka 'int *'} from incompatible pointer type 'long int *'
-
-	bmaporgx += bmapwidth * 128 * FRACUNIT;
-	bmaporgx = -bmaporgx;
-
-	for (y = 0; y < bmapheight; y++)
-	{
-	    rowoffset = blockmap + y * bmapwidth;
-
-	    for (x = 0; x < bmapwidth / 2; x++)
-	    {
-	        int32_t tmp; // [crispy] BLOCKMAP limit
-
-	        tmp = rowoffset[x];
-	        rowoffset[x] = rowoffset[bmapwidth-1-x];
-	        rowoffset[bmapwidth-1-x] = tmp;
-	    }
-	}
-    }
-	
     // Clear out mobj chains
 
     count = sizeof(*blocklinks) * bmapwidth * bmapheight;

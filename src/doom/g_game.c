@@ -762,6 +762,12 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         cmd->buttons = BT_SPECIAL | BTS_SAVEGAME | (savegameslot<<BTS_SAVESHIFT); 
     } 
 
+    if (flip_levels)
+    {
+        cmd->angleturn = -cmd->angleturn;
+        cmd->sidemove = -cmd->sidemove;
+    }
+
     // low-res turning
 
     if (lowres_turn)
@@ -2432,12 +2438,6 @@ void G_ReadDemoTiccmd (ticcmd_t* cmd)
     }
 
     cmd->buttons = (unsigned char)*demo_p++; 
-
-    if (flip_levels)
-    {
-	cmd->sidemove *= (const signed char) -1;
-	cmd->angleturn *= (const short) -1;
-    }
 } 
 
 // Increase the size of the demo buffer to allow unlimited demos
@@ -2475,12 +2475,6 @@ static void IncreaseDemoBuffer(void)
 void G_WriteDemoTiccmd (ticcmd_t* cmd) 
 { 
     byte *demo_start;
-
-    if (flip_levels)
-    {
-	cmd->sidemove *= (const signed char) -1;
-	cmd->angleturn *= (const short) -1;
-    }
 
     if (gamekeydown[key_demo_quit]) // press q to end demo recording 
     G_CheckDemoStatus (); 

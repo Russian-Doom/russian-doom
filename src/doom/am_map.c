@@ -1114,7 +1114,7 @@ void AM_drawFline (fline_t* fl, int color)
         return;
     }
 
-#define PUTDOT(xx,yy,cc) fb[(yy)*f_w+(xx)]=(cc)
+#define PUTDOT(xx,yy,cc) fb[(yy)*f_w+(flipwidth[xx])]=(colormaps[(cc)])
 
     dx = fl->b.x - fl->a.x;
     ax = 2 * (dx<0 ? -dx : dx);

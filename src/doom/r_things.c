@@ -1038,7 +1038,7 @@ void R_DrawPSprite (pspdef_t* psp)
     sprframe = &sprdef->spriteframes[ psp->state->frame & FF_FRAMEMASK ];
 
     lump = sprframe->lump[0];
-    flip = (boolean)sprframe->flip[0];
+    flip = (boolean)sprframe->flip[0] ^ flip_levels;
 
     // [crispy] Smoothen Chainsaw idle animation
     // [JN] ...а также применять стандартную анимацию покачивания к некоторым фреймам стрельбы
@@ -1090,7 +1090,8 @@ void R_DrawPSprite (pspdef_t* psp)
     // calculate edges of the shape
     tx = psp_sx-((ORIGWIDTH/2)-ORIGWIDTH_DELTA)*FRACUNIT;
 
-    tx -= spriteoffset[lump];	
+    // [crispy] fix sprite offsets for mirrored sprites
+    tx -= flip ? 2 * tx - spriteoffset[lump] + spritewidth[lump] : spriteoffset[lump];
     x1 = (centerxfrac + FixedMul (tx,pspritescale) ) >>FRACBITS;
 
     // off the right side
@@ -1144,7 +1145,7 @@ void R_DrawPSprite (pspdef_t* psp)
     }
 
     // [JN] Mouselook: also move HUD weapons while mouse look
-    vis->texturemid += FixedMul(((centery - viewheight / 2) << FRACBITS), vis->xiscale);
+    vis->texturemid += FixedMul(((centery - viewheight / 2) << FRACBITS), pspriteiscale);
 
     if (vis->x1 > x1)
     vis->startfrac += vis->xiscale*(vis->x1-x1);

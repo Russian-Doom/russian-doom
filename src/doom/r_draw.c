@@ -40,8 +40,8 @@
 #include "jn.h"
 
 // ?
-#define MAXWIDTH    1120
-#define MAXHEIGHT   832
+// #define MAXWIDTH    1120
+// #define MAXHEIGHT   832
 
 // status bar height at bottom of screen
 #define SBARHEIGHT  (32 << hires)
@@ -136,7 +136,7 @@ void R_DrawColumn (void)
     // Use ylookup LUT to avoid multiply with ScreenWidth.
     // Use columnofs LUT for subwindows?
 
-    dest = ylookup[dc_yl] + columnofs[dc_x];
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     // Determine scaling, which is the only mapping to be done.
 
@@ -229,10 +229,10 @@ void R_DrawColumnLow (void)
     // Blocky mode, need to multiply by 2.
     x = dc_x << 1;
 
-    dest = ylookup[(dc_yl << hires)] + columnofs[x];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[x+1];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[x];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[x+1];
+    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
 
     fracstep = dc_iscale; 
     frac = dc_texturemid + (dc_yl-centery)*fracstep;
@@ -362,7 +362,7 @@ void R_DrawFuzzColumn (void)
     }
 #endif
 
-    dest  = ylookup[dc_yl] + columnofs[dc_x];
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     // Looks familiar.
     fracstep = dc_iscale; 
@@ -440,10 +440,10 @@ void R_DrawFuzzColumnLow (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[x];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[x+1];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[x];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[x+1];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
 
     // Looks familiar.
     fracstep = dc_iscale; 
@@ -526,7 +526,7 @@ void R_DrawTranslatedColumn (void)
     }    
 #endif 
 
-    dest = ylookup[dc_yl] + columnofs[dc_x]; 
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     // Looks familiar.
     fracstep = dc_iscale; 
@@ -576,10 +576,10 @@ void R_DrawTranslatedColumnLow (void)
     }
 #endif 
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[x];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[x+1];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[x];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[x+1];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
 
     // Looks familiar.
     fracstep = dc_iscale; 
@@ -631,7 +631,7 @@ void R_DrawTLColumn (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[dc_x];
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl-centery)*fracstep;
@@ -674,10 +674,10 @@ void R_DrawTLColumnLow (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[x];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[x+1];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[x];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[x+1];
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
 
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl-centery)*fracstep;
@@ -793,7 +793,7 @@ void R_DrawSpan (void)
     // with x in the top 16 bits and y in the bottom 16 bits.  For
     // each 16-bit part, the top 6 bits are the integer part and the
     // bottom 10 bits are the fractional part of the pixel position.
-    dest = ylookup[ds_y] + columnofs[ds_x1];
+    // dest = ylookup[ds_y] + columnofs[ds_x1];
 
     // We do not check for zero spans here?
     count = ds_x2 - ds_x1;
@@ -808,7 +808,9 @@ void R_DrawSpan (void)
 
         // Lookup pixel from flat texture tile,
         //  re-index using light/colormap.
-        *dest++ = ds_colormap[ds_source[spot]];
+        //*dest++ = ds_colormap[ds_source[spot]];
+        dest = ylookup[ds_y] + columnofs[flipwidth[ds_x1++]];
+        *dest = ds_colormap[ds_source[spot]];
 
         // position += step;
         ds_xfrac += ds_xstep;
@@ -843,8 +845,8 @@ void R_DrawSpanLow (void)
     ds_x1 <<= 1;
     ds_x2 <<= 1;
 
-    dest = ylookup[(ds_y << hires)] + columnofs[ds_x1];
-    dest2 = ylookup[(ds_y << hires) + 1] + columnofs[ds_x1];
+    // dest = ylookup[(ds_y << hires)] + columnofs[ds_x1];
+    // dest2 = ylookup[(ds_y << hires) + 1] + columnofs[ds_x1];
 
     do
     {
@@ -856,13 +858,18 @@ void R_DrawSpanLow (void)
 
         // Lowres/blocky mode does it twice,
         //  while scale is adjusted appropriately.
+        // *dest++ = ds_colormap[ds_source[spot]];
+        // *dest++ = ds_colormap[ds_source[spot]];
+
+        dest = ylookup[(ds_y << hires)] + columnofs[flipwidth[ds_x1++]];
         *dest++ = ds_colormap[ds_source[spot]];
-        *dest++ = ds_colormap[ds_source[spot]];
-        if (hires)
-        {
-            *dest2++ = ds_colormap[ds_source[spot]];
-            *dest2++ = ds_colormap[ds_source[spot]];
-        }
+        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipwidth[ds_x1++]];
+        *dest2++ = ds_colormap[ds_source[spot]];
+        // if (hires)
+        // {
+        //     *dest2++ = ds_colormap[ds_source[spot]];
+        //     *dest2++ = ds_colormap[ds_source[spot]];
+        // }
 
     // position += step;
     ds_xfrac += ds_xstep;
