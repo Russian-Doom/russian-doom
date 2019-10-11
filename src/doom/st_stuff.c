@@ -616,10 +616,10 @@ boolean ST_Responder (event_t* ev)
                         plyr->mo->health = 100;
                         plyr->health = deh_god_mode_health;
                     }
-                    plyr->message = DEH_String(english_language ? STSTR_DQDON : STSTR_DQDON_RUS);
+                    plyr->message = DEH_String(ststr_dqdon);
                 }
                 else 
-                plyr->message = DEH_String(english_language ? STSTR_DQDOFF : STSTR_DQDOFF_RUS);
+                plyr->message = DEH_String(ststr_dqdoff);
             }
 
             // 'fa' cheat for killer fucking arsenal
@@ -660,7 +660,7 @@ boolean ST_Responder (event_t* ev)
                     plyr->ammo[i] = plyr->maxammo[i];
                 }
 
-                plyr->message = DEH_String(english_language ? STSTR_FAADDED : STSTR_FAADDED_RUS);
+                plyr->message = DEH_String(ststr_faadded);
             }
 
             // 'kfa' cheat for key full ammo
@@ -704,7 +704,7 @@ boolean ST_Responder (event_t* ev)
                 for (i=0;i<NUMCARDS;i++)
                     plyr->cards[i] = true;
 
-                plyr->message = DEH_String(english_language ? STSTR_KFAADDED : STSTR_KFAADDED_RUS);
+                plyr->message = DEH_String(ststr_kfaadded);
             }
 
             // [JN] 'ka' чит для выдачи ключей
@@ -713,7 +713,7 @@ boolean ST_Responder (event_t* ev)
                 for (i=0;i<NUMCARDS;i++)
                     plyr->cards[i] = true;
 
-                plyr->message = DEH_String(english_language ? STSTR_KAADDED : STSTR_KAADDED_RUS);
+                plyr->message = DEH_String(ststr_kaadded);
             }
 
             // [crispy] implement Boom's "tntem" cheat
@@ -721,7 +721,7 @@ boolean ST_Responder (event_t* ev)
             else if (cht_CheckCheat(&cheat_massacre, ev->data2))
             {
                 ST_cheat_massacre();
-                plyr->message = DEH_String(english_language ? STSTR_MASSACRE : STSTR_MASSACRE_RUS);
+                plyr->message = DEH_String(ststr_massacre);
             }
 
             // [JN] Отображение версии проекта
@@ -740,7 +740,7 @@ boolean ST_Responder (event_t* ev)
                 char    buf[3];
                 int     musnum;
 
-                plyr->message = DEH_String(english_language ? STSTR_MUS : STSTR_MUS_RUS);
+                plyr->message = DEH_String(ststr_mus);
                 cht_GetParam(&cheat_mus, buf);
 
                 // Note: The original v1.9 had a bug that tried to play back
@@ -758,7 +758,7 @@ boolean ST_Responder (event_t* ev)
                     // [JN] Jaguar: do not try to play D_ROMER2 (map27) and higher
                     if (((((buf[0]-'0')*10 + buf[1]-'0') > 35 || musnum < mus_runnin) && gameversion >= exe_doom_1_8)
                     ||  ((((buf[0]-'0')*10 + buf[1]-'0') > 26 || musnum < mus_runnin) && gamemission == jaguar))
-                        plyr->message = DEH_String(english_language ? STSTR_NOMUS : STSTR_NOMUS_RUS);
+                        plyr->message = DEH_String(ststr_nomus);
                     else
                         S_ChangeMusic(musnum, 1);
                 }
@@ -768,7 +768,7 @@ boolean ST_Responder (event_t* ev)
 
                     // [crispy] prevent crash with IDMUS0x or IDMUSx0
                     if (((buf[0]-'1')*9 + buf[1]-'1') > 31 || buf[0] < '1' || buf[1] < '1')
-                        plyr->message = DEH_String(english_language ? STSTR_NOMUS : STSTR_NOMUS_RUS);
+                        plyr->message = DEH_String(ststr_nomus);
                     else
                         S_ChangeMusic(musnum, 1);
                 }
@@ -787,9 +787,9 @@ boolean ST_Responder (event_t* ev)
                 plyr->cheats ^= CF_NOCLIP;
 
                 if (plyr->cheats & CF_NOCLIP)
-                    plyr->message = DEH_String(english_language ? STSTR_NCON : STSTR_NCON_RUS);
+                    plyr->message = DEH_String(ststr_ncon);
                 else
-                    plyr->message = DEH_String(english_language ? STSTR_NCOFF : STSTR_NCOFF_RUS);
+                    plyr->message = DEH_String(ststr_ncoff);
             }
 
             // 'behold?' power-up cheats
@@ -804,17 +804,17 @@ boolean ST_Responder (event_t* ev)
                     if (!plyr->powers[i])
                     {
                         P_GivePower( plyr, i);
-                        plyr->message = DEH_String(english_language ? STSTR_BEHOLDX : STSTR_BEHOLDX_RUS); // [JN] Активирован
+                        plyr->message = DEH_String(ststr_beholdx); // [JN] Активирован
                     }
                     else if (i!=pw_strength)
                     {
                         plyr->powers[i] = 1;
-                        plyr->message = DEH_String(english_language ? STSTR_BEHOLDZ : STSTR_BEHOLDZ_RUS); // [JN] Деактивирован
+                        plyr->message = DEH_String(ststr_beholdz); // [JN] Деактивирован
                     }
                     else
                     {
                         plyr->powers[i] = 0;
-                        plyr->message = DEH_String(english_language ? STSTR_BEHOLDZ : STSTR_BEHOLDZ_RUS); // [JN] Деактивирован
+                        plyr->message = DEH_String(ststr_beholdz); // [JN] Деактивирован
                     }
                 }
             }
@@ -823,9 +823,9 @@ boolean ST_Responder (event_t* ev)
             if (cht_CheckCheat(&cheat_powerup[6], ev->data2))
             {
                 if (gamemission == jaguar)  // [JN] Atari Jaguar: don't offer "i"nvisibility and "l"ight visor.
-                plyr->message = DEH_String(english_language ? STSTR_BEHOLD_JAG : STSTR_BEHOLD_JAG_RUS);
+                plyr->message = DEH_String(ststr_behold_jag);
                 else
-                plyr->message = DEH_String(english_language ? STSTR_BEHOLD : STSTR_BEHOLD_RUS);
+                plyr->message = DEH_String(ststr_behold);
             }
 
             // 'choppers' invulnerability & chainsaw
@@ -833,7 +833,7 @@ boolean ST_Responder (event_t* ev)
             {
                 plyr->weaponowned[wp_chainsaw] = true;
                 plyr->powers[pw_invulnerability] = true;
-                plyr->message = DEH_String(english_language ? STSTR_CHOPPERS : STSTR_CHOPPERS_RUS);
+                plyr->message = DEH_String(ststr_choppers);
             }
 
             // 'mypos' for player position
@@ -931,7 +931,7 @@ boolean ST_Responder (event_t* ev)
             }
 
             // So be it.
-            plyr->message = DEH_String(english_language ? STSTR_CLEV : STSTR_CLEV_RUS);
+            plyr->message = DEH_String(ststr_clev);
             G_DeferedInitNew(gameskill, epsd, map);
         }
 
@@ -949,10 +949,10 @@ boolean ST_Responder (event_t* ev)
                     plyr->mo->health = 100;
 
                     plyr->health = deh_god_mode_health;
-                    plyr->message = DEH_String(english_language ? STSTR_DQDON : STSTR_DQDON_RUS);
+                    plyr->message = DEH_String(ststr_dqdon);
                 }
                 else 
-                plyr->message = DEH_String(english_language ? STSTR_DQDOFF : STSTR_DQDOFF_RUS);
+                plyr->message = DEH_String(ststr_dqdoff);
             }
 
             // 'AMO' cheat for key full ammo
@@ -970,7 +970,7 @@ boolean ST_Responder (event_t* ev)
                 for (i=0;i<NUMCARDS;i++)
                     plyr->cards[i] = true;
 
-                plyr->message = DEH_String(english_language ? STSTR_KFAADDED : STSTR_KFAADDED_RUS);
+                plyr->message = DEH_String(ststr_kfaadded);
             }
 
             // 'NC' - noclipping mode
@@ -979,9 +979,9 @@ boolean ST_Responder (event_t* ev)
                 plyr->cheats ^= CF_NOCLIP;
 
                 if (plyr->cheats & CF_NOCLIP)
-                    plyr->message = DEH_String(english_language ? STSTR_NCON : STSTR_NCON_RUS);
+                    plyr->message = DEH_String(ststr_ncon);
                 else
-                    plyr->message = DEH_String(english_language ? STSTR_NCOFF : STSTR_NCOFF_RUS);
+                    plyr->message = DEH_String(ststr_ncoff);
             }
         }
     }

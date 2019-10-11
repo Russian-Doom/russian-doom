@@ -129,6 +129,34 @@ char* gotshotgun;
 char* gotshotgun2;
 
 
+//
+// ST_stuff.C
+//
+
+char* ststr_mus;
+char* ststr_nomus;
+char* ststr_dqdon;
+char* ststr_dqdoff;
+
+char* ststr_kfaadded;
+char* ststr_faadded;
+char* ststr_kaadded;
+
+char* ststr_ncon;
+char* ststr_ncoff;
+
+char* ststr_choppers;
+char* ststr_clev;
+
+char* ststr_behold;
+char* ststr_beholdx;
+char* ststr_beholdz;
+char* ststr_behold_jag;
+
+// RD specific
+char* ststr_massacre;
+
+
 // -----------------------------------------------------------------------------
 // [JN] Function for (pre-)defining strings for text translations.
 // -----------------------------------------------------------------------------
@@ -238,6 +266,33 @@ void RD_DefineLanguageStrings (void)
         gotplasma   = GOTPLASMA;
         gotshotgun  = GOTSHOTGUN;
         gotshotgun2 = GOTSHOTGUN2;
+
+        //
+        // ST_stuff.C
+        //
+
+        ststr_mus       = STSTR_MUS;
+        ststr_nomus     = STSTR_NOMUS;
+        ststr_dqdon     = STSTR_DQDON;
+        ststr_dqdoff    = STSTR_DQDOFF;
+
+        ststr_kfaadded  = STSTR_KFAADDED;
+        ststr_faadded   = STSTR_FAADDED;
+        ststr_kaadded   = STSTR_KAADDED;
+
+        ststr_ncon      = STSTR_NCON;
+        ststr_ncoff     = STSTR_NCOFF;
+
+        ststr_choppers  = STSTR_CHOPPERS;
+        ststr_clev      = STSTR_CLEV;
+
+        ststr_behold    = STSTR_BEHOLD;
+        ststr_beholdx   = STSTR_BEHOLDX;
+        ststr_beholdz   = STSTR_BEHOLDZ;
+        ststr_behold_jag= STSTR_BEHOLD_JAG;
+
+        // RD specific
+        ststr_massacre  = STSTR_MASSACRE;
     }
     else
     {
@@ -342,5 +397,32 @@ void RD_DefineLanguageStrings (void)
         gotplasma   = GOTPLASMA_RUS;
         gotshotgun  = GOTSHOTGUN_RUS;
         gotshotgun2 = GOTSHOTGUN2_RUS;
+
+        //
+        // ST_stuff.C
+        //
+
+        ststr_mus       = STSTR_MUS_RUS;
+        ststr_nomus     = STSTR_NOMUS_RUS;
+        ststr_dqdon     = STSTR_DQDON_RUS;
+        ststr_dqdoff    = STSTR_DQDOFF_RUS;
+
+        ststr_kfaadded  = STSTR_KFAADDED_RUS;
+        ststr_faadded   = STSTR_FAADDED_RUS;
+        ststr_kaadded   = STSTR_KAADDED_RUS;
+
+        ststr_ncon      = STSTR_NCON_RUS;
+        ststr_ncoff     = STSTR_NCOFF_RUS;
+
+        ststr_choppers  = STSTR_CHOPPERS_RUS;
+        ststr_clev      = STSTR_CLEV_RUS;
+
+        ststr_behold    = STSTR_BEHOLD_RUS;
+        ststr_beholdx   = STSTR_BEHOLDX_RUS;
+        ststr_beholdz   = STSTR_BEHOLDZ_RUS;
+        ststr_behold_jag= STSTR_BEHOLD_JAG_RUS;
+
+        // RD specific
+        ststr_massacre  = STSTR_MASSACRE_RUS;
     }
 }

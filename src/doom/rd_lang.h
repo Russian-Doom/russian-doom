@@ -316,6 +316,55 @@ extern char* gotshotgun2;
 
 
 //
+// ST_stuff.C
+//
+
+extern char* ststr_mus;
+extern char* ststr_nomus;
+extern char* ststr_dqdon;
+extern char* ststr_dqdoff;
+
+extern char* ststr_kfaadded;
+extern char* ststr_faadded;
+extern char* ststr_kaadded;
+
+extern char* ststr_ncon;
+extern char* ststr_ncoff;
+
+extern char* ststr_choppers;
+extern char* ststr_clev;
+
+extern char* ststr_behold;
+extern char* ststr_beholdx;
+extern char* ststr_beholdz;
+extern char* ststr_behold_jag;
+
+extern char* ststr_massacre;
+
+#define STSTR_MUS		"Music Change"
+#define STSTR_NOMUS		"IMPOSSIBLE SELECTION"
+#define STSTR_DQDON		"Degreelessness Mode On"
+#define STSTR_DQDOFF	"Degreelessness Mode Off"
+
+#define STSTR_KFAADDED	"Very Happy Ammo Added"
+#define STSTR_FAADDED	"Ammo (no keys) Added"
+#define STSTR_KAADDED   "Keys Added"
+
+#define STSTR_NCON		"No Clipping Mode ON"
+#define STSTR_NCOFF		"No Clipping Mode OFF"
+
+#define STSTR_CHOPPERS	"... doesn't suck - GM"
+#define STSTR_CLEV		"Changing Level..."
+
+#define STSTR_BEHOLD	"inVuln, Str, Inviso, Rad, Allmap, or Lite-amp"
+#define STSTR_BEHOLDX	"Power-up Activated"
+#define STSTR_BEHOLDZ   "Power-up Deactivated"
+#define STSTR_BEHOLD_JAG "inVuln, Str, Rad or Allmap"
+
+#define STSTR_MASSACRE  "All monsters killed"
+
+
+//
 // HU_stuff.C
 //
 
@@ -591,31 +640,6 @@ extern char* gotshotgun2;
 #define HUSTR_KEYINDIGO 'i'
 #define HUSTR_KEYBROWN  'b'
 #define HUSTR_KEYRED    'r'
-
-
-//
-// ST_stuff.C
-//
-
-#define STSTR_MUS		"Music Change"
-#define STSTR_NOMUS		"IMPOSSIBLE SELECTION"
-#define STSTR_DQDON		"Degreelessness Mode On"
-#define STSTR_DQDOFF	"Degreelessness Mode Off"
-
-#define STSTR_KFAADDED	"Very Happy Ammo Added"
-#define STSTR_FAADDED	"Ammo (no keys) Added"
-#define STSTR_KAADDED   "Keys Added"
-
-#define STSTR_NCON		"No Clipping Mode ON"
-#define STSTR_NCOFF		"No Clipping Mode OFF"
-
-#define STSTR_CHOPPERS	"... doesn't suck - GM"
-#define STSTR_CLEV		"Changing Level..."
-
-#define STSTR_BEHOLD	"inVuln, Str, Inviso, Rad, Allmap, or Lite-amp"
-#define STSTR_BEHOLDX	"Power-up Activated"
-#define STSTR_BEHOLDZ   "Power-up Deactivated"
-#define STSTR_BEHOLD_JAG    "inVuln, Str, Rad or Allmap"
 
 
 //
@@ -991,8 +1015,6 @@ extern char* gotshotgun2;
 
 #define SECRETFOUND "A secret is revealed!"
 
-#define STSTR_MASSACRE  "All monsters killed"
-
 #define STSRT_CROSSHAIR     "Crosshair "
 #define STSTR_CROSSHAIR_ON  "ON"
 #define STSTR_CROSSHAIR_OFF "OFF"
@@ -1210,6 +1232,33 @@ PRESSYN_RUS
 #define GOTPLASMA_RUS   "gjkextyf gkfpvtyyfz geirf!"        // Получена плазменная пушка!
 #define GOTSHOTGUN_RUS  "gjkexty lhj,jdbr!"                 // Получен дробовик!
 #define GOTSHOTGUN2_RUS "gjkextyj ldecndjkmyjt he;mt!"      // Получено двуствольное ружье!
+
+
+//
+// ST_stuff.C
+//
+
+#define STSTR_MUS_RUS       "cvtyf vepsrb>>>"                           // Смена музыки...
+#define STSTR_NOMUS_RUS     "ytrjhhtrnysq ds,jh"                        // Некорректный выбор
+#define STSTR_DQDON_RUS     "ytezpdbvjcnm frnbdbhjdfyf"                 // Неуязвимость активирована
+#define STSTR_DQDOFF_RUS    "ytezpdbvjcnm ltfrnbdbhjdfyf"               // Неуязвимость деактивирована
+
+#define STSTR_KFAADDED_RUS  ",jtpfgfc gjgjkyty"                         // Боезапас пополнен
+#define STSTR_FAADDED_RUS   ",jtpfgfc gjgjkyty (,tp rk.xtq)"            // Боезапас пополнен (без ключей)
+#define STSTR_KAADDED_RUS   "rk.xb gjkextys"                            // Ключи получены
+
+#define STSTR_NCON_RUS      "ghj[j;ltybt xthtp cntys frnbdbhjdfyj"      // Прохождение через стены активировано
+#define STSTR_NCOFF_RUS     "ghj[j;ltybt xthtp cntys ltfrnbdbhjdfyj"    // Прохождение через стены дереактивировано
+
+#define STSTR_CHOPPERS_RUS  ">>> yt lehcndtyyj - u>v>"                  // ... не дурственно - г.м.
+#define STSTR_CLEV_RUS      "cvtyf ehjdyz>>>"                           // Смена уровня...
+
+#define STSTR_BEHOLD_RUS    "v=,tccv>< s=,thc>< i=ytd>< r=rjc>< a=rhn>< l=dbp>" // m=бессм., ы=берс., ш=нев., к=кос., ф=крт., д=виз.
+#define STSTR_BEHOLDX_RUS   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
+#define STSTR_BEHOLDZ_RUS   "ghtlvtn ltfrnbdbhjdfy"                     // Предмет деактивирован
+#define STSTR_BEHOLD_JAG_RUS    "v=,tccv>< s=,thc>< r=rjc>< a=rhn>"     // m=бессм., ы=берс., к=кос., ф=крт.
+
+#define STSTR_MASSACRE_RUS  "dct vjycnhs eybxnj;tys"    // Все монстры уничтожены
 
 
 //
@@ -1482,30 +1531,6 @@ PRESSYN_RUS
 #define HUSTR_PLRBROWN_RUS  ",hfey: "   // Браун:
 #define HUSTR_PLRRED_RUS    "htl: "     // Ред:
 
-
-//
-// ST_stuff.C
-//
-
-#define STSTR_MUS_RUS       "cvtyf vepsrb>>>"                           // Смена музыки...
-#define STSTR_NOMUS_RUS     "ytrjhhtrnysq ds,jh"                        // Некорректный выбор
-#define STSTR_DQDON_RUS     "ytezpdbvjcnm frnbdbhjdfyf"                 // Неуязвимость активирована
-#define STSTR_DQDOFF_RUS    "ytezpdbvjcnm ltfrnbdbhjdfyf"               // Неуязвимость деактивирована
-
-#define STSTR_KFAADDED_RUS  ",jtpfgfc gjgjkyty"                         // Боезапас пополнен
-#define STSTR_FAADDED_RUS   ",jtpfgfc gjgjkyty (,tp rk.xtq)"            // Боезапас пополнен (без ключей)
-#define STSTR_KAADDED_RUS   "rk.xb gjkextys"                            // Ключи получены
-
-#define STSTR_NCON_RUS      "ghj[j;ltybt xthtp cntys frnbdbhjdfyj"      // Прохождение через стены активировано
-#define STSTR_NCOFF_RUS     "ghj[j;ltybt xthtp cntys ltfrnbdbhjdfyj"    // Прохождение через стены дереактивировано
-
-#define STSTR_CHOPPERS_RUS  ">>> yt lehcndtyyj - u>v>"                  // ... не дурственно - г.м.
-#define STSTR_CLEV_RUS      "cvtyf ehjdyz>>>"                           // Смена уровня...
-
-#define STSTR_BEHOLD_RUS    "v=,tccv>< s=,thc>< i=ytd>< r=rjc>< a=rhn>< l=dbp>" // m=бессм., ы=берс., ш=нев., к=кос., ф=крт., д=виз.
-#define STSTR_BEHOLDX_RUS   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
-#define STSTR_BEHOLDZ_RUS   "ghtlvtn ltfrnbdbhjdfy"                     // Предмет деактивирован
-#define STSTR_BEHOLD_JAG_RUS    "v=,tccv>< s=,thc>< r=rjc>< a=rhn>"     // m=бессм., ы=берс., к=кос., ф=крт.
 
 //
 // F_Finale.C
@@ -2208,8 +2233,6 @@ PRESSYN_RUS
 //
 
 #define SECRETFOUND_RUS "j,yfhe;ty nfqybr!"     // Обнаружен тайник!
-
-#define STSTR_MASSACRE_RUS  "dct vjycnhs eybxnj;tys"    // Все монстры уничтожены
 
 #define STSRT_CROSSHAIR_RUS     "ghbwtk "               // Прицел
 #define STSTR_CROSSHAIR_ON_RUS  "drk.xty"               // включен
