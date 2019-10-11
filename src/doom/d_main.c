@@ -2272,7 +2272,7 @@ void D_DoomMain (void)
 
     if (M_ParmExists("-cdrom"))
     {
-        printf(D_CDROM);
+        DEH_printf(english_language ? D_CDROM : D_CDROM_RUS);
         M_SetConfigDir("c:\\doomdata\\");
     }
     else
