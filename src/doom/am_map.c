@@ -44,7 +44,7 @@
 #include "r_state.h"
 
 // Data.
-#include "d_englsh.h"
+#include "rd_lang.h"
 
 #include "am_map.h"
 #include "st_stuff.h"   // [JN] ST_refreshBackground and ST_drawWidgets

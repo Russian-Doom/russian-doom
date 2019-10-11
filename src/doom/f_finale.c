@@ -33,7 +33,7 @@
 
 // Data.
 #include "d_main.h"
-#include "d_englsh.h"
+#include "rd_lang.h"
 #include "sounds.h"
 
 #include "doomstat.h"

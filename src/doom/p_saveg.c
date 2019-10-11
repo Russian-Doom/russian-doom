@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "d_englsh.h"
+#include "rd_lang.h"
 #include "deh_main.h"
 #include "i_system.h"
 #include "z_zone.h"

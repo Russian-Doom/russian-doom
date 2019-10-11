@@ -58,7 +58,7 @@
 #include "doomstat.h"
 
 // Data.
-#include "d_englsh.h"
+#include "rd_lang.h"
 #include "sounds.h"
 
 #include "v_trans.h"

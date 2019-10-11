@@ -39,7 +39,7 @@
 #include "v_video.h"  // [JN] V_DrawPatch
 
 // Data.
-#include "d_englsh.h"
+#include "rd_lang.h"
 #include "sounds.h"
 
 #include "crispy.h"

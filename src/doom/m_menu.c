@@ -25,7 +25,7 @@
 
 #include "doomdef.h"
 #include "doomkeys.h"
-#include "d_englsh.h"
+#include "rd_lang.h"
 
 #include "d_main.h"
 #include "deh_main.h"

@@ -4,7 +4,6 @@ noinst_LIBRARIES=libdoom.a
 
 SOURCE_FILES=                   \
 am_map.c           am_map.h     \
-                   d_englsh.h   \
 d_items.c          d_items.h    \
 d_main.c           d_main.h     \
 d_net.c                         \
@@ -56,6 +55,7 @@ r_sky.c            r_sky.h      \
                    r_state.h    \
 r_swirl.c          r_swirl.h    \
 r_things.c         r_things.h   \
+rd_lang.c          rd_lang.h    \
 s_sound.c          s_sound.h    \
 sounds.c           sounds.h     \
 statdump.c         statdump.h   \

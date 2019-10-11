@@ -50,7 +50,7 @@
 #include "sounds.h"
 
 // [JN] Файл со строчкой о найденном секрете.
-#include "d_englsh.h"
+#include "rd_lang.h"
 
 #include "r_swirl.h"
 #include "crispy.h"
