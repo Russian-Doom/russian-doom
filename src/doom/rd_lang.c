@@ -23,6 +23,17 @@
 // -----------------------------------------------------------------------------
 
 //
+// P_Doors.C
+//
+
+char* pd_blueo;
+char* pd_redo;
+char* pd_yellowo;
+char* pd_bluek;
+char* pd_redk;
+char* pd_yellowk;
+
+//
 // P_inter.C
 //
 
@@ -91,6 +102,17 @@ void RD_DefineLanguageStrings (void)
     if (english_language)
     {
         //
+        // P_Doors.C
+        //
+
+        pd_blueo    = PD_BLUEO;
+        pd_redo     = PD_REDO;
+        pd_yellowo  = PD_YELLOWO;
+        pd_bluek    = PD_BLUEK;
+        pd_redk     = PD_REDK;
+        pd_yellowk  = PD_YELLOWK;
+
+        //
         // P_inter.C
         //
 
@@ -151,6 +173,17 @@ void RD_DefineLanguageStrings (void)
     }
     else
     {
+        //
+        // P_Doors.C
+        //
+
+        pd_blueo    = PD_BLUEO_RUS;
+        pd_redo     = PD_REDO_RUS;
+        pd_yellowo  = PD_YELLOWO_RUS;
+        pd_bluek    = PD_BLUEK_RUS;
+        pd_redk     = PD_REDK_RUS;
+        pd_yellowk  = PD_YELLOWK_RUS;
+
         //
         // P_inter.C
         //

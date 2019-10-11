@@ -119,6 +119,25 @@ PRESSYN
 
 
 //
+// P_Doors.C
+//
+
+extern char* pd_blueo;
+extern char* pd_redo;
+extern char* pd_yellowo;
+extern char* pd_bluek;
+extern char* pd_redk;
+extern char* pd_yellowk;
+
+#define PD_BLUEO    "You need a blue key to activate this object"
+#define PD_REDO     "You need a red key to activate this object"
+#define PD_YELLOWO  "You need a yellow key to activate this object"
+#define PD_BLUEK    "You need a blue key to open this door"
+#define PD_REDK     "You need a red key to open this door"
+#define PD_YELLOWK  "You need a yellow key to open this door"
+
+
+//
 // P_inter.C
 //
 
@@ -235,18 +254,6 @@ extern char* gotshotgun2;
 #define GOTPLASMA	"You got the plasma gun!"
 #define GOTSHOTGUN	"You got the shotgun!"
 #define GOTSHOTGUN2	"You got the super shotgun!"
-
-
-//
-// P_Doors.C
-//
-
-#define PD_BLUEO    "You need a blue key to activate this object"
-#define PD_REDO     "You need a red key to activate this object"
-#define PD_YELLOWO  "You need a yellow key to activate this object"
-#define PD_BLUEK    "You need a blue key to open this door"
-#define PD_REDK     "You need a red key to open this door"
-#define PD_YELLOWK  "You need a yellow key to open this door"
 
 
 //
@@ -1073,6 +1080,18 @@ PRESSYN_RUS
 
 
 //
+// P_Doors.C
+//
+
+#define PD_BLUEO_RUS    "lkz frnbdfwbb ye;ty cbybq rk.x>"   // Для активации нужен синий ключ.
+#define PD_REDO_RUS     "lkz frnbdfwbb ye;ty rhfcysq rk.x>" // Для активации нужен красный ключ.
+#define PD_YELLOWO_RUS  "lkz frnbdfwbb ye;ty ;tknsq rk.x>"  // Для активации нужен желтый ключ.
+#define PD_BLUEK_RUS    "lkz jnrhsnbz ye;ty cbybq rk.x>"    // Для открытия нужен синий ключ.
+#define PD_REDK_RUS     "lkz jnrhsnbz ye;ty rhfcysq rk.x>"  // Для открытия нужен красный ключ.
+#define PD_YELLOWK_RUS  "lkz jnrhsnbz ye;ty ;tknsq rk.x>"   // Для открытия нужен жёлтый ключ.
+
+
+//
 // P_inter.C
 //
 
@@ -1133,18 +1152,6 @@ PRESSYN_RUS
 #define GOTPLASMA_RUS   "gjkextyf gkfpvtyyfz geirf!"        // Получена плазменная пушка!
 #define GOTSHOTGUN_RUS  "gjkexty lhj,jdbr!"                 // Получен дробовик!
 #define GOTSHOTGUN2_RUS "gjkextyj ldecndjkmyjt he;mt!"      // Получено двуствольное ружье!
-
-
-//
-// P_Doors.C
-//
-
-#define PD_BLUEO_RUS    "lkz frnbdfwbb ye;ty cbybq rk.x>"   // Для активации нужен синий ключ.
-#define PD_REDO_RUS     "lkz frnbdfwbb ye;ty rhfcysq rk.x>" // Для активации нужен красный ключ.
-#define PD_YELLOWO_RUS  "lkz frnbdfwbb ye;ty ;tknsq rk.x>"  // Для активации нужен желтый ключ.
-#define PD_BLUEK_RUS    "lkz jnrhsnbz ye;ty cbybq rk.x>"    // Для открытия нужен синий ключ.
-#define PD_REDK_RUS     "lkz jnrhsnbz ye;ty rhfcysq rk.x>"  // Для открытия нужен красный ключ.
-#define PD_YELLOWK_RUS  "lkz jnrhsnbz ye;ty ;tknsq rk.x>"   // Для открытия нужен жёлтый ключ.
 
 
 //
