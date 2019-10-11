@@ -448,7 +448,7 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // [crispy] toggle always run
     if (gamekeydown[key_toggleautorun])
     {
-        static char autorunmsg[24];
+        static char* autorunmsg;
 
         if (joybspeed >= MAX_JOY_BUTTONS)
         {
@@ -460,19 +460,14 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
             joybspeed = 29;
         }
 
-        // [JN] Добавлен звуковой фидбек
-        if (english_language)
-        {
-            M_snprintf(autorunmsg, sizeof(autorunmsg), STSTR_ALWAYSRUN "%s",
-                (joybspeed >= MAX_JOY_BUTTONS) ? STSTR_ALWRUNON : STSTR_ALWRUNOFF);
-        }
-        else
-        {
-            M_snprintf(autorunmsg, sizeof(autorunmsg), STSTR_ALWAYSRUN_RUS "%s",
-                (joybspeed >= MAX_JOY_BUTTONS) ? STSTR_ALWRUNON_RUS : STSTR_ALWRUNOFF_RUS);
-        }
+        // [JN] Added sound feedback
+        autorunmsg = M_StringJoin(ststr_alwaysrun, (joybspeed >= MAX_JOY_BUTTONS) ? 
+                                  ststr_alwrunon : ststr_alwrunoff, NULL);
+
         players[consoleplayer].message = autorunmsg;
         S_StartSound(NULL,sfx_swtchn);
+
+        free(autorunmsg);
 
         gamekeydown[key_toggleautorun] = false;
     }
@@ -663,7 +658,7 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // [JN] Mouselook: toggling
     if (gamekeydown[key_togglemlook])
     {
-        static char mlookmsg[24];
+        static char* mlookmsg;
 
         if (!mlook)
         {
@@ -675,19 +670,13 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
             look = TOCENTER;
         }
 
-        if (english_language)
-        {
-            M_snprintf(mlookmsg, sizeof(mlookmsg), STSRT_MOUSELOOK "%s",
-                (mlook == true) ? STSTR_MLOOK_ON : STSTR_MLOOK_OFF);
-        }
-        else
-        {
-            M_snprintf(mlookmsg, sizeof(mlookmsg), STSRT_MOUSELOOK_RUS "%s",
-                (mlook == true) ? STSTR_MLOOK_ON_RUS : STSTR_MLOOK_OFF_RUS);
-        }
+        mlookmsg = M_StringJoin(stsrt_mouselook, (mlook == true) ?
+                                ststr_mlook_on : ststr_mlook_off, NULL);
+
         players[consoleplayer].message = mlookmsg;
-        
         S_StartSound(NULL, sfx_swtchn);
+
+        free(mlookmsg);
 
         gamekeydown[key_togglemlook] = false;
     }
@@ -888,7 +877,7 @@ void G_DoLoadLevel (void)
 
     if (testcontrols)
     {
-        players[consoleplayer].message = english_language ? STSTR_TESTCTRLS : STSTR_TESTCTRLS_RUS;
+        players[consoleplayer].message = ststr_testctrls;
     }
 }
 
@@ -1123,7 +1112,7 @@ void G_Ticker (void)
             V_ScreenShot("screenshot-doom-%02i.%s");
             if (devparm)
             {
-                players[consoleplayer].message = english_language ? STSTR_SCRNSHT : STSTR_SCRNSHT_RUS;
+                players[consoleplayer].message = ststr_scrnsht;
             }
             S_StartSound(NULL,sfx_itemup); // [JN] Звуковой фидбек
             gameaction = ga_nothing;
@@ -2007,7 +1996,7 @@ void G_DoLoadGame (void)
     R_ExecuteSetViewSize ();
     
     // [JN] Дополнительный фидбек о загрузке игры (Игра загружена.)
-    players[consoleplayer].message = DEH_String(english_language ? GGLOADED : GGLOADED_RUS);
+    players[consoleplayer].message = DEH_String(ggloaded);
     
     // draw the pattern into the back screen
     // [JN] Do not invoke bezel drawing in wide screen mode
@@ -2106,7 +2095,7 @@ void G_DoSaveGame (void)
     gameaction = ga_nothing;
     M_StringCopy(savedescription, "", sizeof(savedescription));
 
-    players[consoleplayer].message = DEH_String(english_language ? GGSAVED : GGSAVED_RUS);
+    players[consoleplayer].message = DEH_String(ggsaved);
 
     // draw the pattern into the back screen
     R_FillBackScreen ();

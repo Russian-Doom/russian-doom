@@ -23,6 +23,24 @@
 // -----------------------------------------------------------------------------
 
 //
+// G_game.C
+//
+
+char* ggsaved;
+char* ggloaded;
+
+// RD specific
+char* ststr_alwaysrun;
+char* ststr_alwrunon;
+char* ststr_alwrunoff;
+char* stsrt_mouselook;
+char* ststr_mlook_on;
+char* ststr_mlook_off;
+char* ststr_testctrls;
+char* ststr_scrnsht;
+
+
+//
 // P_Doors.C
 //
 
@@ -102,6 +120,23 @@ void RD_DefineLanguageStrings (void)
     if (english_language)
     {
         //
+        // G_game.C
+        //
+
+        ggsaved         = GGSAVED;
+        ggloaded        = GGLOADED;
+
+        // RD specific
+        ststr_alwaysrun = STSTR_ALWAYSRUN;
+        ststr_alwrunon  = STSTR_ALWRUNON;
+        ststr_alwrunoff = STSTR_ALWRUNOFF;
+        stsrt_mouselook = STSRT_MOUSELOOK;
+        ststr_mlook_on  = STSTR_MLOOK_ON;
+        ststr_mlook_off = STSTR_MLOOK_OFF;
+        ststr_testctrls = STSTR_TESTCTRLS;
+        ststr_scrnsht   = STSTR_SCRNSHT;
+
+        //
         // P_Doors.C
         //
 
@@ -173,6 +208,23 @@ void RD_DefineLanguageStrings (void)
     }
     else
     {
+        //
+        // G_game.C
+        //
+
+        ggsaved         = GGSAVED_RUS;
+        ggloaded        = GGLOADED_RUS;
+
+        // RD specific
+        ststr_alwaysrun = STSTR_ALWAYSRUN_RUS;
+        ststr_alwrunon  = STSTR_ALWRUNON_RUS;
+        ststr_alwrunoff = STSTR_ALWRUNOFF_RUS;
+        stsrt_mouselook = STSRT_MOUSELOOK_RUS;
+        ststr_mlook_on  = STSTR_MLOOK_ON_RUS;
+        ststr_mlook_off = STSTR_MLOOK_OFF_RUS;
+        ststr_testctrls = STSTR_TESTCTRLS_RUS;
+        ststr_scrnsht   = STSTR_SCRNSHT_RUS;
+
         //
         // P_Doors.C
         //
