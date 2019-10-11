@@ -858,18 +858,14 @@ void R_DrawSpanLow (void)
 
         // Lowres/blocky mode does it twice,
         //  while scale is adjusted appropriately.
-        // *dest++ = ds_colormap[ds_source[spot]];
-        // *dest++ = ds_colormap[ds_source[spot]];
-
-        dest = ylookup[(ds_y << hires)] + columnofs[flipwidth[ds_x1++]];
-        *dest++ = ds_colormap[ds_source[spot]];
+        dest = ylookup[(ds_y << hires)] + columnofs[flipwidth[ds_x1]];
+        *dest = ds_colormap[ds_source[spot]];
         dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipwidth[ds_x1++]];
-        *dest2++ = ds_colormap[ds_source[spot]];
-        // if (hires)
-        // {
-        //     *dest2++ = ds_colormap[ds_source[spot]];
-        //     *dest2++ = ds_colormap[ds_source[spot]];
-        // }
+        *dest2 = ds_colormap[ds_source[spot]];
+        dest = ylookup[(ds_y << hires)] + columnofs[flipwidth[ds_x1]];
+        *dest = ds_colormap[ds_source[spot]];
+        dest2 = ylookup[(ds_y << hires) + 1] + columnofs[flipwidth[ds_x1++]];
+        *dest2 = ds_colormap[ds_source[spot]];
 
     // position += step;
     ds_xfrac += ds_xstep;
