@@ -749,29 +749,29 @@ boolean AM_Responder (event_t* ev)
             automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
             if (automap_follow)
-                plr->message = DEH_String(english_language ? AMSTR_FOLLOWON : AMSTR_FOLLOWON_RUS);
+                plr->message = DEH_String(amstr_followon);
             else
-                plr->message = DEH_String(english_language ? AMSTR_FOLLOWOFF : AMSTR_FOLLOWOFF_RUS);
+                plr->message = DEH_String(amstr_followoff);
         }
         else if (key == key_map_grid)
         {
             automap_grid = !automap_grid;
             if (automap_grid)
-                plr->message = DEH_String(english_language ? AMSTR_GRIDON : AMSTR_GRIDON_RUS);
+                plr->message = DEH_String(amstr_gridon);
             else
-                plr->message = DEH_String(english_language ? AMSTR_GRIDOFF : AMSTR_GRIDOFF_RUS);
+                plr->message = DEH_String(amstr_gridoff);
         }
         else if (key == key_map_mark)
         {
             M_snprintf(buffer, sizeof(buffer), "%s %d",
-                    DEH_String(english_language ? AMSTR_MARKEDSPOT : AMSTR_MARKEDSPOT_RUS), markpointnum);
+                    DEH_String(amstr_markedspot), markpointnum);
             plr->message = buffer;
             AM_addMark();
         }
         else if (key == key_map_clearmark)
         {
             AM_clearMarks();
-            plr->message = DEH_String(english_language ? AMSTR_MARKSCLEARED : AMSTR_MARKSCLEARED_RUS);
+            plr->message = DEH_String(amstr_markscleared);
         }
         else if (key == key_map_overlay)
         {
@@ -781,17 +781,17 @@ boolean AM_Responder (event_t* ev)
             
             automap_overlay = !automap_overlay;
             if (automap_overlay)
-                plr->message = DEH_String(english_language ? AMSTR_OVERLAYON : AMSTR_OVERLAYON_RUS);
+                plr->message = DEH_String(amstr_overlayon);
             else
-                plr->message = DEH_String(english_language ? AMSTR_OVERLAYOFF : AMSTR_OVERLAYOFF_RUS);
+                plr->message = DEH_String(amstr_overlayoff);
         }
         else if (key == key_map_rotate)
         {
             automap_rotate = !automap_rotate;
             if (automap_rotate)
-                plr->message = DEH_String(english_language ? AMSTR_ROTATEON : AMSTR_ROTATEON_RUS);
+                plr->message = DEH_String(amstr_rotateon);
             else
-                plr->message = DEH_String(english_language ? AMSTR_ROTATEOFF : AMSTR_ROTATEOFF_RUS);
+                plr->message = DEH_String(amstr_rotateoff);
         }
         else
         {

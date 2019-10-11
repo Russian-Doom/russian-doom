@@ -39,6 +39,33 @@ extern void RD_DefineLanguageStrings ();
 // -----------------------------------------------------------------------------
 
 //
+// AM_map.C
+//
+
+extern char* amstr_followon;
+extern char* amstr_followoff;
+extern char* amstr_gridon;
+extern char* amstr_gridoff;
+extern char* amstr_markedspot;
+extern char* amstr_markscleared;
+extern char* amstr_overlayon;
+extern char* amstr_overlayoff;
+extern char* amstr_rotateon;
+extern char* amstr_rotateoff;
+
+#define AMSTR_FOLLOWON      "Follow Mode ON"
+#define AMSTR_FOLLOWOFF     "Follow Mode OFF"
+#define AMSTR_GRIDON        "Grid ON"
+#define AMSTR_GRIDOFF       "Grid OFF"
+#define AMSTR_MARKEDSPOT    "Marked Spot"
+#define AMSTR_MARKSCLEARED  "All Marks Cleared"
+#define AMSTR_OVERLAYON     "Overlay Mode ON"
+#define AMSTR_OVERLAYOFF    "Overlay Mode OFF"
+#define AMSTR_ROTATEON      "Rotate Mode ON"
+#define AMSTR_ROTATEOFF     "Rotate Mode OFF"
+
+
+//
 // D_Main.C
 //
 
@@ -567,22 +594,6 @@ extern char* gotshotgun2;
 
 
 //
-// AM_map.C
-//
-
-#define AMSTR_FOLLOWON      "Follow Mode ON"
-#define AMSTR_FOLLOWOFF     "Follow Mode OFF"
-#define AMSTR_GRIDON        "Grid ON"
-#define AMSTR_GRIDOFF       "Grid OFF"
-#define AMSTR_MARKEDSPOT    "Marked Spot"
-#define AMSTR_MARKSCLEARED  "All Marks Cleared"
-#define AMSTR_OVERLAYON     "Overlay Mode ON"
-#define AMSTR_OVERLAYOFF    "Overlay Mode OFF"
-#define AMSTR_ROTATEON      "Rotate Mode ON"
-#define AMSTR_ROTATEOFF     "Rotate Mode OFF"
-
-
-//
 // ST_stuff.C
 //
 
@@ -990,6 +1001,22 @@ extern char* gotshotgun2;
 // -----------------------------------------------------------------------------
 // Русский язык
 // -----------------------------------------------------------------------------
+
+
+//
+// AM_map.C
+//
+
+#define AMSTR_FOLLOWON_RUS      "ht;bv cktljdfybz drk.xty"  // Режим следования включен
+#define AMSTR_FOLLOWOFF_RUS     "ht;bv cktljdfybz dsrk.xty" // Режим следования выключен
+#define AMSTR_GRIDON_RUS        "ctnrf drk.xtyf"            // Сетка включена
+#define AMSTR_GRIDOFF_RUS       "ctnrf jnrk.xtyf"           // Сетка выключена
+#define AMSTR_MARKEDSPOT_RUS    "jnvtnrf"                   // Отметка
+#define AMSTR_MARKSCLEARED_RUS  "jnvtnrb jxbotys"           // Отметки очищены
+#define AMSTR_OVERLAYON_RUS     "ht;bv yfkj;tybz drk.xty"   // Режим наложения включен
+#define AMSTR_OVERLAYOFF_RUS    "ht;bv yfkj;tybz dsrk.xty"  // Режим наложения выключен
+#define AMSTR_ROTATEON_RUS      "ht;bv dhfotybz drk.xty"    // Режим вращения включен
+#define AMSTR_ROTATEOFF_RUS     "ht;bv dhfotybz dsrk.xty"   // Режим вращения выключен
 
 
 //
@@ -1454,22 +1481,6 @@ PRESSYN_RUS
 #define HUSTR_PLRINDIGO_RUS "bylbuj: "  // Индиго:
 #define HUSTR_PLRBROWN_RUS  ",hfey: "   // Браун:
 #define HUSTR_PLRRED_RUS    "htl: "     // Ред:
-
-
-//
-// AM_map.C
-//
-
-#define AMSTR_FOLLOWON_RUS      "ht;bv cktljdfybz drk.xty"  // Режим следования включен
-#define AMSTR_FOLLOWOFF_RUS     "ht;bv cktljdfybz dsrk.xty" // Режим следования выключен
-#define AMSTR_GRIDON_RUS        "ctnrf drk.xtyf"            // Сетка включена
-#define AMSTR_GRIDOFF_RUS       "ctnrf jnrk.xtyf"           // Сетка выключена
-#define AMSTR_MARKEDSPOT_RUS    "jnvtnrf"                   // Отметка
-#define AMSTR_MARKSCLEARED_RUS  "jnvtnrb jxbotys"           // Отметки очищены
-#define AMSTR_OVERLAYON_RUS     "ht;bv yfkj;tybz drk.xty"   // Режим наложения включен
-#define AMSTR_OVERLAYOFF_RUS    "ht;bv yfkj;tybz dsrk.xty"  // Режим наложения выключен
-#define AMSTR_ROTATEON_RUS      "ht;bv dhfotybz drk.xty"    // Режим вращения включен
-#define AMSTR_ROTATEOFF_RUS     "ht;bv dhfotybz dsrk.xty"   // Режим вращения выключен
 
 
 //

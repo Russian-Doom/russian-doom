@@ -23,11 +23,28 @@
 // -----------------------------------------------------------------------------
 
 //
+// AM_map.C
+//
+
+char* amstr_followon;
+char* amstr_followoff;
+char* amstr_gridon;
+char* amstr_gridoff;
+char* amstr_markedspot;
+char* amstr_markscleared;
+char* amstr_overlayon;
+char* amstr_overlayoff;
+char* amstr_rotateon;
+char* amstr_rotateoff;
+
+
+//
 // G_game.C
 //
 
 char* ggsaved;
 char* ggloaded;
+
 
 // RD specific
 char* ststr_alwaysrun;
@@ -50,6 +67,7 @@ char* pd_yellowo;
 char* pd_bluek;
 char* pd_redk;
 char* pd_yellowk;
+
 
 //
 // P_inter.C
@@ -119,6 +137,21 @@ void RD_DefineLanguageStrings (void)
 {
     if (english_language)
     {
+        //
+        // AM_map.C
+        //
+
+        amstr_followon      = AMSTR_FOLLOWON;
+        amstr_followoff     = AMSTR_FOLLOWOFF;
+        amstr_gridon        = AMSTR_GRIDON;
+        amstr_gridoff       = AMSTR_GRIDOFF;
+        amstr_markedspot    = AMSTR_MARKEDSPOT;
+        amstr_markscleared  = AMSTR_MARKSCLEARED;
+        amstr_overlayon     = AMSTR_OVERLAYON;
+        amstr_overlayoff    = AMSTR_OVERLAYOFF;
+        amstr_rotateon      = AMSTR_ROTATEON;
+        amstr_rotateoff     = AMSTR_ROTATEOFF;
+
         //
         // G_game.C
         //
@@ -208,6 +241,21 @@ void RD_DefineLanguageStrings (void)
     }
     else
     {
+        //
+        // AM_map.C
+        //
+
+        amstr_followon      = AMSTR_FOLLOWON_RUS;
+        amstr_followoff     = AMSTR_FOLLOWOFF_RUS;
+        amstr_gridon        = AMSTR_GRIDON_RUS;
+        amstr_gridoff       = AMSTR_GRIDOFF_RUS;
+        amstr_markedspot    = AMSTR_MARKEDSPOT_RUS;
+        amstr_markscleared  = AMSTR_MARKSCLEARED_RUS;
+        amstr_overlayon     = AMSTR_OVERLAYON_RUS;
+        amstr_overlayoff    = AMSTR_OVERLAYOFF_RUS;
+        amstr_rotateon      = AMSTR_ROTATEON_RUS;
+        amstr_rotateoff     = AMSTR_ROTATEOFF_RUS;
+
         //
         // G_game.C
         //
