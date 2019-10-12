@@ -355,8 +355,6 @@ void M_DrawSaveLoadBorder(int x,int y);
 void M_SetupNextMenu(menu_t *menudef);
 void M_DrawThermo(int x,int y,int thermWidth,int thermDot);
 void M_DrawThermo_Small(int x,int y,int thermWidth,int thermDot);
-void M_DrawEmptyCell(menu_t *menu,int item);
-void M_DrawSelCell(menu_t *menu,int item);
 int  M_StringWidth(char *string);
 int  M_StringHeight(char *string);
 void M_StartMessage(char *string,void *routine,boolean input);
@@ -4469,12 +4467,11 @@ void M_QuitDOOM(int choice)
 //
 // Menu Functions
 //
-void
-M_DrawThermo
-( int x,
-  int y,
-  int thermWidth,
-  int thermDot )
+
+// -----------------------------------------------------------------------------
+// [JN] Draw vanilla thermo
+// -----------------------------------------------------------------------------
+void M_DrawThermo (int x, int y, int thermWidth, int thermDot)
 {
     int     xx;
     int     i;
@@ -4507,8 +4504,9 @@ M_DrawThermo
     }
 }
 
+
 // -----------------------------------------------------------------------------
-// [JN] Draw small thermo
+// [JN] Draw small thermo for RD options menu
 // -----------------------------------------------------------------------------
 void M_DrawThermo_Small (int x, int y, int thermWidth, int thermDot)
 {
@@ -4527,23 +4525,6 @@ void M_DrawThermo_Small (int x, int y, int thermWidth, int thermDot)
 
     V_DrawPatchDirect((x + 8) + thermDot * 8, y,
 		      W_CacheLumpName(DEH_String("RD_THRMO"), PU_CACHE));
-}
-
-
-void
-M_DrawEmptyCell
-( menu_t*   menu,
-  int       item )
-{
-    V_DrawPatch(menu->x - 10, menu->y + item * LINEHEIGHT - 1, W_CacheLumpName(DEH_String("M_CELL1"), PU_CACHE));
-}
-
-void
-M_DrawSelCell
-( menu_t*   menu,
-  int       item )
-{
-    V_DrawPatch(menu->x - 10, menu->y + item * LINEHEIGHT - 1, W_CacheLumpName(DEH_String("M_CELL2"), PU_CACHE));
 }
 
 
