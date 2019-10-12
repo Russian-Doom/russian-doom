@@ -2232,13 +2232,13 @@ void M_RD_Draw_Display(void)
 
     // Draw numerical representation of slider position
     M_snprintf(num, 4, "%3d", screenblocks);
-    M_WriteText(96+ORIGWIDTH_DELTA, 54, num);
+    M_WriteTextSmall_ENG(96+ORIGWIDTH_DELTA, 55, num);
 #else
     M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 54, 12, screenSize);
 
     // Draw numerical representation of slider position
     M_snprintf(num, 4, "%3d", screenblocks);
-    M_WriteText(145+ORIGWIDTH_DELTA, 54, num);
+    M_WriteTextSmall_ENG(145+ORIGWIDTH_DELTA, 55, num);
 #endif
 
     // Draw gamma-correction slider
@@ -2611,19 +2611,19 @@ void M_RD_Draw_Audio(void)
     M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 54, 16, sfxVolume);
     // Draw numerical representation of SFX volume
     M_snprintf(num, 4, "%3d", sfxVolume);
-    M_WriteText(177+ORIGWIDTH_DELTA, 54, num);
+    M_WriteTextSmall_ENG(177+ORIGWIDTH_DELTA, 55, num);
 
     // Draw music volume slider
     M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 16, musicVolume);
     // Draw numerical representation of music volume
     M_snprintf(num, 4, "%3d", musicVolume);
-    M_WriteText(177+ORIGWIDTH_DELTA, 74, num);
+    M_WriteTextSmall_ENG(177+ORIGWIDTH_DELTA, 75, num);
 
     // Draw SFX channels slider
     M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 104, 16, snd_channels / 4 - 1);
     // Draw numerical representation of channels
     M_snprintf(num, 4, "%3d", snd_channels);
-    M_WriteText(177+ORIGWIDTH_DELTA, 104, num);
+    M_WriteTextSmall_ENG(177+ORIGWIDTH_DELTA, 105, num);
 
     // Write "on" / "off" strings for features
     if (english_language)
@@ -2759,7 +2759,7 @@ void M_RD_Draw_Controls(void)
     M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 17, mouseSensitivity);
     // Draw numerical representation of mouse sensivity
     M_snprintf(num, 4, "%3d", mouseSensitivity);
-    M_WriteText(189+ORIGWIDTH_DELTA, 74, num);
+    M_WriteTextSmall_ENG(189+ORIGWIDTH_DELTA, 75, num);
 
     // Write "on" / "off" strings for features
     if (english_language)
@@ -3775,7 +3775,7 @@ void M_DrawLoad(void)
         if (!LoadMenu[i].status && colored_hud && !vanillaparm)
         dp_translation = cr[CR_DARKRED];
 
-        M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+        M_WriteTextSmall_ENG(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
 
         dp_translation = NULL;
     }
@@ -5334,7 +5334,7 @@ static void M_DrawOPLDev(void)
             *p = '\0';
         }
 
-        M_WriteText(0, line * 8, curr);
+        M_WriteTextSmall_ENG(0, line * 8, curr);
         ++line;
 
         if (p == NULL)
@@ -5423,8 +5423,8 @@ void M_Drawer (void)
     {
         name = DEH_String(currentMenu->menuitems[i].name);
 
-        if (name[0])
-        {
+        // if (name[0])
+        // {
             // -----------------------------------------------------------------
             // [JN] Write common menus by using standard graphical patches:
             // -----------------------------------------------------------------
@@ -5440,6 +5440,9 @@ void M_Drawer (void)
                 // DRAW SKULL
                 V_DrawShadowedPatchDoom(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
                 W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
+
+                // [JN] Big vertical spacing
+                y += LINEHEIGHT;
             }
             // -----------------------------------------------------------------
             // [JN] Write English options menu with big English font
@@ -5452,6 +5455,9 @@ void M_Drawer (void)
                 // DRAW SKULL
                 V_DrawShadowedPatchDoom(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
                 W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
+
+                // [JN] Big vertical spacing
+                y += LINEHEIGHT;
             }
             // -----------------------------------------------------------------
             // [JN] Write Russian options menu with big Russian font
@@ -5466,6 +5472,9 @@ void M_Drawer (void)
                 // DRAW SKULL
                 V_DrawShadowedPatchDoom(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
                 W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
+
+                // [JN] Big vertical spacing
+                y += LINEHEIGHT;
             }
             // -----------------------------------------------------------------
             // [JN] Write English submenus with small English font
@@ -5491,6 +5500,9 @@ void M_Drawer (void)
                                      gamemission == jaguar && whichSkull == 0 ? " " : ">");
                 // [JN] Clear translation
                 dp_translation = NULL;
+
+                // [JN] Small vertical spacing
+                y += LINEHEIGHT_SML;
             }
             // -----------------------------------------------------------------
             // [JN] Write Russian submenus with small Russian font
@@ -5516,9 +5528,11 @@ void M_Drawer (void)
                                      gamemission == jaguar && whichSkull == 0 ? " " : ">");
                 // [JN] Clear translation
                 dp_translation = NULL;
-            }
 
-        }
+                // [JN] Small vertical spacing
+                y += LINEHEIGHT_SML;
+            }
+        // }
 
         // [JN] Saving / Loading menus, help screens. Just a blinking skull.
         if (currentMenu == &LoadDef
@@ -5529,25 +5543,6 @@ void M_Drawer (void)
             // DRAW SKULL
             V_DrawShadowedPatchDoom(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
             W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
-        }
-
-        // [JN] Properly add vertical spacing to menus
-        if (currentMenu != &MainDef                    // Main Menu
-        &&  currentMenu != &MainDefBeta                // Main Menu (Press Beta) 
-        &&  currentMenu != &EpiDef                     // Episode selection
-        &&  currentMenu != &NewDef                     // New game (skill level)
-        &&  currentMenu != &RD_Options_Def             // Options menu (ENG)
-        &&  currentMenu != &RD_Options_Def_Rus         // Options menu (RUS)
-        &&  currentMenu != &Vanilla_OptionsDef         // Vanilla options menu (ENG)
-        &&  currentMenu != &Vanilla_OptionsDef_Rus     // Vanilla options menu (RUS)
-        &&  currentMenu != &Vanilla_Audio_Def          // Vanilla sound menu (ENG)
-        &&  currentMenu != &Vanilla_Audio_Def_Rus)     // Vanilla sound menu (RUS)
-        {
-            y += LINEHEIGHT_SML;
-        }
-        else
-        {
-            y += LINEHEIGHT;
         }
     }
 }
