@@ -64,6 +64,7 @@
 // Stereo separation
 
 #define S_STEREO_SWING (96 * FRACUNIT)
+static int stereo_swing;
 
 #define NORM_PRIORITY 64
 #define NORM_SEP 128
@@ -180,6 +181,9 @@ void S_Init(int sfxVolume, int musicVolume)
     }
 
     I_AtExit(S_Shutdown, true);
+
+    // [crispy] handle stereo separation for mono-sfx and flipped levels
+    S_UpdateStereoSeparation();
 }
 
 // -----------------------------------------------------------------------------
@@ -202,6 +206,29 @@ void S_ChannelsRealloc(void)
     {
         channels[i].sfxinfo = 0;
     }
+}
+
+// -----------------------------------------------------------------------------
+// S_UpdateStereoSeparation
+// [JN] Defines stereo separtion for mono sfx mode and flipped levels.
+// -----------------------------------------------------------------------------
+
+void S_UpdateStereoSeparation(void)
+{
+	// [crispy] play all sound effects in mono
+	if (snd_monomode)
+	{
+		stereo_swing = 0;
+	}
+	else
+	if (flip_levels)
+	{
+		stereo_swing = -S_STEREO_SWING;
+	}
+	else
+	{
+		stereo_swing = S_STEREO_SWING;
+	}
 }
 
 void S_Shutdown(void)
@@ -459,11 +486,7 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
     angle >>= ANGLETOFINESHIFT;
 
     // stereo separation
-    // [JN] Support for mono sfx mode
-    *sep = snd_monomode ? 128 : 128 
-                        - (FixedMul(flip_levels ? 
-                        - S_STEREO_SWING :
-                          S_STEREO_SWING, finesine[angle]) >> FRACBITS);
+    *sep = 128 - (FixedMul(stereo_swing, finesine[angle]) >> FRACBITS);
 
     // volume calculation
     if (approx_dist < S_CLOSE_DIST)

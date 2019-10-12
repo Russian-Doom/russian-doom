@@ -2725,6 +2725,9 @@ void M_RD_Change_SndMode(int choice)
 {
     choice = 0;
     snd_monomode = 1 - snd_monomode;
+
+    // Update stereo separation
+    S_UpdateStereoSeparation();
 }
 
 void M_RD_Change_PitchShifting(int choice)
@@ -3496,6 +3499,9 @@ void M_RD_Change_FlipLevels(int choice)
 
     // Redraw game screen
     R_ExecuteSetViewSize();
+
+    // Update stereo separation
+    S_UpdateStereoSeparation();
 }
 
 void M_RD_Change_ExtraPlayerFaces(int choice)

@@ -42,6 +42,9 @@ void S_Shutdown(void);
 // [JN] Channels reallocation
 void S_ChannelsRealloc(void);
 
+// [JN] Stereo separation defining
+void S_UpdateStereoSeparation(void);
+
 //
 // Per level startup code.
 // Kills playing sounds at start of level,
