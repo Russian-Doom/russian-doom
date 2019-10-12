@@ -1648,15 +1648,15 @@ void D_SetGameDescription(void)
     }
 
     // [JN] Check if we have exactly two TITLEPICs loaded in Russian version
-    // of Ultimate Doom. If two, we are free to use wide version: TITLEPIU,
-    // since there is a TITLEPIC for registered game mode already. More clear:
+    // of Doom registered. If two, we are free to use wide version: TITLEPIR,
+    // since there is a TITLEPIC for ultimate game mode already. More clear:
     // 1) placed inside IWAD.
     // 2) placed inside doom-doom1-wide.wad.
     // 3 or more) modified titlepic inside PWAD.
 #ifdef WIDESCREEN
-    if (gamemode == retail && W_CheckMultipleLumps("TITLEPIC") <= 2)
+    if (gamemode == registered && W_CheckMultipleLumps("TITLEPIC") <= 2)
     {
-        DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
+        DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIR");
     }
 #endif
 

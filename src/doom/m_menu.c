@@ -3798,7 +3798,7 @@ void M_DrawLoad(void)
         if (!LoadMenu[i].status && colored_hud && !vanillaparm)
         dp_translation = cr[CR_DARKRED];
 
-        M_WriteTextSmall_ENG(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+        M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
 
         dp_translation = NULL;
     }
