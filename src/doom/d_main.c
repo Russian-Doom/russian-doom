@@ -117,7 +117,6 @@ boolean fastparm;    // checkparm of -fast
 
 boolean vanillaparm; // [JN] проверка параметра -vanilla
 boolean scaled_sky = false; // [JN] Boolean for sky scaling
-boolean old_slider = false; // [JN] Boolean for dimmed/red thermometer
 boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
 boolean wide_loaded = false; // [JN] Boolen only for wide bunny screen
 
@@ -1658,13 +1657,6 @@ void D_SetGameDescription(void)
         DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
     }
 #endif
-
-    // [JN] Check for modified thermometer. If exist, 
-    // don't use dimmed/red in game menus.
-    if (W_CheckMultipleLumps("M_THERMO") > 1)
-    {
-        old_slider = true;
-    }
 
     // [JN] Check for modified player's face. If exist, 
     // don't use extra faces. Note that Freedoom should 

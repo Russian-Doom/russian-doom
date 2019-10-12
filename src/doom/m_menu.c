@@ -4478,7 +4478,6 @@ M_DrawThermo
 {
     int     xx;
     int     i;
-    extern boolean old_slider;
 
     xx = x;
 
@@ -4495,24 +4494,11 @@ M_DrawThermo
     V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
 
     // [crispy] do not crash anymore if value exceeds thermometer range
-    // [JN] Если ползунок уезжает за пределы полоски вправо, окрашивать его красным
     if (thermDot >= thermWidth)
     {
         thermDot = thermWidth - 1;
         V_DrawPatch((x + 8) + thermDot * 8, y, 
-                    W_CacheLumpName(DEH_String(old_slider ?
-                    "M_THERMO" :
-                    "M_THERMW"),
-                    PU_CACHE));
-    }
-    // [JN] А если ползунок в крайнем левом положении, делать его затемненным
-    else if (thermDot == 0)
-    {
-        V_DrawPatch((x + 8) + thermDot * 8, y,
-                    W_CacheLumpName(DEH_String(old_slider ?
-                    "M_THERMO" :
-                    "M_THERMD"),
-                    PU_CACHE));
+                    W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));
     }
     else
     {
