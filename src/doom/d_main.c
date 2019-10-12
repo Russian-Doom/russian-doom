@@ -1339,6 +1339,7 @@ void D_SetGameDescription(void)
             else
             {
                 gamedescription = GetGameName("DOOM для Atari Jaguar");
+                W_MergeFile("base/games/doom-jaguar.wad");
                 W_MergeFile("base/games/doom-jaguar-russian.wad");
             }
         }
