@@ -151,7 +151,6 @@ char* ststr_clev;
 char* ststr_behold;
 char* ststr_beholdx;
 char* ststr_beholdz;
-char* ststr_behold_jag;
 
 // RD specific
 char* ststr_massacre;
@@ -289,7 +288,6 @@ void RD_DefineLanguageStrings (void)
         ststr_behold    = STSTR_BEHOLD;
         ststr_beholdx   = STSTR_BEHOLDX;
         ststr_beholdz   = STSTR_BEHOLDZ;
-        ststr_behold_jag= STSTR_BEHOLD_JAG;
 
         // RD specific
         ststr_massacre  = STSTR_MASSACRE;
@@ -420,7 +418,6 @@ void RD_DefineLanguageStrings (void)
         ststr_behold    = STSTR_BEHOLD_RUS;
         ststr_beholdx   = STSTR_BEHOLDX_RUS;
         ststr_beholdz   = STSTR_BEHOLDZ_RUS;
-        ststr_behold_jag= STSTR_BEHOLD_JAG_RUS;
 
         // RD specific
         ststr_massacre  = STSTR_MASSACRE_RUS;

@@ -822,9 +822,6 @@ boolean ST_Responder (event_t* ev)
             // 'behold' power-up menu
             if (cht_CheckCheat(&cheat_powerup[6], ev->data2))
             {
-                if (gamemission == jaguar)  // [JN] Atari Jaguar: don't offer "i"nvisibility and "l"ight visor.
-                plyr->message = DEH_String(ststr_behold_jag);
-                else
                 plyr->message = DEH_String(ststr_behold);
             }
 

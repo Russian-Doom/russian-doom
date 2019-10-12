@@ -105,6 +105,7 @@ extern char* ststr_scrnsht;
 //
 // M_Menu.C
 //
+
 #define PRESSKEY    "press a key."
 #define PRESSYN     "press y or n."
 #define DOSY        "(press y to quit.)" // [crispy] remove " to dos.)"
@@ -342,7 +343,6 @@ extern char* ststr_clev;
 extern char* ststr_behold;
 extern char* ststr_beholdx;
 extern char* ststr_beholdz;
-extern char* ststr_behold_jag;
 
 extern char* ststr_massacre;
 
@@ -364,7 +364,6 @@ extern char* ststr_massacre;
 #define STSTR_BEHOLD	"inVuln, Str, Inviso, Rad, Allmap, or Lite-amp"
 #define STSTR_BEHOLDX	"Power-up Activated"
 #define STSTR_BEHOLDZ   "Power-up Deactivated"
-#define STSTR_BEHOLD_JAG "inVuln, Str, Rad or Allmap"
 
 #define STSTR_MASSACRE  "All monsters killed"
 
@@ -1261,7 +1260,6 @@ PRESSYN_RUS
 #define STSTR_BEHOLD_RUS    "v=,tccv>< s=,thc>< i=ytd>< r=rjc>< a=rhn>< l=dbp>" // m=бессм., ы=берс., ш=нев., к=кос., ф=крт., д=виз.
 #define STSTR_BEHOLDX_RUS   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
 #define STSTR_BEHOLDZ_RUS   "ghtlvtn ltfrnbdbhjdfy"                     // Предмет деактивирован
-#define STSTR_BEHOLD_JAG_RUS    "v=,tccv>< s=,thc>< r=rjc>< a=rhn>"     // m=бессм., ы=берс., к=кос., ф=крт.
 
 #define STSTR_MASSACRE_RUS  "dct vjycnhs eybxnj;tys"    // Все монстры уничтожены
 
