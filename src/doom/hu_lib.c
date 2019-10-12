@@ -34,7 +34,7 @@
 #define noterased viewwindowx
 
 extern boolean	automapactive;	// in AM_map.c
-
+extern GameMission_t gamemission; // [JN] For uncolored Jaguar messages
 
 void HUlib_init(void)
 {
@@ -109,7 +109,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
             break;
 
             // [JN] Colorize message if necessary
-            if (messages_color > 0 && !vanillaparm)
+            if (messages_color > 0 && !vanillaparm && gamemission != jaguar)
             {
                 messages_color == 1 ? dp_translation = cr[CR_GREEN] :
                 messages_color == 2 ? dp_translation = cr[CR_BLUE2] :
@@ -123,7 +123,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
             V_DrawShadowedPatchDoom(x, l->y, l->f[c - l->sc]);
 
             // [JN] Clear color translation if necessary
-            if (messages_color > 0 && !vanillaparm)
+            if (messages_color > 0 && !vanillaparm && gamemission != jaguar)
             dp_translation = NULL;
 
             x += w;
