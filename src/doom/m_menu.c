@@ -4478,30 +4478,23 @@ void M_DrawThermo (int x, int y, int thermWidth, int thermDot)
 
     xx = x;
 
-    V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
+    V_DrawPatch(xx, y, W_CacheLumpName(DEH_String("M_THERML"), PU_CACHE));
 
     xx += 8;
 
     for (i=0;i<thermWidth;i++)
     {
-        V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
+        V_DrawPatch(xx, y, W_CacheLumpName(DEH_String("M_THERMM"), PU_CACHE));
         xx += 8;
     }
-
-    V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
 
     // [crispy] do not crash anymore if value exceeds thermometer range
     if (thermDot >= thermWidth)
     {
         thermDot = thermWidth - 1;
-        V_DrawPatch((x + 8) + thermDot * 8, y, 
-                    W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));
     }
-    else
-    {
-        V_DrawPatch((x + 8) + thermDot * 8, y,
-                    W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));        
-    }
+
+    V_DrawPatch(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
 }
 
 
@@ -4523,8 +4516,19 @@ void M_DrawThermo_Small (int x, int y, int thermWidth, int thermDot)
     }
     V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("RD_THRMR"), PU_CACHE));
 
-    V_DrawPatchDirect((x + 8) + thermDot * 8, y,
-		      W_CacheLumpName(DEH_String("RD_THRMO"), PU_CACHE));
+    // [crispy] do not crash anymore if value exceeds thermometer range
+    // [JN] Draw red slider instead of blue.
+    if (thermDot >= thermWidth)
+    {
+        thermDot = thermWidth - 1;
+        V_DrawPatchDirect((x + 8) + thermDot * 8, y,
+                W_CacheLumpName(DEH_String("RD_THRMW"), PU_CACHE));
+    }
+    else
+    {
+        V_DrawPatchDirect((x + 8) + thermDot * 8, y,
+                W_CacheLumpName(DEH_String("RD_THRMO"), PU_CACHE));
+    }
 }
 
 
