@@ -31,8 +31,6 @@
 
 extern void RD_DefineLanguageStrings ();
 
-// [JN] Extended name from "doomsav".
-#define SAVEGAMENAME "doom-save-"
 
 // -----------------------------------------------------------------------------
 // English language
@@ -313,6 +311,13 @@ extern char* gotshotgun2;
 #define GOTPLASMA	"You got the plasma gun!"
 #define GOTSHOTGUN	"You got the shotgun!"
 #define GOTSHOTGUN2	"You got the super shotgun!"
+
+
+//
+// P_Saveg.C
+//
+
+#define SAVEGAMENAME "doom-save-"
 
 
 //
