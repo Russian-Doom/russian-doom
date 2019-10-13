@@ -1847,7 +1847,7 @@ void AM_drawMarks(void)
             {
                 AM_rotatePoint(&pt);
             }
-            fx = (CXMTOF(pt.x) >> hires) - 1;
+            fx = (flipwidth[CXMTOF(pt.x)] >> hires) - 1;
             fy = (CYMTOF(pt.y) >> hires) - 2;
 
             if (fx >= f_x && fx <= (f_w >> hires) - w && fy >= f_y && fy <= (f_h >> hires) - h)
