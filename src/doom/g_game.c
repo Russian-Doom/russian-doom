@@ -684,7 +684,14 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // [JN] Mouselook: handling
     if (!demoplayback && players[consoleplayer].playerstate == PST_LIVE && !paused && !menuactive)
     {
-        cmd->lookdir += mousey;
+        if (mlook || novert)
+        {
+            cmd->lookdir += mousey;
+        }
+        else if (!novert)
+        {
+            forward += mousey;
+        }
         
         if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
             players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
@@ -707,21 +714,25 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     if (forward > MAXPLMOVE) 
     {
         forward = MAXPLMOVE; 
+        if (novert)
         max_bobbing = true;
     }
     else if (forward < -MAXPLMOVE) 
     {
         forward = -MAXPLMOVE; 
+        if (novert)
         max_bobbing = false;
     }
     if (side > MAXPLMOVE) 
     {
         side = MAXPLMOVE; 
+        if (novert)
         max_bobbing = true;
     }
     else if (side < -MAXPLMOVE) 
     {
         side = -MAXPLMOVE; 
+        if (novert)
         max_bobbing = false;        
     }
 

@@ -416,6 +416,7 @@ void M_RD_Choose_Controls(int choice);
 void M_RD_Draw_Controls(void);
 void M_RD_Change_AlwaysRun();
 void M_RD_Change_MouseLook(int choice);
+void M_RD_Change_Novert(int choice);
 void M_RD_Change_Sensitivity(int choice);
 
 // Gameplay
@@ -1378,6 +1379,7 @@ enum
     rd_controls_sensitivity,
     rd_controls_empty2,
     rd_controls_mouselook,
+    rd_controls_novert,
     rd_controls_end
 } rd_controls_e;
 
@@ -1392,6 +1394,7 @@ menuitem_t RD_Controls_Menu[]=
     {2,"mouse sensivity", M_RD_Change_Sensitivity, 'm'},
     {-1,"",0,'\0'},
     {1,"mouse look: o",    M_RD_Change_MouseLook,  'm'},
+    {1,"vertical movement:", M_RD_Change_Novert,   'v'},
     {-1,"",0,'\0'}
 
 };
@@ -1417,6 +1420,7 @@ menuitem_t RD_Controls_Menu_Rus[]=
     {2,"Crjhjcnm vsib",           M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
     {-1,"",0,'\0'},                                              //
     {1,"J,pjh vsim.:",            M_RD_Change_MouseLook,   'j'}, // Обзор мышью
+    {1,"dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,    'd'}, // Вертикальное перемещение
     {-1,"",0,'\0'}
 };
 
@@ -2815,6 +2819,9 @@ void M_RD_Draw_Controls(void)
 
         // - Mouse look --------------------------------------------------------
         M_WriteTextSmall_ENG(119 + ORIGWIDTH_DELTA, 85, mlook ? "on" : "off");
+
+        // - Vertical movement -------------------------------------------------
+        M_WriteTextSmall_ENG(171 + ORIGWIDTH_DELTA, 95, !novert ? "on" : "off");
     }
     else
     {
@@ -2837,6 +2844,9 @@ void M_RD_Draw_Controls(void)
 
         // - Обзор мышью -------------------------------------------------------
         M_WriteTextSmall_RUS(135 + ORIGWIDTH_DELTA, 85, mlook ? "drk" : "dsrk");
+
+        // - Вертикальное перемещение ------------------------------------------
+        M_WriteTextSmall_RUS(235 + ORIGWIDTH_DELTA, 95, !novert ? "drk" : "dsrk");
     }
 }
 
@@ -2862,6 +2872,12 @@ void M_RD_Change_MouseLook(int choice)
 
     if (!mlook)
     players[consoleplayer].centering = true;
+}
+
+void M_RD_Change_Novert(int choice)
+{
+    choice = 0;
+    novert = 1 - novert;
 }
 
 void M_RD_Change_Sensitivity(int choice)

@@ -33,6 +33,7 @@ extern boolean flip_levels_cmdline;
 // -----------------------------------------------------------------------------
 
 extern int mlook;
+extern int novert;
 extern int local_time;
 
 

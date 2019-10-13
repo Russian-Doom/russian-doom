@@ -73,3 +73,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Hexen widescreen HUD and weapons by Neoworm
 - Invisible Warrior
 - NormanSeven
+- Daniil Petrov
