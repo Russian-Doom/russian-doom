@@ -2498,16 +2498,23 @@ void M_RD_Draw_AutomapSettings(void)
     if (english_language)
     {
         // - Automap colors (English only names, different placement) ----------
-        if (automap_color == 0)
-        M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "doom");
-        else if (automap_color == 1)
-        M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "boom");
-        else if (automap_color == 2)
-        M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "jaguar");
-        else if (automap_color == 3)
-        M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "raven");
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_ENG(170 + ORIGWIDTH_DELTA, 35, "n/a");
+        }
         else
-        M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "strife");
+        {
+            if (automap_color == 0)
+            M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "doom");
+            else if (automap_color == 1)
+            M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "boom");
+            else if (automap_color == 2)
+            M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "jaguar");
+            else if (automap_color == 3)
+            M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "raven");
+            else
+            M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "strife");
+        }
 
         // - Level stats -------------------------------------------------------
         M_WriteTextSmall_ENG(159 + ORIGWIDTH_DELTA, 45, automap_stats == 1 ? "on" : "off");
@@ -2527,16 +2534,23 @@ void M_RD_Draw_AutomapSettings(void)
     else
     {
         // - Automap colors (English only names, different placement) ----------
-        if (automap_color == 0)
-        M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "doom");
-        else if (automap_color == 1)
-        M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "boom");
-        else if (automap_color == 2)
-        M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "jaguar");
-        else if (automap_color == 3)
-        M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "raven");
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_RUS(191 + ORIGWIDTH_DELTA, 35, "y/l"); // н/д
+        }
         else
-        M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "strife");
+        {
+            if (automap_color == 0)
+            M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "doom");
+            else if (automap_color == 1)
+            M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "boom");
+            else if (automap_color == 2)
+            M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "jaguar");
+            else if (automap_color == 3)
+            M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "raven");
+            else
+            M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "strife");
+        }
         
         // - Статистика уровня -------------------------------------------------
         M_WriteTextSmall_RUS(210 + ORIGWIDTH_DELTA, 45, automap_stats == 1 ? "drk" : "dsrk");
@@ -2557,6 +2571,10 @@ void M_RD_Draw_AutomapSettings(void)
 
 void M_RD_Change_AutomapColor(int choice)
 {
+    // [JN] Disable automap colors changing in Jaguar
+    if (gamemission == jaguar)
+    return;
+
     choice = 0;
     automap_color++;
 
