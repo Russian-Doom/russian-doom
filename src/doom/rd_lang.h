@@ -322,6 +322,15 @@ extern char* gotshotgun2;
 
 
 //
+// P_Spec.C
+//
+
+extern char* secretfound;
+
+#define SECRETFOUND "A secret is revealed!"
+
+
+//
 // ST_stuff.C
 //
 
@@ -1013,11 +1022,7 @@ extern char* ststr_massacre;
 #define CC_CYBER    "THE CYBERDEMON"
 #define CC_HERO     "OUR HERO"
 
-//
-// Port-specific strings
-//
 
-#define SECRETFOUND "A secret is revealed!"
 
 #define STSRT_CROSSHAIR     "Crosshair "
 #define STSTR_CROSSHAIR_ON  "ON"
@@ -1236,6 +1241,13 @@ PRESSYN_RUS
 #define GOTPLASMA_RUS   "gjkextyf gkfpvtyyfz geirf!"        // Получена плазменная пушка!
 #define GOTSHOTGUN_RUS  "gjkexty lhj,jdbr!"                 // Получен дробовик!
 #define GOTSHOTGUN2_RUS "gjkextyj ldecndjkmyjt he;mt!"      // Получено двуствольное ружье!
+
+
+//
+// P_Spec.C
+//
+
+#define SECRETFOUND_RUS "j,yfhe;ty nfqybr!"     // Обнаружен тайник!
 
 
 //
@@ -2231,11 +2243,7 @@ PRESSYN_RUS
 #define CC_CYBER_RUS    "rb,thltvjy"            // Кибердемон
 #define CC_HERO_RUS     "yfi uthjq"             // Наш Герой
 
-//
-// Специфические сообщения порта
-//
 
-#define SECRETFOUND_RUS "j,yfhe;ty nfqybr!"     // Обнаружен тайник!
 
 #define STSRT_CROSSHAIR_RUS     "ghbwtk "               // Прицел
 #define STSTR_CROSSHAIR_ON_RUS  "drk.xty"               // включен

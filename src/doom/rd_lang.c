@@ -130,6 +130,13 @@ char* gotshotgun2;
 
 
 //
+// P_Spec.C
+//
+
+char* secretfound;
+
+
+//
 // ST_stuff.C
 //
 
@@ -267,6 +274,12 @@ void RD_DefineLanguageStrings (void)
         gotshotgun2 = GOTSHOTGUN2;
 
         //
+        // P_Spec.C
+        //
+
+        secretfound     = SECRETFOUND;
+
+        //
         // ST_stuff.C
         //
 
@@ -395,6 +408,12 @@ void RD_DefineLanguageStrings (void)
         gotplasma   = GOTPLASMA_RUS;
         gotshotgun  = GOTSHOTGUN_RUS;
         gotshotgun2 = GOTSHOTGUN2_RUS;
+
+        //
+        // P_Spec.C
+        //
+
+        secretfound     = SECRETFOUND_RUS;
 
         //
         // ST_stuff.C
