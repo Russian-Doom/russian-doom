@@ -170,6 +170,7 @@ static void M_RD_ShadowedText(int option);
 static void M_RD_CrossHairDraw(int option);
 static void M_RD_CrossHairHealth(int option);
 static void M_RD_CrossHairScale(int option);
+static void M_RD_FlipLevels(int option);
 static void M_RD_NoDemos(int option);
 
 // End game
@@ -562,6 +563,7 @@ static MenuItem_t GameplayItems[] = {
     {ITT_EFUNC, "INCREASED SIZE:",      M_RD_CrossHairScale,  0, MENU_NONE   },
     {ITT_EMPTY, NULL,                   NULL,                 0, MENU_NONE   },
     {ITT_EMPTY, NULL,                   NULL,                 0, MENU_NONE   },
+    {ITT_EFUNC, "FLIP GAME LEVELS:",    M_RD_FlipLevels,      0, MENU_NONE   },
     {ITT_EFUNC, "PLAY INTERNAL DEMOS:", M_RD_NoDemos,         0, MENU_NONE   }
 };
 
@@ -576,13 +578,14 @@ static MenuItem_t GameplayItems_Rus[] = {
     {ITT_EFUNC, "EDTKBXTYYSQ HFPVTH:",      M_RD_CrossHairScale,  0, MENU_NONE   }, // УВЕЛИЧЕННЫЙ РАЗМЕР
     {ITT_EMPTY, NULL,                       NULL,                 0, MENU_NONE   }, //
     {ITT_EMPTY, NULL,                       NULL,                 0, MENU_NONE   }, //
-    {ITT_EFUNC, "GHJBUHSDFNM LTVJPFGBCB:",  M_RD_NoDemos,         0, MENU_NONE   }, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
+    {ITT_EFUNC, "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",  M_RD_FlipLevels,0, MENU_NONE   }, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
+    {ITT_EFUNC, "GHJBUHSDFNM LTVJPFGBCB:",  M_RD_NoDemos,         0, MENU_NONE   }  // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
 };
 
 static Menu_t GameplayMenu = {
     53 + ORIGWIDTH_DELTA, 26,
     DrawGameplayMenu,
-    11, GameplayItems,
+    12, GameplayItems,
     0,
     MENU_OPTIONS
 };
@@ -590,7 +593,7 @@ static Menu_t GameplayMenu = {
 static Menu_t GameplayMenu_Rus = {
     53 + ORIGWIDTH_DELTA, 26,
     DrawGameplayMenu,
-    11, GameplayItems_Rus,
+    12, GameplayItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -1758,19 +1761,35 @@ static void DrawGameplayMenu(void)
         dp_translation = NULL;
     }
 
-    // Play internal demos
-    if (no_internal_demos)
+    // Flip game levels
+    if (flip_levels)
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 196 : 228) + ORIGWIDTH_DELTA, 126);
+                  (english_language ? 170 : 272) + ORIGWIDTH_DELTA, 126);
         dp_translation = NULL;
     }
     else
     {
         dp_translation = cr[CR_GRAY2GREEN_HEXEN];
         MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 196 : 228) + ORIGWIDTH_DELTA, 126);
+                  (english_language ? 170 : 272) + ORIGWIDTH_DELTA, 126);
+        dp_translation = NULL;
+    }
+
+    // Play internal demos
+    if (no_internal_demos)
+    {
+        dp_translation = cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
+                  (english_language ? 196 : 228) + ORIGWIDTH_DELTA, 136);
+        dp_translation = NULL;
+    }
+    else
+    {
+        dp_translation = cr[CR_GRAY2GREEN_HEXEN];
+        MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
+                  (english_language ? 196 : 228) + ORIGWIDTH_DELTA, 136);
         dp_translation = NULL;
     }
 }
@@ -1803,6 +1822,16 @@ static void M_RD_CrossHairHealth(int option)
 static void M_RD_CrossHairScale(int option)
 {
     crosshair_scale ^= 1;
+}
+
+static void M_RD_FlipLevels(int option)
+{
+    extern void R_ExecuteSetViewSize();
+
+    flip_levels ^= 1;
+
+    // [JN] Redraw game screen
+    R_ExecuteSetViewSize();
 }
 
 static void M_RD_NoDemos(int option)

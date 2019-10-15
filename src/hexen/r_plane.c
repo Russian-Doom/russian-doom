@@ -492,7 +492,7 @@ void R_DrawPlanes(void)
                             >> ANGLETOSKYSHIFT;
                         source = R_GetColumn(skyTexture, angle + offset);
                         source2 = R_GetColumn(skyTexture2, angle + offset2);
-                        dest = ylookup[dc_yl] + columnofs[x];
+                        dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
                         do
                         {
@@ -541,7 +541,7 @@ void R_DrawPlanes(void)
                         angle = (viewangle + xtoviewangle[x])
                             >> ANGLETOSKYSHIFT;
                         source = R_GetColumn(skyTexture, angle + offset);
-                        dest = ylookup[dc_yl] + columnofs[x];
+                        dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
                         frac = SKYTEXTUREMIDSHIFTED * FRACUNIT + (dc_yl - centery) * fracstep;
                         do
                         {

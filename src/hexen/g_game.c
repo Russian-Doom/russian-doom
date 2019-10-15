@@ -824,6 +824,12 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             BT_SPECIAL | BTS_SAVEGAME | (savegameslot << BTS_SAVESHIFT);
     }
 
+    if (flip_levels)
+    {
+        cmd->angleturn = -cmd->angleturn;
+        cmd->sidemove = -cmd->sidemove;
+    }
+
     if (lowres_turn)
     {
         if (shortticfix)

@@ -141,6 +141,7 @@ int snd_monomode = 0;
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
+int flip_levels = 0;
 int draw_shadowed_text = 1;
 
 // Gameplay: Crosshair
@@ -215,6 +216,7 @@ void D_BindVariables(void)
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
 
     // Геймплей
+    M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
     // Прицел
