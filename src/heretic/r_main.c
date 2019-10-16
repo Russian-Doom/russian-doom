@@ -578,6 +578,9 @@ void R_InitLightTables(void)
 boolean setsizeneeded;
 int setblocks, setdetail;
 
+// [crispy] lookup table for horizontal screen coordinates
+int		flipwidth[MAXWIDTH];
+
 void R_SetViewSize(int blocks, int detail)
 {
     setsizeneeded = true;
@@ -713,6 +716,12 @@ void R_ExecuteSetViewSize(void)
             fullbright_yellowonly_dim[i][j] = brightmaps_yellowonly_dim + level * 256;
             fullbright_ethereal[i][j] = brightmaps_ethereal + level * 256;
         }
+    }
+
+    // [crispy] lookup table for horizontal screen coordinates
+    for (i = 0, j = scaledviewwidth - 1; i < scaledviewwidth; i++, j--)
+    {
+        flipwidth[i] = flip_levels ? j : i;
     }
 
 //

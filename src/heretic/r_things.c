@@ -467,7 +467,7 @@ void R_DrawVisSprite(vissprite_t * vis, int x1, int x2)
     if (vis->psprite)
     {
         dc_texturemid += FixedMul(((centery - viewheight / 2) << FRACBITS),
-                                  vis->xiscale);
+                                  pspriteiscale);
         sprtopscreen += (viewheight / 2 - centery) << FRACBITS;
     }
 
@@ -1019,7 +1019,7 @@ void R_DrawPSprite(pspdef_t * psp)
     sprframe = &sprdef->spriteframes[psp->state->frame & FF_FRAMEMASK];
 
     lump = sprframe->lump[0];
-    flip = (boolean) sprframe->flip[0];
+    flip = (boolean)sprframe->flip[0] ^ flip_levels;
 
     // [JN] Applying standard bobbing for animation interpolation (Staff+, Gauntlets+),
     // and for preventing "shaking" between refiring states. "Plus" means activated Tome of Power:
@@ -1071,7 +1071,8 @@ void R_DrawPSprite(pspdef_t * psp)
 //
     tx = psp_sx - 160 * FRACUNIT;
 
-    tx -= spriteoffset[lump];
+    // [crispy] fix sprite offsets for mirrored sprites
+    tx -= flip ? 2 * tx - spriteoffset[lump] + spritewidth[lump] : spriteoffset[lump];
     if (viewangleoffset)
     {
         tempangle =

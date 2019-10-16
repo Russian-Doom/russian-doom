@@ -83,7 +83,7 @@ void R_DrawColumn(void)
     // Use ylookup LUT to avoid multiply with ScreenWidth.
     // Use columnofs LUT for subwindows?
 
-    dest = ylookup[dc_yl] + columnofs[dc_x];
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     // Determine scaling, which is the only mapping to be done.
 
@@ -161,7 +161,7 @@ void R_DrawColumnLow(void)
 //      dccount++;
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[dc_x];
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl - centery) * fracstep;
@@ -204,7 +204,7 @@ void R_DrawTLColumn(void)
                 dc_yl, dc_yh, dc_x);
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[dc_x];
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl - centery) * fracstep;
@@ -258,7 +258,7 @@ void R_DrawTranslatedColumn(void)
                 dc_yl, dc_yh, dc_x);
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[dc_x];
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl - centery) * fracstep;
@@ -290,7 +290,7 @@ void R_DrawTranslatedTLColumn(void)
                 dc_yl, dc_yh, dc_x);
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[dc_x];
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl - centery) * fracstep;
@@ -378,12 +378,14 @@ void R_DrawSpan(void)
     xfrac = ds_xfrac;
     yfrac = ds_yfrac;
 
-    dest = ylookup[ds_y] + columnofs[ds_x1];
+//  dest = ylookup[ds_y] + columnofs[ds_x1];
     count = ds_x2 - ds_x1;
     do
     {
         spot = ((yfrac >> (16 - 6)) & (63 * 64)) + ((xfrac >> 16) & 63);
-        *dest++ = ds_colormap[ds_source[spot]];
+//      *dest++ = ds_colormap[ds_source[spot]];
+        dest = ylookup[ds_y] + columnofs[flipwidth[ds_x1++]];
+        *dest = ds_colormap[ds_source[spot]];
         xfrac += ds_xstep;
         yfrac += ds_ystep;
     }
@@ -409,12 +411,14 @@ void R_DrawSpanLow(void)
     xfrac = ds_xfrac;
     yfrac = ds_yfrac;
 
-    dest = ylookup[ds_y] + columnofs[ds_x1];
+//  dest = ylookup[ds_y] + columnofs[ds_x1];
     count = ds_x2 - ds_x1;
     do
     {
         spot = ((yfrac >> (16 - 6)) & (63 * 64)) + ((xfrac >> 16) & 63);
-        *dest++ = ds_colormap[ds_source[spot]];
+//      *dest++ = ds_colormap[ds_source[spot]];
+        dest = ylookup[ds_y] + columnofs[flipwidth[ds_x1++]];
+        *dest = ds_colormap[ds_source[spot]];
         xfrac += ds_xstep;
         yfrac += ds_ystep;
     }

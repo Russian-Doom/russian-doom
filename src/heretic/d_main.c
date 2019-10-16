@@ -77,8 +77,6 @@ boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom;                  // true if cd-rom mode active
 boolean noartiskip;             // whether shift-enter skips an artifact
 
-boolean flip_levels_cmdline = false;  // [JN] Flipped levels initially false
-
 skill_t startskill;
 int startepisode;
 int startmap;
@@ -392,7 +390,7 @@ void D_DoAdvanceDemo(void)
         case 2:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
-            if (!flip_levels && !flip_levels_cmdline && !no_internal_demos)
+            if (!no_internal_demos)
             G_DeferedPlayDemo(DEH_String("demo1"));
             break;
         case 3:
@@ -403,7 +401,7 @@ void D_DoAdvanceDemo(void)
         case 4:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
-            if (!flip_levels && !flip_levels_cmdline && !no_internal_demos)
+            if (!no_internal_demos)
             G_DeferedPlayDemo(DEH_String("demo2"));
             break;
         case 5:
@@ -421,7 +419,7 @@ void D_DoAdvanceDemo(void)
         case 6:
             BorderNeedRefresh = true;
             UpdateState |= I_FULLSCRN;
-            if (!flip_levels && !flip_levels_cmdline && !no_internal_demos)
+            if (!no_internal_demos)
             G_DeferedPlayDemo(DEH_String("demo3"));
             break;
     }
@@ -1267,12 +1265,6 @@ void D_DoomMain(void)
         startmap = 1;
         autostart = true;
         testcontrols = true;
-    }
-
-    // [crispy] port level flipping feature over from Strawberry Doom
-    if (M_ParmExists("-fliplevels"))
-    {
-        flip_levels_cmdline = !flip_levels_cmdline;
     }
 
     I_InitTimer();

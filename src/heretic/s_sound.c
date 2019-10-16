@@ -500,7 +500,7 @@ void S_UpdateSounds(mobj_t * listener)
 
             angle = R_PointToAngle2(listener->x, listener->y,
                                     channel[i].mo->x, channel[i].mo->y);
-            angle = (angle - viewangle) >> 24;
+            angle = ((flip_levels ? -angle : angle) - viewangle) >> 24;
             sep = angle * 2 - 128;
 
             // [JN] Support for mono sfx mode

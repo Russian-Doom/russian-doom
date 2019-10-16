@@ -1074,7 +1074,7 @@ void AM_drawFline(fline_t * fl, int color)
                     return;
                 }
 
-#define DOT(xx,yy,cc) fb[(yy)*f_w+(xx)]=(cc)    //the MACRO!
+#define DOT(xx,yy,cc) fb[(yy)*f_w+(flipwidth[xx])]=(cc)    //the MACRO!
 
                 dx = fl->b.x - fl->a.x;
                 ax = 2 * (dx < 0 ? -dx : dx);
@@ -1174,7 +1174,7 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
         oldyy = yy;
         oldyyshifted = yy * (ORIGWIDTH << hires);
     }
-    fb[oldyyshifted + xx] = *(cc);
+    fb[oldyyshifted + flipwidth[xx]] = *(cc);
 //      fb[(yy)*f_w+(xx)]=*(cc);
 }
 

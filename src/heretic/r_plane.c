@@ -495,7 +495,7 @@ void R_DrawPlanes(void)
                                 dc_yl, dc_yh, dc_x);
 #endif
 
-                    dest = ylookup[dc_yl] + columnofs[dc_x];
+                    dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
 
                     fracstep = dc_iscale;
                     frac = dc_texturemid + (dc_yl - centery) * fracstep;

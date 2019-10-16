@@ -684,11 +684,11 @@ static void saveg_write_player_t(player_t *str)
 static void saveg_read_mapthing_t(mapthing_t *str)
 {
     // short x, y;
-    str->x = flip_levels || flip_levels_cmdline ? -SV_ReadWord() : SV_ReadWord();
+    str->x = SV_ReadWord();
     str->y = SV_ReadWord();
 
     // short angle;
-    str->angle = flip_levels || flip_levels_cmdline ? (180 - SV_ReadWord()) : SV_ReadWord();
+    str->angle = SV_ReadWord();
 
     // short type;
     str->type = SV_ReadWord();
@@ -700,11 +700,11 @@ static void saveg_read_mapthing_t(mapthing_t *str)
 static void saveg_write_mapthing_t(mapthing_t *str)
 {
     // short x, y;
-    SV_WriteWord(flip_levels || flip_levels_cmdline ? -str->x : str->x);
+    SV_WriteWord(str->x);
     SV_WriteWord(str->y);
 
     // short angle;
-    SV_WriteWord(flip_levels || flip_levels_cmdline ? (180 - str->angle) : str->angle);
+    SV_WriteWord(str->angle);
 
     // short type;
     SV_WriteWord(str->type);
@@ -775,7 +775,7 @@ static void saveg_read_mobj_t(mobj_t *str)
     saveg_read_thinker_t(&str->thinker);
 
     // fixed_t x, y, z;
-    str->x = flip_levels || flip_levels_cmdline ? -SV_ReadLong() : SV_ReadLong();
+    str->x = SV_ReadLong();
     str->y = SV_ReadLong();
     str->z = SV_ReadLong();
 
@@ -786,7 +786,7 @@ static void saveg_read_mobj_t(mobj_t *str)
     str->sprev = NULL;
 
     // angle_t angle;
-    str->angle = flip_levels || flip_levels_cmdline ? (ANG180 - SV_ReadLong()) : SV_ReadLong();
+    str->angle = SV_ReadLong();
 
     // spritenum_t sprite;
     str->sprite = SV_ReadLong();
@@ -813,7 +813,7 @@ static void saveg_read_mobj_t(mobj_t *str)
     str->height = SV_ReadLong();
 
     // fixed_t momx, momy, momz;
-    str->momx = flip_levels || flip_levels_cmdline ? -SV_ReadLong() : SV_ReadLong();
+    str->momx = SV_ReadLong();
     str->momy = SV_ReadLong();
     str->momz = SV_ReadLong();
 
@@ -924,7 +924,7 @@ static void saveg_write_mobj_t(mobj_t *str)
     saveg_write_thinker_t(&str->thinker);
 
     // fixed_t x, y, z;
-    SV_WriteLong(flip_levels || flip_levels_cmdline ? -str->x : str->x);
+    SV_WriteLong(str->x);
     SV_WriteLong(str->y);
     SV_WriteLong(str->z);
 
@@ -933,7 +933,7 @@ static void saveg_write_mobj_t(mobj_t *str)
     SV_WritePtr(str->sprev);
 
     // angle_t angle;
-    SV_WriteLong(flip_levels || flip_levels_cmdline ? (ANG180 - str->angle) : str->angle);
+    SV_WriteLong(str->angle);
 
     // spritenum_t sprite;
     SV_WriteLong(str->sprite);
@@ -957,7 +957,7 @@ static void saveg_write_mobj_t(mobj_t *str)
     SV_WriteLong(str->height);
 
     // fixed_t momx, momy, momz;
-    SV_WriteLong(flip_levels || flip_levels_cmdline ? -str->momx : str->momx);
+    SV_WriteLong(str->momx);
     SV_WriteLong(str->momy);
     SV_WriteLong(str->momz);
 
