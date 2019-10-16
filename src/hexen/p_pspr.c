@@ -368,8 +368,8 @@ void P_BringUpWeapon(player_t * player)
         player->pendingweapon = player->readyweapon;
     }
     if (player->class == PCLASS_FIGHTER && player->pendingweapon == WP_SECOND
-        && player->mana[MANA_1])
-    {
+        && player->mana[MANA_1] > 0) // [JN] & [FG] Do not bring up glowing axe,
+    {                                //             if no blue mana available.
         new = S_FAXEUP_G;
     }
     else
@@ -607,8 +607,8 @@ void A_Raise(player_t * player, pspdef_t * psp)
     }
     psp->sy = WEAPONTOP;
     if (player->class == PCLASS_FIGHTER && player->readyweapon == WP_SECOND
-        && player->mana[MANA_1])
-    {
+        && player->mana[MANA_1] > 0) // [JN] & [FG] Do not draw glowing axe,
+    {                                //             if no blue mana available.
         P_SetPsprite(player, ps_weapon, S_FAXEREADY_G);
     }
     else
