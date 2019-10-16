@@ -612,30 +612,44 @@ boolean AM_Responder(event_t * ev)
         if (key == key_map_east)                 // pan right
         {
             if (!followplayer)
-                m_paninc.x = FTOM(F_PANINC);
+            {
+                m_paninc.x = flip_levels ? -FTOM(F_PANINC) : FTOM(F_PANINC);
+            }
             else
+            {
                 rc = false;
+            }
         }
         else if (key == key_map_west)            // pan left
         {
             if (!followplayer)
-                m_paninc.x = -FTOM(F_PANINC);
+            {
+                m_paninc.x = flip_levels ? FTOM(F_PANINC) : -FTOM(F_PANINC);
+            }
             else
+            {
                 rc = false;
+            }
         }
         else if (key == key_map_north)           // pan up
         {
             if (!followplayer)
+            {
                 m_paninc.y = FTOM(F_PANINC);
+            }
             else
                 rc = false;
         }
         else if (key == key_map_south)           // pan down
         {
             if (!followplayer)
+            {
                 m_paninc.y = -FTOM(F_PANINC);
+            }
             else
+            {
                 rc = false;
+            }
         }
         else if (key == key_map_zoomout)         // zoom out
         {
