@@ -770,7 +770,7 @@ void S_UpdateSounds(mobj_t * listener)
                 angle = R_PointToAngle2(listener->x, listener->y,
                                         Channel[i].mo->x, Channel[i].mo->y);
                 angle = (angle - viewangle) >> 24;
-                sep = angle * 2 - 128;
+                sep = (flip_levels ? -angle : angle) * 2 - 128;
                 if (sep < 64)
                     sep = -sep;
                 if (sep > 192)
