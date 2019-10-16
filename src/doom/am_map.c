@@ -700,23 +700,47 @@ boolean AM_Responder (event_t* ev)
         {
             // [crispy] keep the map static in overlay mode
             // if not following the player
-            if (!automap_follow && !automap_overlay) m_paninc.x = FTOM(F_PANINC);
-            else rc = false;
+            if (!automap_follow && !automap_overlay)
+            {
+                m_paninc.x = flip_levels ? -FTOM(F_PANINC): FTOM(F_PANINC);
+            }
+            else
+            {
+                rc = false;
+            }
         }
         else if (key == key_map_west)   // pan left
         {
-            if (!automap_follow && !automap_overlay) m_paninc.x = -FTOM(F_PANINC);
-            else rc = false;
+            if (!automap_follow && !automap_overlay)
+            {
+                m_paninc.x = flip_levels ? FTOM(F_PANINC): -FTOM(F_PANINC);
+            }
+            else
+            {
+                rc = false;
+            }
         }
         else if (key == key_map_north)  // pan up
         {
-            if (!automap_follow && !automap_overlay) m_paninc.y = FTOM(F_PANINC);
-            else rc = false;
+            if (!automap_follow && !automap_overlay)
+            {
+                m_paninc.y = FTOM(F_PANINC);
+            }
+            else
+            {
+                rc = false;
+            }
         }
         else if (key == key_map_south)  // pan down
         {
-            if (!automap_follow && !automap_overlay) m_paninc.y = -FTOM(F_PANINC);
-            else rc = false;
+            if (!automap_follow && !automap_overlay)
+            {
+                m_paninc.y = -FTOM(F_PANINC);
+            }
+            else
+            {
+                rc = false;
+            }
         }
         else if (key == key_map_zoomout)  // zoom out
         {
