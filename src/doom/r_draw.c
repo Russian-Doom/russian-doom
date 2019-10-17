@@ -102,6 +102,10 @@ byte*   dc_source;
 // just for profiling 
 int dccount;
 
+// [JN] External data for new fuzz effect
+extern boolean inhelpscreens;
+extern int Crispy_Random(void);
+
 
 //
 // A column is a vertical slice/span from a wall texture that,
@@ -380,8 +384,9 @@ void R_DrawFuzzColumn (void)
         *dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
 
         // Clamp table lookup index.
+        // [JN] New fuzz effect. Also fixes animation being stuck in sone instances.
         if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = 0;
+        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()&49;
 
         dest += SCREENWIDTH;
 
@@ -469,8 +474,9 @@ void R_DrawFuzzColumnLow (void)
         }
 
         // Clamp table lookup index.
+        // [JN] New fuzz effect. Also fixes animation being stuck in sone instances.
         if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = 0;
+        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()&49;
 
         dest += SCREENWIDTH << hires;
         dest2 += SCREENWIDTH << hires;
