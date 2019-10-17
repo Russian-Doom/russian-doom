@@ -137,6 +137,7 @@ void MN_LoadSlotText(void);
 
 // Rendering
 static void DrawRenderingMenu(void);
+static void M_RD_Change_VSync(int option);
 static void M_RD_AspectRatio(int option);
 static void M_RD_Uncapped(int option);
 static void M_RD_Smoothing(int option);
@@ -407,6 +408,7 @@ static Menu_t OptionsMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t RenderingItems[] = {
+    {ITT_LRFUNC, "VERTICAL SYNC:",    M_RD_Change_VSync,0,  MENU_NONE},
     {ITT_LRFUNC, "FIX ASPECT RATIO:", M_RD_AspectRatio, 0,  MENU_NONE},
     {ITT_LRFUNC, "UNCAPPED FPS:",     M_RD_Uncapped,    0,  MENU_NONE},
     {ITT_LRFUNC, "PIXEL SCALING:",    M_RD_Smoothing,   0,  MENU_NONE},
@@ -414,6 +416,7 @@ static MenuItem_t RenderingItems[] = {
 };
 
 static MenuItem_t RenderingItems_Rus[] = {
+    {ITT_LRFUNC, "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync,0, MENU_NONE}, // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
     {ITT_LRFUNC, "ABRCBHJDFNM CJJNYJITYBT CNJHJY:", M_RD_AspectRatio, 0, MENU_NONE}, // ФИКСИРОВАТЬ СООТНОШЕНИЕ СТОРОН
     {ITT_LRFUNC, "JUHFYBXTYBT RFLHJDJQ XFCNJNS:",   M_RD_Uncapped,    0, MENU_NONE}, // ОГРАНИЧЕНИЕ КАДРОВОЙ ЧАСТОТЫ
     {ITT_LRFUNC, "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing,   0, MENU_NONE}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
@@ -423,7 +426,7 @@ static MenuItem_t RenderingItems_Rus[] = {
 static Menu_t RenderingMenu = {
     66 + ORIGWIDTH_DELTA, 16,
     DrawRenderingMenu,
-    4, RenderingItems,
+    5, RenderingItems,
     0,
     MENU_OPTIONS
 };
@@ -431,7 +434,7 @@ static Menu_t RenderingMenu = {
 static Menu_t RenderingMenu_Rus = {
     36 + ORIGWIDTH_DELTA, 16,
     DrawRenderingMenu,
-    4, RenderingItems_Rus,
+    5, RenderingItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -1240,69 +1243,97 @@ static void DrawFileSlots(Menu_t * menu)
 
 static void DrawRenderingMenu(void)
 {
-    // Fix aspect ratio:
-    if (aspect_ratio_correct)
+    // Vertical sync:
+    if (vsync)
     {
         if (english_language)
-        MN_DrTextB("ON", 219 + ORIGWIDTH_DELTA, 16);
+        MN_DrTextB("ON", 195 + ORIGWIDTH_DELTA, 16);
         else
-        MN_DrTextA("DRK", 270 + ORIGWIDTH_DELTA, 16);
+        MN_DrTextA("DRK", 236 + ORIGWIDTH_DELTA, 16);
     }
     else
     {
         if (english_language)
-        MN_DrTextB("OFF", 219 + ORIGWIDTH_DELTA, 16);
+        MN_DrTextB("OFF", 195 + ORIGWIDTH_DELTA, 16);
         else
-        MN_DrTextA("DSRK", 270 + ORIGWIDTH_DELTA, 16);
+        MN_DrTextA("DSRK", 236 + ORIGWIDTH_DELTA, 16);
+    }
+
+    // Fix aspect ratio:
+    if (aspect_ratio_correct)
+    {
+        if (english_language)
+        MN_DrTextB("ON", 219 + ORIGWIDTH_DELTA, 36);
+        else
+        MN_DrTextA("DRK", 270 + ORIGWIDTH_DELTA, 26);
+    }
+    else
+    {
+        if (english_language)
+        MN_DrTextB("OFF", 219 + ORIGWIDTH_DELTA, 36);
+        else
+        MN_DrTextA("DSRK", 270 + ORIGWIDTH_DELTA, 26);
     }
 
     // Uncapped FPS:
     if (uncapped_fps)
     {
         if (english_language)
-        MN_DrTextB("ON", 206 + ORIGWIDTH_DELTA, 36);
+        MN_DrTextB("ON", 206 + ORIGWIDTH_DELTA, 56);
         else
-        MN_DrTextA("DSRK", 254 + ORIGWIDTH_DELTA, 26);
+        MN_DrTextA("DSRK", 254 + ORIGWIDTH_DELTA, 36);
     }
     else
     {
         if (english_language)
-        MN_DrTextB("OFF", 206 + ORIGWIDTH_DELTA, 36);
+        MN_DrTextB("OFF", 206 + ORIGWIDTH_DELTA, 56);
         else
-        MN_DrTextA("DRK", 254 + ORIGWIDTH_DELTA, 26);
+        MN_DrTextA("DRK", 254 + ORIGWIDTH_DELTA, 36);
     }
 
     // Pixel scaling:
     if (smoothing)
     {
         if (english_language)
-        MN_DrTextB("SMOOTH", 193 + ORIGWIDTH_DELTA, 56);
+        MN_DrTextB("SMOOTH", 193 + ORIGWIDTH_DELTA, 76);
         else
-        MN_DrTextA("DRK", 211 + ORIGWIDTH_DELTA, 36);
+        MN_DrTextA("DRK", 211 + ORIGWIDTH_DELTA, 46);
     }
     else
     {
         if (english_language)
-        MN_DrTextB("SHARP", 193 + ORIGWIDTH_DELTA, 56);
+        MN_DrTextB("SHARP", 193 + ORIGWIDTH_DELTA, 76);
         else
-        MN_DrTextA("DSRK", 211 + ORIGWIDTH_DELTA, 36);
+        MN_DrTextA("DSRK", 211 + ORIGWIDTH_DELTA, 46);
     }
 
     // Video rendered:
     if (force_software_renderer)
     {
         if (english_language)
-        MN_DrTextB("CPU", 216 + ORIGWIDTH_DELTA, 76);
+        MN_DrTextB("CPU", 216 + ORIGWIDTH_DELTA, 96);
         else
-        MN_DrTextA("GHJUHFVVYFZ", 159 + ORIGWIDTH_DELTA, 46);
+        MN_DrTextA("GHJUHFVVYFZ", 159 + ORIGWIDTH_DELTA, 56);
     }
     else
     {
         if (english_language)
-        MN_DrTextB("GPU", 216 + ORIGWIDTH_DELTA, 76);
+        MN_DrTextB("GPU", 216 + ORIGWIDTH_DELTA, 96);
         else
-        MN_DrTextA("FGGFHFNYFZ", 159 + ORIGWIDTH_DELTA, 46);
+        MN_DrTextA("FGGFHFNYFZ", 159 + ORIGWIDTH_DELTA, 56);
     }    
+}
+
+static void M_RD_Change_VSync(int option)
+{
+    // [JN] Disable "vsync" toggling in software renderer
+    if (force_software_renderer == 1)
+    return;
+
+    vsync ^= 1;
+
+    // Reinitialize graphics
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
 
 static void M_RD_AspectRatio(int option)
