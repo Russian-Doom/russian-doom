@@ -21,6 +21,7 @@ hu_stuff.c         hu_stuff.h   \
 info.c             info.h       \
 m_menu.c           m_menu.h     \
 m_random.c         m_random.h   \
+p_bexptr.c                      \
 p_ceilng.c                      \
 p_doors.c                       \
 p_enemy.c                       \
@@ -66,7 +67,8 @@ wi_stuff.c         wi_stuff.h
 FEATURE_DEHACKED_SOURCE_FILES =            \
 deh_ammo.c                                 \
 deh_bexstr.c                               \
-deh_bexpars.c                              \
+deh_bexincl.c                              \
+deh_bexpars.c     deh_bexpars.h            \
 deh_bexptr.c                               \
 deh_cheat.c                                \
 deh_doom.c                                 \

@@ -130,7 +130,8 @@ static void DEH_FrameParseLine(deh_context_t *context, char *line, void *tag)
 
     ivalue = atoi(value);
     
-    if (state == &states[NUMSTATES - 1])
+    // [crispy] drop the overflow simulation into the frame table
+    if (state == &states[NUMSTATES - 1] && false)
     {
         DEH_FrameOverflow(context, variable_name, ivalue);
     }

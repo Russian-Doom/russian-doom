@@ -58,7 +58,7 @@ static void DEH_PointerInit(void)
     // [BH] Initialize extra dehacked states
     for (; i < NUMSTATES; i++)
     {
-	states[i].sprite = SPR_TROO;    // [JN] TODO: should be SPR_TNT1;
+	states[i].sprite = SPR_TNT1;
 	states[i].frame = 0;
 	states[i].tics = -1;
 	states[i].action.acv = (actionf_v) NULL;

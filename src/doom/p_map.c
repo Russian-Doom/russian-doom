@@ -1644,19 +1644,11 @@ boolean PIT_ChangeSector (mobj_t*	thing)
     }
     
     // crunch bodies to giblets
-    // [JN] Разноцветное мясцо только в случае "colored_blood".
-
     if (thing->health <= 0)
     {
-        // [JN] Специальное мясцо для Паука-Предводителя
-        if (gamevariant != freedoom && colored_blood && !vanillaparm && thing->type == MT_SPIDER)
-        P_SetMobjState (thing, S_GIBSM);
-
-        // [JN] Не оставляют мясца
-        else if (thing->type == MT_BARREL || thing->type == MT_SKULL)
+        // [JN] No gibs for crushed explosive barrel and Lost Soul
+        if (thing->type == MT_BARREL || thing->type == MT_SKULL)
         P_SetMobjState (thing, SPR_TROO);
-
-        // [JN] Все остальные монстры
         else
         P_SetMobjState (thing, S_GIBS);
 

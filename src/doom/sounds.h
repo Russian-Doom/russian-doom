@@ -226,6 +226,12 @@ typedef enum
     sfx_radio,
     sfx_slop2,
     sfx_swtchw,
+    // [crispy] additional BOOM and MBF states, sprites and code pointers
+    sfx_dgsit,
+    sfx_dgatk,
+    sfx_dgact,
+    sfx_dgdth,
+    sfx_dgpain,
     NUMSFX
 } sfxenum_t;
 

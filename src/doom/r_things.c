@@ -142,52 +142,58 @@ void R_InstallSpriteLump (int lump, unsigned frame, char rot, boolean flipped)
 
     if (rotation == 0)
     {
-    // the lump should be used for all rotations
-    if (sprtemp[frame].rotate == false)
-    {
-        I_Error (english_language ?
-                 "R_InitSprites: Sprite %s frame %c has multip rot=0 lump" :
-                 "R_InitSprites: фрейм %c спрайта %s имеет многократный блок rot=0",
-                 spritename, 'A'+frame);
-    }
+	// the lump should be used for all rotations
+	// [crispy] make non-fatal
+	if (sprtemp[frame].rotate == false)
+	    fprintf (stderr, "R_InitSprites: Sprite %s frame %c has "
+		     "multip rot=0 lump\n", spritename, 'A'+frame);
 
+	// [crispy] make non-fatal
 	if (sprtemp[frame].rotate == true)
-    {
-	    I_Error (english_language ?
-                 "R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump\n" :
-                 "R_InitSprites: фрейм %c спрайта %s имеет фреймы поворота и блок rot=0",
-                 spritename, 'A'+frame);
-    }
-
-    sprtemp[frame].rotate = false;
-    for (r=0 ; r<16 ; r++) // [crispy] support 16 sprite rotations
-    {
-        sprtemp[frame].lump[r] = lump - firstspritelump;
-        sprtemp[frame].flip[r] = (byte)flipped;
+	    fprintf (stderr, "R_InitSprites: Sprite %s frame %c has rotations "
+		     "and a rot=0 lump\n", spritename, 'A'+frame);
+			
+// [crispy] moved ...
+//	sprtemp[frame].rotate = false;
+	for (r=0 ; r<8 ; r++)
+	{
+	  // [crispy] only if not yet substituted
+	  if (sprtemp[frame].lump[r] == -1)
+	  {
+	    sprtemp[frame].lump[r] = lump - firstspritelump;
+	    sprtemp[frame].flip[r] = (byte)flipped;
+	    // [crispy] ... here
+	    sprtemp[frame].rotate = false;
+	  }
 	}
 
     return;
     }
 
     // the lump is only used for one rotation
+    // [crispy] make non-fatal
     if (sprtemp[frame].rotate == false)
-    I_Error (english_language ?
-             "R_InitSprites: Sprite %s frame %c has rotations and a rot=0 lump" :
-             "R_InitSprites: фрейм спрайта %c спрайта %s имеет фреймы поворота и блок rot=0",
-             spritename, 'A'+frame);
-
-    sprtemp[frame].rotate = true;
+	fprintf (stderr, "R_InitSprites: Sprite %s frame %c has rotations "
+		 "and a rot=0 lump\n", spritename, 'A'+frame);
+		
+// [crispy] moved ...
+//    sprtemp[frame].rotate = true;
 
     // make 0 based
     rotation--;		
     if (sprtemp[frame].lump[rotation] != -1)
-    I_Error (english_language ?
-             "R_InitSprites: Sprite %s : %c : %c has two lumps mapped to it" :
-             "R_InitSprites: спрайу %s : %c : %c назначено несколько одинаковых блоков",
-             spritename, 'A'+frame, '1'+rotation);
-
+    {
+	// [crispy] make non-fatal
+	fprintf (stderr, "R_InitSprites: Sprite %s : %c : %c "
+		 "has two lumps mapped to it\n",
+		 spritename, 'A'+frame, '1'+rotation);
+	return;
+    }
+		
     sprtemp[frame].lump[rotation] = lump - firstspritelump;
     sprtemp[frame].flip[rotation] = (byte)flipped;
+    // [crispy] ... here
+    sprtemp[frame].rotate = true;
 }
 
 // -------------------------------------------------------------------------
@@ -580,10 +586,13 @@ void R_ProjectSprite (mobj_t* thing)
     sprdef = &sprites[thing->sprite];
 #ifdef RANGECHECK
     if ( (thing->frame&FF_FRAMEMASK) >= sprdef->numframes )
+        return;
+    /* [JN] TODO - investigate why error may occur
     I_Error (english_language ?
              "R_ProjectSprite: invalid sprite frame %i : %i " :
              "R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
              thing->sprite, thing->frame);
+    */
 #endif
     sprframe = &sprdef->spriteframes[ thing->frame & FF_FRAMEMASK];
 
@@ -591,11 +600,17 @@ void R_ProjectSprite (mobj_t* thing)
     {
         // choose a different rotation based on player view
         ang = R_PointToAngle (interpx, interpy);
+        // [crispy] now made non-fatal
+        if (sprframe->rotate == -1)
+        {
+            return;
+        }
+        else
         // [crispy] support 16 sprite rotations
         if (sprframe->rotate == 2)
         {
-            rot = (ang-interpangle+(unsigned)(ANG45/4)*17);
-            rot = (rot>>29) + ((rot>>25)&8);
+            const unsigned rot2 = (ang-interpangle+(unsigned)(ANG45/4)*17);
+            rot = (rot2>>29) + ((rot2>>25)&8);
         }
         else
         {
@@ -743,16 +758,8 @@ void R_ProjectSprite (mobj_t* thing)
             else if (thing->type == MT_MISC49)
             vis->colormap = fullbrights_candles[index];
         
-            // Animated candlestick
-            else if (thing->type == MT_MISC49_A)
-            vis->colormap = fullbrights_candles[index];
-
             // Candelabra (35)
             else if (thing->type == MT_MISC50)
-            vis->colormap = fullbrights_candles[index];
-
-            // Animated candelabra
-            else if (thing->type == MT_MISC50_A)
             vis->colormap = fullbrights_candles[index];
 
             // Tall blue torch (44)
@@ -804,9 +811,7 @@ void R_ProjectSprite (mobj_t* thing)
         else
         {
             if (thing->type == MT_MISC49    // Candlestick
-            ||  thing->type == MT_MISC49_A  // Animated candlestick
             ||  thing->type == MT_MISC50    // Candelabra
-            ||  thing->type == MT_MISC50_A  // Animated candelabra
             ||  thing->type == MT_MISC41    // Tall blue torch
             ||  thing->type == MT_MISC42    // Tall green torch
             ||  thing->type == MT_MISC43    // Tall red torch
@@ -1031,10 +1036,13 @@ void R_DrawPSprite (pspdef_t* psp)
     sprdef = &sprites[psp->state->sprite];
 #ifdef RANGECHECK
     if ( (psp->state->frame & FF_FRAMEMASK)  >= sprdef->numframes)
+        return;
+    /* [JN] TODO - investigate why error may occur
     I_Error (english_language ?
              "R_ProjectSprite: invalid sprite frame %i : %i " :
              "R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
              psp->state->sprite, psp->state->frame);
+    */
 #endif
     sprframe = &sprdef->spriteframes[ psp->state->frame & FF_FRAMEMASK ];
 

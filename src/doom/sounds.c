@@ -228,5 +228,11 @@ sfxinfo_t S_sfx[] =
     SOUND("radio",  60),
     SOUND("slop2",  78),
     SOUND("swtchw", 78),
+    // [crispy] additional BOOM and MBF states, sprites and code pointers
+    SOUND("dgsit",  98),
+    SOUND("dgatk",  70),
+    SOUND("dgact", 120),
+    SOUND("dgdth",  70),
+    SOUND("dgpain", 96),
 };
 

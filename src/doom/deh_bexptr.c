@@ -99,8 +99,6 @@ extern void A_BrainSpit();
 extern void A_SpawnSound();
 extern void A_SpawnFly();
 extern void A_BrainExplode();
-/* -----------------------------------------------------------------------------
-// [JN] Not used
 // [crispy] additional BOOM and MBF states, sprites and code pointers
 extern void A_Stop();
 extern void A_Die();
@@ -116,7 +114,6 @@ extern void A_Scratch();
 extern void A_PlaySound();
 extern void A_RandomJump();
 extern void A_LineEffect();
------------------------------------------------------------------------------ */
 
 typedef struct {
     const char *mnemonic;
@@ -198,8 +195,6 @@ static const bex_codeptr_t bex_codeptrtable[] = {
     {"SpawnSound", {A_SpawnSound}},
     {"SpawnFly", {A_SpawnFly}},
     {"BrainExplode", {A_BrainExplode}},
-    /* -------------------------------------------------------------------------
-    // [JN] Not used
     // [crispy] additional BOOM and MBF states, sprites and code pointers
     {"Stop", {A_Stop}},
     {"Die", {A_Die}},
@@ -215,7 +210,6 @@ static const bex_codeptr_t bex_codeptrtable[] = {
     {"PlaySound", {A_PlaySound}},
     {"RandomJump", {A_RandomJump}},
     {"LineEffect", {A_LineEffect}},
-    ------------------------------------------------------------------------- */
     {"NULL", {NULL}},
 };
 
