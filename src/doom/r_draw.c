@@ -386,7 +386,7 @@ void R_DrawFuzzColumn (void)
         // Clamp table lookup index.
         // [JN] New fuzz effect. Also fixes animation being stuck in sone instances.
         if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()&49;
+        fuzzpos = paused || menuactive || vanillaparm || inhelpscreens ? 0 : Crispy_Random()&49;
 
         dest += SCREENWIDTH;
 
@@ -476,7 +476,7 @@ void R_DrawFuzzColumnLow (void)
         // Clamp table lookup index.
         // [JN] New fuzz effect. Also fixes animation being stuck in sone instances.
         if (++fuzzpos == FUZZTABLE) 
-        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()&49;
+        fuzzpos = paused || menuactive || vanillaparm || inhelpscreens ? 0 : Crispy_Random()&49;
 
         dest += SCREENWIDTH << hires;
         dest2 += SCREENWIDTH << hires;
