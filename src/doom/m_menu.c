@@ -3597,6 +3597,8 @@ void M_RD_BackToDefaultsResponse(int key)
     usegamma        = 0;
     detailLevel     = 0;
     showMessages    = 1;
+    messages_color  = 0;
+    draw_shadowed_text = 1;
     local_time      = 0;
 
     // Automap
@@ -3621,17 +3623,16 @@ void M_RD_BackToDefaultsResponse(int key)
     mlook               = 0;
     players[consoleplayer].centering = true;
     mouseSensitivity    = 5;
+    novert              = 1;
 
     // Gameplay
     brightmaps              = 1;
     fake_contrast           = 0;
     translucency            = 1;    
     colored_hud             = 0;
-    messages_color          = 0;
     colored_blood           = 1;
     swirling_liquids        = 1;
     invul_sky               = 1;
-    draw_shadowed_text      = 1;
 
     play_exit_sfx = 1;
     crushed_corpses_sfx = 1;
