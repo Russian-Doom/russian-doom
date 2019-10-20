@@ -1023,7 +1023,8 @@ void R_DrawPSprite (pspdef_t* psp)
     vissprite_t     avis;
     boolean         flip;
 
-    const int state = viewplayer->psprites[ps_weapon].state - states; // [from-crispy] Для плавной анимации бензопилы
+    const int state = viewplayer->psprites[ps_weapon].state - states;       // [crispy]
+    const weaponinfo_t *const winfo = &weaponinfo[viewplayer->readyweapon]; // [crispy]
 
     // decide which patch to use
 #ifdef RANGECHECK
@@ -1049,47 +1050,22 @@ void R_DrawPSprite (pspdef_t* psp)
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0] ^ flip_levels;
 
-    // [crispy] Smoothen Chainsaw idle animation
-    // [JN] ...а также применять стандартную анимацию покачивания к некоторым фреймам стрельбы
-    // для получения плавного эффекта перехода от состояния стрельбы к обычному состоянию.
-    if (!vanillaparm && weapon_bobbing && (
-    /* Бензопила  */ state == S_SAW      || state == S_SAWB     ||
-    /* Дробовик   */ state == S_SGUN8    || state == S_SGUN9    ||
-    /* Двустволка */ state == S_DSGUN9   || state == S_DSGUN10  ||
-    /* Плазмаган  */ state == S_PLASMA2  ||
-    /* BFG9000    */ state == S_BFG3     || state == S_BFG4 ))
+    if (weapon_bobbing && !vanillaparm)
     {
-        R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
-    }
-    
-    // [JN] Smoothen bobbing while weapon changing (raising and lowering).
-    if (!vanillaparm && weapon_bobbing && (
-    /* Кулак      */ state == S_PUNCHDOWN   || state == S_PUNCHUP   ||
-    /* Бензопила  */ state == S_SAWDOWN     || state == S_SAWUP     ||
-    /* Пистолет   */ state == S_PISTOLDOWN  || state == S_PISTOLUP  ||
-    /* Дробовик   */ state == S_SGUNDOWN    || state == S_SGUNUP    ||
-    /* Двустволка */ state == S_DSGUNDOWN   || state == S_DSGUNUP   ||
-    /* Пулемет    */ state == S_CHAINDOWN   || state == S_CHAINUP   ||
-    /* Ракетница  */ state == S_MISSILEDOWN || state == S_MISSILEUP ||
-    /* Плазмаган  */ state == S_PLASMADOWN  || state == S_PLASMAUP  ||
-    /* BFG9000    */ state == S_BFGDOWN     || state == S_BFGUP ))
-    {
-        R_ApplyRaiseLowerBob(&psp_sx, true);
-    }
-    
-    // [JN] Уполовиненная амплитуда покачия оружия при стрельбе в движении
-    if (!vanillaparm && weapon_bobbing && (
-    /* Кулак      */ state == S_PUNCH1   || state == S_PUNCH2   || state == S_PUNCH3   || state == S_PUNCH4  || state == S_PUNCH5 ||
-    /* Бензопила  */ state == S_SAW1     || state == S_SAW2     ||
-    /* Пистолет   */ state == S_PISTOL1  || state == S_PISTOL2  || state == S_PISTOL3  || state == S_PISTOL4 ||
-    /* Дробовик   */ state == S_SGUN1    || state == S_SGUN2    || state == S_SGUN3    || state == S_SGUN4   || state == S_SGUN5  || state == S_SGUN6  || state == S_SGUN7  ||
-    /* Двустволка */ state == S_DSGUN1   || state == S_DSGUN2   || state == S_DSGUN3   || state == S_DSGUN4  || state == S_DSGUN5 || state == S_DSGUN6 || state == S_DSGUN7 ||
-    /* Пулемет    */ state == S_CHAIN1   || state == S_CHAIN2   || state == S_CHAIN3   ||
-    /* Ракетница  */ state == S_MISSILE1 || state == S_MISSILE2 || state == S_MISSILE3 ||
-    /* Плазмаган  */ state == S_PLASMA1  ||
-    /* BFG9000    */ state == S_BFG1     || state == S_BFG2 ))
-    {
-        R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
+        // [JN] Apply halfed bobbing for firing states,
+        // normal bobbing for other states.
+        if (state != winfo->downstate && state != winfo->upstate)
+        {
+            if (viewplayer->attackdown)
+            R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
+            else
+            R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
+        }
+        // [JN] Apply X-bobbing only for weapon raising and lowering states.
+        else
+        {
+            R_ApplyRaiseLowerBob(&psp_sx, true);
+        }
     }
 
     // [crispy] squat down weapon sprite a bit after hitting the ground
