@@ -256,6 +256,10 @@ void ConfigDisplay(void)
 
         ar_checkbox = 
         TXT_NewCheckBox(english_language ?
+                        "Vertical sync" :
+                        "Вертикальна€ синхронизаци€",
+                        &vsync),
+        TXT_NewCheckBox(english_language ?
                         "Fix aspect ratio" :
                         "Фиксировать соотношение сторон",
                         &aspect_ratio_correct),
@@ -264,19 +268,14 @@ void ConfigDisplay(void)
                         "Сн€ть ограничение с кадровой частоты",
                         &uncapped_fps),
         TXT_If(gamemission == doom,
-        TXT_NewCheckBox(english_language ?
-                        "Show Disk icon" :
-                        "Отображать значок дискеты",
-                        &show_diskicon)),
+                TXT_NewCheckBox(english_language ?
+                        "Show fps counter" :
+                        "Счетчик кадровой частоты",
+                        &uncapped_fps)),
         TXT_NewCheckBox(english_language ?
                         "Smooth pixel scaling" :
                         "Пиксельное сглаживание",
                         &smoothing),
-        TXT_If(gamemission == doom,
-        TXT_NewCheckBox(english_language ?
-                        "Screen wiping effect" :
-                        "Плавна€ смена экранов",
-                        &screen_wiping)),
         TXT_NewCheckBox(english_language ?
                         "Software rendering" :
                         "Программный рендеринг (режим Software)",
@@ -285,23 +284,35 @@ void ConfigDisplay(void)
     TXT_NewSeparator(english_language ?
                      "Extra" :
                      "Дополнительно"),
-    
+
+        TXT_If(gamemission == doom,
+                TXT_NewCheckBox(english_language ?
+                        "Show Disk icon" :
+                        "Отображать значок дискеты",
+                        &show_diskicon)),
+        TXT_If(gamemission == doom,
+        TXT_NewCheckBox(english_language ?
+                        "Screen wiping effect" :
+                        "Плавна€ смена экранов",
+                        &screen_wiping)),
         TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
             TXT_NewCheckBox(english_language ?
                             "Graphical startup" :
                             "Графическа€ загрузка",
                             &graphical_startup)),
-        TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
-            TXT_NewCheckBox(english_language ?
-                            "Show ENDOOM screen on exit" :
-                            "Показывать экран ENDOOM при выходе",
-                            &show_endoom)),
+
 #ifdef HAVE_LIBPNG
         TXT_NewCheckBox(english_language ?
                         "Save screenshots in PNG format" :
                         "Сохран€ть скриншоты в формате PNG",
                         &png_screenshots),
 #endif
+
+        TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
+            TXT_NewCheckBox(english_language ?
+                            "Show ENDOOM screen on exit" :
+                            "Показывать экран ENDOOM при выходе",
+                            &show_endoom)),
 
     TXT_NewSeparator(english_language ?
                      "Video" :

@@ -183,12 +183,16 @@ void ConfigMouse(void)
                         "Enable mouse" :
                         "Разрешить использование мыши",
                         &usemouse),
-            // TXT_TABLE_OVERFLOW_RIGHT,
-            // TXT_If(gamemission == doom, TXT_NewInvertedCheckBox("Разрешить вертикальное перемещение",   &novert)),
-            TXT_TABLE_OVERFLOW_RIGHT,
+        TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_If(gamemission == doom, 
+            TXT_NewInvertedCheckBox(english_language ?
+                                    "Allow vertical mouse movement" :
+                                    "Вертикальное перемещение",
+                                    &novert)),
+        TXT_TABLE_OVERFLOW_RIGHT,
             TXT_NewCheckBox(english_language ?
                             "Allow mouse look" :
-                            "Вертикальный обзор мышью",
+                            "Свободный обзор мышью",
                             &mlook),
         TXT_TABLE_OVERFLOW_RIGHT,
         TXT_NewCheckBox(english_language ?
@@ -198,7 +202,7 @@ void ConfigMouse(void)
         TXT_TABLE_OVERFLOW_RIGHT,
         TXT_NewCheckBox(english_language ?
                         "Double click acts as \"use\"" :
-                        "Двойной клик активизирует \"использование\"",
+                        "Двойной клик активирует \"использование\"",
                         &dclick_use),
         TXT_TABLE_OVERFLOW_RIGHT,
 
