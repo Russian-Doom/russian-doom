@@ -4532,6 +4532,9 @@ void M_DrawThermo (int x, int y, int thermWidth, int thermDot)
     }
 
     V_DrawPatch(xx, y, W_CacheLumpName(DEH_String("M_THERMR"), PU_CACHE));
+
+    V_DrawPatch((x + 8) + thermDot * 8, y,
+                W_CacheLumpName(DEH_String("M_THERMO"), PU_CACHE));
 }
 
 
