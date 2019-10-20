@@ -138,7 +138,6 @@ static void SensibleDefaults(void)
     colored_blood = 1;
     swirling_liquids = 1;
     invul_sky = 1;
-    red_resurrection_flash = 1;
     draw_shadowed_text = 1;
 
     // Gameplay: Audible

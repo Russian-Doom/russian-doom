@@ -41,7 +41,6 @@ int messages_color = 0;
 int colored_blood = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
-int red_resurrection_flash = 1;
 int draw_shadowed_text = 1;
 
 // Gameplay: Audible
@@ -308,7 +307,6 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("colored_blood",          &colored_blood);
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
-    M_BindIntVariable("red_resurrection_flash", &red_resurrection_flash);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
 
     // Gameplay: Audible

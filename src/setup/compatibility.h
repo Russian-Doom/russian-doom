@@ -40,7 +40,6 @@ extern int invul_sky;
 extern int colored_hud;
 extern int messages_color;
 extern int colored_blood;
-extern int red_resurrection_flash;
 extern int draw_shadowed_text;
 extern int show_diskicon;
 
