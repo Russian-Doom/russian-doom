@@ -4361,7 +4361,33 @@ void M_DrawReadThis2(void)
 //
 void M_DrawMainMenu(void)
 {
-    V_DrawPatch(94+ORIGWIDTH_DELTA, 2, W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
+    if (english_language)
+    {
+        // [JN] Always draw original "M_DOOM" in English language
+        V_DrawPatch(94+ORIGWIDTH_DELTA, 2, 
+                    W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
+    }
+    else
+    {
+        if (logical_gamemission == pack_plut)
+        {
+            // [JN] Draw translated "RD_MPLUT" for Plutonia
+            V_DrawPatch(94+ORIGWIDTH_DELTA, 2, 
+                        W_CacheLumpName(DEH_String("RD_MPLUT"), PU_CACHE));
+        }
+        else if (logical_gamemission == pack_tnt)
+        {
+            // [JN] Draw translated "RD_TNT" for TNT
+            V_DrawPatch(94+ORIGWIDTH_DELTA, 2, 
+                        W_CacheLumpName(DEH_String("RD_MTNT"), PU_CACHE));
+        }
+        else
+        {
+            // [JN] Draw standard "M_DOOM" for other games
+            V_DrawPatch(94+ORIGWIDTH_DELTA, 2, 
+                        W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
+        }
+    }
 }
 
 
