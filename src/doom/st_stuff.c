@@ -342,6 +342,7 @@ static boolean st_artifactson;
 
 // main bar left
 static patch_t* sbar;
+static patch_t* sbar_rus;
 
 // 0-9, tall numbers
 static patch_t* tallnum[10];
@@ -368,6 +369,7 @@ static patch_t* faceback;
 
  // main bar right
 static patch_t* armsbg;
+static patch_t* armsbg_rus;
 
 // weapon ownership patches
 static patch_t* arms[6][2]; 
@@ -497,11 +499,11 @@ void ST_refreshBackground(void)
     if (st_statusbaron)
     {
         V_UseBuffer(st_backing_screen);
-        V_DrawPatch(ST_X+ORIGWIDTH_DELTA, 0, sbar);
+        V_DrawPatch(ST_X+ORIGWIDTH_DELTA, 0, english_language ? sbar : sbar_rus);
 
         // [crispy] back up arms widget background
         if (!deathmatch && gamemode != pressbeta)
-        V_DrawPatch(ST_ARMSBGX, 0, armsbg);
+        V_DrawPatch(ST_ARMSBGX, 0, english_language ? armsbg : armsbg_rus);
 
         if (netgame)
         V_DrawPatch(ST_FX+ORIGWIDTH_DELTA, 0, faceback);
@@ -1674,11 +1676,11 @@ void ST_drawWidgets(boolean refresh)
     if (screenblocks == 9 || screenblocks == 10)
     {
         V_DrawPatch(ORIGWIDTH_DELTA, ST_Y, 
-                    W_CacheLumpName(DEH_String("STBAR"), PU_CACHE));
+                    W_CacheLumpName(DEH_String(english_language ? "STBAR" : "RDSTBAR"), PU_CACHE));
 
         if (!deathmatch && gamemode != pressbeta)
         V_DrawPatch(ORIGWIDTH_DELTA + 104, ST_Y, 
-                    W_CacheLumpName(DEH_String("STARMS"), PU_CACHE));
+                    W_CacheLumpName(DEH_String(english_language ? "STARMS" : "RDARMS"), PU_CACHE));
     }
 
     // [JN] Wide screen: Side bezel for reconstructed standard HUD
@@ -1768,18 +1770,22 @@ void ST_drawWidgets(boolean refresh)
             ||  plyr->readyweapon == wp_plasma
             ||  plyr->readyweapon == wp_bfg)
             V_DrawPatch(ORIGWIDTH_DELTA + 2, 191, 
-                        W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
+                        W_CacheLumpName(DEH_String(english_language ? 
+                                                   "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
 
             if (deathmatch) // [JN] Frags
             V_DrawPatch(ORIGWIDTH_DELTA + 108, 191, 
-                        W_CacheLumpName(DEH_String("STCHFRGS"), PU_CACHE));
+                        W_CacheLumpName(DEH_String(english_language ?
+                                                   "STCHFRGS" : "RDCHFRGS"), PU_CACHE));
             else            // [JN] Arms
             V_DrawPatch(ORIGWIDTH_DELTA + 108, 191, 
-                        W_CacheLumpName(DEH_String("STCHARMS"), PU_CACHE));
+                        W_CacheLumpName(DEH_String(english_language ? 
+                                                   "STCHARMS" : "RDCHARMS"), PU_CACHE));
 
             // [JN] Health, armor, ammo
             V_DrawPatch(ORIGWIDTH_DELTA + 52, 173, 
-                        W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
+                        W_CacheLumpName(DEH_String(english_language ? 
+                                                   "STCHNAMS" : "RDCHNAMS"), PU_CACHE));
         }
 
         V_DrawPatch(ORIGWIDTH_DELTA + 292, 173, 
@@ -1984,6 +1990,7 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
 
     // arms background
     callback(DEH_String("STARMS"), &armsbg);
+    callback(DEH_String("RDARMS"), &armsbg_rus);
 
     // arms ownership widgets
     for (i=0; i<6; i++)
@@ -2003,6 +2010,7 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
 
     // status bar background bits
     callback(DEH_String("STBAR"), &sbar);
+    callback(DEH_String("RDSTBAR"), &sbar_rus);
 
     // face states
     facenum = 0;
@@ -2194,7 +2202,7 @@ void ST_createWidgets(void)
     STlib_initBinIcon(&w_armsbg,
         ST_ARMSBGX,
         ST_ARMSBGY,
-        armsbg,
+        english_language ? armsbg : armsbg_rus,
         &st_notdeathmatch,
         &st_statusbaron);
 
@@ -2464,10 +2472,12 @@ void ST_drawWidgetsJaguar (boolean refresh)
     {
         // Don't draw ammo for fist and chainsaw
         if (plyr->readyweapon != wp_fist && plyr->readyweapon != wp_chainsaw)
-        V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("STCHAMMO"), PU_CACHE));
+        V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String(english_language ?
+                                                                       "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
 
         //  Health, armor, ammo
-        V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("STCHNAMS"), PU_CACHE));
+        V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String(english_language ?
+                                                                       "STCHNAMS" : "RDCHNAMS"), PU_CACHE));
     }
 
     // Health and Armor widgets ------------------------------------------------
