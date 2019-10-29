@@ -360,7 +360,8 @@ void D_Display (void)
         {
             V_DrawShadowedPatchDoom(0 + ORIGWIDTH_DELTA, gamestate == GS_INTERMISSION ?
                                     -40 : 0, // [JN] Do not obstruct titles on intermission screen
-                                    W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+                                    W_CacheLumpName (DEH_String(english_language ?
+                                                                "M_PAUSE" : "RD_PAUSE"), PU_CACHE));
         }
         else
         {
@@ -372,7 +373,8 @@ void D_Display (void)
             y = (viewwindowy >> hires)+4;
 
             V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, 
-                                    y, W_CacheLumpName (DEH_String("M_PAUSE"), PU_CACHE));
+                                    y, W_CacheLumpName (DEH_String(english_language ?
+                                                                   "M_PAUSE" : "RD_PAUSE"), PU_CACHE));
         }
     }
 
@@ -1137,8 +1139,8 @@ void D_SetGameDescription(void)
             }
             else
             {
-                W_MergeFile("base/common/doom-common-russian.wad");
-                W_MergeFile("base/common/doom-doom1-russian.wad");
+                // W_MergeFile("base/common/doom-common-russian.wad");
+                // W_MergeFile("base/common/doom-doom1-russian.wad");
             }
 
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
@@ -1170,8 +1172,8 @@ void D_SetGameDescription(void)
             }
             else
             {
-                W_MergeFile("base/common/doom-common-russian.wad");
-                W_MergeFile("base/common/doom-doom1-russian.wad");
+                // W_MergeFile("base/common/doom-common-russian.wad");
+                // W_MergeFile("base/common/doom-doom1-russian.wad");
             }
 
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
@@ -1191,8 +1193,8 @@ void D_SetGameDescription(void)
             else
             {
                 gamedescription = GetGameName("DOOM (Демоверсия)");
-                W_MergeFile("base/common/doom-common-russian.wad");
-                W_MergeFile("base/common/doom-doom1-russian.wad");
+                // W_MergeFile("base/common/doom-common-russian.wad");
+                // W_MergeFile("base/common/doom-doom1-russian.wad");
             }
 
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
@@ -1277,8 +1279,8 @@ void D_SetGameDescription(void)
             else
             {
                 gamedescription = GetGameName("DOOM 2: Ад на Земле");
-                W_MergeFile("base/common/doom-common-russian.wad");
-                W_MergeFile("base/common/doom-doom2-russian.wad");
+                // W_MergeFile("base/common/doom-common-russian.wad");
+                // W_MergeFile("base/common/doom-doom2-russian.wad");
             }
 
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
@@ -1299,8 +1301,8 @@ void D_SetGameDescription(void)
             {
                 gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
 
-                W_MergeFile("base/common/doom-common-russian.wad");
-                W_MergeFile("base/common/doom-plutonia-russian.wad");
+                // W_MergeFile("base/common/doom-common-russian.wad");
+                // W_MergeFile("base/common/doom-plutonia-russian.wad");
             }
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-plutonia-wide.wad");
@@ -1319,8 +1321,8 @@ void D_SetGameDescription(void)
             else
             {
                 gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
-                W_MergeFile("base/common/doom-common-russian.wad");
-                W_MergeFile("base/common/doom-tnt-russian.wad");
+                // W_MergeFile("base/common/doom-common-russian.wad");
+                // W_MergeFile("base/common/doom-tnt-russian.wad");
             }
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-tnt-wide.wad");
