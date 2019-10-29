@@ -465,6 +465,9 @@ void M_RD_Change_NoInternalDemos(int choice);
 void M_RD_BackToDefaultsResponse(int key);
 void M_RD_BackToDefaults(int choice);
 
+// Language hot-swapping
+void M_RD_ChangeLanguage(int choice);
+
 // -----------------------------------------------------------------------------
 // [JN] Vanilla menu prototypes
 // -----------------------------------------------------------------------------
@@ -824,9 +827,9 @@ void M_WriteTextBigCentered_RUS (int y, char *string)
 }
 
 
-//
+// =============================================================================
 // DOOM MENU
-//
+// =============================================================================
 
 enum
 {
@@ -839,6 +842,10 @@ enum
     main_end
 } main_e;
 
+// ------------
+// English menu
+// ------------
+
 menuitem_t MainMenu[]=
 {
     {1,"M_NGAME",M_NewGame,'n'},
@@ -850,16 +857,6 @@ menuitem_t MainMenu[]=
     {1,"M_QUITG",M_QuitDOOM,'q'}
 };
 
-// Special menu for Press Beta
-menuitem_t MainMenuBeta[]=
-{
-    {1,"M_BLVL1",  M_Episode, '1'},
-    {1,"M_BLVL2",  M_Episode, '2'},
-    {1,"M_BLVL3",  M_Episode, '3'},
-    {1,"M_OPTION", M_Options, 'o'},
-    {1,"M_QUITG",  M_QuitDOOM,'q'}
-};
-
 menu_t  MainDef =
 {
     main_end,
@@ -868,6 +865,40 @@ menu_t  MainDef =
     M_DrawMainMenu,
     97+ORIGWIDTH_DELTA,70,
     0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t MainMenu_Rus[]=
+{
+    {1,"Yjdfz buhf",     M_NewGame,  'y'},  // Новая игра
+    {1,"Yfcnhjqrb",      M_Options,  'y'},  // Настройки
+    {1,"Pfuheprf",       M_LoadGame, 'p'},  // Загрузка
+    {1,"Cj[hfytybt",     M_SaveGame, 'c'},  // Сохранение
+    {1,"Byajhvfwbz!",    M_ReadThis, 'b'},  // Информация!
+    {1,"Ds[jl",          M_QuitDOOM, 'd'}   // Выход
+};
+
+menu_t  MainDef_Rus =
+{
+    main_end,
+    NULL,
+    MainMenu_Rus,
+    M_DrawMainMenu,
+    97+ORIGWIDTH_DELTA,70,
+    0
+};
+
+// Special menu for Press Beta
+menuitem_t MainMenuBeta[]=
+{
+    {1,"M_BLVL1",  M_Episode, '1'},
+    {1,"M_BLVL2",  M_Episode, '2'},
+    {1,"M_BLVL3",  M_Episode, '3'},
+    {1,"M_OPTION", M_Options, 'o'},
+    {1,"M_QUITG",  M_QuitDOOM,'q'}
 };
 
 // [JN] Special menu for Press Beta
@@ -882,9 +913,9 @@ menu_t  MainDefBeta =
 };
 
 
-//
+// =============================================================================
 // EPISODE SELECT
-//
+// =============================================================================
 
 enum
 {
@@ -894,6 +925,10 @@ enum
     ep4,
     ep_end
 } episodes_e;
+
+// ------------
+// English menu
+// ------------
 
 menuitem_t EpisodeMenu[]=
 {
@@ -913,9 +948,32 @@ menu_t  EpiDef =
     ep1                     // lastOn
 };
 
-//
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t EpisodeMenu_Rus[]=
+{
+    {1,"Gj rjktyj d nhegf[",  M_Episode,'g'},   // По колено в трупах
+    {1,"Ghb,ht;mt Flf",       M_Episode,'g'},   // Прибрежье Ада
+    {1,"Byathyj",             M_Episode,'b'},   // Инферно
+    {1,"Ndjz gkjnm bcnjotyf", M_Episode,'n'}    // Твоя плоть истощена
+};
+
+menu_t  EpiDef_Rus =
+{
+    ep_end,
+    &MainDef_Rus,
+    EpisodeMenu_Rus,
+    M_DrawEpisode,
+    48+ORIGWIDTH_DELTA,63,
+    ep1
+};
+
+
+// =============================================================================
 // NEW GAME
-//
+// =============================================================================
 
 enum
 {
@@ -927,6 +985,10 @@ enum
     ultra_nm,
     newg_end
 } newgame_e;
+
+// ------------
+// English menu
+// ------------
 
 menuitem_t NewGameMenu[]=
 {
@@ -948,6 +1010,131 @@ menu_t  NewDef =
     hurtme                  // lastOn
 };
 
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t NewGameMenu_Rus[]=
+{
+    {1,"Vyt hfyj evbhfnm/",  M_ChooseSkill, 'v'},   // Мне рано умирать.
+    {1,"Yt nfr uhe,j/",      M_ChooseSkill, 'y'},   // Не так грубо.
+    {1,"Cltkfq vyt ,jkmyj/", M_ChooseSkill, 'c'},   // Сделай мне больно.
+    {1,"Ekmnhfyfcbkbt/",     M_ChooseSkill, 'e'},   // Ультранасилие
+    {1,"",                   M_ChooseSkill, 'r'},   // Кошмар. (gfx)
+    {1,"",                   M_ChooseSkill, 'e'}    // Ультра кошмар! (gfx)
+};
+
+menu_t  NewDef_Rus =
+{
+    newg_end,
+    &EpiDef_Rus,
+    NewGameMenu_Rus,
+    M_DrawNewGame,
+    48+ORIGWIDTH_DELTA,63,
+    hurtme
+};
+
+
+// =============================================================================
+// LOAD GAME MENU
+// =============================================================================
+
+enum
+{
+    load1,
+    load2,
+    load3,
+    load4,
+    load5,
+    load6,
+    load7,
+    load8,
+    load_end
+} load_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t LoadMenu[]=
+{
+    {1,"", M_LoadSelect,'1'},
+    {1,"", M_LoadSelect,'2'},
+    {1,"", M_LoadSelect,'3'},
+    {1,"", M_LoadSelect,'4'},
+    {1,"", M_LoadSelect,'5'},
+    {1,"", M_LoadSelect,'6'},
+    {1,"", M_LoadSelect,'7'},
+    {1,"", M_LoadSelect,'8'}
+};
+
+menu_t  LoadDef =
+{
+    load_end,
+    &MainDef,
+    LoadMenu,
+    M_DrawLoad,
+    67,38,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menu_t  LoadDef_Rus =
+{
+    load_end,
+    &MainDef_Rus,
+    LoadMenu,
+    M_DrawLoad,
+    67,38,
+    0
+};
+
+// =============================================================================
+// SAVE GAME MENU
+// =============================================================================
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t SaveMenu[]=
+{
+    {1,"", M_SaveSelect,'1'},
+    {1,"", M_SaveSelect,'2'},
+    {1,"", M_SaveSelect,'3'},
+    {1,"", M_SaveSelect,'4'},
+    {1,"", M_SaveSelect,'5'},
+    {1,"", M_SaveSelect,'6'},
+    {1,"", M_SaveSelect,'7'},
+    {1,"", M_SaveSelect,'8'}
+};
+
+menu_t  SaveDef =
+{
+    load_end,
+    &MainDef,
+    SaveMenu,
+    M_DrawSave,
+    67,38,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menu_t  SaveDef_Rus =
+{
+    load_end,
+    &MainDef_Rus,
+    SaveMenu,
+    M_DrawSave,
+    67,38,
+    0
+};
 
 // =============================================================================
 // Read This! MENU 1 & 2
@@ -1013,6 +1200,7 @@ enum
     rd_gameplay,
     rd_endgame,
     rd_defaults,
+    rd_language,
     rd_end
 } options_e;
 
@@ -1029,6 +1217,7 @@ menuitem_t RD_Options_Menu[]=
     {1,"Gameplay",  M_RD_Choose_Gameplay_1,     'g'},
     {1,"End Game",  M_EndGame,                  'e'},
     {1,"Reset settings", M_RD_BackToDefaults,   'r'},
+    {1,"Language:", M_RD_ChangeLanguage,        'l'},
     {-1,"",0,'\0'}
 };
 
@@ -1055,13 +1244,14 @@ menuitem_t RD_Options_Menu_Rus[]=
     {1,"Utqvgktq",      M_RD_Choose_Gameplay_1, 'u'},   // Геймплей
     {1,"Pfrjyxbnm buhe",M_EndGame,              'p'},   // Закончить игру
     {1,"C,hjc yfcnhjtr", M_RD_BackToDefaults,   'c'},   // Сброс настроек
+    {1,"Zpsr#",         M_RD_ChangeLanguage,    'z'},   // Язык:
     {-1,"",0,'\0'}
 };
 
 menu_t  RD_Options_Def_Rus =
 {
     rd_end, 
-    &MainDef,
+    &MainDef_Rus,
     RD_Options_Menu_Rus,
     M_RD_Draw_Options,
     60+ORIGWIDTH_DELTA, 37,
@@ -1796,7 +1986,7 @@ menuitem_t Vanilla_Options_Menu_Rus[]=
 menu_t  Vanilla_OptionsDef_Rus =
 {
     vanilla_opt_end,
-    &MainDef,
+    &MainDef_Rus,
     Vanilla_Options_Menu_Rus,
     M_Vanilla_DrawOptions,
     60+ORIGWIDTH_DELTA,37,
@@ -1938,11 +2128,18 @@ void M_Vanilla_DrawSound(void)
 
 void M_RD_Draw_Options(void)
 {
-    // Write capitalized title
     if (english_language)
-    M_WriteTextBigCentered_ENG(12, "OPTIONS");
+    {
+        M_WriteTextBigCentered_ENG(12, "OPTIONS");
+        M_WriteTextBig_ENG(184+ORIGWIDTH_DELTA, 149, "english");
+    }
     else
-    M_WriteTextBigCentered_RUS(12, "YFCNHJQRB");    // НАСТРОЙКИ
+    {
+        // НАСТРОЙКИ
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB");            
+        // русский        
+        M_WriteTextBig_RUS(127+ORIGWIDTH_DELTA, 149, "heccrbq");
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -3689,70 +3886,18 @@ void M_RD_BackToDefaults(int choice)
 }
 
 
-//
-// LOAD GAME MENU
-//
+// -----------------------------------------------------------------------------
+// Language hot-swapping
+// -----------------------------------------------------------------------------
 
-enum
+void M_RD_ChangeLanguage(int choice)
 {
-    load1,
-    load2,
-    load3,
-    load4,
-    load5,
-    load6,
-    load7,
-    load8,
-    load_end
-} load_e;
+    choice = 0;
+    english_language = 1 - english_language;
 
-menuitem_t LoadMenu[]=
-{
-    {1,"", M_LoadSelect,'1'},
-    {1,"", M_LoadSelect,'2'},
-    {1,"", M_LoadSelect,'3'},
-    {1,"", M_LoadSelect,'4'},
-    {1,"", M_LoadSelect,'5'},
-    {1,"", M_LoadSelect,'6'},
-    {1,"", M_LoadSelect,'7'},
-    {1,"", M_LoadSelect,'8'}
-};
-
-menu_t  LoadDef =
-{
-    load_end,
-    &MainDef,
-    LoadMenu,
-    M_DrawLoad,
-    67,38,
-    0
-};
-
-//
-// SAVE GAME MENU
-//
-
-menuitem_t SaveMenu[]=
-{
-    {1,"", M_SaveSelect,'1'},
-    {1,"", M_SaveSelect,'2'},
-    {1,"", M_SaveSelect,'3'},
-    {1,"", M_SaveSelect,'4'},
-    {1,"", M_SaveSelect,'5'},
-    {1,"", M_SaveSelect,'6'},
-    {1,"", M_SaveSelect,'7'},
-    {1,"", M_SaveSelect,'8'}
-};
-
-menu_t  SaveDef =
-{
-    load_end,
-    &MainDef,
-    SaveMenu,
-    M_DrawSave,
-    67,38,
-    0
-};
+    // [JN] Reset options menu
+    currentMenu = english_language ? &RD_Options_Def : &RD_Options_Def_Rus;
+}
 
 
 //
@@ -3798,15 +3943,13 @@ void M_DrawLoad(void)
 
     if (english_language)
     {
-        // [JN] Use standard centered title "M_LOADG"
         V_DrawShadowedPatchDoom(LoadDef_x, LoadDef_y,
                            W_CacheLumpName(DEH_String("M_LOADG"), PU_CACHE));
     }
     else
     {
-        // [JN] Use own Russian capitalized and centered title: "ЗАГРУЗИТЬ ИГРУ"
-        V_DrawShadowedPatchDoom(LoadDef_x, LoadDef_y, 
-                                W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
+        // ЗАГРУЗИТЬ ИГРУ
+        M_WriteTextBigCentered_RUS(LoadDef_y, "PFUHEPBNM BUHE");
     }
 
     for (i = 0;i < load_end; i++)
@@ -3878,7 +4021,7 @@ void M_LoadGame (int choice)
         return;
     }
 
-    M_SetupNextMenu(&LoadDef);
+    M_SetupNextMenu(english_language ? &LoadDef : &LoadDef_Rus);
     M_ReadSaveStrings();
 }
 
@@ -3891,35 +4034,18 @@ void M_DrawSave(void)
 {
     int i;
 	
-    if (QuickSaveTitle)
+    if (english_language)
     {
-        if (english_language)
-        {
-            // [JN] Use standard centered title "M_SAVEG"
-            V_DrawShadowedPatchDoom(SaveDef_x, SaveDef_y, 
-                                    W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE));
-        }
-        else
-        {
-            // [JN] Use own Russian capitalized and centered title: "БЫСТРОЕ СОХРАНЕНИЕ"
-            V_DrawShadowedPatchDoom(SaveDef_x, SaveDef_y,
-                                    W_CacheLumpName(DEH_String("M_QSGTTL"), PU_CACHE));            
-        }
+        // [JN] Use standard centered title "M_SAVEG"
+        V_DrawShadowedPatchDoom(SaveDef_x, SaveDef_y, 
+                                W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE));
     }
     else
     {
-        if (english_language)
-        {
-            // [JN] Use standard centered title "M_SAVEG"
-            V_DrawShadowedPatchDoom(SaveDef_x, SaveDef_y,
-                                    W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE));
-        }
-        else
-        {
-            // [JN] Use own Russian capitalized and centered title: "СОХРАНИТЬ ИГРУ"
-            V_DrawShadowedPatchDoom(SaveDef_x, SaveDef_y,
-                                    W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
-        }
+        if (QuickSaveTitle) // БЫСТРОЕ СОХРАНЕНИЕ
+        M_WriteTextBigCentered_RUS(SaveDef_y, "<SCNHJT CJ{HFYTYBT");
+        else                // СОХРАНИТЬ ИГРУ
+        M_WriteTextBigCentered_RUS(SaveDef_y, "CJ{HFYBNM BUHE");
     }
 
     for (i = 0;i < load_end; i++)
@@ -3983,7 +4109,7 @@ void M_SaveGame (int choice)
     if (gamestate != GS_LEVEL)
     return;
 
-    M_SetupNextMenu(&SaveDef);
+    M_SetupNextMenu(english_language ? &SaveDef : &SaveDef_Rus);
     M_ReadSaveStrings();
 }
 
@@ -4017,7 +4143,7 @@ void M_QuickSave(void)
     {
         M_StartControlPanel();
         M_ReadSaveStrings();
-        M_SetupNextMenu(&SaveDef);
+        M_SetupNextMenu(english_language ? &SaveDef : &SaveDef_Rus);
         quickSaveSlot = -2;	// means to pick a slot now
         return;
     }
@@ -4235,8 +4361,22 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
-    V_DrawShadowedPatchDoom(99+ORIGWIDTH_DELTA, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-    V_DrawShadowedPatchDoom(42+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
+    if (english_language)
+    {
+        V_DrawShadowedPatchDoom(99+ORIGWIDTH_DELTA, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+        V_DrawShadowedPatchDoom(42+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
+    }
+    else
+    {
+        // НОВАЯ ИГРА
+        M_WriteTextBigCentered_RUS(13, "YJDFZ BUHF");
+        // Уровень сложности:
+        M_WriteTextBigCentered_RUS(38, "Ehjdtym ckj;yjcnb#");
+        // Кошмар.
+        V_DrawShadowedPatchDoom(48+ORIGWIDTH_DELTA, 127, W_CacheLumpName(DEH_String("RD_NMARE"), PU_CACHE));
+        // Ультра кошмар!
+        V_DrawShadowedPatchDoom(48+ORIGWIDTH_DELTA, 143, W_CacheLumpName(DEH_String("RD_UNMAR"), PU_CACHE));
+    }
 }
 
 void M_NewGame(int choice)
@@ -4252,9 +4392,9 @@ void M_NewGame(int choice)
     // Chex Quest disabled the episode select screen, as did Doom II.
 
     if (gamemode == commercial || gameversion == exe_chex)
-    M_SetupNextMenu(&NewDef);
+    M_SetupNextMenu(english_language ? &NewDef : &NewDef_Rus);
     else
-    M_SetupNextMenu(&EpiDef);
+    M_SetupNextMenu(english_language ? &EpiDef : &EpiDef_Rus);
 }
 
 
@@ -4265,8 +4405,18 @@ int epi;
 
 void M_DrawEpisode(void)
 {
-    V_DrawShadowedPatchDoom(99+ORIGWIDTH_DELTA, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
-    V_DrawShadowedPatchDoom(73+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
+    if (english_language)
+    {
+        V_DrawShadowedPatchDoom(99+ORIGWIDTH_DELTA, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
+        V_DrawShadowedPatchDoom(73+ORIGWIDTH_DELTA, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
+    }
+    else
+    {
+        // НОВАЯ ИГРА
+        M_WriteTextBigCentered_RUS(13, "YJDFZ BUHF");
+        // Какой эпизод?
+        M_WriteTextBigCentered_RUS(38, "Rfrjq \'gbpjl?");
+    }
 }
 
 void M_VerifyNightmare(int key)
@@ -4329,7 +4479,7 @@ void M_Episode(int choice)
     }
 
     epi = choice;
-    M_SetupNextMenu(&NewDef);
+    M_SetupNextMenu(english_language ? &NewDef : &NewDef_Rus);
 }
 
 
@@ -4420,7 +4570,7 @@ void M_ReadThis2(int choice)
 void M_FinishReadThis(int choice)
 {
     choice = 0;
-    M_SetupNextMenu(&MainDef);
+    M_SetupNextMenu(english_language ? &MainDef : &MainDef_Rus);
 }
 
 
@@ -5188,7 +5338,10 @@ boolean M_Responder (event_t* ev)
     // [crispy] delete a savegame
     else if (key == KEY_DEL)
     {
-        if (currentMenu == &LoadDef || currentMenu == &SaveDef)
+        if (currentMenu == &LoadDef
+        ||  currentMenu == &LoadDef_Rus
+        ||  currentMenu == &SaveDef
+        ||  currentMenu == &SaveDef_Rus)
         {
             if (LoadMenu[itemOn].status)
             {
@@ -5326,7 +5479,7 @@ void M_StartControlPanel (void)
     return;
 
     menuactive = 1;
-    currentMenu = &MainDef;         // JDC
+    currentMenu = english_language ? &MainDef : &MainDef_Rus;         // JDC
     itemOn = currentMenu->lastOn;   // JDC
 }
 
@@ -5481,7 +5634,10 @@ void M_Drawer (void)
             // [JN] Write Russian options menu with big Russian font
             // -----------------------------------------------------------------
             else 
-            if (currentMenu == &RD_Options_Def_Rus
+            if (currentMenu == &MainDef_Rus
+            ||  currentMenu == &EpiDef_Rus
+            ||  currentMenu == &NewDef_Rus
+            ||  currentMenu == &RD_Options_Def_Rus
             ||  currentMenu == &Vanilla_OptionsDef_Rus
             ||  currentMenu == &Vanilla_Audio_Def_Rus)
             {
@@ -5554,7 +5710,9 @@ void M_Drawer (void)
 
         // [JN] Saving / Loading menus, help screens. Just a blinking skull.
         if (currentMenu == &LoadDef
+        ||  currentMenu == &LoadDef_Rus
         ||  currentMenu == &SaveDef
+        ||  currentMenu == &SaveDef_Rus
         ||  currentMenu == &ReadDef1
         ||  currentMenu == &ReadDef2)
         {
@@ -5605,7 +5763,8 @@ void M_Ticker (void)
 //
 void M_Init (void)
 {
-    currentMenu = &MainDef;
+    currentMenu = english_language ? &MainDef : &MainDef_Rus;
+
     menuactive = 0;
     itemOn = currentMenu->lastOn;
     whichSkull = 0;
@@ -5640,9 +5799,12 @@ void M_Init (void)
         case commercial:
         // Commercial has no "read this" entry.
         MainMenu[readthis] = MainMenu[quitdoom];
+        MainMenu_Rus[readthis] = MainMenu_Rus[quitdoom];
         MainDef.numitems--;
+        MainDef_Rus.numitems--;
         MainDef.y += 8;
         NewDef.prevMenu = &MainDef;
+        NewDef_Rus.prevMenu = &MainDef_Rus;
         break;
 
         case shareware:
@@ -5675,6 +5837,7 @@ void M_Init (void)
     if (gameversion < exe_ultimate)
     {
         EpiDef.numitems--;
+        EpiDef_Rus.numitems--;
     }
 
     // [crispy] rearrange Load Game and Save Game menus
