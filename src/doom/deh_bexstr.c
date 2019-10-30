@@ -389,7 +389,7 @@ static const bex_string_t bex_stringtable[] = {
     // {"GAMMALV35_RUS", GAMMALV35_RUS},
     // {"GAMMALV37_RUS", GAMMALV37_RUS},
     // {"GAMMALVL4_RUS", GAMMALVL4_RUS},
-    {"EMPTYSTRING_RUS", EMPTYSTRING_RUS},
+    // {"EMPTYSTRING_RUS", EMPTYSTRING_RUS},
     {"GGSAVED_RUS", GGSAVED_RUS},
     {"GGLOADED_RUS", GGLOADED_RUS},
     // part 2 - messages when the player gets things

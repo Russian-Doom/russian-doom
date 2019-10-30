@@ -173,7 +173,7 @@ PRESSYN
 #define GAMMA_ORIGINAL_35   "Standard gamma correction level 3.5"
 #define GAMMA_ORIGINAL_4    "Standard gamma correction level 4.0"
 
-#define EMPTYSTRING	"empty slot"
+#define EMPTYSTRING	"-"
 
 
 //
@@ -1165,7 +1165,6 @@ PRESSYN_RUS
 #define GAMMA_ORIGINAL_35_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 3>5"  // Уровень стандартной гамма-коррекции 3.5
 #define GAMMA_ORIGINAL_4_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 4>0"  // Уровень стандартной гамма-коррекции 4.0
 
-#define EMPTYSTRING_RUS "gecnjq ckjn"           // Пустой слот
 
 
 //

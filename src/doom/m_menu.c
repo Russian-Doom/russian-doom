@@ -3894,6 +3894,7 @@ void M_RD_ChangeLanguage(int choice)
 {
     extern void ST_Stop(void);
     extern void HU_Stop(void);
+    extern void F_StartFinale(void);
     extern int  demosequence;
 
     choice = 0;
@@ -3927,6 +3928,12 @@ void M_RD_ChangeLanguage(int choice)
         ST_Stop();
         ST_Start();
     }
+
+    // Restart finale text
+    if (gamestate == GS_FINALE)
+    {
+        F_StartFinale();
+    }
 }
 
 
@@ -3949,9 +3956,7 @@ void M_ReadSaveStrings(void)
         handle = fopen(name, "rb");
         if (handle == NULL)
         {
-            M_StringCopy(savegamestrings[i], english_language ?
-                                             EMPTYSTRING : EMPTYSTRING_RUS,
-                                             SAVESTRINGSIZE);
+            M_StringCopy(savegamestrings[i], EMPTYSTRING, SAVESTRINGSIZE);
             LoadMenu[i].status = 0;
             continue;
         }
@@ -4004,22 +4009,15 @@ void M_DrawSaveLoadBorder(int x,int y)
 {
     int i;
 
-    // [JN] Russian characters having -1 vertical offset because of "Й" char,
-    // which may go out of vertical bounds. These conditions stands for pixel perfection
-    // in both English and Russian languages, with and without -vanilla game mode.
-
-    V_DrawShadowedPatchDoom(x - 8, y + (english_language ? 8 : 9),
-                            W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
+    V_DrawShadowedPatchDoom(x - 8, y + 8, W_CacheLumpName(DEH_String("M_LSLEFT"), PU_CACHE));
 
     for (i = 0 ; i < 24 ; i++)
     {
-        V_DrawShadowedPatchDoom(x, y + (english_language ? 8 : 9),
-                                W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
+        V_DrawShadowedPatchDoom(x, y + 8, W_CacheLumpName(DEH_String("M_LSCNTR"), PU_CACHE));
         x += 8;
     }
 
-    V_DrawShadowedPatchDoom(x, y + (english_language ? 8 : 9),
-                            W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
+    V_DrawShadowedPatchDoom(x, y + 8, W_CacheLumpName(DEH_String("M_LSRGHT"), PU_CACHE));
 }
 
 
@@ -5632,8 +5630,17 @@ void M_Drawer (void)
             }
 
             x = 160 - M_StringWidth(string) / 2;
-            M_WriteText(x+ORIGWIDTH_DELTA, y, string);
-            y += SHORT(hu_font[0]->height);
+
+            if (english_language)
+            {
+                M_WriteText(x+ORIGWIDTH_DELTA, y, string);
+                y += SHORT(hu_font[0]->height);
+            }
+            else
+            {
+                M_WriteTextSmall_RUS(x+ORIGWIDTH_DELTA, y, string);
+                y += SHORT(hu_font_small_rus[0]->height);                
+            }
         }
 
         return;
