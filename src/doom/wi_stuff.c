@@ -347,43 +347,45 @@ static patch_t*     num[10];
 // minus sign
 static patch_t*     wiminus;
 
-// "Finished!" graphics
-static patch_t*     finished;   // Увроень завернен
+// [JN] English patches:
+static patch_t*     finished;       // "Finished"
+static patch_t*     entering;       // "Entering"
+static patch_t*     mp_items;       // "Items" (multiplayer)
+static patch_t*     sp_secret;      // "Secret"
+static patch_t*     kills;          // "Kills"
+static patch_t*     secret;         // "Scrt" (multiplayer)
+static patch_t*     items;          // "Items"
+static patch_t*     frags;          // "Frags"
+static patch_t*     mp_kills;       // "Kills" (multiplayer)
+static patch_t*     timepatch;      // "Time"
+static patch_t*     par;            // "Par"
+static patch_t*     sucks;          // "Sucks"
+static patch_t*     killers;        // "killers" (multiplayer)
+static patch_t*     victims;        // "victims" (multiplayer)
+static patch_t*     total;          // "Total"
 
-//  "Пред."
-static patch_t*     mp_items;
+// [JN] Russian patches:
+static patch_t*     finished_rus;   // "Уровень завершен"
+static patch_t*     entering_rus;   // "Загружается уровень"
+static patch_t*     mp_items_rus;   // "Пред." (multiplayer)
+static patch_t*     sp_secret_rus;  // "Тайники"
+static patch_t*     kills_rus;      // "Враги"
+static patch_t*     secret_rus;     // "Тайн." (multiplayer)
+static patch_t*     items_rus;      // "Предметы"
+static patch_t*     frags_rus;      // "Фраги"
+static patch_t*     mp_kills_rus;   // "Враг." (multiplayer)
+static patch_t*     timepatch_rus;  // "Время"
+static patch_t*     par_rus;        // "Рекорд"
+static patch_t*     sucks_rus;      // ":Ужас"
+static patch_t*     killers_rus;    // "убийцы" (multiplayer)
+static patch_t*     victims_rus;    // "жертвы" (multiplayer)
+static patch_t*     total_rus;      // "Итог"
+static patch_t*     overtime;       // "Общее время:"
 
-// "Entering" graphic
-static patch_t*     entering;   // Загружается
 
-// "secret"
-static patch_t*     sp_secret;
-
- // "Kills", "Scrt", "Items", "Frags"
-static patch_t*     kills;
-static patch_t*     secret;
-static patch_t*     items;
-static patch_t*     frags;
-
-// "Враг."
-static patch_t*     mp_kills;
-
-// Time sucks.
-static patch_t*     timepatch;
-static patch_t*     par;
-static patch_t*     sucks;
-
-// "killers", "victims"
-static patch_t*	    killers;
-static patch_t*	    victims; 
-
-// "Total", your face, your dead face
-static patch_t*     total;
+// your face, your dead face
 static patch_t*     star;
 static patch_t*     bstar;
-
-// "Общее время:"
-static patch_t*     overtime;
 
 // "red P[1..MAXPLAYERS]"
 static patch_t*     p[MAXPLAYERS];
@@ -432,12 +434,10 @@ void WI_drawLF(void)
         V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
 
         // draw "Finished!"
-        if (freedoom && netgame) // [JN] Небольшая коррекция координат для более симпатичного отображения
-            y += (4*SHORT(lnames[wbs->last]->height))/4;
-        else
-            y += (5*SHORT(lnames[wbs->last]->height))/4;
-        
-        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(finished->width)) / 2, y, finished);
+        y += (5*SHORT(lnames[wbs->last]->height))/4;
+        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT
+                                (english_language ? finished->width : finished_rus->width)) / 2, y, 
+                                 english_language ? finished : finished_rus);
     }
     else if (wbs->last == NUMCMAPS)
     {
@@ -462,8 +462,10 @@ void WI_drawEL(void)
 {
     int y = WI_TITLEY;
 
-    // draw "Entering"
-    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(entering->width))/2,y,entering);
+    // [JN] Draw "Entering" / "Загружается уровень"
+    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT
+                            (english_language ? entering->width : entering_rus->width)) / 2, y,
+                             english_language ? entering : entering_rus);
 
     // draw level
     y += (5*SHORT(lnames[wbs->next]->height))/4;
@@ -727,7 +729,10 @@ void WI_drawTime (int x, int y, int t, boolean suck)
     else
     {
         // "sucks"
+        if (english_language)
         V_DrawShadowedPatchDoom((x - SHORT(sucks->width))-ORIGWIDTH_DELTA, y, sucks);
+        else
+        V_DrawShadowedPatchDoom((x - SHORT(sucks_rus->width))-ORIGWIDTH_DELTA, y, sucks_rus);
     }
 }
 
@@ -1022,9 +1027,18 @@ void WI_drawDeathmatchStats(void)
     WI_drawLF();
 
     // draw stat titles (top line)
-    V_DrawShadowedPatchDoom(DM_TOTALSX-SHORT(total->width)/2, DM_MATRIXY-WI_SPACINGY+10, total);
-    V_DrawShadowedPatchDoom(DM_KILLERSX, DM_KILLERSY, killers);
-    V_DrawShadowedPatchDoom(DM_VICTIMSX, DM_VICTIMSY, victims);
+    if (english_language)
+    {
+        V_DrawShadowedPatchDoom(DM_TOTALSX-SHORT(total->width)/2, DM_MATRIXY-WI_SPACINGY+10, total);
+        V_DrawShadowedPatchDoom(DM_KILLERSX, DM_KILLERSY, killers);
+        V_DrawShadowedPatchDoom(DM_VICTIMSX, DM_VICTIMSY, victims);
+    }
+    else
+    {
+        V_DrawShadowedPatchDoom(DM_TOTALSX-SHORT(total_rus->width)/2, DM_MATRIXY-WI_SPACINGY+10, total_rus);
+        V_DrawShadowedPatchDoom(DM_KILLERSX, DM_KILLERSY, killers_rus);
+        V_DrawShadowedPatchDoom(DM_VICTIMSX, DM_VICTIMSY, victims_rus);        
+    }
 
     // draw P?
     x = DM_MATRIXX + DM_SPACINGX;
@@ -1281,18 +1295,24 @@ void WI_drawNetgameStats(void)
     // Russian language, so they can fit perfectly.
     if (english_language)
     {
-        V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(kills->width), NG_STATSY, kills);
+        V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(kills->width),   NG_STATSY, kills);
         V_DrawShadowedPatchDoom(NG_STATSX+2*NG_SPACINGX-SHORT(items->width), NG_STATSY, items);
+        V_DrawShadowedPatchDoom(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),NG_STATSY, secret);
     }
     else
     {
-        V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(mp_kills->width), NG_STATSY, mp_kills);
-        V_DrawShadowedPatchDoom(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items->width),	NG_STATSY, mp_items);
+        V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(mp_kills_rus->width),  NG_STATSY, mp_kills_rus);
+        V_DrawShadowedPatchDoom(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items_rus->width),NG_STATSY, mp_items_rus);
+        V_DrawShadowedPatchDoom(NG_STATSX+3*NG_SPACINGX-SHORT(secret_rus->width),  NG_STATSY, secret_rus);
     }
-    V_DrawShadowedPatchDoom(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),NG_STATSY, secret);
 
     if (dofrags)
-    V_DrawShadowedPatchDoom(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width), NG_STATSY, frags);
+    {
+        if (english_language)
+        V_DrawShadowedPatchDoom(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width), NG_STATSY, frags);
+        else
+        V_DrawShadowedPatchDoom(NG_STATSX+4*NG_SPACINGX-SHORT(frags_rus->width), NG_STATSY, frags_rus);
+    }
 
     // draw stats
     y = NG_STATSY + SHORT(kills->height);
@@ -1468,11 +1488,13 @@ void WI_drawStats(void)
     
     WI_drawLF();
 
-    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY, kills);
+    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY, 
+                            english_language ? kills : kills_rus);
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
-    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+lh, items);
+    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+lh,
+                            english_language ? items : items_rus);
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
@@ -1480,12 +1502,14 @@ void WI_drawStats(void)
     // Adaptaken from Doom Retro, thanks Brad Harding!
     if (totalsecret || vanillaparm)
     {
-    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+2*lh, sp_secret);
+    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+2*lh,
+                            english_language ? sp_secret : sp_secret_rus);
 
     WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
     }
 
-    V_DrawShadowedPatchDoom(SP_TIMEX+ORIGWIDTH_DELTA, SP_TIMEY, timepatch);
+    V_DrawShadowedPatchDoom(SP_TIMEX+ORIGWIDTH_DELTA, SP_TIMEY, 
+                            english_language ? timepatch : timepatch_rus);
     
     // [JN] Press Beta: draw additional "Artifacts" counter
     if (gamemode == pressbeta)
@@ -1515,7 +1539,8 @@ void WI_drawStats(void)
 
     if (wbs->epsd < 4)
     {
-        V_DrawShadowedPatchDoom(ORIGWIDTH/2 + SP_TIMEX, SP_TIMEY, par);
+        V_DrawShadowedPatchDoom(ORIGWIDTH/2 + SP_TIMEX, SP_TIMEY, 
+                                english_language ? par : par_rus);
 
         WI_drawTime(ORIGWIDTH - SP_TIMEX, SP_TIMEY, cnt_par, true);
     }
@@ -1712,27 +1737,43 @@ static void WI_loadUnloadData(load_callback_t callback)
     // percent sign
     callback(DEH_String("WIPCNT"), &percent);
 
-    // "Уровень завершен"
-    callback(DEH_String("WIF"), &finished);
+    // [JN] English patches:
+    callback(DEH_String("WIF"),     &finished);         // "Finished"
+    callback(DEH_String("WIENTER"), &entering);         // "Entering"
+    callback(DEH_String("WIOSTIS"), &mp_items);         // "Items" (multiplayer)
+    callback(DEH_String("WISCRT2"), &sp_secret);        // "Secret"
+    callback(DEH_String("WIOSTK"),  &kills);            // "Kills"
+    callback(DEH_String("WIOSTS"),  &secret);           // "Scrt" (multiplayer)
+    callback(DEH_String("WIOSTI"),  &items);            // "Items"
+    callback(DEH_String("WIFRGS"),  &frags);            // "Frags"
+    callback(DEH_String("WIOSTKS"), &mp_kills);         // "Kills" (multiplayer)
+    callback(DEH_String("WITIME"),  &timepatch);        // "Time"
+    callback(DEH_String("WIPAR"),   &par);              // "Par"
+    callback(DEH_String("WISUCKS"), &sucks);            // "Sucks"
+    callback(DEH_String("WIKILRS"), &killers);          // "killers" (multiplayer)
+    callback(DEH_String("WIVCTMS"), &victims);          // "victims" (multiplayer)
+    callback(DEH_String("WIMSTT"),  &total);            // "Total"
 
-    // "Загружается"
-    callback(DEH_String("WIENTER"), &entering);
+    // [JN] Russian patches:
+    callback(DEH_String("RD_WFIN"),  &finished_rus);    // "Уровень завершен"
+    callback(DEH_String("RD_WENTR"), &entering_rus);    // "Загружается уровень"
+    callback(DEH_String("RD_WITM"),  &mp_items_rus);    // "Пред." (multiplayer) 
+    callback(DEH_String("RD_WSCRT"), &sp_secret_rus);   // "Тайники"
+    callback(DEH_String("RD_WKILL"), &kills_rus);       // "Враги"
+    callback(DEH_String("RD_WSCR"),  &secret_rus);      // "Тайн." (multiplayer)
+    callback(DEH_String("RD_WITMS"), &items_rus);       // "Предметы"
+    callback(DEH_String("RD_WFRGS"), &frags_rus);       // "Фраги"
+    callback(DEH_String("RD_WKLL"),  &mp_kills_rus);    // "Враг." (multiplayer)
+    callback(DEH_String("RD_WTIME"), &timepatch_rus);   // "Время"
+    callback(DEH_String("RD_WPAR"),  &par_rus);         // "Рекорд"
+    callback(DEH_String("RD_WSUCK"), &sucks_rus);       // ":Ужас"
+    callback(DEH_String("RD_WKLRS"), &killers_rus);     // "убийцы" (multiplayer)
+    callback(DEH_String("RD_WVCTM"), &victims_rus);     // "жертвы" (multiplayer)
+    callback(DEH_String("RD_WTOT"),  &total_rus);       // "Итог"
+    callback(DEH_String("WIOVTIME"), &overtime);        // "Общее время:"
 
-    // "kills"
-    callback(DEH_String("WIOSTK"), &kills);
-
-    // "scrt"
-    callback(DEH_String("WIOSTS"), &secret);
-
-    // "secret"
-    callback(DEH_String("WISCRT2"), &sp_secret);
-
-    // "Враг." (для сетевой игры)
-    callback(DEH_String("WIOSTKS"), &mp_kills);
-
-    // "Пред." (для сетевой игры)
-    callback(DEH_String("WIOSTIS"), &mp_items);
-
+    // [JN] TODO - needed?
+    /*
     // french wad uses WIOBJ (?)
     if (W_CheckNumForName(DEH_String("WIOBJ")) >= 0)
     {
@@ -1746,33 +1787,10 @@ static void WI_loadUnloadData(load_callback_t callback)
     {
         callback(DEH_String("WIOSTI"), &items);
     }
-
-    // "frgs"
-    callback(DEH_String("WIFRGS"), &frags);
+    */
 
     // ":"
     callback(DEH_String("WICOLON"), &colon);
-
-    // "time"
-    callback(DEH_String("WITIME"), &timepatch);
-
-    // "sucks"
-    callback(DEH_String("WISUCKS"), &sucks);
-
-    // "par"
-    callback(DEH_String("WIPAR"), &par);
-
-    // "killers" (vertical)
-    callback(DEH_String("WIKILRS"), &killers);
-
-    // "victims" (horiz)
-    callback(DEH_String("WIVCTMS"), &victims);
-
-    // "total"
-    callback(DEH_String("WIMSTT"), &total);
-
-    // "Общее время:"
-    callback(DEH_String("WIOVTIME"), &overtime);
 
     for (i=0 ; i<MAXPLAYERS ; i++)
     {
