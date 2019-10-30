@@ -738,7 +738,9 @@ void HU_Start(void)
     chat_on = false;
 
     // create the message widget
-    HUlib_initSText(&w_message, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, hu_font, HU_FONTSTART, &message_on);
+    HUlib_initSText(&w_message, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, 
+                    english_language ? hu_font : hu_font_small_rus,
+                    HU_FONTSTART, &message_on);
 
     // [JN] Create the local time widget
 #ifdef WIDESCREEN
@@ -753,31 +755,32 @@ void HU_Start(void)
     HUlib_initTextLine(&w_title, HU_TITLEX, (gamemission == jaguar ?
                                              HU_TITLEY_JAG :
                                              HU_TITLEY),
-                                             hu_font, HU_FONTSTART);
+                                             english_language ? hu_font : hu_font_small_rus, 
+                                             HU_FONTSTART);
 
     HUlib_initTextLine(&w_kills,
 		       HU_TITLEX, HU_MSGY + 1 * 8,
-		       hu_font,
+		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_items,
 		       HU_TITLEX, HU_MSGY + 2 * 8,
-		       hu_font,
+		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_scrts,
 		       HU_TITLEX, HU_MSGY + 3 * 8,
-		       hu_font,
+		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_skill,
 		       HU_TITLEX, HU_MSGY + 4 * 8,
-		       hu_font,
+		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_ltime,
 		       HU_TITLEX, HU_MSGY + 6 * 8,
-		       hu_font,
+		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
     switch ( logical_gamemission )

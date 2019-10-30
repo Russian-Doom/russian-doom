@@ -3893,12 +3893,20 @@ void M_RD_BackToDefaults(int choice)
 void M_RD_ChangeLanguage(int choice)
 {
     extern void ST_Stop(void);
+    extern void HU_Stop(void);
 
     choice = 0;
     english_language = 1 - english_language;
 
     // Reset options menu
     currentMenu = english_language ? &RD_Options_Def : &RD_Options_Def_Rus;
+
+    // Update HUD system
+    HU_Stop();
+    HU_Start();
+
+    // Update messages
+    RD_DefineLanguageStrings();
 
     // Update status bar
     if (gamestate == GS_LEVEL)
