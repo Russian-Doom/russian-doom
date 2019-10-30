@@ -331,8 +331,9 @@ static int NUMCMAPS;
 //	GRAPHICS
 //
 
-// You Are Here graphic
+// [JN] You Are Here graphic
 static patch_t*     yah[3] = { NULL, NULL, NULL }; 
+static patch_t*     yah_rus[3] = { NULL, NULL, NULL }; 
 
 // splat
 static patch_t*     splat[2] = { NULL, NULL };
@@ -842,7 +843,7 @@ void WI_drawShowNextLoc(void)
 
         // draw flashing ptr
         if (snl_pointeron)
-        WI_drawOnLnode(wbs->next, yah); 
+        WI_drawOnLnode(wbs->next, english_language ? yah : yah_rus); 
     }
 
     if (gamemission == pack_nerve && wbs->last == 7) 
@@ -1691,11 +1692,13 @@ static void WI_loadUnloadData(load_callback_t callback)
                 callback(name, &lnames[i]);
         }
 
-        // you are here
-        callback(DEH_String("WIURH0"), &yah[0]);
+        // [JN] English patches:
+        callback(DEH_String("WIURH0"), &yah[0]);        // you are here
+        callback(DEH_String("WIURH1"), &yah[1]);        // you are here (alt.)
 
-        // you are here (alt.)
-        callback(DEH_String("WIURH1"), &yah[1]);
+        // [JN] Russian patches:
+        callback(DEH_String("RD_URH0"), &yah_rus[0]);   // вы здесь
+        callback(DEH_String("RD_URH1"), &yah_rus[1]);   // вы здесь (альт.)
 
         // splat
         callback(DEH_String("WISPLAT"), &splat[0]);
