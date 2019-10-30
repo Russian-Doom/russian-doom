@@ -306,6 +306,7 @@ void F_Ticker (void)
 
 #include "hu_stuff.h"
 extern patch_t *hu_font[HU_FONTSIZE];
+extern patch_t *hu_font_small_rus[HU_FONTSIZE];
 extern patch_t *hu_font_big_eng[HU_FONTSIZE];
 extern patch_t *hu_font_big_rus[HU_FONTSIZE];
 
@@ -412,13 +413,19 @@ void F_TextWrite (void)
             continue;
         }
 
+        if (english_language)
         w = SHORT (hu_font[c]->width);
+        else
+        w = SHORT (hu_font_small_rus[c]->width);
 
         if (cx+w > ORIGWIDTH)
 	    break;
 
         // [JN] Wide screen support
+        if (english_language)
         V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font[c]);
+        else
+        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font_small_rus[c]);
 
         cx+=w;
     }
@@ -896,9 +903,18 @@ void F_BunnyScroll (void)
 
     if (finalecount < 1180)
     {
-        V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + ORIGWIDTH_DELTA,
-            (ORIGHEIGHT - 8 * 8) / 2, 
-            W_CacheLumpName(DEH_String("END0"), PU_CACHE));
+        if (english_language)
+        {
+            V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + ORIGWIDTH_DELTA,
+                (ORIGHEIGHT - 8 * 8) / 2, 
+                W_CacheLumpName(DEH_String("END0"), PU_CACHE));
+        }
+        else
+        {
+            V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + ORIGWIDTH_DELTA,
+                (ORIGHEIGHT - 8 * 8) / 2, 
+                W_CacheLumpName(DEH_String("RD_END0"), PU_CACHE));
+        }
 
         laststage = 0;
         return;
@@ -915,7 +931,10 @@ void F_BunnyScroll (void)
         laststage = stage;
     }
 
+    if (english_language)
     DEH_snprintf(name, 10, "END%i", stage);
+    else
+    DEH_snprintf(name, 10, "RD_END%i", stage);
 
     V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + ORIGWIDTH_DELTA,
             (ORIGHEIGHT - 8 * 8) / 2, 
