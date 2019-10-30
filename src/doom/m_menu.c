@@ -3894,6 +3894,7 @@ void M_RD_ChangeLanguage(int choice)
 {
     extern void ST_Stop(void);
     extern void HU_Stop(void);
+    extern int  demosequence;
 
     choice = 0;
     english_language = 1 - english_language;
@@ -3907,6 +3908,18 @@ void M_RD_ChangeLanguage(int choice)
 
     // Update messages
     RD_DefineLanguageStrings();
+
+    // Update TITLEPIC/CREDIT screens in live mode
+    if (gamestate == GS_DEMOSCREEN)
+    {
+        if (demosequence == 0
+        ||  demosequence == 2
+        ||  demosequence == 4)
+        {
+            demosequence--;
+            D_DoAdvanceDemo();
+        }
+    }
 
     // Update status bar
     if (gamestate == GS_LEVEL)
@@ -4251,7 +4264,11 @@ void M_DrawReadThis1(void)
 		if (gamemode == commercial )
         {
             // Doom 2
+            if (english_language)
             lumpname = "HELP";
+            else
+            lumpname = "HELPR";
+        
             skullx = 330+ORIGWIDTH_DELTA; // [JN] Wide screen support
             skully = 162;
         }
@@ -4260,10 +4277,10 @@ void M_DrawReadThis1(void)
         {
             // Doom 1
             // HELP2 is the first screen shown in Doom 1
-            if (gamevariant == old_shareware)   // [JN] Red chars for older sharewares
-            lumpname = "HELP2RED";  
-            else                                // [JN] Green chars
+            if (english_language)
             lumpname = "HELP2";
+            else
+            lumpname = "HELP2R";
 
             if (english_language)
             {
@@ -4289,7 +4306,10 @@ void M_DrawReadThis1(void)
         // Chex Quest version also uses "HELP1", even though it is based
         // on Final Doom.
 
+        if (english_language)
         lumpname = "HELP1";
+        else
+        lumpname = "HELP1R";
         break;
 
         case exe_final:
@@ -4299,7 +4319,11 @@ void M_DrawReadThis1(void)
         // [JN] Иконка черепа сдвинута чуть выше, по аналогии Doom 2,
         // чтобы не загораживать фразу "джойстика 2".
 
+        if (english_language)
         lumpname = "HELP";
+        else
+        lumpname = "HELPR";
+    
         skullx = 330+ORIGWIDTH_DELTA;   // [JN] Wide screen support
         skully = 165;
         break;
@@ -4352,10 +4376,8 @@ void M_DrawReadThis2(void)
     // gameversion == exe_doom_1_9 and gamemode == registered
     // [JN] Wide screen support
 
-    if (gamevariant == old_shareware)   // [JN] Red chars for older sharewares
-    V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("HELP1RED"), PU_CACHE));
-    else                                // [JN] Green chars
-    V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
+    V_DrawPatch(ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String
+               (english_language ? "HELP1" : "HELP1R"), PU_CACHE));
 
     // [JN] Wide screen: proper position for second HELP screen
     // TODO - needed?

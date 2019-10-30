@@ -732,9 +732,28 @@ void D_DoAdvanceDemo (void)
             gamestate = GS_DEMOSCREEN;
 
             if (gamemode == shareware)
-                pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
-            else
+            {
+                if (english_language)
                 pagename = DEH_String("TITLEPIC");
+                else
+                pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
+            }
+            else
+            {
+                if (english_language)
+                {
+                    pagename = DEH_String("TITLEPIC");
+                }
+                else
+                {
+                    if (logical_gamemission == pack_plut)
+                    pagename = DEH_String("TITLEPIP");
+                    else if (logical_gamemission == pack_tnt)
+                    pagename = DEH_String("TITLEPIT");
+                    else
+                    pagename = DEH_String("TITLEPIC");
+                }
+            }
         
             if (gamemode == commercial)
                 S_StartMusic(mus_dm2ttl);
@@ -777,8 +796,11 @@ void D_DoAdvanceDemo (void)
                 // [JN] Different screens in Russian language, packed into one PWAD.
                 if (gamemode == shareware || gamemode == registered)
                 pagename = DEH_String("CREDITS");
+                else if (gamemode == retail)
+                pagename = DEH_String("CREDITU");
                 else
-                pagename = DEH_String("CREDIT"); 
+                pagename = DEH_String("CREDIT2");
+
             }
             break;
         }
@@ -807,7 +829,19 @@ void D_DoAdvanceDemo (void)
             if (gamemode == commercial)
             {
                 pagetic = TICRATE * 11;
-                pagename = DEH_String("TITLEPIC");
+                if (english_language)
+                {
+                    pagename = DEH_String("TITLEPIC");
+                }
+                else
+                {
+                    if (logical_gamemission == pack_plut)
+                    pagename = DEH_String("TITLEPIP");
+                    else if (logical_gamemission == pack_tnt)
+                    pagename = DEH_String("TITLEPIT");
+                    else
+                    pagename = DEH_String("TITLEPIC");
+                }
 
                 S_StartMusic(mus_dm2ttl);
             }
@@ -815,18 +849,30 @@ void D_DoAdvanceDemo (void)
             {
                 pagetic = 200;
 
-                if (gameversion >= exe_ultimate
-                || gamemode == pressbeta)
-                    pagename = DEH_String("CREDIT");
-                // [JN] Different screens in Russian language, packed into one PWAD.
-                else if (!english_language && gamemode == registered)
-                pagename = DEH_String("CREDITS");
+                if (gameversion >= exe_ultimate)
+                {
+                    if (english_language)
+                    {
+                        pagename = DEH_String("CREDIT");
+                    }
+                    else
+                    {
+                        // [JN] Different screens in Russian language, packed into one PWAD.
+                        if (gamemode == shareware || gamemode == registered)
+                        pagename = DEH_String("CREDITS");
+                        else if (gamemode == retail)
+                        pagename = DEH_String("CREDITU");
+                        else
+                        pagename = DEH_String("CREDIT2");
+        
+                    }
+                }
                 else
                 {
-                    if (!english_language && gamevariant == old_shareware)       // [JN] Red chars for older sharewares
-                        pagename = DEH_String("HELP2RED");
-                    else                                    // [JN] Green chars
-                        pagename = DEH_String("HELP2");
+                    if (english_language)
+                    pagename = DEH_String("HELP2");
+                    else
+                    pagename = DEH_String("HELP2R");
                 }
             }
 
