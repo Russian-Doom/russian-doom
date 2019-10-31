@@ -729,7 +729,11 @@ void F_CastPrint (char* text)
             continue;
         }
 
+        if (english_language)
         w = SHORT (hu_font[c]->width);
+        else
+        w = SHORT (hu_font_small_rus[c]->width);
+
         width += w;
     }
 
@@ -751,9 +755,16 @@ void F_CastPrint (char* text)
             continue;
         }
 
-        w = SHORT (hu_font[c]->width);
-
-        V_DrawShadowedPatchDoom(cx, 180, hu_font[c]);
+        if (english_language)
+        {
+            w = SHORT (hu_font[c]->width);
+            V_DrawShadowedPatchDoom(cx, 180, hu_font[c]);
+        }
+        else
+        {
+            w = SHORT (hu_font_small_rus[c]->width);
+            V_DrawShadowedPatchDoom(cx, 180, hu_font_small_rus[c]);
+        }
 
         cx+=w;
     }
