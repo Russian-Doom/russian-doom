@@ -397,6 +397,12 @@ static patch_t*     bp[MAXPLAYERS];
  // Name graphics of each level (centered)
 static patch_t**    lnames;
 
+// [JN] Russian level names
+static patch_t**    lnames_d1_rus;
+static patch_t**    lnames_d2_rus;
+static patch_t**    lnames_plut_rus;
+static patch_t**    lnames_tnt_rus;
+
 // Buffer storing the backdrop
 static patch_t*     background;
 
@@ -432,8 +438,24 @@ void WI_drawLF(void)
     if (gamemode != commercial || wbs->last < NUMCMAPS)
     {
         // draw <LevelName> 
-        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
-
+        if (english_language)
+        {
+            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
+        }
+        else
+        {
+            if (logical_gamemission == doom)
+            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2, y, lnames_d1_rus[wbs->last]);
+            else if (logical_gamemission == doom2)
+            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2, y, lnames_d2_rus[wbs->last]);
+            else if (logical_gamemission == pack_plut)
+            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_plut_rus[wbs->last]->width))/2, y, lnames_plut_rus[wbs->last]);
+            else if (logical_gamemission == pack_tnt)
+            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_tnt_rus[wbs->last]->width))/2, y, lnames_tnt_rus[wbs->last]);
+            else
+            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
+        }
+    
         // draw "Finished!"
         y += (5*SHORT(lnames[wbs->last]->height))/4;
         V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT
@@ -1673,23 +1695,54 @@ typedef void (*load_callback_t)(char *lumpname, patch_t **variable);
 static void WI_loadUnloadData(load_callback_t callback)
 {
     int     i, j;
+    int     k, l, m, n;    // [JN] For language hot-swapping
     char    name[9];
     anim_t *a;
 
     if (gamemode == commercial)
     {
+        // [JN] Load standard English Doom 2 level names
         for (i=0 ; i<NUMCMAPS ; i++)
         {
             DEH_snprintf(name, 9, "CWILV%2.2d", i);
                 callback(name, &lnames[i]);
         }
+
+        // [JN] Load Russian Doom 2 (only) level names
+        for (l=0 ; l<NUMCMAPS ; l++)
+        {
+            DEH_snprintf(name, 9, "R2ILV%2.2d", l);
+                callback(name, &lnames_d2_rus[l]);
+        }
+
+        // [JN] Load Russian Plutonia (only) level names
+        for (m=0 ; m<NUMCMAPS ; m++)
+        {
+            DEH_snprintf(name, 9, "RPILV%2.2d", m);
+                callback(name, &lnames_plut_rus[m]);
+        }
+
+        // [JN] Load Russian TNT (only) level names
+        for (n=0 ; n<NUMCMAPS ; n++)
+        {
+            DEH_snprintf(name, 9, "RTILV%2.2d", n);
+                callback(name, &lnames_tnt_rus[n]);
+        }
     }
     else
     {
+        // [JN] Load standard English Doom 1 level names
         for (i=0 ; i<NUMMAPS ; i++)
         {
             DEH_snprintf(name, 9, "WILV%d%d", wbs->epsd, i);
                 callback(name, &lnames[i]);
+        }
+
+        // [JN] Load Russian Doom 1 level names
+        for (k=0 ; k<NUMMAPS ; k++)
+        {
+            DEH_snprintf(name, 9, "R1LV%d%d", wbs->epsd, k);
+                callback(name, &lnames_d1_rus[k]);
         }
 
         // [JN] English patches:
@@ -1838,10 +1891,14 @@ void WI_loadData(void)
     {
         NUMCMAPS = 32;
         lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, NULL);
+        lnames_d2_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, NULL);
+        lnames_plut_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, NULL);
+        lnames_tnt_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, NULL);
     }
     else
     {
         lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMMAPS, PU_STATIC, NULL);
+        lnames_d1_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMMAPS, PU_STATIC, NULL);
     }
 
     WI_loadUnloadData(WI_loadCallback);
