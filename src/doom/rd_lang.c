@@ -47,10 +47,8 @@ char* ggloaded;
 
 
 // RD specific
-char* ststr_alwaysrun;
-char* ststr_alwrunon;
-char* ststr_alwrunoff;
-char* stsrt_mouselook;
+char* ststr_alwrun_on;
+char* ststr_alwrun_off;
 char* ststr_mlook_on;
 char* ststr_mlook_off;
 char* ststr_testctrls;
@@ -194,10 +192,8 @@ void RD_DefineLanguageStrings (void)
         ggloaded        = GGLOADED;
 
         // RD specific
-        ststr_alwaysrun = STSTR_ALWAYSRUN;
-        ststr_alwrunon  = STSTR_ALWRUNON;
-        ststr_alwrunoff = STSTR_ALWRUNOFF;
-        stsrt_mouselook = STSRT_MOUSELOOK;
+        ststr_alwrun_on = STSTR_ALWRUNON;
+        ststr_alwrun_off= STSTR_ALWRUNOFF;
         ststr_mlook_on  = STSTR_MLOOK_ON;
         ststr_mlook_off = STSTR_MLOOK_OFF;
         ststr_testctrls = STSTR_TESTCTRLS;
@@ -330,10 +326,8 @@ void RD_DefineLanguageStrings (void)
         ggloaded        = GGLOADED_RUS;
 
         // RD specific
-        ststr_alwaysrun = STSTR_ALWAYSRUN_RUS;
-        ststr_alwrunon  = STSTR_ALWRUNON_RUS;
-        ststr_alwrunoff = STSTR_ALWRUNOFF_RUS;
-        stsrt_mouselook = STSRT_MOUSELOOK_RUS;
+        ststr_alwrun_on = STSTR_ALWRUNON_RUS;
+        ststr_alwrun_off= STSTR_ALWRUNOFF_RUS;
         ststr_mlook_on  = STSTR_MLOOK_ON_RUS;
         ststr_mlook_off = STSTR_MLOOK_OFF_RUS;
         ststr_testctrls = STSTR_TESTCTRLS_RUS;

@@ -79,10 +79,8 @@ extern char* ggsaved;
 extern char* ggloaded;
 
 // RD specific
-extern char* ststr_alwaysrun;
-extern char* ststr_alwrunon;
-extern char* ststr_alwrunoff;
-extern char* stsrt_mouselook;
+extern char* ststr_alwrun_on;
+extern char* ststr_alwrun_off;
 extern char* ststr_mlook_on;
 extern char* ststr_mlook_off;
 extern char* ststr_testctrls;
@@ -92,12 +90,10 @@ extern char* ststr_scrnsht;
 #define GGLOADED        "game loaded."
 
 // RD specific
-#define STSTR_ALWAYSRUN "Always run "
-#define STSTR_ALWRUNON  "ON"
-#define STSTR_ALWRUNOFF "OFF"
-#define STSRT_MOUSELOOK "Mouse look "
-#define STSTR_MLOOK_ON  "ON"
-#define STSTR_MLOOK_OFF "OFF"
+#define STSTR_ALWRUNON  "Always run ON"
+#define STSTR_ALWRUNOFF "Always run OFF"
+#define STSTR_MLOOK_ON  "Mouse look ON"
+#define STSTR_MLOOK_OFF "Mouse look OFF"
 #define STSTR_TESTCTRLS "Press escape to quit."
 #define STSTR_SCRNSHT   "Screen shot"
 
@@ -1066,12 +1062,10 @@ extern char* ststr_massacre;
 #define GGLOADED_RUS         "buhf pfuhe;tyf>"          // Игра загружена.
 
 // RD specific
-#define STSTR_ALWAYSRUN_RUS "gjcnjzyysq ,tu "           // Постоянный бег
-#define STSTR_ALWRUNON_RUS  "drk.xty"                   // включен
-#define STSTR_ALWRUNOFF_RUS "dsrk.xty"                  // выключен
-#define STSRT_MOUSELOOK_RUS "j,pjh vsim. "              // Обзор мышью 
-#define STSTR_MLOOK_ON_RUS  "drk.xty"                   // включен
-#define STSTR_MLOOK_OFF_RUS "dsrk.xty"                  // выключен
+#define STSTR_ALWRUNON_RUS  "gjcnjzyysq ,tu drk.xty"    // Постоянный бег включен
+#define STSTR_ALWRUNOFF_RUS "gjcnjzyysq ,tu dsrk.xty"   // Постоянный бег выключен
+#define STSTR_MLOOK_ON_RUS  "j,pjh vsim. drk.xty"       // Обзор мышью включен
+#define STSTR_MLOOK_OFF_RUS "j,pjh vsim. dsrk.xty"      // Обзор мышью выключен
 #define STSTR_TESTCTRLS_RUS "ht;bv ghjdthrb eghfdktybz" // Режим проверки управления
 #define STSTR_SCRNSHT_RUS   "crhbyijn"                  // Скриншот
 

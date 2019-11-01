@@ -447,8 +447,6 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // [crispy] toggle always run
     if (gamekeydown[key_toggleautorun])
     {
-        static char* autorunmsg;
-
         if (joybspeed >= MAX_JOY_BUTTONS)
         {
             joybspeed = joybspeed_old;
@@ -459,14 +457,8 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
             joybspeed = 29;
         }
 
-        // [JN] Added sound feedback
-        autorunmsg = M_StringJoin(ststr_alwaysrun, (joybspeed >= MAX_JOY_BUTTONS) ? 
-                                  ststr_alwrunon : ststr_alwrunoff, NULL);
-
-        players[consoleplayer].message = autorunmsg;
+        players[consoleplayer].message = (joybspeed >= MAX_JOY_BUTTONS) ? ststr_alwrun_on : ststr_alwrun_off;
         S_StartSound(NULL,sfx_swtchn);
-
-        free(autorunmsg);
 
         gamekeydown[key_toggleautorun] = false;
     }
@@ -657,8 +649,6 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // [JN] Mouselook: toggling
     if (gamekeydown[key_togglemlook])
     {
-        static char* mlookmsg;
-
         if (!mlook)
         {
             mlook = true;
@@ -669,13 +659,8 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
             look = TOCENTER;
         }
 
-        mlookmsg = M_StringJoin(stsrt_mouselook, (mlook == true) ?
-                                ststr_mlook_on : ststr_mlook_off, NULL);
-
-        players[consoleplayer].message = mlookmsg;
+        players[consoleplayer].message = mlook ? ststr_mlook_on : ststr_mlook_off;
         S_StartSound(NULL, sfx_swtchn);
-
-        free(mlookmsg);
 
         gamekeydown[key_togglemlook] = false;
     }
