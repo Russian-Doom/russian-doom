@@ -3949,6 +3949,58 @@ void M_RD_ChangeLanguage(int choice)
     {
         F_StartFinale();
     }
+
+    // Update window title
+    if (english_language)
+    {
+        if (logical_gamemission == doom)
+        {
+            if (gamemode == shareware)
+            I_SetWindowTitle("DOOM Shareware");
+            else if (gamemode == registered)
+            I_SetWindowTitle("DOOM Registered");
+            else
+            I_SetWindowTitle("The Ultimate DOOM");
+        }
+        else if (logical_gamemission == doom2)
+        {
+            I_SetWindowTitle("DOOM 2: Hell on Earth");
+        }
+        else if (logical_gamemission == pack_plut)
+        {
+            I_SetWindowTitle("Final DOOM: Plutonia Experiment");
+        }
+        else if (logical_gamemission == pack_tnt)
+        {
+            I_SetWindowTitle("Final DOOM: TNT - Evilution");
+        }
+        I_InitWindowTitle();
+    }
+    else
+    {
+        if (logical_gamemission == doom)
+        {
+            if (gamemode == shareware)
+            I_SetWindowTitle("DOOM (Демоверсия)");
+            else if (gamemode == registered)
+            I_SetWindowTitle("DOOM");
+            else
+            I_SetWindowTitle("The Ultimate DOOM");
+        }
+        else if (logical_gamemission == doom2)
+        {
+            I_SetWindowTitle("DOOM 2: Ад на Земле");
+        }
+        else if (logical_gamemission == pack_plut)
+        {
+            I_SetWindowTitle("Final DOOM: Эксперимент “Плутония”");
+        }
+        else if (logical_gamemission == pack_tnt)
+        {
+            I_SetWindowTitle("Final DOOM: TNT - Дьяволюция");
+        }
+        I_InitWindowTitle();
+    }
 }
 
 
