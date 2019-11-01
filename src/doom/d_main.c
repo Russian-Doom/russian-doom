@@ -735,9 +735,9 @@ void D_DoAdvanceDemo (void)
             if (gamemode == shareware)
             {
                 if (english_language)
-                pagename = DEH_String("TITLEPIC");
+                pagename = DEH_String("TITLEPSE");
                 else
-                pagename = DEH_String("TITLEPIS"); // [JN] Отдельный экран для Shareware
+                pagename = DEH_String("TITLEPSR");
             }
             else
             {
@@ -1219,11 +1219,12 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("DOOM Shareware");
             else
             gamedescription = GetGameName("DOOM (Демоверсия)");
-/*
-#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
+
+#ifdef WIDESCREEN
+            // [JN] Load widescreen backgrounds
             W_MergeFile("base/doom-wide-doom1.wad");
 #endif
-*/
+
         }
         else if (gamemode == pressbeta)
         {
