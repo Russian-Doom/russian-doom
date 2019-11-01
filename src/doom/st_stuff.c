@@ -1013,6 +1013,8 @@ int ST_calcPainOffset(void)
 // the precedence of expressions is:
 //  dead > evil grin > turned head > straight ahead
 //
+// [crispy] fix status bar face hysteresis
+static int faceindex;
 void ST_updateFaceWidget(void)
 {
     int         i;
@@ -1023,7 +1025,6 @@ void ST_updateFaceWidget(void)
     boolean     doevilgrin;
 
     int         painoffset;
-    static int  faceindex;
 
     painoffset = ST_calcPainOffset();
 
@@ -2158,6 +2159,7 @@ void ST_initData(void)
     st_oldchat = st_chat = false;
     st_cursoron = false;
 
+    faceindex = 0; // [crispy] fix status bar face hysteresis across level changes
     st_faceindex = 0;
     st_palette = -1;
 
