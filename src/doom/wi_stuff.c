@@ -493,7 +493,23 @@ void WI_drawEL(void)
     // draw level
     y += (5*SHORT(lnames[wbs->next]->height))/4;
 
-    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->next]->width))/2, y, lnames[wbs->next]);
+    if (english_language)
+    {
+        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->next]->width))/2, y, lnames[wbs->next]);
+    }
+    else
+    {
+        if (logical_gamemission == doom)
+        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2, y, lnames_d1_rus[wbs->next]);
+        else if (logical_gamemission == doom2)
+        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2, y, lnames_d2_rus[wbs->next]);
+        else if (logical_gamemission == pack_plut)
+        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_plut_rus[wbs->next]->width))/2, y, lnames_plut_rus[wbs->next]);
+        else if (logical_gamemission == pack_tnt)
+        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_tnt_rus[wbs->next]->width))/2, y, lnames_tnt_rus[wbs->next]);
+        else
+        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->next]->width))/2, y, lnames[wbs->next]);
+    }
 }
 
 void WI_drawOnLnode (int n, patch_t* c[])
