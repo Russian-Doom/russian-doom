@@ -1633,19 +1633,19 @@ void D_SetGameDescription(void)
 
         // Doom 1
         if (gamemode == shareware || gamemode == registered || gamemode == retail)
-        W_MergeFile("base/extra/doom-doom1-skies.wad");
+        W_MergeFile("base/doom-skies-doom1.wad");
 
         // Doom 2
         else if (gamemission == doom2 || gamemission == pack_nerve)
-        W_MergeFile("base/extra/doom-doom2-skies.wad");
+        W_MergeFile("base/doom-skies-doom2.wad");
 
         // TNT - Evilution
         else if (gamemission == pack_tnt)
-        W_MergeFile("base/extra/doom-tnt-skies.wad");
+        W_MergeFile("base/doom-skies-tnt.wad");
 
         // Plutonia
         else if (gamemission == pack_plut)
-        W_MergeFile("base/extra/doom-plutonia-skies.wad");
+        W_MergeFile("base/doom-skies-plutonia.wad");
     }
 
     // [JN] Check if we have exactly two TITLEPICs loaded in Russian version
