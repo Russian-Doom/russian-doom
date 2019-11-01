@@ -1145,7 +1145,6 @@ void R_InitData (void)
 
     if (gamevariant != freedoom && gamevariant != freedm)
     {
-        W_MergeFile("base/brightmaps/doom-brightmaps.wad");
         R_InitBrightmaps ();
         printf (".");
         R_InitBrightmappedTextures ();
