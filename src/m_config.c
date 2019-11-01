@@ -1660,6 +1660,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(colored_blood),
     CONFIG_VARIABLE_INT(swirling_liquids),
     CONFIG_VARIABLE_INT(invul_sky),
+    CONFIG_VARIABLE_INT(flip_weapons),
     CONFIG_VARIABLE_INT(draw_shadowed_text),
 
     // Gameplay: Audible

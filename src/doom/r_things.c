@@ -1048,7 +1048,7 @@ void R_DrawPSprite (pspdef_t* psp)
     sprframe = &sprdef->spriteframes[ psp->state->frame & FF_FRAMEMASK ];
 
     lump = sprframe->lump[0];
-    flip = (boolean)sprframe->flip[0] ^ flip_levels;
+    flip = (boolean)sprframe->flip[0] ^ flip_levels ^ flip_weapons;
 
     if (weapon_bobbing && !vanillaparm)
     {

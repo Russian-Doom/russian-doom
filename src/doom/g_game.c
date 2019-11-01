@@ -257,6 +257,7 @@ int messages_color = 0;
 int colored_blood = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
+int flip_weapons = 0;
 int draw_shadowed_text = 1;
 
 // Gameplay: Audible

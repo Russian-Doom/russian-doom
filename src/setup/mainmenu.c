@@ -138,6 +138,7 @@ static void SensibleDefaults(void)
     colored_blood = 1;
     swirling_liquids = 1;
     invul_sky = 1;
+    flip_weapons = 1;
     draw_shadowed_text = 1;
 
     // Gameplay: Audible
