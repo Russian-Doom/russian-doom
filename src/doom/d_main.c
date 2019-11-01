@@ -502,6 +502,7 @@ void D_BindVariables(void)
     M_BindIntVariable("colored_blood",          &colored_blood);
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
+    M_BindIntVariable("flip_weapons",           &flip_weapons);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
 
     // Gameplay: Audible
@@ -746,7 +747,11 @@ void D_DoAdvanceDemo (void)
                 }
                 else
                 {
-                    if (logical_gamemission == pack_plut)
+                    if (logical_gamemission == doom)
+                    pagename = DEH_String("TITLEPIR");
+                    else if (logical_gamemission == doom2)
+                    pagename = DEH_String("TITLEPI2");
+                    else if (logical_gamemission == pack_plut)
                     pagename = DEH_String("TITLEPIP");
                     else if (logical_gamemission == pack_tnt)
                     pagename = DEH_String("TITLEPIT");
@@ -835,7 +840,11 @@ void D_DoAdvanceDemo (void)
                 }
                 else
                 {
-                    if (logical_gamemission == pack_plut)
+                    if (logical_gamemission == doom)
+                    pagename = DEH_String("TITLEPIR");
+                    else if (logical_gamemission == doom2)
+                    pagename = DEH_String("TITLEPI2");
+                    else if (logical_gamemission == pack_plut)
                     pagename = DEH_String("TITLEPIP");
                     else if (logical_gamemission == pack_tnt)
                     pagename = DEH_String("TITLEPIT");
@@ -1175,13 +1184,10 @@ void D_SetGameDescription(void)
         {
             gamedescription = GetGameName("The Ultimate DOOM");
 
-/*
-#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-doom1-wide.wad");
-                if (!english_language)
-                W_MergeFile("base/wide/doom-doom1-wide-russian.wad");
+#ifdef WIDESCREEN
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-doom1.wad");
 #endif
-*/
 
             if (gameversion == exe_doom_se)
             {
@@ -1200,13 +1206,12 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("DOOM Registered");
             else 
             gamedescription = GetGameName("DOOM");
-/*
-#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-doom1-wide.wad");
-                if (!english_language)
-                W_MergeFile("base/wide/doom-doom1-wide-russian.wad");
+
+#ifdef WIDESCREEN
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-doom1.wad");
 #endif
-*/
+
         }
         else if (gamemode == shareware)
         {
@@ -1216,9 +1221,7 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("DOOM (Демоверсия)");
 /*
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-doom1-wide.wad");
-                if (!english_language)
-                W_MergeFile("base/wide/doom-doom1-wide-russian.wad");
+            W_MergeFile("base/doom-wide-doom1.wad");
 #endif
 */
         }
@@ -1293,13 +1296,12 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("DOOM 2: Hell on Earth");
             else
             gamedescription = GetGameName("DOOM 2: Ад на Земле");
-/*
-#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-doom2-wide.wad");
-                if (!english_language)
-                W_MergeFile("base/wide/doom-doom2-wide-russian.wad");
+
+#ifdef WIDESCREEN
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-doom2.wad");
 #endif
-*/
+
         }
         else if (logical_gamemission == pack_plut)
         {
@@ -1307,13 +1309,12 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("Final DOOM: Plutonia Experiment");
             else
             gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
-/*
-#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-plutonia-wide.wad");
-                if (!english_language)
-                W_MergeFile("base/wide/doom-plutonia-wide-russian.wad");
+
+#ifdef WIDESCREEN
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-plutonia.wad");
 #endif
-*/
+
         }
         else if (logical_gamemission == pack_tnt)
         {
@@ -1321,13 +1322,12 @@ void D_SetGameDescription(void)
             gamedescription = GetGameName("Final DOOM: TNT - Evilution");
             else
             gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
-/*
-#ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
-                W_MergeFile("base/wide/doom-tnt-wide.wad");
-                if (!english_language)
-                W_MergeFile("base/wide/doom-tnt-wide-russian.wad");
+
+#ifdef WIDESCREEN
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-tnt.wad");
 #endif
-*/
+
         }
         else if (logical_gamemission == jaguar)
         {

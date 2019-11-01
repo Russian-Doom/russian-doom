@@ -790,6 +790,9 @@ void F_CastDrawer (void)
 
     // erase the entire screen to a background
     // [JN] Wide screen support
+    if (!english_language && logical_gamemission == pack_plut)
+    V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("BOSSBACP"), PU_CACHE));
+    else
     V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
 
     F_CastPrint (DEH_String(english_language ?
