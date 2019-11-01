@@ -1148,12 +1148,10 @@ void D_SetGameDescription(void)
     boolean is_freedoom = W_CheckNumForName("FREEDOOM") >= 0,
             is_freedm = W_CheckNumForName("FREEDM") >= 0;
 
-    gamedescription = english_language ? 
-                      "Unknown game" : "Неизвестная игра";
+    gamedescription = english_language ? "Unknown game" : "Неизвестная игра";
 
-    // [JN] Always load both system fonts, English and Russian
-    W_MergeFile("base/common/doom-sysfont.wad");
-    W_MergeFile("base/common/doom-sysfont-russian.wad");
+    // [JN] Always load RD system pwad
+    W_MergeFile("base/doom-common.wad");
 
     if (logical_gamemission == doom)
     {
@@ -1177,23 +1175,13 @@ void D_SetGameDescription(void)
         {
             gamedescription = GetGameName("The Ultimate DOOM");
 
-            W_MergeFile("base/common/doom-common.wad");
-
-            if (english_language)
-            {
-                // [JN] We are fine.
-            }
-            else
-            {
-                // W_MergeFile("base/common/doom-common-russian.wad");
-                // W_MergeFile("base/common/doom-doom1-russian.wad");
-            }
-
+/*
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom1-wide.wad");
                 if (!english_language)
                 W_MergeFile("base/wide/doom-doom1-wide-russian.wad");
 #endif
+*/
 
             if (gameversion == exe_doom_se)
             {
@@ -1208,46 +1196,31 @@ void D_SetGameDescription(void)
         }
         else if (gamemode == registered)
         {
-            gamedescription = GetGameName("DOOM");
-
-            W_MergeFile("base/common/doom-common.wad");
-
             if (english_language)
-            {
-                gamedescription = GetGameName("DOOM Registered");
-            }
-            else
-            {
-                // W_MergeFile("base/common/doom-common-russian.wad");
-                // W_MergeFile("base/common/doom-doom1-russian.wad");
-            }
-
+            gamedescription = GetGameName("DOOM Registered");
+            else 
+            gamedescription = GetGameName("DOOM");
+/*
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom1-wide.wad");
                 if (!english_language)
                 W_MergeFile("base/wide/doom-doom1-wide-russian.wad");
 #endif
+*/
         }
         else if (gamemode == shareware)
         {
-            W_MergeFile("base/common/doom-common.wad");
-
             if (english_language)
-            {
-                gamedescription = GetGameName("DOOM Shareware");
-            }
+            gamedescription = GetGameName("DOOM Shareware");
             else
-            {
-                gamedescription = GetGameName("DOOM (Демоверсия)");
-                // W_MergeFile("base/common/doom-common-russian.wad");
-                // W_MergeFile("base/common/doom-doom1-russian.wad");
-            }
-
+            gamedescription = GetGameName("DOOM (Демоверсия)");
+/*
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom1-wide.wad");
                 if (!english_language)
                 W_MergeFile("base/wide/doom-doom1-wide-russian.wad");
 #endif
+*/
         }
         else if (gamemode == pressbeta)
         {
@@ -1316,65 +1289,45 @@ void D_SetGameDescription(void)
         }
         else if (logical_gamemission == doom2)
         {
-            W_MergeFile("base/common/doom-common.wad");
-
             if (english_language)
-            {
-                gamedescription = GetGameName("DOOM 2: Hell on Earth");
-            }
+            gamedescription = GetGameName("DOOM 2: Hell on Earth");
             else
-            {
-                gamedescription = GetGameName("DOOM 2: Ад на Земле");
-                // W_MergeFile("base/common/doom-common-russian.wad");
-                // W_MergeFile("base/common/doom-doom2-russian.wad");
-            }
-
+            gamedescription = GetGameName("DOOM 2: Ад на Земле");
+/*
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-doom2-wide.wad");
                 if (!english_language)
                 W_MergeFile("base/wide/doom-doom2-wide-russian.wad");
 #endif
+*/
         }
         else if (logical_gamemission == pack_plut)
         {
-            W_MergeFile("base/common/doom-common.wad");
-            
             if (english_language)
-            {
-                gamedescription = GetGameName("Final DOOM: Plutonia Experiment");
-            }
+            gamedescription = GetGameName("Final DOOM: Plutonia Experiment");
             else
-            {
-                gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
-
-                // W_MergeFile("base/common/doom-common-russian.wad");
-                // W_MergeFile("base/common/doom-plutonia-russian.wad");
-            }
+            gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
+/*
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-plutonia-wide.wad");
                 if (!english_language)
                 W_MergeFile("base/wide/doom-plutonia-wide-russian.wad");
 #endif
+*/
         }
         else if (logical_gamemission == pack_tnt)
         {
-            W_MergeFile("base/common/doom-common.wad");
-
             if (english_language)
-            {
-                gamedescription = GetGameName("Final DOOM: TNT - Evilution");
-            }
+            gamedescription = GetGameName("Final DOOM: TNT - Evilution");
             else
-            {
-                gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
-                // W_MergeFile("base/common/doom-common-russian.wad");
-                // W_MergeFile("base/common/doom-tnt-russian.wad");
-            }
+            gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
+/*
 #ifdef WIDESCREEN   // [JN] Load widescreen backgrounds
                 W_MergeFile("base/wide/doom-tnt-wide.wad");
                 if (!english_language)
                 W_MergeFile("base/wide/doom-tnt-wide-russian.wad");
 #endif
+*/
         }
         else if (logical_gamemission == jaguar)
         {
