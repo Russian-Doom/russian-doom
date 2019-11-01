@@ -1792,13 +1792,6 @@ void AM_drawPlayers(void)
         their_color++;
         p = &players[i];
 
-        pt.x = p->mo->x;
-        pt.y = p->mo->y;
-        if (automap_rotate)
-        {
-            AM_rotatePoint(&pt);
-        }
-
         if ((deathmatch && !singledemo) && p != plr)
         continue;
 
@@ -1809,6 +1802,13 @@ void AM_drawPlayers(void)
         color = 246; // *close* to black
         else
         color = their_colors[their_color];
+
+        pt.x = p->mo->x;
+        pt.y = p->mo->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&pt);
+        }
 
         AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, p->mo->angle, color,pt.x, pt.y);
     }
