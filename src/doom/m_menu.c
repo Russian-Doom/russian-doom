@@ -1074,7 +1074,7 @@ menu_t  LoadDef =
     &MainDef,
     LoadMenu,
     M_DrawLoad,
-    67,38,
+    67+ORIGWIDTH_DELTA,38,
     0
 };
 
@@ -1088,7 +1088,7 @@ menu_t  LoadDef_Rus =
     &MainDef_Rus,
     LoadMenu,
     M_DrawLoad,
-    67,38,
+    67+ORIGWIDTH_DELTA,38,
     0
 };
 
@@ -1118,7 +1118,7 @@ menu_t  SaveDef =
     &MainDef,
     SaveMenu,
     M_DrawSave,
-    67,38,
+    67+ORIGWIDTH_DELTA,38,
     0
 };
 
@@ -1132,7 +1132,7 @@ menu_t  SaveDef_Rus =
     &MainDef_Rus,
     SaveMenu,
     M_DrawSave,
-    67,38,
+    67+ORIGWIDTH_DELTA,38,
     0
 };
 
@@ -3903,10 +3903,6 @@ void M_RD_ChangeLanguage(int choice)
     // Reset options menu
     currentMenu = english_language ? &RD_Options_Def : &RD_Options_Def_Rus;
 
-    // Update HUD system
-    HU_Stop();
-    HU_Start();
-
     // Update messages
     RD_DefineLanguageStrings();
 
@@ -3922,9 +3918,13 @@ void M_RD_ChangeLanguage(int choice)
         }
     }
 
-    // Update status bar
     if (gamestate == GS_LEVEL)
     {
+        // Update HUD system
+        HU_Stop();
+        HU_Start();
+
+        // Update status bar
         ST_Stop();
         ST_Start();
     }
