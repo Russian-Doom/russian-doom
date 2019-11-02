@@ -111,6 +111,8 @@ char* iwadfile;
 
 // [JN] Loaded SIGIL PWAD
 int sgl;
+// [JN] Loaded NERVE PWAD
+int nrv;
 
 // [JN] Devparm now global and available for all three games (see i_main.c)
 // boolean devparm;     // started game with -devparm
@@ -1349,7 +1351,6 @@ void D_SetGameDescription(void)
         while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
         {
             char    *filename;
-            int     nrv;
             int     mlvls;
 
             // [JN] Using -file for Press Beta is strictly prohibited
@@ -1375,17 +1376,14 @@ void D_SetGameDescription(void)
                     if (check != NULL)
                     {
                         gamemission = pack_nerve;
+                        W_MergeFile("base/doom-nerve.wad");
                         DEH_AddStringReplacement ("TITLEPIC", "DMENUPIC");
-
+                        DEH_AddStringReplacement ("TITLEPI2", "DMENUPIC");
+                        
                         if (english_language)
-                        {
-                            gamedescription = "DOOM 2: No Rest For The Living";
-                        }
+                        gamedescription = "DOOM 2: No Rest For The Living";
                         else
-                        {
-                            gamedescription = "DOOM 2: Нет покоя для живых";
-                            W_MergeFile("base/common/doom-nerve-russian.wad");
-                        }
+                        gamedescription = "DOOM 2: Нет покоя для живых";
                     }
                 }
             }

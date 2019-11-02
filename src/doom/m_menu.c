@@ -4001,6 +4001,10 @@ void M_RD_ChangeLanguage(int choice)
         {
             I_SetWindowTitle("DOOM 2: Hell on Earth");
         }
+        else if (gamemission == pack_nerve)
+        {
+            I_SetWindowTitle("DOOM 2: No Rest For The Living");
+        }
         else if (logical_gamemission == pack_plut)
         {
             I_SetWindowTitle("Final DOOM: Plutonia Experiment");
@@ -4030,6 +4034,10 @@ void M_RD_ChangeLanguage(int choice)
         else if (logical_gamemission == doom2)
         {
             I_SetWindowTitle("DOOM 2: Ад на Земле");
+        }
+        else if (gamemission == pack_nerve)
+        {
+            I_SetWindowTitle("DOOM 2: Нет покоя для живых");
         }
         else if (logical_gamemission == pack_plut)
         {

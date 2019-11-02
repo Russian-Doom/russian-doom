@@ -446,7 +446,7 @@ void WI_drawLF(void)
         {
             if (logical_gamemission == doom)
             V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2, y, lnames_d1_rus[wbs->last]);
-            else if (logical_gamemission == doom2)
+            else if (logical_gamemission == doom2 || gamemission == pack_nerve)
             V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2, y, lnames_d2_rus[wbs->last]);
             else if (logical_gamemission == pack_plut)
             V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_plut_rus[wbs->last]->width))/2, y, lnames_plut_rus[wbs->last]);
@@ -501,7 +501,7 @@ void WI_drawEL(void)
     {
         if (logical_gamemission == doom)
         V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2, y, lnames_d1_rus[wbs->next]);
-        else if (logical_gamemission == doom2)
+        else if (logical_gamemission == doom2 || gamemission == pack_nerve)
         V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2, y, lnames_d2_rus[wbs->next]);
         else if (logical_gamemission == pack_plut)
         V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_plut_rus[wbs->next]->width))/2, y, lnames_plut_rus[wbs->next]);
