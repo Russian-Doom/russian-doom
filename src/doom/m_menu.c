@@ -5990,6 +5990,7 @@ void M_Init (void)
         MainDef.numitems--;
         MainDef_Rus.numitems--;
         MainDef.y += 8;
+        MainDef_Rus.y += 8;
         NewDef.prevMenu = &MainDef;
         NewDef_Rus.prevMenu = &MainDef_Rus;
         break;
