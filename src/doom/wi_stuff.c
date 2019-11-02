@@ -1553,8 +1553,11 @@ void WI_drawStats(void)
     // [JN] Press Beta: draw additional "Artifacts" counter
     if (gamemode == pressbeta)
     {
-        // [JN] Draw "Артефакты" title
-        V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTIF"), PU_CACHE));
+        // [JN] Draw "Arfifacts"/"Артефакты" title
+        V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+3*lh, 
+                                W_CacheLumpName(DEH_String(english_language ?
+                                                           "WIARTIF" : "RD_ARTIF"),
+                                                           PU_CACHE));
         
         // [JN] Don't start counting immediately
         if (sp_state > 7)

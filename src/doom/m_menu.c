@@ -874,12 +874,12 @@ menu_t  MainDef =
 
 menuitem_t MainMenu_Rus[]=
 {
-    {1,"Yjdfz buhf",     M_NewGame,  'y'},  // Новая игра
-    {1,"Yfcnhjqrb",      M_Options,  'y'},  // Настройки
-    {1,"Pfuheprf",       M_LoadGame, 'p'},  // Загрузка
-    {1,"Cj[hfytybt",     M_SaveGame, 'c'},  // Сохранение
-    {1,"Byajhvfwbz!",    M_ReadThis, 'b'},  // Информация!
-    {1,"Ds[jl",          M_QuitDOOM, 'd'}   // Выход
+    {1,"RD_NGAME",  M_NewGame,  'y'},  // Новая игра
+    {1,"RD_OPTN",   M_Options,  'y'},  // Настройки
+    {1,"RD_LOADG",  M_LoadGame, 'p'},  // Загрузка
+    {1,"RD_SAVEG",  M_SaveGame, 'c'},  // Сохранение
+    {1,"RD_INFO",   M_ReadThis, 'b'},  // Информация!
+    {1,"RD_QUITG",  M_QuitDOOM, 'd'}   // Выход
 };
 
 menu_t  MainDef_Rus =
@@ -892,7 +892,14 @@ menu_t  MainDef_Rus =
     0
 };
 
-// Special menu for Press Beta
+// -----------------------------------------------------------------------------
+// [JN] Special menu for Press Beta
+// -----------------------------------------------------------------------------
+
+// ------------
+// English menu
+// ------------
+
 menuitem_t MainMenuBeta[]=
 {
     {1,"M_BLVL1",  M_Episode, '1'},
@@ -902,12 +909,34 @@ menuitem_t MainMenuBeta[]=
     {1,"M_QUITG",  M_QuitDOOM,'q'}
 };
 
-// [JN] Special menu for Press Beta
 menu_t  MainDefBeta =
 {
     main_end,
     NULL,
     MainMenuBeta,
+    M_DrawMainMenu,
+    97+ORIGWIDTH_DELTA,70,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t MainMenuBeta_Rus[]=
+{
+    {1,"RD_BLVL1", M_Episode, '1'},
+    {1,"RD_BLVL2", M_Episode, '2'},
+    {1,"RD_BLVL3", M_Episode, '3'},
+    {1,"RD_OPTN",  M_Options, 'o'},
+    {1,"RD_QUITG", M_QuitDOOM,'q'}
+};
+
+menu_t  MainDefBeta_Rus =
+{
+    main_end,
+    NULL,
+    MainMenuBeta_Rus,
     M_DrawMainMenu,
     97+ORIGWIDTH_DELTA,70,
     0
@@ -955,10 +984,10 @@ menu_t  EpiDef =
 
 menuitem_t EpisodeMenu_Rus[]=
 {
-    {1,"Gj rjktyj d nhegf[",  M_Episode,'g'},   // По колено в трупах
-    {1,"Ghb,ht;mt Flf",       M_Episode,'g'},   // Прибрежье Ада
-    {1,"Byathyj",             M_Episode,'b'},   // Инферно
-    {1,"Ndjz gkjnm bcnjotyf", M_Episode,'n'}    // Твоя плоть истощена
+    {1,"RD_EPI1",    M_Episode,'g'},   // По колено в трупах
+    {1,"RD_EPI2",    M_Episode,'g'},   // Прибрежье Ада
+    {1,"RD_EPI3",    M_Episode,'b'},   // Инферно
+    {1,"RD_EPI4",    M_Episode,'n'}    // Твоя плоть истощена
 };
 
 menu_t  EpiDef_Rus =
@@ -1017,12 +1046,12 @@ menu_t  NewDef =
 
 menuitem_t NewGameMenu_Rus[]=
 {
-    {1,"Vyt hfyj evbhfnm/",  M_ChooseSkill, 'v'},   // Мне рано умирать.
-    {1,"Yt nfr uhe,j/",      M_ChooseSkill, 'y'},   // Не так грубо.
-    {1,"Cltkfq vyt ,jkmyj/", M_ChooseSkill, 'c'},   // Сделай мне больно.
-    {1,"Ekmnhfyfcbkbt/",     M_ChooseSkill, 'e'},   // Ультранасилие
-    {1,"",                   M_ChooseSkill, 'r'},   // Кошмар. (gfx)
-    {1,"",                   M_ChooseSkill, 'e'}    // Ультра кошмар! (gfx)
+    {1,"RD_JKILL",  M_ChooseSkill, 'v'},   // Мне рано умирать.
+    {1,"RD_ROUGH",  M_ChooseSkill, 'y'},   // Эй, не так грубо.
+    {1,"RD_HURT",   M_ChooseSkill, 'c'},   // Сделай мне больно.
+    {1,"RD_ULTRA",  M_ChooseSkill, 'e'},   // Ультранасилие
+    {1,"RD_NMARE",  M_ChooseSkill, 'r'},   // Кошмар.
+    {1,"RD_UNMAR",  M_ChooseSkill, 'e'}    // Ультра кошмар!
 };
 
 menu_t  NewDef_Rus =
@@ -3959,8 +3988,10 @@ void M_RD_ChangeLanguage(int choice)
             I_SetWindowTitle("DOOM Shareware");
             else if (gamemode == registered)
             I_SetWindowTitle("DOOM Registered");
-            else
+            else if (gamemode == retail)
             I_SetWindowTitle("The Ultimate DOOM");
+            else if (gamemode == pressbeta)
+            I_SetWindowTitle("Doom Press Release Beta");
         }
         else if (logical_gamemission == doom2)
         {
@@ -3984,8 +4015,10 @@ void M_RD_ChangeLanguage(int choice)
             I_SetWindowTitle("DOOM (Демоверсия)");
             else if (gamemode == registered)
             I_SetWindowTitle("DOOM");
-            else
+            else if (gamemode == retail)
             I_SetWindowTitle("The Ultimate DOOM");
+            else if (gamemode == pressbeta)
+            I_SetWindowTitle("DOOM (Бета-версия)");
         }
         else if (logical_gamemission == doom2)
         {
@@ -4502,10 +4535,6 @@ void M_DrawNewGame(void)
         M_WriteTextBigCentered_RUS(13, "YJDFZ BUHF");
         // Уровень сложности:
         M_WriteTextBigCentered_RUS(38, "Ehjdtym ckj;yjcnb#");
-        // Кошмар.
-        V_DrawShadowedPatchDoom(48+ORIGWIDTH_DELTA, 127, W_CacheLumpName(DEH_String("RD_NMARE"), PU_CACHE));
-        // Ультра кошмар!
-        V_DrawShadowedPatchDoom(48+ORIGWIDTH_DELTA, 143, W_CacheLumpName(DEH_String("RD_UNMAR"), PU_CACHE));
     }
 }
 
@@ -5739,9 +5768,13 @@ void M_Drawer (void)
             // [JN] Write common menus by using standard graphical patches:
             // -----------------------------------------------------------------
             if (currentMenu == &MainDef                // Main Menu
+            ||  currentMenu == &MainDef_Rus            // Main Menu
             ||  currentMenu == &MainDefBeta            // Main Menu (Press Beta) 
+            ||  currentMenu == &MainDefBeta_Rus        // Main Menu (Press Beta)
             ||  currentMenu == &EpiDef                 // Episode selection
+            ||  currentMenu == &EpiDef_Rus             // Episode selection
             ||  currentMenu == &NewDef                 // Skill level
+            ||  currentMenu == &NewDef_Rus             // Skill level
             ||  currentMenu == &Vanilla_OptionsDef     // Vanilla options menu
             ||  currentMenu == &Vanilla_Audio_Def)     // Vanilla sound menu
             {
@@ -5959,10 +5992,13 @@ void M_Init (void)
         case pressbeta:
         // [JN] Use special menu for Press Beta
         MainDef = MainDefBeta;
+        MainDef_Rus = MainDefBeta_Rus;
         // [JN] Remove one lower menu item
         MainDef.numitems--;
+        MainDef_Rus.numitems--;
         // [JN] Correct return to previous menu
         NewDef.prevMenu = &MainDef;
+        NewDef_Rus.prevMenu = &MainDef_Rus;
         break;
 
         default:

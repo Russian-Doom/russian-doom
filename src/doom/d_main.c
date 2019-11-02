@@ -1228,31 +1228,19 @@ void D_SetGameDescription(void)
         }
         else if (gamemode == pressbeta)
         {
-            W_MergeFile("base/common/doom-common.wad");
-            W_MergeFile("base/games/doom-beta.wad");
+            W_MergeFile("base/doom-beta.wad");
 
-            DEH_AddStringReplacement ("M_JKILL",   "M_JKILL2");
-            DEH_AddStringReplacement ("STBAR",     "STBARB");
-            DEH_AddStringReplacement ("STCHARMS",  "STCHARTS");
+            DEH_AddStringReplacement (GOTHTHBONUS,     GOTDAGGER);
+            DEH_AddStringReplacement (GOTARMBONUS,     GOTCHEST);
+            DEH_AddStringReplacement (GOTSUPER,        GOTEXTRALIFE);
+            DEH_AddStringReplacement (GOTHTHBONUS_RUS, GOTDAGGER_RUS);
+            DEH_AddStringReplacement (GOTARMBONUS_RUS, GOTCHEST_RUS);
+            DEH_AddStringReplacement (GOTSUPER_RUS,    GOTEXTRALIFE_RUS);
 
             if (english_language)
-            {
-                gamedescription = GetGameName("Doom Press Release Beta");
-
-                DEH_AddStringReplacement (GOTHTHBONUS, GOTDAGGER);
-                DEH_AddStringReplacement (GOTARMBONUS, GOTCHEST);
-                DEH_AddStringReplacement (GOTSUPER,    GOTEXTRALIFE);
-            }
+            gamedescription = GetGameName("Doom Press Release Beta");
             else
-            {
-                gamedescription = GetGameName("DOOM (Бета-версия)");
-
-                W_MergeFile("base/common/doom-common-russian.wad");
-                W_MergeFile("base/games/doom-beta-russian.wad");
-                DEH_AddStringReplacement (GOTHTHBONUS_RUS, GOTDAGGER_RUS);
-                DEH_AddStringReplacement (GOTARMBONUS_RUS, GOTCHEST_RUS);
-                DEH_AddStringReplacement (GOTSUPER_RUS,    GOTEXTRALIFE_RUS);
-            }
+            gamedescription = GetGameName("DOOM (Бета-версия)");
         }
     }
     else
