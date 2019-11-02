@@ -109,6 +109,9 @@ char* savegamedir;
 // location of IWAD and WAD files
 char* iwadfile;
 
+// [JN] Loaded SIGIL PWAD
+int sgl;
+
 // [JN] Devparm now global and available for all three games (see i_main.c)
 // boolean devparm;     // started game with -devparm
 boolean nomonsters;  // checkparm of -nomonsters
@@ -1348,7 +1351,6 @@ void D_SetGameDescription(void)
             char    *filename;
             int     nrv;
             int     mlvls;
-            int     sgl;
 
             // [JN] Using -file for Press Beta is strictly prohibited
             if (gamemode == pressbeta)
@@ -1581,15 +1583,12 @@ void D_SetGameDescription(void)
 
                     if (check)
                     {
+                        W_MergeFile("base/doom-sigil.wad");
+
                         if (english_language)
-                        {
-                            gamedescription = "SIGIL";
-                        }
+                        gamedescription = "SIGIL";
                         else
-                        {
-                            gamedescription = "СИГИЛ";
-                            W_MergeFile("base/common/doom-sigil-russian.wad");
-                        }
+                        gamedescription = "СИГИЛ";
                     }
                 }
             }

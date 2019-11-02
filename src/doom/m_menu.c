@@ -3940,6 +3940,7 @@ void M_RD_ChangeLanguage(int choice)
     extern void HU_Stop(void);
     extern void F_StartFinale(void);
     extern int  demosequence;
+    extern int  sgl;
 
     choice = 0;
     english_language = 1 - english_language;
@@ -3992,6 +3993,9 @@ void M_RD_ChangeLanguage(int choice)
             I_SetWindowTitle("The Ultimate DOOM");
             else if (gamemode == pressbeta)
             I_SetWindowTitle("Doom Press Release Beta");
+
+            if (sgl)
+            I_SetWindowTitle("SIGIL");
         }
         else if (logical_gamemission == doom2)
         {
@@ -4019,6 +4023,9 @@ void M_RD_ChangeLanguage(int choice)
             I_SetWindowTitle("The Ultimate DOOM");
             else if (gamemode == pressbeta)
             I_SetWindowTitle("DOOM (Бета-версия)");
+
+            if (sgl)
+            I_SetWindowTitle("СИГИЛ");
         }
         else if (logical_gamemission == doom2)
         {
