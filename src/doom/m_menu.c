@@ -2271,7 +2271,7 @@ void M_RD_Draw_Rendering(void)
         if (force_software_renderer == 1)
         {
             dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmall_RUS(249 + ORIGWIDTH_DELTA, 45, "y/l"); // Н/Д
+            M_WriteTextSmall_RUS(249 + ORIGWIDTH_DELTA, 45, "y*l"); // Н/Д
             dp_translation = NULL;
         }
         else
@@ -2303,7 +2303,7 @@ void M_RD_Draw_Rendering(void)
         if (force_software_renderer == 1)
         {
             dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 85, "y/l"); // Н/Д
+            M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 85, "y*l"); // Н/Д
             dp_translation = NULL;
         }
         else
@@ -2549,7 +2549,7 @@ void M_RD_Draw_Display(void)
         // - Цвет сообщений ----------------------------------------------------
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "y/l"); // н/д
+            M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "y*l"); // н/д
         }
         else
         {
@@ -2763,7 +2763,7 @@ void M_RD_Draw_AutomapSettings(void)
         // - Automap colors (English only names, different placement) ----------
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(191 + ORIGWIDTH_DELTA, 35, "y/l"); // н/д
+            M_WriteTextSmall_RUS(191 + ORIGWIDTH_DELTA, 35, "y*l"); // н/д
         }
         else
         {
