@@ -1247,7 +1247,7 @@ menuitem_t RD_Options_Menu[]=
     {1,"Gameplay",  M_RD_Choose_Gameplay_1,     'g'},
     {1,"End Game",  M_EndGame,                  'e'},
     {1,"Reset settings", M_RD_BackToDefaults,   'r'},
-    {1,"Language:", M_RD_ChangeLanguage,        'l'},
+    {1,"Language:english", M_RD_ChangeLanguage, 'l'},
     {-1,"",0,'\0'}
 };
 
@@ -1274,7 +1274,7 @@ menuitem_t RD_Options_Menu_Rus[]=
     {1,"Utqvgktq",      M_RD_Choose_Gameplay_1, 'u'},   // Геймплей
     {1,"Pfrjyxbnm buhe",M_EndGame,              'p'},   // Закончить игру
     {1,"C,hjc yfcnhjtr", M_RD_BackToDefaults,   'c'},   // Сброс настроек
-    {1,"Zpsr#",         M_RD_ChangeLanguage,    'z'},   // Язык:
+    {1,"Zpsr#heccrbq",  M_RD_ChangeLanguage,    'z'},   // Язык: русский
     {-1,"",0,'\0'}
 };
 
@@ -2161,14 +2161,11 @@ void M_RD_Draw_Options(void)
     if (english_language)
     {
         M_WriteTextBigCentered_ENG(12, "OPTIONS");
-        M_WriteTextBig_ENG(184+ORIGWIDTH_DELTA, 149, "english");
     }
     else
     {
         // НАСТРОЙКИ
         M_WriteTextBigCentered_RUS(12, "YFCNHJQRB");            
-        // русский        
-        M_WriteTextBig_RUS(127+ORIGWIDTH_DELTA, 149, "heccrbq");
     }
 }
 
@@ -3997,6 +3994,10 @@ void M_RD_ChangeLanguage(int choice)
             if (sgl)
             I_SetWindowTitle("SIGIL");
         }
+        else if (logical_gamemission == jaguar)
+        {
+            I_SetWindowTitle("DOOM for Atari Jaguar");
+        }
         else if (logical_gamemission == doom2)
         {
             I_SetWindowTitle("DOOM 2: Hell on Earth");
@@ -4030,6 +4031,10 @@ void M_RD_ChangeLanguage(int choice)
 
             if (sgl)
             I_SetWindowTitle("СИГИЛ");
+        }
+        else if (logical_gamemission == jaguar)
+        {
+            I_SetWindowTitle("DOOM для Atari Jaguar");
         }
         else if (logical_gamemission == doom2)
         {
@@ -6019,6 +6024,13 @@ void M_Init (void)
 
         default:
         break;
+    }
+
+    // [JN] Move up Jaguar options menu to don't draw it over status bar
+    if (gamemission == jaguar)
+    {
+        RD_Options_Def.y -= 6;
+        RD_Options_Def_Rus.y -= 6;
     }
 
     // Versions of doom.exe before the Ultimate Doom release only had

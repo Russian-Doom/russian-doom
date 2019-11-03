@@ -754,6 +754,8 @@ void D_DoAdvanceDemo (void)
                 {
                     if (logical_gamemission == doom)
                     pagename = DEH_String("TITLEPIR");
+                    else if (logical_gamemission == jaguar)
+                    pagename = DEH_String("TITLEPIJ");
                     else if (logical_gamemission == doom2)
                     pagename = DEH_String("TITLEPI2");
                     else if (logical_gamemission == pack_plut)
@@ -808,6 +810,8 @@ void D_DoAdvanceDemo (void)
                 pagename = DEH_String("CREDITS");
                 else if (gamemode == retail)
                 pagename = DEH_String("CREDITU");
+                else if (logical_gamemission == jaguar)
+                pagename = DEH_String("CREDITJ");
                 else
                 pagename = DEH_String("CREDIT2");
 
@@ -847,6 +851,8 @@ void D_DoAdvanceDemo (void)
                 {
                     if (logical_gamemission == doom)
                     pagename = DEH_String("TITLEPIR");
+                    else if (logical_gamemission == jaguar)
+                    pagename = DEH_String("TITLEPIJ");
                     else if (logical_gamemission == doom2)
                     pagename = DEH_String("TITLEPI2");
                     else if (logical_gamemission == pack_plut)
@@ -876,6 +882,8 @@ void D_DoAdvanceDemo (void)
                         pagename = DEH_String("CREDITS");
                         else if (gamemode == retail)
                         pagename = DEH_String("CREDITU");
+                        else if (logical_gamemission == jaguar)
+                        pagename = DEH_String("CREDITJ");
                         else
                         pagename = DEH_String("CREDIT2");
         
@@ -1325,17 +1333,12 @@ void D_SetGameDescription(void)
         }
         else if (logical_gamemission == jaguar)
         {
+            W_MergeFile("base/doom-jaguar.wad");
+            
             if (english_language)
-            {
-                gamedescription = GetGameName("DOOM for Atari Jaguar");
-                W_MergeFile("base/games/doom-jaguar.wad");
-            }
+            gamedescription = GetGameName("DOOM for Atari Jaguar");
             else
-            {
-                gamedescription = GetGameName("DOOM для Atari Jaguar");
-                W_MergeFile("base/games/doom-jaguar.wad");
-                W_MergeFile("base/games/doom-jaguar-russian.wad");
-            }
+            gamedescription = GetGameName("DOOM для Atari Jaguar");
         }
     }
 

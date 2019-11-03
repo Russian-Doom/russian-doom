@@ -34,6 +34,7 @@
 #include "w_wad.h"      // [JN] Atari Jaguar: W_CacheLumpName
 #include "doomstat.h"   // [JN] Atari Jaguar: screenblocks
 #include "st_stuff.h"   // [JN] Atari Jaguar: Status bar widgets
+#include "jn.h"         // [JN] Atari Jaguar: english_language
 
 extern char *DEH_String(char *s);
 
@@ -297,7 +298,9 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     if (gamemission == jaguar)
     {
         // Draw "Loading" picture, with wide screen support
-        V_DrawShadowedPatchDoom (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("M_LOADIN"), PU_CACHE));
+        V_DrawShadowedPatchDoom (ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String
+                                (english_language ? "M_LOADIN" : "RD_LDNG"),
+                                 PU_CACHE));
     }
     
     return !go;

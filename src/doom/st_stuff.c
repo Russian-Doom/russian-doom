@@ -2420,7 +2420,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
     if (screenblocks == 9 || screenblocks == 10)
     {
         V_DrawPatch(0 + ORIGWIDTH_DELTA, ST_Y_JAG, 
-                    W_CacheLumpName(DEH_String("STBAR"), PU_CACHE));
+                    W_CacheLumpName(DEH_String(english_language ? "STBAR" : "RDSTBAR"), PU_CACHE));
     }
 
     // Wide screen: Side bezel for reconstructed standard HUD
