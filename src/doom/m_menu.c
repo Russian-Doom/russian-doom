@@ -4005,9 +4005,9 @@ void M_RD_ChangeLanguage(int choice)
         {
             I_SetWindowTitle("DOOM 2: Hell on Earth");
 
-            if (freedoom)
+            if (gamevariant == freedoom)
             I_SetWindowTitle("Freedoom: Phase 2");
-            if (freedm)
+            else if (gamevariant == freedm)
             I_SetWindowTitle("FreeDM");
         }
         else if (gamemission == pack_nerve)
@@ -4051,9 +4051,9 @@ void M_RD_ChangeLanguage(int choice)
         {
             I_SetWindowTitle("DOOM 2: Ад на Земле");
 
-            if (freedoom)
+            if (gamevariant == freedoom)
             I_SetWindowTitle("Freedoom: Стадия 2");
-            if (freedm)
+            else if (gamevariant == freedm)
             I_SetWindowTitle("FreeDM");
         }
         else if (gamemission == pack_nerve)
