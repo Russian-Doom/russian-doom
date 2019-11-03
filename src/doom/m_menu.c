@@ -1612,7 +1612,7 @@ menuitem_t RD_Controls_Menu[]=
     {-1,"",0,'\0'},
     {2,"mouse sensivity", M_RD_Change_Sensitivity, 'm'},
     {-1,"",0,'\0'},
-    {1,"mouse look: o",    M_RD_Change_MouseLook,  'm'},
+    {1,"mouse look:",     M_RD_Change_MouseLook,   'm'},
     {1,"vertical movement:", M_RD_Change_Novert,   'v'},
     {-1,"",0,'\0'}
 
@@ -3991,6 +3991,9 @@ void M_RD_ChangeLanguage(int choice)
             else if (gamemode == pressbeta)
             I_SetWindowTitle("Doom Press Release Beta");
 
+            if (freedoom)
+            I_SetWindowTitle("Freedoom: Phase 1");
+
             if (sgl)
             I_SetWindowTitle("SIGIL");
         }
@@ -4001,6 +4004,11 @@ void M_RD_ChangeLanguage(int choice)
         else if (logical_gamemission == doom2)
         {
             I_SetWindowTitle("DOOM 2: Hell on Earth");
+
+            if (freedoom)
+            I_SetWindowTitle("Freedoom: Phase 2");
+            if (freedm)
+            I_SetWindowTitle("FreeDM");
         }
         else if (gamemission == pack_nerve)
         {
@@ -4029,6 +4037,9 @@ void M_RD_ChangeLanguage(int choice)
             else if (gamemode == pressbeta)
             I_SetWindowTitle("DOOM (Бета-версия)");
 
+            if (freedoom)
+            I_SetWindowTitle("Freedoom: Стадия 1");
+
             if (sgl)
             I_SetWindowTitle("СИГИЛ");
         }
@@ -4039,6 +4050,11 @@ void M_RD_ChangeLanguage(int choice)
         else if (logical_gamemission == doom2)
         {
             I_SetWindowTitle("DOOM 2: Ад на Земле");
+
+            if (freedoom)
+            I_SetWindowTitle("Freedoom: Стадия 2");
+            if (freedm)
+            I_SetWindowTitle("FreeDM");
         }
         else if (gamemission == pack_nerve)
         {

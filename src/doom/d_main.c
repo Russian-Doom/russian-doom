@@ -1181,17 +1181,12 @@ void D_SetGameDescription(void)
 
         if (is_freedoom)
         {
-            W_MergeFile("base/common/freedoom-common.wad");
+            W_MergeFile("base/doom-freedoom.wad");
 
             if (english_language)
-            {
-                gamedescription = GetGameName("Freedoom: Phase 1");
-            }
+            gamedescription = GetGameName("Freedoom: Phase 1");
             else
-            {
-                gamedescription = GetGameName("Freedoom: Стадия 1");
-                W_MergeFile("base/common/freedoom-common-russian.wad");
-            }
+            gamedescription = GetGameName("Freedoom: Стадия 1");
         }
         else if (gamemode == retail)
         {
@@ -1265,31 +1260,17 @@ void D_SetGameDescription(void)
             if (is_freedm)
             {
                 gamedescription = GetGameName("FreeDM");
-                W_MergeFile("base/common/freedoom-common.wad");
-
-                if (english_language)
-                {
-                    // [JN] We are fine.
-                }
-                else
-                {
-                    W_MergeFile("base/common/freedoom-common-russian.wad");
-                    W_MergeFile("base/common/freedoom-dm-russian.wad");
-                }
+                W_MergeFile("base/doom-freedoom.wad");
+                W_MergeFile("base/doom-freedm.wad");
             }
             else
             {
-                W_MergeFile("base/common/freedoom-common.wad");
+                W_MergeFile("base/doom-freedoom.wad");
 
                 if (english_language)
-                {
-                    gamedescription = GetGameName("Freedoom: Phase 2");
-                }
+                gamedescription = GetGameName("Freedoom: Phase 2");
                 else
-                {
-                    gamedescription = GetGameName("Freedoom: Стадия 2");
-                    W_MergeFile("base/common/freedoom-common-russian.wad");
-                }
+                gamedescription = GetGameName("Freedoom: Стадия 2");
             }
         }
         else if (logical_gamemission == doom2)

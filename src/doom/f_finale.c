@@ -976,14 +976,11 @@ static void F_ArtScreenDrawer(void)
             case 1:
                 if (gameversion >= exe_ultimate)
                 {
-                    lumpname = "CREDIT";
+                    lumpname = english_language ? "CREDIT" : "CREDITU";
                 }
                 else
                 {
-                    if (gamevariant == old_shareware)
-                    lumpname = "HELP2RED";  // [JN] Red chars for older sharewares
-                    else
-                    lumpname = "HELP2";     // [JN] Green chars
+                    lumpname = english_language ? "HELP2" : "HELP2R";
                 }
                 break;
             case 2:
