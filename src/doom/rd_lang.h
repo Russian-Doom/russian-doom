@@ -1088,8 +1088,8 @@ extern char* ststr_massacre;
 
 #define RD_ON_RUS       "drk"       // вкл
 #define RD_OFF_RUS      "dsrk"      // выкл
-#define RD_NEXT_RUS     "lfktt )"   // далее >
-#define RD_PREV_RUS     "( yfpfl"   // < назад
+#define RD_NEXT_RUS     "lfktt \\"   // далее >
+#define RD_PREV_RUS     "/ yfpfl"   // < назад
 
 // Внутриигровые настройки будут
 // сброшены на стандартные значения.
