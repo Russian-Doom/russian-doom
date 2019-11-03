@@ -5822,6 +5822,7 @@ void M_Drawer (void)
             ||  currentMenu == &Vanilla_OptionsDef     // Vanilla options menu
             ||  currentMenu == &Vanilla_Audio_Def)     // Vanilla sound menu
             {
+                if (name[0])
                 V_DrawShadowedPatchDoom (x, y, W_CacheLumpName(name, PU_CACHE));
 
                 // DRAW SKULL
