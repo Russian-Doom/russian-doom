@@ -3999,7 +3999,7 @@ void M_RD_ChangeLanguage(int choice)
             else if (gamemode == pressbeta)
             I_SetWindowTitle("Doom Press Release Beta");
 
-            if (freedoom)
+            if (gamevariant == freedoom)
             I_SetWindowTitle("Freedoom: Phase 1");
 
             if (sgl)
@@ -4045,7 +4045,7 @@ void M_RD_ChangeLanguage(int choice)
             else if (gamemode == pressbeta)
             I_SetWindowTitle("DOOM (Бета-версия)");
 
-            if (freedoom)
+            if (gamevariant == freedoom)
             I_SetWindowTitle("Freedoom: Стадия 1");
 
             if (sgl)
