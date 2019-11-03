@@ -3215,6 +3215,7 @@ void M_RD_Draw_Gameplay_1(void)
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "next page >"); 
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 155, "< last page"); 
+        M_WriteTextSmall_ENG(231 + ORIGWIDTH_DELTA, 155, "page 1/4");
         dp_translation = NULL;
     }
     else
@@ -3262,6 +3263,7 @@ void M_RD_Draw_Gameplay_1(void)
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 145, RD_NEXT_RUS); 
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 155, RD_PREV_RUS); 
+        M_WriteTextSmall_RUS(197 + ORIGWIDTH_DELTA, 155, "cnhfybwf 1*4");
         dp_translation = NULL;
     }
 }
@@ -3317,6 +3319,7 @@ void M_RD_Draw_Gameplay_2(void)
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "next page >");
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 155, "< prev page");
+        M_WriteTextSmall_ENG(231 + ORIGWIDTH_DELTA, 155, "page 2/4");
         dp_translation = NULL;
     }
     else
@@ -3367,6 +3370,7 @@ void M_RD_Draw_Gameplay_2(void)
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 155, RD_PREV_RUS);
+        M_WriteTextSmall_RUS(197 + ORIGWIDTH_DELTA, 155, "cnhfybwf 2*4");
         dp_translation = NULL;
     }
 }
@@ -3432,6 +3436,7 @@ void M_RD_Draw_Gameplay_3(void)
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "next page >");
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 155, "< prev page");
+        M_WriteTextSmall_ENG(231 + ORIGWIDTH_DELTA, 155, "page 3/4");
         dp_translation = NULL;
     }
     else
@@ -3490,6 +3495,7 @@ void M_RD_Draw_Gameplay_3(void)
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 155, RD_PREV_RUS);
+        M_WriteTextSmall_RUS(197 + ORIGWIDTH_DELTA, 155, "cnhfybwf 3*4");
         dp_translation = NULL;
     }
 }
@@ -3543,6 +3549,7 @@ void M_RD_Draw_Gameplay_4(void)
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "first page >");
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 155, "< prev page");
+        M_WriteTextSmall_ENG(231 + ORIGWIDTH_DELTA, 155, "page 4/4");
         dp_translation = NULL;
     }
     else
@@ -3586,6 +3593,7 @@ void M_RD_Draw_Gameplay_4(void)
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 155, RD_PREV_RUS);
+        M_WriteTextSmall_RUS(197 + ORIGWIDTH_DELTA, 155, "cnhfybwf 4*4");
         dp_translation = NULL;
     }
 }
