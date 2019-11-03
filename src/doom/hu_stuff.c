@@ -868,7 +868,7 @@ void HU_Drawer(void)
         if (!vanillaparm && automap_stats)
         {
             sprintf(str, english_language ?
-                         "Kills: %d/%d" : "dhfub: %d/%d",
+                         "Kills: %d/%d" : "dhfub: %d*%d",
                          players[consoleplayer].killcount, totalkills);
             HUlib_clearTextLine(&w_kills);
             s = str;
@@ -877,7 +877,7 @@ void HU_Drawer(void)
             HUlib_drawTextLineUncolored(&w_kills, false);
     
             sprintf(str, english_language ?
-                         "Items: %d/%d" : "ghtlvtns: %d/%d",
+                         "Items: %d/%d" : "ghtlvtns: %d*%d",
                          players[consoleplayer].itemcount, totalitems);
             HUlib_clearTextLine(&w_items);
             s = str;
@@ -886,7 +886,7 @@ void HU_Drawer(void)
             HUlib_drawTextLineUncolored(&w_items, false);
     
             sprintf(str, english_language ?
-                         "Secret: %d/%d" : "nfqybrb: %d/%d",
+                         "Secret: %d/%d" : "nfqybrb: %d*%d",
                          players[consoleplayer].secretcount, totalsecret);
             HUlib_clearTextLine(&w_scrts);
             s = str;

@@ -1458,7 +1458,7 @@ PRESSYN_RUS
 #define THUSTR_16_RUS   "ehjdtym 16: uke,jxfqibt ljcnb;tybz"        // Уровень 16: Глубочайшие достижения
 #define THUSTR_17_RUS   "ehjdtym 17: pjyf j,hf,jnrb"                // Уровень 17: Зона обработки
 #define THUSTR_18_RUS   "ehjdtym 18: pfdjl"                         // Уровень 18: Завод
-#define THUSTR_19_RUS   "ehjdtym 19: gjuheprf/jnghfdrf"             // Уровень 19: Погрузка/отправка
+#define THUSTR_19_RUS   "ehjdtym 19: gjuheprf*jnghfdrf"             // Уровень 19: Погрузка/отправка
 #define THUSTR_20_RUS   "ehjdtym 20: wtynhfkmysq geyrn j,hf,jnrb"   // Уровень 20: Центральный пункт обработки
 #define THUSTR_21_RUS   "ehjdtym 21: flvbybcnhfnbdysq wtynh"        // Уровень 21: Административный центр
 #define THUSTR_22_RUS   "ehjdtym 22: j,bnfkbot"                     // Уровень 22: Обиталище
