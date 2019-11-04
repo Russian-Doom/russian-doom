@@ -3833,81 +3833,85 @@ void M_RD_BackToDefaultsResponse(int key)
     aspect_ratio_correct    = 1;
     uncapped_fps            = 1;
     show_fps                = 0;
-    show_diskicon           = 1;
     smoothing               = 0;
-    screen_wiping           = 1;
     force_software_renderer = 0;
+    show_diskicon           = 1;
+    screen_wiping           = 1;
+    png_screenshots         = 1;
 
     // Display
-    screenSize      = 10;
-    usegamma        = 0;
-    detailLevel     = 0;
-    showMessages    = 1;
-    messages_color  = 0;
+    screenSize         = 10;
+    usegamma           = 0;
+    detailLevel        = 0;
+    local_time         = 0;
+    showMessages       = 1;
+    messages_color     = 0;
     draw_shadowed_text = 1;
-    local_time      = 0;
 
     // Automap
     automap_color   = 0;
-    automap_follow  = 1;
+    automap_stats   = 1;
     automap_overlay = 0;
     automap_rotate  = 0;
+    automap_follow  = 1;
     automap_grid    = 0;
 
     // Audio
-    sfxVolume       = 8;
-    S_SetSfxVolume(sfxVolume * 8);
-    musicVolume     = 8;
-    S_SetMusicVolume(musicVolume * 8);
-    snd_channels    = 32;
-    S_ChannelsRealloc();
+    sfxVolume       = 8;  S_SetSfxVolume(sfxVolume * 8);
+    musicVolume     = 8;  S_SetMusicVolume(musicVolume * 8);
+    snd_channels    = 32; S_ChannelsRealloc();
     snd_monomode    = 0;
     snd_pitchshift  = 0;
 
     // Controls
-    joybspeed           = 29;
-    mlook               = 0;
-    players[consoleplayer].centering = true;
-    mouseSensitivity    = 5;
-    novert              = 1;
+    joybspeed        = 29;
+    mlook            = 0;  players[consoleplayer].centering = true;
+    mouseSensitivity = 5;
+    novert           = 1;
 
-    // Gameplay
-    brightmaps              = 1;
-    fake_contrast           = 0;
-    translucency            = 1;    
-    colored_hud             = 0;
-    colored_blood           = 1;
-    swirling_liquids        = 1;
-    invul_sky               = 1;
+    // Gameplay: Graphical
+    brightmaps       = 1;
+    fake_contrast    = 0;
+    translucency     = 1;    
+    colored_hud      = 0;
+    colored_blood    = 1;
+    swirling_liquids = 1;
+    invul_sky        = 1;
+    flip_weapons     = 0;
 
-    play_exit_sfx = 1;
-    crushed_corpses_sfx = 1;
+    // Gameplay: Audible
+    play_exit_sfx        = 1;
+    crushed_corpses_sfx  = 1;
     blazing_door_fix_sfx = 1;
-    noise_alert_sfx     = 0;
+    noise_alert_sfx      = 0;
+    // correct_endlevel_sfx = 0; (hidden variable)
 
-    automap_stats = 1;
+    // Gameplay: Tactical
     secret_notification = 1;
-    negative_health = 0;
-    infragreen_visor = 0;
+    negative_health     = 0;
+    infragreen_visor    = 0;
 
-    over_under = 0;
-    torque = 1;
-    weapon_bobbing = 1;
-    ssg_blast_enemies = 1;
+    // Gameplay: Physical
+    over_under           = 0;
+    torque               = 1;
+    weapon_bobbing       = 1;
+    ssg_blast_enemies    = 1;
     randomly_flipcorpses = 1;
-    floating_powerups = 0;
+    floating_powerups    = 0;
 
-    crosshair_draw = 0;
+    // Gameplay: Crosshair
+    crosshair_draw   = 0;
     crosshair_health = 1;
-    crosshair_scale = 0;
+    crosshair_scale  = 0;
 
-    fix_map_errors = 1;
-    flip_levels = 0;
-    extra_player_faces = 1;
+    // Gameplay: Gameplay
+    fix_map_errors       = 1;
+    flip_levels          = 0;
+    extra_player_faces   = 1;
     unlimited_lost_souls = 1;
     agressive_lost_souls = 0;
-    fast_quickload = 1;
-    no_internal_demos = 0;
+    fast_quickload       = 1;
+    no_internal_demos    = 0;
 
     // Do a full graphics reinitialization
     I_InitGraphics();

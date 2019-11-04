@@ -24,25 +24,30 @@ void BindCompatibilityVariables(void);
 
 // [JN] Дополнительные параметры игры
 
+// Rendering
+extern int show_diskicon;
+
+// Display
+extern int messages_color;
+extern int draw_shadowed_text;
+
 // Automap
 extern int automap_color;
-extern int automap_follow;
+extern int automap_stats;
 extern int automap_overlay;
 extern int automap_rotate;
+extern int automap_follow;
 extern int automap_grid;
 
 // Графика
 extern int brightmaps;
 extern int fake_contrast;
 extern int translucency;
+extern int colored_hud;
+extern int colored_blood;
 extern int swirling_liquids;
 extern int invul_sky;
 extern int flip_weapons;
-extern int colored_hud;
-extern int messages_color;
-extern int colored_blood;
-extern int draw_shadowed_text;
-extern int show_diskicon;
 
 // Звук
 extern int crushed_corpses_sfx;
@@ -52,7 +57,6 @@ extern int play_exit_sfx;
 extern int noise_alert_sfx;
 
 // Тактика
-extern int automap_stats;
 extern int secret_notification;
 extern int negative_health;
 extern int infragreen_visor;

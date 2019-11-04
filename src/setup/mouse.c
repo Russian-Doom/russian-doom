@@ -250,10 +250,10 @@ void ConfigMouse(void)
 void BindMouseVariables(void)
 {
     M_BindIntVariable("use_mouse",               &usemouse);
-    M_BindIntVariable("novert",                  &novert);
     M_BindIntVariable("mlook",                   &mlook);
-    M_BindIntVariable("grabmouse",               &grabmouse);
     M_BindIntVariable("mouse_sensitivity",       &mouseSensitivity);
+    M_BindIntVariable("novert",                  &novert);
+    M_BindIntVariable("grabmouse",               &grabmouse);
     M_BindIntVariable("mouse_threshold",         &mouse_threshold);
     M_BindFloatVariable("mouse_acceleration",    &mouse_acceleration);
 }

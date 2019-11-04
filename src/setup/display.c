@@ -308,11 +308,14 @@ void ConfigDisplay(void)
                         &png_screenshots),
 #endif
 
+// [JN] Not really needed. Leave as a hidden variable in config file.
+/*
         TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
             TXT_NewCheckBox(english_language ?
                             "Show ENDOOM screen on exit" :
                             "Показывать экран ENDOOM при выходе",
                             &show_endoom)),
+*/
 
     TXT_NewSeparator(english_language ?
                      "Video" :
@@ -365,8 +368,16 @@ void ConfigDisplay(void)
 
 void BindDisplayVariables(void)
 {
+    M_BindIntVariable("vsync",                     &vsync);
     M_BindIntVariable("aspect_ratio_correct",      &aspect_ratio_correct);
+    M_BindIntVariable("uncapped_fps",              &uncapped_fps);    
+    M_BindIntVariable("show_fps",                  &show_fps);
     M_BindIntVariable("smoothing",                 &smoothing);
+    M_BindIntVariable("force_software_renderer",   &force_software_renderer);
+    M_BindIntVariable("show_diskicon",             &show_diskicon);
+    M_BindIntVariable("screen_wiping",             &screen_wiping);
+    M_BindIntVariable("png_screenshots",           &png_screenshots);
+
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
     M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("fullscreen",                &fullscreen);
@@ -378,15 +389,8 @@ void BindDisplayVariables(void)
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindStringVariable("window_position",        &window_position);
     M_BindIntVariable("usegamma",                  &usegamma);
-    M_BindIntVariable("uncapped_fps",              &uncapped_fps);
-    M_BindIntVariable("png_screenshots",           &png_screenshots);
-    M_BindIntVariable("force_software_renderer",   &force_software_renderer);
-    M_BindIntVariable("show_diskicon",             &show_diskicon);
-    M_BindIntVariable("vsync",                     &vsync);
-    M_BindIntVariable("show_fps",                  &show_fps);
 
-    if (gamemission == doom || gamemission == heretic
-     || gamemission == strife)
+    if (gamemission == doom || gamemission == heretic || gamemission == strife)
     {
         M_BindIntVariable("show_endoom",           &show_endoom);
     }

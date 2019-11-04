@@ -21,11 +21,59 @@
 
 
 // -----------------------------------------------------------------------------
+// Language (0 = Russian, 1 = English)
+// -----------------------------------------------------------------------------
+
+extern int english_language;
+
+
+// -----------------------------------------------------------------------------
 // Command line parameters
 // -----------------------------------------------------------------------------
 
 extern boolean vanillaparm;
-extern boolean flip_levels_cmdline;
+
+
+// -----------------------------------------------------------------------------
+// Rendering
+// -----------------------------------------------------------------------------
+
+extern int vsync;
+// extern int aspect_ratio_correct;
+extern int uncapped_fps;
+extern int show_fps, real_fps;
+// extern int smoothing;
+// extern int force_software_renderer;
+extern int show_diskicon;
+extern int screen_wiping;
+extern int png_screenshots;
+
+
+// -----------------------------------------------------------------------------
+// Display
+// -----------------------------------------------------------------------------
+
+extern int local_time;
+extern int messages_color;
+extern int draw_shadowed_text;
+
+
+// -----------------------------------------------------------------------------
+// Automap
+// -----------------------------------------------------------------------------
+
+extern int automap_color;
+extern int automap_stats;
+extern int automap_overlay;
+extern int automap_rotate;
+extern int automap_follow;
+extern int automap_grid;
+
+// -----------------------------------------------------------------------------
+// Sound
+// -----------------------------------------------------------------------------
+
+extern int snd_monomode;
 
 
 // -----------------------------------------------------------------------------
@@ -34,59 +82,21 @@ extern boolean flip_levels_cmdline;
 
 extern int mlook;
 extern int novert;
-extern int local_time;
 
 
 // -----------------------------------------------------------------------------
-// Rendering
+// Gameplay feautures
 // -----------------------------------------------------------------------------
-
-extern int uncapped_fps;
-
-
-// -----------------------------------------------------------------------------
-// Language (0 = Russian, 1 = English)
-// -----------------------------------------------------------------------------
-
-extern int english_language;
-
-
-// -----------------------------------------------------------------------------
-// Automap specific variables
-// -----------------------------------------------------------------------------
-
-extern int automap_color;
-extern int automap_follow;
-extern int automap_overlay;
-extern int automap_rotate;
-extern int automap_grid;
-
-// -----------------------------------------------------------------------------
-// Optional gameplay features
-// -----------------------------------------------------------------------------
-
-// Rendering
-extern int vsync;
-extern int show_fps;
-extern int real_fps;
-extern int show_diskicon;
-extern int screen_wiping;
-extern int png_screenshots;
-
-// Sound
-extern int snd_monomode;
 
 // Gameplay: Graphical
 extern int brightmaps;
 extern int fake_contrast;
 extern int translucency;
 extern int colored_hud;
-extern int messages_color;
 extern int colored_blood;
 extern int swirling_liquids;
 extern int invul_sky;
 extern int flip_weapons;
-extern int draw_shadowed_text;
 
 // Gameplay: Audible
 extern int play_exit_sfx;
@@ -96,7 +106,6 @@ extern int noise_alert_sfx;
 extern int correct_endlevel_sfx;
 
 // Gameplay: Tactical
-extern int automap_stats;
 extern int secret_notification;
 extern int negative_health;
 extern int infragreen_visor;
@@ -116,12 +125,12 @@ extern int crosshair_scale;
 
 // Gameplay: Gameplay
 extern int fix_map_errors;
+extern int flip_levels;
 extern int extra_player_faces;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
 extern int fast_quickload;
 extern int no_internal_demos;
-extern int flip_levels;
 
 
 // -----------------------------------------------------------------------------

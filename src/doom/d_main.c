@@ -468,7 +468,7 @@ void D_BindVariables(void)
     NET_BindVariables();
 #endif
 
-    // [JN] Support for fallback to the English language.
+    // [JN] Support English/Russian language hot swapping
     M_BindIntVariable("english_language",       &english_language);
 
     // Rendering
@@ -480,26 +480,28 @@ void D_BindVariables(void)
     // Display
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("detaillevel",            &detailLevel);
+    M_BindIntVariable("local_time",             &local_time);
     M_BindIntVariable("show_messages",          &showMessages);
     M_BindIntVariable("messages_color",         &messages_color);
-    M_BindIntVariable("local_time",             &local_time);
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
+
+    // Automap
+    M_BindIntVariable("automap_color",          &automap_color);
+    M_BindIntVariable("automap_stats",          &automap_stats);
+    M_BindIntVariable("automap_overlay",        &automap_overlay);
+    M_BindIntVariable("automap_rotate",         &automap_rotate);
+    M_BindIntVariable("automap_follow",         &automap_follow);
+    M_BindIntVariable("automap_grid",           &automap_grid);
 
     // Sound
     M_BindIntVariable("sfx_volume",             &sfxVolume);
     M_BindIntVariable("music_volume",           &musicVolume);
-    M_BindIntVariable("snd_monomode",           &snd_monomode);
     M_BindIntVariable("snd_channels",           &snd_channels);
+    M_BindIntVariable("snd_monomode",           &snd_monomode);
 
     // Controls
     M_BindIntVariable("mlook",                  &mlook);
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
-
-    // Automap
-    M_BindIntVariable("automap_color",          &automap_color);
-    M_BindIntVariable("automap_follow",         &automap_follow);
-    M_BindIntVariable("automap_overlay",        &automap_overlay);
-    M_BindIntVariable("automap_rotate",         &automap_rotate);
-    M_BindIntVariable("automap_grid",           &automap_grid);
 
     // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);
@@ -510,7 +512,6 @@ void D_BindVariables(void)
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("flip_weapons",           &flip_weapons);
-    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
 
     // Gameplay: Audible
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);
@@ -520,7 +521,6 @@ void D_BindVariables(void)
     M_BindIntVariable("correct_endlevel_sfx",   &correct_endlevel_sfx);
 
     // Gameplay: Tactical
-    M_BindIntVariable("automap_stats",          &automap_stats);
     M_BindIntVariable("secret_notification",    &secret_notification);
     M_BindIntVariable("negative_health",        &negative_health);
     M_BindIntVariable("infragreen_visor",       &infragreen_visor);
@@ -540,12 +540,12 @@ void D_BindVariables(void)
 
     // Gameplay: Gameplay
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);
+    M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("extra_player_faces",     &extra_player_faces);
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
     M_BindIntVariable("fast_quickload",         &fast_quickload);
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
-    M_BindIntVariable("flip_levels",            &flip_levels);
 
     // Multiplayer chat macros
     for (i=0; i<10; ++i)

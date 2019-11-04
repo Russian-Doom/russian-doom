@@ -498,12 +498,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(screensize),
 
     //!
-    // Number of sounds that will be played simultaneously.
-    //
-
-    CONFIG_VARIABLE_INT(snd_channels),
-
-    //!
     // Music output device.  A non-zero value gives MIDI sound output,
     // while a value of zero disables music.
     //
@@ -716,14 +710,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(grabmouse),
 
     //!
-    // If non-zero, all vertical mouse movement is ignored.  This
-    // emulates the behavior of the "novert" tool available under DOS
-    // that performs the same function.
-    //
-
-    CONFIG_VARIABLE_INT(novert),
-
-    //!
     // Mouse acceleration factor.  When the speed of mouse movement
     // exceeds the threshold value (mouse_threshold), the speed is
     // multiplied by this value.
@@ -792,12 +778,6 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(show_endoom),
-
-    //!
-    // If non-zero, save screenshots in PNG format.
-    //
-
-    CONFIG_VARIABLE_INT(png_screenshots),
 
     //!
     // @game doom strife
@@ -1611,15 +1591,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_toggletime),
 
     //!
-    // [JN] Automap specific variables
-    //
-    CONFIG_VARIABLE_INT(automap_color),
-    CONFIG_VARIABLE_INT(automap_follow),
-    CONFIG_VARIABLE_INT(automap_overlay),
-    CONFIG_VARIABLE_INT(automap_rotate),
-    CONFIG_VARIABLE_INT(automap_grid),
-
-    //!
     // [JN] Russian Doom menu
     //
 
@@ -1628,21 +1599,33 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(aspect_ratio_correct),
     CONFIG_VARIABLE_INT(uncapped_fps),
     CONFIG_VARIABLE_INT(show_fps),
-    CONFIG_VARIABLE_INT(show_diskicon),
     CONFIG_VARIABLE_INT(smoothing),
-    CONFIG_VARIABLE_INT(screen_wiping),
     CONFIG_VARIABLE_INT(force_software_renderer),
+    CONFIG_VARIABLE_INT(show_diskicon),
+    CONFIG_VARIABLE_INT(screen_wiping),
+    CONFIG_VARIABLE_INT(png_screenshots),
 
     // Display
     CONFIG_VARIABLE_INT(screenblocks),
     CONFIG_VARIABLE_INT(usegamma),
     CONFIG_VARIABLE_INT(detaillevel),
-    CONFIG_VARIABLE_INT(show_messages), CONFIG_VARIABLE_INT(messageson),
     CONFIG_VARIABLE_INT(local_time),
+    CONFIG_VARIABLE_INT(show_messages), CONFIG_VARIABLE_INT(messageson),
+    CONFIG_VARIABLE_INT(messages_color),
+    CONFIG_VARIABLE_INT(draw_shadowed_text),
+
+    // Automap specific variables
+    CONFIG_VARIABLE_INT(automap_color),
+    CONFIG_VARIABLE_INT(automap_stats),
+    CONFIG_VARIABLE_INT(automap_overlay),
+    CONFIG_VARIABLE_INT(automap_rotate),
+    CONFIG_VARIABLE_INT(automap_follow),
+    CONFIG_VARIABLE_INT(automap_grid),
 
     // Sound
     CONFIG_VARIABLE_INT(sfx_volume),
     CONFIG_VARIABLE_INT(music_volume),
+    CONFIG_VARIABLE_INT(snd_channels),
     CONFIG_VARIABLE_INT(snd_monomode),
     CONFIG_VARIABLE_INT(snd_pitchshift),
 
@@ -1650,18 +1633,17 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(joyb_speed),
     CONFIG_VARIABLE_INT(mlook),
     CONFIG_VARIABLE_INT(mouse_sensitivity),
+    CONFIG_VARIABLE_INT(novert),
 
     // Gameplay: Graphical
     CONFIG_VARIABLE_INT(brightmaps),
     CONFIG_VARIABLE_INT(fake_contrast),
     CONFIG_VARIABLE_INT(translucency),
     CONFIG_VARIABLE_INT(colored_hud),
-    CONFIG_VARIABLE_INT(messages_color),
     CONFIG_VARIABLE_INT(colored_blood),
     CONFIG_VARIABLE_INT(swirling_liquids),
     CONFIG_VARIABLE_INT(invul_sky),
     CONFIG_VARIABLE_INT(flip_weapons),
-    CONFIG_VARIABLE_INT(draw_shadowed_text),
 
     // Gameplay: Audible
     CONFIG_VARIABLE_INT(play_exit_sfx),
@@ -1671,7 +1653,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(correct_endlevel_sfx),
 
     // Gameplay: Tactical
-    CONFIG_VARIABLE_INT(automap_stats),
     CONFIG_VARIABLE_INT(secret_notification),
     CONFIG_VARIABLE_INT(negative_health),
     CONFIG_VARIABLE_INT(infragreen_visor),
@@ -1691,12 +1672,12 @@ static default_t extra_defaults_list[] =
 
     // Gameplay: Gameplay
     CONFIG_VARIABLE_INT(fix_map_errors),
+    CONFIG_VARIABLE_INT(flip_levels),
     CONFIG_VARIABLE_INT(extra_player_faces),
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(agressive_lost_souls),
     CONFIG_VARIABLE_INT(fast_quickload),
     CONFIG_VARIABLE_INT(no_internal_demos),
-    CONFIG_VARIABLE_INT(flip_levels),
 };
 
 static default_collection_t extra_defaults =
