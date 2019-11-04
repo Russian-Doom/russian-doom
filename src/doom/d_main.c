@@ -1178,6 +1178,10 @@ void D_SetGameDescription(void)
     // [JN] Always load RD system pwad
     W_MergeFile("base/doom-common.wad");
 
+    // [JN] Load extra content for vanilla Doom
+    if (!is_freedoom && !is_freedm)
+    W_MergeFile("base/doom-extra.wad");
+
     if (logical_gamemission == doom)
     {
         // Doom 1.  But which version?
