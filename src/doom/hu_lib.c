@@ -246,7 +246,10 @@ void HUlib_initSText (hu_stext_t* s, int x, int y, int h, patch_t** font, int st
     s->cl = 0;
     
     for (i=0;i<h;i++)
-	HUlib_initTextLine(&s->l[i], x, y - i*(SHORT(font[0]->height)+1), font, startchar);
+	HUlib_initTextLine(&s->l[i], x, y - i*(SHORT(font[0]->height)+1)
+                       // [JN] Critical: always draw HUD messages 1px below for
+                       // preventing framebuffer overflow and normal "Й" apperance.
+                       +1, font, startchar);
 }
 
 

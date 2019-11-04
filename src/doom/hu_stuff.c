@@ -759,27 +759,27 @@ void HU_Start(void)
                                              HU_FONTSTART);
 
     HUlib_initTextLine(&w_kills,
-		       HU_TITLEX, HU_MSGY + 1 * 8,
+		       HU_TITLEX, (HU_MSGY+1) + 1 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_items,
-		       HU_TITLEX, HU_MSGY + 2 * 8,
+		       HU_TITLEX, (HU_MSGY+1) + 2 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_scrts,
-		       HU_TITLEX, HU_MSGY + 3 * 8,
+		       HU_TITLEX, (HU_MSGY+1) + 3 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_skill,
-		       HU_TITLEX, HU_MSGY + 4 * 8,
+		       HU_TITLEX, (HU_MSGY+1) + 4 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_ltime,
-		       HU_TITLEX, HU_MSGY + 6 * 8,
+		       HU_TITLEX, (HU_MSGY+1) + 6 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
