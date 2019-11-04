@@ -6128,16 +6128,20 @@ static void M_ConfirmDeleteGameResponse (int key)
 
 void M_ConfirmDeleteGame ()
 {
-    savegwarning =
-    M_StringJoin(english_language ?
-        "are you sure you want to\ndelete saved game\n\n\"" :
-        "ds ltqcndbntkmyj [jnbnt\nelfkbnm cj[hfytyye. buhe\n\n^",
-        savegamestrings[itemOn], english_language ?
-        "\"?\n\n" :
-        "^?\n\n",
-        english_language ?
-        PRESSYN : PRESSYN_RUS,
-        NULL);
+    // [JN] Do not print savegame name in Russian language because of
+    // lack of English symbols in message.
+    if (english_language)
+    {
+        savegwarning =
+            M_StringJoin("are you sure you want to\ndelete saved game\n\n\"",
+            savegamestrings[itemOn], "\"?\n\n", PRESSYN, NULL);
+    }
+    else
+    {
+        savegwarning =
+            M_StringJoin("ds ltqcndbntkmyj [jnbnt\nelfkbnm cj[hfytyye. buhe?\n\n",
+            PRESSYN_RUS, NULL);
+    }
 
     M_StartMessage(savegwarning, M_ConfirmDeleteGameResponse, true);
     messageToPrint = 2;
