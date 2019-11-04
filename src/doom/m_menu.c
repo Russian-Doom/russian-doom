@@ -3946,6 +3946,7 @@ void M_RD_ChangeLanguage(int choice)
     extern void F_StartFinale(void);
     extern int  demosequence;
     extern int  sgl;
+    extern int  mlvls;
 
     choice = 0;
     english_language = 1 - english_language;
@@ -4017,6 +4018,9 @@ void M_RD_ChangeLanguage(int choice)
             I_SetWindowTitle("Freedoom: Phase 2");
             else if (gamevariant == freedm)
             I_SetWindowTitle("FreeDM");
+
+            if (mlvls)
+            I_SetWindowTitle("Master Levels for DOOM 2");
         }
         else if (gamemission == pack_nerve)
         {
@@ -4063,6 +4067,9 @@ void M_RD_ChangeLanguage(int choice)
             I_SetWindowTitle("Freedoom: Стадия 2");
             else if (gamevariant == freedm)
             I_SetWindowTitle("FreeDM");
+
+            if (mlvls)
+            I_SetWindowTitle("Мастер-уровни для DOOM 2");
         }
         else if (gamemission == pack_nerve)
         {
