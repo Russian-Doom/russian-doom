@@ -434,6 +434,7 @@ void M_RD_Change_FakeContrast(int choice);
 void M_RD_Change_Transparency(int choice);
 void M_RD_Change_ColoredHUD(int choice);
 void M_RD_Change_ColoredBlood(int choice);
+void M_RD_Change_ImprovedFuzz(int choice);
 void M_RD_Change_SwirlingLiquids(int choice);
 void M_RD_Change_InvulSky(int choice);
 void M_RD_Change_FlipWeapons(int choice);
@@ -1664,11 +1665,11 @@ enum
     rd_gameplay_1_translucency,
     rd_gameplay_1_colored_hud,
     rd_gameplay_1_colored_blood,
+    rd_gameplay_1_improved_fuzz,
     rd_gameplay_1_swirling_liquids,
     rd_gameplay_1_invul_sky,
     rd_gameplay_1_flip_weapons,
     rd_gameplay_1_empty2,
-    rd_gameplay_1_empty3,
     rd_gameplay_1_next_page,
     rd_gameplay_1_last_page,
     rd_gameplay_1_end
@@ -1736,10 +1737,10 @@ menuitem_t RD_Gameplay_Menu_1[]=
     {1,"Transparency:",                M_RD_Change_Transparency,   't'},
     {1,"Colored HUD elements:",        M_RD_Change_ColoredHUD,     'c'},
     {1,"Colored blood and corpses:",   M_RD_Change_ColoredBlood,   'c'},
+    {1,"Improved fuzz effect:",        M_RD_Change_ImprovedFuzz,   'i'},
     {1,"Swirling liquids:",            M_RD_Change_SwirlingLiquids,'s'},
     {1,"Invulnerability affects sky:", M_RD_Change_InvulSky,       'i'},
     {1,"Flip weapons:",                M_RD_Change_FlipWeapons,    'f'},
-    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"", /* Next Page > */           M_RD_Choose_Gameplay_2,     'n'},
     {1,"", /* < Last Page */           M_RD_Choose_Gameplay_4,     'l'},
@@ -1848,6 +1849,7 @@ menuitem_t RD_Gameplay_Menu_1_Rus[]=
     {1,"Ghjphfxyjcnm j,]trnjd:",            M_RD_Change_Transparency,   'g'},   // Прозрачность объектов
     {1,"Hfpyjwdtnyst 'ktvtyns $:",          M_RD_Change_ColoredHUD,     'h'},   // Разноцветные элементы HUD
     {1,"Hfpyjwdtnyfz rhjdm b nhegs:",       M_RD_Change_ColoredBlood,   'h'},   // Разноцветная кровь и трупы
+    {1,"ekexityysq \'aatrn ievf:",          M_RD_Change_ImprovedFuzz,   'e'},   // Улучшенный эффект шума
     {1,"ekexityyfz fybvfwbz ;blrjcntq:",    M_RD_Change_SwirlingLiquids,'e'},   // Улучшенная анимация жидкостей
     {1,"ytezpdbvjcnm jrhfibdftn yt,j:",     M_RD_Change_InvulSky,       'y'},   // Неуязвимость окрашивает небо
     {1,"pthrfkmyjt jnhf;tybt jhe;bz:",      M_RD_Change_FlipWeapons,    'p'},   // Зеркальное отражение оружия
@@ -3199,17 +3201,21 @@ void M_RD_Draw_Gameplay_1(void)
         if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(229 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(229 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
 
+        // - Improved fuzz effect ----------------------------------------------
+        if (improved_fuzz) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(189 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(189 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+
         // - Swirling liquids --------------------------------------------------
-        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(150 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(150 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(150 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(150 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
 
         // - Invulnerability affects sky ---------------------------------------
-        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(237 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(237 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
+        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(237 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(237 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
 
         // - Flip weapons ------------------------------------------------------
-        if (flip_weapons) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(131 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(131 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
+        if (flip_weapons) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(131 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(131 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
 
         // Footer
         dp_translation = cr[CR_GOLD];
@@ -3247,17 +3253,21 @@ void M_RD_Draw_Gameplay_1(void)
         if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(242 + ORIGWIDTH_DELTA, 85, RD_ON_RUS); dp_translation = NULL; }
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(242 + ORIGWIDTH_DELTA, 85, RD_OFF_RUS); dp_translation = NULL; }
 
+        // - Улучшенный эффект шума --------------------------------------------
+        if (improved_fuzz) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(221 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(221 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
+
         // - Улучшенная анимация жидкостей -------------------------------------
-        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
+        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 105, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 105, RD_OFF_RUS); dp_translation = NULL; }
 
         // - Неуязвимость окрашивает небо --------------------------------------
-        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(262 + ORIGWIDTH_DELTA, 105, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(262 + ORIGWIDTH_DELTA, 105, RD_OFF_RUS); dp_translation = NULL; }
+        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(262 + ORIGWIDTH_DELTA, 115, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(262 + ORIGWIDTH_DELTA, 115, RD_OFF_RUS); dp_translation = NULL; }
 
         // - Зеркальное отражение оружия ---------------------------------------
-        if (flip_weapons) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(259 + ORIGWIDTH_DELTA, 115, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(259 + ORIGWIDTH_DELTA, 115, RD_OFF_RUS); dp_translation = NULL; }
+        if (flip_weapons) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(259 + ORIGWIDTH_DELTA, 125, RD_ON_RUS); dp_translation = NULL; }
+        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(259 + ORIGWIDTH_DELTA, 125, RD_OFF_RUS); dp_translation = NULL; }
 
         // Footer
         dp_translation = cr[CR_GOLD];
@@ -3635,6 +3645,12 @@ void M_RD_Change_ColoredBlood(int choice)
     colored_blood = 1 - colored_blood;
 }
 
+void M_RD_Change_ImprovedFuzz(int choice)
+{
+    choice = 0;
+    improved_fuzz = 1 - improved_fuzz;
+}
+
 void M_RD_Change_SwirlingLiquids(int choice)
 {
     choice = 0;
@@ -3875,6 +3891,7 @@ void M_RD_BackToDefaultsResponse(int key)
     translucency     = 1;    
     colored_hud      = 0;
     colored_blood    = 1;
+    improved_fuzz    = 1;
     swirling_liquids = 1;
     invul_sky        = 1;
     flip_weapons     = 0;

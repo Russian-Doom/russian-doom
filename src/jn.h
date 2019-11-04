@@ -94,6 +94,7 @@ extern int fake_contrast;
 extern int translucency;
 extern int colored_hud;
 extern int colored_blood;
+extern int improved_fuzz;
 extern int swirling_liquids;
 extern int invul_sky;
 extern int flip_weapons;

@@ -43,6 +43,7 @@ int fake_contrast = 0;
 int translucency = 1;
 int colored_hud = 0;
 int colored_blood = 1;
+int improved_fuzz = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
 int flip_weapons = 1;
@@ -313,6 +314,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("translucency",           &translucency);
     M_BindIntVariable("colored_hud",            &colored_hud);
     M_BindIntVariable("colored_blood",          &colored_blood);
+    M_BindIntVariable("improved_fuzz",          &improved_fuzz);
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("flip_weapons",           &flip_weapons);
