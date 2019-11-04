@@ -468,6 +468,10 @@ cheatseq_t cheat_choppers = CHEAT("idchoppers", 0);
 cheatseq_t cheat_clev = CHEAT("idclev", 2);
 cheatseq_t cheat_mypos = CHEAT("idmypos", 0);
 
+// [crispy] pseudo cheats to eat up the first digit typed after a cheat expecting two parameters
+cheatseq_t cheat_mus1 = CHEAT("idmus", 1);
+cheatseq_t cheat_clev1 = CHEAT("idclev", 1);
+
 // [crispy] new cheats
 cheatseq_t cheat_massacre = CHEAT("tntem", 0);
 
@@ -762,7 +766,11 @@ boolean ST_Responder (event_t* ev)
                     ||  ((((buf[0]-'0')*10 + buf[1]-'0') > 26 || musnum < mus_runnin) && gamemission == jaguar))
                         plyr->message = DEH_String(ststr_nomus);
                     else
+                    {
                         S_ChangeMusic(musnum, 1);
+                        // [crispy] eat key press, i.e. don't change weapon upon music change
+                        return true;
+                    }
                 }
                 else
                 {
@@ -772,8 +780,20 @@ boolean ST_Responder (event_t* ev)
                     if (((buf[0]-'1')*9 + buf[1]-'1') > 31 || buf[0] < '1' || buf[1] < '1')
                         plyr->message = DEH_String(ststr_nomus);
                     else
+                    {
                         S_ChangeMusic(musnum, 1);
+                        // [crispy] eat key press, i.e. don't change weapon upon music change
+                        return true;
+                    }
                 }
+            }
+
+            // [crispy] eat up the first digit typed after a cheat expecting two parameters
+            else if (cht_CheckCheat(&cheat_mus1, ev->data2))
+            {
+                char buf[2];
+                cht_GetParam(&cheat_mus1, buf);
+                return isdigit(buf[0]);
             }
 
             // [crispy] allow both idspispopd and idclip cheats in all gamemissions
@@ -932,6 +952,16 @@ boolean ST_Responder (event_t* ev)
             // So be it.
             plyr->message = DEH_String(ststr_clev);
             G_DeferedInitNew(gameskill, epsd, map);
+            // [crispy] eat key press, i.e. don't change weapon upon level change
+            return true;
+        }
+
+        // [crispy] eat up the first digit typed after a cheat expecting two parameters
+        else if (!netgame && !menuactive && cht_CheckCheat(&cheat_clev1, ev->data2))
+        {
+            char buf[2];
+            cht_GetParam(&cheat_clev1, buf);
+            return isdigit(buf[0]);
         }
 
         // [JN] Finally, Press Beta cheats
