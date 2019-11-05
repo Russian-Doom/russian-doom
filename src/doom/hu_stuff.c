@@ -742,13 +742,13 @@ void HU_Start(void)
                     english_language ? hu_font : hu_font_small_rus,
                     HU_FONTSTART, &message_on);
 
-    // [JN] Create the local time widget
+    // [JN] Create the local time and FPS widgets
 #ifdef WIDESCREEN
     HUlib_initSText(&w_message_time, 400, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
     HUlib_initSText(&w_message_fps, 390, 20, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 #else
     HUlib_initSText(&w_message_time, 294, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
-    HUlib_initSText(&w_message_fps, 294, 20, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
+    HUlib_initSText(&w_message_fps, 284, 20, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 #endif
 
     // create the map title widget
