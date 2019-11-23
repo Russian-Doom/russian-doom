@@ -136,7 +136,6 @@ static void SensibleDefaults(void)
     colored_hud = 0;
     messages_color = 0;
     colored_blood = 1;
-    improved_fuzz = 1;
     swirling_liquids = 1;
     invul_sky = 1;
     flip_weapons = 1;
