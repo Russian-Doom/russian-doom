@@ -387,10 +387,7 @@ void R_DrawFuzzColumn (void)
         // [JN] New fuzz effect. Also fixes animation being stuck in sone instances.
         if (++fuzzpos == FUZZTABLE) 
         {
-            if (improved_fuzz && !vanillaparm)
-            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()&49;
-            else
-            fuzzpos = 0;
+            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
         }
 
         dest += SCREENWIDTH;
@@ -482,10 +479,7 @@ void R_DrawFuzzColumnLow (void)
         // [JN] New fuzz effect. Also fixes animation being stuck in sone instances.
         if (++fuzzpos == FUZZTABLE) 
         {
-            if (improved_fuzz && !vanillaparm)
-            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()&49;
-            else
-            fuzzpos = 0;
+            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
         }
 
         dest += SCREENWIDTH << hires;
