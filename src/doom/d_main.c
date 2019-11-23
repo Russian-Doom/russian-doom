@@ -110,11 +110,13 @@ char* savegamedir;
 char* iwadfile;
 
 // [JN] Loaded SIGIL PWAD
-int sgl;
+int     sgl;
+boolean sgl_loaded;
 // [JN] Loaded NERVE PWAD
-int nrv;
+int     nrv;
 // [JN] Loaded Master-Level PWAD
-int mlvls;
+int     mlvls;
+boolean mlvls_loaded;
 
 // [JN] Devparm now global and available for all three games (see i_main.c)
 // boolean devparm;     // started game with -devparm
@@ -1366,6 +1368,7 @@ void D_SetGameDescription(void)
                     {
                         gamemission = pack_nerve;
                         W_MergeFile("base/doom-nerve.wad");
+
                         DEH_AddStringReplacement ("TITLEPIC", "DMENUPIC");
                         DEH_AddStringReplacement ("TITLEPI2", "DMENUPIC");
                         
@@ -1410,6 +1413,7 @@ void D_SetGameDescription(void)
                     if (check)
                     {
                         W_MergeFile("base/doom-mlevels.wad");
+                        mlvls_loaded = true;
 
                         if (english_language)
                         gamedescription = "Master Levels for DOOM 2";
@@ -1605,6 +1609,7 @@ void D_SetGameDescription(void)
                     if (check)
                     {
                         W_MergeFile("base/doom-sigil.wad");
+                        sgl_loaded = true;
 
                         if (english_language)
                         gamedescription = "SIGIL";

@@ -3949,8 +3949,7 @@ void M_RD_ChangeLanguage(int choice)
     extern void HU_Stop(void);
     extern void F_StartFinale(void);
     extern int  demosequence;
-    extern int  sgl;
-    extern int  mlvls;
+    extern boolean sgl_loaded, mlvls_loaded;
 
     choice = 0;
     english_language = 1 - english_language;
@@ -4001,12 +4000,14 @@ void M_RD_ChangeLanguage(int choice)
             I_SetWindowTitle("DOOM Registered");
             else if (gamemode == retail)
             I_SetWindowTitle("The Ultimate DOOM");
-
-            if (sgl)
-            I_SetWindowTitle("SIGIL");
+            else if (gamemode == pressbeta)
+            I_SetWindowTitle("Doom Press Release Beta");
 
             if (gamevariant == freedoom)
             I_SetWindowTitle("Freedoom: Phase 1");
+
+            if (sgl_loaded)
+            I_SetWindowTitle("SIGIL");
         }
         else if (logical_gamemission == doom2)
         {
@@ -4017,7 +4018,7 @@ void M_RD_ChangeLanguage(int choice)
             else if (gamevariant == freedm)
             I_SetWindowTitle("FreeDM");
 
-            if (mlvls)
+            if (mlvls_loaded)
             I_SetWindowTitle("Master Levels for DOOM 2");
         }
         else if (gamemission == pack_nerve)
@@ -4036,10 +4037,6 @@ void M_RD_ChangeLanguage(int choice)
         {
             I_SetWindowTitle("DOOM for Atari Jaguar");
         }
-        else if (gamemode == pressbeta)
-        {
-            I_SetWindowTitle("Doom Press Release Beta");
-        }
 
         I_InitWindowTitle();
     }
@@ -4053,11 +4050,14 @@ void M_RD_ChangeLanguage(int choice)
             I_SetWindowTitle("DOOM");
             else if (gamemode == retail)
             I_SetWindowTitle("The Ultimate DOOM");
-            if (sgl)
-            I_SetWindowTitle("СИГИЛ");
+            else if (gamemode == pressbeta)
+            I_SetWindowTitle("DOOM (Бета-версия)");
 
             if (gamevariant == freedoom)
             I_SetWindowTitle("Freedoom: Стадия 1");
+
+            if (sgl_loaded)
+            I_SetWindowTitle("СИГИЛ");
         }
         else if (logical_gamemission == doom2)
         {
@@ -4068,7 +4068,7 @@ void M_RD_ChangeLanguage(int choice)
             else if (gamevariant == freedm)
             I_SetWindowTitle("FreeDM");
 
-            else if (mlvls)
+            if (mlvls_loaded)
             I_SetWindowTitle("Мастер-уровни для DOOM 2");
         }
         else if (gamemission == pack_nerve)
@@ -4086,10 +4086,6 @@ void M_RD_ChangeLanguage(int choice)
         else if (logical_gamemission == jaguar)
         {
             I_SetWindowTitle("DOOM для Atari Jaguar");
-        }
-        else if (gamemode == pressbeta)
-        {
-            I_SetWindowTitle("DOOM (Бета-версия)");
         }
 
         I_InitWindowTitle();
