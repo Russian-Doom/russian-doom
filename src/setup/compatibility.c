@@ -45,7 +45,7 @@ int colored_hud = 0;
 int colored_blood = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
-int flip_weapons = 1;
+int flip_weapons = 0;
 
 // Gameplay: Audible
 int play_exit_sfx = 1;
