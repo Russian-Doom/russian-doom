@@ -389,6 +389,7 @@ static void HandleWindowEvent(SDL_WindowEvent *event)
     }
 }
 
+// [JN] Alt + Return (the Enter key on main keyboard)
 static boolean ToggleFullScreenKeyShortcut(SDL_Keysym *sym)
 {
     Uint16 flags = (KMOD_LALT | KMOD_RALT);
@@ -396,6 +397,16 @@ static boolean ToggleFullScreenKeyShortcut(SDL_Keysym *sym)
     flags |= (KMOD_LGUI | KMOD_RGUI);
 #endif
     return sym->scancode == SDL_SCANCODE_RETURN && (sym->mod & flags) != 0;
+}
+
+// [JN] Alt + Keypad Enter (the Enter key on numeric keypad)
+static boolean ToggleFullScreenKeyShortcutNum(SDL_Keysym *sym)
+{
+    Uint16 flags = (KMOD_LALT | KMOD_RALT);
+#if defined(__MACOSX__)
+    flags |= (KMOD_LGUI | KMOD_RGUI);
+#endif
+    return sym->scancode == SDL_SCANCODE_KP_ENTER && (sym->mod & flags) != 0;
 }
 
 static void I_ToggleFullScreen(void)
@@ -439,7 +450,8 @@ void I_GetEvent(void)
         switch (sdlevent.type)
         {
             case SDL_KEYDOWN:
-                if (ToggleFullScreenKeyShortcut(&sdlevent.key.keysym))
+                if (ToggleFullScreenKeyShortcut(&sdlevent.key.keysym)
+                || (ToggleFullScreenKeyShortcutNum(&sdlevent.key.keysym)))
                 {
                     I_ToggleFullScreen();
                     break;
