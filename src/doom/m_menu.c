@@ -1181,10 +1181,28 @@ menuitem_t ReadMenu1[] =
     {1,"",M_ReadThis2,0}
 };
 
+// ------------
+// English menu
+// ------------
+
 menu_t  ReadDef1 =
 {
     read1_end,
     &MainDef,
+    ReadMenu1,
+    M_DrawReadThis1,
+    280,185,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menu_t  ReadDef1_Rus =
+{
+    read1_end,
+    &MainDef_Rus,
     ReadMenu1,
     M_DrawReadThis1,
     280,185,
@@ -1202,10 +1220,28 @@ menuitem_t ReadMenu2[]=
     {1,"",M_FinishReadThis,0}
 };
 
+// ------------
+// English menu
+// ------------
+
 menu_t  ReadDef2 =
 {
     read2_end,
     &ReadDef1,
+    ReadMenu2,
+    M_DrawReadThis2,
+    330,175,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menu_t  ReadDef2_Rus =
+{
+    read2_end,
+    &ReadDef1_Rus,
     ReadMenu2,
     M_DrawReadThis2,
     330,175,
@@ -4436,18 +4472,7 @@ void M_DrawReadThis1(void)
             else
             lumpname = "HELP2R";
 
-            if (english_language)
-            {
-                skullx = 280+ORIGWIDTH_DELTA;
-            }
-            else
-            {
-#ifdef WIDESCREEN
-                skullx = 359;
-#else
-                skullx = 280;
-#endif
-            }
+            skullx = 280+ORIGWIDTH_DELTA;
             skully = 185;
         }
         break;
@@ -4509,8 +4534,8 @@ void M_DrawReadThis1(void)
     // [JN] Wide screen support
     V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName(lumpname, PU_CACHE));
 
-    ReadDef1.x = skullx;
-    ReadDef1.y = skully;
+    ReadDef1.x = ReadDef1_Rus.x = skullx;
+    ReadDef1.y = ReadDef1_Rus.y = skully;
 }
 
 
@@ -4534,9 +4559,8 @@ void M_DrawReadThis2(void)
                (english_language ? "HELP1" : "HELP1R"), PU_CACHE));
 
     // [JN] Wide screen: proper position for second HELP screen
-    // TODO - needed?
-    ReadDef2.x = 330+ORIGWIDTH_DELTA;
-    ReadDef2.y = 175;
+    ReadDef2.x = ReadDef2_Rus.x = 330+ORIGWIDTH_DELTA;
+    ReadDef2.y = ReadDef2_Rus.y = 175;
 }
 
 
@@ -4758,7 +4782,7 @@ void M_EndGame(int choice)
 void M_ReadThis(int choice)
 {
     choice = 0;
-    M_SetupNextMenu(&ReadDef1);
+    M_SetupNextMenu(english_language ? &ReadDef1 : &ReadDef1_Rus);
 }
 
 void M_ReadThis2(int choice)
@@ -4773,7 +4797,7 @@ void M_ReadThis2(int choice)
     || (gameversion == exe_doom_1_8 && gamemode == shareware))
     {
         choice = 0;
-        M_SetupNextMenu(&ReadDef2);
+        M_SetupNextMenu(english_language ? &ReadDef2 : &ReadDef2_Rus);
     }
     else
     {
@@ -5327,9 +5351,9 @@ boolean M_Responder (event_t* ev)
         M_StartControlPanel ();
 
         if ( gamemode == retail )
-            currentMenu = &ReadDef2;
+            currentMenu = english_language ? &ReadDef2 : &ReadDef2_Rus;
         else
-            currentMenu = &ReadDef1;
+            currentMenu = english_language ? &ReadDef1 : &ReadDef1_Rus;
 
         itemOn = 0;
         S_StartSound(NULL,sfx_swtchn);
@@ -5946,7 +5970,9 @@ void M_Drawer (void)
         ||  currentMenu == &SaveDef
         ||  currentMenu == &SaveDef_Rus
         ||  currentMenu == &ReadDef1
-        ||  currentMenu == &ReadDef2)
+        ||  currentMenu == &ReadDef1_Rus
+        ||  currentMenu == &ReadDef2
+        ||  currentMenu == &ReadDef2_Rus)
         {
             // DRAW SKULL
             V_DrawShadowedPatchDoom(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
