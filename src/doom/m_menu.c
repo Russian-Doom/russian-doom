@@ -5322,23 +5322,7 @@ boolean M_Responder (event_t* ev)
     // F-Keys
     if (!menuactive)
     {
-        if (key == key_menu_decscreen)      // Screen size down
-        {
-            if (automapactive || chat_on)
-            return false;
-            M_RD_Change_ScreenSize(0);
-            S_StartSound(NULL,sfx_stnmov);
-            return true;
-        }
-        else if (key == key_menu_incscreen) // Screen size up
-        {
-            if (automapactive || chat_on)
-            return false;
-            M_RD_Change_ScreenSize(1);
-            S_StartSound(NULL,sfx_stnmov);
-            return true;
-        }
-        else if (key == key_menu_help)     // Help key
+        if (key == key_menu_help)     // Help key
         {
         M_StartControlPanel ();
 
@@ -5422,10 +5406,9 @@ boolean M_Responder (event_t* ev)
             M_QuitDOOM(0);
             return true;
         }
-        // [JN] gamma toggling moved below for making 
-        // possible to change gamma even while active menu.
     }
 
+    // [JN] Allow gamma toggling even while active menu.
     if (key == key_menu_gamma)    // gamma toggle
     {
         usegamma++;
@@ -5441,6 +5424,26 @@ boolean M_Responder (event_t* ev)
                                                     gammamsg_rus[usegamma]);
         return true;
     }
+
+    // [JN] Allow screen decreasing even while active menu.
+	if (key == key_menu_decscreen)      // Screen size down
+	{
+		if (automapactive || chat_on)
+		return false;
+		M_RD_Change_ScreenSize(0);
+		S_StartSound(NULL,sfx_stnmov);
+		return true;
+	}
+
+    // [JN] Allow screen increasing even while active menu.
+	if (key == key_menu_incscreen) // Screen size up
+	{
+		if (automapactive || chat_on)
+		return false;
+		M_RD_Change_ScreenSize(1);
+		S_StartSound(NULL,sfx_stnmov);
+		return true;
+	}
 
     // Pop-up menu?
     if (!menuactive)
