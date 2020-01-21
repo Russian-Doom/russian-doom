@@ -140,6 +140,7 @@ static void DrawRenderingMenu(void);
 static boolean M_RD_Change_VSync(int option);
 static boolean M_RD_AspectRatio(int option);
 static boolean M_RD_Uncapped(int option);
+static boolean M_RD_FPScounter(int option);
 static boolean M_RD_Smoothing(int option);
 static boolean M_RD_Renderer(int option);
 static boolean M_RD_Screenshots(int option);
@@ -470,6 +471,7 @@ static MenuItem_t RenderingItems[] = {
     {ITT_LRFUNC, "VERTICAL SYNCHRONIZATION:",       M_RD_Change_VSync, 0, MENU_NONE},
     {ITT_LRFUNC, "FIX ASPECT RATIO:",               M_RD_AspectRatio,  0, MENU_NONE},
     {ITT_LRFUNC, "UNCAPPED FRAMERATE:",             M_RD_Uncapped,     0, MENU_NONE},
+    {ITT_LRFUNC, "SHOW FPS COUNTER:",               M_RD_FPScounter,   0, MENU_NONE},
     {ITT_LRFUNC, "PIXEL SCALING:",                  M_RD_Smoothing,    0, MENU_NONE},
     {ITT_LRFUNC, "VIDEO RENDERER:",                 M_RD_Renderer,     0, MENU_NONE},
     {ITT_EMPTY,  NULL,                              NULL,              0, MENU_NONE},
@@ -480,6 +482,7 @@ static MenuItem_t RenderingItems_Rus[] = {
     {ITT_LRFUNC, "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync, 0, MENU_NONE}, // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
     {ITT_LRFUNC, "ABRCBHJDFNM CJJNYJITYBT CNJHJY:", M_RD_AspectRatio,  0, MENU_NONE}, // ФИКСИРОВАТЬ СООТНОШЕНИЕ СТОРОН
     {ITT_LRFUNC, "JUHFYBXTYBT RFLHJDJQ XFCNJNS:",   M_RD_Uncapped,     0, MENU_NONE}, // ОГРАНИЧЕНИЕ КАДРОВОЙ ЧАСТОТЫ
+    {ITT_LRFUNC, "CXTNXBR RFLHJDJQ XFCNJNS:",       M_RD_FPScounter,   0, MENU_NONE}, // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ
     {ITT_LRFUNC, "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing,    0, MENU_NONE}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
     {ITT_LRFUNC, "J,HF,JNRF DBLTJ:",                M_RD_Renderer,     0, MENU_NONE}, // ОБРАБОТКА ВИДЕО
     {ITT_EMPTY,  NULL,                              NULL,              0, MENU_NONE},
@@ -489,7 +492,7 @@ static MenuItem_t RenderingItems_Rus[] = {
 static Menu_t RenderingMenu = {
     36 + ORIGWIDTH_DELTA, 42,
     DrawRenderingMenu,
-    7, RenderingItems,
+    8, RenderingItems,
     0,
     MENU_OPTIONS
 };
@@ -497,7 +500,7 @@ static Menu_t RenderingMenu = {
 static Menu_t RenderingMenu_Rus = {
     36 + ORIGWIDTH_DELTA, 42,
     DrawRenderingMenu,
-    7, RenderingItems_Rus,
+    8, RenderingItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -1578,7 +1581,7 @@ static void DrawRenderingMenu(void)
         // Subheaders
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("RENDERING"), 36 + ORIGWIDTH_DELTA, 32);
-        MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + ORIGWIDTH_DELTA, 102);
         dp_translation = NULL;
     }
     else
@@ -1590,7 +1593,7 @@ static void DrawRenderingMenu(void)
         // Subheaders
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("HTYLTHBYU"), 36 + ORIGWIDTH_DELTA, 32);      // РЕНДЕРИНГ
-        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + ORIGWIDTH_DELTA, 92);  // ДОПОЛНИТЕЛЬНО
+        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + ORIGWIDTH_DELTA, 102);  // ДОПОЛНИТЕЛЬНО
         dp_translation = NULL;
     }
 
@@ -1644,48 +1647,64 @@ static void DrawRenderingMenu(void)
                                               + ORIGWIDTH_DELTA, 62);
     }
 
-    // - Pixel scaling ---------------------------------------------------------
-    if (smoothing)
+    // - FPS counter -----------------------------------------------------------
+    if (show_fps)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("SMOOTH"), 131 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallENG(DEH_String("ON"), 165 + ORIGWIDTH_DELTA, 72);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 211 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 223 + ORIGWIDTH_DELTA, 72);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("SHARP"), 131 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallENG(DEH_String("OFF"), 165 + ORIGWIDTH_DELTA, 72);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 211 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 223 + ORIGWIDTH_DELTA, 72);
+    }
+
+    // - Pixel scaling ---------------------------------------------------------
+    if (smoothing)
+    {
+        if (english_language)
+        MN_DrTextSmallENG(DEH_String("SMOOTH"), 131 + ORIGWIDTH_DELTA, 82);
+        else
+        MN_DrTextSmallRUS(DEH_String("DRK"), 211 + ORIGWIDTH_DELTA, 82);
+    }
+    else
+    {
+        if (english_language)
+        MN_DrTextSmallENG(DEH_String("SHARP"), 131 + ORIGWIDTH_DELTA, 82);
+        else
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 211 + ORIGWIDTH_DELTA, 82);
     }
 
     // - Video renderer --------------------------------------------------------
     if (force_software_renderer)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("SOFTWARE (CPU)"), 149 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("SOFTWARE (CPU)"), 149 + ORIGWIDTH_DELTA, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("GHJUHFVVYFZ"), 159 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("GHJUHFVVYFZ"), 159 + ORIGWIDTH_DELTA, 92);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("HARDWARE (GPU)"), 149 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("HARDWARE (GPU)"), 149 + ORIGWIDTH_DELTA, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("FGGFHFNYFZ"), 159 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("FGGFHFNYFZ"), 159 + ORIGWIDTH_DELTA, 92);
     }
 
     // - Screenshot format --------------------------------------------------------
     if (png_screenshots)
     {
         MN_DrTextSmallENG(DEH_String("PNG"), (english_language ? 175 : 176)
-                                           + ORIGWIDTH_DELTA, 102);
+                                           + ORIGWIDTH_DELTA, 112);
     }
     else
     {
         MN_DrTextSmallENG(DEH_String("PCX"), (english_language ? 175 : 176)
-                                           + ORIGWIDTH_DELTA, 102);
+                                           + ORIGWIDTH_DELTA, 112);
     }   
 }
 
@@ -1719,6 +1738,12 @@ static boolean M_RD_AspectRatio(int option)
 static boolean M_RD_Uncapped(int option)
 {
     uncapped_fps ^= 1;
+    return true;
+}
+
+static boolean M_RD_FPScounter(int option)
+{
+    show_fps ^= 1;
     return true;
 }
 
@@ -2820,6 +2845,7 @@ void M_RD_DoResetSettings(void)
     vsync                   = 1;
     aspect_ratio_correct    = 1;
     uncapped_fps            = 1;
+    show_fps                = 0;
     smoothing               = 0;
     force_software_renderer = 0;
     png_screenshots         = 1;

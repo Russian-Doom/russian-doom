@@ -617,6 +617,8 @@ void SB_Drawer(void)
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
     static char s[64];
+    int f = real_fps;
+    char fps [999];
     strftime(s, sizeof(s), "%H:%M", tm);
 
     // [JN] Draw local time widget
@@ -624,6 +626,14 @@ void SB_Drawer(void)
     {
         M_snprintf(s, sizeof(s), s);
         MN_DrTextC(s, 293 + (ORIGWIDTH_DELTA * 2), 13);
+    }
+
+    // [JN] Draw FPS widget
+    if (show_fps)
+    {
+        sprintf (fps, "%d", f);
+        MN_DrTextC("!", 281 + (ORIGWIDTH_DELTA * 2), 23);   // [JN] "fps:" char
+        MN_DrTextC(fps, 299 + (ORIGWIDTH_DELTA * 2), 23);   // [JN] fps digits
     }
 
     // Sound info debug stuff
