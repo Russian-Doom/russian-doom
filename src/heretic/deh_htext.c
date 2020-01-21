@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include "doomtype.h"
-#include "dstrings.h"
+#include "rd_lang.h"
 
 #include "z_zone.h"
 

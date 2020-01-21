@@ -25,6 +25,7 @@
 #include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
+#include "rd_lang.h"
 #include "crispy.h"
 #include "jn.h"
 
@@ -582,27 +583,21 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_ITEMHEALTH :
-                                            TXT_ITEMHEALTH_RUS), false);
+            P_SetMessage(player, DEH_String(txt_itemhealth), false);
             break;
         case SPR_SHLD:         // Item_Shield1
             if (!P_GiveArmor(player, 1))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_ITEMSHIELD1 :
-                                            TXT_ITEMSHIELD1_RUS), false);
+            P_SetMessage(player, DEH_String(txt_itemshield1), false);
             break;
         case SPR_SHD2:         // Item_Shield2
             if (!P_GiveArmor(player, 2))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_ITEMSHIELD2 :
-                                            TXT_ITEMSHIELD2_RUS), false);
+            P_SetMessage(player, DEH_String(txt_itemshield2), false);
             break;
         case SPR_BAGH:         // Item_BagOfHolding
             if (!player->backpack)
@@ -618,27 +613,21 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             P_GiveAmmo(player, am_crossbow, AMMO_CBOW_WIMPY);
             P_GiveAmmo(player, am_skullrod, AMMO_SKRD_WIMPY);
             P_GiveAmmo(player, am_phoenixrod, AMMO_PHRD_WIMPY);
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_ITEMBAGOFHOLDING :
-                                            TXT_ITEMBAGOFHOLDING_RUS), false);
+            P_SetMessage(player, DEH_String(txt_itembagofholding), false);
             break;
         case SPR_SPMP:         // Item_SuperMap
             if (!P_GivePower(player, pw_allmap))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_ITEMSUPERMAP :
-                                            TXT_ITEMSUPERMAP_RUS), false);
+            P_SetMessage(player, DEH_String(txt_itemsupermap), false);
             break;
 
             // Keys
         case SPR_BKYY:         // Key_Blue
             if (!player->keys[key_blue])
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_GOTBLUEKEY :
-                                                TXT_GOTBLUEKEY_RUS), false);
+                P_SetMessage(player, DEH_String(txt_gotbluekey), false);
             }
             P_GiveKey(player, key_blue);
             sound = sfx_keyup;
@@ -650,9 +639,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
         case SPR_CKYY:         // Key_Yellow
             if (!player->keys[key_yellow])
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_GOTYELLOWKEY :
-                                                TXT_GOTYELLOWKEY_RUS), false);
+                P_SetMessage(player, DEH_String(txt_gotyellowkey), false);
             }
             sound = sfx_keyup;
             P_GiveKey(player, key_yellow);
@@ -664,9 +651,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
         case SPR_AKYY:         // Key_Green
             if (!player->keys[key_green])
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_GOTGREENKEY :
-                                                TXT_GOTGREENKEY_RUS), false);
+                P_SetMessage(player, DEH_String(txt_gotgreenkey), false);
             }
             sound = sfx_keyup;
             P_GiveKey(player, key_green);
@@ -680,90 +665,70 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
         case SPR_PTN2:         // Arti_HealingPotion
             if (P_GiveArtifact(player, arti_health, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTIHEALTH :
-                                                TXT_ARTIHEALTH_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artihealth), false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_SOAR:         // Arti_Fly
             if (P_GiveArtifact(player, arti_fly, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTIFLY :
-                                                TXT_ARTIFLY_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artifly), false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_INVU:         // Arti_Invulnerability
             if (P_GiveArtifact(player, arti_invulnerability, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTIINVULNERABILITY :
-                                                TXT_ARTIINVULNERABILITY_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artiinvulnerability), false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_PWBK:         // Arti_TomeOfPower
             if (P_GiveArtifact(player, arti_tomeofpower, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTITOMEOFPOWER :
-                                                TXT_ARTITOMEOFPOWER_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artitomeofpower), false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_INVS:         // Arti_Invisibility
             if (P_GiveArtifact(player, arti_invisibility, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTIINVISIBILITY :
-                                                TXT_ARTIINVISIBILITY_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artiinvisibility), false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_EGGC:         // Arti_Egg
             if (P_GiveArtifact(player, arti_egg, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTIEGG :
-                                                TXT_ARTIEGG_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artiegg), false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_SPHL:         // Arti_SuperHealth
             if (P_GiveArtifact(player, arti_superhealth, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTISUPERHEALTH :
-                                                TXT_ARTISUPERHEALTH_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artisuperhealth), false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_TRCH:         // Arti_Torch
             if (P_GiveArtifact(player, arti_torch, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTITORCH :
-                                                TXT_ARTITORCH_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artitorch), false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_FBMB:         // Arti_FireBomb
             if (P_GiveArtifact(player, arti_firebomb, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTIFIREBOMB :
-                                                TXT_ARTIFIREBOMB_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artifirebomb), false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_ATLP:         // Arti_Teleport
             if (P_GiveArtifact(player, arti_teleport, special))
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_ARTITELEPORT :
-                                                TXT_ARTITELEPORT_RUS), false);
+                P_SetMessage(player, DEH_String(txt_artiteleport), false);
                 P_SetDormantArtifact(special);
             }
             return;
@@ -774,108 +739,84 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOGOLDWAND1 :
-                                            TXT_AMMOGOLDWAND1_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammogoldwand1), false);
             break;
         case SPR_AMG2:         // Ammo_GoldWandHefty
             if (!P_GiveAmmo(player, am_goldwand, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOGOLDWAND2 :
-                                            TXT_AMMOGOLDWAND2_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammogoldwand2), false);
             break;
         case SPR_AMM1:         // Ammo_MaceWimpy
             if (!P_GiveAmmo(player, am_mace, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOMACE1 :
-                                            TXT_AMMOMACE1_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammomace1), false);
             break;
         case SPR_AMM2:         // Ammo_MaceHefty
             if (!P_GiveAmmo(player, am_mace, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOMACE2 :
-                                            TXT_AMMOMACE2_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammomace2), false);
             break;
         case SPR_AMC1:         // Ammo_CrossbowWimpy
             if (!P_GiveAmmo(player, am_crossbow, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOCROSSBOW1 :
-                                            TXT_AMMOCROSSBOW1_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammocrossbow1), false);
             break;
         case SPR_AMC2:         // Ammo_CrossbowHefty
             if (!P_GiveAmmo(player, am_crossbow, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOCROSSBOW2 :
-                                            TXT_AMMOCROSSBOW2_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammocrossbow2), false);
             break;
         case SPR_AMB1:         // Ammo_BlasterWimpy
             if (!P_GiveAmmo(player, am_blaster, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOBLASTER1 :
-                                            TXT_AMMOBLASTER1_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammoblaster1), false);
             break;
         case SPR_AMB2:         // Ammo_BlasterHefty
             if (!P_GiveAmmo(player, am_blaster, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOBLASTER2 :
-                                            TXT_AMMOBLASTER2_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammoblaster2), false);
             break;
         case SPR_AMS1:         // Ammo_SkullRodWimpy
             if (!P_GiveAmmo(player, am_skullrod, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOSKULLROD1 :
-                                            TXT_AMMOSKULLROD1_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammoskullrod1), false);
             break;
         case SPR_AMS2:         // Ammo_SkullRodHefty
             if (!P_GiveAmmo(player, am_skullrod, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOSKULLROD2 :
-                                            TXT_AMMOSKULLROD2_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammoskullrod2), false);
             break;
         case SPR_AMP1:         // Ammo_PhoenixRodWimpy
             if (!P_GiveAmmo(player, am_phoenixrod, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOPHOENIXROD1 :
-                                            TXT_AMMOPHOENIXROD1_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammophoenixrod1), false);
             break;
         case SPR_AMP2:         // Ammo_PhoenixRodHefty
             if (!P_GiveAmmo(player, am_phoenixrod, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_AMMOPHOENIXROD2 :
-                                            TXT_AMMOPHOENIXROD2_RUS), false);
+            P_SetMessage(player, DEH_String(txt_ammophoenixrod2), false);
             break;
 
             // Weapons
@@ -884,9 +825,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_WPNMACE :
-                                            TXT_WPNMACE_RUS), false);
+            P_SetMessage(player, DEH_String(txt_wpnmace), false);
             sound = sfx_wpnup;
             break;
         case SPR_WBOW:         // Weapon_Crossbow
@@ -894,9 +833,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_WPNCROSSBOW :
-                                            TXT_WPNCROSSBOW_RUS), false);
+            P_SetMessage(player, DEH_String(txt_wpncrossbow), false);
             sound = sfx_wpnup;
             break;
         case SPR_WBLS:         // Weapon_Blaster
@@ -904,9 +841,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_WPNBLASTER :
-                                            TXT_WPNBLASTER_RUS), false);
+            P_SetMessage(player, DEH_String(txt_wpnblaster), false);
             sound = sfx_wpnup;
             break;
         case SPR_WSKL:         // Weapon_SkullRod
@@ -914,9 +849,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_WPNSKULLROD :
-                                            TXT_WPNSKULLROD_RUS), false);
+            P_SetMessage(player, DEH_String(txt_wpnskullrod), false);
             sound = sfx_wpnup;
             break;
         case SPR_WPHX:         // Weapon_PhoenixRod
@@ -924,9 +857,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_WPNPHOENIXROD :
-                                            TXT_WPNPHOENIXROD_RUS), false);
+            P_SetMessage(player, DEH_String(txt_wpnphoenixrod), false);
             sound = sfx_wpnup;
             break;
         case SPR_WGNT:         // Weapon_Gauntlets
@@ -934,9 +865,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_WPNGAUNTLETS :
-                                            TXT_WPNGAUNTLETS_RUS), false);
+            P_SetMessage(player, DEH_String(txt_wpngauntlets), false);
             sound = sfx_wpnup;
             break;
         default:

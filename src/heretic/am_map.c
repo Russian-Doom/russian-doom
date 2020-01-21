@@ -682,18 +682,7 @@ boolean AM_Responder(event_t * ev)
         {
             followplayer = !followplayer;
             f_oldloc.x = INT_MAX;
-            if (english_language)
-            {
-                P_SetMessage(plr,
-                            followplayer ? AMSTR_FOLLOWON : AMSTR_FOLLOWOFF,
-                            true);
-            }
-            else
-            {
-                P_SetMessage(plr,
-                            followplayer ? AMSTR_FOLLOWON_RUS : AMSTR_FOLLOWOFF_RUS,
-                            true);                
-            }
+            P_SetMessage(plr, followplayer ? amstr_followon : amstr_followoff, true);
         }
         /*
         else if (key == key_map_grid)
@@ -1643,9 +1632,15 @@ void AM_Drawer(void)
                      LevelNames[(gameepisode - 1) * 9 + gamemap - 1] :
                      LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1];
 #ifdef WIDESCREEN
+        if (english_language)
         MN_DrTextA(DEH_String(level_name), 20, 136);
+        else
+        MN_DrTextSmallRUS(DEH_String(level_name), 20, 136);
 #else
+        if (english_language)
         MN_DrTextA(DEH_String(level_name), 20, 146);
+        else
+        MN_DrTextSmallRUS(DEH_String(level_name), 20, 146);
 #endif
     }
 
@@ -1661,7 +1656,10 @@ void AM_Drawer(void)
                    "DHFUB: %d/ %d",
                    players[consoleplayer].killcount,
                    totalkills);
+        if (english_language)
         MN_DrTextA(text, 20, 16);
+        else
+        MN_DrTextSmallRUS(text, 20, 16);
 
         M_snprintf(text, sizeof(text),
                    english_language ?
@@ -1669,7 +1667,10 @@ void AM_Drawer(void)
                    "GHTLVTNS: %d/ %d",
                    players[consoleplayer].itemcount,
                    totalitems);
+        if (english_language)
         MN_DrTextA(text, 20, 26);
+        else
+        MN_DrTextSmallRUS(text, 20, 26);
 
         M_snprintf(text, sizeof(text),
                    english_language ?
@@ -1677,14 +1678,20 @@ void AM_Drawer(void)
                    "NFQYBRB: %d/ %d",
                    players[consoleplayer].secretcount,
                    totalsecret);
+        if (english_language)
         MN_DrTextA(text, 20, 36);
+        else
+        MN_DrTextSmallRUS(text, 20, 36);
 
         M_snprintf(text, sizeof(text), 
                    english_language ?
                    "SKILL: %d" :
                    "CKJ;YJCNM: %d", 
                    gameskill +1);
+        if (english_language)
         MN_DrTextA(text, 20, 46);
+        else
+        MN_DrTextSmallRUS(text, 20, 46);
 
         M_snprintf(text, sizeof(text),
                    "%02d:%02d:%02d",

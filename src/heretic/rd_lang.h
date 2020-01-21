@@ -1,6 +1,5 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
 // Copyright(C) 2016-2019 Julian Nechaevsky
 //
@@ -15,29 +14,144 @@
 // GNU General Public License for more details.
 //
 
+//
+// Памятка по символам:
+// --------------------
+// < = ,
+// > = .
+// $ = BFG
+// # = y 
+// @ = n
+// ^ = "
 
 
-//
-// Памятка по символам: docs_russian/charmap/raven_charmap.xlsx
-//
+#ifndef __RD_LANG__
+#define __RD_LANG__
+
+
+extern void RD_DefineLanguageStrings ();
+
+// Keys
+extern char* txt_gotbluekey;
+extern char* txt_gotyellowkey;
+extern char* txt_gotgreenkey;
+
+// Artifacts
+extern char* txt_artihealth;
+extern char* txt_artifly;
+extern char* txt_artiinvulnerability;
+extern char* txt_artitomeofpower;
+extern char* txt_artiinvisibility;
+extern char* txt_artiegg;
+extern char* txt_artisuperhealth;
+extern char* txt_artitorch;
+extern char* txt_artifirebomb;
+extern char* txt_artiteleport;
+
+// Items
+extern char* txt_itemhealth;
+extern char* txt_itembagofholding;
+extern char* txt_itemshield1;
+extern char* txt_itemshield2;
+extern char* txt_itemsupermap;
+
+// Ammo
+extern char* txt_ammogoldwand1;
+extern char* txt_ammogoldwand2;
+extern char* txt_ammomace1;
+extern char* txt_ammomace2;
+extern char* txt_ammocrossbow1;
+extern char* txt_ammocrossbow2;
+extern char* txt_ammoblaster1;
+extern char* txt_ammoblaster2;
+extern char* txt_ammoskullrod1;
+extern char* txt_ammoskullrod2;
+extern char* txt_ammophoenixrod1;
+extern char* txt_ammophoenixrod2;
+
+// Weapons
+extern char* txt_wpnmace;
+extern char* txt_wpncrossbow;
+extern char* txt_wpnblaster;
+extern char* txt_wpnskullrod;
+extern char* txt_wpnphoenixrod;
+extern char* txt_wpngauntlets;
+
+// SB_bar.c
+extern char* txt_cheatgodon;
+extern char* txt_cheatgodoff;
+extern char* txt_cheatnoclipon;
+extern char* txt_cheatnoclipoff;
+extern char* txt_cheatweapons;
+extern char* txt_cheatflighton;
+extern char* txt_cheatflightoff;
+extern char* txt_cheatpoweron;
+extern char* txt_cheatpoweroff;
+extern char* txt_cheathealth;
+extern char* txt_cheatkeys;
+extern char* txt_cheatsoundon;
+extern char* txt_cheatsoundoff;
+extern char* txt_cheattickeron;
+extern char* txt_cheattickeroff;
+extern char* txt_cheatartifacts1;
+extern char* txt_cheatartifacts2;
+extern char* txt_cheatartifacts3;
+extern char* txt_cheatartifactsfail;
+extern char* txt_cheatwarp;
+extern char* txt_cheatscreenshot;
+extern char* txt_cheatchickenon;
+extern char* txt_cheatchickenoff;
+extern char* txt_cheatmassacre;
+extern char* txt_cheatiddqd;
+extern char* txt_cheatidkfa;
+
+// P_doors.c
+extern char* txt_needbluekey;
+extern char* txt_needgreenkey;
+extern char* txt_needyellowkey;
+
+// G_game.c
+extern char* txt_gamesaved;
+
+// AM_map.c
+extern char* amstr_followon;
+extern char* amstr_followoff;
+extern char* amstr_gridon;
+extern char* amstr_gridoff;
+extern char* amstr_markedspot;
+extern char* amstr_markscleared;
+
+// MN_menu.c
+extern char* txt_gamma_improved_off;
+extern char* txt_gamma_improved_05;
+extern char* txt_gamma_improved_1;
+extern char* txt_gamma_improved_15;
+extern char* txt_gamma_improved_2;
+extern char* txt_gamma_improved_25;
+extern char* txt_gamma_improved_3;
+extern char* txt_gamma_improved_35;
+extern char* txt_gamma_improved_4;
+extern char* txt_gamma_original_off;
+extern char* txt_gamma_original_05;
+extern char* txt_gamma_original_1;
+extern char* txt_gamma_original_15;
+extern char* txt_gamma_original_2;
+extern char* txt_gamma_original_25;
+extern char* txt_gamma_original_3;
+extern char* txt_gamma_original_35;
+extern char* txt_gamma_original_4;
 
 
 // -----------------------------------------------------------------------------
 // English language
 // -----------------------------------------------------------------------------
 
-//
 // Keys
-//
-
 #define TXT_GOTBLUEKEY      "BLUE KEY"
 #define TXT_GOTYELLOWKEY    "YELLOW KEY"
 #define TXT_GOTGREENKEY     "GREEN KEY"
 
-//
 // Artifacts
-//
-
 #define TXT_ARTIHEALTH          "QUARTZ FLASK"
 #define TXT_ARTIFLY             "WINGS OF WRATH"
 #define TXT_ARTIINVULNERABILITY "RING OF INVINCIBILITY"
@@ -49,20 +163,14 @@
 #define TXT_ARTIFIREBOMB        "TIME BOMB OF THE ANCIENTS"
 #define TXT_ARTITELEPORT        "CHAOS DEVICE"
 
-//
 // Items
-//
-
 #define TXT_ITEMHEALTH          "CRYSTAL VIAL"
 #define TXT_ITEMBAGOFHOLDING    "BAG OF HOLDING"
 #define TXT_ITEMSHIELD1         "SILVER SHIELD"
 #define TXT_ITEMSHIELD2         "ENCHANTED SHIELD"
 #define TXT_ITEMSUPERMAP        "MAP SCROLL"
 
-//
 // Ammo
-//
-
 #define TXT_AMMOGOLDWAND1       "WAND CRYSTAL"
 #define TXT_AMMOGOLDWAND2       "CRYSTAL GEODE"
 #define TXT_AMMOMACE1           "MACE SPHERES"
@@ -76,10 +184,7 @@
 #define TXT_AMMOPHOENIXROD1     "FLAME ORB"
 #define TXT_AMMOPHOENIXROD2     "INFERNO ORB"
 
-//
 // Weapons
-//
-
 #define TXT_WPNMACE             "FIREMACE"
 #define TXT_WPNCROSSBOW         "ETHEREAL CROSSBOW"
 #define TXT_WPNBLASTER          "DRAGON CLAW"
@@ -87,10 +192,7 @@
 #define TXT_WPNPHOENIXROD       "PHOENIX ROD"
 #define TXT_WPNGAUNTLETS        "GAUNTLETS OF THE NECROMANCER"
 
-//
 // SB_bar.c
-//
-
 #define TXT_CHEATGODON          "GOD MODE ON"
 #define TXT_CHEATGODOFF         "GOD MODE OFF"
 #define TXT_CHEATNOCLIPON       "NO CLIPPING ON"
@@ -118,38 +220,23 @@
 #define TXT_CHEATIDDQD          "TRYING TO CHEAT, EH?  NOW YOU DIE!"
 #define TXT_CHEATIDKFA          "CHEATER - YOU DON'T DESERVE WEAPONS"
 
-//
 // P_doors.c
-//
-
 #define TXT_NEEDBLUEKEY         "YOU NEED A BLUE KEY TO OPEN THIS DOOR"
 #define TXT_NEEDGREENKEY        "YOU NEED A GREEN KEY TO OPEN THIS DOOR"
 #define TXT_NEEDYELLOWKEY       "YOU NEED A YELLOW KEY TO OPEN THIS DOOR"
 
-//
 // G_game.c
-//
-
 #define TXT_GAMESAVED           "GAME SAVED"
 
-//
 // AM_map.c
-//
-
 #define AMSTR_FOLLOWON          "FOLLOW MODE ON"
 #define AMSTR_FOLLOWOFF         "FOLLOW MODE OFF"
-
 #define AMSTR_GRIDON            "Grid ON"
 #define AMSTR_GRIDOFF           "Grid OFF"
-
 #define AMSTR_MARKEDSPOT        "Marked Spot"
 #define AMSTR_MARKSCLEARED      "All Marks Cleared"
 
-//
 // MN_menu.c
-//
-
-// Improved (PALFIX) and standard (PLAYPAL) gamma correction
 #define TXT_GAMMA_IMPROVED_OFF  "IMPROVED GAMMA CORRECTION OFF"
 #define TXT_GAMMA_IMPROVED_05   "IMPROVED GAMMA CORRECTION LEVEL 0.5"
 #define TXT_GAMMA_IMPROVED_1    "IMPROVED GAMMA CORRECTION LEVEL 1.0"
@@ -169,10 +256,7 @@
 #define TXT_GAMMA_ORIGINAL_35   "STANDARD GAMMA CORRECTION LEVEL 3.5"
 #define TXT_GAMMA_ORIGINAL_4    "STANDARD GAMMA CORRECTION LEVEL 4.0"
 
-//
 // F_finale.c
-//
-
 #define E1TEXT  "with the destruction of the iron\n"\
                 "liches and their minions, the last\n"\
                 "of the undead are cleared from this\n"\
@@ -270,41 +354,27 @@
                 "surrender without a fight. eyes\n"\
                 "wide, you go to meet your fate."
 
-//
 // Port-specific strings
-//
-
 #define TXT_ALWAYSRUN_ON    "ALWAYS RUN ON"
 #define TXT_ALWAYSRUN_OFF   "ALWAYS RUN OFF"
-
 #define TXT_MLOOK_ON        "MOUSE LOOK ON"
 #define TXT_MLOOK_OFF       "MOUSE LOOK OFF"
-
 #define TXT_CROSSHAIR_ON    "CROSSHAIR ON"
 #define TXT_CROSSHAIR_OFF   "CROSSHAIR OFF"
-
 #define TXT_SECRET_FOUND    "A SECRET IS REVEALED!"
-
-#define RD_ON   "ON"
-#define RD_OFF  "OFF"
-
+#define RD_ON               "ON"
+#define RD_OFF              "OFF"
 
 // -----------------------------------------------------------------------------
 // Русский язык
 // -----------------------------------------------------------------------------
 
-//
 // Keys
-//
+#define TXT_GOTBLUEKEY_RUS      "CBYBQ RK.X"    // СИНИЙ КЛЮЧ
+#define TXT_GOTYELLOWKEY_RUS    ";TKNSQ RK.X"   // ЖЕЛТЫЙ КЛЮЧ
+#define TXT_GOTGREENKEY_RUS     "PTKTYSQ RK.X"  // ЗЕЛЕНЫЙ КЛЮЧ
 
-#define TXT_GOTBLUEKEY_RUS          "CBYBQ RK.X"    // СИНИЙ КЛЮЧ
-#define TXT_GOTYELLOWKEY_RUS        ";TKNSQ RK.X"   // ЖЕЛТЫЙ КЛЮЧ
-#define TXT_GOTGREENKEY_RUS         "PTKTYSQ RK.X"  // ЗЕЛЕНЫЙ КЛЮЧ
-
-//
 // Artifacts
-//
-
 #define TXT_ARTIHEALTH_RUS          "RDFHWTDSQ AKFRJY"      // КВАРЦЕВЫЙ ФЛАКОН
 #define TXT_ARTIFLY_RUS             "RHSKMZ UYTDF"          // КРЫЛЬЯ ГНЕВА
 #define TXT_ARTIINVULNERABILITY_RUS "RJKMWJ YTEZPDBVJCNB"   // КОЛЬЦО НЕУЯЗВИМОСТИ
@@ -316,20 +386,14 @@
 #define TXT_ARTIFIREBOMB_RUS        "XFCJDFZ ,JV,F LHTDYB[" // ЧАСОВАЯ БОМБА ДРЕВНИХ
 #define TXT_ARTITELEPORT_RUS        "'V,KTVF [FJCF"         // ЭМБЛЕМА ХАОСА
 
-//
 // Items
-//
-
 #define TXT_ITEMHEALTH_RUS          "RHBCNFKMYSQ AKFRJY"    // КРИСТАЛЬНЫЙ ФЛАКОН
 #define TXT_ITEMBAGOFHOLDING_RUS    "YJCBKMYSQ RJITKM"      // НОСИЛЬНЫЙ КОШЕЛЬ
 #define TXT_ITEMSHIELD1_RUS         "CTHT,HZYSQ OBN"        // СЕРЕБРЯНЫЙ ЩИТ
 #define TXT_ITEMSHIELD2_RUS         "PFXFHJDFYYSQ OBN"      // ЗАЧАРОВАННЫЙ ЩИТ
 #define TXT_ITEMSUPERMAP_RUS        "CDBNJR RFHNS"          // СВИТОК КАРТЫ
 
-//
 // Ammo
-//
-
 #define TXT_AMMOGOLDWAND1_RUS       "RHBCNFKK LKZ 'KMABQCRJUJ ;TPKF"    // КРИСТАЛЛ ДЛЯ ЭЛЬФИЙСКОГО ЖЕЗЛА
 #define TXT_AMMOGOLDWAND2_RUS       ";TJLF RHBCNFKKF"       // ЖЕОДА КРИСТАЛЛА
 #define TXT_AMMOMACE1_RUS           "CATHS LKZ ,EKFDS"      // СФЕРЫ ДЛЯ БУЛАВЫ
@@ -343,21 +407,15 @@
 #define TXT_AMMOPHOENIXROD1_RUS     "GKFVTYYSQ IFH"         // ПЛАМЕННЫЙ ШАР
 #define TXT_AMMOPHOENIXROD2_RUS     "BYATHYFKMYSQ IFH"      // ИНФЕРНАЛЬНЫЙ ШАР
 
-//
 // Weapons
-//
+#define TXT_WPNMACE_RUS             "JUYTYYFZ ,EKFDF"       // ОГНЕННАЯ БУЛАВА
+#define TXT_WPNCROSSBOW_RUS         "'ABHYSQ FH,FKTN"       // ЭФИРНЫЙ АРБАЛЕТ
+#define TXT_WPNBLASTER_RUS          "RJUJNM LHFRJYF"        // КОГОТЬ ДРАКОНА
+#define TXT_WPNSKULLROD_RUS         "GJCJ[ FLF"             // ПОСОХ АДА
+#define TXT_WPNPHOENIXROD_RUS       ";TPK ATYBRCF"          // ЖЕЗЛ ФЕНИКСА
+#define TXT_WPNGAUNTLETS_RUS        "GTHXFNRB YTRHJVFYNF"   // ПЕРЧАТКИ НЕКРОМАНТА
 
-#define TXT_WPNMACE_RUS         "JUYTYYFZ ,EKFDF"       // ОГНЕННАЯ БУЛАВА
-#define TXT_WPNCROSSBOW_RUS     "'ABHYSQ FH,FKTN"       // ЭФИРНЫЙ АРБАЛЕТ
-#define TXT_WPNBLASTER_RUS      "RJUJNM LHFRJYF"        // КОГОТЬ ДРАКОНА
-#define TXT_WPNSKULLROD_RUS     "GJCJ[ FLF"             // ПОСОХ АДА
-#define TXT_WPNPHOENIXROD_RUS   ";TPK ATYBRCF"          // ЖЕЗЛ ФЕНИКСА
-#define TXT_WPNGAUNTLETS_RUS    "GTHXFNRB YTRHJVFYNF"   // ПЕРЧАТКИ НЕКРОМАНТА
-
-//
 // SB_bar.c
-//
-
 #define TXT_CHEATGODON_RUS          "HT;BV ,JUF"                            // РЕЖИМ БОГА
 #define TXT_CHEATGODOFF_RUS         "HT;BV ,JUF JNVTYTY"                    // РЕЖИМ БОГА ОТМЕНЕН
 #define TXT_CHEATNOCLIPON_RUS       "GHJ[J;LTYBT XTHTP CNTYS"               // ПРОХОЖДЕНИЕ ЧЕРЕЗ СТЕНЫ
@@ -385,38 +443,23 @@
 #define TXT_CHEATIDDQD_RUS          "GSNFTIMCZ C[BNHBNM? NFR EVHB ;T!"      // ПЫТАЕШЬСЯ СХИТРИТЬ? ТАК УМРИ ЖЕ!
 #define TXT_CHEATIDKFA_RUS          ";EKBR< NS YT LJCNJBY CDJTUJ JHE;BZ"    // ЖУЛИК, ТЫ НЕ ДОСТОИН СВОЕГО ОРУЖИЯ
 
-//
 // P_doors.c
-//
-
 #define TXT_NEEDBLUEKEY_RUS     "LKZ JNRHSNBZ YE;TY CBYBQ RK.X"     // ДЛЯ ОТКРЫТИЯ НУЖЕН СИНИЙ КЛЮЧ
 #define TXT_NEEDGREENKEY_RUS    "LKZ JNRHSNBZ YE;TY PTKTYSQ RK.X"   // ДЛЯ ОТКРЫТИЯ НУЖЕН ЗЕЛЕНЫЙ КЛЮЧ
 #define TXT_NEEDYELLOWKEY_RUS   "LKZ JNRHSNBZ YE;TY ;TKNSQ RK.X"    // ДЛЯ ОТКРЫТИЯ НУЖЕН ЖЕЛТЫЙ КЛЮЧ
 
-//
 // G_game.c
-//
-
 #define TXT_GAMESAVED_RUS       "BUHF CJ[HFYTYF"    // ИГРА СОХРАНЕНА
 
-//
 // AM_map.c
-//
-
 #define AMSTR_FOLLOWON_RUS      "HT;BV CKTLJDFYBZ DRK.XTY"      // РЕЖИМ СЛЕДОВАНИЯ ВКЛЮЧЕН
 #define AMSTR_FOLLOWOFF_RUS     "HT;BV CKTLJDFYBZ JNRK.XTY"     // РЕЖИМ СЛЕДОВАНИЯ ОТКЛЮЧЕН
-
 #define AMSTR_GRIDON_RUS        "CTNRF DRK.XTYF"                // СЕТКА ВКЛЮЧЕНА
 #define AMSTR_GRIDOFF_RUS       "CTNRF DSRK.XTYF"               // СЕТКА ВЫКЛЮЧЕНА
-
 #define AMSTR_MARKEDSPOT_RUS    "JNVTNRF"                       // ОТМЕТКА
 #define AMSTR_MARKSCLEARED_RUS  "JNVTNRB JXBOTYS"               // ОТМЕТКИ ОЧИЩЕНЫ
 
-//
 // MN_menu.c
-//
-
-// Улучшенная (PALFIX) и стандартная (PLAYPAL) гамма-коррекция 
 #define TXT_GAMMA_IMPROVED_OFF_RUS  "EKEXITYYFZ UFVVF-RJHHTRWBZ JNRK.XTYF"     // Улучшенная гамма-коррекция отключена
 #define TXT_GAMMA_IMPROVED_05_RUS   "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 0>5"   // Уровень улучшенной гамма-коррекции: 0.5
 #define TXT_GAMMA_IMPROVED_1_RUS    "EHJDTYM EKEXITYYJQ UFVVF-RJHHTRWBB 1>0"   // Уровень улучшенной гамма-коррекции: 1.0
@@ -436,10 +479,7 @@
 #define TXT_GAMMA_ORIGINAL_35_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 3>5"  // Уровень стандартной гамма-коррекции: 3.5
 #define TXT_GAMMA_ORIGINAL_4_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 4>0"  // Уровень стандартной гамма-коррекции: 4.0
 
-//
 // F_finale.c
-//
-
 #define E1TEXT_RUS  "C EYBXNJ;TYBTV ;TKTPYS[ KBXTQ\n"\
                     "B B[ GHBCGTIYBRJD< JRHTCNYST PTVKB\n"\
                     "JXBCNBKBCM JN JVTHPBNTKMYJQ YT;BNB>\n"\
@@ -656,23 +696,16 @@
 **                  путь - наверх.
 */
 
-//
 // Специфические сообщения порта
-//
-
-#define TXT_ALWAYSRUN_ON_RUS "GJCNJZYYSQ ,TU DRK.XTY"     // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
-#define TXT_ALWAYSRUN_OFF_RUS "GJCNJZYYSQ ,TU DSRK.XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
-
-#define TXT_MLOOK_ON_RUS "J,PJH VSIM. DRK.XTY"            // ОБЗОР МЫШЬЮ ВКЛЮЧЕН
-#define TXT_MLOOK_OFF_RUS "J,PJH VSIM. DSRK.XTY"          // ОБЗОР МЫШЬЮ ВЫКЛЮЧЕН
-
-#define TXT_CROSSHAIR_ON_RUS "GHBWTK DRK.XTY"             // ПРИЦЕЛ ВКЛЮЧЕН
-#define TXT_CROSSHAIR_OFF_RUS "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
-
-#define TXT_SECRET_FOUND_RUS "J,YFHE;TY NFQYBR!"          // ОБНАРУЖЕН ТАЙНИК!
-
-#define RD_ON_RUS   "DRK"   // ВКЛ
-#define RD_OFF_RUS  "DSRK"  // ВЫКЛ
+#define TXT_ALWAYSRUN_ON_RUS    "GJCNJZYYSQ ,TU DRK.XTY"    // ПОСТОЯННЫЙ БЕГ ВКЛЮЧЕН
+#define TXT_ALWAYSRUN_OFF_RUS   "GJCNJZYYSQ ,TU DSRK.XTY"   // ПОСТОЯННЫЙ БЕГ ВЫКЛЮЧЕН
+#define TXT_MLOOK_ON_RUS        "J,PJH VSIM. DRK.XTY"       // ОБЗОР МЫШЬЮ ВКЛЮЧЕН
+#define TXT_MLOOK_OFF_RUS       "J,PJH VSIM. DSRK.XTY"      // ОБЗОР МЫШЬЮ ВЫКЛЮЧЕН
+#define TXT_CROSSHAIR_ON_RUS    "GHBWTK DRK.XTY"            // ПРИЦЕЛ ВКЛЮЧЕН
+#define TXT_CROSSHAIR_OFF_RUS   "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
+#define TXT_SECRET_FOUND_RUS    "J,YFHE;TY NFQYBR!"         // ОБНАРУЖЕН ТАЙНИК!
+#define RD_ON_RUS               "DRK"                       // ВКЛ
+#define RD_OFF_RUS              "DSRK"                      // ВЫКЛ
 
 //
 // Version stuff (better keep it in one place)
@@ -697,4 +730,9 @@
 #define TXT_ARCH_RUS      " - ([86)"        // x86
 #else
 #define TXT_ARCH_RUS      ""                // ?  
+#endif
+
+
+
+
 #endif

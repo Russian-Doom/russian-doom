@@ -758,9 +758,16 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
     // [JN] Mouselook: initials
     // TODO: make it safe for network game
-    if (mlook && !netgame && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !menuactive && !askforquit && !paused)
+    if (!netgame && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !menuactive && !askforquit && !paused)
     {
-        cmd->lookdir += mousey;
+        if (mlook || novert)
+        {
+            cmd->lookdir += mousey;
+        }
+        else if (!novert)
+        {
+            forward += mousey;
+        }
         
          if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
              players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
@@ -2432,9 +2439,7 @@ void G_DoSaveGame(void)
 
     gameaction = ga_nothing;
     savedescription[0] = 0;
-    P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
-                                                     TXT_GAMESAVED :
-                                                     TXT_GAMESAVED_RUS), true);
+    P_SetMessage(&players[consoleplayer], DEH_String(txt_gamesaved), true);
 
     free(filename);
 }

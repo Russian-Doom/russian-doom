@@ -684,7 +684,6 @@ void R_InitData(void)
 
     if (!vanillaparm)
     {
-        W_MergeFile("base/brightmaps/heretic-brightmaps.wad");
         R_InitBrightmaps();
         R_InitBrightmappedTextures ();
     }

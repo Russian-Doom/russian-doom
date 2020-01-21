@@ -145,7 +145,11 @@ void DrawMessage(void)
     {                           // No message
         return;
     }
+
+    if (english_language)
     MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2 + ORIGWIDTH_DELTA, 1);
+    else
+    MN_DrTextSmallRUS(player->message, 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + ORIGWIDTH_DELTA, 1);
 }
 
 //---------------------------------------------------------------------------
@@ -219,12 +223,15 @@ void D_Display(void)
     {
         if (!netgame)
         {
-            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, (viewwindowy >> hires) + 5, W_CacheLumpName(DEH_String("PAUSED"),
-                                                              PU_CACHE));
+            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, (viewwindowy >> hires) + 5, 
+                                     W_CacheLumpName(DEH_String(english_language ? 
+                                                                "PAUSED" : "RD_PAUSE"), PU_CACHE));
         }
         else
         {
-            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, 70, W_CacheLumpName(DEH_String("PAUSED"), PU_CACHE));
+            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, 70, 
+                                     W_CacheLumpName(DEH_String(english_language ? 
+                                                                "PAUSED" : "RD_PAUSE"), PU_CACHE));
         }
     }
     // Handle player messages
@@ -346,7 +353,7 @@ void D_PageDrawer(void)
     V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
     if (demosequence == 1)
     {
-        V_DrawShadowedPatchRaven(4, 160, W_CacheLumpName(DEH_String("ADVISOR"), PU_CACHE));
+        V_DrawShadowedPatchRaven(4, 160, W_CacheLumpName(DEH_String(english_language ? "ADVISOR" : "ADVIS_RU"), PU_CACHE));
     }
     UpdateState |= I_FULLSCRN;
 }
@@ -379,13 +386,37 @@ void D_DoAdvanceDemo(void)
         case 0:
             pagetic = 210;
             gamestate = GS_DEMOSCREEN;
-            pagename = DEH_String("TITLE");
+
+            if (english_language)
+            {
+                pagename = DEH_String("TITLE");
+            }
+            else
+            {
+                if (gamemode == retail)
+                pagename = DEH_String("TITLE_RT");
+                else
+                pagename = DEH_String("TITLE");
+            }
+
             S_StartSong(mus_titl, false);
             break;
         case 1:
             pagetic = 140;
             gamestate = GS_DEMOSCREEN;
-            pagename = DEH_String("TITLE");
+
+            if (english_language)
+            {
+                pagename = DEH_String("TITLE");
+            }
+            else
+            {
+                if (gamemode == retail)
+                pagename = DEH_String("TITLE_RT");
+                else
+                pagename = DEH_String("TITLE");
+            }
+
             break;
         case 2:
             BorderNeedRefresh = true;
@@ -396,7 +427,19 @@ void D_DoAdvanceDemo(void)
         case 3:
             pagetic = 200;
             gamestate = GS_DEMOSCREEN;
-            pagename = DEH_String("CREDIT");
+
+            if (english_language)
+            {
+                pagename = DEH_String("CREDIT");
+            }
+            else
+            {
+                if (gamemode == retail)
+                pagename = DEH_String("CRED_RT");
+                else
+                pagename = DEH_String("CRED_RG");
+            }
+
             break;
         case 4:
             BorderNeedRefresh = true;
@@ -409,11 +452,28 @@ void D_DoAdvanceDemo(void)
             gamestate = GS_DEMOSCREEN;
             if (gamemode == shareware)
             {
+                if (english_language)
                 pagename = DEH_String("ORDER");
+                else
+                pagename = DEH_String("ORDER_R");
             }
             else
             {
-                pagename = DEH_String("CREDIT");
+                if (english_language)
+                {
+                    pagename = DEH_String("CREDIT");
+                }
+                else
+                {
+                    if (gamemode == retail)
+                    {
+                        pagename = DEH_String("CRED_RT");
+                    }
+                    else
+                    {
+                        pagename = DEH_String("CRED_RG");
+                    }
+                }
             }
             break;
         case 6:
@@ -1186,54 +1246,27 @@ void D_DoomMain(void)
 
     demoextend = M_ParmExists("-demoextend");
 
+    W_MergeFile("base/heretic-common.wad");
+
     if (W_CheckNumForName(DEH_String("E2M1")) == -1)
     {
         gamemode = shareware;
-        W_MergeFile("base/common/heretic-common.wad");
-
-        if (english_language)
-        {
-            gamedescription = "Heretic (shareware)";
-        }
-        else
-        {
-            gamedescription = "Heretic (Демоверсия)";
-            W_MergeFile("base/common/heretic-common-russian.wad");
-            W_MergeFile("base/common/heretic-shareware-russian.wad");
-        }
+        gamedescription = english_language ?
+                          "Heretic (shareware)" :
+                          "Heretic (демоверсия)";
     }
     else if (W_CheckNumForName("EXTENDED") != -1)
     {
         // Presence of the EXTENDED lump indicates the retail version
         gamemode = retail;
-        W_MergeFile("base/common/heretic-common.wad");
-        
-        if (english_language)
-        {
-            gamedescription = "Heretic: Shadow of the Serpent Riders";
-        }
-        else
-        {
-            gamedescription = "Heretic: Тень Змеиных Всадников";
-            W_MergeFile("base/common/heretic-common-russian.wad");
-            W_MergeFile("base/common/heretic-retail-russian.wad");
-        }
+        gamedescription = english_language ? 
+                          "Heretic: Shadow of the Serpent Riders" :
+                          "Heretic: Тень Змеиных Всадников";
     }
     else
     {
         gamemode = registered;
         gamedescription = "Heretic";
-        W_MergeFile("base/common/heretic-common.wad");
-
-        if (english_language)
-        {
-            // [JN] We are fine.
-        }
-        else
-        {
-            W_MergeFile("base/common/heretic-common-russian.wad");
-            W_MergeFile("base/common/heretic-registered-russian.wad");            
-        }
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
@@ -1445,6 +1478,9 @@ void D_DoomMain(void)
     DEH_printf(gamedescription);
     DEH_printf("\".");
     DEH_printf("\n");
+
+    // [JN] Define and load translated strings
+    RD_DefineLanguageStrings();
 
     D_DoomLoop();               // Never returns
 }

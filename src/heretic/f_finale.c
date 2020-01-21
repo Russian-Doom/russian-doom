@@ -39,6 +39,7 @@ char *finaletext;
 char *finaleflat;
 
 int FontABaseLump;
+int FontFBaseLump;
 
 extern boolean automapactive;
 extern boolean viewactive;
@@ -89,6 +90,7 @@ void F_StartFinale(void)
     finalestage = 0;
     finalecount = 0;
     FontABaseLump = W_GetNumForName(DEH_String("FONTA_S")) + 1;
+    FontFBaseLump = W_GetNumForName(DEH_String("FONTF_S")) + 1;
 
 //      S_ChangeMusic(mus_victor, true);
     S_StartSong(mus_cptd, true);
@@ -222,15 +224,87 @@ void F_TextWrite(void)
             continue;
         }
 
-        w = W_CacheLumpNum(FontABaseLump + c - 33, PU_CACHE);
+        w = W_CacheLumpNum((FontABaseLump) + c - 33, PU_CACHE);
+
         if (cx + SHORT(w->width) > SCREENWIDTH)
             break;
         V_DrawShadowedPatchRaven(cx + ORIGWIDTH_DELTA, cy, w);
         cx += SHORT(w->width);
     }
-
 }
 
+//---------------------------------------------------------------------------
+//
+// F_TextWriteRUS
+//
+//---------------------------------------------------------------------------
+
+void F_TextWriteRUS(void)
+{
+    byte *src, *dest;
+    int x, y;
+    int count;
+    char *ch;
+    int c;
+    int cx, cy;
+    patch_t *w;
+
+//
+// erase the entire screen to a tiled background
+//
+    src = W_CacheLumpName(finaleflat, PU_CACHE);
+    dest = I_VideoBuffer;
+    for (y = 0; y < SCREENHEIGHT; y++)
+    {
+        for (x = 0; x < SCREENWIDTH / 64; x++)
+        {
+            memcpy(dest, src + ((y & 63) << 6), 64);
+            dest += 64;
+        }
+        if (SCREENWIDTH & 63)
+        {
+            memcpy(dest, src + ((y & 63) << 6), SCREENWIDTH & 63);
+            dest += (SCREENWIDTH & 63);
+        }
+    }
+
+//
+// draw some of the text onto the screen
+//
+    cx = 20;
+    cy = 5;
+    ch = finaletext;
+
+    count = (finalecount - 10) / TEXTSPEED;
+    if (count < 0)
+        count = 0;
+    for (; count; count--)
+    {
+        c = *ch++;
+        if (!c)
+            break;
+        if (c == '\n')
+        {
+            cx = 20;
+            cy += 9;
+            continue;
+        }
+
+        c = toupper(c);
+        if (c < 33)
+        {
+            cx += 5;
+            continue;
+        }
+
+        w = W_CacheLumpNum((FontFBaseLump) + c - 33, PU_CACHE);
+
+        if (cx + SHORT(w->width) > SCREENWIDTH)
+            break;
+        V_DrawShadowedPatchRaven(cx + ORIGWIDTH_DELTA, cy, w);
+        cx += SHORT(w->width);
+    }
+}
 
 void F_DrawPatchCol(int x, patch_t * patch, int col)
 {
@@ -435,7 +509,12 @@ void F_Drawer(void)
 {
     UpdateState |= I_FULLSCRN;
     if (!finalestage)
+    {
+        if (english_language)
         F_TextWrite();
+        else
+        F_TextWriteRUS();
+    }
     else
     {
         switch (gameepisode)
@@ -445,11 +524,16 @@ void F_Drawer(void)
                 V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
                 if (gamemode == shareware)
                 {
-                    V_DrawRawScreen(W_CacheLumpName("ORDER", PU_CACHE));
+                    V_DrawRawScreen(W_CacheLumpName(english_language ? 
+                                                    "ORDER" : "ORDER_R", PU_CACHE));
                 }
                 else
                 {
+                    if (english_language)
                     V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                    else
+                    V_DrawRawScreen(W_CacheLumpName(gamemode == retail ?
+                                                    "CRED_RT" : "CRED_RG", PU_CACHE));
                 }
                 break;
             case 2:
@@ -465,7 +549,11 @@ void F_Drawer(void)
             case 4:            // Just show credits screen for extended episodes
             case 5:
                 V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+                if (english_language)
                 V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                else
+                V_DrawRawScreen(W_CacheLumpName(gamemode == retail ?
+                                                "CRED_RT" : "CRED_RG", PU_CACHE));
                 break;
         }
     }

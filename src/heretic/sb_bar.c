@@ -21,7 +21,6 @@
 #include <time.h>
 #include "doomdef.h"
 #include "deh_str.h"
-#include "dstrings.h"
 #include "i_video.h"
 #include "i_swap.h"
 #include "m_cheat.h"
@@ -31,6 +30,7 @@
 #include "s_sound.h"
 #include "v_video.h"
 #include "v_trans.h"
+#include "rd_lang.h"
 #include "jn.h"
 
 // Types
@@ -95,6 +95,7 @@ patch_t *PatchRTFACE;
 patch_t *PatchBARBACK;
 patch_t *PatchCHAIN;
 patch_t *PatchSTATBAR;
+patch_t *PatchSTATBAR_RUS;
 patch_t *PatchLIFEGEM;
 //patch_t *PatchEMPWEAP;
 //patch_t *PatchLIL4BOX;
@@ -210,10 +211,12 @@ void SB_Init(void)
     if (deathmatch)
     {
         PatchSTATBAR = W_CacheLumpName(DEH_String("STATBAR"), PU_STATIC);
+        PatchSTATBAR_RUS = W_CacheLumpName(DEH_String("RD_STBAR"), PU_STATIC);
     }
     else
     {
         PatchSTATBAR = W_CacheLumpName(DEH_String("LIFEBAR"), PU_STATIC);
+        PatchSTATBAR_RUS = W_CacheLumpName(DEH_String("RD_LFBAR"), PU_STATIC);
     }
     if (!netgame)
     {                           // single player game uses red life gem
@@ -708,7 +711,8 @@ void SB_Drawer(void)
         if (!inventory)
         {
             // Main interface
-            V_DrawPatch(34 + ORIGWIDTH_DELTA, 160, PatchSTATBAR);
+            V_DrawPatch(34 + ORIGWIDTH_DELTA, 160, 
+                        english_language ? PatchSTATBAR : PatchSTATBAR_RUS);
             oldarti = 0;
             oldammo = -1;
             oldarmor = -1;
@@ -745,7 +749,8 @@ void SB_Drawer(void)
             if (SB_state != 0)
             {
                 // Main interface
-                V_DrawPatch(34 + ORIGWIDTH_DELTA, 160, PatchSTATBAR);
+                V_DrawPatch(34 + ORIGWIDTH_DELTA, 160, 
+                            english_language ? PatchSTATBAR : PatchSTATBAR_RUS);
                 oldarti = 0;
                 oldammo = -1;
                 oldarmor = -1;
@@ -1441,15 +1446,11 @@ static void CheatGodFunc(player_t * player, Cheat_t * cheat)
     player->cheats ^= CF_GODMODE;
     if (player->cheats & CF_GODMODE)
     {
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATGODON :
-                                        TXT_CHEATGODON_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatgodon), false);
     }
     else
     {
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATGODOFF :
-                                        TXT_CHEATGODOFF_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatgodoff), false);
     }
     SB_state = -1;
 }
@@ -1459,15 +1460,11 @@ static void CheatNoClipFunc(player_t * player, Cheat_t * cheat)
     player->cheats ^= CF_NOCLIP;
     if (player->cheats & CF_NOCLIP)
     {
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATNOCLIPON :
-                                        TXT_CHEATNOCLIPON_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatnoclipon), false);
     }
     else
     {
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATNOCLIPOFF :
-                                        TXT_CHEATNOCLIPOFF_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatnoclipoff), false);
     }
 }
 
@@ -1500,9 +1497,7 @@ static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat)
     {
         player->ammo[i] = player->maxammo[i];
     }
-    P_SetMessage(player, DEH_String(english_language ?
-                                    TXT_CHEATWEAPONS :
-                                    TXT_CHEATWEAPONS_RUS), false);
+    P_SetMessage(player, DEH_String(txt_cheatweapons), false);
 }
 
 static void CheatPowerFunc(player_t * player, Cheat_t * cheat)
@@ -1510,16 +1505,12 @@ static void CheatPowerFunc(player_t * player, Cheat_t * cheat)
     if (player->powers[pw_weaponlevel2])
     {
         player->powers[pw_weaponlevel2] = 0;
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATPOWEROFF :
-                                        TXT_CHEATPOWEROFF_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatpoweroff), false);
     }
     else
     {
         P_UseArtifact(player, arti_tomeofpower);
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATPOWERON :
-                                        TXT_CHEATPOWERON_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatpoweron), false);
     }
 }
 
@@ -1533,9 +1524,7 @@ static void CheatHealthFunc(player_t * player, Cheat_t * cheat)
     {
         player->health = player->mo->health = MAXHEALTH;
     }
-    P_SetMessage(player, DEH_String(english_language ?
-                                    TXT_CHEATHEALTH :
-                                    TXT_CHEATHEALTH_RUS), false);
+    P_SetMessage(player, DEH_String(txt_cheathealth), false);
 }
 
 static void CheatKeysFunc(player_t * player, Cheat_t * cheat)
@@ -1544,26 +1533,25 @@ static void CheatKeysFunc(player_t * player, Cheat_t * cheat)
     player->keys[key_green] = true;
     player->keys[key_blue] = true;
     playerkeys = 7;             // Key refresh flags
-    P_SetMessage(player, DEH_String(english_language ?
-                                    TXT_CHEATKEYS :
-                                    TXT_CHEATKEYS_RUS), false);
+    P_SetMessage(player, DEH_String(txt_cheatkeys), false);
 }
 
 static void CheatSoundFunc(player_t * player, Cheat_t * cheat)
 {
+    return; 
+
+    // [JN] TODO - crashing :O
+    /*
     DebugSound = !DebugSound;
     if (DebugSound)
     {
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATSOUNDON :
-                                        TXT_CHEATSOUNDON_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatsoundon), false);
     }
     else
     {
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATSOUNDOFF :
-                                        TXT_CHEATSOUNDOFF_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatsoundoff), false);
     }
+    */
 }
 
 static void CheatTickerFunc(player_t * player, Cheat_t * cheat)
@@ -1571,15 +1559,11 @@ static void CheatTickerFunc(player_t * player, Cheat_t * cheat)
     DisplayTicker = !DisplayTicker;
     if (DisplayTicker)
     {
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATTICKERON :
-                                        TXT_CHEATTICKERON_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheattickeron), false);
     }
     else
     {
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATTICKEROFF :
-                                        TXT_CHEATTICKEROFF_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheattickeroff), false);
     }
 
     I_DisplayFPSDots(DisplayTicker);
@@ -1587,16 +1571,12 @@ static void CheatTickerFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatArtifact1Func(player_t * player, Cheat_t * cheat)
 {
-    P_SetMessage(player, DEH_String(english_language ?
-                                    TXT_CHEATARTIFACTS1 :
-                                    TXT_CHEATARTIFACTS1_RUS), false);
+    P_SetMessage(player, DEH_String(txt_cheatartifacts1), false);
 }
 
 static void CheatArtifact2Func(player_t * player, Cheat_t * cheat)
 {
-    P_SetMessage(player, DEH_String(english_language ?
-                                    TXT_CHEATARTIFACTS2 :
-                                    TXT_CHEATARTIFACTS2_RUS), false);
+    P_SetMessage(player, DEH_String(txt_cheatartifacts2), false);
 }
 
 static void CheatArtifact3Func(player_t * player, Cheat_t * cheat)
@@ -1624,9 +1604,7 @@ static void CheatArtifact3Func(player_t * player, Cheat_t * cheat)
                 P_GiveArtifact(player, i, NULL);
             }
         }
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATARTIFACTS3 :
-                                        TXT_CHEATARTIFACTS3_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatartifacts3), false);
     }
     else if (type > arti_none && type < NUMARTIFACTS
              && count > 0 && count < 10)
@@ -1634,24 +1612,18 @@ static void CheatArtifact3Func(player_t * player, Cheat_t * cheat)
         if (gamemode == shareware
          && (type == arti_superhealth || type == arti_teleport))
         {
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_CHEATARTIFACTSFAIL :
-                                            TXT_CHEATARTIFACTSFAIL_RUS), false);
+            P_SetMessage(player, DEH_String(txt_cheatartifactsfail), false);
             return;
         }
         for (i = 0; i < count; i++)
         {
             P_GiveArtifact(player, type, NULL);
         }
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATARTIFACTS3 : 
-                                        TXT_CHEATARTIFACTS3_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatartifacts3), false);
     }
     else
     {                           // Bad input
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATARTIFACTSFAIL :
-                                        TXT_CHEATARTIFACTSFAIL_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatartifactsfail), false);
     }
 }
 
@@ -1668,9 +1640,7 @@ static void CheatWarpFunc(player_t * player, Cheat_t * cheat)
     if (D_ValidEpisodeMap(heretic, gamemode, episode, map))
     {
         G_DeferedInitNew(gameskill, episode, map);
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATWARP :
-                                        TXT_CHEATWARP_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatwarp), false);
     }
 }
 
@@ -1682,25 +1652,19 @@ static void CheatChickenFunc(player_t * player, Cheat_t * cheat)
     {
         if (P_UndoPlayerChicken(player))
         {
-            P_SetMessage(player, DEH_String(english_language ?
-                                            TXT_CHEATCHICKENOFF :
-                                            TXT_CHEATCHICKENOFF_RUS), false);
+            P_SetMessage(player, DEH_String(txt_cheatchickenoff), false);
         }
     }
     else if (P_ChickenMorphPlayer(player))
     {
-        P_SetMessage(player, DEH_String(english_language ?
-                                        TXT_CHEATCHICKENON :
-                                        TXT_CHEATCHICKENON_RUS), false);
+        P_SetMessage(player, DEH_String(txt_cheatchickenon), false);
     }
 }
 
 static void CheatMassacreFunc(player_t * player, Cheat_t * cheat)
 {
     P_Massacre();
-    P_SetMessage(player, DEH_String(english_language ?
-                                    TXT_CHEATMASSACRE :
-                                    TXT_CHEATMASSACRE_RUS), false);
+    P_SetMessage(player, DEH_String(txt_cheatmassacre), false);
 }
 
 static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat)
@@ -1715,17 +1679,13 @@ static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat)
         player->weaponowned[i] = false;
     }
     player->pendingweapon = wp_staff;
-    P_SetMessage(player, DEH_String(english_language ?
-                                    TXT_CHEATIDKFA :
-                                    TXT_CHEATIDKFA_RUS), true);
+    P_SetMessage(player, DEH_String(txt_cheatidkfa), true);
 }
 
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
 {
     P_DamageMobj(player->mo, NULL, player->mo, 10000);
-    P_SetMessage(player, DEH_String(english_language ?
-                                    TXT_CHEATIDDQD :
-                                    TXT_CHEATIDDQD_RUS), true);
+    P_SetMessage(player, DEH_String(txt_cheatiddqd), true);
 }
 
 static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)

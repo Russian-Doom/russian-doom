@@ -228,9 +228,7 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
             }
             if (!player->keys[key_blue])
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_NEEDBLUEKEY :
-                                                TXT_NEEDBLUEKEY_RUS), false);
+                P_SetMessage(player, DEH_String(txt_needbluekey), false);
                 S_StartSound(NULL, sfx_plroof);
                 return;
             }
@@ -243,9 +241,7 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
             }
             if (!player->keys[key_yellow])
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_NEEDYELLOWKEY :
-                                                TXT_NEEDYELLOWKEY_RUS), false);
+                P_SetMessage(player, DEH_String(txt_needyellowkey), false);
                 S_StartSound(NULL, sfx_plroof);
                 return;
             }
@@ -258,9 +254,7 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
             }
             if (!player->keys[key_green])
             {
-                P_SetMessage(player, DEH_String(english_language ?
-                                                TXT_NEEDGREENKEY :
-                                                TXT_NEEDGREENKEY_RUS), false);
+                P_SetMessage(player, DEH_String(txt_needgreenkey), false);
                 S_StartSound(NULL, sfx_plroof);
                 return;
             }

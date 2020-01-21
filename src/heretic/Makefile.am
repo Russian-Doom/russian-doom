@@ -13,7 +13,6 @@ d_main.c                                             \
 d_net.c                                              \
                        doomdata.h                    \
                        doomdef.h                     \
-                       dstrings.h                    \
 f_finale.c                                           \
 g_game.c                                             \
 info.c                 info.h                        \
@@ -50,6 +49,7 @@ r_main.c                                             \
 r_plane.c                                            \
 r_segs.c                                             \
 r_things.c                                           \
+rd_lang.c              rd_lang.h                     \
 sb_bar.c                                             \
 sounds.c               sounds.h                      \
 s_sound.c              s_sound.h
