@@ -2435,15 +2435,14 @@ void D_DoomMain (void)
         // version), MAP33 overflows into the Plutonia level names
         // array, so HUSTR_33 is actually PHUSTR_1.
 
-        DEH_AddStringReplacement(HUSTR_31, english_language ? 
-                                           "level 31: idkfa" :
-                                           "ehjdtym 31: blraf");
-        DEH_AddStringReplacement(HUSTR_32, english_language ?
-                                           "level 32: keen" :
-                                           "ehjdtym 32: rby");
-        DEH_AddStringReplacement(PHUSTR_1, english_language ? 
-                                           "level 33: betray" :
-                                           "ehjdtym 33: ghtlfntkmcndj");
+        DEH_AddStringReplacement(HUSTR_31, "level 31: idkfa");
+        DEH_AddStringReplacement(HUSTR_32, "level 32: keen");
+        DEH_AddStringReplacement(PHUSTR_1, "level 33: betray");
+
+        // [JN] Replace Russian names as well.
+        DEH_AddStringReplacement(HUSTR_31_RUS, "ehjdtym 31: blraf");         // уровень 31: идкфа
+        DEH_AddStringReplacement(HUSTR_32_RUS, "ehjdtym 32: rby");           // уровень 32: кин
+        DEH_AddStringReplacement(PHUSTR_1_RUS, "ehjdtym 33: ghtlfntkmcndj"); // уровень 33: предательство
 
         // The BFG edition doesn't have the "low detail" menu option (fair
         // enough). But bizarrely, it reuses the M_GDHIGH patch as a label

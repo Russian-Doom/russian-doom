@@ -403,6 +403,10 @@ static patch_t**    lnames_d2_rus;
 static patch_t**    lnames_plut_rus;
 static patch_t**    lnames_tnt_rus;
 
+// [JN] Russian MAP31 and MAP32 names in BFG Edition
+static patch_t*     rd_idkfa;
+static patch_t*     rd_keen;
+
 // Buffer storing the backdrop
 static patch_t*     background;
 
@@ -447,7 +451,22 @@ void WI_drawLF(void)
             if (logical_gamemission == doom)
             V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2, y, lnames_d1_rus[wbs->last]);
             else if (logical_gamemission == doom2 || gamemission == pack_nerve)
-            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2, y, lnames_d2_rus[wbs->last]);
+            {
+                // [JN] Special case for Russian level names in BFG Edition
+                if (gamevariant == bfgedition)
+                {
+                    if (gamemap == 31)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(rd_idkfa->width))/2, y, rd_idkfa);
+                    else if (gamemap == 32)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(rd_keen->width))/2, y, rd_keen);
+                    else
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2, y, lnames_d2_rus[wbs->last]);
+                }
+                else
+                {
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2, y, lnames_d2_rus[wbs->last]);
+                }
+            }
             else if (logical_gamemission == pack_plut)
             V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_plut_rus[wbs->last]->width))/2, y, lnames_plut_rus[wbs->last]);
             else if (logical_gamemission == pack_tnt)
@@ -502,7 +521,20 @@ void WI_drawEL(void)
         if (logical_gamemission == doom)
         V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2, y, lnames_d1_rus[wbs->next]);
         else if (logical_gamemission == doom2 || gamemission == pack_nerve)
-        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2, y, lnames_d2_rus[wbs->next]);
+        {
+            // [JN] Special case for Russian level names in BFG Edition
+            if (gamevariant == bfgedition)
+            {
+                if (gamemap == 31)
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(rd_keen->width))/2, y, rd_keen);
+                else
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2, y, lnames_d2_rus[wbs->next]);
+            }
+            else
+            {
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2, y, lnames_d2_rus[wbs->next]);
+            }
+        }
         else if (logical_gamemission == pack_plut)
         V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_plut_rus[wbs->next]->width))/2, y, lnames_plut_rus[wbs->next]);
         else if (logical_gamemission == pack_tnt)
@@ -1733,6 +1765,10 @@ static void WI_loadUnloadData(load_callback_t callback)
             DEH_snprintf(name, 9, "R2ILV%2.2d", l);
                 callback(name, &lnames_d2_rus[l]);
         }
+
+        // [JN] Russian MAP31 and MAP32 names in BFG Edition
+        callback(DEH_String("R2_IDKFA"), &rd_idkfa);
+        callback(DEH_String("R2_KEEN"),  &rd_keen);
 
         // [JN] Load Russian Plutonia (only) level names
         for (m=0 ; m<NUMCMAPS ; m++)
