@@ -218,6 +218,10 @@ static boolean I_SDL_InitMusic(void)
 
 #if defined(_WIN32)
     // [AM] Start up midiproc to handle playing MIDI music.
+    // [JN] Do not start Midiproc if music device is set to GUS.
+    // Running Midiproc is preventing GUS synth to be played,
+    // using a Windows MIDI synth instead.
+    if (snd_musicdevice != SNDDEVICE_GUS)
     I_MidiPipe_InitServer();
 #endif
 
