@@ -74,3 +74,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Invisible Warrior
 - NormanSeven
 - Daniil Petrov
+- Manuel Alfayate Corchete
