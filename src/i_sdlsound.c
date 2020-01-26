@@ -526,35 +526,6 @@ static boolean ExpandSoundData_SRC(sfxinfo_t *sfxinfo,
 
 #endif
 
-static boolean ConvertibleRatio(int freq1, int freq2)
-{
-    int ratio;
-
-    if (freq1 > freq2)
-    {
-        return ConvertibleRatio(freq2, freq1);
-    }
-    else if ((freq2 % freq1) != 0)
-    {
-        // Not in a direct ratio
-
-        return false;
-    }
-    else
-    {
-        // Check the ratio is a power of 2
-
-        ratio = freq2 / freq1;
-
-        while ((ratio & 1) == 0)
-        {
-            ratio = ratio >> 1;
-        }
-
-        return ratio == 1;
-    }
-}
-
 #ifdef DEBUG_DUMP_WAVS
 
 // Debug code to dump resampled sound effects to WAV files for analysis.
@@ -639,11 +610,7 @@ static boolean ExpandSoundData_SDL(sfxinfo_t *sfxinfo,
 
     // If we can, use the standard / optimized SDL conversion routines.
 
-    if (samplerate <= mixer_freq
-     && ConvertibleRatio(samplerate, mixer_freq)
-     && SDL_BuildAudioCVT(&convertor,
-                          AUDIO_U8, 1, samplerate,
-                          mixer_format, mixer_channels, mixer_freq))
+    if (false)
     {
         convertor.len = length;
         convertor.buf = malloc(convertor.len * convertor.len_mult);
