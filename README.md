@@ -14,19 +14,19 @@ Starting from version 3.0 for Windows, English is available for all supported ga
 
 ##### Download latest version (Doom only, released: November 25, 2019)
 
-For Windows: [russian-doom-4.0-win32.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/4.0/russian-doom-4.0-win32.zip/download)<br />
-For Windows (x64): [russian-doom-4.0-win64.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/4.0/russian-doom-4.0-win64.zip/download)<br />
-Source codes: [russian-doom-4.0-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/4.0/russian-doom-4.0-source.zip/download)<br />
+For Windows: [russian-doom-4.0-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/4.0/russian-doom-4.0-win32.zip)<br />
+For Windows (x64): [russian-doom-4.0-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/4.0/russian-doom-4.0-win64.zip)<br />
+Source codes: [russian-doom-4.0-source.zip](https://github.com/JNechaevsky/russian-doom/releases/download/4.0/russian-doom-4.0-source.zip)<br />
 
 ##### Download previous version (unified package, released: September 29, 2019)
 
-For Windows: [russian-doom-3.3-win32.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.3/russian-doom-3.3-win32.zip/download)<br />
-For Windows (x64): [russian-doom-3.3-win64.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.3/russian-doom-3.3-win64.zip/download)<br />
-Source codes: [russian-doom-3.3-source.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom/3.3/russian-doom-3.3-source.zip/download)<br />
+For Windows: [russian-doom-3.3-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/3.3/russian-doom-3.3-win32.zip)<br />
+For Windows (x64): [russian-doom-3.3-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/3.3/russian-doom-3.3-win64.zip)<br />
+Source codes: [russian-doom-3.3-source.zip](https://github.com/JNechaevsky/russian-doom/releases/download/3.3/russian-doom-3.3-source.zip)<br />
 
 ##### Other downloads
 
-Version for DOS: [russian-doom-dos-1.7.zip](https://sourceforge.net/projects/jnechaevsky/files/Russian%20Doom%20for%20DOS/1.7/russian-doom-dos-1.7.zip/download)<br />
-PNG font atlases: [russian-doom-fonts-png.zip](https://sourceforge.net/projects/jnechaevsky/files/PNG%20Fonts/russian-doom-fonts-png.zip/download)
+Version for DOS: [russian-doom-dos-1.7.zip](https://github.com/JNechaevsky/russian-doom/releases/download/dos-1.7/russian-doom-dos-1.7.zip)<br />
+PNG font atlases: [russian-doom-fonts-png.zip](https://jnechaevsky.github.io/projects/rusdoom/files/russian-doom-fonts-png.zip)
 
-History of changes for [Windows](http://jnechaevsky.users.sourceforge.net/projects/rusdoom/files/changelog_eng.html) and [DOS](http://jnechaevsky.users.sourceforge.net/projects/rusdoom/files/changelog_dos_rus.html) versions.
+History of changes for [Windows](https://jnechaevsky.github.io/projects/rusdoom/files/changelog_eng.html) and [DOS](https://jnechaevsky.github.io/projects/rusdoom/files/changelog_dos_rus.html) versions.
