@@ -41,7 +41,7 @@
 #include "multiplayer.h"
 #include "sound.h"
 
-#define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/index.html"
+#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
 
 
 //

@@ -37,10 +37,10 @@
 #include "net_io.h"
 #include "net_query.h"
 
-#define MULTI_START_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/netgame_start.html"
-#define MULTI_JOIN_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/netgame_join.html"
+#define MULTI_START_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/netgame_start.html"
+#define MULTI_JOIN_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/netgame_join.html"
 #define MULTI_CONFIG_HELP_URL "https://www.chocolate-doom.org/setup-multi-config"
-#define LEVEL_WARP_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/warp.html"
+#define LEVEL_WARP_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/warp.html"
 
 #define NUM_WADS 10
 #define NUM_EXTRA_PARAMS 10

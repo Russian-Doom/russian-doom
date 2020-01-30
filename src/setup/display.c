@@ -31,7 +31,7 @@
 #include "display.h"
 #include "config.h"
 
-#define WINDOW_HELP_URL "http://jnechaevsky.users.sourceforge.net/projects/rusdoom/setup/display.html"
+#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/display.html"
 
 extern void RestartTextscreen(void);
 
