@@ -571,14 +571,15 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         gamekeydown[127] = false;
         cmd->arti = arti_tomeofpower;
     }
-
     // [JN] Keys for Artifacts
-    if (gamekeydown[key_arti_quartz] && !cmd->arti && (players[consoleplayer].mo->health < MAXHEALTH))
+    else if (gamekeydown[key_arti_quartz] && !cmd->arti 
+             && (players[consoleplayer].mo->health < MAXHEALTH))
     {
         gamekeydown[key_arti_quartz] = false;
         cmd->arti = arti_health;
     }
-    else if (gamekeydown[key_arti_urn] && !cmd->arti && (players[consoleplayer].mo->health < MAXHEALTH))
+    else if (gamekeydown[key_arti_urn] && !cmd->arti 
+             && (players[consoleplayer].mo->health < MAXHEALTH))
     {
         gamekeydown[key_arti_urn] = false;
         cmd->arti = arti_superhealth;
@@ -588,7 +589,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         gamekeydown[key_arti_bomb] = false;
         cmd->arti = arti_firebomb;
     }
-    else if (gamekeydown[key_arti_tome] && !cmd->arti)
+    else if (gamekeydown[key_arti_tome] && !cmd->arti
+             && !players[consoleplayer].powers[pw_weaponlevel2])
     {
         gamekeydown[key_arti_tome] = false;
         cmd->arti = arti_tomeofpower;
