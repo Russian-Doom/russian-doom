@@ -172,6 +172,7 @@ fixed_t*	spritetopoffset;
 
 lighttable_t	*colormaps;
 lighttable_t	*colormaps_beta; // [JN] For infra green light amplification visor
+lighttable_t	*colormaps_bw;   // [JN] For B&W fuzz effect
 
 // [JN] Brightmaps
 lighttable_t	*brightmaps_notgray;
@@ -1058,7 +1059,7 @@ void R_InitTranMap()
 //
 void R_InitColormaps (void)
 {
-    int	lump, lump_beta;
+    int	lump, lump_beta, lump_bw;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -1069,6 +1070,10 @@ void R_InitColormaps (void)
     // [JN] COLORMAP (№33) from Press Release Beta for infra green visor
     lump_beta  = W_GetNumForName(DEH_String("COLORMAB"));
     colormaps_beta  = W_CacheLumpNum(lump_beta, PU_STATIC);
+
+    // [JN] COLORMBW for black and white fuzz effect
+    lump_bw  = W_GetNumForName(DEH_String("COLORMBW"));
+    colormaps_bw  = W_CacheLumpNum(lump_bw, PU_STATIC);
 }
 
 

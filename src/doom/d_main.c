@@ -509,6 +509,7 @@ void D_BindVariables(void)
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("translucency",           &translucency);
+    M_BindIntVariable("improved_fuzz",          &improved_fuzz);
     M_BindIntVariable("colored_hud",            &colored_hud);
     M_BindIntVariable("colored_blood",          &colored_blood);
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
@@ -642,12 +643,12 @@ void D_DoomLoop (void)
         // will run at least one tic
         TryRunTics ();
 
-        // move positional sounds
-        S_UpdateSounds (players[consoleplayer].mo);
-
         // Update display, next frame, with current state.
         if (screenvisible)
         D_Display ();
+
+        // move positional sounds
+        S_UpdateSounds (players[consoleplayer].mo);
     }
 }
 

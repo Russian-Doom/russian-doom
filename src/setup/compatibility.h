@@ -43,6 +43,7 @@ extern int automap_grid;
 extern int brightmaps;
 extern int fake_contrast;
 extern int translucency;
+extern int improved_fuzz;
 extern int colored_hud;
 extern int colored_blood;
 extern int swirling_liquids;

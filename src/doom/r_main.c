@@ -606,7 +606,10 @@ void R_ExecuteSetViewSize (void)
     if (!detailshift)
     {
         colfunc = basecolfunc = R_DrawColumn;
-        fuzzcolfunc = R_DrawFuzzColumn;
+        fuzzcolfunc = (vanillaparm || improved_fuzz == 0) ? R_DrawFuzzColumn :
+                                      improved_fuzz == 1  ? R_DrawFuzzColumnBW :
+                                      improved_fuzz == 2  ? R_DrawFuzzColumnImproved :
+                                                            R_DrawFuzzColumnImprovedBW;
         transcolfunc = R_DrawTranslatedColumn;
         tlcolfunc = R_DrawTLColumn;
         spanfunc = R_DrawSpan;
@@ -614,7 +617,10 @@ void R_ExecuteSetViewSize (void)
     else
     {
         colfunc = basecolfunc = R_DrawColumnLow;
-        fuzzcolfunc = R_DrawFuzzColumnLow;
+        fuzzcolfunc = (vanillaparm || improved_fuzz == 0) ? R_DrawFuzzColumnLow :
+                                      improved_fuzz == 1  ? R_DrawFuzzColumnLowBW :
+                                      improved_fuzz == 2  ? R_DrawFuzzColumnLowImproved :
+                                                            R_DrawFuzzColumnLowImprovedBW;
         transcolfunc = R_DrawTranslatedColumnLow;
         tlcolfunc = R_DrawTLColumnLow;
         spanfunc = R_DrawSpanLow;

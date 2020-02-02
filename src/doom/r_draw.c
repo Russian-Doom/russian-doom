@@ -332,6 +332,11 @@ void R_SetFuzzPosDraw (void)
 //  could create the SHADOW effect,
 //  i.e. spectres and invisible players.
 //
+
+// -----------------------------------------------------------------------------
+// [JN] Fuzz effect, original version (improved_fuzz = 0)
+// -----------------------------------------------------------------------------
+
 void R_DrawFuzzColumn (void) 
 { 
     int     count; 
@@ -384,11 +389,8 @@ void R_DrawFuzzColumn (void)
         *dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
 
         // Clamp table lookup index.
-        // [JN] New fuzz effect. Also fixes animation being stuck in sone instances.
         if (++fuzzpos == FUZZTABLE) 
-        {
-            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
-        }
+        fuzzpos = 0;
 
         dest += SCREENWIDTH;
 
@@ -441,8 +443,8 @@ void R_DrawFuzzColumnLow (void)
     if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
-                 "R_DrawFuzzColumn: %i to %i at %i" :
-                 "R_DrawFuzzColumn: %i к %i у %i",
+                 "R_DrawFuzzColumnLow: %i to %i at %i" :
+                 "R_DrawFuzzColumnLow: %i к %i у %i",
                  dc_yl, dc_yh, dc_x);
     }
 #endif
@@ -476,11 +478,8 @@ void R_DrawFuzzColumnLow (void)
         }
 
         // Clamp table lookup index.
-        // [JN] New fuzz effect. Also fixes animation being stuck in sone instances.
         if (++fuzzpos == FUZZTABLE) 
-        {
-            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
-        }
+        fuzzpos = 0;
 
         dest += SCREENWIDTH << hires;
         dest2 += SCREENWIDTH << hires;
@@ -501,6 +500,419 @@ void R_DrawFuzzColumnLow (void)
         }
     }
 } 
+
+// -----------------------------------------------------------------------------
+// [JN] Fuzz effect, original version + black and white (improved_fuzz = 1)
+// -----------------------------------------------------------------------------
+
+void R_DrawFuzzColumnBW (void) 
+{ 
+    int     count; 
+    byte*   dest; 
+    fixed_t frac;
+    fixed_t fracstep;	 
+    boolean cutoff = false;
+
+    if (!dc_yl) 
+    dc_yl = 1;
+
+    if (dc_yh == viewheight-1) 
+    {
+        dc_yh = viewheight - 2; 
+        cutoff = true;
+    }
+
+    count = dc_yh - dc_yl; 
+
+    if (count < 0) 
+    return; 
+
+#ifdef RANGECHECK 
+    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawFuzzColumnBW: %i to %i at %i" :
+                 "R_DrawFuzzColumnBW: %i к %i у %i", dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    fracstep = dc_iscale; 
+    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+
+    do 
+    {
+        *dest = colormaps_bw[6*256+dest[fuzzoffset[fuzzpos]]]; 
+
+        if (++fuzzpos == FUZZTABLE) 
+        fuzzpos = 0;
+
+        dest += SCREENWIDTH;
+
+        frac += fracstep; 
+    } while (count--); 
+
+    if (cutoff)
+    {
+        *dest = colormaps_bw[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+    }
+} 
+
+void R_DrawFuzzColumnLowBW (void) 
+{ 
+    int     count; 
+    byte*   dest; 
+    byte*   dest2; 
+    byte*   dest3;
+    byte*   dest4;
+    fixed_t frac;
+    fixed_t fracstep;	 
+    int     x;
+    boolean cutoff = false;
+
+    if (!dc_yl) 
+    dc_yl = 1;
+
+    if (dc_yh == viewheight-1)
+    {
+        dc_yh = viewheight - 2; 
+        cutoff = true;
+    }
+
+    count = dc_yh - dc_yl; 
+
+    if (count < 0) 
+    return; 
+
+    x = dc_x << 1;
+
+#ifdef RANGECHECK 
+    if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawFuzzColumnLowBW: %i to %i at %i" :
+                 "R_DrawFuzzColumnLowBW: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    fracstep = dc_iscale; 
+    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+
+    do 
+    {
+        *dest = colormaps_bw[6*256+dest[fuzzoffset[fuzzpos]]]; 
+        *dest2 = colormaps_bw[6*256+dest2[fuzzoffset[fuzzpos]]]; 
+        if (hires)
+        {
+            *dest3 = colormaps_bw[6*256+dest[fuzzoffset[fuzzpos]]];
+            *dest4 = colormaps_bw[6*256+dest2[fuzzoffset[fuzzpos]]];
+            dest3 += SCREENWIDTH << hires;
+            dest4 += SCREENWIDTH << hires;
+        }
+
+        if (++fuzzpos == FUZZTABLE) 
+        fuzzpos = 0;
+
+        dest += SCREENWIDTH << hires;
+        dest2 += SCREENWIDTH << hires;
+
+        frac += fracstep; 
+    } while (count--); 
+
+    if (cutoff)
+    {
+        *dest = colormaps_bw[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        *dest2 = colormaps_bw[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (hires)
+        {
+            *dest3 = *dest;
+            *dest4 = *dest2;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// [JN] Fuzz effect, improved version (improved_fuzz = 2)
+// -----------------------------------------------------------------------------
+
+void R_DrawFuzzColumnImproved (void)
+{ 
+    int     count; 
+    byte*   dest; 
+    fixed_t frac;
+    fixed_t fracstep;	 
+    boolean cutoff = false;
+
+    if (!dc_yl) 
+    dc_yl = 1;
+
+    if (dc_yh == viewheight-1) 
+    {
+        dc_yh = viewheight - 2; 
+        cutoff = true;
+    }
+
+    count = dc_yh - dc_yl; 
+
+    if (count < 0) 
+    return; 
+
+#ifdef RANGECHECK 
+    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawFuzzColumnImproved: %i to %i at %i" :
+                 "R_DrawFuzzColumnImproved: %i к %i у %i", dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    fracstep = dc_iscale; 
+    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+
+    do 
+    {
+        *dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
+
+        if (++fuzzpos == FUZZTABLE) 
+        {
+            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
+        }
+
+        dest += SCREENWIDTH;
+
+        frac += fracstep; 
+    } while (count--); 
+
+    if (cutoff)
+    {
+        *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+    }
+} 
+
+void R_DrawFuzzColumnLowImproved (void) 
+{ 
+    int     count; 
+    byte*   dest; 
+    byte*   dest2; 
+    byte*   dest3;
+    byte*   dest4;
+    fixed_t frac;
+    fixed_t fracstep;	 
+    int     x;
+    boolean cutoff = false;
+
+    if (!dc_yl) 
+    dc_yl = 1;
+
+    if (dc_yh == viewheight-1)
+    {
+        dc_yh = viewheight - 2; 
+        cutoff = true;
+    }
+
+    count = dc_yh - dc_yl; 
+
+    if (count < 0) 
+    return; 
+
+    x = dc_x << 1;
+
+#ifdef RANGECHECK 
+    if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawFuzzColumnLowImproved: %i to %i at %i" :
+                 "R_DrawFuzzColumnLowImproved: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    fracstep = dc_iscale; 
+    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+
+    do 
+    {
+        *dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
+        *dest2 = colormaps[6*256+dest2[fuzzoffset[fuzzpos]]]; 
+        if (hires)
+        {
+            *dest3 = colormaps[6*256+dest[fuzzoffset[fuzzpos]]];
+            *dest4 = colormaps[6*256+dest2[fuzzoffset[fuzzpos]]];
+            dest3 += SCREENWIDTH << hires;
+            dest4 += SCREENWIDTH << hires;
+        }
+
+        if (++fuzzpos == FUZZTABLE) 
+        {
+            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
+        }
+
+        dest += SCREENWIDTH << hires;
+        dest2 += SCREENWIDTH << hires;
+
+        frac += fracstep; 
+    } while (count--); 
+
+    if (cutoff)
+    {
+        *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        *dest2 = colormaps[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (hires)
+        {
+            *dest3 = *dest;
+            *dest4 = *dest2;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// [JN] Fuzz effect, improved version + black and white (improved_fuzz = 3)
+// -----------------------------------------------------------------------------
+
+void R_DrawFuzzColumnImprovedBW (void)
+{ 
+    int     count; 
+    byte*   dest; 
+    fixed_t frac;
+    fixed_t fracstep;	 
+    boolean cutoff = false;
+
+    if (!dc_yl) 
+    dc_yl = 1;
+
+    if (dc_yh == viewheight-1) 
+    {
+        dc_yh = viewheight - 2; 
+        cutoff = true;
+    }
+
+    count = dc_yh - dc_yl; 
+
+    if (count < 0) 
+    return; 
+
+#ifdef RANGECHECK 
+    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawFuzzColumnImprovedBW: %i to %i at %i" :
+                 "R_DrawFuzzColumnImprovedBW: %i к %i у %i", dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    fracstep = dc_iscale; 
+    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+
+    do 
+    {
+        *dest = colormaps_bw[6*256+dest[fuzzoffset[fuzzpos]]]; 
+
+        if (++fuzzpos == FUZZTABLE) 
+        {
+            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
+        }
+
+        dest += SCREENWIDTH;
+
+        frac += fracstep; 
+    } while (count--); 
+
+    if (cutoff)
+    {
+        *dest = colormaps_bw[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+    }
+} 
+
+void R_DrawFuzzColumnLowImprovedBW (void) 
+{ 
+    int     count; 
+    byte*   dest; 
+    byte*   dest2; 
+    byte*   dest3;
+    byte*   dest4;
+    fixed_t frac;
+    fixed_t fracstep;	 
+    int     x;
+    boolean cutoff = false;
+
+    if (!dc_yl) 
+    dc_yl = 1;
+
+    if (dc_yh == viewheight-1)
+    {
+        dc_yh = viewheight - 2; 
+        cutoff = true;
+    }
+
+    count = dc_yh - dc_yl; 
+
+    if (count < 0) 
+    return; 
+
+    x = dc_x << 1;
+
+#ifdef RANGECHECK 
+    if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawFuzzColumnLowImprovedBW: %i to %i at %i" :
+                 "R_DrawFuzzColumnLowImprovedBW: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    fracstep = dc_iscale; 
+    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+
+    do 
+    {
+        *dest = colormaps_bw[6*256+dest[fuzzoffset[fuzzpos]]]; 
+        *dest2 = colormaps_bw[6*256+dest2[fuzzoffset[fuzzpos]]]; 
+        if (hires)
+        {
+            *dest3 = colormaps_bw[6*256+dest[fuzzoffset[fuzzpos]]];
+            *dest4 = colormaps_bw[6*256+dest2[fuzzoffset[fuzzpos]]];
+            dest3 += SCREENWIDTH << hires;
+            dest4 += SCREENWIDTH << hires;
+        }
+
+        if (++fuzzpos == FUZZTABLE) 
+        {
+            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
+        }
+
+        dest += SCREENWIDTH << hires;
+        dest2 += SCREENWIDTH << hires;
+
+        frac += fracstep; 
+    } while (count--); 
+
+    if (cutoff)
+    {
+        *dest = colormaps_bw[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        *dest2 = colormaps_bw[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (hires)
+        {
+            *dest3 = *dest;
+            *dest4 = *dest2;
+        }
+    }
+}
 
 
 //

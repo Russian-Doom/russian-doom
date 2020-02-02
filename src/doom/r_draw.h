@@ -45,7 +45,13 @@ void 	R_DrawColumnLow (void);
 
 // The Spectre/Invisibility effect.
 void 	R_DrawFuzzColumn (void);
+void 	R_DrawFuzzColumnBW (void);
+void 	R_DrawFuzzColumnImproved (void);
+void 	R_DrawFuzzColumnImprovedBW (void);
 void 	R_DrawFuzzColumnLow (void);
+void 	R_DrawFuzzColumnLowBW (void);
+void 	R_DrawFuzzColumnLowImproved (void);
+void 	R_DrawFuzzColumnLowImprovedBW (void);
 
 // [crispy] draw fuzz effect independent of rendering frame rate
 void 	R_SetFuzzPosTic (void);

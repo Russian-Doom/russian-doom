@@ -133,6 +133,7 @@ static void SensibleDefaults(void)
     brightmaps = 1;
     fake_contrast = 0;
     translucency = 1;
+    improved_fuzz = 2;
     colored_hud = 0;
     messages_color = 0;
     colored_blood = 1;

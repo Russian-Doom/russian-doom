@@ -41,6 +41,7 @@ int automap_grid = 0;
 int brightmaps = 1;
 int fake_contrast = 0;
 int translucency = 1;
+int improved_fuzz = 2;
 int colored_hud = 0;
 int colored_blood = 1;
 int swirling_liquids = 1;
@@ -311,6 +312,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
     M_BindIntVariable("translucency",           &translucency);
+    M_BindIntVariable("improved_fuzz",          &improved_fuzz);
     M_BindIntVariable("colored_hud",            &colored_hud);
     M_BindIntVariable("colored_blood",          &colored_blood);
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
