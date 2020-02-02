@@ -346,16 +346,46 @@ static void ConfigExtraKeys(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                                    "Артефакты",
                                    true);
 
-            AddKeyControl(table, "Кварцевый флакон",      &key_arti_quartz);
-            AddKeyControl(table, "Мистическа€ урна",      &key_arti_urn);
-            AddKeyControl(table, "Часова€ бомба древних", &key_arti_bomb);
-            AddKeyControl(table, "Том могущества",        &key_arti_tome);
-            AddKeyControl(table, "Кольцо неу€звимости",   &key_arti_ring);
-            AddKeyControl(table, "Морфийное €йцо",        &key_arti_morphegg);
-            AddKeyControl(table, "Юмблема Хаоса",         &key_arti_chaosdevice);
-            AddKeyControl(table, "Тенева€ сфера",         &key_arti_shadowsphere);
-            AddKeyControl(table, "Крыль€ гнева",          &key_arti_wings);
-            AddKeyControl(table, "Факел",                 &key_arti_torch);
+            AddKeyControl(table, english_language ?
+                                 "Quartz Flask" :
+                                 "Кварцевый флакон",
+                                 &key_arti_quartz);
+            AddKeyControl(table, english_language ?
+                                 "Mystic Urn" :
+                                 "Мистическа€ урна",
+                                 &key_arti_urn);
+            AddKeyControl(table, english_language ? 
+                                 "Timebomb" :
+                                 "Часова€ бомба древних ",
+                                 &key_arti_bomb);
+            AddKeyControl(table, english_language ?
+                                 "Tome of Power" :
+                                 "Том могущества",
+                                 &key_arti_tome);
+            AddKeyControl(table, english_language ?
+                                 "Ring of Invincibility " :
+                                 "Кольцо неу€звимости",
+                                 &key_arti_ring);
+            AddKeyControl(table, english_language ?
+                                 "Morph Ovum" :
+                                 "°йцо превращений",
+                                 &key_arti_morphegg);
+            AddKeyControl(table, english_language ?
+                                 "Chaos Device" :
+                                 "Юмблема Хаоса",
+                                 &key_arti_chaosdevice);
+            AddKeyControl(table, english_language ?
+                                 "Shadowsphere" :
+                                 "Тенева€ сфера",
+                                 &key_arti_shadowsphere);
+            AddKeyControl(table, english_language ?
+                                 "Wings of Wrath" :
+                                 "Крыль€ гнева",
+                                 &key_arti_wings);
+            AddKeyControl(table, english_language ?
+                                 "Torch" :
+                                 "Факел",
+                                 &key_arti_torch);
         }
 
         if (gamemission == hexen)
