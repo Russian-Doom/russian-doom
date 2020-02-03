@@ -430,7 +430,18 @@ void F_DrawUnderwater(void)
                 W_ReleaseLumpName(lumpname);
                 underwawa = false;
             }
-            V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE"), PU_CACHE));
+
+            if (english_language)
+            {
+                V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE"), PU_CACHE));
+            }
+            else
+            {
+                if (gamemode == retail)
+                V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE_RT"), PU_CACHE));
+                else
+                V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE"), PU_CACHE));
+            }
             //D_StartTitle(); // go to intro/demo mode.
     }
 }
