@@ -21,7 +21,7 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [DOOM Retro](http://doomretro.com/) source port 
 - Brad Harding
 
-#### [Russian GZDoom](http://doomretro.com/) project 
+#### [Russian GZDoom](https://i.iddqd.ru/viewtopic.php?t=1492) project 
 - theleo_ua 
 - Nemrtvi 
 - Invisible Warrior 
