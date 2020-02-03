@@ -21,6 +21,12 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [DOOM Retro](http://doomretro.com/) source port 
 - Brad Harding
 
+#### [Russian GZDoom](http://doomretro.com/) project 
+- theleo_ua 
+- Nemrtvi 
+- Invisible Warrior 
+- NormanSeven 
+
 #### [RiscOS Doom](https://github.com/jeffdoggett/Doom) source port 
 - Jeff Doggett
 
@@ -47,10 +53,6 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Andrew Grischenko
 - Nemrtvi
 
-#### Special thanks
-- theleo_ua
-- Nemrtvi
-
 ##### And also:
 - Maxim "MaxLeon" Pyanov, Oleg Zik and Oleg “Kai” Sudarikov
 - [LeD] Jake Crusher
@@ -71,7 +73,6 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - hfc2x
 - Heretic widescreen HUD by Hellser, Neoworm, TerminusEst13 and PSTrooper
 - Hexen widescreen HUD and weapons by Neoworm
-- Invisible Warrior
-- NormanSeven
 - Daniil Petrov
 - Manuel Alfayate Corchete
+- Orfeus94
