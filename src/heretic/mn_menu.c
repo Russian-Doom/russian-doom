@@ -2991,6 +2991,7 @@ static boolean M_RD_ChangeLanguage(int option)
     // Update game screen, borders and status bar
     UpdateState |= I_FULLSCRN;
     BorderNeedRefresh = true;
+    SB_state = -1;
 
     // Restart finale text
     if (gamestate == GS_FINALE)
