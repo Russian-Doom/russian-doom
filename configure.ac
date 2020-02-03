@@ -6,7 +6,7 @@ PACKAGE_SHORTDESC="Russian Doom, Freedoom, Heretic and Hexen"
 PACKAGE_COPYRIGHT="Copyright (C) 2016-2019"
 PACKAGE_LICENSE="GNU General Public License, version 2"
 PACKAGE_MAINTAINER="Julian Nechaevsky"
-PACKAGE_URL="http://jnechaevsky.sf.net/rusdoom"
+PACKAGE_URL="https://jnechaevsky.github.io/rusdoom"
 # PACKAGE_ISSUES="https://github.com/chocolate-doom/chocolate-doom/issues"
 
 AC_CONFIG_AUX_DIR(autotools)
