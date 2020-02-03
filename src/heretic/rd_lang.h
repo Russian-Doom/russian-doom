@@ -712,7 +712,7 @@ extern char* txt_gamma_original_4;
 //
 
 // English
-#define TXT_VERSION "VERSION 3.4"
+#define TXT_VERSION "VERSION 4.0"
 #if defined (_WIN64)
 #define TXT_ARCH      " - (X64)"
 #elif defined (_WIN32)
@@ -720,10 +720,10 @@ extern char* txt_gamma_original_4;
 #else
 #define TXT_ARCH      ""
 #endif
-#define TXT_DATE      "2019-11-25"          // YYYY-MM-DD
+#define TXT_DATE      "2020-02-03"          // YYYY-MM-DD
 
 // Русский
-#define TXT_VERSION_RUS "DTHCBZ 3>4"        // ВЕРСИЯ 3.4
+#define TXT_VERSION_RUS "DTHCBZ 4>0"        // ВЕРСИЯ 4.0
 #if defined (_WIN64)
 #define TXT_ARCH_RUS      " - ([64)"        // x64
 #elif defined (_WIN32)
