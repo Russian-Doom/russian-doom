@@ -20,6 +20,8 @@ addons:
         - libsdl2-image-dev
         - libsamplerate0-dev
 
+script: ./.travis.sh
+
 branches:
     only:
     - master
