@@ -271,7 +271,7 @@ void ConfigDisplay(void)
                 TXT_NewCheckBox(english_language ?
                         "Show fps counter" :
                         "Счетчик кадровой частоты",
-                        &uncapped_fps)),
+                        &show_fps)),
         TXT_NewCheckBox(english_language ?
                         "Smooth pixel scaling" :
                         "Пиксельное сглаживание",
