@@ -3232,7 +3232,7 @@ void M_RD_Draw_Gameplay_1(void)
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(138 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
 
         // - Fuzz effect -------------------------------------------------------
-        if (improved_fuzz == 0) { dp_translation = cr[CR_RED]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Original"); dp_translation = NULL; }
+        if (improved_fuzz == 0) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Original"); dp_translation = NULL; }
         else if (improved_fuzz == 1) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Original (b&w)"); dp_translation = NULL; }
         else if (improved_fuzz == 2) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Improved"); dp_translation = NULL; }
         else if (improved_fuzz == 3) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Improved (b&w)"); dp_translation = NULL; }
@@ -3286,7 +3286,7 @@ void M_RD_Draw_Gameplay_1(void)
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(207 + ORIGWIDTH_DELTA, 65, RD_OFF_RUS); dp_translation = NULL; }
 
         // - Эффект шума -------------------------------------------------------
-        if (improved_fuzz == 0) { dp_translation = cr[CR_RED]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Jhbubyfkmysq"); dp_translation = NULL; }
+        if (improved_fuzz == 0) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Jhbubyfkmysq"); dp_translation = NULL; }
         else if (improved_fuzz == 1) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Jhbubyfkmysq (x*,)"); dp_translation = NULL; }
         else if (improved_fuzz == 2) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Ekexityysq"); dp_translation = NULL; }
         else if (improved_fuzz == 3) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Ekexityysq (x*,)"); dp_translation = NULL; }
