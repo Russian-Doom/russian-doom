@@ -115,6 +115,7 @@ lighttable_t* fullbright_redonly1[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_explosivebarrel[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_alllights[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t* fullbright_candles[LIGHTLEVELS][MAXLIGHTSCALE];
+lighttable_t* fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
 
 // bumped light from gun blasts
 int extralight;			
@@ -692,6 +693,7 @@ void R_ExecuteSetViewSize (void)
             fullbright_explosivebarrel[i][j] = brightmaps_explosivebarrel + level*256;
             fullbright_alllights[i][j] = brightmaps_alllights + level*256;
             fullbright_candles[i][j] = brightmaps_candles + level*256;
+            fullbright_pileofskulls[i][j] = brightmaps_pileofskulls + level*256;
         }
     }
 

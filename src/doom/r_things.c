@@ -83,6 +83,7 @@ lighttable_t** fullbrights_dimmeditems;
 lighttable_t** fullbrights_explosivebarrel;
 lighttable_t** fullbrights_alllights;
 lighttable_t** fullbrights_candles;
+lighttable_t** fullbrights_pileofskulls;
 
 // constant arrays used for psprite clipping and initializing clipping
 int negonearray[SCREENWIDTH];
@@ -754,6 +755,10 @@ void R_ProjectSprite (mobj_t* thing)
             else if (thing->type == MT_BARREL)
             vis->colormap = fullbrights_explosivebarrel[index];
 
+            // Pile of skulls and candles (29)
+            else if (thing->type == MT_MISC73)
+            vis->colormap = fullbrights_pileofskulls[index];
+
             // Candlestick (34)
             else if (thing->type == MT_MISC49)
             vis->colormap = fullbrights_candles[index];
@@ -818,6 +823,7 @@ void R_ProjectSprite (mobj_t* thing)
             ||  thing->type == MT_MISC44    // Short blue torch
             ||  thing->type == MT_MISC45    // Short green torch
             ||  thing->type == MT_MISC46    // Short red torch
+            ||  thing->type == MT_MISC73    // Pile of skulls and candles
             ||  thing->type == MT_MISC77    // Burning barrel
             ||  thing->type == MT_MISC29    // Tall tech lamp
             ||  thing->type == MT_MISC30    // Short tech lamp
@@ -883,6 +889,7 @@ void R_AddSprites (sector_t* sec)
         fullbrights_explosivebarrel = fullbright_explosivebarrel[0];
         fullbrights_alllights = fullbright_alllights[0];
         fullbrights_candles = fullbright_candles[0];
+        fullbrights_pileofskulls = fullbright_pileofskulls[0];
     }
     else if (lightnum >= LIGHTLEVELS)
     {
@@ -896,6 +903,7 @@ void R_AddSprites (sector_t* sec)
         fullbrights_explosivebarrel = fullbright_explosivebarrel[LIGHTLEVELS-1];
         fullbrights_alllights = fullbright_alllights[LIGHTLEVELS-1];
         fullbrights_candles = fullbright_candles[LIGHTLEVELS-1];
+        fullbrights_pileofskulls = fullbright_pileofskulls[LIGHTLEVELS-1];
     }
     else
     {
@@ -909,6 +917,7 @@ void R_AddSprites (sector_t* sec)
         fullbrights_explosivebarrel = fullbright_explosivebarrel[lightnum];
         fullbrights_alllights = fullbright_alllights[lightnum];
         fullbrights_candles = fullbright_candles[lightnum];
+        fullbrights_pileofskulls = fullbright_pileofskulls[lightnum];
     }
 
     // Handle all things in sector.
