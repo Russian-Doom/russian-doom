@@ -403,6 +403,17 @@ static patch_t**    lnames_d2_rus;
 static patch_t**    lnames_plut_rus;
 static patch_t**    lnames_tnt_rus;
 
+// [JN] Unreplaceble Sigil compat Russian level names
+static patch_t*     sglv20;
+static patch_t*     sglv21;
+static patch_t*     sglv22;
+static patch_t*     sglv23;
+static patch_t*     sglv24;
+static patch_t*     sglv25;
+static patch_t*     sglv26;
+static patch_t*     sglv27;
+static patch_t*     sglv28;
+
 // [JN] Russian MAP31 and MAP32 names in BFG Edition
 static patch_t*     rd_idkfa;
 static patch_t*     rd_keen;
@@ -449,7 +460,34 @@ void WI_drawLF(void)
         else
         {
             if (logical_gamemission == doom)
-            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2, y, lnames_d1_rus[wbs->last]);
+            {
+                // [JN] Unreplaceble Sigil compat Russian level names
+                if (sgl_compat_loaded && gameepisode == 3 && !english_language)
+                {
+                    if (gamemap == 1)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv20->width))/2, y, sglv20);
+                    else if (gamemap == 2)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv21->width))/2, y, sglv21);
+                    else if (gamemap == 3)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv22->width))/2, y, sglv22);
+                    else if (gamemap == 4)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv23->width))/2, y, sglv23);
+                    else if (gamemap == 5)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv24->width))/2, y, sglv24);
+                    else if (gamemap == 6)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv25->width))/2, y, sglv25);
+                    else if (gamemap == 7)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv26->width))/2, y, sglv26);
+                    else if (gamemap == 8)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv27->width))/2, y, sglv27);
+                    else if (gamemap == 9)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv28->width))/2, y, sglv28);
+                }
+                else
+                {
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2, y, lnames_d1_rus[wbs->last]);
+                }
+            }
             else if (logical_gamemission == doom2 || gamemission == pack_nerve)
             {
                 // [JN] Special case for Russian level names in BFG Edition
@@ -519,7 +557,37 @@ void WI_drawEL(void)
     else
     {
         if (logical_gamemission == doom)
-        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2, y, lnames_d1_rus[wbs->next]);
+        {
+            // [JN] Unreplaceble Sigil compat Russian level names
+            if (sgl_compat_loaded && gameepisode == 3 && !english_language)
+            {
+                if (gamemap == 1)
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv21->width))/2, y, sglv21);
+                else if (gamemap == 2)
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv22->width))/2, y, sglv22);
+                else if (gamemap == 3)
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv23->width))/2, y, sglv23);
+                else if (gamemap == 4)
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv24->width))/2, y, sglv24);
+                else if (gamemap == 5)
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv25->width))/2, y, sglv25);
+                else if (gamemap == 6)
+                {
+                    if (wbs->next == 8)
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv28->width))/2, y, sglv28);
+                    else
+                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv26->width))/2, y, sglv26);
+                }
+                else if (gamemap == 7)
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv27->width))/2, y, sglv27);
+                else if (gamemap == 9)
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv26->width))/2, y, sglv26);
+            }
+            else
+            {
+                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2, y, lnames_d1_rus[wbs->next]);
+            }
+        }
         else if (logical_gamemission == doom2 || gamemission == pack_nerve)
         {
             // [JN] Special case for Russian level names in BFG Edition
@@ -1798,6 +1866,20 @@ static void WI_loadUnloadData(load_callback_t callback)
         {
             DEH_snprintf(name, 9, "R1LV%d%d", wbs->epsd, k);
                 callback(name, &lnames_d1_rus[k]);
+        }
+
+        // [JN] Load unreplaceble Sigil compat Russian level names
+        if (sgl_compat_loaded)
+        {
+            callback(DEH_String("SGLV20"), &sglv20);
+            callback(DEH_String("SGLV21"), &sglv21);
+            callback(DEH_String("SGLV22"), &sglv22);
+            callback(DEH_String("SGLV23"), &sglv23);
+            callback(DEH_String("SGLV24"), &sglv24);
+            callback(DEH_String("SGLV25"), &sglv25);
+            callback(DEH_String("SGLV26"), &sglv26);
+            callback(DEH_String("SGLV27"), &sglv27);
+            callback(DEH_String("SGLV28"), &sglv28);
         }
 
         // [JN] English patches:
