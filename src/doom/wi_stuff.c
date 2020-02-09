@@ -1611,7 +1611,7 @@ void WI_drawStats(void)
 
     WI_drawTime((ORIGWIDTH/2 - SP_TIMEX)+ORIGWIDTH_DELTA, SP_TIMEY, cnt_time, true);
 
-    if (wbs->epsd < 4)
+    if (wbs->epsd < 4+1) // [JN] Sigil: extra episode
     {
         V_DrawShadowedPatchDoom(ORIGWIDTH/2 + SP_TIMEX, SP_TIMEY, 
                                 english_language ? par : par_rus);
@@ -1923,6 +1923,10 @@ static void WI_loadUnloadData(load_callback_t callback)
     else if (gamemode == retail && wbs->epsd == 3)
     {
         M_StringCopy(name, DEH_String("INTERPIC"), sizeof(name));
+    }
+    else if (sgl_loaded && wbs->epsd == 4 && W_CheckNumForName(DEH_String("SIGILINT")) != -1) // [crispy] Sigil
+    {
+        M_StringCopy(name, DEH_String("SIGILINT"), sizeof(name));
     }
     else
     {

@@ -1571,6 +1571,12 @@ static int e4pars[10] =
     0, 165, 255, 135, 150, 180, 390, 135, 360, 180
 };
 
+// [JN] Sigil par times
+static int e5pars[10] =
+{
+    0, 90, 150, 360, 420, 780, 420, 780, 300, 660
+};
+
 // [JN] Press Beta Par Times
 int bpars[4][10] = 
 { 
@@ -1780,6 +1786,10 @@ void G_DoCompleted (void)
                 case 4:
                 wminfo.next = 2;
                 break;
+
+                case 5: // [crispy] Sigil
+                wminfo.next = 6; 
+                break; 
             }                
         }
 
@@ -1828,6 +1838,10 @@ void G_DoCompleted (void)
 
     else if (gameepisode == 4 && singleplayer)
 	wminfo.partime = TICRATE*e4pars[gamemap];
+
+    // [JN] Sigil
+    else if (gameepisode == 5)
+	wminfo.partime = TICRATE*e5pars[gamemap];
 
     else
     wminfo.partime = TICRATE*cpars[gamemap];
@@ -2382,6 +2396,14 @@ G_InitNew
 
             case 4: // Special Edition sky
             skytexturename = "SKY4";
+            break;
+
+            case 5: // [crispy] Sigil
+            skytexturename = "SKY5_ZD";
+            if (R_CheckTextureNumForName(DEH_String(skytexturename)) == -1)
+            {
+                skytexturename = "SKY3";
+            }
             break;
         }
     }

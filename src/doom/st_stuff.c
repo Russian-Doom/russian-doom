@@ -66,6 +66,8 @@
 #include "jn.h"
 
 
+extern boolean sgl_loaded;
+
 // [JN] Jaguar: prototypes
 void ST_drawWidgetsJaguar (boolean refresh);
 void ST_createWidgetsJaguar (void);
@@ -781,8 +783,11 @@ boolean ST_Responder (event_t* ev)
                     musnum = mus_e1m1 + (buf[0]-'1')*9 + (buf[1]-'1');
 
                     // [crispy] prevent crash with IDMUS0x or IDMUSx0
-                    if (((buf[0]-'1')*9 + buf[1]-'1') > 31 || buf[0] < '1' || buf[1] < '1')
+                    // [JN] Sigil: allow to choose E5MX music, otherwise don't allow to choose E4MX music.
+                    if ((((buf[0]-'1')*9 + buf[1]-'1') > (sgl_loaded ? 41 : 21) || buf[0] < '1' || buf[1] < '1'))
+                    {
                         plyr->message = DEH_String(ststr_nomus);
+                    }
                     else
                     {
                         S_ChangeMusic(musnum, 1);
@@ -916,6 +921,8 @@ boolean ST_Responder (event_t* ev)
                 }
                 if (epsd > 4)
                 {
+                    // [crispy] Sigil
+                    if (!(sgl_loaded && epsd == 5))
                     return false;
                 }
                 if (epsd == 4 && gameversion < exe_ultimate)
