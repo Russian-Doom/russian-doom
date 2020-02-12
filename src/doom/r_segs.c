@@ -25,6 +25,7 @@
 #include <stdlib.h>
 
 #include "i_system.h"
+#include "d_main.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "r_local.h"
@@ -981,6 +982,21 @@ void R_StoreWallRange (int start, int stop)
                 
                     if (bottomtexture == bmaptexture89 || bottomtexture == bmaptexture90)
                     walllights_bottom = fullbright_redonly1[lightnum];
+                }
+
+                // -------------------------------------------------------
+                //  Sigil
+                // -------------------------------------------------------
+                if (sgl_loaded || sgl_compat_loaded)
+                {
+                    if (midtexture == bmaptexture92)
+                    walllights_middle = fullbright_redonly[lightnum];
+
+                    if (toptexture == bmaptexture92)
+                    walllights_top = fullbright_redonly[lightnum];
+
+                    if (bottomtexture == bmaptexture92)
+                    walllights_bottom = fullbright_redonly[lightnum];
                 }
 
                 // -------------------------------------------------------

@@ -87,6 +87,7 @@ typedef struct player_s
     // This is only used between levels,
     // mo->health is used during levels.
     int health;	
+    int health_neg;	 // [JN] Negative player halth
     int armorpoints;
     // Armor type is 0-2.
     int armortype;	

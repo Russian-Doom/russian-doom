@@ -956,6 +956,7 @@ enum
     ep2,
     ep3,
     ep4,
+    ep5, // [crispy] Sigil
     ep_end
 } episodes_e;
 
@@ -968,7 +969,8 @@ menuitem_t EpisodeMenu[]=
     {1,"M_EPI1", M_Episode,'k'},
     {1,"M_EPI2", M_Episode,'t'},
     {1,"M_EPI3", M_Episode,'i'},
-    {1,"M_EPI4", M_Episode,'t'}
+    {1,"M_EPI4", M_Episode,'t'},
+    {1,"M_EPI5", M_Episode,'s'} // [crispy] Sigil
 };
 
 menu_t  EpiDef =
@@ -990,7 +992,8 @@ menuitem_t EpisodeMenu_Rus[]=
     {1,"RD_EPI1",    M_Episode,'g'},   // По колено в трупах
     {1,"RD_EPI2",    M_Episode,'g'},   // Прибрежье Ада
     {1,"RD_EPI3",    M_Episode,'b'},   // Инферно
-    {1,"RD_EPI4",    M_Episode,'n'}    // Твоя плоть истощена
+    {1,"RD_EPI4",    M_Episode,'n'},   // Твоя плоть истощена
+    {1,"RD_EPI5",    M_Episode,'c'}    // Сигил
 };
 
 menu_t  EpiDef_Rus =
@@ -3232,7 +3235,7 @@ void M_RD_Draw_Gameplay_1(void)
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(138 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
 
         // - Fuzz effect -------------------------------------------------------
-        if (improved_fuzz == 0) { dp_translation = cr[CR_RED]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Original"); dp_translation = NULL; }
+        if (improved_fuzz == 0) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Original"); dp_translation = NULL; }
         else if (improved_fuzz == 1) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Original (b&w)"); dp_translation = NULL; }
         else if (improved_fuzz == 2) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Improved"); dp_translation = NULL; }
         else if (improved_fuzz == 3) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Improved (b&w)"); dp_translation = NULL; }
@@ -3286,7 +3289,7 @@ void M_RD_Draw_Gameplay_1(void)
         else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(207 + ORIGWIDTH_DELTA, 65, RD_OFF_RUS); dp_translation = NULL; }
 
         // - Эффект шума -------------------------------------------------------
-        if (improved_fuzz == 0) { dp_translation = cr[CR_RED]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Jhbubyfkmysq"); dp_translation = NULL; }
+        if (improved_fuzz == 0) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Jhbubyfkmysq"); dp_translation = NULL; }
         else if (improved_fuzz == 1) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Jhbubyfkmysq (x*,)"); dp_translation = NULL; }
         else if (improved_fuzz == 2) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Ekexityysq"); dp_translation = NULL; }
         else if (improved_fuzz == 3) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Ekexityysq (x*,)"); dp_translation = NULL; }
@@ -4013,7 +4016,6 @@ void M_RD_ChangeLanguage(int choice)
     extern void HU_Stop(void);
     extern void F_StartFinale(void);
     extern int  demosequence;
-    extern boolean sgl_loaded, mlvls_loaded;
 
     choice = 0;
     english_language = 1 - english_language;
@@ -4070,7 +4072,7 @@ void M_RD_ChangeLanguage(int choice)
             if (gamevariant == freedoom)
             I_SetWindowTitle("Freedoom: Phase 1");
 
-            if (sgl_loaded)
+            if (sgl_loaded || sgl_compat_loaded)
             I_SetWindowTitle("SIGIL");
         }
         else if (logical_gamemission == doom2)
@@ -4120,7 +4122,7 @@ void M_RD_ChangeLanguage(int choice)
             if (gamevariant == freedoom)
             I_SetWindowTitle("Freedoom: Стадия 1");
 
-            if (sgl_loaded)
+            if (sgl_loaded || sgl_compat_loaded)
             I_SetWindowTitle("СИГИЛ");
         }
         else if (logical_gamemission == doom2)
@@ -6125,6 +6127,12 @@ void M_Init (void)
     {
         RD_Options_Def.y -= 6;
         RD_Options_Def_Rus.y -= 6;
+    }
+
+    // [crispy] & [JN] Sigil
+    if (!sgl_loaded)
+    {
+        EpiDef.numitems = EpiDef_Rus.numitems = 4;
     }
 
     // Versions of doom.exe before the Ultimate Doom release only had

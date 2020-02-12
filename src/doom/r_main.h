@@ -91,6 +91,7 @@ extern lighttable_t*    fullbright_redonly1[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_explosivebarrel[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_alllights[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*    fullbright_candles[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t*    fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
 
 extern int extralight;
 extern lighttable_t* fixedcolormap;

@@ -420,6 +420,15 @@ extern char* ststr_massacre;
 #define HUSTR_E4M7  "E4M7: And Hell Followed"
 #define HUSTR_E4M8  "E4M8: Unto The Cruel"
 #define HUSTR_E4M9  "E4M9: Fear"
+#define HUSTR_E5M1	"E5M1: Baphomet's Demesne"
+#define HUSTR_E5M2	"E5M2: Sheol"
+#define HUSTR_E5M3	"E5M3: Cages of the Damned"
+#define HUSTR_E5M4	"E5M4: Paths of Wretchedness"
+#define HUSTR_E5M5	"E5M5: Abaddon's Void"
+#define HUSTR_E5M6	"E5M6: Unspeakable Persecution"
+#define HUSTR_E5M7	"E5M7: Nightmare Underworld"
+#define HUSTR_E5M8	"E5M8: Halls of Perdition"
+#define HUSTR_E5M9	"E5M9: Realm of Iblis"
 
 
 //
@@ -727,6 +736,19 @@ extern char* ststr_massacre;
 "of demons run amok among our cities.\n"\
 "\n"\
 "next stop, hell on earth!"
+
+#define E5TEXT \
+"Baphomet was only doing Satan's bidding\n"\
+"by bringing you back to Hell. Somehow they\n"\
+"didn't understand that you're the reason\n"\
+"they failed in the first place.\n"\
+"\n"\
+"After mopping up the place with your\n"\
+"arsenal, you're ready to face the more\n"\
+"advanced demons that were sent to Earth.\n"\
+"\n"\
+"\n"\
+"Lock and load. Rip and tear."
 
 // after level 6, put this:
 
@@ -1316,6 +1338,15 @@ PRESSYN_RUS
 #define HUSTR_E4M7_RUS  "t4v7: b gjcktljdfk fl"                     // E4M7: И последовал Ад
 #define HUSTR_E4M8_RUS  "t4v8: lj ,tccthltxbz"                      // E4M8: До бессердечия
 #define HUSTR_E4M9_RUS  "t4v9: cnhf["                               // E4M9: Страх
+#define HUSTR_E5M1_RUS  "t5v1: dkfltybz ,fajvtnf"                   // E5M1: Владения Бафомета
+#define HUSTR_E5M2_RUS  "t5v2: itjk"                                // E5M2: Шеол
+#define HUSTR_E5M3_RUS  "t5v3: rktnb ghjrkzns["                     // E5M3: Клети проклятых
+#define HUSTR_E5M4_RUS  "t5v4: genb ytcxfcnmz"                      // E5M4: Пути несчастья
+#define HUSTR_E5M5_RUS  "t5v5: ,tplyf f,flljyf"                     // E5M5: Бездна Абаддона
+#define HUSTR_E5M6_RUS  "t5v6: ytukfcyjt ujytybt"                   // E5M6: Негласное гонение
+#define HUSTR_E5M7_RUS  "t5v7: j,bntkm rjivfhf"                     // E5M7: Обитель кошмара
+#define HUSTR_E5M8_RUS  "t5v8: pfks gjub,tkb"                       // E5M8: Залы погибели
+#define HUSTR_E5M9_RUS  "t5v9: wfhcndj b,kbcf"                      // E5M9: Царство Иблиса
 
 
 //
@@ -1685,6 +1716,31 @@ PRESSYN_RUS
 // неиствующих в наших городах.
 //
 // Следующая остановка - Ад на земле!
+
+#define E5TEXT_RUS \
+"gsnfzcm pfnjxbnm dfc d fl< ,fajvtn kbim\n" \
+"gjrjhyj bcgjkyzk djk. cfnfys< cdjtuj\n" \
+"ujcgjlbyf> b gjkysv rhf[jv j,thyekbcm\n" \
+"b[ pfvscks pf cnjkm hjrjde. jib,re>\n" \
+"\n" \
+"bcnht,bd gjhj;ltybz flf d xthnjuf[\n" \
+"ghtbcgjlybb< ds bcgjkytys htibvjcnm.\n" \
+"chfpbnmcz c ,jktt vjueotcndtyysv\n" \
+"jnhjlmtv ltvjybxtcrb[ cbk< gjckfyysv\n" \
+"yf ptvk.>\n\nybrjulf yt clfdfqntcm> hdbnt b vtxbnt!"
+
+// Пытаясь заточить вас в Ад, Бафомет лишь
+// покорно исполнял волю Сатаны, своего
+// господина. И полным крахом обернулись
+// их замыслы за столь роковую ошибку.
+//
+// Истребив порождения Ада в чертогах
+// преисподнии, вы исполнены решимостью
+// сразиться с более могущественным
+// отродьем демонических сил, посланным
+// на Землю.
+//
+// Никогда не сдавайтесь. Рвите и мечите!
 
 // after level 6, put this:
 

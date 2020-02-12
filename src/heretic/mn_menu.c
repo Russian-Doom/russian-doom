@@ -2488,9 +2488,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 190 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallENG(DEH_String("OFF"), 190 + ORIGWIDTH_DELTA, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 253 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 253 + ORIGWIDTH_DELTA, 122);
 
         dp_translation = NULL;
     }

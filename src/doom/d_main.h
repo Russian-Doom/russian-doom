@@ -44,6 +44,7 @@ void D_StartTitle (void);
 //
 
 extern gameaction_t gameaction;
+extern boolean sgl_loaded, sgl_compat_loaded, mlvls_loaded;
 
 
 #endif

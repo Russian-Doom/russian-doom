@@ -964,16 +964,17 @@ P_DamageMobj
 	    damage -= saved;
 	}
 	player->health -= damage; 	// mirror mobj health here for Dave
-    // [from-crispy] Опциональная функция отрицательного здоровья
-    if (negative_health && !vanillaparm)
+    player->health_neg = player->health; 	// [JN] Set negative health value
+
+    if (player->health < 0)
     {
-        if (player->health < -99)
-            player->health = -99;
+        player->health = 0;
     }
-    else
+
+    // [crispy] & [JN] Negative player health
+    if (player->health_neg < -99)
     {
-        if (player->health < 0)
-            player->health = 0;        
+        player->health_neg = -99;
     }
 	
 	player->attacker = source;

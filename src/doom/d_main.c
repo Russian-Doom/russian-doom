@@ -112,6 +112,8 @@ char* iwadfile;
 // [JN] Loaded SIGIL PWAD
 int     sgl;
 boolean sgl_loaded;
+int     sgl_compat;
+boolean sgl_compat_loaded;
 // [JN] Loaded NERVE PWAD
 int     nrv;
 // [JN] Loaded Master-Level PWAD
@@ -1595,7 +1597,7 @@ void D_SetGameDescription(void)
                 }
             }
             
-            // [JN] Support for SIGIL (compat version)
+            // [JN] Support for SIGIL (main version)
             sgl = M_CheckParmWithArgs ("-file", 1);
 
             if (sgl)
@@ -1603,14 +1605,43 @@ void D_SetGameDescription(void)
                 while (++sgl != myargc && myargv[sgl][0] != '-')
                 {
                     boolean check;
-                    check = (M_StrCaseStr(myargv[sgl], "sigil_compat.wad") ||
-                            (M_StrCaseStr(myargv[sgl], "sigil_compat_v1_2.wad")) ||
-                            (M_StrCaseStr(myargv[sgl], "sigil_compat_v1_21.wad")) );
+                    check = (M_StrCaseStr(myargv[sgl], "sigil.wad") ||
+                            (M_StrCaseStr(myargv[sgl], "sigil_v1_2.wad")) ||
+                            (M_StrCaseStr(myargv[sgl], "sigil_v1_21.wad")) );
 
                     if (check)
                     {
                         W_MergeFile("base/doom-sigil.wad");
                         sgl_loaded = true;
+
+                        DEH_AddStringReplacement("RD_EPI5",  "RD_SGEP5");
+
+                        if (english_language)
+                        gamedescription = "SIGIL";
+                        else
+                        gamedescription = "СИГИЛ";
+                    }
+                }
+            }
+
+            // [JN] Support for SIGIL (compat version)
+            sgl_compat = M_CheckParmWithArgs ("-file", 1);
+
+            if (sgl_compat)
+            {
+                while (++sgl_compat != myargc && myargv[sgl_compat][0] != '-')
+                {
+                    boolean check;
+                    check = (M_StrCaseStr(myargv[sgl_compat], "sigil_compat.wad") ||
+                            (M_StrCaseStr(myargv[sgl_compat], "sigil_compat_v1_2.wad")) ||
+                            (M_StrCaseStr(myargv[sgl_compat], "sigil_compat_v1_21.wad")) );
+
+                    if (check)
+                    {
+                        W_MergeFile("base/doom-sigil.wad");
+                        sgl_compat_loaded = true;
+
+                        DEH_AddStringReplacement("RD_EPI3",  "RD_SGEP3");
 
                         if (english_language)
                         gamedescription = "SIGIL";
@@ -1731,7 +1762,9 @@ void D_SetGameDescription(void)
 
         for (i = numiwadlumps; i < numlumps; ++i)
         {
-            if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8))
+            // [JN] Sigil: do not load DEHACKED for 5th episode version,
+            // to keep proper episode 3 level names and gfx.
+            if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8) && !sgl_loaded)
             {
                 DEH_LoadLump(i, true, true); // [crispy] allow long, allow error
                 loaded++;

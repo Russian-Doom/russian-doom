@@ -66,6 +66,8 @@
 #include "jn.h"
 
 
+extern boolean sgl_loaded;
+
 // [JN] Jaguar: prototypes
 void ST_drawWidgetsJaguar (boolean refresh);
 void ST_createWidgetsJaguar (void);
@@ -391,6 +393,10 @@ static st_number_t      w_lifes;
 
 // health widget
 static st_percent_t     w_health;
+
+// [JN] Negative player health
+static boolean          st_neghealth; 
+static st_percent_t     w_health_neg;
 
 // arms background
 static st_binicon_t     w_armsbg; 
@@ -777,8 +783,11 @@ boolean ST_Responder (event_t* ev)
                     musnum = mus_e1m1 + (buf[0]-'1')*9 + (buf[1]-'1');
 
                     // [crispy] prevent crash with IDMUS0x or IDMUSx0
-                    if (((buf[0]-'1')*9 + buf[1]-'1') > 31 || buf[0] < '1' || buf[1] < '1')
+                    // [JN] Sigil: allow to choose E5MX music, otherwise don't allow to choose E4MX music.
+                    if ((((buf[0]-'1')*9 + buf[1]-'1') > (sgl_loaded ? 41 : 21) || buf[0] < '1' || buf[1] < '1'))
+                    {
                         plyr->message = DEH_String(ststr_nomus);
+                    }
                     else
                     {
                         S_ChangeMusic(musnum, 1);
@@ -912,6 +921,8 @@ boolean ST_Responder (event_t* ev)
                 }
                 if (epsd > 4)
                 {
+                    // [crispy] Sigil
+                    if (!(sgl_loaded && epsd == 5))
                     return false;
                 }
                 if (epsd == 4 && gameversion < exe_ultimate)
@@ -1701,6 +1712,7 @@ void ST_drawWidgets(boolean refresh)
     st_armson = st_statusbaron && !deathmatch;  // used by w_arms[] widgets
     st_fragson = deathmatch && st_statusbaron;  // used by w_frags widget
     st_artifactson = !deathmatch && st_statusbaron;  // [JN] used by w_artifacts widget
+    st_neghealth = negative_health && plyr->health <= 0 && !vanillaparm;
 
 #ifdef WIDESCREEN
     // [JN] Wide screen: draw STBAR on "full screen" mode
@@ -1831,17 +1843,23 @@ void ST_drawWidgets(boolean refresh)
                 W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
 
 #ifdef WIDESCREEN
+    // [JN] Negative player halth
     dp_translation = ST_WidgetColor(hudcolor_health);
-    STlib_updatePercent(&w_health, refresh || (screenblocks >= 9 
-                                           &&  screenblocks <= 13));
+    STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health, 
+                                       refresh
+                                       || (screenblocks >= 9 
+                                       &&  screenblocks <= 13));
     dp_translation = ST_WidgetColor(hudcolor_armor);
     STlib_updatePercent(&w_armor, refresh || (screenblocks >= 9 
                                           &&  screenblocks <= 13));
     dp_translation = NULL;
 #else
     dp_translation = ST_WidgetColor(hudcolor_health);
-    STlib_updatePercent(&w_health, refresh || (screenblocks >= 11
-                                           &&  screenblocks <= 13));
+    // [JN] Negative player halth
+    STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health,
+                                       refresh    
+                                       || (screenblocks >= 11
+                                       &&  screenblocks <= 13));
     dp_translation = ST_WidgetColor(hudcolor_armor);
     STlib_updatePercent(&w_armor, refresh || (screenblocks >= 11 
                                           &&  screenblocks <= 13));
@@ -2232,6 +2250,15 @@ void ST_createWidgets(void)
         &st_statusbaron,
         tallpercent);
 
+    // [JN] Negative player health
+    STlib_initPercent(&w_health_neg,
+        ST_HEALTHX,
+        ST_HEALTHY,
+        tallnum,
+        &plyr->health_neg,
+        &st_statusbaron,
+        tallpercent);
+
     // arms background
     STlib_initBinIcon(&w_armsbg,
         ST_ARMSBGX,
@@ -2446,6 +2473,7 @@ void ST_drawWidgetsJaguar (boolean refresh)
 {
     int i;
     st_armson = st_statusbaron; // used by w_arms[] widgets
+    st_neghealth = negative_health && plyr->health <= 0 && !vanillaparm;
 
 #ifdef WIDESCREEN
     // Wide screen: draw STBAR on "full screen" mode
@@ -2516,7 +2544,8 @@ void ST_drawWidgetsJaguar (boolean refresh)
 
     // Health and Armor widgets ------------------------------------------------
 #ifdef WIDESCREEN
-    STlib_updatePercent(&w_health, refresh || screenblocks == 9
+    STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health, refresh
+                                           || screenblocks == 9
                                            || screenblocks == 10
                                            || screenblocks == 11
                                            || screenblocks == 12
@@ -2528,7 +2557,8 @@ void ST_drawWidgetsJaguar (boolean refresh)
                                            || screenblocks == 12
                                            || screenblocks == 13);
 #else
-    STlib_updatePercent(&w_health, refresh || screenblocks == 11
+    STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health, refresh
+                                           || screenblocks == 11
                                            || screenblocks == 12
                                            || screenblocks == 13);
 
@@ -2607,6 +2637,15 @@ void ST_createWidgetsJaguar(void)
         174,
         tallnum,
         &plyr->health,
+        &st_statusbaron,
+        tallpercent);
+
+     // [JN] Negative player health
+    STlib_initPercent(&w_health_neg,
+        104 + ORIGWIDTH_DELTA,
+        174,
+        tallnum,
+        &plyr->health_neg,
         &st_statusbaron,
         tallpercent);
 

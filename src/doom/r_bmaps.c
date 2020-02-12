@@ -18,6 +18,7 @@
 
 #include "doomdef.h"
 #include "doomstat.h"
+#include "d_main.h"
 #include "r_bmaps.h"
 #include "jn.h"
 
@@ -44,7 +45,7 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
     bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
     bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
     bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
-    bmaptexture91;
+    bmaptexture91, bmaptexture92;
 
 // Terminator:
 int bmap_terminator;
@@ -146,6 +147,14 @@ void R_InitBrightmappedTextures(void)
         // Red only 1
         bmaptexture89 = R_TextureNumForName("TEKWALL2");
         bmaptexture90 = R_TextureNumForName("TEKWALL5");
+    }
+
+    // -------------------------------------------------------
+    //  Sigil
+    // -------------------------------------------------------
+    if (sgl_loaded || sgl_compat_loaded)
+    {
+        bmaptexture92 = R_TextureNumForName("SIGIL");
     }
 
     // -------------------------------------------------------
