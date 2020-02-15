@@ -76,3 +76,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Daniil Petrov
 - Manuel Alfayate Corchete
 - Orfeus94
+- Artyom "Allard" Andreyev
