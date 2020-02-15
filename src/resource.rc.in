@@ -15,7 +15,7 @@ FILETYPE 1
    VALUE "FileDescription", "@PACKAGE_STRING@"
    VALUE "InternalName", "@PACKAGE_TARNAME@"
    VALUE "CompanyName", "@PACKAGE_BUGREPORT@"
-   VALUE "LegalCopyright", "Copyright \xA9 2016-2018 Julian Nechaevsky. Licensed under GNU General Public License, version 2"
+   VALUE "LegalCopyright", "Copyright \xA9 2016-2020 Julian Nechaevsky. Licensed under GNU General Public License, version 2"
    VALUE "ProductName", "@PACKAGE_NAME@"
    VALUE "ProductVersion", "@PACKAGE_VERSION@"
   }
