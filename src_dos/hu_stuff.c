@@ -82,8 +82,11 @@ char* player_names[] =
 char            chat_char; // remove later.
 static          player_t* plr;
 patch_t*        hu_font[HU_FONTSIZE];
-patch_t*        hu_font_small[HU_FONTSIZE]; // [JN] Small, unchangeable STCFS font
-patch_t*        hu_font_big[HU_FONTSIZE2];  // [JN] Big, unchangeable STCFB font
+patch_t*        hu_font_small_eng[HU_FONTSIZE]; // [JN] Small, unchangeable English font (FNTSE)
+patch_t*        hu_font_small_rus[HU_FONTSIZE]; // [JN] Small, unchangeable Russian font (FNTSR)
+patch_t*        hu_font_big_eng[HU_FONTSIZE2];  // [JN] Big, unchangeable English font (FNTBE)
+patch_t*        hu_font_big_rus[HU_FONTSIZE2];  // [JN] Big, unchangeable Russian font (FNTBR)
+
 static          hu_textline_t w_title;
 static          hu_textline_t w_kills;
 static          hu_textline_t w_items;
@@ -387,37 +390,59 @@ void HU_Init(void)
 {
     int	    i;
     int	    j;
-    int     n;
-    int     o;
+    int     o, p;
+    int     q, r;
     char    buffer[9];
 
+    // [JN] Not used.
+    /*
     if (french)
     shiftxform = french_shiftxform;
     else
     shiftxform = english_shiftxform;
+    */
 
     // load the heads-up font
     j = HU_FONTSTART;
     // [JN] Load system fonts
     o = HU_FONTSTART;
-    n = HU_FONTSTART2;
+    p = HU_FONTSTART;
+    q = HU_FONTSTART2;
+    r = HU_FONTSTART2;
+
+    // [JN] Standard STCFN font
     for (i=0;i<HU_FONTSIZE;i++)
     {
         sprintf(buffer, "STCFN%.3d", j++);
         hu_font[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
-    // [JN] Small, unchangeable STCFS font
+
+    // [JN] Small, unchangeable English font (FNTSE)
     for (i=0;i<HU_FONTSIZE;i++)
     {
-        sprintf(buffer, "STCFS%.3d", o++);
-        hu_font_small[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+        sprintf(buffer, "FNTSE%.3d", o++);
+        hu_font_small_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 
-    // [JN] Big, unchangeable STCFB font
+    // [JN] Small, unchangeable Russian font (FNTSR)
+    for (i=0;i<HU_FONTSIZE;i++)
+    {
+        sprintf(buffer, "FNTSR%.3d", p++);
+        hu_font_small_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    // [JN] Big, unchangeable English font (FNTBE)
     for (i=0;i<HU_FONTSIZE2;i++)
     {
-        sprintf(buffer, "STCFB%.3d", n++);
-        hu_font_big[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+        sprintf(buffer, "FNTBE%.3d", q++);
+        hu_font_big_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    // [JN] Big, unchangeable Russian font (FNTBR)
+    for (i=0;i<HU_FONTSIZE2;i++)
+    {
+        sprintf(buffer, "FNTBR%.3d", r++);
+        hu_font_big_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 }
 

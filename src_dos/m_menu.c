@@ -64,8 +64,10 @@
 
 
 extern patch_t*		hu_font[HU_FONTSIZE];
-extern patch_t*		hu_font_small[HU_FONTSIZE];
-extern patch_t*		hu_font_big[HU_FONTSIZE2];
+extern patch_t*		hu_font_small_eng[HU_FONTSIZE];
+extern patch_t*		hu_font_small_rus[HU_FONTSIZE];
+extern patch_t*		hu_font_big_eng[HU_FONTSIZE2];
+extern patch_t*		hu_font_big_rus[HU_FONTSIZE2];
 extern boolean		message_dontfuckwithme;
 
 extern boolean		chat_on;		// in heads-up code
@@ -247,9 +249,12 @@ menu_t*	currentMenu;
 // -----------------------------------------------------------------------------
 
 void M_WriteText(int x, int y, char *string);
-void M_WriteTextSmall(int x, int y, char *string);
-void M_WriteTextBig(int x, int y, char *string);
-void M_WriteTextBigCentered(int y, char *string);
+void M_WriteTextSmall_ENG(int x, int y, char *string);
+void M_WriteTextSmall_RUS(int x, int y, char *string);
+void M_WriteTextBig_ENG(int x, int y, char *string);
+void M_WriteTextBig_RUS(int x, int y, char *string);
+void M_WriteTextBigCentered_ENG(int y, char *string);
+void M_WriteTextBigCentered_RUS(int y, char *string);
 
 //
 // PROTOTYPES
@@ -293,7 +298,6 @@ void M_SetupNextMenu(menu_t *menudef);
 void M_DrawThermo(int x,int y,int thermWidth,int thermDot);
 void M_DrawEmptyCell(menu_t *menu,int item);
 void M_DrawSelCell(menu_t *menu,int item);
-void M_WriteText(int x, int y, char *string);
 int  M_StringWidth(char *string);
 int  M_StringHeight(char *string);
 void M_StartControlPanel(void);
@@ -432,12 +436,12 @@ void M_WriteText (int x, int y, char *string)
 }
 
 // -----------------------------------------------------------------------------
-// M_WriteTextSmall
+// M_WriteTextSmall_ENG
 //
 // [JN] Write a string using a small STCFS font
 // -----------------------------------------------------------------------------
 
-void M_WriteTextSmall (int x, int y, char *string)
+void M_WriteTextSmall_ENG (int x, int y, char *string)
 {
     int     w, c;
     int     cx = x;
@@ -463,12 +467,55 @@ void M_WriteTextSmall (int x, int y, char *string)
             continue;
         }
 
-        w = SHORT (hu_font_small[c]->width);
+        w = SHORT (hu_font_small_eng[c]->width);
         if (cx+w > SCREENWIDTH)
             break;
 
-        V_DrawShadowDirect(cx+1, cy+1, 0, hu_font_small[c]);
-        V_DrawPatchDirect(cx, cy, 0, hu_font_small[c]);
+        V_DrawShadowDirect(cx+1, cy+1, 0, hu_font_small_eng[c]);
+        V_DrawPatchDirect(cx, cy, 0, hu_font_small_eng[c]);
+
+        cx+=w;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// M_WriteTextSmall_ENG
+//
+// [JN] Write a string using a small STCFS font
+// -----------------------------------------------------------------------------
+
+void M_WriteTextSmall_RUS (int x, int y, char *string)
+{
+    int     w, c;
+    int     cx = x;
+    int     cy = y;
+    char   *ch = string;
+
+    while(1)
+    {
+        c = *ch++;
+        if (!c)
+            break;
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
+        c = toupper(c) - HU_FONTSTART;
+        if (c < 0 || c>= HU_FONTSIZE)
+        {
+            cx += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_small_rus[c]->width);
+        if (cx+w > SCREENWIDTH)
+            break;
+
+        V_DrawShadowDirect(cx+1, cy+1, 0, hu_font_small_rus[c]);
+        V_DrawPatchDirect(cx, cy, 0, hu_font_small_rus[c]);
 
         cx+=w;
     }
@@ -480,7 +527,7 @@ void M_WriteTextSmall (int x, int y, char *string)
 // [JN] Write a string using a big STCFB font
 // -----------------------------------------------------------------------------
 
-void M_WriteTextBig (int x, int y, char *string)
+void M_WriteTextBig_ENG (int x, int y, char *string)
 {
     int    w, c, cx, cy;
     char  *ch;
@@ -509,18 +556,64 @@ void M_WriteTextBig (int x, int y, char *string)
             continue;
         }
 
-        w = SHORT (hu_font_big[c]->width);
+        w = SHORT (hu_font_big_eng[c]->width);
         if (cx+w > SCREENWIDTH)
         break;
 
-        V_DrawShadowDirect(cx+1, cy+1, 0, hu_font_big[c]);
-        V_DrawPatchDirect(cx, cy, 0, hu_font_big[c]);
+        V_DrawShadowDirect(cx+1, cy+1, 0, hu_font_big_eng[c]);
+        V_DrawPatchDirect(cx, cy, 0, hu_font_big_eng[c]);
 
         // Place one char to another with one pixel
         cx += w-1;
     }
 }
 
+// -----------------------------------------------------------------------------
+// M_WriteTextBig
+//
+// [JN] Write a string using a big STCFB font
+// -----------------------------------------------------------------------------
+
+void M_WriteTextBig_RUS (int x, int y, char *string)
+{
+    int    w, c, cx, cy;
+    char  *ch;
+
+    ch = string;
+    cx = x;
+    cy = y;
+
+    while(1)
+    {
+        c = *ch++;
+        if (!c)
+        break;
+
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
+        c = c - HU_FONTSTART2;
+        if (c < 0 || c>= HU_FONTSIZE2)
+        {
+            cx += 7;
+            continue;
+        }
+
+        w = SHORT (hu_font_big_rus[c]->width);
+        if (cx+w > SCREENWIDTH)
+        break;
+
+        V_DrawShadowDirect(cx+1, cy+1, 0, hu_font_big_rus[c]);
+        V_DrawPatchDirect(cx, cy, 0, hu_font_big_rus[c]);
+
+        // Place one char to another with one pixel
+        cx += w-1;
+    }
+}
 
 // -----------------------------------------------------------------------------
 // HU_WriteTextBigCentered
@@ -528,7 +621,7 @@ void M_WriteTextBig (int x, int y, char *string)
 // [JN] Write a centered string using the BIG hu_font_big. Only Y coord is set.
 // -----------------------------------------------------------------------------
 
-void M_WriteTextBigCentered (int y, char *string)
+void M_WriteTextBigCentered_ENG (int y, char *string)
 {
     char*   ch;
     int	    c;
@@ -557,7 +650,7 @@ void M_WriteTextBigCentered (int y, char *string)
             continue;
         }
 
-        w = SHORT (hu_font_big[c]->width);
+        w = SHORT (hu_font_big_eng[c]->width);
         width += w;
     }
 
@@ -579,10 +672,76 @@ void M_WriteTextBigCentered (int y, char *string)
             continue;
         }
 
-        w = SHORT (hu_font_big[c]->width);
+        w = SHORT (hu_font_big_eng[c]->width);
 
-        V_DrawShadowDirect(cx+1, cy+1, 0, hu_font_big[c]);
-        V_DrawPatchDirect(cx, cy, 0, hu_font_big[c]);
+        V_DrawShadowDirect(cx+1, cy+1, 0, hu_font_big_eng[c]);
+        V_DrawPatchDirect(cx, cy, 0, hu_font_big_eng[c]);
+
+        cx+=w;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// HU_WriteTextBigCentered
+//
+// [JN] Write a centered string using the BIG hu_font_big. Only Y coord is set.
+// -----------------------------------------------------------------------------
+
+void M_WriteTextBigCentered_RUS (int y, char *string)
+{
+    char*   ch;
+    int	    c;
+    int	    cx;
+    int	    cy;
+    int	    w;
+    int	    width;
+
+    // find width
+    ch = string;
+    width = 0;
+    cy = y;
+
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = c - HU_FONTSTART2;
+
+        if (c < 0 || c> HU_FONTSIZE2)
+        {
+            width += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big_rus[c]->width);
+        width += w;
+    }
+
+    // draw it
+    cx = SCREENWIDTH/2-width/2;
+    ch = string;
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = c - HU_FONTSTART2;
+
+        if (c < 0 || c> HU_FONTSIZE2)
+        {
+            cx += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big_rus[c]->width);
+
+        V_DrawShadowDirect(cx+1, cy+1, 0, hu_font_big_rus[c]);
+        V_DrawPatchDirect(cx, cy, 0, hu_font_big_rus[c]);
 
         cx+=w;
     }
@@ -1062,7 +1221,7 @@ menu_t  RD_Gameplay_Def_4 =
 void M_RD_Draw_Options(void)
 {
     // Write capitalized title (НАСТРОЙКИ)
-    M_WriteTextBigCentered(12, "YFCNHJQRB");
+    M_WriteTextBigCentered_RUS(12, "YFCNHJQRB");
 }
 
 // -----------------------------------------------------------------------------
@@ -1077,20 +1236,20 @@ void M_RD_Choose_Rendering(int choice)
 void M_RD_Draw_Rendering(void)
 {
     // Write capitalized title (НАСТРОЙКИ ВИДЕО)
-    M_WriteTextBigCentered(12, "YFCNHJQRB DBLTJ");
+    M_WriteTextBigCentered_RUS(12, "YFCNHJQRB DBLTJ");
 
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 35, "htylthbyu"); // Рендеринг
+    M_WriteTextSmall_RUS(35, 35, "htylthbyu"); // Рендеринг
     dp_translation = NULL;
 
-    M_WriteTextSmall(217, 45, noflats == 1 ? "dsrk" : "drk");
+    M_WriteTextSmall_RUS(217, 45, noflats == 1 ? "dsrk" : "drk");
 
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 55, "ljgjkybntkmyj"); // Дополнительно
+    M_WriteTextSmall_RUS(35, 55, "ljgjkybntkmyj"); // Дополнительно
     dp_translation = NULL;
 
-    M_WriteTextSmall(241, 65, show_diskicon == 1 ? "drk" : "dsrk");
-    M_WriteTextSmall(204, 75, screen_wiping == 1 ? "drk" : "dsrk");
+    M_WriteTextSmall_RUS(241, 65, show_diskicon == 1 ? "drk" : "dsrk");
+    M_WriteTextSmall_RUS(204, 75, screen_wiping == 1 ? "drk" : "dsrk");
 }
 
 void M_RD_Change_DiskIcon(int choice)
@@ -1128,13 +1287,13 @@ void M_RD_Draw_Display(void)
     char    num[4];
 
     // Write capitalized title (НАСТРОЙКИ ЭКРАНА)
-    M_WriteTextBigCentered(12, "YFCNHJQRB \"RHFYF");
+    M_WriteTextBigCentered_RUS(12, "YFCNHJQRB \"RHFYF");
 
     //
     // Экран
     //
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 35, "\'rhfy");
+    M_WriteTextSmall_RUS(35, 35, "\'rhfy");
     dp_translation = NULL;
 
     // Draw screen size slider
@@ -1233,13 +1392,13 @@ void M_RD_Draw_Audio(void)
     char    num[4];
 
     // Write capitalized title (НАСТРОЙКИ ЗВУКА)
-    M_WriteTextBigCentered(12, "YFCNHJQRB PDERF");
+    M_WriteTextBigCentered_RUS(12, "YFCNHJQRB PDERF");
 
     //
     // Громкость
     //
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 35, "uhjvrjcnm");
+    M_WriteTextSmall_RUS(35, 35, "uhjvrjcnm");
     dp_translation = NULL;
 
     // Draw SFX volume slider
@@ -1258,7 +1417,7 @@ void M_RD_Draw_Audio(void)
     // Дополнительно
     //
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 85, "ljgjkybntkmyj");
+    M_WriteTextSmall_RUS(35, 85, "ljgjkybntkmyj");
     dp_translation = NULL;
 
     // Draw SFX channels slider
@@ -1354,13 +1513,13 @@ void M_RD_Draw_Controls(void)
     char    num[4];
 
     // Write capitalized title (УПРАВЛЕНИЕ)
-    M_WriteTextBigCentered(12, "EGHFDKTYBT");
+    M_WriteTextBigCentered_RUS(12, "EGHFDKTYBT");
 
     //
     // Передвижение
     //
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 35, "gthtldb;tybt");
+    M_WriteTextSmall_RUS(35, 35, "gthtldb;tybt");
     dp_translation = NULL;
 
     // Always run
@@ -1370,7 +1529,7 @@ void M_RD_Draw_Controls(void)
     // Мышь
     //
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 55, "vsim");
+    M_WriteTextSmall_RUS(35, 55, "vsim");
     dp_translation = NULL;
 
     // Draw mouse sensivity slider
@@ -1454,166 +1613,166 @@ void M_RD_Choose_Gameplay_4(int choice)
 void M_RD_Draw_Gameplay_1(void)
 {   
     // Write capitalized title (НАСТРОЙКИ ГЕЙМПЛЕЯ)
-    M_WriteTextBigCentered(10, "YFCNHJQRB UTQVGKTZ");
+    M_WriteTextBigCentered_RUS(10, "YFCNHJQRB UTQVGKTZ");
 
 
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 35, "uhfabrf");  // Графика
+    M_WriteTextSmall_RUS(35, 35, "uhfabrf");  // Графика
     dp_translation = NULL;
 
     // Брайтмаппинг
-    if (brightmaps) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(140, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(140 , 45, RD_OFF); dp_translation = NULL; }
+    if (brightmaps) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(140, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(140 , 45, RD_OFF); dp_translation = NULL; }
     // Имитация контрастности
-    if (fake_contrast) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(217, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(217, 55, RD_OFF); dp_translation = NULL; }
+    if (fake_contrast) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(217, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(217, 55, RD_OFF); dp_translation = NULL; }
     // Разноцветные элементы HUD
-    if (colored_hud) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(239, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(239, 65, RD_OFF); dp_translation = NULL; }
+    if (colored_hud) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(239, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(239, 65, RD_OFF); dp_translation = NULL; }
     // Разноцветная кровь и трупы
-    if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(242, 75, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(242, 75, RD_OFF); dp_translation = NULL; }
+    if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(242, 75, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(242, 75, RD_OFF); dp_translation = NULL; }
     // Улучшенная анимация жидкостей
-    if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(275, 85, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(275, 85, RD_OFF); dp_translation = NULL; }
+    if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(275, 85, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(275, 85, RD_OFF); dp_translation = NULL; }
     // Неуязвимость окрашивает небо
-    if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(262, 95, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(262, 95, RD_OFF); dp_translation = NULL; }
+    if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(262, 95, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(262, 95, RD_OFF); dp_translation = NULL; }
     // Тексты отбрасывают тень
-     if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(226, 105, RD_ON); dp_translation = NULL; }
-     else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(226, 105, RD_OFF); dp_translation = NULL; }
+     if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(226, 105, RD_ON); dp_translation = NULL; }
+     else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(226, 105, RD_OFF); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 145, RD_NEXT); 
-    M_WriteTextSmall(35, 155, RD_PREV); 
+    M_WriteTextSmall_RUS(35, 145, RD_NEXT); 
+    M_WriteTextSmall_RUS(35, 155, RD_PREV); 
     dp_translation = NULL;
 }
 
 void M_RD_Draw_Gameplay_2(void)
 {   
     // Write capitalized title (НАСТРОЙКИ ГЕЙМПЛЕЯ)
-    M_WriteTextBigCentered(10, "YFCNHJQRB UTQVGKTZ");
+    M_WriteTextBigCentered_RUS(10, "YFCNHJQRB UTQVGKTZ");
 
 
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 35, "Pder");  // Звук
+    M_WriteTextSmall_RUS(35, 35, "Pder");  // Звук
     dp_translation = NULL;
 
     // Play exit sounds
-    if (play_exit_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(225, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(225, 45, RD_OFF); dp_translation = NULL; }
+    if (play_exit_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(225, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(225, 45, RD_OFF); dp_translation = NULL; }
     // Sound of crushing corpses
-    if (crushed_corpses_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(236, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(236, 55, RD_OFF); dp_translation = NULL; }
+    if (crushed_corpses_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(236, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(236, 55, RD_OFF); dp_translation = NULL; }
     // Single sound of closing blazing door
-    if (blazing_door_fix_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(260, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(260, 65, RD_OFF); dp_translation = NULL; }
+    if (blazing_door_fix_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(260, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(260, 65, RD_OFF); dp_translation = NULL; }
     // Monster alert waking up other monsters
-    if (noise_alert_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(227, 75,RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(227, 75, RD_OFF); dp_translation = NULL; }
+    if (noise_alert_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(227, 75,RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(227, 75, RD_OFF); dp_translation = NULL; }
 
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 85, "Nfrnbrf"); // Тактика
+    M_WriteTextSmall_RUS(35, 85, "Nfrnbrf"); // Тактика
     dp_translation = NULL;
 
     // Show level stats on automap
-    if (automap_stats) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(239, 95, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(239, 95, RD_OFF); dp_translation = NULL; }
+    if (automap_stats) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(239, 95, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(239, 95, RD_OFF); dp_translation = NULL; }
     // Notification of revealed secrets
-    if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(260, 105, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(260, 105, RD_OFF); dp_translation = NULL; }
+    if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(260, 105, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(260, 105, RD_OFF); dp_translation = NULL; }
     // Show negative health
-    if (negative_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(255, 115, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(255, 115, RD_OFF); dp_translation = NULL; }
+    if (negative_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(255, 115, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(255, 115, RD_OFF); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 145, RD_NEXT);
-    M_WriteTextSmall(35, 155, RD_PREV);
+    M_WriteTextSmall_RUS(35, 145, RD_NEXT);
+    M_WriteTextSmall_RUS(35, 155, RD_PREV);
     dp_translation = NULL;
 }
 
 void M_RD_Draw_Gameplay_3(void)
 {
     // Write capitalized title (НАСТРОЙКИ ГЕЙМПЛЕЯ)
-    M_WriteTextBigCentered(10, "YFCNHJQRB UTQVGKTZ");
+    M_WriteTextBigCentered_RUS(10, "YFCNHJQRB UTQVGKTZ");
 
 
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 35, "Abpbrf");     // Физика
+    M_WriteTextSmall_RUS(35, 35, "Abpbrf");     // Физика
     dp_translation = NULL;
 
     // Walk over and under monsters
-    if (over_under) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(274, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(274, 45, RD_OFF); dp_translation = NULL; }
+    if (over_under) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(274, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(274, 45, RD_OFF); dp_translation = NULL; }
     // Corpses sliding from the ledges
-    if (torque) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(256, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(256, 55, RD_OFF); dp_translation = NULL; }
+    if (torque) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(256, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(256, 55, RD_OFF); dp_translation = NULL; }
     // Weapon bobbing while firing
-    if (weapon_bobbing) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(271, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(271, 65, RD_OFF); dp_translation = NULL; }
+    if (weapon_bobbing) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(271, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(271, 65, RD_OFF); dp_translation = NULL; }
     // Lethal pellet of a point-blank SSG
-    if (ssg_blast_enemies) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(274, 75, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(274, 75, RD_OFF); dp_translation = NULL; }
+    if (ssg_blast_enemies) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(274, 75, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(274, 75, RD_OFF); dp_translation = NULL; }
     // Randomly mirrored corpses
-    if (randomly_flipcorpses) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(207, 85, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(207, 85, RD_OFF); dp_translation = NULL; }
+    if (randomly_flipcorpses) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(207, 85, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(207, 85, RD_OFF); dp_translation = NULL; }
     // Floating powerups
-    if (floating_powerups) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(275, 95, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(275, 95, RD_OFF); dp_translation = NULL; }
+    if (floating_powerups) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(275, 95, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(275, 95, RD_OFF); dp_translation = NULL; }
 
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 105, "Ghbwtk");   // Прицел
+    M_WriteTextSmall_RUS(35, 105, "Ghbwtk");   // Прицел
     dp_translation = NULL;
 
     // Draw crosshair
-    if (crosshair_draw) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(180, 115, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(180, 115, RD_OFF); dp_translation = NULL; }
+    if (crosshair_draw) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(180, 115, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(180, 115, RD_OFF); dp_translation = NULL; }
     // Health indication
-    if (crosshair_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(186, 125, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(186, 125, RD_OFF); dp_translation = NULL; }
+    if (crosshair_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(186, 125, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(186, 125, RD_OFF); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 145, RD_NEXT);
-    M_WriteTextSmall(35, 155, RD_PREV);
+    M_WriteTextSmall_RUS(35, 145, RD_NEXT);
+    M_WriteTextSmall_RUS(35, 155, RD_PREV);
     dp_translation = NULL;
 }
 
 void M_RD_Draw_Gameplay_4(void)
 {   
     // Write capitalized title (НАСТРОЙКИ ГЕЙМПЛЕЯ)
-    M_WriteTextBigCentered(10, "YFCNHJQRB UTQVGKTZ");
+    M_WriteTextBigCentered_RUS(10, "YFCNHJQRB UTQVGKTZ");
 
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 35, "Utqvgktq"); // Геймплей
+    M_WriteTextSmall_RUS(35, 35, "Utqvgktq"); // Геймплей
     dp_translation = NULL;
 
     // Extra player faces on the HUD
-    if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(247, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(247, 45, RD_OFF); dp_translation = NULL; }
+    if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(247, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(247, 45, RD_OFF); dp_translation = NULL; }
 
     // Pain Elemental without Souls limit
-    if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(274, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(274, 55, RD_OFF); dp_translation = NULL; }
+    if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(274, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(274, 55, RD_OFF); dp_translation = NULL; }
 
     // Don't prompt for q. saving/loading
-    if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(253, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(253, 65, RD_OFF); dp_translation = NULL; }
+    if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(253, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(253, 65, RD_OFF); dp_translation = NULL; }
 
     // Play internal demos
-    if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(219, 75, RD_OFF); dp_translation = NULL; }
-    else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(219, 75, RD_ON); dp_translation = NULL; }
+    if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(219, 75, RD_OFF); dp_translation = NULL; }
+    else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(219, 75, RD_ON); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(35, 145, RD_NEXT);
-    M_WriteTextSmall(35, 155, RD_PREV);
+    M_WriteTextSmall_RUS(35, 145, RD_NEXT);
+    M_WriteTextSmall_RUS(35, 155, RD_PREV);
     dp_translation = NULL;
 }
 
@@ -2027,7 +2186,7 @@ void M_DrawLoad(void)
     int             i;
 
     // ЗАГРУЗИТЬ ИГРУ
-    M_WriteTextBigCentered(13, "PFUHEPBNM BUHE");
+    M_WriteTextBigCentered_RUS(13, "PFUHEPBNM BUHE");
 
     for (i = 0;i < load_end; i++)
     {
@@ -2113,12 +2272,12 @@ void M_DrawSave(void)
     if (QuickSaveTitle)
     {
         // БЫСТРОЕ СОХРАНЕНИЕ
-        M_WriteTextBigCentered(13, "<SCNHJT CJ{HFYTYBT");
+        M_WriteTextBigCentered_RUS(13, "<SCNHJT CJ{HFYTYBT");
     }
     else
     {
         // СОХРАНИТЬ ИГРУ
-        M_WriteTextBigCentered(13, "CJ{HFYBNM BUHE");
+        M_WriteTextBigCentered_RUS(13, "CJ{HFYBNM BUHE");
     }
 
     for (i = 0;i < load_end; i++)
@@ -2328,10 +2487,10 @@ void M_DrawMainMenu(void)
 void M_DrawNewGame(void)
 {
     // НОВАЯ ИГРА
-    M_WriteTextBigCentered(14, "YJDFZ BUHF");
+    M_WriteTextBigCentered_RUS(14, "YJDFZ BUHF");
 
     // Уровень сложности:
-    M_WriteTextBigCentered(38, "Ehjdtym ckj;yjcnb:");
+    M_WriteTextBigCentered_RUS(38, "Ehjdtym ckj;yjcnb:");
 }
 
 void M_NewGame(int choice)
@@ -2357,10 +2516,10 @@ int     epi;
 void M_DrawEpisode(void)
 {
     // НОВАЯ ИГРА
-    M_WriteTextBigCentered(14, "YJDFZ BUHF");
+    M_WriteTextBigCentered_RUS(14, "YJDFZ BUHF");
 
     // Какой эпизод?
-    M_WriteTextBigCentered(38, "Rfrjq \'gbpjl?");
+    M_WriteTextBigCentered_RUS(38, "Rfrjq \'gbpjl?");
 }
 
 void M_VerifyNightmare(int ch)
@@ -3304,7 +3463,7 @@ void M_Drawer (void)
         else
         if (currentMenu == &RD_Options_Def)
         {
-            M_WriteTextBig(x, y, currentMenu->menuitems[i].name);
+            M_WriteTextBig_RUS(x, y, currentMenu->menuitems[i].name);
         
             // DRAW SKULL
             V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
@@ -3350,12 +3509,12 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Gameplay_Def_3
         ||  currentMenu == &RD_Gameplay_Def_4)
         {
-            M_WriteTextSmall(x, y, currentMenu->menuitems[i].name);
+            M_WriteTextSmall_RUS(x, y, currentMenu->menuitems[i].name);
         
             // [JN] Draw blinking ">" symbol
             if (whichSkull == 0)
             dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmall(x + SKULLXOFF + 24, currentMenu->y + itemOn*LINEHEIGHT_SML, ">");
+            M_WriteTextSmall_RUS(x + SKULLXOFF + 24, currentMenu->y + itemOn*LINEHEIGHT_SML, ">");
             // [JN] Clear translation
             dp_translation = NULL;
         

@@ -76,8 +76,6 @@
 //
 void D_DoomLoop (void);
 
-// [JN] Prototype for text writing ("Пауза").
-extern void M_WriteTextBigCentered(int y, char *string);
 
 char*       wadfiles[MAXWADFILES];
 
@@ -330,9 +328,10 @@ void D_Display (void)
         else
         y = viewwindowy+4;
 
-        // [JN] Draw "Пауза" a bit lower to don't obstruct message line
-        // Пауза
-        M_WriteTextBigCentered(y+7, "Gfepf");
+        V_DrawShadowDirect(viewwindowx+(scaledviewwidth-68)/2+1,
+                          y+1,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
+        V_DrawPatchDirect(viewwindowx+(scaledviewwidth-68)/2,
+                          y,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
     }
 
     // menus go directly to the screen
