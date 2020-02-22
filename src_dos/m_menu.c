@@ -605,13 +605,13 @@ enum
 
 menuitem_t MainMenu[]=
 {
-    {1, "Yjdfz buhf",  M_NewGame,  'y'}, // Новая игра
-    {1, "Yfcnhjqrb",   M_Options,  'y'}, // Настройки
-    {1, "Pfuheprf",    M_LoadGame, 'p'}, // Загрузка
-    {1, "Cj[hfytybt",  M_SaveGame, 'c'}, // Сохранение
+    {1,"M_NGAME",M_NewGame,'n'},
+    {1,"M_OPTION",M_Options,'o'},
+    {1,"M_LOADG",M_LoadGame,'l'},
+    {1,"M_SAVEG",M_SaveGame,'s'},
     // Another hickup with Special edition.
-    {1, "Byajhvfwbz!", M_ReadThis, 'b'}, // Информация!
-    {1, "Ds[jl",       M_QuitDOOM, 'd'}  // Выход
+    {1,"M_RDTHIS",M_ReadThis,'r'},
+    {1,"M_QUITG",M_QuitDOOM,'q'}
 };
 
 menu_t  MainDef =
@@ -639,10 +639,10 @@ enum
 
 menuitem_t EpisodeMenu[]=
 {
-    {1,"Gj rjktyj d nhegf[",  M_Episode, 'g'}, // По колено в трупах
-    {1,"Ghb,ht;mt Flf",       M_Episode, 'g'}, // Прибрежье Ада
-    {1,"Byathyj",             M_Episode, 'b'}, // Инферно
-    {1,"Ndjz gkjnm bcnjotyf", M_Episode, 'n'}  // Твоя плоть истощена
+    {1,"M_EPI1", M_Episode, 'g'}, // По колено в трупах
+    {1,"M_EPI2", M_Episode, 'g'}, // Прибрежье Ада
+    {1,"M_EPI3", M_Episode, 'b'}, // Инферно
+    {1,"M_EPI4", M_Episode, 'n'}  // Твоя плоть истощена
 };
 
 menu_t  EpiDef =
@@ -738,16 +738,18 @@ menu_t  RD_Options_Def =
 
 enum
 {
+    rd_rendering_wiping,
+    rd_rendering_empty1,
     rd_rendering_diskicon,
     rd_rendering_noflats,
-    rd_rendering_wiping,
     rd_rendering_end
 } rd_rendering_e;
 
 menuitem_t RD_Rendering_Menu[]=
 {
-    {1,"Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon, 'j'}, // Отображать значок дискеты
     {1,"Ntrcnehs gjkf b gjnjkrf:",   M_RD_Change_NoFlats,  'n'}, // Текстуры пола и потолка
+    {-1,"",0,'\0'},
+    {1,"Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon, 'j'}, // Отображать значок дискеты
     {1,"Gkfdyfz cvtyf \'rhfyjd:",    M_RD_Change_Wiping,   'g'}, // Плавная смена экранов
     {-1,"",0,'\0'}
 };
@@ -758,7 +760,7 @@ menu_t  RD_Rendering_Def =
     &RD_Options_Def,
     RD_Rendering_Menu,
     M_RD_Draw_Rendering,
-    35,37,
+    35,45,
     0
 };
 
@@ -779,12 +781,12 @@ enum
 
 menuitem_t RD_Display_Menu[]=
 {
-    {2,"Hfpvth 'rhfyf",   M_RD_Change_ScreenSize, 'h'}, // Размер экрана
-    {-1,"",0,'\0'},                                     //
-    {2,"Ufvvf-rjhhtrwbz", M_RD_Change_Gamma,      'u'}, // Гамма-коррекция
-    {-1,"",0,'\0'},                                     //
-    {1,"Ltnfkbpfwbz:",    M_RD_Change_Detail,     'l'}, // Детализация:
-    {1,"Cjj,otybz:",      M_RD_Change_Messages,   'c'}, // Сообщения:
+    {2,"hfpvth buhjdjuj \'rhfyf", M_RD_Change_ScreenSize, 'h'}, // Размер игрового экрана
+    {-1,"",0,'\0'},                                             //
+    {2,"ehjdtym ufvvf-rjhhtrwbb", M_RD_Change_Gamma,      'e'}, // Уровень гамма-коррекции
+    {-1,"",0,'\0'},                                             //
+    {1,"ehjdtym ltnfkbpfwbb:",    M_RD_Change_Detail,     'e'}, // Уровень детализации:
+    {1,"jnj,hf;tybt cjj,otybq:",  M_RD_Change_Messages,   'j'}, // Отображение сообщений:
     {-1,"",0,'\0'}
 };
 
@@ -794,7 +796,7 @@ menu_t  RD_Display_Def =
     &RD_Options_Def,
     RD_Display_Menu,
     M_RD_Draw_Display,
-    60,37,
+    35,45,
     0
 };
 
@@ -808,8 +810,9 @@ enum
     rd_audio_empty1,
     rd_audio_musvolume,
     rd_audio_empty2,
-    rd_audio_sfxchannels,
     rd_audio_empty3,
+    rd_audio_sfxchannels,
+    rd_audio_empty4,
     rd_audio_sndmode,
     rd_audio_sndpitch,
     rd_audio_end
@@ -817,14 +820,15 @@ enum
 
 menuitem_t RD_Audio_Menu[]=
 {
-    {2,"Uhjvrjcnm pderf",  M_RD_Change_SfxVol,      'u'},   // Громкость звука
-    {-1,"",0,'\0'},                                         //
-    {2,"Uhjvrjcnm vepsrb", M_RD_Change_MusicVol,    'u'},   // Громкость музыки
-    {-1,"",0,'\0'},                                         //
-    {2,"Pderjdst rfyfks",  M_RD_Change_SfxChannels, 'p'},   // Звуковые каналы
-    {-1,"",0,'\0'},                                         //
-    {1,"Ht;bv pderf:",     M_RD_Change_SndMode,     'h'},   // Режим звука
-    {1,"Gbnx-ibanbyu:",    M_RD_Change_PitchShifting, 'g'}, // Питч-шифтинг
+    {2,"pder",                       M_RD_Change_SfxVol,        'p'}, // Звук
+    {-1,"",0,'\0'},                                                   //
+    {2,"vepsrf",                     M_RD_Change_MusicVol,      'v'}, // Музыка
+    {-1,"",0,'\0'},                                                   //
+    {-1,"",0,'\0'},                                                   //
+    {2,"Pderjdst rfyfks",            M_RD_Change_SfxChannels,   'p'}, // Звуковые каналы
+    {-1,"",0,'\0'},                                                   //
+    {1,"Ht;bv pderf:",               M_RD_Change_SndMode,       'h'}, // Режим звука
+    {1,"ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 'g'}, // Произвольный питч-шифтинг
     {-1,"",0,'\0'}
 };
 
@@ -834,7 +838,7 @@ menu_t RD_Audio_Def =
     &RD_Options_Def,
     RD_Audio_Menu,
     M_RD_Draw_Audio,
-    60,37,
+    35,45,
     0
 };
 
@@ -845,17 +849,20 @@ menu_t RD_Audio_Def =
 enum
 {
     rd_controls_alwaysrun,
-    rd_controls_mouselook,
-    rd_controls_sensitivity,
     rd_controls_empty1,
+    rd_controls_sensitivity,
+    rd_controls_empty2,
+    rd_controls_mouselook,
     rd_controls_end
 } rd_controls_e;
 
 menuitem_t RD_Controls_Menu[]=
 {
-    {1,"Gjcnjzyysq ,tu:", M_RD_Change_AlwaysRun,   'g'}, // Постоянный бег
-    {1,"J,pjh vsim.:",    M_RD_Change_MouseLook,   'j'}, // Обзор мышью
-    {2,"Crjhjcnm vsib",   M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
+    {1,"ht;bv gjcnjzyyjuj ,tuf:", M_RD_Change_AlwaysRun,   'g'}, // Режим постоянного бега
+    {-1,"",0,'\0'},                                              //
+    {2,"Crjhjcnm vsib",           M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
+    {-1,"",0,'\0'},                                              //
+    {1,"J,pjh vsim.:",            M_RD_Change_MouseLook,   'j'}, // Обзор мышью
     {-1,"",0,'\0'}
 };
 
@@ -865,7 +872,7 @@ menu_t  RD_Controls_Def =
     &RD_Options_Def,
     RD_Controls_Menu,
     M_RD_Draw_Controls,
-    45,37,
+    35,45,
     0
 };
 
@@ -961,7 +968,7 @@ menu_t  RD_Gameplay_Def_1 =
     &RD_Options_Def,
     RD_Gameplay_Menu_1,
     M_RD_Draw_Gameplay_1,
-    45,45,
+    35,45,
     0
 };
 
@@ -988,7 +995,7 @@ menu_t  RD_Gameplay_Def_2 =
     &RD_Options_Def,
     RD_Gameplay_Menu_2,
     M_RD_Draw_Gameplay_2,
-    45,45,
+    35,45,
     0
 };
 
@@ -1014,7 +1021,7 @@ menu_t  RD_Gameplay_Def_3 =
     &RD_Options_Def,
     RD_Gameplay_Menu_3,
     M_RD_Draw_Gameplay_3,
-    45,45,
+    35,45,
     0
 };
 
@@ -1039,7 +1046,7 @@ menu_t  RD_Gameplay_Def_4 =
     &RD_Options_Def,
     RD_Gameplay_Menu_4,
     M_RD_Draw_Gameplay_4,
-    45,45,
+    35,45,
     0
 };
 
@@ -1072,10 +1079,18 @@ void M_RD_Draw_Rendering(void)
     // Write capitalized title (НАСТРОЙКИ ВИДЕО)
     M_WriteTextBigCentered(12, "YFCNHJQRB DBLTJ");
 
-    // Write "on" / "off" strings for features
-    M_WriteTextSmall(241, 37, show_diskicon == 1 ? "drk" : "dsrk");
-    M_WriteTextSmall(217, 47, noflats == 1 ? "dsrk" : "drk");
-    M_WriteTextSmall(204, 57, screen_wiping == 1 ? "drk" : "dsrk");
+    dp_translation = cr[CR_GOLD];
+    M_WriteTextSmall(35, 35, "htylthbyu"); // Рендеринг
+    dp_translation = NULL;
+
+    M_WriteTextSmall(217, 45, noflats == 1 ? "dsrk" : "drk");
+
+    dp_translation = cr[CR_GOLD];
+    M_WriteTextSmall(35, 55, "ljgjkybntkmyj"); // Дополнительно
+    dp_translation = NULL;
+
+    M_WriteTextSmall(241, 65, show_diskicon == 1 ? "drk" : "dsrk");
+    M_WriteTextSmall(204, 75, screen_wiping == 1 ? "drk" : "dsrk");
 }
 
 void M_RD_Change_DiskIcon(int choice)
@@ -1115,21 +1130,27 @@ void M_RD_Draw_Display(void)
     // Write capitalized title (НАСТРОЙКИ ЭКРАНА)
     M_WriteTextBigCentered(12, "YFCNHJQRB \"RHFYF");
 
+    //
+    // Экран
+    //
+    dp_translation = cr[CR_GOLD];
+    M_WriteTextSmall(35, 35, "\'rhfy");
+    dp_translation = NULL;
+
     // Draw screen size slider
-    M_DrawThermo(60, RD_Display_Def.y + LINEHEIGHT+1, 12, screenSize);
+    M_DrawThermo_Small(35, 55, 12, screenSize);
 
     
     // Draw numerical representation of slider position
     snprintf(num, 4, "%3d", screenblocks);
-    M_WriteText(170, RD_Display_Def.y + LINEHEIGHT+3, num);
+    M_WriteText(145, 55, num);
 
     // Draw gamma-correction slider
-    M_DrawThermo(60, RD_Display_Def.y + LINEHEIGHT*(rd_display_gamma+1), 18, usegamma);
-
+    M_DrawThermo_Small(35, 75, 18, usegamma);
 
     // Write "on" / "off" strings for features
-    M_WriteTextBig(225, 101, detailLevel == 1 ? "ybp/" : "dsc/");
-    M_WriteTextBig(207, 117, showMessages == 1 ? "drk/" : "dsrk/");
+    M_WriteText(193, 85, detailLevel == 1 ? "ybprbq" : "dscjrbq");
+    M_WriteText(214, 95, showMessages == 1 ? "drk" : "dsrk");
 }
 
 void M_RD_Change_ScreenSize(int choice)
@@ -1214,28 +1235,41 @@ void M_RD_Draw_Audio(void)
     // Write capitalized title (НАСТРОЙКИ ЗВУКА)
     M_WriteTextBigCentered(12, "YFCNHJQRB PDERF");
 
+    //
+    // Громкость
+    //
+    dp_translation = cr[CR_GOLD];
+    M_WriteTextSmall(35, 35, "uhjvrjcnm");
+    dp_translation = NULL;
 
     // Draw SFX volume slider
-    M_DrawThermo(60, RD_Audio_Def.y + LINEHEIGHT+1, 16, sfxVolume);
+    M_DrawThermo_Small(35, 55, 16, sfxVolume);
     // Draw numerical representation of SFX volume
     snprintf(num, 4, "%3d", sfxVolume);
-    M_WriteText(202, RD_Audio_Def.y + LINEHEIGHT+3, num);
+    M_WriteText(177, 55, num);
 
     // Draw music volume slider
-    M_DrawThermo(60, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_musvolume+1), 16, musicVolume);
+    M_DrawThermo_Small(35, 75, 16, musicVolume);
     // Draw numerical representation of music volume
     snprintf(num, 4, "%3d", musicVolume);
-    M_WriteText(202, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_musvolume+1) + 2, num);
+    M_WriteText(177, 75, num);
+
+    //
+    // Дополнительно
+    //
+    dp_translation = cr[CR_GOLD];
+    M_WriteTextSmall(35, 85, "ljgjkybntkmyj");
+    dp_translation = NULL;
 
     // Draw SFX channels slider
-    M_DrawThermo(60, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1), 16, numChannels / 4 - 1);
+    M_DrawThermo_Small(35, 105, 16, numChannels / 4 - 1);
     // Draw numerical representation of channels
     snprintf(num, 4, "%3d", numChannels);
-    M_WriteText(202, RD_Audio_Def.y + LINEHEIGHT*(rd_audio_sfxchannels+1) + 2, num);
+    M_WriteText(177, 105, num);
 
     // Write "on" / "off" strings for features
-    M_WriteTextBig(219, 133, snd_monomode == 1 ? "vjyj" : "cnthtj");
-    M_WriteTextBig(236, 149, snd_pitchshift == 1 ? "drk" : "dsrk");
+    M_WriteText(132, 115, snd_monomode == 1 ? "vjyj" : "cnthtj");
+    M_WriteText(242, 125, snd_pitchshift == 1 ? "drk" : "dsrk");
 }
 
 void M_RD_Change_SfxVol(int choice)
@@ -1322,15 +1356,31 @@ void M_RD_Draw_Controls(void)
     // Write capitalized title (УПРАВЛЕНИЕ)
     M_WriteTextBigCentered(12, "EGHFDKTYBT");
 
+    //
+    // Передвижение
+    //
+    dp_translation = cr[CR_GOLD];
+    M_WriteTextSmall(35, 35, "gthtldb;tybt");
+    dp_translation = NULL;
+
+    // Always run
+    M_WriteText(216, 45, joybspeed >= 20 ? "drk" : "dsrk");
+
+    //
+    // Мышь
+    //
+    dp_translation = cr[CR_GOLD];
+    M_WriteTextSmall(35, 55, "vsim");
+    dp_translation = NULL;
+
     // Draw mouse sensivity slider
-    M_DrawThermo(45, RD_Options_Def.y + LINEHEIGHT*(rd_controls_sensitivity+1), 13, mouseSensitivity);
+    M_DrawThermo_Small(35, 75, 13, mouseSensitivity);
     // Draw numerical representation of mouse sensivity
     snprintf(num, 4, "%3d", mouseSensitivity);
-    M_WriteText(163, RD_Audio_Def.y + LINEHEIGHT*(rd_controls_empty1)+2, num);
+    M_WriteText(163, 65, num);
 
-    // Write "on" / "off" strings for features
-    M_WriteTextBig(243, 37, joybspeed >= 20 ? "drk/" : "dsrk/");
-    M_WriteTextBig(216, 53, mlook ? "drk/" : "dsrk/");
+
+    M_WriteText(135, 85, mlook ? "drk" : "dsrk");
 }
 
 void M_RD_Change_AlwaysRun(int choice)
@@ -1409,35 +1459,35 @@ void M_RD_Draw_Gameplay_1(void)
 
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 35, "uhfabrf");  // Графика
+    M_WriteTextSmall(35, 35, "uhfabrf");  // Графика
     dp_translation = NULL;
 
     // Брайтмаппинг
-    if (brightmaps) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(150, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(150 , 45, RD_OFF); dp_translation = NULL; }
+    if (brightmaps) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(140, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(140 , 45, RD_OFF); dp_translation = NULL; }
     // Имитация контрастности
-    if (fake_contrast) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(227, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(227, 55, RD_OFF); dp_translation = NULL; }
+    if (fake_contrast) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(217, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(217, 55, RD_OFF); dp_translation = NULL; }
     // Разноцветные элементы HUD
-    if (colored_hud) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(249, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(249, 65, RD_OFF); dp_translation = NULL; }
+    if (colored_hud) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(239, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(239, 65, RD_OFF); dp_translation = NULL; }
     // Разноцветная кровь и трупы
-    if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(252, 75, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(252, 75, RD_OFF); dp_translation = NULL; }
+    if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(242, 75, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(242, 75, RD_OFF); dp_translation = NULL; }
     // Улучшенная анимация жидкостей
-    if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(285, 85, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(285, 85, RD_OFF); dp_translation = NULL; }
+    if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(275, 85, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(275, 85, RD_OFF); dp_translation = NULL; }
     // Неуязвимость окрашивает небо
-    if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(272, 95, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(272, 95, RD_OFF); dp_translation = NULL; }
+    if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(262, 95, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(262, 95, RD_OFF); dp_translation = NULL; }
     // Тексты отбрасывают тень
-     if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(236, 105, RD_ON); dp_translation = NULL; }
-     else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(236, 105, RD_OFF); dp_translation = NULL; }
+     if (draw_shadowed_text) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(226, 105, RD_ON); dp_translation = NULL; }
+     else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(226, 105, RD_OFF); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 145, RD_NEXT); 
-    M_WriteTextSmall(45, 155, RD_PREV); 
+    M_WriteTextSmall(35, 145, RD_NEXT); 
+    M_WriteTextSmall(35, 155, RD_PREV); 
     dp_translation = NULL;
 }
 
@@ -1449,40 +1499,40 @@ void M_RD_Draw_Gameplay_2(void)
 
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 35, "Pder");  // Звук
+    M_WriteTextSmall(35, 35, "Pder");  // Звук
     dp_translation = NULL;
 
     // Play exit sounds
-    if (play_exit_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(235, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(235, 45, RD_OFF); dp_translation = NULL; }
+    if (play_exit_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(225, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(225, 45, RD_OFF); dp_translation = NULL; }
     // Sound of crushing corpses
-    if (crushed_corpses_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(246, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(246, 55, RD_OFF); dp_translation = NULL; }
+    if (crushed_corpses_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(236, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(236, 55, RD_OFF); dp_translation = NULL; }
     // Single sound of closing blazing door
-    if (blazing_door_fix_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(270, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(270, 65, RD_OFF); dp_translation = NULL; }
+    if (blazing_door_fix_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(260, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(260, 65, RD_OFF); dp_translation = NULL; }
     // Monster alert waking up other monsters
-    if (noise_alert_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(237, 75,RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(237, 75, RD_OFF); dp_translation = NULL; }
+    if (noise_alert_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(227, 75,RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(227, 75, RD_OFF); dp_translation = NULL; }
 
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 85, "Nfrnbrf"); // Тактика
+    M_WriteTextSmall(35, 85, "Nfrnbrf"); // Тактика
     dp_translation = NULL;
 
     // Show level stats on automap
-    if (automap_stats) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(249, 95, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(249, 95, RD_OFF); dp_translation = NULL; }
+    if (automap_stats) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(239, 95, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(239, 95, RD_OFF); dp_translation = NULL; }
     // Notification of revealed secrets
-    if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(270, 105, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(270, 105, RD_OFF); dp_translation = NULL; }
+    if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(260, 105, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(260, 105, RD_OFF); dp_translation = NULL; }
     // Show negative health
-    if (negative_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(265, 115, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(265, 115, RD_OFF); dp_translation = NULL; }
+    if (negative_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(255, 115, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(255, 115, RD_OFF); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 145, RD_NEXT);
-    M_WriteTextSmall(45, 155, RD_PREV);
+    M_WriteTextSmall(35, 145, RD_NEXT);
+    M_WriteTextSmall(35, 155, RD_PREV);
     dp_translation = NULL;
 }
 
@@ -1494,43 +1544,43 @@ void M_RD_Draw_Gameplay_3(void)
 
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 35, "Abpbrf");     // Физика
+    M_WriteTextSmall(35, 35, "Abpbrf");     // Физика
     dp_translation = NULL;
 
     // Walk over and under monsters
-    if (over_under) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(284, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(284, 45, RD_OFF); dp_translation = NULL; }
+    if (over_under) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(274, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(274, 45, RD_OFF); dp_translation = NULL; }
     // Corpses sliding from the ledges
-    if (torque) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(266, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(266, 55, RD_OFF); dp_translation = NULL; }
+    if (torque) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(256, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(256, 55, RD_OFF); dp_translation = NULL; }
     // Weapon bobbing while firing
-    if (weapon_bobbing) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(281, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(281, 65, RD_OFF); dp_translation = NULL; }
+    if (weapon_bobbing) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(271, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(271, 65, RD_OFF); dp_translation = NULL; }
     // Lethal pellet of a point-blank SSG
-    if (ssg_blast_enemies) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(264, 75, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(264, 75, RD_OFF); dp_translation = NULL; }
+    if (ssg_blast_enemies) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(274, 75, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(274, 75, RD_OFF); dp_translation = NULL; }
     // Randomly mirrored corpses
-    if (randomly_flipcorpses) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(217, 85, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(217, 85, RD_OFF); dp_translation = NULL; }
+    if (randomly_flipcorpses) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(207, 85, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(207, 85, RD_OFF); dp_translation = NULL; }
     // Floating powerups
-    if (floating_powerups) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(285, 95, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(285, 95, RD_OFF); dp_translation = NULL; }
+    if (floating_powerups) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(275, 95, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(275, 95, RD_OFF); dp_translation = NULL; }
 
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 105, "Ghbwtk");   // Прицел
+    M_WriteTextSmall(35, 105, "Ghbwtk");   // Прицел
     dp_translation = NULL;
 
     // Draw crosshair
-    if (crosshair_draw) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(190, 115, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(190, 115, RD_OFF); dp_translation = NULL; }
+    if (crosshair_draw) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(180, 115, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(180, 115, RD_OFF); dp_translation = NULL; }
     // Health indication
-    if (crosshair_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(196, 125, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(196, 125, RD_OFF); dp_translation = NULL; }
+    if (crosshair_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(186, 125, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(186, 125, RD_OFF); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 145, RD_NEXT);
-    M_WriteTextSmall(45, 155, RD_PREV);
+    M_WriteTextSmall(35, 145, RD_NEXT);
+    M_WriteTextSmall(35, 155, RD_PREV);
     dp_translation = NULL;
 }
 
@@ -1541,29 +1591,29 @@ void M_RD_Draw_Gameplay_4(void)
 
     // Write "on" / "off" strings for features
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 35, "Utqvgktq"); // Геймплей
+    M_WriteTextSmall(35, 35, "Utqvgktq"); // Геймплей
     dp_translation = NULL;
 
     // Extra player faces on the HUD
-    if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(257, 45, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(257, 45, RD_OFF); dp_translation = NULL; }
+    if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(247, 45, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(247, 45, RD_OFF); dp_translation = NULL; }
 
     // Pain Elemental without Souls limit
-    if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(284, 55, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(284, 55, RD_OFF); dp_translation = NULL; }
+    if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(274, 55, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(274, 55, RD_OFF); dp_translation = NULL; }
 
     // Don't prompt for q. saving/loading
-    if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(263, 65, RD_ON); dp_translation = NULL; }
-    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(263, 65, RD_OFF); dp_translation = NULL; }
+    if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(253, 65, RD_ON); dp_translation = NULL; }
+    else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(253, 65, RD_OFF); dp_translation = NULL; }
 
     // Play internal demos
-    if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(229, 75, RD_OFF); dp_translation = NULL; }
-    else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(229, 75, RD_ON); dp_translation = NULL; }
+    if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall(219, 75, RD_OFF); dp_translation = NULL; }
+    else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall(219, 75, RD_ON); dp_translation = NULL; }
 
     // Footer
     dp_translation = cr[CR_GOLD];
-    M_WriteTextSmall(45, 145, RD_NEXT);
-    M_WriteTextSmall(45, 155, RD_PREV);
+    M_WriteTextSmall(35, 145, RD_NEXT);
+    M_WriteTextSmall(35, 155, RD_PREV);
     dp_translation = NULL;
 }
 
@@ -2585,6 +2635,40 @@ M_DrawThermo
 }
 
 
+// -----------------------------------------------------------------------------
+// [JN] Draw small thermo for RD options menu
+// -----------------------------------------------------------------------------
+void M_DrawThermo_Small (int x, int y, int thermWidth, int thermDot)
+{
+    int		xx;
+    int		i;
+
+    xx = x;
+    V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("RD_THRML",PU_CACHE));
+    V_DrawPatchDirect (xx,y,0,W_CacheLumpName("RD_THRML",PU_CACHE));
+    xx += 8;
+    for (i=0;i<thermWidth;i++)
+    {
+        V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("RD_THRMM",PU_CACHE));
+        V_DrawPatchDirect (xx,y,0,W_CacheLumpName("RD_THRMM",PU_CACHE));
+        xx += 8;
+    }
+    V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("RD_THRMR",PU_CACHE));
+    V_DrawPatchDirect (xx,y,0,W_CacheLumpName("RD_THRMR",PU_CACHE));
+
+    // [crispy] do not crash anymore if value exceeds thermometer range
+    // [JN] Draw red slider instead of blue.
+    if (thermDot >= thermWidth)
+    {
+        thermDot = thermWidth - 1;
+        V_DrawPatchDirect ((x+8) + thermDot*8,y,0,W_CacheLumpName("RD_THRMW",PU_CACHE));
+    }
+    else
+    {
+        V_DrawPatchDirect ((x+8) + thermDot*8,y,0,W_CacheLumpName("RD_THRMO",PU_CACHE));
+    }
+}
+
 
 // [JN] From Doom Alpha, not needed
 /*
@@ -3147,7 +3231,7 @@ void M_Drawer (void)
     static short	y;
     short		i;
     short		max;
-    char		string[40];
+    char		string[80];
     int			start;
 
     inhelpscreens = false;
@@ -3195,81 +3279,132 @@ void M_Drawer (void)
 
     for (i=0;i<max;i++)
     {
-        // [JN] Shade Gameplay menu in -vanilla mode
-        if (vanilla && currentMenu == &RD_Options_Def && i == rd_gameplay)
-        dp_translation = cr[CR_DARKRED];
-
-        // [JN] Write only skill levels with GFX patches
-        if (currentMenu == &NewDef)
+        // -----------------------------------------------------------------
+        // [JN] Write common menus by using standard graphical patches:
+        // -----------------------------------------------------------------
+        if (currentMenu == &MainDef                // Main Menu
+        ||  currentMenu == &EpiDef                 // Episode selection
+        ||  currentMenu == &NewDef)                // Skill level
         {
             V_DrawShadowDirect (x+1,y+1,0, W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE));
             V_DrawPatchDirect (x,y,0, W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE));
+
+            // DRAW SKULL
+            V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
+                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+            V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
+                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
         }
-        // [JN] Now comes a difference. Write Rendering menu and
-        // Gameplay features with small font, write rest of others
-        // with big font.
+        // -----------------------------------------------------------------
+        // [JN] Write English options menu with big English font
+        // -----------------------------------------------------------------
         else
+        if (currentMenu == &RD_Options_Def)
         {
-
-            if (currentMenu != &RD_Rendering_Def
-            &&  currentMenu != &RD_Gameplay_Def_1
-            &&  currentMenu != &RD_Gameplay_Def_2
-            &&  currentMenu != &RD_Gameplay_Def_3
-            &&  currentMenu != &RD_Gameplay_Def_4)
-            {
-                M_WriteTextBig(x, y, currentMenu->menuitems[i].name);
-            }
-            else
-            {
-                M_WriteTextSmall(x, y, currentMenu->menuitems[i].name);
-            }
-        }
-
-        // [JN] Clear shading
-        if (vanilla)
-        dp_translation = NULL;
+            M_WriteTextBig(x, y, currentMenu->menuitems[i].name);
         
-        // [JN] And another difference. Listed above menus requre
-        // different vertical line spacing because of different font.
+            // DRAW SKULL
+            V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
+                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+            V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
+                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+        
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
+        }
+        // -----------------------------------------------------------------
+        // [JN] Write Russian options menu with big Russian font
+        // -----------------------------------------------------------------
+    /*
+        else 
+        if (currentMenu == &MainDef_Rus
+        ||  currentMenu == &EpiDef_Rus
+        ||  currentMenu == &NewDef_Rus
+        ||  currentMenu == &RD_Options_Def_Rus
+        ||  currentMenu == &Vanilla_OptionsDef_Rus
+        ||  currentMenu == &Vanilla_Audio_Def_Rus)
+        {
+            M_WriteTextBig_RUS(x, y, name);
+        
+            // DRAW SKULL
+            V_DrawShadowedPatchDoom(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,
+            W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
+        
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
+        }
+    */
+        // -----------------------------------------------------------------
+        // [JN] Write English submenus with small English font
+        // -----------------------------------------------------------------
+        else
         if (currentMenu == &RD_Rendering_Def
+        ||  currentMenu == &RD_Display_Def
+        ||  currentMenu == &RD_Audio_Def
+        ||  currentMenu == &RD_Controls_Def
         ||  currentMenu == &RD_Gameplay_Def_1
         ||  currentMenu == &RD_Gameplay_Def_2
         ||  currentMenu == &RD_Gameplay_Def_3
         ||  currentMenu == &RD_Gameplay_Def_4)
         {
+            M_WriteTextSmall(x, y, currentMenu->menuitems[i].name);
+        
+            // [JN] Draw blinking ">" symbol
+            if (whichSkull == 0)
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall(x + SKULLXOFF + 24, currentMenu->y + itemOn*LINEHEIGHT_SML, ">");
+            // [JN] Clear translation
+            dp_translation = NULL;
+        
+            // [JN] Small vertical spacing
             y += LINEHEIGHT_SML;
         }
+        // -----------------------------------------------------------------
+        // [JN] Write Russian submenus with small Russian font
+        // -----------------------------------------------------------------            
+        /*
         else
+        if (currentMenu == &RD_Rendering_Def_Rus
+        ||  currentMenu == &RD_Display_Def_Rus
+        ||  currentMenu == &RD_Automap_Def_Rus
+        ||  currentMenu == &RD_Audio_Def_Rus
+        ||  currentMenu == &RD_Controls_Def_Rus
+        ||  currentMenu == &RD_Gameplay_Def_1_Rus
+        ||  currentMenu == &RD_Gameplay_Def_2_Rus
+        ||  currentMenu == &RD_Gameplay_Def_3_Rus
+        ||  currentMenu == &RD_Gameplay_Def_4_Rus)
         {
-            y += LINEHEIGHT;
-        }
-    }
-
-    // [JN] Again. If we are using small font, draw ">" symbol instead of skull.
-    if (currentMenu == &RD_Rendering_Def
-    ||  currentMenu == &RD_Gameplay_Def_1
-    ||  currentMenu == &RD_Gameplay_Def_2
-    ||  currentMenu == &RD_Gameplay_Def_3
-    ||  currentMenu == &RD_Gameplay_Def_4)
-    {
-        // [JN] Draw blinking ">" symbol 
-        // (">" in Russian is a "ю" char, so replace with redrawn ")"
-        if (whichSkull == 0)
-        dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_RUS(x, y, name);
+            
+            // [JN] Draw blinking ">" symbol
+            if (whichSkull == 0)
+            dp_translation = cr[CR_DARKRED];
+            // [JN] Jaguar: no font color translation, draw SKULL1 as an empty symbol.
+            M_WriteTextSmall_ENG(x + SKULLXOFF + 24, currentMenu->y + itemOn*LINEHEIGHT_SML,
+                                 gamemission == jaguar && whichSkull == 0 ? " " : ">");
+            // [JN] Clear translation
+            dp_translation = NULL;
         
-        // [JN] Jaguar: no font color translation, draw SKULL1 as an empty symbol.
-        M_WriteTextSmall(x + SKULLXOFF + 24, currentMenu->y + itemOn*LINEHEIGHT_SML, ")");
+            // [JN] Small vertical spacing
+            y += LINEHEIGHT_SML;
+        }
+        */
 
-        // [JN] Clear translation
-        dp_translation = NULL;
-    }
-    else
-    {
-    // DRAW SKULL
-    V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
-		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-    V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
-		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+        // [JN] Saving / Loading menus, help screens. Just a blinking skull.
+        if (currentMenu == &LoadDef
+        ||  currentMenu == &SaveDef
+        ||  currentMenu == &ReadDef1
+        ||  currentMenu == &ReadDef2)
+        {
+            // DRAW SKULL
+            V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
+                    W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+            V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
+                    W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+        }
     }
 }
 
