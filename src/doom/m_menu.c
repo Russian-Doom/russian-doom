@@ -25,11 +25,8 @@
 
 #include "doomdef.h"
 #include "doomkeys.h"
-#include "rd_lang.h"
-
 #include "d_main.h"
 #include "deh_main.h"
-
 #include "i_swap.h"
 #include "i_system.h"
 #include "i_timer.h"
@@ -38,29 +35,21 @@
 #include "v_video.h"
 #include "w_wad.h"
 #include "z_zone.h"
-
 #include "r_local.h"
-
 #include "hu_stuff.h"
-
 #include "g_game.h"
-
 #include "m_argv.h"
 #include "m_controls.h"
 #include "p_saveg.h"
-
 #include "s_sound.h"
-
 #include "doomstat.h"
-
-// Data.
 #include "sounds.h"
-
 #include "m_menu.h"
-
 #include "p_local.h"
 #include "st_stuff.h"
 #include "v_trans.h"
+
+#include "rd_lang.h"
 #include "crispy.h"
 #include "jn.h"
 
@@ -71,10 +60,7 @@ extern patch_t*     hu_font_small_rus[HU_FONTSIZE];
 extern patch_t*     hu_font_big_eng[HU_FONTSIZE2];
 extern patch_t*     hu_font_big_rus[HU_FONTSIZE2];
 extern boolean      message_dontfuckwithme;
-
 extern boolean      chat_on;    // in heads-up code
-
-extern int  st_palette;
 
 extern void R_ExecuteSetViewSize();
 
@@ -83,34 +69,21 @@ extern void R_ExecuteSetViewSize();
 //
 
 int mouseSensitivity = 5;
-int showMessages = 1; // Show messages has default, 0 = off, 1 = on
-
-// Blocky mode, has default, 0 = high, 1 = normal
-int detailLevel = 0;
-int screenblocks = 10; // [JN] Размер экрана по-умолчанию установлен на 10
-
-// temp for screenblocks (0-9)
-int screenSize;
-
-// -1 = no quicksave slot picked!
-int quickSaveSlot;
-
-// 1 = message to be printed
-int     messageToPrint;
-// ...and here is the message string!
-char*   messageString;
+int showMessages = 1;       // Show messages has default, 0 = off, 1 = on
+int detailLevel = 0;        // Blocky mode, has default, 0 = high, 1 = normal
+int screenblocks = 10;      // [JN] Размер экрана по-умолчанию установлен на 10
+int screenSize;             // temp for screenblocks (0-9)
+int quickSaveSlot;          // -1 = no quicksave slot picked!
+int messageToPrint;         // 1 = message to be printed
+char* messageString;        // ...and here is the message string!
 
 // message x & y
 int messx;
 int messy;
 int messageLastMenuActive;
 
-// timed message = no input from user
-boolean messageNeedsInput;
-
-// [JN] Дополнительный титр "БЫСТРОЕ СОХРАНЕНИЕ"
-boolean QuickSaveTitle;
-
+boolean messageNeedsInput;  // timed message = no input from user
+boolean QuickSaveTitle;     // [JN] Extra title "БЫСТРОЕ СОХРАНЕНИЕ"
 
 void (*messageRoutine)(int response);
 
@@ -852,13 +825,13 @@ enum
 
 menuitem_t MainMenu[]=
 {
-    {1,"M_NGAME",M_NewGame,'n'},
-    {1,"M_OPTION",M_Options,'o'},
-    {1,"M_LOADG",M_LoadGame,'l'},
-    {1,"M_SAVEG",M_SaveGame,'s'},
+    {1, "M_NGAME",  M_NewGame,  'n'},
+    {1, "M_OPTION", M_Options,  'o'},
+    {1, "M_LOADG",  M_LoadGame, 'l'},
+    {1, "M_SAVEG",  M_SaveGame, 's'},
     // Another hickup with Special edition.
-    {1,"M_RDTHIS",M_ReadThis,'r'},
-    {1,"M_QUITG",M_QuitDOOM,'q'}
+    {1, "M_RDTHIS", M_ReadThis, 'r'},
+    {1, "M_QUITG",  M_QuitDOOM, 'q'}
 };
 
 menu_t  MainDef =
@@ -877,12 +850,12 @@ menu_t  MainDef =
 
 menuitem_t MainMenu_Rus[]=
 {
-    {1,"RD_NGAME",  M_NewGame,  'y'},  // Новая игра
-    {1,"RD_OPTN",   M_Options,  'y'},  // Настройки
-    {1,"RD_LOADG",  M_LoadGame, 'p'},  // Загрузка
-    {1,"RD_SAVEG",  M_SaveGame, 'c'},  // Сохранение
-    {1,"RD_INFO",   M_ReadThis, 'b'},  // Информация!
-    {1,"RD_QUITG",  M_QuitDOOM, 'd'}   // Выход
+    {1, "RD_NGAME", M_NewGame,  'y'}, // Новая игра
+    {1, "RD_OPTN",  M_Options,  'y'}, // Настройки
+    {1, "RD_LOADG", M_LoadGame, 'p'}, // Загрузка
+    {1, "RD_SAVEG", M_SaveGame, 'c'}, // Сохранение
+    {1, "RD_INFO",  M_ReadThis, 'b'}, // Информация!
+    {1, "RD_QUITG", M_QuitDOOM, 'd'}  // Выход
 };
 
 menu_t  MainDef_Rus =
@@ -905,11 +878,11 @@ menu_t  MainDef_Rus =
 
 menuitem_t MainMenuBeta[]=
 {
-    {1,"M_BLVL1",  M_Episode, '1'},
-    {1,"M_BLVL2",  M_Episode, '2'},
-    {1,"M_BLVL3",  M_Episode, '3'},
-    {1,"M_OPTION", M_Options, 'o'},
-    {1,"M_QUITG",  M_QuitDOOM,'q'}
+    {1, "M_BLVL1",  M_Episode, '1'},
+    {1, "M_BLVL2",  M_Episode, '2'},
+    {1, "M_BLVL3",  M_Episode, '3'},
+    {1, "M_OPTION", M_Options, 'o'},
+    {1, "M_QUITG",  M_QuitDOOM,'q'}
 };
 
 menu_t  MainDefBeta =
@@ -928,11 +901,11 @@ menu_t  MainDefBeta =
 
 menuitem_t MainMenuBeta_Rus[]=
 {
-    {1,"RD_BLVL1", M_Episode, '1'},
-    {1,"RD_BLVL2", M_Episode, '2'},
-    {1,"RD_BLVL3", M_Episode, '3'},
-    {1,"RD_OPTN",  M_Options, 'o'},
-    {1,"RD_QUITG", M_QuitDOOM,'q'}
+    {1, "RD_BLVL1", M_Episode, '1'},
+    {1, "RD_BLVL2", M_Episode, '2'},
+    {1, "RD_BLVL3", M_Episode, '3'},
+    {1, "RD_OPTN",  M_Options, 'o'},
+    {1, "RD_QUITG", M_QuitDOOM,'q'}
 };
 
 menu_t  MainDefBeta_Rus =
@@ -966,11 +939,11 @@ enum
 
 menuitem_t EpisodeMenu[]=
 {
-    {1,"M_EPI1", M_Episode,'k'},
-    {1,"M_EPI2", M_Episode,'t'},
-    {1,"M_EPI3", M_Episode,'i'},
-    {1,"M_EPI4", M_Episode,'t'},
-    {1,"M_EPI5", M_Episode,'s'} // [crispy] Sigil
+    {1, "M_EPI1", M_Episode,'k'},
+    {1, "M_EPI2", M_Episode,'t'},
+    {1, "M_EPI3", M_Episode,'i'},
+    {1, "M_EPI4", M_Episode,'t'},
+    {1, "M_EPI5", M_Episode,'s'} // [crispy] Sigil
 };
 
 menu_t  EpiDef =
@@ -989,11 +962,11 @@ menu_t  EpiDef =
 
 menuitem_t EpisodeMenu_Rus[]=
 {
-    {1,"RD_EPI1",    M_Episode,'g'},   // По колено в трупах
-    {1,"RD_EPI2",    M_Episode,'g'},   // Прибрежье Ада
-    {1,"RD_EPI3",    M_Episode,'b'},   // Инферно
-    {1,"RD_EPI4",    M_Episode,'n'},   // Твоя плоть истощена
-    {1,"RD_EPI5",    M_Episode,'c'}    // Сигил
+    {1, "RD_EPI1", M_Episode, 'g'}, // По колено в трупах
+    {1, "RD_EPI2", M_Episode, 'g'}, // Прибрежье Ада
+    {1, "RD_EPI3", M_Episode, 'b'}, // Инферно
+    {1, "RD_EPI4", M_Episode, 'n'}, // Твоя плоть истощена
+    {1, "RD_EPI5", M_Episode, 'c'}  // Сигил
 };
 
 menu_t  EpiDef_Rus =
@@ -1028,12 +1001,12 @@ enum
 
 menuitem_t NewGameMenu[]=
 {
-    {1,"M_JKILL",   M_ChooseSkill, 'i'},
-    {1,"M_ROUGH",   M_ChooseSkill, 'h'},
-    {1,"M_HURT",    M_ChooseSkill, 'h'},
-    {1,"M_ULTRA",   M_ChooseSkill, 'u'},
-    {1,"M_NMARE",   M_ChooseSkill, 'n'},
-    {1,"M_UNMARE",  M_ChooseSkill, 'z'}
+    {1, "M_JKILL",  M_ChooseSkill, 'i'},
+    {1, "M_ROUGH",  M_ChooseSkill, 'h'},
+    {1, "M_HURT",   M_ChooseSkill, 'h'},
+    {1, "M_ULTRA",  M_ChooseSkill, 'u'},
+    {1, "M_NMARE",  M_ChooseSkill, 'n'},
+    {1, "M_UNMARE", M_ChooseSkill, 'z'}
 };
 
 menu_t  NewDef =
@@ -1052,12 +1025,12 @@ menu_t  NewDef =
 
 menuitem_t NewGameMenu_Rus[]=
 {
-    {1,"RD_JKILL",  M_ChooseSkill, 'v'},   // Мне рано умирать.
-    {1,"RD_ROUGH",  M_ChooseSkill, 'y'},   // Эй, не так грубо.
-    {1,"RD_HURT",   M_ChooseSkill, 'c'},   // Сделай мне больно.
-    {1,"RD_ULTRA",  M_ChooseSkill, 'e'},   // Ультранасилие
-    {1,"RD_NMARE",  M_ChooseSkill, 'r'},   // Кошмар.
-    {1,"RD_UNMAR",  M_ChooseSkill, 'e'}    // Ультра кошмар!
+    {1, "RD_JKILL", M_ChooseSkill, 'v'}, // Мне рано умирать.
+    {1, "RD_ROUGH", M_ChooseSkill, 'y'}, // Эй, не так грубо.
+    {1, "RD_HURT",  M_ChooseSkill, 'c'}, // Сделай мне больно.
+    {1, "RD_ULTRA", M_ChooseSkill, 'e'}, // Ультранасилие
+    {1, "RD_NMARE", M_ChooseSkill, 'r'}, // Кошмар.
+    {1, "RD_UNMAR", M_ChooseSkill, 'e'}  // Ультра кошмар!
 };
 
 menu_t  NewDef_Rus =
@@ -1094,14 +1067,14 @@ enum
 
 menuitem_t LoadMenu[]=
 {
-    {1,"", M_LoadSelect,'1'},
-    {1,"", M_LoadSelect,'2'},
-    {1,"", M_LoadSelect,'3'},
-    {1,"", M_LoadSelect,'4'},
-    {1,"", M_LoadSelect,'5'},
-    {1,"", M_LoadSelect,'6'},
-    {1,"", M_LoadSelect,'7'},
-    {1,"", M_LoadSelect,'8'}
+    {1, "", M_LoadSelect, '1'},
+    {1, "", M_LoadSelect, '2'},
+    {1, "", M_LoadSelect, '3'},
+    {1, "", M_LoadSelect, '4'},
+    {1, "", M_LoadSelect, '5'},
+    {1, "", M_LoadSelect, '6'},
+    {1, "", M_LoadSelect, '7'},
+    {1, "", M_LoadSelect, '8'}
 };
 
 menu_t  LoadDef =
@@ -1138,14 +1111,14 @@ menu_t  LoadDef_Rus =
 
 menuitem_t SaveMenu[]=
 {
-    {1,"", M_SaveSelect,'1'},
-    {1,"", M_SaveSelect,'2'},
-    {1,"", M_SaveSelect,'3'},
-    {1,"", M_SaveSelect,'4'},
-    {1,"", M_SaveSelect,'5'},
-    {1,"", M_SaveSelect,'6'},
-    {1,"", M_SaveSelect,'7'},
-    {1,"", M_SaveSelect,'8'}
+    {1, "", M_SaveSelect, '1'},
+    {1, "", M_SaveSelect, '2'},
+    {1, "", M_SaveSelect, '3'},
+    {1, "", M_SaveSelect, '4'},
+    {1, "", M_SaveSelect, '5'},
+    {1, "", M_SaveSelect, '6'},
+    {1, "", M_SaveSelect, '7'},
+    {1, "", M_SaveSelect, '8'}
 };
 
 menu_t  SaveDef =
@@ -1184,7 +1157,7 @@ enum
 
 menuitem_t ReadMenu1[] =
 {
-    {1,"",M_ReadThis2,0}
+    {1, "", M_ReadThis2, 0}
 };
 
 // ------------
@@ -1223,7 +1196,7 @@ enum
 
 menuitem_t ReadMenu2[]=
 {
-    {1,"",M_FinishReadThis,0}
+    {1, "", M_FinishReadThis, 0}
 };
 
 // ------------
@@ -1282,14 +1255,14 @@ enum
 
 menuitem_t RD_Options_Menu[]=
 {
-    {1,"Rendering", M_RD_Choose_Rendering,      'r'},
-    {1,"Display",   M_RD_Choose_Display,        'd'},
-    {1,"Sound",     M_RD_Choose_Audio,          's'},
-    {1,"Controls",  M_RD_Choose_Controls,       'c'},
-    {1,"Gameplay",  M_RD_Choose_Gameplay_1,     'g'},
-    {1,"End Game",  M_EndGame,                  'e'},
-    {1,"Reset settings", M_RD_BackToDefaults,   'r'},
-    {1,"Language:english", M_RD_ChangeLanguage, 'l'},
+    {1, "Rendering",        M_RD_Choose_Rendering,  'r'},
+    {1, "Display",          M_RD_Choose_Display,    'd'},
+    {1, "Sound",            M_RD_Choose_Audio,      's'},
+    {1, "Controls",         M_RD_Choose_Controls,   'c'},
+    {1, "Gameplay",         M_RD_Choose_Gameplay_1, 'g'},
+    {1, "End Game",         M_EndGame,              'e'},
+    {1, "Reset settings",   M_RD_BackToDefaults,    'r'},
+    {1, "Language:english", M_RD_ChangeLanguage,    'l'},
     {-1,"",0,'\0'}
 };
 
@@ -1309,14 +1282,14 @@ menu_t  RD_Options_Def =
 
 menuitem_t RD_Options_Menu_Rus[]=
 {
-    {1,"Dbltj",         M_RD_Choose_Rendering,  'd'},   // Видео
-    {1,"\"rhfy",        M_RD_Choose_Display,    '\''},  // Экран
-    {1,"Felbj",         M_RD_Choose_Audio,      'f'},   // Аудио
-    {1,"Eghfdktybt",    M_RD_Choose_Controls,   'e'},   // Управление
-    {1,"Utqvgktq",      M_RD_Choose_Gameplay_1, 'u'},   // Геймплей
-    {1,"Pfrjyxbnm buhe",M_EndGame,              'p'},   // Закончить игру
-    {1,"C,hjc yfcnhjtr", M_RD_BackToDefaults,   'c'},   // Сброс настроек
-    {1,"Zpsr#heccrbq",  M_RD_ChangeLanguage,    'z'},   // Язык: русский
+    {1, "Dbltj",          M_RD_Choose_Rendering,  'd'}, // Видео
+    {1, "\"rhfy",         M_RD_Choose_Display,   '\''}, // Экран
+    {1, "Felbj",          M_RD_Choose_Audio,      'f'}, // Аудио
+    {1, "Eghfdktybt",     M_RD_Choose_Controls,   'e'}, // Управление
+    {1, "Utqvgktq",       M_RD_Choose_Gameplay_1, 'u'}, // Геймплей
+    {1, "Pfrjyxbnm buhe", M_EndGame,              'p'}, // Закончить игру
+    {1, "C,hjc yfcnhjtr", M_RD_BackToDefaults,    'c'}, // Сброс настроек
+    {1, "Zpsr#heccrbq",   M_RD_ChangeLanguage,    'z'}, // Язык: русский
     {-1,"",0,'\0'}
 };
 
@@ -1355,16 +1328,16 @@ enum
 
 menuitem_t RD_Rendering_Menu[]=
 {
-    {1,"Vertical synchronization:", M_RD_Change_VSync,      'v'},
-    {1,"Fix aspect ratio:",         M_RD_Change_AspectRatio,'f'},
-    {1,"Uncapped framerate:",       M_RD_Change_Uncapped,   'u'},
-    {1,"Show FPS counter:",         M_RD_Change_FPScounter, 's'},
-    {1,"Pixel scaling:",            M_RD_Change_Smoothing,  'p'},
-    {1,"Video renderer:",           M_RD_Change_Renderer,   'v'},
+    {1, "Vertical synchronization:", M_RD_Change_VSync,       'v'},
+    {1, "Fix aspect ratio:",         M_RD_Change_AspectRatio, 'f'},
+    {1, "Uncapped framerate:",       M_RD_Change_Uncapped,    'u'},
+    {1, "Show FPS counter:",         M_RD_Change_FPScounter,  's'},
+    {1, "Pixel scaling:",            M_RD_Change_Smoothing,   'p'},
+    {1, "Video renderer:",           M_RD_Change_Renderer,    'v'},
     {-1,"",0,'\0'},
-    {1,"Show disk icon:",           M_RD_Change_DiskIcon,   's'},
-    {1,"Screen wiping effect:",     M_RD_Change_Wiping,     's'},
-    {1,"Screenshot format:",        M_RD_Change_Screenshots,'s'},
+    {1, "Show disk icon:",           M_RD_Change_DiskIcon,    's'},
+    {1, "Screen wiping effect:",     M_RD_Change_Wiping,      's'},
+    {1, "Screenshot format:",        M_RD_Change_Screenshots, 's'},
     {-1,"",0,'\0'}
 };
 
@@ -1384,16 +1357,16 @@ menu_t  RD_Rendering_Def =
 
 menuitem_t RD_Rendering_Menu_Rus[]=
 {
-    {1,"Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,      'd'}, // Вертикальная синхронизация
-    {1,"Abrcbhjdfnm cjjnyjitybt cnjhjy:", M_RD_Change_AspectRatio,'a'}, // Фиксировать соотношение сторон
-    {1,"Juhfybxtybt rflhjdjq xfcnjns:",   M_RD_Change_Uncapped,   'j'}, // Ограничение кадровой частоты
-    {1,"Cxtnxbr rflhjdjq xfcnjns:",       M_RD_Change_FPScounter, 'a'}, // Счетчик кадровой частоты
-    {1,"Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,  'g'}, // Пиксельное сглаживание
-    {1,"J,hf,jnrf dbltj:",                M_RD_Change_Renderer,   'j'}, // Обработка видео
-    {-1,"",0,'\0'},                                                     // Дополнительно
-    {1,"Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,   'j'}, // Отображать значок дискеты
-    {1,"Gkfdyfz cvtyf \'rhfyjd:",         M_RD_Change_Wiping,     'g'}, // Плавная смена экранов
-    {1,"Ajhvfn crhbyijnjd:",              M_RD_Change_Screenshots,'g'}, // Формат скриншотов
+    {1, "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,       'd'}, // Вертикальная синхронизация
+    {1, "Abrcbhjdfnm cjjnyjitybt cnjhjy:", M_RD_Change_AspectRatio, 'a'}, // Фиксировать соотношение сторон
+    {1, "Juhfybxtybt rflhjdjq xfcnjns:",   M_RD_Change_Uncapped,    'j'}, // Ограничение кадровой частоты
+    {1, "Cxtnxbr rflhjdjq xfcnjns:",       M_RD_Change_FPScounter,  'a'}, // Счетчик кадровой частоты
+    {1, "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,   'g'}, // Пиксельное сглаживание
+    {1, "J,hf,jnrf dbltj:",                M_RD_Change_Renderer,    'j'}, // Обработка видео
+    {-1,"",0,'\0'},                                                       // Дополнительно
+    {1, "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,    'j'}, // Отображать значок дискеты
+    {1, "Gkfdyfz cvtyf \'rhfyjd:",         M_RD_Change_Wiping,      'g'}, // Плавная смена экранов
+    {1, "Ajhvfn crhbyijnjd:",              M_RD_Change_Screenshots, 'g'}, // Формат скриншотов
     {-1,"",0,'\0'}
 };
 
@@ -1434,18 +1407,18 @@ enum
 
 menuitem_t RD_Display_Menu[]=
 {
-    {2,"screen size",         M_RD_Change_ScreenSize,     's'},
+    {2, "screen size",         M_RD_Change_ScreenSize,      's'},
     {-1,"",0,'\0'},
-    {2,"gamma-correction",    M_RD_Change_Gamma,          'g'},
+    {2, "gamma-correction",    M_RD_Change_Gamma,           'g'},
     {-1,"",0,'\0'},
-    {1,"detail level:",       M_RD_Change_Detail,         'd'},
-    {1,"local time:",         M_RD_Change_LocalTime,      'l'},
+    {1, "detail level:",       M_RD_Change_Detail,          'd'},
+    {1, "local time:",         M_RD_Change_LocalTime,       'l'},
     {-1,"",0,'\0'},
-    {1,"messages:",           M_RD_Change_Messages,       'm'},
-    {1,"messages color:",     M_RD_Change_MessagesColor,  'm'},
-    {1,"text casts shadows:", M_RD_Change_ShadowedText,   't'},
+    {1, "messages:",           M_RD_Change_Messages,        'm'},
+    {1, "messages color:",     M_RD_Change_MessagesColor,   'm'},
+    {1, "text casts shadows:", M_RD_Change_ShadowedText,    't'},
     {-1,"",0,'\0'},
-    {1,"automap settings",    M_RD_Choose_AutomapSettings,'a'},
+    {1, "automap settings",    M_RD_Choose_AutomapSettings, 'a'},
     {-1,"",0,'\0'}
 };
 
@@ -1465,18 +1438,18 @@ menu_t  RD_Display_Def =
 
 menuitem_t RD_Display_Menu_Rus[]=
 {
-    {2,"hfpvth buhjdjuj \'rhfyf",  M_RD_Change_ScreenSize,      'h'}, // Размер игрового экрана
-    {-1,"",0,'\0'},                                                   //
-    {2,"ehjdtym ufvvf-rjhhtrwbb",  M_RD_Change_Gamma,           'u'}, // Уровень гамма-коррекции
-    {-1,"",0,'\0'},                                                   //
-    {1,"ehjdtym ltnfkbpfwbb:",     M_RD_Change_Detail,          'l'}, // Уровень детализации:
-    {1,"cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
-    {-1,"",0,'\0'},                                                   //
-    {1,"jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'c'}, // Отображение сообщений:
-    {1,"wdtn cjj,otybq:",          M_RD_Change_MessagesColor,   'c'}, // Цвет сообщений:
-    {1,"ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'c'}, // Тексты отбрасывают тень:
-    {-1,"",0,'\0'},                                                   //
-    {1,"vty. yfcnhjqrb rfhns",     M_RD_Choose_AutomapSettings, 'c'}, // Меню настройки карты
+    {2, "hfpvth buhjdjuj \'rhfyf",  M_RD_Change_ScreenSize,      'h'}, // Размер игрового экрана
+    {-1,"",0,'\0'},                                                    //
+    {2, "ehjdtym ufvvf-rjhhtrwbb",  M_RD_Change_Gamma,           'e'}, // Уровень гамма-коррекции
+    {-1,"",0,'\0'},                                                    //
+    {1, "ehjdtym ltnfkbpfwbb:",     M_RD_Change_Detail,          'e'}, // Уровень детализации:
+    {1, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
+    {-1,"",0,'\0'},                                                    //
+    {1, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'j'}, // Отображение сообщений:
+    {1, "wdtn cjj,otybq:",          M_RD_Change_MessagesColor,   'w'}, // Цвет сообщений:
+    {1, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень:
+    {-1,"",0,'\0'},                                                    //
+    {1, "vty. yfcnhjqrb rfhns",     M_RD_Choose_AutomapSettings, 'v'}, // Меню настройки карты
     {-1,"",0,'\0'}
 };
 
@@ -1511,12 +1484,12 @@ enum
 
 menuitem_t RD_Automap_Menu[]=
 {
-    {1,"color scheme:", M_RD_Change_AutomapColor,   'c'},
-    {1,"level stats:",  M_RD_Change_AutomapStats,   'l'},
-    {1,"overlay mode:", M_RD_Change_AutomapOverlay, 'o'},
-    {1,"rotate mode:",  M_RD_Change_AutomapRotate,  'r'},
-    {1,"follow mode:",  M_RD_Change_AutomapFollow,  'f'},
-    {1,"grid: o",       M_RD_Change_AutomapGrid,    'g'},
+    {1, "color scheme:", M_RD_Change_AutomapColor,   'c'},
+    {1, "level stats:",  M_RD_Change_AutomapStats,   'l'},
+    {1, "overlay mode:", M_RD_Change_AutomapOverlay, 'o'},
+    {1, "rotate mode:",  M_RD_Change_AutomapRotate,  'r'},
+    {1, "follow mode:",  M_RD_Change_AutomapFollow,  'f'},
+    {1, "grid: o",       M_RD_Change_AutomapGrid,    'g'},
     {-1,"",0,'\0'}
 };
 
@@ -1536,12 +1509,12 @@ menu_t  RD_Automap_Def =
 
 menuitem_t RD_Automap_Menu_Rus[]=
 {
-    {1,"wdtnjdfz c[tvf:",       M_RD_Change_AutomapColor, 'h'},     // Цветовая схема:
-    {1,"cnfnbcnbrf ehjdyz:",    M_RD_Change_AutomapStats, 'h'},     // Статистика уровня:
-    {1,"ht;bv yfkj;tybz:",      M_RD_Change_AutomapOverlay, 'h'},   // Режим наложения:
-    {1,"ht;bv dhfotybz:",       M_RD_Change_AutomapRotate, 'h'},    // Режим вращения:
-    {1,"ht;bv cktljdfybz:",     M_RD_Change_AutomapFollow, 'h'},    // Режим следования:
-    {1,"ctnrf:",                M_RD_Change_AutomapGrid, 'h'},      // Сетка:
+    {1, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,   'w'}, // Цветовая схема:
+    {1, "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,   'c'}, // Статистика уровня:
+    {1, "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay, 'h'}, // Режим наложения:
+    {1, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,  'h'}, // Режим вращения:
+    {1, "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,  'h'}, // Режим следования:
+    {1, "ctnrf:",             M_RD_Change_AutomapGrid,    'c'}, // Сетка:
     {-1,"",0,'\0'}
 };
 
@@ -1579,15 +1552,15 @@ enum
 
 menuitem_t RD_Audio_Menu[]=
 {
-    {2,"sfx volume",            M_RD_Change_SfxVol,        's'},
+    {2, "sfx volume",            M_RD_Change_SfxVol,        's'},
     {-1,"",0,'\0'},
-    {2,"music volume",          M_RD_Change_MusicVol,      'm'},
+    {2, "music volume",          M_RD_Change_MusicVol,      'm'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {2,"sound channels",        M_RD_Change_SfxChannels,   's'},
+    {2, "sound channels",        M_RD_Change_SfxChannels,   's'},
     {-1,"",0,'\0'},
-    {1,"sfx mode:",             M_RD_Change_SndMode,       's'},
-    {1,"pitch-shifted sounds:", M_RD_Change_PitchShifting, 'p'},
+    {1, "sfx mode:",             M_RD_Change_SndMode,       's'},
+    {1, "pitch-shifted sounds:", M_RD_Change_PitchShifting, 'p'},
     {-1,"",0,'\0'}
 };
 
@@ -1607,15 +1580,15 @@ menu_t RD_Audio_Def =
 
 menuitem_t RD_Audio_Menu_Rus[]=
 {
-    {2,"pder",                          M_RD_Change_SfxVol,         'u'},   // Звук
-    {-1,"",0,'\0'},                                                         //
-    {2,"vepsrf",                        M_RD_Change_MusicVol,       'u'},   // Музыка
-    {-1,"",0,'\0'},                                                         //
-    {-1,"",0,'\0'},                                                         //
-    {2,"Pderjdst rfyfks",               M_RD_Change_SfxChannels,    'p'},   // Звуковые каналы
-    {-1,"",0,'\0'},                                                         //
-    {1,"Ht;bv pderf:",                  M_RD_Change_SndMode,        'h'},   // Режим звука
-    {1,"ghjbpdjkmysq gbnx-ibanbyu: d",  M_RD_Change_PitchShifting,  'g'},   // Произвольный питч-шифтинг
+    {2, "pder",                       M_RD_Change_SfxVol,         'u'},   // Звук
+    {-1,"",0,'\0'},                                                       //
+    {2, "vepsrf",                     M_RD_Change_MusicVol,       'u'},   // Музыка
+    {-1,"",0,'\0'},                                                       //
+    {-1,"",0,'\0'},                                                       //
+    {2, "Pderjdst rfyfks",            M_RD_Change_SfxChannels,    'p'},   // Звуковые каналы
+    {-1,"",0,'\0'},                                                       //
+    {1, "Ht;bv pderf:",               M_RD_Change_SndMode,        'h'},   // Режим звука
+    {1, "ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting,  'g'},   // Произвольный питч-шифтинг
     {-1,"",0,'\0'}
 };
 
@@ -1650,12 +1623,12 @@ enum
 
 menuitem_t RD_Controls_Menu[]=
 {
-    {1,"always run:",     M_RD_Change_AlwaysRun,   'a'},
+    {1, "always run:",        M_RD_Change_AlwaysRun,   'a'},
     {-1,"",0,'\0'},
-    {2,"mouse sensivity", M_RD_Change_Sensitivity, 'm'},
+    {2, "mouse sensivity",    M_RD_Change_Sensitivity, 'm'},
     {-1,"",0,'\0'},
-    {1,"mouse look:",     M_RD_Change_MouseLook,   'm'},
-    {1,"vertical movement:", M_RD_Change_Novert,   'v'},
+    {1, "mouse look:",        M_RD_Change_MouseLook,   'm'},
+    {1, "vertical movement:", M_RD_Change_Novert,      'v'},
     {-1,"",0,'\0'}
 
 };
@@ -1676,12 +1649,12 @@ menu_t  RD_Controls_Def =
 
 menuitem_t RD_Controls_Menu_Rus[]=
 {
-    {1,"ht;bv gjcnjzyyjuj ,tuf:", M_RD_Change_AlwaysRun,   'g'}, // Режим постоянного бега
-    {-1,"",0,'\0'},                                              //
-    {2,"Crjhjcnm vsib",           M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
-    {-1,"",0,'\0'},                                              //
-    {1,"J,pjh vsim.:",            M_RD_Change_MouseLook,   'j'}, // Обзор мышью
-    {1,"dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,    'd'}, // Вертикальное перемещение
+    {1, "ht;bv gjcnjzyyjuj ,tuf:",   M_RD_Change_AlwaysRun,   'g'}, // Режим постоянного бега
+    {-1,"",0,'\0'},                                                 //
+    {2, "crjhjcnm vsib",             M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
+    {-1,"",0,'\0'},                                                 //
+    {1, "j,pjh vsim.:",              M_RD_Change_MouseLook,   'j'}, // Обзор мышью
+    {1, "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,      'd'}, // Вертикальное перемещение
     {-1,"",0,'\0'}
 };
 
@@ -2225,20 +2198,18 @@ void M_RD_Choose_Rendering(int choice)
 
 void M_RD_Draw_Rendering(void)
 {
-    // Write capitalized title
-    if (english_language)
-    M_WriteTextBigCentered_ENG(12, "RENDERING OPTIONS");
-    else
-    M_WriteTextBigCentered_RUS(12, "YFCNHJQRB DBLTJ");    // НАСТРОЙКИ ВИДЕО
-
-    // Write "on" / "off" strings for features
     if (english_language)
     {
+        M_WriteTextBigCentered_ENG(12, "RENDERING OPTIONS");
+
+        //
+        // Rendering
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 35, "Rendering");
         dp_translation = NULL;
 
-        // - Vertical synchronization ------------------------------------------
+        // Vertical synchronization
         if (force_software_renderer == 1)
         {
             dp_translation = cr[CR_DARKRED];
@@ -2250,27 +2221,20 @@ void M_RD_Draw_Rendering(void)
             M_WriteTextSmall_ENG(216 + ORIGWIDTH_DELTA, 45, vsync == 1 ? "on" : "off");
         }
 
-        // - Fix aspect ratio --------------------------------------------------
+        // Fix aspect ratio
 #ifdef WIDESCREEN
         M_WriteTextSmall_ENG(155 + ORIGWIDTH_DELTA, 55, aspect_ratio_correct == 1 ? "16:9" : "off");
 #else
         M_WriteTextSmall_ENG(155 + ORIGWIDTH_DELTA, 55, aspect_ratio_correct == 1 ? "4:3" : "off");
 #endif
+    
+        // Uncapped framerate
+        M_WriteTextSmall_ENG(184 + ORIGWIDTH_DELTA, 65, uncapped_fps ? "on" : "35 fps");
 
-        // - Uncapped framerate ------------------------------------------------
-        if (uncapped_fps)
-        {
-            M_WriteTextSmall_ENG(184 + ORIGWIDTH_DELTA, 65, "on");
-        }
-        else
-        {
-            M_WriteTextSmall_ENG(184 + ORIGWIDTH_DELTA, 65, "35 fps");
-        }
-
-        // - Show FPS counter --------------------------------------------------
+        // Show FPS counter
         M_WriteTextSmall_ENG(162 + ORIGWIDTH_DELTA, 75, show_fps == 1 ? "on" : "off");
 
-        // - Pixel scaling -----------------------------------------------------
+        // Pixel scaling
         if (force_software_renderer == 1)
         {
             dp_translation = cr[CR_DARKRED];
@@ -2282,27 +2246,29 @@ void M_RD_Draw_Rendering(void)
             M_WriteTextSmall_ENG(135 + ORIGWIDTH_DELTA, 85, smoothing == 1 ? "smooth" : "sharp");
         }
 
-        // - Video rendered ----------------------------------------------------
-        if (force_software_renderer == 1)
-        M_WriteTextSmall_ENG(146 + ORIGWIDTH_DELTA, 95, "software (cpu)");
-        else
-        M_WriteTextSmall_ENG(146 + ORIGWIDTH_DELTA, 95, "hardware (gpu)");
+        // Video renderer
+        M_WriteTextSmall_ENG(146 + ORIGWIDTH_DELTA, 95, force_software_renderer ? "software (cpu)" : "hardware (gpu)");
 
+        //
+        // Extra
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 105, "Extra");
         dp_translation = NULL;
 
-        // - Show disk icon ----------------------------------------------------
+        // Show disk icon
         M_WriteTextSmall_ENG(138 + ORIGWIDTH_DELTA, 115, show_diskicon == 1 ? "on" : "off");
 
-        // - Screen wiping effect ----------------------------------------------
+        // Screen wiping effect
         M_WriteTextSmall_ENG(187 + ORIGWIDTH_DELTA, 125, screen_wiping == 1 ? "on" : "off");
 
-        // - Screenshot format -------------------------------------------------
+        // Screenshot format
         M_WriteTextSmall_ENG(174 + ORIGWIDTH_DELTA, 135, png_screenshots == 1 ? "png" : "pcx");
     }
     else
     {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB DBLTJ"); // НАСТРОЙКИ ВИДЕО
+
         //
         // Рендеринг
         //
@@ -2310,7 +2276,7 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 35, "htylthbyu");
         dp_translation = NULL;
 
-        // - Вертикальная синхронизация ----------------------------------------
+        // Вертикальная синхронизация
         if (force_software_renderer == 1)
         {
             dp_translation = cr[CR_DARKRED];
@@ -2322,14 +2288,14 @@ void M_RD_Draw_Rendering(void)
             M_WriteTextSmall_RUS(249 + ORIGWIDTH_DELTA, 45, vsync == 1 ? "drk" : "dsrk");
         }
 
-        // - Фиксировать соотношение сторон ------------------------------------
+        // Фиксировать соотношение сторон
 #ifdef WIDESCREEN
         M_WriteTextSmall_RUS(279 + ORIGWIDTH_DELTA, 55, aspect_ratio_correct == 1 ? "16:9" : "dsrk");
 #else
         M_WriteTextSmall_RUS(279 + ORIGWIDTH_DELTA, 55, aspect_ratio_correct == 1 ? "4:3" : "dsrk");
 #endif
 
-        // - Ограничение кадровой частоты  -------------------------------------
+        // Ограничение кадровой частоты
         if (uncapped_fps)
         {
             M_WriteTextSmall_RUS(260 + ORIGWIDTH_DELTA, 65, "dsrk");
@@ -2339,10 +2305,10 @@ void M_RD_Draw_Rendering(void)
             M_WriteTextSmall_ENG(260 + ORIGWIDTH_DELTA, 65, "35 fps");
         }
 
-        // - Счетчик кадровой частоты ------------------------------------------
+        // Счетчик кадровой частоты
         M_WriteTextSmall_RUS(227 + ORIGWIDTH_DELTA, 75, show_fps == 1 ? "drk" : "dsrk");
 
-        // - Пиксельное сглаживание --------------------------------------------
+        // Пиксельное сглаживание
         if (force_software_renderer == 1)
         {
             dp_translation = cr[CR_DARKRED];
@@ -2354,12 +2320,9 @@ void M_RD_Draw_Rendering(void)
             M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 85, smoothing == 1 ? "drk" : "dsrk");
         }
 
-        // - Обработка видео ---------------------------------------------------
+        // Обработка видео
         M_WriteTextSmall_RUS(160 + ORIGWIDTH_DELTA, 95, force_software_renderer == 1 ? "ghjuhfvvyfz" : "fggfhfnyfz");
-        if (force_software_renderer == 1)
-        M_WriteTextSmall_ENG(254 + ORIGWIDTH_DELTA, 95, "(cpu)");
-        else
-        M_WriteTextSmall_ENG(244 + ORIGWIDTH_DELTA, 95, "(gpu)");
+        M_WriteTextSmall_ENG(254 + ORIGWIDTH_DELTA, 95, force_software_renderer ? "(cpu)" : "gpu");
 
         //
         // Дополнительно
@@ -2368,25 +2331,24 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 105, "ljgjkybntkmyj");
         dp_translation = NULL;
 
-        // - Отображать значок дискеты -----------------------------------------
+        // Отображать значок дискеты
         M_WriteTextSmall_RUS(241 + ORIGWIDTH_DELTA, 115, show_diskicon == 1 ? "drk" : "dsrk");
 
-        // - Плавная смена экранов ---------------------------------------------
+        // Плавная смена экранов
         M_WriteTextSmall_RUS(204 + ORIGWIDTH_DELTA, 125, screen_wiping == 1 ? "drk" : "dsrk");
 
-        // - Формат скриншотов -------------------------------------------------
+        // Формат скриншотов
         M_WriteTextSmall_ENG(180 + ORIGWIDTH_DELTA, 135, png_screenshots == 1 ? "png" : "pcx");
     }
 }
 
 void M_RD_Change_VSync(int choice)
 {
-    // [JN] Disable "vsync" toggling in sofrware renderer
+    // [JN] Disable "vsync" toggling in software renderer
     if (force_software_renderer == 1)
     return;
 
-    choice = 0;
-    vsync = 1 - vsync;
+    vsync ^= 1;
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
@@ -2394,11 +2356,11 @@ void M_RD_Change_VSync(int choice)
 
 void M_RD_Change_AspectRatio(int choice)
 {
-    choice = 0;
-    aspect_ratio_correct = 1 - aspect_ratio_correct;
+    aspect_ratio_correct ^= 1;
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
@@ -2409,20 +2371,17 @@ void M_RD_Change_AspectRatio(int choice)
 
 void M_RD_Change_Uncapped(int choice)
 {
-    choice = 0;
-    uncapped_fps = 1 - uncapped_fps;
+    uncapped_fps ^= 1;
 }
 
 void M_RD_Change_FPScounter(int choice)
 {
-    choice = 0;
-    show_fps = 1 - show_fps;
+    show_fps ^= 1;
 }
 
 void M_RD_Change_DiskIcon(int choice)
 {
-    choice = 0;
-    show_diskicon = 1 - show_diskicon;
+    show_diskicon ^= 1;
 }
 
 void M_RD_Change_Smoothing(int choice)
@@ -2431,11 +2390,11 @@ void M_RD_Change_Smoothing(int choice)
     if (force_software_renderer == 1)
     return;
 
-    choice = 0;
-    smoothing = 1 - smoothing;
+    smoothing ^= 1;
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
@@ -2446,23 +2405,21 @@ void M_RD_Change_Smoothing(int choice)
 
 void M_RD_Change_Wiping(int choice)
 {
-    choice = 0;
-    screen_wiping = 1 - screen_wiping;
+    screen_wiping ^= 1;
 }
 
 void M_RD_Change_Screenshots(int choice)
 {
-    choice = 0;
-    png_screenshots = 1 - png_screenshots;
+    png_screenshots ^= 1;
 }
 
 void M_RD_Change_Renderer(int choice)
 {
-    choice = 0;
-    force_software_renderer = 1 - force_software_renderer;
+    force_software_renderer ^= 1;
 
     // Do a full graphics reinitialization
     I_InitGraphics();
+
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
@@ -2485,54 +2442,33 @@ void M_RD_Choose_Display(int choice)
 
 void M_RD_Draw_Display(void)
 {
-    char    num[4];
+    static char num[4];
 
-    // Write capitalized title
-    if (english_language)
-    M_WriteTextBigCentered_ENG(12, "DISPLAY OPTIONS");
-    else
-    M_WriteTextBigCentered_RUS(12, "YFCNHJQRB \"RHFYF");  // НАСТРОЙКИ ЭКРАНА
-
-    // Draw screen size slider
-#ifdef WIDESCREEN
-    // [JN] Wide screen: only 6 sizes are available
-    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 54, 6, screenSize);
-
-    // Draw numerical representation of slider position
-    M_snprintf(num, 4, "%3d", screenblocks);
-    M_WriteTextSmall_ENG(96+ORIGWIDTH_DELTA, 55, num);
-#else
-    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 54, 12, screenSize);
-
-    // Draw numerical representation of slider position
-    M_snprintf(num, 4, "%3d", screenblocks);
-    M_WriteTextSmall_ENG(145+ORIGWIDTH_DELTA, 55, num);
-#endif
-
-    // Draw gamma-correction slider
-    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 18, usegamma);
-
-    // Write "on" / "off" strings for features
     if (english_language)
     {
+        M_WriteTextBigCentered_ENG(12, "DISPLAY OPTIONS");
+
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 35, "Screen");
         dp_translation = NULL;
 
-        // - Detail level ------------------------------------------------------
+        // Detail level
         M_WriteTextSmall_ENG(130 + ORIGWIDTH_DELTA, 85, detailLevel == 1 ? "low" : "high");
 
-        // - Local time --------------------------------------------------------
+        // Local time
         M_WriteTextSmall_ENG(116 + ORIGWIDTH_DELTA, 95, local_time == 1 ? "on" : "off");
 
+        //
+        // Messages and texts
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 105, "Messages and texts");  
         dp_translation = NULL;
 
-        // - Messages ----------------------------------------------------------
+        // Messages
         M_WriteTextSmall_ENG(105 + ORIGWIDTH_DELTA, 115, showMessages == 1 ? "on" : "off");
 
-        // - Messages color ----------------------------------------------------
+        // Messages color
         if (gamemission == jaguar)
         {
             M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "n/a");
@@ -2557,15 +2493,20 @@ void M_RD_Draw_Display(void)
             { dp_translation = NULL; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "standard"); }
         }
 
-        // - Text casts shadows ------------------------------------------------
+        // Text casts shadows
         M_WriteTextSmall_ENG(177 + ORIGWIDTH_DELTA, 135, draw_shadowed_text == 1 ? "on" : "off");
 
+        //
+        // Automap
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "Automap");
         dp_translation = NULL;
     }
     else
     {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB \"RHFYF"); // НАСТРОЙКИ ЭКРАНА
+
         //
         // Экран
         //
@@ -2573,10 +2514,10 @@ void M_RD_Draw_Display(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 35, "\'rhfy");
         dp_translation = NULL;
 
-        // - Уровень детализации -----------------------------------------------
+        // Уровень детализации
         M_WriteTextSmall_RUS(193 + ORIGWIDTH_DELTA, 85, detailLevel == 1 ? "ybprbq" : "dscjrbq");
 
-        // - Системное время ---------------------------------------------------
+        // Системное время
         M_WriteTextSmall_RUS(161 + ORIGWIDTH_DELTA, 95, local_time == 1 ? "drk" : "dsrk");
 
         //
@@ -2586,10 +2527,10 @@ void M_RD_Draw_Display(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 105, "cjj,otybz b ntrcns");  
         dp_translation = NULL;
 
-        // - Отображение сообщений ---------------------------------------------
+        // Отображение сообщений
         M_WriteTextSmall_RUS(214 + ORIGWIDTH_DELTA, 115, showMessages == 1 ? "drk" : "dsrk");
 
-        // - Цвет сообщений ----------------------------------------------------
+        // Цвет сообщений
         if (gamemission == jaguar)
         {
             M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "y*l"); // н/д
@@ -2614,7 +2555,7 @@ void M_RD_Draw_Display(void)
             { dp_translation = NULL; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "cnfylfhnysq"); }
         }
 
-        // - Тексты отбрасывают тень -------------------------------------------
+        // Тексты отбрасывают тень
         M_WriteTextSmall_RUS(226 + ORIGWIDTH_DELTA, 135, draw_shadowed_text == 1 ? "drk" : "dsrk");
 
         //
@@ -2624,6 +2565,25 @@ void M_RD_Draw_Display(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 145, "rfhnf");
         dp_translation = NULL;
     }
+
+    // Screen size slider
+#ifdef WIDESCREEN
+    // [JN] Wide screen: only 6 sizes are available
+    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 54, 6, screenSize);
+
+    // Numerical representation of slider position
+    M_snprintf(num, 4, "%3d", screenblocks);
+    M_WriteTextSmall_ENG(96+ORIGWIDTH_DELTA, 55, num);
+#else
+    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 54, 12, screenSize);
+
+    // Numerical representation of slider position
+    M_snprintf(num, 4, "%3d", screenblocks);
+    M_WriteTextSmall_ENG(145+ORIGWIDTH_DELTA, 55, num);
+#endif
+
+    // Gamma-correction slider
+    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 18, usegamma);
 }
 
 void M_RD_Change_ScreenSize(int choice)
@@ -2691,8 +2651,7 @@ void M_RD_Change_Gamma(int choice)
 
 void M_RD_Change_Detail(int choice)
 {
-    choice = 0;
-    detailLevel = 1 - detailLevel;
+    detailLevel ^= 1;
 
     R_SetViewSize (screenblocks, detailLevel);
 
@@ -2706,8 +2665,7 @@ void M_RD_Change_Detail(int choice)
 
 void M_RD_Change_Messages(int choice)
 {
-    choice = 0;
-    showMessages = 1 - showMessages;
+    showMessages ^= 1;
 
     if (!showMessages)
     players[consoleplayer].message = DEH_String(english_language ?
@@ -2721,8 +2679,7 @@ void M_RD_Change_Messages(int choice)
 
 void M_RD_Change_LocalTime(int choice)
 {
-    choice = 0;
-    local_time = 1 - local_time;
+    local_time ^= 1;
 }
 
 void M_RD_Change_MessagesColor(int choice)
@@ -2741,10 +2698,16 @@ void M_RD_Change_MessagesColor(int choice)
 
     // Print example message
     M_snprintf(msgcolor, sizeof(msgcolor), english_language ? 
-                                           "Pickup message example" :
+                                           "Colored message example" :
                                            "ghjdthrf wdtnf cjj,otybz");
     players[consoleplayer].message = msgcolor;
 }
+
+void M_RD_Change_ShadowedText(int choice)
+{
+    draw_shadowed_text ^= 1;
+}
+
 
 // -----------------------------------------------------------------------------
 // Automap settings
@@ -2759,15 +2722,11 @@ void M_RD_Choose_AutomapSettings(int choice)
 
 void M_RD_Draw_AutomapSettings(void)
 {
-    // Write capitalized title
-    if (english_language)
-    M_WriteTextBigCentered_ENG(12, "AUTOMAP OPTIONS");
-    else
-    M_WriteTextBigCentered_RUS(12, "YFCNHJQRB RFHNS");    // НАСТРОЙКИ КАРТЫ
-
     if (english_language)
     {
-        // - Automap colors (English only names, different placement) ----------
+        M_WriteTextBigCentered_ENG(12, "AUTOMAP OPTIONS");
+
+        // Automap colors (English only names, different placement)
         if (gamemission == jaguar)
         {
             M_WriteTextSmall_ENG(170 + ORIGWIDTH_DELTA, 35, "n/a");
@@ -2786,24 +2745,26 @@ void M_RD_Draw_AutomapSettings(void)
             M_WriteTextSmall_ENG (170 + ORIGWIDTH_DELTA, 35, "strife");
         }
 
-        // - Level stats -------------------------------------------------------
+        // Level stats
         M_WriteTextSmall_ENG(159 + ORIGWIDTH_DELTA, 45, automap_stats == 1 ? "on" : "off");
         
-        // - Overlay mode ------------------------------------------------------
+        // Overlay mode
         M_WriteTextSmall_ENG(170 + ORIGWIDTH_DELTA, 55, automap_overlay == 1 ? "on" : "off");
 
-        // - Rotate mode -------------------------------------------------------
+        // Rotate mode
         M_WriteTextSmall_ENG(163 + ORIGWIDTH_DELTA, 65, automap_rotate == 1 ? "on" : "off");
 
-        // - Follow mode -------------------------------------------------------
+        // Follow mode
         M_WriteTextSmall_ENG(164 + ORIGWIDTH_DELTA, 75, automap_follow == 1 ? "on" : "off");
 
-        // - Grid --------------------------------------------------------------
+        // Grid
         M_WriteTextSmall_ENG(106 + ORIGWIDTH_DELTA, 85, automap_grid == 1 ? "on" : "off");
     }
     else
     {
-        // - Automap colors (English only names, different placement) ----------
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB RFHNS"); // НАСТРОЙКИ КАРТЫ
+
+        // Automap colors (English only names, different placement)
         if (gamemission == jaguar)
         {
             M_WriteTextSmall_RUS(191 + ORIGWIDTH_DELTA, 35, "y*l"); // н/д
@@ -2822,19 +2783,19 @@ void M_RD_Draw_AutomapSettings(void)
             M_WriteTextSmall_ENG (191 + ORIGWIDTH_DELTA, 35, "strife");
         }
         
-        // - Статистика уровня -------------------------------------------------
+        // Статистика уровня
         M_WriteTextSmall_RUS(210 + ORIGWIDTH_DELTA, 45, automap_stats == 1 ? "drk" : "dsrk");
         
-        // - Режим наложения ---------------------------------------------------
+        // Режим наложения
         M_WriteTextSmall_RUS(203 + ORIGWIDTH_DELTA, 55, automap_overlay == 1 ? "drk" : "dsrk");
 
-        // - Режим вращения ---------------------------------------------------
+        // Режим вращения
         M_WriteTextSmall_RUS(194 + ORIGWIDTH_DELTA, 65, automap_rotate == 1 ? "drk" : "dsrk");
 
-        // - Режим следования ---------------------------------------------------
+        // Режим следования
         M_WriteTextSmall_RUS(208 + ORIGWIDTH_DELTA, 75, automap_follow == 1 ? "drk" : "dsrk");
 
-        // - Сетка -------------------------------------------------------------
+        // Сетка
         M_WriteTextSmall_RUS(118 + ORIGWIDTH_DELTA, 85, automap_grid == 1 ? "drk" : "dsrk");
     }
 }
@@ -2845,7 +2806,6 @@ void M_RD_Change_AutomapColor(int choice)
     if (gamemission == jaguar)
     return;
 
-    choice = 0;
     automap_color++;
 
     if (automap_color > 4)
@@ -2854,32 +2814,27 @@ void M_RD_Change_AutomapColor(int choice)
 
 void M_RD_Change_AutomapOverlay(int choice)
 {
-    choice = 0;
-    automap_overlay = 1 - automap_overlay;
+    automap_overlay ^= 1;
 }
 
 void M_RD_Change_AutomapStats(int choice)
 {
-    choice = 0;
-    automap_stats = 1 - automap_stats;
+    automap_stats ^= 1;
 }
 
 void M_RD_Change_AutomapRotate(int choice)
 {
-    choice = 0;
-    automap_rotate = 1 - automap_rotate;
+    automap_rotate ^= 1;
 }
 
 void M_RD_Change_AutomapFollow(int choice)
 {
-    choice = 0;
-    automap_follow = 1 - automap_follow;
+    automap_follow ^= 1;
 }
 
 void M_RD_Change_AutomapGrid(int choice)
 {
-    choice = 0;
-    automap_grid = 1 - automap_grid;
+    automap_grid ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -2904,51 +2859,36 @@ void M_RD_Choose_Audio(int choice)
 
 void M_RD_Draw_Audio(void)
 {
-    char    num[4];
+    static char num[4];
 
-    // Write capitalized title
-    if (english_language)
-    M_WriteTextBigCentered_ENG(12, "SOUND OPTIONS");
-    else
-    M_WriteTextBigCentered_RUS(12, "YFCNHJQRB PDERF");    // НАСТРОЙКИ ЗВУКА
-
-    // Draw SFX volume slider
-    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 54, 16, sfxVolume);
-    // Draw numerical representation of SFX volume
-    M_snprintf(num, 4, "%3d", sfxVolume);
-    M_WriteTextSmall_ENG(177+ORIGWIDTH_DELTA, 55, num);
-
-    // Draw music volume slider
-    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 16, musicVolume);
-    // Draw numerical representation of music volume
-    M_snprintf(num, 4, "%3d", musicVolume);
-    M_WriteTextSmall_ENG(177+ORIGWIDTH_DELTA, 75, num);
-
-    // Draw SFX channels slider
-    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 104, 16, snd_channels / 4 - 1);
-    // Draw numerical representation of channels
-    M_snprintf(num, 4, "%3d", snd_channels);
-    M_WriteTextSmall_ENG(177+ORIGWIDTH_DELTA, 105, num);
-
-    // Write "on" / "off" strings for features
     if (english_language)
     {
+        M_WriteTextBigCentered_ENG(12, "SOUND OPTIONS");
+
+        //
+        // Volume
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 35, "volume");
         dp_translation = NULL;
 
+        //
+        // Extra
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 85, "extra");
         dp_translation = NULL;
 
-        // - Sfx mode ----------------------------------------------------------
+        // Sfx mode
         M_WriteTextSmall_ENG(104 + ORIGWIDTH_DELTA, 115, snd_monomode == 1 ? "mono" : "stereo");
 
-        // - Pitch-shifted sounds ----------------------------------------------
+        // Pitch-shifted sounds
         M_WriteTextSmall_ENG(186 + ORIGWIDTH_DELTA, 125, snd_pitchshift == 1 ? "on" : "off");
     }
     else
     {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB PDERF"); // НАСТРОЙКИ ЗВУКА
+
         //
         // Громкость
         //
@@ -2963,12 +2903,30 @@ void M_RD_Draw_Audio(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 85, "ljgjkybntkmyj");
         dp_translation = NULL;
 
-        // - Режим звука -------------------------------------------------------
+        // Режим звука
         M_WriteTextSmall_RUS(132 + ORIGWIDTH_DELTA, 115, snd_monomode == 1 ? "vjyj" : "cnthtj");
 
-        // - Произвольный питч-шифтинг -----------------------------------------
+        // Произвольный питч-шифтинг
         M_WriteTextSmall_RUS(242 + ORIGWIDTH_DELTA, 125, snd_pitchshift == 1 ? "drk" : "dsrk");
     }
+
+    // SFX volume slider
+    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 54, 16, sfxVolume);
+    // Numerical representation of SFX volume
+    M_snprintf(num, 4, "%3d", sfxVolume);
+    M_WriteTextSmall_ENG(177+ORIGWIDTH_DELTA, 55, num);
+
+    // Music volume slider
+    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 16, musicVolume);
+    // Numerical representation of music volume
+    M_snprintf(num, 4, "%3d", musicVolume);
+    M_WriteTextSmall_ENG(177+ORIGWIDTH_DELTA, 75, num);
+
+    // SFX channels slider
+    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 104, 16, snd_channels / 4 - 1);
+    // Numerical representation of channels
+    M_snprintf(num, 4, "%3d", snd_channels);
+    M_WriteTextSmall_ENG(177+ORIGWIDTH_DELTA, 105, num);
 }
 
 void M_RD_Change_SfxVol(int choice)
@@ -3028,8 +2986,7 @@ void M_RD_Change_SfxChannels(int choice)
 
 void M_RD_Change_SndMode(int choice)
 {
-    choice = 0;
-    snd_monomode = 1 - snd_monomode;
+    snd_monomode ^= 1;
 
     // Update stereo separation
     S_UpdateStereoSeparation();
@@ -3037,8 +2994,7 @@ void M_RD_Change_SndMode(int choice)
 
 void M_RD_Change_PitchShifting(int choice)
 {
-    choice = 0;
-    snd_pitchshift = 1 - snd_pitchshift;
+    snd_pitchshift ^= 1;
 }
 
 
@@ -3055,42 +3011,39 @@ void M_RD_Choose_Controls(int choice)
 
 void M_RD_Draw_Controls(void)
 {
-    char    num[4];
+    static char num[4];
 
-    // Write capitalized title
-    if (english_language)
-    M_WriteTextBigCentered_ENG(12, "CONTROL SETTINGS");
-    else
-    M_WriteTextBigCentered_RUS(12, "EGHFDKTYBT");     // УПРАВЛЕНИЕ
-
-    // Draw mouse sensivity slider
-    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 17, mouseSensitivity);
-    // Draw numerical representation of mouse sensivity
-    M_snprintf(num, 4, "%3d", mouseSensitivity);
-    M_WriteTextSmall_ENG(189+ORIGWIDTH_DELTA, 75, num);
-
-    // Write "on" / "off" strings for features
     if (english_language)
     {
+        M_WriteTextBigCentered_ENG(12, "CONTROL SETTINGS");
+
+        //
+        // Movement
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 35, "movement");
         dp_translation = NULL;
 
-        // - Always run --------------------------------------------------------
+        // Always run
         M_WriteTextSmall_ENG(119 + ORIGWIDTH_DELTA, 45, joybspeed >= 20 ? "on" : "off");
 
+        //
+        // Mouse
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 55, "mouse");
         dp_translation = NULL;
 
-        // - Mouse look --------------------------------------------------------
+        // Mouse look
         M_WriteTextSmall_ENG(119 + ORIGWIDTH_DELTA, 85, mlook ? "on" : "off");
 
-        // - Vertical movement -------------------------------------------------
+        // Vertical movement
         M_WriteTextSmall_ENG(171 + ORIGWIDTH_DELTA, 95, !novert ? "on" : "off");
     }
     else
     {
+        M_WriteTextBigCentered_RUS(12, "EGHFDKTYBT"); // УПРАВЛЕНИЕ
+
         //
         // Передвижение
         //
@@ -3098,7 +3051,7 @@ void M_RD_Draw_Controls(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 35, "gthtldb;tybt");
         dp_translation = NULL;
 
-        // - Режим постоянного бега --------------------------------------------
+        // Режим постоянного бега
         M_WriteTextSmall_RUS(216 + ORIGWIDTH_DELTA, 45, joybspeed >= 20 ? "drk" : "dsrk");
 
         //
@@ -3108,12 +3061,18 @@ void M_RD_Draw_Controls(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 55, "vsim");
         dp_translation = NULL;
 
-        // - Обзор мышью -------------------------------------------------------
+        // Обзор мышью
         M_WriteTextSmall_RUS(135 + ORIGWIDTH_DELTA, 85, mlook ? "drk" : "dsrk");
 
-        // - Вертикальное перемещение ------------------------------------------
+        // Вертикальное перемещение
         M_WriteTextSmall_RUS(235 + ORIGWIDTH_DELTA, 95, !novert ? "drk" : "dsrk");
     }
+
+    // Mouse sensivity slider
+    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 17, mouseSensitivity);
+    // Numerical representation of mouse sensivity
+    M_snprintf(num, 4, "%3d", mouseSensitivity);
+    M_WriteTextSmall_ENG(189+ORIGWIDTH_DELTA, 75, num);
 }
 
 void M_RD_Change_AlwaysRun(int choice)
@@ -3133,8 +3092,7 @@ void M_RD_Change_AlwaysRun(int choice)
 
 void M_RD_Change_MouseLook(int choice)
 {
-    choice = 0;
-    mlook = 1 - mlook;
+    mlook ^= 1;
 
     if (!mlook)
     players[consoleplayer].centering = true;
@@ -3142,8 +3100,7 @@ void M_RD_Change_MouseLook(int choice)
 
 void M_RD_Change_Novert(int choice)
 {
-    choice = 0;
-    novert = 1 - novert;
+    novert ^= 1;
 }
 
 void M_RD_Change_Sensitivity(int choice)
@@ -3211,56 +3168,68 @@ void M_RD_Draw_Gameplay_1(void)
     M_RD_Jaguar_Menu_Background();
 
     if (english_language)
-    M_WriteTextBigCentered_ENG(10, "GAMEPLAY FEATURES");
-    else
-    M_WriteTextBigCentered_RUS(10, "YFCNHJQRB UTQVGKTZ");    // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
-    // Write "on" / "off" strings for features
-    if (english_language)
     {
+        M_WriteTextBigCentered_ENG(12, "GAMEPLAY FEATURES");
+
+        //
+        // Graphical
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 35, "Graphical");
         dp_translation = NULL;
 
-        // - Brightmaps --------------------------------------------------------
-        if (brightmaps) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(119 + ORIGWIDTH_DELTA, 45, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(119 + ORIGWIDTH_DELTA, 45, RD_OFF); dp_translation = NULL; }
+        // Brightmaps
+        dp_translation = brightmaps ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(119 + ORIGWIDTH_DELTA, 45, brightmaps ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Fake contrast -----------------------------------------------------
-        if (fake_contrast) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(142 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(142 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
+        // Fake contrast
+        dp_translation = fake_contrast ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(142 + ORIGWIDTH_DELTA, 55, fake_contrast ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Transparency ------------------------------------------------------
-        if (translucency) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(138 + ORIGWIDTH_DELTA, 65, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(138 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
+        // Transparency
+        dp_translation = translucency ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(138 + ORIGWIDTH_DELTA, 65, translucency ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Fuzz effect -------------------------------------------------------
-        if (improved_fuzz == 0) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Original"); dp_translation = NULL; }
-        else if (improved_fuzz == 1) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Original (b&w)"); dp_translation = NULL; }
-        else if (improved_fuzz == 2) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Improved"); dp_translation = NULL; }
-        else if (improved_fuzz == 3) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, "Improved (b&w)"); dp_translation = NULL; }
+        // Fuzz effect
+        dp_translation = improved_fuzz > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(125 + ORIGWIDTH_DELTA, 75, 
+                             improved_fuzz == 0 ? "Original" :
+                             improved_fuzz == 1 ? "Original (b&w)" :
+                             improved_fuzz == 2 ? "Improved" :
+                                                  "Improved (b&w)");
+        dp_translation = NULL;
 
-        // - Colored HUD elements ----------------------------------------------
-        if (colored_hud) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(195 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(195 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
+        // Colored HUD elements
+        dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(195 + ORIGWIDTH_DELTA, 85, colored_hud ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Colored blood and corpses -----------------------------------------
-        if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(229 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(229 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+        // Colored blood and corpses
+        dp_translation = colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(229 + ORIGWIDTH_DELTA, 95, colored_blood ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Swirling liquids --------------------------------------------------
-        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(150 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(150 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
+        // Swirling liquids
+        dp_translation = swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(150 + ORIGWIDTH_DELTA, 105, swirling_liquids ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Invulnerability affects sky ---------------------------------------
-        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(237 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(237 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
+        // Invulnerability affects sky
+        dp_translation = invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(237 + ORIGWIDTH_DELTA, 115, invul_sky ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Flip weapons ------------------------------------------------------
-        if (flip_weapons) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(131 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(131 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
+        // Flip weapons
+        dp_translation = flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(131 + ORIGWIDTH_DELTA, 125, flip_weapons ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
+        //
         // Footer
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "next page >"); 
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 155, "< last page"); 
@@ -3269,6 +3238,8 @@ void M_RD_Draw_Gameplay_1(void)
     }
     else
     {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB UTQVGKTZ"); // НАСТРОЙКИ ГЕЙМПЛЕЯ
+
         //
         // Графика
         //
@@ -3276,45 +3247,58 @@ void M_RD_Draw_Gameplay_1(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 35, "uhfabrf");
         dp_translation = NULL;
 
-        // - Брайтмаппинг ------------------------------------------------------
-        if (brightmaps) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(140 + ORIGWIDTH_DELTA, 45, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(140 + ORIGWIDTH_DELTA, 45, RD_OFF_RUS); dp_translation = NULL; }
+        // Брайтмаппинг
+        dp_translation = brightmaps ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(140 + ORIGWIDTH_DELTA, 45, brightmaps ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Имитация контрастности --------------------------------------------
-        if (fake_contrast) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(217 + ORIGWIDTH_DELTA, 55, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(217 + ORIGWIDTH_DELTA, 55, RD_OFF_RUS); dp_translation = NULL; }
+        // Имитация контрастности
+        dp_translation = fake_contrast ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(217 + ORIGWIDTH_DELTA, 55, fake_contrast ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Прозрачность объектов ---------------------------------------------
-        if (translucency) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(207 + ORIGWIDTH_DELTA, 65, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(207 + ORIGWIDTH_DELTA, 65, RD_OFF_RUS); dp_translation = NULL; }
+        // Прозрачность объектов
+        dp_translation = translucency ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(207 + ORIGWIDTH_DELTA, 65, translucency ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Эффект шума -------------------------------------------------------
-        if (improved_fuzz == 0) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Jhbubyfkmysq"); dp_translation = NULL; }
-        else if (improved_fuzz == 1) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Jhbubyfkmysq (x*,)"); dp_translation = NULL; }
-        else if (improved_fuzz == 2) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Ekexityysq"); dp_translation = NULL; }
-        else if (improved_fuzz == 3) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, "Ekexityysq (x*,)"); dp_translation = NULL; }
+        // Эффект шума
+        dp_translation = improved_fuzz > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(134 + ORIGWIDTH_DELTA, 75, 
+                             improved_fuzz == 0 ? "Jhbubyfkmysq" :
+                             improved_fuzz == 1 ? "Jhbubyfkmysq (x*,)" :
+                             improved_fuzz == 2 ? "Ekexityysq" :
+                                                  "Ekexityysq (x*,)");
+        dp_translation = NULL;
 
-        // - Разноцветные элементы HUD -----------------------------------------
-        if (colored_hud) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(239 + ORIGWIDTH_DELTA, 85, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(239 + ORIGWIDTH_DELTA, 85, RD_OFF_RUS); dp_translation = NULL; }
+        // Разноцветные элементы HUD
+        dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(239 + ORIGWIDTH_DELTA, 85, colored_hud ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Разноцветная кровь и трупы ----------------------------------------
-        if (colored_blood) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(242 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(242 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
+        // Разноцветная кровь и трупы
+        dp_translation = colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(242 + ORIGWIDTH_DELTA, 95, colored_blood ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Улучшенная анимация жидкостей -------------------------------------
-        if (swirling_liquids) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 105, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 105, RD_OFF_RUS); dp_translation = NULL; }
+        // Улучшенная анимация жидкостей
+        dp_translation = swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 105, swirling_liquids ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Неуязвимость окрашивает небо --------------------------------------
-        if (invul_sky) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(262 + ORIGWIDTH_DELTA, 115, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(262 + ORIGWIDTH_DELTA, 115, RD_OFF_RUS); dp_translation = NULL; }
+        // Неуязвимость окрашивает небо
+        dp_translation = invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(262 + ORIGWIDTH_DELTA, 115, invul_sky ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Зеркальное отражение оружия ---------------------------------------
-        if (flip_weapons) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(259 + ORIGWIDTH_DELTA, 125, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(259 + ORIGWIDTH_DELTA, 125, RD_OFF_RUS); dp_translation = NULL; }
+        // Зеркальное отражение оружия
+        dp_translation = flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(259 + ORIGWIDTH_DELTA, 125, flip_weapons ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
+        //
         // Footer
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 145, RD_NEXT_RUS); 
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 155, RD_PREV_RUS); 
@@ -3329,48 +3313,61 @@ void M_RD_Draw_Gameplay_2(void)
     M_RD_Jaguar_Menu_Background();
 
     if (english_language)
-    M_WriteTextBigCentered_ENG(10, "GAMEPLAY FEATURES");
-    else
-    M_WriteTextBigCentered_RUS(10, "YFCNHJQRB UTQVGKTZ");    // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
-    // Write "on" / "off" strings for features
-    if (english_language)
     {
+        M_WriteTextBigCentered_ENG(12, "GAMEPLAY FEATURES");
+
+        //
+        // Audible
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 35, "Audible");
         dp_translation = NULL;
 
-        // - Play exit sounds --------------------------------------------------
-        if (play_exit_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(158 + ORIGWIDTH_DELTA, 45, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(158 + ORIGWIDTH_DELTA, 45, RD_OFF); dp_translation = NULL; }
+        // Play exit sounds
+        dp_translation = play_exit_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(158 + ORIGWIDTH_DELTA, 45, play_exit_sfx ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Sound of crushing corpses -----------------------------------------
-        if (crushed_corpses_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(223 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(223 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
+        // Sound of crushing corpses
+        dp_translation = crushed_corpses_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(223 + ORIGWIDTH_DELTA, 55, crushed_corpses_sfx ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Single sound of closing blazing door ------------------------------
-        if (blazing_door_fix_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(240 + ORIGWIDTH_DELTA, 65, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(240 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
+        // Single sound of closing blazing door
+        dp_translation = blazing_door_fix_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(240 + ORIGWIDTH_DELTA, 65, blazing_door_fix_sfx ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Monster alert waking up other monsters ----------------------------
-        if (noise_alert_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(263 + ORIGWIDTH_DELTA, 75,RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(263 + ORIGWIDTH_DELTA, 75, RD_OFF); dp_translation = NULL; }
-        
+        // Monster alert waking up other monsters
+        dp_translation = noise_alert_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(263 + ORIGWIDTH_DELTA, 75, noise_alert_sfx ? RD_ON : RD_OFF);
+        dp_translation = NULL;
+
+        //
+        // Tactical
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 85, "Tactical");
         dp_translation = NULL;
 
         // Notify of revealed secrets
-        if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(232 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(232 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
-        // Show negative health
-        if (negative_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(190 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(190 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
-        // Infragreen light amp. visor
-        if (infragreen_visor) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(230 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(230 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
+        dp_translation = secret_notification ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(232 + ORIGWIDTH_DELTA, 95, secret_notification ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
+        // Show negative health
+        dp_translation = negative_health ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(190 + ORIGWIDTH_DELTA, 105, negative_health ? RD_ON : RD_OFF);
+        dp_translation = NULL;
+
+        // Infragreen light amp. visor
+        dp_translation = infragreen_visor ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(230 + ORIGWIDTH_DELTA, 115, infragreen_visor ? RD_ON : RD_OFF);
+        dp_translation = NULL;
+
+        //
         // Footer
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "next page >");
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 155, "< prev page");
@@ -3378,7 +3375,9 @@ void M_RD_Draw_Gameplay_2(void)
         dp_translation = NULL;
     }
     else
-    {   
+    {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB UTQVGKTZ"); // НАСТРОЙКИ ГЕЙМПЛЕЯ
+
         //
         // Звук
         //
@@ -3386,21 +3385,25 @@ void M_RD_Draw_Gameplay_2(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 35, "Pder");
         dp_translation = NULL;
 
-        // - Звуки при выходе из игры ------------------------------------------
-        if (play_exit_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(225 + ORIGWIDTH_DELTA, 45, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(225 + ORIGWIDTH_DELTA, 45, RD_OFF_RUS); dp_translation = NULL; }
+        // Звуки при выходе из игры
+        dp_translation = play_exit_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(225 + ORIGWIDTH_DELTA, 45, play_exit_sfx ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Звук раздавливания трупов -----------------------------------------
-        if (crushed_corpses_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(236 + ORIGWIDTH_DELTA, 55, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(236 + ORIGWIDTH_DELTA, 55, RD_OFF_RUS); dp_translation = NULL; }
+        // Звук раздавливания трупов
+        dp_translation = crushed_corpses_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(236 + ORIGWIDTH_DELTA, 55, crushed_corpses_sfx ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Одиночный звук быстро двери ---------------------------------------
-        if (blazing_door_fix_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(260 + ORIGWIDTH_DELTA, 65, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(260 + ORIGWIDTH_DELTA, 65, RD_OFF_RUS); dp_translation = NULL; }
+        // Одиночный звук быстрой двери
+        dp_translation = blazing_door_fix_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(260 + ORIGWIDTH_DELTA, 65, blazing_door_fix_sfx ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Общая тревога у монстров ------------------------------------------
-        if (noise_alert_sfx) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(227 + ORIGWIDTH_DELTA, 75,RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(227 + ORIGWIDTH_DELTA, 75, RD_OFF_RUS); dp_translation = NULL; }
+        // Общая тревога у монстров
+        dp_translation = noise_alert_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(227 + ORIGWIDTH_DELTA, 75, noise_alert_sfx ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
         //
         // Тактика
@@ -3409,17 +3412,20 @@ void M_RD_Draw_Gameplay_2(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 85, "Nfrnbrf");
         dp_translation = NULL;
 
-        // - Сообщать о найденном тайнике --------------------------------------
-        if (secret_notification) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(260 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(260 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
+        // Сообщать о найденном тайнике
+        dp_translation = secret_notification ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(260 + ORIGWIDTH_DELTA, 95, secret_notification ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Отрицательное здоровье в HUD --------------------------------------
-        if (negative_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(255 + ORIGWIDTH_DELTA, 105, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(255 + ORIGWIDTH_DELTA, 105, RD_OFF_RUS); dp_translation = NULL; }
+        // Отрицательное здоровье в HUD
+        dp_translation = negative_health ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(255 + ORIGWIDTH_DELTA, 105, negative_health ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Инфразеленый визор освещения --------------------------------------
-        if (infragreen_visor) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 115, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 115, RD_OFF_RUS); dp_translation = NULL; }
+        // Инфразеленый визор освещения
+        dp_translation = infragreen_visor ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 115, infragreen_visor ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
         // Footer
         dp_translation = cr[CR_GOLD];
@@ -3436,58 +3442,71 @@ void M_RD_Draw_Gameplay_3(void)
     M_RD_Jaguar_Menu_Background();
 
     if (english_language)
-    M_WriteTextBigCentered_ENG(10, "GAMEPLAY FEATURES");
-    else
-    M_WriteTextBigCentered_RUS(10, "YFCNHJQRB UTQVGKTZ");    // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
-    // Write "on" / "off" strings for features
-    if (english_language)
     {
+        M_WriteTextBigCentered_ENG(12, "GAMEPLAY FEATURES");
+
+        //
+        // Physical
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 35, "Physical");
         dp_translation = NULL;
 
-        // - Walk over and under monsters --------------------------------------
-        if (over_under) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(250 + ORIGWIDTH_DELTA, 45, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(250 + ORIGWIDTH_DELTA, 45, RD_OFF); dp_translation = NULL; }
+        // Walk over and under monsters
+        dp_translation = over_under ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(250 + ORIGWIDTH_DELTA, 45, over_under ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Corpses sliding from the ledges -----------------------------------
-        if (torque) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(264 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(264 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
+        // Corpses sliding from the ledges
+        dp_translation = torque ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(264 + ORIGWIDTH_DELTA, 55, torque ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Weapon bobbing while firing ---------------------------------------
-        if (weapon_bobbing) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(233 + ORIGWIDTH_DELTA, 65, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(233 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
+        // Weapon bobbing while firing
+        dp_translation = weapon_bobbing ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(233 + ORIGWIDTH_DELTA, 65, weapon_bobbing ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Lethal pellet of a point-blank SSG --------------------------------
-        if (ssg_blast_enemies) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(287 + ORIGWIDTH_DELTA, 75, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(287 + ORIGWIDTH_DELTA, 75, RD_OFF); dp_translation = NULL; }
+        // Lethal pellet of a point-blank SSG
+        dp_translation = ssg_blast_enemies ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(287 + ORIGWIDTH_DELTA, 75, ssg_blast_enemies ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Randomly mirrored corpses -----------------------------------------
-        if (randomly_flipcorpses) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(231 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(231 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
+        // Randomly mirrored corpses
+        dp_translation = randomly_flipcorpses ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(231 + ORIGWIDTH_DELTA, 85, randomly_flipcorpses ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Floating powerups -------------------------------------------------
-        if (floating_powerups) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(171 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(171 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+        // Floating powerups
+        dp_translation = floating_powerups ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(171 + ORIGWIDTH_DELTA, 95, floating_powerups ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
+        //
+        // Crosshair
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 105, "Crosshair");
         dp_translation = NULL;
 
-        // - Draw crosshair ----------------------------------------------------
-        if (crosshair_draw) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(146 + ORIGWIDTH_DELTA, 115, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(146 + ORIGWIDTH_DELTA, 115, RD_OFF); dp_translation = NULL; }
+        // Draw crosshair
+        dp_translation = crosshair_draw ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(146 + ORIGWIDTH_DELTA, 115, crosshair_draw ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Health indication -------------------------------------------------
-        if (crosshair_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(163 + ORIGWIDTH_DELTA, 125, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(163 + ORIGWIDTH_DELTA, 125, RD_OFF); dp_translation = NULL; }
+        // Health indication
+        dp_translation = crosshair_health ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(163 + ORIGWIDTH_DELTA, 125, crosshair_health ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Increased size ----------------------------------------------------
-        if (crosshair_scale) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(140 + ORIGWIDTH_DELTA, 135, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(140 + ORIGWIDTH_DELTA, 135, RD_OFF); dp_translation = NULL; }
+        // Increased size
+        dp_translation = crosshair_scale ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(140 + ORIGWIDTH_DELTA, 135, crosshair_scale ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
+        //
         // Footer
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "next page >");
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 155, "< prev page");
@@ -3496,6 +3515,8 @@ void M_RD_Draw_Gameplay_3(void)
     }
     else
     {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB UTQVGKTZ"); // НАСТРОЙКИ ГЕЙМПЛЕЯ
+
         //
         // Физика
         //
@@ -3503,29 +3524,35 @@ void M_RD_Draw_Gameplay_3(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 35, "Abpbrf");
         dp_translation = NULL;
 
-        // - Перемещение под/над монстрами -------------------------------------
-        if (over_under) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 45, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 45, RD_OFF_RUS); dp_translation = NULL; }
+        // Перемещение под/над монстрами
+        dp_translation = over_under ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 45, over_under ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Трупы сползают с возвышений ---------------------------------------
-        if (torque) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(256 + ORIGWIDTH_DELTA, 55, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(256 + ORIGWIDTH_DELTA, 55, RD_OFF_RUS); dp_translation = NULL; }
+        // Трупы сползают с возвышений
+        dp_translation = torque ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(256 + ORIGWIDTH_DELTA, 55, torque ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Улучшенное покачивание оружия -------------------------------------
-        if (weapon_bobbing) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(271 + ORIGWIDTH_DELTA, 65, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(271 + ORIGWIDTH_DELTA, 65, RD_OFF_RUS); dp_translation = NULL; }
+        // Улучшенное покачивание оружия
+        dp_translation = torque ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(271 + ORIGWIDTH_DELTA, 65, torque ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Двустволка разрывает врагов ---------------------------------------
-        if (ssg_blast_enemies) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(254 + ORIGWIDTH_DELTA, 75, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(254 + ORIGWIDTH_DELTA, 75, RD_OFF_RUS); dp_translation = NULL; }
+        // Двустволка разрывает врагов
+        dp_translation = torque ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(254 + ORIGWIDTH_DELTA, 75, torque ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Зеркалирование трупов ---------------------------------------------
-        if (randomly_flipcorpses) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(207 + ORIGWIDTH_DELTA, 85, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(207 + ORIGWIDTH_DELTA, 85, RD_OFF_RUS); dp_translation = NULL; }
+        // Зеркалирование трупов
+        dp_translation = randomly_flipcorpses ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(207 + ORIGWIDTH_DELTA, 85, randomly_flipcorpses ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Левитирующие сферы-артефакты --------------------------------------
-        if (floating_powerups) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
+        // Левитирующие сферы-артефакты
+        dp_translation = floating_powerups ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(275 + ORIGWIDTH_DELTA, 95, floating_powerups ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
         //
         // Прицел
@@ -3534,19 +3561,24 @@ void M_RD_Draw_Gameplay_3(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 105, "Ghbwtk");
         dp_translation = NULL;
 
-        // - Отображать прицел -------------------------------------------------
-        if (crosshair_draw) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(180 + ORIGWIDTH_DELTA, 115, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(180 + ORIGWIDTH_DELTA, 115, RD_OFF_RUS); dp_translation = NULL; }
+        // Отображать прицел
+        dp_translation = crosshair_draw ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(180 + ORIGWIDTH_DELTA, 115, crosshair_draw ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Индикация здоровья ------------------------------------------------
-        if (crosshair_health) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(186 + ORIGWIDTH_DELTA, 125, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(186 + ORIGWIDTH_DELTA, 125, RD_OFF_RUS); dp_translation = NULL; }
+        // Индикация здоровья
+        dp_translation = crosshair_health ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(186 + ORIGWIDTH_DELTA, 125, crosshair_health ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Увеличенный размер ------------------------------------------------
-        if (crosshair_scale) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(185 + ORIGWIDTH_DELTA, 135, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(185 + ORIGWIDTH_DELTA, 135, RD_OFF_RUS); dp_translation = NULL; }
+        // Увеличенный размер
+        dp_translation = crosshair_scale ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(185 + ORIGWIDTH_DELTA, 135, crosshair_scale ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
+        //
         // Footer
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 155, RD_PREV_RUS);
@@ -3561,46 +3593,54 @@ void M_RD_Draw_Gameplay_4(void)
     M_RD_Jaguar_Menu_Background();
 
     if (english_language)
-    M_WriteTextBigCentered_ENG(10, "GAMEPLAY FEATURES");
-    else
-    M_WriteTextBigCentered_RUS(10, "YFCNHJQRB UTQVGKTZ");    // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
-    // Write "on" / "off" strings for features
-    if (english_language)
     {
+        M_WriteTextBigCentered_ENG(12, "GAMEPLAY FEATURES");
+
+        //
+        // Gameplay
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 35, "Gameplay");
         dp_translation = NULL;
 
-        // - Fix errors of vanilla maps ----------------------------------------
-        if (fix_map_errors) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(226 + ORIGWIDTH_DELTA, 45, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(226 + ORIGWIDTH_DELTA, 45, RD_OFF); dp_translation = NULL; }
+        // Fix errors of vanilla maps
+        dp_translation = fix_map_errors ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(226 + ORIGWIDTH_DELTA, 45, fix_map_errors ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Flip game levels --------------------------------------------------
-        if (flip_levels) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(158 + ORIGWIDTH_DELTA, 55, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(158 + ORIGWIDTH_DELTA, 55, RD_OFF); dp_translation = NULL; }
+        // Flip game levels
+        dp_translation = flip_levels ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(158 + ORIGWIDTH_DELTA, 55, flip_levels ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Extra player faces on the HUD -------------------------------------
-        if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(255 + ORIGWIDTH_DELTA, 65, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(255 + ORIGWIDTH_DELTA, 65, RD_OFF); dp_translation = NULL; }
+        // Extra player faces on the HUD
+        dp_translation = extra_player_faces ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(255 + ORIGWIDTH_DELTA, 65, extra_player_faces ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Pain Elemental without Souls limit --------------------------------
-        if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(284 + ORIGWIDTH_DELTA, 75, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(284 + ORIGWIDTH_DELTA, 75, RD_OFF); dp_translation = NULL; }
+        // Pain Elemental without Souls limit
+        dp_translation = unlimited_lost_souls ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(284 + ORIGWIDTH_DELTA, 75, unlimited_lost_souls ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - More agressive lost souls -----------------------------------------
-        if (agressive_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(222 + ORIGWIDTH_DELTA, 85, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(222 + ORIGWIDTH_DELTA, 85, RD_OFF); dp_translation = NULL; }
+        // More agressive lost souls
+        dp_translation = agressive_lost_souls ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(222 + ORIGWIDTH_DELTA, 85, agressive_lost_souls ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Don't prompt for q. saving/loading --------------------------------
-        if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(281 + ORIGWIDTH_DELTA, 95, RD_ON); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(281 + ORIGWIDTH_DELTA, 95, RD_OFF); dp_translation = NULL; }
+        // More agressive lost souls
+        dp_translation = fast_quickload ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(281 + ORIGWIDTH_DELTA, 95, fast_quickload ? RD_ON : RD_OFF);
+        dp_translation = NULL;
 
-        // - Play internal demos -----------------------------------------------
-        if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_ENG(183 + ORIGWIDTH_DELTA, 105, RD_OFF); dp_translation = NULL; }
-        else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(183 + ORIGWIDTH_DELTA, 105, RD_ON); dp_translation = NULL; }
+        // Play internal demos
+        dp_translation = no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN];
+        M_WriteTextSmall_ENG(183 + ORIGWIDTH_DELTA, 105, no_internal_demos ? RD_OFF : RD_ON);
+        dp_translation = NULL;
 
+        //
         // Footer
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "first page >");
         M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 155, "< prev page");
@@ -3609,6 +3649,8 @@ void M_RD_Draw_Gameplay_4(void)
     }
     else
     {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB UTQVGKTZ"); // НАСТРОЙКИ ГЕЙМПЛЕЯ
+
         //
         // Геймплей
         //
@@ -3616,35 +3658,44 @@ void M_RD_Draw_Gameplay_4(void)
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 35, "Utqvgktq");
         dp_translation = NULL;
 
-        // - Устранять ошибки ориг. уровней ------------------------------------
-        if (fix_map_errors) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(269 + ORIGWIDTH_DELTA, 45, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(269 + ORIGWIDTH_DELTA, 45, RD_OFF_RUS); dp_translation = NULL; }
+        // Устранять ошибки ориг. уровней
+        dp_translation = fix_map_errors ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(269 + ORIGWIDTH_DELTA, 45, fix_map_errors ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Зеркальное отражение уровней ------------------------------------
-        if (flip_levels) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(263 + ORIGWIDTH_DELTA, 55, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(263 + ORIGWIDTH_DELTA, 55, RD_OFF_RUS); dp_translation = NULL; }
+        // Устранять ошибки ориг. уровней
+        dp_translation = flip_levels ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(263 + ORIGWIDTH_DELTA, 55, flip_levels ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Дополнительные лица игрока ----------------------------------------
-        if (extra_player_faces) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(247 + ORIGWIDTH_DELTA, 65, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(247 + ORIGWIDTH_DELTA, 65, RD_OFF_RUS); dp_translation = NULL; }
+        // Дополнительные лица игрока в HUD
+        dp_translation = extra_player_faces ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(247 + ORIGWIDTH_DELTA, 65, extra_player_faces ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Элементаль без ограничения Душ ------------------------------------
-        if (unlimited_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 75, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 75, RD_OFF_RUS); dp_translation = NULL; }
+        // Элементаль без ограничения Душ
+        dp_translation = unlimited_lost_souls ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(274 + ORIGWIDTH_DELTA, 75, unlimited_lost_souls ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Повышенная агрессивность Душ --------------------------------------
-        if (agressive_lost_souls) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 85, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 85, RD_OFF_RUS); dp_translation = NULL; }
+        // Повышенная агрессивность Душ
+        dp_translation = agressive_lost_souls ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(266 + ORIGWIDTH_DELTA, 85, agressive_lost_souls ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Отключить запрос б. загрузки --------------------------------------
-        if (fast_quickload) { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(253 + ORIGWIDTH_DELTA, 95, RD_ON_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(253 + ORIGWIDTH_DELTA, 95, RD_OFF_RUS); dp_translation = NULL; }
+        // Отключить запрос б. загрузки
+        dp_translation = fast_quickload ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(253 + ORIGWIDTH_DELTA, 95, fast_quickload ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
 
-        // - Проигрывать демозаписи --------------------------------------------
-        if (no_internal_demos) { dp_translation = cr[CR_DARKRED]; M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 105, RD_OFF_RUS); dp_translation = NULL; }
-        else { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 105, RD_ON_RUS); dp_translation = NULL; }
+        // Проигрывать демозаписи
+        dp_translation = no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN];
+        M_WriteTextSmall_RUS(219 + ORIGWIDTH_DELTA, 105, no_internal_demos ? RD_OFF_RUS : RD_ON_RUS);
+        dp_translation = NULL;
 
+        //
         // Footer
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 155, RD_PREV_RUS);
@@ -3655,25 +3706,21 @@ void M_RD_Draw_Gameplay_4(void)
 
 void M_RD_Change_Brightmaps(int choice)
 {
-    choice = 0;
-    brightmaps = 1 - brightmaps;
+    brightmaps ^= 1;
 }
 
 void M_RD_Change_FakeContrast(int choice)
 {
-    choice = 0;
-    fake_contrast = 1 - fake_contrast;
+    fake_contrast ^= 1;
 }
 
 void M_RD_Change_Transparency(int choice)
 {
-    choice = 0;
-    translucency = 1 - translucency;
+    translucency ^= 1;
 }
 
 void M_RD_Change_ImprovedFuzz(int choice)
 {
-    choice = 0;
     improved_fuzz++;
 
     if (improved_fuzz > 3)
@@ -3685,8 +3732,7 @@ void M_RD_Change_ImprovedFuzz(int choice)
 
 void M_RD_Change_ColoredHUD(int choice)
 {
-    choice = 0;
-    colored_hud = 1 - colored_hud;
+    colored_hud ^= 1;
     
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
@@ -3698,80 +3744,62 @@ void M_RD_Change_ColoredHUD(int choice)
 
 void M_RD_Change_ColoredBlood(int choice)
 {
-    choice = 0;
-    colored_blood = 1 - colored_blood;
+    colored_blood ^= 1;
 }
 
 void M_RD_Change_SwirlingLiquids(int choice)
 {
-    choice = 0;
-    swirling_liquids = 1 - swirling_liquids;
+    swirling_liquids ^= 1;
 }
 
 void M_RD_Change_InvulSky(int choice)
 {
-    choice = 0;
-    invul_sky = 1 - invul_sky;
+    invul_sky ^= 1;
 }
 
 void M_RD_Change_FlipWeapons(int choice)
 {
-    choice = 0;
-    flip_weapons = 1 - flip_weapons;
-}
-
-void M_RD_Change_ShadowedText(int choice)
-{
-    choice = 0;
-    draw_shadowed_text = 1 - draw_shadowed_text;
+    flip_weapons ^= 1;
 }
 
 void M_RD_Change_ExitSfx(int choice)
 {
-    choice = 0;
-    play_exit_sfx = 1 - play_exit_sfx;
+    play_exit_sfx ^= 1;
 }
 
 void M_RD_Change_CrushingSfx(int choice)
 {
-    choice = 0;
-    crushed_corpses_sfx = 1 - crushed_corpses_sfx;
+    crushed_corpses_sfx ^= 1;
 }
 
 void M_RD_Change_BlazingSfx(int choice)
 {
-    choice = 0;
-    blazing_door_fix_sfx = 1 - blazing_door_fix_sfx;
+    blazing_door_fix_sfx ^= 1;
 }
 
 void M_RD_Change_AlertSfx(int choice)
 {
-    choice = 0;
-    noise_alert_sfx = 1 - noise_alert_sfx;
+     noise_alert_sfx ^= 1;
 }
 
 void M_RD_Change_AutoMapStats(int choice)
 {
-    choice = 0;
-    automap_stats = 1 - automap_stats;
+    automap_stats ^= 1;
 }
 
 void M_RD_Change_SecretNotify(int choice)
 {
-    choice = 0;
-    secret_notification = 1 - secret_notification;
+    secret_notification ^= 1;
 }
 
 void M_RD_Change_NegativeHealth(int choice)
 {
-    choice = 0;
-    negative_health = 1 - negative_health;
+    negative_health ^= 1;
 }
 
 void M_RD_Change_InfraGreenVisor(int choice)
 {
-    choice = 0;
-    infragreen_visor = 1 - infragreen_visor;
+    infragreen_visor ^= 1;
 
     // Update current COLORMAP
     if (infragreen_visor && players[consoleplayer].powers[pw_infrared])
@@ -3782,68 +3810,57 @@ void M_RD_Change_InfraGreenVisor(int choice)
 
 void M_RD_Change_WalkOverUnder(int choice)
 {
-    choice = 0;
-    over_under = 1 - over_under;
+    over_under ^= 1;
 }
 
 void M_RD_Change_Torque(int choice)
 {
-    choice = 0;
-    torque = 1 - torque;
+    torque ^= 1;
 }
 
 void M_RD_Change_Bobbing(int choice)
 {
-    choice = 0;
-    weapon_bobbing = 1 - weapon_bobbing;
+    weapon_bobbing ^= 1;
 }
 
 void M_RD_Change_SSGBlast(int choice)
 {
-    choice = 0;
-    ssg_blast_enemies = 1 - ssg_blast_enemies;
+    ssg_blast_enemies ^= 1;
 }
 
 void M_RD_Change_FlipCorpses(int choice)
 {
-    choice = 0;
-    randomly_flipcorpses = 1 - randomly_flipcorpses;
+    randomly_flipcorpses ^= 1;
 }
 
 void M_RD_Change_FloatPowerups(int choice)
 {
-    choice = 0;
-    floating_powerups = 1 - floating_powerups;
+    floating_powerups ^= 1;
 }
 
 void M_RD_Change_CrosshairDraw(int choice)
 {
-    choice = 0;
-    crosshair_draw = 1 - crosshair_draw;
+    crosshair_draw ^= 1;
 }
 
 void M_RD_Change_CrosshairHealth(int choice)
 {
-    choice = 0;
-    crosshair_health = 1 - crosshair_health;
+    crosshair_health ^= 1;
 }
 
 void M_RD_Change_CrosshairScale(int choice)
 {
-    choice = 0;
-    crosshair_scale = 1 - crosshair_scale;
+    crosshair_scale ^= 1;
 }
 
 void M_RD_Change_FixMapErrors(int choice)
 {
-    choice = 0;
-    fix_map_errors = 1 - fix_map_errors;
+    fix_map_errors ^= 1;
 }
 
 void M_RD_Change_FlipLevels(int choice)
 {
-    choice = 0;
-    flip_levels = 1 - flip_levels;
+    flip_levels ^= 1;
 
     // Redraw game screen
     R_ExecuteSetViewSize();
@@ -3854,32 +3871,27 @@ void M_RD_Change_FlipLevels(int choice)
 
 void M_RD_Change_ExtraPlayerFaces(int choice)
 {
-    choice = 0;
-    extra_player_faces = 1 - extra_player_faces;
+    extra_player_faces ^= 1;
 }
 
 void M_RD_Change_LostSoulsQty(int choice)
 {
-    choice = 0;
-    unlimited_lost_souls = 1 - unlimited_lost_souls;
+    unlimited_lost_souls ^= 1;
 }
 
 void M_RD_Change_LostSoulsAgr(int choice)
 {
-    choice = 0;
-    agressive_lost_souls = 1 - agressive_lost_souls;
+    agressive_lost_souls ^= 1;
 }
 
 void M_RD_Change_FastQSaveLoad(int choice)
 {
-    choice = 0;
-    fast_quickload = 1 - fast_quickload;
+    fast_quickload ^= 1;
 }
 
 void M_RD_Change_NoInternalDemos(int choice)
 {
-    choice = 0;
-    no_internal_demos = 1 - no_internal_demos;
+    no_internal_demos ^= 1;
 }
 
 
@@ -3982,6 +3994,7 @@ void M_RD_BackToDefaultsResponse(int key)
 
     // Do a full graphics reinitialization
     I_InitGraphics();
+
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
@@ -4017,8 +4030,7 @@ void M_RD_ChangeLanguage(int choice)
     extern void F_StartFinale(void);
     extern int  demosequence;
 
-    choice = 0;
-    english_language = 1 - english_language;
+    english_language ^= 1;
 
     // Reset options menu
     currentMenu = english_language ? &RD_Options_Def : &RD_Options_Def_Rus;

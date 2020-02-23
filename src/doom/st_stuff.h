@@ -95,6 +95,6 @@ extern cheatseq_t cheat_powerup[7];
 extern cheatseq_t cheat_choppers;
 extern cheatseq_t cheat_clev;
 extern cheatseq_t cheat_mypos;
-
+extern int st_palette;
 
 #endif

@@ -1281,7 +1281,6 @@ void G_InitPlayer (int player)
 void G_PlayerFinishLevel (int player) 
 { 
     player_t*	p; 
-    extern int st_palette;
 
     p = &players[player]; 
 
