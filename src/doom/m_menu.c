@@ -2322,7 +2322,8 @@ void M_RD_Draw_Rendering(void)
 
         // Обработка видео
         M_WriteTextSmall_RUS(160 + ORIGWIDTH_DELTA, 95, force_software_renderer == 1 ? "ghjuhfvvyfz" : "fggfhfnyfz");
-        M_WriteTextSmall_ENG(254 + ORIGWIDTH_DELTA, 95, force_software_renderer ? "(cpu)" : "gpu");
+        M_WriteTextSmall_ENG((force_software_renderer ? 254 : 244) + ORIGWIDTH_DELTA, 95, 
+                              force_software_renderer ? "(cpu)" : "(gpu)");
 
         //
         // Дополнительно
