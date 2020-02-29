@@ -363,6 +363,10 @@ void M_RD_Change_ScreenSize(int choice);
 void M_RD_Change_Gamma(int choice);
 void M_RD_Change_Detail(int choice);
 void M_RD_Change_LocalTime(int choice);
+
+// Messages
+void M_RD_Choose_MessagesSettings(int choice);
+void M_RD_Draw_MessagesSettings(void);
 void M_RD_Change_Messages(int choice);
 void M_RD_Change_MessagesColor(int choice);
 void M_RD_Change_ShadowedText(int choice);
@@ -1390,13 +1394,13 @@ enum
     rd_display_empty1,
     rd_display_gamma,
     rd_display_empty2,
+    rd_display_level_brightness,
+    rd_display_empty3,
     rd_display_detail,
     rd_display_localtime,
-    rd_display_empty3,
-    rd_display_messages_toggle,
-    rd_display_messages_color1,
-    rd_display_messages_color2,
     rd_display_empty4,
+    rd_display_messages_settings,
+    rd_display_empty5,
     rd_display_automap_settings,
     rd_display_end
 } rd_display_e;
@@ -1411,12 +1415,12 @@ menuitem_t RD_Display_Menu[]=
     {-1,"",0,'\0'},
     {2, "gamma-correction",    M_RD_Change_Gamma,           'g'},
     {-1,"",0,'\0'},
+    {2, "level brightness",    M_RD_Change_Gamma,           'l'},
+    {-1,"",0,'\0'},
     {1, "detail level:",       M_RD_Change_Detail,          'd'},
     {1, "local time:",         M_RD_Change_LocalTime,       'l'},
     {-1,"",0,'\0'},
-    {1, "messages:",           M_RD_Change_Messages,        'm'},
-    {1, "messages color:",     M_RD_Change_MessagesColor,   'm'},
-    {1, "text casts shadows:", M_RD_Change_ShadowedText,    't'},
+    {1, "messages settings",   M_RD_Choose_MessagesSettings, 'a'},
     {-1,"",0,'\0'},
     {1, "automap settings",    M_RD_Choose_AutomapSettings, 'a'},
     {-1,"",0,'\0'}
@@ -1442,12 +1446,12 @@ menuitem_t RD_Display_Menu_Rus[]=
     {-1,"",0,'\0'},                                                    //
     {2, "ehjdtym ufvvf-rjhhtrwbb",  M_RD_Change_Gamma,           'e'}, // Уровень гамма-коррекции
     {-1,"",0,'\0'},                                                    //
+    {2, "ehjdtym jcdtotyyjcnb",     M_RD_Change_Gamma,           'e'}, // Уровень освещенности
+    {-1,"",0,'\0'},                                                    //
     {1, "ehjdtym ltnfkbpfwbb:",     M_RD_Change_Detail,          'e'}, // Уровень детализации:
     {1, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
     {-1,"",0,'\0'},                                                    //
-    {1, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'j'}, // Отображение сообщений:
-    {1, "wdtn cjj,otybq:",          M_RD_Change_MessagesColor,   'w'}, // Цвет сообщений:
-    {1, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень:
+    {1, "vty. yfcnhjqrb cjj,otybq", M_RD_Choose_MessagesSettings, 'a'},// Меню настройки сообщений
     {-1,"",0,'\0'},                                                    //
     {1, "vty. yfcnhjqrb rfhns",     M_RD_Choose_AutomapSettings, 'v'}, // Меню настройки карты
     {-1,"",0,'\0'}
@@ -1460,6 +1464,62 @@ menu_t  RD_Display_Def_Rus =
     RD_Display_Menu_Rus,
     M_RD_Draw_Display,
     35+ORIGWIDTH_DELTA,45,
+    0
+};
+
+// -----------------------------------------------------------------------------
+// Messages settings
+// -----------------------------------------------------------------------------
+
+enum
+{
+    rd_messages_toggle,
+    rd_messages_color,
+    rd_messages_shadows,
+    rd_messages_end
+} rd_messages_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t RD_Messages_Menu[]=
+{
+    {1, "messages enabled:",   M_RD_Change_Messages,        'm'},
+    {1, "messages color:",     M_RD_Change_MessagesColor,   'm'},
+    {1, "text casts shadows:", M_RD_Change_ShadowedText,    't'},
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Messages_Def =
+{
+    rd_messages_end,
+    &RD_Display_Def,
+    RD_Messages_Menu,
+    M_RD_Draw_MessagesSettings,
+    35+ORIGWIDTH_DELTA,35,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t RD_Messages_Menu_Rus[]=
+{
+    {1, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'j'}, // Отображение сообщений:
+    {1, "wdtn cjj,otybq:",          M_RD_Change_MessagesColor,   'w'}, // Цвет сообщений:
+    {1, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень:
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Messages_Def_Rus =
+{
+    rd_messages_end,
+    &RD_Display_Def_Rus,
+    RD_Messages_Menu_Rus,
+    M_RD_Draw_MessagesSettings,
+    35+ORIGWIDTH_DELTA,35,
     0
 };
 
@@ -2454,48 +2514,17 @@ void M_RD_Draw_Display(void)
         dp_translation = NULL;
 
         // Detail level
-        M_WriteTextSmall_ENG(130 + ORIGWIDTH_DELTA, 85, detailLevel == 1 ? "low" : "high");
+        M_WriteTextSmall_ENG(130 + ORIGWIDTH_DELTA, 105, detailLevel == 1 ? "low" : "high");
 
         // Local time
-        M_WriteTextSmall_ENG(116 + ORIGWIDTH_DELTA, 95, local_time == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(116 + ORIGWIDTH_DELTA, 115, local_time == 1 ? "on" : "off");
 
         //
         // Messages and texts
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 105, "Messages and texts");  
+        M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 125, "Messages and texts");  
         dp_translation = NULL;
-
-        // Messages
-        M_WriteTextSmall_ENG(105 + ORIGWIDTH_DELTA, 115, showMessages == 1 ? "on" : "off");
-
-        // Messages color
-        if (gamemission == jaguar)
-        {
-            M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "n/a");
-        }
-        else
-        {
-            if (messages_color == 1)
-            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "green"); dp_translation = NULL; }
-            else if (messages_color == 2)
-            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "blue"); dp_translation = NULL; }
-            else if (messages_color == 3)
-            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "gold"); dp_translation = NULL; }
-            else if (messages_color == 4)
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "gray"); dp_translation = NULL; }
-            else if (messages_color == 5)
-            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "tan"); dp_translation = NULL; }
-            else if (messages_color == 6)
-            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "brown"); dp_translation = NULL; }
-            else if (messages_color == 7)
-            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "brick"); dp_translation = NULL; }
-            else
-            { dp_translation = NULL; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 125, "standard"); }
-        }
-
-        // Text casts shadows
-        M_WriteTextSmall_ENG(177 + ORIGWIDTH_DELTA, 135, draw_shadowed_text == 1 ? "on" : "off");
 
         //
         // Automap
@@ -2516,48 +2545,17 @@ void M_RD_Draw_Display(void)
         dp_translation = NULL;
 
         // Уровень детализации
-        M_WriteTextSmall_RUS(193 + ORIGWIDTH_DELTA, 85, detailLevel == 1 ? "ybprbq" : "dscjrbq");
+        M_WriteTextSmall_RUS(193 + ORIGWIDTH_DELTA, 105, detailLevel == 1 ? "ybprbq" : "dscjrbq");
 
         // Системное время
-        M_WriteTextSmall_RUS(161 + ORIGWIDTH_DELTA, 95, local_time == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(161 + ORIGWIDTH_DELTA, 115, local_time == 1 ? "drk" : "dsrk");
 
         //
         // Сообщения и тексты
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 105, "cjj,otybz b ntrcns");  
+        M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 125, "cjj,otybz b ntrcns");  
         dp_translation = NULL;
-
-        // Отображение сообщений
-        M_WriteTextSmall_RUS(214 + ORIGWIDTH_DELTA, 115, showMessages == 1 ? "drk" : "dsrk");
-
-        // Цвет сообщений
-        if (gamemission == jaguar)
-        {
-            M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "y*l"); // н/д
-        }
-        else
-        {
-            if (messages_color == 1) // Зеленый
-            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "ptktysq"); dp_translation = NULL; }
-            else if (messages_color == 2) // Синий
-            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "cbybq"); dp_translation = NULL; }
-            else if (messages_color == 3) // Желтый
-            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, ";tknsq"); dp_translation = NULL; }
-            else if (messages_color == 4) // Белый
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, ",tksq"); dp_translation = NULL; }
-            else if (messages_color == 5) // Бежевый
-            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, ",t;tdsq"); dp_translation = NULL; }
-            else if (messages_color == 6) // Коричневый
-            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "rjhbxytdsq"); dp_translation = NULL; }
-            else if (messages_color == 7) // Розовый
-            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "hjpjdsq"); dp_translation = NULL; }
-            else                            // Стандартный (красный)
-            { dp_translation = NULL; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 125, "cnfylfhnysq"); }
-        }
-
-        // Тексты отбрасывают тень
-        M_WriteTextSmall_RUS(226 + ORIGWIDTH_DELTA, 135, draw_shadowed_text == 1 ? "drk" : "dsrk");
 
         //
         // Карта
@@ -2585,6 +2583,9 @@ void M_RD_Draw_Display(void)
 
     // Gamma-correction slider
     M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 18, usegamma);
+
+    // Level brightness slider
+    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 94, 18, usegamma);
 }
 
 void M_RD_Change_ScreenSize(int choice)
@@ -2664,6 +2665,98 @@ void M_RD_Change_Detail(int choice)
                                      DETAILLO : DETAILLO_RUS);
 }
 
+void M_RD_Change_LocalTime(int choice)
+{
+    local_time ^= 1;
+}
+
+
+// -----------------------------------------------------------------------------
+// Messages settings
+// -----------------------------------------------------------------------------
+
+void M_RD_Choose_MessagesSettings(int choice)
+{
+    M_SetupNextMenu(english_language ? 
+                    &RD_Messages_Def :
+                    &RD_Messages_Def_Rus);
+}
+
+void M_RD_Draw_MessagesSettings(void)
+{
+    if (english_language)
+    {
+        M_WriteTextBigCentered_ENG(12, "MESSAGES SETTINGS");
+
+        // Messages
+        M_WriteTextSmall_ENG(165 + ORIGWIDTH_DELTA, 35, showMessages == 1 ? "on" : "off");
+
+        // Messages color
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 45, "n/a");
+        }
+        else
+        {
+            if (messages_color == 1)
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 45, "green"); dp_translation = NULL; }
+            else if (messages_color == 2)
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 45, "blue"); dp_translation = NULL; }
+            else if (messages_color == 3)
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 45, "gold"); dp_translation = NULL; }
+            else if (messages_color == 4)
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 45, "gray"); dp_translation = NULL; }
+            else if (messages_color == 5)
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 45, "tan"); dp_translation = NULL; }
+            else if (messages_color == 6)
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 45, "brown"); dp_translation = NULL; }
+            else if (messages_color == 7)
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 45, "brick"); dp_translation = NULL; }
+            else
+            { dp_translation = NULL; M_WriteTextSmall_ENG(149 + ORIGWIDTH_DELTA, 45, "standard"); }
+        }
+
+        // Text casts shadows
+        M_WriteTextSmall_ENG(177 + ORIGWIDTH_DELTA, 55, draw_shadowed_text == 1 ? "on" : "off");
+
+    }
+    else
+    {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB CJJ<OTYBQ"); // НАСТРОЙКИ СООБЩЕНИЙ
+
+        // Отображение сообщений
+        M_WriteTextSmall_RUS(214 + ORIGWIDTH_DELTA, 35, showMessages == 1 ? "drk" : "dsrk");
+
+        // Цвет сообщений
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 45, "y*l"); // н/д
+        }
+        else
+        {
+            if (messages_color == 1) // Зеленый
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 45, "ptktysq"); dp_translation = NULL; }
+            else if (messages_color == 2) // Синий
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 45, "cbybq"); dp_translation = NULL; }
+            else if (messages_color == 3) // Желтый
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 45, ";tknsq"); dp_translation = NULL; }
+            else if (messages_color == 4) // Белый
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 45, ",tksq"); dp_translation = NULL; }
+            else if (messages_color == 5) // Бежевый
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 45, ",t;tdsq"); dp_translation = NULL; }
+            else if (messages_color == 6) // Коричневый
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 45, "rjhbxytdsq"); dp_translation = NULL; }
+            else if (messages_color == 7) // Розовый
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 45, "hjpjdsq"); dp_translation = NULL; }
+            else                            // Стандартный (красный)
+            { dp_translation = NULL; M_WriteTextSmall_RUS(155 + ORIGWIDTH_DELTA, 45, "cnfylfhnysq"); }
+        }
+
+        // Тексты отбрасывают тень
+        M_WriteTextSmall_RUS(226 + ORIGWIDTH_DELTA, 55, draw_shadowed_text == 1 ? "drk" : "dsrk");
+    }
+}
+
 void M_RD_Change_Messages(int choice)
 {
     showMessages ^= 1;
@@ -2676,11 +2769,6 @@ void M_RD_Change_Messages(int choice)
                                      MSGON : MSGON_RUS);
 
     message_dontfuckwithme = true;
-}
-
-void M_RD_Change_LocalTime(int choice)
-{
-    local_time ^= 1;
 }
 
 void M_RD_Change_MessagesColor(int choice)
@@ -5955,6 +6043,7 @@ void M_Drawer (void)
             else
             if (currentMenu == &RD_Rendering_Def
             ||  currentMenu == &RD_Display_Def
+            ||  currentMenu == &RD_Messages_Def
             ||  currentMenu == &RD_Automap_Def
             ||  currentMenu == &RD_Audio_Def
             ||  currentMenu == &RD_Controls_Def
@@ -5983,6 +6072,7 @@ void M_Drawer (void)
             else
             if (currentMenu == &RD_Rendering_Def_Rus
             ||  currentMenu == &RD_Display_Def_Rus
+            ||  currentMenu == &RD_Messages_Def_Rus
             ||  currentMenu == &RD_Automap_Def_Rus
             ||  currentMenu == &RD_Audio_Def_Rus
             ||  currentMenu == &RD_Controls_Def_Rus
