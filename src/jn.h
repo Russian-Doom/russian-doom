@@ -53,6 +53,7 @@ extern int png_screenshots;
 // Display
 // -----------------------------------------------------------------------------
 
+extern int level_brightness;
 extern int local_time;
 extern int messages_color;
 extern int draw_shadowed_text;

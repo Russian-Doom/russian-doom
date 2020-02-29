@@ -28,6 +28,7 @@ void BindCompatibilityVariables(void);
 extern int show_diskicon;
 
 // Display
+extern int level_brightness;
 extern int messages_color;
 extern int draw_shadowed_text;
 

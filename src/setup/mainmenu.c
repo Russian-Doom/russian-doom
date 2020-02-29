@@ -122,6 +122,9 @@ static void SensibleDefaults(void)
     show_fps = 0;
     show_diskicon = 1;
 
+    // Display
+    level_brightness = 0;
+
     // Automap
     automap_color = 0;
     automap_follow = 1;

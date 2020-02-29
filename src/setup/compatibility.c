@@ -26,6 +26,7 @@
 
 
 // Display
+int level_brightness = 0;
 int messages_color = 0;
 int draw_shadowed_text = 1;
 
@@ -297,6 +298,7 @@ void CompatibilitySettings(void)
 void BindCompatibilityVariables(void)
 {
     // Display
+    M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("messages_color",         &messages_color);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     

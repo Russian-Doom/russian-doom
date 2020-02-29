@@ -875,7 +875,7 @@ void R_AddSprites (sector_t* sec)
     // Well, now it will be done.
     sec->validcount = validcount;
 
-    lightnum = (sec->lightlevel >> LIGHTSEGSHIFT)+extralight;
+    lightnum = ((sec->lightlevel+level_brightness) >> LIGHTSEGSHIFT)+extralight;
 
     if (lightnum < 0)		
     {
@@ -1189,7 +1189,7 @@ void R_DrawPlayerSprites (void)
     pspdef_t*   psp;    
 
     // get light level
-    lightnum = (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) + extralight;
+    lightnum = ((viewplayer->mo->subsector->sector->lightlevel+level_brightness) >> LIGHTSEGSHIFT) + extralight;
 
     if (lightnum < 0)		
     {

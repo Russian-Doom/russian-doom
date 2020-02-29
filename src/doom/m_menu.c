@@ -361,6 +361,7 @@ void M_RD_Choose_Display(int choice);
 void M_RD_Draw_Display(void);
 void M_RD_Change_ScreenSize(int choice);
 void M_RD_Change_Gamma(int choice);
+void M_RD_Change_LevelBrightness(int choice);
 void M_RD_Change_Detail(int choice);
 void M_RD_Change_LocalTime(int choice);
 
@@ -1415,7 +1416,7 @@ menuitem_t RD_Display_Menu[]=
     {-1,"",0,'\0'},
     {2, "gamma-correction",    M_RD_Change_Gamma,           'g'},
     {-1,"",0,'\0'},
-    {2, "level brightness",    M_RD_Change_Gamma,           'l'},
+    {2, "level brightness",    M_RD_Change_LevelBrightness, 'l'},
     {-1,"",0,'\0'},
     {1, "detail level:",       M_RD_Change_Detail,          'd'},
     {1, "local time:",         M_RD_Change_LocalTime,       'l'},
@@ -1446,7 +1447,7 @@ menuitem_t RD_Display_Menu_Rus[]=
     {-1,"",0,'\0'},                                                    //
     {2, "ehjdtym ufvvf-rjhhtrwbb",  M_RD_Change_Gamma,           'e'}, // Уровень гамма-коррекции
     {-1,"",0,'\0'},                                                    //
-    {2, "ehjdtym jcdtotyyjcnb",     M_RD_Change_Gamma,           'e'}, // Уровень освещенности
+    {2, "ehjdtym jcdtotyyjcnb",     M_RD_Change_LevelBrightness, 'e'}, // Уровень освещенности
     {-1,"",0,'\0'},                                                    //
     {1, "ehjdtym ltnfkbpfwbb:",     M_RD_Change_Detail,          'e'}, // Уровень детализации:
     {1, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
@@ -2585,7 +2586,7 @@ void M_RD_Draw_Display(void)
     M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 74, 18, usegamma);
 
     // Level brightness slider
-    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 94, 18, usegamma);
+    M_DrawThermo_Small(35+ORIGWIDTH_DELTA, 94, 5, level_brightness / 16);
 }
 
 void M_RD_Change_ScreenSize(int choice)
@@ -2649,6 +2650,22 @@ void M_RD_Change_Gamma(int choice)
     players[consoleplayer].message = DEH_String(english_language ? 
                                                gammamsg[usegamma] :
                                                gammamsg_rus[usegamma]);
+}
+
+void M_RD_Change_LevelBrightness(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        if (level_brightness > 0)
+            level_brightness -= 16;
+        break;
+    
+        case 1:
+        if (level_brightness < 64)
+            level_brightness += 16;
+        break;
+    }
 }
 
 void M_RD_Change_Detail(int choice)
@@ -4009,6 +4026,7 @@ void M_RD_BackToDefaultsResponse(int key)
     // Display
     screenSize         = 10;
     usegamma           = 0;
+    level_brightness   = 0;
     detailLevel        = 0;
     local_time         = 0;
     showMessages       = 1;

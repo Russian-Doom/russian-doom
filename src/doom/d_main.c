@@ -155,6 +155,7 @@ char mapdir[1024];   // directory of development maps
 int english_language = 0;
 
 int show_endoom   = 0;
+int level_brightness = 0; // [JN] Level brightness level
 int local_time    = 0; // [JN] Local time widget
 
 // [JN] Automap specific variables.
@@ -483,6 +484,7 @@ void D_BindVariables(void)
 
     // Display
     M_BindIntVariable("screenblocks",           &screenblocks);
+    M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("local_time",             &local_time);
     M_BindIntVariable("show_messages",          &showMessages);
