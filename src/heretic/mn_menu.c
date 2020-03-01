@@ -127,7 +127,7 @@ static void DrawFilesMenu(void);
 static void MN_DrawInfo(void);
 static void DrawLoadMenu(void);
 static void DrawSaveMenu(void);
-static void DrawSlider(Menu_t * menu, int item, int width, int slot);
+// static void DrawSlider(Menu_t * menu, int item, int width, int slot);
 static void DrawSliderSmall(Menu_t * menu, int item, int width, int slot);
 void MN_LoadSlotText(void);
 
@@ -515,10 +515,10 @@ static MenuItem_t DisplayItems[] = {
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
     {ITT_LRFUNC, "GAMMA-CORRECTION",         M_RD_Gamma,        0, MENU_NONE},
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
-    {ITT_EFUNC,  "LOCAL TIME:",              M_RD_LocalTime,    0, MENU_NONE},
+    {ITT_LRFUNC, "LOCAL TIME:",              M_RD_LocalTime,    0, MENU_NONE},
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, 
-    {ITT_EFUNC,  "MESSAGES:",                M_RD_Messages,     0, MENU_NONE},
-    {ITT_EFUNC,  "TEXT CASTS SHADOWS:",      M_RD_ShadowedText, 0, MENU_NONE}
+    {ITT_LRFUNC, "MESSAGES:",                M_RD_Messages,     0, MENU_NONE},
+    {ITT_LRFUNC, "TEXT CASTS SHADOWS:",      M_RD_ShadowedText, 0, MENU_NONE}
 };
 
 static MenuItem_t DisplayItems_Rus[] = {
@@ -526,10 +526,10 @@ static MenuItem_t DisplayItems_Rus[] = {
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, // 
     {ITT_LRFUNC, "EHJDTYM UFVVF-RJHHTRWBB",  M_RD_Gamma,        0, MENU_NONE}, // УРОВЕНЬ ГАММА-КОРРЕКЦИИ
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, //
-    {ITT_EFUNC,  "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,    0, MENU_NONE}, // СИСТЕМНОЕ ВРЕМЯ
+    {ITT_LRFUNC, "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,    0, MENU_NONE}, // СИСТЕМНОЕ ВРЕМЯ
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, //
-    {ITT_EFUNC,  "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,     0, MENU_NONE}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
-    {ITT_EFUNC,  "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText, 0, MENU_NONE}  // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
+    {ITT_LRFUNC, "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,     0, MENU_NONE}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
+    {ITT_LRFUNC, "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText, 0, MENU_NONE}  // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
     
 };
 
@@ -561,8 +561,8 @@ static MenuItem_t SoundItems[] = {
     {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE},
     {ITT_LRFUNC, "SFX CHANNELS",               M_RD_SfxChannels,   0, MENU_NONE},
     {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE},
-    {ITT_EFUNC,  "SFX MODE:",                  M_RD_SndMode,       0, MENU_NONE},
-    {ITT_EFUNC,  "PITCH-SHIFTED SOUNDS:",      M_RD_PitchShifting, 0, MENU_NONE}
+    {ITT_LRFUNC, "SFX MODE:",                  M_RD_SndMode,       0, MENU_NONE},
+    {ITT_LRFUNC, "PITCH-SHIFTED SOUNDS:",      M_RD_PitchShifting, 0, MENU_NONE}
 };
 
 static MenuItem_t SoundItems_Rus[] = {
@@ -573,8 +573,8 @@ static MenuItem_t SoundItems_Rus[] = {
     {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
     {ITT_LRFUNC, "PDERJDST RFYFKS",            M_RD_SfxChannels,   0, MENU_NONE}, // ЗВУКОВЫЕ КАНАЛЫ
     {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
-    {ITT_EFUNC,  "HT;BV PDERF:",               M_RD_SndMode,       0, MENU_NONE}, // РЕЖИМ ЗВУКА
-    {ITT_EFUNC,  "GHJBPDJKMYSQ GBNX-IBANBYU:", M_RD_PitchShifting, 0, MENU_NONE}  // ПРОИЗВОЛЬНЫЙ ПИТЧ-ШИФТИНГ
+    {ITT_LRFUNC, "HT;BV PDERF:",               M_RD_SndMode,       0, MENU_NONE}, // РЕЖИМ ЗВУКА
+    {ITT_LRFUNC, "GHJBPDJKMYSQ GBNX-IBANBYU:", M_RD_PitchShifting, 0, MENU_NONE}  // ПРОИЗВОЛЬНЫЙ ПИТЧ-ШИФТИНГ
 };
 
 static Menu_t SoundMenu = {
@@ -598,21 +598,21 @@ static Menu_t SoundMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t ControlsItems[] = {
-    {ITT_EFUNC,  "ALWAYS RUN:",              M_RD_AlwaysRun,    0, MENU_NONE},
+    {ITT_LRFUNC, "ALWAYS RUN:",              M_RD_AlwaysRun,    0, MENU_NONE},
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
     {ITT_LRFUNC, "MOUSE SENSIVITY",          M_RD_Sensitivity,  0, MENU_NONE},
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
-    {ITT_EFUNC,  "MOUSE LOOK:",              M_RD_MouseLook,    0, MENU_NONE},
-    {ITT_EFUNC,  "VERTICAL MOVEMENT:",       M_RD_Novert,       0, MENU_NONE}
+    {ITT_LRFUNC, "MOUSE LOOK:",              M_RD_MouseLook,    0, MENU_NONE},
+    {ITT_LRFUNC, "VERTICAL MOVEMENT:",       M_RD_Novert,       0, MENU_NONE}
 };
 
 static MenuItem_t ControlsItems_Rus[] = {
-    {ITT_EFUNC,  "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,   0, MENU_NONE}, // РЕЖИМ ПОСТОЯННОГО БЕГА
+    {ITT_LRFUNC, "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,   0, MENU_NONE}, // РЕЖИМ ПОСТОЯННОГО БЕГА
     {ITT_EMPTY,  NULL,                        NULL,             0, MENU_NONE},
     {ITT_LRFUNC, "CRJHJCNM VSIB",             M_RD_Sensitivity, 0, MENU_NONE}, // СКОРОСТЬ МЫШИ
     {ITT_EMPTY,  NULL,                        NULL,             0, MENU_NONE},
-    {ITT_EFUNC,  "J,PJH VSIM.:",              M_RD_MouseLook,   0, MENU_NONE}, // ОБЗОР МЫШЬЮ
-    {ITT_EFUNC,  "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,      0, MENU_NONE}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
+    {ITT_LRFUNC, "J,PJH VSIM.:",              M_RD_MouseLook,   0, MENU_NONE}, // ОБЗОР МЫШЬЮ
+    {ITT_LRFUNC, "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,      0, MENU_NONE}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
 };
 
 static Menu_t ControlsMenu = {
@@ -636,29 +636,29 @@ static Menu_t ControlsMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Gameplay1Items[] = {
-    {ITT_EFUNC,  "BRIGHTMAPS:",                  M_RD_Brightmaps,     0,  MENU_NONE      },
-    {ITT_EFUNC,  "FAKE CONTRAST:",               M_RD_FakeContrast,   0,  MENU_NONE      },
-    {ITT_EFUNC,  "COLORED HUD:",                 M_RD_ColoredHUD,     0,  MENU_NONE      },
-    {ITT_EFUNC,  "COLORED BLOOD:",               M_RD_ColoredBlood,   0,  MENU_NONE      },
-    {ITT_EFUNC,  "INVULNERABILITY AFFECTS SKY:", M_RD_InvulSky,       0,  MENU_NONE      },
+    {ITT_LRFUNC, "BRIGHTMAPS:",                  M_RD_Brightmaps,     0,  MENU_NONE      },
+    {ITT_LRFUNC, "FAKE CONTRAST:",               M_RD_FakeContrast,   0,  MENU_NONE      },
+    {ITT_LRFUNC, "COLORED HUD:",                 M_RD_ColoredHUD,     0,  MENU_NONE      },
+    {ITT_LRFUNC, "COLORED BLOOD:",               M_RD_ColoredBlood,   0,  MENU_NONE      },
+    {ITT_LRFUNC, "INVULNERABILITY AFFECTS SKY:", M_RD_InvulSky,       0,  MENU_NONE      },
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE      },
-    {ITT_EFUNC,  "SHOW LEVEL STATS ON AUTOMAP:", M_RD_AutoMapStats,   0,  MENU_NONE      },
-    {ITT_EFUNC,  "NOTIFY OF REVEALED SECRETS:",  M_RD_SecretNotify,   0,  MENU_NONE      },
-    {ITT_EFUNC,  "SHOW NEGATIVE HEALTH:",        M_RD_NegativeHealth, 0,  MENU_NONE      },
+    {ITT_LRFUNC, "SHOW LEVEL STATS ON AUTOMAP:", M_RD_AutoMapStats,   0,  MENU_NONE      },
+    {ITT_LRFUNC, "NOTIFY OF REVEALED SECRETS:",  M_RD_SecretNotify,   0,  MENU_NONE      },
+    {ITT_LRFUNC, "SHOW NEGATIVE HEALTH:",        M_RD_NegativeHealth, 0,  MENU_NONE      },
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE      },
     {ITT_SETMENU,"NEXT PAGE...",                 NULL,                0,  MENU_GAMEPLAY2 }
 };
 
 static MenuItem_t Gameplay1Items_Rus[] = {
-    {ITT_EFUNC,  ",HFQNVFGGBYU:",                M_RD_Brightmaps,     0,  MENU_NONE      }, // БРАЙТМАППИНГ
-    {ITT_EFUNC,  "BVBNFWBZ RJYNHFCNYJCNB:",      M_RD_FakeContrast,   0,  MENU_NONE      }, // ИМИТАЦИЯ КОНТРАСТНОСТИ
-    {ITT_EFUNC,  "HFPYJWDTNYST \'KTVTYNS $:",    M_RD_ColoredHUD,     0,  MENU_NONE      }, // РАЗНОЦВЕТНЫЕ ЭЛЕМЕНТЫ HUD
-    {ITT_EFUNC,  "HFPYJWDTNYFZ RHJDM:",          M_RD_ColoredBlood,   0,  MENU_NONE      }, // РАЗНОЦВЕТНАЯ КРОВЬ
-    {ITT_EFUNC,  "YTEZPDBVJCNM JRHFIBDFTN YT,J:",M_RD_InvulSky,       0,  MENU_NONE      }, // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
+    {ITT_LRFUNC, ",HFQNVFGGBYU:",                M_RD_Brightmaps,     0,  MENU_NONE      }, // БРАЙТМАППИНГ
+    {ITT_LRFUNC, "BVBNFWBZ RJYNHFCNYJCNB:",      M_RD_FakeContrast,   0,  MENU_NONE      }, // ИМИТАЦИЯ КОНТРАСТНОСТИ
+    {ITT_LRFUNC, "HFPYJWDTNYST \'KTVTYNS $:",    M_RD_ColoredHUD,     0,  MENU_NONE      }, // РАЗНОЦВЕТНЫЕ ЭЛЕМЕНТЫ HUD
+    {ITT_LRFUNC, "HFPYJWDTNYFZ RHJDM:",          M_RD_ColoredBlood,   0,  MENU_NONE      }, // РАЗНОЦВЕТНАЯ КРОВЬ
+    {ITT_LRFUNC, "YTEZPDBVJCNM JRHFIBDFTN YT,J:",M_RD_InvulSky,       0,  MENU_NONE      }, // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE      }, //
-    {ITT_EFUNC,  "CNFNBCNBRF EHJDYZ YF RFHNT:",  M_RD_AutoMapStats,   0,  MENU_NONE      }, // СТАТИСТИКА УРОВНЯ НА КАРТЕ
-    {ITT_EFUNC,  "CJJ,OFNM J YFQLTYYJV NFQYBRT:",M_RD_SecretNotify,   0,  MENU_NONE      }, // СООБЩАТЬ О НАЙДЕННОМ ТАЙНИКЕ
-    {ITT_EFUNC,  "JNHBWFNTKMYJT PLJHJDMT D $:",  M_RD_NegativeHealth, 0,  MENU_NONE      }, // ОТРИЦАТЕЛЬНОЕ ЗДОРОВЬЕ В HUD
+    {ITT_LRFUNC, "CNFNBCNBRF EHJDYZ YF RFHNT:",  M_RD_AutoMapStats,   0,  MENU_NONE      }, // СТАТИСТИКА УРОВНЯ НА КАРТЕ
+    {ITT_LRFUNC, "CJJ,OFNM J YFQLTYYJV NFQYBRT:",M_RD_SecretNotify,   0,  MENU_NONE      }, // СООБЩАТЬ О НАЙДЕННОМ ТАЙНИКЕ
+    {ITT_LRFUNC, "JNHBWFNTKMYJT PLJHJDMT D $:",  M_RD_NegativeHealth, 0,  MENU_NONE      }, // ОТРИЦАТЕЛЬНОЕ ЗДОРОВЬЕ В HUD
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE      }, //
     {ITT_SETMENU,"CKTLE.OFZ CNHFYBWF>>>",        NULL,                0,  MENU_GAMEPLAY2 }  // СЛЕДУЮЩАЯ СТРАНИЦА
 };
@@ -684,30 +684,30 @@ static Menu_t Gameplay1Menu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Gameplay2Items[] = {
-    {ITT_EFUNC,  "CORPSES SLIDING FROM LEDGES:", M_RD_Torque,         0,  MENU_NONE   },
-    {ITT_EFUNC,  "WEAPON BOBBING WHILE FIRING:", M_RD_Bobbing,        0,  MENU_NONE   },
-    {ITT_EFUNC,  "RANDOMLY MIRRORED CORPSES:",   M_RD_FlipCorpses,    0,  MENU_NONE   },
+    {ITT_LRFUNC, "CORPSES SLIDING FROM LEDGES:", M_RD_Torque,         0,  MENU_NONE   },
+    {ITT_LRFUNC, "WEAPON BOBBING WHILE FIRING:", M_RD_Bobbing,        0,  MENU_NONE   },
+    {ITT_LRFUNC, "RANDOMLY MIRRORED CORPSES:",   M_RD_FlipCorpses,    0,  MENU_NONE   },
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },
-    {ITT_EFUNC,  "DRAW CROSSHAIR:",              M_RD_CrossHairDraw,  0,  MENU_NONE   },
-    {ITT_EFUNC,  "HEALTH INDICATION:",           M_RD_CrossHairHealth,0,  MENU_NONE   },
-    {ITT_EFUNC,  "INCREASED SIZE:",              M_RD_CrossHairScale, 0,  MENU_NONE   },
+    {ITT_LRFUNC, "DRAW CROSSHAIR:",              M_RD_CrossHairDraw,  0,  MENU_NONE   },
+    {ITT_LRFUNC, "HEALTH INDICATION:",           M_RD_CrossHairHealth,0,  MENU_NONE   },
+    {ITT_LRFUNC, "INCREASED SIZE:",              M_RD_CrossHairScale, 0,  MENU_NONE   },
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },
-    {ITT_EFUNC,  "FLIP GAME LEVELS:",            M_RD_FlipLevels,     0,  MENU_NONE   },
-    {ITT_EFUNC,  "PLAY INTERNAL DEMOS:",         M_RD_NoDemos,        0,  MENU_NONE   },
+    {ITT_LRFUNC, "FLIP GAME LEVELS:",            M_RD_FlipLevels,     0,  MENU_NONE   },
+    {ITT_LRFUNC, "PLAY INTERNAL DEMOS:",         M_RD_NoDemos,        0,  MENU_NONE   },
     {ITT_SETMENU,"PREVIOUS PAGE...",             NULL,                0,  MENU_GAMEPLAY1 }
 };
 
 static MenuItem_t Gameplay2Items_Rus[] = {
-    {ITT_EFUNC,  "NHEGS CGJKPF.N C DJPDSITYBQ:", M_RD_Torque,         0,  MENU_NONE   },    // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
-    {ITT_EFUNC,  "EKEXITYYJT GJRFXBDFYBT JHE;BZ:",M_RD_Bobbing,       0,  MENU_NONE   },    // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
-    {ITT_EFUNC,  "PTHRFKBHJDFYBT NHEGJD:",       M_RD_FlipCorpses,    0,  MENU_NONE   },    // ЗЕКРАЛИРОВАНИЕ ТРУПОВ
+    {ITT_LRFUNC, "NHEGS CGJKPF.N C DJPDSITYBQ:", M_RD_Torque,         0,  MENU_NONE   },    // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
+    {ITT_LRFUNC, "EKEXITYYJT GJRFXBDFYBT JHE;BZ:",M_RD_Bobbing,       0,  MENU_NONE   },    // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
+    {ITT_LRFUNC, "PTHRFKBHJDFYBT NHEGJD:",       M_RD_FlipCorpses,    0,  MENU_NONE   },    // ЗЕКРАЛИРОВАНИЕ ТРУПОВ
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },    //
-    {ITT_EFUNC,  "JNJ,HF;FNM GHBWTK:",           M_RD_CrossHairDraw,  0,  MENU_NONE   },    // ОТОБРАЖАТЬ ПРИЦЕЛ
-    {ITT_EFUNC,  "BYLBRFWBZ PLJHJDMZ:",          M_RD_CrossHairHealth,0,  MENU_NONE   },    // ИНДИКАЦИЯ ЗДОРОВЬЯ
-    {ITT_EFUNC,  "EDTKBXTYYSQ HFPVTH:",          M_RD_CrossHairScale, 0,  MENU_NONE   },    // УВЕЛИЧЕННЫЙ РАЗМЕР
+    {ITT_LRFUNC, "JNJ,HF;FNM GHBWTK:",           M_RD_CrossHairDraw,  0,  MENU_NONE   },    // ОТОБРАЖАТЬ ПРИЦЕЛ
+    {ITT_LRFUNC, "BYLBRFWBZ PLJHJDMZ:",          M_RD_CrossHairHealth,0,  MENU_NONE   },    // ИНДИКАЦИЯ ЗДОРОВЬЯ
+    {ITT_LRFUNC, "EDTKBXTYYSQ HFPVTH:",          M_RD_CrossHairScale, 0,  MENU_NONE   },    // УВЕЛИЧЕННЫЙ РАЗМЕР
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },    //
-    {ITT_EFUNC,  "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",M_RD_FlipLevels,     0,  MENU_NONE   },    // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
-    {ITT_EFUNC,  "GHJBUHSDFNM LTVJPFGBCB:",      M_RD_NoDemos,        0,  MENU_NONE   },    // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
+    {ITT_LRFUNC, "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",M_RD_FlipLevels,     0,  MENU_NONE   },    // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
+    {ITT_LRFUNC, "GHJBUHSDFNM LTVJPFGBCB:",      M_RD_NoDemos,        0,  MENU_NONE   },    // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
     {ITT_SETMENU,"GHTLSLEOFZ CNHFYBWF>>>",       NULL,                0,  MENU_GAMEPLAY1 }  // ПРЕДЫДУЩАЯ СТРАНИЦА
 };
 
@@ -2576,7 +2576,7 @@ static void DrawGameplay2Menu(void)
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("UHFABRF"), 36 + ORIGWIDTH_DELTA, 32);    // ФИЗИКА
-        MN_DrTextSmallRUS(DEH_String("NFRNBRF"), 36 + ORIGWIDTH_DELTA, 72);    // ПРИЦЕЛ
+        MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + ORIGWIDTH_DELTA, 72);     // ПРИЦЕЛ
         MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + ORIGWIDTH_DELTA, 112);  // ГЕЙМПЛЕЙ
         dp_translation = NULL;
     }
@@ -2589,7 +2589,7 @@ static void DrawGameplay2Menu(void)
         if (english_language)
         MN_DrTextSmallENG(DEH_String("ON"), 238 + ORIGWIDTH_DELTA, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 253 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 248 + ORIGWIDTH_DELTA, 42);
 
         dp_translation = NULL;
     }
@@ -2600,7 +2600,7 @@ static void DrawGameplay2Menu(void)
         if (english_language)
         MN_DrTextSmallENG(DEH_String("OFF"), 238 + ORIGWIDTH_DELTA, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 253 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 248 + ORIGWIDTH_DELTA, 42);
 
         dp_translation = NULL;
     }
@@ -3979,9 +3979,9 @@ static void SetMenu(MenuType_t menu)
 //---------------------------------------------------------------------------
 //
 // PROC DrawSlider
-//
+// [JN] Not used for now
 //---------------------------------------------------------------------------
-
+/*
 static void DrawSlider(Menu_t * menu, int item, int width, int slot)
 {
     int x;
@@ -4020,6 +4020,7 @@ static void DrawSlider(Menu_t * menu, int item, int width, int slot)
     else
     V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
 }
+*/
 
 //---------------------------------------------------------------------------
 //
