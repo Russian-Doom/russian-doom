@@ -34,7 +34,7 @@
 #include "r_local.h"
 #include "r_sky.h"
 #include "g_game.h"
-
+#include "crispy.h"
 #include "jn.h"
 
 
@@ -434,6 +434,7 @@ void R_InitTextureMapping (void)
     int     x;
     int     t;
     fixed_t focallength;
+    fixed_t focalwidth;
 
     // Use tangent table to generate viewangletox:
     //  viewangletox will give the next greatest x
@@ -441,7 +442,14 @@ void R_InitTextureMapping (void)
     //
     // Calc focallength
     //  so FIELDOFVIEW angles covers SCREENWIDTH.
+    // [crispy] in widescreen mode, make sure the same number of horizontal
+    // pixels shows the same part of the game scene as in regular rendering mode
+    focalwidth = (((320 << hires)>>detailshift)/2)<<FRACBITS;
+#ifdef WIDESCREEN
+    focallength = FixedDiv (focalwidth, finetangent[FINEANGLES/4+FIELDOFVIEW/2] );
+#else
     focallength = FixedDiv (centerxfrac, finetangent[FINEANGLES/4+FIELDOFVIEW/2] );
+#endif
 
     for (i=0 ; i<FINEANGLES/2 ; i++)
     {
@@ -515,7 +523,7 @@ void R_InitLightTables (void)
         // [JN] No smoother diminished lighting in -vanilla mode
         for (j=0 ; vanillaparm ? j<MAXLIGHTZ_VANILLA : j<MAXLIGHTZ ; j++)
         {
-            scale = FixedDiv ((ORIGWIDTH/2*FRACUNIT), vanillaparm ? 
+            scale = FixedDiv ((320 / 2*FRACUNIT), vanillaparm ? 
                                                       ((j+1)<<LIGHTZSHIFT_VANILLA) : 
                                                       ((j+1)<<LIGHTZSHIFT));
 
@@ -602,7 +610,11 @@ void R_ExecuteSetViewSize (void)
     centerx = viewwidth/2;
     centerxfrac = centerx<<FRACBITS;
     centeryfrac = centery<<FRACBITS;
+#ifdef WIDESCREEN
+    projection = MIN(centerxfrac, (((320 << hires)>>detailshift)/2)<<FRACBITS);
+#else
     projection = centerxfrac;
+#endif
 
     if (!detailshift)
     {
@@ -642,7 +654,7 @@ void R_ExecuteSetViewSize (void)
     // planes
     for (i=0 ; i<viewheight ; i++)
     {
-        const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
+        const fixed_t num = MIN(viewwidth<<detailshift, 320 << !detailshift)/2*FRACUNIT;
         for (j = 0; j < LOOKDIRS; j++)
         {
 #ifdef WIDESCREEN
