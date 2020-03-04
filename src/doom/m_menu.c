@@ -5227,10 +5227,13 @@ boolean M_Responder (event_t* ev)
     int             i;
     static int      joywait = 0;
     static int      mousewait = 0;
+    // [FG] disable menu control by mouse
+    /*
     static int      mousey = 0;
     static int      lasty = 0;
     static int      mousex = 0;
     static int      lastx = 0;
+    */
 
     // In testcontrols mode, none of the function keys should do anything
     // - the only key is escape to quit.
@@ -5322,6 +5325,8 @@ boolean M_Responder (event_t* ev)
     {
         if (ev->type == ev_mouse && mousewait < I_GetTime())
         {
+            // [FG] disable menu control by mouse
+            /*
             mousey += ev->data3;
             if (mousey < lasty-30)
             {
@@ -5350,6 +5355,7 @@ boolean M_Responder (event_t* ev)
                 mousewait = I_GetTime() + 5;
                 mousex = lastx += 30;
             }
+            */
 
             if (ev->data1&1)
             {
