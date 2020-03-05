@@ -4725,6 +4725,14 @@ void M_DrawReadThis2(void)
 {
     inhelpscreens = true;
 
+    // [JN] Do not show HELP1 screen again (from M_DrawReadThis1) 
+    // in non-shareware versions. Fixes two "BackSpace" pressings.
+    if (gamemode != shareware)
+    {
+        ReadDef2.prevMenu = &MainDef;
+        ReadDef2_Rus.prevMenu = &MainDef_Rus;
+    }
+
 #ifdef WIDESCREEN
     // [JN] Clean up remainings of the wide screen before drawing
     V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
