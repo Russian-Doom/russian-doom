@@ -675,6 +675,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(startup_delay),
 
     //!
+    // [JN] Defines short or long window title composition.
+    //
+
+    CONFIG_VARIABLE_INT(window_title_short),
+
+    //!
     // Window width when running in windowed mode.
     //
 

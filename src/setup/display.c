@@ -75,6 +75,7 @@ static int integer_scaling = 0;
 static int force_software_renderer = 0;
 static int fullscreen = 1;
 static int fullscreen_width = 0, fullscreen_height = 0;
+static int window_title_short = 1;
 static int window_width = 640, window_height = 480;
 static int startup_delay = 35;  // [JN] Redused from 1000 to 35
 static int usegamma = 0;
@@ -383,6 +384,7 @@ void BindDisplayVariables(void)
     M_BindIntVariable("fullscreen",                &fullscreen);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);
     M_BindIntVariable("fullscreen_height",         &fullscreen_height);
+    M_BindIntVariable("window_title_short",        &window_title_short);
     M_BindIntVariable("window_width",              &window_width);
     M_BindIntVariable("window_height",             &window_height);
     M_BindIntVariable("startup_delay",             &startup_delay);
