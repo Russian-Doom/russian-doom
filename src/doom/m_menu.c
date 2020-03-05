@@ -2800,16 +2800,16 @@ void M_RD_Change_MessagesColor(int choice)
     {
         case 0:
         messages_color--;
+        if (messages_color < 0)
+            messages_color = 7;
         break;
 
         case 1:
         messages_color++;
+        if (messages_color > 7)
+            messages_color = 0;
+        break;
     }
-   
-    if (messages_color > 7)
-        messages_color = 0;
-    if (messages_color < 0)
-        messages_color = 7;
 
     // Print example message
     M_snprintf(msgcolor, sizeof(msgcolor), english_language ? 
@@ -2925,17 +2925,16 @@ void M_RD_Change_AutomapColor(int choice)
     {
         case 0: 
         automap_color--;
+        if (automap_color < 0) 
+            automap_color = 4;
         break;
     
         case 1:
         automap_color++;
+        if (automap_color > 4)
+            automap_color = 0;
         break;
     }
-
-    if (automap_color < 0) 
-        automap_color = 4;
-    if (automap_color > 4)
-        automap_color = 0;
 }
 
 void M_RD_Change_AutomapOverlay(int choice)
@@ -3851,17 +3850,16 @@ void M_RD_Change_ImprovedFuzz(int choice)
     {
         case 0: 
         improved_fuzz--;
+        if (improved_fuzz < 0) 
+            improved_fuzz = 3;
         break;
     
         case 1:
         improved_fuzz++;
+        if (improved_fuzz > 3)
+            improved_fuzz = 0;
         break;
     }
-
-    if (improved_fuzz < 0) 
-        improved_fuzz = 3;
-    if (improved_fuzz > 3)
-        improved_fuzz = 0;
 
     // Redraw game screen
     R_ExecuteSetViewSize();
