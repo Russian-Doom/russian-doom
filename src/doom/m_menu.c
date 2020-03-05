@@ -3278,9 +3278,6 @@ void M_RD_Choose_Gameplay_4(int choice)
 
 void M_RD_Jaguar_Menu_Background(void)
 {
-    if (gamemission != jaguar)
-    return;
-
     inhelpscreens = true;
     V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
     V_DrawPatch(0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("INTERPIC"), 
@@ -3290,6 +3287,7 @@ void M_RD_Jaguar_Menu_Background(void)
 void M_RD_Draw_Gameplay_1(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
+    if (gamemission == jaguar)
     M_RD_Jaguar_Menu_Background();
 
     if (english_language)
@@ -3435,6 +3433,7 @@ void M_RD_Draw_Gameplay_1(void)
 void M_RD_Draw_Gameplay_2(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
+    if (gamemission == jaguar)
     M_RD_Jaguar_Menu_Background();
 
     if (english_language)
@@ -3564,6 +3563,7 @@ void M_RD_Draw_Gameplay_2(void)
 void M_RD_Draw_Gameplay_3(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
+    if (gamemission == jaguar)
     M_RD_Jaguar_Menu_Background();
 
     if (english_language)
@@ -3715,6 +3715,7 @@ void M_RD_Draw_Gameplay_3(void)
 void M_RD_Draw_Gameplay_4(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
+    if (gamemission == jaguar)
     M_RD_Jaguar_Menu_Background();
 
     if (english_language)
