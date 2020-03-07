@@ -764,14 +764,18 @@ void HU_Start(void)
                     english_language ? hu_font : hu_font_small_rus,
                     HU_FONTSTART, &message_on);
 
-    // [JN] Create the local time and FPS widgets
+    // [JN] Create the local time widget
+    HUlib_initSText(&w_message_time,
+                    (local_time == 1 ? 282 :
+                     local_time == 2 ? 270 :
+                     local_time == 3 ? 294 :
+                     local_time == 4 ? 282 :
+                     0) + ORIGWIDTH_DELTA * 2, 10,
+                     HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
+
+    // [JN] Create the FPS widget
     HUlib_initSText(&w_message_fps, 278 + ORIGWIDTH_DELTA * 2, 20, 
                     HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
-#ifdef WIDESCREEN
-    HUlib_initSText(&w_message_time, 400, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
-#else
-    HUlib_initSText(&w_message_time, 294, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
-#endif
 
     // create the map title widget
     HUlib_initTextLine(&w_title, HU_TITLEX, (gamemission == jaguar ?
@@ -1018,12 +1022,21 @@ void HU_Ticker(void)
     struct tm *tm = localtime(&t);
     static char s[64];
     static char f[64];
-    strftime(s, sizeof(s), "%H:%M", tm);
 
-    // [JN] Start local time widget
+    // [JN] Compose the local time widget
     if (local_time)
-    plr->message_time = (s);
+    {
+        strftime(s, sizeof(s), 
+                 local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
+                 local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
+                 local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
+                 local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
+                                   "", tm);        // No time
 
+        plr->message_time = (s);
+    }
+
+    // [JN] Compose the FPS widget
     if (show_fps && !vanillaparm)
     {
         M_snprintf(f, sizeof(f), "FPS: %d", real_fps);

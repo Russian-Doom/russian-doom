@@ -2518,7 +2518,12 @@ void M_RD_Draw_Display(void)
         M_WriteTextSmall_ENG(130 + ORIGWIDTH_DELTA, 105, detailLevel == 1 ? "low" : "high");
 
         // Local time
-        M_WriteTextSmall_ENG(116 + ORIGWIDTH_DELTA, 115, local_time == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(116 + ORIGWIDTH_DELTA, 115, 
+                             local_time == 1 ? "12-hour (hh:mm)" :
+                             local_time == 2 ? "12-hour (hh:mm:ss)" :
+                             local_time == 3 ? "24-hour (hh:mm)" :
+                             local_time == 4 ? "24-hour (hh:mm:ss)" :
+                                               "off");
 
         //
         // Messages and texts
@@ -2549,7 +2554,12 @@ void M_RD_Draw_Display(void)
         M_WriteTextSmall_RUS(193 + ORIGWIDTH_DELTA, 105, detailLevel == 1 ? "ybprbq" : "dscjrbq");
 
         // Системное время
-        M_WriteTextSmall_RUS(161 + ORIGWIDTH_DELTA, 115, local_time == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(161 + ORIGWIDTH_DELTA, 115, 
+                             local_time == 1 ? "12-xfcjdjt (xx:vv)" :
+                             local_time == 2 ? "12-xfcjdjt (xx:vv:cc)" :
+                             local_time == 3 ? "24-xfcjdjt (xx:vv)" :
+                             local_time == 4 ? "24-xfcjdjt (xx:vv:cc)" :
+                                               "dsrk");
 
         //
         // Сообщения и тексты
@@ -2684,7 +2694,24 @@ void M_RD_Change_Detail(int choice)
 
 void M_RD_Change_LocalTime(int choice)
 {
-    local_time ^= 1;
+    switch(choice)
+    {
+        case 0: 
+        local_time--;
+        if (local_time < 0) 
+            local_time = 4;
+        // Reinitialize time widget's horizontal offset
+        HU_Start();
+        break;
+
+        case 1:
+        local_time++;
+        if (local_time > 4)
+            local_time = 0;
+        // Reinitialize time widget's horizontal offset
+        HU_Start();
+        break;
+    }
 }
 
 
