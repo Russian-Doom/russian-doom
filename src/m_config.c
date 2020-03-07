@@ -1591,12 +1591,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_togglemlook),
 
     //!
-    // [JN] Toggle local time widget.
-    //
-
-    CONFIG_VARIABLE_KEY(key_toggletime),
-
-    //!
     // [JN] Russian Doom menu
     //
 

@@ -755,21 +755,6 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     }
     mousex = mousey = 0;
 
-    // [JN] Toggle local time widget
-    if (gamekeydown[key_toggletime])
-    {
-        if (!local_time)
-        {
-            local_time = true;
-        }
-        else
-        {
-            local_time = false;
-        }
-       
-        gamekeydown[key_toggletime] = false;
-    }   
-
     if (forward > MaxPlayerMove[pClass])
     {
         forward = MaxPlayerMove[pClass];

@@ -5514,20 +5514,6 @@ boolean M_Responder (event_t* ev)
         return true;
     }
 
-    // [JN] Toggling of local time widget
-    if (key == key_toggletime)
-    {
-        if (!local_time)
-        {
-            local_time = true;
-        }
-        else
-        {
-            local_time = false;
-        }
-        return true;
-    }
-
     // [JN] Toggling of crosshair
     if (key == key_togglecrosshair)
     {

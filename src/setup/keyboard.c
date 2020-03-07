@@ -37,7 +37,7 @@ static int always_run = 0;
 // Keys within these groups cannot have the same value.
 
 static int *controls[] = { &key_left, &key_right, &key_up, &key_down,
-                           &key_toggleautorun, &key_togglecrosshair, &key_togglemlook, &key_toggletime,
+                           &key_toggleautorun, &key_togglecrosshair, &key_togglemlook,
                            &key_strafeleft, &key_straferight, &key_fire,
                            &key_use, &key_strafe, &key_speed, &key_jump,
                            &key_flyup, &key_flydown, &key_flycenter,
@@ -689,10 +689,6 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                          "Finish recording demo" :
                          "Закончить запись демо",
                          &key_demo_quit);
-    AddKeyControl(table, english_language ?
-                         "Toggle local time" :
-                         "Отобразить системное врем€",
-                         &key_toggletime);
 
     AddSectionLabel(table, english_language ?
                            "Map" :
