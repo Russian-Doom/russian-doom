@@ -78,29 +78,31 @@ extern char* amstr_rotateoff;
 extern char* ggsaved;
 extern char* ggloaded;
 
-// RD specific
-extern char* ststr_alwrun_on;
-extern char* ststr_alwrun_off;
-extern char* ststr_mlook_on;
-extern char* ststr_mlook_off;
-extern char* ststr_testctrls;
-extern char* ststr_scrnsht;
-
 #define GGSAVED         "game saved."
 #define GGLOADED        "game loaded."
-
-// RD specific
-#define STSTR_ALWRUNON  "Always run ON"
-#define STSTR_ALWRUNOFF "Always run OFF"
-#define STSTR_MLOOK_ON  "Mouse look ON"
-#define STSTR_MLOOK_OFF "Mouse look OFF"
-#define STSTR_TESTCTRLS "Press escape to quit."
-#define STSTR_SCRNSHT   "Screen shot"
 
 
 //
 // M_Menu.C
 //
+
+extern char* ststr_alwrun_on;
+extern char* ststr_alwrun_off;
+extern char* ststr_crosshair_on;
+extern char* ststr_crosshair_off;
+extern char* ststr_mlook_on;
+extern char* ststr_mlook_off;
+extern char* ststr_testctrls;
+extern char* ststr_scrnsht;
+
+#define STSTR_ALWRUNON  "Always run ON"
+#define STSTR_ALWRUNOFF "Always run OFF"
+#define STSTR_CROSSHAIR_ON  "Crosshair ON"
+#define STSTR_CROSSHAIR_OFF "Crosshair OFF"
+#define STSTR_MLOOK_ON  "Mouse look ON"
+#define STSTR_MLOOK_OFF "Mouse look OFF"
+#define STSTR_TESTCTRLS "Press escape to quit."
+#define STSTR_SCRNSHT   "Screen shot"
 
 #define PRESSKEY    "press a key."
 #define PRESSYN     "press y or n."
@@ -1041,12 +1043,6 @@ extern char* ststr_massacre;
 #define CC_HERO     "OUR HERO"
 
 
-
-#define STSRT_CROSSHAIR     "Crosshair "
-#define STSTR_CROSSHAIR_ON  "ON"
-#define STSTR_CROSSHAIR_OFF "OFF"
-
-
 // -----------------------------------------------------------------------------
 // Русский язык
 // -----------------------------------------------------------------------------
@@ -1095,6 +1091,9 @@ extern char* ststr_massacre;
 //
 // M_Menu.C
 //
+
+#define STSTR_CROSSHAIR_ON_RUS  "ghbwtk drk.xty"    // Прицел включен
+#define STSTR_CROSSHAIR_OFF_RUS "ghbwtk dsrk.xty"   // Прицел выключен
 
 #define PRESSKEY_RUS    "(yf;vbnt k.,e. rkfdbie)"   // (Нажмите любую клавишу)
 #define PRESSYN_RUS     "(yf;vbnt ^#^ bkb ^@^)"     // (Нажмите "Y" или "N")
@@ -2292,11 +2291,6 @@ PRESSYN_RUS
 #define CC_CYBER_RUS    "rb,thltvjy"            // Кибердемон
 #define CC_HERO_RUS     "yfi uthjq"             // Наш Герой
 
-
-
-#define STSRT_CROSSHAIR_RUS     "ghbwtk "               // Прицел
-#define STSTR_CROSSHAIR_ON_RUS  "drk.xty"               // включен
-#define STSTR_CROSSHAIR_OFF_RUS "dsrk.xty"              // выключен
 
 //
 // Отображение версии проекта

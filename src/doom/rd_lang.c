@@ -46,9 +46,14 @@ char* ggsaved;
 char* ggloaded;
 
 
-// RD specific
+//
+// M_Menu.C
+//
+
 char* ststr_alwrun_on;
 char* ststr_alwrun_off;
+char* ststr_crosshair_on;
+char* ststr_crosshair_off;
 char* ststr_mlook_on;
 char* ststr_mlook_off;
 char* ststr_testctrls;
@@ -191,9 +196,14 @@ void RD_DefineLanguageStrings (void)
         ggsaved         = GGSAVED;
         ggloaded        = GGLOADED;
 
-        // RD specific
+        //
+        // M_Menu.C
+        //
+
         ststr_alwrun_on = STSTR_ALWRUNON;
         ststr_alwrun_off= STSTR_ALWRUNOFF;
+        ststr_crosshair_on = STSTR_CROSSHAIR_ON;
+        ststr_crosshair_off = STSTR_CROSSHAIR_OFF;
         ststr_mlook_on  = STSTR_MLOOK_ON;
         ststr_mlook_off = STSTR_MLOOK_OFF;
         ststr_testctrls = STSTR_TESTCTRLS;
@@ -325,9 +335,14 @@ void RD_DefineLanguageStrings (void)
         ggsaved         = GGSAVED_RUS;
         ggloaded        = GGLOADED_RUS;
 
-        // RD specific
+        //
+        // M_Menu.C
+        //
+
         ststr_alwrun_on = STSTR_ALWRUNON_RUS;
         ststr_alwrun_off= STSTR_ALWRUNOFF_RUS;
+        ststr_crosshair_on = STSTR_CROSSHAIR_ON_RUS;
+        ststr_crosshair_off = STSTR_CROSSHAIR_OFF_RUS;
         ststr_mlook_on  = STSTR_MLOOK_ON_RUS;
         ststr_mlook_off = STSTR_MLOOK_OFF_RUS;
         ststr_testctrls = STSTR_TESTCTRLS_RUS;
