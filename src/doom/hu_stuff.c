@@ -144,7 +144,7 @@ patch_t*    hu_font_small_eng[HU_FONTSIZE]; // [JN] Small, unchangeable English 
 patch_t*    hu_font_small_rus[HU_FONTSIZE]; // [JN] Small, unchangeable Russian font (FNTSR)
 patch_t*    hu_font_big_eng[HU_FONTSIZE2];  // [JN] Big, unchangeable English font (FNTBE)
 patch_t*    hu_font_big_rus[HU_FONTSIZE2];  // [JN] Big, unchangeable Russian font (FNTBR)
-patch_t*    hu_font_gray[HU_FONTSIZE];  // [JN] Small gray STCFG font, used for local time widget
+patch_t*    hu_font_gray[HU_FONTSIZE_GRAY]; // [JN] Small gray STCFG font
 
 static      hu_textline_t w_title;
 static      hu_textline_t w_kills;
