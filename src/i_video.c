@@ -723,9 +723,9 @@ void I_FinishUpdate (void)
 			fpscount = 0;
 			lastmili = i;
             
-            if (real_fps >= 999)    // [JN] Do not draw four FPS digits
-                real_fps  = 999;
-            if (real_fps <= 0)      // [JN] Just in case
+            if (real_fps >= 9999)
+                real_fps  = 9999;
+            if (real_fps <= 0)
                 real_fps  = 0;
 		}
 	}

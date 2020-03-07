@@ -765,12 +765,12 @@ void HU_Start(void)
                     HU_FONTSTART, &message_on);
 
     // [JN] Create the local time and FPS widgets
+    HUlib_initSText(&w_message_fps, 278 + ORIGWIDTH_DELTA * 2, 20, 
+                    HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 #ifdef WIDESCREEN
     HUlib_initSText(&w_message_time, 400, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
-    HUlib_initSText(&w_message_fps, 390, 20, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 #else
     HUlib_initSText(&w_message_time, 294, 10, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
-    HUlib_initSText(&w_message_fps, 284, 20, HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 #endif
 
     // create the map title widget
@@ -1026,7 +1026,7 @@ void HU_Ticker(void)
 
     if (show_fps && !vanillaparm)
     {
-        M_snprintf(f, sizeof(f), "! %d", real_fps); // [JN] 1 = FPS, see STCFG033 (doom-sysfont.wad)
+        M_snprintf(f, sizeof(f), "FPS: %d", real_fps);
         plr->message_fps = (f);
     }
 
