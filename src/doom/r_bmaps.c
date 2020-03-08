@@ -45,7 +45,7 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
     bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
     bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
     bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
-    bmaptexture91, bmaptexture92;
+    bmaptexture91, bmaptexture92, bmaptexture93;
 
 // Terminator:
 int bmap_terminator;
@@ -117,6 +117,9 @@ void R_InitBrightmappedTextures(void)
         bmaptexture86 = R_TextureNumForName("SW2SATYR");
         bmaptexture87 = R_TextureNumForName("SW2LION");
         bmaptexture88 = R_TextureNumForName("SW2GARG");
+
+        // Red only 2
+        bmaptexture93 = R_TextureNumForName("SW2HOT");
     }
 
     // -------------------------------------------------------

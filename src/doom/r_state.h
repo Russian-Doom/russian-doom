@@ -60,6 +60,7 @@ extern lighttable_t* brightmaps_explosivebarrel;
 extern lighttable_t* brightmaps_alllights;
 extern lighttable_t* brightmaps_candles;
 extern lighttable_t* brightmaps_pileofskulls;
+extern lighttable_t* brightmaps_redonly2;
 
 extern int viewwidth;
 extern int scaledviewwidth;

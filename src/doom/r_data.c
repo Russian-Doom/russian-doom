@@ -189,6 +189,7 @@ lighttable_t	*brightmaps_explosivebarrel;
 lighttable_t	*brightmaps_alllights;
 lighttable_t	*brightmaps_candles;
 lighttable_t	*brightmaps_pileofskulls;
+lighttable_t	*brightmaps_redonly2;
 
 
 //
@@ -1084,7 +1085,7 @@ void R_InitColormaps (void)
 void R_InitBrightmaps (void)
 {
     int lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9;
-    int lump10, lump11, lump12, lump13, lump14;
+    int lump10, lump11, lump12, lump13, lump14, lump15;
 
     // [JN] Load in the brightmaps.
     // Note: tables as well as it's valuaes are taken from Doom Retro (r_data.c).
@@ -1131,6 +1132,9 @@ void R_InitBrightmaps (void)
 
     lump14 = W_GetNumForName(DEH_String("BRTMAP14"));
     brightmaps_pileofskulls = W_CacheLumpNum(lump14, PU_STATIC);    
+
+    lump15 = W_GetNumForName(DEH_String("BRTMAP15"));
+    brightmaps_redonly2 = W_CacheLumpNum(lump15, PU_STATIC);
 }
 
 //

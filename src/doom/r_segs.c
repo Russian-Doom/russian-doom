@@ -919,6 +919,16 @@ void R_StoreWallRange (int start, int stop)
 
                     if (bottomtexture == bmaptexture86 || bottomtexture == bmaptexture87 || bottomtexture == bmaptexture88)
                     walllights_bottom = fullbright_brighttan[lightnum];
+
+                    // Red only 2
+                    if (midtexture == bmaptexture93)
+                    walllights_middle = fullbright_redonly2[lightnum];
+
+                    if (toptexture == bmaptexture93)
+                    walllights_top = fullbright_redonly2[lightnum];
+
+                    if (bottomtexture == bmaptexture93)
+                    walllights_bottom = fullbright_redonly2[lightnum];
                 }
 
                 // -------------------------------------------------------
