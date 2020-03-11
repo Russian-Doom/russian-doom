@@ -26,6 +26,7 @@
 #include "p_local.h"
 #include "tables.h"
 #include "i_timer.h"
+#include "crispy.h"
 #include "jn.h"
 
 int viewangleoffset;
@@ -469,8 +470,17 @@ void R_InitTextureMapping(void)
 // viewangletox will give the next greatest x after the view angle
 //
     // calc focallength so FIELDOFVIEW angles covers SCREENWIDTH
+#ifdef WIDESCREEN
+    // [crispy] in widescreen mode, make sure the same number of horizontal
+    // pixels shows the same part of the game scene as in regular rendering mode
+    fixed_t focalwidth;
+
+    focalwidth = (((320 << hires)>>detailshift)/2)<<FRACBITS;
+    focallength = FixedDiv (focalwidth, finetangent[FINEANGLES/4+FIELDOFVIEW/2] );
+#else
     focallength =
         FixedDiv(centerxfrac, finetangent[FINEANGLES / 4 + FIELDOFVIEW / 2]);
+#endif
 
     for (i = 0; i < FINEANGLES / 2; i++)
     {
@@ -547,7 +557,7 @@ void R_InitLightTables(void)
         for (j = 0; j < MAXLIGHTZ; j++)
         {
             scale =
-                FixedDiv((ORIGWIDTH / 2 * FRACUNIT),
+                FixedDiv((320 / 2 * FRACUNIT),
                          (j + 1) << LIGHTZSHIFT);
             scale >>= LIGHTSCALESHIFT;
             level = startmap - scale / DISTMAP;
@@ -628,7 +638,11 @@ void R_ExecuteSetViewSize(void)
     centerx = viewwidth / 2;
     centerxfrac = centerx << FRACBITS;
     centeryfrac = centery << FRACBITS;
+#ifdef WIDESCREEN
+    projection = MIN(centerxfrac, (((320 << hires)>>detailshift)/2)<<FRACBITS);
+#else
     projection = centerxfrac;
+#endif
 
     if (!detailshift)
     {
@@ -666,7 +680,11 @@ void R_ExecuteSetViewSize(void)
 //
     for (i = 0; i < viewheight; i++)
     {
+#ifdef WIDESCREEN
+        const fixed_t num = MIN(viewwidth<<detailshift, 320 << !detailshift)/2*FRACUNIT;
+#else
         const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
+#endif
         for (j = 0; j < LOOKDIRS; j++)
         {
 #ifdef WIDESCREEN
