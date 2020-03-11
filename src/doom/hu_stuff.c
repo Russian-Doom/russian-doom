@@ -36,6 +36,7 @@
 #include "s_sound.h"
 #include "doomstat.h"
 #include "st_stuff.h" // [JN] ST_HEIGHT
+#include "v_trans.h"  // [JN] Crosshair coloring
 #include "v_video.h"  // [JN] V_DrawPatch
 
 // Data.
@@ -939,59 +940,42 @@ void HU_Drawer(void)
     // [JN] Draw crosshair. 
     // Thanks to Fabian Greffrath for ORIGWIDTH, ORIGHEIGHT and ST_HEIGHT values,
     // thanks to Zodomaniac for proper health values!
-    if (!vanillaparm && !automapactive && crosshair_draw)
+    if (crosshair_draw && !automapactive && !vanillaparm)
     {
+        if (crosshair_health)
+        {
+            dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
+                             plr->health >= 34 ? cr[CR_GOLD] :
+                                                 cr[CR_RED];
+        }
+
 #ifdef WIDESCREEN
         if (crosshair_scale)
-        {   // Scaled crosshair
-            V_DrawPatch(ORIGWIDTH/2,
-                       (ORIGHEIGHT+2)/2,
-                W_CacheLumpName(DEH_String(!crosshair_health ?
-                                           "XHAIRSR" :             // Red (only)
-                                           plr->health >= 67 ?
-                                           "XHAIRSG" :             // Green
-                                           plr->health >= 34 ?
-                                           "XHAIRSY" : "XHAIRSR"), // Yellow or Red
-                                           PU_CACHE));
+        {
+            V_DrawPatch(ORIGWIDTH/2, (ORIGHEIGHT+2)/2,
+                W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE));
         }
         else
-        {   // Unscaled crosshair
-            V_DrawPatchUnscaled(SCREENWIDTH/2,
-                               (SCREENHEIGHT+4)/2,
-                W_CacheLumpName(DEH_String(!crosshair_health ? 
-                                           "XHAIRUR" :              // Red (only)
-                                           plr->health >= 67 ?
-                                           "XHAIRUG" :              // Green
-                                           plr->health >= 34 ?
-                                           "XHAIRUY" : "XHAIRUR"),  // Yellow or Red
-                                           PU_CACHE));
+        {
+            V_DrawPatchUnscaled(SCREENWIDTH/2, (SCREENHEIGHT+4)/2,
+                W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE));
         }
 #else
         if (crosshair_scale)
-        {   // Scaled crosshair
-            V_DrawPatch(ORIGWIDTH/2, 
-                ((screenblocks <= 10) ? (ORIGHEIGHT-ST_HEIGHT+2)/2 : (ORIGHEIGHT+2)/2),
-                W_CacheLumpName(DEH_String(!crosshair_health ?
-                                           "XHAIRSR" :             // Red (only)
-                                           plr->health >= 67 ?
-                                           "XHAIRSG" :             // Green
-                                           plr->health >= 34 ?
-                                           "XHAIRSY" : "XHAIRSR"), // Yellow or Red
-                                           PU_CACHE));
+        {
+            V_DrawPatch(ORIGWIDTH/2, ((screenblocks <= 10) ?
+                (ORIGHEIGHT-ST_HEIGHT+2)/2 : (ORIGHEIGHT+2)/2),
+                    W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE));
         }
         else
-        {   // Unscaled crosshair
-            V_DrawPatchUnscaled(SCREENWIDTH/2,
-                ((screenblocks <= 10) ? (SCREENHEIGHT-ST_HEIGHT-26)/2 : (SCREENHEIGHT+4)/2),
-                W_CacheLumpName(DEH_String(!crosshair_health ? 
-                                           "XHAIRUR" :              // Red (only)
-                                           plr->health >= 67 ?
-                                           "XHAIRUG" :             // Green
-                                           plr->health >= 34 ?
-                                           "XHAIRUY" : "XHAIRUR"),  // Yellow or Red
-                                           PU_CACHE));
+        {
+            V_DrawPatchUnscaled(SCREENWIDTH/2, ((screenblocks <= 10) ?
+                (SCREENHEIGHT-ST_HEIGHT-26)/2 : (SCREENHEIGHT+4)/2),
+                    W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE));
         }
 #endif
+
+        dp_translation = NULL;
     }
 }
 
