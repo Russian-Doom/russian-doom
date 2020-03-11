@@ -820,6 +820,7 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
     byte *desttop;
     byte *dest;
     byte *source;
+    byte *sourcetrans;
     int w;
 
     y -= SHORT(patch->topoffset);
@@ -859,13 +860,16 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
         // step through the posts in a column
         while (column->topdelta != 0xff)
         {
-            source = (byte *)column + 3;
+            source = sourcetrans = (byte *)column + 3;
             dest = desttop + column->topdelta*SCREENWIDTH;
             count = column->length;
 
             while (count--)
             {
-                *dest = *source++;
+                if (dp_translation)
+                sourcetrans = &dp_translation[*source++];
+
+                *dest = *sourcetrans++;
                 dest += SCREENWIDTH;
             }
             column = (column_t *)((byte *)column + column->length + 4);
