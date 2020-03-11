@@ -997,10 +997,7 @@ void R_InitTranMap()
 {
     // [JN] Don't lookup for TRANMAP lump, generate tranlucency dynamically
     // Compose a default transparent filter map based on PLAYPAL.
-    unsigned char *playpal = (W_CacheLumpName (usegamma <= 8 ? 
-                                               "PALFIX" :
-                                               "PLAYPAL",
-                                               PU_STATIC));
+    unsigned char *playpal = (W_CacheLumpName ("PLAYPAL", PU_STATIC));
 
     long pal[3][256], tot[256], pal_w1[3][256];
     long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
@@ -1010,11 +1007,11 @@ void R_InitTranMap()
     // First, convert playpal into long int type, and transpose array,
     // for fast inner-loop calculations. Precompute tot array.
     {
-        register int i = 255;
-        register const unsigned char *p = playpal+255*3;
+        int i = 255;
+        const unsigned char *p = playpal+255*3;
         do
         {
-            register long t,d;
+            long t,d;
             pal_w1[0][i] = (pal[0][i] = t = p[0]) * w1;
             d = t*t;
             pal_w1[1][i] = (pal[1][i] = t = p[1]) * w1;
@@ -1038,8 +1035,8 @@ void R_InitTranMap()
             long b1 = pal[2][i] * w2;
             for (j=0;j<256;j++,tp++)
             {
-                register int color = 255;
-                register long err;
+                int color = 255;
+                long err;
                 long r = pal_w1[0][j] + r1;
                 long g = pal_w1[1][j] + g1;
                 long b = pal_w1[2][j] + b1;
@@ -1053,7 +1050,7 @@ void R_InitTranMap()
         }
     }
 
-    Z_ChangeTag(playpal, PU_CACHE);
+    W_ReleaseLumpName("PLAYPAL");
 }
 
 //
