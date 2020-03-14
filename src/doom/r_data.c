@@ -279,129 +279,93 @@ R_DrawColumnInCache
 //
 // Rewritten by Lee Killough for performance and to fix Medusa bug
 
-void R_GenerateComposite (int texnum)
+static void R_GenerateComposite (int texnum)
 {
-    byte*		block;
-    texture_t*		texture;
-    texpatch_t*		patch;	
-    patch_t*		realpatch;
-    int			x;
-    int			x1;
-    int			x2;
-    int			i;
-    column_t*		patchcol;
-    short*		collump;
-    unsigned*		colofs; // killough 4/9/98: make 32-bit
-    byte*		marks; // killough 4/9/98: transparency marks
-    byte*		source; // killough 4/9/98: temporary column
-	
-    texture = textures[texnum];
+    byte *block = Z_Malloc(texturecompositesize[texnum], PU_STATIC, 
+                          (void **) &texturecomposite[texnum]);
+    texture_t *texture = textures[texnum];
 
-    block = Z_Malloc (texturecompositesize[texnum],
-		      PU_STATIC, 
-		      &texturecomposite[texnum]);	
-
-    collump = texturecolumnlump[texnum];
-    colofs = texturecolumnofs[texnum];
-    
     // Composite the columns together.
-    patch = texture->patches;
-		
+    texpatch_t *patch = texture->patches;
+    short *collump = texturecolumnlump[texnum];
+    unsigned *colofs = texturecolumnofs[texnum]; // killough 4/9/98: make 32-bit
+    int i = texture->patchcount;
+
     // killough 4/9/98: marks to identify transparent regions in merged textures
-    marks = calloc(texture->width, texture->height);
+    byte *marks = calloc(texture->width, texture->height), *source;
 
     // [crispy] initialize composite background to black (index 0)
     memset(block, 0, texturecompositesize[texnum]);
 
-    for (i=0 , patch = texture->patches;
-	 i<texture->patchcount;
-	 i++, patch++)
+    for (; --i >=0; patch++)
     {
-	realpatch = W_CacheLumpNum (patch->patch, PU_CACHE);
-	x1 = patch->originx;
-	x2 = x1 + SHORT(realpatch->width);
+        patch_t *realpatch = W_CacheLumpNum(patch->patch, PU_CACHE);
+        int x, x1 = patch->originx, x2 = x1 + SHORT(realpatch->width);
+        const int *cofs = realpatch->columnofs - x1;
 
-	if (x1<0)
-	    x = 0;
-	else
-	    x = x1;
-	
-	if (x2 > texture->width)
-	    x2 = texture->width;
+        if (x1 < 0)
+        x1 = 0;
+        if (x2 > texture->width)
+        x2 = texture->width;
 
-	for ( ; x<x2 ; x++)
-	{
-	    // Column does not have multiple patches?
-	    // [crispy] generate composites for single-patched columns as well
-	    /*
-	    if (collump[x] >= 0)
-		continue;
-	    */
-	    
-	    patchcol = (column_t *)((byte *)realpatch
-				    + LONG(realpatch->columnofs[x-x1]));
-	    R_DrawColumnInCache (patchcol,
-				 block + colofs[x],
-				 // [crispy] single-patched columns are normally not composited
-				 // but directly read from the patch lump ignoring their originy
-				 collump[x] >= 0 ? 0 : patch->originy,
-				 texture->height,
-				 marks + x * texture->height);
-	}
-						
+        for (x = x1; x < x2 ; x++)
+        // [crispy] generate composites for single-patched textures as well
+        // killough 1/25/98, 4/9/98: Fix medusa bug.
+        R_DrawColumnInCache((column_t*)((byte*) realpatch + LONG(cofs[x])),
+                            block + colofs[x], patch->originy,
+                            texture->height, marks + x*texture->height);
     }
 
     // killough 4/9/98: Next, convert multipatched columns into true columns,
-    // to fix Medusa bug while still allowing for transparent regions.
+    // to fix Medusa bug while still allowing for transparent regions.	
 
-    source = I_Realloc(NULL, texture->height); // temporary column
-    for (i = 0; i < texture->width; i++)
+    source = malloc(texture->height);       // temporary column
+    for (i=0; i < texture->width; i++)
+    if (collump[i] == -1)                 // process only multipatched columns
     {
-	if (collump[i] == -1) // process only multipatched columns
-	{
-	    column_t *col = (column_t *)(block + colofs[i] - 3); // cached column
-	    const byte *mark = marks + i * texture->height;
-	    int j = 0;
+        column_t *col = (column_t *)(block + colofs[i] - 3);  // cached column
+        const byte *mark = marks + i * texture->height;
+        int j = 0;
 
-	    // save column in temporary so we can shuffle it around
-	    memcpy(source, (byte *) col + 3, texture->height);
+        // save column in temporary so we can shuffle it around
+        memcpy(source, (byte *) col + 3, texture->height);
 
-	    for ( ; ; ) // reconstruct the column by scanning transparency marks
-	    {
-		unsigned len; // killough 12/98
+        for (;;)  // reconstruct the column by scanning transparency marks
+        {
+            unsigned len;        // killough 12/98
 
-		while (j < texture->height && !mark[j]) // skip transparent cells
-		    j++;
+            while (j < texture->height && !mark[j]) // skip transparent cells
+            j++;
 
-		if (j >= texture->height) // if at end of column
-		{
-		    col->topdelta = -1; // end-of-column marker
-		    break;
-		}
+            if (j >= texture->height)           // if at end of column
+            {
+                col->topdelta = -1;             // end-of-column marker
+                break;
+            }
 
-		col->topdelta = j; // starting offset of post
+            col->topdelta = j;                  // starting offset of post
 
-		// killough 12/98:
-		// Use 32-bit len counter, to support tall 1s multipatched textures
+            // killough 12/98:
+            // Use 32-bit len counter, to support tall 1s multipatched textures
 
-		for (len = 0; j < texture->height && mark[j]; j++)
-		    len++; // count opaque cells
+            for (len = 0; j < texture->height && mark[j]; j++)
+            len++;                    // count opaque cells
 
-		col->length = len; // killough 12/98: intentionally truncate length
+            col->length = len; // killough 12/98: intentionally truncate length
 
-		// copy opaque cells from the temporary back into the column
-		memcpy((byte *) col + 3, source + col->topdelta, len);
-		col = (column_t *)((byte *) col + len + 4); // next post
-	    }
-	}
+            // copy opaque cells from the temporary back into the column
+            memcpy((byte *) col + 3, source + col->topdelta, len);
+            col = (column_t *)((byte *) col + len + 4); // next post
+        }
     }
 
-    free(source); // free temporary column
-    free(marks); // free transparency marks
+    free(source);         // free temporary column
+    free(marks);          // free transparency marks
 
     // Now that the texture has been built in column cache,
-    //  it is purgable from zone memory.
-    Z_ChangeTag (block, PU_CACHE);
+    // it is purgable from zone memory.
+
+    Z_ChangeTag(block, PU_CACHE);
 }
 
 
@@ -1290,62 +1254,41 @@ int	R_TextureNumForName (char* name)
 // R_PrecacheLevel
 // Preloads all relevant graphics for the level.
 //
-int		flatmemory;
-int		texturememory;
-int		spritememory;
+// Totally rewritten by Lee Killough to use less memory,
+// to avoid using alloca(), and to improve performance.
 
 void R_PrecacheLevel (void)
 {
-    char*		flatpresent;
-    char*		texturepresent;
-    char*		spritepresent;
-
-    int			i;
-    int			j;
-    int			k;
-    int			lump;
-    
-    texture_t*		texture;
-    thinker_t*		th;
-    spriteframe_t*	sf;
+    register int i;
+    register byte *hitlist;
 
     if (demoplayback)
     return;
-    
+
+    {
+        size_t size = numflats > numsprites  ? numflats : numsprites;
+        hitlist = malloc(numtextures > size ? numtextures : size);
+    }
+
     // Precache flats.
-    flatpresent = Z_Malloc(numflats, PU_STATIC, NULL);
-    memset (flatpresent,0,numflats);	
 
-    for (i=0 ; i<numsectors ; i++)
-    {
-        flatpresent[sectors[i].floorpic] = 1;
-        flatpresent[sectors[i].ceilingpic] = 1;
-    }
-	
-    flatmemory = 0;
+    memset(hitlist, 0, numflats);
 
-    for (i=0 ; i<numflats ; i++)
-    {
-        if (flatpresent[i])
-        {
-            lump = firstflat + i;
-            flatmemory += lumpinfo[lump]->size;
-            W_CacheLumpNum(lump, PU_CACHE);
-        }
-    }
+    for (i = numsectors; --i >= 0; )
+    hitlist[sectors[i].floorpic] = hitlist[sectors[i].ceilingpic] = 1;
 
-    Z_Free(flatpresent);
-    
+    for (i = numflats; --i >= 0; )
+        if (hitlist[i])
+            W_CacheLumpNum(firstflat + i, PU_CACHE);
+
     // Precache textures.
-    texturepresent = Z_Malloc(numtextures, PU_STATIC, NULL);
-    memset (texturepresent,0, numtextures);
-	
-    for (i=0 ; i<numsides ; i++)
-    {
-        texturepresent[sides[i].toptexture] = 1;
-        texturepresent[sides[i].midtexture] = 1;
-        texturepresent[sides[i].bottomtexture] = 1;
-    }
+
+    memset(hitlist, 0, numtextures);
+
+    for (i = numsides; --i >= 0;)
+    hitlist[sides[i].bottomtexture] =
+    hitlist[sides[i].toptexture] =
+    hitlist[sides[i].midtexture] = 1;
 
     // Sky texture is always present.
     // Note that F_SKY1 is the name used to
@@ -1353,59 +1296,46 @@ void R_PrecacheLevel (void)
     //  while the sky texture is stored like
     //  a wall texture, with an episode dependend
     //  name.
-    texturepresent[skytexture] = 1;
-	
-    texturememory = 0;
-    for (i=0 ; i<numtextures ; i++)
-    {
-        if (!texturepresent[i])
-            continue;
 
-        // [crispy] precache composite textures
-        R_GenerateComposite(i);
+    hitlist[skytexture] = 1;
 
-        texture = textures[i];
-	
-        for (j=0 ; j<texture->patchcount ; j++)
+    for (i = numtextures; --i >= 0; )
+        if (hitlist[i])
         {
-            lump = texture->patches[j].patch;
-            texturememory += lumpinfo[lump]->size;
-            W_CacheLumpNum(lump , PU_CACHE);
+            texture_t *texture = textures[i];
+            int j = texture->patchcount;
+
+            while (--j >= 0)
+            W_CacheLumpNum(texture->patches[j].patch, PU_CACHE);
         }
-    }
 
-    Z_Free(texturepresent);
-    
     // Precache sprites.
-    spritepresent = Z_Malloc(numsprites, PU_STATIC, NULL);
-    memset (spritepresent,0, numsprites);
-	
-    for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
-    {
-        if (th->function.acp1 == (actionf_p1)P_MobjThinker)
-            spritepresent[((mobj_t *)th)->sprite] = 1;
-    }
-	
-    spritememory = 0;
+    memset(hitlist, 0, numsprites);
 
-    for (i=0 ; i<numsprites ; i++)
     {
-        if (!spritepresent[i])
-            continue;
-        
-        for (j=0 ; j<sprites[i].numframes ; j++)
+        thinker_t *th;
+        for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
+            if (th->function.acp1 == (actionf_p1)P_MobjThinker)
+            hitlist[((mobj_t *)th)->sprite] = 1;
+    }
+
+    for (i=numsprites; --i >= 0;)
+        if (hitlist[i])
         {
-            sf = &sprites[i].spriteframes[j];
-            for (k=0 ; k<8 ; k++)
+            int j = sprites[i].numframes;
+
+            while (--j >= 0)
             {
-                lump = firstspritelump + sf->lump[k];
-                spritememory += lumpinfo[lump]->size;
-                W_CacheLumpNum(lump , PU_CACHE);
+                short *sflump = sprites[i].spriteframes[j].lump;
+                int k = 7;
+
+                do
+                W_CacheLumpNum(firstspritelump + sflump[k], PU_CACHE);
+                while (--k >= 0);
             }
         }
-    }
 
-    Z_Free(spritepresent);
+    free(hitlist);
 }
 
 
