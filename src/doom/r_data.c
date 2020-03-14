@@ -279,93 +279,129 @@ R_DrawColumnInCache
 //
 // Rewritten by Lee Killough for performance and to fix Medusa bug
 
-static void R_GenerateComposite (int texnum)
+void R_GenerateComposite (int texnum)
 {
-    byte *block = Z_Malloc(texturecompositesize[texnum], PU_STATIC, 
-                          (void **) &texturecomposite[texnum]);
-    texture_t *texture = textures[texnum];
+    byte*		block;
+    texture_t*		texture;
+    texpatch_t*		patch;	
+    patch_t*		realpatch;
+    int			x;
+    int			x1;
+    int			x2;
+    int			i;
+    column_t*		patchcol;
+    short*		collump;
+    unsigned*		colofs; // killough 4/9/98: make 32-bit
+    byte*		marks; // killough 4/9/98: transparency marks
+    byte*		source; // killough 4/9/98: temporary column
+	
+    texture = textures[texnum];
 
+    block = Z_Malloc (texturecompositesize[texnum],
+		      PU_STATIC, 
+		      &texturecomposite[texnum]);	
+
+    collump = texturecolumnlump[texnum];
+    colofs = texturecolumnofs[texnum];
+    
     // Composite the columns together.
-    texpatch_t *patch = texture->patches;
-    short *collump = texturecolumnlump[texnum];
-    unsigned *colofs = texturecolumnofs[texnum]; // killough 4/9/98: make 32-bit
-    int i = texture->patchcount;
-
+    patch = texture->patches;
+		
     // killough 4/9/98: marks to identify transparent regions in merged textures
-    byte *marks = calloc(texture->width, texture->height), *source;
+    marks = calloc(texture->width, texture->height);
 
     // [crispy] initialize composite background to black (index 0)
     memset(block, 0, texturecompositesize[texnum]);
 
-    for (; --i >=0; patch++)
+    for (i=0 , patch = texture->patches;
+	 i<texture->patchcount;
+	 i++, patch++)
     {
-        patch_t *realpatch = W_CacheLumpNum(patch->patch, PU_CACHE);
-        int x, x1 = patch->originx, x2 = x1 + SHORT(realpatch->width);
-        const int *cofs = realpatch->columnofs - x1;
+	realpatch = W_CacheLumpNum (patch->patch, PU_CACHE);
+	x1 = patch->originx;
+	x2 = x1 + SHORT(realpatch->width);
 
-        if (x1 < 0)
-        x1 = 0;
-        if (x2 > texture->width)
-        x2 = texture->width;
+	if (x1<0)
+	    x = 0;
+	else
+	    x = x1;
+	
+	if (x2 > texture->width)
+	    x2 = texture->width;
 
-        for (x = x1; x < x2 ; x++)
-        // [crispy] generate composites for single-patched textures as well
-        // killough 1/25/98, 4/9/98: Fix medusa bug.
-        R_DrawColumnInCache((column_t*)((byte*) realpatch + LONG(cofs[x])),
-                            block + colofs[x], patch->originy,
-                            texture->height, marks + x*texture->height);
+	for ( ; x<x2 ; x++)
+	{
+	    // Column does not have multiple patches?
+	    // [crispy] generate composites for single-patched columns as well
+	    /*
+	    if (collump[x] >= 0)
+		continue;
+	    */
+	    
+	    patchcol = (column_t *)((byte *)realpatch
+				    + LONG(realpatch->columnofs[x-x1]));
+	    R_DrawColumnInCache (patchcol,
+				 block + colofs[x],
+				 // [crispy] single-patched columns are normally not composited
+				 // but directly read from the patch lump ignoring their originy
+				 collump[x] >= 0 ? 0 : patch->originy,
+				 texture->height,
+				 marks + x * texture->height);
+	}
+						
     }
 
     // killough 4/9/98: Next, convert multipatched columns into true columns,
-    // to fix Medusa bug while still allowing for transparent regions.	
+    // to fix Medusa bug while still allowing for transparent regions.
 
-    source = malloc(texture->height);       // temporary column
-    for (i=0; i < texture->width; i++)
-    if (collump[i] == -1)                 // process only multipatched columns
+    source = I_Realloc(NULL, texture->height); // temporary column
+    for (i = 0; i < texture->width; i++)
     {
-        column_t *col = (column_t *)(block + colofs[i] - 3);  // cached column
-        const byte *mark = marks + i * texture->height;
-        int j = 0;
+	if (collump[i] == -1) // process only multipatched columns
+	{
+	    column_t *col = (column_t *)(block + colofs[i] - 3); // cached column
+	    const byte *mark = marks + i * texture->height;
+	    int j = 0;
 
-        // save column in temporary so we can shuffle it around
-        memcpy(source, (byte *) col + 3, texture->height);
+	    // save column in temporary so we can shuffle it around
+	    memcpy(source, (byte *) col + 3, texture->height);
 
-        for (;;)  // reconstruct the column by scanning transparency marks
-        {
-            unsigned len;        // killough 12/98
+	    for ( ; ; ) // reconstruct the column by scanning transparency marks
+	    {
+		unsigned len; // killough 12/98
 
-            while (j < texture->height && !mark[j]) // skip transparent cells
-            j++;
+		while (j < texture->height && !mark[j]) // skip transparent cells
+		    j++;
 
-            if (j >= texture->height)           // if at end of column
-            {
-                col->topdelta = -1;             // end-of-column marker
-                break;
-            }
+		if (j >= texture->height) // if at end of column
+		{
+		    col->topdelta = -1; // end-of-column marker
+		    break;
+		}
 
-            col->topdelta = j;                  // starting offset of post
+		col->topdelta = j; // starting offset of post
 
-            // killough 12/98:
-            // Use 32-bit len counter, to support tall 1s multipatched textures
+		// killough 12/98:
+		// Use 32-bit len counter, to support tall 1s multipatched textures
 
-            for (len = 0; j < texture->height && mark[j]; j++)
-            len++;                    // count opaque cells
+		for (len = 0; j < texture->height && mark[j]; j++)
+		    len++; // count opaque cells
 
-            col->length = len; // killough 12/98: intentionally truncate length
+		col->length = len; // killough 12/98: intentionally truncate length
 
-            // copy opaque cells from the temporary back into the column
-            memcpy((byte *) col + 3, source + col->topdelta, len);
-            col = (column_t *)((byte *) col + len + 4); // next post
-        }
+		// copy opaque cells from the temporary back into the column
+		memcpy((byte *) col + 3, source + col->topdelta, len);
+		col = (column_t *)((byte *) col + len + 4); // next post
+	    }
+	}
     }
 
-    free(source);         // free temporary column
-    free(marks);          // free transparency marks
+    free(source); // free temporary column
+    free(marks); // free transparency marks
 
     // Now that the texture has been built in column cache,
-    // it is purgable from zone memory.
-
-    Z_ChangeTag(block, PU_CACHE);
+    //  it is purgable from zone memory.
+    Z_ChangeTag (block, PU_CACHE);
 }
 
 
