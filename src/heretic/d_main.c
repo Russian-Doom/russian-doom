@@ -94,6 +94,7 @@ FILE *debugfile;
 // [JN] Support for fallback to the English language.
 int english_language = 0;
 static int show_endoom = 0;
+int level_brightness = 0; // [JN] Level brightness level
 int local_time = 0; // [JN] Local time widget
 
 void D_ConnectNetGame(void);
@@ -879,6 +880,7 @@ void D_BindVariables(void)
 
     // Display
     M_BindIntVariable("screenblocks",           &screenblocks);
+    M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("local_time",             &local_time);
 
     // Sound

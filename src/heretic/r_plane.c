@@ -564,7 +564,7 @@ void R_DrawPlanes(void)
                 ds_source = tempSource;
         }
         planeheight = abs(pl->height - viewz);
-        light = (pl->lightlevel >> LIGHTSEGSHIFT) + extralight;
+        light = ((pl->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
         if (light >= LIGHTLEVELS)
             light = LIGHTLEVELS - 1;
         if (light < 0)

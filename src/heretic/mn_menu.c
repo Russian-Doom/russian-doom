@@ -149,6 +149,7 @@ static boolean M_RD_Screenshots(int option);
 static void DrawDisplayMenu(void);
 static boolean M_RD_ScreenSize(int option);
 static boolean M_RD_Gamma(int option);
+static boolean M_RD_LevelBrightness(int option);
 static boolean M_RD_LocalTime(int option);
 static boolean M_RD_Messages(int option);
 static boolean M_RD_ShadowedText(int option);
@@ -515,8 +516,10 @@ static MenuItem_t DisplayItems[] = {
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
     {ITT_LRFUNC, "GAMMA-CORRECTION",         M_RD_Gamma,        0, MENU_NONE},
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
+    {ITT_LRFUNC, "LEVEL BRIGHTNESS",         M_RD_LevelBrightness, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
     {ITT_LRFUNC, "LOCAL TIME:",              M_RD_LocalTime,    0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, 
     {ITT_LRFUNC, "MESSAGES:",                M_RD_Messages,     0, MENU_NONE},
     {ITT_LRFUNC, "TEXT CASTS SHADOWS:",      M_RD_ShadowedText, 0, MENU_NONE}
 };
@@ -526,8 +529,10 @@ static MenuItem_t DisplayItems_Rus[] = {
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, // 
     {ITT_LRFUNC, "EHJDTYM UFVVF-RJHHTRWBB",  M_RD_Gamma,        0, MENU_NONE}, // УРОВЕНЬ ГАММА-КОРРЕКЦИИ
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, //
-    {ITT_LRFUNC, "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,    0, MENU_NONE}, // СИСТЕМНОЕ ВРЕМЯ
+    {ITT_LRFUNC, "EHJDTYM JCDTOTYYJCNB",     M_RD_LevelBrightness, 0, MENU_NONE}, // УРОВЕНЬ ОСВЕЩЕННОСТИ
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, //
+    {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, //
+    {ITT_LRFUNC, "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,    0, MENU_NONE}, // СИСТЕМНОЕ ВРЕМЯ
     {ITT_LRFUNC, "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,     0, MENU_NONE}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
     {ITT_LRFUNC, "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText, 0, MENU_NONE}  // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
     
@@ -536,7 +541,7 @@ static MenuItem_t DisplayItems_Rus[] = {
 static Menu_t DisplayMenu = {
     36 + ORIGWIDTH_DELTA, 42,
     DrawDisplayMenu,
-    8, DisplayItems,
+    10, DisplayItems,
     0,
     MENU_OPTIONS
 };
@@ -544,7 +549,7 @@ static Menu_t DisplayMenu = {
 static Menu_t DisplayMenu_Rus = {
     36 + ORIGWIDTH_DELTA, 42,
     DrawDisplayMenu,
-    8, DisplayItems_Rus,
+    10, DisplayItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -1802,7 +1807,7 @@ static void DrawDisplayMenu(void)
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("SCREEN"), 36 + ORIGWIDTH_DELTA, 32);
-        MN_DrTextSmallENG(DEH_String("MESSAGES AND TEXTS"), 36 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallENG(DEH_String("MESSAGES AND TEXTS"), 36 + ORIGWIDTH_DELTA, 102);
         dp_translation = NULL;
     }
     else
@@ -1813,7 +1818,7 @@ static void DrawDisplayMenu(void)
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("\'RHFY"), 36 + ORIGWIDTH_DELTA, 32);              // ЭКРАН
-        MN_DrTextSmallRUS(DEH_String("CJJ,OTYBZ B NTRCNS"), 36 + ORIGWIDTH_DELTA, 92);  // СООБЩЕНИЯ И ТЕКСТЫ
+        MN_DrTextSmallRUS(DEH_String("CJJ,OTYBZ B NTRCNS"), 36 + ORIGWIDTH_DELTA, 102); // СООБЩЕНИЯ И ТЕКСТЫ
         dp_translation = NULL;
     }
 
@@ -1835,52 +1840,55 @@ static void DrawDisplayMenu(void)
     // Gamma-correction
     DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 3, 18, usegamma);
 
+    // Level brightness
+    DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 5, 5, level_brightness / 16);
+
     // Local time:
     if (local_time)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 110 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("ON"), 110 + ORIGWIDTH_DELTA, 112);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 157 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 157 + ORIGWIDTH_DELTA, 112);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 110 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("OFF"), 110 + ORIGWIDTH_DELTA, 112);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 157 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 157 + ORIGWIDTH_DELTA, 112);
     }
 
     // Messages:
     if (messageson)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 108 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallENG(DEH_String("ON"), 108 + ORIGWIDTH_DELTA, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 208 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 208 + ORIGWIDTH_DELTA, 122);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 108 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallENG(DEH_String("OFF"), 108 + ORIGWIDTH_DELTA, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 208 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 208 + ORIGWIDTH_DELTA, 122);
     }
 
     // Text casting shadows:
     if (draw_shadowed_text)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 179 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallENG(DEH_String("ON"), 179 + ORIGWIDTH_DELTA, 132);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 220 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 220 + ORIGWIDTH_DELTA, 132);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 179 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallENG(DEH_String("OFF"), 179 + ORIGWIDTH_DELTA, 132);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 220 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 220 + ORIGWIDTH_DELTA, 132);
     }
 }
 
@@ -1935,6 +1943,23 @@ static boolean M_RD_Gamma(int option)
                                           GammaText[usegamma] :
                                           GammaText_Rus[usegamma],
                                           false);
+    return true;
+}
+
+static boolean M_RD_LevelBrightness(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (level_brightness > 0)
+            level_brightness -= 16;
+        break;
+
+        case 1:
+        if (level_brightness < 64)
+            level_brightness += 16;
+        break;
+    }
     return true;
 }
 
@@ -2878,6 +2903,7 @@ void M_RD_DoResetSettings(void)
     // Display
     screenblocks        = 10;
     usegamma            = 0;
+    level_brightness    = 0;
     local_time          = 0;
     messageson          = 1;
     draw_shadowed_text  = 1;
