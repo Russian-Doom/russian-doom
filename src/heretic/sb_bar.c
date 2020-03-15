@@ -619,21 +619,31 @@ void SB_Drawer(void)
     static char s[64];
     int f = real_fps;
     char fps [999];
-    strftime(s, sizeof(s), "%H:%M", tm);
 
     // [JN] Draw local time widget
     if (local_time)
     {
-        M_snprintf(s, sizeof(s), s);
-        MN_DrTextC(s, 293 + (ORIGWIDTH_DELTA * 2), 13);
+
+        strftime(s, sizeof(s), 
+                 local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
+                 local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
+                 local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
+                 local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
+                                   "", tm);        // No time
+
+        MN_DrTextC(s, (local_time == 1 ? 281 :
+                       local_time == 2 ? 269 :
+                       local_time == 3 ? 293 :
+                       local_time == 4 ? 281 : 0) 
+                       + (ORIGWIDTH_DELTA * 2), 13);
     }
 
     // [JN] Draw FPS widget
     if (show_fps)
     {
         sprintf (fps, "%d", f);
-        MN_DrTextC("!", 281 + (ORIGWIDTH_DELTA * 2), 23);   // [JN] "fps:" char
-        MN_DrTextC(fps, 299 + (ORIGWIDTH_DELTA * 2), 23);   // [JN] fps digits
+        MN_DrTextC("FPS:", 279 + (ORIGWIDTH_DELTA * 2), 23);
+        MN_DrTextC(fps, 297 + (ORIGWIDTH_DELTA * 2), 23);   // [JN] fps digits
     }
 
     // Sound info debug stuff

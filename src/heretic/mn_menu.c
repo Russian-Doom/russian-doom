@@ -983,9 +983,16 @@ void MN_DrTextC(char *text, int x, int y)
 
     while ((c = *text++) != 0)
     {
-        p = W_CacheLumpNum(FontCBaseLump + c - 33, PU_CACHE);
-        V_DrawPatch(x, y, p);
-        x += SHORT(p->width);
+        if (c < 33) // [JN] Means space symbol (" ").
+        {
+            x += 4;
+        }
+        else
+        {
+            p = W_CacheLumpNum(FontCBaseLump + c - 33, PU_CACHE);
+            V_DrawPatch(x, y, p);
+            x += SHORT(p->width);
+        }
     }
 }
 
@@ -1844,19 +1851,23 @@ static void DrawDisplayMenu(void)
     DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 5, 5, level_brightness / 16);
 
     // Local time:
-    if (local_time)
+    if (english_language)
     {
-        if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 110 + ORIGWIDTH_DELTA, 112);
-        else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 157 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallENG(DEH_String(
+                          local_time == 1 ? "12-HOUR (HH:MM)" :
+                          local_time == 2 ? "12-HOUR (HH:MM:SS)" :
+                          local_time == 3 ? "24-HOUR (HH:MM)" :
+                          local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF"),
+                          110 + ORIGWIDTH_DELTA, 112);
     }
     else
     {
-        if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 110 + ORIGWIDTH_DELTA, 112);
-        else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 157 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallRUS(DEH_String(
+                          local_time == 1 ? "12-XFCJDJT (XX:VV)" :
+                          local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
+                          local_time == 3 ? "24-XFCJDJT (XX:VV)" :
+                          local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK"),
+                          157 + ORIGWIDTH_DELTA, 112);
     }
 
     // Messages:
@@ -1965,7 +1976,20 @@ static boolean M_RD_LevelBrightness(int option)
 
 static boolean M_RD_LocalTime(int option)
 {
-    local_time ^= 1;
+    switch(option)
+    {
+        case 0: 
+        local_time--;
+        if (local_time < 0) 
+            local_time = 4;
+        break;
+
+        case 1:
+        local_time++;
+        if (local_time > 4)
+            local_time = 0;
+        break;
+    }
     return true;
 }
 
