@@ -78,7 +78,7 @@ static int fullscreen_width = 0, fullscreen_height = 0;
 static int window_title_short = 1;
 static int window_width = 640, window_height = 480;
 static int startup_delay = 35;  // [JN] Redused from 1000 to 35
-static int usegamma = 0;
+static int usegamma = 4; // [JN] Set default gamma to improved level 2.0.
 
 int uncapped_fps = 1;
 int vsync = 1;

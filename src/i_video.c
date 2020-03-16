@@ -211,8 +211,9 @@ static boolean window_focused = true;
 static boolean need_resize = false;
 
 // Gamma correction level to use
+// [JN] Set default gamma to improved level 2.0.
 
-int usegamma = 0;
+int usegamma = 4;
 
 static boolean MouseShouldBeGrabbed()
 {
