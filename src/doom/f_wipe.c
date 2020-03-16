@@ -181,8 +181,8 @@ int wipe_doMelt (int width, int height, int ticks)
             }
             else if (y[i] < height)
             {
-                // [JN] Atari Jaguar: Loading delay emulation
-                if (gamemission == jaguar)
+                // [JN] Loading delay emulation
+                if (gamemission == jaguar || screen_wiping == 2)
                 {
                     dy = 13; // [JN] almost identical to original wipe duration
                     y[i] += dy;
@@ -190,7 +190,7 @@ int wipe_doMelt (int width, int height, int ticks)
 
                     done = false;
                 }
-                // [JN] Standard wiping routine
+                // [JN] Standard wiping
                 else
                 {
                 dy = (y[i] < 16) ? y[i]+1 : 8;
@@ -234,8 +234,9 @@ int wipe_exitMelt (int width, int height, int ticks)
     Z_Free(y);
     Z_Free(wipe_scr_start);
     Z_Free(wipe_scr_end);
-    // [JN] Update only classic HUD
-    if (gamemission == jaguar && screenblocks <= 10 && gamestate == GS_LEVEL)
+    // [JN] Need to update classic HUD
+    if ((gamemission == jaguar || screen_wiping == 2)
+    && screenblocks <= 10 && gamestate == GS_LEVEL)
     {
         ST_refreshBackground();
         ST_drawWidgets(true);
@@ -294,10 +295,9 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
         (*wipes[wipeno*3+2])(width, height, ticks);
     }
 
-    // [JN] Atari Jaguar: loading emulation
-    if (gamemission == jaguar)
+    // [JN] Draw "Loading" picture
+    if (gamemission == jaguar || screen_wiping == 2)
     {
-        // Draw "Loading" picture, with wide screen support
         V_DrawShadowedPatchDoom (ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String
                                 (english_language ? "M_LOADIN" : "RD_LDNG"),
                                  PU_CACHE));
