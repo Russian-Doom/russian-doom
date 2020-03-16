@@ -4082,7 +4082,7 @@ void M_RD_BackToDefaultsResponse(int key)
 
     // Display
     screenSize         = 10;
-    usegamma           = 0;
+    usegamma           = 4;
     level_brightness   = 0;
     detailLevel        = 0;
     local_time         = 0;
