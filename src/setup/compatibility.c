@@ -50,7 +50,7 @@ int invul_sky = 1;
 int flip_weapons = 0;
 
 // Gameplay: Audible
-int play_exit_sfx = 1;
+int play_exit_sfx = 0;
 int crushed_corpses_sfx = 1;
 int blazing_door_fix_sfx = 1;
 int noise_alert_sfx = 0;
