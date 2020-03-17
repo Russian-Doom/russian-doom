@@ -1008,7 +1008,7 @@ void HU_Ticker(void)
     static char f[64];
 
     // [JN] Compose the local time widget
-    if (local_time)
+    if (local_time && !vanillaparm)
     {
         strftime(s, sizeof(s), 
                  local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
