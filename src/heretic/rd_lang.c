@@ -132,6 +132,10 @@ char* txt_gamma_original_3;
 char* txt_gamma_original_35;
 char* txt_gamma_original_4;
 
+// Port-specific strings
+char* txt_crosshair_on;
+char* txt_crosshair_off;
+
 // -----------------------------------------------------------------------------
 // [JN] Function for (pre-)defining strings for text translations.
 // -----------------------------------------------------------------------------
@@ -249,6 +253,10 @@ void RD_DefineLanguageStrings (void)
         txt_gamma_original_3   = TXT_GAMMA_ORIGINAL_3;
         txt_gamma_original_35  = TXT_GAMMA_ORIGINAL_35;
         txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4;
+
+        // Port-specific strings
+        txt_crosshair_on       = TXT_CROSSHAIR_ON;
+        txt_crosshair_off      = TXT_CROSSHAIR_OFF;
     }
     else
     {
@@ -361,6 +369,10 @@ void RD_DefineLanguageStrings (void)
         txt_gamma_original_3   = TXT_GAMMA_ORIGINAL_3_RUS;
         txt_gamma_original_35  = TXT_GAMMA_ORIGINAL_35_RUS;
         txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4_RUS;
+
+        // Port-specific strings
+        txt_crosshair_on       = TXT_CROSSHAIR_ON_RUS;
+        txt_crosshair_off      = TXT_CROSSHAIR_OFF_RUS;
     }
 }
 

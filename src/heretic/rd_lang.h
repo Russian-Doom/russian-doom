@@ -141,6 +141,10 @@ extern char* txt_gamma_original_3;
 extern char* txt_gamma_original_35;
 extern char* txt_gamma_original_4;
 
+// Port-specific strings
+extern char* txt_crosshair_on;
+extern char* txt_crosshair_off;
+
 
 // -----------------------------------------------------------------------------
 // English language
