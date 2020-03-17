@@ -182,7 +182,7 @@ int wipe_doMelt (int width, int height, int ticks)
             else if (y[i] < height)
             {
                 // [JN] Loading delay emulation
-                if (gamemission == jaguar || screen_wiping == 2)
+                if ((gamemission == jaguar || screen_wiping == 2) && !vanillaparm)
                 {
                     dy = 13; // [JN] almost identical to original wipe duration
                     y[i] += dy;
@@ -296,7 +296,7 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     }
 
     // [JN] Draw "Loading" picture
-    if (gamemission == jaguar || screen_wiping == 2)
+    if ((gamemission == jaguar || screen_wiping == 2) && !vanillaparm)
     {
         V_DrawShadowedPatchDoom (ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String
                                 (english_language ? "M_LOADIN" : "RD_LDNG"),
