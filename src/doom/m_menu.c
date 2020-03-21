@@ -1267,7 +1267,7 @@ menuitem_t RD_Options_Menu[]=
     {1, "Gameplay",         M_RD_Choose_Gameplay_1, 'g'},
     {1, "End Game",         M_EndGame,              'e'},
     {1, "Reset settings",   M_RD_BackToDefaults,    'r'},
-    {1, "Language:english", M_RD_ChangeLanguage,    'l'},
+    {2, "Language:english", M_RD_ChangeLanguage,    'l'},
     {-1,"",0,'\0'}
 };
 
@@ -1294,7 +1294,7 @@ menuitem_t RD_Options_Menu_Rus[]=
     {1, "Utqvgktq",       M_RD_Choose_Gameplay_1, 'u'}, // Геймплей
     {1, "Pfrjyxbnm buhe", M_EndGame,              'p'}, // Закончить игру
     {1, "C,hjc yfcnhjtr", M_RD_BackToDefaults,    'c'}, // Сброс настроек
-    {1, "Zpsr#heccrbq",   M_RD_ChangeLanguage,    'z'}, // Язык: русский
+    {2, "Zpsr#heccrbq",   M_RD_ChangeLanguage,    'z'}, // Язык: русский
     {-1,"",0,'\0'}
 };
 

@@ -433,9 +433,8 @@ static MenuItem_t OptionsItems[] = {
     {ITT_SETMENU, "SOUND",             NULL,                0, MENU_SOUND    },
     {ITT_SETMENU, "CONTROLS",          NULL,                0, MENU_CONTROLS },
     {ITT_SETMENU, "GAMEPLAY",          NULL,                0, MENU_GAMEPLAY1},
-//  {ITT_EFUNC,   "END GAME",          M_RD_EndGame,        0, MENU_NONE     },
     {ITT_EFUNC,   "RESET SETTINGS",    M_RD_ResetSettings,  0, MENU_NONE     },
-    {ITT_EFUNC,   "LANGUAGE: ENGLISH", M_RD_ChangeLanguage, 0, MENU_NONE     }
+    {ITT_LRFUNC,  "LANGUAGE: ENGLISH", M_RD_ChangeLanguage, 0, MENU_NONE     }
 };
 
 static MenuItem_t OptionsItems_Rus[] = {
@@ -444,9 +443,8 @@ static MenuItem_t OptionsItems_Rus[] = {
     {ITT_SETMENU, "FELBJ",             NULL,                0, MENU_SOUND    },  // АУДИО
     {ITT_SETMENU, "EGHFDKTYBT",        NULL,                0, MENU_CONTROLS },  // УПРАВЛЕНИЕ
     {ITT_SETMENU, "UTQVGKTQ",          NULL,                0, MENU_GAMEPLAY1},  // ГЕЙМПЛЕЙ
-//  {ITT_EFUNC,   "PFRJYXBNM BUHE",    M_RD_EndGame,        0, MENU_NONE     },  // ЗАКОНЧИТЬ ИГРУ
     {ITT_EFUNC,   "C,HJC YFCNHJTR",    M_RD_ResetSettings,  0, MENU_NONE     },  // СБРОС НАСТРОЕК
-    {ITT_EFUNC,   "ZPSR: HECCRBQ",     M_RD_ChangeLanguage, 0, MENU_NONE     }   // ЯЗЫК: РУССКИЙ
+    {ITT_LRFUNC,  "ZPSR: HECCRBQ",     M_RD_ChangeLanguage, 0, MENU_NONE     }   // ЯЗЫК: РУССКИЙ
 };
 
 static Menu_t OptionsMenu = {
