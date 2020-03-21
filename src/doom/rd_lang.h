@@ -2297,7 +2297,7 @@ PRESSYN_RUS
 //
 
 // English
-#define STSTR_VERSION   "Version 4.1"
+#define STSTR_VERSION   "Version 4.2"
 #if defined (_WIN64)
 #define STSRT_ARCH      " - (x64)"
 #elif defined (_WIN32)
@@ -2305,10 +2305,10 @@ PRESSYN_RUS
 #else
 #define STSRT_ARCH      ""
 #endif
-#define STSRT_DATE      "2020-02-15"        // YYYY-MM-DD
+#define STSRT_DATE      "2020-03-21"        // YYYY-MM-DD
 
 // Русский
-#define STSTR_VERSION_RUS   "dthcbz 4>1"    // Версия 4.1
+#define STSTR_VERSION_RUS   "dthcbz 4>2"    // Версия 4.2
 #if defined (_WIN64)
 #define STSRT_ARCH_RUS      " - ([64)"      // x64
 #elif defined (_WIN32)
