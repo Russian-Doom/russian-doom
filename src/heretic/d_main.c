@@ -52,6 +52,7 @@
 #include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
+#include "r_local.h"
 #include "s_sound.h"
 #include "w_main.h"
 #include "v_video.h"
@@ -160,8 +161,6 @@ void DrawMessage(void)
 // Draw current display, possibly wiping it from the previous.
 //
 //---------------------------------------------------------------------------
-
-void R_ExecuteSetViewSize(void);
 
 extern boolean finalestage;
 

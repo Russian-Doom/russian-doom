@@ -69,7 +69,6 @@
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
-void R_ExecuteSetViewSize(void);
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
 boolean F_Responder(event_t * ev);

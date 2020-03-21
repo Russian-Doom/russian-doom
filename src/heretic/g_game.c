@@ -33,6 +33,7 @@
 #include "m_misc.h"
 #include "m_random.h"
 #include "p_local.h"
+#include "r_local.h"
 #include "s_sound.h"
 #include "v_video.h"
 #include "jn.h"
@@ -442,6 +443,16 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         S_StartSound(NULL, sfx_chat);
 
         gamekeydown[key_togglecrosshair] = false;
+    }
+
+    // [JN] Toggle level flipping.
+    if (gamekeydown[key_togglefliplvls])
+    {
+        flip_levels ^= 1;
+        R_ExecuteSetViewSize();       // Redraw game screen
+        S_StartSound(NULL, sfx_chat); // Play quiet sound
+
+        gamekeydown[key_togglefliplvls] = false;
     }
 
 //

@@ -387,6 +387,7 @@ extern void (*colfunc) (void);
 extern void (*basecolfunc) (void);
 extern void (*tlcolfunc) (void);
 extern void (*spanfunc) (void);
+extern void R_ExecuteSetViewSize();
 
 int R_PointOnSide(fixed_t x, fixed_t y, node_t * node);
 int R_PointOnSegSide(fixed_t x, fixed_t y, seg_t * line);

@@ -1591,6 +1591,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_togglemlook),
 
     //!
+    // [JN] Toggle level flipping.
+    //
+
+    CONFIG_VARIABLE_KEY(key_togglefliplvls),
+
+    //!
     // [JN] Russian Doom menu
     //
 

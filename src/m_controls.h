@@ -36,6 +36,7 @@ extern int key_jump;
 extern int key_toggleautorun;
 extern int key_togglecrosshair;
 extern int key_togglemlook;
+extern int key_togglefliplvls;
  
 extern int key_flyup;
 extern int key_flydown;

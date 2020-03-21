@@ -1857,8 +1857,6 @@ static void M_RD_CrossHairScale(int option)
 
 static void M_RD_FlipLevels(int option)
 {
-    extern void R_ExecuteSetViewSize();
-
     flip_levels ^= 1;
 
     // [JN] Redraw game screen

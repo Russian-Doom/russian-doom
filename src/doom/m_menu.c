@@ -5546,6 +5546,17 @@ boolean M_Responder (event_t* ev)
         return true;
     }
 
+    // [JN] Toggle level flipping.
+    if (key == key_togglefliplvls)
+    {
+        flip_levels ^= 1;
+        R_ExecuteSetViewSize();         // Redraw game screen
+        S_UpdateStereoSeparation();     // Update stereo separation
+        S_StartSound(NULL, sfx_stnmov); // Play quiet sound
+
+        return true;
+    }
+
     // F-Keys
     if (!menuactive)
     {

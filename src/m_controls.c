@@ -44,6 +44,7 @@ int key_speed = KEY_RSHIFT;
 int key_toggleautorun = KEY_CAPSLOCK;
 int key_togglecrosshair = 'x';
 int key_togglemlook = '`';
+int key_togglefliplvls = 0;
 
 // 
 // Heretic keyboard controls
@@ -272,6 +273,7 @@ void M_BindBaseControls(void)
     M_BindIntVariable("key_toggleautorun",   &key_toggleautorun);
     M_BindIntVariable("key_togglecrosshair", &key_togglecrosshair);
     M_BindIntVariable("key_togglemlook",     &key_togglemlook);
+    M_BindIntVariable("key_togglefliplvls",  &key_togglefliplvls);
 
     M_BindIntVariable("key_lookup",         &key_lookup);
     M_BindIntVariable("key_lookdown",       &key_lookdown);

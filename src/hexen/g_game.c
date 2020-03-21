@@ -348,6 +348,16 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         gamekeydown[key_togglecrosshair] = false;
     }
 
+    // [JN] Toggle level flipping.
+    if (gamekeydown[key_togglefliplvls])
+    {
+        flip_levels ^= 1;
+        R_ExecuteSetViewSize();       // Redraw game screen
+        S_StartSound(NULL, SFX_CHAT); // Play quiet sound
+
+        gamekeydown[key_togglefliplvls] = false;
+    }
+
 //
 // let movement keys cancel each other out
 //
