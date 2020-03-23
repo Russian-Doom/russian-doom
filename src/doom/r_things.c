@@ -941,6 +941,9 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 
 		if (bobx)
 		{
+            if (chainsaw_attack_swing) // [JN] Own amplitude for Chainsaw attack
+            *sx += FixedMul(viewplayer->bob, finecosine[angle] / 16);
+            else
 			 *sx += FixedMul(viewplayer->bob, finecosine[angle]);
 		}
 	}
@@ -951,6 +954,9 @@ static inline void R_ApplyWeaponBob (fixed_t *sx, boolean bobx, fixed_t *sy, boo
 
 		if (boby)
 		{
+            if (chainsaw_attack_swing) // [JN] Own amplitude for Chainsaw attack
+            *sy += FixedMul(viewplayer->bob, finesine[angle*16 & (FINEANGLES / 2 - 1)] / 12);
+            else
 			*sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)]);
 		}
 	}
@@ -971,45 +977,6 @@ static inline void R_ApplyRaiseLowerBob (fixed_t *sx, boolean bobx)
 		if (bobx)
 		{
 			 *sx += FixedMul(viewplayer->bob, finecosine[angle]);
-		}
-	}
-}
-
-// -------------------------------------------------------------------------
-//
-// [crispy] & [JN] Уполовиненная амплитуда при стрельбе в движении
-//
-// -------------------------------------------------------------------------
-
-static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *sy, boolean boby)
-{
-	const angle_t angle = (128 * leveltime) & FINEMASK;
-
-	if (sx)
-	{
-		*sx = FRACUNIT;
-
-		if (bobx)
-		{
-            if (chainsaw_attack_swing) // [JN] Отдельная амплитуда для атаки бензопилы
-            *sx += FixedMul(viewplayer->bob, finecosine[angle] / 16);
-
-            else
-			*sx += FixedMul(viewplayer->bob, finecosine[angle] / 2);
-		}
-	}
-
-	if (sy)
-	{
-		*sy = 32 * FRACUNIT; // [crispy] WEAPONTOP
-
-		if (boby)
-		{
-            if (chainsaw_attack_swing) // [JN] Отдельная амплитуда для атаки бензопилы
-            *sy += FixedMul(viewplayer->bob, finesine[angle*16 & (FINEANGLES / 2 - 1)] / 12);
-
-            else
-			*sy += FixedMul(viewplayer->bob, finesine[angle & (FINEANGLES / 2 - 1)] / 2);
 		}
 	}
 }
@@ -1061,16 +1028,12 @@ void R_DrawPSprite (pspdef_t* psp)
 
     if (weapon_bobbing && !vanillaparm)
     {
-        // [JN] Apply halfed bobbing for firing states,
-        // normal bobbing for other states.
+        // [JN] Always apply bobbing for all states...
         if (state != winfo->downstate && state != winfo->upstate)
         {
-            if (viewplayer->attackdown)
-            R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
-            else
             R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
         }
-        // [JN] Apply X-bobbing only for weapon raising and lowering states.
+        // [JN] ...except X-bobbing only for raising and lowering states.
         else
         {
             R_ApplyRaiseLowerBob(&psp_sx, true);
