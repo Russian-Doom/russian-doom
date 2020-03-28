@@ -730,11 +730,6 @@ P_SpawnMobjSafe
     mobj->flags = info->flags;
     mobj->health = info->spawnhealth;
 
-    // [JN] Prevent bullet puffs and blood splats fall through the floor of moving platform.
-    // See: https://github.com/JNechaevsky/russian-doom/issues/150
-    if (singleplayer && (mobj->type == MT_PUFF || mobj->type == MT_BLOOD))
-    mobj->flags &= ~MF_NOBLOCKMAP;
-
     if (gameskill != sk_nightmare && gameskill != sk_ultranm)
 	mobj->reactiontime = info->reactiontime;
     
