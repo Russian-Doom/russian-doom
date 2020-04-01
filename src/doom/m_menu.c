@@ -1401,7 +1401,6 @@ enum
     rd_display_localtime,
     rd_display_empty4,
     rd_display_messages_settings,
-    rd_display_empty5,
     rd_display_automap_settings,
     rd_display_end
 } rd_display_e;
@@ -1422,7 +1421,6 @@ menuitem_t RD_Display_Menu[]=
     {2, "local time:",         M_RD_Change_LocalTime,       'l'},
     {-1,"",0,'\0'},
     {1, "messages settings",   M_RD_Choose_MessagesSettings, 'a'},
-    {-1,"",0,'\0'},
     {1, "automap settings",    M_RD_Choose_AutomapSettings, 'a'},
     {-1,"",0,'\0'}
 };
@@ -1452,9 +1450,8 @@ menuitem_t RD_Display_Menu_Rus[]=
     {2, "ehjdtym ltnfkbpfwbb:",     M_RD_Change_Detail,          'e'}, // Уровень детализации:
     {2, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
     {-1,"",0,'\0'},                                                    //
-    {1, "vty. yfcnhjqrb cjj,otybq", M_RD_Choose_MessagesSettings, 'a'},// Меню настройки сообщений
-    {-1,"",0,'\0'},                                                    //
-    {1, "vty. yfcnhjqrb rfhns",     M_RD_Choose_AutomapSettings, 'v'}, // Меню настройки карты
+    {1, "yfcnhjqrb cjj,otybq",      M_RD_Choose_MessagesSettings,'y'}, // Настройки сообщений
+    {1, "yfcnhjqrb rfhns",          M_RD_Choose_AutomapSettings, 'y'}, // Настройки карты
     {-1,"",0,'\0'}
 };
 
@@ -2543,17 +2540,10 @@ void M_RD_Draw_Display(void)
                                                "off");
 
         //
-        // Messages and texts
+        // Interface
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 125, "Messages and texts");  
-        dp_translation = NULL;
-
-        //
-        // Automap
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 145, "Automap");
+        M_WriteTextSmall_ENG(35 + ORIGWIDTH_DELTA, 125, "Interface");  
         dp_translation = NULL;
     }
     else
@@ -2579,17 +2569,10 @@ void M_RD_Draw_Display(void)
                                                "dsrk");
 
         //
-        // Сообщения и тексты
+        // Интерфейс
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 125, "cjj,otybz b ntrcns");  
-        dp_translation = NULL;
-
-        //
-        // Карта
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 145, "rfhnf");
+        M_WriteTextSmall_RUS(35 + ORIGWIDTH_DELTA, 125, "bynthatqc");  
         dp_translation = NULL;
     }
 
