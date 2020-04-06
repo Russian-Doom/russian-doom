@@ -67,7 +67,7 @@ int     scaledviewheight;
 int     viewwindowx;
 int     viewwindowy; 
 byte*   ylookup[MAXHEIGHT]; 
-int     columnofs[MAXWIDTH]; 
+int     columnofs[WIDEMAXWIDTH]; 
 
 
 // Color tables for different players,
@@ -127,7 +127,7 @@ void R_DrawColumn (void)
     return;
 
 #ifdef RANGECHECK
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawColumn: %i to %i at %i" :
@@ -177,7 +177,7 @@ void R_DrawColumn (void)
                 // heightmask is the Tutti-Frutti fix -- killough
 
                 *dest = colormap[source[frac>>FRACBITS]];
-                dest += SCREENWIDTH;                     // killough 11/98
+                dest += screenwidth;                     // killough 11/98
                 if ((frac += fracstep) >= heightmask)
                 frac -= heightmask;
             }
@@ -188,10 +188,10 @@ void R_DrawColumn (void)
             while ((count-=2)>=0)   // texture height is a power of 2 -- killough
             {
                 *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
-                dest += SCREENWIDTH;   // killough 11/98
+                dest += screenwidth;   // killough 11/98
                 frac += fracstep;
                 *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
-                dest += SCREENWIDTH;   // killough 11/98
+                dest += screenwidth;   // killough 11/98
                 frac += fracstep;
             }
             if (count & 1)
@@ -220,7 +220,7 @@ void R_DrawColumnLow (void)
     return; 
 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawColumn: %i to %i at %i" :
@@ -257,14 +257,14 @@ void R_DrawColumnLow (void)
         {
             *dest2 = *dest = dc_colormap[dc_source[frac>>FRACBITS]];
 
-            dest += SCREENWIDTH << hires;
-            dest2 += SCREENWIDTH << hires;
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
 
             if (hires)
             {
                 *dest4 = *dest3 = dc_colormap[dc_source[frac>>FRACBITS]];
-                dest3 += SCREENWIDTH << hires;
-                dest4 += SCREENWIDTH << hires;
+                dest3 += screenwidth << hires;
+                dest4 += screenwidth << hires;
             }
 
             if ((frac += fracstep) >= heightmask)
@@ -277,14 +277,14 @@ void R_DrawColumnLow (void)
         {
             // Hack. Does not work corretly.
             *dest2 = *dest = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
-            dest += SCREENWIDTH << hires;
-            dest2 += SCREENWIDTH << hires;
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
 
             if (hires)
             {
                 *dest4 = *dest3 = dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]];
-                dest3 += SCREENWIDTH << hires;
-                dest4 += SCREENWIDTH << hires;
+                dest3 += screenwidth << hires;
+                dest4 += screenwidth << hires;
             }
 
             frac += fracstep; 
@@ -299,6 +299,7 @@ void R_DrawColumnLow (void)
 //
 #define FUZZTABLE   50 
 #define FUZZOFF     (SCREENWIDTH)
+#define WFUZZOFF    (WIDESCREENWIDTH)
 
 int	fuzzoffset[FUZZTABLE] =
 {
@@ -310,6 +311,17 @@ int	fuzzoffset[FUZZTABLE] =
     FUZZOFF, -FUZZOFF,-FUZZOFF,-FUZZOFF,-FUZZOFF, FUZZOFF, FUZZOFF,
     FUZZOFF,  FUZZOFF,-FUZZOFF, FUZZOFF, FUZZOFF,-FUZZOFF, FUZZOFF 
 };
+
+int	wfuzzoffset[FUZZTABLE] =
+{
+    WFUZZOFF,-WFUZZOFF,WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,
+    WFUZZOFF,WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,
+    WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,-WFUZZOFF,-WFUZZOFF,-WFUZZOFF,
+    WFUZZOFF,-WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,
+    WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,-WFUZZOFF,WFUZZOFF,
+    WFUZZOFF,-WFUZZOFF,-WFUZZOFF,-WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,
+    WFUZZOFF,WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,WFUZZOFF 
+}; 
 
 int	fuzzpos = 0; 
 
@@ -344,6 +356,7 @@ void R_DrawFuzzColumn (void)
     fixed_t frac;
     fixed_t fracstep;	 
     boolean cutoff = false;
+    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
 
     // Adjust borders. Low... 
     if (!dc_yl) 
@@ -363,7 +376,7 @@ void R_DrawFuzzColumn (void)
     return; 
 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawFuzzColumn: %i to %i at %i" :
@@ -386,13 +399,13 @@ void R_DrawFuzzColumn (void)
         //  a pixel that is either one column
         //  left or right of the current one.
         // Add index from colormap to index.
-        *dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
+        *dest = colormaps[6*256+dest[afuzzoffset[fuzzpos]]]; 
 
         // Clamp table lookup index.
         if (++fuzzpos == FUZZTABLE) 
         fuzzpos = 0;
 
-        dest += SCREENWIDTH;
+        dest += screenwidth;
 
         frac += fracstep; 
     } while (count--); 
@@ -401,7 +414,14 @@ void R_DrawFuzzColumn (void)
     // draw one extra line using only pixels of that line and the one above
     if (cutoff)
     {
-        *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (widescreen)
+        {
+            *dest = colormaps[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+        }
+        else
+        {
+            *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        }
     }
 } 
 
@@ -418,6 +438,7 @@ void R_DrawFuzzColumnLow (void)
     fixed_t fracstep;	 
     int     x;
     boolean cutoff = false;
+    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
 
     // Adjust borders. Low... 
     if (!dc_yl) 
@@ -440,7 +461,7 @@ void R_DrawFuzzColumnLow (void)
     x = dc_x << 1;
 
 #ifdef RANGECHECK 
-    if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawFuzzColumnLow: %i to %i at %i" :
@@ -467,22 +488,22 @@ void R_DrawFuzzColumnLow (void)
         //  a pixel that is either one column
         //  left or right of the current one.
         // Add index from colormap to index.
-        *dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
-        *dest2 = colormaps[6*256+dest2[fuzzoffset[fuzzpos]]]; 
+        *dest = colormaps[6*256+dest[afuzzoffset[fuzzpos]]]; 
+        *dest2 = colormaps[6*256+dest2[afuzzoffset[fuzzpos]]]; 
         if (hires)
         {
-            *dest3 = colormaps[6*256+dest[fuzzoffset[fuzzpos]]];
-            *dest4 = colormaps[6*256+dest2[fuzzoffset[fuzzpos]]];
-            dest3 += SCREENWIDTH << hires;
-            dest4 += SCREENWIDTH << hires;
+            *dest3 = colormaps[6*256+dest[afuzzoffset[fuzzpos]]];
+            *dest4 = colormaps[6*256+dest2[afuzzoffset[fuzzpos]]];
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
         }
 
         // Clamp table lookup index.
         if (++fuzzpos == FUZZTABLE) 
         fuzzpos = 0;
 
-        dest += SCREENWIDTH << hires;
-        dest2 += SCREENWIDTH << hires;
+        dest += screenwidth << hires;
+        dest2 += screenwidth << hires;
 
         frac += fracstep; 
     } while (count--); 
@@ -491,8 +512,18 @@ void R_DrawFuzzColumnLow (void)
     // draw one extra line using only pixels of that line and the one above
     if (cutoff)
     {
-        *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        *dest2 = colormaps[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (widescreen)
+        {
+            *dest = colormaps[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest2 = colormaps[6*256+dest2[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+        }
+        else
+        {
+            *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+            *dest2 = colormaps[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        }
+
+
         if (hires)
         {
             *dest3 = *dest;
@@ -513,6 +544,7 @@ void R_DrawFuzzColumnBW (void)
     fixed_t fracstep;	 
     boolean cutoff = false;
     boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
+    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -529,7 +561,7 @@ void R_DrawFuzzColumnBW (void)
     return; 
 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawFuzzColumnBW: %i to %i at %i" :
@@ -543,19 +575,26 @@ void R_DrawFuzzColumnBW (void)
 
     do 
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[fuzzoffset[fuzzpos]]]; 
+        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
         fuzzpos = 0;
 
-        dest += SCREENWIDTH;
+        dest += screenwidth;
 
         frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (widescreen)
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+        }
+        else
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        }
     }
 } 
 
@@ -571,6 +610,7 @@ void R_DrawFuzzColumnLowBW (void)
     int     x;
     boolean cutoff = false;
     boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
+    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -589,7 +629,7 @@ void R_DrawFuzzColumnLowBW (void)
     x = dc_x << 1;
 
 #ifdef RANGECHECK 
-    if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawFuzzColumnLowBW: %i to %i at %i" :
@@ -607,29 +647,38 @@ void R_DrawFuzzColumnLowBW (void)
 
     do 
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[fuzzoffset[fuzzpos]]]; 
-        *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[fuzzoffset[fuzzpos]]]; 
+        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]]; 
+        *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[afuzzoffset[fuzzpos]]]; 
         if (hires)
         {
-            *dest3 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[fuzzoffset[fuzzpos]]];
-            *dest4 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[fuzzoffset[fuzzpos]]];
-            dest3 += SCREENWIDTH << hires;
-            dest4 += SCREENWIDTH << hires;
+            *dest3 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]];
+            *dest4 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[afuzzoffset[fuzzpos]]];
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
         }
 
         if (++fuzzpos == FUZZTABLE) 
         fuzzpos = 0;
 
-        dest += SCREENWIDTH << hires;
-        dest2 += SCREENWIDTH << hires;
+        dest += screenwidth << hires;
+        dest2 += screenwidth << hires;
 
         frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (widescreen)
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+        }
+        else
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        }
+
         if (hires)
         {
             *dest3 = *dest;
@@ -649,6 +698,7 @@ void R_DrawFuzzColumnImproved (void)
     fixed_t frac;
     fixed_t fracstep;	 
     boolean cutoff = false;
+    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -665,7 +715,7 @@ void R_DrawFuzzColumnImproved (void)
     return; 
 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawFuzzColumnImproved: %i to %i at %i" :
@@ -679,21 +729,28 @@ void R_DrawFuzzColumnImproved (void)
 
     do 
     {
-        *dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
+        *dest = colormaps[6*256+dest[afuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
         {
             fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
         }
 
-        dest += SCREENWIDTH;
+        dest += screenwidth;
 
         frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
     {
-        *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (widescreen)
+        {
+            *dest = colormaps[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+        }
+        else
+        {
+            *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        }
     }
 } 
 
@@ -708,6 +765,7 @@ void R_DrawFuzzColumnLowImproved (void)
     fixed_t fracstep;	 
     int     x;
     boolean cutoff = false;
+    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -726,7 +784,7 @@ void R_DrawFuzzColumnLowImproved (void)
     x = dc_x << 1;
 
 #ifdef RANGECHECK 
-    if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawFuzzColumnLowImproved: %i to %i at %i" :
@@ -744,14 +802,14 @@ void R_DrawFuzzColumnLowImproved (void)
 
     do 
     {
-        *dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
-        *dest2 = colormaps[6*256+dest2[fuzzoffset[fuzzpos]]]; 
+        *dest = colormaps[6*256+dest[afuzzoffset[fuzzpos]]]; 
+        *dest2 = colormaps[6*256+dest2[afuzzoffset[fuzzpos]]]; 
         if (hires)
         {
-            *dest3 = colormaps[6*256+dest[fuzzoffset[fuzzpos]]];
-            *dest4 = colormaps[6*256+dest2[fuzzoffset[fuzzpos]]];
-            dest3 += SCREENWIDTH << hires;
-            dest4 += SCREENWIDTH << hires;
+            *dest3 = colormaps[6*256+dest[afuzzoffset[fuzzpos]]];
+            *dest4 = colormaps[6*256+dest2[afuzzoffset[fuzzpos]]];
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
         }
 
         if (++fuzzpos == FUZZTABLE) 
@@ -759,16 +817,25 @@ void R_DrawFuzzColumnLowImproved (void)
             fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
         }
 
-        dest += SCREENWIDTH << hires;
-        dest2 += SCREENWIDTH << hires;
+        dest += screenwidth << hires;
+        dest2 += screenwidth << hires;
 
         frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
     {
-        *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        *dest2 = colormaps[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (widescreen)
+        {
+            *dest = colormaps[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest2 = colormaps[6*256+dest2[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+        }
+        else
+        {
+            *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+            *dest2 = colormaps[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        }
+
         if (hires)
         {
             *dest3 = *dest;
@@ -789,6 +856,7 @@ void R_DrawFuzzColumnImprovedBW (void)
     fixed_t fracstep;	 
     boolean cutoff = false;
     boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
+    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -805,7 +873,7 @@ void R_DrawFuzzColumnImprovedBW (void)
     return; 
 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawFuzzColumnImprovedBW: %i to %i at %i" :
@@ -819,21 +887,28 @@ void R_DrawFuzzColumnImprovedBW (void)
 
     do 
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[fuzzoffset[fuzzpos]]]; 
+        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
         {
             fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
         }
 
-        dest += SCREENWIDTH;
+        dest += screenwidth;
 
         frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (widescreen)
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+        }
+        else
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        }
     }
 } 
 
@@ -849,6 +924,7 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     int     x;
     boolean cutoff = false;
     boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
+    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -867,7 +943,7 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     x = dc_x << 1;
 
 #ifdef RANGECHECK 
-    if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawFuzzColumnLowImprovedBW: %i to %i at %i" :
@@ -885,14 +961,14 @@ void R_DrawFuzzColumnLowImprovedBW (void)
 
     do 
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[fuzzoffset[fuzzpos]]]; 
-        *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[fuzzoffset[fuzzpos]]]; 
+        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]]; 
+        *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[afuzzoffset[fuzzpos]]]; 
         if (hires)
         {
-            *dest3 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[fuzzoffset[fuzzpos]]];
-            *dest4 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[fuzzoffset[fuzzpos]]];
-            dest3 += SCREENWIDTH << hires;
-            dest4 += SCREENWIDTH << hires;
+            *dest3 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]];
+            *dest4 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[afuzzoffset[fuzzpos]]];
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
         }
 
         if (++fuzzpos == FUZZTABLE) 
@@ -900,16 +976,25 @@ void R_DrawFuzzColumnLowImprovedBW (void)
             fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
         }
 
-        dest += SCREENWIDTH << hires;
-        dest2 += SCREENWIDTH << hires;
+        dest += screenwidth << hires;
+        dest2 += screenwidth << hires;
 
         frac += fracstep; 
     } while (count--); 
 
     if (cutoff)
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        if (widescreen)
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+        }
+        else
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        }
+
         if (hires)
         {
             *dest3 = *dest;
@@ -943,7 +1028,7 @@ void R_DrawTranslatedColumn (void)
     return; 
 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawColumn: %i to %i at %i" :
@@ -967,7 +1052,7 @@ void R_DrawTranslatedColumn (void)
         // Thus the "green" ramp of the player 0 sprite
         //  is mapped to gray, red, black/indigo. 
         *dest = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
-        dest += SCREENWIDTH;
+        dest += screenwidth;
 	
         frac += fracstep; 
     } while (count--); 
@@ -993,7 +1078,7 @@ void R_DrawTranslatedColumnLow (void)
     x = dc_x << 1;
 
 #ifdef RANGECHECK 
-    if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawColumn: %i to %i at %i" :
@@ -1021,14 +1106,14 @@ void R_DrawTranslatedColumnLow (void)
         //  is mapped to gray, red, black/indigo. 
         *dest = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
         *dest2 = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
-        dest += SCREENWIDTH << hires;
-        dest2 += SCREENWIDTH << hires;
+        dest += screenwidth << hires;
+        dest2 += screenwidth << hires;
         if (hires)
         {
             *dest3 = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
             *dest4 = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
-            dest3 += SCREENWIDTH << hires;
-            dest4 += SCREENWIDTH << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
         }
 
         frac += fracstep; 
@@ -1048,7 +1133,7 @@ void R_DrawTLColumn (void)
     return;
 
 #ifdef RANGECHECK
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawColumn: %i to %i at %i" :
@@ -1065,7 +1150,7 @@ void R_DrawTLColumn (void)
     do
     {
         *dest = tranmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-        dest += SCREENWIDTH;
+        dest += screenwidth;
 
         frac += fracstep;
     } while (count--);
@@ -1091,7 +1176,7 @@ void R_DrawTLColumnLow (void)
     x = dc_x << 1;
 
 #ifdef RANGECHECK
-    if ((unsigned)x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
                  "R_DrawColumn: %i to %i at %i" :
@@ -1112,15 +1197,15 @@ void R_DrawTLColumnLow (void)
     {
         *dest = tranmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
         *dest2 = tranmap[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-        dest += SCREENWIDTH << hires;
-        dest2 += SCREENWIDTH << hires;
+        dest += screenwidth << hires;
+        dest2 += screenwidth << hires;
 
         if (hires)
         {
             *dest3 = tranmap[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
             *dest4 = tranmap[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            dest3 += SCREENWIDTH << hires;
-            dest4 += SCREENWIDTH << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
         }
 
         frac += fracstep;
@@ -1205,7 +1290,7 @@ void R_DrawSpan (void)
     unsigned int xtemp, ytemp;
 
 #ifdef RANGECHECK
-    if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
+    if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=screenwidth || (unsigned)ds_y>SCREENHEIGHT)
     {
         I_Error(english_language ?
                 "R_DrawSpan: %i to %i at %i" :
@@ -1256,7 +1341,7 @@ void R_DrawSpanLow (void)
     int     spot;
 
 #ifdef RANGECHECK
-    if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
+    if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=screenwidth || (unsigned)ds_y>SCREENHEIGHT)
     {
         I_Error(english_language ?
                 "R_DrawSpan: %i to %i at %i" :
@@ -1315,14 +1400,14 @@ void R_InitBuffer (int width, int height)
     // Handle resize,
     //  e.g. smaller view windows
     //  with border and/or status bar.
-    viewwindowx = (SCREENWIDTH-width) >> 1; 
+    viewwindowx = (screenwidth-width) >> 1; 
 
     // Column offset. For windows.
     for (i=0 ; i<width ; i++) 
     columnofs[i] = viewwindowx + i;
 
     // Samw with base row offset.
-    if (width == SCREENWIDTH) 
+    if (width == screenwidth) 
     viewwindowy = 0; 
     else 
     viewwindowy = (SCREENHEIGHT - (gamemission == jaguar ? 
@@ -1331,7 +1416,7 @@ void R_InitBuffer (int width, int height)
 
     // Preclaculate all row offsets.
     for (i=0 ; i<height ; i++) 
-    ylookup[i] = I_VideoBuffer + (i+viewwindowy)*SCREENWIDTH; 
+    ylookup[i] = I_VideoBuffer + (i+viewwindowy)*screenwidth; 
 }
 
 
@@ -1363,7 +1448,7 @@ void R_FillBackScreen (void)
     // If we are running full screen, there is no need to do any of this,
     // and the background buffer can be freed if it was previously in use.
 
-    if (scaledviewwidth == SCREENWIDTH)
+    if (scaledviewwidth == screenwidth)
     {
         if (background_buffer != NULL)
         {
@@ -1378,7 +1463,7 @@ void R_FillBackScreen (void)
 
     if (background_buffer == NULL)
     {
-        background_buffer = Z_Malloc(SCREENWIDTH * (SCREENHEIGHT - (gamemission == jaguar ? 
+        background_buffer = Z_Malloc(screenwidth * (SCREENHEIGHT - (gamemission == jaguar ? 
                                                     SBARHEIGHT_JAG : SBARHEIGHT))
                                                     *sizeof(*background_buffer),
                                                     PU_STATIC, NULL);
@@ -1397,16 +1482,16 @@ void R_FillBackScreen (void)
 
     for (y=0 ; y<SCREENHEIGHT - (gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT) ; y++) 
     { 
-        for (x=0 ; x<SCREENWIDTH/64 ; x++) 
+        for (x=0 ; x<screenwidth/64 ; x++) 
         { 
             memcpy (dest, src+((y&63)<<6), 64); 
             dest += 64; 
         } 
 
-        if (SCREENWIDTH&63) 
+        if (screenwidth&63) 
         { 
-            memcpy (dest, src+((y&63)<<6), SCREENWIDTH&63); 
-            dest += (SCREENWIDTH&63); 
+            memcpy (dest, src+((y&63)<<6), screenwidth&63); 
+            dest += (screenwidth&63); 
         } 
     } 
 
@@ -1482,30 +1567,30 @@ void R_DrawViewBorder (void)
     int	    ofs;
     int	    i; 
 
-    if (scaledviewwidth == SCREENWIDTH) 
+    if (scaledviewwidth == screenwidth) 
     return; 
 
     top = ((SCREENHEIGHT - (gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT))-scaledviewheight)/2; 
-    side = (SCREENWIDTH-scaledviewwidth)/2; 
+    side = (screenwidth-scaledviewwidth)/2; 
 
     // copy top and one line of left side 
-    R_VideoErase (0, top*SCREENWIDTH+side); 
+    R_VideoErase (0, top*screenwidth+side); 
 
     // copy one line of right side and bottom 
-    ofs = (scaledviewheight+top)*SCREENWIDTH-side;
-    R_VideoErase (ofs, top*SCREENWIDTH+side); 
+    ofs = (scaledviewheight+top)*screenwidth-side;
+    R_VideoErase (ofs, top*screenwidth+side); 
 
     // copy sides using wraparound 
-    ofs = top*SCREENWIDTH + SCREENWIDTH-side; 
+    ofs = top*screenwidth + screenwidth-side; 
     side <<= 1;
 
     for (i=1 ; i<scaledviewheight ; i++) 
     { 
         R_VideoErase (ofs, side); 
-        ofs += SCREENWIDTH; 
+        ofs += screenwidth; 
     } 
 
     // ? 
-    V_MarkRect (0,0,SCREENWIDTH, SCREENHEIGHT - (gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT)); 
+    V_MarkRect (0,0,screenwidth, SCREENHEIGHT - (gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT)); 
 }
 

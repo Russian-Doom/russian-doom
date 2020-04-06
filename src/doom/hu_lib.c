@@ -35,6 +35,8 @@
 
 extern boolean	automapactive;	// in AM_map.c
 extern GameMission_t gamemission; // [JN] For uncolored Jaguar messages
+extern int screenblocks; // [JN] Widescreen: for emulated 4:3 screen size
+
 
 void HUlib_init(void)
 {
@@ -94,6 +96,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
     int w;
     int x;
     unsigned char c;
+    boolean wide_4_3 = widescreen && screenblocks == 9;
 
     // draw the new stuff
     x = l->x;
@@ -105,7 +108,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
         {
             w = SHORT(l->f[c - l->sc]->width);
 
-            if (x+w > ORIGWIDTH)
+            if (x+w > origwidth)
             break;
 
             // [JN] Colorize message if necessary
@@ -120,7 +123,8 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
                 messages_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
             }
         
-            V_DrawShadowedPatchDoom(x, l->y, l->f[c - l->sc]);
+            V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+                                    l->y, l->f[c - l->sc]);
 
             // [JN] Clear color translation if necessary
             if (messages_color > 0 && !vanillaparm && gamemission != jaguar)
@@ -132,13 +136,13 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
         {
         x += 4;
 
-        if (x >= ORIGWIDTH)
+        if (x >= origwidth)
         break;
         }
     }
 
     // draw the cursor if requested
-    if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= ORIGWIDTH)
+    if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= origwidth)
     {
         // [JN] Colorize message if necessary
         if (messages_color > 0 && !vanillaparm)
@@ -152,7 +156,8 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
             messages_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
         }
 
-        V_DrawShadowedPatchDoom(x, l->y, l->f['_' - l->sc]);
+        V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+                                l->y, l->f['_' - l->sc]);
 
         // [JN] Clear color translation if necessary
         if (messages_color > 0 && !vanillaparm)
@@ -166,6 +171,7 @@ void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
     int w;
     int x;
     unsigned char c;
+    boolean wide_4_3 = widescreen && screenblocks == 9;
 
     // draw the new stuff
     x = l->x;
@@ -177,10 +183,11 @@ void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
         {
             w = SHORT(l->f[c - l->sc]->width);
 
-            if (x+w > ORIGWIDTH)
+            if (x+w > origwidth)
             break;
 
-            V_DrawShadowedPatchDoom(x, l->y, l->f[c - l->sc]);
+            V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+                                    l->y, l->f[c - l->sc]);
 
             x += w;
         }
@@ -188,15 +195,16 @@ void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
         {
         x += 4;
 
-        if (x >= ORIGWIDTH)
+        if (x >= origwidth)
         break;
         }
     }
 
     // draw the cursor if requested
-    if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= ORIGWIDTH)
+    if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= origwidth)
     {
-        V_DrawShadowedPatchDoom(x, l->y, l->f['_' - l->sc]);
+        V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+                                l->y, l->f['_' - l->sc]);
     }
 }
 
@@ -219,10 +227,10 @@ void HUlib_eraseTextLine(hu_textline_t* l)
         // Fixes remainings of text shadows for chars "Д", "Ц" and "Щ".
         lh = (SHORT(l->f[0]->height+2) + 1) << hires;
 
-        for (y=(l->y << hires),yoffset=y*SCREENWIDTH ; y<(l->y << hires)+lh ; y++,yoffset+=SCREENWIDTH)
+        for (y=(l->y << hires),yoffset=y*screenwidth ; y<(l->y << hires)+lh ; y++,yoffset+=screenwidth)
         {
             if (y < viewwindowy || y >= viewwindowy + scaledviewheight)
-            R_VideoErase(yoffset, SCREENWIDTH); // erase entire line
+            R_VideoErase(yoffset, screenwidth); // erase entire line
             else
             {
                 R_VideoErase(yoffset, viewwindowx); // erase left border

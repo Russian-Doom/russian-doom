@@ -645,6 +645,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(fullscreen),
 
     //!
+    // [JN] Widescreen rendering.
+    //
+
+    CONFIG_VARIABLE_INT(widescreen),
+
+    //!
     // Index of the display on which the game should run. This has no
     // effect if running in windowed mode (fullscreen=0) and
     // window_position is not set to "center".

@@ -33,12 +33,12 @@ typedef void (*planefunction_t) (int top, int bottom);
 extern planefunction_t floorfunc;
 extern planefunction_t ceilingfunc_t;
 
-extern int floorclip[SCREENWIDTH];   // [crispy] 32-bit integer math
-extern int ceilingclip[SCREENWIDTH]; // [crispy] 32-bit integer math
+extern int floorclip[WIDESCREENWIDTH];   // [crispy] 32-bit integer math
+extern int ceilingclip[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
 
 extern fixed_t*	yslope;
 extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-extern fixed_t distscale[SCREENWIDTH];
+extern fixed_t distscale[WIDESCREENWIDTH];
 
 // void R_InitPlanes (void);
 void R_ClearPlanes (void);

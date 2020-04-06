@@ -73,9 +73,9 @@ static void SaveDiskData(char *disk_lump, int xoffs, int yoffs)
     patch_t *disk;
 
     // Allocate a complete temporary screen where we'll draw the patch.
-    tmpscreen = Z_Malloc(SCREENWIDTH * SCREENHEIGHT * sizeof(*tmpscreen),
+    tmpscreen = Z_Malloc(screenwidth * SCREENHEIGHT * sizeof(*tmpscreen),
                          PU_STATIC, NULL);
-    memset(tmpscreen, 0, SCREENWIDTH * SCREENHEIGHT * sizeof(*tmpscreen));
+    memset(tmpscreen, 0, screenwidth * SCREENHEIGHT * sizeof(*tmpscreen));
     V_UseBuffer(tmpscreen);
 
     // Buffer where we'll save the disk data.
@@ -86,7 +86,7 @@ static void SaveDiskData(char *disk_lump, int xoffs, int yoffs)
     disk = W_CacheLumpName(disk_lump, PU_STATIC);
     V_DrawPatch(loading_disk_xoffs >> hires, loading_disk_yoffs >> hires, disk);
     CopyRegion(disk_data, LOADING_DISK_W,
-               tmpscreen + yoffs * SCREENWIDTH + xoffs, SCREENWIDTH,
+               tmpscreen + yoffs * screenwidth + xoffs, screenwidth,
                LOADING_DISK_W, LOADING_DISK_H);
     W_ReleaseLumpName(disk_lump);
 
@@ -113,7 +113,7 @@ void V_BeginRead(size_t nbytes)
 static byte *DiskRegionPointer(void)
 {
     return I_VideoBuffer
-         + loading_disk_yoffs * SCREENWIDTH
+         + loading_disk_yoffs * screenwidth
          + loading_disk_xoffs;
 }
 
@@ -126,11 +126,11 @@ void V_DrawDiskIcon(void)
     {
         // Save the background behind the disk before we draw it.
         CopyRegion(saved_background, LOADING_DISK_W,
-                   DiskRegionPointer(), SCREENWIDTH,
+                   DiskRegionPointer(), screenwidth,
                    LOADING_DISK_W, LOADING_DISK_H);
 
         // Write the disk to the screen buffer.
-        CopyRegion(DiskRegionPointer(), SCREENWIDTH,
+        CopyRegion(DiskRegionPointer(), screenwidth,
                    disk_data, LOADING_DISK_W,
                    LOADING_DISK_W, LOADING_DISK_H);
         disk_drawn = true;
@@ -144,7 +144,7 @@ void V_RestoreDiskBackground(void)
     if (disk_drawn)
     {
         // Restore the background.
-        CopyRegion(DiskRegionPointer(), SCREENWIDTH,
+        CopyRegion(DiskRegionPointer(), screenwidth,
                    saved_background, LOADING_DISK_W,
                    LOADING_DISK_W, LOADING_DISK_H);
 

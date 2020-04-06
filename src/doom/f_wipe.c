@@ -33,6 +33,7 @@
 #include "d_mode.h"     // [JN] Atari Jaguar: gamemission
 #include "w_wad.h"      // [JN] Atari Jaguar: W_CacheLumpName
 #include "doomstat.h"   // [JN] Atari Jaguar: screenblocks
+#include "hu_stuff.h"
 #include "st_stuff.h"   // [JN] Atari Jaguar: Status bar widgets
 #include "jn.h"         // [JN] Atari Jaguar: english_language
 
@@ -240,6 +241,7 @@ int wipe_exitMelt (int width, int height, int ticks)
     {
         ST_refreshBackground();
         ST_drawWidgets(true);
+        HU_Drawer();
     }
     return 0;
 }
@@ -247,7 +249,7 @@ int wipe_exitMelt (int width, int height, int ticks)
 
 int wipe_StartScreen (int x, int y, int width, int height)
 {
-    wipe_scr_start = Z_Malloc(SCREENWIDTH * SCREENHEIGHT * sizeof(*wipe_scr_start), PU_STATIC, NULL);
+    wipe_scr_start = Z_Malloc(screenwidth * SCREENHEIGHT * sizeof(*wipe_scr_start), PU_STATIC, NULL);
     I_ReadScreen(wipe_scr_start);
     return 0;
 }
@@ -255,7 +257,7 @@ int wipe_StartScreen (int x, int y, int width, int height)
 
 int wipe_EndScreen (int x, int y, int width, int height)
 {
-    wipe_scr_end = Z_Malloc(SCREENWIDTH * SCREENHEIGHT * sizeof(*wipe_scr_end), PU_STATIC, NULL);
+    wipe_scr_end = Z_Malloc(screenwidth * SCREENHEIGHT * sizeof(*wipe_scr_end), PU_STATIC, NULL);
     I_ReadScreen(wipe_scr_end);
     V_DrawBlock(x, y, width, height, wipe_scr_start); // restore start scr.
     return 0;
@@ -298,7 +300,7 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     // [JN] Draw "Loading" picture
     if ((gamemission == jaguar || screen_wiping == 2) && !vanillaparm)
     {
-        V_DrawShadowedPatchDoom (ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String
+        V_DrawShadowedPatchDoom (wide_delta, 0, W_CacheLumpName(DEH_String
                                 (english_language ? "M_LOADIN" : "RD_LDNG"),
                                  PU_CACHE));
     }

@@ -1307,12 +1307,15 @@ P_SpawnPlayerMissile
     {
         an = source->angle;
 
-#ifdef WIDESCREEN
-        // [JN] Wide screen: new magic number :(
-        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
-#else
-        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / (screenblocks <= 10 ? 160 : 146);
-#endif
+        if (widescreen)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 180;
+        }
+        else
+        {
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / (screenblocks <= 10 ? 160 : 146);
+        }
     }
     }
 		

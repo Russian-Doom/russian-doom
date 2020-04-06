@@ -748,6 +748,7 @@ void HU_Start(void)
 {
     int     i;
     char*   s;
+    boolean wide = widescreen && screenblocks > 9;
 
     if (headsupactive)
     HU_Stop();
@@ -771,11 +772,11 @@ void HU_Start(void)
                      local_time == 2 ? 270 :
                      local_time == 3 ? 294 :
                      local_time == 4 ? 282 :
-                     0) + ORIGWIDTH_DELTA * 2, 10,
+                     0) + (wide ? WIDE_DELTA*2 : 0), 10,
                      HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
 
     // [JN] Create the FPS widget
-    HUlib_initSText(&w_message_fps, 278 + ORIGWIDTH_DELTA * 2, 20, 
+    HUlib_initSText(&w_message_fps, 278 + (wide ? WIDE_DELTA*2 : 0), 20, 
                     HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 
     // create the map title widget
@@ -937,6 +938,35 @@ void HU_Drawer(void)
         }
     }
 
+    // [JN] Wide screen: draw black borders in emulated 4:3 mode.
+    if ((widescreen && screenblocks == 9)
+    ||  (widescreen && screenblocks == 9 && automapactive && !automap_overlay))
+    {
+        V_DrawBlackBorders();
+    }
+
+    // [JN] Wide screen: side green borders.
+    if ((widescreen && screenblocks == 10) 
+    ||  (widescreen && screenblocks != 9 && automapactive && !automap_overlay))
+    {
+        if (gamemode == commercial)                 
+        {
+            V_DrawPatch(0, 168, W_CacheLumpName     // left border
+                                (DEH_String("RDWBD2LF"), PU_CACHE));
+        
+            V_DrawPatch(373, 168, W_CacheLumpName   // right border
+                                (DEH_String("RDWBD2RT"), PU_CACHE));
+        }
+        else
+        {
+            V_DrawPatch(0, 168, W_CacheLumpName     // left border
+                                (DEH_String("RDWBD1LF"), PU_CACHE));
+        
+            V_DrawPatch(373, 168, W_CacheLumpName   // right border
+                                (DEH_String("RDWBD1RT"), PU_CACHE));            
+        }
+    }
+
     // [JN] Draw crosshair. 
     // Thanks to Fabian Greffrath for ORIGWIDTH, ORIGHEIGHT and ST_HEIGHT values,
     // thanks to Zodomaniac for proper health values!
@@ -949,18 +979,6 @@ void HU_Drawer(void)
                                                  cr[CR_RED];
         }
 
-#ifdef WIDESCREEN
-        if (crosshair_scale)
-        {
-            V_DrawPatch(ORIGWIDTH/2, (ORIGHEIGHT+2)/2,
-                W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE));
-        }
-        else
-        {
-            V_DrawPatchUnscaled(SCREENWIDTH/2, (SCREENHEIGHT+4)/2,
-                W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE));
-        }
-#else
         if (crosshair_scale)
         {
             V_DrawPatch(ORIGWIDTH/2, ((screenblocks <= 10) ?
@@ -969,11 +987,10 @@ void HU_Drawer(void)
         }
         else
         {
-            V_DrawPatchUnscaled(SCREENWIDTH/2, ((screenblocks <= 10) ?
+            V_DrawPatchUnscaled(screenwidth/2, ((screenblocks <= 10) ?
                 (SCREENHEIGHT-ST_HEIGHT-26)/2 : (SCREENHEIGHT+4)/2),
                     W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE));
         }
-#endif
 
         dp_translation = NULL;
     }
@@ -1157,7 +1174,7 @@ static void StartChatInput(int dest)
     HUlib_resetIText(&w_chat);
     HU_queueChatChar(HU_BROADCAST);
 
-    I_StartTextInput(0, 8, SCREENWIDTH, 16);
+    I_StartTextInput(0, 8, screenwidth, 16);
 }
 
 

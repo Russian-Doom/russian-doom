@@ -240,7 +240,7 @@ void D_Display (void)
     if (gamestate != wipegamestate && (screen_wiping || vanillaparm))
     {
         wipe = true;
-        wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
+        wipe_StartScreen(0, 0, screenwidth, SCREENHEIGHT);
     }
     else
     {
@@ -287,20 +287,12 @@ void D_Display (void)
         break;
     }
 
-    // [JN] Don't call empty function
-    // draw buffered stuff to screen
-    // I_UpdateNoBlit ();
-
     // draw the view directly
     if (gamestate == GS_LEVEL && (!automapactive || automap_overlay) && gametic)
     {
         R_RenderPlayerView (&players[displayplayer]);
 
-#ifdef WIDESCREEN
-        if (screenblocks == 9 || screenblocks == 10 || screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
-#else
         if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
-#endif
         ST_Drawer(0, 0);
     }
 
@@ -322,10 +314,12 @@ void D_Display (void)
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
     {
         viewactivestate = false;    // view was not active
-        // [JN] Do not invoke bezel drawing in wide screen mode
-#ifndef WIDESCREEN
-        R_FillBackScreen ();        // draw the pattern into the back screen
-#endif
+
+        if (!widescreen)
+        {
+            // [JN] Do not invoke bezel drawing in wide screen mode        
+            R_FillBackScreen ();    // draw the pattern into the back screen
+        }
     }
 
     // see if the border needs to be updated to the screen
@@ -370,7 +364,7 @@ void D_Display (void)
         // [JN] Atari Jaguar: draw PAUSE pic independently, offsets done in the sprite
         if (gamemission == jaguar)
         {
-            V_DrawShadowedPatchDoom(0 + ORIGWIDTH_DELTA, gamestate == GS_INTERMISSION ?
+            V_DrawShadowedPatchDoom(wide_delta, gamestate == GS_INTERMISSION ?
                                     -40 : 0, // [JN] Do not obstruct titles on intermission screen
                                     W_CacheLumpName (DEH_String(english_language ?
                                                                 "M_PAUSE" : "RD_PAUSE"), PU_CACHE));
@@ -402,7 +396,7 @@ void D_Display (void)
     }
 
     // wipe update
-    wipe_EndScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
+    wipe_EndScreen(0, 0, screenwidth, SCREENHEIGHT);
     wipestart = I_GetTime () - 1;
 
     do
@@ -415,7 +409,7 @@ void D_Display (void)
         } while (tics <= 0);
 
     wipestart = nowtime;
-    done = wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
+    done = wipe_ScreenWipe(wipe_Melt, 0, 0, screenwidth, SCREENHEIGHT, tics);
     // [JN] Don't call empty function
     // I_UpdateNoBlit ();
     M_Drawer ();        // menu is drawn even on top of wipes
@@ -424,7 +418,8 @@ void D_Display (void)
 }
 
 
-static void EnableLoadingDisk(void)
+// [JN] Un-static for position hot switching
+void EnableLoadingDisk(void)
 {
     char *disk_lump_name;
 
@@ -439,7 +434,10 @@ static void EnableLoadingDisk(void)
     else
     disk_lump_name = DEH_String("STDISK");
 
-    V_EnableLoadingDisk(disk_lump_name,SCREENWIDTH - LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
+    V_EnableLoadingDisk(disk_lump_name, 
+                       (widescreen && screenblocks == 9 ? 
+                        SCREENWIDTH+WIDE_DELTA*2 : screenwidth) -
+                        LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
 }
 
 
@@ -683,11 +681,19 @@ void D_PageTicker (void)
 
 void D_PageDrawer (void)
 {
-#ifdef WIDESCREEN
-    // [JN] Clean up remainings of the wide screen before drawing
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
-    V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName(pagename, PU_CACHE));
+    if (widescreen)
+    {
+        // [JN] Wide screen: clean up wide screen remainings before drawing.
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
+
+    V_DrawPatch (wide_delta, 0, W_CacheLumpName(pagename, PU_CACHE));
+
+    if (widescreen && screenblocks == 9)
+    {
+        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
+        V_DrawBlackBorders();
+    }
 }
 
 
@@ -1205,10 +1211,11 @@ void D_SetGameDescription(void)
         {
             gamedescription = GetGameName("The Ultimate DOOM");
 
-#ifdef WIDESCREEN
-            // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-doom1.wad");
-#endif
+            if (widescreen)
+            {
+                // [JN] Load widescreen backgrounds
+                W_MergeFile("base/doom-wide-doom1.wad");
+            }
 
             if (gameversion == exe_doom_se)
             {
@@ -1228,11 +1235,11 @@ void D_SetGameDescription(void)
             else 
             gamedescription = GetGameName("DOOM");
 
-#ifdef WIDESCREEN
-            // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-doom1.wad");
-#endif
-
+            if (widescreen)
+            {
+                // [JN] Load widescreen backgrounds
+                W_MergeFile("base/doom-wide-doom1.wad");
+            }
         }
         else if (gamemode == shareware)
         {
@@ -1241,11 +1248,11 @@ void D_SetGameDescription(void)
             else
             gamedescription = GetGameName("DOOM (Демоверсия)");
 
-#ifdef WIDESCREEN
-            // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-doom1.wad");
-#endif
-
+            if (widescreen)
+            {
+                // [JN] Load widescreen backgrounds
+                W_MergeFile("base/doom-wide-doom1.wad");
+            }
         }
         else if (gamemode == pressbeta)
         {
@@ -1293,11 +1300,11 @@ void D_SetGameDescription(void)
             else
             gamedescription = GetGameName("DOOM 2: Ад на Земле");
 
-#ifdef WIDESCREEN
-            // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-doom2.wad");
-#endif
-
+            if (widescreen)
+            {
+                // [JN] Load widescreen backgrounds
+                W_MergeFile("base/doom-wide-doom2.wad");
+            }
         }
         else if (logical_gamemission == pack_plut)
         {
@@ -1306,11 +1313,11 @@ void D_SetGameDescription(void)
             else
             gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
 
-#ifdef WIDESCREEN
-            // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-plutonia.wad");
-#endif
-
+            if (widescreen)
+            {
+                // [JN] Load widescreen backgrounds
+                W_MergeFile("base/doom-wide-plutonia.wad");
+            }
         }
         else if (logical_gamemission == pack_tnt)
         {
@@ -1319,11 +1326,11 @@ void D_SetGameDescription(void)
             else
             gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
 
-#ifdef WIDESCREEN
-            // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-tnt.wad");
-#endif
-
+            if (widescreen)
+            {
+                // [JN] Load widescreen backgrounds
+                W_MergeFile("base/doom-wide-tnt.wad");
+            }
         }
         else if (logical_gamemission == jaguar)
         {
@@ -1701,12 +1708,10 @@ void D_SetGameDescription(void)
     // 1) placed inside IWAD.
     // 2) placed inside doom-doom1-wide.wad.
     // 3 or more) modified titlepic inside PWAD.
-#ifdef WIDESCREEN
-    if (gamemode == registered && W_CheckMultipleLumps("TITLEPIC") <= 2)
+    if (widescreen && gamemode == registered && W_CheckMultipleLumps("TITLEPIC") <= 2)
     {
         DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIR");
     }
-#endif
 
     // [JN] Check for modified player's face. If exist, 
     // don't use extra faces. Note that Freedoom should 
@@ -1729,9 +1734,8 @@ void D_SetGameDescription(void)
     // and modified backgrounds.
     // If not modified, use wide scrolling code 426x200 and
     // wide bunny backgrounds. See F_BunnyScroll (f_finale.c).
-#ifdef WIDESCREEN
-    if (W_CheckMultipleLumps("PFUB1") > 1 || W_CheckMultipleLumps("PFUB2") > 1
-    ||  gamevariant == freedoom)
+    if (widescreen && (W_CheckMultipleLumps("PFUB1") > 1 || W_CheckMultipleLumps("PFUB2") > 1
+    ||  gamevariant == freedoom))
     {
         wide_loaded = false;
     }
@@ -1739,7 +1743,6 @@ void D_SetGameDescription(void)
     {
         wide_loaded = true;
     }
-#endif
 
     // [JN] Finally, some compatibility mess
     if (gamemode == pressbeta || gamemission == jaguar)
