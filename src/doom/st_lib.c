@@ -117,11 +117,7 @@ STlib_drawNum
     if (n->y - (gamemission == jaguar ? ST_Y_JAG : ST_Y) < 0)
 	I_Error("drawNum: n->y - ST_Y < 0");
 
-#ifdef WIDESCREEN
-    if (screenblocks < 9 || (automapactive && !automap_overlay))
-#else
     if (screenblocks < 11 || (automapactive && !automap_overlay))
-#endif
     V_CopyRect(x, n->y - (gamemission == jaguar ? ST_Y_JAG : ST_Y), 
                           st_backing_screen, w*numdigits, h, x, n->y);
 
@@ -239,11 +235,7 @@ STlib_updateMultIcon
 	    if (y - (gamemission == jaguar ? ST_Y_JAG : ST_Y) < 0)
 		I_Error("updateMultIcon: y - ST_Y < 0");
 
-#ifdef WIDESCREEN
-        if (screenblocks < 9 || (automapactive && !automap_overlay))
-#else
         if (screenblocks < 11 || (automapactive && !automap_overlay))
-#endif
 	    V_CopyRect(x, y - (gamemission == jaguar ? ST_Y_JAG : ST_Y),
                            st_backing_screen, w, h, x, y);
 	}
@@ -296,12 +288,7 @@ STlib_updateBinIcon
 
 	if (*bi->val)
 	    V_DrawPatch(bi->x, bi->y, bi->p);
-	else
-#ifdef WIDESCREEN
-        if (screenblocks < 9 || (automapactive && !automap_overlay))
-#else
-        if (screenblocks < 11 || (automapactive && !automap_overlay))
-#endif
+	else if (screenblocks < 11 || (automapactive && !automap_overlay))
 	    V_CopyRect(x, y - (gamemission == jaguar ? ST_Y_JAG : ST_Y),
                            st_backing_screen, w, h, x, y);
 

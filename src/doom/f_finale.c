@@ -337,29 +337,31 @@ void F_TextWrite (void)
 
     for (y=0 ; y<SCREENHEIGHT ; y++)
     {
-        for (x=0 ; x<SCREENWIDTH/64 ; x++)
+        for (x=0 ; x<screenwidth/64 ; x++)
         {
             memcpy (dest, src+((y&63)<<6), 64);
             dest += 64;
         }
-        if (SCREENWIDTH&63)
+        if (screenwidth&63)
         {
-            memcpy (dest, src+((y&63)<<6), SCREENWIDTH&63);
-            dest += (SCREENWIDTH&63);
+            memcpy (dest, src+((y&63)<<6), screenwidth&63);
+            dest += (screenwidth&63);
         }
     }
 
-    V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
+    V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
     if (gamemission == jaguar)
     {
         if (gamemap == 23)  // Leaving MAP23, end game. Special background.
         {
-#ifdef WIDESCREEN
-            // [JN] Clean up remainings of the wide screen before drawing
-            V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
-            V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
+            if (widescreen)
+            {
+                // [JN] Wide screen: clean up wide screen remainings before drawing.
+                V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+            }
+
+            V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
         }
     }
     // [JN] Draw special background on entering Wolfenstein and Grosse levels
@@ -367,21 +369,31 @@ void F_TextWrite (void)
     {
         if (gamemap == 15)  // Leaving MAP15, entering MAP31
         {
-#ifdef WIDESCREEN
-            // [JN] Clean up remainings of the wide screen before drawing
-            V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
-            V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
+            if (widescreen)
+            {
+                // [JN] Wide screen: clean up wide screen remainings before drawing.
+                V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+            }
+
+            V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
         }
 
         if (gamemap == 31)  // Leaving MAP31, entering MAP32
         {
-#ifdef WIDESCREEN
-            // [JN] Clean up remainings of the wide screen before drawing
-            V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
-            V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE));
+            if (widescreen)
+            {
+                // [JN] Wide screen: clean up wide screen remainings before drawing.
+                V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+            }
+
+            V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE));
         }
+    }
+
+    if (widescreen && screenblocks == 9)
+    {
+        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
+        V_DrawBlackBorders();
     }
 
     // draw some of the text onto the screen
@@ -420,14 +432,13 @@ void F_TextWrite (void)
         else
         w = SHORT (hu_font_small_rus[c]->width);
 
-        if (cx+w > ORIGWIDTH)
+        if (cx+w > origwidth)
 	    break;
 
-        // [JN] Wide screen support
         if (english_language)
-        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font[c]);
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font[c]);
         else
-        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font_small_rus[c]);
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font_small_rus[c]);
 
         cx+=w;
     }
@@ -740,7 +751,7 @@ void F_CastPrint (char* text)
     }
 
     // draw it
-    cx = ORIGWIDTH/2-width/2;
+    cx = origwidth/2-width/2;
     ch = text;
     while (ch)
     {
@@ -785,17 +796,23 @@ void F_CastDrawer (void)
     boolean         flip;
     patch_t*        patch;
 
-#ifdef WIDESCREEN
-    // [JN] Clean up remainings of the wide screen before drawing
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
+    if (widescreen)
+    {
+        // [JN] Wide screen: clean up wide screen remainings before drawing.
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
 
     // erase the entire screen to a background
-    // [JN] Wide screen support
     if (!english_language && logical_gamemission == pack_plut)
-    V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("BOSSBACP"), PU_CACHE));
+    V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("BOSSBACP"), PU_CACHE));
     else
-    V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
+    V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
+
+    if (widescreen && screenblocks == 9)
+    {
+        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
+        V_DrawBlackBorders();
+    }
 
     F_CastPrint (DEH_String(english_language ?
                             castorder[castnum].name :
@@ -810,9 +827,9 @@ void F_CastDrawer (void)
     patch = W_CacheLumpNum (lump+firstspritelump, PU_CACHE);
 
     if (flip)
-    V_DrawPatchFlipped(ORIGWIDTH/2, 170, patch);
+    V_DrawPatchFlipped(origwidth/2, 170, patch);
     else
-    V_DrawPatch(ORIGWIDTH/2, 170, patch);
+    V_DrawPatch(origwidth/2, 170, patch);
 }
 
 
@@ -836,7 +853,7 @@ void F_DrawPatchCol (int x, patch_t* patch, int col)
         for (f = 0; f <= hires; f++)
         {
             source = (byte *)column + 3;
-            dest = desttop + column->topdelta*(SCREENWIDTH << hires) + (x * hires) + f;
+            dest = desttop + column->topdelta*(screenwidth << hires) + (x * hires) + f;
             count = column->length;
 		
             while (count--)
@@ -844,10 +861,10 @@ void F_DrawPatchCol (int x, patch_t* patch, int col)
                 if (hires)
                 {
                     *dest = *source;
-                    dest += SCREENWIDTH;
+                    dest += screenwidth;
                 }
                 *dest = *source++;
-                dest += SCREENWIDTH;
+                dest += screenwidth;
             }
         }
     column = (column_t *)(  (byte *)column + column->length + 4 );
@@ -874,7 +891,7 @@ void F_BunnyScroll (void)
         p1 = W_CacheLumpName (DEH_String("PFUB2WD"), PU_LEVEL);
         p2 = W_CacheLumpName (DEH_String("PFUB1WD"), PU_LEVEL);
 
-        V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
+        V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
         scrolled = (426 - ((signed int) finalecount-230)/2);
 
@@ -896,7 +913,7 @@ void F_BunnyScroll (void)
         p1 = W_CacheLumpName (DEH_String("PFUB2"), PU_LEVEL);
         p2 = W_CacheLumpName (DEH_String("PFUB1"), PU_LEVEL);
 
-        V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
+        V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
         scrolled = (320 - ((signed int) finalecount-230)/2);
 
@@ -908,10 +925,16 @@ void F_BunnyScroll (void)
         for ( x=0 ; x<320  ; x++)
         {
             if (x+scrolled < 320)
-            F_DrawPatchCol (x + ORIGWIDTH_DELTA, p1, x+scrolled);
+            F_DrawPatchCol (x + wide_delta, p1, x+scrolled);
             else
-            F_DrawPatchCol (x + ORIGWIDTH_DELTA, p2, x+scrolled - 320);
+            F_DrawPatchCol (x + wide_delta, p2, x+scrolled - 320);
         }
+    }
+
+    if (widescreen && screenblocks == 9)
+    {
+        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
+        V_DrawBlackBorders();
     }
 
     if (finalecount < 1130)
@@ -921,13 +944,13 @@ void F_BunnyScroll (void)
     {
         if (english_language)
         {
-            V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + ORIGWIDTH_DELTA,
+            V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + wide_delta,
                 (ORIGHEIGHT - 8 * 8) / 2, 
                 W_CacheLumpName(DEH_String("END0"), PU_CACHE));
         }
         else
         {
-            V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + ORIGWIDTH_DELTA,
+            V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + wide_delta,
                 (ORIGHEIGHT - 8 * 8) / 2, 
                 W_CacheLumpName(DEH_String("RD_END0"), PU_CACHE));
         }
@@ -952,7 +975,7 @@ void F_BunnyScroll (void)
     else
     DEH_snprintf(name, 10, "RD_END%i", stage);
 
-    V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + ORIGWIDTH_DELTA,
+    V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + wide_delta,
             (ORIGHEIGHT - 8 * 8) / 2, 
             W_CacheLumpName (name,PU_CACHE));
 }
@@ -962,10 +985,11 @@ static void F_ArtScreenDrawer(void)
 {
     char *lumpname;
 
-#ifdef WIDESCREEN
-    // [JN] Clean up remainings of the wide screen before drawing
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
+    if (widescreen)
+    {
+        // [JN] Wide screen: clean up wide screen remainings before drawing.
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
 
     if (gameepisode == 3)
     {
@@ -1005,8 +1029,13 @@ static void F_ArtScreenDrawer(void)
 
         lumpname = DEH_String(lumpname);
 
-        // [JN] Wide screen support
-        V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName(lumpname, PU_CACHE));
+        V_DrawPatch (wide_delta, 0, W_CacheLumpName(lumpname, PU_CACHE));
+
+        if (widescreen && screenblocks == 9)
+        {
+            // [JN] Wide screen: draw black borders in emulated 4:3 mode.
+            V_DrawBlackBorders();
+        }
     }
 }
 
@@ -1061,27 +1090,29 @@ void F_TextWriteJaguar (void)
 
     for (y=0 ; y<SCREENHEIGHT ; y++)
     {
-        for (x=0 ; x<SCREENWIDTH/64 ; x++)
+        for (x=0 ; x<screenwidth/64 ; x++)
         {
             memcpy (dest, src+((y&63)<<6), 64);
             dest += 64;
         }
-        if (SCREENWIDTH&63)
+        if (screenwidth&63)
         {
-            memcpy (dest, src+((y&63)<<6), SCREENWIDTH&63);
-            dest += (SCREENWIDTH&63);
+            memcpy (dest, src+((y&63)<<6), screenwidth&63);
+            dest += (screenwidth&63);
         }
     }
 
-    V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
+    V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
     if (gamemap == 23)  // Leaving MAP23, end game. Special background.
     {
-#ifdef WIDESCREEN
-        // Clean up remainings of the wide screen before drawing
-        V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
-        V_DrawPatch (ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
+        if (widescreen)
+        {
+            // Clean up remainings of the wide screen before drawing
+            V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+        }
+
+        V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
     }
 
     // draw some of the text onto the screen
@@ -1120,13 +1151,13 @@ void F_TextWriteJaguar (void)
         else
         w = SHORT (hu_font_big_rus[c]->width);
 
-        if (cx+w > ORIGWIDTH)
+        if (cx+w > origwidth)
 	    break;
 
         if (english_language)
-        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font_big_eng[c]);
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font_big_eng[c]);
         else
-        V_DrawShadowedPatchDoom(cx+ORIGWIDTH_DELTA, cy, hu_font_big_rus[c]);
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font_big_rus[c]);
 
         cx+=w;
     }
@@ -1264,7 +1295,7 @@ void F_CastPrintJaguar (char *text)
     }
 
     // draw it
-    cx = ORIGWIDTH/2-width/2;
+    cx = origwidth/2-width/2;
     ch = text;
     while (ch)
     {
@@ -1308,13 +1339,14 @@ void F_CastDrawerJaguar (void)
     int              lump;
     patch_t         *patch;
 
-#ifdef WIDESCREEN
-    // Clean up remainings of the wide screen before drawing
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
+    if (widescreen)
+    {
+        // Clean up remainings of the wide screen before drawing
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
 
     // erase the entire screen to a background
-    V_DrawPatch (0 + ORIGWIDTH_DELTA, 0, W_CacheLumpName (DEH_String("VICPIC"), PU_CACHE));
+    V_DrawPatch (0 + wide_delta, 0, W_CacheLumpName (DEH_String("VICPIC"), PU_CACHE));
 
     F_CastPrintJaguar (DEH_String(english_language ?
                                   castorder_jaguar[castnum].name :
@@ -1326,5 +1358,5 @@ void F_CastDrawerJaguar (void)
     lump = sprframe->lump[0];
     patch = W_CacheLumpNum (lump+firstspritelump, PU_CACHE);
 
-    V_DrawPatchFinale(80 + (ORIGWIDTH_DELTA/2), 90, patch);
+    V_DrawPatchFinale(80 + (wide_delta/2), 90, patch);
 }

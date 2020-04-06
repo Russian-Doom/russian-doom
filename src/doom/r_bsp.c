@@ -86,9 +86,7 @@ typedef	struct
 // fact. -haleyjd
 //#define MAXSEGS 32
 
-// [JN] Увеличен лимит до 1280
-// Ранее: #define MAXSEGS (SCREENWIDTH / 2 + 1)
-#define MAXSEGS (SCREENWIDTH / 2 + 1)
+#define MAXSEGS (WIDESCREENWIDTH / 2 + 1)
 
 // newend is one past the last valid seg
 cliprange_t*	newend;

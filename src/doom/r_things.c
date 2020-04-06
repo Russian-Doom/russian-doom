@@ -86,8 +86,8 @@ lighttable_t** fullbrights_candles;
 lighttable_t** fullbrights_pileofskulls;
 
 // constant arrays used for psprite clipping and initializing clipping
-int negonearray[SCREENWIDTH];
-int screenheightarray[SCREENWIDTH];
+int negonearray[WIDESCREENWIDTH];
+int screenheightarray[WIDESCREENWIDTH];
 
 //
 // INITIALIZATION FUNCTIONS
@@ -340,7 +340,7 @@ void R_InitSprites (char** namelist)
 {
     int i;
 
-    for (i=0 ; i<SCREENWIDTH ; i++)
+    for (i=0 ; i<screenwidth ; i++)
     {
         negonearray[i] = -1;
     }
@@ -1045,7 +1045,7 @@ void R_DrawPSprite (pspdef_t* psp)
     psp_sy += abs(viewplayer->psp_dy);
 
     // calculate edges of the shape
-    tx = psp_sx-((ORIGWIDTH/2)-ORIGWIDTH_DELTA)*FRACUNIT;
+    tx = psp_sx-(ORIGWIDTH/2)*FRACUNIT;
 
     // [crispy] fix sprite offsets for mirrored sprites
     tx -= flip ? 2 * tx - spriteoffset[lump] + spritewidth[lump] : spriteoffset[lump];
@@ -1066,26 +1066,14 @@ void R_DrawPSprite (pspdef_t* psp)
     vis = &avis;
     vis->translation = NULL;
     vis->mobjflags = 0;
+
     // [crispy] weapons drawn 1 pixel too high when player is idle
-#ifdef WIDESCREEN
-    // [JN] Wide screen: weapon positioning for HUD and non-HUD view
-    if (screenblocks <= 10)
-    {
-        // [JN] Jaguar weapon placement: 10 px higher above STBAR, not in full screen mode.
-        if (gamemission == jaguar)
-        vis->texturemid = (BASEYCENTER<<FRACBITS) + FRACUNIT/4 + FRACUNIT*23 - (psp_sy-spritetopoffset[lump]);
-        else
-        vis->texturemid = (BASEYCENTER<<FRACBITS)+(FRACUNIT*16)+(FRACUNIT/4)-(psp_sy-spritetopoffset[lump]);
-    }
-    else
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
-#else
     // [JN] Jaguar weapon placement: 10 px higher above STBAR, not in full screen mode.
     if (gamemission == jaguar && screenblocks <= 10)
     vis->texturemid = (BASEYCENTER<<FRACBITS) + FRACUNIT/4 + FRACUNIT*10 - (psp_sy-spritetopoffset[lump]);
     else
     vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
-#endif
+
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth-1 : x2;	
     vis->scale = pspritescale<<(detailshift && !hires);
@@ -1254,8 +1242,8 @@ void R_SortVisSprites (void)
 
 void R_DrawSprite (vissprite_t* spr)
 {
-    int         clipbot[SCREENWIDTH];
-    int         cliptop[SCREENWIDTH];
+    int         clipbot[WIDESCREENWIDTH];
+    int         cliptop[WIDESCREENWIDTH];
     int         x;
     int         r1;
     int         r2;

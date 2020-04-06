@@ -40,22 +40,9 @@ typedef struct
     int w, h;
 } window_size_t;
 
-// List of aspect ratio-uncorrected window sizes:
-static window_size_t window_sizes_unscaled[] =
-{
-    { 320,  200 },
-    { 640,  400 },
-    { 960,  600 },
-    { 1280, 800 },
-    { 1600, 1000 },
-    { 0, 0},
-};
-
 // List of aspect ratio-corrected window sizes:
 static window_size_t window_sizes_scaled[] =
 {
-    { 320,  240 },
-    { 512,  400 },
     { 640,  480 },
     { 800,  600 },
     { 960,  720 },
@@ -63,6 +50,18 @@ static window_size_t window_sizes_scaled[] =
     { 1280, 960 },
     { 1600, 1200 },
     { 1920, 1440 },
+    { 0, 0},
+};
+
+// [JN] List of widescreen window sizes:
+static window_size_t window_sizes_wide[] =
+{
+    { 852,  480 },
+    { 960,  540 },
+    { 1024, 576 },
+    { 1280, 720 },
+    { 1600, 900 },
+    { 1920, 1080 },
     { 0, 0},
 };
 
@@ -74,6 +73,7 @@ static int vga_porch_flash = 0;
 static int integer_scaling = 0;
 static int force_software_renderer = 0;
 static int fullscreen = 1;
+static int widescreen = 1;
 static int fullscreen_width = 0, fullscreen_height = 0;
 static int window_title_short = 1;
 static int window_width = 640, window_height = 480;
@@ -152,13 +152,13 @@ static void GenerateSizesTable(TXT_UNCAST_ARG(widget),
     int i;
 
     // Pick which window sizes list to use
-    if (aspect_ratio_correct)
+    if (widescreen)
     {
-        sizes = window_sizes_scaled;
+        sizes = window_sizes_wide;
     }
     else
     {
-        sizes = window_sizes_unscaled;
+        sizes = window_sizes_scaled;
     }
 
     // Build the table
@@ -257,13 +257,17 @@ void ConfigDisplay(void)
 
         ar_checkbox = 
         TXT_NewCheckBox(english_language ?
+                        "Widescreen rendering" :
+                        "Щирокоформатный режим",
+                        &widescreen),
+        TXT_NewCheckBox(english_language ?
                         "Vertical sync" :
                         "Вертикальна€ синхронизаци€",
                         &vsync),
-        TXT_NewCheckBox(english_language ?
-                        "Fix aspect ratio" :
-                        "Фиксировать соотношение сторон",
-                        &aspect_ratio_correct),
+//      TXT_NewCheckBox(english_language ?
+//                      "Fix aspect ratio" :
+//                      "Фиксировать соотношение сторон",
+//                      &aspect_ratio_correct),
         TXT_NewCheckBox(english_language ?
                         "Uncapped framerate" :
                         "Сн€ть ограничение с кадровой частоты",
@@ -282,25 +286,24 @@ void ConfigDisplay(void)
                         "Программный рендеринг (режим Software)",
                         &force_software_renderer),
 
-    TXT_NewSeparator(english_language ?
-                     "Extra" :
-                     "Дополнительно"),
+  TXT_NewSeparator(english_language ?
+                   "Extra" :
+                   "Дополнительно"),
 
-        TXT_If(gamemission == doom,
-                TXT_NewCheckBox(english_language ?
-                        "Show Disk icon" :
-                        "Отображать значок дискеты",
-                        &show_diskicon)),
-        TXT_If(gamemission == doom,
-        TXT_NewCheckBox(english_language ?
-                        "Screen wiping effect" :
-                        "Плавна€ смена экранов",
-                        &screen_wiping)),
-        TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
-            TXT_NewCheckBox(english_language ?
-                            "Graphical startup" :
-                            "Графическа€ загрузка",
-                            &graphical_startup)),
+      TXT_If(gamemission == doom,
+              TXT_NewCheckBox(english_language ?
+                      "Show Disk icon" :
+                      "Отображать значок дискеты",
+                      &show_diskicon)),
+//      TXT_NewCheckBox(english_language ?
+//                      "Screen wiping effect" :
+//                      "Плавна€ смена экранов",
+//                      &screen_wiping)),
+      TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
+          TXT_NewCheckBox(english_language ?
+                          "Graphical startup" :
+                          "Графическа€ загрузка",
+                          &graphical_startup)),
 
 #ifdef HAVE_LIBPNG
         TXT_NewCheckBox(english_language ?
@@ -343,6 +346,8 @@ void ConfigDisplay(void)
 
     GenerateSizesTable(NULL, sizes_table);
 
+    TXT_SignalConnect(ar_checkbox, "changed", GenerateSizesTable, sizes_table);
+
     /*
     **    Button to open "advanced" window.
     ** Need to pass a pointer to the window sizes table, as some of the options
@@ -382,6 +387,7 @@ void BindDisplayVariables(void)
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
     M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("fullscreen",                &fullscreen);
+    M_BindIntVariable("widescreen",                &widescreen);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);
     M_BindIntVariable("fullscreen_height",         &fullscreen_height);
     M_BindIntVariable("window_title_short",        &window_title_short);

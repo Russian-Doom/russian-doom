@@ -28,45 +28,31 @@
 
 #define hires 1
 
-// -----------------------------------------------------------------------------
-// [JN] Wide screen executable building definition. In fact, it's not a real
-// wide screen mode, it's just a way to get wide picture on resolutions like:
-// - 1920x1080
-// - 1366x768
-// - 1600x900
-//
-// There is one simple step to turn building executable into wide mode -
-// uncomment following macro to define some code to be built as wide.
-// #define WIDESCREEN
-
-// In case of building wide screen executable, extend screen width to new value.
-#ifdef WIDESCREEN
-#define ORIGWIDTH       426
-#else
 #define ORIGWIDTH       320
-#endif
-
 #define ORIGHEIGHT      200
 #define SRCWIDTH        320
 
-#define MAXWIDTH  (ORIGWIDTH << 1) // [crispy]
-#define MAXHEIGHT (ORIGHEIGHT << 1) // [crispy]
-
-// Delta is a pixel width from left size of the screen to the standard 320
-// pixel canvas. It stands for moving some elements to the right to get a
-// proper centering in wide mode.
-#ifdef WIDESCREEN
-#define ORIGWIDTH_DELTA 53
-#else
-#define ORIGWIDTH_DELTA 0
-#endif
-
-// -----------------------------------------------------------------------------
-
-#define SCREENWIDTH  (ORIGWIDTH << hires)
-#define SCREENHEIGHT (ORIGHEIGHT << hires)
+#define SCREENWIDTH     (ORIGWIDTH << hires)
+#define SCREENHEIGHT    (ORIGHEIGHT << hires)
 
 #define SCREENWIDTH_4_3 (256 << hires)
+
+#define WIDEMAXWIDTH    (WIDEORIGWIDTH << 1)  // [crispy]
+#define MAXWIDTH        (ORIGWIDTH << 1)      // [crispy]
+#define MAXHEIGHT       (ORIGHEIGHT << 1)     // [crispy]
+
+// [JN] Widescreen rendering macroses and variables.
+
+#define WIDEORIGWIDTH   426
+#define WIDESCREENWIDTH (426 << hires)
+#define ORIGWIDTH_DELTA 0   // TODO - remove entirely in Heretic and Hexen
+#define WIDE_DELTA      53
+
+extern int widescreen;
+extern int widescreen_temp;
+extern int wide_delta;
+extern int screenwidth;
+extern int origwidth;
 
 // Screen height used when aspect_ratio_correct=true.
 

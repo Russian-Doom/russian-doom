@@ -428,12 +428,19 @@ static patch_t*     background;
 // slam background
 void WI_slamBackground(void)
 {
-#ifdef WIDESCREEN
-    // [JN] Clean up remainings of the wide screen before drawing
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
+    if (widescreen)
+    {
+        // [JN] Wide screen: clean up wide screen remainings before drawing.
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
 
-    V_DrawPatch(ORIGWIDTH_DELTA, 0, background);
+    V_DrawPatch(wide_delta, 0, background);
+
+    if (widescreen && screenblocks == 9)
+    {
+        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
+        V_DrawBlackBorders();
+    }
 }
 
 
@@ -455,7 +462,7 @@ void WI_drawLF(void)
         // draw <LevelName> 
         if (english_language)
         {
-            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
+            V_DrawShadowedPatchDoom((origwidth - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
         }
         else
         {
@@ -465,27 +472,27 @@ void WI_drawLF(void)
                 if (sgl_compat_loaded && gameepisode == 3 && !english_language)
                 {
                     if (gamemap == 1)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv20->width))/2, y, sglv20);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv20->width))/2, y, sglv20);
                     else if (gamemap == 2)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv21->width))/2, y, sglv21);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv21->width))/2, y, sglv21);
                     else if (gamemap == 3)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv22->width))/2, y, sglv22);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv22->width))/2, y, sglv22);
                     else if (gamemap == 4)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv23->width))/2, y, sglv23);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv23->width))/2, y, sglv23);
                     else if (gamemap == 5)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv24->width))/2, y, sglv24);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv24->width))/2, y, sglv24);
                     else if (gamemap == 6)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv25->width))/2, y, sglv25);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv25->width))/2, y, sglv25);
                     else if (gamemap == 7)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv26->width))/2, y, sglv26);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv26->width))/2, y, sglv26);
                     else if (gamemap == 8)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv27->width))/2, y, sglv27);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv27->width))/2, y, sglv27);
                     else if (gamemap == 9)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv28->width))/2, y, sglv28);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv28->width))/2, y, sglv28);
                 }
                 else
                 {
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2, y, lnames_d1_rus[wbs->last]);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_d1_rus[wbs->last]->width))/2, y, lnames_d1_rus[wbs->last]);
                 }
             }
             else if (logical_gamemission == doom2 || gamemission == pack_nerve)
@@ -494,28 +501,28 @@ void WI_drawLF(void)
                 if (gamevariant == bfgedition)
                 {
                     if (gamemap == 31)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(rd_idkfa->width))/2, y, rd_idkfa);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(rd_idkfa->width))/2, y, rd_idkfa);
                     else if (gamemap == 32)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(rd_keen->width))/2, y, rd_keen);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(rd_keen->width))/2, y, rd_keen);
                     else
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2, y, lnames_d2_rus[wbs->last]);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_d2_rus[wbs->last]->width))/2, y, lnames_d2_rus[wbs->last]);
                 }
                 else
                 {
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2, y, lnames_d2_rus[wbs->last]);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_d2_rus[wbs->last]->width))/2, y, lnames_d2_rus[wbs->last]);
                 }
             }
             else if (logical_gamemission == pack_plut)
-            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_plut_rus[wbs->last]->width))/2, y, lnames_plut_rus[wbs->last]);
+            V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_plut_rus[wbs->last]->width))/2, y, lnames_plut_rus[wbs->last]);
             else if (logical_gamemission == pack_tnt)
-            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_tnt_rus[wbs->last]->width))/2, y, lnames_tnt_rus[wbs->last]);
+            V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_tnt_rus[wbs->last]->width))/2, y, lnames_tnt_rus[wbs->last]);
             else
-            V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
+            V_DrawShadowedPatchDoom((origwidth - SHORT(lnames[wbs->last]->width))/2, y, lnames[wbs->last]);
         }
     
         // draw "Finished!"
         y += (5*SHORT(lnames[wbs->last]->height))/4;
-        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT
+        V_DrawShadowedPatchDoom((origwidth - SHORT
                                 (english_language ? finished->width : finished_rus->width)) / 2, y, 
                                  english_language ? finished : finished_rus);
     }
@@ -530,7 +537,7 @@ void WI_drawLF(void)
         // bits of memory at this point, but let's try to be accurate
         // anyway.  This deliberately triggers a V_DrawPatch error.
 
-        patch_t tmp = { ORIGWIDTH, ORIGHEIGHT, 1, 1, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+        patch_t tmp = { origwidth, ORIGHEIGHT, 1, 1, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
         V_DrawPatch(0, y, &tmp);
     }
@@ -543,7 +550,7 @@ void WI_drawEL(void)
     int y = WI_TITLEY;
 
     // [JN] Draw "Entering" / "Загружается уровень"
-    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT
+    V_DrawShadowedPatchDoom((origwidth - SHORT
                             (english_language ? entering->width : entering_rus->width)) / 2, y,
                              english_language ? entering : entering_rus);
 
@@ -552,7 +559,7 @@ void WI_drawEL(void)
 
     if (english_language)
     {
-        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->next]->width))/2, y, lnames[wbs->next]);
+        V_DrawShadowedPatchDoom((origwidth - SHORT(lnames[wbs->next]->width))/2, y, lnames[wbs->next]);
     }
     else
     {
@@ -562,30 +569,30 @@ void WI_drawEL(void)
             if (sgl_compat_loaded && gameepisode == 3 && !english_language)
             {
                 if (gamemap == 1)
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv21->width))/2, y, sglv21);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(sglv21->width))/2, y, sglv21);
                 else if (gamemap == 2)
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv22->width))/2, y, sglv22);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(sglv22->width))/2, y, sglv22);
                 else if (gamemap == 3)
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv23->width))/2, y, sglv23);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(sglv23->width))/2, y, sglv23);
                 else if (gamemap == 4)
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv24->width))/2, y, sglv24);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(sglv24->width))/2, y, sglv24);
                 else if (gamemap == 5)
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv25->width))/2, y, sglv25);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(sglv25->width))/2, y, sglv25);
                 else if (gamemap == 6)
                 {
                     if (wbs->next == 8)
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv28->width))/2, y, sglv28);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv28->width))/2, y, sglv28);
                     else
-                    V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv26->width))/2, y, sglv26);
+                    V_DrawShadowedPatchDoom((origwidth - SHORT(sglv26->width))/2, y, sglv26);
                 }
                 else if (gamemap == 7)
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv27->width))/2, y, sglv27);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(sglv27->width))/2, y, sglv27);
                 else if (gamemap == 9)
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(sglv26->width))/2, y, sglv26);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(sglv26->width))/2, y, sglv26);
             }
             else
             {
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2, y, lnames_d1_rus[wbs->next]);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_d1_rus[wbs->next]->width))/2, y, lnames_d1_rus[wbs->next]);
             }
         }
         else if (logical_gamemission == doom2 || gamemission == pack_nerve)
@@ -594,21 +601,21 @@ void WI_drawEL(void)
             if (gamevariant == bfgedition)
             {
                 if (gamemap == 31)
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(rd_keen->width))/2, y, rd_keen);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(rd_keen->width))/2, y, rd_keen);
                 else
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2, y, lnames_d2_rus[wbs->next]);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_d2_rus[wbs->next]->width))/2, y, lnames_d2_rus[wbs->next]);
             }
             else
             {
-                V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2, y, lnames_d2_rus[wbs->next]);
+                V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_d2_rus[wbs->next]->width))/2, y, lnames_d2_rus[wbs->next]);
             }
         }
         else if (logical_gamemission == pack_plut)
-        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_plut_rus[wbs->next]->width))/2, y, lnames_plut_rus[wbs->next]);
+        V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_plut_rus[wbs->next]->width))/2, y, lnames_plut_rus[wbs->next]);
         else if (logical_gamemission == pack_tnt)
-        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames_tnt_rus[wbs->next]->width))/2, y, lnames_tnt_rus[wbs->next]);
+        V_DrawShadowedPatchDoom((origwidth - SHORT(lnames_tnt_rus[wbs->next]->width))/2, y, lnames_tnt_rus[wbs->next]);
         else
-        V_DrawShadowedPatchDoom((ORIGWIDTH - SHORT(lnames[wbs->next]->width))/2, y, lnames[wbs->next]);
+        V_DrawShadowedPatchDoom((origwidth - SHORT(lnames[wbs->next]->width))/2, y, lnames[wbs->next]);
     }
 }
 
@@ -629,7 +636,7 @@ void WI_drawOnLnode (int n, patch_t* c[])
         right = left + SHORT(c[i]->width);
         bottom = top + SHORT(c[i]->height);
 
-        if (left >= 0 && right < ORIGWIDTH && top >= 0 && bottom < ORIGHEIGHT)
+        if (left >= 0 && right < origwidth && top >= 0 && bottom < ORIGHEIGHT)
         {
             fits = true;
         }
@@ -642,7 +649,7 @@ void WI_drawOnLnode (int n, patch_t* c[])
     // [JN] Кровавое пятно и надпись "ВЫ ЗДЕСЬ"
     if (fits && i<2)
     {
-        V_DrawShadowedPatchDoom((lnodes[wbs->epsd][n].x)+ORIGWIDTH_DELTA, lnodes[wbs->epsd][n].y, c[i]);
+        V_DrawShadowedPatchDoom((lnodes[wbs->epsd][n].x) + wide_delta, lnodes[wbs->epsd][n].y, c[i]);
     }
     else
     {
@@ -749,14 +756,14 @@ void WI_drawAnimatedBack(void)
         a = &anims[wbs->epsd][i];
 
         if (a->ctr >= 0)
-        V_DrawPatch((a->loc.x)+ORIGWIDTH_DELTA, a->loc.y, a->p[a->ctr]);
+        V_DrawPatch((a->loc.x) + wide_delta, a->loc.y, a->p[a->ctr]);
     }
 
     // [crispy] show Fortress of Mystery if it has been completed
     if (wbs->epsd == 1 && wbs->didsecret)
     {
         a = &anims[1][7];
-        V_DrawPatch((a->loc.x)+ORIGWIDTH_DELTA, a->loc.y, a->p[2]);
+        V_DrawPatch((a->loc.x) + wide_delta, a->loc.y, a->p[2]);
     }
 }
 
@@ -807,13 +814,13 @@ int WI_drawNum (int x, int y, int n, int digits)
     while (digits--)
     {
         x -= fontwidth;
-        V_DrawShadowedPatchDoom(x-ORIGWIDTH_DELTA, y, num[ n % 10 ]);
+        V_DrawShadowedPatchDoom(x - wide_delta, y, num[ n % 10 ]);
         n /= 10;
     }
 
     // draw a minus sign if necessary
     if (neg)
-    V_DrawShadowedPatchDoom((x-=8)-ORIGWIDTH_DELTA, y, wiminus);
+    V_DrawShadowedPatchDoom((x-=8) - wide_delta, y, wiminus);
 
     return x;
 }
@@ -824,7 +831,7 @@ void WI_drawPercent (int x, int y, int p)
     if (p < 0)
     return;
 
-    V_DrawShadowedPatchDoom(x-ORIGWIDTH_DELTA, y, percent);
+    V_DrawShadowedPatchDoom(x - wide_delta, y, percent);
 
     WI_drawNum(x, y, p, -1);
 }
@@ -855,7 +862,7 @@ void WI_drawTime (int x, int y, int t, boolean suck)
             // draw
             if (div==60 || t / div)
             {
-                V_DrawShadowedPatchDoom(x-ORIGWIDTH_DELTA, y, colon);
+                V_DrawShadowedPatchDoom(x - wide_delta, y, colon);
             }
         } while (t / div && div < 3600);
 
@@ -869,9 +876,9 @@ void WI_drawTime (int x, int y, int t, boolean suck)
     {
         // "sucks"
         if (english_language)
-        V_DrawShadowedPatchDoom((x - SHORT(sucks->width))-ORIGWIDTH_DELTA, y, sucks);
+        V_DrawShadowedPatchDoom((x - SHORT(sucks->width)) - wide_delta, y, sucks);
         else
-        V_DrawShadowedPatchDoom((x - SHORT(sucks_rus->width))-ORIGWIDTH_DELTA, y, sucks_rus);
+        V_DrawShadowedPatchDoom((x - SHORT(sucks_rus->width)) - wide_delta, y, sucks_rus);
     }
 }
 
@@ -1188,13 +1195,13 @@ void WI_drawDeathmatchStats(void)
         // [JN] Портрет игровка в режиме Дефматч
         if (playeringame[i])
         {
-            V_DrawPatch((x-SHORT(p[i]->width)/2)+ORIGWIDTH_DELTA, DM_MATRIXY - WI_SPACINGY, p[i]);
-            V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+ORIGWIDTH_DELTA, y, p[i]);
+            V_DrawPatch((x-SHORT(p[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, p[i]);
+            V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+wide_delta, y, p[i]);
 
             if (i == me)
             {
-                V_DrawPatch((x-SHORT(p[i]->width)/2)+ORIGWIDTH_DELTA, DM_MATRIXY - WI_SPACINGY, bstar);
-                V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+ORIGWIDTH_DELTA, y, star);
+                V_DrawPatch((x-SHORT(p[i]->width)/2)+wide_delta, DM_MATRIXY - WI_SPACINGY, bstar);
+                V_DrawPatch((DM_MATRIXX-SHORT(p[i]->width)/2)+wide_delta, y, star);
             }
         }
         else
@@ -1464,10 +1471,10 @@ void WI_drawNetgameStats(void)
         x = NG_STATSX;
 
         // [JN] Портрет игрока в режиме совместного прохождения
-        V_DrawPatch((x-SHORT(p[i]->width))+ORIGWIDTH_DELTA, y, p[i]);
+        V_DrawPatch((x-SHORT(p[i]->width))+wide_delta, y, p[i]);
 
         if (i == me)
-        V_DrawPatch((x-SHORT(p[i]->width))+ORIGWIDTH_DELTA, y, star);
+        V_DrawPatch((x-SHORT(p[i]->width))+wide_delta, y, star);
 
         x += NG_SPACINGX;
         WI_drawPercent(x-pwidth, y+10, cnt_kills[i]);	x += NG_SPACINGX;
@@ -1627,34 +1634,34 @@ void WI_drawStats(void)
     
     WI_drawLF();
 
-    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY, 
+    V_DrawShadowedPatchDoom(SP_STATSX+wide_delta, SP_STATSY, 
                             english_language ? kills : kills_rus);
 
-    WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
+    WI_drawPercent(origwidth - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
-    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+lh,
+    V_DrawShadowedPatchDoom(SP_STATSX+wide_delta, SP_STATSY+lh,
                             english_language ? items : items_rus);
 
-    WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
+    WI_drawPercent(origwidth - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
     // [JN] Show secrets counter if only map have a secrets.
     // Adaptaken from Doom Retro, thanks Brad Harding!
     if (totalsecret || vanillaparm)
     {
-    V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+2*lh,
+    V_DrawShadowedPatchDoom(SP_STATSX+wide_delta, SP_STATSY+2*lh,
                             english_language ? sp_secret : sp_secret_rus);
 
-    WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
+    WI_drawPercent(origwidth - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
     }
 
-    V_DrawShadowedPatchDoom(SP_TIMEX+ORIGWIDTH_DELTA, SP_TIMEY, 
+    V_DrawShadowedPatchDoom(SP_TIMEX+wide_delta, SP_TIMEY, 
                             english_language ? timepatch : timepatch_rus);
     
     // [JN] Press Beta: draw additional "Artifacts" counter
     if (gamemode == pressbeta)
     {
         // [JN] Draw "Arfifacts"/"Артефакты" title
-        V_DrawShadowedPatchDoom(SP_STATSX+ORIGWIDTH_DELTA, SP_STATSY+3*lh, 
+        V_DrawShadowedPatchDoom(SP_STATSX+wide_delta, SP_STATSY+3*lh, 
                                 W_CacheLumpName(DEH_String(english_language ?
                                                            "WIARTIF" : "RD_ARTIF"),
                                                            PU_CACHE));
@@ -1663,28 +1670,28 @@ void WI_drawStats(void)
         if (sp_state > 7)
         {
             // [JN] Number of collected artifacts
-            WI_drawNum(ORIGWIDTH - 78, SP_STATSY+3*lh, artifactcount, -1);
+            WI_drawNum(origwidth - 78, SP_STATSY+3*lh, artifactcount, -1);
 
             // [JN] Draw "из" patch ("of")
-            V_DrawShadowedPatchDoom((ORIGWIDTH - 76)-ORIGWIDTH_DELTA, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTOF"), PU_CACHE));
+            V_DrawShadowedPatchDoom((origwidth - 76)-wide_delta, SP_STATSY+3*lh, W_CacheLumpName(DEH_String("WIARTOF"), PU_CACHE));
             // [JN] Overall amount of artifacts, different for each level
             if (gameepisode == 1 && gamemap == 1)
-            WI_drawNum(ORIGWIDTH - 39, SP_STATSY+3*lh, 36, 2);  // Map 1: 36 artifacts
+            WI_drawNum(origwidth - 39, SP_STATSY+3*lh, 36, 2);  // Map 1: 36 artifacts
             else if (gameepisode == 2 && gamemap == 1)
-            WI_drawNum(ORIGWIDTH - 39, SP_STATSY+3*lh, 29, 2);  // Map 2: 29 artifacts
+            WI_drawNum(origwidth - 39, SP_STATSY+3*lh, 29, 2);  // Map 2: 29 artifacts
             else if (gameepisode == 3 && gamemap == 1)
-            WI_drawNum(ORIGWIDTH - 39, SP_STATSY+3*lh, 25, 2);  // Map 3: 25 artifacts
+            WI_drawNum(origwidth - 39, SP_STATSY+3*lh, 25, 2);  // Map 3: 25 artifacts
         }
     }
 
-    WI_drawTime((ORIGWIDTH/2 - SP_TIMEX)+ORIGWIDTH_DELTA, SP_TIMEY, cnt_time, true);
+    WI_drawTime((origwidth/2 - SP_TIMEX)+wide_delta, SP_TIMEY, cnt_time, true);
 
     if (wbs->epsd < 4+1) // [JN] Sigil: extra episode
     {
-        V_DrawShadowedPatchDoom(ORIGWIDTH/2 + SP_TIMEX, SP_TIMEY, 
+        V_DrawShadowedPatchDoom(origwidth/2 + SP_TIMEX, SP_TIMEY, 
                                 english_language ? par : par_rus);
 
-        WI_drawTime(ORIGWIDTH - SP_TIMEX, SP_TIMEY, cnt_par, true);
+        WI_drawTime(origwidth - SP_TIMEX, SP_TIMEY, cnt_par, true);
     }
 
     // [crispy] draw total time after level time and par time
@@ -1694,22 +1701,22 @@ void WI_drawStats(void)
         if (sp_state > 8)
         {
             const int ttime = wbs->totaltimes / TICRATE;
-            const boolean wide = (ttime > 61*59) || (SP_TIMEX + SHORT(total->width) >= ORIGWIDTH/4);
+            const boolean wide = (ttime > 61*59) || (SP_TIMEX + SHORT(total->width) >= origwidth/4);
 
             // [JN] Perfected positioning for both languages
             if (english_language)
             {
-                V_DrawShadowedPatchDoom((SP_TIMEX)+ORIGWIDTH_DELTA, SP_TIMEY + 16, total);
+                V_DrawShadowedPatchDoom((SP_TIMEX)+wide_delta, SP_TIMEY + 16, total);
                 // [crispy] choose x-position depending on width of time string
-                WI_drawTime((wide ? ORIGWIDTH : ORIGWIDTH/2) - SP_TIMEX + (wide ? 0 : ORIGWIDTH_DELTA), SP_TIMEY + 16, ttime, false);
+                WI_drawTime((wide ? origwidth : origwidth/2) - SP_TIMEX + (wide ? 0 : wide_delta), SP_TIMEY + 16, ttime, false);
             }
             else
             {
                 // [JN] Choose x-position for long Russian "Общее время"
-                V_DrawShadowedPatchDoom(SP_TIMEX + (wide ? 0 : 24) + ORIGWIDTH_DELTA,
+                V_DrawShadowedPatchDoom(SP_TIMEX + (wide ? 0 : 24) + wide_delta,
                                         SP_TIMEY + 16, overtime);
                 // [crispy] choose x-position depending on width of time string
-                WI_drawTime(SP_TIMEX + (wide ? 288 : 264) + (ORIGWIDTH_DELTA * 2),
+                WI_drawTime(SP_TIMEX + (wide ? 288 : 264) + (wide_delta * 2),
                             SP_TIMEY + 16, ttime, false);
             }
         }
@@ -2323,35 +2330,35 @@ void WI_drawStatsJaguar(void)
 
     // Kills | Враги
     if (english_language)
-    M_WriteTextBig_ENG(71 + ORIGWIDTH_DELTA, 50, "Kills");
+    M_WriteTextBig_ENG(71 + wide_delta, 50, "Kills");
     else
-    M_WriteTextBig_RUS(80 + ORIGWIDTH_DELTA, 50, "Dhfub");
+    M_WriteTextBig_RUS(80 + wide_delta, 50, "Dhfub");
 
-    WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
+    WI_drawPercent(origwidth - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
     // Items | Предметы
     if (english_language)
-    M_WriteTextBig_ENG(66 + ORIGWIDTH_DELTA, 68, "Items");
+    M_WriteTextBig_ENG(66 + wide_delta, 68, "Items");
     else
-    M_WriteTextBig_RUS(32 + ORIGWIDTH_DELTA, 68, "Ghtlvtns");
+    M_WriteTextBig_RUS(32 + wide_delta, 68, "Ghtlvtns");
 
-    WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
+    WI_drawPercent(origwidth - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
     // Secrets | Тайники
     if (english_language)
-    M_WriteTextBig_ENG(30 + ORIGWIDTH_DELTA, 86, "Secrets");
+    M_WriteTextBig_ENG(30 + wide_delta, 86, "Secrets");
     else
-    M_WriteTextBig_RUS(45 + ORIGWIDTH_DELTA, 86, "Nfqybrb");
+    M_WriteTextBig_RUS(45 + wide_delta, 86, "Nfqybrb");
 
-    WI_drawPercent(ORIGWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
+    WI_drawPercent(origwidth - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
 
     // Time
     if (english_language)
-    M_WriteTextBig_ENG(74 + ORIGWIDTH_DELTA, 113, "Time");
+    M_WriteTextBig_ENG(74 + wide_delta, 113, "Time");
     else
-    M_WriteTextBig_RUS(77 + ORIGWIDTH_DELTA, 113, "Dhtvz");
+    M_WriteTextBig_RUS(77 + wide_delta, 113, "Dhtvz");
 
-    WI_drawTime(ORIGWIDTH - SP_STATSX, SP_STATSY+4*lh-8+2, cnt_time, true);
+    WI_drawTime(origwidth - SP_STATSX, SP_STATSY+4*lh-8+2, cnt_time, true);
 
     // Draw total times only after finishing last level
     if (gamemap == 23)
@@ -2361,13 +2368,13 @@ void WI_drawStatsJaguar(void)
 
         // Total | Итог
         if (english_language)
-        M_WriteTextBig_ENG(59 + ORIGWIDTH_DELTA, 131, "Total");
+        M_WriteTextBig_ENG(59 + wide_delta, 131, "Total");
         else
-        M_WriteTextBig_RUS(95 + ORIGWIDTH_DELTA, 131, "Bnju");
+        M_WriteTextBig_RUS(95 + wide_delta, 131, "Bnju");
         
         // Show total time only after level time is counted
         if (cnt_time == plrs[me].stime / TICRATE)
-        WI_drawTime(ORIGWIDTH - SP_STATSX, SP_STATSY+5*lh-8+2, ttime, false);
+        WI_drawTime(origwidth - SP_STATSX, SP_STATSY+5*lh-8+2, ttime, false);
     }
 
     // Draws which level you are entering...
