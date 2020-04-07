@@ -68,6 +68,7 @@ static window_size_t window_sizes_wide[] =
 
 static char *video_driver = "";
 static char *window_position = "";
+static int window_border = 1;
 static int aspect_ratio_correct = 1;
 static int smoothing = 0;
 static int vga_porch_flash = 0;
@@ -397,6 +398,7 @@ void BindDisplayVariables(void)
     M_BindIntVariable("startup_delay",             &startup_delay);
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindStringVariable("window_position",        &window_position);
+    M_BindIntVariable("window_border",             &window_border);
     M_BindIntVariable("usegamma",                  &usegamma);
 
     if (gamemission == doom || gamemission == heretic || gamemission == strife)

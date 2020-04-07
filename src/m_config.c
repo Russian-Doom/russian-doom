@@ -838,6 +838,12 @@ static default_t extra_defaults_list[] =
 
     CONFIG_VARIABLE_STRING(window_position),
 
+    //!
+    // [JN] Use bordered or borderless window.
+    //
+
+    CONFIG_VARIABLE_INT(window_border),
+
 #ifdef FEATURE_MULTIPLAYER
 
     //!

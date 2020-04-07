@@ -117,6 +117,10 @@ char *video_driver = "";
 
 static char *window_position = "center";
 
+// [JN] Use bordered or borderless window.
+
+int window_border = 1;
+
 // SDL display number on which to run.
 
 int video_display = 0;
@@ -1243,6 +1247,12 @@ static void SetVideoMode(void)
         I_InitWindowIcon();
     }
 
+    // [JN] Disable window border if window_border = 0.
+    if (!window_border)
+    {
+        SDL_SetWindowBordered(screen, SDL_FALSE);
+    }
+
     // The SDL_RENDERER_TARGETTEXTURE flag is required to render the
     // intermediate texture into the upscaled texture.
     renderer_flags = SDL_RENDERER_TARGETTEXTURE;
@@ -1672,6 +1682,7 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("grabmouse",                 &grabmouse);
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindStringVariable("window_position",        &window_position);
+    M_BindIntVariable("window_border",             &window_border);
     M_BindIntVariable("usegamma",                  &usegamma);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
 }
