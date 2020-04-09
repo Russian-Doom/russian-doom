@@ -30,6 +30,9 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 #### [RiscOS Doom](https://github.com/jeffdoggett/Doom) source port 
 - Jeff Doggett
 
+#### [RUDE](https://github.com/drfrag666/RUDE) source port 
+- drfrag
+
 #### [PCDoom](https://github.com/nukeykt/PCDoom-v2) source port 
 - Alexey Khokholov
 
@@ -77,3 +80,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Manuel Alfayate Corchete
 - Orfeus94
 - Artyom "Allard" Andreyev
+- Dwars
