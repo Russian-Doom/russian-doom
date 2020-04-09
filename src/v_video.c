@@ -1137,13 +1137,14 @@ void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
 
     for (k = 0; k < size; k++)
     {
-        const int l = k / SRCWIDTH; // current line in the source screen
-        const int p = k - l * SRCWIDTH; // current pixel in this line
+        const int l = k / ORIGWIDTH; // current line in the source screen
+        const int p = k - l * ORIGWIDTH; // current pixel in this line
         for (i = 0; i <= hires; i++)
         {
             for (j = 0; j <= hires; j++)
             {
-                *(dest + (p << hires) + ((l << hires) + i) * screenwidth + j + (ORIGWIDTH_DELTA << hires)) = *(src + k);
+                *(dest + (p << hires) + ((l << hires) + i) * screenwidth + j 
+                       + (wide_delta << hires)) = *(src + k);
             }
         }
     }
@@ -1151,7 +1152,7 @@ void V_CopyScaledBuffer(byte *dest, byte *src, size_t size)
  
 void V_DrawRawScreen(byte *raw)
 {
-    V_CopyScaledBuffer(dest_screen, raw, SRCWIDTH * ORIGHEIGHT);
+    V_CopyScaledBuffer(dest_screen, raw, ORIGWIDTH * ORIGHEIGHT);
 }
 
 //

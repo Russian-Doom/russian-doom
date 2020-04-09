@@ -41,6 +41,8 @@ char *finaleflat;
 int FontABaseLump;
 int FontFBaseLump;
 
+extern int screenblocks;
+
 extern boolean automapactive;
 extern boolean viewactive;
 
@@ -181,15 +183,15 @@ void F_TextWrite(void)
     dest = I_VideoBuffer;
     for (y = 0; y < SCREENHEIGHT; y++)
     {
-        for (x = 0; x < SCREENWIDTH / 64; x++)
+        for (x = 0; x < screenwidth / 64; x++)
         {
             memcpy(dest, src + ((y & 63) << 6), 64);
             dest += 64;
         }
-        if (SCREENWIDTH & 63)
+        if (screenwidth & 63)
         {
-            memcpy(dest, src + ((y & 63) << 6), SCREENWIDTH & 63);
-            dest += (SCREENWIDTH & 63);
+            memcpy(dest, src + ((y & 63) << 6), screenwidth & 63);
+            dest += (screenwidth & 63);
         }
     }
 
@@ -226,10 +228,16 @@ void F_TextWrite(void)
 
         w = W_CacheLumpNum((FontABaseLump) + c - 33, PU_CACHE);
 
-        if (cx + SHORT(w->width) > SCREENWIDTH)
+        if (cx + SHORT(w->width) > screenwidth)
             break;
-        V_DrawShadowedPatchRaven(cx + ORIGWIDTH_DELTA, cy, w);
+        V_DrawShadowedPatchRaven(cx + wide_delta, cy, w);
         cx += SHORT(w->width);
+    }
+
+    // [JN] Wide screen: draw black borders in emulated 4:3 mode.
+    if (widescreen && screenblocks == 9)
+    {
+        V_DrawBlackBorders();
     }
 }
 
@@ -256,15 +264,15 @@ void F_TextWriteRUS(void)
     dest = I_VideoBuffer;
     for (y = 0; y < SCREENHEIGHT; y++)
     {
-        for (x = 0; x < SCREENWIDTH / 64; x++)
+        for (x = 0; x < screenwidth / 64; x++)
         {
             memcpy(dest, src + ((y & 63) << 6), 64);
             dest += 64;
         }
-        if (SCREENWIDTH & 63)
+        if (screenwidth & 63)
         {
-            memcpy(dest, src + ((y & 63) << 6), SCREENWIDTH & 63);
-            dest += (SCREENWIDTH & 63);
+            memcpy(dest, src + ((y & 63) << 6), screenwidth & 63);
+            dest += (screenwidth & 63);
         }
     }
 
@@ -299,10 +307,16 @@ void F_TextWriteRUS(void)
 
         w = W_CacheLumpNum((FontFBaseLump) + c - 33, PU_CACHE);
 
-        if (cx + SHORT(w->width) > SCREENWIDTH)
+        if (cx + SHORT(w->width) > screenwidth)
             break;
-        V_DrawShadowedPatchRaven(cx + ORIGWIDTH_DELTA, cy, w);
+        V_DrawShadowedPatchRaven(cx + wide_delta, cy, w);
         cx += SHORT(w->width);
+    }
+
+    // [JN] Wide screen: draw black borders in emulated 4:3 mode.
+    if (widescreen && screenblocks == 9)
+    {
+        V_DrawBlackBorders();
     }
 }
 
@@ -320,13 +334,13 @@ void F_DrawPatchCol(int x, patch_t * patch, int col)
     while (column->topdelta != 0xff)
     {
         source = (byte *) column + 3;
-        dest = desttop + column->topdelta * SCREENWIDTH;
+        dest = desttop + column->topdelta * screenwidth;
         count = column->length;
 
         while (count--)
         {
             *dest = *source++;
-            dest += SCREENWIDTH;
+            dest += screenwidth;
         }
         column = (column_t *) ((byte *) column + column->length + 4);
     }
@@ -405,7 +419,7 @@ void F_DrawUnderwater(void)
             if (!underwawa)
             {
                 underwawa = true;
-                V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 lumpname = DEH_String(usegamma <= 8 ?
                                       "E2PALFIX" :
                                       "E2PAL");
@@ -467,7 +481,7 @@ void F_BunnyScroll(void)
     p1 = W_CacheLumpName("PFUB2", PU_LEVEL);
     p2 = W_CacheLumpName("PFUB1", PU_LEVEL);
 
-    V_MarkRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
+    V_MarkRect(0, 0, screenwidth, SCREENHEIGHT);
 
     scrolled = 320 - (finalecount - 230) / 2;
     if (scrolled > 320)
@@ -475,7 +489,7 @@ void F_BunnyScroll(void)
     if (scrolled < 0)
         scrolled = 0;
 
-    for (x = 0; x < SCREENWIDTH; x++)
+    for (x = 0; x < screenwidth; x++)
     {
         if (x + scrolled < 320)
             F_DrawPatchCol(x, p1, x + scrolled);
@@ -487,7 +501,7 @@ void F_BunnyScroll(void)
         return;
     if (finalecount < 1180)
     {
-        V_DrawPatch((SCREENWIDTH - 13 * 8) / 2, (SCREENHEIGHT - 8 * 8) / 2, 0,
+        V_DrawPatch((screenwidth - 13 * 8) / 2, (SCREENHEIGHT - 8 * 8) / 2, 0,
                     W_CacheLumpName("END0", PU_CACHE));
         laststage = 0;
         return;
@@ -503,7 +517,7 @@ void F_BunnyScroll(void)
     }
 
     M_snprintf(name, sizeof(name), "END%i", stage);
-    V_DrawPatch((SCREENWIDTH - 13 * 8) / 2, (SCREENHEIGHT - 8 * 8) / 2,
+    V_DrawPatch((screenwidth - 13 * 8) / 2, (SCREENHEIGHT - 8 * 8) / 2,
                 W_CacheLumpName(name, PU_CACHE));
 }
 #endif
@@ -532,7 +546,7 @@ void F_Drawer(void)
         {
             case 1:
                 // [JN] Clean up remainings of the wide screen
-                V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 if (gamemode == shareware)
                 {
                     V_DrawRawScreen(W_CacheLumpName(english_language ? 
@@ -554,12 +568,12 @@ void F_Drawer(void)
                 break;
             case 3:
                 // [JN] Clean up remainings of the wide screen
-                V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 F_DemonScroll();
                 break;
             case 4:            // Just show credits screen for extended episodes
             case 5:
-                V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 if (english_language)
                 V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
                 else

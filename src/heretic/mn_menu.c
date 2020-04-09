@@ -137,8 +137,8 @@ void MN_LoadSlotText(void);
 
 // Rendering
 static void DrawRenderingMenu(void);
+static boolean M_RD_Change_Widescreen(int option);
 static boolean M_RD_Change_VSync(int option);
-static boolean M_RD_AspectRatio(int option);
 static boolean M_RD_Uncapped(int option);
 static boolean M_RD_FPScounter(int option);
 static boolean M_RD_Smoothing(int option);
@@ -265,7 +265,7 @@ static MenuItem_t MainItems_Rus[] = {
 };
 
 static Menu_t MainMenu = {
-    110 + ORIGWIDTH_DELTA, 56,
+    110, 56,
     DrawMainMenu,
     5, MainItems,
     0,
@@ -273,7 +273,7 @@ static Menu_t MainMenu = {
 };
 
 static Menu_t MainMenu_Rus = {
-    103 + ORIGWIDTH_DELTA, 56,
+    103, 56,
     DrawMainMenu,
     5, MainItems_Rus,
     0,
@@ -297,7 +297,7 @@ static MenuItem_t EpisodeItems_Rus[] = {
 };
 
 static Menu_t EpisodeMenu = {
-    80 + ORIGWIDTH_DELTA, 50,
+    80, 50,
     DrawEpisodeMenu,
     3, EpisodeItems,
     0,
@@ -305,7 +305,7 @@ static Menu_t EpisodeMenu = {
 };
 
 static Menu_t EpisodeMenu_Rus = {
-    55 + ORIGWIDTH_DELTA, 50,
+    55, 50,
     DrawEpisodeMenu,
     3, EpisodeItems_Rus,
     0,
@@ -323,7 +323,7 @@ static MenuItem_t FilesItems_Rus[] = {
 };
 
 static Menu_t FilesMenu = {
-    110 + ORIGWIDTH_DELTA, 60,
+    110, 60,
     DrawFilesMenu,
     2, FilesItems,
     0,
@@ -331,7 +331,7 @@ static Menu_t FilesMenu = {
 };
 
 static Menu_t FilesMenu_Rus = {
-    90 + ORIGWIDTH_DELTA, 60,
+    90, 60,
     DrawFilesMenu,
     2, FilesItems_Rus,
     0,
@@ -348,7 +348,7 @@ static MenuItem_t LoadItems[] = {
 };
 
 static Menu_t LoadMenu = {
-    70 + ORIGWIDTH_DELTA, 30,
+    70, 30,
     DrawLoadMenu,
     6, LoadItems,
     0,
@@ -356,7 +356,7 @@ static Menu_t LoadMenu = {
 };
 
 static Menu_t LoadMenu_Rus = {
-    70 + ORIGWIDTH_DELTA, 30,
+    70, 30,
     DrawLoadMenu,
     6, LoadItems,
     0,
@@ -373,7 +373,7 @@ static MenuItem_t SaveItems[] = {
 };
 
 static Menu_t SaveMenu = {
-    70 + ORIGWIDTH_DELTA, 30,
+    70, 30,
     DrawSaveMenu,
     6, SaveItems,
     0,
@@ -381,7 +381,7 @@ static Menu_t SaveMenu = {
 };
 
 static Menu_t SaveMenu_Rus = {
-    70 + ORIGWIDTH_DELTA, 30,
+    70, 30,
     DrawSaveMenu,
     6, SaveItems,
     0,
@@ -407,7 +407,7 @@ static MenuItem_t SkillItems_Rus[] = {
 };
 
 static Menu_t SkillMenu = {
-    38 + ORIGWIDTH_DELTA, 30,
+    38, 30,
     DrawSkillMenu,
     6, SkillItems,
     2,
@@ -415,7 +415,7 @@ static Menu_t SkillMenu = {
 };
 
 static Menu_t SkillMenu_Rus = {
-    38 + ORIGWIDTH_DELTA, 30,
+    38, 30,
     DrawSkillMenu,
     6, SkillItems_Rus,
     2,
@@ -448,7 +448,7 @@ static MenuItem_t OptionsItems_Rus[] = {
 };
 
 static Menu_t OptionsMenu = {
-    77 + ORIGWIDTH_DELTA, 16,
+    77, 16,
     NULL,
     7, OptionsItems,
     0,
@@ -456,7 +456,7 @@ static Menu_t OptionsMenu = {
 };
 
 static Menu_t OptionsMenu_Rus = {
-    77 + ORIGWIDTH_DELTA, 16,
+    77, 16,
     NULL,
     7, OptionsItems_Rus,
     0,
@@ -468,10 +468,10 @@ static Menu_t OptionsMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t RenderingItems[] = {
+    {ITT_LRFUNC, "WIDESCREEN RENDERING:",           M_RD_Change_Widescreen, 0, MENU_NONE},
     {ITT_LRFUNC, "VERTICAL SYNCHRONIZATION:",       M_RD_Change_VSync, 0, MENU_NONE},
-    {ITT_LRFUNC, "FIX ASPECT RATIO:",               M_RD_AspectRatio,  0, MENU_NONE},
-    {ITT_LRFUNC, "UNCAPPED FRAMERATE:",             M_RD_Uncapped,     0, MENU_NONE},
-    {ITT_LRFUNC, "SHOW FPS COUNTER:",               M_RD_FPScounter,   0, MENU_NONE},
+    {ITT_LRFUNC, "FRAME RATE:",                     M_RD_Uncapped,     0, MENU_NONE},
+    {ITT_LRFUNC, "FPS COUNTER:",                    M_RD_FPScounter,   0, MENU_NONE},
     {ITT_LRFUNC, "PIXEL SCALING:",                  M_RD_Smoothing,    0, MENU_NONE},
     {ITT_LRFUNC, "VIDEO RENDERER:",                 M_RD_Renderer,     0, MENU_NONE},
     {ITT_EMPTY,  NULL,                              NULL,              0, MENU_NONE},
@@ -479,9 +479,9 @@ static MenuItem_t RenderingItems[] = {
 };
 
 static MenuItem_t RenderingItems_Rus[] = {
+    {ITT_LRFUNC, "IBHJRJAJHVFNYSQ HT;BV: D",        M_RD_Change_Widescreen, 0, MENU_NONE}, // ШИРОКОФОРМАТНЫЙ РЕЖИМ
     {ITT_LRFUNC, "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync, 0, MENU_NONE}, // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
-    {ITT_LRFUNC, "ABRCBHJDFNM CJJNYJITYBT CNJHJY:", M_RD_AspectRatio,  0, MENU_NONE}, // ФИКСИРОВАТЬ СООТНОШЕНИЕ СТОРОН
-    {ITT_LRFUNC, "JUHFYBXTYBT RFLHJDJQ XFCNJNS:",   M_RD_Uncapped,     0, MENU_NONE}, // ОГРАНИЧЕНИЕ КАДРОВОЙ ЧАСТОТЫ
+    {ITT_LRFUNC, "RFLHJDFZ XFCNJNF:",               M_RD_Uncapped,     0, MENU_NONE}, // КАДРОВАЯ ЧАСТОТА
     {ITT_LRFUNC, "CXTNXBR RFLHJDJQ XFCNJNS:",       M_RD_FPScounter,   0, MENU_NONE}, // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ
     {ITT_LRFUNC, "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing,    0, MENU_NONE}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
     {ITT_LRFUNC, "J,HF,JNRF DBLTJ:",                M_RD_Renderer,     0, MENU_NONE}, // ОБРАБОТКА ВИДЕО
@@ -490,7 +490,7 @@ static MenuItem_t RenderingItems_Rus[] = {
 };
 
 static Menu_t RenderingMenu = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawRenderingMenu,
     8, RenderingItems,
     0,
@@ -498,7 +498,7 @@ static Menu_t RenderingMenu = {
 };
 
 static Menu_t RenderingMenu_Rus = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawRenderingMenu,
     8, RenderingItems_Rus,
     0,
@@ -537,7 +537,7 @@ static MenuItem_t DisplayItems_Rus[] = {
 };
 
 static Menu_t DisplayMenu = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawDisplayMenu,
     10, DisplayItems,
     0,
@@ -545,7 +545,7 @@ static Menu_t DisplayMenu = {
 };
 
 static Menu_t DisplayMenu_Rus = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawDisplayMenu,
     10, DisplayItems_Rus,
     0,
@@ -581,7 +581,7 @@ static MenuItem_t SoundItems_Rus[] = {
 };
 
 static Menu_t SoundMenu = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawSoundMenu,
     9, SoundItems,
     0,
@@ -589,7 +589,7 @@ static Menu_t SoundMenu = {
 };
 
 static Menu_t SoundMenu_Rus = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawSoundMenu,
     9, SoundItems_Rus,
     0,
@@ -619,7 +619,7 @@ static MenuItem_t ControlsItems_Rus[] = {
 };
 
 static Menu_t ControlsMenu = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawControlsMenu,
     6, ControlsItems,
     0,
@@ -627,7 +627,7 @@ static Menu_t ControlsMenu = {
 };
 
 static Menu_t ControlsMenu_Rus = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawControlsMenu,
     6, ControlsItems_Rus,
     0,
@@ -667,7 +667,7 @@ static MenuItem_t Gameplay1Items_Rus[] = {
 };
 
 static Menu_t Gameplay1Menu = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawGameplay1Menu,
     11, Gameplay1Items,
     0,
@@ -675,7 +675,7 @@ static Menu_t Gameplay1Menu = {
 };
 
 static Menu_t Gameplay1Menu_Rus = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawGameplay1Menu,
     11, Gameplay1Items_Rus,
     0,
@@ -715,7 +715,7 @@ static MenuItem_t Gameplay2Items_Rus[] = {
 };
 
 static Menu_t Gameplay2Menu = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawGameplay2Menu,
     11, Gameplay2Items,
     0,
@@ -723,7 +723,7 @@ static Menu_t Gameplay2Menu = {
 };
 
 static Menu_t Gameplay2Menu_Rus = {
-    36 + ORIGWIDTH_DELTA, 42,
+    36, 42,
     DrawGameplay2Menu,
     11, Gameplay2Items_Rus,
     0,
@@ -817,6 +817,9 @@ void MN_Init(void)
     menuactive = false;
     messageson = true;
     SkullBaseLump = W_GetNumForName(DEH_String("M_SKL00"));
+
+    // [JN] Widescreen: set temp variable for rendering menu.
+    widescreen_temp = widescreen;
 
     if (gamemode == retail)
     {                           // Add episodes 4 and 5 to the menu
@@ -1281,23 +1284,23 @@ void MN_Drawer(void)
                                  QuitEndMsg_Rus[typeofask - 1]);
 
             if (english_language)
-            MN_DrTextA(message, 160 - MN_TextAWidth(message) / 2 + ORIGWIDTH_DELTA, 80);
+            MN_DrTextA(message, 160 - MN_TextAWidth(message) / 2 + wide_delta, 80);
             else
-            MN_DrTextSmallRUS(message, 160 - MN_DrTextSmallRUSWidth(message) / 2 + ORIGWIDTH_DELTA, 80);
+            MN_DrTextSmallRUS(message, 160 - MN_DrTextSmallRUSWidth(message) / 2 + wide_delta, 80);
 
             if (typeofask == 3)
             {
                 MN_DrTextA(SlotText[quicksave - 1], 160 -
-                           MN_TextAWidth(SlotText[quicksave - 1]) / 2 + ORIGWIDTH_DELTA, 90);
+                           MN_TextAWidth(SlotText[quicksave - 1]) / 2 + wide_delta, 90);
                 MN_DrTextA(DEH_String("?"), 160 +
-                           MN_TextAWidth(SlotText[quicksave - 1]) / 2 + ORIGWIDTH_DELTA, 90);
+                           MN_TextAWidth(SlotText[quicksave - 1]) / 2 + wide_delta, 90);
             }
             if (typeofask == 4)
             {
                 MN_DrTextA(SlotText[quickload - 1], 160 -
-                           MN_TextAWidth(SlotText[quickload - 1]) / 2 + ORIGWIDTH_DELTA, 90);
+                           MN_TextAWidth(SlotText[quickload - 1]) / 2 + wide_delta, 90);
                 MN_DrTextA(DEH_String("?"), 160 +
-                           MN_TextAWidth(SlotText[quickload - 1]) / 2 + ORIGWIDTH_DELTA, 90);
+                           MN_TextAWidth(SlotText[quickload - 1]) / 2 + wide_delta, 90);
             }
             UpdateState |= I_FULLSCRN;
         }
@@ -1336,11 +1339,11 @@ void MN_Drawer(void)
                     ||  CurrentMenu == &SkillMenu
                     ||  CurrentMenu == &OptionsMenu)
                     {
-                        MN_DrTextBigENG(DEH_String(item->text), x, y);
+                        MN_DrTextBigENG(DEH_String(item->text), x + wide_delta, y);
                     }
                     else
                     {
-                        MN_DrTextSmallENG(DEH_String(item->text), x, y);
+                        MN_DrTextSmallENG(DEH_String(item->text), x + wide_delta, y);
                     }
                 }
                 else
@@ -1351,11 +1354,11 @@ void MN_Drawer(void)
                     ||  CurrentMenu == &SkillMenu_Rus
                     ||  CurrentMenu == &OptionsMenu_Rus)
                     {
-                        MN_DrTextBigRUS(DEH_String(item->text), x, y);
+                        MN_DrTextBigRUS(DEH_String(item->text), x + wide_delta, y);
                     }
                     else
                     {
-                        MN_DrTextSmallRUS(DEH_String(item->text), x, y);
+                        MN_DrTextSmallRUS(DEH_String(item->text), x + wide_delta, y);
                     }
                 }
             }
@@ -1399,14 +1402,14 @@ void MN_Drawer(void)
         {
             y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT) + SELECTOR_YOFFSET;
             selName = DEH_String(MenuTime & 16 ? "M_SLCTR1" : "M_SLCTR2");
-            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET, y,
+            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET + wide_delta, y,
                                      W_CacheLumpName(selName, PU_CACHE));
         }
         else
         {
             y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT_SMALL) + SELECTOR_YOFFSET;
             selName = DEH_String(MenuTime & 8 ? "INVGEMR1" : "INVGEMR2");
-            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET_SMALL, y,
+            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET_SMALL + wide_delta, y,
                                      W_CacheLumpName(selName, PU_CACHE));
         }
     }
@@ -1423,10 +1426,10 @@ static void DrawMainMenu(void)
     int frame;
 
     frame = (MenuTime / 3) % 18;
-    V_DrawShadowedPatchRaven(88 + ORIGWIDTH_DELTA, 0, W_CacheLumpName(DEH_String("M_HTIC"), PU_CACHE));
-    V_DrawShadowedPatchRaven(40 + ORIGWIDTH_DELTA, 10, W_CacheLumpNum(SkullBaseLump + (17 - frame),
+    V_DrawShadowedPatchRaven(88 + wide_delta, 0, W_CacheLumpName(DEH_String("M_HTIC"), PU_CACHE));
+    V_DrawShadowedPatchRaven(40 + wide_delta, 10, W_CacheLumpNum(SkullBaseLump + (17 - frame),
                                        PU_CACHE));
-    V_DrawShadowedPatchRaven(232 + ORIGWIDTH_DELTA, 10, W_CacheLumpNum(SkullBaseLump + frame, PU_CACHE));
+    V_DrawShadowedPatchRaven(232 + wide_delta, 10, W_CacheLumpNum(SkullBaseLump + frame, PU_CACHE));
 }
 
 //---------------------------------------------------------------------------
@@ -1478,9 +1481,9 @@ static void DrawLoadMenu(void)
     title_rus = DEH_String("PFUHEPBNM BUHE");   // ЗАГРУЗИТЬ ИГРУ
 
     if (english_language)
-    MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + ORIGWIDTH_DELTA, 7);
+    MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + wide_delta, 7);
     else
-    MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 + ORIGWIDTH_DELTA, 7);
+    MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 + wide_delta, 7);
     
     if (!slottextloaded)
     {
@@ -1503,9 +1506,9 @@ static void DrawSaveMenu(void)
     title_rus = DEH_String("CJ[HFYBNM BUHE");   // СОХРАНИТЬ ИГРУ
 
     if (english_language)
-    MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + ORIGWIDTH_DELTA, 7);
+    MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + wide_delta, 7);
     else
-    MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 + ORIGWIDTH_DELTA, 7);
+    MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 + wide_delta, 7);
 
     if (!slottextloaded)
     {
@@ -1563,11 +1566,11 @@ static void DrawFileSlots(Menu_t * menu)
     y = menu->y;
     for (i = 0; i < 6; i++)
     {
-        V_DrawShadowedPatchRaven(x, y, W_CacheLumpName(DEH_String("M_FSLOT"), PU_CACHE));
+        V_DrawShadowedPatchRaven(x + wide_delta, y, W_CacheLumpName(DEH_String("M_FSLOT"), PU_CACHE));
         if (SlotStatus[i])
         {
             // [JN] Use only small English chars here
-            MN_DrTextSmallENG(SlotText[i], x + 5, y + 5);
+            MN_DrTextSmallENG(SlotText[i], x + 5 + wide_delta, y + 5);
         }
         y += ITEM_HEIGHT;
     }
@@ -1589,136 +1592,150 @@ static void DrawRenderingMenu(void)
     {
         // Title
         MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         // Subheaders
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("RENDERING"), 36 + ORIGWIDTH_DELTA, 32);
-        MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallENG(DEH_String("RENDERING"), 36 + wide_delta, 32);
+        MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + wide_delta, 102);
         dp_translation = NULL;
     }
     else
     {
         // Title
         MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         // Subheaders
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("HTYLTHBYU"), 36 + ORIGWIDTH_DELTA, 32);      // РЕНДЕРИНГ
-        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + ORIGWIDTH_DELTA, 102);  // ДОПОЛНИТЕЛЬНО
+        MN_DrTextSmallRUS(DEH_String("HTYLTHBYU"), 36 + wide_delta, 32);      // РЕНДЕРИНГ
+        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + wide_delta, 102);  // ДОПОЛНИТЕЛЬНО
         dp_translation = NULL;
     }
 
+    // - Widescreen rendering---------------------------------------------------
+    if (english_language)
+    {
+        MN_DrTextSmallENG(DEH_String(widescreen_temp == 1 ? "ON (16:9)" : "OFF (4:3)"),
+                                     193 + wide_delta, 42);
+        // Informative message
+        if (widescreen_temp != widescreen)
+        {
+            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            MN_DrTextSmallENG(DEH_String("PROGRAM MUST BE RESTARTED"), 66 + wide_delta, 132);
+            dp_translation = NULL;
+        }
+    }
+    else
+    {
+        MN_DrTextSmallRUS(DEH_String(widescreen_temp == 1 ? "DRK (16:9)" : "DSRK (4:3)"),
+                                     212 + wide_delta, 42);
+        // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
+        if (widescreen_temp != widescreen)
+        {
+            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            MN_DrTextSmallRUS(DEH_String("YTJ,[JLBV GTHTPFGECR GHJUHFVVS"), 46 + wide_delta, 132);
+            dp_translation = NULL;
+        }
+    }
 
     // - Vertical sync ---------------------------------------------------------
     if (vsync)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 216 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallENG(DEH_String("ON"), 216 + wide_delta, 52);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 236 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 236 + wide_delta, 52);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 216 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallENG(DEH_String("OFF"), 216 + wide_delta, 52);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 236 + ORIGWIDTH_DELTA, 42);
-    }
-
-    // - Fix aspect ratio ------------------------------------------------------
-    if (aspect_ratio_correct)
-    {
-#ifdef WIDESCREEN
-        MN_DrTextSmallENG(DEH_String("16:9"), (english_language ? 156 : 270) 
-                                            + ORIGWIDTH_DELTA, 52);
-#else
-        MN_DrTextSmallENG(DEH_String("4:3"), (english_language ? 156 : 270)
-                                           + ORIGWIDTH_DELTA, 52);
-#endif
-    }
-    else
-    {
-        if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 156 + ORIGWIDTH_DELTA, 52);
-        else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 270 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 236 + wide_delta, 52);
     }
 
     // - Uncapped FPS ----------------------------------------------------------
-    if (uncapped_fps)
+    if (english_language)
     {
-        if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 184 + ORIGWIDTH_DELTA, 62);
-        else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 254 + ORIGWIDTH_DELTA, 62);
+        MN_DrTextSmallENG(DEH_String(uncapped_fps ? "UNCAPPED" : "35 FPS"), 120 + wide_delta, 62);
     }
     else
     {
-        MN_DrTextSmallENG(DEH_String("35 FPS"), (english_language ? 184 : 254) 
-                                              + ORIGWIDTH_DELTA, 62);
+        if (uncapped_fps)
+        MN_DrTextSmallRUS(DEH_String(",TP JUHFYBXTYBZ"), 165 + wide_delta, 62);
+        else
+        MN_DrTextSmallENG(DEH_String("35 FPS"), 165 + wide_delta, 62);
     }
 
     // - FPS counter -----------------------------------------------------------
     if (show_fps)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 165 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallENG(DEH_String("ON"), 129 + wide_delta, 72);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 223 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 223 + wide_delta, 72);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 165 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallENG(DEH_String("OFF"), 129 + wide_delta, 72);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 223 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 223 + wide_delta, 72);
     }
 
     // - Pixel scaling ---------------------------------------------------------
     if (smoothing)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("SMOOTH"), 131 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("SMOOTH"), 131 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 211 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 211 + wide_delta, 82);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("SHARP"), 131 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("SHARP"), 131 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 211 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 211 + wide_delta, 82);
     }
 
     // - Video renderer --------------------------------------------------------
     if (force_software_renderer)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("SOFTWARE (CPU)"), 149 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallENG(DEH_String("SOFTWARE (CPU)"), 149 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("GHJUHFVVYFZ"), 159 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallRUS(DEH_String("GHJUHFVVYFZ"), 159 + wide_delta, 92);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("HARDWARE (GPU)"), 149 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallENG(DEH_String("HARDWARE (GPU)"), 149 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("FGGFHFNYFZ"), 159 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallRUS(DEH_String("FGGFHFNYFZ"), 159 + wide_delta, 92);
     }
 
     // - Screenshot format --------------------------------------------------------
     if (png_screenshots)
     {
         MN_DrTextSmallENG(DEH_String("PNG"), (english_language ? 175 : 176)
-                                           + ORIGWIDTH_DELTA, 112);
+                                           + wide_delta, 112);
     }
     else
     {
         MN_DrTextSmallENG(DEH_String("PCX"), (english_language ? 175 : 176)
-                                           + ORIGWIDTH_DELTA, 112);
+                                           + wide_delta, 112);
     }   
+}
+
+static boolean M_RD_Change_Widescreen(int option)
+{
+    // [JN] Widescreen: changing only temp variable here.
+    // Initially it is set in MN_Init and stored into config file in M_QuitResponse.
+    widescreen_temp ^= 1;
+
+    return true;
 }
 
 static boolean M_RD_Change_VSync(int option)
@@ -1731,19 +1748,6 @@ static boolean M_RD_Change_VSync(int option)
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
-
-    return true;
-}
-
-static boolean M_RD_AspectRatio(int option)
-{
-    aspect_ratio_correct ^= 1;
-
-    // Reinitialize graphics
-    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
-
-    // Update status bar
-    SB_state = -1;
 
     return true;
 }
@@ -1808,39 +1812,42 @@ static void DrawDisplayMenu(void)
     {
         // Title
         MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("SCREEN"), 36 + ORIGWIDTH_DELTA, 32);
-        MN_DrTextSmallENG(DEH_String("MESSAGES AND TEXTS"), 36 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallENG(DEH_String("SCREEN"), 36 + wide_delta, 32);
+        MN_DrTextSmallENG(DEH_String("MESSAGES AND TEXTS"), 36 + wide_delta, 102);
         dp_translation = NULL;
     }
     else
     {
         // Title
         MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("\'RHFY"), 36 + ORIGWIDTH_DELTA, 32);              // ЭКРАН
-        MN_DrTextSmallRUS(DEH_String("CJJ,OTYBZ B NTRCNS"), 36 + ORIGWIDTH_DELTA, 102); // СООБЩЕНИЯ И ТЕКСТЫ
+        MN_DrTextSmallRUS(DEH_String("\'RHFY"), 36 + wide_delta, 32);              // ЭКРАН
+        MN_DrTextSmallRUS(DEH_String("CJJ,OTYBZ B NTRCNS"), 36 + wide_delta, 102); // СООБЩЕНИЯ И ТЕКСТЫ
         dp_translation = NULL;
     }
 
     // Screen size
-#ifdef WIDESCREEN
-    DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 4, screenblocks - 9);
-    M_snprintf(num, 4, "%3d", screenblocks);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextSmallENG(num, 85 + ORIGWIDTH_DELTA, 52);
-    dp_translation = NULL;
-#else
-    DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 10, screenblocks - 3);
-    M_snprintf(num, 4, "%3d", screenblocks);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 208 : 202) + ORIGWIDTH_DELTA, 41);
-    dp_translation = NULL;
-#endif
+    if (widescreen)
+    {
+        DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 4, screenblocks - 9);
+        M_snprintf(num, 4, "%3d", screenblocks);
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        MN_DrTextSmallENG(num, 85 + wide_delta, 52);
+        dp_translation = NULL;
+    }
+    else
+    {
+        DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 10, screenblocks - 3);
+        M_snprintf(num, 4, "%3d", screenblocks);
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        MN_DrTextA(num, 135 + wide_delta, 52);
+        dp_translation = NULL;
+    }
 
     // Gamma-correction
     DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 3, 18, usegamma);
@@ -1856,7 +1863,7 @@ static void DrawDisplayMenu(void)
                           local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                           local_time == 3 ? "24-HOUR (HH:MM)" :
                           local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF"),
-                          110 + ORIGWIDTH_DELTA, 112);
+                          110 + wide_delta, 112);
     }
     else
     {
@@ -1865,39 +1872,39 @@ static void DrawDisplayMenu(void)
                           local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                           local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                           local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK"),
-                          157 + ORIGWIDTH_DELTA, 112);
+                          157 + wide_delta, 112);
     }
 
     // Messages:
     if (messageson)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 108 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallENG(DEH_String("ON"), 108 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 208 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 208 + wide_delta, 122);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 108 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallENG(DEH_String("OFF"), 108 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 208 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 208 + wide_delta, 122);
     }
 
     // Text casting shadows:
     if (draw_shadowed_text)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 179 + ORIGWIDTH_DELTA, 132);
+        MN_DrTextSmallENG(DEH_String("ON"), 179 + wide_delta, 132);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 220 + ORIGWIDTH_DELTA, 132);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 220 + wide_delta, 132);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 179 + ORIGWIDTH_DELTA, 132);
+        MN_DrTextSmallENG(DEH_String("OFF"), 179 + wide_delta, 132);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 220 + ORIGWIDTH_DELTA, 132);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 220 + wide_delta, 132);
     }
 }
 
@@ -1915,14 +1922,15 @@ static boolean M_RD_ScreenSize(int option)
         screenblocks--;
     }
 
-#ifdef WIDESCREEN
-    // [JN] Wide screen: don't allow unsupported (bordered) views
-    // screenblocks - config file variable
-    if (screenblocks < 9)
-        screenblocks = 9;
-    if (screenblocks > 12)
-        screenblocks = 12;
-#endif
+    if (widescreen)
+    {
+        // [JN] Wide screen: don't allow unsupported (bordered) views
+        // screenblocks - config file variable
+        if (screenblocks < 9)
+            screenblocks = 9;
+        if (screenblocks > 12)
+            screenblocks = 12;
+    }
 
     R_SetViewSize(screenblocks, detailLevel);
     return true;
@@ -2034,22 +2042,22 @@ static void DrawSoundMenu(void)
     {
         // Title
         MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("VOLUME"), 36 + ORIGWIDTH_DELTA, 32);
-        MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("VOLUME"), 36 + wide_delta, 32);
+        MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + wide_delta, 82);
         dp_translation = NULL;
     }
     else
     {
         // Title
         MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("UHJVRJCNM"), 36 + ORIGWIDTH_DELTA, 32);       // ГРОМКОСТЬ
-        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + ORIGWIDTH_DELTA, 82);   // ДОПОЛНИТЕЛЬНО
+        MN_DrTextSmallRUS(DEH_String("UHJVRJCNM"), 36 + wide_delta, 32);       // ГРОМКОСТЬ
+        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + wide_delta, 82);   // ДОПОЛНИТЕЛЬНО
         dp_translation = NULL;
     }
 
@@ -2057,53 +2065,53 @@ static void DrawSoundMenu(void)
     DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 1, 16, snd_MaxVolume);
     M_snprintf(num, 4, "%3d", snd_MaxVolume);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextSmallENG(num, 184 + ORIGWIDTH_DELTA, 53);
+    MN_DrTextSmallENG(num, 184 + wide_delta, 53);
     dp_translation = NULL;
 
     // Music Volume
     DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 3, 16, snd_MusicVolume);
     M_snprintf(num, 4, "%3d", snd_MusicVolume);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextSmallENG(num, 184 + ORIGWIDTH_DELTA, 73);
+    MN_DrTextSmallENG(num, 184 + wide_delta, 73);
     dp_translation = NULL;
 
     // SFX Channels
     DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 6, 16, snd_Channels / 4 - 1);
     M_snprintf(num, 4, "%3d", snd_Channels);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextSmallENG(num, 184 + ORIGWIDTH_DELTA, 103);
+    MN_DrTextSmallENG(num, 184 + wide_delta, 103);
     dp_translation = NULL;
 
     // SFX Mode
     if (snd_monomode)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("MONO"), 105 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallENG(DEH_String("MONO"), 105 + wide_delta, 112);
         else
-        MN_DrTextSmallRUS(DEH_String("VJYJ"), 128 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallRUS(DEH_String("VJYJ"), 128 + wide_delta, 112);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("STEREO"), 105 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallENG(DEH_String("STEREO"), 105 + wide_delta, 112);
         else
-        MN_DrTextSmallRUS(DEH_String("CNTHTJ"), 128 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallRUS(DEH_String("CNTHTJ"), 128 + wide_delta, 112);
     }    
 
     // Pitch-Shifted sounds
     if (snd_pitchshift)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 189 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallENG(DEH_String("ON"), 189 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 230 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 230 + wide_delta, 122);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 189 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallENG(DEH_String("OFF"), 189 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 230 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 230 + wide_delta, 122);
     }
 }
 
@@ -2192,22 +2200,22 @@ static void DrawControlsMenu(void)
     {
         // Title
         MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("MOVEMENT"), 36 + ORIGWIDTH_DELTA, 32);
-        MN_DrTextSmallENG(DEH_String("MOUSE"), 36 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallENG(DEH_String("MOVEMENT"), 36 + wide_delta, 32);
+        MN_DrTextSmallENG(DEH_String("MOUSE"), 36 + wide_delta, 52);
         dp_translation = NULL;
     }
     else
     {
         // Title
         MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("GTHTLDB;TYBT"), 36 + ORIGWIDTH_DELTA, 32);    // ПЕРЕДВИЖЕНИЕ
-        MN_DrTextSmallRUS(DEH_String("VSIM"), 36 + ORIGWIDTH_DELTA, 52);            // МЫШЬ
+        MN_DrTextSmallRUS(DEH_String("GTHTLDB;TYBT"), 36 + wide_delta, 32);    // ПЕРЕДВИЖЕНИЕ
+        MN_DrTextSmallRUS(DEH_String("VSIM"), 36 + wide_delta, 52);            // МЫШЬ
         dp_translation = NULL;
     }
 
@@ -2215,55 +2223,55 @@ static void DrawControlsMenu(void)
     if (joybspeed >= 20)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 118 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallENG(DEH_String("ON"), 118 + wide_delta, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 209 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 209 + wide_delta, 42);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 118 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallENG(DEH_String("OFF"), 118 + wide_delta, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 209 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 209 + wide_delta, 42);
     }
 
     // Mouse sensivity
     DrawSliderSmall((english_language ? &ControlsMenu : &ControlsMenu_Rus), 3, 12, mouseSensitivity);
     M_snprintf(num, 4, "%3d", mouseSensitivity);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextSmallENG(num, 152 + ORIGWIDTH_DELTA, 73);
+    MN_DrTextSmallENG(num, 152 + wide_delta, 73);
     dp_translation = NULL;
 
     // Mouse look
     if (mlook)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 118 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("ON"), 118 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 132 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 132 + wide_delta, 82);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 118 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("OFF"), 118 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 132 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 132 + wide_delta, 82);
     }
 
     // Novert
     if (!novert)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 168 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallENG(DEH_String("ON"), 168 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 227 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 227 + wide_delta, 92);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 168 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallENG(DEH_String("OFF"), 168 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 227 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 227 + wide_delta, 92);
     }
 }
 
@@ -2330,22 +2338,22 @@ static void DrawGameplay1Menu(void)
     {
         // Title
         MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("VISUAL"), 36 + ORIGWIDTH_DELTA, 32);
-        MN_DrTextSmallENG(DEH_String("TACTICAL"), 36 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallENG(DEH_String("VISUAL"), 36 + wide_delta, 32);
+        MN_DrTextSmallENG(DEH_String("TACTICAL"), 36 + wide_delta, 92);
         dp_translation = NULL;
     }
     else
     {
         // Title
         MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("UHFABRF"), 36 + ORIGWIDTH_DELTA, 32); // ГРАФИКА
-        MN_DrTextSmallRUS(DEH_String("NFRNBRF"), 36 + ORIGWIDTH_DELTA, 92); // ТАКТИКА
+        MN_DrTextSmallRUS(DEH_String("UHFABRF"), 36 + wide_delta, 32); // ГРАФИКА
+        MN_DrTextSmallRUS(DEH_String("NFRNBRF"), 36 + wide_delta, 92); // ТАКТИКА
         dp_translation = NULL;
     }
 
@@ -2355,9 +2363,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 119 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallENG(DEH_String("ON"), 119 + wide_delta, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 133 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 133 + wide_delta, 42);
 
         dp_translation = NULL;
     }
@@ -2366,9 +2374,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 119 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallENG(DEH_String("OFF"), 119 + wide_delta, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 133 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 133 + wide_delta, 42);
 
         dp_translation = NULL;
     }
@@ -2379,9 +2387,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 143 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallENG(DEH_String("ON"), 143 + wide_delta, 52);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 205 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 205 + wide_delta, 52);
 
         dp_translation = NULL;
     }
@@ -2390,9 +2398,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 143 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallENG(DEH_String("OFF"), 143 + wide_delta, 52);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 205 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 205 + wide_delta, 52);
 
         dp_translation = NULL;
     }
@@ -2403,9 +2411,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 126 + ORIGWIDTH_DELTA, 62);
+        MN_DrTextSmallENG(DEH_String("ON"), 126 + wide_delta, 62);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 235 + ORIGWIDTH_DELTA, 62);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 235 + wide_delta, 62);
 
         dp_translation = NULL;
     }
@@ -2414,9 +2422,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 126 + ORIGWIDTH_DELTA, 62);
+        MN_DrTextSmallENG(DEH_String("OFF"), 126 + wide_delta, 62);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 235 + ORIGWIDTH_DELTA, 62);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 235 + wide_delta, 62);
 
         dp_translation = NULL;
     }
@@ -2428,9 +2436,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 139 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallENG(DEH_String("ON"), 139 + wide_delta, 72);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 178 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 178 + wide_delta, 72);
 
         dp_translation = NULL;
     }
@@ -2439,9 +2447,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 139 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallENG(DEH_String("OFF"), 139 + wide_delta, 72);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 178 + ORIGWIDTH_DELTA, 72);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 178 + wide_delta, 72);
 
         dp_translation = NULL;
     }
@@ -2452,9 +2460,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 235 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("ON"), 235 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 253 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 253 + wide_delta, 82);
 
         dp_translation = NULL;
     }
@@ -2463,9 +2471,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 235 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("OFF"), 235 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 253 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 253 + wide_delta, 82);
 
         dp_translation = NULL;
     }
@@ -2476,9 +2484,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 240 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallENG(DEH_String("ON"), 240 + wide_delta, 102);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 231 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 231 + wide_delta, 102);
 
         dp_translation = NULL;
     }
@@ -2487,9 +2495,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 240 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallENG(DEH_String("OFF"), 240 + wide_delta, 102);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 231 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 231 + wide_delta, 102);
 
         dp_translation = NULL;
     }
@@ -2500,9 +2508,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 235 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallENG(DEH_String("ON"), 235 + wide_delta, 112);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 251 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 251 + wide_delta, 112);
 
         dp_translation = NULL;
     }
@@ -2511,9 +2519,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 235 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallENG(DEH_String("OFF"), 235 + wide_delta, 112);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 251 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 251 + wide_delta, 112);
 
         dp_translation = NULL;
     }
@@ -2524,9 +2532,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 190 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallENG(DEH_String("ON"), 190 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 253 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 253 + wide_delta, 122);
 
         dp_translation = NULL;
     }
@@ -2535,9 +2543,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 190 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallENG(DEH_String("OFF"), 190 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 253 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 253 + wide_delta, 122);
 
         dp_translation = NULL;
     }
@@ -2607,24 +2615,24 @@ static void DrawGameplay2Menu(void)
     {
         // Title
         MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + ORIGWIDTH_DELTA, 32);
-        MN_DrTextSmallENG(DEH_String("CROSSHAIR"), 36 + ORIGWIDTH_DELTA, 72);
-        MN_DrTextSmallENG(DEH_String("GAMEPLAY"), 36 + ORIGWIDTH_DELTA, 112);
+        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 32);
+        MN_DrTextSmallENG(DEH_String("CROSSHAIR"), 36 + wide_delta, 72);
+        MN_DrTextSmallENG(DEH_String("GAMEPLAY"), 36 + wide_delta, 112);
         dp_translation = NULL;
     }
     else
     {
         // Title
         MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + ORIGWIDTH_DELTA, 7);
+                                       + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("UHFABRF"), 36 + ORIGWIDTH_DELTA, 32);    // ФИЗИКА
-        MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + ORIGWIDTH_DELTA, 72);     // ПРИЦЕЛ
-        MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + ORIGWIDTH_DELTA, 112);  // ГЕЙМПЛЕЙ
+        MN_DrTextSmallRUS(DEH_String("UHFABRF"), 36 + wide_delta, 32);    // ФИЗИКА
+        MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + wide_delta, 72);     // ПРИЦЕЛ
+        MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + wide_delta, 112);  // ГЕЙМПЛЕЙ
         dp_translation = NULL;
     }
 
@@ -2634,9 +2642,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 238 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallENG(DEH_String("ON"), 238 + wide_delta, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 248 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 248 + wide_delta, 42);
 
         dp_translation = NULL;
     }
@@ -2645,9 +2653,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 238 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallENG(DEH_String("OFF"), 238 + wide_delta, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 248 + ORIGWIDTH_DELTA, 42);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 248 + wide_delta, 42);
 
         dp_translation = NULL;
     }
@@ -2658,9 +2666,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 233 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallENG(DEH_String("ON"), 233 + wide_delta, 52);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 260 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 260 + wide_delta, 52);
 
         dp_translation = NULL;
     }
@@ -2669,9 +2677,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 233 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallENG(DEH_String("OFF"), 233 + wide_delta, 52);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 260 + ORIGWIDTH_DELTA, 52);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 260 + wide_delta, 52);
 
         dp_translation = NULL;
     }
@@ -2682,9 +2690,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 232 + ORIGWIDTH_DELTA, 62);
+        MN_DrTextSmallENG(DEH_String("ON"), 232 + wide_delta, 62);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 201 + ORIGWIDTH_DELTA, 62);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 201 + wide_delta, 62);
 
         dp_translation = NULL;
     }
@@ -2693,9 +2701,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 232 + ORIGWIDTH_DELTA, 62);
+        MN_DrTextSmallENG(DEH_String("OFF"), 232 + wide_delta, 62);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 201 + ORIGWIDTH_DELTA, 62);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 201 + wide_delta, 62);
 
         dp_translation = NULL;
     }
@@ -2706,9 +2714,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 150 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("ON"), 150 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 175 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 175 + wide_delta, 82);
 
         dp_translation = NULL;
     }
@@ -2717,9 +2725,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 150 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallENG(DEH_String("OFF"), 150 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 175 + ORIGWIDTH_DELTA, 82);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 175 + wide_delta, 82);
 
         dp_translation = NULL;
     }
@@ -2730,9 +2738,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 161 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallENG(DEH_String("ON"), 161 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 179 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 179 + wide_delta, 92);
 
         dp_translation = NULL;
     }
@@ -2741,9 +2749,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 161 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallENG(DEH_String("OFF"), 161 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 179 + ORIGWIDTH_DELTA, 92);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 179 + wide_delta, 92);
 
         dp_translation = NULL;
     }
@@ -2754,9 +2762,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 146 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallENG(DEH_String("ON"), 146 + wide_delta, 102);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 181 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 181 + wide_delta, 102);
 
         dp_translation = NULL;
     }
@@ -2765,9 +2773,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 146 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallENG(DEH_String("OFF"), 146 + wide_delta, 102);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 181 + ORIGWIDTH_DELTA, 102);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 181 + wide_delta, 102);
 
         dp_translation = NULL;
     }
@@ -2778,9 +2786,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 153 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallENG(DEH_String("ON"), 153 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 255 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 255 + wide_delta, 122);
 
         dp_translation = NULL;
     }
@@ -2789,9 +2797,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 153 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallENG(DEH_String("OFF"), 153 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 255 + ORIGWIDTH_DELTA, 122);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 255 + wide_delta, 122);
 
         dp_translation = NULL;
     }
@@ -2802,9 +2810,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 179 + ORIGWIDTH_DELTA, 132);
+        MN_DrTextSmallENG(DEH_String("OFF"), 179 + wide_delta, 132);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 211 + ORIGWIDTH_DELTA, 132);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 211 + wide_delta, 132);
 
         dp_translation = NULL;
     }
@@ -2813,9 +2821,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 179 + ORIGWIDTH_DELTA, 132);
+        MN_DrTextSmallENG(DEH_String("ON"), 179 + wide_delta, 132);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 211 + ORIGWIDTH_DELTA, 132);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 211 + wide_delta, 132);
 
         dp_translation = NULL;
     }
@@ -3289,6 +3297,9 @@ boolean MN_Responder(event_t * event)
           && (event->data1 == key_menu_activate
            || event->data1 == key_menu_quit)))
         {
+            // [JN] Widescreen: remember choosen widescreen variable before quit.
+            widescreen = widescreen_temp;
+
             I_Quit();
             return true;
         }
@@ -3305,6 +3316,9 @@ boolean MN_Responder(event_t * event)
         if (!menuactive && askforquit && typeofask == 1)
         {
             G_CheckDemoStatus();
+
+            // [JN] Widescreen: remember choosen widescreen variable before quit.
+            widescreen = widescreen_temp;
             I_Quit();
         }
         else
@@ -3374,6 +3388,8 @@ boolean MN_Responder(event_t * event)
             {
                 case 1:
                     G_CheckDemoStatus();
+                    // [JN] Widescreen: remember choosen widescreen variable before quit.
+                    widescreen = widescreen_temp;
                     I_Quit();
                     return false;
 
@@ -3941,11 +3957,12 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-#ifdef WIDESCREEN
-    // [JN] Clean up remainings of the wide screen before 
-    // drawing a HELP or TITLE screens.
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
+    if (widescreen)
+    {
+        // [JN] Clean up remainings of the wide screen before 
+        // drawing a HELP or TITLE screens.
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
 
     I_SetPalette(W_CacheLumpName(usegamma <= 8 ?
                                  "PALFIX" :
@@ -4086,21 +4103,21 @@ static void DrawSliderSmall(Menu_t * menu, int item, int width, int slot)
     x = menu->x + 24;
     y = menu->y + (item * ITEM_HEIGHT_SMALL);
 
-    V_DrawShadowedPatchRaven(x - 32, y, W_CacheLumpName(DEH_String("M_RDSLDL"), PU_CACHE));
+    V_DrawShadowedPatchRaven(x - 32 + wide_delta, y, W_CacheLumpName(DEH_String("M_RDSLDL"), PU_CACHE));
 
     for (x2 = x, count = width; count--; x2 += 8)
     {
-        V_DrawShadowedPatchRaven(x2 - 16, y, W_CacheLumpName(DEH_String("M_RDSLD1"), PU_CACHE));
+        V_DrawShadowedPatchRaven(x2 - 16 + wide_delta, y, W_CacheLumpName(DEH_String("M_RDSLD1"), PU_CACHE));
     }
 
-    V_DrawShadowedPatchRaven(x2 - 25, y, W_CacheLumpName(DEH_String("M_RDSLDR"), PU_CACHE));
+    V_DrawShadowedPatchRaven(x2 - 25 + wide_delta, y, W_CacheLumpName(DEH_String("M_RDSLDR"), PU_CACHE));
 
     // [JN] Colorizing slider gem...
     // Most left position (dull green gem)
     if (slot == 0)
     {
         dp_translation = cr[CR_GREEN2GRAY_HERETIC];
-        V_DrawPatch(x + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_RDSLG"), PU_CACHE));
+        V_DrawPatch(x + slot * 8 + wide_delta, y + 7, W_CacheLumpName(DEH_String("M_RDSLG"), PU_CACHE));
         dp_translation = NULL;
     }
     // [JN] Most right position that is "out of bounds" (red gem).
@@ -4109,10 +4126,10 @@ static void DrawSliderSmall(Menu_t * menu, int item, int width, int slot)
     {
         slot = 11;
         dp_translation = cr[CR_GREEN2RED_HERETIC];
-        V_DrawPatch(x + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_RDSLG"), PU_CACHE));
+        V_DrawPatch(x + slot * 8 + wide_delta, y + 7, W_CacheLumpName(DEH_String("M_RDSLG"), PU_CACHE));
         dp_translation = NULL;
     }
     // [JN] Standard function (green gem)
     else
-    V_DrawPatch(x + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_RDSLG"), PU_CACHE));
+    V_DrawPatch(x + slot * 8 + wide_delta, y + 7, W_CacheLumpName(DEH_String("M_RDSLG"), PU_CACHE));
 }
