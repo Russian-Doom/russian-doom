@@ -205,7 +205,7 @@ boolean CT_Responder(event_t * ev)
         }
         CT_queueChatChar(sendto);
         chatmodeon = true;
-        I_StartTextInput(25, 10, SCREENWIDTH, 18);
+        I_StartTextInput(25, 10, screenwidth, 18);
         return true;
     }
     else
@@ -378,7 +378,7 @@ void CT_Drawer(void)
                 x += patch->width;
             }
         }
-        V_DrawShadowedPatchRaven(x, 10, W_CacheLumpName(DEH_String("FONTA63"), PU_CACHE)); // [JN] Replaced to FONTA63 ('_')
+        V_DrawShadowedPatchRaven(x, 10, W_CacheLumpName(DEH_String("FONTA59"), PU_CACHE)); // [JN] Replaced to FONTA59 ('_')
         BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
     }

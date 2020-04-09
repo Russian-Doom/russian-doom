@@ -158,7 +158,7 @@ static int grid = 0;
 static int leveljuststarted = 1;        // kluge until AM_LevelInit() is called
 
 boolean automapactive = false;
-static int finit_width = SCREENWIDTH;
+// static int finit_width = SCREENWIDTH; // [JN] Replaced with screenwidth.
 static int finit_height = SCREENHEIGHT - (42 << hires);
 static int f_x, f_y;            // location of window on screen
 static int f_w, f_h;            // size of window on screen
@@ -374,10 +374,10 @@ void AM_changeWindowLoc(void)
     // in AM_clearFB).
     mapxstart += MTOF(m_paninc.x+FRACUNIT/2);
     mapystart -= MTOF(m_paninc.y+FRACUNIT/2);
-    if(mapxstart >= finit_width)
-        mapxstart -= finit_width;
+    if(mapxstart >= screenwidth)
+        mapxstart -= screenwidth;
     if(mapxstart < 0)
-        mapxstart += finit_width;
+        mapxstart += screenwidth;
     if(mapystart >= finit_height)
         mapystart -= finit_height;
     if(mapystart < 0)
@@ -499,7 +499,7 @@ void AM_LevelInit(void)
     leveljuststarted = 0;
 
     f_x = f_y = 0;
-    f_w = finit_width;
+    f_w = screenwidth;
     f_h = finit_height;
     mapxstart = mapystart = 0;
 
@@ -852,19 +852,19 @@ void AM_Ticker(void)
 void AM_clearFB(int color)
 {
 // [JN] Do not initialize for wide screen unused variables
-#ifndef WIDESCREEN
+
     int i, j;
-#endif
+
     int dmapx;
     int dmapy;
 
 // [JN] Use static automap background for automap.
 // TODO - FIXME
-#ifdef WIDESCREEN
+
     int x, y;
     byte *src = W_CacheLumpName(DEH_String("AUTOPAGE"), PU_CACHE);
     byte *dest = I_VideoBuffer;
-#endif
+
 
     if (followplayer)
     {
@@ -878,10 +878,10 @@ void AM_clearFB(int color)
         mapxstart += dmapx >> 1;
         mapystart += dmapy >> 1;
 
-        while (mapxstart >= (finit_width >> hires))
-            mapxstart -= (finit_width >> hires);
+        while (mapxstart >= (screenwidth >> hires))
+            mapxstart -= (screenwidth >> hires);
         while (mapxstart < 0)
-            mapxstart += (finit_width >> hires);
+            mapxstart += (screenwidth >> hires);
         while (mapystart >= (finit_height >> hires))
             mapystart -= (finit_height >> hires);
         while (mapystart < 0)
@@ -892,44 +892,47 @@ void AM_clearFB(int color)
         mapxstart += (MTOF(m_paninc.x) >> 1);
         mapystart -= (MTOF(m_paninc.y) >> 1);
 
-        if (mapxstart >= (finit_width >> hires))
-            mapxstart -= (finit_width >> hires);
+        if (mapxstart >= (screenwidth >> hires))
+            mapxstart -= (screenwidth >> hires);
         if (mapxstart < 0)
-            mapxstart += (finit_width >> hires);
+            mapxstart += (screenwidth >> hires);
         if (mapystart >= (finit_height >> hires))
             mapystart -= (finit_height >> hires);
         if (mapystart < 0)
             mapystart += (finit_height >> hires);
     }
 
-#ifdef WIDESCREEN
-    for (y = 0; y < SCREENHEIGHT; y++)
+    if (widescreen)
     {
-        for (x = 0; x < SCREENWIDTH / 320; x++)
+        for (y = 0; y < SCREENHEIGHT-28; y++)
         {
-            memcpy(dest, src + ((y & 127) << 6), 320);
-            dest += 320;
-        }
-        if (SCREENWIDTH & 127)
-        {
-            memcpy(dest, src + ((y & 127) << 6), SCREENWIDTH & 127);
-            dest += (SCREENWIDTH & 127);
+            for (x = 0; x < WIDESCREENWIDTH / 320; x++)
+            {
+                memcpy(dest, src + ((y & 127) << 6), 320);
+                dest += 320;
+            }
+            if (WIDESCREENWIDTH & 127)
+            {
+                memcpy(dest, src + ((y & 127) << 6), WIDESCREENWIDTH & 127);
+                dest += (WIDESCREENWIDTH & 127);
+            }
         }
     }
-#else
-    //blit the automap background to the screen.
-    j = (mapystart & ~hires) * (finit_width >> hires);
-    for (i = 0; i < finit_height; i++)
+    else
     {
-        memcpy(I_VideoBuffer + i * finit_width, maplump + j + mapxstart,
-               finit_width - mapxstart);
-        memcpy(I_VideoBuffer + i * finit_width + finit_width - mapxstart,
-               maplump + j, mapxstart);
-        j += finit_width;
-        if (j >= (finit_height >> hires) * (finit_width >> hires))
-            j = 0;
+        //blit the automap background to the screen.
+        j = (mapystart & ~hires) * (SCREENWIDTH >> hires);
+        for (i = 0; i < finit_height; i++)
+        {
+            memcpy(I_VideoBuffer + i * SCREENWIDTH, maplump + j + mapxstart,
+                SCREENWIDTH - mapxstart);
+            memcpy(I_VideoBuffer + i * SCREENWIDTH + SCREENWIDTH - mapxstart,
+                maplump + j, mapxstart);
+            j += SCREENWIDTH;
+            if (j >= (finit_height >> hires) * (SCREENWIDTH >> hires))
+                j = 0;
+        }
     }
-#endif
 
 //       memcpy(I_VideoBuffer, maplump, finit_width*finit_height);
 //  memset(fb, color, f_w*f_h);
@@ -1145,8 +1148,8 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
 
     if (xx < 32)
         cc += 7 - (xx >> 2);
-    else if (xx > (finit_width - 32))
-        cc += 7 - ((finit_width - xx) >> 2);
+    else if (xx > (screenwidth - 32))
+        cc += 7 - ((screenwidth - xx) >> 2);
 //      if(cc==oldcc) //make sure that we don't double fade the corners.
 //      {
     if (yy < 32)
@@ -1165,17 +1168,17 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
     if (yy == oldyy + 1)
     {
         oldyy++;
-        oldyyshifted += (ORIGWIDTH << hires);
+        oldyyshifted += (origwidth << hires);
     }
     else if (yy == oldyy - 1)
     {
         oldyy--;
-        oldyyshifted -= (ORIGWIDTH << hires);
+        oldyyshifted -= (origwidth << hires);
     }
     else if (yy != oldyy)
     {
         oldyy = yy;
-        oldyyshifted = yy * (ORIGWIDTH << hires);
+        oldyyshifted = yy * (origwidth << hires);
     }
     fb[oldyyshifted + flipwidth[xx]] = *(cc);
 //      fb[(yy)*f_w+(xx)]=*(cc);
@@ -1597,6 +1600,7 @@ void AM_Drawer(void)
 {
     char *level_name;
     int numepisodes;
+    boolean wide_4_3 = widescreen && screenblocks == 9;
 
     if (!automapactive)
         return;
@@ -1631,17 +1635,23 @@ void AM_Drawer(void)
         level_name = english_language ?
                      LevelNames[(gameepisode - 1) * 9 + gamemap - 1] :
                      LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1];
-#ifdef WIDESCREEN
-        if (english_language)
-        MN_DrTextA(DEH_String(level_name), 20, 136);
+
+        // [JN] Wide screen: place level name higher in wide screen,
+        // do not place it under the status bar gargoyle's horn.
+        if (widescreen)
+        {
+            if (english_language)
+            MN_DrTextA(DEH_String(level_name), 20 + (wide_4_3 ? wide_delta : 0), 136);
+            else
+            MN_DrTextSmallRUS(DEH_String(level_name), 20 + (wide_4_3 ? wide_delta : 0), 136);
+        }
         else
-        MN_DrTextSmallRUS(DEH_String(level_name), 20, 136);
-#else
-        if (english_language)
-        MN_DrTextA(DEH_String(level_name), 20, 146);
-        else
-        MN_DrTextSmallRUS(DEH_String(level_name), 20, 146);
-#endif
+        {
+            if (english_language)
+            MN_DrTextA(DEH_String(level_name), 20, 146);
+            else
+            MN_DrTextSmallRUS(DEH_String(level_name), 20, 146);
+        }
     }
 
     // [JN] Show level stats in automap
@@ -1657,9 +1667,9 @@ void AM_Drawer(void)
                    players[consoleplayer].killcount,
                    totalkills);
         if (english_language)
-        MN_DrTextA(text, 20, 16);
+        MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
         else
-        MN_DrTextSmallRUS(text, 20, 16);
+        MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
 
         M_snprintf(text, sizeof(text),
                    english_language ?
@@ -1668,9 +1678,9 @@ void AM_Drawer(void)
                    players[consoleplayer].itemcount,
                    totalitems);
         if (english_language)
-        MN_DrTextA(text, 20, 26);
+        MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
         else
-        MN_DrTextSmallRUS(text, 20, 26);
+        MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
 
         M_snprintf(text, sizeof(text),
                    english_language ?
@@ -1679,9 +1689,9 @@ void AM_Drawer(void)
                    players[consoleplayer].secretcount,
                    totalsecret);
         if (english_language)
-        MN_DrTextA(text, 20, 36);
+        MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
         else
-        MN_DrTextSmallRUS(text, 20, 36);
+        MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
 
         M_snprintf(text, sizeof(text), 
                    english_language ?
@@ -1689,16 +1699,16 @@ void AM_Drawer(void)
                    "CKJ;YJCNM: %d", 
                    gameskill +1);
         if (english_language)
-        MN_DrTextA(text, 20, 46);
+        MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
         else
-        MN_DrTextSmallRUS(text, 20, 46);
+        MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
 
         M_snprintf(text, sizeof(text),
                    "%02d:%02d:%02d",
                    time/3600,
                    (time%3600)/60,
                    time%60);
-        MN_DrTextA(text, 20, 63);
+        MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 63);
      }
 
 //  I_Update();

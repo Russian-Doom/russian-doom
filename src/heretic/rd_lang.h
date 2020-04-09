@@ -441,8 +441,8 @@ extern char* txt_crosshair_off;
 #define TXT_CHEATARTIFACTSFAIL_RUS  "YTRJHHTRNYSQ DDJL"                     // НЕКОРРЕНТНЫЙ ВВОД
 #define TXT_CHEATWARP_RUS           "GTHTVTOTYBT YF EHJDTYM"                // ПЕРЕМЕЩЕНИЕ НА УРОВЕНЬ
 #define TXT_CHEATSCREENSHOT_RUS     "CYBVJR 'RHFYF"                         // СНИМОК ЭКРАНА
-#define TXT_CHEATCHICKENON_RUS      "GHTDHFOTYBT D WBGKTYRF"                // ПРЕВРАЩЕНИЕ В ЦИПЛЕНКА
-#define TXT_CHEATCHICKENOFF_RUS     "GHTDHFOTYBT D WBGKTYRF JNVTYTYJ"       // ПРЕВРАЩЕНИЕ В ЦИПЛЕНКА ОТМЕНЕНО
+#define TXT_CHEATCHICKENON_RUS      "GHTDHFOTYBT D WSGKTYRF"                // ПРЕВРАЩЕНИЕ В ЦЫПЛЕНКА
+#define TXT_CHEATCHICKENOFF_RUS     "GHTDHFOTYBT D WSGKTYRF JNVTYTYJ"       // ПРЕВРАЩЕНИЕ В ЦЫПЛЕНКА ОТМЕНЕНО
 #define TXT_CHEATMASSACRE_RUS       "DCT VJYCNHS EYBXNJ;TYS"                // ВСЕ МОНСТРЫ УНИЧТОЖЕНЫ
 #define TXT_CHEATIDDQD_RUS          "GSNFTIMCZ C[BNHBNM? NFR EVHB ;T!"      // ПЫТАЕШЬСЯ СХИТРИТЬ? ТАК УМРИ ЖЕ!
 #define TXT_CHEATIDKFA_RUS          ";EKBR< NS YT LJCNJBY CDJTUJ JHE;BZ"    // ЖУЛИК, ТЫ НЕ ДОСТОИН СВОЕГО ОРУЖИЯ

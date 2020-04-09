@@ -56,8 +56,8 @@ int* lastopening;           // [crispy] 32-bit integer math
 // floorclip starts out SCREENHEIGHT
 // ceilingclip starts out -1
 //
-int  floorclip[SCREENWIDTH];   // [crispy] 32-bit integer math
-int  ceilingclip[SCREENWIDTH]; // [crispy] 32-bit integer math
+int  floorclip[WIDESCREENWIDTH];   // [crispy] 32-bit integer math
+int  ceilingclip[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
 
 //
 // spanstart holds the start of a plane span
@@ -74,7 +74,7 @@ fixed_t planeheight;
 
 fixed_t* yslope;
 fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-fixed_t distscale[SCREENWIDTH];
+fixed_t distscale[WIDESCREENWIDTH];
 fixed_t basexscale, baseyscale;
 
 fixed_t cachedheight[SCREENHEIGHT];
@@ -299,7 +299,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
     check->picnum = picnum;
     check->lightlevel = lightlevel;
     check->special = special;
-    check->minx = SCREENWIDTH;
+    check->minx = screenwidth;
     check->maxx = -1;
     memset(check->top, 0xff, sizeof(check->top));
     return (check);
@@ -487,7 +487,7 @@ void R_DrawPlanes(void)
                         return;
 
 #ifdef RANGECHECK
-                    if ((unsigned) dc_x >= SCREENWIDTH || dc_yl < 0
+                    if ((unsigned) dc_x >= screenwidth || dc_yl < 0
                         || dc_yh >= SCREENHEIGHT)
                         I_Error(english_language ?
                                 "R_DrawColumn: %i to %i at %i" :
@@ -502,7 +502,7 @@ void R_DrawPlanes(void)
                     do
                     {
                         *dest = dc_source[frac >> FRACBITS];
-                        dest += SCREENWIDTH;
+                        dest += screenwidth;
                         frac += fracstep;
                     }
                     while (count--);

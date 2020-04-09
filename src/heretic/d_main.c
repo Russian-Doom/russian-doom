@@ -149,9 +149,9 @@ void DrawMessage(void)
     }
 
     if (english_language)
-    MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2 + ORIGWIDTH_DELTA, 1);
+    MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2 + wide_delta, 1);
     else
-    MN_DrTextSmallRUS(player->message, 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + ORIGWIDTH_DELTA, 1);
+    MN_DrTextSmallRUS(player->message, 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta, 1);
 }
 
 //---------------------------------------------------------------------------
@@ -223,13 +223,13 @@ void D_Display(void)
     {
         if (!netgame)
         {
-            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, (viewwindowy >> hires) + 5, 
+            V_DrawShadowedPatchRaven(160 + wide_delta, (viewwindowy >> hires) + 5, 
                                      W_CacheLumpName(DEH_String(english_language ? 
                                                                 "PAUSED" : "RD_PAUSE"), PU_CACHE));
         }
         else
         {
-            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, 70, 
+            V_DrawShadowedPatchRaven(160 + wide_delta, 70, 
                                      W_CacheLumpName(DEH_String(english_language ? 
                                                                 "PAUSED" : "RD_PAUSE"), PU_CACHE));
         }
@@ -344,11 +344,12 @@ void D_PageTicker(void)
 
 void D_PageDrawer(void)
 {
-#ifdef WIDESCREEN
-    // [JN] Clean up remainings of the wide screen before
-    // drawing any new RAW screen.
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
+    if (widescreen)
+    {
+        // [JN] Clean up remainings of the wide screen before
+        // drawing any new RAW screen.
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
 
     V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
     if (demosequence == 1)

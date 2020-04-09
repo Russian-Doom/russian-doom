@@ -1615,28 +1615,33 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
         {
             an = source->angle;
 
-#ifdef WIDESCREEN
-        // [JN] Wide screen: new magic number :(
-        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
-#else
-        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-                 (screenblocks <= 10 ? 161 : 146);
-#endif
-
+        if (widescreen)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
+        }
+        else
+        {
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
+                    (screenblocks <= 10 ? 161 : 146);
+        }
         }
     }
     x = source->x;
     y = source->y;
 
-#ifdef WIDESCREEN
+    if (widescreen)
+    {
         // [JN] Wide screen: new magic number :(
         z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
-#else
-    z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-         (screenblocks <= 10 ? 161 : 146);
-#endif
+        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
+    }
+    else
+    {
+        z = source->z + 4 * 8 * FRACUNIT +
+            ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
+            (screenblocks <= 10 ? 161 : 146);
+    }
 
     if (source->flags2 & MF2_FEETARECLIPPED)
     {
@@ -1704,28 +1709,33 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
         {
             an = angle;
 
-#ifdef WIDESCREEN
-        // [JN] Wide screen: new magic number :(
-        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
-#else
-        slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-                 (screenblocks <= 10 ? 161 : 146);
-#endif
-
+        if (widescreen)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
+        }
+        else
+        {
+            slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
+                    (screenblocks <= 10 ? 161 : 146);
+        }
         }
     }
     x = source->x;
     y = source->y;
 
-#ifdef WIDESCREEN
-    // [JN] Wide screen: new magic number :(
-    z = source->z + 4 * 8 * FRACUNIT +
-    ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 240;
-#else
-    z = source->z + 4 * 8 * FRACUNIT +
-        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
-         (screenblocks <= 10 ? 161 : 146);
-#endif
+    if (widescreen)
+    {
+        // [JN] Wide screen: new magic number :(
+        z = source->z + 4 * 8 * FRACUNIT +
+        ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
+    }
+    else
+    {
+        z = source->z + 4 * 8 * FRACUNIT +
+            ((source->player->lookdir / MLOOKUNIT) << FRACBITS) /
+            (screenblocks <= 10 ? 161 : 146);
+    }
 
     if (source->flags2 & MF2_FEETARECLIPPED)
     {

@@ -66,8 +66,8 @@ lighttable_t** fullbrights_ethereal;
 
 
 // constant arrays used for psprite clipping and initializing clipping
-int negonearray[SCREENWIDTH];       // [crispy] 32-bit integer math
-int screenheightarray[SCREENWIDTH]; // [crispy] 32-bit integer math
+int negonearray[WIDESCREENWIDTH];       // [crispy] 32-bit integer math
+int screenheightarray[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
 
 /*
 ===============================================================================
@@ -295,7 +295,7 @@ void R_InitSprites(char **namelist)
 {
     int i;
 
-    for (i = 0; i < SCREENWIDTH; i++)
+    for (i = 0; i < screenwidth; i++)
     {
         negonearray[i] = -1;
     }
@@ -1099,15 +1099,7 @@ void R_DrawPSprite(pspdef_t * psp)
     vis->mobjflags = 0;
     vis->psprite = true;
     // [crispy] weapons drawn 1 pixel too high when player is idle
-#ifdef WIDESCREEN
-    // [JN] Wide screen: weapon positioning for HUD and non-HUD view
-    if (screenblocks <= 10)
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+(FRACUNIT*26)+(FRACUNIT/4)-(psp_sy-spritetopoffset[lump]);
-    else
     vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
-#else
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp_sy-spritetopoffset[lump]);
-#endif
     if (viewheight == SCREENHEIGHT)
     {
         vis->texturemid -= PSpriteSY[players[consoleplayer].readyweapon];
@@ -1427,8 +1419,8 @@ void R_SortVisSprites(void)
 void R_DrawSprite(vissprite_t * spr)
 {
     drawseg_t *ds;
-    int clipbot[SCREENWIDTH]; // [crispy] 32-bit integer math
-    int cliptop[SCREENWIDTH]; // [crispy] 32-bit integer math
+    int clipbot[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
+    int cliptop[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
     int x, r1, r2;
     fixed_t scale, lowscale;
     int silhouette;
