@@ -18,7 +18,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <winnls.h>
+
+#ifdef _WIN32
+#include <winnls.h> // [JN] GetSystemDefaultLCID()
+#endif
 
 #include "config.h"
 #include "textscreen.h"
