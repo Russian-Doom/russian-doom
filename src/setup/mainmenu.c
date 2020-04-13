@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <winnls.h>
 
 #include "config.h"
 #include "textscreen.h"
@@ -490,6 +491,22 @@ static void RunGUI(void)
 
 static void MissionSet(void)
 {
+#ifdef _WIN32
+    // [JN] Get system preffed language...
+    DWORD rd_lang_id = PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID()));
+    // ..if game language is not set yet (-1), and OS preffered language
+    // is appropriate for using Russian language in the game, use it.
+    if (english_language == -1)
+    {
+        if (rd_lang_id != LANG_RUSSIAN
+        &&  rd_lang_id != LANG_UKRAINIAN
+        &&  rd_lang_id != LANG_BELARUSIAN)
+        english_language = 1;
+        else
+        english_language = 0;
+    }
+#endif
+
     SetWindowTitle();
     InitConfig();
     MainMenu();

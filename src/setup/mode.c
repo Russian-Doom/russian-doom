@@ -105,7 +105,14 @@ static GameSelectCallback game_selected_callback;
 
 // Miscellaneous variables that aren't used in setup.
 
+// Windows OS only: do not set game language on first launch, 
+// try to determine it automatically in D_DoomMain.
+#ifdef _WIN32
+int english_language = -1;
+#else
 int english_language = 0;
+#endif
+
 static int showMessages = 1;
 static int screenblocks = 10;
 static int detailLevel = 0;

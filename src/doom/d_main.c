@@ -152,7 +152,13 @@ char wadfile[1024];  // primary wad file
 char mapdir[1024];   // directory of development maps
 
 // [JN] Support for fallback to the English language.
+// Windows OS only: do not set game language on first launch, 
+// try to determine it automatically in D_DoomMain.
+#ifdef _WIN32
+int english_language = -1;
+#else
 int english_language = 0;
+#endif
 
 int show_endoom   = 0;
 int level_brightness = 0; // [JN] Level brightness level
@@ -2150,6 +2156,20 @@ void D_DoomMain (void)
     char    demolumpname[9];
 
 #ifdef _WIN32
+    // [JN] Get system preffed language...
+    DWORD rd_lang_id = PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID()));
+    // ..if game language is not set yet (-1), and OS preffered language
+    // is appropriate for using Russian language in the game, use it.
+    if (english_language == -1)
+    {
+        if (rd_lang_id != LANG_RUSSIAN
+        &&  rd_lang_id != LANG_UKRAINIAN
+        &&  rd_lang_id != LANG_BELARUSIAN)
+        english_language = 1;
+        else
+        english_language = 0;
+    }
+
     // [JN] Print colorized title
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_BLUE 
                                                            | FOREGROUND_RED
