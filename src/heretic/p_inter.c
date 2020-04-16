@@ -139,10 +139,7 @@ void P_SetMessage(player_t * player, char *message, boolean ultmsg)
     BorderTopRefresh = true;
     if (ultmsg)
     {
-        ultimatemsg = false; 
-		// [JN] Ранее "true", что заставляло пропадать сообщения после
-		// сохранения игры и перехода на новый уровень.
-		// Огромное спасибо CapnClever за помощь!
+        ultimatemsg = true; 
     }
 }
 
