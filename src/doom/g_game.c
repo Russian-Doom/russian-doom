@@ -2020,11 +2020,7 @@ void G_DoLoadGame (void)
     players[consoleplayer].message = DEH_String(ggloaded);
     
     // draw the pattern into the back screen
-    if (!widescreen)
-    {
-        // [JN] Do not invoke bezel drawing in wide screen mode
-        R_FillBackScreen ();   
-    }
+    R_FillBackScreen ();   
 } 
 
 

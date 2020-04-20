@@ -1445,6 +1445,12 @@ void R_FillBackScreen (void)
 
     char *name;
 
+    // [JN] Function not used in widescreen rendering.
+    if (widescreen)
+    {
+        return;
+    }
+
     // If we are running full screen, there is no need to do any of this,
     // and the background buffer can be freed if it was previously in use.
 

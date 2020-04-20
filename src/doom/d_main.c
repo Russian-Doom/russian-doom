@@ -320,12 +320,7 @@ void D_Display (void)
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
     {
         viewactivestate = false;    // view was not active
-
-        if (!widescreen)
-        {
-            // [JN] Do not invoke bezel drawing in wide screen mode        
-            R_FillBackScreen ();    // draw the pattern into the back screen
-        }
+        R_FillBackScreen ();    // draw the pattern into the back screen
     }
 
     // see if the border needs to be updated to the screen
