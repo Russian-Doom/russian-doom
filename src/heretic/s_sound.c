@@ -55,7 +55,10 @@ byte *soundCurve;
 
 int snd_MaxVolume = 10;
 int snd_MusicVolume = 10;
+
+int snd_Channels_RD;
 int snd_Channels = 32;
+int snd_Channels_Vanilla = 8;
 
 int AmbChan;
 
@@ -66,7 +69,7 @@ void S_Start(void)
     S_StartSong((gameepisode - 1) * 9 + gamemap - 1, true);
 
     //stop all sounds
-    for (i = 0; i < snd_Channels; i++)
+    for (i = 0; i < snd_Channels_RD; i++)
     {
         if (channel[i].handle)
         {
@@ -171,11 +174,11 @@ void S_StartSound(void *_origin, int sound_id)
     {
         return;                 // other sounds have greater priority
     }
-    for (i = 0; i < snd_Channels; i++)
+    for (i = 0; i < snd_Channels_RD; i++)
     {
         if (origin->player)
         {
-            i = snd_Channels;
+            i = snd_Channels_RD;
             break;              // let the player have more than one sound.
         }
         if (origin == channel[i].mo)
@@ -184,7 +187,7 @@ void S_StartSound(void *_origin, int sound_id)
             break;
         }
     }
-    if (i >= snd_Channels)
+    if (i >= snd_Channels_RD)
     {
         if (sound_id >= sfx_wind)
         {
@@ -198,24 +201,24 @@ void S_StartSound(void *_origin, int sound_id)
                 AmbChan = -1;
             }
         }
-        for (i = 0; i < snd_Channels; i++)
+        for (i = 0; i < snd_Channels_RD; i++)
         {
             if (channel[i].mo == NULL)
             {
                 break;
             }
         }
-        if (i >= snd_Channels)
+        if (i >= snd_Channels_RD)
         {
             //look for a lower priority sound to replace.
             sndcount++;
-            if (sndcount >= snd_Channels)
+            if (sndcount >= snd_Channels_RD)
             {
                 sndcount = 0;
             }
-            for (chan = 0; chan < snd_Channels; chan++)
+            for (chan = 0; chan < snd_Channels_RD; chan++)
             {
-                i = (sndcount + chan) % snd_Channels;
+                i = (sndcount + chan) % snd_Channels_RD;
                 if (priority >= channel[i].priority)
                 {
                     chan = -1;  //denote that sound should be replaced.
@@ -313,14 +316,14 @@ void S_StartSoundAtVolume(void *_origin, int sound_id, int volume)
     volume = (volume * (snd_MaxVolume + 1) * 8) >> 7;
 
 // no priority checking, as ambient sounds would be the LOWEST.
-    for (i = 0; i < snd_Channels; i++)
+    for (i = 0; i < snd_Channels_RD; i++)
     {
         if (channel[i].mo == NULL)
         {
             break;
         }
     }
-    if (i >= snd_Channels)
+    if (i >= snd_Channels_RD)
     {
         return;
     }
@@ -356,7 +359,7 @@ boolean S_StopSoundID(int sound_id, int priority)
     }
     lp = -1;                    //denote the argument sound_id
     found = 0;
-    for (i = 0; i < snd_Channels; i++)
+    for (i = 0; i < snd_Channels_RD; i++)
     {
         if (channel[i].sound_id == sound_id && channel[i].mo)
         {
@@ -396,7 +399,7 @@ void S_StopSound(void *_origin)
     mobj_t *origin = _origin;
     int i;
 
-    for (i = 0; i < snd_Channels; i++)
+    for (i = 0; i < snd_Channels_RD; i++)
     {
         if (channel[i].mo == origin)
         {
@@ -419,7 +422,7 @@ void S_SoundLink(mobj_t * oldactor, mobj_t * newactor)
 {
     int i;
 
-    for (i = 0; i < snd_Channels; i++)
+    for (i = 0; i < snd_Channels_RD; i++)
     {
         if (channel[i].mo == oldactor)
             channel[i].mo = newactor;
@@ -453,7 +456,7 @@ void S_UpdateSounds(mobj_t * listener)
         return;
     }
 
-    for (i = 0; i < snd_Channels; i++)
+    for (i = 0; i < snd_Channels_RD; i++)
     {
         if (!channel[i].handle || S_sfx[channel[i].sound_id].usefulness == -1)
         {
@@ -540,6 +543,16 @@ void S_Init(void)
     if (snd_Channels >= 64)
         snd_Channels = 64;
 
+    // [JN] Cap sound channels to 8 in -vanilla game mode.
+    if (vanillaparm)
+    {
+        snd_Channels_RD = snd_Channels_Vanilla;
+    }
+    else
+    {
+        snd_Channels_RD = snd_Channels;
+    }
+
     I_SetMusicVolume(snd_MusicVolume * 8);
     S_SetMaxVolume(true);
 
@@ -583,10 +596,10 @@ void S_GetChannelInfo(SoundInfo_t * s)
     int i;
     ChanInfo_t *c;
 
-    s->channelCount = snd_Channels;
+    s->channelCount = snd_Channels_RD;
     s->musicVolume = snd_MusicVolume;
     s->soundVolume = snd_MaxVolume;
-    for (i = 0; i < snd_Channels; i++)
+    for (i = 0; i < snd_Channels_RD; i++)
     {
         c = &s->chan[i];
         c->id = channel[i].sound_id;
