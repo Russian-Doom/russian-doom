@@ -1167,6 +1167,11 @@ static void GetWindowPosition(int *x, int *y, int w, int h)
     {
         *x = *y = SDL_WINDOWPOS_UNDEFINED;
     }
+    else if (window_border == false)
+    {
+        // [JN] Use zero window coords if running in borderless window.
+        *x = *y = 0;
+    }
     else if (!strcmp(window_position, "center"))
     {
         // Note: SDL has a SDL_WINDOWPOS_CENTER, but this is useless for our
@@ -1679,10 +1684,10 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("window_title_short",        &window_title_short);
     M_BindIntVariable("window_width",              &window_width);
     M_BindIntVariable("window_height",             &window_height);
+    M_BindIntVariable("window_border",             &window_border);
     M_BindIntVariable("grabmouse",                 &grabmouse);
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindStringVariable("window_position",        &window_position);
-    M_BindIntVariable("window_border",             &window_border);
     M_BindIntVariable("usegamma",                  &usegamma);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
 }

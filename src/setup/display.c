@@ -68,7 +68,6 @@ static window_size_t window_sizes_wide[] =
 
 static char *video_driver = "";
 static char *window_position = "";
-static int window_border = 1;
 static int aspect_ratio_correct = 1;
 static int smoothing = 0;
 static int vga_porch_flash = 0;
@@ -79,6 +78,7 @@ static int widescreen = 1;
 static int fullscreen_width = 0, fullscreen_height = 0;
 static int window_title_short = 1;
 static int window_width = 640, window_height = 480;
+static int window_border = 1;
 static int startup_delay = 35;  // [JN] Redused from 1000 to 35
 static int usegamma = 4; // [JN] Set default gamma to improved level 2.0.
 
@@ -392,13 +392,13 @@ void BindDisplayVariables(void)
     M_BindIntVariable("widescreen",                &widescreen);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);
     M_BindIntVariable("fullscreen_height",         &fullscreen_height);
+    M_BindIntVariable("window_border",             &window_border);
     M_BindIntVariable("window_title_short",        &window_title_short);
     M_BindIntVariable("window_width",              &window_width);
     M_BindIntVariable("window_height",             &window_height);
     M_BindIntVariable("startup_delay",             &startup_delay);
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindStringVariable("window_position",        &window_position);
-    M_BindIntVariable("window_border",             &window_border);
     M_BindIntVariable("usegamma",                  &usegamma);
 
     if (gamemission == doom || gamemission == heretic || gamemission == strife)

@@ -699,6 +699,12 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(window_height),
 
     //!
+    // [JN] Use bordered or borderless window.
+    //
+
+    CONFIG_VARIABLE_INT(window_border),
+
+    //!
     // Width for screen mode when running fullscreen.
     // If this and fullscreen_height are both set to zero, we run
     // fullscreen as a desktop window that covers the entire screen,
@@ -837,12 +843,6 @@ static default_t extra_defaults_list[] =
     // window at the specified coordinates.
 
     CONFIG_VARIABLE_STRING(window_position),
-
-    //!
-    // [JN] Use bordered or borderless window.
-    //
-
-    CONFIG_VARIABLE_INT(window_border),
 
 #ifdef FEATURE_MULTIPLAYER
 
