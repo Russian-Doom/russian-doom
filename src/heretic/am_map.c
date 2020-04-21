@@ -234,6 +234,13 @@ static short mapxstart = 0;     //x-value for the bitmap.
 //byte screens[][SCREENWIDTH*SCREENHEIGHT];
 //void V_MarkRect (int x, int y, int width, int height);
 
+// [crispy] automap rotate mode ...
+// ... needs these early on
+void AM_rotate (int64_t *x, int64_t *y, angle_t a);
+static void AM_rotatePoint (mpoint_t *pt);
+static mpoint_t mapcenter;
+static angle_t mapangle;
+
 // Functions
 
 void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
@@ -345,14 +352,22 @@ void AM_findMinMaxBoundaries(void)
 
 void AM_changeWindowLoc(void)
 {
+    int64_t incx, incy;
+
     if (m_paninc.x || m_paninc.y)
     {
         followplayer = 0;
         f_oldloc.x = INT_MAX;
     }
 
-    m_x += m_paninc.x;
-    m_y += m_paninc.y;
+    incx = m_paninc.x;
+    incy = m_paninc.y;
+    if (automap_rotate)
+    {
+        AM_rotate(&incx, &incy, -mapangle);
+    }
+    m_x += incx;
+    m_y += incy;
 
     if (m_x + m_w / 2 > max_x)
     {
@@ -618,7 +633,9 @@ boolean AM_Responder(event_t * ev)
 
         if (key == key_map_east)                 // pan right
         {
-            if (!followplayer)
+            // [crispy] keep the map static in overlay mode
+            // if not following the player
+            if (!followplayer && !automap_overlay)
             {
                 m_paninc.x = flip_levels ? -FTOM(F_PANINC) : FTOM(F_PANINC);
             }
@@ -629,7 +646,7 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_west)            // pan left
         {
-            if (!followplayer)
+            if (!followplayer && !automap_overlay)
             {
                 m_paninc.x = flip_levels ? FTOM(F_PANINC) : -FTOM(F_PANINC);
             }
@@ -640,7 +657,7 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_north)           // pan up
         {
-            if (!followplayer)
+            if (!followplayer && !automap_overlay)
             {
                 m_paninc.y = FTOM(F_PANINC);
             }
@@ -649,7 +666,7 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_south)           // pan down
         {
-            if (!followplayer)
+            if (!followplayer && !automap_overlay)
             {
                 m_paninc.y = -FTOM(F_PANINC);
             }
@@ -694,6 +711,11 @@ boolean AM_Responder(event_t * ev)
         else if (key == key_map_overlay)
         {
             automap_overlay = !automap_overlay;
+            P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
+        }
+        else if (key == key_map_rotate)
+        {
+            automap_rotate = !automap_rotate;
             P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
         }
         /*
@@ -859,6 +881,16 @@ void AM_Ticker(void)
     // Update light level
 // AM_updateLightLev();
 
+    // [crispy] required for AM_rotatePoint()
+    if (automap_rotate)
+    {
+        mapcenter.x = m_x + m_w / 2;
+        mapcenter.y = m_y + m_h / 2;
+        // [crispy] keep the map static in overlay mode
+        // if not following the player
+        if (!(!followplayer && automap_overlay))
+        mapangle = ANG90 - viewangle;
+    }
 }
 
 void AM_clearFB(int color)
@@ -1392,6 +1424,11 @@ void AM_drawWalls(void)
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&l.a);
+            AM_rotatePoint(&l.b);
+        }
         if (cheating || (lines[i].flags & ML_MAPPED))
         {
             if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
@@ -1458,9 +1495,9 @@ void AM_drawWalls(void)
 
 }
 
-void AM_rotate(fixed_t * x, fixed_t * y, angle_t a)
+void AM_rotate (int64_t* x, int64_t* y, angle_t a)
 {
-    fixed_t tmpx;
+    int64_t tmpx;
 
     tmpx = FixedMul(*x, finecosine[a >> ANGLETOFINESHIFT])
         - FixedMul(*y, finesine[a >> ANGLETOFINESHIFT]);
@@ -1469,11 +1506,36 @@ void AM_rotate(fixed_t * x, fixed_t * y, angle_t a)
     *x = tmpx;
 }
 
+// [crispy] rotate point around map center
+// adapted from prboom-plus/src/am_map.c:898-920
+static void AM_rotatePoint (mpoint_t *pt)
+{
+    int64_t tmpx;
+
+    pt->x -= mapcenter.x;
+    pt->y -= mapcenter.y;
+
+    tmpx = (int64_t)FixedMul(pt->x, finecosine[mapangle>>ANGLETOFINESHIFT])
+         - (int64_t)FixedMul(pt->y, finesine[mapangle>>ANGLETOFINESHIFT])
+         + mapcenter.x;
+
+    pt->y = (int64_t)FixedMul(pt->x, finesine[mapangle>>ANGLETOFINESHIFT])
+          + (int64_t)FixedMul(pt->y, finecosine[mapangle>>ANGLETOFINESHIFT])
+          + mapcenter.y;
+
+    pt->x = tmpx;
+}
+
 void AM_drawLineCharacter(mline_t * lineguy, int lineguylines, fixed_t scale,
                           angle_t angle, int color, fixed_t x, fixed_t y)
 {
     int i;
     mline_t l;
+
+    if (automap_rotate)
+    {
+        angle += mapangle;
+    }
 
     for (i = 0; i < lineguylines; i++)
     {
@@ -1514,6 +1576,7 @@ void AM_drawPlayers(void)
     static int their_colors[] = { GREENKEY, YELLOWKEY, BLOODRED, BLUEKEY };
     int their_color = -1;
     int color;
+    mpoint_t pt;
 
     if (!netgame)
     {
@@ -1522,8 +1585,15 @@ void AM_drawPlayers(void)
            plr->mo->angle, WHITE, plr->mo->x, plr->mo->y);
          *///cheat key player pointer is the same as non-cheat pointer..
 
+        pt.x = plr->mo->x;
+        pt.y = plr->mo->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&pt);
+        }
+
         AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, plr->mo->angle,
-                             WHITE, plr->mo->x, plr->mo->y);
+                             WHITE, pt.x, pt.y);
         return;
     }
 
@@ -1531,6 +1601,7 @@ void AM_drawPlayers(void)
     {
         their_color++;
         p = &players[i];
+
         if (deathmatch && !singledemo && p != plr)
         {
             continue;
@@ -1541,8 +1612,16 @@ void AM_drawPlayers(void)
             color = 102;        // *close* to the automap color
         else
             color = their_colors[their_color];
+
+        pt.x = p->mo->x;
+        pt.y = p->mo->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&pt);
+        }
+
         AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, p->mo->angle,
-                             color, p->mo->x, p->mo->y);
+                             color, pt.x, pt.y);
     }
 }
 
@@ -1550,15 +1629,30 @@ void AM_drawThings(int colors, int colorrange)
 {
     int i;
     mobj_t *t;
+    mpoint_t pt;
 
     for (i = 0; i < numsectors; i++)
     {
         t = sectors[i].thinglist;
         while (t)
         {
+            // [crispy] do not draw an extra triangle for the player
+            if (t == plr->mo)
+            {
+                t = t->snext;
+                continue;
+            }
+
+            pt.x = t->x;
+            pt.y = t->y;
+            if (automap_rotate)
+            {
+                AM_rotatePoint(&pt);
+            }
+
             AM_drawLineCharacter(thintriangle_guy, NUMTHINTRIANGLEGUYLINES,
                                  16 << FRACBITS, t->angle, colors + lightlev,
-                                 t->x, t->y);
+                                 pt.x, pt.y);
             t = t->snext;
         }
     }

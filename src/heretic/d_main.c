@@ -107,6 +107,7 @@ int local_time = 0; // [JN] Local time widget
 
 // [JN] Automap specific variables.
 int automap_overlay = 0;
+int automap_rotate = 0;
 
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
@@ -895,6 +896,7 @@ void D_BindVariables(void)
 
     // Automap
     M_BindIntVariable("automap_overlay",        &automap_overlay);
+    M_BindIntVariable("automap_rotate",         &automap_rotate);
 
     // Sound
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);
