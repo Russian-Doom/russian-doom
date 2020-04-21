@@ -33,8 +33,7 @@ files only know about ccordinates, not the architecture of the frame buffer.
 byte *viewimage;
 int viewwidth, scaledviewwidth, viewheight, viewwindowx, viewwindowy;
 byte *ylookup[MAXHEIGHT];
-int columnofs[MAXWIDTH];
-int linesize = SCREENWIDTH;
+int columnofs[WIDEMAXWIDTH];
 //byte translations[3][256]; // color tables for different players
 
 /*
@@ -71,7 +70,7 @@ void R_DrawColumn(void)
     return;
 
 #ifdef RANGECHECK
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
         I_Error (english_language ?
                  "R_DrawColumn: %i to %i at %i" :
                  "R_DrawColumn: %i к %i в %i",
@@ -118,7 +117,7 @@ void R_DrawColumn(void)
                 // heightmask is the Tutti-Frutti fix -- killough
 
                 *dest = colormap[source[frac>>FRACBITS]];
-                dest += linesize;                     // killough 11/98
+                dest += screenwidth;                     // killough 11/98
                 if ((frac += fracstep) >= heightmask)
                     frac -= heightmask;
             }
@@ -129,10 +128,10 @@ void R_DrawColumn(void)
             while ((count-=2)>=0)   // texture height is a power of 2 -- killough
             {
                 *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
-                dest += linesize;   // killough 11/98
+                dest += screenwidth;   // killough 11/98
                 frac += fracstep;
                 *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
-                dest += linesize;   // killough 11/98
+                dest += screenwidth;   // killough 11/98
                 frac += fracstep;
             }
             if (count & 1)
@@ -152,7 +151,7 @@ void R_DrawColumnLow(void)
         return;
 
 #ifdef RANGECHECK
-    if ((unsigned) dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
         I_Error(english_language ?
                 "R_DrawColumn: %i to %i at %i" :
                 "R_DrawColumn: %i к %i в %i",
@@ -168,7 +167,7 @@ void R_DrawColumnLow(void)
     do
     {
         *dest = dc_colormap[dc_source[(frac >> FRACBITS) & 127]];
-        dest += SCREENWIDTH;
+        dest += screenwidth;
         frac += fracstep;
     }
     while (count--);
@@ -190,7 +189,7 @@ void R_DrawTLColumn(void)
         return;
 
 #ifdef RANGECHECK
-    if ((unsigned) dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
         I_Error(english_language ?
                 "R_DrawTLColumn: %i to %i at %i" :
                 "R_DrawTLColumn: %i к %i в %i",
@@ -207,7 +206,7 @@ void R_DrawTLColumn(void)
         *dest = tinttable[*dest +
                           (dc_colormap[dc_source[(frac >> FRACBITS) & 127]] <<
                            8)];
-        dest += SCREENWIDTH;
+        dest += screenwidth;
         frac += fracstep;
     }
     while (count--);
@@ -235,7 +234,7 @@ void R_DrawAltTLColumn(void)
         return;
 
 #ifdef RANGECHECK
-    if ((unsigned) dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
         I_Error(english_language ?
                 "R_DrawAltTLColumn: %i to %i at %i" :
                 "R_DrawAltTLColumn: %i к %i в %i",
@@ -251,7 +250,7 @@ void R_DrawAltTLColumn(void)
     {
         *dest = tinttable[((*dest) << 8)
                           + dc_colormap[dc_source[(frac >> FRACBITS) & 127]]];
-        dest += SCREENWIDTH;
+        dest += screenwidth;
         frac += fracstep;
     }
     while (count--);
@@ -279,7 +278,7 @@ void R_DrawTranslatedColumn(void)
         return;
 
 #ifdef RANGECHECK
-    if ((unsigned) dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
         I_Error(english_language ?
                 "R_DrawColumn: %i to %i at %i" :
                 "R_DrawColumn: %i к %i в %i",
@@ -294,7 +293,7 @@ void R_DrawTranslatedColumn(void)
     do
     {
         *dest = dc_colormap[dc_translation[dc_source[frac >> FRACBITS]]];
-        dest += SCREENWIDTH;
+        dest += screenwidth;
         frac += fracstep;
     }
     while (count--);
@@ -317,7 +316,7 @@ void R_DrawTranslatedTLColumn(void)
         return;
 
 #ifdef RANGECHECK
-    if ((unsigned) dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    if ((unsigned) dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
         I_Error(english_language ?
                 "R_DrawColumn: %i to %i at %i" :
                 "R_DrawColumn: %i к %i в %i",
@@ -335,7 +334,7 @@ void R_DrawTranslatedTLColumn(void)
                           +
                           dc_colormap[dc_translation
                                       [dc_source[frac >> FRACBITS]]]];
-        dest += SCREENWIDTH;
+        dest += screenwidth;
         frac += fracstep;
     }
     while (count--);
@@ -359,7 +358,7 @@ void R_DrawTranslatedAltTLColumn (void)
 		return;
 				
 #ifdef RANGECHECK
-	if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+	if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
 		I_Error ("R_DrawColumn: %i to %i at %i", dc_yl, dc_yh, dc_x);
 #endif
 
@@ -372,7 +371,7 @@ void R_DrawTranslatedAltTLColumn (void)
 	{
 		*dest = tinttable[*dest
 			+(dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]]<<8)];
-		dest += SCREENWIDTH;
+		dest += screenwidth;
 		frac += fracstep;
 	} while (count--);
 }
@@ -431,7 +430,7 @@ void R_DrawSpan(void)
     int count, spot;
 
 #ifdef RANGECHECK
-    if (ds_x2 < ds_x1 || ds_x1 < 0 || ds_x2 >= SCREENWIDTH
+    if (ds_x2 < ds_x1 || ds_x1 < 0 || ds_x2 >= screenwidth
         || (unsigned) ds_y > SCREENHEIGHT)
         I_Error(english_language ?
                 "R_DrawSpan: %i to %i at %i" :
@@ -464,7 +463,7 @@ void R_DrawSpanLow(void)
     int count, spot;
 
 #ifdef RANGECHECK
-    if (ds_x2 < ds_x1 || ds_x1 < 0 || ds_x2 >= SCREENWIDTH
+    if (ds_x2 < ds_x1 || ds_x1 < 0 || ds_x2 >= screenwidth
         || (unsigned) ds_y > SCREENHEIGHT)
         I_Error(english_language ?
                 "R_DrawSpan: %i to %i at %i" :
@@ -503,15 +502,15 @@ void R_InitBuffer(int width, int height)
 {
     int i;
 
-    viewwindowx = (SCREENWIDTH - width) >> 1;
+    viewwindowx = (screenwidth - width) >> 1;
     for (i = 0; i < width; i++)
         columnofs[i] = viewwindowx + i;
-    if (width == SCREENWIDTH)
+    if (width == screenwidth)
         viewwindowy = 0;
     else
         viewwindowy = (SCREENHEIGHT - SBARHEIGHT - height) >> 1;
     for (i = 0; i < height; i++)
-        ylookup[i] = I_VideoBuffer + (i + viewwindowy) * SCREENWIDTH;
+        ylookup[i] = I_VideoBuffer + (i + viewwindowy) * screenwidth;
 }
 
 
@@ -531,7 +530,7 @@ void R_DrawViewBorder(void)
     byte *src, *dest;
     int x, y;
 
-    if (scaledviewwidth == SCREENWIDTH)
+    if (scaledviewwidth == screenwidth)
         return;
 
     src = W_CacheLumpName("F_022", PU_CACHE);
@@ -539,15 +538,15 @@ void R_DrawViewBorder(void)
 
     for (y = 0; y < SCREENHEIGHT - SBARHEIGHT; y++)
     {
-        for (x = 0; x < SCREENWIDTH / 64; x++)
+        for (x = 0; x < screenwidth / 64; x++)
         {
             memcpy(dest, src + ((y & 63) << 6), 64);
             dest += 64;
         }
-        if (SCREENWIDTH & 63)
+        if (screenwidth & 63)
         {
-            memcpy(dest, src + ((y & 63) << 6), SCREENWIDTH & 63);
-            dest += (SCREENWIDTH & 63);
+            memcpy(dest, src + ((y & 63) << 6), screenwidth & 63);
+            dest += (screenwidth & 63);
         }
     }
     for (x = (viewwindowx >> hires); x < (viewwindowx >> hires) + (viewwidth >> hires); x += 16)
@@ -588,7 +587,7 @@ void R_DrawTopBorder(void)
     byte *src, *dest;
     int x, y;
 
-    if (scaledviewwidth == SCREENWIDTH)
+    if (scaledviewwidth == screenwidth)
         return;
 
 /*	if(gamemode == shareware)
@@ -605,15 +604,15 @@ void R_DrawTopBorder(void)
 
     for (y = 0; y < 34; y++)
     {
-        for (x = 0; x < SCREENWIDTH / 64; x++)
+        for (x = 0; x < screenwidth / 64; x++)
         {
             memcpy(dest, src + ((y & 63) << 6), 64);
             dest += 64;
         }
-        if (SCREENWIDTH & 63)
+        if (screenwidth & 63)
         {
-            memcpy(dest, src + ((y & 63) << 6), SCREENWIDTH & 63);
-            dest += (SCREENWIDTH & 63);
+            memcpy(dest, src + ((y & 63) << 6), screenwidth & 63);
+            dest += (screenwidth & 63);
         }
     }
     if (viewwindowy < 35)

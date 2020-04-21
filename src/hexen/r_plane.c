@@ -60,8 +60,8 @@ short openings[MAXOPENINGS], *lastopening;
 // Clip values are the solid pixel bounding the range.
 // floorclip start out SCREENHEIGHT
 // ceilingclip starts out -1
-short floorclip[SCREENWIDTH];
-short ceilingclip[SCREENWIDTH];
+short floorclip[WIDESCREENWIDTH];
+short ceilingclip[WIDESCREENWIDTH];
 
 // spanstart holds the start of a plane span, initialized to 0
 int spanstart[SCREENHEIGHT];
@@ -72,7 +72,7 @@ lighttable_t **planezlight;
 fixed_t planeheight;
 fixed_t* yslope;
 fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-fixed_t distscale[SCREENWIDTH];
+fixed_t distscale[WIDESCREENWIDTH];
 fixed_t basexscale, baseyscale;
 fixed_t cachedheight[SCREENHEIGHT];
 fixed_t cacheddistance[SCREENHEIGHT];
@@ -309,7 +309,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
     check->picnum = picnum;
     check->lightlevel = lightlevel;
     check->special = special;
-    check->minx = SCREENWIDTH;
+    check->minx = screenwidth;
     check->maxx = -1;
     memset(check->top, 0xff, sizeof(check->top));
     return (check);
@@ -435,7 +435,7 @@ void R_DrawPlanes(void)
     int fracstep = FRACUNIT >> hires;
 
     extern byte *ylookup[MAXHEIGHT];
-    extern int columnofs[MAXWIDTH];
+    extern int columnofs[WIDEMAXWIDTH];
 
 #ifdef RANGECHECK
     if (ds_p - drawsegs > numdrawsegs)
@@ -506,7 +506,7 @@ void R_DrawPlanes(void)
                                 *dest = source2[frac >> FRACBITS];
                                 frac += fracstep;
                             }
-                            dest += SCREENWIDTH;
+                            dest += screenwidth;
                         }
                         while (count--);
                     }
@@ -546,7 +546,7 @@ void R_DrawPlanes(void)
                         do
                         {
                             *dest = source[frac >> FRACBITS];
-                            dest += SCREENWIDTH;
+                            dest += screenwidth;
                             frac += fracstep;
                         }
                         while (count--);

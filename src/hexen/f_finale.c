@@ -178,10 +178,11 @@ static void TextWrite(void)
     int cx, cy;
     patch_t *w;
 
-#ifdef WIDESCREEN
-    // [JN] Clean up remainings of the wide screen before drawing
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
+    if (widescreen)
+    {
+        // [JN] Clean up remainings of the wide screen before drawing
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
 
     V_CopyScaledBuffer(I_VideoBuffer, W_CacheLumpNum(FinaleLumpNum, PU_CACHE),
            SRCWIDTH * ORIGHEIGHT);
@@ -238,11 +239,11 @@ static void TextWrite(void)
             continue;
         }
         w = W_CacheLumpNum(FontABaseLump + c - 33, PU_CACHE);
-        if (cx + SHORT(w->width) > SCREENWIDTH)
+        if (cx + SHORT(w->width) > screenwidth)
         {
             break;
         }
-        V_DrawShadowedPatchRaven(cx + ORIGWIDTH_DELTA, cy, w);
+        V_DrawShadowedPatchRaven(cx + wide_delta, cy, w);
         cx += SHORT(w->width);
     }
 }
@@ -333,13 +334,14 @@ static void FadePic(void)
 static void DrawPic(void)
 {
 
-#ifdef WIDESCREEN
-    // [JN] Clean up remainings of the wide screen before drawing
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif    
+    if (widescreen)
+    {
+        // [JN] Clean up remainings of the wide screen before drawing
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
 
     V_CopyScaledBuffer(I_VideoBuffer, W_CacheLumpNum(FinaleLumpNum, PU_CACHE),
-           SRCWIDTH * ORIGHEIGHT);
+           ORIGWIDTH * ORIGHEIGHT);
     if (FinaleStage == 4 || FinaleStage == 5)
     {                           // Chess pic, draw the correct character graphic
         if (netgame)

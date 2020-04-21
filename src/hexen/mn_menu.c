@@ -235,7 +235,7 @@ static MenuItem_t MainItems_Rus[] = {
 };
 
 static Menu_t MainMenu = {
-    110 + ORIGWIDTH_DELTA, 56,
+    110, 56,
     DrawMainMenu,
     5, MainItems,
     0,
@@ -243,7 +243,7 @@ static Menu_t MainMenu = {
 };
 
 static Menu_t MainMenu_Rus = {
-    104 + ORIGWIDTH_DELTA, 56,
+    104, 56,
     DrawMainMenu,
     5, MainItems_Rus,
     0,
@@ -263,7 +263,7 @@ static MenuItem_t ClassItems_Rus[] = {
 };
 
 static Menu_t ClassMenu = {
-    66 + ORIGWIDTH_DELTA, 66,
+    66, 66,
     DrawClassMenu,
     3, ClassItems,
     0,
@@ -271,7 +271,7 @@ static Menu_t ClassMenu = {
 };
 
 static Menu_t ClassMenu_Rus = {
-    66 + ORIGWIDTH_DELTA, 66,
+    66, 66,
     DrawClassMenu,
     3, ClassItems_Rus,
     0,
@@ -289,7 +289,7 @@ static MenuItem_t FilesItems_Rus[] = {
 };
 
 static Menu_t FilesMenu = {
-    110 + ORIGWIDTH_DELTA, 60,
+    110, 60,
     DrawFilesMenu,
     2, FilesItems,
     0,
@@ -297,7 +297,7 @@ static Menu_t FilesMenu = {
 };
 
 static Menu_t FilesMenu_Rus = {
-    110 + ORIGWIDTH_DELTA, 60,
+    110, 60,
     DrawFilesMenu,
     2, FilesItems_Rus,
     0,
@@ -314,7 +314,7 @@ static MenuItem_t LoadItems[] = {
 };
 
 static Menu_t LoadMenu = {
-    70 + ORIGWIDTH_DELTA, 30,
+    70, 30,
     DrawLoadMenu,
     6, LoadItems,
     0,
@@ -331,7 +331,7 @@ static MenuItem_t SaveItems[] = {
 };
 
 static Menu_t SaveMenu = {
-    70 + ORIGWIDTH_DELTA, 30,
+    70, 30,
     DrawSaveMenu,
     6, SaveItems,
     0,
@@ -348,7 +348,7 @@ static MenuItem_t SkillItems[] = {
 };
 
 static Menu_t SkillMenu = {
-    120 + ORIGWIDTH_DELTA, 44,
+    120, 44,
     DrawSkillMenu,
     6, SkillItems,
     2,
@@ -356,7 +356,7 @@ static Menu_t SkillMenu = {
 };
 
 static Menu_t SkillMenu_Rus = {
-    120 + ORIGWIDTH_DELTA, 44,
+    120, 44,
     DrawSkillMenu,
     6, SkillItems,
     2,
@@ -388,7 +388,7 @@ static MenuItem_t OptionsItems_Rus[] = {
 };
 
 static Menu_t OptionsMenu = {
-    97 + ORIGWIDTH_DELTA, 16,
+    97, 16,
     NULL,
     7, OptionsItems,
     0,
@@ -396,7 +396,7 @@ static Menu_t OptionsMenu = {
 };
 
 static Menu_t OptionsMenu_Rus = {
-    77 + ORIGWIDTH_DELTA, 16,
+    77, 16,
     NULL,
     7, OptionsItems_Rus,
     0,
@@ -424,7 +424,7 @@ static MenuItem_t RenderingItems_Rus[] = {
 };
 
 static Menu_t RenderingMenu = {
-    66 + ORIGWIDTH_DELTA, 16,
+    66, 16,
     DrawRenderingMenu,
     5, RenderingItems,
     0,
@@ -432,7 +432,7 @@ static Menu_t RenderingMenu = {
 };
 
 static Menu_t RenderingMenu_Rus = {
-    36 + ORIGWIDTH_DELTA, 16,
+    36, 16,
     DrawRenderingMenu,
     5, RenderingItems_Rus,
     0,
@@ -462,7 +462,7 @@ static MenuItem_t DisplayItems_Rus[] = {
 };
 
 static Menu_t DisplayMenu = {
-    72 + ORIGWIDTH_DELTA, 16,
+    72, 16,
     DrawDisplayMenu,
     6, DisplayItems,
     0,
@@ -470,7 +470,7 @@ static Menu_t DisplayMenu = {
 };
 
 static Menu_t DisplayMenu_Rus = {
-    66 + ORIGWIDTH_DELTA, 16,
+    66, 16,
     DrawDisplayMenu,
     6, DisplayItems_Rus,
     0,
@@ -502,7 +502,7 @@ static MenuItem_t SoundItems_Rus[] = {
 };
 
 static Menu_t SoundMenu = {
-    72 + ORIGWIDTH_DELTA, 16,
+    72, 16,
     DrawSoundMenu,
     7, SoundItems,
     0,
@@ -510,7 +510,7 @@ static Menu_t SoundMenu = {
 };
 
 static Menu_t SoundMenu_Rus = {
-    61 + ORIGWIDTH_DELTA, 16,
+    61, 16,
     DrawSoundMenu,
     7, SoundItems_Rus,
     0,
@@ -536,7 +536,7 @@ static MenuItem_t ControlsItems_Rus[] = {
 };
 
 static Menu_t ControlsMenu = {
-    87 + ORIGWIDTH_DELTA, 16,
+    87, 16,
     DrawControlsMenu,
     4, ControlsItems,
     0,
@@ -544,7 +544,7 @@ static Menu_t ControlsMenu = {
 };
 
 static Menu_t ControlsMenu_Rus = {
-    68 + ORIGWIDTH_DELTA, 16,
+    68, 16,
     DrawControlsMenu,
     4, ControlsItems_Rus,
     0,
@@ -586,7 +586,7 @@ static MenuItem_t GameplayItems_Rus[] = {
 };
 
 static Menu_t GameplayMenu = {
-    53 + ORIGWIDTH_DELTA, 26,
+    53, 26,
     DrawGameplayMenu,
     12, GameplayItems,
     0,
@@ -594,7 +594,7 @@ static Menu_t GameplayMenu = {
 };
 
 static Menu_t GameplayMenu_Rus = {
-    53 + ORIGWIDTH_DELTA, 26,
+    53, 26,
     DrawGameplayMenu,
     12, GameplayItems_Rus,
     0,
@@ -930,32 +930,32 @@ void MN_Drawer(void)
             {
                 MN_DrTextA(QuitEndMsg[typeofask - 1], 160 -
                            MN_TextAWidth(QuitEndMsg[typeofask - 1]) / 2
-                           + ORIGWIDTH_DELTA, 80);
+                           + wide_delta, 80);
             }
             else
             {
                 MN_DrTextA(QuitEndMsg_Rus[typeofask - 1], 160 -
                            MN_TextAWidth(QuitEndMsg_Rus[typeofask - 1]) / 2
-                           + ORIGWIDTH_DELTA, 80);
+                           + wide_delta, 80);
             }
 
             if (typeofask == 3)
             {
                 MN_DrTextA(SlotText[quicksave - 1], 160 -
                            MN_TextAWidth(SlotText[quicksave - 1]) / 2
-                           + ORIGWIDTH_DELTA, 90);
+                           + wide_delta, 90);
                 MN_DrTextA("?", 160 +
                            MN_TextAWidth(SlotText[quicksave - 1]) / 2
-                           + ORIGWIDTH_DELTA, 90);
+                           + wide_delta, 90);
             }
             if (typeofask == 4)
             {
                 MN_DrTextA(SlotText[quickload - 1], 160 -
                            MN_TextAWidth(SlotText[quickload - 1]) / 2
-                           + ORIGWIDTH_DELTA, 90);
+                           + wide_delta, 90);
                 MN_DrTextA("?", 160 +
                            MN_TextAWidth(SlotText[quicksave - 1]) / 2
-                           + ORIGWIDTH_DELTA, 90);
+                           + wide_delta, 90);
             }
             UpdateState |= I_FULLSCRN;
         }
@@ -988,9 +988,9 @@ void MN_Drawer(void)
                 if (CurrentMenu == &GameplayMenu
                 ||  CurrentMenu == &RenderingMenu_Rus
                 ||  CurrentMenu == &GameplayMenu_Rus)
-                MN_DrTextA(item->text, x, y);
+                MN_DrTextA(item->text, x + wide_delta, y);
                 else
-                MN_DrTextB(item->text, x, y);
+                MN_DrTextB(item->text, x + wide_delta, y);
             }
 
             // [JN] Use a different font's vertical spacing in following menus:
@@ -1011,14 +1011,14 @@ void MN_Drawer(void)
         {
             y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT_SMALL) + SELECTOR_YOFFSET;
             selName = MenuTime & 8 ? "INVGEMR1" : "INVGEMR2";
-            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET_SMALL, y,
+            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET_SMALL + wide_delta, y,
                                      W_CacheLumpName(selName, PU_CACHE));
         }
         else
         {
             y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT) + SELECTOR_YOFFSET;
             selName = MenuTime & 16 ? "M_SLCTR1" : "M_SLCTR2";
-            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET, y,
+            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET + wide_delta, y,
                         W_CacheLumpName(selName, PU_CACHE));
         }
     }
@@ -1035,11 +1035,11 @@ static void DrawMainMenu(void)
     int frame;
 
     frame = (MenuTime / 5) % 7;
-    V_DrawShadowedPatchRaven(88 + ORIGWIDTH_DELTA, 0, W_CacheLumpName("M_HTIC", PU_CACHE));
+    V_DrawShadowedPatchRaven(88 + wide_delta, 0, W_CacheLumpName("M_HTIC", PU_CACHE));
 // Old Gold skull positions: (40, 10) and (232, 10)
-    V_DrawShadowedPatchRaven(42 + ORIGWIDTH_DELTA, 83, W_CacheLumpNum(MauloBaseLump + (frame + 2) % 7,
+    V_DrawShadowedPatchRaven(42 + wide_delta, 83, W_CacheLumpNum(MauloBaseLump + (frame + 2) % 7,
                                        PU_CACHE));
-    V_DrawShadowedPatchRaven(273 + ORIGWIDTH_DELTA, 83, W_CacheLumpNum(MauloBaseLump + frame, PU_CACHE));
+    V_DrawShadowedPatchRaven(273 + wide_delta, 83, W_CacheLumpNum(MauloBaseLump + frame, PU_CACHE));
 }
 
 //==========================================================================
@@ -1064,15 +1064,15 @@ static void DrawClassMenu(void)
 
     if (english_language)
     {
-        MN_DrTextB("CHOOSE CLASS:", 34 + ORIGWIDTH_DELTA, 24);
+        MN_DrTextB("CHOOSE CLASS:", 34 + wide_delta, 24);
     }
     else
     {
-        MN_DrTextB("DS,THBNT RKFCC:", 5 + ORIGWIDTH_DELTA, 24);   // ВЫБЕРИТЕ КЛАСС:
+        MN_DrTextB("DS,THBNT RKFCC:", 5 + wide_delta, 24);   // ВЫБЕРИТЕ КЛАСС:
     }
     class = (pclass_t) CurrentMenu->items[CurrentItPos].option;
-    V_DrawShadowedPatchRaven(174 + ORIGWIDTH_DELTA, 8, W_CacheLumpName(boxLumpName[class], PU_CACHE));
-    V_DrawPatch(174 + 24 + ORIGWIDTH_DELTA, 8 + 12,
+    V_DrawShadowedPatchRaven(174 + wide_delta, 8, W_CacheLumpName(boxLumpName[class], PU_CACHE));
+    V_DrawPatch(174 + 24 + wide_delta, 8 + 12,
                 W_CacheLumpNum(W_GetNumForName(walkLumpName[class])
                                + ((MenuTime >> 3) & 3), PU_CACHE));
 }
@@ -1087,11 +1087,11 @@ static void DrawSkillMenu(void)
 {
     if (english_language)
     {
-        MN_DrTextB("CHOOSE SKILL LEVEL:", 74 + ORIGWIDTH_DELTA, 16);
+        MN_DrTextB("CHOOSE SKILL LEVEL:", 74 + wide_delta, 16);
     }
     else
     {
-        MN_DrTextB("EHJDTYM CKJ;YJCNB:", 57 + ORIGWIDTH_DELTA, 16);   // УРОВЕНЬ СЛОЖНОСТИ:
+        MN_DrTextB("EHJDTYM CKJ;YJCNB:", 57 + wide_delta, 16);   // УРОВЕНЬ СЛОЖНОСТИ:
     }
 }
 
@@ -1119,11 +1119,11 @@ static void DrawLoadMenu(void)
 {
     if (english_language)
     {
-        MN_DrTextB("LOAD GAME", 160 - MN_TextBWidth("LOAD GAME") / 2 + ORIGWIDTH_DELTA, 10);
+        MN_DrTextB("LOAD GAME", 160 - MN_TextBWidth("LOAD GAME") / 2 + wide_delta, 10);
     }
     else
     {
-        MN_DrTextB("PFUHEPBNM BUHE", 160 - MN_TextBWidth("PFUHEPBNM BUHE") / 2 + ORIGWIDTH_DELTA, 10);	// ЗАГРУЗИТЬ ИГРУ
+        MN_DrTextB("PFUHEPBNM BUHE", 160 - MN_TextBWidth("PFUHEPBNM BUHE") / 2 + wide_delta, 10);	// ЗАГРУЗИТЬ ИГРУ
     }
 
     if (!slottextloaded)
@@ -1143,11 +1143,11 @@ static void DrawSaveMenu(void)
 {
     if (english_language)
     {
-        MN_DrTextB("SAVE GAME", 160 - MN_TextBWidth("SAVE GAME") / 2 + ORIGWIDTH_DELTA, 10);
+        MN_DrTextB("SAVE GAME", 160 - MN_TextBWidth("SAVE GAME") / 2 + wide_delta, 10);
     }
     else
     {
-        MN_DrTextB("CJ[HFYBNM BUHE", 160 - MN_TextBWidth("CJ[HFYBNM BUHE") / 2 + ORIGWIDTH_DELTA, 10);	// СОХРАНИТЬ ИГРУ
+        MN_DrTextB("CJ[HFYBNM BUHE", 160 - MN_TextBWidth("CJ[HFYBNM BUHE") / 2 + wide_delta, 10);	// СОХРАНИТЬ ИГРУ
     }
     
     if (!slottextloaded)
@@ -1228,10 +1228,10 @@ static void DrawFileSlots(Menu_t * menu)
     y = menu->y;
     for (i = 0; i < 6; i++)
     {
-        V_DrawShadowedPatchRaven(x, y, W_CacheLumpName("M_FSLOT", PU_CACHE));
+        V_DrawShadowedPatchRaven(x + wide_delta, y, W_CacheLumpName("M_FSLOT", PU_CACHE));
         if (SlotStatus[i])
         {
-            MN_DrTextA(SlotText[i], x + 5, y + 5);
+            MN_DrTextA(SlotText[i], x + 5 + wide_delta, y + 5);
         }
         y += ITEM_HEIGHT;
     }
@@ -1247,80 +1247,80 @@ static void DrawRenderingMenu(void)
     if (vsync)
     {
         if (english_language)
-        MN_DrTextB("ON", 195 + ORIGWIDTH_DELTA, 16);
+        MN_DrTextB("ON", 195 + wide_delta, 16);
         else
-        MN_DrTextA("DRK", 236 + ORIGWIDTH_DELTA, 16);
+        MN_DrTextA("DRK", 236 + wide_delta, 16);
     }
     else
     {
         if (english_language)
-        MN_DrTextB("OFF", 195 + ORIGWIDTH_DELTA, 16);
+        MN_DrTextB("OFF", 195 + wide_delta, 16);
         else
-        MN_DrTextA("DSRK", 236 + ORIGWIDTH_DELTA, 16);
+        MN_DrTextA("DSRK", 236 + wide_delta, 16);
     }
 
     // Fix aspect ratio:
     if (aspect_ratio_correct)
     {
         if (english_language)
-        MN_DrTextB("ON", 219 + ORIGWIDTH_DELTA, 36);
+        MN_DrTextB("ON", 219 + wide_delta, 36);
         else
-        MN_DrTextA("DRK", 270 + ORIGWIDTH_DELTA, 26);
+        MN_DrTextA("DRK", 270 + wide_delta, 26);
     }
     else
     {
         if (english_language)
-        MN_DrTextB("OFF", 219 + ORIGWIDTH_DELTA, 36);
+        MN_DrTextB("OFF", 219 + wide_delta, 36);
         else
-        MN_DrTextA("DSRK", 270 + ORIGWIDTH_DELTA, 26);
+        MN_DrTextA("DSRK", 270 + wide_delta, 26);
     }
 
     // Uncapped FPS:
     if (uncapped_fps)
     {
         if (english_language)
-        MN_DrTextB("ON", 206 + ORIGWIDTH_DELTA, 56);
+        MN_DrTextB("ON", 206 + wide_delta, 56);
         else
-        MN_DrTextA("DSRK", 254 + ORIGWIDTH_DELTA, 36);
+        MN_DrTextA("DSRK", 254 + wide_delta, 36);
     }
     else
     {
         if (english_language)
-        MN_DrTextB("OFF", 206 + ORIGWIDTH_DELTA, 56);
+        MN_DrTextB("OFF", 206 + wide_delta, 56);
         else
-        MN_DrTextA("DRK", 254 + ORIGWIDTH_DELTA, 36);
+        MN_DrTextA("DRK", 254 + wide_delta, 36);
     }
 
     // Pixel scaling:
     if (smoothing)
     {
         if (english_language)
-        MN_DrTextB("SMOOTH", 193 + ORIGWIDTH_DELTA, 76);
+        MN_DrTextB("SMOOTH", 193 + wide_delta, 76);
         else
-        MN_DrTextA("DRK", 211 + ORIGWIDTH_DELTA, 46);
+        MN_DrTextA("DRK", 211 + wide_delta, 46);
     }
     else
     {
         if (english_language)
-        MN_DrTextB("SHARP", 193 + ORIGWIDTH_DELTA, 76);
+        MN_DrTextB("SHARP", 193 + wide_delta, 76);
         else
-        MN_DrTextA("DSRK", 211 + ORIGWIDTH_DELTA, 46);
+        MN_DrTextA("DSRK", 211 + wide_delta, 46);
     }
 
     // Video rendered:
     if (force_software_renderer)
     {
         if (english_language)
-        MN_DrTextB("CPU", 216 + ORIGWIDTH_DELTA, 96);
+        MN_DrTextB("CPU", 216 + wide_delta, 96);
         else
-        MN_DrTextA("GHJUHFVVYFZ", 159 + ORIGWIDTH_DELTA, 56);
+        MN_DrTextA("GHJUHFVVYFZ", 159 + wide_delta, 56);
     }
     else
     {
         if (english_language)
-        MN_DrTextB("GPU", 216 + ORIGWIDTH_DELTA, 96);
+        MN_DrTextB("GPU", 216 + wide_delta, 96);
         else
-        MN_DrTextA("FGGFHFNYFZ", 159 + ORIGWIDTH_DELTA, 56);
+        MN_DrTextA("FGGFHFNYFZ", 159 + wide_delta, 56);
     }    
 }
 
@@ -1383,19 +1383,22 @@ static void DrawDisplayMenu(void)
     static char num[4];
 
     // Screen size
-#ifdef WIDESCREEN
-    DrawSlider((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 4, screenblocks - 9);
-    M_snprintf(num, 4, "%3d", screenblocks);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 160 : 154) + ORIGWIDTH_DELTA, 41);
-    dp_translation = NULL;
-#else
-    DrawSlider((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 10, screenblocks - 3);
-    M_snprintf(num, 4, "%3d", screenblocks);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 208 : 202) + ORIGWIDTH_DELTA, 41);
-    dp_translation = NULL;
-#endif
+    if (widescreen)
+    {
+        DrawSlider((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 4, screenblocks - 9);
+        M_snprintf(num, 4, "%3d", screenblocks);
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        MN_DrTextA(num, (english_language ? 160 : 154) + wide_delta, 41);
+        dp_translation = NULL;
+    }
+    else
+    {
+        DrawSlider((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 10, screenblocks - 3);
+        M_snprintf(num, 4, "%3d", screenblocks);
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        MN_DrTextA(num, (english_language ? 208 : 202) + wide_delta, 41);
+        dp_translation = NULL;
+    }
 
     // Gamma-correction
     DrawSlider((english_language ? &DisplayMenu : &DisplayMenu_Rus), 3, 18, usegamma);
@@ -1404,24 +1407,24 @@ static void DrawDisplayMenu(void)
     if (messageson)
     {
         MN_DrTextB(english_language ?  "ON" : "DRK>",
-                  (english_language ? 170 : 191) + ORIGWIDTH_DELTA, 96);
+                  (english_language ? 170 : 191) + wide_delta, 96);
     }
     else
     {
         MN_DrTextB(english_language ? "OFF" : "DSRK>",
-                  (english_language ? 170 : 191) + ORIGWIDTH_DELTA, 96);
+                  (english_language ? 170 : 191) + wide_delta, 96);
     }
 
     // Local time:
     if (local_time)
     {
         MN_DrTextB(english_language ?  "ON" : "DRK>",
-                  (english_language ? 173 : 140) + ORIGWIDTH_DELTA, 116);
+                  (english_language ? 173 : 140) + wide_delta, 116);
     }
     else
     {
         MN_DrTextB(english_language ? "OFF" : "DSRK>",
-                  (english_language ? 173 : 140) + ORIGWIDTH_DELTA, 116);
+                  (english_language ? 173 : 140) + wide_delta, 116);
     }
 }
 
@@ -1439,14 +1442,15 @@ static void M_RD_ScreenSize(int option)
         screenblocks--;
     }
 
-#ifdef WIDESCREEN
-    // [JN] Wide screen: don't allow unsupported (bordered) views
-    // screenblocks - config file variable
-    if (screenblocks < 9)
-        screenblocks = 9;
-    if (screenblocks > 12)
-        screenblocks = 12;
-#endif
+    if (widescreen)
+    {
+        // [JN] Wide screen: don't allow unsupported (bordered) views
+        // screenblocks - config file variable
+        if (screenblocks < 9)
+            screenblocks = 9;
+        if (screenblocks > 12)
+            screenblocks = 12;
+    }
 
     R_SetViewSize(screenblocks, detailLevel);
 }
@@ -1514,33 +1518,33 @@ static void DrawSoundMenu(void)
     DrawSlider((english_language ? &SoundMenu : &SoundMenu_Rus), 1, 16, snd_MaxVolume);
     M_snprintf(num, 4, "%3d", snd_MaxVolume);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 251 : 240) + ORIGWIDTH_DELTA, 41);
+    MN_DrTextA(num, (english_language ? 251 : 240) + wide_delta, 41);
     dp_translation = NULL;
 
     // Music Volume
     DrawSlider((english_language ? &SoundMenu : &SoundMenu_Rus), 3, 16, snd_MusicVolume);
     M_snprintf(num, 4, "%3d", snd_MusicVolume);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 251 : 240) + ORIGWIDTH_DELTA, 81);
+    MN_DrTextA(num, (english_language ? 251 : 240) + wide_delta, 81);
     dp_translation = NULL;
 
     // SFX Channels
     DrawSlider((english_language ? &SoundMenu : &SoundMenu_Rus), 5, 16, snd_Channels / 4 - 1);
     M_snprintf(num, 4, "%3d", snd_Channels);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 251 : 240) + ORIGWIDTH_DELTA, 121);
+    MN_DrTextA(num, (english_language ? 251 : 240) + wide_delta, 121);
     dp_translation = NULL;
 
     // SFX Mode
     if (snd_monomode)
     {
         MN_DrTextB(english_language ?  "MONO" : "VJYJ",
-                  (english_language ? 169 : 204) + ORIGWIDTH_DELTA, 136);
+                  (english_language ? 169 : 204) + wide_delta, 136);
     }
     else
     {
         MN_DrTextB(english_language ? "STEREO" : "CNTHTJ",
-                  (english_language ? 169 : 204) + ORIGWIDTH_DELTA, 136);
+                  (english_language ? 169 : 204) + wide_delta, 136);
     }    
 }
 
@@ -1611,31 +1615,31 @@ static void DrawControlsMenu(void)
     DrawSlider((english_language ? &ControlsMenu : &ControlsMenu_Rus), 3, 12, mouseSensitivity);
     M_snprintf(num, 4, "%3d", mouseSensitivity);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-    MN_DrTextA(num, (english_language ? 234 : 215) + ORIGWIDTH_DELTA, 81);
+    MN_DrTextA(num, (english_language ? 234 : 215) + wide_delta, 81);
     dp_translation = NULL;
 
     // Always run
     if (joybspeed >= 20)
     {
         MN_DrTextB(english_language ?  "ON" : "DRK>",
-                  (english_language ? 200 : 246) + ORIGWIDTH_DELTA, 16);
+                  (english_language ? 200 : 246) + wide_delta, 16);
     }
     else
     {
         MN_DrTextB(english_language ? "OFF" : "DSRK>",
-                  (english_language ? 200 : 246) + ORIGWIDTH_DELTA, 16);
+                  (english_language ? 200 : 246) + wide_delta, 16);
     }
 
     // Mouse look
     if (mlook)
     {
         MN_DrTextB(english_language ?  "ON" : "DRK>",
-                  (english_language ? 207 : 227) + ORIGWIDTH_DELTA, 36);
+                  (english_language ? 207 : 227) + wide_delta, 36);
     }
     else
     {
         MN_DrTextB(english_language ? "OFF" : "DSRK>",
-                  (english_language ? 207 : 227) + ORIGWIDTH_DELTA, 36);
+                  (english_language ? 207 : 227) + wide_delta, 36);
     }
 }
 
@@ -1687,13 +1691,13 @@ static void DrawGameplayMenu(void)
     // Subheaders
     dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
     MN_DrTextA(english_language ?  "VISUAL" : "UHFABRF",
-              (english_language ? 53 : 53) + ORIGWIDTH_DELTA, 16);
+              (english_language ? 53 : 53) + wide_delta, 16);
     
     MN_DrTextA(english_language ?  "CROSSHAIR" : "GHBWTK",
-              (english_language ? 53 : 53) + ORIGWIDTH_DELTA, 66);
+              (english_language ? 53 : 53) + wide_delta, 66);
 
     MN_DrTextA(english_language ?  "GAMEPLAY" : "UTQVGKTQ",
-              (english_language ? 53 : 53) + ORIGWIDTH_DELTA, 116);
+              (english_language ? 53 : 53) + wide_delta, 116);
     dp_translation = NULL;
 
     // Brightmaps
@@ -1701,14 +1705,14 @@ static void DrawGameplayMenu(void)
     {
         dp_translation = cr[CR_GRAY2GREEN_HEXEN];
         MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 136 : 150) + ORIGWIDTH_DELTA, 26);
+                  (english_language ? 136 : 150) + wide_delta, 26);
         dp_translation = NULL;
     }
     else
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 136 : 150) + ORIGWIDTH_DELTA, 26);
+                  (english_language ? 136 : 150) + wide_delta, 26);
         dp_translation = NULL;
     }
 
@@ -1717,14 +1721,14 @@ static void DrawGameplayMenu(void)
     {
         dp_translation = cr[CR_GRAY2GREEN_HEXEN];
         MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 160 : 222) + ORIGWIDTH_DELTA, 36);
+                  (english_language ? 160 : 222) + wide_delta, 36);
         dp_translation = NULL;
     }
     else
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 160 : 222) + ORIGWIDTH_DELTA, 36);
+                  (english_language ? 160 : 222) + wide_delta, 36);
         dp_translation = NULL;
     }
 
@@ -1733,14 +1737,14 @@ static void DrawGameplayMenu(void)
     {
         dp_translation = cr[CR_GRAY2GREEN_HEXEN];
         MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 197 : 237) + ORIGWIDTH_DELTA, 46);
+                  (english_language ? 197 : 237) + wide_delta, 46);
         dp_translation = NULL;
     }
     else
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 197 : 237) + ORIGWIDTH_DELTA, 46);
+                  (english_language ? 197 : 237) + wide_delta, 46);
         dp_translation = NULL;
     }
 
@@ -1749,14 +1753,14 @@ static void DrawGameplayMenu(void)
     {
         dp_translation = cr[CR_GRAY2GREEN_HEXEN];
         MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 167 : 192) + ORIGWIDTH_DELTA, 76);
+                  (english_language ? 167 : 192) + wide_delta, 76);
         dp_translation = NULL;
     }
     else
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 167 : 192) + ORIGWIDTH_DELTA, 76);
+                  (english_language ? 167 : 192) + wide_delta, 76);
         dp_translation = NULL;
     }
 
@@ -1765,14 +1769,14 @@ static void DrawGameplayMenu(void)
     {
         dp_translation = cr[CR_GRAY2GREEN_HEXEN];
         MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 178 : 196) + ORIGWIDTH_DELTA, 86);
+                  (english_language ? 178 : 196) + wide_delta, 86);
         dp_translation = NULL;
     }
     else 
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 178 : 196) + ORIGWIDTH_DELTA, 86);
+                  (english_language ? 178 : 196) + wide_delta, 86);
         dp_translation = NULL;
     }
 
@@ -1781,14 +1785,14 @@ static void DrawGameplayMenu(void)
     {
         dp_translation = cr[CR_GRAY2GREEN_HEXEN];
         MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 163 : 198) + ORIGWIDTH_DELTA, 96);
+                  (english_language ? 163 : 198) + wide_delta, 96);
         dp_translation = NULL;
     }
     else
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 163 : 198) + ORIGWIDTH_DELTA, 96);
+                  (english_language ? 163 : 198) + wide_delta, 96);
         dp_translation = NULL;
     }
 
@@ -1797,14 +1801,14 @@ static void DrawGameplayMenu(void)
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 170 : 272) + ORIGWIDTH_DELTA, 126);
+                  (english_language ? 170 : 272) + wide_delta, 126);
         dp_translation = NULL;
     }
     else
     {
         dp_translation = cr[CR_GRAY2GREEN_HEXEN];
         MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 170 : 272) + ORIGWIDTH_DELTA, 126);
+                  (english_language ? 170 : 272) + wide_delta, 126);
         dp_translation = NULL;
     }
 
@@ -1813,14 +1817,14 @@ static void DrawGameplayMenu(void)
     {
         dp_translation = cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 196 : 228) + ORIGWIDTH_DELTA, 136);
+                  (english_language ? 196 : 228) + wide_delta, 136);
         dp_translation = NULL;
     }
     else
     {
         dp_translation = cr[CR_GRAY2GREEN_HEXEN];
         MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 196 : 228) + ORIGWIDTH_DELTA, 136);
+                  (english_language ? 196 : 228) + wide_delta, 136);
         dp_translation = NULL;
     }
 }
@@ -2924,10 +2928,11 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-#ifdef WIDESCREEN
-    // [JN] Clean up remainings of the wide screen before drawing
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-#endif
+    if (widescreen)
+    {
+        // [JN] Clean up remainings of the wide screen before drawing
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+    }
 
     I_SetPalette(W_CacheLumpName(usegamma <= 8 ?
                                  "PALFIX" :
@@ -2973,28 +2978,28 @@ static void DrawSlider(Menu_t * menu, int item, int width, int slot)
 
     x = menu->x + 24;
     y = menu->y + 2 + (item * ITEM_HEIGHT);
-    V_DrawShadowedPatchRaven(x - 32, y, W_CacheLumpName("M_SLDLT", PU_CACHE));
+    V_DrawShadowedPatchRaven(x - 32 + wide_delta, y, W_CacheLumpName("M_SLDLT", PU_CACHE));
     for (x2 = x, count = width; count--; x2 += 8)
     {
-        V_DrawShadowedPatchRaven(x2, y, W_CacheLumpName(count & 1 ? "M_SLDMD1"
+        V_DrawShadowedPatchRaven(x2 + wide_delta, y, W_CacheLumpName(count & 1 ? "M_SLDMD1"
                                            : "M_SLDMD2", PU_CACHE));
     }
-    V_DrawShadowedPatchRaven(x2, y, W_CacheLumpName("M_SLDRT", PU_CACHE));
+    V_DrawShadowedPatchRaven(x2 + wide_delta, y, W_CacheLumpName("M_SLDRT", PU_CACHE));
 
     // [JN] Colorizing slider gem...
     // Most left position (dull green gem)
     if (slot == 0)
     {
-        V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName("M_SLDKD", PU_CACHE));
+        V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7, W_CacheLumpName("M_SLDKD", PU_CACHE));
     }
     // [JN] Most right position that is "out of bounds" (red gem).
     // Only the mouse sensitivity menu requires this trick.
     else if ((CurrentMenu == &ControlsMenu || CurrentMenu == &ControlsMenu_Rus) && slot > 11)
     {
         slot = 11;
-        V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName("M_SLDKR", PU_CACHE));
+        V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7, W_CacheLumpName("M_SLDKR", PU_CACHE));
     }
     // [JN] Standard function (green gem)
     else
-    V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName("M_SLDKB", PU_CACHE));
+    V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7, W_CacheLumpName("M_SLDKB", PU_CACHE));
 }

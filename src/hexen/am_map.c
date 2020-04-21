@@ -39,7 +39,7 @@ static int grid = 0;
 static int leveljuststarted = 1;        // kluge until AM_LevelInit() is called
 
 boolean automapactive = false;
-static int finit_width = SCREENWIDTH;
+//static int finit_width = SCREENWIDTH; // [JN] Replaced with screenwidth
 static int finit_height = SCREENHEIGHT - SBARHEIGHT - (3 << hires);
 static int f_x, f_y;            // location of window on screen
 static int f_w, f_h;            // size of window on screen
@@ -259,10 +259,10 @@ void AM_changeWindowLoc(void)
     // in AM_clearFB).
     mapxstart += MTOF(m_paninc.x+FRACUNIT/2);
     mapystart -= MTOF(m_paninc.y+FRACUNIT/2);
-    if(mapxstart >= finit_width)
-        mapxstart -= finit_width;
+    if(mapxstart >= screenwidth)
+        mapxstart -= screenwidth;
     if(mapxstart < 0)
-        mapxstart += finit_width;
+        mapxstart += screenwidth;
     if(mapystart >= finit_height)
         mapystart -= finit_height;
     if(mapystart < 0)
@@ -354,7 +354,7 @@ void AM_LevelInit(void)
     leveljuststarted = 0;
 
     f_x = f_y = 0;
-    f_w = finit_width;
+    f_w = screenwidth;
     f_h = finit_height;
     mapxstart = mapystart = 0;
 
@@ -647,10 +647,10 @@ void AM_doFollowPlayer(void)
 	 mapxstart += dmapx;
 	 mapystart += dmapy;
 
-  	 while(mapxstart >= finit_width)
-			mapxstart -= finit_width;
+  	 while(mapxstart >= screenwidth)
+			mapxstart -= screenwidth;
     while(mapxstart < 0)
-			mapxstart += finit_width;
+			mapxstart += screenwidth;
     while(mapystart >= finit_height)
 			mapystart -= finit_height;
     while(mapystart < 0)
@@ -705,19 +705,14 @@ void AM_Ticker(void)
 
 void AM_clearFB(int color)
 {
-#ifndef WIDESCREEN
     int i, j;
-#endif
     int dmapx;
     int dmapy;
-
-// [JN] Use static automap background for automap.
-// TODO - FIXME
-#ifdef WIDESCREEN
+    // [JN] Use static automap background for automap.
+    // TODO - FIXME
     int x, y;
     byte *src = W_CacheLumpName("AUTOPAGE", PU_CACHE);
     byte *dest = I_VideoBuffer;
-#endif
 
     if (followplayer)
     {
@@ -731,10 +726,10 @@ void AM_clearFB(int color)
         mapxstart += dmapx >> 1;
         mapystart += dmapy >> 1;
 
-        while (mapxstart >= (finit_width >> hires))
-            mapxstart -= (finit_width >> hires);
+        while (mapxstart >= (screenwidth >> hires))
+            mapxstart -= (screenwidth >> hires);
         while (mapxstart < 0)
-            mapxstart += (finit_width >> hires);
+            mapxstart += (screenwidth >> hires);
         while (mapystart >= (finit_height >> hires))
             mapystart -= (finit_height >> hires);
         while (mapystart < 0)
@@ -744,10 +739,10 @@ void AM_clearFB(int color)
     {
         mapxstart += (MTOF(m_paninc.x) >> 1);
         mapystart -= (MTOF(m_paninc.y) >> 1);
-        if (mapxstart >= (finit_width >> hires))
-            mapxstart -= (finit_width >> hires);
+        if (mapxstart >= (screenwidth >> hires))
+            mapxstart -= (screenwidth >> hires);
         if (mapxstart < 0)
-            mapxstart += (finit_width >> hires);
+            mapxstart += (screenwidth >> hires);
         if (mapystart >= (finit_height >> hires))
             mapystart -= (finit_height >> hires);
         if (mapystart < 0)
@@ -755,35 +750,38 @@ void AM_clearFB(int color)
     }
 
     //blit the automap background to the screen.
-#ifdef WIDESCREEN
-    for (y = 0; y < SCREENHEIGHT; y++)
+    if (widescreen)
     {
-        for (x = 0; x < SCREENWIDTH / 320; x++)
+        for (y = 0; y < SCREENHEIGHT-21; y++)
         {
-            memcpy(dest, src + ((y & 127) << 6), 320);
-            dest += 320;
-        }
-        if (SCREENWIDTH & 127)
-        {
-            memcpy(dest, src + ((y & 127) << 6), SCREENWIDTH & 127);
-            dest += (SCREENWIDTH & 127);
+            for (x = 0; x < WIDESCREENWIDTH / 320; x++)
+            {
+                memcpy(dest, src + ((y & 127) << 6), 320);
+                dest += 320;
+            }
+            if (WIDESCREENWIDTH & 127)
+            {
+                memcpy(dest, src + ((y & 127) << 6), WIDESCREENWIDTH & 127);
+                dest += (WIDESCREENWIDTH & 127);
+            }
         }
     }
-#else
-    j = (mapystart & ~hires) * (finit_width >> hires);
-    for (i = 0; i < SCREENHEIGHT - SBARHEIGHT; i++)
+    else
     {
-        memcpy(I_VideoBuffer + i * finit_width, maplump + j + mapxstart,
-               finit_width - mapxstart);
-        memcpy(I_VideoBuffer + i * finit_width + finit_width - mapxstart,
-               maplump + j, mapxstart);
-        j += finit_width;
-        if (j >= (finit_height >> hires) * (finit_width >> hires))
-            j = 0;
+        j = (mapystart & ~hires) * (SCREENWIDTH >> hires);
+        for (i = 0; i < SCREENHEIGHT - SBARHEIGHT; i++)
+        {
+            memcpy(I_VideoBuffer + i * SCREENWIDTH, maplump + j + mapxstart,
+                SCREENWIDTH - mapxstart);
+            memcpy(I_VideoBuffer + i * SCREENWIDTH + SCREENWIDTH - mapxstart,
+                maplump + j, mapxstart);
+            j += SCREENWIDTH;
+            if (j >= (finit_height >> hires) * (screenwidth >> hires))
+                j = 0;
+        }
     }
-#endif
 
-//       memcpy(I_VideoBuffer, maplump, finit_width*finit_height);
+//       memcpy(I_VideoBuffer, maplump, screenwidth*finit_height);
 //  memset(fb, color, f_w*f_h);
 }
 
@@ -996,8 +994,8 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
 
     if (xx < 32)
         cc += 7 - (xx >> 2);
-    else if (xx > (finit_width - 32))
-        cc += 7 - ((finit_width - xx) >> 2);
+    else if (xx > (screenwidth - 32))
+        cc += 7 - ((screenwidth - xx) >> 2);
 //      if(cc==oldcc) //make sure that we don't double fade the corners.
 //      {
     if (yy < 32)
@@ -1016,17 +1014,17 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
     if (yy == oldyy + 1)
     {
         oldyy++;
-        oldyyshifted += (ORIGWIDTH << hires);
+        oldyyshifted += (origwidth << hires);
     }
     else if (yy == oldyy - 1)
     {
         oldyy--;
-        oldyyshifted -= (ORIGWIDTH << hires);
+        oldyyshifted -= (origwidth << hires);
     }
     else if (yy != oldyy)
     {
         oldyy = yy;
-        oldyyshifted = yy * (ORIGWIDTH << hires);
+        oldyyshifted = yy * (origwidth << hires);
     }
     fb[oldyyshifted + flipwidth[xx]] = *(cc);
 //      fb[(yy)*f_w+(xx)]=*(cc);
@@ -1454,11 +1452,14 @@ void AM_Drawer(void)
 //  AM_drawMarks();
 //      if(gameskill == sk_baby) AM_drawkeys();
 
-#ifdef WIDESCREEN
-    MN_DrTextA(P_GetMapName(gamemap), 74, 142);
-#else
-    MN_DrTextA(P_GetMapName(gamemap), 38, 144);
-#endif
+    if (widescreen)
+    {
+        MN_DrTextA(P_GetMapName(gamemap), 74, 142);
+    }
+    else
+    {
+        MN_DrTextA(P_GetMapName(gamemap), 38, 144);
+    }
 
     if (ShowKills && netgame && deathmatch)
     {
@@ -1569,6 +1570,7 @@ static void DrawWorldTimer(void)
     char timeBuffer[15];
     // char dayBuffer[20];
     char skill[15];
+    boolean wide_4_3 = widescreen && screenblocks == 9;
 
     worldTimer = players[consoleplayer].worldTimer;
 
@@ -1583,7 +1585,7 @@ static void DrawWorldTimer(void)
 
     M_snprintf(timeBuffer, sizeof(timeBuffer),
                "%.2d : %.2d : %.2d", hours, minutes, seconds);
-    MN_DrTextA(timeBuffer, 237 + (ORIGWIDTH_DELTA * 2), 8); // [JN] Небольшая корректировка позиции
+    MN_DrTextA(timeBuffer, 237 + (wide_4_3 ? wide_delta : wide_delta*2), 8); // [JN] Небольшая корректировка позиции
 
     // [JN] No good place for days indication, there is also a local time widget.
     /*
@@ -1597,13 +1599,13 @@ static void DrawWorldTimer(void)
         {
             M_snprintf(dayBuffer, sizeof(dayBuffer), "%.2d LYTQ", days); // "%.2d DAYS"
         }
-        MN_DrTextA(dayBuffer, 240 + (ORIGWIDTH_DELTA * 2), 20);
+        MN_DrTextA(dayBuffer, 240 + (wide_delta * 2), 20);
         if (days >= 5)
         {
             MN_DrTextA(english_language ?
             "YOU FREAK!!!" :
             "DS CGZNBKB!", // [JN] ВЫ СПЯТИЛИ! Давайте без хамства, а?
-            230 + (ORIGWIDTH_DELTA * 2), 35);
+            230 + (wide_delta * 2), 35);
         }
     }
     */
@@ -1614,5 +1616,5 @@ static void DrawWorldTimer(void)
                                      "CKJ;YJCNM: %d",   // СЛОЖНОСТЬ:
                                      gameskill + 1);
     MN_DrTextA(skill, (english_language ? 265 : 223) 
-                    + (ORIGWIDTH_DELTA * 2), 26);
+                    + (wide_4_3 ? wide_delta : wide_delta*2), 26);
 }
