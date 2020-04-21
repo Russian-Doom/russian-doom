@@ -36,7 +36,7 @@
 
 vertex_t KeyPoints[NUMKEYS];
 
-#define NUMALIAS 3              // Number of antialiased lines.
+#define NUMALIAS 7              // Number of antialiased lines.
 
 char *LevelNames[] = {
     // EPISODE 1 - THE CITY OF THE DAMNED
@@ -212,14 +212,22 @@ extern boolean viewactive;
 static byte antialias[NUMALIAS][8] = {
     {96, 97, 98, 99, 100, 101, 102, 103},
     {110, 109, 108, 107, 106, 105, 104, 103},
-    {75, 76, 77, 78, 79, 80, 81, 103}
+    {75, 76, 77, 78, 79, 80, 81, 103},
+    {197, 197, 196, 196, 195, 195, 194, 194},   // BLUEKEY
+    {143, 143, 142, 142, 141, 141, 140, 140},   // YELLOWKEY
+    {220, 220, 219, 219, 218, 218, 217, 217},   // GREENKEY
+    {43, 43, 43, 42, 42, 42, 41, 41}            // GRAYS + 3 (unrevealed walls)
 };
 
 // [JN] Use iverted colors for automap overlay mode (softly faded to darken).
 static byte antialias_overlay[NUMALIAS][8] = {
     {99, 99, 98, 98, 97, 97, 96, 96},
     {106, 105, 104, 103, 102, 101, 100, 99},
-    {75, 75, 74, 74, 73, 73, 72, 72}
+    {75, 75, 74, 74, 73, 73, 72, 72},
+    {197, 197, 196, 196, 195, 195, 194, 194},   // BLUEKEY
+    {143, 143, 142, 142, 141, 141, 140, 140},   // YELLOWKEY
+    {220, 219, 218, 217, 216, 215, 214, 213},   // GREENKEY
+    {43, 42, 41, 40, 39, 38, 37, 36}            // GRAYS + 3 (unrevealed walls)
 };
 
 /*
@@ -1111,6 +1119,24 @@ void AM_drawFline(fline_t * fl, int color)
         case CDWALLCOLORS:
             DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
                        &antialias_overlay[2][0] : &antialias[2][0]), 8, 3);
+            break;
+        // [JN] Apply antialiasing to key-locked doors
+        case BLUEKEY:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[3][0] : &antialias[3][0]), 8, 3);
+            break;
+        case YELLOWKEY:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[4][0] : &antialias[4][0]), 8, 3);
+            break;
+        case GREENKEY:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[5][0] : &antialias[5][0]), 8, 3);
+            break;
+        // [JN] Apply antialiasing to unrevealed walls
+        case GRAYS + 3:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[6][0] : &antialias[6][0]), 8, 3);
             break;
         default:
             {
