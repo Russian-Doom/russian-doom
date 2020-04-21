@@ -569,7 +569,7 @@ void R_StoreWallRange(int start, int stop)
     linedef->flags |= ML_MAPPED;
 
 // [crispy] (flags & ML_MAPPED) is all we need to know for automap
-    if (automapactive)
+    if (automapactive && !automap_overlay)
         return;
 
 //

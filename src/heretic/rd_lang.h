@@ -118,6 +118,8 @@ extern char* amstr_followon;
 extern char* amstr_followoff;
 extern char* amstr_gridon;
 extern char* amstr_gridoff;
+extern char* amstr_overlayon;
+extern char* amstr_overlayoff;
 extern char* amstr_markedspot;
 extern char* amstr_markscleared;
 
@@ -237,6 +239,8 @@ extern char* txt_crosshair_off;
 #define AMSTR_FOLLOWOFF         "FOLLOW MODE OFF"
 #define AMSTR_GRIDON            "Grid ON"
 #define AMSTR_GRIDOFF           "Grid OFF"
+#define AMSTR_OVERLAYON         "OVERLAY MODE ON"
+#define AMSTR_OVERLAYOFF        "OVERLAY MODE OFF"
 #define AMSTR_MARKEDSPOT        "Marked Spot"
 #define AMSTR_MARKSCLEARED      "All Marks Cleared"
 
@@ -457,9 +461,11 @@ extern char* txt_crosshair_off;
 
 // AM_map.c
 #define AMSTR_FOLLOWON_RUS      "HT;BV CKTLJDFYBZ DRK.XTY"      // РЕЖИМ СЛЕДОВАНИЯ ВКЛЮЧЕН
-#define AMSTR_FOLLOWOFF_RUS     "HT;BV CKTLJDFYBZ JNRK.XTY"     // РЕЖИМ СЛЕДОВАНИЯ ОТКЛЮЧЕН
+#define AMSTR_FOLLOWOFF_RUS     "HT;BV CKTLJDFYBZ DSRK.XTY"     // РЕЖИМ СЛЕДОВАНИЯ ВЫКЛЮЧЕН
 #define AMSTR_GRIDON_RUS        "CTNRF DRK.XTYF"                // СЕТКА ВКЛЮЧЕНА
 #define AMSTR_GRIDOFF_RUS       "CTNRF DSRK.XTYF"               // СЕТКА ВЫКЛЮЧЕНА
+#define AMSTR_OVERLAYON_RUS     "HT;BV YFKJ;TYBZ DRK.XTY"       // РЕЖИМ НАЛОЖЕНИЯ ВКЛЮЧЕН
+#define AMSTR_OVERLAYOFF_RUS    "HT;BV YFKJ;TYBZ DSRK.XTY"      // РЕЖИМ НАЛОЖЕНИЯ ВЫКЛЮЧЕН
 #define AMSTR_MARKEDSPOT_RUS    "JNVTNRF"                       // ОТМЕТКА
 #define AMSTR_MARKSCLEARED_RUS  "JNVTNRB JXBOTYS"               // ОТМЕТКИ ОЧИЩЕНЫ
 

@@ -215,6 +215,13 @@ static byte antialias[NUMALIAS][8] = {
     {75, 76, 77, 78, 79, 80, 81, 103}
 };
 
+// [JN] Use iverted colors for automap overlay mode (faded to dark).
+static byte antialias_overlay[NUMALIAS][8] = {
+    {102, 101, 100, 99, 98, 97, 96, 95},
+    {106, 105, 104, 103, 102, 101, 100, 99},
+    {75, 74, 73, 72, 71, 70, 69, 68}
+};
+
 /*
 static byte *aliasmax[NUMALIAS] = {
 	&antialias[0][7], &antialias[1][7], &antialias[2][7]
@@ -684,6 +691,11 @@ boolean AM_Responder(event_t * ev)
             f_oldloc.x = INT_MAX;
             P_SetMessage(plr, followplayer ? amstr_followon : amstr_followoff, true);
         }
+        else if (key == key_map_overlay)
+        {
+            automap_overlay = !automap_overlay;
+            P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
+        }
         /*
         else if (key == key_map_grid)
         {
@@ -1057,16 +1069,16 @@ void AM_drawFline(fline_t * fl, int color)
     switch (color)
     {
         case WALLCOLORS:
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, &antialias[0][0],
-                       8, 3);
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[0][0] : &antialias[0][0]), 8, 3);
             break;
         case FDWALLCOLORS:
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, &antialias[1][0],
-                       8, 3);
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ? 
+                       &antialias_overlay[1][0] : &antialias[1][0]), 8, 3);
             break;
         case CDWALLCOLORS:
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, &antialias[2][0],
-                       8, 3);
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[2][0] : &antialias[2][0]), 8, 3);
             break;
         default:
             {
@@ -1606,7 +1618,8 @@ void AM_Drawer(void)
         return;
 
     UpdateState |= I_FULLSCRN;
-    AM_clearFB(BACKGROUND);
+    if (!automap_overlay)
+        AM_clearFB(BACKGROUND);
     if (grid)
         AM_drawGrid(GRIDCOLORS);
     AM_drawWalls();

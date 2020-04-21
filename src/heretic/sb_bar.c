@@ -633,10 +633,18 @@ void SB_Drawer(void)
     boolean wide_4_3 = widescreen && screenblocks == 9;
 
     // [JN] Draw extended skulls and stone border
-    if ((widescreen && screenblocks == 10) || (widescreen && automapactive))
+    if ((widescreen && screenblocks <= 10) 
+    ||  (widescreen && automapactive && !automap_overlay))
     {
         V_DrawPatch(0, 147, W_CacheLumpName(DEH_String("WDBARLF"), PU_CACHE));
         V_DrawPatch(344, 147, W_CacheLumpName(DEH_String("WDBARRT"), PU_CACHE));
+    }
+
+    // [JN] Draw horns separatelly in non wide screen mode
+    if (!widescreen && screenblocks <= 10 && automapactive && automap_overlay)
+    {
+        V_DrawPatch(0 + wide_delta, 148, PatchLTFCTOP);
+        V_DrawPatch(290 + wide_delta, 148, PatchRTFCTOP);
     }
 
     // [JN] Draw local time widget
@@ -699,7 +707,8 @@ void SB_Drawer(void)
         dp_translation = NULL;
     }
 
-    if (viewheight == SCREENHEIGHT && !automapactive)
+    if ((viewheight == SCREENHEIGHT && !automapactive) 
+    ||  (viewheight == SCREENHEIGHT && automapactive && automap_overlay))
     {
         if (screenblocks == 11) // [JN] Draw only in 11 screen size, 12 is clean full screen
         DrawFullScreenStuff();
