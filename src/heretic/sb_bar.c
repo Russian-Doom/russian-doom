@@ -1081,10 +1081,8 @@ void DrawMainBar(void)
                 dp_translation = cr[CR_GOLD2RED_HERETIC];
                 else if (ammo < fullammo/2)
                 dp_translation = NULL;
-                else if (ammo <= fullammo)
-                dp_translation = cr[CR_GOLD2GREEN_HERETIC]; 
                 else
-                dp_translation = cr[CR_GOLD2BLUE_HERETIC];
+                dp_translation = cr[CR_GOLD2GREEN_HERETIC]; 
             }
             
             DrINumber(temp, 109 + wide_delta, 162);
