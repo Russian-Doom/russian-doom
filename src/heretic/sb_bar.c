@@ -766,12 +766,12 @@ void SB_Drawer(void)
             {
                 if (hitCenterFrame && (frame != 15 && frame != 0))
                 {
-                    V_DrawPatch(20, 17, W_CacheLumpNum(spinflylump + 15,
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17, W_CacheLumpNum(spinflylump + 15,
                                                        PU_CACHE));
                 }
                 else
                 {
-                    V_DrawPatch(20, 17, W_CacheLumpNum(spinflylump + frame,
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17, W_CacheLumpNum(spinflylump + frame,
                                                        PU_CACHE));
                     hitCenterFrame = false;
                 }
@@ -780,24 +780,24 @@ void SB_Drawer(void)
             {
                 if (!hitCenterFrame && (frame != 15 && frame != 0))
                 {
-                    V_DrawPatch(20, 17, W_CacheLumpNum(spinflylump + frame,
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17, W_CacheLumpNum(spinflylump + frame,
                                                        PU_CACHE));
                     hitCenterFrame = false;
                 }
                 else
                 {
-                    V_DrawPatch(20, 17, W_CacheLumpNum(spinflylump + 15,
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17, W_CacheLumpNum(spinflylump + 15,
                                                        PU_CACHE));
                     hitCenterFrame = true;
                 }
             }
-            BorderTopRefresh = true;
+            BorderNeedRefresh = true;
             UpdateState |= I_MESSAGES;
         }
         else
         {
-            BorderTopRefresh = true;
-            UpdateState |= I_MESSAGES;
+            BorderNeedRefresh = true;
+            UpdateState |= I_FULLSCRN;
         }
     }
 
@@ -807,15 +807,15 @@ void SB_Drawer(void)
             || !(CPlayer->powers[pw_weaponlevel2] & 16))
         {
             frame = (leveltime / 3) & 15;
-            V_DrawPatch(300 + wide_delta, 17, // [JN] Do not obstruct clock widget
+            V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2), 17, // [JN] Do not obstruct clock widget
                         W_CacheLumpNum(spinbooklump + frame, PU_CACHE));
-            BorderTopRefresh = true;
-            UpdateState |= I_MESSAGES;
+            BorderNeedRefresh = true;
+            UpdateState |= I_FULLSCRN;
         }
         else
         {
-            BorderTopRefresh = true;
-            UpdateState |= I_MESSAGES;
+            BorderNeedRefresh = true;
+            UpdateState |= I_FULLSCRN;
         }
     }
 
