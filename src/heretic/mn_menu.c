@@ -2630,7 +2630,7 @@ static void DrawGameplay2Menu(void)
                                        + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("UHFABRF"), 36 + wide_delta, 32);    // ФИЗИКА
+        MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 32);     // ФИЗИКА
         MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + wide_delta, 72);     // ПРИЦЕЛ
         MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + wide_delta, 112);  // ГЕЙМПЛЕЙ
         dp_translation = NULL;
