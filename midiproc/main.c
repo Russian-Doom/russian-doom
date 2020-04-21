@@ -421,6 +421,10 @@ int main(int argc, char *argv[])
     }
 
     // Make sure our Choccolate Doom and midiproc version are lined up.
+    // [JN] Disable version checking. Russian Doom, Heretic and Hexen
+    // may have a different versions, and thus, installing them into
+    // one folder will prevent Midiproc from running.
+    /*
     if (strcmp(PACKAGE_STRING, argv[1]) != 0)
     {
         char message[1024];
@@ -437,6 +441,7 @@ int main(int argc, char *argv[])
 
         return EXIT_FAILURE;
     }
+    */
 
     // Parse out the sample rate - if we can't, default to 44100.
     snd_samplerate = strtol(argv[2], NULL, 10);
