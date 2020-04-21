@@ -898,6 +898,7 @@ static void DrawAnimatedIcons(void)
 {
     int frame;
     static boolean hitCenterFrame;
+    boolean wide_4_3 = widescreen && screenblocks == 9;
 
     // Wings of wrath
     if (CPlayer->powers[pw_flight])
@@ -910,12 +911,12 @@ static void DrawAnimatedIcons(void)
             {
                 if (hitCenterFrame && (frame != 15 && frame != 0))
                 {
-                    V_DrawPatch(20, 19, W_CacheLumpNum(SpinFlylump + 15,
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinFlylump + 15,
                                                        PU_CACHE));
                 }
                 else
                 {
-                    V_DrawPatch(20, 19, W_CacheLumpNum(SpinFlylump + frame,
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinFlylump + frame,
                                                        PU_CACHE));
                     hitCenterFrame = false;
                 }
@@ -924,20 +925,20 @@ static void DrawAnimatedIcons(void)
             {
                 if (!hitCenterFrame && (frame != 15 && frame != 0))
                 {
-                    V_DrawPatch(20, 19, W_CacheLumpNum(SpinFlylump + frame,
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinFlylump + frame,
                                                        PU_CACHE));
                     hitCenterFrame = false;
                 }
                 else
                 {
-                    V_DrawPatch(20, 19, W_CacheLumpNum(SpinFlylump + 15,
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinFlylump + 15,
                                                        PU_CACHE));
                     hitCenterFrame = true;
                 }
             }
         }
-        BorderTopRefresh = true;
-        UpdateState |= I_MESSAGES;
+        BorderNeedRefresh = true;
+        UpdateState |= I_FULLSCRN;
     }
 
     // Speed Boots
@@ -947,11 +948,11 @@ static void DrawAnimatedIcons(void)
             || !(CPlayer->powers[pw_speed] & 16))
         {
             frame = (leveltime / 3) & 15;
-            V_DrawPatch(60, 19, W_CacheLumpNum(SpinSpeedLump + frame,
+            V_DrawPatch(60 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinSpeedLump + frame,
                                                PU_CACHE));
         }
-        BorderTopRefresh = true;
-        UpdateState |= I_MESSAGES;
+        BorderNeedRefresh = true;
+        UpdateState |= I_FULLSCRN;
     }
 
     // Defensive power
@@ -961,11 +962,11 @@ static void DrawAnimatedIcons(void)
             || !(CPlayer->powers[pw_invulnerability] & 16))
         {
             frame = (leveltime / 3) & 15;
-            V_DrawPatch(260, 19, W_CacheLumpNum(SpinDefenseLump + frame,
+            V_DrawPatch(260 + (wide_4_3 ? wide_delta : wide_delta*2), 19, W_CacheLumpNum(SpinDefenseLump + frame,
                                                 PU_CACHE));
         }
-        BorderTopRefresh = true;
-        UpdateState |= I_MESSAGES;
+        BorderNeedRefresh = true;
+        UpdateState |= I_FULLSCRN;
     }
 
     // Minotaur Active
@@ -975,11 +976,11 @@ static void DrawAnimatedIcons(void)
             || !(CPlayer->powers[pw_minotaur] & 16))
         {
             frame = (leveltime / 3) & 15;
-            V_DrawPatch(300, 19, W_CacheLumpNum(SpinMinotaurLump + frame,
+            V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2), 19, W_CacheLumpNum(SpinMinotaurLump + frame,
                                                 PU_CACHE));
         }
-        BorderTopRefresh = true;
-        UpdateState |= I_MESSAGES;
+        BorderNeedRefresh = true;
+        UpdateState |= I_FULLSCRN;
     }
 }
 
