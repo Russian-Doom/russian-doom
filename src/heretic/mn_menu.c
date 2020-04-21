@@ -80,6 +80,7 @@ typedef enum
     MENU_SAVE,
     MENU_RENDERING,
     MENU_DISPLAY,
+    MENU_AUTOMAP,
     MENU_SOUND,
     MENU_CONTROLS,
     MENU_GAMEPLAY1,
@@ -154,6 +155,13 @@ static boolean M_RD_LocalTime(int option);
 static boolean M_RD_Messages(int option);
 static boolean M_RD_ShadowedText(int option);
 
+// Automap
+static void DrawAutomapMenu(void);
+static boolean M_RD_AutoMapStats(int option);
+static boolean M_RD_AutoMapOverlay(int option);
+static boolean M_RD_AutoMapRotate(int option);
+static boolean M_RD_AutoMapFollow(int option);
+
 // Sound
 static void DrawSoundMenu(void);
 static boolean M_RD_SfxVolume(int option);
@@ -177,7 +185,6 @@ static boolean M_RD_FakeContrast(int option);
 static boolean M_RD_ColoredHUD(int option);
 static boolean M_RD_ColoredBlood(int option);
 static boolean M_RD_InvulSky(int option);
-static boolean M_RD_AutoMapStats(int option);
 static boolean M_RD_SecretNotify(int option);
 static boolean M_RD_NegativeHealth(int option);
 
@@ -519,7 +526,8 @@ static MenuItem_t DisplayItems[] = {
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
     {ITT_LRFUNC, "LOCAL TIME:",              M_RD_LocalTime,    0, MENU_NONE},
     {ITT_LRFUNC, "MESSAGES:",                M_RD_Messages,     0, MENU_NONE},
-    {ITT_LRFUNC, "TEXT CASTS SHADOWS:",      M_RD_ShadowedText, 0, MENU_NONE}
+    {ITT_LRFUNC, "TEXT CASTS SHADOWS:",      M_RD_ShadowedText, 0, MENU_NONE},
+    {ITT_SETMENU,"AUTOMAP SETTINGS...",      NULL,              0, MENU_AUTOMAP}
 };
 
 static MenuItem_t DisplayItems_Rus[] = {
@@ -532,14 +540,14 @@ static MenuItem_t DisplayItems_Rus[] = {
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE}, //
     {ITT_LRFUNC, "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,    0, MENU_NONE}, // СИСТЕМНОЕ ВРЕМЯ
     {ITT_LRFUNC, "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,     0, MENU_NONE}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
-    {ITT_LRFUNC, "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText, 0, MENU_NONE}  // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
-    
+    {ITT_LRFUNC, "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText, 0, MENU_NONE},  // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
+    {ITT_SETMENU,"YFCNHJQRB RFHNS>>>",       NULL,              0, MENU_AUTOMAP} // НАСТРОЙКИ КАРТЫ
 };
 
 static Menu_t DisplayMenu = {
     36, 42,
     DrawDisplayMenu,
-    10, DisplayItems,
+    11, DisplayItems,
     0,
     MENU_OPTIONS
 };
@@ -547,9 +555,43 @@ static Menu_t DisplayMenu = {
 static Menu_t DisplayMenu_Rus = {
     36, 42,
     DrawDisplayMenu,
-    10, DisplayItems_Rus,
+    11, DisplayItems_Rus,
     0,
     MENU_OPTIONS
+};
+
+// -----------------------------------------------------------------------------
+// Automap settings
+// -----------------------------------------------------------------------------
+
+static MenuItem_t AutomapItems[] = {
+    {ITT_LRFUNC, "LEVEL STATS:",             M_RD_AutoMapStats,   0, MENU_NONE},
+    {ITT_LRFUNC, "OVERLAY MODE:",            M_RD_AutoMapOverlay, 0, MENU_NONE},
+    {ITT_LRFUNC, "ROTATE MODE:",             M_RD_AutoMapRotate,  0, MENU_NONE},
+    {ITT_LRFUNC, "FOLLOW MODE:",             M_RD_AutoMapFollow,  0, MENU_NONE}
+};
+
+static MenuItem_t AutomapItems_Rus[] = {
+    {ITT_LRFUNC, "CNFNBCNBRF EHJDYZ:",       M_RD_AutoMapStats,   0, MENU_NONE}, // СТАТИСТИКА УРОВНЯ
+    {ITT_LRFUNC, "HT;BV YFKJ;TYBZ:",         M_RD_AutoMapOverlay, 0, MENU_NONE}, // РЕЖИМ НАЛОЖЕНИЯ
+    {ITT_LRFUNC, "HT;BV DHFOTYBZ:",          M_RD_AutoMapRotate,  0, MENU_NONE}, // РЕЖИМ ВРАЩЕНИЯ
+    {ITT_LRFUNC, "HT;BV CKTLJDFYBZ:",        M_RD_AutoMapFollow,  0, MENU_NONE}  // РЕЖИМ СЛЕДОВАНИЯ
+};
+
+static Menu_t AutomapMenu = {
+    102, 32,
+    DrawAutomapMenu,
+    4, AutomapItems,
+    0,
+    MENU_DISPLAY
+};
+
+static Menu_t AutomapMenu_Rus = {
+    82, 32,
+    DrawAutomapMenu,
+    4, AutomapItems_Rus,
+    0,
+    MENU_DISPLAY
 };
 
 // -----------------------------------------------------------------------------
@@ -645,9 +687,9 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_LRFUNC, "COLORED BLOOD:",               M_RD_ColoredBlood,   0,  MENU_NONE      },
     {ITT_LRFUNC, "INVULNERABILITY AFFECTS SKY:", M_RD_InvulSky,       0,  MENU_NONE      },
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE      },
-    {ITT_LRFUNC, "SHOW LEVEL STATS ON AUTOMAP:", M_RD_AutoMapStats,   0,  MENU_NONE      },
-    {ITT_LRFUNC, "NOTIFY OF REVEALED SECRETS:",  M_RD_SecretNotify,   0,  MENU_NONE      },
-    {ITT_LRFUNC, "SHOW NEGATIVE HEALTH:",        M_RD_NegativeHealth, 0,  MENU_NONE      },
+    {ITT_LRFUNC, "CORPSES SLIDING FROM LEDGES:", M_RD_Torque,         0,  MENU_NONE   },
+    {ITT_LRFUNC, "WEAPON BOBBING WHILE FIRING:", M_RD_Bobbing,        0,  MENU_NONE   },
+    {ITT_LRFUNC, "RANDOMLY MIRRORED CORPSES:",   M_RD_FlipCorpses,    0,  MENU_NONE   },
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE      },
     {ITT_SETMENU,"NEXT PAGE...",                 NULL,                0,  MENU_GAMEPLAY2 }
 };
@@ -659,9 +701,9 @@ static MenuItem_t Gameplay1Items_Rus[] = {
     {ITT_LRFUNC, "HFPYJWDTNYFZ RHJDM:",          M_RD_ColoredBlood,   0,  MENU_NONE      }, // РАЗНОЦВЕТНАЯ КРОВЬ
     {ITT_LRFUNC, "YTEZPDBVJCNM JRHFIBDFTN YT,J:",M_RD_InvulSky,       0,  MENU_NONE      }, // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE      }, //
-    {ITT_LRFUNC, "CNFNBCNBRF EHJDYZ YF RFHNT:",  M_RD_AutoMapStats,   0,  MENU_NONE      }, // СТАТИСТИКА УРОВНЯ НА КАРТЕ
-    {ITT_LRFUNC, "CJJ,OFNM J YFQLTYYJV NFQYBRT:",M_RD_SecretNotify,   0,  MENU_NONE      }, // СООБЩАТЬ О НАЙДЕННОМ ТАЙНИКЕ
-    {ITT_LRFUNC, "JNHBWFNTKMYJT PLJHJDMT D $:",  M_RD_NegativeHealth, 0,  MENU_NONE      }, // ОТРИЦАТЕЛЬНОЕ ЗДОРОВЬЕ В HUD
+    {ITT_LRFUNC, "NHEGS CGJKPF.N C DJPDSITYBQ:", M_RD_Torque,         0,  MENU_NONE   },    // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
+    {ITT_LRFUNC, "EKEXITYYJT GJRFXBDFYBT JHE;BZ:",M_RD_Bobbing,       0,  MENU_NONE   },    // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
+    {ITT_LRFUNC, "PTHRFKBHJDFYBT NHEGJD:",       M_RD_FlipCorpses,    0,  MENU_NONE   },    // ЗЕКРАЛИРОВАНИЕ ТРУПОВ
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE      }, //
     {ITT_SETMENU,"CKTLE.OFZ CNHFYBWF>>>",        NULL,                0,  MENU_GAMEPLAY2 }  // СЛЕДУЮЩАЯ СТРАНИЦА
 };
@@ -687,9 +729,8 @@ static Menu_t Gameplay1Menu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Gameplay2Items[] = {
-    {ITT_LRFUNC, "CORPSES SLIDING FROM LEDGES:", M_RD_Torque,         0,  MENU_NONE   },
-    {ITT_LRFUNC, "WEAPON BOBBING WHILE FIRING:", M_RD_Bobbing,        0,  MENU_NONE   },
-    {ITT_LRFUNC, "RANDOMLY MIRRORED CORPSES:",   M_RD_FlipCorpses,    0,  MENU_NONE   },
+    {ITT_LRFUNC, "NOTIFY OF REVEALED SECRETS:",  M_RD_SecretNotify,   0,  MENU_NONE   },
+    {ITT_LRFUNC, "SHOW NEGATIVE HEALTH:",        M_RD_NegativeHealth, 0,  MENU_NONE   },
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },
     {ITT_LRFUNC, "DRAW CROSSHAIR:",              M_RD_CrossHairDraw,  0,  MENU_NONE   },
     {ITT_LRFUNC, "HEALTH INDICATION:",           M_RD_CrossHairHealth,0,  MENU_NONE   },
@@ -697,13 +738,13 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },
     {ITT_LRFUNC, "FLIP GAME LEVELS:",            M_RD_FlipLevels,     0,  MENU_NONE   },
     {ITT_LRFUNC, "PLAY INTERNAL DEMOS:",         M_RD_NoDemos,        0,  MENU_NONE   },
+    {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },
     {ITT_SETMENU,"PREVIOUS PAGE...",             NULL,                0,  MENU_GAMEPLAY1 }
 };
 
 static MenuItem_t Gameplay2Items_Rus[] = {
-    {ITT_LRFUNC, "NHEGS CGJKPF.N C DJPDSITYBQ:", M_RD_Torque,         0,  MENU_NONE   },    // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
-    {ITT_LRFUNC, "EKEXITYYJT GJRFXBDFYBT JHE;BZ:",M_RD_Bobbing,       0,  MENU_NONE   },    // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
-    {ITT_LRFUNC, "PTHRFKBHJDFYBT NHEGJD:",       M_RD_FlipCorpses,    0,  MENU_NONE   },    // ЗЕКРАЛИРОВАНИЕ ТРУПОВ
+    {ITT_LRFUNC, "CJJ,OFNM J YFQLTYYJV NFQYBRT:",M_RD_SecretNotify,   0,  MENU_NONE   },    // СООБЩАТЬ О НАЙДЕННОМ ТАЙНИКЕ
+    {ITT_LRFUNC, "JNHBWFNTKMYJT PLJHJDMT D $:",  M_RD_NegativeHealth, 0,  MENU_NONE   },    // ОТРИЦАТЕЛЬНОЕ ЗДОРОВЬЕ В HUD
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },    //
     {ITT_LRFUNC, "JNJ,HF;FNM GHBWTK:",           M_RD_CrossHairDraw,  0,  MENU_NONE   },    // ОТОБРАЖАТЬ ПРИЦЕЛ
     {ITT_LRFUNC, "BYLBRFWBZ PLJHJDMZ:",          M_RD_CrossHairHealth,0,  MENU_NONE   },    // ИНДИКАЦИЯ ЗДОРОВЬЯ
@@ -711,6 +752,7 @@ static MenuItem_t Gameplay2Items_Rus[] = {
     {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },    //
     {ITT_LRFUNC, "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",M_RD_FlipLevels,     0,  MENU_NONE   },    // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     {ITT_LRFUNC, "GHJBUHSDFNM LTVJPFGBCB:",      M_RD_NoDemos,        0,  MENU_NONE   },    // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
+    {ITT_EMPTY,  NULL,                           NULL,                0,  MENU_NONE   },    //
     {ITT_SETMENU,"GHTLSLEOFZ CNHFYBWF>>>",       NULL,                0,  MENU_GAMEPLAY1 }  // ПРЕДЫДУЩАЯ СТРАНИЦА
 };
 
@@ -740,6 +782,7 @@ static Menu_t *Menus[] = {
     &SaveMenu,
     &RenderingMenu,
     &DisplayMenu,
+    &AutomapMenu,
     &SoundMenu,
     &ControlsMenu,
     &Gameplay1Menu,
@@ -756,6 +799,7 @@ static Menu_t *Menus_Rus[] = {
     &SaveMenu_Rus,
     &RenderingMenu_Rus,
     &DisplayMenu_Rus,
+    &AutomapMenu_Rus,
     &SoundMenu_Rus,
     &ControlsMenu_Rus,
     &Gameplay1Menu_Rus,
@@ -1816,7 +1860,7 @@ static void DrawDisplayMenu(void)
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("SCREEN"), 36 + wide_delta, 32);
-        MN_DrTextSmallENG(DEH_String("MESSAGES AND TEXTS"), 36 + wide_delta, 102);
+        MN_DrTextSmallENG(DEH_String("INTERFACE"), 36 + wide_delta, 102);
         dp_translation = NULL;
     }
     else
@@ -1827,7 +1871,7 @@ static void DrawDisplayMenu(void)
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("\'RHFY"), 36 + wide_delta, 32);              // ЭКРАН
-        MN_DrTextSmallRUS(DEH_String("CJJ,OTYBZ B NTRCNS"), 36 + wide_delta, 102); // СООБЩЕНИЯ И ТЕКСТЫ
+        MN_DrTextSmallRUS(DEH_String("BYNTHATQC"), 36 + wide_delta, 102); // ИНТЕРФЕЙС
         dp_translation = NULL;
     }
 
@@ -2023,6 +2067,79 @@ static boolean M_RD_Messages(int option)
 static boolean M_RD_ShadowedText(int option)
 {
     draw_shadowed_text ^= 1;
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+// DrawAutomapMenu
+// -----------------------------------------------------------------------------
+
+static void DrawAutomapMenu(void)
+{
+    static char *title_eng, *title_rus;
+
+    title_eng = DEH_String("AUTOMAP OPTIONS");
+    title_rus = DEH_String("YFCNHJQRB RFHNS");  // НАСТРОЙКИ КАРТЫ
+
+    if (english_language)
+    {
+        // Title
+        MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
+                                       + wide_delta, 7);
+
+        // Level stats
+        MN_DrTextSmallENG(DEH_String(automap_stats == 1 ? "ON" : "OFF"), 187 + wide_delta, 32);
+
+        // Overlay mode
+        MN_DrTextSmallENG(DEH_String(automap_overlay == 1 ? "ON" : "OFF"), 200 + wide_delta, 42);
+
+        // Rotate mode
+        MN_DrTextSmallENG(DEH_String(automap_rotate == 1 ? "ON" : "OFF"), 193 + wide_delta, 52);
+
+        // Follow mode
+        MN_DrTextSmallENG(DEH_String(automap_follow == 1 ? "ON" : "OFF"), 189 + wide_delta, 62);
+    }
+    else
+    {
+        // Title
+        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
+                                       + wide_delta, 7);
+
+        // Статистика уровня
+        MN_DrTextSmallRUS(DEH_String(automap_stats == 1 ? "DRK" : "DSRK"), 214 + wide_delta, 32);
+
+        // Режим наложения
+        MN_DrTextSmallRUS(DEH_String(automap_overlay == 1 ? "DRK" : "DSRK"), 208 + wide_delta, 42);
+
+        // Режим вращения
+        MN_DrTextSmallRUS(DEH_String(automap_rotate == 1 ? "DRK" : "DSRK"), 200 + wide_delta, 52);
+
+        // Режим следования
+        MN_DrTextSmallRUS(DEH_String(automap_follow == 1 ? "DRK" : "DSRK"), 215 + wide_delta, 62);
+    }
+}
+
+static boolean M_RD_AutoMapStats(int option)
+{
+    automap_stats ^= 1;
+    return true;
+}
+
+static boolean M_RD_AutoMapOverlay(int option)
+{
+    automap_overlay ^= 1;
+    return true;
+}
+
+static boolean M_RD_AutoMapRotate(int option)
+{
+    automap_rotate ^= 1;
+    return true;
+}
+
+static boolean M_RD_AutoMapFollow(int option)
+{
+    automap_follow ^= 1;
     return true;
 }
 
@@ -2342,7 +2459,7 @@ static void DrawGameplay1Menu(void)
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("VISUAL"), 36 + wide_delta, 32);
-        MN_DrTextSmallENG(DEH_String("TACTICAL"), 36 + wide_delta, 92);
+        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 92);
         dp_translation = NULL;
     }
     else
@@ -2353,7 +2470,7 @@ static void DrawGameplay1Menu(void)
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("UHFABRF"), 36 + wide_delta, 32); // ГРАФИКА
-        MN_DrTextSmallRUS(DEH_String("NFRNBRF"), 36 + wide_delta, 92); // ТАКТИКА
+        MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 92);  // ФИЗИКА
         dp_translation = NULL;
     }
 
@@ -2478,15 +2595,15 @@ static void DrawGameplay1Menu(void)
         dp_translation = NULL;
     }
 
-    // Show level stats on automap
-    if (automap_stats)
+    // Corpses sliding from the ledges
+    if (torque)
     {
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 240 + wide_delta, 102);
+        MN_DrTextSmallENG(DEH_String("ON"), 238 + wide_delta, 102);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 231 + wide_delta, 102);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 248 + wide_delta, 102);
 
         dp_translation = NULL;
     }
@@ -2495,22 +2612,46 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 240 + wide_delta, 102);
+        MN_DrTextSmallENG(DEH_String("OFF"), 238 + wide_delta, 102);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 231 + wide_delta, 102);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 248 + wide_delta, 102);
 
         dp_translation = NULL;
     }
 
-    // Notify of revealed secrets
-    if (secret_notification)
+    // Weapon bobbing while firing
+    if (weapon_bobbing)
     {
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 235 + wide_delta, 112);
+        MN_DrTextSmallENG(DEH_String("ON"), 233 + wide_delta, 112);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 251 + wide_delta, 112);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 260 + wide_delta, 112);
+
+        dp_translation = NULL;
+    }
+    else 
+    {
+        dp_translation = cr[CR_GRAY2RED_HERETIC];
+
+        if (english_language)
+        MN_DrTextSmallENG(DEH_String("OFF"), 233 + wide_delta, 112);
+        else
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 260 + wide_delta, 112);
+
+        dp_translation = NULL;
+    }
+
+    // Randomly flipped corpses
+    if (randomly_flipcorpses)
+    {
+        dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+
+        if (english_language)
+        MN_DrTextSmallENG(DEH_String("ON"), 232 + wide_delta, 122);
+        else
+        MN_DrTextSmallRUS(DEH_String("DRK"), 201 + wide_delta, 122);
 
         dp_translation = NULL;
     }
@@ -2519,33 +2660,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 235 + wide_delta, 112);
+        MN_DrTextSmallENG(DEH_String("OFF"), 232 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 251 + wide_delta, 112);
-
-        dp_translation = NULL;
-    }
-
-    // Negative health
-    if (negative_health)
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HERETIC];
-
-        if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 190 + wide_delta, 122);
-        else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 253 + wide_delta, 122);
-
-        dp_translation = NULL;
-    }
-    else
-    {
-        dp_translation = cr[CR_GRAY2RED_HERETIC];
-
-        if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 190 + wide_delta, 122);
-        else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 253 + wide_delta, 122);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 201 + wide_delta, 122);
 
         dp_translation = NULL;
     }
@@ -2582,12 +2699,6 @@ static boolean M_RD_InvulSky(int option)
     return true;
 }
 
-static boolean M_RD_AutoMapStats(int option)
-{
-    automap_stats ^= 1;
-    return true;
-}
-
 static boolean M_RD_SecretNotify(int option)
 {
     secret_notification ^= 1;
@@ -2618,9 +2729,9 @@ static void DrawGameplay2Menu(void)
                                        + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 32);
-        MN_DrTextSmallENG(DEH_String("CROSSHAIR"), 36 + wide_delta, 72);
-        MN_DrTextSmallENG(DEH_String("GAMEPLAY"), 36 + wide_delta, 112);
+        MN_DrTextSmallENG(DEH_String("TACTICAL"), 36 + wide_delta, 32);
+        MN_DrTextSmallENG(DEH_String("CROSSHAIR"), 36 + wide_delta, 62);
+        MN_DrTextSmallENG(DEH_String("GAMEPLAY"), 36 + wide_delta, 102);
         dp_translation = NULL;
     }
     else
@@ -2630,21 +2741,21 @@ static void DrawGameplay2Menu(void)
                                        + wide_delta, 7);
 
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 32);     // ФИЗИКА
-        MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + wide_delta, 72);     // ПРИЦЕЛ
-        MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + wide_delta, 112);  // ГЕЙМПЛЕЙ
+        MN_DrTextSmallRUS(DEH_String("NFRNBRF"), 36 + wide_delta, 32);    // ТАКТИКА
+        MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + wide_delta, 62);     // ПРИЦЕЛ
+        MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + wide_delta, 102);  // ГЕЙМПЛЕЙ
         dp_translation = NULL;
     }
 
-    // Corpses sliding from the ledges
-    if (torque)
+    // Notify of revealed secrets
+    if (secret_notification)
     {
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 238 + wide_delta, 42);
+        MN_DrTextSmallENG(DEH_String("ON"), 235 + wide_delta, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 248 + wide_delta, 42);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 251 + wide_delta, 42);
 
         dp_translation = NULL;
     }
@@ -2653,46 +2764,22 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 238 + wide_delta, 42);
+        MN_DrTextSmallENG(DEH_String("OFF"), 235 + wide_delta, 42);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 248 + wide_delta, 42);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 251 + wide_delta, 42);
 
         dp_translation = NULL;
     }
 
-    // Weapon bobbing while firing
-    if (weapon_bobbing)
+    // Negative health
+    if (negative_health)
     {
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 233 + wide_delta, 52);
+        MN_DrTextSmallENG(DEH_String("ON"), 190 + wide_delta, 52);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 260 + wide_delta, 52);
-
-        dp_translation = NULL;
-    }
-    else 
-    {
-        dp_translation = cr[CR_GRAY2RED_HERETIC];
-
-        if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 233 + wide_delta, 52);
-        else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 260 + wide_delta, 52);
-
-        dp_translation = NULL;
-    }
-
-    // Randomly flipped corpses
-    if (randomly_flipcorpses)
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HERETIC];
-
-        if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 232 + wide_delta, 62);
-        else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 201 + wide_delta, 62);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 253 + wide_delta, 52);
 
         dp_translation = NULL;
     }
@@ -2701,9 +2788,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 232 + wide_delta, 62);
+        MN_DrTextSmallENG(DEH_String("OFF"), 190 + wide_delta, 52);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 201 + wide_delta, 62);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 253 + wide_delta, 52);
 
         dp_translation = NULL;
     }
@@ -2714,9 +2801,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 150 + wide_delta, 82);
+        MN_DrTextSmallENG(DEH_String("ON"), 150 + wide_delta, 72);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 175 + wide_delta, 82);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 175 + wide_delta, 72);
 
         dp_translation = NULL;
     }
@@ -2725,9 +2812,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 150 + wide_delta, 82);
+        MN_DrTextSmallENG(DEH_String("OFF"), 150 + wide_delta, 72);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 175 + wide_delta, 82);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 175 + wide_delta, 72);
 
         dp_translation = NULL;
     }
@@ -2738,9 +2825,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 161 + wide_delta, 92);
+        MN_DrTextSmallENG(DEH_String("ON"), 161 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 179 + wide_delta, 92);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 179 + wide_delta, 82);
 
         dp_translation = NULL;
     }
@@ -2749,9 +2836,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 161 + wide_delta, 92);
+        MN_DrTextSmallENG(DEH_String("OFF"), 161 + wide_delta, 82);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 179 + wide_delta, 92);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 179 + wide_delta, 82);
 
         dp_translation = NULL;
     }
@@ -2762,9 +2849,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 146 + wide_delta, 102);
+        MN_DrTextSmallENG(DEH_String("ON"), 146 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 181 + wide_delta, 102);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 181 + wide_delta, 92);
 
         dp_translation = NULL;
     }
@@ -2773,9 +2860,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 146 + wide_delta, 102);
+        MN_DrTextSmallENG(DEH_String("OFF"), 146 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 181 + wide_delta, 102);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 181 + wide_delta, 92);
 
         dp_translation = NULL;
     }
@@ -2786,9 +2873,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 153 + wide_delta, 122);
+        MN_DrTextSmallENG(DEH_String("ON"), 153 + wide_delta, 112);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 255 + wide_delta, 122);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 255 + wide_delta, 112);
 
         dp_translation = NULL;
     }
@@ -2797,9 +2884,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 153 + wide_delta, 122);
+        MN_DrTextSmallENG(DEH_String("OFF"), 153 + wide_delta, 112);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 255 + wide_delta, 122);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 255 + wide_delta, 112);
 
         dp_translation = NULL;
     }
@@ -2810,9 +2897,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2RED_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 179 + wide_delta, 132);
+        MN_DrTextSmallENG(DEH_String("OFF"), 179 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 211 + wide_delta, 132);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 211 + wide_delta, 122);
 
         dp_translation = NULL;
     }
@@ -2821,9 +2908,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_GRAY2GREEN_HERETIC];
 
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 179 + wide_delta, 132);
+        MN_DrTextSmallENG(DEH_String("ON"), 179 + wide_delta, 122);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 211 + wide_delta, 132);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 211 + wide_delta, 122);
 
         dp_translation = NULL;
     }
@@ -2936,6 +3023,12 @@ void M_RD_DoResetSettings(void)
     messageson          = 1;
     draw_shadowed_text  = 1;
 
+    // Automap
+    automap_stats   = 1;
+    automap_follow  = 1;
+    automap_overlay = 0;
+    automap_rotate  = 0;
+
     // Audio
     snd_MaxVolume   = 8;
     S_SetMaxVolume(false);      // don't recalc the sound curve, yet
@@ -2954,19 +3047,18 @@ void M_RD_DoResetSettings(void)
     novert              = 1;    
 
     // Gameplay (1)
-    brightmaps          = 1;
-    fake_contrast       = 0;
-    colored_hud         = 0;
-    colored_blood       = 1;
-    invul_sky           = 1;
-    automap_stats       = 1;
-    secret_notification = 1;
-    negative_health     = 0;
-
-    // Gameplay (2)
+    brightmaps           = 1;
+    fake_contrast        = 0;
+    colored_hud          = 0;
+    colored_blood        = 1;
+    invul_sky            = 1;
     torque               = 1;
     weapon_bobbing       = 1;
     randomly_flipcorpses = 1;
+
+    // Gameplay (2)
+    secret_notification  = 1;
+    negative_health      = 0;
     crosshair_draw       = 0;
     crosshair_health     = 1;
     crosshair_scale      = 0;
