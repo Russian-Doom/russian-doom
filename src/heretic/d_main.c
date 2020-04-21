@@ -106,6 +106,7 @@ int level_brightness = 0; // [JN] Level brightness level
 int local_time = 0; // [JN] Local time widget
 
 // [JN] Automap specific variables.
+int automap_follow = 1;
 int automap_overlay = 0;
 int automap_rotate = 0;
 
@@ -895,6 +896,7 @@ void D_BindVariables(void)
     M_BindIntVariable("local_time",             &local_time);
 
     // Automap
+    M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_overlay",        &automap_overlay);
     M_BindIntVariable("automap_rotate",         &automap_rotate);
 

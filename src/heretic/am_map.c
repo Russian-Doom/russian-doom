@@ -201,8 +201,6 @@ static vertex_t oldplr;
 //static mpoint_t markpoints[AM_NUMMARKPOINTS]; // where the points are
 //static int markpointnum = 0; // next point to be assigned
 
-static int followplayer = 1;    // specifies whether to follow the player around
-
 static char cheat_amap[] = { 'r', 'a', 'v', 'm', 'a', 'p' };
 
 static byte cheatcount = 0;
@@ -298,7 +296,7 @@ void AM_restoreScaleAndLoc(void)
 
     m_w = old_m_w;
     m_h = old_m_h;
-    if (!followplayer)
+    if (!automap_follow)
     {
         m_x = old_m_x;
         m_y = old_m_y;
@@ -364,7 +362,7 @@ void AM_changeWindowLoc(void)
 
     if (m_paninc.x || m_paninc.y)
     {
-        followplayer = 0;
+        automap_follow = 0;
         f_oldloc.x = INT_MAX;
     }
 
@@ -643,7 +641,7 @@ boolean AM_Responder(event_t * ev)
         {
             // [crispy] keep the map static in overlay mode
             // if not following the player
-            if (!followplayer && !automap_overlay)
+            if (!automap_follow && !automap_overlay)
             {
                 m_paninc.x = flip_levels ? -FTOM(F_PANINC) : FTOM(F_PANINC);
             }
@@ -654,7 +652,7 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_west)            // pan left
         {
-            if (!followplayer && !automap_overlay)
+            if (!automap_follow && !automap_overlay)
             {
                 m_paninc.x = flip_levels ? FTOM(F_PANINC) : -FTOM(F_PANINC);
             }
@@ -665,7 +663,7 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_north)           // pan up
         {
-            if (!followplayer && !automap_overlay)
+            if (!automap_follow && !automap_overlay)
             {
                 m_paninc.y = FTOM(F_PANINC);
             }
@@ -674,7 +672,7 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_south)           // pan down
         {
-            if (!followplayer && !automap_overlay)
+            if (!automap_follow && !automap_overlay)
             {
                 m_paninc.y = -FTOM(F_PANINC);
             }
@@ -712,9 +710,9 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_follow)
         {
-            followplayer = !followplayer;
+            automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
-            P_SetMessage(plr, followplayer ? amstr_followon : amstr_followoff, true);
+            P_SetMessage(plr, automap_follow ? amstr_followon : amstr_followoff, true);
         }
         else if (key == key_map_overlay)
         {
@@ -768,22 +766,22 @@ boolean AM_Responder(event_t * ev)
 
         if (key == key_map_east)
         {
-            if (!followplayer)
+            if (!automap_follow)
                 m_paninc.x = 0;
         }
         else if (key == key_map_west)
         {
-            if (!followplayer)
+            if (!automap_follow)
                 m_paninc.x = 0;
         }
         else if (key == key_map_north)
         {
-            if (!followplayer)
+            if (!automap_follow)
                 m_paninc.y = 0;
         }
         else if (key == key_map_south)
         {
-            if (!followplayer)
+            if (!automap_follow)
                 m_paninc.y = 0;
         }
         else if (key == key_map_zoomout || key == key_map_zoomin)
@@ -876,7 +874,7 @@ void AM_Ticker(void)
 
     amclock++;
 
-    if (followplayer)
+    if (automap_follow)
         AM_doFollowPlayer();
 
     // Change the zoom if necessary
@@ -896,7 +894,7 @@ void AM_Ticker(void)
         mapcenter.y = m_y + m_h / 2;
         // [crispy] keep the map static in overlay mode
         // if not following the player
-        if (!(!followplayer && automap_overlay))
+        if (!(!automap_follow && automap_overlay))
         mapangle = ANG90 - viewangle;
     }
 }
@@ -918,7 +916,7 @@ void AM_clearFB(int color)
     byte *dest = I_VideoBuffer;
 
 
-    if (followplayer)
+    if (automap_follow)
     {
         dmapx = (MTOF(plr->mo->x) - MTOF(oldplr.x));    //fixed point
         dmapy = (MTOF(oldplr.y) - MTOF(plr->mo->y));
