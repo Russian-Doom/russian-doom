@@ -232,7 +232,7 @@ boolean CT_Responder(event_t * ev)
         }
         CT_queueChatChar(sendto);
         chatmodeon = true;
-        I_StartTextInput(25, 10, SCREENWIDTH, 18);
+        I_StartTextInput(25, 10, screenwidth, 18);
         return true;
     }
     else

@@ -240,7 +240,7 @@ typedef byte lighttable_t;      // this could be wider for >8 bit display
 
 #define MAXVISPLANES    160
 // [JN] MAXOPENINGS увеличено в 4 раза
-#define MAXOPENINGS             SCREENWIDTH*64*4
+#define MAXOPENINGS             WIDESCREENWIDTH*64*4
 
 typedef struct
 {
@@ -250,10 +250,10 @@ typedef struct
     int special;
     int minx, maxx;
     unsigned short pad1;                  // leave pads for [minx-1]/[maxx+1]
-    unsigned short top[SCREENWIDTH];
+    unsigned short top[WIDESCREENWIDTH];
     unsigned short pad2;
     unsigned short pad3;
-    unsigned short bottom[SCREENWIDTH];
+    unsigned short bottom[WIDESCREENWIDTH];
     unsigned short pad4;
 } visplane_t;
 
@@ -357,7 +357,7 @@ extern player_t *viewplayer;
 extern angle_t clipangle;
 
 extern int viewangletox[FINEANGLES / 2];
-extern angle_t xtoviewangle[SCREENWIDTH + 1];
+extern angle_t xtoviewangle[WIDESCREENWIDTH + 1];
 
 extern fixed_t rw_distance;
 extern angle_t rw_normalangle;
@@ -473,12 +473,12 @@ extern int skyflatnum;
 
 extern short openings[MAXOPENINGS], *lastopening;
 
-extern short floorclip[SCREENWIDTH];
-extern short ceilingclip[SCREENWIDTH];
+extern short floorclip[WIDESCREENWIDTH];
+extern short ceilingclip[WIDESCREENWIDTH];
 
 extern fixed_t* yslope;
 extern fixed_t yslopes[LOOKDIRS][SCREENHEIGHT];
-extern fixed_t distscale[SCREENWIDTH];
+extern fixed_t distscale[WIDESCREENWIDTH];
 
 void R_InitPlanes(void);
 void R_ClearPlanes(void);
@@ -517,7 +517,7 @@ extern int firstflat;
 extern int numflats;
 
 // [crispy] lookup table for horizontal screen coordinates
-extern int flipwidth[MAXWIDTH];
+extern int flipwidth[WIDEMAXWIDTH];
 
 extern int *flattranslation;    // for global animation
 extern int *texturetranslation; // for global animation
@@ -541,8 +541,8 @@ extern vissprite_t vissprites[MAXVISSPRITES], *vissprite_p;
 extern vissprite_t vsprsortedhead;
 
 // constant arrays used for psprite clipping and initializing clipping
-extern short negonearray[SCREENWIDTH];
-extern short screenheightarray[SCREENWIDTH];
+extern short negonearray[WIDESCREENWIDTH];
+extern short screenheightarray[WIDESCREENWIDTH];
 
 // vars for R_DrawMaskedColumn
 extern short *mfloorclip;

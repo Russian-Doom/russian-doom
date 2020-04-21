@@ -1137,12 +1137,12 @@ static void DrawAndBlit(void)
     {
         if (!netgame)
         {
-            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, (viewwindowy >> hires) + 5,
+            V_DrawShadowedPatchRaven(160 + wide_delta, (viewwindowy >> hires) + 5,
                                      W_CacheLumpName("PAUSED", PU_CACHE));
         }
         else
         {
-            V_DrawShadowedPatchRaven(160 + ORIGWIDTH_DELTA, 70,
+            V_DrawShadowedPatchRaven(160 + wide_delta, 70,
                                     W_CacheLumpName("PAUSED", PU_CACHE));
         }
     }
@@ -1179,12 +1179,12 @@ static void DrawMessage(void)
     {
         MN_DrTextAYellow(player->message,
                          160 - MN_TextAWidth(player->message) / 2 
-                         + ORIGWIDTH_DELTA, 1);
+                         + wide_delta, 1);
     }
     else
     {
         MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2
-                   + ORIGWIDTH_DELTA, 1);
+                   + wide_delta, 1);
     }
 }
 

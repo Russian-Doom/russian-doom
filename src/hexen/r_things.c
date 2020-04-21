@@ -59,8 +59,8 @@ lighttable_t **fullbrights_firebull;
 
 
 // constant arrays used for psprite clipping and initializing clipping
-short negonearray[SCREENWIDTH];
-short screenheightarray[SCREENWIDTH];
+short negonearray[WIDESCREENWIDTH];
+short screenheightarray[WIDESCREENWIDTH];
 
 boolean LevelUseFullBright;
 /*
@@ -287,7 +287,7 @@ void R_InitSprites(char **namelist)
 {
     int i;
 
-    for (i = 0; i < SCREENWIDTH; i++)
+    for (i = 0; i < screenwidth; i++)
     {
         negonearray[i] = -1;
     }
@@ -935,15 +935,8 @@ void R_DrawPSprite(pspdef_t * psp)
     vis->class = 0;
     vis->psprite = true;
     // [crispy] weapons drawn 1 pixel too high when player is idle
-#ifdef WIDESCREEN
-    // [JN] Wide screen: weapon positioning for HUD and non-HUD view
-    if (screenblocks <= 10)
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+(FRACUNIT*26)+(FRACUNIT/4)-(psp->sy-spritetopoffset[lump]);
-    else
     vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp->sy-spritetopoffset[lump]);
-#else
-    vis->texturemid = (BASEYCENTER<<FRACBITS)+FRACUNIT/4-(psp->sy-spritetopoffset[lump]);
-#endif
+
     if (viewheight == SCREENHEIGHT)
     {
         vis->texturemid -= PSpriteSY[viewplayer->class]
@@ -1215,7 +1208,7 @@ void R_SortVisSprites(void)
 void R_DrawSprite(vissprite_t * spr)
 {
     drawseg_t *ds;
-    short clipbot[SCREENWIDTH], cliptop[SCREENWIDTH];
+    short clipbot[WIDESCREENWIDTH], cliptop[WIDESCREENWIDTH];
     int x, r1, r2;
     fixed_t scale, lowscale;
     int silhouette;

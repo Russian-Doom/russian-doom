@@ -62,7 +62,7 @@ int viewangletox[FINEANGLES / 2];
 
 // The xtoviewangleangle[] table maps a screen pixel to the lowest viewangle
 // that maps back to x ranges from clipangle to -clipangle
-angle_t xtoviewangle[SCREENWIDTH + 1];
+angle_t xtoviewangle[WIDESCREENWIDTH + 1];
 
 lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t *scalelightfixed[MAXLIGHTSCALE];
@@ -461,17 +461,15 @@ void R_InitTextureMapping(void)
 // viewangletox will give the next greatest x after the view angle
 //
     // calc focallength so FIELDOFVIEW angles covers SCREENWIDTH
-#ifdef WIDESCREEN
+
     // [crispy] in widescreen mode, make sure the same number of horizontal
     // pixels shows the same part of the game scene as in regular rendering mode
     fixed_t focalwidth;
-
     focalwidth = (((320 << hires)>>detailshift)/2)<<FRACBITS;
-    focallength = FixedDiv (focalwidth, finetangent[FINEANGLES/4+FIELDOFVIEW/2] );
-#else
+
     focallength =
-        FixedDiv(centerxfrac, finetangent[FINEANGLES / 4 + FIELDOFVIEW / 2]);
-#endif
+        FixedDiv(widescreen ? focalwidth : centerxfrac, finetangent[FINEANGLES / 4 + FIELDOFVIEW / 2]);
+
 
     for (i = 0; i < FINEANGLES / 2; i++)
     {
@@ -577,7 +575,7 @@ boolean setsizeneeded;
 int setblocks, setdetail;
 
 // [crispy] lookup table for horizontal screen coordinates
-int		flipwidth[MAXWIDTH];
+int		flipwidth[WIDEMAXWIDTH];
 
 void R_SetViewSize(int blocks, int detail)
 {
@@ -601,23 +599,33 @@ void R_ExecuteSetViewSize(void)
 
     setsizeneeded = false;
 
-#ifdef WIDESCREEN
-    // [JN] Wide screen: use only SCREENWIDTH and SCREENHEIGHT sizes,
-    // there is no bordered view and effective screen size is always same.
-    scaledviewwidth = SCREENWIDTH;
-    viewheight = SCREENHEIGHT;
-#else
-    if (setblocks == 11 || setblocks == 12) // [JN] Sizes 11 and 12 are the full screen mode
+    if (widescreen)
     {
-        scaledviewwidth = SCREENWIDTH;
-        viewheight = SCREENHEIGHT;
+        if (setblocks == 9 || setblocks == 10)
+        {
+            scaledviewwidth = WIDESCREENWIDTH;
+            viewheight = SCREENHEIGHT - SBARHEIGHT;
+
+        }
+        else if (setblocks >= 11)
+        {
+            scaledviewwidth = WIDESCREENWIDTH;
+            viewheight = SCREENHEIGHT;
+        }
     }
     else
     {
-        scaledviewwidth = (setblocks * 32) << hires;
-        viewheight = (setblocks * 161 / 10) << hires;
+        if (setblocks == 11 || setblocks == 12) // [JN] Sizes 11 and 12 are the full screen mode
+        {
+            scaledviewwidth = SCREENWIDTH;
+            viewheight = SCREENHEIGHT;
+        }
+        else
+        {
+            scaledviewwidth = (setblocks * 32) << hires;
+            viewheight = (setblocks * 161 / 10) << hires;
+        }
     }
-#endif
 
     detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;
@@ -626,11 +634,14 @@ void R_ExecuteSetViewSize(void)
     centerx = viewwidth / 2;
     centerxfrac = centerx << FRACBITS;
     centeryfrac = centery << FRACBITS;
-#ifdef WIDESCREEN
-    projection = MIN(centerxfrac, (((320 << hires)>>detailshift)/2)<<FRACBITS);
-#else
-    projection = centerxfrac;
-#endif
+    if (widescreen)
+    {
+        projection = MIN(centerxfrac, (((320 << hires)>>detailshift)/2)<<FRACBITS);
+    }
+    else
+    {
+        projection = centerxfrac;
+    }
 
     if (!detailshift)
     {
@@ -654,8 +665,8 @@ void R_ExecuteSetViewSize(void)
 //
 // psprite scales
 //
-    pspritescale = FRACUNIT * viewwidth / ORIGWIDTH;
-    pspriteiscale = FRACUNIT * ORIGWIDTH / viewwidth;
+    pspritescale = FRACUNIT * viewwidth / origwidth;
+    pspriteiscale = FRACUNIT * origwidth / viewwidth;
 
 //
 // thing clipping
@@ -668,20 +679,23 @@ void R_ExecuteSetViewSize(void)
 //
     for (i = 0; i < viewheight; i++)
     {
-#ifdef WIDESCREEN
-        const fixed_t num = MIN(viewwidth<<detailshift, 320 << !detailshift)/2*FRACUNIT;
-#else
+
+        const fixed_t num_wide = MIN(viewwidth<<detailshift, 320 << !detailshift)/2*FRACUNIT;
         const fixed_t num = (viewwidth<<(detailshift && !hires))/2*FRACUNIT;
-#endif
+
         for (j = 0; j < LOOKDIRS; j++)
         {
-#ifdef WIDESCREEN
-        dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
-#else
-        dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
-#endif
+            if (widescreen)
+            {
+                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
+            }
+            else
+            {
+                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
+            }
+
         dy = abs(dy);
-        yslopes[j][i] = FixedDiv (num, dy);
+        yslopes[j][i] = FixedDiv (widescreen ? num_wide : num, dy);
         }
     }
     yslope = yslopes[LOOKDIRMIN];
@@ -702,7 +716,7 @@ void R_ExecuteSetViewSize(void)
         {
             level =
                 startmap -
-                j * SCREENWIDTH / (viewwidth << detailshift) / DISTMAP;
+                j * screenwidth / (viewwidth << detailshift) / DISTMAP;
             if (level < 0)
                 level = 0;
             if (level >= NUMCOLORMAPS)
@@ -746,6 +760,15 @@ int screenblocks = 10;
 
 void R_Init(void)
 {
+    // [JN] Wide screen: don't allow unsupported view modes at startup
+    if (widescreen)
+    {
+        if (screenblocks < 9)
+            screenblocks = 9;
+        if (screenblocks > 12)
+            screenblocks = 12;
+    }
+
     R_InitData();
     R_InitPointToAngle();
     R_InitTables();
@@ -755,16 +778,6 @@ void R_Init(void)
     R_InitLightTables();
     R_InitSkyMap();
     R_InitTranslationTables();
-
-#ifdef WIDESCREEN
-    // [JN] Wide screen: don't allow unsupported (bordered) view modes at startup
-    {
-        if (screenblocks < 9)
-            screenblocks = 9;
-        if (screenblocks > 12)
-            screenblocks = 12;
-    }
-#endif
 
     framecount = 0;
 }
@@ -869,11 +882,15 @@ void R_SetupFrame(player_t * player)
     pitch = -LOOKDIRMIN;
 
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
-#ifdef WIDESCREEN
-    tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10;
-#else
-    tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10;
-#endif
+    if (widescreen)
+    {
+        tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10;
+    }
+    else
+    {
+        tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10;
+    }
+
     if (centery != tempCentery)
     {
         centery = tempCentery;
@@ -922,7 +939,7 @@ void R_SetupFrame(player_t * player)
 #if 0
     {
         static int frame;
-        memset(screen, frame, SCREENWIDTH * SCREENHEIGHT);
+        memset(screen, frame, screenwidth * SCREENHEIGHT);
         frame++;
     }
 #endif
