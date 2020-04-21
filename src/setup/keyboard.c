@@ -725,7 +725,7 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                          "Follow mode" :
                          "ђежим следования",
                          &key_map_follow);
-    if (gamemission == doom)
+    if (gamemission == doom || gamemission == heretic)
     {
     AddKeyControl(table, english_language ?
                          "Overlay mode" :
