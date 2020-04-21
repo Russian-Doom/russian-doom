@@ -185,7 +185,7 @@ static void TextWrite(void)
     }
 
     V_CopyScaledBuffer(I_VideoBuffer, W_CacheLumpNum(FinaleLumpNum, PU_CACHE),
-           SRCWIDTH * ORIGHEIGHT);
+           ORIGWIDTH * ORIGHEIGHT);
     if (FinaleStage == 5)
     {                           // Chess pic, draw the correct character graphic
         if (netgame)

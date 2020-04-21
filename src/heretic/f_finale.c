@@ -370,7 +370,7 @@ void F_DemonScroll(void)
     p2 = W_CacheLumpName(DEH_String("FINAL2"), PU_LEVEL);
 
     // [JN] Only single static picture for now.
-    V_CopyScaledBuffer(I_VideoBuffer, p2, SRCWIDTH * ORIGHEIGHT);
+    V_CopyScaledBuffer(I_VideoBuffer, p2, ORIGWIDTH * ORIGHEIGHT);
 
     /*
     if (finalecount < 70)

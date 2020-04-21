@@ -2941,7 +2941,7 @@ void MN_DrawInfo(void)
 
     V_CopyScaledBuffer(I_VideoBuffer,
            (byte *) W_CacheLumpNum(W_GetNumForName("TITLE") + InfoType,
-                                   PU_CACHE), SRCWIDTH * ORIGHEIGHT);
+                                   PU_CACHE), ORIGWIDTH * ORIGHEIGHT);
 
 //      V_DrawPatch(0, 0, W_CacheLumpNum(W_GetNumForName("TITLE")+InfoType,
 //              PU_CACHE));

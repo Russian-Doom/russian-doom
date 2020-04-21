@@ -30,7 +30,6 @@
 
 #define ORIGWIDTH       320
 #define ORIGHEIGHT      200
-#define SRCWIDTH        320
 
 #define SCREENWIDTH     (ORIGWIDTH << hires)
 #define SCREENHEIGHT    (ORIGHEIGHT << hires)
@@ -45,7 +44,6 @@
 
 #define WIDEORIGWIDTH   426
 #define WIDESCREENWIDTH (426 << hires)
-#define ORIGWIDTH_DELTA 0   // TODO - remove entirely in Heretic and Hexen
 #define WIDE_DELTA      53
 
 extern int widescreen;
