@@ -938,7 +938,7 @@ static void DrawAnimatedIcons(void)
             }
         }
         BorderNeedRefresh = true;
-        UpdateState |= I_FULLSCRN;
+        UpdateState |= I_MESSAGES;
     }
 
     // Speed Boots
@@ -952,7 +952,7 @@ static void DrawAnimatedIcons(void)
                                                PU_CACHE));
         }
         BorderNeedRefresh = true;
-        UpdateState |= I_FULLSCRN;
+        UpdateState |= I_MESSAGES;
     }
 
     // Defensive power
@@ -966,7 +966,7 @@ static void DrawAnimatedIcons(void)
                                                 PU_CACHE));
         }
         BorderNeedRefresh = true;
-        UpdateState |= I_FULLSCRN;
+        UpdateState |= I_MESSAGES;
     }
 
     // Minotaur Active
@@ -980,7 +980,7 @@ static void DrawAnimatedIcons(void)
                                                 PU_CACHE));
         }
         BorderNeedRefresh = true;
-        UpdateState |= I_FULLSCRN;
+        UpdateState |= I_MESSAGES;
     }
 }
 

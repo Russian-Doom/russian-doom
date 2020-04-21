@@ -797,7 +797,7 @@ void SB_Drawer(void)
         else
         {
             BorderNeedRefresh = true;
-            UpdateState |= I_FULLSCRN;
+            UpdateState |= I_MESSAGES;
         }
     }
 
@@ -810,12 +810,12 @@ void SB_Drawer(void)
             V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2), 17, // [JN] Do not obstruct clock widget
                         W_CacheLumpNum(spinbooklump + frame, PU_CACHE));
             BorderNeedRefresh = true;
-            UpdateState |= I_FULLSCRN;
+            UpdateState |= I_MESSAGES;
         }
         else
         {
             BorderNeedRefresh = true;
-            UpdateState |= I_FULLSCRN;
+            UpdateState |= I_MESSAGES;
         }
     }
 
