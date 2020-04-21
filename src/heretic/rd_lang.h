@@ -120,6 +120,8 @@ extern char* amstr_gridon;
 extern char* amstr_gridoff;
 extern char* amstr_overlayon;
 extern char* amstr_overlayoff;
+extern char* amstr_rotateon;
+extern char* amstr_rotateoff;
 extern char* amstr_markedspot;
 extern char* amstr_markscleared;
 
@@ -241,6 +243,8 @@ extern char* txt_crosshair_off;
 #define AMSTR_GRIDOFF           "Grid OFF"
 #define AMSTR_OVERLAYON         "OVERLAY MODE ON"
 #define AMSTR_OVERLAYOFF        "OVERLAY MODE OFF"
+#define AMSTR_ROTATEON          "ROTATE MODE ON"
+#define AMSTR_ROTATEOFF         "ROTATE MODE OFF"
 #define AMSTR_MARKEDSPOT        "Marked Spot"
 #define AMSTR_MARKSCLEARED      "All Marks Cleared"
 
@@ -466,6 +470,8 @@ extern char* txt_crosshair_off;
 #define AMSTR_GRIDOFF_RUS       "CTNRF DSRK.XTYF"               // СЕТКА ВЫКЛЮЧЕНА
 #define AMSTR_OVERLAYON_RUS     "HT;BV YFKJ;TYBZ DRK.XTY"       // РЕЖИМ НАЛОЖЕНИЯ ВКЛЮЧЕН
 #define AMSTR_OVERLAYOFF_RUS    "HT;BV YFKJ;TYBZ DSRK.XTY"      // РЕЖИМ НАЛОЖЕНИЯ ВЫКЛЮЧЕН
+#define AMSTR_ROTATEON_RUS      "HT;BV DHFOTYBZ DRK.XTY"        // РЕЖИМ ВРАЩЕНИЯ ВКЛЮЧЕН
+#define AMSTR_ROTATEOFF_RUS     "HT;BV DHFOTYBZ DSRK.XTY"       // РЕЖИМ ВРАЩЕНИЯ ВЫКЛЮЧЕН
 #define AMSTR_MARKEDSPOT_RUS    "JNVTNRF"                       // ОТМЕТКА
 #define AMSTR_MARKSCLEARED_RUS  "JNVTNRB JXBOTYS"               // ОТМЕТКИ ОЧИЩЕНЫ
 

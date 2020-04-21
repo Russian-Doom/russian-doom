@@ -215,11 +215,11 @@ static byte antialias[NUMALIAS][8] = {
     {75, 76, 77, 78, 79, 80, 81, 103}
 };
 
-// [JN] Use iverted colors for automap overlay mode (faded to dark).
+// [JN] Use iverted colors for automap overlay mode (softly faded to darken).
 static byte antialias_overlay[NUMALIAS][8] = {
-    {102, 101, 100, 99, 98, 97, 96, 95},
+    {99, 99, 98, 98, 97, 97, 96, 96},
     {106, 105, 104, 103, 102, 101, 100, 99},
-    {75, 74, 73, 72, 71, 70, 69, 68}
+    {75, 75, 74, 74, 73, 73, 72, 72}
 };
 
 /*
@@ -716,7 +716,7 @@ boolean AM_Responder(event_t * ev)
         else if (key == key_map_rotate)
         {
             automap_rotate = !automap_rotate;
-            P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
+            P_SetMessage(plr, automap_rotate ? amstr_rotateon : amstr_rotateoff, true);
         }
         /*
         else if (key == key_map_grid)

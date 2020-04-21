@@ -111,6 +111,8 @@ char* amstr_gridon;
 char* amstr_gridoff;
 char* amstr_overlayon;
 char* amstr_overlayoff;
+char* amstr_rotateon;
+char* amstr_rotateoff;
 char* amstr_markedspot;
 char* amstr_markscleared;
 
@@ -235,6 +237,8 @@ void RD_DefineLanguageStrings (void)
         amstr_gridoff          = AMSTR_GRIDOFF;
         amstr_overlayon        = AMSTR_OVERLAYON;
         amstr_overlayoff       = AMSTR_OVERLAYOFF;
+        amstr_rotateon         = AMSTR_ROTATEON;
+        amstr_rotateoff        = AMSTR_ROTATEOFF;
         amstr_markedspot       = AMSTR_MARKEDSPOT;
         amstr_markscleared     = AMSTR_MARKSCLEARED;
 
@@ -353,6 +357,8 @@ void RD_DefineLanguageStrings (void)
         amstr_gridoff          = AMSTR_GRIDOFF_RUS;
         amstr_overlayon        = AMSTR_OVERLAYON_RUS;
         amstr_overlayoff       = AMSTR_OVERLAYOFF_RUS;
+        amstr_rotateon         = AMSTR_ROTATEON_RUS;
+        amstr_rotateoff        = AMSTR_ROTATEOFF_RUS;
         amstr_markedspot       = AMSTR_MARKEDSPOT_RUS;
         amstr_markscleared     = AMSTR_MARKSCLEARED_RUS;
 
