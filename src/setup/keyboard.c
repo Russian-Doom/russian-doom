@@ -752,6 +752,8 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                          "Pan west" :
                          "Прокрутить влево",
                          &key_map_west);
+    if (gamemission == doom)
+    {
     AddKeyControl(table, english_language ?
                          "Toggle grid" :
                          "Отобразить сетку",
@@ -764,6 +766,7 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                          "Clear all marks" :
                          "Убрать отметки",
                          &key_map_clearmark);
+    }
 
     AddSectionLabel(table, english_language ?
                            "Multiplayer" :
