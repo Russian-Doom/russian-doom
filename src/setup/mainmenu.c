@@ -131,6 +131,7 @@ static void SensibleDefaults(void)
 
     // Automap
     automap_color = 0;
+    automap_antialias = 1;
     automap_follow = 1;
     automap_overlay = 0;
     automap_rotate = 0;

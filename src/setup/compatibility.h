@@ -34,6 +34,7 @@ extern int draw_shadowed_text;
 
 // Automap
 extern int automap_color;
+extern int automap_antialias;
 extern int automap_stats;
 extern int automap_overlay;
 extern int automap_rotate;

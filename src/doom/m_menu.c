@@ -376,6 +376,7 @@ void M_RD_Change_ShadowedText(int choice);
 void M_RD_Choose_AutomapSettings(int choice);
 void M_RD_Draw_AutomapSettings(void);
 void M_RD_Change_AutomapColor(int choice);
+void M_RD_Change_AutomapAntialias(int choice);
 void M_RD_Change_AutomapStats(int choice);
 void M_RD_Change_AutomapOverlay(int choice);
 void M_RD_Change_AutomapRotate(int choice);
@@ -1528,6 +1529,7 @@ menu_t  RD_Messages_Def_Rus =
 enum
 {
     rd_automap_colors,
+    rd_automap_antialias,
     rd_automap_stats,
     rd_automap_overlay,
     rd_automap_rotate,
@@ -1542,12 +1544,13 @@ enum
 
 menuitem_t RD_Automap_Menu[]=
 {
-    {2, "color scheme:", M_RD_Change_AutomapColor,   'c'},
-    {2, "level stats:",  M_RD_Change_AutomapStats,   'l'},
-    {2, "overlay mode:", M_RD_Change_AutomapOverlay, 'o'},
-    {2, "rotate mode:",  M_RD_Change_AutomapRotate,  'r'},
-    {2, "follow mode:",  M_RD_Change_AutomapFollow,  'f'},
-    {2, "grid: o",       M_RD_Change_AutomapGrid,    'g'},
+    {2, "color scheme:",      M_RD_Change_AutomapColor,     'c'},
+    {2, "line antialiasing:", M_RD_Change_AutomapAntialias, 'l'},
+    {2, "level stats:",       M_RD_Change_AutomapStats,     'l'},
+    {2, "overlay mode:",      M_RD_Change_AutomapOverlay,   'o'},
+    {2, "rotate mode:",       M_RD_Change_AutomapRotate,    'r'},
+    {2, "follow mode:",       M_RD_Change_AutomapFollow,    'f'},
+    {2, "grid: o",            M_RD_Change_AutomapGrid,      'g'},
     {-1,"",0,'\0'}
 };
 
@@ -1567,12 +1570,13 @@ menu_t  RD_Automap_Def =
 
 menuitem_t RD_Automap_Menu_Rus[]=
 {
-    {2, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,   'w'}, // Цветовая схема:
-    {2, "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,   'c'}, // Статистика уровня:
-    {2, "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay, 'h'}, // Режим наложения:
-    {2, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,  'h'}, // Режим вращения:
-    {2, "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,  'h'}, // Режим следования:
-    {2, "ctnrf:",             M_RD_Change_AutomapGrid,    'c'}, // Сетка:
+    {2, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,     'w'}, // Цветовая схема:
+    {2, "cukf;bdfybt kbybq:", M_RD_Change_AutomapAntialias, 'c'}, // Сглаживание линий:
+    {2, "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     'c'}, // Статистика уровня:
+    {2, "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay,   'h'}, // Режим наложения:
+    {2, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    'h'}, // Режим вращения:
+    {2, "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,    'h'}, // Режим следования:
+    {2, "ctnrf:",             M_RD_Change_AutomapGrid,      'c'}, // Сетка:
     {-1,"",0,'\0'}
 };
 
@@ -2910,20 +2914,23 @@ void M_RD_Draw_AutomapSettings(void)
             M_WriteTextSmall_ENG (170 + wide_delta, 35, "strife");
         }
 
+        // Line antialiasing
+        M_WriteTextSmall_ENG(193 + wide_delta, 45, automap_antialias == 1 ? "on" : "off");
+
         // Level stats
-        M_WriteTextSmall_ENG(159 + wide_delta, 45, automap_stats == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(159 + wide_delta, 55, automap_stats == 1 ? "on" : "off");
         
         // Overlay mode
-        M_WriteTextSmall_ENG(170 + wide_delta, 55, automap_overlay == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(170 + wide_delta, 65, automap_overlay == 1 ? "on" : "off");
 
         // Rotate mode
-        M_WriteTextSmall_ENG(163 + wide_delta, 65, automap_rotate == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(163 + wide_delta, 75, automap_rotate == 1 ? "on" : "off");
 
         // Follow mode
-        M_WriteTextSmall_ENG(164 + wide_delta, 75, automap_follow == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(164 + wide_delta, 85, automap_follow == 1 ? "on" : "off");
 
         // Grid
-        M_WriteTextSmall_ENG(106 + wide_delta, 85, automap_grid == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(106 + wide_delta, 95, automap_grid == 1 ? "on" : "off");
     }
     else
     {
@@ -2947,21 +2954,24 @@ void M_RD_Draw_AutomapSettings(void)
             else
             M_WriteTextSmall_ENG (191 + wide_delta, 35, "strife");
         }
-        
+
+        // Сглаживание линий
+        M_WriteTextSmall_RUS(214 + wide_delta, 45, automap_antialias == 1 ? "drk" : "dsrk");
+
         // Статистика уровня
-        M_WriteTextSmall_RUS(210 + wide_delta, 45, automap_stats == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(210 + wide_delta, 55, automap_stats == 1 ? "drk" : "dsrk");
         
         // Режим наложения
-        M_WriteTextSmall_RUS(203 + wide_delta, 55, automap_overlay == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(203 + wide_delta, 65, automap_overlay == 1 ? "drk" : "dsrk");
 
         // Режим вращения
-        M_WriteTextSmall_RUS(194 + wide_delta, 65, automap_rotate == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(194 + wide_delta, 75, automap_rotate == 1 ? "drk" : "dsrk");
 
         // Режим следования
-        M_WriteTextSmall_RUS(208 + wide_delta, 75, automap_follow == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(208 + wide_delta, 85, automap_follow == 1 ? "drk" : "dsrk");
 
         // Сетка
-        M_WriteTextSmall_RUS(118 + wide_delta, 85, automap_grid == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(118 + wide_delta, 95, automap_grid == 1 ? "drk" : "dsrk");
     }
 }
 
@@ -2985,6 +2995,11 @@ void M_RD_Change_AutomapColor(int choice)
             automap_color = 0;
         break;
     }
+}
+
+void M_RD_Change_AutomapAntialias(int choice)
+{
+    automap_antialias ^= 1;
 }
 
 void M_RD_Change_AutomapOverlay(int choice)
@@ -4115,6 +4130,7 @@ void M_RD_BackToDefaultsResponse(int key)
 
     // Automap
     automap_color   = 0;
+    automap_antialias = 1;
     automap_stats   = 1;
     automap_overlay = 0;
     automap_rotate  = 0;

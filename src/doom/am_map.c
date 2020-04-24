@@ -1,5 +1,6 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
+// Copyright(C) 1993-2008 Raven Software
 // Copyright(C) 2005-2014 Simon Howard
 // Copyright(C) 2016-2019 Julian Nechaevsky
 //
@@ -281,6 +282,56 @@ cheatseq_t cheat_amap = CHEAT("iddt", 0);
 cheatseq_t cheat_amap_beta = CHEAT("eek", 0);
 
 static boolean stopped = true;
+
+// [JN] Automap line antialiasing:
+#define NUMALIAS 35                             // Number of antialiased lines
+
+static byte antialias[NUMALIAS][8] = {
+    // Doom colors:
+    {176, 177, 178, 179, 180, 181, 182, 183},   // 1.  WALLCOLORS
+    { 64,  65,  66,  67,  68,  69,  70,  71},   // 2.  FDWALLCOLORS
+    { 96,  97,  98,  99, 100, 101, 102, 103},   // 3.  TSWALLCOLORS
+    {231, 160, 161, 162, 163, 164, 165, 166},   // 4.  CDWALLCOLORS
+    {176, 177, 178, 179, 180, 181, 182, 183},   // 5.  SECRETWALLCOLORS
+    { 99, 100, 101, 102, 103, 104, 105, 106},   // 6.  GRAYS+3 (LINE_NEVERSEE)
+    // Boom colors:
+    { 23,  24,  25,  26,  27,  28,  29,  30},   // 7.  One-sided wall
+    {119, 120, 121, 122, 123, 124, 125, 126},   // 8.  Various teleporters
+    {204, 204, 205, 205, 206, 206, 207, 207},   // 9.  BLUE locked doors
+    {175, 176, 177, 178, 179, 180, 181, 182},   // 10. RED locked doors
+    {208,  80,  81,  82,  83,  84,  85,  86},   // 11. non-secret closed door
+    { 55,  56,  57,  58,  59,  60,  61,  62},   // 12. floor level change
+    {215, 216, 217, 218, 219, 220, 221, 222},   // 13. ceiling level change
+    { 88,  89,  90,  91,  92,  93,  94,  95},   // 14. 2S lines that appear only in IDDT
+    // Jaguar colors:
+    { 32,  33,  34,  35,  36,  37,  38,  39},   // 15. RED_JAGUAR
+    {120, 121, 122, 123, 124, 125, 126, 127},   // 16. GREEN_JAGUAR
+    {254, 254, 254, 254, 254, 254, 254, 254},   // 17. MAGENTA_JAGUAR
+    {163, 163, 164, 164, 165, 165, 166, 167},   // 18. YELLOW_JAGUAR
+    // Raven colors:
+    {151, 151, 236, 236, 237, 237, 238, 239},   // 19. One-sided wall
+    {116, 117, 118, 119, 120, 121, 122, 123},   // 20. Various teleporters
+    {108, 109, 110, 111,   5,   6,   7,   8},   // 21. Secret door
+    {199, 200, 201, 202, 203, 204, 205, 206},   // 22. BLUE locked doors
+    {178, 179, 180, 181, 182, 183, 184, 185},   // 23. RED locked doors
+    {161, 162, 163, 164, 165, 166, 167, 167},   // 24. YELLOW locked doors
+    {239, 239, 239, 239, 239, 239, 239, 239},   // 25. floor level change
+    {133, 134, 135, 136, 137, 138, 139, 140},   // 26. ceiling level change
+    // Strife colors:
+    { 86,  87,  88,  89,  90,  91,  92,  93},   // 27. One-sided wall
+    {135, 136, 137, 138, 139, 140, 141, 142},   // 28. Various teleporters
+    {203, 204, 205, 206, 207, 240, 241, 242},   // 29. floor level change
+    {195, 196, 197, 198, 199, 200, 201, 202},   // 30. ceiling level change
+    { 98,  99, 100, 101, 102, 103, 104, 105},   // 31. One-sided wall (cheating)
+    {102, 103, 104, 105, 106, 107, 108, 109},   // 32. One-sided wall (LINE_NEVERSEE)
+    // Common colors:
+    {209,  84,  85,  86,  87,  88,  89,  90},   // 33. YOURCOLORS: White player arrow
+    {112, 113, 114, 115, 116, 117, 118, 119},   // 34. THINGCOLORS: Green triangles (IDDT cheat)
+    {104, 105, 106, 107, 108, 109, 110, 111}    // 35. GRIDCOLORS: Automap grid
+};
+
+void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
+                int NumLevels, unsigned short IntensityBits);
 
 // [crispy] automap rotate mode ...
 // ... needs these early on
@@ -1117,18 +1168,119 @@ boolean AM_clipMline (mline_t* ml, fline_t* fl)
 //
 void AM_drawFline (fline_t* fl, int color)
 {
-    register int x;
-    register int y;
-    register int dx;
-    register int dy;
-    register int sx;
-    register int sy;
-    register int ax;
-    register int ay;
-    register int d;
-
+    int x, y, dx, dy, sx, sy, ax, ay, d;
     static int fuck = 0;
 
+    // [JN] Apply line antialiasing
+    if (automap_antialias && !vanillaparm)
+    {
+        // Doom colors:
+        if (automap_color == 0)
+        {
+            if (color == WALLCOLORS)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[0][0]), 8, 3);
+            if (color == FDWALLCOLORS)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[1][0]), 8, 3);
+            if (color == TSWALLCOLORS)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[2][0]), 8, 3);
+            if (color == CDWALLCOLORS)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[3][0]), 8, 3);
+            if (color == SECRETWALLCOLORS)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[4][0]), 8, 3);
+            if (color == GRAYS+3)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
+        }
+        // Boom colors:
+        if (automap_color == 1)
+        {
+            if (color == 23)    // Wall color
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[6][0]), 8, 3);
+            if (color == 119)   // Various teleporters
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[7][0]), 8, 3);
+            if (color == 204)   // BLUE locked doors
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[8][0]), 8, 3);
+            if (color == 175)   // RED locked doors
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[9][0]), 8, 3);
+            if (color == 231)   // YELLOW locked doors (using CDWALLCOLORS)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[3][0]), 8, 3);
+            if (color == 208)   // non-secret closed door
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[10][0]), 8, 3);
+            if (color == 55)    // floor level change
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[11][0]), 8, 3);
+            if (color == 215)   // ceiling level change
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[12][0]), 8, 3);
+            if (color == 88)    // 2S lines that appear only in IDDT
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[13][0]), 8, 3);
+        }
+        // Jaguar colors:
+        if (automap_color == 2)
+        {
+            if (color == RED_JAGUAR)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[14][0]), 8, 3);
+            if (color == GREEN_JAGUAR)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[15][0]), 8, 3);
+            if (color == MAGENTA_JAGUAR)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[16][0]), 8, 3);
+            if (color == YELLOW_JAGUAR)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[17][0]), 8, 3);
+            if (color == TSWALLCOLORS)  // Hidden gray walls
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[2][0]), 8, 3);
+            if (color == GRAYS+3)       // computermap visible lines
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
+        }
+        // Raven colors:
+        if (automap_color == 3)
+        {
+            if (color == 151)   // One-sided wall
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[18][0]), 8, 3);
+            if (color == 116)   // Various teleporters
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[19][0]), 8, 3);
+            if (color == 108)   // Secret door
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[20][0]), 8, 3);
+            if (color == 199)   // BLUE locked doors
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[21][0]), 8, 3);
+            if (color == 178)   // RED locked doors
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[22][0]), 8, 3);
+            if (color == 161)   // YELLOW locked doors
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[23][0]), 8, 3);
+            if (color == 239)   // floor level change
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[24][0]), 8, 3);
+            if (color == 133)   // ceiling level change
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[25][0]), 8, 3);
+            if (color == 99)    // ceiling level change, cheating (using GRAYS+3 (LINE_NEVERSEE))
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
+        }
+        // Strife colors:
+        if (automap_color == 4)
+        {
+            if (color == 119)   // Exit lines (using "Various teleporters")
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[7][0]), 8, 3);
+            if (color == 86)    // One-sided wall
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[26][0]), 8, 3);
+            if (color == 135)   // Various teleporters and secret door
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[27][0]), 8, 3);
+            if (color == 203)   // floor level change
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[28][0]), 8, 3);
+            if (color == 195)   // ceiling level change
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[29][0]), 8, 3);
+            if (color == 98)    // One-sided wall (cheating)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[30][0]), 8, 3);
+            if (color == 102)   // One-sided wall (LINE_NEVERSEE)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[31][0]), 8, 3);
+        }
+        // Common colors:
+        {
+            if (color == YOURCOLORS)    // White player arrow
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[32][0]), 8, 3);
+            if (color == THINGCOLORS)   // Green triangles (IDDT cheat)
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[33][0]), 8, 3);
+            if (color == 104)           // computermap visible lines
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[34][0]), 8, 3);
+
+        }
+    }
+    else
+    {
     // For debugging only
     if (fl->a.x < 0 || fl->a.x >= f_w
 	 || fl->a.y < 0 || fl->a.y >= f_h
@@ -1139,7 +1291,7 @@ void AM_drawFline (fline_t* fl, int color)
         return;
     }
 
-#define PUTDOT(xx,yy,cc) fb[(yy)*f_w+(flipwidth[xx])]=(colormaps[(cc)])
+#define DOT(xx,yy,cc) fb[(yy)*f_w+(flipwidth[xx])]=(cc)    //the MACRO!
 
     dx = fl->b.x - fl->a.x;
     ax = 2 * (dx<0 ? -dx : dx);
@@ -1157,7 +1309,7 @@ void AM_drawFline (fline_t* fl, int color)
         d = ay - ax/2;
         while (1)
         {
-            PUTDOT(x,y,color);
+            DOT(x,y,color);
             if (x == fl->b.x) return;
             if (d>=0)
             {
@@ -1173,7 +1325,7 @@ void AM_drawFline (fline_t* fl, int color)
         d = ax - ay/2;
         while (1)
         {
-            PUTDOT(x, y, color);
+            DOT(x, y, color);
             if (y == fl->b.y) return;
             if (d >= 0)
             {
@@ -1184,8 +1336,193 @@ void AM_drawFline (fline_t* fl, int color)
             d += ax;
         }
     }
+    }
 }
 
+// [JN] Line antialiasing. Adapted from Heretic source code. (src/am_map.c)
+/* Wu antialiased line drawer.
+ * (X0,Y0),(X1,Y1) = line to draw
+ * BaseColor = color # of first color in block used for antialiasing, the
+ *          100% intensity version of the drawing color
+ * NumLevels = size of color block, with BaseColor+NumLevels-1 being the
+ *          0% intensity version of the drawing color
+ * IntensityBits = log base 2 of NumLevels; the # of bits used to describe
+ *          the intensity of the drawing color. 2**IntensityBits==NumLevels
+ */
+void PUTDOT(short xx, short yy, byte * cc, byte * cm)
+{
+    static int oldyy;
+    static int oldyyshifted;
+    byte *oldcc = cc;
+
+    if (xx < 32)
+        cc += 7 - (xx >> 2);
+    else if (xx > (screenwidth - 32))
+        cc += 7 - ((screenwidth - xx) >> 2);
+    if (yy < 32)
+        cc += 7 - (yy >> 2);
+    else if (yy > (finit_height - 32))
+        cc += 7 - ((finit_height - yy) >> 2);
+    if (cc > cm && cm != NULL)
+    {
+        cc = cm;
+    }
+    else if (cc > oldcc + 6)    // don't let the color escape from the fade table...
+    {
+        cc = oldcc + 6;
+    }
+    if (yy == oldyy + 1)
+    {
+        oldyy++;
+        oldyyshifted += (origwidth << hires);
+    }
+    else if (yy == oldyy - 1)
+    {
+        oldyy--;
+        oldyyshifted -= (origwidth << hires);
+    }
+    else if (yy != oldyy)
+    {
+        oldyy = yy;
+        oldyyshifted = yy * (origwidth << hires);
+    }
+    fb[oldyyshifted + flipwidth[xx]] = *(cc);
+}
+
+void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
+                int NumLevels, unsigned short IntensityBits)
+{
+    unsigned short IntensityShift, ErrorAdj, ErrorAcc;
+    unsigned short ErrorAccTemp, Weighting, WeightingComplementMask;
+    short DeltaX, DeltaY, Temp, XDir;
+
+    /* Make sure the line runs top to bottom */
+    if (Y0 > Y1)
+    {
+        Temp = Y0;
+        Y0 = Y1;
+        Y1 = Temp;
+        Temp = X0;
+        X0 = X1;
+        X1 = Temp;
+    }
+    /* Draw the initial pixel, which is always exactly intersected by
+       the line and so needs no weighting */
+    PUTDOT(X0, Y0, &BaseColor[0], NULL);
+
+    if ((DeltaX = X1 - X0) >= 0)
+    {
+        XDir = 1;
+    }
+    else
+    {
+        XDir = -1;
+        DeltaX = -DeltaX;       /* make DeltaX positive */
+    }
+    /* Special-case horizontal, vertical, and diagonal lines, which
+       require no weighting because they go right through the center of
+       every pixel */
+    if ((DeltaY = Y1 - Y0) == 0)
+    {
+        /* Horizontal line */
+        while (DeltaX-- != 0)
+        {
+            X0 += XDir;
+            PUTDOT(X0, Y0, &BaseColor[0], NULL);
+        }
+        return;
+    }
+    if (DeltaX == 0)
+    {
+        /* Vertical line */
+        do
+        {
+            Y0++;
+            PUTDOT(X0, Y0, &BaseColor[0], NULL);
+        }
+        while (--DeltaY != 0);
+        return;
+    }
+    //diagonal line.
+    if (DeltaX == DeltaY)
+    {
+        do
+        {
+            X0 += XDir;
+            Y0++;
+            PUTDOT(X0, Y0, &BaseColor[0], NULL);
+        }
+        while (--DeltaY != 0);
+        return;
+    }
+    /* Line is not horizontal, diagonal, or vertical */
+    ErrorAcc = 0;               /* initialize the line error accumulator to 0 */
+    /* # of bits by which to shift ErrorAcc to get intensity level */
+    IntensityShift = 16 - IntensityBits;
+    /* Mask used to flip all bits in an intensity weighting, producing the
+       result (1 - intensity weighting) */
+    WeightingComplementMask = NumLevels - 1;
+    /* Is this an X-major or Y-major line? */
+    if (DeltaY > DeltaX)
+    {
+        /* Y-major line; calculate 16-bit fixed-point fractional part of a
+           pixel that X advances each time Y advances 1 pixel, truncating the
+           result so that we won't overrun the endpoint along the X axis */
+        ErrorAdj = ((unsigned int) DeltaX << 16) / (unsigned int) DeltaY;
+        /* Draw all pixels other than the first and last */
+        while (--DeltaY)
+        {
+            ErrorAccTemp = ErrorAcc;    /* remember currrent accumulated error */
+            ErrorAcc += ErrorAdj;       /* calculate error for next pixel */
+            if (ErrorAcc <= ErrorAccTemp)
+            {
+                /* The error accumulator turned over, so advance the X coord */
+                X0 += XDir;
+            }
+            Y0++;               /* Y-major, so always advance Y */
+            /* The IntensityBits most significant bits of ErrorAcc give us the
+               intensity weighting for this pixel, and the complement of the
+               weighting for the paired pixel */
+            Weighting = ErrorAcc >> IntensityShift;
+            PUTDOT(X0, Y0, &BaseColor[Weighting], &BaseColor[7]);
+            PUTDOT(X0 + XDir, Y0,
+                   &BaseColor[(Weighting ^ WeightingComplementMask)],
+                   &BaseColor[7]);
+        }
+        /* Draw the final pixel, which is always exactly intersected by the line
+           and so needs no weighting */
+        PUTDOT(X1, Y1, &BaseColor[0], NULL);
+        return;
+    }
+    /* It's an X-major line; calculate 16-bit fixed-point fractional part of a
+       pixel that Y advances each time X advances 1 pixel, truncating the
+       result to avoid overrunning the endpoint along the X axis */
+    ErrorAdj = ((unsigned int) DeltaY << 16) / (unsigned int) DeltaX;
+    /* Draw all pixels other than the first and last */
+    while (--DeltaX)
+    {
+        ErrorAccTemp = ErrorAcc;        /* remember currrent accumulated error */
+        ErrorAcc += ErrorAdj;   /* calculate error for next pixel */
+        if (ErrorAcc <= ErrorAccTemp)
+        {
+            /* The error accumulator turned over, so advance the Y coord */
+            Y0++;
+        }
+        X0 += XDir;             /* X-major, so always advance X */
+        /* The IntensityBits most significant bits of ErrorAcc give us the
+           intensity weighting for this pixel, and the complement of the
+           weighting for the paired pixel */
+        Weighting = ErrorAcc >> IntensityShift;
+        PUTDOT(X0, Y0, &BaseColor[Weighting], &BaseColor[7]);
+        PUTDOT(X0, Y0 + 1,
+               &BaseColor[(Weighting ^ WeightingComplementMask)],
+               &BaseColor[7]);
+
+    }
+    /* Draw the final pixel, which is always exactly intersected by the line
+       and so needs no weighting */
+    PUTDOT(X1, Y1, &BaseColor[0], NULL);
+}
 
 //
 // Clip lines, draw visible part sof lines.
@@ -1384,17 +1721,20 @@ void AM_drawWallsBoom(void)
                 }
 
                 // [JN] BLUE locked doors
-                else if (lines[i].special == 26 || lines[i].special == 32)
+                else if (lines[i].special == 26 || lines[i].special == 32
+                     ||  lines[i].special == 99 || lines[i].special == 133)
                 {
                     AM_drawMline(&l, 204);
                 }
                 // [JN] RED locked doors
-                else if (lines[i].special == 28 || lines[i].special == 33)
+                else if (lines[i].special == 28 || lines[i].special == 33
+                     ||  lines[i].special == 134 || lines[i].special == 135)
                 {
                     AM_drawMline(&l, 175);
                 }
                 // [JN] YELLOW locked doors
-                else if (lines[i].special == 27 || lines[i].special == 34)
+                else if (lines[i].special == 27 || lines[i].special == 34
+                     ||  lines[i].special == 136 || lines[i].special == 137)
                 {
                     AM_drawMline(&l, 231);
                 }
@@ -1558,17 +1898,20 @@ void AM_drawWallsRaven(void)
                         AM_drawMline(&l, 108+lightlev);
                 }
                 // [JN] BLUE locked doors
-                else if (lines[i].special == 26 || lines[i].special == 32)
+                else if (lines[i].special == 26 || lines[i].special == 32
+                     ||  lines[i].special == 99 || lines[i].special == 133)
                 {
                     AM_drawMline(&l, 199);
                 }
                 // [JN] RED locked doors
-                else if (lines[i].special == 28 || lines[i].special == 33)
+                else if (lines[i].special == 28 || lines[i].special == 33
+                     ||  lines[i].special == 134 || lines[i].special == 135)
                 {
                     AM_drawMline(&l, 178);
                 }
                 // [JN] YELLOW locked doors
-                else if (lines[i].special == 27 || lines[i].special == 34)
+                else if (lines[i].special == 27 || lines[i].special == 34
+                     ||  lines[i].special == 136 || lines[i].special == 137)
                 {
                     AM_drawMline(&l, 161);
                 }
@@ -1642,7 +1985,7 @@ void AM_drawWallsStrife(void)
                 ||  lines[i].special == 125
                 ||  lines[i].special == 126)
                 {
-                    AM_drawMline(&l, 86 + 98 / 2); // [JN] Erm?!
+                    AM_drawMline(&l, 135);
                 }
                 else if (lines[i].flags & ML_SECRET) // secret door
                 {
@@ -1894,9 +2237,6 @@ void AM_Drawer (void)
 
     if (!automap_overlay)
     {
-        if (automap_color == 3) // [JN] Raven automap colors using different background
-        AM_clearFB(140);
-        else
         AM_clearFB(BACKGROUND);
     }
 

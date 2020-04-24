@@ -32,6 +32,7 @@ int draw_shadowed_text = 1;
 
 // Automap
 int automap_color = 0;
+int automap_antialias = 1;
 int automap_stats = 1;
 int automap_overlay = 0;
 int automap_rotate = 0;
