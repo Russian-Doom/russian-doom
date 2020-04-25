@@ -1213,7 +1213,7 @@ void AM_drawFline (fline_t* fl, int color)
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[13][0]), 8, 3);
         }
         // Jaguar colors:
-        if (automap_color == 2)
+        if (automap_color == 2 || gamemission == jaguar)
         {
             if (color == RED_JAGUAR)
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[14][0]), 8, 3);
