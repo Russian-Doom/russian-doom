@@ -55,8 +55,11 @@ extern int png_screenshots;
 
 extern int level_brightness;
 extern int local_time;
-extern int messages_color;
 extern int draw_shadowed_text;
+extern int messages_pickup_color;
+extern int messages_secret_color;
+extern int messages_system_color;
+extern int messages_chat_color;
 
 
 // -----------------------------------------------------------------------------

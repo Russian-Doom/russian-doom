@@ -1120,7 +1120,7 @@ void P_PlayerInSpecialSector (player_t* player)
 	// Звук проигрывается только у обнаружевшего игрока.
 	if (secret_notification && !vanillaparm)
 	{
-        player->message = secretfound;
+        player->message_secret = secretfound;
         // [JN] Don't break revealed's secret sound by any others
 	    if (player == &players[consoleplayer])
 		S_StartSoundNoBreak(sfx_getpow);

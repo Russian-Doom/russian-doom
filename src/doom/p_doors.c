@@ -233,7 +233,7 @@ EV_DoLockedDoor
 	    return 0;
 	if (!p->cards[it_bluecard] && !p->cards[it_blueskull])
 	{
-	    p->message = DEH_String(pd_blueo);
+	    p->message_system = DEH_String(pd_blueo);
 	    // [crispy] blinking key or skull in the status bar
 	    p->tryopen[it_bluecard] = KEYBLINKTICS;
 	    S_StartSound(NULL,sfx_oof);
@@ -247,7 +247,7 @@ EV_DoLockedDoor
 	    return 0;
 	if (!p->cards[it_redcard] && !p->cards[it_redskull])
 	{
-	    p->message = DEH_String(pd_redo);
+	    p->message_system = DEH_String(pd_redo);
 	    // [crispy] blinking key or skull in the status bar
 	    p->tryopen[it_redcard] = KEYBLINKTICS;
 	    S_StartSound(NULL,sfx_oof);
@@ -262,7 +262,7 @@ EV_DoLockedDoor
 	if (!p->cards[it_yellowcard] &&
 	    !p->cards[it_yellowskull])
 	{
-	    p->message = DEH_String(pd_yellowo);
+	    p->message_system = DEH_String(pd_yellowo);
 	    // [crispy] blinking key or skull in the status bar
 	    p->tryopen[it_yellowcard] = KEYBLINKTICS;
 	    S_StartSound(NULL,sfx_oof);
@@ -384,7 +384,7 @@ EV_VerticalDoor
 	
 	if (!player->cards[it_bluecard] && !player->cards[it_blueskull])
 	{
-	    player->message = DEH_String(pd_bluek);
+	    player->message_system = DEH_String(pd_bluek);
 	    // [crispy] blinking key or skull in the status bar
 	    player->tryopen[it_bluecard] = KEYBLINKTICS;
 	    S_StartSound(NULL,sfx_oof);
@@ -400,7 +400,7 @@ EV_VerticalDoor
 	if (!player->cards[it_yellowcard] &&
 	    !player->cards[it_yellowskull])
 	{
-	    player->message = DEH_String(pd_yellowk);
+	    player->message_system = DEH_String(pd_yellowk);
 	    // [crispy] blinking key or skull in the status bar
 	    player->tryopen[it_yellowcard] = KEYBLINKTICS;
 	    S_StartSound(NULL,sfx_oof);
@@ -415,7 +415,7 @@ EV_VerticalDoor
 	
 	if (!player->cards[it_redcard] && !player->cards[it_redskull])
 	{
-	    player->message = DEH_String(pd_redk);
+	    player->message_system = DEH_String(pd_redk);
 	    // [crispy] blinking key or skull in the status bar
 	    player->tryopen[it_redcard] = KEYBLINKTICS;
 	    S_StartSound(NULL,sfx_oof);

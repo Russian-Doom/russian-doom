@@ -128,6 +128,9 @@ void HUlib_addMessageToSText (hu_stext_t* s, char* prefix, char* msg);
 
 // draws stext
 void HUlib_drawSText (hu_stext_t* s);
+void HUlib_drawSText_Secret (hu_stext_t* s);
+void HUlib_drawSText_System (hu_stext_t* s);
+void HUlib_drawSText_Chat (hu_stext_t* s);
 
 // erases all stext lines
 void HUlib_eraseSText (hu_stext_t* s); 

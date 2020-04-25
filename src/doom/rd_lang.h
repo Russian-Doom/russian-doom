@@ -1540,34 +1540,11 @@ PRESSYN_RUS
 // Макросы для чата
 // 
 
-#define HUSTR_CHATMACRO1_RUS    "ujnjd r ,j.!"                  // Готов к бою!
-#define HUSTR_CHATMACRO2_RUS    "z d gjhzlrt>"                  // Я в порядке.
-#define HUSTR_CHATMACRO3_RUS    "z hfyty!"                      // Я ранен!
-#define HUSTR_CHATMACRO4_RUS    "yf gjvjom!"                    // На помощь!
-#define HUSTR_CHATMACRO5_RUS    "ns - jncnjq!"                  // Ты - отстой!
-#define HUSTR_CHATMACRO6_RUS    "d cktle.obq hfp< gjljyjr>>>"   // В следующий раз, подонок...
-#define HUSTR_CHATMACRO7_RUS    "c.lf!"                         // Сюда!
-#define HUSTR_CHATMACRO8_RUS    "z j, 'njv gjpf,jxecm>"         // Я об этом позабочусь.
-#define HUSTR_CHATMACRO9_RUS    "lf."                           // Да.
-#define HUSTR_CHATMACRO0_RUS    "ytn>"                          // Нет.
-
 #define HUSTR_TALKTOSELF1_RUS   "ythfp,jhxbdjt ,jhvjnfybt>>>"   // Неразборчивое бормотание...
 #define HUSTR_TALKTOSELF2_RUS   "rnj nfv?"                      // Кто там?
 #define HUSTR_TALKTOSELF3_RUS   "xnj 'nj ,skj?"                 // Что это было?
 #define HUSTR_TALKTOSELF4_RUS   "ds ,htlbnt>"                   // Вы бредите.
 #define HUSTR_TALKTOSELF5_RUS   "rfrfz ljcflf!"                 // Какая досада!
-
-#define HUSTR_MESSAGESENT_RUS   "(cjj,otybt jnghfdktyj)"        // (сообщение отправлено)
-
-
-//
-// Позывные игроков
-//
-
-#define HUSTR_PLRGREEN_RUS  "uhby: "    // Грин:
-#define HUSTR_PLRINDIGO_RUS "bylbuj: "  // Индиго:
-#define HUSTR_PLRBROWN_RUS  ",hfey: "   // Браун:
-#define HUSTR_PLRRED_RUS    "htl: "     // Ред:
 
 
 //

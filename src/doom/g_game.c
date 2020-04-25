@@ -254,7 +254,10 @@ int fake_contrast = 0;
 int translucency = 1;
 int improved_fuzz = 2;
 int colored_hud = 0;
-int messages_color = 0;
+int messages_pickup_color = 0;
+int messages_secret_color = 3;
+int messages_system_color = 0;
+int messages_chat_color = 1;
 int colored_blood = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
@@ -459,7 +462,7 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
             joybspeed = 29;
         }
 
-        players[consoleplayer].message = (joybspeed >= MAX_JOY_BUTTONS) ? ststr_alwrun_on : ststr_alwrun_off;
+        players[consoleplayer].message_system = (joybspeed >= MAX_JOY_BUTTONS) ? ststr_alwrun_on : ststr_alwrun_off;
         S_StartSound(NULL,sfx_swtchn);
 
         gamekeydown[key_toggleautorun] = false;
@@ -661,7 +664,7 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
             look = TOCENTER;
         }
 
-        players[consoleplayer].message = mlook ? ststr_mlook_on : ststr_mlook_off;
+        players[consoleplayer].message_system = mlook ? ststr_mlook_on : ststr_mlook_off;
         S_StartSound(NULL, sfx_swtchn);
 
         gamekeydown[key_togglemlook] = false;
@@ -885,7 +888,7 @@ void G_DoLoadLevel (void)
 
     if (testcontrols)
     {
-        players[consoleplayer].message = ststr_testctrls;
+        players[consoleplayer].message_system = ststr_testctrls;
     }
 }
 
@@ -1120,7 +1123,7 @@ void G_Ticker (void)
             V_ScreenShot("screenshot-doom-%02i.%s");
             if (devparm)
             {
-                players[consoleplayer].message = ststr_scrnsht;
+                players[consoleplayer].message_system = ststr_scrnsht;
             }
             S_StartSound(NULL,sfx_itemup); // [JN] Звуковой фидбек
             gameaction = ga_nothing;
@@ -1167,20 +1170,11 @@ void G_Ticker (void)
             {
                 static char turbomessage[80];
                 extern char *player_names[4];
-                extern char *player_names_rus[4];
 
-                if (english_language)
-                {
-                    M_snprintf(turbomessage, sizeof(turbomessage),
-                               "%s is turbo!", player_names[i]);
-                }
-                else
-                {   // Сверхскорость!
-                    M_snprintf(turbomessage, sizeof(turbomessage),
-                               "%s cdth[crjhjcnm!", player_names_rus[i]);
-                }
+                M_snprintf(turbomessage, sizeof(turbomessage),
+                           "%s is turbo!", player_names[i]);
 
-                players[consoleplayer].message = turbomessage;
+                players[consoleplayer].message_chat = turbomessage;
                 turbodetected[i] = false;
             }
 
@@ -2017,7 +2011,7 @@ void G_DoLoadGame (void)
     R_ExecuteSetViewSize ();
     
     // [JN] Дополнительный фидбек о загрузке игры (Игра загружена.)
-    players[consoleplayer].message = DEH_String(ggloaded);
+    players[consoleplayer].message_system = DEH_String(ggloaded);
     
     // draw the pattern into the back screen
     R_FillBackScreen ();   
@@ -2113,7 +2107,7 @@ void G_DoSaveGame (void)
     gameaction = ga_nothing;
     M_StringCopy(savedescription, "", sizeof(savedescription));
 
-    players[consoleplayer].message = DEH_String(ggsaved);
+    players[consoleplayer].message_system = DEH_String(ggsaved);
 
     // draw the pattern into the back screen
     R_FillBackScreen ();

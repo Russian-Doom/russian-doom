@@ -369,8 +369,11 @@ void M_RD_Change_LocalTime(int choice);
 void M_RD_Choose_MessagesSettings(int choice);
 void M_RD_Draw_MessagesSettings(void);
 void M_RD_Change_Messages(int choice);
-void M_RD_Change_MessagesColor(int choice);
 void M_RD_Change_ShadowedText(int choice);
+void M_RD_Change_Msg_Pickup_Color(int choice);
+void M_RD_Change_Msg_Secret_Color(int choice);
+void M_RD_Change_Msg_System_Color(int choice);
+void M_RD_Change_Msg_Chat_Color(int choice);
 
 // Automap
 void M_RD_Choose_AutomapSettings(int choice);
@@ -1473,8 +1476,12 @@ menu_t  RD_Display_Def_Rus =
 enum
 {
     rd_messages_toggle,
-    rd_messages_color,
     rd_messages_shadows,
+    rd_messages_empty1,
+    rd_messages_pickup_color,
+    rd_messages_secret_color,
+    rd_messages_system_color,
+    rd_messages_chat_color,
     rd_messages_end
 } rd_messages_e;
 
@@ -1485,8 +1492,12 @@ enum
 menuitem_t RD_Messages_Menu[]=
 {
     {2, "messages enabled:",   M_RD_Change_Messages,        'm'},
-    {2, "messages color:",     M_RD_Change_MessagesColor,   'm'},
     {2, "text casts shadows:", M_RD_Change_ShadowedText,    't'},
+    {-1,"",0,'\0'},
+    {2, "item pickup:",        M_RD_Change_Msg_Pickup_Color,'i'},
+    {2, "revealed secret:",    M_RD_Change_Msg_Secret_Color,'r'},
+    {2, "system message:",     M_RD_Change_Msg_System_Color,'s'},
+    {2, "netgame chat:",       M_RD_Change_Msg_Chat_Color,  'n'},
     {-1,"",0,'\0'}
 };
 
@@ -1496,7 +1507,7 @@ menu_t  RD_Messages_Def =
     &RD_Display_Def,
     RD_Messages_Menu,
     M_RD_Draw_MessagesSettings,
-    35,35,
+    35,45,
     0
 };
 
@@ -1507,8 +1518,12 @@ menu_t  RD_Messages_Def =
 menuitem_t RD_Messages_Menu_Rus[]=
 {
     {2, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'j'}, // Отображение сообщений:
-    {2, "wdtn cjj,otybq:",          M_RD_Change_MessagesColor,   'w'}, // Цвет сообщений:
     {2, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень:
+    {-1,"",0,'\0'},
+    {2, "gjkextybt ghtlvtnjd:",     M_RD_Change_Msg_Pickup_Color,'g'}, // Получение предметов:
+    {2, "j,yfhe;tybt nfqybrjd:",    M_RD_Change_Msg_Secret_Color,'j'}, // Обнаружение тайников:
+    {2, "cbcntvyst cjj,otybz:",     M_RD_Change_Msg_System_Color,'c'}, // Системные сообщения:
+    {2, "xfn ctntdjq buhs:",        M_RD_Change_Msg_Chat_Color,  'x'}, // Чат сетевой игры:
     {-1,"",0,'\0'}
 };
 
@@ -1518,7 +1533,7 @@ menu_t  RD_Messages_Def_Rus =
     &RD_Display_Def_Rus,
     RD_Messages_Menu_Rus,
     M_RD_Draw_MessagesSettings,
-    35,35,
+    35,45,
     0
 };
 
@@ -2678,7 +2693,7 @@ void M_RD_Change_Gamma(int choice)
                                                      "PLAYPAL"),
                                                      PU_CACHE) + 
                                                      st_palette * 768);
-    players[consoleplayer].message = DEH_String(english_language ? 
+    players[consoleplayer].message_system = DEH_String(english_language ? 
                                                gammamsg[usegamma] :
                                                gammamsg_rus[usegamma]);
 }
@@ -2706,11 +2721,11 @@ void M_RD_Change_Detail(int choice)
     R_SetViewSize (screenblocks, detailLevel);
 
     if (!detailLevel)
-    players[consoleplayer].message = DEH_String(english_language ?
-                                     DETAILHI : DETAILHI_RUS);
+    players[consoleplayer].message_system = DEH_String(english_language ?
+                                            DETAILHI : DETAILHI_RUS);
     else
-    players[consoleplayer].message = DEH_String(english_language ?
-                                     DETAILLO : DETAILLO_RUS);
+    players[consoleplayer].message_system = DEH_String(english_language ?
+                                            DETAILLO : DETAILLO_RUS);
 }
 
 void M_RD_Change_LocalTime(int choice)
@@ -2759,72 +2774,243 @@ void M_RD_Draw_MessagesSettings(void)
     {
         M_WriteTextBigCentered_ENG(12, "MESSAGES SETTINGS");
 
-        // Messages
-        M_WriteTextSmall_ENG(165 + wide_delta, 35, showMessages == 1 ? "on" : "off");
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35 + wide_delta, 35, "General");  
+        dp_translation = NULL;
 
-        // Messages color
-        if (gamemission == jaguar)
-        {
-            M_WriteTextSmall_ENG(149 + wide_delta, 45, "n/a");
-        }
-        else
-        {
-            if (messages_color == 1)
-            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(149 + wide_delta, 45, "green"); dp_translation = NULL; }
-            else if (messages_color == 2)
-            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(149 + wide_delta, 45, "blue"); dp_translation = NULL; }
-            else if (messages_color == 3)
-            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(149 + wide_delta, 45, "gold"); dp_translation = NULL; }
-            else if (messages_color == 4)
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(149 + wide_delta, 45, "gray"); dp_translation = NULL; }
-            else if (messages_color == 5)
-            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(149 + wide_delta, 45, "tan"); dp_translation = NULL; }
-            else if (messages_color == 6)
-            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(149 + wide_delta, 45, "brown"); dp_translation = NULL; }
-            else if (messages_color == 7)
-            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(149 + wide_delta, 45, "brick"); dp_translation = NULL; }
-            else
-            { dp_translation = NULL; M_WriteTextSmall_ENG(149 + wide_delta, 45, "standard"); }
-        }
+        // Messages
+        M_WriteTextSmall_ENG(165 + wide_delta, 45, showMessages == 1 ? "on" : "off");
 
         // Text casts shadows
         M_WriteTextSmall_ENG(177 + wide_delta, 55, draw_shadowed_text == 1 ? "on" : "off");
 
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35 + wide_delta, 65, "Colors");  
+        dp_translation = NULL;
+
+        // Item pickup
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_ENG(120 + wide_delta, 75, "n/a");
+        }
+        else
+        {
+            if (messages_pickup_color == 1)
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(120 + wide_delta, 75, "green"); dp_translation = NULL; }
+            else if (messages_pickup_color == 2)
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(120 + wide_delta, 75, "blue"); dp_translation = NULL; }
+            else if (messages_pickup_color == 3)
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(120 + wide_delta, 75, "gold"); dp_translation = NULL; }
+            else if (messages_pickup_color == 4)
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(120 + wide_delta, 75, "gray"); dp_translation = NULL; }
+            else if (messages_pickup_color == 5)
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(120 + wide_delta, 75, "tan"); dp_translation = NULL; }
+            else if (messages_pickup_color == 6)
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(120 + wide_delta, 75, "brown"); dp_translation = NULL; }
+            else if (messages_pickup_color == 7)
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(120 + wide_delta, 75, "brick"); dp_translation = NULL; }
+            else
+            { dp_translation = NULL; M_WriteTextSmall_ENG(120 + wide_delta, 75, "red"); }
+        }
+
+        // Revealed secret
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_ENG(157 + wide_delta, 85, "n/a");
+        }
+        else
+        {
+            if (messages_secret_color == 1)
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(157 + wide_delta, 85, "green"); dp_translation = NULL; }
+            else if (messages_secret_color == 2)
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(157 + wide_delta, 85, "blue"); dp_translation = NULL; }
+            else if (messages_secret_color == 3)
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(157 + wide_delta, 85, "gold"); dp_translation = NULL; }
+            else if (messages_secret_color == 4)
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(157 + wide_delta, 85, "gray"); dp_translation = NULL; }
+            else if (messages_secret_color == 5)
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(157 + wide_delta, 85, "tan"); dp_translation = NULL; }
+            else if (messages_secret_color == 6)
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(157 + wide_delta, 85, "brown"); dp_translation = NULL; }
+            else if (messages_secret_color == 7)
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(157 + wide_delta, 85, "brick"); dp_translation = NULL; }
+            else
+            { dp_translation = NULL; M_WriteTextSmall_ENG(157 + wide_delta, 85, "red"); }
+        }
+
+        // System message
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_ENG(149 + wide_delta, 95, "n/a");
+        }
+        else
+        {
+            if (messages_system_color == 1)
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(149 + wide_delta, 95, "green"); dp_translation = NULL; }
+            else if (messages_system_color == 2)
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(149 + wide_delta, 95, "blue"); dp_translation = NULL; }
+            else if (messages_system_color == 3)
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(149 + wide_delta, 95, "gold"); dp_translation = NULL; }
+            else if (messages_system_color == 4)
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(149 + wide_delta, 95, "gray"); dp_translation = NULL; }
+            else if (messages_system_color == 5)
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(149 + wide_delta, 95, "tan"); dp_translation = NULL; }
+            else if (messages_system_color == 6)
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(149 + wide_delta, 95, "brown"); dp_translation = NULL; }
+            else if (messages_system_color == 7)
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(149 + wide_delta, 95, "brick"); dp_translation = NULL; }
+            else
+            { dp_translation = NULL; M_WriteTextSmall_ENG(149 + wide_delta, 95, "red"); }
+        }
+
+        // Netgame chat
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_ENG(136 + wide_delta, 105, "n/a");
+        }
+        else
+        {
+            if (messages_chat_color == 1)
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(136 + wide_delta, 105, "green"); dp_translation = NULL; }
+            else if (messages_chat_color == 2)
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(136 + wide_delta, 105, "blue"); dp_translation = NULL; }
+            else if (messages_chat_color == 3)
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(136 + wide_delta, 105, "gold"); dp_translation = NULL; }
+            else if (messages_chat_color == 4)
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(136 + wide_delta, 105, "gray"); dp_translation = NULL; }
+            else if (messages_chat_color == 5)
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(136 + wide_delta, 105, "tan"); dp_translation = NULL; }
+            else if (messages_chat_color == 6)
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(136 + wide_delta, 105, "brown"); dp_translation = NULL; }
+            else if (messages_chat_color == 7)
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(136 + wide_delta, 105, "brick"); dp_translation = NULL; }
+            else
+            { dp_translation = NULL; M_WriteTextSmall_ENG(136 + wide_delta, 105, "red"); }
+        }
     }
     else
     {
         M_WriteTextBigCentered_RUS(12, "YFCNHJQRB CJJ<OTYBQ"); // НАСТРОЙКИ СООБЩЕНИЙ
 
-        // Отображение сообщений
-        M_WriteTextSmall_RUS(214 + wide_delta, 35, showMessages == 1 ? "drk" : "dsrk");
+        //
+        // Общие
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35 + wide_delta, 35, "j,obt");  
+        dp_translation = NULL;
 
-        // Цвет сообщений
-        if (gamemission == jaguar)
-        {
-            M_WriteTextSmall_RUS(155 + wide_delta, 45, "y*l"); // н/д
-        }
-        else
-        {
-            if (messages_color == 1) // Зеленый
-            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(155 + wide_delta, 45, "ptktysq"); dp_translation = NULL; }
-            else if (messages_color == 2) // Синий
-            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(155 + wide_delta, 45, "cbybq"); dp_translation = NULL; }
-            else if (messages_color == 3) // Желтый
-            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(155 + wide_delta, 45, ";tknsq"); dp_translation = NULL; }
-            else if (messages_color == 4) // Белый
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(155 + wide_delta, 45, ",tksq"); dp_translation = NULL; }
-            else if (messages_color == 5) // Бежевый
-            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(155 + wide_delta, 45, ",t;tdsq"); dp_translation = NULL; }
-            else if (messages_color == 6) // Коричневый
-            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(155 + wide_delta, 45, "rjhbxytdsq"); dp_translation = NULL; }
-            else if (messages_color == 7) // Розовый
-            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(155 + wide_delta, 45, "hjpjdsq"); dp_translation = NULL; }
-            else                            // Стандартный (красный)
-            { dp_translation = NULL; M_WriteTextSmall_RUS(155 + wide_delta, 45, "cnfylfhnysq"); }
-        }
+        // Отображение сообщений
+        M_WriteTextSmall_RUS(214 + wide_delta, 45, showMessages == 1 ? "drk" : "dsrk");
 
         // Тексты отбрасывают тень
         M_WriteTextSmall_RUS(226 + wide_delta, 55, draw_shadowed_text == 1 ? "drk" : "dsrk");
+
+        //
+        // Цвета
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35 + wide_delta, 65, "wdtnf");  
+        dp_translation = NULL;
+
+        // Получение предметов
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_RUS(193 + wide_delta, 75, "y*l"); // н/д
+        }
+        else
+        {
+            if (messages_pickup_color == 1) // Зеленый
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(193 + wide_delta, 75, "ptktysq"); dp_translation = NULL; }
+            else if (messages_pickup_color == 2) // Синий
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(193 + wide_delta, 75, "cbybq"); dp_translation = NULL; }
+            else if (messages_pickup_color == 3) // Желтый
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(193 + wide_delta, 75, ";tknsq"); dp_translation = NULL; }
+            else if (messages_pickup_color == 4) // Белый
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(193 + wide_delta, 75, ",tksq"); dp_translation = NULL; }
+            else if (messages_pickup_color == 5) // Бежевый
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(193 + wide_delta, 75, ",t;tdsq"); dp_translation = NULL; }
+            else if (messages_pickup_color == 6) // Коричневый
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(193 + wide_delta, 75, "rjhbxytdsq"); dp_translation = NULL; }
+            else if (messages_pickup_color == 7) // Розовый
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(193 + wide_delta, 75, "hjpjdsq"); dp_translation = NULL; }
+            else                            // Красный
+            { dp_translation = NULL; M_WriteTextSmall_RUS(193 + wide_delta, 75, "rhfcysq"); }
+        }
+
+        // Обнаружение тайников
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_RUS(203 + wide_delta, 85, "y*l"); // н/д
+        }
+        else
+        {
+            if (messages_secret_color == 1) // Зеленый
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(203 + wide_delta, 85, "ptktysq"); dp_translation = NULL; }
+            else if (messages_secret_color == 2) // Синий
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(203 + wide_delta, 85, "cbybq"); dp_translation = NULL; }
+            else if (messages_secret_color == 3) // Желтый
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(203 + wide_delta, 85, ";tknsq"); dp_translation = NULL; }
+            else if (messages_secret_color == 4) // Белый
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(203 + wide_delta, 85, ",tksq"); dp_translation = NULL; }
+            else if (messages_secret_color == 5) // Бежевый
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(203 + wide_delta, 85, ",t;tdsq"); dp_translation = NULL; }
+            else if (messages_secret_color == 6) // Коричневый
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(203 + wide_delta, 85, "rjhbxytdsq"); dp_translation = NULL; }
+            else if (messages_secret_color == 7) // Розовый
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(203 + wide_delta, 85, "hjpjdsq"); dp_translation = NULL; }
+            else                            // Красный
+            { dp_translation = NULL; M_WriteTextSmall_RUS(203 + wide_delta, 85, "rhfcysq"); }
+        }
+
+        // Системные сообщения
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_RUS(197 + wide_delta, 95, "y*l"); // н/д
+        }
+        else
+        {
+            if (messages_system_color == 1) // Зеленый
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(197 + wide_delta, 95, "ptktysq"); dp_translation = NULL; }
+            else if (messages_system_color == 2) // Синий
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(197 + wide_delta, 95, "cbybq"); dp_translation = NULL; }
+            else if (messages_system_color == 3) // Желтый
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(197 + wide_delta, 95, ";tknsq"); dp_translation = NULL; }
+            else if (messages_system_color == 4) // Белый
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(197 + wide_delta, 95, ",tksq"); dp_translation = NULL; }
+            else if (messages_system_color == 5) // Бежевый
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(197 + wide_delta, 95, ",t;tdsq"); dp_translation = NULL; }
+            else if (messages_system_color == 6) // Коричневый
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(197 + wide_delta, 95, "rjhbxytdsq"); dp_translation = NULL; }
+            else if (messages_system_color == 7) // Розовый
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(197 + wide_delta, 95, "hjpjdsq"); dp_translation = NULL; }
+            else                            // Красный
+            { dp_translation = NULL; M_WriteTextSmall_RUS(197 + wide_delta, 95, "rhfcysq"); }
+        }
+
+        // Чат сетевой игры
+        if (gamemission == jaguar)
+        {
+            M_WriteTextSmall_RUS(164 + wide_delta, 105, "y*l"); // н/д
+        }
+        else
+        {
+            if (messages_chat_color == 1) // Зеленый
+            { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(164 + wide_delta, 105, "ptktysq"); dp_translation = NULL; }
+            else if (messages_chat_color == 2) // Синий
+            { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(164 + wide_delta, 105, "cbybq"); dp_translation = NULL; }
+            else if (messages_chat_color == 3) // Желтый
+            { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(164 + wide_delta, 105, ";tknsq"); dp_translation = NULL; }
+            else if (messages_chat_color == 4) // Белый
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(164 + wide_delta, 105, ",tksq"); dp_translation = NULL; }
+            else if (messages_chat_color == 5) // Бежевый
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(164 + wide_delta, 105, ",t;tdsq"); dp_translation = NULL; }
+            else if (messages_chat_color == 6) // Коричневый
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(164 + wide_delta, 105, "rjhbxytdsq"); dp_translation = NULL; }
+            else if (messages_chat_color == 7) // Розовый
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(164 + wide_delta, 105, "hjpjdsq"); dp_translation = NULL; }
+            else                            // Красный
+            { dp_translation = NULL; M_WriteTextSmall_RUS(164 + wide_delta, 105, "rhfcysq"); }
+        }
     }
 }
 
@@ -2833,19 +3019,17 @@ void M_RD_Change_Messages(int choice)
     showMessages ^= 1;
 
     if (!showMessages)
-    players[consoleplayer].message = DEH_String(english_language ?
-                                     MSGOFF : MSGOFF_RUS);
+    players[consoleplayer].message_system = DEH_String(english_language ?
+                                            MSGOFF : MSGOFF_RUS);
     else
-    players[consoleplayer].message = DEH_String(english_language ?
-                                     MSGON : MSGON_RUS);
+    players[consoleplayer].message_system = DEH_String(english_language ?
+                                            MSGON : MSGON_RUS);
 
     message_dontfuckwithme = true;
 }
 
-void M_RD_Change_MessagesColor(int choice)
+void M_RD_Change_Msg_Pickup_Color(int choice)
 {
-    static char msgcolor[32];
-
     // [JN] Disable colored messages toggling in Jaguar
     if (gamemission == jaguar)
     return;
@@ -2853,23 +3037,83 @@ void M_RD_Change_MessagesColor(int choice)
     switch(choice)
     {
         case 0:
-        messages_color--;
-        if (messages_color < 0)
-            messages_color = 7;
+        messages_pickup_color--;
+        if (messages_pickup_color < 0)
+            messages_pickup_color = 7;
         break;
 
         case 1:
-        messages_color++;
-        if (messages_color > 7)
-            messages_color = 0;
+        messages_pickup_color++;
+        if (messages_pickup_color > 7)
+            messages_pickup_color = 0;
         break;
     }
+}
 
-    // Print example message
-    M_snprintf(msgcolor, sizeof(msgcolor), english_language ? 
-                                           "Colored message example" :
-                                           "ghjdthrf wdtnf cjj,otybz");
-    players[consoleplayer].message = msgcolor;
+void M_RD_Change_Msg_Secret_Color(int choice)
+{
+    // [JN] Disable colored messages toggling in Jaguar
+    if (gamemission == jaguar)
+    return;
+
+    switch(choice)
+    {
+        case 0:
+        messages_secret_color--;
+        if (messages_secret_color < 0)
+            messages_secret_color = 7;
+        break;
+
+        case 1:
+        messages_secret_color++;
+        if (messages_secret_color > 7)
+            messages_secret_color = 0;
+        break;
+    }
+}
+
+void M_RD_Change_Msg_System_Color(int choice)
+{
+    // [JN] Disable colored messages toggling in Jaguar
+    if (gamemission == jaguar)
+    return;
+
+    switch(choice)
+    {
+        case 0:
+        messages_system_color--;
+        if (messages_system_color < 0)
+            messages_system_color = 7;
+        break;
+
+        case 1:
+        messages_system_color++;
+        if (messages_system_color > 7)
+            messages_system_color = 0;
+        break;
+    }
+}
+
+void M_RD_Change_Msg_Chat_Color(int choice)
+{
+    // [JN] Disable colored messages toggling in Jaguar
+    if (gamemission == jaguar)
+    return;
+
+    switch(choice)
+    {
+        case 0:
+        messages_chat_color--;
+        if (messages_chat_color < 0)
+            messages_chat_color = 7;
+        break;
+
+        case 1:
+        messages_chat_color++;
+        if (messages_chat_color > 7)
+            messages_chat_color = 0;
+        break;
+    }
 }
 
 void M_RD_Change_ShadowedText(int choice)
@@ -4125,7 +4369,10 @@ void M_RD_BackToDefaultsResponse(int key)
     detailLevel        = 0;
     local_time         = 0;
     showMessages       = 1;
-    messages_color     = 0;
+    messages_pickup_color = 0;
+    messages_secret_color = 3;
+    messages_system_color = 0;
+    messages_chat_color   = 1;
     draw_shadowed_text = 1;
 
     // Automap
@@ -4209,7 +4456,7 @@ void M_RD_BackToDefaultsResponse(int key)
     M_snprintf(resetmsg, sizeof(resetmsg), english_language ? 
                                            "Settings reset" :
                                            "Yfcnhjqrb c,hjitys");
-    players[consoleplayer].message = resetmsg;
+    players[consoleplayer].message_system = resetmsg;
 }
 
 void M_RD_BackToDefaults(int choice)
@@ -5572,7 +5819,7 @@ boolean M_Responder (event_t* ev)
 
         M_snprintf(crosshairmsg, sizeof(crosshairmsg),
                    crosshair_draw ? ststr_crosshair_on : ststr_crosshair_off);
-        players[consoleplayer].message = crosshairmsg;
+        players[consoleplayer].message_system = crosshairmsg;
         S_StartSound(NULL,sfx_swtchn);
 
         return true;
@@ -5689,9 +5936,9 @@ boolean M_Responder (event_t* ev)
                                               "PALFIX" : "PLAYPAL"), PU_CACHE) +
                                               st_palette * 768);
 
-        players[consoleplayer].message = DEH_String(english_language ? 
-                                                    gammamsg[usegamma] : 
-                                                    gammamsg_rus[usegamma]);
+        players[consoleplayer].message_system = DEH_String(english_language ? 
+                                                           gammamsg[usegamma] : 
+                                                           gammamsg_rus[usegamma]);
         return true;
     }
 
@@ -6297,10 +6544,6 @@ void M_Init (void)
         if (screenSize > 5)
             screenSize = 5;
     }
-
-    // [JN] Safeguard: correct invalid pickup message colors
-    if (messages_color < 0 || messages_color > 7)
-        messages_color = 0;
 
     // Here we could catch other version dependencies,
     //  like HELP1/2, and four episodes.

@@ -143,7 +143,10 @@ static void SensibleDefaults(void)
     translucency = 1;
     improved_fuzz = 2;
     colored_hud = 0;
-    messages_color = 0;
+    messages_pickup_color = 0;
+    messages_secret_color = 3;
+    messages_system_color = 0;
+    messages_chat_color = 0;
     colored_blood = 1;
     swirling_liquids = 1;
     invul_sky = 1;

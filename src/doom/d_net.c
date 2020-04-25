@@ -69,7 +69,7 @@ static void PlayerQuitGame(player_t *player)
     exitmsg[6] += player_num;
 
     playeringame[player_num] = false;
-    players[consoleplayer].message = exitmsg;
+    players[consoleplayer].message_system = exitmsg;
 
     // TODO: check if it is sensible to do this:
 

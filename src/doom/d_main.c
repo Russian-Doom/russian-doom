@@ -488,7 +488,10 @@ void D_BindVariables(void)
     M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("local_time",             &local_time);
     M_BindIntVariable("show_messages",          &showMessages);
-    M_BindIntVariable("messages_color",         &messages_color);
+    M_BindIntVariable("messages_pickup_color",  &messages_pickup_color);
+    M_BindIntVariable("messages_secret_color",  &messages_secret_color);
+    M_BindIntVariable("messages_system_color",  &messages_system_color);
+    M_BindIntVariable("messages_chat_color",    &messages_chat_color);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
 
     // Automap
