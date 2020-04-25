@@ -2118,7 +2118,7 @@ void AM_drawPlayers(void)
         {
             // [JN] Atari Jaguar: draw dark green, blinking arrow
             if (leveltime & 8)
-            AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, plr->mo->angle, GREEN_JAGUAR, plr->mo->x, plr->mo->y);
+            AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, plr->mo->angle, GREEN_JAGUAR, pt.x, pt.y);
         }
         else
         {
