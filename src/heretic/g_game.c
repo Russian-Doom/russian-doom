@@ -756,7 +756,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     {
         if (mlook || novert)
         {
-            cmd->lookdir += mousey;
+            cmd->lookdir += mouse_y_invert ? -mousey : mousey;
         }
         else if (!novert)
         {

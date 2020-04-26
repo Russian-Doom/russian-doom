@@ -175,6 +175,7 @@ static void DrawControlsMenu(void);
 static boolean M_RD_AlwaysRun(int option);
 static boolean M_RD_Sensitivity(int option);
 static boolean M_RD_MouseLook(int option);
+static boolean M_RD_InvertY(int option);
 static boolean M_RD_Novert(int option);
 
 
@@ -648,6 +649,7 @@ static MenuItem_t ControlsItems[] = {
     {ITT_LRFUNC, "MOUSE SENSIVITY",          M_RD_Sensitivity,  0, MENU_NONE},
     {ITT_EMPTY,  NULL,                       NULL,              0, MENU_NONE},
     {ITT_LRFUNC, "MOUSE LOOK:",              M_RD_MouseLook,    0, MENU_NONE},
+    {ITT_LRFUNC, "INVERT Y AXIS:",           M_RD_InvertY,      0, MENU_NONE},
     {ITT_LRFUNC, "VERTICAL MOVEMENT:",       M_RD_Novert,       0, MENU_NONE}
 };
 
@@ -657,13 +659,14 @@ static MenuItem_t ControlsItems_Rus[] = {
     {ITT_LRFUNC, "CRJHJCNM VSIB",             M_RD_Sensitivity, 0, MENU_NONE}, // СКОРОСТЬ МЫШИ
     {ITT_EMPTY,  NULL,                        NULL,             0, MENU_NONE},
     {ITT_LRFUNC, "J,PJH VSIM.:",              M_RD_MouseLook,   0, MENU_NONE}, // ОБЗОР МЫШЬЮ
+    {ITT_LRFUNC, "DTHNBRFKMYFZ BYDTHCBZ:",    M_RD_InvertY,     0, MENU_NONE}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
     {ITT_LRFUNC, "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,      0, MENU_NONE}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
 };
 
 static Menu_t ControlsMenu = {
     36, 42,
     DrawControlsMenu,
-    6, ControlsItems,
+    7, ControlsItems,
     0,
     MENU_OPTIONS
 };
@@ -671,7 +674,7 @@ static Menu_t ControlsMenu = {
 static Menu_t ControlsMenu_Rus = {
     36, 42,
     DrawControlsMenu,
-    6, ControlsItems_Rus,
+    7, ControlsItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -2375,20 +2378,36 @@ static void DrawControlsMenu(void)
         MN_DrTextSmallRUS(DEH_String("DSRK"), 132 + wide_delta, 82);
     }
 
-    // Novert
-    if (!novert)
+    // Invert Y axis
+    if (mouse_y_invert)
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("ON"), 168 + wide_delta, 92);
+        MN_DrTextSmallENG(DEH_String("ON"), 133 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("DRK"), 227 + wide_delta, 92);
+        MN_DrTextSmallRUS(DEH_String("DRK"), 199 + wide_delta, 92);
     }
     else
     {
         if (english_language)
-        MN_DrTextSmallENG(DEH_String("OFF"), 168 + wide_delta, 92);
+        MN_DrTextSmallENG(DEH_String("OFF"), 133 + wide_delta, 92);
         else
-        MN_DrTextSmallRUS(DEH_String("DSRK"), 227 + wide_delta, 92);
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 199 + wide_delta, 92);
+    }
+
+    // Novert
+    if (!novert)
+    {
+        if (english_language)
+        MN_DrTextSmallENG(DEH_String("ON"), 168 + wide_delta, 102);
+        else
+        MN_DrTextSmallRUS(DEH_String("DRK"), 227 + wide_delta, 102);
+    }
+    else
+    {
+        if (english_language)
+        MN_DrTextSmallENG(DEH_String("OFF"), 168 + wide_delta, 102);
+        else
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 227 + wide_delta, 102);
     }
 }
 
@@ -2430,6 +2449,12 @@ static boolean M_RD_MouseLook(int option)
     mlook ^= 1;
     if (!mlook)
     players[consoleplayer].centering = true;
+    return true;
+}
+
+static boolean M_RD_InvertY(int option)
+{
+    mouse_y_invert ^= 1;
     return true;
 }
 
