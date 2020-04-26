@@ -3476,10 +3476,16 @@ void M_RD_Draw_Controls(void)
         M_WriteTextSmall_ENG(119 + wide_delta, 85, mlook ? "on" : "off");
 
         // Invert Y axis
+        if (!mlook)
+        dp_translation = cr[CR_DARKRED];
         M_WriteTextSmall_ENG(130 + wide_delta, 95, mouse_y_invert ? "on" : "off");
+        dp_translation = NULL;
 
         // Vertical movement
+        if (mlook)
+        dp_translation = cr[CR_DARKRED];
         M_WriteTextSmall_ENG(171 + wide_delta, 105, !novert ? "on" : "off");
+        dp_translation = NULL;
     }
     else
     {
@@ -3506,10 +3512,16 @@ void M_RD_Draw_Controls(void)
         M_WriteTextSmall_RUS(135 + wide_delta, 85, mlook ? "drk" : "dsrk");
 
         // Вертикальная инверсия
+        if (!mlook)
+        dp_translation = cr[CR_DARKRED];
         M_WriteTextSmall_RUS(207 + wide_delta, 95, mouse_y_invert ? "drk" : "dsrk");
+        dp_translation = NULL;
 
         // Вертикальное перемещение
+        if (mlook)
+        dp_translation = cr[CR_DARKRED];
         M_WriteTextSmall_RUS(235 + wide_delta, 105, !novert ? "drk" : "dsrk");
+        dp_translation = NULL;
     }
 
     // Mouse sensivity slider
