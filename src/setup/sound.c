@@ -57,7 +57,7 @@ char *snd_musiccmd = "";
 int snd_pitchshift = 0;
 char *snd_dmxoption = "-opl3"; // [crispy] default to OPL3 emulation
 
-static int numChannels = 8;
+static int numChannels = 32;
 static int sfxVolume = 8;
 static int musicVolume = 8;
 static int snd_monomode = 0; // [JN] Mono SFX
