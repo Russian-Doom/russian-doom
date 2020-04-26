@@ -192,50 +192,59 @@ static void GenerateSizesTable(TXT_UNCAST_ARG(widget),
     }
 }
 
-// [JN] No longer used, moved to ConfigDisplay
-//
-// static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
-//                                   TXT_UNCAST_ARG(sizes_table))
-// {
-//     TXT_CAST_ARG(txt_table_t, sizes_table);
-//     txt_window_t *window;
-//     txt_checkbox_t *ar_checkbox;
-// 
-//     window = TXT_NewWindow("Дополнительные настройки");
-// 
-//     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
-// 
-//     TXT_SetColumnWidths(window, 40);
-// 
-//     TXT_AddWidgets(window,
-//         ar_checkbox = TXT_NewCheckBox("Фиксировать соотношение сторон", &aspect_ratio_correct),
-//         TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
-//             TXT_NewCheckBox("Графическа€ загрузка", &graphical_startup)),
-//         TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
-//             TXT_NewCheckBox("Показывать экран ENDOOM при выходе", &show_endoom)),
-//             
-//     // [JN] Ёкспериментальные функции
-// 
-//     TXT_NewSeparator("Рендеринг"),
-//     TXT_NewCheckBox("Незначительное сглаживание текстур", &smoothing),
-//     TXT_NewCheckBox("Программный рендеринг (режим Software)", &force_software_renderer),
-// /*
-//     TXT_NewCheckBox("Мигать бордюрами экрана (эмул€ци€ VGA)", &vga_porch_flash),
-// #if SDL_VERSION_ATLEAST(2, 0, 5)
-//         TXT_NewCheckBox("Целочисленное масштабирование окна", &integer_scaling),
-// #endif
-// */
-// 
-//         NULL);
-// 
-//     TXT_SignalConnect(ar_checkbox, "changed", GenerateSizesTable, sizes_table);
-// }
+static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
+                                  TXT_UNCAST_ARG(sizes_table))
+{
+    // TXT_CAST_ARG(txt_table_t, sizes_table);
+    txt_window_t *window;
+    txt_checkbox_t *ar_checkbox;
+
+    window = TXT_NewWindow("Дополнительные настройки");
+
+    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
+
+    TXT_SetColumnWidths(window, 40);
+
+    TXT_AddWidgets(window,
+
+        ar_checkbox =
+        TXT_NewCheckBox(english_language ?
+                        "Draw window border" :
+                        "Отображать рамку окна",
+                        &window_border),
+        
+        TXT_If(!widescreen,
+        TXT_NewCheckBox(english_language ?
+                        "Fix aspect ratio" :
+                        "Фиксировать соотношение сторон",
+                        &aspect_ratio_correct)),
+
+        TXT_If(gamemission == heretic || gamemission == hexen,
+        TXT_NewCheckBox(english_language ?
+                        "Graphical startup" :
+                        "Графическа€ загрузка",
+                        &graphical_startup)),
+
+        TXT_If(gamemission == doom || gamemission == heretic,
+        TXT_NewCheckBox(english_language ?
+                        "Show ENDOOM screen on exit" :
+                        "Показывать экран ENDOOM при выходе",
+                        &show_endoom)),
+
+/*
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+        TXT_NewCheckBox("Целочисленное масштабирование окна", &integer_scaling),
+#endif
+*/
+
+        NULL);
+}
 
 void ConfigDisplay(void)
 {
     txt_window_t *window;
     txt_table_t *sizes_table;
-    // txt_window_action_t *advanced_button;
+    txt_window_action_t *advanced_button;
     txt_checkbox_t *ar_checkbox;
 
     // Open the window
@@ -266,10 +275,6 @@ void ConfigDisplay(void)
                         "Vertical sync" :
                         "Вертикальна€ синхронизаци€",
                         &vsync),
-//      TXT_NewCheckBox(english_language ?
-//                      "Fix aspect ratio" :
-//                      "Фиксировать соотношение сторон",
-//                      &aspect_ratio_correct),
         TXT_NewCheckBox(english_language ?
                         "Uncapped framerate" :
                         "Сн€ть ограничение с кадровой частоты",
@@ -297,10 +302,6 @@ void ConfigDisplay(void)
                       "Show Disk icon" :
                       "Отображать значок дискеты",
                       &show_diskicon)),
-//      TXT_NewCheckBox(english_language ?
-//                      "Screen wiping effect" :
-//                      "Плавна€ смена экранов",
-//                      &screen_wiping)),
       TXT_If(gamemission == heretic || gamemission == hexen || gamemission == strife,
           TXT_NewCheckBox(english_language ?
                           "Graphical startup" :
@@ -313,15 +314,6 @@ void ConfigDisplay(void)
                         "Сохран€ть скриншоты в формате PNG",
                         &png_screenshots),
 #endif
-
-// [JN] Not really needed. Leave as a hidden variable in config file.
-/*
-        TXT_If(gamemission == doom || gamemission == heretic || gamemission == strife,
-            TXT_NewCheckBox(english_language ?
-                            "Show ENDOOM screen on exit" :
-                            "Показывать экран ENDOOM при выходе",
-                            &show_endoom)),
-*/
 
     TXT_NewSeparator(english_language ?
                      "Video" :
@@ -350,17 +342,16 @@ void ConfigDisplay(void)
 
     TXT_SignalConnect(ar_checkbox, "changed", GenerateSizesTable, sizes_table);
 
-    /*
-    **    Button to open "advanced" window.
-    ** Need to pass a pointer to the window sizes table, as some of the options
-    ** in there trigger a rebuild of it.
 
-    ** advanced_button = TXT_NewWindowAction('a', "Дополнительно");
+    //    Button to open "advanced" window.
+    // Need to pass a pointer to the window sizes table, as some of the options
+    // in there trigger a rebuild of it.
 
-    ** TXT_SetWindowAction(window, TXT_HORIZ_CENTER, advanced_button);
-    ** TXT_SignalConnect(advanced_button, "pressed",
-    **                   AdvancedDisplayConfig, sizes_table);
-    */
+    advanced_button = TXT_NewWindowAction('a', "Дополнительно");
+
+    TXT_SetWindowAction(window, TXT_HORIZ_CENTER, advanced_button);
+    TXT_SignalConnect(advanced_button, "pressed",
+                      AdvancedDisplayConfig, sizes_table);
 
     //
     // [JN] Create translated buttons
