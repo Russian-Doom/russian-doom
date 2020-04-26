@@ -2154,7 +2154,7 @@ void ST_createWidgets(void)
 
     // [JN] Negative player health
     STlib_initPercent(&w_health_neg,
-        ST_HEALTHX,
+        ST_HEALTHX + (widescreen ? WIDE_DELTA : 0),
         ST_HEALTHY,
         tallnum,
         &plyr->health_neg,
