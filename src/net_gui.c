@@ -66,13 +66,26 @@ static void OpenWaitDialog(void)
 {
     txt_window_action_t *cancel;
 
+    // [JN] Use RD branded colors
+    TXT_SetColor(TXT_COLOR_BLUE, 0, 63, 148);           // Background
+    TXT_SetColor(TXT_COLOR_BRIGHT_CYAN, 84, 206, 254);  // Borders
+    TXT_SetColor(TXT_COLOR_BRIGHT_GREEN, 255, 232, 59); // FN buttons
+    TXT_SetColor(TXT_COLOR_CYAN, 70, 176, 219);         // Highlighted item
+    TXT_SetColor(TXT_COLOR_GREEN, 0, 255, 0);           // Language switching text
+
     TXT_SetDesktopTitle(PACKAGE_STRING);
 
-    window = TXT_NewWindow("Ожидание запуска игры...");
+    window = TXT_NewWindow(english_language ?
+                           "Waiting for game start..." :
+                           "Ожидание запуска игры...");
 
-    TXT_AddWidget(window, TXT_NewLabel("\nПожалуйста, подождите...\n\n"));
+    TXT_AddWidget(window, TXT_NewLabel(english_language ?
+                                       "\nPlease wait...\n\n" :
+                                       "\nПожалуйста, подождите...\n\n"));
 
-    cancel = TXT_NewWindowAction(KEY_ESCAPE, "Отмена");
+    cancel = TXT_NewWindowAction(KEY_ESCAPE, english_language ?
+                                             "Cancel" :
+                                             "Отмена");
     TXT_SignalConnect(cancel, "pressed", EscapePressed, NULL);
 
     TXT_SetWindowAction(window, TXT_HORIZ_LEFT, cancel);
