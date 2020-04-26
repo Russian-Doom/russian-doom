@@ -1163,14 +1163,14 @@ static void GetWindowPosition(int *x, int *y, int w, int h)
     // in windowed mode, the desired window position can be specified
     // in the configuration file.
 
-    if (window_position == NULL || !strcmp(window_position, ""))
-    {
-        *x = *y = SDL_WINDOWPOS_UNDEFINED;
-    }
-    else if (window_border == false)
+    if (window_border == false)
     {
         // [JN] Use zero window coords if running in borderless window.
         *x = *y = 0;
+    }
+    else if (window_position == NULL || !strcmp(window_position, ""))
+    {
+        *x = *y = SDL_WINDOWPOS_UNDEFINED;
     }
     else if (!strcmp(window_position, "center"))
     {
