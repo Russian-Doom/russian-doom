@@ -87,6 +87,7 @@ extern int snd_monomode;
 
 extern int mlook;
 extern int novert;
+extern int mouse_y_invert;
 
 
 // -----------------------------------------------------------------------------

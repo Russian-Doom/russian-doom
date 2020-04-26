@@ -400,6 +400,7 @@ void M_RD_Choose_Controls(int choice);
 void M_RD_Draw_Controls(void);
 void M_RD_Change_AlwaysRun();
 void M_RD_Change_MouseLook(int choice);
+void M_RD_Change_InvertY(int choice);
 void M_RD_Change_Novert(int choice);
 void M_RD_Change_Sensitivity(int choice);
 
@@ -1691,6 +1692,7 @@ enum
     rd_controls_empty2,
     rd_controls_mouselook,
     rd_controls_novert,
+    rd_controls_inverty,
     rd_controls_end
 } rd_controls_e;
 
@@ -1705,6 +1707,7 @@ menuitem_t RD_Controls_Menu[]=
     {2, "mouse sensivity",    M_RD_Change_Sensitivity, 'm'},
     {-1,"",0,'\0'},
     {2, "mouse look:",        M_RD_Change_MouseLook,   'm'},
+    {2, "invert y axis:",     M_RD_Change_InvertY,     'i'},
     {2, "vertical movement:", M_RD_Change_Novert,      'v'},
     {-1,"",0,'\0'}
 
@@ -1731,6 +1734,7 @@ menuitem_t RD_Controls_Menu_Rus[]=
     {2, "crjhjcnm vsib",             M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
     {-1,"",0,'\0'},                                                 //
     {2, "j,pjh vsim.:",              M_RD_Change_MouseLook,   'j'}, // Обзор мышью
+    {2, "bydthcbz jcb #:",           M_RD_Change_InvertY,     'b'}, // Инверсия оси Y
     {2, "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,      'd'}, // Вертикальное перемещение
     {-1,"",0,'\0'}
 };
@@ -3471,8 +3475,11 @@ void M_RD_Draw_Controls(void)
         // Mouse look
         M_WriteTextSmall_ENG(119 + wide_delta, 85, mlook ? "on" : "off");
 
+        // Invert Y axis
+        M_WriteTextSmall_ENG(130 + wide_delta, 95, mouse_y_invert ? "on" : "off");
+
         // Vertical movement
-        M_WriteTextSmall_ENG(171 + wide_delta, 95, !novert ? "on" : "off");
+        M_WriteTextSmall_ENG(171 + wide_delta, 105, !novert ? "on" : "off");
     }
     else
     {
@@ -3498,8 +3505,11 @@ void M_RD_Draw_Controls(void)
         // Обзор мышью
         M_WriteTextSmall_RUS(135 + wide_delta, 85, mlook ? "drk" : "dsrk");
 
+        // Инверсия оси Y
+        M_WriteTextSmall_RUS(147 + wide_delta, 95, mouse_y_invert ? "drk" : "dsrk");
+
         // Вертикальное перемещение
-        M_WriteTextSmall_RUS(235 + wide_delta, 95, !novert ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(235 + wide_delta, 105, !novert ? "drk" : "dsrk");
     }
 
     // Mouse sensivity slider
@@ -3530,6 +3540,11 @@ void M_RD_Change_MouseLook(int choice)
 
     if (!mlook)
     players[consoleplayer].centering = true;
+}
+
+void M_RD_Change_InvertY(int choice)
+{
+    mouse_y_invert ^= 1;
 }
 
 void M_RD_Change_Novert(int choice)

@@ -38,8 +38,8 @@ static int mouse_threshold = 10;
 static int mlook = 0;
 static int grabmouse = 1;
 
-// [JN] ¬ертикальное перемещение отключено по умолчанию.
-int novert = 1;
+int novert = 1; // [JN] ¬ертикальное перемещение отключено по умолчанию.
+int mouse_y_invert = 0; // [crispy]
 
 static int *all_mouse_buttons[] = {
     &mousebfire,
@@ -184,16 +184,21 @@ void ConfigMouse(void)
                         "Разрешить использование мыши",
                         &usemouse),
         TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_NewCheckBox(english_language ?
+                            "Allow mouse look" :
+                            "Обзор мышью",
+                            &mlook),
+        TXT_TABLE_OVERFLOW_RIGHT,
+            TXT_NewCheckBox(english_language ?
+                            "Invert Y axis" :
+                            "Инверси€ оси Y",
+                            &mouse_y_invert),
+        TXT_TABLE_OVERFLOW_RIGHT,
             TXT_If(gamemission == doom, 
             TXT_NewInvertedCheckBox(english_language ?
                                     "Allow vertical mouse movement" :
                                     "Вертикальное перемещение",
                                     &novert)),
-        TXT_TABLE_OVERFLOW_RIGHT,
-            TXT_NewCheckBox(english_language ?
-                            "Allow mouse look" :
-                            "Свободный обзор мышью",
-                            &mlook),
         TXT_TABLE_OVERFLOW_RIGHT,
         TXT_NewCheckBox(english_language ?
                         "Grab mouse in windowed mode" :
@@ -253,6 +258,7 @@ void BindMouseVariables(void)
     M_BindIntVariable("mlook",                   &mlook);
     M_BindIntVariable("mouse_sensitivity",       &mouseSensitivity);
     M_BindIntVariable("novert",                  &novert);
+    M_BindIntVariable("mouse_y_invert",          &mouse_y_invert);
     M_BindIntVariable("grabmouse",               &grabmouse);
     M_BindIntVariable("mouse_threshold",         &mouse_threshold);
     M_BindFloatVariable("mouse_acceleration",    &mouse_acceleration);

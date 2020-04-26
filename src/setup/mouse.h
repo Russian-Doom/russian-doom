@@ -22,5 +22,6 @@ void ConfigMouse(void);
 void BindMouseVariables(void);
 
 extern int novert;
+extern int mouse_y_invert;
 
 #endif /* #ifndef SETUP_MOUSE_H */

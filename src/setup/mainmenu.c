@@ -118,6 +118,7 @@ static void SensibleDefaults(void)
     show_endoom = 0;
     dclick_use = 0;
     novert = 1;
+    mouse_y_invert = 0; // [crispy]
     snd_dmxoption = "-opl3 -reverse";
     png_screenshots = 1;
 

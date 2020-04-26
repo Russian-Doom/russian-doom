@@ -1657,6 +1657,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(mlook),
     CONFIG_VARIABLE_INT(mouse_sensitivity),
     CONFIG_VARIABLE_INT(novert),
+    CONFIG_VARIABLE_INT(mouse_y_invert),
 
     // Gameplay: Graphical
     CONFIG_VARIABLE_INT(brightmaps),

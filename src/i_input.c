@@ -106,6 +106,8 @@ int vanilla_keyboard_mapping = true;
 // by mouse_acceleration to increase the speed.
 float mouse_acceleration = 2.0;
 int mouse_threshold = 10;
+// [crispy]
+int mouse_y_invert = 0;
 
 // Translates the SDL key to a value of the type found in doomkeys.h
 static int TranslateKey(SDL_Keysym *sym)
@@ -473,4 +475,5 @@ void I_BindInputVariables(void)
     M_BindIntVariable("mouse_threshold",           &mouse_threshold);
     M_BindIntVariable("vanilla_keyboard_mapping",  &vanilla_keyboard_mapping);
     M_BindIntVariable("novert",                    &novert);
+    M_BindIntVariable("mouse_y_invert",            &mouse_y_invert); // [crispy]
 }
