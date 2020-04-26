@@ -1651,6 +1651,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(snd_channels),
     CONFIG_VARIABLE_INT(snd_monomode),
     CONFIG_VARIABLE_INT(snd_pitchshift),
+    CONFIG_VARIABLE_INT(mute_inactive_window),
 
     // Controls
     CONFIG_VARIABLE_INT(joyb_speed),

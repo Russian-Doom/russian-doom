@@ -655,6 +655,19 @@ void D_DoomLoop (void)
         if (screenvisible)
         D_Display ();
 
+        // [JN] Mute and restore sound and music volume.
+        if (mute_inactive_window && volume_needs_update)
+        {
+            if (!window_focused)
+            {
+                S_MuteSound();
+            }
+            else
+            {
+                S_UnMuteSound();
+            }
+        }
+
         // move positional sounds
         S_UpdateSounds (players[consoleplayer].mo);
     }

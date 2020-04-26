@@ -918,3 +918,35 @@ void S_StopMusic(void)
     }
 }
 
+// -----------------------------------------------------------------------------
+// S_MuteSound
+// [JN] Sets sound and music volume to 0, stops all sounds in all channels.
+// -----------------------------------------------------------------------------
+
+void S_MuteSound(void)
+{
+    int i;
+
+    S_SetMusicVolume(0);
+    S_SetSfxVolume(0);
+    for (i=0; i<snd_channels_rd; i++)
+    {
+        S_StopChannel(i);
+    }
+
+    volume_needs_update = false;
+}
+
+// -----------------------------------------------------------------------------
+// S_UnMuteSound
+// [JN] Restores sound and music volume.
+// -----------------------------------------------------------------------------
+
+void S_UnMuteSound(void)
+{
+    S_SetMusicVolume(musicVolume * 8);
+    S_SetSfxVolume(sfxVolume * 8);
+
+    volume_needs_update = false;
+}
+

@@ -79,6 +79,9 @@ extern int automap_grid;
 // -----------------------------------------------------------------------------
 
 extern int snd_monomode;
+extern int mute_inactive_window;
+extern boolean window_focused;
+extern boolean volume_needs_update;
 
 
 // -----------------------------------------------------------------------------

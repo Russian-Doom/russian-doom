@@ -56,6 +56,10 @@ char *snd_musiccmd = "";
 
 int snd_pitchshift = -1;
 
+// [JN] Mute sound and music volume if window lost it's focus.
+
+int mute_inactive_window = 0;
+
 // Low-level sound and music modules we are using
 
 static sound_module_t *sound_module;
@@ -463,6 +467,7 @@ void I_BindSoundVariables(void)
     M_BindIntVariable("snd_cachesize",           &snd_cachesize);
     M_BindIntVariable("opl_io_port",             &opl_io_port);
     M_BindIntVariable("snd_pitchshift",          &snd_pitchshift);
+    M_BindIntVariable("mute_inactive_window",    &mute_inactive_window);
 
     M_BindStringVariable("timidity_cfg_path",    &timidity_cfg_path);
     M_BindStringVariable("gus_patch_path",       &gus_patch_path);

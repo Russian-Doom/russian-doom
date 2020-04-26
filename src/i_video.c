@@ -223,7 +223,12 @@ static grabmouse_callback_t grabmouse_callback = NULL;
 
 // Does the window currently have focus?
 
-static boolean window_focused = true;
+boolean window_focused = true;
+
+// [JN] Does the sound volume needs to be updated?
+// Used for "mute_inactive_window" feature.
+
+boolean volume_needs_update = false;
 
 // Window resize state.
 
@@ -390,10 +395,12 @@ static void HandleWindowEvent(SDL_WindowEvent *event)
 
         case SDL_WINDOWEVENT_FOCUS_GAINED:
             window_focused = true;
+            volume_needs_update = true;
             break;
 
         case SDL_WINDOWEVENT_FOCUS_LOST:
             window_focused = false;
+            volume_needs_update = true;
             break;
             
         // We want to save the user's preferred monitor to use for running the

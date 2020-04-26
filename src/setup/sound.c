@@ -55,6 +55,7 @@ int snd_cachesize = 64 * 1024 * 1024;
 int snd_maxslicetime_ms = 28;
 char *snd_musiccmd = "";
 int snd_pitchshift = 0;
+int mute_inactive_window = 0;
 char *snd_dmxoption = "-opl3"; // [crispy] default to OPL3 emulation
 
 static int numChannels = 32;
@@ -244,6 +245,15 @@ void ConfigSound(void)
                                     "Выберите конфигурационный файл Timidity",
                                     cfg_extension),
                 NULL)),
+
+        TXT_NewSeparator(english_language ?
+                         "Misc." :
+                         "Дополнительно"),
+        TXT_NewCheckBox(english_language ?
+                        "Mute inactive window" :
+                        "Звук в неактивном окне",
+                        &mute_inactive_window),
+                         
         NULL);
 
     //
@@ -289,6 +299,7 @@ void BindSoundVariables(void)
     M_BindIntVariable("opl_io_port",              &opl_io_port);
 
     M_BindIntVariable("snd_pitchshift",           &snd_pitchshift);
+    M_BindIntVariable("mute_inactive_window",     &mute_inactive_window);
 
     if (gamemission == strife)
     {

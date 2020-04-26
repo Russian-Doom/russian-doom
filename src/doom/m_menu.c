@@ -394,6 +394,7 @@ void M_RD_Change_MusicVol(int choice);
 void M_RD_Change_SfxChannels(int choice);
 void M_RD_Change_SndMode(int choice);
 void M_RD_Change_PitchShifting(int choice);
+void M_RD_Change_MuteInactive(int choice);
 
 // Controls
 void M_RD_Choose_Controls(int choice);
@@ -1621,6 +1622,7 @@ enum
     rd_audio_empty4,
     rd_audio_sndmode,
     rd_audio_sndpitch,
+    rd_audio_muteinactive,
     rd_audio_end
 } rd_audio_e;
 
@@ -1639,6 +1641,7 @@ menuitem_t RD_Audio_Menu[]=
     {-1,"",0,'\0'},
     {2, "sfx mode:",             M_RD_Change_SndMode,       's'},
     {2, "pitch-shifted sounds:", M_RD_Change_PitchShifting, 'p'},
+    {2, "mute inactive window:", M_RD_Change_MuteInactive,  'm'},
     {-1,"",0,'\0'}
 };
 
@@ -1667,6 +1670,7 @@ menuitem_t RD_Audio_Menu_Rus[]=
     {-1,"",0,'\0'},                                                       //
     {2, "Ht;bv pderf:",               M_RD_Change_SndMode,        'h'},   // Режим звука
     {2, "ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting,  'g'},   // Произвольный питч-шифтинг
+    {2, "pder d ytfrnbdyjv jryt:",    M_RD_Change_MuteInactive,   'p'},   // Звук в неактивном окне
     {-1,"",0,'\0'}
 };
 
@@ -3322,6 +3326,9 @@ void M_RD_Draw_Audio(void)
 
         // Pitch-shifted sounds
         M_WriteTextSmall_ENG(186 + wide_delta, 125, snd_pitchshift == 1 ? "on" : "off");
+
+        // Mute inactive window
+        M_WriteTextSmall_ENG(185 + wide_delta, 135, mute_inactive_window == 1 ? "on" : "off");
     }
     else
     {
@@ -3346,6 +3353,9 @@ void M_RD_Draw_Audio(void)
 
         // Произвольный питч-шифтинг
         M_WriteTextSmall_RUS(242 + wide_delta, 125, snd_pitchshift == 1 ? "drk" : "dsrk");
+
+        // Звук в неактивном окне
+        M_WriteTextSmall_RUS(208 + wide_delta, 135, mute_inactive_window == 0 ? "drk" : "dsrk");
     }
 
     // SFX volume slider
@@ -3433,6 +3443,11 @@ void M_RD_Change_SndMode(int choice)
 void M_RD_Change_PitchShifting(int choice)
 {
     snd_pitchshift ^= 1;
+}
+
+void M_RD_Change_MuteInactive(int choice)
+{
+    mute_inactive_window ^= 1;
 }
 
 
@@ -4417,6 +4432,7 @@ void M_RD_BackToDefaultsResponse(int key)
     snd_channels    = 32; S_ChannelsRealloc();
     snd_monomode    = 0;
     snd_pitchshift  = 0;
+    mute_inactive_window = 0;
 
     // Controls
     joybspeed        = 29;
