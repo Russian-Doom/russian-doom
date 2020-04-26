@@ -191,14 +191,13 @@ void ConfigMouse(void)
         TXT_TABLE_OVERFLOW_RIGHT,
             TXT_NewCheckBox(english_language ?
                             "Invert Y axis" :
-                            "Инверси€ оси Y",
+                            "Вертикальна€ инверси€",
                             &mouse_y_invert),
         TXT_TABLE_OVERFLOW_RIGHT,
-            TXT_If(gamemission == doom, 
             TXT_NewInvertedCheckBox(english_language ?
                                     "Allow vertical mouse movement" :
                                     "Вертикальное перемещение",
-                                    &novert)),
+                                    &novert),
         TXT_TABLE_OVERFLOW_RIGHT,
         TXT_NewCheckBox(english_language ?
                         "Grab mouse in windowed mode" :

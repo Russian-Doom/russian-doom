@@ -1734,7 +1734,7 @@ menuitem_t RD_Controls_Menu_Rus[]=
     {2, "crjhjcnm vsib",             M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
     {-1,"",0,'\0'},                                                 //
     {2, "j,pjh vsim.:",              M_RD_Change_MouseLook,   'j'}, // Обзор мышью
-    {2, "bydthcbz jcb #:",           M_RD_Change_InvertY,     'b'}, // Инверсия оси Y
+    {2, "dthnbrfkmyfz bydthcbz:",    M_RD_Change_InvertY,     'd'}, // Вертикальная инверсия
     {2, "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,      'd'}, // Вертикальное перемещение
     {-1,"",0,'\0'}
 };
@@ -3505,8 +3505,8 @@ void M_RD_Draw_Controls(void)
         // Обзор мышью
         M_WriteTextSmall_RUS(135 + wide_delta, 85, mlook ? "drk" : "dsrk");
 
-        // Инверсия оси Y
-        M_WriteTextSmall_RUS(147 + wide_delta, 95, mouse_y_invert ? "drk" : "dsrk");
+        // Вертикальная инверсия
+        M_WriteTextSmall_RUS(207 + wide_delta, 95, mouse_y_invert ? "drk" : "dsrk");
 
         // Вертикальное перемещение
         M_WriteTextSmall_RUS(235 + wide_delta, 105, !novert ? "drk" : "dsrk");
