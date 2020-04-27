@@ -199,7 +199,9 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
     txt_window_t *window;
     txt_checkbox_t *ar_checkbox;
 
-    window = TXT_NewWindow("Дополнительные настройки");
+    window = TXT_NewWindow(english_language ?
+                           "Advanced display options" :
+                           "Прочие настройки");
 
     TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
@@ -238,6 +240,17 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
 */
 
         NULL);
+
+    //
+    // [JN] Create translated buttons
+    //
+
+    TXT_SetWindowAction(window, TXT_HORIZ_LEFT, english_language ?
+                        TXT_NewWindowAbortAction(window) :
+                        TXT_NewWindowAbortAction_Rus(window));
+    TXT_SetWindowAction(window, TXT_HORIZ_RIGHT, english_language ?
+                        TXT_NewWindowSelectAction(window) :
+                        TXT_NewWindowSelectAction_Rus(window));
 }
 
 void ConfigDisplay(void)
@@ -347,7 +360,9 @@ void ConfigDisplay(void)
     // Need to pass a pointer to the window sizes table, as some of the options
     // in there trigger a rebuild of it.
 
-    advanced_button = TXT_NewWindowAction('a', "Дополнительно");
+    advanced_button = TXT_NewWindowAction('a', english_language ?
+                                               "Advanced" :
+                                               "Прочее");
 
     TXT_SetWindowAction(window, TXT_HORIZ_CENTER, advanced_button);
     TXT_SignalConnect(advanced_button, "pressed",
