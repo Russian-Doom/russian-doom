@@ -208,23 +208,63 @@ void R_DrawTLColumn(void)
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl - centery) * fracstep;
 
-    do
-    {
-        *dest =
-            tinttable[((*dest) << 8) +
-                      dc_colormap[dc_source[(frac >> FRACBITS) & 127]]];
+    {   // [JN] Tutti-Frutti fix by Lee Killough
+        const byte *source = dc_source;
+        const lighttable_t *colormap = dc_colormap;
+        int heightmask = dc_texheight-1;
 
-        dest += screenwidth;
-        frac += fracstep;
+        if (dc_texheight & heightmask)  // not a power of 2 -- killough
+        {
+            heightmask++;
+            heightmask <<= FRACBITS;
+
+            if (frac < 0)
+            {
+                while ((frac += heightmask) < 0);
+            }
+            else
+            {
+                while (frac >= heightmask)
+                frac -= heightmask;
+            }
+
+            do
+            {
+                *dest = tinttable[((*dest) << 8) 
+                       + colormap[dc_source[(frac >> FRACBITS) & 127]]];
+                dest += screenwidth;    // killough 11/98
+                if ((frac += fracstep) >= heightmask)
+                {
+                    frac -= heightmask;
+                }
+            } while (--count);
+        }
+        else
+        {
+            while ((count-=2)>=0)   // texture height is a power of 2 -- killough
+            {
+                *dest = tinttable[((*dest) << 8) 
+                      + colormap[source[(frac>>FRACBITS) & heightmask]]];
+                dest += screenwidth;    // killough 11/98
+                frac += fracstep;
+                *dest = tinttable[((*dest) << 8) 
+                      + colormap[source[(frac>>FRACBITS) & heightmask]]];
+                dest += screenwidth;    // killough 11/98
+                frac += fracstep;
+            }
+            if (count & 1)
+                *dest = tinttable[((*dest) << 8) 
+                      + colormap[source[(frac>>FRACBITS) & heightmask]]];
+        }
     }
-    while (count--);
 
     // [crispy] if the line at the bottom had to be cut off,
     // draw one extra line using only pixels of that line and the one above
     // [JN] Slightly modified for Heretic
     if (cutoff)
     {
-        *dest = tinttable[((*dest) << 8) + dc_colormap[dc_source[(frac >> FRACBITS) & 127 / 2]]];
+        *dest = tinttable[((*dest) << 8) 
+              + dc_colormap[dc_source[(frac >> FRACBITS) & 127 / 2]]];
     }
 }
 
