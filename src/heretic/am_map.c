@@ -36,8 +36,6 @@
 
 vertex_t KeyPoints[NUMKEYS];
 
-#define NUMALIAS 7              // Number of antialiased lines.
-
 char *LevelNames[] = {
     // EPISODE 1 - THE CITY OF THE DAMNED
     "E1M1:  THE DOCKS",
@@ -207,6 +205,8 @@ static byte cheatcount = 0;
 
 extern boolean viewactive;
 
+#define NUMALIAS 11              // Number of antialiased lines.
+
 static byte antialias[NUMALIAS][8] = {
     {96, 97, 98, 99, 100, 101, 102, 103},
     {110, 109, 108, 107, 106, 105, 104, 103},
@@ -214,7 +214,11 @@ static byte antialias[NUMALIAS][8] = {
     {197, 197, 196, 196, 195, 195, 194, 194},   // BLUEKEY
     {143, 143, 142, 142, 141, 141, 140, 140},   // YELLOWKEY
     {220, 220, 219, 219, 218, 218, 217, 217},   // GREENKEY
-    {43, 43, 43, 42, 42, 42, 41, 41}            // GRAYS + 3 (unrevealed walls)
+    {43, 43, 43, 42, 42, 42, 41, 41},           // GRAYS + 3 (unrevealed walls)
+    {32, 31, 30, 29, 28, 27, 26, 25},           // WHITE
+    {8, 9, 10, 11, 12, 13, 14, 15},             // GREENS
+    {40, 40, 41, 41, 42, 42, 43, 43},           // GRAYS
+    {0, 2, 4, 6, 8, 10, 12, 14}                 // BLACK
 };
 
 // [JN] Use iverted colors for automap overlay mode (softly faded to darken).
@@ -225,7 +229,11 @@ static byte antialias_overlay[NUMALIAS][8] = {
     {197, 197, 196, 196, 195, 195, 194, 194},   // BLUEKEY
     {143, 143, 142, 142, 141, 141, 140, 140},   // YELLOWKEY
     {220, 219, 218, 217, 216, 215, 214, 213},   // GREENKEY
-    {43, 42, 41, 40, 39, 38, 37, 36}            // GRAYS + 3 (unrevealed walls)
+    {43, 42, 41, 40, 39, 38, 37, 36},           // GRAYS + 3 (unrevealed walls)
+    {32, 30, 28, 26, 24, 22, 20, 18},           // WHITE
+    {8, 7, 6, 5, 4, 3, 2, 1},                   // GREENS
+    {40, 39, 39, 38, 38, 37, 37, 36},           // GRAYS
+    {0, 0, 1, 1, 2, 2, 3, 4}                    // BLACK
 };
 
 /*
@@ -1135,6 +1143,26 @@ void AM_drawFline(fline_t * fl, int color)
         case GRAYS + 3:
             DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
                        &antialias_overlay[6][0] : &antialias[6][0]), 8, 3);
+            break;
+        // [JN] Apply antialiasing to player arrow
+        case WHITE:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[7][0] : &antialias[7][0]), 8, 3);
+            break;
+        // [JN] Apply antialiasing to thing triangles (GREENS = 8, not 264)
+        case GREENS:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[8][0] : &antialias[8][0]), 8, 3);
+            break;
+        // [JN] Apply antialiasing to hidden 2-sided lines
+        case GRAYS:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[9][0] : &antialias[9][0]), 8, 3);
+            break;
+        // [JN] Apply antialiasing to hidden 2-sided lines (secret doors)
+        case BLACK:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (automap_overlay ?
+                       &antialias_overlay[10][0] : &antialias[10][0]), 8, 3);
             break;
         default:
             {
