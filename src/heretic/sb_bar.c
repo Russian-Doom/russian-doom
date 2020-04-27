@@ -1215,10 +1215,8 @@ void DrawFullScreenStuff(void)
             dp_translation = cr[CR_GREEN2RED_HERETIC];
             else if (ammo < fullammo/2)
             dp_translation = cr[CR_GREEN2GOLD_HERETIC];
-            else if (ammo <= fullammo)
-            dp_translation = NULL;
             else
-            dp_translation = cr[CR_GREEN2BLUE_HERETIC];
+            dp_translation = NULL;
         }
 
         DrBNumber(fs_ammo, 274 + (wide_delta * 2), 176);
