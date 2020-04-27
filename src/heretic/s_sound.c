@@ -54,6 +54,7 @@ void *mus_sndptr;
 byte *soundCurve;
 
 int snd_MaxVolume = 10;
+int snd_MaxVolume_tmp;  // [JN] Temp volume variable used for hot-muting.
 int snd_MusicVolume = 10;
 
 int snd_Channels_RD;
@@ -556,6 +557,8 @@ void S_Init(void)
     I_SetMusicVolume(snd_MusicVolume * 8);
     S_SetMaxVolume(true);
 
+    snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable.
+
     I_AtExit(S_ShutDown, true);
 
     // Heretic defaults to pitch-shifting on
@@ -663,3 +666,41 @@ void S_ShutDown(void)
     I_ShutdownSound();
 }
 
+// -----------------------------------------------------------------------------
+// S_MuteSound
+// [JN] Sets sound and music volume to 0, stops all sounds in all channels.
+// -----------------------------------------------------------------------------
+
+void S_MuteSound(void)
+{
+    int i;
+
+    I_SetMusicVolume(0);
+
+    snd_MaxVolume = 0;
+    S_SetMaxVolume(true);
+    for (i = 0; i < snd_Channels_RD; i++)
+    {
+        if (channel[i].handle)
+        {
+            S_StopSound(channel[i].mo);
+        }
+    }
+
+    volume_needs_update = false;
+}
+
+// -----------------------------------------------------------------------------
+// S_UnMuteSound
+// [JN] Restores sound and music volume.
+// -----------------------------------------------------------------------------
+
+void S_UnMuteSound(void)
+{
+    I_SetMusicVolume(snd_MusicVolume * 8);
+
+    snd_MaxVolume = snd_MaxVolume_tmp;
+    S_SetMaxVolume(true);
+
+    volume_needs_update = false;
+}

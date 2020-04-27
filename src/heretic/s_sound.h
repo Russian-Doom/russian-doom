@@ -22,6 +22,7 @@
 #define __SOUNDSTH__
 
 extern int snd_MaxVolume;
+extern int snd_MaxVolume_tmp;
 extern int snd_MusicVolume;
 
 void S_Start(void);
@@ -37,5 +38,7 @@ void S_ChannelsRealloc(void);
 void S_GetChannelInfo(SoundInfo_t * s);
 void S_SetMaxVolume(boolean fullprocess);
 void S_SetMusicVolume(void);
+void S_MuteSound(void);
+void S_UnMuteSound(void);
 
 #endif

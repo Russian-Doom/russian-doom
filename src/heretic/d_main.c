@@ -307,6 +307,19 @@ void D_DoomLoop(void)
         // Will run at least one tic
         TryRunTics();
 
+        // [JN] Mute and restore sound and music volume.
+        if (mute_inactive_window && volume_needs_update)
+        {
+            if (!window_focused)
+            {
+                S_MuteSound();
+            }
+            else
+            {
+                S_UnMuteSound();
+            }
+        }
+
         // Move positional sounds
         S_UpdateSounds(players[consoleplayer].mo);
 

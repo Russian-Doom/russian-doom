@@ -169,6 +169,7 @@ static boolean M_RD_MusVolume(int option);
 static boolean M_RD_SfxChannels(int option);
 static boolean M_RD_SndMode(int option);
 static boolean M_RD_PitchShifting(int option);
+static boolean M_RD_MuteInactive(int option);
 
 // Controls
 static void DrawControlsMenu(void);
@@ -608,7 +609,8 @@ static MenuItem_t SoundItems[] = {
     {ITT_LRFUNC, "SFX CHANNELS",               M_RD_SfxChannels,   0, MENU_NONE},
     {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE},
     {ITT_LRFUNC, "SFX MODE:",                  M_RD_SndMode,       0, MENU_NONE},
-    {ITT_LRFUNC, "PITCH-SHIFTED SOUNDS:",      M_RD_PitchShifting, 0, MENU_NONE}
+    {ITT_LRFUNC, "PITCH-SHIFTED SOUNDS:",      M_RD_PitchShifting, 0, MENU_NONE},
+    {ITT_LRFUNC, "MUTE INACTIVE WINDOW:",      M_RD_MuteInactive,  0, MENU_NONE}
 };
 
 static MenuItem_t SoundItems_Rus[] = {
@@ -620,13 +622,14 @@ static MenuItem_t SoundItems_Rus[] = {
     {ITT_LRFUNC, "PDERJDST RFYFKS",            M_RD_SfxChannels,   0, MENU_NONE}, // ЗВУКОВЫЕ КАНАЛЫ
     {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
     {ITT_LRFUNC, "HT;BV PDERF:",               M_RD_SndMode,       0, MENU_NONE}, // РЕЖИМ ЗВУКА
-    {ITT_LRFUNC, "GHJBPDJKMYSQ GBNX-IBANBYU:", M_RD_PitchShifting, 0, MENU_NONE}  // ПРОИЗВОЛЬНЫЙ ПИТЧ-ШИФТИНГ
+    {ITT_LRFUNC, "GHJBPDJKMYSQ GBNX-IBANBYU:", M_RD_PitchShifting, 0, MENU_NONE}, // ПРОИЗВОЛЬНЫЙ ПИТЧ-ШИФТИНГ
+    {ITT_LRFUNC, "PDER D YTFRNBDYJV JRYT:",    M_RD_MuteInactive,  0, MENU_NONE}  // ЗВУК В НЕАКТИВНОМ ОКНЕ
 };
 
 static Menu_t SoundMenu = {
     36, 42,
     DrawSoundMenu,
-    9, SoundItems,
+    10, SoundItems,
     0,
     MENU_OPTIONS
 };
@@ -634,7 +637,7 @@ static Menu_t SoundMenu = {
 static Menu_t SoundMenu_Rus = {
     36, 42,
     DrawSoundMenu,
-    9, SoundItems_Rus,
+    10, SoundItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -2182,8 +2185,8 @@ static void DrawSoundMenu(void)
     }
 
     // SFX Volume
-    DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 1, 16, snd_MaxVolume);
-    M_snprintf(num, 4, "%3d", snd_MaxVolume);
+    DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 1, 16, snd_MaxVolume_tmp);
+    M_snprintf(num, 4, "%3d", snd_MaxVolume_tmp);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
     MN_DrTextSmallENG(num, 184 + wide_delta, 53);
     dp_translation = NULL;
@@ -2233,6 +2236,22 @@ static void DrawSoundMenu(void)
         else
         MN_DrTextSmallRUS(DEH_String("DSRK"), 230 + wide_delta, 122);
     }
+
+    // Mute inactive window
+    if (mute_inactive_window)
+    {
+        if (english_language)
+        MN_DrTextSmallENG(DEH_String("ON"), 184 + wide_delta, 132);
+        else
+        MN_DrTextSmallRUS(DEH_String("DSRK"), 201 + wide_delta, 132);
+    }
+    else
+    {
+        if (english_language)
+        MN_DrTextSmallENG(DEH_String("OFF"), 184 + wide_delta, 132);
+        else
+        MN_DrTextSmallRUS(DEH_String("DRK"), 201 + wide_delta, 132);    
+    }
 }
 
 static boolean M_RD_SfxVolume(int option)
@@ -2248,6 +2267,7 @@ static boolean M_RD_SfxVolume(int option)
     {
         snd_MaxVolume--;
     }
+    snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable.
     S_SetMaxVolume(false);      // don't recalc the sound curve, yet
     soundchanged = true;        // we'll set it when we leave the menu
 
@@ -2301,6 +2321,12 @@ static boolean M_RD_SndMode(int option)
 static boolean M_RD_PitchShifting(int option)
 {
     snd_pitchshift ^= 1;
+    return true;
+}
+
+static boolean M_RD_MuteInactive(int option)
+{
+    mute_inactive_window ^= 1;
     return true;
 }
 
@@ -3063,6 +3089,8 @@ void M_RD_DoResetSettings(void)
     snd_Channels    = 32;
     S_ChannelsRealloc();
     snd_monomode    = 0;
+    snd_pitchshift  = 1;
+    mute_inactive_window = 0;
 
     // Controls
     joybspeed           = 29;
