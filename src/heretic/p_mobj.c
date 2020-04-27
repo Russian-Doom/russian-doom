@@ -132,6 +132,28 @@ void P_ExplodeMissile(mobj_t * mo)
     {
         S_StartSound(mo, mo->info->deathsound);
     }
+
+    // [JN] Allow missle attacks to make splashes on water/lava/sludge
+    if (singleplayer && !vanillaparm)
+    {
+        switch (P_GetThingFloorType(mo))
+        {
+            case FLOOR_WATER:
+                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SPLASHBASE);
+                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SPLASH);
+                S_StartSound(mo, sfx_gloop);
+            break;
+            case FLOOR_LAVA:
+                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_LAVASPLASH);
+                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_LAVASMOKE);
+                S_StartSound(mo, sfx_burn);
+            break;
+            case FLOOR_SLUDGE:
+                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SLUDGESPLASH);
+                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SLUDGECHUNK);
+            break;
+        }
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -1285,16 +1307,11 @@ void P_SpawnMapThing(mapthing_t * mthing)
 extern fixed_t attackrange;
 
 void P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z)
-    {
-        P_SpawnPuffSafe(x, y, z, false);
-    }
+{
+    P_SpawnPuffSafe(x, y, z, false);
+}
     
-    void
-    P_SpawnPuffSafe
-    ( fixed_t	x,
-    fixed_t	y,
-    fixed_t	z,
-    boolean	safe )
+void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe)
 {
     mobj_t *puff;
 
@@ -1319,6 +1336,28 @@ void P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z)
             puff->momz = (fixed_t)(.8 * FRACUNIT);
         default:
             break;
+    }
+
+    // [JN] Allow hitscan attacks to make splashes on water/lava/sludge
+    if (singleplayer && !vanillaparm)
+    {
+        switch (P_GetThingFloorType(puff))
+        {
+            case FLOOR_WATER:
+                P_SpawnMobj(x, y, ONFLOORZ, MT_SPLASHBASE);
+                P_SpawnMobj(x, y, ONFLOORZ, MT_SPLASH);
+                S_StartSound(puff, sfx_gloop);
+            break;
+            case FLOOR_LAVA:
+                P_SpawnMobj(x, y, ONFLOORZ, MT_LAVASPLASH);
+                P_SpawnMobj(x, y, ONFLOORZ, MT_LAVASMOKE);
+                S_StartSound(puff, sfx_burn);
+            break;
+            case FLOOR_SLUDGE:
+                P_SpawnMobj(x, y, ONFLOORZ, MT_SLUDGESPLASH);
+                P_SpawnMobj(x, y, ONFLOORZ, MT_SLUDGECHUNK);
+            break;
+        }
     }
 }
 
