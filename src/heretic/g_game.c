@@ -1677,13 +1677,12 @@ void G_DoCompleted(void)
         gamemap = afterSecret[gameepisode - 1];
     }
     // [crispy] display tally screen after ExM8
-    /*
-    else if (gamemap == 8)
+    // [JN] Do not display in vanilla game mode.
+    else if (gamemap == 8 && vanillaparm)
     {
         gameaction = ga_victory;
         return;
     }
-    */
     else
     {
         gamemap++;
