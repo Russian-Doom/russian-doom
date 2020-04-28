@@ -674,12 +674,12 @@ void IN_DrawOldLevel(void)
     {
         for (i = 0; i < gamemap - 1; i++)
         {
-            V_DrawPatch(YAHspot[gameepisode - 1][i].x + wide_delta,
+            V_DrawShadowedPatchRaven(YAHspot[gameepisode - 1][i].x + wide_delta,
                         YAHspot[gameepisode - 1][i].y, patchBEENTHERE);
         }
         if (!(intertime & 16))
         {
-            V_DrawPatch(YAHspot[gameepisode - 1][8].x + wide_delta,
+            V_DrawShadowedPatchRaven(YAHspot[gameepisode - 1][8].x + wide_delta,
                         YAHspot[gameepisode - 1][8].y, patchBEENTHERE);
         }
     }
@@ -687,17 +687,17 @@ void IN_DrawOldLevel(void)
     {
         for (i = 0; i < prevmap - 1; i++)
         {
-            V_DrawPatch(YAHspot[gameepisode - 1][i].x + wide_delta,
+            V_DrawShadowedPatchRaven(YAHspot[gameepisode - 1][i].x + wide_delta,
                         YAHspot[gameepisode - 1][i].y, patchBEENTHERE);
         }
         if (players[consoleplayer].didsecret)
         {
-            V_DrawPatch(YAHspot[gameepisode - 1][8].x + wide_delta,
+            V_DrawShadowedPatchRaven(YAHspot[gameepisode - 1][8].x + wide_delta,
                         YAHspot[gameepisode - 1][8].y, patchBEENTHERE);
         }
         if (!(intertime & 16))
         {
-            V_DrawPatch(YAHspot[gameepisode - 1][prevmap - 1].x + wide_delta,
+            V_DrawShadowedPatchRaven(YAHspot[gameepisode - 1][prevmap - 1].x + wide_delta,
                         YAHspot[gameepisode - 1][prevmap - 1].y,
                         patchBEENTHERE);
         }
