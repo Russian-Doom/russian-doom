@@ -134,7 +134,7 @@ void P_ExplodeMissile(mobj_t * mo)
     }
 
     // [JN] Allow missle attacks to make splashes on water/lava/sludge
-    if (singleplayer && !vanillaparm)
+    if (singleplayer && mo->z <= mo->floorz + FRACUNIT*8 && !vanillaparm)
     {
         switch (P_GetThingFloorType(mo))
         {
@@ -1339,7 +1339,7 @@ void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe)
     }
 
     // [JN] Allow hitscan attacks to make splashes on water/lava/sludge
-    if (singleplayer && !vanillaparm)
+    if (singleplayer && puff->z <= puff->floorz + FRACUNIT*8 && !vanillaparm)
     {
         switch (P_GetThingFloorType(puff))
         {
