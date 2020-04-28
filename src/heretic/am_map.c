@@ -1732,20 +1732,36 @@ void AM_drawMarks(void)
 
 void AM_drawkeys(void)
 {
+    mpoint_t pt0;
+    mpoint_t pt1;
+    mpoint_t pt2;
+
+    // [JN] Support for keys rotation in automap rotate mode.
+    pt0.x = KeyPoints[0].x; pt0.y = KeyPoints[0].y;
+    pt1.x = KeyPoints[1].x; pt1.y = KeyPoints[1].y;
+    pt2.x = KeyPoints[2].x; pt2.y = KeyPoints[2].y;
+
+    if (automap_rotate)
+    {
+        AM_rotatePoint(&pt0);
+        AM_rotatePoint(&pt1);
+        AM_rotatePoint(&pt2);
+    }
+
     if (KeyPoints[0].x != 0 || KeyPoints[0].y != 0)
     {
-        AM_drawLineCharacter(keysquare, NUMKEYSQUARELINES, 0, 0, YELLOWKEY,
-                             KeyPoints[0].x, KeyPoints[0].y);
+        AM_drawLineCharacter(keysquare, NUMKEYSQUARELINES, 0, 0, YELLOWKEY, 
+                             pt0.x, pt0.y);
     }
     if (KeyPoints[1].x != 0 || KeyPoints[1].y != 0)
     {
         AM_drawLineCharacter(keysquare, NUMKEYSQUARELINES, 0, 0, GREENKEY,
-                             KeyPoints[1].x, KeyPoints[1].y);
+                             pt1.x, pt1.y);
     }
     if (KeyPoints[2].x != 0 || KeyPoints[2].y != 0)
     {
         AM_drawLineCharacter(keysquare, NUMKEYSQUARELINES, 0, 0, BLUEKEY,
-                             KeyPoints[2].x, KeyPoints[2].y);
+                             pt2.x, pt2.y);
     }
 }
 
