@@ -1422,6 +1422,11 @@ void G_PlayerFinishLevel(int player)
     {
         SB_state = -1;          // refresh the status bar
     }
+    // [JN] Fix Raven's bug: finishing level 9 was not considered as "didsecret".
+    if (gamemap == 9)
+    {
+        p->didsecret = true;
+    }
 }
 
 /*
