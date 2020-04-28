@@ -151,7 +151,7 @@ void RD_DefineLanguageStrings (void)
         // Keys
         txt_gotbluekey   = TXT_GOTBLUEKEY;
         txt_gotyellowkey = TXT_GOTYELLOWKEY;
-        txt_gotgreenkey  = TXT_GOTBLUEKEY;
+        txt_gotgreenkey  = TXT_GOTGREENKEY;
 
         // Artifacts
         txt_artihealth          = TXT_ARTIHEALTH;
@@ -270,8 +270,8 @@ void RD_DefineLanguageStrings (void)
     {
         // Keys
         txt_gotbluekey   = TXT_GOTBLUEKEY_RUS;
-        txt_gotyellowkey = TXT_GOTBLUEKEY_RUS;
-        txt_gotgreenkey  = TXT_GOTYELLOWKEY_RUS;
+        txt_gotyellowkey = TXT_GOTYELLOWKEY_RUS;
+        txt_gotgreenkey  = TXT_GOTGREENKEY_RUS;
 
         // Artifacts
         txt_artihealth          = TXT_ARTIHEALTH_RUS;
