@@ -161,6 +161,7 @@ static boolean M_RD_AutoMapStats(int option);
 static boolean M_RD_AutoMapOverlay(int option);
 static boolean M_RD_AutoMapRotate(int option);
 static boolean M_RD_AutoMapFollow(int option);
+static boolean M_RD_AutoMapGrid(int option);
 
 // Sound
 static void DrawSoundMenu(void);
@@ -570,20 +571,22 @@ static MenuItem_t AutomapItems[] = {
     {ITT_LRFUNC, "LEVEL STATS:",  M_RD_AutoMapStats,   0, MENU_NONE},
     {ITT_LRFUNC, "OVERLAY MODE:", M_RD_AutoMapOverlay, 0, MENU_NONE},
     {ITT_LRFUNC, "ROTATE MODE:",  M_RD_AutoMapRotate,  0, MENU_NONE},
-    {ITT_LRFUNC, "FOLLOW MODE:",  M_RD_AutoMapFollow,  0, MENU_NONE}
+    {ITT_LRFUNC, "FOLLOW MODE:",  M_RD_AutoMapFollow,  0, MENU_NONE},
+    {ITT_LRFUNC, "GRID:",         M_RD_AutoMapGrid,    0, MENU_NONE}
 };
 
 static MenuItem_t AutomapItems_Rus[] = {
     {ITT_LRFUNC, "CNFNBCNBRF EHJDYZ:", M_RD_AutoMapStats,   0, MENU_NONE}, // СТАТИСТИКА УРОВНЯ
     {ITT_LRFUNC, "HT;BV YFKJ;TYBZ:",   M_RD_AutoMapOverlay, 0, MENU_NONE}, // РЕЖИМ НАЛОЖЕНИЯ
     {ITT_LRFUNC, "HT;BV DHFOTYBZ:",    M_RD_AutoMapRotate,  0, MENU_NONE}, // РЕЖИМ ВРАЩЕНИЯ
-    {ITT_LRFUNC, "HT;BV CKTLJDFYBZ:",  M_RD_AutoMapFollow,  0, MENU_NONE} // РЕЖИМ СЛЕДОВАНИЯ
+    {ITT_LRFUNC, "HT;BV CKTLJDFYBZ:",  M_RD_AutoMapFollow,  0, MENU_NONE}, // РЕЖИМ СЛЕДОВАНИЯ
+    {ITT_LRFUNC, "CTNRF:",             M_RD_AutoMapGrid,    0, MENU_NONE}  // СЕТКА
 };
 
 static Menu_t AutomapMenu = {
     102, 32,
     DrawAutomapMenu,
-    4, AutomapItems,
+    5, AutomapItems,
     0,
     MENU_DISPLAY
 };
@@ -591,7 +594,7 @@ static Menu_t AutomapMenu = {
 static Menu_t AutomapMenu_Rus = {
     82, 32,
     DrawAutomapMenu,
-    4, AutomapItems_Rus,
+    5, AutomapItems_Rus,
     0,
     MENU_DISPLAY
 };
@@ -2148,6 +2151,10 @@ static void DrawAutomapMenu(void)
         // Follow mode
         MN_DrTextSmallENG(DEH_String(automap_follow ? "ON" : "OFF"),
                                      189 + wide_delta, 62);
+
+        // Grid
+        MN_DrTextSmallENG(DEH_String(automap_grid ? "ON" : "OFF"),
+                                     138 + wide_delta, 72);
     }
     else
     {
@@ -2172,6 +2179,10 @@ static void DrawAutomapMenu(void)
         // Режим следования
         MN_DrTextSmallRUS(DEH_String(automap_follow ? "DRK" : "DSRK"),
                                      215 + wide_delta, 62);
+
+        // Сетка
+        MN_DrTextSmallRUS(DEH_String(automap_grid ? "DRK" : "DSRK"),
+                                     128 + wide_delta, 72);
     }
 }
 
@@ -2196,6 +2207,12 @@ static boolean M_RD_AutoMapRotate(int option)
 static boolean M_RD_AutoMapFollow(int option)
 {
     automap_follow ^= 1;
+    return true;
+}
+
+static boolean M_RD_AutoMapGrid(int option)
+{
+    automap_grid ^= 1;
     return true;
 }
 
@@ -3029,6 +3046,7 @@ void M_RD_DoResetSettings(void)
     automap_follow  = 1;
     automap_overlay = 0;
     automap_rotate  = 0;
+    automap_grid    = 0;
 
     // Audio
     snd_MaxVolume   = 8;

@@ -151,7 +151,6 @@ char *LevelNames_Rus[] = {
 };
 
 static int cheating = 0;
-static int grid = 0;
 
 static int leveljuststarted = 1;        // kluge until AM_LevelInit() is called
 
@@ -732,12 +731,12 @@ boolean AM_Responder(event_t * ev)
             automap_rotate = !automap_rotate;
             P_SetMessage(plr, automap_rotate ? amstr_rotateon : amstr_rotateoff, true);
         }
-        /*
         else if (key == key_map_grid)
         {
-            grid = !grid;
-            plr->message = grid ? AMSTR_GRIDON : AMSTR_GRIDOFF;
+            automap_grid = !automap_grid;
+            P_SetMessage(plr, automap_grid ? amstr_gridon : amstr_gridoff, true);
         }
+        /*
         else if (key == key_map_mark)
         {
             M_snprintf(buffer, sizeof(buffer), "%s %d",
@@ -1426,41 +1425,81 @@ void AM_drawMline(mline_t * ml, int color)
 
 void AM_drawGrid(int color)
 {
-    fixed_t x, y;
-    fixed_t start, end;
+    int64_t x, y;
+    int64_t start, end;
     mline_t ml;
 
     // Figure out start of vertical gridlines
     start = m_x;
-    if ((start - bmaporgx) % (MAPBLOCKUNITS << FRACBITS))
-        start += (MAPBLOCKUNITS << FRACBITS)
-            - ((start - bmaporgx) % (MAPBLOCKUNITS << FRACBITS));
+    if (automap_rotate)
+    {
+        start -= m_h / 2;
+    }
+
+    if ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS))
+    {
+        start += (MAPBLOCKUNITS<<FRACBITS) - 
+      ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
+    }
+
     end = m_x + m_w;
+    if (automap_rotate)
+    {
+        end += m_h / 2;
+    }
 
     // draw vertical gridlines
-    ml.a.y = m_y;
-    ml.b.y = m_y + m_h;
     for (x = start; x < end; x += (MAPBLOCKUNITS << FRACBITS))
     {
         ml.a.x = x;
         ml.b.x = x;
+        // [crispy] moved here
+        ml.a.y = m_y;
+        ml.b.y = m_y + m_h;
+        if (automap_rotate)
+        {
+            ml.a.y -= m_w / 2;
+            ml.b.y += m_w / 2;
+            AM_rotatePoint(&ml.a);
+            AM_rotatePoint(&ml.b);
+        }
         AM_drawMline(&ml, color);
     }
 
     // Figure out start of horizontal gridlines
     start = m_y;
-    if ((start - bmaporgy) % (MAPBLOCKUNITS << FRACBITS))
-        start += (MAPBLOCKUNITS << FRACBITS)
-            - ((start - bmaporgy) % (MAPBLOCKUNITS << FRACBITS));
+    if (automap_rotate)
+    {
+        start -= m_w / 2;
+    }
+
+    if ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS))
+    {
+        start += (MAPBLOCKUNITS<<FRACBITS) - 
+      ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
+    }
+    
     end = m_y + m_h;
+    if (automap_rotate)
+    {
+        end += m_w / 2;
+    }
 
     // draw horizontal gridlines
-    ml.a.x = m_x;
-    ml.b.x = m_x + m_w;
     for (y = start; y < end; y += (MAPBLOCKUNITS << FRACBITS))
     {
         ml.a.y = y;
         ml.b.y = y;
+        // [crispy] moved here
+        ml.a.x = m_x;
+        ml.b.x = m_x + m_w;
+        if (automap_rotate)
+        {
+            ml.a.x -= m_h / 2;
+            ml.b.x += m_h / 2;
+            AM_rotatePoint(&ml.a);
+            AM_rotatePoint(&ml.b);
+        }
         AM_drawMline(&ml, color);
     }
 }
@@ -1782,7 +1821,7 @@ void AM_Drawer(void)
     UpdateState |= I_FULLSCRN;
     if (!automap_overlay)
         AM_clearFB(BACKGROUND);
-    if (grid)
+    if (automap_grid)
         AM_drawGrid(GRIDCOLORS);
     AM_drawWalls();
     AM_drawPlayers();

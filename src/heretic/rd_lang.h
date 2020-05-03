@@ -239,8 +239,8 @@ extern char* txt_crosshair_off;
 // AM_map.c
 #define AMSTR_FOLLOWON          "FOLLOW MODE ON"
 #define AMSTR_FOLLOWOFF         "FOLLOW MODE OFF"
-#define AMSTR_GRIDON            "Grid ON"
-#define AMSTR_GRIDOFF           "Grid OFF"
+#define AMSTR_GRIDON            "GRID ON"
+#define AMSTR_GRIDOFF           "GRID OFF"
 #define AMSTR_OVERLAYON         "OVERLAY MODE ON"
 #define AMSTR_OVERLAYOFF        "OVERLAY MODE OFF"
 #define AMSTR_ROTATEON          "ROTATE MODE ON"
