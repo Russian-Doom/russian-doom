@@ -4115,58 +4115,28 @@ void MN_DrawInfo(void)
                                  PU_CACHE));
 
     // [JN] Some complex mess to avoid using numerical identification of screens.
-    // Note: in English version, Shareware using paletted screens instead of RAWs.
+    // Note: older Shareware version using paletted screens instead of RAWs.
     if (english_language)
     {
-        if (gamemode == shareware)
-        {
-            if (InfoType == 0)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("TITLE"), PU_CACHE));
-            if (InfoType == 1)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("HELP1"), PU_CACHE));
-            if (InfoType == 2)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("HELP2"), PU_CACHE));
-            if (InfoType == 3)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("CREDIT"), PU_CACHE));
-            if (InfoType == 4)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("ORDER"), PU_CACHE));
-        }
-        else
-        {
-            if (InfoType == 0)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("TITLE"), PU_CACHE));
-            if (InfoType == 1)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("HELP1"), PU_CACHE));
-            if (InfoType == 2)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("HELP2"), PU_CACHE));
-            if (InfoType == 3)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("CREDIT"), PU_CACHE));
-            if (InfoType == 4)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("ORDER"), PU_CACHE));
-        }
+        V_DrawRawScreen(W_CacheLumpNum
+                       (W_GetNumForName
+                       (InfoType == 0 ? "TITLE" :
+                        InfoType == 1 ? "HELP1" :
+                        InfoType == 2 ? "HELP2" :
+                        InfoType == 3 ? "CREDIT" :
+                                        "ORDER"), PU_CACHE));
     }
     else
     {
-        if (InfoType == 0)
-        {
-            if (gamemode == retail)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("TITLE_RT"), PU_CACHE));
-            else
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("TITLE"), PU_CACHE));
-        }
-        if (InfoType == 1)
-        V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("HELP1_R"), PU_CACHE));
-        if (InfoType == 2)
-        V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("HELP2_R"), PU_CACHE));
-        if (InfoType == 3)
-        {
-            if (gamemode == retail)
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("CRED_RT"), PU_CACHE));
-            else
-            V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("CRED_RG"), PU_CACHE));
-        }
-        if (InfoType == 4)
-        V_DrawRawScreen(W_CacheLumpNum(W_GetNumForName("ORDER_R"), PU_CACHE));
+        V_DrawRawScreen(W_CacheLumpNum
+                       (W_GetNumForName
+                       (InfoType == 0 ? 
+                       (gamemode == retail ? "TITLE_RT" : "TITLE") :
+                        InfoType == 1 ? "HELP1_R" : 
+                        InfoType == 2 ? "HELP2_R" :
+                        InfoType == 3 ?
+                       (gamemode == retail ? "CRED_RT" : "CRED_RG") :
+                                             "ORDER_R"), PU_CACHE));
     }
 }
 
