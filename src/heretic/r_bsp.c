@@ -76,7 +76,7 @@ typedef struct
 //#define MAXSEGS 32
 #define MAXSEGS (WIDESCREENWIDTH / 2 + 1)
 
-cliprange_t solidsegs[MAXSEGS], *newend;        // newend is one past the last valid seg
+cliprange_t solidsegs[MAXSEGS], *newend;    // newend is one past the last valid seg
 
 
 void R_ClipSolidWallSegment(int first, int last)
@@ -91,7 +91,7 @@ void R_ClipSolidWallSegment(int first, int last)
     if (first < start->first)
     {
         if (last < start->first - 1)
-        {                       // post is entirely visible (above start), so insert a new clippost
+        {   // post is entirely visible (above start), so insert a new clippost
             R_StoreWallRange(first, last);
             next = newend;
             newend++;
@@ -217,11 +217,15 @@ void R_MaybeInterpolateSector(sector_t* sector)
     {
         // Interpolate between current and last floor/ceiling position.
         if (sector->floorheight != sector->oldfloorheight)
-            sector->interpfloorheight = sector->oldfloorheight + FixedMul(sector->floorheight - sector->oldfloorheight, fractionaltic);
+            sector->interpfloorheight = sector->oldfloorheight
+                                      + FixedMul(sector->floorheight
+                                      - sector->oldfloorheight, fractionaltic);
         else
             sector->interpfloorheight = sector->floorheight;
         if (sector->ceilingheight != sector->oldceilingheight)
-            sector->interpceilingheight = sector->oldceilingheight + FixedMul(sector->ceilingheight - sector->oldceilingheight, fractionaltic);
+            sector->interpceilingheight = sector->oldceilingheight
+                                        + FixedMul(sector->ceilingheight
+                                        - sector->oldceilingheight, fractionaltic);
         else
             sector->interpceilingheight = sector->ceilingheight;
     }
@@ -492,11 +496,6 @@ void R_Subsector(int num)
         R_AddLine(line);
         line++;
     }
-
-    // check for solidsegs overflow - extremely unsatisfactory!
-    // [JN] make non-fatal
-    // if(newend > &solidsegs[32])
-    //     I_Error("R_Subsector: solidsegs overflow (vanilla may crash here)\n");
 }
 
 
@@ -529,8 +528,8 @@ void R_RenderBSPNode(int bspnum)
 //
     side = R_PointOnSide(viewx, viewy, bsp);
 
-    R_RenderBSPNode(bsp->children[side]);       // recursively divide front space
+    R_RenderBSPNode(bsp->children[side]);   // recursively divide front space
 
-    if (R_CheckBBox(bsp->bbox[side ^ 1]))       // possibly divide back space
+    if (R_CheckBBox(bsp->bbox[side ^ 1]))   // possibly divide back space
         R_RenderBSPNode(bsp->children[side ^ 1]);
 }
