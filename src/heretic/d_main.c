@@ -162,9 +162,17 @@ void DrawMessage(void)
     }
 
     if (english_language)
-    MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2 + wide_delta, 1);
+    {
+        MN_DrTextA(player->message, 
+                   160 - MN_TextAWidth(player->message) /
+                   2 + wide_delta, 1);
+    }
     else
-    MN_DrTextSmallRUS(player->message, 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta, 1);
+    {
+        MN_DrTextSmallRUS(player->message, 
+                          160 - MN_DrTextSmallRUSWidth(player->message) /
+                          2 + wide_delta, 1);
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -236,15 +244,18 @@ void D_Display(void)
     {
         if (!netgame)
         {
-            V_DrawShadowedPatchRaven(160 + wide_delta, (viewwindowy >> hires) + 5, 
-                                     W_CacheLumpName(DEH_String(english_language ? 
-                                                                "PAUSED" : "RD_PAUSE"), PU_CACHE));
+            V_DrawShadowedPatchRaven(160 + wide_delta,
+                                    (viewwindowy >> hires) + 5, W_CacheLumpName
+                                    (DEH_String
+                                    (english_language ? 
+                                     "PAUSED" : "RD_PAUSE"), PU_CACHE));
         }
         else
         {
-            V_DrawShadowedPatchRaven(160 + wide_delta, 70, 
-                                     W_CacheLumpName(DEH_String(english_language ? 
-                                                                "PAUSED" : "RD_PAUSE"), PU_CACHE));
+            V_DrawShadowedPatchRaven(160 + wide_delta,
+                                     70, W_CacheLumpName
+                                    (DEH_String(english_language ?
+                                     "PAUSED" : "RD_PAUSE"), PU_CACHE));
         }
     }
     // Handle player messages
@@ -300,10 +311,6 @@ void D_DoomLoop(void)
 
     while (1)
     {
-        // [JN] Don't call empty function
-        // Frame syncronous IO operations
-        // I_StartFrame();
-
         // Process one or more tics
         // Will run at least one tic
         TryRunTics();
@@ -380,7 +387,10 @@ void D_PageDrawer(void)
     V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
     if (demosequence == 1)
     {
-        V_DrawShadowedPatchRaven(4, 160, W_CacheLumpName(DEH_String(english_language ? "ADVISOR" : "ADVIS_RU"), PU_CACHE));
+        V_DrawShadowedPatchRaven(4, 160, W_CacheLumpName
+                                (DEH_String
+                                (english_language ? "ADVISOR" : "ADVIS_RU"),
+                                                                 PU_CACHE));
     }
     UpdateState |= I_FULLSCRN;
 }
@@ -420,12 +430,8 @@ void D_DoAdvanceDemo(void)
             }
             else
             {
-                if (gamemode == retail)
-                pagename = DEH_String("TITLE_RT");
-                else
-                pagename = DEH_String("TITLE");
+                pagename = DEH_String(gamemode == retail ? "TITLE_RT" : "TITLE");
             }
-
             S_StartSong(mus_titl, false);
             break;
         case 1:
@@ -438,10 +444,7 @@ void D_DoAdvanceDemo(void)
             }
             else
             {
-                if (gamemode == retail)
-                pagename = DEH_String("TITLE_RT");
-                else
-                pagename = DEH_String("TITLE");
+                pagename = DEH_String(gamemode == retail ? "TITLE_RT" : "TITLE");
             }
 
             break;
@@ -461,10 +464,7 @@ void D_DoAdvanceDemo(void)
             }
             else
             {
-                if (gamemode == retail)
-                pagename = DEH_String("CRED_RT");
-                else
-                pagename = DEH_String("CRED_RG");
+                pagename = DEH_String(gamemode == retail ? "CRED_RT" : "CRED_RG");
             }
 
             break;
@@ -553,7 +553,9 @@ void D_CheckRecordFrom(void)
 
     p = M_CheckParmWithArgs("-recordfrom", 2);
     if (!p)
+    {
         return;
+    }
 
     filename = SV_Filename(myargv[p + 1][0] - '0');
     G_LoadGame(filename);
@@ -768,7 +770,7 @@ void initStartup(void)
 
     // Blit main screen
     textScreen = TXT_GetScreenData();
-    loading = W_CacheLumpName(DEH_String("LOADING"), PU_CACHE); // [JN] ANSI экран, не переводить.
+    loading = W_CacheLumpName(DEH_String("LOADING"), PU_CACHE);
     memcpy(textScreen, loading, 4000);
 
     // Print version string
@@ -1182,7 +1184,7 @@ void D_DoomMain(void)
                "M_LoadDefaults: Load system defaults.\n" :
                "M_LoadDefaults: Загрузка системных стандартов.\n");
     D_BindVariables();
-    M_SetConfigFilenames(/*"heretic.ini", */PROGRAM_PREFIX "heretic.ini");
+    M_SetConfigFilenames(PROGRAM_PREFIX "heretic.ini");
     M_LoadDefaults();
 
     I_AtExit(M_SaveDefaults, false);
