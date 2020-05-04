@@ -698,11 +698,13 @@ void R_ExecuteSetViewSize(void)
         {
             if (widescreen)
             {
-                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
+                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) 
+                   * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
             }
             else
             {
-                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
+                dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift))
+                   * (screenblocks < 11 ? screenblocks : 11) / 10))<<FRACBITS)+FRACUNIT/2;
             }
 
         dy = abs(dy);
@@ -784,24 +786,18 @@ void R_Init(void)
             screenblocks = 12;
     }
 
-    //tprintf("R_InitData ", 1);
     R_InitData();
     printf (".");
-    //tprintf("R_InitPointToAngle\n", 0);
     R_InitPointToAngle();
     printf (".");
-    //tprintf("R_InitTables ", 0);
     R_InitTables();
     // viewwidth / viewheight / detailLevel are set by the defaults
     printf (".");
     R_SetViewSize(screenblocks, detailLevel);
-    //tprintf("R_InitPlanes\n", 0);
     R_InitPlanes();
     printf (".");
-    //tprintf("R_InitLightTables ", 0);
     R_InitLightTables();
     printf (".");
-    //tprintf("R_InitSkyMap\n", 0);
     R_InitSkyMap();
     printf (".");
     R_InitTranslationTables();
@@ -872,20 +868,28 @@ void R_SetupFrame(player_t * player)
         // [JN] Also for player's chicken mode.
         if (player->chickenTics && player->chickenPeck)
         {
-            viewx = player->mo->oldx + FixedMul(player->mo->x - player->mo->oldx, fractionaltic) 
+            viewx = player->mo->oldx + FixedMul(player->mo->x
+                                              - player->mo->oldx, fractionaltic) 
                   + player->chickenPeck * finecosine[viewangle>>ANGLETOFINESHIFT];
-            viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic)
+            viewy = player->mo->oldy + FixedMul(player->mo->y 
+                                              - player->mo->oldy, fractionaltic)
                   + player->chickenPeck * finesine[viewangle>>ANGLETOFINESHIFT];
         }
         else
         {
-            viewx = player->mo->oldx + FixedMul(player->mo->x - player->mo->oldx, fractionaltic);
-            viewy = player->mo->oldy + FixedMul(player->mo->y - player->mo->oldy, fractionaltic);
+            viewx = player->mo->oldx + FixedMul(player->mo->x
+                                              - player->mo->oldx, fractionaltic);
+            viewy = player->mo->oldy + FixedMul(player->mo->y -
+                                                player->mo->oldy, fractionaltic);
         }
-        viewz = player->oldviewz + FixedMul(player->viewz - player->oldviewz, fractionaltic);
-        viewangle = R_InterpolateAngle(player->mo->oldangle, player->mo->angle, fractionaltic) + viewangleoffset;
+        viewz = player->oldviewz + FixedMul(player->viewz
+                                          - player->oldviewz, fractionaltic);
+        viewangle = R_InterpolateAngle(player->mo->oldangle,
+                                       player->mo->angle, fractionaltic)
+                                       + viewangleoffset;
 
-        pitch = (player->oldlookdir + (player->lookdir - player->oldlookdir) * FIXED2DOUBLE(fractionaltic)) / MLOOKUNIT;
+        pitch = (player->oldlookdir + (player->lookdir - player->oldlookdir)
+                                    * FIXED2DOUBLE(fractionaltic)) / MLOOKUNIT;
     }
     else
     {                           // Normal view position
@@ -909,11 +913,13 @@ void R_SetupFrame(player_t * player)
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
     if (widescreen)
     {
-        tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10;
+        tempCentery = viewheight/2 + (pitch << (hires && !detailshift))
+                                   * (screenblocks < 9 ? screenblocks : 9) / 10;
     }
     else
     {
-        tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 11 ? screenblocks : 11) / 10;
+        tempCentery = viewheight/2 + (pitch << (hires && !detailshift))
+                                   * (screenblocks < 11 ? screenblocks : 11) / 10;
     }
 
     if (centery != tempCentery)
