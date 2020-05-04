@@ -2427,11 +2427,7 @@ void A_ESound(mobj_t * mo)
         default:
             break;
     }
-    // [JN] Fix incorrect distance volume and stereo separation - instead of 
-    // using standard S_StartSound, use S_StartSoundAtVolume which is 
-    // calculating both values correctly. Value 32 is good enough
-    // as initial volume value.
-    S_StartSoundAtVolume(mo, sound, 32);
+    S_StartSound(mo, sound);
 }
 
 //----------------------------------------------------------------------------
