@@ -369,12 +369,16 @@ boolean P_TryWalk(mobj_t * actor)
 */
 
 dirtype_t opposite[] =
-    { DI_WEST, DI_SOUTHWEST, DI_SOUTH, DI_SOUTHEAST, DI_EAST, DI_NORTHEAST,
+{
+    DI_WEST, DI_SOUTHWEST, DI_SOUTH,
+    DI_SOUTHEAST, DI_EAST, DI_NORTHEAST,
     DI_NORTH, DI_NORTHWEST, DI_NODIR
 };
 
 dirtype_t diags[] =
-    { DI_NORTHWEST, DI_NORTHEAST, DI_SOUTHWEST, DI_SOUTHEAST };
+{
+    DI_NORTHWEST, DI_NORTHEAST, DI_SOUTHWEST, DI_SOUTHEAST
+};
 
 void P_NewChaseDir(mobj_t * actor)
 {
@@ -568,7 +572,7 @@ boolean P_LookForPlayers(mobj_t * actor, boolean allaround)
     fixed_t dist;
 
     if (!netgame && players[0].health <= 0)
-    {                           // Single player game and player is dead, look for monsters
+    {   // Single player game and player is dead, look for monsters
         return (P_LookForMonsters(actor));
     }
     c = 0;
@@ -666,23 +670,6 @@ void A_Look(mobj_t * actor)
     {
         int sound;
 
-/*
-		switch (actor->info->seesound)
-		{
-		case sfx_posit1:
-		case sfx_posit2:
-		case sfx_posit3:
-			sound = sfx_posit1+P_Random()%3;
-			break;
-		case sfx_bgsit1:
-		case sfx_bgsit2:
-			sound = sfx_bgsit1+P_Random()%2;
-			break;
-		default:
-			sound = actor->info->seesound;
-			break;
-		}
-*/
         sound = actor->info->seesound;
         if (actor->flags2 & MF2_BOSS)
         {                       // Full volume
@@ -1268,14 +1255,12 @@ void A_MummyAttack2(mobj_t * actor)
     {
         return;
     }
-    //S_StartSound(actor, actor->info->attacksound);
     if (P_CheckMeleeRange(actor))
     {
         P_DamageMobj(actor->target, actor, actor, HITDICE(2));
         return;
     }
     mo = P_SpawnMissile(actor, actor->target, MT_MUMMYFX1);
-    //mo = P_SpawnMissile(actor, actor->target, MT_EGGFX);
     if (mo != NULL)
     {
         mo->special1.m = actor->target;
@@ -1558,7 +1543,7 @@ void A_GenWizard(mobj_t * actor)
 
 void A_Sor2DthInit(mobj_t * actor)
 {
-    actor->special1.i = 7;        // Animation loop counter
+    actor->special1.i = 7;      // Animation loop counter
     P_Massacre();               // Kill monsters early
 }
 
@@ -1852,7 +1837,7 @@ void A_HeadAttack(mobj_t * actor)
     static int atkResolve2[] = { 150, 200 };
     int dist;
 
-    // Ice ball             (close 20% : far 60%)
+    // Ice ball     (close 20% : far 60%)
     // Fire column  (close 40% : far 20%)
     // Whirlwind    (close 40% : far 20%)
     // Distance threshold = 8 cells
@@ -2382,7 +2367,8 @@ void A_BossDeath(mobj_t * actor)
     mobj_t *mo;
     thinker_t *think;
     line_t dummyLine;
-    static mobjtype_t bossType[6] = {
+    static mobjtype_t bossType[6] =
+    {
         MT_HEAD,
         MT_MINOTAUR,
         MT_SORCERER2,
@@ -2557,7 +2543,8 @@ void A_VolcanoBlast(mobj_t * volcano)
     count = 1 + (P_Random() % 3);
     for (i = 0; i < count; i++)
     {
-        blast = P_SpawnMobj(volcano->x, volcano->y, volcano->z + 44 * FRACUNIT, MT_VOLCANOBLAST);       // MT_VOLCANOBLAST
+        blast = P_SpawnMobj(volcano->x, volcano->y, 
+                            volcano->z + 44 * FRACUNIT, MT_VOLCANOBLAST);
         blast->target = volcano;
         angle = P_Random() << 24;
         blast->angle = angle;
@@ -2587,7 +2574,6 @@ void A_VolcBallImpact(mobj_t * ball)
         ball->flags |= MF_NOGRAVITY;
         ball->flags2 &= ~MF2_LOGRAV;
         ball->z += 28 * FRACUNIT;
-        //ball->momz = 3*FRACUNIT;
     }
     P_RadiusAttack(ball, ball->target, 25);
     for (i = 0; i < 4; i++)
@@ -2618,7 +2604,6 @@ void A_SkullPop(mobj_t * actor)
     actor->flags &= ~MF_SOLID;
     mo = P_SpawnMobj(actor->x, actor->y, actor->z + 48 * FRACUNIT,
                      MT_BLOODYSKULL);
-    //mo->target = actor;
     mo->momx = P_SubRandom() << 9;
     mo->momy = P_SubRandom() << 9;
     mo->momz = FRACUNIT * 2 + (P_Random() << 6);
@@ -2738,7 +2723,6 @@ void A_FlameSnd(mobj_t * actor)
 
 void A_HideThing(mobj_t * actor)
 {
-    //P_UnsetThingPosition(actor);
     actor->flags2 |= MF2_DONTDRAW;
 }
 
@@ -2750,6 +2734,5 @@ void A_HideThing(mobj_t * actor)
 
 void A_UnHideThing(mobj_t * actor)
 {
-    //P_SetThingPosition(actor);
     actor->flags2 &= ~MF2_DONTDRAW;
 }
