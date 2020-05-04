@@ -94,7 +94,6 @@ void F_StartFinale(void)
     FontABaseLump = W_GetNumForName(DEH_String("FONTA_S")) + 1;
     FontFBaseLump = W_GetNumForName(DEH_String("FONTF_S")) + 1;
 
-//      S_ChangeMusic(mus_victor, true);
     S_StartSong(mus_cptd, true);
 }
 
@@ -107,13 +106,9 @@ boolean F_Responder(event_t * event)
         return false;
     }
     if (finalestage == 1 && gameepisode == 2)
-    {                           // we're showing the water pic, make any key kick to demo mode
+    {   // we're showing the water pic, make any key kick to demo mode
         finalestage++;
-        /*
-        memset((byte *) 0xa0000, 0, SCREENWIDTH * SCREENHEIGHT);
-        memset(I_VideoBuffer, 0, SCREENWIDTH * SCREENHEIGHT);
-        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
-        */
+
         return true;
     }
     return false;
@@ -137,20 +132,14 @@ void F_Ticker(void)
     }
 
     finalecount++;
-    if (!finalestage
-        && finalecount > strlen(finaletext) * TEXTSPEED + TEXTWAIT)
+
+    if (!finalestage && finalecount > strlen(finaletext) * TEXTSPEED + TEXTWAIT)
     {
         finalecount = 0;
         if (!finalestage)
         {
             finalestage = 1;
         }
-
-//              wipegamestate = -1;             // force a wipe
-/*
-		if (gameepisode == 3)
-			S_StartMusic (mus_bunny);
-*/
     }
 }
 
@@ -162,9 +151,6 @@ void F_Ticker(void)
 =
 =======================
 */
-
-//#include "hu_stuff.h"
-//extern        patch_t *hu_font[HU_FONTSIZE];
 
 void F_TextWrite(void)
 {
@@ -194,8 +180,6 @@ void F_TextWrite(void)
             dest += (screenwidth & 63);
         }
     }
-
-//      V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
 
 //
 // draw some of the text onto the screen
@@ -356,41 +340,49 @@ void F_DrawPatchCol(int x, patch_t * patch, int col)
 
 void F_DemonScroll(void)
 {
-    // [JN] TODO - fix scrolling for new V_CopyScaledBuffer
-    // byte *p1;
+    byte *p1;
     byte *p2;
-    // static int yval = 0;
+    static int yval = 0;
     static int nextscroll = 0;
 
     if (finalecount < nextscroll)
     {
         return;
     }
-    // p1 = W_CacheLumpName(DEH_String("FINAL1"), PU_LEVEL);
+    p1 = W_CacheLumpName(DEH_String("FINAL1"), PU_LEVEL);
     p2 = W_CacheLumpName(DEH_String("FINAL2"), PU_LEVEL);
 
-    // [JN] Only single static picture for now.
-    V_CopyScaledBuffer(I_VideoBuffer, p2, ORIGWIDTH * ORIGHEIGHT);
+    if (widescreen)
+    {
+        // [JN] Clean up remainings of the wide screen before drawing.
+        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
 
-    /*
-    if (finalecount < 70)
-    {
-        V_CopyScaledBuffer(I_VideoBuffer, p1, ORIGHEIGHT * ORIGWIDTH);
-        nextscroll = finalecount;
-        return;
-    }
-    if (yval < 64000)
-    {
-        V_CopyScaledBuffer(I_VideoBuffer, p2 + ORIGHEIGHT * ORIGWIDTH - yval, yval);
-        V_CopyScaledBuffer(I_VideoBuffer + (yval << (2 * hires)), p1, ORIGHEIGHT * ORIGWIDTH - yval);
-        yval += ORIGWIDTH;
-        nextscroll = finalecount + 3;
-    }
-    else
-    {                           //else, we'll just sit here and wait, for now
+        // [JN] Only single static picture for now.
+        // TODO - fix scrolling for new V_CopyScaledBuffer.
         V_CopyScaledBuffer(I_VideoBuffer, p2, ORIGWIDTH * ORIGHEIGHT);
     }
-    */
+    else
+    {
+        if (finalecount < 70)
+        {
+            V_CopyScaledBuffer(I_VideoBuffer, p1, ORIGHEIGHT * ORIGWIDTH);
+            nextscroll = finalecount;
+            return;
+        }
+        if (yval < 64000)
+        {
+            V_CopyScaledBuffer(I_VideoBuffer,
+                               p2 + ORIGHEIGHT * ORIGWIDTH - yval, yval);
+            V_CopyScaledBuffer(I_VideoBuffer + (yval << (2 * hires)), 
+                               p1, ORIGHEIGHT * ORIGWIDTH - yval);
+            yval += ORIGWIDTH;
+            nextscroll = finalecount + 3;
+        }
+        else
+        {   //else, we'll just sit here and wait, for now
+            V_CopyScaledBuffer(I_VideoBuffer, p2, ORIGWIDTH * ORIGHEIGHT);
+        }
+    }
 }
 
 /*
@@ -431,8 +423,7 @@ void F_DrawUnderwater(void)
             paused = false;
             menuactive = false;
             askforquit = false;
-
-            break;
+        break;
         case 2:
             if (underwawa)
             {
@@ -456,71 +447,9 @@ void F_DrawUnderwater(void)
                 else
                 V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE"), PU_CACHE));
             }
-            //D_StartTitle(); // go to intro/demo mode.
+        break;
     }
 }
-
-
-#if 0
-/*
-==================
-=
-= F_BunnyScroll
-=
-==================
-*/
-
-void F_BunnyScroll(void)
-{
-    int scrolled, x;
-    patch_t *p1, *p2;
-    char name[10];
-    int stage;
-    static int laststage;
-
-    p1 = W_CacheLumpName("PFUB2", PU_LEVEL);
-    p2 = W_CacheLumpName("PFUB1", PU_LEVEL);
-
-    V_MarkRect(0, 0, screenwidth, SCREENHEIGHT);
-
-    scrolled = 320 - (finalecount - 230) / 2;
-    if (scrolled > 320)
-        scrolled = 320;
-    if (scrolled < 0)
-        scrolled = 0;
-
-    for (x = 0; x < screenwidth; x++)
-    {
-        if (x + scrolled < 320)
-            F_DrawPatchCol(x, p1, x + scrolled);
-        else
-            F_DrawPatchCol(x, p2, x + scrolled - 320);
-    }
-
-    if (finalecount < 1130)
-        return;
-    if (finalecount < 1180)
-    {
-        V_DrawPatch((screenwidth - 13 * 8) / 2, (SCREENHEIGHT - 8 * 8) / 2, 0,
-                    W_CacheLumpName("END0", PU_CACHE));
-        laststage = 0;
-        return;
-    }
-
-    stage = (finalecount - 1180) / 5;
-    if (stage > 6)
-        stage = 6;
-    if (stage > laststage)
-    {
-        S_StartSound(NULL, sfx_pistol);
-        laststage = stage;
-    }
-
-    M_snprintf(name, sizeof(name), "END%i", stage);
-    V_DrawPatch((screenwidth - 13 * 8) / 2, (SCREENHEIGHT - 8 * 8) / 2,
-                W_CacheLumpName(name, PU_CACHE));
-}
-#endif
 
 /*
 =======================
@@ -549,16 +478,22 @@ void F_Drawer(void)
                 V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 if (gamemode == shareware)
                 {
-                    V_DrawRawScreen(W_CacheLumpName(english_language ? 
-                                                    "ORDER" : "ORDER_R", PU_CACHE));
+                    V_DrawRawScreen(W_CacheLumpName
+                                   (english_language ? 
+                                    "ORDER" : "ORDER_R", PU_CACHE));
                 }
                 else
                 {
                     if (english_language)
-                    V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                    {
+                        V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                    }
                     else
-                    V_DrawRawScreen(W_CacheLumpName(gamemode == retail ?
-                                                    "CRED_RT" : "CRED_RG", PU_CACHE));
+                    {
+                        V_DrawRawScreen(W_CacheLumpName
+                                    (gamemode == retail ?
+                                        "CRED_RT" : "CRED_RG", PU_CACHE));
+                    }
                 }
                 break;
             case 2:
@@ -567,8 +502,8 @@ void F_Drawer(void)
                 F_DrawUnderwater();
                 break;
             case 3:
-                // [JN] Clean up remainings of the wide screen
-                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
+                // [JN] No need to cleanup screen here, it is done in F_DemonScroll.
+                // V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 F_DemonScroll();
                 break;
             case 4:            // Just show credits screen for extended episodes
