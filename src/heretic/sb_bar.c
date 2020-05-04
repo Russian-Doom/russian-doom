@@ -97,16 +97,9 @@ patch_t *PatchCHAIN;
 patch_t *PatchSTATBAR;
 patch_t *PatchSTATBAR_RUS;
 patch_t *PatchLIFEGEM;
-//patch_t *PatchEMPWEAP;
-//patch_t *PatchLIL4BOX;
 patch_t *PatchLTFCTOP;
 patch_t *PatchRTFCTOP;
-//patch_t *PatchARMORBOX;
-//patch_t *PatchARTIBOX;
 patch_t *PatchSELECTBOX;
-//patch_t *PatchKILLSPIC;
-//patch_t *PatchMANAPIC;
-//patch_t *PatchPOWERICN;
 patch_t *PatchINVLFGEM1;
 patch_t *PatchINVLFGEM2;
 patch_t *PatchINVRTGEM1;
@@ -118,7 +111,6 @@ patch_t *PatchBLACKSQ;
 patch_t *PatchINVBAR;
 patch_t *PatchARMCLEAR;
 patch_t *PatchCHAINBACK;
-//byte *ShadeTables;
 int FontBNumBase;
 int spinbooklump;
 int spinflylump;
@@ -404,7 +396,8 @@ static void DrBNumber(signed int val, int x, int y)
 
         // [JN] Draw minus symbol with respection of digits placement.
         // However, values below -10 requires some correction in "x" placement.
-        V_DrawShadowedPatch(xpos + (val <= 9 ? 16 : 8) - SHORT(patch_n->width) / 2, y-1, patch_n);
+        V_DrawShadowedPatch(xpos + (val <= 9 ? 16 : 8) - SHORT(patch_n->width)
+                                                       / 2, y-1, patch_n);
     }
     if (val > 99)
     {
@@ -520,12 +513,14 @@ static void DrawSoundInfo(void)
     {
         if (english_language)
         {
-            MN_DrTextSmallENG(DEH_String("*** SOUND DEBUG INFO ***"), xPos[0] + wide_delta, 20);
+            MN_DrTextSmallENG(DEH_String("*** SOUND DEBUG INFO ***"), xPos[0]
+                                                                    + wide_delta, 20);
         }
         else
         {
             // *** ОТЛАДОЧНАЯ ИНФОРМАЦИЯ О ЗВУКЕ ***
-            MN_DrTextSmallRUS(DEH_String("*** JNKFLJXYFZ BYAJHVFWBZ J PDERT ***"), xPos[0] + wide_delta, 20);
+            MN_DrTextSmallRUS(DEH_String("*** JNKFLJXYFZ BYAJHVFWBZ J PDERT ***"), xPos[0]
+                                                                                 + wide_delta, 20);
         }
     }
     S_GetChannelInfo(&s);
@@ -753,7 +748,8 @@ void SB_Drawer(void)
     SB_PaletteFlash();
 
     // [JN] Apply golden eyes to HUD gargoyles while Ring of Invincibility
-    if ((screenblocks <= 10 || automapactive) && (players[consoleplayer].cheats & CF_GODMODE
+    if ((screenblocks <= 10 || automapactive)
+    && (players[consoleplayer].cheats & CF_GODMODE
     || (CPlayer->powers[pw_invulnerability] && !vanillaparm)))
     {
         V_DrawPatch(16 + wide_delta, 167,
@@ -775,13 +771,13 @@ void SB_Drawer(void)
             {
                 if (hitCenterFrame && (frame != 15 && frame != 0))
                 {
-                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17, W_CacheLumpNum(spinflylump + 15,
-                                                       PU_CACHE));
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17,
+                                W_CacheLumpNum(spinflylump + 15, PU_CACHE));
                 }
                 else
                 {
-                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17, W_CacheLumpNum(spinflylump + frame,
-                                                       PU_CACHE));
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17,
+                                W_CacheLumpNum(spinflylump + frame, PU_CACHE));
                     hitCenterFrame = false;
                 }
             }
@@ -789,14 +785,14 @@ void SB_Drawer(void)
             {
                 if (!hitCenterFrame && (frame != 15 && frame != 0))
                 {
-                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17, W_CacheLumpNum(spinflylump + frame,
-                                                       PU_CACHE));
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17,
+                                W_CacheLumpNum(spinflylump + frame, PU_CACHE));
                     hitCenterFrame = false;
                 }
                 else
                 {
-                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17, W_CacheLumpNum(spinflylump + 15,
-                                                       PU_CACHE));
+                    V_DrawPatch(20 + (wide_4_3 ? wide_delta : 0), 17,
+                                W_CacheLumpNum(spinflylump + 15, PU_CACHE));
                     hitCenterFrame = true;
                 }
             }
@@ -816,7 +812,8 @@ void SB_Drawer(void)
             || !(CPlayer->powers[pw_weaponlevel2] & 16))
         {
             frame = (leveltime / 3) & 15;
-            V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2), 17, // [JN] Do not obstruct clock widget
+            // [JN] Do not obstruct clock widget
+            V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2), 17,
                         W_CacheLumpNum(spinbooklump + frame, PU_CACHE));
             BorderNeedRefresh = true;
             UpdateState |= I_MESSAGES;
@@ -834,19 +831,6 @@ void SB_Drawer(void)
     {
         V_DrawBlackBorders();
     }
-
-/*
-		if(CPlayer->powers[pw_weaponlevel2] > BLINKTHRESHOLD
-			|| (CPlayer->powers[pw_weaponlevel2]&8))
-		{
-			V_DrawPatch(291, 0, W_CacheLumpName("ARTIPWBK", PU_CACHE));
-		}
-		else
-		{
-			BorderTopRefresh = true;
-		}
-	}
-*/
 }
 
 // sets the new palette based upon current values of player->damagecount
@@ -868,7 +852,8 @@ void SB_PaletteFlash(void)
         }
         palette += STARTREDPALS;
     }
-    else if (CPlayer->bonuscount && CPlayer->health > 0) // [crispy] never show the yellow bonus palette for a dead player
+    // [crispy] never show the yellow bonus palette for a dead player
+    else if (CPlayer->bonuscount && CPlayer->health > 0)
     {
         // [JN] One extra palette for pickup flashing
         // https://doomwiki.org/wiki/PLAYPAL
@@ -953,7 +938,7 @@ void DrawMainBar(void)
 
         V_DrawPatch(182 + wide_delta, 161, W_CacheLumpNum(temp, PU_CACHE));
         ArtifactFlash--;
-        oldarti = -1;           // so that the correct artifact fills in after the flash
+        oldarti = -1;   // so that the correct artifact fills in after the flash
         UpdateState |= I_STATBAR;
     }
     else if (oldarti != CPlayer->readyArtifact
@@ -1051,15 +1036,18 @@ void DrawMainBar(void)
         
         if (CPlayer->keys[key_yellow])
         {
-            V_DrawPatch(153 + wide_delta, 164, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            V_DrawPatch(153 + wide_delta, 164,
+                        W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
         }
         if (CPlayer->keys[key_green])
         {
-            V_DrawPatch(153 + wide_delta, 172, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            V_DrawPatch(153 + wide_delta, 172,
+                        W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
         }
         if (CPlayer->keys[key_blue])
         {
-            V_DrawPatch(153 + wide_delta, 180, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+            V_DrawPatch(153 + wide_delta, 180,
+                        W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
         }
         oldkeys = playerkeys;
         UpdateState |= I_STATBAR;
@@ -1143,8 +1131,10 @@ void DrawInventoryBar(void)
         {
             patch = DEH_String(patcharti[CPlayer->inventory[x + i].type]);
 
-            V_DrawPatch(50 + i * 31 + wide_delta, 160, W_CacheLumpName(patch, PU_CACHE));
-            DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31 + wide_delta, 182);
+            V_DrawPatch(50 + i * 31 + wide_delta, 160,
+                        W_CacheLumpName(patch, PU_CACHE));
+            DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31
+                                                              + wide_delta, 182);
         }
     }
     V_DrawPatch(50 + curpos * 31 + wide_delta, 189, PatchSELECTBOX);
@@ -1166,7 +1156,8 @@ void DrawFullScreenStuff(void)
     int i;
     int x;
     int temp;
-    int fs_ammo = CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo]; // [JN] Definition of full screen ammo
+    // [JN] Definition of full screen ammo
+    int fs_ammo = CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
 
     UpdateState |= I_FULLSCRN;
 
@@ -1256,9 +1247,12 @@ void DrawFullScreenStuff(void)
         // and not while opened inventory. Just as visual reminder.
         if (CPlayer->mo->health > 0 && !inventory)
         {
-            V_DrawShadowedPatch(219 + (wide_delta * 2), 174, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
-            V_DrawShadowedPatch(219 + (wide_delta * 2), 182, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
-            V_DrawShadowedPatch(219 + (wide_delta * 2), 190, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (wide_delta * 2), 174,
+                                W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (wide_delta * 2), 182,
+                                W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (wide_delta * 2), 190,
+                                W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
         }
     }
     if (!inventory)
@@ -1293,11 +1287,14 @@ void DrawFullScreenStuff(void)
         if (!deathmatch)
         {
             if (CPlayer->keys[key_yellow])
-            V_DrawShadowedPatch(219 + (wide_delta * 2), 174, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (wide_delta * 2), 174,
+                                W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
             if (CPlayer->keys[key_green])
-            V_DrawShadowedPatch(219 + (wide_delta * 2), 182, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (wide_delta * 2), 182,
+                                W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
             if (CPlayer->keys[key_blue])
-            V_DrawShadowedPatch(219 + (wide_delta * 2), 190, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+            V_DrawShadowedPatch(219 + (wide_delta * 2), 190,
+                                W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
         }
 
         if (CPlayer->readyArtifact > 0)
@@ -1305,7 +1302,8 @@ void DrawFullScreenStuff(void)
             patch = DEH_String(patcharti[CPlayer->readyArtifact]);
             
             // [JN] Draw Artifacts
-            V_DrawShadowedPatch(238 + (wide_delta * 2), 170, W_CacheLumpName(patch, PU_CACHE));
+            V_DrawShadowedPatch(238 + (wide_delta * 2), 170,
+                                W_CacheLumpName(patch, PU_CACHE));
             DrSmallNumber(CPlayer->inventory[inv_ptr].count, 259 + (wide_delta * 2), 191);
         }
 
@@ -1348,8 +1346,8 @@ void DrawFullScreenStuff(void)
                 patch = DEH_String(patcharti[CPlayer->inventory[x + i].type]);
                 V_DrawPatch(50 + i * 31 + wide_delta, 168,
                             W_CacheLumpName(patch, PU_CACHE));
-                DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31 + wide_delta,
-                              190);
+                DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31 
+                                                                  + wide_delta, 190);
             }
         }
         V_DrawPatch(50 + curpos * 31 + wide_delta, 197, PatchSELECTBOX);
@@ -1398,11 +1396,11 @@ static boolean HandleCheats(byte key)
     boolean eat;
 
     if (netgame || gameskill == sk_nightmare)
-    {                           // Can't cheat in a net-game, or in nightmare mode
+    {                         // Can't cheat in a net-game, or in nightmare mode
         return (false);
     }
     if (players[consoleplayer].health <= 0)
-    {                           // Dead players can't cheat
+    {                         // Dead players can't cheat
         return (false);
     }
     eat = false;
