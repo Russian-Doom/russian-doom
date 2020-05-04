@@ -378,7 +378,9 @@ void CT_Drawer(void)
                 x += patch->width;
             }
         }
-        V_DrawShadowedPatchRaven(x, 10, W_CacheLumpName(DEH_String("FONTA59"), PU_CACHE)); // [JN] Replaced to FONTA59 ('_')
+        // [JN] Replaced with FONTA59 ('_')
+        V_DrawShadowedPatchRaven(x, 10, W_CacheLumpName
+                                (DEH_String("FONTA59"), PU_CACHE)); 
         BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
     }
