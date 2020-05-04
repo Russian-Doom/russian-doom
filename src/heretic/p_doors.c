@@ -87,7 +87,7 @@ void T_VerticalDoor(vldoor_t * door)
                     case vld_normal:
                     case vld_close:
                         door->sector->specialdata = NULL;
-                        P_RemoveThinker(&door->thinker);        // unlink and free
+                        P_RemoveThinker(&door->thinker);    // unlink and free
                         S_StartSound(&door->sector->soundorg, sfx_dorcls);
                         break;
                     case vld_close30ThenOpen:
@@ -125,7 +125,7 @@ void T_VerticalDoor(vldoor_t * door)
                     case vld_close30ThenOpen:
                     case vld_open:
                         door->sector->specialdata = NULL;
-                        P_RemoveThinker(&door->thinker);        // unlink and free
+                        P_RemoveThinker(&door->thinker);    // unlink and free
                         S_StopSound(&door->sector->soundorg);
                         break;
                     default:
@@ -268,7 +268,7 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
     {
         // [JN] Use player->mo for sound source, don't play it globally.
         // This also fixes bombing out on using this linedef.
-        S_StartSound(player->mo,sfx_plroof);
+        S_StartSound(player->mo, sfx_plroof);
         return;
     }
 
@@ -286,7 +286,8 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
                 {
                     door->direction = 1;        // go back up
 
-                    // [crispy] & [JN] play sound effect when the door is opened again while going down
+                    // [crispy] & [JN] play sound effect when the door
+                    // is opened again while going down
                     if (!vanillaparm)
                     S_StartSound(&door->sector->soundorg, sfx_dormov);
                 }
@@ -298,7 +299,8 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
                     }
                     door->direction = -1;       // start going down immediately
 
-                    // [crispy] & [JN] play sound effect when the door is closed manually
+                    // [crispy] & [JN] play sound effect when the door
+                    // is closed manually
                     if (!vanillaparm)
                     S_StartSound(&door->sector->soundorg, sfx_dormov);
                 }
@@ -312,12 +314,10 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
         case 1:                // NORMAL DOOR SOUND
         case 31:
             S_StartSound(&sec->soundorg, sfx_doropn);
-            //S_StartSound(&sec->soundorg, sfx_dormov);
-            break;
+        break;
         default:               // LOCKED DOOR SOUND
             S_StartSound(&sec->soundorg, sfx_doropn);
-            //S_StartSound(&sec->soundorg, sfx_dormov);
-            break;
+        break;
     }
 
     //
@@ -336,14 +336,14 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
         case 27:
         case 28:
             door->type = vld_normal;
-            break;
+        break;
         case 31:
         case 32:
         case 33:
         case 34:
             door->type = vld_open;
             line->special = 0;
-            break;
+        break;
     }
     door->speed = VDOORSPEED;
     door->topwait = VDOORWAIT;
