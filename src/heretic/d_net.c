@@ -55,8 +55,16 @@ static void PlayerQuitGame(player_t *player)
     // The Heretic source code does this, which doesn't actually work.
     // As a result, the exit message is never seen.
 
-    M_StringCopy(exitmsg, "BUHJR 1 GJRBYEK BUHE", sizeof(exitmsg)); // ИГРОК 1 ПОКИНУЛ ИГРУ
+    M_StringCopy(exitmsg, (english_language ?
+                 "PLAYER 1 LEFT THE GAME" :
+                 "BUHJR 1 GJRBYEK BUHE"), // ИГРОК 1 ПОКИНУЛ ИГРУ
+                 sizeof(exitmsg));
+
+    if (english_language)
+    exitmsg[7] += player_num;
+    else
     exitmsg[6] += player_num;
+
     players[consoleplayer].message = exitmsg;
 
     playeringame[player_num] = false;
