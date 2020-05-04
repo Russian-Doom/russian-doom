@@ -60,10 +60,10 @@ int dccount;                    // just for profiling
 
 void R_DrawColumn(void)
 {
-    int              count;
-    register byte    *dest;           // killough
-    register fixed_t frac;            // killough
-    fixed_t          fracstep;
+    int      count;
+    byte    *dest;   // killough
+    fixed_t  frac;   // killough
+    fixed_t  fracstep;
 
     count = dc_yh - dc_yl + 1;
 
@@ -96,9 +96,9 @@ void R_DrawColumn(void)
     // killough 2/1/98: more performance tuning
 
     {
-        register const byte *source = dc_source;
-        register const lighttable_t *colormap = dc_colormap;
-        register int heightmask = dc_texheight-1;
+        const byte *source = dc_source;
+        const lighttable_t *colormap = dc_colormap;
+        int heightmask = dc_texheight-1;
         if (dc_texheight & heightmask)   // not a power of 2 -- killough
         {
             heightmask++;
@@ -157,7 +157,6 @@ void R_DrawColumnLow(void)
                 "R_DrawColumn: %i to %i at %i" :
                 "R_DrawColumn: %i к %i в %i",
                 dc_yl, dc_yh, dc_x);
-//      dccount++;
 #endif
 
     dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
@@ -366,9 +365,9 @@ void R_InitTranslationTables(void)
     {
         if (i >= 225 && i <= 240)
         {
-            translationtables[i] = 114 + (i - 225);     // yellow
-            translationtables[i + 256] = 145 + (i - 225);       // red
-            translationtables[i + 512] = 190 + (i - 225);       // blue
+            translationtables[i] = 114 + (i - 225);       // yellow
+            translationtables[i + 256] = 145 + (i - 225); // red
+            translationtables[i + 512] = 190 + (i - 225); // blue
         }
         else
         {
@@ -411,18 +410,15 @@ void R_DrawSpan(void)
                 "R_DrawSpan: %i to %i at %i" :
                 "R_DrawSpan: %i к %i в %i",
                 ds_x1, ds_x2, ds_y);
-//      dscount++;
 #endif
 
     xfrac = ds_xfrac;
     yfrac = ds_yfrac;
 
-//  dest = ylookup[ds_y] + columnofs[ds_x1];
     count = ds_x2 - ds_x1;
     do
     {
         spot = ((yfrac >> (16 - 6)) & (63 * 64)) + ((xfrac >> 16) & 63);
-//      *dest++ = ds_colormap[ds_source[spot]];
         dest = ylookup[ds_y] + columnofs[flipwidth[ds_x1++]];
         *dest = ds_colormap[ds_source[spot]];
         xfrac += ds_xstep;
@@ -444,18 +440,15 @@ void R_DrawSpanLow(void)
                 "R_DrawSpan: %i to %i at %i" :
                 "R_DrawSpan: %i к %i в %i",
                 ds_x1, ds_x2, ds_y);
-//      dscount++;
 #endif
 
     xfrac = ds_xfrac;
     yfrac = ds_yfrac;
 
-//  dest = ylookup[ds_y] + columnofs[ds_x1];
     count = ds_x2 - ds_x1;
     do
     {
         spot = ((yfrac >> (16 - 6)) & (63 * 64)) + ((xfrac >> 16) & 63);
-//      *dest++ = ds_colormap[ds_source[spot]];
         dest = ylookup[ds_y] + columnofs[flipwidth[ds_x1++]];
         *dest = ds_colormap[ds_source[spot]];
         xfrac += ds_xstep;
