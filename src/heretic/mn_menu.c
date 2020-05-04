@@ -2433,12 +2433,18 @@ static void DrawControlsMenu(void)
                                      118 + wide_delta, 82);
 
         // Invert Y axis
+        if (!mlook)
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
         MN_DrTextSmallENG(DEH_String(mouse_y_invert ? "ON" : "OFF"),
                                      133 + wide_delta, 92);
+        dp_translation = NULL;
 
         // Novert
+        if (mlook)
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
         MN_DrTextSmallENG(DEH_String(!novert ? "ON" : "OFF"),
                                      168 + wide_delta, 102);
+        dp_translation = NULL;
     }
     else
     {
@@ -2471,12 +2477,18 @@ static void DrawControlsMenu(void)
                                      132 + wide_delta, 82);
 
         // Вертикальная инверсия
+        if (!mlook)
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
         MN_DrTextSmallRUS(DEH_String(mouse_y_invert ? "DRK" : "DSRK"),
                                      199 + wide_delta, 92);
+        dp_translation = NULL;
 
         // Вертикальное перемещение
+        if (mlook)
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
         MN_DrTextSmallRUS(DEH_String(!novert ? "DRK" : "DSRK"),
                                      227 + wide_delta, 102);
+        dp_translation = NULL;
     }
 
     //
