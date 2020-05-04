@@ -95,8 +95,8 @@ mobj_t *tmthing;
 int tmflags;
 fixed_t tmx, tmy;
 
-boolean floatok;                // if true, move would be ok if
-                                                                        // within tmfloorz - tmceilingz
+boolean floatok;    // if true, move would be ok if
+                    // within tmfloorz - tmceilingz
 
 fixed_t tmfloorz, tmceilingz, tmdropoffz;
 
@@ -110,7 +110,7 @@ line_t *ceilingline;
 line_t *spechit[MAXSPECIALCROSS];
 int numspechit;
 
-mobj_t *onmobj;                 //generic global onmobj...used for landing on pods/players
+mobj_t *onmobj;     //generic global onmobj...used for landing on pods/players
 
 /*
 ===============================================================================
@@ -340,10 +340,10 @@ boolean PIT_CheckThing(mobj_t * thing)
         return (true);
     }
     if (tmthing->flags2 & MF2_PASSMOBJ)
-    {                           // check if a mobj passed over/under another object
+    {   // check if a mobj passed over/under another object
         if ((tmthing->type == MT_IMP || tmthing->type == MT_WIZARD)
             && (thing->type == MT_IMP || thing->type == MT_WIZARD))
-        {                       // don't let imps/wizards fly over other imps/wizards
+        {   // don't let imps/wizards fly over other imps/wizards
             return false;
         }
         if (tmthing->z > thing->z + thing->height
@@ -1000,7 +1000,7 @@ void P_ApplyTorque(mobj_t *mo)
         mo->y - mo->radius) - bmaporgy) >> MAPBLOCKSHIFT;
     int yh = ((tmbbox[BOXTOP] = 
         mo->y + mo->radius) - bmaporgy) >> MAPBLOCKSHIFT;
-    int bx,by,flags = mo->intflags;     //Remember the current state, for gear-change
+    int bx,by,flags = mo->intflags; // Remember the current state, for gear-change
 
     tmthing = mo;
     validcount++;   // prevents checking same line twice
@@ -1022,10 +1022,10 @@ void P_ApplyTorque(mobj_t *mo)
     // of rotation, so we have to creatively simulate these 
     // systems somehow :)
 
-    if (!((mo->intflags | flags) & MIF_FALLING))    // If not falling for a while,
-        mo->gear = 0;                               // Reset it to full strength
-    else if (mo->gear < MAXGEAR)                    // Else if not at max gear,
-        mo->gear++;                                 // move up a gear
+    if (!((mo->intflags | flags) & MIF_FALLING))  // If not falling for a while,
+        mo->gear = 0;                             // Reset it to full strength
+    else if (mo->gear < MAXGEAR)                  // Else if not at max gear,
+        mo->gear++;                               // move up a gear
 }
 
 /*
@@ -1046,6 +1046,7 @@ static sector_t *movingsector;
 boolean P_ThingHeightClip(mobj_t * thing)
 {
     boolean onfloor;
+    extern void P_CalcHeight(player_t * player);
 
     onfloor = (thing->z == thing->floorz);
 
@@ -1063,19 +1064,14 @@ boolean P_ThingHeightClip(mobj_t * thing)
         // [JN] Update player's view when on moving platform.
         // Idea by Brad Harding, code by Fabian Greffrath.
         // Thanks again, colleagues! (03.06.2018)
-        if (thing->player && thing->subsector->sector == movingsector)
+        if (!vanillaparm && thing->player 
+        &&  thing->subsector->sector == movingsector)
         {
-            player_t *const player = thing->player;
-            player->viewz = player->mo->z + player->viewheight;
-
-            if (player->viewz > player->mo->ceilingz - 4*FRACUNIT)
-            {
-                player->viewz = player->mo->ceilingz - 4*FRACUNIT;
-            }
+            P_CalcHeight (thing->player);
         }
     }
     else
-    {                           // don't adjust a floating monster unless forced to
+    {   // don't adjust a floating monster unless forced to
         if (thing->z + thing->height > thing->ceilingz)
             thing->z = thing->ceilingz - thing->height;
     }
@@ -1139,7 +1135,6 @@ void P_HitSlideLine(line_t * ld)
     deltaangle = moveangle - lineangle;
     if (deltaangle > ANG180)
         deltaangle += ANG180;
-//              I_Error ("SlideLine: ang>ANG180");
 
     lineangle >>= ANGLETOFINESHIFT;
     deltaangle >>= ANGLETOFINESHIFT;
@@ -1318,7 +1313,7 @@ void P_SlideMove(mobj_t * mo)
 mobj_t *linetarget;             // who got hit (or NULL)
 mobj_t *shootthing;
 fixed_t shootz;                 // height if not aiming up or down
-                                                                        // ???: use slope for monsters?
+                                // ???: use slope for monsters?
 int la_damage;
 fixed_t attackrange;
 
@@ -1510,10 +1505,13 @@ boolean PTR_ShootTraverse(intercept_t * in)
         // [from-crispy]
         if (li->frontsector->ceilingpic == skyflatnum &&
         li->backsector && li->backsector->ceilingpic == skyflatnum)
-
-        P_SpawnPuffSafe (x, y, z, true);
+        {
+            P_SpawnPuffSafe (x, y, z, true);
+        }
         else
-        P_SpawnPuff(x, y, z);
+        {
+            P_SpawnPuff(x, y, z);
+        }
         return false;           // don't go any farther
     }
 
@@ -1654,7 +1652,6 @@ boolean PTR_UseTraverse(intercept_t * in)
         P_LineOpening(in->d.line);
         if (openrange <= 0)
         {
-            //S_StartSound (usething, sfx_noway);
             return false;       // can't use through a wall
         }
         return true;            // not a special line, but keep checking
@@ -1726,8 +1723,8 @@ boolean PIT_RadiusAttack(mobj_t * thing)
         return true;
     }
     if (thing->type == MT_MINOTAUR || thing->type == MT_SORCERER1
-        || thing->type == MT_SORCERER2)
-    {                           // Episode 2 and 3 bosses take no damage from PIT_RadiusAttack
+    ||  thing->type == MT_SORCERER2)
+    {   // Episode 2 and 3 bosses take no damage from PIT_RadiusAttack
         return (true);
     }
     dx = abs(thing->x - bombspot->x);
@@ -1821,7 +1818,6 @@ boolean PIT_ChangeSector(mobj_t * thing)
     // crunch bodies to giblets
     if (thing->health <= 0)
     {
-        //P_SetMobjState (thing, S_GIBS);
         thing->height = 0;
         thing->radius = 0;
         return true;            // keep checking
