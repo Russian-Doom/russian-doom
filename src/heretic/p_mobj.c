@@ -35,22 +35,22 @@ mobjtype_t PuffType;
 mobj_t *MissileMobj;
 
 static fixed_t FloatBobOffsets[64] = {
-    0, 51389, 102283, 152192,
-    200636, 247147, 291278, 332604,
-    370727, 405280, 435929, 462380,
-    484378, 501712, 514213, 521763,
-    524287, 521763, 514213, 501712,
-    484378, 462380, 435929, 405280,
-    370727, 332604, 291278, 247147,
-    200636, 152192, 102283, 51389,
-    -1, -51390, -102284, -152193,
+          0,   51389,  102283,  152192,
+     200636,  247147,  291278,  332604,
+     370727,  405280,  435929,  462380,
+     484378,  501712,  514213,  521763,
+     524287,  521763,  514213,  501712,
+     484378,  462380,  435929,  405280,
+     370727,  332604,  291278,  247147,
+     200636,  152192,  102283,   51389,
+         -1,  -51390, -102284, -152193,
     -200637, -247148, -291279, -332605,
     -370728, -405281, -435930, -462381,
     -484380, -501713, -514215, -521764,
     -524288, -521764, -514214, -501713,
     -484379, -462381, -435930, -405280,
     -370728, -332605, -291279, -247148,
-    -200637, -152193, -102284, -51389
+    -200637, -152193, -102284,  -51389
 };
 
 //----------------------------------------------------------------------------
@@ -126,7 +126,6 @@ void P_ExplodeMissile(mobj_t * mo)
     }
     mo->momx = mo->momy = mo->momz = 0;
     P_SetMobjState(mo, mobjinfo[mo->type].deathstate);
-    //mo->tics -= P_Random()&3;
     mo->flags &= ~MF_MISSILE;
     if (mo->info->deathsound)
     {
@@ -296,10 +295,10 @@ boolean P_SeekerMissile(mobj_t * actor, angle_t thresh, angle_t turnMax)
 //
 //----------------------------------------------------------------------------
 
-#define STOPSPEED                       0x1000
-#define FRICTION_NORMAL         0xe800
-#define FRICTION_LOW            0xf900
-#define FRICTION_FLY            0xeb00
+#define STOPSPEED       0x1000
+#define FRICTION_NORMAL 0xe800
+#define FRICTION_LOW    0xf900
+#define FRICTION_FLY    0xeb00
 
 void P_XYMovement(mobj_t * mo)
 {
@@ -387,10 +386,10 @@ void P_XYMovement(mobj_t * mo)
                 P_SlideMove(mo);
             }
             else if (mo->flags & MF_MISSILE)
-            {                   // Explode a missile
+            {   // Explode a missile
                 if (ceilingline && ceilingline->backsector
                     && ceilingline->backsector->ceilingpic == skyflatnum)
-                {               // Hack to prevent missiles exploding against the sky
+                {   // Hack to prevent missiles exploding against the sky
                     if (mo->type == MT_BLOODYSKULL)
                     {
                         mo->momx = mo->momy = 0;
@@ -404,12 +403,6 @@ void P_XYMovement(mobj_t * mo)
                 }
                 P_ExplodeMissile(mo);
             }
-            //else if(mo->info->crashstate)
-            //{
-            //      mo->momx = mo->momy = 0;
-            //      P_SetMobjState(mo, mo->info->crashstate);
-            //      return;
-            //}
             else
             {
                 mo->momx = mo->momy = 0;
@@ -421,21 +414,21 @@ void P_XYMovement(mobj_t * mo)
     // Friction
 
     if (player && player->cheats & CF_NOMOMENTUM)
-    {                           // Debug option for no sliding at all
+    {   // Debug option for no sliding at all
         mo->momx = mo->momy = 0;
         return;
     }
     if (mo->flags & (MF_MISSILE | MF_SKULLFLY))
-    {                           // No friction for missiles
+    {   // No friction for missiles
         return;
     }
     if (mo->z > mo->floorz && !(mo->flags2 & MF2_FLY)
         && !(mo->flags2 & MF2_ONMOBJ))
-    {                           // No friction when falling
+    {   // No friction when falling
         return;
     }
     if (mo->flags & MF_CORPSE)
-    {                           // Don't stop sliding if halfway off a step with some momentum
+    {   // Don't stop sliding if halfway off a step with some momentum
         if (mo->momx > FRACUNIT / 4 || mo->momx < -FRACUNIT / 4
             || mo->momy > FRACUNIT / 4 || mo->momy < -FRACUNIT / 4)
         {
@@ -449,11 +442,10 @@ void P_XYMovement(mobj_t * mo)
     // killough 8/11/98: add bouncers
     // killough 9/15/98: add objects falling off ledges
     // killough 11/98: only include bouncers hanging off ledges
-    if ((/*(mo->flags & MF_BOUNCES && mo->z > mo->dropoffz) ||*/
-    mo->flags & MF_CORPSE || mo->intflags & MIF_FALLING) 
-    && (mo->momx > FRACUNIT/4 || mo->momx < -FRACUNIT/4
-    ||  mo->momy > FRACUNIT/4 || mo->momy < -FRACUNIT/4) 
-    &&  mo->floorz != mo->subsector->sector->floorheight)
+    if ((mo->flags & MF_CORPSE || mo->intflags & MIF_FALLING) 
+    &&  (mo->momx > FRACUNIT/4 || mo->momx < -FRACUNIT/4
+    ||   mo->momy > FRACUNIT/4 || mo->momy < -FRACUNIT/4) 
+    &&   mo->floorz != mo->subsector->sector->floorheight)
     {
         return;  // do not stop sliding if halfway off a step with some momentum
     }
@@ -581,8 +573,8 @@ void P_ZMovement(mobj_t * mo)
         }
         mo->z = mo->floorz;
         if (mo->momz < 0)
-        {
-            if (mo->player && mo->momz < -GRAVITY * 8 && !(mo->flags2 & MF2_FLY))       // squat down
+        {   // squat down
+            if (mo->player && mo->momz < -GRAVITY * 8 && !(mo->flags2 & MF2_FLY))
             {
                 mo->player->deltaviewheight = mo->momz >> 3;
 
@@ -1361,31 +1353,6 @@ void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe)
     }
 }
 
-/*
-================
-=
-= P_SpawnBlood
-=
-================
-*/
-
-/*
-void P_SpawnBlood (fixed_t x, fixed_t y, fixed_t z, int damage)
-{
-	mobj_t  *th;
-	
-	z += (P_SubRandom()<<10);
-	th = P_SpawnMobj (x,y,z, MT_BLOOD);
-	th->momz = FRACUNIT*2;
-	th->tics -= P_Random()&3;
-
-	if (damage <= 12 && damage >= 9)
-		P_SetMobjState (th,S_BLOOD2);
-	else if (damage < 9)
-		P_SetMobjState (th,S_BLOOD3);
-}
-*/
-
 //---------------------------------------------------------------------------
 //
 // PROC P_BloodSplatter
@@ -1433,17 +1400,6 @@ void P_RipperBlood(mobj_t * mo)
 int P_GetThingFloorType(mobj_t * thing)
 {
     return (TerrainTypes[thing->subsector->sector->floorpic]);
-/*
-	if(thing->subsector->sector->floorpic
-		== W_GetNumForName("FLTWAWA1")-firstflat)
-	{
-		return(FLOOR_WATER);
-	}
-	else
-	{
-		return(FLOOR_SOLID);
-	}
-*/
 }
 
 //---------------------------------------------------------------------------
@@ -1457,7 +1413,7 @@ int P_HitFloor(mobj_t * thing)
     mobj_t *mo;
 
     if (thing->floorz != thing->subsector->sector->floorheight)
-    {                           // don't splash if landing on the edge above water/lava/etc....
+    {   // don't splash if landing on the edge above water/lava/etc....
         return (FLOOR_SOLID);
     }
     switch (P_GetThingFloorType(thing))
@@ -1500,8 +1456,6 @@ int P_HitFloor(mobj_t * thing)
 
 boolean P_CheckMissileSpawn(mobj_t * missile)
 {
-    //missile->tics -= P_Random()&3;
-
     // move a little forward so an angle can be computed if it
     // immediately explodes
     missile->x += (missile->momx >> 1);
