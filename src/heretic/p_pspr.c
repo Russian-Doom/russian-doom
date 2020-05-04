@@ -304,11 +304,11 @@ void P_CloseWeapons(void)
     int spot;
 
     if (!MaceSpotCount)
-    {                           // No maces placed
+    {                       // No maces placed
         return;
     }
     if (!deathmatch && P_Random() < 64)
-    {                           // Sometimes doesn't show up if not in deathmatch
+    {                       // Sometimes doesn't show up if not in deathmatch
         return;
     }
     spot = P_Random() % MaceSpotCount;
@@ -354,33 +354,6 @@ void P_SetPsprite(player_t * player, int position, statenum_t stnum)
     }
     while (!psp->tics);         // An initial state of 0 could cycle through.
 }
-
-/*
-=================
-=
-= P_CalcSwing
-=
-=================
-*/
-
-/*
-fixed_t	swingx, swingy;
-void P_CalcSwing (player_t *player)
-{
-	fixed_t	swing;
-	int		angle;
-
-// OPTIMIZE: tablify this
-
-	swing = player->bob;
-
-	angle = (FINEANGLES/70*leveltime)&FINEMASK;
-	swingx = FixedMul ( swing, finesine[angle]);
-
-	angle = (FINEANGLES/70*leveltime+FINEANGLES/2)&FINEMASK;
-	swingy = -FixedMul ( swingx, finesine[angle]);
-}
-*/
 
 //---------------------------------------------------------------------------
 //
@@ -554,7 +527,7 @@ void P_FireWeapon(player_t * player)
     P_SetPsprite(player, ps_weapon, attackState);
     P_NoiseAlert(player->mo, player->mo);
     if (player->readyweapon == wp_gauntlets && !player->refire)
-    {                           // Play the sound for the initial gauntlet attack
+    {                       // Play the sound for the initial gauntlet attack
         S_StartSound(player->mo, sfx_gntuse);
     }
 }
@@ -732,16 +705,16 @@ void A_Lower(player_t * player, pspdef_t * psp)
         psp->sy += LOWERSPEED;
     }
     if (psp->sy < WEAPONBOTTOM)
-    {                           // Not lowered all the way yet
+    {                   // Not lowered all the way yet
         return;
     }
     if (player->playerstate == PST_DEAD)
-    {                           // Player is dead, so don't bring up a pending weapon
+    {                   // Player is dead, so don't bring up a pending weapon
         psp->sy = WEAPONBOTTOM;
         return;
     }
     if (!player->health)
-    {                           // Player is dead, so keep the weapon off screen
+    {                   // Player is dead, so keep the weapon off screen
         P_SetPsprite(player, ps_weapon, S_NULL);
         return;
     }
@@ -829,7 +802,7 @@ void P_BulletSlope(mobj_t * mo)
             else
             {
                 bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) /
-                            (screenblocks <= 10 ? 161 : 146);
+                              (screenblocks <= 10 ? 161 : 146);
             }
         }
     }
@@ -917,7 +890,6 @@ void A_StaffAttackPL1(player_t * player, pspdef_t * psp)
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
-        //S_StartSound(player->mo, sfx_stfhit);
         // turn to face target
         player->mo->angle = R_PointToAngle2(player->mo->x,
                                             player->mo->y, linetarget->x,
@@ -946,7 +918,6 @@ void A_StaffAttackPL2(player_t * player, pspdef_t * psp)
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
-        //S_StartSound(player->mo, sfx_stfpow);
         // turn to face target
         player->mo->angle = R_PointToAngle2(player->mo->x,
                                             player->mo->y, linetarget->x,
@@ -1459,11 +1430,11 @@ void A_FireSkullRodPL2(player_t * player, pspdef_t * psp)
     // P_SpawnPlayerMissile because we need to give info to the mobj
     // even if it exploded immediately.
     if (netgame)
-    {                           // Multi-player game
+    {                        // Multi-player game
         MissileMobj->special2.i = P_GetPlayerNum(player);
     }
     else
-    {                           // Always use red missiles in single player games
+    {                        // Always use red missiles in single player games
         MissileMobj->special2.i = 2;
     }
     if (linetarget)
@@ -1632,7 +1603,6 @@ void A_FirePhoenixPL1(player_t * player, pspdef_t * psp)
 
     player->ammo[am_phoenixrod] -= USE_PHRD_AMMO_1;
     P_SpawnPlayerMissile(player->mo, MT_PHOENIXFX1);
-    //P_SpawnPlayerMissile(player->mo, MT_MNTRFX2);
     angle = player->mo->angle + ANG180;
     angle >>= ANGLETOFINESHIFT;
     player->mo->momx += FixedMul(4 * FRACUNIT, finecosine[angle]);
