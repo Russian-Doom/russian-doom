@@ -257,7 +257,6 @@ void S_StartSound(void *_origin, int sound_id)
     }
 
     // calculate the volume based upon the distance from the sound origin.
-//      vol = (snd_MaxVolume*16 + dist*(-snd_MaxVolume*16)/MAX_SND_DIST)>>9;
     vol = soundCurve[dist];
 
     if (origin == listener)
@@ -488,7 +487,6 @@ void S_UpdateSounds(mobj_t * listener)
             absy = abs(channel[i].mo->y - listener->y);
             dist = absx + absy - (absx > absy ? absy >> 1 : absx >> 1);
             dist >>= FRACBITS;
-//          dist = P_AproxDistance(channel[i].mo->x-listener->x, channel[i].mo->y-listener->y)>>FRACBITS;
 
             if (dist >= MAX_SND_DIST)
             {
@@ -499,7 +497,6 @@ void S_UpdateSounds(mobj_t * listener)
                 dist = 0;
 
 // calculate the volume based upon the distance from the sound origin.
-//          vol = (*((byte *)W_CacheLumpName("SNDCURVE", PU_CACHE)+dist)*(snd_MaxVolume*8))>>7;
             vol = soundCurve[dist];
 
             angle = R_PointToAngle2(listener->x, listener->y,
