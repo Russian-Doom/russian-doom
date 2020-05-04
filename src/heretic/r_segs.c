@@ -36,7 +36,8 @@
 int brightmap_redonly;
 int brightmap_blueonly;
 int brightmap_notbronze;
-extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05, bmaptexture06, bmaptexture07;
+extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04;
+extern int bmaptexture05, bmaptexture06, bmaptexture07;
 extern int bmap_terminator;
 
 // OPTIMIZE: closed two sided lines as single sided
@@ -277,9 +278,11 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
             // mapping to screen coordinates is totally out of range:
 
             {
-                int64_t t = ((int64_t) centeryfrac << FRACBITS) - (int64_t) dc_texturemid * spryscale;
+                int64_t t = ((int64_t) centeryfrac << FRACBITS) 
+                          - (int64_t) dc_texturemid * spryscale;
 
-                if (t + (int64_t) textureheight[texnum] * spryscale < 0 || t > (int64_t) SCREENHEIGHT << FRACBITS*2)
+                if (t + (int64_t) textureheight[texnum] * spryscale < 0 
+                ||  t > (int64_t) SCREENHEIGHT << FRACBITS*2)
                 {
                     spryscale += rw_scalestep; // [crispy] MBF had this in the for-loop iterator
                     continue; // skip if the texture is out of screen's range
@@ -301,7 +304,6 @@ void R_RenderMaskedSegRange(drawseg_t * ds, int x1, int x2)
         }
         spryscale += rw_scalestep;
     }
-
 }
 
 /*
@@ -384,13 +386,18 @@ void R_RenderSegLoop(void)
                 rw_offset - FixedMul(finetangent[angle], rw_distance);
             texturecolumn >>= FRACBITS;
             // calculate lighting
-            /* index = rw_scale >> (LIGHTSCALESHIFT + hires); // [JN] See above */
+            // [JN] See above...
+            // index = rw_scale >> (LIGHTSCALESHIFT + hires);
             if (index >= MAXLIGHTSCALE)
                 index = MAXLIGHTSCALE - 1;
-            /* dc_colormap = walllights[index]; // [JN] All wall segments (top/middle/bottom) now using own lights */
+
+            // [JN] All wall segments (top/middle/bottom) now using own lights
+            // dc_colormap = walllights[index];
 
             dc_x = rw_x;
-            dc_iscale = 0xffffffffu / (unsigned)rw_scale - SPARKLEFIX; // [JN] Sparkle fix
+
+            // [JN] Sparkle fix
+            dc_iscale = 0xffffffffu / (unsigned)rw_scale - SPARKLEFIX;
         }
 
 //
@@ -426,7 +433,8 @@ void R_RenderSegLoop(void)
                 {
                     dc_yl = yl;
                     dc_yh = mid;
-                    dc_texturemid = rw_toptexturemid + (dc_yl - centery + 1) * SPARKLEFIX; // [JN] Sparkle fix
+                    dc_texturemid = rw_toptexturemid + (dc_yl - centery + 1)
+                                  * SPARKLEFIX; // [JN] Sparkle fix
                     dc_source = R_GetColumn(toptexture, texturecolumn);
                     dc_texheight = textureheight[toptexture]>>FRACBITS;
 
@@ -458,7 +466,9 @@ void R_RenderSegLoop(void)
                 {
                     dc_yl = mid;
                     dc_yh = yh;
-                    dc_texturemid = rw_bottomtexturemid + (dc_yl - centery + 1) * SPARKLEFIX; // [JN] Sparkle fix
+                    dc_texturemid = rw_bottomtexturemid 
+                                  + (dc_yl - centery + 1)
+                                  * SPARKLEFIX; // [JN] Sparkle fix
                     dc_source = R_GetColumn(bottomtexture, texturecolumn);
                     dc_texheight = textureheight[bottomtexture]>>FRACBITS;
 
@@ -481,7 +491,7 @@ void R_RenderSegLoop(void)
             }
 
             if (maskedtexture)
-            {                   // save texturecol for backdrawing of masked mid texture
+            {   // save texturecol for backdrawing of masked mid texture
                 maskedtexturecol[rw_x] = texturecolumn;
             }
         }
@@ -856,33 +866,47 @@ void R_StoreWallRange(int start, int stop)
                     //  Blue only
                     // -------------------------------------------------------
 
-                    if (midtexture == bmaptexture02 || midtexture == bmaptexture03 || midtexture == bmaptexture04 || midtexture == bmaptexture05)
+                    if (midtexture == bmaptexture02
+                    ||  midtexture == bmaptexture03
+                    ||  midtexture == bmaptexture04
+                    ||  midtexture == bmaptexture05)
                     walllights_middle = fullbright_blueonly[lightnum];
 
-                    if (toptexture == bmaptexture02 || toptexture == bmaptexture03 || toptexture == bmaptexture04 || toptexture == bmaptexture05)
+                    if (toptexture == bmaptexture02
+                    ||  toptexture == bmaptexture03
+                    ||  toptexture == bmaptexture04
+                    ||  toptexture == bmaptexture05)
                     walllights_top = fullbright_blueonly[lightnum];
 
-                    if (bottomtexture == bmaptexture02 || bottomtexture == bmaptexture03 || bottomtexture == bmaptexture04 || bottomtexture == bmaptexture05)
+                    if (bottomtexture == bmaptexture02
+                    ||  bottomtexture == bmaptexture03
+                    ||  bottomtexture == bmaptexture04
+                    ||  bottomtexture == bmaptexture05)
                     walllights_bottom = fullbright_blueonly[lightnum];
 
                     // -------------------------------------------------------
                     //  Not bronze
                     // -------------------------------------------------------
 
-                    if (midtexture == bmaptexture06 || midtexture == bmaptexture07)
+                    if (midtexture == bmaptexture06
+                    ||  midtexture == bmaptexture07)
                     walllights_middle = fullbright_notbronze[lightnum];
 
-                    if (toptexture == bmaptexture06 || toptexture == bmaptexture07)
+                    if (toptexture == bmaptexture06
+                    ||  toptexture == bmaptexture07)
                     walllights_top = fullbright_notbronze[lightnum];
                     
-                    if (bottomtexture == bmaptexture06 || bottomtexture == bmaptexture07)
+                    if (bottomtexture == bmaptexture06
+                    ||  bottomtexture == bmaptexture07)
                     walllights_bottom = fullbright_notbronze[lightnum];
 
                     // -------------------------------------------------------
                     //  Brightmap terminator
                     // -------------------------------------------------------
 
-                    if (midtexture == bmap_terminator || toptexture == bmap_terminator || bottomtexture == bmap_terminator)
+                    if (midtexture == bmap_terminator
+                    ||  toptexture == bmap_terminator
+                    ||  bottomtexture == bmap_terminator)
                     walllights = scalelight[lightnum];
                 }
             }
@@ -907,10 +931,12 @@ void R_StoreWallRange(int start, int stop)
     worldbottom >>= invhgtbits;
 
     topstep = -FixedMul(rw_scalestep, worldtop);
-    topfrac = ((int64_t)centeryfrac>>invhgtbits) - (((int64_t)worldtop * rw_scale)>>FRACBITS); // [crispy] WiggleFix
+    topfrac = ((int64_t)centeryfrac>>invhgtbits) 
+            - (((int64_t)worldtop * rw_scale)>>FRACBITS); // [crispy] WiggleFix
 
     bottomstep = -FixedMul(rw_scalestep, worldbottom);
-    bottomfrac = ((int64_t)centeryfrac>>invhgtbits) - (((int64_t)worldbottom * rw_scale)>>FRACBITS); // [crispy] WiggleFix
+    bottomfrac = ((int64_t)centeryfrac>>invhgtbits)
+               - (((int64_t)worldbottom * rw_scale)>>FRACBITS); // [crispy] WiggleFix
 
     if (backsector)
     {
@@ -919,12 +945,14 @@ void R_StoreWallRange(int start, int stop)
 
         if (worldhigh < worldtop)
         {
-            pixhigh = ((int64_t)centeryfrac>>invhgtbits) - (((int64_t)worldhigh * rw_scale)>>FRACBITS); // [crispy] WiggleFix
+            pixhigh = ((int64_t)centeryfrac>>invhgtbits)
+                    - (((int64_t)worldhigh * rw_scale)>>FRACBITS); // [crispy] WiggleFix
             pixhighstep = -FixedMul(rw_scalestep, worldhigh);
         }
         if (worldlow > worldbottom)
         {
-            pixlow = ((int64_t)centeryfrac>>invhgtbits) - (((int64_t)worldlow * rw_scale)>>FRACBITS); // [crispy] WiggleFix
+            pixlow = ((int64_t)centeryfrac>>invhgtbits)
+                   - (((int64_t)worldlow * rw_scale)>>FRACBITS); // [crispy] WiggleFix
             pixlowstep = -FixedMul(rw_scalestep, worldlow);
         }
     }
@@ -944,14 +972,16 @@ void R_StoreWallRange(int start, int stop)
 //
     if (((ds_p->silhouette & SIL_TOP) || maskedtexture) && !ds_p->sprtopclip)
     {
-        memcpy (lastopening, ceilingclip+start, sizeof(lastopening)*(rw_stopx-start)); // [crispy] 32-bit integer math
+        memcpy (lastopening, ceilingclip+start,
+                sizeof(lastopening)*(rw_stopx-start)); // [crispy] 32-bit integer math
         ds_p->sprtopclip = lastopening - start;
         lastopening += rw_stopx - start;
     }
     if (((ds_p->silhouette & SIL_BOTTOM) || maskedtexture)
         && !ds_p->sprbottomclip)
     {
-        memcpy (lastopening, floorclip+start, sizeof(lastopening)*(rw_stopx-start)); // [crispy] 32-bit integer math
+        memcpy (lastopening, floorclip+start,
+                sizeof(lastopening)*(rw_stopx-start)); // [crispy] 32-bit integer math
         ds_p->sprbottomclip = lastopening - start;
         lastopening += rw_stopx - start;
     }
