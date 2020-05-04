@@ -146,8 +146,12 @@ extern char* txt_gamma_original_35;
 extern char* txt_gamma_original_4;
 
 // Port-specific strings
+extern char* txt_alwaysrun_on;
+extern char* txt_alwaysrun_off;
 extern char* txt_crosshair_on;
 extern char* txt_crosshair_off;
+extern char* txt_mlook_on;
+extern char* txt_mlook_off;
 
 
 // -----------------------------------------------------------------------------

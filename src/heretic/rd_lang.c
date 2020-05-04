@@ -137,8 +137,12 @@ char* txt_gamma_original_35;
 char* txt_gamma_original_4;
 
 // Port-specific strings
+char* txt_alwaysrun_on;
+char* txt_alwaysrun_off;
 char* txt_crosshair_on;
 char* txt_crosshair_off;
+char* txt_mlook_on;
+char* txt_mlook_off;
 
 // -----------------------------------------------------------------------------
 // [JN] Function for (pre-)defining strings for text translations.
@@ -263,8 +267,12 @@ void RD_DefineLanguageStrings (void)
         txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4;
 
         // Port-specific strings
+        txt_alwaysrun_on       = TXT_ALWAYSRUN_ON;
+        txt_alwaysrun_off      = TXT_ALWAYSRUN_OFF;
         txt_crosshair_on       = TXT_CROSSHAIR_ON;
         txt_crosshair_off      = TXT_CROSSHAIR_OFF;
+        txt_mlook_on           = TXT_MLOOK_ON;
+        txt_mlook_off          = TXT_MLOOK_OFF;
     }
     else
     {
@@ -383,8 +391,12 @@ void RD_DefineLanguageStrings (void)
         txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4_RUS;
 
         // Port-specific strings
+        txt_alwaysrun_on       = TXT_ALWAYSRUN_ON_RUS;
+        txt_alwaysrun_off      = TXT_ALWAYSRUN_OFF_RUS;
         txt_crosshair_on       = TXT_CROSSHAIR_ON_RUS;
         txt_crosshair_off      = TXT_CROSSHAIR_OFF_RUS;
+        txt_mlook_on           = TXT_MLOOK_ON_RUS;
+        txt_mlook_off          = TXT_MLOOK_OFF_RUS;
     }
 }
 

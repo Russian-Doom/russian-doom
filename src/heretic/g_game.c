@@ -242,23 +242,6 @@ int inventoryTics;
 
 // haleyjd: removed WATCOMC
 
-//=============================================================================
-// Not used - ripped out for Heretic
-/*
-int G_CmdChecksum(ticcmd_t *cmd)
-{
-	int     i;
-	int sum;
-
-	sum = 0;
-	for(i = 0; i < sizeof(*cmd)/4-1; i++)
-	{
-		sum += ((int *)cmd)[i];
-	}
-	return(sum);
-}
-*/
-
 static boolean WeaponSelectable(weapontype_t weapon)
 {
     if (weapon == wp_beak)
@@ -304,9 +287,6 @@ static int G_NextWeapon(int direction)
     return weapon_order_table[i].weapon_num;
 }
 
-// [JN] Небольшой хак, при котором в режиме Always Run и нажатии кнопки
-// бега игрок переходит на шаг.
-
 // [crispy] holding down the "Run" key may trigger special behavior,
 // e.g. quick exit, clean screenshots, resurrection from savegames
 boolean speedkeydown (void)
@@ -347,11 +327,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     // haleyjd: removed externdriver crap
 
     memset(cmd, 0, sizeof(*cmd));
-    //cmd->consistancy =
-    //      consistancy[consoleplayer][(maketic*ticdup)%BACKUPTICS];
     cmd->consistancy = consistancy[consoleplayer][maketic % BACKUPTICS];
-
-//printf ("cons: %i\n",cmd->consistancy);
 
     strafe = gamekeydown[key_strafe] || mousebuttons[mousebstrafe]
         || joybuttons[joybstrafe];
@@ -360,10 +336,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     // pressing the "run" key will result in walking
     speed = key_speed >= NUMKEYS
          || joybspeed >= MAX_JOY_BUTTONS;
-//       || gamekeydown[key_speed] 
-//       || joybuttons[joybspeed];
 	
-	// [JN] Модификатор мнопки бега
+	// [JN] Run button modifier
 	speed ^= speedkeydown();
 
     // haleyjd: removed externdriver crap
@@ -373,15 +347,23 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 //
 // use two stage accelerative turning on the keyboard and joystick
 //
-    if (joyxmove < 0 || joyxmove > 0
-        || gamekeydown[key_right] || gamekeydown[key_left])
+    if (joyxmove < 0 || joyxmove > 0 
+    ||  gamekeydown[key_right] || gamekeydown[key_left])
+    {
         turnheld += ticdup;
+    }
     else
+    {
         turnheld = 0;
+    }
     if (turnheld < SLOWTURNTICS)
+    {
         tspeed = 2;             // slow turn
+    }
     else
+    {
         tspeed = speed;
+    }
 
     if (gamekeydown[key_lookdown] || gamekeydown[key_lookup])
     {
@@ -414,18 +396,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         }
 
         // [JN] Added audible feedback
-        if (english_language)
-        {
-            P_SetMessage(&players[consoleplayer], 
-                        (joybspeed >= MAX_JOY_BUTTONS) ?
-                         TXT_ALWAYSRUN_ON : TXT_ALWAYSRUN_OFF, false);
-        }
-        else
-        {
-            P_SetMessage(&players[consoleplayer],
-                        (joybspeed >= MAX_JOY_BUTTONS) ?
-                        TXT_ALWAYSRUN_ON_RUS : TXT_ALWAYSRUN_OFF_RUS, false);
-        }
+        P_SetMessage(&players[consoleplayer], (joybspeed >= MAX_JOY_BUTTONS) ?
+                     txt_alwaysrun_on : txt_alwaysrun_off, false);
     
         S_StartSound(NULL, sfx_chat);
 
@@ -516,7 +488,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
     // Fly up/down/drop keys
     if (gamekeydown[key_flyup])
     {
-        flyheight = 5;          // note that the actual flyheight will be twice this
+        flyheight = 5;  // note that the actual flyheight will be twice this
     }
     if (gamekeydown[key_flydown])
     {
@@ -623,9 +595,10 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 //
     cmd->chatchar = CT_dequeueChatChar();
 
-    if (gamekeydown[key_fire] || mousebuttons[mousebfire]
-        || joybuttons[joybfire])
+    if (gamekeydown[key_fire] || mousebuttons[mousebfire] ||  joybuttons[joybfire])
+    {
         cmd->buttons |= BT_ATTACK;
+    }
 
     if (gamekeydown[key_use] || joybuttons[joybuse] || mousebuttons[mousebuse])
     {
@@ -672,7 +645,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
     if (mousebuttons[mousebbackward])
     {
-	forward -= forwardmove[speed];
+        forward -= forwardmove[speed];
     }
 
     // Double click to use can be disabled 
@@ -752,7 +725,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
     // [JN] Mouselook: initials
     // TODO: make it safe for network game
-    if (!netgame && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !menuactive && !askforquit && !paused)
+    if (players[consoleplayer].playerstate == PST_LIVE && !netgame 
+    && !demoplayback && !menuactive && !askforquit && !paused)
     {
         if (mlook || novert)
         {
@@ -783,16 +757,8 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
             look = TOCENTER;
         }
 
-        if (english_language)
-        {
-            P_SetMessage(&players[consoleplayer], 
-                        (mlook == true ? TXT_MLOOK_ON : TXT_MLOOK_OFF), false);
-        }
-        else
-        {
-            P_SetMessage(&players[consoleplayer], 
-                        (mlook == true ? TXT_MLOOK_ON_RUS : TXT_MLOOK_OFF_RUS), false);
-        }
+        P_SetMessage(&players[consoleplayer], (mlook == true ?
+                     txt_mlook_on : txt_mlook_off), false);
 
         S_StartSound(NULL, sfx_chat);
 
@@ -1016,7 +982,7 @@ boolean G_Responder(event_t * ev)
 
     plr = &players[consoleplayer];
     if (ev->type == ev_keyup && ev->data1 == key_useartifact)
-    {                           // flag to denote that it's okay to use an artifact
+    {   // flag to denote that it's okay to use an artifact
         if (!inventory)
         {
             plr->readyArtifact = plr->inventory[inv_ptr].type;
@@ -1194,7 +1160,7 @@ void G_Ticker(void)
                 break;
             case ga_loadgame:
                 G_DoLoadGame();
-                // [JN] Reset looking direction if game is loaded without mouse look
+                // [JN] Reset looking direction if game is loaded w/o mouse look
                 if (!mlook)
                 players[consoleplayer].lookdir = 0;
                 break;
@@ -1227,7 +1193,6 @@ void G_Ticker(void)
 //
 // get commands, check consistancy, and build new consistancy check
 //
-    //buf = gametic%BACKUPTICS;
     buf = (gametic / ticdup) % BACKUPTICS;
 
     for (i = 0; i < MAXPLAYERS; i++)
@@ -1286,7 +1251,7 @@ void G_Ticker(void)
                         {
                             if (netgame)
                             {
-                                M_StringCopy(savedescription,
+                                M_StringCopy(savedescription, 
                                              DEH_String("CTNTDFZ BUHF"),	// СЕТЕВАЯ ИГРА
                                              sizeof(savedescription));
                             }
@@ -1381,11 +1346,6 @@ void G_PlayerFinishLevel(int player)
     player_t *p;
     int i;
 
-/*      // BIG HACK
-	inv_ptr = 0;
-	curpos = 0;
-*/
-    // END HACK
     p = &players[player];
     for (i = 0; i < p->inventorySlotNum; i++)
     {
@@ -1403,7 +1363,7 @@ void G_PlayerFinishLevel(int player)
     memset(p->powers, 0, sizeof(p->powers));
     memset(p->keys, 0, sizeof(p->keys));
     playerkeys = 0;
-//      memset(p->inventory, 0, sizeof(p->inventory));
+
     if (p->chickenTics)
     {
         p->readyweapon = p->mo->special1.i;       // Restore weapon
@@ -1592,10 +1552,13 @@ void G_DoReborn(int playernum)
     // quit demo unless -demoextend
     if (!demoextend && G_CheckDemoStatus())
         return;
+
     if (!netgame)
-        gameaction = ga_loadlevel;      // reload the level from scratch
+    {
+        gameaction = ga_loadlevel;  // reload the level from scratch
+    }
     else
-    {                           // respawn at the start
+    {                               // respawn at the start
         players[playernum].mo->player = NULL;   // dissasociate the corpse
 
         // spawn at random spot if in death match
@@ -1778,7 +1741,7 @@ void G_DoLoadGame(void)
     SV_Read(readversion, VERSIONSIZE);
 
     if (strncmp(readversion, vcheck, VERSIONSIZE) != 0)
-    {                           // Bad version
+    {   // Bad version
         return;
     }
     gameskill = SV_ReadByte();
@@ -2008,7 +1971,7 @@ void G_InitNew(skill_t skill, int episode, int map)
 ===============================================================================
 */
 
-#define DEMOMARKER      0x80
+#define DEMOMARKER            0x80
 #define DEMOHEADER_RESPAWN    0x20
 #define DEMOHEADER_LONGTICS   0x10
 #define DEMOHEADER_NOMONSTERS 0x02
