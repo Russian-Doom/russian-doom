@@ -73,51 +73,6 @@ static weapontype_t GetAmmoChange[] = {
     wp_mace
 };
 
-/*
-static boolean GetAmmoChangePL1[NUMWEAPONS][NUMAMMO] =
-{
-	// staff
-	{wp_goldwand, wp_crossbow, wp_blaster, wp_skullrod, -1, wp_mace},
-	// gold wand
-	{-1, wp_crossbow, wp_blaster, wp_skullrod, -1, wp_mace},
-	// crossbow
-	{-1, -1, wp_blaster, wp_skullrod, -1, -1},
-	// blaster
-	{-1, -1, -1, -1, -1, -1},
-	// skull rod
-	{-1, -1, -1, -1, -1, -1},
-	// phoenix rod
-	{-1, -1, -1, -1, -1, -1},
-	// mace
-	{-1, wp_crossbow, wp_blaster, wp_skullrod, -1, -1},
-	// gauntlets
-	{-1, wp_crossbow, wp_blaster, wp_skullrod, -1, wp_mace}
-};
-*/
-
-/*
-static boolean GetAmmoChangePL2[NUMWEAPONS][NUMAMMO] =
-{
-	// staff
-	{wp_goldwand, wp_crossbow, wp_blaster, wp_skullrod, wp_phoenixrod,
-		wp_mace},
-	// gold wand
-	{-1, wp_crossbow, wp_blaster, wp_skullrod, wp_phoenixrod, wp_mace},
-	// crossbow
-	{-1, -1, wp_blaster, wp_skullrod, wp_phoenixrod, -1},
-	// blaster
-	{-1, -1, -1, wp_skullrod, wp_phoenixrod, -1},
-	// skull rod
-	{-1, -1, -1, -1, -1, -1},
-	// phoenix rod
-	{-1, -1, -1, -1, -1, -1},
-	// mace
-	{-1, wp_crossbow, wp_blaster, wp_skullrod, -1, -1},
-	// gauntlets
-	{-1, -1, -1, wp_skullrod, wp_phoenixrod, wp_mace}
-};
-*/
-
 //--------------------------------------------------------------------------
 //
 // PROC P_SetMessage
@@ -155,7 +110,6 @@ void P_SetMessage(player_t * player, char *message, boolean ultmsg)
 boolean P_GiveAmmo(player_t * player, ammotype_t ammo, int count)
 {
     int prevAmmo;
-    //weapontype_t changeWeapon;
 
     if (ammo == am_noammo)
     {
@@ -196,23 +150,7 @@ boolean P_GiveAmmo(player_t * player, ammotype_t ammo, int count)
             player->pendingweapon = GetAmmoChange[ammo];
         }
     }
-/*
-	if(player->powers[pw_weaponlevel2])
-	{
-		changeWeapon = GetAmmoChangePL2[player->readyweapon][ammo];
-	}
-	else
-	{
-		changeWeapon = GetAmmoChangePL1[player->readyweapon][ammo];
-	}
-	if(changeWeapon != -1)
-	{
-		if(player->weaponowned[changeWeapon])
-		{
-			player->pendingweapon = changeWeapon;
-		}
-	}
-*/
+
     return (true);
 }
 
@@ -402,19 +340,6 @@ boolean P_GivePower(player_t * player, powertype_t power)
         player->powers[power] = INFRATICS;
         return (true);
     }
-/*
-	if(power == pw_ironfeet)
-	{
-		player->powers[power] = IRONTICS;
-		return(true);
-	}
-	if(power == pw_strength)
-	{
-		P_GiveBody(player, 100);
-		player->powers[power] = 1;
-		return(true);
-	}
-*/
     if (player->powers[power])
     {
         return (false);         // already got it
@@ -870,6 +795,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             printf(english_language ?
                    "P_SpecialThing: Unknown gettable thing" :
                    "P_SpecialThing: Получен неизвестный предмет");
+            break;
     }
     if (special->flags & MF_COUNTITEM)
     {
@@ -948,7 +874,6 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
         if (target->flags2 & MF2_FIREDAMAGE)
         {                       // Player flame death
             P_SetMobjState(target, S_PLAY_FDTH1);
-            //S_StartSound(target, sfx_hedat1); // Burn sound
             return;
         }
     }
@@ -966,8 +891,6 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
     // [crispy] randomize corpse health
     if (singleplayer)
         target->health -= target->tics & 1;
-
-//      I_StartSound(&actor->r, actor->info->deathsound);
 }
 
 //---------------------------------------------------------------------------
@@ -1365,7 +1288,6 @@ void P_DamageMobj
     {
         ang = R_PointToAngle2(inflictor->x, inflictor->y,
                               target->x, target->y);
-        //thrust = damage*(FRACUNIT>>3)*100/target->info->mass;
         thrust = damage * (FRACUNIT >> 3) * 150 / target->info->mass;
         // make fall forwards sometimes
         if ((damage < 40) && (damage > target->health)
@@ -1462,11 +1384,11 @@ void P_DamageMobj
     {                           // Death
         target->special1.i = damage;
         if (target->type == MT_POD && source && source->type != MT_POD)
-        {                       // Make sure players get frags for chain-reaction kills
+        {   // Make sure players get frags for chain-reaction kills
             target->target = source;
         }
         if (player && inflictor && !player->chickenTics)
-        {                       // Check for flame death
+        {   // Check for flame death
             if ((inflictor->flags2 & MF2_FIREDAMAGE)
                 || ((inflictor->type == MT_PHOENIXFX1)
                     && (target->health > -50) && (damage > 25)))
