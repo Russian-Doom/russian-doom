@@ -263,7 +263,6 @@ void R_GenerateLookup(int texnum)
                    texture->name);
             return;
         }
-//                      I_Error ("R_GenerateLookup: column without a patch");
         if (patchcount[x] > 1)
         {
             collump[x] = -1;    // use the cached block
@@ -655,14 +654,11 @@ void R_InitBrightmaps(void)
 
 void R_InitData(void)
 {
-    //tprintf("\nR_InitTextures ", 0);
     R_InitTextures();
     printf (".");
-    //tprintf("R_InitFlats\n", 0);
     R_InitFlats();
     IncThermo();
     printf (".");
-    //tprintf("R_InitSpriteLumps ", 0);
     R_InitSpriteLumps();
     IncThermo();
     printf (".");
@@ -701,7 +697,6 @@ int R_FlatNumForName(char *name)
                          "R_FlatNumForName: %s not found" :
                          "R_FlatNumForName: текстура поверхности %s не найдена\n",
                          namet);
-        // I_Error("R_FlatNumForName: %s not found", namet);
         // [crispy] since there is no "No Flat" marker,
         // render missing flats as SKY
         return skyflatnum;
@@ -744,12 +739,10 @@ int R_CheckTextureNumForName(char *name)
 int R_TextureNumForName(char *name)
 {
     int i;
-    //char  namet[9];
 
     i = R_CheckTextureNumForName(name);
     if (i==-1)
     {
-        // I_Error ("R_TextureNumForName: %s not found", name);
         // [crispy] make non-fatal
         fprintf (stderr, english_language ?
                          "R_TextureNumForName: %s not found" :
