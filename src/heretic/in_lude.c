@@ -107,7 +107,8 @@ static fixed_t dSlideX[MAXPLAYERS];
 static fixed_t dSlideY[MAXPLAYERS];
 
 static char *KillersText[] = { "K", "I", "L", "L", "E", "R", "S" };
-static char *KillersText_Rus[] = { "E", ",", "B", "Q", "W", "S", "" }; // "У", "Б", "И", "Й", "Ц", "Ы", ""
+//                                 "У", "Б", "И", "Й", "Ц", "Ы", ""
+static char *KillersText_Rus[] = { "E", ",", "B", "Q", "W", "S", "" };
 
 extern char *LevelNames[];
 extern char *LevelNames_Rus[];
@@ -120,38 +121,38 @@ typedef struct
 
 static yahpt_t YAHspot[3][9] = {
     {
-     {172, 78},
-     {86, 90},
-     {73, 66},
-     {159, 95},
-     {148, 126},
-     {132, 54},
-     {131, 74},
-     {208, 138},
-     {52, 101}
-     },
+        {172,  78},
+        {86,   90},
+        {73,   66},
+        {159,  95},
+        {148, 126},
+        {132,  54},
+        {131,  74},
+        {208, 138},
+        {52,  101}
+    },
     {
-     {218, 57},
-     {137, 81},
-     {155, 124},
-     {171, 68},
-     {250, 86},
-     {136, 98},
-     {203, 90},
-     {220, 140},
-     {279, 106}
-     },
+        {218,  57},
+        {137,  81},
+        {155, 124},
+        {171,  68},
+        {250,  86},
+        {136,  98},
+        {203,  90},
+        {220, 140},
+        {279, 106}
+    },
     {
-     {86, 99},
-     {124, 103},
-     {154, 79},
-     {202, 83},
-     {178, 59},
-     {142, 58},
-     {219, 66},
-     {247, 57},
-     {107, 80}
-     }
+        {86,   99},
+        {124, 103},
+        {154,  79},
+        {202,  83},
+        {178,  59},
+        {142,  58},
+        {219,  66},
+        {247,  57},
+        {107 , 80}
+    }
 };
 
 //========================================================================
@@ -299,7 +300,7 @@ void IN_InitStats(void)
             }
         }
         if (playercount == slaughtercount)
-        {                       // don't do the slaughter stuff if everyone is equal
+        {   // don't do the slaughter stuff if everyone is equal
             slaughterboy = 0;
         }
     }
@@ -423,7 +424,7 @@ void IN_Ticker(void)
     {
         interstate++;
         if (gameepisode > 3 && interstate >= 1)
-        {                       // Extended Wad levels:  skip directly to the next level
+        {   // Extended Wad levels:  skip directly to the next level
             interstate = 3;
         }
         switch (interstate)
@@ -655,19 +656,24 @@ void IN_DrawOldLevel(void)
 
     if (english_language)
     {
-        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
-        IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
+        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) 
+                * 9 + prevmap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + prevmap - 1]
+                                                + 7, x + wide_delta, 3);
 
         x = 160 - MN_TextAWidth(DEH_String("FINISHED")) / 2;
         MN_DrTextA(DEH_String("FINISHED"), x + wide_delta, 25);
     }
     else
     {
-        x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
-        IN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
+        x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1)
+                * 9 + prevmap - 1] + 7) / 2;
+        IN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1]
+                                                         + 7, x + wide_delta, 3);
 
-        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;         // УРОВЕНЬ ЗАВЕРШЕН
-        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25); // УРОВЕНЬ ЗАВЕРШЕН
+        // УРОВЕНЬ ЗАВЕРШЕН
+        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;
+        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25);
     }
 
     if (prevmap == 9)
@@ -720,16 +726,21 @@ void IN_DrawYAH(void)
         x = 160 - MN_TextAWidth(DEH_String("NOW ENTERING:")) / 2;
         MN_DrTextA(DEH_String("NOW ENTERING:"), x + wide_delta, 10);
 
-        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
-        IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1] + 7, x + wide_delta, 20);
+        x = 160 - MN_TextBWidth(LevelNames[(gameepisode - 1) 
+                * 9 + gamemap - 1] + 7) / 2;
+        IN_DrTextB(LevelNames[(gameepisode - 1) * 9 + gamemap - 1]
+                                                + 7, x + wide_delta, 20);
     }
     else
     {
-        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;            // ЗАГРУЖАЕТСЯ УРОВЕНЬ
-        MN_DrTextSmallRUS(DEH_String("PFUHE;FTNCZ EHJDTYM"), x + wide_delta, 10);    // ЗАГРУЖАЕТСЯ УРОВЕНЬ
+        // ЗАГРУЖАЕТСЯ УРОВЕНЬ
+        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;
+        MN_DrTextSmallRUS(DEH_String("PFUHE;FTNCZ EHJDTYM"), x + wide_delta, 10);
 
-        x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
-        IN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7, x + wide_delta, 20);
+        x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1)
+                * 9 + gamemap - 1] + 7) / 2;
+        IN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1]
+                                                         + 7, x + wide_delta, 20);
     }
 
     if (prevmap == 9)
@@ -882,8 +893,8 @@ void IN_DrawSingleStats(void)
         }
         else
         {
-            x = 160 - MN_DrTextSmallRUSWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;             // ЗАГРУЖАЕТСЯ УРОВЕНЬ
-            MN_DrTextSmallRUS(DEH_String("PFUHE;FTNCZ EHJDTYM"), x + wide_delta, 160);    // ЗАГРУЖАЕТСЯ УРОВЕНЬ
+            x = 160 - MN_DrTextSmallRUSWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;    // ЗАГРУЖАЕТСЯ УРОВЕНЬ
+            MN_DrTextSmallRUS(DEH_String("PFUHE;FTNCZ EHJDTYM"), x + wide_delta, 160);  // ЗАГРУЖАЕТСЯ УРОВЕНЬ
 
             x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
             IN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7, x + wide_delta, 170);
@@ -940,8 +951,8 @@ void IN_DrawCoopStats(void)
         x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7) / 2;
         IN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
 
-        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;            // УРОВЕНЬ ЗАВЕРШЕН
-        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25);    // УРОВЕНЬ ЗАВЕРШЕН
+        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;   // УРОВЕНЬ ЗАВЕРШЕН
+        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25);  // УРОВЕНЬ ЗАВЕРШЕН
     }
 
     ypos = 50;
@@ -975,8 +986,7 @@ void IN_DrawCoopStats(void)
             }
             else
             {
-                // [JN] Координаты скорректированы в 
-                // соответствии с длинной русских слов.
+                // [JN] Coords changed to fit Russian words.
                 IN_DrawNumber(killPercent[i], 84 + wide_delta, ypos + 10, 3);
                 V_DrawShadowedPatch(120 + wide_delta, ypos + 10, FontBPercent);
                 IN_DrawNumber(bonusPercent[i], 160 + wide_delta, ypos + 10, 3);
@@ -1016,7 +1026,7 @@ void IN_DrawDMStats(void)
     }
     else
     {
-        IN_DrTextBigRUS(DEH_String("BNJU"), 265 + wide_delta, 30);  // ИТОГ
+        IN_DrTextBigRUS(DEH_String("BNJU"), 265 + wide_delta, 30);    // ИТОГ
         MN_DrTextSmallRUS(DEH_String(";THNDS"), 140 + wide_delta, 8); // ЖЕРТВЫ
     }
 
