@@ -155,7 +155,6 @@ static int cheating = 0;
 static int leveljuststarted = 1;        // kluge until AM_LevelInit() is called
 
 boolean automapactive = false;
-// static int finit_width = SCREENWIDTH; // [JN] Replaced with screenwidth.
 static int finit_height = SCREENHEIGHT - (42 << hires);
 static int f_x, f_y;            // location of window on screen
 static int f_w, f_h;            // size of window on screen
@@ -194,10 +193,6 @@ static fixed_t scale_ftom;
 static player_t *plr;           // the player represented by an arrow
 static vertex_t oldplr;
 
-//static patch_t *marknums[10]; // numbers used for marking by the automap
-//static mpoint_t markpoints[AM_NUMMARKPOINTS]; // where the points are
-//static int markpointnum = 0; // next point to be assigned
-
 static char cheat_amap[] = { 'r', 'a', 'v', 'm', 'a', 'p' };
 
 static byte cheatcount = 0;
@@ -207,45 +202,37 @@ extern boolean viewactive;
 #define NUMALIAS 11              // Number of antialiased lines.
 
 static byte antialias[NUMALIAS][8] = {
-    {96, 97, 98, 99, 100, 101, 102, 103},
+    { 96,  97,  98,  99, 100, 101, 102, 103},
     {110, 109, 108, 107, 106, 105, 104, 103},
-    {75, 76, 77, 78, 79, 80, 81, 103},
+    { 75,  76,  77,  78,  79,  80,  81, 103},
     {197, 197, 196, 196, 195, 195, 194, 194},   // BLUEKEY
     {143, 143, 142, 142, 141, 141, 140, 140},   // YELLOWKEY
     {220, 220, 219, 219, 218, 218, 217, 217},   // GREENKEY
-    {43, 43, 43, 42, 42, 42, 41, 41},           // GRAYS + 3 (unrevealed walls)
-    {32, 31, 30, 29, 28, 27, 26, 25},           // WHITE
-    {8, 9, 10, 11, 12, 13, 14, 15},             // GREENS
-    {40, 40, 41, 41, 42, 42, 43, 43},           // GRAYS
-    {0, 2, 4, 6, 8, 10, 12, 14}                 // BLACK
+    { 43,  43,  43,  42,  42,  42,  41,  41},   // GRAYS + 3 (unrevealed walls)
+    { 32,  31,  30,  29,  28,  27,  26,  25},   // WHITE
+    {  8,   9,  10,  11,  12,  13,  14,  15},   // GREENS
+    { 40,  40,  41,  41,  42,  42,  43,  43},   // GRAYS
+    {  0,   2,   4,   6,   8,  10,  12,  14}    // BLACK
 };
 
 // [JN] Use iverted colors for automap overlay mode (softly faded to darken).
 static byte antialias_overlay[NUMALIAS][8] = {
-    {99, 99, 98, 98, 97, 97, 96, 96},
-    {106, 105, 104, 103, 102, 101, 100, 99},
-    {75, 75, 74, 74, 73, 73, 72, 72},
+    { 99,  99,  98,  98,  97,  97,  96,  96},
+    {106, 105, 104, 103, 102, 101, 100,  99},
+    { 75,  75,  74,  74,  73,  73,  72,  72},
     {197, 197, 196, 196, 195, 195, 194, 194},   // BLUEKEY
     {143, 143, 142, 142, 141, 141, 140, 140},   // YELLOWKEY
     {220, 219, 218, 217, 216, 215, 214, 213},   // GREENKEY
-    {43, 42, 41, 40, 39, 38, 37, 36},           // GRAYS + 3 (unrevealed walls)
-    {32, 30, 28, 26, 24, 22, 20, 18},           // WHITE
-    {8, 7, 6, 5, 4, 3, 2, 1},                   // GREENS
-    {40, 39, 39, 38, 38, 37, 37, 36},           // GRAYS
-    {0, 0, 1, 1, 2, 2, 3, 4}                    // BLACK
+    { 43,  42,  41,  40,  39,  38,  37,  36},   // GRAYS + 3 (unrevealed walls)
+    { 32,  30,  28,  26,  24,  22,  20,  18},   // WHITE
+    {  8,   7,   6,   5,   4,   3,   2,   1},   // GREENS
+    { 40,  39,  39,  38,  38,  37,  37,  36},   // GRAYS
+    {  0,   0,   1,   1,   2,   2,   3,   4}    // BLACK
 };
-
-/*
-static byte *aliasmax[NUMALIAS] = {
-	&antialias[0][7], &antialias[1][7], &antialias[2][7]
-};*/
 
 static byte *maplump;           // pointer to the raw data for the automap background.
 static short mapystart = 0;     // y-value for the start of the map bitmap...used in the paralax stuff.
 static short mapxstart = 0;     //x-value for the bitmap.
-
-//byte screens[][SCREENWIDTH*SCREENHEIGHT];
-//void V_MarkRect (int x, int y, int width, int height);
 
 // [crispy] automap rotate mode ...
 // ... needs these early on
@@ -258,25 +245,6 @@ static angle_t mapangle;
 
 void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
                 int NumLevels, unsigned short IntensityBits);
-
-// Calculates the slope and slope according to the x-axis of a line
-// segment in map coordinates (with the upright y-axis n' all) so
-// that it can be used with the brain-dead drawing stuff.
-
-// Ripped out for Heretic
-/*
-void AM_getIslope(mline_t *ml, islope_t *is)
-{
-  int dx, dy;
-
-  dy = ml->a.y - ml->b.y;
-  dx = ml->b.x - ml->a.x;
-  if (!dy) is->islp = (dx<0?-INT_MAX:INT_MAX);
-  else is->islp = FixedDiv(dx, dy);
-  if (!dx) is->slp = (dy<0?-INT_MAX:INT_MAX);
-  else is->slp = FixedDiv(dy, dx);
-}
-*/
 
 void AM_activateNewScale(void)
 {
@@ -321,17 +289,6 @@ void AM_restoreScaleAndLoc(void)
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
 }
 
-// adds a marker at the current location
-
-/*
-void AM_addMark(void)
-{
-  markpoints[markpointnum].x = m_x + m_w/2;
-  markpoints[markpointnum].y = m_y + m_h/2;
-  markpointnum = (markpointnum + 1) % AM_NUMMARKPOINTS;
-
-}
-*/
 void AM_findMinMaxBoundaries(void)
 {
     int i;
@@ -410,13 +367,13 @@ void AM_changeWindowLoc(void)
     mapxstart += MTOF(m_paninc.x+FRACUNIT/2);
     mapystart -= MTOF(m_paninc.y+FRACUNIT/2);
     if(mapxstart >= screenwidth)
-        mapxstart -= screenwidth;
+       mapxstart -= screenwidth;
     if(mapxstart < 0)
-        mapxstart += screenwidth;
+       mapxstart += screenwidth;
     if(mapystart >= finit_height)
-        mapystart -= finit_height;
+       mapystart -= finit_height;
     if(mapystart < 0)
-        mapystart += finit_height;
+       mapystart += finit_height;
     // - end of code that was commented-out
 
     m_x2 = m_x + m_w;
@@ -428,8 +385,6 @@ void AM_initVariables(void)
     int pnum;
     thinker_t *think;
     mobj_t *mo;
-
-    //static event_t st_notify = { ev_keyup, AM_MSGENTERED };
 
     automapactive = true;
     fb = I_VideoBuffer;
@@ -493,38 +448,12 @@ void AM_initVariables(void)
             }
         }
     }
-
-    // inform the status bar of the change
-//c  ST_Responder(&st_notify);
 }
 
 void AM_loadPics(void)
 {
-    //int i;
-    //char namebuf[9];
-/*  for (i=0;i<10;i++)
-  {
-    M_snprintf(namebuf, sizeof(namebuf), "AMMNUM%d", i);
-    marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
-  }*/
     maplump = W_CacheLumpName(DEH_String("AUTOPAGE"), PU_STATIC);
 }
-
-/*void AM_unloadPics(void)
-{
-  int i;
-  for (i=0;i<10;i++) Z_ChangeTag(marknums[i], PU_CACHE);
-
-}*/
-
-/*
-void AM_clearMarks(void)
-{
-  int i;
-  for (i=0;i<AM_NUMMARKPOINTS;i++) markpoints[i].x = -1; // means empty
-  markpointnum = 0;
-}
-*/
 
 // should be called at the start of every level
 // right now, i figure it out myself
@@ -538,9 +467,6 @@ void AM_LevelInit(void)
     f_h = finit_height;
     mapxstart = mapystart = 0;
 
-
-//  AM_clearMarks();
-
     AM_findMinMaxBoundaries();
     scale_mtof = FixedDiv(min_scale_mtof, (int) (0.7 * FRACUNIT));
     if (scale_mtof > max_scale_mtof)
@@ -552,11 +478,7 @@ static boolean stopped = true;
 
 void AM_Stop(void)
 {
-    //static event_t st_notify = { 0, ev_keyup, AM_MSGEXITED };
-
-//  AM_unloadPics();
     automapactive = false;
-//  ST_Responder(&st_notify);
     stopped = true;
     BorderNeedRefresh = true;
 }
@@ -566,7 +488,9 @@ void AM_Start(void)
     static int lastlevel = -1, lastepisode = -1;
 
     if (!stopped)
+    {
         AM_Stop();
+    }
     stopped = false;
     if (gamestate != GS_LEVEL)
     {
@@ -611,7 +535,7 @@ boolean AM_Responder(event_t * ev)
     rc = false;
 
     if (ev->type == ev_joystick && joybautomap >= 0
-        && (ev->data1 & (1 << joybautomap)) != 0 && joywait < I_GetTime())
+    && (ev->data1 & (1 << joybautomap)) != 0 && joywait < I_GetTime())
     {
         joywait = I_GetTime() + 5;
 
@@ -636,7 +560,6 @@ boolean AM_Responder(event_t * ev)
         {
             AM_Start();
             viewactive = false;
-            // viewactive = true;
             rc = true;
         }
     }
@@ -719,46 +642,40 @@ boolean AM_Responder(event_t * ev)
         {
             automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
-            P_SetMessage(plr, automap_follow ? amstr_followon : amstr_followoff, true);
+            P_SetMessage(plr, automap_follow ?
+                              amstr_followon : amstr_followoff, true);
         }
         else if (key == key_map_overlay)
         {
             automap_overlay = !automap_overlay;
-            P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
+            P_SetMessage(plr, automap_overlay ?
+                              amstr_overlayon : amstr_overlayoff, true);
         }
         else if (key == key_map_rotate)
         {
             automap_rotate = !automap_rotate;
-            P_SetMessage(plr, automap_rotate ? amstr_rotateon : amstr_rotateoff, true);
+            P_SetMessage(plr, automap_rotate ?
+                              amstr_rotateon : amstr_rotateoff, true);
         }
         else if (key == key_map_grid)
         {
             automap_grid = !automap_grid;
-            P_SetMessage(plr, automap_grid ? amstr_gridon : amstr_gridoff, true);
+            P_SetMessage(plr, automap_grid ?
+                              amstr_gridon : amstr_gridoff, true);
         }
-        /*
-        else if (key == key_map_mark)
-        {
-            M_snprintf(buffer, sizeof(buffer), "%s %d",
-                       AMSTR_MARKEDSPOT, markpointnum);
-            plr->message = buffer;
-            AM_addMark();
-        }
-        else if (key == key_map_clearmark)
-        {
-            AM_clearMarks();
-            plr->message = AMSTR_MARKSCLEARED;
-        }
-        */
         else
         {
             rc = false;
         }
 
         if (cheat_amap[cheatcount] == ev->data1 && !netgame)
+        {
             cheatcount++;
+        }
         else
+        {
             cheatcount = 0;
+        }
         if (cheatcount == 6)
         {
             cheatcount = 0;
@@ -799,7 +716,6 @@ boolean AM_Responder(event_t * ev)
     }
 
     return rc;
-
 }
 
 void AM_changeWindowScale(void)
@@ -810,68 +726,34 @@ void AM_changeWindowScale(void)
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
 
     if (scale_mtof < min_scale_mtof)
+    {
         AM_minOutWindowScale();
+    }
     else if (scale_mtof > max_scale_mtof)
+    {
         AM_maxOutWindowScale();
+    }
     else
+    {
         AM_activateNewScale();
+    }
 }
 
 void AM_doFollowPlayer(void)
 {
     if (f_oldloc.x != plr->mo->x || f_oldloc.y != plr->mo->y)
     {
-//  m_x = FTOM(MTOF(plr->mo->x - m_w/2));
-//  m_y = FTOM(MTOF(plr->mo->y - m_h/2));
-//  m_x = plr->mo->x - m_w/2;
-//  m_y = plr->mo->y - m_h/2;
         m_x = FTOM(MTOF(plr->mo->x)) - m_w / 2;
         m_y = FTOM(MTOF(plr->mo->y)) - m_h / 2;
         m_x2 = m_x + m_w;
         m_y2 = m_y + m_h;
 
         // do the parallax parchment scrolling.
-/*
-	 dmapx = (MTOF(plr->mo->x)-MTOF(f_oldloc.x)); //fixed point
-	 dmapy = (MTOF(f_oldloc.y)-MTOF(plr->mo->y));
 
-	 if(f_oldloc.x == INT_MAX) //to eliminate an error when the user first
-		dmapx=0;  //goes into the automap.
-	 mapxstart += dmapx;
-	 mapystart += dmapy;
-
-  	 while(mapxstart >= finit_width)
-			mapxstart -= finit_width;
-    while(mapxstart < 0)
-			mapxstart += finit_width;
-    while(mapystart >= finit_height)
-			mapystart -= finit_height;
-    while(mapystart < 0)
-			mapystart += finit_height;
-*/
         f_oldloc.x = plr->mo->x;
         f_oldloc.y = plr->mo->y;
     }
 }
-
-// Ripped out for Heretic
-/*
-void AM_updateLightLev(void)
-{
-  static nexttic = 0;
-//static int litelevels[] = { 0, 3, 5, 6, 6, 7, 7, 7 };
-  static int litelevels[] = { 0, 4, 7, 10, 12, 14, 15, 15 };
-  static int litelevelscnt = 0;
-
-  // Change light level
-  if (amclock>nexttic)
-  {
-    lightlev = litelevels[litelevelscnt++];
-    if (litelevelscnt == sizeof(litelevels)/sizeof(int)) litelevelscnt = 0;
-    nexttic = amclock + 6 - (amclock % 6);
-  }
-}
-*/
 
 void AM_Ticker(void)
 {
@@ -882,17 +764,21 @@ void AM_Ticker(void)
     amclock++;
 
     if (automap_follow)
+    {
         AM_doFollowPlayer();
+    }
 
     // Change the zoom if necessary
     if (ftom_zoommul != FRACUNIT)
+    {
         AM_changeWindowScale();
+    }
 
     // Change x,y location
     if (m_paninc.x || m_paninc.y)
+    {
         AM_changeWindowLoc();
-    // Update light level
-// AM_updateLightLev();
+    }
 
     // [crispy] required for AM_rotatePoint()
     if (automap_rotate)
@@ -908,20 +794,13 @@ void AM_Ticker(void)
 
 void AM_clearFB(int color)
 {
-// [JN] Do not initialize for wide screen unused variables
-
     int i, j;
 
     int dmapx;
     int dmapy;
-
-// [JN] Use static automap background for automap.
-// TODO - FIXME
-
     int x, y;
     byte *src = W_CacheLumpName(DEH_String("AUTOPAGE"), PU_CACHE);
     byte *dest = I_VideoBuffer;
-
 
     if (automap_follow)
     {
@@ -930,8 +809,7 @@ void AM_clearFB(int color)
 
         oldplr.x = plr->mo->x;
         oldplr.y = plr->mo->y;
-//              if(f_oldloc.x == INT_MAX) //to eliminate an error when the user first
-//                      dmapx=0;  //goes into the automap.
+
         mapxstart += dmapx >> 1;
         mapystart += dmapy >> 1;
 
@@ -961,6 +839,8 @@ void AM_clearFB(int color)
 
     if (widescreen)
     {
+        // [JN] Use static automap background for automap
+        // because of parallax problem.
         for (y = 0; y < SCREENHEIGHT-28; y++)
         {
             for (x = 0; x < WIDESCREENWIDTH / 320; x++)
@@ -982,17 +862,14 @@ void AM_clearFB(int color)
         for (i = 0; i < finit_height; i++)
         {
             memcpy(I_VideoBuffer + i * SCREENWIDTH, maplump + j + mapxstart,
-                SCREENWIDTH - mapxstart);
+                   SCREENWIDTH - mapxstart);
             memcpy(I_VideoBuffer + i * SCREENWIDTH + SCREENWIDTH - mapxstart,
-                maplump + j, mapxstart);
+                   maplump + j, mapxstart);
             j += SCREENWIDTH;
             if (j >= (finit_height >> hires) * (SCREENWIDTH >> hires))
                 j = 0;
         }
     }
-
-//       memcpy(I_VideoBuffer, maplump, finit_width*finit_height);
-//  memset(fb, color, f_w*f_h);
 }
 
 // Based on Cohen-Sutherland clipping algorithm but with a slightly
@@ -1242,16 +1119,21 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
     byte *oldcc = cc;
 
     if (xx < 32)
+    {
         cc += 7 - (xx >> 2);
+    }
     else if (xx > (screenwidth - 32))
+    {
         cc += 7 - ((screenwidth - xx) >> 2);
-//      if(cc==oldcc) //make sure that we don't double fade the corners.
-//      {
+    }
     if (yy < 32)
+    {
         cc += 7 - (yy >> 2);
+    }
     else if (yy > (finit_height - 32))
+    {
         cc += 7 - ((finit_height - yy) >> 2);
-//      }
+    }
     if (cc > cm && cm != NULL)
     {
         cc = cm;
@@ -1276,7 +1158,6 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
         oldyyshifted = yy * (origwidth << hires);
     }
     fb[oldyyshifted + flipwidth[xx]] = *(cc);
-//      fb[(yy)*f_w+(xx)]=*(cc);
 }
 
 void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
@@ -1698,11 +1579,17 @@ void AM_drawPlayers(void)
             continue;
         }
         if (!playeringame[i])
+        {
             continue;
+        }
         if (p->powers[pw_invisibility])
+        {
             color = 102;        // *close* to the automap color
+        }
         else
+        {
             color = their_colors[their_color];
+        }
 
         pt.x = p->mo->x;
         pt.y = p->mo->y;
@@ -1748,26 +1635,6 @@ void AM_drawThings(int colors, int colorrange)
         }
     }
 }
-
-/*
-void AM_drawMarks(void)
-{
-  int i, fx, fy, w, h;
-
-  for (i=0;i<AM_NUMMARKPOINTS;i++)
-  {
-    if (markpoints[i].x != -1)
-    {
-      w = SHORT(marknums[i]->width);
-      h = SHORT(marknums[i]->height);
-      fx = CXMTOF(markpoints[i].x);
-      fy = CYMTOF(markpoints[i].y);
-      if (fx >= f_x && fx <= f_w - w && fy >= f_y && fy <= f_h - h)
-  			V_DrawPatch(fx, fy, marknums[i]);
-    }
-  }
-}
-*/
 
 void AM_drawkeys(void)
 {
@@ -1816,20 +1683,26 @@ void AM_Drawer(void)
     boolean wide_4_3 = widescreen && screenblocks == 9;
 
     if (!automapactive)
+    {
         return;
+    }
 
     UpdateState |= I_FULLSCRN;
     if (!automap_overlay)
+    {
         AM_clearFB(BACKGROUND);
+    }
     if (automap_grid)
+    {
         AM_drawGrid(GRIDCOLORS);
+    }
     AM_drawWalls();
     AM_drawPlayers();
     if (cheating == 2)
+    {
         AM_drawThings(THINGCOLORS, THINGRANGE);
-//  AM_drawCrosshair(XHAIRCOLORS);
+    }
 
-//  AM_drawMarks();
     if (gameskill == sk_baby)
     {
         AM_drawkeys();
@@ -1855,16 +1728,26 @@ void AM_Drawer(void)
         if (widescreen)
         {
             if (english_language)
-            MN_DrTextA(DEH_String(level_name), 20 + (wide_4_3 ? wide_delta : 0), 136);
+            {
+                MN_DrTextA(DEH_String(level_name), 20 + 
+                          (wide_4_3 ?wide_delta : 0), 136);
+            }
             else
-            MN_DrTextSmallRUS(DEH_String(level_name), 20 + (wide_4_3 ? wide_delta : 0), 136);
+            {
+                MN_DrTextSmallRUS(DEH_String(level_name), 20 + 
+                                 (wide_4_3 ? wide_delta : 0), 136);
+            }
         }
         else
         {
             if (english_language)
-            MN_DrTextA(DEH_String(level_name), 20, 146);
+            {
+                MN_DrTextA(DEH_String(level_name), 20, 146);
+            }
             else
-            MN_DrTextSmallRUS(DEH_String(level_name), 20, 146);
+            {
+                MN_DrTextSmallRUS(DEH_String(level_name), 20, 146);
+            }
         }
     }
 
@@ -1881,9 +1764,13 @@ void AM_Drawer(void)
                    players[consoleplayer].killcount,
                    totalkills);
         if (english_language)
-        MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
+        {
+            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
+        }
         else
-        MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
+        {
+            MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
+        }
 
         M_snprintf(text, sizeof(text),
                    english_language ?
@@ -1892,9 +1779,13 @@ void AM_Drawer(void)
                    players[consoleplayer].itemcount,
                    totalitems);
         if (english_language)
-        MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
+        {
+            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
+        }
         else
-        MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
+        {
+            MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
+        }
 
         M_snprintf(text, sizeof(text),
                    english_language ?
@@ -1903,9 +1794,13 @@ void AM_Drawer(void)
                    players[consoleplayer].secretcount,
                    totalsecret);
         if (english_language)
-        MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
+        {
+            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
+        }
         else
-        MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
+        {
+            MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
+        }
 
         M_snprintf(text, sizeof(text), 
                    english_language ?
@@ -1913,9 +1808,13 @@ void AM_Drawer(void)
                    "CKJ;YJCNM: %d", 
                    gameskill +1);
         if (english_language)
-        MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
+        {
+            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
+        }
         else
-        MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
+        {
+            MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
+        }
 
         M_snprintf(text, sizeof(text),
                    "%02d:%02d:%02d",
@@ -1923,8 +1822,5 @@ void AM_Drawer(void)
                    (time%3600)/60,
                    time%60);
         MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 63);
-     }
-
-//  I_Update();
-//  V_MarkRect(f_x, f_y, f_w, f_h);
+    }
 }
