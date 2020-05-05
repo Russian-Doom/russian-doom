@@ -937,7 +937,7 @@ static void DrawAnimatedIcons(void)
                 }
             }
         }
-        BorderNeedRefresh = true;
+        BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
     }
 
@@ -951,7 +951,7 @@ static void DrawAnimatedIcons(void)
             V_DrawPatch(60 + (wide_4_3 ? wide_delta : 0), 19, W_CacheLumpNum(SpinSpeedLump + frame,
                                                PU_CACHE));
         }
-        BorderNeedRefresh = true;
+        BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
     }
 
@@ -965,7 +965,7 @@ static void DrawAnimatedIcons(void)
             V_DrawPatch(260 + (wide_4_3 ? wide_delta : wide_delta*2), 19, W_CacheLumpNum(SpinDefenseLump + frame,
                                                 PU_CACHE));
         }
-        BorderNeedRefresh = true;
+        BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
     }
 
@@ -979,7 +979,7 @@ static void DrawAnimatedIcons(void)
             V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2), 19, W_CacheLumpNum(SpinMinotaurLump + frame,
                                                 PU_CACHE));
         }
-        BorderNeedRefresh = true;
+        BorderTopRefresh = true;
         UpdateState |= I_MESSAGES;
     }
 }

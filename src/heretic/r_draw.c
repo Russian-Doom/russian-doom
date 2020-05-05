@@ -578,7 +578,7 @@ void R_DrawTopBorder(void)
     }
     dest = I_VideoBuffer;
 
-    for (y = 0; y < 30; y++)
+    for (y = 0; y < (30 << hires); y++)
     {
         for (x = 0; x < screenwidth / 64; x++)
         {

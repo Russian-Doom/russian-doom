@@ -796,12 +796,12 @@ void SB_Drawer(void)
                     hitCenterFrame = true;
                 }
             }
-            BorderNeedRefresh = true;
+            BorderTopRefresh = true;
             UpdateState |= I_MESSAGES;
         }
         else
         {
-            BorderNeedRefresh = true;
+            BorderTopRefresh = true;
             UpdateState |= I_MESSAGES;
         }
     }
@@ -815,12 +815,12 @@ void SB_Drawer(void)
             // [JN] Do not obstruct clock widget
             V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2), 17,
                         W_CacheLumpNum(spinbooklump + frame, PU_CACHE));
-            BorderNeedRefresh = true;
+            BorderTopRefresh = true;
             UpdateState |= I_MESSAGES;
         }
         else
         {
-            BorderNeedRefresh = true;
+            BorderTopRefresh = true;
             UpdateState |= I_MESSAGES;
         }
     }
