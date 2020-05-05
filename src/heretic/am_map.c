@@ -307,15 +307,17 @@ void AM_findMinMaxBoundaries(void)
         else if (vertexes[i].y > max_y)
             max_y = vertexes[i].y;
     }
-    max_w = max_x - min_x;
-    max_h = max_y - min_y;
+    // [crispy] cope with huge level dimensions which span the entire INT range
+    max_w = max_x/2 - min_x/2;
+    max_h = max_y/2 - min_y/2;
+
     min_w = 2 * PLAYERRADIUS;
     min_h = 2 * PLAYERRADIUS;
 
     a = FixedDiv(f_w << FRACBITS, max_w);
     b = FixedDiv(f_h << FRACBITS, max_h);
-    min_scale_mtof = a < b ? a : b;
 
+    min_scale_mtof = a < b ? a/2 : b/2;
     max_scale_mtof = FixedDiv(f_h << FRACBITS, 2 * PLAYERRADIUS);
 
 }
@@ -460,6 +462,7 @@ void AM_loadPics(void)
 
 void AM_LevelInit(void)
 {
+    fixed_t a, b;
     leveljuststarted = 0;
 
     f_x = f_y = 0;
@@ -468,7 +471,13 @@ void AM_LevelInit(void)
     mapxstart = mapystart = 0;
 
     AM_findMinMaxBoundaries();
-    scale_mtof = FixedDiv(min_scale_mtof, (int) (0.7 * FRACUNIT));
+    
+    // [crispy] initialize zoomlevel on all maps so that a 4096 units
+    // square map would just fit in (MAP01 is 3376x3648 units)
+    a = FixedDiv(f_w, (max_w>>FRACBITS < 2048) ? 2*(max_w>>FRACBITS) : 4096);
+    b = FixedDiv(f_h, (max_h>>FRACBITS < 2048) ? 2*(max_h>>FRACBITS) : 4096);
+    scale_mtof = FixedDiv(a < b ? a : b, (int) (0.7*FRACUNIT));
+
     if (scale_mtof > max_scale_mtof)
         scale_mtof = min_scale_mtof;
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
