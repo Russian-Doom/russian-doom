@@ -82,6 +82,7 @@ typedef enum
     MENU_DISPLAY,
     MENU_AUTOMAP,
     MENU_SOUND,
+    MENU_SOUND_SYS,
     MENU_CONTROLS,
     MENU_GAMEPLAY1,
     MENU_GAMEPLAY2,
@@ -168,6 +169,12 @@ static void DrawSoundMenu(void);
 static boolean M_RD_SfxVolume(int option);
 static boolean M_RD_MusVolume(int option);
 static boolean M_RD_SfxChannels(int option);
+
+// Sound system
+static void DrawSoundSystemMenu(void);
+static boolean M_RD_SoundDevice(int option);
+static boolean M_RD_MusicDevice(int option);
+static boolean M_RD_Sampling(int option);
 static boolean M_RD_SndMode(int option);
 static boolean M_RD_PitchShifting(int option);
 static boolean M_RD_MuteInactive(int option);
@@ -604,35 +611,33 @@ static Menu_t AutomapMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t SoundItems[] = {
-    {ITT_LRFUNC, "SFX VOLUME",            M_RD_SfxVolume,     0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                    NULL,               0, MENU_NONE},
-    {ITT_LRFUNC, "MUSIC VOLUME",          M_RD_MusVolume,     0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                    NULL,               0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                    NULL,               0, MENU_NONE},
-    {ITT_LRFUNC, "SFX CHANNELS",          M_RD_SfxChannels,   0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                    NULL,               0, MENU_NONE},
-    {ITT_LRFUNC, "SFX MODE:",             M_RD_SndMode,       0, MENU_NONE},
-    {ITT_LRFUNC, "PITCH-SHIFTED SOUNDS:", M_RD_PitchShifting, 0, MENU_NONE},
-    {ITT_LRFUNC, "MUTE INACTIVE WINDOW:", M_RD_MuteInactive,  0, MENU_NONE}
+    {ITT_LRFUNC, "SFX VOLUME",               M_RD_SfxVolume,   0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
+    {ITT_LRFUNC, "MUSIC VOLUME",             M_RD_MusVolume,   0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
+    {ITT_LRFUNC, "SFX CHANNELS",             M_RD_SfxChannels, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
+    {ITT_SETMENU,"SOUND SYSTEM SETTINGS...", NULL,             0, MENU_SOUND_SYS}
 };
 
 static MenuItem_t SoundItems_Rus[] = {
-    {ITT_LRFUNC, "UHJVRJCNM PDERF",            M_RD_SfxVolume,     0, MENU_NONE}, // ГРОМКОСТЬ ЗВУКА
-    {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
-    {ITT_LRFUNC, "UHJVRJCNM VEPSRB",           M_RD_MusVolume,     0, MENU_NONE}, // ГРОМКОСТЬ МУЗЫКИ
-    {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
-    {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
-    {ITT_LRFUNC, "PDERJDST RFYFKS",            M_RD_SfxChannels,   0, MENU_NONE}, // ЗВУКОВЫЕ КАНАЛЫ
-    {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
-    {ITT_LRFUNC, "HT;BV PDERF:",               M_RD_SndMode,       0, MENU_NONE}, // РЕЖИМ ЗВУКА
-    {ITT_LRFUNC, "GHJBPDJKMYSQ GBNX-IBANBYU:", M_RD_PitchShifting, 0, MENU_NONE}, // ПРОИЗВОЛЬНЫЙ ПИТЧ-ШИФТИНГ
-    {ITT_LRFUNC, "PDER D YTFRNBDYJV JRYT:",    M_RD_MuteInactive,  0, MENU_NONE}  // ЗВУК В НЕАКТИВНОМ ОКНЕ
+    {ITT_LRFUNC, "UHJVRJCNM PDERF",               M_RD_SfxVolume,   0, MENU_NONE},      // ГРОМКОСТЬ ЗВУКА
+    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
+    {ITT_LRFUNC, "UHJVRJCNM VEPSRB",              M_RD_MusVolume,   0, MENU_NONE},      // ГРОМКОСТЬ МУЗЫКИ
+    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
+    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
+    {ITT_LRFUNC, "PDERJDST RFYFKS",               M_RD_SfxChannels, 0, MENU_NONE},      // ЗВУКОВЫЕ КАНАЛЫ
+    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
+    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
+    {ITT_SETMENU,"YFCNHJQRB PDERJDJQ CBCNTVS>>>", NULL,             0, MENU_SOUND_SYS}, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
 };
 
 static Menu_t SoundMenu = {
     36, 42,
     DrawSoundMenu,
-    10, SoundItems,
+    9, SoundItems,
     0,
     MENU_OPTIONS
 };
@@ -640,9 +645,51 @@ static Menu_t SoundMenu = {
 static Menu_t SoundMenu_Rus = {
     36, 42,
     DrawSoundMenu,
-    10, SoundItems_Rus,
+    9, SoundItems_Rus,
     0,
     MENU_OPTIONS
+};
+
+// -----------------------------------------------------------------------------
+// Sound system
+// -----------------------------------------------------------------------------
+
+static MenuItem_t SoundSysItems[] = {
+    {ITT_LRFUNC, "SOUND EFFECTS:",        M_RD_SoundDevice,   0, MENU_NONE},
+    {ITT_LRFUNC, "MUSIC:",                M_RD_MusicDevice,   0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                    NULL,               0, MENU_NONE},
+    {ITT_LRFUNC, "SAMPLING FREQUENCY:",   M_RD_Sampling,      0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                    NULL,               0, MENU_NONE},
+    {ITT_LRFUNC, "SOUND EFFECTS MODE:",   M_RD_SndMode,       0, MENU_NONE},
+    {ITT_LRFUNC, "PITCH-SHIFTED SOUNDS:", M_RD_PitchShifting, 0, MENU_NONE},
+    {ITT_LRFUNC, "MUTE INACTIVE WINDOW:", M_RD_MuteInactive,  0, MENU_NONE},
+};
+
+static MenuItem_t SoundSysItems_Rus[] = {
+    {ITT_LRFUNC, "PDERJDST \'AATRNS:",         M_RD_SoundDevice,   0, MENU_NONE}, // ЗВУКОВЫЕ ЭФФЕКТЫ:
+    {ITT_LRFUNC, "VEPSRF:",                    M_RD_MusicDevice,   0, MENU_NONE}, // МУЗЫКА:
+    {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
+    {ITT_LRFUNC, "XFCNJNF LBCRHTNBPFWBB:",     M_RD_Sampling,      0, MENU_NONE}, // ЧАСТОТА ДИСКРЕТИЗАЦИИ:
+    {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
+    {ITT_LRFUNC, "HT;BV PDERJDS[ \'AATRNJD:",  M_RD_SndMode,       0, MENU_NONE}, // РЕЖИМ ЗВУКОВЫХ ЭФФЕКТОВ
+    {ITT_LRFUNC, "GHJBPDJKMYSQ GBNX-IBANBYU:", M_RD_PitchShifting, 0, MENU_NONE}, // ПРОИЗВОЛЬНЫЙ ПИТЧ-ШИФТИНГ
+    {ITT_LRFUNC, "PDER D YTFRNBDYJV JRYT:",    M_RD_MuteInactive,  0, MENU_NONE}, // ЗВУК В НЕАКТИВНОМ ОКНЕ
+};
+
+static Menu_t SoundSysMenu = {
+    36, 42,
+    DrawSoundSystemMenu,
+    8, SoundSysItems,
+    0,
+    MENU_SOUND
+};
+
+static Menu_t SoundSysMenu_Rus = {
+    36, 42,
+    DrawSoundSystemMenu,
+    8, SoundSysItems_Rus,
+    0,
+    MENU_SOUND
 };
 
 // -----------------------------------------------------------------------------
@@ -793,6 +840,7 @@ static Menu_t *Menus[] = {
     &DisplayMenu,
     &AutomapMenu,
     &SoundMenu,
+    &SoundSysMenu,
     &ControlsMenu,
     &Gameplay1Menu,
     &Gameplay2Menu
@@ -810,6 +858,7 @@ static Menu_t *Menus_Rus[] = {
     &DisplayMenu_Rus,
     &AutomapMenu_Rus,
     &SoundMenu_Rus,
+    &SoundSysMenu_Rus,
     &ControlsMenu_Rus,
     &Gameplay1Menu_Rus,
     &Gameplay2Menu_Rus
@@ -1681,8 +1730,8 @@ static void DrawRenderingMenu(void)
         if (widescreen_temp != widescreen)
         {
             dp_translation = cr[CR_GRAY2GREEN_HERETIC];
-            MN_DrTextSmallENG(DEH_String("PROGRAM MUST BE RESTARTED"),
-                                         66 + wide_delta, 132);
+            MN_DrTextSmallENG(DEH_String("THE PROGRAM MUST BE RESTARTED"),
+                                         51 + wide_delta, 132);
             dp_translation = NULL;
         }
 
@@ -2125,7 +2174,7 @@ static void DrawAutomapMenu(void)
 {
     static char *title_eng, *title_rus;
 
-    title_eng = DEH_String("AUTOMAP OPTIONS");
+    title_eng = DEH_String("AUTOMAP SETTINGS");
     title_rus = DEH_String("YFCNHJQRB RFHNS");  // НАСТРОЙКИ КАРТЫ
 
     if (english_language)
@@ -2237,24 +2286,13 @@ static void DrawSoundMenu(void)
                                        + wide_delta, 7);
 
         //
-        // VOLUME, EXTRA
+        // VOLUME, CHANNELS, SYSTEM
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("VOLUME"), 36 + wide_delta, 32);
-        MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + wide_delta, 82);
+        MN_DrTextSmallENG(DEH_String("CHANNELS"), 36 + wide_delta, 82);
+        MN_DrTextSmallENG(DEH_String("SYSTEM"), 36 + wide_delta, 112);
         dp_translation = NULL;
-
-        // SFX Mode
-        MN_DrTextSmallENG(DEH_String(snd_monomode ? "MONO" : "STEREO"),
-                                     105 + wide_delta, 112);
-
-        // Pitch-Shifted sounds
-        MN_DrTextSmallENG(DEH_String(snd_pitchshift ? "ON" : "OFF"),
-                                     189 + wide_delta, 122);
-
-        // Mute inactive window
-        MN_DrTextSmallENG(DEH_String(mute_inactive_window ? "ON" : "OFF"),
-                                     184 + wide_delta, 132);
     }
     else
     {
@@ -2265,24 +2303,13 @@ static void DrawSoundMenu(void)
                                        + wide_delta, 7);
 
         //
-        // ГРОМКОСТЬ, ДОПОЛНИТЕЛЬНО
+        // ГРОМКОСТЬ, ВОСПРОИЗВЕДЕНИЕ, СИСТЕМА
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("UHJVRJCNM"), 36 + wide_delta, 32);
-        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + wide_delta, 82);
+        MN_DrTextSmallRUS(DEH_String("DJCGHJBPDTLTYBT"), 36 + wide_delta, 82);
+        MN_DrTextSmallRUS(DEH_String("CBCNTVF"), 36 + wide_delta, 112);
         dp_translation = NULL;
-
-        // Режим звука
-        MN_DrTextSmallRUS(DEH_String(snd_monomode ? "VJYJ" : "CNTHTJ"),
-                                     128 + wide_delta, 112);
-
-        // Произвольный питч-шифтинг
-        MN_DrTextSmallRUS(DEH_String(snd_pitchshift ? "DRK" : "DSRK"),
-                                     230 + wide_delta, 122);
-
-        // Звук в неактивном окне
-        MN_DrTextSmallRUS(DEH_String(mute_inactive_window ? "DSRK" : "DRK"),
-                                     201 + wide_delta, 132);
     }
 
     //
@@ -2369,6 +2396,340 @@ static boolean M_RD_SfxChannels(int option)
     // Reallocate sound channels
     S_ChannelsRealloc();
 
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+// DrawSoundMenu
+// -----------------------------------------------------------------------------
+
+static void DrawSoundSystemMenu(void)
+{
+    static char *title_eng, *title_rus;
+
+    title_eng = DEH_String("SOUND SYSTEM SETTINGS");
+    title_rus = DEH_String("YFCNHJQRB PDERJDJQ CBCNTVS");  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
+
+    if (english_language)
+    {
+        //
+        // Title
+        //
+        MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
+                                       + wide_delta, 7);
+
+        //
+        // SOUND SYSTEM
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("SOUND SYSTEM"), 36 + wide_delta, 32);
+        dp_translation = NULL;
+
+        // Sound effects
+        if (snd_sfxdevice == 0)
+        {
+            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            MN_DrTextSmallENG(DEH_String("DISABLED"), 144 + wide_delta, 42);
+            dp_translation = NULL;
+        }
+        else if (snd_sfxdevice == 3)
+        {
+            MN_DrTextSmallENG(DEH_String("DIGITAL SFX"), 144 + wide_delta, 42);
+        }
+
+        // Music
+        if (snd_musicdevice == 0)
+        {   
+            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            MN_DrTextSmallENG(DEH_String("DISABLED"), 80 + wide_delta, 52);
+            dp_translation = NULL;
+        }
+        else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
+        {
+            MN_DrTextSmallENG(DEH_String("OPL2 SYNTH"), 80 + wide_delta, 52);
+        }
+        else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, "-opl3"))
+        {
+            MN_DrTextSmallENG(DEH_String("OPL3 SYNTH"), 80 + wide_delta, 52);
+        }
+        else if (snd_musicdevice == 5)
+        {
+            MN_DrTextSmallENG(DEH_String("GUS EMULATION"), 80 + wide_delta, 52);
+        }
+        else if (snd_musicdevice == 8)
+        {
+            // MIDI/MP3/OGG/FLAC
+            MN_DrTextSmallENG(DEH_String("MIDI/MP3/OGG/FLAC"), 80 + wide_delta, 52);
+        }
+
+        //
+        // QUALITY
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("QUALITY"), 36 + wide_delta, 62);
+        dp_translation = NULL;
+
+        // Sampling frequency (hz)
+        if (snd_samplerate == 44100)
+        {
+            MN_DrTextSmallENG(DEH_String("44100 HZ"), 178 + wide_delta, 72);
+        }
+        else if (snd_samplerate == 22050)
+        {
+            MN_DrTextSmallENG(DEH_String("22050 HZ"), 178 + wide_delta, 72);
+        }
+        else if (snd_samplerate == 11025)
+        {
+            MN_DrTextSmallENG(DEH_String("11025 HZ"), 178 + wide_delta, 72);
+        }
+
+        //
+        // MISCELLANEOUS
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("MISCELLANEOUS"), 36 + wide_delta, 82);
+        dp_translation = NULL;
+
+        // SFX Mode
+        MN_DrTextSmallENG(DEH_String(snd_monomode ? "MONO" : "STEREO"),
+                                     181 + wide_delta, 92);
+
+        // Pitch-Shifted sounds
+        MN_DrTextSmallENG(DEH_String(snd_pitchshift ? "ON" : "OFF"),
+                                     189 + wide_delta, 102);
+
+        // Mute inactive window
+        MN_DrTextSmallENG(DEH_String(mute_inactive_window ? "ON" : "OFF"),
+                                     184 + wide_delta, 112);
+
+        // Informative message:
+        if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
+        {
+            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            MN_DrTextSmallENG(DEH_String("CHANGING WILL REQUIRE RESTART OF THE PROGRAM"),
+                                         3 + wide_delta, 132);
+            dp_translation = NULL;
+        }
+    }
+    else
+    {
+
+        //
+        // Title
+        //
+        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
+                                       + wide_delta, 7);
+
+        //
+        // ЗВУКВАЯ СИСТЕМА
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("PDERJDFZ CBCNTVF"), 36 + wide_delta, 32);
+        dp_translation = NULL;
+
+        // Звуковые эффекты
+        if (snd_sfxdevice == 0)
+        {
+            // ОТКЛЮЧЕНЫ
+            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            MN_DrTextSmallRUS(DEH_String("JNRK.XTYS"), 173 + wide_delta, 42);
+            dp_translation = NULL;
+        }
+        else if (snd_sfxdevice == 3)
+        {
+            // ЦИФРОВЫЕ
+            MN_DrTextSmallRUS(DEH_String("WBAHJDST"), 173 + wide_delta, 42);
+        }
+
+        // Музыка
+        if (snd_musicdevice == 0)
+        {   
+            // ОТКЛЮЧЕНА
+            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            MN_DrTextSmallRUS(DEH_String("JNRK.XTYF"), 91 + wide_delta, 52);
+            dp_translation = NULL;
+        }
+        else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
+        {
+            // СИНТЕЗ OPL2
+            MN_DrTextSmallRUS(DEH_String("CBYNTP J"), 91 + wide_delta, 52);
+            MN_DrTextSmallENG(DEH_String("OPL2"), 140 + wide_delta, 52);
+        }
+        else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, "-opl3"))
+        {
+            // СИНТЕЗ OPL3
+            MN_DrTextSmallRUS(DEH_String("CBYNTP J"), 91 + wide_delta, 52);
+            MN_DrTextSmallENG(DEH_String("OPL3"), 140 + wide_delta, 52);
+        }
+        else if (snd_musicdevice == 5)
+        {
+            // ЭМУЛЯЦИЯ GUS
+            MN_DrTextSmallRUS(DEH_String("\'VEKZWBZ"), 91 + wide_delta, 52);
+            MN_DrTextSmallENG(DEH_String("GUS"), 155 + wide_delta, 52);
+        }
+        else if (snd_musicdevice == 8)
+        {
+            // MIDI/MP3/OGG/FLAC
+            MN_DrTextSmallENG(DEH_String("MIDI/MP3/OGG/FLAC"), 91 + wide_delta, 52);
+        }
+
+        //
+        // КАЧЕСТВО ЗВУЧАНИЯ
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("RFXTCNDJ PDEXFYBZ"), 36 + wide_delta, 62);
+        dp_translation = NULL;
+
+        // Частота дискретизации (гц)
+        if (snd_samplerate == 44100)
+        {
+            MN_DrTextSmallRUS(DEH_String("44100 UW"), 200 + wide_delta, 72);
+        }
+        else if (snd_samplerate == 22050)
+        {
+            MN_DrTextSmallRUS(DEH_String("22050 UW"), 200 + wide_delta, 72);
+        }
+        else if (snd_samplerate == 11025)
+        {
+            MN_DrTextSmallRUS(DEH_String("11025 UW"), 200 + wide_delta, 72);
+        }
+
+        //
+        // РАЗНОЕ
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("HFPYJT"), 36 + wide_delta, 82);
+        dp_translation = NULL;
+
+        // Режим звуковых эффектов
+        MN_DrTextSmallRUS(DEH_String(snd_monomode ? "VJYJ" : "CNTHTJ"),
+                                     226 + wide_delta, 92);
+
+        // Произвольный питч-шифтинг
+        MN_DrTextSmallRUS(DEH_String(snd_pitchshift ? "DRK" : "DSRK"),
+                                     230 + wide_delta, 102);
+
+        // Звук в неактивном окне
+        MN_DrTextSmallRUS(DEH_String(mute_inactive_window ? "DSRK" : "DRK"),
+                                     201 + wide_delta, 112);
+
+        // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
+        if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
+        {
+            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            MN_DrTextSmallRUS(DEH_String("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS"), 
+                                         11 + wide_delta, 132);
+            dp_translation = NULL;
+        }
+    }
+}
+
+static boolean M_RD_SoundDevice(int option)
+{
+    switch(option)
+    {
+        case 0:
+        case 1:
+        if (snd_sfxdevice == 0)
+            snd_sfxdevice = 3;
+        else 
+        if (snd_sfxdevice == 3)
+            snd_sfxdevice = 0;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_MusicDevice(int option)
+{
+    switch(option)
+    {
+        case 0:
+            if (snd_musicdevice == 0)
+            {
+                snd_musicdevice = 8;    // Set to MIDI/MP3/OGG/FLAC
+            }
+            else if (snd_musicdevice == 8)
+            {
+                snd_musicdevice = 5;    // Set to GUS
+            }
+            else if (snd_musicdevice == 5)
+            {
+                snd_musicdevice = 3;    // Set to OPL3
+                snd_dmxoption = "-opl3";
+            }
+            else if (snd_musicdevice == 3  && !strcmp(snd_dmxoption, "-opl3"))
+            {
+                snd_musicdevice = 3;    // Set to OPL2
+                snd_dmxoption = "";
+            }
+            else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
+            {
+                snd_musicdevice = 0;    // Disable
+            }
+        break;
+        case 1:
+            if (snd_musicdevice == 0)
+            {
+                snd_musicdevice  = 3;   // Set to OPL2
+                snd_dmxoption = "";
+            }
+            else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
+            {
+                snd_musicdevice  = 3;   // Set to OPL3
+                snd_dmxoption = "-opl3";
+            }
+            else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, "-opl3"))
+            {
+                snd_musicdevice  = 5;
+            }
+            else if (snd_musicdevice == 5)
+            {
+                snd_musicdevice  = 8;   // Set to MIDI/MP3/OGG/FLAC
+            }
+            else if (snd_musicdevice == 8)
+            {
+                snd_musicdevice  = 0;   // Disable
+            }
+        break;
+
+    }
+    return true;
+}
+
+static boolean M_RD_Sampling(int option)
+{
+    switch(option)
+    {
+        case 0:
+            if (snd_samplerate == 44100)
+            {
+                snd_samplerate = 22050;
+            }
+            else if (snd_samplerate == 22050)
+            {
+                snd_samplerate = 11025;
+            }
+            else if (snd_samplerate == 11025)
+            {
+                snd_samplerate  = 44100;
+            }
+        break;
+        case 1:
+            if (snd_samplerate == 11025)
+            {
+                snd_samplerate = 22050;
+            }
+            else if (snd_samplerate == 22050)
+            {
+                snd_samplerate = 44100;
+            }
+            else if (snd_samplerate == 44100)
+            {
+                snd_samplerate = 11025;
+            }
+        break;
+    }
     return true;
 }
 

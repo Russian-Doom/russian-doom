@@ -450,7 +450,6 @@ boolean I_MusicIsPlaying(void)
 
 void I_BindSoundVariables(void)
 {
-    extern char *snd_dmxoption;
     // extern int use_libsamplerate;
     extern float libsamplerate_scale;
 

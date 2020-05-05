@@ -235,6 +235,7 @@ extern int snd_samplerate;
 extern int snd_cachesize;
 extern int snd_maxslicetime_ms;
 extern char *snd_musiccmd;
+extern char *snd_dmxoption;
 extern int snd_pitchshift;
 
 void I_BindSoundVariables(void);
