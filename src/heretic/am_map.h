@@ -79,8 +79,9 @@
 #define M_ZOOMOUT       ((int) (FRACUNIT/1.02)) // pulls out to 0.5x in 1 second
 
 // translates between frame-buffer and map distances
-#define FTOM(x) (((int64_t)((x)<<16) * scale_ftom) >> FRACBITS)
-#define MTOF(x) ((((int64_t)(x) * scale_mtof) >> FRACBITS)>>16)
+// [crispy] fix int overflow that causes map and grid lines to disappear
+#define FTOM(x) (((int64_t)((x)<<FRACBITS) * scale_ftom) >> FRACBITS)
+#define MTOF(x) ((((int64_t)(x) * scale_mtof) >> FRACBITS)>>FRACBITS)
 // translates between frame-buffer and map coordinates
 #define CXMTOF(x)  (f_x + MTOF((x)-m_x))
 #define CYMTOF(y)  (f_y + (f_h - MTOF((y)-m_y)))

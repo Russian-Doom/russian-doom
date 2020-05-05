@@ -166,11 +166,11 @@ static mpoint_t m_paninc;       // how far the window pans each tic (map coords)
 static fixed_t mtof_zoommul;    // how far the window zooms in each tic (map coords)
 static fixed_t ftom_zoommul;    // how far the window zooms in each tic (fb coords)
 
-static fixed_t m_x, m_y;        // LL x,y where the window is on the map (map coords)
-static fixed_t m_x2, m_y2;      // UR x,y where the window is on the map (map coords)
+static int64_t m_x, m_y;        // LL x,y where the window is on the map (map coords)
+static int64_t m_x2, m_y2;      // UR x,y where the window is on the map (map coords)
 
 // width/height of window on map (map coords)
-static fixed_t m_w, m_h;
+static int64_t m_w, m_h;
 static fixed_t min_x, min_y;    // based on level size
 static fixed_t max_x, max_y;    // based on level size
 static fixed_t max_w, max_h;    // max_x-min_x, max_y-min_y
@@ -179,8 +179,8 @@ static fixed_t min_scale_mtof;  // used to tell when to stop zooming out
 static fixed_t max_scale_mtof;  // used to tell when to stop zooming in
 
 // old stuff for recovery later
-static fixed_t old_m_w, old_m_h;
-static fixed_t old_m_x, old_m_y;
+static int64_t old_m_w, old_m_h;
+static int64_t old_m_x, old_m_y;
 
 // old location used by the Follower routine
 static mpoint_t f_oldloc;
