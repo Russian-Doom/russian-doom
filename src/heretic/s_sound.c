@@ -347,6 +347,97 @@ void S_StartSoundAtVolume(void *_origin, int sound_id, int volume)
     }
 }
 
+// -----------------------------------------------------------------------------
+// S_StartSoundAmbient
+// [JN] Used for waterfall and wind sounds. Sets proper stereo separation and
+// making sounds always playable (altrough not hearable if sound is too far).
+// -----------------------------------------------------------------------------
+
+void S_StartSoundAmbient(void *_origin, int sound_id)
+{
+    mobj_t *origin = _origin;
+    mobj_t *listener;
+    int dist, vol;
+    int sep;
+    int angle;
+    int i;
+    int priority;
+    int absx, absy;
+
+    // [JN] Player is always listener.
+    listener = players[consoleplayer].mo;
+
+    if (origin == NULL)
+    {
+        origin = listener;
+    }
+
+    if (origin == listener)
+    {
+        sep = 128;
+    }
+    else
+    {
+        angle = R_PointToAngle2(listener->x, listener->y,
+                                origin->x, origin->y);
+        angle = (angle - viewangle) >> 24;
+        sep = angle * 2 - 128;
+        if (sep < 64)
+            sep = -sep;
+        if (sep > 192)
+            sep = 512 - sep;
+    }
+
+    // [JN] Calculate the distance.
+    absx = abs(origin->x - listener->x);
+    absy = abs(origin->y - listener->y);
+    dist = absx + absy - (absx > absy ? absy >> 1 : absx >> 1);
+    dist >>= FRACBITS;
+
+    if (dist >= MAX_SND_DIST)
+    {
+        dist = MAX_SND_DIST - 1;
+    }
+    if (dist < 0)
+    {
+        dist = 0;
+    }
+
+    priority = S_sfx[sound_id].priority;
+    priority *= (10 - (dist / 160));
+
+    // [JN] Calculate the volume based upon the distance from the sound origin.
+    vol = soundCurve[dist];
+
+    // [JN] No priority checking.
+    for (i = 0; i < snd_Channels_RD; i++)
+    {
+        if (channel[i].mo == NULL)
+        {
+            break;
+        }
+    }
+
+    if (i >= snd_Channels_RD)
+    {
+        return;
+    }
+
+    channel[i].pitch = (byte) (NORM_PITCH - (M_Random() & 7) + (M_Random() & 7));
+    channel[i].handle = I_StartSound(&S_sfx[sound_id], i, vol, sep, channel[i].pitch);
+    channel[i].mo = origin;
+    channel[i].sound_id = sound_id;
+    channel[i].priority = priority;
+    if (S_sfx[sound_id].usefulness == -1)
+    {
+        S_sfx[sound_id].usefulness = 1;
+    }
+    else
+    {
+        S_sfx[sound_id].usefulness++;
+    }
+}
+
 boolean S_StopSoundID(int sound_id, int priority)
 {
     int i;
@@ -490,8 +581,18 @@ void S_UpdateSounds(mobj_t * listener)
 
             if (dist >= MAX_SND_DIST)
             {
-                S_StopSound(channel[i].mo);
-                continue;
+                // [JN] Do not stop/break waterfall and wind sounds,
+                // consider them playing at maximum distance.
+                if (channel[i].sound_id == sfx_waterfl
+                ||  channel[i].sound_id == sfx_wind)
+                {
+                    dist = MAX_SND_DIST - 1;
+                }
+                else
+                {
+                    S_StopSound(channel[i].mo);
+                    continue;
+                }
             }
             if (dist < 0)
                 dist = 0;

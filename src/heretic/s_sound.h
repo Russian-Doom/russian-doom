@@ -28,6 +28,7 @@ extern int snd_MusicVolume;
 void S_Start(void);
 void S_StartSound(void *origin, int sound_id);
 void S_StartSoundAtVolume(void *origin, int sound_id, int volume);
+void S_StartSoundAmbient(void *origin, int sound_id);
 void S_StopSound(void *origin);
 void S_PauseSound(void);
 void S_ResumeSound(void);
