@@ -299,7 +299,8 @@ void R_DrawColumnLow (void)
 //
 #define FUZZTABLE   50 
 #define FUZZOFF     (SCREENWIDTH)
-#define WFUZZOFF    (WIDESCREENWIDTH)
+#define WFUZZOFF_16_9   (WIDESCREENWIDTH)
+#define WFUZZOFF_16_10  (WIDESCREENWIDTH - (42 << hires))
 
 int	fuzzoffset[FUZZTABLE] =
 {
@@ -312,15 +313,32 @@ int	fuzzoffset[FUZZTABLE] =
     FUZZOFF,  FUZZOFF,-FUZZOFF, FUZZOFF, FUZZOFF,-FUZZOFF, FUZZOFF 
 };
 
-int	wfuzzoffset[FUZZTABLE] =
+int	wfuzzoffset_16_9[FUZZTABLE] =
 {
-    WFUZZOFF,-WFUZZOFF,WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,
-    WFUZZOFF,WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,
-    WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,-WFUZZOFF,-WFUZZOFF,-WFUZZOFF,
-    WFUZZOFF,-WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,
-    WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,-WFUZZOFF,WFUZZOFF,
-    WFUZZOFF,-WFUZZOFF,-WFUZZOFF,-WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,
-    WFUZZOFF,WFUZZOFF,-WFUZZOFF,WFUZZOFF,WFUZZOFF,-WFUZZOFF,WFUZZOFF 
+    WFUZZOFF_16_9,-WFUZZOFF_16_9, WFUZZOFF_16_9,-WFUZZOFF_16_9, WFUZZOFF_16_9,
+    WFUZZOFF_16_9,-WFUZZOFF_16_9, WFUZZOFF_16_9, WFUZZOFF_16_9,-WFUZZOFF_16_9,
+    WFUZZOFF_16_9, WFUZZOFF_16_9, WFUZZOFF_16_9,-WFUZZOFF_16_9, WFUZZOFF_16_9,
+    WFUZZOFF_16_9, WFUZZOFF_16_9,-WFUZZOFF_16_9,-WFUZZOFF_16_9,-WFUZZOFF_16_9,
+   -WFUZZOFF_16_9, WFUZZOFF_16_9,-WFUZZOFF_16_9,-WFUZZOFF_16_9, WFUZZOFF_16_9,
+    WFUZZOFF_16_9, WFUZZOFF_16_9, WFUZZOFF_16_9,-WFUZZOFF_16_9, WFUZZOFF_16_9,
+   -WFUZZOFF_16_9, WFUZZOFF_16_9, WFUZZOFF_16_9,-WFUZZOFF_16_9,-WFUZZOFF_16_9,
+    WFUZZOFF_16_9, WFUZZOFF_16_9,-WFUZZOFF_16_9,-WFUZZOFF_16_9,-WFUZZOFF_16_9,
+   -WFUZZOFF_16_9, WFUZZOFF_16_9, WFUZZOFF_16_9, WFUZZOFF_16_9, WFUZZOFF_16_9,
+   -WFUZZOFF_16_9, WFUZZOFF_16_9, WFUZZOFF_16_9,-WFUZZOFF_16_9, WFUZZOFF_16_9 
+}; 
+
+int	wfuzzoffset_16_10[FUZZTABLE] =
+{
+    WFUZZOFF_16_10,-WFUZZOFF_16_10, WFUZZOFF_16_10,-WFUZZOFF_16_10, WFUZZOFF_16_10,
+    WFUZZOFF_16_10,-WFUZZOFF_16_10, WFUZZOFF_16_10, WFUZZOFF_16_10,-WFUZZOFF_16_10,
+    WFUZZOFF_16_10, WFUZZOFF_16_10, WFUZZOFF_16_10,-WFUZZOFF_16_10, WFUZZOFF_16_10,
+    WFUZZOFF_16_10, WFUZZOFF_16_10,-WFUZZOFF_16_10,-WFUZZOFF_16_10,-WFUZZOFF_16_10,
+   -WFUZZOFF_16_10, WFUZZOFF_16_10,-WFUZZOFF_16_10,-WFUZZOFF_16_10, WFUZZOFF_16_10,
+    WFUZZOFF_16_10, WFUZZOFF_16_10, WFUZZOFF_16_10,-WFUZZOFF_16_10, WFUZZOFF_16_10,
+   -WFUZZOFF_16_10, WFUZZOFF_16_10, WFUZZOFF_16_10,-WFUZZOFF_16_10,-WFUZZOFF_16_10,
+    WFUZZOFF_16_10, WFUZZOFF_16_10,-WFUZZOFF_16_10,-WFUZZOFF_16_10,-WFUZZOFF_16_10,
+   -WFUZZOFF_16_10, WFUZZOFF_16_10, WFUZZOFF_16_10, WFUZZOFF_16_10, WFUZZOFF_16_10,
+   -WFUZZOFF_16_10, WFUZZOFF_16_10, WFUZZOFF_16_10,-WFUZZOFF_16_10,WFUZZOFF_16_10 
 }; 
 
 int	fuzzpos = 0; 
@@ -356,7 +374,10 @@ void R_DrawFuzzColumn (void)
     fixed_t frac;
     fixed_t fracstep;	 
     boolean cutoff = false;
-    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
+    // [RUDE] actual offset
+    int* afuzzoffset = widescreen == 1 ? wfuzzoffset_16_9 :
+                       widescreen == 2 ? wfuzzoffset_16_10 :
+                                         fuzzoffset;
 
     // Adjust borders. Low... 
     if (!dc_yl) 
@@ -414,9 +435,13 @@ void R_DrawFuzzColumn (void)
     // draw one extra line using only pixels of that line and the one above
     if (cutoff)
     {
-        if (widescreen)
+        if (widescreen == 1)
         {
-            *dest = colormaps[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest = colormaps[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+        }
+        else if (widescreen == 2)
+        {
+            *dest = colormaps[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
         }
         else
         {
@@ -438,7 +463,10 @@ void R_DrawFuzzColumnLow (void)
     fixed_t fracstep;	 
     int     x;
     boolean cutoff = false;
-    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
+    // [RUDE] actual offset
+    int* afuzzoffset = widescreen == 1 ? wfuzzoffset_16_9 :
+                       widescreen == 2 ? wfuzzoffset_16_10 :
+                                         fuzzoffset;
 
     // Adjust borders. Low... 
     if (!dc_yl) 
@@ -512,17 +540,21 @@ void R_DrawFuzzColumnLow (void)
     // draw one extra line using only pixels of that line and the one above
     if (cutoff)
     {
-        if (widescreen)
+        if (widescreen == 1)
         {
-            *dest = colormaps[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
-            *dest2 = colormaps[6*256+dest2[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest = colormaps[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+        }
+        else if (widescreen == 2)
+        {
+            *dest = colormaps[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
+            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
         }
         else
         {
             *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
             *dest2 = colormaps[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
         }
-
 
         if (hires)
         {
@@ -544,7 +576,10 @@ void R_DrawFuzzColumnBW (void)
     fixed_t fracstep;	 
     boolean cutoff = false;
     boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
-    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
+    // [RUDE] actual offset
+    int* afuzzoffset = widescreen == 1 ? wfuzzoffset_16_9 :
+                       widescreen == 2 ? wfuzzoffset_16_10 :
+                                         fuzzoffset;
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -587,9 +622,13 @@ void R_DrawFuzzColumnBW (void)
 
     if (cutoff)
     {
-        if (widescreen)
+        if (widescreen == 1)
         {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+        }
+        else if (widescreen == 2)
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
         }
         else
         {
@@ -610,7 +649,10 @@ void R_DrawFuzzColumnLowBW (void)
     int     x;
     boolean cutoff = false;
     boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
-    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
+    // [RUDE] actual offset
+    int* afuzzoffset = widescreen == 1 ? wfuzzoffset_16_9 :
+                       widescreen == 2 ? wfuzzoffset_16_10 :
+                                         fuzzoffset;
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -668,10 +710,15 @@ void R_DrawFuzzColumnLowBW (void)
 
     if (cutoff)
     {
-        if (widescreen)
+        if (widescreen == 1)
         {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+        }
+        else if (widescreen == 2)
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
+            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
         }
         else
         {
@@ -698,7 +745,10 @@ void R_DrawFuzzColumnImproved (void)
     fixed_t frac;
     fixed_t fracstep;	 
     boolean cutoff = false;
-    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
+    // [RUDE] actual offset
+    int* afuzzoffset = widescreen == 1 ? wfuzzoffset_16_9 :
+                       widescreen == 2 ? wfuzzoffset_16_10 :
+                                         fuzzoffset;
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -743,9 +793,13 @@ void R_DrawFuzzColumnImproved (void)
 
     if (cutoff)
     {
-        if (widescreen)
+        if (widescreen == 1)
         {
-            *dest = colormaps[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest = colormaps[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+        }
+        else if (widescreen == 2)
+        {
+            *dest = colormaps[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
         }
         else
         {
@@ -765,7 +819,10 @@ void R_DrawFuzzColumnLowImproved (void)
     fixed_t fracstep;	 
     int     x;
     boolean cutoff = false;
-    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
+    // [RUDE] actual offset
+    int* afuzzoffset = widescreen == 1 ? wfuzzoffset_16_9 :
+                       widescreen == 2 ? wfuzzoffset_16_10 :
+                                         fuzzoffset;
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -825,10 +882,15 @@ void R_DrawFuzzColumnLowImproved (void)
 
     if (cutoff)
     {
-        if (widescreen)
+        if (widescreen == 1)
         {
-            *dest = colormaps[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
-            *dest2 = colormaps[6*256+dest2[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest = colormaps[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+        }
+        else if (widescreen == 2)
+        {
+            *dest = colormaps[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
+            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];            
         }
         else
         {
@@ -856,7 +918,10 @@ void R_DrawFuzzColumnImprovedBW (void)
     fixed_t fracstep;	 
     boolean cutoff = false;
     boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
-    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
+    // [RUDE] actual offset
+    int* afuzzoffset = widescreen == 1 ? wfuzzoffset_16_9 :
+                       widescreen == 2 ? wfuzzoffset_16_10 :
+                                         fuzzoffset;
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -901,9 +966,13 @@ void R_DrawFuzzColumnImprovedBW (void)
 
     if (cutoff)
     {
-        if (widescreen)
+        if (widescreen == 1)
         {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+        }
+        else if (widescreen == 2)
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
         }
         else
         {
@@ -924,7 +993,10 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     int     x;
     boolean cutoff = false;
     boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
-    int* afuzzoffset = widescreen ? wfuzzoffset : fuzzoffset; // [RUDE] actual offset
+    // [RUDE] actual offset
+    int* afuzzoffset = widescreen == 1 ? wfuzzoffset_16_9 :
+                       widescreen == 2 ? wfuzzoffset_16_10 :
+                                         fuzzoffset;
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -984,10 +1056,15 @@ void R_DrawFuzzColumnLowImprovedBW (void)
 
     if (cutoff)
     {
-        if (widescreen)
+        if (widescreen == 1)
         {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset[fuzzpos]-WFUZZOFF)/2]];
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
+        }
+        else if (widescreen == 2)
+        {
+            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
+            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
         }
         else
         {
