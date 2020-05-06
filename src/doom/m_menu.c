@@ -1339,7 +1339,7 @@ enum
 
 menuitem_t RD_Rendering_Menu[]=
 {
-    {2, "Widescreen rendering:",     M_RD_Change_Widescreen,  'w'},
+    {2, "Display aspect ratio:",     M_RD_Change_Widescreen,  'd'},
     {2, "Vertical synchronization:", M_RD_Change_VSync,       'v'},
     {2, "Frame rate:",               M_RD_Change_Uncapped,    'f'},
     {2, "Show FPS counter:",         M_RD_Change_FPScounter,  's'},
@@ -1368,7 +1368,7 @@ menu_t  RD_Rendering_Def =
 
 menuitem_t RD_Rendering_Menu_Rus[]=
 {
-    {2, "Ibhjrjajhvfnysq ht;bv:",          M_RD_Change_Widescreen,  'i'}, // Широкоформатный режим
+    {2, "Cjjnyjitybt cnjhjy \'rhfyf:",     M_RD_Change_Widescreen,  'c'}, // Соотношение сторон экрана
     {2, "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,       'd'}, // Вертикальная синхронизация
     {2, "Rflhjdfz xfcnjnf:",               M_RD_Change_Uncapped,    'r'}, // Кадровая частота
     {2, "Cxtnxbr rflhjdjq xfcnjns:",       M_RD_Change_FPScounter,  'c'}, // Счетчик кадровой частоты
@@ -2298,7 +2298,9 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         // Widescreen rendering
-        M_WriteTextSmall_ENG(191 + wide_delta, 45, widescreen_temp == 1 ? "on (16:9)" : "off (4:3)");
+        M_WriteTextSmall_ENG(185 + wide_delta, 45, widescreen_temp == 1 ? "16:9" :
+                                                   widescreen_temp == 2 ? "16:10" :
+                                                                          "4:3");
         // Informative message
         if (widescreen_temp != widescreen)
         {
@@ -2370,7 +2372,10 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         // Широкоформатный режим
-        M_WriteTextSmall_RUS(219 + wide_delta, 45, widescreen_temp == 1 ? "drk (16:9)" : "dsrk (4:3)");
+        M_WriteTextSmall_RUS(238 + wide_delta, 45, widescreen_temp == 1 ? "16:9" :
+                                                   widescreen_temp == 2 ? "16:10" :
+                                                                          "4:3");
+
         // Informative message: Необходим перезапуск программы
         if (widescreen_temp != widescreen)
         {
@@ -2447,7 +2452,20 @@ void M_RD_Change_Widescreen(int choice)
 {
     // [JN] Widescreen: changing only temp variable here.
     // Initially it is set in M_Init and stored into config file in M_QuitResponse.
-    widescreen_temp ^= 1;
+    switch(choice)
+    {
+        case 0:
+        widescreen_temp--;
+        if (widescreen_temp < 0)
+            widescreen_temp = 2;
+        break;
+
+        case 1:
+        widescreen_temp++;
+        if (widescreen_temp > 2)
+            widescreen_temp = 0;
+        break;
+    }
 }
 
 void M_RD_Change_VSync(int choice)

@@ -1415,11 +1415,17 @@ void I_InitGraphics(void)
     }
 
     // [JN] Set widescreen variables
-    if (widescreen)
+    if (widescreen == 1)
     {
         screenwidth = WIDESCREENWIDTH;
         origwidth = WIDEORIGWIDTH;
         wide_delta = WIDE_DELTA;
+    }
+    else if (widescreen == 2)
+    {
+        screenwidth = WIDESCREENWIDTH - (42 << hires);
+        origwidth = WIDEORIGWIDTH - 42;
+        wide_delta = WIDE_DELTA - 21;
     }
     else
     {
