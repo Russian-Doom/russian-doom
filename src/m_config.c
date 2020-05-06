@@ -1109,7 +1109,7 @@ static default_t extra_defaults_list[] =
     // mode.
     //
 
-    CONFIG_VARIABLE_STRING(gus_patch_path),
+    CONFIG_VARIABLE_STRING(gus_patches_path),
 
     //!
     // Number of kilobytes of RAM to use in GUS emulation mode. Valid

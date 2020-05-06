@@ -377,7 +377,9 @@ static void CheckSteamEdition(void)
 
 // The BFG edition ships with a full set of GUS patches. If we find them,
 // we can autoconfigure to use them.
+// [JN] Function disabled. GUS patches now included in release package.
 
+/*
 static void CheckSteamGUSPatches(void)
 {
     const char *current_path;
@@ -386,7 +388,7 @@ static void CheckSteamGUSPatches(void)
     int len;
 
     // Already configured? Don't stomp on the user's choices.
-    current_path = M_GetStringVariable("gus_patch_path");
+    current_path = M_GetStringVariable("gus_patches_path");
     if (current_path != NULL && strlen(current_path) > 0)
     {
         return;
@@ -404,17 +406,18 @@ static void CheckSteamGUSPatches(void)
     M_snprintf(patch_path, len, "%s\\%s\\ACBASS.PAT",
                install_path, STEAM_BFG_GUS_PATCHES);
 
-    // Does acbass.pat exist? If so, then set gus_patch_path.
+    // Does acbass.pat exist? If so, then set gus_patches_path.
     if (M_FileExists(patch_path))
     {
         M_snprintf(patch_path, len, "%s\\%s",
                    install_path, STEAM_BFG_GUS_PATCHES);
-        M_SetVariable("gus_patch_path", patch_path);
+        M_SetVariable("gus_patches_path", patch_path);
     }
 
     free(patch_path);
     free(install_path);
 }
+*/
 
 // Default install directories for DOS Doom
 
@@ -699,8 +702,9 @@ static void BuildIWADDirList(void)
     CheckDOSDefaults();
 
     // Check for GUS patches installed with the BFG edition!
+    // [JN] Disable checking, GUS patches now included in release package.
 
-    CheckSteamGUSPatches();
+    // CheckSteamGUSPatches();
 
 #else
     AddXdgDirs();

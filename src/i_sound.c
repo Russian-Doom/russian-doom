@@ -469,7 +469,7 @@ void I_BindSoundVariables(void)
     M_BindIntVariable("mute_inactive_window",    &mute_inactive_window);
 
     M_BindStringVariable("timidity_cfg_path",    &timidity_cfg_path);
-    M_BindStringVariable("gus_patch_path",       &gus_patch_path);
+    M_BindStringVariable("gus_patches_path",     &gus_patches_path);
     M_BindIntVariable("gus_ram_kb",              &gus_ram_kb);
 
 #ifdef FEATURE_SOUND

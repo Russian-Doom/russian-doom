@@ -120,6 +120,7 @@ static void SensibleDefaults(void)
     novert = 1;
     mouse_y_invert = 0; // [crispy]
     snd_dmxoption = "-opl3 -reverse";
+    gus_patches_path = "base/gus_patches";
     png_screenshots = 1;
 
     // Rendering

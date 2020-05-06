@@ -23,4 +23,6 @@
 void ConfigSound(void);
 void BindSoundVariables(void);
 
+char *gus_patches_path;
+
 #endif /* #ifndef SETUP_SOUND_H */
