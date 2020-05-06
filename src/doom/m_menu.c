@@ -2298,7 +2298,8 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         // Widescreen rendering
-        M_WriteTextSmall_ENG(185 + wide_delta, 45, widescreen_temp == 1 ? "16:9" :
+        M_WriteTextSmall_ENG(185 + wide_delta, 45, widescreen_temp == 0 ? "5:4" :
+                                                   widescreen_temp == 1 ? "16:9" :
                                                    widescreen_temp == 2 ? "16:10" :
                                                                           "4:3");
         // Informative message
@@ -2372,7 +2373,8 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         // Широкоформатный режим
-        M_WriteTextSmall_RUS(238 + wide_delta, 45, widescreen_temp == 1 ? "16:9" :
+        M_WriteTextSmall_RUS(238 + wide_delta, 45, widescreen_temp == 0 ? "5:4" :
+                                                   widescreen_temp == 1 ? "16:9" :
                                                    widescreen_temp == 2 ? "16:10" :
                                                                           "4:3");
 
@@ -2456,14 +2458,14 @@ void M_RD_Change_Widescreen(int choice)
     {
         case 0:
         widescreen_temp--;
-        if (widescreen_temp < 0)
+        if (widescreen_temp < -1)
             widescreen_temp = 2;
         break;
 
         case 1:
         widescreen_temp++;
         if (widescreen_temp > 2)
-            widescreen_temp = 0;
+            widescreen_temp = -1;
         break;
     }
 }
@@ -2673,7 +2675,7 @@ void M_RD_Change_ScreenSize(int choice)
         break;
     }
 
-    if (widescreen)
+    if (widescreen > 0)
     {
         // Wide screen: don't allow unsupported views
         // screenblocks - config file variable
@@ -6587,7 +6589,7 @@ void M_Init (void)
     whichSkull = 0;
     skullAnimCounter = 10;
 
-    if (widescreen)
+    if (widescreen > 0)
     screenSize = screenblocks - 9;
     else
     screenSize = screenblocks - 3;
@@ -6597,7 +6599,7 @@ void M_Init (void)
     messageLastMenuActive = menuactive;
     quickSaveSlot = -1;
 
-    if (widescreen)
+    if (widescreen > 0)
     {
         // [JN] Wide screen: place screen size slider correctly at starup
         if (screenSize < 0)

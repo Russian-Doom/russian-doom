@@ -1446,7 +1446,7 @@ void R_FillBackScreen (void)
     char *name;
 
     // [JN] Function not used in widescreen rendering.
-    if (widescreen)
+    if (widescreen > 0)
     {
         return;
     }

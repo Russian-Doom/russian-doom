@@ -954,15 +954,15 @@ void HU_Drawer(void)
     }
 
     // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if ((widescreen && screenblocks == 9)
-    ||  (widescreen && screenblocks == 9 && automapactive && !automap_overlay))
+    if ((widescreen > 0 && screenblocks == 9)
+    ||  (widescreen > 0 && screenblocks == 9 && automapactive && !automap_overlay))
     {
         V_DrawBlackBorders();
     }
 
     // [JN] Wide screen: side green borders.
-    if ((widescreen && screenblocks == 10) 
-    ||  (widescreen && screenblocks != 9 && automapactive && !automap_overlay))
+    if ((widescreen > 0 && screenblocks == 10) 
+    ||  (widescreen > 0 && screenblocks != 9 && automapactive && !automap_overlay))
     {
         if (gamemode == commercial)                 
         {

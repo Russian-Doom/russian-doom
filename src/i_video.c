@@ -1414,28 +1414,42 @@ void I_InitGraphics(void)
         fullscreen = true;
     }
 
-    // [JN] Set widescreen variables
-    if (widescreen == 1)
+    // [JN] Set aspect ratio variables
+    if (widescreen == -1)
     {
+        // 4:3
+        screenwidth = SCREENWIDTH;
+        origwidth = ORIGWIDTH;
+        wide_delta = 0;
+    }
+    else if (widescreen == 0)
+    {
+        // 5:4
+        screenwidth = SCREENWIDTH;
+        origwidth = ORIGWIDTH;
+        wide_delta = 0;
+        actualheight = SCREENHEIGHT_5_4;
+    }
+    else if (widescreen == 1)
+    {
+        // 16:9
         screenwidth = WIDESCREENWIDTH;
         origwidth = WIDEORIGWIDTH;
         wide_delta = WIDE_DELTA;
     }
     else if (widescreen == 2)
     {
+        // 16:10
         screenwidth = WIDESCREENWIDTH - (42 << hires);
         origwidth = WIDEORIGWIDTH - 42;
         wide_delta = WIDE_DELTA - 21;
     }
-    else
-    {
-        screenwidth = SCREENWIDTH;
-        origwidth = ORIGWIDTH;
-        wide_delta = 0;
-    }
 
     if (aspect_ratio_correct)
     {
+        if (widescreen == 0)
+        actualheight = SCREENHEIGHT_5_4;
+        else
         actualheight = SCREENHEIGHT_4_3;
     }
     else
@@ -1586,6 +1600,9 @@ void I_ReInitGraphics (int reinit)
 	{
 		if (aspect_ratio_correct == 1)
 		{
+ 			if (widescreen == 0)
+ 			actualheight = SCREENHEIGHT_5_4;
+ 			else
 			actualheight = SCREENHEIGHT_4_3;
 		}
 		else
