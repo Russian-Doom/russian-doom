@@ -49,6 +49,12 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - The DOSBox Team
 - SDL2 patch by NY00123
 
+#### Gravis Ultrasound synth by Advanced Gravis Computer Technology
+- GUS patches provided by Simon Howard ([dgguspat.zip](https://www.doomworld.com/idgames/music/dgguspat))
+- Optimized mapping file for Doom by Simon Howard ([gusgonna.zip](https://www.doomworld.com/idgames/sounds/gusgonna))
+- Optimized mapping file for Heretic by Tom Klok ([ht_gus1m.zip](https://www.doomworld.com/idgames/sounds/ht_gus1m))
+- Optimized mapping file for Hexen by Colin Caird
+
 #### [GENMIDI](https://www.doomworld.com/forum/topic/97388-update-hisymaks-genmidi-an-enhanced-genmidi-lump-for-opl-synth/) sound bank for Atari Jaguar TC
 - Hisymak
 
