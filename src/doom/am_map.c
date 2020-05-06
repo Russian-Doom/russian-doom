@@ -210,10 +210,6 @@ static int cheating = 0;
 static int leveljuststarted = 1; // kluge until AM_LevelInit() is called
 
 boolean automapactive = false;
-static int finit_width = SCREENWIDTH;
-static int finit_width_wide = WIDESCREENWIDTH;
-static int finit_height = SCREENHEIGHT - (ST_HEIGHT << hires);
-static int finit_height_jag = SCREENHEIGHT - (ST_HEIGHT_JAG << hires);
 
 // location of window on screen
 static int f_x;
@@ -616,9 +612,12 @@ void AM_LevelInit(void)
     leveljuststarted = 0;
 
     f_x = f_y = 0;
-    f_w = widescreen ? finit_width_wide : finit_width;
-    // [JN] Jaguar: use different height of status bar
-    f_h = gamemission == jaguar ? finit_height_jag : finit_height;
+    f_w = screenwidth;
+    
+    if (gamemission == jaguar)
+    f_h = SCREENHEIGHT - (ST_HEIGHT_JAG << hires);
+    else
+    f_h = SCREENHEIGHT - (ST_HEIGHT << hires);
 
     AM_clearMarks();
 
@@ -1354,7 +1353,13 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
 {
     static int oldyy;
     static int oldyyshifted;
+    static int finit_height; // [JN] For different height between games.
     byte *oldcc = cc;
+
+    if (gamemission == jaguar)
+    finit_height = SCREENHEIGHT - (ST_HEIGHT_JAG << hires);
+    else
+    finit_height = SCREENHEIGHT - (ST_HEIGHT << hires);
 
     if (xx < 32)
         cc += 7 - (xx >> 2);

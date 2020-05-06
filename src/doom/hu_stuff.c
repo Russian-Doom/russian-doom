@@ -870,6 +870,20 @@ void HU_Start(void)
 
 void HU_Drawer(void)
 {
+    static int wborder_delta_l; // [JN] For different width between wide modes.
+    static int wborder_delta_r; // [JN] For different width between wide modes.
+
+    if (widescreen == 1)
+    {
+        wborder_delta_l = 0;
+        wborder_delta_r = 373;
+    }
+    else if (widescreen == 2)
+    {
+        wborder_delta_l = -21;
+        wborder_delta_r = 352;        
+    }
+
     HUlib_drawSText(&w_message);
     HUlib_drawSText_Secret(&w_message_secret);
     HUlib_drawSText_System(&w_message_system);
@@ -952,19 +966,19 @@ void HU_Drawer(void)
     {
         if (gamemode == commercial)                 
         {
-            V_DrawPatch(0, 168, W_CacheLumpName     // left border
-                                (DEH_String("RDWBD2LF"), PU_CACHE));
+            V_DrawPatch(wborder_delta_l, 168,   // left border
+                        W_CacheLumpName(DEH_String("RDWBD2LF"), PU_CACHE));
         
-            V_DrawPatch(373, 168, W_CacheLumpName   // right border
-                                (DEH_String("RDWBD2RT"), PU_CACHE));
+            V_DrawPatch(wborder_delta_r, 168,   // right border
+                        W_CacheLumpName(DEH_String("RDWBD2RT"), PU_CACHE));
         }
         else
         {
-            V_DrawPatch(0, 168, W_CacheLumpName     // left border
-                                (DEH_String("RDWBD1LF"), PU_CACHE));
+            V_DrawPatch(wborder_delta_l, 168,   // left border
+                        W_CacheLumpName(DEH_String("RDWBD1LF"), PU_CACHE));
         
-            V_DrawPatch(373, 168, W_CacheLumpName   // right border
-                                (DEH_String("RDWBD1RT"), PU_CACHE));            
+            V_DrawPatch(wborder_delta_r, 168,   // right border
+                        W_CacheLumpName(DEH_String("RDWBD1RT"), PU_CACHE));
         }
     }
 
