@@ -1646,7 +1646,7 @@ menuitem_t RD_Audio_Menu[]=
     {2, "sound channels",          M_RD_Change_SfxChannels, 's'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {1,"sound system settings...", M_RD_Choose_SoundSystem, 's'},
+    {1,"sound system settings",    M_RD_Choose_SoundSystem, 's'},
     {-1,"",0,'\0'}
 };
 
@@ -1674,7 +1674,7 @@ menuitem_t RD_Audio_Menu_Rus[]=
     {2, "Pderjdst rfyfks",              M_RD_Change_SfxChannels, 'p'}, // Звуковые каналы
     {-1,"",0,'\0'},                                                    //
     {-1,"",0,'\0'},                                                    //
-    {1,"yfcnhjqrb pderjdjq cbcntvs>>>", M_RD_Choose_SoundSystem, 'y'}, // Настройки звуковой системы...
+    {1,"yfcnhjqrb pderjdjq cbcntvs",    M_RD_Choose_SoundSystem, 'y'}, // Настройки звуковой системы...
     {-1,"",0,'\0'}
 };
 
