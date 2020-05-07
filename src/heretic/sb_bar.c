@@ -625,18 +625,31 @@ void SB_Drawer(void)
     static char s[64];
     int f = real_fps;
     char fps [999];
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
+    static int wborder_delta_l; // [JN] For different width between wide modes.
+    static int wborder_delta_r; // [JN] For different width between wide modes.
+
+    if (widescreen == 1)
+    {
+        wborder_delta_l = 0;
+        wborder_delta_r = 344;
+    }
+    else if (widescreen == 2)
+    {
+        wborder_delta_l = -21;
+        wborder_delta_r = 323;        
+    }
 
     // [JN] Draw extended skulls and stone border
-    if ((widescreen && screenblocks <= 10) 
-    ||  (widescreen && automapactive && !automap_overlay))
+    if ((widescreen > 0 && screenblocks <= 10) 
+    ||  (widescreen > 0 && automapactive && !automap_overlay))
     {
-        V_DrawPatch(0, 147, W_CacheLumpName(DEH_String("WDBARLF"), PU_CACHE));
-        V_DrawPatch(344, 147, W_CacheLumpName(DEH_String("WDBARRT"), PU_CACHE));
+        V_DrawPatch(wborder_delta_l, 147, W_CacheLumpName(DEH_String("WDBARLF"), PU_CACHE));
+        V_DrawPatch(wborder_delta_r, 147, W_CacheLumpName(DEH_String("WDBARRT"), PU_CACHE));
     }
 
     // [JN] Draw horns separatelly in non wide screen mode
-    if (!widescreen && screenblocks <= 10 && automapactive && automap_overlay)
+    if (widescreen < 0 && screenblocks <= 10 && automapactive && automap_overlay)
     {
         V_DrawPatch(0 + wide_delta, 148, PatchLTFCTOP);
         V_DrawPatch(290 + wide_delta, 148, PatchRTFCTOP);
@@ -826,8 +839,8 @@ void SB_Drawer(void)
     }
 
     // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if ((widescreen && screenblocks == 9)
-    ||  (widescreen && screenblocks == 9 && automapactive))
+    if ((widescreen > 0 && screenblocks == 9)
+    ||  (widescreen > 0 && screenblocks == 9 && automapactive))
     {
         V_DrawBlackBorders();
     }

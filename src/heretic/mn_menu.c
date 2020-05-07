@@ -485,7 +485,7 @@ static Menu_t OptionsMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t RenderingItems[] = {
-    {ITT_LRFUNC, "WIDESCREEN RENDERING:",     M_RD_Change_Widescreen, 0, MENU_NONE},
+    {ITT_LRFUNC, "DISPLAY ASPECT RATIO:",     M_RD_Change_Widescreen, 0, MENU_NONE},
     {ITT_LRFUNC, "VERTICAL SYNCHRONIZATION:", M_RD_Change_VSync,      0, MENU_NONE},
     {ITT_LRFUNC, "FRAME RATE:",               M_RD_Uncapped,          0, MENU_NONE},
     {ITT_LRFUNC, "FPS COUNTER:",              M_RD_FPScounter,        0, MENU_NONE},
@@ -496,7 +496,7 @@ static MenuItem_t RenderingItems[] = {
 };
 
 static MenuItem_t RenderingItems_Rus[] = {
-    {ITT_LRFUNC, "IBHJRJAJHVFNYSQ HT;BV: D",    M_RD_Change_Widescreen, 0, MENU_NONE}, // ШИРОКОФОРМАТНЫЙ РЕЖИМ
+    {ITT_LRFUNC, "CJJNYJITYBT CNJHJY \'RHFYF:", M_RD_Change_Widescreen, 0, MENU_NONE}, // СООТНОШЕНИЕ СТОРОН ЭКРАНА
     {ITT_LRFUNC, "DTHNBRFKMYFZ CBY[HJYBPFWBZ:", M_RD_Change_VSync,      0, MENU_NONE}, // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
     {ITT_LRFUNC, "RFLHJDFZ XFCNJNF:",           M_RD_Uncapped,          0, MENU_NONE}, // КАДРОВАЯ ЧАСТОТА
     {ITT_LRFUNC, "CXTNXBR RFLHJDJQ XFCNJNS:",   M_RD_FPScounter,        0, MENU_NONE}, // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ
@@ -1722,10 +1722,12 @@ static void DrawRenderingMenu(void)
         MN_DrTextSmallENG(DEH_String("RENDERING"), 36 + wide_delta, 32);
         dp_translation = NULL;
 
-        // Widescreen rendering
-        MN_DrTextSmallENG(DEH_String(widescreen_temp == 1 ? 
-                                     "ON (16:9)" : "OFF (4:3)"),
-                                     193 + wide_delta, 42);
+        // Display aspect ratio
+        MN_DrTextSmallENG(DEH_String(widescreen_temp == 0 ? "5:4" :
+                                     widescreen_temp == 1 ? "16:9" :
+                                     widescreen_temp == 2 ? "16:10" :
+                                                            "4:3"),
+                                     185 + wide_delta, 42);
         // Informative message
         if (widescreen_temp != widescreen)
         {
@@ -1796,10 +1798,12 @@ static void DrawRenderingMenu(void)
         MN_DrTextSmallRUS(DEH_String("HTYLTHBYU"), 36 + wide_delta, 32);
         dp_translation = NULL;
 
-        // Широкоформатный режим
-        MN_DrTextSmallRUS(DEH_String(widescreen_temp == 1 ?
-                                     "DRK (16:9)" : "DSRK (4:3)"),
-                                     212 + wide_delta, 42);
+        // Соотношение сторон экрана
+        MN_DrTextSmallENG(DEH_String(widescreen_temp == 0 ? "5:4" :
+                                     widescreen_temp == 1 ? "16:9" :
+                                     widescreen_temp == 2 ? "16:10" :
+                                                            "4:3"),
+                                     230 + wide_delta, 42);
 
         // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
         if (widescreen_temp != widescreen)
@@ -1869,7 +1873,20 @@ static boolean M_RD_Change_Widescreen(int option)
 {
     // [JN] Widescreen: changing only temp variable here.
     // Initially it is set in MN_Init and stored into config file in M_QuitResponse.
-    widescreen_temp ^= 1;
+    switch(option)
+    {
+        case 0:
+        widescreen_temp--;
+        if (widescreen_temp < -1)
+            widescreen_temp = 2;
+        break;
+
+        case 1:
+        widescreen_temp++;
+        if (widescreen_temp > 2)
+            widescreen_temp = -1;
+        break;
+    }
     return true;
 }
 
@@ -2017,7 +2034,7 @@ static void DrawDisplayMenu(void)
     //
 
     // Screen size
-    if (widescreen)
+    if (widescreen > 0)
     {
         DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 4, screenblocks - 9);
         M_snprintf(num, 4, "%3d", screenblocks);
@@ -2055,7 +2072,7 @@ static boolean M_RD_ScreenSize(int option)
         screenblocks--;
     }
 
-    if (widescreen)
+    if (widescreen > 0)
     {
         // [JN] Wide screen: don't allow unsupported (bordered) views
         // screenblocks - config file variable
@@ -4456,7 +4473,7 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-    if (widescreen)
+    if (widescreen > 0)
     {
         // [JN] Clean up remainings of the wide screen before 
         // drawing a HELP or TITLE screens.

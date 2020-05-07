@@ -377,7 +377,7 @@ void D_PageTicker(void)
 
 void D_PageDrawer(void)
 {
-    if (widescreen)
+    if (widescreen > 0)
     {
         // [JN] Clean up remainings of the wide screen before
         // drawing any new RAW screen.

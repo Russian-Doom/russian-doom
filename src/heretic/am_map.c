@@ -846,7 +846,7 @@ void AM_clearFB(int color)
             mapystart += (finit_height >> hires);
     }
 
-    if (widescreen)
+    if (widescreen == 1)
     {
         // [JN] Use static automap background for automap
         // because of parallax problem.
@@ -861,6 +861,24 @@ void AM_clearFB(int color)
             {
                 memcpy(dest, src + ((y & 127) << 6), WIDESCREENWIDTH & 127);
                 dest += (WIDESCREENWIDTH & 127);
+            }
+        }
+    }
+    if (widescreen == 2)
+    {
+        // [JN] Use static automap background for automap
+        // because of parallax problem.
+        for (y = 0; y < SCREENHEIGHT - 21; y++)
+        {
+            for (x = 0; x < (WIDESCREENWIDTH - (42 << hires)) / 320; x++)
+            {
+                memcpy(dest, src + ((y & 127) << 6), 320);
+                dest += 320;
+            }
+            if ((WIDESCREENWIDTH - (42 << hires)) & 127)
+            {
+                memcpy(dest, src + ((y & 127) << 6), (WIDESCREENWIDTH - (42 << hires)) & 127);
+                dest += ((WIDESCREENWIDTH - (42 << hires)) & 127);
             }
         }
     }
@@ -1689,7 +1707,7 @@ void AM_Drawer(void)
 {
     char *level_name;
     int numepisodes;
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
 
     if (!automapactive)
     {
@@ -1738,7 +1756,7 @@ void AM_Drawer(void)
 
         // [JN] Wide screen: place level name higher in wide screen,
         // do not place it under the status bar gargoyle's horn.
-        if (widescreen)
+        if (widescreen > 0)
         {
             if (english_language)
             {
