@@ -3165,7 +3165,7 @@ void M_RD_Draw_AutomapSettings(void)
 {
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(12, "AUTOMAP OPTIONS");
+        M_WriteTextBigCentered_ENG(12, "AUTOMAP SETTINGS");
 
         // Automap colors (English only names, different placement)
         if (gamemission == jaguar)
