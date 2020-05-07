@@ -904,15 +904,26 @@ void HU_Drawer(void)
     {
         static char str[32], *s;
         int time = leveltime / TICRATE;
+        int extrakills = players[consoleplayer].killcount - totalkills;
 
         HUlib_drawTextLineUncolored(&w_title, false);
 
         // [from-crispy] Show level stats in automap
         if (!vanillaparm && automap_stats)
         {
+            // [JN] Show extra kills only when necessary
+            if (players[consoleplayer].killcount <= totalkills)
+            {
             sprintf(str, english_language ?
                          "Kills: %d/%d" : "dhfub: %d*%d",
                          players[consoleplayer].killcount, totalkills);
+            }
+            else
+            {
+            sprintf(str, english_language ?
+                         "Kills: %d/%d+%d" : "dhfub: %d*%d+%d",
+                         players[consoleplayer].killcount, totalkills, extrakills);                
+            }
             HUlib_clearTextLine(&w_kills);
             s = str;
             while (*s)
