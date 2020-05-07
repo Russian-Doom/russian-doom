@@ -96,7 +96,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
@@ -123,7 +123,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
                 messages_pickup_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
             }
         
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
                                     l->y, l->f[c - l->sc]);
 
             // [JN] Clear color translation if necessary
@@ -156,7 +156,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
             messages_pickup_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
         }
 
-        V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+        V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
                                 l->y, l->f['_' - l->sc]);
 
         // [JN] Clear color translation if necessary
@@ -171,7 +171,7 @@ void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
@@ -186,7 +186,7 @@ void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
             if (x+w > origwidth)
             break;
 
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
                                     l->y, l->f[c - l->sc]);
 
             x += w;
@@ -203,7 +203,7 @@ void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
     // draw the cursor if requested
     if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= origwidth)
     {
-        V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+        V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
                                 l->y, l->f['_' - l->sc]);
     }
 }
@@ -214,7 +214,7 @@ void HUlib_drawTextLineSecret (hu_textline_t *l)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
@@ -241,7 +241,7 @@ void HUlib_drawTextLineSecret (hu_textline_t *l)
                 messages_secret_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
             }
         
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
                                     l->y, l->f[c - l->sc]);
 
             // [JN] Clear color translation if necessary
@@ -266,7 +266,7 @@ void HUlib_drawTextLineSystem (hu_textline_t *l)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
@@ -293,7 +293,7 @@ void HUlib_drawTextLineSystem (hu_textline_t *l)
                 messages_system_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
             }
         
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
                                     l->y, l->f[c - l->sc]);
 
             // [JN] Clear color translation if necessary
@@ -318,7 +318,7 @@ void HUlib_drawTextLineChat (hu_textline_t *l, boolean drawcursor)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
@@ -345,7 +345,7 @@ void HUlib_drawTextLineChat (hu_textline_t *l, boolean drawcursor)
                 messages_chat_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
             }
         
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
                                     l->y, l->f[c - l->sc]);
 
             // [JN] Clear color translation if necessary
@@ -378,7 +378,7 @@ void HUlib_drawTextLineChat (hu_textline_t *l, boolean drawcursor)
             messages_chat_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
         }
 
-        V_DrawShadowedPatchDoom(x + (wide_4_3 ? WIDE_DELTA : 0),
+        V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
                                 l->y, l->f['_' - l->sc]);
 
         // [JN] Clear color translation if necessary
