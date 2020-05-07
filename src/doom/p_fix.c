@@ -814,6 +814,8 @@ linefix_t linefix[] =
     { doom,             4,   1,      96,    0, "",         "",            "",                 56,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     124,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     126,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   1,     156,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   1,     165,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     171,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     172,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   1,     193,    0, "",         "",            "",                 -8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -1121,6 +1123,8 @@ linefix_t linefix[] =
     { doom,             4,   6,     480,    1, "MARBLE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   6,     481,    1, "MARBLE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   6,     482,    1, "MARBLE1",  "",            "",            DEFAULT,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   6,     565,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom,             4,   6,     566,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   6,     814,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   6,     817,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom,             4,   6,     819,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3112,6 +3116,9 @@ linefix_t linefix[] =
     { pack_tnt,         1,   9,    1235,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,   9,    1240,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,   9,    1282,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,   9,    2098,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,   9,    2100,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,   9,    2163,    0, "",         "",            "",                  8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { pack_tnt,         1,  10,       9,    0, "",         "",            "",                  8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  10,      13,    0, "",         "",            "",                  8,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3138,6 +3145,8 @@ linefix_t linefix[] =
     { pack_tnt,         1,  11,    1195,    0, "",         "",            "",                -18,       -80, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  11,    1219,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  11,    1228,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTPEGTOP,                      DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  11,    1247,    0, "",         "",            "",                 32,        48, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  11,    1250,    0, "",         "",            "",                 -8,        48, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  11,    1251,    0, "",         "",            "",            DEFAULT,   DEFAULT, (ML_DONTPEGTOP | ML_DONTPEGBOTTOM), DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  11,    1600,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  11,    1601,    0, "",         "",            "",                  4,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3192,6 +3201,7 @@ linefix_t linefix[] =
     { pack_tnt,         1,  13,    1557,    0, "",         "",            "",            DEFAULT,        32, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
     { pack_tnt,         1,  15,     380,    0, "",         "",            "",                  6,         3, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  15,     503,    0, "",         "",            "",                -24,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  15,     908,    0, "METAL7",   "",            "METAL6",           12,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  15,     909,    0, "METAL7",   "",            "METAL6",           32,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  15,     910,    0, "METAL7",   "",            "METAL6",           12,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
@@ -3314,6 +3324,13 @@ linefix_t linefix[] =
     { pack_tnt,         1,  31,    1681,    0, "",         "",            "",            DEFAULT,        64, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  31,    1682,    0, "",         "",            "",            DEFAULT,        64, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
     { pack_tnt,         1,  31,    1683,    0, "",         "",            "",            DEFAULT,        64, ML_DONTPEGBOTTOM,                   DEFAULT,                                    DEFAULT },
+
+    { pack_tnt,         1,  32,     984,    0, "",         "",            "",            DEFAULT,        16, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  32,    1026,    0, "",         "",            "",            DEFAULT,        16, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  32,    1215,    0, "",         "",            "",                  3,         8, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  32,    1218,    0, "",         "",            "",            DEFAULT,        56, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  32,    1223,    0, "",         "",            "",                 72,        56, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { pack_tnt,         1,  32,    1281,    0, "",         "",            "",                 59,         8, DEFAULT,                            DEFAULT,                                    DEFAULT },
 
    // mission,    episode, map, linedef, side, toptexture, middletexture, bottomtexture,  offset, rowoffset, flags,                              special,                                    tag
 
