@@ -864,7 +864,7 @@ void AM_clearFB(int color)
             }
         }
     }
-    if (widescreen == 2)
+    else if (widescreen == 2)
     {
         // [JN] Use static automap background for automap
         // because of parallax problem.
