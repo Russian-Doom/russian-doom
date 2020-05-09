@@ -1732,6 +1732,17 @@ void D_SetGameDescription(void)
         DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIR");
     }
 
+    // [JN] Check if we have replaced skill level graphics.
+    // If found, replace "Ultra-Nightmare" patch with empty
+    // placeholder for keeping menu style in one fashion.
+    if (W_CheckMultipleLumps("M_JKILL") > 1
+    ||  W_CheckMultipleLumps("M_ROUGH") > 1
+    ||  W_CheckMultipleLumps("M_HURT") > 1
+    ||  W_CheckMultipleLumps("M_ULTRA") > 1)
+    {
+        DEH_AddStringReplacement ("M_UNMARE",   "TNT1A0");
+    }
+
     // [JN] Check for modified player's face. If exist, 
     // don't use extra faces. Note that Freedoom should 
     // not have extra faces, as well as vanilla game mode 

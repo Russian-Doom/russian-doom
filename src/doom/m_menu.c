@@ -858,7 +858,7 @@ menu_t  MainDef =
     NULL,
     MainMenu,
     M_DrawMainMenu,
-    97,70,
+    97,64,
     0
 };
 
@@ -882,7 +882,7 @@ menu_t  MainDef_Rus =
     NULL,
     MainMenu_Rus,
     M_DrawMainMenu,
-    97,70,
+    97,64,
     0
 };
 
