@@ -656,7 +656,7 @@ void SB_Drawer(void)
     }
 
     // [JN] Draw local time widget
-    if (local_time)
+    if (local_time && !vanillaparm)
     {
 
         strftime(s, sizeof(s), 
@@ -674,7 +674,7 @@ void SB_Drawer(void)
     }
 
     // [JN] Draw FPS widget
-    if (show_fps)
+    if (show_fps && !vanillaparm)
     {
         sprintf (fps, "%d", f);
         MN_DrTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 23);
