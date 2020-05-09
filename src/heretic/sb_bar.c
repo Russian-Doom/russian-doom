@@ -507,7 +507,6 @@ static void DrawSoundInfo(void)
     int x;
     int y;
     int xPos[7] = { 1, 75, 112, 156, 200, 230, 260 };
-    extern int snd_Channels;
 
     if (leveltime & 16)
     {
@@ -536,19 +535,16 @@ static void DrawSoundInfo(void)
     MN_DrTextA(DEH_String("ID"), xPos[x++] + wide_delta, 30);
     MN_DrTextA(DEH_String("PRI"), xPos[x++] + wide_delta, 30);
     MN_DrTextA(DEH_String("DIST"), xPos[x++] + wide_delta, 30);
-    for (i = 0; i < s.channelCount; i++)
+    // [JN] "i < s.channelCount" replaced with "8".
+    // Don't draw info for more than 8 channels.
+    for (i = 0; i < 8; i++)
     {
         c = &s.chan[i];
         x = 0;
         y = 40 + i * 10;
         if (c->mo == NULL)
         {                       // Channel is unused
-            // [JN] Draw only for 8 channes max, otherwise lines will be
-            // drawing beneath status bar and game will crash.
-            if (snd_Channels <= 8)
-            {
-                MN_DrTextA(DEH_String("------"), xPos[0] + wide_delta, y);
-            }
+            MN_DrTextA(DEH_String("------"), xPos[0] + wide_delta, y);
             continue;
         }
         M_snprintf(text, sizeof(text), "%s", c->name);
