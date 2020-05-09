@@ -86,6 +86,8 @@ typedef enum
     MENU_CONTROLS,
     MENU_GAMEPLAY1,
     MENU_GAMEPLAY2,
+    MENU_OPTIONS_VANILLA,
+    MENU_OPTIONS2_VANILLA,
     MENU_NONE
 } MenuType_t;
 
@@ -129,7 +131,7 @@ static void DrawFilesMenu(void);
 static void MN_DrawInfo(void);
 static void DrawLoadMenu(void);
 static void DrawSaveMenu(void);
-// static void DrawSlider(Menu_t * menu, int item, int width, int slot);
+static void DrawSlider(Menu_t * menu, int item, int width, int slot);
 static void DrawSliderSmall(Menu_t * menu, int item, int width, int slot);
 void MN_LoadSlotText(void);
 
@@ -208,6 +210,10 @@ static boolean M_RD_CrossHairHealth(int option);
 static boolean M_RD_CrossHairScale(int option);
 static boolean M_RD_FlipLevels(int option);
 static boolean M_RD_NoDemos(int option);
+
+// Vanilla Options menu
+static void DrawOptionsMenu_Vanilla(void);
+static void DrawOptions2Menu_Vanilla(void);
 
 // End game
 static boolean M_RD_EndGame(int option);
@@ -828,6 +834,82 @@ static Menu_t Gameplay2Menu_Rus = {
     MENU_OPTIONS
 };
 
+// -----------------------------------------------------------------------------
+// Vanilla options menu
+// -----------------------------------------------------------------------------
+
+static MenuItem_t OptionsItems_Vanilla[] = {
+    {ITT_EFUNC,   "END GAME",          M_RD_EndGame,     0, MENU_NONE},
+    {ITT_EFUNC,   "MESSAGES : ",       SCMessages,       0, MENU_NONE},
+    {ITT_LRFUNC,  "MOUSE SENSITIVITY", M_RD_Sensitivity, 0, MENU_NONE},
+    {ITT_EMPTY,   NULL,                NULL,             0, MENU_NONE},
+    {ITT_SETMENU, "MORE...",           NULL,             0, MENU_OPTIONS2_VANILLA}
+};
+
+static MenuItem_t OptionsItems_Rus_Vanilla[] = {
+    {ITT_EFUNC,   "PFRJYXBNM BUHE",   M_RD_EndGame,     0, MENU_NONE},
+    {ITT_EFUNC,   "CJJ,OTYBZ : ",     SCMessages,       0, MENU_NONE},
+    {ITT_LRFUNC,  "CRJHJCNM VSIB",    M_RD_Sensitivity, 0, MENU_NONE},
+    {ITT_EMPTY,   NULL,               NULL,             0, MENU_NONE},
+    {ITT_SETMENU, "LJGJKYBNTKMYJ>>>", NULL,             0, MENU_OPTIONS2_VANILLA}
+};
+
+static Menu_t OptionsMenu_Vanilla = {
+    88, 30,
+    DrawOptionsMenu_Vanilla,
+    5, OptionsItems_Vanilla,
+    0,
+    MENU_MAIN
+};
+
+static Menu_t OptionsMenu_Rus_Vanilla = {
+    88, 30,
+    DrawOptionsMenu_Vanilla,
+    5, OptionsItems_Rus_Vanilla,
+    0,
+    MENU_MAIN
+};
+
+// -----------------------------------------------------------------------------
+// Vanilla options menu (more...)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Options2Items_Vanilla[] = {
+    {ITT_LRFUNC, "SCREEN SIZE",  M_RD_ScreenSize, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,           NULL,            0, MENU_NONE},
+    {ITT_LRFUNC, "SFX VOLUME",   M_RD_SfxVolume,  0, MENU_NONE},
+    {ITT_EMPTY,  NULL,           NULL,            0, MENU_NONE},
+    {ITT_LRFUNC, "MUSIC VOLUME", M_RD_MusVolume,  0, MENU_NONE},
+    {ITT_EMPTY,  NULL,           NULL,            0, MENU_NONE}
+};
+
+static MenuItem_t Options2Items_Rus_Vanilla[] = {
+    {ITT_LRFUNC, "HFPVTH 'RHFYF",   M_RD_ScreenSize, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,               NULL,           0, MENU_NONE},
+    {ITT_LRFUNC, "UHJVRJCNM PDERF",  M_RD_SfxVolume, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,               NULL,           0, MENU_NONE},
+    {ITT_LRFUNC, "UHJVRJCNM VEPSRB", M_RD_MusVolume, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,               NULL,           0, MENU_NONE}
+};
+
+static Menu_t Options2Menu_Vanilla = {
+    90, 20,
+    DrawOptions2Menu_Vanilla,
+    6, Options2Items_Vanilla,
+    0,
+    MENU_OPTIONS_VANILLA
+};
+
+static Menu_t Options2Menu_Rus_Vanilla = {
+    90, 20,
+    DrawOptions2Menu_Vanilla,
+    6, Options2Items_Rus_Vanilla,
+    0,
+    MENU_OPTIONS_VANILLA
+};
+
+// -----------------------------------------------------------------------------
+
 static Menu_t *Menus[] = {
     &MainMenu,
     &EpisodeMenu,
@@ -843,7 +925,9 @@ static Menu_t *Menus[] = {
     &SoundSysMenu,
     &ControlsMenu,
     &Gameplay1Menu,
-    &Gameplay2Menu
+    &Gameplay2Menu,
+    &OptionsMenu_Vanilla,
+    &Options2Menu_Vanilla
 };
 
 static Menu_t *Menus_Rus[] = {
@@ -861,7 +945,9 @@ static Menu_t *Menus_Rus[] = {
     &SoundSysMenu_Rus,
     &ControlsMenu_Rus,
     &Gameplay1Menu_Rus,
-    &Gameplay2Menu_Rus
+    &Gameplay2Menu_Rus,
+    &OptionsMenu_Rus_Vanilla,
+    &Options2Menu_Rus_Vanilla
 };
 
 static char *GammaText[] = {
@@ -1445,7 +1531,9 @@ void MN_Drawer(void)
                     ||  CurrentMenu == &EpisodeMenu
                     ||  CurrentMenu == &FilesMenu
                     ||  CurrentMenu == &SkillMenu
-                    ||  CurrentMenu == &OptionsMenu)
+                    ||  CurrentMenu == &OptionsMenu
+                    ||  CurrentMenu == &OptionsMenu_Vanilla
+                    ||  CurrentMenu == &Options2Menu_Vanilla)
                     {
                         MN_DrTextBigENG(DEH_String(item->text), x + wide_delta, y);
                     }
@@ -1460,7 +1548,9 @@ void MN_Drawer(void)
                     ||  CurrentMenu == &EpisodeMenu_Rus
                     ||  CurrentMenu == &FilesMenu_Rus
                     ||  CurrentMenu == &SkillMenu_Rus
-                    ||  CurrentMenu == &OptionsMenu_Rus)
+                    ||  CurrentMenu == &OptionsMenu_Rus
+                    ||  CurrentMenu == &OptionsMenu_Rus_Vanilla
+                    ||  CurrentMenu == &Options2Menu_Rus_Vanilla)
                     {
                         MN_DrTextBigRUS(DEH_String(item->text), x + wide_delta, y);
                     }
@@ -1480,7 +1570,11 @@ void MN_Drawer(void)
             ||  CurrentMenu == &EpisodeMenu_Rus
             ||  CurrentMenu == &FilesMenu_Rus
             ||  CurrentMenu == &SkillMenu_Rus
-            ||  CurrentMenu == &OptionsMenu_Rus)
+            ||  CurrentMenu == &OptionsMenu_Rus
+            ||  CurrentMenu == &OptionsMenu_Vanilla
+            ||  CurrentMenu == &OptionsMenu_Rus_Vanilla
+            ||  CurrentMenu == &Options2Menu_Vanilla
+            ||  CurrentMenu == &Options2Menu_Rus_Vanilla)
             {
                 y += ITEM_HEIGHT;
             }
@@ -1506,7 +1600,11 @@ void MN_Drawer(void)
         ||  CurrentMenu == &SkillMenu_Rus
         ||  CurrentMenu == &LoadMenu_Rus
         ||  CurrentMenu == &SaveMenu_Rus
-        ||  CurrentMenu == &OptionsMenu_Rus)        
+        ||  CurrentMenu == &OptionsMenu_Rus
+        ||  CurrentMenu == &OptionsMenu_Vanilla
+        ||  CurrentMenu == &OptionsMenu_Rus_Vanilla
+        ||  CurrentMenu == &Options2Menu_Vanilla
+        ||  CurrentMenu == &Options2Menu_Rus_Vanilla)
         {
             y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT) + SELECTOR_YOFFSET;
             selName = DEH_String(MenuTime & 16 ? "M_SLCTR1" : "M_SLCTR2");
@@ -3372,6 +3470,37 @@ static boolean M_RD_NoDemos(int option)
 }
 
 //---------------------------------------------------------------------------
+// [JN] Vanilla Options menu 1 and 2
+//---------------------------------------------------------------------------
+
+static void DrawOptionsMenu_Vanilla(void)
+{
+    if (english_language)
+    {
+        MN_DrTextB(DEH_String(messageson ? "ON" : "OFF"), 196 + wide_delta, 50);
+    }
+    else
+    {
+        MN_DrTextBigRUS(DEH_String(messageson ? "DRK" : "DSRK"), 223 + wide_delta, 50);
+    }
+    DrawSlider(&OptionsMenu_Vanilla, 3, 10, mouseSensitivity);
+}
+
+static void DrawOptions2Menu_Vanilla(void)
+{
+    if (widescreen > 0)
+    {
+        DrawSlider(&Options2Menu_Vanilla, 1, 4, screenblocks - 9);
+    }
+    else
+    {
+        DrawSlider(&Options2Menu_Vanilla, 1, 10, screenblocks - 3);
+    }
+    DrawSlider(&Options2Menu_Vanilla, 3, 16, snd_MaxVolume);
+    DrawSlider(&Options2Menu_Vanilla, 5, 16, snd_MusicVolume);
+}
+
+//---------------------------------------------------------------------------
 // M_RD_EndGame
 //---------------------------------------------------------------------------
 
@@ -4041,9 +4170,19 @@ boolean MN_Responder(event_t * event)
             menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
-            CurrentMenu = english_language ? 
-                          &SoundMenu :
-                          &SoundMenu_Rus;
+            // [JN] Force to use vanilla options 2 menu in -vanilla game mode.
+            if (vanillaparm)
+            {
+                CurrentMenu = english_language ? 
+                            &Options2Menu_Vanilla :
+                            &Options2Menu_Rus_Vanilla;
+            }
+            else
+            {
+                CurrentMenu = english_language ? 
+                            &SoundMenu :
+                            &SoundMenu_Rus;
+            }
             CurrentItPos = CurrentMenu->oldItPos;
             if (!netgame && !demoplayback)
             {
@@ -4523,14 +4662,22 @@ static void SetMenu(MenuType_t menu)
     CurrentMenu->oldItPos = CurrentItPos;
     CurrentMenu = english_language ? Menus[menu] : Menus_Rus[menu];
     CurrentItPos = CurrentMenu->oldItPos;
+
+    // [JN] Force to use vanilla options menu in -vanilla game mode.
+    if (vanillaparm)
+    {
+        if (CurrentMenu == &OptionsMenu || CurrentMenu == &OptionsMenu_Rus)
+        {
+            CurrentMenu = english_language ? &OptionsMenu_Vanilla :
+                                             &OptionsMenu_Rus_Vanilla;
+        }
+    }
 }
 
 //---------------------------------------------------------------------------
 //
 // PROC DrawSlider
-// [JN] Not used for now
 //---------------------------------------------------------------------------
-/*
 static void DrawSlider(Menu_t * menu, int item, int width, int slot)
 {
     int x;
@@ -4540,36 +4687,41 @@ static void DrawSlider(Menu_t * menu, int item, int width, int slot)
 
     x = menu->x + 24;
     y = menu->y + 2 + (item * ITEM_HEIGHT);
-    V_DrawShadowedPatchRaven(x - 32, y, W_CacheLumpName(DEH_String("M_SLDLT"), PU_CACHE));
+    V_DrawShadowedPatchRaven(x - 32 + wide_delta, y,
+                             W_CacheLumpName(DEH_String("M_SLDLT"), PU_CACHE));
     for (x2 = x, count = width; count--; x2 += 8)
     {
-        V_DrawShadowedPatchRaven(x2, y, W_CacheLumpName(DEH_String(count & 1 ? "M_SLDMD1"
-                                           : "M_SLDMD2"), PU_CACHE));
+        V_DrawShadowedPatchRaven(x2 + wide_delta, y,
+                                 W_CacheLumpName(DEH_String(count & 1 ? 
+                                                           "M_SLDMD1" : "M_SLDMD2"), PU_CACHE));
     }
-    V_DrawShadowedPatchRaven(x2, y, W_CacheLumpName(DEH_String("M_SLDRT"), PU_CACHE));
+    V_DrawShadowedPatchRaven(x2 + wide_delta, y,
+                             W_CacheLumpName(DEH_String("M_SLDRT"), PU_CACHE));
 
     // [JN] Colorizing slider gem...
     // Most left position (dull green gem)
     if (slot == 0)
     {
         dp_translation = cr[CR_GREEN2GRAY_HERETIC];
-        V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
+        V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7,
+                    W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
         dp_translation = NULL;
     }
     // [JN] Most right position that is "out of bounds" (red gem).
-    // Only the mouse sensitivity menu requires this trick.
-    else if ((CurrentMenu == &ControlsMenu || CurrentMenu == &ControlsMenu_Rus) && slot > 11)
+    // Only mouse sensivity in vanilla options menu requires this trick.
+    else if ((CurrentMenu == &OptionsMenu_Vanilla || CurrentMenu == &OptionsMenu_Rus_Vanilla) && slot > 9)
     {
-        slot = 11;
+        slot = 9;
         dp_translation = cr[CR_GREEN2RED_HERETIC];
-        V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
+        V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7,
+                    W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
         dp_translation = NULL;
     }
     // [JN] Standard function (green gem)
     else
-    V_DrawPatch(x + 4 + slot * 8, y + 7, W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
+    V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7,
+                W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
 }
-*/
 
 //---------------------------------------------------------------------------
 //
