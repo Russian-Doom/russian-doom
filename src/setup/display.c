@@ -40,6 +40,24 @@ typedef struct
     int w, h;
 } window_size_t;
 
+typedef enum
+{
+    ASPECT_4_3,
+    ASPECT_5_4,
+    ASPECT_16_9,
+    ASPECT_16_10,
+    NUM_ASPECTS,
+} aspect_t;
+
+// [JN] List of available aspect ratios
+static char *aspect_strings[] =
+{
+    "4:3",
+    "5:4",
+    "16:9",
+    "16:10"
+};
+
 // List of aspect ratio-corrected window sizes:
 static window_size_t window_sizes_scaled[] =
 {
@@ -55,7 +73,7 @@ static window_size_t window_sizes_scaled[] =
 };
 
 // [JN] List of widescreen window sizes:
-static window_size_t window_sizes_wide[] =
+static window_size_t window_sizes_16_9[] =
 {
     { 852,  480 },
     { 960,  540 },
@@ -74,7 +92,7 @@ static int vga_porch_flash = 0;
 static int integer_scaling = 0;
 static int force_software_renderer = 0;
 static int fullscreen = 1;
-static int widescreen = 1;
+static int aspect_ratio = 0;
 static int fullscreen_width = 0, fullscreen_height = 0;
 static int window_title_short = 1;
 static int window_width = 640, window_height = 480;
@@ -155,9 +173,9 @@ static void GenerateSizesTable(TXT_UNCAST_ARG(widget),
     int i;
 
     // Pick which window sizes list to use
-    if (widescreen)
+    if (aspect_ratio == 2)
     {
-        sizes = window_sizes_wide;
+        sizes = window_sizes_16_9;
     }
     else
     {
@@ -216,12 +234,6 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
                         "Отображать рамку окна",
                         &window_border),
         
-        TXT_If(!widescreen,
-        TXT_NewCheckBox(english_language ?
-                        "Fix aspect ratio" :
-                        "Фиксировать соотношение сторон",
-                        &aspect_ratio_correct)),
-
         TXT_If(gamemission == heretic || gamemission == hexen,
         TXT_NewCheckBox(english_language ?
                         "Graphical startup" :
@@ -254,6 +266,32 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
                         TXT_NewWindowSelectAction_Rus(window));
 }
 
+static txt_dropdown_list_t *AspectRatioSelector(void)
+{
+    txt_dropdown_list_t *result;
+
+    if (aspect_ratio == 0)
+    {
+        aspect_ratio = ASPECT_4_3;
+    }
+    else if (aspect_ratio == 1)
+    {
+        aspect_ratio = ASPECT_5_4;
+    }
+    else if (aspect_ratio == 2)
+    {
+        aspect_ratio = ASPECT_16_9;
+    }
+    else if (aspect_ratio == 3)
+    {
+        aspect_ratio = ASPECT_16_10;
+    }
+
+    result = TXT_NewDropdownList(&aspect_ratio, aspect_strings, 4);
+
+    return result;
+}
+
 void ConfigDisplay(void)
 {
     txt_window_t *window;
@@ -280,11 +318,15 @@ void ConfigDisplay(void)
                      "Rendering" :
                      "Рендеринг"),
 
+        TXT_NewHorizBox(TXT_NewStrut(4, 0),
+                        TXT_NewLabel(english_language ?
+                        "Display aspect ratio: ":
+                        "Соотношение сторон экрана: "),
+                        AspectRatioSelector(),
+                        NULL),
+
         ar_checkbox = 
-        TXT_NewCheckBox(english_language ?
-                        "Widescreen rendering" :
-                        "Щирокоформатный режим",
-                        &widescreen),
+
         TXT_NewCheckBox(english_language ?
                         "Vertical sync" :
                         "Вертикальна€ синхронизаци€",
@@ -396,7 +438,7 @@ void BindDisplayVariables(void)
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
     M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("fullscreen",                &fullscreen);
-    M_BindIntVariable("widescreen",                &widescreen);
+    M_BindIntVariable("aspect_ratio",              &aspect_ratio);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);
     M_BindIntVariable("fullscreen_height",         &fullscreen_height);
     M_BindIntVariable("window_border",             &window_border);
