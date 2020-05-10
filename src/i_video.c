@@ -240,6 +240,8 @@ boolean volume_needs_update = false;
 // Window resize state.
 
 static boolean need_resize = false;
+static unsigned int last_resize_time;
+static int resize_delay = 35; // [JN] Redused from 500 to 35
 
 // Gamma correction level to use
 // [JN] Set default gamma to improved level 2.0.
@@ -369,18 +371,7 @@ static void HandleWindowEvent(SDL_WindowEvent *event)
 
         case SDL_WINDOWEVENT_RESIZED:
             need_resize = true;
-            // When the window is resized (we're not in fullscreen mode),
-            // save the new window size.
-            flags = SDL_GetWindowFlags(screen);
-            if ((flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == 0)
-            {
-                SDL_GetWindowSize(screen, &window_width, &window_height);
-
-                // Adjust the window by resizing again so that the window
-                // is the right aspect ratio.
-                AdjustWindowSize();
-                SDL_SetWindowSize(screen, window_width, window_height);
-            }
+            last_resize_time = SDL_GetTicks();
             break;
 
         // Don't render the screen when the window is minimized:
@@ -707,9 +698,29 @@ void I_FinishUpdate (void)
 
     if (need_resize)
     {
-        CreateUpscaledTexture(false);
-        need_resize = false;
-        palette_to_set = true;
+        if (SDL_GetTicks() > last_resize_time + resize_delay)
+        {
+            int flags;
+            // When the window is resized (we're not in fullscreen mode),
+            // save the new window size.
+            flags = SDL_GetWindowFlags(screen);
+            if ((flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == 0)
+            {
+                SDL_GetWindowSize(screen, &window_width, &window_height);
+
+                // Adjust the window by resizing again so that the window
+                // is the right aspect ratio.
+                AdjustWindowSize();
+                SDL_SetWindowSize(screen, window_width, window_height);
+            }
+            CreateUpscaledTexture(false);
+            need_resize = false;
+            palette_to_set = true;
+        }
+        else
+        {
+            return;
+        }
     }
 
     UpdateGrab();
@@ -1719,6 +1730,7 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
     M_BindIntVariable("integer_scaling",           &integer_scaling);
     M_BindIntVariable("startup_delay",             &startup_delay);
+    M_BindIntVariable("resize_delay",              &resize_delay);
     M_BindIntVariable("fullscreen_width",          &fullscreen_width);
     M_BindIntVariable("fullscreen_height",         &fullscreen_height);
     M_BindIntVariable("force_software_renderer",   &force_software_renderer);

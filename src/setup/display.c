@@ -80,6 +80,7 @@ static int window_title_short = 1;
 static int window_width = 640, window_height = 480;
 static int window_border = 1;
 static int startup_delay = 35;  // [JN] Redused from 1000 to 35
+static int resize_delay = 35;   // [JN] Redused from 500 to 35
 static int usegamma = 4; // [JN] Set default gamma to improved level 2.0.
 
 int uncapped_fps = 1;
@@ -403,6 +404,7 @@ void BindDisplayVariables(void)
     M_BindIntVariable("window_width",              &window_width);
     M_BindIntVariable("window_height",             &window_height);
     M_BindIntVariable("startup_delay",             &startup_delay);
+    M_BindIntVariable("resize_delay",              &resize_delay);
     M_BindStringVariable("video_driver",           &video_driver);
     M_BindStringVariable("window_position",        &window_position);
     M_BindIntVariable("usegamma",                  &usegamma);

@@ -679,6 +679,7 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(startup_delay),
+    CONFIG_VARIABLE_INT(resize_delay),
 
     //!
     // [JN] Defines short or long window title composition.
