@@ -151,10 +151,10 @@ int fullscreen_width = 0, fullscreen_height = 0;
 
 int fullscreen = true;
 
-// [JN] Widescreen rendering variables.
+// [JN] Aspect ratio variables.
 
-int widescreen = 1;
-int widescreen_temp; // used for in-game toggling
+int aspect_ratio = 0;
+int aspect_ratio_temp; // used for in-game toggling
 int wide_delta;
 int screenwidth;
 int origwidth;
@@ -795,15 +795,15 @@ void I_FinishUpdate (void)
     // Blit from the paletted 8-bit screen buffer to the intermediate
     // 32-bit RGBA buffer that we can load into the texture.
 
-    if (widescreen == -1 || widescreen == 0)
+    if (aspect_ratio == 0 || aspect_ratio == 1)
     {
         SDL_LowerBlit(screenbuffer, &blit_rect, rgbabuffer, &blit_rect);
     }
-    else if (widescreen == 1)
+    else if (aspect_ratio == 2)
     {
         SDL_LowerBlit(screenbuffer, &w_blit_rect_16_9, rgbabuffer, &w_blit_rect_16_9);
     }
-    else if (widescreen == 2)
+    else if (aspect_ratio == 3)
     {
         SDL_LowerBlit(screenbuffer, &w_blit_rect_16_10, rgbabuffer, &w_blit_rect_16_10);
     }
@@ -1437,14 +1437,14 @@ void I_InitGraphics(void)
     }
 
     // [JN] Set aspect ratio variables
-    if (widescreen == -1)
+    if (aspect_ratio == 0)
     {
         // 4:3
         screenwidth = SCREENWIDTH;
         origwidth = ORIGWIDTH;
         wide_delta = 0;
     }
-    else if (widescreen == 0)
+    else if (aspect_ratio == 1)
     {
         // 5:4
         screenwidth = SCREENWIDTH;
@@ -1452,14 +1452,14 @@ void I_InitGraphics(void)
         wide_delta = 0;
         actualheight = SCREENHEIGHT_5_4;
     }
-    else if (widescreen == 1)
+    else if (aspect_ratio == 2)
     {
         // 16:9
         screenwidth = WIDESCREENWIDTH;
         origwidth = WIDEORIGWIDTH;
         wide_delta = WIDE_DELTA;
     }
-    else if (widescreen == 2)
+    else if (aspect_ratio == 3)
     {
         // 16:10
         screenwidth = WIDESCREENWIDTH - (42 << hires);
@@ -1469,7 +1469,7 @@ void I_InitGraphics(void)
 
     if (aspect_ratio_correct)
     {
-        if (widescreen == 0)
+        if (aspect_ratio == 1)
         actualheight = SCREENHEIGHT_5_4;
         else
         actualheight = SCREENHEIGHT_4_3;
@@ -1622,7 +1622,7 @@ void I_ReInitGraphics (int reinit)
 	{
 		if (aspect_ratio_correct == 1)
 		{
- 			if (widescreen == 0)
+ 			if (aspect_ratio == 1)
  			actualheight = SCREENHEIGHT_5_4;
  			else
 			actualheight = SCREENHEIGHT_4_3;
@@ -1721,7 +1721,7 @@ void I_BindVideoVariables(void)
 {
     M_BindIntVariable("use_mouse",                 &usemouse);
     M_BindIntVariable("fullscreen",                &fullscreen);
-    M_BindIntVariable("widescreen",                &widescreen);
+    M_BindIntVariable("aspect_ratio",              &aspect_ratio);
     M_BindIntVariable("video_display",             &video_display);
     M_BindIntVariable("vsync",                     &vsync);
     M_BindIntVariable("show_fps",                  &show_fps);

@@ -41,18 +41,18 @@
 #define MAXHEIGHT       (ORIGHEIGHT << 1)     // [crispy]
 
 // [JN] Aspect ratio macroses and variables. Available ratios are:
-// widescreen = -1 (4:3)
-// widescreen =  0 (5:4)
-// widescreen =  1 (16:9)
-// widescreen =  2 (16:10)
+// aspect_ratio = 0 (4:3)
+// aspect_ratio = 1 (5:4)
+// aspect_ratio = 2 (16:9)
+// aspect_ratio = 3 (16:10)
 
 #define WIDEORIGWIDTH   426
 #define WIDESCREENWIDTH (426 << hires)
 #define WIDE_DELTA      53
 #define SCREENHEIGHT_5_4 (256 << hires)
 
-extern int widescreen;
-extern int widescreen_temp;
+extern int aspect_ratio;
+extern int aspect_ratio_temp;
 extern int wide_delta;
 extern int screenwidth;
 extern int origwidth;

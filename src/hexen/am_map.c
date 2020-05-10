@@ -750,7 +750,7 @@ void AM_clearFB(int color)
     }
 
     //blit the automap background to the screen.
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         for (y = 0; y < SCREENHEIGHT-21; y++)
         {
@@ -1452,7 +1452,7 @@ void AM_Drawer(void)
 //  AM_drawMarks();
 //      if(gameskill == sk_baby) AM_drawkeys();
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         MN_DrTextA(P_GetMapName(gamemap), 74, 142);
     }
@@ -1570,7 +1570,7 @@ static void DrawWorldTimer(void)
     char timeBuffer[15];
     // char dayBuffer[20];
     char skill[15];
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = aspect_ratio >= 2 && screenblocks == 9;
 
     worldTimer = players[consoleplayer].worldTimer;
 

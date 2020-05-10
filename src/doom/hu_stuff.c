@@ -732,7 +732,13 @@ void HU_Start(void)
 {
     int     i;
     char*   s;
-    boolean wide = widescreen && screenblocks > 9;
+    boolean wide = aspect_ratio >= 2 && screenblocks > 9;
+    static int widget_delta;
+
+    if (aspect_ratio >= 2)
+    widget_delta = wide_delta * 2;
+    else
+    widget_delta = 0;
 
     if (headsupactive)
     HU_Stop();
@@ -766,11 +772,11 @@ void HU_Start(void)
                      local_time == 2 ? 270 :
                      local_time == 3 ? 294 :
                      local_time == 4 ? 282 :
-                     0) + (wide ? WIDE_DELTA*2 : 0), 10,
+                     0) + (wide ? widget_delta : 0), 10,
                      HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
 
     // [JN] Create the FPS widget
-    HUlib_initSText(&w_message_fps, 278 + (wide ? WIDE_DELTA*2 : 0), 20, 
+    HUlib_initSText(&w_message_fps, 278 + (wide ? widget_delta : 0), 20, 
                     HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 
     // create the map title widget
@@ -873,12 +879,12 @@ void HU_Drawer(void)
     static int wborder_delta_l; // [JN] For different width between wide modes.
     static int wborder_delta_r; // [JN] For different width between wide modes.
 
-    if (widescreen == 1)
+    if (aspect_ratio == 2)
     {
         wborder_delta_l = 0;
         wborder_delta_r = 373;
     }
-    else if (widescreen == 2)
+    else if (aspect_ratio == 3)
     {
         wborder_delta_l = -21;
         wborder_delta_r = 352;        
@@ -965,15 +971,15 @@ void HU_Drawer(void)
     }
 
     // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if ((widescreen > 0 && screenblocks == 9)
-    ||  (widescreen > 0 && screenblocks == 9 && automapactive && !automap_overlay))
+    if ((aspect_ratio >= 2 && screenblocks == 9)
+    ||  (aspect_ratio >= 2 && screenblocks == 9 && automapactive && !automap_overlay))
     {
         V_DrawBlackBorders();
     }
 
     // [JN] Wide screen: side green borders.
-    if ((widescreen > 0 && screenblocks == 10) 
-    ||  (widescreen > 0 && screenblocks != 9 && automapactive && !automap_overlay))
+    if ((aspect_ratio >= 2 && screenblocks == 10) 
+    ||  (aspect_ratio >= 2 && screenblocks != 9 && automapactive && !automap_overlay))
     {
         if (gamemode == commercial)                 
         {

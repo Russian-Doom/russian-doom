@@ -2292,7 +2292,7 @@ void M_Vanilla_DrawOptions(void)
     }
 
     // - Screen size slider ----------------------------------------------------
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: only 6 sizes are available
         M_DrawThermo(60 + wide_delta, 102, 6, screenSize);
@@ -2373,12 +2373,12 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         // Widescreen rendering
-        M_WriteTextSmall_ENG(185 + wide_delta, 45, widescreen_temp == 0 ? "5:4" :
-                                                   widescreen_temp == 1 ? "16:9" :
-                                                   widescreen_temp == 2 ? "16:10" :
-                                                                          "4:3");
+        M_WriteTextSmall_ENG(185 + wide_delta, 45, aspect_ratio_temp == 1 ? "5:4" :
+                                                   aspect_ratio_temp == 2 ? "16:9" :
+                                                   aspect_ratio_temp == 3 ? "16:10" :
+                                                                            "4:3");
         // Informative message
-        if (widescreen_temp != widescreen)
+        if (aspect_ratio_temp != aspect_ratio)
         {
             dp_translation = cr[CR_GRAY];
             M_WriteTextSmall_ENG(66 + wide_delta, 150, "Program must be restarted");
@@ -2448,13 +2448,13 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         // Широкоформатный режим
-        M_WriteTextSmall_RUS(238 + wide_delta, 45, widescreen_temp == 0 ? "5:4" :
-                                                   widescreen_temp == 1 ? "16:9" :
-                                                   widescreen_temp == 2 ? "16:10" :
-                                                                          "4:3");
+        M_WriteTextSmall_RUS(238 + wide_delta, 45, aspect_ratio == 1 ? "5:4" :
+                                                   aspect_ratio == 2 ? "16:9" :
+                                                   aspect_ratio == 3 ? "16:10" :
+                                                                       "4:3");
 
         // Informative message: Необходим перезапуск программы
-        if (widescreen_temp != widescreen)
+        if (aspect_ratio_temp != aspect_ratio)
         {
             dp_translation = cr[CR_GRAY];
             M_WriteTextSmall_RUS(40 + wide_delta, 150, "ytj,[jlbv gthtpfgecr ghjuhfvvs");
@@ -2532,15 +2532,15 @@ void M_RD_Change_Widescreen(int choice)
     switch(choice)
     {
         case 0:
-        widescreen_temp--;
-        if (widescreen_temp < -1)
-            widescreen_temp = 2;
+        aspect_ratio_temp--;
+        if (aspect_ratio_temp < 0)
+            aspect_ratio_temp = 3;
         break;
 
         case 1:
-        widescreen_temp++;
-        if (widescreen_temp > 2)
-            widescreen_temp = -1;
+        aspect_ratio_temp++;
+        if (aspect_ratio_temp > 3)
+            aspect_ratio_temp = 0;
         break;
     }
 }
@@ -2702,7 +2702,7 @@ void M_RD_Draw_Display(void)
     }
 
     // Screen size slider
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: only 6 sizes are available
         M_DrawThermo_Small(35 + wide_delta, 54, 6, screenSize);
@@ -2750,7 +2750,7 @@ void M_RD_Change_ScreenSize(int choice)
         break;
     }
 
-    if (widescreen > 0)
+    if (aspect_ratio >= 2)
     {
         // Wide screen: don't allow unsupported views
         // screenblocks - config file variable
@@ -5400,7 +5400,7 @@ void M_DrawReadThis1(void)
 
     inhelpscreens = true;
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -5496,7 +5496,7 @@ void M_DrawReadThis1(void)
 
     V_DrawPatch (wide_delta, 0, W_CacheLumpName(lumpname, PU_CACHE));
 
-    if (widescreen && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         V_DrawBlackBorders();
     }
@@ -5521,7 +5521,7 @@ void M_DrawReadThis2(void)
         ReadDef2_Rus.prevMenu = &MainDef_Rus;
     }
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before drawing
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -5533,7 +5533,7 @@ void M_DrawReadThis2(void)
     V_DrawPatch(wide_delta, 0, W_CacheLumpName(DEH_String
                (english_language ? "HELP1" : "HELP1R"), PU_CACHE));
 
-    if (widescreen && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         V_DrawBlackBorders();
     }
@@ -5837,7 +5837,7 @@ void M_QuitResponse(int key)
     }
 
     // [JN] Widescreen: remember choosen widescreen variable before quit.
-    widescreen = widescreen_temp;
+    aspect_ratio = aspect_ratio_temp;
 
     I_Quit ();
 }
@@ -6993,14 +6993,14 @@ void M_Init (void)
     currentMenu = english_language ? &MainDef : &MainDef_Rus;
 
     // [JN] Widescreen: set temp variable for rendering menu.
-    widescreen_temp = widescreen;
+    aspect_ratio_temp = aspect_ratio;
 
     menuactive = 0;
     itemOn = currentMenu->lastOn;
     whichSkull = 0;
     skullAnimCounter = 10;
 
-    if (widescreen > 0)
+    if (aspect_ratio >= 2)
     screenSize = screenblocks - 9;
     else
     screenSize = screenblocks - 3;
@@ -7010,7 +7010,7 @@ void M_Init (void)
     messageLastMenuActive = menuactive;
     quickSaveSlot = -1;
 
-    if (widescreen > 0)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: place screen size slider correctly at starup
         if (screenSize < 0)

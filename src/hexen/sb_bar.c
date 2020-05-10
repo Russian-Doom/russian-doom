@@ -774,11 +774,11 @@ void SB_Drawer(void)
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
     static char s[64];
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = aspect_ratio >= 2 && screenblocks == 9;
     strftime(s, sizeof(s), "%H:%M", tm);
 
     // [JN] Draw extended skulls and stone border
-    if ((widescreen && screenblocks == 10) || (widescreen && automapactive))
+    if ((aspect_ratio >= 2 && screenblocks == 10) || (aspect_ratio >= 2 && automapactive))
     {
         V_DrawPatch(0, 123, W_CacheLumpName("WDBARLF", PU_CACHE));    // left
         V_DrawPatch(373, 123, W_CacheLumpName("WDBARRT", PU_CACHE));  // right
@@ -898,7 +898,7 @@ static void DrawAnimatedIcons(void)
 {
     int frame;
     static boolean hitCenterFrame;
-    boolean wide_4_3 = widescreen && screenblocks == 9;
+    boolean wide_4_3 = aspect_ratio >= 2 && screenblocks == 9;
 
     // Wings of wrath
     if (CPlayer->powers[pw_flight])
@@ -1060,8 +1060,8 @@ void SB_PaletteFlash(boolean forceChange)
     }
 
     // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if ((widescreen && screenblocks == 9)
-    ||  (widescreen && screenblocks == 9 && automapactive))
+    if ((aspect_ratio >= 2 && screenblocks == 9)
+    ||  (aspect_ratio >= 2 && screenblocks == 9 && automapactive))
     {
         V_DrawBlackBorders();
     }

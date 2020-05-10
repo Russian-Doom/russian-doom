@@ -550,7 +550,7 @@ void IN_Drawer(void)
     }
     oldinterstate = interstate;
 
-    if (widescreen > 0)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -602,7 +602,7 @@ void IN_Drawer(void)
     }
 
     // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if (widescreen > 0 && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         V_DrawBlackBorders();
     }

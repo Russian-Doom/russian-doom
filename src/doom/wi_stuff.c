@@ -428,7 +428,7 @@ static patch_t*     background;
 // slam background
 void WI_slamBackground(void)
 {
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -436,7 +436,7 @@ void WI_slamBackground(void)
 
     V_DrawPatch(wide_delta, 0, background);
 
-    if (widescreen && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         // [JN] Wide screen: draw black borders in emulated 4:3 mode.
         V_DrawBlackBorders();

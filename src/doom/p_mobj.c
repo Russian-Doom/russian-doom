@@ -1307,7 +1307,7 @@ P_SpawnPlayerMissile
     {
         an = source->angle;
 
-        if (widescreen)
+        if (aspect_ratio >= 2)
         {
             // [JN] Wide screen: new magic number :(
             slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 180;

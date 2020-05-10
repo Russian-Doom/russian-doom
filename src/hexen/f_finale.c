@@ -178,7 +178,7 @@ static void TextWrite(void)
     int cx, cy;
     patch_t *w;
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before drawing
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -334,7 +334,7 @@ static void FadePic(void)
 static void DrawPic(void)
 {
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before drawing
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);

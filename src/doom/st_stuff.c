@@ -504,9 +504,9 @@ void ST_refreshBackground(void)
     if (screenblocks >= 11 && (!automapactive || (automapactive && automap_overlay)))
     return;    
 
-    if (widescreen == 1)
+    if (aspect_ratio == 2)
     st_width = ST_WIDEWIDTH_16_9;
-    else if (widescreen == 2)
+    else if (aspect_ratio == 3)
     st_width = ST_WIDEWIDTH_16_10;
     else
     st_width = ST_WIDTH;
@@ -2151,9 +2151,9 @@ void ST_createWidgets(void)
     static int widget_delta; // [JN] For different widget offset between wide modes.
     int i;
 
-    if (widescreen == 1)
+    if (aspect_ratio == 2)
     widget_delta = WIDE_DELTA;
-    else if (widescreen == 2)
+    else if (aspect_ratio == 3)
     widget_delta = WIDE_DELTA - 21;
     else
     widget_delta = 0;
@@ -2382,9 +2382,9 @@ void ST_Init (void)
 
     ST_loadData();
 
-    if (widescreen == 1)
+    if (aspect_ratio == 2)
     st_width = ST_WIDEWIDTH_16_9;
-    else if (widescreen == 2)
+    else if (aspect_ratio == 3)
     st_width = ST_WIDEWIDTH_16_10;
     else
     st_width = ST_WIDTH;
@@ -2509,9 +2509,9 @@ void ST_createWidgetsJaguar(void)
     int i;
     static int widget_delta; // [JN] For different widget offset between wide modes.
 
-    if (widescreen == 1)
+    if (aspect_ratio == 2)
     widget_delta = WIDE_DELTA;
-    else if (widescreen == 2)
+    else if (aspect_ratio == 3)
     widget_delta = WIDE_DELTA - 21;
     else
     widget_delta = 0;

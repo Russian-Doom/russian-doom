@@ -476,7 +476,7 @@ void R_InitTextureMapping(void)
     fixed_t focalwidth;
     focalwidth = (((ORIGWIDTH << hires)>>detailshift)/2)<<FRACBITS;
 
-    focallength = FixedDiv(widescreen > 0 ? focalwidth : centerxfrac, 
+    focallength = FixedDiv(aspect_ratio >= 2 ? focalwidth : centerxfrac, 
                            finetangent[FINEANGLES / 4 + FIELDOFVIEW / 2]);
 
     for (i = 0; i < FINEANGLES / 2; i++)
@@ -610,7 +610,7 @@ void R_ExecuteSetViewSize(void)
 
     setsizeneeded = false;
 
-    if (widescreen == -1 || widescreen == 0)
+    if (aspect_ratio == 0 || aspect_ratio == 1)
     {   // [JN] 4:3 and 5:4
         if (setblocks >= 11) 
         {
@@ -623,7 +623,7 @@ void R_ExecuteSetViewSize(void)
             viewheight = ((setblocks * 158 / 10)) << hires;
         }
     }
-    else if (widescreen == 1)
+    else if (aspect_ratio == 2)
     {   // [JN] 16:9
         if (setblocks == 9 || setblocks == 10)
         {
@@ -637,7 +637,7 @@ void R_ExecuteSetViewSize(void)
             viewheight = SCREENHEIGHT;
         }
     }
-    else if (widescreen == 2)
+    else if (aspect_ratio == 3)
     {
         // [JN] 16:10
         if (setblocks == 9 || setblocks == 10)
@@ -661,7 +661,7 @@ void R_ExecuteSetViewSize(void)
     centerx = viewwidth / 2;
     centerxfrac = centerx << FRACBITS;
     centeryfrac = centery << FRACBITS;
-    if (widescreen > 0)
+    if (aspect_ratio >= 2)
     {
         projection = MIN(centerxfrac, (((320 << hires)>>detailshift)/2)<<FRACBITS);
     }
@@ -712,7 +712,7 @@ void R_ExecuteSetViewSize(void)
 
         for (j = 0; j < LOOKDIRS; j++)
         {
-            if (widescreen > 0)
+            if (aspect_ratio >= 2)
             {
                 dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) 
                    * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
@@ -724,7 +724,7 @@ void R_ExecuteSetViewSize(void)
             }
 
         dy = abs(dy);
-        yslopes[j][i] = FixedDiv (widescreen > 0 ? num_wide : num, dy);
+        yslopes[j][i] = FixedDiv (aspect_ratio >= 2 ? num_wide : num, dy);
         }
     }
     yslope = yslopes[LOOKDIRMIN];
@@ -793,7 +793,7 @@ int screenblocks = 10;
 
 void R_Init(void)
 {
-    if (widescreen > 0)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: don't allow unsupported view modes at startup
         if (screenblocks < 9)
@@ -927,7 +927,7 @@ void R_SetupFrame(player_t * player)
     pitch = -LOOKDIRMIN;
 
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
-    if (widescreen > 0)
+    if (aspect_ratio >= 2)
     {
         tempCentery = viewheight/2 + (pitch << (hires && !detailshift))
                                    * (screenblocks < 9 ? screenblocks : 9) / 10;

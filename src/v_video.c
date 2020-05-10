@@ -1111,13 +1111,13 @@ void V_DrawBox(int x, int y, int w, int h, int c)
 
 void V_DrawBlackBorders(void)
 {
-    if (widescreen == 1)
+    if (aspect_ratio == 2)
     {
         V_DrawFilledBox(0, 0, wide_delta << hires, SCREENHEIGHT, 0);
         V_DrawFilledBox((WIDESCREENWIDTH-wide_delta) << hires, -1, 
                         wide_delta << hires, SCREENHEIGHT, 0);
     }
-    else if (widescreen == 2)
+    else if (aspect_ratio == 3)
     {
         V_DrawFilledBox(0, 0, wide_delta << hires, SCREENHEIGHT, 0);
         V_DrawFilledBox((WIDESCREENWIDTH-(42 << hires)-wide_delta) << hires, -1, 

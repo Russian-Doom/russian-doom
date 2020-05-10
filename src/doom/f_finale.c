@@ -355,7 +355,7 @@ void F_TextWrite (void)
     {
         if (gamemap == 23)  // Leaving MAP23, end game. Special background.
         {
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: clean up wide screen remainings before drawing.
                 V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -369,7 +369,7 @@ void F_TextWrite (void)
     {
         if (gamemap == 15)  // Leaving MAP15, entering MAP31
         {
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: clean up wide screen remainings before drawing.
                 V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -380,7 +380,7 @@ void F_TextWrite (void)
 
         if (gamemap == 31)  // Leaving MAP31, entering MAP32
         {
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: clean up wide screen remainings before drawing.
                 V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -390,7 +390,7 @@ void F_TextWrite (void)
         }
     }
 
-    if (widescreen && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         // [JN] Wide screen: draw black borders in emulated 4:3 mode.
         V_DrawBlackBorders();
@@ -796,7 +796,7 @@ void F_CastDrawer (void)
     boolean         flip;
     patch_t*        patch;
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -808,7 +808,7 @@ void F_CastDrawer (void)
     else
     V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
 
-    if (widescreen && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         // [JN] Wide screen: draw black borders in emulated 4:3 mode.
         V_DrawBlackBorders();
@@ -931,7 +931,7 @@ void F_BunnyScroll (void)
         }
     }
 
-    if (widescreen && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         // [JN] Wide screen: draw black borders in emulated 4:3 mode.
         V_DrawBlackBorders();
@@ -985,7 +985,7 @@ static void F_ArtScreenDrawer(void)
 {
     char *lumpname;
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -1031,7 +1031,7 @@ static void F_ArtScreenDrawer(void)
 
         V_DrawPatch (wide_delta, 0, W_CacheLumpName(lumpname, PU_CACHE));
 
-        if (widescreen && screenblocks == 9)
+        if (aspect_ratio >= 2 && screenblocks == 9)
         {
             // [JN] Wide screen: draw black borders in emulated 4:3 mode.
             V_DrawBlackBorders();
@@ -1106,7 +1106,7 @@ void F_TextWriteJaguar (void)
 
     if (gamemap == 23)  // Leaving MAP23, end game. Special background.
     {
-        if (widescreen)
+        if (aspect_ratio >= 2)
         {
             // Clean up remainings of the wide screen before drawing
             V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -1339,7 +1339,7 @@ void F_CastDrawerJaguar (void)
     int              lump;
     patch_t         *patch;
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // Clean up remainings of the wide screen before drawing
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);

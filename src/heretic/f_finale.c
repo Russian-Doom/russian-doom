@@ -219,7 +219,7 @@ void F_TextWrite(void)
     }
 
     // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if (widescreen > 0 && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         V_DrawBlackBorders();
     }
@@ -298,7 +298,7 @@ void F_TextWriteRUS(void)
     }
 
     // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if (widescreen > 0 && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         V_DrawBlackBorders();
     }
@@ -352,7 +352,7 @@ void F_DemonScroll(void)
     p1 = W_CacheLumpName(DEH_String("FINAL1"), PU_LEVEL);
     p2 = W_CacheLumpName(DEH_String("FINAL2"), PU_LEVEL);
 
-    if (widescreen > 0)
+    if (aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before drawing.
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);

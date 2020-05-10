@@ -710,7 +710,7 @@ void P_BulletSlope (mobj_t*	mo)
         {
             an += 2 << 26;
 
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: new magic number :(
                 bulletslope = (mo->player->lookdir / MLOOKUNIT << FRACBITS) / 180;

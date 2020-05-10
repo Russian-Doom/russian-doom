@@ -2280,7 +2280,7 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
         if (!linetarget)
         {
             an = source->angle;
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: new magic number :(
                 slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
@@ -2306,7 +2306,7 @@ mobj_t *P_SpawnPlayerMissile(mobj_t * source, mobjtype_t type)
     }
     else
     {
-        if (widescreen)
+        if (aspect_ratio >= 2)
         {
             z = source->z + 4 * 8 * FRACUNIT +
                 ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
@@ -2428,7 +2428,7 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
         if (!linetarget)
         {
             an = angle;
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: new magic number :(
                 slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
@@ -2442,7 +2442,7 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
     }
     x = source->x;
     y = source->y;
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         z = source->z + 4 * 8 * FRACUNIT +
             ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
@@ -2497,7 +2497,7 @@ mobj_t *P_SPMAngleXYZ(mobj_t * source, fixed_t x, fixed_t y,
         if (!linetarget)
         {
             an = angle;
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: new magic number :(
                 slope = ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
@@ -2509,7 +2509,7 @@ mobj_t *P_SPMAngleXYZ(mobj_t * source, fixed_t x, fixed_t y,
             }
         }
     }
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         z += 4 * 8 * FRACUNIT + ((source->player->lookdir / MLOOKUNIT) << FRACBITS) / 177;
     }

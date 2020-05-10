@@ -468,7 +468,7 @@ void R_InitTextureMapping(void)
     focalwidth = (((320 << hires)>>detailshift)/2)<<FRACBITS;
 
     focallength =
-        FixedDiv(widescreen ? focalwidth : centerxfrac, finetangent[FINEANGLES / 4 + FIELDOFVIEW / 2]);
+        FixedDiv(aspect_ratio >= 2 ? focalwidth : centerxfrac, finetangent[FINEANGLES / 4 + FIELDOFVIEW / 2]);
 
 
     for (i = 0; i < FINEANGLES / 2; i++)
@@ -599,7 +599,7 @@ void R_ExecuteSetViewSize(void)
 
     setsizeneeded = false;
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         if (setblocks == 9 || setblocks == 10)
         {
@@ -634,7 +634,7 @@ void R_ExecuteSetViewSize(void)
     centerx = viewwidth / 2;
     centerxfrac = centerx << FRACBITS;
     centeryfrac = centery << FRACBITS;
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         projection = MIN(centerxfrac, (((320 << hires)>>detailshift)/2)<<FRACBITS);
     }
@@ -685,7 +685,7 @@ void R_ExecuteSetViewSize(void)
 
         for (j = 0; j < LOOKDIRS; j++)
         {
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 dy = ((i-(viewheight/2 + ((j-LOOKDIRMIN) << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10))<<FRACBITS)+FRACUNIT/2;
             }
@@ -695,7 +695,7 @@ void R_ExecuteSetViewSize(void)
             }
 
         dy = abs(dy);
-        yslopes[j][i] = FixedDiv (widescreen ? num_wide : num, dy);
+        yslopes[j][i] = FixedDiv (aspect_ratio >= 2 ? num_wide : num, dy);
         }
     }
     yslope = yslopes[LOOKDIRMIN];
@@ -761,7 +761,7 @@ int screenblocks = 10;
 void R_Init(void)
 {
     // [JN] Wide screen: don't allow unsupported view modes at startup
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         if (screenblocks < 9)
             screenblocks = 9;
@@ -882,7 +882,7 @@ void R_SetupFrame(player_t * player)
     pitch = -LOOKDIRMIN;
 
     // apply new yslope[] whenever "lookdir", "detailshift" or "screenblocks" change
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         tempCentery = viewheight/2 + (pitch << (hires && !detailshift)) * (screenblocks < 9 ? screenblocks : 9) / 10;
     }

@@ -96,7 +96,7 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
+    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
@@ -171,7 +171,7 @@ void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
+    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
@@ -214,7 +214,7 @@ void HUlib_drawTextLineSecret (hu_textline_t *l)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
+    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
@@ -266,7 +266,7 @@ void HUlib_drawTextLineSystem (hu_textline_t *l)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
+    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
@@ -318,7 +318,7 @@ void HUlib_drawTextLineChat (hu_textline_t *l, boolean drawcursor)
     int w;
     int x;
     unsigned char c;
-    boolean wide_4_3 = (widescreen > 0 && screenblocks == 9);
+    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;

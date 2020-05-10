@@ -1007,7 +1007,7 @@ void MN_Init(void)
     SkullBaseLump = W_GetNumForName(DEH_String("M_SKL00"));
 
     // [JN] Widescreen: set temp variable for rendering menu.
-    widescreen_temp = widescreen;
+    aspect_ratio_temp = aspect_ratio;
 
     if (gamemode == retail)
     {                           // Add episodes 4 and 5 to the menu
@@ -1821,13 +1821,13 @@ static void DrawRenderingMenu(void)
         dp_translation = NULL;
 
         // Display aspect ratio
-        MN_DrTextSmallENG(DEH_String(widescreen_temp == 0 ? "5:4" :
-                                     widescreen_temp == 1 ? "16:9" :
-                                     widescreen_temp == 2 ? "16:10" :
-                                                            "4:3"),
+        MN_DrTextSmallENG(DEH_String(aspect_ratio_temp == 1 ? "5:4" :
+                                     aspect_ratio_temp == 2 ? "16:9" :
+                                     aspect_ratio_temp == 3 ? "16:10" :
+                                                              "4:3"),
                                      185 + wide_delta, 42);
         // Informative message
-        if (widescreen_temp != widescreen)
+        if (aspect_ratio_temp != aspect_ratio)
         {
             dp_translation = cr[CR_GRAY2GREEN_HERETIC];
             MN_DrTextSmallENG(DEH_String("THE PROGRAM MUST BE RESTARTED"),
@@ -1897,14 +1897,14 @@ static void DrawRenderingMenu(void)
         dp_translation = NULL;
 
         // Соотношение сторон экрана
-        MN_DrTextSmallENG(DEH_String(widescreen_temp == 0 ? "5:4" :
-                                     widescreen_temp == 1 ? "16:9" :
-                                     widescreen_temp == 2 ? "16:10" :
-                                                            "4:3"),
+        MN_DrTextSmallENG(DEH_String(aspect_ratio_temp == 1 ? "5:4" :
+                                     aspect_ratio_temp == 2 ? "16:9" :
+                                     aspect_ratio_temp == 3 ? "16:10" :
+                                                              "4:3"),
                                      230 + wide_delta, 42);
 
         // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
-        if (widescreen_temp != widescreen)
+        if (aspect_ratio_temp != aspect_ratio)
         {
             dp_translation = cr[CR_GRAY2GREEN_HERETIC];
             MN_DrTextSmallRUS(DEH_String("YTJ,[JLBV GTHTPFGECR GHJUHFVVS"), 
@@ -1974,15 +1974,15 @@ static boolean M_RD_Change_Widescreen(int option)
     switch(option)
     {
         case 0:
-        widescreen_temp--;
-        if (widescreen_temp < -1)
-            widescreen_temp = 2;
+        aspect_ratio_temp--;
+        if (aspect_ratio_temp < 0)
+            aspect_ratio_temp = 3;
         break;
 
         case 1:
-        widescreen_temp++;
-        if (widescreen_temp > 2)
-            widescreen_temp = -1;
+        aspect_ratio_temp++;
+        if (aspect_ratio_temp > 3)
+            aspect_ratio_temp = 0;
         break;
     }
     return true;
@@ -2132,7 +2132,7 @@ static void DrawDisplayMenu(void)
     //
 
     // Screen size
-    if (widescreen > 0)
+    if (aspect_ratio_temp >= 2)
     {
         DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 4, screenblocks - 9);
         M_snprintf(num, 4, "%3d", screenblocks);
@@ -2170,7 +2170,7 @@ static boolean M_RD_ScreenSize(int option)
         screenblocks--;
     }
 
-    if (widescreen > 0)
+    if (aspect_ratio_temp >= 2)
     {
         // [JN] Wide screen: don't allow unsupported (bordered) views
         // screenblocks - config file variable
@@ -3488,7 +3488,7 @@ static void DrawOptionsMenu_Vanilla(void)
 
 static void DrawOptions2Menu_Vanilla(void)
 {
-    if (widescreen > 0)
+    if (aspect_ratio_temp >= 2)
     {
         DrawSlider(&Options2Menu_Vanilla, 1, 4, screenblocks - 9);
     }
@@ -3943,7 +3943,7 @@ boolean MN_Responder(event_t * event)
            || event->data1 == key_menu_quit)))
         {
             // [JN] Widescreen: remember choosen widescreen variable before quit.
-            widescreen = widescreen_temp;
+            aspect_ratio = aspect_ratio_temp;
 
             I_Quit();
             return true;
@@ -3963,7 +3963,7 @@ boolean MN_Responder(event_t * event)
             G_CheckDemoStatus();
 
             // [JN] Widescreen: remember choosen widescreen variable before quit.
-            widescreen = widescreen_temp;
+            aspect_ratio = aspect_ratio_temp;
             I_Quit();
         }
         else
@@ -4034,7 +4034,7 @@ boolean MN_Responder(event_t * event)
                 case 1:
                     G_CheckDemoStatus();
                     // [JN] Widescreen: remember choosen widescreen variable before quit.
-                    widescreen = widescreen_temp;
+                    aspect_ratio = aspect_ratio_temp;
                     I_Quit();
                     return false;
 
@@ -4612,7 +4612,7 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-    if (widescreen > 0)
+    if (aspect_ratio_temp >= 2)
     {
         // [JN] Clean up remainings of the wide screen before 
         // drawing a HELP or TITLE screens.

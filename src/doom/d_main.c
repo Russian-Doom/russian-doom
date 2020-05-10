@@ -437,7 +437,7 @@ void EnableLoadingDisk(void)
     disk_lump_name = DEH_String("STDISK");
 
     V_EnableLoadingDisk(disk_lump_name, 
-                       (widescreen && screenblocks == 9 ? 
+                       (aspect_ratio >= 2 && screenblocks == 9 ? 
                         SCREENWIDTH+WIDE_DELTA*2 : screenwidth) -
                         LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
 }
@@ -700,7 +700,7 @@ void D_PageTicker (void)
 
 void D_PageDrawer (void)
 {
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
@@ -708,7 +708,7 @@ void D_PageDrawer (void)
 
     V_DrawPatch (wide_delta, 0, W_CacheLumpName(pagename, PU_CACHE));
 
-    if (widescreen && screenblocks == 9)
+    if (aspect_ratio >= 2 && screenblocks == 9)
     {
         // [JN] Wide screen: draw black borders in emulated 4:3 mode.
         V_DrawBlackBorders();
@@ -1230,7 +1230,7 @@ void D_SetGameDescription(void)
         {
             gamedescription = GetGameName("The Ultimate DOOM");
 
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Load widescreen backgrounds
                 W_MergeFile("base/doom-wide-doom1.wad");
@@ -1254,7 +1254,7 @@ void D_SetGameDescription(void)
             else 
             gamedescription = GetGameName("DOOM");
 
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Load widescreen backgrounds
                 W_MergeFile("base/doom-wide-doom1.wad");
@@ -1267,7 +1267,7 @@ void D_SetGameDescription(void)
             else
             gamedescription = GetGameName("DOOM (Демоверсия)");
 
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Load widescreen backgrounds
                 W_MergeFile("base/doom-wide-doom1.wad");
@@ -1319,7 +1319,7 @@ void D_SetGameDescription(void)
             else
             gamedescription = GetGameName("DOOM 2: Ад на Земле");
 
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Load widescreen backgrounds
                 W_MergeFile("base/doom-wide-doom2.wad");
@@ -1332,7 +1332,7 @@ void D_SetGameDescription(void)
             else
             gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
 
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Load widescreen backgrounds
                 W_MergeFile("base/doom-wide-plutonia.wad");
@@ -1345,7 +1345,7 @@ void D_SetGameDescription(void)
             else
             gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
 
-            if (widescreen)
+            if (aspect_ratio >= 2)
             {
                 // [JN] Load widescreen backgrounds
                 W_MergeFile("base/doom-wide-tnt.wad");
@@ -1727,7 +1727,7 @@ void D_SetGameDescription(void)
     // 1) placed inside IWAD.
     // 2) placed inside doom-doom1-wide.wad.
     // 3 or more) modified titlepic inside PWAD.
-    if (widescreen && gamemode == registered && W_CheckMultipleLumps("TITLEPIC") <= 2)
+    if (aspect_ratio >= 2 && gamemode == registered && W_CheckMultipleLumps("TITLEPIC") <= 2)
     {
         DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIR");
     }
@@ -1764,7 +1764,7 @@ void D_SetGameDescription(void)
     // and modified backgrounds.
     // If not modified, use wide scrolling code 426x200 and
     // wide bunny backgrounds. See F_BunnyScroll (f_finale.c).
-    if (widescreen && (W_CheckMultipleLumps("PFUB1") > 1 || W_CheckMultipleLumps("PFUB2") > 1
+    if (aspect_ratio >= 2 && (W_CheckMultipleLumps("PFUB1") > 1 || W_CheckMultipleLumps("PFUB2") > 1
     ||  gamevariant == freedoom))
     {
         wide_loaded = false;

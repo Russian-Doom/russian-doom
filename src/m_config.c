@@ -645,10 +645,10 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(fullscreen),
 
     //!
-    // [JN] Widescreen rendering.
+    // [JN] Aspect ratio.
     //
 
-    CONFIG_VARIABLE_INT(widescreen),
+    CONFIG_VARIABLE_INT(aspect_ratio),
 
     //!
     // Index of the display on which the game should run. This has no

@@ -1210,7 +1210,7 @@ void H2_PageTicker(void)
 
 static void PageDrawer(void)
 {
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before drawing
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);

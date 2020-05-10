@@ -1383,7 +1383,7 @@ static void DrawDisplayMenu(void)
     static char num[4];
 
     // Screen size
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         DrawSlider((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 4, screenblocks - 9);
         M_snprintf(num, 4, "%3d", screenblocks);
@@ -1442,7 +1442,7 @@ static void M_RD_ScreenSize(int option)
         screenblocks--;
     }
 
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: don't allow unsupported (bordered) views
         // screenblocks - config file variable
@@ -2928,7 +2928,7 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
-    if (widescreen)
+    if (aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before drawing
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
