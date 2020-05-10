@@ -2448,10 +2448,10 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         // Широкоформатный режим
-        M_WriteTextSmall_RUS(238 + wide_delta, 45, aspect_ratio == 1 ? "5:4" :
-                                                   aspect_ratio == 2 ? "16:9" :
-                                                   aspect_ratio == 3 ? "16:10" :
-                                                                       "4:3");
+        M_WriteTextSmall_RUS(238 + wide_delta, 45, aspect_ratio_temp == 1 ? "5:4" :
+                                                   aspect_ratio_temp == 2 ? "16:9" :
+                                                   aspect_ratio_temp == 3 ? "16:10" :
+                                                                            "4:3");
 
         // Informative message: Необходим перезапуск программы
         if (aspect_ratio_temp != aspect_ratio)
