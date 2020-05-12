@@ -51,15 +51,6 @@ boolean devparm;
 
 void D_DoomMain (void);
 
-/* [JN] TODO - implement a proper return to cmd.exe
-void I_RD_SendReturn (void)
-{
-    keybd_event(VK_RETURN,
-                0x0D,
-                KEYEVENTF_EXTENDEDKEY,
-                0);
-}
-*/
 
 int main(int argc, char **argv)
 {
@@ -70,41 +61,21 @@ int main(int argc, char **argv)
 
     M_FindResponseFile();
 
-    // [JN] Make a console output for Windows. There two ways:
-    //  1) In case of using -devparm, separate console window will appear.
-    //  2) In case of starting game from Windows console (cmd.exe), all 
-    //     prints will be made in existing console.
-
-#ifdef _WIN32
     // Check for -devparm being activated
     devparm = M_CheckParm ("-devparm");
 
+#ifdef _WIN32
     if (devparm)
-    {   // Create a separate console window
+    {
         AllocConsole();
     }
-    /* [JN] TODO - implement a proper return to cmd.exe
-    else
-    {
-        // Use an existing console window
-        AttachConsole(-1);
 
-        // Clear console contens to emulate vanilla
-        // behaviour and for proper line breaking
-        system("cls");
-
-        // Send an 'ENTER' key after exiting the game
-        // for proper return to command prompt
-        I_AtExit(I_RD_SendReturn, false);
-    }
-    */
-
-    // Head text outputs
+    // [JN] Head text outputs.
     freopen("CONIN$", "r",stdin); 
     freopen("CONOUT$","w",stdout); 
     freopen("CONOUT$","w",stderr); 
 
-    // Set a proper codepage
+    // [JN] Set a proper codepage.
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif
