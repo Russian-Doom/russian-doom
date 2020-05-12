@@ -1250,14 +1250,16 @@ void G_Ticker(void)
                         {
                             if (netgame)
                             {
+                                // [JN] Internal string, do not translate
                                 M_StringCopy(savedescription, 
-                                             DEH_String("CTNTDFZ BUHF"),	// СЕТЕВАЯ ИГРА
+                                             DEH_String("NET GAME"),
                                              sizeof(savedescription));
                             }
                             else
                             {
+                                // [JN] Internal string, do not translate
                                 M_StringCopy(savedescription,
-                                             DEH_String("CJ[HFYBNM BUHE"),	// СОХРАНИТЬ ИГРУ
+                                             DEH_String("SAVE GAME"),
                                              sizeof(savedescription));
                             }
                         }
