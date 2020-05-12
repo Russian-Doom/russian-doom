@@ -92,7 +92,6 @@ fixed_t cacheddistance[SCREENHEIGHT];
 fixed_t cachedxstep[SCREENHEIGHT];
 fixed_t cachedystep[SCREENHEIGHT];
 
-int detailLevel; // [JN] & [crispy] Необходимо для R_MapPlane
 
 
 //

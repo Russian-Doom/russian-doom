@@ -117,8 +117,6 @@ void D_PageDrawer(void);
 void D_AdvanceDemo(void);
 boolean F_Responder(event_t * ev);
 
-int draw_shadowed_text;     // [JN] Элементы меню и тексты отбрасывают тень
-
 //---------------------------------------------------------------------------
 //
 // PROC D_ProcessEvents
@@ -1070,16 +1068,6 @@ void D_DoomMain(void)
     startepisode = 1;
     startmap = 1;
     autostart = false;
-
-    //!
-    // @vanilla
-    //
-    // [JN] Activate vanilla gameplay mode.
-    // All optional enhancements will be disabled without 
-    // modifying configuration file (russian-heretic.ini)
-    //
-
-    vanillaparm = M_ParmExists("-vanilla");
 
 //
 // get skill / episode / map from parms

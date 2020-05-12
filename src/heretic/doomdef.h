@@ -578,7 +578,7 @@ extern int levelstarttic;       // gametic at level start
 extern int leveltime;           // tics in game play for par
 
 // [crispy] CPhipps - total game time for completed levels so far
-int totaltimes; 
+extern int totaltimes; 
 
 extern ticcmd_t *netcmds;
 

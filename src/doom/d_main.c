@@ -126,7 +126,6 @@ boolean nomonsters;  // checkparm of -nomonsters
 boolean respawnparm; // checkparm of -respawn
 boolean fastparm;    // checkparm of -fast
 
-boolean vanillaparm; // [JN] проверка параметра -vanilla
 boolean scaled_sky = false; // [JN] Boolean for sky scaling
 boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
 boolean wide_loaded = false; // [JN] Boolen only for wide bunny screen
@@ -2306,15 +2305,6 @@ void D_DoomMain (void)
     //
 
     fastparm = M_CheckParm ("-fast");
-
-    //!
-    // @vanilla
-    //
-    // [JN] Активация "ванильного" режима, отключающего некоторые
-    // опциональные улучшения и фичи. По аналогии версии для DOS.
-    //
-
-    vanillaparm = M_CheckParm ("-vanilla");
 
     I_DisplayFPSDots(devparm);
 

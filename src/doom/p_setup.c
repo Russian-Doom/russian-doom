@@ -41,6 +41,7 @@
 
 #include "doomstat.h"
 
+#include "m_menu.h" // [JN] detailLevel
 #include "crispy.h"
 #include "jn.h"
 #include "p_fix.h"
@@ -79,13 +80,10 @@ line_t*		lines;
 int		numsides;
 side_t*		sides;
 
-int     detailLevel; // [JN] & [crispy] Необходимо для WiggleFix
-
 static int      totallines;
 
 boolean canmodify;
 
-gameaction_t    gameaction;
 
 // BLOCKMAP
 // Created from axis aligned bounding box

@@ -106,7 +106,6 @@ GameMode_t gamemode;
 char *gamedescription;
 char *iwadfile;
 static char demolumpname[9];    // Demo lump to start playing.
-boolean devparm;                // started game with -devparm
 boolean nomonsters;             // checkparm of -nomonsters
 boolean respawnparm;            // checkparm of -respawn
 boolean randomclass;            // checkparm of -randclass
@@ -125,7 +124,6 @@ FILE *debugfile;
 int UpdateState;
 int maxplayers = MAXPLAYERS;
 
-boolean vanillaparm; // [JN] проверка параметра -vanilla
 boolean title_mus_played = false;
 
 // [JN] Support for fallback to the English language.
@@ -829,16 +827,6 @@ static void HandleArgs(void)
     artiskip = M_ParmExists("-artiskip");
 
     debugmode = M_ParmExists("-debug");
-
-    //!
-    // @vanilla
-    //
-    // [JN] Activate vanilla gameplay mode.
-    // All optional enhancements will be disabled without 
-    // modifying configuration file (russian-heretic.ini)
-    //
-
-    vanillaparm = M_ParmExists("-vanilla");
 
     //!
     // @vanilla

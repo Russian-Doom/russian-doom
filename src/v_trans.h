@@ -74,7 +74,7 @@ enum
     CR_GRAY2GREEN_HEXEN,        // Gameplay features "ON"
     CR_GRAY2RED_HEXEN,          // Gameplay features "OFF"
     CRMAX
-} cr_t;
+};
 
 extern byte  *cr[CRMAX];
 extern char **crstr;

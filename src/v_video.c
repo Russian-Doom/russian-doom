@@ -37,13 +37,13 @@
 #include "v_video.h"
 #include "w_wad.h"
 #include "z_zone.h"
+#include "jn.h"
 
 #include "config.h"
 #ifdef HAVE_LIBPNG
 #include <png.h>
 #endif
 
-extern int english_language;
 
 // TODO: There are separate RANGECHECK defines for different games, but this
 // is common code. Fix this.
@@ -57,7 +57,7 @@ byte *tintmap = NULL;
 // Only used in Heretic/Hexen
 byte *tinttable = NULL;
 
-// [JN] Color translation (for colored blood)
+// [JN] Color translation
 byte *dp_translation = NULL;
 
 // villsa [STRIFE] Blending table used for Strife
@@ -73,8 +73,6 @@ int dirtybox[4];
 // This is needed for Chocolate Strife, which clips patches to the screen.
 static vpatchclipfunc_t patchclip_callback = NULL;
 
-extern int draw_shadowed_text;
-int vanillaparm;
 
 //
 // V_MarkRect 
@@ -1432,7 +1430,6 @@ void V_ScreenShot(char *format)
     // find a file name to save it to
 
 #ifdef HAVE_LIBPNG
-    extern int png_screenshots;
     if (png_screenshots)
     {
         ext = "png";

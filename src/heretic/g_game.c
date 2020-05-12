@@ -112,8 +112,7 @@ int displayplayer;              // view being displayed
 int levelstarttic;              // gametic at level start
 int totalkills, totalitems, totalsecret;        // for intermission
 int totalleveltimes;            // [crispy] CPhipps - total time for all completed levels
-
-int mouseSensitivity;
+int totaltimes;
 
 char demoname[32];
 boolean demorecording;

@@ -72,7 +72,7 @@ static int show_talk = 0;
 static float libsamplerate_scale = 0.65;
 
 static char *timidity_cfg_path = NULL;
-char *gus_patches_path = "base/gus_patches";
+static char *gus_patches_path = "base/gus_patches";
 static int gus_ram_kb = 1024;
 
 // DOS specific variables: these are unused but should be maintained

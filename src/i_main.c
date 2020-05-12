@@ -36,6 +36,8 @@
 #include "i_system.h"
 #include "m_argv.h"
 
+// [JN] Vanilla game mode available for all three games in RD
+boolean vanillaparm;
 
 // [JN] Devparm available for all three games in RD
 boolean devparm;
@@ -106,6 +108,11 @@ int main(int argc, char **argv)
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif
+
+    // [JN] Activate vanilla gameplay mode.
+    // All optional enhancements will be disabled 
+    // without modifying configuration files.
+    vanillaparm = M_ParmExists("-vanilla");
 
     // start doom
 
