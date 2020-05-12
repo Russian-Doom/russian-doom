@@ -372,7 +372,7 @@ extern char* ststr_massacre;
 #define STSTR_BEHOLDX	"Power-up Activated"
 #define STSTR_BEHOLDZ   "Power-up Deactivated"
 
-#define STSTR_MASSACRE  "All monsters killed"
+#define STSTR_MASSACRE  "Monsters killed:"
 
 
 //
@@ -1287,7 +1287,7 @@ PRESSYN_RUS
 #define STSTR_BEHOLDX_RUS   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
 #define STSTR_BEHOLDZ_RUS   "ghtlvtn ltfrnbdbhjdfy"                     // Предмет деактивирован
 
-#define STSTR_MASSACRE_RUS  "dct vjycnhs eybxnj;tys"    // Все монстры уничтожены
+#define STSTR_MASSACRE_RUS  "eybxnj;tyj vjycnhjd:"                      // Уничтожено монстров:
 
 
 //

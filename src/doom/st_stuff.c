@@ -742,11 +742,12 @@ boolean ST_Responder (event_t* ev)
             }
 
             // [crispy] implement Boom's "tntem" cheat
-            // [JN] В несколько упрощенном варианте, без счетчика монстров
             else if (cht_CheckCheat(&cheat_massacre, ev->data2))
             {
-                ST_cheat_massacre();
-                plyr->message_system = DEH_String(ststr_massacre);
+                int killcount = ST_cheat_massacre();
+
+                M_snprintf(msg, sizeof(msg), "%s %d", ststr_massacre, killcount);
+                plyr->message_system = msg;
             }
 
             // [JN] Отображение версии проекта
