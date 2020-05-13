@@ -241,7 +241,7 @@ boolean volume_needs_update = false;
 
 static boolean need_resize = false;
 static unsigned int last_resize_time;
-static int resize_delay = 35; // [JN] Redused from 500 to 35
+static int resize_delay = 70; // [JN] Redused from 500 to 70
 
 // Gamma correction level to use
 // [JN] Set default gamma to improved level 2.0.
