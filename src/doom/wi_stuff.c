@@ -435,12 +435,6 @@ void WI_slamBackground(void)
     }
 
     V_DrawPatch(wide_delta, 0, background);
-
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-        V_DrawBlackBorders();
-    }
 }
 
 

@@ -390,12 +390,6 @@ void F_TextWrite (void)
         }
     }
 
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-        V_DrawBlackBorders();
-    }
-
     // draw some of the text onto the screen
     cx = 10;
     cy = 10;
@@ -808,12 +802,6 @@ void F_CastDrawer (void)
     else
     V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
 
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-        V_DrawBlackBorders();
-    }
-
     F_CastPrint (DEH_String(english_language ?
                             castorder[castnum].name :
                             castorder_rus[castnum].name));
@@ -931,12 +919,6 @@ void F_BunnyScroll (void)
         }
     }
 
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-        V_DrawBlackBorders();
-    }
-
     if (finalecount < 1130)
     return;
 
@@ -1030,12 +1012,6 @@ static void F_ArtScreenDrawer(void)
         lumpname = DEH_String(lumpname);
 
         V_DrawPatch (wide_delta, 0, W_CacheLumpName(lumpname, PU_CACHE));
-
-        if (aspect_ratio >= 2 && screenblocks == 9)
-        {
-            // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-            V_DrawBlackBorders();
-        }
     }
 }
 

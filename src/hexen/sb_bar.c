@@ -1058,13 +1058,6 @@ void SB_PaletteFlash(boolean forceChange)
                                       PU_CACHE) + palette * 768;
         I_SetPalette(pal);
     }
-
-    // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if ((aspect_ratio >= 2 && screenblocks == 9)
-    ||  (aspect_ratio >= 2 && screenblocks == 9 && automapactive))
-    {
-        V_DrawBlackBorders();
-    }
 }
 
 //==========================================================================

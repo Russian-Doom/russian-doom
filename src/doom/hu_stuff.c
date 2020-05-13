@@ -970,13 +970,6 @@ void HU_Drawer(void)
         }
     }
 
-    // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if ((aspect_ratio >= 2 && screenblocks == 9)
-    ||  (aspect_ratio >= 2 && screenblocks == 9 && automapactive && !automap_overlay))
-    {
-        V_DrawBlackBorders();
-    }
-
     // [JN] Wide screen: side green borders.
     if ((aspect_ratio >= 2 && screenblocks == 10) 
     ||  (aspect_ratio >= 2 && screenblocks != 9 && automapactive && !automap_overlay))

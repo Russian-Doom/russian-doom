@@ -1102,27 +1102,6 @@ void V_DrawBox(int x, int y, int w, int h, int c)
     V_DrawVertLine(x+w-1, y, h, c);
 }
 
-// -----------------------------------------------------------------------------
-// [JN] V_DrawWideBorders
-// Filling borders with black in widescreen mode, used in screensize 9.
-// -----------------------------------------------------------------------------
-
-void V_DrawBlackBorders(void)
-{
-    if (aspect_ratio == 2)
-    {
-        V_DrawFilledBox(0, 0, wide_delta << hires, SCREENHEIGHT, 0);
-        V_DrawFilledBox((WIDESCREENWIDTH-wide_delta) << hires, -1, 
-                        wide_delta << hires, SCREENHEIGHT, 0);
-    }
-    else if (aspect_ratio == 3)
-    {
-        V_DrawFilledBox(0, 0, wide_delta << hires, SCREENHEIGHT, 0);
-        V_DrawFilledBox((WIDESCREENWIDTH-(42 << hires)-wide_delta) << hires, -1, 
-                        wide_delta << hires, SCREENHEIGHT, 0);        
-    }
-}
-
 //
 // Draw a "raw" screen (lump containing raw data to blit directly
 // to the screen)

@@ -80,7 +80,6 @@ void V_DrawFilledBox(int x, int y, int w, int h, int c);
 void V_DrawHorizLine(int x, int y, int w, int c);
 void V_DrawVertLine(int x, int y, int h, int c);
 void V_DrawBox(int x, int y, int w, int h, int c);
-void V_DrawBlackBorders(void);
 void V_CopyScaledBuffer(byte *dest, byte *src, size_t size);
 
 // Draw a raw screen lump

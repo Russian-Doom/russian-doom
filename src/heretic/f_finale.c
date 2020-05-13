@@ -217,12 +217,6 @@ void F_TextWrite(void)
         V_DrawShadowedPatchRaven(cx + wide_delta, cy, w);
         cx += SHORT(w->width);
     }
-
-    // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        V_DrawBlackBorders();
-    }
 }
 
 //---------------------------------------------------------------------------
@@ -295,12 +289,6 @@ void F_TextWriteRUS(void)
             break;
         V_DrawShadowedPatchRaven(cx + wide_delta, cy, w);
         cx += SHORT(w->width);
-    }
-
-    // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        V_DrawBlackBorders();
     }
 }
 

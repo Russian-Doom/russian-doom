@@ -5496,11 +5496,6 @@ void M_DrawReadThis1(void)
 
     V_DrawPatch (wide_delta, 0, W_CacheLumpName(lumpname, PU_CACHE));
 
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        V_DrawBlackBorders();
-    }
-
     ReadDef1.x = ReadDef1_Rus.x = skullx;
     ReadDef1.y = ReadDef1_Rus.y = skully;
 }
@@ -5532,11 +5527,6 @@ void M_DrawReadThis2(void)
 
     V_DrawPatch(wide_delta, 0, W_CacheLumpName(DEH_String
                (english_language ? "HELP1" : "HELP1R"), PU_CACHE));
-
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        V_DrawBlackBorders();
-    }
 
     ReadDef2.x = ReadDef2_Rus.x = 330;
     ReadDef2.y = ReadDef2_Rus.y = 175;

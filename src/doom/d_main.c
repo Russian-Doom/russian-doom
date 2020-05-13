@@ -713,12 +713,6 @@ void D_PageDrawer (void)
     }
 
     V_DrawPatch (wide_delta, 0, W_CacheLumpName(pagename, PU_CACHE));
-
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-        V_DrawBlackBorders();
-    }
 }
 
 

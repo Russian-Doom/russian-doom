@@ -57,6 +57,8 @@ extern int wide_delta;
 extern int screenwidth;
 extern int origwidth;
 
+void I_DrawBlackBorders (void);
+
 // Screen height used when aspect_ratio_correct=true.
 
 #define SCREENHEIGHT_4_3 (240 << hires)

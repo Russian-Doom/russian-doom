@@ -248,6 +248,8 @@ static int resize_delay = 35; // [JN] Redused from 500 to 35
 
 int usegamma = 4;
 
+extern int screenblocks;
+
 static boolean MouseShouldBeGrabbed()
 {
     // never grab the mouse when in screensaver mode
@@ -681,6 +683,59 @@ static void CreateUpscaledTexture(boolean force)
 //      range of [0.0, 1.0).  Used for interpolation.
 fixed_t fractionaltic;
 
+// -----------------------------------------------------------------------------
+// [JN] I_DrawBlackBorders
+// Filling side borders with black color in widescreen mode.
+// Used in screensize 9 for emulating 4:3 display aspect ratio.
+// -----------------------------------------------------------------------------
+
+void I_DrawBlackBorders (void)
+{
+    SDL_Rect rectangle_left;
+    SDL_Rect rectangle_right;
+
+    if (vga_porch_flash)
+    {
+        // [JN] "flash" the pillars/letterboxes with palette 
+        // changes, emulating VGA "porch" behaviour.
+        SDL_SetRenderDrawColor(renderer, palette[0].r, palette[0].g,
+                                         palette[0].b, SDL_ALPHA_OPAQUE);
+    }
+    else
+    {
+        // [JN] Or else, draw them with unchangable black color.
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    }
+
+    if (aspect_ratio == 2)
+    {
+        rectangle_left.x = 0;
+        rectangle_left.y = 0;
+        rectangle_left.w = wide_delta << hires;
+        rectangle_left.h = actualheight;
+    
+        rectangle_right.x = WIDESCREENWIDTH - (wide_delta << hires);
+        rectangle_right.y = 0;
+        rectangle_right.w = wide_delta << hires;
+        rectangle_right.h = actualheight;
+    }
+    else if (aspect_ratio == 3)
+    {
+        rectangle_left.x = 0;
+        rectangle_left.y = 0;
+        rectangle_left.w = wide_delta << hires;
+        rectangle_left.h = actualheight;
+    
+        rectangle_right.x = WIDESCREENWIDTH - (58 << hires) - wide_delta;
+        rectangle_right.y = 0;
+        rectangle_right.w = wide_delta << hires;
+        rectangle_right.h = actualheight;
+    }
+    
+    SDL_RenderFillRect(renderer, &rectangle_left);
+    SDL_RenderFillRect(renderer, &rectangle_right);
+}
+
 //
 // I_FinishUpdate
 //
@@ -784,7 +839,7 @@ void I_FinishUpdate (void)
         palette_to_set = false;
     }
 
-    if (vga_porch_flash)
+    if (vga_porch_flash && aspect_ratio <= 1)
     {
         // "flash" the pillars/letterboxes with palette changes, emulating
         // VGA "porch" behaviour (GitHub issue #832)
@@ -833,6 +888,11 @@ void I_FinishUpdate (void)
     {
     SDL_SetRenderTarget(renderer, NULL);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
+    }
+
+    if (aspect_ratio >= 2 && screenblocks == 9)
+    {
+        I_DrawBlackBorders();
     }
 
     // Draw!

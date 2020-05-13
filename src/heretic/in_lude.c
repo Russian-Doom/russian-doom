@@ -600,12 +600,6 @@ void IN_Drawer(void)
             I_Error("IN_lude: Ошибка последовательности в межмиссионном экране.\n");
             break;
     }
-
-    // [JN] Wide screen: draw black borders in emulated 4:3 mode.
-    if (aspect_ratio >= 2 && screenblocks == 9)
-    {
-        V_DrawBlackBorders();
-    }
 }
 
 //========================================================================
