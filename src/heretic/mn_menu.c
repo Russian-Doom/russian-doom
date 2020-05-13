@@ -2401,12 +2401,12 @@ static void DrawSoundMenu(void)
                                        + wide_delta, 7);
 
         //
-        // VOLUME, CHANNELS, SYSTEM
+        // VOLUME, CHANNELS, ADVANCED
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("VOLUME"), 36 + wide_delta, 32);
         MN_DrTextSmallENG(DEH_String("CHANNELS"), 36 + wide_delta, 82);
-        MN_DrTextSmallENG(DEH_String("SYSTEM"), 36 + wide_delta, 112);
+        MN_DrTextSmallENG(DEH_String("ADVANCED"), 36 + wide_delta, 112);
         dp_translation = NULL;
     }
     else
@@ -2418,12 +2418,12 @@ static void DrawSoundMenu(void)
                                        + wide_delta, 7);
 
         //
-        // ГРОМКОСТЬ, ВОСПРОИЗВЕДЕНИЕ, СИСТЕМА
+        // ГРОМКОСТЬ, ВОСПРОИЗВЕДЕНИЕ, ДОПОЛНИТЕЛЬНО
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("UHJVRJCNM"), 36 + wide_delta, 32);
         MN_DrTextSmallRUS(DEH_String("DJCGHJBPDTLTYBT"), 36 + wide_delta, 82);
-        MN_DrTextSmallRUS(DEH_String("CBCNTVF"), 36 + wide_delta, 112);
+        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + wide_delta, 112);
         dp_translation = NULL;
     }
 

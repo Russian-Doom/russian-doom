@@ -3420,7 +3420,7 @@ void M_RD_Draw_Audio(void)
         // System
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 115, "system");
+        M_WriteTextSmall_ENG(35 + wide_delta, 115, "advanced");
         dp_translation = NULL;
     }
     else
@@ -3442,10 +3442,10 @@ void M_RD_Draw_Audio(void)
         dp_translation = NULL;
 
         //
-        // Система
+        // Дополнительно
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 115, "cbcntvf");
+        M_WriteTextSmall_RUS(35 + wide_delta, 115, "ljgjkybntkmyj");
         dp_translation = NULL;
     }
 
