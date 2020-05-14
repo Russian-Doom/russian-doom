@@ -40,17 +40,8 @@ typedef struct
     int w, h;
 } window_size_t;
 
-typedef enum
-{
-    ASPECT_4_3,
-    ASPECT_5_4,
-    ASPECT_16_9,
-    ASPECT_16_10,
-    NUM_ASPECTS,
-} aspect_t;
-
 // [JN] List of available aspect ratios
-static char *aspect_strings[] =
+static char *aspect_ratios[] = 
 {
     "4:3",
     "5:4",
@@ -72,7 +63,21 @@ static window_size_t window_sizes_scaled[] =
     { 0, 0},
 };
 
-// [JN] List of widescreen window sizes:
+// [JN] List of 5:4 aspect ratio window sizes:
+static window_size_t window_sizes_5_4[] =
+{
+    { 640,  512 },
+    { 800,  640 },
+    { 960,  768 },
+    { 1024, 820 },
+    { 1280, 1024 },
+    { 1440, 1152 },
+    { 1600, 1280 },
+    { 1920, 1536 },
+    { 0, 0},
+};
+
+// [JN] List of 16:9 aspect ratio window sizes:
 static window_size_t window_sizes_16_9[] =
 {
     { 852,  480 },
@@ -81,6 +86,18 @@ static window_size_t window_sizes_16_9[] =
     { 1280, 720 },
     { 1600, 900 },
     { 1920, 1080 },
+    { 0, 0},
+};
+
+// [JN] List of 16:10 aspect ratio window sizes:
+static window_size_t window_sizes_16_10[] =
+{
+    { 768,  480 },
+    { 864,  540 },
+    { 920,  576 },
+    { 1152, 720 },
+    { 1440, 900 },
+    { 1728, 1080 },
     { 0, 0},
 };
 
@@ -98,7 +115,7 @@ static int window_title_short = 1;
 static int window_width = 640, window_height = 480;
 static int window_border = 1;
 static int startup_delay = 35;  // [JN] Redused from 1000 to 35
-static int resize_delay = 35;   // [JN] Redused from 500 to 35
+static int resize_delay = 70;   // [JN] Redused from 500 to 70
 static int usegamma = 4; // [JN] Set default gamma to improved level 2.0.
 
 int uncapped_fps = 1;
@@ -173,9 +190,17 @@ static void GenerateSizesTable(TXT_UNCAST_ARG(widget),
     int i;
 
     // Pick which window sizes list to use
-    if (aspect_ratio == 2)
+    if (aspect_ratio == 1)
+    {
+        sizes = window_sizes_5_4;
+    }
+    else if (aspect_ratio == 2)
     {
         sizes = window_sizes_16_9;
+    }
+    else if (aspect_ratio == 3)
+    {
+        sizes = window_sizes_16_10;
     }
     else
     {
@@ -266,38 +291,13 @@ static void AdvancedDisplayConfig(TXT_UNCAST_ARG(widget),
                         TXT_NewWindowSelectAction_Rus(window));
 }
 
-static txt_dropdown_list_t *AspectRatioSelector(void)
-{
-    txt_dropdown_list_t *result;
-
-    if (aspect_ratio == 0)
-    {
-        aspect_ratio = ASPECT_4_3;
-    }
-    else if (aspect_ratio == 1)
-    {
-        aspect_ratio = ASPECT_5_4;
-    }
-    else if (aspect_ratio == 2)
-    {
-        aspect_ratio = ASPECT_16_9;
-    }
-    else if (aspect_ratio == 3)
-    {
-        aspect_ratio = ASPECT_16_10;
-    }
-
-    result = TXT_NewDropdownList(&aspect_ratio, aspect_strings, 4);
-
-    return result;
-}
-
 void ConfigDisplay(void)
 {
     txt_window_t *window;
     txt_table_t *sizes_table;
     txt_window_action_t *advanced_button;
     txt_checkbox_t *ar_checkbox;
+    txt_dropdown_list_t *cc_dropdown;
 
     // Open the window
 
@@ -322,7 +322,8 @@ void ConfigDisplay(void)
                         TXT_NewLabel(english_language ?
                         "Display aspect ratio: ":
                         "Соотношение сторон экрана: "),
-                        AspectRatioSelector(),
+                        cc_dropdown = TXT_NewDropdownList(&aspect_ratio,
+                                                          aspect_ratios, 4),
                         NULL),
 
         ar_checkbox = 
@@ -398,6 +399,8 @@ void ConfigDisplay(void)
 
     TXT_SignalConnect(ar_checkbox, "changed", GenerateSizesTable, sizes_table);
 
+    // [JN] Re-generate window sizes table after changing aspect ratio.
+    TXT_SignalConnect(cc_dropdown, "changed", GenerateSizesTable, sizes_table);
 
     //    Button to open "advanced" window.
     // Need to pass a pointer to the window sizes table, as some of the options
