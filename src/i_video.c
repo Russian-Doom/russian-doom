@@ -1283,7 +1283,7 @@ static void SetVideoMode(void)
     int w, h;
     int x, y;
     unsigned int rmask, gmask, bmask, amask;
-    int unused_bpp;
+    int bpp;
     int window_flags = 0, renderer_flags = 0;
 
     w = window_width;
@@ -1422,10 +1422,10 @@ static void SetVideoMode(void)
     // import the surface data into the texture.
     if (rgbabuffer == NULL)
     {
-        SDL_PixelFormatEnumToMasks(pixel_format, &unused_bpp,
+        SDL_PixelFormatEnumToMasks(pixel_format, &bpp,
                                    &rmask, &gmask, &bmask, &amask);
         rgbabuffer = SDL_CreateRGBSurface(0,
-                                          screenwidth, SCREENHEIGHT, 32,
+                                          screenwidth, SCREENHEIGHT, bpp,
                                           rmask, gmask, bmask, amask);
         SDL_FillRect(rgbabuffer, NULL, 0);
     }
