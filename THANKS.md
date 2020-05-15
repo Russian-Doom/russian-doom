@@ -88,3 +88,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Artyom "Allard" Andreyev
 - Dwars
 - mtvile666
+- Wells Lu
