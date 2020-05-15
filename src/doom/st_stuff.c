@@ -451,6 +451,15 @@ int st_keyorskull[3];
 // a random number per tick
 static int st_randomnumber;  
 
+// [JN] Different status bar width and height between wide modes and games.
+static int st_width;  
+static int st_height;
+static int st_y;
+
+// [JN] Different wide deltas between wide screen modes.
+static int wborder_delta_l;
+static int wborder_delta_r;
+
 cheatseq_t cheat_mus = CHEAT("idmus", 2);
 cheatseq_t cheat_god = CHEAT("iddqd", 0);
 cheatseq_t cheat_ammo = CHEAT("idkfa", 0);
@@ -497,30 +506,8 @@ void ST_Stop(void);
 
 void ST_refreshBackground(void)
 {
-    static int st_width;  // [JN] For different width between wide modes.
-    static int st_height; // [JN] For different height between games.
-    static int st_y;      // [JN] For different Y between games.
-
     if (screenblocks >= 11 && (!automapactive || (automapactive && automap_overlay)))
     return;    
-
-    if (aspect_ratio == 2)
-    st_width = ST_WIDEWIDTH_16_9;
-    else if (aspect_ratio == 3)
-    st_width = ST_WIDEWIDTH_16_10;
-    else
-    st_width = ST_WIDTH;
-
-    if (gamemission == jaguar)
-    {
-        st_height = ST_HEIGHT_JAG;
-        st_y = ST_Y_JAG;
-    }
-    else
-    {
-        st_height = ST_HEIGHT;
-        st_y = ST_Y;
-    }
 
     if (st_statusbaron)
     {
@@ -538,6 +525,27 @@ void ST_refreshBackground(void)
 
         V_CopyRect(ST_X, 0, st_backing_screen, 
                    st_width, st_height, ST_X, st_y);
+    }
+
+    // [JN] Wide screen: draw side borders.
+    if ((aspect_ratio >= 2 && screenblocks <= 10) || (automapactive && !automap_overlay))
+    {
+        if (gamemode == commercial)                 
+        {
+            V_DrawPatch(wborder_delta_l, 168,   // left border
+                        W_CacheLumpName(DEH_String("RDWBD2LF"), PU_CACHE));
+        
+            V_DrawPatch(wborder_delta_r, 168,   // right border
+                        W_CacheLumpName(DEH_String("RDWBD2RT"), PU_CACHE));
+        }
+        else
+        {
+            V_DrawPatch(wborder_delta_l, 168,   // left border
+                        W_CacheLumpName(DEH_String("RDWBD1LF"), PU_CACHE));
+        
+            V_DrawPatch(wborder_delta_r, 168,   // right border
+                        W_CacheLumpName(DEH_String("RDWBD1RT"), PU_CACHE));
+        }
     }
 }
 
@@ -2142,6 +2150,40 @@ void ST_initData(void)
 
     for (i=0;i<3;i++)
     keyboxes[i] = -1;
+
+    //
+    // [JN] Pre-define sizes and deltas for different width and height of stbar.
+    //
+
+    // [JN] Status bar width
+    if (aspect_ratio == 2)
+    {
+        st_width = ST_WIDEWIDTH_16_9;
+    }
+    else if (aspect_ratio == 3)
+    {
+        st_width = ST_WIDEWIDTH_16_10;
+    }
+    else
+    {
+        st_width = ST_WIDTH;
+    }
+    
+    // [JN] Status bar height
+    st_height = gamemission == jaguar ? ST_HEIGHT_JAG : ST_HEIGHT;
+    st_y = gamemission == jaguar ? ST_Y_JAG : ST_Y;
+
+    // [JN] Wide border deltas
+    if (aspect_ratio == 2)
+    {
+        wborder_delta_l = 0;
+        wborder_delta_r = 373;
+    }
+    else if (aspect_ratio == 3)
+    {
+        wborder_delta_l = -21;
+        wborder_delta_r = 352;
+    }
 
     STlib_init();
 }

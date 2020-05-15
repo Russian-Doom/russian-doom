@@ -876,20 +876,6 @@ void HU_Start(void)
 
 void HU_Drawer(void)
 {
-    static int wborder_delta_l; // [JN] For different width between wide modes.
-    static int wborder_delta_r; // [JN] For different width between wide modes.
-
-    if (aspect_ratio == 2)
-    {
-        wborder_delta_l = 0;
-        wborder_delta_r = 373;
-    }
-    else if (aspect_ratio == 3)
-    {
-        wborder_delta_l = -21;
-        wborder_delta_r = 352;        
-    }
-
     HUlib_drawSText(&w_message);
     HUlib_drawSText_Secret(&w_message_secret);
     HUlib_drawSText_System(&w_message_system);
@@ -967,28 +953,6 @@ void HU_Drawer(void)
             while (*s)
                 HUlib_addCharToTextLine(&w_ltime, *(s++));
             HUlib_drawTextLineUncolored(&w_ltime, false);
-        }
-    }
-
-    // [JN] Wide screen: side green borders.
-    if ((aspect_ratio >= 2 && screenblocks == 10) 
-    ||  (aspect_ratio >= 2 && screenblocks != 9 && automapactive && !automap_overlay))
-    {
-        if (gamemode == commercial)                 
-        {
-            V_DrawPatch(wborder_delta_l, 168,   // left border
-                        W_CacheLumpName(DEH_String("RDWBD2LF"), PU_CACHE));
-        
-            V_DrawPatch(wborder_delta_r, 168,   // right border
-                        W_CacheLumpName(DEH_String("RDWBD2RT"), PU_CACHE));
-        }
-        else
-        {
-            V_DrawPatch(wborder_delta_l, 168,   // left border
-                        W_CacheLumpName(DEH_String("RDWBD1LF"), PU_CACHE));
-        
-            V_DrawPatch(wborder_delta_r, 168,   // right border
-                        W_CacheLumpName(DEH_String("RDWBD1RT"), PU_CACHE));
         }
     }
 
