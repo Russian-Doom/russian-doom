@@ -121,6 +121,8 @@ lighttable_t* fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 // bumped light from gun blasts
 int extralight;			
 
+// [JN] Smooth and vanilla diminished lighting
+int lightzshift, maxlightz;
 
 void (*colfunc) (void);
 void (*basecolfunc) (void);
@@ -513,18 +515,20 @@ void R_InitLightTables (void)
     int startmap; 	
     int scale;
 
+    // [JN] Define, which diminished lighting to use
+    lightzshift = vanillaparm ? LIGHTZSHIFT_VANILLA : LIGHTZSHIFT;
+    maxlightz = vanillaparm ? MAXLIGHTZ_VANILLA : MAXLIGHTZ;
+
     // Calculate the light levels to use
     //  for each level / distance combination.
     for (i=0 ; i< LIGHTLEVELS ; i++)
     {
         startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
 
-        // [JN] No smoother diminished lighting in -vanilla mode
-        for (j=0 ; vanillaparm ? j<MAXLIGHTZ_VANILLA : j<MAXLIGHTZ ; j++)
+        // [JN] Note: no smooth diminished lighting in -vanilla mode
+        for (j=0 ; j < maxlightz ; j++)
         {
-            scale = FixedDiv ((320 / 2*FRACUNIT), vanillaparm ? 
-                                                      ((j+1)<<LIGHTZSHIFT_VANILLA) : 
-                                                      ((j+1)<<LIGHTZSHIFT));
+            scale = FixedDiv ((320 / 2*FRACUNIT), ((j+1)<<lightzshift));
 
             scale >>= LIGHTSCALESHIFT;
             level = startmap - scale/DISTMAP;

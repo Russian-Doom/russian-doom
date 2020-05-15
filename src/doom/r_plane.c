@@ -29,6 +29,7 @@
 #include "w_wad.h"
 #include "doomdef.h"
 #include "doomstat.h"
+#include "r_data.h"
 #include "r_local.h"
 #include "r_sky.h"
 #include "r_swirl.h"
@@ -175,21 +176,11 @@ void R_MapPlane (int y, int x1, int x2)
     }
     else
     {
-        // [JN] No smoother diminished lighting in -vanilla mode
-        if (vanillaparm)
-        {
-            index = distance >> LIGHTZSHIFT_VANILLA;
-        
-            if (index >= MAXLIGHTZ_VANILLA)
-                index = MAXLIGHTZ_VANILLA-1;
-        }
-        else
-        {
-            index = distance >> LIGHTZSHIFT;
-        
-            if (index >= MAXLIGHTZ)
-                index = MAXLIGHTZ-1;
-        }
+        // [JN] Note: no smoother diminished lighting in -vanilla mode
+        index = distance >> lightzshift;
+
+        if (index >= maxlightz)
+            index = maxlightz-1;
 
         ds_colormap = planezlight[index];
     }
