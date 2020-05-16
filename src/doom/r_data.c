@@ -1058,7 +1058,7 @@ void R_InitTranMap()
 //
 void R_InitColormaps (void)
 {
-    int	lump, lump_beta, lump_bw;
+    int	lump;
 
     // Load in the light tables, 
     //  256 byte align tables.
@@ -1067,71 +1067,70 @@ void R_InitColormaps (void)
     colormaps  = W_CacheLumpNum(lump, PU_STATIC);
 
     // [JN] COLORMAP (№33) from Press Release Beta for infra green visor
-    lump_beta  = W_GetNumForName(DEH_String("COLORMAB"));
-    colormaps_beta  = W_CacheLumpNum(lump_beta, PU_STATIC);
+    lump  = W_GetNumForName(DEH_String("COLORMAB"));
+    colormaps_beta  = W_CacheLumpNum(lump, PU_STATIC);
 
     // [JN] COLORMBW for black and white fuzz effect
-    lump_bw  = W_GetNumForName(DEH_String("COLORMBW"));
-    colormaps_bw  = W_CacheLumpNum(lump_bw, PU_STATIC);
+    lump  = W_GetNumForName(DEH_String("COLORMBW"));
+    colormaps_bw  = W_CacheLumpNum(lump, PU_STATIC);
 }
 
 
-//
+// -----------------------------------------------------------------------------
 // R_InitBrightmaps
-//
+// [JN] Load in the brightmaps.
+// Note: some tables as well as it's valuaes are taken from Doom Retro (r_data.c).
+// Many thanks to Brad Harding for his amazing research of brightmap tables and colors!
+// -----------------------------------------------------------------------------
+
 void R_InitBrightmaps (void)
 {
-    int lump1, lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9;
-    int lump10, lump11, lump12, lump13, lump14, lump15;
+    int bmap_lump;
 
-    // [JN] Load in the brightmaps.
-    // Note: tables as well as it's valuaes are taken from Doom Retro (r_data.c).
-    // Many thanks to Brad Harding for his amazing research of brightmap tables and colors!
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP1"));
+    brightmaps_notgray = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump1 = W_GetNumForName(DEH_String("BRTMAP1"));
-    brightmaps_notgray = W_CacheLumpNum(lump1, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP2"));
+    brightmaps_notgrayorbrown = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump2 = W_GetNumForName(DEH_String("BRTMAP2"));
-    brightmaps_notgrayorbrown = W_CacheLumpNum(lump2, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP3"));
+    brightmaps_redonly = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump3 = W_GetNumForName(DEH_String("BRTMAP3"));
-    brightmaps_redonly = W_CacheLumpNum(lump3, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP4"));
+    brightmaps_greenonly1 = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump4 = W_GetNumForName(DEH_String("BRTMAP4"));
-    brightmaps_greenonly1 = W_CacheLumpNum(lump4, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP5"));
+    brightmaps_greenonly2 = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump5 = W_GetNumForName(DEH_String("BRTMAP5"));
-    brightmaps_greenonly2 = W_CacheLumpNum(lump5, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP6"));
+    brightmaps_greenonly3 = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump6 = W_GetNumForName(DEH_String("BRTMAP6"));
-    brightmaps_greenonly3 = W_CacheLumpNum(lump6, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP7"));
+    brightmaps_orangeyellow = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump7 = W_GetNumForName(DEH_String("BRTMAP7"));
-    brightmaps_orangeyellow = W_CacheLumpNum(lump7, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP8"));
+    brightmaps_dimmeditems = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump8 = W_GetNumForName(DEH_String("BRTMAP8"));
-    brightmaps_dimmeditems = W_CacheLumpNum(lump8, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP9"));
+    brightmaps_brighttan = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump9 = W_GetNumForName(DEH_String("BRTMAP9"));
-    brightmaps_brighttan = W_CacheLumpNum(lump9, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP10"));
+    brightmaps_redonly1 = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump10 = W_GetNumForName(DEH_String("BRTMAP10"));
-    brightmaps_redonly1 = W_CacheLumpNum(lump10, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP11"));
+    brightmaps_explosivebarrel = W_CacheLumpNum(bmap_lump, PU_STATIC);
 
-    lump11 = W_GetNumForName(DEH_String("BRTMAP11"));
-    brightmaps_explosivebarrel = W_CacheLumpNum(lump11, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP12"));
+    brightmaps_alllights = W_CacheLumpNum(bmap_lump, PU_STATIC);    
 
-    lump12 = W_GetNumForName(DEH_String("BRTMAP12"));
-    brightmaps_alllights = W_CacheLumpNum(lump12, PU_STATIC);    
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP13"));
+    brightmaps_candles = W_CacheLumpNum(bmap_lump, PU_STATIC);    
 
-    lump13 = W_GetNumForName(DEH_String("BRTMAP13"));
-    brightmaps_candles = W_CacheLumpNum(lump13, PU_STATIC);    
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP14"));
+    brightmaps_pileofskulls = W_CacheLumpNum(bmap_lump, PU_STATIC);    
 
-    lump14 = W_GetNumForName(DEH_String("BRTMAP14"));
-    brightmaps_pileofskulls = W_CacheLumpNum(lump14, PU_STATIC);    
-
-    lump15 = W_GetNumForName(DEH_String("BRTMAP15"));
-    brightmaps_redonly2 = W_CacheLumpNum(lump15, PU_STATIC);
+    bmap_lump = W_GetNumForName(DEH_String("BRTMAP15"));
+    brightmaps_redonly2 = W_CacheLumpNum(bmap_lump, PU_STATIC);
 }
 
 //
