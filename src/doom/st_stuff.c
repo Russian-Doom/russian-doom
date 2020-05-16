@@ -528,7 +528,7 @@ void ST_refreshBackground(void)
     }
 
     // [JN] Wide screen: draw side borders.
-    if ((aspect_ratio >= 2 && screenblocks <= 10) || (automapactive && !automap_overlay))
+    if (aspect_ratio >= 2 && (screenblocks <= 10 || (automapactive && !automap_overlay)))
     {
         if (gamemode == commercial)                 
         {
