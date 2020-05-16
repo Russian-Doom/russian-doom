@@ -38,6 +38,7 @@
 #include "i_timer.h"
 
 // Needs access to LFB.
+#include "v_trans.h"
 #include "v_video.h"
 
 // State.
@@ -2233,7 +2234,22 @@ void AM_drawMarks(void)
 
 void AM_drawCrosshair(int color)
 {
-    fb[(f_w*(f_h+1))/2] = color; // single point for now
+    if (vanillaparm)
+    {
+        fb[(f_w*(f_h+1))/2] = color; // single point for now
+    }
+    else
+    {
+        // [JN] Draw small graphical crosshair,
+        // if automap isn't following player.
+        if (!automap_follow)
+        {
+            dp_translation = cr[CR_GRAY];
+            V_DrawPatchUnscaled(screenwidth/2, (SCREENHEIGHT-ST_HEIGHT-26)/2,
+                                W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE));
+            dp_translation = NULL;
+        }
+    }
 }
 
 void AM_Drawer (void)
@@ -2273,7 +2289,7 @@ void AM_Drawer (void)
     if (cheating==2)
 	AM_drawThings(THINGCOLORS, THINGRANGE);
 
-    // [JN] Atari Jaguar: don't draw single dot
+    // [JN] Atari Jaguar: don't draw single dot or crosshair
     if (gamemission != jaguar)
     {
         AM_drawCrosshair(XHAIRCOLORS);
