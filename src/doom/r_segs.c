@@ -558,10 +558,6 @@ void R_StoreWallRange (int start, int stop)
     int         lightnum;
     int64_t     dx, dy, dx1, dy1; // [crispy] fix long wall wobble
 
-    // [JN] Can we apply wall brightmaps?
-    boolean wall_bmaps_allowed = brightmaps && !vanillaparm 
-                              && gamevariant != freedoom && gamevariant != freedm;
-
     // [crispy] remove MAXDRAWSEGS Vanilla limit
     if (ds_p == &drawsegs[numdrawsegs])
     {
@@ -882,7 +878,7 @@ void R_StoreWallRange (int start, int stop)
             walllights_bottom = scalelight[lightnum];
             
             // [JN] Applying brightmaps to walls...
-            if (wall_bmaps_allowed)
+            if (brightmaps && brightmaps_allowed)
             {
                 // -------------------------------------------------------
                 //  Not in Shareware

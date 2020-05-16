@@ -191,6 +191,8 @@ lighttable_t	*brightmaps_candles;
 lighttable_t	*brightmaps_pileofskulls;
 lighttable_t	*brightmaps_redonly2;
 
+// [JN] Brightmaps: define where they can be applied.
+boolean brightmaps_allowed;
 
 //
 // MAPTEXTURE_T CACHING
@@ -1131,6 +1133,10 @@ void R_InitBrightmaps (void)
 
     bmap_lump = W_GetNumForName(DEH_String("BRTMAP15"));
     brightmaps_redonly2 = W_CacheLumpNum(bmap_lump, PU_STATIC);
+
+    // [JN] Brightmaps are loaded. But where can they be applied?
+    brightmaps_allowed = !vanillaparm && gamevariant != freedoom 
+                                      && gamevariant != freedm;
 }
 
 //

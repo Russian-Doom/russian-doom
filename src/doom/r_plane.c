@@ -495,15 +495,19 @@ void R_DrawPlanes (void)
         planezlight = zlight[light];
 
         // [JN] Apply brightmaps to floor/ceiling...
-        if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+        if (brightmaps && brightmaps_allowed)
         {
             if (pl->picnum == bmapflatnum1  // CONS1_1
             ||  pl->picnum == bmapflatnum2  // CONS1_5
             ||  pl->picnum == bmapflatnum3) // CONS1_7
-            planezlight = fullbright_notgrayorbrown_floor[light];
+            {
+                planezlight = fullbright_notgrayorbrown_floor[light];
+            }
 
             if (pl->picnum == bmapflatnum4) // GATE6
-            planezlight = fullbright_orangeyellow_floor[light];
+            {
+                planezlight = fullbright_orangeyellow_floor[light];
+            }
         }
 
         pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math

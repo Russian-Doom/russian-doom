@@ -44,6 +44,8 @@ R_GetColumn
 void R_InitData (void);
 void R_PrecacheLevel (void);
 
+// [JN] Brightmaps: define where they can be applied.
+extern boolean brightmaps_allowed;
 
 // Retrieval.
 // Floor/ceiling opaque texture tiles,

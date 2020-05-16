@@ -729,7 +729,7 @@ void R_ProjectSprite (mobj_t* thing)
         vis->colormap = spritelights[index];
 
         // [JN] Applying brightmaps to sprites...
-        if (brightmaps && !vanillaparm && gamevariant != freedoom && gamevariant != freedm)
+        if (brightmaps && brightmaps_allowed)
         {
             // Armor Bonus (don't light up Skull Chest from Press Beta)
             if (thing->type == MT_MISC3 && gamemode != pressbeta)
