@@ -135,7 +135,8 @@ int english_language = -1;
 int english_language = 0;
 #endif
 
-// [JN] Local time widget
+// Display
+int level_brightness = 0;
 int local_time = 0; 
 
 // Sound
@@ -208,6 +209,7 @@ void D_BindVariables(void)
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("snd_channels",           &snd_Channels);
     M_BindIntVariable("mlook",                  &mlook);
+    M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("local_time",             &local_time);
 
     // [JN] Дополнительные параметры игры

@@ -1883,7 +1883,7 @@ static void DrawDisplayMenu(void)
     DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 3, 18, usegamma);
 
     // Level brightness
-    DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 5, 5, usegamma /*level_brightness*/ / 16);
+    DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 5, 5, level_brightness / 16);
 
     /*
     // Messages:
@@ -1989,7 +1989,6 @@ static void M_RD_LevelBrightness(int option)
 {
     switch(option)
     {
-        /*
         case 0:
         if (level_brightness > 0)
             level_brightness -= 16;
@@ -1999,7 +1998,6 @@ static void M_RD_LevelBrightness(int option)
         if (level_brightness < 64)
             level_brightness += 16;
         break;
-        */
     }
 
     return true;
@@ -2842,6 +2840,7 @@ void M_RD_DoResetSettings(void)
     screenblocks    = 10;
     usegamma        = 0;
     messageson      = 1;
+    level_brightness = 0;
     local_time      = 0;
 
     // Audio
