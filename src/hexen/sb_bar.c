@@ -781,7 +781,6 @@ void SB_Drawer(void)
     struct tm *tm = localtime(&t);
     static char s[64];
     boolean wide_4_3 = aspect_ratio >= 2 && screenblocks == 9;
-    strftime(s, sizeof(s), "%H:%M", tm);
 
     // [JN] Draw extended skulls and stone border
     if ((aspect_ratio >= 2 && screenblocks == 10) || (aspect_ratio >= 2 && automapactive))
@@ -791,10 +790,21 @@ void SB_Drawer(void)
     }
 
     // [JN] Draw local time widget
-    if (local_time)
+    if (local_time && !vanillaparm)
     {
-        M_snprintf(s, sizeof(s), s);
-        MN_DrTextC(s, 294 + (wide_4_3 ? wide_delta : wide_delta*2), 19);
+
+        strftime(s, sizeof(s), 
+                 local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
+                 local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
+                 local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
+                 local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
+                                   "", tm);        // No time
+
+        MN_DrTextC(s, (local_time == 1 ? 281 :
+                       local_time == 2 ? 269 :
+                       local_time == 3 ? 293 :
+                       local_time == 4 ? 281 : 0) 
+                       + (wide_4_3 ? wide_delta : wide_delta*2), 13);
     }
 
     // Sound info debug stuff

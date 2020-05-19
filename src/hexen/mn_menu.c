@@ -998,9 +998,16 @@ void MN_DrTextC(char *text, int x, int y)
 
     while ((c = *text++) != 0)
     {
-        p = W_CacheLumpNum(FontCBaseLump + c - 33, PU_CACHE);
-        V_DrawPatch(x, y, p);
-        x += SHORT(p->width);
+        if (c < 33) // [JN] Means space symbol (" ").
+        {
+            x += 4;
+        }
+        else
+        {
+            p = W_CacheLumpNum(FontCBaseLump + c - 33, PU_CACHE);
+            V_DrawPatch(x, y, p);
+            x += SHORT(p->width);
+        }
     }
 }
 
@@ -1843,6 +1850,13 @@ static void DrawDisplayMenu(void)
         MN_DrTextA("SCREEN", 36 + wide_delta, 32);
         MN_DrTextA("INTERFACE", 36 + wide_delta, 102);
         dp_translation = NULL;
+
+        // Local time
+        MN_DrTextA(local_time == 1 ? "12-HOUR (HH:MM)" :
+                   local_time == 2 ? "12-HOUR (HH:MM:SS)" :
+                   local_time == 3 ? "24-HOUR (HH:MM)" :
+                   local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
+                   110 + wide_delta, 112);
     }
     else
     {
@@ -1859,6 +1873,13 @@ static void DrawDisplayMenu(void)
         MN_DrTextSmallRUS(DEH_String("\'RHFY"), 36 + wide_delta, 32);
         MN_DrTextSmallRUS(DEH_String("BYNTHATQC"), 36 + wide_delta, 102);
         dp_translation = NULL;
+
+        // Системное время
+        MN_DrTextSmallRUS(local_time == 1 ? "12-XFCJDJT (XX:VV)" :
+                          local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
+                          local_time == 3 ? "24-XFCJDJT (XX:VV)" :
+                          local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
+                          157 + wide_delta, 112);
     }
 
     // Screen size
@@ -1896,18 +1917,6 @@ static void DrawDisplayMenu(void)
     {
         MN_DrTextB(english_language ? "OFF" : "DSRK>",
                   (english_language ? 170 : 191) + wide_delta, 96);
-    }
-
-    // Local time:
-    if (local_time)
-    {
-        MN_DrTextB(english_language ?  "ON" : "DRK>",
-                  (english_language ? 173 : 140) + wide_delta, 116);
-    }
-    else
-    {
-        MN_DrTextB(english_language ? "OFF" : "DSRK>",
-                  (english_language ? 173 : 140) + wide_delta, 116);
     }
     */
 }
@@ -1999,13 +2008,24 @@ static void M_RD_LevelBrightness(int option)
             level_brightness += 16;
         break;
     }
-
-    return true;
 }
 
 static void M_RD_LocalTime(int option)
 {
-    local_time ^= 1;
+    switch(option)
+    {
+        case 0: 
+        local_time--;
+        if (local_time < 0) 
+            local_time = 4;
+        break;
+
+        case 1:
+        local_time++;
+        if (local_time > 4)
+            local_time = 0;
+        break;
+    }
 }
 
 // -----------------------------------------------------------------------------
