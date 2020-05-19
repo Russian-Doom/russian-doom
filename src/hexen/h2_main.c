@@ -417,7 +417,7 @@ void D_SetGameDescription(void)
 
     if (gamemode == shareware)
     {
-        W_MergeFile("base/common/hexen-common.wad");
+        W_MergeFile("base/hexen-common.wad");
 
         if (english_language)
         {
@@ -426,15 +426,14 @@ void D_SetGameDescription(void)
         else
         {
             gamedescription = "Hexen: Демоверсия четырех уровней";
-            W_MergeFile("base/common/hexen-common-russian.wad");
-            W_MergeFile("base/common/hexen-demo-russian.wad");
+            W_MergeFile("base/hexen-demo-russian.wad");
         }
     }
 
     else
     {
         gamedescription = "Hexen";
-        W_MergeFile("base/common/hexen-common.wad");
+        W_MergeFile("base/hexen-common.wad");
 
         if (english_language)
         {
@@ -442,8 +441,7 @@ void D_SetGameDescription(void)
         }
         else
         {
-            W_MergeFile("base/common/hexen-common-russian.wad");
-            W_MergeFile("base/common/hexen-beyond-russian.wad");
+            W_MergeFile("base/hexen-beyond-russian.wad");
         }
     }
 
@@ -485,7 +483,7 @@ void D_SetGameDescription(void)
                         else
                         {
                             gamedescription = "Hexen: Короли Смерти Темной Цитадели";
-                            W_MergeFile("base/common/hexen-dd-russian.wad");
+                            W_MergeFile("base/hexen-dd-russian.wad");
                         }
                     }
                 }
@@ -1126,12 +1124,14 @@ static void DrawAndBlit(void)
         if (!netgame)
         {
             V_DrawShadowedPatchRaven(160 + wide_delta, (viewwindowy >> hires) + 5,
-                                     W_CacheLumpName("PAUSED", PU_CACHE));
+                                     W_CacheLumpName(english_language ?
+                                     "PAUSED" : "RD_PAUS", PU_CACHE));
         }
         else
         {
             V_DrawShadowedPatchRaven(160 + wide_delta, 70,
-                                    W_CacheLumpName("PAUSED", PU_CACHE));
+                                    W_CacheLumpName(english_language ?
+                                    "PAUSED" : "RD_PAUS", PU_CACHE));
         }
     }
 
@@ -1165,14 +1165,33 @@ static void DrawMessage(void)
     }
     if (player->yellowMessage)
     {
-        MN_DrTextAYellow(player->message,
-                         160 - MN_TextAWidth(player->message) / 2 
-                         + wide_delta, 1);
+        if (english_language)
+        {
+            MN_DrTextAYellow(player->message,
+                            160 - MN_TextAWidth(player->message) / 2 
+                            + wide_delta, 1);
+        }
+        else
+        {
+            MN_DrTextSmallYellowRUS(player->message,
+                                    160 - MN_DrTextSmallRUSWidth(player->message) / 2 
+                                    + wide_delta, 1);
+        }
     }
     else
     {
-        MN_DrTextA(player->message, 160 - MN_TextAWidth(player->message) / 2
-                   + wide_delta, 1);
+        if (english_language)
+        {
+            MN_DrTextA(player->message, 
+                       160 - MN_TextAWidth(player->message) / 2
+                       + wide_delta, 1);
+        }
+        else
+        {
+            MN_DrTextSmallRUS(player->message,
+                              160 - MN_DrTextSmallRUSWidth(player->message) / 2
+                              + wide_delta, 1);            
+        }
     }
 }
 
@@ -1207,7 +1226,8 @@ static void PageDrawer(void)
     V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
     if (demosequence == 1)
     {
-        V_DrawShadowedPatchRaven(4, 160, W_CacheLumpName("ADVISOR", PU_CACHE));
+        V_DrawShadowedPatchRaven(4, 160, W_CacheLumpName( english_language ?
+                                 "ADVISOR" : "RD_ADV" , PU_CACHE));
     }
     UpdateState |= I_FULLSCRN;
 }

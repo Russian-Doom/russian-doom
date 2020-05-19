@@ -1077,6 +1077,9 @@ int MN_TextAWidth(char *text);
 void MN_DrTextB(char *text, int x, int y);
 int MN_TextBWidth(char *text);
 void MN_DrTextC(char *text, int x, int y);
+void MN_DrTextSmallRUS(char *text, int x, int y);
+void MN_DrTextSmallYellowRUS(char *text, int x, int y);
+int MN_DrTextSmallRUSWidth(char *text);
 
 extern int messageson;
 

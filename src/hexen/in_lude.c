@@ -475,10 +475,21 @@ static void DrDeathTally(void)
     static boolean showTotals;
     int temp;
 
-    V_DrawPatch(TALLY_TOP_X, TALLY_TOP_Y,
-                W_CacheLumpName("tallytop", PU_CACHE));
-    V_DrawPatch(TALLY_LEFT_X, TALLY_LEFT_Y,
-                W_CacheLumpName("tallylft", PU_CACHE));
+    if (english_language)
+    {
+        V_DrawPatch(TALLY_TOP_X, TALLY_TOP_Y,
+                    W_CacheLumpName("tallytop", PU_CACHE));
+        V_DrawPatch(TALLY_LEFT_X, TALLY_LEFT_Y,
+                    W_CacheLumpName("tallylft", PU_CACHE));
+    }
+    else
+    {
+        V_DrawPatch(TALLY_TOP_X, TALLY_TOP_Y,
+                    W_CacheLumpName("RD_TLTOP", PU_CACHE));
+        V_DrawPatch(TALLY_LEFT_X, TALLY_LEFT_Y,
+                    W_CacheLumpName("RD_TLLFT", PU_CACHE));
+    }
+
     if (intertime < TALLY_EFFECT_TICKS)
     {
         showTotals = false;

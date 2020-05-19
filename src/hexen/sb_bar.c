@@ -119,6 +119,7 @@ static int PlayPalette1;
 static int PlayPalette2;
 
 static patch_t *PatchH2BAR;
+static patch_t *PatchH2BAR_RUS;
 static patch_t *PatchH2TOP;
 static patch_t *PatchLFEDGE;
 static patch_t *PatchRTEDGE;
@@ -126,6 +127,7 @@ static patch_t *PatchARMCLEAR;
 static patch_t *PatchARTICLEAR;
 static patch_t *PatchMANACLEAR;
 static patch_t *PatchKILLS;
+static patch_t *PatchKILLS_RUS;
 static patch_t *PatchMANAVIAL1;
 static patch_t *PatchMANAVIAL2;
 static patch_t *PatchMANAVIALDIM1;
@@ -136,6 +138,7 @@ static patch_t *PatchMANABRIGHT1;
 static patch_t *PatchMANABRIGHT2;
 static patch_t *PatchCHAIN;
 static patch_t *PatchSTATBAR;
+static patch_t *PatchSTATBAR_RUS;
 static patch_t *PatchKEYBAR;
 static patch_t *PatchLIFEGEM;
 static patch_t *PatchSELECTBOX;
@@ -271,11 +274,13 @@ void SB_Init(void)
     int startLump;
 
     PatchH2BAR = W_CacheLumpName("H2BAR", PU_STATIC);
+    PatchH2BAR_RUS = W_CacheLumpName("RD_H2BAR", PU_STATIC);
     PatchH2TOP = W_CacheLumpName("H2TOP", PU_STATIC);
     PatchINVBAR = W_CacheLumpName("INVBAR", PU_STATIC);
     PatchLFEDGE = W_CacheLumpName("LFEDGE", PU_STATIC);
     PatchRTEDGE = W_CacheLumpName("RTEDGE", PU_STATIC);
     PatchSTATBAR = W_CacheLumpName("STATBAR", PU_STATIC);
+    PatchSTATBAR_RUS = W_CacheLumpName("RD_STBAR", PU_STATIC);
     PatchKEYBAR = W_CacheLumpName("KEYBAR", PU_STATIC);
     PatchSELECTBOX = W_CacheLumpName("SELECTBOX", PU_STATIC);
     PatchARTICLEAR = W_CacheLumpName("ARTICLS", PU_STATIC);
@@ -317,6 +322,7 @@ void SB_Init(void)
     if (deathmatch)
     {
         PatchKILLS = W_CacheLumpName("KILLS", PU_STATIC);
+        PatchKILLS_RUS = W_CacheLumpName("RD_KILLS", PU_STATIC);
     }
     SB_SetClassData();
 
@@ -840,7 +846,8 @@ void SB_Drawer(void)
     {
         if (SB_state == -1)
         {
-            V_DrawPatch(0 + wide_delta, 134, PatchH2BAR);
+            V_DrawPatch(0 + wide_delta, 134, 
+                        english_language ? PatchH2BAR : PatchH2BAR_RUS);
             oldhealth = -1;
         }
         DrawCommonBar();
@@ -851,7 +858,8 @@ void SB_Drawer(void)
                 // Main interface
                 if (!automapactive)
                 {
-                    V_DrawPatch(38 + wide_delta, 162, PatchSTATBAR);
+                    V_DrawPatch(38 + wide_delta, 162,
+                                english_language ? PatchSTATBAR : PatchSTATBAR_RUS);
                 }
                 else
                 {
@@ -1150,7 +1158,8 @@ void DrawMainBar(void)
         }
         if (temp != oldfrags)
         {
-            V_DrawPatch(38 + wide_delta, 162, PatchKILLS);
+            V_DrawPatch(38 + wide_delta, 162,
+                        english_language ? PatchKILLS : PatchKILLS_RUS);
             DrINumber(temp, 40 + wide_delta, 176);
             oldfrags = temp;
             UpdateState |= I_STATBAR;
@@ -1624,8 +1633,11 @@ void DrawFullScreenStuff(void)
 void Draw_TeleportIcon(void)
 {
     patch_t *patch;
+    patch_t *patch_rus;
     patch = W_CacheLumpNum(W_GetNumForName("teleicon"), PU_CACHE);
-    V_DrawShadowedPatchRaven(100 + wide_delta, 68, patch);
+    patch_rus = W_CacheLumpNum(W_GetNumForName("RD_TLICO"), PU_CACHE);
+    V_DrawShadowedPatchRaven(100 + wide_delta, 68,
+                             english_language ? patch : patch_rus);
     UpdateState |= I_FULLSCRN;
     I_FinishUpdate();
     UpdateState |= I_FULLSCRN;
@@ -1639,8 +1651,11 @@ void Draw_TeleportIcon(void)
 void Draw_SaveIcon(void)
 {
     patch_t *patch;
+    patch_t *patch_rus;
     patch = W_CacheLumpNum(W_GetNumForName("saveicon"), PU_CACHE);
-    V_DrawShadowedPatchRaven(100 + wide_delta, 68, patch);
+    patch_rus = W_CacheLumpNum(W_GetNumForName("RD_SVICO"), PU_CACHE);
+    V_DrawShadowedPatchRaven(100 + wide_delta, 68,
+                             english_language ? patch : patch_rus);
     UpdateState |= I_FULLSCRN;
     I_FinishUpdate();
     UpdateState |= I_FULLSCRN;
@@ -1654,8 +1669,11 @@ void Draw_SaveIcon(void)
 void Draw_LoadIcon(void)
 {
     patch_t *patch;
+    patch_t *patch_rus;
     patch = W_CacheLumpNum(W_GetNumForName("loadicon"), PU_CACHE);
-    V_DrawShadowedPatchRaven(100 + wide_delta, 68, patch);
+    patch_rus = W_CacheLumpNum(W_GetNumForName("RD_LDICO"), PU_CACHE);
+    V_DrawShadowedPatchRaven(100 + wide_delta, 68,
+                             english_language ? patch : patch_rus);
     UpdateState |= I_FULLSCRN;
     I_FinishUpdate();
     UpdateState |= I_FULLSCRN;
