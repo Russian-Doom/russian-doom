@@ -182,8 +182,10 @@ static void M_RD_MuteInactive(int option);
 // Controls
 static void DrawControlsMenu(void);
 static void M_RD_AlwaysRun(int option);
-static void M_RD_MouseLook(int option);
 static void M_RD_Sensitivity(int option);
+static void M_RD_MouseLook(int option);
+static void M_RD_InvertY(int option);
+static void M_RD_Novert(int option);
 
 // Gameplay
 static void DrawGameplayMenu(void);
@@ -648,8 +650,8 @@ static MenuItem_t ControlsItems[] = {
     {ITT_LRFUNC, "MOUSE SENSIVITY",    M_RD_Sensitivity, 0, MENU_NONE},
     {ITT_EMPTY,  NULL,                 NULL,             0, MENU_NONE},
     {ITT_LRFUNC, "MOUSE LOOK:",        M_RD_MouseLook,   0, MENU_NONE},
-    {ITT_LRFUNC, "INVERT Y AXIS:",     NULL,     0, MENU_NONE},
-    {ITT_LRFUNC, "VERTICAL MOVEMENT:", NULL,      0, MENU_NONE}
+    {ITT_LRFUNC, "INVERT Y AXIS:",     M_RD_InvertY,     0, MENU_NONE},
+    {ITT_LRFUNC, "VERTICAL MOVEMENT:", M_RD_Novert,      0, MENU_NONE}
 };
 
 static MenuItem_t ControlsItems_Rus[] = {
@@ -658,8 +660,8 @@ static MenuItem_t ControlsItems_Rus[] = {
     {ITT_LRFUNC, "CRJHJCNM VSIB",             M_RD_Sensitivity, 0, MENU_NONE}, // СКОРОСТЬ МЫШИ
     {ITT_EMPTY,  NULL,                        NULL,             0, MENU_NONE}, //
     {ITT_LRFUNC, "J,PJH VSIM.:",              M_RD_MouseLook,   0, MENU_NONE}, // ОБЗОР МЫШЬЮ
-    {ITT_LRFUNC, "DTHNBRFKMYFZ BYDTHCBZ:",    NULL,     0, MENU_NONE}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
-    {ITT_LRFUNC, "DTHNBRFKMYJT GTHTVTOTYBT:", NULL,      0, MENU_NONE}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
+    {ITT_LRFUNC, "DTHNBRFKMYFZ BYDTHCBZ:",    M_RD_InvertY,     0, MENU_NONE}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
+    {ITT_LRFUNC, "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,      0, MENU_NONE}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
 };
 
 static Menu_t ControlsMenu = {
@@ -2607,11 +2609,29 @@ static void DrawControlsMenu(void)
         MN_DrTextA("MOVEMENT", 36 + wide_delta, 32);
         dp_translation = NULL;
 
+        // Always run
+        MN_DrTextA(joybspeed >= 20 ? "ON" : "OFF", 118 + wide_delta, 42);
+
         //
         // MOUSE
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
         MN_DrTextA("MOUSE", 36 + wide_delta, 52);
+        dp_translation = NULL;
+
+        // Mouse look
+        MN_DrTextA(mlook ? "ON" : "OFF", 118 + wide_delta, 82);
+
+        // Invert Y axis
+        if (!mlook)
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        MN_DrTextA(mouse_y_invert ? "ON" : "OFF", 133 + wide_delta, 92);
+        dp_translation = NULL;
+
+        // Novert
+        if (mlook)
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        MN_DrTextA(!novert ? "ON" : "OFF", 168 + wide_delta, 102);
         dp_translation = NULL;
     }
     else
@@ -2629,11 +2649,29 @@ static void DrawControlsMenu(void)
         MN_DrTextSmallRUS("GTHTLDB;TYBT", 36 + wide_delta, 32);
         dp_translation = NULL;
 
+        // Режим постоянного бега
+        MN_DrTextSmallRUS(joybspeed >= 20 ? "DRK" : "DSRK", 209 + wide_delta, 42);
+
         //
         // МЫШЬ
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
         MN_DrTextSmallRUS("VSIM", 36 + wide_delta, 52);
+        dp_translation = NULL;
+
+        // Обзор мышью
+        MN_DrTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 82);
+
+        // Вертикальная инверсия
+        if (!mlook)
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        MN_DrTextSmallRUS(mouse_y_invert ? "DRK" : "DSRK", 199 + wide_delta, 92);
+        dp_translation = NULL;
+
+        // Вертикальное перемещение
+        if (mlook)
+        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        MN_DrTextSmallRUS(!novert ? "DRK" : "DSRK", 227 + wide_delta, 102);
         dp_translation = NULL;
     }
 
@@ -2643,32 +2681,6 @@ static void DrawControlsMenu(void)
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
     MN_DrTextA(num, 152 + wide_delta, 73);
     dp_translation = NULL;
-
-    /*
-    // Always run
-    if (joybspeed >= 20)
-    {
-        MN_DrTextB(english_language ?  "ON" : "DRK>",
-                  (english_language ? 200 : 246) + wide_delta, 16);
-    }
-    else
-    {
-        MN_DrTextB(english_language ? "OFF" : "DSRK>",
-                  (english_language ? 200 : 246) + wide_delta, 16);
-    }
-
-    // Mouse look
-    if (mlook)
-    {
-        MN_DrTextB(english_language ?  "ON" : "DRK>",
-                  (english_language ? 207 : 227) + wide_delta, 36);
-    }
-    else
-    {
-        MN_DrTextB(english_language ? "OFF" : "DSRK>",
-                  (english_language ? 207 : 227) + wide_delta, 36);
-    }
-    */
 }
 
 static void M_RD_AlwaysRun(int option)
@@ -2706,6 +2718,16 @@ static void M_RD_Sensitivity(int option)
     {
         mouseSensitivity--;
     }
+}
+
+static void M_RD_InvertY(int option)
+{
+    mouse_y_invert ^= 1;
+}
+
+static void M_RD_Novert(int option)
+{
+    novert ^= 1;
 }
 
 // -----------------------------------------------------------------------------

@@ -721,10 +721,18 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
    // [JN] Mouselook: initials
    // TODO: make it safe for network game
-   if (mlook && !netgame && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !menuactive && !askforquit && !paused)
+   if (players[consoleplayer].playerstate == PST_LIVE && !netgame 
+   && !demoplayback && !menuactive && !askforquit && !paused)
    {
-       cmd->lookdir += mousey;
-       
+        if (mlook || novert)
+        {
+            cmd->lookdir += mouse_y_invert ? -mousey : mousey;
+        }
+        else if (!novert)
+        {
+            forward += mousey;
+        }
+
        if (players[consoleplayer].lookdir > LOOKDIRMAX * MLOOKUNIT)
            players[consoleplayer].lookdir = LOOKDIRMAX * MLOOKUNIT;
        else
