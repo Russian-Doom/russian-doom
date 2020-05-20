@@ -72,7 +72,12 @@ typedef struct
 
 extern int snd_MaxVolume;
 extern int snd_MusicVolume;
+extern int snd_MaxVolume_tmp;
+
+extern int snd_Channels_RD;
 extern int snd_Channels;
+extern int snd_Channels_Vanilla;
+
 extern boolean cdmusic;
 
 void S_Start(void);
@@ -90,6 +95,8 @@ void S_Init(void);
 void S_ChannelsRealloc(void);
 void S_GetChannelInfo(SoundInfo_t * s);
 void S_SetMusicVolume(void);
+void S_MuteSound(void);
+void S_UnMuteSound(void);
 boolean S_GetSoundPlayingInfo(mobj_t * mobj, int sound_id);
 boolean S_StartCustomCDTrack(int tracknum);
 int S_GetCurrentCDTrack(void);

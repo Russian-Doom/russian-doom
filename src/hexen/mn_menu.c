@@ -2157,8 +2157,8 @@ static void DrawSoundMenu(void)
     }
 
     // SFX Volume
-    DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 1, 16, snd_MaxVolume);
-    M_snprintf(num, 4, "%3d", snd_MaxVolume);
+    DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 1, 16, snd_MaxVolume_tmp);
+    M_snprintf(num, 4, "%3d", snd_MaxVolume_tmp);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
     MN_DrTextA(num, 184 + wide_delta, 53);
     dp_translation = NULL;
@@ -2205,6 +2205,7 @@ static void M_RD_SfxVolume(int option)
     {
         snd_MaxVolume--;
     }
+    snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable.
     soundchanged = true;        // we'll set it when we leave the menu
 }
 
@@ -2267,44 +2268,42 @@ static void DrawSoundSystemMenu(void)
         MN_DrTextA("SOUND SYSTEM", 36 + wide_delta, 32);
         dp_translation = NULL;
 
-        /*
         // Sound effects
         if (snd_sfxdevice == 0)
         {
             dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-            MN_DrTextSmallENG(DEH_String("DISABLED"), 144 + wide_delta, 42);
+            MN_DrTextA("DISABLED", 144 + wide_delta, 42);
             dp_translation = NULL;
         }
         else if (snd_sfxdevice == 3)
         {
-            MN_DrTextSmallENG(DEH_String("DIGITAL SFX"), 144 + wide_delta, 42);
+            MN_DrTextA("DIGITAL SFX", 144 + wide_delta, 42);
         }
 
         // Music
         if (snd_musicdevice == 0)
         {   
             dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-            MN_DrTextSmallENG(DEH_String("DISABLED"), 80 + wide_delta, 52);
+            MN_DrTextA("DISABLED", 80 + wide_delta, 52);
             dp_translation = NULL;
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
         {
-            MN_DrTextSmallENG(DEH_String("OPL2 SYNTH"), 80 + wide_delta, 52);
+            MN_DrTextA("OPL2 SYNTH", 80 + wide_delta, 52);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, "-opl3"))
         {
-            MN_DrTextSmallENG(DEH_String("OPL3 SYNTH"), 80 + wide_delta, 52);
+            MN_DrTextA("OPL3 SYNTH", 80 + wide_delta, 52);
         }
         else if (snd_musicdevice == 5)
         {
-            MN_DrTextSmallENG(DEH_String("GUS EMULATION"), 80 + wide_delta, 52);
+            MN_DrTextA("GUS EMULATION", 80 + wide_delta, 52);
         }
         else if (snd_musicdevice == 8)
         {
             // MIDI/MP3/OGG/FLAC
-            MN_DrTextSmallENG(DEH_String("MIDI/MP3/OGG/FLAC"), 80 + wide_delta, 52);
+            MN_DrTextA("MIDI/MP3/OGG/FLAC", 80 + wide_delta, 52);
         }
-        */
 
         //
         // QUALITY
@@ -2313,21 +2312,19 @@ static void DrawSoundSystemMenu(void)
         MN_DrTextA("QUALITY", 36 + wide_delta, 62);
         dp_translation = NULL;
 
-        /*
         // Sampling frequency (hz)
         if (snd_samplerate == 44100)
         {
-            MN_DrTextSmallENG(DEH_String("44100 HZ"), 178 + wide_delta, 72);
+            MN_DrTextA("44100 HZ", 178 + wide_delta, 72);
         }
         else if (snd_samplerate == 22050)
         {
-            MN_DrTextSmallENG(DEH_String("22050 HZ"), 178 + wide_delta, 72);
+            MN_DrTextA("22050 HZ", 178 + wide_delta, 72);
         }
         else if (snd_samplerate == 11025)
         {
-            MN_DrTextSmallENG(DEH_String("11025 HZ"), 178 + wide_delta, 72);
+            MN_DrTextA("11025 HZ", 178 + wide_delta, 72);
         }
-        */
 
         //
         // MISCELLANEOUS
@@ -2336,28 +2333,22 @@ static void DrawSoundSystemMenu(void)
         MN_DrTextA("MISCELLANEOUS", 36 + wide_delta, 82);
         dp_translation = NULL;
 
-        /*
         // SFX Mode
-        MN_DrTextSmallENG(DEH_String(snd_monomode ? "MONO" : "STEREO"),
-                                     181 + wide_delta, 92);
+        MN_DrTextA(snd_monomode ? "MONO" : "STEREO", 181 + wide_delta, 92);
 
         // Pitch-Shifted sounds
-        MN_DrTextSmallENG(DEH_String(snd_pitchshift ? "ON" : "OFF"),
-                                     189 + wide_delta, 102);
+        MN_DrTextA(snd_pitchshift ? "ON" : "OFF", 189 + wide_delta, 102);
 
         // Mute inactive window
-        MN_DrTextSmallENG(DEH_String(mute_inactive_window ? "ON" : "OFF"),
-                                     184 + wide_delta, 112);
+        MN_DrTextA(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 112);
 
         // Informative message:
         if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
         {
-            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
-            MN_DrTextSmallENG(DEH_String("CHANGING WILL REQUIRE RESTART OF THE PROGRAM"),
-                                         3 + wide_delta, 132);
+            dp_translation = cr[CR_GRAY2GREEN_HEXEN];
+            MN_DrTextA("CHANGING WILL REQUIRE RESTART OF THE PROGRAM", 3 + wide_delta, 132);
             dp_translation = NULL;
         }
-        */
     }
     else
     {
@@ -2375,19 +2366,18 @@ static void DrawSoundSystemMenu(void)
         MN_DrTextSmallRUS("PDERJDFZ CBCNTVF", 36 + wide_delta, 32);
         dp_translation = NULL;
 
-        /*
         // Звуковые эффекты
         if (snd_sfxdevice == 0)
         {
             // ОТКЛЮЧЕНЫ
             dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-            MN_DrTextSmallRUS(DEH_String("JNRK.XTYS"), 173 + wide_delta, 42);
+            MN_DrTextSmallRUS("JNRK.XTYS", 173 + wide_delta, 42);
             dp_translation = NULL;
         }
         else if (snd_sfxdevice == 3)
         {
             // ЦИФРОВЫЕ
-            MN_DrTextSmallRUS(DEH_String("WBAHJDST"), 173 + wide_delta, 42);
+            MN_DrTextSmallRUS("WBAHJDST", 173 + wide_delta, 42);
         }
 
         // Музыка
@@ -2395,33 +2385,32 @@ static void DrawSoundSystemMenu(void)
         {   
             // ОТКЛЮЧЕНА
             dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
-            MN_DrTextSmallRUS(DEH_String("JNRK.XTYF"), 91 + wide_delta, 52);
+            MN_DrTextSmallRUS("JNRK.XTYF", 91 + wide_delta, 52);
             dp_translation = NULL;
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
         {
             // СИНТЕЗ OPL2
-            MN_DrTextSmallRUS(DEH_String("CBYNTP J"), 91 + wide_delta, 52);
-            MN_DrTextSmallENG(DEH_String("OPL2"), 140 + wide_delta, 52);
+            MN_DrTextSmallRUS("CBYNTP", 91 + wide_delta, 52);
+            MN_DrTextA("OPL2", 140 + wide_delta, 52);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, "-opl3"))
         {
             // СИНТЕЗ OPL3
-            MN_DrTextSmallRUS(DEH_String("CBYNTP J"), 91 + wide_delta, 52);
-            MN_DrTextSmallENG(DEH_String("OPL3"), 140 + wide_delta, 52);
+            MN_DrTextSmallRUS("CBYNTP", 91 + wide_delta, 52);
+            MN_DrTextA("OPL3", 140 + wide_delta, 52);
         }
         else if (snd_musicdevice == 5)
         {
             // ЭМУЛЯЦИЯ GUS
-            MN_DrTextSmallRUS(DEH_String("\'VEKZWBZ"), 91 + wide_delta, 52);
-            MN_DrTextSmallENG(DEH_String("GUS"), 155 + wide_delta, 52);
+            MN_DrTextSmallRUS("\'VEKZWBZ", 91 + wide_delta, 52);
+            MN_DrTextA("GUS", 155 + wide_delta, 52);
         }
         else if (snd_musicdevice == 8)
         {
             // MIDI/MP3/OGG/FLAC
-            MN_DrTextSmallENG(DEH_String("MIDI/MP3/OGG/FLAC"), 91 + wide_delta, 52);
+            MN_DrTextA("MIDI/MP3/OGG/FLAC", 91 + wide_delta, 52);
         }
-        */
 
         //
         // КАЧЕСТВО ЗВУЧАНИЯ
@@ -2430,21 +2419,19 @@ static void DrawSoundSystemMenu(void)
         MN_DrTextSmallRUS("RFXTCNDJ PDEXFYBZ", 36 + wide_delta, 62);
         dp_translation = NULL;
 
-        /*
         // Частота дискретизации (гц)
         if (snd_samplerate == 44100)
         {
-            MN_DrTextSmallRUS(DEH_String("44100 UW"), 200 + wide_delta, 72);
+            MN_DrTextSmallRUS("44100 UW", 200 + wide_delta, 72);
         }
         else if (snd_samplerate == 22050)
         {
-            MN_DrTextSmallRUS(DEH_String("22050 UW"), 200 + wide_delta, 72);
+            MN_DrTextSmallRUS("22050 UW", 200 + wide_delta, 72);
         }
         else if (snd_samplerate == 11025)
         {
-            MN_DrTextSmallRUS(DEH_String("11025 UW"), 200 + wide_delta, 72);
+            MN_DrTextSmallRUS("11025 UW", 200 + wide_delta, 72);
         }
-        */
 
         //
         // РАЗНОЕ
@@ -2453,28 +2440,23 @@ static void DrawSoundSystemMenu(void)
         MN_DrTextSmallRUS("HFPYJT", 36 + wide_delta, 82);
         dp_translation = NULL;
 
-        /*
         // Режим звуковых эффектов
-        MN_DrTextSmallRUS(DEH_String(snd_monomode ? "VJYJ" : "CNTHTJ"),
-                                     226 + wide_delta, 92);
+        MN_DrTextSmallRUS(snd_monomode ? "VJYJ" : "CNTHTJ", 226 + wide_delta, 92);
 
         // Произвольный питч-шифтинг
-        MN_DrTextSmallRUS(DEH_String(snd_pitchshift ? "DRK" : "DSRK"),
-                                     230 + wide_delta, 102);
+        MN_DrTextSmallRUS(snd_pitchshift ? "DRK" : "DSRK", 230 + wide_delta, 102);
 
         // Звук в неактивном окне
-        MN_DrTextSmallRUS(DEH_String(mute_inactive_window ? "DSRK" : "DRK"),
-                                     201 + wide_delta, 112);
+        MN_DrTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 112);
 
         // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
         if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
         {
-            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
-            MN_DrTextSmallRUS(DEH_String("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS"), 
-                                         11 + wide_delta, 132);
+            dp_translation = cr[CR_GRAY2GREEN_HEXEN];
+            MN_DrTextSmallRUS("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS", 
+                              11 + wide_delta, 132);
             dp_translation = NULL;
         }
-        */
     }
 }
 
@@ -2996,6 +2978,8 @@ void M_RD_DoResetSettings(void)
     snd_Channels    = 32;
     S_ChannelsRealloc();
     snd_monomode    = 0;
+    snd_pitchshift  = 1;
+    mute_inactive_window = 0;
 
     // Controls
     joybspeed           = 29;
