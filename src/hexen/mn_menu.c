@@ -402,7 +402,8 @@ static MenuItem_t OptionsItems[] = {
     {ITT_SETMENU, "SOUND",          NULL,               0, MENU_SOUND    },
     {ITT_SETMENU, "CONTROLS",       NULL,               0, MENU_CONTROLS },
     {ITT_SETMENU, "GAMEPLAY",       NULL,               0, MENU_GAMEPLAY },
-    {ITT_EFUNC,   "RESET SETTINGS", M_RD_ResetSettings, 0, MENU_NONE     }
+    {ITT_EFUNC,   "RESET SETTINGS", M_RD_ResetSettings, 0, MENU_NONE     },
+    {ITT_EFUNC,   "LANGUAGE: ENGLISH", NULL, 0, MENU_NONE     }
 };
 
 static MenuItem_t OptionsItems_Rus[] = {
@@ -411,13 +412,15 @@ static MenuItem_t OptionsItems_Rus[] = {
     {ITT_SETMENU, "FELBJ",          NULL,               0, MENU_SOUND    }, // АУДИО
     {ITT_SETMENU, "EGHFDKTYBT",     NULL,               0, MENU_CONTROLS }, // УПРАВЛЕНИЕ
     {ITT_SETMENU, "UTQVGKTQ",       NULL,               0, MENU_GAMEPLAY }, // ГЕЙМПЛЕЙ
-    {ITT_EFUNC,   "C,HJC YFCNHJTR", M_RD_ResetSettings, 0, MENU_NONE     }  // СБРОС НАСТРОЕК
+    {ITT_EFUNC,   "C,HJC YFCNHJTR", M_RD_ResetSettings, 0, MENU_NONE     }, // СБРОС НАСТРОЕК
+    {ITT_EFUNC,   "ZPSR: HECCRBQ", NULL, 0, MENU_NONE     }
+    
 };
 
 static Menu_t OptionsMenu = {
     97, 16,
     NULL,
-    6, OptionsItems,
+    7, OptionsItems,
     0,
     MENU_MAIN
 };
@@ -425,7 +428,7 @@ static Menu_t OptionsMenu = {
 static Menu_t OptionsMenu_Rus = {
     77, 16,
     NULL,
-    6, OptionsItems_Rus,
+    7, OptionsItems_Rus,
     0,
     MENU_MAIN
 };
@@ -1216,8 +1219,8 @@ void MN_Drawer(void)
             }
             else
             {
-                MN_DrTextA(QuitEndMsg_Rus[typeofask - 1], 160 -
-                           MN_TextAWidth(QuitEndMsg_Rus[typeofask - 1]) / 2
+                MN_DrTextSmallRUS(QuitEndMsg_Rus[typeofask - 1], 160 -
+                           MN_DrTextSmallRUSWidth(QuitEndMsg_Rus[typeofask - 1]) / 2
                            + wide_delta, 80);
             }
 
@@ -2756,6 +2759,46 @@ static void DrawGameplayMenu(void)
         MN_DrTextA("CROSSHAIR", 36 + wide_delta, 72);
         MN_DrTextA("GAMEPLAY", 36 + wide_delta, 112);
         dp_translation = NULL;
+
+        // Brightmaps
+        dp_translation = brightmaps ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextA(brightmaps ? "ON" : "OFF", 119 + wide_delta, 42);
+        dp_translation = NULL;
+
+        // Fake contrast
+        dp_translation = fake_contrast ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextA(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 52);
+        dp_translation = NULL;
+
+        // Text casts shadows
+        // dp_translation = fake_contrast ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        // MN_DrTextA(fake_contrast ? "ON" : "OFF", 160 + wide_delta, 52);
+        // dp_translation = NULL;
+
+        // Draw crosshair
+        dp_translation = crosshair_draw ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextA(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 82);
+        dp_translation = NULL;
+
+        // Health indication
+        dp_translation = crosshair_health ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextA(crosshair_health ? "ON" : "OFF", 161 + wide_delta, 92);
+        dp_translation = NULL;
+
+        // Increased size
+        dp_translation = crosshair_scale ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextA(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 102);
+        dp_translation = NULL;
+
+        // Flip game levels
+        dp_translation = flip_levels ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextA(flip_levels ? "ON" : "OFF", 153 + wide_delta, 122);
+        dp_translation = NULL;
+
+        // Play internal demos
+        dp_translation = no_internal_demos ? cr[CR_GRAY2RED_HEXEN] : cr[CR_GRAY2GREEN_HEXEN];
+        MN_DrTextA(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 132);
+        dp_translation = NULL;
     }
     else
     {
@@ -2773,149 +2816,47 @@ static void DrawGameplayMenu(void)
         MN_DrTextSmallRUS("GHBWTK", 36 + wide_delta, 72);
         MN_DrTextSmallRUS("UTQVGKTQ", 36 + wide_delta, 112);
         dp_translation = NULL;
-    }
 
-    /*
-    // Subheaders
-    dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-    MN_DrTextA(english_language ?  "VISUAL" : "UHFABRF",
-              (english_language ? 53 : 53) + wide_delta, 16);
-    
-    MN_DrTextA(english_language ?  "CROSSHAIR" : "GHBWTK",
-              (english_language ? 53 : 53) + wide_delta, 66);
+        // Брайтмаппинг
+        dp_translation = brightmaps ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 42);
+        dp_translation = NULL;
 
-    MN_DrTextA(english_language ?  "GAMEPLAY" : "UTQVGKTQ",
-              (english_language ? 53 : 53) + wide_delta, 116);
-    dp_translation = NULL;
+        // Имитация контрастности
+        dp_translation = fake_contrast ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 52);
+        dp_translation = NULL;
 
-    // Brightmaps
-    if (brightmaps)
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 136 : 150) + wide_delta, 26);
-        dp_translation = NULL;
-    }
-    else
-    {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 136 : 150) + wide_delta, 26);
-        dp_translation = NULL;
-    }
+        // Имитация контрастности
+        // dp_translation = fake_contrast ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        // MN_DrTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 62);
+        // dp_translation = NULL;
 
-    // Fake contrast
-    if (fake_contrast)
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 160 : 222) + wide_delta, 36);
+        // Отображать прицел
+        dp_translation = crosshair_draw ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 82);
         dp_translation = NULL;
-    }
-    else
-    {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 160 : 222) + wide_delta, 36);
-        dp_translation = NULL;
-    }
 
-    // Text casts shadows
-    if (draw_shadowed_text)
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 197 : 237) + wide_delta, 46);
+        // Индикация здоровья
+        dp_translation = crosshair_health ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextSmallRUS(crosshair_health ? "DRK" : "DSRK", 179 + wide_delta, 92);
         dp_translation = NULL;
-    }
-    else
-    {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 197 : 237) + wide_delta, 46);
-        dp_translation = NULL;
-    }
 
-    // Draw crosshair
-    if (crosshair_draw)
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 167 : 192) + wide_delta, 76);
+        // Увеличенный размер
+        dp_translation = crosshair_scale ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 102);
         dp_translation = NULL;
-    }
-    else
-    {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 167 : 192) + wide_delta, 76);
-        dp_translation = NULL;
-    }
 
-    // Health indication
-    if (crosshair_health)
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 178 : 196) + wide_delta, 86);
+        // Зеркальное отражение уровней
+        dp_translation = flip_levels ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 122);
         dp_translation = NULL;
-    }
-    else 
-    {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 178 : 196) + wide_delta, 86);
-        dp_translation = NULL;
-    }
 
-    // Increased size
-    if (crosshair_scale)
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 163 : 198) + wide_delta, 96);
+        // Проигрывать демозаписи
+        dp_translation = no_internal_demos ? cr[CR_GRAY2RED_HEXEN] : cr[CR_GRAY2GREEN_HEXEN];
+        MN_DrTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 132);
         dp_translation = NULL;
     }
-    else
-    {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 163 : 198) + wide_delta, 96);
-        dp_translation = NULL;
-    }
-
-    // Flip game levels
-    if (flip_levels)
-    {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 170 : 272) + wide_delta, 126);
-        dp_translation = NULL;
-    }
-    else
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 170 : 272) + wide_delta, 126);
-        dp_translation = NULL;
-    }
-
-    // Play internal demos
-    if (no_internal_demos)
-    {
-        dp_translation = cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(english_language ? RD_OFF : RD_OFF_RUS,
-                  (english_language ? 196 : 228) + wide_delta, 136);
-        dp_translation = NULL;
-    }
-    else
-    {
-        dp_translation = cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextA(english_language ? RD_ON : RD_ON_RUS,
-                  (english_language ? 196 : 228) + wide_delta, 136);
-        dp_translation = NULL;
-    }
-    */
 }
 
 static void M_RD_Brightmaps(int option)
