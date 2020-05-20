@@ -2041,27 +2041,17 @@ static void DrawAutomapMenu(void)
         MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 
                                   + wide_delta, 7);
 
-        /*
-        // Level stats
-        MN_DrTextA(DEH_String(automap_stats ? "ON" : "OFF"),
-                                     187 + wide_delta, 32);
-
         // Overlay mode
-        MN_DrTextA(DEH_String(automap_overlay ? "ON" : "OFF"),
-                                     200 + wide_delta, 42);
+        MN_DrTextA(automap_overlay ? "ON" : "OFF", 200 + wide_delta, 32);
 
         // Rotate mode
-        MN_DrTextA(DEH_String(automap_rotate ? "ON" : "OFF"),
-                                     193 + wide_delta, 52);
+        MN_DrTextA(automap_rotate ? "ON" : "OFF", 193 + wide_delta, 42);
 
         // Follow mode
-        MN_DrTextA(DEH_String(automap_follow ? "ON" : "OFF"),
-                                     189 + wide_delta, 62);
+        MN_DrTextA(automap_follow ? "ON" : "OFF", 189 + wide_delta, 52);
 
         // Grid
-        MN_DrTextA(DEH_String(automap_grid ? "ON" : "OFF"),
-                                     138 + wide_delta, 72);
-                                     */
+        MN_DrTextA(automap_grid ? "ON" : "OFF", 138 + wide_delta, 62);
     }
     else
     {
@@ -2071,48 +2061,38 @@ static void DrawAutomapMenu(void)
         MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
                                        + wide_delta, 7);
 
-        /*
-        // Статистика уровня
-        MN_DrTextSmallRUS(DEH_String(automap_stats ? "DRK" : "DSRK"),
-                                     214 + wide_delta, 32);
-
         // Режим наложения
-        MN_DrTextSmallRUS(DEH_String(automap_overlay ? "DRK" : "DSRK"),
-                                     208 + wide_delta, 42);
+        MN_DrTextSmallRUS(automap_overlay ? "DRK" : "DSRK", 208 + wide_delta, 32);
 
         // Режим вращения
-        MN_DrTextSmallRUS(DEH_String(automap_rotate ? "DRK" : "DSRK"),
-                                     200 + wide_delta, 52);
+        MN_DrTextSmallRUS(automap_rotate ? "DRK" : "DSRK", 200 + wide_delta, 42);
 
         // Режим следования
-        MN_DrTextSmallRUS(DEH_String(automap_follow ? "DRK" : "DSRK"),
-                                     215 + wide_delta, 62);
+        MN_DrTextSmallRUS(automap_follow ? "DRK" : "DSRK", 215 + wide_delta, 52);
 
         // Сетка
-        MN_DrTextSmallRUS(DEH_String(automap_grid ? "DRK" : "DSRK"),
-                                     128 + wide_delta, 72);
-                                     */
+        MN_DrTextSmallRUS(automap_grid ? "DRK" : "DSRK", 128 + wide_delta, 62);
     }
 }
 
 static void M_RD_AutoMapOverlay(int option)
 {
-    // automap_overlay ^= 1;
+    automap_overlay ^= 1;
 }
 
 static void M_RD_AutoMapRotate(int option)
 {
-    // automap_rotate ^= 1;
+    automap_rotate ^= 1;
 }
 
 static void M_RD_AutoMapFollow(int option)
 {
-    // automap_follow ^= 1;
+    automap_follow ^= 1;
 }
 
 static void M_RD_AutoMapGrid(int option)
 {
-    // automap_grid ^= 1;
+    automap_grid ^= 1;
 }
 
 // -----------------------------------------------------------------------------

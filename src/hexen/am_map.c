@@ -34,7 +34,6 @@
 #define NUMALIAS 3              // Number of antialiased lines.
 
 int cheating = 0;
-static int grid = 0;
 
 static int leveljuststarted = 1;        // kluge until AM_LevelInit() is called
 
@@ -82,8 +81,6 @@ static vertex_t oldplr;
 //static mpoint_t markpoints[AM_NUMMARKPOINTS]; // where the points are
 //static int markpointnum = 0; // next point to be assigned
 
-static int followplayer = 1;    // specifies whether to follow the player around
-
 static char cheat_kills[] = { 'k', 'i', 'l', 'l', 's' };
 static boolean ShowKills = 0;
 static unsigned ShowKillsCount = 0;
@@ -108,6 +105,13 @@ static short mapxstart = 0;     //x-value for the bitmap.
 
 //byte screens[][SCREENWIDTH*SCREENHEIGHT];
 //void V_MarkRect (int x, int y, int width, int height);
+
+// [crispy] automap rotate mode ...
+// ... needs these early on
+void AM_rotate (int64_t *x, int64_t *y, angle_t a);
+static void AM_rotatePoint (mpoint_t *pt);
+static mpoint_t mapcenter;
+static angle_t mapangle;
 
 // Functions
 
@@ -161,7 +165,7 @@ void AM_restoreScaleAndLoc(void)
 
     m_w = old_m_w;
     m_h = old_m_h;
-    if (!followplayer)
+    if (!automap_follow)
     {
         m_x = old_m_x;
         m_y = old_m_y;
@@ -223,14 +227,22 @@ void AM_findMinMaxBoundaries(void)
 
 void AM_changeWindowLoc(void)
 {
+    int64_t incx, incy;
+
     if (m_paninc.x || m_paninc.y)
     {
-        followplayer = 0;
+        automap_follow = 0;
         f_oldloc.x = INT_MAX;
     }
 
-    m_x += m_paninc.x;
-    m_y += m_paninc.y;
+    incx = m_paninc.x;
+    incy = m_paninc.y;
+    if (automap_rotate)
+    {
+        AM_rotate(&incx, &incy, -mapangle);
+    }
+    m_x += incx;
+    m_y += incy;
 
     if (m_x + m_w / 2 > max_x)
     {
@@ -470,7 +482,9 @@ boolean AM_Responder(event_t * ev)
 
         if (key == key_map_east)                 // pan right
         {
-            if (!followplayer)
+            // [crispy] keep the map static in overlay mode
+            // if not following the player
+            if (!automap_follow && !automap_overlay)
             {
                 m_paninc.x = flip_levels ? -FTOM(F_PANINC) : FTOM(F_PANINC);
             }
@@ -479,7 +493,7 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_west)                   // pan left
         {
-            if (!followplayer)
+            if (!automap_follow && !automap_overlay)
             {
                 m_paninc.x = flip_levels ? FTOM(F_PANINC) : -FTOM(F_PANINC);
             }
@@ -490,7 +504,7 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_north)             // pan up
         {
-            if (!followplayer)
+            if (!automap_follow && !automap_overlay)
             {
                 m_paninc.y = FTOM(F_PANINC);
             }
@@ -501,7 +515,7 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_south)                   // pan down
         {
-            if (!followplayer)
+            if (!automap_follow && !automap_overlay)
             {
                 m_paninc.y = -FTOM(F_PANINC);
             }
@@ -540,21 +554,36 @@ boolean AM_Responder(event_t * ev)
         }
         else if (key == key_map_follow)
         {
-            followplayer = !followplayer;
+            automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
             
             if (english_language)
             {
                 P_SetMessage(plr,
-                            followplayer ? AMSTR_FOLLOWON : AMSTR_FOLLOWOFF,
+                            automap_follow ? AMSTR_FOLLOWON : AMSTR_FOLLOWOFF,
                             true);
             }
             else
             {
                 P_SetMessage(plr,
-                            followplayer ? AMSTR_FOLLOWON_RUS : AMSTR_FOLLOWOFF_RUS,
+                            automap_follow ? AMSTR_FOLLOWON_RUS : AMSTR_FOLLOWOFF_RUS,
                             true);
             }
+        }
+        else if (key == key_map_overlay)
+        {
+            automap_overlay = !automap_overlay;
+            //P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
+        }
+        else if (key == key_map_rotate)
+        {
+            automap_rotate = !automap_rotate;
+            //P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
+        }
+        else if (key == key_map_grid)
+        {
+            automap_grid = !automap_grid;
+            //P_SetMessage(plr, automap_overlay ? amstr_overlayon : amstr_overlayoff, true);
         }
         else
         {
@@ -582,22 +611,22 @@ boolean AM_Responder(event_t * ev)
 
         if (key == key_map_east)
         {
-            if (!followplayer)
+            if (!automap_follow)
                 m_paninc.x = 0;
         }
         else if (key == key_map_west)
         {
-            if (!followplayer)
+            if (!automap_follow)
                 m_paninc.x = 0;
         }
         else if (key == key_map_north)
         {
-            if (!followplayer)
+            if (!automap_follow)
                 m_paninc.y = 0;
         }
         else if (key == key_map_south)
         {
-            if (!followplayer)
+            if (!automap_follow)
                 m_paninc.y = 0;
         }
         else if (key == key_map_zoomin || key == key_map_zoomout)
@@ -624,7 +653,7 @@ void AM_changeWindowScale(void)
         AM_activateNewScale();
 }
 
-void AM_doFollowPlayer(void)
+void AM_doautomap_follow(void)
 {
     if (f_oldloc.x != plr->mo->x || f_oldloc.y != plr->mo->y)
     {
@@ -688,8 +717,8 @@ void AM_Ticker(void)
 
     amclock++;
 
-    if (followplayer)
-        AM_doFollowPlayer();
+    if (automap_follow)
+        AM_doautomap_follow();
 
     // Change the zoom if necessary
     if (ftom_zoommul != FRACUNIT)
@@ -701,6 +730,16 @@ void AM_Ticker(void)
     // Update light level
 // AM_updateLightLev();
 
+    // [crispy] required for AM_rotatePoint()
+    if (automap_rotate)
+    {
+        mapcenter.x = m_x + m_w / 2;
+        mapcenter.y = m_y + m_h / 2;
+        // [crispy] keep the map static in overlay mode
+        // if not following the player
+        if (!(!automap_follow && automap_overlay))
+        mapangle = ANG90 - viewangle;
+    }
 }
 
 void AM_clearFB(int color)
@@ -714,7 +753,7 @@ void AM_clearFB(int color)
     byte *src = W_CacheLumpName("AUTOPAGE", PU_CACHE);
     byte *dest = I_VideoBuffer;
 
-    if (followplayer)
+    if (automap_follow)
     {
         dmapx = (MTOF(plr->mo->x) - MTOF(oldplr.x));    //fixed point
         dmapy = (MTOF(oldplr.y) - MTOF(plr->mo->y));
@@ -1176,41 +1215,81 @@ void AM_drawMline(mline_t * ml, int color)
 
 void AM_drawGrid(int color)
 {
-    fixed_t x, y;
-    fixed_t start, end;
+    int64_t x, y;
+    int64_t start, end;
     mline_t ml;
 
     // Figure out start of vertical gridlines
     start = m_x;
-    if ((start - bmaporgx) % (MAPBLOCKUNITS << FRACBITS))
-        start += (MAPBLOCKUNITS << FRACBITS)
-            - ((start - bmaporgx) % (MAPBLOCKUNITS << FRACBITS));
+    if (automap_rotate)
+    {
+        start -= m_h / 2;
+    }
+
+    if ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS))
+    {
+        start += (MAPBLOCKUNITS<<FRACBITS) - 
+      ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
+    }
+
     end = m_x + m_w;
+    if (automap_rotate)
+    {
+        end += m_h / 2;
+    }
 
     // draw vertical gridlines
-    ml.a.y = m_y;
-    ml.b.y = m_y + m_h;
     for (x = start; x < end; x += (MAPBLOCKUNITS << FRACBITS))
     {
         ml.a.x = x;
         ml.b.x = x;
+        // [crispy] moved here
+        ml.a.y = m_y;
+        ml.b.y = m_y + m_h;
+        if (automap_rotate)
+        {
+            ml.a.y -= m_w / 2;
+            ml.b.y += m_w / 2;
+            AM_rotatePoint(&ml.a);
+            AM_rotatePoint(&ml.b);
+        }
         AM_drawMline(&ml, color);
     }
 
     // Figure out start of horizontal gridlines
     start = m_y;
-    if ((start - bmaporgy) % (MAPBLOCKUNITS << FRACBITS))
-        start += (MAPBLOCKUNITS << FRACBITS)
-            - ((start - bmaporgy) % (MAPBLOCKUNITS << FRACBITS));
+    if (automap_rotate)
+    {
+        start -= m_w / 2;
+    }
+
+    if ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS))
+    {
+        start += (MAPBLOCKUNITS<<FRACBITS) - 
+      ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
+    }
+    
     end = m_y + m_h;
+    if (automap_rotate)
+    {
+        end += m_w / 2;
+    }
 
     // draw horizontal gridlines
-    ml.a.x = m_x;
-    ml.b.x = m_x + m_w;
     for (y = start; y < end; y += (MAPBLOCKUNITS << FRACBITS))
     {
         ml.a.y = y;
         ml.b.y = y;
+        // [crispy] moved here
+        ml.a.x = m_x;
+        ml.b.x = m_x + m_w;
+        if (automap_rotate)
+        {
+            ml.a.x -= m_h / 2;
+            ml.b.x += m_h / 2;
+            AM_rotatePoint(&ml.a);
+            AM_rotatePoint(&ml.b);
+        }
         AM_drawMline(&ml, color);
     }
 }
@@ -1226,6 +1305,11 @@ void AM_drawWalls(void)
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&l.a);
+            AM_rotatePoint(&l.b);
+        }
         if (cheating || (lines[i].flags & ML_MAPPED))
         {
             if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
@@ -1280,9 +1364,9 @@ void AM_drawWalls(void)
 
 }
 
-void AM_rotate(fixed_t * x, fixed_t * y, angle_t a)
+void AM_rotate (int64_t* x, int64_t* y, angle_t a)
 {
-    fixed_t tmpx;
+    int64_t tmpx;
 
     tmpx = FixedMul(*x, finecosine[a >> ANGLETOFINESHIFT])
         - FixedMul(*y, finesine[a >> ANGLETOFINESHIFT]);
@@ -1291,11 +1375,36 @@ void AM_rotate(fixed_t * x, fixed_t * y, angle_t a)
     *x = tmpx;
 }
 
+// [crispy] rotate point around map center
+// adapted from prboom-plus/src/am_map.c:898-920
+static void AM_rotatePoint (mpoint_t *pt)
+{
+    int64_t tmpx;
+
+    pt->x -= mapcenter.x;
+    pt->y -= mapcenter.y;
+
+    tmpx = (int64_t)FixedMul(pt->x, finecosine[mapangle>>ANGLETOFINESHIFT])
+         - (int64_t)FixedMul(pt->y, finesine[mapangle>>ANGLETOFINESHIFT])
+         + mapcenter.x;
+
+    pt->y = (int64_t)FixedMul(pt->x, finesine[mapangle>>ANGLETOFINESHIFT])
+          + (int64_t)FixedMul(pt->y, finecosine[mapangle>>ANGLETOFINESHIFT])
+          + mapcenter.y;
+
+    pt->x = tmpx;
+}
+
 void AM_drawLineCharacter(mline_t * lineguy, int lineguylines, fixed_t scale,
                           angle_t angle, int color, fixed_t x, fixed_t y)
 {
     int i;
     mline_t l;
+
+    if (automap_rotate)
+    {
+        angle += mapangle;
+    }
 
     for (i = 0; i < lineguylines; i++)
     {
@@ -1331,6 +1440,8 @@ void AM_drawPlayers(void)
 {
     int i;
     player_t *p;
+    mpoint_t pt;
+
     static int their_colors[] = {
         AM_PLR1_COLOR,
         AM_PLR2_COLOR,
@@ -1346,8 +1457,15 @@ void AM_drawPlayers(void)
 
     if (!netgame)
     {
+        pt.x = plr->mo->x;
+        pt.y = plr->mo->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&pt);
+        }
+
         AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, plr->mo->angle,
-                             WHITE, plr->mo->x, plr->mo->y);
+                             WHITE, pt.x, pt.y);
         return;
     }
 
@@ -1362,8 +1480,16 @@ void AM_drawPlayers(void)
         if (!playeringame[i])
             continue;
         color = their_colors[their_color];
+
+        pt.x = p->mo->x;
+        pt.y = p->mo->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&pt);
+        }
+
         AM_drawLineCharacter(player_arrow, NUMPLYRLINES, 0, p->mo->angle,
-                             color, p->mo->x, p->mo->y);
+                             color, pt.x, pt.y);
     }
 }
 
@@ -1371,15 +1497,30 @@ void AM_drawThings(int colors, int colorrange)
 {
     int i;
     mobj_t *t;
+    mpoint_t pt;
 
     for (i = 0; i < numsectors; i++)
     {
         t = sectors[i].thinglist;
         while (t)
         {
+            // [crispy] do not draw an extra triangle for the player
+            if (t == plr->mo)
+            {
+                t = t->snext;
+                continue;
+            }
+
+            pt.x = t->x;
+            pt.y = t->y;
+            if (automap_rotate)
+            {
+                AM_rotatePoint(&pt);
+            }
+
             AM_drawLineCharacter(thintriangle_guy, NUMTHINTRIANGLEGUYLINES,
                                  16 << FRACBITS, t->angle, colors + lightlev,
-                                 t->x, t->y);
+                                 pt.x, pt.y);
             t = t->snext;
         }
     }
@@ -1438,8 +1579,9 @@ void AM_Drawer(void)
         return;
 
     UpdateState |= I_FULLSCRN;
+    if (!automap_overlay)
     AM_clearFB(BACKGROUND);
-    if (grid)
+    if (automap_grid)
         AM_drawGrid(GRIDCOLORS);
     AM_drawWalls();
     AM_drawPlayers();

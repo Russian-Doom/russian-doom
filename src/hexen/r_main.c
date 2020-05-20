@@ -960,7 +960,7 @@ void R_RenderPlayerView(player_t * player)
     R_SetupFrame(player);
     R_ClearClipSegs();
     R_ClearDrawSegs();
-    if (automapactive)
+    if (automapactive && !automap_overlay)
     {
         R_RenderBSPNode (numnodes-1);
         return;
