@@ -213,8 +213,10 @@ void S_ChannelsRealloc(void)
     if (snd_channels > 64)
         snd_channels = 64;
 
-    channels = Z_Malloc(snd_channels * sizeof(channel_t), PU_STATIC, 0);
-    for (i=0 ; i<snd_channels ; i++)
+    snd_channels_rd = snd_channels;
+
+    channels = Z_Malloc(snd_channels_rd * sizeof(channel_t), PU_STATIC, 0);
+    for (i=0 ; i<snd_channels_rd ; i++)
     {
         channels[i].sfxinfo = 0;
     }
