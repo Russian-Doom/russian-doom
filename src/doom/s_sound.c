@@ -208,12 +208,10 @@ void S_ChannelsRealloc(void)
     int i;
 
     // Safeguard conditions:
-    if (snd_channels < 4)
-        snd_channels = 4;
-    if (snd_channels > 64)
-        snd_channels = 64;
-
-    snd_channels_rd = snd_channels;
+    if (snd_channels_rd < 4)
+        snd_channels_rd = 4;
+    if (snd_channels_rd > 64)
+        snd_channels_rd = 64;
 
     channels = Z_Malloc(snd_channels_rd * sizeof(channel_t), PU_STATIC, 0);
     for (i=0 ; i<snd_channels_rd ; i++)

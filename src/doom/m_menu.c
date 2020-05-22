@@ -3462,9 +3462,9 @@ void M_RD_Draw_Audio(void)
     M_WriteTextSmall_ENG(177 + wide_delta, 75, num);
 
     // SFX channels slider
-    M_DrawThermo_Small(35 + wide_delta, 104, 16, snd_channels / 4 - 1);
+    M_DrawThermo_Small(35 + wide_delta, 104, 16, snd_channels_rd / 4 - 1);
     // Numerical representation of channels
-    M_snprintf(num, 4, "%3d", snd_channels);
+    M_snprintf(num, 4, "%3d", snd_channels_rd);
     M_WriteTextSmall_ENG(177 + wide_delta, 105, num);
 }
 
@@ -3509,15 +3509,18 @@ void M_RD_Change_SfxChannels(int choice)
     switch(choice)
     {
         case 0:
-        if (snd_channels > 4)
-            snd_channels -= 4;
+        if (snd_channels_rd > 4)
+            snd_channels_rd -= 4;
         break;
     
         case 1:
-        if (snd_channels < 64)
-            snd_channels += 4;
+        if (snd_channels_rd < 64)
+            snd_channels_rd += 4;
         break;
     }
+
+    // Sync internal value
+    snd_channels = snd_channels_rd;
 
     // Reallocate sound channels
     S_ChannelsRealloc();
