@@ -5549,24 +5549,11 @@ void M_DrawMainMenu(void)
     }
     else
     {
-        if (logical_gamemission == pack_plut)
-        {
-            // [JN] Draw translated "RD_MPLUT" for Plutonia
-            V_DrawPatch(94+wide_delta, 2, 
-                        W_CacheLumpName(DEH_String("RD_MPLUT"), PU_CACHE));
-        }
-        else if (logical_gamemission == pack_tnt)
-        {
-            // [JN] Draw translated "RD_TNT" for TNT
-            V_DrawPatch(94+wide_delta, 2, 
-                        W_CacheLumpName(DEH_String("RD_MTNT"), PU_CACHE));
-        }
-        else
-        {
-            // [JN] Draw standard "M_DOOM" for other games
-            V_DrawPatch(94+wide_delta, 2, 
-                        W_CacheLumpName(DEH_String("M_DOOM"), PU_CACHE));
-        }
+        // [JN] Draw translated titles for Plutonia and TNT
+        V_DrawPatch(94+wide_delta, 2, W_CacheLumpName
+                    (logical_gamemission == pack_plut ? "RD_MPLUT" :
+                      logical_gamemission == pack_tnt ? "RD_MTNT" :
+                                                        "M_DOOM", PU_CACHE));
     }
 }
 
