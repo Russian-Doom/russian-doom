@@ -327,6 +327,44 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
             dest = desttop + column->topdelta*(screenwidth << hires) + (x * hires) + f;
             count = column->length;
 
+            // [crispy] prevent framebuffer overflows
+            {
+                int tmpy = y + column->topdelta;
+
+                // [crispy] too far left
+                if (x < 0)
+                {
+                    continue;
+                }
+
+                // [crispy] too far right / width
+                if (x >= origwidth)
+                {
+                    break;
+                }
+
+                // [crispy] too high
+                while (tmpy < 0)
+                {
+                    count--;
+                    source++;
+                    dest += (screenwidth << hires);
+                    tmpy++;
+                }
+
+                // [crispy] too low / height
+                while (tmpy + count > ORIGHEIGHT)
+                {
+                    count--;
+                }
+
+                // [crispy] nothing left to draw?
+                if (count < 1)
+                {
+                    continue;
+                }
+            }
+
             while (count--)
             {
                 if (dp_translation)
@@ -591,6 +629,44 @@ void V_DrawShadowedPatch(int x, int y, patch_t *patch)
             dest2 = desttop2 + column->topdelta * (screenwidth << hires) + (x * hires) + f;
             count = column->length;
 
+            // [crispy] prevent framebuffer overflows
+            {
+                int tmpy = y + column->topdelta;
+
+                // [crispy] too far left
+                if (x < 0)
+                {
+                    continue;
+                }
+
+                // [crispy] too far right / width
+                if (x >= origwidth)
+                {
+                    break;
+                }
+
+                // [crispy] too high
+                while (tmpy < 0)
+                {
+                    count--;
+                    source++;
+                    dest += (screenwidth << hires);
+                    tmpy++;
+                }
+
+                // [crispy] too low / height
+                while (tmpy + count > ORIGHEIGHT)
+                {
+                    count--;
+                }
+
+                // [crispy] nothing left to draw?
+                if (count < 1)
+                {
+                    continue;
+                }
+            }
+
             while (count--)
             {
                 if (dp_translation)
@@ -679,6 +755,44 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
                 }
 
                 count = column->length;
+
+                // [crispy] prevent framebuffer overflows
+                {
+                    int tmpy = y + column->topdelta;
+
+                    // [crispy] too far left
+                    if (x < 0)
+                    {
+                        continue;
+                    }
+
+                    // [crispy] too far right / width
+                    if (x >= origwidth)
+                    {
+                        break;
+                    }
+
+                    // [crispy] too high
+                    while (tmpy < 0)
+                    {
+                        count--;
+                        source++;
+                        dest += (screenwidth << hires);
+                        tmpy++;
+                    }
+
+                    // [crispy] too low / height
+                    while (tmpy + count > ORIGHEIGHT)
+                    {
+                        count--;
+                    }
+
+                    // [crispy] nothing left to draw?
+                    if (count < 1)
+                    {
+                        continue;
+                    }
+                }
 
                 while (count--)
                 {
@@ -775,6 +889,44 @@ void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch)
             }
 
             count = column->length;
+
+            // [crispy] prevent framebuffer overflows
+            {
+                int tmpy = y + column->topdelta;
+
+                // [crispy] too far left
+                if (x < 0)
+                {
+                    continue;
+                }
+
+                // [crispy] too far right / width
+                if (x >= origwidth)
+                {
+                    break;
+                }
+
+                // [crispy] too high
+                while (tmpy < 0)
+                {
+                    count--;
+                    source++;
+                    dest += (screenwidth << hires);
+                    tmpy++;
+                }
+
+                // [crispy] too low / height
+                while (tmpy + count > ORIGHEIGHT)
+                {
+                    count--;
+                }
+
+                // [crispy] nothing left to draw?
+                if (count < 1)
+                {
+                    continue;
+                }
+            }
 
             while (count--)
             {
