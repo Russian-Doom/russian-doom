@@ -46,27 +46,6 @@
 #include "jn.h"
 
 
-// Spechit overrun magic value.
-//
-// This is the value used by PrBoom-plus.  I think the value below is 
-// actually better and works with more demos.  However, I think
-// it's better for the spechits emulation to be compatible with
-// PrBoom-plus, at least so that the big spechits emulation list
-// on Doomworld can also be used with Chocolate Doom.
-
-#define DEFAULT_SPECHIT_MAGIC 0x01C09C98
-
-// This is from a post by myk on the Doomworld forums, 
-// outputted from entryway's spechit_magic generator for
-// s205n546.lmp.  The _exact_ value of this isn't too
-// important; as long as it is in the right general
-// range, it will usually work.  Otherwise, we can use
-// the generator (hacked doom2.exe) and provide it 
-// with -spechit.
-
-//#define DEFAULT_SPECHIT_MAGIC 0x84f968e8
-
-
 fixed_t		tmbbox[4];
 mobj_t*		tmthing;
 int		tmflags;
@@ -239,7 +218,6 @@ static boolean PIT_CrossLine(line_t *ld)
         || P_PointOnLineSide(pe_x, pe_y, ld) == P_PointOnLineSide(ls_x, ls_y, ld));
 }
 
-static void SpechitOverrun(line_t *ld);
 
 //
 // PIT_CheckLine
@@ -300,12 +278,6 @@ boolean PIT_CheckLine (line_t* ld)
     {
         spechit[numspechit] = ld;
 	numspechit++;
-
-        // fraggle: spechits overrun emulation code from prboom-plus
-        if (numspechit > MAXSPECIALCROSS_ORIGINAL)
-        {
-            SpechitOverrun(ld);
-        }
     }
 
     return true;
@@ -1750,68 +1722,5 @@ P_ChangeSector
 	
 	
     return nofit;
-}
-
-// Code to emulate the behavior of Vanilla Doom when encountering an overrun
-// of the spechit array.  This is by Andrey Budko (e6y) and comes from his
-// PrBoom plus port.  A big thanks to Andrey for this.
-
-static void SpechitOverrun(line_t *ld)
-{
-    static unsigned int baseaddr = 0;
-    unsigned int addr;
-   
-    if (baseaddr == 0)
-    {
-        int p;
-
-        // This is the first time we have had an overrun.  Work out
-        // what base address we are going to use.
-        // Allow a spechit value to be specified on the command line.
-
-        //!
-        // @category compat
-        // @arg <n>
-        //
-        // Use the specified magic value when emulating spechit overruns.
-        //
-
-        p = M_CheckParmWithArgs("-spechit", 1);
-        
-        if (p > 0)
-        {
-            M_StrToInt(myargv[p+1], (int *) &baseaddr);
-        }
-        else
-        {
-            baseaddr = DEFAULT_SPECHIT_MAGIC;
-        }
-    }
-    
-    // Calculate address used in doom2.exe
-
-    addr = baseaddr + (ld - lines) * 0x3E;
-
-    switch(numspechit)
-    {
-        case 9: 
-        case 10:
-        case 11:
-        case 12:
-            tmbbox[numspechit-9] = addr;
-            break;
-        case 13: 
-            crushchange = addr; 
-            break;
-        case 14: 
-            nofit = addr; 
-            break;
-        default:
-            fprintf(stderr, english_language ?
-                            "SpechitOverrun: Warning: unable to emulate an overrun where numspechit=%i\n" :
-                            "SpechitOverrun: невозможно съэмулировать переполнение numspechit=%i\n",
-                            numspechit);
-            break;
-    }
 }
 
