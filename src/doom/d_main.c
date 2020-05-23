@@ -2195,19 +2195,18 @@ void D_DoomMain (void)
     }
 
     // [JN] Print colorized title
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_BLUE 
-                                                           | FOREGROUND_RED
-                                                           | FOREGROUND_GREEN
-                                                           | FOREGROUND_BLUE
-                                                           | FOREGROUND_INTENSITY);
-    DEH_printf("                                Russian Doom " PACKAGE_VERSION
-               "                               ");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_BLUE
+                           | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE
+                           | FOREGROUND_INTENSITY);
+
+    for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
+    DEH_printf(PACKAGE_NAME " " PACKAGE_VERSION);
+    for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 
     // [JN] Fallback to standard console colos
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED
-                                                           | FOREGROUND_GREEN
-                                                           | FOREGROUND_BLUE);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 
+                            FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 #else
     // [JN] Just print an uncolored banner
     I_PrintBanner(PACKAGE_STRING);    
