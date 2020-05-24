@@ -137,7 +137,7 @@ static boolean SndDeviceInList(snddevice_t device, snddevice_t *list,
 // Find and initialize a sound_module_t appropriate for the setting
 // in snd_sfxdevice.
 
-static void InitSfxModule(boolean use_sfx_prefix)
+void InitSfxModule(boolean use_sfx_prefix)
 {
     int i;
 

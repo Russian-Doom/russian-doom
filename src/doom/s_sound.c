@@ -203,6 +203,31 @@ void S_Init(int sfxVolume, int musicVolume)
 }
 
 // -----------------------------------------------------------------------------
+// S_RD_Change_SoundDevice
+// [JN] Routine for sfx device hot-swapping.
+// -----------------------------------------------------------------------------
+
+void S_RD_Change_SoundDevice (void)
+{
+    int i;
+
+    // Regenerate cache of digital sounds
+    I_PrecacheSounds(S_sfx, NUMSFX);
+
+    // Free all channels for use
+    for (i=0 ; i<snd_channels_rd ; i++)
+    {
+        channels[i].sfxinfo = 0;
+    }
+
+    // Reinitialize sfx usefulness
+    for (i=1 ; i<NUMSFX ; i++)
+    {
+        S_sfx[i].lumpnum = S_sfx[i].usefulness = -1;
+    }
+}
+
+// -----------------------------------------------------------------------------
 // S_ChannelsRealloc
 // [JN] Reallocates sound channels, needed for hot-swapping.
 // -----------------------------------------------------------------------------
@@ -671,6 +696,13 @@ void S_StartSound(void *origin_p, int sfx_id)
 //
 void S_StartSoundNoBreak(int sfx_id)
 {
+    if (snd_sfxdevice == 1)
+    {
+        // [JN] TODO - not working with PC Speaker,
+        // use standard sfx playing function.
+        return S_StartSound(NULL, sfx_id);
+    }
+
     channels[snd_channels_rd].handle = 
         I_StartSound(&S_sfx[sfx_id],    // Sfx id to play
                       snd_channels_rd,  // Use the last available channel

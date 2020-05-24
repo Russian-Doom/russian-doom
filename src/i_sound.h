@@ -227,6 +227,7 @@ void *I_RegisterSong(void *data, int len);
 void I_UnRegisterSong(void *handle);
 void I_PlaySong(void *handle, boolean looping);
 void I_StopSong(void);
+void InitSfxModule(boolean use_sfx_prefix);
 boolean I_MusicIsPlaying(void);
 
 extern int snd_sfxdevice;

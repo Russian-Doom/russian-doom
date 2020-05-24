@@ -38,6 +38,8 @@ void S_Init(int sfxVolume, int musicVolume);
 
 void S_Shutdown(void);
 
+// [JN] SFX device changing routine
+void S_RD_Change_SoundDevice(void);
 
 // [JN] Channels reallocation
 void S_ChannelsRealloc(void);

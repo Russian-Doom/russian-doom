@@ -3628,9 +3628,7 @@ void M_RD_Draw_Audio_System(void)
         M_WriteTextSmall_ENG(185 + wide_delta, 115, mute_inactive_window == 1 ? "on" : "off");
 
         // Informative message
-        if (itemOn == rd_audio_sys_sfx
-        ||  itemOn == rd_audio_sys_music
-        ||  itemOn == rd_audio_sys_sampling)
+        if (itemOn == rd_audio_sys_sampling)
         {
             dp_translation = cr[CR_GRAY];
             M_WriteTextSmall_ENG(1 + wide_delta, 140, "changing will require restart of the program");
@@ -3736,9 +3734,7 @@ void M_RD_Draw_Audio_System(void)
         M_WriteTextSmall_RUS(208 + wide_delta, 115, mute_inactive_window == 0 ? "drk" : "dsrk");
 
         // Informative message: изменение потребует перезапуск программы
-        if (itemOn == rd_audio_sys_sfx
-        ||  itemOn == rd_audio_sys_music
-        ||  itemOn == rd_audio_sys_sampling)
+        if (itemOn == rd_audio_sys_sampling)
         {
             dp_translation = cr[CR_GRAY];
             M_WriteTextSmall_RUS(3 + wide_delta, 140, "bpvtytybt gjnht,etn gthtpfgecr ghjuhfvvs");
@@ -3772,6 +3768,15 @@ void M_RD_Change_SoundDevice(int choice)
             snd_sfxdevice = 0;
         break;
     }
+
+    // Reinitialize SFX module
+    InitSfxModule(snd_sfxdevice);
+
+    // Call sfx device changing routine
+    S_RD_Change_SoundDevice();
+
+    // Reinitialize sound volume
+    S_SetSfxVolume(sfxVolume * 8);
 }
 
 void M_RD_Change_MusicDevice(int choice)
