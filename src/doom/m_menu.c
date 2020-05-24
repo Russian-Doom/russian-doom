@@ -5982,8 +5982,17 @@ int M_StringWidth(char* string)
         if (c < 0 || c >= HU_FONTSIZE)
             w += 4;
         else
-            w += SHORT (english_language ? 
-                        hu_font[c]->width : hu_font_small_rus[c]->width);
+        {
+            if (english_language || currentMenu == &SaveDef
+            ||  currentMenu == &SaveDef_Rus)
+            {
+                w += SHORT (hu_font[c]->width);
+            }
+            else
+            {
+                w += SHORT (hu_font_small_rus[c]->width);    
+            }
+        }
     }
 
     return w;
