@@ -115,6 +115,10 @@ int snd_channels_rd;
 int snd_channels = 32;
 int snd_channels_vanilla = 8;
 
+// [JN] External music number, used for music system hot-swapping.
+
+int music_num_rd;
+
 //
 // Initializes sound stuff, including volume
 // Sets channels, SFX and music volume,
@@ -865,6 +869,10 @@ void S_ChangeMusic(int musicnum, int looping)
     {
         return;
     }
+
+    // [JN] After inner muscial number has been set, sync it with
+    // external number, used in M_RD_Change_MusicDevice.
+    music_num_rd = musicnum;
 
     // shutdown old music
     S_StopMusic();

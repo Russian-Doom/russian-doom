@@ -95,6 +95,8 @@ void S_SetSfxVolume(int volume);
 extern int snd_channels;
 extern int snd_channels_rd;
 
+extern int music_num_rd;
+
 void S_MuteSound(void);
 void S_UnMuteSound(void);
 

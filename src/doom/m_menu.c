@@ -3827,6 +3827,21 @@ void M_RD_Change_MusicDevice(int choice)
             }
         break;
     }
+
+    // Shut down current music
+    S_StopMusic();
+
+    // Shut down music system
+    S_Shutdown();
+    
+    // Start music system
+    I_InitSound(true);
+
+    // Reinitialize music volume
+    S_SetMusicVolume(musicVolume * 8);
+
+    // Restart current music
+    S_ChangeMusic(music_num_rd, true);
 }
 
 void M_RD_Change_Sampling(int choice)
