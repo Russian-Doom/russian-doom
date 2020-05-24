@@ -874,7 +874,7 @@ void F_BunnyScroll (void)
     static int  laststage;
     extern boolean wide_loaded;
 
-    if (wide_loaded)
+    if (aspect_ratio >= 2 && wide_loaded)
     {
         p1 = W_CacheLumpName (DEH_String("PFUB2WD"), PU_LEVEL);
         p2 = W_CacheLumpName (DEH_String("PFUB1WD"), PU_LEVEL);

@@ -1764,8 +1764,8 @@ void D_SetGameDescription(void)
     // and modified backgrounds.
     // If not modified, use wide scrolling code 426x200 and
     // wide bunny backgrounds. See F_BunnyScroll (f_finale.c).
-    if (aspect_ratio >= 2 && (W_CheckMultipleLumps("PFUB1") > 1 || W_CheckMultipleLumps("PFUB2") > 1
-    ||  gamevariant == freedoom))
+    if (aspect_ratio >= 2 && ((W_CheckMultipleLumps("PFUB1") > 1 || W_CheckMultipleLumps("PFUB2") > 1
+    ||  gamevariant == freedoom)))
     {
         wide_loaded = false;
     }
