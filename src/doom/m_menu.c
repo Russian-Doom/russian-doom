@@ -3598,17 +3598,24 @@ void M_RD_Draw_Audio_System(void)
         dp_translation = NULL;
 
         // Sampling frequency (hz)
-        if (snd_samplerate == 44100)
+        if (snd_samplerate_temp == 44100)
         {
             M_WriteTextSmall_ENG(179 + wide_delta, 75, "44100 HZ");
         }
-        else if (snd_samplerate == 22050)
+        else if (snd_samplerate_temp == 22050)
         {
             M_WriteTextSmall_ENG(179 + wide_delta, 75, "22050 HZ");
         }
-        else if (snd_samplerate == 11025)
+        else if (snd_samplerate_temp == 11025)
         {
             M_WriteTextSmall_ENG(179 + wide_delta, 75, "11025 HZ");
+        }
+        // Informative message
+        if (snd_samplerate_temp != snd_samplerate)
+        {
+            dp_translation = cr[CR_GRAY];
+            M_WriteTextSmall_ENG(66 + wide_delta, 140, "Program must be restarted");
+            dp_translation = NULL;
         }
 
         //
@@ -3626,14 +3633,6 @@ void M_RD_Draw_Audio_System(void)
 
         // Mute inactive window
         M_WriteTextSmall_ENG(185 + wide_delta, 115, mute_inactive_window == 1 ? "on" : "off");
-
-        // Informative message
-        if (itemOn == rd_audio_sys_sampling)
-        {
-            dp_translation = cr[CR_GRAY];
-            M_WriteTextSmall_ENG(1 + wide_delta, 140, "changing will require restart of the program");
-            dp_translation = NULL;
-        }
     }
     else
     {
@@ -3704,17 +3703,24 @@ void M_RD_Draw_Audio_System(void)
         dp_translation = NULL;
 
         // Частота дискретизации (гц)
-        if (snd_samplerate == 44100)
+        if (snd_samplerate_temp == 44100)
         {
             M_WriteTextSmall_RUS(208 + wide_delta, 75, "44100 uw");
         }
-        else if (snd_samplerate == 22050)
+        else if (snd_samplerate_temp == 22050)
         {
             M_WriteTextSmall_RUS(208 + wide_delta, 75, "22050 uw");
         }
-        else if (snd_samplerate == 11025)
+        else if (snd_samplerate_temp == 11025)
         {
             M_WriteTextSmall_RUS(208 + wide_delta, 75, "11025 uw");
+        }
+        // Informative message: изменение потребует перезапуск программы
+        if (snd_samplerate_temp != snd_samplerate)
+        {
+            dp_translation = cr[CR_GRAY];
+            M_WriteTextSmall_RUS(40 + wide_delta, 140, "ytj,[jlbv gthtpfgecr ghjuhfvvs");
+            dp_translation = NULL;
         }
 
         //
@@ -3732,14 +3738,6 @@ void M_RD_Draw_Audio_System(void)
 
         // Звук в неактивном окне
         M_WriteTextSmall_RUS(208 + wide_delta, 115, mute_inactive_window == 0 ? "drk" : "dsrk");
-
-        // Informative message: изменение потребует перезапуск программы
-        if (itemOn == rd_audio_sys_sampling)
-        {
-            dp_translation = cr[CR_GRAY];
-            M_WriteTextSmall_RUS(3 + wide_delta, 140, "bpvtytybt gjnht,etn gthtpfgecr ghjuhfvvs");
-            dp_translation = NULL;
-        }
     }
 }
 
@@ -3854,31 +3852,31 @@ void M_RD_Change_Sampling(int choice)
     switch(choice)
     {
         case 0:
-            if (snd_samplerate == 44100)
+            if (snd_samplerate_temp == 44100)
             {
-                snd_samplerate = 22050;
+                snd_samplerate_temp = 22050;
             }
-            else if (snd_samplerate == 22050)
+            else if (snd_samplerate_temp == 22050)
             {
-                snd_samplerate = 11025;
+                snd_samplerate_temp = 11025;
             }
-            else if (snd_samplerate == 11025)
+            else if (snd_samplerate_temp == 11025)
             {
-                snd_samplerate  = 44100;
+                snd_samplerate_temp  = 44100;
             }
         break;
         case 1:
-            if (snd_samplerate == 11025)
+            if (snd_samplerate_temp == 11025)
             {
-                snd_samplerate = 22050;
+                snd_samplerate_temp = 22050;
             }
-            else if (snd_samplerate == 22050)
+            else if (snd_samplerate_temp == 22050)
             {
-                snd_samplerate = 44100;
+                snd_samplerate_temp = 44100;
             }
-            else if (snd_samplerate == 44100)
+            else if (snd_samplerate_temp == 44100)
             {
-                snd_samplerate = 11025;
+                snd_samplerate_temp = 11025;
             }
         break;
     }
@@ -5839,6 +5837,9 @@ void M_QuitResponse(int key)
     // [JN] Widescreen: remember choosen widescreen variable before quit.
     aspect_ratio = aspect_ratio_temp;
 
+    // [JN] Sampling frequency: remember choosen variable before quit.
+    snd_samplerate = snd_samplerate_temp;
+
     I_Quit ();
 }
 
@@ -7004,6 +7005,9 @@ void M_Init (void)
 
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;
+
+    // [JN] Sampling frequency: set temp variable for sound system menu.
+    snd_samplerate_temp = snd_samplerate;
 
     menuactive = 0;
     itemOn = currentMenu->lastOn;

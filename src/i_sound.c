@@ -36,6 +36,7 @@
 // Sound sample rate to use for digital output (Hz)
 
 int snd_samplerate = 44100;
+int snd_samplerate_temp; // [JN] Temp variable used for safe-swapping.
 
 // Maximum number of bytes to dedicate to allocated sound effects.
 // (Default: 64MB)
