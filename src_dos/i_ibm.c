@@ -1194,18 +1194,25 @@ void I_Quit(void)
         D_QuitNetGame();
     }
     M_SaveDefaults();
-    if (shareware)
-        scr = (byte*)W_CacheLumpName("ENDOOMS", PU_CACHE);
-    else if (registered)
-        scr = (byte*)W_CacheLumpName("ENDOOMR", PU_CACHE);
-    else if (retail)
-        scr = (byte*)W_CacheLumpName("ENDOOMU", PU_CACHE);
-    else if (tnt)
-        scr = (byte*)W_CacheLumpName("ENDOOMT", PU_CACHE);
-    else if (plutonia)
-        scr = (byte*)W_CacheLumpName("ENDOOMP", PU_CACHE);
+    if (english_language)
+    {
+        scr = (byte*)W_CacheLumpName("ENDOOM", PU_CACHE);
+    }
     else
-        scr = (byte*)W_CacheLumpName("ENDOOMH", PU_CACHE);
+    {
+        if (shareware)
+            scr = (byte*)W_CacheLumpName("ENDOOMS", PU_CACHE);
+        else if (registered)
+            scr = (byte*)W_CacheLumpName("ENDOOMR", PU_CACHE);
+        else if (retail)
+            scr = (byte*)W_CacheLumpName("ENDOOMU", PU_CACHE);
+        else if (tnt)
+            scr = (byte*)W_CacheLumpName("ENDOOMT", PU_CACHE);
+        else if (plutonia)
+            scr = (byte*)W_CacheLumpName("ENDOOMP", PU_CACHE);
+        else
+            scr = (byte*)W_CacheLumpName("ENDOOMH", PU_CACHE);
+    }
     I_ShutdownGraphics();
     I_ShutdownSound();
     I_ShutdownTimer();
