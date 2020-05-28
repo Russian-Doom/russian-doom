@@ -33,8 +33,8 @@
 //
 
 
-
 #include "tables.h"
+
 
 int finetangent[4096] =
 {
