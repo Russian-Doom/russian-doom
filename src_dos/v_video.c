@@ -22,26 +22,44 @@
 
 
 #include <conio.h>
-#include "i_system.h"
-#include "r_local.h"
 
 #include "doomdef.h"
 #include "doomdata.h"
 #include "doomstat.h"
 
+#include "i_system.h"
 #include "m_misc.h"
-
+#include "r_local.h"
 #include "v_video.h"
 
 #include "jn.h"
 
 
-// Each screen is [SCREENWIDTH*SCREENHEIGHT]; 
-byte*				screens[5];	
+#define SC_INDEX            0x3C4
+#define SC_RESET            0
+#define SC_CLOCK            1
+#define SC_MAPMASK          2
+#define SC_CHARMAP          3
+#define SC_MEMMODE          4
 
-int				dirtybox[4]; 
+#define GC_INDEX            0x3CE
+#define GC_SETRESET         0
+#define GC_ENABLESETRESET   1
+#define GC_COLORCOMPARE     2
+#define GC_DATAROTATE       3
+#define GC_READMAP          4
+#define GC_MODE             5
+#define GC_MISCELLANEOUS    6
+#define GC_COLORDONTCARE    7
+#define GC_BITMASK          8
 
-byte *dp_translation = NULL;
+int    usegamma;
+int    dirtybox[4];
+
+byte  *screens[5];	// Each screen is [SCREENWIDTH*SCREENHEIGHT]; 
+byte  *dp_translation = NULL;
+
+extern byte *tinttable;
 
 
 // Now where did these came from?
@@ -391,41 +409,16 @@ const byte gammatable[18][256] =
     }
 };
 
- 
-#define SC_INDEX                0x3C4
-#define SC_RESET                0
-#define SC_CLOCK                1
-#define SC_MAPMASK              2
-#define SC_CHARMAP              3
-#define SC_MEMMODE              4
 
-#define GC_INDEX                0x3CE
-#define GC_SETRESET             0
-#define GC_ENABLESETRESET 1
-#define GC_COLORCOMPARE 2
-#define GC_DATAROTATE   3
-#define GC_READMAP              4
-#define GC_MODE                 5
-#define GC_MISCELLANEOUS 6
-#define GC_COLORDONTCARE 7
-#define GC_BITMASK              8
-
-int	usegamma;
-			 
 //
 // V_MarkRect 
 // 
-void
-V_MarkRect
-( int		x,
-  int		y,
-  int		width,
-  int		height ) 
+void V_MarkRect (int x, int y, int width, int height)
 { 
     M_AddToBox (dirtybox, x, y); 
     M_AddToBox (dirtybox, x+width-1, y+height-1); 
 } 
- 
+
 
 //
 // V_CopyRect 
@@ -441,33 +434,36 @@ V_CopyRect
   int		desty,
   int		destscrn ) 
 { 
-    byte*	src;
-    byte*	dest; 
-	 
+    byte *src;
+    byte *dest; 
+
 #ifdef RANGECHECK 
-    if (srcx<0
-	||srcx+width >SCREENWIDTH
-	|| srcy<0
-	|| srcy+height>SCREENHEIGHT 
-	||destx<0||destx+width >SCREENWIDTH
-	|| desty<0
-	|| desty+height>SCREENHEIGHT 
-	|| (unsigned)srcscrn>4
-	|| (unsigned)destscrn>4)
+    if (srcx < 0
+    ||  srcx+width > SCREENWIDTH
+    ||  srcy < 0
+    ||  srcy+height> SCREENHEIGHT 
+    ||  destx < 0 || destx+width >SCREENWIDTH
+    ||  desty < 0
+    ||  desty+height > SCREENHEIGHT 
+    || (unsigned)srcscrn > 4
+    || (unsigned)destscrn> 4 )
     {
-	I_Error ("Žè¨¡ª  V_CopyRect");
+        I_Error (english_language ?
+        "Bad V_CopyRect" :
+        "Žè¨¡ª  V_CopyRect");
     }
-#endif 
+#endif
+
     V_MarkRect (destx, desty, width, height); 
-	 
+
     src = screens[srcscrn]+SCREENWIDTH*srcy+srcx; 
     dest = screens[destscrn]+SCREENWIDTH*desty+destx; 
 
-    for ( ; height>0 ; height--) 
+    for ( ; height > 0 ; height--) 
     { 
-	memcpy (dest, src, width); 
-	src += SCREENWIDTH; 
-	dest += SCREENWIDTH; 
+        memcpy (dest, src, width); 
+        src += SCREENWIDTH; 
+        dest += SCREENWIDTH; 
     } 
 } 
  
@@ -476,429 +472,424 @@ V_CopyRect
 // V_DrawPatch
 // Masks a column based masked pic to the screen. 
 //
-void
-V_DrawPatch
-( int		x,
-  int		y,
-  int		scrn,
-  patch_t*	patch ) 
+void V_DrawPatch (int x, int y, int scrn, patch_t *patch)
 { 
+    int        count;
+    int        col;
+    int        w;
+    byte      *desttop;
+    byte      *dest;
+    byte      *source;
+    byte      *sourcetrans;
+    column_t  *column;
 
-    int		count;
-    int		col; 
-    column_t*	column; 
-    byte*	desttop;
-    byte*	dest;
-    byte*	source; 
-    byte *sourcetrans;
-    int		w; 
-	 
-    y -= SHORT(patch->topoffset); 
-    x -= SHORT(patch->leftoffset); 
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
+
 #ifdef RANGECHECK 
-    if (x<0
-	||x+SHORT(patch->width) >SCREENWIDTH
-	|| y<0
-	|| y+SHORT(patch->height)>SCREENHEIGHT 
-	|| (unsigned)scrn>4)
+    if (x < 0
+    ||  x + SHORT(patch->width) >SCREENWIDTH
+    ||  y < 0
+    ||  y + SHORT(patch->height)>SCREENHEIGHT
+    || (unsigned)scrn > 4)
     {
-      // [JN] Disabled for preventing text mess appearing on the screen.
-      /*
-      fprintf( stderr, "Patch at %d,%d exceeds LFB\n", x,y );
-      // No I_Error abort - what is up with TNT.WAD?
-      fprintf( stderr, "V_DrawPatch: bad patch (ignored)\n");
-      */
-      return;
+        // [JN] Disabled for preventing text mess appearing on the screen.
+        /*
+        fprintf( stderr, "Patch at %d,%d exceeds LFB\n", x,y );
+        // No I_Error abort - what is up with TNT.WAD?
+        fprintf( stderr, "V_DrawPatch: bad patch (ignored)\n");
+        */
+        return;
     }
 #endif 
- 
+
     if (!scrn)
-	V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height)); 
+    {
+        V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height));
+    }
 
     col = 0; 
-    desttop = screens[scrn]+y*SCREENWIDTH+x; 
-	 
-    w = SHORT(patch->width); 
+    desttop = screens[scrn] + y * SCREENWIDTH + x;
+
+    w = SHORT(patch->width);
 
     for ( ; col<w ; x++, col++, desttop++)
     { 
-	column = (column_t *)((byte *)patch + LONG(patch->columnofs[col])); 
- 
-	// step through the posts in a column 
-	while (column->topdelta != 0xff ) 
-	{ 
-	    source = sourcetrans = (byte *)column + 3;
-	    dest = desttop + column->topdelta*SCREENWIDTH; 
-	    count = column->length; 
-			 
-	    while (count--) 
-	    { 
-        if (dp_translation)
-        sourcetrans = &dp_translation[*source++];
+        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
 
-		*dest = *sourcetrans++; 
-		dest += SCREENWIDTH; 
-	    } 
-	    column = (column_t *)(  (byte *)column + column->length 
-				    + 4 ); 
-	} 
-    }			 
+        // step through the posts in a column 
+        while (column->topdelta != 0xff ) 
+        { 
+            source = sourcetrans = (byte *)column + 3;
+            dest = desttop + column->topdelta * SCREENWIDTH;
+            count = column->length;
+
+            while (count--) 
+            { 
+                if (dp_translation)
+                {
+                    sourcetrans = &dp_translation[*source++];
+                }
+
+                *dest = *sourcetrans++; 
+                dest += SCREENWIDTH; 
+            } 
+
+            column = (column_t *)((byte *)column + column->length + 4 ); 
+        }
+    }
 } 
- 
+
+
 //
 // V_DrawPatchFlipped 
 // Masks a column based masked pic to the screen.
 // Flips horizontally, e.g. to mirror face.
 //
-void
-V_DrawPatchFlipped
-( int		x,
-  int		y,
-  int		scrn,
-  patch_t*	patch ) 
+void V_DrawPatchFlipped (int x, int y, int scrn, patch_t *patch)
 { 
+    int        count;
+    int        col;
+    int        w;
+    byte      *desttop;
+    byte      *dest;
+    byte      *source;
+    byte      *sourcetrans;
+    column_t  *column;
 
-    int		count;
-    int		col; 
-    column_t*	column; 
-    byte*	desttop;
-    byte*	dest;
-    byte*	source; 
-    byte*	sourcetrans;
-    int		w; 
-	 
-    y -= SHORT(patch->topoffset); 
-    x -= SHORT(patch->leftoffset); 
-#ifdef RANGECHECK 
-    if (x<0
-	||x+SHORT(patch->width) >SCREENWIDTH
-	|| y<0
-	|| y+SHORT(patch->height)>SCREENHEIGHT 
-	|| (unsigned)scrn>4)
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
+
+#ifdef RANGECHECK
+    if (x < 0
+    ||  x + SHORT(patch->width) >SCREENWIDTH
+    ||  y < 0
+    ||  y + SHORT(patch->height)>SCREENHEIGHT
+    || (unsigned)scrn > 4)
     {
-      // [JN] Disabled for preventing text mess appearing on the screen,
-      // make non-fatal.
-      /*
-      fprintf( stderr, "Patch origin %d,%d exceeds LFB\n", x,y );
-      I_Error ("Žè¨¡ª  V_DrawPatch ¢ V_DrawPatchFlipped");
-      */
-      return;
+        // [JN] Disabled for preventing text mess appearing on the screen,
+        // make non-fatal.
+        /*
+        fprintf( stderr, "Patch origin %d,%d exceeds LFB\n", x,y );
+        I_Error ("Žè¨¡ª  V_DrawPatch ¢ V_DrawPatchFlipped");
+        */
+        return;
     }
 #endif 
- 
-    if (!scrn)
-	V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height)); 
 
-    col = 0; 
-    desttop = screens[scrn]+y*SCREENWIDTH+x; 
-	 
+    if (!scrn)
+    {
+        V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height));
+    }
+
+    col = 0;
+    desttop = screens[scrn] + y * SCREENWIDTH + x;
+
     w = SHORT(patch->width); 
 
-    for ( ; col<w ; x++, col++, desttop++) 
+    for ( ; col<w ; x++, col++, desttop++)
     { 
-	column = (column_t *)((byte *)patch + LONG(patch->columnofs[w-1-col])); 
- 
-	// step through the posts in a column 
-	while (column->topdelta != 0xff ) 
-	{ 
-	    source = sourcetrans = (byte *)column + 3; 
-	    dest = desttop + column->topdelta*SCREENWIDTH; 
-	    count = column->length; 
-			 
-	    while (count--) 
-	    { 
-		if (dp_translation)
-		sourcetrans = &dp_translation[*source++];
+        column = (column_t *)((byte *)patch + LONG(patch->columnofs[w-1-col]));
 
-		*dest = *sourcetrans++; 
-		dest += SCREENWIDTH; 
-	    } 
-	    column = (column_t *)(  (byte *)column + column->length 
-				    + 4 ); 
-	} 
+        // step through the posts in a column 
+        while (column->topdelta != 0xff ) 
+        {
+            source = sourcetrans = (byte *)column + 3;
+            dest = desttop + column->topdelta * SCREENWIDTH;
+            count = column->length; 
+
+            while (count--) 
+            {
+                if (dp_translation)
+                {
+                    sourcetrans = &dp_translation[*source++];
+                }
+
+                *dest = *sourcetrans++; 
+                dest += SCREENWIDTH; 
+            }
+
+            column = (column_t *)((byte *)column + column->length + 4); 
+        }
     }			 
 } 
- 
 
 
 //
 // V_DrawPatchDirect
 // Draws directly to the screen on the pc. 
 //
-void
-V_DrawPatchDirect
-( int		x,
-  int		y,
-  int		scrn,
-  patch_t*	patch ) 
+void V_DrawPatchDirect (int x, int y, int scrn, patch_t *patch)
 {
-    int		count;
-    int		col; 
-    column_t*	column; 
-    byte*	desttop;
-    byte*	dest;
-    byte*	source; 
-    byte*	sourcetrans;
-    int		w; 
-	 
-    y -= SHORT(patch->topoffset); 
-    x -= SHORT(patch->leftoffset); 
+    int        count;
+    int        col;
+    int        w;
+    byte      *desttop;
+    byte      *dest;
+    byte      *source;
+    byte      *sourcetrans;
+    column_t  *column;
+
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
 
 #ifdef RANGECHECK 
-    if (x<0
-	||x+SHORT(patch->width) >SCREENWIDTH
-	|| y<0
-	|| y+SHORT(patch->height)>SCREENHEIGHT 
-	|| (unsigned)scrn>4)
+    if (x < 0
+    ||  x + SHORT(patch->width) >SCREENWIDTH
+    ||  y < 0
+    ||  y + SHORT(patch->height)>SCREENHEIGHT
+    || (unsigned)scrn > 4)
     {
-    // [JN] Make non-fatal
-	// I_Error ("Žè¨¡ª  V_DrawPatchDirect");
-    return;
+        // [JN] Make non-fatal
+        // I_Error ("Žè¨¡ª  V_DrawPatchDirect");
+        return;
     }
 #endif 
- 
-    //	V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height)); 
-    desttop = destscreen + y*SCREENWIDTH/4 + (x>>2); 
-	 
-    w = SHORT(patch->width); 
-    for ( col = 0 ; col<w ; col++) 
-    { 
-	outp (SC_INDEX+1,1<<(x&3)); 
-	column = (column_t *)((byte *)patch + LONG(patch->columnofs[col])); 
- 
-	// step through the posts in a column 
-	 
-	while (column->topdelta != 0xff ) 
-	{ 
-	    source = sourcetrans = (byte *)column + 3; 
-	    dest = desttop + column->topdelta*SCREENWIDTH/4; 
-	    count = column->length; 
- 
-	    while (count--) 
-	    { 
-		if (dp_translation)
-		sourcetrans = &dp_translation[*source++];
 
-		*dest = *sourcetrans++; 
-		dest += SCREENWIDTH/4; 
-	    } 
-	    column = (column_t *)(  (byte *)column + column->length + 4 ); 
-	} 
-	if ( ((++x)&3) == 0 ) 
-	    desttop++;	// go to next byte, not next plane 
+    desttop = destscreen + y*SCREENWIDTH/4 + (x>>2);
+
+    w = SHORT(patch->width);
+
+    for (col = 0 ; col<w ; col++)
+    {
+        outp (SC_INDEX+1,1<<(x&3));
+        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
+
+        // step through the posts in a column
+
+        while (column->topdelta != 0xff)
+        { 
+            source = sourcetrans = (byte *)column + 3;
+            dest = desttop + column->topdelta*SCREENWIDTH/4;
+            count = column->length;
+
+            while (count--)
+            {
+                if (dp_translation)
+                {
+                    sourcetrans = &dp_translation[*source++];
+                }
+
+                *dest = *sourcetrans++;
+                dest += SCREENWIDTH/4;
+            }
+
+            column = (column_t *)((byte *)column + column->length + 4);
+        }
+
+        if (((++x)&3) == 0) 
+        {
+            desttop++;	// go to next byte, not next plane
+        }
     }
-} 
+}
+
 
 //
 // V_DrawShadow
-// Masks a column based masked shadow to the screen. 
+// [JN] Masks a column based masked shadow to the screen. 
 //
-
-extern byte *tinttable;
-
-void
-V_DrawShadow
-( int		x,
-  int		y,
-  int		scrn,
-  patch_t*	patch ) 
+void V_DrawShadow (int x, int y, int scrn, patch_t *patch)
 { 
-    int		count;
-    int		col; 
-    column_t*	column; 
-    byte*	desttop;
-    byte*	dest;
-    byte*	source; 
-    int		w; 
+    int        count;
+    int        col; 
+    int        w;
+    byte      *desttop;
+    byte      *dest;
+    byte      *source; 
+    column_t  *column;
 
     if (!draw_shadowed_text || vanilla)
-    return;
-
-    y -= SHORT(patch->topoffset); 
-    x -= SHORT(patch->leftoffset); 
-#ifdef RANGECHECK 
-    if (x<0 ||x+SHORT(patch->width) >SCREENWIDTH || y<0 || y+SHORT(patch->height)>SCREENHEIGHT  || (unsigned)scrn>4)
     {
-      // [JN] Disabled for preventing text mess appearing on the screen.
-      /*
-      fprintf( stderr, "Shadow at %d,%d exceeds LFB\n", x,y );
-      // No I_Error abort - what is up with TNT.WAD?
-      fprintf( stderr, "V_DrawShadow: bad patch (ignored)\n");
-      */
-      return;
+        return;
     }
-#endif 
- 
-    if (!scrn)
-	V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height)); 
 
-    col = 0; 
-    desttop = screens[scrn]+y*SCREENWIDTH+x; 
-	 
-    w = SHORT(patch->width); 
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
+
+#ifdef RANGECHECK 
+    if (x < 0 
+    ||  x + SHORT(patch->width) >SCREENWIDTH 
+    ||  y < 0
+    ||  y + SHORT(patch->height)>SCREENHEIGHT
+    || (unsigned)scrn > 4)
+    {
+        // [JN] Disabled for preventing text mess appearing on the screen.
+        /*
+        fprintf( stderr, "Shadow at %d,%d exceeds LFB\n", x,y );
+        // No I_Error abort - what is up with TNT.WAD?
+        fprintf( stderr, "V_DrawShadow: bad patch (ignored)\n");
+        */
+        return;
+    }
+#endif
+
+    if (!scrn)
+    {
+        V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height));
+    }
+
+    col = 0;
+    desttop = screens[scrn] + y*SCREENWIDTH + x;
+
+    w = SHORT(patch->width);
 
     for ( ; col<w ; x++, col++, desttop++)
     { 
-	column = (column_t *)((byte *)patch + LONG(patch->columnofs[col])); 
- 
-	// step through the posts in a column 
-	while (column->topdelta != 0xff ) 
-	{ 
-	    source = (byte *)column + 3; 
-	    dest = desttop + column->topdelta*SCREENWIDTH; 
-	    count = column->length; 
-			 
-	    while (count--) 
-	    { 
-		*dest = tinttable[((*dest)<<8)];
-		dest += SCREENWIDTH; 
-	    } 
-	    column = (column_t *)(  (byte *)column + column->length + 4 ); 
-	} 
-    }			 
+        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
+
+        // step through the posts in a column
+        while (column->topdelta != 0xff)
+        {
+            source = (byte *)column + 3;
+            dest = desttop + column->topdelta*SCREENWIDTH; 
+            count = column->length;
+
+            while (count--) 
+            {
+                *dest = tinttable[((*dest)<<8)];
+                dest += SCREENWIDTH;
+            }
+
+            column = (column_t *)((byte *)column + column->length + 4); 
+        }
+    }
 } 
+
 
 //
 // V_DrawShadowDirect
-// Masks a column based masked shadow to the screen.
+// [JN] Masks a column based masked shadow to the screen.
 //
-
-void
-V_DrawShadowDirect
-( int		x,
-  int		y,
-  int		scrn,
-  patch_t*	patch ) 
+void V_DrawShadowDirect (int x, int y, int scrn, patch_t *patch)
 {
-    int		count;
-    int		col; 
-    column_t*	column; 
-    byte*	desttop;
-    byte*	dest;
-    byte*	source; 
-    int		w; 
-    
+    int        count;
+    int        col;
+    int        w;
+    byte      *desttop;
+    byte      *dest;
+    byte      *source;
+    column_t  *column;
+
     if (!draw_shadowed_text || vanilla)
-    return;
+    {
+        return;
+    }
 
     y -= SHORT(patch->topoffset); 
     x -= SHORT(patch->leftoffset); 
 
 #ifdef RANGECHECK 
-    if (x<0 ||x+SHORT(patch->width) >SCREENWIDTH || y<0 || y+SHORT(patch->height)>SCREENHEIGHT || (unsigned)scrn>4)
+    if (x < 0 
+    ||  x + SHORT(patch->width) >SCREENWIDTH
+    ||  y < 0
+    ||  y + SHORT(patch->height)>SCREENHEIGHT
+    || (unsigned)scrn > 4)
     {
-	// [JN] Make non-fatal.
-	// I_Error ("Žè¨¡ª  V_DrawShadowDirect");
-    return;
+        // [JN] Make non-fatal.
+        // I_Error ("Žè¨¡ª  V_DrawShadowDirect");
+        return;
     }
 #endif 
- 
-    desttop = destscreen + y*SCREENWIDTH/4 + (x>>2); 
-	 
-    w = SHORT(patch->width); 
-    for ( col = 0 ; col<w ; col++) 
-    { 
-	outp (SC_INDEX+1,1<<(x&3)); 
-	column = (column_t *)((byte *)patch + LONG(patch->columnofs[col])); 
- 
-	// step through the posts in a column 
-	 
-	while (column->topdelta != 0xff ) 
-	{ 
-	    source = (byte *)column + 3; 
-	    dest = desttop + column->topdelta*SCREENWIDTH/4; 
-	    count = column->length; 
- 
-	    while (count--) 
-	    {
-        *dest = tinttable[((*dest)<<8)];
-        dest += SCREENWIDTH/4; 
 
-	    } 
-	    column = (column_t *)(  (byte *)column + column->length + 4 ); 
-	} 
-	if ( ((++x)&3) == 0 ) 
-	    desttop++;	// go to next byte, not next plane 
+    desttop = destscreen + y*SCREENWIDTH/4 + (x>>2);
+
+    w = SHORT(patch->width);
+
+    for ( col = 0 ; col<w ; col++)
+    {
+        outp (SC_INDEX+1,1<<(x&3));
+        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
+
+        // step through the posts in a column 
+
+        while (column->topdelta != 0xff ) 
+        {
+            source = (byte *)column + 3;
+            dest = desttop + column->topdelta*SCREENWIDTH/4;
+            count = column->length;
+
+            while (count--)
+            {
+                *dest = tinttable[((*dest)<<8)];
+                dest += SCREENWIDTH/4;
+            }
+
+            column = (column_t *)((byte *)column + column->length + 4);
+        }
+
+        if (((++x)&3) == 0) 
+        {
+            desttop++;	// go to next byte, not next plane 
+        }
     }
 } 
+
 
 //
 // V_DrawBlock
 // Draw a linear block of pixels into the view buffer.
 //
-void
-V_DrawBlock
-( int		x,
-  int		y,
-  int		scrn,
-  int		width,
-  int		height,
-  byte*		src ) 
+void V_DrawBlock (int x, int y, int scrn, int width, int height, byte *src)
 { 
-    byte*	dest; 
-	 
+    byte *dest;
+
 #ifdef RANGECHECK 
-    if (x<0
-	||x+width >SCREENWIDTH
-	|| y<0
-	|| y+height>SCREENHEIGHT 
-	|| (unsigned)scrn>4 )
+    if (x < 0
+    ||  x + width >SCREENWIDTH
+    ||  y < 0
+    ||  y + height>SCREENHEIGHT
+    ||  (unsigned)scrn > 4)
     {
-	I_Error ("Žè¨¡ª  V_DrawBlock");
+        I_Error (english_language ?
+                 "Bad V_DrawBlock" :
+                 "Žè¨¡ª  V_DrawBlock");
     }
 #endif 
- 
-    V_MarkRect (x, y, width, height); 
- 
-    dest = screens[scrn] + y*SCREENWIDTH+x; 
 
-    while (height--) 
-    { 
-	memcpy (dest, src, width); 
-	src += width; 
-	dest += SCREENWIDTH; 
-    } 
-} 
- 
+    V_MarkRect (x, y, width, height);
+
+    dest = screens[scrn] + y*SCREENWIDTH+x;
+
+    while (height--)
+    {
+        memcpy (dest, src, width);
+        src += width;
+        dest += SCREENWIDTH;
+    }
+}
 
 
 //
 // V_GetBlock
 // Gets a linear block of pixels from the view buffer.
 //
-void
-V_GetBlock
-( int		x,
-  int		y,
-  int		scrn,
-  int		width,
-  int		height,
-  byte*		dest ) 
-{ 
-    byte*	src; 
-	 
+void V_GetBlock (int x, int y, int scrn, int width, int height, byte *dest)
+{
+    byte *src;
+
 #ifdef RANGECHECK 
-    if (x<0
-	||x+width >SCREENWIDTH
-	|| y<0
-	|| y+height>SCREENHEIGHT 
-	|| (unsigned)scrn>4 )
+    if (x < 0
+    ||  x + width >SCREENWIDTH
+    ||  y < 0
+    ||  y + height>SCREENHEIGHT 
+    || (unsigned)scrn>4 )
     {
-	I_Error ("Žè¨¡ª  V_DrawBlock");
+        I_Error (english_language ?
+                 "Bad V_GetBlock" :
+                 "Žè¨¡ª  V_GetBlock");
     }
-#endif 
- 
-    src = screens[scrn] + y*SCREENWIDTH+x; 
+#endif
 
-    while (height--) 
+    src = screens[scrn] + y*SCREENWIDTH+x;
+
+    while (height--)
     { 
-	memcpy (dest, src, width); 
-	src += SCREENWIDTH; 
-	dest += width; 
-    } 
-} 
-
-
+        memcpy (dest, src, width);
+        src += SCREENWIDTH;
+        dest += width;
+    }
+}
 
 
 //
@@ -906,13 +897,15 @@ V_GetBlock
 // 
 void V_Init (void) 
 { 
-    int		i;
-    byte*	base;
-		
-    // stick these in low dos memory on PCs
+    int    i;
+    byte  *base;
 
+    // stick these in low dos memory on PCs
     base = I_AllocLow (SCREENWIDTH*SCREENHEIGHT*4);
 
     for (i=0 ; i<4 ; i++)
-	screens[i] = base + i*SCREENWIDTH*SCREENHEIGHT;
+    {
+        screens[i] = base + i*SCREENWIDTH*SCREENHEIGHT;
+    }
 }
+

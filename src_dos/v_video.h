@@ -25,39 +25,25 @@
 #define __V_VIDEO__
 
 #include "doomtype.h"
-
 #include "doomdef.h"
-
-// Needed because we are refering to patches.
 #include "r_data.h"
 
-//
-// VIDEO
-//
 
-#define CENTERY			(SCREENHEIGHT/2)
+#define CENTERY (SCREENHEIGHT/2)
 
+extern int  usegamma;
+extern int  dirtybox[4];
 
-// Screen 0 is the screen updated by I_Update screen.
-// Screen 1 is an extra buffer.
-
-
-
-extern	byte*		screens[5];
-
-extern  int	dirtybox[4];
+extern byte *screens[5];
 extern byte *dp_translation;
 
 extern const byte gammatable[18][256];
-extern	int	usegamma;
-
 
 
 // Allocates buffer screens, call before R_Init.
 void V_Init (void);
 
-
-void
+void 
 V_CopyRect
 ( int		srcx,
   int		srcy,
@@ -125,3 +111,4 @@ V_MarkRect
   int		height );
 
 #endif
+
