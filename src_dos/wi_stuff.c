@@ -43,6 +43,8 @@
 
 #include "wi_stuff.h"
 
+#include "jn.h"
+
 //
 // Data needed to add patches to full screen intermission pics.
 // Patches are statistics messages, and animations.
@@ -336,6 +338,7 @@ static patch_t*		bg;
 
 // You Are Here graphic
 static patch_t*		yah[2]; 
+static patch_t*		yah_rus[2];
 
 // splat
 static patch_t*		splat;
@@ -350,36 +353,42 @@ static patch_t*		num[10];
 // minus sign
 static patch_t*		wiminus;
 
-// "Finished!" graphics
-static patch_t*		finished;
+// [JN] English patches:
+static patch_t*		finished;   // "Finished"
+static patch_t*		entering;   // "Entering"
+static patch_t*		sp_secret;  // "Secret" 
+static patch_t*		kills;      // "Kills"
+static patch_t*		secret;     // "Scrt" (multiplayer)
+static patch_t*		items;      // "Items"
+static patch_t*		frags;      // "Frags"
+static patch_t*		time;       // "Time"
+static patch_t*		par;        // "Par"
+static patch_t*		sucks;      // "Sucks"
+static patch_t*		killers;    // "killers" (multiplayer)
+static patch_t*		victims;    // "victims" (multiplayer)
+static patch_t*		total;      // "Total"
 
-// "Entering" graphic
-static patch_t*		entering; 
-
-// "secret"
-static patch_t*		sp_secret;
-
- // "Kills", "Scrt", "Items", "Frags"
-static patch_t*		kills;
-static patch_t*		secret;
-static patch_t*		items;
-static patch_t*		frags;
-
-// Time sucks.
-static patch_t*		time;
-static patch_t*		par;
-static patch_t*		sucks;
-
-// "Total time:"
-static patch_t*		overtime;
+// [JN] Russian patches:
+static patch_t*     finished_rus;   // "Уровень завершен"
+static patch_t*     entering_rus;   // "Загружается уровень"
+static patch_t*     mp_items_rus;   // "Загружается уровень"
+static patch_t*     sp_secret_rus;  // "Тайники"
+static patch_t*     kills_rus;      // "Враги"
+static patch_t*     secret_rus;     // "Тайн." (multiplayer)
+static patch_t*     items_rus;      // "Предметы"
+static patch_t*     frags_rus;      // "Фраги"
+static patch_t*     time_rus;  // "Время"
+static patch_t*     par_rus;        // "Рекорд"
+static patch_t*     sucks_rus;      // ":Ужас"
+static patch_t*     killers_rus;    // "убийцы" (multiplayer)
+static patch_t*     victims_rus;    // "жертвы" (multiplayer)
+static patch_t*     total_rus;      // "Итог"
+static patch_t*     overtime;       // "Общее время:"
 
 
-// "killers", "victims"
-static patch_t*		killers;
-static patch_t*		victims; 
 
-// "Total", your face, your dead face
-static patch_t*		total;
+// your face, your dead face
+
 static patch_t*		star;
 static patch_t*		bstar;
 
@@ -391,6 +400,12 @@ static patch_t*		bp[MAXPLAYERS];
 
  // Name graphics of each level (centered)
 static patch_t**	lnames;
+
+// [JN] Russian level names
+static patch_t**    lnames_d1_rus;
+static patch_t**    lnames_d2_rus;
+static patch_t**    lnames_plut_rus;
+static patch_t**    lnames_tnt_rus;
 
 //
 // CODE
@@ -419,14 +434,58 @@ void WI_drawLF(void)
     int y = WI_TITLEY;
 
     // draw <LevelName> 
-    V_DrawShadow(((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2)+1, y+1, FB, lnames[wbs->last]);
-    V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2, y, FB, lnames[wbs->last]);
+    if (english_language)
+    {
+        V_DrawShadow(((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2)+1, 
+                     y+1, FB, lnames[wbs->last]);
+        V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2,
+                    y, FB, lnames[wbs->last]);
+    }
+    else
+    {
+        if (shareware || registered || retail)
+        {
+            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2)+1, 
+                        y+1, FB, lnames_d1_rus[wbs->last]);
+            V_DrawPatch((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2,
+                        y, FB, lnames_d1_rus[wbs->last]);
+        }
+        else if (plutonia)
+        {
+            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->last]->width))/2)+1, 
+                        y+1, FB, lnames_plut_rus[wbs->last]);
+            V_DrawPatch((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->last]->width))/2,
+                        y, FB, lnames_plut_rus[wbs->last]);
+        }
+        else if (tnt)
+        {
+            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->last]->width))/2)+1, 
+                         y+1, FB, lnames_tnt_rus[wbs->last]);
+            V_DrawPatch((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->last]->width))/2,
+                         y, FB, lnames_tnt_rus[wbs->last]);
+        }
+        else
+        {
+            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2)+1, 
+                         y+1, FB, lnames_d2_rus[wbs->last]);
+            V_DrawPatch((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2,
+                        y, FB, lnames_d2_rus[wbs->last]);
+        }
+    }
 
     // draw "Finished!"
     y += (5*SHORT(lnames[wbs->last]->height))/4;
-    
-    V_DrawShadow(((SCREENWIDTH - SHORT(finished->width))/2)+1, y+1, FB, finished);
-    V_DrawPatch((SCREENWIDTH - SHORT(finished->width))/2, y, FB, finished);
+
+    if (english_language)
+    {
+        V_DrawShadow(((SCREENWIDTH - SHORT(finished->width))/2)+1, y+1, FB, finished);
+        V_DrawPatch((SCREENWIDTH - SHORT(finished->width))/2, y, FB, finished);
+    }
+    else
+    {
+        V_DrawShadow(((SCREENWIDTH - SHORT(finished_rus->width))/2)+1, y+1, FB, finished_rus);
+        V_DrawPatch((SCREENWIDTH - SHORT(finished_rus->width))/2, y, FB, finished_rus);
+    }
 }
 
 
@@ -437,15 +496,56 @@ void WI_drawEL(void)
     int y = WI_TITLEY;
 
     // draw "Entering"
-    V_DrawShadow(((SCREENWIDTH - SHORT(entering->width))/2)+1, y+1, FB, entering);
-    V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2, y, FB, entering);
+    if (english_language)
+    {
+        V_DrawShadow(((SCREENWIDTH - SHORT(entering->width))/2)+1, y+1, FB, entering);
+        V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2, y, FB, entering);
+    }
+    else
+    {
+        V_DrawShadow(((SCREENWIDTH - SHORT(entering_rus->width))/2)+1, y+1, FB, entering_rus);
+        V_DrawPatch((SCREENWIDTH - SHORT(entering_rus->width))/2, y, FB, entering_rus);
+    }
 
     // draw level
     y += (5*SHORT(lnames[wbs->next]->height))/4;
 
-    V_DrawShadow(((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2)+1, y+1, FB, lnames[wbs->next]);
-    V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2, y, FB, lnames[wbs->next]);
-
+    if (english_language)
+    {
+        V_DrawShadow(((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2)+1, y+1, FB, lnames[wbs->next]);
+        V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2, y, FB, lnames[wbs->next]);
+    }
+    else
+    {
+        if (shareware || registered || retail)
+        {
+            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2)+1,
+                         y+1, FB, lnames_d1_rus[wbs->next]);
+            V_DrawPatch((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2,
+                        y, FB, lnames_d1_rus[wbs->next]);
+        }
+        else if (plutonia)
+        {
+            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->next]->width))/2)+1,
+                         y+1, FB, lnames_plut_rus[wbs->next]);
+            V_DrawPatch((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->next]->width))/2,
+                        y, FB, lnames_plut_rus[wbs->next]);
+        }
+        else if (tnt)
+        {
+            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->next]->width))/2)+1,
+                         y+1, FB, lnames_tnt_rus[wbs->next]);
+            V_DrawPatch((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->next]->width))/2,
+                        y, FB, lnames_tnt_rus[wbs->next]);
+        }
+        else
+        {
+            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2)+1,
+                         y+1, FB, lnames_d2_rus[wbs->next]);
+            V_DrawPatch((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2,
+                        y, FB, lnames_d2_rus[wbs->next]);
+        }
+    }
 }
 
 void
@@ -734,9 +834,17 @@ WI_drawTime
     }
     else
     {
-	// "sucks"
-    V_DrawShadow((x - SHORT(sucks->width))+1, y+1, FB, sucks); 
-	V_DrawPatch(x - SHORT(sucks->width), y, FB, sucks); 
+        // "sucks"
+        if (english_language)
+        {
+            V_DrawShadow((x - SHORT(sucks->width))+1, y+1, FB, sucks);
+            V_DrawPatch(x - SHORT(sucks->width), y, FB, sucks);
+        }
+        else
+        {
+            V_DrawShadow((x - SHORT(sucks_rus->width))+1, y+1, FB, sucks_rus);
+            V_DrawPatch(x - SHORT(sucks_rus->width), y, FB, sucks_rus);
+        }
     }
 }
 
@@ -826,7 +934,7 @@ void WI_drawShowNextLoc(void)
 
 	// draw flashing ptr
 	if (snl_pointeron)
-	    WI_drawOnLnode(wbs->next, yah); 
+	    WI_drawOnLnode(wbs->next, english_language ? yah : yah_rus);
     }
 
     // draws which level you are entering..
@@ -1025,14 +1133,32 @@ void WI_drawDeathmatchStats(void)
     WI_drawLF();
 
     // draw stat titles (top line)
-    V_DrawShadow((DM_TOTALSX-SHORT(total->width)/2)+1, (DM_MATRIXY-WI_SPACINGY+10)+1, FB, total);
-    V_DrawPatch(DM_TOTALSX-SHORT(total->width)/2, DM_MATRIXY-WI_SPACINGY+10, FB, total);
-    
-    V_DrawShadow(DM_KILLERSX+1, DM_KILLERSY+1, FB, killers);
-    V_DrawPatch(DM_KILLERSX, DM_KILLERSY, FB, killers);
-    
-    V_DrawShadow(DM_VICTIMSX+1, DM_VICTIMSY+1, FB, victims);
-    V_DrawPatch(DM_VICTIMSX, DM_VICTIMSY, FB, victims);
+    if (english_language)
+    {
+        V_DrawShadow((DM_TOTALSX-SHORT(total->width)/2)+1,
+                     (DM_MATRIXY-WI_SPACINGY+10)+1, FB, total);
+        V_DrawPatch(DM_TOTALSX-SHORT(total->width)/2,
+                    DM_MATRIXY-WI_SPACINGY+10, FB, total);
+
+        V_DrawShadow(DM_KILLERSX+1, DM_KILLERSY+1, FB, killers);
+        V_DrawPatch(DM_KILLERSX, DM_KILLERSY, FB, killers);
+
+        V_DrawShadow(DM_VICTIMSX+1, DM_VICTIMSY+1, FB, victims);
+        V_DrawPatch(DM_VICTIMSX, DM_VICTIMSY, FB, victims);
+    }
+    else
+    {
+        V_DrawShadow((DM_TOTALSX-SHORT(total_rus->width)/2)+1,
+                     (DM_MATRIXY-WI_SPACINGY+10)+1, FB, total_rus);
+        V_DrawPatch(DM_TOTALSX-SHORT(total_rus->width)/2,
+                    DM_MATRIXY-WI_SPACINGY+10, FB, total_rus);
+
+        V_DrawShadow(DM_KILLERSX+1, DM_KILLERSY+1, FB, killers_rus);
+        V_DrawPatch(DM_KILLERSX, DM_KILLERSY, FB, killers_rus);
+
+        V_DrawShadow(DM_VICTIMSX+1, DM_VICTIMSY+1, FB, victims_rus);
+        V_DrawPatch(DM_VICTIMSX, DM_VICTIMSY, FB, victims_rus);
+    }
 
     // draw P?
     x = DM_MATRIXX + DM_SPACINGX;
@@ -1297,21 +1423,57 @@ void WI_drawNetgameStats(void)
     WI_drawLF();
 
     // draw stat titles (top line)
-    V_DrawShadow((NG_STATSX+NG_SPACINGX-SHORT(kills->width))+1, NG_STATSY+1, FB, kills);
-    V_DrawPatch(NG_STATSX+NG_SPACINGX-SHORT(kills->width), NG_STATSY, FB, kills);
-
-    V_DrawShadow((NG_STATSX+2*NG_SPACINGX-SHORT(items->width))+1, NG_STATSY+1, FB, items);
-    V_DrawPatch(NG_STATSX+2*NG_SPACINGX-SHORT(items->width), NG_STATSY, FB, items);
-
-    V_DrawShadow((NG_STATSX+3*NG_SPACINGX-SHORT(secret->width))+1, NG_STATSY+1, FB, secret);
-    V_DrawPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width), NG_STATSY, FB, secret);
-    
-    if (dofrags)
+    if (english_language)
     {
-	V_DrawShadow((NG_STATSX+4*NG_SPACINGX-SHORT(frags->width))+1, NG_STATSY+1, FB, frags);
-	V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width), NG_STATSY, FB, frags);
-    }
+        V_DrawShadow((NG_STATSX+NG_SPACINGX-SHORT(kills->width))+1,
+                      NG_STATSY+1, FB, kills);
+        V_DrawPatch(NG_STATSX+NG_SPACINGX-SHORT(kills->width),
+                    NG_STATSY, FB, kills);
 
+        V_DrawShadow((NG_STATSX+2*NG_SPACINGX-SHORT(items->width))+1,
+                      NG_STATSY+1, FB, items);
+        V_DrawPatch(NG_STATSX+2*NG_SPACINGX-SHORT(items->width),
+                    NG_STATSY, FB, items);
+
+        V_DrawShadow((NG_STATSX+3*NG_SPACINGX-SHORT(secret->width))+1,
+                      NG_STATSY+1, FB, secret);
+        V_DrawPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),
+                    NG_STATSY, FB, secret);
+
+        if (dofrags)
+        {
+            V_DrawShadow((NG_STATSX+4*NG_SPACINGX-SHORT(frags->width))+1,
+                          NG_STATSY+1, FB, frags);
+            V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width),
+                        NG_STATSY, FB, frags);
+        }
+    }
+    else
+    {
+        V_DrawShadow((NG_STATSX+NG_SPACINGX-SHORT(kills_rus->width))+1,
+                      NG_STATSY+1, FB, kills_rus);
+        V_DrawPatch(NG_STATSX+NG_SPACINGX-SHORT(kills_rus->width),
+                    NG_STATSY, FB, kills_rus);
+
+        V_DrawShadow((NG_STATSX+2*NG_SPACINGX-SHORT(mp_items_rus->width))+1,
+                      NG_STATSY+1, FB, mp_items_rus);
+        V_DrawPatch(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items_rus->width),
+                    NG_STATSY, FB, mp_items_rus);
+
+        V_DrawShadow((NG_STATSX+3*NG_SPACINGX-SHORT(secret_rus->width))+1,
+                      NG_STATSY+1, FB, secret_rus);
+        V_DrawPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret_rus->width),
+                    NG_STATSY, FB, secret_rus);
+
+        if (dofrags)
+        {
+            V_DrawShadow((NG_STATSX+4*NG_SPACINGX-SHORT(frags_rus->width))+1,
+                          NG_STATSY+1, FB, frags_rus);
+            V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags_rus->width),
+                        NG_STATSY, FB, frags_rus);
+        }
+    }
+    
     // draw stats
     y = NG_STATSY + SHORT(kills->height);
 
@@ -1477,41 +1639,64 @@ void WI_drawStats(void)
     
     WI_drawLF();
 
-    V_DrawShadow(SP_STATSX+1, SP_STATSY+1, FB, kills);
-    V_DrawPatch(SP_STATSX, SP_STATSY, FB, kills);
+    V_DrawShadow(SP_STATSX+1, SP_STATSY+1, FB,
+                 english_language ? kills : kills_rus);
+    V_DrawPatch(SP_STATSX, SP_STATSY, FB,
+                english_language ? kills : kills_rus);
+
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
-    V_DrawShadow(SP_STATSX+1, SP_STATSY+lh+1, FB, items);
-    V_DrawPatch(SP_STATSX, SP_STATSY+lh, FB, items);
+    V_DrawShadow(SP_STATSX+1, SP_STATSY+lh+1, FB,
+                 english_language ? items : items_rus);
+    V_DrawPatch(SP_STATSX, SP_STATSY+lh, FB,
+                english_language ? items : items_rus);
+
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
     // [JN] Show secrets counter if only map have a secrets.
     // Adaptaken from Doom Retro, thanks Brad Harding!
     if (totalsecret || vanilla)
     {
-    V_DrawShadow(SP_STATSX+1, SP_STATSY+2*lh+1, FB, sp_secret);
-    V_DrawPatch(SP_STATSX, SP_STATSY+2*lh, FB, sp_secret);
-    WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
+        V_DrawShadow(SP_STATSX+1, SP_STATSY+2*lh+1, FB,
+                     english_language ? sp_secret : sp_secret_rus);
+        V_DrawPatch(SP_STATSX, SP_STATSY+2*lh, FB,
+                    english_language ? sp_secret : sp_secret_rus);
+
+        WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
     }
 
-    V_DrawShadow(SP_TIMEX+1, SP_TIMEY+1, FB, time);
-    V_DrawPatch(SP_TIMEX, SP_TIMEY, FB, time);
+    V_DrawShadow(SP_TIMEX+1, SP_TIMEY+1, FB,
+                 english_language ? time : time_rus);
+    V_DrawPatch(SP_TIMEX, SP_TIMEY, FB,
+                english_language ? time : time_rus);
+
     WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time, true);
 
     if (wbs->epsd < 4)
     {
-    V_DrawShadow(SCREENWIDTH/2 + SP_TIMEX+1, SP_TIMEY+1, FB, par);
-	V_DrawPatch(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, FB, par);
-	WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par, true);
+        V_DrawShadow(SCREENWIDTH/2 + SP_TIMEX+1, SP_TIMEY+1, FB,
+                     english_language ? par : par_rus);
+        V_DrawPatch(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, FB,
+                    english_language ? par : par_rus);
+
+        WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par, true);
     }
     
     // [crispy] draw total time after level time and par time
-    if (sp_state > 8)
+    if (sp_state > 8 && !vanilla)
     {
         const int ttime = wbs->totaltimes / TICRATE;
         const boolean wide = (ttime > 61*59) || (SP_TIMEX + SHORT(total->width) >= SCREENWIDTH/4);
 
-        if (!vanilla)
+        if (english_language)
+        {
+            V_DrawShadow(SP_TIMEX + 1, SP_TIMEY + 17, FB, total);
+            V_DrawPatch(SP_TIMEX, SP_TIMEY + 16, FB, total);
+
+            // [crispy] choose x-position depending on width of time string
+            WI_drawTime((wide ? 320 : 320/2) - SP_TIMEX, SP_TIMEY + 16, ttime, false);
+        }
+        else
         {
             // [JN] Choose x-position for long Russian "Общее время"
             V_DrawShadow(SP_TIMEX + (wide ? 1 : 25),
@@ -1524,7 +1709,6 @@ void WI_drawStats(void)
                         SP_TIMEY + 16, ttime, false);
         }
     }
-
 }
 
 void WI_checkForAccelerate(void)
@@ -1610,6 +1794,7 @@ void WI_loadData(void)
 {
     int		i;
     int		j;
+    int		k, l, m, n;    // [JN] For language hot-swapping
     char	name[9];
     anim_t*	a;
 
@@ -1639,35 +1824,72 @@ void WI_loadData(void)
 
     if (commercial)
     {
-	NUMCMAPS = 32;								
-	lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS,
-				       PU_STATIC, 0);
-	for (i=0 ; i<NUMCMAPS ; i++)
-	{
-        if (commercial)
-            sprintf(name, "CWILV%2.2d", i);
-        if (tnt)
-            sprintf(name, "TWILV%2.2d", i);
-        if (plutonia)
-            sprintf(name, "PWILV%2.2d", i);
-	    lnames[i] = W_CacheLumpName(name, PU_STATIC);
-	}					
+        NUMCMAPS = 32;
+
+        // [JN] Load standard English Doom 2 level names
+        lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, 0);
+
+        for (i=0 ; i<NUMCMAPS ; i++)
+        {
+            if (commercial)
+                sprintf(name, "CWILV%2.2d", i);
+            if (tnt)
+                sprintf(name, "TWILV%2.2d", i);
+            if (plutonia)
+                sprintf(name, "PWILV%2.2d", i);
+            lnames[i] = W_CacheLumpName(name, PU_STATIC);
+        }
+
+        // [JN] Load Russian Doom 2 (only) level names
+        lnames_d2_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, 0);
+        for (k=0 ; k<NUMCMAPS ; k++)
+        {
+            if (commercial)
+            sprintf(name, "R2ILV%2.2d", k);
+            lnames_d2_rus[k] = W_CacheLumpName(name, PU_STATIC);
+        }
+
+        // [JN] Load Russian Plutonia (only) level names
+        lnames_plut_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, 0);
+        for (l=0 ; l<NUMCMAPS ; l++)
+        {
+            if (plutonia)
+            sprintf(name, "RPILV%2.2d", l);
+            lnames_plut_rus[l] = W_CacheLumpName(name, PU_STATIC);
+        }
+
+        // [JN] Load Russian TNT (only) level names
+        lnames_tnt_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, 0);
+        for (m=0 ; m<NUMCMAPS ; m++)
+        {
+            if (tnt)
+            sprintf(name, "RTILV%2.2d", m);
+            lnames_tnt_rus[m] = W_CacheLumpName(name, PU_STATIC);
+        }
     }
     else
     {
-	lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMMAPS,
-				       PU_STATIC, 0);
-	for (i=0 ; i<NUMMAPS ; i++)
-	{
-	    sprintf(name, "WILV%d%d", wbs->epsd, i);
-	    lnames[i] = W_CacheLumpName(name, PU_STATIC);
-	}
+        lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMMAPS, PU_STATIC, 0);
+        for (i=0 ; i<NUMMAPS ; i++)
+        {
+            sprintf(name, "WILV%d%d", wbs->epsd, i);
+            lnames[i] = W_CacheLumpName(name, PU_STATIC);
+        }
+
+        lnames_d1_rus = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMMAPS, PU_STATIC, 0);
+        for (n=0 ; n<NUMMAPS ; n++)
+        {
+            sprintf(name, "R1LV%d%d", wbs->epsd, n);
+            lnames_d1_rus[n] = W_CacheLumpName(name, PU_STATIC);
+        }
 
 	// you are here
 	yah[0] = W_CacheLumpName("WIURH0", PU_STATIC);
+    yah_rus[0] = W_CacheLumpName("RD_URH0", PU_STATIC);
 
 	// you are here (alt.)
 	yah[1] = W_CacheLumpName("WIURH1", PU_STATIC);
+    yah_rus[1] = W_CacheLumpName("RD_URH1", PU_STATIC);
 
 	// splat
 	splat = W_CacheLumpName("WISPLAT", PU_STATIC); 
@@ -1709,58 +1931,40 @@ void WI_loadData(void)
     // percent sign
     percent = W_CacheLumpName("WIPCNT", PU_STATIC);
 
-    // "finished"
-    finished = W_CacheLumpName("WIF", PU_STATIC);
+    // [JN] English patches:
+    finished = W_CacheLumpName("WIF", PU_STATIC);           // "finished"
+    entering = W_CacheLumpName("WIENTER", PU_STATIC);       // "entering"
+    sp_secret = W_CacheLumpName("WISCRT2", PU_STATIC);      // "secret"
+    kills = W_CacheLumpName("WIOSTK", PU_STATIC);           // "kills"
+    secret = W_CacheLumpName("WIOSTS", PU_STATIC);          // "scrt" (multiplayer)
+	items = W_CacheLumpName("WIOSTI", PU_STATIC);           // "items"
+    frags = W_CacheLumpName("WIFRGS", PU_STATIC);           // "frgs"
+    time = W_CacheLumpName("WITIME", PU_STATIC);            // "time"
+    par = W_CacheLumpName("WIPAR", PU_STATIC);              // "par"
+    sucks = W_CacheLumpName("WISUCKS", PU_STATIC);          // "sucks"
+    killers = W_CacheLumpName("WIKILRS", PU_STATIC);        // "killers" (vertical)
+    victims = W_CacheLumpName("WIVCTMS", PU_STATIC);        // "victims" (horiz)
+    total = W_CacheLumpName("WIMSTT", PU_STATIC);           // "total"
 
-    // "entering"
-    entering = W_CacheLumpName("WIENTER", PU_STATIC);
-
-    // "kills"
-    kills = W_CacheLumpName("WIOSTK", PU_STATIC);   
-
-    // "scrt"
-    secret = W_CacheLumpName("WIOSTS", PU_STATIC);
-
-     // "secret"
-    sp_secret = W_CacheLumpName("WISCRT2", PU_STATIC);
-
-    // Yuck. 
-    if (french)
-    {
-	// "items"
-	if (netgame && !deathmatch)
-	    items = W_CacheLumpName("WIOBJ", PU_STATIC);    
-  	else
-	    items = W_CacheLumpName("WIOSTI", PU_STATIC);
-    } else
-	items = W_CacheLumpName("WIOSTI", PU_STATIC);
-
-    // "frgs"
-    frags = W_CacheLumpName("WIFRGS", PU_STATIC);    
+    // [JN] Russian patches:
+    finished_rus = W_CacheLumpName("RD_WFIN", PU_STATIC);   // "Уровень завершен"
+    entering_rus = W_CacheLumpName("RD_WENTR", PU_STATIC);  // "Загружается уровень"
+    mp_items_rus = W_CacheLumpName("RD_WITM", PU_STATIC);  // "Загружается уровень"
+    sp_secret_rus = W_CacheLumpName("RD_WSCRT", PU_STATIC); // "Тайники"
+    kills_rus = W_CacheLumpName("RD_WKILL", PU_STATIC);     // "Враги"
+    secret_rus = W_CacheLumpName("RD_WSCR", PU_STATIC);     // "Тайн." (multiplayer)
+    items_rus = W_CacheLumpName("RD_WITMS", PU_STATIC);     // "Предметы"
+    frags_rus = W_CacheLumpName("RD_WFRGS", PU_STATIC);     // "Фраги"
+    time_rus = W_CacheLumpName("RD_WTIME", PU_STATIC);      // "Время"
+    par_rus = W_CacheLumpName("RD_WPAR", PU_STATIC);        // "Рекорд"
+    sucks_rus = W_CacheLumpName("RD_WSUCK", PU_STATIC);     // ":Ужас"
+    killers_rus = W_CacheLumpName("RD_WKLRS", PU_STATIC);   // "убийцы" (multiplayer)
+    victims_rus = W_CacheLumpName("RD_WVCTM", PU_STATIC);   // "жертвы" (multiplayer)
+    total_rus = W_CacheLumpName("RD_WIMST", PU_STATIC);     // "Итог"
+    overtime = W_CacheLumpName("WIOVTIME", PU_STATIC);      // "Общее время"    
 
     // ":"
     colon = W_CacheLumpName("WICOLON", PU_STATIC); 
-
-    // "time"
-    time = W_CacheLumpName("WITIME", PU_STATIC);   
-
-    // "sucks"
-    sucks = W_CacheLumpName("WISUCKS", PU_STATIC);  
-
-    // "par"
-    par = W_CacheLumpName("WIPAR", PU_STATIC);   
-
-    // "Total time:"
-    overtime = W_CacheLumpName("WIOVTIME", PU_STATIC);   
-
-    // "killers" (vertical)
-    killers = W_CacheLumpName("WIKILRS", PU_STATIC);
-
-    // "victims" (horiz)
-    victims = W_CacheLumpName("WIVCTMS", PU_STATIC);
-
-    // "total"
-    total = W_CacheLumpName("WIMSTT", PU_STATIC);   
 
     // your face
     star = W_CacheLumpName("STFST01", PU_STATIC);
@@ -1800,6 +2004,8 @@ void WI_unloadData(void)
     {
 	Z_ChangeTag(yah[0], PU_CACHE);
 	Z_ChangeTag(yah[1], PU_CACHE);
+	Z_ChangeTag(yah_rus[0], PU_CACHE);
+	Z_ChangeTag(yah_rus[1], PU_CACHE);
 
 	Z_ChangeTag(splat, PU_CACHE);
 

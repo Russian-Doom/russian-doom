@@ -327,14 +327,16 @@ void D_Display (void)
         if (automapactive)
         y = 4;
         else if (gamestate == GS_INTERMISSION)  // [JN] Do not obstruct titles on intermission screen
-        y = 28;
+        y = 32;
         else
         y = viewwindowy+4;
 
         V_DrawShadowDirect(viewwindowx+(scaledviewwidth-68)/2+1,
-                          y+1,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
+                          y+1,0,W_CacheLumpName (english_language ? 
+                                                 "M_PAUSE" : "RD_PAUSE", PU_CACHE));
         V_DrawPatchDirect(viewwindowx+(scaledviewwidth-68)/2,
-                          y,0,W_CacheLumpName ("M_PAUSE", PU_CACHE));
+                          y,0,W_CacheLumpName (english_language ?
+                                               "M_PAUSE" : "RD_PAUSE", PU_CACHE));
     }
 
     // menus go directly to the screen
