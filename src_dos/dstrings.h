@@ -29,11 +29,11 @@
 #ifdef FRENCH
 #include "d_french.h"
 #else
-#include "d_englsh.h"
+#include "rd_lang.h"
 #endif
 
 // Misc. other strings.
-#define SAVEGAMENAME	"doomsav"
+// #define SAVEGAMENAME	"doomsav"
 
 
 //

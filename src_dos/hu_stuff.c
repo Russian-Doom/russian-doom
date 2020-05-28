@@ -38,10 +38,23 @@
 //
 // Locally used constants, shortcuts.
 //
+
+// DOOM 1 map names
 #define HU_TITLE        (mapnames[(gameepisode-1)*9+gamemap-1])
+#define HU_TITLE_RUS    (mapnames_rus[(gameepisode-1)*9+gamemap-1])
+
+// DOOM 2 map names
 #define HU_TITLE2       (mapnames2[gamemap-1])
+#define HU_TITLE2_RUS   (mapnames2_rus[gamemap-1])
+
+// Plutonia map names
 #define HU_TITLEP       (mapnamesp[gamemap-1])
+#define HU_TITLEP_RUS   (mapnamesp_rus[gamemap-1 + 32])
+
+// TNT map names
 #define HU_TITLET       (mapnamest[gamemap-1])
+#define HU_TITLET_RUS   (mapnamest_rus[gamemap-1 + 64])
+
 #define HU_TITLEHEIGHT  1
 #define HU_TITLEX       0
 
@@ -168,6 +181,60 @@ char* mapnames[] =	// DOOM shareware/registered/retail (Ultimate) names.
     "NEWLEVEL"
 };
 
+char* mapnames_rus[] =
+{
+    HUSTR_E1M1_RUS,
+    HUSTR_E1M2_RUS,
+    HUSTR_E1M3_RUS,
+    HUSTR_E1M4_RUS,
+    HUSTR_E1M5_RUS,
+    HUSTR_E1M6_RUS,
+    HUSTR_E1M7_RUS,
+    HUSTR_E1M8_RUS,
+    HUSTR_E1M9_RUS,
+
+    HUSTR_E2M1_RUS,
+    HUSTR_E2M2_RUS,
+    HUSTR_E2M3_RUS,
+    HUSTR_E2M4_RUS,
+    HUSTR_E2M5_RUS,
+    HUSTR_E2M6_RUS,
+    HUSTR_E2M7_RUS,
+    HUSTR_E2M8_RUS,
+    HUSTR_E2M9_RUS,
+
+    HUSTR_E3M1_RUS,
+    HUSTR_E3M2_RUS,
+    HUSTR_E3M3_RUS,
+    HUSTR_E3M4_RUS,
+    HUSTR_E3M5_RUS,
+    HUSTR_E3M6_RUS,
+    HUSTR_E3M7_RUS,
+    HUSTR_E3M8_RUS,
+    HUSTR_E3M9_RUS,
+
+    HUSTR_E4M1_RUS,
+    HUSTR_E4M2_RUS,
+    HUSTR_E4M3_RUS,
+    HUSTR_E4M4_RUS,
+    HUSTR_E4M5_RUS,
+    HUSTR_E4M6_RUS,
+    HUSTR_E4M7_RUS,
+    HUSTR_E4M8_RUS,
+    HUSTR_E4M9_RUS,
+
+    // [JN] "ÕŒ¬€… ”–Œ¬≈Õ‹"
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM",
+    "YJDSQ EHJDTYM"
+};
+
 char* mapnames2[] = // DOOM 2 map names.
 {
     HUSTR_1,
@@ -204,6 +271,44 @@ char* mapnames2[] = // DOOM 2 map names.
     HUSTR_30,
     HUSTR_31,
     HUSTR_32
+};
+
+char* mapnames2_rus[] = // [JN] Russian DOOM 2 map names.
+{
+    HUSTR_1_RUS,
+    HUSTR_2_RUS,
+    HUSTR_3_RUS,
+    HUSTR_4_RUS,
+    HUSTR_5_RUS,
+    HUSTR_6_RUS,
+    HUSTR_7_RUS,
+    HUSTR_8_RUS,
+    HUSTR_9_RUS,
+    HUSTR_10_RUS,
+    HUSTR_11_RUS,
+
+    HUSTR_12_RUS,
+    HUSTR_13_RUS,
+    HUSTR_14_RUS,
+    HUSTR_15_RUS,
+    HUSTR_16_RUS,
+    HUSTR_17_RUS,
+    HUSTR_18_RUS,
+    HUSTR_19_RUS,
+    HUSTR_20_RUS,
+
+    HUSTR_21_RUS,
+    HUSTR_22_RUS,
+    HUSTR_23_RUS,
+    HUSTR_24_RUS,
+    HUSTR_25_RUS,
+    HUSTR_26_RUS,
+    HUSTR_27_RUS,
+    HUSTR_28_RUS,
+    HUSTR_29_RUS,
+    HUSTR_30_RUS,
+    HUSTR_31_RUS,
+    HUSTR_32_RUS
 };
 
 char* mapnamesp[] = // Plutonia WAD map names.
@@ -244,6 +349,44 @@ char* mapnamesp[] = // Plutonia WAD map names.
     PHUSTR_32
 };
 
+char* mapnamesp_rus[] = // [JN] Russian Plutonia WAD map names.
+{
+    PHUSTR_1_RUS,
+    PHUSTR_2_RUS,
+    PHUSTR_3_RUS,
+    PHUSTR_4_RUS,
+    PHUSTR_5_RUS,
+    PHUSTR_6_RUS,
+    PHUSTR_7_RUS,
+    PHUSTR_8_RUS,
+    PHUSTR_9_RUS,
+    PHUSTR_10_RUS,
+    PHUSTR_11_RUS,
+
+    PHUSTR_12_RUS,
+    PHUSTR_13_RUS,
+    PHUSTR_14_RUS,
+    PHUSTR_15_RUS,
+    PHUSTR_16_RUS,
+    PHUSTR_17_RUS,
+    PHUSTR_18_RUS,
+    PHUSTR_19_RUS,
+    PHUSTR_20_RUS,
+
+    PHUSTR_21_RUS,
+    PHUSTR_22_RUS,
+    PHUSTR_23_RUS,
+    PHUSTR_24_RUS,
+    PHUSTR_25_RUS,
+    PHUSTR_26_RUS,
+    PHUSTR_27_RUS,
+    PHUSTR_28_RUS,
+    PHUSTR_29_RUS,
+    PHUSTR_30_RUS,
+    PHUSTR_31_RUS,
+    PHUSTR_32_RUS
+};
+
 char *mapnamest[] = // TNT WAD map names.
 {
     THUSTR_1,
@@ -280,6 +423,44 @@ char *mapnamest[] = // TNT WAD map names.
     THUSTR_30,
     THUSTR_31,
     THUSTR_32
+};
+
+char *mapnamest_rus[] = // TNT WAD map names.
+{
+    THUSTR_1_RUS,
+    THUSTR_2_RUS,
+    THUSTR_3_RUS,
+    THUSTR_4_RUS,
+    THUSTR_5_RUS,
+    THUSTR_6_RUS,
+    THUSTR_7_RUS,
+    THUSTR_8_RUS,
+    THUSTR_9_RUS,
+    THUSTR_10_RUS,
+    THUSTR_11_RUS,
+
+    THUSTR_12_RUS,
+    THUSTR_13_RUS,
+    THUSTR_14_RUS,
+    THUSTR_15_RUS,
+    THUSTR_16_RUS,
+    THUSTR_17_RUS,
+    THUSTR_18_RUS,
+    THUSTR_19_RUS,
+    THUSTR_20_RUS,
+
+    THUSTR_21_RUS,
+    THUSTR_22_RUS,
+    THUSTR_23_RUS,
+    THUSTR_24_RUS,
+    THUSTR_25_RUS,
+    THUSTR_26_RUS,
+    THUSTR_27_RUS,
+    THUSTR_28_RUS,
+    THUSTR_29_RUS,
+    THUSTR_30_RUS,
+    THUSTR_31_RUS,
+    THUSTR_32_RUS
 };
 
 const char* shiftxform;
@@ -466,32 +647,38 @@ void HU_Start(void)
     chat_on = false;
 
     // create the message widget
-    HUlib_initSText(&w_message, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, hu_font, HU_FONTSTART, &message_on);
+    HUlib_initSText(&w_message, HU_MSGX, HU_MSGY, HU_MSGHEIGHT,
+                    english_language ? hu_font : hu_font_small_rus,
+                    HU_FONTSTART, &message_on);
 
     // create the map title widget
     if (!vanilla)
-    HUlib_initTextLine(&w_title,HU_TITLEX, HU_TITLEY,hu_font,HU_FONTSTART);
+    HUlib_initTextLine(&w_title,HU_TITLEX, HU_TITLEY,
+                       english_language ? hu_font : hu_font_small_rus,
+                       HU_FONTSTART);
     else
-    HUlib_initTextLine(&w_title,HU_TITLEX, HU_TITLEY+1,hu_font,HU_FONTSTART);
+    HUlib_initTextLine(&w_title,HU_TITLEX, HU_TITLEY+1,
+                       english_language ? hu_font : hu_font_small_rus,
+                       HU_FONTSTART);
 
     HUlib_initTextLine(&w_kills,
                         HU_TITLEX, HU_MSGY + 1 * 8,
-                        hu_font,
+                        english_language ? hu_font : hu_font_small_rus,
                         HU_FONTSTART);
     
     HUlib_initTextLine(&w_items,
                         HU_TITLEX, HU_MSGY + 2 * 8,
-                        hu_font,
+                        english_language ? hu_font : hu_font_small_rus,
                         HU_FONTSTART);
     
     HUlib_initTextLine(&w_scrts,
                         HU_TITLEX, HU_MSGY + 3 * 8,
-                        hu_font,
+                        english_language ? hu_font : hu_font_small_rus,
                         HU_FONTSTART);
     
     HUlib_initTextLine(&w_skill,
 		                HU_TITLEX, HU_MSGY + 4 * 8,
-		                hu_font,
+		                english_language ? hu_font : hu_font_small_rus,
 		                HU_FONTSTART);
 
     HUlib_initTextLine(&w_ltime,
@@ -503,20 +690,20 @@ void HU_Start(void)
     {
         if (plutonia)
         {
-            s = HU_TITLEP;
+            s = english_language ? HU_TITLEP : HU_TITLEP_RUS;
         }
         else if (tnt)
         {
-            s = HU_TITLET;
+            s = english_language ? HU_TITLET : HU_TITLET_RUS;
         }
         else
         {
-            s = HU_TITLE2;
+            s = english_language ? HU_TITLE2 : HU_TITLE2_RUS;
         }
     }
     else
     {
-        s = HU_TITLE;
+        s = english_language ? HU_TITLE : HU_TITLE_RUS;
     }
 
     while (*s)
@@ -554,28 +741,36 @@ void HU_Drawer(void)
         // [from-crispy] Show level stats in automap
         if (automap_stats && !vanilla)
         {
-            sprintf(str, "dhfub: %d/%d", players[consoleplayer].killcount, totalkills);
+            sprintf(str, english_language ?
+                         "Kills: %d/%d" : "dhfub: %d*%d",
+                         players[consoleplayer].killcount, totalkills);
             HUlib_clearTextLine(&w_kills);
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_kills, *(s++));
             HUlib_drawTextLine(&w_kills, false);
 
-            sprintf(str, "ghtlvtns: %d/%d", players[consoleplayer].itemcount, totalitems);
+            sprintf(str, english_language ?
+                         "Items: %d/%d" : "ghtlvtns: %d*%d",
+                         players[consoleplayer].itemcount, totalitems);
             HUlib_clearTextLine(&w_items);
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_items, *(s++));
             HUlib_drawTextLine(&w_items, false);
 
-            sprintf(str, "nfqybrb: %d/%d", players[consoleplayer].secretcount, totalsecret);
+            sprintf(str, english_language ?
+                         "Secret: %d/%d" : "nfqybrb: %d*%d",
+                         players[consoleplayer].secretcount, totalsecret);
             HUlib_clearTextLine(&w_scrts);
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_scrts, *(s++));
             HUlib_drawTextLine(&w_scrts, false);
 
-            sprintf(str, "ckj;yjcnm: %d", gameskill+1);
+            sprintf(str, english_language ?
+                         "Skill: %d" : "ckj;yjcnm: %d",
+                         gameskill+1);
             HUlib_clearTextLine(&w_skill);
             s = str;
             while (*s)

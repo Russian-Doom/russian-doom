@@ -45,7 +45,7 @@
 // Data.
 #include "sounds.h"
 
-#include "d_englsh.h"
+#include "rd_lang.h"
 
 #include "jn.h"
 
@@ -1045,7 +1045,7 @@ void P_PlayerInSpecialSector (player_t* player)
     // [JN] Notification of revealed secrets
     if (secret_notification && !vanilla)
     {
-	player->message = SECRETFOUND;	 
+	player->message = secretfound;	 
     // [JN] Don't break revealed's secret sound by any others
     if (player == &players[consoleplayer])
         S_StartSoundNoBreak(sfx_getpow);

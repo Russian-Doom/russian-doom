@@ -236,7 +236,7 @@ EV_DoLockedDoor
 	    return 0;
 	if (!p->cards[it_bluecard] && !p->cards[it_blueskull])
 	{
-	    p->message = PD_BLUEO;
+	    p->message = pd_blueo;
 	    S_StartSound(NULL,sfx_oof);
 	    // [crispy] blinking key or skull in the status bar
 	    p->tryopen[it_bluecard] = KEYBLINKTICS;
@@ -250,7 +250,7 @@ EV_DoLockedDoor
 	    return 0;
 	if (!p->cards[it_redcard] && !p->cards[it_redskull])
 	{
-	    p->message = PD_REDO;
+	    p->message = pd_redo;
 	    S_StartSound(NULL,sfx_oof);
 	    // [crispy] blinking key or skull in the status bar
 	    p->tryopen[it_redcard] = KEYBLINKTICS;
@@ -265,7 +265,7 @@ EV_DoLockedDoor
 	if (!p->cards[it_yellowcard] &&
 	    !p->cards[it_yellowskull])
 	{
-	    p->message = PD_YELLOWO;
+	    p->message = pd_yellowo;
 	    S_StartSound(NULL,sfx_oof);
 	    // [crispy] blinking key or skull in the status bar
 	    p->tryopen[it_yellowcard] = KEYBLINKTICS;
@@ -393,7 +393,7 @@ EV_VerticalDoor
 	
 	if (!player->cards[it_bluecard] && !player->cards[it_blueskull])
 	{
-	    player->message = PD_BLUEK;
+	    player->message = pd_bluek;
 	    S_StartSound(NULL,sfx_oof);
 	    // [crispy] blinking key or skull in the status bar
 	    player->tryopen[it_bluecard] = KEYBLINKTICS;
@@ -409,7 +409,7 @@ EV_VerticalDoor
 	if (!player->cards[it_yellowcard] &&
 	    !player->cards[it_yellowskull])
 	{
-	    player->message = PD_YELLOWK;
+	    player->message = pd_yellowk;
 	    S_StartSound(NULL,sfx_oof);
 	    // [crispy] blinking key or skull in the status bar
 	    player->tryopen[it_yellowcard] = KEYBLINKTICS;
@@ -424,7 +424,7 @@ EV_VerticalDoor
 	
 	if (!player->cards[it_redcard] && !player->cards[it_redskull])
 	{
-	    player->message = PD_REDK;
+	    player->message = pd_redk;
 	    S_StartSound(NULL,sfx_oof);
 	    // [crispy] blinking key or skull in the status bar
 	    player->tryopen[it_redcard] = KEYBLINKTICS;

@@ -58,6 +58,7 @@
 
 #include "d_main.h"
 
+#include "rd_lang.h"
 #include "jn.h"
 
 // [JN] Default banner colors. Background changed to
@@ -1529,6 +1530,9 @@ void D_DoomMain (void)
            "ST_Init: Инициализация строки состояния.\n");
     D_RedrawTitle();
     ST_Init();
+
+    // [JN] Define and load translated strings
+    RD_DefineLanguageStrings();
 
     // check for a driver that wants intermission stats
     p = M_CheckParm ("-statcopy");

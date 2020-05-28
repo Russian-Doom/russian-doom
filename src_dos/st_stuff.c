@@ -598,7 +598,8 @@ ST_Responder (event_t* ev)
         // [JN] IDDQD does not affect on dead player
         if (!vanilla && plyr->playerstate == PST_DEAD)
         {
-            plyr->message = CHEATDENIED;	
+            // [JN] TODO - needed?
+            // plyr->message = CHEATDENIED;	
             return false;
         }
  
@@ -609,10 +610,10 @@ ST_Responder (event_t* ev)
 	    plyr->mo->health = 100;
 	  
 	  plyr->health = 100;
-	  plyr->message = STSTR_DQDON;
+	  plyr->message = ststr_dqdon;
 	}
 	else 
-	  plyr->message = STSTR_DQDOFF;
+	  plyr->message = ststr_dqdoff;
       }
       // 'fa' cheat for killer fucking arsenal
       else if (cht_CheckCheat(&cheat_ammonokey, ev->data1))
@@ -644,7 +645,7 @@ ST_Responder (event_t* ev)
 	for (i=0;i<NUMAMMO;i++)
 	  plyr->ammo[i] = plyr->maxammo[i];
 	
-	plyr->message = STSTR_FAADDED;
+	plyr->message = ststr_faadded;
       }
       // 'kfa' cheat for key full ammo
       else if (cht_CheckCheat(&cheat_ammo, ev->data1))
@@ -679,7 +680,7 @@ ST_Responder (event_t* ev)
 	for (i=0;i<NUMCARDS;i++)
 	  plyr->cards[i] = true;
 	
-	plyr->message = STSTR_KFAADDED;
+	plyr->message = ststr_kfaadded;
       }
       // 'mus' cheat for changing music
       else if (cht_CheckCheat(&cheat_mus, ev->data1))
@@ -688,7 +689,7 @@ ST_Responder (event_t* ev)
 	char	buf[3];
 	int		musnum;
 	
-	plyr->message = STSTR_MUS;
+	plyr->message = ststr_mus;
 	cht_GetParam(&cheat_mus, buf);
 	
 	if (commercial)
@@ -697,7 +698,7 @@ ST_Responder (event_t* ev)
 	  
 	  // [crispy] prevent crash with IDMUS00
 	  if (((buf[0]-'0')*10 + buf[1]-'0') > 35 || musnum < mus_runnin)
-        plyr->message = STSTR_NOMUS;
+        plyr->message = ststr_nomus;
 	  else
 	    S_ChangeMusic(musnum, 1);
 	}
@@ -707,7 +708,7 @@ ST_Responder (event_t* ev)
 	  
 	  // [crispy] prevent crash with IDMUS0x or IDMUSx0
 	  if (((buf[0]-'1')*9 + buf[1]-'1') > 31 || buf[0] < '1' || buf[1] < '1')
-	    plyr->message = STSTR_NOMUS;
+	    plyr->message = ststr_nomus;
 	  else
 	    S_ChangeMusic(musnum, 1);
 	}
@@ -719,9 +720,9 @@ ST_Responder (event_t* ev)
     plyr->cheats ^= CF_NOCLIP;
 
     if (plyr->cheats & CF_NOCLIP)
-        plyr->message = STSTR_NCON;
+        plyr->message = ststr_ncon;
     else
-        plyr->message = STSTR_NCOFF;
+        plyr->message = ststr_ncoff;
     }
 
       // 'behold?' power-up cheats
@@ -732,17 +733,17 @@ ST_Responder (event_t* ev)
 	  if (!plyr->powers[i])
 	  {
 	    P_GivePower( plyr, i);
-	    plyr->message = STSTR_BEHOLDX; // [JN] Активирован
+	    plyr->message = ststr_beholdx; // [JN] Активирован
 	  }
 	  else if (i!=pw_strength)
 	  {
 	    plyr->powers[i] = 1;
-	    plyr->message = STSTR_BEHOLDZ; // [JN] Деактивирован
+	    plyr->message = ststr_beholdz; // [JN] Деактивирован
 	  }
 	  else
 	  {
 	    plyr->powers[i] = 0;
-	    plyr->message = STSTR_BEHOLDZ; // [JN] Деактивирован
+	    plyr->message = ststr_beholdz; // [JN] Деактивирован
 	  }
 	}
       }
@@ -750,14 +751,14 @@ ST_Responder (event_t* ev)
       // 'behold' power-up menu
       if (cht_CheckCheat(&cheat_powerup[6], ev->data1))
       {
-	plyr->message = STSTR_BEHOLD;
+	plyr->message = ststr_behold;
       }
       // 'choppers' invulnerability & chainsaw
       else if (cht_CheckCheat(&cheat_choppers, ev->data1))
       {
 	plyr->weaponowned[wp_chainsaw] = true;
 	plyr->powers[pw_invulnerability] = true;
-	plyr->message = STSTR_CHOPPERS;
+	plyr->message = ststr_choppers;
       }
       // 'mypos' for player position
       else if (cht_CheckCheat(&cheat_mypos, ev->data1))
@@ -775,11 +776,12 @@ ST_Responder (event_t* ev)
 		for (i=0;i<NUMCARDS;i++)
 		  plyr->cards[i] = true;
 
-		plyr->message = STSTR_KAADDED;
+		plyr->message = ststr_kaadded;
       }
       // [JN] version cheat
       else if (cht_CheckCheat(&cheat_version, ev->data1))
       {
+          // [JN] TODO - project version
 		plyr->message = STSTR_VERSION;
       }
     }
@@ -812,7 +814,7 @@ ST_Responder (event_t* ev)
        || (commercial && map > 0 && map <= 40))
       {
           // So be it.
-          plyr->message = STSTR_CLEV;
+          plyr->message = ststr_clev;
           G_DeferedInitNew(gameskill, epsd, map);
       }
     }    

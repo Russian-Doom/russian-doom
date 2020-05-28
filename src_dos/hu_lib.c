@@ -190,8 +190,10 @@ HUlib_initSText
     s->cl = 0;
     for (i=0;i<h;i++)
 	HUlib_initTextLine(&s->l[i],
-			   x, y - i*(SHORT(font[0]->height)+1),
-			   font, startchar);
+			   x, y - i*(SHORT(font[0]->height)+1)
+               // [JN] Critical: always draw HUD messages 1px below for
+               // preventing framebuffer overflow and normal "Й" apperance.
+               +1, font, startchar);
 
 }
 

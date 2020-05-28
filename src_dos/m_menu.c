@@ -137,10 +137,58 @@ char gammamsg[18][41] =
     GAMMA_ORIGINAL_4
 };
 
+char gammamsg_rus[18][41] =
+{
+    GAMMA_IMPROVED_OFF_RUS,
+    GAMMA_IMPROVED_05_RUS,
+    GAMMA_IMPROVED_1_RUS,
+    GAMMA_IMPROVED_15_RUS,
+    GAMMA_IMPROVED_2_RUS,
+    GAMMA_IMPROVED_25_RUS,
+    GAMMA_IMPROVED_3_RUS,
+    GAMMA_IMPROVED_35_RUS,
+    GAMMA_IMPROVED_4_RUS,
+    GAMMA_ORIGINAL_OFF_RUS,
+    GAMMA_ORIGINAL_05_RUS,
+    GAMMA_ORIGINAL_1_RUS,
+    GAMMA_ORIGINAL_15_RUS,
+    GAMMA_ORIGINAL_2_RUS,
+    GAMMA_ORIGINAL_25_RUS,
+    GAMMA_ORIGINAL_3_RUS,
+    GAMMA_ORIGINAL_35_RUS,
+    GAMMA_ORIGINAL_4_RUS
+};
+
 char endmsg1[NUM_QUITMESSAGES][80] =
 {
     // DOOM1
+    "are you sure you want to\nquit this great game?",
+    "please don't leave, there's more\ndemons to toast!",
+    "let's beat it -- this is turning\ninto a bloodbath!",
+    "i wouldn't leave if i were you.\ndos is much worse.",
+    "you're trying to say you like dos\nbetter than me, right?",
+    "don't leave yet -- there's a\ndemon around that corner!",
+    "ya know, next time you come in here\ni'm gonna toast ya.",
+    "go ahead and leave. see if i care."
+};
+
+char endmsg2[NUM_QUITMESSAGES][80] =
+{
+    // QuitDOOM II messages
     QUITMSG,
+    "you want to quit?\nthen, thou hast lost an eighth!",
+    "don't go now, there's a \ndimensional shambler waiting\nat the dos prompt!",
+    "get outta here and go back\nto your boring programs.",
+    "if i were your boss, i'd \n deathmatch ya in a minute!",
+    "look, bud. you leave now\nand you forfeit your body count!",
+    "just leave. when you come\nback, i'll be waiting with a bat.",
+    "you're lucky i don't smack\nyou for thinking about leaving."
+};
+
+char endmsg1_rus[NUM_QUITMESSAGES][80] =
+{
+    // DOOM1
+    "are you sure you want to\nquit this great game?",
 	// Пожалуйста, не уходите! \n Здесь осталось ещё много демонов!
 	"gj;fkeqcnf< yt e[jlbnt! \n pltcm jcnfkjcm tot vyjuj ltvjyjd!",
 	// Давайте определимся, это будет \n ваша первая и последняя попытка!
@@ -157,10 +205,11 @@ char endmsg1[NUM_QUITMESSAGES][80] =
 	"lfdfqnt< e[jlbnt> \n vyt f,cjk.nyj dct hfdyj>"
 };
 
-char endmsg2[NUM_QUITMESSAGES][80] =
+char endmsg2_rus[NUM_QUITMESSAGES][80] =
 {
     // QuitDOOM II messages
-    QUITMSG,
+    // Вы действительно хотите выйти \n из этой замечательной игры?
+    "ds ltqcndbntkmyj [jnbnt dsqnb\nbp 'njq pfvtxfntkmyjq buhs?",
     // Всерьез задумали выйти? \n Полагаю, это не очень-то разумно!
     "dcthmtp pflevfkb dsqnb?\ngjkfuf.< 'nj yt jxtym-nj hfpevyj!", 
     // Не уходите, в операционной системе \n вас ждут ужасные демоны!
@@ -1746,7 +1795,9 @@ void M_RD_Change_Gamma(int choice)
                                           "PLAYPAL",
                                           PU_CACHE) + 
                                           st_palette * 768);
-    players[consoleplayer].message = gammamsg[usegamma];
+    players[consoleplayer].message = english_language ?
+                                     gammamsg[usegamma] :
+                                     gammamsg_rus[usegamma];
 }
 
 void M_RD_Change_Detail(int choice)
@@ -2787,8 +2838,7 @@ void M_RD_BackToDefaults(int choice)
 
 void M_RD_ChangeLanguage(int choice)
 {
-    extern void ST_Stop(void);
-    extern void HU_Stop(void);
+    extern void D_DoAdvanceDemo(void);
     extern void F_StartFinale(void);
     extern int  demosequence;
 
@@ -2798,7 +2848,7 @@ void M_RD_ChangeLanguage(int choice)
     currentMenu = english_language ? &RD_Options_Def : &RD_Options_Def_Rus;
 
     // Update messages
-    // RD_DefineLanguageStrings();
+    RD_DefineLanguageStrings();
 
     // Update TITLEPIC/CREDIT screens in live mode
     if (gamestate == GS_DEMOSCREEN)
@@ -2837,6 +2887,10 @@ enum
     read1_end
 } read_e;
 
+// ------------
+// English menu
+// ------------
+
 menuitem_t ReadMenu1[] =
 {
     {1,"",M_ReadThis2,0}
@@ -2851,6 +2905,24 @@ menu_t  ReadDef1 =
     280,181,
     0
 };
+
+// ------------
+// Russian menu
+// ------------
+
+menu_t  ReadDef1_Rus =
+{
+    read1_end,
+    &MainDef_Rus,
+    ReadMenu1,
+    M_DrawReadThis1,
+    280,185,
+    0
+};
+
+// ------------
+// English menu
+// ------------
 
 enum
 {
@@ -2873,6 +2945,20 @@ menu_t  ReadDef2 =
     0
 };
 
+// ------------
+// Russian menu
+// ------------
+
+menu_t  ReadDef2_Rus =
+{
+    read2_end,
+    &ReadDef1_Rus,
+    ReadMenu2,
+    M_DrawReadThisRetail,
+    330,175,
+    0
+};
+
 
 //
 // LOAD GAME MENU
@@ -2889,6 +2975,10 @@ enum
     load8,
     load_end
 } load_e;
+
+// ------------
+// English menu
+// ------------
 
 menuitem_t LoadMenu[]=
 {
@@ -2912,9 +3002,29 @@ menu_t  LoadDef =
     0
 };
 
+// ------------
+// Russian menu
+// ------------
+
+menu_t  LoadDef_Rus =
+{
+    load_end,
+    &MainDef_Rus,
+    LoadMenu,
+    M_DrawLoad,
+    67,38,
+    0
+};
+
+
 //
 // SAVE GAME MENU
 //
+
+// ------------
+// English menu
+// ------------
+
 menuitem_t SaveMenu[]=
 {
     {1,"", M_SaveSelect,'1'},
@@ -2934,6 +3044,20 @@ menu_t  SaveDef =
     SaveMenu,
     M_DrawSave,
     67,38, // [JN] Отцентрированы и скорректированы поля ввода текста
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menu_t  SaveDef_Rus =
+{
+    load_end,
+    &MainDef_Rus,
+    SaveMenu,
+    M_DrawSave,
+    67,38,
     0
 };
 
@@ -2973,12 +3097,20 @@ void M_ReadSaveStrings(void)
 //
 // M_LoadGame & Cie.
 //
+
 void M_DrawLoad(void)
 {
     int             i;
 
-    // ЗАГРУЗИТЬ ИГРУ
-    M_WriteTextBigCentered_RUS(13, "PFUHEPBNM BUHE");
+    if (english_language)
+    {
+        V_DrawShadowDirect (73,14,0,W_CacheLumpName("M_LOADG",PU_CACHE));
+        V_DrawPatchDirect (72,13,0,W_CacheLumpName("M_LOADG",PU_CACHE));
+    }
+    else
+    {
+        M_WriteTextBigCentered_RUS(13, "PFUHEPBNM BUHE"); // ЗАГРУЗИТЬ ИГРУ
+    }
 
     for (i = 0;i < load_end; i++)
     {
@@ -3049,7 +3181,7 @@ void M_LoadGame (int choice)
 	return;
     }
 	
-    M_SetupNextMenu(&LoadDef);
+    M_SetupNextMenu(english_language ? &LoadDef : &LoadDef_Rus);
     M_ReadSaveStrings();
 }
 
@@ -3061,14 +3193,17 @@ void M_DrawSave(void)
 {
     int             i;
 
-    if (QuickSaveTitle)
+    if (english_language)
     {
-        // БЫСТРОЕ СОХРАНЕНИЕ
-        M_WriteTextBigCentered_RUS(13, "<SCNHJT CJ{HFYTYBT");
+        // [JN] Use standard title "M_SAVEG"
+        V_DrawShadowDirect (73, 14, 0, W_CacheLumpName("M_SAVEG",PU_CACHE));
+        V_DrawPatchDirect (72, 13, 0, W_CacheLumpName("M_SAVEG",PU_CACHE));
     }
     else
     {
-        // СОХРАНИТЬ ИГРУ
+        if (QuickSaveTitle) // БЫСТРОЕ СОХРАНЕНИЕ
+        M_WriteTextBigCentered_RUS(13, "<SCNHJT CJ{HFYTYBT");
+        else                // СОХРАНИТЬ ИГРУ
         M_WriteTextBigCentered_RUS(13, "CJ{HFYBNM BUHE");
     }
 
@@ -3131,7 +3266,7 @@ void M_SaveGame (int choice)
     if (gamestate != GS_LEVEL)
 	return;
 	
-    M_SetupNextMenu(&SaveDef);
+    M_SetupNextMenu(english_language ? &SaveDef : &SaveDef_Rus);
     M_ReadSaveStrings();
 }
 
@@ -3166,7 +3301,7 @@ void M_QuickSave(void)
     {
 	M_StartControlPanel();
 	M_ReadSaveStrings();
-	M_SetupNextMenu(&SaveDef);
+	M_SetupNextMenu(english_language ? &SaveDef : &SaveDef_Rus);
 	quickSaveSlot = -2;	// means to pick a slot now
 	return;
     }
@@ -3474,13 +3609,13 @@ void M_EndGame(int choice)
 void M_ReadThis(int choice)
 {
     choice = 0;
-    M_SetupNextMenu(&ReadDef1);
+    M_SetupNextMenu(english_language ? &ReadDef1 : &ReadDef1_Rus);
 }
 
 void M_ReadThis2(int choice)
 {
     choice = 0;
-    M_SetupNextMenu(&ReadDef2);
+    M_SetupNextMenu(english_language ? &ReadDef2 : &ReadDef2_Rus);
 }
 
 void M_FinishReadThis(int choice)
@@ -3546,20 +3681,29 @@ void M_QuitDOOM(int choice)
   //  or one at random, between 1 and maximum number.
     if (commercial)
     {
-        if (french)
+        if (english_language)
         {
-            sprintf(endstring, "%s\n\n"DOSY, endmsg2[0]);
+            sprintf(endstring, "%s\n\n"DOSY, 
+                    endmsg2[(gametic >> 2) % NUM_QUITMESSAGES]);
         }
         else
         {
-            sprintf(endstring, "%s\n\n"DOSY,
-                    endmsg2[(gametic >> 2) % NUM_QUITMESSAGES]);
+            sprintf(endstring, "%s\n\n"DOSY_RUS, 
+                    endmsg2_rus[(gametic >> 2) % NUM_QUITMESSAGES]);
         }
     }
     else
     {
-        sprintf(endstring, "%s\n\n"DOSY,
-                endmsg1[(gametic >> 2) % NUM_QUITMESSAGES]);
+        if (english_language)
+        {
+            sprintf(endstring, "%s\n\n"DOSY, 
+                    endmsg1[(gametic >> 2) % NUM_QUITMESSAGES]);
+        }
+        else
+        {
+            sprintf(endstring, "%s\n\n"DOSY_RUS,
+                    endmsg1_rus[(gametic >> 2) % NUM_QUITMESSAGES]);
+        }
     }
   
   if (devparm) // [JN] Quit immediately
@@ -3709,11 +3853,23 @@ int M_StringWidth(char* string)
 	
     for (i = 0;i < strlen(string);i++)
     {
-	c = toupper(string[i]) - HU_FONTSTART;
-	if (c < 0 || c >= HU_FONTSIZE)
-	    w += 4;
-	else
-	    w += SHORT (hu_font[c]->width);
+        c = toupper(string[i]) - HU_FONTSTART;
+        if (c < 0 || c >= HU_FONTSIZE)
+        {
+            w += 4;
+        }
+        else
+        {
+            if (english_language || currentMenu == &SaveDef
+            ||  currentMenu == &SaveDef_Rus)
+            {
+                w += SHORT (hu_font[c]->width);
+            }
+            else
+            {
+                w += SHORT (hu_font_small_rus[c]->width);
+            }
+        }
     }
 		
     return w;
@@ -4006,7 +4162,10 @@ boolean M_Responder (event_t* ev)
         usegamma++;
         if (usegamma > 17)
         usegamma = 0;
-        players[consoleplayer].message = gammamsg[usegamma];
+
+        players[consoleplayer].message = english_language ?
+                                         gammamsg[usegamma] :
+                                         gammamsg_rus[usegamma];
         pal = (byte *) W_CacheLumpName (usegamma <= 8 ?  "PALFIX" : "PLAYPAL",
                                         PU_CACHE) + st_palette * 768;
         I_SetPalette (pal);
@@ -4267,8 +4426,17 @@ void M_Drawer (void)
 	    }
 				
 	    x = 160 - M_StringWidth(string)/2;
-	    M_WriteText(x,y,string);
-	    y += SHORT(hu_font[0]->height);
+
+        if (english_language)
+        {
+            M_WriteText(x,y,string);
+            y += SHORT(hu_font[0]->height);
+        }
+        else
+        {
+            M_WriteTextSmall_RUS(x, y, string);
+            y += SHORT(hu_font_small_rus[0]->height); 
+        }
 	}
 	return;
     }
@@ -4396,9 +4564,13 @@ void M_Drawer (void)
 
         // [JN] Saving / Loading menus, help screens. Just a blinking skull.
         if (currentMenu == &LoadDef
+        ||  currentMenu == &LoadDef_Rus
         ||  currentMenu == &SaveDef
+        ||  currentMenu == &SaveDef_Rus
         ||  currentMenu == &ReadDef1
-        ||  currentMenu == &ReadDef2)
+        ||  currentMenu == &ReadDef1_Rus
+        ||  currentMenu == &ReadDef2
+        ||  currentMenu == &ReadDef2_Rus)
         {
             // DRAW SKULL
             V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,

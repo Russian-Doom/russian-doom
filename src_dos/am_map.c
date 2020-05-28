@@ -671,23 +671,23 @@ boolean AM_Responder (event_t* ev)
             case AM_FOLLOWKEY:
             followplayer = !followplayer;
             f_oldloc.x = MAXINT;
-            plr->message = followplayer ? AMSTR_FOLLOWON : AMSTR_FOLLOWOFF;
+            plr->message = followplayer ? amstr_followon : amstr_followoff;
             break;
     
             case AM_GRIDKEY:
             grid = !grid;
-            plr->message = grid ? AMSTR_GRIDON : AMSTR_GRIDOFF;
+            plr->message = grid ? amstr_gridon : amstr_gridoff;
             break;
 
             case AM_MARKKEY:
-            sprintf(buffer, "%s %d", AMSTR_MARKEDSPOT, markpointnum);
+            sprintf(buffer, "%s %d", amstr_markedspot, markpointnum);
             plr->message = buffer;
             AM_addMark();
             break;
 
             case AM_CLEARMARKKEY:
             AM_clearMarks();
-            plr->message = AMSTR_MARKSCLEARED;
+            plr->message = amstr_markscleared;
             break;
 
             default:
