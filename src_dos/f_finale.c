@@ -50,6 +50,7 @@ int finalecount;
 #define TEXTSPEED   3
 #define TEXTWAIT    250
 
+// [JN] English texts
 char*   e1text = E1TEXT;
 char*   e2text = E2TEXT;
 char*   e3text = E3TEXT;
@@ -75,6 +76,33 @@ char*   t3text = T3TEXT;
 char*   t4text = T4TEXT;
 char*   t5text = T5TEXT;
 char*   t6text = T6TEXT;
+
+// [JN] Russian texts
+char*   e1text_rus = E1TEXT_RUS;
+char*   e2text_rus = E2TEXT_RUS;
+char*   e3text_rus = E3TEXT_RUS;
+char*   e4text_rus = E4TEXT_RUS;
+
+char*   c1text_rus = C1TEXT_RUS;
+char*   c2text_rus = C2TEXT_RUS;
+char*   c3text_rus = C3TEXT_RUS;
+char*   c4text_rus = C4TEXT_RUS;
+char*   c5text_rus = C5TEXT_RUS;
+char*   c6text_rus = C6TEXT_RUS;
+
+char*   p1text_rus = P1TEXT_RUS;
+char*   p2text_rus = P2TEXT_RUS;
+char*   p3text_rus = P3TEXT_RUS;
+char*   p4text_rus = P4TEXT_RUS;
+char*   p5text_rus = P5TEXT_RUS;
+char*   p6text_rus = P6TEXT_RUS;
+
+char*   t1text_rus = T1TEXT_RUS;
+char*   t2text_rus = T2TEXT_RUS;
+char*   t3text_rus = T3TEXT_RUS;
+char*   t4text_rus = T4TEXT_RUS;
+char*   t5text_rus = T5TEXT_RUS;
+char*   t6text_rus = T6TEXT_RUS;
 
 char*   finaletext;
 char*   finaleflat;
@@ -105,37 +133,37 @@ void F_StartFinale (void)
             {
                 case 6:
                 finaleflat = "SLIME16";
-                finaletext = p1text;
+                finaletext = english_language ? p1text : p1text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 11:
                 finaleflat = "RROCK14";
-                finaletext = p2text;
+                finaletext = english_language ? p2text : p2text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 20:
                 finaleflat = "RROCK07";
-                finaletext = p3text;
+                finaletext = english_language ? p3text : p3text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 30:
                 finaleflat = "RROCK17";
-                finaletext = p4text;
+                finaletext = english_language ? p4text : p4text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 15:
                 finaleflat = "RROCK13";
-                finaletext = p5text;
+                finaletext = english_language ? p5text : p5text_rus;
                 finalemusic = mus_read_m;
                 break;
                 
                 case 31:
                 finaleflat = "RROCK19";
-                finaletext = p6text;
+                finaletext = english_language ? p6text : p6text_rus;
                 finalemusic = mus_read_m;
                 break;
 
@@ -151,37 +179,37 @@ void F_StartFinale (void)
             {
                 case 6:
                 finaleflat = "SLIME16";
-                finaletext = t1text;
+                finaletext = english_language ? t1text : t1text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 11:
                 finaleflat = "RROCK14";
-                finaletext = t2text;
+                finaletext = english_language ? t2text : t2text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 20:
                 finaleflat = "RROCK07";
-                finaletext = t3text;
+                finaletext = english_language ? t3text : t3text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 30:
                 finaleflat = "RROCK17";
-                finaletext = t4text;
+                finaletext = english_language ? t4text : t4text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 15:
                 finaleflat = "RROCK13";
-                finaletext = t5text;
+                finaletext = english_language ? t5text : t5text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 31:
                 finaleflat = "RROCK19";
-                finaletext = t6text;
+                finaletext = english_language ? t6text : t6text_rus;
                 finalemusic = mus_read_m;
                 break;
 
@@ -198,37 +226,37 @@ void F_StartFinale (void)
             {
                 case 6:
                 finaleflat = "SLIME16";
-                finaletext = c1text;
+                finaletext = english_language ? c1text : c1text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 11:
                 finaleflat = "RROCK14";
-                finaletext = c2text;
+                finaletext = english_language ? c2text : c2text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 20:
                 finaleflat = "RROCK07";
-                finaletext = c3text;
+                finaletext = english_language ? c3text : c3text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 30:
                 finaleflat = "RROCK17";
-                finaletext = c4text;
+                finaletext = english_language ? c4text : c4text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 15:
                 finaleflat = "RROCK13";
-                finaletext = c5text;
+                finaletext = english_language ? c5text : c5text_rus;
                 finalemusic = mus_read_m;
                 break;
 
                 case 31:
                 finaleflat = "RROCK19";
-                finaletext = c6text;
+                finaletext = english_language ? c6text : c6text_rus;
                 finalemusic = mus_read_m;
                 break;
 
@@ -246,22 +274,22 @@ void F_StartFinale (void)
         {
             case 1:
             finaleflat = "FLOOR4_8";
-            finaletext = e1text;
+            finaletext = english_language ? e1text : e1text_rus;
             break;
 
             case 2:
             finaleflat = "SFLR6_1";
-            finaletext = e2text;
+            finaletext = english_language ? e2text : e2text_rus;
             break;
 
             case 3:
             finaleflat = "MFLR8_4";
-            finaletext = e3text;
+            finaletext = english_language ? e3text : e3text_rus;
             break;
 
             case 4:
             finaleflat = "MFLR8_3";
-            finaletext = e4text;
+            finaletext = english_language ? e4text : e4text_rus;
             break;
 
             default:
@@ -350,6 +378,7 @@ void F_Ticker (void)
 //
 #include "hu_stuff.h"
 extern patch_t *hu_font[HU_FONTSIZE];
+extern patch_t *hu_font_small_rus[HU_FONTSIZE];
 
 void F_TextWrite (void)
 {
@@ -427,12 +456,29 @@ void F_TextWrite (void)
             continue;
         }
 
-        w = SHORT (hu_font[c]->width);
+        if (english_language)
+        {
+            w = SHORT (hu_font[c]->width);
+        }
+        else
+        {
+            w = SHORT (hu_font_small_rus[c]->width);
+        }
+
         if (cx+w > SCREENWIDTH)
         break;
 
-        V_DrawShadow(cx+1, cy+1, 0, hu_font[c]);
-        V_DrawPatch(cx, cy, 0, hu_font[c]);
+        if (english_language)
+        {
+            V_DrawShadow(cx+1, cy+1, 0, hu_font[c]);
+            V_DrawPatch(cx, cy, 0, hu_font[c]);
+        }
+        else
+        {
+            V_DrawShadow(cx+1, cy+1, 0, hu_font_small_rus[c]);
+            V_DrawPatch(cx, cy, 0, hu_font_small_rus[c]);
+        }
+
         cx+=w;
     }
 }
@@ -467,6 +513,27 @@ castinfo_t	castorder[] = {
     {CC_SPIDER,  MT_SPIDER},
     {CC_CYBER,   MT_CYBORG},
     {CC_HERO,    MT_PLAYER},
+    {NULL,0}
+};
+
+castinfo_t	castorder_rus[] = {
+    {CC_ZOMBIE_RUS,  MT_POSSESSED},
+    {CC_SHOTGUN_RUS, MT_SHOTGUY},
+    {CC_HEAVY_RUS,   MT_CHAINGUY},
+    {CC_IMP_RUS,     MT_TROOP},
+    {CC_DEMON_RUS,   MT_SERGEANT},
+    {CC_LOST_RUS,    MT_SKULL},
+    {CC_CACO_RUS,    MT_HEAD},
+    {CC_HELL_RUS,    MT_KNIGHT},
+    {CC_BARON_RUS,   MT_BRUISER},
+    {CC_ARACH_RUS,   MT_BABY},
+    {CC_PAIN_RUS,    MT_PAIN},
+    {CC_REVEN_RUS,   MT_UNDEAD},
+    {CC_MANCU_RUS,   MT_FATSO},
+    {CC_ARCH_RUS,    MT_VILE},
+    {CC_SPIDER_RUS,  MT_SPIDER},
+    {CC_CYBER_RUS,   MT_CYBORG},
+    {CC_HERO_RUS,    MT_PLAYER},
     {NULL,0}
 };
 
@@ -658,7 +725,14 @@ void F_CastPrint (char* text)
             continue;
         }
 
-        w = SHORT (hu_font[c]->width);
+        if (english_language)
+        {
+            w = SHORT (hu_font[c]->width);
+        }
+        else
+        {
+            w = SHORT (hu_font_small_rus[c]->width);
+        }
         width += w;
     }
 
@@ -679,9 +753,19 @@ void F_CastPrint (char* text)
             continue;
         }
 
-        w = SHORT (hu_font[c]->width);
-        V_DrawShadow(cx+1, 181, 0, hu_font[c]);
-        V_DrawPatch(cx, 180, 0, hu_font[c]);
+        if (english_language)
+        {
+            w = SHORT (hu_font[c]->width);
+            V_DrawShadow(cx+1, 181, 0, hu_font[c]);
+            V_DrawPatch(cx, 180, 0, hu_font[c]);
+        }
+        else
+        {
+            w = SHORT (hu_font_small_rus[c]->width);
+            V_DrawShadow(cx+1, 181, 0, hu_font_small_rus[c]);
+            V_DrawPatch(cx, 180, 0, hu_font_small_rus[c]);
+        }
+
         cx+=w;
     }
 }
@@ -711,7 +795,8 @@ void F_CastDrawer (void)
                                                         "BOSSBACK", PU_CACHE));
     }
 
-    F_CastPrint (castorder[castnum].name);
+    F_CastPrint (english_language ? 
+                 castorder[castnum].name : castorder_rus[castnum].name);
 
     // draw the current frame in the middle of the screen
     sprdef = &sprites[caststate->sprite];
