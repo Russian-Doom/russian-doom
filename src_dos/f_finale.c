@@ -797,7 +797,7 @@ void F_BunnyScroll (void)
 
     if (finalecount < 1180)
     {
-        if (english_lanuage)
+        if (english_language)
         {
             V_DrawShadow(((SCREENWIDTH-13*8)/2)+1,
                          ((SCREENHEIGHT-8*8)/2)+1,0,
