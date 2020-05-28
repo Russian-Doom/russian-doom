@@ -371,6 +371,9 @@ typedef struct
 
 default_t	defaults[] =
 {
+    // [JN] Language
+    {"english_language", &english_language, 0},
+
     {"mouse_sensitivity",&mouseSensitivity, 5},
     {"sfx_volume",&sfxVolume, 8},
     {"music_volume",&musicVolume, 8},

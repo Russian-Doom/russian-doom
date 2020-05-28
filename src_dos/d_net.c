@@ -24,6 +24,7 @@
 #include "g_game.h"
 #include "doomdef.h"
 #include "doomstat.h"
+#include "jn.h"
 
 #define NCMD_EXIT       0x80000000
 #define NCMD_RETRANSMIT 0x40000000
@@ -117,7 +118,9 @@ int ExpandTics (int low)
     if (delta < -64)
     return (maketic&~0xff) + 256 + low;
 
-    I_Error ("ExpandTics: неизвестное значение %i в maketic %i",low,maketic);
+    I_Error (english_language ?
+             "ExpandTics: strange value %i at maketic %i" :
+             "ExpandTics: неизвестное значение %i в maketic %i", low, maketic);
     return 0;
 }
 
@@ -140,7 +143,9 @@ void HSendPacket (int node, int flags)
     return;
 
     if (!netgame)
-    I_Error ("Попытка передачи на другой узел.");
+    I_Error (english_language ? 
+             "Tried to transmit to another node" :
+             "Попытка передачи на другой узел.");
 
     doomcom->command = CMD_SEND;
     doomcom->remotenode = node;
@@ -156,7 +161,9 @@ void HSendPacket (int node, int flags)
     else
     realretrans = -1;
 
-    fprintf (debugfile,"отправка (%i + %i, R %i) [%i] ",
+    fprintf (debugfile, english_language? 
+        "send (%i + %i, R %i) [%i] " :
+        "отправка (%i + %i, R %i) [%i] ",
         ExpandTics(netbuffer->starttic),
         netbuffer->numtics, realretrans, doomcom->datalength);
 
@@ -199,7 +206,9 @@ boolean HGetPacket (void)
     if (doomcom->datalength != NetbufferSize ())
     {
         if (debugfile)
-        fprintf (debugfile,"некорректная длина пакета %i\n",doomcom->datalength);
+        fprintf (debugfile, english_language ?
+                 "bad packet length %i\n" :
+                 "некорректная длина пакета %i\n", doomcom->datalength);
 
         return false;
     }
@@ -207,7 +216,9 @@ boolean HGetPacket (void)
     if (NetbufferChecksum () != (netbuffer->checksum&NCMD_CHECKSUM) )
     {
         if (debugfile)
-        fprintf (debugfile,"некорректная контрольная сумма пакета\n");
+        fprintf (debugfile, english_language ?
+                 "bad packet checksum\n" :
+                 "некорректная контрольная сумма пакета\n");
 
         return false;
     }
@@ -218,7 +229,9 @@ boolean HGetPacket (void)
         int     i;
 
         if (netbuffer->checksum & NCMD_SETUP)
-        fprintf (debugfile,"настройка пакета\n");
+        fprintf (debugfile, english_language ?
+                 "setup packet\n" :
+                 "настройка пакета\n");
         else
         {
             if (netbuffer->checksum & NCMD_RETRANSMIT)
@@ -226,7 +239,9 @@ boolean HGetPacket (void)
             else
             realretrans = -1;
 
-            fprintf (debugfile,"получено %i = (%i + %i, R %i)[%i] ",
+            fprintf (debugfile, english_language ?
+                     "get %i = (%i + %i, R %i)[%i] " :
+                     "получено %i = (%i + %i, R %i)[%i] ",
             doomcom->remotenode,
             ExpandTics(netbuffer->starttic),
             netbuffer->numtics, realretrans, doomcom->datalength);
@@ -274,8 +289,17 @@ void GetPackets (void)
 
             nodeingame[netnode] = false;
             playeringame[netconsole] = false;
-            strcpy (exitmsg, "buhjr 1 dsitk bp buhs"); // [JN] Игрок № вышел из игры
-            exitmsg[6] += netconsole;
+
+            if (english_language)
+            {
+                strcpy (exitmsg, "Player 1 left the game");
+                exitmsg[7] += netconsole;
+            }
+            else
+            {
+                strcpy (exitmsg, "buhjr 1 dsitk bp buhs"); // [JN] Игрок № вышел из игры
+                exitmsg[6] += netconsole;
+            }
             players[consoleplayer].message = exitmsg;
 
             if (demorecording)
@@ -286,7 +310,9 @@ void GetPackets (void)
 
         // check for a remote game kill
         if (netbuffer->checksum & NCMD_KILL)
-        I_Error ("Завершение работы вызовом сетевого драйвера");
+        I_Error (english_language ?
+                 "Killed by network driver" :
+                 "Завершение работы вызовом сетевого драйвера");
 
         nodeforplayer[netconsole] = netnode;
 
@@ -295,7 +321,9 @@ void GetPackets (void)
         {
             resendto[netnode] = ExpandTics(netbuffer->retransmitfrom);
             if (debugfile)
-            fprintf (debugfile,"ретрансляция с %i\n", resendto[netnode]);
+            fprintf (debugfile, english_language ?
+                     "retransmit from %i\n" :
+                     "ретрансляция с %i\n", resendto[netnode]);
 
             resendcount[netnode] = RESENDCOUNT;
         }
@@ -309,7 +337,9 @@ void GetPackets (void)
         if (realend < nettics[netnode])
         {
             if (debugfile)
-            fprintf (debugfile,"недопустимый пакет (%i + %i)\n",realstart,netbuffer->numtics);
+            fprintf (debugfile, english_language ?
+                     "out of order packet (%i + %i)\n" :
+                     "недопустимый пакет (%i + %i)\n", realstart, netbuffer->numtics);
             continue;
         }
 
@@ -318,7 +348,10 @@ void GetPackets (void)
         {
             // stop processing until the other system resends the missed tics
             if (debugfile)
-            fprintf (debugfile,"отсутствие тиков от %i (%i - %i)\n",netnode, realstart, nettics[netnode]);
+            fprintf (debugfile, english_language ?
+                     "missed tics from %i (%i - %i)\n" :
+                     "отсутствие тиков от %i (%i - %i)\n", 
+                     netnode, realstart, nettics[netnode]);
             remoteresend[netnode] = true;
             continue;
         }
@@ -447,7 +480,9 @@ void CheckAbort (void)
     { 
         ev = &events[eventtail];
         if (ev->type == ev_keydown && ev->data1 == KEY_ESCAPE)
-        I_Error ("Синхронизация сетевой игры прервана.");
+        I_Error (english_language ?
+                 "Network game synchronization aborted." :
+                 "Синхронизация сетевой игры прервана.");
     } 
 }
 
@@ -466,7 +501,9 @@ void D_ArbitrateNetStart (void)
     if (doomcom->consoleplayer)
     {
         // listen for setup info from key player
-        printf ("ожидание начала сетевой игры...\n");
+        printf (english_language ?
+                "listening for network start info...\n" :
+                "ожидание начала сетевой игры...\n");
         while (1)
         {
             CheckAbort();
@@ -477,7 +514,9 @@ void D_ArbitrateNetStart (void)
             if (netbuffer->checksum & NCMD_SETUP)
             {
                 if (netbuffer->player != VERSION)
-                I_Error ("Различные версии DOOM не могут играть в сетевую игру!");
+                I_Error (english_language ?
+                         "Different DOOM versions cannot play a net game!" :
+                         "Различные версии DOOM не могут играть в сетевую игру!");
 
                 startskill = netbuffer->retransmitfrom & 15;
                 deathmatch = (netbuffer->retransmitfrom & 0xc0) >> 6;
@@ -492,7 +531,9 @@ void D_ArbitrateNetStart (void)
     else
     {
         // key player, send the setup info
-        printf ("отправка запроса на начало сетевой игры...\n");
+        printf (english_language ?
+                "sending network start info...\n" :
+                "отправка запроса на начало сетевой игры...\n");
 
         do
         {
@@ -556,14 +597,19 @@ void D_CheckNetGame (void)
     // I_InitNetwork sets doomcom and netgame
     I_InitNetwork();
     if (doomcom->id != DOOMCOM_ID)
-    I_Error ("Некорректный буфер Doomcom!");
+    I_Error (english_language ?
+             "Doomcom buffer invalid!" :
+             "Некорректный буфер Doomcom!");
 
     netbuffer = &doomcom->data;
     consoleplayer = displayplayer = doomcom->consoleplayer;
     if (netgame)
     D_ArbitrateNetStart ();
 
-    printf ("сложность %i, дефматч: %i, уровень: %i, эпизод: %i\n", startskill, deathmatch, startmap, startepisode);
+    printf (english_language ?
+            "startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n" :
+            "сложность %i, дефматч: %i, уровень: %i, эпизод: %i\n",
+            startskill, deathmatch, startmap, startepisode);
 
     // read values out of doomcom
     ticdup = doomcom->ticdup;
@@ -576,7 +622,10 @@ void D_CheckNetGame (void)
     for (i=0 ; i<doomcom->numnodes ; i++)
     nodeingame[i] = true;
 
-    printf ("количество игроков: %i из %i (узлов: %i)\n", consoleplayer+1, doomcom->numplayers, doomcom->numnodes);
+    printf (english_language ?
+            "player %i of %i (%i nodes)\n" :
+            "количество игроков: %i из %i (узлов: %i)\n",
+            consoleplayer+1, doomcom->numplayers, doomcom->numnodes);
 }
 
 

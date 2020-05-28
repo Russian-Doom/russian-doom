@@ -35,7 +35,7 @@
 
 #include "w_wad.h"
 
-
+#include "jn.h"
 
 
 
@@ -76,7 +76,9 @@ ExtractFileBase
     while (*src && *src != '.')
     {
 	if (++length == 9)
-	    I_Error ("Длина имени файла %s >8 символов",path);
+	    I_Error (english_language ?
+                 "Filename base of %s >8 chars" :
+                 "Длина имени файла %s >8 символов", path);
 
 	*dest++ = toupper((int)*src++);
     }
@@ -131,11 +133,15 @@ void W_AddFile (char *filename)
 		
     if ( (handle = open (filename,O_RDONLY | O_BINARY)) == -1)
     {
-	printf ("\tневозможно открыть %s\n",filename);
+	printf (english_language ?
+            "\tcouldn't open %s\n" :
+            "\tневозможно открыть %s\n", filename);
 	return;
     }
 
-    printf ("\tдобавление %s\n",filename);
+    printf (english_language ?
+            "\tadding %s\n" :
+            "\tдобавление %s\n", filename);
     startlump = numlumps;
 	
     if (strcmpi (filename+strlen(filename)-3 , "wad" ) )
@@ -156,7 +162,9 @@ void W_AddFile (char *filename)
 	    // Homebrew levels?
 	    if (strncmp(header.identification,"PWAD",4))
 	    {
-		I_Error ("Wad-файл %s не содержит информации IWAD или PWAD\n", filename);
+		I_Error (english_language ?
+                 "Wad file %s doesn't have IWAD or PWAD id\n" :
+                 "Wad-файл %s не содержит информации IWAD или PWAD\n", filename);
 	    }
 	    
 	    modifiedgame = true;		
@@ -167,7 +175,10 @@ void W_AddFile (char *filename)
 	if (header.numlumps > 4046)
 	{
 	    // alloca would saturate the stack segment
-	    I_Error ("Количество блоков в файле %s (%d блоков) превысило лимит\n", filename, header.numlumps);
+	    I_Error (english_language ?
+                 "There isn't sufficient stack space available for %s (%d lumps)\n" :
+                 "Количество блоков в файле %s (%d блоков) превысило лимит\n",
+                 filename, header.numlumps);
 	}
 	fileinfo = alloca (length);
 	lseek (handle, header.infotableofs, SEEK_SET);
@@ -180,7 +191,9 @@ void W_AddFile (char *filename)
     lumpinfo = realloc (lumpinfo, numlumps*sizeof(lumpinfo_t));
 
     if (!lumpinfo)
-	I_Error ("НЕвозможно распределить информацию о блоках");
+	I_Error (english_language ?
+             "Couldn't realloc lumpinfo" :
+             "Невозможно распределить информацию о блоках");
 
     lump_p = &lumpinfo[startlump];
 	
@@ -285,7 +298,9 @@ void W_Reload (void)
 	return;
 		
     if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
-	I_Error ("W_Reload: Невозможно открыть %s",reloadname);
+	I_Error (english_language ?
+             "W_Reload: couldn't open %s" :
+             "W_Reload: Невозможно открыть %s", reloadname);
 
     read (handle, &header, sizeof(header));
     lumpcount = LONG(header.numlumps);
@@ -341,7 +356,9 @@ void W_InitMultipleFiles (char** filenames)
 	W_AddFile (*filenames);
 
     if (!numlumps)
-	I_Error ("W_InitFiles: Файлы не найдены");
+	I_Error (english_language ?
+             "W_InitFiles: no files found" :
+             "W_InitFiles: Файлы не найдены");
 
     //jff 1/23/98
     // get all the sprites and flats into one marked block each
@@ -359,7 +376,9 @@ void W_InitMultipleFiles (char** filenames)
     lumpcache = malloc (size);
     
     if (!lumpcache)
-	I_Error ("Невозможно обнаружить кэш блоков");
+	I_Error (english_language ?
+             "Couldn't allocate lumpcache" :
+             "Невозможно обнаружить кэш блоков");
 
     memset (lumpcache,0, size);
 }
@@ -452,7 +471,9 @@ int W_GetNumForName (char* name)
     i = W_CheckNumForName (name);
     
     if (i == -1)
-      I_Error ("W_GetNumForName: %s не найден!", name);
+      I_Error (english_language ?
+               "W_GetNumForName: %s not found!" :
+               "W_GetNumForName: %s не найден!", name);
       
     return i;
 }
@@ -497,7 +518,9 @@ W_ReadLump
     {
 	// reloadable file, so use open / read / close
 	if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
-	    I_Error ("W_ReadLump: невозможно открыть %s",reloadname);
+	    I_Error (english_language ?
+                 "W_ReadLump: couldn't open %s" :
+                 "W_ReadLump: невозможно открыть %s", reloadname);
     }
     else
 	handle = l->handle;
@@ -506,8 +529,10 @@ W_ReadLump
     c = read (handle, dest, l->size);
 
     if (c < l->size)
-	I_Error ("W_ReadLump: прочитано всего %i из %i в блоке %i",
-		 c,l->size,lump);	
+	I_Error (english_language ?
+             "W_ReadLump: only read %i of %i on lump %i" :
+             "W_ReadLump: прочитано всего %i из %i в блоке %i",
+             c,l->size,lump);	
 
     if (l->handle == -1)
 	close (handle);

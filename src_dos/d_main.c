@@ -76,6 +76,8 @@
 //
 void D_DoomLoop (void);
 
+// [JN] Support for language swapping.
+int         english_language = 0;
 
 char*       wadfiles[MAXWADFILES];
 
@@ -381,7 +383,9 @@ void D_DoomLoop (void)
         char filename[20];
 
         sprintf (filename,"debug%i.txt",consoleplayer);
-        printf ("запись отладочного файла: %s\n",filename);
+        printf (english_language ?
+                "debug output to: %s\n" :
+                "запись отладочного файла: %s\n", filename);
         debugfile = fopen (filename,"w");
     }
 
@@ -925,7 +929,9 @@ void IdentifyVersion (void)
     }
 }
 
-    printf("Невозможно определить игру.\n");
+    printf(english_language ?
+           "Game mode indeterminate\n" :
+           "Невозможно определить игру.\n");
     exit(1);
     //I_Error ("Game mode indeterminate\n");
 }
@@ -957,11 +963,15 @@ void FindResponseFile (void)
         handle = fopen (&myargv[i][1],"rb");
         if (!handle)
         {
-            printf ("\nОтсутствует ответный файл!");
+            printf (english_language ?
+                    "\nNo such response file!" :
+                    "\nОтсутствует ответный файл!");
             exit(1);
         }
 
-        printf("Найден ответный файл %s!\n",&myargv[i][1]);
+        printf(english_language ?
+               "Found response file %s!\n" :
+               "Найден ответный файл %s!\n", &myargv[i][1]);
         fseek (handle,0,SEEK_END);
         size = ftell(handle);
         fseek (handle,0,SEEK_SET);
@@ -996,7 +1006,9 @@ void FindResponseFile (void)
         myargc = indexinfile;
 
         // DISPLAY ARGS
-        printf("%d параметры командной строки:\n",myargc);
+        printf(english_language ?
+               "%d command-line args:\n" :
+               "%d параметры командной строки:\n", myargc);
         for (k=1;k<myargc;k++)
         printf("%s\n",myargv[k]);
 
@@ -1033,13 +1045,28 @@ void D_DoomMain (void)
     else if (M_CheckParm("-deathmatch"))
     deathmatch = 1;
 
+    // [JN] Load variables first, so we can show 
+    // startup string with proper language.
+    M_LoadDefaults();
+
     if (shareware || registered)
     {
-        sprintf(title,
-        "                           "
-        "Система загрузки DOOM v%i.%i"
-        "                           ",
-        VERSION/100,VERSION%100);
+        if (english_language)
+        {
+            sprintf(title,
+            "                         "
+            "DOOM System Startup v%i.%i"
+            "                           ",
+            VERSION/100,VERSION%100);
+        }
+        else
+        {
+            sprintf(title,
+            "                           "
+            "Система загрузки DOOM v%i.%i"
+            "                           ",
+            VERSION/100,VERSION%100);
+        }
     }
     else if (retail)
     {
@@ -1051,34 +1078,69 @@ void D_DoomMain (void)
     }
     else if (tnt)
     {
-        sprintf(title,
-        "                       "
-        "Final DOOM: TNT - Дьяволюция v%i.%i"
-        "                        ",
-        VERSION/100,VERSION%100);
+        if (english_language)
+        {
+            sprintf(title,
+            "                     "
+            "DOOM 2: TNT - Evilution v%i.%i"
+            "                           ",
+            VERSION/100,VERSION%100);
+        }
+        else
+        {
+            sprintf(title,
+            "                       "
+            "Final DOOM: TNT - Дьяволюция v%i.%i"
+            "                        ",
+            VERSION/100,VERSION%100);
+        }
     }
     else if (plutonia)
     {
-        sprintf(title,
-        "                    "
-        "Final DOOM: Эксперимент \"Плутония\" v%i.%i"
-        "                     ",
-        VERSION/100,VERSION%100);
+        if (english_language)
+        {
+            sprintf(title,
+            "                   "
+            "DOOM 2: Plutonia Experiment v%i.%i"
+            "                           ",
+            VERSION/100,VERSION%100);
+        }
+        else
+        {
+            sprintf(title,
+            "                    "
+            "Final DOOM: Эксперимент \"Плутония\" v%i.%i"
+            "                     ",
+            VERSION/100,VERSION%100);
+        }
     }
     else if (commercial)
     {
-        sprintf(title,
-        "                            "
-        "DOOM 2: Ад на Земле v%i.%i"
-        "                            ",
-        VERSION/100,VERSION%100);
+        if (english_language)
+        {
+            sprintf(title,
+            "                         "
+            "DOOM 2: Hell on Earth v%i.%i"
+            "                           ",
+            VERSION/100,VERSION%100);
+        }
+        else
+        {
+            sprintf(title,
+            "                            "
+            "DOOM 2: Ад на Земле v%i.%i"
+            "                            ",
+            VERSION/100,VERSION%100);
+        }
     }
 
     regs.w.ax = 3;
     int386(0x10, &regs, &regs);
     D_DrawTitle(title, FGCOLOR, BGCOLOR);
 
-    printf("\nP_Init: Проверка параметров командной строки...\n");
+    printf(english_language ?
+    "\nP_Init: Checking cmd-line parameters...\n" :
+    "\nP_Init: Проверка параметров командной строки...\n");
 
     if (devparm)
     {
@@ -1107,7 +1169,9 @@ void D_DoomMain (void)
         if (scale > 400)
         scale = 400;
 
-        printf ("турбо ускорение: %i%%\n",scale);
+        printf (english_language ?
+                "turbo scale: %i%%\n" :
+                "турбо ускорение: %i%%\n",scale);
         forwardmove[0] = forwardmove[0]*scale/100;
         forwardmove[1] = forwardmove[1]*scale/100;
         sidemove[0] = sidemove[0]*scale/100;
@@ -1138,7 +1202,9 @@ void D_DoomMain (void)
         else
         {
             sprintf (file,"~"DEVMAPS"E%cM%c.wad", myargv[p+1][0], myargv[p+2][0]);
-            printf("Перемещение в эпизод %s, карту %s.\n",
+            printf(english_language ?
+                   "Warping to Episode %s, Map %s.\n" :
+                   "Перемещение в эпизод %s, карту %s.\n",
             myargv[p+1],myargv[p+2]);
         }
 
@@ -1164,7 +1230,9 @@ void D_DoomMain (void)
     {
         sprintf (file,"%s.lmp", myargv[p+1]);
         D_AddFile (file);
-        printf("Проигрывание демозаписи %s.lmp.\n",myargv[p+1]);
+        printf(english_language ?
+               "Playing demo %s.lmp.\n" :
+               "Проигрывание демозаписи %s.lmp.\n", myargv[p+1]);
     }
 
     // get skill / episode / map from parms
@@ -1194,7 +1262,9 @@ void D_DoomMain (void)
         int time;
 
         time = atoi(myargv[p+1]);
-        printf("Уровни будут завершаться после %d минут(ы)",time);
+        printf(english_language ?
+               "Levels will end after %d minute" :
+               "Уровни будут завершаться после %d минут(ы)", time);
 
         if (time>1)
         printf("s");
@@ -1203,7 +1273,9 @@ void D_DoomMain (void)
 
     p = M_CheckParm ("-avg");
     if (p && p < myargc-1 && deathmatch)
-    printf("Austin Virtual Gaming: Уровни будут завершаться после 20 минут\n");
+    printf(english_language ?
+           "Austin Virtual Gaming: Levels will end after 20 minutes\n" :
+           "Austin Virtual Gaming: Уровни будут завершаться после 20 минут\n");
 
     p = M_CheckParm ("-warp");
     if (p && p < myargc-1)
@@ -1220,27 +1292,50 @@ void D_DoomMain (void)
     }
 
     // init subsystems
-    printf("V_Init: Обнаружение экранов.\n");
+    printf(english_language ? 
+           "V_Init: allocate screens.\n" :
+           "V_Init: Обнаружение экранов.\n");
     V_Init();
 
-    printf("M_LoadDefaults: Загрузка системных стандартов.\n");
-    M_LoadDefaults(); // load before initing other systems
+    printf(english_language ? 
+           "M_LoadDefaults: Load system defaults.\n" :
+           "M_LoadDefaults: Загрузка системных стандартов.\n");
+    // [JN] We *have* to load variables first for proper 
+    // language on startup screens. Moved above.
+    // M_LoadDefaults(); // load before initing other systems
+    
 
-    printf("Z_Init: Инициализация распределения памяти. \n");
+    printf(english_language ?
+           "Z_Init: Init zone memory allocation daemon. \n" :
+           "Z_Init: Инициализация распределения памяти. \n");
     Z_Init();
 
-    printf ("W_Init: Инициализация WAD-файлов.\n");
+    printf (english_language ?
+            "W_Init: Init WADfiles.\n" :
+            "W_Init: Инициализация WAD-файлов.\n");
     W_InitMultipleFiles (wadfiles);
 
     if (W_CheckNumForName("E4M1") >= 0)
     {
         registered = false;
         retail = true;
-        sprintf(title,
-        "                          "
-        "Загрузка Ultimate DOOM v%i.%i"
-        "                           ",
-        VERSION/100,VERSION%100);
+
+        if (english_language)
+        {
+            sprintf(title,
+            "                         "
+            "The Ultimate DOOM Startup v%i.%i"
+            "                        ",
+            VERSION/100,VERSION%100);
+        }
+        else
+        {
+            sprintf(title,
+            "                          "
+            "Загрузка Ultimate DOOM v%i.%i"
+            "                           ",
+            VERSION/100,VERSION%100);
+        }
         D_RedrawTitle();
     }
 
@@ -1294,68 +1389,116 @@ void D_DoomMain (void)
     if (registered)
     {
         if (retail)
-        printf("\tкоммерческая версия.\n");
+        printf(english_language ? 
+               "\tretail version.\n" :
+               "\tкоммерческая версия.\n");
         else
-        printf("\tзарегистрированная версия.\n");
+        printf(english_language ? 
+               "\tregistered version.\n" :
+               "\tзарегистрированная версия.\n");
 
         D_RedrawTitle();
-        printf(
-        "================================================================================"
-        "          Это не демонстрационная версия игры, не распространяйте ее!           "
-        "  Просим вас сообщать о случаях компьютерного пиратства в SPA: 1-800-388-PIR8   "
-        "================================================================================"
-        );
+        if (english_language)
+        {
+            printf(
+            "===========================================================================\n"
+            "              This version is NOT SHAREWARE, do not distribute!\n"
+            "         Please report software piracy to the SPA: 1-800-388-PIR8\n"
+            "===========================================================================\n"
+            );
+        }
+        else
+        {
+            printf(
+            "================================================================================"
+            "          Это не демонстрационная версия игры, не распространяйте ее!           "
+            "  Просим вас сообщать о случаях компьютерного пиратства в SPA: 1-800-388-PIR8   "
+            "================================================================================"
+            );            
+        }
 
         D_RedrawTitle();
     }
     if (shareware)
     {
-        printf("\tдемонстрационная версия.\n");
+        printf(english_language ?
+               "\tshareware version.\n" :
+               "\tдемонстрационная версия.\n");
         D_RedrawTitle();
     }
     if (commercial)
     {
-        printf("\tкоммерческая версия.\n");
+        printf(english_language ?
+               "\tcommercial version.\n" :
+               "\tкоммерческая версия.\n");
         D_RedrawTitle();
-        printf(
-        "================================================================================"
-        "          Это не демонстрационная версия игры, не распространяйте ее!           "
-        "  Просим вас сообщать о случаях компьютерного пиратства в SPA: 1-800-388-PIR8   "
-        "================================================================================"
-        );
+        if (english_language)
+        {
+            printf(
+            "===========================================================================\n"
+            "                            Do not distribute!\n"
+            "         Please report software piracy to the SPA: 1-800-388-PIR8\n"
+            "===========================================================================\n"
+            );
+        }
+        else
+        {
+            printf(
+            "================================================================================"
+            "          Это не демонстрационная версия игры, не распространяйте ее!           "
+            "  Просим вас сообщать о случаях компьютерного пиратства в SPA: 1-800-388-PIR8   "
+            "================================================================================"
+            );
+        }
 
         D_RedrawTitle();
     }
 
-    printf("M_Init: Инициализация внутренних данных.\n");
+    printf(english_language ?
+           "M_Init: Init miscellaneous info.\n" :
+           "M_Init: Инициализация внутренних данных.\n");
     D_RedrawTitle();
     M_Init();
 
-    printf("R_Init: Инициализация запуска DOOM - ");
+    printf(english_language ?
+           "R_Init: Init DOOM refresh daemon - " :
+           "R_Init: Инициализация запуска DOOM - ");
     D_RedrawTitle();
     R_Init();
 
-    printf("\nP_Init: Инициализация игрового окружения.\n");
+    printf(english_language ?
+           "\nP_Init: Init Playloop state.\n" :
+           "\nP_Init: Инициализация игрового окружения.\n");
     D_RedrawTitle();
     P_Init();
 
-    printf("I_Init: Инициализация состояния компьютера.\n");
+    printf(english_language ?
+           "I_Init: Setting up machine state.\n" :
+           "I_Init: Инициализация состояния компьютера.\n");
     D_RedrawTitle();
     I_Init();
 
-    printf("D_CheckNetGame: Проверка статуса сетевой игры.\n");
+    printf(english_language ?
+           "D_CheckNetGame: Checking network game status.\n" :
+           "D_CheckNetGame: Проверка статуса сетевой игры.\n");
     D_RedrawTitle();
     D_CheckNetGame();
 
-    printf("S_Init: Активация звуковой системы.\n");
+    printf(english_language ?
+           "S_Init: Setting up sound.\n" :
+           "S_Init: Активация звуковой системы.\n");
     D_RedrawTitle();
     S_Init(sfxVolume*8, musicVolume*8);
 
-    printf("HU_Init: Настройка игрового дисплея.\n");
+    printf(english_language ?
+           "HU_Init: Setting up heads up display.\n" :
+           "HU_Init: Настройка игрового дисплея.\n");
     D_RedrawTitle();
     HU_Init();
 
-    printf("ST_Init: Инициализация строки состояния.\n");
+    printf(english_language ?
+           "ST_Init: Init status bar.\n" :
+           "ST_Init: Инициализация строки состояния.\n");
     D_RedrawTitle();
     ST_Init();
 
@@ -1367,7 +1510,9 @@ void D_DoomMain (void)
         extern void*    statcopy;                            
 
         statcopy = (void*)atoi(myargv[p+1]);
-        printf ("Зарегистрирована внешняя статистика.\n");
+        printf (english_language ?
+                "External statistics registered.\n" :
+                "Зарегистрирована внешняя статистика.\n");
 
         D_RedrawTitle();
     }

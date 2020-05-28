@@ -361,7 +361,9 @@ void I_UpdateBox(int x, int y, int w, int h)
     if (x < 0 || y < 0 || w <= 0 || h <= 0
      || x + w > SCREENWIDTH || y + h > SCREENHEIGHT)
     {
-        I_Error("Bad I_UpdateBox (%i, %i, %i, %i)", x, y, w, h);
+        I_Error(english_language ?
+        "Bad I_UpdateBox (%i, %i, %i, %i)" :
+        "Ошибка I_UpdateBox (%i, %i, %i, %i)", x, y, w, h);
     }
 
     sp_x1 = x / 8;
@@ -765,10 +767,14 @@ void I_StartupMouse(void)
 
     if (I_ResetMouse() != 0xffff)
     {
-        printf("Мышь отсутствует\n", 0);
+        printf(english_language ?
+               "Mouse: not present\n" :
+               "Мышь отсутствует\n", 0);
         return;
     }
-    printf("Мышь обнаружена\n", 0);
+    printf(english_language ?
+           "Mouse: detected\n" :
+           "Мышь обнаружена\n", 0);
 
     mousepresent = 1;
 
@@ -888,13 +894,19 @@ void I_StartupJoystick(void)
     if (!I_ReadJoystick())
     {
         joystickpresent = false;
-        printf("joystick not found\n");
+        printf(english_language ?
+        "joystick not found\n" :
+        "джойстик не обнаружен\n");
         return;
     }
-    printf("joystick found\n");
+    printf(english_language ?
+    "joystick found\n" :
+    "джойстик обнаружен\n");
     joystickpresent = true;
 
-    printf("CENTER the joystick and press button 1:");
+    printf(english_language ?
+    "CENTER the joystick and press button 1:" :
+    "Отцентрируйте джойстик и нажмите кнопку 1:");
     if (!WaitJoyButton())
     {
         return;
@@ -903,7 +915,9 @@ void I_StartupJoystick(void)
     centerx = joystickx;
     centery = joysticky;
 
-    printf("\nPush the joystick to the UPPER LEFT corner and press button 1:");
+    printf(english_language ?
+    "\nPush the joystick to the UPPER LEFT corner and press button 1:" :
+    "\nПереведите джойстик в верхнее левое положение и нажмите кнопку 1:");
     if (!WaitJoyButton())
     {
         return;
@@ -912,7 +926,9 @@ void I_StartupJoystick(void)
     joyxl = (centerx + joystickx) / 2;
     joyyl = (centerx + joysticky) / 2;
 
-    printf("\nPush the joystick to the LOWER RIGHT corner and press button 1:");
+    printf(english_language ?
+    "\nPush the joystick to the LOWER RIGHT corner and press button 1:" :
+    "\nПереведите джойстик в нижнее правое положение и нажмите кнопку 1:");
     if (!WaitJoyButton())
     {
         return;
@@ -1070,7 +1086,9 @@ void IO_SetTimer0(int speed)
 {
     if (speed > 0 && speed < 150)
     {
-        I_Error("INT_SetTimer0: %i является некорректным значением", speed);
+        I_Error(english_language ?
+                "INT_SetTimer0: %i is a bad value" :
+                "INT_SetTimer0: %i является некорректным значением", speed);
     }
 
     _outbyte(0x43, 0x36);                            // Change timer 0
@@ -1112,7 +1130,9 @@ void I_Init(void)
     if (p)
     {
         extcontrol = (extapi_t*)atoi(myargv[p + 1]);
-        printf("Using external control API\n");
+        printf(english_language ?
+               "Using external control API\n" :
+               "Используется внешний API управления\n");
     }
     printf("I_StartupDPMI\n");
     I_StartupDPMI();
@@ -1221,7 +1241,9 @@ byte *I_ZoneBase(int *size)
     int386x(0x31, &regs, &regs, &segregs);
 
     heap = meminfo[0];
-    printf("Память DPMI: 0x%x", heap);
+    printf(english_language ?
+           "DPMI memory: 0x%x" :
+           "Память DPMI: 0x%x", heap);
     
     // [JN] Command line parameter to increase/decrease heap size
     // Thanks to Alexandre-Xavier Labonte-Lamoureux for the code!
@@ -1247,13 +1269,25 @@ byte *I_ZoneBase(int *size)
         ptr = malloc(heap);
     } while (!ptr);
 
-    printf(", 0x%x обнаружено для распределения.\n", heap);
+    printf(english_language ?
+           ", 0x%x allocated for zone\n" :
+           ", 0x%x обнаружено для распределения.\n", heap);
     if (heap < 0x180000)
     {
         printf("\n");
-        printf("Недостаточно оперативной памяти!\n");
-        printf("Для запуска DOOM необходимо минимум 2 мегабайта памяти.\n\n");
-        printf("Выполнение программы прервано.\n");
+
+        if (english_language)
+        {
+            printf("\n");
+            printf("Insufficient memory! Please, free up more memory for DOOM.\n\n");
+            printf("DOOM aborted.\n");
+        }
+        else
+        {
+            printf("Недостаточно оперативной памяти!\n");
+            printf("Для запуска DOOM необходимо минимум 2 мегабайта памяти.\n\n");
+            printf("Выполнение программы прервано.\n");
+        }
         exit(1);
     }
 #if 0
@@ -1263,7 +1297,9 @@ byte *I_ZoneBase(int *size)
     int386(0x31, &regs, &regs);
     if (regs.w.cflag)
     {
-        I_Error("Невозможно распределить память DPMI!");
+        I_Error(english_language ?
+                "Couldn't allocate DPMI memory!" :
+                "Невозможно распределить память DPMI!");
     }
     block = (regs.w.si << 16) + regs.w.di;
 #endif
@@ -1402,7 +1438,9 @@ byte *I_AllocLow (int length)
     //selector = regs.w.dx;
     if (regs.w.cflag != 0)
     {
-        I_Error("I_AllocLow: невозможно обнаружить %i, свободно %i",
+        I_Error(english_language ?
+                "I_AllocLow: DOS alloc of %i failed, %i free" :
+                "I_AllocLow: невозможно обнаружить %i, свободно %i",
                 length, regs.w.bx * 16);
     }
 
@@ -1475,7 +1513,9 @@ void I_InitNetwork(void)
         doomcom = malloc(sizeof(*doomcom));
         if (!doomcom)
         {
-            I_Error("Ошибка malloc() в I_InitNetwork()");
+            I_Error(english_language ?
+                    "malloc() in I_InitNetwork() failed" :
+                    "Ошибка malloc() в I_InitNetwork()");
         }
         memset(doomcom, 0, sizeof(*doomcom));
         netgame = false;
@@ -1502,7 +1542,9 @@ void I_NetCmd(void)
 {
     if (!netgame)
     {
-        I_Error("I_NetCmd не в сетевой игре");
+        I_Error(english_language ?
+                "I_NetCmd when not in netgame" :
+                "I_NetCmd не в сетевой игре");
     }
     DPMIInt(doomcom->intnum);
 }
