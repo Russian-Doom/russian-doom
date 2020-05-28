@@ -324,6 +324,7 @@ static boolean		st_fragson;
 
 // main bar left
 static patch_t*		sbar;
+static patch_t*		sbar_rus;
 
 // 0-9, tall numbers
 static patch_t*		tallnum[10];
@@ -348,6 +349,7 @@ static patch_t*		faceback;
 
  // main bar right
 static patch_t*		armsbg;
+static patch_t*		armsbg_rus;
 
 // weapon ownership patches
 static patch_t*		arms[6][2]; 
@@ -545,11 +547,11 @@ void ST_refreshBackground(void)
 
     if (st_statusbaron && screenblocks < 11 || automapactive)
     {
-	V_DrawPatch(ST_X, 0, BG, sbar);
+	V_DrawPatch(ST_X, 0, BG, english_language ? sbar : sbar_rus);
 
 	// [crispy] back up arms widget background
 	if (!deathmatch)
-	    V_DrawPatch(ST_ARMSBGX, 0, BG, armsbg);
+	    V_DrawPatch(ST_ARMSBGX, 0, BG, english_language ? armsbg : armsbg_rus);
 
 	if (netgame)
 	    V_DrawPatch(ST_FX, 0, BG, faceback);
@@ -1467,15 +1469,23 @@ void ST_drawWidgets(boolean refresh)
             || plyr->readyweapon == wp_missile
             || plyr->readyweapon == wp_plasma
             || plyr->readyweapon == wp_bfg)
-            V_DrawPatchDirect(2, 191, 0, W_CacheLumpName("STCHAMMO", PU_CACHE));
+            V_DrawPatchDirect(2, 191, 0, W_CacheLumpName(english_language ?
+                                                         "STCHAMMO" :
+                                                         "RDCHAMMO", PU_CACHE));
 
             if (deathmatch) // [JN] Frags
-                V_DrawPatchDirect(108, 191, 0, W_CacheLumpName("STCHFRGS", PU_CACHE));
+                V_DrawPatchDirect(108, 191, 0, W_CacheLumpName(english_language ?
+                                                               "STCHFRGS" :
+                                                               "RDCHFRGS", PU_CACHE));
             else            // [JN] Arms
-                V_DrawPatchDirect(108, 191, 0, W_CacheLumpName("STCHARMS", PU_CACHE));
+                V_DrawPatchDirect(108, 191, 0, W_CacheLumpName(english_language ?
+                                                               "STCHARMS" :
+                                                               "RDCHARMS", PU_CACHE));
 
             // [JN] Health, armor, list of ammo
-            V_DrawPatchDirect(52, 173, 0, W_CacheLumpName("STCHNAMS", PU_CACHE));
+            V_DrawPatchDirect(52, 173, 0, W_CacheLumpName(english_language ?
+                                                          "STCHNAMS" :
+                                                          "RDCHNAMS", PU_CACHE));
         }
 
         // [JN] For prevention of yellow slashes "blinking",
@@ -1592,6 +1602,7 @@ void ST_loadGraphics(void)
 
     // arms background
     armsbg = (patch_t *) W_CacheLumpName("STARMS", PU_STATIC);
+    armsbg_rus = (patch_t *) W_CacheLumpName("RDARMS", PU_STATIC);
 
     // arms ownership widgets
     for (i=0;i<6;i++)
@@ -1611,6 +1622,7 @@ void ST_loadGraphics(void)
 
     // status bar background bits
     sbar = (patch_t *) W_CacheLumpName("STBAR", PU_STATIC);
+    sbar_rus = (patch_t *) W_CacheLumpName("RDSTBAR", PU_STATIC);
 
     // face states
     facenum = 0;
@@ -1696,6 +1708,7 @@ void ST_unloadGraphics(void)
 
     // unload arms background
     Z_ChangeTag(armsbg, PU_CACHE); 
+    Z_ChangeTag(armsbg_rus, PU_CACHE);
 
     // unload gray #'s
     for (i=0;i<6;i++)
@@ -1706,6 +1719,7 @@ void ST_unloadGraphics(void)
 	Z_ChangeTag(keys[i], PU_CACHE);
 
     Z_ChangeTag(sbar, PU_CACHE);
+    Z_ChangeTag(sbar_rus, PU_CACHE);
     Z_ChangeTag(faceback, PU_CACHE);
 
     for (i=0;i<ST_NUMFACES;i++)
@@ -1785,7 +1799,7 @@ void ST_createWidgets(void)
     STlib_initBinIcon(&w_armsbg,
 		      ST_ARMSBGX,
 		      ST_ARMSBGY,
-		      armsbg,
+		      english_language ? armsbg : armsbg_rus,
 		      &st_notdeathmatch,
 		      &st_statusbaron);
 

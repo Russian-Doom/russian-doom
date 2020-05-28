@@ -34,6 +34,8 @@
 #include "doomstat.h"
 #include "r_state.h"
 
+#include "jn.h"
+
 // ?
 //#include "doomstat.h"
 //#include "r_local.h"
@@ -699,10 +701,15 @@ void F_CastDrawer (void)
     patch_t*        patch;
 
     // erase the entire screen to a background
-    if (!plutonia)
-    V_DrawPatch (0,0,0, W_CacheLumpName ("BOSSBACK", PU_CACHE));
+    if (english_language)
+    {
+        V_DrawPatch (0,0,0, W_CacheLumpName ("BOSSBACK", PU_CACHE));
+    }
     else
-    V_DrawPatch (0,0,0, W_CacheLumpName ("BOSSBACP", PU_CACHE));
+    {
+        V_DrawPatch (0,0,0, W_CacheLumpName (plutonia ? "BOSSBACP" : 
+                                                        "BOSSBACK", PU_CACHE));
+    }
 
     F_CastPrint (castorder[castnum].name);
 
@@ -790,8 +797,24 @@ void F_BunnyScroll (void)
 
     if (finalecount < 1180)
     {
-        V_DrawShadow (((SCREENWIDTH-13*8)/2)+1, ((SCREENHEIGHT-8*8)/2)+1,0, W_CacheLumpName ("END0",PU_CACHE));
-        V_DrawPatch ((SCREENWIDTH-13*8)/2, (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName ("END0",PU_CACHE));
+        if (english_lanuage)
+        {
+            V_DrawShadow(((SCREENWIDTH-13*8)/2)+1,
+                         ((SCREENHEIGHT-8*8)/2)+1,0,
+                           W_CacheLumpName ("END0",PU_CACHE));
+            V_DrawPatch((SCREENWIDTH-13*8)/2,
+                        (SCREENHEIGHT-8*8)/2,0,
+                         W_CacheLumpName ("END0",PU_CACHE));
+        }
+        else
+        {
+            V_DrawShadow(((SCREENWIDTH-13*8)/2)+1,
+                         ((SCREENHEIGHT-8*8)/2)+1,0,
+                           W_CacheLumpName ("RD_END0",PU_CACHE));
+            V_DrawPatch((SCREENWIDTH-13*8)/2,
+                        (SCREENHEIGHT-8*8)/2,0,
+                         W_CacheLumpName ("RD_END0",PU_CACHE));
+        }
         laststage = 0;
         return;
     }
@@ -807,10 +830,14 @@ void F_BunnyScroll (void)
         laststage = stage;
     }
 
-    sprintf (name,"END%i",stage);
+    sprintf (name, english_language ? "END%i" : "RD_END%i",stage);
 
-    V_DrawShadow (((SCREENWIDTH-13*8)/2)+1, ((SCREENHEIGHT-8*8)/2)+1,0, W_CacheLumpName (name,PU_CACHE));
-    V_DrawPatch ((SCREENWIDTH-13*8)/2, (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName (name,PU_CACHE));
+    V_DrawShadow(((SCREENWIDTH-13*8)/2)+1, 
+                 ((SCREENHEIGHT-8*8)/2)+1,0,
+                   W_CacheLumpName (name,PU_CACHE));
+    V_DrawPatch((SCREENWIDTH-13*8)/2,
+                (SCREENHEIGHT-8*8)/2,0,
+                 W_CacheLumpName (name,PU_CACHE));
 }
 
 

@@ -492,14 +492,21 @@ void D_DoAdvanceDemo (void)
 
         gamestate = GS_DEMOSCREEN;
 
-        if (shareware)
-        pagename = "TITLEPIS";
-        else if (tnt)
-        pagename = "TITLEPIT";
-        else if (plutonia)
-        pagename = "TITLEPIP";
+        if (english_language)
+        {
+            pagename = "TITLEPIC";
+        }
         else
-        pagename = "TITLEPIC";
+        {
+            if (shareware)
+            pagename = "TITLEPIS";
+            else if (tnt)
+            pagename = "TITLEPIT";
+            else if (plutonia)
+            pagename = "TITLEPIP";
+            else
+            pagename = "TITLEPIC";
+        }
 
         if (commercial)
         S_StartMusic(mus_dm2ttl);
@@ -518,13 +525,20 @@ void D_DoAdvanceDemo (void)
         pagetic = 200;
         gamestate = GS_DEMOSCREEN;
 
-        if (shareware || registered)
-        pagename = "CREDITS";
-        else if (retail)
-        pagename = "CREDITU";
+        if (english_language)
+        {
+            pagename = "CREDIT";
+        }
         else
-        pagename = "CREDIT";
-        break;
+        {
+            if (shareware || registered)
+            pagename = "CREDITS";
+            else if (retail)
+            pagename = "CREDITU";
+            else
+            pagename = "CREDIT2";
+            break;
+        }
 
         case 3:
         {
@@ -538,27 +552,41 @@ void D_DoAdvanceDemo (void)
         if (commercial)
         {
             pagetic = 35 * 11;
-            if (tnt)
-            pagename = "TITLEPIT";
-            else if (plutonia)
-            pagename = "TITLEPIP";
+            if (english_language)
+            {
+                pagename = "TITLEPIC";
+            }
             else
-            pagename = "TITLEPIC";
+            {
+                if (tnt)
+                pagename = "TITLEPIT";
+                else if (plutonia)
+                pagename = "TITLEPIP";
+                else
+                pagename = "TITLEPIC";
+            }
 
             S_StartMusic(mus_dm2ttl);
         }
         else
         {
-        pagetic = 200;
+            pagetic = 200;
 
-        if (shareware)
-        pagename = "HELP2";
-        else if (registered)
-        pagename = "CREDITS";
-        else if (retail)
-        pagename = "CREDITU";
-        else
-        pagename = "CREDIT";
+            if (english_language)
+            {
+                pagename = "CREDIT";
+            }
+            else
+            {
+                if (shareware)
+                pagename = "HELP2";
+                else if (registered)
+                pagename = "CREDITS";
+                else if (retail)
+                pagename = "CREDITU";
+                else
+                pagename = "CREDIT";
+            }
         }
         break;
 
