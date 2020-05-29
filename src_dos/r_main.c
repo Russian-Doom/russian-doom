@@ -58,6 +58,10 @@ extern lighttable_t**	walllights;
 int			centerx;
 int			centery;
 
+// [JN] Define, which diminished lighting we well use
+int			maxlightz;
+int			lightzshift;
+
 fixed_t			centerxfrac;
 fixed_t			centeryfrac;
 fixed_t			projection;
@@ -659,17 +663,19 @@ void R_InitLightTables (void)
     int		startmap; 	
     int		scale;
     
+    // [JN] Define, which diminished lighting to use
+    lightzshift = vanilla ? LIGHTZSHIFT_VANILLA : LIGHTZSHIFT;
+    maxlightz = vanilla ? MAXLIGHTZ_VANILLA : MAXLIGHTZ;
+
     // Calculate the light levels to use
     //  for each level / distance combination.
     for (i=0 ; i< LIGHTLEVELS ; i++)
     {
 	startmap = ((LIGHTLEVELS-1-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
 	// [JN] No smoother diminished lighting in -vanilla mode
-	for (j=0 ; vanilla ? j<MAXLIGHTZ_VANILLA : j<MAXLIGHTZ ; j++)
+	for (j=0 ; j < maxlightz ; j++)
 	{
-	    scale = FixedDiv ((SCREENWIDTH/2*FRACUNIT), vanilla ?
-                                                    ((j+1)<<LIGHTZSHIFT_VANILLA) : 
-                                                    ((j+1)<<LIGHTZSHIFT));
+	    scale = FixedDiv ((SCREENWIDTH/2*FRACUNIT), ((j+1)<<lightzshift));
 	    scale >>= LIGHTSCALESHIFT;
 	    level = startmap - scale/DISTMAP;
 	    

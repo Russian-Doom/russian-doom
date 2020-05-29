@@ -74,6 +74,9 @@ extern int		loopcount;
 #define MAXLIGHTZ_VANILLA   128
 #define LIGHTZSHIFT_VANILLA 20
 
+// [JN] Define, which diminished lighting to use
+extern int lightzshift, maxlightz; 
+
 extern lighttable_t*	scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
 extern lighttable_t*	scalelightfixed[MAXLIGHTSCALE];
 extern lighttable_t*	zlight[LIGHTLEVELS][MAXLIGHTZ];

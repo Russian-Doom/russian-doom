@@ -32,6 +32,8 @@
 #include "r_local.h"
 #include "r_sky.h"
 #include "r_bmaps.h"
+#include "r_main.h"
+
 #include "jn.h"
 
 
@@ -175,21 +177,11 @@ R_MapPlane
     }
     else
     {
-        // [JN] No smoother diminished lighting in -vanilla mode
-        if (vanilla)
-        {
-            index = distance >> LIGHTZSHIFT_VANILLA;
-        
-            if (index >= MAXLIGHTZ_VANILLA)
-                index = MAXLIGHTZ_VANILLA-1;
-        }
-        else
-        {
-            index = distance >> LIGHTZSHIFT;
-        
-            if (index >= MAXLIGHTZ)
-                index = MAXLIGHTZ-1;
-        }
+        // [JN] Note: no smooth diminished lighting in -vanilla mode
+        index = distance >> lightzshift;
+
+        if (index >= maxlightz)
+            index = maxlightz-1;
 
         ds_colormap = planezlight[index];
     }
