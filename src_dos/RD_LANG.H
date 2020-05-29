@@ -86,6 +86,10 @@ extern char* ggloaded;
 // M_Menu.C
 //
 
+extern char* msgoff;
+extern char* msgon;
+extern char* detailhi;
+extern char* detaillo;
 extern char* ststr_alwrun_on;
 extern char* ststr_alwrun_off;
 extern char* ststr_crosshair_on;
@@ -422,15 +426,6 @@ extern char* ststr_massacre;
 #define HUSTR_E4M7  "E4M7: And Hell Followed"
 #define HUSTR_E4M8  "E4M8: Unto The Cruel"
 #define HUSTR_E4M9  "E4M9: Fear"
-#define HUSTR_E5M1	"E5M1: Baphomet's Demesne"
-#define HUSTR_E5M2	"E5M2: Sheol"
-#define HUSTR_E5M3	"E5M3: Cages of the Damned"
-#define HUSTR_E5M4	"E5M4: Paths of Wretchedness"
-#define HUSTR_E5M5	"E5M5: Abaddon's Void"
-#define HUSTR_E5M6	"E5M6: Unspeakable Persecution"
-#define HUSTR_E5M7	"E5M7: Nightmare Underworld"
-#define HUSTR_E5M8	"E5M8: Halls of Perdition"
-#define HUSTR_E5M9	"E5M9: Realm of Iblis"
 
 
 //
@@ -469,48 +464,6 @@ extern char* ststr_massacre;
 #define HUSTR_30    "level 30: icon of sin"
 #define HUSTR_31    "level 31: wolfenstein"
 #define HUSTR_32    "level 32: grosse"
-
-
-//
-// DOOM2: No Rest for the Living
-//
-
-#define NHUSTR_1    "level 1: The Earth Base"
-#define NHUSTR_2    "level 2: The Pain Labs"
-#define NHUSTR_3    "level 3: Canyon of the Dead"
-#define NHUSTR_4    "level 4: Hell Mountain"
-#define NHUSTR_5    "level 5: Vivisection"
-#define NHUSTR_6    "level 6: Inferno of Blood"
-#define NHUSTR_7    "level 7: Baron's Banquet"
-#define NHUSTR_8    "level 8: Tomb of Malevolence"
-#define NHUSTR_9    "level 9: March of the Demons"
-
-
-//
-// Master Levels for DOOM 2
-//
-
-#define MLSTR_1     "Attack"
-#define MLSTR_2     "Black Tower"
-#define MLSTR_3     "Bloodsea Keep"
-#define MLSTR_4     "Canyon"
-#define MLSTR_5     "The Catwalk"
-#define MLSTR_6     "The Combine"
-#define MLSTR_7     "The Fistula"
-#define MLSTR_8     "The Garrison"
-#define MLSTR_9     "Geryon"
-#define MLSTR_10    "Titan Manor"
-#define MLSTR_11    "Mephisto's Maosoleum"
-#define MLSTR_12    "Minos' Judgement"
-#define MLSTR_13    "Nessus"
-#define MLSTR_14    "Paradox"
-#define MLSTR_15    "Subspace"
-#define MLSTR_16    "Subterra"
-#define MLSTR_17    "The Express Elevator To Hell"
-#define MLSTR_18    "Bad Dream"
-#define MLSTR_19    "Trapped On Titan"
-#define MLSTR_20    "Vesperas"
-#define MLSTR_21    "Virgil's Lead"
 
 
 //
@@ -587,38 +540,6 @@ extern char* ststr_massacre;
 #define THUSTR_30   "level 30: last call"
 #define THUSTR_31   "level 31: pharaoh"
 #define THUSTR_32   "level 32: caribbean"
-
-
-//
-// DOOM for Atari Jaguar
-//
-
-#define JHUSTR_1    "level 1: Hangar"
-#define JHUSTR_2    "level 2: Plant"
-#define JHUSTR_3    "level 3: Toxin Refinery"
-#define JHUSTR_4    "level 4: Command Control"
-#define JHUSTR_5    "level 5: Phobos Lab"
-#define JHUSTR_6    "level 6: Central Processing"
-#define JHUSTR_7    "level 7: Computer Station"
-#define JHUSTR_8    "level 8: Phobos Anomaly"
-#define JHUSTR_9    "level 9: Deimos Anomaly"
-#define JHUSTR_10   "level 10: Containment Area"
-#define JHUSTR_11   "level 11: Refinery"
-#define JHUSTR_12   "level 12: Deimos Lab"
-#define JHUSTR_13   "level 13: Command Center"
-#define JHUSTR_14   "level 14: Halls of the Damned"
-#define JHUSTR_15   "level 15: Spawning Vats"
-#define JHUSTR_16   "level 16: Tower of Babel"
-#define JHUSTR_17   "level 17: Hell Keep"
-#define JHUSTR_18   "level 18: Pandemonium"
-#define JHUSTR_19   "level 19: House of Pain"
-#define JHUSTR_20   "level 20: Unholy Cathedral"
-#define JHUSTR_21   "level 21: Mt. Erebus"
-#define JHUSTR_22   "level 22: Limbo"
-#define JHUSTR_23   "level 23: Dis"
-#define JHUSTR_24   "level 24: Military Base"
-#define JHUSTR_25   "level 25: Extra Map"
-#define JHUSTR_26   "level 26: Warrens"
 
 
 //
@@ -987,38 +908,6 @@ extern char* ststr_massacre;
 "As you step off the transport, you hear\n"\
 "the stomp of a cyberdemon's iron shoe."
 
-// No Rest for the Living
-
-#define N1TEXT \
-"TROUBLE WAS BREWING AGAIN IN YOUR FAVORITE\n"\
-"VACATION SPOT... HELL. SOME CYBERDEMON\n"\
-"PUNK THOUGHT HE COULD TURN HELL INTO A\n"\
-"PERSONAL AMUSEMENT PARK, AND MAKE EARTH\nTHE TICKET BOOTH.\n\n"\
-"WELL THAT HALF-ROBOT FREAK SHOW DIDN'T\n"\
-"KNOW WHO WAS COMING TO THE FAIR. THERE'S\n"\
-"NOTHING LIKE A SHOOTING GALLERY FULL OF\n"\
-"HELLSPAWN TO GET THE BLOOD PUMPING...\n\n"\
-"NOW THE WALLS OF THE DEMON'S LABYRINTH\n"\
-"ECHO WITH THE SOUND OF HIS METALLIC LIMBS\n"\
-"HITTING THE FLOOR. HIS DEATH MOAN GURGLES\n" \
-"OUT THROUGH THE MESS YOU LEFT OF HIS FACE.\n\n" \
-"THIS RIDE IS CLOSED."
-
-// Doom for Atari Jaguar
-
-#define J1TEXT              \
-"     id software\n"        \
-"     salutes you!\n"       \
-"\n"                        \
-"  the horrors of hell\n"   \
-"  could not kill you.\n"   \
-"  their most cunning\n"    \
-"  traps were no match\n"   \
-"  for you. you have\n"     \
-"  proven yourself the\n"   \
-"  best of all!\n"          \
-"\n"                        \
-"  congratulations!"        \
 
 //
 // F_FINALE.C
@@ -1181,7 +1070,6 @@ PRESSYN_RUS
 #define GAMMA_ORIGINAL_4_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 4>0"  // Уровень стандартной гамма-коррекции 4.0
 
 
-
 //
 // P_Doors.C
 //
@@ -1337,15 +1225,6 @@ PRESSYN_RUS
 #define HUSTR_E4M7_RUS  "t4v7: b gjcktljdfk fl"                     // E4M7: И последовал Ад
 #define HUSTR_E4M8_RUS  "t4v8: lj ,tccthltxbz"                      // E4M8: До бессердечия
 #define HUSTR_E4M9_RUS  "t4v9: cnhf["                               // E4M9: Страх
-#define HUSTR_E5M1_RUS  "t5v1: dkfltybz ,fajvtnf"                   // E5M1: Владения Бафомета
-#define HUSTR_E5M2_RUS  "t5v2: itjk"                                // E5M2: Шеол
-#define HUSTR_E5M3_RUS  "t5v3: rktnb ghjrkzns["                     // E5M3: Клети проклятых
-#define HUSTR_E5M4_RUS  "t5v4: genb ytcxfcnmz"                      // E5M4: Пути несчастья
-#define HUSTR_E5M5_RUS  "t5v5: ,tplyf f,flljyf"                     // E5M5: Бездна Абаддона
-#define HUSTR_E5M6_RUS  "t5v6: ytukfcyjt ujytybt"                   // E5M6: Негласное гонение
-#define HUSTR_E5M7_RUS  "t5v7: j,bntkm rjivfhf"                     // E5M7: Обитель кошмара
-#define HUSTR_E5M8_RUS  "t5v8: pfks gjub,tkb"                       // E5M8: Залы погибели
-#define HUSTR_E5M9_RUS  "t5v9: wfhcndj b,kbcf"                      // E5M9: Царство Иблиса
 
 
 //
@@ -1384,48 +1263,6 @@ PRESSYN_RUS
 #define HUSTR_30_RUS    "ehjdtym 30: brjyf uht[f"                   // Уровень 30: Икона греха
 #define HUSTR_31_RUS    "ehjdtym 31: djkmatyinfqy"                  // Уровень 31: Вольфенштайн
 #define HUSTR_32_RUS    "ehjdtym 32: uhjcct"                        // Уровень 32: Гроссе
-
-
-//
-// DOOM2: Нет покоя для живых
-//
-
-#define NHUSTR_1_RUS    "ehjdtym 1: ,fpf yf ptvkt"      // Уровень 1: База на Земле
-#define NHUSTR_2_RUS    "ehjdtym 2: kf,jhfnjhbb ,jkb"   // Уровень 2: Лаборатории боли
-#define NHUSTR_3_RUS    "ehjdtym 3: rfymjy vthndtwjd"   // Уровень 3: Каньон мертвецов
-#define NHUSTR_4_RUS    "ehjdtym 4: flcrfz ujhf"        // Уровень 4: Адская гора
-#define NHUSTR_5_RUS    "ehjdtym 5: dbdbctrwbz"         // Уровень 5: Вивисекция
-#define NHUSTR_6_RUS    "ehjdtym 6: rhjdm ghtbcgjlyzz"  // Уровень 6: Кровь преисподняя
-#define NHUSTR_7_RUS    "ehjdtym 7: ,fyrtn e ,fhjyf"    // Уровень 7: Банкет у Барона
-#define NHUSTR_8_RUS    "ehjdtym 8: uhj,ybwf pkj,s"     // Уровень 8: Гробница злобы
-#define NHUSTR_9_RUS    "ehjdtym 9: itcndbt ltvjyjd"    // Уровень 9: Шествие демонов
-
-
-//
-// Мастер-Уровни для DOOM 2
-//
-
-#define MLSTR_1_RUS     "yfgfltybt"                // ATTACK.WAD   - Нападение
-#define MLSTR_2_RUS     "xthyfz ,fiyz"             // BLACKTWR.WAD - Черная Башня
-#define MLSTR_3_RUS     "rhtgjcnm d rhjdfdjv vjht" // BLOODSEA.WAD - Крепость в Кровавом море
-#define MLSTR_4_RUS     "rfymjy"                   // CANYON.WAD   - Каньон
-#define MLSTR_5_RUS     "gjvjcn"                   // CATWALK.WAD  - Помост
-#define MLSTR_6_RUS     "rjv,byfn"                 // COMBINE.WAD  - Комбинат
-#define MLSTR_7_RUS     "abcnekf"                  // FISTULA.WAD  - Фистула
-#define MLSTR_8_RUS     "ufhybpjy"                 // GARRISON.WAD - Гарнизон
-#define MLSTR_9_RUS     "uthbjy"                   // GERYON.WAD   - Герион
-#define MLSTR_10_RUS    "gjvtcnmt ubufynf"         // MANOR.WAD    - Поместье Гиганта
-#define MLSTR_11_RUS    "vfdpjktq vtabcnjatkz"     // MEPHISTO.WAD - Мавзолей Мефистофеля
-#define MLSTR_12_RUS    "ghbujdjh vbyjcf"          // MINOS.WAD    - Приговор Миноса
-#define MLSTR_13_RUS    "ytcc"                     // NESSUS.WAD   - Несс
-#define MLSTR_14_RUS    "gfhfljrc"                 // PARADOX.WAD  - Парадокс
-#define MLSTR_15_RUS    "gjlghjcnhfycndj"          // SUBSPACE.WAD - Подпространство
-#define MLSTR_16_RUS    "gjlptvtkmt"               // SUBTERRA.WAD - Подземелье
-#define MLSTR_17_RUS    "neh,jkban d ghtbcgjly.."  // TEETH.WAD    - Турболифт в Преисподнюю
-#define MLSTR_18_RUS    "lehyjq cjy"               //              - Дурной сон
-#define MLSTR_19_RUS    "pfcnhzdibq yf nbnfyt"     // TTRAP.WAD    - Застрявший на Титане
-#define MLSTR_20_RUS    "dtxth"                    // VESPERAS.WAD - Вечер
-#define MLSTR_21_RUS    "djkz dthubkbz"            // VIRGIL.WAD   - Воля Вергилия
 
 
 //
@@ -1502,38 +1339,6 @@ PRESSYN_RUS
 #define THUSTR_30_RUS   "ehjdtym 30: gjcktlybq dspjd"               // Уровень 30: Последний вызов
 #define THUSTR_31_RUS   "ehjdtym 31: afhfjy"                        // Уровень 31: Фараон
 #define THUSTR_32_RUS   "ehjdtym 32: rfhb,s"                        // Уровень 32: Карибы
-
-
-//
-// DOOM для Atari Jaguar
-//
-
-#define JHUSTR_1_RUS    "ehjdtym 1: fyufh"                          // Уровень 1: Ангар
-#define JHUSTR_2_RUS    "ehjdtym 2: 'ktrnhjcnfywbz"                 // Уровень 2: Электростанция
-#define JHUSTR_3_RUS    "ehjdtym 3: pfdjl gj gththf,jnrt"           // Уровень 3: Завод по переработке
-#define JHUSTR_4_RUS    "ehjdtym 4: rjvfylysq geyrn"                // Уровень 4: Командный пункт
-#define JHUSTR_5_RUS    "ehjdtym 5: kf,jhfnjhbz yf aj,jct"          // Уровень 5: Лаборатория на Фобосе
-#define JHUSTR_6_RUS    "ehjdtym 6: wtynhfkmysq geyrn j,hf,jnrb"    // Уровень 6: Центральный пункт обработки
-#define JHUSTR_7_RUS    "ehjdtym 7: dsxbckbntkmysq wtynh"           // Уровень 7: Вычислительный центр
-#define JHUSTR_8_RUS    "ehjdtym 8: fyjvfkbz yf aj,jct"             // Уровень 8: Аномалия на Фобосе
-#define JHUSTR_9_RUS    "ehjdtym 9: fyjvfkbz yf ltqvjct"            // Уровень 9: Аномалия на Деймосе
-#define JHUSTR_10_RUS   "ehjdtym 10: [hfybkbot"                     // Уровень 10: Хранилище
-#define JHUSTR_11_RUS   "ehjdtym 11: jxbcnbntkmysq pfdjl"           // Уровень 11: Очистительный завод
-#define JHUSTR_12_RUS   "ehjdtym 12: kf,jhfnjhbz yf ltqvjct"        // Уровень 12: Лаборатория на Деймосе
-#define JHUSTR_13_RUS   "ehjdtym 13: rjvfylysq wtynh"               // Уровень 13: Командный центр
-#define JHUSTR_14_RUS   "ehjdtym 14: pfks ghjrkzns["                // Уровень 14: Залы проклятых
-#define JHUSTR_15_RUS   "ehjdtym 15: ythtcnbkbot"                   // Уровень 15: Нерестилище
-#define JHUSTR_16_RUS   "ehjdtym 16: dfdbkjycrfz ,fiyz"             // Уровень 16: Вавилонская башня
-#define JHUSTR_17_RUS   "ehjdtym 17: rhtgjcnm flf"                  // Уровень 17: Крепость Ада
-#define JHUSTR_18_RUS   "ehjdtym 18: gfyltvjybq"                    // Уровень 18: Пандемоний
-#define JHUSTR_19_RUS   "ehjdtym 19: ljv ,jkb"                      // Уровень 19: Дом боли
-#define JHUSTR_20_RUS   "ehjdtym 20: ytxtcnbdsq cj,jh"              // Уровень 20: Нечестивый собор
-#define JHUSTR_21_RUS   "ehjdtym 21: ujhf 'ht,"                     // Уровень 21: Гора Эреб
-#define JHUSTR_22_RUS   "ehjdtym 22: kbv,"                          // Уровень 22: Лимб
-#define JHUSTR_23_RUS   "ehjdtym 23: lbn"                           // Уровень 23: Дит
-#define JHUSTR_24_RUS   "ehjdtym 24: djtyyfz ,fpf"                  // Уровень 24: Военная база
-#define JHUSTR_25_RUS   "ehjdtym 25: 'rcnhf-htfkmyjcnm"             // Уровень 25: Экстра-реальность
-#define JHUSTR_26_RUS   "ehjdtym 26: rhjkbxbq cfl"                  // Уровень 26: Кроличий сад
 
 
 //
@@ -2172,78 +1977,6 @@ PRESSYN_RUS
 // Покинув транспортное средство,
 // Вы слышите топот железного копыта 
 // кибердемона.
-
-// No Rest for the Living | Нет покоя для живых
-
-#define N1TEXT_RUS \
-"ytghbznyjcnb< rfpfkjcm< yfcnbukb d cfvsq\n"\
-"ytgjl[jlzobq vjvtyn>>>\n"\
-"ytcvjnhz yf hfpuhjvyjt gjhf;tybt cbk\n"\
-"flf< j,tpevtdibq rb,thltvjy htibk< xnj\n"\
-"cvj;tn bpvtybnm [jl cj,snbq b dyjdm\n"\
-"gjdthuyenm ptvk. d ltvjybxtcrbq [fjc>\n"\
-"\n" \
-"b vexbntkmyfz cvthnm cnfkf gkfnjq pf 'ne\n"\
-"hjrjde. jib,re> cntys tuj j,bntkb tot\n"\
-"ljkuj ,elen gjvybnm ghtlcvthnye. fujyb.\n"\
-"'njuj gjhj;ltybz gjnecnjhjyyb[ cbk>\n"\
-"b gecnm tuj uyb.obt jcnfyrb cnfyen\n" \
-"dtxysv yfgjvbyfybtv lkz nt[< rnj dyjdm\n" \
-"jcvtkbncz yfheibnm gjrjq yfituj vbhf>\n" \
-"\n" \
-"'nf vbccbz pfdthityf>"
-
-// Неприятности, казалось, настигли в самый 
-// неподходящий момент...
-// Несмотря на разгромное поражение сил 
-// Ада, обезумевший Кибердемон решил, что 
-// сможет изменить ход событий и вновь 
-// повергнуть Землю в демонический хаос.
-// 
-// И мучительная смерть стала платой за эту 
-// роковую ошибку. Стены его обители ещё 
-// долго будут помнить предсмертную агонию 
-// этого порождения потусторонних сил.
-// И пусть его гниющие останки станут  
-// вечным напоминанием для тех, кто вновь
-// осмелится нарушить покой нашего мира.
-// 
-// Эта миссия завершена.
-
-// Doom для Atari Jaguar
-
-#define J1TEXT_RUS              \
-"     ds cghfdbkbcm!\n"         \
-"\n"                            \
-"  lf;t cfvst e;fcyst\n"      \
-"  gjhj;ltybz flf b b[\n"       \
-"  cvthntkmyst kjdeirb\n"      \
-"  yt jcnfyjdbkb dfc/\n"        \
-"\n"                            \
-"  ds d jxthtlyjq hfp\n"        \
-"  ghjzdbkb gjlkbyysq\n"        \
-"  uthjbpv b bcnbyyjt\n"        \
-"  ,tccnhfibt^ ljrfpfd^\n"      \
-"  xnj ds - kexibq bp\n"        \
-"  kexib[! gjplhfdkztv!"        \
-
-//     вы справились!
-//
-//  даже самые ужасные
-//  порождения ада и их
-//  смертельные ловушки 
-//  не остановили вас.
-//
-//  вы в очередной раз
-//  проявили подлинный
-//  героизм и истинное
-//  бесстрашие, доказав,
-//  что вы - лучший из
-//  лучших! поздравляем!
-//
-//  [JN] note: 
-//  STCFB047: / = .
-//  STCFB094: ^ = ,
 
 
 //

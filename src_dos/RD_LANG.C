@@ -50,6 +50,10 @@ char* ggloaded;
 // M_Menu.C
 //
 
+char* msgoff;
+char* msgon;
+char* detailhi;
+char* detaillo;
 char* ststr_alwrun_on;
 char* ststr_alwrun_off;
 char* ststr_crosshair_on;
@@ -200,6 +204,10 @@ void RD_DefineLanguageStrings (void)
         // M_Menu.C
         //
 
+        msgoff          = MSGOFF;
+        msgon           = MSGON;
+        detailhi        = DETAILHI;
+        detaillo        = DETAILLO;
         ststr_alwrun_on = STSTR_ALWRUNON;
         ststr_alwrun_off= STSTR_ALWRUNOFF;
         ststr_crosshair_on = STSTR_CROSSHAIR_ON;
@@ -339,6 +347,10 @@ void RD_DefineLanguageStrings (void)
         // M_Menu.C
         //
 
+        msgoff          = MSGOFF_RUS;
+        msgon           = MSGON_RUS;
+        detailhi        = DETAILHI_RUS;
+        detaillo        = DETAILLO_RUS;
         ststr_alwrun_on = STSTR_ALWRUNON_RUS;
         ststr_alwrun_off= STSTR_ALWRUNOFF_RUS;
         ststr_crosshair_on = STSTR_CROSSHAIR_ON_RUS;
