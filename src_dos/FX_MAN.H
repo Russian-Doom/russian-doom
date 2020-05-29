@@ -115,7 +115,7 @@ int FX_PlayVOC3D( char *ptr, int pitchoffset, int angle, int distance,
        int priority, unsigned long callbackval );
 int FX_PlayWAV3D( char *ptr, int pitchoffset, int angle, int distance,
        int priority, unsigned long callbackval );
-int FX_PlayRaw( char *ptr, unsigned long length, unsigned rate,
+int FX_PlayRaw( unsigned char *ptr, unsigned long length, unsigned rate,
        int pitchoffset, int vol, int left, int right, int priority,
        unsigned long callbackval );
 int FX_PlayLoopedRaw( char *ptr, unsigned long length, char *loopstart,

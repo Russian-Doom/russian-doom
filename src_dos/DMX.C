@@ -24,6 +24,7 @@
 #include "task_man.h"
 #include "mus2mid.h"
 #include "pcfx.h"
+#include "i_system.h"   // [JN] I_WaitVBL
 
 unsigned short divisors[] = {
     0,
@@ -221,6 +222,7 @@ int SFX_PlayPatch(void *vdata, int pitch, int sep, int vol, int unk1, int unk2) 
         len -= 32;
         return FX_PlayRaw(data + 24, len, rate, ((pitch - 128) * 2400) / 128, vol * 2, ((254 - sep) * vol) / 63, ((sep)* vol) / 63, 100, 0);
     }
+    return 0;
 }
 void SFX_StopPatch(int handle) {
     if (handle & 0x8000)
@@ -395,7 +397,6 @@ void DMX_DeInit(void) {
 
 void WAV_PlayMode(int channels, int samplerate) {
     long device, status;
-    char tmp[300];
     switch (dmx_sdev) {
     case 0:
         device = NumSoundCards;
