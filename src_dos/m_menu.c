@@ -341,6 +341,17 @@ void M_RD_Change_Gamma(int choice);
 void M_RD_Change_Detail(int choice);
 void M_RD_Change_Messages(int choice);
 
+// Automap
+void M_RD_Choose_AutomapSettings(int choice);
+void M_RD_Draw_AutomapSettings(void);
+void M_RD_Change_AutomapColor(int choice);
+void M_RD_Change_AutomapAntialias(int choice);
+void M_RD_Change_AutomapStats(int choice);
+void M_RD_Change_AutomapOverlay(int choice);
+void M_RD_Change_AutomapRotate(int choice);
+void M_RD_Change_AutomapFollow(int choice);
+void M_RD_Change_AutomapGrid(int choice);
+
 // Sound
 void M_RD_Choose_Audio(int choice);
 void M_RD_Draw_Audio(void);
@@ -380,7 +391,6 @@ void M_RD_Change_ExitSfx(int choice);
 void M_RD_Change_CrushingSfx(int choice);
 void M_RD_Change_BlazingSfx(int choice);
 void M_RD_Change_AlertSfx(int choice);
-void M_RD_Change_AutoMapStats(int choice);
 void M_RD_Change_SecretNotify(int choice);
 void M_RD_Change_NegativeHealth(int choice);
 
@@ -1083,6 +1093,8 @@ enum
     rd_display_empty2,
     rd_display_detail,
     rd_display_messages,
+    rd_display_empty3,
+    rd_display_automap_settings,
     rd_display_end
 } rd_display_e;
 
@@ -1098,6 +1110,8 @@ menuitem_t RD_Display_Menu[]=
     {-1,"",0,'\0'},
     {2,"detail level:",     M_RD_Change_Detail,     'e'},
     {2,"messages enabled:", M_RD_Change_Messages,   'j'},
+    {-1,"",0,'\0'},
+    {1, "automap settings", M_RD_Choose_AutomapSettings, 'a'},
     {-1,"",0,'\0'}
 };
 
@@ -1123,6 +1137,8 @@ menuitem_t RD_Display_Menu_Rus[]=
     {-1,"",0,'\0'},                                             //
     {2,"ehjdtym ltnfkbpfwbb:",    M_RD_Change_Detail,     'e'}, // Уровень детализации:
     {2,"jnj,hf;tybt cjj,otybq:",  M_RD_Change_Messages,   'j'}, // Отображение сообщений:
+    {-1,"",0,'\0'},
+    {1, "yfcnhjqrb rfhns",        M_RD_Choose_AutomapSettings, 'y'}, // Настройки карты
     {-1,"",0,'\0'}
 };
 
@@ -1133,6 +1149,74 @@ menu_t  RD_Display_Def_Rus =
     RD_Display_Menu_Rus,
     M_RD_Draw_Display,
     35,45,
+    0
+};
+
+// -----------------------------------------------------------------------------
+// Automap settings
+// -----------------------------------------------------------------------------
+
+enum
+{
+    rd_automap_colors,
+    rd_automap_antialias,
+    rd_automap_stats,
+    rd_automap_overlay,
+    rd_automap_rotate,
+    rd_automap_follow,
+    rd_automap_grid,
+    rd_automap_end
+} rd_automap_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t RD_Automap_Menu[]=
+{
+    {2, "color scheme:",      M_RD_Change_AutomapColor,     'c'},
+    {2, "line antialiasing:", M_RD_Change_AutomapAntialias, 'l'},
+    {2, "level stats:",       M_RD_Change_AutomapStats,     'l'},
+    {2, "overlay mode:",      M_RD_Change_AutomapOverlay,   'o'},
+    {2, "rotate mode:",       M_RD_Change_AutomapRotate,    'r'},
+    {2, "follow mode:",       M_RD_Change_AutomapFollow,    'f'},
+    {2, "grid: o",            M_RD_Change_AutomapGrid,      'g'},
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Automap_Def =
+{
+    rd_automap_end,
+    &RD_Display_Def,
+    RD_Automap_Menu,
+    M_RD_Draw_AutomapSettings,
+    70,35,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t RD_Automap_Menu_Rus[]=
+{
+    {2, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,     'w'}, // Цветовая схема:
+    {2, "cukf;bdfybt kbybq:", M_RD_Change_AutomapAntialias, 'c'}, // Сглаживание линий:
+    {2, "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     'c'}, // Статистика уровня:
+    {2, "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay,   'h'}, // Режим наложения:
+    {2, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    'h'}, // Режим вращения:
+    {2, "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,    'h'}, // Режим следования:
+    {2, "ctnrf:",             M_RD_Change_AutomapGrid,      'c'}, // Сетка:
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Automap_Def_Rus =
+{
+    rd_automap_end,
+    &RD_Display_Def_Rus,
+    RD_Automap_Menu_Rus,
+    M_RD_Draw_AutomapSettings,
+    70,35,
     0
 };
 
@@ -1300,7 +1384,6 @@ enum
     rd_gameplay_2_blazing_door_fix_sfx,
     rd_gameplay_2_noise_alert_sfx,
     rd_gameplay_2_empty1,
-    rd_gameplay_2_automap_stats,
     rd_gameplay_2_secret_notification,
     rd_gameplay_2_negative_health,
     rd_gameplay_2_empty2,
@@ -1379,7 +1462,6 @@ menuitem_t RD_Gameplay_Menu_2[]=
     {2,"Single sound of blazing door:",   M_RD_Change_BlazingSfx,     's'},
     {2,"Monster alert waking up others:", M_RD_Change_AlertSfx,       'm'},
     {-1,"",0,'\0'},
-    {2,"Show automap stats:",             M_RD_Change_AutoMapStats,   's'},
     {2,"Notify of revealed secrets:",     M_RD_Change_SecretNotify,   'n'},
     {2,"Show negative health:",           M_RD_Change_NegativeHealth, 's'},
     {-1,"",0,'\0'},
@@ -1488,7 +1570,6 @@ menuitem_t RD_Gameplay_Menu_2_Rus[]=
     {2,"Jlbyjxysq pder ,scnhjq ldthb:", M_RD_Change_BlazingSfx,     'j'}, // Одиночный звук быстрой двери
     {2,"J,ofz nhtdjuf e vjycnhjd:",     M_RD_Change_AlertSfx,       'j'}, // Общая тревога у монстров
     {-1,"",0,'\0'},
-    {2,"Cnfnbcnbrf ehjdyz yf rfhnt:",   M_RD_Change_AutoMapStats,   'c'}, // Статистика уровня на карте
     {2,"Cjj,ofnm j yfqltyyjv nfqybrt:", M_RD_Change_SecretNotify,   'c'}, // Сообщать о найденном тайнике
     {2,"jnhbwfntkmyjt pljhjdmt d $:",   M_RD_Change_NegativeHealth, 'j'}, // Отрицательное здоровье в HUD
     {-1,"",0,'\0'},
@@ -1676,6 +1757,13 @@ void M_RD_Draw_Display(void)
 
         // Messages allowed
         M_WriteTextSmall_ENG(214, 95, showMessages ? "drk" : "dsrk");
+
+        //
+        // Interface
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35, 105, "Interface");  
+        dp_translation = NULL;
     }
     else
     {
@@ -1691,6 +1779,13 @@ void M_RD_Draw_Display(void)
         // Write "on" / "off" strings for features
         M_WriteTextSmall_RUS(193, 85, detailLevel ? "ybprbq" : "dscjrbq");
         M_WriteTextSmall_RUS(214, 95, showMessages ? "drk" : "dsrk");
+
+        //
+        // Интерфейс
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35, 105, "bynthatqc");  
+        dp_translation = NULL;
     }
 
     // Draw screen size slider
@@ -1768,6 +1863,143 @@ void M_RD_Change_Messages (int choice)
     showMessages ^= 1;
     players[consoleplayer].message = showMessages ? msgon : msgoff;
     message_dontfuckwithme = true;
+}
+
+// -----------------------------------------------------------------------------
+// Automap settings
+// -----------------------------------------------------------------------------
+
+void M_RD_Choose_AutomapSettings(int choice)
+{
+    M_SetupNextMenu(english_language ? 
+                    &RD_Automap_Def :
+                    &RD_Automap_Def_Rus);
+}
+
+void M_RD_Draw_AutomapSettings(void)
+{
+    if (english_language)
+    {
+        M_WriteTextBigCentered_ENG(12, "AUTOMAP SETTINGS");
+
+        /*
+        // Automap colors (English only names, different placement)
+        if (automap_color == 0)
+        M_WriteTextSmall_ENG (170 + wide_delta, 35, "doom");
+        else if (automap_color == 1)
+        M_WriteTextSmall_ENG (170 + wide_delta, 35, "boom");
+        else if (automap_color == 2)
+        M_WriteTextSmall_ENG (170 + wide_delta, 35, "jaguar");
+        else if (automap_color == 3)
+        M_WriteTextSmall_ENG (170 + wide_delta, 35, "raven");
+        else
+        M_WriteTextSmall_ENG (170 + wide_delta, 35, "strife");
+
+        // Line antialiasing
+        M_WriteTextSmall_ENG(193 + wide_delta, 45, automap_antialias == 1 ? "on" : "off");
+
+        // Level stats
+        M_WriteTextSmall_ENG(159 + wide_delta, 55, automap_stats == 1 ? "on" : "off");
+        
+        // Overlay mode
+        M_WriteTextSmall_ENG(170 + wide_delta, 65, automap_overlay == 1 ? "on" : "off");
+
+        // Rotate mode
+        M_WriteTextSmall_ENG(163 + wide_delta, 75, automap_rotate == 1 ? "on" : "off");
+        */
+
+        // Follow mode
+        M_WriteTextSmall_ENG(164, 85, automap_follow ? "on" : "off");
+
+        // Grid
+        M_WriteTextSmall_ENG(106, 95, automap_grid ? "on" : "off");
+    }
+    else
+    {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB RFHNS"); // НАСТРОЙКИ КАРТЫ
+
+        /*
+        // Automap colors (English only names, different placement)
+        if (automap_color == 0)
+        M_WriteTextSmall_ENG (191, 35, "doom");
+        else if (automap_color == 1)
+        M_WriteTextSmall_ENG (191, 35, "boom");
+        else if (automap_color == 2)
+        M_WriteTextSmall_ENG (191, 35, "jaguar");
+        else if (automap_color == 3)
+        M_WriteTextSmall_ENG (191, 35, "raven");
+        else
+        M_WriteTextSmall_ENG (191, 35, "strife");
+
+        // Сглаживание линий
+        M_WriteTextSmall_RUS(214, 45, automap_antialias == 1 ? "drk" : "dsrk");
+
+        // Статистика уровня
+        M_WriteTextSmall_RUS(210, 55, automap_stats == 1 ? "drk" : "dsrk");
+        
+        // Режим наложения
+        M_WriteTextSmall_RUS(203, 65, automap_overlay == 1 ? "drk" : "dsrk");
+
+        // Режим вращения
+        M_WriteTextSmall_RUS(194, 75, automap_rotate == 1 ? "drk" : "dsrk");
+        */
+
+        // Режим следования
+        M_WriteTextSmall_RUS(208, 85, automap_follow ? "drk" : "dsrk");
+
+        // Сетка
+        M_WriteTextSmall_RUS(118, 95, automap_grid ? "drk" : "dsrk");
+    }
+}
+
+void M_RD_Change_AutomapColor(int choice)
+{
+    /*
+    switch(choice)
+    {
+        case 0: 
+        automap_color--;
+        if (automap_color < 0) 
+            automap_color = 4;
+        break;
+    
+        case 1:
+        automap_color++;
+        if (automap_color > 4)
+            automap_color = 0;
+        break;
+    }
+    */
+}
+
+void M_RD_Change_AutomapAntialias(int choice)
+{
+    automap_antialias ^= 1;
+}
+
+void M_RD_Change_AutomapOverlay(int choice)
+{
+    // automap_overlay ^= 1;
+}
+
+void M_RD_Change_AutomapStats(int choice)
+{
+    automap_stats ^= 1;
+}
+
+void M_RD_Change_AutomapRotate(int choice)
+{
+    // automap_rotate ^= 1;
+}
+
+void M_RD_Change_AutomapFollow(int choice)
+{
+    automap_follow ^= 1;
+}
+
+void M_RD_Change_AutomapGrid(int choice)
+{
+    automap_grid ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -2596,11 +2828,6 @@ void M_RD_Change_BlazingSfx(int choice)
 void M_RD_Change_AlertSfx (int choice)
 {
     noise_alert_sfx ^= 1;
-}
-
-void M_RD_Change_AutoMapStats (int choice)
-{
-    automap_stats ^= 1;
 }
 
 void M_RD_Change_SecretNotify (int choice)
@@ -4425,6 +4652,7 @@ void M_Drawer (void)
         else 
         if (currentMenu == &RD_Rendering_Def
         ||  currentMenu == &RD_Display_Def
+        ||  currentMenu == &RD_Automap_Def
         ||  currentMenu == &RD_Audio_Def
         ||  currentMenu == &RD_Controls_Def
         ||  currentMenu == &RD_Gameplay_Def_1
@@ -4450,7 +4678,7 @@ void M_Drawer (void)
         else
         if (currentMenu == &RD_Rendering_Def_Rus
         ||  currentMenu == &RD_Display_Def_Rus
-//      ||  currentMenu == &RD_Automap_Def_Rus
+        ||  currentMenu == &RD_Automap_Def_Rus
         ||  currentMenu == &RD_Audio_Def_Rus
         ||  currentMenu == &RD_Controls_Def_Rus
         ||  currentMenu == &RD_Gameplay_Def_1_Rus

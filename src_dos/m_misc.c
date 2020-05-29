@@ -437,6 +437,15 @@ default_t	defaults[] =
     {"noflats", &noflats, 0},
     {"screen_wiping", &screen_wiping, 1},
 
+    // Automap
+    {"automap_color", &automap_color, 0},
+    {"automap_antialias", &automap_antialias, 1},
+    {"automap_stats", &automap_stats, 1},
+    {"automap_overlay", &automap_overlay, 0},
+    {"automap_rotate", &automap_rotate, 0},
+    {"automap_grid", &automap_grid, 0},
+    {"automap_follow", &automap_follow, 1},
+
     // Controls
     {"mlook", &mlook, 0},
 
@@ -456,7 +465,6 @@ default_t	defaults[] =
     {"noise_alert_sfx", &noise_alert_sfx, 0},
 
     // Gameplay: Tactical
-    {"automap_stats", &automap_stats, 1},
     {"secret_notification", &secret_notification, 1},
     {"negative_health", &negative_health, 0},
 
