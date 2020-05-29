@@ -1989,7 +1989,7 @@ void M_RD_Change_AutomapStats(int choice)
 
 void M_RD_Change_AutomapRotate(int choice)
 {
-    // automap_rotate ^= 1;
+    automap_rotate ^= 1;
 }
 
 void M_RD_Change_AutomapFollow(int choice)
