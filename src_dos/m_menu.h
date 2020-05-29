@@ -22,8 +22,8 @@
 #define __M_MENU__
 
 
-
 #include "d_event.h"
+
 
 //
 // MENUS
@@ -35,17 +35,13 @@
 // Does all the real work of the menu interaction.
 boolean M_Responder (event_t *ev);
 
-
-// Called by main loop,
-// only used for menu (skull cursor) animation.
+// Called by main loop, only used for menu (skull cursor) animation.
 void M_Ticker (void);
 
-// Called by main loop,
-// draws the menus directly into the screen buffer.
+// Called by main loop, draws the menus directly into the screen buffer.
 void M_Drawer (void);
 
-// Called by D_DoomMain,
-// loads the config file.
+// Called by D_DoomMain, loads the config file.
 void M_Init (void);
 
 // Called by intro code to force menu up upon a keypress,
@@ -53,8 +49,5 @@ void M_Init (void);
 void M_StartControlPanel (void);
 
 
-
-
-
-
 #endif    
+

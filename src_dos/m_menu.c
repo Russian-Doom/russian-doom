@@ -30,90 +30,119 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "dstrings.h"
-
 #include "d_main.h"
-
 #include "i_system.h"
 #include "z_zone.h"
 #include "v_video.h"
 #include "w_wad.h"
-
 #include "r_local.h"
-
-
 #include "hu_stuff.h"
-
 #include "g_game.h"
-
 #include "m_misc.h"
-
 #include "s_sound.h"
-
 #include "doomstat.h"
-
-// Data.
 #include "sounds.h"
-
 #include "m_menu.h"
 #include "v_trans.h"
+#include "r_main.h"
+#include "s_sound.h"
+#include "st_stuff.h"
 
-#include "r_main.h"     // R_ExecuteSetViewSize
-#include "s_sound.h"    // S_ChannelsRealloc
-#include "st_stuff.h"   // ST_refreshBackground and ST_drawWidgets
 #include "jn.h"
 
 
-extern patch_t*		hu_font[HU_FONTSIZE];
-extern patch_t*		hu_font_small_eng[HU_FONTSIZE];
-extern patch_t*		hu_font_small_rus[HU_FONTSIZE];
-extern patch_t*		hu_font_big_eng[HU_FONTSIZE2];
-extern patch_t*		hu_font_big_rus[HU_FONTSIZE2];
-extern boolean		message_dontfuckwithme;
-
-extern boolean		chat_on;		// in heads-up code
-
-extern int st_palette;
-
-//
-// defaulted values
-//
-int			mouseSensitivity;       // has default
-
-// Show messages has default, 0 = off, 1 = on
-int			showMessages;
-	
-int         sfxVolume;
-int         musicVolume;
-
-// Blocky mode, has default, 0 = high, 1 = normal
-int			detailLevel;		
-int			screenblocks;		// has default
-
-// temp for screenblocks (0-9)
-int			screenSize;		
-
-// -1 = no quicksave slot picked!
-int			quickSaveSlot;          
-
- // 1 = message to be printed
-int			messageToPrint;
-// ...and here is the message string!
-char*			messageString;		
-
-// message x & y
-int			messx;			
-int			messy;
-int			messageLastMenuActive;
-
-// timed message = no input from user
-boolean			messageNeedsInput;  
-
-// [JN] Additional title "БЫСТРОЕ СОХРАНЕНИЕ"
-boolean QuickSaveTitle;   
+#define SKULLXOFF		-32
+#define LINEHEIGHT		16
+#define LINEHEIGHT_SML  10  // [JN] Line height for small font
+#define SAVESTRINGSIZE  24
 
 void    (*messageRoutine)(int response);
 
-#define SAVESTRINGSIZE 	24
+int     mouseSensitivity;       // has default
+int     showMessages;           // Show messages has default, 0 = off, 1 = on
+int     sfxVolume;
+int     musicVolume;
+int     detailLevel;            // Blocky mode, has default, 0 = high, 1 = normal
+int     screenblocks;           // has default
+int     screenSize;             // temp for screenblocks (0-9)
+int     quickSaveSlot;          // -1 = no quicksave slot picked!
+int     messageToPrint;         // 1 = message to be printed
+int     messx;                  // message x
+int     messy;                  // message y
+int     messageLastMenuActive;
+int     saveStringEnter;        // we are going to be entering a savegame string
+int     saveSlot;               // which slot to save in
+int     saveCharIndex;          // which char we're editing
+int     epi;
+
+char    saveOldString[SAVESTRINGSIZE];  // old save description before edit
+char    savegamestrings[10][SAVESTRINGSIZE];
+char    tempstring[80];
+char    endstring[160];
+char    skullName[2][9] = {"M_SKULL1","M_SKULL2"};  // graphic name of skulls
+char    detailNames[2][9] = {"M_GDHIGH","M_GDLOW"};
+char    msgNames[2][9] = {"M_MSGOFF","M_MSGON"};
+
+char   *messageString;          // ...and here is the message string!
+
+short   itemOn;                 // menu item skull is on
+short   skullAnimCounter;       // skull animation counter
+short   whichSkull;             // which skull to draw
+
+boolean inhelpscreens;
+boolean menuactive;
+boolean messageNeedsInput;      // timed message = no input from user
+boolean QuickSaveTitle;         // [JN] Additional title "БЫСТРОЕ СОХРАНЕНИЕ"
+
+
+extern int      st_palette;
+
+extern boolean  chat_on;		// in heads-up code
+extern boolean  sendpause;
+extern boolean  message_dontfuckwithme;
+
+extern patch_t *hu_font[HU_FONTSIZE];
+extern patch_t *hu_font_small_eng[HU_FONTSIZE];
+extern patch_t *hu_font_small_rus[HU_FONTSIZE];
+extern patch_t *hu_font_big_eng[HU_FONTSIZE2];
+extern patch_t *hu_font_big_rus[HU_FONTSIZE2];
+
+
+
+//
+// MENU TYPEDEFS
+//
+typedef struct
+{
+    // 0 = no cursor here, 1 = ok, 2 = arrows ok
+    short	status;
+    
+    // [JN] Extended from 10 to 128, so long text string may appear
+    char	name[128];
+    
+    // choice = menu item #.
+    // if status = 2,
+    //   choice=0:leftarrow,1:rightarrow
+    void	(*routine)(int choice);
+    
+    // hotkey in menu
+    char	alphaKey;			
+} menuitem_t;
+
+
+typedef struct menu_s
+{
+    short           numitems;	// # of menu items
+    struct menu_s  *prevMenu;	// previous menu
+    menuitem_t     *menuitems;	// menu items
+    void          (*routine)();	// draw routine
+    short           x;          // x of menu
+    short           y;          // y of menu
+    short           lastOn;		// last item user was on in menu
+} menu_t;
+
+menu_t*	currentMenu; // current menudef
+
 
 char gammamsg[18][41] =
 {
@@ -225,72 +254,6 @@ char endmsg2_rus[NUM_QUITMESSAGES][80] =
     // Вам очень повезло, что за это \n с вами ничего не случится!
     "dfv jxtym gjdtpkj< xnj pf 'nj \n c dfvb ybxtuj yt ckexbncz!"
 };
-
-// we are going to be entering a savegame string
-int			saveStringEnter;              
-int             	saveSlot;	// which slot to save in
-int			saveCharIndex;	// which char we're editing
-// old save description before edit
-char			saveOldString[SAVESTRINGSIZE];  
-
-boolean			inhelpscreens;
-boolean			menuactive;
-
-#define SKULLXOFF		-32
-#define LINEHEIGHT		16
-#define LINEHEIGHT_SML  10  // [JN] Line height for small font
-
-extern boolean		sendpause;
-char			savegamestrings[10][SAVESTRINGSIZE];
-
-char	endstring[160];
-
-
-//
-// MENU TYPEDEFS
-//
-typedef struct
-{
-    // 0 = no cursor here, 1 = ok, 2 = arrows ok
-    short	status;
-    
-    // [JN] Extended from 10 to 128, so long text string may appear
-    char	name[128];
-    
-    // choice = menu item #.
-    // if status = 2,
-    //   choice=0:leftarrow,1:rightarrow
-    void	(*routine)(int choice);
-    
-    // hotkey in menu
-    char	alphaKey;			
-} menuitem_t;
-
-
-
-typedef struct menu_s
-{
-    short		numitems;	// # of menu items
-    struct menu_s*	prevMenu;	// previous menu
-    menuitem_t*		menuitems;	// menu items
-    void		(*routine)();	// draw routine
-    short		x;
-    short		y;		// x,y of menu
-    short		lastOn;		// last item user was on in menu
-} menu_t;
-
-short		itemOn;			// menu item skull is on
-short		skullAnimCounter;	// skull animation counter
-short		whichSkull;		// which skull to draw
-
-// graphic name of skulls
-// warning: initializer-string for array of chars is too long
-char    skullName[2][/*8*/9] = {"M_SKULL1","M_SKULL2"};
-
-char    skullNameUNM[2][9] = {"M_SKUNM1","M_SKUNM2"};
-
-// current menudef
-menu_t*	currentMenu;                          
 
 
 // -----------------------------------------------------------------------------
@@ -443,6 +406,7 @@ void M_RD_BackToDefaults(int choice);
 // Language hot-swapping
 void M_RD_ChangeLanguage(int choice);
 
+
 // -----------------------------------------------------------------------------
 // M_WriteText
 //
@@ -450,8 +414,8 @@ void M_RD_ChangeLanguage(int choice);
 // -----------------------------------------------------------------------------
 void M_WriteText (int x, int y, char *string)
 {
-    int     w, c, cx, cy;
-    char*   ch;
+    int    w, c, cx, cy;
+    char  *ch;
 
     ch = string;
     cx = x;
@@ -675,12 +639,8 @@ void M_WriteTextBig_RUS (int x, int y, char *string)
 
 void M_WriteTextBigCentered_ENG (int y, char *string)
 {
-    char*   ch;
-    int	    c;
-    int	    cx;
-    int	    cy;
-    int	    w;
-    int	    width;
+    int    c, cx, cy, w, width;
+    char  *ch;
 
     // find width
     ch = string;
@@ -741,12 +701,8 @@ void M_WriteTextBigCentered_ENG (int y, char *string)
 
 void M_WriteTextBigCentered_RUS (int y, char *string)
 {
-    char*   ch;
-    int	    c;
-    int	    cx;
-    int	    cy;
-    int	    w;
-    int	    width;
+    int    c, cx, cy, w, width;
+    char  *ch;
 
     // find width
     ch = string;
@@ -889,12 +845,12 @@ menuitem_t EpisodeMenu[]=
 
 menu_t  EpiDef =
 {
-    ep_end,		// # of menu items
-    &MainDef,		// previous menu
-    EpisodeMenu,	// menuitem_t ->
-    M_DrawEpisode,	// drawing routine ->
-    48,63,              // x,y
-    ep1			// lastOn
+    ep_end,
+    &MainDef,
+    EpisodeMenu,
+    M_DrawEpisode,
+    48,63,
+    ep1
 };
 
 // ------------
@@ -949,12 +905,12 @@ menuitem_t NewGameMenu[]=
 
 menu_t  NewDef =
 {
-    newg_end,		// # of menu items
-    &EpiDef,		// previous menu
-    NewGameMenu,	// menuitem_t ->
-    M_DrawNewGame,	// drawing routine ->
-    48,63,              // x,y
-    hurtme		// lastOn
+    newg_end,
+    &EpiDef,
+    NewGameMenu,
+    M_DrawNewGame,
+    48,63,
+    hurtme
 };
 
 // ------------
@@ -1075,10 +1031,10 @@ enum
 
 menuitem_t RD_Rendering_Menu[]=
 {
-    {1,"Floor and ceiling textures:", M_RD_Change_NoFlats,  'f'},
+    {2,"Floor and ceiling textures:", M_RD_Change_NoFlats,  'f'},
     {-1,"",0,'\0'},
-    {1,"Show disk icon:",             M_RD_Change_DiskIcon, 's'},
-    {1,"Screen wiping effect:",       M_RD_Change_Wiping,   's'},
+    {2,"Show disk icon:",             M_RD_Change_DiskIcon, 's'},
+    {2,"Screen wiping effect:",       M_RD_Change_Wiping,   's'},
     {-1,"",0,'\0'}
 };
 
@@ -1098,10 +1054,10 @@ menu_t  RD_Rendering_Def =
 
 menuitem_t RD_Rendering_Menu_Rus[]=
 {
-    {1,"Ntrcnehs gjkf b gjnjkrf:",   M_RD_Change_NoFlats,  'n'}, // Текстуры пола и потолка
+    {2,"Ntrcnehs gjkf b gjnjkrf:",   M_RD_Change_NoFlats,  'n'}, // Текстуры пола и потолка
     {-1,"",0,'\0'},
-    {1,"Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon, 'j'}, // Отображать значок дискеты
-    {1,"Gkfdyfz cvtyf \'rhfyjd:",    M_RD_Change_Wiping,   'g'}, // Плавная смена экранов
+    {2,"Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon, 'j'}, // Отображать значок дискеты
+    {2,"Gkfdyfz cvtyf \'rhfyjd:",    M_RD_Change_Wiping,   'g'}, // Плавная смена экранов
     {-1,"",0,'\0'}
 };
 
@@ -1140,8 +1096,8 @@ menuitem_t RD_Display_Menu[]=
     {-1,"",0,'\0'},
     {2,"gamma-correction",  M_RD_Change_Gamma,      'g'},
     {-1,"",0,'\0'},
-    {1,"detail level:",     M_RD_Change_Detail,     'e'},
-    {1,"messages enabled:", M_RD_Change_Messages,   'j'},
+    {2,"detail level:",     M_RD_Change_Detail,     'e'},
+    {2,"messages enabled:", M_RD_Change_Messages,   'j'},
     {-1,"",0,'\0'}
 };
 
@@ -1165,8 +1121,8 @@ menuitem_t RD_Display_Menu_Rus[]=
     {-1,"",0,'\0'},                                             //
     {2,"ehjdtym ufvvf-rjhhtrwbb", M_RD_Change_Gamma,      'e'}, // Уровень гамма-коррекции
     {-1,"",0,'\0'},                                             //
-    {1,"ehjdtym ltnfkbpfwbb:",    M_RD_Change_Detail,     'e'}, // Уровень детализации:
-    {1,"jnj,hf;tybt cjj,otybq:",  M_RD_Change_Messages,   'j'}, // Отображение сообщений:
+    {2,"ehjdtym ltnfkbpfwbb:",    M_RD_Change_Detail,     'e'}, // Уровень детализации:
+    {2,"jnj,hf;tybt cjj,otybq:",  M_RD_Change_Messages,   'j'}, // Отображение сообщений:
     {-1,"",0,'\0'}
 };
 
@@ -1211,8 +1167,8 @@ menuitem_t RD_Audio_Menu[]=
     {-1,"",0,'\0'},
     {2,"sound channels",        M_RD_Change_SfxChannels,   's'},
     {-1,"",0,'\0'},
-    {1,"sound effects mode:",   M_RD_Change_SndMode,       's'},
-    {1,"pitch-shifted sounds:", M_RD_Change_PitchShifting, 'g'},
+    {2,"sound effects mode:",   M_RD_Change_SndMode,       's'},
+    {2,"pitch-shifted sounds:", M_RD_Change_PitchShifting, 'g'},
     {-1,"",0,'\0'}
 };
 
@@ -1239,8 +1195,8 @@ menuitem_t RD_Audio_Menu_Rus[]=
     {-1,"",0,'\0'},                                                   //
     {2,"Pderjdst rfyfks",            M_RD_Change_SfxChannels,   'p'}, // Звуковые каналы
     {-1,"",0,'\0'},                                                   //
-    {1,"Ht;bv pderf:",               M_RD_Change_SndMode,       'h'}, // Режим звука
-    {1,"ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 'g'}, // Произвольный питч-шифтинг
+    {2,"Ht;bv pderf:",               M_RD_Change_SndMode,       'h'}, // Режим звука
+    {2,"ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 'g'}, // Произвольный питч-шифтинг
     {-1,"",0,'\0'}
 };
 
@@ -1274,11 +1230,11 @@ enum
 
 menuitem_t RD_Controls_Menu[]=
 {
-    {1,"always run:",     M_RD_Change_AlwaysRun,   'a'},
+    {2,"always run:",     M_RD_Change_AlwaysRun,   'a'},
     {-1,"",0,'\0'},
     {2,"mouse sensivity", M_RD_Change_Sensitivity, 'm'},
     {-1,"",0,'\0'},
-    {1,"mouse look:",     M_RD_Change_MouseLook,   'm'},
+    {2,"mouse look:",     M_RD_Change_MouseLook,   'm'},
     {-1,"",0,'\0'}
 };
 
@@ -1298,11 +1254,11 @@ menu_t  RD_Controls_Def =
 
 menuitem_t RD_Controls_Menu_Rus[]=
 {
-    {1,"ht;bv gjcnjzyyjuj ,tuf:", M_RD_Change_AlwaysRun,   'g'}, // Режим постоянного бега
+    {2,"ht;bv gjcnjzyyjuj ,tuf:", M_RD_Change_AlwaysRun,   'g'}, // Режим постоянного бега
     {-1,"",0,'\0'},                                              //
     {2,"Crjhjcnm vsib",           M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
     {-1,"",0,'\0'},                                              //
-    {1,"J,pjh vsim.:",            M_RD_Change_MouseLook,   'j'}, // Обзор мышью
+    {2,"J,pjh vsim.:",            M_RD_Change_MouseLook,   'j'}, // Обзор мышью
     {-1,"",0,'\0'}
 };
 
@@ -1391,13 +1347,13 @@ enum
 
 menuitem_t RD_Gameplay_Menu_1[]=
 {
-    {1,"Brightmaps:",                  M_RD_Change_Brightmaps,      'b'},
-    {1,"Fake contrast:",               M_RD_Change_FakeContrast,    'f'},
-    {1,"Colored HUD elements:",        M_RD_Change_ColoredHUD,      'c'},
-    {1,"Colored blood and corpses:",   M_RD_Change_ColoredBlood,    'c'},
-    {1,"Swirling liquids:",            M_RD_Change_SwirlingLiquids, 's'},
-    {1,"Invulnerability affects sky:", M_RD_Change_InvulSky,        'i'},
-    {1,"Text casts shadows:",          M_RD_Change_ShadowedText,    't'},
+    {2,"Brightmaps:",                  M_RD_Change_Brightmaps,      'b'},
+    {2,"Fake contrast:",               M_RD_Change_FakeContrast,    'f'},
+    {2,"Colored HUD elements:",        M_RD_Change_ColoredHUD,      'c'},
+    {2,"Colored blood and corpses:",   M_RD_Change_ColoredBlood,    'c'},
+    {2,"Swirling liquids:",            M_RD_Change_SwirlingLiquids, 's'},
+    {2,"Invulnerability affects sky:", M_RD_Change_InvulSky,        'i'},
+    {2,"Text casts shadows:",          M_RD_Change_ShadowedText,    't'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
@@ -1418,14 +1374,14 @@ menu_t  RD_Gameplay_Def_1 =
 
 menuitem_t RD_Gameplay_Menu_2[]=
 {
-    {1,"Play exit sounds:",               M_RD_Change_ExitSfx,        'p'},
-    {1,"Sound of crushing corpses:",      M_RD_Change_CrushingSfx,    's'},
-    {1,"Single sound of blazing door:",   M_RD_Change_BlazingSfx,     's'},
-    {1,"Monster alert waking up others:", M_RD_Change_AlertSfx,       'm'},
+    {2,"Play exit sounds:",               M_RD_Change_ExitSfx,        'p'},
+    {2,"Sound of crushing corpses:",      M_RD_Change_CrushingSfx,    's'},
+    {2,"Single sound of blazing door:",   M_RD_Change_BlazingSfx,     's'},
+    {2,"Monster alert waking up others:", M_RD_Change_AlertSfx,       'm'},
     {-1,"",0,'\0'},
-    {1,"Show automap stats:",             M_RD_Change_AutoMapStats,   's'},
-    {1,"Notify of revealed secrets:",     M_RD_Change_SecretNotify,   'n'},
-    {1,"Show negative health:",           M_RD_Change_NegativeHealth, 's'},
+    {2,"Show automap stats:",             M_RD_Change_AutoMapStats,   's'},
+    {2,"Notify of revealed secrets:",     M_RD_Change_SecretNotify,   'n'},
+    {2,"Show negative health:",           M_RD_Change_NegativeHealth, 's'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"", /* Next page >   */            M_RD_Choose_Gameplay_3,     'n'},
@@ -1445,17 +1401,17 @@ menu_t  RD_Gameplay_Def_2 =
 
 menuitem_t RD_Gameplay_Menu_3[]=
 {
-    {1,"Walk over and under monsters:",       M_RD_Change_WalkOverUnder,      'w'},
-    {1,"Corpses sliding from the ledges:",    M_RD_Change_Torque,             'c'},
-    {1,"Weapon bobbing while firing:",        M_RD_Change_Bobbing,            'w'},
-    {1,"Lethal pellet of a point-blank SSG:", M_RD_Change_SSGBlast,           'l'},
-    {1,"Randomly mirrored corpses:",          M_RD_Change_FlipCorpses,        'r'},
-    {1,"Floating powerups:",                  M_RD_Change_FloatPowerups,      'f'},
+    {2,"Walk over and under monsters:",       M_RD_Change_WalkOverUnder,   'w'},
+    {2,"Corpses sliding from the ledges:",    M_RD_Change_Torque,          'c'},
+    {2,"Weapon bobbing while firing:",        M_RD_Change_Bobbing,         'w'},
+    {2,"Lethal pellet of a point-blank SSG:", M_RD_Change_SSGBlast,        'l'},
+    {2,"Randomly mirrored corpses:",          M_RD_Change_FlipCorpses,     'r'},
+    {2,"Floating powerups:",                  M_RD_Change_FloatPowerups,   'f'},
     {-1,"",0,'\0'},
-    {1,"Draw crosshair:",                     M_RD_Change_CrosshairDraw,      'd'},
-    {1,"Health indication:",                  M_RD_Change_CrosshairHealth,    'h'},
-    {1,"", /* Next page >   */                M_RD_Choose_Gameplay_4,         'n'},
-    {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_2,         'p'},
+    {2,"Draw crosshair:",                     M_RD_Change_CrosshairDraw,   'd'},
+    {2,"Health indication:",                  M_RD_Change_CrosshairHealth, 'h'},
+    {1,"", /* Next page >   */                M_RD_Choose_Gameplay_4,      'n'},
+    {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_2,      'p'},
     {-1,"",0,'\0'}
 };
 
@@ -1471,10 +1427,10 @@ menu_t  RD_Gameplay_Def_3 =
 
 menuitem_t RD_Gameplay_Menu_4[]=
 {
-    {1,"Extra player faces on the HUD:",      M_RD_Change_ExtraPlayerFaces, 'e'},
-    {1,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
-    {1,"Don't prompt for q. saving/loading:", M_RD_Change_FastQSaveLoad,    'd'},
-    {1,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'p'},
+    {2,"Extra player faces on the HUD:",      M_RD_Change_ExtraPlayerFaces, 'e'},
+    {2,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
+    {2,"Don't prompt for q. saving/loading:", M_RD_Change_FastQSaveLoad,    'd'},
+    {2,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'p'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
@@ -1500,18 +1456,18 @@ menu_t  RD_Gameplay_Def_4 =
 
 menuitem_t RD_Gameplay_Menu_1_Rus[]=
 {
-    {1,",hfqnvfggbyu:",                     M_RD_Change_Brightmaps,     ','},   // Брайтмаппинг
-    {1,"Bvbnfwbz rjynhfcnyjcnb:",           M_RD_Change_FakeContrast,   'b'},   // Имитация контрастности
-    {1,"Hfpyjwdtnyst 'ktvtyns $:",          M_RD_Change_ColoredHUD,     'h'},   // Разноцветные элементы HUD
-    {1,"Hfpyjwdtnyfz rhjdm b nhegs:",       M_RD_Change_ColoredBlood,   'h'},   // Разноцветная кровь и трупы
-    {1,"ekexityyfz fybvfwbz ;blrjcntq:",    M_RD_Change_SwirlingLiquids,'e'},   // Улучшенная анимация жидкостей
-    {1,"ytezpdbvjcnm jrhfibdftn yt,j:",     M_RD_Change_InvulSky,       'y'},   // Неуязвимость окрашивает небо
-    {1,"ntrcns jn,hfcsdf.n ntym:",          M_RD_Change_ShadowedText,   'n'},   // Тексты отбрасывают тень
+    {2,",hfqnvfggbyu:",                  M_RD_Change_Brightmaps,      ','}, // Брайтмаппинг
+    {2,"Bvbnfwbz rjynhfcnyjcnb:",        M_RD_Change_FakeContrast,    'b'}, // Имитация контрастности
+    {2,"Hfpyjwdtnyst 'ktvtyns $:",       M_RD_Change_ColoredHUD,      'h'}, // Разноцветные элементы HUD
+    {2,"Hfpyjwdtnyfz rhjdm b nhegs:",    M_RD_Change_ColoredBlood,    'h'}, // Разноцветная кровь и трупы
+    {2,"ekexityyfz fybvfwbz ;blrjcntq:", M_RD_Change_SwirlingLiquids, 'e'}, // Улучшенная анимация жидкостей
+    {2,"ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        'y'}, // Неуязвимость окрашивает небо
+    {2,"ntrcns jn,hfcsdf.n ntym:",       M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {1,"",                                  M_RD_Choose_Gameplay_2,     'l'},   // Далее >
-    {1,"",                                  M_RD_Choose_Gameplay_4,     'y'},   // < Назад
+    {1,"",                               M_RD_Choose_Gameplay_2,      'l'}, // Далее >
+    {1,"",                               M_RD_Choose_Gameplay_4,      'y'}, // < Назад
     {-1,"",0,'\0'}
 };
 
@@ -1527,18 +1483,18 @@ menu_t  RD_Gameplay_Def_1_Rus =
 
 menuitem_t RD_Gameplay_Menu_2_Rus[]=
 {
-    {1,"Pderb ghb ds[jlt bp buhs:",     M_RD_Change_ExitSfx,        'p'},   // Звук при выходе из игры
-    {1,"Pder hfplfdkbdfybz nhegjd:",    M_RD_Change_CrushingSfx,    'p'},   // Звук раздавливания трупов
-    {1,"Jlbyjxysq pder ,scnhjq ldthb:", M_RD_Change_BlazingSfx,     'j'},   // Одиночный звук быстрой двери
-    {1,"J,ofz nhtdjuf e vjycnhjd:",     M_RD_Change_AlertSfx,       'j'},   // Общая тревога у монстров
-    {-1,"",0,'\0'},                                                         //
-    {1,"Cnfnbcnbrf ehjdyz yf rfhnt:",   M_RD_Change_AutoMapStats,   'c'},   // Статистика уровня на карте
-    {1,"Cjj,ofnm j yfqltyyjv nfqybrt:", M_RD_Change_SecretNotify,   'c'},   // Сообщать о найденном тайнике
-    {1,"jnhbwfntkmyjt pljhjdmt d $:",   M_RD_Change_NegativeHealth, 'j'},   // Отрицательное здоровье в HUD
-    {-1,"",0,'\0'},                                                         //
-    {-1,"",0,'\0'},                                                         //
-    {1,"",                              M_RD_Choose_Gameplay_3,     'l'},   // Далее >
-    {1,"",                              M_RD_Choose_Gameplay_1,     'y'},   // < Назад
+    {2,"Pderb ghb ds[jlt bp buhs:",     M_RD_Change_ExitSfx,        'p'}, // Звук при выходе из игры
+    {2,"Pder hfplfdkbdfybz nhegjd:",    M_RD_Change_CrushingSfx,    'p'}, // Звук раздавливания трупов
+    {2,"Jlbyjxysq pder ,scnhjq ldthb:", M_RD_Change_BlazingSfx,     'j'}, // Одиночный звук быстрой двери
+    {2,"J,ofz nhtdjuf e vjycnhjd:",     M_RD_Change_AlertSfx,       'j'}, // Общая тревога у монстров
+    {-1,"",0,'\0'},
+    {2,"Cnfnbcnbrf ehjdyz yf rfhnt:",   M_RD_Change_AutoMapStats,   'c'}, // Статистика уровня на карте
+    {2,"Cjj,ofnm j yfqltyyjv nfqybrt:", M_RD_Change_SecretNotify,   'c'}, // Сообщать о найденном тайнике
+    {2,"jnhbwfntkmyjt pljhjdmt d $:",   M_RD_Change_NegativeHealth, 'j'}, // Отрицательное здоровье в HUD
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
+    {1,"",                              M_RD_Choose_Gameplay_3,     'l'}, // Далее >
+    {1,"",                              M_RD_Choose_Gameplay_1,     'y'}, // < Назад
     {-1,"",0,'\0'}
 };
 
@@ -1554,17 +1510,17 @@ menu_t  RD_Gameplay_Def_2_Rus =
 
 menuitem_t RD_Gameplay_Menu_3_Rus[]=
 {
-    {1,"Gthtvtotybt gjl/yfl vjycnhfvb:",    M_RD_Change_WalkOverUnder,      'g'},   // Перемещение над/под монстрами
-    {1,"Nhegs cgjkpf.n c djpdsitybq:",      M_RD_Change_Torque,             'n'},   // Трупы сползают с возвышений
-    {1,"Ekexityyjt gjrfxbdfybt jhe;bz:",    M_RD_Change_Bobbing,            'e'},   // Улучшенное покачивание оружия
-    {1,"ldecndjkrf hfphsdftn dhfujd:",      M_RD_Change_SSGBlast,           'l'},   // Двустволка разрывает врагов
-    {1,"pthrfkbhjdfybt nhegjd:",            M_RD_Change_FlipCorpses,        'p'},   // Зеркалирование трупов
-    {1,"Ktdbnbhe.obt caths-fhntafrns:",     M_RD_Change_FloatPowerups,      'k'},   // Левитирующие сферы-артефакты
-    {-1,"",0,'\0'},                                                                 //
-    {1,"Jnj,hf;fnm ghbwtk:",                M_RD_Change_CrosshairDraw,      'j'},   // Отображать прицел
-    {1,"Bylbrfwbz pljhjdmz:",               M_RD_Change_CrosshairHealth,    'b'},   // Индикация здоровья
-    {1,"",                                  M_RD_Choose_Gameplay_4,         'l'},   // Далее >
-    {1,"",                                  M_RD_Choose_Gameplay_2,         'y'},   // < Назад
+    {2,"Gthtvtotybt gjl/yfl vjycnhfvb:", M_RD_Change_WalkOverUnder,   'g'}, // Перемещение над/под монстрами
+    {2,"Nhegs cgjkpf.n c djpdsitybq:",   M_RD_Change_Torque,          'n'}, // Трупы сползают с возвышений
+    {2,"Ekexityyjt gjrfxbdfybt jhe;bz:", M_RD_Change_Bobbing,         'e'}, // Улучшенное покачивание оружия
+    {2,"ldecndjkrf hfphsdftn dhfujd:",   M_RD_Change_SSGBlast,        'l'}, // Двустволка разрывает врагов
+    {2,"pthrfkbhjdfybt nhegjd:",         M_RD_Change_FlipCorpses,     'p'}, // Зеркалирование трупов
+    {2,"Ktdbnbhe.obt caths-fhntafrns:",  M_RD_Change_FloatPowerups,   'k'}, // Левитирующие сферы-артефакты
+    {-1,"",0,'\0'},
+    {2,"Jnj,hf;fnm ghbwtk:",             M_RD_Change_CrosshairDraw,   'j'}, // Отображать прицел
+    {2,"Bylbrfwbz pljhjdmz:",            M_RD_Change_CrosshairHealth, 'b'}, // Индикация здоровья
+    {1,"",                               M_RD_Choose_Gameplay_4,      'l'}, // Далее >
+    {1,"",                               M_RD_Choose_Gameplay_2,      'y'}, // < Назад
     {-1,"",0,'\0'}
 };
 
@@ -1580,16 +1536,16 @@ menu_t  RD_Gameplay_Def_3_Rus =
 
 menuitem_t RD_Gameplay_Menu_4_Rus[]=
 {
-    {1,"Ljgjkybntkmyst kbwf buhjrf:",       M_RD_Change_ExtraPlayerFaces,   'a'},   // Дополнительные лица игрока
-    {1,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       'a'},   // Элементаль без ограничения душ
-    {1,"jnrk.xbnm pfghjc ,> pfuheprb:",     M_RD_Change_FastQSaveLoad,      'a'},   // Отключить запрос б. загрузки
-    {1,"Ghjbuhsdfnm ltvjpfgbcb:",           M_RD_Change_NoInternalDemos,    'a'},   // Проигрывать демозаписи
-    {-1,"",0,'\0'},                                                                 //
-    {-1,"",0,'\0'},                                                                 //
-    {-1,"",0,'\0'},                                                                 //
-    {-1,"",0,'\0'},                                                                 //
-    {1,"",                                  M_RD_Choose_Gameplay_1,         'n'},   // Далее >
-    {1,"",                                  M_RD_Choose_Gameplay_3,         'p'},   // < Назад
+    {2,"Ljgjkybntkmyst kbwf buhjrf:",     M_RD_Change_ExtraPlayerFaces, 'l'}, // Дополнительные лица игрока
+    {2,"'ktvtynfkm ,tp juhfybxtybz lei:", M_RD_Change_LostSoulsQty,     '\''},// Элементаль без ограничения душ
+    {2,"jnrk.xbnm pfghjc ,> pfuheprb:",   M_RD_Change_FastQSaveLoad,    'j'}, // Отключить запрос б. загрузки
+    {2,"Ghjbuhsdfnm ltvjpfgbcb:",         M_RD_Change_NoInternalDemos,  'g'}, // Проигрывать демозаписи
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
+    {1,"",                                M_RD_Choose_Gameplay_1,       'l'}, // Далее >
+    {1,"",                                M_RD_Choose_Gameplay_3,       'y'}, // < Назад
     {-1,"",0,'\0'}
 };
 
@@ -1620,8 +1576,7 @@ void M_RD_Draw_Options(void)
     }
     else
     {
-        // НАСТРОЙКИ
-        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB");
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB"); // НАСТРОЙКИ
     }
 }
 
@@ -1675,25 +1630,22 @@ void M_RD_Draw_Rendering(void)
     }
 }
 
-void M_RD_Change_DiskIcon(int choice)
+void M_RD_Change_DiskIcon (int choice)
 {
-    choice = 0;
-    show_diskicon = 1 - show_diskicon;
+    show_diskicon ^= 1;
 }
 
-void M_RD_Change_NoFlats(int choice)
+void M_RD_Change_NoFlats (int choice)
 {
-    choice = 0;
-    noflats = 1 - noflats;
+    noflats ^= 1;
 
     // Reinitialize drawing functions
     R_ExecuteSetViewSize();
 }
 
-void M_RD_Change_Wiping(int choice)
+void M_RD_Change_Wiping (int choice)
 {
-    choice = 0;
-    screen_wiping = 1 - screen_wiping;
+    screen_wiping ^= 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -1781,13 +1733,17 @@ void M_RD_Change_Gamma(int choice)
     switch(choice)
     {
         case 0:
-        if (usegamma > 0) 
+        if (usegamma > 0)
+        {
             usegamma--;
+        }
         break;
 
         case 1:
-        if (usegamma < 17) 
+        if (usegamma < 17)
+        {
             usegamma++;
+        }
         break;
     }
     I_SetPalette ((byte *)W_CacheLumpName(usegamma <= 8 ?
@@ -1802,21 +1758,15 @@ void M_RD_Change_Gamma(int choice)
 
 void M_RD_Change_Detail(int choice)
 {
-    choice = 0;
-    detailLevel = 1 - detailLevel;
-
+    detailLevel ^= 1;
     R_SetViewSize (screenblocks, detailLevel);
-
-    players[consoleplayer].message = detailLevel ? DETAILLO : DETAILHI;
+    players[consoleplayer].message = detailLevel ? detaillo : detailhi;
 }
 
-void M_RD_Change_Messages(int choice)
+void M_RD_Change_Messages (int choice)
 {
-    choice = 0;
-    showMessages = 1 - showMessages;
-
-    players[consoleplayer].message = showMessages ? MSGON : MSGOFF;
-
+    showMessages ^= 1;
+    players[consoleplayer].message = showMessages ? msgon : msgoff;
     message_dontfuckwithme = true;
 }
 
@@ -1833,7 +1783,7 @@ void M_RD_Choose_Audio(int choice)
 
 void M_RD_Draw_Audio(void)
 {
-    char    num[4];
+    static char num[4];
 
     if (english_language)
     {
@@ -1897,54 +1847,66 @@ void M_RD_Draw_Audio(void)
     M_WriteTextSmall_ENG(177, 105, num);
 }
 
-void M_RD_Change_SfxVol(int choice)
+void M_RD_Change_SfxVol (int choice)
 {
     switch(choice)
     {
         case 0:
         if (sfxVolume)
+        {
             sfxVolume--;
+        }
         break;
 
         case 1:
         if (sfxVolume < 15)
+        {
             sfxVolume++;
+        }
         break;
     }
 
     S_SetSfxVolume(sfxVolume * 8);
 }
 
-void M_RD_Change_MusicVol(int choice)
+void M_RD_Change_MusicVol (int choice)
 {
     switch(choice)
     {
         case 0:
         if (musicVolume)
+        {
             musicVolume--;
+        }
         break;
 
         case 1:
         if (musicVolume < 15)
+        {
             musicVolume++;
+        }
         break;
     }
 
     S_SetMusicVolume(musicVolume * 8);
 }
 
-void M_RD_Change_SfxChannels(int choice)
+void M_RD_Change_SfxChannels (int choice)
 {
     switch(choice)
     {
         case 0:
         if (numChannels > 4)
+        {
             numChannels -= 4;
+        }
         break;
     
         case 1:
         if (numChannels < 64)
+        {
             numChannels += 4;
+        }
         break;
     }
 
@@ -1952,16 +1914,14 @@ void M_RD_Change_SfxChannels(int choice)
     S_ChannelsRealloc();
 }
 
-void M_RD_Change_SndMode(int choice)
+void M_RD_Change_SndMode (int choice)
 {
-    choice = 0;
-    snd_monomode = 1 - snd_monomode;
+    snd_monomode ^= 1;
 }
 
-void M_RD_Change_PitchShifting(int choice)
+void M_RD_Change_PitchShifting (int choice)
 {
-    choice = 0;
-    snd_pitchshift = 1 - snd_pitchshift;
+    snd_pitchshift ^= 1;
 }
 
 
@@ -1978,7 +1938,7 @@ void M_RD_Choose_Controls(int choice)
 
 void M_RD_Draw_Controls(void)
 {
-    char    num[4];
+    static char num[4];
 
     if (english_language)
     {
@@ -2051,11 +2011,12 @@ void M_RD_Change_AlwaysRun(int choice)
 
 void M_RD_Change_MouseLook(int choice)
 {
-    choice = 0;
-    mlook = 1 - mlook;
+    mlook ^= 1;
 
     if (!mlook)
-    players[consoleplayer].centering = true;
+    {
+        players[consoleplayer].centering = true;
+    }
 }
 
 void M_RD_Change_Sensitivity(int choice)
@@ -2074,6 +2035,7 @@ void M_RD_Change_Sensitivity(int choice)
     }
 }
 
+
 // -----------------------------------------------------------------------------
 // Gameplay features
 // -----------------------------------------------------------------------------
@@ -2082,7 +2044,9 @@ void M_RD_Choose_Gameplay_1(int choice)
 {
     // [JN] Don't allow to enter in -vanilla mode
     if (vanilla)
-    return;
+    {
+        return;
+    }
 
     M_SetupNextMenu(english_language ?
                     &RD_Gameplay_Def_1 :
@@ -2105,7 +2069,7 @@ void M_RD_Choose_Gameplay_3(int choice)
 
 void M_RD_Choose_Gameplay_4(int choice)
 {
-    M_SetupNextMenu(english_language ?
+    M_SetupNextMenu(english_language ? 
                     &RD_Gameplay_Def_4 :
                     &RD_Gameplay_Def_4_Rus);
 }
@@ -2483,7 +2447,7 @@ void M_RD_Draw_Gameplay_3(void)
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_RUS(35, 145, "lfktt \\");      // далее >
         M_WriteTextSmall_RUS(35, 155, "/ yfpfl");       // < назад
-        M_WriteTextSmall_RUS(197, 155, "cnhfybwf 3*4");
+        M_WriteTextSmall_RUS(197, 155, "cnhfybwf 3*4"); // страница 3/4
         dp_translation = NULL;
     }
 }
@@ -2572,22 +2536,19 @@ void M_RD_Draw_Gameplay_4(void)
     }
 }
 
-void M_RD_Change_Brightmaps(int choice)
+void M_RD_Change_Brightmaps (int choice)
 {
-    choice = 0;
-    brightmaps = 1 - brightmaps;
+    brightmaps ^= 1;
 }
 
-void M_RD_Change_FakeContrast(int choice)
+void M_RD_Change_FakeContrast (int choice)
 {
-    choice = 0;
-    fake_contrast = 1 - fake_contrast;
+    fake_contrast ^= 1;
 }
 
-void M_RD_Change_ColoredHUD(int choice)
+void M_RD_Change_ColoredHUD (int choice)
 {
-    choice = 0;
-    colored_hud = 1 - colored_hud;
+    colored_hud ^= 1;
     
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
@@ -2597,149 +2558,126 @@ void M_RD_Change_ColoredHUD(int choice)
     }
 }
 
-void M_RD_Change_ColoredBlood(int choice)
+void M_RD_Change_ColoredBlood (int choice)
 {
-    choice = 0;
-    colored_blood = 1 - colored_blood;
+    colored_blood ^= 1;
 }
 
-void M_RD_Change_SwirlingLiquids(int choice)
+void M_RD_Change_SwirlingLiquids (int choice)
 {
-    choice = 0;
-    swirling_liquids = 1 - swirling_liquids;
+    swirling_liquids ^= 1;
 }
 
-void M_RD_Change_InvulSky(int choice)
+void M_RD_Change_InvulSky (int choice)
 {
-    choice = 0;
-    invul_sky = 1 - invul_sky;
+    invul_sky ^= 1;
 }
 
-void M_RD_Change_ShadowedText(int choice)
+void M_RD_Change_ShadowedText (int choice)
 {
-    choice = 0;
-    draw_shadowed_text = 1 - draw_shadowed_text;
+    draw_shadowed_text ^= 1;
 }
 
-void M_RD_Change_ExitSfx(int choice)
+void M_RD_Change_ExitSfx (int choice)
 {
-    choice = 0;
-    play_exit_sfx = 1 - play_exit_sfx;
+    play_exit_sfx ^= 1;
 }
 
 void M_RD_Change_CrushingSfx(int choice)
 {
-    choice = 0;
-    crushed_corpses_sfx = 1 - crushed_corpses_sfx;
+    crushed_corpses_sfx ^= 1;
 }
 
 void M_RD_Change_BlazingSfx(int choice)
 {
-    choice = 0;
-    blazing_door_fix_sfx = 1 - blazing_door_fix_sfx;
+    blazing_door_fix_sfx ^= 1;
 }
 
-void M_RD_Change_AlertSfx(int choice)
+void M_RD_Change_AlertSfx (int choice)
 {
-    choice = 0;
-    noise_alert_sfx = 1 - noise_alert_sfx;
+    noise_alert_sfx ^= 1;
 }
 
-void M_RD_Change_AutoMapStats(int choice)
+void M_RD_Change_AutoMapStats (int choice)
 {
-    choice = 0;
-    automap_stats = 1 - automap_stats;
+    automap_stats ^= 1;
 }
 
-void M_RD_Change_SecretNotify(int choice)
+void M_RD_Change_SecretNotify (int choice)
 {
-    choice = 0;
-    secret_notification = 1 - secret_notification;
+    secret_notification ^= 1;
 }
 
-void M_RD_Change_NegativeHealth(int choice)
+void M_RD_Change_NegativeHealth (int choice)
 {
-    choice = 0;
-    negative_health = 1 - negative_health;
+    negative_health ^= 1;
 }
 
-void M_RD_Change_WalkOverUnder(int choice)
+void M_RD_Change_WalkOverUnder (int choice)
 {
-    choice = 0;
-    over_under = 1 - over_under;
+    over_under ^= 1;
 }
 
-void M_RD_Change_Torque(int choice)
+void M_RD_Change_Torque (int choice)
 {
-    choice = 0;
-    torque = 1 - torque;
+    torque ^= 1;
 }
 
-void M_RD_Change_Bobbing(int choice)
+void M_RD_Change_Bobbing (int choice)
 {
-    choice = 0;
-    weapon_bobbing = 1 - weapon_bobbing;
+    weapon_bobbing ^= 1;
 }
 
-void M_RD_Change_SSGBlast(int choice)
+void M_RD_Change_SSGBlast (int choice)
 {
-    choice = 0;
-    ssg_blast_enemies = 1 - ssg_blast_enemies;
+    ssg_blast_enemies ^= 1;
 }
 
-void M_RD_Change_FlipCorpses(int choice)
+void M_RD_Change_FlipCorpses (int choice)
 {
-    choice = 0;
-    randomly_flipcorpses = 1 - randomly_flipcorpses;
+    randomly_flipcorpses ^= 1;
 }
 
-void M_RD_Change_FloatPowerups(int choice)
+void M_RD_Change_FloatPowerups (int choice)
 {
-    choice = 0;
-    floating_powerups = 1 - floating_powerups;
+    floating_powerups ^= 1;
 }
 
-void M_RD_Change_CrosshairDraw(int choice)
+void M_RD_Change_CrosshairDraw (int choice)
 {
-    choice = 0;
-    crosshair_draw = 1 - crosshair_draw;
+    crosshair_draw ^= 1;
 }
 
-void M_RD_Change_CrosshairHealth(int choice)
+void M_RD_Change_CrosshairHealth (int choice)
 {
-    choice = 0;
-    crosshair_health = 1 - crosshair_health;
+    crosshair_health ^= 1;
 }
 
-void M_RD_Change_ExtraPlayerFaces(int choice)
+void M_RD_Change_ExtraPlayerFaces (int choice)
 {
-    choice = 0;
-    extra_player_faces = 1 - extra_player_faces;
+    extra_player_faces ^= 1;
 }
 
-void M_RD_Change_LostSoulsQty(int choice)
+void M_RD_Change_LostSoulsQty (int choice)
 {
-    choice = 0;
-    unlimited_lost_souls = 1 - unlimited_lost_souls;
+    unlimited_lost_souls ^= 1;
 }
 
-void M_RD_Change_FastQSaveLoad(int choice)
+void M_RD_Change_FastQSaveLoad (int choice)
 {
-    choice = 0;
-    fast_quickload = 1 - fast_quickload;
+    fast_quickload ^= 1;
 }
 
-void M_RD_Change_NoInternalDemos(int choice)
+void M_RD_Change_NoInternalDemos (int choice)
 {
-    choice = 0;
-    no_internal_demos = 1 - no_internal_demos;
+    no_internal_demos ^= 1;
 }
 
 // -----------------------------------------------------------------------------
 // Back to Defaults
 // -----------------------------------------------------------------------------
 
-void M_RD_BackToDefaultsResponse(int ch)
+void M_RD_BackToDefaultsResponse (int ch)
 {
     static char resetmsg[24];
 
@@ -2825,7 +2763,7 @@ void M_RD_BackToDefaultsResponse(int ch)
     players[consoleplayer].message = resetmsg;
 }
 
-void M_RD_BackToDefaults(int choice)
+void M_RD_BackToDefaults (int choice)
 {
     choice = 0;
     M_StartMessage(RD_DEFAULTS, M_RD_BackToDefaultsResponse,true);
@@ -2836,7 +2774,7 @@ void M_RD_BackToDefaults(int choice)
 // Language hot-swapping
 // -----------------------------------------------------------------------------
 
-void M_RD_ChangeLanguage(int choice)
+void M_RD_ChangeLanguage (int choice)
 {
     extern void D_DoAdvanceDemo(void);
     extern void F_StartFinale(void);
@@ -2998,7 +2936,7 @@ menu_t  LoadDef =
     &MainDef,
     LoadMenu,
     M_DrawLoad,
-    67,38, // [JN] Отцентрированы и скорректированы поля ввода текста
+    67,38,
     0
 };
 
@@ -3043,7 +2981,7 @@ menu_t  SaveDef =
     &MainDef,
     SaveMenu,
     M_DrawSave,
-    67,38, // [JN] Отцентрированы и скорректированы поля ввода текста
+    67,38,
     0
 };
 
@@ -3066,30 +3004,36 @@ menu_t  SaveDef_Rus =
 // M_ReadSaveStrings
 //  read the strings from the savegame files
 //
-void M_ReadSaveStrings(void)
+void M_ReadSaveStrings (void)
 {
-    int             handle;
-    int             count;
-    int             i;
-    char    name[256];
-	
+    int   handle;
+    int   count;
+    int   i;
+    char  name[256];
+
     for (i = 0;i < load_end;i++)
     {
-	if (M_CheckParm("-cdrom"))
-	    sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",i);
-	else
-	    sprintf(name,SAVEGAMENAME"%d.dsg",i);
+        if (M_CheckParm("-cdrom"))
+        {
+            sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",i);
+        }
+        else
+        {
+            sprintf(name,SAVEGAMENAME"%d.dsg",i);
+        }
 
-	handle = open (name, O_RDONLY | 0, 0666);
-	if (handle == -1)
-	{
-	    strcpy(&savegamestrings[i][0],EMPTYSTRING);
-	    LoadMenu[i].status = 0;
-	    continue;
-	}
-	count = read (handle, &savegamestrings[i], SAVESTRINGSIZE);
-	close (handle);
-	LoadMenu[i].status = 1;
+        handle = open (name, O_RDONLY | 0, 0666);
+
+        if (handle == -1)
+        {
+            strcpy(&savegamestrings[i][0],EMPTYSTRING);
+            LoadMenu[i].status = 0;
+            continue;
+        }
+
+        count = read (handle, &savegamestrings[i], SAVESTRINGSIZE);
+        close (handle);
+        LoadMenu[i].status = 1;
     }
 }
 
@@ -3098,9 +3042,9 @@ void M_ReadSaveStrings(void)
 // M_LoadGame & Cie.
 //
 
-void M_DrawLoad(void)
+void M_DrawLoad (void)
 {
-    int             i;
+    int i;
 
     if (english_language)
     {
@@ -3114,39 +3058,34 @@ void M_DrawLoad(void)
 
     for (i = 0;i < load_end; i++)
     {
-    if (!vanilla)
-    // [JN] TODO - cleanup
-    M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
-    else
-    M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y-1+LINEHEIGHT*i);
+        M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
 
-	// [crispy] shade empty savegame slots
-	if (!LoadMenu[i].status && colored_hud && !vanilla)
-	dp_translation = cr[CR_DARKRED];
+        // [crispy] shade empty savegame slots
+        if (!LoadMenu[i].status && colored_hud && !vanilla)
+        dp_translation = cr[CR_DARKRED];
 
-	M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+        M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
 
-	dp_translation = NULL;
+        dp_translation = NULL;
     }
 }
-
 
 
 //
 // Draw border for the savegame description
 //
-void M_DrawSaveLoadBorder(int x,int y)
+void M_DrawSaveLoadBorder (int x,int y)
 {
-    int             i;
-	
+    int i;
+
     V_DrawShadowDirect (x-7,y+9,0,W_CacheLumpName("M_LSLEFT",PU_CACHE));
     V_DrawPatchDirect (x-8,y+8,0,W_CacheLumpName("M_LSLEFT",PU_CACHE));
-	
-    for (i = 0;i < 24;i++)
+
+    for (i = 0 ; i < 24 ; i++)
     {
-    V_DrawShadowDirect (x+1,y+9,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
-	V_DrawPatchDirect (x,y+8,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
-	x += 8;
+        V_DrawShadowDirect (x+1,y+9,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
+        V_DrawPatchDirect (x,y+8,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
+        x += 8;
     }
 
     V_DrawShadowDirect (x+1,y+9,0,W_CacheLumpName("M_LSRGHT",PU_CACHE));
@@ -3154,18 +3093,22 @@ void M_DrawSaveLoadBorder(int x,int y)
 }
 
 
-
 //
 // User wants to load this game
 //
-void M_LoadSelect(int choice)
+void M_LoadSelect (int choice)
 {
-    char    name[256];
-	
+    char name[256];
+
     if (M_CheckParm("-cdrom"))
-	sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",choice);
+    {
+        sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",choice);
+    }
     else
-	sprintf(name,SAVEGAMENAME"%d.dsg",choice);
+    {
+        sprintf(name,SAVEGAMENAME"%d.dsg",choice);
+    }
+
     G_LoadGame (name);
     M_ClearMenus ();
 }
@@ -3177,10 +3120,10 @@ void M_LoadGame (int choice)
 {
     if (netgame)
     {
-	M_StartMessage(LOADNET,NULL,false);
-	return;
+        M_StartMessage(LOADNET,NULL,false);
+        return;
     }
-	
+
     M_SetupNextMenu(english_language ? &LoadDef : &LoadDef_Rus);
     M_ReadSaveStrings();
 }
@@ -3189,9 +3132,9 @@ void M_LoadGame (int choice)
 //
 //  M_SaveGame & Cie.
 //
-void M_DrawSave(void)
+void M_DrawSave (void)
 {
-    int             i;
+    int i;
 
     if (english_language)
     {
@@ -3209,48 +3152,51 @@ void M_DrawSave(void)
 
     for (i = 0;i < load_end; i++)
     {
-    if (!vanilla)
-	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
-    else
-    M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y-1+LINEHEIGHT*i);
-
-	M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+        M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
+        M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
     }
-	
+
     if (saveStringEnter)
     {
-	i = M_StringWidth(savegamestrings[saveSlot]);
-	M_WriteText(LoadDef.x + i,LoadDef.y+LINEHEIGHT*saveSlot,"_");
+        i = M_StringWidth(savegamestrings[saveSlot]);
+        M_WriteText(LoadDef.x + i,LoadDef.y+LINEHEIGHT*saveSlot,"_");
     }
 }
+
 
 //
 // M_Responder calls this when user is finished
 //
-void M_DoSave(int slot)
+void M_DoSave (int slot)
 {
     G_SaveGame (slot,savegamestrings[slot]);
     M_ClearMenus ();
 
     // PICK QUICKSAVE SLOT YET?
     if (quickSaveSlot == -2)
-	quickSaveSlot = slot;
+    {
+        quickSaveSlot = slot;
+    }
 }
+
 
 //
 // User wants to save. Start string input for M_Responder
 //
-void M_SaveSelect(int choice)
+void M_SaveSelect (int choice)
 {
     // we are going to be intercepting all chars
     saveStringEnter = 1;
-    
+
     saveSlot = choice;
     strcpy(saveOldString,savegamestrings[choice]);
     if (!strcmp(savegamestrings[choice],EMPTYSTRING))
-	savegamestrings[choice][0] = 0;
+    {
+        savegamestrings[choice][0] = 0;
+    }
     saveCharIndex = strlen(savegamestrings[choice]);
 }
+
 
 //
 // Selected from DOOM menu
@@ -3259,51 +3205,54 @@ void M_SaveGame (int choice)
 {
     if (!usergame)
     {
-	M_StartMessage(SAVEDEAD,NULL,false);
-	return;
+        M_StartMessage(SAVEDEAD,NULL,false);
+        return;
     }
-	
+
     if (gamestate != GS_LEVEL)
-	return;
-	
+    {
+        return;
+    }
+
     M_SetupNextMenu(english_language ? &SaveDef : &SaveDef_Rus);
     M_ReadSaveStrings();
 }
 
 
-
 //
-//      M_QuickSave
+// M_QuickSave
 //
-char    tempstring[80];
 
-void M_QuickSaveResponse(int ch)
+void M_QuickSaveResponse (int ch)
 {
     if (ch == 'y')
     {
-	M_DoSave(quickSaveSlot);
-	S_StartSound(NULL,sfx_swtchx);
+        M_DoSave(quickSaveSlot);
+        S_StartSound(NULL,sfx_swtchx);
     }
 }
 
-void M_QuickSave(void)
+
+void M_QuickSave (void)
 {
     if (!usergame)
     {
-	S_StartSound(NULL,sfx_oof);
-	return;
+        S_StartSound(NULL,sfx_oof);
+        return;
     }
 
     if (gamestate != GS_LEVEL)
-	return;
-	
+    {
+        return;
+    }
+
     if (quickSaveSlot < 0)
     {
-	M_StartControlPanel();
-	M_ReadSaveStrings();
-	M_SetupNextMenu(english_language ? &SaveDef : &SaveDef_Rus);
-	quickSaveSlot = -2;	// means to pick a slot now
-	return;
+        M_StartControlPanel();
+        M_ReadSaveStrings();
+        M_SetupNextMenu(english_language ? &SaveDef : &SaveDef_Rus);
+        quickSaveSlot = -2;	// means to pick a slot now
+        return;
     }
 
     if (fast_quickload)
@@ -3319,32 +3268,31 @@ void M_QuickSave(void)
 }
 
 
-
 //
 // M_QuickLoad
 //
-void M_QuickLoadResponse(int ch)
+void M_QuickLoadResponse (int ch)
 {
     if (ch == 'y')
     {
-	M_LoadSelect(quickSaveSlot);
-	S_StartSound(NULL,sfx_swtchx);
+        M_LoadSelect(quickSaveSlot);
+        S_StartSound(NULL,sfx_swtchx);
     }
 }
 
 
-void M_QuickLoad(void)
+void M_QuickLoad (void)
 {
     if (netgame)
     {
-	M_StartMessage(QLOADNET,NULL,false);
-	return;
+        M_StartMessage(QLOADNET,NULL,false);
+        return;
     }
-	
+
     if (quickSaveSlot < 0)
     {
-	M_StartMessage(QSAVESPOT,NULL,false);
-	return;
+        M_StartMessage(QSAVESPOT,NULL,false);
+        return;
     }
 
     if (fast_quickload)
@@ -3360,68 +3308,63 @@ void M_QuickLoad(void)
 }
 
 
-
-
 //
 // Read This Menus
 // Had a "quick hack to fix romero bug"
 //
-void M_DrawReadThis1(void)
+void M_DrawReadThis1 (void)
 {
     inhelpscreens = true;
-    V_DrawPatchDirect(0, 0, 0, W_CacheLumpName(english_language ? 
-                                               "HELP2" : "HELP2R", PU_CACHE));
+    V_DrawPatchDirect(0, 0, 0, W_CacheLumpName
+                     (english_language ? "HELP2" : "HELP2R", PU_CACHE));
 }
-
 
 
 //
 // Read This Menus - optional second page.
 //
-void M_DrawReadThisRetail(void)
+void M_DrawReadThisRetail (void)
 {
     inhelpscreens = true;
 
     if (commercial)
-        V_DrawPatchDirect(0, 0, 0, W_CacheLumpName(english_language ?
-                                                   "HELP" : "HELPR", PU_CACHE));
+    {
+        V_DrawPatchDirect(0, 0, 0, W_CacheLumpName
+                         (english_language ? "HELP" : "HELPR", PU_CACHE));
+    }
     else
-        V_DrawPatchDirect(0, 0, 0, W_CacheLumpName(english_language ?
-                                                   "HELP1" : "HELP1R", PU_CACHE));
+    {
+        V_DrawPatchDirect(0, 0, 0, W_CacheLumpName
+                         (english_language ? "HELP1" : "HELP1R", PU_CACHE));
+    }
 }
-
-
-
-
 
 
 //
 // M_DrawMainMenu
 //
-void M_DrawMainMenu(void)
+void M_DrawMainMenu (void)
 {
     if (english_language)
     {
         // [JN] Always draw original "M_DOOM" in English language
-        V_DrawPatchDirect (94,2,0,W_CacheLumpName("M_DOOM",PU_CACHE));
+        V_DrawPatchDirect (94, 2, 0, W_CacheLumpName("M_DOOM",PU_CACHE));
     }
     else
     {
         // [JN] Draw translated titles for Plutonia and TNT
-        V_DrawPatchDirect (94,2,0,W_CacheLumpName
-                          (tnt ? "M_DOOMT" : 
-                           plutonia ? "M_DOOMP" :
-                                      "M_DOOM", PU_CACHE));
+        V_DrawPatchDirect (94, 2, 0, W_CacheLumpName 
+                           (tnt ? "M_DOOMT" : 
+                            plutonia ? "M_DOOMP" :
+                                          "M_DOOM", PU_CACHE));
     }
 }
-
-
 
 
 //
 // M_NewGame
 //
-void M_DrawNewGame(void)
+void M_DrawNewGame (void)
 {
     if (english_language)
     {
@@ -3433,34 +3376,34 @@ void M_DrawNewGame(void)
     }
     else
     {
-        // НОВАЯ ИГРА
-        M_WriteTextBigCentered_RUS(14, "YJDFZ BUHF");
-        // Уровень сложности:
-        M_WriteTextBigCentered_RUS(38, "Ehjdtym ckj;yjcnb:");
+        M_WriteTextBigCentered_RUS(14, "YJDFZ BUHF");         // НОВАЯ ИГРА
+        M_WriteTextBigCentered_RUS(38, "Ehjdtym ckj;yjcnb:"); // Уровень сложности:
     }
 }
 
-void M_NewGame(int choice)
+void M_NewGame (int choice)
 {
     if (netgame && !demoplayback)
     {
-	M_StartMessage(NEWGAME,NULL,false);
-	return;
+        M_StartMessage(NEWGAME,NULL,false);
+        return;
     }
-	
-    if ( commercial )
-	M_SetupNextMenu(english_language ? &NewDef : &NewDef_Rus);
+
+    if (commercial)
+    {
+        M_SetupNextMenu(english_language ? &NewDef : &NewDef_Rus);
+    }
     else
-	M_SetupNextMenu(english_language ? &EpiDef : &EpiDef_Rus);
+    {
+        M_SetupNextMenu(english_language ? &EpiDef : &EpiDef_Rus);
+    }
 }
 
 
 //
-//      M_Episode
+// M_Episode
 //
-int     epi;
-
-void M_DrawEpisode(void)
+void M_DrawEpisode (void)
 {
     if (english_language)
     {
@@ -3472,98 +3415,77 @@ void M_DrawEpisode(void)
     }
     else
     {
-        // НОВАЯ ИГРА
-        M_WriteTextBigCentered_RUS(14, "YJDFZ BUHF");
-        // Какой эпизод?
-        M_WriteTextBigCentered_RUS(38, "Rfrjq \'gbpjl?");
+        M_WriteTextBigCentered_RUS(14, "YJDFZ BUHF");       // НОВАЯ ИГРА
+        M_WriteTextBigCentered_RUS(38, "Rfrjq \'gbpjl?");   // Какой эпизод?
     }
 }
 
-void M_VerifyNightmare(int ch)
+void M_VerifyNightmare (int ch)
 {
     if (ch != 'y')
-	return;
-		
-    G_DeferedInitNew(nightmare,epi+1,1);
+    {
+        return;
+    }
+
+    G_DeferedInitNew(nightmare, epi+1, 1);
     M_ClearMenus ();
 }
 
-void M_VerifyUltraNightmare(int ch)
+void M_VerifyUltraNightmare (int ch)
 {
     if (ch != 'y')
-    return;
+    {
+        return;
+    }
 
-    G_DeferedInitNew(ultra_nm,epi+1,1);
-    M_ClearMenus ();
+    G_DeferedInitNew(ultra_nm, epi+1, 1);
+    M_ClearMenus();
 }
 
-void M_ChooseSkill(int choice)
+void M_ChooseSkill (int choice)
 {
     if (choice == nightmare)
     {
-	M_StartMessage(NIGHTMARE,M_VerifyNightmare,true);
-	return;
+        M_StartMessage(NIGHTMARE, M_VerifyNightmare, true);
+        return;
     }
 
     if (choice == ultra_nm)
     {
-	M_StartMessage(ULTRANM,M_VerifyUltraNightmare,true);
-	return;
+        M_StartMessage(ULTRANM, M_VerifyUltraNightmare, true);
+        return;
     }
-	
-    G_DeferedInitNew(choice,epi+1,1);
-    M_ClearMenus ();
+
+    G_DeferedInitNew(choice, epi+1, 1);
+    M_ClearMenus();
 }
 
-void M_Episode(int choice)
+void M_Episode (int choice)
 {
-    if ( shareware
-	 && choice)
+    if (shareware && choice)
     {
-	M_StartMessage(SWSTRING,NULL,false);
-	M_SetupNextMenu(&ReadDef1);
-	return;
+        M_StartMessage(SWSTRING,NULL,false);
+        M_SetupNextMenu(&ReadDef1);
+        return;
     }
-	 
+
     epi = choice;
     M_SetupNextMenu(english_language ? &NewDef : &NewDef_Rus);
 }
 
 
-
 //
 // M_Options
 //
-char    detailNames[2][9]	= {"M_GDHIGH","M_GDLOW"};
-char	msgNames[2][9]		= {"M_MSGOFF","M_MSGON"};
 
-
-void M_DrawOptions(void)
+void M_DrawOptions (void)
 {
     V_DrawShadowDirect (90,14,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
     V_DrawPatchDirect (89,13,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
-	
-    /*
-    V_DrawShadowDirect (RD_Options_Def.x + 176,RD_Options_Def.y+1+LINEHEIGHT*detail,0,
-		       W_CacheLumpName(detailNames[detailLevel],PU_CACHE));
-    V_DrawPatchDirect (RD_Options_Def.x + 175,RD_Options_Def.y+LINEHEIGHT*detail,0,
-		       W_CacheLumpName(detailNames[detailLevel],PU_CACHE));
-
-    V_DrawShadowDirect (RD_Options_Def.x + 121,RD_Options_Def.y+1+LINEHEIGHT*messages,0,
-		       W_CacheLumpName(msgNames[showMessages],PU_CACHE));
-    V_DrawPatchDirect (RD_Options_Def.x + 120,RD_Options_Def.y+LINEHEIGHT*messages,0,
-		       W_CacheLumpName(msgNames[showMessages],PU_CACHE));
-
-    M_DrawThermo(RD_Options_Def.x,RD_Options_Def.y+LINEHEIGHT*(mousesens+1),
-		 12,mouseSensitivity);
-	
-    // [JN] Initially 9. Three new screen sizes for Crispy HUDs.
-    M_DrawThermo(RD_Options_Def.x,RD_Options_Def.y+LINEHEIGHT*(scrnsize+1),
-		 12,screenSize);
-         */
 }
 
-void M_Options(int choice)
+
+void M_Options (int choice)
 {
     M_SetupNextMenu(english_language ? &RD_Options_Def : &RD_Options_Def_Rus);
 }
@@ -3572,41 +3494,42 @@ void M_Options(int choice)
 //
 // M_EndGame
 //
-void M_EndGameResponse(int ch)
+void M_EndGameResponse (int ch)
 {
     if (ch != 'y')
-	return;
-		
+    {
+        return;
+    }
+
     currentMenu->lastOn = itemOn;
-    M_ClearMenus ();
-    D_StartTitle ();
+    M_ClearMenus();
+    D_StartTitle();
 }
 
-void M_EndGame(int choice)
+void M_EndGame (int choice)
 {
     choice = 0;
+
     if (!usergame)
     {
-	S_StartSound(NULL,sfx_oof);
-	return;
+        S_StartSound(NULL, sfx_oof);
+        return;
     }
-	
+
     if (netgame)
     {
-	M_StartMessage(NETEND,NULL,false);
-	return;
+        M_StartMessage(NETEND, NULL, false);
+        return;
     }
-	
-    M_StartMessage(ENDGAME,M_EndGameResponse,true);
+
+    M_StartMessage(ENDGAME, M_EndGameResponse, true);
 }
-
-
 
 
 //
 // M_ReadThis
 //
-void M_ReadThis(int choice)
+void M_ReadThis (int choice)
 {
     choice = 0;
     M_SetupNextMenu(english_language ? &ReadDef1 : &ReadDef1_Rus);
@@ -3625,12 +3548,11 @@ void M_FinishReadThis(int choice)
 }
 
 
-
-
 //
 // M_QuitDOOM
 //
-int     quitsounds[8] =
+
+int quitsounds[8] =
 {
     sfx_pldeth,
     sfx_dmpain,
@@ -3642,7 +3564,7 @@ int     quitsounds[8] =
     sfx_sgtatk
 };
 
-int     quitsounds2[8] =
+int quitsounds2[8] =
 {
     sfx_vilact,
     sfx_getpow,
@@ -3655,30 +3577,34 @@ int     quitsounds2[8] =
 };
 
 
-
-void M_QuitResponse(int ch)
+void M_QuitResponse (int ch)
 {
     if (ch != 'y')
-	return;
+    {
+        return;
+    }
+
     // [JN] No need to play exit sfx if it's volume set to 0.
     if (!netgame && play_exit_sfx && sfxVolume > 0)
     {
-	if (commercial)
-	    S_StartSound(NULL,quitsounds2[(gametic>>2)&7]);
-	else
-	    S_StartSound(NULL,quitsounds[(gametic>>2)&7]);
-	I_WaitVBL(105);
+        if (commercial)
+        {
+            S_StartSound(NULL,quitsounds2[(gametic>>2)&7]);
+        }
+        else
+        {
+            S_StartSound(NULL,quitsounds[(gametic>>2)&7]);
+        }
+        I_WaitVBL(105);
     }
     I_Quit ();
 }
 
 
-
-
-void M_QuitDOOM(int choice)
+void M_QuitDOOM (int choice)
 {
-  // We pick index 0 which is language sensitive,
-  //  or one at random, between 1 and maximum number.
+    // We pick index 0 which is language sensitive,
+    //  or one at random, between 1 and maximum number.
     if (commercial)
     {
         if (english_language)
@@ -3705,39 +3631,41 @@ void M_QuitDOOM(int choice)
                     endmsg1_rus[(gametic >> 2) % NUM_QUITMESSAGES]);
         }
     }
-  
-  if (devparm) // [JN] Quit immediately
-  I_Quit ();
-  else
-  M_StartMessage(endstring,M_QuitResponse,true);
+
+    if (devparm)
+    {
+        // [JN] Quit immediately
+        I_Quit ();
+    }
+    else
+    {
+        M_StartMessage(endstring, M_QuitResponse, true);
+    }
 }
 
 
-
 //
-//      Menu Functions
+// Menu Functions
 //
-void
-M_DrawThermo
-( int	x,
-  int	y,
-  int	thermWidth,
-  int	thermDot )
+void M_DrawThermo (int x, int y, int thermWidth, int thermDot)
 {
-    int		xx;
-    int		i;
+    int xx;
+    int i;
 
     xx = x;
 
     V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERML",PU_CACHE));
     V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERML",PU_CACHE));
+
     xx += 8;
-    for (i=0;i<thermWidth;i++)
+
+    for (i=0 ; i<thermWidth ; i++)
     {
-    V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERMM",PU_CACHE));
-	V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMM",PU_CACHE));
-	xx += 8;
+        V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERMM",PU_CACHE));
+        V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMM",PU_CACHE));
+        xx += 8;
     }
+
     V_DrawShadowDirect (xx+1,y+1,0,W_CacheLumpName("M_THERMR",PU_CACHE));
     V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMR",PU_CACHE));
 
@@ -3755,8 +3683,6 @@ M_DrawThermo
     {
         V_DrawPatchDirect ((x+8) + thermDot*8,y,0,W_CacheLumpName("M_THERMO",PU_CACHE));
     }
-
-
 }
 
 
@@ -3795,33 +3721,7 @@ void M_DrawThermo_Small (int x, int y, int thermWidth, int thermDot)
 }
 
 
-// [JN] From Doom Alpha, not needed
-/*
-void
-M_DrawEmptyCell
-( menu_t*	menu,
-  int		item )
-{
-    V_DrawPatchDirect (menu->x - 10,        menu->y+item*LINEHEIGHT - 1, 0,
-		       W_CacheLumpName("M_CELL1",PU_CACHE));
-}
-
-void
-M_DrawSelCell
-( menu_t*	menu,
-  int		item )
-{
-    V_DrawPatchDirect (menu->x - 10,        menu->y+item*LINEHEIGHT - 1, 0,
-		       W_CacheLumpName("M_CELL2",PU_CACHE));
-}
-*/
-
-
-void
-M_StartMessage
-( char*		string,
-  void*		routine,
-  boolean	input )
+void M_StartMessage (char *string, void *routine, boolean input)
 {
     messageLastMenuActive = menuactive;
     messageToPrint = 1;
@@ -3833,25 +3733,23 @@ M_StartMessage
 }
 
 
-
-void M_StopMessage(void)
+void M_StopMessage (void)
 {
     menuactive = messageLastMenuActive;
     messageToPrint = 0;
 }
 
 
-
 //
 // Find string width from hu_font chars
 //
-int M_StringWidth(char* string)
+int M_StringWidth(char *string)
 {
-    int             i;
-    int             w = 0;
-    int             c;
-	
-    for (i = 0;i < strlen(string);i++)
+    int i;
+    int w = 0;
+    int c;
+
+    for (i = 0 ; i < strlen(string) ; i++)
     {
         c = toupper(string[i]) - HU_FONTSTART;
         if (c < 0 || c >= HU_FONTSIZE)
@@ -3871,32 +3769,28 @@ int M_StringWidth(char* string)
             }
         }
     }
-		
+
     return w;
 }
 
 
-
 //
-//      Find string height from hu_font chars
+// Find string height from hu_font chars
 //
-int M_StringHeight(char* string)
+int M_StringHeight(char *string)
 {
-    int             i;
-    int             h;
-    int             height = SHORT(hu_font[0]->height);
-	
+    int i;
+    int h;
+    int height = SHORT(hu_font[0]->height);
+
     h = height;
-    for (i = 0;i < strlen(string);i++)
-	if (string[i] == '\n')
-	    h += height;
-		
+
+    for (i = 0 ; i < strlen(string) ; i++)
+        if (string[i] == '\n')
+            h += height;
+
     return h;
 }
-
-
-
-
 
 
 //
@@ -3906,258 +3800,262 @@ int M_StringHeight(char* string)
 //
 // M_Responder
 //
-boolean M_Responder (event_t* ev)
+boolean M_Responder (event_t *ev)
 {
-    int             ch;
-    int             i;
-    static  int     joywait = 0;
-    static  int     mousewait = 0;
-    static  int     mousey = 0;
-    static  int     lasty = 0;
-    static  int     mousex = 0;
-    static  int     lastx = 0;
-    byte*	pal;
-	
+    int          ch;
+    int          i;
+    static int   joywait = 0;
+    static int   mousewait = 0;
+    static int   mousey = 0;
+    static int   lasty = 0;
+    static int   mousex = 0;
+    static int   lastx = 0;
+    byte        *pal;
+
     ch = -1;
-	
+
     if (ev->type == ev_joystick && joywait < I_GetTime())
     {
-	if (ev->data3 == -1)
-	{
-	    ch = KEY_UPARROW;
-	    joywait = I_GetTime() + 5;
-	}
-	else if (ev->data3 == 1)
-	{
-	    ch = KEY_DOWNARROW;
-	    joywait = I_GetTime() + 5;
-	}
-		
-	if (ev->data2 == -1)
-	{
-	    ch = KEY_LEFTARROW;
-	    joywait = I_GetTime() + 2;
-	}
-	else if (ev->data2 == 1)
-	{
-	    ch = KEY_RIGHTARROW;
-	    joywait = I_GetTime() + 2;
-	}
-		
-	if (ev->data1&1)
-	{
-	    ch = KEY_ENTER;
-	    joywait = I_GetTime() + 5;
-	}
-	if (ev->data1&2)
-	{
-	    ch = KEY_BACKSPACE;
-	    joywait = I_GetTime() + 5;
-	}
+        if (ev->data3 == -1)
+        {
+            ch = KEY_UPARROW;
+            joywait = I_GetTime() + 5;
+        }
+        else if (ev->data3 == 1)
+        {
+            ch = KEY_DOWNARROW;
+            joywait = I_GetTime() + 5;
+        }
+
+        if (ev->data2 == -1)
+        {
+            ch = KEY_LEFTARROW;
+            joywait = I_GetTime() + 2;
+        }
+        else if (ev->data2 == 1)
+        {
+            ch = KEY_RIGHTARROW;
+            joywait = I_GetTime() + 2;
+        }
+
+        if (ev->data1&1)
+        {
+            ch = KEY_ENTER;
+            joywait = I_GetTime() + 5;
+        }
+
+        if (ev->data1&2)
+        {
+            ch = KEY_BACKSPACE;
+            joywait = I_GetTime() + 5;
+        }
     }
     else
     {
-	if (ev->type == ev_mouse && mousewait < I_GetTime())
-	{
-	    mousey += ev->data3;
-	    if (mousey < lasty-30)
-	    {
-		ch = KEY_DOWNARROW;
-		mousewait = I_GetTime() + 5;
-		mousey = lasty -= 30;
-	    }
-	    else if (mousey > lasty+30)
-	    {
-		ch = KEY_UPARROW;
-		mousewait = I_GetTime() + 5;
-		mousey = lasty += 30;
-	    }
-		
-	    mousex += ev->data2;
-	    if (mousex < lastx-30)
-	    {
-		ch = KEY_LEFTARROW;
-		mousewait = I_GetTime() + 5;
-		mousex = lastx -= 30;
-	    }
-	    else if (mousex > lastx+30)
-	    {
-		ch = KEY_RIGHTARROW;
-		mousewait = I_GetTime() + 5;
-		mousex = lastx += 30;
-	    }
-		
-	    if (ev->data1&1)
-	    {
-		ch = KEY_ENTER;
-		mousewait = I_GetTime() + 15;
-	    }
-			
-	    if (ev->data1&2)
-	    {
-		ch = KEY_BACKSPACE;
-		mousewait = I_GetTime() + 15;
-	    }
-	}
-	else
-	    if (ev->type == ev_keydown)
-	    {
-		ch = ev->data1;
-	    }
-    }
-    
-    if (ch == -1)
-	return false;
+        if (ev->type == ev_mouse && mousewait < I_GetTime())
+        {
+            mousey += ev->data3;
 
-    
+            if (mousey < lasty-30)
+            {
+                ch = KEY_DOWNARROW;
+                mousewait = I_GetTime() + 5;
+                mousey = lasty -= 30;
+            }
+            else if (mousey > lasty+30)
+            {
+                ch = KEY_UPARROW;
+                mousewait = I_GetTime() + 5;
+                mousey = lasty += 30;
+            }
+
+            mousex += ev->data2;
+
+            if (mousex < lastx-30)
+            {
+                ch = KEY_LEFTARROW;
+                mousewait = I_GetTime() + 5;
+                mousex = lastx -= 30;
+            }
+            else if (mousex > lastx+30)
+            {
+                ch = KEY_RIGHTARROW;
+                mousewait = I_GetTime() + 5;
+                mousex = lastx += 30;
+            }
+
+            if (ev->data1&1)
+            {
+                ch = KEY_ENTER;
+                mousewait = I_GetTime() + 15;
+            }
+
+            if (ev->data1&2)
+            {
+                ch = KEY_BACKSPACE;
+                mousewait = I_GetTime() + 15;
+            }
+        }
+        else if (ev->type == ev_keydown)
+        {
+            ch = ev->data1;
+        }
+    }
+
+    if (ch == -1)
+    {
+        return false;
+    }
+
     // Save Game string input
     if (saveStringEnter)
     {
-	switch(ch)
-	{
-	  case KEY_BACKSPACE:
-	    if (saveCharIndex > 0)
-	    {
-		saveCharIndex--;
-		savegamestrings[saveSlot][saveCharIndex] = 0;
-	    }
-	    break;
-				
-	  case KEY_ESCAPE:
-	    saveStringEnter = 0;
-	    strcpy(&savegamestrings[saveSlot][0],saveOldString);
-	    break;
-				
-	  case KEY_ENTER:
-	    saveStringEnter = 0;
-	    if (savegamestrings[saveSlot][0])
-		M_DoSave(saveSlot);
-	    break;
-				
-	  default:
-	    ch = toupper(ch);
-	    if (ch != 32)
-		if (ch-HU_FONTSTART < 0 || ch-HU_FONTSTART >= HU_FONTSIZE)
+        switch(ch)
+        {
+            case KEY_BACKSPACE:
+            if (saveCharIndex > 0)
+            {
+                saveCharIndex--;
+                savegamestrings[saveSlot][saveCharIndex] = 0;
+            }
+            break;
+
+            case KEY_ESCAPE:
+            saveStringEnter = 0;
+            strcpy(&savegamestrings[saveSlot][0],saveOldString);
+            break;
+
+            case KEY_ENTER:
+            saveStringEnter = 0;
+            if (savegamestrings[saveSlot][0])
+            {
+                M_DoSave(saveSlot);
+            }
+            break;
+
+            default:
+            ch = toupper(ch);
+            if (ch != 32)
+            if (ch-HU_FONTSTART < 0 || ch-HU_FONTSTART >= HU_FONTSIZE)
 		    break;
-	    if (ch >= 32 && ch <= 127 &&
-		saveCharIndex < SAVESTRINGSIZE-1 &&
-		M_StringWidth(savegamestrings[saveSlot]) <
-		(SAVESTRINGSIZE-2)*8)
-	    {
-		savegamestrings[saveSlot][saveCharIndex++] = ch;
-		savegamestrings[saveSlot][saveCharIndex] = 0;
-	    }
-	    break;
-	}
-	return true;
+            if (ch >= 32 && ch <= 127 && saveCharIndex < SAVESTRINGSIZE-1 
+            &&  M_StringWidth(savegamestrings[saveSlot]) < (SAVESTRINGSIZE-2)*8)
+            {
+                savegamestrings[saveSlot][saveCharIndex++] = ch;
+                savegamestrings[saveSlot][saveCharIndex] = 0;
+            }
+            break;
+        }
+        return true;
     }
-    
+
     // Take care of any messages that need input
     if (messageToPrint)
     {
-	if (messageNeedsInput == true &&
-	    !(ch == ' ' || ch == 'n' || ch == 'y' || ch == KEY_ESCAPE))
-	    return false;
-		
-	menuactive = messageLastMenuActive;
-	messageToPrint = 0;
-	if (messageRoutine)
-	    messageRoutine(ch);
-			
-	menuactive = false;
-	S_StartSound(NULL,sfx_swtchx);
-	return true;
+        if (messageNeedsInput == true 
+        && !(ch == ' ' || ch == 'n' || ch == 'y' || ch == KEY_ESCAPE))
+        {
+            return false;
+        }
+        menuactive = messageLastMenuActive;
+        messageToPrint = 0;
+        if (messageRoutine)
+        {
+            messageRoutine(ch);
+        }
+        menuactive = false;
+        S_StartSound(NULL,sfx_swtchx);
+        return true;
     }
-	
+
     if (devparm && ch == KEY_F1)
     {
-	G_ScreenShot ();
-	return true;
+        G_ScreenShot ();
+        return true;
     }
-		
-    
+
     // F-Keys
     if (!menuactive)
-	switch(ch)
-	{
-	  case KEY_MINUS:         // Screen size down
-	    if (automapactive || chat_on)
-		return false;
-	    M_RD_Change_ScreenSize(0);
-	    S_StartSound(NULL,sfx_stnmov);
-	    return true;
-				
-	  case KEY_EQUALS:        // Screen size up
-	    if (automapactive || chat_on)
-		return false;
-	    M_RD_Change_ScreenSize(1);
-	    S_StartSound(NULL,sfx_stnmov);
-	    return true;
-				
-	  case KEY_F1:            // Help key
-	    M_StartControlPanel ();
+    switch(ch)
+    {
+        case KEY_MINUS:         // Screen size down
+        if (automapactive || chat_on)
+        {
+            return false;
+        }
+        M_RD_Change_ScreenSize(0);
+        S_StartSound(NULL,sfx_stnmov);
+        return true;
 
-	    currentMenu = &ReadDef2;
-	    
-	    itemOn = 0;
-	    S_StartSound(NULL,sfx_swtchn);
-	    return true;
-				
-	  case KEY_F2:            // Save
-	    QuickSaveTitle = false;
-	    M_StartControlPanel();
-	    S_StartSound(NULL,sfx_swtchn);
-	    M_SaveGame(0);
-	    return true;
-				
-	  case KEY_F3:            // Load
-	    M_StartControlPanel();
-	    S_StartSound(NULL,sfx_swtchn);
-	    M_LoadGame(0);
-	    return true;
-				
-	  case KEY_F4:            // Sound Volume
-	    M_StartControlPanel ();
-	    currentMenu = english_language ?
-                      &RD_Audio_Def :
-                      &RD_Audio_Def_Rus;
-	    itemOn = rd_audio_sfxvolume;
-	    S_StartSound(NULL,sfx_swtchn);
-	    return true;
-				
-	  case KEY_F5:            // Detail toggle
-	    M_RD_Change_Detail(0);
-	    S_StartSound(NULL,sfx_swtchn);
-	    return true;
-				
-	  case KEY_F6:            // Quicksave
-	    QuickSaveTitle = true;
-	    S_StartSound(NULL,sfx_swtchn);
-	    M_QuickSave();
-	    return true;
-				
-	  case KEY_F7:            // End game
-	    S_StartSound(NULL,sfx_swtchn);
-	    M_EndGame(0);
-	    return true;
-				
-	  case KEY_F8:            // Toggle messages
-	    M_RD_Change_Messages(0);
-	    S_StartSound(NULL,sfx_swtchn);
-	    return true;
-				
-	  case KEY_F9:            // Quickload
-	    S_StartSound(NULL,sfx_swtchn);
-	    M_QuickLoad();
-	    return true;
-				
-	  case KEY_F10:           // Quit DOOM
-	    S_StartSound(NULL,sfx_swtchn);
-	    M_QuitDOOM(0);
-	    return true;
-	}
+        case KEY_EQUALS:        // Screen size up
+        if (automapactive || chat_on)
+        {
+            return false;
+        }
+        M_RD_Change_ScreenSize(1);
+        S_StartSound(NULL,sfx_stnmov);
+        return true;
 
-    if (ch == KEY_F11)    // gamma toggle
+        case KEY_F1:            // Help key
+	    M_StartControlPanel ();
+	    currentMenu = english_language ? &ReadDef2 : &ReadDef2_Rus;
+        itemOn = 0;
+        S_StartSound(NULL,sfx_swtchn);
+        return true;
+
+        case KEY_F2:            // Save
+        QuickSaveTitle = false;
+        M_StartControlPanel();
+        S_StartSound(NULL,sfx_swtchn);
+        M_SaveGame(0);
+        return true;
+
+        case KEY_F3:            // Load
+        M_StartControlPanel();
+        S_StartSound(NULL,sfx_swtchn);
+        M_LoadGame(0);
+        return true;
+
+        case KEY_F4:            // Sound Volume
+        M_StartControlPanel ();
+        currentMenu = english_language ? &RD_Audio_Def : &RD_Audio_Def_Rus;
+        itemOn = rd_audio_sfxvolume;
+        S_StartSound(NULL,sfx_swtchn);
+        return true;
+
+        case KEY_F5:            // Detail toggle
+        M_RD_Change_Detail(0);
+        S_StartSound(NULL,sfx_swtchn);
+        return true;
+
+        case KEY_F6:            // Quicksave
+        QuickSaveTitle = true;
+        S_StartSound(NULL,sfx_swtchn);
+        M_QuickSave();
+        return true;
+
+        case KEY_F7:            // End game
+        S_StartSound(NULL,sfx_swtchn);
+        M_EndGame(0);
+        return true;
+
+        case KEY_F8:            // Toggle messages
+        M_RD_Change_Messages(0);
+        S_StartSound(NULL,sfx_swtchn);
+        return true;
+
+        case KEY_F9:            // Quickload
+        S_StartSound(NULL,sfx_swtchn);
+        M_QuickLoad();
+        return true;
+
+        case KEY_F10:           // Quit DOOM
+        S_StartSound(NULL,sfx_swtchn);
+        M_QuitDOOM(0);
+        return true;
+    }
+
+    if (ch == KEY_F11)          // gamma toggle
     {
         usegamma++;
         if (usegamma > 17)
@@ -4171,204 +4069,210 @@ boolean M_Responder (event_t* ev)
         I_SetPalette (pal);
         return true;
     }
-    
+
     // Pop-up menu?
     if (!menuactive)
     {
-	if (ch == KEY_ESCAPE)
-	{
-	    M_StartControlPanel ();
-	    S_StartSound(NULL,sfx_swtchn);
-	    return true;
-	}
-	return false;
+        if (ch == KEY_ESCAPE)
+        {
+            M_StartControlPanel ();
+            S_StartSound(NULL,sfx_swtchn);
+            return true;
+        }
+        return false;
     }
 
-    
     // Keys usable within menu
     switch (ch)
     {
-      case KEY_DOWNARROW:
-	do
-	{
-	    if (itemOn+1 > currentMenu->numitems-1)
-		itemOn = 0;
-	    else itemOn++;
-	    S_StartSound(NULL,sfx_pstop);
-	} while(currentMenu->menuitems[itemOn].status==-1);
-	return true;
-		
-      case KEY_UPARROW:
-	do
-	{
-	    if (!itemOn)
-		itemOn = currentMenu->numitems-1;
-	    else itemOn--;
-	    S_StartSound(NULL,sfx_pstop);
-	} while(currentMenu->menuitems[itemOn].status==-1);
-	return true;
+        case KEY_DOWNARROW:
+        do
+        {
+            if (itemOn+1 > currentMenu->numitems-1)
+            {
+                itemOn = 0;
+            }
+            else
+            {
+                itemOn++;
+            }
+            S_StartSound(NULL,sfx_pstop);
+        } while(currentMenu->menuitems[itemOn].status==-1);
+        return true;
 
-      case KEY_LEFTARROW:
-	if (currentMenu->menuitems[itemOn].routine &&
-	    currentMenu->menuitems[itemOn].status == 2)
-	{
-	    S_StartSound(NULL,sfx_stnmov);
-	    currentMenu->menuitems[itemOn].routine(0);
-	}
-	return true;
-		
-      case KEY_RIGHTARROW:
-	if (currentMenu->menuitems[itemOn].routine &&
-	    currentMenu->menuitems[itemOn].status == 2)
-	{
-	    S_StartSound(NULL,sfx_stnmov);
-	    currentMenu->menuitems[itemOn].routine(1);
-	}
-	return true;
+        case KEY_UPARROW:
+        do
+        {
+            if (!itemOn)
+            {
+                itemOn = currentMenu->numitems-1;
+            }
+            else
+            {
+                itemOn--;
+            }
+            S_StartSound(NULL,sfx_pstop);
+        } while(currentMenu->menuitems[itemOn].status==-1);
+        return true;
 
-      case KEY_ENTER:
-	if (currentMenu->menuitems[itemOn].routine &&
-	    currentMenu->menuitems[itemOn].status)
-	{
-	    currentMenu->lastOn = itemOn;
-	    if (currentMenu->menuitems[itemOn].status == 2)
-	    {
-		currentMenu->menuitems[itemOn].routine(1);      // right arrow
-		S_StartSound(NULL,sfx_stnmov);
-	    }
-	    else
-	    {
-		currentMenu->menuitems[itemOn].routine(itemOn);
-		S_StartSound(NULL,sfx_pistol);
-	    }
-	}
-	return true;
-		
-      case KEY_ESCAPE:
-	currentMenu->lastOn = itemOn;
-	M_ClearMenus ();
-	S_StartSound(NULL,sfx_swtchx);
-	return true;
-		
-      case KEY_BACKSPACE:
-	currentMenu->lastOn = itemOn;
-	if (currentMenu->prevMenu)
-	{
-	    currentMenu = currentMenu->prevMenu;
-	    itemOn = currentMenu->lastOn;
-	    S_StartSound(NULL,sfx_swtchn);
-	}
-	return true;
-	
-    // [JN] Scroll Gameplay features menu by PgUp/PgDn keys
-    case KEY_PGUP:
-    {
+        case KEY_LEFTARROW:
+        if (currentMenu->menuitems[itemOn].routine
+        &&  currentMenu->menuitems[itemOn].status == 2)
+        {
+            S_StartSound(NULL,sfx_stnmov);
+            currentMenu->menuitems[itemOn].routine(0);
+        }
+        return true;
+
+        case KEY_RIGHTARROW:
+        if (currentMenu->menuitems[itemOn].routine
+        &&  currentMenu->menuitems[itemOn].status == 2)
+        {
+            S_StartSound(NULL,sfx_stnmov);
+            currentMenu->menuitems[itemOn].routine(1);
+        }
+        return true;
+
+        case KEY_ENTER:
+        if (currentMenu->menuitems[itemOn].routine
+        &&  currentMenu->menuitems[itemOn].status)
+        {
+            currentMenu->lastOn = itemOn;
+            if (currentMenu->menuitems[itemOn].status == 2)
+            {
+                currentMenu->menuitems[itemOn].routine(1); // right arrow
+                S_StartSound(NULL,sfx_stnmov);
+            }
+            else
+            {
+                currentMenu->menuitems[itemOn].routine(itemOn);
+                S_StartSound(NULL,sfx_pistol);
+            }
+        }
+        return true;
+
+        case KEY_ESCAPE:
         currentMenu->lastOn = itemOn;
+        M_ClearMenus ();
+        S_StartSound(NULL,sfx_swtchx);
+        return true;
 
-        if (currentMenu == &RD_Gameplay_Def_1
-        ||  currentMenu == &RD_Gameplay_Def_1_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                            &RD_Gameplay_Def_4 :
-                            &RD_Gameplay_Def_4_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_2
-        ||  currentMenu == &RD_Gameplay_Def_2_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                            &RD_Gameplay_Def_1 :
-                            &RD_Gameplay_Def_1_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_3
-        ||  currentMenu == &RD_Gameplay_Def_3_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                            &RD_Gameplay_Def_2 :
-                            &RD_Gameplay_Def_2_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_4
-        ||  currentMenu == &RD_Gameplay_Def_4_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                            &RD_Gameplay_Def_3 :
-                            &RD_Gameplay_Def_3_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-    }
-    case KEY_PGDN:
-    {
+        case KEY_BACKSPACE:
         currentMenu->lastOn = itemOn;
+        if (currentMenu->prevMenu)
+        {
+            currentMenu = currentMenu->prevMenu;
+            itemOn = currentMenu->lastOn;
+            S_StartSound(NULL,sfx_swtchn);
+        }
+        return true;
 
-        if (currentMenu == &RD_Gameplay_Def_1
-        ||  currentMenu == &RD_Gameplay_Def_1_Rus)
+        // [JN] Scroll Gameplay features menu by PgUp/PgDn keys
+        case KEY_PGUP:
         {
-            M_SetupNextMenu(english_language ?
-                            &RD_Gameplay_Def_2 :
-                            &RD_Gameplay_Def_2_Rus);
-            S_StartSound(NULL,sfx_pistol);
+            currentMenu->lastOn = itemOn;
+
+            if (currentMenu == &RD_Gameplay_Def_1
+            ||  currentMenu == &RD_Gameplay_Def_1_Rus)
+            {
+                M_SetupNextMenu(english_language ?
+                                &RD_Gameplay_Def_4 :
+                                &RD_Gameplay_Def_4_Rus);
+                S_StartSound(NULL,sfx_pistol);
+                return true;
+            }
+            if (currentMenu == &RD_Gameplay_Def_2
+            ||  currentMenu == &RD_Gameplay_Def_2_Rus)
+            {
+                M_SetupNextMenu(english_language ?
+                                &RD_Gameplay_Def_1 :
+                                &RD_Gameplay_Def_1_Rus);
+                S_StartSound(NULL,sfx_pistol);
+                return true;
+            }
+            if (currentMenu == &RD_Gameplay_Def_3
+            ||  currentMenu == &RD_Gameplay_Def_3_Rus)
+            {
+                M_SetupNextMenu(english_language ?
+                                &RD_Gameplay_Def_2 :
+                                &RD_Gameplay_Def_2_Rus);
+                S_StartSound(NULL,sfx_pistol);
+                return true;
+            }
+            if (currentMenu == &RD_Gameplay_Def_4
+            ||  currentMenu == &RD_Gameplay_Def_4_Rus)
+            {
+                M_SetupNextMenu(english_language ?
+                                &RD_Gameplay_Def_3 :
+                                &RD_Gameplay_Def_3_Rus);
+                S_StartSound(NULL,sfx_pistol);
+                return true;
+            }
+        }
+        case KEY_PGDN:
+        {
+            currentMenu->lastOn = itemOn;
+        
+            if (currentMenu == &RD_Gameplay_Def_1
+            ||  currentMenu == &RD_Gameplay_Def_1_Rus)
+            {
+                M_SetupNextMenu(english_language ?
+                                &RD_Gameplay_Def_2 :
+                                &RD_Gameplay_Def_2_Rus);
+                S_StartSound(NULL,sfx_pistol);
+                return true;
+            }
+            if (currentMenu == &RD_Gameplay_Def_2
+            ||  currentMenu == &RD_Gameplay_Def_2_Rus)
+            {
+                M_SetupNextMenu(english_language ?
+                                &RD_Gameplay_Def_3 :
+                                &RD_Gameplay_Def_3_Rus);
+                S_StartSound(NULL,sfx_pistol);
+                return true;
+            }
+            if (currentMenu == &RD_Gameplay_Def_3
+            ||  currentMenu == &RD_Gameplay_Def_3_Rus)
+            {
+                M_SetupNextMenu(english_language ?
+                                &RD_Gameplay_Def_4 :
+                                &RD_Gameplay_Def_4_Rus);
+                S_StartSound(NULL,sfx_pistol);
+                return true;
+            }
+            if (currentMenu == &RD_Gameplay_Def_4
+            ||  currentMenu == &RD_Gameplay_Def_4_Rus)
+            {
+                M_SetupNextMenu(english_language ?
+                                &RD_Gameplay_Def_1 :
+                                &RD_Gameplay_Def_1_Rus);
+                S_StartSound(NULL,sfx_pistol);
+                return true;
+            }
+        }
+
+        case 0:
+        break;
+
+        default:
+        for (i = itemOn+1;i < currentMenu->numitems;i++)
+        if (currentMenu->menuitems[i].alphaKey == ch)
+        {
+            itemOn = i;
+            S_StartSound(NULL,sfx_pstop);
             return true;
         }
-        if (currentMenu == &RD_Gameplay_Def_2
-        ||  currentMenu == &RD_Gameplay_Def_2_Rus)
+        for (i = 0;i <= itemOn;i++)
+        if (currentMenu->menuitems[i].alphaKey == ch)
         {
-            M_SetupNextMenu(english_language ?
-                            &RD_Gameplay_Def_3 :
-                            &RD_Gameplay_Def_3_Rus);
-            S_StartSound(NULL,sfx_pistol);
+            itemOn = i;
+            S_StartSound(NULL,sfx_pstop);
             return true;
         }
-        if (currentMenu == &RD_Gameplay_Def_3
-        ||  currentMenu == &RD_Gameplay_Def_3_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                            &RD_Gameplay_Def_4 :
-                            &RD_Gameplay_Def_4_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
-        if (currentMenu == &RD_Gameplay_Def_4
-        ||  currentMenu == &RD_Gameplay_Def_4_Rus)
-        {
-            M_SetupNextMenu(english_language ?
-                            &RD_Gameplay_Def_1 :
-                            &RD_Gameplay_Def_1_Rus);
-            S_StartSound(NULL,sfx_pistol);
-            return true;
-        }
+        break;
     }
-
-      case 0:
-	break;
-	
-      default:
-	for (i = itemOn+1;i < currentMenu->numitems;i++)
-	    if (currentMenu->menuitems[i].alphaKey == ch)
-	    {
-		itemOn = i;
-		S_StartSound(NULL,sfx_pstop);
-		return true;
-	    }
-	for (i = 0;i <= itemOn;i++)
-	    if (currentMenu->menuitems[i].alphaKey == ch)
-	    {
-		itemOn = i;
-		S_StartSound(NULL,sfx_pstop);
-		return true;
-	    }
-	break;
-	
-    }
-
     return false;
 }
-
 
 
 //
@@ -4378,11 +4282,13 @@ void M_StartControlPanel (void)
 {
     // intro might call this repeatedly
     if (menuactive)
-	return;
-    
+    {
+        return;
+    }
+
     menuactive = 1;
-    currentMenu = english_language ? &MainDef : &MainDef_Rus;         // JDC
-    itemOn = currentMenu->lastOn;   // JDC
+    currentMenu = english_language ? &MainDef : &MainDef_Rus;   // JDC
+    itemOn = currentMenu->lastOn;                               // JDC
 }
 
 
@@ -4393,70 +4299,75 @@ void M_StartControlPanel (void)
 //
 void M_Drawer (void)
 {
-    static short	x;
-    static short	y;
-    short		i;
-    short		max;
-    char		string[80];
-    int			start;
+    int          start;
+    char         string[80];
+    short        i;
+    short        max;
+    static short x;
+    static short y;
 
     inhelpscreens = false;
 
-    
     // Horiz. & Vertically center string and print it.
     if (messageToPrint)
     {
-	start = 0;
-	y = 100 - M_StringHeight(messageString)/2;
-	while(*(messageString+start))
-	{
-	    for (i = 0;i < strlen(messageString+start);i++)
-		if (*(messageString+start+i) == '\n')
-		{
-		    memset(string,0,40);
-		    strncpy(string,messageString+start,i);
-		    start += i+1;
-		    break;
-		}
-				
-	    if (i == strlen(messageString+start))
-	    {
-		strcpy(string,messageString+start);
-		start += i;
-	    }
-				
-	    x = 160 - M_StringWidth(string)/2;
+        start = 0;
+        y = 100 - M_StringHeight(messageString)/2;
 
-        if (english_language)
+        while(*(messageString+start))
         {
-            M_WriteText(x,y,string);
-            y += SHORT(hu_font[0]->height);
+            for (i = 0 ; i < strlen(messageString+start) ; i++)
+            if (*(messageString+start+i) == '\n')
+            {
+                memset(string,0,40);
+                strncpy(string,messageString+start,i);
+                start += i+1;
+                break;
+            }
+
+            if (i == strlen(messageString+start))
+            {
+                strcpy(string,messageString+start);
+                start += i;
+            }
+
+            x = 160 - M_StringWidth(string)/2;
+
+            if (english_language)
+            {
+                M_WriteText(x,y,string);
+                y += SHORT(hu_font[0]->height);
+            }
+            else
+            {
+                M_WriteTextSmall_RUS(x, y, string);
+                y += SHORT(hu_font_small_rus[0]->height); 
+            }
         }
-        else
-        {
-            M_WriteTextSmall_RUS(x, y, string);
-            y += SHORT(hu_font_small_rus[0]->height); 
-        }
-	}
-	return;
+        return;
     }
 
     if (!menuactive)
-	return;
+    {
+        return;
+    }
 
     if (currentMenu->routine)
-	currentMenu->routine();         // call Draw routine
-    
+    {
+        // call Draw routine
+        currentMenu->routine();
+    }
+
     // DRAW MENU
     x = currentMenu->x;
     y = currentMenu->y;
     max = currentMenu->numitems;
 
-    for (i=0;i<max;i++)
+    for (i=0 ; i<max ; i++)
     {
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // [JN] Write common menus by using standard graphical patches:
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         if (currentMenu == &MainDef                // Main Menu
         ||  currentMenu == &MainDef_Rus            // Main Menu
         ||  currentMenu == &EpiDef                 // Episode selection
@@ -4476,44 +4387,42 @@ void M_Drawer (void)
             // [JN] Big vertical spacing
             y += LINEHEIGHT;
         }
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // [JN] Write English options menu with big English font
-        // -----------------------------------------------------------------
-        else
-        if (currentMenu == &RD_Options_Def)
+        // ---------------------------------------------------------------------
+        else if (currentMenu == &RD_Options_Def)
         {
             M_WriteTextBig_ENG(x, y, currentMenu->menuitems[i].name);
-        
+
             // DRAW SKULL
             V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
                                W_CacheLumpName(skullName[whichSkull],PU_CACHE));
             V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
                                W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-        
+
             // [JN] Big vertical spacing
             y += LINEHEIGHT;
         }
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // [JN] Write Russian options menu with big Russian font
-        // -----------------------------------------------------------------
-        else 
-        if (currentMenu == &RD_Options_Def_Rus)
+        // ---------------------------------------------------------------------
+        else if (currentMenu == &RD_Options_Def_Rus)
         {
             M_WriteTextBig_RUS(x, y, currentMenu->menuitems[i].name);
-        
+
             // DRAW SKULL
             V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
                                W_CacheLumpName(skullName[whichSkull],PU_CACHE));
             V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
                                W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-        
+
             // [JN] Big vertical spacing
             y += LINEHEIGHT;
         }
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // [JN] Write English submenus with small English font
-        // -----------------------------------------------------------------
-        else
+        // ---------------------------------------------------------------------
+        else 
         if (currentMenu == &RD_Rendering_Def
         ||  currentMenu == &RD_Display_Def
         ||  currentMenu == &RD_Audio_Def
@@ -4524,20 +4433,20 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Gameplay_Def_4)
         {
             M_WriteTextSmall_ENG(x, y, currentMenu->menuitems[i].name);
-        
+
             // [JN] Draw blinking ">" symbol
             if (whichSkull == 0)
             dp_translation = cr[CR_DARKRED];
             M_WriteTextSmall_ENG(x + SKULLXOFF + 24, currentMenu->y 
                                    + itemOn*LINEHEIGHT_SML, ">");
             dp_translation = NULL;
-        
+
             // [JN] Small vertical spacing
             y += LINEHEIGHT_SML;
         }
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // [JN] Write Russian submenus with small Russian font
-        // -----------------------------------------------------------------            
+        // ---------------------------------------------------------------------
         else
         if (currentMenu == &RD_Rendering_Def_Rus
         ||  currentMenu == &RD_Display_Def_Rus
@@ -4588,11 +4497,7 @@ void M_Drawer (void)
 void M_ClearMenus (void)
 {
     menuactive = 0;
-    // if (!netgame && usergame && paused)
-    //       sendpause = true;
 }
-
-
 
 
 //
@@ -4612,8 +4517,8 @@ void M_Ticker (void)
 {
     if (--skullAnimCounter <= 0)
     {
-	whichSkull ^= 1;
-	skullAnimCounter = 8;
+        whichSkull ^= 1;
+        skullAnimCounter = 8;
     }
 }
 
@@ -4623,7 +4528,7 @@ void M_Ticker (void)
 //
 void M_Init (void)
 {
-    currentMenu = &MainDef;
+    currentMenu = english_language ? &MainDef : &MainDef_Rus;
     menuactive = 0;
     itemOn = currentMenu->lastOn;
     whichSkull = 0;
@@ -4639,16 +4544,23 @@ void M_Init (void)
     if (registered || retail)
     {
         MainMenu[readthis].routine = M_ReadThis2;
+        MainMenu_Rus[readthis].routine = M_ReadThis2;
         ReadDef2.prevMenu = NULL;
+        ReadDef2_Rus.prevMenu = NULL;
     }
 
     if (commercial)
     {
         MainMenu[readthis] = MainMenu[quitdoom];
+        MainMenu_Rus[readthis] = MainMenu_Rus[quitdoom];
         MainDef.numitems--;
+        MainDef_Rus.numitems--;
         MainDef.y += 8;
+        MainDef_Rus.y += 8;
         NewDef.prevMenu = &MainDef;
+        NewDef_Rus.prevMenu = &MainDef_Rus;
         ReadDef1.routine = M_DrawReadThisRetail;
+        ReadDef1_Rus.routine = M_DrawReadThisRetail;
         ReadDef1.x = 330;
         ReadDef1.y = 165;
         ReadMenu1[0].routine = M_FinishReadThis;
