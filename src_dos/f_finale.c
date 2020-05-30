@@ -134,42 +134,35 @@ void F_StartFinale (void)
                 case 6:
                 finaleflat = "SLIME16";
                 finaletext = english_language ? p1text : p1text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 11:
                 finaleflat = "RROCK14";
                 finaletext = english_language ? p2text : p2text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 20:
                 finaleflat = "RROCK07";
                 finaletext = english_language ? p3text : p3text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 30:
                 finaleflat = "RROCK17";
                 finaletext = english_language ? p4text : p4text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 15:
                 finaleflat = "RROCK13";
                 finaletext = english_language ? p5text : p5text_rus;
-                finalemusic = mus_read_m;
                 break;
                 
                 case 31:
                 finaleflat = "RROCK19";
                 finaletext = english_language ? p6text : p6text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 default:
                 // Ouch.
-                finalemusic = mus_read_m;
                 break;
             }
         }
@@ -180,42 +173,35 @@ void F_StartFinale (void)
                 case 6:
                 finaleflat = "SLIME16";
                 finaletext = english_language ? t1text : t1text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 11:
                 finaleflat = "RROCK14";
                 finaletext = english_language ? t2text : t2text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 20:
                 finaleflat = "RROCK07";
                 finaletext = english_language ? t3text : t3text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 30:
                 finaleflat = "RROCK17";
                 finaletext = english_language ? t4text : t4text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 15:
                 finaleflat = "RROCK13";
                 finaletext = english_language ? t5text : t5text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 31:
                 finaleflat = "RROCK19";
                 finaletext = english_language ? t6text : t6text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 default:
                 // Ouch.
-                finalemusic = mus_read_m;
                 break;
             }
         }
@@ -227,45 +213,39 @@ void F_StartFinale (void)
                 case 6:
                 finaleflat = "SLIME16";
                 finaletext = english_language ? c1text : c1text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 11:
                 finaleflat = "RROCK14";
                 finaletext = english_language ? c2text : c2text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 20:
                 finaleflat = "RROCK07";
                 finaletext = english_language ? c3text : c3text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 30:
                 finaleflat = "RROCK17";
                 finaletext = english_language ? c4text : c4text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 15:
                 finaleflat = "RROCK13";
                 finaletext = english_language ? c5text : c5text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 case 31:
                 finaleflat = "RROCK19";
                 finaletext = english_language ? c6text : c6text_rus;
-                finalemusic = mus_read_m;
                 break;
 
                 default:
                 // Ouch.
-                finalemusic = mus_read_m;
                 break;
             }
         }
+        finalemusic = mus_read_m;
     }
     else
     {
@@ -785,15 +765,9 @@ void F_CastDrawer (void)
     patch_t*        patch;
 
     // erase the entire screen to a background
-    if (english_language)
-    {
-        V_DrawPatch (0,0,0, W_CacheLumpName ("BOSSBACK", PU_CACHE));
-    }
-    else
-    {
-        V_DrawPatch (0,0,0, W_CacheLumpName (plutonia ? "BOSSBACP" : 
-                                                        "BOSSBACK", PU_CACHE));
-    }
+    // [JN] Plutonia using translated final screen.
+    V_DrawPatch (0,0,0, W_CacheLumpName (!english_language && plutonia ?
+                                         "BOSSBACP" : "BOSSBACK", PU_CACHE));
 
     F_CastPrint (english_language ? 
                  castorder[castnum].name : castorder_rus[castnum].name);
@@ -950,10 +924,9 @@ void F_Drawer (void)
             }
             else
             {
-                if (shareware || registered)
-                V_DrawPatch(0,0,0,W_CacheLumpName("CREDITS",PU_CACHE));
-                else
-                V_DrawPatch(0,0,0,W_CacheLumpName("CREDITU",PU_CACHE));
+                V_DrawPatch(0,0,0,W_CacheLumpName
+                           (shareware || registered ? 
+                            "CREDITS" : "CREDITU", PU_CACHE));
             }
             break;
 

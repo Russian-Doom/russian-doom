@@ -1834,12 +1834,7 @@ void WI_loadData (void)
         lnames = (patch_t **) Z_Malloc(sizeof(patch_t*) * NUMCMAPS, PU_STATIC, 0);
         for (i=0 ; i<NUMCMAPS ; i++)
         {
-            if (commercial)
-                sprintf(name, "CWILV%2.2d", i);
-            if (tnt)
-                sprintf(name, "TWILV%2.2d", i);
-            if (plutonia)
-                sprintf(name, "PWILV%2.2d", i);
+            sprintf(name, "CWILV%2.2d", i);
             lnames[i] = W_CacheLumpName(name, PU_STATIC);
         }
 

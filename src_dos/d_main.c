@@ -490,9 +490,6 @@ void D_DoAdvanceDemo (void)
         else
         pagetic = 170;
 
-        if (devparm)
-        pagetic = 35 * 666; // [JN] Pause here for a while
-
         gamestate = GS_DEMOSCREEN;
 
         if (english_language)
@@ -501,14 +498,10 @@ void D_DoAdvanceDemo (void)
         }
         else
         {
-            if (shareware)
-            pagename = "TITLEPIS";
-            else if (tnt)
-            pagename = "TITLEPIT";
-            else if (plutonia)
-            pagename = "TITLEPIP";
-            else
-            pagename = "TITLEPIC";
+            pagename = shareware ? "TITLEPIS" :
+                        plutonia ? "TITLEPIP" :
+                             tnt ? "TITLEPIT" :
+                                   "TITLEPIC" ;
         }
 
         if (commercial)
@@ -534,12 +527,9 @@ void D_DoAdvanceDemo (void)
         }
         else
         {
-            if (shareware || registered)
-            pagename = "CREDITS";
-            else if (retail)
-            pagename = "CREDITU";
-            else
-            pagename = "CREDIT2";
+            pagename = shareware || registered ? "CREDITS" :
+                                        retail ? "CREDITU" :
+                                                 "CREDIT2" ;
             break;
         }
 
@@ -561,12 +551,9 @@ void D_DoAdvanceDemo (void)
             }
             else
             {
-                if (tnt)
-                pagename = "TITLEPIT";
-                else if (plutonia)
-                pagename = "TITLEPIP";
-                else
-                pagename = "TITLEPIC";
+                pagename = plutonia ? "TITLEPIP" :
+                                tnt ? "TITLEPIT" :
+                                      "TITLEPIC" ;
             }
 
             S_StartMusic(mus_dm2ttl);
@@ -581,14 +568,10 @@ void D_DoAdvanceDemo (void)
             }
             else
             {
-                if (shareware)
-                pagename = "HELP2";
-                else if (registered)
-                pagename = "CREDITS";
-                else if (retail)
-                pagename = "CREDITU";
-                else
-                pagename = "CREDIT";
+                pagename = registered ? "CREDITS" :
+                            shareware ? "HELP2" :
+                               retail ? "CREDITU" :
+                                        "CREDIT";
             }
         }
         break;

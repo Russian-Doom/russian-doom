@@ -3084,7 +3084,7 @@ menu_t  ReadDef1_Rus =
     &MainDef_Rus,
     ReadMenu1,
     M_DrawReadThis1,
-    280,185,
+    280,181,
     0
 };
 
@@ -3123,7 +3123,7 @@ menu_t  ReadDef2_Rus =
     &ReadDef1_Rus,
     ReadMenu2,
     M_DrawReadThisRetail,
-    330,175,
+    330,168,
     0
 };
 

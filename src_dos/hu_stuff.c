@@ -49,11 +49,11 @@
 
 // Plutonia map names
 #define HU_TITLEP       (mapnamesp[gamemap-1])
-#define HU_TITLEP_RUS   (mapnamesp_rus[gamemap-1 + 32])
+#define HU_TITLEP_RUS   (mapnamesp_rus[gamemap-1])
 
 // TNT map names
 #define HU_TITLET       (mapnamest[gamemap-1])
-#define HU_TITLET_RUS   (mapnamest_rus[gamemap-1 + 64])
+#define HU_TITLET_RUS   (mapnamest_rus[gamemap-1])
 
 #define HU_TITLEHEIGHT  1
 #define HU_TITLEX       0
@@ -688,17 +688,17 @@ void HU_Start(void)
 
     if (commercial)
     {
-        if (plutonia)
+        if (english_language)
         {
-            s = english_language ? HU_TITLEP : HU_TITLEP_RUS;
-        }
-        else if (tnt)
-        {
-            s = english_language ? HU_TITLET : HU_TITLET_RUS;
+            s = plutonia ? HU_TITLEP :
+                     tnt ? HU_TITLET :
+                           HU_TITLE2 ;
         }
         else
         {
-            s = english_language ? HU_TITLE2 : HU_TITLE2_RUS;
+            s = plutonia ? HU_TITLEP_RUS :
+                     tnt ? HU_TITLET_RUS :
+                           HU_TITLE2_RUS ;
         }
     }
     else
