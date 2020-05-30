@@ -1175,13 +1175,13 @@ void D_DoomMain (void)
 
     if (devparm)
     {
-        printf(D_DEVSTR);
+        printf(english_language ? D_DEVSTR : D_DEVSTR_RUS);
         D_RedrawTitle();
     }
 
     if (M_CheckParm("-cdrom"))
     {
-        printf(D_CDROM);
+        printf(english_language ? D_CDROM : D_CDROM_RUS);
         mkdir("c:\\doomdata");
         strcpy (basedefault,"c:/doomdata/default.cfg");
     }	

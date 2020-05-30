@@ -33,7 +33,7 @@
 #include "doomstat.h"
 #include "r_state.h"
 
-//#include "r_local.h"
+#include "jn.h"
 
 
 
@@ -509,9 +509,10 @@ void R_Subsector (int num)
 	
 #ifdef RANGECHECK
     if (num>=numsubsectors)
-	I_Error ("R_Subsector: ss %i á numss = %i",
-		 num,
-		 numsubsectors);
+	I_Error (english_language ?
+             "R_Subsector: ss %i with numss = %i" :
+             "R_Subsector: ss %i á numss = %i",
+             num, numsubsectors);
 #endif
 
     sscount++;

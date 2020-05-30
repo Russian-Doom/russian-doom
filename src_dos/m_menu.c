@@ -2987,7 +2987,9 @@ void M_RD_BackToDefaultsResponse (int ch)
     }
 
     // Print informative message (настройки сброшены)
-    snprintf(resetmsg, sizeof(resetmsg), "Yfcnhjqrb c,hjitys");
+    snprintf(resetmsg, sizeof(resetmsg), english_language ?
+                                         "Settings reset" :
+                                         "Yfcnhjqrb c,hjitys");
     players[consoleplayer].message = resetmsg;
 }
 

@@ -36,6 +36,8 @@
 // State.
 #include "doomstat.h"
 
+#include "jn.h"
+
 
 // ?
 #define MAXWIDTH			1120
@@ -130,7 +132,9 @@ void R_DrawColumn (void)
     if ((unsigned)dc_x >= SCREENWIDTH
 	|| dc_yl < 0
 	|| dc_yh >= SCREENHEIGHT) 
-	I_Error ("R_DrawColumn: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x); 
+	I_Error (english_language ?
+                 "R_DrawColumn: %i to %i at %i" :
+                 "R_DrawColumn: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x); 
 #endif 
 
         outp (SC_INDEX+1,1<<(dc_x&3)); 
@@ -178,7 +182,9 @@ void R_DrawColumnLow (void)
 	|| dc_yh >= SCREENHEIGHT)
     {
 	
-	I_Error ("R_DrawColumn: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x);
+	I_Error (english_language ?
+                 "R_DrawColumnLow: %i to %i at %i" :
+                 "R_DrawColumnLow: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x);
     }
     //	dccount++; 
 #endif 
@@ -272,7 +278,9 @@ void R_DrawFuzzColumn (void)
     if ((unsigned)dc_x >= SCREENWIDTH
 	|| dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
-	I_Error ("R_DrawFuzzColumn: %i ª %i ¢ %i",
+	I_Error (english_language ?
+                 "R_DrawFuzzColumn: %i to %i at %i" :
+                 "R_DrawFuzzColumn: %i ª %i ¢ %i",
 		 dc_yl, dc_yh, dc_x);
     }
 #endif
@@ -361,8 +369,10 @@ void R_DrawTranslatedColumn (void)
 	|| dc_yl < 0
 	|| dc_yh >= SCREENHEIGHT)
     {
-	I_Error ( "R_DrawColumn: %i ª %i ¢ %i",
-		  dc_yl, dc_yh, dc_x);
+	I_Error (english_language ?
+                 "R_DrawTranslatedColumn: %i to %i at %i" :
+                 "R_DrawTranslatedColumn: %i ª %i ¢ %i",
+		 dc_yl, dc_yh, dc_x);
     }
     
 #endif 
@@ -495,8 +505,10 @@ void R_DrawSpan (void)
         || ds_x2>=SCREENWIDTH  
         || (unsigned)ds_y>SCREENHEIGHT)
     {
-        I_Error( "R_DrawSpan: %i ª %i ¢ %i",
-                 ds_x1,ds_x2,ds_y);
+        I_Error(english_language ?
+                "R_DrawSpan: %i to %i at %i" :
+                "R_DrawSpan: %i ª %i ¢ %i",
+                ds_x1,ds_x2,ds_y);
     } 
 #endif 
 
@@ -558,8 +570,10 @@ void R_DrawSpanLow (void)
         || ds_x2>=SCREENWIDTH  
         || (unsigned)ds_y>SCREENHEIGHT)
     {
-        I_Error( "R_DrawSpan: %i ª %i ¢ %i",
-                 ds_x1,ds_x2,ds_y);
+        I_Error(english_language ?
+                "R_DrawSpanLow: %i to %i at %i" :
+                "R_DrawSpanLow: %i ª %i ¢ %i",
+                ds_x1,ds_x2,ds_y);
     } 
 #endif 
 
@@ -612,7 +626,9 @@ void R_DrawSpanNoTexture (void)
 
 #ifdef RANGECHECK
     if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
-    I_Error( "R_DrawSpan: %i ª %i ¢ %i", ds_x1,ds_x2,ds_y);
+    I_Error(english_language ?
+            "R_DrawSpanNoTexture: %i to %i at %i" :
+            "R_DrawSpanNoTexture: %i ª %i ¢ %i", ds_x1,ds_x2,ds_y);
 #endif
 
     for (i = 0; i < 4; i++)
@@ -650,7 +666,9 @@ void R_DrawSpanLowNoTexture (void)
 
 #ifdef RANGECHECK
     if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
-    I_Error( "R_DrawSpan: %i ª %i ¢ %i", ds_x1,ds_x2,ds_y);
+    I_Error(english_language ?
+            "R_DrawSpanLowNoTexture: %i to %i at %i" :
+            "R_DrawSpanLowNoTexture: %i ª %i ¢ %i", ds_x1,ds_x2,ds_y);
 #endif 
 
     for (i = 0; i < 2; i++)

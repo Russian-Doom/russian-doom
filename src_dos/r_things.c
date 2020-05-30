@@ -117,7 +117,9 @@ char*		spritename;
 void R_InstallSpriteLump (int lump, unsigned frame, unsigned rotation, boolean flipped)
 {
     if (frame >= 29 || rotation > 8)
-	I_Error("R_InstallSpriteLump: Некорректный фрейм в блоке %i", lump);
+	I_Error(english_language ?
+            "R_InstallSpriteLump: Bad frame characters in lump %i" :
+            "R_InstallSpriteLump: Некорректный фрейм в блоке %i", lump);
 	
     if ((int)frame > maxframe)
 	maxframe = frame;
@@ -249,7 +251,10 @@ void R_InitSpriteDefs (char** namelist)
                     case -1:
                     // no rotations were found for that frame at all
                     // [crispy] make non-fatal
-                    fprintf (stderr, "R_InitSprites: отсутствуют патчи в спрайте %.8s фрейме %c", namelist[i], frame+'A');
+                    fprintf (stderr, english_language ?
+                    "R_InitSprites: No patches found for %s frame %c" :
+                    "R_InitSprites: отсутствуют патчи в спрайте %.8s фрейме %c",
+                    namelist[i], frame+'A');
                     break;
 
                     case 0:
@@ -262,7 +267,10 @@ void R_InitSpriteDefs (char** namelist)
                         int rotation;
                         for (rotation=0 ; rotation<8 ; rotation++)
                             if (sprtemp[frame].lump[rotation] == -1)
-                                I_Error ("R_InitSprites: Sprite %.8s frame %c is missing rotations",namelist[i], frame+'A');
+                                I_Error (english_language ?
+                                "R_InitSprites: Sprite %.8s frame %c is missing rotations" :
+                                "R_InitSprites: в спрайте %.8s отсутствуют патчи повора в фрейма %c",
+                                namelist[i], frame+'A');
                         break;
                     }
                 }
@@ -439,7 +447,9 @@ R_DrawVisSprite
         // [crispy] make non-fatal
         if (!error)
         {
-        fprintf (stderr, "R_DrawSpriteRange: Некорректная информация texturecolumn\n");
+        fprintf (stderr, english_language ?
+                 "R_DrawSpriteRange: bad texturecolumn" :
+                 "R_DrawSpriteRange: Некорректная информация texturecolumn\n");
         error++;
         }
         continue;
@@ -517,12 +527,16 @@ void R_ProjectSprite (mobj_t* thing)
     // decide which patch to use for sprite relative to player
 #ifdef RANGECHECK
     if ((unsigned)thing->sprite >= numsprites)
-	I_Error ("R_ProjectSprite: Некорректный номер спрайта %i ", thing->sprite);
+	I_Error (english_language ?
+             "R_ProjectSprite: invalid sprite number %i " :
+             "R_ProjectSprite: Некорректный номер спрайта %i ", thing->sprite);
 #endif
     sprdef = &sprites[thing->sprite];
 #ifdef RANGECHECK
     if ( (thing->frame&FF_FRAMEMASK) >= sprdef->numframes )
-	I_Error ("R_ProjectSprite: Некорректный фрейм спрайта %i : %i ",
+	I_Error (english_language ?
+             "R_ProjectSprite: invalid sprite frame %i : %i " :
+             "R_ProjectSprite: Некорректный фрейм спрайта %i : %i ",
 		 thing->sprite, thing->frame);
 #endif
     sprframe = &sprdef->spriteframes[ thing->frame & FF_FRAMEMASK];
@@ -903,14 +917,18 @@ void R_DrawPSprite (pspdef_t* psp)
     // decide which patch to use
 #ifdef RANGECHECK
     if ( (unsigned)psp->state->sprite >= numsprites)
-	I_Error ("R_ProjectSprite: Некорректный номер спрайта %i ",
-		 psp->state->sprite);
+	I_Error (english_language ?
+             "R_ProjectSprite: invalid sprite number %i " :
+             "R_ProjectSprite: Некорректный номер спрайта %i ",
+             psp->state->sprite);
 #endif
     sprdef = &sprites[psp->state->sprite];
 #ifdef RANGECHECK
     if ( (psp->state->frame & FF_FRAMEMASK)  >= sprdef->numframes)
-	I_Error ("R_ProjectSprite: Некорректный фрейм спрайта %i : %i ",
-		 psp->state->sprite, psp->state->frame);
+	I_Error (english_language ?
+             "R_ProjectSprite: invalid sprite frame %i : %i " :
+             "R_ProjectSprite: Некорректный фрейм спрайта %i : %i ",
+             psp->state->sprite, psp->state->frame);
 #endif
     sprframe = &sprdef->spriteframes[ psp->state->frame & FF_FRAMEMASK ];
 

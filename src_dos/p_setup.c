@@ -38,6 +38,8 @@
 
 #include "doomstat.h"
 
+#include "jn.h"
+
 
 void	P_SpawnMapThing (mapthing_t*	mthing);
 
@@ -381,7 +383,9 @@ void P_LoadThings (int lump)
     if (!deathmatch)
         for (i = 0; i < MAXPLAYERS; i++)
             if (playeringame[i] && !playerstartsingame[i])
-                I_Error("P_LoadThings: Отсутствует стартовая точка игрока №%d", i + 1);
+                I_Error(english_language ?
+                "P_LoadThings: Player %d start missing" :
+                "P_LoadThings: Отсутствует стартовая точка игрока №%d", i + 1);
 
     Z_Free (data);
 }
@@ -591,7 +595,9 @@ void P_GroupLines (void)
 	    }
 	}
 	if (linebuffer - sector->lines != sector->linecount)
-	    I_Error ("P_GroupLines: Ошибка в расчете");
+	    I_Error (english_language ?
+                 "P_GroupLines: miscounted" :
+                 "P_GroupLines: Ошибка в расчете");
 			
 	// set the degenmobj_t to the middle of the bounding box
 	sector->soundorg.x = (bbox[BOXRIGHT]+bbox[BOXLEFT])/2;

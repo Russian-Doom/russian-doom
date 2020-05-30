@@ -54,7 +54,9 @@ void I_StartupTimer(void)
     tsm_ID = TSM_NewService(I_TimerISR, 35, 0, 0);
     if (tsm_ID == -1)
     {
-        I_Error("Невозможно зарегистрировать 35 Гц таймер в библиотеке DMX");
+        I_Error(english_language ?
+                "Can't register 35 Hz timer w/ DMX library" :
+                "Невозможно зарегистрировать 35 Гц таймер в библиотеке DMX");
     }
 #endif
 }
@@ -113,7 +115,9 @@ int I_RegisterSong(void *data)
 {
     int rc = MUS_RegisterSong(data);
 #ifdef SNDDEBUG
-    if (rc<0) printf("MUS_Reg() возврат значения: %d\n", rc);
+    if (rc<0) printf(english_language ?
+                     "MUS_Reg() returned %d\n" :
+                     "MUS_Reg() возврат значения: %d\n", rc);
 #endif
     return rc;
 }
@@ -122,7 +126,9 @@ void I_UnRegisterSong(int handle)
 {
     int rc = MUS_UnregisterSong(handle);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_Unreg() возврат значения: %d\n", rc);
+    if (rc < 0) printf(english_language ?
+                       "MUS_Unreg() returned %d\n" :
+                       "MUS_Unreg() возврат значения: %d\n", rc);
 #endif
     rc = false;
 }
@@ -131,7 +137,9 @@ int I_QrySongPlaying(int handle)
 {
     int rc = MUS_QrySongPlaying(handle);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_QrySP() возврат значения: %d\n", rc);
+    if (rc < 0) printf(english_language ?
+                       "MUS_QrySP() returned %d\n" :
+                       "MUS_QrySP() возврат значения: %d\n", rc);
 #endif
     return rc;
 }
@@ -143,7 +151,9 @@ void I_StopSong(int handle)
     int rc;
     rc = MUS_StopSong(handle);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_StopSong() возврат значения: %d\n", rc);
+    if (rc < 0) printf(english_language ?
+                       "MUS_StopSong() returned %d\n" :
+                       "MUS_StopSong() возврат значения: %d\n", rc);
 #endif
     // Fucking kluge pause
     {
@@ -158,11 +168,15 @@ void I_PlaySong(int handle, boolean looping)
     int rc;
     rc = MUS_ChainSong(handle, looping ? handle : -1);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_ChainSong() возврат значения: %d\n", rc);
+    if (rc < 0) printf(english_language ?
+                       "MUS_ChainSong() returned %d\n" :
+                       "MUS_ChainSong() возврат значения: %d\n", rc);
 #endif
     rc = MUS_PlaySong(handle, snd_MusicVolume);
 #ifdef SNDDEBUG
-    if (rc < 0) printf("MUS_PlaySong() возврат значения: %d\n", rc);
+    if (rc < 0) printf(english_language ?
+                       "MUS_PlaySong() returned %d\n" :
+                       "MUS_PlaySong() возврат значения: %d\n", rc);
 #endif
 }
 
@@ -278,7 +292,9 @@ void I_sndArbitrateCards(void)
         }
         if (ENS_Detect())
         {
-            printf("Внимание! Устройство ENSONIQ не отвечает.\n");
+            printf(english_language ?
+                   "Dude.  The ENSONIQ ain't responding.\n" :
+                   "Внимание! Устройство ENSONIQ не отвечает.\n");
         }
     }
     if (codec)
@@ -289,7 +305,9 @@ void I_sndArbitrateCards(void)
         }
         if (CODEC_Detect(&snd_SBport, &snd_SBdma))
         {
-            printf("Внимание! CODEC не отвечает.\n");
+            printf(english_language ?
+                   "CODEC.  The CODEC ain't responding.\n" :
+                   "Внимание! CODEC не отвечает.\n");
         }
     }
     if (gus)
@@ -301,7 +319,9 @@ void I_sndArbitrateCards(void)
         fprintf(stderr, "GUS1\n");
         if (GF1_Detect())
         {
-            printf("Внимание! Устройство GUS не отвечает.\n");
+            printf(english_language ?
+                   "Dude.  The GUS ain't responding.\n" :
+                   "Внимание! Устройство GUS не отвечает.\n");
         }
         else
         {
@@ -327,7 +347,9 @@ void I_sndArbitrateCards(void)
         }
         if (SB_Detect(&snd_SBport, &snd_SBirq, &snd_SBdma, 0))
         {
-            printf("SB не отвечает по каналам p=0x%x, i=%d, d=%d\n",
+            printf(english_language ?
+                   "SB isn't responding at p=0x%x, i=%d, d=%d\n" :
+                   "SB не отвечает по каналам p=0x%x, i=%d, d=%d\n",
                    snd_SBport, snd_SBirq, snd_SBdma);
             // [JN] Try to set again
             SB_SetCard(snd_SBport, snd_SBirq, snd_SBdma);
@@ -338,7 +360,9 @@ void I_sndArbitrateCards(void)
         }
         if (devparm)
         {
-            printf("SB_Detect: возврат значения p=0x%x,i=%d,d=%d\n",
+            printf(english_language ?
+                   "SB_Detect returned p=0x%x,i=%d,d=%d\n" :
+                   "SB_Detect: возврат значения p=0x%x,i=%d,d=%d\n",
                    snd_SBport, snd_SBirq, snd_SBdma);
         }
     }
@@ -351,7 +375,9 @@ void I_sndArbitrateCards(void)
         }
         if (AL_Detect(&wait, 0))
         {
-            printf("Внимание! Устройство Adlib не отвечает.\n");
+            printf(english_language ?
+                   "Dude.  The Adlib isn't responding.\n" :
+                   "Внимание! Устройство Adlib не отвечает.\n");
             // [JN] Try to set again
             AL_SetCard(wait, W_CacheLumpName("genmidi", PU_STATIC));
         }
@@ -373,7 +399,9 @@ void I_sndArbitrateCards(void)
         }
         if (MPU_Detect(&snd_Mport, &i))
         {
-            printf("Устройство MPU-401 не отвечает @ p=0x%x.\n", snd_Mport);
+            printf(english_language ?
+                   "The MPU-401 isn't reponding @ p=0x%x.\n" :
+                   "Устройство MPU-401 не отвечает @ p=0x%x.\n", snd_Mport);
         }
         else
         {
@@ -416,23 +444,31 @@ void I_StartupSound(void)
 
     if (devparm)
     {
-        printf("  Музыкальное устройство #%d & dmxCode=%d\n", snd_MusicDevice,
+        printf(english_language ?
+               "  Music device #%d & dmxCode=%d\n" :
+               "  Музыкальное устройство #%d & dmxCode=%d\n", snd_MusicDevice,
                dmxCodes[snd_MusicDevice]);
-        printf("  Звуковое устройство #%d & dmxCode=%d\n", snd_SfxDevice,
+        printf(english_language ?
+               "  Sfx device #%d & dmxCode=%d\n" :
+               "  Звуковое устройство #%d & dmxCode=%d\n", snd_SfxDevice,
                dmxCodes[snd_SfxDevice]);
     }
 
     //
     // inits DMX sound library
     //
-    printf("  вызов DMX_Init\n");
+    printf(english_language ?
+           "  calling DMX_Init\n" :
+           "  вызов DMX_Init\n");
 
     rc = DMX_Init(SND_TICRATE, SND_MAXSONGS, dmxCodes[snd_MusicDevice],
                   dmxCodes[snd_SfxDevice]);
 
     if (devparm)
     {
-        printf("  возврат значения DMX_Init: %d\n", rc);
+        printf(english_language ?
+               "  DMX_Init() returned %d\n" :
+               "  возврат значения DMX_Init: %d\n", rc);
     }
 }
 //

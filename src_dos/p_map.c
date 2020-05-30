@@ -905,7 +905,9 @@ boolean PTR_SlideTraverse (intercept_t* in)
     line_t*	li;
 	
     if (!in->isaline)
-	I_Error ("PTR_SlideTraverse: Не является линией?");
+	I_Error (english_language ? 
+             "PTR_SlideTraverse: not a line?" :
+             "PTR_SlideTraverse: Не является линией?");
 		
     li = in->d.line;
     

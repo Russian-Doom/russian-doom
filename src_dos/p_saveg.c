@@ -26,6 +26,8 @@
 #include "doomstat.h"
 #include "r_state.h"
 
+#include "jn.h"
+
 byte*		save_p;
 
 
@@ -313,7 +315,9 @@ void P_UnArchiveThinkers (void)
 	    break;
 			
 	  default:
-	    I_Error ("Неизвестный tclass %i в сохраненной игре",tclass);
+	    I_Error (english_language ?
+                 "Unknown tclass %i in savegame" :
+                 "Неизвестный tclass %i в сохраненной игре", tclass);
 	}
 	
     }
@@ -598,8 +602,9 @@ void P_UnArchiveSpecials (void)
 	    break;
 				
 	  default:
-	    I_Error ("P_UnarchiveSpecials: Неизвестный tclass %i "
-		     "в сохраненной игре",tclass);
+	    I_Error (english_language ?
+        "P_UnarchiveSpecials:Unknown tclass %i in savegame" :
+        "P_UnarchiveSpecials: Неизвестный tclass %i в сохраненной игре",tclass);
 	}
 	
     }

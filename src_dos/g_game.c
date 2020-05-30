@@ -56,6 +56,7 @@
 #include "r_sky.h"
 
 #include "g_game.h"
+#include "jn.h"
 
 
 // [JN] Increased savegame limit (180.224 bytes * 16 = 2.883.584 | 2.75 MB)
@@ -822,14 +823,20 @@ void G_Ticker (void)
             {
                 static char turbomessage[80];
                 extern char *player_names[4];
-                sprintf (turbomessage, "%s yf cdth[crjhjcnb!",player_names[i]); // %s на сверхскорости!
+                sprintf (turbomessage, english_language ?
+                         "%s is turbo!" :
+                         "%s yf cdth[crjhjcnb!", // %s на сверхскорости!
+                         player_names[i]);
                 players[consoleplayer].message = turbomessage;
             }
 
             if (netgame && !netdemo && !(gametic%ticdup))
             {
                 if (gametic > BACKUPTICS && consistancy[i][buf] != cmd->consistancy)
-                I_Error ("Нарушение последовательности (%i должно быть %i)",cmd->consistancy, consistancy[i][buf]); 
+                I_Error (english_language ?
+                         "consistency failure (%i should be %i)" :
+                         "Нарушение последовательности (%i должно быть %i)",
+                         cmd->consistancy, consistancy[i][buf]); 
 
                 if (players[i].mo)
                 consistancy[i][buf] = players[i].mo->x;
@@ -1048,8 +1055,17 @@ void G_DeathMatchSpawnPlayer (int playernum)
 
     selections = deathmatch_p - deathmatchstarts;
     if (selections < 4)
-    I_Error ("Обнаружено %i стартовых точек для режима Дефтатч.\n"
-             "Минимальное необходимое количество: 4", selections);
+    {
+        if (english_language)
+        {
+            I_Error ("Only %i deathmatch spots, 4 required", selections);
+        }
+        else
+        {
+            I_Error ("Обнаружено %i стартовых точек для режима Дефтатч.\n"
+                     "Минимальное необходимое количество: 4", selections);
+        }
+    }
 
     for (j=0 ; j<20 ; j++) 
     { 
@@ -1412,7 +1428,9 @@ void G_DoLoadGame (void)
     P_UnArchiveSpecials();
 
     if (*save_p != 0x1d)
-	I_Error ("Некорректный файл сохраненной игры.");
+	I_Error (english_language ? 
+             "Bad savegame" :
+             "Некорректный файл сохраненной игры.");
 
     // done
     Z_Free (savebuffer);
@@ -1489,7 +1507,11 @@ void G_DoSaveGame (void)
 
     length = save_p - savebuffer;
     if (length > SAVEGAMESIZE)
-    I_Error ("Ошибка переполнения буфера сохраненной игры.");
+    {
+        I_Error (english_language ?
+                 "Savegame buffer overrun" :
+                 "Ошибка переполнения буфера сохраненной игры.");
+    }
     M_WriteFile (name, savebuffer, length);
     gameaction = ga_nothing;
     savedescription[0] = 0;
@@ -1829,7 +1851,9 @@ void G_DoPlayDemo (void)
     demobuffer = demo_p = W_CacheLumpName (defdemoname, PU_STATIC);
 
     if ( *demo_p++ < 106)
-    I_Error("Демозапись от другой версии игры!");
+    I_Error(english_language ? 
+            "Demo is from a different game version!" :
+            "Демозапись от другой версии игры!");
 
     skill = *demo_p++;
     episode = *demo_p++;
@@ -1902,8 +1926,16 @@ boolean G_CheckDemoStatus (void)
         timingdemo = false;
         demoplayback = false;        
         
-        I_Error ("Насчитано %i gametics в %i realtics.\n"
-                 "Среднее значение FPS: %f.", gametic, realtics, fps);
+        if (english_language)
+        {
+            I_Error ("timed %i gametics in %i realtics.\n"
+                     "Average FPS: %f.", gametic, realtics, fps); 
+        }
+        else
+        {
+            I_Error ("Насчитано %i gametics в %i realtics.\n" 
+                    "Среднее значение FPS: %f.", gametic, realtics, fps);
+        }
     } 
 
     if (demoplayback) 
@@ -1931,7 +1963,10 @@ boolean G_CheckDemoStatus (void)
         M_WriteFile (demoname, demobuffer, demo_p - demobuffer);
         Z_Free (demobuffer);
         demorecording = false;
-        I_Error ("Демозапись %s завершена.",demoname);
+        I_Error (english_language ?
+                 "Demo %s recorded" :
+                 "Демозапись %s завершена.",
+                 demoname);
     }
 
     return false;

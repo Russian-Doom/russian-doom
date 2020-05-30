@@ -34,6 +34,8 @@
 #include "doomstat.h"
 #include "r_state.h"
 
+#include "jn.h"
+
 
 //
 // CHANGE THE TEXTURE OF A WALL SWITCH TO ITS OPPOSITE
@@ -127,8 +129,10 @@ void P_InitSwitchList(void)
 			
 	    if (R_CheckTextureNumForName(alphSwitchList[i].name1) < 0)
 	    {
-		I_Error("Не обнаружена текстура переключателя '%s'!",
-			alphSwitchList[i].name1);
+		I_Error(english_language ?
+                "Can't find switch texture '%s'!" :
+                "Не обнаружена текстура переключателя '%s'!",
+                alphSwitchList[i].name1);
 		continue;
 	    }
 	    
@@ -183,7 +187,9 @@ P_StartButton
 	}
     }
     
-    I_Error("P_StartButton: Превышен лимит слотов для кнопок!");
+    I_Error(english_language ?
+            "P_StartButton: no button slots left!" :
+            "P_StartButton: Превышен лимит слотов для кнопок!");
 }
 
 

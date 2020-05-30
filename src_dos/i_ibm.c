@@ -362,8 +362,8 @@ void I_UpdateBox(int x, int y, int w, int h)
      || x + w > SCREENWIDTH || y + h > SCREENHEIGHT)
     {
         I_Error(english_language ?
-        "Bad I_UpdateBox (%i, %i, %i, %i)" :
-        "Ошибка I_UpdateBox (%i, %i, %i, %i)", x, y, w, h);
+                "Bad I_UpdateBox (%i, %i, %i, %i)" :
+                "Ошибка I_UpdateBox (%i, %i, %i, %i)", x, y, w, h);
     }
 
     sp_x1 = x / 8;
@@ -895,13 +895,13 @@ void I_StartupJoystick(void)
     {
         joystickpresent = false;
         printf(english_language ?
-        "joystick not found\n" :
-        "джойстик не обнаружен\n");
+               "Joystick: not found\n" :
+               "Джойстик не обнаружен\n");
         return;
     }
     printf(english_language ?
-    "joystick found\n" :
-    "джойстик обнаружен\n");
+           "Joystick: found\n" :
+           "Джойстик обнаружен\n");
     joystickpresent = true;
 
     printf(english_language ?

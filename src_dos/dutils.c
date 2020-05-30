@@ -21,6 +21,7 @@
 #include "dutils.h"
 #include "i_system.h"
 #include "z_zone.h"
+#include "jn.h"
 
 list_t* dll_NewList(void)
 {
@@ -36,7 +37,9 @@ lnode_t* dll_AddEndNode(list_t* list, void* value)
 
     if (!list)
     {
-        I_Error("Некорректный список в dll_AddEndNode");
+        I_Error(english_language ?
+                "Bad list in dll_AddEndNode" :
+                "Некорректный список в dll_AddEndNode");
     }
 
     node = (lnode_t*)Z_Malloc(sizeof(lnode_t), PU_STATIC, 0);
@@ -65,7 +68,9 @@ lnode_t* dll_AddStartNode(list_t* list, void* value)
 
     if (!list)
     {
-        I_Error("Некорректный список в dll_AddStartNode");
+        I_Error(english_language ?
+                "Bad list in dll_AddStartNode" :
+                "Некорректный список в dll_AddStartNode");
     }
 
     node = (lnode_t*)Z_Malloc(sizeof(lnode_t), PU_STATIC, 0);
@@ -93,11 +98,15 @@ void* dll_DelNode(list_t* list, lnode_t* node)
     void* value;
     if (!list)
     {
-        I_Error("Некорректный список в dll_DelNode");
+        I_Error(english_language ?
+                "Bad list in dll_DelNode" :
+                "Некорректный список в dll_DelNode");
     }
     if (!list->start)
     {
-        I_Error("Некорректный список в dll_DelNode");
+        I_Error(english_language ?
+                "Empty list in dll_DelNode" :
+                "Пустой список в dll_DelNode");
     }
     value = node->value;
     if (node->prev)

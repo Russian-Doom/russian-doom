@@ -38,6 +38,8 @@
 
 #include "r_data.h"
 
+#include "jn.h"
+
 //
 // Graphics.
 // DOOM graphics for walls and sprites
@@ -354,8 +356,10 @@ void R_GenerateLookup (int texnum)
     {
 	if (!patchcount[x])
 	{
-	    printf ("R_GenerateLookup: Column %d is without a patch in texture %s\n",
-		    x, texture->name);
+	    printf (english_language ?
+                "R_GenerateLookup: Column %d is without a patch in texture %s\n" :
+                "R_GenerateLookup: Колонне %d не назначен патч в текстуре %s\n",
+                x, texture->name);
 	    return;
 	}
 	// I_Error ("R_GenerateLookup: column without a patch");
@@ -368,8 +372,10 @@ void R_GenerateLookup (int texnum)
 	    
 	    if (texturecompositesize[texnum] > 0x10000-texture->height)
 	    {
-		I_Error ("R_GenerateLookup: Размер текстуры %i превышает 64 килобайта",
-			 texnum);
+		I_Error (english_language ?
+                "R_GenerateLookup: texture %i is >64k" :
+                "R_GenerateLookup: Размер текстуры %i превышает 64 килобайта",
+                texnum);
 	    }
 	    
 	    texturecompositesize[texnum] += texture->height;
@@ -524,7 +530,9 @@ void R_InitTextures (void)
 	offset = LONG(*directory);
 
 	if (offset > maxoff)
-	    I_Error ("R_InitTextures: Некорректная директория текстур");
+	    I_Error (english_language ?
+                 "R_InitTextures: bad texture directory" :
+                 "R_InitTextures: Некорректная директория текстур");
 	
 	mtexture = (maptexture_t *) ( (byte *)maptex + offset);
 
@@ -549,7 +557,9 @@ void R_InitTextures (void)
 	    if (patch->patch == -1)
         {
         // [crispy] make non-fatal
-        fprintf (stderr, "R_InitTextures: Отсутствует патч в текстуре %s\n", texture->name);
+        fprintf (stderr, english_language ?
+                 "R_InitTextures: Missing patch in texture %s" :
+                 "R_InitTextures: Отсутствует патч в текстуре %s\n", texture->name);
         patch->patch = 0;
         }
 	}		
@@ -818,7 +828,9 @@ int	R_TextureNumForName (char* name)
     if (i==-1)
     {
         // [crispy] make non-fatal
-        fprintf (stderr, "R_TextureNumForName: Текстура %s не найдена\n", name);
+        fprintf (stderr, english_language ?
+                 "R_TextureNumForName: %s not found" :
+                 "R_TextureNumForName: Текстура %s не найдена\n", name);
         return 0;
     }
     return i;

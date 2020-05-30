@@ -75,7 +75,9 @@ P_GiveAmmo
 	return false;
 		
     if (ammo < 0 || ammo > NUMAMMO)
-	I_Error ("P_GiveAmmo: Некорректный тип %i", ammo);
+	I_Error (english_language ?
+             "P_GiveAmmo: bad type %i" :
+             "P_GiveAmmo: Некорректный тип %i", ammo);
 		
     if ( player->ammo[ammo] == player->maxammo[ammo]  )
 	return false;

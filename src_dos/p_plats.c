@@ -35,6 +35,8 @@
 // Data.
 #include "sounds.h"
 
+#include "jn.h"
+
 
 plat_t*		activeplats[MAXPLATS];
 
@@ -289,7 +291,9 @@ void P_AddActivePlat(plat_t* plat)
 	    activeplats[i] = plat;
 	    return;
 	}
-    I_Error ("P_AddActivePlat: Превышен лимит платформ!");
+    I_Error (english_language ?
+             "P_AddActivePlat: no more plats!" :
+             "P_AddActivePlat: Превышен лимит платформ!");
 }
 
 void P_RemoveActivePlat(plat_t* plat)
@@ -304,5 +308,7 @@ void P_RemoveActivePlat(plat_t* plat)
 	    
 	    return;
 	}
-    I_Error ("P_RemoveActivePlat: Платформа не обнаружена!");
+    I_Error (english_language ?
+             "P_RemoveActivePlat: can't find plat!" :
+             "P_RemoveActivePlat: Платформа не обнаружена!");
 }

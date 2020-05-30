@@ -242,16 +242,22 @@ M_ReadFile
 	
     handle = open (name, O_RDONLY | O_BINARY, 0666);
     if (handle == -1)
-	I_Error ("Невозможно прочитать файл %s", name);
+	I_Error (english_language ?
+             "Couldn't read file %s" :
+             "Невозможно прочитать файл %s", name);
     if (fstat (handle,&fileinfo) == -1)
-	I_Error ("Невозможно прочитать файл %s", name);
+	I_Error (english_language ?
+             "Couldn't read file %s" :
+             "Невозможно прочитать файл %s", name);
     length = fileinfo.st_size;
     buf = Z_Malloc (length, PU_STATIC, NULL);
     count = read (handle, buf, length);
     close (handle);
 	
     if (count < length)
-	I_Error ("Невозможно прочитать файл %s", name);
+	I_Error (english_language ?
+             "Couldn't read file %s" :
+             "Невозможно прочитать файл %s", name);
 		
     *buffer = buf;
     return length;
@@ -550,7 +556,9 @@ void M_LoadDefaults (void)
     if (i && i<myargc-1)
     {
 	defaultfile = myargv[i+1];
-	printf ("	стандартный файл: %s\n",defaultfile);
+	printf (english_language ?
+            "   default file: %s\n" :
+            "   конфигурационный файл: %s\n",defaultfile);
     }
     else
 	defaultfile = basedefault;
@@ -723,7 +731,9 @@ void M_ScreenShot (void)
 	    break;	// file doesn't exist
     }
     if (i==100)
-	I_Error ("M_ScreenShot: Невозможно создать файл PCX");
+	I_Error (english_language ?
+             "M_ScreenShot: Couldn't create a PCX" :
+             "M_ScreenShot: Невозможно создать файл PCX");
     
     // save the pcx file
     WritePCXfile (lbmname, linear,
@@ -731,7 +741,9 @@ void M_ScreenShot (void)
 		  W_CacheLumpName (usegamma <= 8 ? 
                            "PALFIX" : "PLAYPAL",PU_CACHE));
 	
-    players[consoleplayer].message = "cybvjr 'rhfyf"; // снимок экрана
+    players[consoleplayer].message = english_language ?
+                                     "screen shot" :
+                                     "cybvjr 'rhfyf"; // снимок экрана
 }
 
 

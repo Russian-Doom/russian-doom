@@ -147,8 +147,10 @@ void S_SetMusicVolume(int volume)
 {
     if (volume < 0 || volume > 127)
     {
-        I_Error("Попытка установить громкость музыки на значение %d",
-            volume);
+        I_Error(english_language ?
+                "Attempt to set music volume at %d" :
+                "Попытка установить громкость музыки на значение %d",
+                volume);
     }
 
     I_SetMusicVolume(127);
@@ -207,7 +209,9 @@ S_ChangeMusic
     if ( (musicnum <= mus_None)
 	 || (musicnum >= NUMMUSIC) )
     {
-	I_Error("Некорректный номер музыки: %d", musicnum);
+	I_Error(english_language ?
+            "Bad music number %d" :
+            "Некорректный номер музыки: %d", musicnum);
     }
     else
 	music = &S_music[musicnum];
@@ -368,7 +372,9 @@ void S_SetSfxVolume(int volume)
 {
 
     if (volume < 0 || volume > 127)
-	I_Error("Попытка установить громкость звука на значение %d", volume);
+	I_Error(english_language ?
+            "Attempt to set sfx volume at %d" :
+            "Попытка установить громкость звука на значение %d", volume);
 
     snd_SfxVolume = volume;
 
@@ -511,7 +517,9 @@ S_StartSoundAtVolume
   
   // check for bogus sound #
   if (sfx_id < 1 || sfx_id > NUMSFX)
-    I_Error("Некорректный номер звука: %d", sfx_id);
+    I_Error(english_language ?
+            "Bad sfx #: %d" :
+            "Некорректный номер звука: %d", sfx_id);
   
   sfx = &S_sfx[sfx_id];
   

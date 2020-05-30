@@ -944,10 +944,17 @@ void F_Drawer (void)
         switch (gameepisode)
         {
             case 1:
-            if (shareware || registered)
-            V_DrawPatch(0,0,0,W_CacheLumpName("CREDITS",PU_CACHE));
+            if (english_language)
+            {
+                V_DrawPatch(0,0,0,W_CacheLumpName("CREDIT",PU_CACHE));
+            }
             else
-            V_DrawPatch(0,0,0,W_CacheLumpName("CREDITU",PU_CACHE));
+            {
+                if (shareware || registered)
+                V_DrawPatch(0,0,0,W_CacheLumpName("CREDITS",PU_CACHE));
+                else
+                V_DrawPatch(0,0,0,W_CacheLumpName("CREDITU",PU_CACHE));
+            }
             break;
 
             case 2:
