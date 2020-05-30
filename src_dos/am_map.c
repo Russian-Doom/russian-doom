@@ -292,12 +292,12 @@ static angle_t mapangle;
 
 static byte antialias[NUMALIAS][8] = {
     // Doom colors:
-    {176, 177, 178, 179, 180, 181, 182, 183},   // 1.  WALLCOLORS
-    { 64,  65,  66,  67,  68,  69,  70,  71},   // 2.  FDWALLCOLORS
-    { 96,  97,  98,  99, 100, 101, 102, 103},   // 3.  TSWALLCOLORS
+    {176, 178, 180, 182, 184, 186, 188, 190},   // 1.  WALLCOLORS
+    { 64,  66,  68,  70,  72,  74,  76,  78},   // 2.  FDWALLCOLORS
+    { 96,  98, 100, 102, 104, 106, 108, 101},   // 3.  TSWALLCOLORS
     {231, 160, 161, 162, 163, 164, 165, 166},   // 4.  CDWALLCOLORS
-    {176, 177, 178, 179, 180, 181, 182, 183},   // 5.  SECRETWALLCOLORS
-    { 99, 100, 101, 102, 103, 104, 105, 106},   // 6.  GRAYS+3 (LINE_NEVERSEE)
+    {176, 178, 180, 182, 184, 186, 188, 190},   // 5.  SECRETWALLCOLORS
+    { 99, 101, 103, 105, 107, 109, 110, 111},   // 6.  GRAYS+3 (LINE_NEVERSEE)
     // Boom colors:
     { 23,  24,  25,  26,  27,  28,  29,  30},   // 7.  One-sided wall
     {119, 120, 121, 122, 123, 124, 125, 126},   // 8.  Various teleporters
@@ -308,29 +308,29 @@ static byte antialias[NUMALIAS][8] = {
     {215, 216, 217, 218, 219, 220, 221, 222},   // 13. ceiling level change
     { 88,  89,  90,  91,  92,  93,  94,  95},   // 14. 2S lines that appear only in IDDT
     // Jaguar colors:
-    { 32,  33,  34,  35,  36,  37,  38,  39},   // 15. RED_JAGUAR
+    { 32,  34,  36,  38,  40,  42,  44,  46},   // 15. RED_JAGUAR
     {120, 121, 122, 123, 124, 125, 126, 127},   // 16. GREEN_JAGUAR
     {254, 254, 254, 254, 254, 254, 254, 254},   // 17. MAGENTA_JAGUAR
     {163, 163, 164, 164, 165, 165, 166, 167},   // 18. YELLOW_JAGUAR
     // Raven colors:
     {151, 151, 236, 236, 237, 237, 238, 239},   // 19. One-sided wall
-    {116, 117, 118, 119, 120, 121, 122, 123},   // 20. Various teleporters
+    {116, 118, 120, 122, 124, 125, 126, 127},   // 20. Various teleporters
     {108, 109, 110, 111,   5,   6,   7,   8},   // 21. Secret door
     {199, 200, 201, 202, 203, 204, 205, 206},   // 22. BLUE locked doors
-    {178, 179, 180, 181, 182, 183, 184, 185},   // 23. RED locked doors
+    {178, 180, 182, 184, 186, 188, 190, 191},   // 23. RED locked doors
     {161, 162, 163, 164, 165, 166, 167, 167},   // 24. YELLOW locked doors
-    {239, 239, 239, 239, 239, 239, 239, 239},   // 25. floor level change
-    {133, 134, 135, 136, 137, 138, 139, 140},   // 26. ceiling level change
+    {236, 236, 237, 237, 238, 238, 239, 239},   // 25. floor level change
+    {133, 135, 137, 139, 140, 142, 144, 146},   // 26. ceiling level change
     // Strife colors:
-    { 86,  87,  88,  89,  90,  91,  92,  93},   // 27. One-sided wall
-    {135, 136, 137, 138, 139, 140, 141, 142},   // 28. Various teleporters
+    { 86,  88,  90,  92,  94,  96,  98, 100},   // 27. One-sided wall
+    {135, 137, 139, 141, 143, 145, 147, 149},   // 28. Various teleporters
     {203, 204, 205, 206, 207, 240, 241, 242},   // 29. floor level change
     {195, 196, 197, 198, 199, 200, 201, 202},   // 30. ceiling level change
-    { 98,  99, 100, 101, 102, 103, 104, 105},   // 31. One-sided wall (cheating)
+    { 98, 100, 102, 104, 106, 108, 110, 111},   // 31. One-sided wall (cheating)
     {102, 103, 104, 105, 106, 107, 108, 109},   // 32. One-sided wall (LINE_NEVERSEE)
     // Common colors:
-    {209,  84,  85,  86,  87,  88,  89,  90},   // 33. YOURCOLORS: White player arrow
-    {112, 113, 114, 115, 116, 117, 118, 119},   // 34. THINGCOLORS: Green triangles (IDDT cheat)
+    {209,  86,  88,  90,  92,  94,  96,  98},   // 33. YOURCOLORS: White player arrow
+    {112, 114, 116, 118, 120, 122, 124, 126},   // 34. THINGCOLORS: Green triangles (IDDT cheat)
     {104, 105, 106, 107, 108, 109, 110, 111}    // 35. GRIDCOLORS: Automap grid
 };
 
