@@ -19,6 +19,7 @@
 //  IBM DOS VGA graphics and key/mouse/joystick.
 //
 
+
 #include <dos.h>
 #include <conio.h>
 #include <stdlib.h>
@@ -39,38 +40,8 @@
 #include "dpmiapi.h"
 #include "jn.h"
 
-//
-// Macros
-//
 
-#define DPMI_INT 0x31
-//#define NOKBD
-//#define NOTIMER
-
-//
-// Code
-//
-
-void I_StartupNet(void);
-void I_ShutdownNet(void);
-void I_ReadExternDriver(void);
-
-typedef struct
-{
-    unsigned        edi, esi, ebp, reserved, ebx, edx, ecx, eax;
-    unsigned short  flags, es, ds, fs, gs, ip, cs, sp, ss;
-} dpmiregs_t;
-
-extern dpmiregs_t dpmiregs;
-
-void I_ReadMouse(void);
-void I_InitDiskFlash(void);
-
-extern int usemouse, usejoystick;
-
-//
-// Constants
-//
+#define DPMI_INT                0x31
 
 #define SC_INDEX                0x3C4
 #define SC_RESET                0
@@ -106,7 +77,6 @@ extern int usemouse, usejoystick;
 #define CRTC_MODE               23
 #define CRTC_LINECOMPARE        24
 
-
 #define GC_INDEX                0x3CE
 #define GC_SETRESET             0
 #define GC_ENABLESETRESET       1
@@ -132,70 +102,105 @@ extern int usemouse, usejoystick;
 #define PEL_DATA                0x3c9
 #define PEL_MASK                0x3c6
 
-boolean grmode;
+#define VBLCOUNTER              34000 // hardware tics to a frame
 
-//
-// joystick vars
-//
+#define TIMERINT                8
+#define KEYBOARDINT             9
 
-boolean joystickpresent;
-/*extern*/ unsigned joystickx, joysticky;
-boolean I_ReadJoystick(void) // returns false if not connected
-{
-    return false;
-}
+#define CRTCOFF                 (_inbyte(STATUS_REGISTER_1)&1)
+#define CLI                     _disable()
+#define STI                     _enable()
 
-#define VBLCOUNTER 34000 // hardware tics to a frame
+#define _outbyte(x,y)           (outp(x,y))
+#define _outhword(x,y)          (outpw(x,y))
+#define _inbyte(x)              (inp(x))
+#define _inhword(x)             (inpw(x))
+
+#define KEY_LSHIFT              (0xfe)
+#define KEY_INS                 (0x80+0x52)
+#define KEY_DEL                 (0x80+0x53)
+#define KEY_PGUP                (0x80+0x49)
+#define KEY_PGDN                (0x80+0x51)
+#define KEY_HOME                (0x80+0x47)
+#define KEY_END                 (0x80+0x4f)
+
+#define SC_UPARROW              0x48
+#define SC_DOWNARROW            0x50
+#define SC_LEFTARROW            0x4b
+#define SC_RIGHTARROW           0x4d
+#define SC_RSHIFT               0x36
+#define SC_LSHIFT               0x2a
+
+#define MOUSEB1                 1
+#define MOUSEB2                 2
+#define MOUSEB3                 4
+
+#define KBDQUESIZE              32
+
+#define REALSTACKSIZE           1024
+
+#define DOOMCOM_ID              0x12345678l
 
 
-#define TIMERINT 8
-#define KEYBOARDINT 9
-
-#define CRTCOFF (_inbyte(STATUS_REGISTER_1)&1)
-#define CLI     _disable()
-#define STI     _enable()
-
-#define _outbyte(x,y) (outp(x,y))
-#define _outhword(x,y) (outpw(x,y))
-
-#define _inbyte(x) (inp(x))
-#define _inhword(x) (inpw(x))
-
-#define MOUSEB1 1
-#define MOUSEB2 2
-#define MOUSEB3 4
-
-boolean mousepresent;
-
-int ticcount;
-
-// REGS stuff used for int calls
-union REGS regs;
-struct SREGS segregs;
-
-boolean novideo; // if true, stay in text mode for debugging
-
-#define KBDQUESIZE 32
-byte keyboardque[KBDQUESIZE];
-int kbdtail, kbdhead;
-
-#define KEY_LSHIFT      0xfe
-
-#define KEY_INS         (0x80+0x52)
-#define KEY_DEL         (0x80+0x53)
-#define KEY_PGUP        (0x80+0x49)
-#define KEY_PGDN        (0x80+0x51)
-#define KEY_HOME        (0x80+0x47)
-#define KEY_END         (0x80+0x4f)
-
-#define SC_RSHIFT       0x36
-#define SC_LSHIFT       0x2a
+void I_StartupNet(void);
+void I_ShutdownNet(void);
+void I_ReadExternDriver(void);
+void I_ReadMouse(void);
+void I_InitDiskFlash(void);
 void DPMIInt(int i);
 void I_WaitVBL(int vbls);
 void I_StartupCyberMan(void);
 void I_StartupSound(void);
 void I_ShutdownSound(void);
 void I_ShutdownTimer(void);
+void (__interrupt __far *oldkeyboardisr) () = NULL;
+void I_DivException(void);
+void (__interrupt __far *oldtimerisr) ();
+int  I_SetDivException(void);
+
+
+int         ticcount;
+int         kbdtail;
+int         kbdhead;
+int         olddb[2][4];
+int         lastpress;
+int         joyxl, joyxh, joyyl, joyyh;
+int         basejoyx, basejoyy;
+
+union       REGS regs;          // REGS stuff used for int calls
+struct      SREGS segregs;
+
+unsigned    joystickx;
+unsigned    joysticky;
+unsigned    realstackseg;
+
+extern int  usemouse, usejoystick;
+extern      doomcom_t *doomcom;
+
+byte        keyboardque[KBDQUESIZE];
+byte        *pcscreen;
+byte        *currentscreen;
+byte        *destscreen;
+byte        *destview;
+byte        *I_AllocLow(int length);
+
+boolean     grmode;
+boolean     mousepresent;
+boolean     novideo;            // if true, stay in text mode for debugging
+boolean     joystickpresent;
+boolean I_ReadJoystick (void)   // returns false if not connected
+{
+    return false;
+}
+
+typedef struct
+{
+    unsigned        edi, esi, ebp, reserved, ebx, edx, ecx, eax;
+    unsigned short  flags, es, ds, fs, gs, ip, cs, sp, ss;
+} dpmiregs_t;
+
+extern      dpmiregs_t dpmiregs;
+dpmiregs_t  dpmiregs;
 
 byte scantokey[128] =
 {
@@ -239,53 +244,59 @@ ticcmd_t* I_BaseTiccmd(void)
     return &extcontrol->cmd;
 }
 
+
 //
 // I_GetTime
 // Returns time in 1/35th second tics.
 //
-int I_GetTime(void)
+int I_GetTime (void)
 {
-	return ticcount;
+    return ticcount;
 }
+
 
 //
 // I_ColorBorder
 //
-void I_ColorBorder(void)
+void I_ColorBorder (void)
 {
     int i;
 
     I_WaitVBL(1);
     _outbyte(PEL_WRITE_ADR, 0);
+
     for (i = 0; i < 3; i++)
     {
         _outbyte(PEL_DATA, 63);
     }
 }
 
+
 //
 // I_UnColorBorder
 //
-void I_UnColorBorder(void)
+void I_UnColorBorder (void)
 {
     int i;
 
     I_WaitVBL(1);
     _outbyte(PEL_WRITE_ADR, 0);
+
     for (i = 0; i < 3; i++)
     {
         _outbyte(PEL_DATA, 0);
     }
 }
 
-//
+
+// -----------------------------------------------------------------------------
 // User input
-//
+// -----------------------------------------------------------------------------
 
 //
 // I_WaitVBL
 //
-void I_WaitVBL(int vbls)
+void I_WaitVBL (int vbls)
 {
     int stat;
 
@@ -293,6 +304,7 @@ void I_WaitVBL(int vbls)
     {
         return;
     }
+
     while (vbls--)
     {
         do
@@ -314,52 +326,55 @@ void I_WaitVBL(int vbls)
     }
 }
 
+
 //
 // I_SetPalette
 // Palette source must use 8 bit RGB elements.
 //
-void I_SetPalette(byte *palette)
+void I_SetPalette (byte *palette)
 {
-	int i;
+    int i;
 
-    // [JN] Check for incorrect gamma levels while startup
-    if (usegamma < 0 || usegamma > 17)
-    usegamma = 0;    
+    // [JN] Check for incorrect gamma levels at startup
+    if (usegamma < 0)
+        usegamma = 0;
+    if (usegamma > 17)
+        usegamma = 17;
 
 	if(novideo)
 	{
 		return;
 	}
+
 	I_WaitVBL(1);
 	_outbyte(PEL_WRITE_ADR, 0);
+
 	for(i = 0; i < 768; i++)
 	{
 		_outbyte(PEL_DATA, (gammatable[usegamma][*palette++])>>2);
 	}
 }
 
-//
+
+// -----------------------------------------------------------------------------
 // Graphics mode
-//
-
-byte *pcscreen, *currentscreen, *destscreen, *destview;
-
+// -----------------------------------------------------------------------------
 
 //
 // I_UpdateBox
 //
-void I_UpdateBox(int x, int y, int w, int h)
+void I_UpdateBox (int x, int y, int w, int h)
 {
-    int i, j, k, count;
-    int sp_x1, sp_x2;
-    int poffset;
-    int offset;
-    int pstep;
-    int step;
-    byte *dest, *source;
+    int      i, j, k, count;
+    int      sp_x1, sp_x2;
+    int      poffset;
+    int      offset;
+    int      pstep;
+    int      step;
+    byte    *dest, *source;
 
     if (x < 0 || y < 0 || w <= 0 || h <= 0
-     || x + w > SCREENWIDTH || y + h > SCREENHEIGHT)
+    ||  x + w > SCREENWIDTH || y + h > SCREENHEIGHT)
     {
         I_Error(english_language ?
                 "Bad I_UpdateBox (%i, %i, %i, %i)" :
@@ -376,18 +391,19 @@ void I_UpdateBox(int x, int y, int w, int h)
 
     outp(SC_INDEX, SC_MAPMASK);
 
-    for (i = 0; i < 4; i++)
+    for (i = 0 ; i < 4 ; i++)
     {
         outp(SC_INDEX + 1, 1 << i);
         source = &screens[0][offset + i];
         dest = destscreen + poffset;
 
-        for (j = 0; j < h; j++)
+        for (j = 0 ; j < h ; j++)
         {
             k = count;
             while (k--)
             {
-                *(unsigned short *)dest = (unsigned short)(((*(source + 4)) << 8) + (*source));
+                *(unsigned short *)dest = (unsigned short)
+                                          (((*(source + 4)) << 8) + (*source));
                 dest += 2;
                 source += 8;
             }
@@ -398,14 +414,16 @@ void I_UpdateBox(int x, int y, int w, int h)
     }
 }
 
+
 //
 // I_UpdateNoBlit
 //
-int olddb[2][4];
-void I_UpdateNoBlit(void)
+
+void I_UpdateNoBlit (void)
 {
     int realdr[4];
     int x, y, w, h;
+
     // Set current screen
     currentscreen = destscreen;
 
@@ -467,21 +485,25 @@ void I_UpdateNoBlit(void)
     M_ClearBox(dirtybox);
 }
 
+
 //
 // I_FinishUpdate
 //
-void I_FinishUpdate(void)
+void I_FinishUpdate (void)
 {
-    static int lasttic;
-    int tics;
-    int i;
+    int         tics;
+    int         i;
+    static int  lasttic;
+
     if (devparm)
     {
         i = ticcount;
         tics = i - lasttic;
         lasttic = i;
+
         if (tics > 20) tics = 20;
         outpw(SC_INDEX, 0x102);
+
         for (i = 0; i < tics; i++)
         {
             destscreen[(SCREENHEIGHT - 1)*SCREENWIDTH / 4 + i] = 0xff;
@@ -495,21 +517,24 @@ void I_FinishUpdate(void)
 
     //Next plane
     destscreen += 0x4000;
+
     if (destscreen == (byte*)0xac000)
     {
         destscreen = (byte*)0xa0000;
     }
 }
 
+
 //
 // I_InitGraphics
 //
-void I_InitGraphics(void)
+void I_InitGraphics (void)
 {
     if (novideo)
     {
         return;
     }
+
     grmode = true;
     regs.w.ax = 0x13;
     int386(0x10, (union REGS *)&regs, &regs);
@@ -535,37 +560,39 @@ void I_InitGraphics(void)
     I_InitDiskFlash();
 }
 
+
 //
 // I_ShutdownGraphics
 //
-void I_ShutdownGraphics(void)
+void I_ShutdownGraphics (void)
 {
-    if (*(byte *)0x449 == 0x13) // don't reset mode if it didn't get set
+    if (*(byte *)0x449 == 0x13)     // don't reset mode if it didn't get set
     {
         regs.w.ax = 3;
         int386(0x10, &regs, &regs); // back to text mode
     }
 }
 
+
 //
 // I_ReadScreen
 // Reads the screen currently displayed into a linear buffer.
 //
-void I_ReadScreen(byte *scr)
+void I_ReadScreen (byte *scr)
 {
-	int i;
-	int j;
+    int i;
+    int j;
 
-	outp(GC_INDEX, GC_READMAP);
+    outp(GC_INDEX, GC_READMAP);
 
-	for (i = 0; i < 4; i++)
-	{
-		outp(GC_INDEX+1, i);
-		for (j = 0; j < SCREENWIDTH*SCREENHEIGHT/4; j++)
-		{
-			scr[i+j*4] = currentscreen[j];
-		}
-	}
+    for (i = 0 ; i < 4 ; i++)
+    {
+        outp(GC_INDEX+1, i);
+        for (j = 0; j < SCREENWIDTH*SCREENHEIGHT/4; j++)
+        {
+            scr[i+j*4] = currentscreen[j];
+        }
+    }
 }
 
 
@@ -578,23 +605,14 @@ void I_ReadScreen(byte *scr)
 // asyncronous interrupt functions should maintain private ques that are
 // read by the syncronous functions to be converted into events
 //
-
-
-#define SC_UPARROW      0x48
-#define SC_DOWNARROW    0x50
-#define SC_LEFTARROW    0x4b
-#define SC_RIGHTARROW   0x4d
-
-void I_StartTic(void)
+void I_StartTic (void)
 {
-    int k;
-    event_t ev;
+    int      k;
+    event_t  ev;
 
     I_ReadMouse();
 
-    //
     // keyboard events
-    //
     while (kbdtail < kbdhead)
     {
         k = keyboardque[kbdtail&(KBDQUESIZE - 1)];
@@ -654,7 +672,7 @@ void I_StartTic(void)
     }
 }
 
-void I_ReadKeys(void)
+void I_ReadKeys (void)
 {
     int k;
 
@@ -666,10 +684,13 @@ void I_ReadKeys(void)
             kbdtail++;
             printf("0x%x\n", k);
             if (k == 1)
+            {
                 I_Quit();
+            }
         }
     }
 }
+
 
 void I_ColorBlack(int r, int g, int b)
 {
@@ -679,41 +700,35 @@ void I_ColorBlack(int r, int g, int b)
     _outbyte(PEL_DATA, b);
 }
 
-//
-// Timer interrupt
-//
 
+// -----------------------------------------------------------------------------
+// Timer interrupt
+// -----------------------------------------------------------------------------
 
 //
 // I_TimerISR
 //
-int I_TimerISR(void)
+int I_TimerISR (void)
 {
     ticcount++;
     return 0;
 }
 
-//
+
+// -----------------------------------------------------------------------------
 // Keyboard
-//
-
-void (__interrupt __far *oldkeyboardisr) () = NULL;
-
-int lastpress;
+// -----------------------------------------------------------------------------
 
 //
 // I_KeyboardISR
 //
-
-void __interrupt I_KeyboardISR(void)
+void __interrupt I_KeyboardISR (void)
 {
-// Get the scan code
-
+    // Get the scan code
     keyboardque[kbdhead&(KBDQUESIZE - 1)] = lastpress = _inbyte(0x60);
     kbdhead++;
 
-// acknowledge the interrupt
-
+    // acknowledge the interrupt
     _outbyte(0x20, 0x20);
 }
 
@@ -721,44 +736,41 @@ void __interrupt I_KeyboardISR(void)
 //
 // I_StartupKeyboard
 //
-void I_StartupKeyboard(void)
+void I_StartupKeyboard (void)
 {
-	oldkeyboardisr = _dos_getvect(KEYBOARDINT);
-	_dos_setvect (0x8000 | KEYBOARDINT, I_KeyboardISR);
-
-    //I_ReadKeys ();
+    oldkeyboardisr = _dos_getvect(KEYBOARDINT);
+    _dos_setvect (0x8000 | KEYBOARDINT, I_KeyboardISR);
 }
 
 
-void I_ShutdownKeyboard(void)
+void I_ShutdownKeyboard (void)
 {
-	if (oldkeyboardisr)
+    if (oldkeyboardisr)
+    {
 		_dos_setvect (KEYBOARDINT, oldkeyboardisr);
+    }
 	*(short *)0x41c = *(short *)0x41a;      // clear bios key buffer
 }
 
 
-//
+// -----------------------------------------------------------------------------
 // Mouse
-//
+// -----------------------------------------------------------------------------
 
-int I_ResetMouse(void)
+int I_ResetMouse (void)
 {
-	regs.w.ax = 0; // reset
-	int386 (0x33, &regs, &regs);
-	return regs.w.ax;
+    regs.w.ax = 0; // reset
+    int386 (0x33, &regs, &regs);
+    return regs.w.ax;
 }
 
 
 //
 // StartupMouse
 //
-
-void I_StartupMouse(void)
+void I_StartupMouse (void)
 {
-    //
     // General mouse detection
-    //
     mousepresent = 0;
     if (M_CheckParm("-nomouse") || !usemouse)
     {
@@ -781,10 +793,11 @@ void I_StartupMouse(void)
     I_StartupCyberMan();
 }
 
+
 //
 // ShutdownMouse
 //
-void I_ShutdownMouse(void)
+void I_ShutdownMouse (void)
 {
     if (!mousepresent)
     {
@@ -802,9 +815,7 @@ void I_ReadMouse(void)
 {
     event_t ev;
 
-    //
     // mouse events
-    //
     if (!mousepresent)
     {
         return;
@@ -825,11 +836,10 @@ void I_ReadMouse(void)
     D_PostEvent(&ev);
 }
 
-//
-// Joystick
-//
 
-int joyxl, joyxh, joyyl, joyyh;
+// -----------------------------------------------------------------------------
+// Joystick
+// -----------------------------------------------------------------------------
 
 boolean WaitJoyButton(void)
 {
@@ -877,15 +887,12 @@ boolean WaitJoyButton(void)
 //
 // I_StartupJoystick
 //
-int basejoyx, basejoyy;
-
-void I_StartupJoystick(void)
+void I_StartupJoystick (void)
 {
-    // int buttons;
-    // int count;
     int centerx, centery;
 
     joystickpresent = 0;
+
     if (M_CheckParm("-nojoy") || !usejoystick)
     {
         return;
@@ -939,6 +946,7 @@ void I_StartupJoystick(void)
     printf("\n");
 }
 
+
 //
 // I_StartFrame
 //
@@ -946,9 +954,7 @@ void I_StartFrame(void)
 {
     event_t ev;
 
-    //
     // joystick events
-    //
     if (!joystickpresent)
     {
         return;
@@ -986,23 +992,16 @@ void I_StartFrame(void)
     D_PostEvent(&ev);
 }
 
-//
+
+// -----------------------------------------------------------------------------
 // DPMI stuff
-//
+// -----------------------------------------------------------------------------
 
-#define REALSTACKSIZE 1024
-
-dpmiregs_t dpmiregs;
-
-unsigned realstackseg;
-
-void I_DivException(void);
-int I_SetDivException(void);
 
 //
 // DPMIFarCall
 //
-void DPMIFarCall(void)
+void DPMIFarCall (void)
 {
     segread(&segregs);
     regs.w.ax = 0x301;
@@ -1017,72 +1016,38 @@ void DPMIFarCall(void)
 //
 // I_StartupDPMI
 //
-byte *I_AllocLow(int length);
-
-void I_StartupDPMI(void)
+void I_StartupDPMI (void)
 {
     extern char __begtext;
     extern char ___Argc;
 
-//
-// allocate a decent stack for real mode ISRs
-//
+    // allocate a decent stack for real mode ISRs
     realstackseg = (int)I_AllocLow (1024) >> 4;
 
-//
-// lock the entire program down
-//
-
+    // lock the entire program down
     _dpmi_lockregion (&__begtext, &___Argc - &__begtext);
-
-
-//
-// catch divide by 0 exception
-//
-#if 0
-    segread(&segregs);
-    regs.w.ax = 0x0203; // DPMI set processor exception handler vector
-    regs.w.bx = 0;  // int 0
-    regs.w.cx = segregs.cs;
-    regs.x.edx = (int)&I_DivException;
-    printf("%x : %x\n", regs.w.cx, regs.x.edx);
-    int386(DPMI_INT, &regs, &regs);
-#endif
-
-#if 0
-    n = I_SetDivException();
-    printf("return: %i\n", n);
-    n = 100;
-    d = 0;
-    printf("100 / 0 = %i\n", n / d);
-
-    exit(1);
-#endif
 }
 
-//
-// Timer interrupt
-//
 
-void (__interrupt __far *oldtimerisr) ();
+// -----------------------------------------------------------------------------
+// Timer interrupt
+// -----------------------------------------------------------------------------
 
 //
 // IO_TimerISR
 //
-
-//void __interrupt IO_TimerISR(void)
-
-void __interrupt __far IO_TimerISR(void)
+void __interrupt __far IO_TimerISR (void)
 {
     ticcount++;
-    _outbyte(0x20, 0x20);                            // Ack the interrupt
+    _outbyte(0x20, 0x20);   // Ack the interrupt
 }
+
 
 //
 // IO_SetTimer0
 // Sets system timer 0 to the specified speed
 //
-void IO_SetTimer0(int speed)
+void IO_SetTimer0 (int speed)
 {
     if (speed > 0 && speed < 150)
     {
@@ -1091,17 +1056,16 @@ void IO_SetTimer0(int speed)
                 "INT_SetTimer0: %i является некорректным значением", speed);
     }
 
-    _outbyte(0x43, 0x36);                            // Change timer 0
+    _outbyte(0x43, 0x36);   // Change timer 0
     _outbyte(0x40, speed);
     _outbyte(0x40, speed >> 8);
 }
 
 
-
 //
 // IO_StartupTimer
 //
-void IO_StartupTimer(void)
+void IO_StartupTimer (void)
 {
     oldtimerisr = _dos_getvect(TIMERINT);
 
@@ -1109,11 +1073,12 @@ void IO_StartupTimer(void)
     IO_SetTimer0(VBLCOUNTER);
 }
 
-void IO_ShutdownTimer(void)
+
+void IO_ShutdownTimer (void)
 {
     if (oldtimerisr)
     {
-        IO_SetTimer0(0);              // back to 18.4 ips
+        IO_SetTimer0(0);    // back to 18.4 ips
         _dos_setvect(TIMERINT, oldtimerisr);
     }
 }
@@ -1122,11 +1087,13 @@ void IO_ShutdownTimer(void)
 // I_Init
 // hook interrupts and set graphics mode
 //
-void I_Init(void)
+void I_Init (void)
 {
     int p;
+
     novideo = M_CheckParm("novideo");
     p = M_CheckParm("-control");
+
     if (p)
     {
         extcontrol = (extapi_t*)atoi(myargv[p + 1]);
@@ -1134,6 +1101,7 @@ void I_Init(void)
                "Using external control API\n" :
                "Используется внешний API управления\n");
     }
+
     printf("I_StartupDPMI\n");
     I_StartupDPMI();
     printf("I_StartupMouse\n");
@@ -1146,11 +1114,12 @@ void I_Init(void)
     I_StartupSound();
 }
 
+
 //
 // I_Shutdown
 // return to default system state
 //
-void I_Shutdown(void)
+void I_Shutdown (void)
 {
     I_ShutdownGraphics();
     I_ShutdownSound();
@@ -1158,6 +1127,7 @@ void I_Shutdown(void)
     I_ShutdownMouse();
     I_ShutdownKeyboard();
 }
+
 
 //
 // I_Error
@@ -1175,13 +1145,14 @@ void I_Error (char *error, ...)
     exit(1);
 }
 
+
 //
 // I_Quit
 //
 // Shuts down net game, saves defaults, prints the exit text message,
 // goes to text mode, and exits.
 //
-void I_Quit(void)
+void I_Quit (void)
 {
     byte *scr;
 
@@ -1200,18 +1171,13 @@ void I_Quit(void)
     }
     else
     {
-        if (shareware)
-            scr = (byte*)W_CacheLumpName("ENDOOMS", PU_CACHE);
-        else if (registered)
-            scr = (byte*)W_CacheLumpName("ENDOOMR", PU_CACHE);
-        else if (retail)
-            scr = (byte*)W_CacheLumpName("ENDOOMU", PU_CACHE);
-        else if (tnt)
-            scr = (byte*)W_CacheLumpName("ENDOOMT", PU_CACHE);
-        else if (plutonia)
-            scr = (byte*)W_CacheLumpName("ENDOOMP", PU_CACHE);
-        else
-            scr = (byte*)W_CacheLumpName("ENDOOMH", PU_CACHE);
+        scr = (byte*)W_CacheLumpName(shareware ? "ENDOOMS" :
+                                    registered ? "ENDOOMR" :
+                                        retail ? "ENDOOMU" :
+                                      plutonia ? "ENDOOMP" :
+                                           tnt ? "ENDOOMT" :
+                                                 "ENDOOMH" ,
+                                                 PU_CACHE);
     }
     I_ShutdownGraphics();
     I_ShutdownSound();
@@ -1229,16 +1195,17 @@ void I_Quit(void)
     exit(0);
 }
 
+
 //
 // I_ZoneBase
 //
-byte *I_ZoneBase(int *size)
+byte *I_ZoneBase (int *size)
 {
-    int meminfo[32];
-    int heap;
-    byte *ptr;
-    int maxmem = 0x800000; // [JN] Initial heap size to use
-    int p;
+    int    meminfo[32];
+    int    heap;
+    int    maxmem = 0x800000; // [JN] Initial heap size to use (8 MB).
+    int    p;
+    byte  *ptr;
 
     memset(meminfo, 0, sizeof(meminfo));
     segread(&segregs);
@@ -1251,7 +1218,7 @@ byte *I_ZoneBase(int *size)
     printf(english_language ?
            "DPMI memory: 0x%x" :
            "Память DPMI: 0x%x", heap);
-    
+
     // [JN] Command line parameter to increase/decrease heap size
     // Thanks to Alexandre-Xavier Labonte-Lamoureux for the code!
     p = M_CheckParm ("-mb");
@@ -1292,34 +1259,21 @@ byte *I_ZoneBase(int *size)
         else
         {
             printf("Недостаточно оперативной памяти!\n");
-            printf("Для запуска DOOM необходимо минимум 2 мегабайта памяти.\n\n");
             printf("Выполнение программы прервано.\n");
         }
         exit(1);
     }
-#if 0
-    regs.w.ax = 0x501; // allocate linear block
-    regs.w.bx = heap >> 16;
-    regs.w.cx = heap & 0xffff;
-    int386(0x31, &regs, &regs);
-    if (regs.w.cflag)
-    {
-        I_Error(english_language ?
-                "Couldn't allocate DPMI memory!" :
-                "Невозможно распределить память DPMI!");
-    }
-    block = (regs.w.si << 16) + regs.w.di;
-#endif
 
     *size = heap;
     return ptr;
 }
 
-//
-// Disk icon flashing
-//
 
-void I_InitDiskFlash(void)
+// -----------------------------------------------------------------------------
+// Disk icon flashing
+// -----------------------------------------------------------------------------
+
+void I_InitDiskFlash (void)
 {
     void *pic;
     byte *temp;
@@ -1332,19 +1286,25 @@ void I_InitDiskFlash(void)
     {
         pic = W_CacheLumpName("STDISK", PU_CACHE);
     }
+
     temp = destscreen;
     destscreen = (byte *)0xac000;
+
     // [JN] Disk icon - make optional
     if (show_diskicon || vanilla)
-    V_DrawPatchDirect(SCREENWIDTH - 16, SCREENHEIGHT - 16, 0, pic);
+    {
+        V_DrawPatchDirect(SCREENWIDTH - 16, SCREENHEIGHT - 16, 0, pic);
+    }
     destscreen = temp;
 }
 
+
 // draw disk icon
-void I_BeginRead(void)
+void I_BeginRead (void)
 {
-    byte *src, *dest;
-    int y;
+    int    y;
+    byte  *src;
+    byte  *dest;
 
     if (!grmode)
     {
@@ -1361,7 +1321,7 @@ void I_BeginRead(void)
     // copy to backup
     src = currentscreen + 184 * 80 + 304 / 4;
     dest = (byte *)0xac000 + 184 * 80 + 288 / 4;
-    for (y = 0; y<16; y++)
+    for (y = 0 ; y<16 ; y++)
     {
         dest[0] = src[0];
         dest[1] = src[1];
@@ -1374,7 +1334,7 @@ void I_BeginRead(void)
     // copy disk over
     dest = currentscreen + 184 * 80 + 304 / 4;
     src = (byte *)0xac000 + 184 * 80 + 304 / 4;
-    for (y = 0; y<16; y++)
+    for (y = 0 ; y<16 ; y++)
     {
         dest[0] = src[0];
         dest[1] = src[1];
@@ -1384,17 +1344,18 @@ void I_BeginRead(void)
         dest += 80;
     }
 
-
     // set write mode 0
     outp(GC_INDEX, GC_MODE);
     outp(GC_INDEX + 1, inp(GC_INDEX + 1)&~1);
 }
 
+
 // erase disk icon
-void I_EndRead(void)
+void I_EndRead (void)
 {
-    byte *src, *dest;
-    int y;
+    int   y;
+    byte *src;
+    byte *dest;    
 
     if (!grmode)
     {
@@ -1407,7 +1368,6 @@ void I_EndRead(void)
     // set write mode 1
     outp(GC_INDEX, GC_MODE);
     outp(GC_INDEX + 1, inp(GC_INDEX + 1) | 1);
-
 
     // copy disk over
     dest = currentscreen + 184 * 80 + 304 / 4;
@@ -1428,7 +1388,6 @@ void I_EndRead(void)
 }
 
 
-
 //
 // I_AllocLow
 //
@@ -1441,8 +1400,6 @@ byte *I_AllocLow (int length)
     regs.w.ax = 0x0100; // DPMI allocate DOS memory
     regs.w.bx = (length + 15) / 16;
     int386(DPMI_INT, &regs, &regs);
-    //segment = regs.w.ax;
-    //selector = regs.w.dx;
     if (regs.w.cflag != 0)
     {
         I_Error(english_language ?
@@ -1457,66 +1414,25 @@ byte *I_AllocLow (int length)
     return mem;
 }
 
-//
+
+// -----------------------------------------------------------------------------
 // Networking
-//
+// -----------------------------------------------------------------------------
 
-/* // FUCKED LINES
-typedef struct
-{
-	char    priv[508];
-} doomdata_t;
-*/ // FUCKED LINES
 
-#define DOOMCOM_ID 0x12345678l
-
-/* // FUCKED LINES
-typedef struct
-{
-	long    id;
-	short   intnum;                 // DOOM executes an int to execute commands
-
-// communication between DOOM and the driver
-	short   command;                // CMD_SEND or CMD_GET
-	short   remotenode;             // dest for send, set by get (-1 = no packet)
-	short   datalength;             // bytes in doomdata to be sent
-
-// info common to all nodes
-	short   numnodes;               // console is allways node 0
-	short   ticdup;                 // 1 = no duplication, 2-5 = dup for slow nets
-	short   extratics;              // 1 = send a backup tic in every packet
-	short   deathmatch;             // 1 = deathmatch
-	short   savegame;               // -1 = new game, 0-5 = load savegame
-	short   episode;                // 1-3
-	short   map;                    // 1-9
-	short   skill;                  // 1-5
-
-// info specific to this node
-	short   consoleplayer;
-	short   numplayers;
-	short   angleoffset;    // 1 = left, 0 = center, -1 = right
-	short   drone;                  // 1 = drone
-
-// packet data to be sent
-	doomdata_t      data;
-} doomcom_t;
-*/ // FUCKED LINES
-
-extern doomcom_t *doomcom;
 
 //
 // I_InitNetwork
 //
-void I_InitNetwork(void)
+void I_InitNetwork (void)
 {
-	int i;
+    int i;
 
-	i = M_CheckParm ("-net");
+    i = M_CheckParm ("-net");
+
     if (!i)
     {
-        //
         // single player game
-        //
         doomcom = malloc(sizeof(*doomcom));
         if (!doomcom)
         {
@@ -1542,10 +1458,10 @@ void I_InitNetwork(void)
     doomcom->episode = startepisode;
     doomcom->map = startmap;
     doomcom->deathmatch = deathmatch;
-
 }
 
-void I_NetCmd(void)
+
+void I_NetCmd (void)
 {
     if (!netgame)
     {
@@ -1556,10 +1472,11 @@ void I_NetCmd(void)
     DPMIInt(doomcom->intnum);
 }
 
+
 //
 // DPMIInt
 //
-void DPMIInt(int i)
+void DPMIInt (int i)
 {
     dpmiregs.ss = realstackseg;
     dpmiregs.sp = REALSTACKSIZE - 4;
