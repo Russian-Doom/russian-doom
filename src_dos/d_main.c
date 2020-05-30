@@ -1085,9 +1085,9 @@ void D_DoomMain (void)
         if (english_language)
         {
             sprintf(title,
-            "                         "
+            "                            "
             "DOOM System Startup v%i.%i"
-            "                           ",
+            "                            ",
             VERSION/100,VERSION%100);
         }
         else
@@ -1112,9 +1112,9 @@ void D_DoomMain (void)
         if (english_language)
         {
             sprintf(title,
-            "                     "
-            "DOOM 2: TNT - Evilution v%i.%i"
-            "                           ",
+            "                        "
+            "Final DOOM: TNT - Evilution v%i.%i"
+            "                        ",
             VERSION/100,VERSION%100);
         }
         else
@@ -1131,9 +1131,9 @@ void D_DoomMain (void)
         if (english_language)
         {
             sprintf(title,
-            "                   "
-            "DOOM 2: Plutonia Experiment v%i.%i"
-            "                           ",
+            "                      "
+            "Final DOOM: Plutonia Experiment v%i.%i"
+            "                      ",
             VERSION/100,VERSION%100);
         }
         else
@@ -1150,9 +1150,9 @@ void D_DoomMain (void)
         if (english_language)
         {
             sprintf(title,
-            "                         "
+            "                          "
             "DOOM 2: Hell on Earth v%i.%i"
-            "                           ",
+            "                            ",
             VERSION/100,VERSION%100);
         }
         else
@@ -1356,7 +1356,7 @@ void D_DoomMain (void)
             sprintf(title,
             "                         "
             "The Ultimate DOOM Startup v%i.%i"
-            "                        ",
+            "                         ",
             VERSION/100,VERSION%100);
         }
         else
@@ -1432,10 +1432,10 @@ void D_DoomMain (void)
         if (english_language)
         {
             printf(
-            "===========================================================================\n"
-            "              This version is NOT SHAREWARE, do not distribute!\n"
-            "         Please report software piracy to the SPA: 1-800-388-PIR8\n"
-            "===========================================================================\n"
+            "================================================================================"
+            "               This version is NOT SHAREWARE, do not distribute!                "
+            "            Please report software piracy to the SPA: 1-800-388-PIR8            "
+            "================================================================================"
             );
         }
         else
@@ -1466,10 +1466,10 @@ void D_DoomMain (void)
         if (english_language)
         {
             printf(
-            "===========================================================================\n"
-            "                            Do not distribute!\n"
-            "         Please report software piracy to the SPA: 1-800-388-PIR8\n"
-            "===========================================================================\n"
+            "================================================================================"
+            "                               Do not distribute!                               "
+            "            Please report software piracy to the SPA: 1-800-388-PIR8            "
+            "================================================================================"
             );
         }
         else
