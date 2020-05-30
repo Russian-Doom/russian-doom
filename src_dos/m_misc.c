@@ -441,7 +441,7 @@ default_t	defaults[] =
     {"automap_color", &automap_color, 0},
     {"automap_antialias", &automap_antialias, 1},
     {"automap_stats", &automap_stats, 1},
-    {"automap_overlay", &automap_overlay, 0},
+//  {"automap_overlay", &automap_overlay, 0}, 
     {"automap_rotate", &automap_rotate, 0},
     {"automap_grid", &automap_grid, 0},
     {"automap_follow", &automap_follow, 1},

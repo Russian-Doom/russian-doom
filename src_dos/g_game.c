@@ -169,6 +169,15 @@ int screen_wiping;
 int snd_monomode;
 int snd_pitchshift;
 
+// Automap
+int automap_color;
+int automap_antialias;
+int automap_stats;
+int automap_overlay = 0; // [JN] Not working, keep for better times.
+int automap_rotate;
+int automap_follow;
+int automap_grid;
+
 // Controls
 int mlook;
 
@@ -188,7 +197,6 @@ int blazing_door_fix_sfx;
 int noise_alert_sfx;
 
 // Gameplay: Tactical
-int automap_stats;
 int secret_notification;
 int negative_health;
 

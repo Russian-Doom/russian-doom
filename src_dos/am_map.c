@@ -39,6 +39,8 @@
 #include "dstrings.h"
 #include "am_map.h"
 
+#include "jn.h"
+
 
 // For use if I do walls with outsides/insides
 #define REDS        (256-5*16)
@@ -201,15 +203,6 @@ mline_t thintriangle_guy[] = {
 };
 #undef R
 #define NUMTHINTRIANGLEGUYLINES (sizeof(thintriangle_guy)/sizeof(mline_t))
-
-// [JN] 
-int automap_color = 0;
-int automap_antialias = 1;
-int automap_stats = 1;
-int automap_overlay = 0;
-int automap_rotate = 0;
-int automap_follow = 1;
-int automap_grid = 0;
 
 
 static int  cheating = 0;
@@ -1100,7 +1093,6 @@ void AM_drawFline (fline_t* fl, int color)
             if (color == GRAYS+3)
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
         }
-        /*
         // Boom colors:
         if (automap_color == 1)
         {
@@ -1126,13 +1118,13 @@ void AM_drawFline (fline_t* fl, int color)
         // Jaguar colors:
         if (automap_color == 2)
         {
-            if (color == RED_JAGUAR)
+            if (color == 32)    // dark red
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[14][0]), 8, 3);
-            if (color == GREEN_JAGUAR)
+            if (color == 120)   // dark green
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[15][0]), 8, 3);
-            if (color == MAGENTA_JAGUAR)
+            if (color == 254)   // dark magenta
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[16][0]), 8, 3);
-            if (color == YELLOW_JAGUAR)
+            if (color == 163)   // dark yellow
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[17][0]), 8, 3);
             if (color == TSWALLCOLORS)  // Hidden gray walls
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[2][0]), 8, 3);
@@ -1179,7 +1171,6 @@ void AM_drawFline (fline_t* fl, int color)
             if (color == 102)   // One-sided wall (LINE_NEVERSEE)
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[31][0]), 8, 3);
         }
-        */
         // Common colors:
         {
             if (color == YOURCOLORS)    // White player arrow
@@ -1589,6 +1580,343 @@ void AM_drawWalls (void)
     }
 }
 
+// -----------------------------------------------------------------------------
+// [JN] Automap colors: Boom
+// -----------------------------------------------------------------------------
+void AM_drawWallsBoom(void)
+{
+    int i;
+    static mline_t l;
+
+    for (i=0;i<numlines;i++)
+    {
+        l.a.x = lines[i].v1->x;
+        l.a.y = lines[i].v1->y;
+        l.b.x = lines[i].v2->x;
+        l.b.y = lines[i].v2->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&l.a);
+            AM_rotatePoint(&l.b);
+        }
+        if (cheating || (lines[i].flags & ML_MAPPED))
+        {
+            if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
+            continue;
+
+            if (!lines[i].backsector)
+            {
+                AM_drawMline(&l, 23);
+            }
+            else
+            {
+                // [JN] Various teleporters
+                if (lines[i].special == 39
+                ||  lines[i].special == 97
+                ||  lines[i].special == 125
+                ||  lines[i].special == 126)
+                {
+                    AM_drawMline(&l, 119);
+                }
+                // [JN] Secret door
+                else if (lines[i].flags & ML_SECRET)
+                {
+                    AM_drawMline(&l, 23);      // wall color
+                }
+
+                // [JN] BLUE locked doors
+                else if (lines[i].special == 26 || lines[i].special == 32
+                     ||  lines[i].special == 99 || lines[i].special == 133)
+                {
+                    AM_drawMline(&l, 204);
+                }
+                // [JN] RED locked doors
+                else if (lines[i].special == 28 || lines[i].special == 33
+                     ||  lines[i].special == 134 || lines[i].special == 135)
+                {
+                    AM_drawMline(&l, 175);
+                }
+                // [JN] YELLOW locked doors
+                else if (lines[i].special == 27 || lines[i].special == 34
+                     ||  lines[i].special == 136 || lines[i].special == 137)
+                {
+                    AM_drawMline(&l, 231);
+                }
+
+                // non-secret closed door
+                else if
+                (!(lines[i].flags & ML_SECRET) &&
+                ((lines[i].backsector->floorheight==lines[i].backsector->ceilingheight) ||
+                (lines[i].frontsector->floorheight==lines[i].frontsector->ceilingheight)))
+                {
+                    AM_drawMline(&l, 208);      // non-secret closed door
+                } //jff 1/6/98 show secret sector 2S lines
+                // floor level change
+                else if (lines[i].backsector->floorheight !=
+                         lines[i].frontsector->floorheight)
+                {
+                    AM_drawMline(&l, 55);
+                }
+                // ceiling level change
+                else if (lines[i].backsector->ceilingheight !=
+                         lines[i].frontsector->ceilingheight)
+                {
+                    AM_drawMline(&l, 215);
+                }
+                //2S lines that appear only in IDDT
+                else if (cheating)
+                {
+                    AM_drawMline(&l, 88);
+                }
+            }
+        }
+        // computermap visible lines
+        else if (plr->powers[pw_allmap])
+        {
+            if (!(lines[i].flags & ML_DONTDRAW)) // invisible flag lines do not show
+            {
+                if
+                (
+                !lines[i].backsector
+                ||
+                lines[i].backsector->floorheight
+                != lines[i].frontsector->floorheight
+                ||
+                lines[i].backsector->ceilingheight
+                != lines[i].frontsector->ceilingheight
+                )
+                    AM_drawMline(&l, 104);
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// [JN] Atari Jaguar: draw walls using Jaguar colors.
+// Adapted from original Jaguar Doom source, AM_Drawer.
+// -----------------------------------------------------------------------------
+void AM_drawWallsJaguar(void)
+{
+    int i;
+    static mline_t l;
+
+    for (i=0;i<numlines;i++)
+    {
+        l.a.x = lines[i].v1->x;
+        l.a.y = lines[i].v1->y;
+        l.b.x = lines[i].v2->x;
+        l.b.y = lines[i].v2->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&l.a);
+            AM_rotatePoint(&l.b);
+        }
+        if (cheating || (lines[i].flags & ML_MAPPED))
+        {
+            if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
+            continue;
+
+            if (!lines[i].backsector)
+            {
+                AM_drawMline(&l, 32);
+            }
+            else
+            {
+                // Teleport line
+                if (lines[i].special == 39 || lines[i].special == 97)
+                AM_drawMline(&l, 120);
+
+                // Secret door
+                else if (lines[i].flags & ML_SECRET)
+                AM_drawMline(&l, 32);
+
+                // Any special linedef
+                else if (lines[i].special)
+                AM_drawMline(&l, 254);
+
+                // Floor level change
+                else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight)
+                AM_drawMline(&l, 163);
+
+                // Ceiling level change
+                else if (lines[i].backsector->ceilingheight != lines[i].frontsector->ceilingheight)
+                AM_drawMline(&l, 163);
+
+                // Hidden gray walls
+                else if (cheating)
+                AM_drawMline(&l, TSWALLCOLORS);
+
+            }
+        }
+        else if (plr->powers[pw_allmap])
+        {
+            if (!(lines[i].flags & LINE_NEVERSEE)) AM_drawMline(&l, GRAYS+3);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// [JN] Automap colors: Raven (Heretic)
+// -----------------------------------------------------------------------------
+void AM_drawWallsRaven(void)
+{
+    int i;
+    static mline_t l;
+
+    for (i=0;i<numlines;i++)
+    {
+        l.a.x = lines[i].v1->x;
+        l.a.y = lines[i].v1->y;
+        l.b.x = lines[i].v2->x;
+        l.b.y = lines[i].v2->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&l.a);
+            AM_rotatePoint(&l.b);
+        }
+        if (cheating || (lines[i].flags & ML_MAPPED))
+        {
+            if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
+            continue;
+
+            if (!lines[i].backsector)
+            {
+                AM_drawMline(&l, 151+lightlev);
+            }
+            else
+            {
+                // [JN] Various teleporters
+                if (lines[i].special == 39
+                ||  lines[i].special == 97
+                ||  lines[i].special == 125
+                ||  lines[i].special == 126)
+                {
+                    AM_drawMline(&l, 116);
+                }
+                // [JN] Secret door
+                else if (lines[i].flags & ML_SECRET)
+                {
+                    if (cheating) 
+                        AM_drawMline(&l, 0);
+                    else 
+                        AM_drawMline(&l, 108+lightlev);
+                }
+                // [JN] BLUE locked doors
+                else if (lines[i].special == 26 || lines[i].special == 32
+                     ||  lines[i].special == 99 || lines[i].special == 133)
+                {
+                    AM_drawMline(&l, 199);
+                }
+                // [JN] RED locked doors
+                else if (lines[i].special == 28 || lines[i].special == 33
+                     ||  lines[i].special == 134 || lines[i].special == 135)
+                {
+                    AM_drawMline(&l, 178);
+                }
+                // [JN] YELLOW locked doors
+                else if (lines[i].special == 27 || lines[i].special == 34
+                     ||  lines[i].special == 136 || lines[i].special == 137)
+                {
+                    AM_drawMline(&l, 161);
+                }
+                // [JN] floor level change
+                else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight) 
+                {
+                    AM_drawMline(&l, 239 + lightlev);
+                }
+                // [JN] ceiling level change
+                else if (lines[i].backsector->ceilingheight != lines[i].frontsector->ceilingheight) 
+                {
+                    AM_drawMline(&l, 133+lightlev);
+                }
+                else if (cheating)
+                {
+                    AM_drawMline(&l, 99+lightlev);
+                }
+            }
+        }
+        else if (plr->powers[pw_allmap])
+        {
+            if (!(lines[i].flags & LINE_NEVERSEE)) 
+                AM_drawMline(&l, 99);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// [JN] Automap colors: Strife
+// -----------------------------------------------------------------------------
+void AM_drawWallsStrife(void)
+{
+    int i;
+    static mline_t l;
+
+    for (i=0;i<numlines;i++)
+    {
+        l.a.x = lines[i].v1->x;
+        l.a.y = lines[i].v1->y;
+        l.b.x = lines[i].v2->x;
+        l.b.y = lines[i].v2->y;
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&l.a);
+            AM_rotatePoint(&l.b);
+        }
+        if (cheating || (lines[i].flags & ML_MAPPED))
+        {
+            if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
+            continue;
+
+            // villsa [STRIFE]
+            // [JN] Changed to Doom exit lines
+            if (lines[i].special == 11
+            ||  lines[i].special == 51
+            ||  lines[i].special == 52
+            ||  lines[i].special == 124)
+            {
+                AM_drawMline(&l, 119);
+            }
+            // villsa [STRIFE] lightlev is unused here
+            else if (!lines[i].backsector)
+            {
+                AM_drawMline(&l, 86);
+            }
+            else
+            {
+                // [JN] Various teleporters
+                if (lines[i].special == 39
+                ||  lines[i].special == 97
+                ||  lines[i].special == 125
+                ||  lines[i].special == 126)
+                {
+                    AM_drawMline(&l, 135);
+                }
+                else if (lines[i].flags & ML_SECRET) // secret door
+                {
+                    // villsa [STRIFE] just draw the wall as is!
+                    AM_drawMline(&l, 86);
+                }
+                else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight) 
+                {
+                    AM_drawMline(&l, 203); // floor level change
+                }
+                else if (lines[i].backsector->ceilingheight != lines[i].frontsector->ceilingheight) 
+                {
+                    AM_drawMline(&l, 195); // ceiling level change
+                }
+                else if (cheating)
+                {
+                    AM_drawMline(&l, 98);
+                }
+            }
+        }
+        else if (plr->powers[pw_allmap])
+        {
+            if (!(lines[i].flags & LINE_NEVERSEE)) 
+                AM_drawMline(&l, 102);
+        }
+    }
+}
 
 //
 // Rotation in 2D.
@@ -1809,7 +2137,17 @@ void AM_Drawer (void)
     if (automap_grid)
 	AM_drawGrid(GRIDCOLORS);
 
+    if (automap_color == 0 || vanilla)  // Doom
     AM_drawWalls();
+    else if (automap_color == 1)        // Boom
+    AM_drawWallsBoom();
+    else if (automap_color == 2)        // Jaguar
+    AM_drawWallsJaguar();
+    else if (automap_color == 3)        // Raven (Heretic)
+    AM_drawWallsRaven();
+    else                                // Strife
+    AM_drawWallsStrife();
+
     AM_drawPlayers();
 
     if (cheating==2)
