@@ -541,6 +541,73 @@ void V_DrawPatch (int x, int y, int scrn, patch_t *patch)
 } 
 
 
+// V_DrawShadowedPatch
+// [JN] Masks a column based masked pic with shadow to the screen. 
+void V_DrawShadowedPatch (int x, int y, int scrn, patch_t *patch)
+{ 
+    int        count, col, w;
+    byte      *source, *sourcetrans;
+    byte      *desttop, *dest;
+    byte      *desttop2, *dest2;
+    column_t  *column;
+
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
+
+#ifdef RANGECHECK 
+    if (x < 0
+    ||  x + SHORT(patch->width) >SCREENWIDTH
+    ||  y < 0
+    ||  y + SHORT(patch->height)>SCREENHEIGHT
+    || (unsigned)scrn > 4)
+    {
+        // [JN] Disabled for preventing text mess appearing on the screen.
+        return;
+    }
+#endif
+
+    if (!scrn)
+    {
+        V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height));
+    }
+
+    col = 0;
+    desttop = screens[scrn] + y * SCREENWIDTH + x;
+    desttop2 = screens[scrn] + (y+1) * SCREENWIDTH + (x+1);
+
+    w = SHORT(patch->width);
+
+    for ( ; col<w ; x++, col++, desttop++, desttop2++)
+    {
+        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
+
+        // step through the posts in a column
+        while (column->topdelta != 0xff )
+        {
+            source = sourcetrans = (byte *)column + 3;
+            dest = desttop + column->topdelta * SCREENWIDTH;
+            dest2 = desttop2 + column->topdelta * SCREENWIDTH;
+            count = column->length;
+
+            while (count--)
+            {
+                if (dp_translation)
+                {
+                    sourcetrans = &dp_translation[*source++];
+                }
+
+				*dest2 = tinttable[((*dest2)<<8)];
+				dest2 += SCREENWIDTH;
+                *dest = *sourcetrans++;
+                dest += SCREENWIDTH;
+            }
+
+            column = (column_t *)((byte *)column + column->length + 4 );
+        }
+    }
+}
+
+
 //
 // V_DrawPatchFlipped 
 // Masks a column based masked pic to the screen.
@@ -683,78 +750,6 @@ void V_DrawPatchDirect (int x, int y, int scrn, patch_t *patch)
         }
     }
 }
-
-
-//
-// V_DrawShadow
-// [JN] Masks a column based masked shadow to the screen. 
-//
-void V_DrawShadow (int x, int y, int scrn, patch_t *patch)
-{ 
-    int        count;
-    int        col; 
-    int        w;
-    byte      *desttop;
-    byte      *dest;
-    byte      *source; 
-    column_t  *column;
-
-    if (!draw_shadowed_text || vanilla)
-    {
-        return;
-    }
-
-    y -= SHORT(patch->topoffset);
-    x -= SHORT(patch->leftoffset);
-
-#ifdef RANGECHECK 
-    if (x < 0 
-    ||  x + SHORT(patch->width) >SCREENWIDTH 
-    ||  y < 0
-    ||  y + SHORT(patch->height)>SCREENHEIGHT
-    || (unsigned)scrn > 4)
-    {
-        // [JN] Disabled for preventing text mess appearing on the screen.
-        /*
-        fprintf( stderr, "Shadow at %d,%d exceeds LFB\n", x,y );
-        // No I_Error abort - what is up with TNT.WAD?
-        fprintf( stderr, "V_DrawShadow: bad patch (ignored)\n");
-        */
-        return;
-    }
-#endif
-
-    if (!scrn)
-    {
-        V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height));
-    }
-
-    col = 0;
-    desttop = screens[scrn] + y*SCREENWIDTH + x;
-
-    w = SHORT(patch->width);
-
-    for ( ; col<w ; x++, col++, desttop++)
-    { 
-        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
-
-        // step through the posts in a column
-        while (column->topdelta != 0xff)
-        {
-            source = (byte *)column + 3;
-            dest = desttop + column->topdelta*SCREENWIDTH; 
-            count = column->length;
-
-            while (count--) 
-            {
-                *dest = tinttable[((*dest)<<8)];
-                dest += SCREENWIDTH;
-            }
-
-            column = (column_t *)((byte *)column + column->length + 4); 
-        }
-    }
-} 
 
 
 //

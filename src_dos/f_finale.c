@@ -436,28 +436,14 @@ void F_TextWrite (void)
             continue;
         }
 
-        if (english_language)
-        {
-            w = SHORT (hu_font[c]->width);
-        }
-        else
-        {
-            w = SHORT (hu_font_small_rus[c]->width);
-        }
+        w = SHORT (english_language ? 
+                   hu_font[c]->width : hu_font_small_rus[c]->width);
 
         if (cx+w > SCREENWIDTH)
         break;
 
-        if (english_language)
-        {
-            V_DrawShadow(cx+1, cy+1, 0, hu_font[c]);
-            V_DrawPatch(cx, cy, 0, hu_font[c]);
-        }
-        else
-        {
-            V_DrawShadow(cx+1, cy+1, 0, hu_font_small_rus[c]);
-            V_DrawPatch(cx, cy, 0, hu_font_small_rus[c]);
-        }
+        V_DrawShadowedPatch(cx, cy, 0, english_language ?
+                                       hu_font[c] : hu_font_small_rus[c]);
 
         cx+=w;
     }
@@ -733,18 +719,11 @@ void F_CastPrint (char* text)
             continue;
         }
 
-        if (english_language)
-        {
-            w = SHORT (hu_font[c]->width);
-            V_DrawShadow(cx+1, 181, 0, hu_font[c]);
-            V_DrawPatch(cx, 180, 0, hu_font[c]);
-        }
-        else
-        {
-            w = SHORT (hu_font_small_rus[c]->width);
-            V_DrawShadow(cx+1, 181, 0, hu_font_small_rus[c]);
-            V_DrawPatch(cx, 180, 0, hu_font_small_rus[c]);
-        }
+        w = SHORT (english_language ?
+                   hu_font[c]->width : hu_font_small_rus[c]->width);
+
+        V_DrawShadowedPatch(cx, 180, 0, english_language ?
+                                        hu_font[c] : hu_font_small_rus[c]);
 
         cx+=w;
     }
@@ -856,24 +835,11 @@ void F_BunnyScroll (void)
 
     if (finalecount < 1180)
     {
-        if (english_language)
-        {
-            V_DrawShadow(((SCREENWIDTH-13*8)/2)+1,
-                         ((SCREENHEIGHT-8*8)/2)+1,0,
-                           W_CacheLumpName ("END0",PU_CACHE));
-            V_DrawPatch((SCREENWIDTH-13*8)/2,
-                        (SCREENHEIGHT-8*8)/2,0,
-                         W_CacheLumpName ("END0",PU_CACHE));
-        }
-        else
-        {
-            V_DrawShadow(((SCREENWIDTH-13*8)/2)+1,
-                         ((SCREENHEIGHT-8*8)/2)+1,0,
-                           W_CacheLumpName ("RD_END0",PU_CACHE));
-            V_DrawPatch((SCREENWIDTH-13*8)/2,
-                        (SCREENHEIGHT-8*8)/2,0,
-                         W_CacheLumpName ("RD_END0",PU_CACHE));
-        }
+        V_DrawShadowedPatch((SCREENWIDTH-13*8)/2,
+                            (SCREENHEIGHT-8*8)/2,0,
+                             W_CacheLumpName (english_language ?
+                                              "END0" : "RD_END0", PU_CACHE));
+
         laststage = 0;
         return;
     }
@@ -891,12 +857,9 @@ void F_BunnyScroll (void)
 
     sprintf (name, english_language ? "END%i" : "RD_END%i",stage);
 
-    V_DrawShadow(((SCREENWIDTH-13*8)/2)+1, 
-                 ((SCREENHEIGHT-8*8)/2)+1,0,
-                   W_CacheLumpName (name,PU_CACHE));
-    V_DrawPatch((SCREENWIDTH-13*8)/2,
-                (SCREENHEIGHT-8*8)/2,0,
-                 W_CacheLumpName (name,PU_CACHE));
+    V_DrawShadowedPatch((SCREENWIDTH-13*8)/2,
+                        (SCREENHEIGHT-8*8)/2,0,
+                         W_CacheLumpName (name,PU_CACHE));
 }
 
 

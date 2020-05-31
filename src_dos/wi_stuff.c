@@ -367,39 +367,29 @@ void WI_drawLF(void)
     // draw <LevelName> 
     if (english_language)
     {
-        V_DrawShadow(((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2)+1, 
-                     y+1, FB, lnames[wbs->last]);
-        V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2,
+        V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames[wbs->last]->width))/2,
                     y, FB, lnames[wbs->last]);
     }
     else
     {
         if (shareware || registered || retail)
         {
-            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2)+1, 
-                        y+1, FB, lnames_d1_rus[wbs->last]);
-            V_DrawPatch((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2,
+            V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->last]->width))/2,
                         y, FB, lnames_d1_rus[wbs->last]);
         }
         else if (plutonia)
         {
-            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->last]->width))/2)+1, 
-                        y+1, FB, lnames_plut_rus[wbs->last]);
-            V_DrawPatch((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->last]->width))/2,
+            V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->last]->width))/2,
                         y, FB, lnames_plut_rus[wbs->last]);
         }
         else if (tnt)
         {
-            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->last]->width))/2)+1, 
-                         y+1, FB, lnames_tnt_rus[wbs->last]);
-            V_DrawPatch((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->last]->width))/2,
+            V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->last]->width))/2,
                          y, FB, lnames_tnt_rus[wbs->last]);
         }
         else
         {
-            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2)+1, 
-                         y+1, FB, lnames_d2_rus[wbs->last]);
-            V_DrawPatch((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2,
+            V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->last]->width))/2,
                         y, FB, lnames_d2_rus[wbs->last]);
         }
     }
@@ -409,13 +399,11 @@ void WI_drawLF(void)
 
     if (english_language)
     {
-        V_DrawShadow(((SCREENWIDTH - SHORT(finished->width))/2)+1, y+1, FB, finished);
-        V_DrawPatch((SCREENWIDTH - SHORT(finished->width))/2, y, FB, finished);
+        V_DrawShadowedPatch((SCREENWIDTH - SHORT(finished->width))/2, y, FB, finished);
     }
     else
     {
-        V_DrawShadow(((SCREENWIDTH - SHORT(finished_rus->width))/2)+1, y+1, FB, finished_rus);
-        V_DrawPatch((SCREENWIDTH - SHORT(finished_rus->width))/2, y, FB, finished_rus);
+        V_DrawShadowedPatch((SCREENWIDTH - SHORT(finished_rus->width))/2, y, FB, finished_rus);
     }
 }
 
@@ -428,13 +416,11 @@ void WI_drawEL(void)
     // draw "Entering"
     if (english_language)
     {
-        V_DrawShadow(((SCREENWIDTH - SHORT(entering->width))/2)+1, y+1, FB, entering);
-        V_DrawPatch((SCREENWIDTH - SHORT(entering->width))/2, y, FB, entering);
+        V_DrawShadowedPatch((SCREENWIDTH - SHORT(entering->width))/2, y, FB, entering);
     }
     else
     {
-        V_DrawShadow(((SCREENWIDTH - SHORT(entering_rus->width))/2)+1, y+1, FB, entering_rus);
-        V_DrawPatch((SCREENWIDTH - SHORT(entering_rus->width))/2, y, FB, entering_rus);
+        V_DrawShadowedPatch((SCREENWIDTH - SHORT(entering_rus->width))/2, y, FB, entering_rus);
     }
 
     // draw level
@@ -442,37 +428,28 @@ void WI_drawEL(void)
 
     if (english_language)
     {
-        V_DrawShadow(((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2)+1, y+1, FB, lnames[wbs->next]);
-        V_DrawPatch((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2, y, FB, lnames[wbs->next]);
+        V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames[wbs->next]->width))/2, y, FB, lnames[wbs->next]);
     }
     else
     {
         if (shareware || registered || retail)
         {
-            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2)+1,
-                         y+1, FB, lnames_d1_rus[wbs->next]);
-            V_DrawPatch((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2,
+            V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames_d1_rus[wbs->next]->width))/2,
                         y, FB, lnames_d1_rus[wbs->next]);
         }
         else if (plutonia)
         {
-            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->next]->width))/2)+1,
-                         y+1, FB, lnames_plut_rus[wbs->next]);
-            V_DrawPatch((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->next]->width))/2,
+            V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames_plut_rus[wbs->next]->width))/2,
                         y, FB, lnames_plut_rus[wbs->next]);
         }
         else if (tnt)
         {
-            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->next]->width))/2)+1,
-                         y+1, FB, lnames_tnt_rus[wbs->next]);
-            V_DrawPatch((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->next]->width))/2,
+            V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames_tnt_rus[wbs->next]->width))/2,
                         y, FB, lnames_tnt_rus[wbs->next]);
         }
         else
         {
-            V_DrawShadow(((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2)+1,
-                         y+1, FB, lnames_d2_rus[wbs->next]);
-            V_DrawPatch((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2,
+            V_DrawShadowedPatch((SCREENWIDTH - SHORT(lnames_d2_rus[wbs->next]->width))/2,
                         y, FB, lnames_d2_rus[wbs->next]);
         }
     }
@@ -509,8 +486,7 @@ void WI_drawOnLnode (int n, patch_t *c[])
 
     if (fits && i<2)
     {
-        V_DrawShadow(lnodes[wbs->epsd][n].x+1, lnodes[wbs->epsd][n].y+1, FB, c[i]);
-        V_DrawPatch(lnodes[wbs->epsd][n].x, lnodes[wbs->epsd][n].y, FB, c[i]);
+        V_DrawShadowedPatch(lnodes[wbs->epsd][n].x, lnodes[wbs->epsd][n].y, FB, c[i]);
     }
     else
     {
@@ -704,16 +680,14 @@ int WI_drawNum (int x, int y, int n, int digits)
     while (digits--)
     {
         x -= fontwidth;
-        V_DrawShadow(x+1, y+1, FB, num[ n % 10 ]);
-        V_DrawPatch(x, y, FB, num[ n % 10 ]);
+        V_DrawShadowedPatch(x, y, FB, num[ n % 10 ]);
         n /= 10;
     }
 
     // draw a minus sign if necessary
     if (neg)
     {
-        V_DrawShadow(x-=9, y+1, FB, wiminus);
-        V_DrawPatch(x-=8, y, FB, wiminus);
+        V_DrawShadowedPatch(x-=8, y, FB, wiminus);
     }
 
     return x;
@@ -727,8 +701,7 @@ void WI_drawPercent (int x, int y, int p)
         return;
     }
 
-    V_DrawShadow(x+1, y+1, FB, percent);
-    V_DrawPatch(x, y, FB, percent);
+    V_DrawShadowedPatch(x, y, FB, percent);
     WI_drawNum(x, y, p, -1);
 }
 
@@ -760,8 +733,7 @@ void WI_drawTime (int x, int y, int t, boolean suck)
             // draw
             if (div==60 || t / div)
             {
-                V_DrawShadow(x+1, y+1, FB, colon);
-                V_DrawPatch(x, y, FB, colon);
+                V_DrawShadowedPatch(x, y, FB, colon);
             }
         } while (t / div && div < 3600);
 
@@ -776,13 +748,11 @@ void WI_drawTime (int x, int y, int t, boolean suck)
         // "sucks"
         if (english_language)
         {
-            V_DrawShadow((x - SHORT(sucks->width))+1, y+1, FB, sucks);
-            V_DrawPatch(x - SHORT(sucks->width), y, FB, sucks);
+            V_DrawShadowedPatch(x - SHORT(sucks->width), y, FB, sucks);
         }
         else
         {
-            V_DrawShadow((x - SHORT(sucks_rus->width))+1, y+1, FB, sucks_rus);
-            V_DrawPatch(x - SHORT(sucks_rus->width), y, FB, sucks_rus);
+            V_DrawShadowedPatch(x - SHORT(sucks_rus->width), y, FB, sucks_rus);
         }
     }
 }
@@ -1082,29 +1052,21 @@ void WI_drawDeathmatchStats (void)
     // draw stat titles (top line)
     if (english_language)
     {
-        V_DrawShadow((DM_TOTALSX-SHORT(total->width)/2)+1,
-                     (DM_MATRIXY-WI_SPACINGY+10)+1, FB, total);
-        V_DrawPatch(DM_TOTALSX-SHORT(total->width)/2,
-                    DM_MATRIXY-WI_SPACINGY+10, FB, total);
+        V_DrawShadowedPatch(DM_TOTALSX-SHORT(total->width)/2,
+                            DM_MATRIXY-WI_SPACINGY+10, FB, total);
 
-        V_DrawShadow(DM_KILLERSX+1, DM_KILLERSY+1, FB, killers);
-        V_DrawPatch(DM_KILLERSX, DM_KILLERSY, FB, killers);
+        V_DrawShadowedPatch(DM_KILLERSX, DM_KILLERSY, FB, killers);
 
-        V_DrawShadow(DM_VICTIMSX+1, DM_VICTIMSY+1, FB, victims);
-        V_DrawPatch(DM_VICTIMSX, DM_VICTIMSY, FB, victims);
+        V_DrawShadowedPatch(DM_VICTIMSX, DM_VICTIMSY, FB, victims);
     }
     else
     {
-        V_DrawShadow((DM_TOTALSX-SHORT(total_rus->width)/2)+1,
-                     (DM_MATRIXY-WI_SPACINGY+10)+1, FB, total_rus);
-        V_DrawPatch(DM_TOTALSX-SHORT(total_rus->width)/2,
-                    DM_MATRIXY-WI_SPACINGY+10, FB, total_rus);
+        V_DrawShadowedPatch(DM_TOTALSX-SHORT(total_rus->width)/2,
+                            DM_MATRIXY-WI_SPACINGY+10, FB, total_rus);
 
-        V_DrawShadow(DM_KILLERSX+1, DM_KILLERSY+1, FB, killers_rus);
-        V_DrawPatch(DM_KILLERSX, DM_KILLERSY, FB, killers_rus);
+        V_DrawShadowedPatch(DM_KILLERSX, DM_KILLERSY, FB, killers_rus);
 
-        V_DrawShadow(DM_VICTIMSX+1, DM_VICTIMSY+1, FB, victims_rus);
-        V_DrawPatch(DM_VICTIMSX, DM_VICTIMSY, FB, victims_rus);
+        V_DrawShadowedPatch(DM_VICTIMSX, DM_VICTIMSY, FB, victims_rus);
     }
 
     // draw P?
@@ -1115,11 +1077,9 @@ void WI_drawDeathmatchStats (void)
     {
         if (playeringame[i])
         {
-            V_DrawShadow((x-SHORT(p[i]->width)/2)+1, DM_MATRIXY - WI_SPACINGY+1, FB, p[i]);
-            V_DrawPatch(x-SHORT(p[i]->width)/2, DM_MATRIXY - WI_SPACINGY, FB, p[i]);
+            V_DrawShadowedPatch(x-SHORT(p[i]->width)/2, DM_MATRIXY - WI_SPACINGY, FB, p[i]);
 
-            V_DrawShadow((DM_MATRIXX-SHORT(p[i]->width)/2)+1, y+1, FB, p[i]);
-            V_DrawPatch(DM_MATRIXX-SHORT(p[i]->width)/2, y, FB, p[i]);
+            V_DrawShadowedPatch(DM_MATRIXX-SHORT(p[i]->width)/2, y, FB, p[i]);
 
             if (i == me)
             {
@@ -1407,52 +1367,36 @@ void WI_drawNetgameStats (void)
     // draw stat titles (top line)
     if (english_language)
     {
-        V_DrawShadow((NG_STATSX+NG_SPACINGX-SHORT(kills->width))+1,
-                      NG_STATSY+1, FB, kills);
-        V_DrawPatch(NG_STATSX+NG_SPACINGX-SHORT(kills->width),
-                    NG_STATSY, FB, kills);
+        V_DrawShadowedPatch(NG_STATSX+NG_SPACINGX-SHORT(kills->width),
+                            NG_STATSY, FB, kills);
 
-        V_DrawShadow((NG_STATSX+2*NG_SPACINGX-SHORT(items->width))+1,
-                      NG_STATSY+1, FB, items);
-        V_DrawPatch(NG_STATSX+2*NG_SPACINGX-SHORT(items->width),
-                    NG_STATSY, FB, items);
+        V_DrawShadowedPatch(NG_STATSX+2*NG_SPACINGX-SHORT(items->width),
+                            NG_STATSY, FB, items);
 
-        V_DrawShadow((NG_STATSX+3*NG_SPACINGX-SHORT(secret->width))+1,
-                      NG_STATSY+1, FB, secret);
-        V_DrawPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),
-                    NG_STATSY, FB, secret);
+        V_DrawShadowedPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),
+                            NG_STATSY, FB, secret);
 
         if (dofrags)
         {
-            V_DrawShadow((NG_STATSX+4*NG_SPACINGX-SHORT(frags->width))+1,
-                          NG_STATSY+1, FB, frags);
-            V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width),
-                        NG_STATSY, FB, frags);
+            V_DrawShadowedPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width),
+                                NG_STATSY, FB, frags);
         }
     }
     else
     {
-        V_DrawShadow((NG_STATSX+NG_SPACINGX-SHORT(kills_rus->width))+1,
-                      NG_STATSY+1, FB, kills_rus);
-        V_DrawPatch(NG_STATSX+NG_SPACINGX-SHORT(kills_rus->width),
-                    NG_STATSY, FB, kills_rus);
+        V_DrawShadowedPatch(NG_STATSX+NG_SPACINGX-SHORT(kills_rus->width),
+                            NG_STATSY, FB, kills_rus);
 
-        V_DrawShadow((NG_STATSX+2*NG_SPACINGX-SHORT(mp_items_rus->width))+1,
-                      NG_STATSY+1, FB, mp_items_rus);
-        V_DrawPatch(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items_rus->width),
-                    NG_STATSY, FB, mp_items_rus);
+        V_DrawShadowedPatch(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items_rus->width),
+                            NG_STATSY, FB, mp_items_rus);
 
-        V_DrawShadow((NG_STATSX+3*NG_SPACINGX-SHORT(secret_rus->width))+1,
-                      NG_STATSY+1, FB, secret_rus);
-        V_DrawPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret_rus->width),
-                    NG_STATSY, FB, secret_rus);
+        V_DrawShadowedPatch(NG_STATSX+3*NG_SPACINGX-SHORT(secret_rus->width),
+                            NG_STATSY, FB, secret_rus);
 
         if (dofrags)
         {
-            V_DrawShadow((NG_STATSX+4*NG_SPACINGX-SHORT(frags_rus->width))+1,
-                          NG_STATSY+1, FB, frags_rus);
-            V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags_rus->width),
-                        NG_STATSY, FB, frags_rus);
+            V_DrawShadowedPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags_rus->width),
+                                NG_STATSY, FB, frags_rus);
         }
     }
 
@@ -1467,13 +1411,12 @@ void WI_drawNetgameStats (void)
         }
 
         x = NG_STATSX;
-        V_DrawShadow((x-SHORT(p[i]->width))+1, y+1, FB, p[i]);
-        V_DrawPatch(x-SHORT(p[i]->width), y, FB, p[i]);
+
+        V_DrawShadowedPatch(x-SHORT(p[i]->width), y, FB, p[i]);
 
         if (i == me)
         {
-            V_DrawShadow((x-SHORT(p[i]->width))+1, y+1, FB, star);
-            V_DrawPatch(x-SHORT(p[i]->width), y, FB, star);
+            V_DrawShadowedPatch(x-SHORT(p[i]->width), y, FB, star);
         }
 
         x += NG_SPACINGX;
@@ -1635,17 +1578,13 @@ void WI_drawStats (void)
 
     WI_drawLF();
 
-    V_DrawShadow(SP_STATSX+1, SP_STATSY+1, FB,
-                 english_language ? kills : kills_rus);
-    V_DrawPatch(SP_STATSX, SP_STATSY, FB,
-                english_language ? kills : kills_rus);
+    V_DrawShadowedPatch(SP_STATSX, SP_STATSY, FB,
+                        english_language ? kills : kills_rus);
 
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY, cnt_kills[0]);
 
-    V_DrawShadow(SP_STATSX+1, SP_STATSY+lh+1, FB,
-                 english_language ? items : items_rus);
-    V_DrawPatch(SP_STATSX, SP_STATSY+lh, FB,
-                english_language ? items : items_rus);
+    V_DrawShadowedPatch(SP_STATSX, SP_STATSY+lh, FB,
+                        english_language ? items : items_rus);
 
     WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+lh, cnt_items[0]);
 
@@ -1653,27 +1592,21 @@ void WI_drawStats (void)
     // Adaptaken from Doom Retro, thanks Brad Harding!
     if (totalsecret || vanilla)
     {
-        V_DrawShadow(SP_STATSX+1, SP_STATSY+2*lh+1, FB,
-                     english_language ? sp_secret : sp_secret_rus);
-        V_DrawPatch(SP_STATSX, SP_STATSY+2*lh, FB,
-                    english_language ? sp_secret : sp_secret_rus);
+        V_DrawShadowedPatch(SP_STATSX, SP_STATSY+2*lh, FB,
+                            english_language ? sp_secret : sp_secret_rus);
 
         WI_drawPercent(SCREENWIDTH - SP_STATSX, SP_STATSY+2*lh, cnt_secret[0]);
     }
 
-    V_DrawShadow(SP_TIMEX+1, SP_TIMEY+1, FB,
-                 english_language ? time : time_rus);
-    V_DrawPatch(SP_TIMEX, SP_TIMEY, FB,
-                english_language ? time : time_rus);
+    V_DrawShadowedPatch(SP_TIMEX, SP_TIMEY, FB,
+                        english_language ? time : time_rus);
 
     WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time, true);
 
     if (wbs->epsd < 4)
     {
-        V_DrawShadow(SCREENWIDTH/2 + SP_TIMEX+1, SP_TIMEY+1, FB,
-                     english_language ? par : par_rus);
-        V_DrawPatch(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, FB,
-                    english_language ? par : par_rus);
+        V_DrawShadowedPatch(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, FB,
+                            english_language ? par : par_rus);
 
         WI_drawTime(SCREENWIDTH - SP_TIMEX, SP_TIMEY, cnt_par, true);
     }
@@ -1686,8 +1619,7 @@ void WI_drawStats (void)
 
         if (english_language)
         {
-            V_DrawShadow(SP_TIMEX + 1, SP_TIMEY + 17, FB, total);
-            V_DrawPatch(SP_TIMEX, SP_TIMEY + 16, FB, total);
+            V_DrawShadowedPatch(SP_TIMEX, SP_TIMEY + 16, FB, total);
 
             // [crispy] choose x-position depending on width of time string
             WI_drawTime((wide ? 320 : 320/2) - SP_TIMEX, SP_TIMEY + 16, ttime, false);
@@ -1695,10 +1627,8 @@ void WI_drawStats (void)
         else
         {
             // [JN] Choose x-position for long Russian "Общее время"
-            V_DrawShadow(SP_TIMEX + (wide ? 1 : 25),
-                         SP_TIMEY + 17, FB, overtime);
-            V_DrawPatch(SP_TIMEX + (wide ? 0 : 24),
-                        SP_TIMEY + 16, FB, overtime);
+            V_DrawShadowedPatch(SP_TIMEX + (wide ? 0 : 24),
+                                SP_TIMEY + 16, FB, overtime);
 
             // [crispy] choose x-position depending on width of time string
             WI_drawTime(SP_TIMEX + (wide ? 288 : 264),
