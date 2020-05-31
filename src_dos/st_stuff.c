@@ -764,10 +764,12 @@ ST_Responder (event_t* ev)
       else if (cht_CheckCheat(&cheat_mypos, ev->data1))
       {
 	static char	buf[ST_MSGWIDTH];
-	sprintf(buf, "eujk=%x / [<e=(%x<%x)", // ang=0x%x;x,y=(0x%x,0x%x)
-		players[consoleplayer].mo->angle,
-		players[consoleplayer].mo->x,
-		players[consoleplayer].mo->y);
+	sprintf(buf, english_language ?
+                 "x=%d, y=%d, ang=%d" :
+                 "[=%d< e=%d< eujk=%d",
+                 players[consoleplayer].mo->x >> FRACBITS,
+                 players[consoleplayer].mo->y >> FRACBITS,
+                 players[consoleplayer].mo->angle / ANG1);
 	plyr->message = buf;
       }
       // [JN] 'ka' for keys

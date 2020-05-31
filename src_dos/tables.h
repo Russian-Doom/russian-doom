@@ -49,6 +49,8 @@
 #define ANG180      0x80000000
 #define ANG270      0xc0000000
 
+#define ANG1        (ANG45 / 45)
+
 #define SLOPERANGE  2048
 #define SLOPEBITS   11
 #define DBITS   (FRACBITS-SLOPEBITS)
