@@ -394,8 +394,9 @@ default_t	defaults[] =
     // [JN] Russian Doom specific variables
 
     // Rendering
-    {"show_diskicon", &show_diskicon, 1},
     {"noflats", &noflats, 0},
+    {"show_fps", &show_fps, 0},
+    {"show_diskicon", &show_diskicon, 1},
     {"screen_wiping", &screen_wiping, 1},
 
     // Automap

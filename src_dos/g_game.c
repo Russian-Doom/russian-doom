@@ -162,8 +162,9 @@ int     joybspeed;
 // [JN] Russian Doom specific variables 
 
 // Rendering
-int show_diskicon;
 int noflats;
+int show_fps;
+int show_diskicon;
 int screen_wiping;
 
 // Audio

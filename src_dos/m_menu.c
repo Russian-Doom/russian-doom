@@ -329,8 +329,9 @@ void M_RD_Draw_Options(void);
 // Rendering
 void M_RD_Choose_Rendering(int choice);
 void M_RD_Draw_Rendering(void);
-void M_RD_Change_DiskIcon(int choice);
 void M_RD_Change_NoFlats(int choice);
+void M_RD_Change_FPScounter(int choice);
+void M_RD_Change_DiskIcon(int choice);
 void M_RD_Change_Wiping(int choice);
 
 // Display
@@ -1030,10 +1031,12 @@ menu_t  RD_Options_Def_Rus =
 
 enum
 {
-    rd_rendering_wiping,
+    rd_rendering_noflats,
+    rd_rendering_fps,
     rd_rendering_empty1,
     rd_rendering_diskicon,
-    rd_rendering_noflats,
+    rd_rendering_wiping,
+    
     rd_rendering_end
 } rd_rendering_e;
 
@@ -1044,6 +1047,7 @@ enum
 menuitem_t RD_Rendering_Menu[]=
 {
     {2,"Floor and ceiling textures:", M_RD_Change_NoFlats,  'f'},
+    {2, "Show FPS counter:",          M_RD_Change_FPScounter,'s'},
     {-1,"",0,'\0'},
     {2,"Show disk icon:",             M_RD_Change_DiskIcon, 's'},
     {2,"Screen wiping effect:",       M_RD_Change_Wiping,   's'},
@@ -1067,6 +1071,7 @@ menu_t  RD_Rendering_Def =
 menuitem_t RD_Rendering_Menu_Rus[]=
 {
     {2,"Ntrcnehs gjkf b gjnjkrf:",   M_RD_Change_NoFlats,  'n'}, // Текстуры пола и потолка
+    {2, "Cxtnxbr rflhjdjq xfcnjns:", M_RD_Change_FPScounter, 'c'}, // Счетчик кадровой частоты
     {-1,"",0,'\0'},
     {2,"Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon, 'j'}, // Отображать значок дискеты
     {2,"Gkfdyfz cvtyf \'rhfyjd:",    M_RD_Change_Wiping,   'g'}, // Плавная смена экранов
@@ -1692,12 +1697,15 @@ void M_RD_Draw_Rendering(void)
 
         M_WriteTextSmall_ENG(217, 45, noflats ? "off" : "on");
 
+        // Show FPS counter
+        M_WriteTextSmall_ENG(162, 55, show_fps ? "on" : "off");
+
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 55, "Extra");
+        M_WriteTextSmall_ENG(35, 65, "Extra");
         dp_translation = NULL;
 
-        M_WriteTextSmall_ENG(241, 65, show_diskicon ? "on" : "off");
-        M_WriteTextSmall_ENG(204, 75, screen_wiping ? "on" : "off");
+        M_WriteTextSmall_ENG(241, 75, show_diskicon ? "on" : "off");
+        M_WriteTextSmall_ENG(204, 85, screen_wiping ? "on" : "off");
     }
     else
     {
@@ -1710,12 +1718,15 @@ void M_RD_Draw_Rendering(void)
 
         M_WriteTextSmall_RUS(217, 45, noflats ? "dsrk" : "drk");
 
+        // Счетчик кадровой частоты
+        M_WriteTextSmall_RUS(227, 55, show_fps ? "drk" : "dsrk");
+
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 55, "ljgjkybntkmyj"); // Дополнительно
+        M_WriteTextSmall_RUS(35, 65, "ljgjkybntkmyj"); // Дополнительно
         dp_translation = NULL;
 
-        M_WriteTextSmall_RUS(241, 65, show_diskicon ? "drk" : "dsrk");
-        M_WriteTextSmall_RUS(204, 75, screen_wiping ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(241, 75, show_diskicon ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(204, 85, screen_wiping ? "drk" : "dsrk");
     }
 }
 
@@ -1730,6 +1741,11 @@ void M_RD_Change_NoFlats (int choice)
 
     // Reinitialize drawing functions
     R_ExecuteSetViewSize();
+}
+
+void M_RD_Change_FPScounter(int choice)
+{
+    show_fps ^= 1;
 }
 
 void M_RD_Change_Wiping (int choice)

@@ -106,6 +106,7 @@ static          hu_textline_t w_items;
 static          hu_textline_t w_scrts;
 static          hu_textline_t w_skill;
 static          hu_textline_t w_ltime;
+static          hu_textline_t w_fps;
 boolean         chat_on;
 static          hu_itext_t w_chat;
 static boolean  always_off = false;
@@ -585,6 +586,12 @@ void HU_Start(void)
                     english_language ? hu_font : hu_font_small_rus,
                     HU_FONTSTART, &message_on);
 
+    // [JN] Create the FPS widget
+    HUlib_initTextLine(&w_fps,
+                        SCREENWIDTH-57, HU_MSGY + 2 * 8,
+                        hu_font,
+                        HU_FONTSTART);
+
     // create the map title widget
     if (!vanilla)
     HUlib_initTextLine(&w_title,HU_TITLEX, HU_TITLEY,
@@ -664,6 +671,20 @@ void HU_Drawer(void)
     
     HUlib_drawSText(&w_message);
     HUlib_drawIText(&w_chat);
+
+    if (show_fps)
+    {
+        static char str[32], *f;
+
+        sprintf(str, "fps: %d", fps);
+        HUlib_clearTextLine(&w_fps);
+        f = str;
+        while (*f)
+        {
+            HUlib_addCharToTextLine(&w_fps, *(f++));
+        }
+        HUlib_drawTextLine(&w_fps, false);
+    }
 
     if (automapactive)
     {

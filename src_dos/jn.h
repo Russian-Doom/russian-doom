@@ -37,8 +37,9 @@ extern boolean vanilla;
 // Rendering
 // -----------------------------------------------------------------------------
 
-extern int show_diskicon;
 extern int noflats;
+extern int show_fps, fps;
+extern int show_diskicon;
 extern int screen_wiping;
 
 

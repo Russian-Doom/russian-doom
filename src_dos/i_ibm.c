@@ -166,6 +166,7 @@ int         olddb[2][4];
 int         lastpress;
 int         joyxl, joyxh, joyyl, joyyh;
 int         basejoyx, basejoyy;
+int         fps;
 
 union       REGS regs;          // REGS stuff used for int calls
 struct      SREGS segregs;
@@ -522,6 +523,35 @@ void I_FinishUpdate (void)
     {
         destscreen = (byte*)0xa0000;
     }
+
+	// [JN] Real FPS counter.
+    // Adapted from Doom 'MBF' for DOS, Maintenance release 2.04
+    // https://www.vogons.org/viewtopic.php?f=24&t=40857
+	{
+        static int fps_counter, fps_starttime, fps_nextcalculation;
+        int time = I_GetTime(); // I_GetTime_RealTime(); same result
+
+        if (fps_counter==0)
+        {    
+            fps_starttime = I_GetTime();
+        }
+
+        fps_counter++;
+
+        // store a value and/or draw when data is ok:
+        if (fps_counter>(TICRATE+10)) 
+        {
+            // in case of a very fast system, this will limit the sampling
+            if (fps_nextcalculation<time)
+            {
+                // minus 1!, exactly 35 FPS when measeraring for a longer time.
+                fps=(double)((fps_counter-1)*TICRATE)/(time-fps_starttime);
+                fps_nextcalculation=time+12; 
+                if (fps>999) fps=999; // overflow
+                fps_counter=0; // flush old data
+            }
+	   }
+	}
 }
 
 
