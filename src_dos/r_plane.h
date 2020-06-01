@@ -27,28 +27,22 @@
 
 
 // Visplane related.
-extern  int*		lastopening; // [crispy] 32-bit integer math
-
+extern int *lastopening; // [crispy] 32-bit integer math
 
 typedef void (*planefunction_t) (int top, int bottom);
 
-extern planefunction_t	floorfunc;
-extern planefunction_t	ceilingfunc_t;
+extern int floorclip[SCREENWIDTH]; // [crispy] 32-bit integer math
+extern int ceilingclip[SCREENWIDTH]; // [crispy] 32-bit integer math
 
-extern int		floorclip[SCREENWIDTH]; // [crispy] 32-bit integer math
-extern int		ceilingclip[SCREENWIDTH]; // [crispy] 32-bit integer math
+extern planefunction_t  floorfunc;
+extern planefunction_t  ceilingfunc_t;
 
-extern fixed_t		yslope[SCREENHEIGHT];
-extern fixed_t		distscale[SCREENWIDTH];
+extern fixed_t yslope[SCREENHEIGHT];
+extern fixed_t distscale[SCREENWIDTH];
 
 void R_InitPlanes (void);
 void R_ClearPlanes (void);
-
-void
-R_MapPlane
-( int		y,
-  int		x1,
-  int		x2 );
+void R_MapPlane (int y, int x1, int x2);
 
 void
 R_MakeSpans
@@ -60,18 +54,8 @@ R_MakeSpans
 
 void R_DrawPlanes (void);
 
-visplane_t*
-R_FindPlane
-( fixed_t	height,
-  int		picnum,
-  int		lightlevel );
-
-visplane_t*
-R_CheckPlane
-( visplane_t*	pl,
-  int		start,
-  int		stop );
-
+visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel);
+visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop);
 
 
 #endif
