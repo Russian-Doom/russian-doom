@@ -367,6 +367,7 @@ void M_RD_Draw_Controls(void);
 void M_RD_Change_AlwaysRun();
 void M_RD_Change_MouseLook(int choice);
 void M_RD_Change_Sensitivity(int choice);
+void M_RD_Change_Novert(int choice);
 
 // Gameplay
 void M_RD_Choose_Gameplay_1(int choice);
@@ -1305,6 +1306,7 @@ enum
     rd_controls_sensitivity,
     rd_controls_empty2,
     rd_controls_mouselook,
+    rd_controls_novert,
     rd_controls_end
 } rd_controls_e;
 
@@ -1319,6 +1321,7 @@ menuitem_t RD_Controls_Menu[]=
     {2,"mouse sensivity", M_RD_Change_Sensitivity, 'm'},
     {-1,"",0,'\0'},
     {2,"mouse look:",     M_RD_Change_MouseLook,   'm'},
+    {2, "vertical movement:", M_RD_Change_Novert,  'v'},
     {-1,"",0,'\0'}
 };
 
@@ -1343,6 +1346,7 @@ menuitem_t RD_Controls_Menu_Rus[]=
     {2,"Crjhjcnm vsib",           M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
     {-1,"",0,'\0'},                                              //
     {2,"J,pjh vsim.:",            M_RD_Change_MouseLook,   'j'}, // Обзор мышью
+    {2, "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,   'd'}, // Вертикальное перемещение
     {-1,"",0,'\0'}
 };
 
@@ -2195,6 +2199,12 @@ void M_RD_Draw_Controls(void)
         dp_translation = NULL;
 
         M_WriteTextSmall_ENG(135, 85, mlook ? "on" : "off");
+
+        // Vertical movement
+        if (mlook)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(171, 95, !novert ? "on" : "off");
+        dp_translation = NULL;
     }
     else
     {
@@ -2218,6 +2228,12 @@ void M_RD_Draw_Controls(void)
         dp_translation = NULL;
 
         M_WriteTextSmall_RUS(135, 85, mlook ? "drk" : "dsrk");
+
+        // Вертикальное перемещение
+        if (mlook)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(235, 95, !novert ? "drk" : "dsrk");
+        dp_translation = NULL;
     }
 
     // Draw mouse sensivity slider
@@ -2266,6 +2282,11 @@ void M_RD_Change_Sensitivity(int choice)
             mouseSensitivity++;
         break;
     }
+}
+
+void M_RD_Change_Novert(int choice)
+{
+    novert ^= 1;
 }
 
 

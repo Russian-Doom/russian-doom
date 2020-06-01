@@ -181,6 +181,7 @@ int automap_grid;
 
 // Controls
 int mlook;
+int novert;
 
 // Gameplay: Graphical
 int brightmaps;
@@ -465,9 +466,6 @@ void G_BuildTiccmd (ticcmd_t* cmd)
         }
     } 
 
-    // [JN] Completely disabled vertical mouse movement
-    // forward += mousey;
-
     if (strafe)
     side += mousex*2;
     else
@@ -494,9 +492,17 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     }
     
     // [JN] Mouselook: handling
-    if (mlook && !demoplayback && players[consoleplayer].playerstate == PST_LIVE && !paused && !menuactive)
+    if (!demoplayback && players[consoleplayer].playerstate == PST_LIVE 
+    &&  !paused && !menuactive)
     {
-        players[consoleplayer].lookdir += mousey;
+        if (mlook || novert)
+        {
+            players[consoleplayer].lookdir += mousey;
+        }
+        else if (!novert)
+        {
+            forward += mousey;
+        }
         
         if (players[consoleplayer].lookdir > 90 * MLOOKUNIT)
             players[consoleplayer].lookdir = 90 * MLOOKUNIT;
@@ -543,22 +549,26 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     if (forward > MAXPLMOVE)
     {
     forward = MAXPLMOVE;
+    if (novert)
     max_bobbing = true;
     }
     else if (forward < -MAXPLMOVE)
     {
     forward = -MAXPLMOVE;
+    if (novert)
     max_bobbing = false;
     }
 
     if (side > MAXPLMOVE)
     {
     side = MAXPLMOVE;
+    if (novert)
     max_bobbing = true;
     }
     else if (side < -MAXPLMOVE)
     {
     side = -MAXPLMOVE;
+    if (novert)
     max_bobbing = false;
     }
 

@@ -409,6 +409,7 @@ default_t	defaults[] =
 
     // Controls
     {"mlook", &mlook, 0},
+    {"novert", &novert, 1},
 
     // Gameplay: Graphical
     {"brightmaps", &brightmaps, 1},
