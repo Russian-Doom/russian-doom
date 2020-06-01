@@ -2193,7 +2193,7 @@ void M_RD_Draw_Controls(void)
         dp_translation = NULL;
 
         // Always run
-        M_WriteTextSmall_ENG(216, 45, joybspeed >= 20 ? "on" : "off");
+        M_WriteTextSmall_ENG(119, 45, joybspeed >= 20 ? "on" : "off");
 
         //
         // Mouse
@@ -2203,7 +2203,7 @@ void M_RD_Draw_Controls(void)
         dp_translation = NULL;
 
         // Mouse look
-        M_WriteTextSmall_ENG(135, 85, mlook ? "on" : "off");
+        M_WriteTextSmall_ENG(119, 85, mlook ? "on" : "off");
 
         // Invert Y axis
         if (!mlook)
@@ -2228,7 +2228,7 @@ void M_RD_Draw_Controls(void)
         M_WriteTextSmall_RUS(35, 35, "gthtldb;tybt");
         dp_translation = NULL;
 
-        // Always run
+        // Режим постоянного бега
         M_WriteTextSmall_RUS(216, 45, joybspeed >= 20 ? "drk" : "dsrk");
 
         //
@@ -2255,10 +2255,10 @@ void M_RD_Draw_Controls(void)
     }
 
     // Draw mouse sensivity slider
-    M_DrawThermo_Small(35, 75, 13, mouseSensitivity);
+    M_DrawThermo_Small(35, 74, 17, mouseSensitivity);
     // Draw numerical representation of mouse sensivity
     snprintf(num, 4, "%3d", mouseSensitivity);
-    M_WriteTextSmall_ENG(163, 65, num);
+    M_WriteTextSmall_ENG(189, 75, num);
 }
 
 void M_RD_Change_AlwaysRun(int choice)
