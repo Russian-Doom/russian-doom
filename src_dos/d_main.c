@@ -477,7 +477,7 @@ void D_DoAdvanceDemo (void)
     paused = false;
     gameaction = ga_nothing;
 
-    if(retail && W_CheckNumForName("demo4"))
+    if (retail && W_CheckNumForName("demo4"))
     demosequence = (demosequence+1)%7;
     else
     demosequence = (demosequence+1)%6;
@@ -485,109 +485,113 @@ void D_DoAdvanceDemo (void)
     switch (demosequence)
     {
         case 0:
-        if ( commercial )
-        pagetic = 35 * 11;
-        else
-        pagetic = 170;
-
-        gamestate = GS_DEMOSCREEN;
-
-        if (english_language)
         {
-            pagename = "TITLEPIC";
-        }
-        else
-        {
-            pagename = shareware ? "TITLEPIS" :
-                        plutonia ? "TITLEPIP" :
-                             tnt ? "TITLEPIT" :
-                                   "TITLEPIC" ;
-        }
-
-        if (commercial)
-        S_StartMusic(mus_dm2ttl);
-        else
-        S_StartMusic (mus_intro);
-        break;
-
-        case 1:
-        {
-        if (!no_internal_demos)
-        G_DeferedPlayDemo ("demo1");
-        break;
-        }
-
-        case 2:
-        pagetic = 200;
-        gamestate = GS_DEMOSCREEN;
-
-        if (english_language)
-        {
-            pagename = "CREDIT";
-        }
-        else
-        {
-            pagename = shareware || registered ? "CREDITS" :
-                                        retail ? "CREDITU" :
-                                                 "CREDIT2" ;
-        }
-        break;
-
-        case 3:
-        {
-        if (!no_internal_demos)
-        G_DeferedPlayDemo ("demo2");
-        break;
-        }
-
-        case 4:
-        gamestate = GS_DEMOSCREEN;
-        if (commercial)
-        {
-            pagetic = 35 * 11;
+            pagetic = commercial ? 385 : 170;
+            gamestate = GS_DEMOSCREEN;
             if (english_language)
             {
                 pagename = "TITLEPIC";
             }
             else
             {
-                pagename = plutonia ? "TITLEPIP" :
-                                tnt ? "TITLEPIT" :
-                                      "TITLEPIC" ;
+                pagename = shareware ? "TITLEPIS" :
+                            plutonia ? "TITLEPIP" :
+                                 tnt ? "TITLEPIT" :
+                                       "TITLEPIC" ;
             }
-
-            S_StartMusic(mus_dm2ttl);
+            S_StartMusic(commercial ? mus_dm2ttl : mus_intro);
+            break;
         }
-        else
+
+        case 1:
+        {
+            if (!no_internal_demos)
+            {
+                G_DeferedPlayDemo ("demo1");
+            }
+            break;
+        }
+
+        case 2:
         {
             pagetic = 200;
-
+            gamestate = GS_DEMOSCREEN;
             if (english_language)
             {
                 pagename = "CREDIT";
             }
             else
             {
-                pagename = registered ? "CREDITS" :
-                            shareware ? "HELP2" :
-                               retail ? "CREDITU" :
-                                        "CREDIT";
+                pagename = shareware || registered ? "CREDITS" :
+                                            retail ? "CREDITU" :
+                                                     "CREDIT2" ;
             }
+            break;
         }
-        break;
+
+        case 3:
+        {
+            if (!no_internal_demos)
+            {
+                G_DeferedPlayDemo ("demo2");
+            }
+            break;
+        }
+
+        case 4:
+        {
+            gamestate = GS_DEMOSCREEN;
+            if (commercial)
+            {
+                pagetic = 385;
+                if (english_language)
+                {
+                    pagename = "TITLEPIC";
+                }
+                else
+                {
+                    pagename = plutonia ? "TITLEPIP" :
+                                    tnt ? "TITLEPIT" :
+                                          "TITLEPIC" ;
+                }
+    
+                S_StartMusic(mus_dm2ttl);
+            }
+            else
+            {
+                pagetic = 200;
+    
+                if (english_language)
+                {
+                    pagename = "CREDIT";
+                }
+                else
+                {
+                    pagename = registered ? "CREDITS" :
+                                shareware ? "HELP2" :
+                                   retail ? "CREDITU" :
+                                            "CREDIT";
+                }
+            }
+            break;
+        }
 
         case 5:
         {
-        if (!no_internal_demos)
-        G_DeferedPlayDemo ("demo3");
-        break;
+            if (!no_internal_demos)
+            {
+                G_DeferedPlayDemo ("demo3");
+            }
+            break;
         }
 
         case 6: // THE DEFINITIVE DOOM Special Edition demo
         {
-        if (!no_internal_demos)
-        G_DeferedPlayDemo ("demo4");
-        break;
+            if (!no_internal_demos)
+            {
+                G_DeferedPlayDemo ("demo4");
+            }
+            break;
         }
     }
 
