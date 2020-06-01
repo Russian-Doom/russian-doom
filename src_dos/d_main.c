@@ -530,8 +530,8 @@ void D_DoAdvanceDemo (void)
             pagename = shareware || registered ? "CREDITS" :
                                         retail ? "CREDITU" :
                                                  "CREDIT2" ;
-            break;
         }
+        break;
 
         case 3:
         {
