@@ -2044,8 +2044,8 @@ void M_RD_Draw_Audio(void)
         M_WriteTextSmall_ENG(35, 85, "extra");
         dp_translation = NULL;
 
-        M_WriteTextSmall_ENG(132, 115, snd_monomode ? "mono" : "stereo");
-        M_WriteTextSmall_ENG(242, 125, snd_pitchshift ? "on" : "off");
+        M_WriteTextSmall_ENG(178, 115, snd_monomode ? "mono" : "stereo");
+        M_WriteTextSmall_ENG(186, 125, snd_pitchshift ? "on" : "off");
     }
     else
     {
