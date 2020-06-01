@@ -367,6 +367,7 @@ void M_RD_Draw_Controls(void);
 void M_RD_Change_AlwaysRun();
 void M_RD_Change_MouseLook(int choice);
 void M_RD_Change_Sensitivity(int choice);
+void M_RD_Change_InvertY(int choice);
 void M_RD_Change_Novert(int choice);
 
 // Gameplay
@@ -1306,6 +1307,7 @@ enum
     rd_controls_sensitivity,
     rd_controls_empty2,
     rd_controls_mouselook,
+    rd_controls_inverty,
     rd_controls_novert,
     rd_controls_end
 } rd_controls_e;
@@ -1321,6 +1323,7 @@ menuitem_t RD_Controls_Menu[]=
     {2,"mouse sensivity", M_RD_Change_Sensitivity, 'm'},
     {-1,"",0,'\0'},
     {2,"mouse look:",     M_RD_Change_MouseLook,   'm'},
+    {2, "invert y axis:",     M_RD_Change_InvertY, 'i'},
     {2, "vertical movement:", M_RD_Change_Novert,  'v'},
     {-1,"",0,'\0'}
 };
@@ -1346,6 +1349,7 @@ menuitem_t RD_Controls_Menu_Rus[]=
     {2,"Crjhjcnm vsib",           M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
     {-1,"",0,'\0'},                                              //
     {2,"J,pjh vsim.:",            M_RD_Change_MouseLook,   'j'}, // Обзор мышью
+    {2, "dthnbrfkmyfz bydthcbz:",    M_RD_Change_InvertY,  'd'}, // Вертикальная инверсия
     {2, "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,   'd'}, // Вертикальное перемещение
     {-1,"",0,'\0'}
 };
@@ -2198,12 +2202,19 @@ void M_RD_Draw_Controls(void)
         M_WriteTextSmall_ENG(35, 55, "mouse");
         dp_translation = NULL;
 
+        // Mouse look
         M_WriteTextSmall_ENG(135, 85, mlook ? "on" : "off");
+
+        // Invert Y axis
+        if (!mlook)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(130, 95, mouse_y_invert ? "on" : "off");
+        dp_translation = NULL;
 
         // Vertical movement
         if (mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(171, 95, !novert ? "on" : "off");
+        M_WriteTextSmall_ENG(171, 105, !novert ? "on" : "off");
         dp_translation = NULL;
     }
     else
@@ -2227,12 +2238,19 @@ void M_RD_Draw_Controls(void)
         M_WriteTextSmall_RUS(35, 55, "vsim");
         dp_translation = NULL;
 
+        // Обзор мышью
         M_WriteTextSmall_RUS(135, 85, mlook ? "drk" : "dsrk");
+
+        // Вертикальная инверсия
+        if (!mlook)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(207, 95, mouse_y_invert ? "drk" : "dsrk");
+        dp_translation = NULL;
 
         // Вертикальное перемещение
         if (mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(235, 95, !novert ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(235, 105, !novert ? "drk" : "dsrk");
         dp_translation = NULL;
     }
 
@@ -2282,6 +2300,11 @@ void M_RD_Change_Sensitivity(int choice)
             mouseSensitivity++;
         break;
     }
+}
+
+void M_RD_Change_InvertY(int choice)
+{
+    mouse_y_invert ^= 1;
 }
 
 void M_RD_Change_Novert(int choice)

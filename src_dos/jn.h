@@ -61,6 +61,7 @@ extern int automap_grid;
 
 extern int joybspeed;
 extern int mlook;
+extern int mouse_y_invert;
 extern int novert;
 
 

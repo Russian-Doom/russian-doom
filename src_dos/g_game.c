@@ -181,6 +181,7 @@ int automap_grid;
 
 // Controls
 int mlook;
+int mouse_y_invert; // [crispy]
 int novert;
 
 // Gameplay: Graphical
@@ -497,7 +498,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     {
         if (mlook || novert)
         {
-            players[consoleplayer].lookdir += mousey;
+            players[consoleplayer].lookdir += mouse_y_invert ? -mousey : mousey;
         }
         else if (!novert)
         {

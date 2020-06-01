@@ -409,6 +409,7 @@ default_t	defaults[] =
 
     // Controls
     {"mlook", &mlook, 0},
+    {"mouse_y_invert", &mouse_y_invert, 0},
     {"novert", &novert, 1},
 
     // Gameplay: Graphical
