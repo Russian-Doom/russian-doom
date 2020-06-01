@@ -3754,7 +3754,7 @@ void M_Episode (int choice)
 {
     if (shareware && choice)
     {
-        M_StartMessage(SWSTRING,NULL,false);
+        M_StartMessage(english_language ? SWSTRING : SWSTRING_RUS, NULL, false);
         M_SetupNextMenu(&ReadDef1);
         return;
     }
