@@ -217,7 +217,8 @@ char endmsg2[NUM_QUITMESSAGES][80] =
 char endmsg1_rus[NUM_QUITMESSAGES][80] =
 {
     // DOOM1
-    "are you sure you want to\nquit this great game?",
+    // Вы действительно хотите выйти \n из этой замечательной игры?
+    "ds ltqcndbntkmyj [jnbnt dsqnb\nbp 'njq pfvtxfntkmyjq buhs?",
 	// Пожалуйста, не уходите! \n Здесь осталось ещё много демонов!
 	"gj;fkeqcnf< yt e[jlbnt! \n pltcm jcnfkjcm tot vyjuj ltvjyjd!",
 	// Давайте определимся, это будет \n ваша первая и последняя попытка!
