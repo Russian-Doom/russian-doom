@@ -596,8 +596,11 @@ void V_DrawShadowedPatch (int x, int y, int scrn, patch_t *patch)
                     sourcetrans = &dp_translation[*source++];
                 }
 
-				*dest2 = tinttable[((*dest2)<<8)];
-				dest2 += SCREENWIDTH;
+                if (draw_shadowed_text && !vanilla)
+                {
+                    *dest2 = tinttable[((*dest2)<<8)];
+                    dest2 += SCREENWIDTH;
+                }
                 *dest = *sourcetrans++;
                 dest += SCREENWIDTH;
             }
