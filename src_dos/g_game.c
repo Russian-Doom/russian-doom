@@ -171,6 +171,12 @@ int screen_wiping;
 int level_brightness;
 int local_time;
 
+// Messages
+int messages_pickup_color;
+int messages_secret_color = 3;
+int messages_system_color;
+int messages_chat_color = 1;
+
 // Audio
 int snd_monomode;
 int snd_pitchshift;
@@ -485,13 +491,13 @@ void G_BuildTiccmd (ticcmd_t* cmd)
         if (!mlook)
         {
             mlook = true;
-            players[consoleplayer].message = ststr_mlook_on;
+            players[consoleplayer].message_system = ststr_mlook_on;
         }
         else
         {
             mlook = false;
             look = TOCENTER;
-            players[consoleplayer].message = ststr_mlook_off;
+            players[consoleplayer].message_system = ststr_mlook_off;
         }
     
         S_StartSound(NULL, sfx_swtchn);
@@ -543,7 +549,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
             crosshair_draw = false;
         }
 
-        players[consoleplayer].message =
+        players[consoleplayer].message_system =
             crosshair_draw ? ststr_crosshair_on : ststr_crosshair_off;
 
         S_StartSound(NULL,sfx_swtchn);
@@ -845,7 +851,7 @@ void G_Ticker (void)
                          "%s is turbo!" :
                          "%s yf cdth[crjhjcnb!", // %s на сверхскорости!
                          player_names[i]);
-                players[consoleplayer].message = turbomessage;
+                players[consoleplayer].message_chat = turbomessage;
             }
 
             if (netgame && !netdemo && !(gametic%ticdup))
@@ -1457,7 +1463,7 @@ void G_DoLoadGame (void)
     R_ExecuteSetViewSize();
 
     // [JN] Additional message for loaded game ("Игра загружена.")
-    players[consoleplayer].message = ggloaded;
+    players[consoleplayer].message_system = ggloaded;
 
     // draw the pattern into the back screen
     if (screenblocks < 10) // [JN] Invoke only for appropriate screen sizes
@@ -1534,7 +1540,7 @@ void G_DoSaveGame (void)
     gameaction = ga_nothing;
     savedescription[0] = 0;
 
-    players[consoleplayer].message = ggsaved;
+    players[consoleplayer].message_system = ggsaved;
 
     // draw the pattern into the back screen
     if (screenblocks < 10) // [JN] Invoke only for appropriate screen sizes

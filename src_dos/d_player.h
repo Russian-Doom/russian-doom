@@ -126,7 +126,10 @@ typedef struct player_s
     int         secretcount;
 
     // Hint messages.
-    char*       message;	
+    char*       message;        // [JN] Item pickup
+    char*       message_secret; // [JN] Revealed secret
+    char*       message_system; // [JN] System messages
+    char*       message_chat;   // [JN] Netgame chat
 
     // For screen flashing (red or bright).
     int         damagecount;

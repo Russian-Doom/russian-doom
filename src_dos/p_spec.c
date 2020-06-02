@@ -1046,7 +1046,7 @@ void P_PlayerInSpecialSector (player_t* player)
     // [JN] Notification of revealed secrets
     if (secret_notification && !vanilla)
     {
-	player->message = secretfound;	 
+	player->message_secret = secretfound;	 
     // [JN] Don't break revealed's secret sound by any others
     if (player == &players[consoleplayer])
         S_StartSoundNoBreak(sfx_getpow);

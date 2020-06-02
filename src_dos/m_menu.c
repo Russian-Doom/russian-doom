@@ -345,6 +345,16 @@ void M_RD_Change_Detail(int choice);
 void M_RD_Change_LocalTime(int choice);
 void M_RD_Change_Messages(int choice);
 
+// Messages
+void M_RD_Choose_MessagesSettings(int choice);
+void M_RD_Draw_MessagesSettings(void);
+void M_RD_Change_Messages(int choice);
+void M_RD_Change_ShadowedText(int choice);
+void M_RD_Change_Msg_Pickup_Color(int choice);
+void M_RD_Change_Msg_Secret_Color(int choice);
+void M_RD_Change_Msg_System_Color(int choice);
+void M_RD_Change_Msg_Chat_Color(int choice);
+
 // Automap
 void M_RD_Choose_AutomapSettings(int choice);
 void M_RD_Draw_AutomapSettings(void);
@@ -392,7 +402,6 @@ void M_RD_Change_ColoredBlood(int choice);
 void M_RD_Change_SwirlingLiquids(int choice);
 void M_RD_Change_InvulSky(int choice);
 void M_RD_Change_FlipWeapons(int choice);
-void M_RD_Change_ShadowedText(int choice);
 
 void M_RD_Change_ExitSfx(int choice);
 void M_RD_Change_CrushingSfx(int choice);
@@ -1106,9 +1115,8 @@ enum
     rd_display_empty3,
     rd_display_detail,
     rd_display_localtime,
-    rd_display_messages,
     rd_display_empty4,
-    rd_display_empty5,
+    rd_display_messages_settings,
     rd_display_automap_settings,
     rd_display_end
 } rd_display_e;
@@ -1127,8 +1135,8 @@ menuitem_t RD_Display_Menu[]=
     {-1,"",0,'\0'},
     {2,"detail level:",     M_RD_Change_Detail,     'e'},
     {2, "local time:",      M_RD_Change_LocalTime,  'l'},
-    {2,"messages enabled:", M_RD_Change_Messages,   'j'},
     {-1,"",0,'\0'},
+    {1, "messages settings",M_RD_Choose_MessagesSettings, 'm'},
     {1, "automap settings", M_RD_Choose_AutomapSettings, 'a'},
     {-1,"",0,'\0'}
 };
@@ -1157,8 +1165,8 @@ menuitem_t RD_Display_Menu_Rus[]=
     {-1,"",0,'\0'},
     {2,"ehjdtym ltnfkbpfwbb:",    M_RD_Change_Detail,     'e'}, // Уровень детализации:
     {2, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
-    {2,"jnj,hf;tybt cjj,otybq:",  M_RD_Change_Messages,   'j'}, // Отображение сообщений:
     {-1,"",0,'\0'},
+    {1, "yfcnhjqrb cjj,otybq",      M_RD_Choose_MessagesSettings,'y'}, // Настройки сообщений
     {1, "yfcnhjqrb rfhns",        M_RD_Choose_AutomapSettings, 'y'}, // Настройки карты
     {-1,"",0,'\0'}
 };
@@ -1169,6 +1177,74 @@ menu_t  RD_Display_Def_Rus =
     &RD_Options_Def_Rus,
     RD_Display_Menu_Rus,
     M_RD_Draw_Display,
+    35,45,
+    0
+};
+
+// -----------------------------------------------------------------------------
+// Messages settings
+// -----------------------------------------------------------------------------
+
+enum
+{
+    rd_messages_toggle,
+    rd_messages_shadows,
+    rd_messages_empty1,
+    rd_messages_pickup_color,
+    rd_messages_secret_color,
+    rd_messages_system_color,
+    rd_messages_chat_color,
+    rd_messages_end
+} rd_messages_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t RD_Messages_Menu[]=
+{
+    {2, "messages enabled:",   M_RD_Change_Messages,        'm'},
+    {2, "text casts shadows:", M_RD_Change_ShadowedText,    't'},
+    {-1,"",0,'\0'},
+    {2, "item pickup:",        M_RD_Change_Msg_Pickup_Color,'i'},
+    {2, "revealed secret:",    M_RD_Change_Msg_Secret_Color,'r'},
+    {2, "system message:",     M_RD_Change_Msg_System_Color,'s'},
+    {2, "netgame chat:",       M_RD_Change_Msg_Chat_Color,  'n'},
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Messages_Def =
+{
+    rd_messages_end,
+    &RD_Display_Def,
+    RD_Messages_Menu,
+    M_RD_Draw_MessagesSettings,
+    35,45,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t RD_Messages_Menu_Rus[]=
+{
+    {2, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'j'}, // Отображение сообщений:
+    {2, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень:
+    {-1,"",0,'\0'},
+    {2, "gjkextybt ghtlvtnjd:",     M_RD_Change_Msg_Pickup_Color,'g'}, // Получение предметов:
+    {2, "j,yfhe;tybt nfqybrjd:",    M_RD_Change_Msg_Secret_Color,'j'}, // Обнаружение тайников:
+    {2, "cbcntvyst cjj,otybz:",     M_RD_Change_Msg_System_Color,'c'}, // Системные сообщения:
+    {2, "xfn ctntdjq buhs:",        M_RD_Change_Msg_Chat_Color,  'x'}, // Чат сетевой игры:
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Messages_Def_Rus =
+{
+    rd_messages_end,
+    &RD_Display_Def_Rus,
+    RD_Messages_Menu_Rus,
+    M_RD_Draw_MessagesSettings,
     35,45,
     0
 };
@@ -1397,8 +1473,8 @@ enum
     rd_gameplay_1_swirling_liquids,
     rd_gameplay_1_invul_sky,
     rd_gameplay_1_flip_weapons,
-    rd_gameplay_1_draw_shadowed_text,
     rd_gameplay_1_empty1,
+    rd_gameplay_1_empty2,
     rd_gameplay_1_next_page,
     rd_gameplay_1_last_page,
     rd_gameplay_1_end
@@ -1465,7 +1541,7 @@ menuitem_t RD_Gameplay_Menu_1[]=
     {2,"Swirling liquids:",            M_RD_Change_SwirlingLiquids, 's'},
     {2,"Invulnerability affects sky:", M_RD_Change_InvulSky,        'i'},
     {2,"Flip weapons:",                M_RD_Change_FlipWeapons,     'f'},
-    {2,"Text casts shadows:",          M_RD_Change_ShadowedText,    't'},
+    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"", /* Next Page > */           M_RD_Choose_Gameplay_2,      'n'},
     {1,"", /* < Last Page */           M_RD_Choose_Gameplay_4,      'l'},
@@ -1573,7 +1649,7 @@ menuitem_t RD_Gameplay_Menu_1_Rus[]=
     {2,"ekexityyfz fybvfwbz ;blrjcntq:", M_RD_Change_SwirlingLiquids, 'e'}, // Улучшенная анимация жидкостей
     {2,"ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        'y'}, // Неуязвимость окрашивает небо
     {2,"pthrfkmyjt jnhf;tybt jhe;bz:",   M_RD_Change_FlipWeapons,     'p'}, // Зеркальное отражение оружия
-    {2,"ntrcns jn,hfcsdf.n ntym:",       M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень
+    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"",                               M_RD_Choose_Gameplay_2,      'l'}, // Далее >
     {1,"",                               M_RD_Choose_Gameplay_4,      'y'}, // < Назад
@@ -1791,7 +1867,7 @@ void M_RD_Draw_Display(void)
         dp_translation = NULL;
 
         // Detail level
-        M_WriteTextSmall_ENG(193, 105, detailLevel ? "ybprbq" : "dscjrbq");
+        M_WriteTextSmall_ENG(130, 105, detailLevel ? "low" : "high");
 
         // Local time
         M_WriteTextSmall_ENG(116, 115, 
@@ -1801,14 +1877,11 @@ void M_RD_Draw_Display(void)
                              local_time == 4 ? "24-hour (hh:mm:ss)" :
                                                "off");
 
-        // Messages allowed
-        M_WriteTextSmall_ENG(214, 125, showMessages ? "drk" : "dsrk");
-
         //
         // Interface
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 135, "Interface");  
+        M_WriteTextSmall_ENG(35, 125, "Interface");  
         dp_translation = NULL;
     }
     else
@@ -1833,14 +1906,11 @@ void M_RD_Draw_Display(void)
                              local_time == 4 ? "24-xfcjdjt (xx:vv:cc)" :
                                                "dsrk");
 
-        // Отображение сообщений
-        M_WriteTextSmall_RUS(214, 125, showMessages ? "drk" : "dsrk");
-
         //
         // Интерфейс
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 135, "bynthatqc");  
+        M_WriteTextSmall_RUS(35, 125, "bynthatqc");  
         dp_translation = NULL;
     }
 
@@ -1904,9 +1974,9 @@ void M_RD_Change_Gamma(int choice)
                                           "PLAYPAL",
                                           PU_CACHE) + 
                                           st_palette * 768);
-    players[consoleplayer].message = english_language ?
-                                     gammamsg[usegamma] :
-                                     gammamsg_rus[usegamma];
+    players[consoleplayer].message_system = english_language ?
+                                            gammamsg[usegamma] :
+                                            gammamsg_rus[usegamma];
 }
 
 void M_RD_Change_LevelBrightness(int choice)
@@ -1929,7 +1999,7 @@ void M_RD_Change_Detail(int choice)
 {
     detailLevel ^= 1;
     R_SetViewSize (screenblocks, detailLevel);
-    players[consoleplayer].message = detailLevel ? detaillo : detailhi;
+    players[consoleplayer].message_system = detailLevel ? detaillo : detailhi;
 }
 
 void M_RD_Change_LocalTime(int choice)
@@ -1960,12 +2030,291 @@ void M_RD_Change_LocalTime(int choice)
     }
 }
 
+// -----------------------------------------------------------------------------
+// Messages settings
+// -----------------------------------------------------------------------------
+
+void M_RD_Choose_MessagesSettings(int choice)
+{
+    M_SetupNextMenu(english_language ? 
+                    &RD_Messages_Def :
+                    &RD_Messages_Def_Rus);
+}
+
+void M_RD_Draw_MessagesSettings(void)
+{
+    if (english_language)
+    {
+        M_WriteTextBigCentered_ENG(12, "MESSAGES SETTINGS");
+
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35, 35, "General");  
+        dp_translation = NULL;
+
+        // Messages
+        M_WriteTextSmall_ENG(165, 45, showMessages ? "on" : "off");
+
+        // Text casts shadows
+        M_WriteTextSmall_ENG(177, 55, draw_shadowed_text ? "on" : "off");
+
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35, 65, "Colors");  
+        dp_translation = NULL;
+
+        // Item pickup
+        if (messages_pickup_color == 1)
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(120, 75, "green"); dp_translation = NULL; }
+        else if (messages_pickup_color == 2)
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(120, 75, "blue"); dp_translation = NULL; }
+        else if (messages_pickup_color == 3)
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(120, 75, "gold"); dp_translation = NULL; }
+        else if (messages_pickup_color == 4)
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(120, 75, "gray"); dp_translation = NULL; }
+        else if (messages_pickup_color == 5)
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(120, 75, "tan"); dp_translation = NULL; }
+        else if (messages_pickup_color == 6)
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(120, 75, "brown"); dp_translation = NULL; }
+        else if (messages_pickup_color == 7)
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(120, 75, "brick"); dp_translation = NULL; }
+        else
+        { dp_translation = NULL; M_WriteTextSmall_ENG(120, 75, "red"); }
+
+        // Revealed secret
+        if (messages_secret_color == 1)
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(157, 85, "green"); dp_translation = NULL; }
+        else if (messages_secret_color == 2)
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(157, 85, "blue"); dp_translation = NULL; }
+        else if (messages_secret_color == 3)
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(157, 85, "gold"); dp_translation = NULL; }
+        else if (messages_secret_color == 4)
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(157, 85, "gray"); dp_translation = NULL; }
+        else if (messages_secret_color == 5)
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(157, 85, "tan"); dp_translation = NULL; }
+        else if (messages_secret_color == 6)
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(157, 85, "brown"); dp_translation = NULL; }
+        else if (messages_secret_color == 7)
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(157, 85, "brick"); dp_translation = NULL; }
+        else
+        { dp_translation = NULL; M_WriteTextSmall_ENG(157, 85, "red"); }
+
+        // System message
+        if (messages_system_color == 1)
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(149, 95, "green"); dp_translation = NULL; }
+        else if (messages_system_color == 2)
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(149, 95, "blue"); dp_translation = NULL; }
+        else if (messages_system_color == 3)
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(149, 95, "gold"); dp_translation = NULL; }
+        else if (messages_system_color == 4)
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(149, 95, "gray"); dp_translation = NULL; }
+        else if (messages_system_color == 5)
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(149, 95, "tan"); dp_translation = NULL; }
+        else if (messages_system_color == 6)
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(149, 95, "brown"); dp_translation = NULL; }
+        else if (messages_system_color == 7)
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(149, 95, "brick"); dp_translation = NULL; }
+        else
+        { dp_translation = NULL; M_WriteTextSmall_ENG(149, 95, "red"); }
+
+        // Netgame chat
+        if (messages_chat_color == 1)
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_ENG(136, 105, "green"); dp_translation = NULL; }
+        else if (messages_chat_color == 2)
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_ENG(136, 105, "blue"); dp_translation = NULL; }
+        else if (messages_chat_color == 3)
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_ENG(136, 105, "gold"); dp_translation = NULL; }
+        else if (messages_chat_color == 4)
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(136, 105, "gray"); dp_translation = NULL; }
+        else if (messages_chat_color == 5)
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(136, 105, "tan"); dp_translation = NULL; }
+        else if (messages_chat_color == 6)
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(136, 105, "brown"); dp_translation = NULL; }
+        else if (messages_chat_color == 7)
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(136, 105, "brick"); dp_translation = NULL; }
+        else
+        { dp_translation = NULL; M_WriteTextSmall_ENG(136, 105, "red"); }
+    }
+    else
+    {
+        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB CJJ<OTYBQ"); // НАСТРОЙКИ СООБЩЕНИЙ
+
+        //
+        // Общие
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35, 35, "j,obt");  
+        dp_translation = NULL;
+
+        // Отображение сообщений
+        M_WriteTextSmall_RUS(214, 45, showMessages ? "drk" : "dsrk");
+
+        // Тексты отбрасывают тень
+        M_WriteTextSmall_RUS(226, 55, draw_shadowed_text ? "drk" : "dsrk");
+
+        //
+        // Цвета
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35, 65, "wdtnf");  
+        dp_translation = NULL;
+
+        // Получение предметов
+        if (messages_pickup_color == 1) // Зеленый
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(193, 75, "ptktysq"); dp_translation = NULL; }
+        else if (messages_pickup_color == 2) // Синий
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(193, 75, "cbybq"); dp_translation = NULL; }
+        else if (messages_pickup_color == 3) // Желтый
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(193, 75, ";tknsq"); dp_translation = NULL; }
+        else if (messages_pickup_color == 4) // Белый
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(193, 75, ",tksq"); dp_translation = NULL; }
+        else if (messages_pickup_color == 5) // Бежевый
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(193, 75, ",t;tdsq"); dp_translation = NULL; }
+        else if (messages_pickup_color == 6) // Коричневый
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(193, 75, "rjhbxytdsq"); dp_translation = NULL; }
+        else if (messages_pickup_color == 7) // Розовый
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(193, 75, "hjpjdsq"); dp_translation = NULL; }
+        else                            // Красный
+        { dp_translation = NULL; M_WriteTextSmall_RUS(193, 75, "rhfcysq"); }
+
+        // Обнаружение тайников
+        if (messages_secret_color == 1) // Зеленый
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(203, 85, "ptktysq"); dp_translation = NULL; }
+        else if (messages_secret_color == 2) // Синий
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(203, 85, "cbybq"); dp_translation = NULL; }
+        else if (messages_secret_color == 3) // Желтый
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(203, 85, ";tknsq"); dp_translation = NULL; }
+        else if (messages_secret_color == 4) // Белый
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(203, 85, ",tksq"); dp_translation = NULL; }
+        else if (messages_secret_color == 5) // Бежевый
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(203, 85, ",t;tdsq"); dp_translation = NULL; }
+        else if (messages_secret_color == 6) // Коричневый
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(203, 85, "rjhbxytdsq"); dp_translation = NULL; }
+        else if (messages_secret_color == 7) // Розовый
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(203, 85, "hjpjdsq"); dp_translation = NULL; }
+        else                            // Красный
+        { dp_translation = NULL; M_WriteTextSmall_RUS(203, 85, "rhfcysq"); }
+
+        // Системные сообщения
+        if (messages_system_color == 1) // Зеленый
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(197, 95, "ptktysq"); dp_translation = NULL; }
+        else if (messages_system_color == 2) // Синий
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(197, 95, "cbybq"); dp_translation = NULL; }
+        else if (messages_system_color == 3) // Желтый
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(197, 95, ";tknsq"); dp_translation = NULL; }
+        else if (messages_system_color == 4) // Белый
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(197, 95, ",tksq"); dp_translation = NULL; }
+        else if (messages_system_color == 5) // Бежевый
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(197, 95, ",t;tdsq"); dp_translation = NULL; }
+        else if (messages_system_color == 6) // Коричневый
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(197, 95, "rjhbxytdsq"); dp_translation = NULL; }
+        else if (messages_system_color == 7) // Розовый
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(197, 95, "hjpjdsq"); dp_translation = NULL; }
+        else                            // Красный
+        { dp_translation = NULL; M_WriteTextSmall_RUS(197, 95, "rhfcysq"); }
+
+        // Чат сетевой игры
+        if (messages_chat_color == 1) // Зеленый
+        { dp_translation = cr[CR_GREEN]; M_WriteTextSmall_RUS(164, 105, "ptktysq"); dp_translation = NULL; }
+        else if (messages_chat_color == 2) // Синий
+        { dp_translation = cr[CR_BLUE2]; M_WriteTextSmall_RUS(164, 105, "cbybq"); dp_translation = NULL; }
+        else if (messages_chat_color == 3) // Желтый
+        { dp_translation = cr[CR_GOLD]; M_WriteTextSmall_RUS(164, 105, ";tknsq"); dp_translation = NULL; }
+        else if (messages_chat_color == 4) // Белый
+        { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(164, 105, ",tksq"); dp_translation = NULL; }
+        else if (messages_chat_color == 5) // Бежевый
+        { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(164, 105, ",t;tdsq"); dp_translation = NULL; }
+        else if (messages_chat_color == 6) // Коричневый
+        { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(164, 105, "rjhbxytdsq"); dp_translation = NULL; }
+        else if (messages_chat_color == 7) // Розовый
+        { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(164, 105, "hjpjdsq"); dp_translation = NULL; }
+        else                            // Красный
+        { dp_translation = NULL; M_WriteTextSmall_RUS(164, 105, "rhfcysq"); }
+    }
+}
+
 void M_RD_Change_Messages (int choice)
 {
     showMessages ^= 1;
-    players[consoleplayer].message = showMessages ? msgon : msgoff;
+    players[consoleplayer].message_system = showMessages ? msgon : msgoff;
     message_dontfuckwithme = true;
 }
+
+void M_RD_Change_Msg_Pickup_Color(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        messages_pickup_color--;
+        if (messages_pickup_color < 0)
+            messages_pickup_color = 7;
+        break;
+
+        case 1:
+        messages_pickup_color++;
+        if (messages_pickup_color > 7)
+            messages_pickup_color = 0;
+        break;
+    }
+}
+
+void M_RD_Change_Msg_Secret_Color(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        messages_secret_color--;
+        if (messages_secret_color < 0)
+            messages_secret_color = 7;
+        break;
+
+        case 1:
+        messages_secret_color++;
+        if (messages_secret_color > 7)
+            messages_secret_color = 0;
+        break;
+    }
+}
+
+void M_RD_Change_Msg_System_Color(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        messages_system_color--;
+        if (messages_system_color < 0)
+            messages_system_color = 7;
+        break;
+
+        case 1:
+        messages_system_color++;
+        if (messages_system_color > 7)
+            messages_system_color = 0;
+        break;
+    }
+}
+
+void M_RD_Change_Msg_Chat_Color(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        messages_chat_color--;
+        if (messages_chat_color < 0)
+            messages_chat_color = 7;
+        break;
+
+        case 1:
+        messages_chat_color++;
+        if (messages_chat_color > 7)
+            messages_chat_color = 0;
+        break;
+    }
+}
+
+void M_RD_Change_ShadowedText(int choice)
+{
+    draw_shadowed_text ^= 1;
+}
+
 
 // -----------------------------------------------------------------------------
 // Automap settings
@@ -2996,11 +3345,6 @@ void M_RD_Change_FlipWeapons(int choice)
     flip_weapons ^= 1;
 }
 
-void M_RD_Change_ShadowedText (int choice)
-{
-    draw_shadowed_text ^= 1;
-}
-
 void M_RD_Change_ExitSfx (int choice)
 {
     play_exit_sfx ^= 1;
@@ -3180,7 +3524,7 @@ void M_RD_BackToDefaultsResponse (int ch)
     snprintf(resetmsg, sizeof(resetmsg), english_language ?
                                          "Settings reset" :
                                          "Yfcnhjqrb c,hjitys");
-    players[consoleplayer].message = resetmsg;
+    players[consoleplayer].message_system = resetmsg;
 }
 
 void M_RD_BackToDefaults (int choice)
@@ -4486,9 +4830,9 @@ boolean M_Responder (event_t *ev)
         if (usegamma > 17)
         usegamma = 0;
 
-        players[consoleplayer].message = english_language ?
-                                         gammamsg[usegamma] :
-                                         gammamsg_rus[usegamma];
+        players[consoleplayer].message_system = english_language ?
+                                                gammamsg[usegamma] :
+                                                gammamsg_rus[usegamma];
         pal = (byte *) W_CacheLumpName (usegamma <= 8 ?  "PALFIX" : "PLAYPAL",
                                         PU_CACHE) + st_palette * 768;
         I_SetPalette (pal);
@@ -4850,6 +5194,7 @@ void M_Drawer (void)
         else 
         if (currentMenu == &RD_Rendering_Def
         ||  currentMenu == &RD_Display_Def
+        ||  currentMenu == &RD_Messages_Def
         ||  currentMenu == &RD_Automap_Def
         ||  currentMenu == &RD_Audio_Def
         ||  currentMenu == &RD_Controls_Def
@@ -4876,6 +5221,7 @@ void M_Drawer (void)
         else
         if (currentMenu == &RD_Rendering_Def_Rus
         ||  currentMenu == &RD_Display_Def_Rus
+        ||  currentMenu == &RD_Messages_Def_Rus
         ||  currentMenu == &RD_Automap_Def_Rus
         ||  currentMenu == &RD_Audio_Def_Rus
         ||  currentMenu == &RD_Controls_Def_Rus

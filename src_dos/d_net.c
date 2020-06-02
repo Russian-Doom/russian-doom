@@ -300,7 +300,7 @@ void GetPackets (void)
                 strcpy (exitmsg, "buhjr 1 dsitk bp buhs"); // [JN] Игрок № вышел из игры
                 exitmsg[6] += netconsole;
             }
-            players[consoleplayer].message = exitmsg;
+            players[consoleplayer].message_system = exitmsg;
 
             if (demorecording)
             G_CheckDemoStatus();

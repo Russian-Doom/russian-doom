@@ -401,6 +401,12 @@ default_t	defaults[] =
     {"show_diskicon", &show_diskicon, 1},
     {"screen_wiping", &screen_wiping, 1},
 
+    // Messages
+    {"messages_pickup_color", &messages_pickup_color, 0},
+    {"messages_secret_color", &messages_secret_color, 0},
+    {"messages_system_color", &messages_system_color, 0},
+    {"messages_chat_color",   &messages_chat_color, 0},
+
     // Automap
     {"automap_color", &automap_color, 0},
     {"automap_antialias", &automap_antialias, 1},
@@ -703,9 +709,9 @@ void M_ScreenShot (void)
 		  W_CacheLumpName (usegamma <= 8 ? 
                            "PALFIX" : "PLAYPAL",PU_CACHE));
 	
-    players[consoleplayer].message = english_language ?
-                                     "screen shot" :
-                                     "cybvjr 'rhfyf"; // снимок экрана
+    players[consoleplayer].message_system = english_language ?
+                                            "screen shot" :
+                                            "crhbyijn"; // скриншот
 }
 
 

@@ -27,6 +27,8 @@
 #include "hu_lib.h"
 #include "r_local.h"
 #include "r_draw.h"
+#include "v_trans.h"
+#include "jn.h"
 
 // boolean : whether the screen is always erased
 #define noterased viewwindowx
@@ -90,12 +92,8 @@ boolean HUlib_delCharFromTextLine(hu_textline_t* t)
 
 }
 
-void
-HUlib_drawTextLine
-( hu_textline_t*	l,
-  boolean		drawcursor )
+void HUlib_drawTextLine (hu_textline_t *l, boolean drawcursor)
 {
-
     int			i;
     int			w;
     int			x;
@@ -113,8 +111,22 @@ HUlib_drawTextLine
 	    w = SHORT(l->f[c - l->sc]->width);
 	    if (x+w > SCREENWIDTH)
 		break;
+
+        // [JN] Colorize message if necessary
+        if (messages_pickup_color > 0 && !vanilla)
+        {
+            messages_pickup_color == 1 ? dp_translation = cr[CR_GREEN] :
+            messages_pickup_color == 2 ? dp_translation = cr[CR_BLUE2] :
+            messages_pickup_color == 3 ? dp_translation = cr[CR_GOLD]  :
+            messages_pickup_color == 4 ? dp_translation = cr[CR_GRAY]  :
+            messages_pickup_color == 5 ? dp_translation = cr[CR_TAN]   :
+            messages_pickup_color == 6 ? dp_translation = cr[CR_BROWN] :
+            messages_pickup_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+        }
         V_DrawShadowDirect(x+1, l->y+1, FG, l->f[c - l->sc]);
 	    V_DrawPatchDirect(x, l->y, FG, l->f[c - l->sc]);
+        dp_translation = NULL;
+
 	    x += w;
 	}
 	else
@@ -134,6 +146,183 @@ HUlib_drawTextLine
     }
 }
 
+void HUlib_drawTextLineUncolored (hu_textline_t *l)
+{
+    int            i, w, x;
+    unsigned char  c;
+
+    // draw the new stuff
+    x = l->x;
+
+    for (i=0 ; i < l->len ; i++)
+    {
+        c = toupper(l->l[i]);
+        if (c != ' ' && c >= l->sc && c <= '_')
+        {
+            w = SHORT(l->f[c - l->sc]->width);
+
+            if (x+w > SCREENWIDTH)
+            break;
+
+            V_DrawShadowDirect(x+1, l->y+1, FG, l->f[c - l->sc]);
+            V_DrawPatchDirect(x, l->y, FG, l->f[c - l->sc]);
+
+            x += w;
+        }
+        else
+        {
+            x += 4;
+
+            if (x >= SCREENWIDTH)
+            break;
+        }
+    }
+}
+
+void HUlib_drawTextLineSecret (hu_textline_t *l)
+{
+
+    int            i, w, x;
+    unsigned char  c;
+
+    // draw the new stuff
+    x = l->x;
+
+    for (i=0 ; i < l->len ; i++)
+    {
+        c = toupper(l->l[i]);
+
+        if (c != ' ' && c >= l->sc && c <= '_')
+        {
+            w = SHORT(l->f[c - l->sc]->width);
+
+            if (x+w > SCREENWIDTH)
+            break;
+
+            // [JN] Colorize message if necessary
+            if (messages_secret_color > 0 && !vanilla)
+            {
+                messages_secret_color == 1 ? dp_translation = cr[CR_GREEN] :
+                messages_secret_color == 2 ? dp_translation = cr[CR_BLUE2] :
+                messages_secret_color == 3 ? dp_translation = cr[CR_GOLD]  :
+                messages_secret_color == 4 ? dp_translation = cr[CR_GRAY]  :
+                messages_secret_color == 5 ? dp_translation = cr[CR_TAN]   :
+                messages_secret_color == 6 ? dp_translation = cr[CR_BROWN] :
+                messages_secret_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+            }
+            V_DrawShadowDirect(x+1, l->y+1, FG, l->f[c - l->sc]);
+            V_DrawPatchDirect(x, l->y, FG, l->f[c - l->sc]);
+            dp_translation = NULL;
+
+            x += w;
+        }
+        else
+        {
+            x += 4;
+            if (x >= SCREENWIDTH)
+            break;
+        }
+    }
+}
+
+void HUlib_drawTextLineSystem (hu_textline_t *l)
+{
+
+    int	           i, w, x;
+    unsigned char  c;
+
+    // draw the new stuff
+    x = l->x;
+
+    for (i=0 ; i < l->len ; i++)
+    {
+        c = toupper(l->l[i]);
+
+        if (c != ' ' && c >= l->sc && c <= '_')
+        {
+            w = SHORT(l->f[c - l->sc]->width);
+
+            if (x+w > SCREENWIDTH)
+            break;
+
+            // [JN] Colorize message if necessary
+            if (messages_secret_color > 0 && !vanilla)
+            {
+                messages_system_color == 1 ? dp_translation = cr[CR_GREEN] :
+                messages_system_color == 2 ? dp_translation = cr[CR_BLUE2] :
+                messages_system_color == 3 ? dp_translation = cr[CR_GOLD]  :
+                messages_system_color == 4 ? dp_translation = cr[CR_GRAY]  :
+                messages_system_color == 5 ? dp_translation = cr[CR_TAN]   :
+                messages_system_color == 6 ? dp_translation = cr[CR_BROWN] :
+                messages_system_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+            }
+            V_DrawShadowDirect(x+1, l->y+1, FG, l->f[c - l->sc]);
+            V_DrawPatchDirect(x, l->y, FG, l->f[c - l->sc]);
+            dp_translation = NULL;
+
+            x += w;
+        }
+        else
+        {
+            x += 4;
+            if (x >= SCREENWIDTH)
+            break;
+        }
+    }
+}
+
+void HUlib_drawTextLineChat (hu_textline_t *l, boolean drawcursor)
+{
+
+    int            i, w, x;
+    unsigned char  c;
+
+    // draw the new stuff
+    x = l->x;
+
+    for (i=0 ; i < l->len ; i++)
+    {
+        c = toupper(l->l[i]);
+
+        if (c != ' ' && c >= l->sc && c <= '_')
+        {
+            w = SHORT(l->f[c - l->sc]->width);
+
+            if (x+w > SCREENWIDTH)
+            break;
+
+            // [JN] Colorize message if necessary
+            if (messages_secret_color > 0 && !vanilla)
+            {
+                messages_chat_color == 1 ? dp_translation = cr[CR_GREEN] :
+                messages_chat_color == 2 ? dp_translation = cr[CR_BLUE2] :
+                messages_chat_color == 3 ? dp_translation = cr[CR_GOLD]  :
+                messages_chat_color == 4 ? dp_translation = cr[CR_GRAY]  :
+                messages_chat_color == 5 ? dp_translation = cr[CR_TAN]   :
+                messages_chat_color == 6 ? dp_translation = cr[CR_BROWN] :
+                messages_chat_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+            }
+            V_DrawShadowDirect(x+1, l->y+1, FG, l->f[c - l->sc]);
+            V_DrawPatchDirect(x, l->y, FG, l->f[c - l->sc]);
+            dp_translation = NULL;
+
+            x += w;
+        }
+        else
+        {
+            x += 4;
+            if (x >= SCREENWIDTH)
+            break;
+        }
+    }
+
+    // draw the cursor if requested
+    if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
+    {
+        V_DrawShadowDirect(x+1, l->y+1, FG, l->f['_' - l->sc]);
+        V_DrawPatchDirect(x, l->y, FG, l->f['_' - l->sc]);
+    }
+}
 
 // sorta called by HU_Erase and just better darn get things straight
 void HUlib_eraseTextLine(hu_textline_t* l)
@@ -251,6 +440,75 @@ void HUlib_drawSText(hu_stext_t* s)
 
 }
 
+void HUlib_drawSText_Secret(hu_stext_t* s)
+{
+    int i, idx;
+    hu_textline_t *l;
+
+    if (!*s->on)
+    return; // if not on, don't draw
+
+    // draw everything
+    for (i=0 ; i<s->h ; i++)
+    {
+        idx = s->cl - i;
+
+        if (idx < 0)
+        idx += s->h; // handle queue of lines
+
+        l = &s->l[idx];
+
+        // need a decision made here on whether to skip the draw
+        HUlib_drawTextLineSecret(l);
+    }
+}
+
+void HUlib_drawSText_System(hu_stext_t* s)
+{
+    int i, idx;
+    hu_textline_t *l;
+
+    if (!*s->on)
+    return; // if not on, don't draw
+
+    // draw everything
+    for (i=0 ; i<s->h ; i++)
+    {
+        idx = s->cl - i;
+
+        if (idx < 0)
+        idx += s->h; // handle queue of lines
+
+        l = &s->l[idx];
+
+        // need a decision made here on whether to skip the draw
+        HUlib_drawTextLineSystem(l);
+    }
+}
+
+void HUlib_drawSText_Chat(hu_stext_t* s)
+{
+    int i, idx;
+    hu_textline_t *l;
+
+    if (!*s->on)
+    return; // if not on, don't draw
+
+    // draw everything
+    for (i=0 ; i<s->h ; i++)
+    {
+        idx = s->cl - i;
+
+        if (idx < 0)
+        idx += s->h; // handle queue of lines
+
+        l = &s->l[idx];
+
+        // need a decision made here on whether to skip the draw
+        HUlib_drawTextLineChat(l, false);
+    }
+}
+
 void HUlib_eraseSText(hu_stext_t* s)
 {
 
@@ -340,7 +598,7 @@ void HUlib_drawIText(hu_itext_t* it)
 
     if (!*it->on)
 	return;
-    HUlib_drawTextLine(l, true); // draw the line w/ cursor
+    HUlib_drawTextLineChat(l, true); // draw the line w/ cursor
 
 }
 

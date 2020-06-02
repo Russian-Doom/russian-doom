@@ -111,6 +111,12 @@ boolean HUlib_delCharFromTextLine(hu_textline_t *t);
 // draws tline
 void    HUlib_drawTextLine(hu_textline_t *l, boolean drawcursor);
 
+// [JN] Colored messages
+void    HUlib_drawTextLineUncolored(hu_textline_t *l);
+void    HUlib_drawTextLineSecret(hu_textline_t *l);
+void    HUlib_drawTextLineSystem(hu_textline_t *l);
+void    HUlib_drawTextLineChat(hu_textline_t *l, boolean drawcursor);
+
 // erases text line
 void    HUlib_eraseTextLine(hu_textline_t *l); 
 
@@ -131,6 +137,11 @@ void HUlib_addMessageToSText (hu_stext_t* s, char* prefix, char* msg);
 
 // draws stext
 void HUlib_drawSText(hu_stext_t* s);
+
+// [JN] Colored messages
+void HUlib_drawSText_Secret(hu_stext_t* s);
+void HUlib_drawSText_System(hu_stext_t* s);
+void HUlib_drawSText_Chat(hu_stext_t* s);
 
 // erases all stext lines
 void HUlib_eraseSText(hu_stext_t* s); 

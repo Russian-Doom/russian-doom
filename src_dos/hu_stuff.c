@@ -115,11 +115,17 @@ static boolean  always_off = false;
 static char     chat_dest[MAXPLAYERS];
 static          hu_itext_t w_inputbuffer[MAXPLAYERS];
 
-static boolean  message_on;
+static boolean  message_on;         // [JN] Item pickup
+static boolean  message_on_secret;  // [JN] Revealed secret
+static boolean  message_on_system;  // [JN] System messages
+static boolean  message_on_chat;    // [JN] Netgame chat
 boolean         message_dontfuckwithme;
 static boolean  message_nottobefuckedwith;
 
-static hu_stext_t   w_message;
+static hu_stext_t   w_message;        // [JN] Item pickup
+static hu_stext_t   w_message_secret; // [JN] Revealed secret
+static hu_stext_t   w_message_system; // [JN] System messages
+static hu_stext_t   w_message_chat;   // [JN] Netgame chat
 static int          message_counter;
 
 extern int      showMessages;
@@ -579,6 +585,8 @@ void HU_Start(void)
 
     plr = &players[consoleplayer];
     message_on = false;
+    message_on_secret = false;
+    message_on_system = false;
     message_dontfuckwithme = false;
     message_nottobefuckedwith = false;
     chat_on = false;
@@ -588,18 +596,26 @@ void HU_Start(void)
                     english_language ? hu_font : hu_font_small_rus,
                     HU_FONTSTART, &message_on);
 
+    HUlib_initSText(&w_message_secret, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, 
+                    english_language ? hu_font : hu_font_small_rus,
+                    HU_FONTSTART, &message_on_secret);
+
+    HUlib_initSText(&w_message_system, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, 
+                    english_language ? hu_font : hu_font_small_rus,
+                    HU_FONTSTART, &message_on_system);
+
     // [JN] Create the local time widget
     HUlib_initTextLine(&w_loctime,
                       (local_time == 1 ? 268 :
                        local_time == 2 ? 248 :
                        local_time == 3 ? 281 :
                                          261),
-                       HU_MSGY + 1 * 8,
+                       (HU_MSGY+1) + 1 * 8,
                        hu_font, HU_FONTSTART);
 
     // [JN] Create the FPS widget
     HUlib_initTextLine(&w_fps,
-                        SCREENWIDTH-66, HU_MSGY + 2 * 8,
+                        SCREENWIDTH-66, (HU_MSGY+1) + 2 * 8,
                         hu_font,
                         HU_FONTSTART);
 
@@ -614,27 +630,27 @@ void HU_Start(void)
                        HU_FONTSTART);
 
     HUlib_initTextLine(&w_kills,
-                        HU_TITLEX, HU_MSGY + 1 * 8,
+                        HU_TITLEX, (HU_MSGY+1) + 1 * 8,
                         english_language ? hu_font : hu_font_small_rus,
                         HU_FONTSTART);
     
     HUlib_initTextLine(&w_items,
-                        HU_TITLEX, HU_MSGY + 2 * 8,
+                        HU_TITLEX, (HU_MSGY+1) + 2 * 8,
                         english_language ? hu_font : hu_font_small_rus,
                         HU_FONTSTART);
     
     HUlib_initTextLine(&w_scrts,
-                        HU_TITLEX, HU_MSGY + 3 * 8,
+                        HU_TITLEX, (HU_MSGY+1) + 3 * 8,
                         english_language ? hu_font : hu_font_small_rus,
                         HU_FONTSTART);
     
     HUlib_initTextLine(&w_skill,
-		                HU_TITLEX, HU_MSGY + 4 * 8,
+		                HU_TITLEX, (HU_MSGY+1) + 4 * 8,
 		                english_language ? hu_font : hu_font_small_rus,
 		                HU_FONTSTART);
 
     HUlib_initTextLine(&w_ltime,
-                        HU_TITLEX, HU_MSGY + 6 * 8,
+                        HU_TITLEX, (HU_MSGY+1) + 6 * 8,
                         hu_font,
                         HU_FONTSTART);
 
@@ -664,6 +680,10 @@ void HU_Start(void)
     // create the chat widget
     HUlib_initIText(&w_chat, HU_INPUTX, HU_INPUTY, hu_font, HU_FONTSTART, &chat_on);
 
+    // [JN] Separate netgame chat widget to use English only characters
+    HUlib_initSText(&w_message_chat, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, 
+                        hu_font, HU_FONTSTART, &message_on_chat);
+
     // create the inputbuffer widgets
     for (i=0 ; i<MAXPLAYERS ; i++)
     HUlib_initIText(&w_inputbuffer[i], 0, 0, 0, 0, &always_off);
@@ -681,6 +701,9 @@ void HU_Drawer(void)
     return;
     
     HUlib_drawSText(&w_message);
+    HUlib_drawSText_Secret(&w_message_secret);
+    HUlib_drawSText_System(&w_message_system);
+    HUlib_drawSText_Chat(&w_message_chat);
     HUlib_drawIText(&w_chat);
 
     // [JN] Local time widget, DOS-friendly version.
@@ -743,7 +766,7 @@ void HU_Drawer(void)
         {
             HUlib_addCharToTextLine(&w_loctime, *(t++));
         }
-        HUlib_drawTextLine(&w_loctime, false);
+        HUlib_drawTextLineUncolored(&w_loctime);
     }
 
     if (show_fps)
@@ -757,7 +780,7 @@ void HU_Drawer(void)
         {
             HUlib_addCharToTextLine(&w_fps, *(f++));
         }
-        HUlib_drawTextLine(&w_fps, false);
+        HUlib_drawTextLineUncolored(&w_fps);
     }
 
     if (automapactive)
@@ -765,7 +788,7 @@ void HU_Drawer(void)
         static char str[32], *s;
         int time = leveltime / TICRATE;
 
-        HUlib_drawTextLine(&w_title, false);
+        HUlib_drawTextLineUncolored(&w_title);
 
         // [from-crispy] Show level stats in automap
         if (automap_stats && !vanilla)
@@ -777,7 +800,7 @@ void HU_Drawer(void)
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_kills, *(s++));
-            HUlib_drawTextLine(&w_kills, false);
+            HUlib_drawTextLineUncolored(&w_kills);
 
             sprintf(str, english_language ?
                          "Items: %d/%d" : "ghtlvtns: %d*%d",
@@ -786,7 +809,7 @@ void HU_Drawer(void)
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_items, *(s++));
-            HUlib_drawTextLine(&w_items, false);
+            HUlib_drawTextLineUncolored(&w_items);
 
             sprintf(str, english_language ?
                          "Secret: %d/%d" : "nfqybrb: %d*%d",
@@ -795,7 +818,7 @@ void HU_Drawer(void)
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_scrts, *(s++));
-            HUlib_drawTextLine(&w_scrts, false);
+            HUlib_drawTextLineUncolored(&w_scrts);
 
             sprintf(str, english_language ?
                          "Skill: %d" : "ckj;yjcnm: %d",
@@ -804,14 +827,14 @@ void HU_Drawer(void)
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_skill, *(s++));
-            HUlib_drawTextLine(&w_skill, false);
+            HUlib_drawTextLineUncolored(&w_skill);
 
             sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
             HUlib_clearTextLine(&w_ltime);
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_ltime, *(s++));
-            HUlib_drawTextLine(&w_ltime, false);
+            HUlib_drawTextLineUncolored(&w_ltime);
         }
     }
 
@@ -841,6 +864,9 @@ void HU_Drawer(void)
 void HU_Erase(void)
 {
     HUlib_eraseSText(&w_message);
+    HUlib_eraseSText(&w_message_secret);
+    HUlib_eraseSText(&w_message_system);
+    HUlib_eraseSText(&w_message_chat);
     HUlib_eraseIText(&w_chat);
     HUlib_eraseTextLine(&w_title);
 }
@@ -854,17 +880,79 @@ void HU_Ticker(void)
     if (message_counter && !--message_counter)
     {
         message_on = false;
+        message_on_secret = false;
+        message_on_system = false;
+        message_on_chat = false;
         message_nottobefuckedwith = false;
     }
 
     if (showMessages || message_dontfuckwithme)
     {
         // display message if necessary
+        // [JN] Item pickup
         if ((plr->message && !message_nottobefuckedwith) || (plr->message && message_dontfuckwithme))
         {
             HUlib_addMessageToSText(&w_message, 0, plr->message);
+            message_nottobefuckedwith = 0;
             plr->message = 0;
+            plr->message_secret = 0;
+            plr->message_system = 0;
+            plr->message_chat = 0;
             message_on = true;
+            message_on_secret = false;
+            message_on_system = false;
+            message_on_chat = false;
+            message_counter = HU_MSGTIMEOUT;
+            message_nottobefuckedwith = message_dontfuckwithme;
+            message_dontfuckwithme = 0;
+        }
+
+        // [JN] Revealed secret
+        if ((plr->message_secret && !message_nottobefuckedwith) || (plr->message_secret && message_dontfuckwithme))
+        {
+            HUlib_addMessageToSText(&w_message_secret, 0, plr->message_secret);
+            plr->message = 0;
+            plr->message_secret = 0;
+            plr->message_system = 0;
+            plr->message_chat = 0;
+            message_on = false;
+            message_on_secret = true;
+            message_on_system = false;
+            message_on_chat = false;
+            message_counter = HU_MSGTIMEOUT;
+            message_nottobefuckedwith = message_dontfuckwithme;
+            message_dontfuckwithme = 0;
+        }
+
+        // [JN] System messages
+        if ((plr->message_system && !message_nottobefuckedwith) || (plr->message_system && message_dontfuckwithme))
+        {
+            HUlib_addMessageToSText(&w_message_system, 0, plr->message_system);
+            plr->message = 0;
+            plr->message_secret = 0;
+            plr->message_system = 0;
+            plr->message_chat = 0;
+            message_on = false;
+            message_on_secret = false;
+            message_on_system = true;
+            message_on_chat = false;
+            message_counter = HU_MSGTIMEOUT;
+            message_nottobefuckedwith = message_dontfuckwithme;
+            message_dontfuckwithme = 0;
+        }
+
+        // [JN] Netgame chat
+        if ((plr->message_chat && !message_nottobefuckedwith) || (plr->message_chat && message_dontfuckwithme))
+        {
+            HUlib_addMessageToSText(&w_message_chat, 0, plr->message_chat);
+            plr->message = 0;
+            plr->message_secret = 0;
+            plr->message_system = 0;
+            plr->message_chat = 0;
+            message_on = false;
+            message_on_secret = false;
+            message_on_system = false;
+            message_on_chat = true;
             message_counter = HU_MSGTIMEOUT;
             message_nottobefuckedwith = message_dontfuckwithme;
             message_dontfuckwithme = 0;
@@ -892,10 +980,10 @@ void HU_Ticker(void)
                     {
                         if (w_inputbuffer[i].l.len && (chat_dest[i] == consoleplayer+1 || chat_dest[i] == HU_BROADCAST))
                         {
-                            HUlib_addMessageToSText(&w_message, player_names[i], w_inputbuffer[i].l.l);
+                            HUlib_addMessageToSText(&w_message_chat, player_names[i], w_inputbuffer[i].l.l);
 
                             message_nottobefuckedwith = true;
-                            message_on = true;
+                            message_on_chat = true;
                             message_counter = HU_MSGTIMEOUT;
                             if ( commercial )
                             S_StartSound(0, sfx_radio);
@@ -1017,15 +1105,15 @@ boolean HU_Responder(event_t *ev)
                     {
                         num_nobrainers++;
                         if (num_nobrainers < 3)
-                        plr->message = HUSTR_TALKTOSELF1;
+                        plr->message_system = HUSTR_TALKTOSELF1;
                         else if (num_nobrainers < 6)
-                        plr->message = HUSTR_TALKTOSELF2;
+                        plr->message_system = HUSTR_TALKTOSELF2;
                         else if (num_nobrainers < 9)
-                        plr->message = HUSTR_TALKTOSELF3;
+                        plr->message_system = HUSTR_TALKTOSELF3;
                         else if (num_nobrainers < 32)
-                        plr->message = HUSTR_TALKTOSELF4;
+                        plr->message_system = HUSTR_TALKTOSELF4;
                         else
-                        plr->message = HUSTR_TALKTOSELF5;
+                        plr->message_system = HUSTR_TALKTOSELF5;
                     }
                 }
             }
@@ -1054,7 +1142,8 @@ boolean HU_Responder(event_t *ev)
             // leave chat mode and notify that it was sent
             chat_on = false;
             strcpy(lastmessage, chat_macros[c]);
-            plr->message = lastmessage;
+            // [JN] Do not repeat typed message because of characters problem.
+            // plr->message = lastmessage;
             eatkey = true;
         }
         else
@@ -1076,7 +1165,8 @@ boolean HU_Responder(event_t *ev)
                 if (w_chat.l.len)
                 {
                     strcpy(lastmessage, w_chat.l.l);
-                    plr->message = lastmessage;
+                    // [JN] Do not repeat typed message because of characters problem.
+                    // plr->message = lastmessage;
                 }
             }
             else if (c == KEY_ESCAPE)

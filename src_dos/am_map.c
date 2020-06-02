@@ -753,28 +753,28 @@ boolean AM_Responder (event_t* ev)
             case AM_FOLLOWKEY:
             automap_follow = !automap_follow;
             f_oldloc.x = MAXINT;
-            plr->message = automap_follow ? amstr_followon : amstr_followoff;
+            plr->message_system = automap_follow ? amstr_followon : amstr_followoff;
             break;
     
             case AM_GRIDKEY:
             automap_grid = !automap_grid;
-            plr->message = automap_grid ? amstr_gridon : amstr_gridoff;
+            plr->message_system = automap_grid ? amstr_gridon : amstr_gridoff;
             break;
 
             case AM_MARKKEY:
             sprintf(buffer, "%s %d", amstr_markedspot, markpointnum);
-            plr->message = buffer;
+            plr->message_system = buffer;
             AM_addMark();
             break;
 
             case AM_CLEARMARKKEY:
             AM_clearMarks();
-            plr->message = amstr_markscleared;
+            plr->message_system = amstr_markscleared;
             break;
 
             case AM_ROTATEKEY:
             automap_rotate ^= 1;
-            plr->message = automap_rotate ? amstr_rotateon : amstr_rotateoff;
+            plr->message_system = automap_rotate ? amstr_rotateon : amstr_rotateoff;
             break;
 
             default:
