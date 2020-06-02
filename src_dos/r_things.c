@@ -526,7 +526,8 @@ void R_ProjectSprite (mobj_t *thing)
     }
 
     // calculate edges of the shape
-    tx -= spriteoffset[lump];	
+    // [crispy] fix sprite offsets for mirrored sprites
+    tx -= flip ? spritewidth[lump] - spriteoffset[lump] : spriteoffset[lump];
     x1 = (centerxfrac + FixedMul (tx,xscale) ) >>FRACBITS;
 
     // off the right side?
@@ -928,7 +929,7 @@ void R_DrawPSprite (pspdef_t *psp)
     sprframe = &sprdef->spriteframes[ psp->state->frame & FF_FRAMEMASK ];
 
     lump = sprframe->lump[0];
-    flip = (boolean)sprframe->flip[0];
+    flip = (boolean)sprframe->flip[0] ^ flip_weapons;
 
     // [crispy] Smoothen Chainsaw idle animation
     // [JN] ...and also apply standard bobbing for some frames of weapons
@@ -987,7 +988,8 @@ void R_DrawPSprite (pspdef_t *psp)
     // calculate edges of the shape
     tx = psp_sx-160*FRACUNIT;
 
-    tx -= spriteoffset[lump];	
+    // [crispy] fix sprite offsets for mirrored sprites
+    tx -= flip ? 2 * tx - spriteoffset[lump] + spritewidth[lump] : spriteoffset[lump];
     x1 = (centerxfrac + FixedMul (tx,pspritescale) ) >>FRACBITS;
 
     // off the right side
@@ -1027,7 +1029,7 @@ void R_DrawPSprite (pspdef_t *psp)
 
     // [JN] Mouselook: also move HUD weapons while mouse look. LOW detail friendly.
     vis->texturemid += FixedMul(((centery - viewheight / 2) << FRACBITS),
-                       vis->xiscale>>detailshift);
+                       pspriteiscale>>detailshift);
 
     if (vis->x1 > x1)
     {

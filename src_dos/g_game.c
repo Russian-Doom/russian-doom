@@ -193,6 +193,7 @@ int colored_hud;
 int colored_blood;
 int swirling_liquids;
 int invul_sky;
+int flip_weapons;
 int draw_shadowed_text;
 
 // Gameplay: Audible
