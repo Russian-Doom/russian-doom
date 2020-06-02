@@ -3816,7 +3816,7 @@ void M_EndGame (int choice)
         return;
     }
 
-    M_StartMessage(english_language ? NETEND : NETEND_RUS,
+    M_StartMessage(english_language ? ENDGAME : ENDGAME_RUS,
                    M_EndGameResponse, true);
 }
 
