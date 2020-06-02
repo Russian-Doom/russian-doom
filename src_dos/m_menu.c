@@ -3056,7 +3056,9 @@ void M_RD_BackToDefaultsResponse (int ch)
 void M_RD_BackToDefaults (int choice)
 {
     choice = 0;
-    M_StartMessage(RD_DEFAULTS, M_RD_BackToDefaultsResponse,true);
+    M_StartMessage(english_language ? 
+                   RD_DEFAULTS : RD_DEFAULTS_RUS,
+                   M_RD_BackToDefaultsResponse,true);
 }
 
 
@@ -3410,7 +3412,7 @@ void M_LoadGame (int choice)
 {
     if (netgame)
     {
-        M_StartMessage(LOADNET,NULL,false);
+        M_StartMessage(english_language ? LOADNET : LOADNET_RUS, NULL, false);
         return;
     }
 
@@ -3495,7 +3497,7 @@ void M_SaveGame (int choice)
 {
     if (!usergame)
     {
-        M_StartMessage(SAVEDEAD,NULL,false);
+        M_StartMessage(english_language ? SAVEDEAD : SAVEDEAD_RUS, NULL, false);
         return;
     }
 
@@ -3575,13 +3577,13 @@ void M_QuickLoad (void)
 {
     if (netgame)
     {
-        M_StartMessage(QLOADNET,NULL,false);
+        M_StartMessage(english_language ? QLOADNET : QLOADNET_RUS, NULL, false);
         return;
     }
 
     if (quickSaveSlot < 0)
     {
-        M_StartMessage(QSAVESPOT,NULL,false);
+        M_StartMessage(english_language ? QSAVESPOT : QSAVESPOT_RUS, NULL, false);
         return;
     }
 
@@ -3675,7 +3677,7 @@ void M_NewGame (int choice)
 {
     if (netgame && !demoplayback)
     {
-        M_StartMessage(NEWGAME,NULL,false);
+        M_StartMessage(english_language ? NEWGAME : NEWGAME_RUS, NULL, false);
         return;
     }
 
@@ -3736,13 +3738,15 @@ void M_ChooseSkill (int choice)
 {
     if (choice == nightmare)
     {
-        M_StartMessage(NIGHTMARE, M_VerifyNightmare, true);
+        M_StartMessage(english_language ? NIGHTMARE : NIGHTMARE_RUS,
+                       M_VerifyNightmare, true);
         return;
     }
 
     if (choice == ultra_nm)
     {
-        M_StartMessage(ULTRANM, M_VerifyUltraNightmare, true);
+        M_StartMessage(english_language ? ULTRANM : ULTRANM_RUS,
+                       M_VerifyUltraNightmare, true);
         return;
     }
 
@@ -3808,11 +3812,12 @@ void M_EndGame (int choice)
 
     if (netgame)
     {
-        M_StartMessage(NETEND, NULL, false);
+        M_StartMessage(english_language ? NETEND : NETEND_RUS, NULL, false);
         return;
     }
 
-    M_StartMessage(ENDGAME, M_EndGameResponse, true);
+    M_StartMessage(english_language ? NETEND : NETEND_RUS,
+                   M_EndGameResponse, true);
 }
 
 
