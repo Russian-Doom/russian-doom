@@ -18,6 +18,7 @@
 //
 
 #include <ctype.h>
+#include <time.h>
 
 #include "doomdef.h"
 #include "z_zone.h"
@@ -106,7 +107,8 @@ static          hu_textline_t w_items;
 static          hu_textline_t w_scrts;
 static          hu_textline_t w_skill;
 static          hu_textline_t w_ltime;
-static          hu_textline_t w_fps;
+static          hu_textline_t w_fps;        // [JN] FPS widget
+static          hu_textline_t w_loctime;    // [JN] Local time widget
 boolean         chat_on;
 static          hu_itext_t w_chat;
 static boolean  always_off = false;
@@ -586,9 +588,18 @@ void HU_Start(void)
                     english_language ? hu_font : hu_font_small_rus,
                     HU_FONTSTART, &message_on);
 
+    // [JN] Create the local time widget
+    HUlib_initTextLine(&w_loctime,
+                      (local_time == 1 ? 268 :
+                       local_time == 2 ? 248 :
+                       local_time == 3 ? 281 :
+                                         261),
+                       HU_MSGY + 1 * 8,
+                       hu_font, HU_FONTSTART);
+
     // [JN] Create the FPS widget
     HUlib_initTextLine(&w_fps,
-                        SCREENWIDTH-57, HU_MSGY + 2 * 8,
+                        SCREENWIDTH-66, HU_MSGY + 2 * 8,
                         hu_font,
                         HU_FONTSTART);
 
@@ -671,6 +682,69 @@ void HU_Drawer(void)
     
     HUlib_drawSText(&w_message);
     HUlib_drawIText(&w_chat);
+
+    // [JN] Local time widget, DOS-friendly version.
+    if (local_time)
+    {
+        time_t      rawtime;
+        struct tm  *timeinfo;
+        static char printtime[64], *t;
+        time ( &rawtime );
+        timeinfo = localtime ( &rawtime );
+
+        // 12-hour (HH:MM designation)
+        if (local_time == 1)
+        {
+            if (timeinfo->tm_hour < 12)
+            {
+                snprintf(printtime, sizeof(printtime), "AM %d:%02d",
+                        timeinfo->tm_hour / 2, timeinfo->tm_min);
+            }
+            else
+            {
+                snprintf(printtime, sizeof(printtime), "PM %d:%02d",
+                        timeinfo->tm_hour - 12, timeinfo->tm_min);
+            }
+        }
+
+        // 12-hour (HH:MM:SS designation)
+        if (local_time == 2)
+        {
+            if (timeinfo->tm_hour < 12)
+            {
+                snprintf(printtime, sizeof(printtime), "AM %d:%02d:%02d",
+                        timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+            }
+            else
+            {
+                snprintf(printtime, sizeof(printtime), "PM %d:%02d:%02d",
+                        timeinfo->tm_hour - 12, timeinfo->tm_min, timeinfo->tm_sec);
+            }
+
+        }
+
+        // 24-hour (HH:MM)
+        if (local_time == 3)
+        {
+            snprintf(printtime, sizeof(printtime), "%02d:%02d",
+                    timeinfo->tm_hour, timeinfo->tm_min);
+        }
+
+        // 24-hour (HH:MM:SS)
+        if (local_time == 4)
+        {
+            snprintf(printtime, sizeof(printtime), "%02d:%02d:%02d",
+                    timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+        }
+
+        HUlib_clearTextLine(&w_loctime);
+        t = printtime;
+        while (*t)
+        {
+            HUlib_addCharToTextLine(&w_loctime, *(t++));
+        }
+        HUlib_drawTextLine(&w_loctime, false);
+    }
 
     if (show_fps)
     {

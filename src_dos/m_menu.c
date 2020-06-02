@@ -341,6 +341,7 @@ void M_RD_Change_ScreenSize(int choice);
 void M_RD_Change_Gamma(int choice);
 void M_RD_Change_LevelBrightness(int choice);
 void M_RD_Change_Detail(int choice);
+void M_RD_Change_LocalTime(int choice);
 void M_RD_Change_Messages(int choice);
 
 // Automap
@@ -1103,6 +1104,7 @@ enum
     rd_display_level_brightness,
     rd_display_empty3,
     rd_display_detail,
+    rd_display_localtime,
     rd_display_messages,
     rd_display_empty4,
     rd_display_empty5,
@@ -1123,6 +1125,7 @@ menuitem_t RD_Display_Menu[]=
     {2, "level brightness", M_RD_Change_LevelBrightness, 'l'},
     {-1,"",0,'\0'},
     {2,"detail level:",     M_RD_Change_Detail,     'e'},
+    {2, "local time:",      M_RD_Change_LocalTime,  'l'},
     {2,"messages enabled:", M_RD_Change_Messages,   'j'},
     {-1,"",0,'\0'},
     {1, "automap settings", M_RD_Choose_AutomapSettings, 'a'},
@@ -1152,6 +1155,7 @@ menuitem_t RD_Display_Menu_Rus[]=
     {2, "ehjdtym jcdtotyyjcnb",   M_RD_Change_LevelBrightness, 'e'}, // Уровень освещенности
     {-1,"",0,'\0'},
     {2,"ehjdtym ltnfkbpfwbb:",    M_RD_Change_Detail,     'e'}, // Уровень детализации:
+    {2, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
     {2,"jnj,hf;tybt cjj,otybq:",  M_RD_Change_Messages,   'j'}, // Отображение сообщений:
     {-1,"",0,'\0'},
     {1, "yfcnhjqrb rfhns",        M_RD_Choose_AutomapSettings, 'y'}, // Настройки карты
@@ -1788,14 +1792,22 @@ void M_RD_Draw_Display(void)
         // Detail level
         M_WriteTextSmall_ENG(193, 105, detailLevel ? "ybprbq" : "dscjrbq");
 
+        // Local time
+        M_WriteTextSmall_ENG(116, 115, 
+                             local_time == 1 ? "12-hour (hh:mm)" :
+                             local_time == 2 ? "12-hour (hh:mm:ss)" :
+                             local_time == 3 ? "24-hour (hh:mm)" :
+                             local_time == 4 ? "24-hour (hh:mm:ss)" :
+                                               "off");
+
         // Messages allowed
-        M_WriteTextSmall_ENG(214, 115, showMessages ? "drk" : "dsrk");
+        M_WriteTextSmall_ENG(214, 125, showMessages ? "drk" : "dsrk");
 
         //
         // Interface
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 125, "Interface");  
+        M_WriteTextSmall_ENG(35, 135, "Interface");  
         dp_translation = NULL;
     }
     else
@@ -1812,14 +1824,22 @@ void M_RD_Draw_Display(void)
         // Уровень детализации
         M_WriteTextSmall_RUS(193, 105, detailLevel ? "ybprbq" : "dscjrbq");
 
+        // Системное время
+        M_WriteTextSmall_RUS(161, 115, 
+                             local_time == 1 ? "12-xfcjdjt (xx:vv)" :
+                             local_time == 2 ? "12-xfcjdjt (xx:vv:cc)" :
+                             local_time == 3 ? "24-xfcjdjt (xx:vv)" :
+                             local_time == 4 ? "24-xfcjdjt (xx:vv:cc)" :
+                                               "dsrk");
+
         // Отображение сообщений
-        M_WriteTextSmall_RUS(214, 115, showMessages ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(214, 125, showMessages ? "drk" : "dsrk");
 
         //
         // Интерфейс
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 125, "bynthatqc");  
+        M_WriteTextSmall_RUS(35, 135, "bynthatqc");  
         dp_translation = NULL;
     }
 
@@ -1909,6 +1929,34 @@ void M_RD_Change_Detail(int choice)
     detailLevel ^= 1;
     R_SetViewSize (screenblocks, detailLevel);
     players[consoleplayer].message = detailLevel ? detaillo : detailhi;
+}
+
+void M_RD_Change_LocalTime(int choice)
+{
+    switch(choice)
+    {
+        case 0: 
+        local_time--;
+        if (local_time < 0) 
+            local_time = 4;
+        // Reinitialize time widget's horizontal offset
+        if (gamestate == GS_LEVEL)
+        {
+            HU_Start();
+        }
+        break;
+
+        case 1:
+        local_time++;
+        if (local_time > 4)
+            local_time = 0;
+        // Reinitialize time widget's horizontal offset
+        if (gamestate == GS_LEVEL)
+        {    
+            HU_Start();
+        }
+        break;
+    }
 }
 
 void M_RD_Change_Messages (int choice)

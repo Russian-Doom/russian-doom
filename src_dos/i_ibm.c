@@ -547,7 +547,7 @@ void I_FinishUpdate (void)
                 // minus 1!, exactly 35 FPS when measeraring for a longer time.
                 fps=(double)((fps_counter-1)*TICRATE)/(time-fps_starttime);
                 fps_nextcalculation=time+12; 
-                if (fps>999) fps=999; // overflow
+                if (fps>9999) fps=9999; // overflow
                 fps_counter=0; // flush old data
             }
 	   }

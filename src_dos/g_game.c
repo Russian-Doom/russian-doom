@@ -169,6 +169,7 @@ int screen_wiping;
 
 // Display
 int level_brightness;
+int local_time;
 
 // Audio
 int snd_monomode;

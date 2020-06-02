@@ -370,6 +370,7 @@ default_t	defaults[] =
     {"screenblocks",&screenblocks, 10},
     {"level_brightness",&level_brightness, 0},
     {"detaillevel",&detailLevel, 0},
+    {"local_time",&local_time, 0},
 
     {"snd_channels",&numChannels, 32},
     {"snd_musicdevice",&snd_DesiredMusicDevice, 3},
