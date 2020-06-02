@@ -416,6 +416,7 @@ default_t	defaults[] =
     // Gameplay: Graphical
     {"brightmaps", &brightmaps, 1},
     {"fake_contrast", &fake_contrast, 0},
+    {"improved_fuzz", &improved_fuzz, 2},
     {"colored_hud", &colored_hud, 0},
     {"colored_blood", &colored_blood, 1},
     {"swirling_liquids", &swirling_liquids, 1},

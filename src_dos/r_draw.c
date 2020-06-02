@@ -35,7 +35,7 @@
 
 // State.
 #include "doomstat.h"
-
+#include "m_misc.h" // [JN] Crispy_Random
 #include "jn.h"
 
 
@@ -319,11 +319,21 @@ void R_DrawFuzzColumn (void)
 	//  a pixel that is either one column
 	//  left or right of the current one.
 	// Add index from colormap to index.
-	*dest = colormaps[6*256+dest[fuzzoffset[fuzzpos]]]; 
+	*dest = (improved_fuzz == 1 || improved_fuzz == 3 ? 
+             colormaps_bw : colormaps)[6*256+dest[fuzzoffset[fuzzpos]]]; 
 
 	// Clamp table lookup index.
-	if (++fuzzpos == FUZZTABLE) 
-	    fuzzpos = 0;
+	if (++fuzzpos == FUZZTABLE)
+    {
+        if (improved_fuzz == 2 || improved_fuzz == 3)
+        {
+            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
+        }
+        else
+        {
+            fuzzpos = 0;
+        }
+    }
 	
 	dest += SCREENWIDTH/4;
 
@@ -334,7 +344,8 @@ void R_DrawFuzzColumn (void)
     // draw one extra line using only pixels of that line and the one above
     if (cutoff)
     {
-        *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+        *dest = (improved_fuzz == 1 || improved_fuzz == 3 ? 
+        colormaps_bw : colormaps)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
     }
 } 
  

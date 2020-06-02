@@ -153,6 +153,9 @@ fixed_t*	spritetopoffset;
 
 lighttable_t	*colormaps;
 
+// [JN] Black and white colormap
+lighttable_t	*colormaps_bw;
+
 // [JN] Brightmaps
 lighttable_t	*brightmaps_notgray;
 lighttable_t	*brightmaps_notgrayorbrown;
@@ -672,6 +675,11 @@ void R_InitColormaps (void)
     colormaps = Z_Malloc (length, PU_STATIC, 0); 
     colormaps = (byte *)( ((int)colormaps + 255)&~0xff); 
     W_ReadLump (W_GetNumForName("COLORMAP"), colormaps); 
+    
+    // [JN] Black and white light table
+    colormaps_bw = Z_Malloc (length_bmap, PU_STATIC, 0); 
+    colormaps_bw = (byte *)( ((int)colormaps_bw + 255)&~0xff); 
+    W_ReadLump (W_GetNumForName("COLORMAB"), colormaps_bw); 
     
     // [JN] Loading brightmaps
     // Note: tables as well as it's valuaes are taken from Doom Retro (r_data.c).

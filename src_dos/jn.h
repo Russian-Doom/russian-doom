@@ -82,6 +82,7 @@ extern int snd_pitchshift;
 // Gameplay: Graphical
 extern int brightmaps;
 extern int fake_contrast;
+extern int improved_fuzz;
 extern int colored_hud;
 extern int colored_blood;
 extern int swirling_liquids;

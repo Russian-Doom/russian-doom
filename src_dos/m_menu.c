@@ -383,7 +383,7 @@ void M_RD_Draw_Gameplay_4(void);
 
 void M_RD_Change_Brightmaps(int choice);
 void M_RD_Change_FakeContrast(int choice);
-void M_RD_Change_Transparency(int choice);
+void M_RD_Change_ImprovedFuzz(int choice);
 void M_RD_Change_ColoredHUD(int choice);
 void M_RD_Change_ColoredBlood(int choice);
 void M_RD_Change_SwirlingLiquids(int choice);
@@ -1377,6 +1377,7 @@ enum
 {
     rd_gameplay_1_brightmaps,
     rd_gameplay_1_fake_contrast,
+    rd_gameplay_1_improved_fuzz,
     rd_gameplay_1_colored_hud,
     rd_gameplay_1_colored_blood,
     rd_gameplay_1_swirling_liquids,
@@ -1384,7 +1385,6 @@ enum
     rd_gameplay_1_draw_shadowed_text,
     rd_gameplay_1_empty1,
     rd_gameplay_1_empty2,
-    rd_gameplay_1_empty3,
     rd_gameplay_1_next_page,
     rd_gameplay_1_last_page,
     rd_gameplay_1_end
@@ -1445,12 +1445,12 @@ menuitem_t RD_Gameplay_Menu_1[]=
 {
     {2,"Brightmaps:",                  M_RD_Change_Brightmaps,      'b'},
     {2,"Fake contrast:",               M_RD_Change_FakeContrast,    'f'},
+    {2,"Fuzz effect:",                 M_RD_Change_ImprovedFuzz,   'f'},
     {2,"Colored HUD elements:",        M_RD_Change_ColoredHUD,      'c'},
     {2,"Colored blood and corpses:",   M_RD_Change_ColoredBlood,    'c'},
     {2,"Swirling liquids:",            M_RD_Change_SwirlingLiquids, 's'},
     {2,"Invulnerability affects sky:", M_RD_Change_InvulSky,        'i'},
     {2,"Text casts shadows:",          M_RD_Change_ShadowedText,    't'},
-    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"", /* Next Page > */           M_RD_Choose_Gameplay_2,      'n'},
@@ -1553,12 +1553,12 @@ menuitem_t RD_Gameplay_Menu_1_Rus[]=
 {
     {2,",hfqnvfggbyu:",                  M_RD_Change_Brightmaps,      ','}, // Брайтмаппинг
     {2,"Bvbnfwbz rjynhfcnyjcnb:",        M_RD_Change_FakeContrast,    'b'}, // Имитация контрастности
+    {2,"\'aatrn ievf:",                  M_RD_Change_ImprovedFuzz,   '\''}, // Эффект шума
     {2,"Hfpyjwdtnyst 'ktvtyns $:",       M_RD_Change_ColoredHUD,      'h'}, // Разноцветные элементы HUD
     {2,"Hfpyjwdtnyfz rhjdm b nhegs:",    M_RD_Change_ColoredBlood,    'h'}, // Разноцветная кровь и трупы
     {2,"ekexityyfz fybvfwbz ;blrjcntq:", M_RD_Change_SwirlingLiquids, 'e'}, // Улучшенная анимация жидкостей
     {2,"ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        'y'}, // Неуязвимость окрашивает небо
     {2,"ntrcns jn,hfcsdf.n ntym:",       M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень
-    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"",                               M_RD_Choose_Gameplay_2,      'l'}, // Далее >
@@ -2390,29 +2390,37 @@ void M_RD_Draw_Gameplay_1(void)
         M_WriteTextSmall_ENG(140, 55, fake_contrast ? "on" : "off");
         dp_translation = NULL;
 
+        // Fuzz effect
+        dp_translation = improved_fuzz > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(125, 65, 
+                             improved_fuzz == 0 ? "Original" :
+                             improved_fuzz == 1 ? "Original (b&w)" :
+                             improved_fuzz == 2 ? "Improved" :
+                                                  "Improved (b&w)");
+
         // Colored HUD elements
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 65, colored_hud ? "on" : "off");
+        M_WriteTextSmall_ENG(140, 75, colored_hud ? "on" : "off");
         dp_translation = NULL;
 
         // Colored blood and corpses
         dp_translation = colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 75, colored_blood ? "on" : "off");
+        M_WriteTextSmall_ENG(140, 85, colored_blood ? "on" : "off");
         dp_translation = NULL;
 
         // Swirling liquids
         dp_translation = swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 85, swirling_liquids ? "on" : "off");
+        M_WriteTextSmall_ENG(140, 95, swirling_liquids ? "on" : "off");
         dp_translation = NULL;
 
         // Invulnerability affects sky
         dp_translation = invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 95, invul_sky ? "on" : "off");
+        M_WriteTextSmall_ENG(140, 105, invul_sky ? "on" : "off");
         dp_translation = NULL;
 
         // Test casts shadows
         dp_translation = draw_shadowed_text ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 105, draw_shadowed_text ? "on" : "off");
+        M_WriteTextSmall_ENG(140, 115, draw_shadowed_text ? "on" : "off");
         dp_translation = NULL;
 
         //
@@ -2445,29 +2453,37 @@ void M_RD_Draw_Gameplay_1(void)
         M_WriteTextSmall_RUS(140, 55, fake_contrast ? "drk" : "dsrk");
         dp_translation = NULL;
 
+        // Эффект шума
+        dp_translation = improved_fuzz > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(134, 65, 
+                             improved_fuzz == 0 ? "Jhbubyfkmysq" :
+                             improved_fuzz == 1 ? "Jhbubyfkmysq (x*,)" :
+                             improved_fuzz == 2 ? "Ekexityysq" :
+                                                  "Ekexityysq (x*,)");
+
         // Разноцветные элементы HUD
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 65, colored_hud ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(140, 75, colored_hud ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Разноцветная кровь и трупы
         dp_translation = colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 75, colored_blood ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(140, 85, colored_blood ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Улучшенная анимация жидкостей
         dp_translation = swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 85, swirling_liquids ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(140, 95, swirling_liquids ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Неуязвимость окрашивает небо
         dp_translation = invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 95, invul_sky ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(140, 105, invul_sky ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Тексты отбрасывают тень
         dp_translation = draw_shadowed_text ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 105, draw_shadowed_text ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(140, 115, draw_shadowed_text ? "drk" : "dsrk");
         dp_translation = NULL;
 
         //
@@ -2837,6 +2853,27 @@ void M_RD_Change_Brightmaps (int choice)
 void M_RD_Change_FakeContrast (int choice)
 {
     fake_contrast ^= 1;
+}
+
+void M_RD_Change_ImprovedFuzz(int choice)
+{
+    switch(choice)
+    {
+        case 0: 
+        improved_fuzz--;
+        if (improved_fuzz < 0) 
+            improved_fuzz = 3;
+        break;
+    
+        case 1:
+        improved_fuzz++;
+        if (improved_fuzz > 3)
+            improved_fuzz = 0;
+        break;
+    }
+
+    // Redraw game screen
+    R_ExecuteSetViewSize();
 }
 
 void M_RD_Change_ColoredHUD (int choice)

@@ -44,6 +44,9 @@ extern fixed_t*		spritetopoffset;
 
 extern lighttable_t*	colormaps;
 
+// [JN] Black and white colormap
+extern lighttable_t*	colormaps_bw;
+
 // [JN] Brightmaps
 extern lighttable_t* brightmaps_notgray;
 extern lighttable_t* brightmaps_notgrayorbrown;
