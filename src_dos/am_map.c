@@ -770,6 +770,7 @@ boolean AM_Responder (event_t* ev)
             case AM_CLEARMARKKEY:
             AM_clearMarks();
             plr->message = amstr_markscleared;
+            break;
 
             case AM_ROTATEKEY:
             automap_rotate ^= 1;
