@@ -339,6 +339,7 @@ void M_RD_Choose_Display(int choice);
 void M_RD_Draw_Display(void);
 void M_RD_Change_ScreenSize(int choice);
 void M_RD_Change_Gamma(int choice);
+void M_RD_Change_LevelBrightness(int choice);
 void M_RD_Change_Detail(int choice);
 void M_RD_Change_Messages(int choice);
 
@@ -1099,9 +1100,12 @@ enum
     rd_display_empty1,
     rd_display_gamma,
     rd_display_empty2,
+    rd_display_level_brightness,
+    rd_display_empty3,
     rd_display_detail,
     rd_display_messages,
-    rd_display_empty3,
+    rd_display_empty4,
+    rd_display_empty5,
     rd_display_automap_settings,
     rd_display_end
 } rd_display_e;
@@ -1115,6 +1119,8 @@ menuitem_t RD_Display_Menu[]=
     {2,"screen size",       M_RD_Change_ScreenSize, 's'},
     {-1,"",0,'\0'},
     {2,"gamma-correction",  M_RD_Change_Gamma,      'g'},
+    {-1,"",0,'\0'},
+    {2, "level brightness", M_RD_Change_LevelBrightness, 'l'},
     {-1,"",0,'\0'},
     {2,"detail level:",     M_RD_Change_Detail,     'e'},
     {2,"messages enabled:", M_RD_Change_Messages,   'j'},
@@ -1143,6 +1149,8 @@ menuitem_t RD_Display_Menu_Rus[]=
     {-1,"",0,'\0'},                                             //
     {2,"ehjdtym ufvvf-rjhhtrwbb", M_RD_Change_Gamma,      'e'}, // Уровень гамма-коррекции
     {-1,"",0,'\0'},                                             //
+    {2, "ehjdtym jcdtotyyjcnb",   M_RD_Change_LevelBrightness, 'e'}, // Уровень освещенности
+    {-1,"",0,'\0'},
     {2,"ehjdtym ltnfkbpfwbb:",    M_RD_Change_Detail,     'e'}, // Уровень детализации:
     {2,"jnj,hf;tybt cjj,otybq:",  M_RD_Change_Messages,   'j'}, // Отображение сообщений:
     {-1,"",0,'\0'},
@@ -1778,16 +1786,16 @@ void M_RD_Draw_Display(void)
         dp_translation = NULL;
 
         // Detail level
-        M_WriteTextSmall_ENG(193, 85, detailLevel ? "ybprbq" : "dscjrbq");
+        M_WriteTextSmall_ENG(193, 105, detailLevel ? "ybprbq" : "dscjrbq");
 
         // Messages allowed
-        M_WriteTextSmall_ENG(214, 95, showMessages ? "drk" : "dsrk");
+        M_WriteTextSmall_ENG(214, 115, showMessages ? "drk" : "dsrk");
 
         //
         // Interface
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 105, "Interface");  
+        M_WriteTextSmall_ENG(35, 125, "Interface");  
         dp_translation = NULL;
     }
     else
@@ -1801,27 +1809,31 @@ void M_RD_Draw_Display(void)
         M_WriteTextSmall_RUS(35, 35, "\'rhfy");
         dp_translation = NULL;
 
-        // Write "on" / "off" strings for features
-        M_WriteTextSmall_RUS(193, 85, detailLevel ? "ybprbq" : "dscjrbq");
-        M_WriteTextSmall_RUS(214, 95, showMessages ? "drk" : "dsrk");
+        // Уровень детализации
+        M_WriteTextSmall_RUS(193, 105, detailLevel ? "ybprbq" : "dscjrbq");
+
+        // Отображение сообщений
+        M_WriteTextSmall_RUS(214, 115, showMessages ? "drk" : "dsrk");
 
         //
         // Интерфейс
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 105, "bynthatqc");  
+        M_WriteTextSmall_RUS(35, 125, "bynthatqc");  
         dp_translation = NULL;
     }
 
-    // Draw screen size slider
+    // Screen size slider
     M_DrawThermo_Small(35, 55, 12, screenSize);
-    
-    // Draw numerical representation of slider position
+    // Numerical representation of slider position
     snprintf(num, 4, "%3d", screenblocks);
     M_WriteTextSmall_ENG(145, 55, num);
 
-    // Draw gamma-correction slider
+    // Gamma-correction slider
     M_DrawThermo_Small(35, 75, 18, usegamma);
+
+    // Level brightness slider
+    M_DrawThermo_Small(35, 95, 5, level_brightness / 16);
 }
 
 void M_RD_Change_ScreenSize(int choice)
@@ -1874,6 +1886,22 @@ void M_RD_Change_Gamma(int choice)
     players[consoleplayer].message = english_language ?
                                      gammamsg[usegamma] :
                                      gammamsg_rus[usegamma];
+}
+
+void M_RD_Change_LevelBrightness(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        if (level_brightness > 0)
+            level_brightness -= 16;
+        break;
+    
+        case 1:
+        if (level_brightness < 64)
+            level_brightness += 16;
+        break;
+    }
 }
 
 void M_RD_Change_Detail(int choice)

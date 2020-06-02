@@ -167,6 +167,9 @@ int show_fps;
 int show_diskicon;
 int screen_wiping;
 
+// Display
+int level_brightness;
+
 // Audio
 int snd_monomode;
 int snd_pitchshift;

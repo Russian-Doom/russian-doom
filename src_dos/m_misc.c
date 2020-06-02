@@ -368,6 +368,7 @@ default_t	defaults[] =
     {"joyb_speed",&joybspeed,31},   // [JN] Enable always run by default
 
     {"screenblocks",&screenblocks, 10},
+    {"level_brightness",&level_brightness, 0},
     {"detaillevel",&detailLevel, 0},
 
     {"snd_channels",&numChannels, 32},
