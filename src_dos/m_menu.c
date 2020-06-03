@@ -372,6 +372,12 @@ void M_RD_Draw_Audio(void);
 void M_RD_Change_SfxVol(int choice);
 void M_RD_Change_MusicVol(int choice);
 void M_RD_Change_SfxChannels(int choice);
+
+// Sound system
+void M_RD_Choose_SoundSystem(int choice);
+void M_RD_Draw_Audio_System(void);
+void M_RD_Change_SoundDevice(int choice);
+void M_RD_Change_MusicDevice(int choice);
 void M_RD_Change_SndMode(int choice);
 void M_RD_Change_PitchShifting(int choice);
 
@@ -1330,8 +1336,8 @@ enum
     rd_audio_empty3,
     rd_audio_sfxchannels,
     rd_audio_empty4,
-    rd_audio_sndmode,
-    rd_audio_sndpitch,
+    rd_audio_empty5,
+    rd_audio_soundsystem,
     rd_audio_end
 } rd_audio_e;
 
@@ -1348,8 +1354,8 @@ menuitem_t RD_Audio_Menu[]=
     {-1,"",0,'\0'},
     {2,"sound channels",        M_RD_Change_SfxChannels,   's'},
     {-1,"",0,'\0'},
-    {2,"sound effects mode:",   M_RD_Change_SndMode,       's'},
-    {2,"pitch-shifted sounds:", M_RD_Change_PitchShifting, 'g'},
+    {-1,"",0,'\0'},
+    {1,"sound system settings",    M_RD_Choose_SoundSystem, 's'},
     {-1,"",0,'\0'}
 };
 
@@ -1376,8 +1382,8 @@ menuitem_t RD_Audio_Menu_Rus[]=
     {-1,"",0,'\0'},                                                   //
     {2,"Pderjdst rfyfks",            M_RD_Change_SfxChannels,   'p'}, // Звуковые каналы
     {-1,"",0,'\0'},                                                   //
-    {2,"Ht;bv pderf:",               M_RD_Change_SndMode,       'h'}, // Режим звука
-    {2,"ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 'g'}, // Произвольный питч-шифтинг
+    {-1,"",0,'\0'},                                                   //
+    {1,"yfcnhjqrb pderjdjq cbcntvs",    M_RD_Choose_SoundSystem, 'y'}, // Настройки звуковой системы...
     {-1,"",0,'\0'}
 };
 
@@ -1387,6 +1393,68 @@ menu_t RD_Audio_Def_Rus =
     &RD_Options_Def_Rus,
     RD_Audio_Menu_Rus,
     M_RD_Draw_Audio,
+    35,45,
+    0
+};
+
+// -----------------------------------------------------------------------------
+// Sound system
+// -----------------------------------------------------------------------------
+
+enum
+{
+    rd_audio_sys_sfx,
+    rd_audio_sys_music,
+    rd_audio_sys_empty1,
+    rd_audio_sys_sndmode,
+    rd_audio_sys_sndpitch,
+    rd_audio_sys_end
+} rd_audio_sys_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t RD_Audio_System_Menu[]=
+{
+    {2, "sound effects:",        M_RD_Change_SoundDevice,   's'},
+    {2, "music:",                M_RD_Change_MusicDevice,   'm'},
+    {-1,"",0,'\0'},
+    {2, "sound effects mode:",   M_RD_Change_SndMode,       's'},
+    {2, "pitch-shifted sounds:", M_RD_Change_PitchShifting, 'p'},
+    {-1,"",0,'\0'}
+};
+
+menu_t RD_Audio_System_Def =
+{
+    rd_audio_sys_end,
+    &RD_Audio_Def,
+    RD_Audio_System_Menu,
+    M_RD_Draw_Audio_System,
+    35,45,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t RD_Audio_System_Menu_Rus[]=
+{
+    {2, "pderjdst \'aatrns:",         M_RD_Change_SoundDevice,   'p'}, // Звуковые эффекты
+    {2, "vepsrf:",                    M_RD_Change_MusicDevice,   'v'}, // Музыка
+    {-1,"",0,'\0'},                                                    //
+    {2, "Ht;bv pderjds[ \'aatrnjd:",  M_RD_Change_SndMode,       'h'}, // Режим звуковых эффектов
+    {2, "ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 'g'}, // Произвольный питч-шифтинг
+    {-1,"",0,'\0'}
+};
+
+menu_t RD_Audio_System_Def_Rus =
+{
+    rd_audio_sys_end,
+    &RD_Audio_Def_Rus,
+    RD_Audio_System_Menu_Rus,
+    M_RD_Draw_Audio_System,
     35,45,
     0
 };
@@ -2481,14 +2549,18 @@ void M_RD_Draw_Audio(void)
         dp_translation = NULL;
 
         //
-        // Extra
+        // Channels
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 85, "extra");
+        M_WriteTextSmall_ENG(35, 85, "channels");
         dp_translation = NULL;
 
-        M_WriteTextSmall_ENG(178, 115, snd_monomode ? "mono" : "stereo");
-        M_WriteTextSmall_ENG(186, 125, snd_pitchshift ? "on" : "off");
+        //
+        // Advanced
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35, 115, "ADVANCED");
+        dp_translation = NULL;
     }
     else
     {
@@ -2502,14 +2574,18 @@ void M_RD_Draw_Audio(void)
         dp_translation = NULL;
 
         //
+        // Воспроизведение
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35, 85, "djcghjbpdtltybt");
+        dp_translation = NULL;
+
+        //
         // Дополнительно
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 85, "ljgjkybntkmyj");
+        M_WriteTextSmall_RUS(35, 115, "ljgjkybntkmyj");
         dp_translation = NULL;
-
-        M_WriteTextSmall_RUS(132, 115, snd_monomode ? "vjyj" : "cnthtj");
-        M_WriteTextSmall_RUS(242, 125, snd_pitchshift ? "drk" : "dsrk");
     }
 
     // Draw SFX volume slider
@@ -2596,6 +2672,256 @@ void M_RD_Change_SfxChannels (int choice)
 
     // Reallocate sound channels
     S_ChannelsRealloc();
+}
+
+
+// -----------------------------------------------------------------------------
+// Sound system
+// -----------------------------------------------------------------------------
+
+void M_RD_Choose_SoundSystem (int choice)
+{
+    M_SetupNextMenu(english_language ?
+                    &RD_Audio_System_Def :
+                    &RD_Audio_System_Def_Rus);
+}
+
+void M_RD_Draw_Audio_System (void)
+{
+    if (english_language)
+    {
+        M_WriteTextBigCentered_ENG(12, "SOUND SYSTEM");
+
+        //
+        // Sound system
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35, 35, "sound system");
+        dp_translation = NULL;
+
+        // Sound effects
+        if (snd_DesiredSfxDevice == 0)
+        {
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_ENG(141, 45, "DISABLED");
+            dp_translation = NULL;
+        }
+        else if (snd_DesiredSfxDevice == 1)
+        {
+            M_WriteTextSmall_ENG(141, 45, "PC SPEAKER");
+        }
+        else if (snd_DesiredSfxDevice == 3)
+        {
+            M_WriteTextSmall_ENG(141, 45, "SOUND BLASTER");
+        }
+        else
+        {
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_ENG(141, 45, "UNKNOWN DEVICE");
+            dp_translation = NULL;
+        }
+
+        // Music
+        if (snd_DesiredMusicDevice == 0)
+        {   
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_ENG(79, 55, "disabled");
+            dp_translation = NULL;
+        }
+        else if (snd_DesiredMusicDevice == 3)
+        {
+            M_WriteTextSmall_ENG(79, 55, "SOUND BLASTER");
+        }
+        else if (snd_DesiredMusicDevice == 8)
+        {
+            M_WriteTextSmall_ENG(79, 55, "GENERAL MIDI");
+        }
+        else
+        {
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_ENG(79, 55, "UNKNOWN DEVICE");
+            dp_translation = NULL;
+        }
+
+        //
+        // Miscellaneous
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35, 65, "Miscellaneous");
+        dp_translation = NULL;
+
+        // Sfx mode
+        M_WriteTextSmall_ENG(178, 75, snd_monomode ? "mono" : "stereo");
+
+        // Pitch-shifted sounds
+        M_WriteTextSmall_ENG(186, 85, snd_pitchshift ? "on" : "off");
+
+        // Informative message
+        if (itemOn == rd_audio_sys_sfx
+        ||  itemOn == rd_audio_sys_music)
+        {
+            dp_translation = cr[CR_GRAY];
+            M_WriteTextSmall_ENG(1, 120, "changing will require restart of the program");
+            dp_translation = NULL;
+        }
+    }
+    else
+    {
+        M_WriteTextBigCentered_RUS(12, "PDERJDFZ CBCNTVF"); // ЗВУКОВАЯ СИСТЕМА
+
+        //
+        // Звуковая система
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35, 35, "pderjdfz cbcntvf");
+        dp_translation = NULL;
+
+        // Звуковые эффекты
+        if (snd_DesiredSfxDevice == 0)
+        {
+            // Отключены
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_RUS(175, 45, "jnrk.xtys");
+            dp_translation = NULL;
+        }
+        else if (snd_DesiredSfxDevice == 1)
+        {
+            // Динамик ПК
+            M_WriteTextSmall_RUS(175, 45, "lbyfvbr gr");
+        }
+        else if (snd_DesiredSfxDevice == 3)
+        {
+            // Цифровые
+            M_WriteTextSmall_ENG(175, 45, "SOUND BLASTER");
+        }
+        else
+        {
+            // Неизвестное устройство
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_RUS(175, 45, "ytbpdtcnyjt ecnhjqcndj");
+            dp_translation = NULL;
+        }
+
+        // Музыка
+        if (snd_DesiredMusicDevice == 0)
+        {
+            // Отключена
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_RUS(94, 55, "jnrk.xtyf");
+            dp_translation = NULL;
+        }
+        else if (snd_DesiredMusicDevice == 3)
+        {
+            M_WriteTextSmall_ENG(94, 55, "SOUND BLASTER");
+        }
+        else if (snd_DesiredMusicDevice == 8)
+        {
+            M_WriteTextSmall_ENG(94, 55, "GENERAL MIDI");
+        }
+        else
+        {
+            // Неизвестное устройство
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_RUS(94, 55, "ytbpdtcnyjt ecnhjqcndj");
+            dp_translation = NULL;
+        }
+
+        //
+        // Разное
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35, 65, "hfpyjt");
+        dp_translation = NULL;
+
+        // Режим звука
+        M_WriteTextSmall_RUS(231, 75, snd_monomode ? "vjyj" : "cnthtj");
+
+        // Произвольный питч-шифтинг
+        M_WriteTextSmall_RUS(242, 85, snd_pitchshift ? "drk" : "dsrk");
+
+        // Informative message: изменение потребует перезапуск программы
+        if (itemOn == rd_audio_sys_sfx
+        ||  itemOn == rd_audio_sys_music)
+        {
+            dp_translation = cr[CR_GRAY];
+            M_WriteTextSmall_RUS(3, 120, "bpvtytybt gjnht,etn gthtpfgecr ghjuhfvvs");
+            dp_translation = NULL;
+        }
+    }
+}
+
+void M_RD_Change_SoundDevice (int choice)
+{
+    // [JN] Available values:
+    // 0 = NO SOUND FX
+    // 1 = PC Speaker
+    // 3 = Sound Blaster
+    switch(choice)
+    {
+        case 0:
+        {
+            if (snd_DesiredSfxDevice == 0)
+                snd_DesiredSfxDevice = 3;
+            else 
+            if (snd_DesiredSfxDevice == 3)
+                snd_DesiredSfxDevice = 1;
+            else 
+            if (snd_DesiredSfxDevice == 1)
+                snd_DesiredSfxDevice = 0;
+            break;
+        }
+
+        case 1:
+        {
+            if (snd_DesiredSfxDevice == 0)
+                snd_DesiredSfxDevice = 1;
+            else 
+            if (snd_DesiredSfxDevice == 1)
+                snd_DesiredSfxDevice = 3;
+            else 
+            if (snd_DesiredSfxDevice == 3)
+                snd_DesiredSfxDevice = 0;
+            break;
+        }
+    }
+}
+
+void M_RD_Change_MusicDevice (int choice)
+{
+    // [JN] Available values:
+    // 0 = NO MUSIC
+    // 3 = Sound Blaster
+    // 8 = General MIDI
+    switch(choice)
+    {
+        case 0:
+        {
+            if (snd_DesiredMusicDevice == 0)
+                snd_DesiredMusicDevice = 8;
+            else 
+            if (snd_DesiredMusicDevice == 8)
+                snd_DesiredMusicDevice = 3;
+            else
+            if (snd_DesiredMusicDevice == 3)
+                snd_DesiredMusicDevice = 0;
+            break;
+        }
+
+        case 1:
+        {
+            if (snd_DesiredMusicDevice == 0)
+                snd_DesiredMusicDevice = 3;
+            else
+            if (snd_DesiredMusicDevice == 3)
+                snd_DesiredMusicDevice = 8;
+            else
+            if (snd_DesiredMusicDevice == 8)
+                snd_DesiredMusicDevice = 0;
+            break;
+        }
+
+    }
+
 }
 
 void M_RD_Change_SndMode (int choice)
@@ -5197,6 +5523,7 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Messages_Def
         ||  currentMenu == &RD_Automap_Def
         ||  currentMenu == &RD_Audio_Def
+        ||  currentMenu == &RD_Audio_System_Def
         ||  currentMenu == &RD_Controls_Def
         ||  currentMenu == &RD_Gameplay_Def_1
         ||  currentMenu == &RD_Gameplay_Def_2
@@ -5224,6 +5551,7 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Messages_Def_Rus
         ||  currentMenu == &RD_Automap_Def_Rus
         ||  currentMenu == &RD_Audio_Def_Rus
+        ||  currentMenu == &RD_Audio_System_Def_Rus
         ||  currentMenu == &RD_Controls_Def_Rus
         ||  currentMenu == &RD_Gameplay_Def_1_Rus
         ||  currentMenu == &RD_Gameplay_Def_2_Rus
