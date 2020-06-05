@@ -693,7 +693,6 @@ void HU_Start(void)
 
 void HU_Drawer(void)
 {
-    extern boolean crosshair_draw;
     extern int screenblocks;
 
     // [JN] Don't draw HUD stuff while in help screens.
