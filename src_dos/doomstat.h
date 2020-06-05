@@ -46,7 +46,6 @@ extern boolean nomonsters;  // checkparm of -nomonsters
 extern boolean respawnparm; // checkparm of -respawn
 extern boolean fastparm;    // checkparm of -fast
 extern boolean devparm;     // DEBUG: launched with -devparm
-extern boolean noflats;     // [JN] draw visplanes as single color
 
 // Set if homebrew PWAD stuff has been added.
 extern boolean  modifiedgame;

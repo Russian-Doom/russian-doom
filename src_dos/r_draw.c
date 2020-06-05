@@ -626,7 +626,6 @@ void R_DrawSpanLow (void)
 
 //
 // [JN] Draws the actual span as single color.
-// Activated if "-noflats" command line parameter is present
 //
 void R_DrawSpanNoTexture (void)
 {

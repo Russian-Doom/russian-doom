@@ -1117,7 +1117,6 @@ void P_UpdateSpecials (void)
         // [crispy] add support for SMMU swirling flats
         // [JN] Small hack: animate only surface with animation
         // speed > 8, i.e. only those ones, which defined in animdefs.
-        // Also do not apply swirling animation for "-noflats" mode.
         if (swirling_liquids && !vanilla && anim->speed > 8 && !noflats)
         {
             flattranslation[i] = -1;

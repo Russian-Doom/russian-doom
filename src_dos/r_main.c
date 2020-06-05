@@ -757,8 +757,6 @@ void R_ExecuteSetViewSize (void)
 	colfunc = basecolfunc = R_DrawColumn;
 	fuzzcolfunc = R_DrawFuzzColumn;
 	transcolfunc = R_DrawTranslatedColumn;
-	// [JN] Draw visplanes as single color
-	// if "-noflats" cmd line parameter present.
 	spanfunc = noflats ? R_DrawSpanNoTexture : R_DrawSpan;
     }
     else
@@ -766,8 +764,6 @@ void R_ExecuteSetViewSize (void)
 	colfunc = basecolfunc = R_DrawColumnLow;
 	fuzzcolfunc = R_DrawFuzzColumn;
 	transcolfunc = R_DrawTranslatedColumn;
-	// [JN] Draw visplanes as single color
-	// if "-noflats" cmd line parameter present.
 	spanfunc = noflats ? R_DrawSpanLowNoTexture : R_DrawSpanLow;
     }
 
