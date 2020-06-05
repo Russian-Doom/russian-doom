@@ -49,10 +49,11 @@ planefunction_t     ceilingfunc;
 //
 
 // Here comes the obnoxious "visplane".
-visplane_t   visplanes[MAXVISPLANES];
+visplane_t  *visplanes = NULL;
 visplane_t  *lastvisplane;
 visplane_t  *floorplane;
 visplane_t  *ceilingplane;
+static int   numvisplanes;
 
 //
 // Clip values are the solid pixel bounding the range.
@@ -199,6 +200,28 @@ void R_ClearPlanes (void)
 }
 
 
+// [crispy] remove MAXVISPLANES Vanilla limit
+void R_RaiseVisplanes (visplane_t** vp)
+{
+    if (lastvisplane - visplanes == numvisplanes)
+    {
+        int numvisplanes_old = numvisplanes;
+        visplane_t *visplanes_old = visplanes;
+
+        numvisplanes = numvisplanes ? 2 * numvisplanes : MAXVISPLANES;
+        visplanes = realloc(visplanes, numvisplanes * sizeof(*visplanes));
+        lastvisplane = visplanes + numvisplanes_old;
+        floorplane = visplanes + (floorplane - visplanes_old);
+        ceilingplane = visplanes + (ceilingplane - visplanes_old);
+
+        if (vp)
+        {
+            *vp = visplanes + (*vp - visplanes_old);
+        }
+    }
+}
+
+
 //
 // R_FindPlane
 //
@@ -227,12 +250,7 @@ visplane_t *R_FindPlane (fixed_t height, int picnum, int lightlevel)
         return check;
     }
 
-    if (lastvisplane - visplanes == MAXVISPLANES)
-    {
-        I_Error (english_language ?
-                 "R_FindPlane: no more visplanes" :
-                 "R_FindPlane: превышен лимит visplanes");
-    }
+    R_RaiseVisplanes(&check);
 
     lastvisplane++;
 
@@ -295,6 +313,7 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
     }
 
     // make a new visplane
+    R_RaiseVisplanes(&pl);
     lastvisplane->height = pl->height;
     lastvisplane->picnum = pl->picnum;
     lastvisplane->lightlevel = pl->lightlevel;
@@ -428,7 +447,7 @@ void R_DrawPlanes (void)
                  ds_p - drawsegs);
     }
 
-    if (lastvisplane - visplanes > MAXVISPLANES)
+    if (lastvisplane - visplanes > numvisplanes)
     {
         I_Error (english_language ?
                  "R_DrawPlanes: visplane overflow (%i)" :
