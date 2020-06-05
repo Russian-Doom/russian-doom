@@ -34,8 +34,8 @@
 #include "jn.h"
 
 
-#define MAXVISPLANES    128
-#define MAXOPENINGS     65536   // [JN] Icreased from SCREENWIDTH*64 (20480)
+#define MAXVISPLANES    384  // [JN] Icreased from 128 (Doom Classic)
+#define MAXOPENINGS     SCREENWIDTH*64
 
 
 int  openings[MAXOPENINGS];  // [crispy] 32-bit integer math

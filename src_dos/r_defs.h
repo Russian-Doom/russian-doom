@@ -45,7 +45,7 @@
 #define SIL_TOP			2
 #define SIL_BOTH		3
 
-#define MAXDRAWSEGS		256
+#define MAXDRAWSEGS		1280 // [JN] Increased from 256 (Doom Classic)
 
 
 
