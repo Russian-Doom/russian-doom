@@ -3782,17 +3782,35 @@ void M_RD_BackToDefaultsResponse (int ch)
     return;
 
     // Rendering
-    show_diskicon = 1;
     noflats       = 0;
+    show_fps      = 0;
+    show_diskicon = 1;
     screen_wiping = 1;
 
     // Display
     screenblocks = 10;
     screenSize = screenblocks - 3;
     usegamma     = 0;
+    level_brightness = 0;
     detailLevel  = 0;
-    showMessages = 1;
+    local_time   = 0;
 
+    // Messages
+    showMessages = 1;
+    draw_shadowed_text = 1;
+    messages_pickup_color = 0;
+    messages_secret_color = 3;
+    messages_system_color = 0;
+    messages_chat_color   = 1;
+
+    //Automap
+    automap_color     = 0;
+    automap_antialias = 1;
+    automap_stats     = 1;
+    automap_rotate    = 0;
+    automap_grid      = 0;
+    automap_follow    = 1;    
+    
     // Audio
     sfxVolume       = 8;  S_SetSfxVolume(sfxVolume * 8);
     musicVolume     = 8;  S_SetMusicVolume(musicVolume * 8);
@@ -3802,27 +3820,31 @@ void M_RD_BackToDefaultsResponse (int ch)
 
     // Controls
     joybspeed        = 29;
-    mlook            = 0; players[consoleplayer].centering = true;
     mouseSensitivity = 5;
+    mlook            = 0; players[consoleplayer].centering = true;
+    mouse_y_invert   = 0;
+    novert           = 1;
 
-    // Gameplay
+    // Gameplay (1)
     brightmaps         = 1;
     fake_contrast      = 0;
+    improved_fuzz      = 3;
     colored_hud        = 0;
     colored_blood      = 1;
     swirling_liquids   = 1;
     invul_sky          = 1;
-    draw_shadowed_text = 1;
+    flip_weapons       = 0;
 
+    // Gameplay (2)
     play_exit_sfx        = 1;
     crushed_corpses_sfx  = 1;
     blazing_door_fix_sfx = 1;
     noise_alert_sfx      = 0;
 
-    automap_stats       = 1;
     secret_notification = 1;
     negative_health     = 0;
 
+    // Gameplay (3)
     over_under           = 0;
     torque               = 1;
     weapon_bobbing       = 1;
@@ -3833,6 +3855,7 @@ void M_RD_BackToDefaultsResponse (int ch)
     crosshair_draw   = 0;
     crosshair_health = 1;
 
+    // Gameplay (4)
     extra_player_faces   = 1;
     unlimited_lost_souls = 1;
     fast_quickload       = 1;
