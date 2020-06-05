@@ -168,6 +168,7 @@ char* ststr_beholdz;
 
 // RD specific
 char* ststr_massacre;
+char* ststr_version;
 
 
 // -----------------------------------------------------------------------------
@@ -318,6 +319,7 @@ void RD_DefineLanguageStrings (void)
 
         // RD specific
         ststr_massacre  = STSTR_MASSACRE;
+        ststr_version   = STSTR_VERSION;
     }
     else
     {
@@ -461,5 +463,6 @@ void RD_DefineLanguageStrings (void)
 
         // RD specific
         ststr_massacre  = STSTR_MASSACRE_RUS;
+        ststr_version   = STSTR_VERSION_RUS;
     }
 }

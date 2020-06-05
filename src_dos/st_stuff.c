@@ -843,7 +843,7 @@ ST_Responder (event_t* ev)
       else if (cht_CheckCheat(&cheat_version, ev->data1))
       {
           // [JN] TODO - project version
-		plyr->message_system = STSTR_VERSION;
+		plyr->message_system = ststr_version;
       }
     }
     

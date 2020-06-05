@@ -356,6 +356,7 @@ extern char* ststr_beholdx;
 extern char* ststr_beholdz;
 
 extern char* ststr_massacre;
+extern char* ststr_version;
 
 #define STSTR_MUS		"Music Change"
 #define STSTR_NOMUS		"IMPOSSIBLE SELECTION"
@@ -2006,26 +2007,8 @@ PRESSYN_RUS
 // Отображение версии проекта
 //
 
-// English
-#define STSTR_VERSION   "Version 4.3"
-#if defined (_WIN64)
-#define STSRT_ARCH      " - (x64)"
-#elif defined (_WIN32)
-#define STSRT_ARCH      " - (x86)"
-#else
-#define STSRT_ARCH      ""
-#endif
-#define STSRT_DATE      "2020-05-17"        // YYYY-MM-DD
-
-// Русский
-#define STSTR_VERSION_RUS   "dthcbz 4>3"    // Версия 4.3
-#if defined (_WIN64)
-#define STSRT_ARCH_RUS      " - ([64)"      // x64
-#elif defined (_WIN32)
-#define STSRT_ARCH_RUS      " - ([86)"      // x86
-#else
-#define STSRT_ARCH_RUS      ""              // ?  
-#endif
+#define STSTR_VERSION       "VERSION 1.8 (YYYY-MM-DD)"
+#define STSTR_VERSION_RUS   "DTHCBZ 1>8 (UUUU-VV-LL)"
 
 
 #endif
