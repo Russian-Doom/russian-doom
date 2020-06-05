@@ -563,14 +563,13 @@ void D_DoAdvanceDemo (void)
     
                 if (english_language)
                 {
-                    pagename = "CREDIT";
+                    pagename = retail ? "CREDIT" :
+                                        "HELP2"  ;
                 }
                 else
                 {
-                    pagename = registered ? "CREDITS" :
-                                shareware ? "HELP2" :
-                                   retail ? "CREDITU" :
-                                            "CREDIT";
+                    pagename = retail ? "CREDITU" :
+                                        "HELP2R"  ;
                 }
             }
             break;
