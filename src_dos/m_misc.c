@@ -332,56 +332,125 @@ typedef struct
 
 default_t	defaults[] =
 {
-    // [JN] Language
-    {"english_language", &english_language, 0},
+    // Language
+    {"english_language",        &english_language,      0},
 
-    {"mouse_sensitivity",&mouseSensitivity, 5},
-    {"sfx_volume",&sfxVolume, 8},
-    {"music_volume",&musicVolume, 8},
-    {"snd_monomode",&snd_monomode, 0},
-    {"snd_pitchshift",&snd_pitchshift, 0},
-    {"show_messages",&showMessages, 1},
+    // Rendering
+    {"noflats",                 &noflats,               0},
+    {"show_fps",                &show_fps,              0},
+    {"show_diskicon",           &show_diskicon,         1},
+    {"screen_wiping",           &screen_wiping,         1},
+
+    // Display
+    {"screenblocks",            &screenblocks,         10},
+    {"usegamma",                &usegamma,              0},
+    {"level_brightness",        &level_brightness,      0},
+    {"detaillevel",             &detailLevel,           0},
+    {"local_time",              &local_time,            0},
+
+    // Messages
+    {"show_messages",           &showMessages,          1},
+    {"draw_shadowed_text",      &draw_shadowed_text,    1},
+    {"messages_pickup_color",   &messages_pickup_color, 0},
+    {"messages_secret_color",   &messages_secret_color, 0},
+    {"messages_system_color",   &messages_system_color, 0},
+    {"messages_chat_color",     &messages_chat_color,   0},
+
+    // Automap
+    {"automap_color",           &automap_color,         0},
+    {"automap_antialias",       &automap_antialias,     1},
+    {"automap_stats",           &automap_stats,         1},
+//  {"automap_overlay",         &automap_overlay,       0}, 
+    {"automap_rotate",          &automap_rotate,        0},
+    {"automap_grid",            &automap_grid,          0},
+    {"automap_follow",          &automap_follow,        1},
+
+    // Sound
+    {"sfx_volume",              &sfxVolume,             8},
+    {"music_volume",            &musicVolume,           8},
+    {"snd_channels",            &numChannels,          32},
+
+    // Sound system
+    {"snd_sfxdevice",           &snd_DesiredSfxDevice,  3},
+    {"snd_musicdevice",         &snd_DesiredMusicDevice,3},
+    {"snd_monomode",            &snd_monomode,          0},
+    {"snd_pitchshift",          &snd_pitchshift,        0},
     
-    {"key_right",&key_right, SC_RIGHTARROW, 1},
-    {"key_left",&key_left, SC_LEFTARROW, 1},
-    {"key_up",&key_up, SC_KEY_W, 1},
-    {"key_down",&key_down, SC_KEY_S, 1},
-    {"key_strafeleft",&key_strafeleft, SC_KEY_A, 1},
-    {"key_straferight",&key_straferight, SC_KEY_D, 1},
+    {"snd_sbport",              &snd_SBport,        0x220},
+    {"snd_sbirq",               &snd_SBirq,             5},
+    {"snd_sbdma",               &snd_SBdma,             1},
+    {"snd_mport",               &snd_Mport,         0x330},
 
-    {"key_fire",&key_fire, SC_RCTRL, 1},
-    {"key_use",&key_use, SC_KEY_E, 1},
-    {"key_strafe",&key_strafe, SC_RALT, 1},
-    {"key_speed",&key_speed, SC_RSHIFT, 1},
-    {"key_mouselook",&key_mouselook, SC_TILDE, 1},
-    {"key_crosshair",&key_crosshair, SC_KEY_X, 1},
+    // Control bindings & cie.
+    {"key_right",       &key_right,       SC_RIGHTARROW, 1},
+    {"key_left",        &key_left,        SC_LEFTARROW,  1},
+    {"key_up",          &key_up,          SC_KEY_W,      1},
+    {"key_down",        &key_down,        SC_KEY_S,      1},
+    {"key_strafeleft",  &key_strafeleft,  SC_KEY_A,      1},
+    {"key_straferight", &key_straferight, SC_KEY_D,      1},
 
-    {"use_mouse",&usemouse, 1},
-    {"mouseb_fire",&mousebfire,0},
-    {"mouseb_strafe",&mousebstrafe,1},
-    {"mouseb_forward",&mousebforward,2},
+    {"key_fire",        &key_fire,        SC_RCTRL,      1},
+    {"key_use",         &key_use,         SC_KEY_E,      1},
+    {"key_strafe",      &key_strafe,      SC_RALT,       1},
+    {"key_speed",       &key_speed,       SC_RSHIFT,     1},
+    {"key_mouselook",   &key_mouselook,   SC_TILDE,      1},
+    {"key_crosshair",   &key_crosshair,   SC_KEY_X,      1},
 
-    {"use_joystick",&usejoystick, 0},
-    {"joyb_fire",&joybfire,0},
-    {"joyb_strafe",&joybstrafe,1},
-    {"joyb_use",&joybuse,3},
-    {"joyb_speed",&joybspeed,31},   // [JN] Enable always run by default
+    {"use_mouse",       &usemouse,                      1},
+    {"mouseb_fire",     &mousebfire,                    0},
+    {"mouseb_strafe",   &mousebstrafe,                  1},
+    {"mouseb_forward",  &mousebforward,                 2},
+    {"use_joystick",    &usejoystick,                   0},
+    {"joyb_fire",       &joybfire,                      0},
+    {"joyb_strafe",     &joybstrafe,                    1},
+    {"joyb_use",        &joybuse,                       3},
 
-    {"screenblocks",&screenblocks, 10},
-    {"level_brightness",&level_brightness, 0},
-    {"detaillevel",&detailLevel, 0},
-    {"local_time",&local_time, 0},
+    // Controls
+    {"joyb_speed",              &joybspeed,            29},
+    {"mouse_sensitivity",       &mouseSensitivity,      5},
+    {"mlook",                   &mlook,                 0},
+    {"mouse_y_invert",          &mouse_y_invert,        0},
+    {"novert",                  &novert,                1},
 
-    {"snd_channels",&numChannels, 32},
-    {"snd_musicdevice",&snd_DesiredMusicDevice, 3},
-    {"snd_sfxdevice",&snd_DesiredSfxDevice, 3},
-    {"snd_sbport",&snd_SBport, 0x220},
-    {"snd_sbirq",&snd_SBirq, 5},
-    {"snd_sbdma",&snd_SBdma, 1},
-    {"snd_mport",&snd_Mport, 0x330},
+    // Gameplay: Graphical
+    {"brightmaps",              &brightmaps,            1},
+    {"fake_contrast",           &fake_contrast,         0},
+    {"improved_fuzz",           &improved_fuzz,         2},
+    {"colored_hud",             &colored_hud,           0},
+    {"colored_blood",           &colored_blood,         1},
+    {"swirling_liquids",        &swirling_liquids,      1},
+    {"invul_sky",               &invul_sky,             1},
+    {"flip_weapons",            &flip_weapons,          0},
 
-    {"usegamma",&usegamma, 0},
+    // Gameplay: Audible
+    {"play_exit_sfx",           &play_exit_sfx,         1},
+    {"crushed_corpses_sfx",     &crushed_corpses_sfx,   1},
+    {"blazing_door_fix_sfx",    &blazing_door_fix_sfx,  1},
+    {"noise_alert_sfx",         &noise_alert_sfx,       0},
 
+    // Gameplay: Tactical
+    {"secret_notification",     &secret_notification,   1},
+    {"negative_health",         &negative_health,       0},
+
+    // Gameplay: Physical
+    {"over_under",              &over_under,            0},
+    {"torque",                  &torque,                1},
+    {"weapon_bobbing",          &weapon_bobbing,        1},
+    {"ssg_blast_enemies",       &ssg_blast_enemies,     1},
+    {"randomly_flipcorpses",    &randomly_flipcorpses,  1},
+    {"floating_powerups",       &floating_powerups,     0},
+
+    // Gameplay: Crosshair
+    {"crosshair_draw",          &crosshair_draw,        0},
+    {"crosshair_health",        &crosshair_health,      1},
+
+    // Gameplay: Gameplay
+    {"extra_player_faces",      &extra_player_faces,    1},
+    {"unlimited_lost_souls",    &unlimited_lost_souls,  1},
+    {"fast_quickload",          &fast_quickload,        1},
+    {"no_internal_demos",       &no_internal_demos,     0},
+
+    // Chat macroses
     {"chatmacro0", (int *) &chat_macros[0], (int) HUSTR_CHATMACRO0 },
     {"chatmacro1", (int *) &chat_macros[1], (int) HUSTR_CHATMACRO1 },
     {"chatmacro2", (int *) &chat_macros[2], (int) HUSTR_CHATMACRO2 },
@@ -392,73 +461,6 @@ default_t	defaults[] =
     {"chatmacro7", (int *) &chat_macros[7], (int) HUSTR_CHATMACRO7 },
     {"chatmacro8", (int *) &chat_macros[8], (int) HUSTR_CHATMACRO8 },
     {"chatmacro9", (int *) &chat_macros[9], (int) HUSTR_CHATMACRO9 },
-
-    // [JN] Russian Doom specific variables
-
-    // Rendering
-    {"noflats", &noflats, 0},
-    {"show_fps", &show_fps, 0},
-    {"show_diskicon", &show_diskicon, 1},
-    {"screen_wiping", &screen_wiping, 1},
-
-    // Messages
-    {"messages_pickup_color", &messages_pickup_color, 0},
-    {"messages_secret_color", &messages_secret_color, 0},
-    {"messages_system_color", &messages_system_color, 0},
-    {"messages_chat_color",   &messages_chat_color, 0},
-
-    // Automap
-    {"automap_color", &automap_color, 0},
-    {"automap_antialias", &automap_antialias, 1},
-    {"automap_stats", &automap_stats, 1},
-//  {"automap_overlay", &automap_overlay, 0}, 
-    {"automap_rotate", &automap_rotate, 0},
-    {"automap_grid", &automap_grid, 0},
-    {"automap_follow", &automap_follow, 1},
-
-    // Controls
-    {"mlook", &mlook, 0},
-    {"mouse_y_invert", &mouse_y_invert, 0},
-    {"novert", &novert, 1},
-
-    // Gameplay: Graphical
-    {"brightmaps", &brightmaps, 1},
-    {"fake_contrast", &fake_contrast, 0},
-    {"improved_fuzz", &improved_fuzz, 2},
-    {"colored_hud", &colored_hud, 0},
-    {"colored_blood", &colored_blood, 1},
-    {"swirling_liquids", &swirling_liquids, 1},
-    {"invul_sky", &invul_sky, 1},
-    {"flip_weapons", &flip_weapons, 0},
-    {"draw_shadowed_text", &draw_shadowed_text, 1},
-
-    // Gameplay: Audible
-    {"play_exit_sfx", &play_exit_sfx, 1},
-    {"crushed_corpses_sfx", &crushed_corpses_sfx, 1},
-    {"blazing_door_fix_sfx", &blazing_door_fix_sfx, 1},
-    {"noise_alert_sfx", &noise_alert_sfx, 0},
-
-    // Gameplay: Tactical
-    {"secret_notification", &secret_notification, 1},
-    {"negative_health", &negative_health, 0},
-
-    // Gameplay: Physical
-    {"over_under", &over_under, 0},
-    {"torque", &torque, 1},
-    {"weapon_bobbing", &weapon_bobbing, 1},
-    {"ssg_blast_enemies", &ssg_blast_enemies, 1},
-    {"randomly_flipcorpses", &randomly_flipcorpses, 1},
-    {"floating_powerups", &floating_powerups, 0},
-
-    // Gameplay: Crosshair
-    {"crosshair_draw", &crosshair_draw, 0},
-    {"crosshair_health", &crosshair_health, 1},
-
-    // Gameplay: Gameplay
-    {"extra_player_faces", &extra_player_faces, 1},
-    {"unlimited_lost_souls", &unlimited_lost_souls, 1},
-    {"fast_quickload", &fast_quickload, 1},
-    {"no_internal_demos", &no_internal_demos, 0},
 };
 
 int	numdefaults;
