@@ -1246,8 +1246,8 @@ byte *I_ZoneBase (int *size)
 
     heap = meminfo[0];
     printf(english_language ?
-           "DPMI memory: 0x%x" :
-           "Память DPMI: 0x%x", heap);
+           "DPMI memory: %d MiB" :
+           "Память DPMI: %d Мбайт", heap >> 20);
 
     // [JN] Command line parameter to increase/decrease heap size
     // Thanks to Alexandre-Xavier Labonte-Lamoureux for the code!
@@ -1274,8 +1274,8 @@ byte *I_ZoneBase (int *size)
     } while (!ptr);
 
     printf(english_language ?
-           ", 0x%x allocated for zone\n" :
-           ", 0x%x обнаружено для распределения.\n", heap);
+           ", %d MiB allocated for zone\n" :
+           ", %d Мбайт обнаружено для распределения.\n", heap >> 20);
     if (heap < 0x180000)
     {
         printf("\n");
@@ -1288,7 +1288,7 @@ byte *I_ZoneBase (int *size)
         }
         else
         {
-            printf("Недостаточно оперативной памяти!\n");
+            printf("Недостаточно оперативной памяти!\n\n");
             printf("Выполнение программы прервано.\n");
         }
         exit(1);
