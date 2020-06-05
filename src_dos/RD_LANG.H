@@ -15,7 +15,7 @@
 //
 
 //
-// ╨Я╨░╨╝╤П╤В╨║╨░ ╨┐╨╛ ╤Б╨╕╨╝╨▓╨╛╨╗╨░╨╝:
+// Памятка по символам:
 // --------------------
 // < = ,
 // > = .
@@ -934,7 +934,7 @@ extern char* ststr_version;
 
 
 // -----------------------------------------------------------------------------
-// ╨а╤Г╤Б╤Б╨║╨╕╨╣ ╤П╨╖╤Л╨║
+// Русский язык
 // -----------------------------------------------------------------------------
 
 
@@ -942,70 +942,70 @@ extern char* ststr_version;
 // AM_map.C
 //
 
-#define AMSTR_FOLLOWON_RUS      "ht;bv cktljdfybz drk.xty"  // ╨а╨╡╨╢╨╕╨╝ ╤Б╨╗╨╡╨┤╨╛╨▓╨░╨╜╨╕╤П ╨▓╨║╨╗╤О╤З╨╡╨╜
-#define AMSTR_FOLLOWOFF_RUS     "ht;bv cktljdfybz dsrk.xty" // ╨а╨╡╨╢╨╕╨╝ ╤Б╨╗╨╡╨┤╨╛╨▓╨░╨╜╨╕╤П ╨▓╤Л╨║╨╗╤О╤З╨╡╨╜
-#define AMSTR_GRIDON_RUS        "ctnrf drk.xtyf"            // ╨б╨╡╤В╨║╨░ ╨▓╨║╨╗╤О╤З╨╡╨╜╨░
-#define AMSTR_GRIDOFF_RUS       "ctnrf jnrk.xtyf"           // ╨б╨╡╤В╨║╨░ ╨▓╤Л╨║╨╗╤О╤З╨╡╨╜╨░
-#define AMSTR_MARKEDSPOT_RUS    "jnvtnrf"                   // ╨Ю╤В╨╝╨╡╤В╨║╨░
-#define AMSTR_MARKSCLEARED_RUS  "jnvtnrb jxbotys"           // ╨Ю╤В╨╝╨╡╤В╨║╨╕ ╨╛╤З╨╕╤Й╨╡╨╜╤Л
-#define AMSTR_OVERLAYON_RUS     "ht;bv yfkj;tybz drk.xty"   // ╨а╨╡╨╢╨╕╨╝ ╨╜╨░╨╗╨╛╨╢╨╡╨╜╨╕╤П ╨▓╨║╨╗╤О╤З╨╡╨╜
-#define AMSTR_OVERLAYOFF_RUS    "ht;bv yfkj;tybz dsrk.xty"  // ╨а╨╡╨╢╨╕╨╝ ╨╜╨░╨╗╨╛╨╢╨╡╨╜╨╕╤П ╨▓╤Л╨║╨╗╤О╤З╨╡╨╜
-#define AMSTR_ROTATEON_RUS      "ht;bv dhfotybz drk.xty"    // ╨а╨╡╨╢╨╕╨╝ ╨▓╤А╨░╤Й╨╡╨╜╨╕╤П ╨▓╨║╨╗╤О╤З╨╡╨╜
-#define AMSTR_ROTATEOFF_RUS     "ht;bv dhfotybz dsrk.xty"   // ╨а╨╡╨╢╨╕╨╝ ╨▓╤А╨░╤Й╨╡╨╜╨╕╤П ╨▓╤Л╨║╨╗╤О╤З╨╡╨╜
+#define AMSTR_FOLLOWON_RUS      "ht;bv cktljdfybz drk.xty"  // Режим следования включен
+#define AMSTR_FOLLOWOFF_RUS     "ht;bv cktljdfybz dsrk.xty" // Режим следования выключен
+#define AMSTR_GRIDON_RUS        "ctnrf drk.xtyf"            // Сетка включена
+#define AMSTR_GRIDOFF_RUS       "ctnrf jnrk.xtyf"           // Сетка выключена
+#define AMSTR_MARKEDSPOT_RUS    "jnvtnrf"                   // Отметка
+#define AMSTR_MARKSCLEARED_RUS  "jnvtnrb jxbotys"           // Отметки очищены
+#define AMSTR_OVERLAYON_RUS     "ht;bv yfkj;tybz drk.xty"   // Режим наложения включен
+#define AMSTR_OVERLAYOFF_RUS    "ht;bv yfkj;tybz dsrk.xty"  // Режим наложения выключен
+#define AMSTR_ROTATEON_RUS      "ht;bv dhfotybz drk.xty"    // Режим вращения включен
+#define AMSTR_ROTATEOFF_RUS     "ht;bv dhfotybz dsrk.xty"   // Режим вращения выключен
 
 
 //
 // D_Main.C
 //
 
-#define D_DEVSTR_RUS    "╨Р╨║╤В╨╕╨▓╨╕╤А╨╛╨▓╨░╨╜ ╤А╨╡╨╢╨╕╨╝ ╤А╨░╨╖╤А╨░╨▒╨╛╤В╤З╨╕╨║╨░.\n"
-#define D_CDROM_RUS     "╨Ф╨╕╤Б╨║╨╛╨▓╨░╤П ╨▓╨╡╤А╤Б╨╕╤П: ╤Д╨░╨╣╨╗╤Л ╨║╨╛╨╜╤Д╨╕╨│╤Г╤А╨░╤Ж╨╕╨╕ ╤Б╨╛╤Е╤А╨░╨╜╤П╤В╤Б╤П ╨▓ ╨┐╨░╨┐╨║╨╡ c:\\doomdata\n"
+#define D_DEVSTR_RUS    "Активирован режим разработчика.\n"
+#define D_CDROM_RUS     "Дисковая версия: файлы конфигурации сохранятся в папке c:\\doomdata\n"
 
 
 //
 // G_game.C
 //
 
-#define GGSAVED_RUS          "buhf cj[hfytyf>"          // ╨Ш╨│╤А╨░ ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨░.
-#define GGLOADED_RUS         "buhf pfuhe;tyf>"          // ╨Ш╨│╤А╨░ ╨╖╨░╨│╤А╤Г╨╢╨╡╨╜╨░.
+#define GGSAVED_RUS          "buhf cj[hfytyf>"          // Игра сохранена.
+#define GGLOADED_RUS         "buhf pfuhe;tyf>"          // Игра загружена.
 
 // RD specific
-#define STSTR_ALWRUNON_RUS  "gjcnjzyysq ,tu drk.xty"    // ╨Я╨╛╤Б╤В╨╛╤П╨╜╨╜╤Л╨╣ ╨▒╨╡╨│ ╨▓╨║╨╗╤О╤З╨╡╨╜
-#define STSTR_ALWRUNOFF_RUS "gjcnjzyysq ,tu dsrk.xty"   // ╨Я╨╛╤Б╤В╨╛╤П╨╜╨╜╤Л╨╣ ╨▒╨╡╨│ ╨▓╤Л╨║╨╗╤О╤З╨╡╨╜
-#define STSTR_MLOOK_ON_RUS  "j,pjh vsim. drk.xty"       // ╨Ю╨▒╨╖╨╛╤А ╨╝╤Л╤И╤М╤О ╨▓╨║╨╗╤О╤З╨╡╨╜
-#define STSTR_MLOOK_OFF_RUS "j,pjh vsim. dsrk.xty"      // ╨Ю╨▒╨╖╨╛╤А ╨╝╤Л╤И╤М╤О ╨▓╤Л╨║╨╗╤О╤З╨╡╨╜
-#define STSTR_TESTCTRLS_RUS "ht;bv ghjdthrb eghfdktybz" // ╨а╨╡╨╢╨╕╨╝ ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╤Г╨┐╤А╨░╨▓╨╗╨╡╨╜╨╕╤П
-#define STSTR_SCRNSHT_RUS   "crhbyijn"                  // ╨б╨║╤А╨╕╨╜╤И╨╛╤В
+#define STSTR_ALWRUNON_RUS  "gjcnjzyysq ,tu drk.xty"    // Постоянный бег включен
+#define STSTR_ALWRUNOFF_RUS "gjcnjzyysq ,tu dsrk.xty"   // Постоянный бег выключен
+#define STSTR_MLOOK_ON_RUS  "j,pjh vsim. drk.xty"       // Обзор мышью включен
+#define STSTR_MLOOK_OFF_RUS "j,pjh vsim. dsrk.xty"      // Обзор мышью выключен
+#define STSTR_TESTCTRLS_RUS "ht;bv ghjdthrb eghfdktybz" // Режим проверки управления
+#define STSTR_SCRNSHT_RUS   "crhbyijn"                  // Скриншот
 
 
 //
 // M_Menu.C
 //
 
-#define STSTR_CROSSHAIR_ON_RUS  "ghbwtk drk.xty"    // ╨Я╤А╨╕╤Ж╨╡╨╗ ╨▓╨║╨╗╤О╤З╨╡╨╜
-#define STSTR_CROSSHAIR_OFF_RUS "ghbwtk dsrk.xty"   // ╨Я╤А╨╕╤Ж╨╡╨╗ ╨▓╤Л╨║╨╗╤О╤З╨╡╨╜
+#define STSTR_CROSSHAIR_ON_RUS  "ghbwtk drk.xty"    // Прицел включен
+#define STSTR_CROSSHAIR_OFF_RUS "ghbwtk dsrk.xty"   // Прицел выключен
 
-#define PRESSKEY_RUS    "(yf;vbnt k.,e. rkfdbie)"   // (╨Э╨░╨╢╨╝╨╕╤В╨╡ ╨╗╤О╨▒╤Г╤О ╨║╨╗╨░╨▓╨╕╤И╤Г)
-#define PRESSYN_RUS     "(yf;vbnt ^#^ bkb ^@^)"     // (╨Э╨░╨╢╨╝╨╕╤В╨╡ "Y" ╨╕╨╗╨╕ "N")
-#define DOSY_RUS        "(yf;vbnt ^#^ xnj,s dsqnb)" // (╨Э╨░╨╢╨╝╨╕╤В╨╡ "Y" ╤З╤В╨╛╨▒╤Л ╨▓╤Л╨╣╤В╨╕)
+#define PRESSKEY_RUS    "(yf;vbnt k.,e. rkfdbie)"   // (Нажмите любую клавишу)
+#define PRESSYN_RUS     "(yf;vbnt ^#^ bkb ^@^)"     // (Нажмите "Y" или "N")
+#define DOSY_RUS        "(yf;vbnt ^#^ xnj,s dsqnb)" // (Нажмите "Y" чтобы выйти)
 
-#define QUITMSG_RUS     "ds ltqcndbntkmyj ]jnbnt dsqnb\nbp 'njq pfvtxfntkmyjq buhs?"                // ╨Т╤Л ╨┤╨╡╨╣╤Б╤В╨▓╨╕╤В╨╡╨╗╤М╨╜╨╛ ╤Е╨╛╤В╨╕╤В╨╡ ╨▓╤Л╨╣╤В╨╕ \n ╨╕╨╖ ╤Н╤В╨╛╨╣ ╨╖╨░╨╝╨╡╤З╨░╤В╨╡╨╗╤М╨╜╨╛╨╣ ╨╕╨│╤А╤Л?
-#define LOADNET_RUS     "ytdjpvj;yj pfuhepbnm cj[hfytyye.\nbuhe d ctntdjq buht!\n\n"PRESSKEY_RUS    // ╨Э╨╡╨▓╨╛╨╖╨╝╨╛╨╢╨╜╨╛ ╨╖╨░╨│╤А╤Г╨╖╨╕╤В╤М ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Г╤О \n ╨╕╨│╤А╤Г ╨▓ ╤Б╨╡╤В╨╡╨▓╨╛╨╣ ╨╕╨│╤А╨╡!
-#define QLOADNET_RUS    "ytdjpvj;yj pfuhepbnm ,scnhjt\ncj[hfytybt d ctntdjq buht!\n\n"PRESSKEY_RUS  // ╨Э╨╡╨▓╨╛╨╖╨╝╨╛╨╢╨╜╨╛ ╨╖╨░╨│╤А╤Г╨╖╨╕╤В╤М ╨▒╤Л╤Б╤В╤А╨╛╨╡ \n ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨╕╨╡ ╨▓ ╤Б╨╡╤В╨╡╨▓╨╛╨╣ ╨╕╨│╤А╨╡!
-#define QSAVESPOT_RUS   "e dfc yt ds,hfy ckjn ,scnhjuj cj[hfytybz!\n\n"PRESSKEY_RUS                 // ╨г ╨Т╨░╤Б ╨╜╨╡ ╨▓╤Л╨▒╤А╨░╨╜ ╤Б╨╗╨╛╤В ╨▒╤Л╤Б╤В╤А╨╛╨│╨╛ ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨╕╤П!
-#define SAVEDEAD_RUS    "ytdjpvj;yj cj[hfybnm buhe< yt yfxfd tt!\n\n"PRESSKEY_RUS                   // ╨Э╨╡╨▓╨╛╨╖╨╝╨╛╨╢╨╜╨╛ ╤Б╨╛╤Е╤А╨░╨╜╨╕╤В╤М ╨╕╨│╤А╤Г, ╨╜╨╡ ╨╜╨░╤З╨░╨▓ ╨╡╤С!
+#define QUITMSG_RUS     "ds ltqcndbntkmyj ]jnbnt dsqnb\nbp 'njq pfvtxfntkmyjq buhs?"                // Вы действительно хотите выйти \n из этой замечательной игры?
+#define LOADNET_RUS     "ytdjpvj;yj pfuhepbnm cj[hfytyye.\nbuhe d ctntdjq buht!\n\n"PRESSKEY_RUS    // Невозможно загрузить сохраненую \n игру в сетевой игре!
+#define QLOADNET_RUS    "ytdjpvj;yj pfuhepbnm ,scnhjt\ncj[hfytybt d ctntdjq buht!\n\n"PRESSKEY_RUS  // Невозможно загрузить быстрое \n сохранение в сетевой игре!
+#define QSAVESPOT_RUS   "e dfc yt ds,hfy ckjn ,scnhjuj cj[hfytybz!\n\n"PRESSKEY_RUS                 // У Вас не выбран слот быстрого сохранения!
+#define SAVEDEAD_RUS    "ytdjpvj;yj cj[hfybnm buhe< yt yfxfd tt!\n\n"PRESSKEY_RUS                   // Невозможно сохранить игру, не начав её!
 #define QSPROMPT_RUS    "gthtpfgbcfnm ,scnhjt cj[hfytybt\n^%s^?\n\n"PRESSKEY_RUS                    // quicksave over your game named\n\n'%s'?\n\n
 #define QLPROMPT_RUS    "pfuhepbnm ,scnhjt cj[hfytybt\n^%s^?\n\n"PRESSKEY_RUS                       // do you want to quickload the game named\n'%s'?\n\n
 
-#define RD_ON_RUS       "drk"       // ╨▓╨║╨╗
-#define RD_OFF_RUS      "dsrk"      // ╨▓╤Л╨║╨╗
-#define RD_NEXT_RUS     "lfktt \\"   // ╨┤╨░╨╗╨╡╨╡ >
-#define RD_PREV_RUS     "/ yfpfl"   // < ╨╜╨░╨╖╨░╨┤
+#define RD_ON_RUS       "drk"       // вкл
+#define RD_OFF_RUS      "dsrk"      // выкл
+#define RD_NEXT_RUS     "lfktt \\"   // далее >
+#define RD_PREV_RUS     "/ yfpfl"   // < назад
 
-// ╨Т╨╜╤Г╤В╤А╨╕╨╕╨│╤А╨╛╨▓╤Л╨╡ ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨╕ ╨▒╤Г╨┤╤Г╤В
-// ╤Б╨▒╤А╨╛╤И╨╡╨╜╤Л ╨╜╨░ ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╤Л╨╡ ╨╖╨╜╨░╤З╨╡╨╜╨╕╤П.
+// Внутриигровые настройки будут
+// сброшены на стандартные значения.
 //
-// ╨г╨▓╨╡╤А╨╡╨╜╤Л, ╤З╤В╨╛ ╤Е╨╛╤В╨╕╤В╨╡ ╨┐╤А╨╛╨┤╨╛╨╗╨╢╨╕╤В╤М?
+// Уверены, что хотите продолжить?
 #define RD_DEFAULTS_RUS                 \
 "dyenhbbuhjdst yfcnhjqrb ,elen\n"       \
 "c,hjitys yf cnfylfhnyst pyfxtybz>\n"   \
@@ -1013,74 +1013,74 @@ extern char* ststr_version;
 "edthtys< xnj [jnbnt ghjljk;bnm?\n\n"   \
 PRESSYN_RUS
 
-// ╨Э╨╡╨▓╨╛╨╖╨╝╨╛╨╢╨╜╨╛ ╨╜╨░╤З╨░╤В╤М ╨╜╨╛╨▓╤Г╤О ╨╕╨│╤А╤Г
-// ╨┐╤А╨╕ ╨░╨║╤В╨╕╨▓╨╜╨╛╨╣ ╤Б╨╡╤В╨╡╨▓╨╛╨╣ ╨╕╨│╤А╨╡.
+// Невозможно начать новую игру
+// при активной сетевой игре.
 #define NEWGAME_RUS             \
 "ytdjpvj;yj yfxfnm yjde. buhe\n"\
 "ghb frnbdyjq ctntdjq buht>\n\n"PRESSKEY_RUS 
 
-// ╨г╨▓╨╡╤А╨╡╨╜╤Л? ╤Н╤В╨╛╤В ╤Г╤А╨╛╨▓╨╡╨╜╤М ╤Б╨╗╨╛╨╢╨╜╨╛╤Б╤В╨╕
-// ╨┤╨░╨╢╨╡ ╨╜╨╡ ╨▒╨╗╨╕╨╖╨╛╨║ ╨║ ╤З╨╡╤Б╤В╨╜╨╛╨╝╤Г.
+// Уверены? этот уровень сложности
+// даже не близок к честному.
 #define NIGHTMARE_RUS              \
 "edthtys? 'njn ehjdtym ckj;yjcnb\n"\
 "lf;t yt ,kbpjr r xtcnyjve>\n\n"PRESSYN_RUS 
 
-// ╨Ь╨╛╨╜╤Б╤В╤А╤Л ╨╜╨╡ ╨▓╨╛╤Б╨║╤А╨╡╤И╨░╤О╤В╤Б╤П, ╨╛╨┤╨╜╨░╨║╨╛
-// ╨╕╤Е ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨╕ ╤Б╤В╨╡╨┐╨╡╨╜╤М ╨╜╨░╨╜╨╛╤Б╨╕╨╝╨╛╨│╨╛ 
-// ╨╕╨╝╨╕ ╤Г╤А╨╛╨╜╨░, ╤Г╨▓╨╡╨╗╨╕╤З╨╡╨╜╤Л.
+// Монстры не воскрешаются, однако
+// их скорость и степень наносимого 
+// ими урона, увеличены.
 //
-// ╨г╨▓╨╡╤А╨╡╨╜╤Л, ╤З╤В╨╛ ╤Б╨╝╨╛╨╢╨╡╤В╨╡ ╨▓╤Л╨╢╨╕╤В╤М?
+// Уверены, что сможете выжить?
 #define ULTRANM_RUS                \
 "vjycnhs yt djcrhtif.ncz< jlyfrj\n"\
 "b[ crjhjcnm b cntgtym yfyjcbvjuj\n"  \
 "bvb ehjyf< edtkbxtys>\n\n"\
 "edthtys< xnj cvj;tnt ds;bnm?\n\n"PRESSYN_RUS
 
-// ╨н╤В╨╛ ╨┤╨╡╨╝╨╛╨╜╤Б╤В╤А╨░╤Ж╨╕╨╛╨╜╨╜╨░╤П ╨▓╨╡╤А╤Б╨╕╤П ╨╕╨│╤А╤Л.
-// ╨Т╨░╨╝ ╨╜╨╡╨╛╨▒╤Е╨╛╨┤╨╕╨╝╨╛ ╨┐╤А╨╕╨╛╨▒╤А╨╡╤Б╤В╨╕ ╨▓╤Б╤О ╤В╤А╨╕╨╗╨╛╨│╨╕╤О.
+// Это демонстрационная версия игры.
+// Вам необходимо приобрести всю трилогию.
 #define SWSTRING_RUS                   \
 "'nj ltvjycnhfwbjyyfz dthcbz buhs>\n\n"\
 "dfv ytj,[jlbvj ghbj,htcnb dc. nhbkjub.>\n\n"PRESSKEY_RUS 
 
-#define MSGOFF_RUS  "cjj,otybz dsrk.xtys"                                   // ╨б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╤П ╨▓╤Л╨║╨╗╤О╤З╨╡╨╜╤Л
-#define MSGON_RUS   "cjj,otybz drk.xtys"                                    // ╨б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╤П ╨▓╨║╨╗╤О╤З╨╡╨╜╤Л
-#define NETEND_RUS  "ytdjpvj;yj pfrjyxbnm ctntde. buhe!\n\n"PRESSKEY_RUS        // ╨Э╨╡╨▓╨╛╨╖╨╝╨╛╨╢╨╜╨╛ ╨╖╨░╨║╨╛╨╜╤З╨╕╤В╤М ╤Б╨╡╤В╨╡╨▓╤Г╤О ╨╕╨│╤А╤Г!
-#define ENDGAME_RUS "ds ltqcndbntkmyj [jnbnt pfrjyxbnm buhe?\n\n"PRESSYN_RUS    // ╨Т╤Л ╨┤╨╡╨╣╤Б╤В╨▓╨╕╤В╨╡╨╗╤М╨╜╨╛ ╤Е╨╛╤В╨╕╤В╨╡ ╨╖╨░╨║╨╛╨╜╤З╨╕╤В╤М ╨╕╨│╤А╤Г?
+#define MSGOFF_RUS  "cjj,otybz dsrk.xtys"                                   // Сообщения выключены
+#define MSGON_RUS   "cjj,otybz drk.xtys"                                    // Сообщения включены
+#define NETEND_RUS  "ytdjpvj;yj pfrjyxbnm ctntde. buhe!\n\n"PRESSKEY_RUS        // Невозможно закончить сетевую игру!
+#define ENDGAME_RUS "ds ltqcndbntkmyj [jnbnt pfrjyxbnm buhe?\n\n"PRESSYN_RUS    // Вы действительно хотите закончить игру?
 
-#define DETAILHI_RUS    "dscjrfz ltnfkbpfwbz"   // ╨Т╤Л╤Б╨╛╨║╨░╤П ╨┤╨╡╤В╨░╨╗╨╕╨╖╨░╤Ж╨╕╤П
-#define DETAILLO_RUS    "ybprfz ltnfkbpfwbz"    // ╨Э╨╕╨╖╨║╨░╤П ╨┤╨╡╤В╨░╨╗╨╕╨╖╨░╤Ж╨╕╤П
+#define DETAILHI_RUS    "dscjrfz ltnfkbpfwbz"   // Высокая детализация
+#define DETAILLO_RUS    "ybprfz ltnfkbpfwbz"    // Низкая детализация
 
-// ╨г╨╗╤Г╤З╤И╨╡╨╜╨╜╨░╤П (PALFIX) ╨╕ ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨░╤П (PLAYPAL) ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╤П 
-#define GAMMA_IMPROVED_OFF_RUS  "ekexityyfz ufvvf-rjhhtrwbz jnrk.xtyf"     // ╨г╨╗╤Г╤З╤И╨╡╨╜╨╜╨░╤П ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╤П ╨╛╤В╨║╨╗╤О╤З╨╡╨╜╨░
-#define GAMMA_IMPROVED_05_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 0>5"   // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Г╨╗╤Г╤З╤И╨╡╨╜╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 0.5
-#define GAMMA_IMPROVED_1_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 1>0"   // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Г╨╗╤Г╤З╤И╨╡╨╜╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 1.0
-#define GAMMA_IMPROVED_15_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 1>5"   // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Г╨╗╤Г╤З╤И╨╡╨╜╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 1.5
-#define GAMMA_IMPROVED_2_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 2>0"   // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Г╨╗╤Г╤З╤И╨╡╨╜╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 2.0
-#define GAMMA_IMPROVED_25_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 2>5"   // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Г╨╗╤Г╤З╤И╨╡╨╜╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 2.5
-#define GAMMA_IMPROVED_3_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 3>0"   // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Г╨╗╤Г╤З╤И╨╡╨╜╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 3.0
-#define GAMMA_IMPROVED_35_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 3>5"   // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Г╨╗╤Г╤З╤И╨╡╨╜╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 3.5
-#define GAMMA_IMPROVED_4_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 4>0"   // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Г╨╗╤Г╤З╤И╨╡╨╜╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 4.0
-#define GAMMA_ORIGINAL_OFF_RUS  "cnfylfhnyfz ufvvf-rjhhtrwbz jnrk.xtyf"    // ╨б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨░╤П ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╤П ╨╛╤В╨║╨╗╤О╤З╨╡╨╜╨░
-#define GAMMA_ORIGINAL_05_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 0>5"  // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 0.5
-#define GAMMA_ORIGINAL_1_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 1>0"  // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 1.0
-#define GAMMA_ORIGINAL_15_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 1>5"  // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 1.5
-#define GAMMA_ORIGINAL_2_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 2>0"  // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 2.0
-#define GAMMA_ORIGINAL_25_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 2>5"  // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 2.5
-#define GAMMA_ORIGINAL_3_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 3>0"  // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 3.0
-#define GAMMA_ORIGINAL_35_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 3>5"  // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 3.5
-#define GAMMA_ORIGINAL_4_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 4>0"  // ╨г╤А╨╛╨▓╨╡╨╜╤М ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╣ ╨│╨░╨╝╨╝╨░-╨║╨╛╤А╤А╨╡╨║╤Ж╨╕╨╕ 4.0
+// Улучшенная (PALFIX) и стандартная (PLAYPAL) гамма-коррекция 
+#define GAMMA_IMPROVED_OFF_RUS  "ekexityyfz ufvvf-rjhhtrwbz jnrk.xtyf"     // Улучшенная гамма-коррекция отключена
+#define GAMMA_IMPROVED_05_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 0>5"   // Уровень улучшенной гамма-коррекции 0.5
+#define GAMMA_IMPROVED_1_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 1>0"   // Уровень улучшенной гамма-коррекции 1.0
+#define GAMMA_IMPROVED_15_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 1>5"   // Уровень улучшенной гамма-коррекции 1.5
+#define GAMMA_IMPROVED_2_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 2>0"   // Уровень улучшенной гамма-коррекции 2.0
+#define GAMMA_IMPROVED_25_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 2>5"   // Уровень улучшенной гамма-коррекции 2.5
+#define GAMMA_IMPROVED_3_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 3>0"   // Уровень улучшенной гамма-коррекции 3.0
+#define GAMMA_IMPROVED_35_RUS   "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 3>5"   // Уровень улучшенной гамма-коррекции 3.5
+#define GAMMA_IMPROVED_4_RUS    "ehjdtym ekexityyjq ufvvf-rjhhtrwbb 4>0"   // Уровень улучшенной гамма-коррекции 4.0
+#define GAMMA_ORIGINAL_OFF_RUS  "cnfylfhnyfz ufvvf-rjhhtrwbz jnrk.xtyf"    // Стандартная гамма-коррекция отключена
+#define GAMMA_ORIGINAL_05_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 0>5"  // Уровень стандартной гамма-коррекции 0.5
+#define GAMMA_ORIGINAL_1_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 1>0"  // Уровень стандартной гамма-коррекции 1.0
+#define GAMMA_ORIGINAL_15_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 1>5"  // Уровень стандартной гамма-коррекции 1.5
+#define GAMMA_ORIGINAL_2_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 2>0"  // Уровень стандартной гамма-коррекции 2.0
+#define GAMMA_ORIGINAL_25_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 2>5"  // Уровень стандартной гамма-коррекции 2.5
+#define GAMMA_ORIGINAL_3_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 3>0"  // Уровень стандартной гамма-коррекции 3.0
+#define GAMMA_ORIGINAL_35_RUS   "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 3>5"  // Уровень стандартной гамма-коррекции 3.5
+#define GAMMA_ORIGINAL_4_RUS    "ehjdtym cnfylfhnyjq ufvvf-rjhhtrwbb 4>0"  // Уровень стандартной гамма-коррекции 4.0
 
 
 //
 // P_Doors.C
 //
 
-#define PD_BLUEO_RUS    "lkz frnbdfwbb ye;ty cbybq rk.x>"   // ╨Ф╨╗╤П ╨░╨║╤В╨╕╨▓╨░╤Ж╨╕╨╕ ╨╜╤Г╨╢╨╡╨╜ ╤Б╨╕╨╜╨╕╨╣ ╨║╨╗╤О╤З.
-#define PD_REDO_RUS     "lkz frnbdfwbb ye;ty rhfcysq rk.x>" // ╨Ф╨╗╤П ╨░╨║╤В╨╕╨▓╨░╤Ж╨╕╨╕ ╨╜╤Г╨╢╨╡╨╜ ╨║╤А╨░╤Б╨╜╤Л╨╣ ╨║╨╗╤О╤З.
-#define PD_YELLOWO_RUS  "lkz frnbdfwbb ye;ty ;tknsq rk.x>"  // ╨Ф╨╗╤П ╨░╨║╤В╨╕╨▓╨░╤Ж╨╕╨╕ ╨╜╤Г╨╢╨╡╨╜ ╨╢╨╡╨╗╤В╤Л╨╣ ╨║╨╗╤О╤З.
-#define PD_BLUEK_RUS    "lkz jnrhsnbz ye;ty cbybq rk.x>"    // ╨Ф╨╗╤П ╨╛╤В╨║╤А╤Л╤В╨╕╤П ╨╜╤Г╨╢╨╡╨╜ ╤Б╨╕╨╜╨╕╨╣ ╨║╨╗╤О╤З.
-#define PD_REDK_RUS     "lkz jnrhsnbz ye;ty rhfcysq rk.x>"  // ╨Ф╨╗╤П ╨╛╤В╨║╤А╤Л╤В╨╕╤П ╨╜╤Г╨╢╨╡╨╜ ╨║╤А╨░╤Б╨╜╤Л╨╣ ╨║╨╗╤О╤З.
-#define PD_YELLOWK_RUS  "lkz jnrhsnbz ye;ty ;tknsq rk.x>"   // ╨Ф╨╗╤П ╨╛╤В╨║╤А╤Л╤В╨╕╤П ╨╜╤Г╨╢╨╡╨╜ ╨╢╤С╨╗╤В╤Л╨╣ ╨║╨╗╤О╤З.
+#define PD_BLUEO_RUS    "lkz frnbdfwbb ye;ty cbybq rk.x>"   // Для активации нужен синий ключ.
+#define PD_REDO_RUS     "lkz frnbdfwbb ye;ty rhfcysq rk.x>" // Для активации нужен красный ключ.
+#define PD_YELLOWO_RUS  "lkz frnbdfwbb ye;ty ;tknsq rk.x>"  // Для активации нужен желтый ключ.
+#define PD_BLUEK_RUS    "lkz jnrhsnbz ye;ty cbybq rk.x>"    // Для открытия нужен синий ключ.
+#define PD_REDK_RUS     "lkz jnrhsnbz ye;ty rhfcysq rk.x>"  // Для открытия нужен красный ключ.
+#define PD_YELLOWK_RUS  "lkz jnrhsnbz ye;ty ;tknsq rk.x>"   // Для открытия нужен жёлтый ключ.
 
 
 //
@@ -1088,269 +1088,269 @@ PRESSYN_RUS
 //
 
 // armor
-#define GOTARMOR_RUS    "gjkextyf ,hjyz>"           // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨▒╤А╨╛╨╜╤П.
-#define GOTMEGA_RUS     "gjkextyf vtuf,hjyz!"       // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨╝╨╡╨│╨░╨▒╤А╨╛╨╜╤П!
+#define GOTARMOR_RUS    "gjkextyf ,hjyz>"           // Получена броня.
+#define GOTMEGA_RUS     "gjkextyf vtuf,hjyz!"       // Получена мегаброня!
 
 // bonus items
-#define GOTHTHBONUS_RUS "gjkexty ,jyec pljhjdmz>"       // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╨▒╨╛╨╜╤Г╤Б ╨╖╨┤╨╛╤А╨╛╨▓╤М╤П.
-#define GOTARMBONUS_RUS "gjkexty ,jyec ,hjyb>"          // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╨▒╨╛╨╜╤Г╤Б ╨▒╤А╨╛╨╜╨╕.
-#define GOTSCEPTRE_RUS  "gjkexty lmzdjkmcrbq crbgtnh>"  // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╨┤╤М╤П╨▓╨╛╨╗╤М╤Б╨║╨╕╨╣ ╤Б╨║╨╕╨┐╨╡╤В╤А.
-#define GOTBIBLE_RUS    "gjkextyf ytxtcnbdfz ,b,kbz>"   // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨╜╨╡╤З╨╡╤Б╤В╨╕╨▓╨░╤П ╨С╨╕╨▒╨╗╨╕╤П.
-#define GOTSUPER_RUS    "cdth[pfhzl!"                   // ╨б╨▓╨╡╤А╤Е╨╖╨░╤А╤П╨┤!
-#define GOTMSPHERE_RUS  "vtufcathf!"                    // ╨Ь╨╡╨│╨░╤Б╤Д╨╡╤А╨░!
+#define GOTHTHBONUS_RUS "gjkexty ,jyec pljhjdmz>"       // Получен бонус здоровья.
+#define GOTARMBONUS_RUS "gjkexty ,jyec ,hjyb>"          // Получен бонус брони.
+#define GOTSCEPTRE_RUS  "gjkexty lmzdjkmcrbq crbgtnh>"  // Получен дьявольский скипетр.
+#define GOTBIBLE_RUS    "gjkextyf ytxtcnbdfz ,b,kbz>"   // Получена нечестивая Библия.
+#define GOTSUPER_RUS    "cdth[pfhzl!"                   // Сверхзаряд!
+#define GOTMSPHERE_RUS  "vtufcathf!"                    // Мегасфера!
 // press beta items
-#define GOTDAGGER_RUS       "gjkexty ltvjybxtcrbq rby;fk>"      // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╨┤╨╡╨╝╨╛╨╜╨╕╤З╨╡╤Б╨║╨╕╨╣ ╨║╨╕╨╜╨╢╨░╨╗.
-#define GOTCHEST_RUS        "gjkexty ceyler c xthtgfvb>"        // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╤Б╤Г╨╜╨┤╤Г╨║ ╤Б ╤З╨╡╤А╨╡╨┐╨░╨╝╨╕.
-#define GOTEXTRALIFE_RUS    "gjkextyf ljgjkybntkmyfz ;bpym!"    // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╨░╤П ╨╢╨╕╨╖╨╜╤М!
+#define GOTDAGGER_RUS       "gjkexty ltvjybxtcrbq rby;fk>"      // Получен демонический кинжал.
+#define GOTCHEST_RUS        "gjkexty ceyler c xthtgfvb>"        // Получен сундук с черепами.
+#define GOTEXTRALIFE_RUS    "gjkextyf ljgjkybntkmyfz ;bpym!"    // Получена дополнительная жизнь!
 
-#define GOTBLUECARD_RUS "gjkextyf cbyzz rk.x-rfhnf>"    // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╤Б╨╕╨╜╤П╤П ╨║╨╗╤О╤З-╨║╨░╤А╤В╨░.
-#define GOTYELWCARD_RUS "gjkextyf ;tknfz rk.x-rfhnf>"   // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨╢╨╡╨╗╤В╨░╤П ╨║╨╗╤О╤З-╨║╨░╤А╤В╨░
-#define GOTREDCARD_RUS  "gjkextyf rhfcyfz rk.x-rfhnf>"  // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨║╤А╨░╤Б╨╜╨░╤П ╨║╨╗╤О╤З-╨║╨░╤А╤В╨░.
-#define GOTBLUESKUL_RUS "gjkexty cbybq rk.x-xthtg>"     // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╤Б╨╕╨╜╨╕╨╣ ╨║╨╗╤О╤З-╤З╨╡╤А╨╡╨┐.
-#define GOTYELWSKUL_RUS "gjkexty ;tknsq rk.x-xthtg>"    // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╨╢╨╡╨╗╤В╤Л╨╣ ╨║╨╗╤О╤З-╤З╨╡╤А╨╡╨┐.
-#define GOTREDSKULL_RUS "gjkexty rhfcysq rk.x-xthtg>"   // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╨║╤А╨░╤Б╨╜╤Л╨╣ ╨║╨╗╤О╤З-╤З╨╡╤А╨╡╨┐.
+#define GOTBLUECARD_RUS "gjkextyf cbyzz rk.x-rfhnf>"    // Получена синяя ключ-карта.
+#define GOTYELWCARD_RUS "gjkextyf ;tknfz rk.x-rfhnf>"   // Получена желтая ключ-карта
+#define GOTREDCARD_RUS  "gjkextyf rhfcyfz rk.x-rfhnf>"  // Получена красная ключ-карта.
+#define GOTBLUESKUL_RUS "gjkexty cbybq rk.x-xthtg>"     // Получен синий ключ-череп.
+#define GOTYELWSKUL_RUS "gjkexty ;tknsq rk.x-xthtg>"    // Получен желтый ключ-череп.
+#define GOTREDSKULL_RUS "gjkexty rhfcysq rk.x-xthtg>"   // Получен красный ключ-череп.
 
 // medikits, heals
-#define GOTSTIM_RUS     "gjkexty cnbvekznjh>"                   // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╤Б╤В╨╕╨╝╤Г╨╗╤П╤В╨╛╤А.
-#define GOTMEDINEED_RUS "gjkextyf rhfqyt ytj,[jlbvfz fgntxrf!"  // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨║╤А╨░╨╣╨╜╨╡ ╨╜╨╡╨╛╨▒╤Е╨╛╨┤╨╕╨╝╨░╤П ╨░╨┐╤В╨╡╤З╨║╨░!
-#define GOTMEDIKIT_RUS  "gjkextyf fgntxrf>"                     // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨░╨┐╤В╨╡╤З╨║╨░.
+#define GOTSTIM_RUS     "gjkexty cnbvekznjh>"                   // Получен стимулятор.
+#define GOTMEDINEED_RUS "gjkextyf rhfqyt ytj,[jlbvfz fgntxrf!"  // Получена крайне необходимая аптечка!
+#define GOTMEDIKIT_RUS  "gjkextyf fgntxrf>"                     // Получена аптечка.
 
 // power ups
-#define GOTINVUL_RUS    "ytezpdbvjcnm!"                 // ╨Э╨╡╤Г╤П╨╖╨▓╨╕╨╝╨╛╤Б╤В╤М!
-#define GOTBERSERK_RUS  ",thcthr!"                      // ╨С╨╡╤А╤Б╨╡╤А╨║!
-#define GOTINVIS_RUS    "xfcnbxyfz ytdblbvjcnm>"        // ╨з╨░╤Б╤В╨╕╤З╨╜╨░╤П ╨╜╨╡╨▓╨╕╨┤╨╕╨╝╨╛╤Б╤В╤М.
-#define GOTSUIT_RUS	    "rjcn.v hflbfwbjyyjq pfobns>"   // ╨Ъ╨╛╤Б╤В╤О╨╝ ╤А╨░╨┤╨╕╨░╤Ж╨╕╨╛╨╜╨╜╨╛╨╣ ╨╖╨░╤Й╨╕╤В╤Л.
-#define GOTMAP_RUS      "rjvgm.nthyfz rfhnf ehjdyz>"    // ╨Ъ╨╛╨╝╨┐╤М╤О╤В╨╡╤А╨╜╨░╤П ╨║╨░╤А╤В╨░ ╤Г╤А╨╛╨▓╨╜╤П.
-#define GOTVISOR_RUS    "dbpjh ecbktybz jcdtotybz>"     // ╨Т╨╕╨╖╨╛╤А ╤Г╤Б╨╕╨╗╨╡╨╜╨╕╤П ╨╛╤Б╨▓╨╡╤Й╨╡╨╜╨╕╤П.
+#define GOTINVUL_RUS    "ytezpdbvjcnm!"                 // Неуязвимость!
+#define GOTBERSERK_RUS  ",thcthr!"                      // Берсерк!
+#define GOTINVIS_RUS    "xfcnbxyfz ytdblbvjcnm>"        // Частичная невидимость.
+#define GOTSUIT_RUS	    "rjcn.v hflbfwbjyyjq pfobns>"   // Костюм радиационной защиты.
+#define GOTMAP_RUS      "rjvgm.nthyfz rfhnf ehjdyz>"    // Компьютерная карта уровня.
+#define GOTVISOR_RUS    "dbpjh ecbktybz jcdtotybz>"     // Визор усиления освещения.
 
 // ammo
-#define GOTCLIP_RUS     "gjkextyf j,jqvf>"                          // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨╛╨▒╨╛╨╣╨╝╨░.
-#define GOTCLIPBOX_RUS  "gjkextyf rjhj,rf gfnhjyjd>"                // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨║╨╛╤А╨╛╨▒╨║╨░ ╨┐╨░╤В╤А╨╛╨╜╨╛╨▓.
-#define GOTROCKET_RUS   "gjkextyf hfrtnf>"                          // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╤А╨░╨║╨╡╤В╨░.
-#define GOTROCKET2_RUS  "gjkextyj ldt hfrtns>"                      // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╛ ╨┤╨▓╨╡ ╤А╨░╨║╨╡╤В╤Л.
-#define GOTROCKBOX_RUS  "gjkexty zobr hfrtn>"                       // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╤П╤Й╨╕╨║ ╤А╨░╨║╨╡╤В.
-#define GOTCELL_RUS     "gjkextyf 'ythuj,fnfhtz>"                   // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╤Н╨╜╨╡╤А╨│╨╛╨▒╨░╤В╨░╤А╨╡╤П.
-#define GOTCELLBOX_RUS  "gjkexty 'ythujfrrevekznjh>"                // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╤Н╨╜╨╡╤А╨│╨╛╨░╨║╨║╤Г╨╝╤Г╨╗╤П╤В╨╛╤А.
-#define GOTSHELLS_RUS   "gjkextyj 4 gfnhjyf lkz lhj,jdbrf>"         // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╛ 4 ╨┐╨░╤В╤А╨╛╨╜╨░ ╨┤╨╗╤П ╨┤╤А╨╛╨▒╨╛╨▓╨╕╨║╨░.
-#define GOTSHELLS8_RUS  "gjkextyj 8 gfnhjyjd lkz lhj,jdbrf>"        // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╛ 8 ╨┐╨░╤В╤А╨╛╨╜╨╛╨▓ ╨┤╨╗╤П ╨┤╤А╨╛╨▒╨╛╨▓╨╕╨║╨░.
-#define GOTSHELLBOX_RUS "gjkextyf rjhj,rf gfnhjyjd lkz lhj,jdbrf>"  // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨║╨╛╤А╨╛╨▒╨║╨░ ╨┐╨░╤В╤А╨╛╨╜╨╛╨▓ ╨┤╨╗╤П ╨┤╤А╨╛╨▒╨╛╨▓╨╕╨║╨░.
-#define GOTBACKPACK_RUS "gjkexty h.rpfr c ,jtghbgfcfvb!"            // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╤А╤О╨║╨╖╨░╨║ ╤Б ╨▒╨╛╨╡╨┐╤А╨╕╨┐╨░╤Б╨░╨╝╨╕!
+#define GOTCLIP_RUS     "gjkextyf j,jqvf>"                          // Получена обойма.
+#define GOTCLIPBOX_RUS  "gjkextyf rjhj,rf gfnhjyjd>"                // Получена коробка патронов.
+#define GOTROCKET_RUS   "gjkextyf hfrtnf>"                          // Получена ракета.
+#define GOTROCKET2_RUS  "gjkextyj ldt hfrtns>"                      // Получено две ракеты.
+#define GOTROCKBOX_RUS  "gjkexty zobr hfrtn>"                       // Получен ящик ракет.
+#define GOTCELL_RUS     "gjkextyf 'ythuj,fnfhtz>"                   // Получена энергобатарея.
+#define GOTCELLBOX_RUS  "gjkexty 'ythujfrrevekznjh>"                // Получен энергоаккумулятор.
+#define GOTSHELLS_RUS   "gjkextyj 4 gfnhjyf lkz lhj,jdbrf>"         // Получено 4 патрона для дробовика.
+#define GOTSHELLS8_RUS  "gjkextyj 8 gfnhjyjd lkz lhj,jdbrf>"        // Получено 8 патронов для дробовика.
+#define GOTSHELLBOX_RUS "gjkextyf rjhj,rf gfnhjyjd lkz lhj,jdbrf>"  // Получена коробка патронов для дробовика.
+#define GOTBACKPACK_RUS "gjkexty h.rpfr c ,jtghbgfcfvb!"            // Получен рюкзак с боеприпасами!
 
 // weapons
-#define GOTBFG9000_RUS  "gjkextyj &9000! j lf>"             // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╛ BFG9000! ╨Ю ╨┤╨░.
-#define GOTCHAINGUN_RUS "gjkexty gektvtn!"                  // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╨┐╤Г╨╗╨╡╨╝╨╡╤В!
-#define GOTCHAINSAW_RUS ",typjgbkf! yfqlb ytvyjuj vzcf!"    // ╨С╨╡╨╜╨╖╨╛╨┐╨╕╨╗╨░! ╨Э╨░╨╣╨┤╨╕ ╨╜╨╡╨╝╨╜╨╛╨│╨╛ ╨╝╤П╤Б╨░!
-#define GOTLAUNCHER_RUS "gjkextyf hfrtnybwf!"               // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╤А╨░╨║╨╡╤В╨╜╨╕╤Ж╨░!
-#define GOTPLASMA_RUS   "gjkextyf gkfpvtyyfz geirf!"        // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨░ ╨┐╨╗╨░╨╖╨╝╨╡╨╜╨╜╨░╤П ╨┐╤Г╤И╨║╨░!
-#define GOTSHOTGUN_RUS  "gjkexty lhj,jdbr!"                 // ╨Я╨╛╨╗╤Г╤З╨╡╨╜ ╨┤╤А╨╛╨▒╨╛╨▓╨╕╨║!
-#define GOTSHOTGUN2_RUS "gjkextyj ldecndjkmyjt he;mt!"      // ╨Я╨╛╨╗╤Г╤З╨╡╨╜╨╛ ╨┤╨▓╤Г╤Б╤В╨▓╨╛╨╗╤М╨╜╨╛╨╡ ╤А╤Г╨╢╤М╨╡!
+#define GOTBFG9000_RUS  "gjkextyj &9000! j lf>"             // Получено BFG9000! О да.
+#define GOTCHAINGUN_RUS "gjkexty gektvtn!"                  // Получен пулемет!
+#define GOTCHAINSAW_RUS ",typjgbkf! yfqlb ytvyjuj vzcf!"    // Бензопила! Найди немного мяса!
+#define GOTLAUNCHER_RUS "gjkextyf hfrtnybwf!"               // Получена ракетница!
+#define GOTPLASMA_RUS   "gjkextyf gkfpvtyyfz geirf!"        // Получена плазменная пушка!
+#define GOTSHOTGUN_RUS  "gjkexty lhj,jdbr!"                 // Получен дробовик!
+#define GOTSHOTGUN2_RUS "gjkextyj ldecndjkmyjt he;mt!"      // Получено двуствольное ружье!
 
 
 //
 // P_Spec.C
 //
 
-#define SECRETFOUND_RUS "j,yfhe;ty nfqybr!"     // ╨Ю╨▒╨╜╨░╤А╤Г╨╢╨╡╨╜ ╤В╨░╨╣╨╜╨╕╨║!
+#define SECRETFOUND_RUS "j,yfhe;ty nfqybr!"     // Обнаружен тайник!
 
 
 //
 // ST_stuff.C
 //
 
-#define STSTR_MUS_RUS       "cvtyf vepsrb>>>"                           // ╨б╨╝╨╡╨╜╨░ ╨╝╤Г╨╖╤Л╨║╨╕...
-#define STSTR_NOMUS_RUS     "ytrjhhtrnysq ds,jh"                        // ╨Э╨╡╨║╨╛╤А╤А╨╡╨║╤В╨╜╤Л╨╣ ╨▓╤Л╨▒╨╛╤А
-#define STSTR_DQDON_RUS     "ytezpdbvjcnm frnbdbhjdfyf"                 // ╨Э╨╡╤Г╤П╨╖╨▓╨╕╨╝╨╛╤Б╤В╤М ╨░╨║╤В╨╕╨▓╨╕╤А╨╛╨▓╨░╨╜╨░
-#define STSTR_DQDOFF_RUS    "ytezpdbvjcnm ltfrnbdbhjdfyf"               // ╨Э╨╡╤Г╤П╨╖╨▓╨╕╨╝╨╛╤Б╤В╤М ╨┤╨╡╨░╨║╤В╨╕╨▓╨╕╤А╨╛╨▓╨░╨╜╨░
+#define STSTR_MUS_RUS       "cvtyf vepsrb>>>"                           // Смена музыки...
+#define STSTR_NOMUS_RUS     "ytrjhhtrnysq ds,jh"                        // Некорректный выбор
+#define STSTR_DQDON_RUS     "ytezpdbvjcnm frnbdbhjdfyf"                 // Неуязвимость активирована
+#define STSTR_DQDOFF_RUS    "ytezpdbvjcnm ltfrnbdbhjdfyf"               // Неуязвимость деактивирована
 
-#define STSTR_KFAADDED_RUS  ",jtpfgfc gjgjkyty"                         // ╨С╨╛╨╡╨╖╨░╨┐╨░╤Б ╨┐╨╛╨┐╨╛╨╗╨╜╨╡╨╜
-#define STSTR_FAADDED_RUS   ",jtpfgfc gjgjkyty (,tp rk.xtq)"            // ╨С╨╛╨╡╨╖╨░╨┐╨░╤Б ╨┐╨╛╨┐╨╛╨╗╨╜╨╡╨╜ (╨▒╨╡╨╖ ╨║╨╗╤О╤З╨╡╨╣)
-#define STSTR_KAADDED_RUS   "rk.xb gjkextys"                            // ╨Ъ╨╗╤О╤З╨╕ ╨┐╨╛╨╗╤Г╤З╨╡╨╜╤Л
+#define STSTR_KFAADDED_RUS  ",jtpfgfc gjgjkyty"                         // Боезапас пополнен
+#define STSTR_FAADDED_RUS   ",jtpfgfc gjgjkyty (,tp rk.xtq)"            // Боезапас пополнен (без ключей)
+#define STSTR_KAADDED_RUS   "rk.xb gjkextys"                            // Ключи получены
 
-#define STSTR_NCON_RUS      "ghj[j;ltybt xthtp cntys frnbdbhjdfyj"      // ╨Я╤А╨╛╤Е╨╛╨╢╨┤╨╡╨╜╨╕╨╡ ╤З╨╡╤А╨╡╨╖ ╤Б╤В╨╡╨╜╤Л ╨░╨║╤В╨╕╨▓╨╕╤А╨╛╨▓╨░╨╜╨╛
-#define STSTR_NCOFF_RUS     "ghj[j;ltybt xthtp cntys ltfrnbdbhjdfyj"    // ╨Я╤А╨╛╤Е╨╛╨╢╨┤╨╡╨╜╨╕╨╡ ╤З╨╡╤А╨╡╨╖ ╤Б╤В╨╡╨╜╤Л ╨┤╨╡╤А╨╡╨░╨║╤В╨╕╨▓╨╕╤А╨╛╨▓╨░╨╜╨╛
+#define STSTR_NCON_RUS      "ghj[j;ltybt xthtp cntys frnbdbhjdfyj"      // Прохождение через стены активировано
+#define STSTR_NCOFF_RUS     "ghj[j;ltybt xthtp cntys ltfrnbdbhjdfyj"    // Прохождение через стены дереактивировано
 
-#define STSTR_CHOPPERS_RUS  ">>> yt lehcndtyyj - u>v>"                  // ... ╨╜╨╡ ╨┤╤Г╤А╤Б╤В╨▓╨╡╨╜╨╜╨╛ - ╨│.╨╝.
-#define STSTR_CLEV_RUS      "cvtyf ehjdyz>>>"                           // ╨б╨╝╨╡╨╜╨░ ╤Г╤А╨╛╨▓╨╜╤П...
+#define STSTR_CHOPPERS_RUS  ">>> yt lehcndtyyj - u>v>"                  // ... не дурственно - г.м.
+#define STSTR_CLEV_RUS      "cvtyf ehjdyz>>>"                           // Смена уровня...
 
-#define STSTR_BEHOLD_RUS    "v=,tccv>< s=,thc>< i=ytd>< r=rjc>< a=rhn>< l=dbp>" // m=╨▒╨╡╤Б╤Б╨╝., ╤Л=╨▒╨╡╤А╤Б., ╤И=╨╜╨╡╨▓., ╨║=╨║╨╛╤Б., ╤Д=╨║╤А╤В., ╨┤=╨▓╨╕╨╖.
-#define STSTR_BEHOLDX_RUS   "ghtlvtn frnbdbhjdfy"                       // ╨Я╤А╨╡╨┤╨╝╨╡╤В ╨░╨║╤В╨╕╨▓╨╕╤А╨╛╨▓╨░╨╜
-#define STSTR_BEHOLDZ_RUS   "ghtlvtn ltfrnbdbhjdfy"                     // ╨Я╤А╨╡╨┤╨╝╨╡╤В ╨┤╨╡╨░╨║╤В╨╕╨▓╨╕╤А╨╛╨▓╨░╨╜
+#define STSTR_BEHOLD_RUS    "v=,tccv>< s=,thc>< i=ytd>< r=rjc>< a=rhn>< l=dbp>" // m=бессм., ы=берс., ш=нев., к=кос., ф=крт., д=виз.
+#define STSTR_BEHOLDX_RUS   "ghtlvtn frnbdbhjdfy"                       // Предмет активирован
+#define STSTR_BEHOLDZ_RUS   "ghtlvtn ltfrnbdbhjdfy"                     // Предмет деактивирован
 
-#define STSTR_MASSACRE_RUS  "eybxnj;tyj vjycnhjd:"                      // ╨г╨╜╨╕╤З╤В╨╛╨╢╨╡╨╜╨╛ ╨╝╨╛╨╜╤Б╤В╤А╨╛╨▓:
+#define STSTR_MASSACRE_RUS  "eybxnj;tyj vjycnhjd:"                      // Уничтожено монстров:
 
 
 //
 // HU_stuff.C
 //
 
-#define HUSTR_MSGU_RUS  "(cjj,otybt yt jnghfdktyj)" // (╨б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡ ╨╜╨╡ ╨╛╤В╨┐╤А╨░╨▓╨╗╨╡╨╜╨╛)
+#define HUSTR_MSGU_RUS  "(cjj,otybt yt jnghfdktyj)" // (Сообщение не отправлено)
 
 
 //
 // DOOM 1
 //
 
-#define HUSTR_E1M1_RUS  "t1v1: fyufh"                               // E1M1: ╨Р╨╜╨│╨░╤А
-#define HUSTR_E1M2_RUS  "t1v2: fnjvyfz 'ktrnhjcnfywbz"              // E1M2: ╨Р╤В╨╛╨╝╨╜╨░╤П ╤Н╨╗╨╡╨║╤В╤А╨╛╤Б╤В╨░╨╜╤Ж╨╕╤П
-#define HUSTR_E1M3_RUS  "t1v3: pfdjl gj gththf,jnrt zlj[bvbrfnjd"   // E1M3: ╨Ч╨░╨▓╨╛╨┤ ╨┐╨╛ ╨┐╨╡╤А╨╡╤А╨░╨▒╨╛╤В╨║╨╡ ╤П╨┤╨╛╤Е╨╕╨╝╨╕╨║╨░╤В╨╛╨▓
-#define HUSTR_E1M4_RUS  "t1v4: rjvfylysq geyrn"                     // E1M4: ╨Ъ╨╛╨╝╨░╨╜╨┤╨╜╤Л╨╣ ╨┐╤Г╨╜╨║╤В
-#define HUSTR_E1M5_RUS  "t1v5: kf,jhfnjhbz yf aj,jct"               // E1M5: ╨Ы╨░╨▒╨╛╤А╨░╤В╨╛╤А╨╕╤П ╨╜╨░ ╨д╨╛╨▒╨╛╤Б╨╡
-#define HUSTR_E1M6_RUS  "t1v6: wtynhfkmysq geyrn j,hf,jnrb"         // E1M6: ╨ж╨╡╨╜╤В╤А╨░╨╗╤М╨╜╤Л╨╣ ╨┐╤Г╨╜╨║╤В ╨╛╨▒╤А╨░╨▒╨╛╤В╨║╨╕
-#define HUSTR_E1M7_RUS  "t1v7: dsxbckbntkmysq wtynh"                // E1M7: ╨Т╤Л╤З╨╕╤Б╨╗╨╕╤В╨╡╨╗╤М╨╜╤Л╨╣ ╤Ж╨╡╨╜╤В╤А
-#define HUSTR_E1M8_RUS  "t1v8: fyjvfkbz yf aj,jct"                  // E1M8: ╨Р╨╜╨╛╨╝╨░╨╗╨╕╤П ╨╜╨░ ╨д╨╛╨▒╨╛╤Б╨╡
-#define HUSTR_E1M9_RUS  "t1v9: djtyyfz ,fpf"                        // E1M9: ╨Т╨╛╨╡╨╜╨╜╨░╤П ╨▒╨░╨╖╨░
-#define HUSTR_E2M1_RUS  "t2v1: fyjvfkbz yf ltqvjct"                 // E2M1: ╨Р╨╜╨╛╨╝╨░╨╗╨╕╤П ╨╜╨░ ╨Ф╨╡╨╣╨╝╨╛╤Б╨╡
-#define HUSTR_E2M2_RUS  "t2v2: [hfybkbot"                           // E2M2: ╨е╤А╨░╨╜╨╕╨╗╨╕╤Й╨╡
-#define HUSTR_E2M3_RUS  "t2v3: jxbcnbntkmysq pfdjl"                 // E2M3: ╨Ю╤З╨╕╤Б╤В╨╕╤В╨╡╨╗╤М╨╜╤Л╨╣ ╨╖╨░╨▓╨╛╨┤
-#define HUSTR_E2M4_RUS  "t2v4: kf,jhfnjhbz yf ltqvjct"              // E2M4: ╨Ы╨░╨▒╨╛╤А╨░╤В╨╛╤А╨╕╤П ╨╜╨░ ╨Ф╨╡╨╣╨╝╨╛╤Б╨╡
-#define HUSTR_E2M5_RUS  "t2v5: rjvfylysq wtynh"                     // E2M5: ╨Ъ╨╛╨╝╨░╨╜╨┤╨╜╤Л╨╣ ╤Ж╨╡╨╜╤В╤А
-#define HUSTR_E2M6_RUS  "t2v6: pfks ghjrkzns["                      // E2M6: ╨Ч╨░╨╗╤Л ╨┐╤А╨╛╨║╨╗╤П╤В╤Л╤Е
-#define HUSTR_E2M7_RUS  "t2v7: ythtcnbkbot"                         // E2M7: ╨Э╨╡╤А╨╡╤Б╤В╨╕╨╗╨╕╤Й╨╡
-#define HUSTR_E2M8_RUS  "t2v8: dfdbkjycrfz ,fiyz"                   // E2M8: ╨Т╨░╨▓╨╕╨╗╨╛╨╜╤Б╨║╨░╤П ╨▒╨░╤И╨╜╤П
-#define HUSTR_E2M9_RUS  "t2v9: rhtgjcnm nfqy"                       // E2M9: ╨Ъ╤А╨╡╨┐╨╛╤Б╤В╤М ╤В╨░╨╣╨╜
-#define HUSTR_E3M1_RUS  "t3v1: rhtgjcnm flf"                        // E3M1: ╨Ъ╤А╨╡╨┐╨╛╤Б╤В╤М ╨Р╨┤╨░
-#define HUSTR_E3M2_RUS  "t3v2: nhzcbyf jnxfzybz"                    // E3M2: ╨в╤А╤П╤Б╨╕╨╜╨░ ╨╛╤В╤З╨░╤П╨╜╨╕╤П
-#define HUSTR_E3M3_RUS  "t3v3: gfyltvjybq"                          // E3M3: ╨Я╨░╨╜╨┤╨╡╨╝╨╛╨╜╨╕╨╣
-#define HUSTR_E3M4_RUS  "t3v4: ljv ,jkb"                            // E3M4: ╨Ф╨╛╨╝ ╨▒╨╛╨╗╨╕
-#define HUSTR_E3M5_RUS  "t3v5: ytxtcnbdsq cj,jh"                    // E3M5: ╨Э╨╡╤З╨╡╤Б╤В╨╕╨▓╤Л╨╣ ╤Б╨╛╨▒╨╛╤А
-#define HUSTR_E3M6_RUS  "t3v6: ujhf 'ht,"                           // E3M6: ╨У╨╛╤А╨░ ╨н╤А╨╡╨▒
-#define HUSTR_E3M7_RUS  "t3v7: dhfnf d kbv,"                        // E3M7: ╨Т╤А╨░╤В╨░ ╨▓ ╨Ы╨╕╨╝╨▒
-#define HUSTR_E3M8_RUS  "t3v8: lbn"                                 // E3M8: ╨Ф╨╕╤В
-#define HUSTR_E3M9_RUS  "t3v9: rhjkbxbq cfl"                        // E3M9: ╨Ъ╤А╨╛╨╗╨╕╤З╨╕╨╣ ╤Б╨░╨┤
-#define HUSTR_E4M1_RUS  "t4v1: gjl fljv"                            // E4M1: ╨Я╨╛╨┤ ╨Р╨┤╨╛╨╝
-#define HUSTR_E4M2_RUS  "t4v2: bcnbyyfz ytyfdbcnm"                  // E4M2: ╨Ш╤Б╤В╨╕╨╜╨╜╨░╤П ╨╜╨╡╨╜╨░╨▓╨╕╤Б╤В╤М
-#define HUSTR_E4M3_RUS  "t4v3: bcnzpfybt ytxtcnbds["                // E4M3: ╨Ш╤Б╤В╤П╨╖╨░╨╜╨╕╨╡ ╨╜╨╡╤З╨╡╤Б╤В╨╕╨▓╤Л╤Е
-#define HUSTR_E4M4_RUS  "t4v4: ytelth;bvjt pkj"                     // E4M4: ╨Э╨╡╤Г╨┤╨╡╤А╨╢╨╕╨╝╨╛╨╡ ╨╖╨╗╨╛
-#define HUSTR_E4M5_RUS  "t4v5: jyb gjrf.ncz"                        // E4M5: ╨Ю╨╜╨╕ ╨┐╨╛╨║╨░╤О╤В╤Б╤П
-#define HUSTR_E4M6_RUS  "t4v6: ceghjnbd cb[ ytxtcnbds["             // E4M6: ╨б╤Г╨┐╤А╨╛╤В╨╕╨▓ ╤Б╨╕╤Е ╨╜╨╡╤З╨╡╤Б╤В╨╕╨▓╤Л╤Е
-#define HUSTR_E4M7_RUS  "t4v7: b gjcktljdfk fl"                     // E4M7: ╨Ш ╨┐╨╛╤Б╨╗╨╡╨┤╨╛╨▓╨░╨╗ ╨Р╨┤
-#define HUSTR_E4M8_RUS  "t4v8: lj ,tccthltxbz"                      // E4M8: ╨Ф╨╛ ╨▒╨╡╤Б╤Б╨╡╤А╨┤╨╡╤З╨╕╤П
-#define HUSTR_E4M9_RUS  "t4v9: cnhf["                               // E4M9: ╨б╤В╤А╨░╤Е
+#define HUSTR_E1M1_RUS  "t1v1: fyufh"                               // E1M1: Ангар
+#define HUSTR_E1M2_RUS  "t1v2: fnjvyfz 'ktrnhjcnfywbz"              // E1M2: Атомная электростанция
+#define HUSTR_E1M3_RUS  "t1v3: pfdjl gj gththf,jnrt zlj[bvbrfnjd"   // E1M3: Завод по переработке ядохимикатов
+#define HUSTR_E1M4_RUS  "t1v4: rjvfylysq geyrn"                     // E1M4: Командный пункт
+#define HUSTR_E1M5_RUS  "t1v5: kf,jhfnjhbz yf aj,jct"               // E1M5: Лаборатория на Фобосе
+#define HUSTR_E1M6_RUS  "t1v6: wtynhfkmysq geyrn j,hf,jnrb"         // E1M6: Центральный пункт обработки
+#define HUSTR_E1M7_RUS  "t1v7: dsxbckbntkmysq wtynh"                // E1M7: Вычислительный центр
+#define HUSTR_E1M8_RUS  "t1v8: fyjvfkbz yf aj,jct"                  // E1M8: Аномалия на Фобосе
+#define HUSTR_E1M9_RUS  "t1v9: djtyyfz ,fpf"                        // E1M9: Военная база
+#define HUSTR_E2M1_RUS  "t2v1: fyjvfkbz yf ltqvjct"                 // E2M1: Аномалия на Деймосе
+#define HUSTR_E2M2_RUS  "t2v2: [hfybkbot"                           // E2M2: Хранилище
+#define HUSTR_E2M3_RUS  "t2v3: jxbcnbntkmysq pfdjl"                 // E2M3: Очистительный завод
+#define HUSTR_E2M4_RUS  "t2v4: kf,jhfnjhbz yf ltqvjct"              // E2M4: Лаборатория на Деймосе
+#define HUSTR_E2M5_RUS  "t2v5: rjvfylysq wtynh"                     // E2M5: Командный центр
+#define HUSTR_E2M6_RUS  "t2v6: pfks ghjrkzns["                      // E2M6: Залы проклятых
+#define HUSTR_E2M7_RUS  "t2v7: ythtcnbkbot"                         // E2M7: Нерестилище
+#define HUSTR_E2M8_RUS  "t2v8: dfdbkjycrfz ,fiyz"                   // E2M8: Вавилонская башня
+#define HUSTR_E2M9_RUS  "t2v9: rhtgjcnm nfqy"                       // E2M9: Крепость тайн
+#define HUSTR_E3M1_RUS  "t3v1: rhtgjcnm flf"                        // E3M1: Крепость Ада
+#define HUSTR_E3M2_RUS  "t3v2: nhzcbyf jnxfzybz"                    // E3M2: Трясина отчаяния
+#define HUSTR_E3M3_RUS  "t3v3: gfyltvjybq"                          // E3M3: Пандемоний
+#define HUSTR_E3M4_RUS  "t3v4: ljv ,jkb"                            // E3M4: Дом боли
+#define HUSTR_E3M5_RUS  "t3v5: ytxtcnbdsq cj,jh"                    // E3M5: Нечестивый собор
+#define HUSTR_E3M6_RUS  "t3v6: ujhf 'ht,"                           // E3M6: Гора Эреб
+#define HUSTR_E3M7_RUS  "t3v7: dhfnf d kbv,"                        // E3M7: Врата в Лимб
+#define HUSTR_E3M8_RUS  "t3v8: lbn"                                 // E3M8: Дит
+#define HUSTR_E3M9_RUS  "t3v9: rhjkbxbq cfl"                        // E3M9: Кроличий сад
+#define HUSTR_E4M1_RUS  "t4v1: gjl fljv"                            // E4M1: Под Адом
+#define HUSTR_E4M2_RUS  "t4v2: bcnbyyfz ytyfdbcnm"                  // E4M2: Истинная ненависть
+#define HUSTR_E4M3_RUS  "t4v3: bcnzpfybt ytxtcnbds["                // E4M3: Истязание нечестивых
+#define HUSTR_E4M4_RUS  "t4v4: ytelth;bvjt pkj"                     // E4M4: Неудержимое зло
+#define HUSTR_E4M5_RUS  "t4v5: jyb gjrf.ncz"                        // E4M5: Они покаются
+#define HUSTR_E4M6_RUS  "t4v6: ceghjnbd cb[ ytxtcnbds["             // E4M6: Супротив сих нечестивых
+#define HUSTR_E4M7_RUS  "t4v7: b gjcktljdfk fl"                     // E4M7: И последовал Ад
+#define HUSTR_E4M8_RUS  "t4v8: lj ,tccthltxbz"                      // E4M8: До бессердечия
+#define HUSTR_E4M9_RUS  "t4v9: cnhf["                               // E4M9: Страх
 
 
 //
-// DOOM2: ╨Р╨┤ ╨╜╨░ ╨Ч╨╡╨╝╨╗╨╡
+// DOOM2: Ад на Земле
 //
 
-#define HUSTR_1_RUS     "ehjdtym 1: gfhflysq d[jl"                  // ╨г╤А╨╛╨▓╨╡╨╜╤М 1: ╨Я╨░╤А╨░╨┤╨╜╤Л╨╣ ╨▓╤Е╨╛╨┤
-#define HUSTR_2_RUS     "ehjdtym 2: gjlptvyst pfks"                 // ╨г╤А╨╛╨▓╨╡╨╜╤М 2: ╨Я╨╛╨┤╨╖╨╡╨╝╨╜╤Л╨╡ ╨╖╨░╨╗╤Л
-#define HUSTR_3_RUS     "ehjdtym 3: dspjd ,hjity"                   // ╨г╤А╨╛╨▓╨╡╨╜╤М 3: ╨Т╤Л╨╖╨╛╨▓ ╨▒╤А╨╛╤И╨╡╨╜
-#define HUSTR_4_RUS     "ehjdtym 4: chtljnjxbt"                     // ╨г╤А╨╛╨▓╨╡╨╜╤М 4: ╨б╤А╨╡╨┤╨╛╤В╨╛╤З╨╕╨╡
-#define HUSTR_5_RUS     "ehjdtym 5: cnjxyst neyytkb"                // ╨г╤А╨╛╨▓╨╡╨╜╤М 5: ╨б╤В╨╛╤З╨╜╤Л╨╡ ╤В╤Г╨╜╨╜╨╡╨╗╨╕
-#define HUSTR_6_RUS     "ehjdtym 6: ghtcc"                          // ╨г╤А╨╛╨▓╨╡╨╜╤М 6: ╨Я╤А╨╡╤Б╤Б
-#define HUSTR_7_RUS     "ehjdtym 7: cvthntkmyj ghjcnjq"             // ╨г╤А╨╛╨▓╨╡╨╜╤М 7: ╨б╨╝╨╡╤А╤В╨╡╨╗╤М╨╜╨╛ ╨┐╤А╨╛╤Б╤В╨╛╨╣
-#define HUSTR_8_RUS     "ehjdtym 8: ekjdrb b kjdeirb"               // ╨г╤А╨╛╨▓╨╡╨╜╤М 8: ╨г╨╗╨╛╨▓╨║╨╕ ╨╕ ╨╗╨╛╨▓╤Г╤И╨║╨╕
-#define HUSTR_9_RUS     "ehjdtym 9: zvf"                            // ╨г╤А╨╛╨▓╨╡╨╜╤М 9: ╨п╨╝╨░
-#define HUSTR_10_RUS    "ehjdtym 10: pfghfdjxyfz ,fpf"              // ╨г╤А╨╛╨▓╨╡╨╜╤М 10: ╨Ч╨░╨┐╤А╨░╨▓╨╛╤З╨╜╨░╤П ╨▒╨░╨╖╨░
-#define HUSTR_11_RUS    "ehjdtym 11: ^j^ hfpheitybz!"               // ╨г╤А╨╛╨▓╨╡╨╜╤М 11: "o" ╤А╨░╨╖╤А╤Г╤И╨╡╨╜╨╕╤П!
-#define HUSTR_12_RUS    "ehjdtym 12: af,hbrf"                       // ╨г╤А╨╛╨▓╨╡╨╜╤М 12: ╨д╨░╨▒╤А╨╕╨║╨░
-#define HUSTR_13_RUS    "ehjdtym 13: ltkjdjq hfqjy"                 // ╨г╤А╨╛╨▓╨╡╨╜╤М 13: ╨Ф╨╡╨╗╨╛╨▓╨╛╨╣ ╤А╨░╨╣╨╛╨╜
-#define HUSTR_14_RUS    "ehjdtym 14: uke,jxfqibt kjujdbof"          // ╨г╤А╨╛╨▓╨╡╨╜╤М 14: ╨У╨╗╤Г╨▒╨╛╤З╨░╨╣╤И╨╕╨╡ ╨╗╨╛╨│╨╛╨▓╨╕╤Й╨░
-#define HUSTR_15_RUS    "ehjdtym 15: ghjvsiktyyfz pjyf"             // ╨г╤А╨╛╨▓╨╡╨╜╤М 15: ╨Я╤А╨╛╨╝╤Л╤И╨╗╨╡╨╜╨╜╨░╤П ╨╖╨╛╨╜╨░
-#define HUSTR_16_RUS    "ehjdtym 16: ghbujhjl"                      // ╨г╤А╨╛╨▓╨╡╨╜╤М 16: ╨Я╤А╨╕╨│╨╛╤А╨╛╨┤ 
-#define HUSTR_17_RUS    "ehjdtym 17: dkfltybz"                      // ╨г╤А╨╛╨▓╨╡╨╜╤М 17: ╨Т╨╗╨░╨┤╨╡╨╜╨╕╤П 
-#define HUSTR_18_RUS    "ehjdtym 18: dyenhtyybq ldjh"               // ╨г╤А╨╛╨▓╨╡╨╜╤М 18: ╨Т╨╜╤Г╤В╤А╨╡╨╜╨╜╨╕╨╣ ╨┤╨▓╨╛╤А
-#define HUSTR_19_RUS    "ehjdtym 19: wbnfltkm"                      // ╨г╤А╨╛╨▓╨╡╨╜╤М 19: ╨ж╨╕╤В╨░╨┤╨╡╨╗╤М 
-#define HUSTR_20_RUS    "ehjdtym 20: gjgfkcz!"                      // ╨г╤А╨╛╨▓╨╡╨╜╤М 20: ╨Я╨╛╨┐╨░╨╗╤Б╤П!
-#define HUSTR_21_RUS    "ehjdtym 21: ybhdfyf"                       // ╨г╤А╨╛╨▓╨╡╨╜╤М 21: ╨Э╨╕╤А╨▓╨░╨╜╨░ 
-#define HUSTR_22_RUS    "ehjdtym 22: rfnfrjv,s"                     // ╨г╤А╨╛╨▓╨╡╨╜╤М 22: ╨Ъ╨░╤В╨░╨║╨╛╨╝╨▒╤Л 
-#define HUSTR_23_RUS    "ehjdtym 23: wtkst ,jxrb dtctkmz"           // ╨г╤А╨╛╨▓╨╡╨╜╤М 23: ╨ж╨╡╨╗╤Л╨╡ ╨▒╨╛╤З╨║╨╕ ╨▓╨╡╤Б╨╡╨╗╤М╤П
-#define HUSTR_24_RUS    "ehjdtym 24: ghjgfcnm"                      // ╨г╤А╨╛╨▓╨╡╨╜╤М 24: ╨Я╤А╨╛╨┐╨░╤Б╤В╤М 
-#define HUSTR_25_RUS    "ehjdtym 25: rhjdjgfls"                     // ╨г╤А╨╛╨▓╨╡╨╜╤М 25: ╨Ъ╤А╨╛╨▓╨╛╨┐╨░╨┤╤Л
-#define HUSTR_26_RUS    "ehjdtym 26: pf,hjityyst if[ns"             // ╨г╤А╨╛╨▓╨╡╨╜╤М 26: ╨Ч╨░╨▒╤А╨╛╤И╨╡╨╜╨╜╤Л╨╡ ╤И╨░╤Е╤В╤Л
-#define HUSTR_27_RUS    "ehjdtym 27: rjyljvbybev vjycnhjd"          // ╨г╤А╨╛╨▓╨╡╨╜╤М 27: ╨Ъ╨╛╨╜╨┤╨╛╨╝╨╕╨╜╨╕╤Г╨╝ ╨╝╨╛╨╜╤Б╤В╤А╨╛╨▓
-#define HUSTR_28_RUS    "ehjdtym 28: vbh le[jd"                     // ╨г╤А╨╛╨▓╨╡╨╜╤М 28: ╨Ь╨╕╤А ╨Ф╤Г╤Е╨╛╨▓
-#define HUSTR_29_RUS    "ehjdtym 29: rjytw dctuj ;bdjuj"            // ╨г╤А╨╛╨▓╨╡╨╜╤М 29: ╨Ъ╨╛╨╜╨╡╤Ж ╨▓╤Б╨╡╨│╨╛ ╨╢╨╕╨▓╨╛╨│╨╛
-#define HUSTR_30_RUS    "ehjdtym 30: brjyf uht[f"                   // ╨г╤А╨╛╨▓╨╡╨╜╤М 30: ╨Ш╨║╨╛╨╜╨░ ╨│╤А╨╡╤Е╨░
-#define HUSTR_31_RUS    "ehjdtym 31: djkmatyinfqy"                  // ╨г╤А╨╛╨▓╨╡╨╜╤М 31: ╨Т╨╛╨╗╤М╤Д╨╡╨╜╤И╤В╨░╨╣╨╜
-#define HUSTR_32_RUS    "ehjdtym 32: uhjcct"                        // ╨г╤А╨╛╨▓╨╡╨╜╤М 32: ╨У╤А╨╛╤Б╤Б╨╡
-
-
-//
-// Final DOOM: ╨н╨║╤Б╨┐╨╡╤А╨╕╨╝╨╡╨╜╤В "╨Я╨╗╤Г╤В╨╛╨╜╨╕╤П"
-//
-
-#define PHUSTR_1_RUS    "ehjdtym 1: rjyuj"                  // ╨г╤А╨╛╨▓╨╡╨╜╤М 1: ╨Ъ╨╛╨╜╨│╨╛
-#define PHUSTR_2_RUS    "ehjdtym 2: rjkjltw lei"            // ╨г╤А╨╛╨▓╨╡╨╜╤М 2: ╨Ъ╨╛╨╗╨╛╨┤╨╡╤Ж ╨┤╤Г╤И
-#define PHUSTR_3_RUS    "ehjdtym 3: fwntr"                  // ╨г╤А╨╛╨▓╨╡╨╜╤М 3: ╨Р╤Ж╤В╨╡╨║
-#define PHUSTR_4_RUS    "ehjdtym 4: pfgthnsq d rktnrt"      // ╨г╤А╨╛╨▓╨╡╨╜╤М 4: ╨Ч╨░╨┐╨╡╤А╤В╤Л╨╣ ╨▓ ╨║╨╗╨╡╤В╨║╨╡
-#define PHUSTR_5_RUS    "ehjdtym 5: ujhjl-ghbphfr"          // ╨г╤А╨╛╨▓╨╡╨╜╤М 5: ╨У╨╛╤А╨╛╨┤-╨┐╤А╨╕╨╖╤А╨░╨║
-#define PHUSTR_6_RUS    "ehjdtym 6: kjujdj ,fhjyf"          // ╨г╤А╨╛╨▓╨╡╨╜╤М 6: ╨Ы╨╛╨│╨╛╨▓╨╛ ╨С╨░╤А╨╛╨╜╨░
-#define PHUSTR_7_RUS    "ehjdtym 7: ldjh-kjdeirf"           // ╨г╤А╨╛╨▓╨╡╨╜╤М 7: ╨Ф╨▓╨╛╤А-╨╗╨╛╨▓╤Г╤И╨║╨░
-#define PHUSTR_8_RUS    "ehjdtym 8: wfhcndj"                // ╨г╤А╨╛╨▓╨╡╨╜╤М 8: ╨ж╨░╤А╤Б╤В╨▓╨╛
-#define PHUSTR_9_RUS    "ehjdtym 9: f,,fncndj"              // ╨г╤А╨╛╨▓╨╡╨╜╤М 9: ╨Р╨▒╨▒╨░╤В╤Б╤В╨▓╨╛
-#define PHUSTR_10_RUS   "ehjdtym 10: yfnbcr"                // ╨г╤А╨╛╨▓╨╡╨╜╤М 10: ╨Э╨░╤В╨╕╤Б╨║
-#define PHUSTR_11_RUS   "ehjdtym 11: ghtcktletvsq"          // ╨г╤А╨╛╨▓╨╡╨╜╤М 11: ╨Я╤А╨╡╤Б╨╗╨╡╨┤╤Г╨╡╨╝╤Л╨╣
-#define PHUSTR_12_RUS   "ehjdtym 12: crjhjcnm"              // ╨г╤А╨╛╨▓╨╡╨╜╤М 12: ╨б╨║╨╛╤А╨╛╤Б╤В╤М
-#define PHUSTR_13_RUS   "ehjdtym 13: crktg"                 // ╨г╤А╨╛╨▓╨╡╨╜╤М 13: ╨б╨║╨╗╨╡╨┐
-#define PHUSTR_14_RUS   "ehjdtym 14: pfhj;ltybt"            // ╨г╤А╨╛╨▓╨╡╨╜╤М 14: ╨Ч╨░╤А╨╛╨╢╨┤╨╡╨╜╨╕╨╡
-#define PHUSTR_15_RUS   "ehjdtym 15: cevthrb"               // ╨г╤А╨╛╨▓╨╡╨╜╤М 15: ╨б╤Г╨╝╨╡╤А╨║╨╕
-#define PHUSTR_16_RUS   "ehjdtym 16: ghtlpyfvtyjdfybt"      // ╨г╤А╨╛╨▓╨╡╨╜╤М 16: ╨Я╤А╨╡╨┤╨╖╨╜╨░╨╝╨╡╨╜╨╛╨▓╨░╨╜╨╕╨╡
-#define PHUSTR_17_RUS   "ehjdtym 17: rjvgfeyl"              // ╨г╤А╨╛╨▓╨╡╨╜╤М 17: ╨Ъ╨╛╨╝╨┐╨░╤Г╨╜╨┤
-#define PHUSTR_18_RUS   "ehjdtym 18: ytqhjcathf"            // ╨г╤А╨╛╨▓╨╡╨╜╤М 18: ╨Э╨╡╨╣╤А╨╛╤Б╤Д╨╡╤А╨░
-#define PHUSTR_19_RUS   "ehjdtym 19: d>h>f>u>"              // ╨г╤А╨╛╨▓╨╡╨╜╤М 19: ╨Т.╨а.╨Р.╨У.
-#define PHUSTR_20_RUS   "ehjdtym 20: j,bntkm cvthnb"        // ╨г╤А╨╛╨▓╨╡╨╜╤М 20: ╨Ю╨▒╨╕╤В╨╡╨╗╤М ╨б╨╝╨╡╤А╤В╨╕
-#define PHUSTR_21_RUS   "ehjdtym 21: e,bqwf"                // ╨г╤А╨╛╨▓╨╡╨╜╤М 21: ╨г╨▒╨╕╨╣╤Ж╨░
-#define PHUSTR_22_RUS   "ehjdtym 22: ytdsgjkybvjt pflfybt"  // ╨г╤А╨╛╨▓╨╡╨╜╤М 22: ╨Э╨╡╨▓╤Л╨┐╨╛╨╗╨╜╨╕╨╝╨╛╨╡ ╨╖╨░╨┤╨░╨╜╨╕╨╡
-#define PHUSTR_23_RUS   "ehjdtym 23: yfluhj,bt"             // ╨г╤А╨╛╨▓╨╡╨╜╤М 23: ╨Э╨░╨┤╨│╤А╨╛╨▒╨╕╨╡
-#define PHUSTR_24_RUS   "ehjdtym 24: gjcktlybq he,t;"       // ╨г╤А╨╛╨▓╨╡╨╜╤М 24: ╨Я╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╣ ╤А╤Г╨▒╨╡╨╢
-#define PHUSTR_25_RUS   "ehjdtym 25: [hfv nmvs"             // ╨г╤А╨╛╨▓╨╡╨╜╤М 25: ╨е╤А╨░╨╝ ╤В╤М╨╝╤Л
-#define PHUSTR_26_RUS   "ehjdtym 26: ,eyrth"                // ╨г╤А╨╛╨▓╨╡╨╜╤М 26: ╨С╤Г╨╜╨║╨╡╤А
-#define PHUSTR_27_RUS   "ehjdtym 27: fynb[hbcn"             // ╨г╤А╨╛╨▓╨╡╨╜╤М 27: ╨Р╨╜╤В╨╕╤Е╤А╨╕╤Б╤В
-#define PHUSTR_28_RUS   "ehjdtym 28: rfyfkbpfwbz"           // ╨г╤А╨╛╨▓╨╡╨╜╤М 28: ╨Ъ╨░╨╜╨░╨╗╨╕╨╖╨░╤Ж╨╕╤П
-#define PHUSTR_29_RUS   "ehjdtym 29: jlbcctz ievjd"         // ╨г╤А╨╛╨▓╨╡╨╜╤М 29: ╨Ю╨┤╨╕╤Б╤Б╨╡╤П ╤И╤Г╨╝╨╛╨▓
-#define PHUSTR_30_RUS   "ehjdtym 30: dhfnf flf"             // ╨г╤А╨╛╨▓╨╡╨╜╤М 30: ╨Т╤А╨░╤В╨░ ╨Р╨┤╨░
-#define PHUSTR_31_RUS   "ehjdtym 31: rb,thkjujdj"           // ╨г╤А╨╛╨▓╨╡╨╜╤М 31: ╨Ъ╨╕╨▒╨╡╤А╨╗╨╛╨│╨╛╨▓╨╛
-#define PHUSTR_32_RUS   "ehjdtym 32: blb r ctve"            // ╨г╤А╨╛╨▓╨╡╨╜╤М 32: ╨Ш╨┤╨╕ ╨║ ╤Б╨╡╨╝╤Г
+#define HUSTR_1_RUS     "ehjdtym 1: gfhflysq d[jl"                  // Уровень 1: Парадный вход
+#define HUSTR_2_RUS     "ehjdtym 2: gjlptvyst pfks"                 // Уровень 2: Подземные залы
+#define HUSTR_3_RUS     "ehjdtym 3: dspjd ,hjity"                   // Уровень 3: Вызов брошен
+#define HUSTR_4_RUS     "ehjdtym 4: chtljnjxbt"                     // Уровень 4: Средоточие
+#define HUSTR_5_RUS     "ehjdtym 5: cnjxyst neyytkb"                // Уровень 5: Сточные туннели
+#define HUSTR_6_RUS     "ehjdtym 6: ghtcc"                          // Уровень 6: Пресс
+#define HUSTR_7_RUS     "ehjdtym 7: cvthntkmyj ghjcnjq"             // Уровень 7: Смертельно простой
+#define HUSTR_8_RUS     "ehjdtym 8: ekjdrb b kjdeirb"               // Уровень 8: Уловки и ловушки
+#define HUSTR_9_RUS     "ehjdtym 9: zvf"                            // Уровень 9: Яма
+#define HUSTR_10_RUS    "ehjdtym 10: pfghfdjxyfz ,fpf"              // Уровень 10: Заправочная база
+#define HUSTR_11_RUS    "ehjdtym 11: ^j^ hfpheitybz!"               // Уровень 11: "o" разрушения!
+#define HUSTR_12_RUS    "ehjdtym 12: af,hbrf"                       // Уровень 12: Фабрика
+#define HUSTR_13_RUS    "ehjdtym 13: ltkjdjq hfqjy"                 // Уровень 13: Деловой район
+#define HUSTR_14_RUS    "ehjdtym 14: uke,jxfqibt kjujdbof"          // Уровень 14: Глубочайшие логовища
+#define HUSTR_15_RUS    "ehjdtym 15: ghjvsiktyyfz pjyf"             // Уровень 15: Промышленная зона
+#define HUSTR_16_RUS    "ehjdtym 16: ghbujhjl"                      // Уровень 16: Пригород 
+#define HUSTR_17_RUS    "ehjdtym 17: dkfltybz"                      // Уровень 17: Владения 
+#define HUSTR_18_RUS    "ehjdtym 18: dyenhtyybq ldjh"               // Уровень 18: Внутренний двор
+#define HUSTR_19_RUS    "ehjdtym 19: wbnfltkm"                      // Уровень 19: Цитадель 
+#define HUSTR_20_RUS    "ehjdtym 20: gjgfkcz!"                      // Уровень 20: Попался!
+#define HUSTR_21_RUS    "ehjdtym 21: ybhdfyf"                       // Уровень 21: Нирвана 
+#define HUSTR_22_RUS    "ehjdtym 22: rfnfrjv,s"                     // Уровень 22: Катакомбы 
+#define HUSTR_23_RUS    "ehjdtym 23: wtkst ,jxrb dtctkmz"           // Уровень 23: Целые бочки веселья
+#define HUSTR_24_RUS    "ehjdtym 24: ghjgfcnm"                      // Уровень 24: Пропасть 
+#define HUSTR_25_RUS    "ehjdtym 25: rhjdjgfls"                     // Уровень 25: Кровопады
+#define HUSTR_26_RUS    "ehjdtym 26: pf,hjityyst if[ns"             // Уровень 26: Заброшенные шахты
+#define HUSTR_27_RUS    "ehjdtym 27: rjyljvbybev vjycnhjd"          // Уровень 27: Кондоминиум монстров
+#define HUSTR_28_RUS    "ehjdtym 28: vbh le[jd"                     // Уровень 28: Мир Духов
+#define HUSTR_29_RUS    "ehjdtym 29: rjytw dctuj ;bdjuj"            // Уровень 29: Конец всего живого
+#define HUSTR_30_RUS    "ehjdtym 30: brjyf uht[f"                   // Уровень 30: Икона греха
+#define HUSTR_31_RUS    "ehjdtym 31: djkmatyinfqy"                  // Уровень 31: Вольфенштайн
+#define HUSTR_32_RUS    "ehjdtym 32: uhjcct"                        // Уровень 32: Гроссе
 
 
 //
-// Final DOOM: TNT - ╨Ф╤М╤П╨▓╨╛╨╗╤О╤Ж╨╕╤П
+// Final DOOM: Эксперимент "Плутония"
 //
 
-#define THUSTR_1_RUS    "ehjdtym 1: wtynh eghfdktybz cbcntvjq"      // ╨г╤А╨╛╨▓╨╡╨╜╤М 1: ╨ж╨╡╨╜╤В╤А ╤Г╨┐╤А╨░╨▓╨╗╨╡╨╜╨╕╤П ╤Б╨╕╤Б╤В╨╡╨╝╨╛╨╣
-#define THUSTR_2_RUS    "ehjdtym 2: ,fh,tr. bp xtkjdtxbys"          // ╨г╤А╨╛╨▓╨╡╨╜╤М 2: ╨С╨░╤А╨▒╨╡╨║╤О ╨╕╨╖ ╤З╨╡╨╗╨╛╨▓╨╡╤З╨╕╨╜╤Л
-#define THUSTR_3_RUS    "ehjdtym 3: wtynh eghfdktybz gbnfybtv"      // ╨г╤А╨╛╨▓╨╡╨╜╤М 3: ╨ж╨╡╨╜╤В╤А ╤Г╨┐╤А╨░╨▓╨╗╨╡╨╜╨╕╤П ╨┐╨╕╤В╨░╨╜╨╕╨╡╨╝
-#define THUSTR_4_RUS    "ehjdtym 4: lshf dj dhtvtyb"                // ╨г╤А╨╛╨▓╨╡╨╜╤М 4: ╨Ф╤Л╤А╨░ ╨▓╨╛ ╨▓╤А╨╡╨╝╨╡╨╜╨╕
-#define THUSTR_5_RUS    "ehjdtym 5: dbctkbwf"                       // ╨г╤А╨╛╨▓╨╡╨╜╤М 5: ╨Т╨╕╤Б╨╡╨╗╨╕╤Ж╨░
-#define THUSTR_6_RUS    "ehjdtym 6: jnrhsnsq ctpjy"                 // ╨г╤А╨╛╨▓╨╡╨╜╤М 6: ╨Ю╤В╨║╤А╤Л╤В╤Л╨╣ ╤Б╨╡╨╖╨╛╨╜
-#define THUSTR_7_RUS    "ehjdtym 7: n.hmvf"                         // ╨г╤А╨╛╨▓╨╡╨╜╤М 7: ╨в╤О╤А╤М╨╝╨░
-#define THUSTR_8_RUS    "ehjdtym 8: vtnfkk"                         // ╨г╤А╨╛╨▓╨╡╨╜╤М 8: ╨Ь╨╡╤В╨░╨╗╨╗
-#define THUSTR_9_RUS    "ehjdtym 9: rhtgjcnm"                       // ╨г╤А╨╛╨▓╨╡╨╜╤М 9: ╨Ъ╤А╨╡╨┐╨╛╤Б╤В╤М
-#define THUSTR_10_RUS   "ehjdtym 10: bcregktybt"                    // ╨г╤А╨╛╨▓╨╡╨╜╤М 10: ╨Ш╤Б╨║╤Г╨┐╨╗╨╡╨╜╨╕╨╡
-#define THUSTR_11_RUS   "ehjdtym 11: crkfl"                         // ╨г╤А╨╛╨▓╨╡╨╜╤М 11: ╨б╨║╨╗╨░╨┤
-#define THUSTR_12_RUS   "ehjdtym 12: rhfnth"                        // ╨г╤А╨╛╨▓╨╡╨╜╤М 12: ╨Ъ╤А╨░╤В╨╡╤А
-#define THUSTR_13_RUS   "ehjdtym 13: gththf,jnrf zlthys[ jn[jljd"   // ╨г╤А╨╛╨▓╨╡╨╜╤М 13: ╨Я╨╡╤А╨╡╤А╨░╨▒╨╛╤В╨║╨░ ╤П╨┤╨╡╤А╨╜╤Л╤Е ╨╛╤В╤Е╨╛╨┤╨╛╨▓
-#define THUSTR_14_RUS   "ehjdtym 14: cnfktkbntqysq pfdjl"           // ╨г╤А╨╛╨▓╨╡╨╜╤М 14: C╤В╨░╨╗╨╡╨╗╨╕╤В╨╡╨╣╨╜╤Л╨╣ ╨╖╨░╨▓╨╛╨┤
-#define THUSTR_15_RUS   "ehjdtym 15: vthndfz pjyf"                  // ╨г╤А╨╛╨▓╨╡╨╜╤М 15: ╨Ь╨╡╤А╤В╨▓╨░╤П ╨╖╨╛╨╜╨░
-#define THUSTR_16_RUS   "ehjdtym 16: uke,jxfqibt ljcnb;tybz"        // ╨г╤А╨╛╨▓╨╡╨╜╤М 16: ╨У╨╗╤Г╨▒╨╛╤З╨░╨╣╤И╨╕╨╡ ╨┤╨╛╤Б╤В╨╕╨╢╨╡╨╜╨╕╤П
-#define THUSTR_17_RUS   "ehjdtym 17: pjyf j,hf,jnrb"                // ╨г╤А╨╛╨▓╨╡╨╜╤М 17: ╨Ч╨╛╨╜╨░ ╨╛╨▒╤А╨░╨▒╨╛╤В╨║╨╕
-#define THUSTR_18_RUS   "ehjdtym 18: pfdjl"                         // ╨г╤А╨╛╨▓╨╡╨╜╤М 18: ╨Ч╨░╨▓╨╛╨┤
-#define THUSTR_19_RUS   "ehjdtym 19: gjuheprf*jnghfdrf"             // ╨г╤А╨╛╨▓╨╡╨╜╤М 19: ╨Я╨╛╨│╤А╤Г╨╖╨║╨░/╨╛╤В╨┐╤А╨░╨▓╨║╨░
-#define THUSTR_20_RUS   "ehjdtym 20: wtynhfkmysq geyrn j,hf,jnrb"   // ╨г╤А╨╛╨▓╨╡╨╜╤М 20: ╨ж╨╡╨╜╤В╤А╨░╨╗╤М╨╜╤Л╨╣ ╨┐╤Г╨╜╨║╤В ╨╛╨▒╤А╨░╨▒╨╛╤В╨║╨╕
-#define THUSTR_21_RUS   "ehjdtym 21: flvbybcnhfnbdysq wtynh"        // ╨г╤А╨╛╨▓╨╡╨╜╤М 21: ╨Р╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╕╨▓╨╜╤Л╨╣ ╤Ж╨╡╨╜╤В╤А
-#define THUSTR_22_RUS   "ehjdtym 22: j,bnfkbot"                     // ╨г╤А╨╛╨▓╨╡╨╜╤М 22: ╨Ю╨▒╨╕╤В╨░╨╗╨╕╤Й╨╡
-#define THUSTR_23_RUS   "ehjdtym 23: keyysq ujhysq ghjtrn"          // ╨г╤А╨╛╨▓╨╡╨╜╤М 23: ╨Ы╤Г╨╜╨╜╤Л╨╣ ╨│╨╛╤А╨╜╤Л╨╣ ╨┐╤А╨╛╨╡╨║╤В
-#define THUSTR_24_RUS   "ehjdtym 24: rfhmth"                        // ╨г╤А╨╛╨▓╨╡╨╜╤М 24: ╨Ъ╨░╤А╤М╨╡╤А
-#define THUSTR_25_RUS   "ehjdtym 25: kjujdj ,fhjyf"                 // ╨г╤А╨╛╨▓╨╡╨╜╤М 25: ╨Ы╨╛╨│╨╛╨▓╨╛ ╨С╨░╤А╨╛╨╜╨░
-#define THUSTR_26_RUS   "ehjdtym 26: ,fkkbcnbrc"                    // ╨г╤А╨╛╨▓╨╡╨╜╤М 26: ╨С╨░╨╗╨╗╨╕╤Б╤В╨╕╨║╤Б
-#define THUSTR_27_RUS   "ehjdtym 27: ujhf ,jkm"                     // ╨г╤А╨╛╨▓╨╡╨╜╤М 27: ╨У╨╛╤А╨░ ╨С╨╛╨╗╤М
-#define THUSTR_28_RUS   "ehjdtym 28: xthnjdobyf"                    // ╨г╤А╨╛╨▓╨╡╨╜╤М 28: ╨з╨╡╤А╤В╨╛╨▓╤Й╨╕╨╜╨░
-#define THUSTR_29_RUS   "ehjdtym 29: htrf cnbrc"                    // ╨г╤А╨╛╨▓╨╡╨╜╤М 29: ╨а╨╡╨║╨░ ╨б╤В╨╕╨║╤Б
-#define THUSTR_30_RUS   "ehjdtym 30: gjcktlybq dspjd"               // ╨г╤А╨╛╨▓╨╡╨╜╤М 30: ╨Я╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╣ ╨▓╤Л╨╖╨╛╨▓
-#define THUSTR_31_RUS   "ehjdtym 31: afhfjy"                        // ╨г╤А╨╛╨▓╨╡╨╜╤М 31: ╨д╨░╤А╨░╨╛╨╜
-#define THUSTR_32_RUS   "ehjdtym 32: rfhb,s"                        // ╨г╤А╨╛╨▓╨╡╨╜╤М 32: ╨Ъ╨░╤А╨╕╨▒╤Л
+#define PHUSTR_1_RUS    "ehjdtym 1: rjyuj"                  // Уровень 1: Конго
+#define PHUSTR_2_RUS    "ehjdtym 2: rjkjltw lei"            // Уровень 2: Колодец душ
+#define PHUSTR_3_RUS    "ehjdtym 3: fwntr"                  // Уровень 3: Ацтек
+#define PHUSTR_4_RUS    "ehjdtym 4: pfgthnsq d rktnrt"      // Уровень 4: Запертый в клетке
+#define PHUSTR_5_RUS    "ehjdtym 5: ujhjl-ghbphfr"          // Уровень 5: Город-призрак
+#define PHUSTR_6_RUS    "ehjdtym 6: kjujdj ,fhjyf"          // Уровень 6: Логово Барона
+#define PHUSTR_7_RUS    "ehjdtym 7: ldjh-kjdeirf"           // Уровень 7: Двор-ловушка
+#define PHUSTR_8_RUS    "ehjdtym 8: wfhcndj"                // Уровень 8: Царство
+#define PHUSTR_9_RUS    "ehjdtym 9: f,,fncndj"              // Уровень 9: Аббатство
+#define PHUSTR_10_RUS   "ehjdtym 10: yfnbcr"                // Уровень 10: Натиск
+#define PHUSTR_11_RUS   "ehjdtym 11: ghtcktletvsq"          // Уровень 11: Преследуемый
+#define PHUSTR_12_RUS   "ehjdtym 12: crjhjcnm"              // Уровень 12: Скорость
+#define PHUSTR_13_RUS   "ehjdtym 13: crktg"                 // Уровень 13: Склеп
+#define PHUSTR_14_RUS   "ehjdtym 14: pfhj;ltybt"            // Уровень 14: Зарождение
+#define PHUSTR_15_RUS   "ehjdtym 15: cevthrb"               // Уровень 15: Сумерки
+#define PHUSTR_16_RUS   "ehjdtym 16: ghtlpyfvtyjdfybt"      // Уровень 16: Предзнаменование
+#define PHUSTR_17_RUS   "ehjdtym 17: rjvgfeyl"              // Уровень 17: Компаунд
+#define PHUSTR_18_RUS   "ehjdtym 18: ytqhjcathf"            // Уровень 18: Нейросфера
+#define PHUSTR_19_RUS   "ehjdtym 19: d>h>f>u>"              // Уровень 19: В.Р.А.Г.
+#define PHUSTR_20_RUS   "ehjdtym 20: j,bntkm cvthnb"        // Уровень 20: Обитель Смерти
+#define PHUSTR_21_RUS   "ehjdtym 21: e,bqwf"                // Уровень 21: Убийца
+#define PHUSTR_22_RUS   "ehjdtym 22: ytdsgjkybvjt pflfybt"  // Уровень 22: Невыполнимое задание
+#define PHUSTR_23_RUS   "ehjdtym 23: yfluhj,bt"             // Уровень 23: Надгробие
+#define PHUSTR_24_RUS   "ehjdtym 24: gjcktlybq he,t;"       // Уровень 24: Последний рубеж
+#define PHUSTR_25_RUS   "ehjdtym 25: [hfv nmvs"             // Уровень 25: Храм тьмы
+#define PHUSTR_26_RUS   "ehjdtym 26: ,eyrth"                // Уровень 26: Бункер
+#define PHUSTR_27_RUS   "ehjdtym 27: fynb[hbcn"             // Уровень 27: Антихрист
+#define PHUSTR_28_RUS   "ehjdtym 28: rfyfkbpfwbz"           // Уровень 28: Канализация
+#define PHUSTR_29_RUS   "ehjdtym 29: jlbcctz ievjd"         // Уровень 29: Одиссея шумов
+#define PHUSTR_30_RUS   "ehjdtym 30: dhfnf flf"             // Уровень 30: Врата Ада
+#define PHUSTR_31_RUS   "ehjdtym 31: rb,thkjujdj"           // Уровень 31: Киберлогово
+#define PHUSTR_32_RUS   "ehjdtym 32: blb r ctve"            // Уровень 32: Иди к сему
 
 
 //
-// ╨Ь╨░╨║╤А╨╛╤Б╤Л ╨┤╨╗╤П ╤З╨░╤В╨░
+// Final DOOM: TNT - Дьяволюция
+//
+
+#define THUSTR_1_RUS    "ehjdtym 1: wtynh eghfdktybz cbcntvjq"      // Уровень 1: Центр управления системой
+#define THUSTR_2_RUS    "ehjdtym 2: ,fh,tr. bp xtkjdtxbys"          // Уровень 2: Барбекю из человечины
+#define THUSTR_3_RUS    "ehjdtym 3: wtynh eghfdktybz gbnfybtv"      // Уровень 3: Центр управления питанием
+#define THUSTR_4_RUS    "ehjdtym 4: lshf dj dhtvtyb"                // Уровень 4: Дыра во времени
+#define THUSTR_5_RUS    "ehjdtym 5: dbctkbwf"                       // Уровень 5: Виселица
+#define THUSTR_6_RUS    "ehjdtym 6: jnrhsnsq ctpjy"                 // Уровень 6: Открытый сезон
+#define THUSTR_7_RUS    "ehjdtym 7: n.hmvf"                         // Уровень 7: Тюрьма
+#define THUSTR_8_RUS    "ehjdtym 8: vtnfkk"                         // Уровень 8: Металл
+#define THUSTR_9_RUS    "ehjdtym 9: rhtgjcnm"                       // Уровень 9: Крепость
+#define THUSTR_10_RUS   "ehjdtym 10: bcregktybt"                    // Уровень 10: Искупление
+#define THUSTR_11_RUS   "ehjdtym 11: crkfl"                         // Уровень 11: Склад
+#define THUSTR_12_RUS   "ehjdtym 12: rhfnth"                        // Уровень 12: Кратер
+#define THUSTR_13_RUS   "ehjdtym 13: gththf,jnrf zlthys[ jn[jljd"   // Уровень 13: Переработка ядерных отходов
+#define THUSTR_14_RUS   "ehjdtym 14: cnfktkbntqysq pfdjl"           // Уровень 14: Cталелитейный завод
+#define THUSTR_15_RUS   "ehjdtym 15: vthndfz pjyf"                  // Уровень 15: Мертвая зона
+#define THUSTR_16_RUS   "ehjdtym 16: uke,jxfqibt ljcnb;tybz"        // Уровень 16: Глубочайшие достижения
+#define THUSTR_17_RUS   "ehjdtym 17: pjyf j,hf,jnrb"                // Уровень 17: Зона обработки
+#define THUSTR_18_RUS   "ehjdtym 18: pfdjl"                         // Уровень 18: Завод
+#define THUSTR_19_RUS   "ehjdtym 19: gjuheprf*jnghfdrf"             // Уровень 19: Погрузка/отправка
+#define THUSTR_20_RUS   "ehjdtym 20: wtynhfkmysq geyrn j,hf,jnrb"   // Уровень 20: Центральный пункт обработки
+#define THUSTR_21_RUS   "ehjdtym 21: flvbybcnhfnbdysq wtynh"        // Уровень 21: Административный центр
+#define THUSTR_22_RUS   "ehjdtym 22: j,bnfkbot"                     // Уровень 22: Обиталище
+#define THUSTR_23_RUS   "ehjdtym 23: keyysq ujhysq ghjtrn"          // Уровень 23: Лунный горный проект
+#define THUSTR_24_RUS   "ehjdtym 24: rfhmth"                        // Уровень 24: Карьер
+#define THUSTR_25_RUS   "ehjdtym 25: kjujdj ,fhjyf"                 // Уровень 25: Логово Барона
+#define THUSTR_26_RUS   "ehjdtym 26: ,fkkbcnbrc"                    // Уровень 26: Баллистикс
+#define THUSTR_27_RUS   "ehjdtym 27: ujhf ,jkm"                     // Уровень 27: Гора Боль
+#define THUSTR_28_RUS   "ehjdtym 28: xthnjdobyf"                    // Уровень 28: Чертовщина
+#define THUSTR_29_RUS   "ehjdtym 29: htrf cnbrc"                    // Уровень 29: Река Стикс
+#define THUSTR_30_RUS   "ehjdtym 30: gjcktlybq dspjd"               // Уровень 30: Последний вызов
+#define THUSTR_31_RUS   "ehjdtym 31: afhfjy"                        // Уровень 31: Фараон
+#define THUSTR_32_RUS   "ehjdtym 32: rfhb,s"                        // Уровень 32: Карибы
+
+
+//
+// Макросы для чата
 // 
 
-#define HUSTR_TALKTOSELF1_RUS   "ythfp,jhxbdjt ,jhvjnfybt>>>"   // ╨Э╨╡╤А╨░╨╖╨▒╨╛╤А╤З╨╕╨▓╨╛╨╡ ╨▒╨╛╤А╨╝╨╛╤В╨░╨╜╨╕╨╡...
-#define HUSTR_TALKTOSELF2_RUS   "rnj nfv?"                      // ╨Ъ╤В╨╛ ╤В╨░╨╝?
-#define HUSTR_TALKTOSELF3_RUS   "xnj 'nj ,skj?"                 // ╨з╤В╨╛ ╤Н╤В╨╛ ╨▒╤Л╨╗╨╛?
-#define HUSTR_TALKTOSELF4_RUS   "ds ,htlbnt>"                   // ╨Т╤Л ╨▒╤А╨╡╨┤╨╕╤В╨╡.
-#define HUSTR_TALKTOSELF5_RUS   "rfrfz ljcflf!"                 // ╨Ъ╨░╨║╨░╤П ╨┤╨╛╤Б╨░╨┤╨░!
+#define HUSTR_TALKTOSELF1_RUS   "ythfp,jhxbdjt ,jhvjnfybt>>>"   // Неразборчивое бормотание...
+#define HUSTR_TALKTOSELF2_RUS   "rnj nfv?"                      // Кто там?
+#define HUSTR_TALKTOSELF3_RUS   "xnj 'nj ,skj?"                 // Что это было?
+#define HUSTR_TALKTOSELF4_RUS   "ds ,htlbnt>"                   // Вы бредите.
+#define HUSTR_TALKTOSELF5_RUS   "rfrfz ljcflf!"                 // Какая досада!
 
 
 //
@@ -1373,20 +1373,20 @@ PRESSYN_RUS
 "ghjqlbnt 'gbpjl ^ghb,ht;mt flf^ b tuj\n"\
 "pfvtxfntkmysq cbrdtk ^byathyj^!\n"
 
-// ╨г╨╜╨╕╤З╤В╨╛╨╢╨╕╨▓ ╨С╨░╤А╨╛╨╜╨╛╨▓ ╨Р╨┤╨░ ╨╕ ╨╖╨░╤З╨╕╤Б╤В╨╕╨▓ ╨╗╤Г╨╜╨╜╤Г╤О
-// ╨▒╨░╨╖╤Г, ╨Т╤Л ╨┤╨╛╨╗╨╢╨╜╤Л ╨▒╤Л╨╗╨╕ ╨┐╨╛╨▒╨╡╨┤╨╕╤В╤М, ╨╜╨╡ ╤В╨░╨║ ╨╗╨╕?
-// ╨Э╨╡ ╤В╨░╨║ ╨╗╨╕? ╨У╨┤╨╡ ╨╖╨░╤Б╨╗╤Г╨╢╨╡╨╜╨╜╨░╤П ╨╜╨░╨│╤А╨░╨┤╨░ ╨╕
-// ╨▒╨╕╨╗╨╡╤В ╨┤╨╛╨╝╨╛╨╣? ╨з╤В╨╛ ╤Н╤В╨╛ ╨╖╨░ ╤З╨╡╤А╤В╨╛╨▓╤Й╨╕╨╜╨░?
-// ╨в╨░╨║ ╨╜╨╡ ╨┤╨╛╨╗╨╢╨╜╨╛ ╨▒╤Л╨╗╨╛ ╨▓╤Б╨╡ ╨╖╨░╨║╨╛╨╜╤З╨╕╤В╤М╤Б╤П!
+// Уничтожив Баронов Ада и зачистив лунную
+// базу, Вы должны были победить, не так ли?
+// Не так ли? Где заслуженная награда и
+// билет домой? Что это за чертовщина?
+// Так не должно было все закончиться!
 // 
-// ╨н╤В╨╛ ╨╝╨╡╤Б╤В╨╛ ╨┐╨░╤Е╨╜╨╡╤В ╨║╨░╨║ ╨│╨╜╨╕╨╗╨╛╨╡ ╨╝╤П╤Б╨╛, ╨╜╨╛
-// ╨▓╤Л╨│╨╗╤П╨┤╨╕╤В ╨║╨░╨║ ╨┐╨╛╤В╨╡╤А╤П╨╜╨╜╨░╤П ╨▒╨░╨╖╨░ ╨╜╨░ ╨Ф╨╡╨╣╨╝╨╛╤Б╨╡.
-// ╨Я╨╛╤Е╨╛╨╢╨╡, ╨▓╤Л ╨╖╨░╤Б╤В╤А╤П╨╗╨╕ ╨▓ "╨Я╤А╨╕╨▒╤А╨╡╨╢╤М╨╡ ╨Р╨┤╨░", ╨╕
-// ╨╡╨┤╨╕╨╜╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╣ ╨┐╤Г╤В╤М ╤В╨╡╨┐╨╡╤А╤М - ╨┐╤А╨╛╨╣╤В╨╕ ╨╡╨│╨╛.
+// Это место пахнет как гнилое мясо, но
+// выглядит как потерянная база на Деймосе.
+// Похоже, вы застряли в "Прибрежье Ада", и
+// единственный путь теперь - пройти его.
 //
-// ╨з╤В╨╛╨▒╤Л ╨┐╤А╨╛╨┤╨╛╨╗╨╢╨╕╤В╤М ╨┐╨╛╨│╤А╤Г╨╢╨╡╨╜╨╕╨╡ ╨▓ ╨╕╨│╤А╤Г,
-// ╨┐╤А╨╛╨╣╨┤╨╕╤В╨╡ ╤Н╨┐╨╕╨╖╨╛╨┤ ╨┐╤А╨╕╨▒╤А╨╡╨╢╤М╨╡ ╨░╨┤╨░ ╨╕ ╨╡╨│╨╛
-// ╨╖╨░╨╝╨╡╤З╨░╤В╨╡╨╗╤М╨╜╤Л╨╣ ╤Б╨╕╨║╨▓╨╡╨╗ "╨Ш╨╜╤Д╨╡╤А╨╜╨╛"!
+// Чтобы продолжить погружение в игру,
+// пройдите эпизод прибрежье ада и его
+// замечательный сиквел "Инферно"!
 
 #define E2TEXT_RUS \
 "e dfc gjkexbkjcm! e;fcysq kjhl-\n"\
@@ -1407,23 +1407,23 @@ PRESSYN_RUS
 "Ntgthm yfcnegftn dhtvz gjcktlytq ukfds\n"\
 "- ^byathyj^>"
 
-// ╨г ╨▓╨░╤Б ╨┐╨╛╨╗╤Г╤З╨╕╨╗╨╛╤Б╤М! ╨г╨╢╨░╤Б╨╜╤Л╨╣ ╨Ы╨╛╤А╨┤-
-// ╨Ъ╨╕╨▒╨╡╤А╨┤╨╡╨╝╨╛╨╜, ╨┐╤А╨░╨▓╤П╤Й╨╕╨╣ ╨┐╨╛╤В╨╡╤А╤П╨╜╨╜╨╛╨╣ 
-// ╨┤╨╡╨╣╨╝╨╛╤Б╨╛╨▓╤Б╨║╨╛╨╣ ╨▒╨░╨╖╨╛╨╣, ╨▒╤Л╨╗ ╨┐╨╛╨▓╨╡╤А╨╢╨╡╨╜ 
-// ╨╕ ╨▓╤Л ╤В╨╛╤А╨╢╨╡╤Б╤В╨▓╤Г╨╡╤В╨╡! ╨Э╨╛... ╨У╨┤╨╡ ╨▓╤Л? 
-// ╨Я╨╛╨┤╨╛╨▒╤А╨░╨▓╤И╨╕╤Б╤М ╨║ ╨║╤А╨░╤О ╤Б╨┐╤Г╤В╨╜╨╕╨║╨░, ╨▓╤Л
-// ╨╛╨▒╤А╨░╤Й╨░╨╡╤В╨╡ ╨▓╨╖╨╛╤А ╨▓╨╜╨╕╨╖, ╤З╤В╨╛╨▒╤Л  
-// ╤Г╨▓╨╕╨┤╨╡╤В╤М ╤Г╨╢╨░╤Б╨╜╤Г╤О ╨┐╤А╨░╨▓╨┤╤Г. 
+// У вас получилось! Ужасный Лорд-
+// Кибердемон, правящий потерянной 
+// деймосовской базой, был повержен 
+// и вы торжествуете! Но... Где вы? 
+// Подобравшись к краю спутника, вы
+// обращаете взор вниз, чтобы  
+// увидеть ужасную правду. 
 // 
-// ╨Ф╨╡╨╣╨╝╨╛╤Б ╨┐╨╗╤Л╨▓╤С╤В ╨╜╨░╨┤ ╤Б╨░╨╝╨╕╨╝ ╨Р╨┤╨╛╨╝! 
-// ╨Т╤Л ╨╜╨╕╨║╨╛╨│╨┤╨░ ╨╜╨╡ ╤Б╨╗╤Л╤И╨░╨╗╨╕, ╤З╤В╨╛╨▒╤Л ╨║╤В╨╛-╨╜╨╕╨▒╤Г╨┤╤М
-// ╤Б╨▒╨╡╨│╨░╨╗ ╨╕╨╖ ╨Р╨┤╨░, ╨╜╨╛ ╨▓╤Л ╨╖╨░╤Б╤В╨░╨▓╨╕╤В╨╡ ╤Г╨▒╨╗╤О╨┤╨║╨╛╨▓
-// ╨┐╨╛╨╢╨░╨╗╨╡╤В╤М ╨╛ ╤В╨╛╨╝, ╤З╤В╨╛ ╨╛╨╜╨╕ ╨┐╤А╨╛╤Б╨╗╤Л╤И╨░╨╗╨╕ ╨╛ ╨▓╨░╤Б.
-// ╨Я╨╛╤Б╨┐╨╡╤И╨╜╨╛ ╨╛╨▒╨▓╤П╨╖╨░╨▓╤И╨╕╤Б╤М ╨▓╨╡╤А╤С╨▓╨║╨╛╨╣, ╨Т╤Л 
-// ╤Б╨┐╤Г╤Б╨║╨░╨╡╤В╨╡╤Б╤М ╨╜╨░ ╨┐╨╛╨▓╨╡╤А╤Е╨╜╨╛╤Б╤В╤М ╨Р╨┤╨░.
+// Деймос плывёт над самим Адом! 
+// Вы никогда не слышали, чтобы кто-нибудь
+// сбегал из Ада, но вы заставите ублюдков
+// пожалеть о том, что они прослышали о вас.
+// Поспешно обвязавшись верёвкой, Вы 
+// спускаетесь на поверхность Ада.
 //
-// ╨в╨╡╨┐╨╡╤А╤М ╨╜╨░╤Б╤В╤Г╨┐╨░╨╡╤В ╨▓╤А╨╡╨╝╤П ╨┐╨╛╤Б╨╗╨╡╨┤╨╜╨╡╨╣ ╨│╨╗╨░╨▓╤Л 
-// - "╨Ш╨╜╤Д╨╡╤А╨╜╨╛". 
+// Теперь наступает время последней главы 
+// - "Инферно". 
 
 #define E3TEXT_RUS \
 "jvthpbntkmysq gferjltvjy<\n"\
@@ -1444,23 +1444,23 @@ PRESSYN_RUS
 "jlyj gjhj;ltybt flf yt cvjukj ghjqnb \n"\
 "xthtp 'ne ldthm dvtcnt c dfvb>>>"
 
-// ╨Ю╨╝╨╡╤А╨╖╨╕╤В╨╡╨╗╤М╨╜╤Л╨╣ ╨┐╨░╤Г╨║╨╛╨┤╨╡╨╝╨╛╨╜,
-// ╤А╤Г╨║╨╛╨▓╨╛╨┤╨╕╨▓╤И╨╕╨╣ ╨▓╤В╨╛╤А╨╢╨╡╨╜╨╕╨╡╨╝ ╨╜╨░ ╨╗╤Г╨╜╨╜╤Л╨╡
-// ╨▒╨░╨╖╤Л ╨╕ ╨┐╤А╨╕╨╜╨╡╤Б╤И╨╕╨╣ ╤Б╤В╨╛╨╗╤М ╨╝╨╜╨╛╨│╨╛
-// ╤Б╨╝╨╡╤А╤В╨╡╨╣, ╨▒╤Л╨╗ ╨╛╨║╨╛╨╜╤З╨░╤В╨╡╨╗╤М╨╜╨╛ ╨┐╨╛╨▓╨╡╤А╨╢╨╡╨╜.
+// Омерзительный паукодемон,
+// руководивший вторжением на лунные
+// базы и принесший столь много
+// смертей, был окончательно повержен.
 //
-// ╨Ю╤В╨║╤А╤Л╨▓╨░╨╡╤В╤Б╤П ╤Б╨╡╨║╤А╨╡╤В╨╜╨░╤П ╨┤╨▓╨╡╤А╤М ╨╕ ╨Т╤Л
-// ╨▓╤Е╨╛╨┤╨╕╤В╨╡ ╨▓ ╨╜╨╡╨╡. ╨Т╤Л ╨┤╨╛╨║╨░╨╖╨░╨╗╨╕, ╤З╤В╨╛
-// ╤Б╨╗╨╕╤И╨║╨╛╨╝ ╨║╤А╤Г╤В╤Л ╨┤╨╗╤П ╨░╨┤╨░, ╨╕ ╨┐╨╛╤Н╤В╨╛╨╝╤Г
-// ╨Р╨┤, ╨╜╨░╨║╨╛╨╜╨╡╤Ж, ╨┐╨╛╤Б╤В╤Г╨┐╨░╨╡╤В ╤Б╨┐╤А╨░╨▓╨╡╨┤╨╗╨╕╨▓╨╛ -
-// ╨Т╤Л ╨▓╤Л╤Е╨╛╨┤╨╕╤В╨╡ ╨╕╨╖ ╨┤╨▓╨╡╤А╨╕ ╨┐╤А╤П╨╝╨╛ ╨╜╨░
-// ╨╖╨╡╨╗╨╡╨╜╤Л╨╡ ╨┐╨╛╨╗╤П ╨Ч╨╡╨╝╨╗╨╕. ╨Э╨░╨║╨╛╨╜╨╡╤Ж-╤В╨╛ ╨┤╨╛╨╝.
+// Открывается секретная дверь и Вы
+// входите в нее. Вы доказали, что
+// слишком круты для ада, и поэтому
+// Ад, наконец, поступает справедливо -
+// Вы выходите из двери прямо на
+// зеленые поля Земли. Наконец-то дом.
 //
-// ╨Т╤Л ╤Б╨┐╤А╨░╤И╨╕╨▓╨░╨╡╤В╨╡ ╤Б╨╡╨▒╤П: ╤З╤В╨╛ ╨┐╤А╨╛╨╕╤Б╤Е╨╛╨┤╨╕╨╗╨╛
-// ╨╜╨░ ╨Ч╨╡╨╝╨╗╨╡, ╨┐╨╛╨║╨░ ╨▓╤Л ╤Б╤А╨░╨╢╨░╨╗╨╕╤Б╤М ╤Б
-// ╨▓╤Л╤Б╨▓╨╛╨▒╨╛╨┤╨╕╨▓╤И╨╕╨╝╤Б╤П ╨╖╨╗╨╛╨╝? ╨е╨╛╤А╨╛╤И╨╛, ╤З╤В╨╛ ╨╜╨╕
-// ╨╛╨┤╨╜╨╛ ╨┐╨╛╤А╨╛╨╢╨┤╨╡╨╜╨╕╨╡ ╨Р╨┤╨░ ╨╜╨╡ ╤Б╨╝╨╛╨│╨╗╨╛ ╨┐╤А╨╛╨╣╤В╨╕
-// ╤З╨╡╤А╨╡╨╖ ╤Н╤В╤Г ╨┤╨▓╨╡╤А╤М ╨▓╨╝╨╡╤Б╤В╨╡ ╤Б ╨Т╨░╨╝╨╕...
+// Вы спрашиваете себя: что происходило
+// на Земле, пока вы сражались с
+// высвободившимся злом? Хорошо, что ни
+// одно порождение Ада не смогло пройти
+// через эту дверь вместе с Вами...
 
 #define E4TEXT_RUS \
 "gfer-ghtldjlbntkm< ljk;yj ,snm< gjckfk\n"\
@@ -1481,23 +1481,23 @@ PRESSYN_RUS
 "\n"\
 "cktle.ofz jcnfyjdrf - fl yf ptvkt!"
 
-// ╨Я╨░╤Г╨║-╨┐╤А╨╡╨┤╨▓╨╛╨┤╨╕╤В╨╡╨╗╤М, ╨┤╨╛╨╗╨╢╨╜╨╛ ╨▒╤Л╤В╤М, ╨┐╨╛╤Б╨╗╨░╨╗ 
-// ╨▓╨┐╨╡╤А╤С╨┤ ╤Б╨▓╨╛╨╕ ╨╗╨╡╨│╨╕╨╛╨╜╤Л ╨┐╨╛╤А╨╛╨╢╨┤╨╡╨╜╨╕╨╣ ╨Р╨┤╨░ ╨┐╨╡╤А╨╡╨┤
-// ╨Т╨░╤И╨╕╨╝ ╨┐╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╝ ╤Б╤А╨░╨╢╨╡╨╜╨╕╨╡╨╝ ╤Б ╤Н╤В╨╕╨╝ 
-// ╤Г╨╢╨░╤Б╨╜╤Л╨╝ ╨╛╤В╤А╨╛╨┤╤М╨╡╨╝. ╨Э╨╛ ╨Т╤Л ╨┐╨╛╤И╨╗╨╕ ╨┤╨╛ ╨║╨╛╨╜╤Ж╨░ 
-// ╨╕ ╤Б╤А╨░╨╖╨╕╨╗╨╕ ╨▓╨╡╤З╨╜╤Л╨╝ ╨┐╤А╨╛╨║╨╗╤П╤В╤М╨╡╨╝ ╨╕ ╤Б╤В╤А╨░╨┤╨░╨╜╨╕╨╡╨╝ 
-// ╤Н╤В╤Г ╨╛╤А╨┤╤Г ╤В╨░╨║, ╨║╨░╨║ ╨┐╨╛╤Б╤В╤Г╨┐╨╕╨╗ ╨▒╤Л ╨╜╨░╤Б╤В╨╛╤П╤Й╨╕╨╣ 
-// ╨│╨╡╤А╨╛╨╣ ╨┐╨╡╤А╨╡╨┤ ╨╗╨╕╤Ж╨╛╨╝ ╤Б╨╝╨╡╤А╤В╨╡╨╗╤М╨╜╨╛╨╣ ╨╛╨┐╨░╤Б╨╜╨╛╤Б╨╜╨╛╤Б╤В╨╕.
+// Паук-предводитель, должно быть, послал 
+// вперёд свои легионы порождений Ада перед
+// Вашим последним сражением с этим 
+// ужасным отродьем. Но Вы пошли до конца 
+// и сразили вечным проклятьем и страданием 
+// эту орду так, как поступил бы настоящий 
+// герой перед лицом смертельной опасносности.
 //
-// ╨Ъ╤А╨╛╨╝╨╡ ╤В╨╛╨│╨╛, ╨║╤В╨╛-╤В╨╛ ╨┤╨╛╨╗╨╢╨╡╨╜ ╨▒╤Л╨╗ ╨╖╨░╨┐╨╗╨░╤В╨╕╤В╤М 
-// ╨╖╨░ ╤В╨╛, ╤З╤В╨╛ ╤Б╨╗╤Г╤З╨╕╨╗╨╛╤Б╤М ╤Б ╨Ф╤Н╨╣╨╖╨╕, ╨▓╨░╤И╨╡╨╣
-// ╨┤╨╛╨╝╨░╤И╨╜╨╡╨╣ ╨║╤А╨╛╨╗╤М╤З╨╕╤Е╨╛╨╣. 
+// Кроме того, кто-то должен был заплатить 
+// за то, что случилось с Дэйзи, вашей
+// домашней крольчихой. 
 // 
-// ╨в╨╡╨┐╨╡╤А╤М ╨Т╤Л ╨▓╨╕╨┤╨╕╤В╨╡, ╤Б╨║╨╛╨╗╤М ╨╝╨╜╨╛╨│╨╛ ╨▒╨╛╨╗╨╕ ╨╕
-// ╨║╤А╨╛╨▓╨╕ ╨Т╨░╨╝ ╨┐╤А╨╛╤А╨╛╤З╨░╤В ╨┐╨╛╨╗╤З╨╕╤Й╨░ ╨┤╨╡╨╝╨╛╨╜╨╛╨▓, 
-// ╨╜╨╡╨╕╤Б╤В╨▓╤Г╤О╤Й╨╕╤Е ╨▓ ╨╜╨░╤И╨╕╤Е ╨│╨╛╤А╨╛╨┤╨░╤Е.
+// Теперь Вы видите, сколь много боли и
+// крови Вам пророчат полчища демонов, 
+// неиствующих в наших городах.
 //
-// ╨б╨╗╨╡╨┤╤Г╤О╤Й╨░╤П ╨╛╤Б╤В╨░╨╜╨╛╨▓╨║╨░ - ╨Р╨┤ ╨╜╨░ ╨╖╨╡╨╝╨╗╨╡!
+// Следующая остановка - Ад на земле!
 
 #define E5TEXT_RUS \
 "gsnfzcm pfnjxbnm dfc d fl< ,fajvtn kbim\n" \
@@ -1511,18 +1511,18 @@ PRESSYN_RUS
 "jnhjlmtv ltvjybxtcrb[ cbk< gjckfyysv\n" \
 "yf ptvk.>\n\nybrjulf yt clfdfqntcm> hdbnt b vtxbnt!"
 
-// ╨Я╤Л╤В╨░╤П╤Б╤М ╨╖╨░╤В╨╛╤З╨╕╤В╤М ╨▓╨░╤Б ╨▓ ╨Р╨┤, ╨С╨░╤Д╨╛╨╝╨╡╤В ╨╗╨╕╤И╤М
-// ╨┐╨╛╨║╨╛╤А╨╜╨╛ ╨╕╤Б╨┐╨╛╨╗╨╜╤П╨╗ ╨▓╨╛╨╗╤О ╨б╨░╤В╨░╨╜╤Л, ╤Б╨▓╨╛╨╡╨│╨╛
-// ╨│╨╛╤Б╨┐╨╛╨┤╨╕╨╜╨░. ╨Ш ╨┐╨╛╨╗╨╜╤Л╨╝ ╨║╤А╨░╤Е╨╛╨╝ ╨╛╨▒╨╡╤А╨╜╤Г╨╗╨╕╤Б╤М
-// ╨╕╤Е ╨╖╨░╨╝╤Л╤Б╨╗╤Л ╨╖╨░ ╤Б╤В╨╛╨╗╤М ╤А╨╛╨║╨╛╨▓╤Г╤О ╨╛╤И╨╕╨▒╨║╤Г.
+// Пытаясь заточить вас в Ад, Бафомет лишь
+// покорно исполнял волю Сатаны, своего
+// господина. И полным крахом обернулись
+// их замыслы за столь роковую ошибку.
 //
-// ╨Ш╤Б╤В╤А╨╡╨▒╨╕╨▓ ╨┐╨╛╤А╨╛╨╢╨┤╨╡╨╜╨╕╤П ╨Р╨┤╨░ ╨▓ ╤З╨╡╤А╤В╨╛╨│╨░╤Е
-// ╨┐╤А╨╡╨╕╤Б╨┐╨╛╨┤╨╜╨╕╨╕, ╨▓╤Л ╨╕╤Б╨┐╨╛╨╗╨╜╨╡╨╜╤Л ╤А╨╡╤И╨╕╨╝╨╛╤Б╤В╤М╤О
-// ╤Б╤А╨░╨╖╨╕╤В╤М╤Б╤П ╤Б ╨▒╨╛╨╗╨╡╨╡ ╨╝╨╛╨│╤Г╤Й╨╡╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╝
-// ╨╛╤В╤А╨╛╨┤╤М╨╡╨╝ ╨┤╨╡╨╝╨╛╨╜╨╕╤З╨╡╤Б╨║╨╕╤Е ╤Б╨╕╨╗, ╨┐╨╛╤Б╨╗╨░╨╜╨╜╤Л╨╝
-// ╨╜╨░ ╨Ч╨╡╨╝╨╗╤О.
+// Истребив порождения Ада в чертогах
+// преисподнии, вы исполнены решимостью
+// сразиться с более могущественным
+// отродьем демонических сил, посланным
+// на Землю.
 //
-// ╨Э╨╕╨║╨╛╨│╨┤╨░ ╨╜╨╡ ╤Б╨┤╨░╨▓╨░╨╣╤В╨╡╤Б╤М. ╨а╨▓╨╕╤В╨╡ ╨╕ ╨╝╨╡╤З╨╕╤В╨╡!
+// Никогда не сдавайтесь. Рвите и мечите!
 
 // after level 6, put this:
 
@@ -1540,18 +1540,18 @@ PRESSYN_RUS
 "dsrk.xfntkm< lth;fobq yfctktybt ptvkb\n" \
 "d pfkj;ybrf[>"
 
-// ╨Т╤Л ╨┐╤А╨╛╤И╨╗╨╕ ╨▓╨│╨╗╤Г╨▒╤М ╨┐╨╛╤А╨░╨╢╤С╨╜╨╜╨╛╨│╨╛ ╨║╨╛╤Б╨╝╨╛╨┐╨╛╤А╤В╨░,
-// ╨╜╨╛ ╤З╤В╨╛-╤В╨╛ ╨╖╨┤╨╡╤Б╤М ╨╜╨╡╨┐╤А╨░╨▓╨╕╨╗╤М╨╜╨╛. ╨Ь╨╛╨╜╤Б╤В╤А╤Л
-// ╨┐╤А╨╕╨╜╨╡╤Б╨╗╨╕ ╤Б ╤Б╨╛╨▒╨╛╨╣ ╤Б╨╛╨▒╤Б╤В╨▓╨╡╨╜╨╜╤Г╤О ╤А╨╡╨░╨╗╤М╨╜╨╛╤Б╤В╤М,
-// ╨╕ ╤В╨╡╤Е╨╜╨╛╨╗╨╛╨│╨╕╤П ╨║╨╛╤Б╨╝╨╛╨┐╨╛╤А╤В╨░ 
-// ╤В╤А╨░╨╜╤Б╤Д╨╛╤А╨╝╨╕╤А╤Г╨╡╤В╤Б╤П ╨╛╤В ╨╕╤Е ╨┐╤А╨╕╤Б╤Г╤В╤Б╤В╨▓╨╕╤П.
+// Вы прошли вглубь поражённого космопорта,
+// но что-то здесь неправильно. Монстры
+// принесли с собой собственную реальность,
+// и технология космопорта 
+// трансформируется от их присутствия.
 //
-// ╨Т╨┐╨╡╤А╨╡╨┤╨╕ ╨Т╤Л ╨▓╨╕╨┤╨╕╤В╨╡ ╨░╨▓╨░╨╜╨┐╨╛╤Б╤В ╨Р╨┤╨░.
-// ╨Х╤Б╨╗╨╕ ╨Т╨░╨╝ ╤Г╨┤╨░╤Б╤В╤Б╤П ╨┐╤А╨╛╨▒╤А╨░╤В╤М╤Б╤П ╤З╨╡╤А╨╡╨╖ ╨╜╨╡╨│╨╛,
-// ╨Т╤Л ╤Б╨╝╨╛╨╢╨╡╤В╨╡ ╨┐╤А╨╛╨╜╨╕╨║╨╜╤Г╤В╤М ╨▓ ╨╜╨░╤Б╨╡╨╗╤С╨╜╨╜╤Л╨╣ 
-// ╨┤╨╡╨╝╨╛╨╜╨░╨╝╨╕ ╤Ж╨╡╨╜╤В╤А ╨▒╨░╨╖╤Л ╨╕ ╨╜╨░╨╣╤В╨╕ ╤Г╨┐╤А╨░╨▓╨╗╤П╤О╤Й╨╕╨╣ 
-// ╨▓╤Л╨║╨╗╤О╤З╨░╤В╨╡╨╗╤М, ╨┤╨╡╤А╨╢╨░╤Й╨╕╨╣ ╨╜╨░╤Б╨╡╨╗╨╡╨╜╨╕╨╡ ╨Ч╨╡╨╝╨╗╨╕ 
-// ╨▓ ╨╖╨░╨╗╨╛╨╢╨╜╨╕╨║╨░╤Е.
+// Впереди Вы видите аванпост Ада.
+// Если Вам удастся пробраться через него,
+// Вы сможете проникнуть в населённый 
+// демонами центр базы и найти управляющий 
+// выключатель, держащий население Земли 
+// в заложниках.
 
 // After level 11, put this:
 
@@ -1574,23 +1574,23 @@ PRESSYN_RUS
 "ytlfktrj jn rjcvjgjhnf> vtlktyyj b\n"\
 "vexbntkmyj ds djpdhfoftntcm d ,jq>\n"\
 
-// ╨Т╤Л ╨┐╨╛╨▒╨╡╨┤╨╕╨╗╨╕! ╨Т╨░╤И╨░ ╨┐╨╛╨▒╨╡╨┤╨░ ╨┐╨╛╨╖╨▓╨╛╨╗╨╕╨╗╨░ 
-// ╤З╨╡╨╗╨╛╨▓╨╡╤З╨╡╤Б╤В╨▓╤Г ╤Н╨▓╨░╨║╤Г╨╕╤А╨╛╨▓╨░╤В╤М╤Б╤П ╤Б ╨Ч╨╡╨╝╨╗╨╕
-// ╨╕ ╤Б╨┐╨░╤Б╤В╨╕╤Б╤М ╨╛╤В ╨║╨╛╤И╨╝╨░╤А╨░. ╨в╨╡╨┐╨╡╤А╤М ╨Т╤Л - 
-// ╨╡╨┤╨╕╨╜╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╣ ╤З╨╡╨╗╨╛╨▓╨╡╨║, ╨╛╤Б╤В╨░╨▓╤И╨╕╨╣╤Б╤П ╨╜╨░ 
-// ╨┐╨╗╨░╨╜╨╡╤В╨╡, ╨╕ ╨╗╤О╨┤╨╛╨╡╨┤╤Л-╨╝╤Г╤В╨░╨╜╤В╤Л, ╤Е╨╕╤Й╨╜╤Л╨╡ 
-// ╨╕╨╜╨╛╨┐╨╗╨░╨╜╨╡╤В╤П╨╜╨╡ ╨╕ ╨╖╨╗╤Л╨╡ ╨┤╤Г╤Е╨╕ - ╨Т╨░╤И╨╕
-// ╨╡╨┤╨╕╨╜╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╡ ╤Б╨╛╤Б╨╡╨┤╨╕. ╨г╨┤╨╛╨▓╨╗╨╡╤В╨▓╨╛╤А╤С╨╜╨╜╤Л╨╣ 
-// ╤Б╨┐╨░╤Б╨╡╨╜╨╕╨╡╨╝ ╤Б╨▓╨╛╨╡╨│╨╛ ╨▓╨╕╨┤╨░, ╨Т╤Л ╤Б╨┐╨╛╨║╨╛╨╣╨╜╨╛
-// ╨┤╨╛╨╢╨╕╨┤╨░╨╡╤В╨╡╤Б╤М ╨╜╨╡╨╝╨╕╨╜╤Г╨╡╨╝╨╛╨╣ ╨│╨╕╨▒╨╡╨╗╨╕.
+// Вы победили! Ваша победа позволила 
+// человечеству эвакуироваться с Земли
+// и спастись от кошмара. Теперь Вы - 
+// единственный человек, оставшийся на 
+// планете, и людоеды-мутанты, хищные 
+// инопланетяне и злые духи - Ваши
+// единственные соседи. Удовлетворённый 
+// спасением своего вида, Вы спокойно
+// дожидаетесь неминуемой гибели.
 //
-// ╨Э╨╛ ╨▓╤Б╨║╨╛╤А╨╡ ╤А╤Г╨║╨╛╨▓╨╛╨┤╤Б╤В╨▓╨╛ ╨Ч╨╡╨╝╨╗╨╕ ╨┐╨╡╤А╨╡╨┤╨░╤С╤В
-// ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡ ╤Б ╨╛╤А╨▒╨╕╤В╤Л: "╨б╨╡╨╜╤Б╨╛╤А╤Л ╨╛╨▒╨╜╨░╤А╤Г╨╢╨╕╨╗╨╕
-// ╨╕╤Б╤В╨╛╤З╨╜╨╕╨║ ╨╕╨╜╨╛╨┐╨╗╨░╨╜╨╡╤В╨╜╨╛╨│╨╛ ╨▓╤В╨╛╤А╨╢╨╡╨╜╨╕╤П. ╨Т╨░╤И╨░
-// ╨╖╨░╨┤╨░╤З╨░ - ╨╗╨╕╨║╨▓╨╕╨┤╨╕╤А╨╛╨▓╨░╤В╤М ╨╡╨│╨╛". ╨Ш╨╜╨╛╨┐╨╗╨░╨╜╨╡╤В╨╜╨░╤П 
-// ╨▒╨░╨╖╨░ ╨╜╨░╤Е╨╛╨┤╨╕╤В╤Б╤П ╨▓ ╤Ж╨╡╨╜╤В╤А╨╡ ╨Т╨░╤И╨╡╨│╨╛ ╨│╨╛╤А╨╛╨┤╨░, 
-// ╨╜╨╡╨┤╨░╨╗╨╡╨║╨╛ ╨╛╤В ╨║╨╛╤Б╨╝╨╛╨┐╨╛╤А╤В╨░. ╨Ь╨╡╨┤╨╗╨╡╨╜╨╜╨╛ ╨╕ 
-// ╨╝╤Г╤З╨╕╤В╨╡╨╗╤М╨╜╨╛ ╨▓╤Л ╨▓╨╛╨╖╤А╨▓╤А╨░╤Й╨░╨╡╤В╨╡╤Б╤М ╨▓ ╨▒╨╛╨╣.
+// Но вскоре руководство Земли передаёт
+// сообщение с орбиты: "Сенсоры обнаружили
+// источник инопланетного вторжения. Ваша
+// задача - ликвидировать его". Инопланетная 
+// база находится в центре Вашего города, 
+// недалеко от космопорта. Медленно и 
+// мучительно вы возрвращаетесь в бой.
 
 // After level 20, put this:
 
@@ -1606,16 +1606,16 @@ PRESSYN_RUS
 "njuj< xnj ghbltncz ghjqnb xthtp fl< xnj,s\n"\
 "lj,hfnmcz lj 'njuj gjhnfkf?"
 
-// ╨Т╤Л ╨╜╨░╤Е╨╛╨┤╨╕╤В╨╡╤Б╤М ╨▓ ╤А╨░╨╖╨╗╨░╨│╨░╤О╤Й╨╡╨╝╤Б╤П ╤Б╨╡╤А╨┤╤Ж╨╡
-// ╨│╨╛╤А╨╛╨┤╨░, ╨▓ ╨╛╨║╤А╤Г╨╢╨╡╨╜╨╕╨╕ ╤В╤А╤Г╨┐╨╛╨▓ ╤Б╨▓╨╛╨╕╤Е ╨▓╤А╨░╨│╨╛╨▓. 
-// ╨Т╤Л ╨╜╨╡ ╨▓╨╕╨┤╨╕╤В╨╡ ╨╜╨╕╨║╨░╨║╨╛╨│╨╛ ╤Б╨┐╨╛╤Б╨╛╨▒╨░ ╤Г╨╜╨╕╤З╤В╨╛╨╢╨╕╤В╤М
-// ╨┐╨╛╤А╤В╨░╨╗ ╨╜╨░ ╤Н╤В╨╛╨╣ ╤Б╤В╨╛╤А╨╛╨╜╨╡, ╨╕ ╨┐╨╛╤Н╤В╨╛╨╝╤Г, ╤Б╤В╨╕╤Б╨╜╤Г╨▓ 
-// ╨╖╤Г╨▒╤Л, ╨┐╤А╨╛╤Е╨╛╨┤╨╕╤В╨╡ ╤Б╨║╨▓╨╛╨╖╤М ╨╜╨╡╨│╨╛. 
+// Вы находитесь в разлагающемся сердце
+// города, в окружении трупов своих врагов. 
+// Вы не видите никакого способа уничтожить
+// портал на этой стороне, и поэтому, стиснув 
+// зубы, проходите сквозь него. 
 
-// ╨Ф╨╛╨╗╨╢╨╡╨╜ ╨▒╤Л╤В╤М ╤Б╨┐╨╛╤Б╨╛╨▒ ╨╖╨░╨║╤А╤Л╤В╤М ╨┐╨╛╤А╤В╨░╨╗ 
-// ╨╜╨░ ╨┤╤А╤Г╨│╨╛╨╣ ╤Б╤В╨╛╤А╨╛╨╜╨╡. ╨Ш ╨║╨░╨║╨╛╨╡ ╨Т╨░╨╝ ╨┤╨╡╨╗╨╛ ╨┤╨╛
-// ╤В╨╛╨│╨╛, ╤З╤В╨╛ ╨┐╤А╨╕╨┤╤С╤В╤Б╤П ╨┐╤А╨╛╨╣╤В╨╕ ╤З╨╡╤А╨╡╨╖ ╨Р╨┤, ╤З╤В╨╛╨▒╤Л
-// ╨┤╨╛╨▒╤А╨░╤В╤М╤Б╤П ╨┤╨╛ ╤Н╤В╨╛╨│╨╛ ╨┐╨╛╤А╤В╨░╨╗╨░?
+// Должен быть способ закрыть портал 
+// на другой стороне. И какое Вам дело до
+// того, что придётся пройти через Ад, чтобы
+// добраться до этого портала?
 
 // After level 29, put this:
 
@@ -1637,22 +1637,22 @@ PRESSYN_RUS
 "ljk;yj ,snm ujhfplj ,jktt bynthtcysv\n"\
 "pfyznbtv< yt;tkb tt hfpheitybt>"
 
-// ╨Ц╤Г╤В╤З╨░╨╣╤И╨╕╨╣ ╨╗╨╕╨║ ╤Б╨░╨╝╨╛╨│╨╛ ╨▒╨╛╨╗╤М╤И╨╛╨│╨╛ ╨┤╨╡╨╝╨╛╨╜╨░,
-// ╨║╨╛╤В╨╛╤А╨╛╨│╨╛ ╨Т╤Л ╨║╨╛╨│╨┤╨░-╨╗╨╕╨▒╨╛ ╨▓╨╕╨┤╨╡╨╗╨╕, ╤А╤Г╤И╨╕╤В╤Б╤П
-// ╨╜╨░ ╨Т╨░╤И╨╕╤Е ╨│╨╗╨░╨╖╨░╤Е ╨┐╨╛╤Б╨╗╨╡ ╤В╨╛╨│╨╛, ╨║╨░╨║ ╨Т╤Л 
-// ╨╜╨░╨║╨░╤З╨░╨╗╨╕ ╤А╨░╨║╨╡╤В╨░╨╝╨╕ ╨╡╨│╨╛ ╨╜╨╡╨╖╨░╤Й╨╕╤Й╨╡╨╜╨╜╤Л╨╣
-// ╨╝╨╛╨╖╨│. ╨Ь╨╛╨╜╤Б╤В╤А ╤Г╨│╨░╤Б╨░╨╡╤В ╨╕ ╨│╨╕╨▒╨╜╨╡╤В, 
-// ╤А╨░╨╖╤А╤Г╤И╨░╤П ╨▒╨╡╤Б╤З╨╕╤Б╨╗╨╡╨╜╨╜╤Л╨╡ ╨╝╨╕╨╗╨╕ ╨┐╨╛╨▓╨╡╤А╤Е╨╜╨╛╤Б╤В╨╕ 
-// ╨Р╨┤╨░.
+// Жутчайший лик самого большого демона,
+// которого Вы когда-либо видели, рушится
+// на Ваших глазах после того, как Вы 
+// накачали ракетами его незащищенный
+// мозг. Монстр угасает и гибнет, 
+// разрушая бесчисленные мили поверхности 
+// Ада.
 //
-// ╨Т╤Л ╤Б╨┤╨╡╨╗╨░╨╗╨╕ ╤Н╤В╨╛. ╨Т╤В╨╛╤А╨╢╨╡╨╜╨╕╤О ╨║╨╛╨╜╨╡╤Ж. ╨Ч╨╡╨╝╨╗╤П 
-// ╤Б╨┐╨░╤Б╨╡╨╜╨░. ╨Р╨┤ ╨┐╨╛╨▓╨╡╤А╨╢╨╡╨╜. ╨Т╤Л ╤Б╨┐╤А╨░╤И╨╕╨▓╨░╨╡╤В╨╡ 
-// ╤Б╨╡╨▒╤П: ╨║╤Г╨┤╨░ ╤В╨╡╨┐╨╡╤А╤М ╨┐╨╛╤Б╨╗╨╡ ╤Б╨╝╨╡╤А╤В╨╕ ╨▒╤Г╨┤╤Г╤В
-// ╨┐╨╛╨┐╨░╨┤╨░╤В╤М ╨┐╨╗╨╛╤Е╨╕╨╡ ╨╗╤О╨┤╨╕? ╨г╤В╨╡╤А╨╡╨▓ ╨┐╨╛╤В 
-// ╤Б╨╛ ╨╗╨▒╨░, ╨Т╤Л ╨╜╨░╤З╨╕╨╜╨░╨╡╤В╨╡ ╨┤╨╛╨╗╨│╨╛╨╡ ╨┐╤Г╤В╨╡╤И╨╡╤Б╤В╨▓╨╕╨╡
-// ╨╛╨▒╤А╨░╤В╨╜╨╛ ╨┤╨╛╨╝╨╛╨╣. ╨Т╨╛╤Б╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╡ ╨Ч╨╡╨╝╨╗╨╕ 
-// ╨┤╨╛╨╗╨╢╨╜╨╛ ╨▒╤Л╤В╤М ╨│╨╛╤А╨░╨╖╨┤╨╛ ╨▒╨╛╨╗╨╡╨╡ ╨╕╨╜╤В╨╡╤А╨╡╤Б╨╜╤Л╨╝
-// ╨╖╨░╨╜╤П╤В╨╕╨╡╨╝, ╨╜╨╡╨╢╨╡╨╗╨╕ ╨╡╤С ╤А╨░╨╖╤А╤Г╤И╨╡╨╜╨╕╨╡. 
+// Вы сделали это. Вторжению конец. Земля 
+// спасена. Ад повержен. Вы спрашиваете 
+// себя: куда теперь после смерти будут
+// попадать плохие люди? Утерев пот 
+// со лба, Вы начинаете долгое путешествие
+// обратно домой. Восстановление Земли 
+// должно быть гораздо более интересным
+// занятием, нежели её разрушение. 
 
 // Before level 31, put this:
 
@@ -1662,10 +1662,10 @@ PRESSYN_RUS
 "ltvjyfvb> k.,jgsnyj< rnj ;t yfctkztn\n"\
 "'njn eujkjr flf?\n"\
 
-// ╨Я╨╛╨╖╨┤╤А╨░╨▓╨╗╤П╨╡╨╝, ╨▓╤Л ╨╜╨░╤И╨╗╨╕ ╤Б╨╡╨║╤А╨╡╤В╨╜╤Л╨╣ ╤Г╤А╨╛╨▓╨╡╨╜╤М! 
-// ╨Я╨╛╤Е╨╛╨╢╨╡, ╨╛╨╜ ╨▒╤Л╨╗ ╨┐╨╛╤Б╤В╤А╨╛╨╡╨╜ ╨╗╤О╨┤╤М╨╝╨╕, 
-// ╨░ ╨╜╨╡ ╨┤╨╡╨╝╨╛╨╜╨░╨╝╨╕. ╨Ы╤О╨▒╨╛╨┐╤Л╤В╨╜╨╛, ╨║╤В╨╛ ╨╢╨╡ ╨╜╨░╤Б╨╡╨╗╤П╨╡╤В
-// ╤Н╤В╨╛╤В ╤Г╨│╨╛╨╗╨╛╨║ ╨Р╨┤╨░?
+// Поздравляем, вы нашли секретный уровень! 
+// Похоже, он был построен людьми, 
+// а не демонами. Любопытно, кто же населяет
+// этот уголок Ада?
 
 // Before level 32, put this:
 
@@ -1674,9 +1674,9 @@ PRESSYN_RUS
 "ehjdtym! kexit ,s dfv cnhtvbntkmyj\n"\
 "ghjhdfnmcz crdjpm ytuj!"
 
-// ╨Я╨╛╨╖╨┤╤А╨░╨▓╨╗╤П╨╡╨╝, ╨▓╤Л ╨╜╨░╤И╨╗╨╕ ╤Б╨▓╨╡╤А╤Е╤Б╨╡╨║╤А╨╡╤В╨╜╤Л╨╣ 
-// ╤Г╤А╨╛╨▓╨╡╨╜╤М! ╨Ы╤Г╤З╤И╨╡ ╨▒╤Л ╨▓╨░╨╝ ╤Б╤В╤А╨╡╨╝╨╕╤В╨╡╨╗╤М╨╜╨╛
-// ╨┐╤А╨╛╤А╨▓╨░╤В╤М╤Б╤П ╤Б╨║╨▓╨╛╨╖╤М ╨╜╨╡╨│╨╛!
+// Поздравляем, вы нашли сверхсекретный 
+// уровень! Лучше бы вам стремительно
+// прорваться сквозь него!
 
 // after map 06	
 
@@ -1695,19 +1695,19 @@ PRESSYN_RUS
 "chf;fnmcz< ghjljk;fqnt e,bdfnm>\n"\
 "b lf< ghjljk;fqnt ds;bdfnm>"
 
-// ╨Т╤Л ╤Б╨╛ ╨╖╨╗╨╛╤А╨░╨┤╤Б╤В╨▓╨╛╨╝ ╤Б╨╝╨╛╤В╤А╨╕╤В╨╡ ╨╜╨░ ╨│╨╛╤А╤П╤Й╨╕╨╣ 
-// ╨║╨░╤А╨║╨░╤Б ╨б╤В╤А╨░╨╢╨░. ╨б ╨╡╨│╨╛ ╤Б╨╝╨╡╤А╤В╤М╤О ╨▓╤Л ╨▓╤Л╤А╨▓╨░╨╗╨╕
-// ╨г╤Б╨║╨╛╤А╨╕╤В╨╡╨╗╤М ╨╕╨╖ ╨╖╨╗╨╛╨▓╨╛╨╜╨╜╤Л╤Е ╨║╨╛╨│╤В╨╡╨╣ ╨Р╨┤╨░.
-// ╨а╨░╤Б╤Б╨╗╨░╨▒╨╕╨▓╤И╨╕╤Б╤М, ╨Т╤Л ╨╛╨║╨╕╨┤╤Л╨▓╨░╨╡╤В╨╡ ╨▓╨╖╨│╨╗╤П╨┤╨╛╨╝
-// ╨┐╨╛╨╝╨╡╤Й╨╡╨╜╨╕╨╡. ╨Я╤А╨╛╨║╨╗╤П╤В╤М╨╡! ╨в╤Г╤В ╨┤╨╛╨╗╨╢╨╡╨╜ ╨▒╤Л╤В╤М
-// ╤Е╨╛╤В╤П ╨▒╤Л ╨╛╨┤╨╕╨╜ ╤А╨░╨▒╨╛╤З╨╕╨╣ ╨┐╤А╨╛╤В╨╛╤В╨╕╨┐, ╨╜╨╛ 
-// ╨┤╨╡╨╝╨╛╨╜╤Л, ╨┤╨╛╨╗╨╢╨╜╨╛ ╨▒╤Л╤В╤М, ╨╖╨░╨▒╤А╨░╨╗╨╕ ╨╡╨│╨╛ ╤Б ╤Б╨╛╨▒╨╛╨╣.
+// Вы со злорадством смотрите на горящий 
+// каркас Стража. С его смертью вы вырвали
+// Ускоритель из зловонных когтей Ада.
+// Расслабившись, Вы окидываете взглядом
+// помещение. Проклятье! Тут должен быть
+// хотя бы один рабочий прототип, но 
+// демоны, должно быть, забрали его с собой.
 //
-// ╨Т╤Л ╨┤╨╛╨╗╨╢╨╜╤Л ╨╜╨░╨╣╤В╨╕ ╨┐╤А╨╛╤В╨╛╤В╨╕╨┐, ╨╕╨╜╨░╤З╨╡ ╨▓╤Б╨╡ ╨Т╨░╤И╨╕
-// ╨┐╤А╨╛╤И╨╗╤Л╨╡ ╤Г╤Б╨╕╨╗╨╕╤П ╨╛╨║╨░╨╢╤Г╤В╤Б╤П ╨╜╨░╨┐╤А╨░╤Б╨╜╤Л╨╝╨╕.
-// ╨Я╤А╨╛╨┤╨╛╨╗╨╢╨░╨╣╤В╨╡ ╨┤╨▓╨╕╨│╨░╤В╤М╤Б╤П, ╨┐╤А╨╛╨┤╨╛╨╗╨╢╨░╨╣╤В╨╡
-// ╤Б╤А╨░╨╢╨░╤В╤М╤Б╤П, ╨┐╤А╨╛╨┤╨╛╨╗╨╢╨░╨╣╤В╨╡ ╤Г╨▒╨╕╨▓╨░╤В╤М. ╨Ш ╨┤╨░,
-// ╨┐╤А╨╛╨┤╨╛╨╗╨╢╨░╨╣╤В╨╡ ╨▓╤Л╨╢╨╕╨▓╨░╤В╤М.
+// Вы должны найти прототип, иначе все Ваши
+// прошлые усилия окажутся напрасными.
+// Продолжайте двигаться, продолжайте
+// сражаться, продолжайте убивать. И да,
+// продолжайте выживать.
 
 // after map 11
 
@@ -1719,12 +1719,12 @@ PRESSYN_RUS
 "\n"\
 "eybxnj;tybt - dfif cgtwbfkmyjcnm>"
 
-// ╨Ф╨░╨╢╨╡ ╤Б╨╝╨╡╤А╤В╨╡╨╗╤М╨╜╤Л╨╣ ╨╗╨░╨▒╨╕╤А╨╕╨╜╤В ╨░╤А╤З╨▓╨░╨╣╨╗╨╛╨▓ ╨╜╨╡
-// ╤Б╨╝╨╛╨│ ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╤М ╨Т╨░╤Б. ╨Т╤Л ╨┤╨╛╨▒╤А╨░╨╗╨╕╤Б╤М ╨┤╨╛
-// ╨┐╤А╨╛╤В╨╛╤В╨╕╨┐╨░ ╨г╤Б╨║╨╛╤А╨╕╤В╨╡╨╗╤П, ╨║╨╛╤В╨╛╤А╤Л╨╣ ╨▓╤Б╨║╨╛╤А╨╡
-// ╨▒╤Л╨╗ ╤Г╨╜╨╕╤З╤В╨╛╨╢╨╡╨╜ ╤А╨░╨╖ ╨╕ ╨╜╨░╨▓╤Б╨╡╨│╨┤╨░.
+// Даже смертельный лабиринт арчвайлов не
+// смог остановить Вас. Вы добрались до
+// прототипа Ускорителя, который вскоре
+// был уничтожен раз и навсегда.
 //
-// ╨г╨╜╨╕╤З╤В╨╛╨╢╨╡╨╜╨╕╨╡ - ╨Т╨░╤И╨░ ╤Б╨┐╨╡╤Ж╨╕╨░╨╗╤М╨╜╨╛╤Б╤В╤М.
+// Уничтожение - Ваша специальность.
 
 // after map 20
 
@@ -1743,19 +1743,19 @@ PRESSYN_RUS
 "e,k.lre ytvyjuj flf dfituj\n"\
 "cj,cndtyyjuj bpujnjdktybz!"
 
-// ╨Т╤Л ╨┐╤А╨╛╨▒╨╕╨╗╨╕ ╨╕ ╨┐╤А╨╛╨║╨╛╨╗╨╛╤В╨╕╨╗╨╕ ╤Б╨▓╨╛╨╣ ╨┐╤Г╤В╤М ╨▓
-// ╤Б╨╡╤А╨┤╤Ж╨╡ ╨┤╤М╤П╨▓╨╛╨╗╤М╤Б╨║╨╛╨│╨╛ ╤Г╨╗╤М╤П. ╨Э╨░╤Б╤В╨░╨╗╨╛ ╨▓╤А╨╡╨╝╤П 
-// ╨┤╨╗╤П ╨╝╨╕╤Б╤Б╨╕╨╕ "╨╜╨░╨╣╤В╨╕ ╨╕ ╤Г╨╜╨╕╤З╤В╨╛╨╢╨╕╤В╤М", 
-// ╨╛╨▒╤К╨╡╨║╤В╨╛╨╝ ╨║╨╛╤В╨╛╤А╨╛╨╣ ╤Б╤В╨░╨╜╨╡╤В ╨Я╤А╨╕╨▓╤А╨░╤В╨╜╨╕╨║, 
-// ╤З╤М╨╕ ╨╜╨╡╤З╨╕╤Б╤В╨╕╨▓╤Л╨╡ ╨╛╤В╨┐╤А╤Л╤Б╨║╨╕ ╨╜╨╕╨╖╨▓╨╡╤А╨│╨░╤О╤В╤Б╤П 
-// ╨╜╨░ ╨Ч╨╡╨╝╨╗╤О. 
+// Вы пробили и проколотили свой путь в
+// сердце дьявольского улья. Настало время 
+// для миссии "найти и уничтожить", 
+// объектом которой станет Привратник, 
+// чьи нечистивые отпрыски низвергаются 
+// на Землю. 
 //
-// ╨Ф╨░, ╨╛╨╜ ╨┐╨╗╨╛╤Е╨╛╨╣. ╨Э╨╛ ╨Т╤Л ╨╖╨╜╨░╨╡╤В╨╡ ╨║╤В╨╛ ╨╡╤Й╤С ╤Е╤Г╨╢╨╡!
+// Да, он плохой. Но Вы знаете кто ещё хуже!
 //
-// ╨Ч╨╗╨╛╨▒╨╜╨╛ ╤Г╤Е╨╝╤Л╨╗╤П╤П╤Б╤М, ╨Т╤Л ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В╨╡ ╤Б╨▓╨╛╤С 
-// ╤Б╨╜╨░╤А╤П╨╢╨╡╨╜╨╕╨╡, ╨╕ ╨│╨╛╤В╨╛╨▓╨╕╤В╨╡╤Б╤М ╨┐╤А╨╡╨┐╨╛╨┤╨░╤В╤М 
-// ╤Г╨▒╨╗╤О╨┤╨║╤Г ╨╜╨╡╨╝╨╜╨╛╨│╨╛ ╨Р╨┤╨░ ╨Т╨░╤И╨╡╨│╨╛ 
-// ╤Б╨╛╨▒╤Б╤В╨▓╨╡╨╜╨╜╨╛╨│╨╛ ╨╕╨╖╨│╨╛╤В╨╛╨▓╨╗╨╡╨╜╨╕╤П!
+// Злобно ухмыляясь, Вы проверяете своё 
+// снаряжение, и готовитесь преподать 
+// ублюдку немного Ада Вашего 
+// собственного изготовления!
 
 // after map 30
 
@@ -1775,20 +1775,20 @@ PRESSYN_RUS
 "ds gjgfltnt d fl< jyf gjyflj,bncz\n"\
 "lkz yt,jkmijq gjcktlytq pfxbcnrb>>>"
 
-// ╨Я╨╛╤Б╨╗╨╡ ╤Г╨╜╨╕╤З╤В╨╛╨╢╨╡╨╜╨╕╤П ╨╗╨╕╨║╨░ ╨Я╤А╨╕╨▓╤А╨░╤В╨╜╨╕╨║╨░
-// ╨╜╨░╤З╨╕╨╜╨░╤О╤В ╤Д╨╛╤А╨╝╨╕╤А╨╛╨▓╨░╤В╤М╤Б╤П ╨╕╨╜╨▓╨╡╤А╤В╨╕╤А╨╛╨▓╨░╨╜╨╜╤Л╨╡ 
-// ╨Т╤А╨░╤В╨░, ╨║╨╛╤В╨╛╤А╤Л╨╡ ╨╖╨░╤В╤П╨│╨╕╨▓╨░╤О╤В ╨▓ ╤Б╨╡╨▒╤П 
-// ╨┐╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╡ ╨╛╨▒╨╗╨╛╨╝╨║╨╕ ╨г╤Б╨║╨╛╤А╨╕╤В╨╡╨╗╤П ╨╕ 
-// ╨╜╨╡╤Б╨║╨╛╨╗╤М╨║╨╕╤Е ╨╛╤Б╤В╨░╨▓╤И╨╕╤Е╤Б╤П ╨┤╨╡╨╝╨╛╨╜╨╛╨▓.
+// После уничтожения лика Привратника
+// начинают формироваться инвертированные 
+// Врата, которые затягивают в себя 
+// последние обломки Ускорителя и 
+// нескольких оставшихся демонов.
 //
-// ╨У╨╛╤В╨╛╨▓╨╛. ╨Р╨┤ ╨▓╨╡╤А╨╜╤Г╨╗╤Б╤П ╨╜╨░ ╨║╤А╤Г╨│╨╕ ╤Б╨▓╨╛╤П,
-// ╨┐╨╛╨│╨╗╨░╤Й╨░╤П ╨╗╨╕╤И╤М ╨│╤А╨╡╤И╨╜╤Л╤Е ╨╗╤О╨┤╨╡╨╣, ╨╜╨╡╨╢╨╡╨╗╨╕ 
-// ╨┐╤А╨░╨▓╨╡╨┤╨╜╤Л╤Е.
+// Готово. Ад вернулся на круги своя,
+// поглащая лишь грешных людей, нежели 
+// праведных.
 //
-// ╨Э╨╡ ╨╖╨░╨▒╤Г╨┤╤М╤В╨╡ ╨┐╨╛╨┐╤А╨╛╤Б╨╕╤В╤М ╨▓╨╜╤Г╨║╨╛╨▓ ╨┐╨╛╨╗╨╛╨╢╨╕╤В╤М
-// ╤А╨░╨║╨╡╤В╨╜╨╕╤Ж╤Г ╨▓ ╨Т╨░╤И ╨│╤А╨╛╨▒. ╨Х╤Б╨╗╨╕ ╨┐╨╛╤Б╨╗╨╡ ╤Б╨╝╨╡╤А╤В╨╕
-// ╨Т╤Л ╨┐╨╛╨┐╨░╨┤╤С╤В╨╡ ╨▓ ╨Р╨┤, ╨╛╨╜╨░ ╨┐╨╛╨╜╨░╨┤╨╛╨▒╨╕╤В╤Б╤П
-// ╨┤╨╗╤П ╨╜╨╡╨▒╨╛╨╗╤М╤И╨╛╨╣ ╨┐╨╛╤Б╨╗╨╡╨┤╨╜╨╡╨╣ ╨╖╨░╤З╨╕╤Б╤В╨║╨╕...
+// Не забудьте попросить внуков положить
+// ракетницу в Ваш гроб. Если после смерти
+// Вы попадёте в Ад, она понадобится
+// для небольшой последней зачистки...
 
 // before map 31
 
@@ -1802,14 +1802,14 @@ PRESSYN_RUS
 "ehjdtym hfccxbnfy bcrk.xbntkmyj yf\n"\
 "ghjatccbjyfkjd>"
 
-// ╨Т╤Л ╨╜╨░╤И╨╗╨╕ ╨▓╤В╨╛╤А╨╛╨╣ ╨┐╨╛ ╤Б╨╗╨╛╨╢╨╜╨╛╤Б╤В╨╕ ╤Г╤А╨╛╨▓╨╡╨╜╤М,
-// ╨║╨╛╤В╨╛╤А╤Л╨╣ ╤Г ╨╜╨░╤Б ╨╡╤Б╤В╤М. ╨Э╨░╨┤╨╡╨╡╨╝╤Б╤П, ╨Т╤Л 
-// ╤Б╨╛╤Е╤А╨░╨╜╨╕╨╗╨╕ ╨╕╨│╤А╤Г ╨╜╨░ ╨┐╤А╨╡╨┤╤Л╨┤╤Г╤Й╨╡╨╝ ╤Г╤А╨╛╨▓╨╜╨╡ 
-// ╨╕╨╗╨╕ ╨╡╤Й╤С ╤А╨░╨╜╤М╤И╨╡. ╨Х╤Б╨╗╨╕ ╨╜╨╡╤В, ╨┐╤А╨╕╨│╨╛╤В╨╛╨▓╤М╤В╨╡╤Б╤М 
-// ╨╝╨╜╨╛╨│╨╛ ╤Г╨╝╨╕╤А╨░╤В╤М.
+// Вы нашли второй по сложности уровень,
+// который у нас есть. Надеемся, Вы 
+// сохранили игру на предыдущем уровне 
+// или ещё раньше. Если нет, приготовьтесь 
+// много умирать.
 //
-// ╨г╤А╨╛╨▓╨╡╨╜╤М ╤А╨░c╤Б╤З╨╕╤В╨░╨╜ ╨╕╤Б╨║╨╗╤О╤З╨╕╤В╨╡╨╗╤М╨╜╨╛ ╨╜╨░ 
-// ╨┐╤А╨╛╤Д╨╡╤Б╤Б╨╕╨╛╨╜╨░╨╗╨╛╨▓.
+// Уровень раcсчитан исключительно на 
+// профессионалов.
 
 // before map 32
 
@@ -1818,9 +1818,9 @@ PRESSYN_RUS
 "cfvsq ckj;ysq? ntgthm ds pyftnt>\n"\
 "ybrnj yt ds,thtncz ;bdsv>"
 
-// ╨б╨┐╨╛╤А╨╕╨╝, ╨▓╤Л ╤Г╨┤╨╕╨▓╨╗╤П╨╗╨╕╤Б╤М, ╨║╨░╨║╨╛╨╣ ╨╢╨╡ ╤Г╤А╨╛╨▓╨╡╨╜╤М
-// ╨б╨Р╨Ь╨л╨Щ ╤Б╨╗╨╛╨╢╨╜╤Л╨╣? ╨в╨╡╨┐╨╡╤А╤М ╨Т╤Л ╨╖╨╜╨░╨╡╤В╨╡.
-// ╨Э╨╕╨║╤В╨╛ ╨╜╨╡ ╨▓╤Л╨▒╨╡╤А╨╡╤В╤Б╤П ╨╢╨╕╨▓╤Л╨╝.
+// Спорим, вы удивлялись, какой же уровень
+// САМЫЙ сложный? Теперь Вы знаете.
+// Никто не выберется живым.
 
 // after map 06	
 
@@ -1838,18 +1838,18 @@ PRESSYN_RUS
 "tckb gjdtptn< d rjvgktrct dct tot\n"\
 "ljk;ys jcnfdfnmcz ,jtghbgfcs>"
 
-// ╨б╤А╨░╨╢╨░╤П╤Б╤М, ╨Т╤Л ╨▓╤Л╨▒╤А╨░╨╗╨╕╤Б╤М ╨╕╨╖ ╨╖╨░╤А╨░╨╢╤С╨╜╨╜╤Л╤Е
-// ╤Н╨║╤Б╨┐╨╡╤А╨╡╨╝╨╡╨╜╤В╨░╨╗╤М╨╜╤Л╤Е ╨╗╨░╨▒╨╛╤А╨░╤В╨╛╤А╨╕╨╣.
-// ╨Я╨╛╤Е╨╛╨╢╨╡, ╨Ю╨Р╨Ъ ╤А╨░╤Б╤В╤А╨░╨╜╨╢╨╕╤А╨╕╨╗╨░ ╨╕ ╨╕╤Е, ╨╜╨╡╤Б╨╝╨╛╤В╤А╤П
-// ╨╜╨░ ╨╛╨│╤А╨╛╨╝╨╜╤Л╨╡ ╨║╨╛╤А╨┐╨╛╤А╨░╤В╨╕╨▓╨╜╤Л╨╡ ╨┤╨╛╤Е╨╛╨┤╤Л. ╨Ю╨╜╨╕
-// ╨┤╨░╨╢╨╡ ╨╜╨╡ ╨┐╨╛╨╖╨░╨▒╨╛╤В╨╕╨╗╨╕╤Б╤М ╨╛ ╨┐╨╛╨║╤Г╨┐╨║╨╡ ╤Б╤В╤А╨░╤Е╨╛╨▓╨╛╨║
-// ╨┤╨╗╤П ╤Б╨▓╨╛╨╕╤Е ╤Б╨╛╤В╤А╤Г╨┤╨╜╨╕╨║╨╛╨▓...
+// Сражаясь, Вы выбрались из заражённых
+// эксперементальных лабораторий.
+// Похоже, ОАК растранжирила и их, несмотря
+// на огромные корпоративные доходы. Они
+// даже не позаботились о покупке страховок
+// для своих сотрудников...
 //
-// ╨Т╨┐╨╡╤А╨╡╨┤╨╕ ╤А╨░╤Б╨┐╨╛╨╗╨╛╨╢╨╡╨╜ ╨▓╨╛╨╡╨╜╨╜╤Л╨╣ ╨║╨╛╨╝╨┐╨╗╨╡╨║╤Б, 
-// ╨║╨╕╤И╨░╤Й╨╕╨╣ ╨▓╨╕╤А╤Г╤Б╨░╨╝╨╕ ╨╕ ╤В╨╛╨╗╤М╨║╨╛ ╨╢╨┤╤Г╤Й╨╕╨╣ 
-// ╨║╨░╨║ ╨▒╤Л ╨▓╨│╤А╤Л╨╖╤В╤М╤Б╤П ╨▓ ╨Т╨░╤И╤Г ╨┐╨╗╨╛╤В╤М. ╨з╤В╨╛ ╨╢,
-// ╨╡╤Б╨╗╨╕ ╨┐╨╛╨▓╨╡╨╖╤С╤В, ╨▓ ╨║╨╛╨╝╨┐╨╗╨╡╨║╤Б╨╡ ╨▓╤Б╤С ╨╡╤Й╤С 
-// ╨┤╨╛╨╗╨╢╨╜╤Л ╨╛╤Б╤В╨░╨▓╨░╤В╤М╤Б╤П ╨▒╨╛╨╡╨┐╤А╨╕╨┐╨░╤Б╤Л.
+// Впереди расположен военный комплекс, 
+// кишащий вирусами и только ждущий 
+// как бы вгрызться в Вашу плоть. Что ж,
+// если повезёт, в комплексе всё ещё 
+// должны оставаться боеприпасы.
 
 // after map 11
 
@@ -1867,17 +1867,17 @@ PRESSYN_RUS
 "\n"\
 "ds nfr ghjcnj yt clflbntcm>"
 
-// ╨Т╨┐╨╡╤А╨╡╨┤╨╕ ╤Б╨╗╤Л╤И╨╡╨╜ ╨╝╨╡╤В╨░╨╗╨╗╨╕╤З╨╡╤Б╨║╨╕╨╣ ╤Б╨║╤А╨╡╨╢╨╡╤В 
-// ╤В╤П╨╢╤С╨╗╤Л╤Е ╨╝╨╡╤Е╨░╨╜╨╕╨╖╨╝╨╛╨▓. ╨Т╤Л ╤Г╨▓╨╡╤А╨╡╨╜╤Л, ╤З╤В╨╛ ╨╛╨╜╨╕
-// ╨╜╨╡ ╤И╤В╨░╨╝╨┐╤Г╤О╤В ╨╛╤З╨╡╤А╨╡╨┤╨╜╤Г╤О ╨┐╨░╤А╤В╨╕╤О 
-// ╨┤╤М╤П╨▓╨╛╨╗╤М╤Б╨║╨╕╤Е ╨╛╤В╤А╨╛╨┤╨╕╨╣, ╨╜╨╛ ╨┤╨░╨╢╨╡ ╨╡╤Б╨╗╨╕
-// ╨╕ ╤В╨░╨║, ╨Т╤Л ╨║ ╤Н╤В╨╛╨╝╤Г ╨│╨╛╤В╨╛╨▓╤Л. 
-// ╨н╤В╨╕ ╨╖╨▓╤Г╨║╨╕ ╨╝╨╛╨│╤Г╤В ╨╛╨╖╨╜╨░╤З╨░╤В╤М ╨╛╤З╨╡╤А╨╡╨┤╨╜╨╛╨╣ 
-// ╨║╤А╨╛╨▓╨░╨▓╤Л╨╣ ╤Д╨╡╤Б╤В╨╕╨▓╨░╨╗╤М, ╨╜╨╛ ╨▓╤Л-╤В╨╛ ╤Г╨╢╨╡ ╨╖╨╜╨░╨╡╤В╨╡, 
-// ╨║╨░╨║╨╛╨│╨╛ ╤Н╤В╨╛ ╨╛╤Й╤Г╤Й╨░╤В╤М ╤В╤Л╤Б╤П╤З╨╕ ╨│╨╛╨╗╨╛╨▓╨╛╤А╨╡╨╖╨╛╨▓, 
-// ╤Б╨╛╨▒╤А╨░╨╜╨╜╤Л╤Е ╨▓ ╨╛╨┤╨╜╨╛╨╝ ╨▒╨╡╨╖╤Г╨╝╨╜╨╛╨╝ ╤Г╨▒╨╕╨╣╤Ж╨╡.
+// Впереди слышен металлический скрежет 
+// тяжёлых механизмов. Вы уверены, что они
+// не штампуют очередную партию 
+// дьявольских отродий, но даже если
+// и так, Вы к этому готовы. 
+// Эти звуки могут означать очередной 
+// кровавый фестиваль, но вы-то уже знаете, 
+// какого это ощущать тысячи головорезов, 
+// собранных в одном безумном убийце.
 //
-// ╨Т╤Л ╤В╨░╨║ ╨┐╤А╨╛╤Б╤В╨╛ ╨╜╨╡ ╤Б╨┤╨░╨┤╨╕╤В╨╡╤Б╤М.
+// Вы так просто не сдадитесь.
 
 #define T3TEXT_RUS \
 "jnrhsdf.ofzcz gthcgtrnbdf dsukzlbn\n"\
@@ -1893,18 +1893,18 @@ PRESSYN_RUS
 "e[vskztntcm> yfcnfkj dhtvz dcthmtp\n"\
 "yflhfnm rjt-rjve pflybwe>"
 
-// ╨Ю╤В╨║╤А╤Л╨▓╨░╤О╤Й╨░╤П╤Б╤П ╨┐╨╡╤А╤Б╨┐╨╡╨║╤В╨╕╨▓╨░ ╨▓╤Л╨│╨╗╤П╨┤╨╕╤В 
-// ╤З╨╡╤А╤В╨╛╨▓╤Б╨║╨╕ ╨╖╨╜╨░╨║╨╛╨╝╨╛╨╣ ╨╕ ╨┐╨░╤Е╨╜╨╡╤В 
-// ╤Б╨╗╨╛╨▓╨╜╨╛ ╨╖╨░╨╢╨░╤А╨╡╨╜╨╜╤Л╨╡ ╤Н╨║╤Б╨║╤А╨╡╨╝╨╡╨╜╤В╤Л. 
-// ╨н╤В╨╛ ╨╝╨╡╤Б╤В╨╛ ╨╜╨╡ ╨╜╤А╨░╨▓╨╕╨╗╨╛╤Б╤М ╨▓╨░╨╝ ╤А╨░╨╜╤М╤И╨╡, 
-// ╨╕ ╨Т╤Л ╤З╨╡╤А╤В╨╛╨▓╤Б╨║╨╕ ╤Г╨▓╨╡╤А╨╡╨╜╤Л, ╤З╤В╨╛ ╨╜╨╡ 
-// ╨┐╨╛╨╜╤А╨░╨▓╨╕╤В╤Б╤П ╨╕ ╤Б╨╡╨╣╤З╨░╤Б. ╨з╨╡╨╝ ╨▒╨╛╨╗╤М╤И╨╡ ╨Т╤Л 
-// ╤А╨░╨╖╨╝╤Л╤И╨╗╤П╨╡╤В╨╡ ╨╜╨░╨┤ ╤Н╤В╨╕╨╝, ╤В╨╡╨╝ ╨┐╨╡╤З╨░╨╗╤М╨╜╨╡╨╡ 
-// ╨▓╤Б╤С ╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╤Б╤П.
+// Открывающаяся перспектива выглядит 
+// чертовски знакомой и пахнет 
+// словно зажаренные экскременты. 
+// Это место не нравилось вам раньше, 
+// и Вы чертовски уверены, что не 
+// понравится и сейчас. Чем больше Вы 
+// размышляете над этим, тем печальнее 
+// всё становится.
 // 
-// ╨Т╨╖╨▓╨╡╤Б╨╕╨▓ ╤Б╨▓╨╛╤С ╨╛╤А╤Г╨╢╨╕╨╡, ╨Т╤Л ╨╖╨╗╨╛╨▓╨╡╤Й╨╡ 
-// ╤Г╤Е╨╝╤Л╨╗╤П╨╡╤В╨╡╤Б╤М. ╨Э╨░╤Б╤В╨░╨╗╨╛ ╨▓╤А╨╡╨╝╤П ╨▓╤Б╨╡╤А╤М╨╡╨╖ 
-// ╨╜╨░╨┤╤А╨░╤В╤М ╨║╨╛╨╡-╨║╨╛╨╝╤Г ╨╖╨░╨┤╨╜╨╕╤Ж╤Г.
+// Взвесив своё оружие, Вы зловеще 
+// ухмыляетесь. Настало время всерьез 
+// надрать кое-кому задницу.
 
 #define T4TEXT_RUS \
 "dytpfgyj dct jrenfkjcm nbibyjq lj\n"\
@@ -1919,17 +1919,17 @@ PRESSYN_RUS
 "ltvjyjd yfxbyftn ghj,bdfnmcz zhrjt\n"\
 "cbytt cdtxtybt>"
 
-// ╨Т╨╜╨╡╨╖╨░╨┐╨╜╨╛ ╨▓╤Б╤С ╨╛╨║╤Г╤В╨░╨╗╨╛╤Б╤М ╤В╨╕╤И╨╕╨╜╨╛╨╣ ╨┤╨╛
-// ╤Б╨░╨╝╨╛╨│╨╛ ╨│╨╛╤А╨╕╨╖╨╛╨╜╨░. ╨Р╨│╨╛╨╜╨╕╨╖╨╕╤А╤Г╤О╤Й╨╡╨╡ ╨Р╨┤╤Б╨║╨╛╨╡
-// ╤Н╤Е╨╛ ╤Б╤В╨╕╤Е╨╗╨╛, ╨║╨╛╤И╨╝╨░╤А╨╜╨╛╨╡ ╨╜╨╡╨▒╨╛ ╤Б╤В╨░╨╗╨╛ ╨▓╨╜╨╛╨▓╤М
-// ╨│╨╛╨╗╤Г╨▒╤Л╨╝, ╤В╤А╤Г╨┐╤Л ╨╝╨╛╨╜╤Б╤В╤А╨╛╨▓ ╨╜╨░╤З╨░╨╗╨╕ 
-// ╤А╨░╨╖╨╗╨░╨│╨░╤В╤М╤Б╤П ╤Б╨╛ ╨╖╨╗╨╛╨▓╨╛╨╜╨╜╤Л╨╝ ╤Б╨╝╤А╨░╨┤╨╛╨╝.
-// ╨С╨╛╨╢╨╡, ╨╜╨╡╤Г╨╢╨╡╨╗╨╕ ╨Т╤Л ╨╕ ╨┐╤А╨░╨▓╨┤╨░ ╨┐╨╛╨▒╨╡╨┤╨╕╨╗╨╕?
+// Внезапно всё окуталось тишиной до
+// самого горизона. Агонизирующее Адское
+// эхо стихло, кошмарное небо стало вновь
+// голубым, трупы монстров начали 
+// разлагаться со зловонным смрадом.
+// Боже, неужели Вы и правда победили?
 //
-// ╨Я╨╛╤Б╨╗╨╡ ╨║╨╛╤А╨╛╤В╨║╨╛╨│╨╛ ╨╖╨╡╨╝╨╗╨╡╤В╤А╤П╤Б╨╡╨╜╨╕╤П, ╨╕╨╖
-// ╤А╨░╨╖╨│╤А╨╛╨╝╨╗╨╡╨╜╨╜╨╛╨│╨╛ ╤З╨╡╤А╨╡╨┐╨░ ╨Ш╨╖╤А╤Л╨│╨░╤В╨╡╨╗╤П 
-// ╨Ф╨╡╨╝╨╛╨╜╨╛╨▓ ╨╜╨░╤З╨╕╨╜╨░╨╡╤В ╨┐╤А╨╛╨▒╨╕╨▓╨░╤В╤М╤Б╤П ╤П╤А╨║╨╛╨╡
-// ╤Б╨╕╨╜╨╡╨╡ ╤Б╨▓╨╡╤З╨╡╨╜╨╕╨╡.
+// После короткого землетрясения, из
+// разгромленного черепа Изрыгателя 
+// Демонов начинает пробиваться яркое
+// синее свечение.
 
 #define T5TEXT_RUS \
 "b xnj ntgthm? dct dsukzlbn cjdthityyj\n"\
@@ -1941,14 +1941,14 @@ PRESSYN_RUS
 "bkb vj;tn kexit yt nhtdj;bnm\n"\
 "cgzob[ ,jujd>>>"
 
-// ╨Ш ╤З╤В╨╛ ╤В╨╡╨┐╨╡╤А╤М? ╨Т╤Б╤С ╨▓╤Л╨│╨╗╤П╨┤╨╕╤В ╤Б╨╛╨▓╨╡╤А╤И╨╡╨╜╨╜╨╛
-// ╨┐╨╛-╨┤╤А╤Г╨│╨╛╨╝╤Г, ╤Б╨╗╨╛╨▓╨╜╨╛ ╨┐╨╛╨║╨╛╨╕ ╨▓╨╗╨░╨┤╤Л╨║╨╕
-// ╨в╤Г╤В╨░╨╜╤Е╨░╨╝╨╛╨╜╨░.
+// И что теперь? Всё выглядит совершенно
+// по-другому, словно покои владыки
+// Тутанхамона.
 //
-// ╨з╤В╨╛ ╨╢, ╤З╤В╨╛ ╨▒╤Л ╨╜╨╡ ╨╛╨╢╨╕╨┤╨░╨╗╨╛ ╨Т╨░╤Б ╨▓╨╜╤Г╤В╤А╨╕,
-// ╤Е╤Г╨╢╨╡ ╤Г╨╢╨╡ ╨▒╤Л╤В╤М ╨╜╨╡ ╨╝╨╛╨╢╨╡╤В, ╨╜╨╡ ╤В╨░╨║ ╨╗╨╕?
-// ╨Ш╨╗╨╕ ╨╝╨╛╨╢╨╡╤В ╨╗╤Г╤З╤И╨╡ ╨╜╨╡ ╤В╤А╨╡╨▓╨╛╨╢╨╕╤В╤М 
-// ╤Б╨┐╤П╤Й╨╕╤Е ╨▒╨╛╨│╨╛╨▓...
+// Что ж, что бы не ожидало Вас внутри,
+// хуже уже быть не может, не так ли?
+// Или может лучше не тревожить 
+// спящих богов...
 
 #define T6TEXT_RUS \
 "ghbikj dhtvz lkz jngecrf> tq-,jue<\n"\
@@ -1965,46 +1965,46 @@ PRESSYN_RUS
 "ds cksibnt njgjn ;tktpyjuj rjgsnf\n"\
 "rb,thltvjyf>"
 
-// ╨Я╤А╨╕╤И╨╗╨╛ ╨▓╤А╨╡╨╝╤П ╨┤╨╗╤П ╨╛╤В╨┐╤Г╤Б╨║╨░. ╨Х╨╣-╨▒╨╛╨│╤Г, 
-// ╨▓╨╛╤А╨╛╤И╨░ ╨╜╨╡╨┤╤А╨░ ╨Р╨┤╨░, ╨Т╤Л ╤В╨╛╨╗╤М╨║╨╛ ╨╛ ╨╜╨╡╨╝
-// ╨╕ ╨╝╨╡╤З╤В╨░╨╗╨╕! ╨Я╤Г╤Б╤В╤М ╨║╤В╨╛-╨╜╨╕╨▒╤Г╨┤╤М ╨┤╤А╤Г╨│╨╛╨╣ 
-// ╤В╨╡╨┐╨╡╤А╤М ╨▒╨╛╤А╨╡╤В╤Б╤П ╤Б ╨┐╨╛╨╗╤З╨╕╤Й╨░╨╝╨╕ ╨┤╨╡╨╝╨╛╨╜╨╛╨▓.
+// Пришло время для отпуска. Ей-богу, 
+// вороша недра Ада, Вы только о нем
+// и мечтали! Пусть кто-нибудь другой 
+// теперь борется с полчищами демонов.
 //
-// ╨Т╨┐╨╡╤А╨╡╨┤╨╕ ╤А╨░╤Б╨┐╨╛╨╗╨░╨│╨░╨╡╤В╤Б╤П ╤В╨╕╤Е╨╕╨╣ ╨│╨╛╤А╨╛╨┤╨╛╨║ ╤Б
-// ╨╜╨╡╤Б╨┐╨╡╤И╨╜╨╛ ╤В╨╡╨║╤Г╤Й╨╡╨╣ ╨▓╨╛╨┤╨╛╨╣, ╨┐╤А╨╕╤З╤Г╨┤╨╗╨╕╨▓╤Л╨╝╨╕
-// ╨┤╨╛╨╝╨╕╨║╨░╨╝╨╕, ╨╕, ╨▓╨╡╤А╨╛╤П╤В╨╜╨╛, ╨╜╨╡ ╨╜╨░╤Б╨╡╨╗╨╡╨╜╨╜╤Л╨╣
-// ╨░╨┤╤Б╨║╨╕╨╝ ╨╛╤В╤А╨╛╨┤╤М╨╡╨╝.
+// Впереди располагается тихий городок с
+// неспешно текущей водой, причудливыми
+// домиками, и, вероятно, не населенный
+// адским отродьем.
 //
-// ╨Я╨╛╨║╨╕╨╜╤Г╨▓ ╤В╤А╨░╨╜╤Б╨┐╨╛╤А╤В╨╜╨╛╨╡ ╤Б╤А╨╡╨┤╤Б╤В╨▓╨╛,
-// ╨Т╤Л ╤Б╨╗╤Л╤И╨╕╤В╨╡ ╤В╨╛╨┐╨╛╤В ╨╢╨╡╨╗╨╡╨╖╨╜╨╛╨│╨╛ ╨║╨╛╨┐╤Л╤В╨░ 
-// ╨║╨╕╨▒╨╡╤А╨┤╨╡╨╝╨╛╨╜╨░.
+// Покинув транспортное средство,
+// Вы слышите топот железного копыта 
+// кибердемона.
 
 
 //
 // F_FINALE.C
 //
 
-#define CC_ZOMBIE_RUS   "pjv,b"                 // ╨Ч╨╛╨╝╨▒╨╕
-#define CC_SHOTGUN_RUS  "pjv,b-cth;fyn"         // ╨Ч╨╛╨╝╨▒╨╕-╤Б╨╡╤А╨╢╨░╨╜╤В
-#define CC_HEAVY_RUS    "gektvtnxbr"            // ╨Я╤Г╨╗╨╡╨╝╤С╤В╤З╨╕╨║
-#define CC_IMP_RUS      ",tc"                   // ╨С╨╡╤Б
-#define CC_DEMON_RUS    "ltvjy"                 // ╨Ф╨╡╨╝╨╛╨╜
-#define CC_LOST_RUS     "gjnthzyyfz leif"       // ╨Я╨╛╤В╨╡╤А╤П╨╜╨╜╨░╤П ╨┤╤Г╤И╨░
-#define CC_CACO_RUS     "rfrjltvjy"             // ╨Ъ╨░╨║╨╛╨┤╨╡╨╝╨╛╨╜
-#define CC_HELL_RUS     "hswfhm flf"            // ╨а╤Л╤Ж╨░╤А╤М ╨░╨┤╨░
-#define CC_BARON_RUS    ",fhjy flf"             // ╨С╨░╤А╨╛╨╜ ╨░╨┤╨░
-#define CC_ARACH_RUS    "fhf[yjnhjy"            // ╨Р╤А╨░╤Е╨╜╨╛╤В╤А╨╛╨╜
-#define CC_PAIN_RUS     "'ktvtynfkm ,jkb"       // ╨н╨╗╨╡╨╝╨╡╨╜╤В╨░╨╗╤М ╨▒╨╛╨╗╨╕
-#define CC_REVEN_RUS    "htdtyfyn"              // ╨а╨╡╨▓╨╡╨╜╨░╨╜╤В
-#define CC_MANCU_RUS    "vfyre,ec"              // ╨Ь╨░╨╜╨║╤Г╨▒╤Г╤Б
-#define CC_ARCH_RUS     "fhxdfqk"               // ╨Р╤А╤З╨▓╨░╨╣╨╗
-#define CC_SPIDER_RUS   "gfer-ghtldjlbntkm"     // ╨Я╨░╤Г╨║-╨┐╤А╨╡╨┤╨▓╨╛╨┤╨╕╤В╨╡╨╗╤М
-#define CC_CYBER_RUS    "rb,thltvjy"            // ╨Ъ╨╕╨▒╨╡╤А╨┤╨╡╨╝╨╛╨╜
-#define CC_HERO_RUS     "yfi uthjq"             // ╨Э╨░╤И ╨У╨╡╤А╨╛╨╣
+#define CC_ZOMBIE_RUS   "pjv,b"                 // Зомби
+#define CC_SHOTGUN_RUS  "pjv,b-cth;fyn"         // Зомби-сержант
+#define CC_HEAVY_RUS    "gektvtnxbr"            // Пулемётчик
+#define CC_IMP_RUS      ",tc"                   // Бес
+#define CC_DEMON_RUS    "ltvjy"                 // Демон
+#define CC_LOST_RUS     "gjnthzyyfz leif"       // Потерянная душа
+#define CC_CACO_RUS     "rfrjltvjy"             // Какодемон
+#define CC_HELL_RUS     "hswfhm flf"            // Рыцарь ада
+#define CC_BARON_RUS    ",fhjy flf"             // Барон ада
+#define CC_ARACH_RUS    "fhf[yjnhjy"            // Арахнотрон
+#define CC_PAIN_RUS     "'ktvtynfkm ,jkb"       // Элементаль боли
+#define CC_REVEN_RUS    "htdtyfyn"              // Ревенант
+#define CC_MANCU_RUS    "vfyre,ec"              // Манкубус
+#define CC_ARCH_RUS     "fhxdfqk"               // Арчвайл
+#define CC_SPIDER_RUS   "gfer-ghtldjlbntkm"     // Паук-предводитель
+#define CC_CYBER_RUS    "rb,thltvjy"            // Кибердемон
+#define CC_HERO_RUS     "yfi uthjq"             // Наш Герой
 
 
 //
-// ╨Ю╤В╨╛╨▒╤А╨░╨╢╨╡╨╜╨╕╨╡ ╨▓╨╡╤А╤Б╨╕╨╕ ╨┐╤А╨╛╨╡╨║╤В╨░
+// Отображение версии проекта
 //
 
 #define STSTR_VERSION       "VERSION 1.8 (YYYY-MM-DD)"
