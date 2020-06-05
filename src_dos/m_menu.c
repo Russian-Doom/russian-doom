@@ -2729,7 +2729,7 @@ void M_RD_Draw_Audio_System (void)
         else
         {
             dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmall_ENG(141, 45, "UNKNOWN DEVICE");
+            M_WriteTextSmall_ENG(141, 45, "UNSUPPORTED DEVICE");
             dp_translation = NULL;
         }
 
@@ -2751,7 +2751,7 @@ void M_RD_Draw_Audio_System (void)
         else
         {
             dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmall_ENG(79, 55, "UNKNOWN DEVICE");
+            M_WriteTextSmall_ENG(79, 55, "UNSUPPORTED DEVICE");
             dp_translation = NULL;
         }
 
@@ -2808,9 +2808,9 @@ void M_RD_Draw_Audio_System (void)
         }
         else
         {
-            // Неизвестное устройство
+            // Не определено
             dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmall_RUS(175, 45, "ytbpdtcnyjt ecnhjqcndj");
+            M_WriteTextSmall_RUS(175, 45, "yt jghtltktyj");
             dp_translation = NULL;
         }
 
@@ -2832,9 +2832,9 @@ void M_RD_Draw_Audio_System (void)
         }
         else
         {
-            // Неизвестное устройство
+            // Не определено
             dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmall_RUS(94, 55, "ytbpdtcnyjt ecnhjqcndj");
+            M_WriteTextSmall_RUS(94, 55, "yt jghtltktyj");
             dp_translation = NULL;
         }
 
@@ -2896,6 +2896,14 @@ void M_RD_Change_SoundDevice (int choice)
             break;
         }
     }
+
+    // [JN] Un-lock unsupported device
+    if (snd_DesiredSfxDevice != 0
+    &&  snd_DesiredSfxDevice != 1
+    &&  snd_DesiredSfxDevice != 3)
+    {
+        snd_DesiredSfxDevice = 0;
+    }
 }
 
 void M_RD_Change_MusicDevice (int choice)
@@ -2934,6 +2942,13 @@ void M_RD_Change_MusicDevice (int choice)
 
     }
 
+    // [JN] Un-lock unsupported device
+    if (snd_DesiredMusicDevice != 0
+    &&  snd_DesiredMusicDevice != 3
+    &&  snd_DesiredMusicDevice != 8)
+    {
+        snd_DesiredMusicDevice = 0;
+    }
 }
 
 void M_RD_Change_SndMode (int choice)
