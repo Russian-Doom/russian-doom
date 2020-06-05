@@ -849,7 +849,6 @@ void IdentifyVersion (void)
         {
             commercial = true;
             D_AddFile ("doom2.wad");
-            D_AddFile ("rusdoom.wad");
             return;
         }
 
@@ -858,7 +857,6 @@ void IdentifyVersion (void)
             commercial = true;
             plutonia = true;
             D_AddFile ("plutonia.wad");
-            D_AddFile ("rusdoom.wad");
             return;
         }
 
@@ -867,7 +865,6 @@ void IdentifyVersion (void)
             commercial = true;
             tnt = true;
             D_AddFile ("tnt.wad");
-            D_AddFile ("rusdoom.wad");
             return;
         }
 
@@ -875,7 +872,6 @@ void IdentifyVersion (void)
         {
             registered = true;
             D_AddFile ("doom.wad");
-            D_AddFile ("rusdoom.wad");
 	        return;
         }
 
@@ -883,7 +879,6 @@ void IdentifyVersion (void)
         {
             shareware = true;
             D_AddFile ("doom1.wad");
-            D_AddFile ("rusdoom.wad");
             return;
         }
     }
@@ -906,7 +901,6 @@ void IdentifyVersion (void)
         {
             commercial = true;
             D_AddFile ("doom2.wad");
-            D_AddFile ("rusdoom.wad");
             return;
         }
 
@@ -915,7 +909,6 @@ void IdentifyVersion (void)
             commercial = true;
             plutonia = true;
             D_AddFile ("plutonia.wad");
-            D_AddFile ("rusdoom.wad");
             return;
         }
 
@@ -924,7 +917,6 @@ void IdentifyVersion (void)
             commercial = true;
             tnt = true;
             D_AddFile ("tnt.wad");
-            D_AddFile ("rusdoom.wad");
             return;
         }
 
@@ -932,7 +924,6 @@ void IdentifyVersion (void)
         {
             registered = true;
             D_AddFile ("doom.wad");
-            D_AddFile ("rusdoom.wad");
             return;
         }
 
@@ -940,7 +931,6 @@ void IdentifyVersion (void)
         {
             shareware = true;
             D_AddFile ("doom1.wad");
-            D_AddFile ("rusdoom.wad");
             return;
         }
     }
@@ -1046,6 +1036,9 @@ void D_DoomMain (void)
     FindResponseFile();
 
     IdentifyVersion ();
+
+    // [JN] Load RD resource PWAD.
+    D_AddFile ("rusdoom.wad");
 
     setbuf(stdout, NULL);
     modifiedgame = false;
