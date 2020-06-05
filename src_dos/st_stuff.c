@@ -490,7 +490,7 @@ unsigned char	cheat_keys_seq[] =
     SCRAMBLE('d'),
     SCRAMBLE('k'),
     SCRAMBLE('a'),
-    0xff    // [JN] terminator?
+    0xff    // [JN] terminator
 }; 
 
 // [JN] version cheat
@@ -503,7 +503,18 @@ unsigned char	cheat_version_seq[] =
     SCRAMBLE('i'),
     SCRAMBLE('o'),
     SCRAMBLE('n'),
-    0xff // [JN] terminator?
+    0xff // [JN] terminator
+}; 
+
+// [JN] TNTEM (from Crispy Doom)
+unsigned char	cheat_massacre_seq[] =
+{
+    SCRAMBLE('t'),
+    SCRAMBLE('n'),
+    SCRAMBLE('t'),
+    SCRAMBLE('e'),
+    SCRAMBLE('m'),
+    0xff // [JN] terminator
 }; 
 
 
@@ -531,6 +542,7 @@ cheatseq_t	cheat_clev = { cheat_clev_seq, 0 };
 cheatseq_t	cheat_mypos = { cheat_mypos_seq, 0 };
 cheatseq_t	cheat_keys = { cheat_keys_seq, 0 };
 cheatseq_t	cheat_version = { cheat_version_seq, 0 };
+cheatseq_t	cheat_massacre = { cheat_massacre_seq, 0 };
 
 
 // 
@@ -559,6 +571,44 @@ void ST_refreshBackground(void)
 	V_CopyRect(ST_X, 0, BG, ST_WIDTH, ST_HEIGHT, ST_X, ST_Y, FG);
     }
 
+}
+
+
+// [crispy] adapted from boom202s/M_CHEAT.C:467-498
+
+static int ST_cheat_massacre()
+{
+    int killcount = 0;
+    thinker_t *th;
+    extern int numbraintargets;
+    extern void A_PainDie(mobj_t *);
+
+    for (th = thinkercap.next; th != &thinkercap; th = th->next)
+    {
+        if (th->function.acp1 == (actionf_p1)P_MobjThinker)
+        {
+            mobj_t *mo = (mobj_t *)th;
+
+            if (mo->flags & MF_COUNTKILL || mo->type == MT_SKULL)
+            {
+                if (mo->health > 0)
+                {
+                    P_DamageMobj(mo, NULL, NULL, 10000);
+                    killcount++;
+                }
+                if (mo->type == MT_PAIN)
+                {
+                    A_PainDie(mo);
+                    P_SetMobjState(mo, S_PAIN_DIE6);
+                }
+            }
+        }
+    }
+
+    // [crispy] disable brain spitters
+    numbraintargets = -1;
+
+    return killcount;
 }
 
 
@@ -779,6 +829,15 @@ ST_Responder (event_t* ev)
 		  plyr->cards[i] = true;
 
 		plyr->message_system = ststr_kaadded;
+      }
+      // [crispy] implement Boom's "tntem" cheat
+      else if (cht_CheckCheat(&cheat_massacre, ev->data1))
+      {
+        int killcount = ST_cheat_massacre();
+        static char msg[ST_MSGWIDTH];
+
+        snprintf(msg, sizeof(msg), "%s %d", ststr_massacre, killcount);
+        plyr->message_system = msg;
       }
       // [JN] version cheat
       else if (cht_CheckCheat(&cheat_version, ev->data1))
