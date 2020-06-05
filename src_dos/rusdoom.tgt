@@ -211,7 +211,7 @@ WVList
 54
 MItem
 8
-AM_MAP.C
+am_map.c
 55
 WString
 4
@@ -229,7 +229,7 @@ WVList
 58
 MItem
 8
-D_MAIN.C
+d_main.c
 59
 WString
 4
@@ -247,7 +247,7 @@ WVList
 62
 MItem
 7
-D_NET.C
+d_net.c
 63
 WString
 4
@@ -265,7 +265,7 @@ WVList
 66
 MItem
 5
-DMX.C
+dmx.c
 67
 WString
 4
@@ -283,7 +283,7 @@ WVList
 70
 MItem
 8
-DUTILS.C
+dutils.c
 71
 WString
 4
@@ -301,7 +301,7 @@ WVList
 74
 MItem
 10
-F_FINALE.C
+f_finale.c
 75
 WString
 4
@@ -319,7 +319,7 @@ WVList
 78
 MItem
 8
-F_WIPE.C
+f_wipe.c
 79
 WString
 4
@@ -337,7 +337,7 @@ WVList
 82
 MItem
 8
-G_GAME.C
+g_game.c
 83
 WString
 4
@@ -355,7 +355,7 @@ WVList
 86
 MItem
 8
-HU_LIB.C
+hu_lib.c
 87
 WString
 4
@@ -373,7 +373,7 @@ WVList
 90
 MItem
 10
-HU_STUFF.C
+hu_stuff.c
 91
 WString
 4
@@ -391,7 +391,7 @@ WVList
 94
 MItem
 9
-I_CYBER.C
+i_cyber.c
 95
 WString
 4
@@ -409,7 +409,7 @@ WVList
 98
 MItem
 7
-I_IBM.C
+i_ibm.c
 99
 WString
 4
@@ -427,7 +427,7 @@ WVList
 102
 MItem
 8
-I_MAIN.C
+i_main.c
 103
 WString
 4
@@ -445,7 +445,7 @@ WVList
 106
 MItem
 9
-I_SOUND.C
+i_sound.c
 107
 WString
 4
@@ -463,7 +463,7 @@ WVList
 110
 MItem
 6
-INFO.C
+info.c
 111
 WString
 4
@@ -481,7 +481,7 @@ WVList
 114
 MItem
 8
-M_MENU.C
+m_menu.c
 115
 WString
 4
@@ -499,7 +499,7 @@ WVList
 118
 MItem
 8
-M_MISC.C
+m_misc.c
 119
 WString
 4
@@ -517,7 +517,7 @@ WVList
 122
 MItem
 9
-MUS2MID.C
+mus2mid.c
 123
 WString
 4
@@ -535,7 +535,7 @@ WVList
 126
 MItem
 10
-P_CEILNG.C
+p_ceilng.c
 127
 WString
 4
@@ -553,7 +553,7 @@ WVList
 130
 MItem
 9
-P_DOORS.C
+p_doors.c
 131
 WString
 4
@@ -571,7 +571,7 @@ WVList
 134
 MItem
 9
-P_ENEMY.C
+p_enemy.c
 135
 WString
 4
@@ -589,7 +589,7 @@ WVList
 138
 MItem
 9
-P_FLOOR.C
+p_floor.c
 139
 WString
 4
@@ -607,7 +607,7 @@ WVList
 142
 MItem
 9
-P_INTER.C
+p_inter.c
 143
 WString
 4
@@ -625,7 +625,7 @@ WVList
 146
 MItem
 10
-P_LIGHTS.C
+p_lights.c
 147
 WString
 4
@@ -643,7 +643,7 @@ WVList
 150
 MItem
 7
-P_MAP.C
+p_map.c
 151
 WString
 4
@@ -661,7 +661,7 @@ WVList
 154
 MItem
 10
-P_MAPUTL.C
+p_maputl.c
 155
 WString
 4
@@ -679,7 +679,7 @@ WVList
 158
 MItem
 8
-P_MOBJ.C
+p_mobj.c
 159
 WString
 4
@@ -697,7 +697,7 @@ WVList
 162
 MItem
 9
-P_PLATS.C
+p_plats.c
 163
 WString
 4
@@ -715,7 +715,7 @@ WVList
 166
 MItem
 8
-P_PSPR.C
+p_pspr.c
 167
 WString
 4
@@ -733,7 +733,7 @@ WVList
 170
 MItem
 9
-P_SAVEG.C
+p_saveg.c
 171
 WString
 4
@@ -751,7 +751,7 @@ WVList
 174
 MItem
 9
-P_SETUP.C
+p_setup.c
 175
 WString
 4
@@ -769,7 +769,7 @@ WVList
 178
 MItem
 9
-P_SIGHT.C
+p_sight.c
 179
 WString
 4
@@ -787,7 +787,7 @@ WVList
 182
 MItem
 8
-P_SPEC.C
+p_spec.c
 183
 WString
 4
@@ -805,7 +805,7 @@ WVList
 186
 MItem
 10
-P_SWITCH.C
+p_switch.c
 187
 WString
 4
@@ -823,7 +823,7 @@ WVList
 190
 MItem
 10
-P_TELEPT.C
+p_telept.c
 191
 WString
 4
@@ -841,7 +841,7 @@ WVList
 194
 MItem
 8
-P_TICK.C
+p_tick.c
 195
 WString
 4
@@ -859,7 +859,7 @@ WVList
 198
 MItem
 8
-P_USER.C
+p_user.c
 199
 WString
 4
@@ -877,7 +877,7 @@ WVList
 202
 MItem
 9
-R_BMAPS.c
+r_bmaps.c
 203
 WString
 4
@@ -895,7 +895,7 @@ WVList
 206
 MItem
 7
-R_BSP.C
+r_bsp.c
 207
 WString
 4
@@ -913,7 +913,7 @@ WVList
 210
 MItem
 8
-R_DATA.C
+r_data.c
 211
 WString
 4
@@ -931,7 +931,7 @@ WVList
 214
 MItem
 8
-R_DRAW.C
+r_draw.c
 215
 WString
 4
@@ -949,7 +949,7 @@ WVList
 218
 MItem
 8
-R_MAIN.C
+r_main.c
 219
 WString
 4
@@ -967,7 +967,7 @@ WVList
 222
 MItem
 9
-R_PLANE.C
+r_plane.c
 223
 WString
 4
@@ -985,7 +985,7 @@ WVList
 226
 MItem
 8
-R_SEGS.C
+r_segs.c
 227
 WString
 4
@@ -1003,7 +1003,7 @@ WVList
 230
 MItem
 7
-R_SKY.C
+r_sky.c
 231
 WString
 4
@@ -1021,7 +1021,7 @@ WVList
 234
 MItem
 10
-R_THINGS.C
+r_things.c
 235
 WString
 4
@@ -1039,7 +1039,7 @@ WVList
 238
 MItem
 9
-RD_LANG.C
+rd_lang.c
 239
 WString
 4
@@ -1057,7 +1057,7 @@ WVList
 242
 MItem
 9
-S_SOUND.C
+s_sound.c
 243
 WString
 4
@@ -1075,7 +1075,7 @@ WVList
 246
 MItem
 8
-SOUNDS.C
+sounds.c
 247
 WString
 4
@@ -1093,7 +1093,7 @@ WVList
 250
 MItem
 8
-ST_LIB.C
+st_lib.c
 251
 WString
 4
@@ -1111,7 +1111,7 @@ WVList
 254
 MItem
 10
-ST_STUFF.C
+st_stuff.c
 255
 WString
 4
@@ -1129,7 +1129,7 @@ WVList
 258
 MItem
 8
-TABLES.C
+tables.c
 259
 WString
 4
@@ -1147,7 +1147,7 @@ WVList
 262
 MItem
 10
-USRHOOKS.C
+usrhooks.c
 263
 WString
 4
@@ -1183,7 +1183,7 @@ WVList
 270
 MItem
 9
-V_VIDEO.C
+v_video.c
 271
 WString
 4
@@ -1201,7 +1201,7 @@ WVList
 274
 MItem
 7
-W_WAD.C
+w_wad.c
 275
 WString
 4
@@ -1219,7 +1219,7 @@ WVList
 278
 MItem
 10
-WI_STUFF.C
+wi_stuff.c
 279
 WString
 4
@@ -1237,7 +1237,7 @@ WVList
 282
 MItem
 8
-Z_ZONE.C
+z_zone.c
 283
 WString
 4
@@ -1273,7 +1273,7 @@ WVList
 290
 MItem
 12
-AUDIO_WF.LIB
+audio_wf.lib
 291
 WString
 3
@@ -1309,7 +1309,7 @@ WVList
 298
 MItem
 8
-PCFX.OBJ
+pcfx.obj
 299
 WString
 3
