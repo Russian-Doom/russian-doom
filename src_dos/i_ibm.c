@@ -1256,16 +1256,15 @@ byte *I_ZoneBase (int *size)
     {
         maxmem = 1024 * 1024 * atoi(myargv[p + 1]);
 
-        // [JN] Crash-preventing condition. No need to lockup OS
-        // in case of using "0", "-1" and below values.
+        // [JN] Crash-preventing condition. 
+        // DOS will lock-up in case of using "0", "-1" and below values.
         if (maxmem < 1)
         maxmem = 1;
     }
     
     do
     {
-        heap -= 0x20000; // leave 128k alone
-        // [JN] So, what is our heap size?
+        heap -= 131072; // [JN] Equals 128 KiB, leave alone.
         if (heap > maxmem)
         {
             heap = maxmem;
@@ -1276,7 +1275,7 @@ byte *I_ZoneBase (int *size)
     printf(english_language ?
            ", %d MiB allocated for zone\n" :
            ", %d Мбайт обнаружено для распределения.\n", heap >> 20);
-    if (heap < 0x180000)
+    if (heap < 1572864) // [JN] Equals 1.5 MiB.
     {
         printf("\n");
 
