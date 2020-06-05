@@ -1559,6 +1559,7 @@ enum
     rd_gameplay_2_negative_health,
     rd_gameplay_2_empty2,
     rd_gameplay_2_empty3,
+    rd_gameplay_2_empty4,
     rd_gameplay_2_next_page,
     rd_gameplay_2_prev_page,
     rd_gameplay_2_end
@@ -1575,6 +1576,7 @@ enum
     rd_gameplay_3_empty1,
     rd_gameplay_3_crosshair_draw,
     rd_gameplay_3_crosshair_health,
+    rd_gameplay_3_empty2,
     rd_gameplay_3_next_page,
     rd_gameplay_3_prev_page,
     rd_gameplay_3_end
@@ -1590,6 +1592,8 @@ enum
     rd_gameplay_4_empty2,
     rd_gameplay_4_empty3,
     rd_gameplay_4_empty4,
+    rd_gameplay_4_empty5,
+    rd_gameplay_4_empty6,
     rd_gameplay_4_first_page,
     rd_gameplay_4_prev_page,
     rd_gameplay_4_end
@@ -1637,6 +1641,7 @@ menuitem_t RD_Gameplay_Menu_2[]=
     {2,"Show negative health:",           M_RD_Change_NegativeHealth, 's'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
     {1,"", /* Next page >   */            M_RD_Choose_Gameplay_3,     'n'},
     {1,"", /* < Prev page > */            M_RD_Choose_Gameplay_1,     'p'},
     {-1,"",0,'\0'}
@@ -1663,6 +1668,7 @@ menuitem_t RD_Gameplay_Menu_3[]=
     {-1,"",0,'\0'},
     {2,"Draw crosshair:",                     M_RD_Change_CrosshairDraw,   'd'},
     {2,"Health indication:",                  M_RD_Change_CrosshairHealth, 'h'},
+    {-1,"",0,'\0'},
     {1,"", /* Next page >   */                M_RD_Choose_Gameplay_4,      'n'},
     {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_2,      'p'},
     {-1,"",0,'\0'}
@@ -1684,6 +1690,8 @@ menuitem_t RD_Gameplay_Menu_4[]=
     {2,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
     {2,"Don't prompt for q. saving/loading:", M_RD_Change_FastQSaveLoad,    'd'},
     {2,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'p'},
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
@@ -1745,6 +1753,7 @@ menuitem_t RD_Gameplay_Menu_2_Rus[]=
     {2,"jnhbwfntkmyjt pljhjdmt d $:",   M_RD_Change_NegativeHealth, 'j'}, // Отрицательное здоровье в HUD
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
     {1,"",                              M_RD_Choose_Gameplay_3,     'l'}, // Далее >
     {1,"",                              M_RD_Choose_Gameplay_1,     'y'}, // < Назад
     {-1,"",0,'\0'}
@@ -1771,6 +1780,7 @@ menuitem_t RD_Gameplay_Menu_3_Rus[]=
     {-1,"",0,'\0'},
     {2,"Jnj,hf;fnm ghbwtk:",             M_RD_Change_CrosshairDraw,   'j'}, // Отображать прицел
     {2,"Bylbrfwbz pljhjdmz:",            M_RD_Change_CrosshairHealth, 'b'}, // Индикация здоровья
+    {-1,"",0,'\0'},
     {1,"",                               M_RD_Choose_Gameplay_4,      'l'}, // Далее >
     {1,"",                               M_RD_Choose_Gameplay_2,      'y'}, // < Назад
     {-1,"",0,'\0'}
@@ -1792,6 +1802,8 @@ menuitem_t RD_Gameplay_Menu_4_Rus[]=
     {2,"'ktvtynfkm ,tp juhfybxtybz lei:", M_RD_Change_LostSoulsQty,     '\''},// Элементаль без ограничения душ
     {2,"jnrk.xbnm pfghjc ,> pfuheprb:",   M_RD_Change_FastQSaveLoad,    'j'}, // Отключить запрос б. загрузки
     {2,"Ghjbuhsdfnm ltvjpfgbcb:",         M_RD_Change_NoInternalDemos,  'g'}, // Проигрывать демозаписи
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
@@ -3135,12 +3147,12 @@ void M_RD_Draw_Gameplay_1(void)
 
         // Brightmaps
         dp_translation = brightmaps ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 45, brightmaps ? "on" : "off");
+        M_WriteTextSmall_ENG(119, 45, brightmaps ? "on" : "off");
         dp_translation = NULL;
 
         // Fake contrast
         dp_translation = fake_contrast ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 55, fake_contrast ? "on" : "off");
+        M_WriteTextSmall_ENG(142, 55, fake_contrast ? "on" : "off");
         dp_translation = NULL;
 
         // Fuzz effect
@@ -3150,35 +3162,31 @@ void M_RD_Draw_Gameplay_1(void)
                              improved_fuzz == 1 ? "Original (b&w)" :
                              improved_fuzz == 2 ? "Improved" :
                                                   "Improved (b&w)");
+        dp_translation = NULL;
 
         // Colored HUD elements
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 75, colored_hud ? "on" : "off");
+        M_WriteTextSmall_ENG(195, 75, colored_hud ? "on" : "off");
         dp_translation = NULL;
 
         // Colored blood and corpses
         dp_translation = colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 85, colored_blood ? "on" : "off");
+        M_WriteTextSmall_ENG(229, 85, colored_blood ? "on" : "off");
         dp_translation = NULL;
 
         // Swirling liquids
         dp_translation = swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 95, swirling_liquids ? "on" : "off");
+        M_WriteTextSmall_ENG(150, 95, swirling_liquids ? "on" : "off");
         dp_translation = NULL;
 
         // Invulnerability affects sky
         dp_translation = invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 105, invul_sky ? "on" : "off");
+        M_WriteTextSmall_ENG(237, 105, invul_sky ? "on" : "off");
         dp_translation = NULL;
 
         // Flip weapons
         dp_translation = flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED];
         M_WriteTextSmall_ENG(131, 115, flip_weapons ? "on" : "off");
-        dp_translation = NULL;
-
-        // Test casts shadows
-        dp_translation = draw_shadowed_text ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140, 125, draw_shadowed_text ? "on" : "off");
         dp_translation = NULL;
 
         //
@@ -3208,7 +3216,7 @@ void M_RD_Draw_Gameplay_1(void)
 
         // Имитация контрастности
         dp_translation = fake_contrast ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 55, fake_contrast ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(217, 55, fake_contrast ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Эффект шума
@@ -3218,35 +3226,31 @@ void M_RD_Draw_Gameplay_1(void)
                              improved_fuzz == 1 ? "Jhbubyfkmysq (x*,)" :
                              improved_fuzz == 2 ? "Ekexityysq" :
                                                   "Ekexityysq (x*,)");
+        dp_translation = NULL;
 
         // Разноцветные элементы HUD
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 75, colored_hud ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(239, 75, colored_hud ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Разноцветная кровь и трупы
         dp_translation = colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 85, colored_blood ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(242, 85, colored_blood ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Улучшенная анимация жидкостей
         dp_translation = swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 95, swirling_liquids ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(275, 95, swirling_liquids ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Неуязвимость окрашивает небо
         dp_translation = invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 105, invul_sky ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(262, 105, invul_sky ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Зеркальное отражение оружия
         dp_translation = flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED];
         M_WriteTextSmall_RUS(259, 115, flip_weapons ? "drk" : "dsrk");
-        dp_translation = NULL;
-
-        // Тексты отбрасывают тень
-        dp_translation = draw_shadowed_text ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(140, 125, draw_shadowed_text ? "drk" : "dsrk");
         dp_translation = NULL;
 
         //
@@ -3300,14 +3304,9 @@ void M_RD_Draw_Gameplay_2(void)
         M_WriteTextSmall_ENG(35, 85, "Tactical");
         dp_translation = NULL;
 
-        // Show automap stats
-        dp_translation = automap_stats ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(263, 95, automap_stats ? "on" : "off");
-        dp_translation = NULL;
-
         // Notify of revealed secrets
         dp_translation = secret_notification ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(232, 105, secret_notification ? "on" : "off");
+        M_WriteTextSmall_ENG(232, 95, secret_notification ? "on" : "off");
         dp_translation = NULL;
 
         // Show negative health
@@ -3362,14 +3361,9 @@ void M_RD_Draw_Gameplay_2(void)
         M_WriteTextSmall_RUS(35, 85, "Nfrnbrf");
         dp_translation = NULL;
 
-        // Статистика уровня на карте
-        dp_translation = automap_stats ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(260, 95, automap_stats ? "drk" : "dsrk");
-        dp_translation = NULL;
-
         // Сообщать о найденном тайнике
         dp_translation = secret_notification ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(260, 105, secret_notification ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(260, 95, secret_notification ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Отрицательное здоровье в HUD
@@ -3554,7 +3548,7 @@ void M_RD_Draw_Gameplay_4(void)
 
         // Play internal demos
         dp_translation = no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN];
-        M_WriteTextSmall_ENG(183, 105, no_internal_demos ? "off" : "on");
+        M_WriteTextSmall_ENG(183, 75, no_internal_demos ? "off" : "on");
         dp_translation = NULL;
 
         //
