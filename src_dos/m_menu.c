@@ -3901,8 +3901,10 @@ void M_RD_BackToDefaults (int choice)
 void M_RD_ChangeLanguage (int choice)
 {
     extern void D_DoAdvanceDemo(void);
+    extern void F_CastDrawer(void);
     extern void F_StartFinale(void);
     extern int  demosequence;
+    extern int  finalestage;
 
     english_language ^= 1;
 
@@ -3936,7 +3938,16 @@ void M_RD_ChangeLanguage (int choice)
     // Restart finale text
     if (gamestate == GS_FINALE)
     {
-        F_StartFinale();
+        if (finalestage == 2)
+        {
+            // Just redraw monster's name.
+            F_CastDrawer();
+        }
+        else
+        {
+            // Restart finale text output.
+            F_StartFinale();
+        }
     }
 }
 
