@@ -135,7 +135,7 @@ anim_t*		lastanim;
 //
 //      Animating line specials
 //
-#define MAXLINEANIMS            16384 // [JN] Ранее: 64
+#define MAXLINEANIMS            64
 
 extern  short	numlinespecials;
 extern  line_t*	linespeciallist[MAXLINEANIMS];

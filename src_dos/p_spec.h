@@ -303,7 +303,7 @@ typedef struct
 
 #define PLATWAIT		3
 #define PLATSPEED		FRACUNIT
-#define MAXPLATS		7680 // [JN] Ранее: 30
+#define MAXPLATS		30
 
 
 extern plat_t*	activeplats[MAXPLATS];

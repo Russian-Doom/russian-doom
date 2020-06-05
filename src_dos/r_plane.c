@@ -34,7 +34,7 @@
 #include "jn.h"
 
 
-#define MAXVISPLANES    1024    // [JN] Icreased from 128
+#define MAXVISPLANES    128
 #define MAXOPENINGS     65536   // [JN] Icreased from SCREENWIDTH*64 (20480)
 
 

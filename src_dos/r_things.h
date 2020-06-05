@@ -23,7 +23,7 @@
 #ifndef __R_THINGS__
 #define __R_THINGS__
 
-#define MAXVISSPRITES  	1024 // [JN] Increased from 128
+#define MAXVISSPRITES  	128
 
 
 // Constant arrays used for psprite clipping and initializing clipping.
