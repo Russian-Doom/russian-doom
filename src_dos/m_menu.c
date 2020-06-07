@@ -808,13 +808,13 @@ enum
 
 menuitem_t MainMenu[]=
 {
-    {1,"M_NGAME",M_NewGame,'n'},
-    {1,"M_OPTION",M_Options,'o'},
-    {1,"M_LOADG",M_LoadGame,'l'},
-    {1,"M_SAVEG",M_SaveGame,'s'},
+    {1, "M_NGAME",  M_NewGame,  'n'},
+    {1, "M_OPTION", M_Options,  'o'},
+    {1, "M_LOADG",  M_LoadGame, 'l'},
+    {1, "M_SAVEG",  M_SaveGame, 's'},
     // Another hickup with Special edition.
-    {1,"M_RDTHIS",M_ReadThis,'r'},
-    {1,"M_QUITG",M_QuitDOOM,'q'}
+    {1, "M_RDTHIS", M_ReadThis, 'r'},
+    {1, "M_QUITG",  M_QuitDOOM, 'q'}
 };
 
 menu_t  MainDef =
@@ -869,10 +869,10 @@ enum
 
 menuitem_t EpisodeMenu[]=
 {
-    {1,"M_EPI1", M_Episode, 'k'},
-    {1,"M_EPI2", M_Episode, 't'},
-    {1,"M_EPI3", M_Episode, 'i'},
-    {1,"M_EPI4", M_Episode, 't'}
+    {1, "M_EPI1", M_Episode, 'k'},
+    {1, "M_EPI2", M_Episode, 't'},
+    {1, "M_EPI3", M_Episode, 'i'},
+    {1, "M_EPI4", M_Episode, 't'}
 };
 
 menu_t  EpiDef =
@@ -927,12 +927,12 @@ enum
 
 menuitem_t NewGameMenu[]=
 {
-    {1,"M_JKILL",	M_ChooseSkill, 'i'},
-    {1,"M_ROUGH",	M_ChooseSkill, 'h'},
-    {1,"M_HURT",	M_ChooseSkill, 'h'},
-    {1,"M_ULTRA",	M_ChooseSkill, 'u'},
-    {1,"M_NMARE",	M_ChooseSkill, 'n'},
-    {1,"M_UNMARE",  M_ChooseSkill, 'z'}
+    {1, "M_JKILL",  M_ChooseSkill, 'i'},
+    {1, "M_ROUGH",  M_ChooseSkill, 'h'},
+    {1, "M_HURT",   M_ChooseSkill, 'h'},
+    {1, "M_ULTRA",  M_ChooseSkill, 'u'},
+    {1, "M_NMARE",  M_ChooseSkill, 'n'},
+    {1, "M_UNMARE", M_ChooseSkill, 'u'}
 };
 
 menu_t  NewDef =
@@ -996,14 +996,14 @@ enum
 
 menuitem_t RD_Options_Menu[]=
 {
-    {1,"Rendering",         M_RD_Choose_Rendering,  'r'},
-    {1,"Display",           M_RD_Choose_Display,    'd'},
-    {1,"Sound",             M_RD_Choose_Audio,      's'},
-    {1,"Controls",          M_RD_Choose_Controls,   'c'},
-    {1,"Gameplay",          M_RD_Choose_Gameplay_1, 'g'},
-    {1,"End Game",          M_EndGame,              'e'},
-    {1,"Reset settings",    M_RD_BackToDefaults,    'r'},
-    {2, "Language:english", M_RD_ChangeLanguage,    'l'},
+    {1, "Rendering",         M_RD_Choose_Rendering,  'r'},
+    {1, "Display",           M_RD_Choose_Display,    'd'},
+    {1, "Sound",             M_RD_Choose_Audio,      's'},
+    {1, "Controls",          M_RD_Choose_Controls,   'c'},
+    {1, "Gameplay",          M_RD_Choose_Gameplay_1, 'g'},
+    {1, "End Game",          M_EndGame,              'e'},
+    {1, "Reset settings",    M_RD_BackToDefaults,    'r'},
+    {2,  "Language:english", M_RD_ChangeLanguage,    'l'},
     {-1,"",0,'\0'}
 };
 
@@ -1023,14 +1023,14 @@ menu_t  RD_Options_Def =
 
 menuitem_t RD_Options_Menu_Rus[]=
 {
-    {1,"Dbltj",          M_RD_Choose_Rendering,  'd'},  // Видео
-    {1,"\"rhfy",         M_RD_Choose_Display,    '\''}, // Экран
-    {1,"Felbj",          M_RD_Choose_Audio,      'f'},  // Аудио
-    {1,"Eghfdktybt",     M_RD_Choose_Controls,   'e'},  // Управление
-    {1,"Utqvgktq",       M_RD_Choose_Gameplay_1, 'u'},  // Геймплей
-    {1,"Pfrjyxbnm buhe", M_EndGame,              'p'},  // Закончить игру
-    {1,"C,hjc yfcnhjtr", M_RD_BackToDefaults,    'c'},  // Сброс настроек
-    {2, "Zpsr#heccrbq",  M_RD_ChangeLanguage,    'z'},  // Язык: русский
+    {1, "Dbltj",          M_RD_Choose_Rendering,  'd'}, // Видео
+    {1, "\"rhfy",         M_RD_Choose_Display,   '\''}, // Экран
+    {1, "Felbj",          M_RD_Choose_Audio,      'f'}, // Аудио
+    {1, "Eghfdktybt",     M_RD_Choose_Controls,   'e'}, // Управление
+    {1, "Utqvgktq",       M_RD_Choose_Gameplay_1, 'u'}, // Геймплей
+    {1, "Pfrjyxbnm buhe", M_EndGame,              'p'}, // Закончить игру
+    {1, "C,hjc yfcnhjtr", M_RD_BackToDefaults,    'c'}, // Сброс настроек
+    {2, "Zpsr#heccrbq",   M_RD_ChangeLanguage,    'z'}, // Язык: русский
     {-1,"",0,'\0'}
 };
 
@@ -1065,11 +1065,11 @@ enum
 
 menuitem_t RD_Rendering_Menu[]=
 {
-    {2,"Floor and ceiling textures:", M_RD_Change_NoFlats,  'f'},
-    {2, "Show FPS counter:",          M_RD_Change_FPScounter,'s'},
+    {2, "Floor and ceiling textures:", M_RD_Change_NoFlats,    'f'},
+    {2, "Show FPS counter:",           M_RD_Change_FPScounter, 's'},
     {-1,"",0,'\0'},
-    {2,"Show disk icon:",             M_RD_Change_DiskIcon, 's'},
-    {2,"Screen wiping effect:",       M_RD_Change_Wiping,   's'},
+    {2, "Show disk icon:",             M_RD_Change_DiskIcon,   's'},
+    {2, "Screen wiping effect:",       M_RD_Change_Wiping,     's'},
     {-1,"",0,'\0'}
 };
 
@@ -1089,11 +1089,11 @@ menu_t  RD_Rendering_Def =
 
 menuitem_t RD_Rendering_Menu_Rus[]=
 {
-    {2,"Ntrcnehs gjkf b gjnjkrf:",   M_RD_Change_NoFlats,  'n'}, // Текстуры пола и потолка
-    {2, "Cxtnxbr rflhjdjq xfcnjns:", M_RD_Change_FPScounter, 'c'}, // Счетчик кадровой частоты
+    {2, "Ntrcnehs gjkf b gjnjkrf:",   M_RD_Change_NoFlats,    'n'}, // Текстуры пола и потолка
+    {2, "Cxtnxbr rflhjdjq xfcnjns:",  M_RD_Change_FPScounter, 'c'}, // Счетчик кадровой частоты
     {-1,"",0,'\0'},
-    {2,"Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon, 'j'}, // Отображать значок дискеты
-    {2,"\'aatrn cvtys \'rhfyjd:",    M_RD_Change_Wiping,   '\''}, // Эффект смены экранов
+    {2, "Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon,   'j'}, // Отображать значок дискеты
+    {2, "\'aatrn cvtys \'rhfyjd:",    M_RD_Change_Wiping,    '\''}, // Эффект смены экранов
     {-1,"",0,'\0'}
 };
 
@@ -1133,17 +1133,17 @@ enum
 
 menuitem_t RD_Display_Menu[]=
 {
-    {2,"screen size",       M_RD_Change_ScreenSize, 's'},
+    {2, "screen size",       M_RD_Change_ScreenSize,       's'},
     {-1,"",0,'\0'},
-    {2,"gamma-correction",  M_RD_Change_Gamma,      'g'},
+    {2, "gamma-correction",  M_RD_Change_Gamma,            'g'},
     {-1,"",0,'\0'},
-    {2, "level brightness", M_RD_Change_LevelBrightness, 'l'},
+    {2, "level brightness",  M_RD_Change_LevelBrightness,  'l'},
     {-1,"",0,'\0'},
-    {2,"detail level:",     M_RD_Change_Detail,     'e'},
-    {2, "local time:",      M_RD_Change_LocalTime,  'l'},
+    {2, "detail level:",     M_RD_Change_Detail,           'd'},
+    {2, "local time:",       M_RD_Change_LocalTime,        'l'},
     {-1,"",0,'\0'},
-    {1, "messages settings",M_RD_Choose_MessagesSettings, 'm'},
-    {1, "automap settings", M_RD_Choose_AutomapSettings, 'a'},
+    {1, "messages settings", M_RD_Choose_MessagesSettings, 'm'},
+    {1, "automap settings",  M_RD_Choose_AutomapSettings,  'a'},
     {-1,"",0,'\0'}
 };
 
@@ -1163,17 +1163,17 @@ menu_t  RD_Display_Def =
 
 menuitem_t RD_Display_Menu_Rus[]=
 {
-    {2,"hfpvth buhjdjuj \'rhfyf", M_RD_Change_ScreenSize, 'h'}, // Размер игрового экрана
-    {-1,"",0,'\0'},                                             //
-    {2,"ehjdtym ufvvf-rjhhtrwbb", M_RD_Change_Gamma,      'e'}, // Уровень гамма-коррекции
-    {-1,"",0,'\0'},                                             //
-    {2, "ehjdtym jcdtotyyjcnb",   M_RD_Change_LevelBrightness, 'e'}, // Уровень освещенности
+    {2, "hfpvth buhjdjuj \'rhfyf", M_RD_Change_ScreenSize,       'h'}, // Размер игрового экрана
     {-1,"",0,'\0'},
-    {2,"ehjdtym ltnfkbpfwbb:",    M_RD_Change_Detail,     'e'}, // Уровень детализации:
-    {2, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
+    {2, "ehjdtym ufvvf-rjhhtrwbb", M_RD_Change_Gamma,            'e'}, // Уровень гамма-коррекции
     {-1,"",0,'\0'},
-    {1, "yfcnhjqrb cjj,otybq",      M_RD_Choose_MessagesSettings,'y'}, // Настройки сообщений
-    {1, "yfcnhjqrb rfhns",        M_RD_Choose_AutomapSettings, 'y'}, // Настройки карты
+    {2, "ehjdtym jcdtotyyjcnb",    M_RD_Change_LevelBrightness,  'e'}, // Уровень освещенности
+    {-1,"",0,'\0'},
+    {2, "ehjdtym ltnfkbpfwbb:",    M_RD_Change_Detail,           'e'}, // Уровень детализации:
+    {2, "cbcntvyjt dhtvz:",        M_RD_Change_LocalTime,        'c'}, // Системное время:
+    {-1,"",0,'\0'},
+    {1, "yfcnhjqrb cjj,otybq",     M_RD_Choose_MessagesSettings, 'y'}, // Настройки сообщений
+    {1, "yfcnhjqrb rfhns",         M_RD_Choose_AutomapSettings,  'y'}, // Настройки карты
     {-1,"",0,'\0'}
 };
 
@@ -1209,13 +1209,13 @@ enum
 
 menuitem_t RD_Messages_Menu[]=
 {
-    {2, "messages enabled:",   M_RD_Change_Messages,        'm'},
-    {2, "text casts shadows:", M_RD_Change_ShadowedText,    't'},
+    {2, "messages enabled:",   M_RD_Change_Messages,         'm'},
+    {2, "text casts shadows:", M_RD_Change_ShadowedText,     't'},
     {-1,"",0,'\0'},
-    {2, "item pickup:",        M_RD_Change_Msg_Pickup_Color,'i'},
-    {2, "revealed secret:",    M_RD_Change_Msg_Secret_Color,'r'},
-    {2, "system message:",     M_RD_Change_Msg_System_Color,'s'},
-    {2, "netgame chat:",       M_RD_Change_Msg_Chat_Color,  'n'},
+    {2, "item pickup:",        M_RD_Change_Msg_Pickup_Color, 'i'},
+    {2, "revealed secret:",    M_RD_Change_Msg_Secret_Color, 'r'},
+    {2, "system message:",     M_RD_Change_Msg_System_Color, 's'},
+    {2, "netgame chat:",       M_RD_Change_Msg_Chat_Color,   'n'},
     {-1,"",0,'\0'}
 };
 
@@ -1235,13 +1235,13 @@ menu_t  RD_Messages_Def =
 
 menuitem_t RD_Messages_Menu_Rus[]=
 {
-    {2, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'j'}, // Отображение сообщений:
-    {2, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень:
+    {2, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,         'j'}, // Отображение сообщений:
+    {2, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,     'n'}, // Тексты отбрасывают тень:
     {-1,"",0,'\0'},
-    {2, "gjkextybt ghtlvtnjd:",     M_RD_Change_Msg_Pickup_Color,'g'}, // Получение предметов:
-    {2, "j,yfhe;tybt nfqybrjd:",    M_RD_Change_Msg_Secret_Color,'j'}, // Обнаружение тайников:
-    {2, "cbcntvyst cjj,otybz:",     M_RD_Change_Msg_System_Color,'c'}, // Системные сообщения:
-    {2, "xfn ctntdjq buhs:",        M_RD_Change_Msg_Chat_Color,  'x'}, // Чат сетевой игры:
+    {2, "gjkextybt ghtlvtnjd:",     M_RD_Change_Msg_Pickup_Color, 'g'}, // Получение предметов:
+    {2, "j,yfhe;tybt nfqybrjd:",    M_RD_Change_Msg_Secret_Color, 'j'}, // Обнаружение тайников:
+    {2, "cbcntvyst cjj,otybz:",     M_RD_Change_Msg_System_Color, 'c'}, // Системные сообщения:
+    {2, "xfn ctntdjq buhs:",        M_RD_Change_Msg_Chat_Color,   'x'}, // Чат сетевой игры:
     {-1,"",0,'\0'}
 };
 
@@ -1283,7 +1283,7 @@ menuitem_t RD_Automap_Menu[]=
 //  {2, "overlay mode:",      M_RD_Change_AutomapOverlay,   'o'},
     {2, "rotate mode:",       M_RD_Change_AutomapRotate,    'r'},
     {2, "follow mode:",       M_RD_Change_AutomapFollow,    'f'},
-    {2, "grid: o",            M_RD_Change_AutomapGrid,      'g'},
+    {2, "grid:",              M_RD_Change_AutomapGrid,      'g'},
     {-1,"",0,'\0'}
 };
 
@@ -1347,15 +1347,15 @@ enum
 
 menuitem_t RD_Audio_Menu[]=
 {
-    {2,"sfx volume",            M_RD_Change_SfxVol,        's'},
+    {2, "sfx volume",            M_RD_Change_SfxVol,      's'},
     {-1,"",0,'\0'},
-    {2,"music volume",          M_RD_Change_MusicVol,      'm'},
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    {2,"sound channels",        M_RD_Change_SfxChannels,   's'},
+    {2, "music volume",          M_RD_Change_MusicVol,    'm'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {1,"sound system settings",    M_RD_Choose_SoundSystem, 's'},
+    {2, "sound channels",        M_RD_Change_SfxChannels, 's'},
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
+    {1 ,"sound system settings", M_RD_Choose_SoundSystem, 's'},
     {-1,"",0,'\0'}
 };
 
@@ -1375,15 +1375,15 @@ menu_t RD_Audio_Def =
 
 menuitem_t RD_Audio_Menu_Rus[]=
 {
-    {2,"pder",                       M_RD_Change_SfxVol,        'p'}, // Звук
-    {-1,"",0,'\0'},                                                   //
-    {2,"vepsrf",                     M_RD_Change_MusicVol,      'v'}, // Музыка
-    {-1,"",0,'\0'},                                                   //
-    {-1,"",0,'\0'},                                                   //
-    {2,"Pderjdst rfyfks",            M_RD_Change_SfxChannels,   'p'}, // Звуковые каналы
-    {-1,"",0,'\0'},                                                   //
-    {-1,"",0,'\0'},                                                   //
-    {1,"yfcnhjqrb pderjdjq cbcntvs",    M_RD_Choose_SoundSystem, 'y'}, // Настройки звуковой системы...
+    {2, "pder",                       M_RD_Change_SfxVol,      'p'}, // Звук
+    {-1,"",0,'\0'},
+    {2, "vepsrf",                     M_RD_Change_MusicVol,    'v'}, // Музыка
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
+    {2, "Pderjdst rfyfks",            M_RD_Change_SfxChannels, 'p'}, // Звуковые каналы
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
+    {1, "yfcnhjqrb pderjdjq cbcntvs", M_RD_Choose_SoundSystem, 'y'}, // Настройки звуковой системы
     {-1,"",0,'\0'}
 };
 
@@ -1443,7 +1443,7 @@ menuitem_t RD_Audio_System_Menu_Rus[]=
 {
     {2, "pderjdst \'aatrns:",         M_RD_Change_SoundDevice,   'p'}, // Звуковые эффекты
     {2, "vepsrf:",                    M_RD_Change_MusicDevice,   'v'}, // Музыка
-    {-1,"",0,'\0'},                                                    //
+    {-1,"",0,'\0'},
     {2, "Ht;bv pderjds[ \'aatrnjd:",  M_RD_Change_SndMode,       'h'}, // Режим звуковых эффектов
     {2, "ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 'g'}, // Произвольный питч-шифтинг
     {-1,"",0,'\0'}
@@ -1481,13 +1481,13 @@ enum
 
 menuitem_t RD_Controls_Menu[]=
 {
-    {2,"always run:",     M_RD_Change_AlwaysRun,   'a'},
+    {2, "always run:",        M_RD_Change_AlwaysRun,   'a'},
     {-1,"",0,'\0'},
-    {2,"mouse sensivity", M_RD_Change_Sensitivity, 'm'},
+    {2, "mouse sensivity",    M_RD_Change_Sensitivity, 'm'},
     {-1,"",0,'\0'},
-    {2,"mouse look:",     M_RD_Change_MouseLook,   'm'},
-    {2, "invert y axis:",     M_RD_Change_InvertY, 'i'},
-    {2, "vertical movement:", M_RD_Change_Novert,  'v'},
+    {2, "mouse look:",        M_RD_Change_MouseLook,   'm'},
+    {2, "invert y axis:",     M_RD_Change_InvertY,     'i'},
+    {2, "vertical movement:", M_RD_Change_Novert,      'v'},
     {-1,"",0,'\0'}
 };
 
@@ -1507,13 +1507,13 @@ menu_t  RD_Controls_Def =
 
 menuitem_t RD_Controls_Menu_Rus[]=
 {
-    {2,"ht;bv gjcnjzyyjuj ,tuf:", M_RD_Change_AlwaysRun,   'g'}, // Режим постоянного бега
-    {-1,"",0,'\0'},                                              //
-    {2,"Crjhjcnm vsib",           M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
-    {-1,"",0,'\0'},                                              //
-    {2,"J,pjh vsim.:",            M_RD_Change_MouseLook,   'j'}, // Обзор мышью
-    {2, "dthnbrfkmyfz bydthcbz:",    M_RD_Change_InvertY,  'd'}, // Вертикальная инверсия
-    {2, "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,   'd'}, // Вертикальное перемещение
+    {2, "ht;bv gjcnjzyyjuj ,tuf:",    M_RD_Change_AlwaysRun,   'h'}, // Режим постоянного бега
+    {-1,"",0,'\0'},
+    {2, "Crjhjcnm vsib",              M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
+    {-1,"",0,'\0'},
+    {2, "J,pjh vsim.:",               M_RD_Change_MouseLook,   'j'}, // Обзор мышью
+    {2, "dthnbrfkmyfz bydthcbz:",    M_RD_Change_InvertY,      'd'}, // Вертикальная инверсия
+    {2, "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,       'd'}, // Вертикальное перемещение
     {-1,"",0,'\0'}
 };
 
@@ -1605,18 +1605,18 @@ enum
 
 menuitem_t RD_Gameplay_Menu_1[]=
 {
-    {2,"Brightmaps:",                  M_RD_Change_Brightmaps,      'b'},
-    {2,"Fake contrast:",               M_RD_Change_FakeContrast,    'f'},
-    {2,"Fuzz effect:",                 M_RD_Change_ImprovedFuzz,   'f'},
-    {2,"Colored HUD elements:",        M_RD_Change_ColoredHUD,      'c'},
-    {2,"Colored blood and corpses:",   M_RD_Change_ColoredBlood,    'c'},
-    {2,"Swirling liquids:",            M_RD_Change_SwirlingLiquids, 's'},
-    {2,"Invulnerability affects sky:", M_RD_Change_InvulSky,        'i'},
-    {2,"Flip weapons:",                M_RD_Change_FlipWeapons,     'f'},
+    {2, "Brightmaps:",                  M_RD_Change_Brightmaps,      'b'},
+    {2, "Fake contrast:",               M_RD_Change_FakeContrast,    'f'},
+    {2, "Fuzz effect:",                 M_RD_Change_ImprovedFuzz,    'f'},
+    {2, "Colored HUD elements:",        M_RD_Change_ColoredHUD,      'c'},
+    {2, "Colored blood and corpses:",   M_RD_Change_ColoredBlood,    'c'},
+    {2, "Swirling liquids:",            M_RD_Change_SwirlingLiquids, 's'},
+    {2, "Invulnerability affects sky:", M_RD_Change_InvulSky,        'i'},
+    {2, "Flip weapons:",                M_RD_Change_FlipWeapons,     'f'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {1,"", /* Next Page > */           M_RD_Choose_Gameplay_2,      'n'},
-    {1,"", /* < Last Page */           M_RD_Choose_Gameplay_4,      'l'},
+    {1, "", /* Next Page > */           M_RD_Choose_Gameplay_2,      'n'},
+    {1, "", /* < Last Page */           M_RD_Choose_Gameplay_4,      'l'},
     {-1,"",0,'\0'}
 };
 
@@ -1632,18 +1632,18 @@ menu_t  RD_Gameplay_Def_1 =
 
 menuitem_t RD_Gameplay_Menu_2[]=
 {
-    {2,"Play exit sounds:",               M_RD_Change_ExitSfx,        'p'},
-    {2,"Sound of crushing corpses:",      M_RD_Change_CrushingSfx,    's'},
-    {2,"Single sound of blazing door:",   M_RD_Change_BlazingSfx,     's'},
-    {2,"Monster alert waking up others:", M_RD_Change_AlertSfx,       'm'},
+    {2, "Play exit sounds:",               M_RD_Change_ExitSfx,        'p'},
+    {2, "Sound of crushing corpses:",      M_RD_Change_CrushingSfx,    's'},
+    {2, "Single sound of blazing door:",   M_RD_Change_BlazingSfx,     's'},
+    {2, "Monster alert waking up others:", M_RD_Change_AlertSfx,       'm'},
     {-1,"",0,'\0'},
-    {2,"Notify of revealed secrets:",     M_RD_Change_SecretNotify,   'n'},
-    {2,"Show negative health:",           M_RD_Change_NegativeHealth, 's'},
+    {2, "Notify of revealed secrets:",     M_RD_Change_SecretNotify,   'n'},
+    {2, "Show negative health:",           M_RD_Change_NegativeHealth, 's'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {1,"", /* Next page >   */            M_RD_Choose_Gameplay_3,     'n'},
-    {1,"", /* < Prev page > */            M_RD_Choose_Gameplay_1,     'p'},
+    {1, "", /* Next page >   */            M_RD_Choose_Gameplay_3,     'n'},
+    {1, "", /* < Prev page > */            M_RD_Choose_Gameplay_1,     'p'},
     {-1,"",0,'\0'}
 };
 
@@ -1659,18 +1659,18 @@ menu_t  RD_Gameplay_Def_2 =
 
 menuitem_t RD_Gameplay_Menu_3[]=
 {
-    {2,"Walk over and under monsters:",       M_RD_Change_WalkOverUnder,   'w'},
-    {2,"Corpses sliding from the ledges:",    M_RD_Change_Torque,          'c'},
-    {2,"Weapon bobbing while firing:",        M_RD_Change_Bobbing,         'w'},
-    {2,"Lethal pellet of a point-blank SSG:", M_RD_Change_SSGBlast,        'l'},
-    {2,"Randomly mirrored corpses:",          M_RD_Change_FlipCorpses,     'r'},
-    {2,"Floating powerups:",                  M_RD_Change_FloatPowerups,   'f'},
+    {2, "Walk over and under monsters:",       M_RD_Change_WalkOverUnder,   'w'},
+    {2, "Corpses sliding from the ledges:",    M_RD_Change_Torque,          'c'},
+    {2, "Weapon bobbing while firing:",        M_RD_Change_Bobbing,         'w'},
+    {2, "Lethal pellet of a point-blank SSG:", M_RD_Change_SSGBlast,        'l'},
+    {2, "Randomly mirrored corpses:",          M_RD_Change_FlipCorpses,     'r'},
+    {2, "Floating powerups:",                  M_RD_Change_FloatPowerups,   'f'},
     {-1,"",0,'\0'},
-    {2,"Draw crosshair:",                     M_RD_Change_CrosshairDraw,   'd'},
-    {2,"Health indication:",                  M_RD_Change_CrosshairHealth, 'h'},
+    {2, "Draw crosshair:",                     M_RD_Change_CrosshairDraw,   'd'},
+    {2, "Health indication:",                  M_RD_Change_CrosshairHealth, 'h'},
     {-1,"",0,'\0'},
-    {1,"", /* Next page >   */                M_RD_Choose_Gameplay_4,      'n'},
-    {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_2,      'p'},
+    {1, "", /* Next page >   */                M_RD_Choose_Gameplay_4,      'n'},
+    {1, "", /* < Prev page > */                M_RD_Choose_Gameplay_2,      'p'},
     {-1,"",0,'\0'}
 };
 
@@ -1686,18 +1686,18 @@ menu_t  RD_Gameplay_Def_3 =
 
 menuitem_t RD_Gameplay_Menu_4[]=
 {
-    {2,"Extra player faces on the HUD:",      M_RD_Change_ExtraPlayerFaces, 'e'},
-    {2,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
-    {2,"Don't prompt for q. saving/loading:", M_RD_Change_FastQSaveLoad,    'd'},
-    {2,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'p'},
+    {2, "Extra player faces on the HUD:",      M_RD_Change_ExtraPlayerFaces, 'e'},
+    {2, "Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
+    {2, "Don't prompt for q. saving/loading:", M_RD_Change_FastQSaveLoad,    'd'},
+    {2, "Play internal demos:",                M_RD_Change_NoInternalDemos,  'p'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {1,"", /* First page >  */                M_RD_Choose_Gameplay_1,       'f'},
-    {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_3,       'p'},
+    {1, "", /* First page >  */                M_RD_Choose_Gameplay_1,       'f'},
+    {1, "", /* < Prev page > */                M_RD_Choose_Gameplay_3,       'p'},
     {-1,"",0,'\0'}
 };
 
@@ -1717,18 +1717,18 @@ menu_t  RD_Gameplay_Def_4 =
 
 menuitem_t RD_Gameplay_Menu_1_Rus[]=
 {
-    {2,",hfqnvfggbyu:",                  M_RD_Change_Brightmaps,      ','}, // Брайтмаппинг
-    {2,"Bvbnfwbz rjynhfcnyjcnb:",        M_RD_Change_FakeContrast,    'b'}, // Имитация контрастности
-    {2,"\'aatrn ievf:",                  M_RD_Change_ImprovedFuzz,   '\''}, // Эффект шума
-    {2,"Hfpyjwdtnyst 'ktvtyns $:",       M_RD_Change_ColoredHUD,      'h'}, // Разноцветные элементы HUD
-    {2,"Hfpyjwdtnyfz rhjdm b nhegs:",    M_RD_Change_ColoredBlood,    'h'}, // Разноцветная кровь и трупы
-    {2,"ekexityyfz fybvfwbz ;blrjcntq:", M_RD_Change_SwirlingLiquids, 'e'}, // Улучшенная анимация жидкостей
-    {2,"ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        'y'}, // Неуязвимость окрашивает небо
-    {2,"pthrfkmyjt jnhf;tybt jhe;bz:",   M_RD_Change_FlipWeapons,     'p'}, // Зеркальное отражение оружия
+    {2, ",hfqnvfggbyu:",                  M_RD_Change_Brightmaps,      ','}, // Брайтмаппинг
+    {2, "Bvbnfwbz rjynhfcnyjcnb:",        M_RD_Change_FakeContrast,    'b'}, // Имитация контрастности
+    {2, "\'aatrn ievf:",                  M_RD_Change_ImprovedFuzz,   '\''}, // Эффект шума
+    {2, "Hfpyjwdtnyst 'ktvtyns $:",       M_RD_Change_ColoredHUD,      'h'}, // Разноцветные элементы HUD
+    {2, "Hfpyjwdtnyfz rhjdm b nhegs:",    M_RD_Change_ColoredBlood,    'h'}, // Разноцветная кровь и трупы
+    {2, "ekexityyfz fybvfwbz ;blrjcntq:", M_RD_Change_SwirlingLiquids, 'e'}, // Улучшенная анимация жидкостей
+    {2, "ytezpdbvjcnm jrhfibdftn yt,j:",  M_RD_Change_InvulSky,        'y'}, // Неуязвимость окрашивает небо
+    {2, "pthrfkmyjt jnhf;tybt jhe;bz:",   M_RD_Change_FlipWeapons,     'p'}, // Зеркальное отражение оружия
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {1,"",                               M_RD_Choose_Gameplay_2,      'l'}, // Далее >
-    {1,"",                               M_RD_Choose_Gameplay_4,      'y'}, // < Назад
+    {1, "",                               M_RD_Choose_Gameplay_2,      'l'}, // Далее >
+    {1, "",                               M_RD_Choose_Gameplay_4,      'y'}, // < Назад
     {-1,"",0,'\0'}
 };
 
@@ -1744,18 +1744,18 @@ menu_t  RD_Gameplay_Def_1_Rus =
 
 menuitem_t RD_Gameplay_Menu_2_Rus[]=
 {
-    {2,"Pderb ghb ds[jlt bp buhs:",     M_RD_Change_ExitSfx,        'p'}, // Звук при выходе из игры
-    {2,"Pder hfplfdkbdfybz nhegjd:",    M_RD_Change_CrushingSfx,    'p'}, // Звук раздавливания трупов
-    {2,"Jlbyjxysq pder ,scnhjq ldthb:", M_RD_Change_BlazingSfx,     'j'}, // Одиночный звук быстрой двери
-    {2,"J,ofz nhtdjuf e vjycnhjd:",     M_RD_Change_AlertSfx,       'j'}, // Общая тревога у монстров
+    {2, "Pderb ghb ds[jlt bp buhs:",     M_RD_Change_ExitSfx,        'p'}, // Звук при выходе из игры
+    {2, "Pder hfplfdkbdfybz nhegjd:",    M_RD_Change_CrushingSfx,    'p'}, // Звук раздавливания трупов
+    {2, "Jlbyjxysq pder ,scnhjq ldthb:", M_RD_Change_BlazingSfx,     'j'}, // Одиночный звук быстрой двери
+    {2, "J,ofz nhtdjuf e vjycnhjd:",     M_RD_Change_AlertSfx,       'j'}, // Общая тревога у монстров
     {-1,"",0,'\0'},
-    {2,"Cjj,ofnm j yfqltyyjv nfqybrt:", M_RD_Change_SecretNotify,   'c'}, // Сообщать о найденном тайнике
-    {2,"jnhbwfntkmyjt pljhjdmt d $:",   M_RD_Change_NegativeHealth, 'j'}, // Отрицательное здоровье в HUD
+    {2, "Cjj,ofnm j yfqltyyjv nfqybrt:", M_RD_Change_SecretNotify,   'c'}, // Сообщать о найденном тайнике
+    {2, "jnhbwfntkmyjt pljhjdmt d $:",   M_RD_Change_NegativeHealth, 'j'}, // Отрицательное здоровье в HUD
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {1,"",                              M_RD_Choose_Gameplay_3,     'l'}, // Далее >
-    {1,"",                              M_RD_Choose_Gameplay_1,     'y'}, // < Назад
+    {1, "",                              M_RD_Choose_Gameplay_3,     'l'}, // Далее >
+    {1, "",                              M_RD_Choose_Gameplay_1,     'y'}, // < Назад
     {-1,"",0,'\0'}
 };
 
@@ -1771,18 +1771,18 @@ menu_t  RD_Gameplay_Def_2_Rus =
 
 menuitem_t RD_Gameplay_Menu_3_Rus[]=
 {
-    {2,"Gthtvtotybt gjl/yfl vjycnhfvb:", M_RD_Change_WalkOverUnder,   'g'}, // Перемещение над/под монстрами
-    {2,"Nhegs cgjkpf.n c djpdsitybq:",   M_RD_Change_Torque,          'n'}, // Трупы сползают с возвышений
-    {2,"Ekexityyjt gjrfxbdfybt jhe;bz:", M_RD_Change_Bobbing,         'e'}, // Улучшенное покачивание оружия
-    {2,"ldecndjkrf hfphsdftn dhfujd:",   M_RD_Change_SSGBlast,        'l'}, // Двустволка разрывает врагов
-    {2,"pthrfkbhjdfybt nhegjd:",         M_RD_Change_FlipCorpses,     'p'}, // Зеркалирование трупов
-    {2,"Ktdbnbhe.obt caths-fhntafrns:",  M_RD_Change_FloatPowerups,   'k'}, // Левитирующие сферы-артефакты
+    {2, "Gthtvtotybt gjl/yfl vjycnhfvb:", M_RD_Change_WalkOverUnder,   'g'}, // Перемещение над/под монстрами
+    {2, "Nhegs cgjkpf.n c djpdsitybq:",   M_RD_Change_Torque,          'n'}, // Трупы сползают с возвышений
+    {2, "Ekexityyjt gjrfxbdfybt jhe;bz:", M_RD_Change_Bobbing,         'e'}, // Улучшенное покачивание оружия
+    {2, "ldecndjkrf hfphsdftn dhfujd:",   M_RD_Change_SSGBlast,        'l'}, // Двустволка разрывает врагов
+    {2, "pthrfkbhjdfybt nhegjd:",         M_RD_Change_FlipCorpses,     'p'}, // Зеркалирование трупов
+    {2, "Ktdbnbhe.obt caths-fhntafrns:",  M_RD_Change_FloatPowerups,   'k'}, // Левитирующие сферы-артефакты
     {-1,"",0,'\0'},
-    {2,"Jnj,hf;fnm ghbwtk:",             M_RD_Change_CrosshairDraw,   'j'}, // Отображать прицел
-    {2,"Bylbrfwbz pljhjdmz:",            M_RD_Change_CrosshairHealth, 'b'}, // Индикация здоровья
+    {2, "Jnj,hf;fnm ghbwtk:",             M_RD_Change_CrosshairDraw,   'j'}, // Отображать прицел
+    {2, "Bylbrfwbz pljhjdmz:",            M_RD_Change_CrosshairHealth, 'b'}, // Индикация здоровья
     {-1,"",0,'\0'},
-    {1,"",                               M_RD_Choose_Gameplay_4,      'l'}, // Далее >
-    {1,"",                               M_RD_Choose_Gameplay_2,      'y'}, // < Назад
+    {1, "",                               M_RD_Choose_Gameplay_4,      'l'}, // Далее >
+    {1, "",                               M_RD_Choose_Gameplay_2,      'y'}, // < Назад
     {-1,"",0,'\0'}
 };
 
@@ -1798,18 +1798,18 @@ menu_t  RD_Gameplay_Def_3_Rus =
 
 menuitem_t RD_Gameplay_Menu_4_Rus[]=
 {
-    {2,"Ljgjkybntkmyst kbwf buhjrf:",     M_RD_Change_ExtraPlayerFaces, 'l'}, // Дополнительные лица игрока
-    {2,"'ktvtynfkm ,tp juhfybxtybz lei:", M_RD_Change_LostSoulsQty,     '\''},// Элементаль без ограничения душ
-    {2,"jnrk.xbnm pfghjc ,> pfuheprb:",   M_RD_Change_FastQSaveLoad,    'j'}, // Отключить запрос б. загрузки
-    {2,"Ghjbuhsdfnm ltvjpfgbcb:",         M_RD_Change_NoInternalDemos,  'g'}, // Проигрывать демозаписи
+    {2, "Ljgjkybntkmyst kbwf buhjrf:",     M_RD_Change_ExtraPlayerFaces, 'l'}, // Дополнительные лица игрока
+    {2, "'ktvtynfkm ,tp juhfybxtybz lei:", M_RD_Change_LostSoulsQty,    '\''}, // Элементаль без ограничения душ
+    {2, "jnrk.xbnm pfghjc ,> pfuheprb:",   M_RD_Change_FastQSaveLoad,    'j'}, // Отключить запрос б. загрузки
+    {2, "Ghjbuhsdfnm ltvjpfgbcb:",         M_RD_Change_NoInternalDemos,  'g'}, // Проигрывать демозаписи
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {1,"",                                M_RD_Choose_Gameplay_1,       'l'}, // Далее >
-    {1,"",                                M_RD_Choose_Gameplay_3,       'y'}, // < Назад
+    {1, "",                                M_RD_Choose_Gameplay_1,       'l'}, // Далее >
+    {1, "",                                M_RD_Choose_Gameplay_3,       'y'}, // < Назад
     {-1,"",0,'\0'}
 };
 
@@ -1865,16 +1865,21 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextSmall_ENG(35, 35, "Rendering");
         dp_translation = NULL;
 
-        M_WriteTextSmall_ENG(217, 45, noflats ? "off" : "on");
+        // Floor and ceiling textures
+        M_WriteTextSmall_ENG(231, 45, noflats ? "off" : "on");
 
         // Show FPS counter
         M_WriteTextSmall_ENG(162, 55, show_fps ? "on" : "off");
 
+        //
+        // Extra
+        //
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35, 65, "Extra");
         dp_translation = NULL;
 
-        M_WriteTextSmall_ENG(241, 75, show_diskicon ? "on" : "off");
+        // Show disk icon
+        M_WriteTextSmall_ENG(138, 75, show_diskicon ? "on" : "off");
 
         // Screen wiping effect
         M_WriteTextSmall_ENG(187, 85, screen_wiping == 1 ? "standard" :
@@ -1890,15 +1895,20 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextSmall_RUS(35, 35, "htylthbyu"); // Рендеринг
         dp_translation = NULL;
 
+        // Текстуры пола и потолка
         M_WriteTextSmall_RUS(217, 45, noflats ? "dsrk" : "drk");
 
         // Счетчик кадровой частоты
         M_WriteTextSmall_RUS(227, 55, show_fps ? "drk" : "dsrk");
 
+        //
+        // Дополнительно
+        //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 65, "ljgjkybntkmyj"); // Дополнительно
+        M_WriteTextSmall_RUS(35, 65, "ljgjkybntkmyj");
         dp_translation = NULL;
 
+        // Отображать значок дискеты
         M_WriteTextSmall_RUS(241, 75, show_diskicon ? "drk" : "dsrk");
 
         // Эффект смены экранов
