@@ -363,6 +363,10 @@ static st_number_t	w_frags;
 // health widget
 static st_percent_t	w_health;
 
+// [JN] Negative player health
+static boolean      st_neghealth; 
+static st_percent_t w_health_neg;
+
 // arms background
 static st_binicon_t	w_armsbg; 
 
@@ -1473,6 +1477,9 @@ void ST_drawWidgets(boolean refresh)
     // used by w_frags widget
     st_fragson = deathmatch && st_statusbaron; 
 
+    // [JN] Negative player health
+    st_neghealth = negative_health && plyr->health <= 0 && !vanilla;
+
     dp_translation = ST_WidgetColor(hudcolor_ammo);
     STlib_updateNum(&w_ready, refresh);
     dp_translation = NULL;
@@ -1571,7 +1578,8 @@ void ST_drawWidgets(boolean refresh)
     }
 
     dp_translation = ST_WidgetColor(hudcolor_health);
-    STlib_updatePercent(&w_health, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
+    STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health,
+                        refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
     dp_translation = ST_WidgetColor(hudcolor_armor);
     STlib_updatePercent(&w_armor, refresh || screenblocks == 11 || screenblocks == 12 || screenblocks == 13);
     dp_translation = NULL;
@@ -1856,6 +1864,15 @@ void ST_createWidgets(void)
 		      ST_HEALTHY,
 		      tallnum,
 		      &plyr->health,
+		      &st_statusbaron,
+		      tallpercent);
+
+    // Negative player health
+    STlib_initPercent(&w_health_neg,
+		      ST_HEALTHX,
+		      ST_HEALTHY,
+		      tallnum,
+		      &plyr->health_neg,
 		      &st_statusbaron,
 		      tallpercent);
 

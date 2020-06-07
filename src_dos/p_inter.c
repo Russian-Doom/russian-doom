@@ -916,17 +916,17 @@ P_DamageMobj
 	    damage -= saved;
 	}
 	player->health -= damage; 	// mirror mobj health here for Dave
+    player->health_neg = player->health; 	// [JN] Set negative health value
 
-    // [crispy] negative player health
-    if (negative_health && !vanilla)
+    if (player->health < 0)
     {
-        if (player->health < -99)
-            player->health = -99;
+        player->health = 0;
     }
-    else
+
+    // [crispy] & [JN] Negative player health
+    if (player->health_neg < -99)
     {
-        if (player->health < 0)
-            player->health = 0;
+        player->health_neg = -99;
     }
 	
 	player->attacker = source;
