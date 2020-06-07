@@ -92,7 +92,6 @@ boolean	    singletics = false; // debug flag to cancel adaptiveness
 //extern int soundVolume;
 extern int  sfxVolume;
 extern int  musicVolume;
-extern int  screenblocks;
 
 extern boolean  inhelpscreens;
 

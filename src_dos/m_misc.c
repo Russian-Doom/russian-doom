@@ -47,7 +47,7 @@
 #include "dstrings.h"
 
 #include "m_misc.h"
-
+#include "r_main.h"
 #include "jn.h"
 
 
@@ -257,8 +257,6 @@ extern int	mouseSensitivity;
 extern int	showMessages;
 
 extern int	detailLevel;
-
-extern int	screenblocks;
 
 extern int	showMessages;
 

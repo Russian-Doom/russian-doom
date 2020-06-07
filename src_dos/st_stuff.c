@@ -62,8 +62,6 @@
 // STATUS BAR DATA
 //
 
-// [JN] For Crispy HUD
-extern int screenblocks;
 
 // Palette indices.
 // For damage/bonus red-/gold-shifts

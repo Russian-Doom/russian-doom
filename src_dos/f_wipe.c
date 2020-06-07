@@ -25,14 +25,13 @@
 #include "m_misc.h"
 #include "doomdef.h"
 #include "f_wipe.h"
+#include "r_main.h"
 #include "doomstat.h"
 #include "hu_stuff.h"
 #include "st_stuff.h"
 #include "w_wad.h"
 #include "jn.h"
 
-
-extern int screenblocks;
 
 //
 // SCREEN WIPE PACKAGE

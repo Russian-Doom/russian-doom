@@ -44,7 +44,6 @@
 #define WEAPONTOP		32*FRACUNIT
 
 
-extern int screenblocks;
 boolean chainsaw_attack_swing;
 
 

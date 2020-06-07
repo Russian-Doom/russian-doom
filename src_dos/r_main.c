@@ -834,7 +834,6 @@ void R_ExecuteSetViewSize (void)
 // R_Init
 //
 extern int	detailLevel;
-extern int	screenblocks;
 
 
 

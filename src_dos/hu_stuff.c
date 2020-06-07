@@ -33,6 +33,7 @@
 #include "dstrings.h"
 #include "sounds.h"
 
+#include "r_main.h"
 #include "v_trans.h"
 #include "jn.h"
 
@@ -693,8 +694,6 @@ void HU_Start(void)
 
 void HU_Drawer(void)
 {
-    extern int screenblocks;
-
     // [JN] Don't draw HUD stuff while in help screens.
     if (inhelpscreens)
     return;

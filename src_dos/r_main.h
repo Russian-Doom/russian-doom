@@ -113,6 +113,8 @@ extern lighttable_t*	fixedcolormap;
 //  0 = high, 1 = low
 extern	int		detailshift;	
 
+// [JN] Screen size.
+extern	int		screenblocks;
 
 //
 // Function pointers to switch refresh/drawing functions.

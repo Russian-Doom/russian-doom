@@ -40,8 +40,6 @@
 extern boolean		automapactive; 
 
 
-// [JN] For Crispy HUD
-extern int screenblocks;
 
 
 //

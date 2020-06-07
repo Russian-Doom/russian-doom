@@ -281,7 +281,6 @@ int         bodyqueslot;
 void*       statcopy;       // for statistics driver
 
 extern int isCyberPresent;  // is CyberMan present?
-extern int screenblocks;
 void I_ReadCyberCmd(ticcmd_t *cmd);
 
 int G_CmdChecksum (ticcmd_t* cmd)
