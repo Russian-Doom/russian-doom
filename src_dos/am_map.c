@@ -24,39 +24,31 @@
 #include "st_stuff.h"
 #include "p_local.h"
 #include "w_wad.h"
-
 #include "dutils.h"
 #include "i_system.h"
-
-// Needs access to LFB.
 #include "v_video.h"
-
-// State.
 #include "doomstat.h"
 #include "r_state.h"
-
-// Data.
 #include "dstrings.h"
 #include "am_map.h"
-
 #include "jn.h"
 
 
 // For use if I do walls with outsides/insides
-#define REDS        (256-5*16)
-#define REDRANGE    16
-#define BLUES       (256-4*16+8)
-#define BLUERANGE   8
-#define GREENS      (7*16)
-#define GREENRANGE  16
-#define GRAYS       (6*16)
-#define GRAYSRANGE  16
-#define BROWNS      (4*16)
-#define BROWNRANGE  16
-#define YELLOWS     (256-32+7)
-#define YELLOWRANGE 1
-#define BLACK       0
-#define WHITE       (256-47)
+#define REDS                176
+#define REDRANGE            16
+#define BLUES               200
+#define BLUERANGE           8
+#define GREENS              112
+#define GREENRANGE          16
+#define GRAYS               96
+#define GRAYSRANGE          16
+#define BROWNS              64
+#define BROWNRANGE          16
+#define YELLOWS             231
+#define YELLOWRANGE         1
+#define BLACK               0
+#define WHITE               209
 
 // Automap colors
 #define BACKGROUND          BLACK
@@ -78,37 +70,35 @@
 #define GRIDRANGE           0
 #define XHAIRCOLORS         GRAYS
 
-// drawing stuff
-#define FB 0
-
-#define AM_PANDOWNKEY   KEY_DOWNARROW
-#define AM_PANUPKEY     KEY_UPARROW
-#define AM_PANRIGHTKEY  KEY_RIGHTARROW
-#define AM_PANLEFTKEY   KEY_LEFTARROW
-#define AM_ZOOMINKEY    '='
-#define AM_ZOOMOUTKEY   '-'
-#define AM_STARTKEY     KEY_TAB
-#define AM_ENDKEY       KEY_TAB
-#define AM_GOBIGKEY     '0'
-#define AM_FOLLOWKEY    'f'
-#define AM_GRIDKEY      'g'
-#define AM_MARKKEY      'm'
-#define AM_CLEARMARKKEY 'c'
-#define AM_ROTATEKEY    'r'
+// [JN] Control keys
+#define AM_PANDOWNKEY       KEY_DOWNARROW
+#define AM_PANUPKEY         KEY_UPARROW
+#define AM_PANRIGHTKEY      KEY_RIGHTARROW
+#define AM_PANLEFTKEY       KEY_LEFTARROW
+#define AM_ZOOMINKEY        '='
+#define AM_ZOOMOUTKEY       '-'
+#define AM_STARTKEY         KEY_TAB
+#define AM_ENDKEY           KEY_TAB
+#define AM_GOBIGKEY         '0'
+#define AM_FOLLOWKEY        'f'
+#define AM_GRIDKEY          'g'
+#define AM_MARKKEY          'm'
+#define AM_CLEARMARKKEY     'c'
+#define AM_ROTATEKEY        'r'
 
 #define AM_NUMMARKPOINTS 10
 
 // scale on entry
-#define INITSCALEMTOF (.2*FRACUNIT)
+#define INITSCALEMTOF   (.2*FRACUNIT)
 // how much the automap moves window per tic in frame-buffer coordinates
 // moves 140 pixels in 1 second
-#define F_PANINC    4
+#define F_PANINC        4
 // how much zoom-in per tic
 // goes to 2x in 1 second
-#define M_ZOOMIN    ((int) (1.02*FRACUNIT))
+#define M_ZOOMIN        ((int)(1.02*FRACUNIT))
 // how much zoom-out per tic
 // pulls out to 0.5x in 1 second
-#define M_ZOOMOUT   ((int) (FRACUNIT/1.02))
+#define M_ZOOMOUT       ((int)(FRACUNIT/1.02))
 
 // translates between frame-buffer and map distances
 #define FTOM(x) (((int64_t)((x)<<16) * scale_ftom) >> FRACBITS)
@@ -139,11 +129,6 @@ typedef struct
 {
     mpoint_t a, b;
 } mline_t;
-
-typedef struct
-{
-    fixed_t slp, islp;
-} islope_t;
 
 
 //
@@ -210,7 +195,6 @@ static int  cheating = 0;
 static int  leveljuststarted = 1; // kluge until AM_LevelInit() is called
 
 boolean     automapactive = false;
-static int  finit_width = SCREENWIDTH;
 static int  finit_height = SCREENHEIGHT - 32;
 
 // location of window on screen
@@ -338,23 +322,6 @@ void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
                 int NumLevels, unsigned short IntensityBits);
 
 void V_MarkRect (int x, int y, int width, int height);
-
-// Calculates the slope and slope according to the x-axis of a line
-// segment in map coordinates (with the upright y-axis n' all) so
-// that it can be used with the brain-dead drawing stuff.
-
-void AM_getIslope (mline_t* ml, islope_t* is)
-{
-    int dx, dy;
-
-    dy = ml->a.y - ml->b.y;
-    dx = ml->b.x - ml->a.x;
-
-    if (!dy) is->islp = (dx<0?-MAXINT:MAXINT);
-    else is->islp = FixedDiv(dx, dy);
-    if (!dx) is->slp = (dy<0?-MAXINT:MAXINT);
-    else is->slp = FixedDiv(dy, dx);
-}
 
 
 //
@@ -598,7 +565,7 @@ void AM_LevelInit(void)
     leveljuststarted = 0;
 
     f_x = f_y = 0;
-    f_w = finit_width;
+    f_w = SCREENWIDTH;
     f_h = finit_height;
 
     AM_clearMarks();
@@ -863,26 +830,6 @@ void AM_doFollowPlayer(void)
 
 
 //
-//
-//
-void AM_updateLightLev(void)
-{
-    static int nexttic = 0;
-    //static int litelevels[] = { 0, 3, 5, 6, 6, 7, 7, 7 };
-    static int litelevels[] = { 0, 4, 7, 10, 12, 14, 15, 15 };
-    static int litelevelscnt = 0;
-
-    // Change light level
-    if (amclock>nexttic)
-    {
-        lightlev = litelevels[litelevelscnt++];
-        if (litelevelscnt == sizeof(litelevels)/sizeof(int)) litelevelscnt = 0;
-        nexttic = amclock + 6 - (amclock % 6);
-    }
-}
-
-
-//
 // Updates on Game Tick
 //
 void AM_Ticker (void)
@@ -902,9 +849,6 @@ void AM_Ticker (void)
     // Change x,y location
     if (m_paninc.x || m_paninc.y)
     AM_changeWindowLoc();
-
-    // Update light level
-    // AM_updateLightLev();
 
     // [crispy] required for AM_rotatePoint()
     if (automap_rotate)
@@ -1254,8 +1198,8 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
 
     if (xx < 32)
         cc += 7 - (xx >> 2);
-    else if (xx > (finit_width - 32))
-        cc += 7 - ((finit_width - xx) >> 2);
+    else if (xx > (SCREENWIDTH - 32))
+        cc += 7 - ((SCREENWIDTH - xx) >> 2);
     if (yy < 32)
         cc += 7 - (yy >> 2);
     else if (yy > (finit_height - 32))
@@ -1294,11 +1238,13 @@ void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
 {
     unsigned short IntensityShift, ErrorAdj, ErrorAcc;
     unsigned short ErrorAccTemp, Weighting, WeightingComplementMask;
-    short DeltaX, DeltaY, Temp, XDir;
+    short DeltaX, DeltaY, XDir;
 
     /* Make sure the line runs top to bottom */
     if (Y0 > Y1)
     {
+        short Temp;
+
         Temp = Y0;
         Y0 = Y1;
         Y1 = Temp;
@@ -2115,7 +2061,7 @@ void AM_drawMarks(void)
             fx = (CXMTOF(pt.x)) - 1;
             fy = (CYMTOF(pt.y)) - 2;
             if (fx >= f_x && fx <= f_w - w && fy >= f_y && fy <= f_h - h)
-            V_DrawPatch(fx, fy, FB, marknums[i]);
+            V_DrawPatch(fx, fy, 0, marknums[i]);
         }
     }
 }
