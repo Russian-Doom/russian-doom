@@ -153,7 +153,6 @@ void S_SetMusicVolume(int volume)
                 volume);
     }
 
-    I_SetMusicVolume(127);
     I_SetMusicVolume(volume);
     snd_MusicVolume = volume;
     
