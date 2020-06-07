@@ -2155,7 +2155,10 @@ void AM_Drawer (void)
     if (cheating==2)
 	AM_drawThings(THINGCOLORS, THINGRANGE);
 
+    // [JN] Do not draw in following mode.
+    if (!automap_follow)
     AM_drawCrosshair(XHAIRCOLORS);
+
     AM_drawMarks();
 
     V_MarkRect(f_x, f_y, f_w, f_h);
