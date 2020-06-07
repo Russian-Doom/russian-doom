@@ -170,6 +170,8 @@ lighttable_t	*brightmaps_redonly1;
 lighttable_t	*brightmaps_explosivebarrel;
 lighttable_t	*brightmaps_alllights;
 lighttable_t	*brightmaps_candles;
+lighttable_t	*brightmaps_pileofskulls;
+lighttable_t	*brightmaps_redonly2;
 
 //
 // MAPTEXTURE_T CACHING
@@ -736,6 +738,14 @@ void R_InitColormaps (void)
     brightmaps_candles = Z_Malloc (length_bmap, PU_STATIC, 0); 
     brightmaps_candles = (byte *)( ((int)brightmaps_candles + 255)&~0xff); 
     W_ReadLump (W_GetNumForName("BRTMAP13"), brightmaps_candles);    
+
+    brightmaps_pileofskulls = Z_Malloc (length_bmap, PU_STATIC, 0);
+    brightmaps_pileofskulls = (byte *)( ((int)brightmaps_pileofskulls + 255)&~0xff);
+    W_ReadLump (W_GetNumForName("BRTMAP14"), brightmaps_pileofskulls);
+
+    brightmaps_redonly2 = Z_Malloc (length_bmap, PU_STATIC, 0);
+    brightmaps_redonly2 = (byte *)( ((int)brightmaps_redonly2 + 255)&~0xff);
+    W_ReadLump (W_GetNumForName("BRTMAP15"), brightmaps_redonly2);
 }
 
 
