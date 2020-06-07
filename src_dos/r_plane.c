@@ -479,6 +479,7 @@ void R_DrawPlanes (void)
             }
 
             dc_texturemid = skytexturemid;
+            dc_texheight = textureheight[skytexture]>>FRACBITS;
 
             for (x=pl->minx ; x <= pl->maxx ; x++)
             {

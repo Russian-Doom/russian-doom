@@ -101,6 +101,7 @@ int			dc_yl;
 int			dc_yh; 
 fixed_t			dc_iscale; 
 fixed_t			dc_texturemid;
+int			dc_texheight;
 
 // first pixel in a column (possibly virtual) 
 byte*			dc_source;		
@@ -117,49 +118,98 @@ int			dccount;
 // 
 void R_DrawColumn (void) 
 { 
-    int			count; 
-    byte*		dest; 
-    fixed_t		frac;
-    fixed_t		fracstep;	 
- 
-    count = dc_yh - dc_yl; 
+    int       count;
+    byte     *dest;     // killough
+    fixed_t   frac;     // killough
+    fixed_t   fracstep;
 
-    // Zero length, column does not exceed a pixel.
-    if (count < 0) 
-	return; 
-				 
-#ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH
-	|| dc_yl < 0
-	|| dc_yh >= SCREENHEIGHT) 
-	I_Error (english_language ?
+    count = dc_yh - dc_yl + 1;
+
+    if (count <= 0)    // Zero length, column does not exceed a pixel.
+    {
+        return;
+    }
+
+    // [JN] Write bytes to the graphical output
+    outp (SC_INDEX+1 , 1 << (dc_x&3));
+
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ? 
                  "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x); 
-#endif 
+                 "R_DrawColumn: %i ª %i ¢ %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
 
-        outp (SC_INDEX+1,1<<(dc_x&3)); 
+    // Framebuffer destination address.
+    // Use ylookup LUT to avoid multiply with ScreenWidth.
+    // Use columnofs LUT for subwindows?
 
-        dest = destview + dc_yl*80 + (dc_x>>2); 
+    dest = destview + dc_yl*80 + (dc_x>>2); 
 
-    // Determine scaling,
-    //  which is the only mapping to be done.
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+    // Determine scaling, which is the only mapping to be done.
+
+    fracstep = dc_iscale;
+    frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     // Inner loop that does the actual texture mapping,
     //  e.g. a DDA-lile scaling.
-    // This is as fast as it gets.
-    do 
+    // This is as fast as it gets.       (Yeah, right!!! -- killough)
+    //
+    // killough 2/1/98: more performance tuning
     {
-	// Re-map color indices from wall texture column
-	//  using a lighting/special effects LUT.
-	*dest = dc_colormap[dc_source[(frac>>FRACBITS)&127]];
-	
-	dest += SCREENWIDTH/4;
-	frac += fracstep;
-	
-    } while (count--); 
-} 
+        const byte *source = dc_source;
+        const lighttable_t *colormap = dc_colormap;
+        int heightmask = dc_texheight-1;
+
+        if (dc_texheight & heightmask)   // not a power of 2 -- killough
+        {
+            heightmask++;
+            heightmask <<= FRACBITS;
+
+            if (frac < 0)
+              while ((frac += heightmask) < 0);
+            else
+              while (frac >= heightmask)
+                frac -= heightmask;
+
+            do
+            {
+                // Re-map color indices from wall texture column
+                //  using a lighting/special effects LUT.
+
+                // heightmask is the Tutti-Frutti fix -- killough
+
+                *dest = dc_colormap[dc_source[(frac>>FRACBITS)&127]];
+                dest += SCREENWIDTH/4;
+                if ((frac += fracstep) >= heightmask)
+                {
+                    frac -= heightmask;
+                }
+            } while (--count);
+        }
+        else
+        {
+            while ((count-=2)>=0)   // texture height is a power of 2 -- killough
+            {
+                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+                dest += SCREENWIDTH/4;
+                frac += fracstep;
+                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+                dest += SCREENWIDTH/4;
+                frac += fracstep;
+            }
+
+            if (count & 1)
+            {
+                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+            }
+        }
+    }
+}
+
 
 
 
@@ -184,7 +234,7 @@ void R_DrawColumnLow (void)
 	
 	I_Error (english_language ?
                  "R_DrawColumnLow: %i to %i at %i" :
-                 "R_DrawColumnLow: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x);
+                 "R_DrawColumnLow: %i ò %i ÷ %i", dc_yl, dc_yh, dc_x);
     }
     //	dccount++; 
 #endif 
@@ -280,7 +330,7 @@ void R_DrawFuzzColumn (void)
     {
 	I_Error (english_language ?
                  "R_DrawFuzzColumn: %i to %i at %i" :
-                 "R_DrawFuzzColumn: %i ª %i ¢ %i",
+                 "R_DrawFuzzColumn: %i ò %i ÷ %i",
 		 dc_yl, dc_yh, dc_x);
     }
 #endif
@@ -382,7 +432,7 @@ void R_DrawTranslatedColumn (void)
     {
 	I_Error (english_language ?
                  "R_DrawTranslatedColumn: %i to %i at %i" :
-                 "R_DrawTranslatedColumn: %i ª %i ¢ %i",
+                 "R_DrawTranslatedColumn: %i ò %i ÷ %i",
 		 dc_yl, dc_yh, dc_x);
     }
     
@@ -518,7 +568,7 @@ void R_DrawSpan (void)
     {
         I_Error(english_language ?
                 "R_DrawSpan: %i to %i at %i" :
-                "R_DrawSpan: %i ª %i ¢ %i",
+                "R_DrawSpan: %i ò %i ÷ %i",
                 ds_x1,ds_x2,ds_y);
     } 
 #endif 
@@ -583,7 +633,7 @@ void R_DrawSpanLow (void)
     {
         I_Error(english_language ?
                 "R_DrawSpanLow: %i to %i at %i" :
-                "R_DrawSpanLow: %i ª %i ¢ %i",
+                "R_DrawSpanLow: %i ò %i ÷ %i",
                 ds_x1,ds_x2,ds_y);
     } 
 #endif 
@@ -638,7 +688,7 @@ void R_DrawSpanNoTexture (void)
     if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
     I_Error(english_language ?
             "R_DrawSpanNoTexture: %i to %i at %i" :
-            "R_DrawSpanNoTexture: %i ª %i ¢ %i", ds_x1,ds_x2,ds_y);
+            "R_DrawSpanNoTexture: %i ò %i ÷ %i", ds_x1,ds_x2,ds_y);
 #endif
 
     for (i = 0; i < 4; i++)
@@ -678,7 +728,7 @@ void R_DrawSpanLowNoTexture (void)
     if (ds_x2 < ds_x1 || ds_x1<0 || ds_x2>=SCREENWIDTH || (unsigned)ds_y>SCREENHEIGHT)
     I_Error(english_language ?
             "R_DrawSpanLowNoTexture: %i to %i at %i" :
-            "R_DrawSpanLowNoTexture: %i ª %i ¢ %i", ds_x1,ds_x2,ds_y);
+            "R_DrawSpanLowNoTexture: %i ò %i ÷ %i", ds_x1,ds_x2,ds_y);
 #endif 
 
     for (i = 0; i < 2; i++)
