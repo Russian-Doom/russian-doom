@@ -2748,6 +2748,10 @@ void M_RD_Draw_Audio_System (void)
         {
             M_WriteTextSmall_ENG(79, 55, "SOUND BLASTER");
         }
+        else if (snd_DesiredMusicDevice == 5)
+        {
+            M_WriteTextSmall_ENG(79, 55, "GRAVIS ULTRASOUND");
+        }
         else if (snd_DesiredMusicDevice == 8)
         {
             M_WriteTextSmall_ENG(79, 55, "GENERAL MIDI");
@@ -2833,6 +2837,10 @@ void M_RD_Draw_Audio_System (void)
         else if (snd_DesiredMusicDevice == 3)
         {
             M_WriteTextSmall_ENG(94, 55, "SOUND BLASTER");
+        }
+        else if (snd_DesiredMusicDevice == 5)
+        {
+            M_WriteTextSmall_ENG(94, 55, "GRAVIS ULTRASOUND");
         }
         else if (snd_DesiredMusicDevice == 8)
         {
@@ -2920,6 +2928,7 @@ void M_RD_Change_MusicDevice (int choice)
     // 0 = NO MUSIC
     // 2 = Adlib
     // 3 = Sound Blaster
+    // 5 = Gravis UltraSound
     // 8 = General MIDI
     switch(choice)
     {
@@ -2929,6 +2938,9 @@ void M_RD_Change_MusicDevice (int choice)
                 snd_DesiredMusicDevice = 8;
             else 
             if (snd_DesiredMusicDevice == 8)
+                snd_DesiredMusicDevice = 5;
+            else 
+            if (snd_DesiredMusicDevice == 5)
                 snd_DesiredMusicDevice = 3;
             else
             if (snd_DesiredMusicDevice == 3)
@@ -2948,6 +2960,9 @@ void M_RD_Change_MusicDevice (int choice)
                 snd_DesiredMusicDevice = 3;
             else
             if (snd_DesiredMusicDevice == 3)
+                snd_DesiredMusicDevice = 5;
+            else
+            if (snd_DesiredMusicDevice == 5)
                 snd_DesiredMusicDevice = 8;
             else
             if (snd_DesiredMusicDevice == 8)
@@ -2961,6 +2976,7 @@ void M_RD_Change_MusicDevice (int choice)
     if (snd_DesiredMusicDevice != 0
     &&  snd_DesiredMusicDevice != 2
     &&  snd_DesiredMusicDevice != 3
+    &&  snd_DesiredMusicDevice != 5
     &&  snd_DesiredMusicDevice != 8)
     {
         snd_DesiredMusicDevice = 0;
