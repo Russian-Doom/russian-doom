@@ -402,6 +402,8 @@ void I_sndArbitrateCards(void)
             printf(english_language ?
                    "The MPU-401 isn't reponding @ p=0x%x.\n" :
                    "Устройство MPU-401 не отвечает @ p=0x%x.\n", snd_Mport);
+            // [JN] Try to set again
+            MPU_SetCard(snd_Mport);
         }
         else
         {
@@ -417,6 +419,7 @@ void I_sndArbitrateCards(void)
 void I_StartupSound(void)
 {
     int rc;
+    int i;
 
     //
     // initialize dmxCodes[]
@@ -461,8 +464,16 @@ void I_StartupSound(void)
            "  calling DMX_Init\n" :
            "  вызов DMX_Init\n");
 
-    rc = DMX_Init(SND_TICRATE, SND_MAXSONGS, dmxCodes[snd_MusicDevice],
-                  dmxCodes[snd_SfxDevice]);
+    // [JN] Call DMX_Init eight times. This fixes (hopefully) a bug
+    // with DMX library, which have two possible cosequences:
+    // 1) Music may start with incorrect synth.
+    // 2) Music may not start at all.
+    for (i = 0 ; i < 8 ; i ++)
+    {
+        rc = DMX_Init(SND_TICRATE, SND_MAXSONGS, 
+                      dmxCodes[snd_MusicDevice],
+                      dmxCodes[snd_SfxDevice]);
+    }
 
     if (devparm)
     {

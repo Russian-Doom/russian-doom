@@ -2740,6 +2740,10 @@ void M_RD_Draw_Audio_System (void)
             M_WriteTextSmall_ENG(79, 55, "disabled");
             dp_translation = NULL;
         }
+        else if (snd_DesiredMusicDevice == 2)
+        {
+            M_WriteTextSmall_ENG(79, 55, "ADLIB");
+        }
         else if (snd_DesiredMusicDevice == 3)
         {
             M_WriteTextSmall_ENG(79, 55, "SOUND BLASTER");
@@ -2821,6 +2825,10 @@ void M_RD_Draw_Audio_System (void)
             dp_translation = cr[CR_DARKRED];
             M_WriteTextSmall_RUS(94, 55, "jnrk.xtyf");
             dp_translation = NULL;
+        }
+        else if (snd_DesiredMusicDevice == 2)
+        {
+            M_WriteTextSmall_ENG(94, 55, "ADLIB");
         }
         else if (snd_DesiredMusicDevice == 3)
         {
@@ -2910,6 +2918,7 @@ void M_RD_Change_MusicDevice (int choice)
 {
     // [JN] Available values:
     // 0 = NO MUSIC
+    // 2 = Adlib
     // 3 = Sound Blaster
     // 8 = General MIDI
     switch(choice)
@@ -2923,6 +2932,9 @@ void M_RD_Change_MusicDevice (int choice)
                 snd_DesiredMusicDevice = 3;
             else
             if (snd_DesiredMusicDevice == 3)
+                snd_DesiredMusicDevice = 2;
+            else
+            if (snd_DesiredMusicDevice == 2)
                 snd_DesiredMusicDevice = 0;
             break;
         }
@@ -2930,6 +2942,9 @@ void M_RD_Change_MusicDevice (int choice)
         case 1:
         {
             if (snd_DesiredMusicDevice == 0)
+                snd_DesiredMusicDevice = 2;
+            else
+            if (snd_DesiredMusicDevice == 2)
                 snd_DesiredMusicDevice = 3;
             else
             if (snd_DesiredMusicDevice == 3)
@@ -2944,6 +2959,7 @@ void M_RD_Change_MusicDevice (int choice)
 
     // [JN] Un-lock unsupported device
     if (snd_DesiredMusicDevice != 0
+    &&  snd_DesiredMusicDevice != 2
     &&  snd_DesiredMusicDevice != 3
     &&  snd_DesiredMusicDevice != 8)
     {
