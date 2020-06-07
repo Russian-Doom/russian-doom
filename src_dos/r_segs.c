@@ -520,12 +520,13 @@ void R_RenderSegLoop (void)
 
 // [crispy] WiggleFix: move R_ScaleFromGlobalAngle function to r_segs.c,
 // above R_StoreWallRange
+// [JN] Added support for low detail (detailshift).
 fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 {
     int		anglea = ANG90 + (visangle - viewangle);
     int		angleb = ANG90 + (visangle - rw_normalangle);
     int		den = FixedMul(rw_distance, finesine[anglea >> ANGLETOFINESHIFT]);
-    fixed_t	num = FixedMul(projection, finesine[angleb >> ANGLETOFINESHIFT]);
+    fixed_t	num = FixedMul(projection, finesine[angleb >> ANGLETOFINESHIFT] << detailshift);
     fixed_t 	scale;
 
     if (den > (num >> 16))
@@ -610,21 +611,12 @@ R_StoreWallRange
     // right before calls to R_ScaleFromGlobalAngle:
     R_FixWiggle(frontsector);
 
-    // [JN] Calculations works properly only in High Detail,
-    // that's why there is a definition of !detailshift.
-
     // calculate scale at both ends and step    
-    if (!detailshift)
-    ds_p->scale1 = rw_scale = R_ScaleFromGlobalAngle (viewangle + xtoviewangle[start]);
-    else
-    ds_p->scale1 = rw_scale = R_ScaleFromGlobalAngleLow (viewangle + xtoviewangle[start]);        
+    ds_p->scale1 = rw_scale = R_ScaleFromGlobalAngle (viewangle + xtoviewangle[start]);        
     
     if (stop > start )
     {
-        if (!detailshift)
         ds_p->scale2 = R_ScaleFromGlobalAngle (viewangle + xtoviewangle[stop]);
-        else
-        ds_p->scale2 = R_ScaleFromGlobalAngleLow (viewangle + xtoviewangle[stop]);
 	
     ds_p->scalestep = rw_scalestep = (ds_p->scale2 - rw_scale) / (stop-start);
     }
