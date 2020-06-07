@@ -352,9 +352,9 @@ default_t	defaults[] =
     {"show_messages",           &showMessages,          1},
     {"draw_shadowed_text",      &draw_shadowed_text,    1},
     {"messages_pickup_color",   &messages_pickup_color, 0},
-    {"messages_secret_color",   &messages_secret_color, 0},
+    {"messages_secret_color",   &messages_secret_color, 3},
     {"messages_system_color",   &messages_system_color, 0},
-    {"messages_chat_color",     &messages_chat_color,   0},
+    {"messages_chat_color",     &messages_chat_color,   1},
 
     // Automap
     {"automap_color",           &automap_color,         0},
