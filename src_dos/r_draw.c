@@ -212,50 +212,99 @@ void R_DrawColumn (void)
 
 
 
+void R_DrawColumnLow (void)
+{
+    int       count;
+    byte     *dest;
+    fixed_t   frac;
+    fixed_t   fracstep;
 
-void R_DrawColumnLow (void) 
-{ 
-    int			count; 
-    byte*		dest; 
-    fixed_t		frac;
-    fixed_t		fracstep;	 
- 
-    count = dc_yh - dc_yl; 
+    // [JN] Tutti-Frutti fix - same to high detail (+1).
+    count = dc_yh - dc_yl + 1;
 
-    // Zero length.
-    if (count < 0) 
-	return; 
-				 
-#ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH
-	|| dc_yl < 0
-	|| dc_yh >= SCREENHEIGHT)
+    if (count < 0)  // Zero length, column does not exceed a pixel.
     {
-	
-	I_Error (english_language ?
-                 "R_DrawColumnLow: %i to %i at %i" :
-                 "R_DrawColumnLow: %i ò %i ÷ %i", dc_yl, dc_yh, dc_x);
+        return;
     }
-    //	dccount++; 
-#endif 
-        if (dc_x & 1)
-            outp (SC_INDEX+1,12); 
-        else
-            outp (SC_INDEX+1,3);
 
-        dest = destview + dc_yl*80 + (dc_x>>1); 
-    
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
-    
-    do 
+    // [JN] Write bytes to the graphical output
+    if (dc_x & 1)
     {
-        *dest = dc_colormap[dc_source[(frac>>FRACBITS)&127]];
-        
-        dest += SCREENWIDTH/4; 
-        frac += fracstep;
+        outp (SC_INDEX+1,12);
+    }
+    else
+    {
+        outp (SC_INDEX+1,3);
+    }
 
-    } while (count--);
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                "R_DrawColumnLow: %i to %i at %i" :
+                "R_DrawColumnLow: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest = destview + dc_yl*80 + (dc_x>>1);
+
+    fracstep = dc_iscale;
+    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+
+    // Inner loop that does the actual texture mapping,
+    //  e.g. a DDA-lile scaling.
+    // This is as fast as it gets.       (Yeah, right!!! -- killough)
+    //
+    // killough 2/1/98: more performance tuning
+    {
+        const byte *source = dc_source;
+        const lighttable_t *colormap = dc_colormap;
+        int heightmask = dc_texheight-1;
+
+        if (dc_texheight & heightmask)   // not a power of 2 -- killough
+        {
+            heightmask++;
+            heightmask <<= FRACBITS;
+
+            if (frac < 0)
+              while ((frac += heightmask) < 0);
+            else
+              while (frac >= heightmask)
+                frac -= heightmask;
+
+            do
+            {
+                // Re-map color indices from wall texture column
+                //  using a lighting/special effects LUT.
+
+                // heightmask is the Tutti-Frutti fix -- killough
+
+                *dest = dc_colormap[dc_source[(frac>>FRACBITS)&127]];
+                dest += SCREENWIDTH/4;
+                if ((frac += fracstep) >= heightmask)
+                {
+                    frac -= heightmask;
+                }
+            } while (--count);
+        }
+        else
+        {
+            while ((count-=2)>=0)   // texture height is a power of 2 -- killough
+            {
+                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+                dest += SCREENWIDTH/4;
+                frac += fracstep;
+                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+                dest += SCREENWIDTH/4;
+                frac += fracstep;
+            }
+
+            if (count & 1)
+            {
+                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+            }
+        }
+    }
 }
 
 
