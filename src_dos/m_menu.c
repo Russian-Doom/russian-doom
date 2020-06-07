@@ -1093,7 +1093,7 @@ menuitem_t RD_Rendering_Menu_Rus[]=
     {2, "Cxtnxbr rflhjdjq xfcnjns:", M_RD_Change_FPScounter, 'c'}, // Счетчик кадровой частоты
     {-1,"",0,'\0'},
     {2,"Jnj,hf;fnm pyfxjr lbcrtns:", M_RD_Change_DiskIcon, 'j'}, // Отображать значок дискеты
-    {2,"Gkfdyfz cvtyf \'rhfyjd:",    M_RD_Change_Wiping,   'g'}, // Плавная смена экранов
+    {2,"\'aatrn cvtys \'rhfyjd:",    M_RD_Change_Wiping,   '\''}, // Эффект смены экранов
     {-1,"",0,'\0'}
 };
 
@@ -1875,7 +1875,11 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         M_WriteTextSmall_ENG(241, 75, show_diskicon ? "on" : "off");
-        M_WriteTextSmall_ENG(204, 85, screen_wiping ? "on" : "off");
+
+        // Screen wiping effect
+        M_WriteTextSmall_ENG(187, 85, screen_wiping == 1 ? "standard" :
+                                      screen_wiping == 2 ? "loading" :
+                                                           "off");
     }
     else
     {
@@ -1896,7 +1900,11 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         M_WriteTextSmall_RUS(241, 75, show_diskicon ? "drk" : "dsrk");
-        M_WriteTextSmall_RUS(204, 85, screen_wiping ? "drk" : "dsrk");
+
+        // Эффект смены экранов
+        M_WriteTextSmall_RUS(202, 85, screen_wiping == 1 ? "cnfylfhnysq" :
+                                      screen_wiping == 2 ? "pfuheprf" :
+                                                           "dsrk");
     }
 }
 
@@ -1920,7 +1928,24 @@ void M_RD_Change_FPScounter(int choice)
 
 void M_RD_Change_Wiping (int choice)
 {
-    screen_wiping ^= 1;
+    switch(choice)
+    {
+        case 0:
+        {
+            screen_wiping--;
+            if (screen_wiping < 0)
+                screen_wiping = 2;
+            break;
+        }
+
+        case 1:
+        {
+            screen_wiping++;
+            if (screen_wiping > 2)
+                screen_wiping = 0;
+            break;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------

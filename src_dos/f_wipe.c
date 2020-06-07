@@ -25,6 +25,14 @@
 #include "m_misc.h"
 #include "doomdef.h"
 #include "f_wipe.h"
+#include "doomstat.h"
+#include "hu_stuff.h"
+#include "st_stuff.h"
+#include "w_wad.h"
+#include "jn.h"
+
+
+extern int screenblocks;
 
 //
 // SCREEN WIPE PACKAGE
@@ -161,29 +169,41 @@ int wipe_doMelt (int width, int height, int ticks)
             }
             else if (y[i] < height)
             {
-                dy = (y[i] < 16) ? y[i]+1 : 8;
-                if (y[i]+dy >= height) dy = height - y[i];
-                s = &((short *)wipe_scr_end)[i*height+y[i]];
-                d = &((short *)wipe_scr)[y[i]*width+i];
-                idx = 0;
-
-                for (j=dy;j;j--)
+                // [JN] Loading delay emulation
+                if (screen_wiping == 2 && !vanilla)
                 {
-                    d[idx] = *(s++);
-                    idx += width;
+                    dy = 24; // [JN] Slightly faster than original wiping
+                    y[i] += dy;
+                    idx = 0;
+
+                    done = false;
                 }
-
-                y[i] += dy;
-                s = &((short *)wipe_scr_start)[i*height];
-                d = &((short *)wipe_scr)[y[i]*width+i];
-                idx = 0;
-
-                for (j=height-y[i];j;j--)
+                else
                 {
-                    d[idx] = *(s++);
-                    idx += width;
+                    dy = (y[i] < 16) ? y[i]+1 : 8;
+                    if (y[i]+dy >= height) dy = height - y[i];
+                    s = &((short *)wipe_scr_end)[i*height+y[i]];
+                    d = &((short *)wipe_scr)[y[i]*width+i];
+                    idx = 0;
+
+                    for (j=dy;j;j--)
+                    {
+                        d[idx] = *(s++);
+                        idx += width;
+                    }
+
+                    y[i] += dy;
+                    s = &((short *)wipe_scr_start)[i*height];
+                    d = &((short *)wipe_scr)[y[i]*width+i];
+                    idx = 0;
+
+                    for (j=height-y[i];j;j--)
+                    {
+                        d[idx] = *(s++);
+                        idx += width;
+                    }
+                    done = false;
                 }
-                done = false;
             }
         }
     }
@@ -194,6 +214,14 @@ int wipe_doMelt (int width, int height, int ticks)
 int wipe_exitMelt (int width, int height, int ticks)
 {
     Z_Free(y);
+    // [JN] Need to update classic HUD
+    if (screen_wiping == 2 && !vanilla
+    && screenblocks <= 10 && gamestate == GS_LEVEL)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+        HU_Drawer();
+    }
     return 0;
 }
 
@@ -242,6 +270,13 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     {
         go = 0;
         (*wipes[wipeno*3+2])(width, height, ticks);
+    }
+
+    // [JN] Draw "Loading" picture
+    if (screen_wiping == 2 && !vanilla)
+    {
+        V_DrawPatch (0, 0, 0, W_CacheLumpName(english_language ?
+                              "M_LOADIN" : "RD_LDNG", PU_CACHE));
     }
 
     return !go;
