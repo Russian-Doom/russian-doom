@@ -867,6 +867,8 @@ void HU_Erase(void)
     HUlib_eraseSText(&w_message_chat);
     HUlib_eraseIText(&w_chat);
     HUlib_eraseTextLine(&w_title);
+    HUlib_eraseTextLine(&w_fps);
+    HUlib_eraseTextLine(&w_loctime);
 }
 
 void HU_Ticker(void)
