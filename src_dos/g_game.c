@@ -828,9 +828,8 @@ void G_Ticker (void)
             {
                 static char turbomessage[80];
                 extern char *player_names[4];
-                sprintf (turbomessage, english_language ?
-                         "%s is turbo!" :
-                         "%s yf cdth[crjhjcnb!", // %s на сверхскорости!
+                // [JN] Only English left in netgame chat, do not translate:
+                sprintf (turbomessage, "%s is turbo!",
                          player_names[i]);
                 players[consoleplayer].message_chat = turbomessage;
             }
