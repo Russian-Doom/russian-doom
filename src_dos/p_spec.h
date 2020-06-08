@@ -303,7 +303,6 @@ typedef struct
 
 #define PLATWAIT		3
 #define PLATSPEED		FRACUNIT
-#define MAXPLATS		30
 
 
 extern plat_t*	activeplats[MAXPLATS];

@@ -59,8 +59,6 @@
 #include "jn.h"
 
 
-// [JN] Increased savegame limit (180.224 bytes * 16 = 2.883.584 | 2.75 MB)
-#define SAVEGAMESIZE    0x2c000*16
 #define SAVESTRINGSIZE  24
 #define MAX_JOY_BUTTONS 20
 

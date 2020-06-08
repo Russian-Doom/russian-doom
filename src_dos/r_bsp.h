@@ -22,6 +22,7 @@
 #ifndef __R_BSP__
 #define __R_BSP__
 
+#include "limits.h"
 
 extern seg_t*		curline;
 extern side_t*		sidedef;

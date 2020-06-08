@@ -23,7 +23,7 @@
 #ifndef __R_THINGS__
 #define __R_THINGS__
 
-#define MAXVISSPRITES  	128
+#include "limits.h"
 
 
 // Constant arrays used for psprite clipping and initializing clipping.
