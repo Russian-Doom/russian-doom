@@ -705,7 +705,7 @@ void HU_Drawer(void)
     HUlib_drawIText(&w_chat);
 
     // [JN] Local time widget, DOS-friendly version.
-    if (local_time)
+    if (local_time && !vanilla)
     {
         time_t      rawtime;
         struct tm  *timeinfo;
@@ -767,7 +767,7 @@ void HU_Drawer(void)
         HUlib_drawTextLineUncolored(&w_loctime);
     }
 
-    if (show_fps)
+    if (show_fps && !vanilla)
     {
         static char str[32], *f;
 
