@@ -485,20 +485,13 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     // [JN] Mouselook: toggling
     if (gamekeydown[key_mouselook])
     {
-        if (!mlook)
+        mlook ^= 1;
+        if (mlook)
         {
-            mlook = true;
-            players[consoleplayer].message_system = ststr_mlook_on;
-        }
-        else
-        {
-            mlook = false;
             look = TOCENTER;
-            players[consoleplayer].message_system = ststr_mlook_off;
         }
-    
+        players[consoleplayer].message_system = mlook ? ststr_mlook_on : ststr_mlook_off;
         S_StartSound(NULL, sfx_swtchn);
-    
         gamekeydown[key_mouselook] = false;
     }
     
