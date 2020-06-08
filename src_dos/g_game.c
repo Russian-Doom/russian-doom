@@ -490,7 +490,8 @@ void G_BuildTiccmd (ticcmd_t* cmd)
         {
             look = TOCENTER;
         }
-        players[consoleplayer].message_system = mlook ? ststr_mlook_on : ststr_mlook_off;
+        players[consoleplayer].message_system = mlook ? 
+                               ststr_mlook_on : ststr_mlook_off;
         S_StartSound(NULL, sfx_swtchn);
         gamekeydown[key_mouselook] = false;
     }
@@ -530,20 +531,10 @@ void G_BuildTiccmd (ticcmd_t* cmd)
         if (vanilla)
         return;
 
-        if (!crosshair_draw)
-        {
-            crosshair_draw = true;
-        }
-        else
-        {
-            crosshair_draw = false;
-        }
-
-        players[consoleplayer].message_system =
-            crosshair_draw ? ststr_crosshair_on : ststr_crosshair_off;
-
+        crosshair_draw ^= 1;
+        players[consoleplayer].message_system = crosshair_draw ?
+                               ststr_crosshair_on : ststr_crosshair_off;
         S_StartSound(NULL,sfx_swtchn);
-
         gamekeydown[key_crosshair] = false;
     }
 
