@@ -27,11 +27,7 @@
 //  that appear at the bottom of some columns.
 #define SPARKLEFIX      64
 
-void
-R_RenderMaskedSegRange
-( drawseg_t*	ds,
-  int		x1,
-  int		x2 );
+void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2);
 
 
 #endif
