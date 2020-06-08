@@ -23,26 +23,22 @@
 #define __LIMITS__
 
 
-// [JN] Uncommenting following definition will build Doom+ limits executable.
+// [JN] Comment following definition to make a build with strict vanilla limits.
 //
-// MAXDRAWSEGS and MAXVISPLANES was slightliy increased from vanilla values 
-// to the Doom Classic level. It's far than enough to run big maps like TNT
-// MAP21 and MAP27 without crashing. SAVEGAMESIZE was doubled just in case.
-//
-// NOTE: Doom+ limits version requires 32 MiB of RAM *minimum*, while
-// vanilla requires only 16 MiB. Default size in DOSBox is set to 32 MiB
-// ("memsize=32" variable), so it should not be a problem. But back in 1994...
+// NOTE: in Doom+ limits, SAVEGAMESIZE is smaller than actual Doom+:
+// 524288 (512 KiB) instead of 2883584 (2,75 MiB), for keeping ability
+// to run the game on 16 MiB of RAM.
 
-// #define DOOM_PLUS_LIMITS
+#define DOOM_PLUS_LIMITS
 
 #ifndef DOOM_PLUS_LIMITS     // Vanilla limits
-  #define MAXDRAWSEGS        1280    // Increased from 256
+  #define MAXDRAWSEGS        256
   #define MAXLINEANIMS       64
   #define MAXOPENINGS        20480
   #define MAXPLATS           30
-  #define MAXVISPLANES       384     // Increased from 128
+  #define MAXVISPLANES       128
   #define MAXVISSPRITES      128
-  #define SAVEGAMESIZE       360448  // Increased from 180224
+  #define SAVEGAMESIZE       180224
 #else                        // Doom+ limits
   #define MAXDRAWSEGS        2048
   #define MAXLINEANIMS       16384
@@ -50,7 +46,7 @@
   #define MAXPLATS           7680
   #define MAXVISPLANES       1024
   #define MAXVISSPRITES      1024
-  #define SAVEGAMESIZE       2883584
+  #define SAVEGAMESIZE       524288
 #endif
 
 
