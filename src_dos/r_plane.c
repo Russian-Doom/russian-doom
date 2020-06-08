@@ -297,6 +297,14 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
     lastvisplane->picnum = pl->picnum;
     lastvisplane->lightlevel = pl->lightlevel;
 
+    // [Doom Vanille] fix: prevent the stack from being trashed
+    if (lastvisplane - visplanes == MAXVISPLANES)
+    {
+        I_Error (english_language ?
+                 "R_CheckPlane: no more visplanes" :
+                 "R_CheckPlane: превышен лимит visplanes");
+    }
+
     pl = lastvisplane++;
     pl->minx = start;
     pl->maxx = stop;
