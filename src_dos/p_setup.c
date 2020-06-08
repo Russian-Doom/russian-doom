@@ -775,6 +775,12 @@ P_SetupLevel
 			
     }
 
+    // [JN] killough 3/26/98: Spawn icon landings:
+    if (commercial)
+    {
+        P_SpawnBrainTargets();
+    }
+
     // clear special respawning que
     iquehead = iquetail = 0;		
 	

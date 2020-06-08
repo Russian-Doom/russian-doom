@@ -1937,38 +1937,51 @@ A_CloseShotgun2
 }
 
 
+mobj_t  **braintargets;
+int       numbraintargets;
+int       numbraintargets_alloc;
+int       braintargeton;
 
-mobj_t*		braintargets[32];
-int		numbraintargets;
-int		braintargeton;
-
-void A_BrainAwake (mobj_t* mo)
+// [JN] killough 3/26/98: initialize icon landings at level startup,
+// rather than at boss wakeup, to prevent savegame-related crashes
+void P_SpawnBrainTargets(void)
 {
-    thinker_t*	thinker;
-    mobj_t*	m;
-	
+    thinker_t   *thinker;
+    mobj_t      *m;
+
     // find all the target spots
     numbraintargets = 0;
     braintargeton = 0;
 	
     thinker = thinkercap.next;
-    for (thinker = thinkercap.next ;
-	 thinker != &thinkercap ;
-	 thinker = thinker->next)
+    for (thinker = thinkercap.next ; thinker != &thinkercap ; thinker = thinker->next)
     {
-	if (thinker->function.acp1 != (actionf_p1)P_MobjThinker)
-	    continue;	// not a mobj
+        if (thinker->function.acp1 != (actionf_p1)P_MobjThinker)
+        {
+            continue;	// not a mobj
+        }
 
-	m = (mobj_t *)thinker;
+        m = (mobj_t *)thinker;
 
-	if (m->type == MT_BOSSTARGET )
-	{
-	    braintargets[numbraintargets] = m;
-	    numbraintargets++;
-	}
+        if (m->type == MT_BOSSTARGET )
+        {
+            if (numbraintargets >= numbraintargets_alloc)
+            {
+                braintargets = realloc(braintargets,
+                              (numbraintargets_alloc = numbraintargets_alloc ?
+                               numbraintargets_alloc*2 : 32) *sizeof *braintargets);
+            }
+            
+            braintargets[numbraintargets++] = m;
+        }
     }
-	
-    // [JN] Don't break Boss sight sound by any others
+}
+
+
+void A_BrainAwake (mobj_t* mo)
+{
+    // [JN] killough 3/26/98: only generates sound now,
+	// don't break Boss sight sound by any others.
     S_StartSoundNoBreak (sfx_bossit);
 }
 
