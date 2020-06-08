@@ -42,6 +42,11 @@
 #include "jn.h"
 
 
+// [JN] Raise sector tag 667 floor raising only once, even if Arachnotrons 
+// were resurrected and killed again. Adaptaken from Doom Retro, fixes bug:
+// https://doomwiki.org/wiki/Tag_667#Bugs
+boolean flag667;
+
 
 typedef enum
 {
@@ -1843,8 +1848,12 @@ void A_BossDeath (mobj_t* mo)
 	    
 	    if (mo->type == MT_BABY)
 	    {
-		junk.tag = 667;
-		EV_DoFloor(&junk,raiseToTexture);
+            if (!flag667)
+            {
+                junk.tag = 667;
+                EV_DoFloor(&junk,raiseToTexture);
+                flag667 = true;
+            }
 		return;
 	    }
 	}

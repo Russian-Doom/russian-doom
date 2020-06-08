@@ -66,6 +66,8 @@ extern skill_t  gameskill;
 extern int      gameepisode;
 extern int      gamemap;
 
+extern boolean flag667;
+
 extern boolean  shareware;
 extern boolean  registered;
 extern boolean  retail;

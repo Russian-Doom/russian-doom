@@ -1425,6 +1425,7 @@ void G_DoLoadGame (void)
     gameskill   = *save_p++;
     gameepisode = *save_p++;
     gamemap     = *save_p++;
+    flag667     = *save_p++;
     for (i=0 ; i<MAXPLAYERS ; i++)
 	playeringame[i] = *save_p++;
 
@@ -1511,6 +1512,7 @@ void G_DoSaveGame (void)
     *save_p++ = gameskill;
     *save_p++ = gameepisode;
     *save_p++ = gamemap;
+    *save_p++ = flag667;
     for (i=0 ; i<MAXPLAYERS ; i++)
     *save_p++ = playeringame[i];
     *save_p++ = leveltime>>16;
@@ -1561,6 +1563,7 @@ void G_DeferedInitNew (skill_t skill, int episode, int map)
     d_episode = episode;
     d_map = map;
     gameaction = ga_newgame;
+    flag667 = false;
 }
 
 
@@ -1580,6 +1583,7 @@ void G_DoNewGame (void)
     consoleplayer = 0;
     G_InitNew (d_skill, d_episode, d_map);
     gameaction = ga_nothing;
+    flag667 = false;
 } 
 
 
