@@ -1246,7 +1246,7 @@ byte *I_ZoneBase (int *size)
 
     heap = meminfo[0];
     printf(english_language ?
-           "DPMI memory: %d MiB" :
+           "DPMI memory: %d MB" :
            "Память DPMI: %d Мбайт", heap >> 20);
 
     // [JN] Command line parameter to increase/decrease heap size
@@ -1264,7 +1264,7 @@ byte *I_ZoneBase (int *size)
     
     do
     {
-        heap -= 131072; // [JN] Equals 128 KiB, leave alone.
+        heap -= 131072; // [JN] Equals 128 KB, leave alone.
         if (heap > maxmem)
         {
             heap = maxmem;
@@ -1273,9 +1273,9 @@ byte *I_ZoneBase (int *size)
     } while (!ptr);
 
     printf(english_language ?
-           ", %d MiB allocated for zone\n" :
+           ", %d MB allocated for zone\n" :
            ", %d Мбайт обнаружено для распределения.\n", heap >> 20);
-    if (heap < 1572864) // [JN] Equals 1.5 MiB.
+    if (heap < 1572864) // [JN] Equals 1.5 MB.
     {
         printf("\n");
 
