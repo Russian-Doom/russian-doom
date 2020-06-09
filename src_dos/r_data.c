@@ -139,8 +139,8 @@ int*			texturewidthmask;
 fixed_t*		textureheight;		
 int*			texturecompositesize;
 short**			texturecolumnlump;
-unsigned**		texturecolumnofs; // killough 4/9/98: make 32-bit
-unsigned**      texturecolumnofs2; // [crispy] original column offsets for single-patched textures
+unsigned**		texturecolumnofs;  // [JN] killough 4/9/98: make 32-bit
+unsigned**		texturecolumnofs2; // [crispy] original column offsets for single-patched textures
 byte**			texturecomposite;
 
 // for global animation

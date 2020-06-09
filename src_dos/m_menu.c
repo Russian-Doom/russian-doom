@@ -4422,11 +4422,11 @@ void M_ReadSaveStrings (void)
     {
         if (M_CheckParm("-cdrom"))
         {
-            sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",i);
+            sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.sav",i);
         }
         else
         {
-            sprintf(name,SAVEGAMENAME"%d.dsg",i);
+            sprintf(name,SAVEGAMENAME"%d.sav",i);
         }
 
         handle = open (name, O_RDONLY | 0, 0666);
@@ -4509,11 +4509,11 @@ void M_LoadSelect (int choice)
 
     if (M_CheckParm("-cdrom"))
     {
-        sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",choice);
+        sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.sav",choice);
     }
     else
     {
-        sprintf(name,SAVEGAMENAME"%d.dsg",choice);
+        sprintf(name,SAVEGAMENAME"%d.sav",choice);
     }
 
     G_LoadGame (name);
