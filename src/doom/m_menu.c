@@ -4970,8 +4970,11 @@ void M_RD_ChangeLanguage(int choice)
 {
     extern void ST_Stop(void);
     extern void HU_Stop(void);
+    extern void F_CastDrawer(void);
+    extern void F_CastDrawerJaguar(void);
     extern void F_StartFinale(void);
     extern int  demosequence;
+    extern int  finalestage;
 
     english_language ^= 1;
 
@@ -5002,10 +5005,24 @@ void M_RD_ChangeLanguage(int choice)
         ST_Start();
     }
 
-    // Restart finale text
+    // Update finale sequence
     if (gamestate == GS_FINALE)
     {
-        F_StartFinale();
+        if (finalestage == 2)
+        {
+            // Just redraw monster's names
+            F_CastDrawer();
+        }
+        else if (finalestage == 3)
+        {
+            // Just redraw monster's names (Jaguar)
+            F_CastDrawerJaguar();
+        }
+        else
+        {
+            // Restart finale text output
+            F_StartFinale();
+        }
     }
 
     // Update window title
