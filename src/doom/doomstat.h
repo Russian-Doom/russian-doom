@@ -57,7 +57,8 @@ extern GameMode_t    gamemode;
 extern GameMission_t gamemission;
 extern GameVersion_t gameversion;
 extern GameVariant_t gamevariant;
-extern char         *gamedescription;
+extern char         *gamedescription_eng;
+extern char         *gamedescription_rus;
 
 
 // Convenience macro.

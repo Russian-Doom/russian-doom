@@ -31,7 +31,8 @@ GameMission_t gamemission = doom;
 GameVersion_t gameversion = exe_final2;
 GameVariant_t gamevariant = vanilla;
 
-char *gamedescription;
+char *gamedescription_eng;
+char *gamedescription_rus;
 
 // Set if homebrew PWAD stuff has been added.
 boolean modifiedgame;

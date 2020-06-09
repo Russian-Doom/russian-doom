@@ -623,7 +623,7 @@ void D_DoomLoop (void)
 
     main_loop_started = true;
 
-    I_SetWindowTitle(gamedescription);
+    I_SetWindowTitle(english_language ? gamedescription_eng : gamedescription_rus);
     I_GraphicsCheckCommandLine();
     I_SetGrabMouseCallback(D_GrabMouseCallback);
     I_InitGraphics();
@@ -1207,7 +1207,8 @@ void D_SetGameDescription(void)
     boolean is_freedoom = W_CheckNumForName("FREEDOOM") >= 0,
             is_freedm = W_CheckNumForName("FREEDM") >= 0;
 
-    gamedescription = english_language ? "Unknown game" : "Неизвестная игра";
+    gamedescription_eng = "Unknown game";
+    gamedescription_rus = "Неизвестная игра";
 
     // [JN] Always load RD system pwad
     W_MergeFile("base/doom-common.wad");
@@ -1224,14 +1225,12 @@ void D_SetGameDescription(void)
         {
             W_MergeFile("base/doom-freedoom.wad");
 
-            if (english_language)
-            gamedescription = GetGameName("Freedoom: Phase 1");
-            else
-            gamedescription = GetGameName("Freedoom: Стадия 1");
+            gamedescription_eng = GetGameName("Freedoom: Phase 1");
+            gamedescription_rus = GetGameName("Freedoom: Стадия 1");
         }
         else if (gamemode == retail)
         {
-            gamedescription = GetGameName("The Ultimate DOOM");
+            gamedescription_eng = gamedescription_rus = GetGameName("The Ultimate DOOM");
 
             if (aspect_ratio >= 2)
             {
@@ -1241,10 +1240,8 @@ void D_SetGameDescription(void)
 
             if (gameversion == exe_doom_se)
             {
-                if (english_language)
-                gamedescription = GetGameName("DOOM: Special Edition");
-                else
-                gamedescription = GetGameName("Doom: Специальное издание");
+                gamedescription_eng = GetGameName("DOOM: Special Edition");
+                gamedescription_rus = GetGameName("Doom: Специальное издание");
             
                 // Episode 4 using a sky from Episode 2
                 DEH_AddStringReplacement ("SKY4",   "SKY2");
@@ -1252,10 +1249,8 @@ void D_SetGameDescription(void)
         }
         else if (gamemode == registered)
         {
-            if (english_language)
-            gamedescription = GetGameName("DOOM Registered");
-            else 
-            gamedescription = GetGameName("DOOM");
+            gamedescription_eng = GetGameName("DOOM Registered");
+            gamedescription_rus = GetGameName("DOOM");
 
             if (aspect_ratio >= 2)
             {
@@ -1265,10 +1260,8 @@ void D_SetGameDescription(void)
         }
         else if (gamemode == shareware)
         {
-            if (english_language)
-            gamedescription = GetGameName("DOOM Shareware");
-            else
-            gamedescription = GetGameName("DOOM (Демоверсия)");
+            gamedescription_eng = GetGameName("DOOM Shareware");
+            gamedescription_rus = GetGameName("DOOM (Демоверсия)");
 
             if (aspect_ratio >= 2)
             {
@@ -1287,10 +1280,8 @@ void D_SetGameDescription(void)
             DEH_AddStringReplacement (GOTARMBONUS_RUS, GOTCHEST_RUS);
             DEH_AddStringReplacement (GOTSUPER_RUS,    GOTEXTRALIFE_RUS);
 
-            if (english_language)
-            gamedescription = GetGameName("Doom Press Release Beta");
-            else
-            gamedescription = GetGameName("DOOM (Бета-версия)");
+            gamedescription_eng = GetGameName("Doom Press Release Beta");
+            gamedescription_rus = GetGameName("DOOM (Бета-версия)");
         }
     }
     else
@@ -1301,7 +1292,7 @@ void D_SetGameDescription(void)
         {
             if (is_freedm)
             {
-                gamedescription = GetGameName("FreeDM");
+                gamedescription_eng = gamedescription_rus = GetGameName("FreeDM");
                 W_MergeFile("base/doom-freedoom.wad");
                 W_MergeFile("base/doom-freedm.wad");
             }
@@ -1309,18 +1300,14 @@ void D_SetGameDescription(void)
             {
                 W_MergeFile("base/doom-freedoom.wad");
 
-                if (english_language)
-                gamedescription = GetGameName("Freedoom: Phase 2");
-                else
-                gamedescription = GetGameName("Freedoom: Стадия 2");
+                gamedescription_eng = GetGameName("Freedoom: Phase 2");
+                gamedescription_rus = GetGameName("Freedoom: Стадия 2");
             }
         }
         else if (logical_gamemission == doom2)
         {
-            if (english_language)
-            gamedescription = GetGameName("DOOM 2: Hell on Earth");
-            else
-            gamedescription = GetGameName("DOOM 2: Ад на Земле");
+            gamedescription_eng = GetGameName("DOOM 2: Hell on Earth");
+            gamedescription_rus = GetGameName("DOOM 2: Ад на Земле");
 
             if (aspect_ratio >= 2)
             {
@@ -1330,10 +1317,8 @@ void D_SetGameDescription(void)
         }
         else if (logical_gamemission == pack_plut)
         {
-            if (english_language)
-            gamedescription = GetGameName("Final DOOM: Plutonia Experiment");
-            else
-            gamedescription = GetGameName("Final DOOM: Эксперимент “Плутония”");
+            gamedescription_eng = GetGameName("Final DOOM: Plutonia Experiment");
+            gamedescription_rus = GetGameName("Final DOOM: Эксперимент “Плутония”");
 
             if (aspect_ratio >= 2)
             {
@@ -1343,10 +1328,8 @@ void D_SetGameDescription(void)
         }
         else if (logical_gamemission == pack_tnt)
         {
-            if (english_language)
-            gamedescription = GetGameName("Final DOOM: TNT - Evilution");
-            else
-            gamedescription = GetGameName("Final DOOM: TNT - Дьяволюция");
+            gamedescription_eng = GetGameName("Final DOOM: TNT - Evilution");
+            gamedescription_rus = GetGameName("Final DOOM: TNT - Дьяволюция");
 
             if (aspect_ratio >= 2)
             {
@@ -1358,10 +1341,8 @@ void D_SetGameDescription(void)
         {
             W_MergeFile("base/doom-jaguar.wad");
             
-            if (english_language)
-            gamedescription = GetGameName("DOOM for Atari Jaguar");
-            else
-            gamedescription = GetGameName("DOOM для Atari Jaguar");
+            gamedescription_eng = GetGameName("DOOM for Atari Jaguar");
+            gamedescription_rus = GetGameName("DOOM для Atari Jaguar");
         }
     }
 
@@ -1406,10 +1387,8 @@ void D_SetGameDescription(void)
                         DEH_AddStringReplacement ("TITLEPIC", "DMENUPIC");
                         DEH_AddStringReplacement ("TITLEPI2", "DMENUPIC");
                         
-                        if (english_language)
-                        gamedescription = "DOOM 2: No Rest For The Living";
-                        else
-                        gamedescription = "DOOM 2: Нет покоя для живых";
+                        gamedescription_eng = "DOOM 2: No Rest For The Living";
+                        gamedescription_rus = "DOOM 2: Нет покоя для живых";
                     }
                 }
             }
@@ -1449,10 +1428,8 @@ void D_SetGameDescription(void)
                         W_MergeFile("base/doom-mlevels.wad");
                         mlvls_loaded = true;
 
-                        if (english_language)
-                        gamedescription = "Master Levels for DOOM 2";
-                        else
-                        gamedescription = "Мастер-уровни для DOOM 2";
+                        gamedescription_eng = "Master Levels for DOOM 2";
+                        gamedescription_rus = "Мастер-уровни для DOOM 2";
 
                         // ATTACK.WAD - Нападение
                         if (M_StrCaseStr(myargv[mlvls], "ATTACK.WAD"))
@@ -1647,10 +1624,8 @@ void D_SetGameDescription(void)
 
                         DEH_AddStringReplacement("RD_EPI5",  "RD_SGEP5");
 
-                        if (english_language)
-                        gamedescription = "SIGIL";
-                        else
-                        gamedescription = "СИГИЛ";
+                        gamedescription_eng = "SIGIL";
+                        gamedescription_rus = "СИГИЛ";
                     }
                 }
             }
@@ -1674,10 +1649,8 @@ void D_SetGameDescription(void)
 
                         DEH_AddStringReplacement("RD_EPI3",  "RD_SGEP3");
 
-                        if (english_language)
-                        gamedescription = "SIGIL";
-                        else
-                        gamedescription = "СИГИЛ";
+                        gamedescription_eng = "SIGIL";
+                        gamedescription_rus = "СИГИЛ";
                     }
                 }
             }
@@ -2927,7 +2900,7 @@ void D_DoomMain (void)
     // [JN] Show the game we are playing
     DEH_printf(english_language ? "Starting game: " : "Запуск игры: ");
     DEH_printf("\"");
-    DEH_printf(gamedescription);
+    DEH_printf(english_language ? gamedescription_eng : gamedescription_rus);
     DEH_printf("\".");
     DEH_printf("\n");
 
