@@ -1273,7 +1273,7 @@ byte *I_ZoneBase (int *size)
     } while (!ptr);
 
     printf(english_language ?
-           ", %d MB allocated for zone\n" :
+           ", %d MB allocated for zone.\n" :
            ", %d Мбайт обнаружено для распределения.\n", heap >> 20);
     if (heap < 1572864) // [JN] Equals 1.5 MB.
     {
