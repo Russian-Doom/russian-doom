@@ -4062,7 +4062,7 @@ void M_RD_BackToDefaultsResponse (int ch)
     // Display
     screenblocks = 10;
     screenSize = screenblocks - 3;
-    usegamma     = 0;
+    usegamma     = 4;
     level_brightness = 0;
     detailLevel  = 0;
     local_time   = 0;
