@@ -1,6 +1,6 @@
 # Russian Doom for DOS
 
-This is a sub-project of main project Russian Doom. 
+This is a sub-project of the main project Russian Doom. 
 
 ## Supported games
 * Doom shareware
@@ -18,11 +18,8 @@ If you have multiple IWADs in your directory, you can use the `-iwad` parameter 
 Enables "vanilla" mode, that will turn off almost all improvements like colored blood, shadowed text and other.
 Note: it does affect increased engine limits and bug fixes.
 
-`-pitch`<br />
-Activates sound pitching like in earlier versions of Doom.
-
 `-mb`<br />
-Define amount of memory for game to use. Minimum and default is 2, maximum is 64.
+Define amount of memory for game to use. Minimum is 2 MB, maximum is 64 MB.
 
 `-dm3`<br />
 Enables newschool deathmatch (Deathmatch 3.0) mode. Weapons will stay after picking up, but items and powerups will dissapear, and will respawn after 30 seconds.
@@ -30,7 +27,17 @@ Enables newschool deathmatch (Deathmatch 3.0) mode. Weapons will stay after pick
 
 ## Compiling
 
-Open Watcom C is required. For compiling instructions please refer to this [page](https://github.com/JNechaevsky/russian-doom/blob/master/COMPILING.md).
+Only Open Watcom C is required. Steps to compile:
+
+1. Install [Open Watcom C](http://www.openwatcom.org/) version 1.9 or 2.0 beta.
+2. Open rusdoom.wpj in Watcom.
+3. Build.
+4. Copy rusdoom.exe to your Doom folder.
+
+## Gravis UltraSound
+
+Gravis UltraSound sound synth requires a GUS patches to be installed. Please follow this [instruction](https://github.com/JNechaevsky/russian-doom/blob/master/src_dos/ultrasnd/README.md) to setup them in DOSBox.
+
 
 ## Source code
 
