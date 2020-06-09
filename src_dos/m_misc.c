@@ -331,7 +331,7 @@ typedef struct
 default_t	defaults[] =
 {
     // Language
-    {"english_language",        &english_language,      0},
+    {"english_language",        &english_language,      1},
 
     // Rendering
     {"noflats",                 &noflats,               0},
@@ -341,7 +341,7 @@ default_t	defaults[] =
 
     // Display
     {"screenblocks",            &screenblocks,         10},
-    {"usegamma",                &usegamma,              0},
+    {"usegamma",                &usegamma,              4},
     {"level_brightness",        &level_brightness,      0},
     {"detaillevel",             &detailLevel,           0},
     {"local_time",              &local_time,            0},
