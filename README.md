@@ -18,9 +18,9 @@ Windows (32-bit): [russian-doom-3.3-win32.zip](https://github.com/JNechaevsky/ru
 Windows (64-bit): [russian-doom-3.3-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/3.3/russian-doom-3.3-win64.zip)<br />
 Source code: [russian-doom-3.3-source.zip](https://github.com/JNechaevsky/russian-doom/releases/download/3.3/russian-doom-3.3-source.zip)<br />
 
-#### Russian Doom for DOS 1.7 (released: September 29, 2019)
+#### Russian Doom for DOS 1.8 (released: June 9, 2020)
 
-DOS: [russian-doom-dos-1.7.zip](https://github.com/JNechaevsky/russian-doom/releases/download/dos-1.7/russian-doom-dos-1.7.zip)<br />
+DOS: [russian-doom-dos-1.8.zip](https://github.com/JNechaevsky/russian-doom/releases/download/dos-1.8/russian-doom-dos-1.8.zip)<br />
 Source code available on [GitHub](https://github.com/JNechaevsky/russian-doom/tree/master/src_dos)
 
 #### Other
