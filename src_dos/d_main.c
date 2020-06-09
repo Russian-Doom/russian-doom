@@ -1302,17 +1302,15 @@ void D_DoomMain (void)
 
     // init subsystems
     printf(english_language ? 
-           "V_Init: allocate screens.\n" :
+           "V_Init: Allocate screens.\n" :
            "V_Init: Обнаружение экранов.\n");
     V_Init();
 
+    // [JN] We have to load variables first for proper 
+    // language on startup screens.
     printf(english_language ? 
            "M_LoadDefaults: Load system defaults.\n" :
            "M_LoadDefaults: Загрузка системных стандартов.\n");
-    // [JN] We *have* to load variables first for proper 
-    // language on startup screens. Moved above.
-    // M_LoadDefaults(); // load before initing other systems
-    
 
     printf(english_language ?
            "Z_Init: Init zone memory allocation daemon. \n" :
