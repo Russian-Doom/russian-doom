@@ -835,6 +835,9 @@ void D_DoAdvanceDemo (void)
 
             if (english_language)
             {
+                if (aspect_ratio >= 2 && (gamemode == shareware || gamemode == registered))
+                pagename = DEH_String("CREDITW");
+                else
                 pagename = DEH_String("CREDIT");
             }
             else
