@@ -158,6 +158,10 @@ int wipe_doMelt (int width, int height, int ticks)
 
     width/=2;
 
+    // [JN] If wiping disabled, return immediately.
+    if (screen_wiping == 0 && !vanilla)
+    return done;
+
     while (ticks--)
     {
         for (i=0;i<width;i++)
@@ -214,7 +218,7 @@ int wipe_exitMelt (int width, int height, int ticks)
 {
     Z_Free(y);
     // [JN] Need to update classic HUD
-    if (screen_wiping == 2 && !vanilla
+    if ((screen_wiping == 0 || screen_wiping == 2) && !vanilla
     && screenblocks <= 10 && gamestate == GS_LEVEL)
     {
         ST_refreshBackground();

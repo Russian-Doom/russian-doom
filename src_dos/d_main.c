@@ -225,8 +225,7 @@ void D_Display (void)
     }
 
     // save the current screen if about to wipe
-    // [JN] Wiping - make optional
-    if (gamestate != wipegamestate && (screen_wiping || vanilla))
+    if (gamestate != wipegamestate)
     {
         wipe = true;
         wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
