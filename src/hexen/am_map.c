@@ -31,7 +31,6 @@
 #include "am_data.h"
 #include "v_video.h"
 
-#define NUMALIAS 3              // Number of antialiased lines.
 
 int cheating = 0;
 
@@ -87,10 +86,28 @@ static unsigned ShowKillsCount = 0;
 
 extern boolean viewactive;
 
-static byte antialias[NUMALIAS][8] = {
-    {83, 84, 85, 86, 87, 88, 89, 90},
-    {96, 96, 95, 94, 93, 92, 91, 90},
-    {107, 108, 109, 110, 111, 112, 89, 90}
+// [JN] Apply line antialiasing for all types of lines,
+// apply inversive (faded to dark) colors in automap overlay mode.
+static byte antialias[8][8] = {
+    { 83,  84,  85,  86,  87,  88,  89,  90},   // WALLCOLORS
+    { 96,  96,  95,  94,  93,  92,  91,  90},   // FDWALLCOLORS
+    {107, 108, 109, 110, 111, 112,  89,  90},   // CDWALLCOLORS
+    { 40,  40,  40,  41,  41,  42,  42,  43},   // TSWALLCOLORS (also GRAYS)
+    {198, 198, 198, 198, 199, 199, 199, 199},   // GREENKEY
+    {157, 157, 157, 158, 158, 158, 159, 159},   // BLUEKEY
+    {177, 177, 178, 178, 179, 179, 180, 180},   // BLOODRED
+    { 32,  32,  32,  32,  32,  32,  32,  32}    // WHITE (no antialiasing)
+};
+
+static byte antialias_overlay[8][8] = {
+    { 88,  87,  86,  85,  84,  83,  82,  81},   // WALLCOLORS
+    { 95,  93,  91,  89,  87,  85,  84,  83},   // FDWALLCOLORS
+    {107, 106, 105, 104, 103, 102, 101, 100},   // CDWALLCOLORS
+    { 40,  39,  38,  37,  36,  35,  34,  33},   // TSWALLCOLORS (also GRAYS)
+    {198, 198, 197, 197, 196, 196, 195, 194},   // GREENKEY
+    {157, 157, 156, 156, 155, 155, 154, 154},   // BLUEKEY
+    {177, 177, 176, 176, 175, 175, 174, 173},   // BLOODRED
+    { 32,  31,  30,  29,  28,  27,  26,  25}    // WHITE
 };
 
 /*
@@ -943,15 +960,44 @@ void AM_drawFline(fline_t * fl, int color)
     {
         case WALLCOLORS:
             DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y,
-                       &antialias[0][0], 8, 3);
+                       automap_overlay ? &antialias_overlay[0][0] :
+                                         &antialias[0][0], 8, 3);
             break;
         case FDWALLCOLORS:
-            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y,
-                       &antialias[1][0], 8, 3);
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, 
+                       automap_overlay ? &antialias_overlay[1][0] :
+                                         &antialias[1][0], 8, 3);
             break;
         case CDWALLCOLORS:
             DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y,
-                       &antialias[2][0], 8, 3);
+                       automap_overlay ? &antialias_overlay[2][0] :
+                                         &antialias[2][0], 8, 3);
+            break;
+        // [JN] Apply antialiasing to the rest of the lines
+        case TSWALLCOLORS: // [JN] ... and GRAYS
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y,
+                       automap_overlay ? &antialias_overlay[3][0] :
+                                         &antialias[3][0], 8, 3);
+            break;
+        case GREENKEY:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y,
+                       automap_overlay ? &antialias_overlay[4][0] :
+                                         &antialias[4][0], 8, 3);
+            break;
+        case BLUEKEY:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y,
+                       automap_overlay ? &antialias_overlay[5][0] :
+                                         &antialias[5][0], 8, 3);
+            break;
+        case BLOODRED:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y,
+                       automap_overlay ? &antialias_overlay[6][0] :
+                                         &antialias[6][0], 8, 3);
+            break;
+        case WHITE:
+            DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y,
+                       automap_overlay ? &antialias_overlay[7][0] :
+                                         &antialias[7][0], 8, 3);
             break;
         default:
             {
