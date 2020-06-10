@@ -1596,11 +1596,17 @@ void AM_Drawer(void)
 
     if (aspect_ratio >= 2)
     {
+        if (english_language)
         MN_DrTextA(P_GetMapName(gamemap), 74, 142);
+        else
+        MN_DrTextSmallRUS(P_GetMapName(gamemap), 74, 142);
     }
     else
     {
+        if (english_language)
         MN_DrTextA(P_GetMapName(gamemap), 38, 144);
+        else
+        MN_DrTextSmallRUS(P_GetMapName(gamemap), 38, 144);
     }
 
     if (ShowKills && netgame && deathmatch)
@@ -1753,10 +1759,15 @@ static void DrawWorldTimer(void)
     */
 
     // [JN] Draw skill level
-    M_snprintf(skill, sizeof(skill), english_language ?
-                                     "SKILL: %d" :
-                                     "CKJ;YJCNM: %d",   // СЛОЖНОСТЬ:
-                                     gameskill + 1);
-    MN_DrTextA(skill, (english_language ? 265 : 223) 
-                    + (wide_4_3 ? wide_delta : wide_delta*2), 26);
+    if (english_language)
+    {
+        M_snprintf(skill, sizeof(skill), "SKILL: %d", gameskill + 1);
+        MN_DrTextA(skill, 265 + (wide_4_3 ? wide_delta : wide_delta*2), 26);
+    }
+    else
+    {
+        // СЛОЖНОСТЬ:
+        M_snprintf(skill, sizeof(skill), "CKJ;YJCNM: %d", gameskill + 1);
+        MN_DrTextSmallRUS(skill, 223 + (wide_4_3 ? wide_delta : wide_delta*2), 26);
+    }
 }
