@@ -402,6 +402,7 @@ void M_RD_Draw_Gameplay_4(void);
 
 void M_RD_Change_Brightmaps(int choice);
 void M_RD_Change_FakeContrast(int choice);
+void M_RD_Change_Translucency(int choice);
 void M_RD_Change_ImprovedFuzz(int choice);
 void M_RD_Change_ColoredHUD(int choice);
 void M_RD_Change_ColoredBlood(int choice);
@@ -1542,6 +1543,7 @@ enum
 {
     rd_gameplay_1_brightmaps,
     rd_gameplay_1_fake_contrast,
+    rd_gameplay_1_translucency,
     rd_gameplay_1_improved_fuzz,
     rd_gameplay_1_colored_hud,
     rd_gameplay_1_colored_blood,
@@ -1614,6 +1616,7 @@ menuitem_t RD_Gameplay_Menu_1[]=
 {
     {2, "Brightmaps:",                  M_RD_Change_Brightmaps,      'b'},
     {2, "Fake contrast:",               M_RD_Change_FakeContrast,    'f'},
+    {2, "Translucency:",                M_RD_Change_Translucency,    't'},
     {2, "Fuzz effect:",                 M_RD_Change_ImprovedFuzz,    'f'},
     {2, "Colored HUD elements:",        M_RD_Change_ColoredHUD,      'c'},
     {2, "Colored blood and corpses:",   M_RD_Change_ColoredBlood,    'c'},
@@ -1726,6 +1729,7 @@ menuitem_t RD_Gameplay_Menu_1_Rus[]=
 {
     {2, ",hfqnvfggbyu:",                  M_RD_Change_Brightmaps,      ','}, // Брайтмаппинг
     {2, "Bvbnfwbz rjynhfcnyjcnb:",        M_RD_Change_FakeContrast,    'b'}, // Имитация контрастности
+    {2, "Ghjphfxyjcnm j,]trnjd:",         M_RD_Change_Translucency,    't'}, // Прозрачность объектов
     {2, "\'aatrn ievf:",                  M_RD_Change_ImprovedFuzz,   '\''}, // Эффект шума
     {2, "Hfpyjwdtnyst 'ktvtyns $:",       M_RD_Change_ColoredHUD,      'h'}, // Разноцветные элементы HUD
     {2, "Hfpyjwdtnyfz rhjdm b nhegs:",    M_RD_Change_ColoredBlood,    'h'}, // Разноцветная кровь и трупы
@@ -3442,9 +3446,14 @@ void M_RD_Draw_Gameplay_1(void)
         M_WriteTextSmall_ENG(142, 55, fake_contrast ? "on" : "off");
         dp_translation = NULL;
 
+        // Translucency
+        dp_translation = translucency ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(138, 65, translucency ? "on" : "off");
+        dp_translation = NULL;
+        
         // Fuzz effect
         dp_translation = improved_fuzz > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(125, 65, 
+        M_WriteTextSmall_ENG(125, 75, 
                              improved_fuzz == 0 ? "Original" :
                              improved_fuzz == 1 ? "Original (b&w)" :
                              improved_fuzz == 2 ? "Improved" :
@@ -3453,27 +3462,27 @@ void M_RD_Draw_Gameplay_1(void)
 
         // Colored HUD elements
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(195, 75, colored_hud ? "on" : "off");
+        M_WriteTextSmall_ENG(195, 85, colored_hud ? "on" : "off");
         dp_translation = NULL;
 
         // Colored blood and corpses
         dp_translation = colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(229, 85, colored_blood ? "on" : "off");
+        M_WriteTextSmall_ENG(229, 95, colored_blood ? "on" : "off");
         dp_translation = NULL;
 
         // Swirling liquids
         dp_translation = swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(150, 95, swirling_liquids ? "on" : "off");
+        M_WriteTextSmall_ENG(150, 105, swirling_liquids ? "on" : "off");
         dp_translation = NULL;
 
         // Invulnerability affects sky
         dp_translation = invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(237, 105, invul_sky ? "on" : "off");
+        M_WriteTextSmall_ENG(237, 115, invul_sky ? "on" : "off");
         dp_translation = NULL;
 
         // Flip weapons
         dp_translation = flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(131, 115, flip_weapons ? "on" : "off");
+        M_WriteTextSmall_ENG(131, 125, flip_weapons ? "on" : "off");
         dp_translation = NULL;
 
         //
@@ -3506,9 +3515,14 @@ void M_RD_Draw_Gameplay_1(void)
         M_WriteTextSmall_RUS(217, 55, fake_contrast ? "drk" : "dsrk");
         dp_translation = NULL;
 
+        // Прозрачность объектов
+        dp_translation = translucency ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(207, 65, translucency ? "drk" : "dsrk");
+        dp_translation = NULL;
+
         // Эффект шума
         dp_translation = improved_fuzz > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(134, 65, 
+        M_WriteTextSmall_RUS(134, 75, 
                              improved_fuzz == 0 ? "Jhbubyfkmysq" :
                              improved_fuzz == 1 ? "Jhbubyfkmysq (x*,)" :
                              improved_fuzz == 2 ? "Ekexityysq" :
@@ -3517,27 +3531,27 @@ void M_RD_Draw_Gameplay_1(void)
 
         // Разноцветные элементы HUD
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(239, 75, colored_hud ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(239, 85, colored_hud ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Разноцветная кровь и трупы
         dp_translation = colored_blood ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(242, 85, colored_blood ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(242, 95, colored_blood ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Улучшенная анимация жидкостей
         dp_translation = swirling_liquids ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(275, 95, swirling_liquids ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(275, 105, swirling_liquids ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Неуязвимость окрашивает небо
         dp_translation = invul_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(262, 105, invul_sky ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(262, 115, invul_sky ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Зеркальное отражение оружия
         dp_translation = flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(259, 115, flip_weapons ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(259, 125, flip_weapons ? "drk" : "dsrk");
         dp_translation = NULL;
 
         //
@@ -3897,6 +3911,11 @@ void M_RD_Change_Brightmaps (int choice)
 void M_RD_Change_FakeContrast (int choice)
 {
     fake_contrast ^= 1;
+}
+
+void M_RD_Change_Translucency(int choice)
+{
+    translucency ^= 1;
 }
 
 void M_RD_Change_ImprovedFuzz(int choice)

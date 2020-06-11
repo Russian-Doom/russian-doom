@@ -140,7 +140,8 @@ static void P_ExplodeMissileSafe (mobj_t* mo, boolean safe)
 {
     mo->momx = mo->momy = mo->momz = 0;
 
-    P_SetMobjState (mo, safe ? P_LatestSafeState(mobjinfo[mo->type].deathstate) : mobjinfo[mo->type].deathstate);
+    P_SetMobjState (mo, safe ? P_LatestSafeState(mobjinfo[mo->type].deathstate) :
+                                                 mobjinfo[mo->type].deathstate);
 
     mo->tics -= safe ? Crispy_Random()&3 : P_Random()&3;
 
@@ -148,6 +149,8 @@ static void P_ExplodeMissileSafe (mobj_t* mo, boolean safe)
 	mo->tics = 1;
 
     mo->flags &= ~MF_MISSILE;
+    // [crispy] missile explosions are translucent
+    mo->flags |= MF_TRANSLUCENT;
 
     if (mo->info->deathsound)
 	S_StartSound (mo, mo->info->deathsound);

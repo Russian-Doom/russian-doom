@@ -196,6 +196,7 @@ int novert;
 // Gameplay: Graphical
 int brightmaps;
 int fake_contrast;
+int translucency;
 int improved_fuzz;
 int colored_hud;
 int colored_blood;

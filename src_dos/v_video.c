@@ -59,7 +59,7 @@ int    dirtybox[4];
 byte  *screens[5];	// Each screen is [SCREENWIDTH*SCREENHEIGHT]; 
 byte  *dp_translation = NULL;
 
-extern byte *tinttable;
+extern byte *tintmap;
 
 
 // Now where did these came from?
@@ -598,7 +598,7 @@ void V_DrawShadowedPatch (int x, int y, int scrn, patch_t *patch)
 
                 if (draw_shadowed_text && !vanilla)
                 {
-                    *dest2 = tinttable[((*dest2)<<8)];
+                    *dest2 = tintmap[((*dest2)<<8)];
                     dest2 += SCREENWIDTH;
                 }
                 *dest = *sourcetrans++;
@@ -809,7 +809,7 @@ void V_DrawShadowDirect (int x, int y, int scrn, patch_t *patch)
 
             while (count--)
             {
-                *dest = tinttable[((*dest)<<8)];
+                *dest = tintmap[((*dest)<<8)];
                 dest += SCREENWIDTH/4;
             }
 

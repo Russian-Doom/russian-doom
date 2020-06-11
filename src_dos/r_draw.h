@@ -53,6 +53,10 @@ void R_DrawColumnLow (void);
 void R_DrawFuzzColumn (void);
 void R_DrawFuzzColumnLow (void);
 
+// [JN] Translucent column
+void R_DrawTLColumn (void);
+void R_DrawTLColumnLow (void);
+
 // [crispy] draw fuzz effect independent of rendering frame rate
 void R_SetFuzzPosTic (void);
 void R_SetFuzzPosDraw (void);

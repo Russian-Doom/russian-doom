@@ -405,6 +405,12 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
         dc_translation = vis->translation;
     }
 
+    // [crispy] translucent sprites
+    if (translucency && vis->mobjflags & MF_TRANSLUCENT && !vanilla)
+    {
+        colfunc = tlcolfunc;
+    }
+
     dc_iscale = abs(vis->xiscale)>>detailshift;
     dc_texturemid = vis->texturemid;
     frac = vis->startfrac;
