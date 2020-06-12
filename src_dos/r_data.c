@@ -1151,6 +1151,9 @@ void R_PrecacheLevel (void)
             texture_t *texture = textures[i];
             int j = texture->patchcount;
 
+            // [crispy] precache composite textures
+            R_GenerateComposite(i);
+
             while (--j >= 0)
             W_CacheLumpNum(texture->patches[j].patch, PU_CACHE);
         }
