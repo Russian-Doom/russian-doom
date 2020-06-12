@@ -48,6 +48,7 @@
 
 #include "m_misc.h"
 #include "r_main.h"
+#include "s_sound.h"
 #include "jn.h"
 
 
@@ -699,20 +700,27 @@ void M_ScreenShot (void)
 	if (access(lbmname,0) == -1)
 	    break;	// file doesn't exist
     }
+
+    // [JN] Do not crash if limit is reached.
+    // Instead, play "oof" sound and print warning.
     if (i==100)
-	I_Error (english_language ?
-             "M_ScreenShot: Couldn't create a PCX" :
-             "M_ScreenShot: Невозможно создать файл PCX");
+    {
+        S_StartSound(NULL, sfx_oof);
+        players[consoleplayer].message_system = english_language ?
+                               "unable to write a screenshot" :
+                               "ytdjpvj;yj cj[hfybnm crhbyijn";
+
+        return;
+    }
     
     // save the pcx file
     WritePCXfile (lbmname, linear,
 		  SCREENWIDTH, SCREENHEIGHT,
 		  W_CacheLumpName (usegamma <= 8 ? 
                            "PALFIX" : "PLAYPAL",PU_CACHE));
-	
-    players[consoleplayer].message_system = english_language ?
-                                            "screen shot" :
-                                            "crhbyijn"; // скриншот
+
+    // [JN] Play sound instead of "screenshot" message.
+    S_StartSound(NULL, sfx_itemup);
 }
 
 
