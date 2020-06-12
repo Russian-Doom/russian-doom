@@ -53,18 +53,20 @@ void R_DrawColumnLow (void);
 void R_DrawFuzzColumn (void);
 void R_DrawFuzzColumnLow (void);
 
-// [JN] Translucent column
-void R_DrawTLColumn (void);
-
-// [crispy] draw fuzz effect independent of rendering frame rate
-void R_SetFuzzPosTic (void);
-void R_SetFuzzPosDraw (void);
-
 // Draw with color translation tables,
 //  for player sprite rendering,
 //  Green/Red/Blue/Indigo shirts.
 void R_DrawTranslatedColumn (void);
 void R_DrawTranslatedColumnLow (void);
+
+// [JN] Translucent column
+void R_DrawTLColumn (void);
+void R_DrawTLColumnLow (void);
+
+// [crispy] draw fuzz effect independent of rendering frame rate
+void R_SetFuzzPosTic (void);
+void R_SetFuzzPosDraw (void);
+
 
 void R_VideoErase (unsigned ofs, int count);
 

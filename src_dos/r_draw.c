@@ -230,6 +230,15 @@ void R_DrawColumnLow (void)
         return;
     }
 
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                "R_DrawColumnLow: %i to %i at %i" :
+                "R_DrawColumnLow: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x);
+    }
+#endif
+
     // [JN] Write bytes to the graphical output
     if (dc_x & 1)
     {
@@ -239,15 +248,6 @@ void R_DrawColumnLow (void)
     {
         outp (SC_INDEX+1,3);
     }
-
-#ifdef RANGECHECK
-    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
-    {
-        I_Error (english_language ?
-                "R_DrawColumnLow: %i to %i at %i" :
-                "R_DrawColumnLow: %i ª %i ¢ %i", dc_yl, dc_yh, dc_x);
-    }
-#endif
 
     dest = destview + dc_yl*80 + (dc_x>>1);
 
@@ -384,27 +384,107 @@ void R_DrawFuzzColumn (void)
     }
 #endif
 
-    if (detailshift)
+    // [JN] Write bytes to the graphical output
+    outpw (GC_INDEX,GC_READMAP+((dc_x&3)<<8)); 
+    outp (SC_INDEX+1,1<<(dc_x&3)); 
+    dest = destview + dc_yl*80 + (dc_x>>2); 
+
+    // Looks familiar.
+    fracstep = dc_iscale; 
+    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+
+    // Looks like an attempt at dithering,
+    //  using the colormap #6 (of 0-31, a bit
+    //  brighter than average).
+    do 
     {
-        if (dc_x & 1)
+        // Lookup framebuffer, and retrieve
+        //  a pixel that is either one column
+        //  left or right of the current one.
+        // Add index from colormap to index.
+        *dest = (improved_fuzz == 1 || improved_fuzz == 3 ? 
+                 colormaps_bw : colormaps)[6*256+dest[fuzzoffset[fuzzpos]]]; 
+
+        // Clamp table lookup index.
+        if (++fuzzpos == FUZZTABLE)
         {
-            outpw (GC_INDEX,GC_READMAP+(2<<8));
-            outp (SC_INDEX+1,12); 
-        }
-        else
-        {
-            outpw (GC_INDEX,GC_READMAP); 
-            outp (SC_INDEX+1,3); 
+            if (improved_fuzz == 2 || improved_fuzz == 3)
+            {
+                fuzzpos = paused || menuactive || inhelpscreens ?
+                          0 : Crispy_Random() % 49;
+            }
+            else
+            {
+                fuzzpos = 0;
+            }
         }
 
-        dest = destview + dc_yl*80 + (dc_x>>1); 
+        dest += SCREENWIDTH/4;
+        frac += fracstep; 
+    } while (count--); 
+
+    // [crispy] if the line at the bottom had to be cut off,
+    // draw one extra line using only pixels of that line and the one above
+    if (cutoff)
+    {
+        *dest = (improved_fuzz == 1 || improved_fuzz == 3 ? 
+        colormaps_bw : colormaps)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
+    }
+}
+
+
+void R_DrawFuzzColumnLow (void) 
+{ 
+    int         count; 
+    byte       *dest; 
+    fixed_t     frac;
+    fixed_t     fracstep;	 
+    boolean     cutoff = false;
+
+    // Adjust borders. Low...
+    if (!dc_yl) 
+    {
+        dc_yl = 1;
+    }
+
+    // .. and high.
+    if (dc_yh == viewheight-1)
+    {
+        dc_yh = viewheight - 2;
+        cutoff = true;
+    }
+
+    count = dc_yh - dc_yl;
+
+    // Zero length.
+    if (count < 0)
+    {
+        return;
+    }
+    
+#ifdef RANGECHECK 
+    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawFuzzColumnLow: %i to %i at %i" :
+                 "R_DrawFuzzColumnLow: %i ò %i ÷ %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    // [JN] Write bytes to the graphical output
+    if (dc_x & 1)
+    {
+        outpw (GC_INDEX,GC_READMAP+(2<<8));
+        outp (SC_INDEX+1,12); 
     }
     else
     {
-        outpw (GC_INDEX,GC_READMAP+((dc_x&3)<<8)); 
-        outp (SC_INDEX+1,1<<(dc_x&3)); 
-        dest = destview + dc_yl*80 + (dc_x>>2); 
+        outpw (GC_INDEX,GC_READMAP); 
+        outp (SC_INDEX+1,3); 
     }
+
+    dest = destview + dc_yl*80 + (dc_x>>1); 
 
     // Looks familiar.
     fracstep = dc_iscale; 
@@ -485,24 +565,9 @@ void R_DrawTranslatedColumn (void)
     }
 #endif
 
-    if (detailshift)
-    {
-        if (dc_x & 1)
-        {
-            outp (SC_INDEX+1,12);
-        }
-        else
-        {
-            outp (SC_INDEX+1,3);
-        }
-	
-        dest = destview + dc_yl*80 + (dc_x>>1);
-    }
-    else
-    {
-        outp (SC_INDEX+1,1<<(dc_x&3));
-        dest = destview + dc_yl*80 + (dc_x>>2);
-    }
+    // [JN] Write bytes to the graphical output
+    outp (SC_INDEX+1,1<<(dc_x&3));
+    dest = destview + dc_yl*80 + (dc_x>>2);
 
     // Looks familiar.
     fracstep = dc_iscale;
@@ -521,6 +586,61 @@ void R_DrawTranslatedColumn (void)
         frac += fracstep;
     } while (count--);
 } 
+
+
+void R_DrawTranslatedColumnLow (void)
+{
+    int         count;
+    byte       *dest;
+    fixed_t     frac;
+    fixed_t     fracstep;
+
+    count = dc_yh - dc_yl;
+
+    if (count < 0)
+    {
+        return;
+    }
+
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawTranslatedColumnLow: %i to %i at %i" :
+                 "R_DrawTranslatedColumnLow: %i ò %i ÷ %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    // [JN] Write bytes to the graphical output
+    if (dc_x & 1)
+    {
+        outp (SC_INDEX+1,12);
+    }
+    else
+    {
+        outp (SC_INDEX+1,3);
+    }
+
+    dest = destview + dc_yl*80 + (dc_x>>1);
+
+    // Looks familiar.
+    fracstep = dc_iscale;
+    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+
+    // Here we do an additional index re-mapping.
+    do
+    {
+        // Translation tables are used
+        //  to map certain colorramps to other ones,
+        //  used with PLAY sprites.
+        // Thus the "green" ramp of the player 0 sprite
+        //  is mapped to gray, red, black/indigo.
+        *dest = dc_colormap[dc_translation[dc_source[frac>>FRACBITS]]];
+        dest += SCREENWIDTH/4;
+        frac += fracstep;
+    } while (count--);
+}
 
 
 //
@@ -550,26 +670,103 @@ void R_DrawTLColumn (void)
 #endif
 
     // [JN] Write bytes to the graphical output
-    if (detailshift)
+    outpw (GC_INDEX,GC_READMAP+((dc_x&3)<<8));
+    outp (SC_INDEX+1 , 1 << (dc_x&3));
+    dest = destview + dc_yl*80 + (dc_x>>2); 
+
+    fracstep = dc_iscale;
+    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+
     {
-        if (dc_x & 1)
+        const byte *source = dc_source;
+        const lighttable_t *colormap = dc_colormap;
+        int heightmask = dc_texheight-1;
+
+        if (dc_texheight & heightmask)   // not a power of 2 -- killough
         {
-            outpw (GC_INDEX,GC_READMAP+(2<<8));
-            outp (SC_INDEX+1,12); 
+            heightmask++;
+            heightmask <<= FRACBITS;
+
+            if (frac < 0)
+              while ((frac += heightmask) < 0);
+            else
+              while (frac >= heightmask)
+                frac -= heightmask;
+
+            do
+            {
+                // Re-map color indices from wall texture column
+                //  using a lighting/special effects LUT.
+
+                // heightmask is the Tutti-Frutti fix -- killough
+
+                *dest = tintmap[(*dest<<8)
+                      + dc_colormap[dc_source[(frac>>FRACBITS)&127]]];
+                dest += SCREENWIDTH/4;
+                if ((frac += fracstep) >= heightmask)
+                {
+                    frac -= heightmask;
+                }
+            } while (--count);
         }
         else
         {
-            outp (SC_INDEX+1,3); 
+            while ((count-=2)>=0)   // texture height is a power of 2 -- killough
+            {
+                *dest = tintmap[(*dest<<8)
+                      + colormap[source[(frac>>FRACBITS) & heightmask]]];
+                dest += SCREENWIDTH/4;
+                frac += fracstep;
+                *dest = tintmap[(*dest<<8)
+                      + colormap[source[(frac>>FRACBITS) & heightmask]]];
+                dest += SCREENWIDTH/4;
+                frac += fracstep;
+            }
+
+            if (count & 1)
+            {
+                *dest = tintmap[(*dest<<8)
+                      + colormap[source[(frac>>FRACBITS) & heightmask]]];
+            }
         }
-    
-        dest = destview + dc_yl*80 + (dc_x>>1); 
+    }
+}
+
+
+void R_DrawTLColumnLow (void) 
+{
+    int       count;
+    byte     *dest;
+    fixed_t   frac;
+    fixed_t   fracstep;
+
+    count = dc_yh - dc_yl + 1;
+
+    if (count <= 0)    // Zero length, column does not exceed a pixel.
+    return;
+
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= SCREENWIDTH || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ? 
+                 "R_DrawTLColumnLow: %i to %i at %i" :
+                 "R_DrawTLColumnLow: %i ª %i ¢ %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    // [JN] Write bytes to the graphical output
+    if (dc_x & 1)
+    {
+        outpw (GC_INDEX,GC_READMAP+(2<<8));
+        outp (SC_INDEX+1,12); 
     }
     else
     {
-        outpw (GC_INDEX,GC_READMAP+((dc_x&3)<<8));
-        outp (SC_INDEX+1 , 1 << (dc_x&3));
-        dest = destview + dc_yl*80 + (dc_x>>2); 
+        outp (SC_INDEX+1,3); 
     }
+
+    dest = destview + dc_yl*80 + (dc_x>>1); 
 
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl-centery)*fracstep;
