@@ -763,6 +763,7 @@ void R_DrawTLColumnLow (void)
     }
     else
     {
+        outpw (GC_INDEX,GC_READMAP); 
         outp (SC_INDEX+1,3); 
     }
 
