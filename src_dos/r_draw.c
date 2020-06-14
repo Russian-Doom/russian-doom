@@ -92,7 +92,6 @@ byte   *ylookup[MAXHEIGHT];
 byte   *dc_translation;
 byte   *translationtables;
 byte    translations[3][256];	
-byte   *tinttable; // used for translucent sprites
 
 //
 // R_DrawColumn
