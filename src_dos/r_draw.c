@@ -288,7 +288,12 @@ void R_DrawColumnLow (void)
                 {
                     frac -= heightmask;
                 }
-            } while (--count);
+                // [JN] Skip last count. Prevents column being drawed over the HUD.
+                if (count == 1)
+                {
+                    count = 0;
+                }
+            } while (count--); // [JN] Was (--count). Fixes rare possible crash.
         }
         else
         {
