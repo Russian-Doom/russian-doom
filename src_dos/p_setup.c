@@ -42,6 +42,7 @@
 
 
 void	P_SpawnMapThing (mapthing_t*	mthing);
+extern void P_SpawnBrainTargets();
 
 
 //
