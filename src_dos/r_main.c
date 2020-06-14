@@ -740,7 +740,7 @@ void R_Init (void)
     {
         R_InitBrightmaps ();
     }
-	I_Error ("\n\n PITTO ! ! !\n\n");
+
     framecount = 0;
 }
 
