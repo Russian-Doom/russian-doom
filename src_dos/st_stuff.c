@@ -39,10 +39,10 @@
 #include "s_sound.h"
 #include "v_video.h"
 #include "doomstat.h"
-#include "dstrings.h"
 #include "sounds.h"
 #include "m_menu.h"
 #include "v_trans.h"
+#include "rd_lang.h"
 #include "jn.h"
 
 

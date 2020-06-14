@@ -29,8 +29,8 @@
 #include "v_video.h"
 #include "doomstat.h"
 #include "r_state.h"
-#include "dstrings.h"
 #include "am_map.h"
+#include "rd_lang.h"
 #include "jn.h"
 
 

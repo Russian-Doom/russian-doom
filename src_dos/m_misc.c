@@ -43,12 +43,10 @@
 // State.
 #include "doomstat.h"
 
-// Data.
-#include "dstrings.h"
-
 #include "m_misc.h"
 #include "r_main.h"
 #include "s_sound.h"
+#include "rd_lang.h"
 #include "jn.h"
 
 

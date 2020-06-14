@@ -23,6 +23,15 @@
 
 #include "d_event.h"
 
+
+//
+// File locations,
+//  relative to current position.
+// Path names are OS-sensitive.
+//
+#define DEVMAPS "devmaps"
+#define DEVDATA "devdata"
+
 #define MAXWADFILES     20
 
 extern char*    wadfiles[MAXWADFILES];

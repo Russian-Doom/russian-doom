@@ -784,7 +784,7 @@ void V_DrawShadowDirect (int x, int y, int scrn, patch_t *patch)
     ||  y + SHORT(patch->height)>SCREENHEIGHT
     || (unsigned)scrn > 4)
     {
-        // [JN] Make non-fatal.
+        // [JN] Make non-fatal. 
         // I_Error ("Žè¨¡ª  V_DrawShadowDirect");
         return;
     }

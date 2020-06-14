@@ -29,7 +29,6 @@
 
 #include "doomdef.h"
 #include "doomstat.h"
-#include "dstrings.h"
 #include "d_main.h"
 #include "i_system.h"
 #include "z_zone.h"
@@ -47,9 +46,11 @@
 #include "r_main.h"
 #include "s_sound.h"
 #include "st_stuff.h"
-
+#include "rd_lang.h"
 #include "jn.h"
 
+
+#define NUM_QUITMESSAGES 8  // QuitDOOM messages
 
 #define SKULLXOFF		-32
 #define LINEHEIGHT		16

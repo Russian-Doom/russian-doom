@@ -48,14 +48,13 @@
 #include "s_sound.h"
 
 // Data.
-#include "dstrings.h"
 #include "sounds.h"
 
 // SKY handling - still the wrong place.
 #include "r_data.h"
 #include "r_sky.h"
-
 #include "g_game.h"
+#include "rd_lang.h"
 #include "jn.h"
 
 

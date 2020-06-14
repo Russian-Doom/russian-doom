@@ -30,11 +30,11 @@
 #include "v_video.h"    // [JN] V_DrawPatchDirect
 
 // Data.
-#include "dstrings.h"
 #include "sounds.h"
 
 #include "r_main.h"
 #include "v_trans.h"
+#include "rd_lang.h"
 #include "jn.h"
 
 //

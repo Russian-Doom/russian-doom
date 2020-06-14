@@ -20,20 +20,16 @@
 
 #include <ctype.h>
 
-// Functions.
+
 #include "i_system.h"
 #include "z_zone.h"
 #include "v_video.h"
 #include "w_wad.h"
 #include "s_sound.h"
-
-// Data.
-#include "dstrings.h"
 #include "sounds.h"
-
 #include "doomstat.h"
 #include "r_state.h"
-
+#include "rd_lang.h"
 #include "jn.h"
 
 // ?

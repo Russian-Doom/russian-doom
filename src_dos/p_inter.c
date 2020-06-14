@@ -19,24 +19,16 @@
 //
 
 
-// Data.
 #include "doomdef.h"
-#include "dstrings.h"
 #include "sounds.h"
-
 #include "doomstat.h"
-
 #include "m_misc.h"
 #include "i_system.h"
-
 #include "am_map.h"
-
 #include "p_local.h"
-
 #include "s_sound.h"
-
 #include "p_inter.h"
-
+#include "rd_lang.h"
 #include "jn.h"
 
 
