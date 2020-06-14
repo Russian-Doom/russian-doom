@@ -472,10 +472,9 @@ A_CheckReload
     if (!player) return; // [crispy] let pspr action pointers get called from mobj states
 
     P_CheckAmmo (player);
-#if 0
+
     if (player->ammo[am_shell]<2)
 	P_SetPsprite (player, ps_weapon, S_DSNR1);
-#endif
 }
 
 
