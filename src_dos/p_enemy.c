@@ -1804,6 +1804,10 @@ void A_BossDeath (mobj_t* mo)
 	    }
 	    break;
 	    
+	  // [JN] Sigil: do not trigger anything by boss deaths.
+	  case 5:
+		return;      
+      
 	  default:
 	    if (gamemap != 8)
 		return;

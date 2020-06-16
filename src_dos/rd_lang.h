@@ -427,6 +427,15 @@ extern char* ststr_version;
 #define HUSTR_E4M7  "E4M7: And Hell Followed"
 #define HUSTR_E4M8  "E4M8: Unto The Cruel"
 #define HUSTR_E4M9  "E4M9: Fear"
+#define HUSTR_E5M1	"E5M1: Baphomet's Demesne"
+#define HUSTR_E5M2	"E5M2: Sheol"
+#define HUSTR_E5M3	"E5M3: Cages of the Damned"
+#define HUSTR_E5M4	"E5M4: Paths of Wretchedness"
+#define HUSTR_E5M5	"E5M5: Abaddon's Void"
+#define HUSTR_E5M6	"E5M6: Unspeakable Persecution"
+#define HUSTR_E5M7	"E5M7: Nightmare Underworld"
+#define HUSTR_E5M8	"E5M8: Halls of Perdition"
+#define HUSTR_E5M9	"E5M9: Realm of Iblis"
 
 
 //
@@ -1226,6 +1235,15 @@ PRESSYN_RUS
 #define HUSTR_E4M7_RUS  "t4v7: b gjcktljdfk fl"                     // E4M7: И последовал Ад
 #define HUSTR_E4M8_RUS  "t4v8: lj ,tccthltxbz"                      // E4M8: До бессердечия
 #define HUSTR_E4M9_RUS  "t4v9: cnhf["                               // E4M9: Страх
+#define HUSTR_E5M1_RUS  "t5v1: dkfltybz ,fajvtnf"                   // E5M1: Владения Бафомета
+#define HUSTR_E5M2_RUS  "t5v2: itjk"                                // E5M2: Шеол
+#define HUSTR_E5M3_RUS  "t5v3: rktnb ghjrkzns["                     // E5M3: Клети проклятых
+#define HUSTR_E5M4_RUS  "t5v4: genb ytcxfcnmz"                      // E5M4: Пути несчастья
+#define HUSTR_E5M5_RUS  "t5v5: ,tplyf f,flljyf"                     // E5M5: Бездна Абаддона
+#define HUSTR_E5M6_RUS  "t5v6: ytukfcyjt ujytybt"                   // E5M6: Негласное гонение
+#define HUSTR_E5M7_RUS  "t5v7: j,bntkm rjivfhf"                     // E5M7: Обитель кошмара
+#define HUSTR_E5M8_RUS  "t5v8: pfks gjub,tkb"                       // E5M8: Залы погибели
+#define HUSTR_E5M9_RUS  "t5v9: wfhcndj b,kbcf"                      // E5M9: Царство Иблиса
 
 
 //

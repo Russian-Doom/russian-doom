@@ -73,6 +73,53 @@ int M_CheckParm (char *check)
     return 0;
 }
 
+// M_CheckParmWithArgs
+// [JN] Same as above, but handles given arguments.
+// Function from Chocolate Doom.
+int M_CheckParmWithArgs(char *check, int num_args)
+{
+    int i;
+
+    for (i = 1; i < myargc - num_args; i++)
+    {
+        if (!strcasecmp(check, myargv[i]))
+        return i;
+    }
+
+    return 0;
+}
+
+// M_StrCaseStr
+// [JN] Case-insensitive version of strstr().
+// Function from Chocolate Doom.
+
+char *M_StrCaseStr(char *haystack, char *needle)
+{
+    unsigned int haystack_len;
+    unsigned int needle_len;
+    unsigned int len;
+    unsigned int i;
+
+    haystack_len = strlen(haystack);
+    needle_len = strlen(needle);
+
+    if (haystack_len < needle_len)
+    {
+        return NULL;
+    }
+
+    len = haystack_len - needle_len;
+
+    for (i = 0; i <= len; ++i)
+    {
+        if (!strncasecmp(haystack + i, needle, needle_len))
+        {
+            return haystack + i;
+        }
+    }
+
+    return NULL;
+}
 
 //
 // M_Random

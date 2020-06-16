@@ -56,7 +56,7 @@
 #include "r_local.h"
 
 #include "d_main.h"
-
+#include "m_misc.h"
 #include "rd_lang.h"
 #include "jn.h"
 
@@ -113,6 +113,7 @@ boolean     tnt;
 boolean     french;
 boolean     altfinal;
 boolean     vanilla;
+boolean     sigil;
 
 
 char        wadfile[1024];     // primary wad file
@@ -494,6 +495,7 @@ void D_DoAdvanceDemo (void)
                 pagename = shareware ? "TITLEPIS" :
                             plutonia ? "TITLEPIP" :
                                  tnt ? "TITLEPIT" :
+                               sigil ? "TITLESIG" :
                                        "TITLEPIC" ;
             }
             S_StartMusic(commercial ? mus_dm2ttl : mus_intro);
@@ -520,6 +522,7 @@ void D_DoAdvanceDemo (void)
             else
             {
                 pagename = shareware || registered ? "CREDITS" :
+                                             sigil ? "HELPSIG" :
                                             retail ? "CREDITU" :
                                                      "CREDIT2" ;
             }
@@ -549,6 +552,7 @@ void D_DoAdvanceDemo (void)
                 {
                     pagename = plutonia ? "TITLEPIP" :
                                     tnt ? "TITLEPIT" :
+                                  sigil ? "TITLESIG" :
                                           "TITLEPIC" ;
                 }
     
@@ -565,8 +569,9 @@ void D_DoAdvanceDemo (void)
                 }
                 else
                 {
-                    pagename = retail ? "CREDITU" :
-                                        "HELP2R"  ;
+                    pagename = sigil ? "HELPSIG" :
+                              retail ? "CREDITU" :
+                                       "HELP2R"  ;
                 }
             }
             break;
@@ -1342,6 +1347,26 @@ void D_DoomMain (void)
             VERSION/100,VERSION%100);
         }
         D_RedrawTitle();
+    }
+
+    // [JN] Check for SIGIL loading.
+    // Only main version with five episodes is supported.
+    p = M_CheckParmWithArgs ("-file", 1);
+    if (p)
+    {
+        while (++p != myargc && myargv[p][0] != '-')
+        {
+            boolean check = 
+               M_StrCaseStr(myargv[p], "SIGIL_~1.wad")
+            || M_StrCaseStr(myargv[p], "SIGIL.wad")
+            || M_StrCaseStr(myargv[p], "SIGIL_v1_2.wad")
+            || M_StrCaseStr(myargv[p], "SIGIL_v1_21.wad");
+
+            if (check)
+            {
+                sigil = true;
+            }
+        }
     }
 
     // Check for -file in shareware

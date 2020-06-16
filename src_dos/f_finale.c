@@ -51,6 +51,7 @@ char*   e1text = E1TEXT;
 char*   e2text = E2TEXT;
 char*   e3text = E3TEXT;
 char*   e4text = E4TEXT;
+char*   e5text = E5TEXT; // [crispy] Sigil
 
 char*   c1text = C1TEXT;
 char*   c2text = C2TEXT;
@@ -78,6 +79,7 @@ char*   e1text_rus = E1TEXT_RUS;
 char*   e2text_rus = E2TEXT_RUS;
 char*   e3text_rus = E3TEXT_RUS;
 char*   e4text_rus = E4TEXT_RUS;
+char*   e5text_rus = E5TEXT_RUS; // [JN] Sigil
 
 char*   c1text_rus = C1TEXT_RUS;
 char*   c2text_rus = C2TEXT_RUS;
@@ -266,6 +268,12 @@ void F_StartFinale (void)
             case 4:
             finaleflat = "MFLR8_3";
             finaletext = english_language ? e4text : e4text_rus;
+            break;
+
+            // [JN] Sigil
+            case 5:
+            finaleflat = "FLOOR7_2";
+            finaletext = english_language ? e5text : e5text_rus;
             break;
 
             default:
@@ -901,6 +909,12 @@ void F_Drawer (void)
             case 4:
             V_DrawPatch (0,0,0,
             W_CacheLumpName("ENDPIC",PU_CACHE));
+            break;
+
+            // [JN] Sigil
+            case 5:
+            V_DrawPatch (0,0,0,
+            W_CacheLumpName("SIGILEND",PU_CACHE));
             break;
         }
     }

@@ -794,6 +794,7 @@ boolean ST_Responder (event_t *ev)
 
             // Catch invalid maps.
             if ((!commercial && retail && epsd > 0 && epsd < 5 && map > 0 && map < 10)
+            ||  (!commercial && retail && sigil && epsd > 0 && epsd < 6 && map > 0 && map < 10) // [JN] Sigil
             ||  (!commercial && epsd > 0 && epsd < 4 && map > 0 && map < 10)
             ||   (commercial && map > 0 && map <= 40))
             {

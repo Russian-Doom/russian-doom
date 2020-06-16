@@ -1137,13 +1137,14 @@ void G_ScreenShot (void)
 
 
 // DOOM Par Times
-int pars[5][10] =
+int pars[6][10] =
 {
     {0}, 
     {0,30,75,120,90,165,180,180,30,165}, 
     {0,90,90,90,120,90,360,240,30,170}, 
     {0,90,45,90,150,90,90,165,30,135}, 
-    {0,165,255,135,150,180,390,135,360,180} // [crispy] episode 4 par times from the BFG Edition
+    {0,165,255,135,150,180,390,135,360,180}, // [crispy] episode 4 par times from the BFG Edition
+    {0,90,150,360,420,780,420,780,300,660}   // [JN] Sigil par times
 };
 
 // DOOM II Par Times
@@ -1252,6 +1253,10 @@ void G_DoCompleted (void)
 
             case 4:
             wminfo.next = 2;
+            break;
+
+            case 5: // [crispy] Sigil
+            wminfo.next = 6;
             break;
             }
         }
@@ -1723,6 +1728,14 @@ void G_InitNew (skill_t skill, int episode, int map)
 
         case 4: // Special Edition sky
         skytexture = R_TextureNumForName ("SKY4");
+        break;
+
+        case 5: // [crispy] Sigil
+        skytexture = R_TextureNumForName ("SKY5_ZD");
+        if (W_CheckNumForName("SKY5_ZD") < 0)
+        {
+            skytexture = R_TextureNumForName ("SKY3");
+        }
         break;
     }
 

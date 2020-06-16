@@ -869,6 +869,7 @@ enum
     ep2,
     ep3,
     ep4,
+    ep5, // [crispy] Sigil
     ep_end
 } episodes_e;
 
@@ -881,7 +882,8 @@ menuitem_t EpisodeMenu[]=
     {1, "M_EPI1", M_Episode, 'k'},
     {1, "M_EPI2", M_Episode, 't'},
     {1, "M_EPI3", M_Episode, 'i'},
-    {1, "M_EPI4", M_Episode, 't'}
+    {1, "M_EPI4", M_Episode, 't'},
+    {1, "M_EPI5", M_Episode, 's'} // [crispy] Sigil
 };
 
 menu_t  EpiDef =
@@ -903,7 +905,8 @@ menuitem_t EpisodeMenu_Rus[]=
     {1, "RD_EPI1", M_Episode, 'g'}, // По колено в трупах
     {1, "RD_EPI2", M_Episode, 'g'}, // Прибрежье Ада
     {1, "RD_EPI3", M_Episode, 'b'}, // Инферно
-    {1, "RD_EPI4", M_Episode, 'n'}  // Твоя плоть истощена
+    {1, "RD_EPI4", M_Episode, 'n'}, // Твоя плоть истощена
+    {1, "RD_EPI5", M_Episode, 'c'}  // Сигил
 };
 
 menu_t  EpiDef_Rus =
@@ -4761,8 +4764,15 @@ void M_DrawReadThisRetail (void)
     }
     else
     {
+        if (english_language)
+        {
+            V_DrawPatchDirect(0, 0, 0, W_CacheLumpName("HELP1", PU_CACHE));
+        }
+        else
+        {
         V_DrawPatchDirect(0, 0, 0, W_CacheLumpName
-                         (english_language ? "HELP1" : "HELP1R", PU_CACHE));
+                         (sigil ? "HELPSIG" : "HELP1R", PU_CACHE));
+        }
     }
 }
 
@@ -6041,6 +6051,13 @@ void M_Init (void)
 
     // We need to remove the fourth episode.
     if (!retail)
+    {
+        EpiDef.numitems--;
+        EpiDef_Rus.numitems--;
+    }
+
+    // [JN] If no Sigil loaded, remove fifth episode.
+    if (!sigil)
     {
         EpiDef.numitems--;
         EpiDef_Rus.numitems--;

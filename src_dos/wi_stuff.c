@@ -1603,7 +1603,7 @@ void WI_drawStats (void)
 
     WI_drawTime(SCREENWIDTH/2 - SP_TIMEX, SP_TIMEY, cnt_time, true);
 
-    if (wbs->epsd < 4)
+    if (wbs->epsd < 4+1) // [JN] Sigil: extra episode
     {
         V_DrawShadowedPatch(SCREENWIDTH/2 + SP_TIMEX, SP_TIMEY, FB,
                             english_language ? par : par_rus);
@@ -1750,6 +1750,10 @@ void WI_loadData (void)
     if (wbs->epsd == 3)
     {
         strcpy(name,"INTERPIC");
+    }
+    else if (sigil && wbs->epsd == 4 && W_CheckNumForName("SIGILINT") != -1) // [crispy] Sigil
+    {
+        strcpy(name, "SIGILINT");
     }
 
     // background
@@ -2025,7 +2029,7 @@ void WI_initVariables (wbstartstruct_t *wbstartstruct)
 #ifdef RANGECHECKING
     if (!commercial)
     {
-        RNGCHECK(wbs->epsd, 0, 3);
+        RNGCHECK(wbs->epsd, 0, 3+1); // [JN] Sigil
         RNGCHECK(wbs->last, 0, 8);
         RNGCHECK(wbs->next, 0, 8);
     }

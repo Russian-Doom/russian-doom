@@ -77,6 +77,7 @@ extern boolean  tnt;
 extern boolean  french;
 extern boolean  altfinal;
 extern boolean  vanilla;
+extern boolean  sigil;
 
 
 // Nightmare mode flag, single player.

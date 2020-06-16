@@ -180,6 +180,17 @@ char* mapnames[] =	// DOOM shareware/registered/retail (Ultimate) names.
     HUSTR_E4M8,
     HUSTR_E4M9,
 
+    // [crispy] Sigil
+    HUSTR_E5M1,
+    HUSTR_E5M2,
+    HUSTR_E5M3,
+    HUSTR_E5M4,
+    HUSTR_E5M5,
+    HUSTR_E5M6,
+    HUSTR_E5M7,
+    HUSTR_E5M8,
+    HUSTR_E5M9,
+
     "NEWLEVEL",
     "NEWLEVEL",
     "NEWLEVEL",
@@ -232,6 +243,17 @@ char* mapnames_rus[] =
     HUSTR_E4M7_RUS,
     HUSTR_E4M8_RUS,
     HUSTR_E4M9_RUS,
+
+    // [JN] Sigil
+    HUSTR_E5M1_RUS,
+    HUSTR_E5M2_RUS,
+    HUSTR_E5M3_RUS,
+    HUSTR_E5M4_RUS,
+    HUSTR_E5M5_RUS,
+    HUSTR_E5M6_RUS,
+    HUSTR_E5M7_RUS,
+    HUSTR_E5M8_RUS,
+    HUSTR_E5M9_RUS,
 
     // [JN] "мнбши спнбемэ"
     "YJDSQ EHJDTYM",
