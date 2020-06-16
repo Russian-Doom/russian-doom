@@ -456,7 +456,7 @@ void AM_changeWindowLoc(void)
 
     incx = m_paninc.x;
     incy = m_paninc.y;
-    if (automap_overlay)
+    if (automap_rotate)
     {
         AM_rotate(&incx, &incy, -mapangle);
     }
