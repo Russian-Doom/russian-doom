@@ -88,6 +88,8 @@ extern int novert;
 // Audio
 // -----------------------------------------------------------------------------
 
+extern int sfxVolume;
+extern int musicVolume;
 extern int numChannels;
 extern int snd_monomode;
 extern int snd_pitchshift;

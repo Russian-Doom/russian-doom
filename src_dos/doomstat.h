@@ -129,9 +129,6 @@ extern boolean  inhelpscreens;  // [JN] In HELP* screens?
 
 extern boolean  viewactive;
 
-extern boolean  nodrawers;
-extern boolean  noblit;
-
 extern int viewwindowx;
 extern int viewwindowy;
 extern int viewheight;

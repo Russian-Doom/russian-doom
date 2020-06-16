@@ -25,21 +25,6 @@
 
 
 //
-// File locations,
-//  relative to current position.
-// Path names are OS-sensitive.
-//
-#define DEVMAPS "devmaps"
-#define DEVDATA "devdata"
-
-#define MAXWADFILES     20
-
-extern char*    wadfiles[MAXWADFILES];
-
-void D_AddFile (char *file);
-
-
-//
 // D_DoomMain()
 // Not a globally visible function, just included for source reference,
 // calls all startup code, parses command line options.
@@ -50,14 +35,15 @@ void D_DoomMain (void);
 // Called by IO functions when input is detected.
 void D_PostEvent (event_t* ev);
 
-
 //
 // BASE LEVEL
 //
+void D_AddFile (char *file);
 void D_PageTicker (void);
 void D_PageDrawer (void);
 void D_AdvanceDemo (void);
 void D_StartTitle (void);
+
 
 #endif
 

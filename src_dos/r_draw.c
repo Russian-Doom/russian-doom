@@ -1180,7 +1180,7 @@ void R_FillBackScreen (void)
     char	name2[] = "GRNROCK";    // DOOM II border patch.
     char*	name;
 
-    if (scaledviewwidth == 320)
+    if (scaledviewwidth == SCREENWIDTH)
     {
         return;
     }

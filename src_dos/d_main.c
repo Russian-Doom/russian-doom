@@ -28,42 +28,33 @@
 
 #include "doomdef.h"
 #include "doomstat.h"
-
 #include "sounds.h"
-
 #include "z_zone.h"
 #include "w_wad.h"
 #include "s_sound.h"
 #include "v_video.h"
-
 #include "f_finale.h"
 #include "f_wipe.h"
-
 #include "m_misc.h"
 #include "m_menu.h"
-
 #include "i_system.h"
 #include "i_sound.h"
-
 #include "g_game.h"
-
 #include "hu_stuff.h"
 #include "wi_stuff.h"
 #include "st_stuff.h"
 #include "am_map.h"
-
 #include "p_setup.h"
 #include "r_local.h"
-
 #include "d_main.h"
 #include "m_misc.h"
 #include "rd_lang.h"
 #include "jn.h"
 
-// [JN] Default banner colors. Background changed to
-// black for prevention of color blinking in slow CPUs
-#define BGCOLOR     0
-#define FGCOLOR     15
+
+#define MAXWADFILES     20
+#define MAXARGVS        100
+
 
 //
 // D-DoomLoop()
@@ -75,22 +66,22 @@
 //  calls I_GetTime, I_StartFrame, and I_StartTic
 //
 void D_DoomLoop (void);
+void D_CheckNetGame (void);
+void D_ProcessEvents (void);
+void G_BuildTiccmd (ticcmd_t* cmd);
+void D_DoAdvanceDemo (void);
+void R_ExecuteSetViewSize (void);
 
 
+char        basedefault[1024];      // default file
+char        wadfile[1024];          // primary wad file
 char*       wadfiles[MAXWADFILES];
 
-boolean     devparm;     // started game with -devparm
-boolean     nomonsters;  // checkparm of -nomonsters
-boolean     respawnparm; // checkparm of -respawn
-boolean     fastparm;    // checkparm of -fast
-boolean     drone;
-boolean	    singletics = false; // debug flag to cancel adaptiveness
-
-//extern int soundVolume;
-extern int  sfxVolume;
-extern int  musicVolume;
-
-extern boolean  inhelpscreens;
+boolean     devparm;                // started game with -devparm
+boolean     nomonsters;             // checkparm of -nomonsters
+boolean     respawnparm;            // checkparm of -respawn
+boolean     fastparm;               // checkparm of -fast
+boolean	    singletics = false;     // debug flag to cancel adaptiveness
 
 skill_t     startskill;
 int         startepisode;
@@ -108,21 +99,9 @@ boolean     retail;
 boolean     commercial;
 boolean     plutonia;
 boolean     tnt;
-boolean     french;
 boolean     altfinal;
 boolean     vanilla;
 boolean     sigil;
-
-
-char        wadfile[1024];     // primary wad file
-char        mapdir[1024];      // directory of development maps
-char        basedefault[1024]; // default file
-
-
-void D_CheckNetGame (void);
-void D_ProcessEvents (void);
-void G_BuildTiccmd (ticcmd_t* cmd);
-void D_DoAdvanceDemo (void);
 
 
 //
@@ -135,12 +114,26 @@ event_t     events[MAXEVENTS];
 int         eventhead;
 int         eventtail;
 
+//
+// DEMO LOOP
+//
+int         demosequence;
+int         pagetic;
+char       *pagename;
+
+// wipegamestate can be set to -1 to force a wipe on the next draw
+gamestate_t wipegamestate = GS_DEMOSCREEN;
+
+// print title for every printed line
+char        title[128];
+
+extern boolean  setsizeneeded;
 
 //
 // D_PostEvent
 // Called by the I/O functions when input is detected
 //
-void D_PostEvent (event_t* ev)
+void D_PostEvent (event_t *ev)
 {
     events[eventhead] = *ev;
     eventhead = (++eventhead)&(MAXEVENTS-1);
@@ -153,17 +146,14 @@ void D_PostEvent (event_t* ev)
 //
 void D_ProcessEvents (void)
 {
-    event_t*    ev;
-
-    // IF STORE DEMO, DO NOT ACCEPT INPUT
-    if (( commercial ) && (W_CheckNumForName("map01")<0))
-    return;
+    event_t *ev;
 
     for ( ; eventtail != eventhead ; eventtail = (++eventtail)&(MAXEVENTS-1) )
     {
         ev = &events[eventtail];
+
         if (M_Responder (ev))
-	    continue; // menu ate the event
+        continue; // menu ate the event
 
         G_Responder (ev);
     }
@@ -185,32 +175,20 @@ fixed_t FixedDiv (fixed_t a, fixed_t b)
 // D_Display
 //  draw current display, possibly wiping it from the previous
 //
-
-// wipegamestate can be set to -1 to force a wipe on the next draw
-gamestate_t wipegamestate = GS_DEMOSCREEN;
-extern boolean  setsizeneeded;
-extern int      showMessages;
-
-void R_ExecuteSetViewSize (void);
-
 void D_Display (void)
 {
-    static boolean      viewactivestate = false;
-    static boolean      menuactivestate = false;
-    static boolean      inhelpscreensstate = false;
-    static boolean      fullscreen = false;
+    int             tics;
+    int             wipestart;
+    int             y;
+    boolean         done;
+    boolean         wipe;
+    boolean         redrawsbar;
+    static int      borderdrawcount;
+    static boolean  viewactivestate = false;
+    static boolean  menuactivestate = false;
+    static boolean  inhelpscreensstate = false;
+    static boolean  fullscreen = false;
     static gamestate_t  oldgamestate = -1;
-    static int  borderdrawcount;
-    int         nowtime;
-    int         tics;
-    int         wipestart;
-    int         y;
-    boolean     done;
-    boolean     wipe;
-    boolean     redrawsbar;
-
-    if (nodrawers)
-    return; // for comparative timing / profiling
 
     redrawsbar = false;
 
@@ -229,45 +207,63 @@ void D_Display (void)
         wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
     }
     else
-    wipe = false;
+    {
+        wipe = false;
+    }
 
     if (gamestate == GS_LEVEL && gametic)
-    HU_Erase();
+    {
+        HU_Erase();
+    }
 
     // do buffered drawing
     switch (gamestate)
     {
         case GS_LEVEL:
-        if (!gametic)
-        break;
-
-        if (automapactive)
         {
-            // [crispy] update automap while playing
-            R_RenderPlayerView (&players[displayplayer]);
-            AM_Drawer ();
+            if (!gametic)
+            break;
+
+            if (automapactive)
+            {
+                // [crispy] update automap while playing
+                R_RenderPlayerView (&players[displayplayer]);
+                AM_Drawer ();
+            }
+
+            if (wipe || (viewheight != SCREENHEIGHT && fullscreen))
+            {
+                redrawsbar = true;
+            }
+
+            if (inhelpscreensstate && !inhelpscreens)
+            {
+                redrawsbar = true; // just put away the help screen
+            }
+
+            ST_Drawer (viewheight == SCREENHEIGHT, redrawsbar );
+            fullscreen = viewheight == SCREENHEIGHT;
+
+            break;
         }
 
-        if (wipe || (viewheight != 200 && fullscreen))
-        redrawsbar = true;
-        if (inhelpscreensstate && !inhelpscreens)
-        redrawsbar = true; // just put away the help screen
-
-        ST_Drawer (viewheight == 200, redrawsbar );
-        fullscreen = viewheight == 200;
-        break;
-
         case GS_INTERMISSION:
-        WI_Drawer ();
-        break;
+        {
+            WI_Drawer ();
+            break;
+        }
 
         case GS_FINALE:
-        F_Drawer ();
-        break;
+        {
+            F_Drawer ();
+            break;
+        }
 
         case GS_DEMOSCREEN:
-        D_PageDrawer ();
-        break;
+        {
+            D_PageDrawer ();
+            break;
+        }
     }
 
     // draw buffered stuff to screen
@@ -276,34 +272,39 @@ void D_Display (void)
     // draw the view directly
     if (gamestate == GS_LEVEL && !automapactive && gametic)
     {
-    R_RenderPlayerView (&players[displayplayer]);
+        R_RenderPlayerView (&players[displayplayer]);
 
-    // [JN] Make HUD calculations for active Crispy HUDs
-    if (screenblocks == 11 || screenblocks == 12 || screenblocks == 13)
+        // [JN] Make HUD calculations for active Crispy HUDs
+        if (screenblocks >= 11 || screenblocks <= 13)
         ST_Drawer(0, 0);
     }
 
     if (gamestate == GS_LEVEL && gametic)
-    HU_Drawer ();
+    {
+        HU_Drawer ();
+    }
 
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
-    I_SetPalette (W_CacheLumpName (usegamma <= 8 ? 
-                                   "PALFIX" : "PLAYPAL", PU_CACHE));
+    {
+        I_SetPalette (W_CacheLumpName (usegamma <= 8 ? 
+                      "PALFIX" : "PLAYPAL", PU_CACHE));
+    }
 
     // see if the border needs to be initially drawn
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
     {
         viewactivestate = false; // view was not active
-        if (screenblocks < 10)   // [JN] Invoke only for appropriate screen sizes
         R_FillBackScreen ();     // draw the pattern into the back screen
     }
 
     // see if the border needs to be updated to the screen
-    if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != 320)
+    if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != SCREENWIDTH)
     {
         if (menuactive || menuactivestate || !viewactivestate)
-        borderdrawcount = 3;
+        {
+            borderdrawcount = 3;
+        }
 
         if (borderdrawcount)
         {
@@ -321,18 +322,25 @@ void D_Display (void)
     if (paused)
     {
         if (automapactive)
-        y = 4;
-        else if (gamestate == GS_INTERMISSION)  // [JN] Do not obstruct titles on intermission screen
-        y = 32;
+        {
+            y = 4;
+        }
+        else if (gamestate == GS_INTERMISSION)
+        {
+            // [JN] Do not obstruct titles on intermission screen
+            y = 32;
+        }
         else
-        y = viewwindowy+4;
+        {
+            y = viewwindowy+4;
+        }
 
-        V_DrawShadowDirect(viewwindowx+(scaledviewwidth-68)/2+1,
-                          y+1,0,W_CacheLumpName (english_language ? 
-                                                 "M_PAUSE" : "RD_PAUSE", PU_CACHE));
-        V_DrawPatchDirect(viewwindowx+(scaledviewwidth-68)/2,
-                          y,0,W_CacheLumpName (english_language ?
-                                               "M_PAUSE" : "RD_PAUSE", PU_CACHE));
+        V_DrawShadowDirect(viewwindowx+(scaledviewwidth-68)/2+1, y+1, 0,
+                           W_CacheLumpName (english_language ? "M_PAUSE" :
+                                                               "RD_PAUSE", PU_CACHE));
+        V_DrawPatchDirect(viewwindowx+(scaledviewwidth-68)/2, y, 0,
+                          W_CacheLumpName (english_language ? "M_PAUSE" :
+                                                              "RD_PAUSE", PU_CACHE));
     }
 
     // menus go directly to the screen
@@ -354,11 +362,10 @@ void D_Display (void)
     {
         do
         {
-            nowtime = I_GetTime ();
-            tics = nowtime - wipestart;
+            tics = I_GetTime() - wipestart;
         } while (!tics);
 
-        wipestart = nowtime;
+        wipestart = I_GetTime();
         done = wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
         I_UpdateNoBlit();
         M_Drawer();       // menu is drawn even on top of wipes
@@ -370,8 +377,6 @@ void D_Display (void)
 //
 // D_DoomLoop
 //
-extern boolean      demorecording;
-
 void D_DoomLoop (void)
 {
     if (demorecording)
@@ -424,21 +429,15 @@ void D_DoomLoop (void)
 
 
 //
-// DEMO LOOP
-//
-int     demosequence;
-int     pagetic;
-char    *pagename;
-
-
-//
 // D_PageTicker
 // Handles timing for warped projection
 //
 void D_PageTicker (void)
 {
     if (--pagetic < 0)
-    D_AdvanceDemo();
+    {
+        D_AdvanceDemo();
+    }
 }
 
 
@@ -447,7 +446,7 @@ void D_PageTicker (void)
 //
 void D_PageDrawer (void)
 {
-    V_DrawPatch (0,0, 0, W_CacheLumpName(pagename, PU_CACHE));
+    V_DrawPatch (0, 0, 0, W_CacheLumpName(pagename, PU_CACHE));
 }
 
 
@@ -665,11 +664,11 @@ void D_SetCursorPosition(int column, int row)
 //
 void D_DrawTitle(char *string, int fc, int bc)
 {
+    int   column;
+    int   row;
+    int   i;
+    byte  color;
     union REGS regs;
-    byte color;
-    int column;
-    int row;
-    int i;
 
     //Calculate text color
     color = (bc << 4) | fc;
@@ -700,9 +699,6 @@ void D_DrawTitle(char *string, int fc, int bc)
 }
 
 
-// print title for every printed line
-char title[128];
-
 //
 // D_RedrawTitle
 //
@@ -718,8 +714,7 @@ void D_RedrawTitle(void)
     //Set cursor pos to zero
     D_SetCursorPosition(0, 0);
 
-    //Draw title (title, FGCOLOR, BGCOLOR);
-    // [JN] Different colors for different games
+    // [JN] Different title colors for different games
     // http://www.brackeen.com/vga/basics.html
 
     if (vanilla)
@@ -755,8 +750,8 @@ void D_RedrawTitle(void)
 //
 void D_AddFile (char *file)
 {
-    int     numwadfiles;
-    char    *newfile;
+    int    numwadfiles;
+    char  *newfile;
 
     for (numwadfiles = 0 ; wadfiles[numwadfiles] ; numwadfiles++)
     ;
@@ -776,127 +771,64 @@ void D_AddFile (char *file)
 //
 void IdentifyVersion (void)
 {
+    int p;
+
     // [JN] Moderate purism's Vanilla gameplay mode
     if (M_CheckParm ("-vanilla"))
     vanilla = true;
 
     strcpy(basedefault,"default.cfg");
-    if (M_CheckParm ("-shdev"))
-    {
-        registered = false;
-        shareware = true;
-        devparm = true;
-        D_AddFile (DEVDATA"doom1.wad");
-        D_AddFile (DEVMAPS"data_se/texture1.lmp");
-        D_AddFile (DEVMAPS"data_se/pnames.lmp");
-        strcpy (basedefault,DEVDATA"default.cfg");
-        return;
-    }
-
-    if (M_CheckParm ("-regdev"))
-    {
-        registered = true;
-        shareware = false;
-        devparm = true;
-        D_AddFile (DEVDATA"doom.wad");
-        D_AddFile (DEVMAPS"data_se/texture1.lmp");
-        D_AddFile (DEVMAPS"data_se/texture2.lmp");
-        D_AddFile (DEVMAPS"data_se/pnames.lmp");
-        strcpy (basedefault,DEVDATA"default.cfg");
-        return;
-    }
-
-    if (M_CheckParm ("-comdev"))
-    {
-        commercial = true;
-        devparm = true;
-
-        if(plutonia)
-        D_AddFile (DEVDATA"plutonia.wad");
-        else if(tnt)
-        D_AddFile (DEVDATA"tnt.wad");
-        else
-	    D_AddFile (DEVDATA"doom2.wad");
-
-        D_AddFile (DEVMAPS"cdata/texture1.lmp");
-        D_AddFile (DEVMAPS"cdata/pnames.lmp");
-        strcpy (basedefault,DEVDATA"default.cfg");
-        return;
-    }
-
+    
     if (M_CheckParm ("-alt"))
     altfinal = true;
 
-    {
-    int p = M_CheckParm ("-iwad");
-
+    // [JN] -IWAD loading
+    p = M_CheckParm ("-iwad");
     if (p && p < myargc-1)
     {
-    if( !access (myargv[p+1],R_OK) )
-    {
-        /* [JN] French verion is not supported
-        if ( !strcasecmp (myargv[p+1],"doom2f.wad") )
+        if( !access (myargv[p+1],R_OK) )
         {
-            commercial = true;
-            // Putain de merde
-            french = true;
-            printf("French version\n");
-            D_AddFile ("doom2f.wad");
-            return;
-	    }*/
 
-        if ( !strcasecmp (myargv[p+1],"doom2.wad") )
-        {
-            commercial = true;
-            D_AddFile ("doom2.wad");
-            return;
-        }
+            if ( !strcasecmp (myargv[p+1],"doom2.wad") )
+            {
+                commercial = true;
+                D_AddFile ("doom2.wad");
+                return;
+            }
 
-        if ( !strcasecmp (myargv[p+1],"plutonia.wad") )
-        {
-            commercial = true;
-            plutonia = true;
-            D_AddFile ("plutonia.wad");
-            return;
-        }
+            if ( !strcasecmp (myargv[p+1],"plutonia.wad") )
+            {
+                commercial = true;
+                plutonia = true;
+                D_AddFile ("plutonia.wad");
+                return;
+            }
 
-        if ( !strcasecmp (myargv[p+1],"tnt.wad") )
-        {
-            commercial = true;
-            tnt = true;
-            D_AddFile ("tnt.wad");
-            return;
-        }
+            if ( !strcasecmp (myargv[p+1],"tnt.wad") )
+            {
+                commercial = true;
+                tnt = true;
+                D_AddFile ("tnt.wad");
+                return;
+            }
 
-        if ( !strcasecmp (myargv[p+1],"doom.wad") )
-        {
-            registered = true;
-            D_AddFile ("doom.wad");
-	        return;
-        }
+            if ( !strcasecmp (myargv[p+1],"doom.wad") )
+            {
+                registered = true;
+                D_AddFile ("doom.wad");
+                return;
+            }
 
-        if ( !strcasecmp (myargv[p+1],"doom1.wad") )
-        {
-            shareware = true;
-            D_AddFile ("doom1.wad");
-            return;
+            if ( !strcasecmp (myargv[p+1],"doom1.wad") )
+            {
+                shareware = true;
+                D_AddFile ("doom1.wad");
+                return;
+            }
         }
-    }
     }
     else
     {
-        /* [JN] French verion is not supported
-        if ( !access ("doom2f.wad",R_OK) )
-        {
-            commercial = true;
-            // C'est ridicule!
-            // Let's handle languages in config files, okay?
-            french = true;
-            printf("French version\n");
-            D_AddFile ("doom2f.wad");
-            return;
-        }*/
-
         if ( !access ("doom2.wad",R_OK) )
         {
             commercial = true;
@@ -934,13 +866,11 @@ void IdentifyVersion (void)
             return;
         }
     }
-}
 
     printf(english_language ?
            "Game mode indeterminate\n" :
            "Невозможно определить игру.\n");
     exit(1);
-    //I_Error ("Game mode indeterminate\n");
 }
 
 
@@ -949,25 +879,24 @@ void IdentifyVersion (void)
 //
 void FindResponseFile (void)
 {
-    int     i;
+    int i;
 
-#define MAXARGVS 100
-
-    for (i = 1;i < myargc;i++)
+    for (i = 1 ; i < myargc ; i++)
     if (myargv[i][0] == '@')
     {
-        FILE *  handle;
-        int     size;
-        int     k;
-        int     index;
-        int     indexinfile;
-        char    *infile;
-        char    *file;
-        char    *moreargs[20];
-        char    *firstargv;
+        FILE  *handle;
+        int    size;
+        int    k;
+        int    index;
+        int    indexinfile;
+        char  *infile;
+        char  *file;
+        char  *moreargs[20];
+        char  *firstargv;
 
         // READ THE RESPONSE FILE INTO MEMORY
         handle = fopen (&myargv[i][1],"rb");
+
         if (!handle)
         {
             printf (english_language ?
@@ -987,7 +916,7 @@ void FindResponseFile (void)
         fclose (handle);
 
         // KEEP ALL CMDLINE ARGS FOLLOWING @RESPONSEFILE ARG
-        for (index = 0,k = i+1; k < myargc; k++)
+        for (index = 0, k = i+1 ; k < myargc ; k++)
         moreargs[index++] = myargv[k];
 
         firstargv = myargv[0];
@@ -998,6 +927,7 @@ void FindResponseFile (void)
         infile = file;
         indexinfile = k = 0;
         indexinfile++; // SKIP PAST ARGV[0] (KEEP IT)
+
         do
         {
             myargv[indexinfile++] = infile+k;
@@ -1008,7 +938,7 @@ void FindResponseFile (void)
             k++;
         } while(k < size);
 
-        for (k = 0;k < index;k++)
+        for (k = 0 ; k < index ; k++)
         myargv[indexinfile++] = moreargs[k];
         myargc = indexinfile;
 
@@ -1016,7 +946,8 @@ void FindResponseFile (void)
         printf(english_language ?
                "%d command-line args:\n" :
                "%d параметры командной строки:\n", myargc);
-        for (k=1;k<myargc;k++)
+
+        for (k=1 ; k < myargc ; k++)
         printf("%s\n",myargv[k]);
 
         break;
@@ -1037,9 +968,6 @@ void D_DoomMain (void)
 
     IdentifyVersion ();
 
-    // [JN] Load RD resource PWAD.
-    D_AddFile ("rusdoom.wad");
-
     setbuf(stdout, NULL);
     modifiedgame = false;
 
@@ -1057,7 +985,16 @@ void D_DoomMain (void)
 
     // [JN] Load variables first, so we can show 
     // startup string with proper language.
+    printf(english_language ? 
+           "M_LoadDefaults: Load system defaults.\n" :
+           "M_LoadDefaults: Загрузка системных стандартов.\n");
     M_LoadDefaults();
+
+    // [JN] Load Russian Doom resource PWAD.
+    D_AddFile ("rusdoom.wad");
+
+    // [JN] Define and load translated strings
+    RD_DefineLanguageStrings();
 
     if (shareware || registered)
     {
@@ -1146,7 +1083,10 @@ void D_DoomMain (void)
 
     regs.w.ax = 3;
     int386(0x10, &regs, &regs);
-    D_DrawTitle(title, FGCOLOR, BGCOLOR);
+    // [JN] Colors are:
+    // 15 - foreground, white color
+    //  0 - background, black color
+    D_DrawTitle(title, 15, 0);
 
     printf(english_language ?
     "\nP_Init: Checking cmd-line parameters...\n" :
@@ -1190,37 +1130,6 @@ void D_DoomMain (void)
 
     // add any files specified on the command line with -file wadfile
     // to the wad list
-    //
-    // convenience hack to allow -wart e m to add a wad file
-    // prepend a tilde to the filename so wadfile will be reloadable
-    p = M_CheckParm ("-wart");
-    if (p)
-    {
-        myargv[p][4] = 'p'; // big hack, change to -warp
-
-        // Map name handling.
-
-        if (commercial)
-        {
-            p = atoi (myargv[p+1]);
-
-            if (p<10)
-            sprintf (file,"~"DEVMAPS"cdata/map0%i.wad", p);
-            else
-            sprintf (file,"~"DEVMAPS"cdata/map%i.wad", p);
-        }
-        else
-        {
-            sprintf (file,"~"DEVMAPS"E%cM%c.wad", myargv[p+1][0], myargv[p+2][0]);
-            printf(english_language ?
-                   "Warping to Episode %s, Map %s.\n" :
-                   "Перемещение в эпизод %s, карту %s.\n",
-            myargv[p+1],myargv[p+2]);
-        }
-
-        D_AddFile (file);
-    }
-
     p = M_CheckParm ("-file");
     if (p)
     {
@@ -1307,12 +1216,6 @@ void D_DoomMain (void)
            "V_Init: Обнаружение экранов.\n");
     V_Init();
 
-    // [JN] We have to load variables first for proper 
-    // language on startup screens.
-    printf(english_language ? 
-           "M_LoadDefaults: Load system defaults.\n" :
-           "M_LoadDefaults: Загрузка системных стандартов.\n");
-
     printf(english_language ?
            "Z_Init: Init zone memory allocation daemon. \n" :
            "Z_Init: Инициализация распределения памяти. \n");
@@ -1390,27 +1293,7 @@ void D_DoomMain (void)
             shareware = true;
             retail = registered = false;
         }
-
-        // [JN] Disabled, needed for loading translated wads
-        //
-        // if (shareware && modifiedgame)
-        // I_Error("\nYou cannot -file with the shareware version.");
     }
-
-    // If additonal PWAD files are used, print modified banner
-    //
-    // if (modifiedgame)
-    // {
-    // /*m*/printf (
-    //     "===========================================================================\n"
-    //     "ATTENTION:  This version of DOOM has been modified.  If you would like to\n"
-    //     "get a copy of the original game, call 1-800-IDGAMES or see the readme file.\n"
-    //     "        You will not receive technical support for modified games.\n"
-    //     "                      press enter to continue\n"
-    //     "===========================================================================\n"
-    //     );
-    // getchar ();
-    // }
 
     // Check and print which version is executed.
 
@@ -1530,9 +1413,6 @@ void D_DoomMain (void)
     D_RedrawTitle();
     ST_Init();
 
-    // [JN] Define and load translated strings
-    RD_DefineLanguageStrings();
-
     // check for a driver that wants intermission stats
     p = M_CheckParm ("-statcopy");
     if (p && p<myargc-1)
@@ -1550,7 +1430,6 @@ void D_DoomMain (void)
 
     // start the apropriate game based on parms
     p = M_CheckParm ("-record");
-
     if (p && p < myargc-1)
     {
         G_RecordDemo(myargv[p+1]);
