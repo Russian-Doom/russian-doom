@@ -9,6 +9,7 @@ This is a sub-project of the main project Russian Doom.
 * Doom II: Hell on Earth
 * Final Doom - TNT: Evilution
 * Final Doom - The Plutonia Experiment
+* SIGIL (five episodes version)
 
 If you have multiple IWADs in your directory, you can use the `-iwad` parameter to specify which IWAD to use. 
 
