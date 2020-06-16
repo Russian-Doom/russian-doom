@@ -54,9 +54,7 @@ void ST_Start (void);
 void ST_Init (void);
 
 // [JN] Called in m_menu.c.
-void ST_refreshBackground (void);
-void ST_drawWidgets (boolean refresh);
-
+void ST_doRefresh();
 
 // States for status bar code.
 typedef enum

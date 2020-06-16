@@ -3950,8 +3950,7 @@ void M_RD_Change_ColoredHUD (int choice)
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
+        ST_doRefresh();
     }
 }
 
@@ -4169,8 +4168,7 @@ void M_RD_BackToDefaultsResponse (int ch)
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
+        ST_doRefresh();
     }
 
     // Print informative message (настройки сброшены)

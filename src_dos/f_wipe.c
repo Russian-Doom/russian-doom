@@ -221,9 +221,9 @@ int wipe_exitMelt (int width, int height, int ticks)
     if ((screen_wiping == 0 || screen_wiping == 2) && !vanilla
     && screenblocks <= 10 && gamestate == GS_LEVEL)
     {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
         HU_Drawer();
+        ST_doRefresh();
+        setsizeneeded = true;
     }
     return 0;
 }
