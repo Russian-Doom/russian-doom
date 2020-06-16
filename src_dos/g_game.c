@@ -158,6 +158,9 @@ int     joybspeed;
 
 // [JN] Russian Doom specific variables 
 
+// Language swapping
+int english_language;
+
 // Rendering
 int noflats;
 int show_fps;

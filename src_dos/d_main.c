@@ -76,8 +76,6 @@
 //
 void D_DoomLoop (void);
 
-// [JN] Support for language swapping.
-int         english_language = 0;
 
 char*       wadfiles[MAXWADFILES];
 
