@@ -4179,6 +4179,7 @@ void M_RD_BackToDefaultsResponse (int ch)
     sfxVolume       = 8;  S_SetSfxVolume(sfxVolume * 8);
     musicVolume     = 8;  S_SetMusicVolume(musicVolume * 8);
     numChannels     = 32; S_ChannelsRealloc();
+    snd_samplerate  = 22050; I_SetChannels(numChannels);
     snd_monomode    = 0;
     snd_pitchshift  = 0;
 
