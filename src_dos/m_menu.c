@@ -379,6 +379,7 @@ void M_RD_Choose_SoundSystem(int choice);
 void M_RD_Draw_Audio_System(void);
 void M_RD_Change_SoundDevice(int choice);
 void M_RD_Change_MusicDevice(int choice);
+void M_RD_Change_Sampling(int choice);
 void M_RD_Change_SndMode(int choice);
 void M_RD_Change_PitchShifting(int choice);
 
@@ -1418,6 +1419,7 @@ enum
     rd_audio_sys_sfx,
     rd_audio_sys_music,
     rd_audio_sys_empty1,
+    rd_audio_sys_sampling,
     rd_audio_sys_sndmode,
     rd_audio_sys_sndpitch,
     rd_audio_sys_end
@@ -1432,6 +1434,7 @@ menuitem_t RD_Audio_System_Menu[]=
     {2, "sound effects:",        M_RD_Change_SoundDevice,   's'},
     {2, "music:",                M_RD_Change_MusicDevice,   'm'},
     {-1,"",0,'\0'},
+    {2, "sampling frequency:",   M_RD_Change_Sampling,      's'},
     {2, "sound effects mode:",   M_RD_Change_SndMode,       's'},
     {2, "pitch-shifted sounds:", M_RD_Change_PitchShifting, 'p'},
     {-1,"",0,'\0'}
@@ -1456,6 +1459,7 @@ menuitem_t RD_Audio_System_Menu_Rus[]=
     {2, "pderjdst \'aatrns:",         M_RD_Change_SoundDevice,   'p'}, // Звуковые эффекты
     {2, "vepsrf:",                    M_RD_Change_MusicDevice,   'v'}, // Музыка
     {-1,"",0,'\0'},
+    {2, "xfcnjnf lbcrhtnbpfwbb:",     M_RD_Change_Sampling,      'x'}, // Частота дискретизации
     {2, "Ht;bv pderjds[ \'aatrnjd:",  M_RD_Change_SndMode,       'h'}, // Режим звуковых эффектов
     {2, "ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 'g'}, // Произвольный питч-шифтинг
     {-1,"",0,'\0'}
@@ -3018,11 +3022,25 @@ void M_RD_Draw_Audio_System (void)
         M_WriteTextSmall_ENG(35, 65, "Miscellaneous");
         dp_translation = NULL;
 
+        // Sampling frequency (hz)
+        if (snd_samplerate == 44100)
+        {
+            M_WriteTextSmall_ENG(179, 75, "44100 HZ");
+        }
+        else if (snd_samplerate == 22050)
+        {
+            M_WriteTextSmall_ENG(179, 75, "22050 HZ");
+        }
+        else if (snd_samplerate == 11025)
+        {
+            M_WriteTextSmall_ENG(179, 75, "11025 HZ");
+        }
+
         // Sfx mode
-        M_WriteTextSmall_ENG(178, 75, snd_monomode ? "mono" : "stereo");
+        M_WriteTextSmall_ENG(178, 85, snd_monomode ? "mono" : "stereo");
 
         // Pitch-shifted sounds
-        M_WriteTextSmall_ENG(186, 85, snd_pitchshift ? "on" : "off");
+        M_WriteTextSmall_ENG(186, 95, snd_pitchshift ? "on" : "off");
 
         // Informative message
         if (itemOn == rd_audio_sys_sfx
@@ -3109,11 +3127,25 @@ void M_RD_Draw_Audio_System (void)
         M_WriteTextSmall_RUS(35, 65, "hfpyjt");
         dp_translation = NULL;
 
+        // Частота дискретизации (гц)
+        if (snd_samplerate == 44100)
+        {
+            M_WriteTextSmall_RUS(208, 75, "44100 uw");
+        }
+        else if (snd_samplerate == 22050)
+        {
+            M_WriteTextSmall_RUS(208, 75, "22050 uw");
+        }
+        else if (snd_samplerate == 11025)
+        {
+            M_WriteTextSmall_RUS(208, 75, "11025 uw");
+        }
+
         // Режим звука
-        M_WriteTextSmall_RUS(231, 75, snd_monomode ? "vjyj" : "cnthtj");
+        M_WriteTextSmall_RUS(231, 85, snd_monomode ? "vjyj" : "cnthtj");
 
         // Произвольный питч-шифтинг
-        M_WriteTextSmall_RUS(242, 85, snd_pitchshift ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(242, 95, snd_pitchshift ? "drk" : "dsrk");
 
         // Informative message: изменение потребует перезапуск программы
         if (itemOn == rd_audio_sys_sfx
@@ -3229,6 +3261,44 @@ void M_RD_Change_MusicDevice (int choice)
     {
         snd_DesiredMusicDevice = 0;
     }
+}
+
+void M_RD_Change_Sampling(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+            if (snd_samplerate == 44100)
+            {
+                snd_samplerate = 22050;
+            }
+            else if (snd_samplerate == 22050)
+            {
+                snd_samplerate = 11025;
+            }
+            else if (snd_samplerate == 11025)
+            {
+                snd_samplerate  = 44100;
+            }
+        break;
+        case 1:
+            if (snd_samplerate == 11025)
+            {
+                snd_samplerate = 22050;
+            }
+            else if (snd_samplerate == 22050)
+            {
+                snd_samplerate = 44100;
+            }
+            else if (snd_samplerate == 44100)
+            {
+                snd_samplerate = 11025;
+            }
+        break;
+    }
+
+    // Reset sound channels and update WAV_PlayMode
+    I_SetChannels(numChannels);
 }
 
 void M_RD_Change_SndMode (int choice)

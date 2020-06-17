@@ -417,6 +417,7 @@ default_t	defaults[] =
     // Sound system
     {"snd_sfxdevice",           &snd_DesiredSfxDevice,  3},
     {"snd_musicdevice",         &snd_DesiredMusicDevice,3},
+    {"snd_samplerate",          &snd_samplerate,    22050},
     {"snd_monomode",            &snd_monomode,          0},
     {"snd_pitchshift",          &snd_pitchshift,        0},
     
@@ -530,8 +531,8 @@ void M_SaveDefaults (void)
         if (defaults[i].scantranslate)
             defaults[i].location = &defaults[i].untranslated;
 
-	if (defaults[i].defaultvalue > -0xfff
-	    && defaults[i].defaultvalue < 0xfff)
+	if (defaults[i].defaultvalue > -0xffffff
+	    && defaults[i].defaultvalue < 0xffffff)
 	{
 	    v = *defaults[i].location;
 	    fprintf (f,"%s\t\t%i\n",defaults[i].name,v);

@@ -176,6 +176,7 @@ int messages_system_color;
 int messages_chat_color = 1;
 
 // Audio
+int snd_samplerate;
 int snd_monomode;
 int snd_pitchshift;
 
