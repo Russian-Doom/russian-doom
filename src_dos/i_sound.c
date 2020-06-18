@@ -498,5 +498,6 @@ void I_ShutdownSound(void)
 
 void I_SetChannels(int channels)
 {
-    WAV_PlayMode(channels, snd_samplerate);
+    
+    WAV_PlayMode(channels, vanilla ? 11025 : snd_samplerate);
 }
