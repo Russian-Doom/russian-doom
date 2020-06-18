@@ -25,24 +25,18 @@
 #include "r_defs.h"
 #include "r_state.h"
 
-// Retrieve column data for span blitting.
-byte*
-R_GetColumn
-( int		tex,
-  int		col,
-  boolean	opaque );
 
+// Retrieve column data for span blitting.
+byte *R_GetColumn (int tex, int col, boolean opaque);
 
 // I/O, setting up the stuff.
 void R_InitData (void);
 void R_PrecacheLevel (void);
 
-
 // Retrieval.
 // Floor/ceiling opaque texture tiles,
 // lookup by name. For animation?
-int R_FlatNumForName (char* name);
-
+int R_FlatNumForName (char *name);
 
 // Called by P_Ticker for switches and animations,
 // returns the texture number for the texture name.
