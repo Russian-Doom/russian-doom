@@ -1416,6 +1416,10 @@ void ST_drawWidgets (boolean refresh)
 {
     int i;
 
+    // [JN] No HUD, don't draw anything.
+    if (screenblocks == 14 && !automapactive)
+    return;
+
     // used by w_arms[] widgets
     st_armson = st_statusbaron && !deathmatch;
 
