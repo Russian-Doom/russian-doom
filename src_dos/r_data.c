@@ -433,11 +433,14 @@ static void R_GenerateLookup(int texnum)
                         { // killough 12/98: warn about column construction bug
                             if (badcol)
                             {
-                            badcol = 0;
-                            printf("\nWarning: Texture %8.8s "
-                                "(height %d) has bad column(s)"
-                                " starting at x = %d.",
-                                texture->name, texture->height, x);
+                                badcol = 0;
+                                if (devparm)
+                                {
+                                    printf(english_language ? 
+                                    "\nWarning: Texture %8.8s (height %d) has bad column(s) starting at x = %d." :
+                                    "\nВнимание: Текстура %8.8s (высота %d) имеет некорректную колонну у x = %d.",
+                                    texture->name, texture->height, x);
+                                }
                             }
                             break;
                         }
@@ -464,9 +467,10 @@ static void R_GenerateLookup(int texnum)
                 if (devparm)
                 {
                     // killough 8/8/98
-                    printf("\nR_GenerateLookup:"
-                        " Column %d is without a patch in texture %.8s",
-                        x, texture->name);
+                    printf(english_language ? 
+                    "\nR_GenerateLookup: Column %d is without a patch in texture %.8s" :
+                    "\nR_GenerateLookup: Колонна %d без патча в текстуре %.8s",
+                    x, texture->name);
                 }
                 else
                 {
@@ -498,9 +502,11 @@ static void R_GenerateLookup(int texnum)
 
         texturecompositesize[texnum] = csize;
 
-        if (err)       // killough 10/98: non-verbose output
+        if (err && devparm)       // killough 10/98: non-verbose output
         {
-            printf("\nR_GenerateLookup: Column without a patch in texture %.8s",
+            printf(english_language ?
+                   "\nR_GenerateLookup: Column without a patch in texture %.8s" :
+                   "\nR_GenerateLookup: Колонна без патча в текстуре %.8s",
                     texture->name);
         }
     }
@@ -686,10 +692,13 @@ void R_InitTextures (void)
 	    patch->patch = patchlookup[SHORT(mpatch->patch)];
 	    if (patch->patch == -1)
         {
-        // [crispy] make non-fatal
-        fprintf (stderr, english_language ?
-                 "R_InitTextures: Missing patch in texture %s" :
-                 "R_InitTextures: Отсутствует патч в текстуре %s\n", texture->name);
+            if (devparm)
+            {
+                // [crispy] make non-fatal
+                fprintf (stderr, english_language ?
+                        "R_InitTextures: Missing patch in texture %s" :
+                        "R_InitTextures: Отсутствует патч в текстуре %s\n", texture->name);
+            }
         patch->patch = 0;
         }
 	}		
@@ -1084,10 +1093,13 @@ int	R_TextureNumForName (char* name)
 
     if (i==-1)
     {
-        // [crispy] make non-fatal
-        fprintf (stderr, english_language ?
-                 "R_TextureNumForName: %s not found" :
-                 "R_TextureNumForName: Текстура %s не найдена\n", name);
+        if (devparm)
+        {
+            // [crispy] make non-fatal
+            fprintf (stderr, english_language ?
+                    "R_TextureNumForName: %s not found" :
+                    "R_TextureNumForName: Текстура %s не найдена\n", name);
+        }
         return 0;
     }
     return i;
