@@ -59,8 +59,8 @@ int         setblocks;
 int         setdetail;
 boolean     setsizeneeded;
 
-int			centerx;
-int			centery;
+int         centerx;
+int         centery;
 
 // [JN] Define, which diminished lighting we well use
 int         maxlightz;
@@ -71,11 +71,11 @@ fixed_t     centeryfrac;
 fixed_t     projection;
 
 // just for profiling purposes
-int			framecount;	
+int         framecount;	
 
-int			sscount;
-int			linecount;
-int			loopcount;
+int         sscount;
+int         linecount;
+int         loopcount;
 
 // bumped light from gun blasts
 int         extralight;
