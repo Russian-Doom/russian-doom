@@ -2025,8 +2025,8 @@ PRESSYN_RUS
 // Отображение версии проекта
 //
 
-#define STSTR_VERSION       "VERSION 1.8 (2020-06-09)"
-#define STSTR_VERSION_RUS   "DTHCBZ 1>8 (2020-06-09)"
+#define STSTR_VERSION       "VERSION 1.9 (YYYY-MM-DD)"
+#define STSTR_VERSION_RUS   "DTHCBZ 1>9 (UUUU-VV-LL)"
 
 
 #endif
