@@ -30,4 +30,9 @@
 void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2);
 
 
+extern lighttable_t  **walllights;
+extern lighttable_t  **walllights_top;
+extern lighttable_t  **walllights_middle;
+extern lighttable_t  **walllights_bottom;
+
 #endif
