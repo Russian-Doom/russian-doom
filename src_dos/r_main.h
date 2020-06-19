@@ -26,45 +26,22 @@
 #include "r_data.h"
 
 
-//
-// POV related.
-//
-extern fixed_t		viewcos;
-extern fixed_t		viewsin;
+// Number of diminishing brightness levels.
+// There a 0-31, i.e. 32 LUT in the COLORMAP lump.
+#define NUMCOLORMAPS        32
 
-extern int		viewwidth;
-extern int		viewheight;
-extern int		viewwindowx;
-extern int		viewwindowy;
-
-
-
-extern int		centerx;
-extern int		centery;
-
-extern fixed_t		centerxfrac;
-extern fixed_t		centeryfrac;
-extern fixed_t		projection;
-
-extern int		validcount;
-
-extern int		linecount;
-extern int		loopcount;
-
+// Sky rendering
+#define SKYFLATNAME         "F_SKY1"    // SKY, store the number for name.
+#define ANGLETOSKYSHIFT     22          // The sky map is 256*128*4 maps.
 
 //
-// Lighting LUT.
-// Used for z-depth cuing per column/row,
-//  and other lighting effects (sector ambient, flash).
-//
-
 // Lighting constants.
 // Now why not 32 levels here?
-#define LIGHTLEVELS	        16
-#define LIGHTSEGSHIFT	         4
-
-#define MAXLIGHTSCALE		48
-#define LIGHTSCALESHIFT		12
+//
+#define LIGHTLEVELS         16
+#define LIGHTSEGSHIFT       4
+#define MAXLIGHTSCALE       48
+#define LIGHTSCALESHIFT     12
 
 // [crispy] & [JN] smoother diminished lighting
 #define MAXLIGHTZ           1024
@@ -74,49 +51,76 @@ extern int		loopcount;
 #define MAXLIGHTZ_VANILLA   128
 #define LIGHTZSHIFT_VANILLA 20
 
+
+//
+// POV related.
+//
+extern fixed_t  viewcos;
+extern fixed_t  viewsin;
+
+extern int      viewwidth;
+extern int      viewheight;
+extern int      viewwindowx;
+extern int      viewwindowy;
+
+extern int      centerx;
+extern int      centery;
+
+extern fixed_t  centerxfrac;
+extern fixed_t  centeryfrac;
+extern fixed_t  projection;
+
+extern int      validcount;
+extern int      linecount;
+extern int      loopcount;
+
+
+// Called whenever the view size changes.
+void R_InitSkyMap (void);
+extern int      skytexture;
+extern int      skytexturemid;
+
+
+//
+// Lighting LUT.
+// Used for z-depth cuing per column/row,
+//  and other lighting effects (sector ambient, flash).
+//
+
 // [JN] Define, which diminished lighting to use
 extern int lightzshift, maxlightz; 
 
-extern lighttable_t*	scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*	scalelightfixed[MAXLIGHTSCALE];
-extern lighttable_t*	zlight[LIGHTLEVELS][MAXLIGHTZ];
+extern lighttable_t *scalelight[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *scalelightfixed[MAXLIGHTSCALE];
+extern lighttable_t *zlight[LIGHTLEVELS][MAXLIGHTZ];
 
 // [JN] Floor brightmaps
-extern lighttable_t*    fullbright_notgrayorbrown_floor[LIGHTLEVELS][MAXLIGHTZ];
+extern lighttable_t *fullbright_notgrayorbrown_floor[LIGHTLEVELS][MAXLIGHTZ];
 
-// [JN] Brightmaps
-extern lighttable_t*    fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_greenonly1[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_brighttan[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_redonly1[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_explosivebarrel[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_alllights[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_candles[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
-extern lighttable_t*    fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
+// [JN] Wall and thing brightmaps
+extern lighttable_t *fullbright_redonly[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_notgray[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_notgrayorbrown[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_greenonly1[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_greenonly2[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_greenonly3[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_orangeyellow[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_dimmeditems[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_brighttan[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_redonly1[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_explosivebarrel[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_alllights[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_candles[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
+extern lighttable_t *fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
 
-extern int		extralight;
+extern int extralight;
 extern lighttable_t*	fixedcolormap;
 
 
-// Number of diminishing brightness levels.
-// There a 0-31, i.e. 32 LUT in the COLORMAP lump.
-#define NUMCOLORMAPS		32
-
-
-// Blocky/low detail mode.
-//B remove this?
-//  0 = high, 1 = low
-extern	int		detailshift;	
-
-// [JN] Screen size, detail level and border updating
+// [JN] Screen size, detail level (0 = high, 1 = low) and border updating
 extern  int     screenblocks;
+extern	int		detailshift;
 extern  int     detailLevel;
 extern  boolean setsizeneeded;
 
@@ -135,49 +139,16 @@ extern void		(*spanfunc) (void);
 
 //
 // Utility functions.
-int
-R_PointOnSide
-( fixed_t	x,
-  fixed_t	y,
-  node_t*	node );
+//
+int R_PointOnSide (fixed_t x, fixed_t y, node_t *node);
+int R_PointOnSegSide (fixed_t x, fixed_t y, seg_t *line);
 
-int
-R_PointOnSegSide
-( fixed_t	x,
-  fixed_t	y,
-  seg_t*	line );
+angle_t R_PointToAngle (fixed_t x, fixed_t y);
+angle_t R_PointToAngle2 (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2);
 
-angle_t
-R_PointToAngle
-( fixed_t	x,
-  fixed_t	y );
+fixed_t R_PointToDist (fixed_t x, fixed_t y);
 
-angle_t
-R_PointToAngle2
-( fixed_t	x1,
-  fixed_t	y1,
-  fixed_t	x2,
-  fixed_t	y2 );
-
-fixed_t
-R_PointToDist
-( fixed_t	x,
-  fixed_t	y );
-
-
-fixed_t R_ScaleFromGlobalAngle (angle_t visangle);
-
-subsector_t*
-R_PointInSubsector
-( fixed_t	x,
-  fixed_t	y );
-
-void
-R_AddPointToBox
-( int		x,
-  int		y,
-  fixed_t*	box );
-
+subsector_t *R_PointInSubsector (fixed_t x, fixed_t y);
 
 
 //

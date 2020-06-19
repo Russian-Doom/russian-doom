@@ -31,7 +31,6 @@
 #include "m_misc.h"
 #include "r_local.h"
 #include "r_segs.h"
-#include "r_sky.h"
 #include "p_local.h"
 #include "jn.h"
 
@@ -134,6 +133,13 @@ lighttable_t   *fullbright_alllights[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t   *fullbright_candles[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t   *fullbright_pileofskulls[LIGHTLEVELS][MAXLIGHTSCALE];
 lighttable_t   *fullbright_redonly2[LIGHTLEVELS][MAXLIGHTSCALE];
+
+//
+// sky mapping
+//
+int         skyflatnum;
+int         skytexture;
+int         skytexturemid;
 
 
 //
@@ -386,6 +392,17 @@ void R_InitLightTables (void)
             fullbright_notgrayorbrown_floor[i][j] = brightmaps_notgrayorbrown + level * 256;
         }
     }
+}
+
+
+//
+// R_InitSkyMap
+// Called whenever the view size changes.
+//
+void R_InitSkyMap (void)
+{
+    skyflatnum = R_FlatNumForName(SKYFLATNAME);
+    skytexturemid = 100*FRACUNIT;
 }
 
 

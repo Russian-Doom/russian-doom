@@ -30,7 +30,6 @@
 #include "r_local.h"
 #include "p_local.h"
 #include "doomstat.h"
-#include "r_sky.h"
 #include "r_data.h"
 #include "jn.h"
 

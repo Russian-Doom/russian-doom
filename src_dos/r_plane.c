@@ -28,7 +28,6 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "r_local.h"
-#include "r_sky.h"
 #include "r_bmaps.h"
 #include "r_main.h"
 #include "jn.h"
