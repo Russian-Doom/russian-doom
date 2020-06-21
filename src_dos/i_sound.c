@@ -419,7 +419,6 @@ void I_sndArbitrateCards(void)
 void I_StartupSound(void)
 {
     int rc;
-    int i;
 
     //
     // initialize dmxCodes[]
@@ -464,16 +463,9 @@ void I_StartupSound(void)
            "  calling DMX_Init\n" :
            "  вызов DMX_Init\n");
 
-    // [JN] This is GODAWFUL hack --
-    // Call DMX_Init 256 here for it takes some extra time. Fixes several cases:
-    // 1) Music may start with incorrect synth.
-    // 2) Music may not start on fast PCs (cycles=auto & machine=vgaonly in DOSBox).
-    for (i = 0 ; i < 256 ; i ++)
-    {
-        rc = DMX_Init(SND_TICRATE, SND_MAXSONGS, 
-                      dmxCodes[snd_MusicDevice],
-                      dmxCodes[snd_SfxDevice]);
-    }
+    rc = DMX_Init(SND_TICRATE, SND_MAXSONGS, 
+                  dmxCodes[snd_MusicDevice],
+                  dmxCodes[snd_SfxDevice]);
 
     if (devparm)
     {

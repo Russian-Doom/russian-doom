@@ -344,6 +344,7 @@ void MPU_SetCard(int port) {
 }
 int DMX_Init(int rate, int maxsng, int mdev, int sdev) {
     long status, device;
+    int i;
     dmx_sdev = sdev;
     status = 0;
 
@@ -367,7 +368,17 @@ int DMX_Init(int rate, int maxsng, int mdev, int sdev) {
         return -1;
         break;
     }
-    status = MUSIC_Init(device, dmx_mus_port);
+
+    // [JN] This is GODAWFUL hack --
+    // Call MUSIC_Init 256 times for it takes some extra time.
+    // Fixes several cases:
+    // 1) Music may start with incorrect synth.
+    // 2) Music may not start on fast PCs (cycles=auto & machine=vgaonly in DOSBox).
+    for (i = 0 ; i < 256 ; i ++)
+    {
+        status = MUSIC_Init(device, dmx_mus_port);
+    }
+
     if (status == MUSIC_Ok) {
         MUSIC_SetVolume(0);
     }
