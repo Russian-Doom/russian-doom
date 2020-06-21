@@ -19,56 +19,45 @@
 //
 
 
-
 #include <stdio.h>
 
 #include "deh_main.h"
-
 #include "z_zone.h"
 #include "doomkeys.h"
 #include "doomdef.h"
 #include "st_stuff.h"
 #include "p_local.h"
 #include "w_wad.h"
-
 #include "m_cheat.h"
 #include "m_controls.h"
 #include "m_misc.h"
 #include "i_system.h"
 #include "i_timer.h"
-
-// Needs access to LFB.
 #include "v_trans.h"
 #include "v_video.h"
-
-// State.
 #include "doomstat.h"
 #include "r_state.h"
-
-// Data.
 #include "rd_lang.h"
-
 #include "am_map.h"
-#include "st_stuff.h"   // [JN] ST_refreshBackground and ST_drawWidgets
-
+#include "st_stuff.h"
 #include "jn.h"
 
 
 // For use if I do walls with outsides/insides
-#define REDS        (256-5*16)
-#define REDRANGE    16
-#define BLUES       (256-4*16+8)
-#define BLUERANGE   8
-#define GREENS      (7*16)
-#define GREENRANGE  16
-#define GRAYS       (6*16)
-#define GRAYSRANGE  16
-#define BROWNS      (4*16)
-#define BROWNRANGE  16
-#define YELLOWS     (256-32+7)
-#define YELLOWRANGE 1
-#define BLACK       0
-#define WHITE       (256-47)
+#define REDS             176
+#define REDRANGE         16
+#define BLUES            200
+#define BLUERANGE        8
+#define GREENS           112
+#define GREENRANGE       16
+#define GRAYS            96
+#define GRAYSRANGE       16
+#define BROWNS           64
+#define BROWNRANGE       16
+#define YELLOWS          231
+#define YELLOWRANGE      1
+#define BLACK            0
+#define WHITE            209
 
 // Automap colors
 #define BACKGROUND       BLACK
@@ -86,15 +75,15 @@
 #define THINGRANGE       GREENRANGE
 #define SECRETWALLCOLORS WALLCOLORS
 #define SECRETWALLRANGE  WALLRANGE
-#define GRIDCOLORS       (GRAYS + GRAYSRANGE/2)
+#define GRIDCOLORS       104
 #define GRIDRANGE        0
 #define XHAIRCOLORS      GRAYS
 
-// [JN] Atari Jaguar automap colors
-#define RED_JAGUAR      32     // dark red
-#define GREEN_JAGUAR    120    // dark green
-#define YELLOW_JAGUAR   163    // dark yellow
-#define MAGENTA_JAGUAR  254    // dark magenta
+// [JN] Jaguar Doom automap colors
+#define RED_JAGUAR       32
+#define GREEN_JAGUAR     120
+#define YELLOW_JAGUAR    163
+#define MAGENTA_JAGUAR   254
 
 // drawing stuff
 #define AM_NUMMARKPOINTS 10
@@ -274,9 +263,7 @@ static int markpointnum = 0; // next point to be assigned
 
 
 cheatseq_t cheat_amap = CHEAT("iddt", 0);
-
-// [JN] Press Beta cheat codes
-cheatseq_t cheat_amap_beta = CHEAT("eek", 0);
+cheatseq_t cheat_amap_beta = CHEAT("eek", 0);   // [JN] Press Beta cheat code
 
 static boolean stopped = true;
 
@@ -336,6 +323,7 @@ void AM_rotate (int64_t *x, int64_t *y, angle_t a);
 static void AM_rotatePoint (mpoint_t *pt);
 static mpoint_t mapcenter;
 static angle_t mapangle;
+
 
 // Calculates the slope and slope according to the x-axis of a line
 // segment in map coordinates (with the upright y-axis n' all) so
@@ -1560,8 +1548,7 @@ void AM_drawGrid(int color)
     }
 
     if ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS))
-    start += (MAPBLOCKUNITS<<FRACBITS) - ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
-
+    start -= ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
     end = m_x + m_w;
     if (automap_rotate)
     {
@@ -1594,8 +1581,7 @@ void AM_drawGrid(int color)
     }
 
     if ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS))
-    start += (MAPBLOCKUNITS<<FRACBITS) - ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
-
+    start -= ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
     end = m_y + m_h;
     if (automap_rotate)
     {
