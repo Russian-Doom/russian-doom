@@ -1424,6 +1424,29 @@ boolean	PTR_UseTraverse (intercept_t* in)
 }
 
 
+// Returns false if a "oof" sound should be made because of a blocking
+// linedef. Makes 2s middles which are impassable, as well as 2s uppers
+// and lowers which block the player, cause the sound effect when the
+// player tries to activate them. Specials are excluded, although it is
+// assumed that all special linedefs within reach have been considered
+// and rejected already (see P_UseLines).
+//
+// by Lee Killough
+//
+
+static boolean PTR_NoWayTraverse(intercept_t *in)
+{
+    line_t *ld = in->d.line;                          // This linedef
+
+    return ld->special ||                             // Ignore specials
+         !(ld->flags & ML_BLOCKING ||                 // Always blocking
+          (P_LineOpening(ld),                         // Find openings
+           openrange <= 0 ||                          // No opening
+           openbottom > usething->z+24*FRACUNIT ||    // Too high it blocks
+           opentop < usething->z+usething->height));  // Too low it blocks
+}
+
+
 //
 // P_UseLines
 // Looks for special lines in front of the player to activate.
@@ -1445,7 +1468,16 @@ void P_UseLines (player_t*	player)
     x2 = x1 + (USERANGE>>FRACBITS)*finecosine[angle];
     y2 = y1 + (USERANGE>>FRACBITS)*finesine[angle];
 	
-    P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse );
+    // old code:
+    //
+    // P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse );
+    //
+    // This added test makes the "oof" sound work on 2s lines -- killough:
+    // [JN] Do not break firing sounds by using walls, do not play in "vanilla".
+
+    if (P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse))
+        if (!P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse) && !vanilla)
+            S_StartSound (singleplayer ? NULL : usething, sfx_noway);
 }
 
 
