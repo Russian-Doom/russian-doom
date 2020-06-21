@@ -2623,26 +2623,6 @@ void D_DoomMain (void)
                                    "\nДанная версия не является зарегистрированной."));
     }
 
-// [crispy] disable meaningless warning, we always use "-merge" anyway
-#if 0
-    if (W_CheckNumForName("SS_START") >= 0 || W_CheckNumForName("FF_END") >= 0)
-    {
-        I_PrintDivider();
-        if (english_language)
-        {
-            printf(" WARNING: The loaded WAD file contains modified sprites or\n"
-                   " floor textures.  You may want to use the '-merge' command\n"
-                   " line option instead of '-file'.\n");
-        }
-        else
-        {
-            printf(" ВНИМАНИЕ: Загруженный WAD-файл содержит измененные спрайты\n"
-                   " или текстуры поверхностей. Рекоммендуется использовать\n"
-                   " команду '-merge' вместо '-file'.\n");
-        }
-    }
-#endif
-
     PrintDehackedBanners();
 
     DEH_printf(english_language ?
