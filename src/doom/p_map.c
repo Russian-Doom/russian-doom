@@ -1096,8 +1096,10 @@ fixed_t		attackrange;
 fixed_t		aimslope;
 
 // slopes to top and bottom of target
-extern fixed_t	topslope;
-extern fixed_t	bottomslope;	
+// killough 4/20/98: make static instead of using ones in p_sight.c
+
+static fixed_t  topslope;
+static fixed_t  bottomslope;
 
 
 //
