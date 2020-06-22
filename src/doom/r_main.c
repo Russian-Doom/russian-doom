@@ -959,15 +959,12 @@ void R_RenderPlayerView (player_t* player)
         return;
     }
 
-    if (beneath_door == true)
-    {
-        // [JN] fill whole screen with black color and don't go any farther
-        V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
-        return;
-    }    
-
-    // [JN] Draw map's "out of bounds" as a black color
+    // [JN] Fill map's "out of bounds" with black color.
     V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
+
+    // [JN] Don't render anything farther if player is crushed beneath the door.
+    if (beneath_door)
+    return;
 
     R_ClearPlanes ();
     R_ClearSprites ();

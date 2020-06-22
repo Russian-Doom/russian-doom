@@ -169,7 +169,8 @@ void P_CalcHeight (player_t* player, boolean safe)
     // [JN] If dead player is crushed by closed door, 
     // set boolean "beneath_door" to true and stop
     // game world rendering in R_RenderPlayerView.
-    if (singleplayer && player->playerstate == PST_DEAD && player->viewz < player->mo->floorz)
+    if (singleplayer && player->playerstate == PST_DEAD
+    &&  player->viewz < player->mo->floorz)
     {
         beneath_door = true;
     }
