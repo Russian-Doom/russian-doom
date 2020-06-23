@@ -417,7 +417,7 @@ default_t	defaults[] =
     // Sound system
     {"snd_sfxdevice",           &snd_DesiredSfxDevice,  3},
     {"snd_musicdevice",         &snd_DesiredMusicDevice,3},
-    {"snd_samplerate",          &snd_samplerate,    22050},
+    {"snd_samplerate",          &snd_samplerate,    11025},
     {"snd_monomode",            &snd_monomode,          0},
     {"snd_pitchshift",          &snd_pitchshift,        0},
     

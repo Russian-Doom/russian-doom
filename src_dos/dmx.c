@@ -370,11 +370,11 @@ int DMX_Init(int rate, int maxsng, int mdev, int sdev) {
     }
 
     // [JN] This is GODAWFUL hack --
-    // Call MUSIC_Init 256 times for it takes some extra time.
+    // Call MUSIC_Init 8 times for it takes some extra time.
     // Fixes several cases:
     // 1) Music may start with incorrect synth.
-    // 2) Music may not start on fast PCs (cycles=auto & machine=vgaonly in DOSBox).
-    for (i = 0 ; i < 256 ; i ++)
+    // 2) Music may not start at all.
+    for (i = 0 ; i < 8 ; i ++)
     {
         status = MUSIC_Init(device, dmx_mus_port);
     }
