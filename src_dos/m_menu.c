@@ -1420,6 +1420,7 @@ enum
     rd_audio_sys_music,
     rd_audio_sys_empty1,
     rd_audio_sys_sampling,
+    rd_audio_sys_empty2,
     rd_audio_sys_sndmode,
     rd_audio_sys_sndpitch,
     rd_audio_sys_end
@@ -1435,6 +1436,7 @@ menuitem_t RD_Audio_System_Menu[]=
     {2, "music:",                M_RD_Change_MusicDevice,   'm'},
     {-1,"",0,'\0'},
     {2, "sampling frequency:",   M_RD_Change_Sampling,      's'},
+    {-1,"",0,'\0'},
     {2, "sound effects mode:",   M_RD_Change_SndMode,       's'},
     {2, "pitch-shifted sounds:", M_RD_Change_PitchShifting, 'p'},
     {-1,"",0,'\0'}
@@ -1460,6 +1462,7 @@ menuitem_t RD_Audio_System_Menu_Rus[]=
     {2, "vepsrf:",                    M_RD_Change_MusicDevice,   'v'}, // Музыка
     {-1,"",0,'\0'},
     {2, "xfcnjnf lbcrhtnbpfwbb:",     M_RD_Change_Sampling,      'x'}, // Частота дискретизации
+    {-1,"",0,'\0'},
     {2, "Ht;bv pderjds[ \'aatrnjd:",  M_RD_Change_SndMode,       'h'}, // Режим звуковых эффектов
     {2, "ghjbpdjkmysq gbnx-ibanbyu:", M_RD_Change_PitchShifting, 'g'}, // Произвольный питч-шифтинг
     {-1,"",0,'\0'}
@@ -3016,10 +3019,10 @@ void M_RD_Draw_Audio_System (void)
         }
 
         //
-        // Miscellaneous
+        // Quality
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 65, "Miscellaneous");
+        M_WriteTextSmall_ENG(35, 65, "quality");
         dp_translation = NULL;
 
         // Sampling frequency (hz)
@@ -3036,11 +3039,18 @@ void M_RD_Draw_Audio_System (void)
             M_WriteTextSmall_ENG(179, 75, "11025 HZ");
         }
 
+        //
+        // Miscellaneous
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35, 85, "Miscellaneous");
+        dp_translation = NULL;
+
         // Sfx mode
-        M_WriteTextSmall_ENG(178, 85, snd_monomode ? "mono" : "stereo");
+        M_WriteTextSmall_ENG(178, 95, snd_monomode ? "mono" : "stereo");
 
         // Pitch-shifted sounds
-        M_WriteTextSmall_ENG(186, 95, snd_pitchshift ? "on" : "off");
+        M_WriteTextSmall_ENG(186, 105, snd_pitchshift ? "on" : "off");
 
         // Informative message
         if (itemOn == rd_audio_sys_sfx
@@ -3121,10 +3131,10 @@ void M_RD_Draw_Audio_System (void)
         }
 
         //
-        // Разное
+        // Качество звучания
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 65, "hfpyjt");
+        M_WriteTextSmall_RUS(35, 65, "rfxfcndj pdexfybz");
         dp_translation = NULL;
 
         // Частота дискретизации (гц)
@@ -3141,11 +3151,18 @@ void M_RD_Draw_Audio_System (void)
             M_WriteTextSmall_RUS(208, 75, "11025 uw");
         }
 
+        //
+        // Разное
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35, 85, "hfpyjt");
+        dp_translation = NULL;
+
         // Режим звука
-        M_WriteTextSmall_RUS(231, 85, snd_monomode ? "vjyj" : "cnthtj");
+        M_WriteTextSmall_RUS(231, 95, snd_monomode ? "vjyj" : "cnthtj");
 
         // Произвольный питч-шифтинг
-        M_WriteTextSmall_RUS(242, 95, snd_pitchshift ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(242, 105, snd_pitchshift ? "drk" : "dsrk");
 
         // Informative message: изменение потребует перезапуск программы
         if (itemOn == rd_audio_sys_sfx
