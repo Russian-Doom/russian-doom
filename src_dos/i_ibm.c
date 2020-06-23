@@ -1233,7 +1233,7 @@ byte *I_ZoneBase (int *size)
 {
     int    meminfo[32];
     int    heap;
-    int    maxmem = 0x800000; // [JN] Initial heap size to use (8 MB).
+    int    maxmem = 8388608; // [JN] Bytes, initial heap size to use (8 MB).
     int    p;
     byte  *ptr;
 
@@ -1256,15 +1256,33 @@ byte *I_ZoneBase (int *size)
     {
         maxmem = 1024 * 1024 * atoi(myargv[p + 1]);
 
-        // [JN] Crash-preventing condition. 
-        // DOS will lock-up in case of using "0", "-1" and below values.
+        // [JN] Crash-preventing conditions:
+
+        // 1) Prevent lock-up if heap size is 0 or below.
         if (maxmem < 1)
-        maxmem = 1;
+        {
+            maxmem = 1;
+        }
+        // 2) Prevent lock-up if heap size is above available memory.
+        if (maxmem > heap)
+        {
+            if (english_language)
+            {
+                printf("\n\n\nZone memory can't be greater than available DPMI memory.\n\n");
+                printf("DOOM aborted.\n");
+            }
+            else
+            {
+                printf("\n\n\nРазмер распределяемой памяти не может быть больше доступной памяти DPMI.\n\n");
+                printf("Выполнение программы прервано.\n");
+            }
+            exit(1);
+        }
     }
     
     do
     {
-        heap -= 131072; // [JN] Equals 128 KB, leave alone.
+        heap -= 131072; // [JN] Bytes, equals 128 KB, leave alone.
         if (heap > maxmem)
         {
             heap = maxmem;
@@ -1275,7 +1293,7 @@ byte *I_ZoneBase (int *size)
     printf(english_language ?
            ", %d MB allocated for zone.\n" :
            ", %d Мбайт обнаружено для распределения.\n", heap >> 20);
-    if (heap < 1572864) // [JN] Equals 1.5 MB.
+    if (heap < 1572864) // [JN] Bytes, equals 1.5 MB.
     {
         printf("\n");
 
@@ -1287,6 +1305,7 @@ byte *I_ZoneBase (int *size)
         }
         else
         {
+            printf("\n");
             printf("Недостаточно оперативной памяти!\n\n");
             printf("Выполнение программы прервано.\n");
         }
