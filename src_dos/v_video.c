@@ -796,6 +796,7 @@ void V_DrawShadowDirect (int x, int y, int scrn, patch_t *patch)
 
     for ( col = 0 ; col<w ; col++)
     {
+        outpw (GC_INDEX,GC_READMAP+((x&3)<<8)); 
         outp (SC_INDEX+1,1<<(x&3));
         column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
 
