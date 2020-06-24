@@ -2168,8 +2168,10 @@ void A_PlayerScream (mobj_t* mo)
     // Default death sound.
     int		sound = sfx_pldeth;
 	
-    if ( commercial
-	&& 	(mo->health < -50))
+    // [JN] PDIEHI is also available in retail and newer versions of rigistered
+    // and shareware. Hovewer, just in case of missing sound, use it only in
+    // Ultimate Doom, Doom 2 and Final Doom.
+    if ((retail || commercial) && (mo->health < -50))
     {
 	// IF THE PLAYER DIES
 	// LESS THAN -50% WITHOUT GIBBING
