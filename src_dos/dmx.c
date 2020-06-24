@@ -344,7 +344,7 @@ void MPU_SetCard(int port) {
 }
 int DMX_Init(int rate, int maxsng, int mdev, int sdev) {
     long status, device;
-    int i;
+    int count = 0;
     dmx_sdev = sdev;
     status = 0;
 
@@ -369,15 +369,26 @@ int DMX_Init(int rate, int maxsng, int mdev, int sdev) {
         break;
     }
 
-    // [JN] This is GODAWFUL hack --
-    // Call MUSIC_Init 8 times for it takes some extra time.
+    // [JN] Query music module until it gives 
+    // OK responce, but don't loop forever.
+    //
     // Fixes several cases:
     // 1) Music may start with incorrect synth.
     // 2) Music may not start at all.
-    for (i = 0 ; i < 8 ; i ++)
+    // 3) Music may not start on fast DOSBox emulation (machine=vgaonly).
+    do
     {
+        // Query music module
         status = MUSIC_Init(device, dmx_mus_port);
-    }
+
+        // Count amount of queries
+        count++;
+
+        // Done 512 queries and still no responce? Let's end it up. :-(
+        if (count >= 512)
+        break;
+
+    } while (status != MUSIC_Ok);
 
     if (status == MUSIC_Ok) {
         MUSIC_SetVolume(0);
