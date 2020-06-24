@@ -91,6 +91,7 @@ extern int novert;
 extern int sfxVolume;
 extern int musicVolume;
 extern int numChannels;
+extern int snd_SBport, snd_SBirq, snd_SBdma, snd_Mport;
 extern int snd_samplerate;
 extern int snd_monomode;
 extern int snd_pitchshift;

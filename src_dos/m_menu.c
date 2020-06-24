@@ -379,6 +379,10 @@ void M_RD_Choose_SoundSystem(int choice);
 void M_RD_Draw_Audio_System(void);
 void M_RD_Change_SoundDevice(int choice);
 void M_RD_Change_MusicDevice(int choice);
+void M_RD_Change_SBport(int choice);
+void M_RD_Change_SBirq(int choice);
+void M_RD_Change_SBdma(int choice);
+void M_RD_Change_Mport(int choice);
 void M_RD_Change_Sampling(int choice);
 void M_RD_Change_SndMode(int choice);
 void M_RD_Change_PitchShifting(int choice);
@@ -1418,6 +1422,10 @@ enum
 {
     rd_audio_sys_sfx,
     rd_audio_sys_music,
+    rd_audio_sys_sbport,
+    rd_audio_sys_sbirq,
+    rd_audio_sys_sbdma,
+    rd_audio_sys_mport,    
     rd_audio_sys_empty1,
     rd_audio_sys_sampling,
     rd_audio_sys_empty2,
@@ -1434,6 +1442,10 @@ menuitem_t RD_Audio_System_Menu[]=
 {
     {2, "sound effects:",        M_RD_Change_SoundDevice,   's'},
     {2, "music:",                M_RD_Change_MusicDevice,   'm'},
+    {2, "port:",                 M_RD_Change_SBport,        'p'},
+    {2, "irq:",                  M_RD_Change_SBirq,         'i'},
+    {2, "dma:",                  M_RD_Change_SBdma,         'd'},
+    {2, "midi port:",            M_RD_Change_Mport,         'm'},
     {-1,"",0,'\0'},
     {2, "sampling frequency:",   M_RD_Change_Sampling,      's'},
     {-1,"",0,'\0'},
@@ -1460,6 +1472,10 @@ menuitem_t RD_Audio_System_Menu_Rus[]=
 {
     {2, "pderjdst \'aatrns:",         M_RD_Change_SoundDevice,   'p'}, // Звуковые эффекты
     {2, "vepsrf:",                    M_RD_Change_MusicDevice,   'v'}, // Музыка
+    {2, "gjhn:",                      M_RD_Change_SBport,        'g'}, // Порт
+    {2,  "",                          M_RD_Change_SBirq,         'i'}, // IRQ
+    {2,  "",                          M_RD_Change_SBdma,         'd'}, // DMA
+    {2,  "gjhn"  ,                    M_RD_Change_Mport,         'g'}, // Порт MIDI
     {-1,"",0,'\0'},
     {2, "xfcnjnf lbcrhtnbpfwbb:",     M_RD_Change_Sampling,      'x'}, // Частота дискретизации
     {-1,"",0,'\0'},
@@ -2955,6 +2971,8 @@ void M_RD_Choose_SoundSystem (int choice)
 
 void M_RD_Draw_Audio_System (void)
 {
+    static char num[4];
+
     if (english_language)
     {
         M_WriteTextBigCentered_ENG(12, "SOUND SYSTEM");
@@ -3018,46 +3036,104 @@ void M_RD_Draw_Audio_System (void)
             dp_translation = NULL;
         }
 
+        // SB Port
+        if (snd_DesiredMusicDevice == 0   // disabled
+        ||  snd_DesiredMusicDevice == 2   // adlib
+        ||  snd_DesiredMusicDevice == 5   // gus
+        ||  snd_DesiredMusicDevice == 8)  // general midi
+        dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_ENG(75, 65, snd_SBport == 0x210 ? "210" :
+                                         snd_SBport == 0x220 ? "220" :
+                                         snd_SBport == 0x230 ? "230" :
+                                         snd_SBport == 0x240 ? "240" :
+                                         snd_SBport == 0x250 ? "250" :
+                                         snd_SBport == 0x260 ? "260" :
+                                         snd_SBport == 0x280 ? "280" :
+                                                               "other");
+        dp_translation = NULL;
+
+        // SB IRQ
+        if (snd_DesiredMusicDevice == 0   // disabled
+        ||  snd_DesiredMusicDevice == 2   // adlib
+        ||  snd_DesiredMusicDevice == 5   // gus
+        ||  snd_DesiredMusicDevice == 8)  // general midi
+        dp_translation = cr[CR_DARKRED];
+            snprintf(num, 4, "%3d", snd_SBirq);
+            M_WriteTextSmall_ENG(55, 75, num);
+        dp_translation = NULL;
+
+        // SB DMA channel
+        if (snd_DesiredMusicDevice == 0   // disabled
+        ||  snd_DesiredMusicDevice == 2   // adlib
+        ||  snd_DesiredMusicDevice == 5   // gus
+        ||  snd_DesiredMusicDevice == 8)  // general midi
+        dp_translation = cr[CR_DARKRED];
+            snprintf(num, 4, "%3d", snd_SBdma);
+            M_WriteTextSmall_ENG(60, 85, num);
+        dp_translation = NULL;
+
+        // MIDI port
+        if (snd_DesiredMusicDevice == 0   // disabled
+        ||  snd_DesiredMusicDevice == 2   // adlib
+        ||  snd_DesiredMusicDevice == 3   // sound blaster
+        ||  snd_DesiredMusicDevice == 5)  // gus
+        dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_ENG(104, 95, snd_Mport == 0x220 ? "220" :
+                                          snd_Mport == 0x230 ? "230" :
+                                          snd_Mport == 0x240 ? "240" :
+                                          snd_Mport == 0x250 ? "250" :
+                                          snd_Mport == 0x300 ? "300" :
+                                          snd_Mport == 0x320 ? "320" :
+                                          snd_Mport == 0x330 ? "330" :
+                                          snd_Mport == 0x332 ? "332" :
+                                          snd_Mport == 0x334 ? "334" :
+                                          snd_Mport == 0x336 ? "336" :
+                                          snd_Mport == 0x340 ? "340" :
+                                          snd_Mport == 0x360 ? "360" :
+                                                               "other");
+        dp_translation = NULL;
+
         //
         // Quality
         //
+
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 65, "quality");
+        M_WriteTextSmall_ENG(35, 105, "quality");
         dp_translation = NULL;
 
         // Sampling frequency (hz)
         if (snd_samplerate == 44100)
         {
-            M_WriteTextSmall_ENG(179, 75, "44100 HZ");
+            M_WriteTextSmall_ENG(179, 115, "44100 HZ");
         }
         else if (snd_samplerate == 22050)
         {
-            M_WriteTextSmall_ENG(179, 75, "22050 HZ");
+            M_WriteTextSmall_ENG(179, 115, "22050 HZ");
         }
         else if (snd_samplerate == 11025)
         {
-            M_WriteTextSmall_ENG(179, 75, "11025 HZ");
+            M_WriteTextSmall_ENG(179, 115, "11025 HZ");
         }
 
         //
         // Miscellaneous
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35, 85, "Miscellaneous");
+        M_WriteTextSmall_ENG(35, 125, "Miscellaneous");
         dp_translation = NULL;
 
         // Sfx mode
-        M_WriteTextSmall_ENG(178, 95, snd_monomode ? "mono" : "stereo");
+        M_WriteTextSmall_ENG(178, 135, snd_monomode ? "mono" : "stereo");
 
         // Pitch-shifted sounds
-        M_WriteTextSmall_ENG(186, 105, snd_pitchshift ? "on" : "off");
+        M_WriteTextSmall_ENG(186, 145, snd_pitchshift ? "on" : "off");
 
         // Informative message
-        if (itemOn == rd_audio_sys_sfx
-        ||  itemOn == rd_audio_sys_music)
+        if (itemOn >= rd_audio_sys_sfx
+        &&  itemOn <= rd_audio_sys_mport)
         {
             dp_translation = cr[CR_GRAY];
-            M_WriteTextSmall_ENG(1, 120, "changing will require restart of the program");
+            M_WriteTextSmall_ENG(1, 155, "changing will require restart of the program");
             dp_translation = NULL;
         }
     }
@@ -3130,46 +3206,106 @@ void M_RD_Draw_Audio_System (void)
             dp_translation = NULL;
         }
 
+        // SB Порт
+        if (snd_DesiredMusicDevice == 0   // disabled
+        ||  snd_DesiredMusicDevice == 2   // adlib
+        ||  snd_DesiredMusicDevice == 5   // gus
+        ||  snd_DesiredMusicDevice == 8)  // general midi
+        dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_ENG(75, 65, snd_SBport == 0x210 ? "210" :
+                                         snd_SBport == 0x220 ? "220" :
+                                         snd_SBport == 0x230 ? "230" :
+                                         snd_SBport == 0x240 ? "240" :
+                                         snd_SBport == 0x250 ? "250" :
+                                         snd_SBport == 0x260 ? "260" :
+                                         snd_SBport == 0x280 ? "280" :
+                                                               "other");
+        dp_translation = NULL;
+
+        // SB IRQ
+        M_WriteTextSmall_ENG(35, 75, "irq:");
+        if (snd_DesiredMusicDevice == 0   // disabled
+        ||  snd_DesiredMusicDevice == 2   // adlib
+        ||  snd_DesiredMusicDevice == 5   // gus
+        ||  snd_DesiredMusicDevice == 8)  // general midi
+        dp_translation = cr[CR_DARKRED];
+            snprintf(num, 4, "%3d", snd_SBirq);
+            M_WriteTextSmall_ENG(55, 75, num);
+        dp_translation = NULL;
+
+        // SB канал DMA
+        M_WriteTextSmall_ENG(35, 85, "dma:");
+        if (snd_DesiredMusicDevice == 0   // disabled
+        ||  snd_DesiredMusicDevice == 2   // adlib
+        ||  snd_DesiredMusicDevice == 5   // gus
+        ||  snd_DesiredMusicDevice == 8)  // general midi
+        dp_translation = cr[CR_DARKRED];
+            snprintf(num, 4, "%3d", snd_SBdma);
+            M_WriteTextSmall_ENG(60, 85, num);
+        dp_translation = NULL;
+
+        // Порт MIDI
+        M_WriteTextSmall_ENG(71, 95, "midi:");
+        if (snd_DesiredMusicDevice == 0   // disabled
+        ||  snd_DesiredMusicDevice == 2   // adlib
+        ||  snd_DesiredMusicDevice == 3   // sound blaster
+        ||  snd_DesiredMusicDevice == 5)  // gus
+        dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmall_ENG(104, 95, snd_Mport == 0x220 ? "220" :
+                                          snd_Mport == 0x230 ? "230" :
+                                          snd_Mport == 0x240 ? "240" :
+                                          snd_Mport == 0x250 ? "250" :
+                                          snd_Mport == 0x300 ? "300" :
+                                          snd_Mport == 0x320 ? "320" :
+                                          snd_Mport == 0x330 ? "330" :
+                                          snd_Mport == 0x332 ? "332" :
+                                          snd_Mport == 0x334 ? "334" :
+                                          snd_Mport == 0x336 ? "336" :
+                                          snd_Mport == 0x340 ? "340" :
+                                          snd_Mport == 0x360 ? "360" :
+                                                               "other");
+        dp_translation = NULL;
+
         //
         // Качество звучания
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 65, "rfxfcndj pdexfybz");
+        M_WriteTextSmall_RUS(35, 105, "rfxfcndj pdexfybz");
         dp_translation = NULL;
 
         // Частота дискретизации (гц)
         if (snd_samplerate == 44100)
         {
-            M_WriteTextSmall_RUS(208, 75, "44100 uw");
+            M_WriteTextSmall_RUS(208, 115, "44100 uw");
         }
         else if (snd_samplerate == 22050)
         {
-            M_WriteTextSmall_RUS(208, 75, "22050 uw");
+            M_WriteTextSmall_RUS(208, 115, "22050 uw");
         }
         else if (snd_samplerate == 11025)
         {
-            M_WriteTextSmall_RUS(208, 75, "11025 uw");
+            M_WriteTextSmall_RUS(208, 115, "11025 uw");
         }
 
         //
         // Разное
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35, 85, "hfpyjt");
+        M_WriteTextSmall_RUS(35, 125, "hfpyjt");
         dp_translation = NULL;
 
         // Режим звука
-        M_WriteTextSmall_RUS(231, 95, snd_monomode ? "vjyj" : "cnthtj");
+        M_WriteTextSmall_RUS(231, 135, snd_monomode ? "vjyj" : "cnthtj");
 
         // Произвольный питч-шифтинг
-        M_WriteTextSmall_RUS(242, 105, snd_pitchshift ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(242, 145, snd_pitchshift ? "drk" : "dsrk");
 
         // Informative message: изменение потребует перезапуск программы
-        if (itemOn == rd_audio_sys_sfx
-        ||  itemOn == rd_audio_sys_music)
+        if (itemOn >= rd_audio_sys_sfx
+        &&  itemOn <= rd_audio_sys_mport)
         {
             dp_translation = cr[CR_GRAY];
-            M_WriteTextSmall_RUS(3, 120, "bpvtytybt gjnht,etn gthtpfgecr ghjuhfvvs");
+            M_WriteTextSmall_RUS(3, 155, "bpvtytybt gjnht,etn gthtpfgecr ghjuhfvvs");
             dp_translation = NULL;
         }
     }
@@ -3277,6 +3413,229 @@ void M_RD_Change_MusicDevice (int choice)
     &&  snd_DesiredMusicDevice != 8)
     {
         snd_DesiredMusicDevice = 0;
+    }
+}
+
+void M_RD_Change_SBport(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        {
+            if (snd_SBport == 0x210)
+                snd_SBport  = 0x280;
+            else
+            if (snd_SBport == 0x280)
+                snd_SBport  = 0x260;
+            else
+            if (snd_SBport == 0x260)
+                snd_SBport  = 0x250;
+            else
+            if (snd_SBport == 0x250)
+                snd_SBport  = 0x240;
+            else
+            if (snd_SBport == 0x240)
+                snd_SBport  = 0x230;
+            else
+            if (snd_SBport == 0x230)
+                snd_SBport  = 0x220;
+            else
+            if (snd_SBport == 0x220)
+                snd_SBport  = 0x210;
+            break;
+        }
+        case 1:
+        {
+            if (snd_SBport == 0x210)
+                snd_SBport  = 0x220;
+            else
+            if (snd_SBport == 0x220)
+                snd_SBport  = 0x230;
+            else
+            if (snd_SBport == 0x230)
+                snd_SBport  = 0x240;
+            else
+            if (snd_SBport == 0x240)
+                snd_SBport  = 0x250;
+            else
+            if (snd_SBport == 0x250)
+                snd_SBport  = 0x260;
+            else
+            if (snd_SBport == 0x260)
+                snd_SBport  = 0x280;
+            else
+            if (snd_SBport == 0x280)
+                snd_SBport  = 0x210;
+            break;
+        }
+    }
+}
+
+void M_RD_Change_SBirq(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        {
+            if (snd_SBirq == 2)
+                snd_SBirq  = 7;
+            else
+            if (snd_SBirq == 7)
+                snd_SBirq  = 5;
+            else
+            if (snd_SBirq == 5)
+                snd_SBirq  = 2;
+            break;
+        }
+        case 1:
+        {
+            if (snd_SBirq == 2)
+                snd_SBirq  = 5;
+            else
+            if (snd_SBirq == 5)
+                snd_SBirq  = 7;
+            else
+            if (snd_SBirq == 7)
+                snd_SBirq  = 2;
+            break;
+        }
+    }
+}
+
+void M_RD_Change_SBdma(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        {
+            if (snd_SBdma == 0)
+                snd_SBdma  = 7;
+            else
+            if (snd_SBdma == 7)
+                snd_SBdma  = 6;
+            else
+            if (snd_SBdma == 6)
+                snd_SBdma  = 5;
+            else
+            if (snd_SBdma == 5)
+                snd_SBdma  = 3;
+            else
+            if (snd_SBdma == 3)
+                snd_SBdma  = 1;
+            else
+            if (snd_SBdma == 1)
+                snd_SBdma  = 0;
+            break;
+        }
+        case 1:
+        {
+            if (snd_SBdma == 0)
+                snd_SBdma  = 1;
+            else
+            if (snd_SBdma == 1)
+                snd_SBdma  = 3;
+            else
+            if (snd_SBdma == 3)
+                snd_SBdma  = 5;
+            else
+            if (snd_SBdma == 5)
+                snd_SBdma  = 6;
+            else
+            if (snd_SBdma == 6)
+                snd_SBdma  = 7;
+            else
+            if (snd_SBdma == 7)
+                snd_SBdma  = 0;
+            break;
+        }
+    }
+}
+
+void M_RD_Change_Mport(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        {
+            if (snd_Mport == 0x220)
+                snd_Mport  = 0x360;
+            else
+            if (snd_Mport == 0x360)
+                snd_Mport  = 0x340;
+            else
+            if (snd_Mport == 0x340)
+                snd_Mport  = 0x336;
+            else
+            if (snd_Mport == 0x336)
+                snd_Mport  = 0x334;
+            else
+            if (snd_Mport == 0x334)
+                snd_Mport  = 0x332;
+            else
+            if (snd_Mport == 0x332)
+                snd_Mport  = 0x330;
+            else
+            if (snd_Mport == 0x330)
+                snd_Mport  = 0x320;
+            else
+            if (snd_Mport == 0x320)
+                snd_Mport  = 0x300;
+            else
+            if (snd_Mport == 0x300)
+                snd_Mport  = 0x250;
+            else
+            if (snd_Mport == 0x250)
+                snd_Mport  = 0x240;
+            else
+            if (snd_Mport == 0x240)
+                snd_Mport  = 0x230;
+            else
+            if (snd_Mport == 0x230)
+                snd_Mport  = 0x220;
+            else
+            if (snd_Mport == 0x220)
+                snd_Mport  = 0x360;
+            break;
+        }
+        case 1:
+        {
+            if (snd_Mport == 0x220) 
+                snd_Mport  = 0x230;
+            else
+            if (snd_Mport == 0x230)
+                snd_Mport  = 0x240;
+            else
+            if (snd_Mport == 0x240)
+                snd_Mport  = 0x250;
+            else
+            if (snd_Mport == 0x250)
+                snd_Mport  = 0x300;
+            else
+            if (snd_Mport == 0x300)
+                snd_Mport  = 0x320;
+            else
+            if (snd_Mport == 0x320)
+                snd_Mport  = 0x330;
+            else
+            if (snd_Mport == 0x330)
+                snd_Mport  = 0x332;
+            else
+            if (snd_Mport == 0x332)
+                snd_Mport  = 0x334;
+            else
+            if (snd_Mport == 0x334)
+                snd_Mport  = 0x336;
+            else
+            if (snd_Mport == 0x336)
+                snd_Mport  = 0x340;
+            else
+            if (snd_Mport == 0x340)
+                snd_Mport  = 0x360;
+            else
+            if (snd_Mport == 0x360)
+                snd_Mport  = 0x220;
+            break;
+        }
     }
 }
 
