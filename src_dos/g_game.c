@@ -1174,7 +1174,7 @@ void G_ExitLevel (void)
 void G_SecretExitLevel (void)
 {
     // IF NO WOLF3D LEVELS, NO SECRET EXIT!
-    if ((commercial) && (W_CheckNumForName("map31")<0))
+    if ((commercial) && (W_GetNumForName("map31")<0))
     secretexit = false;
     else
     secretexit = true;
@@ -1733,7 +1733,7 @@ void G_InitNew (skill_t skill, int episode, int map)
 
         case 5: // [crispy] Sigil
         skytexture = R_TextureNumForName ("SKY5_ZD");
-        if (W_CheckNumForName("SKY5_ZD") < 0)
+        if (W_GetNumForName("SKY5_ZD") < 0)
         {
             skytexture = R_TextureNumForName ("SKY3");
         }

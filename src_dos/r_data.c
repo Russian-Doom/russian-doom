@@ -95,16 +95,22 @@ typedef struct
 // A maptexturedef_t describes a rectangular texture,
 //  which is composed of one or more mappatch_t structures
 //  that arrange graphic patches.
-typedef struct
+typedef struct texture_t texture_t;
+
+struct texture_t
 {
     // Keep name for switch changing, etc.
     char        name[8];		
     short       width;
     short       height;
+    // Index in textures list
+    int         index;
+    // Next in hash table chain
+    texture_t  *next;
     // All the patches[patchcount] are drawn back to front into the cached texture.
     short       patchcount;
     texpatch_t  patches[1];		
-} texture_t;
+};
 
 
 int		firstflat;
@@ -121,6 +127,7 @@ int		numspritelumps;
 
 int            numtextures;
 texture_t    **textures;
+texture_t    **textures_hashtable;
 
 
 int           *texturewidthmask;
@@ -528,6 +535,47 @@ byte *R_GetColumn (int tex, int col, boolean opaque)
 }
 
 
+void GenerateTextureHashTable(void)
+{
+    texture_t **rover;
+    int i;
+    int key;
+
+    textures_hashtable = Z_Malloc(sizeof(texture_t *) * numtextures, PU_STATIC, 0);
+
+    memset(textures_hashtable, 0, sizeof(texture_t *) * numtextures);
+
+    // Add all textures to hash table
+
+    for (i=0; i<numtextures; ++i)
+    {
+        // Store index
+
+        textures[i]->index = i;
+
+        // Vanilla Doom does a linear search of the texures array
+        // and stops at the first entry it finds.  If there are two
+        // entries with the same name, the first one in the array
+        // wins. The new entry must therefore be added at the end
+        // of the hash chain, so that earlier entries win.
+
+        key = W_LumpNameHash(textures[i]->name) % numtextures;
+
+        rover = &textures_hashtable[key];
+
+        while (*rover != NULL)
+        {
+            rover = &(*rover)->next;
+        }
+
+        // Hook into hash table
+
+        textures[i]->next = NULL;
+        *rover = textures[i];
+    }
+}
+
+
 //
 // R_InitTextures
 // Initializes the texture list
@@ -577,7 +625,7 @@ void R_InitTextures (void)
     for (i=0 ; i<nummappatches ; i++)
     {
         strncpy (name,name_p+i*8, 8);
-        patchlookup[i] = W_CheckNumForName (name);
+        patchlookup[i] = W_GetNumForName (name);
     }
 
     Z_Free (names);
@@ -590,7 +638,7 @@ void R_InitTextures (void)
     maxoff = W_LumpLength (W_GetNumForName ("TEXTURE1"));
     directory = maptex+1;
 
-    if (W_CheckNumForName ("TEXTURE2") != -1)
+    if (W_GetNumForName ("TEXTURE2") != -1)
     {
         maptex2 = W_CacheLumpName ("TEXTURE2", PU_STATIC);
         numtextures2 = LONG(*maptex2);
@@ -721,6 +769,8 @@ void R_InitTextures (void)
 
     for (i=0 ; i<numtextures ; i++)
     texturetranslation[i] = i;
+
+    GenerateTextureHashTable();
 }
 
 
@@ -882,7 +932,7 @@ int tran_filter_pct = 75;   // [JN] Filter percent, increased from 66
 
 void R_InitTintMap()
 {
-    int lump = W_CheckNumForName("TINTMAP");
+    int lump = W_GetNumForName("TINTMAP");
     
     // If a tranlucency filter map lump is present, use it
     
@@ -1023,7 +1073,7 @@ int R_FlatNumForName (char *name)
     int  i;
     char namet[9];
 
-    i = W_CheckNumForName (name);
+    i = W_GetNumForName (name);
 
     if (i == -1)
     {
@@ -1038,49 +1088,32 @@ int R_FlatNumForName (char *name)
 
 
 //
-// R_CheckTextureNumForName
+// R_TextureNumForName
 // Check whether texture is available.
 // Filter out NoTexture indicator.
 //
-int	R_CheckTextureNumForName (char *name)
+int R_TextureNumForName(char *name)
 {
-    int i;
+    texture_t *texture;
+    int key;
 
     // "NoTexture" marker.
     if (name[0] == '-')		
-    return 0;
+	return 0;
+		
+    key = W_LumpNameHash(name) % numtextures;
 
-    for (i=0 ; i<numtextures ; i++)
-        if (!strncasecmp (textures[i]->name, name, 8) )
-            return i;
-
-    return -1;
-}
-
-
-//
-// R_TextureNumForName
-// Calls R_CheckTextureNumForName,
-//  aborts with error message.
-//
-int	R_TextureNumForName (char *name)
-{
-    int i;
-
-    i = R_CheckTextureNumForName (name);
-
-    if (i==-1)
+    texture=textures_hashtable[key]; 
+    
+    while (texture != NULL)
     {
-        if (devparm)
-        {
-            // [crispy] make non-fatal
-            fprintf (stderr, english_language ?
-                    "R_TextureNumForName: %s not found" :
-                    "R_TextureNumForName: Текстура %s не найдена\n", name);
-        }
-        return 0;
+	if (!strncasecmp (texture->name, name, 8) )
+	    return texture->index;
+
+        texture = texture->next;
     }
-    return i;
+    
+    return -1;
 }
 
 

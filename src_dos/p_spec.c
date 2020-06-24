@@ -153,7 +153,7 @@ void P_InitPicAnims (void)
 	if (animdefs[i].istexture)
 	{
 	    // different episode ?
-	    if (R_CheckTextureNumForName(animdefs[i].startname) == -1)
+	    if (R_TextureNumForName(animdefs[i].startname) == -1)
 		continue;	
 
 	    lastanim->picnum = R_TextureNumForName (animdefs[i].endname);
@@ -161,7 +161,7 @@ void P_InitPicAnims (void)
 	}
 	else
 	{
-	    if (W_CheckNumForName(animdefs[i].startname) == -1)
+	    if (W_GetNumForName(animdefs[i].startname) == -1)
 		continue;
 
 	    lastanim->picnum = R_FlatNumForName (animdefs[i].endname);
@@ -1269,7 +1269,7 @@ void P_SpawnSpecials (void)
     int		episode;
 
     episode = 1;
-    if (W_CheckNumForName("texture2") >= 0)
+    if (W_GetNumForName("texture2") >= 0)
 	episode = 2;
 
     

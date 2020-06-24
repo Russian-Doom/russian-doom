@@ -472,7 +472,7 @@ void D_DoAdvanceDemo (void)
     paused = false;
     gameaction = ga_nothing;
 
-    if (retail && W_CheckNumForName("demo4"))
+    if (retail && W_GetNumForName("demo4"))
     demosequence = (demosequence+1)%7;
     else
     demosequence = (demosequence+1)%6;
@@ -595,7 +595,7 @@ void D_DoAdvanceDemo (void)
 
     // The Doom 3: BFG Edition version of doom2.wad does not have a
     // TITLETPIC lump. Use INTERPIC instead as a workaround.
-    if (!strcasecmp(pagename, "TITLEPIC") && W_CheckNumForName("titlepic") < 0)
+    if (!strcasecmp(pagename, "TITLEPIC") && W_GetNumForName("titlepic") < 0)
     {
         // [crispy] use DMENUPIC instead of TITLEPIC, it's awesome
         pagename = "DMENUPIC";
@@ -1226,7 +1226,7 @@ void D_DoomMain (void)
             "W_Init: Инициализация WAD-файлов.\n");
     W_InitMultipleFiles (wadfiles);
 
-    if (W_CheckNumForName("E4M1") >= 0)
+    if (W_GetNumForName("E4M1") >= 0)
     {
         registered = false;
         retail = true;
@@ -1288,7 +1288,7 @@ void D_DoomMain (void)
         // but w/o all the lumps of the registered version. 
         if (registered)
         for (i = 0;i < 23; i++)
-        if (W_CheckNumForName(name[i])<0)
+        if (W_GetNumForName(name[i])<0)
         {
             shareware = true;
             retail = registered = false;

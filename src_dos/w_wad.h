@@ -51,6 +51,8 @@ typedef struct
     int         handle;
     int         position;
     int         size;
+    // Used for hash table lookups
+    int next;
 
     // killough 4/17/98: namespace tags, to prevent conflicts between resources
     enum {
@@ -76,7 +78,9 @@ extern  void       **lumpcache;
 extern  int          numlumps;
 extern  lumpinfo_t  *lumpinfo;
 
+void W_GenerateHashTable(void);
 
+extern unsigned int W_LumpNameHash(char *s);
 
 #endif
 

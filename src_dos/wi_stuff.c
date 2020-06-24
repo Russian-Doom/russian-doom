@@ -1751,7 +1751,7 @@ void WI_loadData (void)
     {
         strcpy(name,"INTERPIC");
     }
-    else if (sigil && wbs->epsd == 4 && W_CheckNumForName("SIGILINT") != -1) // [crispy] Sigil
+    else if (sigil && wbs->epsd == 4 && W_GetNumForName("SIGILINT") != -1) // [crispy] Sigil
     {
         strcpy(name, "SIGILINT");
     }

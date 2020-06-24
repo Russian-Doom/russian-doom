@@ -1444,11 +1444,11 @@ void ST_drawWidgets (boolean refresh)
 
             if (lump == -1)
             {
-                lump = W_CheckNumForName("PSTRA0");
+                lump = W_GetNumForName("PSTRA0");
 
                 if (lump == -1)
                 {
-                    lump = W_CheckNumForName("MEDIA0");
+                    lump = W_GetNumForName("MEDIA0");
                 }
             }
 

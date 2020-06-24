@@ -43,6 +43,10 @@
 // Location of each lump on disk.
 lumpinfo_t   *lumpinfo;		
 int           numlumps;
+
+// Hash table for fast lookups
+int          *lumphash;
+
 void        **lumpcache;
 
 
@@ -384,6 +388,8 @@ void W_InitMultipleFiles (char **filenames)
     }
 
     memset (lumpcache,0, size);
+    
+    W_GenerateHashTable();
 }
 
 
@@ -410,67 +416,45 @@ int W_NumLumps (void)
 }
 
 
-//
-// W_CheckNumForName
-// Returns -1 if name not found.
-//
 
-int W_CheckNumForName (char *name)
+// Hash function used for lump names.
+unsigned int W_LumpNameHash(char *s)
 {
-    int          v1;
-    int          v2;
-    lumpinfo_t  *lump_p;
-
-    union 
-    {
-        char  s[9];
-        int   x[2];
-    } name8;
-
-    // make the name into two integers for easy compares
-    strncpy (name8.s,name,8);
-
-    // in case the name was a fill 8 chars
-    name8.s[8] = 0;
-
-    // case insensitive
-    strupr (name8.s);		
-
-    v1 = name8.x[0];
-    v2 = name8.x[1];
-
-    // scan backwards so patch lump files take precedence
-    lump_p = lumpinfo + numlumps;
-
-    while (lump_p-- != lumpinfo)
-    {
-        if ( *(int *)lump_p->name == v1 && *(int *)&lump_p->name[4] == v2)
-        {
-            return lump_p - lumpinfo;
-        }
-    }
-
-    // TFB. Not found.
-    return -1;
+    unsigned hash;
+    (void) ((hash = toupper(s[0]), s[1]) &&
+            (hash = hash * 3 + toupper(s[1]), s[2]) &&
+            (hash = hash * 2 + toupper(s[2]), s[3]) &&
+            (hash = hash * 2 + toupper(s[3]), s[4]) &&
+            (hash = hash * 2 + toupper(s[4]), s[5]) &&
+            (hash = hash * 2 + toupper(s[5]), s[6]) &&
+            (hash = hash * 2 + toupper(s[6]),
+             hash = hash * 2 + toupper(s[7])));
+    return hash;
 }
 
 
 //
 // W_GetNumForName
-// Calls W_CheckNumForName, but bombs out if not found.
+// Returns -1 if name not found.
 //
 int W_GetNumForName (char *name)
 {
-    int	i = W_CheckNumForName (name);
+    int i;
+    int hash;
 
-    if (i == -1)
+    hash = W_LumpNameHash(name) % numlumps;
+
+    for (i = lumphash[hash]; i != -1; i = lumpinfo[i].next)
     {
-      I_Error (english_language ?
-               "W_GetNumForName: %s not found!" :
-               "W_GetNumForName: %s не найден!", name);
+        if (!strncasecmp(lumpinfo[i].name, name, 8))
+        {
+            return i;
+        }
     }
 
-    return i;
+    // TFB. Not found.
+
+    return -1;
 }
 
 
@@ -577,6 +561,45 @@ void *W_CacheLumpNum (int lump, int tag)
 void *W_CacheLumpName (char *name, int tag)
 {
     return W_CacheLumpNum (W_GetNumForName(name), tag);
+}
+
+
+// Generate a hash table for fast lookups
+
+void W_GenerateHashTable(void)
+{
+    int i;
+
+    // Free the old hash table, if there is one:
+    if (lumphash != NULL)
+    {
+        Z_Free(lumphash);
+    }
+
+    // Generate hash table
+    if (numlumps > 0)
+    {
+        lumphash = Z_Malloc(sizeof(int) * numlumps, PU_STATIC, NULL);
+
+        for (i = 0; i < numlumps; ++i)
+        {
+            lumphash[i] = -1;
+        }
+
+        for (i = 0; i < numlumps; ++i)
+        {
+            unsigned int hash;
+
+            hash = W_LumpNameHash(lumpinfo[i].name) % numlumps;
+
+            // Hook into the hash table
+
+            lumpinfo[i].next = lumphash[hash];
+            lumphash[hash] = i;
+        }
+    }
+
+    // All done!
 }
 
 
