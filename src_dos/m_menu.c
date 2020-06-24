@@ -6298,12 +6298,6 @@ void M_Drawer (void)
                 V_DrawPatchDirect (x,y,0, W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE));
             }
 
-            // DRAW SKULL
-            V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
-                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-            V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
-                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-
             // [JN] Big vertical spacing
             y += LINEHEIGHT;
         }
@@ -6313,12 +6307,6 @@ void M_Drawer (void)
         else if (currentMenu == &RD_Options_Def)
         {
             M_WriteTextBig_ENG(x, y, currentMenu->menuitems[i].name);
-
-            // DRAW SKULL
-            V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
-                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-            V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
-                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
 
             // [JN] Big vertical spacing
             y += LINEHEIGHT;
@@ -6332,12 +6320,6 @@ void M_Drawer (void)
         ||  currentMenu == &Vanilla_Audio_Def_Rus)
         {
             M_WriteTextBig_RUS(x, y, currentMenu->menuitems[i].name);
-
-            // DRAW SKULL
-            V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
-                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-            V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
-                               W_CacheLumpName(skullName[whichSkull],PU_CACHE));
 
             // [JN] Big vertical spacing
             y += LINEHEIGHT;
@@ -6360,13 +6342,6 @@ void M_Drawer (void)
         {
             M_WriteTextSmall_ENG(x, y, currentMenu->menuitems[i].name);
 
-            // [JN] Draw blinking ">" symbol
-            if (whichSkull == 0)
-            dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmall_ENG(x + SKULLXOFF + 24, currentMenu->y 
-                                   + itemOn*LINEHEIGHT_SML, ">");
-            dp_translation = NULL;
-
             // [JN] Small vertical spacing
             y += LINEHEIGHT_SML;
         }
@@ -6387,34 +6362,38 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Gameplay_Def_4_Rus)
         {
             M_WriteTextSmall_RUS(x, y, currentMenu->menuitems[i].name);
-            
-            // [JN] Draw blinking ">" symbol
-            if (whichSkull == 0)
-            dp_translation = cr[CR_DARKRED];
-            M_WriteTextSmall_ENG(x + SKULLXOFF + 24, currentMenu->y 
-                                   + itemOn*LINEHEIGHT_SML, ">");
-            dp_translation = NULL;
         
             // [JN] Small vertical spacing
             y += LINEHEIGHT_SML;
         }
+    }
 
-        // [JN] Saving / Loading menus, help screens. Just a blinking skull.
-        if (currentMenu == &LoadDef
-        ||  currentMenu == &LoadDef_Rus
-        ||  currentMenu == &SaveDef
-        ||  currentMenu == &SaveDef_Rus
-        ||  currentMenu == &ReadDef1
-        ||  currentMenu == &ReadDef1_Rus
-        ||  currentMenu == &ReadDef2
-        ||  currentMenu == &ReadDef2_Rus)
-        {
-            // DRAW SKULL
-            V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
-                    W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-            V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
-                    W_CacheLumpName(skullName[whichSkull],PU_CACHE));
-        }
+    // [JN] Define where to draw blinking skull and where blinking ">" symbol.
+    if (currentMenu == &MainDef            || currentMenu == &MainDef_Rus
+    ||  currentMenu == &EpiDef             || currentMenu == &EpiDef_Rus 
+    ||  currentMenu == &NewDef             || currentMenu == &NewDef_Rus
+    ||  currentMenu == &ReadDef1           || currentMenu == &ReadDef1_Rus
+    ||  currentMenu == &ReadDef2           || currentMenu == &ReadDef2_Rus
+    ||  currentMenu == &LoadDef            || currentMenu == &LoadDef_Rus
+    ||  currentMenu == &SaveDef            || currentMenu == &SaveDef_Rus
+    ||  currentMenu == &RD_Options_Def     || currentMenu == &RD_Options_Def_Rus
+    ||  currentMenu == &Vanilla_OptionsDef || currentMenu == &Vanilla_OptionsDef_Rus
+    ||  currentMenu == &Vanilla_Audio_Def  || currentMenu == &Vanilla_Audio_Def_Rus)
+    {
+        // [JN] Blinking skull
+        V_DrawShadowDirect(x+1 + SKULLXOFF,currentMenu->y+1 - 5 + itemOn*LINEHEIGHT, 0,
+                           W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+        V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
+                           W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+    }
+    else
+    {
+        // [JN] Blinking ">" symbol
+        if (whichSkull == 0)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + SKULLXOFF + 24, currentMenu->y 
+                            + itemOn*LINEHEIGHT_SML, ">");
+        dp_translation = NULL;
     }
 }
 
