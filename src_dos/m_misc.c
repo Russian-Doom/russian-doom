@@ -469,7 +469,7 @@ default_t	defaults[] =
     {"flip_weapons",            &flip_weapons,          0},
 
     // Gameplay: Audible
-    {"play_exit_sfx",           &play_exit_sfx,         1},
+    {"play_exit_sfx",           &play_exit_sfx,         0},
     {"crushed_corpses_sfx",     &crushed_corpses_sfx,   1},
     {"blazing_door_fix_sfx",    &blazing_door_fix_sfx,  1},
     {"noise_alert_sfx",         &noise_alert_sfx,       0},

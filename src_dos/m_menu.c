@@ -4577,7 +4577,7 @@ void M_RD_BackToDefaultsResponse (int ch)
     flip_weapons       = 0;
 
     // Gameplay (2)
-    play_exit_sfx        = 1;
+    play_exit_sfx        = 0;
     crushed_corpses_sfx  = 1;
     blazing_door_fix_sfx = 1;
     noise_alert_sfx      = 0;
