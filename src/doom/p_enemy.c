@@ -2247,14 +2247,17 @@ void A_PlayerScream (mobj_t* mo)
 {
     // Default death sound.
     int		sound = sfx_pldeth;
-	
-    if ( (gamemode == commercial)
-	&&  (gamemission != jaguar) // [JN] Jaguar: not present in Jaguar Doom
-	&& 	(mo->health < -50))
+
+    // [JN] PDIEHI is also available in retail and newer versions of rigistered
+    // and shareware. Hovewer, just in case of missing sound, use it only in
+    // Ultimate Doom, Doom 2 and Final Doom.
+    if ((gamemode == retail || gamemode == commercial)
+    &&  (gamemission != jaguar) // [JN] Sound not present in Jaguar Doom
+    && 	(mo->health < -50))
     {
-	// IF THE PLAYER DIES
-	// LESS THAN -50% WITHOUT GIBBING
-	sound = sfx_pdiehi;
+        // IF THE PLAYER DIES
+        // LESS THAN -50% WITHOUT GIBBING
+        sound = sfx_pdiehi;
     }
     
     S_StartSound (mo, sound);
