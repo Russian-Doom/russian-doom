@@ -359,8 +359,8 @@ void D_Display (void)
         inhelpscreensstate = true;
     }
 
-    // draw pause pic
-    if (paused)
+    // [JN] Draw pause pic. Don't draw while actime game menu and help screens.
+    if (paused && !menuactive)
     {
         // [JN] Atari Jaguar: draw PAUSE pic independently, offsets done in the sprite
         if (gamemission == jaguar)
