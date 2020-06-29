@@ -101,33 +101,6 @@ P_SetPsprite
 }
 
 
-
-//
-// P_CalcSwing
-//	
-fixed_t		swingx;
-fixed_t		swingy;
-
-void P_CalcSwing (player_t*	player)
-{
-    fixed_t	swing;
-    int		angle;
-	
-    // OPTIMIZE: tablify this.
-    // A LUT would allow for different modes,
-    //  and add flexibility.
-
-    swing = player->bob;
-
-    angle = (FINEANGLES/70*leveltime)&FINEMASK;
-    swingx = FixedMul ( swing, finesine[angle]);
-
-    angle = (FINEANGLES/70*leveltime+FINEANGLES/2)&FINEMASK;
-    swingy = -FixedMul ( swingx, finesine[angle]);
-}
-
-
-
 //
 // P_BringUpWeapon
 // Starts bringing the pending weapon up
