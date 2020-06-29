@@ -6740,143 +6740,125 @@ void M_Drawer (void)
     {
         name = DEH_String(currentMenu->menuitems[i].name);
 
-        // if (name[0])
-        // {
-            // -----------------------------------------------------------------
-            // [JN] Write common menus by using standard graphical patches:
-            // -----------------------------------------------------------------
-            if (currentMenu == &MainDef                // Main Menu
-            ||  currentMenu == &MainDef_Rus            // Main Menu
-            ||  currentMenu == &MainDefBeta            // Main Menu (Press Beta) 
-            ||  currentMenu == &MainDefBeta_Rus        // Main Menu (Press Beta)
-            ||  currentMenu == &EpiDef                 // Episode selection
-            ||  currentMenu == &EpiDef_Rus             // Episode selection
-            ||  currentMenu == &NewDef                 // Skill level
-            ||  currentMenu == &NewDef_Rus             // Skill level
-            ||  currentMenu == &Vanilla_OptionsDef     // Vanilla options menu
-            ||  currentMenu == &Vanilla_Audio_Def)     // Vanilla sound menu
-            {
-                if (name[0])
-                V_DrawShadowedPatchDoom (x + wide_delta, y, W_CacheLumpName(name, PU_CACHE));
-
-                // DRAW SKULL
-                V_DrawShadowedPatchDoom(x + SKULLXOFF + wide_delta, currentMenu->y - 5 + itemOn*LINEHEIGHT,
-                W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
-
-                // [JN] Big vertical spacing
-                y += LINEHEIGHT;
-            }
-            // -----------------------------------------------------------------
-            // [JN] Write English options menu with big English font
-            // -----------------------------------------------------------------
-            else 
-            if (currentMenu == &RD_Options_Def)
-            {
-                M_WriteTextBig_ENG(x + wide_delta, y, name);
-
-                // DRAW SKULL
-                V_DrawShadowedPatchDoom(x + SKULLXOFF + wide_delta, currentMenu->y - 5 + itemOn*LINEHEIGHT,
-                W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
-
-                // [JN] Big vertical spacing
-                y += LINEHEIGHT;
-            }
-            // -----------------------------------------------------------------
-            // [JN] Write Russian options menu with big Russian font
-            // -----------------------------------------------------------------
-            else 
-            if (currentMenu == &MainDef_Rus
-            ||  currentMenu == &EpiDef_Rus
-            ||  currentMenu == &NewDef_Rus
-            ||  currentMenu == &RD_Options_Def_Rus
-            ||  currentMenu == &Vanilla_OptionsDef_Rus
-            ||  currentMenu == &Vanilla_Audio_Def_Rus)
-            {
-                M_WriteTextBig_RUS(x + wide_delta, y, name);
-
-                // DRAW SKULL
-                V_DrawShadowedPatchDoom(x + SKULLXOFF + wide_delta, currentMenu->y - 5 + itemOn*LINEHEIGHT,
-                W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
-
-                // [JN] Big vertical spacing
-                y += LINEHEIGHT;
-            }
-            // -----------------------------------------------------------------
-            // [JN] Write English submenus with small English font
-            // -----------------------------------------------------------------
-            else
-            if (currentMenu == &RD_Rendering_Def
-            ||  currentMenu == &RD_Display_Def
-            ||  currentMenu == &RD_Messages_Def
-            ||  currentMenu == &RD_Automap_Def
-            ||  currentMenu == &RD_Audio_Def
-            ||  currentMenu == &RD_Audio_System_Def
-            ||  currentMenu == &RD_Controls_Def
-            ||  currentMenu == &RD_Gameplay_Def_1
-            ||  currentMenu == &RD_Gameplay_Def_2
-            ||  currentMenu == &RD_Gameplay_Def_3
-            ||  currentMenu == &RD_Gameplay_Def_4)
-            {
-                M_WriteTextSmall_ENG(x + wide_delta, y, name);
-
-                // [JN] Draw blinking ">" symbol
-                if (whichSkull == 0)
-                dp_translation = cr[CR_DARKRED];
-                // [JN] Jaguar: no font color translation, draw SKULL1 as an empty symbol.
-                M_WriteTextSmall_ENG(x + SKULLXOFF + 24 + wide_delta, currentMenu->y + itemOn*LINEHEIGHT_SML,
-                                     gamemission == jaguar && whichSkull == 0 ? " " : ">");
-                // [JN] Clear translation
-                dp_translation = NULL;
-
-                // [JN] Small vertical spacing
-                y += LINEHEIGHT_SML;
-            }
-            // -----------------------------------------------------------------
-            // [JN] Write Russian submenus with small Russian font
-            // -----------------------------------------------------------------            
-            else
-            if (currentMenu == &RD_Rendering_Def_Rus
-            ||  currentMenu == &RD_Display_Def_Rus
-            ||  currentMenu == &RD_Messages_Def_Rus
-            ||  currentMenu == &RD_Automap_Def_Rus
-            ||  currentMenu == &RD_Audio_Def_Rus
-            ||  currentMenu == &RD_Audio_System_Def_Rus
-            ||  currentMenu == &RD_Controls_Def_Rus
-            ||  currentMenu == &RD_Gameplay_Def_1_Rus
-            ||  currentMenu == &RD_Gameplay_Def_2_Rus
-            ||  currentMenu == &RD_Gameplay_Def_3_Rus
-            ||  currentMenu == &RD_Gameplay_Def_4_Rus)
-            {
-                M_WriteTextSmall_RUS(x + wide_delta, y, name);
-                
-                // [JN] Draw blinking ">" symbol
-                if (whichSkull == 0)
-                dp_translation = cr[CR_DARKRED];
-                // [JN] Jaguar: no font color translation, draw SKULL1 as an empty symbol.
-                M_WriteTextSmall_ENG(x + SKULLXOFF + 24 + wide_delta, currentMenu->y + itemOn*LINEHEIGHT_SML,
-                                     gamemission == jaguar && whichSkull == 0 ? " " : ">");
-                // [JN] Clear translation
-                dp_translation = NULL;
-
-                // [JN] Small vertical spacing
-                y += LINEHEIGHT_SML;
-            }
-        // }
-
-        // [JN] Saving / Loading menus, help screens. Just a blinking skull.
-        if (currentMenu == &LoadDef
-        ||  currentMenu == &LoadDef_Rus
-        ||  currentMenu == &SaveDef
-        ||  currentMenu == &SaveDef_Rus
-        ||  currentMenu == &ReadDef1
-        ||  currentMenu == &ReadDef1_Rus
-        ||  currentMenu == &ReadDef2
-        ||  currentMenu == &ReadDef2_Rus)
+        // -----------------------------------------------------------------
+        // [JN] Write common menus by using standard graphical patches:
+        // -----------------------------------------------------------------
+        if (currentMenu == &MainDef                // Main Menu
+        ||  currentMenu == &MainDef_Rus            // Main Menu
+        ||  currentMenu == &MainDefBeta            // Main Menu (Press Beta) 
+        ||  currentMenu == &MainDefBeta_Rus        // Main Menu (Press Beta)
+        ||  currentMenu == &EpiDef                 // Episode selection
+        ||  currentMenu == &EpiDef_Rus             // Episode selection
+        ||  currentMenu == &NewDef                 // Skill level
+        ||  currentMenu == &NewDef_Rus             // Skill level
+        ||  currentMenu == &Vanilla_OptionsDef     // Vanilla options menu
+        ||  currentMenu == &Vanilla_Audio_Def)     // Vanilla sound menu
         {
-            // DRAW SKULL
-            V_DrawShadowedPatchDoom(x + SKULLXOFF + wide_delta, currentMenu->y - 5 + itemOn*LINEHEIGHT,
-            W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
+            // [JN] Draw patch if it's name is present,
+            // i.e. don't try to draw placeholders as patches.
+            if (name[0])
+            V_DrawShadowedPatchDoom (x + wide_delta, y, W_CacheLumpName(name, PU_CACHE));
+
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
         }
+        // -----------------------------------------------------------------
+        // [JN] Write English options menu with big English font
+        // -----------------------------------------------------------------
+        else 
+        if (currentMenu == &RD_Options_Def)
+        {
+            M_WriteTextBig_ENG(x + wide_delta, y, name);
+
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
+        }
+        // -----------------------------------------------------------------
+        // [JN] Write Russian options menu with big Russian font
+        // -----------------------------------------------------------------
+        else 
+        if (currentMenu == &MainDef_Rus
+        ||  currentMenu == &EpiDef_Rus
+        ||  currentMenu == &NewDef_Rus
+        ||  currentMenu == &RD_Options_Def_Rus
+        ||  currentMenu == &Vanilla_OptionsDef_Rus
+        ||  currentMenu == &Vanilla_Audio_Def_Rus)
+        {
+            M_WriteTextBig_RUS(x + wide_delta, y, name);
+
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
+        }
+        // -----------------------------------------------------------------
+        // [JN] Write English submenus with small English font
+        // -----------------------------------------------------------------
+        else
+        if (currentMenu == &RD_Rendering_Def
+        ||  currentMenu == &RD_Display_Def
+        ||  currentMenu == &RD_Messages_Def
+        ||  currentMenu == &RD_Automap_Def
+        ||  currentMenu == &RD_Audio_Def
+        ||  currentMenu == &RD_Audio_System_Def
+        ||  currentMenu == &RD_Controls_Def
+        ||  currentMenu == &RD_Gameplay_Def_1
+        ||  currentMenu == &RD_Gameplay_Def_2
+        ||  currentMenu == &RD_Gameplay_Def_3
+        ||  currentMenu == &RD_Gameplay_Def_4)
+        {
+            M_WriteTextSmall_ENG(x + wide_delta, y, name);
+
+            // [JN] Small vertical spacing
+            y += LINEHEIGHT_SML;
+        }
+        // -----------------------------------------------------------------
+        // [JN] Write Russian submenus with small Russian font
+        // -----------------------------------------------------------------            
+        else
+        if (currentMenu == &RD_Rendering_Def_Rus
+        ||  currentMenu == &RD_Display_Def_Rus
+        ||  currentMenu == &RD_Messages_Def_Rus
+        ||  currentMenu == &RD_Automap_Def_Rus
+        ||  currentMenu == &RD_Audio_Def_Rus
+        ||  currentMenu == &RD_Audio_System_Def_Rus
+        ||  currentMenu == &RD_Controls_Def_Rus
+        ||  currentMenu == &RD_Gameplay_Def_1_Rus
+        ||  currentMenu == &RD_Gameplay_Def_2_Rus
+        ||  currentMenu == &RD_Gameplay_Def_3_Rus
+        ||  currentMenu == &RD_Gameplay_Def_4_Rus)
+        {
+            M_WriteTextSmall_RUS(x + wide_delta, y, name);
+        
+            // [JN] Small vertical spacing
+            y += LINEHEIGHT_SML;
+        }
+    }
+
+    // [JN] Define where to draw blinking skull and where blinking ">" symbol.
+    if (currentMenu == &MainDef            || currentMenu == &MainDef_Rus
+    ||  currentMenu == &EpiDef             || currentMenu == &EpiDef_Rus 
+    ||  currentMenu == &NewDef             || currentMenu == &NewDef_Rus
+    ||  currentMenu == &ReadDef1           || currentMenu == &ReadDef1_Rus
+    ||  currentMenu == &ReadDef2           || currentMenu == &ReadDef2_Rus
+    ||  currentMenu == &LoadDef            || currentMenu == &LoadDef_Rus
+    ||  currentMenu == &SaveDef            || currentMenu == &SaveDef_Rus
+    ||  currentMenu == &RD_Options_Def     || currentMenu == &RD_Options_Def_Rus
+    ||  currentMenu == &Vanilla_OptionsDef || currentMenu == &Vanilla_OptionsDef_Rus
+    ||  currentMenu == &Vanilla_Audio_Def  || currentMenu == &Vanilla_Audio_Def_Rus)
+    {
+        // DRAW SKULL
+        V_DrawShadowedPatchDoom(x + SKULLXOFF + wide_delta, currentMenu->y - 5 + itemOn*LINEHEIGHT,
+        W_CacheLumpName(DEH_String(skullName[whichSkull]), PU_CACHE));
+    }
+    else
+    {
+        // [JN] Draw blinking ">" symbol
+        if (whichSkull == 0)
+        dp_translation = cr[CR_DARKRED];
+        // [JN] Jaguar: no font color translation, draw SKULL1 as an empty symbol.
+        M_WriteTextSmall_ENG(x + SKULLXOFF + 24 + wide_delta, currentMenu->y + itemOn*LINEHEIGHT_SML,
+                             gamemission == jaguar && whichSkull == 0 ? " " : ">");
+        // [JN] Clear translation
+        dp_translation = NULL;
     }
 }
 
