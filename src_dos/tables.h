@@ -50,6 +50,7 @@
 #define ANG270      0xc0000000
 
 #define ANG1        (ANG45 / 45)
+#define ANG5        (ANG90 / 18)
 
 #define SLOPERANGE  2048
 #define SLOPEBITS   11

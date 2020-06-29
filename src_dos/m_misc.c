@@ -25,24 +25,15 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-
 #include <ctype.h>
 
-
 #include "doomdef.h"
-
 #include "z_zone.h"
-
 #include "w_wad.h"
-
 #include "i_system.h"
 #include "v_video.h"
-
 #include "hu_stuff.h"
-
-// State.
 #include "doomstat.h"
-
 #include "m_misc.h"
 #include "r_main.h"
 #include "s_sound.h"
@@ -50,9 +41,22 @@
 #include "jn.h"
 
 
-int		myargc;
-char**		myargv;
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
 
+
+int     myargc;
+char  **myargv;
+
+int     numdefaults;
+char   *defaultfile;
+
+int     rndindex = 0;
+int     prndindex = 0;
+int     crndindex = 0;
+
+extern  byte scantokey[128];
 
 //
 // M_CheckParm
@@ -62,16 +66,19 @@ char**		myargv;
 // or 0 if not present
 int M_CheckParm (char *check)
 {
-    int		i;
+    int i;
 
     for (i = 1;i<myargc;i++)
     {
-	if ( !strcasecmp(check, myargv[i]) )
-	    return i;
+        if (!strcasecmp(check, myargv[i]))
+        {
+            return i;
+        }
     }
 
     return 0;
 }
+
 
 // M_CheckParmWithArgs
 // [JN] Same as above, but handles given arguments.
@@ -89,10 +96,10 @@ int M_CheckParmWithArgs(char *check, int num_args)
     return 0;
 }
 
+
 // M_StrCaseStr
 // [JN] Case-insensitive version of strstr().
 // Function from Chocolate Doom.
-
 char *M_StrCaseStr(char *haystack, char *needle)
 {
     unsigned int haystack_len;
@@ -121,35 +128,33 @@ char *M_StrCaseStr(char *haystack, char *needle)
     return NULL;
 }
 
+
 //
 // M_Random
 // Returns a 0-255 number
 //
 unsigned char rndtable[256] = {
-    0,   8, 109, 220, 222, 241, 149, 107,  75, 248, 254, 140,  16,  66 ,
-    74,  21, 211,  47,  80, 242, 154,  27, 205, 128, 161,  89,  77,  36 ,
-    95, 110,  85,  48, 212, 140, 211, 249,  22,  79, 200,  50,  28, 188 ,
-    52, 140, 202, 120,  68, 145,  62,  70, 184, 190,  91, 197, 152, 224 ,
-    149, 104,  25, 178, 252, 182, 202, 182, 141, 197,   4,  81, 181, 242 ,
-    145,  42,  39, 227, 156, 198, 225, 193, 219,  93, 122, 175, 249,   0 ,
-    175, 143,  70, 239,  46, 246, 163,  53, 163, 109, 168, 135,   2, 235 ,
-    25,  92,  20, 145, 138,  77,  69, 166,  78, 176, 173, 212, 166, 113 ,
-    94, 161,  41,  50, 239,  49, 111, 164,  70,  60,   2,  37, 171,  75 ,
-    136, 156,  11,  56,  42, 146, 138, 229,  73, 146,  77,  61,  98, 196 ,
-    135, 106,  63, 197, 195,  86,  96, 203, 113, 101, 170, 247, 181, 113 ,
-    80, 250, 108,   7, 255, 237, 129, 226,  79, 107, 112, 166, 103, 241 ,
-    24, 223, 239, 120, 198,  58,  60,  82, 128,   3, 184,  66, 143, 224 ,
-    145, 224,  81, 206, 163,  45,  63,  90, 168, 114,  59,  33, 159,  95 ,
-    28, 139, 123,  98, 125, 196,  15,  70, 194, 253,  54,  14, 109, 226 ,
-    71,  17, 161,  93, 186,  87, 244, 138,  20,  52, 123, 251,  26,  36 ,
-    17,  46,  52, 231, 232,  76,  31, 221,  84,  37, 216, 165, 212, 106 ,
-    197, 242,  98,  43,  39, 175, 254, 145, 190,  84, 118, 222, 187, 136 ,
+      0,   8, 109, 220, 222, 241, 149, 107,  75, 248, 254, 140,  16,  66,
+     74,  21, 211,  47,  80, 242, 154,  27, 205, 128, 161,  89,  77,  36,
+     95, 110,  85,  48, 212, 140, 211, 249,  22,  79, 200,  50,  28, 188,
+     52, 140, 202, 120,  68, 145,  62,  70, 184, 190,  91, 197, 152, 224,
+    149, 104,  25, 178, 252, 182, 202, 182, 141, 197,   4,  81, 181, 242,
+    145,  42,  39, 227, 156, 198, 225, 193, 219,  93, 122, 175, 249,   0,
+    175, 143,  70, 239,  46, 246, 163,  53, 163, 109, 168, 135,   2, 235,
+     25,  92,  20, 145, 138,  77,  69, 166,  78, 176, 173, 212, 166, 113,
+     94, 161,  41,  50, 239,  49, 111, 164,  70,  60,   2,  37, 171,  75,
+    136, 156,  11,  56,  42, 146, 138, 229,  73, 146,  77,  61,  98, 196,
+    135, 106,  63, 197, 195,  86,  96, 203, 113, 101, 170, 247, 181, 113,
+     80, 250, 108,   7, 255, 237, 129, 226,  79, 107, 112, 166, 103, 241,
+     24, 223, 239, 120, 198,  58,  60,  82, 128,   3, 184,  66, 143, 224,
+    145, 224,  81, 206, 163,  45,  63,  90, 168, 114,  59,  33, 159,  95,
+    28,  139, 123,  98, 125, 196,  15,  70, 194, 253,  54,  14, 109, 226,
+     71,  17, 161,  93, 186,  87, 244, 138,  20,  52, 123, 251,  26,  36,
+     17,  46,  52, 231, 232,  76,  31, 221,  84,  37, 216, 165, 212, 106,
+    197, 242,  98,  43,  39, 175, 254, 145, 190,  84, 118, 222, 187, 136,
     120, 163, 236, 249
 };
 
-int	rndindex = 0;
-int	prndindex = 0;
-int	crndindex = 0;
 
 // Which one is deterministic?
 int P_Random (void)
@@ -182,49 +187,49 @@ void M_ClearBox (fixed_t *box)
     box[BOXBOTTOM] = box[BOXLEFT] = MAXINT;
 }
 
-void
-M_AddToBox
-( fixed_t*	box,
-  fixed_t	x,
-  fixed_t	y )
+void M_AddToBox (fixed_t *box, fixed_t x, fixed_t y)
 {
     if (x<box[BOXLEFT])
-	box[BOXLEFT] = x;
+    {
+        box[BOXLEFT] = x;
+    }
     else if (x>box[BOXRIGHT])
-	box[BOXRIGHT] = x;
+    {
+        box[BOXRIGHT] = x;
+    }
     if (y<box[BOXBOTTOM])
-	box[BOXBOTTOM] = y;
+    {
+        box[BOXBOTTOM] = y;
+    }
     else if (y>box[BOXTOP])
-	box[BOXTOP] = y;
+    {
+        box[BOXTOP] = y;
+    }
 }
 
 //
 // M_WriteFile
 //
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-boolean
-M_WriteFile
-( char const*	name,
-  void*		source,
-  int		length )
+boolean M_WriteFile (char const *name, void *source, int length)
 {
-    int		handle;
-    int		count;
-	
+    int handle;
+    int count;
+
     handle = open ( name, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
 
     if (handle == -1)
-	return false;
+    {
+        return false;
+    }
 
     count = write (handle, source, length);
     close (handle);
-	
+
     if (count < length)
-	return false;
-		
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -232,34 +237,41 @@ M_WriteFile
 //
 // M_ReadFile
 //
-int
-M_ReadFile
-( char const*	name,
-  byte**	buffer )
+int M_ReadFile (char const *name, byte **buffer)
 {
-    int	handle, count, length;
-    struct stat	fileinfo;
-    byte		*buf;
-	
+    int     handle;
+    int     count;
+    int     length;
+    byte   *buf;
+    struct  stat fileinfo;
+
     handle = open (name, O_RDONLY | O_BINARY, 0666);
+
     if (handle == -1)
-	I_Error (english_language ?
-             "Couldn't read file %s" :
-             "Невозможно прочитать файл %s", name);
+    {
+	    I_Error (english_language ?
+                 "Couldn't read file %s" :
+                 "Невозможно прочитать файл %s", name);
+    }
     if (fstat (handle,&fileinfo) == -1)
-	I_Error (english_language ?
-             "Couldn't read file %s" :
-             "Невозможно прочитать файл %s", name);
+    {
+	    I_Error (english_language ?
+                 "Couldn't read file %s" :
+                 "Невозможно прочитать файл %s", name);
+    }
+
     length = fileinfo.st_size;
     buf = Z_Malloc (length, PU_STATIC, NULL);
     count = read (handle, buf, length);
     close (handle);
-	
+
     if (count < length)
-	I_Error (english_language ?
-             "Couldn't read file %s" :
-             "Невозможно прочитать файл %s", name);
-		
+    {
+	    I_Error (english_language ?
+                 "Couldn't read file %s" :
+                 "Невозможно прочитать файл %s", name);
+    }
+
     *buffer = buf;
     return length;
 }
@@ -268,62 +280,62 @@ M_ReadFile
 //
 // DEFAULTS
 //
-int		usemouse;
-int		usejoystick;
+int         usemouse;
+int         usejoystick;
 
-extern int	key_right;
-extern int	key_left;
-extern int	key_up;
-extern int	key_down;
+extern int  key_right;
+extern int  key_left;
+extern int  key_up;
+extern int  key_down;
 
-extern int	key_strafeleft;
-extern int	key_straferight;
+extern int  key_strafeleft;
+extern int  key_straferight;
 
-extern int	key_fire;
-extern int	key_use;
-extern int	key_strafe;
-extern int	key_speed;
+extern int  key_fire;
+extern int  key_use;
+extern int  key_strafe;
+extern int  key_speed;
 
-extern int	key_mouselook;
-extern int	key_crosshair;
+extern int  key_mouselook;
+extern int  key_crosshair;
 
-extern int	mousebfire;
-extern int	mousebstrafe;
-extern int	mousebforward;
+extern int  mousebfire;
+extern int  mousebstrafe;
+extern int  mousebforward;
 
-extern int	joybfire;
-extern int	joybstrafe;
-extern int	joybuse;
-extern int	joybspeed;
+extern int  joybfire;
+extern int  joybstrafe;
+extern int  joybuse;
+extern int  joybspeed;
 
-extern int	viewwidth;
-extern int	viewheight;
+extern int  viewwidth;
+extern int  viewheight;
 
-extern int	mouseSensitivity;
-extern int	showMessages;
+extern int  mouseSensitivity;
+extern int  showMessages;
 
-extern int	detailLevel;
+extern int  detailLevel;
 
-extern int	showMessages;
+extern int  showMessages;
 
 // machine-independent sound params
-extern	int	numChannels;
+extern int  numChannels;
 
-extern int sfxVolume;
-extern int musicVolume;
-extern int snd_SBport, snd_SBirq, snd_SBdma;
-extern int snd_Mport;
+extern int  sfxVolume;
+extern int  musicVolume;
+extern int  snd_SBport, snd_SBirq, snd_SBdma;
+extern int  snd_Mport;
 
 extern char*	chat_macros[];
 
 
 typedef struct
 {
-    char*	name;
-    int*	location;
-    int		defaultvalue;
-    int		scantranslate;		// PC scan code hack
-    int		untranslated;		// lousy hack
+    char  *name;
+    int   *location;
+    int    defaultvalue;
+    int    scantranslate;       // PC scan code hack
+    int    untranslated;        // lousy hack
 } default_t;
 
 #define SC_UPARROW              0x48
@@ -343,9 +355,7 @@ typedef struct
 #define SC_DELETE               0x53
 #define SC_END                  0x4f
 #define SC_ENTER                0x1c
-
 #define SC_TILDE                0x29 // [JN] Mouselook keycode: `
-
 #define SC_KEY_A                0x1e
 #define SC_KEY_B                0x30
 #define SC_KEY_C                0x2e
@@ -427,28 +437,28 @@ default_t	defaults[] =
     {"snd_mport",               &snd_Mport,         0x330},
 
     // Control bindings & cie.
-    {"key_right",       &key_right,       SC_RIGHTARROW, 1},
-    {"key_left",        &key_left,        SC_LEFTARROW,  1},
-    {"key_up",          &key_up,          SC_KEY_W,      1},
-    {"key_down",        &key_down,        SC_KEY_S,      1},
-    {"key_strafeleft",  &key_strafeleft,  SC_KEY_A,      1},
-    {"key_straferight", &key_straferight, SC_KEY_D,      1},
+    {"key_right",               &key_right,         SC_RIGHTARROW,  1},
+    {"key_left",                &key_left,          SC_LEFTARROW,   1},
+    {"key_up",                  &key_up,            SC_KEY_W,       1},
+    {"key_down",                &key_down,          SC_KEY_S,       1},
+    {"key_strafeleft",          &key_strafeleft,    SC_KEY_A,       1},
+    {"key_straferight",         &key_straferight,   SC_KEY_D,       1},
 
-    {"key_fire",        &key_fire,        SC_RCTRL,      1},
-    {"key_use",         &key_use,         SC_KEY_E,      1},
-    {"key_strafe",      &key_strafe,      SC_RALT,       1},
-    {"key_speed",       &key_speed,       SC_RSHIFT,     1},
-    {"key_mouselook",   &key_mouselook,   SC_TILDE,      1},
-    {"key_crosshair",   &key_crosshair,   SC_KEY_X,      1},
+    {"key_fire",                &key_fire,          SC_RCTRL,       1},
+    {"key_use",                 &key_use,           SC_KEY_E,       1},
+    {"key_strafe",              &key_strafe,        SC_RALT,        1},
+    {"key_speed",               &key_speed,         SC_RSHIFT,      1},
+    {"key_mouselook",           &key_mouselook,     SC_TILDE,       1},
+    {"key_crosshair",           &key_crosshair,     SC_KEY_X,       1},
 
-    {"use_mouse",       &usemouse,                      1},
-    {"mouseb_fire",     &mousebfire,                    0},
-    {"mouseb_strafe",   &mousebstrafe,                  1},
-    {"mouseb_forward",  &mousebforward,                 2},
-    {"use_joystick",    &usejoystick,                   0},
-    {"joyb_fire",       &joybfire,                      0},
-    {"joyb_strafe",     &joybstrafe,                    1},
-    {"joyb_use",        &joybuse,                       3},
+    {"use_mouse",               &usemouse,              1},
+    {"mouseb_fire",             &mousebfire,            0},
+    {"mouseb_strafe",           &mousebstrafe,          1},
+    {"mouseb_forward",          &mousebforward,         2},
+    {"use_joystick",            &usejoystick,           0},
+    {"joyb_fire",               &joybfire,              0},
+    {"joyb_strafe",             &joybstrafe,            1},
+    {"joyb_use",                &joybuse,               3},
 
     // Controls
     {"joyb_speed",              &joybspeed,            29},
@@ -509,39 +519,43 @@ default_t	defaults[] =
     {"chatmacro9", (int *) &chat_macros[9], (int) HUSTR_CHATMACRO9 },
 };
 
-int	numdefaults;
-char*	defaultfile;
-
 
 //
 // M_SaveDefaults
 //
 void M_SaveDefaults (void)
 {
-    int		i;
-    int		v;
-    FILE*	f;
-	
+    int    i;
+    int    v;
+    FILE  *f;
+
     f = fopen (defaultfile, "w");
+
     if (!f)
-	return; // can't write the file, but don't complain
-		
+    {
+        return; // can't write the file, but don't complain
+    }
+
     for (i=0 ; i<numdefaults ; i++)
     {
         if (defaults[i].scantranslate)
+        {
             defaults[i].location = &defaults[i].untranslated;
+        }
 
-	if (defaults[i].defaultvalue > -0xffffff
-	    && defaults[i].defaultvalue < 0xffffff)
-	{
-	    v = *defaults[i].location;
-	    fprintf (f,"%s\t\t%i\n",defaults[i].name,v);
-	} else {
-	    fprintf (f,"%s\t\t\"%s\"\n",defaults[i].name,
+        if (defaults[i].defaultvalue > -0xffffff
+        &&  defaults[i].defaultvalue < 0xffffff)
+        {
+                v = *defaults[i].location;
+                fprintf (f,"%s\t\t%i\n",defaults[i].name,v);
+        }
+        else
+        {
+            fprintf (f,"%s\t\t\"%s\"\n",defaults[i].name,
 		     * (char **) (defaults[i].location));
-	}
+        }
     }
-	
+
     fclose (f);
 }
 
@@ -549,72 +563,87 @@ void M_SaveDefaults (void)
 //
 // M_LoadDefaults
 //
-extern byte	scantokey[128];
+
 
 void M_LoadDefaults (void)
 {
-    int		i;
-    int		len;
-    FILE*	f;
-    char	def[80];
-    char	strparm[100];
-    char*	newstring;
-    int		parm;
-    boolean	isstring;
-    
+    int     i;
+    int     len;
+    FILE   *f;
+    char    def[80];
+    char    strparm[100];
+    char   *newstring;
+    int     parm;
+    boolean isstring;
+
     // set everything to base values
     numdefaults = sizeof(defaults)/sizeof(defaults[0]);
+
     for (i=0 ; i<numdefaults ; i++)
-	*defaults[i].location = defaults[i].defaultvalue;
-    
+    {
+        *defaults[i].location = defaults[i].defaultvalue;
+    }
+
     // check for a custom default file
     i = M_CheckParm ("-config");
+
     if (i && i<myargc-1)
     {
-	defaultfile = myargv[i+1];
-	printf (english_language ?
-            "   default file: %s\n" :
-            "   конфигурационный файл: %s\n",defaultfile);
+        defaultfile = myargv[i+1];
+        printf (english_language ?
+                "   default file: %s\n" :
+                "   конфигурационный файл: %s\n", defaultfile);
     }
     else
-	defaultfile = basedefault;
-    
+    {
+        defaultfile = basedefault;
+    }
+
     // read the file in, overriding any set defaults
     f = fopen (defaultfile, "r");
+
     if (f)
     {
-	while (!feof(f))
-	{
-	    isstring = false;
-	    if (fscanf (f, "%79s %[^\n]\n", def, strparm) == 2)
-	    {
-		if (strparm[0] == '"')
-		{
-		    // get a string default
-		    isstring = true;
-		    len = strlen(strparm);
-		    newstring = (char *) malloc(len);
-		    strparm[len-1] = 0;
-		    strcpy(newstring, strparm+1);
-		}
-		else if (strparm[0] == '0' && strparm[1] == 'x')
-		    sscanf(strparm+2, "%x", &parm);
-		else
-		    sscanf(strparm, "%i", &parm);
-		for (i=0 ; i<numdefaults ; i++)
-		    if (!strcmp(def, defaults[i].name))
-		    {
-			if (!isstring)
-			    *defaults[i].location = parm;
-			else
-			    *defaults[i].location =
-				(int) newstring;
-			break;
-		    }
-	    }
-	}
-		
-	fclose (f);
+        while (!feof(f))
+        {
+            isstring = false;
+
+            if (fscanf (f, "%79s %[^\n]\n", def, strparm) == 2)
+            {
+                if (strparm[0] == '"')
+                {
+                    // get a string default
+                    isstring = true;
+                    len = strlen(strparm);
+                    newstring = (char *) malloc(len);
+                    strparm[len-1] = 0;
+                    strcpy(newstring, strparm+1);
+                }
+                else if (strparm[0] == '0' && strparm[1] == 'x')
+                {
+                    sscanf(strparm+2, "%x", &parm);
+                }
+                else
+                {
+                    sscanf(strparm, "%i", &parm);
+                }
+
+                for (i=0 ; i<numdefaults ; i++)
+                if (!strcmp(def, defaults[i].name))
+                {
+                    if (!isstring)
+                    {
+                        *defaults[i].location = parm;
+                    }
+                    else
+                    {
+                        *defaults[i].location = (int) newstring;
+                    }
+                    break;
+                }
+            }
+        }
+        fclose (f);
     }
 
     for (i = 0; i < numdefaults; i++)
@@ -633,56 +662,49 @@ void M_LoadDefaults (void)
 // SCREEN SHOTS
 //
 
-
 typedef struct
 {
-    char		manufacturer;
-    char		version;
-    char		encoding;
-    char		bits_per_pixel;
+    char            manufacturer;
+    char            version;
+    char            encoding;
+    char            bits_per_pixel;
 
-    unsigned short	xmin;
-    unsigned short	ymin;
-    unsigned short	xmax;
-    unsigned short	ymax;
-    
-    unsigned short	hres;
-    unsigned short	vres;
+    unsigned short  xmin;
+    unsigned short  ymin;
+    unsigned short  xmax;
+    unsigned short  ymax;
 
-    unsigned char	palette[48];
-    
-    char		reserved;
-    char		color_planes;
-    unsigned short	bytes_per_line;
-    unsigned short	palette_type;
-    
-    char		filler[58];
-    unsigned char	data;		// unbounded
+    unsigned short  hres;
+    unsigned short  vres;
+
+    unsigned char   palette[48];
+
+    char            reserved;
+    char            color_planes;
+    unsigned short  bytes_per_line;
+    unsigned short  palette_type;
+
+    char            filler[58];
+    unsigned char   data;		// unbounded
 } pcx_t;
 
 
 //
 // WritePCXfile
 //
-void
-WritePCXfile
-( char*		filename,
-  byte*		data,
-  int		width,
-  int		height,
-  byte*		palette )
+void WritePCXfile (char *filename, byte *data, int width, int height, byte *palette)
 {
-    int		i;
-    int		length;
-    pcx_t*	pcx;
-    byte*	pack;
-	
+    int     i;
+    int     length;
+    pcx_t  *pcx;
+    byte   *pack;
+
     pcx = Z_Malloc (width*height*2+1000, PU_STATIC, NULL);
 
-    pcx->manufacturer = 0x0a;		// PCX id
-    pcx->version = 5;			// 256 color
-    pcx->encoding = 1;			// uncompressed
-    pcx->bits_per_pixel = 8;		// 256 color
+    pcx->manufacturer = 0x0a;   // PCX id
+    pcx->version = 5;           // 256 color
+    pcx->encoding = 1;          // uncompressed
+    pcx->bits_per_pixel = 8;    // 256 color
     pcx->xmin = 0;
     pcx->ymin = 0;
     pcx->xmax = SHORT(width-1);
@@ -690,31 +712,32 @@ WritePCXfile
     pcx->hres = SHORT(width);
     pcx->vres = SHORT(height);
     memset (pcx->palette,0,sizeof(pcx->palette));
-    pcx->color_planes = 1;		// chunky image
+    pcx->color_planes = 1;      // chunky image
     pcx->bytes_per_line = SHORT(width);
-    pcx->palette_type = SHORT(2);	// not a grey scale
+    pcx->palette_type = SHORT(2);   // not a grey scale
     memset (pcx->filler,0,sizeof(pcx->filler));
-
 
     // pack the image
     pack = &pcx->data;
-	
+
     for (i=0 ; i<width*height ; i++)
     {
-	if ( (*data & 0xc0) != 0xc0)
-	    *pack++ = *data++;
-	else
-	{
-	    *pack++ = 0xc1;
-	    *pack++ = *data++;
-	}
+        if ((*data & 0xc0) != 0xc0)
+        {
+            *pack++ = *data++;
+        }
+        else
+        {
+            *pack++ = 0xc1;
+            *pack++ = *data++;
+        }
     }
-    
+
     // write the palette
     *pack++ = 0x0c;	// palette ID byte
     for (i=0 ; i<768 ; i++)
-	*pack++ = *palette++;
-    
+    *pack++ = *palette++;
+
     // write output file
     length = pack - (byte *)pcx;
     M_WriteFile (filename, pcx, length);
@@ -728,23 +751,25 @@ WritePCXfile
 //
 void M_ScreenShot (void)
 {
-    int		i;
-    byte*	linear;
-    char	lbmname[12];
-    
+    int    i;
+    byte  *linear;
+    char   lbmname[12];
+
     // munge planar buffer to linear
     linear = screens[2];
     I_ReadScreen (linear);
-    
+
     // find a file name to save it to
     strcpy(lbmname,"DOOM00.pcx");
-		
+
     for (i=0 ; i<=99 ; i++)
     {
-	lbmname[4] = i/10 + '0';
-	lbmname[5] = i%10 + '0';
-	if (access(lbmname,0) == -1)
-	    break;	// file doesn't exist
+        lbmname[4] = i/10 + '0';
+        lbmname[5] = i%10 + '0';
+        if (access(lbmname,0) == -1)
+        {
+            break;	// file doesn't exist
+        }
     }
 
     // [JN] Do not crash if limit is reached.
@@ -755,18 +780,14 @@ void M_ScreenShot (void)
         players[consoleplayer].message_system = english_language ?
                                "unable to write a screenshot" :
                                "ytdjpvj;yj cj[hfybnm crhbyijn";
-
         return;
     }
-    
+
     // save the pcx file
-    WritePCXfile (lbmname, linear,
-		  SCREENWIDTH, SCREENHEIGHT,
-		  W_CacheLumpName (usegamma <= 8 ? 
-                           "PALFIX" : "PLAYPAL",PU_CACHE));
+    WritePCXfile (lbmname, linear, SCREENWIDTH, SCREENHEIGHT,
+                  W_CacheLumpName (usegamma <= 8 ? "PALFIX" : "PLAYPAL",PU_CACHE));
 
     // [JN] Play sound instead of "screenshot" message.
     S_StartSound(NULL, sfx_itemup);
 }
-
 

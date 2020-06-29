@@ -38,6 +38,8 @@
   #define MAXPLATS           30
   #define MAXVISPLANES       128
   #define MAXVISSPRITES      128
+  #define MAXANIMS           32
+  #define MAX_ADJOINING_SECTORS 20
   #define SAVEGAMESIZE       180224
 #else                        // Doom+ limits
   #define MAXDRAWSEGS        2048
@@ -46,6 +48,8 @@
   #define MAXPLATS           7680
   #define MAXVISPLANES       1024
   #define MAXVISSPRITES      1024
+  #define MAXANIMS           32
+  #define MAX_ADJOINING_SECTORS 20
   #define SAVEGAMESIZE       524288
 #endif
 
