@@ -318,8 +318,8 @@ void D_Display (void)
     inhelpscreensstate = inhelpscreens;
     oldgamestate = wipegamestate = gamestate;
 
-    // draw pause pic
-    if (paused)
+    // [JN] Draw pause pic. Don't draw while actime game menu and help screens.
+    if (paused && !menuactive)
     {
         if (automapactive)
         {
