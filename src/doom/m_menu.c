@@ -62,6 +62,9 @@ extern patch_t*     hu_font_big_rus[HU_FONTSIZE2];
 extern boolean      message_dontfuckwithme;
 extern boolean      chat_on;    // in heads-up code
 
+extern float        mouse_acceleration;
+extern int          mouse_threshold;
+
 extern void R_ExecuteSetViewSize();
 
 //
@@ -411,6 +414,8 @@ void M_RD_Change_MouseLook(int choice);
 void M_RD_Change_InvertY(int choice);
 void M_RD_Change_Novert(int choice);
 void M_RD_Change_Sensitivity(int choice);
+void M_RD_Change_Acceleration(int choice);
+void M_RD_Change_Threshold(int choice);
 
 // Gameplay
 void M_RD_Choose_Gameplay_1(int choice);
@@ -1769,6 +1774,10 @@ enum
     rd_controls_empty1,
     rd_controls_sensitivity,
     rd_controls_empty2,
+    rd_controls_acceleration,
+    rd_controls_empty3,
+    rd_controls_threshold,
+    rd_controls_empty4,
     rd_controls_mouselook,
     rd_controls_novert,
     rd_controls_inverty,
@@ -1783,7 +1792,11 @@ menuitem_t RD_Controls_Menu[]=
 {
     {2, "always run:",        M_RD_Change_AlwaysRun,   'a'},
     {-1,"",0,'\0'},
-    {2, "mouse sensivity",    M_RD_Change_Sensitivity, 'm'},
+    {2, "sensivity",          M_RD_Change_Sensitivity, 'm'},
+    {-1,"",0,'\0'},
+    {2, "acceleration",       M_RD_Change_Acceleration,'a'},
+    {-1,"",0,'\0'},
+    {2, "acceleration threshold", M_RD_Change_Threshold, 't'},
     {-1,"",0,'\0'},
     {2, "mouse look:",        M_RD_Change_MouseLook,   'm'},
     {2, "invert y axis:",     M_RD_Change_InvertY,     'i'},
@@ -1810,8 +1823,12 @@ menuitem_t RD_Controls_Menu_Rus[]=
 {
     {2, "ht;bv gjcnjzyyjuj ,tuf:",   M_RD_Change_AlwaysRun,   'g'}, // Режим постоянного бега
     {-1,"",0,'\0'},                                                 //
-    {2, "crjhjcnm vsib",             M_RD_Change_Sensitivity, 'c'}, // Скорость мыши
+    {2, "crjhjcnm",                  M_RD_Change_Sensitivity, 'c'}, // Скорость
     {-1,"",0,'\0'},                                                 //
+    {2, "frctkthfwbz",               M_RD_Change_Acceleration,'f'}, // Акселерация
+    {-1,"",0,'\0'},
+    {2, "gjhju frctkthfwbb",         M_RD_Change_Threshold,   'g'}, // Порог акселерации
+    {-1,"",0,'\0'},
     {2, "j,pjh vsim.:",              M_RD_Change_MouseLook,   'j'}, // Обзор мышью
     {2, "dthnbrfkmyfz bydthcbz:",    M_RD_Change_InvertY,     'd'}, // Вертикальная инверсия
     {2, "dthnbrfkmyjt gthtvtotybt:", M_RD_Change_Novert,      'd'}, // Вертикальное перемещение
@@ -3938,18 +3955,18 @@ void M_RD_Draw_Controls(void)
         dp_translation = NULL;
 
         // Mouse look
-        M_WriteTextSmall_ENG(119 + wide_delta, 85, mlook ? "on" : "off");
+        M_WriteTextSmall_ENG(119 + wide_delta, 125, mlook ? "on" : "off");
 
         // Invert Y axis
         if (!mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(130 + wide_delta, 95, mouse_y_invert ? "on" : "off");
+        M_WriteTextSmall_ENG(130 + wide_delta, 135, mouse_y_invert ? "on" : "off");
         dp_translation = NULL;
 
         // Vertical movement
         if (mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(171 + wide_delta, 105, !novert ? "on" : "off");
+        M_WriteTextSmall_ENG(171 + wide_delta, 145, !novert ? "on" : "off");
         dp_translation = NULL;
     }
     else
@@ -3974,26 +3991,38 @@ void M_RD_Draw_Controls(void)
         dp_translation = NULL;
 
         // Обзор мышью
-        M_WriteTextSmall_RUS(135 + wide_delta, 85, mlook ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(135 + wide_delta, 125, mlook ? "drk" : "dsrk");
 
         // Вертикальная инверсия
         if (!mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(207 + wide_delta, 95, mouse_y_invert ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(207 + wide_delta, 135, mouse_y_invert ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Вертикальное перемещение
         if (mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(235 + wide_delta, 105, !novert ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(235 + wide_delta, 145, !novert ? "drk" : "dsrk");
         dp_translation = NULL;
     }
 
     // Mouse sensivity slider
     M_DrawThermo_Small(35 + wide_delta, 74, 17, mouseSensitivity);
-    // Numerical representation of mouse sensivity
+    // Numerical representation
     M_snprintf(num, 4, "%3d", mouseSensitivity);
     M_WriteTextSmall_ENG(189 + wide_delta, 75, num);
+
+    // Acceleration slider
+    M_DrawThermo_Small(35 + wide_delta, 94, 17, mouse_acceleration * 4 - 4);
+    // Numerical representation
+    M_snprintf(num, 4, "%f", mouse_acceleration);
+    M_WriteTextSmall_ENG(189 + wide_delta, 95, num);
+
+    // Acceleration threshold slider
+    M_DrawThermo_Small(35 + wide_delta, 114, 17, mouse_threshold / 2);
+    // Numerical representation
+    M_snprintf(num, 4, "%3d", mouse_threshold);
+    M_WriteTextSmall_ENG(189 + wide_delta, 115, num);
 }
 
 void M_RD_Change_AlwaysRun(int choice)
@@ -4044,6 +4073,39 @@ void M_RD_Change_Sensitivity(int choice)
         break;
     }
 }
+
+void M_RD_Change_Acceleration(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        if (mouse_acceleration > 1.0)
+            mouse_acceleration -= 0.1;
+        break;
+
+        case 1:
+        if (mouse_acceleration < 5.0)
+            mouse_acceleration += 0.1;
+        break;
+    }
+}
+
+void M_RD_Change_Threshold(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        if (mouse_threshold > 0)
+            mouse_threshold--;
+        break;
+
+        case 1:
+        if (mouse_threshold < 32)
+            mouse_threshold++;
+        break;
+    }
+}
+
 
 // -----------------------------------------------------------------------------
 // Gameplay features
@@ -4888,6 +4950,8 @@ void M_RD_BackToDefaultsResponse(int key)
     joybspeed        = 29;
     mlook            = 0;  players[consoleplayer].centering = true;
     mouseSensitivity = 5;
+    mouse_acceleration = 2.0;
+    mouse_threshold  = 10;
     novert           = 1;
 
     // Gameplay: Graphical
