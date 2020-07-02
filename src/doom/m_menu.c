@@ -4257,7 +4257,10 @@ void M_RD_Draw_Controls(void)
     M_DrawThermo_Small(35 + wide_delta, 114, 17, mouse_threshold / 2);
     // Numerical representation
     M_snprintf(num, 4, "%3d", mouse_threshold);
+    if (mouse_acceleration < 1.1)
+    dp_translation = cr[CR_DARKRED];
     M_WriteTextSmall_ENG(189 + wide_delta, 115, num);
+    dp_translation = NULL;
 }
 
 void M_RD_Change_AlwaysRun(int choice)
@@ -4314,7 +4317,7 @@ void M_RD_Change_Acceleration(int choice)
     switch(choice)
     {
         case 0:
-        if (mouse_acceleration > 1.0)
+        if (mouse_acceleration > 1.1)
             mouse_acceleration -= 0.1;
         break;
 
@@ -4451,7 +4454,7 @@ void M_RD_Draw_Gameplay_1(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GOLD];
+        dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >"); 
         M_WriteTextSmall_ENG(35 + wide_delta, 155, "< last page"); 
         M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 1/4");
@@ -4520,7 +4523,7 @@ void M_RD_Draw_Gameplay_1(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GOLD];
+        dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS); 
         M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS); 
         M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 1*4");
@@ -4590,7 +4593,7 @@ void M_RD_Draw_Gameplay_2(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GOLD];
+        dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >");
         M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page");
         M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 2/4");
@@ -4650,7 +4653,7 @@ void M_RD_Draw_Gameplay_2(void)
         dp_translation = NULL;
 
         // Footer
-        dp_translation = cr[CR_GOLD];
+        dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS);
         M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 2*4");
@@ -4730,7 +4733,7 @@ void M_RD_Draw_Gameplay_3(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GOLD];
+        dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >");
         M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page");
         M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 3/4");
@@ -4802,7 +4805,7 @@ void M_RD_Draw_Gameplay_3(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GOLD];
+        dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS);
         M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 3*4");
@@ -4865,7 +4868,7 @@ void M_RD_Draw_Gameplay_4(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GOLD];
+        dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(35 + wide_delta, 145, "first page >");
         M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page");
         M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 4/4");
@@ -4920,7 +4923,7 @@ void M_RD_Draw_Gameplay_4(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GOLD];
+        dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS);
         M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 4*4");
