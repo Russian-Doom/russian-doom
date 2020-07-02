@@ -248,6 +248,41 @@ int snd_monomode = 0;
 // Display
 int screen_wiping = 1;
 
+// Selective game
+int selective_skill = 2;
+int selective_episode = 1;
+int selective_map = 1;
+
+int selective_health = 100;
+int selective_armor = 0;
+int selective_armortype = 1;
+
+int selective_wp_chainsaw = 0;
+int selective_wp_shotgun = 0;
+int selective_wp_supershotgun = 0;
+int selective_wp_chaingun = 0;
+int selective_wp_missile = 0;
+int selective_wp_plasma = 0;
+int selective_wp_bfg = 0;
+
+int selective_backpack = 0;
+
+int selective_ammo_0 = 50;  // bullets
+int selective_ammo_1 = 0;   // shells
+int selective_ammo_2 = 0;   // cells
+int selective_ammo_3 = 0;   // rockets
+
+int selective_key_0 = 0;    // blue keycard
+int selective_key_1 = 0;    // yellow keycard
+int selective_key_2 = 0;    // red keycard
+int selective_key_3 = 0;    // blue skull key
+int selective_key_4 = 0;    // yellow skull key
+int selective_key_5 = 0;    // red skull key
+
+int selective_fast = 0;
+int selective_respawn = 0;
+
+
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
@@ -2127,6 +2162,116 @@ void G_DoNewGame (void)
     G_InitNew (d_skill, d_episode, d_map); 
     gameaction = ga_nothing; 
     flag667 = false;
+} 
+
+
+//
+// G_DoSelectiveGame
+// [JN] Start new game with given parameters in "Level select" menu
+//
+void G_DoSelectiveGame (int choice) 
+{
+    int i;
+    player_t *plr = &players[consoleplayer];
+    // [crispy] make sure "fast" parameters are really only applied once
+    static boolean fast_applied;
+
+    demoplayback = false; 
+    netdemo = false;
+    netgame = false;
+    deathmatch = false;
+    playeringame[1] = playeringame[2] = playeringame[3] = 0;
+    consoleplayer = 0;
+    gameaction = ga_nothing; 
+    flag667 = false;
+
+    // Close "Level select" menu
+    M_ClearMenus ();
+
+    G_InitNew (selective_skill,
+               // Set appropriate episode
+               gamemode == shareware  ? 1 : 
+               gamemode == commercial ? 0 : 
+               selective_episode,
+               // Set appropriate map
+               gamemode == pressbeta ? 1 :
+               selective_map); 
+
+    // Do not modify respawnparm parameter
+    respawnmonsters = selective_respawn;
+
+    // Do not modify fastparm parameter
+    // [crispy] make sure "fast" parameters are really only applied once
+    if ((selective_fast || gameskill == sk_nightmare || gameskill == sk_ultranm) && !fast_applied)
+    {
+        for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
+	    // [crispy] Fix infinite loop caused by Demon speed bug
+	    if (states[i].tics > 1)
+	    {
+	    states[i].tics >>= 1;
+	    }
+
+        mobjinfo[MT_BRUISERSHOT].speed = 20*FRACUNIT;
+        mobjinfo[MT_HEADSHOT].speed = 20*FRACUNIT;
+        mobjinfo[MT_TROOPSHOT].speed = 20*FRACUNIT;
+
+        fast_applied = true;
+    }
+    else if (!selective_fast && gameskill != sk_nightmare && gameskill != sk_ultranm && fast_applied)
+    {
+        for (i=S_SARG_RUN1 ; i<=S_SARG_PAIN2 ; i++)
+        states[i].tics <<= 1;
+        mobjinfo[MT_BRUISERSHOT].speed = 15*FRACUNIT;
+        mobjinfo[MT_HEADSHOT].speed = 10*FRACUNIT;
+        mobjinfo[MT_TROOPSHOT].speed = 10*FRACUNIT;
+        fast_applied = false;
+    }
+
+    // Health
+    plr->health = selective_health;
+
+    // Armor
+    plr->armorpoints = selective_armor;
+    // Armor type. Set to 0 if no armor given.
+    plr->armortype = selective_armor == 0 ? 0 : selective_armortype;
+
+    // Weapons
+    plr->weaponowned[wp_chainsaw] = selective_wp_chainsaw;
+    plr->weaponowned[wp_shotgun] = selective_wp_shotgun;
+    // Super shotgun not available in Doom 1 and Jaguar
+    plr->weaponowned[wp_supershotgun] = (logical_gamemission == doom || 
+                                         gamemission == jaguar) ? 
+                                         0 : selective_wp_supershotgun;
+    plr->weaponowned[wp_chaingun] = selective_wp_chaingun;
+    plr->weaponowned[wp_missile] = selective_wp_missile;
+    // Plasma gun not available in shareware
+    plr->weaponowned[wp_plasma] = gamemode == shareware ? 0 : selective_wp_plasma;
+    // BFG9000 not available in shareware
+    plr->weaponowned[wp_bfg] = gamemode == shareware ? 0 : selective_wp_bfg;
+
+    // Backpack
+    plr->backpack = selective_backpack;
+    if (selective_backpack)
+    {
+        plr->maxammo[0] *= 2;
+        plr->maxammo[1] *= 2;
+        plr->maxammo[2] *= 2;
+        plr->maxammo[3] *= 2;
+    }
+
+    // Ammo
+    plr->ammo[0] = selective_ammo_0; // bullets
+    plr->ammo[1] = selective_ammo_1; // shells
+    plr->ammo[2] = selective_ammo_2; // cells
+    plr->ammo[3] = selective_ammo_3; // rockets
+
+    // Keys
+    plr->cards[0] = selective_key_0; // blue keycard
+    plr->cards[1] = selective_key_1; // yellow keycard
+    plr->cards[2] = selective_key_2; // red keycard
+    plr->cards[3] = selective_key_3; // blue skull key
+    plr->cards[4] = selective_key_4; // yellow skull key
+    plr->cards[5] = selective_key_5; // red skull key
 } 
 
 
