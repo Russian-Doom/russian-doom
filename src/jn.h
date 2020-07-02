@@ -92,6 +92,42 @@ extern int mlook;
 extern int novert;
 extern int mouse_y_invert;
 
+// -----------------------------------------------------------------------------
+// Selective game
+// -----------------------------------------------------------------------------
+
+extern int selective_skill;
+extern int selective_episode;
+extern int selective_map;
+
+extern int selective_health;
+extern int selective_armor;
+extern int selective_armortype;
+
+extern int selective_wp_chainsaw;
+extern int selective_wp_shotgun;
+extern int selective_wp_supershotgun;
+extern int selective_wp_chaingun;
+extern int selective_wp_missile;
+extern int selective_wp_plasma;
+extern int selective_wp_bfg;
+
+extern int selective_backpack;
+
+extern int selective_ammo_0;  // bullets
+extern int selective_ammo_1;   // shells
+extern int selective_ammo_2;   // cells
+extern int selective_ammo_3;   // rockets
+
+extern int selective_key_0;
+extern int selective_key_1;
+extern int selective_key_2;
+extern int selective_key_3;
+extern int selective_key_4;
+extern int selective_key_5;
+
+extern int selective_fast;
+extern int selective_respawn;
 
 // -----------------------------------------------------------------------------
 // Gameplay feautures
