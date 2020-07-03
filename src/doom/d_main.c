@@ -2043,21 +2043,22 @@ static void D_Endoom(void)
         return;
     }
 
-	// [JN] Задаём различные экраные ENDOOM для Shareware и
-	// Registered, чтобы избежать дубликации архивов с ресурсами.
+	// [JN] Use original, replacable ENDOOM screen for English language.
+    // Use various unreplacable translated screens for Russian language.
 
-    if (gamemode == shareware && !english_language)
-    {   // [JN] DOOM Shareware
-        endoom = W_CacheLumpName(DEH_String("ENDOOMS"), PU_STATIC);
-    }
-    else if (gamemode == registered && !english_language)
-    {   // [JN] DOOM 1 Registered 
-        endoom = W_CacheLumpName(DEH_String("ENDOOMR"), PU_STATIC);
+    if (english_language)
+    {
+        endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
     }
     else
     {
-        // [JN] The Ultimate DOOM / DOOM 2 / Final DOOM
-        endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
+        endoom = W_CacheLumpName(DEH_String(gamemode == shareware ? "ENDMRDS" :
+                                           gamemode == registered ? "ENDMRDR" :
+                                               gamemode == retail ? "ENDMRDU" :
+                                  logical_gamemission == pack_tnt ? "ENDMRDT" :
+                                 logical_gamemission == pack_plut ? "ENDMRDP" :
+                                                                    "ENDMRD2"),
+                                                                    PU_STATIC);
     }
 
     I_Endoom(endoom);
