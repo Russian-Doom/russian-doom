@@ -331,8 +331,12 @@ int extra_player_faces = 1;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
 int fast_quickload = 1;
-int no_internal_demos = 0;
 int flip_levels = 0;
+
+// Gameplay: Demos
+int demobar = 0;
+int no_internal_demos = 0;
+
 
  
 int G_CmdChecksum (ticcmd_t* cmd) 
@@ -2471,7 +2475,7 @@ G_InitNew
 
     // [crispy] CPhipps - total time for all completed levels
     totalleveltimes = 0;
-
+    defdemotics = 0;
     viewactive = true;
 
     artifactcount = 0;  // [JN] Press Beta: initialy 0 artifacts
@@ -2539,6 +2543,8 @@ G_InitNew
 // 
 #define DEMOMARKER  0x80
 
+// [crispy] demo progress bar and timer widget
+int defdemotics = 0, deftotaldemotics;
 
 void G_ReadDemoTiccmd (ticcmd_t* cmd) 
 { 
@@ -2565,6 +2571,11 @@ void G_ReadDemoTiccmd (ticcmd_t* cmd)
     }
 
     cmd->buttons = (unsigned char)*demo_p++; 
+
+    // [crispy] increase demo tics counter
+    // applies to both recording and playback,
+    // because G_WriteDemoTiccmd() calls G_ReadDemoTiccmd() once
+    defdemotics++;
 } 
 
 // Increase the size of the demo buffer to allow unlimited demos
@@ -2802,11 +2813,21 @@ void G_DoPlayDemo (void)
     skill_t skill;
     int     i, lumpnum, episode, map;
     int     demoversion;
+    int lumplength; // [crispy]
 
     lumpnum = W_GetNumForName(defdemoname);
     gameaction = ga_nothing;
     demobuffer = W_CacheLumpNum(lumpnum, PU_STATIC);
     demo_p = demobuffer;
+
+    // [crispy] ignore empty demo lumps
+    lumplength = W_LumpLength(lumpnum);
+    if (lumplength < 0xd)
+    {
+        demoplayback = true;
+        G_CheckDemoStatus();
+        return;
+    }
 
     demoversion = *demo_p++;
 
@@ -2862,6 +2883,28 @@ void G_DoPlayDemo (void)
 
     usergame = false; 
     demoplayback = true; 
+    
+    // [crispy] demo progress bar
+    {
+        int i, numplayersingame = 0;
+        byte *demo_ptr = demo_p;
+
+        for (i = 0; i < MAXPLAYERS; i++)
+        {
+            if (playeringame[i])
+            {
+                numplayersingame++;
+            }
+        }
+
+        deftotaldemotics = defdemotics = 0;
+
+        while (*demo_ptr != DEMOMARKER && (demo_ptr - demobuffer) < lumplength)
+        {
+            demo_ptr += numplayersingame * (longtics ? 5 : 4);
+            deftotaldemotics++;
+        }
+    }
 } 
 
 

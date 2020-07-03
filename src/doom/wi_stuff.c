@@ -47,10 +47,12 @@
 // [JN] Jaguar: prototypes
 void WI_drawStatsJaguar(void);
 void WI_updateStatsJaguar(void);
+
 extern void M_WriteTextBig_ENG();
 extern void M_WriteTextBig_RUS();
 extern void M_WriteTextBigCentered_ENG();
 extern void M_WriteTextBigCentered_RUS();
+extern void HU_DemoProgressBar(void);
 
 //
 // Data needed to add patches to full screen intermission pics.
@@ -991,6 +993,12 @@ void WI_drawShowNextLoc(void)
     // draws which level you are entering..
     if ( (gamemode != commercial) || wbs->next != 30)
     WI_drawEL();  
+
+    // [crispy] demo progress bar
+    if (demoplayback && demobar)
+    {
+        HU_DemoProgressBar();
+    }
 }
 
 
@@ -1714,6 +1722,12 @@ void WI_drawStats(void)
                             SP_TIMEY + 16, ttime, false);
             }
         }
+    }
+
+    // [crispy] demo progress bar
+    if (demoplayback && demobar)
+    {
+        HU_DemoProgressBar();
     }
 }
 

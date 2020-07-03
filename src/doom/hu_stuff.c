@@ -873,6 +873,15 @@ void HU_Start(void)
     headsupactive = true;
 }
 
+// [crispy] print a bar indicating demo progress at the bottom of the screen
+void HU_DemoProgressBar (void)
+{
+    const int i = screenwidth * defdemotics / deftotaldemotics;
+
+    V_DrawHorizLine(0, SCREENHEIGHT - 2, i, 0); // [crispy] black
+    V_DrawHorizLine(0, SCREENHEIGHT - 1, i, 4); // [crispy] white
+}
+
 
 void HU_Drawer(void)
 {
@@ -982,6 +991,12 @@ void HU_Drawer(void)
         }
 
         dp_translation = NULL;
+    }
+
+    // [crispy] demo progress bar
+    if (demoplayback && demobar)
+    {
+        HU_DemoProgressBar();
     }
 }
 

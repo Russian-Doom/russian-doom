@@ -458,6 +458,7 @@ void M_RD_Change_ExtraPlayerFaces(int choice);
 void M_RD_Change_LostSoulsQty(int choice);
 void M_RD_Change_LostSoulsAgr(int choice);
 void M_RD_Change_FastQSaveLoad(int choice);
+void M_RD_Change_DemoBar(int choice);
 void M_RD_Change_NoInternalDemos(int choice);
 
 // Level select
@@ -1946,9 +1947,9 @@ enum
     rd_gameplay_4_unlimited_lost_souls,
     rd_gameplay_4_agressive_lost_souls,
     rd_gameplay_4_fast_quickload,
-    rd_gameplay_4_no_internal_demos,
     rd_gameplay_4_empty1,
-    rd_gameplay_4_empty2,
+    rd_gameplay_4_demobar,
+    rd_gameplay_4_no_internal_demos,
     rd_gameplay_4_empty3,
     rd_gameplay_4_first_page,
     rd_gameplay_4_prev_page,
@@ -2048,9 +2049,9 @@ menuitem_t RD_Gameplay_Menu_4[]=
     {2,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
     {2,"More agressive lost souls:",          M_RD_Change_LostSoulsAgr,     'm'},
     {2,"Don't prompt for q. saving/loading:", M_RD_Change_FastQSaveLoad,    'd'},
-    {2,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'd'},
     {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
+    {2,"Show progress bar:",                  M_RD_Change_DemoBar,          's'},
+    {2,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'p'},
     {-1,"",0,'\0'},
     {1,"", /* First page >   */               M_RD_Choose_Gameplay_1,       'n'},
     {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_3,       'p'},
@@ -2154,15 +2155,15 @@ menu_t  RD_Gameplay_Def_3_Rus =
 
 menuitem_t RD_Gameplay_Menu_4_Rus[]=
 {
-    {2,"ecnhfyznm jib,rb jhbu> ehjdytq:",   M_RD_Change_FixMapErrors,       'b'},   // Устранять ошибки ориг. уровней
+    {2,"ecnhfyznm jib,rb jhbu> ehjdytq:",   M_RD_Change_FixMapErrors,       'e'},   // Устранять ошибки ориг. уровней
     {2,"pthrfkmyjt jnhf;tybt ehjdytq:",     M_RD_Change_FlipLevels,         'p'},   // Зеркальное отражение уровней
-    {2,"Ljgjkybntkmyst kbwf buhjrf:",       M_RD_Change_ExtraPlayerFaces,   'a'},   // Дополнительные лица игрока
-    {2,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       'a'},   // Элементаль без ограничения душ
-    {2,"gjdsityyfz fuhtccbdyjcnm lei:",     M_RD_Change_LostSoulsAgr,       'a'},   // Повышенная агрессивность душ
-    {2,"jnrk.xbnm pfghjc ,> pfuheprb:",     M_RD_Change_FastQSaveLoad,      'a'},   // Отключить запрос б. загрузки
-    {2,"Ghjbuhsdfnm ltvjpfgbcb:",           M_RD_Change_NoInternalDemos,    'a'},   // Проигрывать демозаписи
+    {2,"Ljgjkybntkmyst kbwf buhjrf:",       M_RD_Change_ExtraPlayerFaces,   'l'},   // Дополнительные лица игрока
+    {2,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       '\''},   // Элементаль без ограничения душ
+    {2,"gjdsityyfz fuhtccbdyjcnm lei:",     M_RD_Change_LostSoulsAgr,       'g'},   // Повышенная агрессивность душ
+    {2,"jnrk.xbnm pfghjc ,> pfuheprb:",     M_RD_Change_FastQSaveLoad,      'j'},   // Отключить запрос б. загрузки
     {-1,"",0,'\0'},                                                                 //
-    {-1,"",0,'\0'},                                                                 //
+    {2,"Gjkjcf ghjuhtccf:",                 M_RD_Change_DemoBar,            'g'},   // Полоса прогресса
+    {2,"Ghjbuhsdfnm ltvjpfgbcb:",           M_RD_Change_NoInternalDemos,    'g'},   // Проигрывать демозаписи
     {-1,"",0,'\0'},                                                                 //
     {1,"",                                  M_RD_Choose_Gameplay_1,         'n'},   // Далее >
     {1,"",                                  M_RD_Choose_Gameplay_3,         'p'},   // < Назад
@@ -4860,9 +4861,21 @@ void M_RD_Draw_Gameplay_4(void)
         M_WriteTextSmall_ENG(281 + wide_delta, 95, fast_quickload ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
+        //
+        // Demos
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35 + wide_delta, 105, "Demos");
+        dp_translation = NULL;
+
+        // Show progress bar 
+        dp_translation = demobar ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(169 + wide_delta, 115, demobar ? RD_ON : RD_OFF);
+        dp_translation = NULL;
+
         // Play internal demos
         dp_translation = no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN];
-        M_WriteTextSmall_ENG(183 + wide_delta, 105, no_internal_demos ? RD_OFF : RD_ON);
+        M_WriteTextSmall_ENG(183 + wide_delta, 125, no_internal_demos ? RD_OFF : RD_ON);
         dp_translation = NULL;
 
         //
@@ -4915,9 +4928,21 @@ void M_RD_Draw_Gameplay_4(void)
         M_WriteTextSmall_RUS(253 + wide_delta, 95, fast_quickload ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
+        //
+        // Демозаписи
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35 + wide_delta, 105, "Ltvjpfgbcb");
+        dp_translation = NULL;
+
+        // Проигрывать демозаписи
+        dp_translation = demobar ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(167 + wide_delta, 115, demobar ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
+
         // Проигрывать демозаписи
         dp_translation = no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN];
-        M_WriteTextSmall_RUS(219 + wide_delta, 105, no_internal_demos ? RD_OFF_RUS : RD_ON_RUS);
+        M_WriteTextSmall_RUS(219 + wide_delta, 125, no_internal_demos ? RD_OFF_RUS : RD_ON_RUS);
         dp_translation = NULL;
 
         //
@@ -5124,6 +5149,17 @@ void M_RD_Change_LostSoulsAgr(int choice)
 void M_RD_Change_FastQSaveLoad(int choice)
 {
     fast_quickload ^= 1;
+}
+
+void M_RD_Change_DemoBar(int choice)
+{
+    demobar ^= 1;
+
+    // Refresh status bar
+    if (gamestate == GS_LEVEL)
+    {
+        ST_doRefresh();
+    }
 }
 
 void M_RD_Change_NoInternalDemos(int choice)
@@ -6079,7 +6115,10 @@ void M_RD_BackToDefaultsResponse(int key)
     unlimited_lost_souls = 1;
     agressive_lost_souls = 0;
     fast_quickload       = 1;
-    no_internal_demos    = 0;
+
+    // Gameplay: Demos
+    demobar           = 0;
+    no_internal_demos = 0;
 
     // Do a full graphics reinitialization
     I_InitGraphics();

@@ -555,6 +555,7 @@ void D_BindVariables(void)
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
     M_BindIntVariable("fast_quickload",         &fast_quickload);
+    M_BindIntVariable("demobar",                &demobar);
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
     // Multiplayer chat macros

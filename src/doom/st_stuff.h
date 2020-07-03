@@ -40,6 +40,10 @@
 #define ST_HEIGHT_JAG   40
 #define ST_Y_JAG        (ORIGHEIGHT - ST_HEIGHT_JAG)
 
+// [crispy] Demo Timer widget
+extern void ST_DrawDemoTimer (const int time);
+extern int defdemotics, deftotaldemotics;
+
 
 //
 // STATUS BAR
@@ -60,10 +64,10 @@ void ST_Start (void);
 // Called by startup code.
 void ST_Init (void);
 
-// [JN] Prototypes for am_map.c
+// [JN] Called in options menu
 void ST_refreshBackground (void);
 void ST_drawWidgets (boolean refresh);
-
+void ST_doRefresh (void);
 
 
 // States for status bar code.
