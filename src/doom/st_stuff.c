@@ -2189,6 +2189,40 @@ void ST_initData(void)
 }
 
 
+// [crispy] Demo Timer widget
+void ST_DrawDemoTimer (const int time)
+{
+    extern patch_t *hu_font_gray[32]; // [JN] Use small gray STCFG font.
+	char buffer[16];
+	const int mins = time / (60 * TICRATE);
+	const float secs = (float)(time % (60 * TICRATE)) / TICRATE;
+	const int w = hu_font_gray[0]->width;
+	int n, x;
+
+	n = M_snprintf(buffer, sizeof(buffer), "%02i:%05.02f", mins, secs);
+
+	x = (viewwindowx >> hires) + (scaledviewwidth >> hires);
+
+	while (n-- > 0)
+	{
+		const int c = buffer[n] - '0';
+
+		x -= w;
+
+		if (c >= 0 && c <= 10)
+		{
+            // [JN] Shift characters by +15 to use numbers instead of symbols.
+			V_DrawShadowedPatchDoom(x, (viewwindowy >> hires) + 1, hu_font_gray[c+15]);
+		}
+	}
+
+    // [JN] Draw colon between seconds and miliseconds separately.
+    V_DrawShadowedPatchDoom(x + 20, (viewwindowy >> hires) + 1, 
+                            W_CacheLumpName(DEH_String("STCFG058"), PU_CACHE));
+
+}
+
+
 void ST_createWidgets(void)
 {
     static int widget_delta; // [JN] For different widget offset between wide modes.

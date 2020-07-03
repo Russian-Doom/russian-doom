@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2019 Julian Nechaevsky
+// Copyright(C) 2016-2020 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -187,6 +187,11 @@ static void SensibleDefaults(void)
     unlimited_lost_souls = 1;
     agressive_lost_souls = 0;
     fast_quickload = 1;
+
+    // Gameplay: Demos
+    demotimer = 0;
+    demotimerdir = 0;
+    demobar = 0;
     no_internal_demos = 0;
 }
 

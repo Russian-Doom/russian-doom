@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2019 Julian Nechaevsky
+// Copyright(C) 2016-2020 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -82,6 +82,11 @@ extern int extra_player_faces;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
 extern int fast_quickload;
+
+// Gameplay: Demos
+extern int demotimer;
+extern int demotimerdir;
+extern int demobar;
 extern int no_internal_demos;
 
 // Прицел

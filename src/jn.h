@@ -176,6 +176,11 @@ extern int extra_player_faces;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
 extern int fast_quickload;
+
+// Gameplay: Demos
+extern int demotimer;
+extern int demotimerdir;
+extern int demobar;
 extern int no_internal_demos;
 
 

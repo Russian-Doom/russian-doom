@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2019 Julian Nechaevsky
+// Copyright(C) 2016-2020 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -23,6 +23,5 @@
 void ConfigSound(void);
 void BindSoundVariables(void);
 
-static char *gus_patches_path;
 
 #endif /* #ifndef SETUP_SOUND_H */

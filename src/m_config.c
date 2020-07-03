@@ -1704,6 +1704,11 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(agressive_lost_souls),
     CONFIG_VARIABLE_INT(fast_quickload),
+
+    // Gameplay: Demos
+    CONFIG_VARIABLE_INT(demotimer),
+    CONFIG_VARIABLE_INT(demotimerdir),
+    CONFIG_VARIABLE_INT(demobar),
     CONFIG_VARIABLE_INT(no_internal_demos),
 };
 

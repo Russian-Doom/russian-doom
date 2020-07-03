@@ -457,7 +457,8 @@ void M_RD_Change_FlipLevels(int choice);
 void M_RD_Change_ExtraPlayerFaces(int choice);
 void M_RD_Change_LostSoulsQty(int choice);
 void M_RD_Change_LostSoulsAgr(int choice);
-void M_RD_Change_FastQSaveLoad(int choice);
+void M_RD_Change_DemoTimer(int choice);
+void M_RD_Change_DemoTimerDir(int choice);
 void M_RD_Change_DemoBar(int choice);
 void M_RD_Change_NoInternalDemos(int choice);
 
@@ -1946,11 +1947,11 @@ enum
     rd_gameplay_4_extra_player_faces,
     rd_gameplay_4_unlimited_lost_souls,
     rd_gameplay_4_agressive_lost_souls,
-    rd_gameplay_4_fast_quickload,
     rd_gameplay_4_empty1,
+    rd_gameplay_4_demotimer,
+    rd_gameplay_4_demotimerdir,
     rd_gameplay_4_demobar,
     rd_gameplay_4_no_internal_demos,
-    rd_gameplay_4_empty3,
     rd_gameplay_4_first_page,
     rd_gameplay_4_prev_page,
     rd_gameplay_4_end
@@ -2048,8 +2049,9 @@ menuitem_t RD_Gameplay_Menu_4[]=
     {2,"Extra player faces on the HUD:",      M_RD_Change_ExtraPlayerFaces, 'e'},
     {2,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
     {2,"More agressive lost souls:",          M_RD_Change_LostSoulsAgr,     'm'},
-    {2,"Don't prompt for q. saving/loading:", M_RD_Change_FastQSaveLoad,    'd'},
     {-1,"",0,'\0'},
+    {2,"Show demo timer:",                    M_RD_Change_DemoTimer,        's'},
+    {2,"timer direction:",                    M_RD_Change_DemoTimerDir,     't'},
     {2,"Show progress bar:",                  M_RD_Change_DemoBar,          's'},
     {2,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'p'},
     {-1,"",0,'\0'},
@@ -2158,11 +2160,12 @@ menuitem_t RD_Gameplay_Menu_4_Rus[]=
     {2,"ecnhfyznm jib,rb jhbu> ehjdytq:",   M_RD_Change_FixMapErrors,       'e'},   // Устранять ошибки ориг. уровней
     {2,"pthrfkmyjt jnhf;tybt ehjdytq:",     M_RD_Change_FlipLevels,         'p'},   // Зеркальное отражение уровней
     {2,"Ljgjkybntkmyst kbwf buhjrf:",       M_RD_Change_ExtraPlayerFaces,   'l'},   // Дополнительные лица игрока
-    {2,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       '\''},   // Элементаль без ограничения душ
+    {2,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       '\''},  // Элементаль без ограничения душ
     {2,"gjdsityyfz fuhtccbdyjcnm lei:",     M_RD_Change_LostSoulsAgr,       'g'},   // Повышенная агрессивность душ
-    {2,"jnrk.xbnm pfghjc ,> pfuheprb:",     M_RD_Change_FastQSaveLoad,      'j'},   // Отключить запрос б. загрузки
-    {-1,"",0,'\0'},                                                                 //
-    {2,"Gjkjcf ghjuhtccf:",                 M_RD_Change_DemoBar,            'g'},   // Полоса прогресса
+    {-1,"",0,'\0'},     
+    {2,"jnj,hf;fnm nfqvth:",                M_RD_Change_DemoTimer,          's'},   // Отображать таймер
+    {2,"dhtvz nfqvthf:",                    M_RD_Change_DemoTimerDir,       's'},   // Время таймера
+    {2,"irfkf ghjuhtccf:",                  M_RD_Change_DemoBar,            'g'},   // Шкала прогресса
     {2,"Ghjbuhsdfnm ltvjpfgbcb:",           M_RD_Change_NoInternalDemos,    'g'},   // Проигрывать демозаписи
     {-1,"",0,'\0'},                                                                 //
     {1,"",                                  M_RD_Choose_Gameplay_1,         'n'},   // Далее >
@@ -4856,26 +4859,34 @@ void M_RD_Draw_Gameplay_4(void)
         M_WriteTextSmall_ENG(222 + wide_delta, 85, agressive_lost_souls ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
-        // More agressive lost souls
-        dp_translation = fast_quickload ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(281 + wide_delta, 95, fast_quickload ? RD_ON : RD_OFF);
-        dp_translation = NULL;
-
         //
         // Demos
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 105, "Demos");
+        M_WriteTextSmall_ENG(35 + wide_delta, 95, "Demos");
+        dp_translation = NULL;
+
+        // Show demo timer
+        dp_translation = demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(153 + wide_delta, 105, demotimer == 1 ? "playback"  :
+                                                    demotimer == 2 ? "recording" :
+                                                    demotimer == 3 ? "always" :
+                                                                     "off");
+        dp_translation = NULL;
+
+        // Timer direction
+        dp_translation = demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(148 + wide_delta, 115, demotimerdir ? "backward" : "forward");
         dp_translation = NULL;
 
         // Show progress bar 
         dp_translation = demobar ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(169 + wide_delta, 115, demobar ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(169 + wide_delta, 125, demobar ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Play internal demos
         dp_translation = no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN];
-        M_WriteTextSmall_ENG(183 + wide_delta, 125, no_internal_demos ? RD_OFF : RD_ON);
+        M_WriteTextSmall_ENG(183 + wide_delta, 135, no_internal_demos ? RD_OFF : RD_ON);
         dp_translation = NULL;
 
         //
@@ -4923,26 +4934,34 @@ void M_RD_Draw_Gameplay_4(void)
         M_WriteTextSmall_RUS(266 + wide_delta, 85, agressive_lost_souls ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
-        // Отключить запрос б. загрузки
-        dp_translation = fast_quickload ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(253 + wide_delta, 95, fast_quickload ? RD_ON_RUS : RD_OFF_RUS);
-        dp_translation = NULL;
-
         //
         // Демозаписи
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 105, "Ltvjpfgbcb");
+        M_WriteTextSmall_RUS(35 + wide_delta, 95, "Ltvjpfgbcb");
         dp_translation = NULL;
 
-        // Проигрывать демозаписи
+        // Отображать таймер
+        dp_translation = demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(180 + wide_delta, 105, demotimer == 1 ? "ghb ghjbuhsdfybb"  :
+                                                    demotimer == 2 ? "ghb pfgbcb" :
+                                                    demotimer == 3 ? "dctulf" :
+                                                                     "dsrk");
+        dp_translation = NULL;
+
+        // Время таймера
+        dp_translation = demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(145 + wide_delta, 115, demotimerdir ? "jcnfdittcz" : "ghjitlitt");
+        dp_translation = NULL;
+
+        // Шкала прогресса
         dp_translation = demobar ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(167 + wide_delta, 115, demobar ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(161 + wide_delta, 125, demobar ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Проигрывать демозаписи
         dp_translation = no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN];
-        M_WriteTextSmall_RUS(219 + wide_delta, 125, no_internal_demos ? RD_OFF_RUS : RD_ON_RUS);
+        M_WriteTextSmall_RUS(219 + wide_delta, 135, no_internal_demos ? RD_OFF_RUS : RD_ON_RUS);
         dp_translation = NULL;
 
         //
@@ -5146,9 +5165,27 @@ void M_RD_Change_LostSoulsAgr(int choice)
     agressive_lost_souls ^= 1;
 }
 
-void M_RD_Change_FastQSaveLoad(int choice)
+void M_RD_Change_DemoTimer(int choice)
 {
-    fast_quickload ^= 1;
+    switch(choice)
+    {
+        case 0: 
+        demotimer--;
+        if (demotimer < 0) 
+            demotimer = 3;
+        break;
+    
+        case 1:
+        demotimer++;
+        if (demotimer > 3)
+            demotimer = 0;
+        break;
+    }
+}
+
+void M_RD_Change_DemoTimerDir(int choice)
+{
+    demotimerdir ^= 1;
 }
 
 void M_RD_Change_DemoBar(int choice)
@@ -6117,6 +6154,8 @@ void M_RD_BackToDefaultsResponse(int key)
     fast_quickload       = 1;
 
     // Gameplay: Demos
+    demotimer         = 0;
+    demotimerdir      = 0;
     demobar           = 0;
     no_internal_demos = 0;
 

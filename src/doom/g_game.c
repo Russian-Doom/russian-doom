@@ -334,6 +334,8 @@ int fast_quickload = 1;
 int flip_levels = 0;
 
 // Gameplay: Demos
+int demotimer = 0;
+int demotimerdir = 0;
 int demobar = 0;
 int no_internal_demos = 0;
 

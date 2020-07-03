@@ -1,6 +1,6 @@
 //
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2016-2019 Julian Nechaevsky
+// Copyright(C) 2016-2020 Julian Nechaevsky
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -85,6 +85,11 @@ int extra_player_faces = 1;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
 int fast_quickload = 1;
+
+// Gameplay: Demos
+int demotimer = 0;
+int demotimerdir = 0;
+int demobar = 0;
 int no_internal_demos = 0;
 
 
@@ -361,6 +366,11 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
     M_BindIntVariable("fast_quickload",         &fast_quickload);
+
+    // Gameplay: Demos
+    M_BindIntVariable("demotimer",              &demotimer);
+    M_BindIntVariable("demotimerdir",           &demotimerdir);
+    M_BindIntVariable("demobar",                &demobar);
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
 
     // M_BindIntVariable("show_exit_sequence",  &show_exit_sequence);    // [Strife]
