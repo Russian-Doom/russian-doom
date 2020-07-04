@@ -891,12 +891,13 @@ boolean ST_Responder (event_t* ev)
             {
                 static char buf[ST_MSGWIDTH];
 
+                // [JN] Show human-readable coords
                 M_snprintf(buf, sizeof(buf), english_language ?
-                                             "ang=0x%x;x,y=(0x%x,0x%x)" : "eujk=%x / [<e=(%x<%x)",
-                    players[consoleplayer].mo->angle,
-                    players[consoleplayer].mo->x,
-                    players[consoleplayer].mo->y);
-
+                                "x=%d, y=%d, ang=%d" :
+                                "[=%d< e=%d< eujk=%d",
+                                players[consoleplayer].mo->x >> FRACBITS,
+                                players[consoleplayer].mo->y >> FRACBITS,
+                                players[consoleplayer].mo->angle / ANG1);
                 plyr->message_system = buf;
             }
         }
