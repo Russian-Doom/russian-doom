@@ -428,7 +428,7 @@ void M_RD_Draw_Gameplay_4(void);
 
 void M_RD_Change_Brightmaps(int choice);
 void M_RD_Change_FakeContrast(int choice);
-void M_RD_Change_Transparency(int choice);
+void M_RD_Change_Translucency(int choice);
 void M_RD_Change_ImprovedFuzz(int choice);
 void M_RD_Change_ColoredHUD(int choice);
 void M_RD_Change_ColoredBlood(int choice);
@@ -1965,7 +1965,7 @@ menuitem_t RD_Gameplay_Menu_1[]=
 {
     {2,"Brightmaps:",                  M_RD_Change_Brightmaps,     'b'},
     {2,"Fake contrast:",               M_RD_Change_FakeContrast,   'f'},
-    {2,"Transparency:",                M_RD_Change_Transparency,   't'},
+    {2,"Translucency:",                M_RD_Change_Translucency,   't'},
     {2,"Fuzz effect:",                 M_RD_Change_ImprovedFuzz,   'f'},
     {2,"Colored HUD elements:",        M_RD_Change_ColoredHUD,     'c'},
     {2,"Colored blood and corpses:",   M_RD_Change_ColoredBlood,   'c'},
@@ -2078,7 +2078,7 @@ menuitem_t RD_Gameplay_Menu_1_Rus[]=
 {
     {2,",hfqnvfggbyu:",                     M_RD_Change_Brightmaps,     ','},   // Брайтмаппинг
     {2,"Bvbnfwbz rjynhfcnyjcnb:",           M_RD_Change_FakeContrast,   'b'},   // Имитация контрастности
-    {2,"Ghjphfxyjcnm j,]trnjd:",            M_RD_Change_Transparency,   'g'},   // Прозрачность объектов
+    {2,"Ghjphfxyjcnm j,]trnjd:",            M_RD_Change_Translucency,   'g'},   // Прозрачность объектов
     {2,"\'aatrn ievf:",                     M_RD_Change_ImprovedFuzz,   '\''},  // Эффект шума
     {2,"Hfpyjwdtnyst 'ktvtyns $:",          M_RD_Change_ColoredHUD,     'h'},   // Разноцветные элементы HUD
     {2,"Hfpyjwdtnyfz rhjdm b nhegs:",       M_RD_Change_ColoredBlood,   'h'},   // Разноцветная кровь и трупы
@@ -4416,7 +4416,7 @@ void M_RD_Draw_Gameplay_1(void)
         M_WriteTextSmall_ENG(142 + wide_delta, 55, fake_contrast ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
-        // Transparency
+        // Translucency
         dp_translation = translucency ? cr[CR_GREEN] : cr[CR_DARKRED];
         M_WriteTextSmall_ENG(138 + wide_delta, 65, translucency ? RD_ON : RD_OFF);
         dp_translation = NULL;
@@ -4985,7 +4985,7 @@ void M_RD_Change_FakeContrast(int choice)
     fake_contrast ^= 1;
 }
 
-void M_RD_Change_Transparency(int choice)
+void M_RD_Change_Translucency(int choice)
 {
     translucency ^= 1;
 }

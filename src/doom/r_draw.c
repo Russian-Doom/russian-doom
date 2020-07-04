@@ -1226,7 +1226,7 @@ void R_DrawTLColumn (void)
 
     do
     {
-        *dest = tranmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+        *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
         dest += screenwidth;
 
         frac += fracstep;
@@ -1272,15 +1272,15 @@ void R_DrawTLColumnLow (void)
 
     do
     {
-        *dest = tranmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-        *dest2 = tranmap[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+        *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+        *dest2 = tintmap[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
 
         if (hires)
         {
-            *dest3 = tranmap[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest4 = tranmap[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest3 = tintmap[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest4 = tintmap[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
             dest3 += screenwidth << hires;
             dest4 += screenwidth << hires;
         }
@@ -1300,9 +1300,6 @@ void R_DrawTLColumnLow (void)
 void R_InitTranslationTables (void)
 {
     int i;
-
-    // [JN] Set a tint map for shadowed text
-    V_LoadTintMap();
 
     translationtables = Z_Malloc (256*3, PU_STATIC, 0);
 

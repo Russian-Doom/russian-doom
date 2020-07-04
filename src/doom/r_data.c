@@ -41,6 +41,7 @@
 
 #include "r_data.h"
 #include "r_bmaps.h"
+#include "v_trans.h"
 #include "jn.h"
 
 
@@ -979,80 +980,123 @@ void R_InitSpriteLumps (void)
     }
 }
 
-// [crispy] from boom202s/R_DATA.C:676-787
-byte *tranmap;
 
-//
-// R_InitTranMap
-//
-// Initialize translucency filter map
-//
-// By Lee Killough 2/21/98
-//
+// [crispy] initialize translucency filter map
+// based in parts on the implementation from boom202s/R_DATA.C:676-787
 
-// [JN] Изначально 66. Значение непрозрачности увеличено до 80.
-int tran_filter_pct = 80;       // filter percent
+enum {
+    r, g, b
+} rgb_t;
 
-#define TSC 12        /* number of fixed point digits in filter percent */
+// [JN] Increased from 66 to 80.
+static const int tran_filter_pct = 80;
 
-void R_InitTranMap()
+void R_InitTintMap()
 {
-    // [JN] Don't lookup for TRANMAP lump, generate tranlucency dynamically
-    // Compose a default transparent filter map based on PLAYPAL.
-    unsigned char *playpal = (W_CacheLumpName ("PLAYPAL", PU_STATIC));
+    int lump = W_CheckNumForName("TINTMAP");
 
-    long pal[3][256], tot[256], pal_w1[3][256];
-    long w1 = ((unsigned long) tran_filter_pct<<TSC)/100;
-    long w2 = (1l<<TSC)-w1;
-    tranmap = Z_Malloc(256*256, PU_STATIC, 0);  // killough 4/11/98
-
-    // First, convert playpal into long int type, and transpose array,
-    // for fast inner-loop calculations. Precompute tot array.
+    // If a tranlucency filter map lump is present, use it
+    if (lump != -1)
     {
-        int i = 255;
-        const unsigned char *p = playpal+255*3;
-        do
-        {
-            long t,d;
-            pal_w1[0][i] = (pal[0][i] = t = p[0]) * w1;
-            d = t*t;
-            pal_w1[1][i] = (pal[1][i] = t = p[1]) * w1;
-            d += t*t;
-            pal_w1[2][i] = (pal[2][i] = t = p[2]) * w1;
-            d += t*t;
-            p -= 3;
-            tot[i] = d << (TSC-1);
-        }
-        while (--i>=0);
+        // Set a pointer to the translucency filter maps.
+        tintmap = W_CacheLumpNum(lump, PU_STATIC);
+        // [crispy] loaded from a lump
+        printf(":");
     }
-
-    // Next, compute all entries using minimum arithmetic.
+    else
     {
-        int i,j;
-        byte *tp = tranmap;
-        for (i=0;i<256;i++)
+        // Compose a default transparent filter map based on PLAYPAL.
+        unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
+        FILE *cachefp;
+        char *fname = NULL;
+        extern char *configdir;
+
+        struct {
+            unsigned char pct;
+            unsigned char playpal[256*3]; // [crispy] a palette has 768 bytes!
+        } cache;
+
+        tintmap = Z_Malloc(256*256, PU_STATIC, 0);
+        fname = M_StringJoin(configdir, "tintmap.dat", NULL);
+
+        // [crispy] open file readable
+        if ((cachefp = fopen(fname, "rb")) &&
+            // [crispy] could read struct cache from file
+            fread(&cache, 1, sizeof(cache), cachefp) == sizeof(cache) &&
+            // [crispy] same filter percents
+            cache.pct == tran_filter_pct &&
+            // [crispy] same base palettes
+            memcmp(cache.playpal, playpal, sizeof(cache.playpal)) == 0 &&
+            // [crispy] could read entire translucency map
+            fread(tintmap, 256, 256, cachefp) == 256 )
         {
-            long r1 = pal[0][i] * w2;
-            long g1 = pal[1][i] * w2;
-            long b1 = pal[2][i] * w2;
-            for (j=0;j<256;j++,tp++)
+            // [crispy] loaded from a file
+            printf(".");
+        }
+        // [crispy] file not readable
+        else
+        {
+            byte *fg, *bg, blend[3], *tp = tintmap;
+            int i, j;
+
+            I_SetPalette(playpal);
+            // [crispy] background color
+            for (i = 0; i < 256; i++)
             {
-                int color = 255;
-                long err;
-                long r = pal_w1[0][j] + r1;
-                long g = pal_w1[1][j] + g1;
-                long b = pal_w1[2][j] + b1;
-                long best = LONG_MAX;
-                do
-                    if ((err = tot[color] - pal[0][color]*r
-                        - pal[1][color]*g - pal[2][color]*b) < best)
-                        best = err, *tp = color;
-                    while (--color >= 0);
+                // [crispy] foreground color
+                for (j = 0; j < 256; j++)
+                {
+                    // [crispy] shortcut: identical foreground and background
+                    if (i == j)
+                    {
+                        *tp++ = i;
+                        continue;
+                    }
+
+                    bg = playpal + 3*i;
+                    fg = playpal + 3*j;
+
+                    blend[r] = (tran_filter_pct * fg[r] + (100 - tran_filter_pct) * bg[r]) / 100;
+                    blend[g] = (tran_filter_pct * fg[g] + (100 - tran_filter_pct) * bg[g]) / 100;
+                    blend[b] = (tran_filter_pct * fg[b] + (100 - tran_filter_pct) * bg[b]) / 100;
+
+                    *tp++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
+                }
+            }
+
+            // [crispy] file not readable, open writable
+            if ((cachefp = fopen(fname, "wb")))
+            {
+                // [crispy] set filter percents
+                cache.pct = tran_filter_pct;
+                // [crispy] set base palette
+                memcpy(cache.playpal, playpal, sizeof(cache.playpal));
+                // [crispy] go to start of file
+                fseek(cachefp, 0, SEEK_SET);
+                // [crispy] write struct cache
+                fwrite(&cache, 1, sizeof(cache), cachefp);
+                // [crispy] write translucency map
+                fwrite(tintmap, 256, 256, cachefp);
+
+                // [crispy] generated and saved
+                printf("!");
+            }
+            else
+            {
+                // [crispy] generated, but not saved
+                printf("?");
             }
         }
-    }
 
-    W_ReleaseLumpName("PLAYPAL");
+        if (cachefp)
+        {
+            fclose(cachefp);
+        }
+
+        free(fname);
+
+        W_ReleaseLumpName("PLAYPAL");
+    }
 }
 
 //
@@ -1155,8 +1199,7 @@ void R_InitData (void)
     printf (".");
     R_InitColormaps ();
     
-    R_InitTranMap ();
-    printf (".");
+    R_InitTintMap (); // [crispy] prints a mark itself
 
     if (gamevariant != freedoom && gamevariant != freedm)
     {

@@ -37,6 +37,7 @@
 #include "v_video.h"
 #include "w_wad.h"
 #include "z_zone.h"
+#include "v_trans.h"
 #include "jn.h"
 
 #include "config.h"
@@ -1105,15 +1106,6 @@ void V_DrawPatchFinale(int x, int y, patch_t *patch)
             column = (column_t *)((byte *)column + column->length + 4);
         }
     }
-}
-
-//
-// [JN] Load tint map from TINMAP lump (Doom only).
-//
-
-void V_LoadTintMap(void)
-{
-    tintmap = W_CacheLumpName("TINTMAP", PU_STATIC);
 }
 
 //
