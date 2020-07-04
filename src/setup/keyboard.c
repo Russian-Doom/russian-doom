@@ -28,7 +28,7 @@
 #include "joystick.h"
 #include "keyboard.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/keyboard.html"
+#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
 
 int vanilla_keyboard_mapping = 1;
 

@@ -22,7 +22,7 @@
 
 #include "compatibility.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/gameplay.html"
+#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
 
 
 // Display

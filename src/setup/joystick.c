@@ -32,7 +32,7 @@
 #include "txt_joyaxis.h"
 #include "txt_joybinput.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/joystick.html"
+#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
 
 typedef struct
 {

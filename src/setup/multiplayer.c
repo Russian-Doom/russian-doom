@@ -37,10 +37,7 @@
 #include "net_io.h"
 #include "net_query.h"
 
-#define MULTI_START_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/netgame_start.html"
-#define MULTI_JOIN_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/netgame_join.html"
-#define MULTI_CONFIG_HELP_URL "https://www.chocolate-doom.org/setup-multi-config"
-#define LEVEL_WARP_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/warp.html"
+#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
 
 #define NUM_WADS 10
 #define NUM_EXTRA_PARAMS 10
@@ -886,16 +883,16 @@ static void StartGameMenu(char *window_title, int multiplayer)
     if (multiplayer)
     {
         if (english_language)
-        TXT_SetWindowHelpURL(window, MULTI_START_HELP_URL);
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
         else
-        TXT_SetWindowHelpURL_RUS(window, MULTI_START_HELP_URL);
+        TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
     }
     else
     {
         if (english_language)
-        TXT_SetWindowHelpURL(window, LEVEL_WARP_HELP_URL);
+        TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
         else
-        TXT_SetWindowHelpURL_RUS(window, LEVEL_WARP_HELP_URL);
+        TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
     }
 
     //
@@ -1263,9 +1260,9 @@ void JoinMultiGame(void)
     TXT_SetColumnWidths(window, 23, 12);
 
     if (english_language)
-    TXT_SetWindowHelpURL(window, MULTI_JOIN_HELP_URL);
+    TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
     else
-    TXT_SetWindowHelpURL_RUS(window, MULTI_JOIN_HELP_URL);
+    TXT_SetWindowHelpURL_RUS(window, WINDOW_HELP_URL);
 
     TXT_AddWidgets(window,
                 TXT_NewLabel(english_language ?
@@ -1398,7 +1395,7 @@ void MultiplayerConfig(void)
     window = TXT_NewWindow(english_language ?
                            "Multiplayer Configuration" :
                            "Настройки сетевой игры");
-    //  TXT_SetWindowHelpURL(window, MULTI_CONFIG_HELP_URL);
+    //  TXT_SetWindowHelpURL(window, WINDOW_HELP_URL);
 
     //
     // [JN] Create translated buttons

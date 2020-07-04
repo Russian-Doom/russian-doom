@@ -28,7 +28,7 @@
 #include "mode.h"
 #include "mouse.h"
 
-#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/mouse.html"
+#define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
 
 static int usemouse = 1;
 
