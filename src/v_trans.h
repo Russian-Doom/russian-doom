@@ -79,6 +79,7 @@ enum
 extern byte  *cr[CRMAX];
 extern char **crstr;
 extern byte  *tintmap;
+extern byte  *shademap;
 
 
 #endif // __V_TRANS__ 

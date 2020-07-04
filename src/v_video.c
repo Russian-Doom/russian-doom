@@ -50,9 +50,9 @@
 // is common code. Fix this.
 #define RANGECHECK
 
-// [JN] Blending table used for shadowed text.
-// Only used in Doom.
-byte *tintmap = NULL;
+// [JN] Only for Doom:
+byte *tintmap = NULL;   // Blending table for sprites.
+byte *shademap = NULL;  // Blending table for shadows.
 
 // Blending table used for fuzzpatch, etc.
 // Only used in Heretic/Hexen
@@ -804,7 +804,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
                     {
                         if (draw_shadowed_text && !vanillaparm)
                         {
-                            *dest2 = tintmap[((*dest2) << 8)];
+                            *dest2 = shademap[((*dest2) << 8)];
                             dest2 += screenwidth;
                         }
                         *dest = *sourcetrans;
@@ -813,7 +813,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
 
                     if (draw_shadowed_text && !vanillaparm)
                     {
-                        *dest2 = tintmap[((*dest2) << 8)];
+                        *dest2 = shademap[((*dest2) << 8)];
                         dest2 += screenwidth;
                     }
                     *dest = *sourcetrans++;
