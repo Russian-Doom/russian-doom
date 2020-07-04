@@ -1,10 +1,10 @@
 ![](http://jnechaevsky.users.sourceforge.net/projects/rusdoom/files/russian_doom_git.png)
 
-#### Russian Doom 4.3 (released: May 17, 2020)
+#### Russian Doom 4.4 (released: July 4, 2020)
 
-Windows (32-bit): [russian-doom-4.3-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/4.3/russian-doom-4.3-win32.zip)<br />
-Windows (64-bit): [russian-doom-4.3-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/4.3/russian-doom-4.3-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/4.3.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/4.3.tar.gz) formats<br />
+Windows (32-bit): [russian-doom-4.4-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/4.4/russian-doom-4.4-win32.zip)<br />
+Windows (64-bit): [russian-doom-4.4-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/4.4/russian-doom-4.4-win64.zip)<br />
+Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/4.4.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/4.4.tar.gz) formats<br />
 
 #### Russian Heretic 4.1 (released:  May 17, 2020)
 
