@@ -49,7 +49,7 @@
 #define SELECTOR_XOFFSET (-28)
 #define SELECTOR_YOFFSET (-1)
 #define SLOTTEXTLEN	16
-#define ASCII_CURSOR '_'
+#define ASCII_CURSOR '['
 
 // [JN] Sizes of small font and small arrow for RD menu
 #define ITEM_HEIGHT_SMALL 10
