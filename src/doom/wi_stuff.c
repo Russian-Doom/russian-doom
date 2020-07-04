@@ -39,7 +39,7 @@
 
 // Needs access to LFB.
 #include "v_video.h"
-
+#include "st_stuff.h"
 #include "wi_stuff.h"
 
 #include "jn.h"
@@ -994,8 +994,15 @@ void WI_drawShowNextLoc(void)
     if ( (gamemode != commercial) || wbs->next != 30)
     WI_drawEL();  
 
+    // [crispy] demo timer widget
+    if (((demoplayback && (demotimer == 1 || demotimer == 3))
+    ||   (demorecording && (demotimer == 2 || demotimer == 3))) && !vanillaparm)
+    {
+        ST_DrawDemoTimer(leveltime);
+    }
+
     // [crispy] demo progress bar
-    if (demoplayback && demobar)
+    if (demoplayback && demobar && !vanillaparm)
     {
         HU_DemoProgressBar();
     }
@@ -1724,8 +1731,15 @@ void WI_drawStats(void)
         }
     }
 
+    // [crispy] demo timer widget
+    if (((demoplayback && (demotimer == 1 || demotimer == 3))
+    ||   (demorecording && (demotimer == 2 || demotimer == 3))) && !vanillaparm)
+    {
+        ST_DrawDemoTimer(leveltime);
+    }
+
     // [crispy] demo progress bar
-    if (demoplayback && demobar)
+    if (demoplayback && demobar && !vanillaparm)
     {
         HU_DemoProgressBar();
     }

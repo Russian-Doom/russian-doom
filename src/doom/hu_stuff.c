@@ -994,18 +994,18 @@ void HU_Drawer(void)
     }
 
     // [crispy] demo timer widget
-    if (demoplayback && (demotimer == 1 || demotimer == 3))
+    if (demoplayback && (demotimer == 1 || demotimer == 3) && !vanillaparm)
     {
         ST_DrawDemoTimer(demotimerdir ? (deftotaldemotics - defdemotics) : defdemotics);
     }
     else
-    if (demorecording && (demotimer == 2 || demotimer == 3))
+    if (demorecording && (demotimer == 2 || demotimer == 3) && !vanillaparm)
     {
         ST_DrawDemoTimer(leveltime);
     }
 
     // [crispy] demo progress bar
-    if (demoplayback && demobar)
+    if (demoplayback && demobar && !vanillaparm)
     {
         HU_DemoProgressBar();
     }
