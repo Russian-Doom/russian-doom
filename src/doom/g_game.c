@@ -51,7 +51,6 @@
 #include "hu_stuff.h"
 #include "st_stuff.h"
 #include "am_map.h"
-#include "statdump.h"
 
 // Needs access to LFB.
 #include "v_video.h"
@@ -1894,8 +1893,6 @@ void G_DoCompleted (void)
     gamestate = GS_INTERMISSION; 
     viewactive = false; 
     automapactive = false; 
-
-    StatCopy(&wminfo);
 
     WI_Start (&wminfo); 
 } 

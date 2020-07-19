@@ -82,7 +82,6 @@
 
 #include "p_setup.h"
 #include "r_local.h"
-#include "statdump.h"
 
 #include "d_main.h"
 #include "jn.h"
@@ -2817,14 +2816,6 @@ void D_DoomMain (void)
 
     if (gamemode == commercial && W_CheckNumForName("map01") < 0)
         storedemo = true;
-
-    if (M_CheckParmWithArgs("-statdump", 1))
-    {
-        I_AtExit(StatDump, true);
-        DEH_printf(english_language ?
-                   "External statistics registered.\n" :
-                   "Регистрация внешней статистики.\n");
-    }
 
     //!
     // @arg <x>
