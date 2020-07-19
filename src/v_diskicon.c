@@ -18,10 +18,6 @@
 //
 
 
-
-#include "doomtype.h"
-#include "deh_str.h"
-#include "i_swap.h"
 #include "i_video.h"
 #include "m_argv.h"
 #include "v_video.h"
@@ -38,71 +34,29 @@ int show_diskicon = 1;
 
 static const int diskicon_threshold = 20*1024;
 
-// Two buffers: disk_data contains the data representing the disk icon
-// (raw, not a patch_t) while saved_background is an equivalently-sized
-// buffer where we save the background data while the disk is on screen.
-static byte *disk_data;
-static byte *saved_background;
 
 static int loading_disk_xoffs = 0;
 static int loading_disk_yoffs = 0;
 
 // Number of bytes read since the last call to V_DrawDiskIcon().
 static size_t recent_bytes_read = 0;
-static boolean disk_drawn;
 
-static void CopyRegion(byte *dest, int dest_pitch,
-                       byte *src, int src_pitch,
-                       int w, int h)
+// [JN] Initially false, will be allowed only in Doom while D_DoomLoop().
+boolean disk_allowed = false;
+
+// [JN] Was disk icon drawn (true) or not (false).
+boolean disk_drawn;
+
+// [JN] Which icon to use, diskette or cdrom.
+char *disk_lump_name;
+
+
+void V_EnableLoadingDisk(int xoffs, int yoffs)
 {
-    byte *s, *d;
-    int y;
+    disk_lump_name = M_CheckParm("-cdrom") > 0 ? "STCDROM" : "STDISK";
 
-    s = src; d = dest;
-    for (y = 0; y < h; ++y)
-    {
-        memcpy(d, s, w * sizeof(*d));
-        s += src_pitch;
-        d += dest_pitch;
-    }
-}
-
-static void SaveDiskData(char *disk_lump, int xoffs, int yoffs)
-{
-    byte *tmpscreen;
-    patch_t *disk;
-
-    // Allocate a complete temporary screen where we'll draw the patch.
-    tmpscreen = Z_Malloc(screenwidth * SCREENHEIGHT * sizeof(*tmpscreen),
-                         PU_STATIC, NULL);
-    memset(tmpscreen, 0, screenwidth * SCREENHEIGHT * sizeof(*tmpscreen));
-    V_UseBuffer(tmpscreen);
-
-    // Buffer where we'll save the disk data.
-    disk_data = Z_Malloc(LOADING_DISK_W * LOADING_DISK_H * sizeof(*disk_data),
-                         PU_STATIC, NULL);
-
-    // Draw the patch and save the result to disk_data.
-    disk = W_CacheLumpName(disk_lump, PU_STATIC);
-    V_DrawPatch(loading_disk_xoffs >> hires, loading_disk_yoffs >> hires, disk);
-    CopyRegion(disk_data, LOADING_DISK_W,
-               tmpscreen + yoffs * screenwidth + xoffs, screenwidth,
-               LOADING_DISK_W, LOADING_DISK_H);
-    W_ReleaseLumpName(disk_lump);
-
-    V_RestoreBuffer();
-    Z_Free(tmpscreen);
-}
-
-void V_EnableLoadingDisk(char *lump_name, int xoffs, int yoffs)
-{
-    loading_disk_xoffs = xoffs;
-    loading_disk_yoffs = yoffs;
-
-    saved_background = Z_Malloc(LOADING_DISK_W * LOADING_DISK_H
-                                 * sizeof(*saved_background),
-                                PU_STATIC, NULL);
-    SaveDiskData(lump_name, xoffs, yoffs);
+    loading_disk_xoffs = xoffs >> hires;
+    loading_disk_yoffs = yoffs >> hires;
 }
 
 void V_BeginRead(size_t nbytes)
@@ -110,45 +64,15 @@ void V_BeginRead(size_t nbytes)
     recent_bytes_read += nbytes;
 }
 
-static byte *DiskRegionPointer(void)
-{
-    return I_VideoBuffer
-         + loading_disk_yoffs * screenwidth
-         + loading_disk_xoffs;
-}
-
 void V_DrawDiskIcon(void)
 {
-    if (show_diskicon != 1)
-    return;
-
-    if (disk_data != NULL && recent_bytes_read > diskicon_threshold)
+    if (recent_bytes_read > diskicon_threshold && disk_drawn == false)
     {
-        // Save the background behind the disk before we draw it.
-        CopyRegion(saved_background, LOADING_DISK_W,
-                   DiskRegionPointer(), screenwidth,
-                   LOADING_DISK_W, LOADING_DISK_H);
-
-        // Write the disk to the screen buffer.
-        CopyRegion(DiskRegionPointer(), screenwidth,
-                   disk_data, LOADING_DISK_W,
-                   LOADING_DISK_W, LOADING_DISK_H);
+        V_DrawPatch(loading_disk_xoffs, loading_disk_yoffs, 
+                    W_CacheLumpName(disk_lump_name, PU_CACHE));
         disk_drawn = true;
     }
 
     recent_bytes_read = 0;
-}
-
-void V_RestoreDiskBackground(void)
-{
-    if (disk_drawn)
-    {
-        // Restore the background.
-        CopyRegion(DiskRegionPointer(), screenwidth,
-                   saved_background, LOADING_DISK_W,
-                   LOADING_DISK_W, LOADING_DISK_H);
-
-        disk_drawn = false;
-    }
 }
 

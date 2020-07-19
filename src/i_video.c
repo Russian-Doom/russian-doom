@@ -831,7 +831,10 @@ void I_FinishUpdate (void)
 	}
 
     // Draw disk icon before blit, if necessary.
-    V_DrawDiskIcon();
+    if (show_diskicon && disk_allowed)
+    {
+        V_DrawDiskIcon();
+    }
 
     if (palette_to_set)
     {
@@ -904,9 +907,6 @@ void I_FinishUpdate (void)
     {
         fractionaltic = I_GetTimeMS() * TICRATE % 1000 * FRACUNIT / 1000;
     }
-
-    // Restore background and undo the disk indicator, if it was drawn.
-    V_RestoreDiskBackground();
 }
 
 

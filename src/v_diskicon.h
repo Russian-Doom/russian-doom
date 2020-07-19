@@ -27,9 +27,11 @@
 #define LOADING_DISK_W (16 << hires)
 #define LOADING_DISK_H (16 << hires)
 
-extern void V_EnableLoadingDisk(char *lump_name, int xoffs, int yoffs);
+extern void V_EnableLoadingDisk(int xoffs, int yoffs);
 extern void V_BeginRead(size_t nbytes);
 extern void V_DrawDiskIcon(void);
-extern void V_RestoreDiskBackground(void);
+
+extern boolean disk_allowed;
+extern boolean disk_drawn;
 
 #endif

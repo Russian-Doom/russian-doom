@@ -422,23 +422,9 @@ void D_Display (void)
 // [JN] Un-static for position hot switching
 void EnableLoadingDisk(void)
 {
-    char *disk_lump_name;
-
-    // [JN] Atari Jaguar: no loading disk icon
-    if (gamemission == jaguar)
-    {
-        return;
-    }
-
-    if (M_CheckParm("-cdrom") > 0)
-    disk_lump_name = DEH_String("STCDROM");
-    else
-    disk_lump_name = DEH_String("STDISK");
-
-    V_EnableLoadingDisk(disk_lump_name, 
-                       (aspect_ratio >= 2 && screenblocks == 9 ? 
-                        SCREENWIDTH+WIDE_DELTA*2 : screenwidth) -
-                        LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
+    V_EnableLoadingDisk((aspect_ratio >= 2 && screenblocks == 9 ? 
+                         SCREENWIDTH+WIDE_DELTA*2 : screenwidth) -
+                         LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
 }
 
 
@@ -623,6 +609,10 @@ void D_DoomLoop (void)
 
     if (demorecording)
     G_BeginRecording ();
+
+    // [JN] Allow to use disk icon drawing functions,
+    // but it's is not used in Jaguar Doom.
+    disk_allowed = gamemission == jaguar ? false : true;
 
     main_loop_started = true;
 

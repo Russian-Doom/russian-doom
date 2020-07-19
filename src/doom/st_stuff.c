@@ -62,6 +62,7 @@
 #include "sounds.h"
 
 #include "v_trans.h"
+#include "v_diskicon.h"
 
 #include "jn.h"
 
@@ -1927,8 +1928,12 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
     ST_doPaletteStuff();
 
     // If just after ST_Start(), refresh all
-    if (st_firsttime)
+    // [JN] Also do a full refresh if disk icon was drawn.
+    if (st_firsttime || disk_drawn)
+    {
         ST_doRefresh();
+        disk_drawn = false;
+    }
     // Otherwise, update as little as possible
     else 
         ST_diffDraw();
