@@ -903,15 +903,15 @@ void HU_Drawer(void)
 
     if (automapactive)
     {
-        static char str[32], *s;
-        int time = leveltime / TICRATE;
-        int extrakills = players[consoleplayer].killcount - totalkills;
-
         HUlib_drawTextLineUncolored(&w_title, false);
 
         // [from-crispy] Show level stats in automap
         if (!vanillaparm && automap_stats)
         {
+            static char str[32], *s;
+            int time = leveltime / TICRATE;
+            int extrakills = players[consoleplayer].killcount - totalkills;
+
             // [JN] Show extra kills only when necessary
             if (players[consoleplayer].killcount <= totalkills)
             {
@@ -1035,8 +1035,6 @@ void HU_Erase(void)
 
 void HU_Ticker(void)
 {
-    int     i, rc;
-    char    c;
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
     static char s[64];
@@ -1164,6 +1162,9 @@ void HU_Ticker(void)
     // check for incoming chat characters
     if (netgame)
     {
+        int  i;
+        char c;
+
         for (i=0 ; i<MAXPLAYERS; i++)
         {
             if (!playeringame[i])
@@ -1177,7 +1178,7 @@ void HU_Ticker(void)
                 }
                 else
                 {
-                    rc = HUlib_keyInIText(&w_inputbuffer[i], c);
+                    int rc = HUlib_keyInIText(&w_inputbuffer[i], c);
 
                     if (rc && c == KEY_ENTER)
                     {
@@ -1273,8 +1274,6 @@ boolean HU_Responder(event_t *ev)
     int             i;
     int             numplayers;
 
-    static int      num_nobrainers = 0;
-
     numplayers = 0;
     for (i=0 ; i<MAXPLAYERS ; i++)
     numplayers += playeringame[i];
@@ -1319,6 +1318,8 @@ boolean HU_Responder(event_t *ev)
                     }
                     else if (i == consoleplayer)
                     {
+                        static int num_nobrainers = 0;
+
                         num_nobrainers++;
                         if (num_nobrainers < 3)
                             plr->message_system = DEH_String(english_language ?
