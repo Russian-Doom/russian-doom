@@ -874,11 +874,8 @@ P_DamageMobj
   mobj_t*	source,
   int 		damage )
 {
-    unsigned	ang;
-    int		saved;
     player_t*	player;
     fixed_t	thrust;
-    int		temp;
 	
     if ( !(target->flags & MF_SHOOTABLE) )
 	return;	// shouldn't happen...
@@ -905,7 +902,7 @@ P_DamageMobj
 	    || !source->player
 	    || source->player->readyweapon != wp_chainsaw))
     {
-	ang = R_PointToAngle2 ( inflictor->x,
+	unsigned ang = R_PointToAngle2 ( inflictor->x,
 				inflictor->y,
 				target->x,
 				target->y);
@@ -930,6 +927,8 @@ P_DamageMobj
     // player specific
     if (player)
     {
+        int temp = damage < 100 ? damage : 100;
+
 	// end of game hell hack
 	if (target->subsector->sector->special == 11
 	    && damage >= target->health)
@@ -949,6 +948,8 @@ P_DamageMobj
 	
 	if (player->armortype)
 	{
+        int saved;
+
 	    if (player->armortype == 1)
 		saved = damage/3;
 	    else
@@ -992,8 +993,6 @@ P_DamageMobj
 	    player->damagecount = 100;	// teleport stomp does 10k points...
     }
 	
-	temp = damage < 100 ? damage : 100;
-
 	if (player == &players[consoleplayer])
 	    I_Tactile (40,10,40+temp*2);
     }
