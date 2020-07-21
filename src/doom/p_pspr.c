@@ -619,7 +619,7 @@ A_FirePlasmaBeta
 		  ps_flash,
 		  weaponinfo[player->readyweapon].flashstate+(P_Random ()&1) );
 
-    P_SpawnPlayerMissile(player->mo, player->refire&1 ? MT_PLASMA1 : MT_PLASMA);
+    P_SpawnPlayerMissile(player->mo, (player->refire & 1) ? MT_PLASMA1 : MT_PLASMA);
 }
 
 //
@@ -677,8 +677,6 @@ void P_BulletSlope (mobj_t*	mo)
         // [JN] Mouselook: also count vertical angles
         if (singleplayer && !linetarget && mlook)
         {
-            an += 2 << 26;
-
             if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: new magic number :(
@@ -779,7 +777,6 @@ A_FireShotgun2
 {
     int		i;
     angle_t	angle;
-    int		damage;
 
     if (!player) return; // [crispy] let pspr action pointers get called from mobj states
     S_StartSound (player->mo, sfx_dshtgn);
@@ -796,7 +793,7 @@ A_FireShotgun2
 	
     for (i=0 ; i<20 ; i++)
     {
-	damage = 5*(P_Random ()%3+1);
+	int damage = 5*(P_Random ()%3+1);
 	angle = player->mo->angle;
 	angle += P_SubRandom() << ANGLETOFINESHIFT;
 	P_LineAttack (player->mo,
@@ -943,12 +940,12 @@ void P_SetupPsprites (player_t* player)
 void P_MovePsprites (player_t* player) 
 {
     int		i;
-    pspdef_t*	psp;
-    state_t*	state;
+    pspdef_t *psp = &player->psprites[0];
 	
-    psp = &player->psprites[0];
     for (i=0 ; i<NUMPSPRITES ; i++, psp++)
     {
+        state_t *state;
+
 	// a null state means not active
 	if ( (state = psp->state) )	
 	{
