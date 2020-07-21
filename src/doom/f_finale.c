@@ -224,8 +224,6 @@ boolean F_Responder (event_t *event)
 //
 void F_Ticker (void)
 {
-    size_t i;
-
     // [JN] Make PAUSE working properly on text screen
     if (paused)
     {
@@ -235,6 +233,8 @@ void F_Ticker (void)
     // check for skipping
     if (gamemode == commercial && finalecount > 50)
     {
+        size_t i;
+
         // go on to the next level
         for (i = 0 ; i < MAXPLAYERS ; i++)
         {
@@ -309,7 +309,6 @@ void F_Ticker (void)
 void F_TextWrite (void)
 {
     int    x,y,w;
-    int    c;
     int    cx;
     int    cy;
     char  *ch;
@@ -399,7 +398,7 @@ void F_TextWrite (void)
 
     for ( ; count ; count-- )
     {
-        c = *ch++;
+        int c = *ch++;
 
         if (!c)
         {
@@ -962,8 +961,6 @@ void F_BunnyScroll (void)
 
 static void F_ArtScreenDrawer(void)
 {
-    char *lumpname;
-
     if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
@@ -976,6 +973,8 @@ static void F_ArtScreenDrawer(void)
     }
     else
     {
+        static char *lumpname;
+
         switch (gameepisode)
         {
             case 1:
@@ -1061,7 +1060,7 @@ void F_Drawer (void)
 void F_TextWriteJaguar (void)
 {
     byte       *src, *dest;
-    int         x, y, w, c, cx, cy;
+    int         x, y, w, cx, cy;
     signed int  count;
     char       *ch;
 
@@ -1108,7 +1107,7 @@ void F_TextWriteJaguar (void)
 
     for ( ; count ; count-- )
     {
-        c = *ch++;
+        int c = *ch++;
 
         if (!c)
         break;
