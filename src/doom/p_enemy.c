@@ -105,7 +105,6 @@ P_RecursiveSound
   int		soundblocks )
 {
     int		i;
-    line_t*	check;
     sector_t*	other;
 	
     // wake up all monsters in this sector
@@ -121,7 +120,7 @@ P_RecursiveSound
 	
     for (i=0 ;i<sec->linecount ; i++)
     {
-	check = sec->lines[i];
+	line_t* check = sec->lines[i];
 	if (! (check->flags & ML_TWOSIDED) )
 	    continue;
 	
@@ -281,9 +280,6 @@ boolean P_Move (mobj_t*	actor)
     fixed_t	tryx;
     fixed_t	tryy;
     
-    line_t*	ld;
-    line_t*	blockline;
-    
     // warning: 'catch', 'throw', and 'try'
     // are all C++ reserved words
     boolean	try_ok;
@@ -345,7 +341,7 @@ boolean P_Move (mobj_t*	actor)
     // back out when they shouldn't, and creates secondary stickiness).
     if (singleplayer)
     {
-        blockline = spechit[numspechit];
+        line_t *blockline = spechit[numspechit];
 
         for (good = false; numspechit--;)
             if (P_UseSpecialLine(actor, spechit[numspechit], 0))
@@ -356,7 +352,7 @@ boolean P_Move (mobj_t*	actor)
     
 	while (numspechit--)
 	{
-	    ld = spechit[numspechit];
+	    line_t *ld = spechit[numspechit];
 	    // if the special is not a door
 	    // that can be opened,
 	    // return false
@@ -890,7 +886,6 @@ void A_PosAttack (mobj_t* actor)
 void A_SPosAttack (mobj_t* actor)
 {
     int		i;
-    int		angle;
     int		bangle;
     int		damage;
     int		slope;
@@ -905,7 +900,7 @@ void A_SPosAttack (mobj_t* actor)
 
     for (i=0 ; i<3 ; i++)
     {
-    angle = bangle + (P_SubRandom() << 20);
+        int angle = bangle + (P_SubRandom() << 20);
 
     if (sk_ultranm && !demorecording && !demoplayback)
     damage = ((P_Random()%5)+1)*4;
@@ -991,16 +986,14 @@ void A_BspiAttack (mobj_t *actor)
 //
 void A_TroopAttack (mobj_t* actor)
 {
-    int		damage;
-	
     if (!actor->target)
 	return;
 		
     A_FaceTarget (actor);
     if (P_CheckMeleeRange (actor))
     {
-	S_StartSound (actor, sfx_claw);
-	damage = (P_Random()%8+1)*3;
+    int damage = (P_Random()%8+1)*3;
+    S_StartSound (actor, sfx_claw);
 	P_DamageMobj (actor->target, actor, actor, damage);
 	return;
     }
@@ -1013,30 +1006,26 @@ void A_TroopAttack (mobj_t* actor)
 
 void A_SargAttack (mobj_t* actor)
 {
-    int		damage;
-
     if (!actor->target)
 	return;
 		
     A_FaceTarget (actor);
     if (P_CheckMeleeRange (actor))
     {
-	damage = ((P_Random()%10)+1)*4;
+	int damage = ((P_Random()%10)+1)*4;
 	P_DamageMobj (actor->target, actor, actor, damage);
     }
 }
 
 void A_HeadAttack (mobj_t* actor)
 {
-    int		damage;
-	
     if (!actor->target)
 	return;
 		
     A_FaceTarget (actor);
     if (P_CheckMeleeRange (actor))
     {
-	damage = (P_Random()%6+1)*10;
+	int damage = (P_Random()%6+1)*10;
 	P_DamageMobj (actor->target, actor, actor, damage);
 	return;
     }
@@ -1057,8 +1046,6 @@ void A_CyberAttack (mobj_t* actor)
 
 void A_BruisAttack (mobj_t* actor)
 {
-    int		damage;
-	
     if (!actor->target)
 	return;
 
@@ -1069,8 +1056,8 @@ void A_BruisAttack (mobj_t* actor)
     
     if (P_CheckMeleeRange (actor))
     {
+	int damage = (P_Random()%8+1)*10;
 	S_StartSound (actor, sfx_claw);
-	damage = (P_Random()%8+1)*10;
 	P_DamageMobj (actor->target, actor, actor, damage);
 	return;
     }
@@ -1199,8 +1186,6 @@ void A_SkelWhoosh (mobj_t*	actor)
 
 void A_SkelFist (mobj_t*	actor)
 {
-    int		damage;
-
     if (!actor->target)
 	return;
 		
@@ -1208,7 +1193,7 @@ void A_SkelFist (mobj_t*	actor)
 	
     if (P_CheckMeleeRange (actor))
     {
-	damage = ((P_Random()%10)+1)*6;
+	int damage = ((P_Random()%10)+1)*6;
 	S_StartSound (actor, sfx_skepch);
 	P_DamageMobj (actor->target, actor, actor, damage);
     }
@@ -1265,30 +1250,23 @@ boolean PIT_VileCheck (mobj_t*	thing)
 //
 void A_VileChase (mobj_t* actor)
 {
-    int			xl;
-    int			xh;
-    int			yl;
-    int			yh;
-    
-    int			bx;
-    int			by;
-
     mobjinfo_t*		info;
     mobj_t*		temp;
 	
     if (actor->movedir != DI_NODIR)
     {
+        int xl = (viletryx - bmaporgx - MAXRADIUS*2)>>MAPBLOCKSHIFT;
+        int xh = (viletryx - bmaporgx + MAXRADIUS*2)>>MAPBLOCKSHIFT;
+        int yl = (viletryy - bmaporgy - MAXRADIUS*2)>>MAPBLOCKSHIFT;
+        int yh = (viletryy - bmaporgy + MAXRADIUS*2)>>MAPBLOCKSHIFT;
+        int bx, by;
+
 	// check for corpses to raise
 	viletryx =
 	    actor->x + actor->info->speed*xspeed[actor->movedir];
 	viletryy =
 	    actor->y + actor->info->speed*yspeed[actor->movedir];
 
-    xl = (viletryx - bmaporgx - MAXRADIUS*2)>>MAPBLOCKSHIFT;
-    xh = (viletryx - bmaporgx + MAXRADIUS*2)>>MAPBLOCKSHIFT;
-    yl = (viletryy - bmaporgy - MAXRADIUS*2)>>MAPBLOCKSHIFT;
-    yh = (viletryy - bmaporgy + MAXRADIUS*2)>>MAPBLOCKSHIFT;        
-	
 	vileobj = actor;
 	for (bx=xl ; bx<=xh ; bx++)
 	{
@@ -2037,7 +2015,6 @@ void A_BrainAwake (mobj_t* mo)
     numbraintargets = 0;
     braintargeton = 0;
 	
-    thinker = thinkercap.next;
     for (thinker = thinkercap.next ;
 	 thinker != &thinkercap ;
 	 thinker = thinker->next)
@@ -2087,17 +2064,14 @@ void A_BrainPain (mobj_t*	mo)
 void A_BrainScream (mobj_t*	mo)
 {
     int		x;
-    int		y;
-    int		z;
-    mobj_t*	th;
 
     // [JN] Взрывы Иконы греха отцентрированы. Исправление бага:
     // https://doomwiki.org/wiki/Lopsided_final_boss_explosions
     for (x=mo->x - 320*FRACUNIT ; x< mo->x + 320*FRACUNIT ; x+= FRACUNIT*8)
     {
-	y = mo->y - 320*FRACUNIT;
-	z = 128 + P_Random()*2*FRACUNIT;
-	th = P_SpawnMobj (x,y,z, MT_ROCKET);
+	int y = mo->y - 320*FRACUNIT;
+	int z = 128 + P_Random()*2*FRACUNIT;
+	mobj_t *th = P_SpawnMobj (x,y,z, MT_ROCKET);
 	th->momz = P_Random()*512;
 
 	P_SetMobjState (th, S_BRAINEXPLODE1);
