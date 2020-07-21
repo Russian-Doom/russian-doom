@@ -38,13 +38,10 @@
 #include "deh_main.h"
 #include "doomdef.h"
 #include "doomstat.h"
-
 #include "rd_lang.h"
 #include "doomfeatures.h"
 #include "sounds.h"
-
 #include "d_iwad.h"
-
 #include "z_zone.h"
 #include "w_main.h"
 #include "w_merge.h"
@@ -52,26 +49,21 @@
 #include "s_sound.h"
 #include "v_diskicon.h"
 #include "v_video.h"
-
 #include "f_finale.h"
 #include "f_wipe.h"
-
 #include "m_argv.h"
 #include "m_config.h"
 #include "m_controls.h"
 #include "m_misc.h"
 #include "m_menu.h"
 #include "p_saveg.h"
-
 #include "i_endoom.h"
 #include "i_input.h"
 #include "i_joystick.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_video.h"
-
 #include "g_game.h"
-
 #include "hu_stuff.h"
 #include "wi_stuff.h"
 #include "st_stuff.h"
@@ -79,12 +71,14 @@
 #include "net_client.h"
 #include "net_dedicated.h"
 #include "net_query.h"
-
 #include "p_setup.h"
 #include "r_local.h"
-
 #include "d_main.h"
 #include "jn.h"
+
+
+void D_ConnectNetGame(void);
+void D_CheckNetGame(void);
 
 // [JN] Сделана глобальной, нужна для функции автоподргузки 
 // блоков DEHACKED, а также в цикле D_DoomMain.
@@ -158,9 +152,14 @@ int english_language = -1;
 int english_language = 0;
 #endif
 
-int show_endoom   = 0;
-int level_brightness = 0; // [JN] Level brightness level
-int local_time    = 0; // [JN] Local time widget
+
+// [JN] Rendering
+int screen_wiping = 1;
+int show_endoom = 0;
+
+// [JN] Display
+int level_brightness = 0;
+int local_time = 0;
 
 // [JN] Automap specific variables.
 int automap_color   = 0;
@@ -170,9 +169,98 @@ int automap_overlay = 0;
 int automap_rotate  = 0;
 int automap_grid    = 0;
 
+// [JN] Sound
+int snd_monomode = 0;
 
-void D_ConnectNetGame(void);
-void D_CheckNetGame(void);
+// [JN] Selective game
+int selective_skill = 2;
+int selective_episode = 1;
+int selective_map = 1;
+
+int selective_health = 100;
+int selective_armor = 0;
+int selective_armortype = 1;
+
+int selective_wp_chainsaw = 0;
+int selective_wp_shotgun = 0;
+int selective_wp_supershotgun = 0;
+int selective_wp_chaingun = 0;
+int selective_wp_missile = 0;
+int selective_wp_plasma = 0;
+int selective_wp_bfg = 0;
+
+int selective_backpack = 0;
+
+int selective_ammo_0 = 50;  // bullets
+int selective_ammo_1 = 0;   // shells
+int selective_ammo_2 = 0;   // cells
+int selective_ammo_3 = 0;   // rockets
+
+int selective_key_0 = 0;    // blue keycard
+int selective_key_1 = 0;    // yellow keycard
+int selective_key_2 = 0;    // red keycard
+int selective_key_3 = 0;    // blue skull key
+int selective_key_4 = 0;    // yellow skull key
+int selective_key_5 = 0;    // red skull key
+
+int selective_fast = 0;
+int selective_respawn = 0;
+
+// [JN] Gameplay: Graphical
+int brightmaps = 1;
+int fake_contrast = 0;
+int translucency = 1;
+int improved_fuzz = 2;
+int colored_hud = 0;
+int messages_pickup_color = 0;
+int messages_secret_color = 3;
+int messages_system_color = 0;
+int messages_chat_color = 1;
+int colored_blood = 1;
+int swirling_liquids = 1;
+int invul_sky = 1;
+int flip_weapons = 0;
+int draw_shadowed_text = 1;
+
+// [JN] Gameplay: Audible
+int play_exit_sfx = 0;
+int crushed_corpses_sfx = 1;
+int blazing_door_fix_sfx = 1;
+int noise_alert_sfx = 0;
+int correct_endlevel_sfx = 0;
+
+// [JN] Gameplay: Tactical
+int automap_stats = 1;
+int secret_notification = 1;
+int negative_health = 0;
+int infragreen_visor = 0;
+
+// [JN] Gameplay: Physical
+int over_under = 0;
+int torque = 1;
+int weapon_bobbing = 1;
+int ssg_blast_enemies = 1;
+int randomly_flipcorpses = 1;
+int floating_powerups = 0;
+
+// [JN] Gameplay: Crosshair
+int crosshair_draw = 0;
+int crosshair_health = 1;
+int crosshair_scale = 0;
+
+// [JN] Gameplay: Gameplay
+int fix_map_errors = 1;
+int extra_player_faces = 1;
+int unlimited_lost_souls = 1;
+int agressive_lost_souls = 0;
+int fast_quickload = 1;
+int flip_levels = 0;
+
+// [JN] Gameplay: Demos
+int demotimer = 0;
+int demotimerdir = 0;
+int demobar = 0;
+int no_internal_demos = 0;
 
 
 //

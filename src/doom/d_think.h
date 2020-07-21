@@ -20,7 +20,6 @@
 //
 
 
-
 #ifndef __D_THINK__
 #define __D_THINK__
 
@@ -55,8 +54,8 @@ typedef actionf_t think_t;
 // Doubly linked list of actors.
 typedef struct thinker_s
 {
-    struct thinker_s*   prev;
-    struct thinker_s*   next;
+    struct thinker_s *prev;
+    struct thinker_s *next;
     think_t function;
 } thinker_t;
 

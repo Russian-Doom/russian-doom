@@ -23,7 +23,6 @@
 #include <stdlib.h>
 
 #include "doomfeatures.h"
-
 #include "d_main.h"
 #include "m_argv.h"
 #include "m_menu.h"
@@ -36,17 +35,16 @@
 #include "doomstat.h"
 #include "w_checksum.h"
 #include "w_wad.h"
-
 #include "deh_main.h"
-
 #include "d_loop.h"
-
 #include "jn.h"
+
 
 ticcmd_t *netcmds;
 
+//
 // Called when a player leaves the game
-
+//
 static void PlayerQuitGame(player_t *player)
 {
     static char exitmsg[80];
@@ -59,14 +57,12 @@ static void PlayerQuitGame(player_t *player)
 
     M_StringCopy(exitmsg, DEH_String(english_language ?
                                      "Player 1 left the game" :
-                                     "buhjr 1 jnrk.xbkcz jn cthdthf>"), // [JN] игрок № отключился от сервера.
+                                     // [JN] игрок № отключился от сервера.
+                                     "buhjr 1 jnrk.xbkcz jn cthdthf>"),
                                      sizeof(exitmsg));
 
-    // [JN] Номер символа, в котором указывается порядковый № игрока.
-    if (english_language)
-    exitmsg[7] += player_num;
-    else
-    exitmsg[6] += player_num;
+    // [JN] Player's symbol number
+    exitmsg[english_language ? 7 : 6] += player_num;
 
     playeringame[player_num] = false;
     players[consoleplayer].message_system = exitmsg;
@@ -103,7 +99,9 @@ static void RunTic(ticcmd_t *cmds, boolean *ingame)
     // run a tic.
 
     if (advancedemo)
+    {
         D_DoAdvanceDemo ();
+    }
 
     G_Ticker ();
 }

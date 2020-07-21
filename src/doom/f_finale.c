@@ -18,11 +18,9 @@
 //
 
 
-
 #include <stdio.h>
 #include <ctype.h>
 
-// Functions.
 #include "deh_main.h"
 #include "i_system.h"
 #include "i_swap.h"
@@ -30,17 +28,19 @@
 #include "v_video.h"
 #include "w_wad.h"
 #include "s_sound.h"
-
-// Data.
 #include "d_main.h"
 #include "rd_lang.h"
 #include "sounds.h"
-
 #include "doomstat.h"
 #include "r_state.h"
 #include "r_main.h"
-
+#include "hu_stuff.h"
 #include "jn.h"
+
+
+#define TEXTSPEED   3
+#define TEXTWAIT    250
+
 
 typedef enum
 {
@@ -50,18 +50,11 @@ typedef enum
     F_STAGE_CAST_JAGUAR,
 } finalestage_t;
 
-// ?
-//#include "doomstat.h"
-//#include "r_local.h"
-//#include "f_finale.h"
 
 // Stage of animation:
 finalestage_t finalestage;
 
 unsigned int finalecount;
-
-#define TEXTSPEED   3
-#define TEXTWAIT    250
 
 typedef struct
 {
@@ -70,7 +63,6 @@ typedef struct
     char *background;
     char *text;
 } textscreen_t;
-
 
 static textscreen_t textscreens[] =
 {
@@ -146,15 +138,20 @@ char*   finaleflat;
 
 void    F_StartCast (void);
 void    F_CastTicker (void);
-boolean F_CastResponder (event_t *ev);
 void    F_CastDrawer (void);
+boolean F_CastResponder (event_t *ev);
 
-// [JN] Jaguar: prototypes
+// [JN] Jaguar Doom prototypes
 void F_TextWriteJaguar (void);
 void F_CastTickerJaguar (void);
 void F_CastPrintJaguar (char *text);
 void F_CastDrawerJaguar (void);
 
+
+extern patch_t *hu_font[HU_FONTSIZE];
+extern patch_t *hu_font_small_rus[HU_FONTSIZE];
+extern patch_t *hu_font_big_eng[HU_FONTSIZE];
+extern patch_t *hu_font_big_rus[HU_FONTSIZE];
 
 //
 // F_StartFinale
@@ -179,7 +176,7 @@ void F_StartFinale (void)
 
     // Find the right screen and set the text and background
 
-    for (i=0; i<arrlen(textscreens); ++i)
+    for (i = 0; i < arrlen(textscreens) ; ++i)
     {
         textscreen_t *screen = english_language ? 
                                &textscreens[i] :
@@ -214,7 +211,9 @@ void F_StartFinale (void)
 boolean F_Responder (event_t *event)
 {
     if (finalestage == F_STAGE_CAST || finalestage == F_STAGE_CAST_JAGUAR)
-    return F_CastResponder (event);
+    {
+        return F_CastResponder (event);
+    }
 
     return false;
 }
@@ -234,11 +233,10 @@ void F_Ticker (void)
     }
     
     // check for skipping
-    if ( (gamemode == commercial)
-    && ( finalecount > 50) )
+    if (gamemode == commercial && finalecount > 50)
     {
         // go on to the next level
-        for (i=0 ; i<MAXPLAYERS ; i++)
+        for (i = 0 ; i < MAXPLAYERS ; i++)
         {
             // [JN] Pressing PAUSE should not skip text screen
             if (players[i].cmd.buttons && !(players->cmd.buttons & BTS_PAUSE))
@@ -248,13 +246,14 @@ void F_Ticker (void)
         }
 
         if (i < MAXPLAYERS)
-        {	
-            if (gamemission == pack_nerve && gamemap == 8) // [JN] Нет покоя для живых
+        {
+            // [JN] No Rest for the Living
+            if (gamemission == pack_nerve && gamemap == 8)
             {
                 F_StartCast ();
             }  
             
-            // [JN] Jaguar: after beating MAP23, don't go any farther
+            // [JN] Jaguar Doom: after beating MAP23, don't go any farther
             else if (gamemission == jaguar && gamemap == 23)
             {
                 F_StartCast ();
@@ -286,11 +285,13 @@ void F_Ticker (void)
         return;
     }
 
-    if ( gamemode == commercial)
-    return;
+    if (gamemode == commercial)
+    {
+        return;
+    }
 
-    if (finalestage == F_STAGE_TEXT
-    && finalecount>strlen (finaletext)*TEXTSPEED + TEXTWAIT)
+    if (finalestage == F_STAGE_TEXT 
+    &&  finalecount > strlen (finaletext)*TEXTSPEED + TEXTWAIT)
     {
         finalecount = 0;
         finalestage = F_STAGE_ARTSCREEN;
@@ -305,25 +306,16 @@ void F_Ticker (void)
 //
 // F_TextWrite
 //
-
-#include "hu_stuff.h"
-extern patch_t *hu_font[HU_FONTSIZE];
-extern patch_t *hu_font_small_rus[HU_FONTSIZE];
-extern patch_t *hu_font_big_eng[HU_FONTSIZE];
-extern patch_t *hu_font_big_rus[HU_FONTSIZE];
-
-
 void F_TextWrite (void)
 {
-    byte*   src;
-    byte*   dest;
-
-    int     x,y,w;
+    int    x,y,w;
+    int    c;
+    int    cx;
+    int    cy;
+    char  *ch;
+    byte  *src;
+    byte  *dest;
     signed int count;
-    char*   ch;
-    int     c;
-    int     cx;
-    int     cy;
 
     if (gamemission == jaguar)
     {
@@ -335,16 +327,16 @@ void F_TextWrite (void)
     src = W_CacheLumpName ( finaleflat , PU_CACHE);
     dest = I_VideoBuffer;
 
-    for (y=0 ; y<SCREENHEIGHT ; y++)
+    for (y = 0 ; y < SCREENHEIGHT ; y++)
     {
-        for (x=0 ; x<screenwidth/64 ; x++)
+        for (x = 0 ; x < screenwidth/64 ; x++)
         {
-            memcpy (dest, src+((y&63)<<6), 64);
+            memcpy(dest, src + ((y&63)<<6), 64);
             dest += 64;
         }
-        if (screenwidth&63)
+        if (screenwidth & 63)
         {
-            memcpy (dest, src+((y&63)<<6), screenwidth&63);
+            memcpy(dest, src + ((y&63)<<6), screenwidth&63);
             dest += (screenwidth&63);
         }
     }
@@ -353,7 +345,8 @@ void F_TextWrite (void)
 
     if (gamemission == jaguar)
     {
-        if (gamemap == 23)  // Leaving MAP23, end game. Special background.
+        // Leaving MAP23, end game. Special background.
+        if (gamemap == 23)
         {
             if (aspect_ratio >= 2)
             {
@@ -367,7 +360,8 @@ void F_TextWrite (void)
     // [JN] Draw special background on entering Wolfenstein and Grosse levels
     else if (gamemission == doom2 && !vanillaparm)
     {
-        if (gamemap == 15)  // Leaving MAP15, entering MAP31
+        // [JN] Leaving MAP15, entering MAP31: blue Wolfenstein 3D background.
+        if (gamemap == 15)
         {
             if (aspect_ratio >= 2)
             {
@@ -378,7 +372,8 @@ void F_TextWrite (void)
             V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
         }
 
-        if (gamemap == 31)  // Leaving MAP31, entering MAP32
+        // Leaving MAP31, entering MAP32: red Wolfenstein 3D background.
+        if (gamemap == 31)
         {
             if (aspect_ratio >= 2)
             {
@@ -398,14 +393,18 @@ void F_TextWrite (void)
     count = ((signed int) finalecount - 10) / TEXTSPEED;
 
     if (count < 0)
-	count = 0;
+    {
+        count = 0;
+    }
 
     for ( ; count ; count-- )
     {
         c = *ch++;
 
         if (!c)
-        break;
+        {
+            break;
+        }
 
         if (c == '\n')
         {
@@ -538,6 +537,7 @@ void F_StartCast (void)
     wipegamestate = -1; // force a screen wipe
     castnum = 0;
 
+    // [JN] Jaguar Doom: own casting order.
     if (gamemission == jaguar)
     caststate = &states[mobjinfo[castorder_jaguar[castnum].type].seestate];
     else
@@ -546,16 +546,13 @@ void F_StartCast (void)
     casttics = caststate->tics;
     castdeath = false;
 
-    if (gamemission == jaguar)
-    finalestage = F_STAGE_CAST_JAGUAR;
-    else
-    finalestage = F_STAGE_CAST;
+    finalestage = gamemission == jaguar ? F_STAGE_CAST_JAGUAR : F_STAGE_CAST;
 
     castframes = 0;
     castonmelee = 0;
     castattacking = false;
     S_ChangeMusic((gamemission == jaguar ? 
-                   mus_adrian : // [JN] Jaguar: Unreleased Doom MIDI: un20.mid
+                   mus_adrian : // [JN] Jaguar Doom: Unreleased Doom MIDI: un20.mid
                    mus_evil), true);
 }
 
@@ -569,7 +566,10 @@ void F_CastTicker (void)
     int sfx;
 
     if (--casttics > 0)
-    return;			// not time to change state yet
+    {
+        // not time to change state yet
+        return;
+    }
 
     if (caststate->tics == -1 || caststate->nextstate == S_NULL)
     {
@@ -612,7 +612,7 @@ void F_CastTicker (void)
             case S_CPOS_ATK2:
             case S_CPOS_ATK3:
             case S_CPOS_ATK4:	sfx = sfx_shotgn; break;
-            case S_TROO_ATK3:	sfx = sfx_claw; break;
+            case S_TROO_ATK3:	sfx = sfx_claw;   break;
             case S_SARG_ATK2:	sfx = sfx_sgtatk; break;
             case S_BOSS_ATK2:
             case S_BOS2_ATK2:
@@ -666,7 +666,9 @@ void F_CastTicker (void)
     casttics = caststate->tics;
 
     if (casttics == -1)
-    casttics = 15;
+    {
+        casttics = 15;
+    }
 }
 
 
@@ -674,17 +676,23 @@ void F_CastTicker (void)
 // F_CastResponder
 //
 
-boolean F_CastResponder (event_t* ev)
+boolean F_CastResponder (event_t *ev)
 {
     if (ev->type != ev_keydown)
-    return false;
+    {
+        return false;
+    }
 
     if (castdeath)
-	return true;    // already in dying frames
+    {
+        // already in dying frames
+        return true;
+    }
 
     // go into death frame
     castdeath = true;
 
+    // [JN] Jaguar Doom: own casting order. 
     if (gamemission == jaguar)
     caststate = &states[mobjinfo[castorder_jaguar[castnum].type].deathstate];
     else
@@ -709,13 +717,13 @@ boolean F_CastResponder (event_t* ev)
 }
 
 
-void F_CastPrint (char* text)
+void F_CastPrint (char *text)
 {
-    char*   ch;
-    int	    c;
-    int	    cx;
-    int	    w;
-    int	    width;
+    int    c;
+    int    cx;
+    int    w;
+    int    width;
+    char  *ch;
 
     // find width
     ch = text;
@@ -784,11 +792,11 @@ void F_CastPrint (char* text)
 
 void F_CastDrawer (void)
 {
-    spritedef_t*    sprdef;
-    spriteframe_t*  sprframe;
     int             lump;
     boolean         flip;
-    patch_t*        patch;
+    patch_t        *patch;
+    spritedef_t    *sprdef;
+    spriteframe_t  *sprframe;
 
     if (aspect_ratio >= 2)
     {
@@ -824,13 +832,13 @@ void F_CastDrawer (void)
 //
 // F_DrawPatchCol
 //
-void F_DrawPatchCol (int x, patch_t* patch, int col)
+void F_DrawPatchCol (int x, patch_t *patch, int col)
 {
-    column_t*   column;
-    byte*       source;
-    byte*       dest;
-    byte*       desttop;
-    int         count, f;
+    int        count, f;
+    byte      *source;
+    byte      *dest;
+    byte      *desttop;
+    column_t  *column;
 
     column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
     desttop = I_VideoBuffer + x;
@@ -874,6 +882,7 @@ void F_BunnyScroll (void)
     static int  laststage;
     extern boolean wide_loaded;
 
+    // [JN] Draw wide screen backgrounds, only for 16:9 mode.
     if (aspect_ratio == 2 && wide_loaded)
     {
         p1 = W_CacheLumpName (DEH_String("PFUB2WD"), PU_LEVEL);
@@ -881,19 +890,19 @@ void F_BunnyScroll (void)
 
         V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
-        scrolled = (426 - ((signed int) finalecount-230)/2);
+        scrolled = (WIDEORIGWIDTH - ((signed int) finalecount-230)/2);
 
-        if (scrolled > 426)
-        scrolled = 426;
+        if (scrolled > WIDEORIGWIDTH)
+        scrolled = WIDEORIGWIDTH;
         if (scrolled < 0)
         scrolled = 0;
 
-        for ( x=0 ; x<426  ; x++)
+        for ( x=0 ; x<WIDEORIGWIDTH  ; x++)
         {
-            if (x+scrolled < 426)
+            if (x+scrolled < WIDEORIGWIDTH)
             F_DrawPatchCol (x, p1, x+scrolled);
             else
-            F_DrawPatchCol (x, p2, x+scrolled - 426);
+            F_DrawPatchCol (x, p2, x+scrolled - WIDEORIGWIDTH);
         }
     }
     else
@@ -903,19 +912,19 @@ void F_BunnyScroll (void)
 
         V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
-        scrolled = (320 - ((signed int) finalecount-230)/2);
+        scrolled = (ORIGWIDTH - ((signed int) finalecount-230)/2);
 
-        if (scrolled > 320)
-        scrolled = 320;
+        if (scrolled > ORIGWIDTH)
+        scrolled = ORIGWIDTH;
         if (scrolled < 0)
         scrolled = 0;
 
-        for ( x=0 ; x<320  ; x++)
+        for ( x=0 ; x<ORIGWIDTH  ; x++)
         {
-            if (x+scrolled < 320)
+            if (x+scrolled < ORIGWIDTH)
             F_DrawPatchCol (x + wide_delta, p1, x+scrolled);
             else
-            F_DrawPatchCol (x + wide_delta, p2, x+scrolled - 320);
+            F_DrawPatchCol (x + wide_delta, p2, x+scrolled - ORIGWIDTH);
         }
     }
 
@@ -924,18 +933,8 @@ void F_BunnyScroll (void)
 
     if (finalecount < 1180)
     {
-        if (english_language)
-        {
-            V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + wide_delta,
-                (ORIGHEIGHT - 8 * 8) / 2, 
-                W_CacheLumpName(DEH_String("END0"), PU_CACHE));
-        }
-        else
-        {
-            V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + wide_delta,
-                (ORIGHEIGHT - 8 * 8) / 2, 
-                W_CacheLumpName(DEH_String("RD_END0"), PU_CACHE));
-        }
+        V_DrawShadowedPatchDoom(((ORIGWIDTH - 13 * 8) / 2) + wide_delta, (ORIGHEIGHT - 8 * 8) / 2, 
+            W_CacheLumpName(DEH_String(english_language ? "END0" : "RD_END0"), PU_CACHE));
 
         laststage = 0;
         return;
@@ -944,7 +943,9 @@ void F_BunnyScroll (void)
     stage = (finalecount-1180) / 5;
 
     if (stage > 6)
-	stage = 6;
+    {
+        stage = 6;
+    }
 
     if (stage > laststage)
     {
@@ -952,14 +953,10 @@ void F_BunnyScroll (void)
         laststage = stage;
     }
 
-    if (english_language)
-    DEH_snprintf(name, 10, "END%i", stage);
-    else
-    DEH_snprintf(name, 10, "RD_END%i", stage);
+    DEH_snprintf(name, 10, english_language ? "END%i" : "RD_END%i", stage);
 
-    V_DrawShadowedPatchDoom(((320 - 13 * 8) / 2) + wide_delta,
-            (ORIGHEIGHT - 8 * 8) / 2, 
-            W_CacheLumpName (name,PU_CACHE));
+    V_DrawShadowedPatchDoom(((ORIGWIDTH - 13 * 8) / 2) + wide_delta, (ORIGHEIGHT - 8 * 8) / 2, 
+        W_CacheLumpName (name,PU_CACHE));
 }
 
 
@@ -982,6 +979,7 @@ static void F_ArtScreenDrawer(void)
         switch (gameepisode)
         {
             case 1:
+            {
                 if (gameversion >= exe_ultimate)
                 {
                     lumpname = english_language ? "CREDIT" : "CREDITU";
@@ -991,22 +989,31 @@ static void F_ArtScreenDrawer(void)
                     lumpname = english_language ? "HELP2" : "HELP2R";
                 }
                 break;
+            }
             case 2:
+            {
                 lumpname = "VICTORY2";
                 break;
+            }
             case 4:
+            {
                 lumpname = "ENDPIC";
                 break;
+            }
             // [crispy] Sigil
             case 5:
+            {
                 lumpname = "SIGILEND";
                 if (W_CheckNumForName(DEH_String(lumpname)) == -1)
                 {
                     return;
                 }
                 break;
+            }
             default:
+            {
                 return;
+            }
         }
 
         lumpname = DEH_String(lumpname);
@@ -1048,11 +1055,9 @@ void F_Drawer (void)
 //
 // =============================================================================
 
-
-// -----------------------------------------------------------------------------
+//
 // [JN] F_TextWriteJaguar
-// -----------------------------------------------------------------------------
-
+//
 void F_TextWriteJaguar (void)
 {
     byte       *src, *dest;
@@ -1140,10 +1145,9 @@ void F_TextWriteJaguar (void)
 }
 
 
-// -----------------------------------------------------------------------------
+//
 // [JN] F_CastTickerJaguar
-// -----------------------------------------------------------------------------
-
+//
 void F_CastTickerJaguar (void)
 {
     int st;
@@ -1235,10 +1239,9 @@ void F_CastTickerJaguar (void)
 }
 
 
-// -----------------------------------------------------------------------------
-// F_CastPrint
-// -----------------------------------------------------------------------------
-
+//
+// [JN] F_CastPrintJaguar
+//
 void F_CastPrintJaguar (char *text)
 {
     int	     c, cx, w, width;
@@ -1304,10 +1307,9 @@ void F_CastPrintJaguar (char *text)
 }
 
 
-// -----------------------------------------------------------------------------
-// F_CastDrawerJaguar
-// -----------------------------------------------------------------------------
-
+//
+// [JN] F_CastDrawerJaguar
+//
 void F_CastDrawerJaguar (void)
 {
     spritedef_t     *sprdef;

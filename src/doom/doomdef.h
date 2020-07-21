@@ -19,9 +19,9 @@
 //
 
 
-
 #ifndef __DOOMDEF__
 #define __DOOMDEF__
+
 
 #include <stdio.h>
 #include <string.h>
@@ -30,15 +30,16 @@
 #include "i_timer.h"
 #include "d_mode.h"
 
+
 //
 // Global parameters/defines.
 //
+
 // DOOM version
 #define DOOM_VERSION 109
 
 // Version code for cph's longtics hack ("v1.91")
 #define DOOM_191_VERSION 111
-
 
 // If rangecheck is undefined,
 // most parameter validation debugging code will not be compiled
@@ -46,6 +47,7 @@
 
 // The maximum number of players, multiplayer/networking.
 #define MAXPLAYERS 4
+
 
 typedef enum
 {
@@ -74,8 +76,8 @@ typedef enum
 // Deaf monsters/do not react to sound.
 #define MTF_AMBUSH  8
 
-// [JN] Muliplayer only flag.
-#define MTF_NETGAME  16
+// [JN] "Muliplayer only" flag.
+#define MTF_NETGAME 16
 
 
 //
@@ -146,10 +148,10 @@ typedef enum
 //
 typedef enum
 {
-    INVULNTICS  = (30*TICRATE),
-    INVISTICS   = (60*TICRATE),
-    INFRATICS   = (120*TICRATE),
-    IRONTICS    = (60*TICRATE)
+    INVULNTICS  = (30 * TICRATE),
+    INVISTICS   = (60 * TICRATE),
+    INFRATICS   = (120 * TICRATE),
+    IRONTICS    = (60 * TICRATE)
 } powerduration_t;
 
 

@@ -18,13 +18,9 @@
 //	
 
 
-
 #ifndef __F_WIPE_H__
 #define __F_WIPE_H__
 
-//
-//                       SCREEN WIPE PACKAGE
-//
 
 enum
 {

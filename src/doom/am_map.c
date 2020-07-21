@@ -79,6 +79,9 @@
 #define GRIDRANGE        0
 #define XHAIRCOLORS      GRAYS
 
+// The MACRO!
+#define DOT(xx,yy,cc) fb[(yy)*f_w+(flipwidth[xx])]=(cc)
+
 // [JN] Jaguar Doom automap colors
 #define RED_JAGUAR       32
 #define GREEN_JAGUAR     120
@@ -95,12 +98,10 @@
 // moves 140 pixels in 1 second
 #define F_PANINC 4
 
-// how much zoom-in per tic
-// goes to 2x in 1 second
+// how much zoom-in per tic goes to 2x in 1 second
 #define M_ZOOMIN ((int) (1.02*FRACUNIT))
 
-// how much zoom-out per tic
-// pulls out to 0.5x in 1 second
+// how much zoom-out per tic pulls out to 0.5x in 1 second
 #define M_ZOOMOUT ((int) (FRACUNIT/1.02))
 
 // translates between frame-buffer and map distances
@@ -148,34 +149,34 @@ typedef struct
 //
 #define R ((8*PLAYERRADIUS)/7)
 mline_t player_arrow[] = {
-    { { -R+R/8, 0 }, { R, 0 } }, // -----
-    { { R, 0 }, { R-R/2, R/4 } },  // ----->
-    { { R, 0 }, { R-R/2, -R/4 } },
-    { { -R+R/8, 0 }, { -R-R/8, R/4 } }, // >---->
-    { { -R+R/8, 0 }, { -R-R/8, -R/4 } },
-    { { -R+3*R/8, 0 }, { -R+R/8, R/4 } }, // >>--->
+    { { -R+R/8,   0 }, {  R,      0   } }, // -----
+    { {  R,       0 }, {  R-R/2,  R/4 } }, // ----->
+    { {  R,       0 }, {  R-R/2, -R/4 } },
+    { { -R+R/8,   0 }, { -R-R/8,  R/4 } }, // >---->
+    { { -R+R/8,   0 }, { -R-R/8, -R/4 } },
+    { { -R+3*R/8, 0 }, { -R+R/8,  R/4 } }, // >>--->
     { { -R+3*R/8, 0 }, { -R+R/8, -R/4 } }
 };
 #undef R
 
 #define R ((8*PLAYERRADIUS)/7)
 mline_t cheat_player_arrow[] = {
-    { { -R+R/8, 0 }, { R, 0 } }, // -----
-    { { R, 0 }, { R-R/2, R/6 } },  // ----->
-    { { R, 0 }, { R-R/2, -R/6 } },
-    { { -R+R/8, 0 }, { -R-R/8, R/6 } }, // >----->
-    { { -R+R/8, 0 }, { -R-R/8, -R/6 } },
-    { { -R+3*R/8, 0 }, { -R+R/8, R/6 } }, // >>----->
-    { { -R+3*R/8, 0 }, { -R+R/8, -R/6 } },
-    { { -R/2, 0 }, { -R/2, -R/6 } }, // >>-d--->
-    { { -R/2, -R/6 }, { -R/2+R/6, -R/6 } },
-    { { -R/2+R/6, -R/6 }, { -R/2+R/6, R/4 } },
-    { { -R/6, 0 }, { -R/6, -R/6 } }, // >>-dd-->
-    { { -R/6, -R/6 }, { 0, -R/6 } },
-    { { 0, -R/6 }, { 0, R/4 } },
-    { { R/6, R/4 }, { R/6, -R/7 } }, // >>-ddt->
-    { { R/6, -R/7 }, { R/6+R/32, -R/7-R/32 } },
-    { { R/6+R/32, -R/7-R/32 }, { R/6+R/10, -R/7 } }
+    { { -R+R/8,     0        }, {  R,           0 } }, // -----
+    { {  R,         0        }, {  R-R/2,     R/6 } }, // ----->
+    { {  R,         0        }, {  R-R/2,    -R/6 } },
+    { { -R+R/8,     0        }, { -R-R/8,     R/6 } }, // >----->
+    { { -R+R/8,     0        }, { -R-R/8,    -R/6 } },
+    { { -R+3*R/8,   0        }, { -R+R/8,     R/6 } }, // >>----->
+    { { -R+3*R/8,   0        }, { -R+R/8,    -R/6 } },
+    { { -R/2,       0        }, { -R/2,      -R/6 } }, // >>-d--->
+    { { -R/2,      -R/6      }, { -R/2+R/6,  -R/6 } },
+    { { -R/2+R/6,  -R/6      }, { -R/2+R/6,   R/4 } },
+    { { -R/6,       0        }, { -R/6,      -R/6 } }, // >>-dd-->
+    { { -R/6,      -R/6      }, {  0,        -R/6 } },
+    { {  0,        -R/6      }, {  0,         R/4 } },
+    { {  R/6,       R/4      }, {  R/6,      -R/7 } }, // >>-ddt->
+    { {  R/6,      -R/7      }, {  R/6+R/32, -R/7-R/32 } },
+    { {  R/6+R/32, -R/7-R/32 }, {  R/6+R/10, -R/7 } }
 };
 #undef R
 
@@ -209,7 +210,6 @@ static int f_y;
 static int f_w;
 static int f_h;
 
-static int lightlev; // used for funky strobing effect
 static byte* fb;     // pseudo-frame buffer
 static int amclock;
 
@@ -233,8 +233,8 @@ static fixed_t min_y;
 static fixed_t max_x;
 static fixed_t max_y;
 
-static fixed_t max_w; // max_x-min_x,
-static fixed_t max_h; // max_y-min_y
+static fixed_t max_w;
+static fixed_t max_h;
 
 // based on player size
 static fixed_t min_w;
@@ -267,10 +267,10 @@ cheatseq_t cheat_amap_beta = CHEAT("eek", 0);   // [JN] Press Beta cheat code
 
 static boolean stopped = true;
 
-// [JN] Automap line antialiasing:
-#define NUMALIAS 35                             // Number of antialiased lines
 
-static byte antialias[NUMALIAS][8] = {
+
+// [JN] Automap line antialiasing:
+static byte antialias[35][8] = {
     // Doom colors:
     {176, 177, 178, 179, 180, 181, 182, 183},   // 1.  WALLCOLORS
     { 64,  65,  66,  67,  68,  69,  70,  71},   // 2.  FDWALLCOLORS
@@ -328,26 +328,33 @@ static angle_t mapangle;
 // Calculates the slope and slope according to the x-axis of a line
 // segment in map coordinates (with the upright y-axis n' all) so
 // that it can be used with the brain-dead drawing stuff.
-
-void
-AM_getIslope
-( mline_t*	ml,
-  islope_t*	is )
+void AM_getIslope (mline_t *ml, islope_t *is)
 {
     int dx, dy;
 
     dy = ml->a.y - ml->b.y;
     dx = ml->b.x - ml->a.x;
-    if (!dy) is->islp = (dx<0?-INT_MAX:INT_MAX);
-    else is->islp = FixedDiv(dx, dy);
-    if (!dx) is->slp = (dy<0?-INT_MAX:INT_MAX);
-    else is->slp = FixedDiv(dy, dx);
+
+    if (!dy)
+    {
+        is->islp = (dx<0?-INT_MAX:INT_MAX);
+    }
+    else
+    {
+        is->islp = FixedDiv(dx, dy);
+    }
+
+    if (!dx)
+    {    
+        is->slp = (dy<0?-INT_MAX:INT_MAX);
+    }
+    else
+    {
+        is->slp = FixedDiv(dy, dx);
+    }
 }
 
 
-//
-//
-//
 void AM_activateNewScale(void)
 {
     m_x += m_w/2;
@@ -361,9 +368,6 @@ void AM_activateNewScale(void)
 }
 
 
-//
-//
-//
 void AM_saveScaleAndLoc(void)
 {
     old_m_x = m_x;
@@ -373,21 +377,22 @@ void AM_saveScaleAndLoc(void)
 }
 
 
-//
-//
-//
 void AM_restoreScaleAndLoc(void)
 {
     m_w = old_m_w;
     m_h = old_m_h;
+
     if (!automap_follow)
     {
         m_x = old_m_x;
         m_y = old_m_y;
-    } else {
+    }
+    else 
+    {
         m_x = plr->mo->x - m_w/2;
         m_y = plr->mo->y - m_h/2;
     }
+
     m_x2 = m_x + m_w;
     m_y2 = m_y + m_h;
 
@@ -424,24 +429,32 @@ void AM_addMark(void)
 //
 void AM_findMinMaxBoundaries(void)
 {
-    int i;
+    int     i;
     fixed_t a;
     fixed_t b;
 
     min_x = min_y =  INT_MAX;
     max_x = max_y = -INT_MAX;
 
-    for (i=0;i<numvertexes;i++)
+    for (i = 0 ; i < numvertexes ; i++)
     {
         if (vertexes[i].x < min_x)
-        min_x = vertexes[i].x;
+        {
+            min_x = vertexes[i].x;
+        }
         else if (vertexes[i].x > max_x)
-        max_x = vertexes[i].x;
+        {
+            max_x = vertexes[i].x;
+        }
 
         if (vertexes[i].y < min_y)
-        min_y = vertexes[i].y;
+        {
+            min_y = vertexes[i].y;
+        }
         else if (vertexes[i].y > max_y)
-        max_y = vertexes[i].y;
+        {
+            max_y = vertexes[i].y;
+        }
     }
 
     // [crispy] cope with huge level dimensions which span the entire INT range
@@ -459,9 +472,6 @@ void AM_findMinMaxBoundaries(void)
 }
 
 
-//
-//
-//
 void AM_changeWindowLoc(void)
 {
     int64_t incx, incy;
@@ -474,31 +484,38 @@ void AM_changeWindowLoc(void)
 
     incx = m_paninc.x;
     incy = m_paninc.y;
+
     if (automap_rotate)
     {
         AM_rotate(&incx, &incy, -mapangle);
     }
+
     m_x += incx;
     m_y += incy;
 
     if (m_x + m_w/2 > max_x)
-    m_x = max_x - m_w/2;
+    {
+        m_x = max_x - m_w/2;
+    }
     else if (m_x + m_w/2 < min_x)
-    m_x = min_x - m_w/2;
+    {
+        m_x = min_x - m_w/2;
+    }
 
     if (m_y + m_h/2 > max_y)
-    m_y = max_y - m_h/2;
+    {
+        m_y = max_y - m_h/2;
+    }
     else if (m_y + m_h/2 < min_y)
-    m_y = min_y - m_h/2;
+    {
+        m_y = min_y - m_h/2;
+    }
 
     m_x2 = m_x + m_w;
     m_y2 = m_y + m_h;
 }
 
 
-//
-//
-//
 void AM_initVariables(void)
 {
     int pnum;
@@ -509,7 +526,6 @@ void AM_initVariables(void)
 
     f_oldloc.x = INT_MAX;
     amclock = 0;
-    lightlev = 0;
 
     m_paninc.x = m_paninc.y = 0;
     ftom_zoommul = FRACUNIT;
@@ -552,15 +568,12 @@ void AM_initVariables(void)
 }
 
 
-//
-// 
-//
 void AM_loadPics(void)
 {
     int i;
     char namebuf[9];
 
-    for (i=0;i<10;i++)
+    for (i = 0 ; i < 10 ; i++)
     {
         DEH_snprintf(namebuf, 9, "AMMNUM%d", i);
         marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
@@ -573,7 +586,7 @@ void AM_unloadPics(void)
     int i;
     char namebuf[9];
 
-    for (i=0;i<10;i++)
+    for (i = 0 ; i < 10 ; i++)
     {
         DEH_snprintf(namebuf, 9, "AMMNUM%d", i);
         W_ReleaseLumpName(namebuf);
@@ -585,8 +598,10 @@ void AM_clearMarks(void)
 {
     int i;
 
-    for (i=0;i<AM_NUMMARKPOINTS;i++)
-    markpoints[i].x = -1; // means empty
+    for (i = 0 ; i < AM_NUMMARKPOINTS ; i++)
+    {
+        markpoints[i].x = -1; // means empty
+    }
     markpointnum = 0;
 }
 
@@ -603,10 +618,7 @@ void AM_LevelInit(void)
     f_x = f_y = 0;
     f_w = screenwidth;
     
-    if (gamemission == jaguar)
-    f_h = SCREENHEIGHT - (ST_HEIGHT_JAG << hires);
-    else
-    f_h = SCREENHEIGHT - (ST_HEIGHT << hires);
+    f_h = SCREENHEIGHT - ((gamemission == jaguar ? ST_HEIGHT_JAG : ST_HEIGHT) << hires);
 
     AM_clearMarks();
 
@@ -618,15 +630,14 @@ void AM_LevelInit(void)
     scale_mtof = FixedDiv(a < b ? a : b, (int) (0.7*FRACUNIT));
 
     if (scale_mtof > max_scale_mtof)
-    scale_mtof = min_scale_mtof;
+    {
+        scale_mtof = min_scale_mtof;
+    }
 
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
 }
 
 
-//
-//
-//
 void AM_Stop (void)
 {
     static event_t st_notify = { 0, ev_keyup, AM_MSGEXITED, 0 };
@@ -646,14 +657,15 @@ void AM_Stop (void)
 }
 
 
-//
-//
-//
 void AM_Start (void)
 {
     static int lastlevel = -1, lastepisode = -1;
 
-    if (!stopped) AM_Stop();
+    if (!stopped)
+    {
+        AM_Stop();
+    }
+
     stopped = false;
 
     if (lastlevel != gamemap || lastepisode != gameepisode)
@@ -693,7 +705,7 @@ void AM_maxOutWindowScale(void)
 //
 // Handle events (user inputs) in automap mode
 //
-boolean AM_Responder (event_t* ev)
+boolean AM_Responder (event_t *ev)
 {
     int rc;
     static int bigstate=0;
@@ -814,17 +826,25 @@ boolean AM_Responder (event_t* ev)
             automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
             if (automap_follow)
+            {
                 plr->message_system = DEH_String(amstr_followon);
+            }
             else
+            {
                 plr->message_system = DEH_String(amstr_followoff);
+            }
         }
         else if (key == key_map_grid)
         {
             automap_grid = !automap_grid;
             if (automap_grid)
+            {
                 plr->message_system = DEH_String(amstr_gridon);
+            }
             else
+            {
                 plr->message_system = DEH_String(amstr_gridoff);
+            }
         }
         else if (key == key_map_mark)
         {
@@ -846,17 +866,25 @@ boolean AM_Responder (event_t* ev)
             
             automap_overlay = !automap_overlay;
             if (automap_overlay)
+            {
                 plr->message_system = DEH_String(amstr_overlayon);
+            }
             else
+            {
                 plr->message_system = DEH_String(amstr_overlayoff);
+            }
         }
         else if (key == key_map_rotate)
         {
             automap_rotate = !automap_rotate;
             if (automap_rotate)
+            {
                 plr->message_system = DEH_String(amstr_rotateon);
+            }
             else
+            {
                 plr->message_system = DEH_String(amstr_rotateoff);
+            }
         }
         else
         {
@@ -919,17 +947,20 @@ void AM_changeWindowScale(void)
     scale_ftom = FixedDiv(FRACUNIT, scale_mtof);
 
     if (scale_mtof < min_scale_mtof)
-    AM_minOutWindowScale();
+    {
+        AM_minOutWindowScale();
+    }
     else if (scale_mtof > max_scale_mtof)
-    AM_maxOutWindowScale();
+    {
+        AM_maxOutWindowScale();
+    }
     else
-    AM_activateNewScale();
+    {
+        AM_activateNewScale();
+    }
 }
 
 
-//
-//
-//
 void AM_doFollowPlayer(void)
 {
     if (f_oldloc.x != plr->mo->x || f_oldloc.y != plr->mo->y)
@@ -940,32 +971,6 @@ void AM_doFollowPlayer(void)
         m_y2 = m_y + m_h;
         f_oldloc.x = plr->mo->x;
         f_oldloc.y = plr->mo->y;
-
-        //  m_x = FTOM(MTOF(plr->mo->x - m_w/2));
-        //  m_y = FTOM(MTOF(plr->mo->y - m_h/2));
-        //  m_x = plr->mo->x - m_w/2;
-        //  m_y = plr->mo->y - m_h/2;
-    }
-}
-
-
-//
-//
-//
-void AM_updateLightLev(void)
-{
-    static int nexttic = 0;
-    //static int litelevels[] = { 0, 3, 5, 6, 6, 7, 7, 7 };
-    static int litelevels[] = { 0, 4, 7, 10, 12, 14, 15, 15 };
-    static int litelevelscnt = 0;
-
-    // Change light level
-    if (amclock>nexttic)
-    {
-        lightlev = litelevels[litelevelscnt++];
-
-        if (litelevelscnt == arrlen(litelevels)) litelevelscnt = 0;
-        nexttic = amclock + 6 - (amclock % 6);
     }
 }
 
@@ -976,33 +981,40 @@ void AM_updateLightLev(void)
 void AM_Ticker (void)
 {
     if (!automapactive)
-    return;
+    {
+        return;
+    }
 
     amclock++;
 
     if (automap_follow)
-    AM_doFollowPlayer();
+    {
+        AM_doFollowPlayer();
+    }
 
     // Change the zoom if necessary
     if (ftom_zoommul != FRACUNIT)
-    AM_changeWindowScale();
+    {
+        AM_changeWindowScale();
+    }
 
     // Change x,y location
     if (m_paninc.x || m_paninc.y)
-    AM_changeWindowLoc();
-
-    // Update light level
-    // AM_updateLightLev();
+    {
+        AM_changeWindowLoc();
+    }
 
     // [crispy] required for AM_rotatePoint()
     if (automap_rotate)
     {
         mapcenter.x = m_x + m_w / 2;
         mapcenter.y = m_y + m_h / 2;
-        // [crispy] keep the map static in overlay mode
+        // [crispy] keep the map static in overlay mode 
         // if not following the player
         if (!(!automap_follow && automap_overlay))
-        mapangle = ANG90 - viewangle;
+        {
+            mapangle = ANG90 - viewangle;
+        }
     }
 }
 
@@ -1027,19 +1039,19 @@ boolean AM_clipMline (mline_t* ml, fline_t* fl)
 {
     enum
     {
-    LEFT	=1,
-    RIGHT	=2,
-    BOTTOM	=4,
-    TOP	=8
+        LEFT   = 1,
+        RIGHT  = 2,
+        BOTTOM = 4,
+        TOP    = 8
     };
 
-    register int outcode1 = 0;
-    register int outcode2 = 0;
-    register int outside;
+    int outcode1 = 0;
+    int outcode2 = 0;
+    int outside;
 
-    fpoint_t tmp;
     int      dx;
     int      dy;
+    fpoint_t tmp;
 
 #define DOOUTCODE(oc, mx, my) \
     (oc) = 0; \
@@ -1048,33 +1060,52 @@ boolean AM_clipMline (mline_t* ml, fline_t* fl)
     if ((mx) < 0) (oc) |= LEFT; \
     else if ((mx) >= f_w) (oc) |= RIGHT;
 
-
     // do trivial rejects and outcodes
     if (ml->a.y > m_y2)
-    outcode1 = TOP;
+    {
+        outcode1 = TOP;
+    }
     else if (ml->a.y < m_y)
-    outcode1 = BOTTOM;
+    {
+        outcode1 = BOTTOM;
+    }
 
     if (ml->b.y > m_y2)
-    outcode2 = TOP;
+    {
+        outcode2 = TOP;
+    }
     else if (ml->b.y < m_y)
-    outcode2 = BOTTOM;
+    {
+        outcode2 = BOTTOM;
+    }
 
     if (outcode1 & outcode2)
-    return false; // trivially outside
+    {
+        return false; // trivially outside
+    }
 
     if (ml->a.x < m_x)
-    outcode1 |= LEFT;
+    {
+        outcode1 |= LEFT;
+    }
     else if (ml->a.x > m_x2)
-    outcode1 |= RIGHT;
+    {
+        outcode1 |= RIGHT;
+    }
 
     if (ml->b.x < m_x)
-    outcode2 |= LEFT;
+    {
+        outcode2 |= LEFT;
+    }
     else if (ml->b.x > m_x2)
+    {
     outcode2 |= RIGHT;
+    }
 
     if (outcode1 & outcode2)
-    return false; // trivially outside
+    {
+        return false; // trivially outside
+    }
 
     // transform to frame-buffer coordinates.
     fl->a.x = CXMTOF(ml->a.x);
@@ -1086,16 +1117,22 @@ boolean AM_clipMline (mline_t* ml, fline_t* fl)
     DOOUTCODE(outcode2, fl->b.x, fl->b.y);
 
     if (outcode1 & outcode2)
-    return false;
+    {
+        return false;
+    }
 
     while (outcode1 | outcode2)
     {
         // may be partially inside box
         // find an outside point
         if (outcode1)
-        outside = outcode1;
+        {
+            outside = outcode1;
+        }
         else
-        outside = outcode2;
+        {
+            outside = outcode2;
+        }
 
         // clip to each side
         if (outside & TOP)
@@ -1144,8 +1181,10 @@ boolean AM_clipMline (mline_t* ml, fline_t* fl)
         }
 
         if (outcode1 & outcode2)
+        {
             return false; // trivially outside
         }
+    }
 
     return true;
 }
@@ -1158,7 +1197,6 @@ boolean AM_clipMline (mline_t* ml, fline_t* fl)
 void AM_drawFline (fline_t* fl, int color)
 {
     int x, y, dx, dy, sx, sy, ax, ay, d;
-    static int fuck = 0;
 
     // [JN] Apply line antialiasing
     if (automap_antialias && !vanillaparm)
@@ -1270,63 +1308,69 @@ void AM_drawFline (fline_t* fl, int color)
     }
     else
     {
-    // For debugging only
-    if (fl->a.x < 0 || fl->a.x >= f_w
-	 || fl->a.y < 0 || fl->a.y >= f_h
-	 || fl->b.x < 0 || fl->b.x >= f_w
-	 || fl->b.y < 0 || fl->b.y >= f_h)
-    {
-        DEH_fprintf(stderr, "fuck %d \r", fuck++);
-        return;
-    }
-
-#define DOT(xx,yy,cc) fb[(yy)*f_w+(flipwidth[xx])]=(cc)    //the MACRO!
-
-    dx = fl->b.x - fl->a.x;
-    ax = 2 * (dx<0 ? -dx : dx);
-    sx = dx<0 ? -1 : 1;
-
-    dy = fl->b.y - fl->a.y;
-    ay = 2 * (dy<0 ? -dy : dy);
-    sy = dy<0 ? -1 : 1;
-
-    x = fl->a.x;
-    y = fl->a.y;
-
-    if (ax > ay)
-    {
-        d = ay - ax/2;
-        while (1)
+        // For debugging only
+        if (fl->a.x < 0 || fl->a.x >= f_w
+        ||  fl->a.y < 0 || fl->a.y >= f_h
+        ||  fl->b.x < 0 || fl->b.x >= f_w
+        ||  fl->b.y < 0 || fl->b.y >= f_h)
         {
-            DOT(x,y,color);
-            if (x == fl->b.x) return;
-            if (d>=0)
-            {
-                y += sy;
-                d -= ax;
-            }
-            x += sx;
-            d += ay;
+            return;
         }
-    }
-    else
-    {
-        d = ax - ay/2;
-        while (1)
+
+        dx = fl->b.x - fl->a.x;
+        ax = 2 * (dx<0 ? -dx : dx);
+        sx = dx<0 ? -1 : 1;
+
+        dy = fl->b.y - fl->a.y;
+        ay = 2 * (dy<0 ? -dy : dy);
+        sy = dy<0 ? -1 : 1;
+
+        x = fl->a.x;
+        y = fl->a.y;
+
+        if (ax > ay)
         {
-            DOT(x, y, color);
-            if (y == fl->b.y) return;
-            if (d >= 0)
+            d = ay - ax/2;
+            while (1)
             {
+                DOT(x,y,color);
+
+                if (x == fl->b.x)
+                {
+                    return;
+                }
+                if (d>=0)
+                {
+                    y += sy;
+                    d -= ax;
+                }
                 x += sx;
-                d -= ay;
+                d += ay;
             }
-            y += sy;
-            d += ax;
         }
-    }
+        else
+        {
+            d = ax - ay/2;
+            while (1)
+            {
+                DOT(x, y, color);
+
+                if (y == fl->b.y)
+                {
+                    return;
+                }
+                if (d >= 0)
+                {
+                    x += sx;
+                    d -= ay;
+                }
+                y += sy;
+                d += ax;
+            }
+        }
     }
 }
+
 
 // [JN] Line antialiasing. Adapted from Heretic source code. (src/am_map.c)
 /* Wu antialiased line drawer.
@@ -1383,6 +1427,7 @@ void PUTDOT(short xx, short yy, byte * cc, byte * cm)
     }
     fb[oldyyshifted + flipwidth[xx]] = *(cc);
 }
+
 
 void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
                 int NumLevels, unsigned short IntensityBits)
@@ -1519,6 +1564,7 @@ void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
     PUTDOT(X1, Y1, &BaseColor[0], NULL);
 }
 
+
 //
 // Clip lines, draw visible part sof lines.
 //
@@ -1527,7 +1573,10 @@ void AM_drawMline (mline_t* ml, int color)
     static fline_t fl;
 
     if (AM_clipMline(ml, &fl))
-    AM_drawFline(&fl, color); // draws it on frame buffer using fb coords
+    {
+        // draws it on frame buffer using fb coords
+        AM_drawFline(&fl, color);
+    }
 }
 
 
@@ -1548,15 +1597,19 @@ void AM_drawGrid(int color)
     }
 
     if ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS))
-    start -= ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
+    {
+        start -= ((start-bmaporgx)%(MAPBLOCKUNITS<<FRACBITS));
+    }
+
     end = m_x + m_w;
+
     if (automap_rotate)
     {
         end += m_h / 2;
     }
 
     // draw vertical gridlines
-    for (x=start; x<end; x+=(MAPBLOCKUNITS<<FRACBITS))
+    for (x = start ; x < end ; x += (MAPBLOCKUNITS<<FRACBITS))
     {
         ml.a.x = x;
         ml.b.x = x;
@@ -1581,15 +1634,19 @@ void AM_drawGrid(int color)
     }
 
     if ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS))
-    start -= ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
+    {
+        start -= ((start-bmaporgy)%(MAPBLOCKUNITS<<FRACBITS));
+    }
+
     end = m_y + m_h;
+
     if (automap_rotate)
     {
         end += m_w / 2;
     }
 
     // draw horizontal gridlines
-    for (y=start; y<end; y+=(MAPBLOCKUNITS<<FRACBITS))
+    for (y = start ; y < end ; y += (MAPBLOCKUNITS<<FRACBITS))
     {
         ml.a.y = y;
         ml.b.y = y;
@@ -1614,51 +1671,61 @@ void AM_drawGrid(int color)
 //
 void AM_drawWalls(void)
 {
-    int i;
+    int    i;
     static mline_t l;
 
-    for (i=0;i<numlines;i++)
+    for (i = 0 ; i < numlines ; i++)
     {
         l.a.x = lines[i].v1->x;
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
+
         if (automap_rotate)
         {
             AM_rotatePoint(&l.a);
             AM_rotatePoint(&l.b);
         }
+
         if (cheating || (lines[i].flags & ML_MAPPED))
         {
             if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
-            continue;
+            {
+                continue;
+            }
 
             if (!lines[i].backsector)
             {
-                AM_drawMline(&l, WALLCOLORS+lightlev);
+                AM_drawMline(&l, WALLCOLORS);
             }
             else
             {
-                if (lines[i].special == 39)
-                { // teleporters
+                if (lines[i].special == 39)          // teleporters
+                {
                     AM_drawMline(&l, WALLCOLORS+WALLRANGE/2);
                 }
                 else if (lines[i].flags & ML_SECRET) // secret door
                 {
-                    if (cheating) AM_drawMline(&l, SECRETWALLCOLORS + lightlev);
-                    else AM_drawMline(&l, WALLCOLORS+lightlev);
+                    if (cheating)
+                    {
+                        AM_drawMline(&l, SECRETWALLCOLORS);
+                    }
+                    else
+                    {
+                        AM_drawMline(&l, WALLCOLORS);
+                    }
                 }
                 else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight) 
                 {
-                    AM_drawMline(&l, FDWALLCOLORS + lightlev); // floor level change
+                    AM_drawMline(&l, FDWALLCOLORS); // floor level change
                 }
                 else if (lines[i].backsector->ceilingheight != lines[i].frontsector->ceilingheight) 
                 {
-                    AM_drawMline(&l, CDWALLCOLORS+lightlev); // ceiling level change
+                    AM_drawMline(&l, CDWALLCOLORS); // ceiling level change
                 }
                 else if (cheating)
                 {
-                    AM_drawMline(&l, TSWALLCOLORS+lightlev);
+                    AM_drawMline(&l, TSWALLCOLORS);
                 }
             }
         }
@@ -1669,29 +1736,34 @@ void AM_drawWalls(void)
     }
 }
 
-// -----------------------------------------------------------------------------
+
+//
 // [JN] Automap colors: Boom
-// -----------------------------------------------------------------------------
+//
 void AM_drawWallsBoom(void)
 {
-    int i;
+    int    i;
     static mline_t l;
 
-    for (i=0;i<numlines;i++)
+    for (i = 0 ; i < numlines ; i++)
     {
         l.a.x = lines[i].v1->x;
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
+
         if (automap_rotate)
         {
             AM_rotatePoint(&l.a);
             AM_rotatePoint(&l.b);
         }
+
         if (cheating || (lines[i].flags & ML_MAPPED))
         {
             if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
-            continue;
+            {
+                continue;
+            }
 
             if (!lines[i].backsector)
             {
@@ -1708,26 +1780,36 @@ void AM_drawWallsBoom(void)
                     AM_drawMline(&l, 119);
                 }
                 // [JN] Secret door
-                else if (lines[i].flags & ML_SECRET)
+                else
+                if (lines[i].flags & ML_SECRET)
                 {
                     AM_drawMline(&l, 23);      // wall color
                 }
 
                 // [JN] BLUE locked doors
-                else if (lines[i].special == 26 || lines[i].special == 32
-                     ||  lines[i].special == 99 || lines[i].special == 133)
+                else
+                if (lines[i].special == 26
+                ||  lines[i].special == 32
+                ||  lines[i].special == 99
+                ||  lines[i].special == 133)
                 {
                     AM_drawMline(&l, 204);
                 }
                 // [JN] RED locked doors
-                else if (lines[i].special == 28 || lines[i].special == 33
-                     ||  lines[i].special == 134 || lines[i].special == 135)
+                else
+                if (lines[i].special == 28
+                ||  lines[i].special == 33
+                ||  lines[i].special == 134
+                ||  lines[i].special == 135)
                 {
                     AM_drawMline(&l, 175);
                 }
                 // [JN] YELLOW locked doors
-                else if (lines[i].special == 27 || lines[i].special == 34
-                     ||  lines[i].special == 136 || lines[i].special == 137)
+                else
+                if (lines[i].special == 27
+                ||  lines[i].special == 34
+                ||  lines[i].special == 136
+                ||  lines[i].special == 137)
                 {
                     AM_drawMline(&l, 231);
                 }
@@ -1780,30 +1862,35 @@ void AM_drawWallsBoom(void)
     }
 }
 
-// -----------------------------------------------------------------------------
+
+//
 // [JN] Atari Jaguar: draw walls using Jaguar colors.
 // Adapted from original Jaguar Doom source, AM_Drawer.
-// -----------------------------------------------------------------------------
+//
 void AM_drawWallsJaguar(void)
 {
-    int i;
+    int    i;
     static mline_t l;
 
-    for (i=0;i<numlines;i++)
+    for (i = 0 ; i < numlines ; i++)
     {
         l.a.x = lines[i].v1->x;
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
+
         if (automap_rotate)
         {
             AM_rotatePoint(&l.a);
             AM_rotatePoint(&l.b);
         }
+
         if (cheating || (lines[i].flags & ML_MAPPED))
         {
             if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
-            continue;
+            {
+                continue;
+            }
 
             if (!lines[i].backsector)
             {
@@ -1812,7 +1899,8 @@ void AM_drawWallsJaguar(void)
             else
             {
                 // Teleport line
-                if (lines[i].special == 39 || lines[i].special == 97)
+                if (lines[i].special == 39
+                ||  lines[i].special == 97)
                 AM_drawMline(&l, GREEN_JAGUAR);
 
                 // Secret door
@@ -1844,33 +1932,37 @@ void AM_drawWallsJaguar(void)
     }
 }
 
-// -----------------------------------------------------------------------------
+//
 // [JN] Automap colors: Raven (Heretic)
-// -----------------------------------------------------------------------------
+//
 void AM_drawWallsRaven(void)
 {
-    int i;
+    int    i;
     static mline_t l;
 
-    for (i=0;i<numlines;i++)
+    for (i = 0 ; i < numlines ; i++)
     {
         l.a.x = lines[i].v1->x;
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
+
         if (automap_rotate)
         {
             AM_rotatePoint(&l.a);
             AM_rotatePoint(&l.b);
         }
+
         if (cheating || (lines[i].flags & ML_MAPPED))
         {
             if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
-            continue;
+            {
+                continue;
+            }
 
             if (!lines[i].backsector)
             {
-                AM_drawMline(&l, 151+lightlev);
+                AM_drawMline(&l, 151);
             }
             else
             {
@@ -1888,73 +1980,89 @@ void AM_drawWallsRaven(void)
                     if (cheating) 
                         AM_drawMline(&l, 0);
                     else 
-                        AM_drawMline(&l, 108+lightlev);
+                        AM_drawMline(&l, 108);
                 }
                 // [JN] BLUE locked doors
-                else if (lines[i].special == 26 || lines[i].special == 32
-                     ||  lines[i].special == 99 || lines[i].special == 133)
+                else 
+                if (lines[i].special == 26
+                ||  lines[i].special == 32
+                ||  lines[i].special == 99
+                ||  lines[i].special == 133)
                 {
                     AM_drawMline(&l, 199);
                 }
                 // [JN] RED locked doors
-                else if (lines[i].special == 28 || lines[i].special == 33
-                     ||  lines[i].special == 134 || lines[i].special == 135)
+                else
+                if (lines[i].special == 28
+                ||  lines[i].special == 33
+                ||  lines[i].special == 134
+                ||  lines[i].special == 135)
                 {
                     AM_drawMline(&l, 178);
                 }
                 // [JN] YELLOW locked doors
-                else if (lines[i].special == 27 || lines[i].special == 34
-                     ||  lines[i].special == 136 || lines[i].special == 137)
+                else
+                if (lines[i].special == 27
+                ||  lines[i].special == 34
+                ||  lines[i].special == 136
+                ||  lines[i].special == 137)
                 {
                     AM_drawMline(&l, 161);
                 }
                 // [JN] floor level change
                 else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight) 
                 {
-                    AM_drawMline(&l, 239 + lightlev);
+                    AM_drawMline(&l, 239);
                 }
                 // [JN] ceiling level change
                 else if (lines[i].backsector->ceilingheight != lines[i].frontsector->ceilingheight) 
                 {
-                    AM_drawMline(&l, 133+lightlev);
+                    AM_drawMline(&l, 133);
                 }
                 else if (cheating)
                 {
-                    AM_drawMline(&l, 99+lightlev);
+                    AM_drawMline(&l, 99);
                 }
             }
         }
         else if (plr->powers[pw_allmap])
         {
-            if (!(lines[i].flags & LINE_NEVERSEE)) 
+            if (!(lines[i].flags & LINE_NEVERSEE))
+            {
                 AM_drawMline(&l, 99);
+            }
         }
     }
 }
 
-// -----------------------------------------------------------------------------
+
+//
 // [JN] Automap colors: Strife
-// -----------------------------------------------------------------------------
+//
 void AM_drawWallsStrife(void)
 {
-    int i;
+    int    i;
     static mline_t l;
 
-    for (i=0;i<numlines;i++)
+    for (i = 0 ; i < numlines ; i++)
     {
         l.a.x = lines[i].v1->x;
         l.a.y = lines[i].v1->y;
         l.b.x = lines[i].v2->x;
         l.b.y = lines[i].v2->y;
+
         if (automap_rotate)
         {
             AM_rotatePoint(&l.a);
             AM_rotatePoint(&l.b);
         }
+
         if (cheating || (lines[i].flags & ML_MAPPED))
         {
             if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
-            continue;
+            {
+                continue;
+            }
 
             // villsa [STRIFE]
             // [JN] Changed to Doom exit lines
@@ -2001,8 +2109,10 @@ void AM_drawWallsStrife(void)
         }
         else if (plr->powers[pw_allmap])
         {
-            if (!(lines[i].flags & LINE_NEVERSEE)) 
+            if (!(lines[i].flags & LINE_NEVERSEE))
+            {
                 AM_drawMline(&l, 102);
+            }
         }
     }
 }
@@ -2012,14 +2122,17 @@ void AM_drawWallsStrife(void)
 // Rotation in 2D.
 // Used to rotate player arrow line character.
 //
-void AM_rotate (int64_t* x, int64_t* y, angle_t a)
+void AM_rotate (int64_t *x, int64_t *y, angle_t a)
 {
     int64_t tmpx;
 
-    tmpx = FixedMul(*x,finecosine[a>>ANGLETOFINESHIFT]) - FixedMul(*y,finesine[a>>ANGLETOFINESHIFT]);
-    *y = FixedMul(*x,finesine[a>>ANGLETOFINESHIFT]) + FixedMul(*y,finecosine[a>>ANGLETOFINESHIFT]);
+    tmpx = FixedMul(*x,finecosine[a>>ANGLETOFINESHIFT]) 
+         - FixedMul(*y,finesine[a>>ANGLETOFINESHIFT]);
+    *y = FixedMul(*x,finesine[a>>ANGLETOFINESHIFT])
+       + FixedMul(*y,finecosine[a>>ANGLETOFINESHIFT]);
     *x = tmpx;
 }
+
 
 // [crispy] rotate point around map center
 // adapted from prboom-plus/src/am_map.c:898-920
@@ -2041,8 +2154,9 @@ static void AM_rotatePoint (mpoint_t *pt)
     pt->x = tmpx;
 }
 
-void
-AM_drawLineCharacter (mline_t* lineguy, int lineguylines, fixed_t scale, angle_t angle, int color, fixed_t x, fixed_t y)
+
+void AM_drawLineCharacter (mline_t *lineguy, int lineguylines, fixed_t scale, 
+                           angle_t angle, int color, fixed_t x, fixed_t y)
 {
     int     i;
     mline_t l;
@@ -2052,7 +2166,7 @@ AM_drawLineCharacter (mline_t* lineguy, int lineguylines, fixed_t scale, angle_t
         angle += mapangle;
     }
 
-    for (i=0;i<lineguylines;i++)
+    for (i = 0 ; i < lineguylines ; i++)
     {
         l.a.x = lineguy[i].a.x;
         l.a.y = lineguy[i].a.y;
@@ -2064,7 +2178,9 @@ AM_drawLineCharacter (mline_t* lineguy, int lineguylines, fixed_t scale, angle_t
         }
 
         if (angle)
-        AM_rotate(&l.a.x, &l.a.y, angle);
+        {
+            AM_rotate(&l.a.x, &l.a.y, angle);
+        }
 
         l.a.x += x;
         l.a.y += y;
@@ -2079,7 +2195,9 @@ AM_drawLineCharacter (mline_t* lineguy, int lineguylines, fixed_t scale, angle_t
         }
 
         if (angle)
-        AM_rotate(&l.b.x, &l.b.y, angle);
+        {
+            AM_rotate(&l.b.x, &l.b.y, angle);
+        }
 
         l.b.x += x;
         l.b.y += y;
@@ -2092,16 +2210,17 @@ AM_drawLineCharacter (mline_t* lineguy, int lineguylines, fixed_t scale, angle_t
 void AM_drawPlayers(void)
 {
     int         i;
-    player_t*   p;
-    static int their_colors[] = { GREENS, GRAYS, BROWNS, REDS };
-    int their_color = -1;
-    int	color;
-    mpoint_t	pt;
+    int         color;
+    int         their_color = -1;
+    static int  their_colors[] = { GREENS, GRAYS, BROWNS, REDS };
+    mpoint_t    pt;
+    player_t   *p;
 
     if (!netgame)
     {
         pt.x = plr->mo->x;
         pt.y = plr->mo->y;
+
         if (automap_rotate)
         {
             AM_rotatePoint(&pt);
@@ -2109,56 +2228,73 @@ void AM_drawPlayers(void)
     
         if (gamemission == jaguar)
         {
-            // [JN] Atari Jaguar: draw dark green, blinking arrow
+            // [JN] Jaguar Doom: draw dark green, blinking arrow.
             if (leveltime & 8)
-            AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, plr->mo->angle, GREEN_JAGUAR, pt.x, pt.y);
+            AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0, 
+                                 plr->mo->angle, GREEN_JAGUAR, pt.x, pt.y);
         }
         else
         {
             if (cheating)
-            AM_drawLineCharacter (cheat_player_arrow, arrlen(cheat_player_arrow), 0, plr->mo->angle, WHITE, pt.x, pt.y);
+            {
+                AM_drawLineCharacter(cheat_player_arrow, arrlen(cheat_player_arrow), 0,
+                                     plr->mo->angle, WHITE, pt.x, pt.y);
+            }
             else
-            AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, plr->mo->angle, WHITE, pt.x, pt.y);
+            {
+                AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0,
+                                     plr->mo->angle, WHITE, pt.x, pt.y);
+            }
         }
         
         return;
     }
 
-    for (i=0;i<MAXPLAYERS;i++)
+    for (i = 0 ; i < MAXPLAYERS ; i++)
     {
         their_color++;
         p = &players[i];
 
         if ((deathmatch && !singledemo) && p != plr)
-        continue;
+        {
+            continue;
+        }
 
         if (!playeringame[i])
-        continue;
+        {
+            continue;
+        }
 
         if (p->powers[pw_invisibility])
-        color = 246; // *close* to black
+        {
+            color = 246; // *close* to black
+        }
         else
-        color = their_colors[their_color];
+        {
+            color = their_colors[their_color];
+        }
 
         pt.x = p->mo->x;
         pt.y = p->mo->y;
+
         if (automap_rotate)
         {
             AM_rotatePoint(&pt);
         }
 
-        AM_drawLineCharacter (player_arrow, arrlen(player_arrow), 0, p->mo->angle, color,pt.x, pt.y);
+        AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0,
+                             p->mo->angle, color,pt.x, pt.y);
     }
 }
 
 
 void AM_drawThings (int colors, int colorrange)
 {
-    int     i;
-    mobj_t* t;
-    mpoint_t	pt;
+    int       i;
+    mpoint_t  pt;
+    mobj_t   *t;
 
-    for (i=0;i<numsectors;i++)
+    for (i = 0 ; i < numsectors ; i++)
     {
         t = sectors[i].thinglist;
         while (t)
@@ -2169,19 +2305,21 @@ void AM_drawThings (int colors, int colorrange)
                 t = t->snext;
                 continue;
             }
-    
+
             pt.x = t->x;
             pt.y = t->y;
+
             if (automap_rotate)
             {
                 AM_rotatePoint(&pt);
             }
-            
-            // [JN] Atari Jaguar: use dark green for things drawing
-            AM_drawLineCharacter (thintriangle_guy, arrlen(thintriangle_guy), 16<<FRACBITS, t->angle, 
-                                  gamemission == jaguar ?
-                                  GREEN_JAGUAR : colors+lightlev,
-                                  pt.x, pt.y);
+
+            // [JN] Jaguar Doom: use dark green for things drawing
+            AM_drawLineCharacter(thintriangle_guy, 
+                                 arrlen(thintriangle_guy),
+                                 16 << FRACBITS, t->angle, 
+                                 gamemission == jaguar ? GREEN_JAGUAR : colors,
+                                 pt.x, pt.y);
             t = t->snext;
         }
     }
@@ -2190,29 +2328,30 @@ void AM_drawThings (int colors, int colorrange)
 
 void AM_drawMarks(void)
 {
-    int i, fx, fy, w, h;
-    mpoint_t pt;
+    int       i, fx, fy;
+    mpoint_t  pt;
 
-    for (i=0;i<AM_NUMMARKPOINTS;i++)
+    for (i = 0 ; i < AM_NUMMARKPOINTS ; i++)
     {
         if (markpoints[i].x != -1)
         {
-            //      w = SHORT(marknums[i]->width);
-            //      h = SHORT(marknums[i]->height);
-            w = 5; // because something's wrong with the wad, i guess
-            h = 6; // because something's wrong with the wad, i guess
             // [crispy] center marks around player
             pt.x = markpoints[i].x;
             pt.y = markpoints[i].y;
+
             if (automap_rotate)
             {
                 AM_rotatePoint(&pt);
             }
+
             fx = (flipwidth[CXMTOF(pt.x)] >> hires) - 1;
             fy = (CYMTOF(pt.y) >> hires) - 2;
 
-            if (fx >= f_x && fx <= (f_w >> hires) - w && fy >= f_y && fy <= (f_h >> hires) - h)
-            V_DrawPatch(fx, fy, marknums[i]);
+            if (fx >= f_x && fx <= (f_w >> hires) - 5 
+            &&  fy >= f_y && fy <= (f_h >> hires) - 6)
+            {
+                V_DrawPatch(fx, fy, marknums[i]);
+            }
         }
     }
 }
@@ -2238,10 +2377,13 @@ void AM_drawCrosshair(int color)
     }
 }
 
+
 void AM_Drawer (void)
 {
     if (!automapactive)
-    return;
+    {
+        return;
+    }
 
     if (!automap_overlay)
     {
@@ -2249,9 +2391,11 @@ void AM_Drawer (void)
     }
 
     if (automap_grid)
-    AM_drawGrid(GRIDCOLORS);
+    {
+        AM_drawGrid(GRIDCOLORS);
+    }
 
-    // [JN] Atari Jaguar: use own function
+    // [JN] Jaguar Doom: always use Jaguar automap colors
     if (gamemission == jaguar)
     {
         AM_drawWallsJaguar();
@@ -2272,10 +2416,12 @@ void AM_Drawer (void)
 
     AM_drawPlayers();
 
-    if (cheating==2)
-	AM_drawThings(THINGCOLORS, THINGRANGE);
+    if (cheating == 2)
+    {
+        AM_drawThings(THINGCOLORS, THINGRANGE);
+    }
 
-    // [JN] Atari Jaguar: don't draw single dot or crosshair
+    // [JN] Jaguar Doom: don't draw single dot or crosshair
     if (gamemission != jaguar)
     {
         AM_drawCrosshair(XHAIRCOLORS);

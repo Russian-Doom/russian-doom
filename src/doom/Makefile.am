@@ -8,10 +8,9 @@ d_items.c          d_items.h    \
 d_main.c           d_main.h     \
 d_net.c                         \
                    doomdata.h   \
-doomdef.c          doomdef.h    \
+                   doomdef.h    \
 doomstat.c         doomstat.h   \
                    d_player.h   \
-                   d_textur.h   \
                    d_think.h    \
 f_finale.c         f_finale.h   \
 f_wipe.c           f_wipe.h     \

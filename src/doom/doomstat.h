@@ -23,25 +23,18 @@
 //
 
 
-
 #ifndef __D_STATE__
 #define __D_STATE__
 
-// We need globally shared data structures,
-//  for defining the global state variables.
+
 #include "doomdata.h"
 #include "d_loop.h"
-
-// We need the playr data structure as well.
 #include "d_player.h"
-
-// Game mode/mission
 #include "d_mode.h"
-
 #include "net_defs.h"
 
 
-// ------------------------
+//
 // Command line parameters.
 //
 extern boolean nomonsters;  // checkparm of -nomonsters
@@ -49,8 +42,7 @@ extern boolean respawnparm; // checkparm of -respawn
 extern boolean fastparm;    // checkparm of -fast
 extern boolean devparm;     // DEBUG: launched with -devparm
 
-
-// -----------------------------------------------------
+//
 // Game Mode - identify IWAD as shareware, retail etc.
 //
 extern GameMode_t    gamemode;
@@ -59,7 +51,6 @@ extern GameVersion_t gameversion;
 extern GameVariant_t gamevariant;
 extern char         *gamedescription_eng;
 extern char         *gamedescription_rus;
-
 
 // Convenience macro.
 // 'gamemission' can be equal to pack_chex or pack_hacx, but these are
@@ -75,7 +66,7 @@ extern char         *gamedescription_rus;
 extern boolean modifiedgame;
 
 
-// -------------------------------------------
+//
 // Selected skill type, map etc.
 //
 
@@ -96,9 +87,7 @@ extern skill_t gameskill;
 extern int gameepisode;
 extern int gamemap;
 
-// [JN] Необходимо для сохранения переменной в сохраненных играх
-// и предотвращения "двойного подъема" эффекта сектора 667.
-// Thanks Jeff Doggett!
+// [JN] Boolean for keeping sector effect 667. Thanks Jeff Doggett!
 extern boolean flag667;
 
 // If non-zero, exit the level after this number of minutes
@@ -114,7 +103,7 @@ extern boolean netgame;
 extern int deathmatch;
 
 
-// -------------------------
+//
 // Internal parameters for sound rendering.
 // These have been taken from the DOS version,
 //  but are not (yet) supported with Linux
@@ -138,7 +127,7 @@ extern int snd_DesiredMusicDevice;
 extern int snd_DesiredSfxDevice;
 
 
-// -------------------------
+//
 // Status flags for refresh.
 //
 
@@ -166,7 +155,7 @@ extern int consoleplayer;
 extern int displayplayer;
 
 
-// -------------------------------------
+//
 // Scores, rating.
 // Statistics on a given map, for intermission.
 //
@@ -180,7 +169,7 @@ extern int leveltime;       // tics in game play for par
 extern int totalleveltimes; // [crispy] CPhipps - total time for all completed levels
 
 
-// --------------------------------------
+//
 // DEMO playback/recording related stuff.
 // No demo, there is a human player in charge?
 // Disable save/end game?
@@ -202,7 +191,7 @@ extern boolean singledemo;
 extern gamestate_t gamestate;
 
 
-//-----------------------------
+//
 // Internal parameters, fixed.
 // These are set by the engine, and not changed
 //  according to user inputs. Partly load from
@@ -229,7 +218,7 @@ extern boolean playerstartsingame[MAXPLAYERS];
 extern wbstartstruct_t wminfo;	
 
 
-//-----------------------------------------
+//
 // Internal parameters, used for engine.
 //
 

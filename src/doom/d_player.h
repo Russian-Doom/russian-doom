@@ -69,33 +69,26 @@ typedef enum
 //
 typedef struct player_s
 {
-    mobj_t*         mo;
-    playerstate_t   playerstate;
-    ticcmd_t        cmd;
+    mobj_t        *mo;
+    ticcmd_t       cmd;
+    playerstate_t  playerstate;
 
-    // Determine POV,
-    //  including viewpoint bobbing during movement.
-    // Focal origin above r.z
-    fixed_t viewz;
-    // Base height above floor for viewz.
-    fixed_t viewheight;
-    // Bob/squat speed.
-    fixed_t deltaviewheight;
-    // bounded/scaled total momentum.
-    fixed_t bob;	
+    // Determine POV, including viewpoint bobbing during movement.
+    fixed_t viewz;              // Focal origin above r.z
+    fixed_t viewheight;         // Base height above floor for viewz.
+    fixed_t deltaviewheight;    // Bob/squat speed.
+    fixed_t bob;                // bounded/scaled total momentum.
 
-    // This is only used between levels,
-    // mo->health is used during levels.
+    // This is only used between levels, mo->health is used during levels.
     int health;	
-    int health_neg;	 // [JN] Negative player halth
+    int health_neg;             // [JN] Negative player halth
     int armorpoints;
-    // Armor type is 0-2.
-    int armortype;	
+    int armortype;	            // Armor type is 0-2.
 
     // Power ups. invinc and invis are tic counters.
     int     powers[NUMPOWERS];
     boolean cards[NUMCARDS];
-    boolean tryopen[NUMCARDS]; // [crispy] blinking key or skull in the status bar
+    boolean tryopen[NUMCARDS];  // [crispy] blinking key or skull in the status bar
     boolean backpack;
 
     // Frags, kills of other players.
@@ -126,27 +119,27 @@ typedef struct player_s
     int secretcount;
 
     // Hint messages.
-    char* message;          // [JN] Item pickup
-    char* message_secret;   // [JN] Revealed secret
-    char* message_system;   // [JN] System messages
-    char* message_chat;     // [JN] Netgame chat
+    char *message;          // [JN] Item pickup
+    char *message_secret;   // [JN] Revealed secret
+    char *message_system;   // [JN] System messages
+    char *message_chat;     // [JN] Netgame chat
+    char *message_fps;      // [JN] FPS counter
+    char *message_time;     // [JN] Local time widget
 
     // For screen flashing (red or bright).
     int damagecount;
     int bonuscount;
 
     // Who did damage (NULL for floors/ceilings).
-    mobj_t* attacker;
+    mobj_t *attacker;
 
     // So gun flashes light up areas.
     int extralight;
 
-    // Current PLAYPAL, ???
-    //  can be set to REDCOLORMAP for pain, etc.
+    // Current PLAYPAL, ??? can be set to REDCOLORMAP for pain, etc.
     int fixedcolormap;
 
-    // Player skin colorshift,
-    //  0-3 for which color to draw player.
+    // Player skin colorshift, 0-3 for which color to draw player.
     int colormap;	
 
     // Overlay view sprites (gun, etc).
@@ -164,12 +157,7 @@ typedef struct player_s
 
     int     lookdir, oldlookdir;
     boolean centering;
-    
-    // [JN] Local time widget.
-    char* message_time;
 
-    // [JN] FPS counter.
-    char* message_fps;
 } player_t;
 
 

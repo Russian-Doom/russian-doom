@@ -18,7 +18,6 @@
 //
 
 
-
 #include <stdio.h>
 
 #include "doomstat.h"
