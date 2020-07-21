@@ -611,9 +611,6 @@ P_TryMove
 {
     fixed_t	oldx;
     fixed_t	oldy;
-    int		side;
-    int		oldside;
-    line_t*	ld;
 
     floatok = false;
     if (!P_CheckPosition (thing, x, y))
@@ -658,9 +655,10 @@ P_TryMove
 	while (numspechit--)
 	{
 	    // see if the line was crossed
-	    ld = spechit[numspechit];
-	    side = P_PointOnLineSide (thing->x, thing->y, ld);
-	    oldside = P_PointOnLineSide (oldx, oldy, ld);
+	    line_t *ld = spechit[numspechit];
+	    int side = P_PointOnLineSide (thing->x, thing->y, ld);
+	    int oldside = P_PointOnLineSide (oldx, oldy, ld);
+
 	    if (side != oldside)
 	    {
 		if (ld->special)
@@ -1109,7 +1107,6 @@ static fixed_t  bottomslope;
 boolean
 PTR_AimTraverse (intercept_t* in)
 {
-    line_t*		li;
     mobj_t*		th;
     fixed_t		slope;
     fixed_t		thingtopslope;
@@ -1118,7 +1115,7 @@ PTR_AimTraverse (intercept_t* in)
 		
     if (in->isaline)
     {
-	li = in->d.line;
+	line_t *li = in->d.line;
 	
 	if ( !(li->flags & ML_TWOSIDED) )
 	    return false;		// stop
@@ -1640,8 +1637,6 @@ boolean		nofit;
 //
 boolean PIT_ChangeSector (mobj_t*	thing)
 {
-    mobj_t*	mo;
-
     if (P_ThingHeightClip (thing))
     {
 	// keep checking
@@ -1704,6 +1699,8 @@ boolean PIT_ChangeSector (mobj_t*	thing)
 
     if (crushchange && !(leveltime&3) )
     {
+        mobj_t *mo;
+
         P_DamageMobj(thing,NULL,NULL,10);
 
         // spray blood in a random direction
