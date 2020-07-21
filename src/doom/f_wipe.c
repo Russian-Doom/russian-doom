@@ -132,7 +132,7 @@ int wipe_exitColorXForm (int width, int height, int ticks)
 
 int wipe_initMelt (int width, int height, int ticks)
 {
-    int i, r;
+    int i;
 
     // copy start screen to main screen
     memcpy(wipe_scr, wipe_scr_start, width * height * sizeof(*wipe_scr));
@@ -148,6 +148,8 @@ int wipe_initMelt (int width, int height, int ticks)
     y[0] = -(M_Random()%16);
     for (i=1;i<width;i++)
     {
+        static int r;
+
         r = (M_Random()%3) - 1;
         y[i] = y[i-1] + r;
         if (y[i] > 0) y[i] = 0;
@@ -186,7 +188,6 @@ int wipe_doMelt (int width, int height, int ticks)
                 {
                     dy = 13; // [JN] almost identical to original wipe duration
                     y[i] += dy;
-                    idx = 0;
 
                     done = false;
                 }
