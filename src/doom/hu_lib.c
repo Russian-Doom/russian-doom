@@ -95,14 +95,13 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
     int i;
     int w;
     int x;
-    unsigned char c;
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
     for (i=0;i<l->len;i++)
     {
-        c = toupper(l->l[i]);
+        unsigned char c = toupper(l->l[i]);
 
         if (c != ' ' && c >= l->sc && c <= '_')
         {
@@ -170,14 +169,13 @@ void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
     int i;
     int w;
     int x;
-    unsigned char c;
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
     for (i=0;i<l->len;i++)
     {
-        c = toupper(l->l[i]);
+        unsigned char c = toupper(l->l[i]);
 
         if (c != ' ' && c >= l->sc && c <= '_')
         {
@@ -213,14 +211,13 @@ void HUlib_drawTextLineSecret (hu_textline_t *l)
     int i;
     int w;
     int x;
-    unsigned char c;
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
     for (i=0;i<l->len;i++)
     {
-        c = toupper(l->l[i]);
+        unsigned char c = toupper(l->l[i]);
 
         if (c != ' ' && c >= l->sc && c <= '_')
         {
@@ -265,14 +262,13 @@ void HUlib_drawTextLineSystem (hu_textline_t *l)
     int i;
     int w;
     int x;
-    unsigned char c;
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
     for (i=0;i<l->len;i++)
     {
-        c = toupper(l->l[i]);
+        unsigned char c = toupper(l->l[i]);
 
         if (c != ' ' && c >= l->sc && c <= '_')
         {
@@ -317,14 +313,13 @@ void HUlib_drawTextLineChat (hu_textline_t *l, boolean drawcursor)
     int i;
     int w;
     int x;
-    unsigned char c;
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
     for (i=0;i<l->len;i++)
     {
-        c = toupper(l->l[i]);
+        unsigned char c = toupper(l->l[i]);
 
         if (c != ' ' && c >= l->sc && c <= '_')
         {
@@ -391,10 +386,6 @@ void HUlib_drawTextLineChat (hu_textline_t *l, boolean drawcursor)
 // sorta called by HU_Erase and just better darn get things straight
 void HUlib_eraseTextLine(hu_textline_t* l)
 {
-    int lh;
-    int y;
-    int yoffset;
-
     // Only erases when NOT in automap and the screen is reduced,
     // and the text must either need updating or refreshing
     // (because of a recent change back from the automap)
@@ -404,7 +395,8 @@ void HUlib_eraseTextLine(hu_textline_t* l)
     {
         // [JN] Russian language: clear two extra pixel lines in bordered view (height+2).
         // Fixes remainings of text shadows for chars "Д", "Ц" and "Щ".
-        lh = (SHORT(l->f[0]->height+2) + 1) << hires;
+        int lh = (SHORT(l->f[0]->height+2) + 1) << hires;
+        int y, yoffset;
 
         for (y=(l->y << hires),yoffset=y*screenwidth ; y<(l->y << hires)+lh ; y++,yoffset+=screenwidth)
         {
@@ -471,8 +463,7 @@ void HUlib_addMessageToSText (hu_stext_t* s, char* prefix, char* msg)
 
 void HUlib_drawSText(hu_stext_t* s)
 {
-    int i, idx;
-    hu_textline_t *l;
+    int i;
 
     if (!*s->on)
     return; // if not on, don't draw
@@ -480,12 +471,13 @@ void HUlib_drawSText(hu_stext_t* s)
     // draw everything
     for (i=0 ; i<s->h ; i++)
     {
-        idx = s->cl - i;
+        int idx = s->cl - i;
+        hu_textline_t *l = &s->l[idx];
 
         if (idx < 0)
         idx += s->h; // handle queue of lines
 
-        l = &s->l[idx];
+        // l = &s->l[idx];
 
         // need a decision made here on whether to skip the draw
         HUlib_drawTextLine(l, false); // no cursor, please
@@ -494,8 +486,7 @@ void HUlib_drawSText(hu_stext_t* s)
 
 void HUlib_drawSText_Secret(hu_stext_t* s)
 {
-    int i, idx;
-    hu_textline_t *l;
+    int i;
 
     if (!*s->on)
     return; // if not on, don't draw
@@ -503,12 +494,11 @@ void HUlib_drawSText_Secret(hu_stext_t* s)
     // draw everything
     for (i=0 ; i<s->h ; i++)
     {
-        idx = s->cl - i;
+        int idx = s->cl - i;
+        hu_textline_t *l = &s->l[idx];
 
         if (idx < 0)
         idx += s->h; // handle queue of lines
-
-        l = &s->l[idx];
 
         // need a decision made here on whether to skip the draw
         HUlib_drawTextLineSecret(l); // no cursor, please
@@ -517,8 +507,7 @@ void HUlib_drawSText_Secret(hu_stext_t* s)
 
 void HUlib_drawSText_System(hu_stext_t* s)
 {
-    int i, idx;
-    hu_textline_t *l;
+    int i;
 
     if (!*s->on)
     return; // if not on, don't draw
@@ -526,12 +515,11 @@ void HUlib_drawSText_System(hu_stext_t* s)
     // draw everything
     for (i=0 ; i<s->h ; i++)
     {
-        idx = s->cl - i;
+        int idx = s->cl - i;
+        hu_textline_t *l = &s->l[idx];
 
         if (idx < 0)
         idx += s->h; // handle queue of lines
-
-        l = &s->l[idx];
 
         // need a decision made here on whether to skip the draw
         HUlib_drawTextLineSystem(l);
@@ -540,8 +528,7 @@ void HUlib_drawSText_System(hu_stext_t* s)
 
 void HUlib_drawSText_Chat(hu_stext_t* s)
 {
-    int i, idx;
-    hu_textline_t *l;
+    int i;
 
     if (!*s->on)
     return; // if not on, don't draw
@@ -549,12 +536,11 @@ void HUlib_drawSText_Chat(hu_stext_t* s)
     // draw everything
     for (i=0 ; i<s->h ; i++)
     {
-        idx = s->cl - i;
+        int idx = s->cl - i;
+        hu_textline_t *l = &s->l[idx];
 
         if (idx < 0)
         idx += s->h; // handle queue of lines
-
-        l = &s->l[idx];
 
         // need a decision made here on whether to skip the draw
         HUlib_drawTextLineChat(l, false);
