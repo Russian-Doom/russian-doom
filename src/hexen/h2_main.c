@@ -53,6 +53,7 @@
 #include "w_main.h"
 #include "w_merge.h"
 #include "r_bmaps.h"
+#include "rushexen.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -125,6 +126,10 @@ int UpdateState;
 int maxplayers = MAXPLAYERS;
 
 boolean title_mus_played = false;
+
+boolean hasUnknownPWads = false;
+boolean isHexenDemo = false;
+boolean isDK = false;
 
 // [JN] Support for fallback to the English language.
 // Windows OS only: do not set game language on first launch, 
@@ -432,6 +437,7 @@ void D_SetGameDescription(void)
     if (gamemode == shareware)
     {
         W_MergeFile("base/hexen-common.wad");
+        isHexenDemo = true;
 
         if (english_language)
         {
@@ -443,7 +449,6 @@ void D_SetGameDescription(void)
             W_MergeFile("base/hexen-demo-russian.wad");
         }
     }
-
     else
     {
         gamedescription = "Hexen";
@@ -469,7 +474,6 @@ void D_SetGameDescription(void)
         while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
         {
             char    *filename;
-            int     dd;
 
             filename = D_TryFindWADByName(myargv[newpwadfile]);
             printf(english_language ?
@@ -480,27 +484,23 @@ void D_SetGameDescription(void)
 
             // [JN] Поддержка Hexen: Deathkings of the Dark Citadel
             // Больше спасибо CapnClever за оказанную помощь!
-            dd = M_CheckParmWithArgs ("-file", 1);
-            if (dd)
+            // [Dasperal] Переписанно на нормальный код
+            if (M_StrCaseStr(myargv[newpwadfile], "hexdd.wad") != NULL) //Deathkings of the Dark Citadel
             {
-                while (++dd != myargc && myargv[dd][0] != '-')
+                isDK = true;
+                if (english_language)
                 {
-                    char *check;
-                    check = M_StrCaseStr(myargv[dd], "hexdd.wad");
-            
-                    if (check != NULL)
-                    {
-                        if (english_language)
-                        {
-                            gamedescription = "Hexen: Deathkings of the Dark Citadel";
-                        }
-                        else
-                        {
-                            gamedescription = "Hexen: Короли Смерти Темной Цитадели";
-                            W_MergeFile("base/hexen-dd-russian.wad");
-                        }
-                    }
+                    gamedescription = "Hexen: Deathkings of the Dark Citadel";
                 }
+                else
+                {
+                    gamedescription = "Hexen: Короли Смерти Темной Цитадели";
+                    W_MergeFile("base/hexen-dd-russian.wad");
+                }
+            }
+            else //Any unknown pwad
+            {
+                hasUnknownPWads = true;
             }
         }
     }

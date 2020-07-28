@@ -26,6 +26,7 @@
 #include "i_swap.h"
 #include "i_system.h"
 #include "p_local.h"
+#include "jn.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -180,6 +181,7 @@ static void ThingCount(int type, int tid);
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 int ACScriptCount;
+const char** rusACStrings;
 byte *ActionCodeBase;
 acsInfo_t *ACSInfo;
 int MapVars[MAX_ACS_MAP_VARS];
@@ -1738,7 +1740,14 @@ static int CmdEndPrintBold(void)
 
 static int CmdPrintString(void)
 {
-    M_StringConcat(PrintBuffer, ACStrings[Pop()], sizeof(PrintBuffer));
+    if (!english_language && rusACStrings)
+    {
+        M_StringConcat(PrintBuffer, rusACStrings[Pop()], sizeof(PrintBuffer));
+    }
+    else
+    {
+        M_StringConcat(PrintBuffer, ACStrings[Pop()], sizeof(PrintBuffer));
+    }
     return SCRIPT_CONTINUE;
 }
 
