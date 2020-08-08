@@ -3505,16 +3505,12 @@ void M_RD_Draw_AutomapSettings(void)
         }
         else
         {
-            if (automap_color == 0)
-            M_WriteTextSmall_ENG (170 + wide_delta, 35, "doom");
-            else if (automap_color == 1)
-            M_WriteTextSmall_ENG (170 + wide_delta, 35, "boom");
-            else if (automap_color == 2)
-            M_WriteTextSmall_ENG (170 + wide_delta, 35, "jaguar");
-            else if (automap_color == 3)
-            M_WriteTextSmall_ENG (170 + wide_delta, 35, "raven");
-            else
-            M_WriteTextSmall_ENG (170 + wide_delta, 35, "strife");
+            M_WriteTextSmall_ENG (170 + wide_delta, 35, automap_color == 1 ? "boom"   :
+                                                        automap_color == 2 ? "jaguar" :
+                                                        automap_color == 3 ? "raven"  :
+                                                        automap_color == 4 ? "strife" :
+                                                        automap_color == 5 ? "unity"  :
+                                                                             "doom");
         }
 
         // Line antialiasing
@@ -3546,16 +3542,12 @@ void M_RD_Draw_AutomapSettings(void)
         }
         else
         {
-            if (automap_color == 0)
-            M_WriteTextSmall_ENG (191 + wide_delta, 35, "doom");
-            else if (automap_color == 1)
-            M_WriteTextSmall_ENG (191 + wide_delta, 35, "boom");
-            else if (automap_color == 2)
-            M_WriteTextSmall_ENG (191 + wide_delta, 35, "jaguar");
-            else if (automap_color == 3)
-            M_WriteTextSmall_ENG (191 + wide_delta, 35, "raven");
-            else
-            M_WriteTextSmall_ENG (191 + wide_delta, 35, "strife");
+            M_WriteTextSmall_ENG (191 + wide_delta, 35, automap_color == 1 ? "boom"   :
+                                                        automap_color == 2 ? "jaguar" :
+                                                        automap_color == 3 ? "raven"  :
+                                                        automap_color == 4 ? "strife" :
+                                                        automap_color == 5 ? "unity"  :
+                                                                             "doom");
         }
 
         // Сглаживание линий
@@ -3589,12 +3581,12 @@ void M_RD_Change_AutomapColor(int choice)
         case 0: 
         automap_color--;
         if (automap_color < 0) 
-            automap_color = 4;
+            automap_color = 5;
         break;
     
         case 1:
         automap_color++;
-        if (automap_color > 4)
+        if (automap_color > 5)
             automap_color = 0;
         break;
     }

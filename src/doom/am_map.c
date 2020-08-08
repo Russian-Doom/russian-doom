@@ -270,48 +270,56 @@ static boolean stopped = true;
 
 
 // [JN] Automap line antialiasing:
-static byte antialias[35][8] = {
+static byte antialias[42][8] = {
     // Doom colors:
-    {176, 177, 178, 179, 180, 181, 182, 183},   // 1.  WALLCOLORS
-    { 64,  65,  66,  67,  68,  69,  70,  71},   // 2.  FDWALLCOLORS
-    { 96,  97,  98,  99, 100, 101, 102, 103},   // 3.  TSWALLCOLORS
-    {231, 160, 161, 162, 163, 164, 165, 166},   // 4.  CDWALLCOLORS
-    {176, 177, 178, 179, 180, 181, 182, 183},   // 5.  SECRETWALLCOLORS
-    { 99, 100, 101, 102, 103, 104, 105, 106},   // 6.  GRAYS+3 (LINE_NEVERSEE)
+    {176, 177, 178, 179, 180, 181, 182, 183},   //  0.  WALLCOLORS
+    { 64,  65,  66,  67,  68,  69,  70,  71},   //  1.  FDWALLCOLORS
+    { 96,  97,  98,  99, 100, 101, 102, 103},   //  2.  TSWALLCOLORS
+    {231, 160, 161, 162, 163, 164, 165, 166},   //  3.  CDWALLCOLORS
+    {176, 177, 178, 179, 180, 181, 182, 183},   //  4.  SECRETWALLCOLORS
+    { 99, 100, 101, 102, 103, 104, 105, 106},   //  5.  GRAYS+3 (LINE_NEVERSEE)
     // Boom colors:
-    { 23,  24,  25,  26,  27,  28,  29,  30},   // 7.  One-sided wall
-    {119, 120, 121, 122, 123, 124, 125, 126},   // 8.  Various teleporters
-    {204, 204, 205, 205, 206, 206, 207, 207},   // 9.  BLUE locked doors
-    {175, 176, 177, 178, 179, 180, 181, 182},   // 10. RED locked doors
-    {208,  80,  81,  82,  83,  84,  85,  86},   // 11. non-secret closed door
-    { 55,  56,  57,  58,  59,  60,  61,  62},   // 12. floor level change
-    {215, 216, 217, 218, 219, 220, 221, 222},   // 13. ceiling level change
-    { 88,  89,  90,  91,  92,  93,  94,  95},   // 14. 2S lines that appear only in IDDT
+    { 23,  24,  25,  26,  27,  28,  29,  30},   //  6.  One-sided wall
+    {119, 120, 121, 122, 123, 124, 125, 126},   //  7.  Various teleporters
+    {204, 204, 205, 205, 206, 206, 207, 207},   //  8.  BLUE locked doors
+    {175, 176, 177, 178, 179, 180, 181, 182},   //  9. RED locked doors
+    {208,  80,  81,  82,  83,  84,  85,  86},   // 10. non-secret closed door
+    { 55,  56,  57,  58,  59,  60,  61,  62},   // 11. floor level change
+    {215, 216, 217, 218, 219, 220, 221, 222},   // 12. ceiling level change
+    { 88,  89,  90,  91,  92,  93,  94,  95},   // 13. 2S lines that appear only in IDDT
     // Jaguar colors:
-    { 32,  33,  34,  35,  36,  37,  38,  39},   // 15. RED_JAGUAR
-    {120, 121, 122, 123, 124, 125, 126, 127},   // 16. GREEN_JAGUAR
-    {254, 254, 254, 254, 254, 254, 254, 254},   // 17. MAGENTA_JAGUAR
-    {163, 163, 164, 164, 165, 165, 166, 167},   // 18. YELLOW_JAGUAR
+    { 32,  33,  34,  35,  36,  37,  38,  39},   // 14. RED_JAGUAR
+    {120, 121, 122, 123, 124, 125, 126, 127},   // 15. GREEN_JAGUAR
+    {254, 254, 254, 254, 254, 254, 254, 254},   // 16. MAGENTA_JAGUAR
+    {163, 163, 164, 164, 165, 165, 166, 167},   // 17. YELLOW_JAGUAR
     // Raven colors:
-    {151, 151, 236, 236, 237, 237, 238, 239},   // 19. One-sided wall
-    {116, 117, 118, 119, 120, 121, 122, 123},   // 20. Various teleporters
-    {108, 109, 110, 111,   5,   6,   7,   8},   // 21. Secret door
-    {199, 200, 201, 202, 203, 204, 205, 206},   // 22. BLUE locked doors
-    {178, 179, 180, 181, 182, 183, 184, 185},   // 23. RED locked doors
-    {161, 162, 163, 164, 165, 166, 167, 167},   // 24. YELLOW locked doors
-    {239, 239, 239, 239, 239, 239, 239, 239},   // 25. floor level change
-    {133, 134, 135, 136, 137, 138, 139, 140},   // 26. ceiling level change
+    {151, 151, 236, 236, 237, 237, 238, 239},   // 18. One-sided wall
+    {116, 117, 118, 119, 120, 121, 122, 123},   // 19. Various teleporters
+    {108, 109, 110, 111,   5,   6,   7,   8},   // 20. Secret door
+    {199, 200, 201, 202, 203, 204, 205, 206},   // 21. BLUE locked doors
+    {178, 179, 180, 181, 182, 183, 184, 185},   // 22. RED locked doors
+    {161, 162, 163, 164, 165, 166, 167, 167},   // 23. YELLOW locked doors
+    {239, 239, 239, 239, 239, 239, 239, 239},   // 24. floor level change
+    {133, 134, 135, 136, 137, 138, 139, 140},   // 25. ceiling level change
     // Strife colors:
-    { 86,  87,  88,  89,  90,  91,  92,  93},   // 27. One-sided wall
-    {135, 136, 137, 138, 139, 140, 141, 142},   // 28. Various teleporters
-    {203, 204, 205, 206, 207, 240, 241, 242},   // 29. floor level change
-    {195, 196, 197, 198, 199, 200, 201, 202},   // 30. ceiling level change
-    { 98,  99, 100, 101, 102, 103, 104, 105},   // 31. One-sided wall (cheating)
-    {102, 103, 104, 105, 106, 107, 108, 109},   // 32. One-sided wall (LINE_NEVERSEE)
+    { 86,  87,  88,  89,  90,  91,  92,  93},   // 26. One-sided wall
+    {135, 136, 137, 138, 139, 140, 141, 142},   // 27. Various teleporters
+    {203, 204, 205, 206, 207, 240, 241, 242},   // 28. floor level change
+    {195, 196, 197, 198, 199, 200, 201, 202},   // 29. ceiling level change
+    { 98,  99, 100, 101, 102, 103, 104, 105},   // 30. One-sided wall (cheating)
+    {102, 103, 104, 105, 106, 107, 108, 109},   // 31. One-sided wall (LINE_NEVERSEE)
+    // Unity colors:
+    {184, 185, 186, 187, 188, 189, 190, 191},   // 32. One sided wall / secret door
+    { 81,  83,  85,  87,  88,  90,  92,  94},   // 33. Various doors
+    {120, 121, 122, 123, 124, 125, 126, 127},   // 34. Various teleporters
+    {200, 201, 202, 203, 204, 205, 206, 207},   // 35. Blue locked door
+    {160, 160, 161, 161, 162, 162, 163, 164},   // 36. Yellow locked door
+    { 72,  73,  74,  75,  76,  77,  78,  78},   // 37. Floor level change
+    {252, 252, 253, 253, 254, 254, 254, 254},   // 38. Floor level change
     // Common colors:
-    {209,  84,  85,  86,  87,  88,  89,  90},   // 33. YOURCOLORS: White player arrow
-    {112, 113, 114, 115, 116, 117, 118, 119},   // 34. THINGCOLORS: Green triangles (IDDT cheat)
-    {104, 105, 106, 107, 108, 109, 110, 111}    // 35. GRIDCOLORS: Automap grid
+    {209,  84,  85,  86,  87,  88,  89,  90},   // 39. YOURCOLORS: White player arrow
+    {112, 113, 114, 115, 116, 117, 118, 119},   // 40. THINGCOLORS: Green triangles (IDDT cheat)
+    {104, 105, 106, 107, 108, 109, 110, 111},   // 41. GRIDCOLORS: Automap grid
 };
 
 void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
@@ -1295,14 +1303,68 @@ void AM_drawFline (fline_t* fl, int color)
             if (color == 102)   // One-sided wall (LINE_NEVERSEE)
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[31][0]), 8, 3);
         }
+        // Unity colors:
+        if (automap_color == 5)
+        {
+            // [JN] One sided wall / secret door
+            if (color == 184)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[32][0]), 8, 3);
+            }
+            // [JN] Various doors
+            if (color == 81)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[33][0]), 8, 3);
+            }
+            // [JN] Various teleporters
+            if (color == 120)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[34][0]), 8, 3);
+            }
+            // [JN] BLUE locked doors
+            if (color == 200)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[35][0]), 8, 3);
+            }
+            // [JN] RED locked doors
+            if (color == 176)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[0][0]), 8, 3);
+            }
+            // [JN] YELLOW locked doors
+            if (color == 160)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[36][0]), 8, 3);
+            }
+            // [JN] Floor level change
+            if (color == 72)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[37][0]), 8, 3);
+            }
+            // [JN] Ceiling level change
+            if (color == 64)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[1][0]), 8, 3);
+            }
+            // [JN] IDDT visible lines
+            if (color == 96)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[2][0]), 8, 3);
+            }
+            // [JN] Exit
+            if (color == 252)
+            {
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[38][0]), 8, 3);
+            }
+        }
         // Common colors:
         {
             if (color == YOURCOLORS)    // White player arrow
-                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[32][0]), 8, 3);
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[39][0]), 8, 3);
             if (color == THINGCOLORS)   // Green triangles (IDDT cheat)
-                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[33][0]), 8, 3);
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[40][0]), 8, 3);
             if (color == 104)           // computermap visible lines
-                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[34][0]), 8, 3);
+                DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[41][0]), 8, 3);
 
         }
     }
@@ -2118,6 +2180,122 @@ void AM_drawWallsStrife(void)
 }
 
 
+void AM_drawWallsUnity(void)
+{
+    int    i;
+    static mline_t l;
+
+    for (i = 0 ; i < numlines ; i++)
+    {
+        l.a.x = lines[i].v1->x;
+        l.a.y = lines[i].v1->y;
+        l.b.x = lines[i].v2->x;
+        l.b.y = lines[i].v2->y;
+
+        if (automap_rotate)
+        {
+            AM_rotatePoint(&l.a);
+            AM_rotatePoint(&l.b);
+        }
+
+        if (cheating || (lines[i].flags & ML_MAPPED))
+        {
+            if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
+            {
+                continue;
+            }
+
+            // [JN] One sided wall
+            if (!lines[i].backsector)
+            {
+                AM_drawMline(&l, 184);
+            }
+            else
+            {
+                // [JN] Secret door
+                if (lines[i].flags & ML_SECRET)
+                {
+                    AM_drawMline(&l, 184);
+                }
+                // [JN] Various Doors
+                else
+                if (lines[i].special == 1
+                ||  lines[i].special == 31
+                ||  lines[i].special == 117
+                ||  lines[i].special == 118)
+                {
+                    AM_drawMline(&l, 81);
+                }
+                // [JN] Various teleporters
+                else
+                if (lines[i].special == 39
+                ||  lines[i].special == 97
+                ||  lines[i].special == 125
+                ||  lines[i].special == 126)
+                {
+                    AM_drawMline(&l, 120);
+                }
+                // [JN] BLUE locked doors
+                else
+                if (lines[i].special == 26
+                ||  lines[i].special == 32
+                ||  lines[i].special == 99
+                ||  lines[i].special == 133)
+                {
+                    AM_drawMline(&l, 200);
+                }
+                // [JN] RED locked doors
+                else
+                if (lines[i].special == 28
+                ||  lines[i].special == 33
+                ||  lines[i].special == 134
+                ||  lines[i].special == 135)
+                {
+                    AM_drawMline(&l, 176);
+                }
+                // [JN] YELLOW locked doors
+                else
+                if (lines[i].special == 27
+                ||  lines[i].special == 34
+                ||  lines[i].special == 136
+                ||  lines[i].special == 137)
+                {
+                    AM_drawMline(&l, 160);
+                }
+                // [JN] Floor level change
+                else if (lines[i].backsector->floorheight != lines[i].frontsector->floorheight) 
+                {
+                    AM_drawMline(&l, 72);
+                }
+                // [JN] Ceiling level change
+                else if (lines[i].backsector->ceilingheight != lines[i].frontsector->ceilingheight) 
+                {
+                    AM_drawMline(&l, 64);
+                }
+                // [JN] IDDT visible lines
+                else if (cheating)
+                {
+                    AM_drawMline(&l, 96);
+                }
+            }
+            // [JN] Exit (can be one-sided or two-sided)
+            if (lines[i].special == 11
+            ||  lines[i].special == 51
+            ||  lines[i].special == 52
+            ||  lines[i].special == 124)
+            {
+                AM_drawMline(&l, 252);
+            }
+        }
+        // [JN] Computermap visible lines
+        else if (plr->powers[pw_allmap])
+        {
+            if (!(lines[i].flags & LINE_NEVERSEE)) AM_drawMline(&l, 104);
+        }
+    }
+}
+
+
 //
 // Rotation in 2D.
 // Used to rotate player arrow line character.
@@ -2410,8 +2588,10 @@ void AM_Drawer (void)
         AM_drawWallsJaguar();
         else if (automap_color == 3)           // Raven (Heretic)
         AM_drawWallsRaven();
-        else                                   // Strife
+        else if (automap_color == 4)           // Strife
         AM_drawWallsStrife();
+        else                                   // Unity
+        AM_drawWallsUnity();
     }
 
     AM_drawPlayers();
