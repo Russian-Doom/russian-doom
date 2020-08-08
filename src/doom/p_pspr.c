@@ -116,6 +116,8 @@ void P_BringUpWeapon (player_t* player)
 
     if (player->pendingweapon == wp_chainsaw)
     S_StartSound (player->mo, sfx_sawup);    
+    else    // [JN] Clear Chainsaw special bobbing flag
+    chainsaw_attack_swing = false;
 
     newstate = weaponinfo[player->pendingweapon].upstate;
 
