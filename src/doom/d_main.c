@@ -122,7 +122,7 @@ boolean fastparm;    // checkparm of -fast
 boolean scaled_sky = false; // [JN] Boolean for sky scaling
 boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
 boolean wide_loaded = false; // [JN] Boolen only for wide bunny screen
-boolean realframe; // [JN] Interpolation for weapon bobbing
+boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
 
 
 extern boolean inhelpscreens;

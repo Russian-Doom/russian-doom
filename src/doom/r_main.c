@@ -768,6 +768,9 @@ void R_ExecuteSetViewSize (void)
     {
         flipwidth[i] = flip_levels ? j : i;
     }
+
+    // [JN] Skip weapon bobbing interpolation for next frame.
+    skippsprinterp = true;
 }
 
 

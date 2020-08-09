@@ -145,6 +145,10 @@ extern boolean testcontrols;
 extern int screenblocks;
 extern int testcontrols_mousespeed;
 
+// [JN] Interpolation for weapon bobbing
+extern boolean realframe;
+extern boolean skippsprinterp;
+
 
 // This one is related to the 3-screen display mode.
 // ANG90 = left side, ANG270 = right
