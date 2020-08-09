@@ -122,6 +122,7 @@ boolean fastparm;    // checkparm of -fast
 boolean scaled_sky = false; // [JN] Boolean for sky scaling
 boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
 boolean wide_loaded = false; // [JN] Boolen only for wide bunny screen
+boolean realframe; // [JN] Interpolation for weapon bobbing
 
 
 extern boolean inhelpscreens;
@@ -307,6 +308,7 @@ void D_Display (void)
     static boolean      fullscreen = false;
     static gamestate_t  oldgamestate = -1;
     static int          borderdrawcount;
+    static int          saved_gametic = -1;
     int                 nowtime;
     int                 tics;
     int                 wipestart;
@@ -314,6 +316,13 @@ void D_Display (void)
     boolean             done;
     boolean             wipe;
     boolean             redrawsbar;
+
+    realframe = (!uncapped_fps || gametic > saved_gametic);
+
+    if (realframe)
+    {
+        saved_gametic = gametic;
+    }
 
     if (nodrawers)
     return; // for comparative timing / profiling
