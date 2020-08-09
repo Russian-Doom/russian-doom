@@ -7069,12 +7069,12 @@ void M_DrawThermo_Small (int x, int y, int thermWidth, int thermDot)
     if (thermDot >= thermWidth)
     {
         thermDot = thermWidth - 1;
-        V_DrawPatchDirect((x + 8) + thermDot * 8, y,
+        V_DrawPatch((x + 8) + thermDot * 8, y,
                 W_CacheLumpName(DEH_String("RD_THRMW"), PU_CACHE));
     }
     else
     {
-        V_DrawPatchDirect((x + 8) + thermDot * 8, y,
+        V_DrawPatch((x + 8) + thermDot * 8, y,
                 W_CacheLumpName(DEH_String("RD_THRMO"), PU_CACHE));
     }
 }
