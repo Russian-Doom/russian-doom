@@ -1124,7 +1124,7 @@ void R_DrawPSprite (pspdef_t* psp)
     }
 	
     // [JN] e6y: interpolation for weapon bobbing
-    if (uncapped_fps)
+    if (uncapped_fps && weapon_bobbing && !vanillaparm)
     {
         typedef struct interpolate_s
         {
