@@ -441,9 +441,8 @@ void D_Display (void)
         AM_Drawer ();
         HU_Drawer ();
 
-        // [crispy] force redraw of status bar and border
+        // [crispy] force redraw of border
         viewactivestate = false;
-        inhelpscreensstate = true;
     }
 
     // [JN] Draw pause pic. Don't draw while actime game menu and help screens.
