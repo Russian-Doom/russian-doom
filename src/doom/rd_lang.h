@@ -86,6 +86,14 @@ extern char* ggloaded;
 // M_Menu.C
 //
 
+#define NUM_QUITMESSAGES 8
+
+extern char  gammamsg[18][41];
+extern char  gammamsg_rus[18][41];
+extern char* doom1_endmsg[];
+extern char* doom2_endmsg[];
+extern char* doom1_endmsg_rus[];
+extern char* doom2_endmsg_rus[];
 extern char* ststr_alwrun_on;
 extern char* ststr_alwrun_off;
 extern char* ststr_crosshair_on;
