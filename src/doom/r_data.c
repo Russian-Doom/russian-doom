@@ -990,8 +990,8 @@ enum {
     r, g, b
 } rgb_t;
 
-// [JN] Increased from 66 to 80.
-static const int tran_filter_pct = 80;
+// [JN] Increased from 66 to 85.
+static const int tran_filter_pct = 85;
 
 static void R_InitTintMap()
 {
