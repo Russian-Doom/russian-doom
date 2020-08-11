@@ -514,30 +514,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(snd_sfxdevice),
 
     //!
-    // SoundBlaster I/O port. Unused.
-    //
-
-    CONFIG_VARIABLE_INT(snd_sbport),
-
-    //!
-    // SoundBlaster IRQ.  Unused.
-    //
-
-    CONFIG_VARIABLE_INT(snd_sbirq),
-
-    //!
-    // SoundBlaster DMA channel.  Unused.
-    //
-
-    CONFIG_VARIABLE_INT(snd_sbdma),
-
-    //!
-    // Output port to use for OPL MIDI playback.  Unused.
-    //
-
-    CONFIG_VARIABLE_INT(snd_mport),
-
-    //!
     // @game hexen
     //
     // Directory in which to store savegames.
