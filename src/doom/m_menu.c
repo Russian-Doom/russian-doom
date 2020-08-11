@@ -4923,11 +4923,20 @@ void M_RD_Change_InfraGreenVisor(int choice)
 {
     infragreen_visor ^= 1;
 
-    // Update current COLORMAP
-    if (infragreen_visor && players[consoleplayer].powers[pw_infrared])
-    players[consoleplayer].fixedcolormap = 33;
-    else if (!infragreen_visor && players[consoleplayer].powers[pw_infrared])
-    players[consoleplayer].fixedcolormap = 1;
+    // [JN] Update current COLORMAP
+    if (players[consoleplayer].powers[pw_infrared])
+    {
+        if (players[consoleplayer].powers[pw_invulnerability])
+        {
+            // Set B&W colormap
+            players[consoleplayer].fixedcolormap = 32;
+        }
+        else
+        {
+            // Set respective colormap
+            players[consoleplayer].fixedcolormap = infragreen_visor ? 33 : 1;
+        }
+    }
 }
 
 void M_RD_Change_WalkOverUnder(int choice)
