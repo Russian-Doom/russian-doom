@@ -1021,7 +1021,7 @@ void AM_Ticker (void)
         // if not following the player
         if (!(!automap_follow && automap_overlay))
         {
-            mapangle = ANG90 - viewangle;
+            mapangle = ANG90 - plr->mo->angle;
         }
     }
 }
