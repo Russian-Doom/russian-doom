@@ -142,7 +142,6 @@ extern boolean viewactive;
 extern boolean nodrawers;
 extern boolean testcontrols;
 
-extern int screenblocks;
 extern int testcontrols_mousespeed;
 
 // [JN] Interpolation for weapon bobbing

@@ -224,10 +224,6 @@ static boolean M_RD_ResetSettings(int option);
 // Change language
 static boolean M_RD_ChangeLanguage(int option);
 
-// External Data
-
-extern int detailLevel;
-
 // Public Data
 
 boolean menuactive;

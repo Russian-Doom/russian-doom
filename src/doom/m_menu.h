@@ -57,8 +57,4 @@ void M_StartControlPanel (void);
 void M_ClearMenus (void);
 
 
-extern int detailLevel;
-
-
-
 #endif    

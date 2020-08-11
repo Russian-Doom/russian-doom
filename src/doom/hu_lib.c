@@ -35,7 +35,6 @@
 
 extern boolean	automapactive;	// in AM_map.c
 extern GameMission_t gamemission; // [JN] For uncolored Jaguar messages
-extern int screenblocks; // [JN] Widescreen: for emulated 4:3 screen size
 
 
 void HUlib_init(void)

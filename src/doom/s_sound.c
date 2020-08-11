@@ -88,15 +88,6 @@ typedef struct
 
 static channel_t *channels;
 
-// Maximum volume of a sound effect.
-// Internal default is max out of 0-15.
-
-int sfxVolume = 8;
-
-// Maximum volume of music.
-
-int musicVolume = 8;
-
 // Internal volume level, ranging from 0-127
 
 static int snd_SfxVolume;
@@ -109,11 +100,7 @@ static boolean mus_paused;
 
 static musicinfo_t *mus_playing = NULL;
 
-// Number of channels to use
 
-int snd_channels_rd;
-int snd_channels = 32;
-int snd_channels_vanilla = 8;
 
 // [JN] External music number, used for music system hot-swapping.
 

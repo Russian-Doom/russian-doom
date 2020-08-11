@@ -71,11 +71,8 @@ extern void R_ExecuteSetViewSize();
 // defaulted values
 //
 
-int mouseSensitivity = 5;
-int showMessages = 1;       // Show messages has default, 0 = off, 1 = on
-int detailLevel = 0;        // Blocky mode, has default, 0 = high, 1 = normal
-int screenblocks = 10;      // [JN] Размер экрана по-умолчанию установлен на 10
-int screenSize;             // temp for screenblocks (0-9)
+
+
 int quickSaveSlot;          // -1 = no quicksave slot picked!
 int messageToPrint;         // 1 = message to be printed
 char* messageString;        // ...and here is the message string!

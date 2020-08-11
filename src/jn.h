@@ -53,8 +53,11 @@ extern int png_screenshots;
 // Display
 // -----------------------------------------------------------------------------
 
+extern int screenblocks, screenSize;
 extern int level_brightness;
 extern int local_time;
+extern int detailLevel;
+extern int showMessages;
 extern int draw_shadowed_text;
 extern int messages_pickup_color;
 extern int messages_secret_color;
@@ -78,6 +81,7 @@ extern int automap_grid;
 // Sound
 // -----------------------------------------------------------------------------
 
+extern int snd_channels_rd, snd_channels, snd_channels_vanilla;
 extern int snd_monomode;
 extern int mute_inactive_window;
 extern boolean window_focused;

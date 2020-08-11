@@ -41,8 +41,6 @@ char *finaleflat;
 int FontABaseLump;
 int FontFBaseLump;
 
-extern int screenblocks;
-
 extern boolean automapactive;
 extern boolean viewactive;
 

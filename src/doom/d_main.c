@@ -77,8 +77,149 @@
 #include "jn.h"
 
 
+// -----------------------------------------------------------------------------
+// [JN] Support for fallback to the English language.
+// Windows OS only: do not set game language on first launch, 
+// try to determine it automatically in D_DoomMain.
+// -----------------------------------------------------------------------------
+
+#ifdef _WIN32
+int english_language = -1;
+#else
+int english_language = 0;
+#endif
+
+
+// -----------------------------------------------------------------------------
+// [JN] Default values
+// -----------------------------------------------------------------------------
+
+// Rendering
+int screen_wiping = 1;
+int show_endoom = 0;
+
+// Display
+int screenblocks = 10, screenSize;
+int level_brightness = 0;
+int detailLevel = 0;        // Blocky mode, has default, 0 = high, 1 = normal
+int local_time = 0;
+
+// Display: Messages
+int showMessages = 1;
+int draw_shadowed_text = 1;
+int messages_pickup_color = 0;
+int messages_secret_color = 3;
+int messages_system_color = 0;
+int messages_chat_color = 1;
+
+// Display: Automap
+int automap_color   = 0;
+int automap_antialias = 1;
+int automap_follow  = 1;
+int automap_overlay = 0;
+int automap_rotate  = 0;
+int automap_grid    = 0;
+
+// Sound
+int sfxVolume = 8;          // Maximum volume of a sound effect (internal: 0-15)
+int musicVolume = 8;        // Maximum volume of music.
+int snd_channels_rd;        // Number of channels to use
+int snd_channels = 32;
+int snd_channels_vanilla = 8;
+int snd_monomode = 0;
+
+// Controls
+int mouseSensitivity = 5;
+
+// Selective game
+int selective_skill = 2;
+int selective_episode = 1;
+int selective_map = 1;
+
+int selective_health = 100;
+int selective_armor = 0;
+int selective_armortype = 1;
+
+int selective_wp_chainsaw = 0;
+int selective_wp_shotgun = 0;
+int selective_wp_supershotgun = 0;
+int selective_wp_chaingun = 0;
+int selective_wp_missile = 0;
+int selective_wp_plasma = 0;
+int selective_wp_bfg = 0;
+
+int selective_backpack = 0;
+
+int selective_ammo_0 = 50;  // bullets
+int selective_ammo_1 = 0;   // shells
+int selective_ammo_2 = 0;   // cells
+int selective_ammo_3 = 0;   // rockets
+
+int selective_key_0 = 0;    // blue keycard
+int selective_key_1 = 0;    // yellow keycard
+int selective_key_2 = 0;    // red keycard
+int selective_key_3 = 0;    // blue skull key
+int selective_key_4 = 0;    // yellow skull key
+int selective_key_5 = 0;    // red skull key
+
+int selective_fast = 0;
+int selective_respawn = 0;
+
+// Gameplay: Graphical
+int brightmaps = 1;
+int fake_contrast = 0;
+int translucency = 1;
+int improved_fuzz = 2;
+int colored_hud = 0;
+int colored_blood = 1;
+int swirling_liquids = 1;
+int invul_sky = 1;
+int flip_weapons = 0;
+
+// Gameplay: Audible
+int play_exit_sfx = 0;
+int crushed_corpses_sfx = 1;
+int blazing_door_fix_sfx = 1;
+int noise_alert_sfx = 0;
+int correct_endlevel_sfx = 0;
+
+// Gameplay: Tactical
+int automap_stats = 1;
+int secret_notification = 1;
+int negative_health = 0;
+int infragreen_visor = 0;
+
+// Gameplay: Physical
+int over_under = 0;
+int torque = 1;
+int weapon_bobbing = 1;
+int ssg_blast_enemies = 1;
+int randomly_flipcorpses = 1;
+int floating_powerups = 0;
+
+// Gameplay: Crosshair
+int crosshair_draw = 0;
+int crosshair_health = 1;
+int crosshair_scale = 0;
+
+// Gameplay: Gameplay
+int fix_map_errors = 1;
+int extra_player_faces = 1;
+int unlimited_lost_souls = 1;
+int agressive_lost_souls = 0;
+int fast_quickload = 1;
+int flip_levels = 0;
+
+// Gameplay: Demos
+int demotimer = 0;
+int demotimerdir = 0;
+int demobar = 0;
+int no_internal_demos = 0;
+
+
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
+
 
 // [JN] Сделана глобальной, нужна для функции автоподргузки 
 // блоков DEHACKED, а также в цикле D_DoomMain.
@@ -144,125 +285,6 @@ boolean main_loop_started = false;
 char wadfile[1024];  // primary wad file
 char mapdir[1024];   // directory of development maps
 
-// [JN] Support for fallback to the English language.
-// Windows OS only: do not set game language on first launch, 
-// try to determine it automatically in D_DoomMain.
-#ifdef _WIN32
-int english_language = -1;
-#else
-int english_language = 0;
-#endif
-
-
-// [JN] Rendering
-int screen_wiping = 1;
-int show_endoom = 0;
-
-// [JN] Display
-int level_brightness = 0;
-int local_time = 0;
-
-// [JN] Automap specific variables.
-int automap_color   = 0;
-int automap_antialias = 1;
-int automap_follow  = 1;
-int automap_overlay = 0;
-int automap_rotate  = 0;
-int automap_grid    = 0;
-
-// [JN] Sound
-int snd_monomode = 0;
-
-// [JN] Selective game
-int selective_skill = 2;
-int selective_episode = 1;
-int selective_map = 1;
-
-int selective_health = 100;
-int selective_armor = 0;
-int selective_armortype = 1;
-
-int selective_wp_chainsaw = 0;
-int selective_wp_shotgun = 0;
-int selective_wp_supershotgun = 0;
-int selective_wp_chaingun = 0;
-int selective_wp_missile = 0;
-int selective_wp_plasma = 0;
-int selective_wp_bfg = 0;
-
-int selective_backpack = 0;
-
-int selective_ammo_0 = 50;  // bullets
-int selective_ammo_1 = 0;   // shells
-int selective_ammo_2 = 0;   // cells
-int selective_ammo_3 = 0;   // rockets
-
-int selective_key_0 = 0;    // blue keycard
-int selective_key_1 = 0;    // yellow keycard
-int selective_key_2 = 0;    // red keycard
-int selective_key_3 = 0;    // blue skull key
-int selective_key_4 = 0;    // yellow skull key
-int selective_key_5 = 0;    // red skull key
-
-int selective_fast = 0;
-int selective_respawn = 0;
-
-// [JN] Gameplay: Graphical
-int brightmaps = 1;
-int fake_contrast = 0;
-int translucency = 1;
-int improved_fuzz = 2;
-int colored_hud = 0;
-int messages_pickup_color = 0;
-int messages_secret_color = 3;
-int messages_system_color = 0;
-int messages_chat_color = 1;
-int colored_blood = 1;
-int swirling_liquids = 1;
-int invul_sky = 1;
-int flip_weapons = 0;
-int draw_shadowed_text = 1;
-
-// [JN] Gameplay: Audible
-int play_exit_sfx = 0;
-int crushed_corpses_sfx = 1;
-int blazing_door_fix_sfx = 1;
-int noise_alert_sfx = 0;
-int correct_endlevel_sfx = 0;
-
-// [JN] Gameplay: Tactical
-int automap_stats = 1;
-int secret_notification = 1;
-int negative_health = 0;
-int infragreen_visor = 0;
-
-// [JN] Gameplay: Physical
-int over_under = 0;
-int torque = 1;
-int weapon_bobbing = 1;
-int ssg_blast_enemies = 1;
-int randomly_flipcorpses = 1;
-int floating_powerups = 0;
-
-// [JN] Gameplay: Crosshair
-int crosshair_draw = 0;
-int crosshair_health = 1;
-int crosshair_scale = 0;
-
-// [JN] Gameplay: Gameplay
-int fix_map_errors = 1;
-int extra_player_faces = 1;
-int unlimited_lost_souls = 1;
-int agressive_lost_souls = 0;
-int fast_quickload = 1;
-int flip_levels = 0;
-
-// [JN] Gameplay: Demos
-int demotimer = 0;
-int demotimerdir = 0;
-int demobar = 0;
-int no_internal_demos = 0;
-
 
 //
 // D_ProcessEvents
@@ -295,7 +317,6 @@ void D_ProcessEvents (void)
 gamestate_t wipegamestate = GS_DEMOSCREEN;
 
 extern boolean setsizeneeded;
-extern int     showMessages;
 
 void R_ExecuteSetViewSize (void);
 

@@ -248,8 +248,6 @@ static int resize_delay = 70; // [JN] Redused from 500 to 70
 
 int usegamma = 4;
 
-extern int screenblocks;
-
 static boolean MouseShouldBeGrabbed()
 {
     // never grab the mouse when in screensaver mode

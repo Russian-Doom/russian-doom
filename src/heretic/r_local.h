@@ -331,7 +331,6 @@ extern angle_t rw_normalangle;
 //
 // R_main.c
 //
-extern int screenblocks;
 extern int viewwidth, viewheight, viewwindowx, viewwindowy;
 extern int scaledviewwidth;
 extern int centerx, centery;

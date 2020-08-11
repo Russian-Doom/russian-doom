@@ -159,8 +159,6 @@ static hu_stext_t w_message_time;
 static boolean  message_on_fps;
 static hu_stext_t w_message_fps;
 
-extern int showMessages;
-
 static boolean headsupactive = false;
 
 

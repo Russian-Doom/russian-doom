@@ -203,9 +203,11 @@ static void SCEndGame(int option);
 // Reset settings
 static void M_RD_ResetSettings(int option);
 
+// Change language
+static void M_RD_ChangeLanguage(int option);
+
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
-extern int detailLevel;
 extern boolean gamekeydown[256];        // The NUMKEYS macro is local to g_game
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
@@ -403,7 +405,7 @@ static MenuItem_t OptionsItems[] = {
     {ITT_SETMENU, "CONTROLS",       NULL,               0, MENU_CONTROLS },
     {ITT_SETMENU, "GAMEPLAY",       NULL,               0, MENU_GAMEPLAY },
     {ITT_EFUNC,   "RESET SETTINGS", M_RD_ResetSettings, 0, MENU_NONE     },
-    {ITT_EFUNC,   "LANGUAGE: ENGLISH", NULL, 0, MENU_NONE     }
+    {ITT_EFUNC,   "LANGUAGE: ENGLISH", M_RD_ChangeLanguage, 0, MENU_NONE     }
 };
 
 static MenuItem_t OptionsItems_Rus[] = {
@@ -413,7 +415,7 @@ static MenuItem_t OptionsItems_Rus[] = {
     {ITT_SETMENU, "EGHFDKTYBT",     NULL,               0, MENU_CONTROLS }, // УПРАВЛЕНИЕ
     {ITT_SETMENU, "UTQVGKTQ",       NULL,               0, MENU_GAMEPLAY }, // ГЕЙМПЛЕЙ
     {ITT_EFUNC,   "C,HJC YFCNHJTR", M_RD_ResetSettings, 0, MENU_NONE     }, // СБРОС НАСТРОЕК
-    {ITT_EFUNC,   "ZPSR: HECCRBQ", NULL, 0, MENU_NONE     }
+    {ITT_EFUNC,   "ZPSR: HECCRBQ", M_RD_ChangeLanguage, 0, MENU_NONE     }
     
 };
 
@@ -1187,7 +1189,8 @@ char *QuitEndMsg[] = {
     "DO YOU WANT TO QUICKSAVE THE GAME NAMED",
     "DO YOU WANT TO QUICKLOAD THE GAME NAMED",
     "ARE YOU SURE YOU WANT TO SUICIDE?",
-    "RESET SETTINGS TO THEIR DEFAULTS?"
+    "RESET SETTINGS TO THEIR DEFAULTS?",
+    "" // [JN] Placeholder for language changing
 };
 
 char *QuitEndMsg_Rus[] = {
@@ -1196,7 +1199,8 @@ char *QuitEndMsg_Rus[] = {
     "DSGJKYBNM ,SCNHJT CJ[HFYTYBT BUHS:",		// ВЫПОЛНИТЬ БЫСТРОЕ СОХРАНЕНИЕ ИГРЫ:
     "DSGJKYBNM ,SCNHE. PFUHEPRE BUHS:",			// ВЫПОЛНИТЬ БЫСТРУЮ ЗАГРУЗКУ ИГРЫ:
     "DS LTQCNDBNTKMYJ [JNBNT CJDTHIBNM CEBWBL?",  // ВЫ ДЕЙСТВИТЕЛЬНО ХОТИТЕ СОВЕРШИТЬ СУИЦИД?
-    "C,HJCBNM YFCNHJQRB YF CNFYLFHNYST PYFXTYBZ?" // СБРОСИТЬ НАСТРОЙКИ НА СТАНДАРТНЫЕ ЗНАЧЕНИЯ?
+    "C,HJCBNM YFCNHJQRB YF CNFYLFHNYST PYFXTYBZ?", // СБРОСИТЬ НАСТРОЙКИ НА СТАНДАРТНЫЕ ЗНАЧЕНИЯ?
+    "" // [JN] Placeholder for language changing
 };
 
 void MN_Drawer(void)
@@ -1242,6 +1246,12 @@ void MN_Drawer(void)
                            MN_TextAWidth(SlotText[quicksave - 1]) / 2
                            + wide_delta, 90);
             }
+
+            if (typeofask == 7)
+            {
+                V_DrawShadowedPatchRaven(32 + wide_delta, 32, W_CacheLumpName("ADVISOR", PU_CACHE));
+            }
+
             UpdateState |= I_FULLSCRN;
         }
         return;
@@ -2957,23 +2967,26 @@ void M_RD_DoResetSettings(void)
 }
 
 
+//---------------------------------------------------------------------------
+// M_RD_ChangeLanguage
+//---------------------------------------------------------------------------
 
+static void M_RD_ChangeLanguage(int option)
+{
+    menuactive = false;
+    askforquit = true;
+    typeofask = 7;
+    if (!netgame && !demoplayback)
+    {
+        paused = true;
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void M_RD_DoChangeLanguage(void)
+{
+    english_language ^= 1;
+    I_Quit();    
+}
 
 
 //---------------------------------------------------------------------------
@@ -3417,6 +3430,9 @@ boolean MN_Responder(event_t * event)
                     break;
                 case 6:
                     M_RD_DoResetSettings();
+                    break;
+                case 7:
+                    M_RD_DoChangeLanguage();
                     break;
                 default:
                     break;
