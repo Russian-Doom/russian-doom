@@ -148,11 +148,6 @@ void F_CastPrintJaguar (char *text);
 void F_CastDrawerJaguar (void);
 
 
-extern patch_t *hu_font[HU_FONTSIZE];
-extern patch_t *hu_font_small_rus[HU_FONTSIZE];
-extern patch_t *hu_font_big_eng[HU_FONTSIZE];
-extern patch_t *hu_font_big_rus[HU_FONTSIZE];
-
 //
 // F_StartFinale
 //

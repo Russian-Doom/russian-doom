@@ -318,8 +318,6 @@ gamestate_t wipegamestate = GS_DEMOSCREEN;
 
 extern boolean setsizeneeded;
 
-void R_ExecuteSetViewSize (void);
-
 
 void D_Display (void)
 {

@@ -19,7 +19,6 @@
 //
 
 
-
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -27,6 +26,7 @@
 #include "doomkeys.h"
 #include "d_main.h"
 #include "deh_main.h"
+#include "i_input.h"
 #include "i_swap.h"
 #include "i_system.h"
 #include "i_timer.h"
@@ -54,61 +54,40 @@
 #include "jn.h"
 
 
-extern patch_t*     hu_font[HU_FONTSIZE];
-extern patch_t*     hu_font_small_eng[HU_FONTSIZE];
-extern patch_t*     hu_font_small_rus[HU_FONTSIZE];
-extern patch_t*     hu_font_big_eng[HU_FONTSIZE2];
-extern patch_t*     hu_font_big_rus[HU_FONTSIZE2];
-extern boolean      message_dontfuckwithme;
-extern boolean      chat_on;    // in heads-up code
+#define SKULLXOFF      -32
+#define LINEHEIGHT      16
+#define LINEHEIGHT_SML  10  // [JN] Line height for small font
 
-extern float        mouse_acceleration;
-extern int          mouse_threshold;
-
-extern void R_ExecuteSetViewSize();
-
-//
-// defaulted values
-//
-
-
-
-int quickSaveSlot;          // -1 = no quicksave slot picked!
-int messageToPrint;         // 1 = message to be printed
-char* messageString;        // ...and here is the message string!
-
-// message x & y
-int messx;
-int messy;
-int messageLastMenuActive;
-
-boolean messageNeedsInput;  // timed message = no input from user
-boolean QuickSaveTitle;     // [JN] Extra title "БЫСТРОЕ СОХРАНЕНИЕ"
 
 void (*messageRoutine)(int response);
-
-
-// we are going to be entering a savegame string
-int saveStringEnter;              
-int saveSlot;       // which slot to save in
-int saveCharIndex;  // which char we're editing
-
-// old save description before edit
-char    saveOldString[SAVESTRINGSIZE];  
 
 boolean inhelpscreens;
 boolean menuactive;
 
-#define SKULLXOFF   -32
-#define LINEHEIGHT  16
-#define LINEHEIGHT_SML  10  // [JN] Line height for small font
-
-extern boolean  sendpause;
-char            savegamestrings[10][SAVESTRINGSIZE];
-
+// [JN] Save strings and messages 
+int     quickSaveSlot;      // -1 = no quicksave slot picked!
+int     messageToPrint;     // 1 = message to be printed
+char   *messageString;      // ...and here is the message string!
+char    savegamestrings[10][SAVESTRINGSIZE];
+char    saveOldString[SAVESTRINGSIZE];  // old save description before edit
 char	endstring[160];
+boolean messageNeedsInput;  // timed message = no input from user
+boolean QuickSaveTitle;     // [JN] Extra title "БЫСТРОЕ СОХРАНЕНИЕ"
+
+// message x & y
+int     messx;
+int     messy;
+int     messageLastMenuActive;
+
+// we are going to be entering a savegame string
+int     saveStringEnter;              
+int     saveSlot;           // which slot to save in
+int     saveCharIndex;      // which char we're editing
+
 
 static boolean opldev;
+extern boolean sendpause;
+
 
 //
 // MENU TYPEDEFS
@@ -121,8 +100,7 @@ typedef struct
     char    name[128];  // [JN] Extended from 10 to 128, so long text string may appear
 
     // choice = menu item #.
-    // if status = 2,
-    //   choice=0:leftarrow,1:rightarrow
+    // if status = 2, choice=0:leftarrow, 1:rightarrow
     void    (*routine)(int choice);
 
     // hotkey in menu
@@ -133,8 +111,8 @@ typedef struct
 typedef struct menu_s
 {
     short           numitems;       // # of menu items
-    struct menu_s*  prevMenu;       // previous menu
-    menuitem_t*     menuitems;      // menu items
+    struct menu_s  *prevMenu;       // previous menu
+    menuitem_t     *menuitems;      // menu items
     void            (*routine)();   // draw routine
     short           x;
     short           y;              // x,y of menu
@@ -146,11 +124,10 @@ short   skullAnimCounter;   // skull animation counter
 short   whichSkull;         // which skull to draw
 
 // graphic name of skulls
-// warning: initializer-string for array of chars is too long
-char    *skullName[2] = {"M_SKULL1","M_SKULL2"};
+char   *skullName[2] = {"M_SKULL1", "M_SKULL2"};
 
 // current menudef
-menu_t*	currentMenu;                          
+menu_t *currentMenu;                          
 
 
 // -----------------------------------------------------------------------------
@@ -2452,6 +2429,7 @@ void M_Vanilla_DrawSound(void)
     M_DrawThermo(80 + wide_delta, 113, 16, musicVolume);
 }
 
+
 // =============================================================================
 // [JN] NEW OPTIONS MENU: DRAWING
 // =============================================================================
@@ -2519,14 +2497,14 @@ void M_RD_Draw_Rendering(void)
         }
         else
         {
-            M_WriteTextSmall_ENG(216 + wide_delta, 55, vsync == 1 ? "on" : "off");
+            M_WriteTextSmall_ENG(216 + wide_delta, 55, vsync ? "on" : "off");
         }
 
         // Frame rate
         M_WriteTextSmall_ENG(120 + wide_delta, 65, uncapped_fps ? "uncapped" : "35 fps");
 
         // Show FPS counter
-        M_WriteTextSmall_ENG(162 + wide_delta, 75, show_fps == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(162 + wide_delta, 75, show_fps ? "on" : "off");
 
         // Pixel scaling
         if (force_software_renderer == 1)
@@ -2537,7 +2515,7 @@ void M_RD_Draw_Rendering(void)
         }
         else
         {
-            M_WriteTextSmall_ENG(135 + wide_delta, 85, smoothing == 1 ? "smooth" : "sharp");
+            M_WriteTextSmall_ENG(135 + wide_delta, 85, smoothing ? "smooth" : "sharp");
         }
 
         // Video renderer
@@ -2551,15 +2529,15 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         // Show disk icon
-        M_WriteTextSmall_ENG(138 + wide_delta, 115, show_diskicon == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(138 + wide_delta, 115, show_diskicon ? "on" : "off");
 
         // Screen wiping effect
         M_WriteTextSmall_ENG(187 + wide_delta, 125, screen_wiping == 1 ? "standard" :
-                                                         screen_wiping == 2 ? "loading" :
-                                                                              "off");
+                                                    screen_wiping == 2 ? "loading" :
+                                                                         "off");
 
         // Screenshot format
-        M_WriteTextSmall_ENG(174 + wide_delta, 135, png_screenshots == 1 ? "png" : "pcx");
+        M_WriteTextSmall_ENG(174 + wide_delta, 135, png_screenshots ? "png" : "pcx");
     }
     else
     {
@@ -2595,7 +2573,7 @@ void M_RD_Draw_Rendering(void)
         }
         else
         {
-            M_WriteTextSmall_RUS(249 + wide_delta, 55, vsync == 1 ? "drk" : "dsrk");
+            M_WriteTextSmall_RUS(249 + wide_delta, 55, vsync ? "drk" : "dsrk");
         }
 
         // Кадровая частота
@@ -2609,7 +2587,7 @@ void M_RD_Draw_Rendering(void)
         }
 
         // Счетчик кадровой частоты
-        M_WriteTextSmall_RUS(227 + wide_delta, 75, show_fps == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(227 + wide_delta, 75, show_fps ? "drk" : "dsrk");
 
         // Пиксельное сглаживание
         if (force_software_renderer == 1)
@@ -2620,11 +2598,11 @@ void M_RD_Draw_Rendering(void)
         }
         else
         {
-            M_WriteTextSmall_RUS(219 + wide_delta, 85, smoothing == 1 ? "drk" : "dsrk");
+            M_WriteTextSmall_RUS(219 + wide_delta, 85, smoothing ? "drk" : "dsrk");
         }
 
         // Обработка видео
-        M_WriteTextSmall_RUS(160 + wide_delta, 95, force_software_renderer == 1 ? "ghjuhfvvyfz" : "fggfhfnyfz");
+        M_WriteTextSmall_RUS(160 + wide_delta, 95, force_software_renderer ? "ghjuhfvvyfz" : "fggfhfnyfz");
         M_WriteTextSmall_ENG((force_software_renderer ? 254 : 244) + wide_delta, 95, 
                               force_software_renderer ? "(cpu)" : "(gpu)");
 
@@ -2636,15 +2614,15 @@ void M_RD_Draw_Rendering(void)
         dp_translation = NULL;
 
         // Отображать значок дискеты
-        M_WriteTextSmall_RUS(241 + wide_delta, 115, show_diskicon == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(241 + wide_delta, 115, show_diskicon ? "drk" : "dsrk");
 
         // Эффект смены экранов
         M_WriteTextSmall_RUS(202 + wide_delta, 125, screen_wiping == 1 ? "cnfylfhnysq" :
-                                                         screen_wiping == 2 ? "pfuheprf" :
-                                                                              "dsrk");
+                                                    screen_wiping == 2 ? "pfuheprf" :
+                                                                         "dsrk");
 
         // Формат скриншотов
-        M_WriteTextSmall_ENG(180 + wide_delta, 135, png_screenshots == 1 ? "png" : "pcx");
+        M_WriteTextSmall_ENG(180 + wide_delta, 135, png_screenshots ? "png" : "pcx");
     }
 }
 
@@ -2922,8 +2900,8 @@ void M_RD_Change_Gamma(int choice)
                                                      PU_CACHE) + 
                                                      st_palette * 768);
     players[consoleplayer].message_system = DEH_String(english_language ? 
-                                               gammamsg[usegamma] :
-                                               gammamsg_rus[usegamma]);
+                                                       gammamsg[usegamma] :
+                                                       gammamsg_rus[usegamma]);
 }
 
 void M_RD_Change_LevelBrightness(int choice)
@@ -3007,10 +2985,10 @@ void M_RD_Draw_MessagesSettings(void)
         dp_translation = NULL;
 
         // Messages
-        M_WriteTextSmall_ENG(165 + wide_delta, 45, showMessages == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(165 + wide_delta, 45, showMessages ? "on" : "off");
 
         // Text casts shadows
-        M_WriteTextSmall_ENG(177 + wide_delta, 55, draw_shadowed_text == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(177 + wide_delta, 55, draw_shadowed_text ? "on" : "off");
 
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + wide_delta, 65, "Colors");  
@@ -3128,10 +3106,10 @@ void M_RD_Draw_MessagesSettings(void)
         dp_translation = NULL;
 
         // Отображение сообщений
-        M_WriteTextSmall_RUS(214 + wide_delta, 45, showMessages == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(214 + wide_delta, 45, showMessages ? "drk" : "dsrk");
 
         // Тексты отбрасывают тень
-        M_WriteTextSmall_RUS(226 + wide_delta, 55, draw_shadowed_text == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(226 + wide_delta, 55, draw_shadowed_text ? "drk" : "dsrk");
 
         //
         // Цвета
@@ -3383,22 +3361,22 @@ void M_RD_Draw_AutomapSettings(void)
         }
 
         // Line antialiasing
-        M_WriteTextSmall_ENG(193 + wide_delta, 45, automap_antialias == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(193 + wide_delta, 45, automap_antialias ? "on" : "off");
 
         // Level stats
-        M_WriteTextSmall_ENG(159 + wide_delta, 55, automap_stats == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(159 + wide_delta, 55, automap_stats ? "on" : "off");
         
         // Overlay mode
-        M_WriteTextSmall_ENG(170 + wide_delta, 65, automap_overlay == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(170 + wide_delta, 65, automap_overlay ? "on" : "off");
 
         // Rotate mode
-        M_WriteTextSmall_ENG(163 + wide_delta, 75, automap_rotate == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(163 + wide_delta, 75, automap_rotate ? "on" : "off");
 
         // Follow mode
-        M_WriteTextSmall_ENG(164 + wide_delta, 85, automap_follow == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(164 + wide_delta, 85, automap_follow ? "on" : "off");
 
         // Grid
-        M_WriteTextSmall_ENG(106 + wide_delta, 95, automap_grid == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(106 + wide_delta, 95, automap_grid ? "on" : "off");
     }
     else
     {
@@ -3420,22 +3398,22 @@ void M_RD_Draw_AutomapSettings(void)
         }
 
         // Сглаживание линий
-        M_WriteTextSmall_RUS(214 + wide_delta, 45, automap_antialias == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(214 + wide_delta, 45, automap_antialias ? "drk" : "dsrk");
 
         // Статистика уровня
-        M_WriteTextSmall_RUS(210 + wide_delta, 55, automap_stats == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(210 + wide_delta, 55, automap_stats ? "drk" : "dsrk");
         
         // Режим наложения
-        M_WriteTextSmall_RUS(203 + wide_delta, 65, automap_overlay == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(203 + wide_delta, 65, automap_overlay ? "drk" : "dsrk");
 
         // Режим вращения
-        M_WriteTextSmall_RUS(194 + wide_delta, 75, automap_rotate == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(194 + wide_delta, 75, automap_rotate ? "drk" : "dsrk");
 
         // Режим следования
-        M_WriteTextSmall_RUS(208 + wide_delta, 85, automap_follow == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(208 + wide_delta, 85, automap_follow ? "drk" : "dsrk");
 
         // Сетка
-        M_WriteTextSmall_RUS(118 + wide_delta, 95, automap_grid == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(118 + wide_delta, 95, automap_grid ? "drk" : "dsrk");
     }
 }
 
@@ -3743,13 +3721,13 @@ void M_RD_Draw_Audio_System(void)
         dp_translation = NULL;
 
         // Sfx mode
-        M_WriteTextSmall_ENG(178 + wide_delta, 95, snd_monomode == 1 ? "mono" : "stereo");
+        M_WriteTextSmall_ENG(178 + wide_delta, 95, snd_monomode ? "mono" : "stereo");
 
         // Pitch-shifted sounds
-        M_WriteTextSmall_ENG(186 + wide_delta, 105, snd_pitchshift == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(186 + wide_delta, 105, snd_pitchshift ? "on" : "off");
 
         // Mute inactive window
-        M_WriteTextSmall_ENG(185 + wide_delta, 115, mute_inactive_window == 1 ? "on" : "off");
+        M_WriteTextSmall_ENG(185 + wide_delta, 115, mute_inactive_window ? "on" : "off");
     }
     else
     {
@@ -3848,13 +3826,13 @@ void M_RD_Draw_Audio_System(void)
         dp_translation = NULL;
 
         // Режим звука
-        M_WriteTextSmall_RUS(231 + wide_delta, 95, snd_monomode == 1 ? "vjyj" : "cnthtj");
+        M_WriteTextSmall_RUS(231 + wide_delta, 95, snd_monomode ? "vjyj" : "cnthtj");
 
         // Произвольный питч-шифтинг
-        M_WriteTextSmall_RUS(242 + wide_delta, 105, snd_pitchshift == 1 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(242 + wide_delta, 105, snd_pitchshift ? "drk" : "dsrk");
 
         // Звук в неактивном окне
-        M_WriteTextSmall_RUS(208 + wide_delta, 115, mute_inactive_window == 0 ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(208 + wide_delta, 115, mute_inactive_window ? "dsrk" : "drk");
     }
 }
 
@@ -4246,8 +4224,7 @@ void M_RD_Jaguar_Menu_Background(void)
 {
     inhelpscreens = true;
     V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-    V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("INTERPIC"), 
-                                                        PU_CACHE));
+    V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE));
 }
 
 void M_RD_Draw_Gameplay_1(void)

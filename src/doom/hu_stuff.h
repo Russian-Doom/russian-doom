@@ -22,6 +22,7 @@
 #define __HU_STUFF_H__
 
 #include "d_event.h"
+#include "v_patch.h"
 
 
 //
@@ -49,6 +50,14 @@
 #define HU_MSGHEIGHT    1   // in lines
 #define HU_MSGTIMEOUT   (4*TICRATE)
 
+// [JN] Global font definitions
+extern patch_t *hu_font[HU_FONTSIZE];
+extern patch_t *hu_font_small_eng[HU_FONTSIZE];
+extern patch_t *hu_font_small_rus[HU_FONTSIZE];
+extern patch_t *hu_font_big_eng[HU_FONTSIZE2];
+extern patch_t *hu_font_big_rus[HU_FONTSIZE2];
+extern boolean  message_dontfuckwithme;
+extern boolean  chat_on;    // in heads-up code
 
 //
 // HEADS UP TEXT
