@@ -4879,6 +4879,9 @@ void M_RD_Change_InvulSky(int choice)
 void M_RD_Change_FlipWeapons(int choice)
 {
     flip_weapons ^= 1;
+
+    // [JN] Skip weapon bobbing interpolation for next frame.
+    skippsprinterp = true;
 }
 
 void M_RD_Change_ExitSfx(int choice)
