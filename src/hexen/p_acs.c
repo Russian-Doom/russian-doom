@@ -184,6 +184,7 @@ static int InternalCmdPrintAlwaysWithTableDelayDirect(void);
 static int InternalCmdPrintRussianDirect(void);
 static int InternalCmdPrintScriptvarAndStringEnglishDirect(void);
 static int InternalCmdPrintMapvarAndStringEnglishDirect(void);
+static int InternalCmdGT2EQ(void);
 
 static void ThingCount(int type, int tid);
 
@@ -324,6 +325,7 @@ static int (*PCodeCmds[]) (void) =
         InternalCmdPrintRussianDirect,
         InternalCmdPrintScriptvarAndStringEnglishDirect,
         InternalCmdPrintMapvarAndStringEnglishDirect,
+        InternalCmdGT2EQ,
 };
 
 // CODE --------------------------------------------------------------------
@@ -1148,6 +1150,19 @@ static int CmdGT(void)
 
     operand2 = Pop();
     Push(Pop() > operand2);
+    return SCRIPT_CONTINUE;
+}
+
+static int InternalCmdGT2EQ(void)
+{
+    int operand2;
+
+    operand2 = Pop();
+    if (Pop() > operand2)
+    {
+        PCodePtr[-1] = LONG(CMD_EQ);
+    }
+    Push(0);
     return SCRIPT_CONTINUE;
 }
 

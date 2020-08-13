@@ -764,7 +764,8 @@ const CMDInjectionRecord_t Hexen_Map_22_CMDInjectionTable[] = {
 };
 
 const CMDInjectionRecord_t Hexen_Map_23_CMDInjectionTable[] = {
-    //TODO: fix bug with serpents
+    RECORD(0x4AC, 0, CMD_GT2EQ), // serpent bug fix
+    RECORD(0x4BC, CMD_DELAYDIRECT, 1),
     //Move special call
     RECORD(0x8BC, CMD_LSPEC3DIRECT, 12),
     RECORD(0x8C4, 8, 32),
