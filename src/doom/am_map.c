@@ -2484,8 +2484,8 @@ void AM_drawThings (int colors, int colorrange)
                 continue;
             }
 
-            pt.x = t->x;
-            pt.y = t->y;
+            pt.x = t->oldx + FixedMul(t->x - t->oldx, fractionaltic);
+            pt.y = t->oldy + FixedMul(t->y - t->oldy, fractionaltic);
 
             if (automap_rotate)
             {
