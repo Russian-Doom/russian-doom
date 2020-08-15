@@ -35,7 +35,7 @@
 #include "s_sound.h"
 
 #include "doomstat.h"
-
+#include "f_finale.h"
 #include "crispy.h"
 #include "jn.h"
 
@@ -937,6 +937,7 @@ void P_SpawnPlayer (mapthing_t* mthing)
     p->viewheight = VIEWHEIGHT;
     p->lookdir = 0;
     skippsprinterp = true;
+    finale_wipe_done = false;
 
     // setup gun psprite
     P_SetupPsprites (p);
