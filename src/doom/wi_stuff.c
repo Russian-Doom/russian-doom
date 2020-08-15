@@ -1756,7 +1756,8 @@ void WI_checkForAccelerate(void)
     {
         if (playeringame[i])
         {
-            if (player->cmd.buttons & BT_ATTACK)
+            // [JN] Don't allow to skip intermission stats while active menu
+            if (player->cmd.buttons & BT_ATTACK && !menuactive)
             {
                 if (!player->attackdown)
                 acceleratestage = 1;
@@ -1767,7 +1768,8 @@ void WI_checkForAccelerate(void)
                 player->attackdown = false;
             }
 
-            if (player->cmd.buttons & BT_USE)
+            // [JN] Don't allow to skip intermission stats while active menu
+            if (player->cmd.buttons & BT_USE && !menuactive)
             {
                 if (!player->usedown)
                 {
