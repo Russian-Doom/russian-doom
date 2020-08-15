@@ -1760,7 +1760,9 @@ void WI_checkForAccelerate(void)
             if (player->cmd.buttons & BT_ATTACK && !menuactive)
             {
                 if (!player->attackdown)
-                acceleratestage = 1;
+                {
+                    acceleratestage = 1;
+                }
                 player->attackdown = true;
             }
             else
@@ -1780,12 +1782,6 @@ void WI_checkForAccelerate(void)
             else
             {
                 player->usedown = false;
-            }
-
-            // [JN] Pressing PAUSE should not accelerate intermission screen
-            if (player->cmd.buttons & BTS_PAUSE)
-            {
-                acceleratestage = 0;
             }
         }
     }
