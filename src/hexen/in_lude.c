@@ -168,6 +168,24 @@ static char *ClusMsgLumpNames[] = {
     "clus5msg"
 };
 
+// [JN] Custom Russian intermission texts for Beyond Heretic
+static char *ClusMsgLumpNames_Rus[] = {
+    "CLUS1_BH",
+    "CLUS2_BH",
+    "CLUS3_BH",
+    "CLUS4_BH",
+    "CLUS5_BH"
+};
+
+// [JN] Custom Russian intermission texts for Death Kings
+static char *ClusMsgLumpNames_DK_Rus[] = {
+    "CLUS1_DK",
+    "CLUS2_DK",
+    "CLUS3_DK",
+    "CLUS4_DK",
+    "CLUS5_DK"
+};
+
 static void InitStats(void)
 {
     int i;
@@ -182,6 +200,7 @@ static void InitStats(void)
     int msgLump;
 
     extern int LeaveMap;
+    extern boolean isDK;
 
     if (!deathmatch)
     {
@@ -192,7 +211,24 @@ static void InitStats(void)
         {
             if (oldCluster >= 1 && oldCluster <= 5)
             {
-                msgLumpName = ClusMsgLumpNames[oldCluster - 1];
+                // [JN] Use standard CLUS*MSG for English language
+                if (english_language)
+                {
+                    msgLumpName = ClusMsgLumpNames[oldCluster - 1];
+                }
+                else
+                {
+                    if (isDK)
+                    {
+                        // [JN] Use custom CLUS*_DK for Russian language in Death Kings
+                        msgLumpName = ClusMsgLumpNames_DK_Rus[oldCluster - 1];
+                    }
+                    else
+                    {
+                        // [JN] Use custom CLUS*_BH for Russian language in Beyond Heretic
+                        msgLumpName = ClusMsgLumpNames_Rus[oldCluster - 1];
+                    }
+                }
                 msgLump = W_GetNumForName(msgLumpName);
                 msgSize = W_LumpLength(msgLump);
                 if (msgSize >= MAX_INTRMSN_MESSAGE_SIZE)
