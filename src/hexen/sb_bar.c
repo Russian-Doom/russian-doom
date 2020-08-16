@@ -1570,6 +1570,7 @@ void DrawFullScreenStuff(void)
     {
         // [JN] Draw health vial, representing player's health
         V_DrawShadowedPatch(46, 177, W_CacheLumpName(
+                            CPlayer->mo->health >= 100 ? "HUDPNT00" :
                             CPlayer->mo->health >=  90 ? "HUDPNT01" :
                             CPlayer->mo->health >=  80 ? "HUDPNT02" :
                             CPlayer->mo->health >=  70 ? "HUDPNT03" :
@@ -1580,8 +1581,7 @@ void DrawFullScreenStuff(void)
                             CPlayer->mo->health >=  20 ? "HUDPNT08" :
                             CPlayer->mo->health >=  10 ? "HUDPNT09" :
                             CPlayer->mo->health >=   1 ? "HUDPNT10" :
-                            CPlayer->mo->health <=   0 ? "HUDPNT11" :
-                                                         "HUDPNT00", PU_CACHE));
+                                                         "HUDPNT11", PU_CACHE));
 
         if (CPlayer->readyArtifact > 0)
         {
