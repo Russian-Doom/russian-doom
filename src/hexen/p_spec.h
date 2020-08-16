@@ -553,6 +553,7 @@ void P_CheckACSStore(void);
 void CheckACSPresent(int number);
 
 extern int ACScriptCount;
+extern const char** rusACStrings;
 extern byte *ActionCodeBase;
 extern acsInfo_t *ACSInfo;
 extern int MapVars[MAX_ACS_MAP_VARS];

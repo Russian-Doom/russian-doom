@@ -26,6 +26,8 @@
 #include "i_swap.h"
 #include "i_system.h"
 #include "p_local.h"
+#include "jn.h"
+#include "rushexen.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -172,6 +174,17 @@ static int CmdSetLineBlocking(void);
 static int CmdSetLineSpecial(void);
 static int CmdThingSound(void);
 static int CmdEndPrintBold(void);
+//Internal PCode handlers
+static int InternalCmdTableDelayDirect(void);
+static int InternalCmdPrintBoldAlwaysWithTableDelayDirect(void);
+static int InternalCmdPrintBoldRussianDirect(void);
+static int InternalCmdPrintNumberOrPrintStringDirect(void);
+static int InternalCmdPrintStringDirectOrPrintNumber(void);
+static int InternalCmdPrintAlwaysWithTableDelayDirect(void);
+static int InternalCmdPrintRussianDirect(void);
+static int InternalCmdPrintScriptvarAndStringEnglishDirect(void);
+static int InternalCmdPrintMapvarAndStringEnglishDirect(void);
+static int InternalCmdGT2EQ(void);
 
 static void ThingCount(int type, int tid);
 
@@ -180,6 +193,7 @@ static void ThingCount(int type, int tid);
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 int ACScriptCount;
+const char** rusACStrings;
 byte *ActionCodeBase;
 acsInfo_t *ACSInfo;
 int MapVars[MAX_ACS_MAP_VARS];
@@ -300,6 +314,18 @@ static int (*PCodeCmds[]) (void) =
         CmdSetLineSpecial,
         CmdThingSound,
         CmdEndPrintBold,
+        //Insert ACSE(zdoom) PCodes here and don't forget to update LAST_EXTERNAL_CMD in rushexen.h
+    //Internal PCodes
+        InternalCmdTableDelayDirect,
+        InternalCmdPrintBoldAlwaysWithTableDelayDirect,
+        InternalCmdPrintBoldRussianDirect,
+        InternalCmdPrintNumberOrPrintStringDirect,
+        InternalCmdPrintStringDirectOrPrintNumber,
+        InternalCmdPrintAlwaysWithTableDelayDirect,
+        InternalCmdPrintRussianDirect,
+        InternalCmdPrintScriptvarAndStringEnglishDirect,
+        InternalCmdPrintMapvarAndStringEnglishDirect,
+        InternalCmdGT2EQ,
 };
 
 // CODE --------------------------------------------------------------------
@@ -1127,6 +1153,19 @@ static int CmdGT(void)
     return SCRIPT_CONTINUE;
 }
 
+static int InternalCmdGT2EQ(void)
+{
+    int operand2;
+
+    operand2 = Pop();
+    if (Pop() > operand2)
+    {
+        PCodePtr[-1] = LONG(CMD_EQ);
+    }
+    Push(0);
+    return SCRIPT_CONTINUE;
+}
+
 static int CmdLE(void)
 {
     int operand2;
@@ -1368,6 +1407,13 @@ static int CmdDelay(void)
 static int CmdDelayDirect(void)
 {
     ACScript->delayCount = LONG(*PCodePtr);
+    ++PCodePtr;
+    return SCRIPT_STOP;
+}
+
+static int InternalCmdTableDelayDirect(void)
+{
+    ACScript->delayCount = delayTable[LONG(*PCodePtr)][english_language ? 0 : 1];
     ++PCodePtr;
     return SCRIPT_STOP;
 }
@@ -1738,7 +1784,127 @@ static int CmdEndPrintBold(void)
 
 static int CmdPrintString(void)
 {
-    M_StringConcat(PrintBuffer, ACStrings[Pop()], sizeof(PrintBuffer));
+    if (!english_language && rusACStrings)
+    {
+        M_StringConcat(PrintBuffer, rusACStrings[Pop()], sizeof(PrintBuffer));
+    }
+    else
+    {
+        M_StringConcat(PrintBuffer, ACStrings[Pop()], sizeof(PrintBuffer));
+    }
+    return SCRIPT_CONTINUE;
+}
+
+static int InternalCmdPrintBoldAlwaysWithTableDelayDirect(void)
+{
+    int i;
+
+    *PrintBuffer = 0;
+    if (!english_language && rusACStrings)
+    {
+        M_StringConcat(PrintBuffer, rusACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+    }
+    else
+    {
+        M_StringConcat(PrintBuffer, ACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+    }
+    ++PCodePtr;
+    for (i = 0; i < maxplayers; i++)
+    {
+        if (playeringame[i])
+        {
+            P_SetYellowMessage(&players[i], PrintBuffer, true);
+        }
+    }
+    i = delayTable[LONG(*PCodePtr)][english_language ? 0 : 1];
+    ++PCodePtr;
+    if (i > 0)
+    {
+        ACScript->delayCount = i;
+        return SCRIPT_STOP;
+    }
+    else
+    {
+        return SCRIPT_CONTINUE;
+    }
+}
+
+static int InternalCmdPrintBoldRussianDirect(void)
+{
+    int i;
+
+    if (!english_language && rusACStrings)
+    {
+        *PrintBuffer = 0;
+        M_StringConcat(PrintBuffer, rusACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+        for (i = 0; i < maxplayers; i++)
+        {
+            if (playeringame[i])
+            {
+                P_SetYellowMessage(&players[i], PrintBuffer, true);
+            }
+        }
+    }
+    ++PCodePtr;
+    return SCRIPT_CONTINUE;
+}
+
+static int InternalCmdPrintAlwaysWithTableDelayDirect(void)
+{
+    player_t* player;
+    int i;
+
+    *PrintBuffer = 0;
+    if (!english_language && rusACStrings)
+    {
+        M_StringConcat(PrintBuffer, rusACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+    }
+    else
+    {
+        M_StringConcat(PrintBuffer, ACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+    }
+    ++PCodePtr;
+    if (ACScript->activator && ACScript->activator->player)
+    {
+        player = ACScript->activator->player;
+    }
+    else
+    {
+        player = &players[consoleplayer];
+    }
+    P_SetMessage(player, PrintBuffer, true);
+    i = delayTable[LONG(*PCodePtr)][english_language ? 0 : 1];
+    ++PCodePtr;
+    if (i > 0)
+    {
+        ACScript->delayCount = i;
+        return SCRIPT_STOP;
+    }
+    else
+    {
+        return SCRIPT_CONTINUE;
+    }
+}
+
+static int InternalCmdPrintRussianDirect(void)
+{
+    player_t* player;
+
+    if (!english_language && rusACStrings)
+    {
+        *PrintBuffer = 0;
+        M_StringConcat(PrintBuffer, rusACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+        if (ACScript->activator && ACScript->activator->player)
+        {
+            player = ACScript->activator->player;
+        }
+        else
+        {
+            player = &players[consoleplayer];
+        }
+        P_SetMessage(player, PrintBuffer, true);
+    }
+    ++PCodePtr;
     return SCRIPT_CONTINUE;
 }
 
@@ -1748,6 +1914,77 @@ static int CmdPrintNumber(void)
 
     M_snprintf(tempStr, sizeof(tempStr), "%d", Pop());
     M_StringConcat(PrintBuffer, tempStr, sizeof(PrintBuffer));
+    return SCRIPT_CONTINUE;
+}
+
+static int InternalCmdPrintNumberOrPrintStringDirect(void)
+{
+    if (english_language)
+    {
+        ++PCodePtr;
+        return CmdPrintNumber();
+    }
+    else
+    {
+        if (rusACStrings)
+        {
+            M_StringConcat(PrintBuffer, rusACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+        }
+        ++PCodePtr;
+        return SCRIPT_CONTINUE;
+    }
+}
+
+static int InternalCmdPrintStringDirectOrPrintNumber(void)
+{
+    if (english_language)
+    {
+        M_StringConcat(PrintBuffer, ACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+        ++PCodePtr;
+        return SCRIPT_CONTINUE;
+    }
+    else
+    {
+        ++PCodePtr;
+        return CmdPrintNumber();
+    }
+}
+
+static int InternalCmdPrintScriptvarAndStringEnglishDirect(void)
+{
+    if (english_language)
+    {
+        char tempStr[16];
+
+        M_snprintf(tempStr, sizeof(tempStr), "%d", ACScript->vars[LONG(*PCodePtr)]);
+        ++PCodePtr;
+        M_StringConcat(PrintBuffer, tempStr, sizeof(PrintBuffer));
+        M_StringConcat(PrintBuffer, ACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+        ++PCodePtr;
+    }
+    else
+    {
+        PCodePtr += 2;
+    }
+    return SCRIPT_CONTINUE;
+}
+
+static int InternalCmdPrintMapvarAndStringEnglishDirect(void)
+{
+    if (english_language)
+    {
+        char tempStr[16];
+
+        M_snprintf(tempStr, sizeof(tempStr), "%d", MapVars[LONG(*PCodePtr)]);
+        ++PCodePtr;
+        M_StringConcat(PrintBuffer, tempStr, sizeof(PrintBuffer));
+        M_StringConcat(PrintBuffer, ACStrings[LONG(*PCodePtr)], sizeof(PrintBuffer));
+        ++PCodePtr;
+    }
+    else
+    {
+        PCodePtr += 2;
+    }
     return SCRIPT_CONTINUE;
 }
 

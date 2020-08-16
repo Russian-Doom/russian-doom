@@ -29,6 +29,7 @@
 #include "i_swap.h"
 #include "s_sound.h"
 #include "p_local.h"
+#include "rushexen.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -683,6 +684,7 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     int parm;
     char lumpname[9];
     int lumpnum;
+    const CMDInjectionRecord_t* injectionTable;
     mobj_t *mobj;
 
     for (i = 0; i < maxplayers; i++)
@@ -727,6 +729,20 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     P_LoadThings(lumpnum + ML_THINGS);
     PO_Init(lumpnum + ML_THINGS);       // Initialize the polyobjs
     P_LoadACScripts(lumpnum + ML_BEHAVIOR);     // ACS object code
+    if (!hasUnknownPWads) // Only if hexen or hexdd or hexen demo
+    {
+        rusACStrings = GetRusStringTable(map);
+        injectionTable = GetCMDInjectionTable(map);
+        if (injectionTable)
+        {
+            while (injectionTable->address != 0)
+            {
+                uint64_t* instruction = (uint64_t*) (ActionCodeBase + injectionTable->address);
+                *instruction = injectionTable->value;
+                injectionTable++;
+            }
+        }
+    }
     //
     // End of map lump processing
     //

@@ -49,6 +49,7 @@ r_main.c                              \
 r_plane.c                             \
 r_segs.c                              \
 r_things.c                            \
+rushexen.c          rushexen.h        \
 s_sound.c           s_sound.h         \
 sb_bar.c                              \
 sc_man.c                              \
