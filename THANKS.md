@@ -27,6 +27,9 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Invisible Warrior 
 - NormanSeven 
 
+#### ACS script enhancement for Russian translation
+- Dasperal 
+
 #### [RiscOS Doom](https://github.com/jeffdoggett/Doom) source port 
 - Jeff Doggett
 
