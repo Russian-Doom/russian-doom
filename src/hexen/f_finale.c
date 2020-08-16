@@ -27,6 +27,7 @@
 #include <ctype.h>
 #include "v_video.h"
 #include "i_swap.h"
+#include "rushexen.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -401,7 +402,6 @@ static char *GetFinaleText(int sequence)
     char *msgLumpName;
     int msgSize;
     int msgLump;
-    extern boolean isDK;
 
     static char *winMsgLumpNames[] = {
         "win1msg",

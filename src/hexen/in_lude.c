@@ -27,6 +27,7 @@
 #include "p_local.h"
 #include "v_video.h"
 #include "i_swap.h"
+#include "rushexen.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -200,7 +201,6 @@ static void InitStats(void)
     int msgLump;
 
     extern int LeaveMap;
-    extern boolean isDK;
 
     if (!deathmatch)
     {

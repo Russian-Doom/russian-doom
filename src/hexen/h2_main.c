@@ -124,6 +124,7 @@ boolean advancedemo;
 FILE *debugfile;
 int UpdateState;
 int maxplayers = MAXPLAYERS;
+int demosequence;
 
 boolean title_mus_played = false;
 
@@ -171,7 +172,6 @@ int no_internal_demos = 0;
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 static int WarpMap;
-static int demosequence;
 static int pagetic;
 static char *pagename;
 static char *SavePathConfig;
@@ -1292,7 +1292,14 @@ void H2_DoAdvanceDemo(void)
         case 0:
             pagetic = 280;
             gamestate = GS_DEMOSCREEN;
-            pagename = "TITLE";
+            if (english_language)
+            {
+                pagename = "TITLE";
+            }
+            else
+            {
+                pagename = isDK ? "TITLEDK" : "TITLE";
+            }
             if (!title_mus_played)
             S_StartSongName("hexen", false);
             if (no_internal_demos)
@@ -1301,7 +1308,14 @@ void H2_DoAdvanceDemo(void)
         case 1:
             pagetic = 210;
             gamestate = GS_DEMOSCREEN;
-            pagename = "TITLE";
+            if (english_language)
+            {
+                pagename = "TITLE";
+            }
+            else
+            {
+                pagename = isDK ? "TITLEDK" : "TITLE";
+            }
             break;
         case 2:
             BorderNeedRefresh = true;
@@ -1312,7 +1326,14 @@ void H2_DoAdvanceDemo(void)
         case 3:
             pagetic = 200;
             gamestate = GS_DEMOSCREEN;
-            pagename = "CREDIT";
+            if (english_language)
+            {
+                pagename = "CREDIT";
+            }
+            else
+            {
+                pagename = isDK ? "RD_CREDK" : "RD_CREDT";
+            }
             break;
         case 4:
             BorderNeedRefresh = true;
@@ -1323,7 +1344,14 @@ void H2_DoAdvanceDemo(void)
         case 5:
             pagetic = 200;
             gamestate = GS_DEMOSCREEN;
-            pagename = "CREDIT";
+            if (english_language)
+            {
+                pagename = "CREDIT";
+            }
+            else
+            {
+                pagename = isDK ? "RD_CREDK" : "RD_CREDT";
+            }
             break;
         case 6:
             BorderNeedRefresh = true;
