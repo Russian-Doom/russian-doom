@@ -1247,11 +1247,6 @@ void MN_Drawer(void)
                            + wide_delta, 90);
             }
 
-            if (typeofask == 7)
-            {
-                V_DrawShadowedPatchRaven(32 + wide_delta, 32, W_CacheLumpName("ADVISOR", PU_CACHE));
-            }
-
             UpdateState |= I_FULLSCRN;
         }
         return;
@@ -2973,21 +2968,32 @@ void M_RD_DoResetSettings(void)
 
 static void M_RD_ChangeLanguage(int option)
 {
-    menuactive = false;
-    askforquit = true;
-    typeofask = 7;
-    if (!netgame && !demoplayback)
+    english_language ^= 1;
+
+    // Reset options menu
+    CurrentMenu = english_language ? &OptionsMenu : &OptionsMenu_Rus;
+
+    // Clear HUD messages
+    players[consoleplayer].message[0] = 0;
+    players[consoleplayer].yellowMessage = 0;
+
+    // Update game screen, borders and status bar
+    UpdateState |= I_FULLSCRN;
+    BorderNeedRefresh = true;
+    SB_state = -1;
+
+    // Restart intermission text
+    if (gamestate == GS_INTERMISSION)
     {
-        paused = true;
+        IN_Start();
+    }
+
+    // Restart finale text
+    if (gamestate == GS_FINALE)
+    {
+        F_StartFinale();
     }
 }
-
-void M_RD_DoChangeLanguage(void)
-{
-    english_language ^= 1;
-    I_Quit();    
-}
-
 
 //---------------------------------------------------------------------------
 //
@@ -3430,9 +3436,6 @@ boolean MN_Responder(event_t * event)
                     break;
                 case 6:
                     M_RD_DoResetSettings();
-                    break;
-                case 7:
-                    M_RD_DoChangeLanguage();
                     break;
                 default:
                     break;
