@@ -786,7 +786,7 @@ void SB_Drawer(void)
 
     // [JN] Draw extended skulls and stone border
     if ((aspect_ratio >= 2 && screenblocks == 10)
-    ||  (automapactive && !automap_overlay))
+    ||  (aspect_ratio >= 2 && automapactive && !automap_overlay))
     {
         V_DrawPatch(0, 123, W_CacheLumpName("WDBARLF", PU_CACHE));    // left
         V_DrawPatch(373, 123, W_CacheLumpName("WDBARRT", PU_CACHE));  // right
