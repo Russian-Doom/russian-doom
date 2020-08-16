@@ -2982,6 +2982,9 @@ static void M_RD_ChangeLanguage(int option)
     BorderNeedRefresh = true;
     SB_state = -1;
 
+    // Re-init map info lump
+    InitMapInfo();
+
     // Restart intermission text
     if (gamestate == GS_INTERMISSION)
     {

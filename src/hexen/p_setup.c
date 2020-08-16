@@ -34,6 +34,9 @@
 // MACROS ------------------------------------------------------------------
 
 #define MAPINFO_SCRIPT_NAME "MAPINFO"
+#define MAPINFO_SCRIPT_NAME_RUS "MINFO_BH"
+#define MAPINFO_SCRIPT_NAME_RUS_DK "MINFO_DK"
+#define MAPINFO_SCRIPT_NAME_RUS_DM "MINFO_DM"
 #define MCMD_SKY1 1
 #define MCMD_SKY2 2
 #define MCMD_LIGHTNING 3
@@ -818,7 +821,7 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 //
 //==========================================================================
 
-static void InitMapInfo(void)
+void InitMapInfo(void)
 {
     int map;
     int mapMax;
@@ -849,8 +852,30 @@ static void InitMapInfo(void)
     info->fadetable = W_GetNumForName(DEFAULT_FADE_TABLE);
     M_StringCopy(info->name, UNKNOWN_MAP_NAME, sizeof(info->name));
 
-//    M_StringCopy(info->songLump, DEFAULT_SONG_LUMP, sizeof(info->songLump));
-    SC_Open(MAPINFO_SCRIPT_NAME);
+    // [JN] Use standard MAPINFO lump for English language
+    if (english_language)
+    {
+        SC_Open(MAPINFO_SCRIPT_NAME);
+    }
+    else
+    {
+        if (isDK)
+        {
+            // [JN] Use custom MINFO_DK for Russian language in Death Kings
+            SC_Open(MAPINFO_SCRIPT_NAME_RUS_DK);
+        }
+        else if (isHexenDemo)
+        {
+            // [JN] Use custom MINFO_DM for Russian language in Demo version
+            SC_Open(MAPINFO_SCRIPT_NAME_RUS_DM);
+        }
+        else
+        {
+            // [JN] Use custom MINFO_BH for Russian language in Beyond Heretic
+            SC_Open(MAPINFO_SCRIPT_NAME_RUS);
+        }
+    }
+
     while (SC_GetString())
     {
         if (SC_Compare("MAP") == false)
