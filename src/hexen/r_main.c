@@ -958,6 +958,7 @@ void R_SetupFrame(player_t * player)
 
 void R_RenderPlayerView(player_t * player)
 {
+    extern void V_DrawFilledBox (int x, int y, int w, int h, int c);
     extern boolean automapactive;
 
     R_SetupFrame(player);
@@ -968,6 +969,10 @@ void R_RenderPlayerView(player_t * player)
         R_RenderBSPNode (numnodes-1);
         return;
     }
+
+    // [JN] Fill level's "out of bounds" with black color
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, viewheight, 0);
+
     R_ClearPlanes();
     R_ClearSprites();
     NetUpdate();                // check for new console commands
