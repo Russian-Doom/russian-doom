@@ -785,7 +785,8 @@ void SB_Drawer(void)
     boolean wide_4_3 = aspect_ratio >= 2 && screenblocks == 9;
 
     // [JN] Draw extended skulls and stone border
-    if ((aspect_ratio >= 2 && screenblocks == 10) || (aspect_ratio >= 2 && automapactive))
+    if ((aspect_ratio >= 2 && screenblocks == 10)
+    ||  (automapactive && !automap_overlay))
     {
         V_DrawPatch(0, 123, W_CacheLumpName("WDBARLF", PU_CACHE));    // left
         V_DrawPatch(373, 123, W_CacheLumpName("WDBARRT", PU_CACHE));  // right
@@ -856,7 +857,7 @@ void SB_Drawer(void)
 
 // -----------------------------------------------------------------------------
 
-    if (viewheight == SCREENHEIGHT && !automapactive)
+    if (viewheight == SCREENHEIGHT && (!automapactive || automap_overlay))
     {
         if (screenblocks == 11) // [JN] Draw only in 11 screen size, 12 is clean full screen
         DrawFullScreenStuff();
@@ -1568,30 +1569,19 @@ void DrawFullScreenStuff(void)
     if (!inventory)
     {
         // [JN] Draw health vial, representing player's health
-        if (CPlayer->mo->health == 100)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT00", PU_CACHE));
-        else if (CPlayer->mo->health >= 90)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT01", PU_CACHE));
-        else if (CPlayer->mo->health >= 80)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT02", PU_CACHE));
-        else if (CPlayer->mo->health >= 70)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT03", PU_CACHE));
-        else if (CPlayer->mo->health >= 60)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT04", PU_CACHE));
-        else if (CPlayer->mo->health >= 50)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT05", PU_CACHE));
-        else if (CPlayer->mo->health >= 40)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT06", PU_CACHE));
-        else if (CPlayer->mo->health >= 30)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT07", PU_CACHE));
-        else if (CPlayer->mo->health >= 20)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT08", PU_CACHE));
-        else if (CPlayer->mo->health >= 10)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT09", PU_CACHE));
-        else if (CPlayer->mo->health >= 1)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT10", PU_CACHE));
-        else if (CPlayer->mo->health <= 0)
-        V_DrawShadowedPatch(46, 177, W_CacheLumpName("HUDPNT11", PU_CACHE));
+        V_DrawShadowedPatch(46, 177, W_CacheLumpName(
+                            CPlayer->mo->health >=  90 ? "HUDPNT01" :
+                            CPlayer->mo->health >=  80 ? "HUDPNT02" :
+                            CPlayer->mo->health >=  70 ? "HUDPNT03" :
+                            CPlayer->mo->health >=  60 ? "HUDPNT04" :
+                            CPlayer->mo->health >=  50 ? "HUDPNT05" :
+                            CPlayer->mo->health >=  40 ? "HUDPNT06" :
+                            CPlayer->mo->health >=  30 ? "HUDPNT07" :
+                            CPlayer->mo->health >=  20 ? "HUDPNT08" :
+                            CPlayer->mo->health >=  10 ? "HUDPNT09" :
+                            CPlayer->mo->health >=   1 ? "HUDPNT10" :
+                            CPlayer->mo->health <=   0 ? "HUDPNT11" :
+                                                         "HUDPNT00", PU_CACHE));
 
         if (CPlayer->readyArtifact > 0)
         {
