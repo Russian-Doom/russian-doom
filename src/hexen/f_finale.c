@@ -401,13 +401,45 @@ static char *GetFinaleText(int sequence)
     char *msgLumpName;
     int msgSize;
     int msgLump;
+    extern boolean isDK;
+
     static char *winMsgLumpNames[] = {
         "win1msg",
         "win2msg",
         "win3msg"
     };
 
-    msgLumpName = winMsgLumpNames[sequence];
+    static char *winMsgLumpNames_Rus[] = {
+        "WIN1_BH",
+        "WIN2_BH",
+        "WIN3_BH"
+    };
+
+    static char *winMsgLumpNames_Rus_DK[] = {
+        "WIN1_DK",
+        "WIN2_DK",
+        "WIN3_DK"
+    };
+
+    // [JN] Use standard WIN*MSG for English language
+    if (english_language)
+    {
+        msgLumpName = winMsgLumpNames[sequence];
+    }
+    else
+    {
+        if (isDK)
+        {
+            // [JN] Use custom WIN*_DK for Russian language in Death Kings
+            msgLumpName = winMsgLumpNames_Rus_DK[sequence];
+        }
+        else
+        {
+            // [JN] Use custom WIN*_BH for Russian language in Beyond Heretic
+            msgLumpName = winMsgLumpNames_Rus[sequence];
+        }
+    }
+    
     msgLump = W_GetNumForName(msgLumpName);
     msgSize = W_LumpLength(msgLump);
     if (msgSize >= MAX_INTRMSN_MESSAGE_SIZE)
