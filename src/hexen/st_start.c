@@ -29,6 +29,7 @@
 #include "i_videohr.h"
 #include "s_sound.h"
 #include "st_start.h"
+#include "rushexen.h"
 
 
 // MACROS ------------------------------------------------------------------
@@ -302,7 +303,8 @@ byte *ST_LoadScreen(void)
     int length, lump;
     byte *buffer;
 
-    lump = W_GetNumForName("STARTUP");
+    lump = W_GetNumForName(!english_language && isHexenDemo ? 
+                                      "RD_STRDM" : "STARTUP");
     length = W_LumpLength(lump);
     buffer = (byte *) Z_Malloc(length, PU_STATIC, NULL);
     W_ReadLump(lump, buffer);

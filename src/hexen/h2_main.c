@@ -438,16 +438,9 @@ void D_SetGameDescription(void)
     {
         W_MergeFile("base/hexen-common.wad");
         isHexenDemo = true;
-
-        if (english_language)
-        {
-            gamedescription = "Hexen: 4 Level Demo Version";
-        }
-        else
-        {
-            gamedescription = "Hexen: Демоверсия четырех уровней";
-            W_MergeFile("base/hexen-demo-russian.wad");
-        }
+        gamedescription = english_language ?
+                          "Hexen: 4 Level Demo Version" :
+                          "Hexen: Демоверсия четырех уровней";
     }
     else
     {
