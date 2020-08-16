@@ -1696,7 +1696,7 @@ static void DrawRenderingMenu(void)
         // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
         if (aspect_ratio_temp != aspect_ratio)
         {
-            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            dp_translation = cr[CR_GRAY2RED_HEXEN];
             MN_DrTextSmallRUS("YTJ,[JLBV GTHTPFGECR GHJUHFVVS", 46 + wide_delta, 132);
             dp_translation = NULL;
         }
