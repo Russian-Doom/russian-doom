@@ -434,9 +434,9 @@ void D_SetGameDescription(void)
 */
     int newpwadfile;
 
+    W_MergeFile("base/hexen-common.wad");
     if (gamemode == shareware)
     {
-        W_MergeFile("base/hexen-common.wad");
         isHexenDemo = true;
         gamedescription = english_language ?
                           "Hexen: 4 Level Demo Version" :
@@ -445,16 +445,6 @@ void D_SetGameDescription(void)
     else
     {
         gamedescription = "Hexen";
-        W_MergeFile("base/hexen-common.wad");
-
-        if (english_language)
-        {
-            // [JN] We are fine.
-        }
-        else
-        {
-            W_MergeFile("base/hexen-beyond-russian.wad");
-        }
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
