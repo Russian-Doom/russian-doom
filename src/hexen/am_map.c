@@ -1808,12 +1808,12 @@ static void DrawWorldTimer(void)
     if (english_language)
     {
         M_snprintf(skill, sizeof(skill), "SKILL: %d", gameskill + 1);
-        MN_DrTextA(skill, 265 + (wide_4_3 ? wide_delta : wide_delta*2), 26);
+        MN_DrTextA(skill, 264 + (wide_4_3 ? wide_delta : wide_delta*2), 18);
     }
     else
     {
         // СЛОЖНОСТЬ:
         M_snprintf(skill, sizeof(skill), "CKJ;YJCNM: %d", gameskill + 1);
-        MN_DrTextSmallRUS(skill, 223 + (wide_4_3 ? wide_delta : wide_delta*2), 26);
+        MN_DrTextSmallRUS(skill, 222 + (wide_4_3 ? wide_delta : wide_delta*2), 18);
     }
 }

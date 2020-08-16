@@ -807,15 +807,15 @@ void SB_Drawer(void)
                        local_time == 2 ? 269 :
                        local_time == 3 ? 293 :
                        local_time == 4 ? 281 : 0) 
-                       + (wide_4_3 ? wide_delta : wide_delta*2), 13);
+                       + (wide_4_3 ? wide_delta : wide_delta*2), 32);
     }
 
     // [JN] Draw FPS widget
     if (show_fps && !vanillaparm)
     {
         sprintf (fps, "%d", f);
-        MN_DrTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 23);
-        MN_DrTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta*2), 23);   // [JN] fps digits
+        MN_DrTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 42);
+        MN_DrTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta*2), 42);   // [JN] fps digits
     }
 
     // Sound info debug stuff
