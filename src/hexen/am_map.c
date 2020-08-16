@@ -1625,6 +1625,11 @@ void AM_Drawer(void)
         return;
 
     UpdateState |= I_FULLSCRN;
+
+    // [JN] Refresh view border if necessary
+    if (aspect_ratio < 2 && screenblocks < 10)
+    BorderNeedRefresh = true;
+
     if (!automap_overlay)
     AM_clearFB(BACKGROUND);
     if (automap_grid)
