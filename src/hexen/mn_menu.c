@@ -2994,6 +2994,9 @@ static void M_RD_ChangeLanguage(int option)
     // Restart finale text
     if (gamestate == GS_FINALE)
     {
+        InfoType = 0;
+        menuactive = false;
+        paused = false;
         F_StartFinale();
     }
 }
