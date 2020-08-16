@@ -3182,7 +3182,7 @@ static void SCSaveGame(int option)
         {
             ptr++;
         }
-        *ptr = '_';
+        *ptr = '[';
         *(ptr + 1) = 0;
         SlotStatus[option]++;
         currentSlot = option;
