@@ -488,15 +488,9 @@ void D_SetGameDescription(void)
             if (M_StrCaseStr(myargv[newpwadfile], "hexdd.wad") != NULL) //Deathkings of the Dark Citadel
             {
                 isDK = true;
-                if (english_language)
-                {
-                    gamedescription = "Hexen: Deathkings of the Dark Citadel";
-                }
-                else
-                {
-                    gamedescription = "Hexen: Короли Смерти Темной Цитадели";
-                    W_MergeFile("base/hexen-dd-russian.wad");
-                }
+                gamedescription = english_language ? 
+                                  "Hexen: Deathkings of the Dark Citadel" :
+                                  "Hexen: Короли Смерти Темной Цитадели";
             }
             else //Any unknown pwad
             {
