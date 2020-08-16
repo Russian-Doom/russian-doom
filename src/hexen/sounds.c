@@ -312,4 +312,14 @@ sfxinfo_t S_sfx[] = {
     SOUND("Fireball", 32, 2, 1),
     SOUND("PuppyBeat", 30, 2, 1),
     SOUND("MysticIncant", 32, 4, 1),
+    //[Dasperal] Russian versions of KoraxVoice
+    SOUND("KoraxVoiceGreetingsRU", 512, 2, 1),
+    SOUND("KoraxVoiceReadyRU", 512, 2, 1),
+    SOUND("KoraxVoiceBloodRU", 512, 2, 1),
+    SOUND("KoraxVoiceGameRU", 512, 2, 1),
+    SOUND("KoraxVoiceBoardRU", 512, 2, 1),
+    SOUND("KoraxVoiceWorshipRU", 512, 2, 1),
+    SOUND("KoraxVoiceMaybeRU", 512, 2, 1),
+    SOUND("KoraxVoiceStrongRU", 512, 2, 1),
+    SOUND("KoraxVoiceFaceRU", 512, 2, 1),
 };

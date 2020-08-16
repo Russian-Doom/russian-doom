@@ -30,6 +30,7 @@
 #include "sounds.h"
 #include "s_sound.h"
 
+#define RUS_KORAX_VOICE_OFFSET 16
 #define PRIORITY_MAX_ADJUST 10
 #define DIST_ADJUST (MAX_SND_DIST/PRIORITY_MAX_ADJUST)
 
@@ -513,6 +514,12 @@ void S_StartSoundAtVolume(mobj_t * origin, int sound_id, int volume)
     else
     {
         Channel[i].pitch = NORM_PITCH;
+    }
+
+    //[Dasperal] Offset sound_id if the current language is Russian and sound is Korax voice
+    if (!english_language && sound_id >= SFX_KORAX_VOICE_1 && sound_id <= SFX_KORAX_VOICE_9)
+    {
+        sound_id += RUS_KORAX_VOICE_OFFSET;
     }
 
     if (S_sfx[sound_id].lumpnum == 0)

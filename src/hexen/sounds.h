@@ -312,6 +312,16 @@ typedef enum
     SFX_FIREBALL,
     SFX_PUPPYBEAT,
     SFX_MYSTICINCANT,
+    //[Dasperal] Russian versions of KoraxVoice
+    SFX_KORAX_VOICE_1_RU,
+    SFX_KORAX_VOICE_2_RU,
+    SFX_KORAX_VOICE_3_RU,
+    SFX_KORAX_VOICE_4_RU,
+    SFX_KORAX_VOICE_5_RU,
+    SFX_KORAX_VOICE_6_RU,
+    SFX_KORAX_VOICE_7_RU,
+    SFX_KORAX_VOICE_8_RU,
+    SFX_KORAX_VOICE_9_RU,
     NUMSFX
 } sfxenum_t;
 
