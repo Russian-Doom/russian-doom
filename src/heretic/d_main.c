@@ -375,6 +375,8 @@ void D_PageTicker(void)
 
 void D_PageDrawer(void)
 {
+    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+
     if (aspect_ratio >= 2)
     {
         // [JN] Clean up remainings of the wide screen before
@@ -385,10 +387,9 @@ void D_PageDrawer(void)
     V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
     if (demosequence == 1)
     {
-        V_DrawShadowedPatchRaven(4, 160, W_CacheLumpName
-                                (DEH_String
-                                (english_language ? "ADVISOR" : "ADVIS_RU"),
-                                                                 PU_CACHE));
+        V_DrawShadowedPatchRaven(4 + (wide_4_3 ? wide_delta : 0), 160,
+                                 W_CacheLumpName(DEH_String(english_language ?
+                                 "ADVISOR" : "ADVIS_RU"), PU_CACHE));
     }
     UpdateState |= I_FULLSCRN;
 }
