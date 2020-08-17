@@ -77,6 +77,7 @@ boolean debugmode;              // checkparm of -debug
 boolean ravpic;                 // checkparm of -ravpic
 boolean cdrom;                  // true if cd-rom mode active
 boolean noartiskip;             // whether shift-enter skips an artifact
+boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
 
 skill_t startskill;
 int startepisode;
@@ -185,7 +186,15 @@ extern boolean finalestage;
 
 void D_Display(void)
 {
+    static int saved_gametic = -1;
     extern boolean askforquit;
+
+    realframe = (!uncapped_fps || gametic > saved_gametic);
+
+    if (realframe)
+    {
+        saved_gametic = gametic;
+    }
 
     // [JN] Set correct palette. Allow finale stages use own palettes.
     if (gamestate != GS_LEVEL && gamestate != GS_FINALE)
