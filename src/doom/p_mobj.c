@@ -935,7 +935,9 @@ void P_SpawnPlayer (mapthing_t* mthing)
     p->extralight = 0;
     p->fixedcolormap = 0;
     p->viewheight = VIEWHEIGHT;
+    p->deltaviewheight = 0;
     p->lookdir = 0;
+    p->psp_dy = p->psp_dy_max = 0;
     skippsprinterp = true;
     finale_wipe_done = false;
 
