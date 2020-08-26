@@ -1326,13 +1326,13 @@ void D_DoomMain(void)
     {
         while (++newpwadfile != myargc && myargv[newpwadfile][0] != '-')
         {
-        char *filename;
-        filename = D_TryFindWADByName(myargv[newpwadfile]);
-        printf(english_language ?
-               " adding: %s\n" :
-               " добавление: %s\n",
-               filename);
-        W_MergeFile(filename);
+            char *filename;
+            filename = D_TryFindWADByName(myargv[newpwadfile]);
+            printf(english_language ?
+                   " adding: %s\n" :
+                   " добавление: %s\n",
+                   filename);
+            W_MergeFile(filename);
         }
     }
 
