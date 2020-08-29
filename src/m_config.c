@@ -1668,6 +1668,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(ssg_blast_enemies),
     CONFIG_VARIABLE_INT(randomly_flipcorpses),
     CONFIG_VARIABLE_INT(floating_powerups),
+    CONFIG_VARIABLE_INT(toss_drop),
 
     // Gameplay: Crosshair
     CONFIG_VARIABLE_INT(crosshair_draw),

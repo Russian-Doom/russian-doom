@@ -175,6 +175,7 @@ static void SensibleDefaults(void)
     ssg_blast_enemies = 1;
     randomly_flipcorpses = 1;
     floating_powerups = 0;
+    toss_drop = 1;
 
     // Gameplay: Crosshair
     crosshair_draw = 0;

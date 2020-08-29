@@ -73,6 +73,7 @@ int weapon_bobbing = 1;
 int ssg_blast_enemies = 1;
 int randomly_flipcorpses = 1;
 int floating_powerups = 0;
+int toss_drop = 1;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
@@ -355,6 +356,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("ssg_blast_enemies",      &ssg_blast_enemies);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("floating_powerups",      &floating_powerups);
+    M_BindIntVariable("toss_drop",              &toss_drop);
 
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);

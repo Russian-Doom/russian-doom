@@ -296,6 +296,7 @@ void M_RD_Change_Bobbing(int choice);
 void M_RD_Change_SSGBlast(int choice);
 void M_RD_Change_FlipCorpses(int choice);
 void M_RD_Change_FloatPowerups(int choice);
+void M_RD_Change_TossDrop(int choice);
 void M_RD_Change_CrosshairDraw(int choice);
 void M_RD_Change_CrosshairHealth(int choice);
 void M_RD_Change_CrosshairScale(int choice);
@@ -1789,6 +1790,7 @@ enum
     rd_gameplay_3_ssg_blast_enemies,
     rd_gameplay_3_randomly_flipcorpses,
     rd_gameplay_3_floating_powerups,
+    rd_gameplay_3_toss_drop,
     rd_gameplay_3_empty1,
     rd_gameplay_3_crosshair_draw,
     rd_gameplay_3_crosshair_health,
@@ -1885,6 +1887,7 @@ menuitem_t RD_Gameplay_Menu_3[]=
     {2,"Lethal pellet of a point-blank SSG:", M_RD_Change_SSGBlast,        'l'},
     {2,"Randomly mirrored corpses:",          M_RD_Change_FlipCorpses,     'r'},
     {2,"Floating powerups:",                  M_RD_Change_FloatPowerups,   'f'},
+    {2,"Items are tossed when dropped:",      M_RD_Change_TossDrop,        'i'},
     {-1,"",0,'\0'},
     {2,"Draw crosshair:",                     M_RD_Change_CrosshairDraw,   'd'},
     {2,"Health indication:",                  M_RD_Change_CrosshairHealth, 'h'},
@@ -2001,6 +2004,7 @@ menuitem_t RD_Gameplay_Menu_3_Rus[]=
     {2,"ldecndjkrf hfphsdftn dhfujd:",      M_RD_Change_SSGBlast,           'l'},   // Двустволка разрывает врагов
     {2,"pthrfkbhjdfybt nhegjd:",            M_RD_Change_FlipCorpses,        'p'},   // Зеркалирование трупов
     {2,"Ktdbnbhe.obt caths-fhntafrns:",     M_RD_Change_FloatPowerups,      'k'},   // Левитирующие сферы-артефакты
+    {2,"Gjl,hfcsdfnm dsgfdibt ghtlvtns:",   M_RD_Change_TossDrop,           'g'},   // Подбрасывать выпавшие предметы
     {-1,"",0,'\0'},                                                                 //
     {2,"Jnj,hf;fnm ghbwtk:",                M_RD_Change_CrosshairDraw,      'j'},   // Отображать прицел
     {2,"Bylbrfwbz pljhjdmz:",               M_RD_Change_CrosshairHealth,    'b'},   // Индикация здоровья
@@ -4589,26 +4593,31 @@ void M_RD_Draw_Gameplay_3(void)
         M_WriteTextSmall_ENG(171 + wide_delta, 85, floating_powerups ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
+        // Items are tossed when dropped
+        dp_translation = toss_drop ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(254 + wide_delta, 95, toss_drop ? RD_ON : RD_OFF);
+        dp_translation = NULL;        
+
         //
         // Crosshair
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 95, "Crosshair");
+        M_WriteTextSmall_ENG(35 + wide_delta, 105, "Crosshair");
         dp_translation = NULL;
 
         // Draw crosshair
         dp_translation = crosshair_draw ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(146 + wide_delta, 105, crosshair_draw ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(146 + wide_delta, 115, crosshair_draw ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Health indication
         dp_translation = crosshair_health ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(163 + wide_delta, 115, crosshair_health ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(163 + wide_delta, 125, crosshair_health ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Increased size
         dp_translation = crosshair_scale ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(140 + wide_delta, 125, crosshair_scale ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(140 + wide_delta, 135, crosshair_scale ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         //
@@ -4661,26 +4670,31 @@ void M_RD_Draw_Gameplay_3(void)
         M_WriteTextSmall_RUS(275 + wide_delta, 85, floating_powerups ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
+        // Подбрасывать выпавшие предметы
+        dp_translation = toss_drop ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(286 + wide_delta, 95, toss_drop ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL; 
+
         //
         // Прицел
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 95, "Ghbwtk");
+        M_WriteTextSmall_RUS(35 + wide_delta, 105, "Ghbwtk");
         dp_translation = NULL;
 
         // Отображать прицел
         dp_translation = crosshair_draw ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(180 + wide_delta, 105, crosshair_draw ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(180 + wide_delta, 115, crosshair_draw ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Индикация здоровья
         dp_translation = crosshair_health ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(186 + wide_delta, 115, crosshair_health ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(186 + wide_delta, 125, crosshair_health ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Увеличенный размер
         dp_translation = crosshair_scale ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(185 + wide_delta, 125, crosshair_scale ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(185 + wide_delta, 135, crosshair_scale ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         //
@@ -5006,6 +5020,11 @@ void M_RD_Change_FlipCorpses(int choice)
 void M_RD_Change_FloatPowerups(int choice)
 {
     floating_powerups ^= 1;
+}
+
+void M_RD_Change_TossDrop(int choice)
+{
+    toss_drop ^= 1;
 }
 
 void M_RD_Change_CrosshairDraw(int choice)
@@ -6029,6 +6048,7 @@ void M_RD_BackToDefaultsResponse(int key)
     ssg_blast_enemies    = 1;
     randomly_flipcorpses = 1;
     floating_powerups    = 0;
+    toss_drop            = 1;
 
     // Gameplay: Crosshair
     crosshair_draw   = 0;

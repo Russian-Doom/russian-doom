@@ -849,7 +849,23 @@ P_KillMobj
 	return;
     }
 
-    mo = P_SpawnMobj (target->x,target->y,ONFLOORZ, item);
+    // [JN] Dropped items tossing feature (from Doom Retro).
+    if (toss_drop && !vanillaparm)
+    {
+        mo = P_SpawnMobj(target->x ,target->y, target->floorz
+                                             + target->height
+                                             * 3 / 2 - 3 * FRACUNIT, item);
+        if (singleplayer)
+        {
+            mo->momx = (target->momx >> 1) + (Crispy_Random() << 8);
+            mo->momy = (target->momy >> 1) + (Crispy_Random() << 8);
+        }
+        mo->momz = 2 * FRACUNIT + (M_Random() << 9);
+    }
+    else
+    {
+        mo = P_SpawnMobj (target->x,target->y,ONFLOORZ, item);
+    }
     mo->flags |= MF_DROPPED;	// special versions of items
 }
 
