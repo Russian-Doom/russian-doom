@@ -467,8 +467,8 @@ void D_SetGameDescription(void)
 
             // [JN] Поддержка Hexen: Deathkings of the Dark Citadel
             // Больше спасибо CapnClever за оказанную помощь!
-            // [Dasperal] Переписанно на нормальный код
-            if (M_StrCaseStr(myargv[newpwadfile], "hexdd.wad") != NULL) //Deathkings of the Dark Citadel
+            // [Dasperal] Переписано на нормальный код
+            if (M_StrCaseStr(myargv[newpwadfile], "hexdd.wad")) //Deathkings of the Dark Citadel
             {
                 isDK = true;
                 gamedescription = english_language ? 
