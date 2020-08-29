@@ -129,6 +129,7 @@ static void SensibleDefaults(void)
 
     // Display
     level_brightness = 0;
+    menu_shading = 0;
 
     // Automap
     automap_color = 0;

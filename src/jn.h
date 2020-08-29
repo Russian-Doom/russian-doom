@@ -55,6 +55,7 @@ extern int png_screenshots;
 
 extern int screenblocks, screenSize;
 extern int level_brightness;
+extern int menu_shading;
 extern int local_time;
 extern int detailLevel;
 extern int showMessages;

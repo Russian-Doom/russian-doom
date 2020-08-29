@@ -210,6 +210,7 @@ void M_RD_Draw_Display(void);
 void M_RD_Change_ScreenSize(int choice);
 void M_RD_Change_Gamma(int choice);
 void M_RD_Change_LevelBrightness(int choice);
+void M_RD_Change_MenuShading(int choice);
 void M_RD_Change_Detail(int choice);
 void M_RD_Change_LocalTime(int choice);
 
@@ -1300,9 +1301,11 @@ enum
     rd_display_empty2,
     rd_display_level_brightness,
     rd_display_empty3,
+    rd_display_menu_shading,
+    rd_display_empty4,
     rd_display_detail,
     rd_display_localtime,
-    rd_display_empty4,
+    rd_display_empty5,
     rd_display_messages_settings,
     rd_display_automap_settings,
     rd_display_end
@@ -1320,6 +1323,8 @@ menuitem_t RD_Display_Menu[]=
     {-1,"",0,'\0'},
     {2, "level brightness",    M_RD_Change_LevelBrightness, 'l'},
     {-1,"",0,'\0'},
+    {2, "menu shading",        M_RD_Change_MenuShading,     'm'},
+    {-1,"",0,'\0'},
     {2, "detail level:",       M_RD_Change_Detail,          'd'},
     {2, "local time:",         M_RD_Change_LocalTime,       'l'},
     {-1,"",0,'\0'},
@@ -1334,7 +1339,7 @@ menu_t  RD_Display_Def =
     &RD_Options_Def,
     RD_Display_Menu,
     M_RD_Draw_Display,
-    35,45,
+    35,35,
     0
 };
 
@@ -1350,6 +1355,8 @@ menuitem_t RD_Display_Menu_Rus[]=
     {-1,"",0,'\0'},                                                    //
     {2, "ehjdtym jcdtotyyjcnb",     M_RD_Change_LevelBrightness, 'e'}, // Уровень освещенности
     {-1,"",0,'\0'},                                                    //
+    {2, "pfntvytybt ajyf vty.",     M_RD_Change_MenuShading,     'p'}, // Затемнение фона меню
+    {-1,"",0,'\0'},                                                    //
     {2, "ehjdtym ltnfkbpfwbb:",     M_RD_Change_Detail,          'e'}, // Уровень детализации:
     {2, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
     {-1,"",0,'\0'},                                                    //
@@ -1364,7 +1371,7 @@ menu_t  RD_Display_Def_Rus =
     &RD_Options_Def_Rus,
     RD_Display_Menu_Rus,
     M_RD_Draw_Display,
-    35,45,
+    35,35,
     0
 };
 
@@ -2750,17 +2757,17 @@ void M_RD_Draw_Display(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(12, "DISPLAY OPTIONS");
+        M_WriteTextBigCentered_ENG(5, "DISPLAY OPTIONS");
 
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 35, "Screen");
+        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Screen");
         dp_translation = NULL;
 
         // Detail level
-        M_WriteTextSmall_ENG(130 + wide_delta, 105, detailLevel == 1 ? "low" : "high");
+        M_WriteTextSmall_ENG(130 + wide_delta, 115, detailLevel == 1 ? "low" : "high");
 
         // Local time
-        M_WriteTextSmall_ENG(116 + wide_delta, 115, 
+        M_WriteTextSmall_ENG(116 + wide_delta, 125, 
                              local_time == 1 ? "12-hour (hh:mm)" :
                              local_time == 2 ? "12-hour (hh:mm:ss)" :
                              local_time == 3 ? "24-hour (hh:mm)" :
@@ -2771,25 +2778,25 @@ void M_RD_Draw_Display(void)
         // Interface
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 125, "Interface");  
+        M_WriteTextSmall_ENG(35 + wide_delta, 135, "Interface");  
         dp_translation = NULL;
     }
     else
     {
-        M_WriteTextBigCentered_RUS(12, "YFCNHJQRB \"RHFYF"); // НАСТРОЙКИ ЭКРАНА
+        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB \"RHFYF"); // НАСТРОЙКИ ЭКРАНА
 
         //
         // Экран
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 35, "\'rhfy");
+        M_WriteTextSmall_RUS(35 + wide_delta, 25, "\'rhfy");
         dp_translation = NULL;
 
         // Уровень детализации
-        M_WriteTextSmall_RUS(193 + wide_delta, 105, detailLevel == 1 ? "ybprbq" : "dscjrbq");
+        M_WriteTextSmall_RUS(193 + wide_delta, 115, detailLevel == 1 ? "ybprbq" : "dscjrbq");
 
         // Системное время
-        M_WriteTextSmall_RUS(161 + wide_delta, 115, 
+        M_WriteTextSmall_RUS(161 + wide_delta, 125, 
                              local_time == 1 ? "12-xfcjdjt (xx:vv)" :
                              local_time == 2 ? "12-xfcjdjt (xx:vv:cc)" :
                              local_time == 3 ? "24-xfcjdjt (xx:vv)" :
@@ -2800,7 +2807,7 @@ void M_RD_Draw_Display(void)
         // Интерфейс
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 125, "bynthatqc");  
+        M_WriteTextSmall_RUS(35 + wide_delta, 135, "bynthatqc");  
         dp_translation = NULL;
     }
 
@@ -2808,26 +2815,29 @@ void M_RD_Draw_Display(void)
     if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: only 6 sizes are available
-        M_DrawThermo_Small(35 + wide_delta, 54, 6, screenSize);
+        M_DrawThermo_Small(35 + wide_delta, 44, 6, screenSize);
 
         // Numerical representation of slider position
         M_snprintf(num, 4, "%3d", screenblocks);
-        M_WriteTextSmall_ENG(96 + wide_delta, 55, num);
+        M_WriteTextSmall_ENG(96 + wide_delta, 45, num);
     }
     else
     {
-        M_DrawThermo_Small(35 + wide_delta, 54, 12, screenSize);
+        M_DrawThermo_Small(35 + wide_delta, 44, 12, screenSize);
 
         // Numerical representation of slider position
         M_snprintf(num, 4, "%3d", screenblocks);
-        M_WriteTextSmall_ENG(145 + wide_delta, 55, num);
+        M_WriteTextSmall_ENG(145 + wide_delta, 45, num);
     }
 
     // Gamma-correction slider
-    M_DrawThermo_Small(35 + wide_delta, 74, 18, usegamma);
+    M_DrawThermo_Small(35 + wide_delta, 64, 18, usegamma);
 
     // Level brightness slider
-    M_DrawThermo_Small(35 + wide_delta, 94, 5, level_brightness / 16);
+    M_DrawThermo_Small(35 + wide_delta, 84, 5, level_brightness / 16);
+
+    // Level brightness slider
+    M_DrawThermo_Small(35 + wide_delta, 104, 7, menu_shading / 4);
 }
 
 void M_RD_Change_ScreenSize(int choice)
@@ -2916,6 +2926,22 @@ void M_RD_Change_LevelBrightness(int choice)
         case 1:
         if (level_brightness < 64)
             level_brightness += 16;
+        break;
+    }
+}
+
+void M_RD_Change_MenuShading(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+        if (menu_shading > 0)
+            menu_shading -= 4;
+        break;
+    
+        case 1:
+        if (menu_shading < 24)
+            menu_shading += 4;
         break;
     }
 }
@@ -5925,6 +5951,7 @@ void M_RD_BackToDefaultsResponse(int key)
     screenSize         = 10;
     usegamma           = 4;
     level_brightness   = 0;
+    menu_shading       = 0;
     detailLevel        = 0;
     local_time         = 0;
     showMessages       = 1;

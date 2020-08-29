@@ -101,6 +101,7 @@ int show_endoom = 0;
 // Display
 int screenblocks = 10, screenSize;
 int level_brightness = 0;
+int menu_shading = 0;
 int detailLevel = 0;        // Blocky mode, has default, 0 = high, 1 = normal
 int local_time = 0;
 
@@ -468,6 +469,19 @@ void D_Display (void)
         viewactivestate = false;
     }
 
+    // [JN] Menu backgound shading. 
+    if (menu_shading > 0 && menuactive && !vanillaparm)
+    {
+        for (y = 0; y < screenwidth * SCREENHEIGHT; y++)
+        {
+            I_VideoBuffer[y] = colormaps[menu_shading * 256 + I_VideoBuffer[y]];
+        }
+    
+        // [crispy] force redraw of status bar and border
+        viewactivestate = false;
+        inhelpscreensstate = true;
+    }
+
     // [JN] Draw pause pic. Don't draw while actime game menu and help screens.
     if (paused && !menuactive)
     {
@@ -579,6 +593,7 @@ void D_BindVariables(void)
     // Display
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("level_brightness",       &level_brightness);
+    M_BindIntVariable("menu_shading",           &menu_shading);
     M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("local_time",             &local_time);
     M_BindIntVariable("show_messages",          &showMessages);

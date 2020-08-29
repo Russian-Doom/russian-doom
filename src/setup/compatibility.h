@@ -29,6 +29,7 @@ extern int show_diskicon;
 
 // Display
 extern int level_brightness;
+extern int menu_shading;
 extern int messages_pickup_color;
 extern int messages_secret_color;
 extern int messages_system_color;

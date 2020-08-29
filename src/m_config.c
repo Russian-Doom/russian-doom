@@ -1604,6 +1604,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(screenblocks),
     CONFIG_VARIABLE_INT(usegamma),
     CONFIG_VARIABLE_INT(level_brightness),
+    CONFIG_VARIABLE_INT(menu_shading),
     CONFIG_VARIABLE_INT(detaillevel),
     CONFIG_VARIABLE_INT(local_time),
     CONFIG_VARIABLE_INT(show_messages), CONFIG_VARIABLE_INT(messageson),
