@@ -55,13 +55,14 @@ extern int lcd_gamma_fix;
 // The current state of the game: whether we are
 // playing, gazing at the intermission screen,
 // the game final animation, or a demo. 
-typedef enum
-{
-    GS_LEVEL,
-    GS_UNKNOWN,
-    GS_FINALE,
-    GS_DEMOSCREEN,
-} gamestate_t;
+// typedef enum
+// {
+//     GS_LEVEL,
+//     GS_UNKNOWN,
+//     GS_FINALE,
+//     GS_DEMOSCREEN,
+// } gamestate_t;
+
 
 typedef enum
 {

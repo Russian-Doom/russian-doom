@@ -149,9 +149,6 @@ AC_DEFUN([AC_DATAROOTDIR_CHECKED])
 # [JN] Unused, moved out
 # man/Makefile
 # man/bash-completion/Makefile
-# src/strife.appdata.xml
-# src/strife.desktop
-# src/strife/Makefile
 
 AC_OUTPUT([
 Makefile
@@ -175,6 +172,9 @@ src/heretic/Makefile
 src/hexen.appdata.xml
 src/hexen.desktop
 src/hexen/Makefile
+src/strife.appdata.xml
+src/strife.desktop
+src/strife/Makefile
 src/resource.rc
 src/setup-res.rc
 src/setup/Makefile

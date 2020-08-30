@@ -962,7 +962,7 @@ void ST_drawNumFontY2(int x, int y, int num)
 
     while(num)
     {
-        V_DrawPatchDirect(x, y, invfonty[num % 10]);
+        V_DrawPatch(x, y, invfonty[num % 10]);
         x -= SHORT(invfonty[0]->width) + 1;
         num /= 10;
     }
@@ -1211,7 +1211,7 @@ static boolean ST_drawKeysPopup(void)
     mobjinfo_t *info;
 
     V_DrawXlaPatch(0, 56, invpbak2);
-    V_DrawPatchDirect(0, 56, invpop2);
+    V_DrawPatch(0, 56, invpop2);
 
     if(deathmatch)
     {
@@ -1229,7 +1229,7 @@ static boolean ST_drawKeysPopup(void)
         {
             DEH_snprintf(buffer, sizeof(buffer), "stcolor%d", pnum+1);
             colpatch = W_CacheLumpName(buffer, PU_CACHE);
-            V_DrawPatchDirect(28, y, colpatch);
+            V_DrawPatch(28, y, colpatch);
             frags = ST_calcFrags(pnum);
             DEH_snprintf(buffer, sizeof(buffer), "%s%d", player_names[pnum], frags);
             HUlib_drawYellowText(38, yt, buffer);
@@ -1246,7 +1246,7 @@ static boolean ST_drawKeysPopup(void)
         {
             DEH_snprintf(buffer, sizeof(buffer), "stcolor%d", pnum+1);
             colpatch = W_CacheLumpName(buffer, PU_CACHE);
-            V_DrawPatchDirect(158, y, colpatch);
+            V_DrawPatch(158, y, colpatch);
             frags = ST_calcFrags(pnum);
             DEH_snprintf(buffer, sizeof(buffer), "%s%d", player_names[pnum], frags);
             HUlib_drawYellowText(168, yt, buffer);
@@ -1310,7 +1310,7 @@ static boolean ST_drawKeysPopup(void)
                 DEH_snprintf(sprname, sizeof(sprname), "I_%s",
                     sprnames[states[info->spawnstate].sprite]);
                 patch = W_CacheLumpName(sprname, PU_CACHE);
-                V_DrawPatchDirect(x, y, patch);
+                V_DrawPatch(x, y, patch);
                 HUlib_drawYellowText(x + ST_KEYNAME_X, y + ST_KEYNAME_Y, info->name);
             }
 
@@ -1339,7 +1339,7 @@ boolean ST_DrawExternal(void)
 
     if(st_statusbaron)
     {
-        V_DrawPatchDirect(0, 160, invtop);
+        V_DrawPatch(0, 160, invtop);
         STlib_drawNumPositive(&w_health);
         STlib_drawNumPositive(&w_ready);
     }
@@ -1360,7 +1360,7 @@ boolean ST_DrawExternal(void)
     if(st_showobjective)
     {
         V_DrawXlaPatch(0, 56, invpbak2);
-        V_DrawPatchDirect(0, 56, invpop2);
+        V_DrawPatch(0, 56, invpop2);
         M_DialogDimMsg(24, 74, mission_objective, true);
         HUlib_drawYellowText(24, 74, mission_objective);
         ST_drawTime(210, 64, leveltime / TICRATE);
@@ -1374,7 +1374,7 @@ boolean ST_DrawExternal(void)
             return ST_drawKeysPopup();
 
         V_DrawXlaPatch(0, 56, invpbak);
-        V_DrawPatchDirect(0, 56, invpop);
+        V_DrawPatch(0, 56, invpop);
 
         for(i = 0; i < NUMCARDS; i++)
         {
@@ -1386,32 +1386,32 @@ boolean ST_DrawExternal(void)
 
          if(plyr->weaponowned[wp_elecbow])
          {
-             V_DrawPatchDirect(38, 86, 
+             V_DrawPatch(38, 86, 
                  W_CacheLumpName(DEH_String("CBOWA0"), PU_CACHE));
          }
          if(plyr->weaponowned[wp_rifle])
          {
-             V_DrawPatchDirect(40, 107, 
+             V_DrawPatch(40, 107, 
                  W_CacheLumpName(DEH_String("RIFLA0"), PU_CACHE));
          }
          if(plyr->weaponowned[wp_missile])
          {
-             V_DrawPatchDirect(39, 131, 
+             V_DrawPatch(39, 131, 
                  W_CacheLumpName(DEH_String("MMSLA0"), PU_CACHE));
          }
          if(plyr->weaponowned[wp_hegrenade])
          {
-             V_DrawPatchDirect(78, 87, 
+             V_DrawPatch(78, 87, 
                  W_CacheLumpName(DEH_String("GRNDA0"), PU_CACHE));
          }
          if(plyr->weaponowned[wp_flame])
          {
-             V_DrawPatchDirect(80, 117, 
+             V_DrawPatch(80, 117, 
                  W_CacheLumpName(DEH_String("FLAMA0"), PU_CACHE));
          }
          if(plyr->weaponowned[wp_mauler])
          {
-             V_DrawPatchDirect(75, 142, 
+             V_DrawPatch(75, 142, 
                  W_CacheLumpName(DEH_String("TRPDA0"), PU_CACHE));
          }
          
@@ -1427,7 +1427,7 @@ boolean ST_DrawExternal(void)
 
          if(plyr->powers[pw_communicator])
          {
-             V_DrawPatchDirect(280, 130, 
+             V_DrawPatch(280, 130, 
                  W_CacheLumpName(DEH_String("I_COMM"), PU_CACHE));
          }
     }

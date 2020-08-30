@@ -921,7 +921,7 @@ void M_DrawReadThis1(void)
 {
     inhelpscreens = true;
 
-    V_DrawPatchDirect (0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
+    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
 }
 
 
@@ -934,7 +934,7 @@ void M_DrawReadThis2(void)
 {
     inhelpscreens = true;
 
-    V_DrawPatchDirect(0, 0, W_CacheLumpName(DEH_String("HELP2"), PU_CACHE));
+    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP2"), PU_CACHE));
 }
 
 
@@ -946,7 +946,7 @@ void M_DrawReadThis3(void)
 {
     inhelpscreens = true;
     
-    V_DrawPatchDirect(0, 0, W_CacheLumpName(DEH_String("HELP3"), PU_CACHE));
+    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP3"), PU_CACHE));
 }
 
 //
@@ -1087,7 +1087,7 @@ int     epi;
 
 void M_DrawEpisode(void)
 {
-    V_DrawPatchDirect(54, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
+    V_DrawPatch(54, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
 }
 
 void M_VerifyNightmare(int key)
@@ -1468,7 +1468,7 @@ M_DrawEmptyCell
 ( menu_t*	menu,
   int		item )
 {
-    V_DrawPatchDirect(menu->x - 10, menu->y + item * LINEHEIGHT - 1, 
+    V_DrawPatch(menu->x - 10, menu->y + item * LINEHEIGHT - 1, 
                       W_CacheLumpName(DEH_String("M_CELL1"), PU_CACHE));
 }
 
@@ -1477,7 +1477,7 @@ M_DrawSelCell
 ( menu_t*	menu,
   int		item )
 {
-    V_DrawPatchDirect(menu->x - 10, menu->y + item * LINEHEIGHT - 1,
+    V_DrawPatch(menu->x - 10, menu->y + item * LINEHEIGHT - 1,
                       W_CacheLumpName(DEH_String("M_CELL2"), PU_CACHE));
 }
 
@@ -2388,7 +2388,7 @@ void M_Drawer (void)
     
     // haleyjd 08/27/10: [STRIFE] Adjust to draw spinning Sigil
     // DRAW SIGIL
-    V_DrawPatchDirect(x + CURSORXOFF - 7, currentMenu->y - 6 + itemOn*LINEHEIGHT,
+    V_DrawPatch(x + CURSORXOFF - 7, currentMenu->y - 6 + itemOn*LINEHEIGHT,
                       W_CacheLumpName(DEH_String(cursorName[whichCursor]),
                                       PU_CACHE));
 

@@ -89,8 +89,6 @@ void S_SetMusicVolume(int volume);
 void S_SetSfxVolume(int volume);
 void S_SetVoiceVolume(int volume); // haleyjd 09/11/10: [STRIFE]
 
-extern int snd_channels;
-
 extern int disable_voices;
 
 #endif

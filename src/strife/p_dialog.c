@@ -1149,7 +1149,7 @@ static void P_DialogDrawer(void)
     if(dialogbgpiclumpnum != -1)
     {
         patch_t *patch = W_CacheLumpNum(dialogbgpiclumpnum, PU_CACHE);
-        V_DrawPatchDirect(0, 0, patch);
+        V_DrawPatch(0, 0, patch);
     }
 
     // if there's a valid background pic, delay drawing the rest of the menu 
@@ -1453,7 +1453,7 @@ void P_DialogStart(player_t *player)
     pic = W_CheckNumForName(currentdialog->backpic);
     dialogbgpiclumpnum = pic;
     if(pic != -1)
-        V_DrawPatchDirect(0, 0, W_CacheLumpNum(pic, PU_CACHE));
+        V_DrawPatch(0, 0, W_CacheLumpNum(pic, PU_CACHE));
 
     // get voice
     I_StartVoice(currentdialog->voice);

@@ -1,21 +1,22 @@
 
 # strife
-SUBDIRS = doom heretic hexen setup
+SUBDIRS = doom heretic hexen strife setup
 
 execgamesdir = ${bindir}
 
 execgames_PROGRAMS = @PROGRAM_PREFIX@doom     \
                      @PROGRAM_PREFIX@heretic  \
-                     @PROGRAM_PREFIX@hexen
+                     @PROGRAM_PREFIX@hexen    \
+                     @PROGRAM_PREFIX@strife
 #                    @PROGRAM_PREFIX@server
-#                    @PROGRAM_PREFIX@strife
+
 
 noinst_PROGRAMS = @PROGRAM_PREFIX@setup
 
 SETUP_BINARIES = @PROGRAM_PREFIX@doom-setup$(EXEEXT)    \
                  @PROGRAM_PREFIX@heretic-setup$(EXEEXT) \
-                 @PROGRAM_PREFIX@hexen-setup$(EXEEXT)
-#                @PROGRAM_PREFIX@strife-setup$(EXEEXT)
+                 @PROGRAM_PREFIX@hexen-setup$(EXEEXT)   \
+                 @PROGRAM_PREFIX@strife-setup$(EXEEXT)
 
 execgames_SCRIPTS = $(SETUP_BINARIES)
 
@@ -182,13 +183,13 @@ endif
 
 @PROGRAM_PREFIX@hexen_LDADD = hexen/libhexen.a $(EXTRA_LIBS)
 
-# if HAVE_WINDRES
-# @PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH) resource.rc
-# else
-# @PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH)
-# endif
+if HAVE_WINDRES
+@PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH) resource.rc
+else
+@PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH)
+endif
 
-# @PROGRAM_PREFIX@strife_LDADD = strife/libstrife.a $(EXTRA_LIBS)
+@PROGRAM_PREFIX@strife_LDADD = strife/libstrife.a $(EXTRA_LIBS)
 
 $(SETUP_BINARIES): @PROGRAM_PREFIX@setup$(EXEEXT)
 	cp @PROGRAM_PREFIX@setup$(EXEEXT) $@
@@ -227,8 +228,8 @@ appdatadir = $(prefix)/share/appdata
 appdata_DATA =                              \
         @PROGRAM_PREFIX@doom.appdata.xml    \
         @PROGRAM_PREFIX@heretic.appdata.xml \
-        @PROGRAM_PREFIX@hexen.appdata.xml
-#       @PROGRAM_PREFIX@strife.appdata.xml
+        @PROGRAM_PREFIX@hexen.appdata.xml   \
+        @PROGRAM_PREFIX@strife.appdata.xml
 
 @PROGRAM_PREFIX@doom.appdata.xml : doom.appdata.xml
 	cp doom.appdata.xml $@
@@ -239,15 +240,15 @@ appdata_DATA =                              \
 @PROGRAM_PREFIX@hexen.appdata.xml : hexen.appdata.xml
 	cp hexen.appdata.xml $@
 
-# @PROGRAM_PREFIX@strife.appdata.xml : strife.appdata.xml
-# 	cp strife.appdata.xml $@
+@PROGRAM_PREFIX@strife.appdata.xml : strife.appdata.xml
+	cp strife.appdata.xml $@
 
 appdir = $(prefix)/share/applications
 app_DATA =                                 \
            @PROGRAM_PREFIX@doom.desktop    \
            @PROGRAM_PREFIX@heretic.desktop \
-           @PROGRAM_PREFIX@hexen.desktop
-#          @PROGRAM_PREFIX@strife.desktop
+           @PROGRAM_PREFIX@hexen.desktop   \
+           @PROGRAM_PREFIX@strife.desktop
 
 @PROGRAM_PREFIX@doom.desktop : doom.desktop
 	cp doom.desktop $@
@@ -258,8 +259,8 @@ app_DATA =                                 \
 @PROGRAM_PREFIX@hexen.desktop : hexen.desktop
 	cp hexen.desktop $@
 
-# @PROGRAM_PREFIX@strife.desktop : strife.desktop
-# 	cp strife.desktop $@
+@PROGRAM_PREFIX@strife.desktop : strife.desktop
+	cp strife.desktop $@
 
 screensaverdir = $(prefix)/share/applications/screensavers
 screensaver_DATA = @PROGRAM_PREFIX@doom-screensaver.desktop

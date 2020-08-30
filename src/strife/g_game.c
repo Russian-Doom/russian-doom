@@ -1069,9 +1069,11 @@ void G_Ticker (void)
         WI_Ticker (); 
         break; 
         */
+        /*
     case GS_UNKNOWN: // STRIFE-TODO: What is this? is it ever used??
         F_WaitTicker();
         break;
+        */
 
     case GS_FINALE: 
         F_Ticker (); 

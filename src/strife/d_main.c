@@ -80,6 +80,8 @@
 
 #include "d_main.h"
 
+#include "jn.h"
+
 //
 // D-DoomLoop()
 // Not a globally visible function,
@@ -102,7 +104,7 @@ char *          savegamedir;
 char *          iwadfile;
 
 
-boolean         devparm;        // started game with -devparm
+//boolean         devparm;        // started game with -devparm
 boolean         nomonsters;     // checkparm of -nomonsters
 boolean         respawnparm;    // checkparm of -respawn
 boolean         fastparm;       // checkparm of -fast
@@ -145,8 +147,11 @@ char		wadfile[1024];          // primary wad file
 char		mapdir[1024];           // directory of development maps
 
 int             show_endoom = 0;
-int             show_diskicon = 1;
+//int             show_diskicon = 1;
 int             graphical_startup = 1;
+
+
+int english_language = 0;
 
 int     lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Strife
 int     draw_shadowed_text;     // [JN] Элементы меню и тексты отбрасывают тень
@@ -204,7 +209,7 @@ void D_ProcessEvents (void)
 // * 20100901: Added ST_DrawExternal and popupactivestate static variable
 // * 20110206: Start wipegamestate at GS_UNKNOWN (STRIFE-TODO: rename?)
 //
-gamestate_t     wipegamestate = GS_UNKNOWN;
+gamestate_t     wipegamestate = GS_DEMOSCREEN;
 extern  boolean setsizeneeded;
 //extern  int             showMessages; [STRIFE] no such variable
 void R_ExecuteSetViewSize (void);
@@ -288,7 +293,7 @@ void D_Display (void)
     }
     
     // draw buffered stuff to screen
-    I_UpdateNoBlit ();
+    // I_UpdateNoBlit ();
 
     // draw the view directly
     if (gamestate == GS_LEVEL && !automapactive && gametic)
@@ -296,10 +301,12 @@ void D_Display (void)
 
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
+    {
         if (lcd_gamma_fix)
             I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
         else
             I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+    }
 
     // see if the border needs to be initially drawn
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
@@ -391,7 +398,7 @@ void D_Display (void)
         wipestart = nowtime;
         done = wipe_ScreenWipe(wipe_ColorXForm
                                , 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
-        I_UpdateNoBlit ();
+        // I_UpdateNoBlit ();
         M_Drawer ();                            // menu is drawn even on top of wipes
         I_FinishUpdate ();                      // page flip or blit buffer
     } while (!done);
@@ -455,7 +462,7 @@ void D_BindVariables(void)
     M_BindIntVariable("graphical_startup",      &graphical_startup);
     
     // [JN] Показывать заставку при выходе
-    M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);
+    //M_BindIntVariable("show_exit_sequence",     &show_exit_sequence);
 
     M_BindStringVariable("back_flat",           &back_flat);
     M_BindStringVariable("nickname",            &nickname);
@@ -525,7 +532,7 @@ void D_DoomLoop (void)
 
     if (show_diskicon)
     {
-        V_EnableLoadingDisk("STDISK", SCREENWIDTH - LOADING_DISK_W, 3);
+        // V_EnableLoadingDisk("STDISK", SCREENWIDTH - LOADING_DISK_W, 3);
     }
     I_SetGrabMouseCallback(D_GrabMouseCallback);
 
@@ -542,7 +549,7 @@ void D_DoomLoop (void)
     while (1)
     {
         // frame syncronous IO operations
-        I_StartFrame ();
+        // I_StartFrame ();
 
         // process one or more tics
         TryRunTics (); // will run at least one tic
