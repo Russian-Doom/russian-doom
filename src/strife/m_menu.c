@@ -62,11 +62,19 @@
 
 #include "m_menu.h"
 #include "p_dialog.h"
+#include "v_trans.h"
+#include "jn.h"
 
 
 extern void M_QuitStrife(int);
 
-extern patch_t*         hu_font[HU_FONTSIZE];
+extern patch_t *hu_font[HU_FONTSIZE];
+extern patch_t *hu_font_small_eng[HU_FONTSIZE];
+extern patch_t *hu_font_small_rus[HU_FONTSIZE];
+extern patch_t *hu_font_big_eng[HU_FONTSIZE];
+extern patch_t *hu_font_big_rus[HU_FONTSIZE];
+
+
 extern boolean          message_dontfuckwithme;
 
 extern boolean          chat_on;        // in heads-up code
@@ -142,8 +150,11 @@ int                     menupausetime;  // haleyjd 09/04/10: [STRIFE] New global
 boolean                 menuindialog;   // haleyjd 09/04/10: ditto
 
 // haleyjd 08/27/10: [STRIFE] SKULLXOFF == -28, LINEHEIGHT == 19
-#define CURSORXOFF		-28
-#define LINEHEIGHT		19
+#define CURSORXOFF     -28
+#define LINEHEIGHT      19
+
+#define SKULLXOFF      -33  // [JN] Cursor position for blinking '*' symbol
+#define LINEHEIGHT_SML  10  // [JN] Line height for small font
 
 extern boolean		sendpause;
 char			savegamestrings[10][SAVESTRINGSIZE];
@@ -225,12 +236,28 @@ int  M_StringHeight(char *string);
 void M_StartMessage(char *string,void *routine,boolean input);
 void M_StopMessage(void);
 
+// -----------------------------------------------------------------------------
+// [JN] Custom RD menu prototypes
+// -----------------------------------------------------------------------------
+
+// Rendering
+void M_RD_Choose_Rendering(int choice);
+void M_RD_Draw_Rendering(void);
+void M_RD_Change_Widescreen(int choice);
+void M_RD_Change_VSync(int choice);
+void M_RD_Change_Uncapped(int choice);
+void M_RD_Change_FPScounter(int choice);
+void M_RD_Change_DiskIcon(int choice);
+void M_RD_Change_Smoothing(int choice);
+void M_RD_Change_Wiping(int choice);
+void M_RD_Change_Screenshots(int choice);
+void M_RD_Change_Renderer(int choice);
 
 
+// =============================================================================
+// [JN] MAIN MENU
+// =============================================================================
 
-//
-// DOOM MENU
-//
 enum
 {
     newgame = 0,
@@ -242,15 +269,19 @@ enum
     main_end
 } main_e;
 
+// ------------
+// English menu
+// ------------
+
 menuitem_t MainMenu[]=
 {
-    {1,"M_NGAME",M_NewGame,'n'},
-    {1,"M_OPTION",M_Options,'o'},
-    {1,"M_LOADG",M_LoadGame,'l'},
-    {1,"M_SAVEG",M_SaveGame,'s'},
+    {1, "M_NGAME",  M_NewGame,    'n'},
+    {1, "M_OPTION", M_Options,    'o'},
+    {1, "M_LOADG",  M_LoadGame,   'l'},
+    {1, "M_SAVEG",  M_SaveGame,   's'},
     // Another hickup with Special edition.
-    {1,"M_RDTHIS",M_ReadThis,'h'}, // haleyjd 08/28/10: 'r' -> 'h'
-    {1,"M_QUITG",M_QuitStrife,'q'}
+    {1, "M_RDTHIS", M_ReadThis,   'h'}, // haleyjd 08/28/10: 'r' -> 'h'
+    {1, "M_QUITG",  M_QuitStrife, 'q'}
 };
 
 menu_t  MainDef =
@@ -263,42 +294,36 @@ menu_t  MainDef =
     0
 };
 
+// ------------
+// Russian menu
+// ------------
 
-//
-// EPISODE SELECT
-//
-/*
-enum
+menuitem_t MainMenu_Rus[]=
 {
-    ep1,
-    ep2,
-    ep3,
-    ep4,
-    ep_end
-} episodes_e;
-
-menuitem_t EpisodeMenu[]=
-{
-    {1,"M_EPI1", M_Episode,'k'},
-    {1,"M_EPI2", M_Episode,'t'},
-    {1,"M_EPI3", M_Episode,'i'},
-    {1,"M_EPI4", M_Episode,'t'}
+    {1, "RD_NGAME", M_NewGame,    'n'}, // Новая игра
+    {1, "RD_OPTN",  M_Options,    'o'}, // Настройки
+    {1, "RD_LOADG", M_LoadGame,   'l'}, // Загрузка
+    {1, "RD_SAVEG", M_SaveGame,   's'}, // Сохранение
+    {1, "RD_INFO",  M_ReadThis,   'h'}, // Помощь!
+    {1, "RD_QUITG", M_QuitStrife, 'q'}  // Выход
 };
 
-menu_t  EpiDef =
+menu_t  MainDef_Rus =
 {
-    ep_end,		// # of menu items
-    &MainDef,		// previous menu
-    EpisodeMenu,	// menuitem_t ->
-    M_DrawEpisode,	// drawing routine ->
-    48,63,              // x,y
-    ep1			// lastOn
+    main_end,
+    NULL,
+    MainMenu_Rus,
+    M_DrawMainMenu,
+    97,45,
+    0
 };
-*/
 
-//
-// NEW GAME
-//
+
+
+// =============================================================================
+// [JN] NEW GAME
+// =============================================================================
+
 enum
 {
     killthings,
@@ -308,6 +333,10 @@ enum
     nightmare,
     newg_end
 } newgame_e;
+
+// ------------
+// English menu
+// ------------
 
 menuitem_t NewGameMenu[]=
 {
@@ -329,46 +358,125 @@ menu_t  NewDef =
     toorough            // lastOn - haleyjd [STRIFE]: default to skill 1
 };
 
-//
-// OPTIONS MENU
-//
-enum
-{
-    // haleyjd 08/28/10: [STRIFE] Removed messages, mouse sens., detail.
-    endgame,
-    scrnsize,
-    option_empty1,
-    soundvol,
-    opt_end
-} options_e;
+// ------------
+// Russian menu
+// ------------
 
-menuitem_t OptionsMenu[]=
+menuitem_t NewGameMenu_Rus[]=
 {
-    // haleyjd 08/28/10: [STRIFE] Removed messages, mouse sens., detail.
-    {1,"M_ENDGAM",	M_EndGame,'e'},
-    {2,"M_SCRNSZ",	M_SizeDisplay,'s'},
-    {-1,"",0,'\0'},
-    {1,"M_SVOL",	M_Sound,'s'}
+    {1,"RD_JKILL",   M_ChooseSkill, 'h'},  // Разминка
+    {1,"RD_ROUGH",   M_ChooseSkill, 'y'},  // Новичок
+    {1,"RD_HURT",    M_ChooseSkill, 'd'},  // Ветеран
+    {1,"RD_ULTRA",   M_ChooseSkill, '\''}, // Элита
+    {1,"RD_NMARE",   M_ChooseSkill, 'r'}   // Кровавая бойня
 };
 
-menu_t  OptionsDef =
+menu_t  NewDef_Rus =
 {
-    opt_end,
+    newg_end,
+    &MainDef_Rus,
+    NewGameMenu_Rus,
+    M_DrawNewGame,
+    66,63,
+    toorough
+};
+
+
+// =============================================================================
+// [JN] OPTIONS
+// =============================================================================
+
+enum
+{
+    rd_rendering,
+    rd_display,
+    rd_sound,
+    rd_controls,
+    rd_gameplay,
+    rd_defaults,
+    rd_language,
+    rd_end
+} options_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t RD_Options_Menu[]=
+{
+    {1, "Rendering",        M_RD_Choose_Rendering,  'r'},
+    {1, "Display",          0,    'd'},
+    {1, "Sound",            0,      's'},
+    {1, "Controls",         0,   'c'},
+    {1, "Gameplay",         0, 'g'},
+    {1, "Reset settings",   0,    'r'},
+    {2, "Language:english", 0,    'l'},
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Options_Def =
+{
+    rd_end,
     &MainDef,
-    OptionsMenu,
+    RD_Options_Menu,
     M_DrawOptions,
-    60,37,
+    54,26,
     0
 };
 
-//
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t RD_Options_Menu_Rus[]=
+{
+    {1, "Dbltj",          M_RD_Choose_Rendering,  'd'}, // Видео
+    {1, "\"rhfy",         0,   '\''}, // Экран
+    {1, "Felbj",          0,      'f'}, // Аудио
+    {1, "Eghfdktybt",     0,   'e'}, // Управление
+    {1, "Utqvgktq",       0, 'u'}, // Геймплей
+    {1, "C,hjc yfcnhjtr", 0,    'c'}, // Сброс настроек
+    {2, "Zpsr#heccrbq",   0,    'z'}, // Язык: русский
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Options_Def_Rus =
+{
+    rd_end, 
+    &MainDef_Rus,
+    RD_Options_Menu_Rus,
+    M_DrawOptions,
+    54,26,
+    0
+};
+
+
+// =============================================================================
 // Read This! MENU 1 & 2 & [STRIFE] 3
-//
+// =============================================================================
+
 enum
 {
     rdthsempty1,
     read1_end
 } read_e;
+
+enum
+{
+    rdthsempty2,
+    read2_end
+} read_e2;
+
+// haleyjd 08/28/10: Added Read This! menu 3
+enum
+{
+    rdthsempty3,
+    read3_end
+} read_e3;
+
+// ----------------
+// English menu (1)
+// ----------------
 
 menuitem_t ReadMenu1[] =
 {
@@ -385,11 +493,28 @@ menu_t  ReadDef1 =
     0
 };
 
-enum
+// ----------------
+// Russian menu (1)
+// ----------------
+
+menuitem_t ReadMenu1_Rus[] =
 {
-    rdthsempty2,
-    read2_end
-} read_e2;
+    {1,"",M_ReadThis2,0}
+};
+
+menu_t  ReadDef1_Rus =
+{
+    read1_end,
+    &MainDef_Rus,
+    ReadMenu1,
+    M_DrawReadThis1,
+    280,185,
+    0
+};
+
+// ----------------
+// English menu (2)
+// ----------------
 
 menuitem_t ReadMenu2[]=
 {
@@ -406,12 +531,28 @@ menu_t  ReadDef2 =
     0
 };
 
-// haleyjd 08/28/10: Added Read This! menu 3
-enum
+// ----------------
+// Russian menu (2)
+// ----------------
+
+menuitem_t ReadMenu2_Rus[]=
 {
-    rdthsempty3,
-    read3_end
-} read_e3;
+    {1,"",M_ReadThis3,0}
+};
+
+menu_t  ReadDef2_Rus =
+{
+    read2_end,
+    &ReadDef1_Rus,
+    ReadMenu2,
+    M_DrawReadThis2,
+    250,185,
+    0
+};
+
+// ----------------
+// English menu (3)
+// ----------------
 
 menuitem_t ReadMenu3[]=
 {
@@ -427,6 +568,105 @@ menu_t  ReadDef3 =
     250, 185,
     0
 };
+
+// ----------------
+// Russian menu (3)
+// ----------------
+
+menuitem_t ReadMenu3_Rus[]=
+{
+    {1,"",M_ClearMenus,0}
+};
+
+menu_t  ReadDef3_Rus =
+{
+    read3_end,
+    &ReadDef2_Rus,
+    ReadMenu3,
+    M_DrawReadThis3,
+    250, 185,
+    0
+};
+
+
+// =============================================================================
+// RENDERING MENU
+// =============================================================================
+
+enum
+{
+    rd_rendering_widescreen,
+    rd_rendering_vsync,
+    rd_rendering_uncapped,
+    rd_rendering_fps,
+    rd_rendering_smoothing,
+    rd_rendering_software,
+    rd_rendering_empty1,
+    rd_rendering_diskicon,
+    rd_rendering_wiping,
+    rd_rendering_screenshots,
+    rd_rendering_end
+} rd_rendering_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t RD_Rendering_Menu[]=
+{
+    {2, "Display aspect ratio:",     M_RD_Change_Widescreen,  'd'},
+    {2, "Vertical synchronization:", M_RD_Change_VSync,       'v'},
+    {2, "Frame rate:",               M_RD_Change_Uncapped,    'f'},
+    {2, "Show FPS counter:",         M_RD_Change_FPScounter,  's'},
+    {2, "Pixel scaling:",            M_RD_Change_Smoothing,   'p'},
+    {2, "Video renderer:",           M_RD_Change_Renderer,    'v'},
+    {-1,"",0,'\0'},
+    {2, "Show hourglass icon:",      M_RD_Change_DiskIcon,    's'},
+    {2, "Screen wiping effect:",     M_RD_Change_Wiping,      's'},
+    {2, "Screenshot format:",        M_RD_Change_Screenshots, 's'},
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Rendering_Def =
+{
+    rd_rendering_end,
+    &RD_Options_Def,
+    RD_Rendering_Menu,
+    M_RD_Draw_Rendering,
+    38,35,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t RD_Rendering_Menu_Rus[]=
+{
+    {2, "Cjjnyjitybt cnjhjy \'rhfyf:",     M_RD_Change_Widescreen,  'c'}, // Соотношение сторон экрана
+    {2, "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,       'd'}, // Вертикальная синхронизация
+    {2, "Rflhjdfz xfcnjnf:",               M_RD_Change_Uncapped,    'r'}, // Кадровая частота
+    {2, "Cxtnxbr rflhjdjq xfcnjns:",       M_RD_Change_FPScounter,  'c'}, // Счетчик кадровой частоты
+    {2, "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,   'g'}, // Пиксельное сглаживание
+    {2, "J,hf,jnrf dbltj:",                M_RD_Change_Renderer,    'j'}, // Обработка видео
+    {-1,"",0,'\0'},                                                       // Дополнительно
+    {2, "Pyfxjr gtcjxys[ xfcjd:",          M_RD_Change_DiskIcon,    'p'}, // Значок песочных часов
+    {2, "\'aatrn cvtys \'rhfyjd:",         M_RD_Change_Wiping,      '\''}, // Эффект смены экранов
+    {2, "Ajhvfn crhbyijnjd:",              M_RD_Change_Screenshots, 'a'}, // Формат скриншотов
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Rendering_Def_Rus =
+{
+    rd_rendering_end,
+    &RD_Options_Def_Rus,
+    RD_Rendering_Menu_Rus,
+    M_RD_Draw_Rendering,
+    37,35,
+    0
+};
+
+
 
 //
 // SOUND VOLUME MENU
@@ -463,7 +703,7 @@ menuitem_t SoundMenu[]=
 menu_t  SoundDef =
 {
     sound_end,
-    &OptionsDef,
+    &RD_Options_Def,
     SoundMenu,
     M_DrawSound,
     80,35,       // [STRIFE] changed y coord 64 -> 35
@@ -647,7 +887,7 @@ void M_DrawLoad(void)
     int             i;
 
     V_DrawShadowedPatchStrife(55, 24, 
-                      W_CacheLumpName(DEH_String("M_LGTTL"), PU_CACHE));
+                      W_CacheLumpName(DEH_String("M_LOADG"), PU_CACHE));
 
     for (i = 0;i < load_end; i++)
     {
@@ -727,7 +967,7 @@ void M_DrawSave(void)
 {
     int             i;
 
-    V_DrawShadowedPatchStrife(53, 24, W_CacheLumpName(DEH_String("M_SGTTL"), PU_CACHE));
+    V_DrawShadowedPatchStrife(53, 24, W_CacheLumpName(DEH_String("M_SAVEG"), PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
         M_DrawSaveLoadBorder(LoadDef.x-3,LoadDef.y+LINEHEIGHT*i);
@@ -921,7 +1161,8 @@ void M_DrawReadThis1(void)
 {
     inhelpscreens = true;
 
-    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
+    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String(english_language ? 
+                                                 "HELP1" : "HELP1R"), PU_CACHE));
 }
 
 
@@ -934,7 +1175,8 @@ void M_DrawReadThis2(void)
 {
     inhelpscreens = true;
 
-    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP2"), PU_CACHE));
+    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String(english_language ? 
+                                                 "HELP2" : "HELP2R"), PU_CACHE));
 }
 
 
@@ -946,7 +1188,8 @@ void M_DrawReadThis3(void)
 {
     inhelpscreens = true;
     
-    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("HELP3"), PU_CACHE));
+    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String(english_language ? 
+                                                 "HELP3" : "HELP3R"), PU_CACHE));
 }
 
 //
@@ -1059,8 +1302,18 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
-    V_DrawShadowedPatchStrife(82, 15, W_CacheLumpName(DEH_String("M_NGAME"), PU_CACHE));
-    V_DrawShadowedPatchStrife(54, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
+    if (english_language)
+    {
+        V_DrawShadowedPatchStrife(94, 14, W_CacheLumpName(DEH_String("M_NGAME"), PU_CACHE));
+        V_DrawShadowedPatchStrife(54, 38, W_CacheLumpName(DEH_String("M_SKILL"), PU_CACHE));
+    }
+    else
+    {
+        // НОВАЯ ИГРА
+        M_WriteTextBigCentered_RUS(14, "YJDFZ BUHF");
+        // Уровень сложности:
+        M_WriteTextBigCentered_RUS(38, "EHJDTYM CKJ;YJCNB#");
+    }
 }
 
 void M_NewGame(int choice)
@@ -1073,32 +1326,11 @@ void M_NewGame(int choice)
     // haleyjd 09/07/10: [STRIFE] Removed Chex Quest and DOOM gamemodes
     if(gameversion == exe_strife_1_31)
        namingCharacter = true; // for 1.31 save logic
-    M_SetupNextMenu(&NewDef);
+
+    M_SetupNextMenu(english_language ? &NewDef : &NewDef_Rus);
 }
 
 
-//
-//      M_Episode
-//
-
-// haleyjd: [STRIFE] Unused
-/*
-int     epi;
-
-void M_DrawEpisode(void)
-{
-    V_DrawPatch(54, 38, W_CacheLumpName(DEH_String("M_EPISOD"), PU_CACHE));
-}
-
-void M_VerifyNightmare(int key)
-{
-    if (key != key_menu_confirm)
-        return;
-
-    G_DeferedInitNew(nightmare, 1);
-    M_ClearMenus (0);
-}
-*/
 
 void M_ChooseSkill(int choice)
 {
@@ -1146,6 +1378,17 @@ char	msgNames[2][9]		= {"M_MSGOFF","M_MSGON"};
 
 void M_DrawOptions(void)
 {
+    if (english_language)
+    {
+        M_WriteTextBigCentered_ENG(5, "OPTIONS");
+    }
+    else
+    {
+        // НАСТРОЙКИ
+        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB");            
+    }
+
+    /*
     // haleyjd 08/27/10: [STRIFE] M_OPTTTL -> M_OPTION
     V_DrawShadowedPatchStrife(89, 14, 
                       W_CacheLumpName(DEH_String("M_OPTION"), PU_CACHE));
@@ -1154,12 +1397,192 @@ void M_DrawOptions(void)
 
     M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(scrnsize+1),
                  9,screenSize);
+    */
 }
 
 void M_Options(int choice)
 {
-    M_SetupNextMenu(&OptionsDef);
+    M_SetupNextMenu(english_language ? &RD_Options_Def : &RD_Options_Def_Rus);
 }
+
+
+// -----------------------------------------------------------------------------
+// Rendering
+// -----------------------------------------------------------------------------
+
+void M_RD_Choose_Rendering(int choice)
+{
+    M_SetupNextMenu(english_language ?
+                    &RD_Rendering_Def :
+                    &RD_Rendering_Def_Rus);
+}
+
+void M_RD_Draw_Rendering(void)
+{
+    if (english_language)
+    {
+        M_WriteTextBigCentered_ENG(5, "RENDERING OPTIONS");
+
+        //
+        // Rendering
+        //
+        dp_translation = cr[CR_GOLD2GRAY_STRIFE];
+        M_WriteTextSmall_ENG(37 + wide_delta, 25, "Rendering");
+        dp_translation = NULL;
+
+        //
+        // Extra
+        //
+        dp_translation = cr[CR_GOLD2GRAY_STRIFE];
+        M_WriteTextSmall_ENG(37 + wide_delta, 95, "Extra");
+        dp_translation = NULL;
+    }
+    else
+    {
+        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB DBLTJ"); // НАСТРОЙКИ ВИДЕО
+
+        //
+        // Рендеринг
+        //
+        dp_translation = cr[CR_GOLD2GRAY_STRIFE];
+        M_WriteTextSmall_RUS(37 + wide_delta, 25, "htylthbyu");
+        dp_translation = NULL;
+
+        //
+        // Дополнительно
+        //
+        dp_translation = cr[CR_GOLD2GRAY_STRIFE];
+        M_WriteTextSmall_RUS(37 + wide_delta, 95, "ljgjkybntkmyj");
+        dp_translation = NULL;
+    }
+}
+
+void M_RD_Change_Widescreen(int choice)
+{
+    /*
+    // [JN] Widescreen: changing only temp variable here.
+    // Initially it is set in M_Init and stored into config file in M_QuitResponse.
+    switch(choice)
+    {
+        case 0:
+        aspect_ratio_temp--;
+        if (aspect_ratio_temp < 0)
+            aspect_ratio_temp = 3;
+        break;
+
+        case 1:
+        aspect_ratio_temp++;
+        if (aspect_ratio_temp > 3)
+            aspect_ratio_temp = 0;
+        break;
+    }
+    */
+}
+
+void M_RD_Change_VSync(int choice)
+{
+    /*
+    // [JN] Disable "vsync" toggling in software renderer
+    if (force_software_renderer == 1)
+    return;
+
+    vsync ^= 1;
+
+    // Reinitialize graphics
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+    */
+}
+
+void M_RD_Change_Uncapped(int choice)
+{
+    /*
+    uncapped_fps ^= 1;
+    */
+}
+
+void M_RD_Change_FPScounter(int choice)
+{
+    /*
+    show_fps ^= 1;
+    */
+}
+
+void M_RD_Change_DiskIcon(int choice)
+{
+    /*
+    show_diskicon ^= 1;
+    */
+}
+
+void M_RD_Change_Smoothing(int choice)
+{
+    /*
+    // [JN] Disable "vsync" toggling in sofrware renderer
+    if (force_software_renderer == 1)
+    return;
+
+    smoothing ^= 1;
+
+    // Reinitialize graphics
+    I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
+    // Update background of classic HUD and player face 
+    if (gamestate == GS_LEVEL)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+    }
+    */
+}
+
+void M_RD_Change_Wiping(int choice)
+{
+    /*
+    switch(choice)
+    {
+        case 0:
+        screen_wiping--;
+        if (screen_wiping < 0)
+            screen_wiping = 2;
+        break;
+
+        case 1:
+        screen_wiping++;
+        if (screen_wiping > 2)
+            screen_wiping = 0;
+        break;
+    }
+    */
+}
+
+void M_RD_Change_Screenshots(int choice)
+{
+    /*
+    png_screenshots ^= 1;
+    */
+}
+
+void M_RD_Change_Renderer(int choice)
+{
+    /*
+    force_software_renderer ^= 1;
+
+    // Do a full graphics reinitialization
+    I_InitGraphics();
+
+    // Update background of classic HUD and player face 
+    if (gamestate == GS_LEVEL)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+    }
+    */
+}
+
+
+
+
+
 
 //
 // M_AutoUseHealth
@@ -1260,7 +1683,7 @@ void M_EndGame(int choice)
 void M_ReadThis(int choice)
 {
     choice = 0;
-    M_SetupNextMenu(&ReadDef1);
+    M_SetupNextMenu(english_language ? &ReadDef1 : &ReadDef1_Rus);
 }
 
 //
@@ -1271,7 +1694,7 @@ void M_ReadThis(int choice)
 void M_ReadThis2(int choice)
 {
     choice = 0;
-    M_SetupNextMenu(&ReadDef2);
+    M_SetupNextMenu(english_language ? &ReadDef2 : &ReadDef2_Rus);
 }
 
 //
@@ -1282,40 +1705,9 @@ void M_ReadThis2(int choice)
 void M_ReadThis3(int choice)
 {
     choice = 0;
-    M_SetupNextMenu(&ReadDef3);
+    M_SetupNextMenu(english_language ? &ReadDef3 : &ReadDef3_Rus);
 }
 
-/*
-// haleyjd 08/28/10: [STRIFE] Not used.
-void M_FinishReadThis(int choice)
-{
-    choice = 0;
-    M_SetupNextMenu(&MainDef);
-}
-*/
-
-#if 0
-extern void F_StartCast(void);
-
-//
-// M_CheckStartCast
-//
-// [STRIFE] New but unused function. Was going to start a cast
-//   call from within the menu system... not functional even in
-//   the earliest demo version.
-//
-void M_CheckStartCast()
-{
-    if(usergame)
-    {
-        M_StartMessage(DEH_String("You have to end your game first."), NULL, false);
-        return;
-    }
-
-    F_StartCast();
-    M_ClearMenus(0);
-}
-#endif
 
 //
 // M_QuitResponse
@@ -1340,12 +1732,6 @@ void M_QuitResponse(int key)
     }
 }
 
-/*
-// haleyjd 09/11/10: [STRIFE] Unused
-static char *M_SelectEndMessage(void)
-{
-}
-*/
 
 //
 // M_QuitStrife
@@ -1548,18 +1934,15 @@ int M_StringHeight(char* string)
 }
 
 
-//
+// -----------------------------------------------------------------------------
 // M_WriteText
 //
 // Write a string using the hu_font
 // haleyjd 09/04/10: [STRIFE]
 // * Rogue made a lot of changes to this for the dialog system.
-//
-int
-M_WriteText
-( int           x,
-  int           y,
-  const char*   string) // haleyjd: made const for safety w/dialog engine
+// -----------------------------------------------------------------------------
+
+int M_WriteText (int x, int y, const char *string) // haleyjd: made const for safety w/dialog engine
 {
     int	        w;
     const char* ch;
@@ -1614,6 +1997,374 @@ M_WriteText
     // [STRIFE] Return final y coordinate.
     return cy + 12;
 }
+
+// -----------------------------------------------------------------------------
+// M_WriteTextSmall_ENG
+//
+// [JN] Write a string using a small STCFS font.
+// -----------------------------------------------------------------------------
+
+int M_WriteTextSmall_ENG (int x, int y, const char *string)
+{
+    int	        w, c, cx, cy;
+    const char* ch;
+
+    ch = string;
+    cx = x;
+    cy = y;
+
+    while(1)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        if(c == ' ' && cx == x)
+        continue;
+
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 11;
+            continue;
+        }
+
+        c = toupper(c) - HU_FONTSTART;
+        if (c < 0 || c>= HU_FONTSIZE)
+        {
+            cx += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_small_eng[c]->width);
+
+        if (cx + w > ORIGWIDTH - 20)
+        {
+            cx = x;
+            cy += 11;
+            --ch;
+        }
+        else
+        {
+            V_DrawShadowedPatchStrife(cx, cy, hu_font_small_eng[c]);
+            cx += w;
+        }
+    }
+
+    return cy + 12;
+}
+
+// -----------------------------------------------------------------------------
+// M_WriteTextSmall_RUS
+//
+// [JN] Write a string using a small STCFS font
+// -----------------------------------------------------------------------------
+
+int M_WriteTextSmall_RUS (int x, int y, const char *string)
+{
+    int	        w, c, cx, cy;
+    const char* ch;
+
+    ch = string;
+    cx = x;
+    cy = y;
+
+    while(1)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        if(c == ' ' && cx == x)
+        continue;
+
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 11;
+            continue;
+        }
+
+        c = toupper(c) - HU_FONTSTART;
+        if (c < 0 || c>= HU_FONTSIZE)
+        {
+            cx += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_small_rus[c]->width);
+
+        if (cx + w > ORIGWIDTH - 20)
+        {
+            cx = x;
+            cy += 11;
+            --ch;
+        }
+        else
+        {
+            V_DrawShadowedPatchStrife(cx, cy, hu_font_small_rus[c]);
+            cx += w;
+        }
+    }
+
+    return cy + 12;
+}
+
+// -----------------------------------------------------------------------------
+// M_WriteTextBig_ENG
+//
+// [JN] Write a string using a big STCFB font
+// -----------------------------------------------------------------------------
+
+int M_WriteTextBig_ENG (int x, int y, const char *string)
+{
+    int	        w, c, cx, cy;
+    const char* ch;
+
+    ch = string;
+    cx = x;
+    cy = y;
+
+    while(1)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        if(c == ' ' && cx == x)
+        continue;
+
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 11;
+            continue;
+        }
+
+        c = toupper(c) - HU_FONTSTART;
+        if (c < 0 || c>= HU_FONTSIZE)
+        {
+            cx += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_big_eng[c]->width);
+
+        if (cx + w > ORIGWIDTH - 20)
+        {
+            cx = x;
+            cy += 11;
+            --ch;
+        }
+        else
+        {
+            V_DrawShadowedPatchStrife(cx, cy, hu_font_big_eng[c]);
+            cx += w;
+        }
+    }
+
+    return cy + 12;
+}
+
+// -----------------------------------------------------------------------------
+// M_WriteTextBig_RUS
+//
+// [JN] Write a string using a big STCFB font
+// -----------------------------------------------------------------------------
+int M_WriteTextBig_RUS (int x, int y, const char *string)
+{
+    int	        w, c, cx, cy;
+    const char* ch;
+
+    ch = string;
+    cx = x;
+    cy = y;
+
+    while(1)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        if(c == ' ' && cx == x)
+        continue;
+
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 11;
+            continue;
+        }
+
+        c = toupper(c) - HU_FONTSTART;
+        if (c < 0 || c>= HU_FONTSIZE)
+        {
+            cx += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_big_rus[c]->width);
+
+        if (cx + w > ORIGWIDTH - 20)
+        {
+            cx = x;
+            cy += 11;
+            --ch;
+        }
+        else
+        {
+            V_DrawShadowedPatchStrife(cx, cy, hu_font_big_rus[c]);
+            cx += w;
+        }
+    }
+
+    return cy + 12;
+}
+
+// -----------------------------------------------------------------------------
+// M_WriteTextBigCentered_ENG
+//
+// [JN] Write a centered string using the BIG hu_font_big. Only Y coord is set.
+// -----------------------------------------------------------------------------
+
+void M_WriteTextBigCentered_ENG (int y, char *string)
+{
+    char*   ch;
+    int	    c;
+    int	    cx;
+    int	    cy;
+    int	    w;
+    int	    width;
+
+    // find width
+    ch = string;
+    width = 0;
+    cy = y;
+
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = c - HU_FONTSTART;
+
+        if (c < 0 || c> HU_FONTSIZE)
+        {
+            width += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big_eng[c]->width);
+        width += w;
+    }
+
+    // draw it
+    cx = origwidth/2-width/2;
+    ch = string;
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = c - HU_FONTSTART;
+
+        if (c < 0 || c> HU_FONTSIZE)
+        {
+            cx += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big_eng[c]->width);
+
+        V_DrawShadowedPatchStrife(cx, cy, hu_font_big_eng[c]);
+
+        cx+=w;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// M_WriteTextBigCentered_RUS
+//
+// [JN] Write a centered string using the BIG hu_font_big. Only Y coord is set.
+// -----------------------------------------------------------------------------
+void M_WriteTextBigCentered_RUS (int y, char *string)
+{
+    char*   ch;
+    int	    c;
+    int	    cx;
+    int	    cy;
+    int	    w;
+    int	    width;
+
+    // find width
+    ch = string;
+    width = 0;
+    cy = y;
+
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = c - HU_FONTSTART;
+
+        if (c < 0 || c> HU_FONTSIZE)
+        {
+            width += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big_rus[c]->width);
+        width += w;
+    }
+
+    // draw it
+    cx = origwidth/2-width/2;
+    ch = string;
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = c - HU_FONTSTART;
+
+        if (c < 0 || c> HU_FONTSIZE)
+        {
+            cx += 10;
+            continue;
+        }
+
+        w = SHORT (hu_font_big_rus[c]->width);
+
+        V_DrawShadowedPatchStrife(cx, cy, hu_font_big_rus[c]);
+
+        cx+=w;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 //
 // M_DialogDimMsg
@@ -2300,7 +3051,7 @@ void M_StartControlPanel (void)
     
     menuactive = 1;
     menupause = true;
-    currentMenu = &MainDef;         // JDC
+    currentMenu = english_language ? &MainDef : &MainDef_Rus;
     itemOn = currentMenu->lastOn;   // JDC
 }
 
@@ -2378,19 +3129,105 @@ void M_Drawer (void)
     {
         name = DEH_String(currentMenu->menuitems[i].name);
 
-        if (name[0])
+        // -----------------------------------------------------------------
+        // [JN] Write common menus by using standard graphical patches:
+        // -----------------------------------------------------------------
+        if (currentMenu == &MainDef                // Main Menu
+        ||  currentMenu == &MainDef_Rus            // Main Menu (Russian)
+        ||  currentMenu == &NewDef                 // Skill level
+        ||  currentMenu == &NewDef_Rus)            // Skill level (Russian)
         {
-            V_DrawShadowedPatchStrife (x-14, y, W_CacheLumpName(name, PU_CACHE));
+            // [JN] Draw patch if it's name is present,
+            // i.e. don't try to draw placeholders as patches.
+            if (name[0])
+            V_DrawShadowedPatchStrife(x + wide_delta, y, W_CacheLumpName(name, PU_CACHE));
+
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
         }
-        y += LINEHEIGHT;
+
+        // -----------------------------------------------------------------
+        // [JN] Write English options menu with big English font
+        // -----------------------------------------------------------------
+        else
+        if (currentMenu == &RD_Options_Def)
+        {
+            M_WriteTextBig_ENG(x + wide_delta, y, name);
+
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
+        }
+        // -----------------------------------------------------------------
+        // [JN] Write Russian options menu with big Russian font
+        // -----------------------------------------------------------------
+        else 
+        if (currentMenu == &RD_Options_Def_Rus)
+        {
+            M_WriteTextBig_RUS(x + wide_delta, y, name);
+
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
+        }
+        // -----------------------------------------------------------------
+        // [JN] Write English submenus with small English font
+        // -----------------------------------------------------------------
+        else
+        if (currentMenu == &RD_Rendering_Def)
+        {
+            M_WriteTextSmall_ENG(x + wide_delta, y, name);
+
+            // [JN] Small vertical spacing
+            y += LINEHEIGHT_SML;
+        }
+        // -----------------------------------------------------------------
+        // [JN] Write Russian submenus with small Russian font
+        // -----------------------------------------------------------------            
+        else
+        if (currentMenu == &RD_Rendering_Def_Rus)
+        {
+            M_WriteTextSmall_RUS(x + wide_delta, y, name);
+        
+            // [JN] Small vertical spacing
+            y += LINEHEIGHT_SML;
+        }
+
+        else
+        {
+            if (name[0])
+            V_DrawShadowedPatchStrife (x-14, y, W_CacheLumpName(name, PU_CACHE));
+
+            // [JN] Big vertical spacing
+            y += LINEHEIGHT;
+        }
+
+        
     }
 
-    
+    // [JN] Define where to draw blinking skull and where blinking '*' symbol.
     // haleyjd 08/27/10: [STRIFE] Adjust to draw spinning Sigil
-    // DRAW SIGIL
-    V_DrawPatch(x + CURSORXOFF - 7, currentMenu->y - 6 + itemOn*LINEHEIGHT,
-                      W_CacheLumpName(DEH_String(cursorName[whichCursor]),
-                                      PU_CACHE));
+    if (currentMenu == &MainDef            || currentMenu == &MainDef_Rus
+    ||  currentMenu == &NewDef             || currentMenu == &NewDef_Rus
+    ||  currentMenu == &RD_Options_Def     || currentMenu == &RD_Options_Def_Rus
+    ||  currentMenu == &ReadDef1           || currentMenu == &ReadDef1_Rus
+    ||  currentMenu == &ReadDef2           || currentMenu == &ReadDef2_Rus
+    /*||  currentMenu == &LoadDef            || currentMenu == &LoadDef_Rus
+    ||  currentMenu == &SaveDef            || currentMenu == &SaveDef_Rus*/)
+    {
+        // Draw Sigil
+        V_DrawPatch(x + CURSORXOFF - 7, currentMenu->y - 6 + itemOn*LINEHEIGHT,
+                        W_CacheLumpName(DEH_String(cursorName[whichCursor]),
+                                        PU_CACHE));
+    }
+    else
+    {
+        // Draw blinking '*' symbol
+        if (gametic & 8)
+        dp_translation = cr[CR_GOLD2DARKGOLD_STRIFE];
+        
+        M_WriteTextSmall_ENG(x + SKULLXOFF + 24 + wide_delta, 
+                             currentMenu->y + itemOn*LINEHEIGHT_SML, "*");
+        dp_translation = NULL;
+    }
 
 }
 

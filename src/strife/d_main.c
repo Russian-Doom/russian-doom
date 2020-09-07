@@ -79,7 +79,7 @@
 #include "r_local.h"
 
 #include "d_main.h"
-
+#include "w_merge.h"
 #include "jn.h"
 
 //
@@ -449,6 +449,8 @@ void D_BindVariables(void)
     // * Removed detailLevel
     // * screenblocks -> screensize
     // * Added nickname, comport
+
+    M_BindIntVariable("english_language",       &english_language);
 
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
     M_BindIntVariable("sfx_volume",             &sfxVolume);
@@ -942,14 +944,15 @@ void DoTimeBomb(void)
 
 void D_SetGameDescription(void)
 {
+    int newpwadfile;
+
     gamedescription = GetGameName("Strife: Сага о поиске Сигиля");
-    W_MergeFile("russian/russian-strife.wad");
+    W_MergeFile("base/strife-common.wad");
 
     // [JN] Параметр "-file" перенесен из w_main.c
     // Необходимо для того, чтобы любые ресурсы из pwad-файлов
     // загружались после руссифицированных pwad-файлов.
 
-    int newpwadfile;
     newpwadfile = M_CheckParmWithArgs ("-file", 1);
     if (newpwadfile)
     {

@@ -90,8 +90,16 @@ char player_names[8][16] =
 
 char                    chat_char; // remove later.
 static player_t*        plr;
-patch_t*                hu_font[HU_FONTSIZE];
-patch_t*                yfont[HU_FONTSIZE];   // haleyjd 09/18/10: [STRIFE]
+
+patch_t *hu_font[HU_FONTSIZE];
+patch_t *hu_font_small_eng[HU_FONTSIZE]; // [JN] Small, unchangeable English font (FNTSE)
+patch_t *hu_font_small_rus[HU_FONTSIZE]; // [JN] Small, unchangeable Russian font (FNTSR)
+patch_t *hu_font_big_eng[HU_FONTSIZE];  // [JN] Big, unchangeable English font (FNTBE)
+patch_t *hu_font_big_rus[HU_FONTSIZE];  // [JN] Big, unchangeable Russian font (FNTBR)
+patch_t *hu_font_gray[HU_FONTSIZE_GRAY]; // [JN] Small gray STCFG font
+
+patch_t *yfont[HU_FONTSIZE];   // haleyjd 09/18/10: [STRIFE]
+
 static hu_textline_t    w_title;
 boolean                 chat_on;
 static hu_itext_t       w_chat;
@@ -183,10 +191,19 @@ void HU_Init(void)
 {
     int		i;
     int		j;
+    int     o, p;
+    int     q, r;
+    int     g;
     char	buffer[9];
 
     // load the heads-up font
     j = HU_FONTSTART;
+    o = HU_FONTSTART;
+    p = HU_FONTSTART;
+    q = HU_FONTSTART;
+    r = HU_FONTSTART;
+    g = HU_FONTSTART_GRAY;
+
     for (i=0;i<HU_FONTSIZE;i++)
     {
         DEH_snprintf(buffer, 9, "STCFN%.3d", j++);
@@ -196,6 +213,45 @@ void HU_Init(void)
         // how Rogue did it :P
         buffer[2] = 'B';
         yfont[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    //
+    // [JN] Loading unreplacable fonts for custom RD menu
+    //
+
+    // [JN] Small, unchangeable English font (FNTSE)
+    for (i=0 ; i < HU_FONTSIZE ; i++)
+    {
+        DEH_snprintf(buffer, 9, "FNTSE%.3d", o++);
+        hu_font_small_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    // [JN] Small, unchangeable Russian font (FNTSR)
+    for (i=0 ; i < HU_FONTSIZE ; i++)
+    {
+        DEH_snprintf(buffer, 9, "FNTSR%.3d", p++);
+        hu_font_small_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    // [JN] Big, unchangeable English font (FNTBE)
+    for (i=0;i<HU_FONTSIZE;i++)
+    {
+        DEH_snprintf(buffer, 9, "FNTBE%.3d", q++);
+        hu_font_big_eng[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }
+
+    // [JN] Big, unchangeable Russian font (FNTBR)
+    for (i=0;i<HU_FONTSIZE;i++)
+    {
+        DEH_snprintf(buffer, 9, "FNTBR%.3d", r++);
+        hu_font_big_rus[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
+    }    
+
+    // [JN] Small gray STCFG font, used for local time widget and FPS counter
+    for (i=0;i<HU_FONTSIZE_GRAY;i++)
+    {
+        DEH_snprintf(buffer, 9, "STCFG%.3d", g++);
+        hu_font_gray[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 }
 

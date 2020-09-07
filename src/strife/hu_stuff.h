@@ -33,6 +33,11 @@
 // Calculate # of glyphs in font.
 #define HU_FONTSIZE     (HU_FONTEND - HU_FONTSTART + 1)	
 
+// [JN] Definitions of small gray font (note: this is not full array)
+#define HU_FONTSTART_GRAY    '!' // the first font characters
+#define HU_FONTEND_GRAY      '_' // the last font characters
+#define HU_FONTSIZE_GRAY     (HU_FONTEND_GRAY - HU_FONTSTART_GRAY + 1)	
+
 #define HU_BROADCAST    9       // haleyjd [STRIFE] Changed 5 -> 9
 #define HU_CHANGENAME   10      // haleyjd [STRIFE] Special command
 

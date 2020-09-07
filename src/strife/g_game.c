@@ -236,7 +236,7 @@ mobj_t*		bodyque[BODYQUESIZE];
 //int       bodyqueslot; [STRIFE] unused
 
 // [JN] Показывать заставку при выходе
-int         show_exit_sequence = 1;
+int         show_exit_sequence = 0;
 
 
 int G_CmdChecksum (ticcmd_t* cmd) 

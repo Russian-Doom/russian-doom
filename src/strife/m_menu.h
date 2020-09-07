@@ -35,7 +35,8 @@ typedef struct
     // 0 = no cursor here, 1 = ok, 2 = arrows ok
     short	status;
     
-    char	name[10];
+    // [JN] Extended from 10 to 128, so long text string may appear
+    char	name[128];
     
     // choice = menu item #.
     // if status = 2,
@@ -89,6 +90,15 @@ void M_StartControlPanel (void);
 
 // haleyjd 09/04/10: Externalized. Draws menu text.
 int M_WriteText(int x, int y, const char *string);
+
+// [JN] RD font writing functions.
+int M_WriteTextSmall_ENG (int x, int y, const char *string);
+int M_WriteTextSmall_RUS (int x, int y, const char *string);
+int M_WriteTextBig_ENG (int x, int y, const char *string);
+int M_WriteTextBig_RUS (int x, int y, const char *string);
+void M_WriteTextBigCentered_ENG (int y, char *string);
+void M_WriteTextBigCentered_RUS (int y, char *string);
+
 
 // haleyjd 09/04/10: [STRIFE] New function.
 void M_DialogDimMsg(int x, int y, char *str, boolean useyfont);
