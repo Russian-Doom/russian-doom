@@ -30,6 +30,7 @@
 #include "s_sound.h"
 #include "v_video.h"
 #include "i_swap.h"
+#include "v_trans.h"
 
 // TYPES -------------------------------------------------------------------
 
@@ -827,32 +828,55 @@ void SB_Drawer(void)
     CPlayer = &players[consoleplayer];
 
     // [JN] Draw crosshair
-    if (!vanillaparm && screenblocks != 12 && !automapactive && crosshair_draw)
+    if (crosshair_draw && !automapactive && !vanillaparm)
     {
+        static int missilerange = 32*64*FRACUNIT; // [JN] MISSILERANGE
+
+        if (crosshair_type == 0)
+        {
+            dp_translation = cr[CR_GRAY2RED_HEXEN];
+        }
+        else if (crosshair_type == 1)
+        {
+            dp_translation = CPlayer->health >= 67 ? cr[CR_GRAY2GREEN_HEXEN] :
+                             CPlayer->health >= 34 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
+                                                     cr[CR_GRAY2RED_HEXEN];
+        }
+        else if (crosshair_type == 2)
+        {
+            dp_translation = cr[CR_GRAY2RED_HEXEN];
+
+            P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, missilerange);
+
+            if (linetarget)
+            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
+        }
+        else if (crosshair_type == 3)
+        {
+            dp_translation = CPlayer->health >= 67 ? cr[CR_GRAY2GREEN_HEXEN] :
+                             CPlayer->health >= 34 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
+                                                     cr[CR_GRAY2RED_HEXEN];
+
+            P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, missilerange);
+
+            if (linetarget)
+            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
+        }
+
         if (crosshair_scale)
-        {   // Scaled crosshair
+        {
             V_DrawPatch(origwidth/2,
                 ((screenblocks <= 10) ? (ORIGHEIGHT-38)/2 : (ORIGHEIGHT+4)/2),
-                W_CacheLumpName((!crosshair_type ?
-                                 "XHAIRSR" :             // Red (only)
-                                 CPlayer->health >= 67 ?
-                                 "XHAIRSG" :             // Green
-                                 CPlayer->health >= 34 ?
-                                 "XHAIRSY" : "XHAIRSR"), // Yellow or Red
-                                 PU_CACHE));
+                W_CacheLumpName("XHAIR_1S", PU_CACHE));
         }
         else
-        {   // Unscaled crosshair
+        {
             V_DrawPatchUnscaled(screenwidth/2,
                 ((screenblocks <= 10) ? (SCREENHEIGHT-76)/2 : (SCREENHEIGHT+8)/2),
-                W_CacheLumpName((!crosshair_type ? 
-                                 "XHAIRUR" :              // Red (only)
-                                 CPlayer->health >= 67 ?
-                                 "XHAIRUG" :             // Green
-                                 CPlayer->health >= 34 ?
-                                 "XHAIRUY" :"XHAIRUR"),  // Yellow or Red
-                                 PU_CACHE));
+                W_CacheLumpName("XHAIR_1U", PU_CACHE));
         }
+
+        dp_translation = NULL;
     }
 
 // -----------------------------------------------------------------------------

@@ -195,7 +195,7 @@ static void DrawGameplayMenu(void);
 static void M_RD_Brightmaps(int option);
 static void M_RD_FakeContrast(int option);
 static void M_RD_CrossHairDraw(int option);
-static void M_RD_CrossHairHealth(int option);
+static void M_RD_CrossHairType(int option);
 static void M_RD_CrossHairScale(int option);
 static void M_RD_FlipLevels(int option);
 static void M_RD_NoDemos(int option);
@@ -697,7 +697,7 @@ static MenuItem_t GameplayItems[] = {
     {ITT_LRFUNC, "FAKE CONTRAST:",       M_RD_FakeContrast,    0, MENU_NONE   },
     {ITT_EMPTY,  NULL,                   NULL,                 0, MENU_NONE   },
     {ITT_LRFUNC, "DRAW CROSSHAIR:",      M_RD_CrossHairDraw,   0, MENU_NONE   },
-    {ITT_LRFUNC, "HEALTH INDICATION:",   M_RD_CrossHairHealth, 0, MENU_NONE   },
+    {ITT_LRFUNC, "INDICATION:",          M_RD_CrossHairType,   0, MENU_NONE   },
     {ITT_LRFUNC, "INCREASED SIZE:",      M_RD_CrossHairScale,  0, MENU_NONE   },
     {ITT_EMPTY,  NULL,                   NULL,                 0, MENU_NONE   },
     {ITT_LRFUNC, "FLIP GAME LEVELS:",    M_RD_FlipLevels,      0, MENU_NONE   },
@@ -709,7 +709,7 @@ static MenuItem_t GameplayItems_Rus[] = {
     {ITT_LRFUNC, "BVBNFWBZ RJYNHFCNYJCNB:",  M_RD_FakeContrast,    0, MENU_NONE   }, // ИМИТАЦИЯ КОНТРАСТНОСТИ
     {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE   }, //
     {ITT_LRFUNC, "JNJ,HF;FNM GHBWTK:",       M_RD_CrossHairDraw,   0, MENU_NONE   }, // ОТОБРАЖАТЬ ПРИЦЕЛ
-    {ITT_LRFUNC, "BYLBRFWBZ PLJHJDMZ:",      M_RD_CrossHairHealth, 0, MENU_NONE   }, // ИНДИКАЦИЯ ЗДОРОВЬЯ
+    {ITT_LRFUNC, "BYLBRFWBZ:",               M_RD_CrossHairType,   0, MENU_NONE   }, // ИНДИКАЦИЯ
     {ITT_LRFUNC, "EDTKBXTYYSQ HFPVTH:",      M_RD_CrossHairScale,  0, MENU_NONE   }, // УВЕЛИЧЕННЫЙ РАЗМЕР
     {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE   }, //
     {ITT_LRFUNC, "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",  M_RD_FlipLevels,0, MENU_NONE   }, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
@@ -2745,9 +2745,13 @@ static void DrawGameplayMenu(void)
         MN_DrTextA(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 72);
         dp_translation = NULL;
 
-        // Health indication
+        // Indication
         dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(crosshair_type ? "ON" : "OFF", 161 + wide_delta, 82);
+        MN_DrTextA(crosshair_type == 1 ? "HEALTH" :
+                   crosshair_type == 2 ? "TARGET HIGHLIGHTING" :
+                   crosshair_type == 3 ? "TARGET HIGHLIGHTING+HEALTH" :
+                                         "STATIC", 
+                   111 + wide_delta, 82);
         dp_translation = NULL;
 
         // Increased size
@@ -2797,9 +2801,13 @@ static void DrawGameplayMenu(void)
         MN_DrTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 72);
         dp_translation = NULL;
 
-        // Индикация здоровья
+        // Индикация
         dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextSmallRUS(crosshair_type ? "DRK" : "DSRK", 179 + wide_delta, 82);
+        MN_DrTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" :       // ЗДОРОВЬЕ
+                          crosshair_type == 2 ? "GJLCDTNRF WTKB" : // ПОДСВЕТКА ЦЕЛИ
+                          crosshair_type == 3 ? "GJLCDTNRF WTKB+PLJHJDMT" :
+                                                "CNFNBXYFZ",       // СТАТИЧНАЯ
+                          111 + wide_delta, 82);
         dp_translation = NULL;
 
         // Увеличенный размер
@@ -2839,9 +2847,22 @@ static void M_RD_CrossHairDraw(int option)
     crosshair_draw ^= 1;
 }
 
-static void M_RD_CrossHairHealth(int option)
+static void M_RD_CrossHairType(int option)
 {
-    crosshair_type ^= 1;
+    switch(option)
+    {
+        case 0: 
+        crosshair_type--;
+        if (crosshair_type < 0) 
+            crosshair_type = 3;
+        break;
+    
+        case 1:
+        crosshair_type++;
+        if (crosshair_type > 3)
+            crosshair_type = 0;
+        break;
+    }
 }
 
 static void M_RD_CrossHairScale(int option)
