@@ -968,11 +968,33 @@ void HU_Drawer(void)
     // thanks to Zodomaniac for proper health values!
     if (crosshair_draw && !automapactive && !vanillaparm)
     {
-        if (crosshair_type)
+        static int missilerange = 32*64*FRACUNIT; // [JN] MISSILERANGE
+        extern fixed_t  P_AimLineAttack(mobj_t *t1, angle_t angle, fixed_t distance);
+        extern mobj_t  *linetarget; // who got hit (or NULL)
+
+        if (crosshair_type == 1)
         {
             dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
                              plr->health >= 34 ? cr[CR_GOLD] :
                                                  cr[CR_RED];
+        }
+        else if (crosshair_type == 2)
+        {
+            P_AimLineAttack(plr->mo, plr->mo->angle, missilerange);
+
+            if (linetarget)
+            dp_translation = cr[CR_GOLD];
+        }
+        else if (crosshair_type == 3)
+        {
+            dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
+                             plr->health >= 34 ? cr[CR_GOLD] :
+                                                 cr[CR_RED];
+
+            P_AimLineAttack(plr->mo, plr->mo->angle, missilerange);
+
+            if (linetarget)
+            dp_translation = cr[CR_GRAY];
         }
 
         if (crosshair_scale)

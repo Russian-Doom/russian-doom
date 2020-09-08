@@ -298,7 +298,7 @@ void M_RD_Change_FlipCorpses(int choice);
 void M_RD_Change_FloatPowerups(int choice);
 void M_RD_Change_TossDrop(int choice);
 void M_RD_Change_CrosshairDraw(int choice);
-void M_RD_Change_CrosshairHealth(int choice);
+void M_RD_Change_CrosshairType(int choice);
 void M_RD_Change_CrosshairScale(int choice);
 void M_RD_Change_FixMapErrors(int choice);
 void M_RD_Change_FlipLevels(int choice);
@@ -1795,7 +1795,6 @@ enum
     rd_gameplay_3_crosshair_draw,
     rd_gameplay_3_crosshair_type,
     rd_gameplay_3_crosshair_scale,
-    rd_gameplay_3_empty2,
     rd_gameplay_3_next_page,
     rd_gameplay_3_prev_page,
     rd_gameplay_3_end
@@ -1890,9 +1889,8 @@ menuitem_t RD_Gameplay_Menu_3[]=
     {2,"Items are tossed when dropped:",      M_RD_Change_TossDrop,        'i'},
     {-1,"",0,'\0'},
     {2,"Draw crosshair:",                     M_RD_Change_CrosshairDraw,   'd'},
-    {2,"Health indication:",                  M_RD_Change_CrosshairHealth, 'h'},
+    {2,"Indication:",                         M_RD_Change_CrosshairType,   'i'},
     {2,"Increased size:",                     M_RD_Change_CrosshairScale,  'i'},
-    {-1,"",0,'\0'},
     {1,"", /* Next page >   */                M_RD_Choose_Gameplay_4,      'n'},
     {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_2,      'p'},
     {-1,"",0,'\0'}
@@ -2007,9 +2005,8 @@ menuitem_t RD_Gameplay_Menu_3_Rus[]=
     {2,"Gjl,hfcsdfnm dsgfdibt ghtlvtns:",   M_RD_Change_TossDrop,           'g'},   // Подбрасывать выпавшие предметы
     {-1,"",0,'\0'},                                                                 //
     {2,"Jnj,hf;fnm ghbwtk:",                M_RD_Change_CrosshairDraw,      'j'},   // Отображать прицел
-    {2,"Bylbrfwbz pljhjdmz:",               M_RD_Change_CrosshairHealth,    'b'},   // Индикация здоровья
+    {2,"Bylbrfwbz:",                        M_RD_Change_CrosshairType,      'b'},   // Индикация
     {2,"Edtkbxtyysq hfpvth:",               M_RD_Change_CrosshairScale,     'e'},   // Увеличенный размер
-    {-1,"",0,'\0'},
     {1,"",                                  M_RD_Choose_Gameplay_4,         'l'},   // Далее >
     {1,"",                                  M_RD_Choose_Gameplay_2,         'y'},   // < Назад
     {-1,"",0,'\0'}
@@ -4610,9 +4607,13 @@ void M_RD_Draw_Gameplay_3(void)
         M_WriteTextSmall_ENG(146 + wide_delta, 115, crosshair_draw ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
-        // Health indication
+        // Indication
         dp_translation = crosshair_type ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(163 + wide_delta, 125, crosshair_type ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(111 + wide_delta, 125, 
+                             crosshair_type == 1 ? "Health" :
+                             crosshair_type == 2 ? "Target highlighting" :
+                             crosshair_type == 3 ? "Target highlighting+Health" :
+                                                   "Static");
         dp_translation = NULL;
 
         // Increased size
@@ -4687,9 +4688,13 @@ void M_RD_Draw_Gameplay_3(void)
         M_WriteTextSmall_RUS(180 + wide_delta, 115, crosshair_draw ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
-        // Индикация здоровья
+        // Индикация
         dp_translation = crosshair_type ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(186 + wide_delta, 125, crosshair_type ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(117 + wide_delta, 125, 
+                             crosshair_type == 1 ? "Pljhjdmt" :       // Здоровье
+                             crosshair_type == 2 ? "Gjlcdtnrf wtkb" : // Подсветка цели
+                             crosshair_type == 3 ? "Gjlcdtnrf wtkb+pljhjdmt" : // Подсветка цели + здоровье
+                                                   "Cnfnbxyfz");      // Статичная
         dp_translation = NULL;
 
         // Увеличенный размер
@@ -5032,9 +5037,22 @@ void M_RD_Change_CrosshairDraw(int choice)
     crosshair_draw ^= 1;
 }
 
-void M_RD_Change_CrosshairHealth(int choice)
+void M_RD_Change_CrosshairType(int choice)
 {
-    crosshair_type ^= 1;
+    switch(choice)
+    {
+        case 0: 
+        crosshair_type--;
+        if (crosshair_type < 0) 
+            crosshair_type = 3;
+        break;
+    
+        case 1:
+        crosshair_type++;
+        if (crosshair_type > 3)
+            crosshair_type = 0;
+        break;
+    }
 }
 
 void M_RD_Change_CrosshairScale(int choice)
