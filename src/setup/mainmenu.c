@@ -179,7 +179,7 @@ static void SensibleDefaults(void)
 
     // Gameplay: Crosshair
     crosshair_draw = 0;
-    crosshair_health = 1;
+    crosshair_type = 1;
     crosshair_scale = 0;
 
     // Gameplay: Gameplay

@@ -1793,7 +1793,7 @@ enum
     rd_gameplay_3_toss_drop,
     rd_gameplay_3_empty1,
     rd_gameplay_3_crosshair_draw,
-    rd_gameplay_3_crosshair_health,
+    rd_gameplay_3_crosshair_type,
     rd_gameplay_3_crosshair_scale,
     rd_gameplay_3_empty2,
     rd_gameplay_3_next_page,
@@ -4611,8 +4611,8 @@ void M_RD_Draw_Gameplay_3(void)
         dp_translation = NULL;
 
         // Health indication
-        dp_translation = crosshair_health ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(163 + wide_delta, 125, crosshair_health ? RD_ON : RD_OFF);
+        dp_translation = crosshair_type ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(163 + wide_delta, 125, crosshair_type ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Increased size
@@ -4688,8 +4688,8 @@ void M_RD_Draw_Gameplay_3(void)
         dp_translation = NULL;
 
         // Индикация здоровья
-        dp_translation = crosshair_health ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(186 + wide_delta, 125, crosshair_health ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = crosshair_type ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(186 + wide_delta, 125, crosshair_type ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Увеличенный размер
@@ -5034,7 +5034,7 @@ void M_RD_Change_CrosshairDraw(int choice)
 
 void M_RD_Change_CrosshairHealth(int choice)
 {
-    crosshair_health ^= 1;
+    crosshair_type ^= 1;
 }
 
 void M_RD_Change_CrosshairScale(int choice)
@@ -6052,7 +6052,7 @@ void M_RD_BackToDefaultsResponse(int key)
 
     // Gameplay: Crosshair
     crosshair_draw   = 0;
-    crosshair_health = 1;
+    crosshair_type   = 1;
     crosshair_scale  = 0;
 
     // Gameplay: Gameplay

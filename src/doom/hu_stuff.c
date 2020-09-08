@@ -968,7 +968,7 @@ void HU_Drawer(void)
     // thanks to Zodomaniac for proper health values!
     if (crosshair_draw && !automapactive && !vanillaparm)
     {
-        if (crosshair_health)
+        if (crosshair_type)
         {
             dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
                              plr->health >= 34 ? cr[CR_GOLD] :

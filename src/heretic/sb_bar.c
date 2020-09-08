@@ -688,7 +688,7 @@ void SB_Drawer(void)
     // [JN] Draw crosshair
     if (crosshair_draw && !automapactive && !vanillaparm)
     {
-        if (crosshair_health)
+        if (crosshair_type)
         {
             dp_translation = CPlayer->health >= 67 ? NULL :
                              CPlayer->health >= 34 ? cr[CR_GREEN2GOLD_HERETIC] :

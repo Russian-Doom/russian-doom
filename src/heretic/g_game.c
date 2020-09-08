@@ -157,7 +157,7 @@ int randomly_flipcorpses = 1;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
-int crosshair_health = 1;
+int crosshair_type = 1;
 int crosshair_scale = 0;
 
 // Gameplay: Gameplay

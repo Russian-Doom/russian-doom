@@ -201,7 +201,7 @@ int toss_drop = 1;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
-int crosshair_health = 1;
+int crosshair_type = 1;
 int crosshair_scale = 0;
 
 // Gameplay: Gameplay
@@ -657,7 +657,7 @@ void D_BindVariables(void)
 
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
-    M_BindIntVariable("crosshair_health",       &crosshair_health);
+    M_BindIntVariable("crosshair_type",         &crosshair_type);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);
 
     // Gameplay: Gameplay

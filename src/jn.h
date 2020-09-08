@@ -172,7 +172,7 @@ extern int toss_drop;
 
 // Gameplay: Crosshair
 extern int crosshair_draw;
-extern int crosshair_health;
+extern int crosshair_type;
 extern int crosshair_scale;
 
 // Gameplay: Gameplay

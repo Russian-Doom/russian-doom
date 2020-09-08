@@ -3299,9 +3299,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = NULL;
 
         // Health indication
-        dp_translation = crosshair_health ? cr[CR_GRAY2GREEN_HERETIC] :
+        dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HERETIC] :
                                             cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(crosshair_health ? "ON" : "OFF"),
+        MN_DrTextSmallENG(DEH_String(crosshair_type ? "ON" : "OFF"),
                                      161 + wide_delta, 82);
         dp_translation = NULL;
 
@@ -3377,9 +3377,9 @@ static void DrawGameplay2Menu(void)
         dp_translation = NULL;
 
         // Индикация здоровья
-        dp_translation = crosshair_health ? cr[CR_GRAY2GREEN_HERETIC] :
+        dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HERETIC] :
                                             cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(crosshair_health ? "DRK" : "DSRK"),
+        MN_DrTextSmallRUS(DEH_String(crosshair_type ? "DRK" : "DSRK"),
                                      179 + wide_delta, 82);
         dp_translation = NULL;
 
@@ -3439,7 +3439,7 @@ static boolean M_RD_CrossHairDraw(int option)
 
 static boolean M_RD_CrossHairHealth(int option)
 {
-    crosshair_health ^= 1;
+    crosshair_type ^= 1;
     return true;
 }
 
@@ -3596,7 +3596,7 @@ void M_RD_DoResetSettings(void)
     secret_notification  = 1;
     negative_health      = 0;
     crosshair_draw       = 0;
-    crosshair_health     = 1;
+    crosshair_type       = 1;
     crosshair_scale      = 0;
     flip_levels          = 0;
     no_internal_demos    = 0;

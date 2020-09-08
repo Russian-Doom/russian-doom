@@ -2746,8 +2746,8 @@ static void DrawGameplayMenu(void)
         dp_translation = NULL;
 
         // Health indication
-        dp_translation = crosshair_health ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(crosshair_health ? "ON" : "OFF", 161 + wide_delta, 82);
+        dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextA(crosshair_type ? "ON" : "OFF", 161 + wide_delta, 82);
         dp_translation = NULL;
 
         // Increased size
@@ -2798,8 +2798,8 @@ static void DrawGameplayMenu(void)
         dp_translation = NULL;
 
         // Индикация здоровья
-        dp_translation = crosshair_health ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextSmallRUS(crosshair_health ? "DRK" : "DSRK", 179 + wide_delta, 82);
+        dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
+        MN_DrTextSmallRUS(crosshair_type ? "DRK" : "DSRK", 179 + wide_delta, 82);
         dp_translation = NULL;
 
         // Увеличенный размер
@@ -2841,7 +2841,7 @@ static void M_RD_CrossHairDraw(int option)
 
 static void M_RD_CrossHairHealth(int option)
 {
-    crosshair_health ^= 1;
+    crosshair_type ^= 1;
 }
 
 static void M_RD_CrossHairScale(int option)
@@ -2915,7 +2915,7 @@ void M_RD_DoResetSettings(void)
     fake_contrast       = 0;
     draw_shadowed_text  = 1;
     crosshair_draw      = 0;
-    crosshair_health    = 1;
+    crosshair_type      = 1;
     crosshair_scale     = 0;
     no_internal_demos   = 0;
 
