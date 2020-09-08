@@ -983,7 +983,7 @@ void HU_Drawer(void)
             P_AimLineAttack(plr->mo, plr->mo->angle, missilerange);
 
             if (linetarget)
-            dp_translation = cr[CR_GOLD];
+            dp_translation = cr[CR_GRAY];
         }
         else if (crosshair_type == 3)
         {
