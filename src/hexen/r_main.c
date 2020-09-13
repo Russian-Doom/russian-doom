@@ -602,22 +602,8 @@ void R_ExecuteSetViewSize(void)
 
     setsizeneeded = false;
 
-    if (aspect_ratio >= 2)
-    {
-        if (setblocks == 9 || setblocks == 10)
-        {
-            scaledviewwidth = WIDESCREENWIDTH;
-            viewheight = SCREENHEIGHT - SBARHEIGHT;
-
-        }
-        else if (setblocks >= 11)
-        {
-            scaledviewwidth = WIDESCREENWIDTH;
-            viewheight = SCREENHEIGHT;
-        }
-    }
-    else
-    {
+    if (aspect_ratio == 0 || aspect_ratio == 1)
+    {   // [JN] 4:3 and 5:4
         if (setblocks == 11 || setblocks == 12) // [JN] Sizes 11 and 12 are the full screen mode
         {
             scaledviewwidth = SCREENWIDTH;
@@ -627,6 +613,33 @@ void R_ExecuteSetViewSize(void)
         {
             scaledviewwidth = (setblocks * 32) << hires;
             viewheight = (setblocks * 161 / 10) << hires;
+        }
+    }
+    else if (aspect_ratio == 2)
+    {   // [JN] 16:9
+        if (setblocks == 9 || setblocks == 10)
+        {
+            scaledviewwidth = WIDESCREENWIDTH;
+            viewheight = SCREENHEIGHT - SBARHEIGHT;
+        }
+        else if (setblocks >= 11)
+        {
+            scaledviewwidth = WIDESCREENWIDTH;
+            viewheight = SCREENHEIGHT;
+        }
+    }
+    else if (aspect_ratio == 3)
+    {
+        // [JN] 16:10
+        if (setblocks == 9 || setblocks == 10)
+        {
+            scaledviewwidth = WIDESCREENWIDTH - (42 << hires);
+            viewheight = SCREENHEIGHT - SBARHEIGHT;
+        }
+        else if (setblocks >= 11)
+        {
+            scaledviewwidth = WIDESCREENWIDTH - (42 << hires);
+            viewheight = SCREENHEIGHT;
         }
     }
 

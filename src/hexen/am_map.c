@@ -805,9 +805,10 @@ void AM_clearFB(int color)
             mapystart += (finit_height >> hires);
     }
 
-    //blit the automap background to the screen.
-    if (aspect_ratio >= 2)
+    if (aspect_ratio == 2)
     {
+        // [JN] Use static automap background for automap
+        // because of parallax problem.
         for (y = 0; y < SCREENHEIGHT-21; y++)
         {
             for (x = 0; x < WIDESCREENWIDTH / 320; x++)
@@ -822,23 +823,39 @@ void AM_clearFB(int color)
             }
         }
     }
+    else if (aspect_ratio == 3)
+    {
+        // [JN] Use static automap background for automap
+        // because of parallax problem.
+        for (y = 0; y < SCREENHEIGHT - 14; y++)
+        {
+            for (x = 0; x < (WIDESCREENWIDTH - (42 << hires)) / 320; x++)
+            {
+                memcpy(dest, src + ((y & 127) << 6), 320);
+                dest += 320;
+            }
+            if ((WIDESCREENWIDTH - (42 << hires)) & 127)
+            {
+                memcpy(dest, src + ((y & 127) << 6), (WIDESCREENWIDTH - (42 << hires)) & 127);
+                dest += ((WIDESCREENWIDTH - (42 << hires)) & 127);
+            }
+        }
+    }
     else
     {
+        //blit the automap background to the screen.
         j = (mapystart & ~hires) * (SCREENWIDTH >> hires);
-        for (i = 0; i < SCREENHEIGHT - SBARHEIGHT; i++)
+        for (i = 0; i < (finit_height+6); i++)
         {
             memcpy(I_VideoBuffer + i * SCREENWIDTH, maplump + j + mapxstart,
-                SCREENWIDTH - mapxstart);
+                   SCREENWIDTH - mapxstart);
             memcpy(I_VideoBuffer + i * SCREENWIDTH + SCREENWIDTH - mapxstart,
-                maplump + j, mapxstart);
+                   maplump + j, mapxstart);
             j += SCREENWIDTH;
-            if (j >= (finit_height >> hires) * (screenwidth >> hires))
+            if (j >= (finit_height >> hires) * (SCREENWIDTH >> hires))
                 j = 0;
         }
     }
-
-//       memcpy(I_VideoBuffer, maplump, screenwidth*finit_height);
-//  memset(fb, color, f_w*f_h);
 }
 
 // Based on Cohen-Sutherland clipping algorithm but with a slightly
