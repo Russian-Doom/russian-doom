@@ -2747,11 +2747,7 @@ static void DrawGameplayMenu(void)
 
         // Indication
         dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(crosshair_type == 1 ? "HEALTH" :
-                   crosshair_type == 2 ? "TARGET HIGHLIGHTING" :
-                   crosshair_type == 3 ? "TARGET HIGHLIGHTING+HEALTH" :
-                                         "STATIC", 
-                   111 + wide_delta, 82);
+        MN_DrTextA(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 82);
         dp_translation = NULL;
 
         // Increased size
@@ -2804,10 +2800,8 @@ static void DrawGameplayMenu(void)
         // Индикация
         dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
         MN_DrTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" :       // ЗДОРОВЬЕ
-                          crosshair_type == 2 ? "GJLCDTNRF WTKB" : // ПОДСВЕТКА ЦЕЛИ
-                          crosshair_type == 3 ? "GJLCDTNRF WTKB+PLJHJDMT" :
                                                 "CNFNBXYFZ",       // СТАТИЧНАЯ
-                          111 + wide_delta, 82);
+                                                111 + wide_delta, 82);
         dp_translation = NULL;
 
         // Увеличенный размер
@@ -2849,20 +2843,7 @@ static void M_RD_CrossHairDraw(int option)
 
 static void M_RD_CrossHairType(int option)
 {
-    switch(option)
-    {
-        case 0: 
-        crosshair_type--;
-        if (crosshair_type < 0) 
-            crosshair_type = 3;
-        break;
-    
-        case 1:
-        crosshair_type++;
-        if (crosshair_type > 3)
-            crosshair_type = 0;
-        break;
-    }
+    crosshair_type ^= 1;
 }
 
 static void M_RD_CrossHairScale(int option)

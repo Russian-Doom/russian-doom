@@ -830,37 +830,15 @@ void SB_Drawer(void)
     // [JN] Draw crosshair
     if (crosshair_draw && !automapactive && !vanillaparm)
     {
-        static int missilerange = 32*64*FRACUNIT; // [JN] MISSILERANGE
-
         if (crosshair_type == 0)
         {
             dp_translation = cr[CR_GRAY2RED_HEXEN];
         }
-        else if (crosshair_type == 1)
+        else
         {
             dp_translation = CPlayer->health >= 67 ? cr[CR_GRAY2GREEN_HEXEN] :
                              CPlayer->health >= 34 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
                                                      cr[CR_GRAY2RED_HEXEN];
-        }
-        else if (crosshair_type == 2)
-        {
-            dp_translation = cr[CR_GRAY2RED_HEXEN];
-
-            P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, missilerange);
-
-            if (linetarget)
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-        }
-        else if (crosshair_type == 3)
-        {
-            dp_translation = CPlayer->health >= 67 ? cr[CR_GRAY2GREEN_HEXEN] :
-                             CPlayer->health >= 34 ? cr[CR_GRAY2DARKGOLD_HEXEN] :
-                                                     cr[CR_GRAY2RED_HEXEN];
-
-            P_AimLineAttack(CPlayer->mo, CPlayer->mo->angle, missilerange);
-
-            if (linetarget)
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
         }
 
         if (crosshair_scale)
