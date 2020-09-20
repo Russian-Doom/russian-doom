@@ -45,6 +45,9 @@
 #include "doomstat.h"
 #include "r_state.h"
 
+#include "jn.h"
+
+
 //
 // CHANGE THE TEXTURE OF A WALL SWITCH TO ITS OPPOSITE
 //
@@ -867,7 +870,8 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side)
         }
         else
         {
-            thing->player->message = DEH_String("You need a gold key");
+            thing->player->message = DEH_String(english_language ?
+            "You need a gold key" : "ye;ty pjkjnjq rk.x"); // [rus] Нужен золотой ключ
             S_StartSound(thing, sfx_oof);
         }
         break;
@@ -917,7 +921,8 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side)
         }
         else
         {
-            thing->player->message = DEH_String("You don't have the key");
+            thing->player->message = DEH_String(english_language ?
+            "You don't have the key" : "ye;ty rk.x"); // [rus] Нужен ключ
             S_StartSound(thing, sfx_oof);
         }
         break;
@@ -962,7 +967,8 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side)
         // haleyjd 09/24/10: [STRIFE] S1 Build Stairs Down 16 if Have Chalice
         if(!P_PlayerHasItem(thing->player, MT_INV_CHALICE))
         {
-            DEH_snprintf(usemessage, sizeof(usemessage), "You need the chalice!");
+            DEH_snprintf(usemessage, sizeof(usemessage), english_language ?
+            "You need the chalice!" : "ye;yf xfif!"); // [JN] Нужна чаша!
             thing->player->message = usemessage;
             S_StartSound(thing, sfx_oof);
             break;
@@ -992,7 +998,8 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side)
         // haleyjd 09/25/10: S1 Lower Floor Blue Crystal
         if(!thing->player->cards[key_BlueCrystalKey])
         {
-            thing->player->message = DEH_String("You need the Blue Crystal");
+            thing->player->message = DEH_String(english_language ?
+            "You need the Blue Crystal" : "ye;ty cbybq rhbcnfkk"); // [rus] Нужен синий кристалл
             S_StartSound(thing, sfx_oof);
         }
         else if(EV_DoFloor(line, lowerFloor))
@@ -1003,7 +1010,8 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side)
         // haleyjd 09/25/10: S1 Lower Floor Red Crystal
         if(!thing->player->cards[key_RedCrystalKey])
         {
-            thing->player->message = DEH_String("You need the Red Crystal");
+            thing->player->message = DEH_String(english_language ?
+            "You need the Red Crystal" : "ye;ty rhfcysq rhbcnfkk"); // [rus] Нужен красный кристалл
             S_StartSound(thing, sfx_oof);
         }
         else if(EV_DoFloor(line, lowerFloor))
@@ -1018,7 +1026,9 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side)
             P_GiveItemToPlayer(thing->player, SPR_TOKN, MT_TOKEN_NEW_ACCURACY);
             P_ChangeSwitchTexture(line, 0);
             DEH_snprintf(usemessage, sizeof(usemessage),
-                DEH_String("Congratulations! You have completed the training area."));
+                DEH_String(english_language ? 
+                "Congratulations! You have completed the training area." :
+                ",hfdj! ns ghjitk nhtybhjdre.")); // [rus] Браво! Ты прошел тренировку.
             thing->player->message = usemessage;
         }
         break;
@@ -1041,8 +1051,9 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side)
         GiveVoiceObjective("voc70", "log70", 0);
         
         // haleyjd: Strife used sprintf here, not a direct set.
-        DEH_snprintf(usemessage, sizeof(usemessage), 
-                     "Incoming Message from BlackBird...");
+        DEH_snprintf(usemessage, sizeof(usemessage), english_language ?
+                     "Incoming Message from BlackBird..." :
+                     "d[jlzott djj,ctybt jn xthyjuj lhjplf>>>"); // [rus] Входящее сообщение от Черного дрозда...
         thing->player->message = usemessage;
 
         break;
@@ -1053,8 +1064,9 @@ boolean P_UseSpecialLine(mobj_t* thing, line_t* line, int side)
         {
             // BUG: doesn't make sfx_oof sound like all other message-
             // giving door types. I highly doubt this was intentional.
-            DEH_snprintf(usemessage, sizeof(usemessage), 
-                         "That doesn't seem to work!");
+            DEH_snprintf(usemessage, sizeof(usemessage), english_language ?
+                         "That doesn't seem to work!" :
+                         "gj[j;t< 'nj yt hf,jnftn!"); // [rus] Похоже, это не работает!
             thing->player->message = usemessage;
         }
         else if(EV_DoDoor(line, vld_normal))
