@@ -78,7 +78,7 @@ void HUlib_drawYellowText(int x, int y, char *text)
                 if(!D_PatchClipCallback(patch, x + SHORT(patch->leftoffset),
                     y + SHORT(patch->topoffset)))
                     return;
-                V_DrawPatch(x, y, patch);
+                V_DrawShadowedPatchStrife(x, y, patch);
                 x = x + width;
             }
             else
@@ -199,7 +199,7 @@ HUlib_drawTextLine
             w = SHORT(l->f[c - l->sc]->width);
             if (x+w > SCREENWIDTH)
                 break;
-            V_DrawPatch(x, l->y, l->f[c - l->sc]);
+            V_DrawShadowedPatchStrife(x, l->y, l->f[c - l->sc]);
             x += w;
         }
         else
@@ -214,7 +214,7 @@ HUlib_drawTextLine
     if (drawcursor
         && x + SHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
     {
-        V_DrawPatch(x, l->y, l->f['_' - l->sc]);
+        V_DrawShadowedPatchStrife(x, l->y, l->f['_' - l->sc]);
     }
 }
 

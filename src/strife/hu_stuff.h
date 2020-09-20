@@ -42,7 +42,8 @@
 #define HU_CHANGENAME   10      // haleyjd [STRIFE] Special command
 
 #define HU_MSGX         0
-#define HU_MSGY         (SHORT(hu_font[0]->height) + 1) // [STRIFE]: DOOM bug fix
+// [JN] Move HUD messages one pixel below (+2 instead of +1) so "Й" char may appear.
+#define HU_MSGY         (SHORT(hu_font[0]->height) + 2) // [STRIFE]: DOOM bug fix
 #define HU_MSGWIDTH     64      // in characters
 #define HU_MSGHEIGHT    2       // in lines
 
