@@ -323,6 +323,14 @@ static int G_NextWeapon(int direction)
     return weapon_order_table[i].weapon_num;
 }
 
+// [crispy] holding down the "Run" key may trigger special behavior,
+// e.g. quick exit, clean screenshots, resurrection from savegames
+boolean speedkeydown (void)
+{
+    return (key_speed < NUMKEYS && gamekeydown[key_speed]) ||
+           (joybspeed < MAX_JOY_BUTTONS && joybuttons[joybspeed]);
+}
+
 //
 // G_BuildTiccmd
 // Builds a ticcmd from all of the available inputs
@@ -386,10 +394,11 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     // fraggle: support the old "joyb_speed = 31" hack which
     // allowed an autorun effect
 
+    // [crispy] when "always run" is active,
+    // pressing the "run" key will result in walking
     speed = key_speed >= NUMKEYS
-         || joybspeed >= MAX_JOY_BUTTONS
-         || gamekeydown[key_speed] 
-         || joybuttons[joybspeed];
+         || joybspeed >= MAX_JOY_BUTTONS;
+    speed ^= speedkeydown();
  
     forward = side = 0;
 
