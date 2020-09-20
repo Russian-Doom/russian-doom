@@ -38,8 +38,8 @@ extern short		screenheightarray[SCREENWIDTH];
 // vars for R_DrawMaskedColumn
 extern short*		mfloorclip;
 extern short*		mceilingclip;
-extern fixed_t		spryscale;
-extern fixed_t		sprtopscreen;
+extern int64_t		spryscale;
+extern int64_t		sprtopscreen;
 
 extern fixed_t		pspritescale;
 extern fixed_t		pspriteiscale;

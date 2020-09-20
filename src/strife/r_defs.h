@@ -71,6 +71,16 @@ typedef struct
     fixed_t	x;
     fixed_t	y;
     
+// [crispy] remove slime trails
+// pseudovertexes are dummies that have their coordinates modified to get
+// moved towards the linedef associated with their seg by projecting them
+// using the law of cosines in p_setup.c:P_RemoveSlimeTrails();
+// they are *only* used in rendering
+
+    fixed_t	px;
+    fixed_t	py;
+    boolean	moved;
+
 } vertex_t;
 
 
@@ -275,6 +285,8 @@ typedef struct
     sector_t*	frontsector;
     sector_t*	backsector;
     
+    fixed_t length; // [crispy] fix long wall wobble
+
 } seg_t;
 
 

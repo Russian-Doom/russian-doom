@@ -293,8 +293,9 @@ void R_AddLine (seg_t*	line)
     curline = line;
 
     // OPTIMIZE: quickly reject orthogonal back sides.
-    angle1 = R_PointToAngle (line->v1->x, line->v1->y);
-    angle2 = R_PointToAngle (line->v2->x, line->v2->y);
+    // [crispy] remove slime trails
+    angle1 = R_PointToAngle (line->v1->px, line->v1->py);
+    angle2 = R_PointToAngle (line->v2->px, line->v2->py);
     
     // Clip to view edges.
     // OPTIMIZE: make constant out of 2*clipangle (FIELDOFVIEW).
