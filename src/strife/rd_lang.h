@@ -61,6 +61,19 @@ extern char *d_cdrom;
 #define D_CDROM_RUS     "Дисковая версия.\n"
 
 //
+// g_game.c
+//
+
+extern char *ststr_alwrun_on;
+extern char *ststr_alwrun_off;
+
+#define STSTR_ALWRUNON  "Always run ON"
+#define STSTR_ALWRUNOFF "Always run OFF"
+
+#define STSTR_ALWRUNON_RUS  "gjcnjzyysq ,tu drk.xty"    // Постоянный бег включен
+#define STSTR_ALWRUNOFF_RUS "gjcnjzyysq ,tu dsrk.xty"   // Постоянный бег выключен
+
+//
 // m_menu.c
 //
 

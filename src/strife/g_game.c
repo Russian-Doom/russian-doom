@@ -69,6 +69,7 @@
 #include "p_dialog.h"   // villsa [STRIFE]
 
 #include "g_game.h"
+#include "rd_lang.h"
 
 
 #define SAVEGAMESIZE	0x2c000
@@ -346,6 +347,7 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     int		tspeed; 
     int		forward;
     int		side;
+    static int  joybspeed_old = 2;
 
     memset(cmd, 0, sizeof(ticcmd_t));
 
@@ -399,6 +401,26 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
     speed = key_speed >= NUMKEYS
          || joybspeed >= MAX_JOY_BUTTONS;
     speed ^= speedkeydown();
+ 
+     // [crispy] toggle always run
+    if (gamekeydown[key_toggleautorun])
+    {
+        if (joybspeed >= MAX_JOY_BUTTONS)
+        {
+            joybspeed = joybspeed_old;
+        }
+        else
+        {
+            joybspeed_old = joybspeed;
+            joybspeed = 29;
+        }
+
+        players[consoleplayer].message = (joybspeed >= MAX_JOY_BUTTONS) ?
+                                          ststr_alwrun_on : ststr_alwrun_off;
+        S_StartSound(NULL, sfx_swtchn);
+
+        gamekeydown[key_toggleautorun] = false;
+    }
  
     forward = side = 0;
 

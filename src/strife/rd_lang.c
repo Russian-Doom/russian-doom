@@ -39,6 +39,13 @@ char *d_devstr;
 char *d_cdrom;
 
 //
+// g_game.c
+//
+
+char *ststr_alwrun_on;
+char *ststr_alwrun_off;
+
+//
 // m_menu.c
 //
 
@@ -138,6 +145,10 @@ void RD_DefineLanguageStrings (void)
         d_devstr = D_DEVSTR;
         d_cdrom  = D_CDROM;
 
+        // g_game.c
+        ststr_alwrun_on  = STSTR_ALWRUNON;
+        ststr_alwrun_off = STSTR_ALWRUNOFF;
+
         // m_menu.c
         presskey  = PRESSKEY;
         pressyn   = PRESSYN;
@@ -179,6 +190,10 @@ void RD_DefineLanguageStrings (void)
         // d_main.c
         d_devstr = D_DEVSTR_RUS;
         d_cdrom  = D_CDROM_RUS;
+
+        // g_game.c
+        ststr_alwrun_on  = STSTR_ALWRUNON_RUS;
+        ststr_alwrun_off = STSTR_ALWRUNOFF_RUS;
 
         // m_menu.c
         presskey = PRESSKEY_RUS;
