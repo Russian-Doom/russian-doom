@@ -26,7 +26,6 @@
 
 #include "doomdef.h"
 #include "doomkeys.h"
-#include "dstrings.h"
 
 #include "d_main.h"
 #include "deh_main.h"
@@ -62,7 +61,9 @@
 
 #include "m_menu.h"
 #include "p_dialog.h"
+#include "st_stuff.h"
 #include "v_trans.h"
+#include "rd_lang.h"
 #include "crispy.h"
 #include "jn.h"
 
@@ -120,27 +121,6 @@ int			messageLastMenuActive;
 boolean			messageNeedsInput;
 
 void    (*messageRoutine)(int response);
-
-char gammamsg[17][29] =
-{
-    GAMMALVL0,
-    GAMMALV02,
-    GAMMALV05,
-    GAMMALV07,
-    GAMMALVL1,
-    GAMMALV12,
-    GAMMALV15,
-    GAMMALV17,
-    GAMMALVL2,
-    GAMMALV22,
-    GAMMALV25,
-    GAMMALV27,
-    GAMMALVL3,
-    GAMMALV32,
-    GAMMALV35,
-    GAMMALV37,
-    GAMMALVL4
-};
 
 // we are going to be entering a savegame string
 int			saveStringEnter;              
@@ -957,7 +937,7 @@ void M_LoadGame (int choice)
 {
     if (netgame)
     {
-        M_StartMessage(DEH_String(LOADNET), NULL, false);
+        M_StartMessage(DEH_String(loadnet), NULL, false);
         return;
     }
 
@@ -1007,7 +987,7 @@ void M_DoSave(int slot)
         FromCurr();
     }
     else
-        M_StartMessage(DEH_String(QSAVESPOT), NULL, false);
+        M_StartMessage(DEH_String(qsavespot), NULL, false);
 }
 
 //
@@ -1050,7 +1030,7 @@ void M_SaveGame (int choice)
     }
     if (!usergame)
     {
-        M_StartMessage(DEH_String(SAVEDEAD),NULL,false);
+        M_StartMessage(DEH_String(savedead),NULL,false);
         return;
     }
 
@@ -1115,7 +1095,7 @@ void M_QuickSave(void)
         quickSaveSlot = -2;	// means to pick a slot now
         return;
     }
-    DEH_snprintf(tempstring, 80, QSPROMPT, savegamestrings[quickSaveSlot]);
+    DEH_snprintf(tempstring, 80, qsprompt, savegamestrings[quickSaveSlot]);
     M_StartMessage(tempstring,M_QuickSaveResponse,true);
 }
 
@@ -1142,16 +1122,16 @@ void M_QuickLoad(void)
 {
     if (netgame)
     {
-        M_StartMessage(DEH_String(QLOADNET),NULL,false);
+        M_StartMessage(DEH_String(qloadnet),NULL,false);
         return;
     }
 
     if (quickSaveSlot < 0)
     {
-        M_StartMessage(DEH_String(QSAVESPOT),NULL,false);
+        M_StartMessage(DEH_String(qsavespot),NULL,false);
         return;
     }
-    DEH_snprintf(tempstring, 80, QLPROMPT, savegamestrings[quickSaveSlot]);
+    DEH_snprintf(tempstring, 80, qlprompt, savegamestrings[quickSaveSlot]);
     M_StartMessage(tempstring,M_QuickLoadResponse,true);
 }
 
@@ -1326,7 +1306,7 @@ void M_NewGame(int choice)
 {
     if (netgame && !demoplayback)
     {
-        M_StartMessage(DEH_String(NEWGAME),NULL,false);
+        M_StartMessage(DEH_String(newgame),NULL,false);
         return;
     }
     // haleyjd 09/07/10: [STRIFE] Removed Chex Quest and DOOM gamemodes
@@ -1788,18 +1768,7 @@ void M_QuitResponse(int key)
 //
 void M_QuitStrife(int choice)
 {
-    if (english_language)
-    {
-    DEH_snprintf(endstring, sizeof(endstring),
-                 "Do you really want to leave?\n\n" DOSY);
-    }
-    else
-    {
-    DEH_snprintf(endstring, sizeof(endstring),
-                 // Вы действительно хотите \n выйти из игры?
-                 "ds ltqcndbntkmyj [jnbnt\ndsqnb bp buhs?\n\n" DOSY);
-    }
-
+    DEH_snprintf(endstring, sizeof(endstring), leave);
     M_StartMessage(endstring, M_QuitResponse, true);
 }
 
@@ -2906,13 +2875,16 @@ boolean M_Responder (event_t* ev)
         else if (key == key_menu_gamma)    // gamma toggle
         {
             usegamma++;
-            if (usegamma > 16)
+            if (usegamma > 17)
                 usegamma = 0;
-            players[consoleplayer].message = DEH_String(gammamsg[usegamma]);
-            if (lcd_gamma_fix)
-                I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
-            else
-                I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+
+            I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
+                                                             "PALFIX" : "PLAYPAL"), PU_CACHE) +
+                                                             st_palette * 768);
+
+            players[consoleplayer].message = DEH_String(english_language ?
+                                                        gammamsg[usegamma] : gammamsg_rus[usegamma]);
+
             return true;
         }
         else if(gameversion == exe_strife_1_31 && key == key_spy)

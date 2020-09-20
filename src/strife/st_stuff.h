@@ -80,6 +80,7 @@ typedef enum
 } st_chatstateenum_t;
 
 
+extern int st_palette;
 
 extern byte *st_backing_screen;
 

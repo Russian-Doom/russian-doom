@@ -4,7 +4,6 @@ noinst_LIBRARIES=libstrife.a
 
 SOURCE_FILES=                   \
 am_map.c           am_map.h     \
-                   d_englsh.h   \
 d_items.c          d_items.h    \
 d_main.c           d_main.h     \
 d_net.c                         \
@@ -12,7 +11,6 @@ d_net.c                         \
 doomdef.c          doomdef.h    \
 doomstat.c         doomstat.h   \
                    d_player.h   \
-dstrings.c         dstrings.h   \
                    d_textur.h   \
                    d_think.h    \
 f_finale.c         f_finale.h   \
@@ -56,6 +54,7 @@ r_segs.c           r_segs.h     \
 r_sky.c            r_sky.h      \
                    r_state.h    \
 r_things.c         r_things.h   \
+rd_lang.c          rd_lang.h    \
 s_sound.c          s_sound.h    \
 sounds.c           sounds.h     \
 st_lib.c           st_lib.h     \

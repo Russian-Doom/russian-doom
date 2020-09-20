@@ -60,7 +60,6 @@
 #include "s_sound.h"
 
 // Data.
-#include "dstrings.h"
 #include "sounds.h"
 
 // SKY handling - still the wrong place.

@@ -68,6 +68,7 @@ extern char player_names[8][16];   // villsa [STRIFE]
 
 // haleyjd [STRIFE] externalized:
 extern char *mapnames[];
+extern char *mapnames_rus[];
 
 // [STRIFE]
 extern patch_t* yfont[HU_FONTSIZE];   // haleyjd 09/18/10: [STRIFE]

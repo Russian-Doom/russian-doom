@@ -36,7 +36,6 @@
 
 // Data.
 #include "d_main.h"
-#include "dstrings.h"
 #include "sounds.h"
 
 #include "doomstat.h"

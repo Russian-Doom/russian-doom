@@ -52,6 +52,7 @@
 // [STRIFE]
 #include "hu_stuff.h"
 #include "p_dialog.h"
+#include "jn.h"
 
 
 //
@@ -1306,14 +1307,20 @@ P_CrossSpecialLine
                     map = 10;
             }
 
-            DEH_snprintf(crosslinestr, sizeof(crosslinestr), 
-                         // [JN] Важно: цифта + 11 подразумевает количество первых 
-                         // символов, написанных в названиях уровнях в d_english.h,
-                         // и будет вычитаться из строчки о загрузке уровня.
+            if (english_language)
+            {
+                DEH_snprintf(crosslinestr, sizeof(crosslinestr), 
+                             "Entering%s", 
+                             DEH_String(mapnames[map - 1]) + 8);
+            }
+            else
+            {
+                DEH_snprintf(crosslinestr, sizeof(crosslinestr), 
+                            "gtht[jl d vtcnyjcnm:%s", // [rus] Переход в местность%s
+                            DEH_String(mapnames_rus[map - 1]) + 13); // [rus] Убираем 9 символов вместо 8 из строки, содержащей название уровня
+                            // [JN] Не совсем так. Необходимо убрать 13 символов.
+            }
 
-                         // Загружается %уровень...
-                         "pfuhe;ftncz%s>>>", 
-                         DEH_String(mapnames[map - 1]) + 11);
             thing->player->message = crosslinestr;
 
             if(netgame && deathmatch)

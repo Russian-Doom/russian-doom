@@ -31,7 +31,6 @@
 #include "r_state.h"
 
 // Data.
-#include "dstrings.h"
 #include "sounds.h"
 
 // [STRIFE]

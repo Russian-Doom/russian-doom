@@ -22,7 +22,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "dstrings.h"
 #include "deh_main.h"
 #include "i_system.h"
 #include "z_zone.h"
@@ -33,6 +32,7 @@
 // State.
 #include "doomstat.h"
 #include "r_state.h"
+#include "rd_lang.h"
 
 #define SAVEGAME_EOF 0x1d
 

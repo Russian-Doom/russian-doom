@@ -32,7 +32,6 @@
 #include "doomdef.h"
 #include "doomstat.h"
 
-#include "dstrings.h"
 #include "doomfeatures.h"
 #include "sounds.h"
 
@@ -80,6 +79,7 @@
 
 #include "d_main.h"
 #include "w_merge.h"
+#include "rd_lang.h"
 #include "jn.h"
 
 //
@@ -303,10 +303,7 @@ void D_Display (void)
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
     {
-        if (lcd_gamma_fix)
-            I_SetPalette (W_CacheLumpName (DEH_String("PALFIX"),PU_CACHE));
-        else
-            I_SetPalette (W_CacheLumpName (DEH_String("PLAYPAL"),PU_CACHE));
+        I_SetPalette (W_CacheLumpName (DEH_String(usegamma <= 8 ? "PLAYPAL" : "PALFIX"), PU_CACHE));
     }
 
     // see if the border needs to be initially drawn
@@ -1532,7 +1529,7 @@ void D_DoomMain (void)
         deathmatch = 2;
 
     if (devparm)
-        DEH_printf(D_DEVSTR);
+        DEH_printf(d_devstr);
     
     // find which dir to use for config files
 
@@ -1548,7 +1545,7 @@ void D_DoomMain (void)
 
     if (M_CheckParm("-cdrom") > 0)
     {
-        printf(D_CDROM);
+        printf(d_cdrom);
 
         // haleyjd 08/22/2010: [STRIFE] Use strife.cd folder for -cdrom
         M_SetConfigDir("c:\\strife.cd\\");
@@ -1598,6 +1595,9 @@ void D_DoomMain (void)
     M_SetConfigFilenames(/*"strife.cfg", */PROGRAM_PREFIX "strife.cfg");
     D_BindVariables();
     M_LoadDefaults();
+
+    // [JN] Define and load translated strings
+    RD_DefineLanguageStrings();
 
     if (!graphical_startup)
     {

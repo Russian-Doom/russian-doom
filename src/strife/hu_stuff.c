@@ -41,13 +41,16 @@
 #include "doomstat.h"
 
 // Data.
-#include "dstrings.h"
 #include "sounds.h"
+#include "rd_lang.h"
+#include "jn.h"
+
 
 //
 // Locally used constants, shortcuts.
 //
 #define HU_TITLE        (mapnames[gamemap-1])
+#define HU_TITLE_RUS    (mapnames_rus[gamemap-1])
 #define HU_TITLEHEIGHT  1
 #define HU_TITLEX       0
 
@@ -126,7 +129,6 @@ static boolean hu_setting_name = false;
 
 //
 // Builtin map names.
-// The actual names can be found in DStrings.h.
 //
 
 // haleyjd 08/31/10: [STRIFE] Changed for Strife level names.
@@ -179,6 +181,44 @@ char *mapnames[] =
     HUSTR_32,
     HUSTR_33,
     HUSTR_34
+};
+
+char *mapnames_rus[] =
+{
+    HUSTR_1_RUS,
+    HUSTR_2_RUS,
+    HUSTR_3_RUS,
+    HUSTR_4_RUS,
+    HUSTR_5_RUS,
+    HUSTR_6_RUS,
+    HUSTR_7_RUS,
+    HUSTR_8_RUS,
+    HUSTR_9_RUS,
+    HUSTR_10_RUS,
+    HUSTR_11_RUS,
+    HUSTR_12_RUS,
+    HUSTR_13_RUS,
+    HUSTR_14_RUS,
+    HUSTR_15_RUS,
+    HUSTR_16_RUS,
+    HUSTR_17_RUS,
+    HUSTR_18_RUS,
+    HUSTR_19_RUS,
+    HUSTR_20_RUS,
+    HUSTR_21_RUS,
+    HUSTR_22_RUS,
+    HUSTR_23_RUS,
+    HUSTR_24_RUS,
+    HUSTR_25_RUS,
+    HUSTR_26_RUS,
+    HUSTR_27_RUS,
+    HUSTR_28_RUS,
+    HUSTR_29_RUS,
+    HUSTR_30_RUS,
+    HUSTR_31_RUS,
+    HUSTR_32_RUS,
+    HUSTR_33_RUS,
+    HUSTR_34_RUS
 };
 
 //
@@ -287,7 +327,7 @@ void HU_Start(void)
                        HU_FONTSTART);
 
     // haleyjd 08/31/10: [STRIFE] Get proper map name.
-    s = HU_TITLE;
+    s = english_language ? HU_TITLE : HU_TITLE_RUS;
 
     // [STRIFE] Removed Chex Quest stuff.
 

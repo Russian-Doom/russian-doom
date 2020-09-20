@@ -44,9 +44,8 @@
 #include "r_state.h"
 
 // Data.
-#include "dstrings.h"
-
 #include "am_map.h"
+#include "rd_lang.h"
 
 
 // Automap colors
@@ -674,9 +673,9 @@ AM_Responder
             followplayer = !followplayer;
             f_oldloc.x = INT_MAX;
             if (followplayer)
-                plr->message = DEH_String(AMSTR_FOLLOWON);
+                plr->message = DEH_String(amstr_followon);
             else
-                plr->message = DEH_String(AMSTR_FOLLOWOFF);
+                plr->message = DEH_String(amstr_followoff);
         }
         // haleyjd 20141101: [STRIFE] grid is not supported
         /*
@@ -684,9 +683,9 @@ AM_Responder
         {
             grid = !grid;
             if (grid)
-                plr->message = DEH_String(AMSTR_GRIDON);
+                plr->message = DEH_String(amstr_gridon);
             else
-                plr->message = DEH_String(AMSTR_GRIDOFF);
+                plr->message = DEH_String(amstr_gridoff);
         }
         */
         else if (key == key_map_mark)
@@ -695,7 +694,7 @@ AM_Responder
             if(markpointnum == AM_NUMMARKPOINTS)
                 --markpointnum;
             M_snprintf(buffer, sizeof(buffer),
-                       "%s %d", DEH_String(AMSTR_MARKEDSPOT), markpointnum + 1); // [STRIFE]
+                       "%s %d", DEH_String(amstr_markedspot), markpointnum + 1); // [STRIFE]
             plr->message = buffer;
             AM_addMark();
         }
@@ -706,7 +705,7 @@ AM_Responder
             {
                 markpoints[markpointnum - 1].x = -1;
                 --markpointnum;
-                plr->message = DEH_String(AMSTR_MARKSCLEARED);
+                plr->message = DEH_String(amstr_markscleared);
             }
         }
         else

@@ -21,7 +21,6 @@
 
 // Data.
 #include "doomdef.h"
-#include "dstrings.h"
 #include "sounds.h"
 #include "deh_main.h"
 #include "deh_misc.h"

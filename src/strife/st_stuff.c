@@ -60,11 +60,12 @@
 #include "d_main.h"    // [STRIFE]
 
 // Data.
-#include "dstrings.h"
 #include "sounds.h"
 #include "m_controls.h"
 #include "hu_lib.h"     // [STRIFE]
 #include "hu_stuff.h"
+#include "rd_lang.h"
+
 
 //
 // STATUS BAR DATA
@@ -146,8 +147,9 @@ static player_t*        plyr;
 // ST_Start() has just been called
 static boolean          st_firsttime;
 
-// lump number for PLAYPAL
-static int              lu_palette;
+// [JN] lump number for PLAYPAL and PALFIX
+static int              lu_palette1;
+static int              lu_palette2;
 
 // whether in automap or first-person
 static st_stateenum_t   st_gamestate;
@@ -482,13 +484,13 @@ boolean ST_Responder(event_t* ev)
         char        buf[3];
         int         musnum;
 
-        plyr->message = DEH_String(STSTR_MUS);
+        plyr->message = DEH_String(ststr_mus);
         cht_GetParam(&cheat_mus, buf);
 
         musnum = (buf[0] - '0') * 10 + buf[1] - '0';
 
         if (((buf[0]-'0')*10 + buf[1]-'0') > 35)
-            plyr->message = DEH_String(STSTR_NOMUS);
+            plyr->message = DEH_String(ststr_nomus);
         else
             S_ChangeMusic(musnum, 1);
     }
@@ -517,12 +519,12 @@ boolean ST_Responder(event_t* ev)
 
             plyr->health = deh_god_mode_health;
             plyr->st_update = true; // [STRIFE]
-            plyr->message = DEH_String(STSTR_DQDON);
+            plyr->message = DEH_String(ststr_dqdon);
         }
         else 
         {
             plyr->st_update = true;
-            plyr->message = DEH_String(STSTR_DQDOFF);
+            plyr->message = DEH_String(ststr_dqdoff);
         }
     }
     else if (cht_CheckCheat(&cheat_ammo, ev->data2))
@@ -541,7 +543,7 @@ boolean ST_Responder(event_t* ev)
         for (i=0;i<NUMAMMO;i++)
             plyr->ammo[i] = plyr->maxammo[i];
 
-        plyr->message = DEH_String(STSTR_FAADDED);
+        plyr->message = DEH_String(ststr_faadded);
     }
     else if(cht_CheckCheat(&cheat_keys, ev->data2))
     {
@@ -585,12 +587,12 @@ boolean ST_Responder(event_t* ev)
 
         if (plyr->cheats & CF_NOCLIP)
         {
-            plyr->message = DEH_String(STSTR_NCON);
+            plyr->message = DEH_String(ststr_ncon);
             plyr->mo->flags |= MF_NOCLIP;
         }
         else
         {
-            plyr->message = DEH_String(STSTR_NCOFF);
+            plyr->message = DEH_String(ststr_ncoff);
             plyr->mo->flags &= ~MF_NOCLIP;
         }
     }
@@ -613,7 +615,7 @@ boolean ST_Responder(event_t* ev)
                 plyr->powers[i] = (i != 1);
             else
                 P_GivePower(plyr, i);
-            plyr->message = DEH_String(STSTR_BEHOLDX);
+            plyr->message = DEH_String(ststr_beholdx);
         }
     }
     if(cht_CheckCheat(&cheat_powerup[ST_PUMPUP_H], ev->data2))
@@ -659,7 +661,7 @@ boolean ST_Responder(event_t* ev)
     if (cht_CheckCheat(&cheat_powerup[ST_PUMPUP], ev->data2))
     {
         // 'behold' power-up menu
-        plyr->message = DEH_String(STSTR_BEHOLD);
+        plyr->message = DEH_String(ststr_behold);
         return false;
     }
 
@@ -704,7 +706,7 @@ boolean ST_Responder(event_t* ev)
         }
 
         // So be it.
-        plyr->message = DEH_String(STSTR_CLEV);
+        plyr->message = DEH_String(ststr_clev);
         G_RiftExitLevel(map, 0, plyr->mo->angle);
     }
     else if(cht_CheckCheat(&cheat_scoot, ev->data2))
@@ -853,7 +855,7 @@ void ST_Ticker (void)
     //    st_chat = st_oldchat;
 }
 
-static int st_palette = 0;
+int st_palette = 0;
 
 //
 // ST_doPaletteStuff
@@ -914,7 +916,10 @@ void ST_doPaletteStuff(void)
     if (palette != st_palette)
     {
         st_palette = palette;
-        pal = (byte *) W_CacheLumpNum (lu_palette, PU_CACHE)+palette*768;
+        pal = (byte *) W_CacheLumpNum ((usegamma <= 8 ? 
+                                        lu_palette1 : 
+                                        lu_palette2), 
+                                        PU_CACHE) + palette * 768;
         I_SetPalette (pal);
     }
 
@@ -1514,10 +1519,9 @@ void ST_loadData(void)
 //    static int dword_8848C = 1; // STRIFE-TODO: what is the purpose of this?
 //    dword_8848C = 0;
 
-    if (lcd_gamma_fix)
-        lu_palette = W_GetNumForName (DEH_String("PALFIX"));
-    else
-        lu_palette = W_GetNumForName (DEH_String("PLAYPAL"));
+    lu_palette1 = W_GetNumForName (DEH_String("PALFIX"));
+    lu_palette2 = W_GetNumForName (DEH_String("PLAYPAL"));
+
     ST_loadGraphics();
 }
 
@@ -1616,7 +1620,10 @@ void ST_Stop (void)
     if (st_stopped)
         return;
 
-    I_SetPalette (W_CacheLumpNum (lu_palette, PU_CACHE));
+    I_SetPalette (W_CacheLumpNum ((usegamma <= 8 ? 
+                                   lu_palette1 : 
+                                   lu_palette2), 
+                                   PU_CACHE));
 
     st_stopped = true;
 }
