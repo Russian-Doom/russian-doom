@@ -245,7 +245,8 @@ void D_Display (void)
     }
 
     // save the current screen if about to wipe
-    if (gamestate != wipegamestate)
+    // [JN] Wiping: make optional
+    if (gamestate != wipegamestate && (screen_wiping || vanillaparm))
     {
         wipe = true;
         wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
@@ -451,6 +452,10 @@ void D_BindVariables(void)
     // * Added nickname, comport
 
     M_BindIntVariable("english_language",       &english_language);
+
+    // Rendering
+    M_BindIntVariable("uncapped_fps",           &uncapped_fps);
+    M_BindIntVariable("screen_wiping",          &screen_wiping);
 
     M_BindIntVariable("mouse_sensitivity",      &mouseSensitivity);
     M_BindIntVariable("sfx_volume",             &sfxVolume);
@@ -949,6 +954,11 @@ void D_SetGameDescription(void)
     gamedescription = GetGameName("Strife: Сага о поиске Сигиля");
     W_MergeFile("base/strife-common.wad");
 
+    if (!english_language)
+    {
+        W_MergeFile("base/strife-russian.wad");
+    }
+
     // [JN] Параметр "-file" перенесен из w_main.c
     // Необходимо для того, чтобы любые ресурсы из pwad-файлов
     // загружались после руссифицированных pwad-файлов.
@@ -1263,6 +1273,9 @@ static void D_DrawIntroSequence(void)
 {
     int laserpos;
     int robotpos;
+
+    // [JN] Disabled for dev needs.
+    return;
 
     if(!showintro)
         return;

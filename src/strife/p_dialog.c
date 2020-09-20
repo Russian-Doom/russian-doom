@@ -42,6 +42,7 @@
 #include "s_sound.h"
 #include "p_local.h"
 #include "p_inter.h"
+#include "jn.h"
 
 //
 // Defines and Macros
@@ -171,57 +172,32 @@ static rndmessage_t rndMessages[] =
         "PEASANT",
         10,
         {
-            // Пожалуйста, не трогай меня.
-            "gj;fkeqcnf< yt nhjufq vtyz>",
-
-            // Если собираешься навредить мне,
-            // я не стою твоих усилий.
-            "tckb cj,bhftimcz yfdhtlbnm vyt<\n"
-            "z yt cnj. ndjb[ ecbkbq>",
+            "PLEASE DON'T HURT ME.",
             
-            // Я ничего не знаю.
-            "z ybxtuj yt pyf.>",
-
-            // Уходи, или я позову стражу!
-            "e[jlb< bkb z gjpjde cnhf;e!",
+            "IF YOU'RE LOOKING TO HURT ME, I'M \n"
+            "NOT REALLY WORTH THE EFFORT.",
             
-            // Хотел бы я, чтобы однажды эти 
-            // постанцы узнали свое место и
-            // прекратили эту бесполезную 
-            // возню>
-            "[jntk ,s z< xnj,s jlyf;ls 'nb\n"
-            "gjdcnfyws epyfkb cdjt vtcnj b\n"
-            "ghtrhfnbkb 'ne ,tcgjktpye.\n"
-            "djpy.>",
+            "I DON'T KNOW ANYTHING.",
+            
+            "GO AWAY OR I'LL CALL THE GUARDS!",
+            
+            "I WISH SOMETIMES THAT ALL THESE \n"
+            "REBELS WOULD JUST LEARN THEIR \n"
+            "PLACE AND STOP THIS NONSENSE.",
 
-            // Просто оставь меня в покое, 
-            // ладно?
-            "ghjcnj jcnfdm vtyz d gjrjt<\n"
-            "kflyj?",
+            "JUST LEAVE ME ALONE, OK?",
 
-            // Я не совсем уверен, но мне
-            // кажется, что я знал некоторых
-            // служителей и ранее.
-            "z yt cjdctv edthty< yj vyt\n"
-            "rf;tncz< xnj z pyfk ytrjnjhs[\n"
-            "cke;bntktq b hfytt>",
+            "I'M NOT SURE, BUT SOMETIMES I THINK \n"
+            "THAT I KNOW SOME OF THE ACOLYTES.",
 
-            // Орден держит здесь все в
-            // крепкой узде.
-            "jhlty lth;bn pltcm dct d\n"
-            "rhtgrjq eplt>",
+            "THE ORDER'S GOT EVERYTHING AROUND HERE PRETTY WELL LOCKED UP TIGHT.",
 
-            // Без разрешения стражей порядка
-            // и шагу ступить нельзя.
-            ",tp hfphtitybz cnhf;tq gjhzlrf\n"
-            "b ifue cnegbnm ytkmpz>",
+            "THERE'S NO WAY THAT THIS IS JUST A \n"
+            "SECURITY FORCE.",
 
-            // Я слышал, что Орден обеспокоен
-            // повышенной активностью повстанцев
-            // в этом регионе.
-            "z cksifk< xnj jhlty j,tcgjrjty\n"
-            "gjdsityyjq frnbdyjcnm.\n"
-            "gjdcnfywtd d 'njv htubjyt>"
+            "I'VE HEARD THAT THE ORDER IS REALLY \n"
+            "NERVOUS ABOUT THE FRONT'S \n"
+            "ACTIONS AROUND HERE."
         }
     },
     // Rebel
@@ -266,52 +242,30 @@ static rndmessage_t rndMessages[] =
         "AGUARD",
         10,
         {
-            // Займсь своим делом, крестьянин.
-            "pfqvbcm cdjbv ltkjv< rhtcnmzyby>",
+            "MOVE ALONG,  PEASANT.",
 
-            // Следуя лишь по пути истинной
-            // веры, ты узришь правду.
-            "cktlez kbim gj genb bcnbyyjq\n"
-            "dths< ns ephbim ghfdle>",
+            "FOLLOW THE TRUE FAITH, ONLY THEN \n"
+            "WILL YOU BEGIN TO UNDERSTAND.",
 
-            // Только лишь через смерть можно
-            // достичь истинного перерождения
-            "njkmrj kbim xthtp cvthnm vj;yj\n"
-            "ljcnbxm bcnbyyjuj gththj;ltybz",
+            "ONLY THROUGH DEATH CAN ONE BE \n"
+            "TRULY REBORN.",
 
-            // Я не расположен к пустой и
-            // бессмысленной болтовне. 
-            "z yt hfcgjkj;ty r gecnjq b\n"
-            ",tccvscktyyjq ,jknjdyt>",
+            "I'M NOT INTERESTED IN YOUR USELESS \n"
+            "DRIVEL.",
 
-            // Если бы я хотел с тобой говорить
-            // я бы тебе об этом сказал.
-            // 
-            "tckb ,s z [jntk c nj,jq ujdjhbnm<\n"
-            "z ,s nt,t j, 'njv crfpfk>",
+            "IF I HAD WANTED TO TALK TO YOU I \n"
+            "WOULD HAVE TOLD YOU SO.",
 
-            // Иди и надоедай кому-нибудь 
-            // другому!
-            "blb b yfljtlfq rjve-yb,elm\n"
-            "lheujve!",
+            "GO AND ANNOY SOMEONE ELSE!",
 
-            // Проходи, не задерживайся!
-            "ghj[jlb< yt pflth;bdfqcz!",
+            "KEEP MOVING!",
 
-            // Если прозвучит тревога, лучше бы 
-            // тебе не стоять на нашем пути!
-            "tckb ghjpdexbn nhtdjuf< kexit ,s\n"
-            "nt,t yt cnjznm yf yfitv genb!",
+            "IF THE ALARM GOES OFF, JUST STAY OUT OF OUR WAY!",
 
-            // Орден принесет очищение в этот
-            // мир и станет его проводником 
-            // в новую великую эпоху.
-            "jhlty ghbytctn jxbotybt d 'njn\n"
-            "vbh b cnfytn tuj ghjdjlybrjv\n"
-            "d yjde. dtkbre. 'gj[e>",
+            "THE ORDER WILL CLEANSE THE WORLD \n"
+            "AND USHER IT INTO THE NEW ERA.",
 
-            // Проблемы? Думаю никаких.
-            "ghj,ktvs? levf. ybrfrb[>",
+            "PROBLEM?  NO, I THOUGHT NOT.",
         }
     },
     // Beggar
@@ -321,46 +275,29 @@ static rndmessage_t rndMessages[] =
         {
             "ALMS FOR THE POOR?",
 
-            // Чего уставился, поверхностный?
-            "xtuj ecnfdbkcz< gjdth[yjcnysq?",
+            "WHAT ARE YOU LOOKING AT, SURFACER?",
 
             "YOU WOULDN'T HAVE ANY EXTRA FOOD, WOULD YOU?",
 
-            // Вы, поверхностные, никогда не
-            // сможете понять нас.
-            "ds< gjdth[yjcnyst< ybrjulf yt\n"
-            "cvj;tnt gjyznm yfc>",
+            "YOU  SURFACE PEOPLE WILL NEVER \n"
+            "                                                                 "
+            "                                      UNDERSTAND US.",
 
-            // Хах! Эта глупая стража никогда
-            // не найдет нас. Они даже не
-            // знают, что мы существуем.
-            "[f[! 'nf ukegfz cnhf;f ybrjulf\n"
-            "yt yfqltn yfc> jyb lf;t yt\n"
-            "pyf.n< xnj vs ceotcndetv.",
+            "HA, THE GUARDS CAN'T FIND US.  THOSE \n"
+            "IDIOTS DON'T EVEN KNOW WE EXIST.",
 
-            // Однажды всем, кто не служит
-            // Ордену придется присоединиться
-            // к нам.
-            "jlyf;ls dctv< rnj yt cke;bn\n"
-            "jhltye ghbltncz ghbcjtlbybnmcz\n"
-            "r yfv>",
+            "ONE DAY EVERYONE BUT THOSE WHO SERVE THE ORDER WILL BE FORCED TO "
+            "  JOIN US.",
 
-            // Уставился... Знай же, что ты
-            // и сам станешь таким однажды.
-            "ecnfdbkcz>>> pyfq ;t< xnj ns\n"
-            "b cfv cnfytim nfrbv jlyf;ls>",
+            "STARE NOW,  BUT YOU KNOW THAT THIS WILL BE YOUR OWN FACE ONE DAY.",
 
             // Note: "NOTHING THING" is an authentic typo
             "THERE'S NOTHING THING MORE \n"
             "ANNOYING THAN A SURFACER WITH AN ATTITUDE!",
 
-            // Орден 
             "THE ORDER WILL MAKE SHORT WORK OF YOUR PATHETIC FRONT.",
 
-            // Полегче, поверхностный. Мы
-            // знаем своих врагов!
-            "gjktuxt< gjdth[yjcnysq> vs\n"
-            "pyftv cdjb[ dhfujd!"
+            "WATCH YOURSELF SURFACER. WE KNOW OUR ENEMIES!"
         }
     },
     // Templar
@@ -397,6 +334,290 @@ static rndmessage_t rndMessages[] =
             "PATHETIC SHELL OF A BODY, \n"
             "YOU'LL ENTER INTO THE ARMS OF THE \n"
             "ORDER."
+        }
+    }
+};
+
+static rndmessage_t rndMessages_Rus[] = 
+{
+    // Peasants
+    {
+        "PEASANT",
+        10,
+        {
+            // [rus] Пожалуйста, не трогай меня.
+            "gj;fkeqcnf< yt nhjufq vtyz>",
+
+            // [rus] Если ты хочешь ударить меня, то
+            // [rus] я не стою твоих усилий.
+            "tckb ns [jxtim elfhbnm vtyz< nj \n"
+            "z yt cnj. ndjb[ ecbkbq>",
+
+            // [rus] Я ничего не знаю.
+            "z ybxtuj yt pyf.>",
+
+            // [rus] Уходи, или я позову стражу!
+            "e[jlb< bkb z gjpjde cnhf;e!",
+
+            // [rus] Иногда мне хочется, чтобы все эти
+            // [rus] повстанцы просто поняли свое
+            // [rus] место и прекратили эту
+            // [rus] пустую возню.
+            "byjulf vyt [jxtncz< xnj,s dct 'nb \n" 
+            "gjdcnfyws ghjcnj gjyzkb cdjt \n" 
+            "vtcnj b ghtrhfnbkb 'ne \n"
+            "gecne. djpy.>",
+
+            // [rus] Просто оставь меня в покое,
+            // [rus] хорошо?
+            "ghjcnj jcnfdm vtyz d gjrjt< \n"
+            "[jhjij?",
+
+            // [rus] Я не уверен, но порой мне кажется,
+            // [rus] что я узнаю некоторых
+            // [rus] служителей.
+            "z yt edthty< yj gjhjq vyt rf;tncz< \n"
+            "xnj z epyf. ytrjnjhs[ \n"
+            "cke;bntktq>",
+
+            // [rus] Орден держит тут все под замком.
+            "jhlty lth;bn nen dct gjl pfvrjv>",
+
+            // [rus] Без разрешения стражей порядка
+            // [rus] и шагу ступить нельзя.
+            ",tp hfphtitybz cnhf;tq gjhzlrf b \n"
+            "ifue cnegbnm ytkmpz>",
+
+            // [rus] Я слыхал, что Орден серьезно
+            // [rus] обеспокоен действиями
+            // [rus] повстанцев в этом районе.
+            "z cks[fk< xnj jhlty cthmtpyj \n"
+            "j,tcgjrjty ltqcndbzvb \n"
+            "gjdcnfywtd d 'njv hfqjyt>"
+        }
+    },
+    // Rebel
+    {
+        "REBEL",
+        10,
+        {
+            // [rus] Ордену никак не устоять против
+            // [rus] нас.
+            "jhltye ybrfr yt ecnjznm ghjnbd \n"
+            "yfc>",
+
+            // [rus] Мы почти готовы атаковать.
+            // [rus] Планы Мэйсила становятся ясны.
+            "vs gjxnb ujnjds fnfrjdfnm> \n"
+            "gkfys v'qcbkf cnfyjdzncz zcys>",
+
+            // [rus] Не беспокойся. Мы сразу за тобой.
+            "yt ,tcgjrjqcz> vs chfpe pf nj,jq>",
+
+            // [rus] Держись подальше от этих
+            // [rus] больших роботов. Они и мокрого
+            // [rus] места от тебя не оставят!
+            "lth;bcm gjlfkmit jn 'nb[ \n"
+            ",jkmib[ hj,jnjd> jyb b vjrhjuj \n"
+            "vtcnf jn nt,z yt jcnfdzn!",
+
+            // [rus] Близок день нашего триумфа.
+            // [rus] Скоро наши враги будут
+            // [rus] уничтожены!
+            ",kbpjr ltym yfituj nhbevaf> \n"
+            "crjhj yfib dhfub ,elen \n"
+            "eybxnj;tys!",
+
+            // [rus] Не расслабляйся. У нас
+            // [rus] по-прежнему хватает дел.
+            "yt hfcckf,kzqcz> e yfc \n"
+            "gj-ght;ytve [dfnftn ltk>",
+
+            // [rus] Мэйсил говорит, что на тебя
+            // [rus] сейчас вся надежда. Имей это
+            // [rus] в виду.
+            "v'qcbk ujdjhbn< xnj yf nt,z \n"
+            "ctqxfc dcz yflt;lf> bvtq 'nj \n"
+            "d dble>",
+
+            // [rus] Когда мы свергнем этих
+            // [rus] шарлатанов, то сможем
+            // [rus] воссоздать этот мир таким,
+            // [rus] каким он должен быть.
+            "rjulf vs cdthuytv 'nb[ \n"
+            "ifhkfnfyjd< nj cvj;tv \n"
+            "djccjplfnm 'njn vbh nfrbv< \n"
+            "rfrbv jy ljk;ty ,snm>",
+
+            // [rus] Помни, ты сражаешься не только
+            // [rus] за себя, но и за каждого здесь
+            // [rus] и снаружи.
+            "gjvyb< ns chf;ftimcz yt njkmrj \n"
+            "pf ct,z< yj b pf rf;ljuj pltcm \n"
+            "b cyfhe;b>",
+
+            // [rus] Пока хотя бы один из нас еще
+            // [rus] дышит, мы непобедимы.
+            "gjrf [jnz ,s jlby bp yfc tot \n"
+            "lsibn< vs ytgj,tlbvs>"
+        }
+    },
+    // Acolyte
+    {
+        "AGUARD",
+        10,
+        {
+            // [rus] Проходи, рабочий.
+            "ghj[jlb< hf,jxbq>",
+
+            // [rus] Следуй истинной вере. Только
+            // [rus] тогда ты начнешь понимать.
+            "cktleq bcnbyyjq dtht> njkmrj \n"
+            "njulf ns yfxytim gjybvfnm>",
+
+            // [rus] Истинное перерождение возможно
+            // [rus] только через смерть.
+            "bcnbyyjt gththj;ltybt djpvj;yj \n"
+            "njkmrj xthtp cvthnm>",
+
+            // [rus] Мне неинтересна твоя пустая
+            // [rus] болтовня.
+            "vyt ytbynthtcyf ndjz gecnfz \n"
+            ",jknjdyz>",
+
+            // [rus] Если бы я хотел поговорить с
+            // [rus] тобой, то сказал бы об этом.
+            "tckb ,s z [jntk gjujdjhbnm c \n"
+            "nj,jq< nj crfpfk ,s j, 'njv>",
+
+            // [rus] Иди и надоедай кому-нибудь
+            // [rus] другому!
+            "blb b yfljtlfq rjve-yb,elm \n"
+            "lheujve!",
+
+            // [rus] Иди куда шел!
+            "blb relf itk!",
+
+            // [rus] Если поднимется тревога, не 
+            // [rus] попадайся нам под ноги!
+            "tckb gjlybvtncz nhtdjuf< yt \n"
+            "gjgflfqcz yfv gjl yjub!",
+
+            // [rus] Орден очистит этот мир и положит
+            // [rus] начало новой эре!
+            "jhlty jxbcnbn 'njn vbh b gjkj;bn \n"
+            "yfxfkj yjdjq 'ht!",
+
+            // [rus] Что-то не так? Нет? Я так и думал.
+            "xnj-nj yt nfr? ytn? z nfr b levfk>",
+        }
+    },
+    // Beggar
+    {
+        "BEGGAR",
+        10,
+        {
+            // [rus] У тебя не найдется мелочи для бедняка?
+            "e nt,z yt yfqltncz vtkjxb lkz ,tlyzrf?",
+
+            // [rus] Что уставился, незнакомец?
+            "xnj ecnfdbkcz< ytpyfrjvtw?",
+
+            // [rus] У тебя случайно не найдется немного лишней еды?
+            "e nt,z ckexfqyj yt yfqltncz ytvyjuj kbiytq tls?",
+
+            // [rus] Вы, люди с поверхности, никогда не
+            // [rus] поймете нас.
+            "ds< k.lb c gjdth[yjcnb< ybrjulf yt \n"
+            "                                                                 "
+            "                                      gjqvtnt yfc>",
+
+            // [rus] Ха! Эта глупая стража никогда не найдет нас.
+            // [rus] Они даже не знают, что мы существуем.
+            "[f! 'nf ukegfz cnhf;f ybrjulf yt yfqltn yfc> \n"
+            "jyb lf;t yt pyf.n< xnj vs ceotcndetv>",
+
+            // [rus] Однажды всем, кто не служит Ордену, придется присоединиться
+            // [rus] к нам.
+            "jlyf;ls dctv< rnj yt cke;bn jhltye< ghbltncz ghbcjtlbybnmcz "
+            "  r yfv>",
+
+            // [rus] Смотри сколько влезет, но знай, что когда-нибудь так будет выглядеть и твое лицо.
+            "cvjnhb crjkmrj dktptn< yj pyfq< xnj rjulf-yb,elm nfr ,eltn dsukzltnm b ndjt kbwj>",
+
+            // Note: "NOTHING THING" is an authentic typo
+            // [rus] Ничто так не выводит из себя, как
+            // [rus] болтун с поверхности!
+            "ybxnj nfr yt dsdjlbn bp ct,z< rfr \n"
+            ",jkney c gjdth[yjcnb!",
+
+            // [rus] Орден быстро расправится с твоим бессильным сопротивлением.
+            "jhlty ,scnhj hfcghfdbncz c ndjbv ,tccbkmysv cjghjnbdktybtv>",
+
+            // [rus] Поосторожнее, человек с поверхности. Мы знаем, кто наш враг!
+            "gjjcnjhj;ytt< xtkjdtr c gjdth[yjcnb> vs pyftv< rnj yfi dhfu!"
+        }
+    },
+    // Templar
+    {
+        "PGUARD",
+        10,
+        {
+            // [rus] Мы длани судьбы. Прогневить нас
+            // [rus] означает встретить забвение!
+            "vs lkfyb celm,s> ghjuytdbnm yfc \n"
+            "jpyfxftn dcnhtnbnm pf,dtybt!",
+
+            // [rus] Орден очистит мир от слабых
+            // [rus] и порочных!
+            "jhlty jxbcnbn vbh jn ckf,s[ \n"
+            "b gjhjxys[!",
+
+            // [rus] Подчинись воле хозяев!
+            "gjlxbybcm djkt [jpztd!",
+
+            // [rus] Да здравствуют братья
+            // [rus] Ордена!
+            "lf plhfdcnde.n ,hfnmz \n"
+            "jhltyf!",
+
+            // [rus] Свободная воля - лишь иллюзия, созданная
+            // [rus] созданная для управления
+            // [rus] слабыми духом.
+            "cdj,jlyfz djkz - kbim bkk.pbz< \n"
+            "cjplfyyfz lkz eghfdktybz \n"
+            "ckf,svb le[jv>",
+
+            // [rus] Сила - путь к величию. Вступить в
+            // [rus] ряды Ордена означает пойти этим
+            // [rus] путем!
+            "cbkf - genm r dtkbxb.> dcnegbnm d \n"
+            "hzls jhltyf jpyfxftn gjqnb 'nbv \n"
+            "gentv!",
+
+            // [rus] Займи свое место среди
+            // [rus] праведных. Присоединись к нам!
+            "pfqvb cdjt vtcnj chtlb \n"
+            "ghfdtlys[> ghbcjtlbybcm r yfv!",
+
+            // [rus] Орден защищает своих.
+            "jhlty pfoboftn cdjb[>",
+
+            // [rus] Служители? Им еще только
+            // [rus] предстоит узреть подлинное
+            // [rus] величие Ордена.
+            "cke;bntkb? bv tot njkmrj \n"
+            "ghtlcnjbn ephtnm gjlkbyyjt \n"
+            "dtkbxbt jhltyf>",
+
+            // [rus] Если внутри этой бренной
+            // [rus] телесной оболочки есть хоть капля
+            // [rus] чести, ты присоединишься к
+            // [rus] Ордену.
+            "tckb dyenhb 'njq ,htyyjq \n"
+            "ntktcyjq j,jkjxrb tcnm [jnm rfgkz \n"
+            "xtcnb< ns ghbcjtlbybimcz r \n"
+            "jhltye>",
         }
     }
 };
@@ -659,7 +880,15 @@ static const char *P_DialogGetMsg(const char *message)
                 // found a match, so return a random message
                 int rnd = M_Random();
                 int nummessages = rndMessages[i].nummessages;
-                return DEH_String(rndMessages[i].messages[rnd % nummessages]);
+
+                if (english_language)
+                {
+                    return DEH_String(rndMessages[i].messages[rnd % nummessages]);
+                }
+                else
+                {
+                    return DEH_String(rndMessages_Rus[i].messages[rnd % nummessages]);
+                }
             }
         }
     }
@@ -1195,8 +1424,8 @@ static void P_DialogDrawer(void)
                 // haleyjd 20120401: necessary to avoid undefined behavior:
                 M_StringCopy(choicetext2, choicetext, sizeof(choicetext2));
                 DEH_snprintf(choicetext, sizeof(choicetext),
-                             "%s for %d", choicetext2,
-                             currentdialog->choices[i].needamounts[0]);
+                             english_language ? "%s for %d" : "%s pf %d",
+                             choicetext2, currentdialog->choices[i].needamounts[0]);
             }
 
             M_WriteText(dialogmenu.x, dialogmenu.y + 3 + y, choicetext);
@@ -1264,8 +1493,10 @@ void P_DialogDoChoice(int choice)
             }
         }
         else
-            // У тебя и так достаточно!
-            message = DEH_String("e nt,z b nfr ljcnfnjxyj!");
+            
+            message = DEH_String(english_language ? 
+                                 "You seem to have enough!" :
+                                 "rf;tncz< nt,t [dfnbn!"); // [rus] Кажется, тебе хватит!
 
         // store next dialog into the talking actor
         nextdialog = currentchoice->next;
@@ -1421,8 +1652,9 @@ void P_DialogStart(player_t *player)
         if(mobjinfo[linetarget->type].name)
             dialogname = DEH_String(mobjinfo[linetarget->type].name); // mobjtype name
         else
-            // Персона
-            dialogname = DEH_String("gthcjyf"); // default name - like Joe in Doom 3 :P
+            // default name - like Joe in Doom 3 :P
+            // [rus] Горожанин
+            dialogname = DEH_String(english_language ? "Person" : "gthcjyf");
     }
 
     // setup number of choices to choose from
@@ -1463,19 +1695,19 @@ void P_DialogStart(player_t *player)
     {
     case 2:
         // "BYE!"
-        // "Прощай!"
-        byetext = DEH_String("ghjofq!");
+        // [rus] "Прощай!"
+        byetext = DEH_String(english_language ? "BYE!" : "ghjofq!");
         break;
     case 1:
         // "Thanks, Bye!"
-        // "Спасибо, прощай!"
-        byetext = DEH_String("cgfcb,j< ghjofq!");
+        // [rus] "Спасибо, прощай!"
+        byetext = DEH_String(english_language ? "Thanks, Bye!" : "cgfcb,j< ghjofq!");
         break;
     default:
     case 0:
         // "See you later!"
-        // "До встречи!"
-        byetext = DEH_String("lj dcnhtxb!");
+        // [rus] "До встречи!"
+        byetext = DEH_String(english_language ? "See you later!" : "lj dcnhtxb!");
         break;
     }
 

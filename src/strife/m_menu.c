@@ -63,6 +63,7 @@
 #include "m_menu.h"
 #include "p_dialog.h"
 #include "v_trans.h"
+#include "crispy.h"
 #include "jn.h"
 
 
@@ -80,9 +81,14 @@ extern boolean          message_dontfuckwithme;
 extern boolean          chat_on;        // in heads-up code
 extern boolean          sendsave;       // [STRIFE]
 
-//
-// defaulted values
-//
+// -----------------------------------------------------------------------------
+// [JN] Default values
+// -----------------------------------------------------------------------------
+
+// Rendering
+int screen_wiping = 1;
+
+
 int			mouseSensitivity = 5;
 
 // [STRIFE]: removed this entirely
@@ -662,7 +668,7 @@ menu_t  RD_Rendering_Def_Rus =
     &RD_Options_Def_Rus,
     RD_Rendering_Menu_Rus,
     M_RD_Draw_Rendering,
-    37,35,
+    11,35,
     0
 };
 
@@ -1430,12 +1436,48 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextSmall_ENG(37 + wide_delta, 25, "Rendering");
         dp_translation = NULL;
 
+        // Vertical synchronization
+        if (force_software_renderer == 1)
+        {
+            dp_translation = cr[CR_GOLD2DARKGOLD_STRIFE];
+            M_WriteTextSmall_ENG(244 + wide_delta, 45, "n/a");
+            dp_translation = NULL;
+        }
+        else
+        {
+            M_WriteTextSmall_ENG(244 + wide_delta, 45, vsync ? "on" : "off");
+        }
+
+        // Frame rate
+        M_WriteTextSmall_ENG(134 + wide_delta, 55, uncapped_fps ? "uncapped" : "35 fps");
+
+        // Pixel scaling
+        if (force_software_renderer == 1)
+        {
+            dp_translation = cr[CR_GOLD2DARKGOLD_STRIFE];
+            M_WriteTextSmall_ENG(146 + wide_delta, 75, "n/a");
+            dp_translation = NULL;
+        }
+        else
+        {
+            M_WriteTextSmall_ENG(146 + wide_delta, 75, smoothing ? "smooth" : "sharp");
+        }
+
+        // Video renderer
+        M_WriteTextSmall_ENG(164 + wide_delta, 85, force_software_renderer ? "software" : "hardware");
+
         //
         // Extra
         //
         dp_translation = cr[CR_GOLD2GRAY_STRIFE];
         M_WriteTextSmall_ENG(37 + wide_delta, 95, "Extra");
         dp_translation = NULL;
+
+        // Screen wiping effect
+        M_WriteTextSmall_ENG(207 + wide_delta, 115, screen_wiping ? "crossfade" : "off");
+
+        // Screenshot format
+        M_WriteTextSmall_ENG(196 + wide_delta, 125, png_screenshots ? "png" : "pcx");
     }
     else
     {
@@ -1445,15 +1487,58 @@ void M_RD_Draw_Rendering(void)
         // Рендеринг
         //
         dp_translation = cr[CR_GOLD2GRAY_STRIFE];
-        M_WriteTextSmall_RUS(37 + wide_delta, 25, "htylthbyu");
+        M_WriteTextSmall_RUS(11 + wide_delta, 25, "htylthbyu");
         dp_translation = NULL;
+
+        // Вертикальная синхронизация
+        if (force_software_renderer == 1)
+        {
+            dp_translation = cr[CR_GOLD2DARKGOLD_STRIFE];
+            M_WriteTextSmall_RUS(254 + wide_delta, 45, "y*l"); // Н/Д
+            dp_translation = NULL;
+        }
+        else
+        {
+            M_WriteTextSmall_RUS(254 + wide_delta, 45, vsync ? "drk" : "dsrk");
+        }
+
+        // Кадровая частота
+        if (uncapped_fps)
+        {
+            M_WriteTextSmall_RUS(164 + wide_delta, 55, ",tp juhfybxtybz");
+        }
+        else
+        {
+            M_WriteTextSmall_ENG(164 + wide_delta, 55, "35 fps");
+        }
+
+        // Пиксельное сглаживание
+        if (force_software_renderer == 1)
+        {
+            dp_translation = cr[CR_GOLD2DARKGOLD_STRIFE];
+            M_WriteTextSmall_RUS(220 + wide_delta, 75, "y*l"); // Н/Д
+            dp_translation = NULL;
+        }
+        else
+        {
+            M_WriteTextSmall_RUS(220 + wide_delta, 75, smoothing ? "drk" : "dsrk");
+        }
+
+        // Обработка видео
+        M_WriteTextSmall_RUS(159 + wide_delta, 85, force_software_renderer ? "ghjuhfvvyfz" : "fggfhfnyfz");
 
         //
         // Дополнительно
         //
         dp_translation = cr[CR_GOLD2GRAY_STRIFE];
-        M_WriteTextSmall_RUS(37 + wide_delta, 95, "ljgjkybntkmyj");
+        M_WriteTextSmall_RUS(11 + wide_delta, 95, "ljgjkybntkmyj");
         dp_translation = NULL;
+
+        // Эффект смены экранов
+        M_WriteTextSmall_RUS(202 + wide_delta, 115, screen_wiping ? "gtht[jl" : "dsrk");
+
+        // Формат скриншотов
+        M_WriteTextSmall_ENG(179 + wide_delta, 125, png_screenshots ? "png" : "pcx");
     }
 }
 
@@ -1481,7 +1566,6 @@ void M_RD_Change_Widescreen(int choice)
 
 void M_RD_Change_VSync(int choice)
 {
-    /*
     // [JN] Disable "vsync" toggling in software renderer
     if (force_software_renderer == 1)
     return;
@@ -1490,14 +1574,11 @@ void M_RD_Change_VSync(int choice)
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
-    */
 }
 
 void M_RD_Change_Uncapped(int choice)
 {
-    /*
     uncapped_fps ^= 1;
-    */
 }
 
 void M_RD_Change_FPScounter(int choice)
@@ -1516,7 +1597,6 @@ void M_RD_Change_DiskIcon(int choice)
 
 void M_RD_Change_Smoothing(int choice)
 {
-    /*
     // [JN] Disable "vsync" toggling in sofrware renderer
     if (force_software_renderer == 1)
     return;
@@ -1525,58 +1605,24 @@ void M_RD_Change_Smoothing(int choice)
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
-
-    // Update background of classic HUD and player face 
-    if (gamestate == GS_LEVEL)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
-    */
 }
 
 void M_RD_Change_Wiping(int choice)
 {
-    /*
-    switch(choice)
-    {
-        case 0:
-        screen_wiping--;
-        if (screen_wiping < 0)
-            screen_wiping = 2;
-        break;
-
-        case 1:
-        screen_wiping++;
-        if (screen_wiping > 2)
-            screen_wiping = 0;
-        break;
-    }
-    */
+    screen_wiping ^= 1;
 }
 
 void M_RD_Change_Screenshots(int choice)
 {
-    /*
     png_screenshots ^= 1;
-    */
 }
 
 void M_RD_Change_Renderer(int choice)
 {
-    /*
     force_software_renderer ^= 1;
 
     // Do a full graphics reinitialization
     I_InitGraphics();
-
-    // Update background of classic HUD and player face 
-    if (gamestate == GS_LEVEL)
-    {
-        ST_refreshBackground();
-        ST_drawWidgets(true);
-    }
-    */
 }
 
 
@@ -1596,12 +1642,22 @@ void M_AutoUseHealth(void)
     {
         players[consoleplayer].cheats ^= CF_AUTOHEALTH;
 
-        if(players[consoleplayer].cheats & CF_AUTOHEALTH)
+        if (english_language)
+        {
+            if (players[consoleplayer].cheats & CF_AUTOHEALTH)
+            players[consoleplayer].message = DEH_String("Auto use health ON");
+            else
+            players[consoleplayer].message = DEH_String("Auto use health OFF");
+        }
+        else
+        {
+            if (players[consoleplayer].cheats & CF_AUTOHEALTH)
             // Автоматическое лечение: включено
             players[consoleplayer].message = DEH_String("fdnjvfnbxtcrjt ktxtybt: drk.xtyj");
-        else
+            else
             // Автоматическое лечение: выключено
             players[consoleplayer].message = DEH_String("fdnjvfnbxtcrjt ktxtybt: dsrk.xtyj");
+        }
     }
 }
 
@@ -1614,33 +1670,23 @@ void M_ChangeShowText(void)
 {
     dialogshowtext ^= true;
 
-    if(dialogshowtext)
+    if (english_language)
+    {
+        if(dialogshowtext)
+        players[consoleplayer].message = DEH_String("Conversation Text On");
+        else
+        players[consoleplayer].message = DEH_String("Conversation Text Off");
+    }
+    else
+    {
+        if (dialogshowtext)
         // Текст в диалоговых окнах: включен
         players[consoleplayer].message = DEH_String("ntrcn d lbfkjujds[ jryf[: drk.xty");
-    else
+        else
         // Текст в диалоговых окнах: выключен
         players[consoleplayer].message = DEH_String("ntrcn d lbfkjujds[ jryf[: dsrk.xty");
+    }
 }
-
-//
-//      Toggle messages on/off
-//
-// [STRIFE] Messages cannot be disabled in Strife
-/*
-void M_ChangeMessages(int choice)
-{
-    // warning: unused parameter `int choice'
-    choice = 0;
-    showMessages = 1 - showMessages;
-
-    if (!showMessages)
-        players[consoleplayer].message = DEH_String(MSGOFF);
-    else
-        players[consoleplayer].message = DEH_String(MSGON);
-
-    message_dontfuckwithme = true;
-}
-*/
 
 
 //
@@ -1742,10 +1788,18 @@ void M_QuitResponse(int key)
 //
 void M_QuitStrife(int choice)
 {
+    if (english_language)
+    {
+    DEH_snprintf(endstring, sizeof(endstring),
+                 "Do you really want to leave?\n\n" DOSY);
+    }
+    else
+    {
     DEH_snprintf(endstring, sizeof(endstring),
                  // Вы действительно хотите \n выйти из игры?
                  "ds ltqcndbntkmyj [jnbnt\ndsqnb bp buhs?\n\n" DOSY);
-  
+    }
+
     M_StartMessage(endstring, M_QuitResponse, true);
 }
 
@@ -1766,22 +1820,6 @@ void M_ChangeSensitivity(int choice)
         break;
     }
 }
-
-/*
-// haleyjd [STRIFE] Unused
-void M_ChangeDetail(int choice)
-{
-    choice = 0;
-    detailLevel = 1 - detailLevel;
-
-    R_SetViewSize (screenblocks, detailLevel);
-
-    if (!detailLevel)
-	players[consoleplayer].message = DEH_String(DETAILHI);
-    else
-	players[consoleplayer].message = DEH_String(DETAILLO);
-}
-*/
 
 // [STRIFE] Verified unmodified
 void M_SizeDisplay(int choice)
@@ -3210,8 +3248,8 @@ void M_Drawer (void)
     ||  currentMenu == &RD_Options_Def     || currentMenu == &RD_Options_Def_Rus
     ||  currentMenu == &ReadDef1           || currentMenu == &ReadDef1_Rus
     ||  currentMenu == &ReadDef2           || currentMenu == &ReadDef2_Rus
-    /*||  currentMenu == &LoadDef            || currentMenu == &LoadDef_Rus
-    ||  currentMenu == &SaveDef            || currentMenu == &SaveDef_Rus*/)
+    ||  currentMenu == &LoadDef          /*|| currentMenu == &LoadDef_Rus*/
+    ||  currentMenu == &SaveDef          /*|| currentMenu == &SaveDef_Rus*/)
     {
         // Draw Sigil
         V_DrawPatch(x + CURSORXOFF - 7, currentMenu->y - 6 + itemOn*LINEHEIGHT,
