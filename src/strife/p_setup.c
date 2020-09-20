@@ -270,6 +270,8 @@ void P_LoadSectors (int lump)
 	ss->special = SHORT(ms->special);
 	ss->tag = SHORT(ms->tag);
 	ss->thinglist = NULL;
+	// [crispy] WiggleFix: [kb] for R_FixWiggle()
+	ss->cachedheight = 0;
 
     // [AM] Sector interpolation.  Even if we're
     //      not running uncapped, the renderer still
@@ -278,7 +280,8 @@ void P_LoadSectors (int lump)
     ss->interpfloorheight = ss->floorheight;
     ss->oldceilingheight = ss->ceilingheight;
     ss->interpceilingheight = ss->ceilingheight;
-    ss->oldgametic = 0;
+    // [crispy] inhibit sector interpolation during the 0th gametic
+    ss->oldgametic = -1;
     }
 	
     W_ReleaseLumpNum(lump);
