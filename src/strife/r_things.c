@@ -357,6 +357,7 @@ void R_DrawMaskedColumn (column_t *column, int baseclip)
     fixed_t	basetexturemid;
 
     basetexturemid = dc_texturemid;
+    dc_texheight = 0;
 
     for ( ; column->topdelta != 0xff ; ) 
     {

@@ -84,6 +84,7 @@ lighttable_t*		dc_colormap;
 int			dc_x; 
 int			dc_yl; 
 int			dc_yh; 
+int			dc_texheight;
 fixed_t			dc_iscale; 
 fixed_t			dc_texturemid;
 
@@ -107,7 +108,7 @@ void R_DrawColumn (void)
     fixed_t		frac;
     fixed_t		fracstep;	 
  
-    count = dc_yh - dc_yl; 
+    count = dc_yh - dc_yl + 1;
 
     // Zero length, column does not exceed a pixel.
     if (count < 0) 
@@ -133,16 +134,51 @@ void R_DrawColumn (void)
     // Inner loop that does the actual texture mapping,
     //  e.g. a DDA-lile scaling.
     // This is as fast as it gets.
-    do 
     {
-	// Re-map color indices from wall texture column
-	//  using a lighting/special effects LUT.
-	*dest = dc_colormap[dc_source[(frac>>FRACBITS)&127]];
-	
-	dest += SCREENWIDTH; 
-	frac += fracstep;
-	
-    } while (count--); 
+        const byte *source = dc_source;
+        const lighttable_t *colormap = dc_colormap;
+        int heightmask = dc_texheight-1;
+
+        if (dc_texheight & heightmask)   // not a power of 2 -- killough
+        {
+            heightmask++;
+            heightmask <<= FRACBITS;
+
+            if (frac < 0)
+                while ((frac += heightmask) < 0);
+            else
+                while (frac >= heightmask)
+                frac -= heightmask;
+
+            do
+            {
+                // Re-map color indices from wall texture column
+                //  using a lighting/special effects LUT.
+
+                // heightmask is the Tutti-Frutti fix -- killough
+
+                *dest = colormap[source[frac>>FRACBITS]];
+                dest += screenwidth;                     // killough 11/98
+                if ((frac += fracstep) >= heightmask)
+                    frac -= heightmask;
+            }
+            while (--count);
+        }
+        else
+        {
+            while ((count-=2)>=0)   // texture height is a power of 2 -- killough
+            {
+                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+                dest += screenwidth;   // killough 11/98
+                frac += fracstep;
+                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+                dest += screenwidth;   // killough 11/98
+                frac += fracstep;
+            }
+            if (count & 1)
+                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+        }
+    }
 } 
 
 
