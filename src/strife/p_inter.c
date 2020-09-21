@@ -42,6 +42,7 @@
 #include "p_pspr.h"
 #include "p_dialog.h"
 #include "f_finale.h"
+#include "jn.h"
 
 
 #define BONUSADD    6
@@ -707,239 +708,26 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher)
     {
         if(special->info->name)
         {
-            // [JN] Для соблюдения правил русского языка (сообщений в разном роде),
-            // мне необходимо сделать разные сообщения получения разных предметов.
-            
-            // Амуниция 
-            
-            if(special->sprite == SPR_BLIT) // (bullets) Получена обойма. 
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf j,jqvf>");
-
-            else if(special->sprite == SPR_BBOX) // (box of bullets) Получена коробка патронов.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf rjhj,rf gfnhjyjd>");
-
-            else if(special->sprite == SPR_MSSL) // (missile) Получены ракеты.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextys hfrtns>");
-
-            else if(special->sprite == SPR_ROKT) // (box of missiles) Получен ящик ракет.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty zobr hfrtn>");
-
-            else if(special->sprite == SPR_BRY1) // (battery) Получена энергобатарея.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf 'ythuj,fnfhtz>");
-
-            else if(special->sprite == SPR_CPAC) // (cell pack) Получен энергокомплект.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty 'ythujrjvgktrn>");
-
-            else if(special->sprite == SPR_PQRL) // (poison bolts) Получены ядовитые болты.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextys zljdbnst ,jkns>");
-
-            else if(special->sprite == SPR_XQRL) // (electric bolts) Получены электрические болты.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextys 'ktrnhbxtcrbt ,jkns>");
-
-            else if(special->sprite == SPR_GRN1) // (he grenades) Получены осколочные гранаты.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextys jcrjkjxyst uhfyfns>");
-
-            else if(special->sprite == SPR_GRN2) // (wp grenades) Получены фосфорные гранаты.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextys ajcajhyst uhfyfns>");
-
-            else if(special->sprite == SPR_BKPK) // (backpack) Получен рюкзак с амуницией.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty h.rpfr c fveybwbtq>");
-
-            // Оружие
-
-            else if(special->sprite == SPR_RIFL) // (rifle) Получена штурмовая винтовка.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf inehvjdfz dbynjdrf>");
-
-            else if(special->sprite == SPR_FLAM) // (flame thrower) Получен огнемет.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty juytvtn>");
-
-            else if(special->sprite == SPR_MMSL) // (missile launcher) Получена мини ракетница.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf vbyb hfrtnybwf>");
-
-            else if(special->sprite == SPR_GRND) // (grenade launcher) Получен гранатомет.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty uhfyfnjvtn>");
-
-            else if(special->sprite == SPR_TRPD) // (mauler) Получен истязатель.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty bcnzpfntkm>");
-
-            else if(special->sprite == SPR_CBOW) // (crossbow) Получен арбалет.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty fh,fktn>"); 
-
-            else if(special->sprite == SPR_SIGL) // (Sigil) Получен Сигиль!
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty cbubkm!");
-
-            // Броня
-
-            else if(special->sprite == SPR_ARM1) // (Leather Armor) Получена кожаная броня.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf rj;fyfz ,hjyz>");
-
-            else if(special->sprite == SPR_ARM2) // (Metal Armor) Получена металлическая броня.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf vtnfkkbxtcrfz ,hjyz>");
-
-            else if(special->sprite == SPR_SHD1) // (Shadow Armor) Получена теневая броня.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf ntytdfz ,hjyz>");
-                
-            else if(special->sprite == SPR_MASK) // (Environmental_Suit) Получен защитный костюм.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty pfobnysq rjcn.v>");
-
-            // Аптечки
-
-            else if(special->sprite == SPR_STMP) // (Med patch) Получен медицинский пластырь. (ХАК)
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty vtlbwbycrbq gkfcnshm>");
-
-            else if(special->sprite == SPR_MDKT) // (Medical kit) Получена медицинская аптечка. (ХАК)
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf vtlbwbycrfz fgntxrf>");
-
-            else if(special->sprite == SPR_FULL) // (Medical kit) Получен хирургический комплект. (ХАК)
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty [bhehubxtcrbq rjvgktrn>");
-
-            // Предметы
-
-            else if(special->sprite == SPR_COIN) // (1 Gold) Получен 1 золотой.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty 1 pjkjnjq>");
-
-            else if(special->sprite == SPR_CRED) // (10 Gold) Получено 10 золотых.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj 10 pjkjns[>");
-
-            else if(special->sprite == SPR_SACK) // (25 Gold) Получено 25 золотых.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj 25 pjkjns[>");
-
-            else if(special->sprite == SPR_CHST) // (50 Gold) Получено 50 золотых.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj 50 pjkjns[>");
-
-            else if(special->sprite == SPR_PMAP) // (All-map powerup) Получена компьютерная карта.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf rjvgm.nthyfz rfhnf>");
-
-            else if(special->sprite == SPR_COMM) // (The Comm Unit) Получен коммуникатор.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rjvveybrfnjh>");
-                
-            else if(special->sprite == SPR_PMUP) // (scanner) Получен сканнер.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty crfyyth>");
-
-            else if(special->sprite == SPR_BEAC) // (Teleporter_Beacon) Получен телепортационный маяк.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty ntktgjhnfwbjyysq vfzr>");
-
-            else if(special->sprite == SPR_TARG) // (Targeter) Получен прицельное устройство.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj ghbwtkmyjt ecnhjqcndj>");
-
-            // Квестовые предметы
-
-            else if(special->sprite == SPR_UNIF) // (Guard Uniform) Получена униформа стража.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf eybajhvf cnhf;f>");
-
-            else if(special->sprite == SPR_OFIC) // (Officer's_Uniform) Получена офицерская униформа.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf jabwthcrfz eybajhvf>");
-
-            else if(special->sprite == SPR_RELC) // (Offering Chalice) Получена ритуальная чаша.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf hbnefkmyfz xfif>");
-
-            else if(special->sprite == SPR_COUP) // (Broken Power Coupling) Получено сломанное энерго сцепление.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj ckjvfyyjt 'ythuj cwtgktybt>");
-                
-            else if(special->sprite == SPR_RING) // (ring) Получено кольцо.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj rjkmwj>");
-                
-            else if(special->sprite == SPR_XPRK) // (Degnin_Ore) Получена дегниновая руда.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf ltuybyjdfz helf>");
-                
-            else if(special->sprite == SPR_EARS) // (Degnin_Ore) Получено отрезанное ухо.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj jnhtpfyyjt e[j>");
-                
-            // Ключи
-
-            else if(special->sprite == SPR_FUSL) // (Base_Key) Получен ключ от Базы.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jn ,fps>");
-
-            else if(special->sprite == SPR_REBL) // (Govs_Key) Получен ключ губернатора.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x ue,thyfnjhf>");
-
-            else if(special->sprite == SPR_TPAS) // (Passcard) Получен пропуск.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty ghjgecr>");
-
-            else if(special->sprite == SPR_CRD1) // (ID_Badge) Получено удостоверение личности.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj eljcnjdthtybt kbxyjcnb>");
-
-            else if(special->sprite == SPR_PRIS) // (Prison_Key) Получен ключ от тюрьмы.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jn n.hmvs>");
-
-            else if(special->sprite == SPR_HAND) // (Severed_Hand) Получена отсеченная рука.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyf jnctxtyyfz herf>");
-
-            else if(special->sprite == SPR_PWR1) // (Power1_Key) Получен первый энергоключ.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty jnctxtyyfz herf>");
-
-            else if(special->sprite == SPR_PWR2) // (Power2_Key) Получен второй энергоключ.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty dnjhjq herf>");
-
-            else if(special->sprite == SPR_PWR3) // (Power3_Key) Получен третий энергоключ.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty третий herf>");
-
-            else if(special->sprite == SPR_KY1G) // (Gold_Key) Получен золотой ключ.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty pjkjnjq rk.x>");
-                
-            else if(special->sprite == SPR_CRD2) // (ID_Card (gold)) Получено удостоверение личности.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj eljcnjdthtybt kbxyjcnb>");
-
-            else if(special->sprite == SPR_KY2S) // (Silver_Key) Получен серебряный ключ.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty ctht,hzysq rk.x>");
-
-            else if(special->sprite == SPR_ORAC) // (Oracle_Key) Получен ключ оракула.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jhfrekf>");
-                
-            else if(special->sprite == SPR_GYID) // (Military_ID) Получено военное удостоверение.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj djtyyjt eljcnjdthtybt>");
-                
-            else if(special->sprite == SPR_FUBR) // (Order_Key) Получен ключ Ордена.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jhltyf>");
-                
-            else if(special->sprite == SPR_WARE) // (Warehouse_Key) Получен ключ от склада.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jn crkflf>");
-
-            else if(special->sprite == SPR_KY3B) // (Brass_Key) Получен медный ключ.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty vtlysq rk.x>");
-                
-            else if(special->sprite == SPR_RCRY) // (Red_Crystal_Key) Получен красный кристальный ключ.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rhfcysq rhbcnfkmysq rk.x>");
-
-            else if(special->sprite == SPR_BCRY) // (Blue_Crystal_Key) Получен синий кристальный ключ.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty cbybq rhbcnfkmysq rk.x>");
-
-            else if(special->sprite == SPR_CHAP) // (Chapel_Key) Получен ключ от часовни.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jn xfcjdyb>");
-
-            else if(special->sprite == SPR_TUNL) // (Catacomb_Key) Получен ключ от катакомб.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jn rfnfrjv,>");
-
-            else if(special->sprite == SPR_SECK) // (Security_Key) Получен ключ безопасности.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x ,tpjgfcyjcnb>");
-                
-            else if(special->sprite == SPR_GOID) // (Core_Key) Получен ключ от ядра.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jn zlhf>");
-                
-            else if(special->sprite == SPR_BLTK) // (Mauler_Key) Получен ключ истязателя.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x bcnzpfntkz>");
-                
-            else if(special->sprite == SPR_PROC) // (Factory_Key) Получен ключ от фабрики.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jn af,hbrb>");
-                
-            else if(special->sprite == SPR_MINE) // (Factory_Key) Получен ключ от шахт.
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty rk.x jn if[n>");
-
-            // Все остальные (возможные) предметы
-
-            else // "Получено: %s."
-                DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkextyj: %s>", DEH_String(special->info->name));
+            DEH_snprintf(pickupmsg, sizeof(pickupmsg), english_language ?
+                         "You picked up the %s." :
+                         "gjkextyj: %s>",    // [JN] Получено: %s.
+                         DEH_String(special->info->name));
         }
-
-        else // (You picked up the item.) Получен предмет."
-            DEH_snprintf(pickupmsg, sizeof(pickupmsg), "gjkexty ghtlvtn>");
+        else
+        {
+            DEH_snprintf(pickupmsg, sizeof(pickupmsg), english_language ?
+                         "You picked up the item." :
+                         "gjkexty ghtlvtn>");  // [rus] Получен предмет.
+        }
     }
     // use the first character to indicate that the player is full on items
     else if(pickupmsg[0] == '!')
     {
         // "You cannot hold any more."
         // "Вы не сможете унести больше."
-        DEH_snprintf(pickupmsg, sizeof(pickupmsg), "ds yt cvj;tnt eytcnb ,jkmit>");
+        DEH_snprintf(pickupmsg, sizeof(pickupmsg), english_language ?
+                     "You cannot hold any more." :
+                     "ytn vtcnf d bydtynfht>"); // [rus] Нет места в инвентаре.
         player->message = pickupmsg;
         return;
     }
@@ -1010,9 +798,7 @@ void P_KillMobj(mobj_t* source, mobj_t* target)
             // villsa [STRIFE] new messages when fragging players
             // haleyjd 20141024: corrected; uses player->allegiance, not mo->miscdata
             DEH_snprintf(plrkilledmsg, sizeof(plrkilledmsg),
-                         // "%s killed %s"
-                         // "%s убил %s"
-                         "%s e,bk %s",
+                         english_language ? "%s killed %s" : "%s e,bk %s",
                          player_names[source->player->allegiance],
                          player_names[target->player->allegiance]);
 
@@ -1194,10 +980,10 @@ void P_KillMobj(mobj_t* source, mobj_t* target)
         EV_DoDoor(&junk, vld_close);
         P_NoiseAlert(players[0].mo, players[0].mo);
 
-        M_snprintf(plrkilledmsg, sizeof(plrkilledmsg),
-                   // "You're dead!  You set off the alarm."
-                   // "Ты покойник! Сработала тревога!"
-                   "%s", DEH_String("ns gjrjqybr! chf,jnfkf nhtdjuf!"));
+        M_snprintf(plrkilledmsg, sizeof(plrkilledmsg), "%s",
+                   DEH_String(english_language ?
+                   "You're dead!  You set off the alarm." :
+                   "ns gjlyzk nhtdjue! ujnjdmcz r cvthnb!")); // [rus] Ты поднял тревогу! Готовься к смерти!
         if(!deathmatch)
             players[consoleplayer].message = plrkilledmsg;
 
@@ -1236,10 +1022,10 @@ void P_KillMobj(mobj_t* source, mobj_t* target)
     case MT_TOKEN_ALARM:
         P_NoiseAlert(players[0].mo, players[0].mo);
 
-        M_snprintf(plrkilledmsg, sizeof(plrkilledmsg),
-                   // "You Fool!  You've set off the alarm"
-                   // "Глупец! Ты поднял тревогу!"
-                   "%s", DEH_String("ukegtw! ns gjlyzk nhtdjue!"));
+        M_snprintf(plrkilledmsg, sizeof(plrkilledmsg), "%s",
+                   DEH_String(english_language ?
+                   "You Fool!  You've set off the alarm" :
+                   "ukegtw! ns drk.xbk cbuyfkbpfwb.!")); // [rus] Глупец! Ты включил сигнализацию!
         if(!deathmatch)
             players[consoleplayer].message = plrkilledmsg;
         return;

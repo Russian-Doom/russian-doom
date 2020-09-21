@@ -38,6 +38,7 @@
 #include "m_random.h"
 #include "s_sound.h"
 #include "p_inter.h"
+#include "jn.h"
 
 
 
@@ -875,12 +876,10 @@ boolean P_UseInventoryItem(player_t* player, int item)
             name = "Item";
 
         M_snprintf(useinventorymsg, sizeof(useinventorymsg),
-                   // "You used the %s."
-                   // "Использовано: %s."
-                   // "bcgjkmpjdfyj: %s>"
-                   // [JN] ХАК: Сообщения об использовании записаны в info.c,
-                   // в то время как сообщения о получении записаны в p_inter.c
-                   "%s", name);
+                   english_language ? 
+                   "You used the %s." : 
+                   "bcgjkmpjdfyj: %s>", // [JN] Использовано:
+                   name);
         player->message = useinventorymsg;
 
         if(player == &players[consoleplayer])
@@ -915,7 +914,9 @@ boolean P_ItemBehavior(player_t* player, int item)
     case SPR_PMUP:  // 191
         if(!player->powers[pw_allmap])
         {
-            player->message = "The scanner won't work without a map!";
+            player->message = english_language ?
+            "The scanner won't work without a map!" :
+            "Crfyth yt ,eltn hf,jnfnm ,tp rfhns!"; // [JN] Сканер не будет работать без карты!
             return false;
         }
         player->powers[pw_allmap] = PMUPTICS;
