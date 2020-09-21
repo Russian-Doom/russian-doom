@@ -264,7 +264,11 @@ void D_Display (void)
         if (!gametic)
             break;
         if (automapactive)
+        {
+            // [crispy] update automap while playing
+            R_RenderPlayerView (&players[displayplayer]);
             AM_Drawer ();
+        }
         if (wipe || (viewheight != (200 <<hires) && fullscreen) )
             redrawsbar = true;
         // haleyjd 08/29/10: [STRIFE] Always redraw sbar if menu is/was active

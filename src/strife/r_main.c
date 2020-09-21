@@ -912,6 +912,11 @@ void R_RenderPlayerView (player_t* player)
     // Clear buffers.
     R_ClearClipSegs ();
     R_ClearDrawSegs ();
+    if (automapactive)
+    {
+        R_RenderBSPNode (numnodes-1);
+        return;
+    }
     R_ClearPlanes ();
     R_ClearSprites ();
     
