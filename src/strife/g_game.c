@@ -1901,9 +1901,9 @@ void G_DoSaveGame (char *path)
     // [STRIFE]: custom message logic
     if(!strcmp(path, savepath))
     {
-        // "%s saved."
-        // "Игра сохранена."
-        M_snprintf(savename, sizeof(savename), "buhf cj[hfytyf>", character_name);
+        M_snprintf(savename, sizeof(savename), english_language ?
+                   "%s saved." : "buhf cj[hfytyf>", // [JN] "Игра сохранена." (no save name)
+                   character_name);
         players[consoleplayer].message = savename;
     }
 
