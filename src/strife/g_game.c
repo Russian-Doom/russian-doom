@@ -70,6 +70,7 @@
 
 #include "g_game.h"
 #include "rd_lang.h"
+#include "jn.h"
 
 
 #define SAVEGAMESIZE	0x2c000
