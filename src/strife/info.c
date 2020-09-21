@@ -5499,9 +5499,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_GIVEQUEST|MF_NOTDMATCH,        //flags
-        "jnctxtyyfz_herf",     //namepointer
-        // Severed_Hand
-        // Отсеченная рука
+        "Severed_Hand",     //namepointer
     },
 
     {       /*MT_POWER1KEY*/
@@ -5528,9 +5526,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "gthdsq_'ythujrk.x",       //namepointer
-        // Power1_Key
-        // Первый энергоключ
+        "Power1_Key",       //namepointer
     },
 
     {       /*MT_POWER2KEY*/
@@ -5557,9 +5553,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "dnjhjq_'ythujrk.x",       //namepointer
-        // Power2_Key
-        // Второй энергоключ
+        "Power2_Key",       //namepointer
     },
 
     {       /*MT_POWER3KEY*/
@@ -5586,9 +5580,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "nhtnbq 'ythujrk.x",       //namepointer
-        // Power3_Key
-        // Третий энергоключ
+        "Power3_Key",       //namepointer
     },
 
     {       /*MT_KEY_GOLD*/
@@ -5615,9 +5607,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "pjkjnjq_rk.x",     //namepointer
-        // Gold_Key
-        // Золотой ключ
+        "Gold_Key",     //namepointer
     },
 
     {       /*MT_KEY_ID_GOLD*/
@@ -5644,9 +5634,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "eljcnjdthtybt",      //namepointer
-        // ID_Card
-        // Удостоверение
+        "ID_Card",      //namepointer
     },
 
     {       /*MT_KEY_SILVER*/
@@ -5673,9 +5661,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "ctht,hzysq_rk.x",       //namepointer
-        // Silver_Key
-        // Серебряный ключ
+        "Silver_Key",       //namepointer
     },
 
     {       /*MT_KEY_ORACLE*/
@@ -5702,9 +5688,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_jhfrekf",       //namepointer
-        // Oracle_Key
-        // Ключ Оракула
+        "Oracle_Key",       //namepointer
     },
 
     {       /*MT_MILITARYID*/
@@ -5731,9 +5715,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "gfccgjhn_djbyf",      //namepointer
-        // Military_ID
-        // Пасспорт воина
+        "Military_ID",      //namepointer
     },
 
     {       /*MT_KEY_ORDER*/
@@ -5760,9 +5742,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_jhltyf",        //namepointer
-        // Order_Key
-        // Ключ Ордена
+        "Order_Key",        //namepointer
     },
 
     {       /*MT_KEY_WAREHOUSE*/
@@ -5789,9 +5769,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_jn_crkflf",        //namepointer
-        // Warehouse_Key
-        // Ключ от склада
+        "Warehouse_Key",        //namepointer
     },
 
     {       /*MT_KEY_BRASS*/
@@ -5818,9 +5796,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "vtlysq_rk.x",        //namepointer
-        // Brass_Key
-        // Медный ключ
+        "Brass_Key",        //namepointer
     },
 
     {       /*MT_KEY_RED_CRYSTAL*/
@@ -5847,9 +5823,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rhfcysq_rhbcnfkk",      //namepointer
-        // Red_Crystal_Key
-        // Красный кристалл
+        "Red_Crystal_Key",      //namepointer
     },
 
     {       /*MT_KEY_BLUE_CRYSTAL*/
@@ -5876,9 +5850,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "cbybq_rhbcnfkk",     //namepointer
-        // Blue_Crystal_Key
-        // Синий кристалл
+        "Blue_Crystal_Key",     //namepointer
     },
 
     {       /*MT_KEY_CHAPEL*/
@@ -5905,9 +5877,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_jn_xfcjdyb",       //namepointer
-        // Chapel_Key
-        // Ключ от часовни
+        "Chapel_Key",       //namepointer
     },
 
     {       /*MT_CATACOMBKEY*/
@@ -5934,9 +5904,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_GIVEQUEST|MF_NOTDMATCH,        //flags
-        "rk.x_jn_rfnfrjv,",     //namepointer
-        // Catacomb_Key
-        // Ключ от катакомб
+        "Catacomb_Key",     //namepointer
     },
 
     {       /*MT_SECURITYKEY*/
@@ -5963,9 +5931,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_,tpjgfcyjcnb",     //namepointer
-        // Security_Key
-        // Ключ безопасности
+        "Security_Key",     //namepointer
     },
 
     {       /*MT_KEY_CORE*/
@@ -5992,9 +5958,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_jn_zlhf",     //namepointer
-        // Core_Key
-        // Ключ от ядра
+        "Core_Key",     //namepointer
     },
 
     {       /*MT_KEY_MAULER*/
@@ -6021,9 +5985,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_bcnzpfntkz",       //namepointer
-        // Mauler_Key
-        // Ключ Истязателя
+        "Mauler_Key",       //namepointer
     },
 
     {       /*MT_KEY_FACTORY*/
@@ -6050,9 +6012,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_jn_af,hbrb",      //namepointer
-        // Factory_Key
-        // Ключ от фабрики
+        "Factory_Key",      //namepointer
     },
 
     {       /*MT_KEY_MINE*/
@@ -6079,9 +6039,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rk.x_jn_if[n",     //namepointer
-        // MINE_KEY
-        // Ключ от шахт
+        "MINE_KEY",     //namepointer
     },
 
     {       /*MT_NEWKEY5*/
@@ -6108,9 +6066,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "yjdsq_rk.x_5",     //namepointer
-        // New_Key5
-        // Новый ключ 5
+        "New_Key5",     //namepointer
     },
 
     {       /*MT_INV_SHADOWARMOR*/
@@ -6137,9 +6093,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "yfltnf_ntytdfz_,hjyz",     //namepointer
-        // Shadow_armor
-        // ХАК: Надета теневая броня
+        "Shadow_armor",     //namepointer
     },
 
     {       /*MT_INV_SUIT*/
@@ -6166,9 +6120,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "yfltn_pfobnysq_rjcn.v>",       //namepointer
-        // Environmental_Suit
-        // ХАК: Надет защитный костюм
+        "Environmental_Suit",       //namepointer
     },
 
     {       /*MT_QUEST_UNIFORM*/
@@ -6249,9 +6201,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "rjvgm.nthyfz_rfhnf",      //namepointer
-        // map
-        // Компьютерная карта
+        "map",      //namepointer
     },
 
     {       /*MT_INV_RADAR*/
@@ -6278,9 +6228,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "bcgjkmpjdfy_crfyth>",      //namepointer
-        // scanner
-        // ХАК: Использован сканер.
+        "scanner",      //namepointer
     },
 
     {       /*MT_BEACON*/
@@ -6307,9 +6255,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_DROPPED,      //flags
-        "bcgjkmpjdfy_ntktgjhnfwbjyysq_vfqr>",        //namepointer
-        // Teleporter_Beacon
-        // ХАК: Использован телепортационный маяк.
+        "Teleporter_Beacon",        //namepointer
     },
 
     {       /*MT_INV_TARGETER*/
@@ -6336,9 +6282,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "bcgjkmpjdfyj_ghbwtkmyjt_ecnhjqcndj>",     //namepointer
-        // Targeter
-        // ХАК: Использовано прицельное устройство.
+        "Targeter",     //namepointer
     },
 
     {       /*MT_MONY_1*/
@@ -6365,9 +6309,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_DROPPED|MF_NOTDMATCH,      //flags
-        "1_pjkjnjq",     //namepointer
-        // coin
-        // 1 золотой
+        "coin",     //namepointer
     },
 
     {       /*MT_MONY_10*/
@@ -6394,9 +6336,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_DROPPED|MF_NOTDMATCH,      //flags
-        "10_pjkjns[",       //namepointer
-        // 10_gold
-        // 10 золотых
+        "10_gold",       //namepointer
     },
 
     {       /*MT_MONY_25*/
@@ -6423,9 +6363,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_DROPPED|MF_NOTDMATCH,      //flags
-        "25_pjkjns[",       //namepointer
-        // 25_gold
-        // 25 золотых
+        "25_gold",       //namepointer
     },
 
     {       /*MT_MONY_50*/
@@ -6452,9 +6390,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_DROPPED|MF_NOTDMATCH,      //flags
-        "50_pjkjns[",       //namepointer
-        // 50_gold
-        // 50 золотых
+        "50_gold",       //namepointer
     },
 
     {       /*MT_MONY_300*/
@@ -6481,9 +6417,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_GIVEQUEST|MF_DROPPED,     //flags
-        "300_pjkjns[",      //namepointer
-        // 300_gold
-        // 300 золотых
+        "300_gold",      //namepointer
     },
 
     {       /*MT_TOKEN_RING*/
@@ -6510,9 +6444,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_GIVEQUEST|MF_NOTDMATCH,        //flags
-        "rjkmwj",     //namepointer
-        // ring
-        // Кольцо
+        "ring",     //namepointer
     },
 
     {       /*MT_INV_CHALICE*/
@@ -6539,9 +6471,8 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_GIVEQUEST|MF_DROPPED,     //flags
-        "hbnefkmyfz_xfif",      //namepointer
-        // Offering_Chalice
-        // Ритуальная Чаша
+        "Offering_Chalice",      //namepointer
+
     },
 
     {       /*MT_TOKEN_EAR*/
@@ -6568,9 +6499,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_GIVEQUEST,        //flags
-        "jnhtpfyyjt_e[j",      //namepointer
-        // ear
-        // Отрезанное ухо
+        "ear",      //namepointer
     },
 
     {       /*MT_INV_COMMUNICATOR*/
@@ -6597,9 +6526,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_NOTDMATCH,     //flags
-        "rjvveybrfnjh",        //namepointer
-        // Communicator
-        // Коммуникатор
+        "Communicator",        //namepointer
     },
 
     {       /*MT_AGREN*/
@@ -6680,9 +6607,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "j,jqvf",      //namepointer
-        // clip_of_bullets
-        // Обойма
+        "clip_of_bullets",      //namepointer
     },
 
     {       /*MT_AAMMOBOX*/
@@ -6709,9 +6634,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "gfnhjys",       //namepointer
-        // ammo
-        // патроны
+        "ammo",       //namepointer
     },
 
     {       /*MT_AMINI*/
@@ -6738,9 +6661,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "vbyb_hfrtns",        //namepointer
-        // mini_missiles
-        // мини ракеты
+        "mini_missiles",        //namepointer
     },
 
     {       /*MT_AMINIBOX*/
@@ -6767,9 +6688,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "zobr_hfrtn",        //namepointer
-        // crate_of_missiles
-        // ящик ракет
+        "crate_of_missiles",        //namepointer
     },
 
     {       /*MT_ACELL*/
@@ -6850,9 +6769,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "zljdbnst_,jkns",     //namepointer
-        // poison_bolts
-        // ядовитые болты
+        "poison_bolts",     //namepointer
     },
 
     {       /*MT_AAROW*/
@@ -6879,9 +6796,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "'ktrnhbxtcrbt_,jkns",       //namepointer
-        // electric_bolts
-        // электрические болты
+        "electric_bolts",       //namepointer
     },
 
     {       /*MT_INV_SATCHEL*/
@@ -6908,9 +6823,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        ",jtrjvgktrn",     //namepointer
-        // ammo_satchel
-        // боекомплект
+        "ammo_satchel",     //namepointer
     },
 
     {       /*MT_PULSE*/
@@ -6937,9 +6850,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "inehvjdfz_dbynjdrf",      //namepointer
-        // assault_gun
-        // штурмовая винтовка
+        "assault_gun",      //namepointer
     },
 
     {       /*MT_RIFLESTAND*/
@@ -6966,9 +6877,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "inehvjdfz_dbynjdrf",      //namepointer
-        // assault_gun
-        // штурмовая винтовка
+        "assault_gun",      //namepointer
     },
 
     {       /*MT_FLAMETHROWER*/
@@ -6995,9 +6904,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL,     //flags
-        "juytvtn",        //namepointer
-        // flame_thrower
-        // огнемет
+        "flame_thrower",        //namepointer
     },
 
     {       /*MT_TOKEN_FLAME_THROWER_PARTS*/
@@ -9671,9 +9578,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         MF_SPECIAL|MF_GIVEQUEST|MF_DROPPED,     //flags
-        "ckjvfyyjt_'ythuj_cwtgktybt",        //namepointer
-        // BROKEN_POWER_COUPLING
-        // Сломанное энерго сцепление
+        "BROKEN_POWER_COUPLING",        //namepointer
     },
 
     {       /*MT_PILLAR10*/
@@ -10699,9 +10604,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         0,      //flags
-        "n.htvyst_dhfnf_hfpheitys!",       //namepointer
-        // You've_Blown_Up_the_Gates
-        // Тюремные врата разрушены!
+        "You've_Blown_Up_the_Gates",       //namepointer
     },
 
     {       /*MT_TOKEN_QUEST17*/
@@ -10998,9 +10901,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] =
         0,      //damage
         sfx_None,       //activesound
         0,      //flags
-        "rjvgm.nth_eybxnj;ty!",      //namepointer
-        // You've_Blown_Up_the_Computer
-        // Компьютер уничтожен
+        "You've_Blown_Up_the_Computer",      //namepointer
     },
 
     {       /*MT_TOKEN_QUEST28*/
