@@ -108,14 +108,14 @@ void R_DrawColumn (void)
     fixed_t		frac;
     fixed_t		fracstep;	 
  
-    count = dc_yh - dc_yl + 1;
+    count = dc_yh - dc_yl/* + 1*/; // [JN] TODO - crashing?
 
     // Zero length, column does not exceed a pixel.
     if (count < 0) 
 	return; 
 				 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH
+    if ((unsigned)dc_x >= screenwidth
 	|| dc_yl < 0
 	|| dc_yh >= SCREENHEIGHT) 
 	I_Error ("R_DrawColumn: %i to %i at %i", dc_yl, dc_yh, dc_x); 
@@ -134,6 +134,17 @@ void R_DrawColumn (void)
     // Inner loop that does the actual texture mapping,
     //  e.g. a DDA-lile scaling.
     // This is as fast as it gets.
+    do 
+    {
+	// Re-map color indices from wall texture column
+	//  using a lighting/special effects LUT.
+	*dest = dc_colormap[dc_source[(frac>>FRACBITS)&127]];
+
+	dest += SCREENWIDTH; 
+	frac += fracstep;
+
+    } while (count--); 
+    /* // [JN] TODO - crashing?
     {
         const byte *source = dc_source;
         const lighttable_t *colormap = dc_colormap;
@@ -179,6 +190,7 @@ void R_DrawColumn (void)
                 *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
         }
     }
+    */
 } 
 
 

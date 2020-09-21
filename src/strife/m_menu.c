@@ -3215,20 +3215,7 @@ void M_Drawer (void)
 
     // [JN] Define where to draw blinking skull and where blinking '*' symbol.
     // haleyjd 08/27/10: [STRIFE] Adjust to draw spinning Sigil
-    if (currentMenu == &MainDef            || currentMenu == &MainDef_Rus
-    ||  currentMenu == &NewDef             || currentMenu == &NewDef_Rus
-    ||  currentMenu == &RD_Options_Def     || currentMenu == &RD_Options_Def_Rus
-    ||  currentMenu == &ReadDef1           || currentMenu == &ReadDef1_Rus
-    ||  currentMenu == &ReadDef2           || currentMenu == &ReadDef2_Rus
-    ||  currentMenu == &LoadDef          /*|| currentMenu == &LoadDef_Rus*/
-    ||  currentMenu == &SaveDef          /*|| currentMenu == &SaveDef_Rus*/)
-    {
-        // Draw Sigil
-        V_DrawPatch(x + CURSORXOFF - 7, currentMenu->y - 6 + itemOn*LINEHEIGHT,
-                        W_CacheLumpName(DEH_String(cursorName[whichCursor]),
-                                        PU_CACHE));
-    }
-    else
+    if (currentMenu == &RD_Rendering_Def   || currentMenu == &RD_Rendering_Def_Rus)
     {
         // Draw blinking '*' symbol
         if (gametic & 8)
@@ -3238,7 +3225,13 @@ void M_Drawer (void)
                              currentMenu->y + itemOn*LINEHEIGHT_SML, "*");
         dp_translation = NULL;
     }
-
+    else
+    {
+        // Draw Sigil
+        V_DrawPatch(x + CURSORXOFF - 7, currentMenu->y - 6 + itemOn*LINEHEIGHT,
+                        W_CacheLumpName(DEH_String(cursorName[whichCursor]),
+                                        PU_CACHE));
+    }
 }
 
 

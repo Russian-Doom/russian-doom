@@ -42,6 +42,7 @@
 #include "s_sound.h"
 #include "p_local.h"
 #include "p_inter.h"
+#include "v_trans.h"
 #include "jn.h"
 
 //
@@ -1378,7 +1379,7 @@ static void P_DialogDrawer(void)
     if(dialogbgpiclumpnum != -1)
     {
         patch_t *patch = W_CacheLumpNum(dialogbgpiclumpnum, PU_CACHE);
-        V_DrawPatch(0, 0, patch);
+        V_DrawShadowedPatchStrife(0, 0, patch);
     }
 
     // if there's a valid background pic, delay drawing the rest of the menu 
@@ -1393,7 +1394,10 @@ static void P_DialogDrawer(void)
         }
 
         // draw character name
-        M_WriteText(12, 18, dialogname);
+        // [JN] Colorize
+        dp_translation = cr[CR_GOLD2GRAY_STRIFE];
+        M_WriteText(20, 18, dialogname); // [JN] Nicer placement (x coord was 12).
+        dp_translation = NULL;
         y = 28;
 
         // show text (optional for dialogs with voices)
@@ -1407,6 +1411,8 @@ static void P_DialogDrawer(void)
             finaly = 199 - height; // height it will bump down to if necessary.
 
         // draw divider
+        // [JN] Don't draw in Russian language because of much longer sentences.
+        if (english_language)
         M_WriteText(42, finaly - 6, DEH_String("______________________________"));
 
         dialogmenu.y = finaly + 6;
@@ -1428,12 +1434,19 @@ static void P_DialogDrawer(void)
                              choicetext2, currentdialog->choices[i].needamounts[0]);
             }
 
+            // [JN] Colorize
+            dp_translation = cr[CR_GOLD2GRAY_STRIFE];
             M_WriteText(dialogmenu.x, dialogmenu.y + 3 + y, choicetext);
+            dp_translation = NULL;
+
             y += 19;
         }
 
         // draw the final item for dismissing the dialog
+        // [JN] Colorize
+        dp_translation = cr[CR_GOLD2GRAY_STRIFE];
         M_WriteText(dialogmenu.x, 19 * i + dialogmenu.y + 3, dialoglastmsgbuffer);
+        dp_translation = NULL;
     }
 }
 
