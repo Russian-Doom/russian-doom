@@ -292,7 +292,8 @@ void M_SizeDisplay(int choice); // villsa [STRIFE]
 void ST_Stop(void);
 
 // [STRIFE]
-static char st_msgbuf[ST_MSGWIDTH];
+// [JN] TODO - inventory quering, needed?
+// static char st_msgbuf[ST_MSGWIDTH];
 
 // Respond to keyboard input events,
 //  intercept cheats.

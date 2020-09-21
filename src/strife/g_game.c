@@ -1097,11 +1097,11 @@ void G_Ticker (void)
         break; 
 
         // haleyjd 08/23/10: [STRIFE] No intermission.
-        /*
+        // [JN] Uncommented, disable compiler warning.
     case GS_INTERMISSION: 
-        WI_Ticker (); 
+        // WI_Ticker (); 
         break; 
-        */
+
         /*
     case GS_UNKNOWN: // STRIFE-TODO: What is this? is it ever used??
         F_WaitTicker();
