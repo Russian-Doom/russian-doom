@@ -518,45 +518,61 @@ static rndmessage_t rndMessages_Rus[] =
         "BEGGAR",
         10,
         {
-            // [rus] У тебя не найдется мелочи для бедняка?
-            "e nt,z yt yfqltncz vtkjxb lkz ,tlyzrf?",
+            // [rus] У тебя не найдется мелочи для 
+            //       бедняка?
+            "e nt,z yt yfqltncz vtkjxb lkz\n"
+            ",tlyzrf?",
 
             // [rus] Что уставился, незнакомец?
             "xnj ecnfdbkcz< ytpyfrjvtw?",
 
-            // [rus] У тебя случайно не найдется немного лишней еды?
-            "e nt,z ckexfqyj yt yfqltncz ytvyjuj kbiytq tls?",
+            // [rus] У тебя случайно не найдется
+            //       немного лишней еды?
+            "e nt,z ckexfqyj yt yfqltncz\n"
+            "ytvyjuj kbiytq tls?",
 
-            // [rus] Вы, люди с поверхности, никогда не
-            // [rus] поймете нас.
-            "ds< k.lb c gjdth[yjcnb< ybrjulf yt \n"
-            "                                                                 "
-            "                                      gjqvtnt yfc>",
+            // [rus] Вы, люди с поверхности, никогда
+            //       не поймете нас.
+            "ds< k.lb c gjdth[yjcnb< ybrjulf\n"
+            "yt gjqvtnt yfc>",
 
-            // [rus] Ха! Эта глупая стража никогда не найдет нас.
-            // [rus] Они даже не знают, что мы существуем.
-            "[f! 'nf ukegfz cnhf;f ybrjulf yt yfqltn yfc> \n"
-            "jyb lf;t yt pyf.n< xnj vs ceotcndetv>",
+            // [rus] Ха! Эта глупая стража никогда не
+            //       найдет нас. Они даже не знают,
+            //       что мы существуем.
+            "[f! 'nf ukegfz cnhf;f ybrjulf yt\n"
+            "yfqltn yfc> jyb lf;t yt pyf.n<\n"
+            "xnj vs ceotcndetv>",
 
-            // [rus] Однажды всем, кто не служит Ордену, придется присоединиться
-            // [rus] к нам.
-            "jlyf;ls dctv< rnj yt cke;bn jhltye< ghbltncz ghbcjtlbybnmcz "
-            "  r yfv>",
+            // [rus] Однажды всем, кто не служит 
+            //       Ордену, придется присоединиться
+            //       к нам.
+            "jlyf;ls dctv< rnj yt cke;bn\n"
+            "jhltye< ghbltncz ghbcjtlbybnmcz\n"
+            "r yfv>",
 
-            // [rus] Смотри сколько влезет, но знай, что когда-нибудь так будет выглядеть и твое лицо.
-            "cvjnhb crjkmrj dktptn< yj pyfq< xnj rjulf-yb,elm nfr ,eltn dsukzltnm b ndjt kbwj>",
+            // [rus] Смотри сколько влезет, но знай,
+            //       что когда-нибудь так будет
+            //       выглядеть и твое лицо.
+            "cvjnhb crjkmrj dktptn< yj pyfq<\n"
+            "xnj rjulf-yb,elm nfr ,eltn\n"
+            "dsukzltnm b ndjt kbwj>",
 
             // Note: "NOTHING THING" is an authentic typo
             // [rus] Ничто так не выводит из себя, как
-            // [rus] болтун с поверхности!
+            //       болтун с поверхности!
             "ybxnj nfr yt dsdjlbn bp ct,z< rfr \n"
             ",jkney c gjdth[yjcnb!",
 
-            // [rus] Орден быстро расправится с твоим бессильным сопротивлением.
+            // [rus] Орден быстро расправится с твоим
+            //       бессильным сопротивлением.
             "jhlty ,scnhj hfcghfdbncz c ndjbv ,tccbkmysv cjghjnbdktybtv>",
 
-            // [rus] Поосторожнее, человек с поверхности. Мы знаем, кто наш враг!
-            "gjjcnjhj;ytt< xtkjdtr c gjdth[yjcnb> vs pyftv< rnj yfi dhfu!"
+            // [rus] Поосторожнее, человек с
+            //       поверхности. Мы знаем, кто
+            //        наш враг!
+            "gjjcnjhj;ytt< xtkjdtr c\n"
+            "gjdth[yjcnb> vs pyftv< rnj\n"
+            "yfi dhfu!"
         }
     },
     // Templar
