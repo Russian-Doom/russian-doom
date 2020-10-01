@@ -1230,6 +1230,18 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_spy),
 
     //!
+    // Keyboard shortcut to go to next level.
+    //
+
+    CONFIG_VARIABLE_KEY(key_menu_nextlevel),
+
+    //!
+    // Keyboard shortcut to restart current level or demo.
+    //
+
+    CONFIG_VARIABLE_KEY(key_menu_reloadlevel),
+
+    //!
     // Keyboard shortcut to increase the screen size.
     //
 
@@ -1681,6 +1693,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(extra_player_faces),
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(agressive_lost_souls),
+    CONFIG_VARIABLE_INT(pistol_start),
     CONFIG_VARIABLE_INT(fast_quickload),
 
     // Gameplay: Demos

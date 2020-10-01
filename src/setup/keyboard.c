@@ -70,6 +70,7 @@ static int *shortcuts[] = { &key_menu_help, &key_menu_save, &key_menu_load,
                             &key_menu_qload, &key_menu_quit, &key_menu_gamma,
                             &key_menu_incscreen, &key_menu_decscreen, 
                             &key_menu_screenshot,
+                            &key_menu_nextlevel, &key_menu_reloadlevel,
                             &key_message_refresh, &key_multi_msg,
                             &key_multi_msgplayer[0], &key_multi_msgplayer[1],
                             &key_multi_msgplayer[2], &key_multi_msgplayer[3] };
@@ -678,6 +679,17 @@ static void OtherKeysDialog(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(unused))
                          "Multiplayer spy" :
                          "Вид другого игрока",
                          &key_spy);
+    if (gamemission == doom || gamemission == heretic)
+    {
+    AddKeyControl(table, english_language ?
+                         "Go to next level" :
+                         "Перейти на следующий уровень",
+                         &key_menu_nextlevel);
+    AddKeyControl(table, english_language ?
+                         "Restart level/demo" :
+                         "Перезагрузить уровень/демо",
+                         &key_menu_reloadlevel);
+    }
 
     AddKeyControl(table, english_language ?
                          "Increase screen size" :

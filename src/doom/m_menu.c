@@ -7114,6 +7114,167 @@ static boolean IsNullKey(int key)
     return key == KEY_PAUSE || key == KEY_CAPSLOCK || key == KEY_SCRLCK || key == KEY_NUMLOCK;
 }
 
+// [crispy] reload current level / go to next level
+// adapted from prboom-plus/src/e6y.c:369-449
+static int G_ReloadLevel(void)
+{
+    int result = false;
+
+    if (gamestate == GS_LEVEL)
+    {
+        // [crispy] restart demos from the map they were started
+        if (demorecording)
+        {
+            gamemap = startmap;
+        }
+        G_DeferedInitNew(gameskill, gameepisode, gamemap);
+        result = true;
+    }
+
+    return result;
+}
+
+static int G_GotoNextLevel(void)
+{
+    byte doom_next[5][9] = {
+    {12, 13, 19, 15, 16, 17, 18, 21, 14},
+    {22, 23, 24, 25, 29, 27, 28, 31, 26},
+    {32, 33, 34, 35, 36, 39, 38, 41, 37},
+    {42, 49, 44, 45, 46, 47, 48, 51, 43},
+    {52, 53, 54, 55, 56, 59, 58, 11, 57},
+    };
+
+    byte doom2_next[33] = {
+     2,  3,  4,  5,  6,  7,  8,  9, 10, 11,
+    12, 13, 14, 15, 31, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 1,
+    32, 16, 3
+    };
+
+    byte jaguar_next[26] = {
+     2,  3, 24,  5,  6,  7,  8,  9, 10, 11,
+    12, 13, 25, 15, 16, 17, 18, 19, 20, 21,
+    26, 23,  1,  4, 14, 22
+    };
+
+    byte nerve_next[9] = {
+    2, 3, 4, 9, 6, 7, 8, 1, 5
+  };
+
+    int changed = false;
+
+    if (gamemode == commercial)
+    {
+        /*
+        if (crispy->havemap33)
+        doom2_next[1] = 33;
+        */
+
+        if (W_CheckNumForName("map31") < 0)
+        {
+            doom2_next[14] = 16;
+        }
+
+        if (gamemission == pack_hacx)
+        {
+            doom2_next[30] = 16;
+            doom2_next[20] = 1;
+        }
+
+        /*
+        if (gamemission == pack_master)
+        {
+            doom2_next[1] = 3;
+            doom2_next[14] = 16;
+            doom2_next[20] = 1;
+        }
+        */
+    }
+    else
+    {
+        if (gamemode == shareware)
+        {
+            doom_next[0][7] = 11;
+        }
+
+        if (gamemode == registered)
+        {
+            doom_next[2][7] = 11;
+        }
+
+        if (!sgl_loaded)
+        {
+            doom_next[3][7] = 11;
+        }
+
+        if (gamemode == pressbeta)
+        {
+            if (gameepisode == 1)
+                doom_next[0][0] = 21;
+            if (gameepisode == 2)
+                doom_next[1][0] = 31;
+            if (gameepisode == 3)
+                doom_next[2][0] = 11;
+        }
+
+        if (gameversion == exe_chex)
+        {
+            doom_next[0][2] = 14;
+            doom_next[0][4] = 11;
+        }
+    }
+
+    if (gamestate == GS_LEVEL)
+    {
+        int epsd, map;
+
+        if (gamemode == commercial)
+        {
+            epsd = gameepisode;
+
+            if (gamemission == pack_nerve)
+            {
+                map = nerve_next[gamemap-1];
+            }
+            else if (gamemission == jaguar)
+            {
+                map = jaguar_next[gamemap-1];
+            }
+            else
+            {
+                map = doom2_next[gamemap-1];
+            }
+        }
+        else
+        {
+            epsd = doom_next[gameepisode-1][gamemap-1] / 10;
+            map = doom_next[gameepisode-1][gamemap-1] % 10;
+        }
+
+        /*
+        // [crispy] special-casing for E1M10 "Sewers" support
+        if (crispy->havee1m10 && gameepisode == 1)
+        {
+            if (gamemap == 1)
+            {
+                map = 10;
+            }
+            else if (gamemap == 10)
+            {
+                epsd = 1;
+                map = 2;
+            }
+        }
+        */
+
+        G_DeferedInitNew(gameskill, epsd, map);
+        changed = true;
+    }
+
+    return changed;
+}
+
+
 //
 // CONTROL PANEL
 //
@@ -7492,6 +7653,19 @@ boolean M_Responder (event_t* ev)
         {
             S_StartSound(NULL,sfx_swtchn);
             M_QuitDOOM(0);
+            return true;
+        }
+
+        // [crispy] those two can be considered as shortcuts for the IDCLEV cheat
+        // and should be treated as such, i.e. add "if (!netgame)"
+        else if (!netgame && key != 0 && key == key_menu_reloadlevel)
+        {
+            if (G_ReloadLevel())
+            return true;
+        }
+        else if (!netgame && key != 0 && key == key_menu_nextlevel)
+        {
+            if (G_GotoNextLevel())
             return true;
         }
     }

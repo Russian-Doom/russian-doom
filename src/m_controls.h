@@ -149,6 +149,8 @@ extern int key_menu_gamma;
 extern int key_menu_incscreen;
 extern int key_menu_decscreen;
 extern int key_menu_screenshot;
+extern int key_menu_nextlevel; // [crispy]
+extern int key_menu_reloadlevel; // [crispy]
 
 extern int mousebfire;
 extern int mousebstrafe;
