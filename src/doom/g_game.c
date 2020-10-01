@@ -835,6 +835,12 @@ void G_DoLoadLevel (void)
         memset (players[i].frags,0,sizeof(players[i].frags)); 
     } 
 
+    // [JN] Pistol start
+    if (singleplayer && pistol_start)
+    {
+        G_PlayerReborn(0);
+    }
+
     P_SetupLevel (gameepisode, gamemap, 0, gameskill);    
     displayplayer = consoleplayer;		// view the guy you are playing    
     gameaction = ga_nothing; 

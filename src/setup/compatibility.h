@@ -83,6 +83,7 @@ extern int flip_levels;
 extern int extra_player_faces;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
+extern int pistol_start;
 extern int fast_quickload;
 
 // Gameplay: Demos

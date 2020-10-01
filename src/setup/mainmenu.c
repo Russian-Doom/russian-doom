@@ -188,6 +188,7 @@ static void SensibleDefaults(void)
     extra_player_faces = 1;
     unlimited_lost_souls = 1;
     agressive_lost_souls = 0;
+    pistol_start = 0;
     fast_quickload = 1;
 
     // Gameplay: Demos

@@ -86,6 +86,7 @@ int flip_levels = 0;
 int extra_player_faces = 1;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
+int pistol_start = 0;
 int fast_quickload = 1;
 
 // Gameplay: Demos

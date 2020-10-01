@@ -305,6 +305,7 @@ void M_RD_Change_FlipLevels(int choice);
 void M_RD_Change_ExtraPlayerFaces(int choice);
 void M_RD_Change_LostSoulsQty(int choice);
 void M_RD_Change_LostSoulsAgr(int choice);
+void M_RD_Change_PistolStart(int choice);
 void M_RD_Change_DemoTimer(int choice);
 void M_RD_Change_DemoTimerDir(int choice);
 void M_RD_Change_DemoBar(int choice);
@@ -1807,12 +1808,12 @@ enum
     rd_gameplay_4_extra_player_faces,
     rd_gameplay_4_unlimited_lost_souls,
     rd_gameplay_4_agressive_lost_souls,
+    rd_gameplay_4_pistol_start,
     rd_gameplay_4_empty1,
     rd_gameplay_4_demotimer,
     rd_gameplay_4_demotimerdir,
     rd_gameplay_4_demobar,
     rd_gameplay_4_no_internal_demos,
-    rd_gameplay_4_empty2,
     rd_gameplay_4_first_page,
     rd_gameplay_4_prev_page,
     rd_gameplay_4_end
@@ -1912,13 +1913,13 @@ menuitem_t RD_Gameplay_Menu_4[]=
     {2,"Flip game levels:",                   M_RD_Change_FlipLevels,       'f'},
     {2,"Extra player faces on the HUD:",      M_RD_Change_ExtraPlayerFaces, 'e'},
     {2,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
-    {2,"More agressive lost souls:",          M_RD_Change_LostSoulsAgr,     'm'},
+    {2,"More aggressive lost souls:",         M_RD_Change_LostSoulsAgr,     'm'},
+    {2,"Start every level with only pistol:", M_RD_Change_PistolStart,      's'},
     {-1,"",0,'\0'},
     {2,"Show demo timer:",                    M_RD_Change_DemoTimer,        's'},
     {2,"timer direction:",                    M_RD_Change_DemoTimerDir,     't'},
     {2,"Show progress bar:",                  M_RD_Change_DemoBar,          's'},
     {2,"Play internal demos:",                M_RD_Change_NoInternalDemos,  'p'},
-    {-1,"",0,'\0'},
     {1,"", /* First page >   */               M_RD_Choose_Gameplay_1,       'n'},
     {1,"", /* < Prev page > */                M_RD_Choose_Gameplay_3,       'p'},
     {-1,"",0,'\0'}
@@ -2029,12 +2030,12 @@ menuitem_t RD_Gameplay_Menu_4_Rus[]=
     {2,"Ljgjkybntkmyst kbwf buhjrf:",       M_RD_Change_ExtraPlayerFaces,   'l'},   // Дополнительные лица игрока
     {2,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       '\''},  // Элементаль без ограничения душ
     {2,"gjdsityyfz fuhtccbdyjcnm lei:",     M_RD_Change_LostSoulsAgr,       'g'},   // Повышенная агрессивность душ
+    {2,"yfxbyfnm dct ehjdyb c gbcnjktnjv:", M_RD_Change_PistolStart,        'y'},   // Начинать все уровни с пистолетом
     {-1,"",0,'\0'},     
     {2,"jnj,hf;fnm nfqvth:",                M_RD_Change_DemoTimer,          's'},   // Отображать таймер
     {2,"dhtvz nfqvthf:",                    M_RD_Change_DemoTimerDir,       's'},   // Время таймера
     {2,"irfkf ghjuhtccf:",                  M_RD_Change_DemoBar,            'g'},   // Шкала прогресса
     {2,"Ghjbuhsdfnm ltvjpfgbcb:",           M_RD_Change_NoInternalDemos,    'g'},   // Проигрывать демозаписи
-    {-1,"",0,'\0'},                                                                 //
     {1,"",                                  M_RD_Choose_Gameplay_1,         'n'},   // Далее >
     {1,"",                                  M_RD_Choose_Gameplay_3,         'p'},   // < Назад
     {-1,"",0,'\0'}
@@ -4752,37 +4753,42 @@ void M_RD_Draw_Gameplay_4(void)
 
         // More agressive lost souls
         dp_translation = agressive_lost_souls ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(222 + wide_delta, 75, agressive_lost_souls ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(230 + wide_delta, 75, agressive_lost_souls ? RD_ON : RD_OFF);
+        dp_translation = NULL;
+
+        // Pistol start
+        dp_translation = pistol_start ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(284 + wide_delta, 85, pistol_start ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         //
         // Demos
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 85, "Demos");
+        M_WriteTextSmall_ENG(35 + wide_delta, 95, "Demos");
         dp_translation = NULL;
 
         // Show demo timer
         dp_translation = demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(153 + wide_delta, 95, demotimer == 1 ? "playback"  :
-                                                   demotimer == 2 ? "recording" :
-                                                   demotimer == 3 ? "always" :
-                                                                    "off");
+        M_WriteTextSmall_ENG(153 + wide_delta, 105, demotimer == 1 ? "playback"  :
+                                                    demotimer == 2 ? "recording" :
+                                                    demotimer == 3 ? "always" :
+                                                                     "off");
         dp_translation = NULL;
 
         // Timer direction
         dp_translation = demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(148 + wide_delta, 105, demotimerdir ? "backward" : "forward");
+        M_WriteTextSmall_ENG(148 + wide_delta, 115, demotimerdir ? "backward" : "forward");
         dp_translation = NULL;
 
         // Show progress bar 
         dp_translation = demobar ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(169 + wide_delta, 115, demobar ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(169 + wide_delta, 125, demobar ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Play internal demos
         dp_translation = no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN];
-        M_WriteTextSmall_ENG(183 + wide_delta, 125, no_internal_demos ? RD_OFF : RD_ON);
+        M_WriteTextSmall_ENG(183 + wide_delta, 135, no_internal_demos ? RD_OFF : RD_ON);
         dp_translation = NULL;
 
         //
@@ -4830,16 +4836,21 @@ void M_RD_Draw_Gameplay_4(void)
         M_WriteTextSmall_RUS(266 + wide_delta, 75, agressive_lost_souls ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
+        // Начинать все уровени с пистолетом
+        dp_translation = pistol_start ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(283 + wide_delta, 85, pistol_start ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
+
         //
         // Демозаписи
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 85, "Ltvjpfgbcb");
+        M_WriteTextSmall_RUS(35 + wide_delta, 95, "Ltvjpfgbcb");
         dp_translation = NULL;
 
         // Отображать таймер
         dp_translation = demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(180 + wide_delta, 95, demotimer == 1 ? "ghb ghjbuhsdfybb"  :
+        M_WriteTextSmall_RUS(180 + wide_delta, 105, demotimer == 1 ? "ghb ghjbuhsdfybb"  :
                                                    demotimer == 2 ? "ghb pfgbcb" :
                                                    demotimer == 3 ? "dctulf" :
                                                                     "dsrk");
@@ -4847,17 +4858,17 @@ void M_RD_Draw_Gameplay_4(void)
 
         // Время таймера
         dp_translation = demotimer > 0 ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(145 + wide_delta, 105, demotimerdir ? "jcnfdittcz" : "ghjitlitt");
+        M_WriteTextSmall_RUS(145 + wide_delta, 115, demotimerdir ? "jcnfdittcz" : "ghjitlitt");
         dp_translation = NULL;
 
         // Шкала прогресса
         dp_translation = demobar ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(161 + wide_delta, 115, demobar ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(161 + wide_delta, 125, demobar ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Проигрывать демозаписи
         dp_translation = no_internal_demos ? cr[CR_DARKRED] : cr[CR_GREEN];
-        M_WriteTextSmall_RUS(219 + wide_delta, 125, no_internal_demos ? RD_OFF_RUS : RD_ON_RUS);
+        M_WriteTextSmall_RUS(219 + wide_delta, 135, no_internal_demos ? RD_OFF_RUS : RD_ON_RUS);
         dp_translation = NULL;
 
         //
@@ -5089,6 +5100,11 @@ void M_RD_Change_LostSoulsQty(int choice)
 void M_RD_Change_LostSoulsAgr(int choice)
 {
     agressive_lost_souls ^= 1;
+}
+
+void M_RD_Change_PistolStart(int choice)
+{
+    pistol_start ^= 1;
 }
 
 void M_RD_Change_DemoTimer(int choice)
@@ -6079,6 +6095,7 @@ void M_RD_BackToDefaultsResponse(int key)
     extra_player_faces   = 1;
     unlimited_lost_souls = 1;
     agressive_lost_souls = 0;
+    pistol_start         = 0;
     fast_quickload       = 1;
 
     // Gameplay: Demos
