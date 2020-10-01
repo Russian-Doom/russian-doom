@@ -1417,10 +1417,12 @@ static boolean HandleCheats(byte key)
     int i;
     boolean eat;
 
+    /* [crispy] check for nightmare/netgame per cheat, to allow "harmless" cheats
     if (netgame || gameskill == sk_nightmare)
     {                         // Can't cheat in a net-game, or in nightmare mode
         return (false);
     }
+    */
     if (players[consoleplayer].health <= 0)
     {                         // Dead players can't cheat
         return (false);
@@ -1437,6 +1439,9 @@ static boolean HandleCheats(byte key)
     return (eat);
 }
 
+#define NIGHTMARE_NETGAME_CHECK if(netgame||gameskill==sk_nightmare){return;}
+#define NETGAME_CHECK if(netgame){return;}
+
 //--------------------------------------------------------------------------
 //
 // CHEAT FUNCTIONS
@@ -1445,6 +1450,7 @@ static boolean HandleCheats(byte key)
 
 static void CheatGodFunc(player_t * player, Cheat_t * cheat)
 {
+    NIGHTMARE_NETGAME_CHECK;
     player->cheats ^= CF_GODMODE;
     if (player->cheats & CF_GODMODE)
     {
@@ -1459,6 +1465,7 @@ static void CheatGodFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatNoClipFunc(player_t * player, Cheat_t * cheat)
 {
+    NIGHTMARE_NETGAME_CHECK;
     player->cheats ^= CF_NOCLIP;
     if (player->cheats & CF_NOCLIP)
     {
@@ -1475,6 +1482,7 @@ static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat)
     int i;
     //extern boolean *WeaponInShareware;
 
+    NIGHTMARE_NETGAME_CHECK;
     player->armorpoints = 200;
     player->armortype = 2;
     if (!player->backpack)
@@ -1504,6 +1512,7 @@ static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatPowerFunc(player_t * player, Cheat_t * cheat)
 {
+    NIGHTMARE_NETGAME_CHECK;
     if (player->powers[pw_weaponlevel2])
     {
         player->powers[pw_weaponlevel2] = 0;
@@ -1518,6 +1527,7 @@ static void CheatPowerFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatHealthFunc(player_t * player, Cheat_t * cheat)
 {
+    NIGHTMARE_NETGAME_CHECK;
     if (player->chickenTics)
     {
         player->health = player->mo->health = MAXCHICKENHEALTH;
@@ -1531,6 +1541,7 @@ static void CheatHealthFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatKeysFunc(player_t * player, Cheat_t * cheat)
 {
+    NIGHTMARE_NETGAME_CHECK;
     player->keys[key_yellow] = true;
     player->keys[key_green] = true;
     player->keys[key_blue] = true;
@@ -1540,6 +1551,7 @@ static void CheatKeysFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatSoundFunc(player_t * player, Cheat_t * cheat)
 {
+    NETGAME_CHECK;
     DebugSound = !DebugSound;
     if (DebugSound)
     {
@@ -1568,11 +1580,13 @@ static void CheatTickerFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatArtifact1Func(player_t * player, Cheat_t * cheat)
 {
+    NIGHTMARE_NETGAME_CHECK;
     P_SetMessage(player, DEH_String(txt_cheatartifacts1), false);
 }
 
 static void CheatArtifact2Func(player_t * player, Cheat_t * cheat)
 {
+    NIGHTMARE_NETGAME_CHECK;
     P_SetMessage(player, DEH_String(txt_cheatartifacts2), false);
 }
 
@@ -1584,6 +1598,7 @@ static void CheatArtifact3Func(player_t * player, Cheat_t * cheat)
     int type;
     int count;
 
+    NIGHTMARE_NETGAME_CHECK;
     cht_GetParam(cheat->seq, args);
     type = args[0] - 'a' + 1;
     count = args[1] - '0';
@@ -1630,6 +1645,7 @@ static void CheatWarpFunc(player_t * player, Cheat_t * cheat)
     int episode;
     int map;
 
+    NETGAME_CHECK;
     cht_GetParam(cheat->seq, args);
 
     episode = args[0] - '0';
@@ -1645,6 +1661,7 @@ static void CheatChickenFunc(player_t * player, Cheat_t * cheat)
 {
     extern boolean P_UndoPlayerChicken(player_t * player);
 
+    NIGHTMARE_NETGAME_CHECK;
     if (player->chickenTics)
     {
         if (P_UndoPlayerChicken(player))
@@ -1660,6 +1677,7 @@ static void CheatChickenFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatMassacreFunc(player_t * player, Cheat_t * cheat)
 {
+    NIGHTMARE_NETGAME_CHECK;
     P_Massacre();
     P_SetMessage(player, DEH_String(txt_cheatmassacre), false);
 }
@@ -1667,6 +1685,8 @@ static void CheatMassacreFunc(player_t * player, Cheat_t * cheat)
 static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat)
 {
     int i;
+
+    NIGHTMARE_NETGAME_CHECK;
     if (player->chickenTics)
     {
         return;
@@ -1681,6 +1701,7 @@ static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat)
 
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
 {
+    NIGHTMARE_NETGAME_CHECK;
     P_DamageMobj(player->mo, NULL, player->mo, 10000);
     P_SetMessage(player, DEH_String(txt_cheatiddqd), true);
 }
