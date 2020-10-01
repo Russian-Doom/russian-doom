@@ -193,13 +193,13 @@ static void TextWrite(void)
     {                           // Chess pic, draw the correct character graphic
         if (netgame)
         {
-            V_DrawPatch(20, 0, W_CacheLumpName("chessall", PU_CACHE));
+            V_DrawPatch(20 + wide_delta, 0, W_CacheLumpName("chessall", PU_CACHE));
         }
         else if (PlayerClass[consoleplayer])
         {
-            V_DrawPatch(60, 0, W_CacheLumpNum(W_GetNumForName("chessc")
-                                              + PlayerClass[consoleplayer] -
-                                              1, PU_CACHE));
+            V_DrawPatch(60 + wide_delta, 0, W_CacheLumpNum(W_GetNumForName("chessc")
+                                                           + PlayerClass[consoleplayer] -
+                                                           1, PU_CACHE));
         }
     }
     // Draw the actual text
@@ -350,13 +350,13 @@ static void DrawPic(void)
     {                           // Chess pic, draw the correct character graphic
         if (netgame)
         {
-            V_DrawPatch(20, 0, W_CacheLumpName("chessall", PU_CACHE));
+            V_DrawPatch(20 + wide_delta, 0, W_CacheLumpName("chessall", PU_CACHE));
         }
         else if (PlayerClass[consoleplayer])
         {
-            V_DrawPatch(60, 0, W_CacheLumpNum(W_GetNumForName("chessc")
-                                              + PlayerClass[consoleplayer] -
-                                              1, PU_CACHE));
+            V_DrawPatch(60 + wide_delta, 0, W_CacheLumpNum(W_GetNumForName("chessc")
+                                                           + PlayerClass[consoleplayer] -
+                                                           1, PU_CACHE));
         }
     }
 }
