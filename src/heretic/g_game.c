@@ -36,6 +36,7 @@
 #include "r_local.h"
 #include "s_sound.h"
 #include "v_video.h"
+#include "crispy.h"
 #include "jn.h"
 
 // Macros
@@ -161,8 +162,9 @@ int crosshair_type = 1;
 int crosshair_scale = 0;
 
 // Gameplay: Gameplay
-int no_internal_demos = 0;
 int flip_levels = 0;
+int no_internal_demos = 0;
+int pistol_start = 0;
 
 
 //
@@ -884,6 +886,12 @@ void G_DoLoadLevel(void)
         if (playeringame[i] && players[i].playerstate == PST_DEAD)
             players[i].playerstate = PST_REBORN;
         memset(players[i].frags, 0, sizeof(players[i].frags));
+    }
+
+    // [JN] Wand start
+    if (singleplayer && pistol_start)
+    {
+        G_PlayerReborn(0);
     }
 
     P_SetupLevel(gameepisode, gamemap, 0, gameskill);

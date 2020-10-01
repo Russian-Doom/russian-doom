@@ -959,8 +959,9 @@ void D_BindVariables(void)
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);    
 
     // Геймплей
-    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
     M_BindIntVariable("flip_levels",            &flip_levels);
+    M_BindIntVariable("no_internal_demos",      &no_internal_demos);
+    M_BindIntVariable("pistol_start",           &pistol_start);
 
     for (i=0; i<10; ++i)
     {
