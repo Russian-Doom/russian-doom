@@ -1103,116 +1103,49 @@ static void R_InitTintMap()
 
 //
 // R_InitShadeMap
-// [JN] Same as R_InitTintMap, but generates 60% translucency table.
-// Used for text and menu shadows.
+// [JN] Generated dynamically and used for text and menu shadows.
+// Intensity can be changed in the Display Options / Messages menu.
 //
-static const int shade_filter_pct = 60;
-
-static void R_InitShadeMap ()
+void R_InitShadeMap (void)
 {
-    int lump = W_CheckNumForName("SHADEMAP");
+    // Compose a default transparent filter map based on PLAYPAL.
+    unsigned char *playpal = W_CacheLumpName((usegamma <= 8 ?
+                                              "PALFIX" :
+                                              "PLAYPAL"), PU_STATIC);
 
-    // If a tranlucency filter map lump is present, use it
-    if (lump != -1)
+    shademap = Z_Malloc(256*256, PU_STATIC, 0);
+
     {
-        // Set a pointer to the translucency filter maps.
-        shademap = W_CacheLumpNum(lump, PU_STATIC);
-        // [crispy] loaded from a lump
-        printf(":");
-    }
-    else
-    {
-        // Compose a default transparent filter map based on PLAYPAL.
-        unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-        FILE *cachefp;
-        char *fname = NULL;
-
-        struct {
-            unsigned char pct;
-            unsigned char playpal[256*3]; // [crispy] a palette has 768 bytes!
-        } cache;
-
-        shademap = Z_Malloc(256*256, PU_STATIC, 0);
-        fname = M_StringJoin(configdir, "shademap.dat", NULL);
-
-        // [crispy] open file readable
-        if ((cachefp = fopen(fname, "rb")) &&
-            // [crispy] could read struct cache from file
-            fread(&cache, 1, sizeof(cache), cachefp) == sizeof(cache) &&
-            // [crispy] same filter percents
-            cache.pct == shade_filter_pct &&
-            // [crispy] same base palettes
-            memcmp(cache.playpal, playpal, sizeof(cache.playpal)) == 0 &&
-            // [crispy] could read entire translucency map
-            fread(shademap, 256, 256, cachefp) == 256 )
+        byte *fg, *bg, blend[3], *tp = shademap;
+        int i, j;
+    
+        I_SetPalette(playpal);
+        // [crispy] background color
+        for (i = 0; i < 256; i++)
         {
-            // [crispy] loaded from a file
-            printf(".");
-        }
-        // [crispy] file not readable
-        else
-        {
-            byte *fg, *bg, blend[3], *tp = shademap;
-            int i, j;
-
-            I_SetPalette(playpal);
-            // [crispy] background color
-            for (i = 0; i < 256; i++)
+            // [crispy] foreground color
+            for (j = 0; j < 256; j++)
             {
-                // [crispy] foreground color
-                for (j = 0; j < 256; j++)
+                // [crispy] shortcut: identical foreground and background
+                if (i == j)
                 {
-                    // [crispy] shortcut: identical foreground and background
-                    if (i == j)
-                    {
-                        *tp++ = i;
-                        continue;
-                    }
-
-                    bg = playpal + 3*i;
-                    fg = playpal + 3*j;
-
-                    blend[r] = (shade_filter_pct * fg[r] + (100 - shade_filter_pct) * bg[r]) / 100;
-                    blend[g] = (shade_filter_pct * fg[g] + (100 - shade_filter_pct) * bg[g]) / 100;
-                    blend[b] = (shade_filter_pct * fg[b] + (100 - shade_filter_pct) * bg[b]) / 100;
-
-                    *tp++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
+                    *tp++ = i;
+                    continue;
                 }
-            }
-
-            // [crispy] file not readable, open writable
-            if ((cachefp = fopen(fname, "wb")))
-            {
-                // [crispy] set filter percents
-                cache.pct = shade_filter_pct;
-                // [crispy] set base palette
-                memcpy(cache.playpal, playpal, sizeof(cache.playpal));
-                // [crispy] go to start of file
-                fseek(cachefp, 0, SEEK_SET);
-                // [crispy] write struct cache
-                fwrite(&cache, 1, sizeof(cache), cachefp);
-                // [crispy] write translucency map
-                fwrite(shademap, 256, 256, cachefp);
-
-                // [crispy] generated and saved
-                printf("!");
-            }
-            else
-            {
-                // [crispy] generated, but not saved
-                printf("?");
+    
+                bg = playpal + 3*i;
+                fg = playpal + 3*j;
+    
+                blend[r] = (shade_filter_pct * fg[r] + (100 - shade_filter_pct) * bg[r]) / 100;
+                blend[g] = (shade_filter_pct * fg[g] + (100 - shade_filter_pct) * bg[g]) / 100;
+                blend[b] = (shade_filter_pct * fg[b] + (100 - shade_filter_pct) * bg[b]) / 100;
+    
+                *tp++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
             }
         }
-
-        if (cachefp)
-        {
-            fclose(cachefp);
-        }
-
-        free(fname);
-
-        W_ReleaseLumpName("PLAYPAL");
     }
+    
+    W_ReleaseLumpName((usegamma <= 8 ? "PALFIX" : "PLAYPAL"));
 }
 
 //

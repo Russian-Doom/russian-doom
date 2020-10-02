@@ -1625,6 +1625,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(messages_system_color),
     CONFIG_VARIABLE_INT(messages_chat_color),
     CONFIG_VARIABLE_INT(draw_shadowed_text),
+    CONFIG_VARIABLE_INT(shade_filter_pct),
 
     // Automap specific variables
     CONFIG_VARIABLE_INT(automap_color),
