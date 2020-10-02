@@ -1103,10 +1103,12 @@ static void R_InitTintMap()
 
 //
 // R_InitShadeMap
-// [JN] Same as R_InitTintMap, but used for text and menu shadows.
-// Intensity can be changed in the Display Options / Messages menu.
+// [JN] Same as R_InitTintMap, but generates 60% translucency table.
+// Used for text and menu shadows.
 //
-void R_InitShadeMap ()
+static const int shade_filter_pct = 60;
+
+static void R_InitShadeMap ()
 {
     int lump = W_CheckNumForName("SHADEMAP");
 

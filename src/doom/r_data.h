@@ -61,7 +61,4 @@ int R_CheckTextureNumForName (char *name);
 // [JN] Transparency initialization.
 void R_InitTranMap (void);
 
-// [JN] Shade map initialization.
-void R_InitShadeMap (void);
-
 #endif
