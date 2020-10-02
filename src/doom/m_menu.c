@@ -3675,6 +3675,8 @@ void M_RD_Choose_SoundSystem(int choice)
 
 void M_RD_Draw_Audio_System(void)
 {
+    static char snd_frequency[4];
+
     if (english_language)
     {
         M_WriteTextBigCentered_ENG(5, "SOUND SYSTEM");
@@ -3733,26 +3735,9 @@ void M_RD_Draw_Audio_System(void)
         M_WriteTextSmall_ENG(35 + wide_delta, 55, "quality");
         dp_translation = NULL;
 
-        // Sampling frequency (hz)
-        if (snd_samplerate_temp == 44100)
-        {
-            M_WriteTextSmall_ENG(179 + wide_delta, 65, "44100 HZ");
-        }
-        else if (snd_samplerate_temp == 22050)
-        {
-            M_WriteTextSmall_ENG(179 + wide_delta, 65, "22050 HZ");
-        }
-        else if (snd_samplerate_temp == 11025)
-        {
-            M_WriteTextSmall_ENG(179 + wide_delta, 65, "11025 HZ");
-        }
-        // Informative message
-        if (snd_samplerate_temp != snd_samplerate)
-        {
-            dp_translation = cr[CR_GRAY];
-            M_WriteTextSmall_ENG(66 + wide_delta, 155, "Program must be restarted");
-            dp_translation = NULL;
-        }
+        // Sampling frequency
+        sprintf(snd_frequency, "%d HZ", snd_samplerate);
+        M_WriteTextSmall_ENG(179 + wide_delta, 65, snd_frequency);
 
         //
         // Miscellaneous
@@ -3838,26 +3823,9 @@ void M_RD_Draw_Audio_System(void)
         M_WriteTextSmall_RUS(35 + wide_delta, 55, "rfxfcndj pdexfybz");
         dp_translation = NULL;
 
-        // Частота дискретизации (гц)
-        if (snd_samplerate_temp == 44100)
-        {
-            M_WriteTextSmall_RUS(208 + wide_delta, 65, "44100 uw");
-        }
-        else if (snd_samplerate_temp == 22050)
-        {
-            M_WriteTextSmall_RUS(208 + wide_delta, 65, "22050 uw");
-        }
-        else if (snd_samplerate_temp == 11025)
-        {
-            M_WriteTextSmall_RUS(208 + wide_delta, 65, "11025 uw");
-        }
-        // Informative message: изменение потребует перезапуск программы
-        if (snd_samplerate_temp != snd_samplerate)
-        {
-            dp_translation = cr[CR_GRAY];
-            M_WriteTextSmall_RUS(40 + wide_delta, 155, "ytj,[jlbv gthtpfgecr ghjuhfvvs");
-            dp_translation = NULL;
-        }
+        // Частота дискретизации (ГЦ)
+        sprintf(snd_frequency, "%d UW", snd_samplerate);
+        M_WriteTextSmall_RUS(208 + wide_delta, 65, snd_frequency);
 
         //
         // Разное
@@ -3988,34 +3956,61 @@ void M_RD_Change_Sampling(int choice)
     switch(choice)
     {
         case 0:
-            if (snd_samplerate_temp == 44100)
+            if (snd_samplerate == 44100)
             {
-                snd_samplerate_temp = 22050;
+                snd_samplerate = 22050;
             }
-            else if (snd_samplerate_temp == 22050)
+            else if (snd_samplerate == 22050)
             {
-                snd_samplerate_temp = 11025;
+                snd_samplerate = 11025;
             }
-            else if (snd_samplerate_temp == 11025)
+            else if (snd_samplerate == 11025)
             {
-                snd_samplerate_temp  = 44100;
+                snd_samplerate  = 44100;
             }
         break;
         case 1:
-            if (snd_samplerate_temp == 11025)
+            if (snd_samplerate == 11025)
             {
-                snd_samplerate_temp = 22050;
+                snd_samplerate = 22050;
             }
-            else if (snd_samplerate_temp == 22050)
+            else if (snd_samplerate == 22050)
             {
-                snd_samplerate_temp = 44100;
+                snd_samplerate = 44100;
             }
-            else if (snd_samplerate_temp == 44100)
+            else if (snd_samplerate == 44100)
             {
-                snd_samplerate_temp = 11025;
+                snd_samplerate = 11025;
             }
         break;
     }
+
+    // Shut down sound system
+    I_ShutdownSound();
+
+    // Reinitialize SFX module
+    InitSfxModule(snd_sfxdevice);
+
+    // Call sfx device changing routine
+    S_RD_Change_SoundDevice();
+
+    // Reinitialize sound volume
+    S_SetSfxVolume(sfxVolume * 8);
+
+    // Shut down current music
+    S_StopMusic();
+
+    // Shut down music system
+    S_Shutdown();
+    
+    // Start music system
+    I_InitSound(true);
+
+    // Reinitialize music volume
+    S_SetMusicVolume(musicVolume * 8);
+
+    // Restart current music
+    S_ChangeMusic(music_num_rd, true);
 }
 
 void M_RD_Change_SndMode(int choice)
@@ -6925,9 +6920,6 @@ void M_QuitResponse(int key)
     // [JN] Widescreen: remember choosen widescreen variable before quit.
     aspect_ratio = aspect_ratio_temp;
 
-    // [JN] Sampling frequency: remember choosen variable before quit.
-    snd_samplerate = snd_samplerate_temp;
-
     I_Quit ();
 }
 
@@ -8293,9 +8285,6 @@ void M_Init (void)
 
     // [JN] Widescreen: set temp variable for rendering menu.
     aspect_ratio_temp = aspect_ratio;
-
-    // [JN] Sampling frequency: set temp variable for sound system menu.
-    snd_samplerate_temp = snd_samplerate;
 
     menuactive = 0;
     itemOn = currentMenu->lastOn;
