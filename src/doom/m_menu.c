@@ -3424,6 +3424,13 @@ void M_RD_Change_ShadowIntensity(int choice)
 
     // Regenerate shading map
     R_InitShadeMap();
+
+    // Set proper palette
+    I_SetPalette ((byte *)W_CacheLumpName(DEH_String(usegamma <= 8 ?
+                                                     "PALFIX" :
+                                                     "PLAYPAL"),
+                                                     PU_CACHE) + 
+                                                     st_palette * 768);
 }
 
 
