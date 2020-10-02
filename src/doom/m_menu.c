@@ -203,6 +203,7 @@ void M_RD_Change_Smoothing(int choice);
 void M_RD_Change_Wiping(int choice);
 void M_RD_Change_Screenshots(int choice);
 void M_RD_Change_Renderer(int choice);
+void M_RD_Change_PorchFlashing(int choice);
 
 // Display
 void M_RD_Choose_Display(int choice);
@@ -1229,6 +1230,7 @@ enum
     rd_rendering_uncapped,
     rd_rendering_fps,
     rd_rendering_smoothing,
+    rd_rendering_vga_porch,
     rd_rendering_software,
     rd_rendering_empty1,
     rd_rendering_diskicon,
@@ -1248,6 +1250,7 @@ menuitem_t RD_Rendering_Menu[]=
     {2, "Frame rate:",               M_RD_Change_Uncapped,    'f'},
     {2, "Show FPS counter:",         M_RD_Change_FPScounter,  's'},
     {2, "Pixel scaling:",            M_RD_Change_Smoothing,   'p'},
+    {2, "Porch palette changing:",   M_RD_Change_PorchFlashing,'v'},
     {2, "Video renderer:",           M_RD_Change_Renderer,    'v'},
     {-1,"",0,'\0'},
     {2, "Show disk icon:",           M_RD_Change_DiskIcon,    's'},
@@ -1277,6 +1280,7 @@ menuitem_t RD_Rendering_Menu_Rus[]=
     {2, "Rflhjdfz xfcnjnf:",               M_RD_Change_Uncapped,    'r'}, // Кадровая частота
     {2, "Cxtnxbr rflhjdjq xfcnjns:",       M_RD_Change_FPScounter,  'c'}, // Счетчик кадровой частоты
     {2, "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,   'g'}, // Пиксельное сглаживание
+    {2, "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing,'b'}, // Изменение палитры краёв экрана
     {2, "J,hf,jnrf dbltj:",                M_RD_Change_Renderer,    'j'}, // Обработка видео
     {-1,"",0,'\0'},                                                       // Дополнительно
     {2, "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,    'j'}, // Отображать значок дискеты
@@ -2547,26 +2551,29 @@ void M_RD_Draw_Rendering(void)
             M_WriteTextSmall_ENG(135 + wide_delta, 75, smoothing ? "smooth" : "sharp");
         }
 
+        // Porch palette changing
+        M_WriteTextSmall_ENG(207 + wide_delta, 85, vga_porch_flash ? "on" : "off");
+
         // Video renderer
-        M_WriteTextSmall_ENG(146 + wide_delta, 85, force_software_renderer ? "software (cpu)" : "hardware (gpu)");
+        M_WriteTextSmall_ENG(146 + wide_delta, 95, force_software_renderer ? "software (cpu)" : "hardware (gpu)");
 
         //
         // Extra
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 95, "Extra");
+        M_WriteTextSmall_ENG(35 + wide_delta, 105, "Extra");
         dp_translation = NULL;
 
         // Show disk icon
-        M_WriteTextSmall_ENG(138 + wide_delta, 105, show_diskicon ? "on" : "off");
+        M_WriteTextSmall_ENG(138 + wide_delta, 115, show_diskicon ? "on" : "off");
 
         // Screen wiping effect
-        M_WriteTextSmall_ENG(187 + wide_delta, 115, screen_wiping == 1 ? "standard" :
+        M_WriteTextSmall_ENG(187 + wide_delta, 125, screen_wiping == 1 ? "standard" :
                                                     screen_wiping == 2 ? "loading" :
                                                                          "off");
 
         // Screenshot format
-        M_WriteTextSmall_ENG(174 + wide_delta, 125, png_screenshots ? "png" : "pcx");
+        M_WriteTextSmall_ENG(174 + wide_delta, 135, png_screenshots ? "png" : "pcx");
     }
     else
     {
@@ -2630,28 +2637,31 @@ void M_RD_Draw_Rendering(void)
             M_WriteTextSmall_RUS(219 + wide_delta, 75, smoothing ? "drk" : "dsrk");
         }
 
+        // Изменение палитры краёв экрана
+        M_WriteTextSmall_RUS(274 + wide_delta, 85, vga_porch_flash ? "drk" : "dsrk");
+
         // Обработка видео
-        M_WriteTextSmall_RUS(160 + wide_delta, 85, force_software_renderer ? "ghjuhfvvyfz" : "fggfhfnyfz");
-        M_WriteTextSmall_ENG((force_software_renderer ? 254 : 244) + wide_delta, 85, 
+        M_WriteTextSmall_RUS(160 + wide_delta, 95, force_software_renderer ? "ghjuhfvvyfz" : "fggfhfnyfz");
+        M_WriteTextSmall_ENG((force_software_renderer ? 254 : 244) + wide_delta, 95, 
                               force_software_renderer ? "(cpu)" : "(gpu)");
 
         //
         // Дополнительно
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 95, "ljgjkybntkmyj");
+        M_WriteTextSmall_RUS(35 + wide_delta, 105, "ljgjkybntkmyj");
         dp_translation = NULL;
 
         // Отображать значок дискеты
-        M_WriteTextSmall_RUS(241 + wide_delta, 105, show_diskicon ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(241 + wide_delta, 115, show_diskicon ? "drk" : "dsrk");
 
         // Эффект смены экранов
-        M_WriteTextSmall_RUS(202 + wide_delta, 115, screen_wiping == 1 ? "cnfylfhnysq" :
+        M_WriteTextSmall_RUS(202 + wide_delta, 125, screen_wiping == 1 ? "cnfylfhnysq" :
                                                     screen_wiping == 2 ? "pfuheprf" :
                                                                          "dsrk");
 
         // Формат скриншотов
-        M_WriteTextSmall_ENG(180 + wide_delta, 125, png_screenshots ? "png" : "pcx");
+        M_WriteTextSmall_ENG(180 + wide_delta, 135, png_screenshots ? "png" : "pcx");
     }
 }
 
@@ -2759,6 +2769,14 @@ void M_RD_Change_Renderer(int choice)
         ST_refreshBackground();
         ST_drawWidgets(true);
     }
+}
+
+void M_RD_Change_PorchFlashing(int choice)
+{
+    vga_porch_flash ^= 1;
+
+    // Update black borders
+    I_DrawBlackBorders();
 }
 
 
