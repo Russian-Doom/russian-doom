@@ -3685,8 +3685,10 @@ boolean MN_Responder(event_t * event)
         else if (key == KEY_F12)                 // F12 (???)
         {
             // F12 - reload current map (devmaps mode)
+            // [JN] Allow only in devparm mode, see this comment:
+            // https://github.com/JNechaevsky/russian-doom/issues/210#issuecomment-702321075
 
-            if (netgame)
+            if (netgame || !devparm)
             {
                 return false;
             }

@@ -633,6 +633,8 @@ extern boolean cmdfrag;         // true if a CMD_FRAG packet should be sent out 
                                                 // kill
 extern boolean menuactive;
 
+extern boolean devparm;         // [JN] DEBUG: launched with -devparm
+
 extern boolean playeringame[MAXPLAYERS];
 extern pclass_t PlayerClass[MAXPLAYERS];
 
