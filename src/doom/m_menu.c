@@ -6068,6 +6068,7 @@ void M_RD_BackToDefaultsResponse(int key)
     uncapped_fps            = 1;
     show_fps                = 0;
     smoothing               = 0;
+    vga_porch_flash         = 0;
     force_software_renderer = 0;
     show_diskicon           = 1;
     screen_wiping           = 1;

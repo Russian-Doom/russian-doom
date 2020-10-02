@@ -146,6 +146,7 @@ static boolean M_RD_Change_VSync(int option);
 static boolean M_RD_Uncapped(int option);
 static boolean M_RD_FPScounter(int option);
 static boolean M_RD_Smoothing(int option);
+static boolean M_RD_PorchFlashing(int option);
 static boolean M_RD_Renderer(int option);
 static boolean M_RD_Screenshots(int option);
 
@@ -493,6 +494,7 @@ static MenuItem_t RenderingItems[] = {
     {ITT_LRFUNC, "FRAME RATE:",               M_RD_Uncapped,          0, MENU_NONE},
     {ITT_LRFUNC, "FPS COUNTER:",              M_RD_FPScounter,        0, MENU_NONE},
     {ITT_LRFUNC, "PIXEL SCALING:",            M_RD_Smoothing,         0, MENU_NONE},
+    {ITT_LRFUNC, "PORCH PALETTE CHANGING:",   M_RD_PorchFlashing,     0, MENU_NONE},
     {ITT_LRFUNC, "VIDEO RENDERER:",           M_RD_Renderer,          0, MENU_NONE},
     {ITT_EMPTY,  NULL,                        NULL,                   0, MENU_NONE},
     {ITT_LRFUNC, "SCREENSHOT FORMAT:",        M_RD_Screenshots,       0, MENU_NONE}
@@ -504,6 +506,7 @@ static MenuItem_t RenderingItems_Rus[] = {
     {ITT_LRFUNC, "RFLHJDFZ XFCNJNF:",           M_RD_Uncapped,          0, MENU_NONE}, // КАДРОВАЯ ЧАСТОТА
     {ITT_LRFUNC, "CXTNXBR RFLHJDJQ XFCNJNS:",   M_RD_FPScounter,        0, MENU_NONE}, // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ
     {ITT_LRFUNC, "GBRCTKMYJT CUKF;BDFYBT:",     M_RD_Smoothing,         0, MENU_NONE}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
+    {ITT_LRFUNC, "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing, 0, MENU_NONE}, // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
     {ITT_LRFUNC, "J,HF,JNRF DBLTJ:",            M_RD_Renderer,          0, MENU_NONE}, // ОБРАБОТКА ВИДЕО
     {ITT_EMPTY,  NULL,                          NULL,                   0, MENU_NONE}, //
     {ITT_LRFUNC, "AJHVFN CRHBYIJNJD:",          M_RD_Screenshots,       0, MENU_NONE}  // ФОРМАТ СКРИНШОТОВ
@@ -512,7 +515,7 @@ static MenuItem_t RenderingItems_Rus[] = {
 static Menu_t RenderingMenu = {
     36, 42,
     DrawRenderingMenu,
-    8, RenderingItems,
+    9, RenderingItems,
     0,
     MENU_OPTIONS
 };
@@ -520,7 +523,7 @@ static Menu_t RenderingMenu = {
 static Menu_t RenderingMenu_Rus = {
     36, 42,
     DrawRenderingMenu,
-    8, RenderingItems_Rus,
+    9, RenderingItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -1923,16 +1926,20 @@ static void DrawRenderingMenu(void)
                                         131 + wide_delta, 82);
         }
 
+        // Porch palette changing
+        MN_DrTextSmallENG(DEH_String(vga_porch_flash ? "ON" : "OFF"),
+                                     205 + wide_delta, 92);
+
         // Video renderer
         MN_DrTextSmallENG(DEH_String(force_software_renderer ?
                                      "SOFTWARE (CPU)" : "HARDWARE (GPU)"),
-                                     149 + wide_delta, 92);
+                                     149 + wide_delta, 102);
 
         //
         // EXTRA
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + wide_delta, 102);
+        MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + wide_delta, 112);
         dp_translation = NULL;
     }
     else
@@ -2002,22 +2009,26 @@ static void DrawRenderingMenu(void)
                                         211 + wide_delta, 82);
         }
 
+        // Изменение палитры краев экрана
+        MN_DrTextSmallRUS(DEH_String(vga_porch_flash ? "DRK" : "DSRK"),
+                                     265 + wide_delta, 92);
+
         // Обработка видео
         MN_DrTextSmallRUS(DEH_String(force_software_renderer ?
                                      "GHJUHFVVYFZ" : "FGGFHFNYFZ"),
-                                     159 + wide_delta, 92);
+                                     159 + wide_delta, 102);
 
         //
         // ДОПОЛНИТЕЛЬНО
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + wide_delta, 102);
+        MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + wide_delta, 112);
         dp_translation = NULL;
     }
 
     // Screenshot format / Формат скриншотов (same english values)
     MN_DrTextSmallENG(DEH_String(png_screenshots ? "PNG" : "PCX"),
-                                 175 + wide_delta, 112);
+                                 175 + wide_delta, 122);
 
 }
 
@@ -2081,6 +2092,16 @@ static boolean M_RD_Smoothing(int option)
 
     // Update status bar
     SB_state = -1;
+
+    return true;
+}
+
+static boolean M_RD_PorchFlashing(int option)
+{
+    vga_porch_flash ^= 1;
+
+    // Update black borders
+    I_DrawBlackBorders();
 
     return true;
 }
@@ -3643,6 +3664,7 @@ void M_RD_DoResetSettings(void)
     uncapped_fps            = 1;
     show_fps                = 0;
     smoothing               = 0;
+    vga_porch_flash         = 0;
     force_software_renderer = 0;
     png_screenshots         = 1;
 
