@@ -1888,7 +1888,7 @@ static void DrawRenderingMenu(void)
         {
             dp_translation = cr[CR_GRAY2GREEN_HERETIC];
             MN_DrTextSmallENG(DEH_String("THE PROGRAM MUST BE RESTARTED"),
-                                         51 + wide_delta, 132);
+                                         51 + wide_delta, 138);
             dp_translation = NULL;
         }
 
@@ -1969,7 +1969,7 @@ static void DrawRenderingMenu(void)
         {
             dp_translation = cr[CR_GRAY2GREEN_HERETIC];
             MN_DrTextSmallRUS(DEH_String("YTJ,[JLBV GTHTPFGECR GHJUHFVVS"), 
-                                         46 + wide_delta, 132);
+                                         46 + wide_delta, 138);
             dp_translation = NULL;
         }
 
