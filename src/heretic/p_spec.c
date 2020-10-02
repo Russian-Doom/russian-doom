@@ -897,7 +897,7 @@ void P_PlayerInSpecialSector(player_t * player)
                                                       TXT_SECRET_FOUND :
                                                       TXT_SECRET_FOUND_RUS, false);
                 if (player == &players[consoleplayer])
-                S_StartSound(NULL, sfx_telept);
+                S_StartSound(NULL, sfx_chat);
             }
             break;
         case 11:               // Exit_SuperDamage (DOOM E1M8 finale)
