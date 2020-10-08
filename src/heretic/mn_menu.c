@@ -802,8 +802,8 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_EMPTY,  NULL,                          NULL,                 0, MENU_NONE},
     {ITT_LRFUNC, "FLIP GAME LEVELS:",           M_RD_FlipLevels,      0, MENU_NONE},
     {ITT_LRFUNC, "PLAY INTERNAL DEMOS:",        M_RD_NoDemos,         0, MENU_NONE},
-    {ITT_LRFUNC, "START EVERY LEVEL WITH ONLY WAND:", M_RD_WandStart, 0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                            NULL,                 0, MENU_NONE},
+    {ITT_LRFUNC, "WAND START GAME MODE:",       M_RD_WandStart,       0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                          NULL,                 0, MENU_NONE},
     {ITT_SETMENU,"PREVIOUS PAGE...",            NULL,                 0, MENU_GAMEPLAY1}
 };
 
@@ -817,7 +817,7 @@ static MenuItem_t Gameplay2Items_Rus[] = {
     {ITT_EMPTY,  NULL,                            NULL,                 0, MENU_NONE},     //
     {ITT_LRFUNC, "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0, MENU_NONE},     // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     {ITT_LRFUNC, "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0, MENU_NONE},     // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
-    {ITT_LRFUNC, "YFXBYFNM DCT EHJDYB C ;TPKJV:", M_RD_WandStart,       0, MENU_NONE},     // НАЧИНАТЬ ВСЕ УРОВНИ С ЖЕЗЛОМ
+    {ITT_LRFUNC, " ",/* [JN] Joint EN/RU string*/ M_RD_WandStart,       0, MENU_NONE},     // РЕЖИМ ИГРЫ "WAND START"
     {ITT_EMPTY,  NULL,                            NULL,                 0, MENU_NONE},
     {ITT_SETMENU,"GHTLSLEOFZ CNHFYBWF>>>",        NULL,                 0, MENU_GAMEPLAY1} // ПРЕДЫДУЩАЯ СТРАНИЦА
 };
@@ -3419,7 +3419,7 @@ static void DrawGameplay2Menu(void)
         dp_translation = pistol_start ? cr[CR_GRAY2GREEN_HERETIC] :
                                         cr[CR_GRAY2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(pistol_start ? "ON" : "OFF"),
-                                     269 + wide_delta, 126);
+                                     193 + wide_delta, 126);
         dp_translation = NULL;
     }
     else
@@ -3503,11 +3503,13 @@ static void DrawGameplay2Menu(void)
                                      211 + wide_delta, 116);
         dp_translation = NULL;
 
-        // Начинать все уровни с жезлом
+        // Режим игры "Wand start"
+        MN_DrTextSmallRUS(DEH_String("HT;BV BUHS"), 36 + wide_delta, 126);
+        MN_DrTextSmallENG(DEH_String("\"WAND START\":"), 120 + wide_delta, 126);
         dp_translation = pistol_start ? cr[CR_GRAY2GREEN_HERETIC] :
                                         cr[CR_GRAY2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(pistol_start ? "DRK" : "DSRK"),
-                                     249 + wide_delta, 126);
+                                     217 + wide_delta, 126);
         dp_translation = NULL;
     }
 }

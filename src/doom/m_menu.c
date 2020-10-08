@@ -1925,7 +1925,7 @@ menuitem_t RD_Gameplay_Menu_4[]=
     {2,"Extra player faces on the HUD:",      M_RD_Change_ExtraPlayerFaces, 'e'},
     {2,"Pain Elemental without Souls limit:", M_RD_Change_LostSoulsQty,     'p'},
     {2,"More aggressive lost souls:",         M_RD_Change_LostSoulsAgr,     'm'},
-    {2,"Start every level with only pistol:", M_RD_Change_PistolStart,      's'},
+    {2,"Pistol start game mode:",             M_RD_Change_PistolStart,      's'},
     {-1,"",0,'\0'},
     {2,"Show demo timer:",                    M_RD_Change_DemoTimer,        's'},
     {2,"timer direction:",                    M_RD_Change_DemoTimerDir,     't'},
@@ -2041,7 +2041,7 @@ menuitem_t RD_Gameplay_Menu_4_Rus[]=
     {2,"Ljgjkybntkmyst kbwf buhjrf:",       M_RD_Change_ExtraPlayerFaces,   'l'},   // Дополнительные лица игрока
     {2,"'ktvtynfkm ,tp juhfybxtybz lei:",   M_RD_Change_LostSoulsQty,       '\''},  // Элементаль без ограничения душ
     {2,"gjdsityyfz fuhtccbdyjcnm lei:",     M_RD_Change_LostSoulsAgr,       'g'},   // Повышенная агрессивность душ
-    {2,"yfxbyfnm dct ehjdyb c gbcnjktnjv:", M_RD_Change_PistolStart,        'y'},   // Начинать все уровни с пистолетом
+    {2,"", /* [JN] Joint EN/RU string */    M_RD_Change_PistolStart,        'y'},   // Режим игры "Pistol start"
     {-1,"",0,'\0'},     
     {2,"jnj,hf;fnm nfqvth:",                M_RD_Change_DemoTimer,          's'},   // Отображать таймер
     {2,"dhtvz nfqvthf:",                    M_RD_Change_DemoTimerDir,       's'},   // Время таймера
@@ -4818,7 +4818,7 @@ void M_RD_Draw_Gameplay_4(void)
 
         // Pistol start
         dp_translation = pistol_start ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(284 + wide_delta, 85, pistol_start ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(203 + wide_delta, 85, pistol_start ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         //
@@ -4896,9 +4896,11 @@ void M_RD_Draw_Gameplay_4(void)
         M_WriteTextSmall_RUS(266 + wide_delta, 75, agressive_lost_souls ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
-        // Начинать все уровени с пистолетом
+        // Режим игры "Pistol start"
+        M_WriteTextSmall_RUS(35 + wide_delta, 85, "ht;bv buhs ^");
+        M_WriteTextSmall_ENG(121 + wide_delta, 85, "\"Pistol start\":");
         dp_translation = pistol_start ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(283 + wide_delta, 85, pistol_start ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(229 + wide_delta, 85, pistol_start ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         //
