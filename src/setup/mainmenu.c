@@ -154,7 +154,6 @@ static void SensibleDefaults(void)
     invul_sky = 1;
     flip_weapons = 0;
     draw_shadowed_text = 1;
-    shade_filter_pct = 60;
 
     // Gameplay: Audible
     play_exit_sfx = 0;

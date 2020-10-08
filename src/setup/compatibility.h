@@ -35,7 +35,6 @@ extern int messages_secret_color;
 extern int messages_system_color;
 extern int messages_chat_color;
 extern int draw_shadowed_text;
-extern int shade_filter_pct;
 
 // Automap
 extern int automap_color;

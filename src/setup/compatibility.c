@@ -33,7 +33,6 @@ int messages_secret_color = 3;
 int messages_system_color = 0;
 int messages_chat_color = 1;
 int draw_shadowed_text = 1;
-int shade_filter_pct = 60;
 
 // Automap
 int automap_color = 0;
@@ -318,7 +317,6 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("messages_system_color",  &messages_system_color);
     M_BindIntVariable("messages_chat_color",    &messages_chat_color);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
-    M_BindIntVariable("shade_filter_pct",       &shade_filter_pct);
     
     // Automap
     M_BindIntVariable("automap_color",          &automap_color);

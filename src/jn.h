@@ -60,7 +60,6 @@ extern int local_time;
 extern int detailLevel;
 extern int showMessages;
 extern int draw_shadowed_text;
-extern int shade_filter_pct;
 extern int messages_pickup_color;
 extern int messages_secret_color;
 extern int messages_system_color;
