@@ -889,7 +889,7 @@ void G_DoLoadLevel(void)
     }
 
     // [JN] Wand start
-    if (singleplayer && pistol_start)
+    if (singleplayer && !vanillaparm && pistol_start)
     {
         G_PlayerReborn(0);
     }
