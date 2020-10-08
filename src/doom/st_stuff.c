@@ -526,26 +526,26 @@ void ST_refreshBackground(void)
 
         V_CopyRect(ST_X, 0, st_backing_screen, 
                    st_width, st_height, ST_X, st_y);
-    }
 
-    // [JN] Wide screen: draw side borders.
-    if (aspect_ratio >= 2 && (screenblocks <= 10 || (automapactive && !automap_overlay)))
-    {
-        if (gamemode == commercial)                 
+        // [JN] Wide screen: draw side borders.
+        if (aspect_ratio >= 2)
         {
-            V_DrawPatch(wborder_delta_l, 168,   // left border
-                        W_CacheLumpName(DEH_String("RDWBD2LF"), PU_CACHE));
-        
-            V_DrawPatch(wborder_delta_r, 168,   // right border
-                        W_CacheLumpName(DEH_String("RDWBD2RT"), PU_CACHE));
-        }
-        else
-        {
-            V_DrawPatch(wborder_delta_l, 168,   // left border
-                        W_CacheLumpName(DEH_String("RDWBD1LF"), PU_CACHE));
-        
-            V_DrawPatch(wborder_delta_r, 168,   // right border
-                        W_CacheLumpName(DEH_String("RDWBD1RT"), PU_CACHE));
+            if (gamemode == commercial)
+            {
+                V_DrawPatch(wborder_delta_l, 168,   // left border
+                            W_CacheLumpName(DEH_String("RDWBD2LF"), PU_CACHE));
+
+                V_DrawPatch(wborder_delta_r, 168,   // right border
+                            W_CacheLumpName(DEH_String("RDWBD2RT"), PU_CACHE));
+            }
+            else
+            {
+                V_DrawPatch(wborder_delta_l, 168,   // left border
+                            W_CacheLumpName(DEH_String("RDWBD1LF"), PU_CACHE));
+
+                V_DrawPatch(wborder_delta_r, 168,   // right border
+                            W_CacheLumpName(DEH_String("RDWBD1RT"), PU_CACHE));
+            }
         }
     }
 }
