@@ -11184,6 +11184,37 @@ boolean M_Responder (event_t* ev)
 
     if (ev->type == ev_joystick && joywait < I_GetTime())
     {
+
+        // [JN] Disallow to use joystick keys while binding keyboard keys
+        if ((currentMenu == &RD_Bindings_Menu_Def_1
+        ||   currentMenu == &RD_Bindings_Menu_Def_1_Rus) && messageToBind)
+        {
+            for (i = 0 ; i < rd_bindings_1_end ; i++)
+                if (itemOn == i)
+                    return false;
+        }
+        if ((currentMenu == &RD_Bindings_Menu_Def_2
+        ||   currentMenu == &RD_Bindings_Menu_Def_2_Rus) && messageToBind)
+        {
+            for (i = 0 ; i < rd_bindings_2_end ; i++)
+                if (itemOn == i)
+                    return false;
+        }
+        if ((currentMenu == &RD_Bindings_Menu_Def_3
+        ||   currentMenu == &RD_Bindings_Menu_Def_3_Rus) && messageToBind)
+        {
+            for (i = 0 ; i < rd_bindings_3_end ; i++)
+                if (itemOn == i)
+                    return false;
+        }
+        if ((currentMenu == &RD_Bindings_Menu_Def_4
+        ||   currentMenu == &RD_Bindings_Menu_Def_4_Rus) && messageToBind)
+        {
+            for (i = 0 ; i < rd_bindings_4_end ; i++)
+                if (itemOn == i)
+                    return false;
+        }
+
         if (ev->data3 < 0)
         {
             key = key_menu_up;
