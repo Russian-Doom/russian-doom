@@ -5252,6 +5252,8 @@ void M_RD_Draw_Bindings_1(void)
 //
 void M_RD_Key_MoveForward (int key)
 {
+    messageToBind = 0;
+
     if (key == key_up)
     {
         key_up = 0;
@@ -5276,6 +5278,8 @@ void M_RD_Bind_MoveForward (int choice)
 //
 void M_RD_Key_MoveBack (int key)
 {
+    messageToBind = 0;
+
     if (key == key_down)
     {
         key_down = 0;
@@ -5288,8 +5292,6 @@ void M_RD_Key_MoveBack (int key)
     {
         key_down = key;
     }
-
-    return;
 }
 
 void M_RD_Bind_MoveBackward (int choice)
@@ -5302,6 +5304,8 @@ void M_RD_Bind_MoveBackward (int choice)
 //
 void M_RD_Key_TurnLeft (int key)
 {
+    messageToBind = 0;
+
     if (key == key_left)
     {
         key_left = 0;
@@ -5314,8 +5318,6 @@ void M_RD_Key_TurnLeft (int key)
     {
         key_left = key;
     }
-
-    return;
 }
 
 void M_RD_Bind_TurnLeft (int choice)
@@ -5328,6 +5330,8 @@ void M_RD_Bind_TurnLeft (int choice)
 //
 void M_RD_Key_TurnRight (int key)
 {
+    messageToBind = 0;
+
     if (key == key_right)
     {
         key_right = 0;
@@ -5340,8 +5344,6 @@ void M_RD_Key_TurnRight (int key)
     {
         key_right = key;
     }
-
-    return;
 }
 
 void M_RD_Bind_TurnRight (int choice)
@@ -5354,6 +5356,8 @@ void M_RD_Bind_TurnRight (int choice)
 //
 void M_RD_Key_StrafeLeft (int key)
 {
+    messageToBind = 0;
+
     if (key == key_strafeleft)
     {
         key_strafeleft = 0;
@@ -5366,8 +5370,6 @@ void M_RD_Key_StrafeLeft (int key)
     {
         key_strafeleft = key;
     }
-
-    return;
 }
 
 void M_RD_Bind_StrafeLeft (int choice)
@@ -5380,6 +5382,8 @@ void M_RD_Bind_StrafeLeft (int choice)
 //
 void M_RD_Key_StrafeRight (int key)
 {
+    messageToBind = 0;
+
     if (key == key_straferight)
     {
         key_straferight = 0;
@@ -5392,8 +5396,6 @@ void M_RD_Key_StrafeRight (int key)
     {
         key_straferight = key;
     }
-
-    return;
 }
 
 void M_RD_Bind_StrafeRight (int choice)
@@ -5406,6 +5408,8 @@ void M_RD_Bind_StrafeRight (int choice)
 //
 void M_RD_Key_SpeedOn (int key)
 {
+    messageToBind = 0;
+
     if (key == key_speed)
     {
         key_speed = 0;
@@ -5418,8 +5422,6 @@ void M_RD_Key_SpeedOn (int key)
     {
         key_speed = key;
     }
-
-    return;
 }
 
 void M_RD_Bind_SpeedOn (int choice)
@@ -5432,6 +5434,8 @@ void M_RD_Bind_SpeedOn (int choice)
 //
 void M_RD_Key_StrafeOn (int key)
 {
+    messageToBind = 0;
+
     if (key == key_strafe)
     {
         key_strafe = 0;
@@ -5444,8 +5448,6 @@ void M_RD_Key_StrafeOn (int key)
     {
         key_strafe = key;
     }
-
-    return;
 }
 
 void M_RD_Bind_StrafeOn (int choice)
@@ -5458,6 +5460,8 @@ void M_RD_Bind_StrafeOn (int choice)
 //
 void M_RD_Key_FireAttack (int key)
 {
+    messageToBind = 0;
+
     if (key == key_fire)
     {
         key_fire = 0;
@@ -5470,8 +5474,6 @@ void M_RD_Key_FireAttack (int key)
     {
         key_fire = key;
     }
-
-    return;
 }
 
 void M_RD_Bind_FireAttack (int choice)
@@ -5484,6 +5486,8 @@ void M_RD_Bind_FireAttack (int choice)
 //
 void M_RD_Key_Use (int key)
 {
+    messageToBind = 0;
+
     if (key == key_use)
     {
         key_use = 0;
@@ -5496,8 +5500,6 @@ void M_RD_Key_Use (int key)
     {
         key_use = key;
     }
-
-    return;
 }
 
 void M_RD_Bind_Use (int choice)
@@ -6094,6 +6096,8 @@ void M_RD_Draw_Bindings_2(void)
 //
 void M_RD_Key_Weapon_1 (int key)
 {
+    messageToBind = 0;
+
     if (key == key_weapon1)
     {
         key_weapon1 = 0;
@@ -6118,6 +6122,8 @@ void M_RD_Bind_Weapon_1 (int choice)
 //
 void M_RD_Key_Weapon_2 (int key)
 {
+    messageToBind = 0;
+
     if (key == key_weapon2)
     {
         key_weapon2 = 0;
@@ -6142,6 +6148,8 @@ void M_RD_Bind_Weapon_2 (int choice)
 //
 void M_RD_Key_Weapon_3 (int key)
 {
+    messageToBind = 0;
+
     if (key == key_weapon3)
     {
         key_weapon3 = 0;
@@ -6166,6 +6174,8 @@ void M_RD_Bind_Weapon_3 (int choice)
 //
 void M_RD_Key_Weapon_4 (int key)
 {
+    messageToBind = 0;
+
     if (key == key_weapon4)
     {
         key_weapon4 = 0;
@@ -6190,6 +6200,8 @@ void M_RD_Bind_Weapon_4 (int choice)
 //
 void M_RD_Key_Weapon_5 (int key)
 {
+    messageToBind = 0;
+
     if (key == key_weapon5)
     {
         key_weapon5 = 0;
@@ -6214,6 +6226,8 @@ void M_RD_Bind_Weapon_5 (int choice)
 //
 void M_RD_Key_Weapon_6 (int key)
 {
+    messageToBind = 0;
+
     if (key == key_weapon6)
     {
         key_weapon6 = 0;
@@ -6238,6 +6252,8 @@ void M_RD_Bind_Weapon_6 (int choice)
 //
 void M_RD_Key_Weapon_7 (int key)
 {
+    messageToBind = 0;
+
     if (key == key_weapon7)
     {
         key_weapon7 = 0;
@@ -6262,6 +6278,8 @@ void M_RD_Bind_Weapon_7 (int choice)
 //
 void M_RD_Key_Weapon_8 (int key)
 {
+    messageToBind = 0;
+
     if (key == key_weapon8)
     {
         key_weapon8 = 0;
@@ -6286,6 +6304,8 @@ void M_RD_Bind_Weapon_8 (int choice)
 //
 void M_RD_Key_PrevWeapon (int key)
 {
+    messageToBind = 0;
+
     if (key == key_prevweapon)
     {
         key_prevweapon = 0;
@@ -6310,6 +6330,8 @@ void M_RD_Bind_PrevWeapon (int choice)
 //
 void M_RD_Key_NextWeapon (int key)
 {
+    messageToBind = 0;
+
     if (key == key_nextweapon)
     {
         key_nextweapon = 0;
@@ -6931,6 +6953,8 @@ void M_RD_Draw_Bindings_3(void)
 //
 void M_RD_Key_QuickSave (int key)
 {
+    messageToBind = 0;
+
     if (key == key_menu_qsave)
     {
         key_menu_qsave = 0;
@@ -6955,6 +6979,8 @@ void M_RD_Bind_QuickSave (int choice)
 //
 void M_RD_Key_QuickLoad (int key)
 {
+    messageToBind = 0;
+
     if (key == key_menu_qload)
     {
         key_menu_qload = 0;
@@ -6979,6 +7005,8 @@ void M_RD_Bind_QuickLoad (int choice)
 //
 void M_RD_Key_NextLevel (int key)
 {
+    messageToBind = 0;
+
     if (key == key_menu_nextlevel)
     {
         key_menu_nextlevel = 0;
@@ -7003,6 +7031,8 @@ void M_RD_Bind_NextLevel (int choice)
 //
 void M_RD_Key_RestartLevel (int key)
 {
+    messageToBind = 0;
+
     if (key == key_menu_reloadlevel)
     {
         key_menu_reloadlevel = 0;
@@ -7027,6 +7057,8 @@ void M_RD_Bind_RestartLevel (int choice)
 //
 void M_RD_Key_Screenshot (int key)
 {
+    messageToBind = 0;
+
     if (key == key_menu_screenshot)
     {
         key_menu_screenshot = 0;
@@ -7051,6 +7083,8 @@ void M_RD_Bind_Screenshot (int choice)
 //
 void M_RD_Key_FinishDemo (int key)
 {
+    messageToBind = 0;
+
     if (key == key_demo_quit)
     {
         key_demo_quit = 0;
@@ -7075,6 +7109,8 @@ void M_RD_Bind_FinishDemo (int choice)
 //
 void M_RD_Key_MouseLook (int key)
 {
+    messageToBind = 0;
+
     if (key == key_togglemlook)
     {
         key_togglemlook = 0;
@@ -7099,6 +7135,8 @@ void M_RD_Bind_MouseLook (int choice)
 //
 void M_RD_Key_AlwaysRun (int key)
 {
+    messageToBind = 0;
+
     if (key == key_toggleautorun)
     {
         key_toggleautorun = 0;
@@ -7123,6 +7161,8 @@ void M_RD_Bind_AlwaysRun (int choice)
 //
 void M_RD_Key_Crosshair (int key)
 {
+    messageToBind = 0;
+
     if (key == key_togglecrosshair)
     {
         key_togglecrosshair = 0;
@@ -7147,6 +7187,8 @@ void M_RD_Bind_Crosshair (int choice)
 //
 void M_RD_Key_FlipLevels (int key)
 {
+    messageToBind = 0;
+
     if (key == key_togglefliplvls)
     {
         key_togglefliplvls = 0;
@@ -7754,6 +7796,8 @@ void M_RD_Draw_Bindings_4(void)
 //
 void M_RD_Key_Automap (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_toggle)
     {
         key_map_toggle = 0;
@@ -7778,6 +7822,8 @@ void M_RD_Bind_Automap (int choice)
 //
 void M_RD_Key_ZoomIn (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_zoomin)
     {
         key_map_zoomin = 0;
@@ -7802,6 +7848,8 @@ void M_RD_Bind_ZoomIn (int choice)
 //
 void M_RD_Key_ZoomOut (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_zoomout)
     {
         key_map_zoomout = 0;
@@ -7826,6 +7874,8 @@ void M_RD_Bind_ZoomOut (int choice)
 //
 void M_RD_Key_MaximumZoom (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_maxzoom)
     {
         key_map_maxzoom = 0;
@@ -7850,6 +7900,8 @@ void M_RD_Bind_MaximumZoom (int choice)
 //
 void M_RD_Key_Follow (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_follow)
     {
         key_map_follow = 0;
@@ -7874,6 +7926,8 @@ void M_RD_Bind_Follow (int choice)
 //
 void M_RD_Key_Overlay (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_overlay)
     {
         key_map_overlay = 0;
@@ -7898,6 +7952,8 @@ void M_RD_Bind_Overlay (int choice)
 //
 void M_RD_Key_Rotate (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_rotate)
     {
         key_map_rotate = 0;
@@ -7922,6 +7978,8 @@ void M_RD_Bind_Rotate (int choice)
 //
 void M_RD_Key_Grid (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_grid)
     {
         key_map_grid = 0;
@@ -7946,6 +8004,8 @@ void M_RD_Bind_Grid (int choice)
 //
 void M_RD_Key_Mark (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_mark)
     {
         key_map_mark = 0;
@@ -7970,6 +8030,8 @@ void M_RD_Bind_Mark (int choice)
 //
 void M_RD_Key_ClearMarks (int key)
 {
+    messageToBind = 0;
+
     if (key == key_map_clearmark)
     {
         key_map_clearmark = 0;
@@ -11195,6 +11257,36 @@ boolean M_Responder (event_t* ev)
                 mousex = lastx += 30;
             }
             */
+
+            // [JN] Disallow to use mouse keys while binding keyboard keys
+            if ((currentMenu == &RD_Bindings_Menu_Def_1
+            ||   currentMenu == &RD_Bindings_Menu_Def_1_Rus) && messageToBind)
+            {
+                for (i = 0 ; i < rd_bindings_1_end ; i++)
+                    if (itemOn == i)
+                        return false;
+            }
+            if ((currentMenu == &RD_Bindings_Menu_Def_2
+            ||   currentMenu == &RD_Bindings_Menu_Def_2_Rus) && messageToBind)
+            {
+                for (i = 0 ; i < rd_bindings_2_end ; i++)
+                    if (itemOn == i)
+                        return false;
+            }
+            if ((currentMenu == &RD_Bindings_Menu_Def_3
+            ||   currentMenu == &RD_Bindings_Menu_Def_3_Rus) && messageToBind)
+            {
+                for (i = 0 ; i < rd_bindings_3_end ; i++)
+                    if (itemOn == i)
+                        return false;
+            }
+            if ((currentMenu == &RD_Bindings_Menu_Def_4
+            ||   currentMenu == &RD_Bindings_Menu_Def_4_Rus) && messageToBind)
+            {
+                for (i = 0 ; i < rd_bindings_4_end ; i++)
+                    if (itemOn == i)
+                        return false;
+            }
 
             if (ev->data1&1)
             {
