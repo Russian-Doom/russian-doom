@@ -527,8 +527,9 @@ void ST_refreshBackground(void)
         V_CopyRect(ST_X, 0, st_backing_screen, 
                    st_width, st_height, ST_X, st_y);
 
-        // [JN] Wide screen: draw side borders.
-        if (aspect_ratio >= 2)
+        // [JN] Wide screen: draw side borders if needed,
+        // i.e. if status bar is 320 pixels wide.
+        if (aspect_ratio >= 2 && sbar->width == SCREENWIDTH)
         {
             if (gamemode == commercial)
             {
