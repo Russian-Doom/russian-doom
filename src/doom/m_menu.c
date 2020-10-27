@@ -4644,6 +4644,104 @@ void M_RD_Change_Threshold(int choice)
     }
 }
 
+// -----------------------------------------------------------------------------
+// M_RD_KbdKeyDrawer
+// [JN] Returns key name for keyboard bindings. Values are simple ASCII table:
+// https://upload.wikimedia.org/wikipedia/commons/7/7b/Ascii_Table-nocolor.svg
+// -----------------------------------------------------------------------------
+
+static char *M_RD_KbdKeyDrawer (int i)
+{
+    switch (i)
+    {
+        case 0:     return "---";
+        case 9:     return "TAB";
+        case 13:    return "ENTER";
+        case 32:    return "SPACE BAR";
+        case 39:    return "'";
+        case 42:    return "*";
+        case 43:    return "+"; // [JN] NumPad +
+        case 44:    return ",";
+        case 45:    return "-";
+        case 46:    return ".";
+        case 47:    return "/";
+        case 48:    return "0";
+        case 49:    return "1";
+        case 50:    return "2";
+        case 51:    return "3";
+        case 52:    return "4";
+        case 53:    return "5";
+        case 54:    return "6";
+        case 55:    return "7";
+        case 56:    return "8";
+        case 57:    return "9";
+        case 59:    return ";";
+        case 61:    return "="; // [JN] Indicated as "+" in help screens
+        case 91:    return "[";
+        case 93:    return "]";
+        case 92:    return "\\";
+        case 96:    return "TILDE";
+        case 97:    return "A";
+        case 98:    return "B";
+        case 99:    return "C";
+        case 100:   return "D";
+        case 101:   return "E";
+        case 102:   return "F";
+        case 103:   return "G";
+        case 104:   return "H";
+        case 105:   return "I";
+        case 106:   return "J";
+        case 107:   return "K";
+        case 108:   return "L";
+        case 109:   return "M";
+        case 110:   return "N";
+        case 111:   return "O";
+        case 112:   return "P";
+        case 113:   return "Q";
+        case 114:   return "R";
+        case 115:   return "S";
+        case 116:   return "T";
+        case 117:   return "U";
+        case 118:   return "V";
+        case 119:   return "W";
+        case 120:   return "X";
+        case 121:   return "Y";
+        case 122:   return "Z";
+        case 127:   return "BACKSPACE";
+        case 157:   return "CTRL";
+        case 172:   return "LEFT ARROW";
+        case 173:   return "UP ARROW";
+        case 174:   return "RIGHT ARROW";
+        case 175:   return "DOWN ARROW";
+        case 182:   return "SHIFT";
+        case 184:   return "ALT";
+        case 186:   return "CAPS LOCK";
+        case 187:   return "F1";
+        case 188:   return "F2";
+        case 189:   return "F3";
+        case 190:   return "F4";
+        case 191:   return "F5";
+        case 192:   return "F6";
+        case 193:   return "F7";
+        case 194:   return "F8";
+        case 195:   return "F9";
+        case 197:   return "NUM LOCK";
+        case 198:   return "SCROLL LOCK";
+        case 199:   return "HOME";
+        case 201:   return "PAGE UP";
+        case 204:   return "5"; // [JN] NumPad 5
+        case 207:   return "END";
+        case 209:   return "PAGE DOWN";
+        case 210:   return "INSERT";
+        case 211:   return "DELETE";
+        case 215:   return "F11";
+        case 216:   return "F12";
+        case 217:   return "PRINT SCREEN";
+        case 255:   return "PAUSE";
+        default:    return "?"; // [JN] Unknown key
+    }
+}
+
 
 // -----------------------------------------------------------------------------
 // Key bindings (1)
@@ -4659,7 +4757,6 @@ void M_RD_Choose_Bindings_1(int choice)
 void M_RD_Draw_Bindings_1(void)
 {
     int x = (english_language ? 209 : 210);
-    static char num[16];
     
     // Jaguar: hide game background, don't draw lines over the HUD
     // if (gamemission == jaguar)
@@ -4730,46 +4827,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_up ==   0 ? "---" :
-                            key_up ==   9 ? "TAB" :
-                            key_up ==  13 ? "ENTER" :
-                            key_up ==  32 ? "SPACE BAR" :
-                            key_up ==  96 ? "\'" :
-                            key_up == 127 ? "BACKSPACE" :
-                            key_up == 157 ? "CTRL" :
-                            key_up == 172 ? "LEFT ARROW" :
-                            key_up == 173 ? "UP ARROW" :
-                            key_up == 174 ? "RIGHT ARROW" :
-                            key_up == 175 ? "DOWN ARROW" :
-                            key_up == 182 ? "SHIFT" :
-                            key_up == 184 ? "ALT" :
-                            key_up == 186 ? "CAPS LOCK" :
-                            key_up == 187 ? "F1" :
-                            key_up == 188 ? "F2" :
-                            key_up == 189 ? "F3" :
-                            key_up == 190 ? "F4" :
-                            key_up == 191 ? "F5" :
-                            key_up == 192 ? "F6" :
-                            key_up == 193 ? "F7" :
-                            key_up == 194 ? "F8" :
-                            key_up == 195 ? "F9" :
-                            key_up == 196 ? "F10" :
-                            key_up == 197 ? "NUM LOCK" :
-                            key_up == 198 ? "SCROLL LOCK" :
-                            key_up == 199 ? "HOME" :
-                            key_up == 201 ? "PAGE UP" :
-                            key_up == 207 ? "END" :
-                            key_up == 209 ? "PAGE DOWN" :
-                            key_up == 210 ? "INSERT" :
-                            key_up == 211 ? "DELETE" :
-                            key_up == 215 ? "F11" :
-                            key_up == 216 ? "F12" :
-                            key_up == 217 ? "PRINT SCREEN" :
-                            key_up == 255 ? "PAUSE" :
-                                            "%c", key_up);
         if (key_up == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_KbdKeyDrawer(key_up));
         dp_translation = NULL;
     }
 
@@ -4782,46 +4842,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_down ==   0 ? "---" :
-                            key_down ==   9 ? "TAB" :
-                            key_down ==  13 ? "ENTER" :
-                            key_down ==  32 ? "SPACE BAR" :
-                            key_down ==  96 ? "\'" :
-                            key_down == 127 ? "BACKSPACE" :
-                            key_down == 157 ? "CTRL" :
-                            key_down == 172 ? "LEFT ARROW" :
-                            key_down == 173 ? "UP ARROW" :
-                            key_down == 174 ? "RIGHT ARROW" :
-                            key_down == 175 ? "DOWN ARROW" :
-                            key_down == 182 ? "SHIFT" :
-                            key_down == 184 ? "ALT" :
-                            key_down == 186 ? "CAPS LOCK" :
-                            key_down == 187 ? "F1" :
-                            key_down == 188 ? "F2" :
-                            key_down == 189 ? "F3" :
-                            key_down == 190 ? "F4" :
-                            key_down == 191 ? "F5" :
-                            key_down == 192 ? "F6" :
-                            key_down == 193 ? "F7" :
-                            key_down == 194 ? "F8" :
-                            key_down == 195 ? "F9" :
-                            key_down == 196 ? "F10" :
-                            key_down == 197 ? "NUM LOCK" :
-                            key_down == 198 ? "SCROLL LOCK" :
-                            key_down == 199 ? "HOME" :
-                            key_down == 201 ? "PAGE UP" :
-                            key_down == 207 ? "END" :
-                            key_down == 209 ? "PAGE DOWN" :
-                            key_down == 210 ? "INSERT" :
-                            key_down == 211 ? "DELETE" :
-                            key_down == 215 ? "F11" :
-                            key_down == 216 ? "F12" :
-                            key_down == 217 ? "PRINT SCREEN" :
-                            key_down == 255 ? "PAUSE" :
-                                              "%c", key_down);
         if (key_down == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_KbdKeyDrawer(key_down));
         dp_translation = NULL;
     }
 
@@ -4834,46 +4857,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_left ==   0 ? "---" :
-                            key_left ==   9 ? "TAB" :
-                            key_left ==  13 ? "ENTER" :
-                            key_left ==  32 ? "SPACE BAR" :
-                            key_left ==  96 ? "\'" :
-                            key_left == 127 ? "BACKSPACE" :
-                            key_left == 157 ? "CTRL" :
-                            key_left == 172 ? "LEFT ARROW" :
-                            key_left == 173 ? "UP ARROW" :
-                            key_left == 174 ? "RIGHT ARROW" :
-                            key_left == 175 ? "DOWN ARROW" :
-                            key_left == 182 ? "SHIFT" :
-                            key_left == 184 ? "ALT" :
-                            key_left == 186 ? "CAPS LOCK" :
-                            key_left == 187 ? "F1" :
-                            key_left == 188 ? "F2" :
-                            key_left == 189 ? "F3" :
-                            key_left == 190 ? "F4" :
-                            key_left == 191 ? "F5" :
-                            key_left == 192 ? "F6" :
-                            key_left == 193 ? "F7" :
-                            key_left == 194 ? "F8" :
-                            key_left == 195 ? "F9" :
-                            key_left == 196 ? "F10" :
-                            key_left == 197 ? "NUM LOCK" :
-                            key_left == 198 ? "SCROLL LOCK" :
-                            key_left == 199 ? "HOME" :
-                            key_left == 201 ? "PAGE UP" :
-                            key_left == 207 ? "END" :
-                            key_left == 209 ? "PAGE DOWN" :
-                            key_left == 210 ? "INSERT" :
-                            key_left == 211 ? "DELETE" :
-                            key_left == 215 ? "F11" :
-                            key_left == 216 ? "F12" :
-                            key_left == 217 ? "PRINT SCREEN" :
-                            key_left == 255 ? "PAUSE" :
-                                              "%c", key_left);
         if (key_left == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_KbdKeyDrawer(key_left));
         dp_translation = NULL;
     }
 
@@ -4886,46 +4872,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_right ==   0 ? "---" :
-                            key_right ==   9 ? "TAB" :
-                            key_right ==  13 ? "ENTER" :
-                            key_right ==  32 ? "SPACE BAR" :
-                            key_right ==  96 ? "\'" :
-                            key_right == 127 ? "BACKSPACE" :
-                            key_right == 157 ? "CTRL" :
-                            key_right == 172 ? "LEFT ARROW" :
-                            key_right == 173 ? "UP ARROW" :
-                            key_right == 174 ? "RIGHT ARROW" :
-                            key_right == 175 ? "DOWN ARROW" :
-                            key_right == 182 ? "SHIFT" :
-                            key_right == 184 ? "ALT" :
-                            key_right == 186 ? "CAPS LOCK" :
-                            key_right == 187 ? "F1" :
-                            key_right == 188 ? "F2" :
-                            key_right == 189 ? "F3" :
-                            key_right == 190 ? "F4" :
-                            key_right == 191 ? "F5" :
-                            key_right == 192 ? "F6" :
-                            key_right == 193 ? "F7" :
-                            key_right == 194 ? "F8" :
-                            key_right == 195 ? "F9" :
-                            key_right == 196 ? "F10" :
-                            key_right == 197 ? "NUM LOCK" :
-                            key_right == 198 ? "SCROLL LOCK" :
-                            key_right == 199 ? "HOME" :
-                            key_right == 201 ? "PAGE UP" :
-                            key_right == 207 ? "END" :
-                            key_right == 209 ? "PAGE DOWN" :
-                            key_right == 210 ? "INSERT" :
-                            key_right == 211 ? "DELETE" :
-                            key_right == 215 ? "F11" :
-                            key_right == 216 ? "F12" :
-                            key_right == 217 ? "PRINT SCREEN" :
-                            key_right == 255 ? "PAUSE" :
-                                               "%c", key_right);
         if (key_right == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_KbdKeyDrawer(key_right));
         dp_translation = NULL;
     }
 
@@ -4938,46 +4887,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_strafeleft ==   0 ? "---" :
-                            key_strafeleft ==   9 ? "TAB" :
-                            key_strafeleft ==  13 ? "ENTER" :
-                            key_strafeleft ==  32 ? "SPACE BAR" :
-                            key_strafeleft ==  96 ? "\'" :
-                            key_strafeleft == 127 ? "BACKSPACE" :
-                            key_strafeleft == 157 ? "CTRL" :
-                            key_strafeleft == 172 ? "LEFT ARROW" :
-                            key_strafeleft == 173 ? "UP ARROW" :
-                            key_strafeleft == 174 ? "RIGHT ARROW" :
-                            key_strafeleft == 175 ? "DOWN ARROW" :
-                            key_strafeleft == 182 ? "SHIFT" :
-                            key_strafeleft == 184 ? "ALT" :
-                            key_strafeleft == 186 ? "CAPS LOCK" :
-                            key_strafeleft == 187 ? "F1" :
-                            key_strafeleft == 188 ? "F2" :
-                            key_strafeleft == 189 ? "F3" :
-                            key_strafeleft == 190 ? "F4" :
-                            key_strafeleft == 191 ? "F5" :
-                            key_strafeleft == 192 ? "F6" :
-                            key_strafeleft == 193 ? "F7" :
-                            key_strafeleft == 194 ? "F8" :
-                            key_strafeleft == 195 ? "F9" :
-                            key_strafeleft == 196 ? "F10" :
-                            key_strafeleft == 197 ? "NUM LOCK" :
-                            key_strafeleft == 198 ? "SCROLL LOCK" :
-                            key_strafeleft == 199 ? "HOME" :
-                            key_strafeleft == 201 ? "PAGE UP" :
-                            key_strafeleft == 207 ? "END" :
-                            key_strafeleft == 209 ? "PAGE DOWN" :
-                            key_strafeleft == 210 ? "INSERT" :
-                            key_strafeleft == 211 ? "DELETE" :
-                            key_strafeleft == 215 ? "F11" :
-                            key_strafeleft == 216 ? "F12" :
-                            key_strafeleft == 217 ? "PRINT SCREEN" :
-                            key_strafeleft == 255 ? "PAUSE" :
-                                                    "%c", key_strafeleft);
         if (key_strafeleft == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_KbdKeyDrawer(key_strafeleft));
         dp_translation = NULL;
     }
 
@@ -4990,46 +4902,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_straferight ==   0 ? "---" :
-                            key_straferight ==   9 ? "TAB" :
-                            key_straferight ==  13 ? "ENTER" :
-                            key_straferight ==  32 ? "SPACE BAR" :
-                            key_straferight ==  96 ? "\'" :
-                            key_straferight == 127 ? "BACKSPACE" :
-                            key_straferight == 157 ? "CTRL" :
-                            key_straferight == 172 ? "LEFT ARROW" :
-                            key_straferight == 173 ? "UP ARROW" :
-                            key_straferight == 174 ? "RIGHT ARROW" :
-                            key_straferight == 175 ? "DOWN ARROW" :
-                            key_straferight == 182 ? "SHIFT" :
-                            key_straferight == 184 ? "ALT" :
-                            key_straferight == 186 ? "CAPS LOCK" :
-                            key_straferight == 187 ? "F1" :
-                            key_straferight == 188 ? "F2" :
-                            key_straferight == 189 ? "F3" :
-                            key_straferight == 190 ? "F4" :
-                            key_straferight == 191 ? "F5" :
-                            key_straferight == 192 ? "F6" :
-                            key_straferight == 193 ? "F7" :
-                            key_straferight == 194 ? "F8" :
-                            key_straferight == 195 ? "F9" :
-                            key_straferight == 196 ? "F10" :
-                            key_straferight == 197 ? "NUM LOCK" :
-                            key_straferight == 198 ? "SCROLL LOCK" :
-                            key_straferight == 199 ? "HOME" :
-                            key_straferight == 201 ? "PAGE UP" :
-                            key_straferight == 207 ? "END" :
-                            key_straferight == 209 ? "PAGE DOWN" :
-                            key_straferight == 210 ? "INSERT" :
-                            key_straferight == 211 ? "DELETE" :
-                            key_straferight == 215 ? "F11" :
-                            key_straferight == 216 ? "F12" :
-                            key_straferight == 217 ? "PRINT SCREEN" :
-                            key_straferight == 255 ? "PAUSE" :
-                                                     "%c", key_straferight);
         if (key_straferight == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_KbdKeyDrawer(key_straferight));
         dp_translation = NULL;
     }
 
@@ -5042,46 +4917,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_speed ==   0 ? "---" :
-                            key_speed ==   9 ? "TAB" :
-                            key_speed ==  13 ? "ENTER" :
-                            key_speed ==  32 ? "SPACE BAR" :
-                            key_speed ==  96 ? "\'" :
-                            key_speed == 127 ? "BACKSPACE" :
-                            key_speed == 157 ? "CTRL" :
-                            key_speed == 172 ? "LEFT ARROW" :
-                            key_speed == 173 ? "UP ARROW" :
-                            key_speed == 174 ? "RIGHT ARROW" :
-                            key_speed == 175 ? "DOWN ARROW" :
-                            key_speed == 182 ? "SHIFT" :
-                            key_speed == 184 ? "ALT" :
-                            key_speed == 186 ? "CAPS LOCK" :
-                            key_speed == 187 ? "F1" :
-                            key_speed == 188 ? "F2" :
-                            key_speed == 189 ? "F3" :
-                            key_speed == 190 ? "F4" :
-                            key_speed == 191 ? "F5" :
-                            key_speed == 192 ? "F6" :
-                            key_speed == 193 ? "F7" :
-                            key_speed == 194 ? "F8" :
-                            key_speed == 195 ? "F9" :
-                            key_speed == 196 ? "F10" :
-                            key_speed == 197 ? "NUM LOCK" :
-                            key_speed == 198 ? "SCROLL LOCK" :
-                            key_speed == 199 ? "HOME" :
-                            key_speed == 201 ? "PAGE UP" :
-                            key_speed == 207 ? "END" :
-                            key_speed == 209 ? "PAGE DOWN" :
-                            key_speed == 210 ? "INSERT" :
-                            key_speed == 211 ? "DELETE" :
-                            key_speed == 215 ? "F11" :
-                            key_speed == 216 ? "F12" :
-                            key_speed == 217 ? "PRINT SCREEN" :
-                            key_speed == 255 ? "PAUSE" :
-                                               "%c", key_speed);
         if (key_speed == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 95, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 95, M_RD_KbdKeyDrawer(key_speed));
         dp_translation = NULL;
     }
 
@@ -5094,46 +4932,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_strafe ==   0 ? "---" :
-                            key_strafe ==   9 ? "TAB" :
-                            key_strafe ==  13 ? "ENTER" :
-                            key_strafe ==  32 ? "SPACE BAR" :
-                            key_strafe ==  96 ? "\'" :
-                            key_strafe == 127 ? "BACKSPACE" :
-                            key_strafe == 157 ? "CTRL" :
-                            key_strafe == 172 ? "LEFT ARROW" :
-                            key_strafe == 173 ? "UP ARROW" :
-                            key_strafe == 174 ? "RIGHT ARROW" :
-                            key_strafe == 175 ? "DOWN ARROW" :
-                            key_strafe == 182 ? "SHIFT" :
-                            key_strafe == 184 ? "ALT" :
-                            key_strafe == 186 ? "CAPS LOCK" :
-                            key_strafe == 187 ? "F1" :
-                            key_strafe == 188 ? "F2" :
-                            key_strafe == 189 ? "F3" :
-                            key_strafe == 190 ? "F4" :
-                            key_strafe == 191 ? "F5" :
-                            key_strafe == 192 ? "F6" :
-                            key_strafe == 193 ? "F7" :
-                            key_strafe == 194 ? "F8" :
-                            key_strafe == 195 ? "F9" :
-                            key_strafe == 196 ? "F10" :
-                            key_strafe == 197 ? "NUM LOCK" :
-                            key_strafe == 198 ? "SCROLL LOCK" :
-                            key_strafe == 199 ? "HOME" :
-                            key_strafe == 201 ? "PAGE UP" :
-                            key_strafe == 207 ? "END" :
-                            key_strafe == 209 ? "PAGE DOWN" :
-                            key_strafe == 210 ? "INSERT" :
-                            key_strafe == 211 ? "DELETE" :
-                            key_strafe == 215 ? "F11" :
-                            key_strafe == 216 ? "F12" :
-                            key_strafe == 217 ? "PRINT SCREEN" :
-                            key_strafe == 255 ? "PAUSE" :
-                                                "%c", key_strafe);
         if (key_strafe == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_KbdKeyDrawer(key_strafe));
         dp_translation = NULL;
     }
 
@@ -5146,46 +4947,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_fire ==   0 ? "---" :
-                            key_fire ==   9 ? "TAB" :
-                            key_fire ==  13 ? "ENTER" :
-                            key_fire ==  32 ? "SPACE BAR" :
-                            key_fire ==  96 ? "\'" :
-                            key_fire == 127 ? "BACKSPACE" :
-                            key_fire == 157 ? "CTRL" :
-                            key_fire == 172 ? "LEFT ARROW" :
-                            key_fire == 173 ? "UP ARROW" :
-                            key_fire == 174 ? "RIGHT ARROW" :
-                            key_fire == 175 ? "DOWN ARROW" :
-                            key_fire == 182 ? "SHIFT" :
-                            key_fire == 184 ? "ALT" :
-                            key_fire == 186 ? "CAPS LOCK" :
-                            key_fire == 187 ? "F1" :
-                            key_fire == 188 ? "F2" :
-                            key_fire == 189 ? "F3" :
-                            key_fire == 190 ? "F4" :
-                            key_fire == 191 ? "F5" :
-                            key_fire == 192 ? "F6" :
-                            key_fire == 193 ? "F7" :
-                            key_fire == 194 ? "F8" :
-                            key_fire == 195 ? "F9" :
-                            key_fire == 196 ? "F10" :
-                            key_fire == 197 ? "NUM LOCK" :
-                            key_fire == 198 ? "SCROLL LOCK" :
-                            key_fire == 199 ? "HOME" :
-                            key_fire == 201 ? "PAGE UP" :
-                            key_fire == 207 ? "END" :
-                            key_fire == 209 ? "PAGE DOWN" :
-                            key_fire == 210 ? "INSERT" :
-                            key_fire == 211 ? "DELETE" :
-                            key_fire == 215 ? "F11" :
-                            key_fire == 216 ? "F12" :
-                            key_fire == 217 ? "PRINT SCREEN" :
-                            key_fire == 255 ? "PAUSE" :
-                                              "%c", key_fire);
         if (key_fire == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 125, M_RD_KbdKeyDrawer(key_fire));
         dp_translation = NULL;
     }
 
@@ -5198,46 +4962,9 @@ void M_RD_Draw_Bindings_1(void)
     }
     else
     {
-        M_snprintf(num, 16, key_use ==   0 ? "---" :
-                            key_use ==   9 ? "TAB" :
-                            key_use ==  13 ? "ENTER" :
-                            key_use ==  32 ? "SPACE BAR" :
-                            key_use ==  96 ? "\'" :
-                            key_use == 127 ? "BACKSPACE" :
-                            key_use == 157 ? "CTRL" :
-                            key_use == 172 ? "LEFT ARROW" :
-                            key_use == 173 ? "UP ARROW" :
-                            key_use == 174 ? "RIGHT ARROW" :
-                            key_use == 175 ? "DOWN ARROW" :
-                            key_use == 182 ? "SHIFT" :
-                            key_use == 184 ? "ALT" :
-                            key_use == 186 ? "CAPS LOCK" :
-                            key_use == 187 ? "F1" :
-                            key_use == 188 ? "F2" :
-                            key_use == 189 ? "F3" :
-                            key_use == 190 ? "F4" :
-                            key_use == 191 ? "F5" :
-                            key_use == 192 ? "F6" :
-                            key_use == 193 ? "F7" :
-                            key_use == 194 ? "F8" :
-                            key_use == 195 ? "F9" :
-                            key_use == 196 ? "F10" :
-                            key_use == 197 ? "NUM LOCK" :
-                            key_use == 198 ? "SCROLL LOCK" :
-                            key_use == 199 ? "HOME" :
-                            key_use == 201 ? "PAGE UP" :
-                            key_use == 207 ? "END" :
-                            key_use == 209 ? "PAGE DOWN" :
-                            key_use == 210 ? "INSERT" :
-                            key_use == 211 ? "DELETE" :
-                            key_use == 215 ? "F11" :
-                            key_use == 216 ? "F12" :
-                            key_use == 217 ? "PRINT SCREEN" :
-                            key_use == 255 ? "PAUSE" :
-                                             "%c", key_use);
         if (key_use == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 135, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 135, M_RD_KbdKeyDrawer(key_use));
         dp_translation = NULL;
     }
 }
@@ -5522,7 +5249,6 @@ void M_RD_Choose_Bindings_2(int choice)
 void M_RD_Draw_Bindings_2(void)
 {
     int x = (english_language ? 209 : 210);
-    static char num[16];
     
     // Jaguar: hide game background, don't draw lines over the HUD
     // if (gamemission == jaguar)
@@ -5579,46 +5305,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_weapon1 ==   0 ? "---" :
-                            key_weapon1 ==   9 ? "TAB" :
-                            key_weapon1 ==  13 ? "ENTER" :
-                            key_weapon1 ==  32 ? "SPACE BAR" :
-                            key_weapon1 ==  96 ? "\'" :
-                            key_weapon1 == 127 ? "BACKSPACE" :
-                            key_weapon1 == 157 ? "CTRL" :
-                            key_weapon1 == 172 ? "LEFT ARROW" :
-                            key_weapon1 == 173 ? "UP ARROW" :
-                            key_weapon1 == 174 ? "RIGHT ARROW" :
-                            key_weapon1 == 175 ? "DOWN ARROW" :
-                            key_weapon1 == 182 ? "SHIFT" :
-                            key_weapon1 == 184 ? "ALT" :
-                            key_weapon1 == 186 ? "CAPS LOCK" :
-                            key_weapon1 == 187 ? "F1" :
-                            key_weapon1 == 188 ? "F2" :
-                            key_weapon1 == 189 ? "F3" :
-                            key_weapon1 == 190 ? "F4" :
-                            key_weapon1 == 191 ? "F5" :
-                            key_weapon1 == 192 ? "F6" :
-                            key_weapon1 == 193 ? "F7" :
-                            key_weapon1 == 194 ? "F8" :
-                            key_weapon1 == 195 ? "F9" :
-                            key_weapon1 == 196 ? "F10" :
-                            key_weapon1 == 197 ? "NUM LOCK" :
-                            key_weapon1 == 198 ? "SCROLL LOCK" :
-                            key_weapon1 == 199 ? "HOME" :
-                            key_weapon1 == 201 ? "PAGE UP" :
-                            key_weapon1 == 207 ? "END" :
-                            key_weapon1 == 209 ? "PAGE DOWN" :
-                            key_weapon1 == 210 ? "INSERT" :
-                            key_weapon1 == 211 ? "DELETE" :
-                            key_weapon1 == 215 ? "F11" :
-                            key_weapon1 == 216 ? "F12" :
-                            key_weapon1 == 217 ? "PRINT SCREEN" :
-                            key_weapon1 == 255 ? "PAUSE" :
-                                                 "%c", key_weapon1);
         if (key_weapon1 == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_KbdKeyDrawer(key_weapon1));
         dp_translation = NULL;
     }
 
@@ -5631,46 +5320,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_weapon2 ==   0 ? "---" :
-                            key_weapon2 ==   9 ? "TAB" :
-                            key_weapon2 ==  13 ? "ENTER" :
-                            key_weapon2 ==  32 ? "SPACE BAR" :
-                            key_weapon2 ==  96 ? "\'" :
-                            key_weapon2 == 127 ? "BACKSPACE" :
-                            key_weapon2 == 157 ? "CTRL" :
-                            key_weapon2 == 172 ? "LEFT ARROW" :
-                            key_weapon2 == 173 ? "UP ARROW" :
-                            key_weapon2 == 174 ? "RIGHT ARROW" :
-                            key_weapon2 == 175 ? "DOWN ARROW" :
-                            key_weapon2 == 182 ? "SHIFT" :
-                            key_weapon2 == 184 ? "ALT" :
-                            key_weapon2 == 186 ? "CAPS LOCK" :
-                            key_weapon2 == 187 ? "F1" :
-                            key_weapon2 == 188 ? "F2" :
-                            key_weapon2 == 189 ? "F3" :
-                            key_weapon2 == 190 ? "F4" :
-                            key_weapon2 == 191 ? "F5" :
-                            key_weapon2 == 192 ? "F6" :
-                            key_weapon2 == 193 ? "F7" :
-                            key_weapon2 == 194 ? "F8" :
-                            key_weapon2 == 195 ? "F9" :
-                            key_weapon2 == 196 ? "F10" :
-                            key_weapon2 == 197 ? "NUM LOCK" :
-                            key_weapon2 == 198 ? "SCROLL LOCK" :
-                            key_weapon2 == 199 ? "HOME" :
-                            key_weapon2 == 201 ? "PAGE UP" :
-                            key_weapon2 == 207 ? "END" :
-                            key_weapon2 == 209 ? "PAGE DOWN" :
-                            key_weapon2 == 210 ? "INSERT" :
-                            key_weapon2 == 211 ? "DELETE" :
-                            key_weapon2 == 215 ? "F11" :
-                            key_weapon2 == 216 ? "F12" :
-                            key_weapon2 == 217 ? "PRINT SCREEN" :
-                            key_weapon2 == 255 ? "PAUSE" :
-                                                 "%c", key_weapon2);
         if (key_weapon2 == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_KbdKeyDrawer(key_weapon2));
         dp_translation = NULL;
     }
 
@@ -5683,46 +5335,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_weapon3 ==   0 ? "---" :
-                            key_weapon3 ==   9 ? "TAB" :
-                            key_weapon3 ==  13 ? "ENTER" :
-                            key_weapon3 ==  32 ? "SPACE BAR" :
-                            key_weapon3 ==  96 ? "\'" :
-                            key_weapon3 == 127 ? "BACKSPACE" :
-                            key_weapon3 == 157 ? "CTRL" :
-                            key_weapon3 == 172 ? "LEFT ARROW" :
-                            key_weapon3 == 173 ? "UP ARROW" :
-                            key_weapon3 == 174 ? "RIGHT ARROW" :
-                            key_weapon3 == 175 ? "DOWN ARROW" :
-                            key_weapon3 == 182 ? "SHIFT" :
-                            key_weapon3 == 184 ? "ALT" :
-                            key_weapon3 == 186 ? "CAPS LOCK" :
-                            key_weapon3 == 187 ? "F1" :
-                            key_weapon3 == 188 ? "F2" :
-                            key_weapon3 == 189 ? "F3" :
-                            key_weapon3 == 190 ? "F4" :
-                            key_weapon3 == 191 ? "F5" :
-                            key_weapon3 == 192 ? "F6" :
-                            key_weapon3 == 193 ? "F7" :
-                            key_weapon3 == 194 ? "F8" :
-                            key_weapon3 == 195 ? "F9" :
-                            key_weapon3 == 196 ? "F10" :
-                            key_weapon3 == 197 ? "NUM LOCK" :
-                            key_weapon3 == 198 ? "SCROLL LOCK" :
-                            key_weapon3 == 199 ? "HOME" :
-                            key_weapon3 == 201 ? "PAGE UP" :
-                            key_weapon3 == 207 ? "END" :
-                            key_weapon3 == 209 ? "PAGE DOWN" :
-                            key_weapon3 == 210 ? "INSERT" :
-                            key_weapon3 == 211 ? "DELETE" :
-                            key_weapon3 == 215 ? "F11" :
-                            key_weapon3 == 216 ? "F12" :
-                            key_weapon3 == 217 ? "PRINT SCREEN" :
-                            key_weapon3 == 255 ? "PAUSE" :
-                                                 "%c", key_weapon3);
         if (key_weapon3 == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_KbdKeyDrawer(key_weapon3));
         dp_translation = NULL;
     }
 
@@ -5735,46 +5350,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_weapon4 ==   0 ? "---" :
-                            key_weapon4 ==   9 ? "TAB" :
-                            key_weapon4 ==  13 ? "ENTER" :
-                            key_weapon4 ==  32 ? "SPACE BAR" :
-                            key_weapon4 ==  96 ? "\'" :
-                            key_weapon4 == 127 ? "BACKSPACE" :
-                            key_weapon4 == 157 ? "CTRL" :
-                            key_weapon4 == 172 ? "LEFT ARROW" :
-                            key_weapon4 == 173 ? "UP ARROW" :
-                            key_weapon4 == 174 ? "RIGHT ARROW" :
-                            key_weapon4 == 175 ? "DOWN ARROW" :
-                            key_weapon4 == 182 ? "SHIFT" :
-                            key_weapon4 == 184 ? "ALT" :
-                            key_weapon4 == 186 ? "CAPS LOCK" :
-                            key_weapon4 == 187 ? "F1" :
-                            key_weapon4 == 188 ? "F2" :
-                            key_weapon4 == 189 ? "F3" :
-                            key_weapon4 == 190 ? "F4" :
-                            key_weapon4 == 191 ? "F5" :
-                            key_weapon4 == 192 ? "F6" :
-                            key_weapon4 == 193 ? "F7" :
-                            key_weapon4 == 194 ? "F8" :
-                            key_weapon4 == 195 ? "F9" :
-                            key_weapon4 == 196 ? "F10" :
-                            key_weapon4 == 197 ? "NUM LOCK" :
-                            key_weapon4 == 198 ? "SCROLL LOCK" :
-                            key_weapon4 == 199 ? "HOME" :
-                            key_weapon4 == 201 ? "PAGE UP" :
-                            key_weapon4 == 207 ? "END" :
-                            key_weapon4 == 209 ? "PAGE DOWN" :
-                            key_weapon4 == 210 ? "INSERT" :
-                            key_weapon4 == 211 ? "DELETE" :
-                            key_weapon4 == 215 ? "F11" :
-                            key_weapon4 == 216 ? "F12" :
-                            key_weapon4 == 217 ? "PRINT SCREEN" :
-                            key_weapon4 == 255 ? "PAUSE" :
-                                                 "%c", key_weapon4);
         if (key_weapon4 == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_KbdKeyDrawer(key_weapon4));
         dp_translation = NULL;
     }
 
@@ -5787,46 +5365,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_weapon5 ==   0 ? "---" :
-                            key_weapon5 ==   9 ? "TAB" :
-                            key_weapon5 ==  13 ? "ENTER" :
-                            key_weapon5 ==  32 ? "SPACE BAR" :
-                            key_weapon5 ==  96 ? "\'" :
-                            key_weapon5 == 127 ? "BACKSPACE" :
-                            key_weapon5 == 157 ? "CTRL" :
-                            key_weapon5 == 172 ? "LEFT ARROW" :
-                            key_weapon5 == 173 ? "UP ARROW" :
-                            key_weapon5 == 174 ? "RIGHT ARROW" :
-                            key_weapon5 == 175 ? "DOWN ARROW" :
-                            key_weapon5 == 182 ? "SHIFT" :
-                            key_weapon5 == 184 ? "ALT" :
-                            key_weapon5 == 186 ? "CAPS LOCK" :
-                            key_weapon5 == 187 ? "F1" :
-                            key_weapon5 == 188 ? "F2" :
-                            key_weapon5 == 189 ? "F3" :
-                            key_weapon5 == 190 ? "F4" :
-                            key_weapon5 == 191 ? "F5" :
-                            key_weapon5 == 192 ? "F6" :
-                            key_weapon5 == 193 ? "F7" :
-                            key_weapon5 == 194 ? "F8" :
-                            key_weapon5 == 195 ? "F9" :
-                            key_weapon5 == 196 ? "F10" :
-                            key_weapon5 == 197 ? "NUM LOCK" :
-                            key_weapon5 == 198 ? "SCROLL LOCK" :
-                            key_weapon5 == 199 ? "HOME" :
-                            key_weapon5 == 201 ? "PAGE UP" :
-                            key_weapon5 == 207 ? "END" :
-                            key_weapon5 == 209 ? "PAGE DOWN" :
-                            key_weapon5 == 210 ? "INSERT" :
-                            key_weapon5 == 211 ? "DELETE" :
-                            key_weapon5 == 215 ? "F11" :
-                            key_weapon5 == 216 ? "F12" :
-                            key_weapon5 == 217 ? "PRINT SCREEN" :
-                            key_weapon5 == 255 ? "PAUSE" :
-                                                 "%c", key_weapon5);
         if (key_weapon5 == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_KbdKeyDrawer(key_weapon5));
         dp_translation = NULL;
     }
 
@@ -5839,46 +5380,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_weapon6 ==   0 ? "---" :
-                            key_weapon6 ==   9 ? "TAB" :
-                            key_weapon6 ==  13 ? "ENTER" :
-                            key_weapon6 ==  32 ? "SPACE BAR" :
-                            key_weapon6 ==  96 ? "\'" :
-                            key_weapon6 == 127 ? "BACKSPACE" :
-                            key_weapon6 == 157 ? "CTRL" :
-                            key_weapon6 == 172 ? "LEFT ARROW" :
-                            key_weapon6 == 173 ? "UP ARROW" :
-                            key_weapon6 == 174 ? "RIGHT ARROW" :
-                            key_weapon6 == 175 ? "DOWN ARROW" :
-                            key_weapon6 == 182 ? "SHIFT" :
-                            key_weapon6 == 184 ? "ALT" :
-                            key_weapon6 == 186 ? "CAPS LOCK" :
-                            key_weapon6 == 187 ? "F1" :
-                            key_weapon6 == 188 ? "F2" :
-                            key_weapon6 == 189 ? "F3" :
-                            key_weapon6 == 190 ? "F4" :
-                            key_weapon6 == 191 ? "F5" :
-                            key_weapon6 == 192 ? "F6" :
-                            key_weapon6 == 193 ? "F7" :
-                            key_weapon6 == 194 ? "F8" :
-                            key_weapon6 == 195 ? "F9" :
-                            key_weapon6 == 196 ? "F10" :
-                            key_weapon6 == 197 ? "NUM LOCK" :
-                            key_weapon6 == 198 ? "SCROLL LOCK" :
-                            key_weapon6 == 199 ? "HOME" :
-                            key_weapon6 == 201 ? "PAGE UP" :
-                            key_weapon6 == 207 ? "END" :
-                            key_weapon6 == 209 ? "PAGE DOWN" :
-                            key_weapon6 == 210 ? "INSERT" :
-                            key_weapon6 == 211 ? "DELETE" :
-                            key_weapon6 == 215 ? "F11" :
-                            key_weapon6 == 216 ? "F12" :
-                            key_weapon6 == 217 ? "PRINT SCREEN" :
-                            key_weapon6 == 255 ? "PAUSE" :
-                                                 "%c", key_weapon6);
         if (key_weapon6 == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_KbdKeyDrawer(key_weapon6));
         dp_translation = NULL;
     }
 
@@ -5891,46 +5395,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_weapon7 ==   0 ? "---" :
-                            key_weapon7 ==   9 ? "TAB" :
-                            key_weapon7 ==  13 ? "ENTER" :
-                            key_weapon7 ==  32 ? "SPACE BAR" :
-                            key_weapon7 ==  96 ? "\'" :
-                            key_weapon7 == 127 ? "BACKSPACE" :
-                            key_weapon7 == 157 ? "CTRL" :
-                            key_weapon7 == 172 ? "LEFT ARROW" :
-                            key_weapon7 == 173 ? "UP ARROW" :
-                            key_weapon7 == 174 ? "RIGHT ARROW" :
-                            key_weapon7 == 175 ? "DOWN ARROW" :
-                            key_weapon7 == 182 ? "SHIFT" :
-                            key_weapon7 == 184 ? "ALT" :
-                            key_weapon7 == 186 ? "CAPS LOCK" :
-                            key_weapon7 == 187 ? "F1" :
-                            key_weapon7 == 188 ? "F2" :
-                            key_weapon7 == 189 ? "F3" :
-                            key_weapon7 == 190 ? "F4" :
-                            key_weapon7 == 191 ? "F5" :
-                            key_weapon7 == 192 ? "F6" :
-                            key_weapon7 == 193 ? "F7" :
-                            key_weapon7 == 194 ? "F8" :
-                            key_weapon7 == 195 ? "F9" :
-                            key_weapon7 == 196 ? "F10" :
-                            key_weapon7 == 197 ? "NUM LOCK" :
-                            key_weapon7 == 198 ? "SCROLL LOCK" :
-                            key_weapon7 == 199 ? "HOME" :
-                            key_weapon7 == 201 ? "PAGE UP" :
-                            key_weapon7 == 207 ? "END" :
-                            key_weapon7 == 209 ? "PAGE DOWN" :
-                            key_weapon7 == 210 ? "INSERT" :
-                            key_weapon7 == 211 ? "DELETE" :
-                            key_weapon7 == 215 ? "F11" :
-                            key_weapon7 == 216 ? "F12" :
-                            key_weapon7 == 217 ? "PRINT SCREEN" :
-                            key_weapon7 == 255 ? "PAUSE" :
-                                                 "%c", key_weapon7);
         if (key_weapon7 == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 95, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 95, M_RD_KbdKeyDrawer(key_weapon7));
         dp_translation = NULL;
     }
 
@@ -5943,46 +5410,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_weapon8 ==   0 ? "---" :
-                            key_weapon8 ==   9 ? "TAB" :
-                            key_weapon8 ==  13 ? "ENTER" :
-                            key_weapon8 ==  32 ? "SPACE BAR" :
-                            key_weapon8 ==  96 ? "\'" :
-                            key_weapon8 == 127 ? "BACKSPACE" :
-                            key_weapon8 == 157 ? "CTRL" :
-                            key_weapon8 == 172 ? "LEFT ARROW" :
-                            key_weapon8 == 173 ? "UP ARROW" :
-                            key_weapon8 == 174 ? "RIGHT ARROW" :
-                            key_weapon8 == 175 ? "DOWN ARROW" :
-                            key_weapon8 == 182 ? "SHIFT" :
-                            key_weapon8 == 184 ? "ALT" :
-                            key_weapon8 == 186 ? "CAPS LOCK" :
-                            key_weapon8 == 187 ? "F1" :
-                            key_weapon8 == 188 ? "F2" :
-                            key_weapon8 == 189 ? "F3" :
-                            key_weapon8 == 190 ? "F4" :
-                            key_weapon8 == 191 ? "F5" :
-                            key_weapon8 == 192 ? "F6" :
-                            key_weapon8 == 193 ? "F7" :
-                            key_weapon8 == 194 ? "F8" :
-                            key_weapon8 == 195 ? "F9" :
-                            key_weapon8 == 196 ? "F10" :
-                            key_weapon8 == 197 ? "NUM LOCK" :
-                            key_weapon8 == 198 ? "SCROLL LOCK" :
-                            key_weapon8 == 199 ? "HOME" :
-                            key_weapon8 == 201 ? "PAGE UP" :
-                            key_weapon8 == 207 ? "END" :
-                            key_weapon8 == 209 ? "PAGE DOWN" :
-                            key_weapon8 == 210 ? "INSERT" :
-                            key_weapon8 == 211 ? "DELETE" :
-                            key_weapon8 == 215 ? "F11" :
-                            key_weapon8 == 216 ? "F12" :
-                            key_weapon8 == 217 ? "PRINT SCREEN" :
-                            key_weapon8 == 255 ? "PAUSE" :
-                                                 "%c", key_weapon8);
         if (key_weapon8 == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_KbdKeyDrawer(key_weapon8));
         dp_translation = NULL;
     }
 
@@ -5995,46 +5425,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_prevweapon ==   0 ? "---" :
-                            key_prevweapon ==   9 ? "TAB" :
-                            key_prevweapon ==  13 ? "ENTER" :
-                            key_prevweapon ==  32 ? "SPACE BAR" :
-                            key_prevweapon ==  96 ? "\'" :
-                            key_prevweapon == 127 ? "BACKSPACE" :
-                            key_prevweapon == 157 ? "CTRL" :
-                            key_prevweapon == 172 ? "LEFT ARROW" :
-                            key_prevweapon == 173 ? "UP ARROW" :
-                            key_prevweapon == 174 ? "RIGHT ARROW" :
-                            key_prevweapon == 175 ? "DOWN ARROW" :
-                            key_prevweapon == 182 ? "SHIFT" :
-                            key_prevweapon == 184 ? "ALT" :
-                            key_prevweapon == 186 ? "CAPS LOCK" :
-                            key_prevweapon == 187 ? "F1" :
-                            key_prevweapon == 188 ? "F2" :
-                            key_prevweapon == 189 ? "F3" :
-                            key_prevweapon == 190 ? "F4" :
-                            key_prevweapon == 191 ? "F5" :
-                            key_prevweapon == 192 ? "F6" :
-                            key_prevweapon == 193 ? "F7" :
-                            key_prevweapon == 194 ? "F8" :
-                            key_prevweapon == 195 ? "F9" :
-                            key_prevweapon == 196 ? "F10" :
-                            key_prevweapon == 197 ? "NUM LOCK" :
-                            key_prevweapon == 198 ? "SCROLL LOCK" :
-                            key_prevweapon == 199 ? "HOME" :
-                            key_prevweapon == 201 ? "PAGE UP" :
-                            key_prevweapon == 207 ? "END" :
-                            key_prevweapon == 209 ? "PAGE DOWN" :
-                            key_prevweapon == 210 ? "INSERT" :
-                            key_prevweapon == 211 ? "DELETE" :
-                            key_prevweapon == 215 ? "F11" :
-                            key_prevweapon == 216 ? "F12" :
-                            key_prevweapon == 217 ? "PRINT SCREEN" :
-                            key_prevweapon == 255 ? "PAUSE" :
-                                                    "%c", key_prevweapon);
         if (key_prevweapon == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 115, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 115, M_RD_KbdKeyDrawer(key_prevweapon));
         dp_translation = NULL;
     }
 
@@ -6047,46 +5440,9 @@ void M_RD_Draw_Bindings_2(void)
     }
     else
     {
-        M_snprintf(num, 16, key_nextweapon ==   0 ? "---" :
-                            key_nextweapon ==   9 ? "TAB" :
-                            key_nextweapon ==  13 ? "ENTER" :
-                            key_nextweapon ==  32 ? "SPACE BAR" :
-                            key_nextweapon ==  96 ? "\'" :
-                            key_nextweapon == 127 ? "BACKSPACE" :
-                            key_nextweapon == 157 ? "CTRL" :
-                            key_nextweapon == 172 ? "LEFT ARROW" :
-                            key_nextweapon == 173 ? "UP ARROW" :
-                            key_nextweapon == 174 ? "RIGHT ARROW" :
-                            key_nextweapon == 175 ? "DOWN ARROW" :
-                            key_nextweapon == 182 ? "SHIFT" :
-                            key_nextweapon == 184 ? "ALT" :
-                            key_nextweapon == 186 ? "CAPS LOCK" :
-                            key_nextweapon == 187 ? "F1" :
-                            key_nextweapon == 188 ? "F2" :
-                            key_nextweapon == 189 ? "F3" :
-                            key_nextweapon == 190 ? "F4" :
-                            key_nextweapon == 191 ? "F5" :
-                            key_nextweapon == 192 ? "F6" :
-                            key_nextweapon == 193 ? "F7" :
-                            key_nextweapon == 194 ? "F8" :
-                            key_nextweapon == 195 ? "F9" :
-                            key_nextweapon == 196 ? "F10" :
-                            key_nextweapon == 197 ? "NUM LOCK" :
-                            key_nextweapon == 198 ? "SCROLL LOCK" :
-                            key_nextweapon == 199 ? "HOME" :
-                            key_nextweapon == 201 ? "PAGE UP" :
-                            key_nextweapon == 207 ? "END" :
-                            key_nextweapon == 209 ? "PAGE DOWN" :
-                            key_nextweapon == 210 ? "INSERT" :
-                            key_nextweapon == 211 ? "DELETE" :
-                            key_nextweapon == 215 ? "F11" :
-                            key_nextweapon == 216 ? "F12" :
-                            key_nextweapon == 217 ? "PRINT SCREEN" :
-                            key_nextweapon == 255 ? "PAUSE" :
-                                                    "%c", key_nextweapon);
         if (key_nextweapon == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 125, M_RD_KbdKeyDrawer(key_nextweapon));
         dp_translation = NULL;
     }
 }
@@ -6366,7 +5722,6 @@ void M_RD_Choose_Bindings_3(int choice)
 void M_RD_Draw_Bindings_3(void)
 {
     int x = (english_language ? 209 : 210);
-    static char num[16];
     
     // Jaguar: hide game background, don't draw lines over the HUD
     // if (gamemission == jaguar)
@@ -6436,46 +5791,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_menu_qsave ==   0 ? "---" :
-                            key_menu_qsave ==   9 ? "TAB" :
-                            key_menu_qsave ==  13 ? "ENTER" :
-                            key_menu_qsave ==  32 ? "SPACE BAR" :
-                            key_menu_qsave ==  96 ? "\'" :
-                            key_menu_qsave == 127 ? "BACKSPACE" :
-                            key_menu_qsave == 157 ? "CTRL" :
-                            key_menu_qsave == 172 ? "LEFT ARROW" :
-                            key_menu_qsave == 173 ? "UP ARROW" :
-                            key_menu_qsave == 174 ? "RIGHT ARROW" :
-                            key_menu_qsave == 175 ? "DOWN ARROW" :
-                            key_menu_qsave == 182 ? "SHIFT" :
-                            key_menu_qsave == 184 ? "ALT" :
-                            key_menu_qsave == 186 ? "CAPS LOCK" :
-                            key_menu_qsave == 187 ? "F1" :
-                            key_menu_qsave == 188 ? "F2" :
-                            key_menu_qsave == 189 ? "F3" :
-                            key_menu_qsave == 190 ? "F4" :
-                            key_menu_qsave == 191 ? "F5" :
-                            key_menu_qsave == 192 ? "F6" :
-                            key_menu_qsave == 193 ? "F7" :
-                            key_menu_qsave == 194 ? "F8" :
-                            key_menu_qsave == 195 ? "F9" :
-                            key_menu_qsave == 196 ? "F10" :
-                            key_menu_qsave == 197 ? "NUM LOCK" :
-                            key_menu_qsave == 198 ? "SCROLL LOCK" :
-                            key_menu_qsave == 199 ? "HOME" :
-                            key_menu_qsave == 201 ? "PAGE UP" :
-                            key_menu_qsave == 207 ? "END" :
-                            key_menu_qsave == 209 ? "PAGE DOWN" :
-                            key_menu_qsave == 210 ? "INSERT" :
-                            key_menu_qsave == 211 ? "DELETE" :
-                            key_menu_qsave == 215 ? "F11" :
-                            key_menu_qsave == 216 ? "F12" :
-                            key_menu_qsave == 217 ? "PRINT SCREEN" :
-                            key_menu_qsave == 255 ? "PAUSE" :
-                                                    "%c", key_menu_qsave);
         if (key_menu_qsave == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_KbdKeyDrawer(key_menu_qsave));
         dp_translation = NULL;
     }
 
@@ -6488,46 +5806,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_menu_qload ==   0 ? "---" :
-                            key_menu_qload ==   9 ? "TAB" :
-                            key_menu_qload ==  13 ? "ENTER" :
-                            key_menu_qload ==  32 ? "SPACE BAR" :
-                            key_menu_qload ==  96 ? "\'" :
-                            key_menu_qload == 127 ? "BACKSPACE" :
-                            key_menu_qload == 157 ? "CTRL" :
-                            key_menu_qload == 172 ? "LEFT ARROW" :
-                            key_menu_qload == 173 ? "UP ARROW" :
-                            key_menu_qload == 174 ? "RIGHT ARROW" :
-                            key_menu_qload == 175 ? "DOWN ARROW" :
-                            key_menu_qload == 182 ? "SHIFT" :
-                            key_menu_qload == 184 ? "ALT" :
-                            key_menu_qload == 186 ? "CAPS LOCK" :
-                            key_menu_qload == 187 ? "F1" :
-                            key_menu_qload == 188 ? "F2" :
-                            key_menu_qload == 189 ? "F3" :
-                            key_menu_qload == 190 ? "F4" :
-                            key_menu_qload == 191 ? "F5" :
-                            key_menu_qload == 192 ? "F6" :
-                            key_menu_qload == 193 ? "F7" :
-                            key_menu_qload == 194 ? "F8" :
-                            key_menu_qload == 195 ? "F9" :
-                            key_menu_qload == 196 ? "F10" :
-                            key_menu_qload == 197 ? "NUM LOCK" :
-                            key_menu_qload == 198 ? "SCROLL LOCK" :
-                            key_menu_qload == 199 ? "HOME" :
-                            key_menu_qload == 201 ? "PAGE UP" :
-                            key_menu_qload == 207 ? "END" :
-                            key_menu_qload == 209 ? "PAGE DOWN" :
-                            key_menu_qload == 210 ? "INSERT" :
-                            key_menu_qload == 211 ? "DELETE" :
-                            key_menu_qload == 215 ? "F11" :
-                            key_menu_qload == 216 ? "F12" :
-                            key_menu_qload == 217 ? "PRINT SCREEN" :
-                            key_menu_qload == 255 ? "PAUSE" :
-                                                    "%c", key_menu_qload);
         if (key_menu_qload == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_KbdKeyDrawer(key_menu_qload));
         dp_translation = NULL;
     }
 
@@ -6540,46 +5821,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_menu_nextlevel ==   0 ? "---" :
-                            key_menu_nextlevel ==   9 ? "TAB" :
-                            key_menu_nextlevel ==  13 ? "ENTER" :
-                            key_menu_nextlevel ==  32 ? "SPACE BAR" :
-                            key_menu_nextlevel ==  96 ? "\'" :
-                            key_menu_nextlevel == 127 ? "BACKSPACE" :
-                            key_menu_nextlevel == 157 ? "CTRL" :
-                            key_menu_nextlevel == 172 ? "LEFT ARROW" :
-                            key_menu_nextlevel == 173 ? "UP ARROW" :
-                            key_menu_nextlevel == 174 ? "RIGHT ARROW" :
-                            key_menu_nextlevel == 175 ? "DOWN ARROW" :
-                            key_menu_nextlevel == 182 ? "SHIFT" :
-                            key_menu_nextlevel == 184 ? "ALT" :
-                            key_menu_nextlevel == 186 ? "CAPS LOCK" :
-                            key_menu_nextlevel == 187 ? "F1" :
-                            key_menu_nextlevel == 188 ? "F2" :
-                            key_menu_nextlevel == 189 ? "F3" :
-                            key_menu_nextlevel == 190 ? "F4" :
-                            key_menu_nextlevel == 191 ? "F5" :
-                            key_menu_nextlevel == 192 ? "F6" :
-                            key_menu_nextlevel == 193 ? "F7" :
-                            key_menu_nextlevel == 194 ? "F8" :
-                            key_menu_nextlevel == 195 ? "F9" :
-                            key_menu_nextlevel == 196 ? "F10" :
-                            key_menu_nextlevel == 197 ? "NUM LOCK" :
-                            key_menu_nextlevel == 198 ? "SCROLL LOCK" :
-                            key_menu_nextlevel == 199 ? "HOME" :
-                            key_menu_nextlevel == 201 ? "PAGE UP" :
-                            key_menu_nextlevel == 207 ? "END" :
-                            key_menu_nextlevel == 209 ? "PAGE DOWN" :
-                            key_menu_nextlevel == 210 ? "INSERT" :
-                            key_menu_nextlevel == 211 ? "DELETE" :
-                            key_menu_nextlevel == 215 ? "F11" :
-                            key_menu_nextlevel == 216 ? "F12" :
-                            key_menu_nextlevel == 217 ? "PRINT SCREEN" :
-                            key_menu_nextlevel == 255 ? "PAUSE" :
-                                                        "%c", key_menu_nextlevel);
         if (key_menu_nextlevel == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_KbdKeyDrawer(key_menu_nextlevel));
         dp_translation = NULL;
     }
 
@@ -6592,46 +5836,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_menu_reloadlevel ==   0 ? "---" :
-                            key_menu_reloadlevel ==   9 ? "TAB" :
-                            key_menu_reloadlevel ==  13 ? "ENTER" :
-                            key_menu_reloadlevel ==  32 ? "SPACE BAR" :
-                            key_menu_reloadlevel ==  96 ? "\'" :
-                            key_menu_reloadlevel == 127 ? "BACKSPACE" :
-                            key_menu_reloadlevel == 157 ? "CTRL" :
-                            key_menu_reloadlevel == 172 ? "LEFT ARROW" :
-                            key_menu_reloadlevel == 173 ? "UP ARROW" :
-                            key_menu_reloadlevel == 174 ? "RIGHT ARROW" :
-                            key_menu_reloadlevel == 175 ? "DOWN ARROW" :
-                            key_menu_reloadlevel == 182 ? "SHIFT" :
-                            key_menu_reloadlevel == 184 ? "ALT" :
-                            key_menu_reloadlevel == 186 ? "CAPS LOCK" :
-                            key_menu_reloadlevel == 187 ? "F1" :
-                            key_menu_reloadlevel == 188 ? "F2" :
-                            key_menu_reloadlevel == 189 ? "F3" :
-                            key_menu_reloadlevel == 190 ? "F4" :
-                            key_menu_reloadlevel == 191 ? "F5" :
-                            key_menu_reloadlevel == 192 ? "F6" :
-                            key_menu_reloadlevel == 193 ? "F7" :
-                            key_menu_reloadlevel == 194 ? "F8" :
-                            key_menu_reloadlevel == 195 ? "F9" :
-                            key_menu_reloadlevel == 196 ? "F10" :
-                            key_menu_reloadlevel == 197 ? "NUM LOCK" :
-                            key_menu_reloadlevel == 198 ? "SCROLL LOCK" :
-                            key_menu_reloadlevel == 199 ? "HOME" :
-                            key_menu_reloadlevel == 201 ? "PAGE UP" :
-                            key_menu_reloadlevel == 207 ? "END" :
-                            key_menu_reloadlevel == 209 ? "PAGE DOWN" :
-                            key_menu_reloadlevel == 210 ? "INSERT" :
-                            key_menu_reloadlevel == 211 ? "DELETE" :
-                            key_menu_reloadlevel == 215 ? "F11" :
-                            key_menu_reloadlevel == 216 ? "F12" :
-                            key_menu_reloadlevel == 217 ? "PRINT SCREEN" :
-                            key_menu_reloadlevel == 255 ? "PAUSE" :
-                                                          "%c", key_menu_reloadlevel);
         if (key_menu_reloadlevel == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_KbdKeyDrawer(key_menu_reloadlevel));
         dp_translation = NULL;
     }
 
@@ -6644,46 +5851,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_menu_screenshot ==   0 ? "---" :
-                            key_menu_screenshot ==   9 ? "TAB" :
-                            key_menu_screenshot ==  13 ? "ENTER" :
-                            key_menu_screenshot ==  32 ? "SPACE BAR" :
-                            key_menu_screenshot ==  96 ? "\'" :
-                            key_menu_screenshot == 127 ? "BACKSPACE" :
-                            key_menu_screenshot == 157 ? "CTRL" :
-                            key_menu_screenshot == 172 ? "LEFT ARROW" :
-                            key_menu_screenshot == 173 ? "UP ARROW" :
-                            key_menu_screenshot == 174 ? "RIGHT ARROW" :
-                            key_menu_screenshot == 175 ? "DOWN ARROW" :
-                            key_menu_screenshot == 182 ? "SHIFT" :
-                            key_menu_screenshot == 184 ? "ALT" :
-                            key_menu_screenshot == 186 ? "CAPS LOCK" :
-                            key_menu_screenshot == 187 ? "F1" :
-                            key_menu_screenshot == 188 ? "F2" :
-                            key_menu_screenshot == 189 ? "F3" :
-                            key_menu_screenshot == 190 ? "F4" :
-                            key_menu_screenshot == 191 ? "F5" :
-                            key_menu_screenshot == 192 ? "F6" :
-                            key_menu_screenshot == 193 ? "F7" :
-                            key_menu_screenshot == 194 ? "F8" :
-                            key_menu_screenshot == 195 ? "F9" :
-                            key_menu_screenshot == 196 ? "F10" :
-                            key_menu_screenshot == 197 ? "NUM LOCK" :
-                            key_menu_screenshot == 198 ? "SCROLL LOCK" :
-                            key_menu_screenshot == 199 ? "HOME" :
-                            key_menu_screenshot == 201 ? "PAGE UP" :
-                            key_menu_screenshot == 207 ? "END" :
-                            key_menu_screenshot == 209 ? "PAGE DOWN" :
-                            key_menu_screenshot == 210 ? "INSERT" :
-                            key_menu_screenshot == 211 ? "DELETE" :
-                            key_menu_screenshot == 215 ? "F11" :
-                            key_menu_screenshot == 216 ? "F12" :
-                            key_menu_screenshot == 217 ? "PRINT SCREEN" :
-                            key_menu_screenshot == 255 ? "PAUSE" :
-                                                          "%c", key_menu_screenshot);
         if (key_menu_screenshot == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_KbdKeyDrawer(key_menu_screenshot));
         dp_translation = NULL;
     }
 
@@ -6696,46 +5866,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_demo_quit ==   0 ? "---" :
-                            key_demo_quit ==   9 ? "TAB" :
-                            key_demo_quit ==  13 ? "ENTER" :
-                            key_demo_quit ==  32 ? "SPACE BAR" :
-                            key_demo_quit ==  96 ? "\'" :
-                            key_demo_quit == 127 ? "BACKSPACE" :
-                            key_demo_quit == 157 ? "CTRL" :
-                            key_demo_quit == 172 ? "LEFT ARROW" :
-                            key_demo_quit == 173 ? "UP ARROW" :
-                            key_demo_quit == 174 ? "RIGHT ARROW" :
-                            key_demo_quit == 175 ? "DOWN ARROW" :
-                            key_demo_quit == 182 ? "SHIFT" :
-                            key_demo_quit == 184 ? "ALT" :
-                            key_demo_quit == 186 ? "CAPS LOCK" :
-                            key_demo_quit == 187 ? "F1" :
-                            key_demo_quit == 188 ? "F2" :
-                            key_demo_quit == 189 ? "F3" :
-                            key_demo_quit == 190 ? "F4" :
-                            key_demo_quit == 191 ? "F5" :
-                            key_demo_quit == 192 ? "F6" :
-                            key_demo_quit == 193 ? "F7" :
-                            key_demo_quit == 194 ? "F8" :
-                            key_demo_quit == 195 ? "F9" :
-                            key_demo_quit == 196 ? "F10" :
-                            key_demo_quit == 197 ? "NUM LOCK" :
-                            key_demo_quit == 198 ? "SCROLL LOCK" :
-                            key_demo_quit == 199 ? "HOME" :
-                            key_demo_quit == 201 ? "PAGE UP" :
-                            key_demo_quit == 207 ? "END" :
-                            key_demo_quit == 209 ? "PAGE DOWN" :
-                            key_demo_quit == 210 ? "INSERT" :
-                            key_demo_quit == 211 ? "DELETE" :
-                            key_demo_quit == 215 ? "F11" :
-                            key_demo_quit == 216 ? "F12" :
-                            key_demo_quit == 217 ? "PRINT SCREEN" :
-                            key_demo_quit == 255 ? "PAUSE" :
-                                                   "%c", key_demo_quit);
         if (key_demo_quit == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_KbdKeyDrawer(key_demo_quit));
         dp_translation = NULL;
     }
 
@@ -6748,46 +5881,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_togglemlook ==   0 ? "---" :
-                            key_togglemlook ==   9 ? "TAB" :
-                            key_togglemlook ==  13 ? "ENTER" :
-                            key_togglemlook ==  32 ? "SPACE BAR" :
-                            key_togglemlook ==  96 ? "\'" :
-                            key_togglemlook == 127 ? "BACKSPACE" :
-                            key_togglemlook == 157 ? "CTRL" :
-                            key_togglemlook == 172 ? "LEFT ARROW" :
-                            key_togglemlook == 173 ? "UP ARROW" :
-                            key_togglemlook == 174 ? "RIGHT ARROW" :
-                            key_togglemlook == 175 ? "DOWN ARROW" :
-                            key_togglemlook == 182 ? "SHIFT" :
-                            key_togglemlook == 184 ? "ALT" :
-                            key_togglemlook == 186 ? "CAPS LOCK" :
-                            key_togglemlook == 187 ? "F1" :
-                            key_togglemlook == 188 ? "F2" :
-                            key_togglemlook == 189 ? "F3" :
-                            key_togglemlook == 190 ? "F4" :
-                            key_togglemlook == 191 ? "F5" :
-                            key_togglemlook == 192 ? "F6" :
-                            key_togglemlook == 193 ? "F7" :
-                            key_togglemlook == 194 ? "F8" :
-                            key_togglemlook == 195 ? "F9" :
-                            key_togglemlook == 196 ? "F10" :
-                            key_togglemlook == 197 ? "NUM LOCK" :
-                            key_togglemlook == 198 ? "SCROLL LOCK" :
-                            key_togglemlook == 199 ? "HOME" :
-                            key_togglemlook == 201 ? "PAGE UP" :
-                            key_togglemlook == 207 ? "END" :
-                            key_togglemlook == 209 ? "PAGE DOWN" :
-                            key_togglemlook == 210 ? "INSERT" :
-                            key_togglemlook == 211 ? "DELETE" :
-                            key_togglemlook == 215 ? "F11" :
-                            key_togglemlook == 216 ? "F12" :
-                            key_togglemlook == 217 ? "PRINT SCREEN" :
-                            key_togglemlook == 255 ? "PAUSE" :
-                                                     "%c", key_togglemlook);
         if (key_togglemlook == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_KbdKeyDrawer(key_togglemlook));
         dp_translation = NULL;
     }
 
@@ -6800,46 +5896,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_toggleautorun ==   0 ? "---" :
-                            key_toggleautorun ==   9 ? "TAB" :
-                            key_toggleautorun ==  13 ? "ENTER" :
-                            key_toggleautorun ==  32 ? "SPACE BAR" :
-                            key_toggleautorun ==  96 ? "\'" :
-                            key_toggleautorun == 127 ? "BACKSPACE" :
-                            key_toggleautorun == 157 ? "CTRL" :
-                            key_toggleautorun == 172 ? "LEFT ARROW" :
-                            key_toggleautorun == 173 ? "UP ARROW" :
-                            key_toggleautorun == 174 ? "RIGHT ARROW" :
-                            key_toggleautorun == 175 ? "DOWN ARROW" :
-                            key_toggleautorun == 182 ? "SHIFT" :
-                            key_toggleautorun == 184 ? "ALT" :
-                            key_toggleautorun == 186 ? "CAPS LOCK" :
-                            key_toggleautorun == 187 ? "F1" :
-                            key_toggleautorun == 188 ? "F2" :
-                            key_toggleautorun == 189 ? "F3" :
-                            key_toggleautorun == 190 ? "F4" :
-                            key_toggleautorun == 191 ? "F5" :
-                            key_toggleautorun == 192 ? "F6" :
-                            key_toggleautorun == 193 ? "F7" :
-                            key_toggleautorun == 194 ? "F8" :
-                            key_toggleautorun == 195 ? "F9" :
-                            key_toggleautorun == 196 ? "F10" :
-                            key_toggleautorun == 197 ? "NUM LOCK" :
-                            key_toggleautorun == 198 ? "SCROLL LOCK" :
-                            key_toggleautorun == 199 ? "HOME" :
-                            key_toggleautorun == 201 ? "PAGE UP" :
-                            key_toggleautorun == 207 ? "END" :
-                            key_toggleautorun == 209 ? "PAGE DOWN" :
-                            key_toggleautorun == 210 ? "INSERT" :
-                            key_toggleautorun == 211 ? "DELETE" :
-                            key_toggleautorun == 215 ? "F11" :
-                            key_toggleautorun == 216 ? "F12" :
-                            key_toggleautorun == 217 ? "PRINT SCREEN" :
-                            key_toggleautorun == 255 ? "PAUSE" :
-                                                       "%c", key_toggleautorun);
         if (key_toggleautorun == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 115, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 115, M_RD_KbdKeyDrawer(key_toggleautorun));
         dp_translation = NULL;
     }
 
@@ -6852,46 +5911,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_togglecrosshair ==   0 ? "---" :
-                            key_togglecrosshair ==   9 ? "TAB" :
-                            key_togglecrosshair ==  13 ? "ENTER" :
-                            key_togglecrosshair ==  32 ? "SPACE BAR" :
-                            key_togglecrosshair ==  96 ? "\'" :
-                            key_togglecrosshair == 127 ? "BACKSPACE" :
-                            key_togglecrosshair == 157 ? "CTRL" :
-                            key_togglecrosshair == 172 ? "LEFT ARROW" :
-                            key_togglecrosshair == 173 ? "UP ARROW" :
-                            key_togglecrosshair == 174 ? "RIGHT ARROW" :
-                            key_togglecrosshair == 175 ? "DOWN ARROW" :
-                            key_togglecrosshair == 182 ? "SHIFT" :
-                            key_togglecrosshair == 184 ? "ALT" :
-                            key_togglecrosshair == 186 ? "CAPS LOCK" :
-                            key_togglecrosshair == 187 ? "F1" :
-                            key_togglecrosshair == 188 ? "F2" :
-                            key_togglecrosshair == 189 ? "F3" :
-                            key_togglecrosshair == 190 ? "F4" :
-                            key_togglecrosshair == 191 ? "F5" :
-                            key_togglecrosshair == 192 ? "F6" :
-                            key_togglecrosshair == 193 ? "F7" :
-                            key_togglecrosshair == 194 ? "F8" :
-                            key_togglecrosshair == 195 ? "F9" :
-                            key_togglecrosshair == 196 ? "F10" :
-                            key_togglecrosshair == 197 ? "NUM LOCK" :
-                            key_togglecrosshair == 198 ? "SCROLL LOCK" :
-                            key_togglecrosshair == 199 ? "HOME" :
-                            key_togglecrosshair == 201 ? "PAGE UP" :
-                            key_togglecrosshair == 207 ? "END" :
-                            key_togglecrosshair == 209 ? "PAGE DOWN" :
-                            key_togglecrosshair == 210 ? "INSERT" :
-                            key_togglecrosshair == 211 ? "DELETE" :
-                            key_togglecrosshair == 215 ? "F11" :
-                            key_togglecrosshair == 216 ? "F12" :
-                            key_togglecrosshair == 217 ? "PRINT SCREEN" :
-                            key_togglecrosshair == 255 ? "PAUSE" :
-                                                         "%c", key_togglecrosshair);
         if (key_togglecrosshair == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 125, M_RD_KbdKeyDrawer(key_togglecrosshair));
         dp_translation = NULL;
     }
 
@@ -6904,46 +5926,9 @@ void M_RD_Draw_Bindings_3(void)
     }
     else
     {
-        M_snprintf(num, 16, key_togglefliplvls ==   0 ? "---" :
-                            key_togglefliplvls ==   9 ? "TAB" :
-                            key_togglefliplvls ==  13 ? "ENTER" :
-                            key_togglefliplvls ==  32 ? "SPACE BAR" :
-                            key_togglefliplvls ==  96 ? "\'" :
-                            key_togglefliplvls == 127 ? "BACKSPACE" :
-                            key_togglefliplvls == 157 ? "CTRL" :
-                            key_togglefliplvls == 172 ? "LEFT ARROW" :
-                            key_togglefliplvls == 173 ? "UP ARROW" :
-                            key_togglefliplvls == 174 ? "RIGHT ARROW" :
-                            key_togglefliplvls == 175 ? "DOWN ARROW" :
-                            key_togglefliplvls == 182 ? "SHIFT" :
-                            key_togglefliplvls == 184 ? "ALT" :
-                            key_togglefliplvls == 186 ? "CAPS LOCK" :
-                            key_togglefliplvls == 187 ? "F1" :
-                            key_togglefliplvls == 188 ? "F2" :
-                            key_togglefliplvls == 189 ? "F3" :
-                            key_togglefliplvls == 190 ? "F4" :
-                            key_togglefliplvls == 191 ? "F5" :
-                            key_togglefliplvls == 192 ? "F6" :
-                            key_togglefliplvls == 193 ? "F7" :
-                            key_togglefliplvls == 194 ? "F8" :
-                            key_togglefliplvls == 195 ? "F9" :
-                            key_togglefliplvls == 196 ? "F10" :
-                            key_togglefliplvls == 197 ? "NUM LOCK" :
-                            key_togglefliplvls == 198 ? "SCROLL LOCK" :
-                            key_togglefliplvls == 199 ? "HOME" :
-                            key_togglefliplvls == 201 ? "PAGE UP" :
-                            key_togglefliplvls == 207 ? "END" :
-                            key_togglefliplvls == 209 ? "PAGE DOWN" :
-                            key_togglefliplvls == 210 ? "INSERT" :
-                            key_togglefliplvls == 211 ? "DELETE" :
-                            key_togglefliplvls == 215 ? "F11" :
-                            key_togglefliplvls == 216 ? "F12" :
-                            key_togglefliplvls == 217 ? "PRINT SCREEN" :
-                            key_togglefliplvls == 255 ? "PAUSE" :
-                                                        "%c", key_togglefliplvls);
         if (key_togglefliplvls == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 135, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 135, M_RD_KbdKeyDrawer(key_togglefliplvls));
         dp_translation = NULL;
     }
 }
@@ -7223,7 +6208,6 @@ void M_RD_Choose_Bindings_4(int choice)
 void M_RD_Draw_Bindings_4(void)
 {
     int x = (english_language ? 209 : 210);
-    static char num[16];
     
     // Jaguar: hide game background, don't draw lines over the HUD
     // if (gamemission == jaguar)
@@ -7279,46 +6263,9 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_toggle ==   0 ? "---" :
-                            key_map_toggle ==   9 ? "TAB" :
-                            key_map_toggle ==  13 ? "ENTER" :
-                            key_map_toggle ==  32 ? "SPACE BAR" :
-                            key_map_toggle ==  96 ? "\'" :
-                            key_map_toggle == 127 ? "BACKSPACE" :
-                            key_map_toggle == 157 ? "CTRL" :
-                            key_map_toggle == 172 ? "LEFT ARROW" :
-                            key_map_toggle == 173 ? "UP ARROW" :
-                            key_map_toggle == 174 ? "RIGHT ARROW" :
-                            key_map_toggle == 175 ? "DOWN ARROW" :
-                            key_map_toggle == 182 ? "SHIFT" :
-                            key_map_toggle == 184 ? "ALT" :
-                            key_map_toggle == 186 ? "CAPS LOCK" :
-                            key_map_toggle == 187 ? "F1" :
-                            key_map_toggle == 188 ? "F2" :
-                            key_map_toggle == 189 ? "F3" :
-                            key_map_toggle == 190 ? "F4" :
-                            key_map_toggle == 191 ? "F5" :
-                            key_map_toggle == 192 ? "F6" :
-                            key_map_toggle == 193 ? "F7" :
-                            key_map_toggle == 194 ? "F8" :
-                            key_map_toggle == 195 ? "F9" :
-                            key_map_toggle == 196 ? "F10" :
-                            key_map_toggle == 197 ? "NUM LOCK" :
-                            key_map_toggle == 198 ? "SCROLL LOCK" :
-                            key_map_toggle == 199 ? "HOME" :
-                            key_map_toggle == 201 ? "PAGE UP" :
-                            key_map_toggle == 207 ? "END" :
-                            key_map_toggle == 209 ? "PAGE DOWN" :
-                            key_map_toggle == 210 ? "INSERT" :
-                            key_map_toggle == 211 ? "DELETE" :
-                            key_map_toggle == 215 ? "F11" :
-                            key_map_toggle == 216 ? "F12" :
-                            key_map_toggle == 217 ? "PRINT SCREEN" :
-                            key_map_toggle == 255 ? "PAUSE" :
-                                                    "%c", key_map_toggle);
         if (key_map_toggle == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_KbdKeyDrawer(key_map_toggle));
         dp_translation = NULL;
     }
 
@@ -7331,46 +6278,9 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_zoomin ==   0 ? "---" :
-                            key_map_zoomin ==   9 ? "TAB" :
-                            key_map_zoomin ==  13 ? "ENTER" :
-                            key_map_zoomin ==  32 ? "SPACE BAR" :
-                            key_map_zoomin ==  96 ? "\'" :
-                            key_map_zoomin == 127 ? "BACKSPACE" :
-                            key_map_zoomin == 157 ? "CTRL" :
-                            key_map_zoomin == 172 ? "LEFT ARROW" :
-                            key_map_zoomin == 173 ? "UP ARROW" :
-                            key_map_zoomin == 174 ? "RIGHT ARROW" :
-                            key_map_zoomin == 175 ? "DOWN ARROW" :
-                            key_map_zoomin == 182 ? "SHIFT" :
-                            key_map_zoomin == 184 ? "ALT" :
-                            key_map_zoomin == 186 ? "CAPS LOCK" :
-                            key_map_zoomin == 187 ? "F1" :
-                            key_map_zoomin == 188 ? "F2" :
-                            key_map_zoomin == 189 ? "F3" :
-                            key_map_zoomin == 190 ? "F4" :
-                            key_map_zoomin == 191 ? "F5" :
-                            key_map_zoomin == 192 ? "F6" :
-                            key_map_zoomin == 193 ? "F7" :
-                            key_map_zoomin == 194 ? "F8" :
-                            key_map_zoomin == 195 ? "F9" :
-                            key_map_zoomin == 196 ? "F10" :
-                            key_map_zoomin == 197 ? "NUM LOCK" :
-                            key_map_zoomin == 198 ? "SCROLL LOCK" :
-                            key_map_zoomin == 199 ? "HOME" :
-                            key_map_zoomin == 201 ? "PAGE UP" :
-                            key_map_zoomin == 207 ? "END" :
-                            key_map_zoomin == 209 ? "PAGE DOWN" :
-                            key_map_zoomin == 210 ? "INSERT" :
-                            key_map_zoomin == 211 ? "DELETE" :
-                            key_map_zoomin == 215 ? "F11" :
-                            key_map_zoomin == 216 ? "F12" :
-                            key_map_zoomin == 217 ? "PRINT SCREEN" :
-                            key_map_zoomin == 255 ? "PAUSE" :
-                                                    "%c", key_map_zoomin);
         if (key_map_zoomin == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_KbdKeyDrawer(key_map_zoomin));
         dp_translation = NULL;
     }
 
@@ -7383,46 +6293,9 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_zoomout ==   0 ? "---" :
-                            key_map_zoomout ==   9 ? "TAB" :
-                            key_map_zoomout ==  13 ? "ENTER" :
-                            key_map_zoomout ==  32 ? "SPACE BAR" :
-                            key_map_zoomout ==  96 ? "\'" :
-                            key_map_zoomout == 127 ? "BACKSPACE" :
-                            key_map_zoomout == 157 ? "CTRL" :
-                            key_map_zoomout == 172 ? "LEFT ARROW" :
-                            key_map_zoomout == 173 ? "UP ARROW" :
-                            key_map_zoomout == 174 ? "RIGHT ARROW" :
-                            key_map_zoomout == 175 ? "DOWN ARROW" :
-                            key_map_zoomout == 182 ? "SHIFT" :
-                            key_map_zoomout == 184 ? "ALT" :
-                            key_map_zoomout == 186 ? "CAPS LOCK" :
-                            key_map_zoomout == 187 ? "F1" :
-                            key_map_zoomout == 188 ? "F2" :
-                            key_map_zoomout == 189 ? "F3" :
-                            key_map_zoomout == 190 ? "F4" :
-                            key_map_zoomout == 191 ? "F5" :
-                            key_map_zoomout == 192 ? "F6" :
-                            key_map_zoomout == 193 ? "F7" :
-                            key_map_zoomout == 194 ? "F8" :
-                            key_map_zoomout == 195 ? "F9" :
-                            key_map_zoomout == 196 ? "F10" :
-                            key_map_zoomout == 197 ? "NUM LOCK" :
-                            key_map_zoomout == 198 ? "SCROLL LOCK" :
-                            key_map_zoomout == 199 ? "HOME" :
-                            key_map_zoomout == 201 ? "PAGE UP" :
-                            key_map_zoomout == 207 ? "END" :
-                            key_map_zoomout == 209 ? "PAGE DOWN" :
-                            key_map_zoomout == 210 ? "INSERT" :
-                            key_map_zoomout == 211 ? "DELETE" :
-                            key_map_zoomout == 215 ? "F11" :
-                            key_map_zoomout == 216 ? "F12" :
-                            key_map_zoomout == 217 ? "PRINT SCREEN" :
-                            key_map_zoomout == 255 ? "PAUSE" :
-                                                     "%c", key_map_zoomout);
         if (key_map_zoomout == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_KbdKeyDrawer(key_map_zoomout));
         dp_translation = NULL;
     }
 
@@ -7435,46 +6308,9 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_maxzoom ==   0 ? "---" :
-                            key_map_maxzoom ==   9 ? "TAB" :
-                            key_map_maxzoom ==  13 ? "ENTER" :
-                            key_map_maxzoom ==  32 ? "SPACE BAR" :
-                            key_map_maxzoom ==  96 ? "\'" :
-                            key_map_maxzoom == 127 ? "BACKSPACE" :
-                            key_map_maxzoom == 157 ? "CTRL" :
-                            key_map_maxzoom == 172 ? "LEFT ARROW" :
-                            key_map_maxzoom == 173 ? "UP ARROW" :
-                            key_map_maxzoom == 174 ? "RIGHT ARROW" :
-                            key_map_maxzoom == 175 ? "DOWN ARROW" :
-                            key_map_maxzoom == 182 ? "SHIFT" :
-                            key_map_maxzoom == 184 ? "ALT" :
-                            key_map_maxzoom == 186 ? "CAPS LOCK" :
-                            key_map_maxzoom == 187 ? "F1" :
-                            key_map_maxzoom == 188 ? "F2" :
-                            key_map_maxzoom == 189 ? "F3" :
-                            key_map_maxzoom == 190 ? "F4" :
-                            key_map_maxzoom == 191 ? "F5" :
-                            key_map_maxzoom == 192 ? "F6" :
-                            key_map_maxzoom == 193 ? "F7" :
-                            key_map_maxzoom == 194 ? "F8" :
-                            key_map_maxzoom == 195 ? "F9" :
-                            key_map_maxzoom == 196 ? "F10" :
-                            key_map_maxzoom == 197 ? "NUM LOCK" :
-                            key_map_maxzoom == 198 ? "SCROLL LOCK" :
-                            key_map_maxzoom == 199 ? "HOME" :
-                            key_map_maxzoom == 201 ? "PAGE UP" :
-                            key_map_maxzoom == 207 ? "END" :
-                            key_map_maxzoom == 209 ? "PAGE DOWN" :
-                            key_map_maxzoom == 210 ? "INSERT" :
-                            key_map_maxzoom == 211 ? "DELETE" :
-                            key_map_maxzoom == 215 ? "F11" :
-                            key_map_maxzoom == 216 ? "F12" :
-                            key_map_maxzoom == 217 ? "PRINT SCREEN" :
-                            key_map_maxzoom == 255 ? "PAUSE" :
-                                                     "%c", key_map_maxzoom);
         if (key_map_maxzoom == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_KbdKeyDrawer(key_map_maxzoom));
         dp_translation = NULL;
     }
 
@@ -7487,46 +6323,9 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_follow ==   0 ? "---" :
-                            key_map_follow ==   9 ? "TAB" :
-                            key_map_follow ==  13 ? "ENTER" :
-                            key_map_follow ==  32 ? "SPACE BAR" :
-                            key_map_follow ==  96 ? "\'" :
-                            key_map_follow == 127 ? "BACKSPACE" :
-                            key_map_follow == 157 ? "CTRL" :
-                            key_map_follow == 172 ? "LEFT ARROW" :
-                            key_map_follow == 173 ? "UP ARROW" :
-                            key_map_follow == 174 ? "RIGHT ARROW" :
-                            key_map_follow == 175 ? "DOWN ARROW" :
-                            key_map_follow == 182 ? "SHIFT" :
-                            key_map_follow == 184 ? "ALT" :
-                            key_map_follow == 186 ? "CAPS LOCK" :
-                            key_map_follow == 187 ? "F1" :
-                            key_map_follow == 188 ? "F2" :
-                            key_map_follow == 189 ? "F3" :
-                            key_map_follow == 190 ? "F4" :
-                            key_map_follow == 191 ? "F5" :
-                            key_map_follow == 192 ? "F6" :
-                            key_map_follow == 193 ? "F7" :
-                            key_map_follow == 194 ? "F8" :
-                            key_map_follow == 195 ? "F9" :
-                            key_map_follow == 196 ? "F10" :
-                            key_map_follow == 197 ? "NUM LOCK" :
-                            key_map_follow == 198 ? "SCROLL LOCK" :
-                            key_map_follow == 199 ? "HOME" :
-                            key_map_follow == 201 ? "PAGE UP" :
-                            key_map_follow == 207 ? "END" :
-                            key_map_follow == 209 ? "PAGE DOWN" :
-                            key_map_follow == 210 ? "INSERT" :
-                            key_map_follow == 211 ? "DELETE" :
-                            key_map_follow == 215 ? "F11" :
-                            key_map_follow == 216 ? "F12" :
-                            key_map_follow == 217 ? "PRINT SCREEN" :
-                            key_map_follow == 255 ? "PAUSE" :
-                                                    "%c", key_map_follow);
         if (key_map_follow == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_KbdKeyDrawer(key_map_follow));
         dp_translation = NULL;
     }
 
@@ -7539,46 +6338,9 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_overlay ==   0 ? "---" :
-                            key_map_overlay ==   9 ? "TAB" :
-                            key_map_overlay ==  13 ? "ENTER" :
-                            key_map_overlay ==  32 ? "SPACE BAR" :
-                            key_map_overlay ==  96 ? "\'" :
-                            key_map_overlay == 127 ? "BACKSPACE" :
-                            key_map_overlay == 157 ? "CTRL" :
-                            key_map_overlay == 172 ? "LEFT ARROW" :
-                            key_map_overlay == 173 ? "UP ARROW" :
-                            key_map_overlay == 174 ? "RIGHT ARROW" :
-                            key_map_overlay == 175 ? "DOWN ARROW" :
-                            key_map_overlay == 182 ? "SHIFT" :
-                            key_map_overlay == 184 ? "ALT" :
-                            key_map_overlay == 186 ? "CAPS LOCK" :
-                            key_map_overlay == 187 ? "F1" :
-                            key_map_overlay == 188 ? "F2" :
-                            key_map_overlay == 189 ? "F3" :
-                            key_map_overlay == 190 ? "F4" :
-                            key_map_overlay == 191 ? "F5" :
-                            key_map_overlay == 192 ? "F6" :
-                            key_map_overlay == 193 ? "F7" :
-                            key_map_overlay == 194 ? "F8" :
-                            key_map_overlay == 195 ? "F9" :
-                            key_map_overlay == 196 ? "F10" :
-                            key_map_overlay == 197 ? "NUM LOCK" :
-                            key_map_overlay == 198 ? "SCROLL LOCK" :
-                            key_map_overlay == 199 ? "HOME" :
-                            key_map_overlay == 201 ? "PAGE UP" :
-                            key_map_overlay == 207 ? "END" :
-                            key_map_overlay == 209 ? "PAGE DOWN" :
-                            key_map_overlay == 210 ? "INSERT" :
-                            key_map_overlay == 211 ? "DELETE" :
-                            key_map_overlay == 215 ? "F11" :
-                            key_map_overlay == 216 ? "F12" :
-                            key_map_overlay == 217 ? "PRINT SCREEN" :
-                            key_map_overlay == 255 ? "PAUSE" :
-                                                     "%c", key_map_overlay);
         if (key_map_overlay == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_KbdKeyDrawer(key_map_overlay));
         dp_translation = NULL;
     }
 
@@ -7591,46 +6353,9 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_rotate ==   0 ? "---" :
-                            key_map_rotate ==   9 ? "TAB" :
-                            key_map_rotate ==  13 ? "ENTER" :
-                            key_map_rotate ==  32 ? "SPACE BAR" :
-                            key_map_rotate ==  96 ? "\'" :
-                            key_map_rotate == 127 ? "BACKSPACE" :
-                            key_map_rotate == 157 ? "CTRL" :
-                            key_map_rotate == 172 ? "LEFT ARROW" :
-                            key_map_rotate == 173 ? "UP ARROW" :
-                            key_map_rotate == 174 ? "RIGHT ARROW" :
-                            key_map_rotate == 175 ? "DOWN ARROW" :
-                            key_map_rotate == 182 ? "SHIFT" :
-                            key_map_rotate == 184 ? "ALT" :
-                            key_map_rotate == 186 ? "CAPS LOCK" :
-                            key_map_rotate == 187 ? "F1" :
-                            key_map_rotate == 188 ? "F2" :
-                            key_map_rotate == 189 ? "F3" :
-                            key_map_rotate == 190 ? "F4" :
-                            key_map_rotate == 191 ? "F5" :
-                            key_map_rotate == 192 ? "F6" :
-                            key_map_rotate == 193 ? "F7" :
-                            key_map_rotate == 194 ? "F8" :
-                            key_map_rotate == 195 ? "F9" :
-                            key_map_rotate == 196 ? "F10" :
-                            key_map_rotate == 197 ? "NUM LOCK" :
-                            key_map_rotate == 198 ? "SCROLL LOCK" :
-                            key_map_rotate == 199 ? "HOME" :
-                            key_map_rotate == 201 ? "PAGE UP" :
-                            key_map_rotate == 207 ? "END" :
-                            key_map_rotate == 209 ? "PAGE DOWN" :
-                            key_map_rotate == 210 ? "INSERT" :
-                            key_map_rotate == 211 ? "DELETE" :
-                            key_map_rotate == 215 ? "F11" :
-                            key_map_rotate == 216 ? "F12" :
-                            key_map_rotate == 217 ? "PRINT SCREEN" :
-                            key_map_rotate == 255 ? "PAUSE" :
-                                                    "%c", key_map_rotate);
         if (key_map_rotate == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 95, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 95, M_RD_KbdKeyDrawer(key_map_rotate));
         dp_translation = NULL;
     }
 
@@ -7643,46 +6368,10 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_grid ==   0 ? "---" :
-                            key_map_grid ==   9 ? "TAB" :
-                            key_map_grid ==  13 ? "ENTER" :
-                            key_map_grid ==  32 ? "SPACE BAR" :
-                            key_map_grid ==  96 ? "\'" :
-                            key_map_grid == 127 ? "BACKSPACE" :
-                            key_map_grid == 157 ? "CTRL" :
-                            key_map_grid == 172 ? "LEFT ARROW" :
-                            key_map_grid == 173 ? "UP ARROW" :
-                            key_map_grid == 174 ? "RIGHT ARROW" :
-                            key_map_grid == 175 ? "DOWN ARROW" :
-                            key_map_grid == 182 ? "SHIFT" :
-                            key_map_grid == 184 ? "ALT" :
-                            key_map_grid == 186 ? "CAPS LOCK" :
-                            key_map_grid == 187 ? "F1" :
-                            key_map_grid == 188 ? "F2" :
-                            key_map_grid == 189 ? "F3" :
-                            key_map_grid == 190 ? "F4" :
-                            key_map_grid == 191 ? "F5" :
-                            key_map_grid == 192 ? "F6" :
-                            key_map_grid == 193 ? "F7" :
-                            key_map_grid == 194 ? "F8" :
-                            key_map_grid == 195 ? "F9" :
-                            key_map_grid == 196 ? "F10" :
-                            key_map_grid == 197 ? "NUM LOCK" :
-                            key_map_grid == 198 ? "SCROLL LOCK" :
-                            key_map_grid == 199 ? "HOME" :
-                            key_map_grid == 201 ? "PAGE UP" :
-                            key_map_grid == 207 ? "END" :
-                            key_map_grid == 209 ? "PAGE DOWN" :
-                            key_map_grid == 210 ? "INSERT" :
-                            key_map_grid == 211 ? "DELETE" :
-                            key_map_grid == 215 ? "F11" :
-                            key_map_grid == 216 ? "F12" :
-                            key_map_grid == 217 ? "PRINT SCREEN" :
-                            key_map_grid == 255 ? "PAUSE" :
-                                                  "%c", key_map_grid);
+
         if (key_map_grid == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_KbdKeyDrawer(key_map_grid));
         dp_translation = NULL;
     }
 
@@ -7695,46 +6384,9 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_mark ==   0 ? "---" :
-                            key_map_mark ==   9 ? "TAB" :
-                            key_map_mark ==  13 ? "ENTER" :
-                            key_map_mark ==  32 ? "SPACE BAR" :
-                            key_map_mark ==  96 ? "\'" :
-                            key_map_mark == 127 ? "BACKSPACE" :
-                            key_map_mark == 157 ? "CTRL" :
-                            key_map_mark == 172 ? "LEFT ARROW" :
-                            key_map_mark == 173 ? "UP ARROW" :
-                            key_map_mark == 174 ? "RIGHT ARROW" :
-                            key_map_mark == 175 ? "DOWN ARROW" :
-                            key_map_mark == 182 ? "SHIFT" :
-                            key_map_mark == 184 ? "ALT" :
-                            key_map_mark == 186 ? "CAPS LOCK" :
-                            key_map_mark == 187 ? "F1" :
-                            key_map_mark == 188 ? "F2" :
-                            key_map_mark == 189 ? "F3" :
-                            key_map_mark == 190 ? "F4" :
-                            key_map_mark == 191 ? "F5" :
-                            key_map_mark == 192 ? "F6" :
-                            key_map_mark == 193 ? "F7" :
-                            key_map_mark == 194 ? "F8" :
-                            key_map_mark == 195 ? "F9" :
-                            key_map_mark == 196 ? "F10" :
-                            key_map_mark == 197 ? "NUM LOCK" :
-                            key_map_mark == 198 ? "SCROLL LOCK" :
-                            key_map_mark == 199 ? "HOME" :
-                            key_map_mark == 201 ? "PAGE UP" :
-                            key_map_mark == 207 ? "END" :
-                            key_map_mark == 209 ? "PAGE DOWN" :
-                            key_map_mark == 210 ? "INSERT" :
-                            key_map_mark == 211 ? "DELETE" :
-                            key_map_mark == 215 ? "F11" :
-                            key_map_mark == 216 ? "F12" :
-                            key_map_mark == 217 ? "PRINT SCREEN" :
-                            key_map_mark == 255 ? "PAUSE" :
-                                                  "%c", key_map_mark);
         if (key_map_mark == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 115, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 115, M_RD_KbdKeyDrawer(key_map_mark));
         dp_translation = NULL;
     }
 
@@ -7747,46 +6399,9 @@ void M_RD_Draw_Bindings_4(void)
     }
     else
     {
-        M_snprintf(num, 16, key_map_clearmark ==   0 ? "---" :
-                            key_map_clearmark ==   9 ? "TAB" :
-                            key_map_clearmark ==  13 ? "ENTER" :
-                            key_map_clearmark ==  32 ? "SPACE BAR" :
-                            key_map_clearmark ==  96 ? "\'" :
-                            key_map_clearmark == 127 ? "BACKSPACE" :
-                            key_map_clearmark == 157 ? "CTRL" :
-                            key_map_clearmark == 172 ? "LEFT ARROW" :
-                            key_map_clearmark == 173 ? "UP ARROW" :
-                            key_map_clearmark == 174 ? "RIGHT ARROW" :
-                            key_map_clearmark == 175 ? "DOWN ARROW" :
-                            key_map_clearmark == 182 ? "SHIFT" :
-                            key_map_clearmark == 184 ? "ALT" :
-                            key_map_clearmark == 186 ? "CAPS LOCK" :
-                            key_map_clearmark == 187 ? "F1" :
-                            key_map_clearmark == 188 ? "F2" :
-                            key_map_clearmark == 189 ? "F3" :
-                            key_map_clearmark == 190 ? "F4" :
-                            key_map_clearmark == 191 ? "F5" :
-                            key_map_clearmark == 192 ? "F6" :
-                            key_map_clearmark == 193 ? "F7" :
-                            key_map_clearmark == 194 ? "F8" :
-                            key_map_clearmark == 195 ? "F9" :
-                            key_map_clearmark == 196 ? "F10" :
-                            key_map_clearmark == 197 ? "NUM LOCK" :
-                            key_map_clearmark == 198 ? "SCROLL LOCK" :
-                            key_map_clearmark == 199 ? "HOME" :
-                            key_map_clearmark == 201 ? "PAGE UP" :
-                            key_map_clearmark == 207 ? "END" :
-                            key_map_clearmark == 209 ? "PAGE DOWN" :
-                            key_map_clearmark == 210 ? "INSERT" :
-                            key_map_clearmark == 211 ? "DELETE" :
-                            key_map_clearmark == 215 ? "F11" :
-                            key_map_clearmark == 216 ? "F12" :
-                            key_map_clearmark == 217 ? "PRINT SCREEN" :
-                            key_map_clearmark == 255 ? "PAUSE" :
-                                                       "%c", key_map_clearmark);
         if (key_map_clearmark == 0)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, num);
+        M_WriteTextSmall_ENG(x + wide_delta, 125, M_RD_KbdKeyDrawer(key_map_clearmark));
         dp_translation = NULL;
     }
 }
