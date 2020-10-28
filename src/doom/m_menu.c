@@ -773,6 +773,32 @@ void M_WriteTextBigCentered_RUS (int y, char *string)
 }
 
 
+// -----------------------------------------------------------------------------
+// M_RD_Draw_Menu_Background
+//
+// [JN] Draws menu background using FLOOR4_8 flat graphics.
+// -----------------------------------------------------------------------------
+
+void M_RD_Draw_Menu_Background (void)
+{
+    byte *src = W_CacheLumpName (DEH_String("FLOOR4_8"), PU_CACHE);
+    byte *dest;
+    int x, y;
+
+    dest = I_VideoBuffer;
+
+    for (y = 0; y < SCREENHEIGHT; y++)
+    {
+        for (x = 0; x < screenwidth; x++)
+        {
+            *dest++ = src[(y & 63) * 64 + (x & 63)];
+        }
+    }
+
+    inhelpscreens = true;
+}
+
+
 // =============================================================================
 // DOOM MENU
 // =============================================================================
@@ -1823,6 +1849,7 @@ enum
     rd_bindings_1_empty_1,
     rd_bindings_1_fire,
     rd_bindings_1_use,
+    rd_bindings_1_empty_2,
     rd_bindings_1_next_page,
     rd_bindings_1_prev_page,
     rd_bindings_1_end
@@ -1845,6 +1872,7 @@ menuitem_t RD_Bindings_Menu_1[]=
     {-1,"",0,'\0'},
     {1, "Fire/Attack",   M_RD_Bind_FireAttack,   'f'},
     {1, "Use",           M_RD_Bind_Use,          'u'},
+    {-1,"",0,'\0'},
     {1,"",               M_RD_Choose_Bindings_2, 'n'},
     {1,"",               M_RD_Choose_Bindings_4, 'l'},
     {-1,"",0,'\0'}
@@ -1877,6 +1905,7 @@ menuitem_t RD_Bindings_Menu_1_Rus[]=
     {-1,"",0,'\0'},
     {1, "fnfrf*cnhtkm,f",  M_RD_Bind_FireAttack,   'f'}, // Атака/стрельба
     {1, "bcgjkmpjdfnm",    M_RD_Bind_Use,          'b'}, // Использовать
+    {-1,"",0,'\0'},
     {1,"",                 M_RD_Choose_Bindings_2, 'l'},
     {1,"",                 M_RD_Choose_Bindings_4, 'y'},
     {-1,"",0,'\0'}
@@ -1910,6 +1939,7 @@ enum
     rd_bindings_2_prevweapon,
     rd_bindings_2_nextweapon,
     rd_bindings_2_empty_1,
+    rd_bindings_2_empty_2,
     rd_bindings_2_next_page,
     rd_bindings_2_prev_page,
     rd_bindings_2_end
@@ -1931,6 +1961,7 @@ menuitem_t RD_Bindings_Menu_2[]=
     { 1, "Weapon 8",        M_RD_Bind_Weapon_8,     'w'},
     { 1, "Previous weapon", M_RD_Bind_PrevWeapon,   'p'},
     { 1, "Next weapon",     M_RD_Bind_NextWeapon,   'n'},
+    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     { 1,"",                 M_RD_Choose_Bindings_3, 'n'},
     { 1,"",                 M_RD_Choose_Bindings_1, 'p'},
@@ -1963,6 +1994,7 @@ menuitem_t RD_Bindings_Menu_2_Rus[]=
     { 1, "jhe;bt 8",          M_RD_Bind_Weapon_8,     'j'}, // Оружие 8
     { 1, "ghtlsleott jhe;bt", M_RD_Bind_PrevWeapon,   'g'}, // Предыдущее оружие
     { 1, "cktle.ott jhe;bt",  M_RD_Bind_NextWeapon,   'c'}, // Следующее оружие
+    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     { 1,"",                   M_RD_Choose_Bindings_3, 'n'},
     { 1,"",                   M_RD_Choose_Bindings_1, 'p'},
@@ -1997,6 +2029,7 @@ enum
     rd_bindings_3_alwaysrun,
     rd_bindings_3_crosshair,
     rd_bindings_3_fliplevel,
+    rd_bindings_3_empty_2,
     rd_bindings_3_next_page,
     rd_bindings_3_prev_page,
     rd_bindings_3_end
@@ -2019,6 +2052,7 @@ menuitem_t RD_Bindings_Menu_3[]=
     { 1, "Always run",            M_RD_Bind_AlwaysRun,    'a'},
     { 1, "Crosshair",             M_RD_Bind_Crosshair,    'c'},
     { 1, "Level flipping",        M_RD_Bind_FlipLevels,   'l'},
+    {-1,"",0,'\0'},
     { 1,"",                       M_RD_Choose_Bindings_4, 'n'},
     { 1,"",                       M_RD_Choose_Bindings_2, 'p'},
     {-1,"",0,'\0'}
@@ -2051,6 +2085,7 @@ menuitem_t RD_Bindings_Menu_3_Rus[]=
     { 1, "gjcnjzyysq ,tu",        M_RD_Bind_AlwaysRun,    'a'}, // Постоянный бег
     { 1, "ghbwtk",                M_RD_Bind_Crosshair,    'c'}, // Прицел
     { 1, "pthrfkbhjdfybt ehjdyz", M_RD_Bind_FlipLevels,   'l'}, // Зеркалирование уровня
+    {-1,"",0,'\0'},
     { 1,"",                       M_RD_Choose_Bindings_4, 'n'},
     { 1,"",                       M_RD_Choose_Bindings_2, 'p'},
     {-1,"",0,'\0'}
@@ -2084,6 +2119,7 @@ enum
     rd_bindings_4_mark,
     rd_bindings_4_clearmarks,
     rd_bindings_4_empty1,
+    rd_bindings_4_empty2,
     rd_bindings_4_next_page,
     rd_bindings_4_prev_page,
     rd_bindings_4_end
@@ -2105,6 +2141,7 @@ menuitem_t RD_Bindings_Menu_4[]=
     { 1, "Toggle grid",      M_RD_Bind_Grid,         't'},
     { 1, "Mark location",    M_RD_Bind_Mark,         'm'},
     { 1, "Clear all marks",  M_RD_Bind_ClearMarks,   'c'},
+    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     { 1,"",                  M_RD_Choose_Bindings_1, 'f'},
     { 1,"",                  M_RD_Choose_Bindings_3, 'p'},
@@ -2137,6 +2174,7 @@ menuitem_t RD_Bindings_Menu_4_Rus[]=
     { 1, "ctnrf",             M_RD_Bind_Grid,         'c'}, // Сетка
     { 1, "gjcnfdbnm jnvtnre", M_RD_Bind_Mark,         'g'}, // Поставить отметку
     { 1, "e,hfnm jnvtnrb",    M_RD_Bind_ClearMarks,   'e'}, // Убрать отметки
+    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     { 1,"",                   M_RD_Choose_Bindings_1, 'f'},
     { 1,"",                   M_RD_Choose_Bindings_3, 'p'},
@@ -4758,9 +4796,7 @@ void M_RD_Draw_Bindings_1(void)
 {
     int x = (english_language ? 209 : 210);
     
-    // Jaguar: hide game background, don't draw lines over the HUD
-    // if (gamemission == jaguar)
-    // M_RD_Jaguar_Menu_Background();
+    M_RD_Draw_Menu_Background();
 
     if (english_language)
     {
@@ -4784,9 +4820,14 @@ void M_RD_Draw_Bindings_1(void)
         // Footer
         //
         dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >"); 
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "< last page"); 
-        M_WriteTextSmall_ENG(x + wide_delta, 155, "page 1/4");
+        M_WriteTextSmall_ENG(35 + wide_delta, 155, "next page >"); 
+        M_WriteTextSmall_ENG(35 + wide_delta, 165, "< last page"); 
+        M_WriteTextSmall_ENG(x + wide_delta, 165, "page 1/4");
+        dp_translation = NULL;
+
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
+        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages");
         dp_translation = NULL;
     }
     else
@@ -4812,9 +4853,19 @@ void M_RD_Draw_Bindings_1(void)
         // Footer
         //
         dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS); 
-        M_WriteTextSmall_RUS(x + wide_delta, 155, "cnhfybwf 1*4");
+        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS); 
+        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS); 
+        M_WriteTextSmall_RUS(x + wide_delta, 165, "cnhfybwf 1*4");
+        dp_translation = NULL;
+
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
+        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
+        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
+        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
+
+        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =");
+        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws");
         dp_translation = NULL;
     }
 
@@ -5250,9 +5301,7 @@ void M_RD_Draw_Bindings_2(void)
 {
     int x = (english_language ? 209 : 210);
     
-    // Jaguar: hide game background, don't draw lines over the HUD
-    // if (gamemission == jaguar)
-    // M_RD_Jaguar_Menu_Background();
+    M_RD_Draw_Menu_Background();
 
     if (english_language)
     {
@@ -5269,11 +5318,15 @@ void M_RD_Draw_Bindings_2(void)
         // Footer
         //
         dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >"); 
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page"); 
-        M_WriteTextSmall_ENG(x + wide_delta, 155, "page 2/4");
+        M_WriteTextSmall_ENG(35 + wide_delta, 155, "next page >"); 
+        M_WriteTextSmall_ENG(35 + wide_delta, 165, "< prev page"); 
+        M_WriteTextSmall_ENG(x + wide_delta, 165, "page 2/4");
         dp_translation = NULL;
 
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
+        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages");
+        dp_translation = NULL;
     }
     else
     {
@@ -5290,9 +5343,19 @@ void M_RD_Draw_Bindings_2(void)
         // Footer
         //
         dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS); 
-        M_WriteTextSmall_RUS(x + wide_delta, 155, "cnhfybwf 2*4");
+        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS); 
+        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS); 
+        M_WriteTextSmall_RUS(x + wide_delta, 165, "cnhfybwf 2*4");
+        dp_translation = NULL;
+
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
+        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
+        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
+        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
+
+        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =");
+        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws");
         dp_translation = NULL;
     }
 
@@ -5723,9 +5786,7 @@ void M_RD_Draw_Bindings_3(void)
 {
     int x = (english_language ? 209 : 210);
     
-    // Jaguar: hide game background, don't draw lines over the HUD
-    // if (gamemission == jaguar)
-    // M_RD_Jaguar_Menu_Background();
+    M_RD_Draw_Menu_Background();
 
     if (english_language)
     {
@@ -5749,9 +5810,14 @@ void M_RD_Draw_Bindings_3(void)
         // Footer
         //
         dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >"); 
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page"); 
-        M_WriteTextSmall_ENG(x + wide_delta, 155, "page 3/4");
+        M_WriteTextSmall_ENG(35 + wide_delta, 155, "next page >"); 
+        M_WriteTextSmall_ENG(35 + wide_delta, 165, "< prev page"); 
+        M_WriteTextSmall_ENG(x + wide_delta, 165, "page 3/4");
+        dp_translation = NULL;
+
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
+        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages");
         dp_translation = NULL;
     }
     else
@@ -5776,9 +5842,19 @@ void M_RD_Draw_Bindings_3(void)
         // Footer
         //
         dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS); 
-        M_WriteTextSmall_RUS(x + wide_delta, 155, "cnhfybwf 3*4");
+        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS); 
+        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS); 
+        M_WriteTextSmall_RUS(x + wide_delta, 165, "cnhfybwf 3*4");
+        dp_translation = NULL;
+
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
+        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
+        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
+        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
+
+        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =");
+        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws");
         dp_translation = NULL;
     }
 
@@ -6209,9 +6285,7 @@ void M_RD_Draw_Bindings_4(void)
 {
     int x = (english_language ? 209 : 210);
     
-    // Jaguar: hide game background, don't draw lines over the HUD
-    // if (gamemission == jaguar)
-    // M_RD_Jaguar_Menu_Background();
+    M_RD_Draw_Menu_Background();
 
     if (english_language)
     {
@@ -6228,9 +6302,14 @@ void M_RD_Draw_Bindings_4(void)
         // Footer
         //
         dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(35 + wide_delta, 145, "first page >"); 
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page"); 
-        M_WriteTextSmall_ENG(x + wide_delta, 155, "page 4/4");
+        M_WriteTextSmall_ENG(35 + wide_delta, 155, "first page >"); 
+        M_WriteTextSmall_ENG(35 + wide_delta, 165, "< prev page"); 
+        M_WriteTextSmall_ENG(x + wide_delta, 165, "page 4/4");
+        dp_translation = NULL;
+
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
+        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages");
         dp_translation = NULL;
     }
     else
@@ -6248,9 +6327,19 @@ void M_RD_Draw_Bindings_4(void)
         // Footer
         //
         dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS); 
-        M_WriteTextSmall_RUS(x + wide_delta, 155, "cnhfybwf 4*4");
+        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS); 
+        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS); 
+        M_WriteTextSmall_RUS(x + wide_delta, 165, "cnhfybwf 4*4");
+        dp_translation = NULL;
+
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
+        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
+        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
+        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
+
+        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =");
+        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws");
         dp_translation = NULL;
     }
 
@@ -7604,30 +7693,11 @@ void M_RD_Choose_LevelSelect_2(int choice)
                     &RD_Level_Def_2_Rus);
 }
 
-void M_RD_Draw_Level_Background (void)
-{
-    byte *src = W_CacheLumpName (DEH_String("FLOOR4_8"), PU_CACHE);
-    byte *dest;
-    int x, y;
-
-    dest = I_VideoBuffer;
-
-    for (y = 0; y < SCREENHEIGHT; y++)
-    {
-        for (x = 0; x < screenwidth; x++)
-        {
-            *dest++ = src[(y & 63) * 64 + (x & 63)];
-        }
-    }
-
-    inhelpscreens = true;
-}
-
 void M_RD_Draw_Level_1 (void)
 {
     static char num[4];
 
-    M_RD_Draw_Level_Background();
+    M_RD_Draw_Menu_Background();
 
     if (english_language)
     {
@@ -7943,7 +8013,7 @@ void M_RD_Draw_Level_2 (void)
 {
     static char num[4];
 
-    M_RD_Draw_Level_Background();
+    M_RD_Draw_Menu_Background();
 
     if (english_language)
     {
@@ -10054,7 +10124,8 @@ boolean M_Responder (event_t* ev)
     &&  currentMenu != &RD_Bindings_Menu_Def_2_Rus
     &&  currentMenu != &RD_Bindings_Menu_Def_3
     &&  currentMenu != &RD_Bindings_Menu_Def_3_Rus
-    &&  currentMenu != &RD_Bindings_Menu_Def_4)
+    &&  currentMenu != &RD_Bindings_Menu_Def_4
+    &&  currentMenu != &RD_Bindings_Menu_Def_4_Rus)
     {
         menuactive = false;
     }
