@@ -798,6 +798,19 @@ void M_RD_Draw_Menu_Background (void)
     inhelpscreens = true;
 }
 
+// -----------------------------------------------------------------------------
+// M_RD_Jaguar_Menu_Background
+//
+// [JN] Draws INTERPIC graphics as a background. Used only in Jaguar Doom.
+// -----------------------------------------------------------------------------
+
+void M_RD_Jaguar_Menu_Background(void)
+{
+    inhelpscreens = true;
+    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
+    V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE));
+}
+
 
 // =============================================================================
 // DOOM MENU
@@ -6786,13 +6799,6 @@ void M_RD_Choose_Gameplay_4(int choice)
     M_SetupNextMenu(english_language ? 
                     &RD_Gameplay_Def_4 :
                     &RD_Gameplay_Def_4_Rus);
-}
-
-void M_RD_Jaguar_Menu_Background(void)
-{
-    inhelpscreens = true;
-    V_DrawFilledBox(0, 0, SCREENWIDTH, SCREENHEIGHT, 0);
-    V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE));
 }
 
 void M_RD_Draw_Gameplay_1(void)
