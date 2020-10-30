@@ -652,7 +652,7 @@ void R_ProjectSprite (mobj_t* thing)
     gzt = interpz + spritetopoffset[lump];
 
     if (interpz > viewz + FixedDiv(viewheight << FRACBITS, xscale)
-    ||  gzt     < viewz - FixedDiv((viewheight << FRACBITS)-viewheight, xscale))
+    ||  gzt     < (int64_t)viewz - FixedDiv((viewheight << FRACBITS)-viewheight, xscale))
     return;
 
     // [JN] quickly reject sprites with bad x ranges
