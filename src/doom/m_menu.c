@@ -321,6 +321,19 @@ void M_RD_Bind_Grid(int choice);
 void M_RD_Bind_Mark(int choice);
 void M_RD_Bind_ClearMarks(int choice);
 
+// Mouse bindings
+void M_RD_Choose_Mouse_Bindings(int choice);
+void M_RD_Draw_Mouse_Bindings(void);
+void M_RD_Mouse_Bind_FireAttack(int choice);
+void M_RD_Mouse_Bind_Use(int choice);
+void M_RD_Mouse_Bind_MoveForward(int choice);
+void M_RD_Mouse_Bind_MoveBackward(int choice);
+void M_RD_Mouse_Bind_StrafeOn(int choice);
+void M_RD_Mouse_Bind_StrafeLeft(int choice);
+void M_RD_Mouse_Bind_StrafeRight(int choice);
+void M_RD_Mouse_Bind_PrevWeapon(int choice);
+void M_RD_Mouse_Bind_NextWeapon(int choice);
+
 // Gameplay
 void M_RD_Choose_Gameplay_1(int choice);
 void M_RD_Choose_Gameplay_2(int choice);
@@ -1768,6 +1781,7 @@ menu_t RD_Audio_System_Def_Rus =
 enum
 {
     rd_controls_kdb_bindings,
+    rd_controls_mouse_bindings,
     rd_controls_empty1,
     rd_controls_sensitivity,
     rd_controls_empty2,
@@ -1790,6 +1804,7 @@ enum
 menuitem_t RD_Controls_Menu[]=
 {
     {1, "keyboard bindings",  M_RD_Choose_Bindings_1,     'k'},
+    {1, "mouse bindings",     M_RD_Choose_Mouse_Bindings, 'm'},
     {-1,"",0,'\0'},
     {2, "sensivity",          M_RD_Change_Sensitivity,    'm'},
     {-1,"",0,'\0'},
@@ -1821,6 +1836,7 @@ menu_t  RD_Controls_Def =
 menuitem_t RD_Controls_Menu_Rus[]=
 {
     {1, "yfcnhjqrb rkfdbfnehs",      M_RD_Choose_Bindings_1,  'k'}, // Настройки клавиатуры
+    {1, "yfcnhjqrb vsib",            M_RD_Choose_Mouse_Bindings,'k'}, // Настройки мыши
     {-1,"",0,'\0'},                                                 //
     {2, "crjhjcnm",                  M_RD_Change_Sensitivity, 'c'}, // Скорость
     {-1,"",0,'\0'},                                                 //
@@ -2200,6 +2216,81 @@ menu_t  RD_Bindings_Menu_Def_4_Rus =
     &RD_Controls_Def_Rus,
     RD_Bindings_Menu_4_Rus,
     M_RD_Draw_Bindings_4,
+    35,35,
+    0
+};
+
+
+// -----------------------------------------------------------------------------
+// Mouse bindings
+// -----------------------------------------------------------------------------
+
+enum
+{
+    rd_mouse_bindings_attack,
+    rd_mouse_bindings_use,
+    rd_mouse_bindings_forward,
+    rd_mouse_bindings_backward,
+    rd_mouse_bindings_strafeon,
+    rd_mouse_bindings_strafeleft,
+    rd_mouse_bindings_straferight,
+    rd_mouse_bindings_prevweapon,
+    rd_mouse_bindings_nextweapon,
+    rd_mouse_bindings_end
+} rd_mouse_bindings_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t RD_Mouse_Bindings_Menu[]=
+{
+    {1, "Fire/Attack",     M_RD_Mouse_Bind_FireAttack,   'f'},
+    {1, "Use",             M_RD_Mouse_Bind_Use,          'u'},
+    {1, "Move Forward",    M_RD_Mouse_Bind_MoveForward,  'm'},
+    {1, "Move Backward",   M_RD_Mouse_Bind_MoveBackward, 'm'},
+    {1, "Strafe On",       M_RD_Mouse_Bind_StrafeOn,     's'},
+    {1, "Strafe Left",     M_RD_Mouse_Bind_StrafeLeft,   's'},
+    {1, "Strafe Right",    M_RD_Mouse_Bind_StrafeRight,  's'},
+    {1, "Previous Weapon", M_RD_Mouse_Bind_PrevWeapon,   't'},
+    {1, "Next Weapon",     M_RD_Mouse_Bind_NextWeapon,   't'},
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Mouse_Bindings_Menu_Def =
+{
+    rd_mouse_bindings_end,
+    &RD_Controls_Def,
+    RD_Mouse_Bindings_Menu,
+    M_RD_Draw_Mouse_Bindings,
+    35,35,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t RD_Mouse_Bindings_Menu_Rus[]=
+{
+    {1, "fnfrf*cnhtkm,f",    M_RD_Mouse_Bind_FireAttack,   'f'}, // Атака/стрельба
+    {1, "bcgjkmpjdfnm",      M_RD_Mouse_Bind_Use,          'b'}, // Использовать
+    {1, "ldb;tybt dgthtl",   M_RD_Mouse_Bind_MoveForward,  'l'}, // Движение вперед
+    {1, "ldb;tybt yfpfl",    M_RD_Mouse_Bind_MoveBackward, 'l'}, // Движение назад
+    {1, "ldb;tybt ,jrjv",    M_RD_Mouse_Bind_StrafeOn,     'l'}, // Движение боком
+    {1, ",jrjv dktdj",       M_RD_Mouse_Bind_StrafeLeft,   ','}, // Боком влево
+    {1, ",jrjv dghfdj",      M_RD_Mouse_Bind_StrafeRight,  ','}, // Боком вправо
+    {1, "ghtlsleott jhe;bt", M_RD_Mouse_Bind_PrevWeapon,   'g'}, // Предыдущее оружие
+    {1, "cktle.ott jhe;bt",  M_RD_Mouse_Bind_NextWeapon,   'c'}, // Следующее оружие
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Mouse_Bindings_Menu_Def_Rus =
+{
+    rd_mouse_bindings_end,
+    &RD_Controls_Def_Rus,
+    RD_Mouse_Bindings_Menu_Rus,
+    M_RD_Draw_Mouse_Bindings,
     35,35,
     0
 };
@@ -4540,22 +4631,22 @@ void M_RD_Draw_Controls(void)
         // Mouse
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 45, "mouse");
+        M_WriteTextSmall_ENG(35 + wide_delta, 55, "mouse");
         dp_translation = NULL;
 
         // Mouse look
-        M_WriteTextSmall_ENG(119 + wide_delta, 115, mlook ? "on" : "off");
+        M_WriteTextSmall_ENG(119 + wide_delta, 125, mlook ? "on" : "off");
 
         // Invert Y axis
         if (!mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(130 + wide_delta, 125, mouse_y_invert ? "on" : "off");
+        M_WriteTextSmall_ENG(130 + wide_delta, 135, mouse_y_invert ? "on" : "off");
         dp_translation = NULL;
 
         // Vertical movement
         if (mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(171 + wide_delta, 135, !novert ? "on" : "off");
+        M_WriteTextSmall_ENG(171 + wide_delta, 145, !novert ? "on" : "off");
         dp_translation = NULL;
     }
     else
@@ -4573,44 +4664,44 @@ void M_RD_Draw_Controls(void)
         // Мышь
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 45, "vsim");
+        M_WriteTextSmall_RUS(35 + wide_delta, 55, "vsim");
         dp_translation = NULL;
 
         // Обзор мышью
-        M_WriteTextSmall_RUS(135 + wide_delta, 115, mlook ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(135 + wide_delta, 125, mlook ? "drk" : "dsrk");
 
         // Вертикальная инверсия
         if (!mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(207 + wide_delta, 125, mouse_y_invert ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(207 + wide_delta, 135, mouse_y_invert ? "drk" : "dsrk");
         dp_translation = NULL;
 
         // Вертикальное перемещение
         if (mlook)
         dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(235 + wide_delta, 135, !novert ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(235 + wide_delta, 145, !novert ? "drk" : "dsrk");
         dp_translation = NULL;
     }
 
     // Mouse sensivity slider
-    M_DrawThermo_Small(35 + wide_delta, 64, 17, mouseSensitivity);
+    M_DrawThermo_Small(35 + wide_delta, 74, 17, mouseSensitivity);
     // Numerical representation
     M_snprintf(num, 4, "%3d", mouseSensitivity);
-    M_WriteTextSmall_ENG(189 + wide_delta, 65, num);
+    M_WriteTextSmall_ENG(189 + wide_delta, 75, num);
 
     // Acceleration slider
-    M_DrawThermo_Small(35 + wide_delta, 84, 17, mouse_acceleration * 4 - 4);
+    M_DrawThermo_Small(35 + wide_delta, 94, 17, mouse_acceleration * 4 - 4);
     // Numerical representation
     M_snprintf(num, 4, "%f", mouse_acceleration);
-    M_WriteTextSmall_ENG(189 + wide_delta, 85, num);
+    M_WriteTextSmall_ENG(189 + wide_delta, 95, num);
 
     // Acceleration threshold slider
-    M_DrawThermo_Small(35 + wide_delta, 104, 17, mouse_threshold / 2);
+    M_DrawThermo_Small(35 + wide_delta, 114, 17, mouse_threshold / 2);
     // Numerical representation
     M_snprintf(num, 4, "%3d", mouse_threshold);
     if (mouse_acceleration < 1.1)
     dp_translation = cr[CR_DARKRED];
-    M_WriteTextSmall_ENG(189 + wide_delta, 105, num);
+    M_WriteTextSmall_ENG(189 + wide_delta, 115, num);
     dp_translation = NULL;
 }
 
@@ -6766,6 +6857,859 @@ void M_RD_Key_ClearMarks (int key)
 void M_RD_Bind_ClearMarks (int choice)
 {
     M_RD_StartBinding(M_RD_Key_ClearMarks);
+}
+
+
+// -----------------------------------------------------------------------------
+// M_RD_MouseBtnDrawer
+// [JN] Returns button name for mouse bindings.
+// -----------------------------------------------------------------------------
+
+static char *M_RD_MouseBtnDrawer (int i)
+{
+    switch (i)
+    {
+        case -1:    return "---";
+        case  0:    return "LEFT BUTTON";
+        case  1:    return "RIGHT BUTTON";
+        case  2:    return "MIDDLE BUTTON";
+        case  3:    return "BUTTON #3";
+        case  4:    return "BUTTON #4";
+        default:    return "?"; // [JN] Unknown key
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Mouse bindings
+// -----------------------------------------------------------------------------
+
+void M_RD_Choose_Mouse_Bindings(int choice)
+{
+    M_SetupNextMenu(english_language ?
+                    &RD_Mouse_Bindings_Menu_Def :
+                    &RD_Mouse_Bindings_Menu_Def_Rus);
+}
+
+void M_RD_Draw_Mouse_Bindings(void)
+{
+    int x = 186;
+    
+    M_RD_Draw_Menu_Background();
+
+    if (english_language)
+    {
+        M_WriteTextBigCentered_ENG(5, "Mouse bindings");
+
+        //
+        // Buttons
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Buttons");
+        dp_translation = NULL;
+
+        //
+        // Footer
+        //
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
+        dp_translation = NULL;
+    }
+    else
+    {
+        M_WriteTextBigCentered_RUS(5, "Yfcnhjqrb vsib"); // Настройки мыши
+
+        //
+        // Кнопки
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(35 + wide_delta, 25, "ryjgrb");
+        dp_translation = NULL;
+
+        //
+        // Footer
+        //
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
+        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
+        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
+        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
+        dp_translation = NULL;
+    }
+
+    // Fire/Attack
+    if (messageToPrint && itemOn == rd_mouse_bindings_attack)
+    {
+        dp_translation = cr[CR_GRAY];
+        M_WriteTextSmall_ENG(x + wide_delta, 35, "?");
+        dp_translation = NULL;
+    }
+    else
+    {
+        if (mousebfire == -1)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_MouseBtnDrawer(mousebfire));
+        dp_translation = NULL;
+    }
+
+    // Use
+    if (messageToPrint && itemOn == rd_mouse_bindings_use)
+    {
+        dp_translation = cr[CR_GRAY];
+        M_WriteTextSmall_ENG(x + wide_delta, 45, "?");
+        dp_translation = NULL;
+    }
+    else
+    {
+        if (mousebuse == -1)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_MouseBtnDrawer(mousebuse));
+        dp_translation = NULL;
+    }
+
+    // Move Forward
+    if (messageToPrint && itemOn == rd_mouse_bindings_forward)
+    {
+        dp_translation = cr[CR_GRAY];
+        M_WriteTextSmall_ENG(x + wide_delta, 55, "?");
+        dp_translation = NULL;
+    }
+    else
+    {
+        if (mousebforward == -1)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_MouseBtnDrawer(mousebforward));
+        dp_translation = NULL;
+    }
+
+    // Move Backward
+    if (messageToPrint && itemOn == rd_mouse_bindings_backward)
+    {
+        dp_translation = cr[CR_GRAY];
+        M_WriteTextSmall_ENG(x + wide_delta, 65, "?");
+        dp_translation = NULL;
+    }
+    else
+    {
+        if (mousebbackward == -1)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_MouseBtnDrawer(mousebbackward));
+        dp_translation = NULL;
+    }
+
+    // Strafe On
+    if (messageToPrint && itemOn == rd_mouse_bindings_strafeon)
+    {
+        dp_translation = cr[CR_GRAY];
+        M_WriteTextSmall_ENG(x + wide_delta, 75, "?");
+        dp_translation = NULL;
+    }
+    else
+    {
+        if (mousebstrafe == -1)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_MouseBtnDrawer(mousebstrafe));
+        dp_translation = NULL;
+    }
+
+    // Strafe Left
+    if (messageToPrint && itemOn == rd_mouse_bindings_strafeleft)
+    {
+        dp_translation = cr[CR_GRAY];
+        M_WriteTextSmall_ENG(x + wide_delta, 85, "?");
+        dp_translation = NULL;
+    }
+    else
+    {
+        if (mousebstrafeleft == -1)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_MouseBtnDrawer(mousebstrafeleft));
+        dp_translation = NULL;
+    }
+
+    // Strafe Right
+    if (messageToPrint && itemOn == rd_mouse_bindings_straferight)
+    {
+        dp_translation = cr[CR_GRAY];
+        M_WriteTextSmall_ENG(x + wide_delta, 95, "?");
+        dp_translation = NULL;
+    }
+    else
+    {
+        if (mousebstraferight == -1)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + wide_delta, 95, M_RD_MouseBtnDrawer(mousebstraferight));
+        dp_translation = NULL;
+    }
+
+    // Previous Weapon
+    if (messageToPrint && itemOn == rd_mouse_bindings_prevweapon)
+    {
+        dp_translation = cr[CR_GRAY];
+        M_WriteTextSmall_ENG(x + wide_delta, 105, "?");
+        dp_translation = NULL;
+    }
+    else
+    {
+
+        if (mousebprevweapon == -1)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_MouseBtnDrawer(mousebprevweapon));
+        dp_translation = NULL;
+    }
+
+    // Next Weapon
+    if (messageToPrint && itemOn == rd_mouse_bindings_nextweapon)
+    {
+        dp_translation = cr[CR_GRAY];
+        M_WriteTextSmall_ENG(x + wide_delta, 115, "?");
+        dp_translation = NULL;
+    }
+    else
+    {
+        if (mousebnextweapon == -1)
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(x + wide_delta, 115, M_RD_MouseBtnDrawer(mousebnextweapon));
+        dp_translation = NULL;
+    }
+}
+
+//
+// Fire/Attack
+//
+void M_RD_Mouse_Attack (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (mousebfire == 0 && key == 13)   
+            mousebfire = -1;
+            else
+            mousebfire = 0;
+            break;
+        }
+        case 127:
+        {
+            if (mousebfire == 1 && key == 127)
+            mousebfire = -1;
+            else
+            mousebfire = 1;
+            break;
+        }
+        case 4:
+        {
+            if (mousebfire == 2 && key == 4)
+            mousebfire = -1;
+            else
+            mousebfire = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((mousebfire == 3 && key == 8)
+            ||  (mousebfire == 3 && key == 16)
+            ||  (mousebfire == 3 && key == 173))
+            mousebfire = -1;
+            else
+            mousebfire = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (mousebfire == 4 && key == 175)
+            mousebfire = -1;
+            else
+            mousebfire = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            return;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    // printf ("Fire: %d \n", key);
+}
+
+void M_RD_Mouse_Bind_FireAttack (int choice) 
+{
+    M_RD_StartBinding(M_RD_Mouse_Attack);
+}
+
+//
+// Use
+//
+void M_RD_Mouse_Use (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (mousebuse == 0 && key == 13)   
+            mousebuse = -1;
+            else
+            mousebuse = 0;
+            break;
+        }
+        case 127:
+        {
+            if (mousebuse == 1 && key == 127)
+            mousebuse = -1;
+            else
+            mousebuse = 1;
+            break;
+        }
+        case 4:
+        {
+            if (mousebuse == 2 && key == 4)
+            mousebuse = -1;
+            else
+            mousebuse = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((mousebuse == 3 && key == 8)
+            ||  (mousebuse == 3 && key == 16)
+            ||  (mousebuse == 3 && key == 173))
+            mousebuse = -1;
+            else
+            mousebuse = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (mousebuse == 4 && key == 175)
+            mousebuse = -1;
+            else
+            mousebuse = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            return;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    // printf ("Use: %d \n", key);
+}
+
+void M_RD_Mouse_Bind_Use (int choice) 
+{
+    M_RD_StartBinding(M_RD_Mouse_Use);
+}
+
+//
+// Move Forward
+//
+void M_RD_Mouse_MoveForward (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (mousebforward == 0 && key == 13)   
+            mousebforward = -1;
+            else
+            mousebforward = 0;
+            break;
+        }
+        case 127:
+        {
+            if (mousebforward == 1 && key == 127)
+            mousebforward = -1;
+            else
+            mousebforward = 1;
+            break;
+        }
+        case 4:
+        {
+            if (mousebforward == 2 && key == 4)
+            mousebforward = -1;
+            else
+            mousebforward = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((mousebforward == 3 && key == 8)
+            ||  (mousebforward == 3 && key == 16)
+            ||  (mousebforward == 3 && key == 173))
+            mousebforward = -1;
+            else
+            mousebforward = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (mousebforward == 4 && key == 175)
+            mousebforward = -1;
+            else
+            mousebforward = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            return;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    // printf ("Move Forward: %d \n", key);
+}
+
+void M_RD_Mouse_Bind_MoveForward (int choice) 
+{
+    M_RD_StartBinding(M_RD_Mouse_MoveForward);
+}
+
+//
+// Move Backward
+//
+void M_RD_Mouse_MoveBackward (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (mousebbackward == 0 && key == 13)   
+            mousebbackward = -1;
+            else
+            mousebbackward = 0;
+            break;
+        }
+        case 127:
+        {
+            if (mousebbackward == 1 && key == 127)
+            mousebbackward = -1;
+            else
+            mousebbackward = 1;
+            break;
+        }
+        case 4:
+        {
+            if (mousebbackward == 2 && key == 4)
+            mousebbackward = -1;
+            else
+            mousebbackward = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((mousebbackward == 3 && key == 8)
+            ||  (mousebbackward == 3 && key == 16)
+            ||  (mousebbackward == 3 && key == 173))
+            mousebbackward = -1;
+            else
+            mousebbackward = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (mousebbackward == 4 && key == 175)
+            mousebbackward = -1;
+            else
+            mousebbackward = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            return;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    // printf ("Move Backward: %d \n", key);
+}
+
+void M_RD_Mouse_Bind_MoveBackward (int choice) 
+{
+    M_RD_StartBinding(M_RD_Mouse_MoveBackward);
+}
+
+//
+// Strafe On
+//
+void M_RD_Mouse_StrafeOn (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (mousebstrafe == 0 && key == 13)   
+            mousebstrafe = -1;
+            else
+            mousebstrafe = 0;
+            break;
+        }
+        case 127:
+        {
+            if (mousebstrafe == 1 && key == 127)
+            mousebstrafe = -1;
+            else
+            mousebstrafe = 1;
+            break;
+        }
+        case 4:
+        {
+            if (mousebstrafe == 2 && key == 4)
+            mousebstrafe = -1;
+            else
+            mousebstrafe = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((mousebstrafe == 3 && key == 8)
+            ||  (mousebstrafe == 3 && key == 16)
+            ||  (mousebstrafe == 3 && key == 173))
+            mousebstrafe = -1;
+            else
+            mousebstrafe = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (mousebstrafe == 4 && key == 175)
+            mousebstrafe = -1;
+            else
+            mousebstrafe = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            return;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    // printf ("Strafe On: %d \n", key);
+}
+
+void M_RD_Mouse_Bind_StrafeOn (int choice) 
+{
+    M_RD_StartBinding(M_RD_Mouse_StrafeOn);
+}
+
+//
+// Strafe Left
+//
+void M_RD_Mouse_StrafeLeft (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (mousebstrafeleft == 0 && key == 13)   
+            mousebstrafeleft = -1;
+            else
+            mousebstrafeleft = 0;
+            break;
+        }
+        case 127:
+        {
+            if (mousebstrafeleft == 1 && key == 127)
+            mousebstrafeleft = -1;
+            else
+            mousebstrafeleft = 1;
+            break;
+        }
+        case 4:
+        {
+            if (mousebstrafeleft == 2 && key == 4)
+            mousebstrafeleft = -1;
+            else
+            mousebstrafeleft = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((mousebstrafeleft == 3 && key == 8)
+            ||  (mousebstrafeleft == 3 && key == 16)
+            ||  (mousebstrafeleft == 3 && key == 173))
+            mousebstrafeleft = -1;
+            else
+            mousebstrafeleft = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (mousebstrafeleft == 4 && key == 175)
+            mousebstrafeleft = -1;
+            else
+            mousebstrafeleft = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            return;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    // printf ("Strafe Left: %d \n", key);
+}
+
+void M_RD_Mouse_Bind_StrafeLeft (int choice) 
+{
+    M_RD_StartBinding(M_RD_Mouse_StrafeLeft);
+}
+
+//
+// Strafe Right
+//
+void M_RD_Mouse_StrafeRight (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (mousebstraferight == 0 && key == 13)   
+            mousebstraferight = -1;
+            else
+            mousebstraferight = 0;
+            break;
+        }
+        case 127:
+        {
+            if (mousebstraferight == 1 && key == 127)
+            mousebstraferight = -1;
+            else
+            mousebstraferight = 1;
+            break;
+        }
+        case 4:
+        {
+            if (mousebstraferight == 2 && key == 4)
+            mousebstraferight = -1;
+            else
+            mousebstraferight = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((mousebstraferight == 3 && key == 8)
+            ||  (mousebstraferight == 3 && key == 16)
+            ||  (mousebstraferight == 3 && key == 173))
+            mousebstraferight = -1;
+            else
+            mousebstraferight = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (mousebstraferight == 4 && key == 175)
+            mousebstraferight = -1;
+            else
+            mousebstraferight = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            return;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    // printf ("Strafe Right: %d \n", key);
+}
+
+void M_RD_Mouse_Bind_StrafeRight (int choice) 
+{
+    M_RD_StartBinding(M_RD_Mouse_StrafeRight);
+}
+
+//
+// Previous Weapon
+//
+void M_RD_Mouse_PrevWeapon (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (mousebprevweapon == 0 && key == 13)   
+            mousebprevweapon = -1;
+            else
+            mousebprevweapon = 0;
+            break;
+        }
+        case 127:
+        {
+            if (mousebprevweapon == 1 && key == 127)
+            mousebprevweapon = -1;
+            else
+            mousebprevweapon = 1;
+            break;
+        }
+        case 4:
+        {
+            if (mousebprevweapon == 2 && key == 4)
+            mousebprevweapon = -1;
+            else
+            mousebprevweapon = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((mousebprevweapon == 3 && key == 8)
+            ||  (mousebprevweapon == 3 && key == 16)
+            ||  (mousebprevweapon == 3 && key == 173))
+            mousebprevweapon = -1;
+            else
+            mousebprevweapon = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (mousebprevweapon == 4 && key == 175)
+            mousebprevweapon = -1;
+            else
+            mousebprevweapon = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            return;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    // printf ("Previous Weapon: %d \n", key);
+}
+
+void M_RD_Mouse_Bind_PrevWeapon (int choice) 
+{
+    M_RD_StartBinding(M_RD_Mouse_PrevWeapon);
+}
+
+//
+// Previous Weapon
+//
+void M_RD_Mouse_NextWeapon (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (mousebnextweapon == 0 && key == 13)   
+            mousebnextweapon = -1;
+            else
+            mousebnextweapon = 0;
+            break;
+        }
+        case 127:
+        {
+            if (mousebnextweapon == 1 && key == 127)
+            mousebnextweapon = -1;
+            else
+            mousebnextweapon = 1;
+            break;
+        }
+        case 4:
+        {
+            if (mousebnextweapon == 2 && key == 4)
+            mousebnextweapon = -1;
+            else
+            mousebnextweapon = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((mousebnextweapon == 3 && key == 8)
+            ||  (mousebnextweapon == 3 && key == 16)
+            ||  (mousebnextweapon == 3 && key == 173))
+            mousebnextweapon = -1;
+            else
+            mousebnextweapon = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (mousebnextweapon == 4 && key == 175)
+            mousebnextweapon = -1;
+            else
+            mousebnextweapon = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            return;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    // printf ("Previous Weapon: %d \n", key);
+}
+
+void M_RD_Mouse_Bind_NextWeapon (int choice) 
+{
+    M_RD_StartBinding(M_RD_Mouse_NextWeapon);
 }
 
 
@@ -10010,6 +10954,14 @@ boolean M_Responder (event_t* ev)
                         return false;
             }
 
+            // [JN] Catch all incoming data1 mouse events. Makes middle mouse button 
+            // working for message interruption and for binding ability.
+            if (ev->data1)
+            {
+                key = ev->data1;
+                mousewait = I_GetTime() + 5;
+            }
+
             if (ev->data1&1)
             {
                 key = key_menu_forward;
@@ -10131,7 +11083,9 @@ boolean M_Responder (event_t* ev)
     &&  currentMenu != &RD_Bindings_Menu_Def_3
     &&  currentMenu != &RD_Bindings_Menu_Def_3_Rus
     &&  currentMenu != &RD_Bindings_Menu_Def_4
-    &&  currentMenu != &RD_Bindings_Menu_Def_4_Rus)
+    &&  currentMenu != &RD_Bindings_Menu_Def_4_Rus
+    &&  currentMenu != &RD_Mouse_Bindings_Menu_Def
+    &&  currentMenu != &RD_Mouse_Bindings_Menu_Def_Rus)
     {
         menuactive = false;
     }
@@ -10508,6 +11462,23 @@ boolean M_Responder (event_t* ev)
             if (itemOn == rd_bindings_4_grid)          { key_map_grid = 0; }
             if (itemOn == rd_bindings_4_mark)          { key_map_mark = 0; }
             if (itemOn == rd_bindings_4_clearmarks)    { key_map_clearmark = 0; }
+
+            S_StartSound(NULL,sfx_stnmov);
+            return true;
+        }
+        // [JN] Mouse bindings menu
+        if (currentMenu == &RD_Mouse_Bindings_Menu_Def
+        ||  currentMenu == &RD_Mouse_Bindings_Menu_Def_Rus)
+        {
+            if (itemOn == rd_mouse_bindings_attack)      { mousebfire = -1; }
+            if (itemOn == rd_mouse_bindings_use)         { mousebuse = -1; }
+            if (itemOn == rd_mouse_bindings_forward)     { mousebforward = -1; }
+            if (itemOn == rd_mouse_bindings_backward)    { mousebbackward = -1; }
+            if (itemOn == rd_mouse_bindings_strafeon)    { mousebstrafe = -1; }
+            if (itemOn == rd_mouse_bindings_strafeleft)  { mousebstrafeleft = -1; }
+            if (itemOn == rd_mouse_bindings_straferight) { mousebstraferight = -1; }
+            if (itemOn == rd_mouse_bindings_prevweapon)  { mousebprevweapon = -1; }
+            if (itemOn == rd_mouse_bindings_nextweapon)  { mousebnextweapon = -1; }
 
             S_StartSound(NULL,sfx_stnmov);
             return true;
@@ -10946,6 +11917,7 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Bindings_Menu_Def_2
         ||  currentMenu == &RD_Bindings_Menu_Def_3
         ||  currentMenu == &RD_Bindings_Menu_Def_4
+        ||  currentMenu == &RD_Mouse_Bindings_Menu_Def
         ||  currentMenu == &RD_Gameplay_Def_1
         ||  currentMenu == &RD_Gameplay_Def_2
         ||  currentMenu == &RD_Gameplay_Def_3
@@ -10973,6 +11945,7 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Bindings_Menu_Def_2_Rus
         ||  currentMenu == &RD_Bindings_Menu_Def_3_Rus
         ||  currentMenu == &RD_Bindings_Menu_Def_4_Rus
+        ||  currentMenu == &RD_Mouse_Bindings_Menu_Def_Rus
         ||  currentMenu == &RD_Gameplay_Def_1_Rus
         ||  currentMenu == &RD_Gameplay_Def_2_Rus
         ||  currentMenu == &RD_Gameplay_Def_3_Rus
