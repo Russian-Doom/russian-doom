@@ -142,6 +142,8 @@ void M_WriteTextBig_ENG(int x, int y, char *string);
 void M_WriteTextBig_RUS(int x, int y, char *string);
 void M_WriteTextBigCentered_ENG(int y, char *string);
 void M_WriteTextBigCentered_RUS(int y, char *string);
+void M_WriteTextSmallCentered_ENG(int y, char *string);
+void M_WriteTextSmallCentered_RUS(int y, char *string);
 
 
 //
@@ -420,9 +422,11 @@ void M_RD_Change_Selective_Key_5(int choice);
 void M_RD_Change_Selective_Fast(int choice);
 void M_RD_Change_Selective_Respawn(int choice);
 
-// Back to Defaults
-void M_RD_BackToDefaultsResponse(int key);
-void M_RD_BackToDefaults(int choice);
+// Reset settings
+void M_RD_Choose_Reset(int choice);
+void M_RD_Draw_Reset(void);
+void M_RD_BackToDefaults_Recommended(int choice);
+void M_RD_BackToDefaults_Original(int choice);
 
 // Language hot-swapping
 void M_RD_ChangeLanguage(int choice);
@@ -780,6 +784,129 @@ void M_WriteTextBigCentered_RUS (int y, char *string)
         w = SHORT (hu_font_big_rus[c]->width);
 
         V_DrawShadowedPatchDoom(cx, cy, hu_font_big_rus[c]);
+
+        cx+=w;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// M_WriteTextSmallCentered_ENG
+// [JN] Write a centered string using a small hu_font_small_eng.
+// -----------------------------------------------------------------------------
+
+void M_WriteTextSmallCentered_ENG (int y, char *string)
+{
+    char *ch;
+    int   c, cx, cy;
+    int   w, width;
+
+    // find width
+    ch = string;
+    width = 0;
+    cy = y;
+
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = toupper(c) - HU_FONTSTART;
+
+        if (c < 0 || c> HU_FONTSIZE)
+        {
+            width += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_small_eng[c]->width);
+        width += w;
+    }
+
+    // draw it
+    cx = origwidth/2-width/2;
+    ch = string;
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = toupper(c) - HU_FONTSTART;
+
+        if (c < 0 || c> HU_FONTSIZE)
+        {
+            cx += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_small_eng[c]->width);
+
+        V_DrawShadowedPatchDoom(cx, cy, hu_font_small_eng[c]);
+
+        cx+=w;
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// M_WriteTextSmallCentered_RUS
+// [JN] Write a centered string using a small hu_font_small_rus.
+// -----------------------------------------------------------------------------
+
+void M_WriteTextSmallCentered_RUS (int y, char *string)
+{
+    char *ch;
+    int   c, cx, cy;
+    int   w, width;
+
+    // find width
+    ch = string;
+    width = 0;
+    cy = y;
+
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = toupper(c) - HU_FONTSTART;
+
+        if (c < 0 || c> HU_FONTSIZE)
+        {
+            width += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_small_rus[c]->width);
+        width += w;
+    }
+
+    // draw it
+    cx = origwidth/2-width/2;
+    ch = string;
+    while (ch)
+    {
+        c = *ch++;
+
+        if (!c)
+        break;
+
+        c = toupper(c) - HU_FONTSTART;
+
+        if (c < 0 || c> HU_FONTSIZE)
+        {
+            cx += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_small_rus[c]->width);
+
+        V_DrawShadowedPatchDoom(cx, cy, hu_font_small_rus[c]);
 
         cx+=w;
     }
@@ -1284,7 +1411,7 @@ menuitem_t RD_Options_Menu[]=
     {1, "Gameplay",         M_RD_Choose_Gameplay_1, 'g'},
     {1, "Level select",     M_RD_Choose_LevelSelect_1,'l'},
     {1, "End Game",         M_EndGame,              'e'},
-    {1, "Reset settings",   M_RD_BackToDefaults,    'r'},
+    {1, "Reset settings",   M_RD_Choose_Reset,      'r'},
     {2, "Language:english", M_RD_ChangeLanguage,    'l'},
     {-1,"",0,'\0'}
 };
@@ -1312,7 +1439,7 @@ menuitem_t RD_Options_Menu_Rus[]=
     {1, "Utqvgktq",       M_RD_Choose_Gameplay_1, 'u'}, // Геймплей
     {1, "Ds,jh ehjdyz",   M_RD_Choose_LevelSelect_1,'d'}, // Выбор уровня
     {1, "Pfrjyxbnm buhe", M_EndGame,              'p'}, // Закончить игру
-    {1, "C,hjc yfcnhjtr", M_RD_BackToDefaults,    'c'}, // Сброс настроек
+    {1, "C,hjc yfcnhjtr", M_RD_Choose_Reset,      'c'}, // Сброс настроек
     {2, "Zpsr#heccrbq",   M_RD_ChangeLanguage,    'z'}, // Язык: русский
     {-1,"",0,'\0'}
 };
@@ -2800,6 +2927,60 @@ menu_t RD_Level_Def_2_Rus =
     RD_Level_Menu_2_Rus,
     M_RD_Draw_Level_2,
     72,20,
+    0
+};
+
+
+// -----------------------------------------------------------------------------
+// Reset settings
+// -----------------------------------------------------------------------------
+
+enum
+{
+    rd_reset_recommended,
+    rd_reset_vanilla,
+    rd_reset_end
+} rd_reset_e;
+
+// ------------
+// English menu
+// ------------
+
+menuitem_t RD_Reset_Menu[]=
+{
+    {1, "Recommended", M_RD_BackToDefaults_Recommended, 'r'},
+    {1, "Original",    M_RD_BackToDefaults_Original,    'o'},
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Reset_Def =
+{
+    rd_reset_end, 
+    &RD_Options_Def,
+    RD_Reset_Menu,
+    M_RD_Draw_Reset,
+    115, 95,
+    0
+};
+
+// ------------
+// Russian menu
+// ------------
+
+menuitem_t RD_Reset_Menu_Rus[]=
+{
+    {1, "Htrjvtyljdfyysq", M_RD_BackToDefaults_Recommended, 'h'}, // Рекомендованный
+    {1, "Jhbubyfkmysq",    M_RD_BackToDefaults_Original,    'j'}, // Оригинальный
+    {-1,"",0,'\0'}
+};
+
+menu_t  RD_Reset_Def_Rus =
+{
+    rd_reset_end, 
+    &RD_Options_Def_Rus,
+    RD_Reset_Menu_Rus,
+    M_RD_Draw_Reset,
+    98, 95,
     0
 };
 
@@ -9455,15 +9636,68 @@ void M_RD_Change_Selective_Respawn (int choice)
 // Back to Defaults
 // -----------------------------------------------------------------------------
 
-void M_RD_BackToDefaultsResponse(int key)
+void M_RD_Choose_Reset(int choice)
+{ // pitto
+    M_SetupNextMenu(english_language ?
+                    &RD_Reset_Def :
+                    &RD_Reset_Def_Rus);
+}
+
+void M_RD_Draw_Reset(void)
+{   
+    if (english_language)
+    {
+        M_WriteTextSmallCentered_ENG(65, "Graphical, audible and gameplay settings");
+        M_WriteTextSmallCentered_ENG(75, "will be reset to it's default values.");
+        M_WriteTextSmallCentered_ENG(85, "Which level of values to use?");
+
+        // Explanations
+        if (itemOn == rd_reset_recommended)
+        {
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmallCentered_ENG(145, "Settings will be reset to");
+            M_WriteTextSmallCentered_ENG(155, "default port's values");
+            dp_translation = NULL;
+        }
+        else
+        {
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmallCentered_ENG(145, "Settings will be reset to");
+            M_WriteTextSmallCentered_ENG(155, "original Doom values");
+            dp_translation = NULL;
+        }
+    }
+    else
+    {
+        M_WriteTextSmallCentered_RUS(65, "Yfcnhjqrb uhfabrb< pderf b utqvgktz");     // Настройки графики, звука и геймплея
+        M_WriteTextSmallCentered_RUS(75, ",elen c,hjitys yf cnfylfhnyst pyfxtybz>"); // Будут сброшены на стандартные значения.
+        M_WriteTextSmallCentered_RUS(85, "Ds,thbnt ehjdtym pyfxtybq:");              // Выберите уровень значений:
+
+        // Пояснения
+        if (itemOn == rd_reset_recommended)
+        {
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmallCentered_RUS(145, ",elen bcgjkmpjdfys pyfxtybz");       // Будут использованы значения
+            M_WriteTextSmallCentered_RUS(155, "htrjvtyletvst gjhnjv");              // рекомендуемые портом
+            dp_translation = NULL;
+        }
+        else
+        {
+            dp_translation = cr[CR_DARKRED];
+            M_WriteTextSmallCentered_RUS(145, ",elen bcgjkmpjdfys pyfxtybz");       // Будут использованы значения
+            M_WriteTextSmall_RUS(85 + wide_delta, 155, "jhbubyfkmyjuj");            // оригинального Doom
+            M_WriteTextSmall_ENG(193 + wide_delta, 155, "Doom");
+            dp_translation = NULL;
+        }
+    }
+}
+
+void M_RD_BackToDefaults_Recommended(int choice)
 {
     static char resetmsg[24];
 
-    if (key != key_menu_confirm)
-    return;
-
     // Rendering
-    vsync                   = 0;
+    vsync                   = 1;
     aspect_ratio_correct    = 1;
     uncapped_fps            = 1;
     show_fps                = 0;
@@ -9475,34 +9709,35 @@ void M_RD_BackToDefaultsResponse(int key)
     png_screenshots         = 1;
 
     // Display
-    screenSize         = 10;
-    usegamma           = 4;
-    level_brightness   = 0;
-    menu_shading       = 0;
-    detailLevel        = 0;
-    local_time         = 0;
-    showMessages       = 1;
+    screenblocks          = 10;
+    usegamma              = 4;
+    level_brightness      = 0;
+    menu_shading          = 0;
+    detailLevel           = 0;
+    local_time            = 0;
+    showMessages          = 1;
     messages_pickup_color = 0;
     messages_secret_color = 3;
     messages_system_color = 0;
     messages_chat_color   = 1;
-    draw_shadowed_text = 1;
+    draw_shadowed_text    = 1;
 
     // Automap
-    automap_color   = 0;
+    automap_color     = 0;
     automap_antialias = 1;
-    automap_stats   = 1;
-    automap_overlay = 0;
-    automap_rotate  = 0;
-    automap_follow  = 1;
-    automap_grid    = 0;
+    automap_stats     = 1;
+    automap_overlay   = 0;
+    automap_rotate    = 0;
+    automap_follow    = 1;
+    automap_grid      = 0;
 
     // Audio
-    sfxVolume       = 8;  S_SetSfxVolume(sfxVolume * 8);
-    musicVolume     = 8;  S_SetMusicVolume(musicVolume * 8);
-    snd_channels    = 32; S_ChannelsRealloc();
-    snd_monomode    = 0;
-    snd_pitchshift  = 0;
+    sfxVolume            = 8;  S_SetSfxVolume(sfxVolume * 8);
+    musicVolume          = 8;  S_SetMusicVolume(musicVolume * 8);
+    snd_channels_rd      = 32;
+    snd_channels         = snd_channels_rd;  S_ChannelsRealloc();
+    snd_monomode         = 0;
+    snd_pitchshift       = 0;
     mute_inactive_window = 0;
 
     // Controls
@@ -9516,7 +9751,7 @@ void M_RD_BackToDefaultsResponse(int key)
     // Gameplay: Graphical
     brightmaps       = 1;
     fake_contrast    = 0;
-    translucency     = 1;    
+    translucency     = 1;
     improved_fuzz    = 2;
     colored_hud      = 0;
     colored_blood    = 1;
@@ -9568,6 +9803,9 @@ void M_RD_BackToDefaultsResponse(int key)
     // Do a full graphics reinitialization
     I_InitGraphics();
 
+    // Update screen size and fuzz effect
+    R_SetViewSize (screenblocks, detailLevel);
+
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
     {
@@ -9582,13 +9820,132 @@ void M_RD_BackToDefaultsResponse(int key)
     players[consoleplayer].message_system = resetmsg;
 }
 
-void M_RD_BackToDefaults(int choice)
+void M_RD_BackToDefaults_Original(int choice)
 {
-    choice = 0;
+    static char resetmsg[24];
 
-    M_StartMessage(DEH_String(english_language ?
-                              RD_DEFAULTS : RD_DEFAULTS_RUS),
-                              M_RD_BackToDefaultsResponse,true);
+    // Rendering
+    vsync                   = 1;
+    aspect_ratio_correct    = 1;
+    uncapped_fps            = 0;
+    show_fps                = 0;
+    smoothing               = 0;
+    vga_porch_flash         = 0;
+    force_software_renderer = 0;
+    show_diskicon           = 1;
+    screen_wiping           = 1;
+    png_screenshots         = 1;
+
+    // Display
+    screenblocks          = 10;
+    usegamma              = 9;
+    level_brightness      = 0;
+    menu_shading          = 0;
+    detailLevel           = 1;
+    local_time            = 0;
+    showMessages          = 1;
+    messages_pickup_color = 0;
+    messages_secret_color = 0;
+    messages_system_color = 0;
+    messages_chat_color   = 0;
+    draw_shadowed_text    = 0;
+
+    // Automap
+    automap_color     = 0;
+    automap_antialias = 0;
+    automap_stats     = 0;
+    automap_overlay   = 0;
+    automap_rotate    = 0;
+    automap_follow    = 1;
+    automap_grid      = 0;
+
+    // Audio
+    sfxVolume            = 8;  S_SetSfxVolume(sfxVolume * 8);
+    musicVolume          = 8;  S_SetMusicVolume(musicVolume * 8);
+    snd_channels_rd      = 8;  
+    snd_channels         = snd_channels_rd;  S_ChannelsRealloc();
+    snd_monomode         = 0;
+    snd_pitchshift       = 0;
+    mute_inactive_window = 0;
+
+    // Controls
+    joybspeed          = 29;
+    mlook              = 0;  players[consoleplayer].centering = true;
+    mouseSensitivity   = 5;
+    mouse_acceleration = 2.0;
+    mouse_threshold    = 10;
+    novert             = 1;
+
+    // Gameplay: Graphical
+    brightmaps       = 0;
+    fake_contrast    = 1;
+    translucency     = 0;
+    improved_fuzz    = 0;
+    colored_hud      = 0;
+    colored_blood    = 0;
+    swirling_liquids = 0;
+    invul_sky        = 0;
+    flip_weapons     = 0;
+
+    // Gameplay: Audible
+    play_exit_sfx        = 1;
+    crushed_corpses_sfx  = 0;
+    blazing_door_fix_sfx = 0;
+    noise_alert_sfx      = 0;
+    // correct_endlevel_sfx = 0; (hidden variable)
+
+    // Gameplay: Tactical
+    secret_notification = 0;
+    negative_health     = 0;
+    infragreen_visor    = 0;
+
+    // Gameplay: Physical
+    over_under           = 0;
+    torque               = 0;
+    weapon_bobbing       = 0;
+    ssg_blast_enemies    = 0;
+    randomly_flipcorpses = 0;
+    floating_powerups    = 0;
+    toss_drop            = 0;
+
+    // Gameplay: Crosshair
+    crosshair_draw   = 0;
+    crosshair_type   = 0;
+    crosshair_scale  = 0;
+
+    // Gameplay: Gameplay
+    fix_map_errors       = 0;
+    flip_levels          = 0;
+    extra_player_faces   = 0;
+    unlimited_lost_souls = 0;
+    agressive_lost_souls = 0;
+    pistol_start         = 0;
+    fast_quickload       = 1;
+
+    // Gameplay: Demos
+    demotimer         = 0;
+    demotimerdir      = 0;
+    demobar           = 0;
+    no_internal_demos = 0;
+
+    // Do a full graphics reinitialization
+    I_InitGraphics();
+
+    // Update screen size and fuzz effect
+    R_SetViewSize (screenblocks, detailLevel);
+
+    // Update background of classic HUD and player face 
+    if (gamestate == GS_LEVEL)
+    {
+        ST_refreshBackground();
+        ST_drawWidgets(true);
+    }
+
+    // Print informative message
+    M_snprintf(resetmsg, sizeof(resetmsg), english_language ? 
+                                           "Settings reset" :
+                                           "Yfcnhjqrb c,hjitys");
+    players[consoleplayer].message_system = resetmsg;
 }
 
 
@@ -11923,7 +12280,8 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Gameplay_Def_3
         ||  currentMenu == &RD_Gameplay_Def_4
         ||  currentMenu == &RD_Level_Def_1
-        ||  currentMenu == &RD_Level_Def_2)
+        ||  currentMenu == &RD_Level_Def_2
+        ||  currentMenu == &RD_Reset_Def)
         {
             M_WriteTextSmall_ENG(x + wide_delta, y, name);
 
@@ -11951,7 +12309,8 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Gameplay_Def_3_Rus
         ||  currentMenu == &RD_Gameplay_Def_4_Rus
         ||  currentMenu == &RD_Level_Def_1_Rus
-        ||  currentMenu == &RD_Level_Def_2_Rus)
+        ||  currentMenu == &RD_Level_Def_2_Rus
+        ||  currentMenu == &RD_Reset_Def_Rus)
         {
             M_WriteTextSmall_RUS(x + wide_delta, y, name);
         
