@@ -3782,10 +3782,6 @@ void M_RD_Choose_MessagesSettings(int choice)
 
 void M_RD_Draw_MessagesSettings(void)
 {
-    static char timeout[3];
-    static char *seconds;
-    static char *string;
-
     if (english_language)
     {
         M_WriteTextBigCentered_ENG(5, "MESSAGES SETTINGS");
@@ -3798,9 +3794,18 @@ void M_RD_Draw_MessagesSettings(void)
         M_WriteTextSmall_ENG(165 + wide_delta, 35, showMessages ? "on" : "off");
 
         // Message timeout. Print "second" or "seconds", depending of ammount.
-        seconds = messages_timeout == 1 ? " second" : " seconds";
-        string = M_StringJoin(timeout, seconds, NULL);
-        M_WriteTextSmall_ENG(133 + wide_delta, 55, string);
+        // [JN] Note: using M_StringJoin could be a smarter way,
+        // but using it will make a notable delay in drawing routine, so here:
+        M_WriteTextSmall_ENG(133 + wide_delta, 55, messages_timeout == 1 ? "1 second" :
+                                                   messages_timeout == 2 ? "2 seconds" :
+                                                   messages_timeout == 3 ? "3 seconds" :
+                                                   messages_timeout == 4 ? "4 seconds" :
+                                                   messages_timeout == 5 ? "5 seconds" :
+                                                   messages_timeout == 6 ? "6 seconds" :
+                                                   messages_timeout == 7 ? "7 seconds" :
+                                                   messages_timeout == 8 ? "8 seconds" :
+                                                   messages_timeout == 9 ? "9 seconds" :
+                                                                           "10 seconds");
 
         // Text casts shadows
         M_WriteTextSmall_ENG(177 + wide_delta, 65, draw_shadowed_text ? "on" : "off");
@@ -3924,12 +3929,16 @@ void M_RD_Draw_MessagesSettings(void)
         M_WriteTextSmall_RUS(214 + wide_delta, 35, showMessages ? "drk" : "dsrk");
 
         // Таймаут отображения. Печатать секунд(а/ы) в зависимости от количества.
-        seconds = messages_timeout == 1 ? " ctreylf" :  // секунда
-                  messages_timeout >= 2 &&  
-                  messages_timeout <= 4 ? " ctreyls" :  // секунды
-                                          " ctreyl";    // секунд
-        string = M_StringJoin(timeout, seconds, NULL);
-        M_WriteTextSmall_RUS(133 + wide_delta, 55, string);
+        M_WriteTextSmall_RUS(133 + wide_delta, 55, messages_timeout == 1 ? "1 ctreylf" :
+                                                   messages_timeout == 2 ? "2 ctreyls" :
+                                                   messages_timeout == 3 ? "3 ctreyls" :
+                                                   messages_timeout == 4 ? "4 ctreyls" :
+                                                   messages_timeout == 5 ? "5 ctreyl"  :
+                                                   messages_timeout == 6 ? "6 ctreyl"  :
+                                                   messages_timeout == 7 ? "7 ctreyl"  :
+                                                   messages_timeout == 8 ? "8 ctreyl"  :
+                                                   messages_timeout == 9 ? "9 ctreyl"  :
+                                                                           "10 ctreyl");
 
         // Тексты отбрасывают тень
         M_WriteTextSmall_RUS(226 + wide_delta, 65, draw_shadowed_text ? "drk" : "dsrk");
@@ -4044,8 +4053,6 @@ void M_RD_Draw_MessagesSettings(void)
 
     // Message timeout slider
     M_DrawThermo_Small(35 + wide_delta, 54, 10, messages_timeout - 1);
-    // Numerical representation of timeout
-    M_snprintf(timeout, 3, "%d", messages_timeout);
 }
 
 void M_RD_Change_Messages(int choice)
