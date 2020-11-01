@@ -236,6 +236,7 @@ void M_RD_Draw_AutomapSettings(void);
 void M_RD_Change_AutomapColor(int choice);
 void M_RD_Change_AutomapAntialias(int choice);
 void M_RD_Change_AutomapStats(int choice);
+void M_RD_Change_AutomapCoords(int choice);
 void M_RD_Change_AutomapOverlay(int choice);
 void M_RD_Change_AutomapRotate(int choice);
 void M_RD_Change_AutomapFollow(int choice);
@@ -1704,6 +1705,7 @@ enum
     rd_automap_colors,
     rd_automap_antialias,
     rd_automap_stats,
+    rd_automap_coords,
     rd_automap_overlay,
     rd_automap_rotate,
     rd_automap_follow,
@@ -1720,10 +1722,11 @@ menuitem_t RD_Automap_Menu[]=
     {2, "color scheme:",      M_RD_Change_AutomapColor,     'c'},
     {2, "line antialiasing:", M_RD_Change_AutomapAntialias, 'l'},
     {2, "level stats:",       M_RD_Change_AutomapStats,     'l'},
+    {2, "player coords:",     M_RD_Change_AutomapCoords,    'p'},
     {2, "overlay mode:",      M_RD_Change_AutomapOverlay,   'o'},
     {2, "rotate mode:",       M_RD_Change_AutomapRotate,    'r'},
     {2, "follow mode:",       M_RD_Change_AutomapFollow,    'f'},
-    {2, "grid: o",            M_RD_Change_AutomapGrid,      'g'},
+    {2, "grid:",              M_RD_Change_AutomapGrid,      'g'},
     {-1,"",0,'\0'}
 };
 
@@ -1746,6 +1749,7 @@ menuitem_t RD_Automap_Menu_Rus[]=
     {2, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,     'w'}, // Цветовая схема:
     {2, "cukf;bdfybt kbybq:", M_RD_Change_AutomapAntialias, 'c'}, // Сглаживание линий:
     {2, "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     'c'}, // Статистика уровня:
+    {2, "rjjhlbyfns buhjrf:", M_RD_Change_AutomapCoords,    'r'}, // Координаты игрока:
     {2, "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay,   'h'}, // Режим наложения:
     {2, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    'h'}, // Режим вращения:
     {2, "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,    'h'}, // Режим следования:
@@ -4201,18 +4205,21 @@ void M_RD_Draw_AutomapSettings(void)
 
         // Level stats
         M_WriteTextSmall_ENG(159 + wide_delta, 45, automap_stats ? "on" : "off");
+
+        // Player coords
+        M_WriteTextSmall_ENG(177 + wide_delta, 55, automap_coords ? "on" : "off");
         
         // Overlay mode
-        M_WriteTextSmall_ENG(170 + wide_delta, 55, automap_overlay ? "on" : "off");
+        M_WriteTextSmall_ENG(170 + wide_delta, 65, automap_overlay ? "on" : "off");
 
         // Rotate mode
-        M_WriteTextSmall_ENG(163 + wide_delta, 65, automap_rotate ? "on" : "off");
+        M_WriteTextSmall_ENG(163 + wide_delta, 75, automap_rotate ? "on" : "off");
 
         // Follow mode
-        M_WriteTextSmall_ENG(164 + wide_delta, 75, automap_follow ? "on" : "off");
+        M_WriteTextSmall_ENG(164 + wide_delta, 85, automap_follow ? "on" : "off");
 
         // Grid
-        M_WriteTextSmall_ENG(106 + wide_delta, 85, automap_grid ? "on" : "off");
+        M_WriteTextSmall_ENG(106 + wide_delta, 95, automap_grid ? "on" : "off");
     }
     else
     {
@@ -4238,18 +4245,21 @@ void M_RD_Draw_AutomapSettings(void)
 
         // Статистика уровня
         M_WriteTextSmall_RUS(210 + wide_delta, 45, automap_stats ? "drk" : "dsrk");
-        
+
+        // Координаты игрока
+        M_WriteTextSmall_RUS(213 + wide_delta, 55, automap_coords ? "drk" : "dsrk");
+
         // Режим наложения
-        M_WriteTextSmall_RUS(203 + wide_delta, 55, automap_overlay ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(203 + wide_delta, 65, automap_overlay ? "drk" : "dsrk");
 
         // Режим вращения
-        M_WriteTextSmall_RUS(194 + wide_delta, 65, automap_rotate ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(194 + wide_delta, 75, automap_rotate ? "drk" : "dsrk");
 
         // Режим следования
-        M_WriteTextSmall_RUS(208 + wide_delta, 75, automap_follow ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(208 + wide_delta, 85, automap_follow ? "drk" : "dsrk");
 
         // Сетка
-        M_WriteTextSmall_RUS(118 + wide_delta, 85, automap_grid ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(118 + wide_delta, 95, automap_grid ? "drk" : "dsrk");
     }
 }
 
@@ -4288,6 +4298,11 @@ void M_RD_Change_AutomapOverlay(int choice)
 void M_RD_Change_AutomapStats(int choice)
 {
     automap_stats ^= 1;
+}
+
+void M_RD_Change_AutomapCoords(int choice)
+{
+    automap_coords ^= 1;
 }
 
 void M_RD_Change_AutomapRotate(int choice)
@@ -9772,6 +9787,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     automap_color     = 0;
     automap_antialias = 1;
     automap_stats     = 1;
+    automap_coords    = 0;
     automap_overlay   = 0;
     automap_rotate    = 0;
     automap_follow    = 1;
@@ -9901,6 +9917,7 @@ void M_RD_BackToDefaults_Original(int choice)
     automap_color     = 0;
     automap_antialias = 0;
     automap_stats     = 0;
+    automap_coords    = 0;
     automap_overlay   = 0;
     automap_rotate    = 0;
     automap_follow    = 1;

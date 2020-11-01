@@ -134,6 +134,8 @@ static void SensibleDefaults(void)
     // Automap
     automap_color = 0;
     automap_antialias = 1;
+    automap_stats = 1;
+    automap_coords = 0;
     automap_follow = 1;
     automap_overlay = 0;
     automap_rotate = 0;
@@ -164,7 +166,6 @@ static void SensibleDefaults(void)
     correct_endlevel_sfx = 0;
 
     // Gameplay: Tactical
-    automap_stats = 1;
     secret_notification = 1;
     negative_health = 0;
     infragreen_visor = 0;

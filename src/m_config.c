@@ -1631,6 +1631,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(automap_color),
     CONFIG_VARIABLE_INT(automap_antialias),
     CONFIG_VARIABLE_INT(automap_stats),
+    CONFIG_VARIABLE_INT(automap_coords),
     CONFIG_VARIABLE_INT(automap_overlay),
     CONFIG_VARIABLE_INT(automap_rotate),
     CONFIG_VARIABLE_INT(automap_follow),

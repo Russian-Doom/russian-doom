@@ -115,8 +115,10 @@ int messages_system_color = 0;
 int messages_chat_color = 1;
 
 // Display: Automap
-int automap_color   = 0;
+int automap_color = 0;
 int automap_antialias = 1;
+int automap_stats = 1;
+int automap_coords = 0;
 int automap_follow  = 1;
 int automap_overlay = 0;
 int automap_rotate  = 0;
@@ -186,7 +188,6 @@ int noise_alert_sfx = 0;
 int correct_endlevel_sfx = 0;
 
 // Gameplay: Tactical
-int automap_stats = 1;
 int secret_notification = 1;
 int negative_health = 0;
 int infragreen_visor = 0;
@@ -611,6 +612,7 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_color",          &automap_color);
     M_BindIntVariable("automap_antialias",      &automap_antialias);
     M_BindIntVariable("automap_stats",          &automap_stats);
+    M_BindIntVariable("automap_coords",         &automap_coords);
     M_BindIntVariable("automap_overlay",        &automap_overlay);
     M_BindIntVariable("automap_rotate",         &automap_rotate);
     M_BindIntVariable("automap_follow",         &automap_follow);
