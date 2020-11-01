@@ -1620,6 +1620,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(detaillevel),
     CONFIG_VARIABLE_INT(local_time),
     CONFIG_VARIABLE_INT(show_messages), CONFIG_VARIABLE_INT(messageson),
+    CONFIG_VARIABLE_INT(messages_timeout),
     CONFIG_VARIABLE_INT(messages_pickup_color),
     CONFIG_VARIABLE_INT(messages_secret_color),
     CONFIG_VARIABLE_INT(messages_system_color),

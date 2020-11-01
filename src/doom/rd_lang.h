@@ -127,12 +127,6 @@ extern char* ststr_scrnsht;
 #define RD_ON       "on"
 #define RD_OFF      "off"
 
-#define RD_DEFAULTS                                 \
-"ingame settings will reset to their defaults.\n"   \
-"\n"                                                \
-"are you sure you want to continue?\n\n"            \
-PRESSYN
-
 #define NEWGAME               \
 "you can't start a new game\n"\
 "while in a network game.\n\n"PRESSKEY
@@ -1119,17 +1113,6 @@ extern char* ststr_massacre;
 #define RD_OFF_RUS      "dsrk"      // выкл
 #define RD_NEXT_RUS     "lfktt \\"   // далее >
 #define RD_PREV_RUS     "/ yfpfl"   // < назад
-
-// Внутриигровые настройки будут
-// сброшены на стандартные значения.
-//
-// Уверены, что хотите продолжить?
-#define RD_DEFAULTS_RUS                 \
-"dyenhbbuhjdst yfcnhjqrb ,elen\n"       \
-"c,hjitys yf cnfylfhnyst pyfxtybz>\n"   \
-"\n"                                    \
-"edthtys< xnj [jnbnt ghjljk;bnm?\n\n"   \
-PRESSYN_RUS
 
 // Невозможно начать новую игру
 // при активной сетевой игре.

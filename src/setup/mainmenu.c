@@ -145,6 +145,7 @@ static void SensibleDefaults(void)
     translucency = 1;
     improved_fuzz = 2;
     colored_hud = 0;
+    messages_timeout = 4;
     messages_pickup_color = 0;
     messages_secret_color = 3;
     messages_system_color = 0;

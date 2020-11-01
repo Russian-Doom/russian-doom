@@ -1106,7 +1106,7 @@ void HU_Ticker(void)
             message_on_secret = false;
             message_on_system = false;
             message_on_chat = false;
-            message_counter = HU_MSGTIMEOUT;
+            message_counter = messages_timeout * TICRATE;
             message_nottobefuckedwith = message_dontfuckwithme;
             message_dontfuckwithme = 0;
         }
@@ -1123,7 +1123,7 @@ void HU_Ticker(void)
             message_on_secret = true;
             message_on_system = false;
             message_on_chat = false;
-            message_counter = HU_MSGTIMEOUT;
+            message_counter = messages_timeout * TICRATE;
             message_nottobefuckedwith = message_dontfuckwithme;
             message_dontfuckwithme = 0;
         }
@@ -1140,7 +1140,7 @@ void HU_Ticker(void)
             message_on_secret = false;
             message_on_system = true;
             message_on_chat = false;
-            message_counter = HU_MSGTIMEOUT;
+            message_counter = messages_timeout * TICRATE;
             message_nottobefuckedwith = message_dontfuckwithme;
             message_dontfuckwithme = 0;
         }
@@ -1157,7 +1157,7 @@ void HU_Ticker(void)
             message_on_secret = false;
             message_on_system = false;
             message_on_chat = true;
-            message_counter = HU_MSGTIMEOUT;
+            message_counter = messages_timeout * TICRATE;
             message_nottobefuckedwith = message_dontfuckwithme;
             message_dontfuckwithme = 0;
         }
@@ -1208,7 +1208,7 @@ void HU_Ticker(void)
 
                             message_nottobefuckedwith = true;
                             message_on_chat = true;
-                            message_counter = HU_MSGTIMEOUT;
+                            message_counter = messages_timeout * TICRATE;
 
                             if ( gamemode == commercial )
                             S_StartSound(0, sfx_radio);
@@ -1316,7 +1316,7 @@ boolean HU_Responder(event_t *ev)
         if (ev->data1 == key_message_refresh)
         {
             message_on = true;
-            message_counter = HU_MSGTIMEOUT;
+            message_counter = messages_timeout * TICRATE;
             eatkey = true;
         }
         else if (netgame && ev->data2 == key_multi_msg)

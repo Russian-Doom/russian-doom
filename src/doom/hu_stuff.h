@@ -48,7 +48,6 @@
 #define HU_MSGY         0
 #define HU_MSGWIDTH     64  // in characters
 #define HU_MSGHEIGHT    1   // in lines
-#define HU_MSGTIMEOUT   (4*TICRATE)
 
 // [JN] Global font definitions
 extern patch_t *hu_font[HU_FONTSIZE];

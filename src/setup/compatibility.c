@@ -28,6 +28,7 @@
 // Display
 int level_brightness = 0;
 int menu_shading = 0;
+int messages_timeout = 4;
 int messages_pickup_color = 0;
 int messages_secret_color = 3;
 int messages_system_color = 0;
