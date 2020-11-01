@@ -1636,6 +1636,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(automap_rotate),
     CONFIG_VARIABLE_INT(automap_follow),
     CONFIG_VARIABLE_INT(automap_grid),
+    CONFIG_VARIABLE_INT(automap_grid_size),
 
     // Sound
     CONFIG_VARIABLE_INT(sfx_volume),

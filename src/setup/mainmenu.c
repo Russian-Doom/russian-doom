@@ -140,6 +140,7 @@ static void SensibleDefaults(void)
     automap_overlay = 0;
     automap_rotate = 0;
     automap_grid = 0;
+    automap_grid_size = 128;
 
     // Gameplay: Graphical
     brightmaps = 1;

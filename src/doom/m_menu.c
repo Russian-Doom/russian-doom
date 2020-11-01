@@ -241,6 +241,7 @@ void M_RD_Change_AutomapOverlay(int choice);
 void M_RD_Change_AutomapRotate(int choice);
 void M_RD_Change_AutomapFollow(int choice);
 void M_RD_Change_AutomapGrid(int choice);
+void M_RD_Change_AutomapGridSize(int choice);
 
 // Sound
 void M_RD_Choose_Audio(int choice);
@@ -1710,6 +1711,7 @@ enum
     rd_automap_rotate,
     rd_automap_follow,
     rd_automap_grid,
+    rd_automap_grid_size,
     rd_automap_end
 } rd_automap_e;
 
@@ -1727,6 +1729,7 @@ menuitem_t RD_Automap_Menu[]=
     {2, "rotate mode:",       M_RD_Change_AutomapRotate,    'r'},
     {2, "follow mode:",       M_RD_Change_AutomapFollow,    'f'},
     {2, "grid:",              M_RD_Change_AutomapGrid,      'g'},
+    {2, "grid size:",         M_RD_Change_AutomapGridSize,  'g'},
     {-1,"",0,'\0'}
 };
 
@@ -1754,6 +1757,7 @@ menuitem_t RD_Automap_Menu_Rus[]=
     {2, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    'h'}, // Режим вращения:
     {2, "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,    'h'}, // Режим следования:
     {2, "ctnrf:",             M_RD_Change_AutomapGrid,      'c'}, // Сетка:
+    {2, "hfpvth ctnrb:",      M_RD_Change_AutomapGridSize,  'h'}, // Размер сетки:
     {-1,"",0,'\0'}
 };
 
@@ -4181,6 +4185,10 @@ void M_RD_Choose_AutomapSettings(int choice)
 
 void M_RD_Draw_AutomapSettings(void)
 {
+    static char num[4];
+
+    M_snprintf(num, 4, "%d", automap_grid_size);
+
     if (english_language)
     {
         M_WriteTextBigCentered_ENG(5, "AUTOMAP SETTINGS");
@@ -4220,6 +4228,9 @@ void M_RD_Draw_AutomapSettings(void)
 
         // Grid
         M_WriteTextSmall_ENG(106 + wide_delta, 95, automap_grid ? "on" : "off");
+
+        // Grid size
+        M_WriteTextSmall_ENG(136 + wide_delta, 105, num);
     }
     else
     {
@@ -4260,6 +4271,9 @@ void M_RD_Draw_AutomapSettings(void)
 
         // Сетка
         M_WriteTextSmall_RUS(118 + wide_delta, 95, automap_grid ? "drk" : "dsrk");
+
+        // Размер сетки
+        M_WriteTextSmall_ENG(171 + wide_delta, 105, num);
     }
 }
 
@@ -4318,6 +4332,50 @@ void M_RD_Change_AutomapFollow(int choice)
 void M_RD_Change_AutomapGrid(int choice)
 {
     automap_grid ^= 1;
+}
+
+void M_RD_Change_AutomapGridSize(int choice)
+{
+    switch(choice)
+    {
+        case 0:
+            if (automap_grid_size == 512)
+            {
+                automap_grid_size = 256;
+            }
+            else if (automap_grid_size == 256)
+            {
+                automap_grid_size = 128;
+            }
+            else if (automap_grid_size == 128)
+            {
+                automap_grid_size = 64;
+            }
+            else if (automap_grid_size == 64)
+            {
+                automap_grid_size = 32;
+            }
+        break;
+
+        case 1:
+            if (automap_grid_size == 32)
+            {
+                automap_grid_size = 64;
+            }
+            else if (automap_grid_size == 64)
+            {
+                automap_grid_size = 128;
+            }
+            else if (automap_grid_size == 128)
+            {
+                automap_grid_size = 256;
+            }
+            else if (automap_grid_size == 256)
+            {
+                automap_grid_size = 512;
+            }
+        break;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -9792,6 +9850,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     automap_rotate    = 0;
     automap_follow    = 1;
     automap_grid      = 0;
+    automap_grid_size = 128;
 
     // Audio
     sfxVolume            = 8;  S_SetSfxVolume(sfxVolume * 8);
@@ -9922,6 +9981,7 @@ void M_RD_BackToDefaults_Original(int choice)
     automap_rotate    = 0;
     automap_follow    = 1;
     automap_grid      = 0;
+    automap_grid_size = 128;
 
     // Audio
     sfxVolume            = 8;  S_SetSfxVolume(sfxVolume * 8);
