@@ -11432,8 +11432,13 @@ boolean M_Responder (event_t* ev)
     if (messageRoutine)
         messageRoutine(key);
 
+    // [JN] Do not close Save/Load menu after deleting a savegame.
+    if (currentMenu != &SaveDef
+    &&  currentMenu != &SaveDef_Rus
+    &&  currentMenu != &LoadDef
+    &&  currentMenu != &LoadDef_Rus    
     // [JN] Do not close bindings menu after binding key / mouse button.
-    if (currentMenu != &RD_Bindings_Menu_Def_1
+    &&  currentMenu != &RD_Bindings_Menu_Def_1
     &&  currentMenu != &RD_Bindings_Menu_Def_1_Rus
     &&  currentMenu != &RD_Bindings_Menu_Def_2
     &&  currentMenu != &RD_Bindings_Menu_Def_2_Rus
