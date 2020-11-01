@@ -9648,7 +9648,7 @@ void M_RD_Draw_Reset(void)
     if (english_language)
     {
         M_WriteTextSmallCentered_ENG(65, "Graphical, audible and gameplay settings");
-        M_WriteTextSmallCentered_ENG(75, "will be reset to it's default values.");
+        M_WriteTextSmallCentered_ENG(75, "will be reset to their default values.");
         M_WriteTextSmallCentered_ENG(85, "Which level of values to use?");
 
         // Explanations
