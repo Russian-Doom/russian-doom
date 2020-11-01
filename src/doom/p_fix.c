@@ -1906,6 +1906,8 @@ linefix_t linefix[] =
     { doom2,            1,  13,     195,    0, "",         "",            "",                 58,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  13,     196,    0, "",         "",            "",                103,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  13,     197,    0, "",         "",            "",                 23,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
+    { doom2,            1,  13,     268,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTDRAW,                        DEFAULT,                                    DEFAULT },
+    { doom2,            1,  13,     320,    0, "",         "",            "",            DEFAULT,   DEFAULT, ML_DONTDRAW,                        DEFAULT,                                    DEFAULT },
     { doom2,            1,  13,     474,    0, "",         "",            "",                 -8,        48, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  13,     484,    0, "",         "",            "",                 56,        48, DEFAULT,                            DEFAULT,                                    DEFAULT },
     { doom2,            1,  13,     528,    0, "",         "",            "",                -40,   DEFAULT, DEFAULT,                            DEFAULT,                                    DEFAULT },
