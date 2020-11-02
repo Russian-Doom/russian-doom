@@ -1832,12 +1832,10 @@ void ST_drawWidgets(boolean refresh)
     dp_translation = ST_WidgetColor(hudcolor_health);
     // [JN] Negative player halth
     STlib_updatePercent(st_neghealth ? &w_health_neg : &w_health,
-                                       refresh    
-                                       || (screenblocks >= 11
-                                       &&  screenblocks <= 13));
+                        refresh || screenblocks <= 13);
+
     dp_translation = ST_WidgetColor(hudcolor_armor);
-    STlib_updatePercent(&w_armor, refresh || (screenblocks >= 11 
-                                          &&  screenblocks <= 13));
+    STlib_updatePercent(&w_armor, refresh || screenblocks <= 13);
     dp_translation = NULL;
 
     // [JN] Don't update/draw ARMS background in Press Beta
