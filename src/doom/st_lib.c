@@ -181,7 +181,7 @@ STlib_updatePercent
 
     STlib_updateNum(&per->n, refresh); // [crispy] moved here
 
-    if (colored_hud && !vanillaparm)
+    if (colored_hud == 1 && !vanillaparm)
         dp_translation = cr[CR_GRAY];
 
     if (refresh && *per->n.on)

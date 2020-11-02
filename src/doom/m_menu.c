@@ -8094,7 +8094,9 @@ void M_RD_Draw_Gameplay_1(void)
 
         // Colored HUD elements
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(195 + wide_delta, 75, colored_hud ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(195 + wide_delta, 75, colored_hud == 1 ? RD_ON  :
+                                                   colored_hud == 2 ? "On (%)" :
+                                                                      RD_OFF);
         dp_translation = NULL;
 
         // Colored blood and corpses
@@ -8163,7 +8165,9 @@ void M_RD_Draw_Gameplay_1(void)
 
         // Разноцветные элементы HUD
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(239 + wide_delta, 75, colored_hud ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(239 + wide_delta, 75, colored_hud == 1 ? RD_ON_RUS   :
+                                                   colored_hud == 2 ? "Drk (%)" :
+                                                                      RD_OFF_RUS);
         dp_translation = NULL;
 
         // Разноцветная кровь и трупы
@@ -8705,7 +8709,20 @@ void M_RD_Change_ImprovedFuzz(int choice)
 
 void M_RD_Change_ColoredHUD(int choice)
 {
-    colored_hud ^= 1;
+    switch(choice)
+    {
+        case 0: 
+        colored_hud--;
+        if (colored_hud < 0) 
+            colored_hud = 2;
+        break;
+    
+        case 1:
+        colored_hud++;
+        if (colored_hud > 2)
+            colored_hud = 0;
+        break;
+    }
     
     // Update background of classic HUD and player face 
     if (gamestate == GS_LEVEL)
