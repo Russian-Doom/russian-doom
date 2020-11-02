@@ -9860,10 +9860,24 @@ void M_RD_BackToDefaults_Recommended(int choice)
     automap_grid_size = 128;
 
     // Audio
-    sfxVolume            = 8;  S_SetSfxVolume(sfxVolume * 8);
-    musicVolume          = 8;  S_SetMusicVolume(musicVolume * 8);
+    snd_samplerate = 44100;
+    snd_sfxdevice        = 3;
+        I_ShutdownSound();                  // Shut down sound system
+        InitSfxModule(snd_sfxdevice);       // Reinitialize SFX module
+        S_RD_Change_SoundDevice();          // Call sfx device changing routine
+    snd_musicdevice      = 3;
+    snd_dmxoption        = "-opl3";
+        S_StopMusic();                      // Shut down current music
+        S_Shutdown();                       // Shut down music system
+        I_InitSound(true);                  // Start music system
+        S_ChangeMusic(music_num_rd, true);  // Restart current music
+    sfxVolume            = 8;
+        S_SetSfxVolume(sfxVolume * 8);
+    musicVolume          = 8;
+        S_SetMusicVolume(musicVolume * 8);
     snd_channels_rd      = 32;
-    snd_channels         = snd_channels_rd;  S_ChannelsRealloc();
+    snd_channels         = snd_channels_rd;
+        S_ChannelsRealloc();
     snd_monomode         = 0;
     snd_pitchshift       = 0;
     mute_inactive_window = 0;
@@ -9991,10 +10005,24 @@ void M_RD_BackToDefaults_Original(int choice)
     automap_grid_size = 128;
 
     // Audio
-    sfxVolume            = 8;  S_SetSfxVolume(sfxVolume * 8);
-    musicVolume          = 8;  S_SetMusicVolume(musicVolume * 8);
+    snd_samplerate = 44100;
+    snd_sfxdevice        = 3;
+        I_ShutdownSound();                  // Shut down sound system
+        InitSfxModule(snd_sfxdevice);       // Reinitialize SFX module
+        S_RD_Change_SoundDevice();          // Call sfx device changing routine
+    snd_musicdevice      = 3;
+    snd_dmxoption        = "-opl3";
+        S_StopMusic();                      // Shut down current music
+        S_Shutdown();                       // Shut down music system
+        I_InitSound(true);                  // Start music system
+        S_ChangeMusic(music_num_rd, true);  // Restart current music
+    sfxVolume            = 8;
+        S_SetSfxVolume(sfxVolume * 8);
+    musicVolume          = 8;
+        S_SetMusicVolume(musicVolume * 8);
     snd_channels_rd      = 8;  
-    snd_channels         = snd_channels_rd;  S_ChannelsRealloc();
+    snd_channels         = snd_channels_rd;
+        S_ChannelsRealloc();
     snd_monomode         = 0;
     snd_pitchshift       = 0;
     mute_inactive_window = 0;
