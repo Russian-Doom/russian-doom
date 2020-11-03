@@ -11319,11 +11319,11 @@ boolean M_Responder (event_t* ev)
         return false;
     }
 
-    // [JN] Не запрашивать подтверждение на выход при нажатии F10 в режиме разработчика (devparm).
-    if (devparm && ev->data1 == key_menu_quit)
+    // [JN] Remember game settings and quit immediately
+    // in devparm mode by pressing "close" button on window.
+    if (devparm && ev->type == ev_quit)
     {
-        I_Quit();
-        return true;
+        M_QuitDOOM(0);
     }
 
     // "close" button pressed on window?
