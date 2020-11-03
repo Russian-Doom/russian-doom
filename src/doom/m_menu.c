@@ -68,6 +68,7 @@ boolean menuactive;
 int     quickSaveSlot;      // -1 = no quicksave slot picked!
 int     messageToPrint;     // 1 = message to be printed
 int     messageToBind;      // [JN] Indicates if we are binding key
+int    *keyToBind;          // [Dasperal] Pointer to key_var to bind
 char   *messageString;      // ...and here is the message string!
 char    savegamestrings[10][SAVESTRINGSIZE];
 char    saveOldString[SAVESTRINGSIZE];  // old save description before edit
@@ -186,7 +187,8 @@ int  M_StringWidth(char *string);
 int  M_StringHeight(char *string);
 void M_StartMessage(char *string,void *routine,boolean input);
 void M_StopMessage(void);
-void M_RD_StartBinding(void *routine);
+void M_RD_StartBinding(int* key_var);
+void M_RD_StartBinding_Mouse(int* key_var);
 
 // -----------------------------------------------------------------------------
 // [JN] Custom RD menu prototypes
@@ -5438,261 +5440,81 @@ void M_RD_Draw_Bindings_1(void)
 //
 // Move Forward
 //
-void M_RD_Key_MoveForward (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_up)
-    {
-        key_up = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_up = key;
-    }
-}
-
 void M_RD_Bind_MoveForward (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_MoveForward);
+    M_RD_StartBinding(&key_up);
 }
 
 //
 // Move Backward
 //
-void M_RD_Key_MoveBack (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_down)
-    {
-        key_down = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_down = key;
-    }
-}
-
 void M_RD_Bind_MoveBackward (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_MoveBack);
+    M_RD_StartBinding(&key_down);
 }
 
 //
 // Turn Left
 //
-void M_RD_Key_TurnLeft (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_left)
-    {
-        key_left = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_left = key;
-    }
-}
-
 void M_RD_Bind_TurnLeft (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_TurnLeft);
+    M_RD_StartBinding(&key_left);
 }
 
 //
 // Turn Right
 //
-void M_RD_Key_TurnRight (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_right)
-    {
-        key_right = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_right = key;
-    }
-}
-
 void M_RD_Bind_TurnRight (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_TurnRight);
+    M_RD_StartBinding(&key_right);
 }
 
 //
 // Strafe Left
 //
-void M_RD_Key_StrafeLeft (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_strafeleft)
-    {
-        key_strafeleft = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_strafeleft = key;
-    }
-}
-
 void M_RD_Bind_StrafeLeft (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_StrafeLeft);
+    M_RD_StartBinding(&key_strafeleft);
 }
 
 //
 // Strafe Right
 //
-void M_RD_Key_StrafeRight (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_straferight)
-    {
-        key_straferight = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_straferight = key;
-    }
-}
-
 void M_RD_Bind_StrafeRight (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_StrafeRight);
+    M_RD_StartBinding(&key_straferight);
 }
 
 //
 // Speed On
 //
-void M_RD_Key_SpeedOn (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_speed)
-    {
-        key_speed = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_speed = key;
-    }
-}
-
 void M_RD_Bind_SpeedOn (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_SpeedOn);
+    M_RD_StartBinding(&key_speed);
 }
 
 //
 // Strafe On
 //
-void M_RD_Key_StrafeOn (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_strafe)
-    {
-        key_strafe = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_strafe = key;
-    }
-}
-
 void M_RD_Bind_StrafeOn (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_StrafeOn);
+    M_RD_StartBinding(&key_strafe);
 }
 
 //
 // Fire/Attack
 //
-void M_RD_Key_FireAttack (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_fire)
-    {
-        key_fire = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_fire = key;
-    }
-}
-
 void M_RD_Bind_FireAttack (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_FireAttack);
+    M_RD_StartBinding(&key_fire);
 }
 
 //
 // Use
 //
-void M_RD_Key_Use (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_use)
-    {
-        key_use = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_use = key;
-    }
-}
-
 void M_RD_Bind_Use (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Use);
+    M_RD_StartBinding(&key_use);
 }
 
 
@@ -5923,261 +5745,81 @@ void M_RD_Draw_Bindings_2(void)
 //
 // Weapon 1
 //
-void M_RD_Key_Weapon_1 (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_weapon1)
-    {
-        key_weapon1 = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_weapon1 = key;
-    }
-}
-
 void M_RD_Bind_Weapon_1 (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Weapon_1);
+    M_RD_StartBinding(&key_weapon1);
 }
 
 //
 // Weapon 2
 //
-void M_RD_Key_Weapon_2 (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_weapon2)
-    {
-        key_weapon2 = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_weapon2 = key;
-    }
-}
-
 void M_RD_Bind_Weapon_2 (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Weapon_2);
+    M_RD_StartBinding(&key_weapon2);
 }
 
 //
 // Weapon 3
 //
-void M_RD_Key_Weapon_3 (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_weapon3)
-    {
-        key_weapon3 = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_weapon3 = key;
-    }
-}
-
 void M_RD_Bind_Weapon_3 (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Weapon_3);
+    M_RD_StartBinding(&key_weapon3);
 }
 
 //
 // Weapon 4
 //
-void M_RD_Key_Weapon_4 (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_weapon4)
-    {
-        key_weapon4 = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_weapon4 = key;
-    }
-}
-
 void M_RD_Bind_Weapon_4 (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Weapon_4);
+    M_RD_StartBinding(&key_weapon4);
 }
 
 //
 // Weapon 5
 //
-void M_RD_Key_Weapon_5 (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_weapon5)
-    {
-        key_weapon5 = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_weapon5 = key;
-    }
-}
-
 void M_RD_Bind_Weapon_5 (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Weapon_5);
+    M_RD_StartBinding(&key_weapon5);
 }
 
 //
 // Weapon 6
 //
-void M_RD_Key_Weapon_6 (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_weapon6)
-    {
-        key_weapon6 = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_weapon6 = key;
-    }
-}
-
 void M_RD_Bind_Weapon_6 (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Weapon_6);
+    M_RD_StartBinding(&key_weapon6);
 }
 
 //
 // Weapon 7
 //
-void M_RD_Key_Weapon_7 (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_weapon7)
-    {
-        key_weapon7 = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_weapon7 = key;
-    }
-}
-
 void M_RD_Bind_Weapon_7 (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Weapon_7);
+    M_RD_StartBinding(&key_weapon7);
 }
 
 //
 // Weapon 8
 //
-void M_RD_Key_Weapon_8 (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_weapon8)
-    {
-        key_weapon8 = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_weapon8 = key;
-    }
-}
-
 void M_RD_Bind_Weapon_8 (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Weapon_8);
+    M_RD_StartBinding(&key_weapon8);
 }
 
 //
 // Previous weapon
 //
-void M_RD_Key_PrevWeapon (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_prevweapon)
-    {
-        key_prevweapon = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_prevweapon = key;
-    }
-}
-
 void M_RD_Bind_PrevWeapon (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_PrevWeapon);
+    M_RD_StartBinding(&key_prevweapon);
 }
 
 //
 // Next weapon
 //
-void M_RD_Key_NextWeapon (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_nextweapon)
-    {
-        key_nextweapon = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_nextweapon = key;
-    }
-}
-
 void M_RD_Bind_NextWeapon (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_NextWeapon);
+    M_RD_StartBinding(&key_nextweapon);
 }
 
 
@@ -6422,261 +6064,81 @@ void M_RD_Draw_Bindings_3(void)
 //
 // Quick save
 //
-void M_RD_Key_QuickSave (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_menu_qsave)
-    {
-        key_menu_qsave = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_menu_qsave = key;
-    }
-}
-
 void M_RD_Bind_QuickSave (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_QuickSave);
+    M_RD_StartBinding(&key_menu_qsave);
 }
 
 //
 // Quick load
 //
-void M_RD_Key_QuickLoad (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_menu_qload)
-    {
-        key_menu_qload = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_menu_qload = key;
-    }
-}
-
 void M_RD_Bind_QuickLoad (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_QuickLoad);
+    M_RD_StartBinding(&key_menu_qload);
 }
 
 //
 // Go to next level
 //
-void M_RD_Key_NextLevel (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_menu_nextlevel)
-    {
-        key_menu_nextlevel = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_menu_nextlevel = key;
-    }
-}
-
 void M_RD_Bind_NextLevel (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_NextLevel);
+    M_RD_StartBinding(&key_menu_nextlevel);
 }
 
 //
 // Restart level/demo
 //
-void M_RD_Key_RestartLevel (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_menu_reloadlevel)
-    {
-        key_menu_reloadlevel = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_menu_reloadlevel = key;
-    }
-}
-
 void M_RD_Bind_RestartLevel (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_RestartLevel);
+    M_RD_StartBinding(&key_menu_reloadlevel);
 }
 
 //
 // Save a screenshot
 //
-void M_RD_Key_Screenshot (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_menu_screenshot)
-    {
-        key_menu_screenshot = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_menu_screenshot = key;
-    }
-}
-
 void M_RD_Bind_Screenshot (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Screenshot);
+    M_RD_StartBinding(&key_menu_screenshot);
 }
 
 //
 // Finish demo recording
 //
-void M_RD_Key_FinishDemo (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_demo_quit)
-    {
-        key_demo_quit = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_demo_quit = key;
-    }
-}
-
 void M_RD_Bind_FinishDemo (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_FinishDemo);
+    M_RD_StartBinding(&key_demo_quit);
 }
 
 //
 // Mouse look
 //
-void M_RD_Key_MouseLook (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_togglemlook)
-    {
-        key_togglemlook = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_togglemlook = key;
-    }
-}
-
 void M_RD_Bind_MouseLook (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_MouseLook);
+    M_RD_StartBinding(&key_togglemlook);
 }
 
 //
 // Always run
 //
-void M_RD_Key_AlwaysRun (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_toggleautorun)
-    {
-        key_toggleautorun = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_toggleautorun = key;
-    }
-}
-
 void M_RD_Bind_AlwaysRun (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_AlwaysRun);
+    M_RD_StartBinding(&key_toggleautorun);
 }
 
 //
 // Crosshair
 //
-void M_RD_Key_Crosshair (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_togglecrosshair)
-    {
-        key_togglecrosshair = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_togglecrosshair = key;
-    }
-}
-
 void M_RD_Bind_Crosshair (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Crosshair);
+    M_RD_StartBinding(&key_togglecrosshair);
 }
 
 //
-// Crosshair
+// FlipLevels
 //
-void M_RD_Key_FlipLevels (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_togglefliplvls)
-    {
-        key_togglefliplvls = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_togglefliplvls = key;
-    }
-}
-
 void M_RD_Bind_FlipLevels (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_FlipLevels);
+    M_RD_StartBinding(&key_togglefliplvls);
 }
 
 
@@ -6908,261 +6370,81 @@ void M_RD_Draw_Bindings_4(void)
 //
 // Toggle automap
 //
-void M_RD_Key_Automap (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_toggle)
-    {
-        key_map_toggle = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_toggle = key;
-    }
-}
-
 void M_RD_Bind_Automap (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Automap);
+    M_RD_StartBinding(&key_map_toggle);
 }
 
 //
 // Zoom in
 //
-void M_RD_Key_ZoomIn (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_zoomin)
-    {
-        key_map_zoomin = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_zoomin = key;
-    }
-}
-
 void M_RD_Bind_ZoomIn (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_ZoomIn);
+    M_RD_StartBinding(&key_map_zoomin);
 }
 
 //
 // Zoom out
 //
-void M_RD_Key_ZoomOut (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_zoomout)
-    {
-        key_map_zoomout = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_zoomout = key;
-    }
-}
-
 void M_RD_Bind_ZoomOut (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_ZoomOut);
+    M_RD_StartBinding(&key_map_zoomout);
 }
 
 //
 // Maximum zoom out
 //
-void M_RD_Key_MaximumZoom (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_maxzoom)
-    {
-        key_map_maxzoom = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_maxzoom = key;
-    }
-}
-
 void M_RD_Bind_MaximumZoom (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_MaximumZoom);
+    M_RD_StartBinding(&key_map_maxzoom);
 }
 
 //
 // Follow mode
 //
-void M_RD_Key_Follow (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_follow)
-    {
-        key_map_follow = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_follow = key;
-    }
-}
-
 void M_RD_Bind_Follow (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Follow);
+    M_RD_StartBinding(&key_map_follow);
 }
 
 //
 // Overlay mode
 //
-void M_RD_Key_Overlay (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_overlay)
-    {
-        key_map_overlay = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_overlay = key;
-    }
-}
-
 void M_RD_Bind_Overlay (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Overlay);
+    M_RD_StartBinding(&key_map_overlay);
 }
 
 //
 // Rotate mode
 //
-void M_RD_Key_Rotate (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_rotate)
-    {
-        key_map_rotate = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_rotate = key;
-    }
-}
-
 void M_RD_Bind_Rotate (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Rotate);
+    M_RD_StartBinding(&key_map_rotate);
 }
 
 //
 // Toggle grid
 //
-void M_RD_Key_Grid (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_grid)
-    {
-        key_map_grid = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_grid = key;
-    }
-}
-
 void M_RD_Bind_Grid (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Grid);
+    M_RD_StartBinding(&key_map_grid);
 }
 
 //
 // Mark location
 //
-void M_RD_Key_Mark (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_mark)
-    {
-        key_map_mark = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_mark = key;
-    }
-}
-
 void M_RD_Bind_Mark (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_Mark);
+    M_RD_StartBinding(&key_map_mark);
 }
 
 //
 // Clear all marks
 //
-void M_RD_Key_ClearMarks (int key)
-{
-    messageToBind = 0;
-
-    if (key == key_map_clearmark)
-    {
-        key_map_clearmark = 0;
-    }
-    else if (key == KEY_ESCAPE)
-    {
-        return;
-    }
-    else
-    {
-        key_map_clearmark = key;
-    }
-}
-
 void M_RD_Bind_ClearMarks (int choice)
 {
-    M_RD_StartBinding(M_RD_Key_ClearMarks);
+    M_RD_StartBinding(&key_map_clearmark);
 }
 
 
@@ -7382,640 +6664,73 @@ void M_RD_Draw_Mouse_Bindings(void)
 //
 // Fire/Attack
 //
-void M_RD_Mouse_Attack (int key)
-{
-    messageToBind = 0;
-
-    switch (key)
-    {
-        case 13:
-        {
-            if (mousebfire == 0 && key == 13)   
-            mousebfire = -1;
-            else
-            mousebfire = 0;
-            break;
-        }
-        case 127:
-        {
-            if (mousebfire == 1 && key == 127)
-            mousebfire = -1;
-            else
-            mousebfire = 1;
-            break;
-        }
-        case 4:
-        {
-            if (mousebfire == 2 && key == 4)
-            mousebfire = -1;
-            else
-            mousebfire = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((mousebfire == 3 && key == 8)
-            ||  (mousebfire == 3 && key == 16)
-            ||  (mousebfire == 3 && key == 173))
-            mousebfire = -1;
-            else
-            mousebfire = 3;
-
-            break;
-        }
-        case 175:
-        {
-            if (mousebfire == 4 && key == 175)
-            mousebfire = -1;
-            else
-            mousebfire = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        {
-            return;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    // printf ("Fire: %d \n", key);
-}
-
 void M_RD_Mouse_Bind_FireAttack (int choice) 
 {
-    M_RD_StartBinding(M_RD_Mouse_Attack);
+    M_RD_StartBinding_Mouse(&mousebfire);
 }
 
 //
 // Use
 //
-void M_RD_Mouse_Use (int key)
-{
-    messageToBind = 0;
-
-    switch (key)
-    {
-        case 13:
-        {
-            if (mousebuse == 0 && key == 13)   
-            mousebuse = -1;
-            else
-            mousebuse = 0;
-            break;
-        }
-        case 127:
-        {
-            if (mousebuse == 1 && key == 127)
-            mousebuse = -1;
-            else
-            mousebuse = 1;
-            break;
-        }
-        case 4:
-        {
-            if (mousebuse == 2 && key == 4)
-            mousebuse = -1;
-            else
-            mousebuse = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((mousebuse == 3 && key == 8)
-            ||  (mousebuse == 3 && key == 16)
-            ||  (mousebuse == 3 && key == 173))
-            mousebuse = -1;
-            else
-            mousebuse = 3;
-
-            break;
-        }
-        case 175:
-        {
-            if (mousebuse == 4 && key == 175)
-            mousebuse = -1;
-            else
-            mousebuse = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        {
-            return;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    // printf ("Use: %d \n", key);
-}
-
 void M_RD_Mouse_Bind_Use (int choice) 
 {
-    M_RD_StartBinding(M_RD_Mouse_Use);
+    M_RD_StartBinding_Mouse(&mousebuse);
 }
 
 //
 // Move Forward
 //
-void M_RD_Mouse_MoveForward (int key)
-{
-    messageToBind = 0;
-
-    switch (key)
-    {
-        case 13:
-        {
-            if (mousebforward == 0 && key == 13)   
-            mousebforward = -1;
-            else
-            mousebforward = 0;
-            break;
-        }
-        case 127:
-        {
-            if (mousebforward == 1 && key == 127)
-            mousebforward = -1;
-            else
-            mousebforward = 1;
-            break;
-        }
-        case 4:
-        {
-            if (mousebforward == 2 && key == 4)
-            mousebforward = -1;
-            else
-            mousebforward = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((mousebforward == 3 && key == 8)
-            ||  (mousebforward == 3 && key == 16)
-            ||  (mousebforward == 3 && key == 173))
-            mousebforward = -1;
-            else
-            mousebforward = 3;
-
-            break;
-        }
-        case 175:
-        {
-            if (mousebforward == 4 && key == 175)
-            mousebforward = -1;
-            else
-            mousebforward = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        {
-            return;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    // printf ("Move Forward: %d \n", key);
-}
-
 void M_RD_Mouse_Bind_MoveForward (int choice) 
 {
-    M_RD_StartBinding(M_RD_Mouse_MoveForward);
+    M_RD_StartBinding_Mouse(&mousebforward);
 }
 
 //
 // Move Backward
 //
-void M_RD_Mouse_MoveBackward (int key)
-{
-    messageToBind = 0;
-
-    switch (key)
-    {
-        case 13:
-        {
-            if (mousebbackward == 0 && key == 13)   
-            mousebbackward = -1;
-            else
-            mousebbackward = 0;
-            break;
-        }
-        case 127:
-        {
-            if (mousebbackward == 1 && key == 127)
-            mousebbackward = -1;
-            else
-            mousebbackward = 1;
-            break;
-        }
-        case 4:
-        {
-            if (mousebbackward == 2 && key == 4)
-            mousebbackward = -1;
-            else
-            mousebbackward = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((mousebbackward == 3 && key == 8)
-            ||  (mousebbackward == 3 && key == 16)
-            ||  (mousebbackward == 3 && key == 173))
-            mousebbackward = -1;
-            else
-            mousebbackward = 3;
-
-            break;
-        }
-        case 175:
-        {
-            if (mousebbackward == 4 && key == 175)
-            mousebbackward = -1;
-            else
-            mousebbackward = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        {
-            return;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    // printf ("Move Backward: %d \n", key);
-}
-
 void M_RD_Mouse_Bind_MoveBackward (int choice) 
 {
-    M_RD_StartBinding(M_RD_Mouse_MoveBackward);
+    M_RD_StartBinding_Mouse(&mousebbackward);
 }
 
 //
 // Strafe On
 //
-void M_RD_Mouse_StrafeOn (int key)
-{
-    messageToBind = 0;
-
-    switch (key)
-    {
-        case 13:
-        {
-            if (mousebstrafe == 0 && key == 13)   
-            mousebstrafe = -1;
-            else
-            mousebstrafe = 0;
-            break;
-        }
-        case 127:
-        {
-            if (mousebstrafe == 1 && key == 127)
-            mousebstrafe = -1;
-            else
-            mousebstrafe = 1;
-            break;
-        }
-        case 4:
-        {
-            if (mousebstrafe == 2 && key == 4)
-            mousebstrafe = -1;
-            else
-            mousebstrafe = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((mousebstrafe == 3 && key == 8)
-            ||  (mousebstrafe == 3 && key == 16)
-            ||  (mousebstrafe == 3 && key == 173))
-            mousebstrafe = -1;
-            else
-            mousebstrafe = 3;
-
-            break;
-        }
-        case 175:
-        {
-            if (mousebstrafe == 4 && key == 175)
-            mousebstrafe = -1;
-            else
-            mousebstrafe = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        {
-            return;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    // printf ("Strafe On: %d \n", key);
-}
-
 void M_RD_Mouse_Bind_StrafeOn (int choice) 
 {
-    M_RD_StartBinding(M_RD_Mouse_StrafeOn);
+    M_RD_StartBinding_Mouse(&mousebstrafe);
 }
 
 //
 // Strafe Left
 //
-void M_RD_Mouse_StrafeLeft (int key)
-{
-    messageToBind = 0;
-
-    switch (key)
-    {
-        case 13:
-        {
-            if (mousebstrafeleft == 0 && key == 13)   
-            mousebstrafeleft = -1;
-            else
-            mousebstrafeleft = 0;
-            break;
-        }
-        case 127:
-        {
-            if (mousebstrafeleft == 1 && key == 127)
-            mousebstrafeleft = -1;
-            else
-            mousebstrafeleft = 1;
-            break;
-        }
-        case 4:
-        {
-            if (mousebstrafeleft == 2 && key == 4)
-            mousebstrafeleft = -1;
-            else
-            mousebstrafeleft = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((mousebstrafeleft == 3 && key == 8)
-            ||  (mousebstrafeleft == 3 && key == 16)
-            ||  (mousebstrafeleft == 3 && key == 173))
-            mousebstrafeleft = -1;
-            else
-            mousebstrafeleft = 3;
-
-            break;
-        }
-        case 175:
-        {
-            if (mousebstrafeleft == 4 && key == 175)
-            mousebstrafeleft = -1;
-            else
-            mousebstrafeleft = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        {
-            return;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    // printf ("Strafe Left: %d \n", key);
-}
-
 void M_RD_Mouse_Bind_StrafeLeft (int choice) 
 {
-    M_RD_StartBinding(M_RD_Mouse_StrafeLeft);
+    M_RD_StartBinding_Mouse(&mousebstrafeleft);
 }
 
 //
 // Strafe Right
 //
-void M_RD_Mouse_StrafeRight (int key)
-{
-    messageToBind = 0;
-
-    switch (key)
-    {
-        case 13:
-        {
-            if (mousebstraferight == 0 && key == 13)   
-            mousebstraferight = -1;
-            else
-            mousebstraferight = 0;
-            break;
-        }
-        case 127:
-        {
-            if (mousebstraferight == 1 && key == 127)
-            mousebstraferight = -1;
-            else
-            mousebstraferight = 1;
-            break;
-        }
-        case 4:
-        {
-            if (mousebstraferight == 2 && key == 4)
-            mousebstraferight = -1;
-            else
-            mousebstraferight = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((mousebstraferight == 3 && key == 8)
-            ||  (mousebstraferight == 3 && key == 16)
-            ||  (mousebstraferight == 3 && key == 173))
-            mousebstraferight = -1;
-            else
-            mousebstraferight = 3;
-
-            break;
-        }
-        case 175:
-        {
-            if (mousebstraferight == 4 && key == 175)
-            mousebstraferight = -1;
-            else
-            mousebstraferight = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        {
-            return;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    // printf ("Strafe Right: %d \n", key);
-}
-
 void M_RD_Mouse_Bind_StrafeRight (int choice) 
 {
-    M_RD_StartBinding(M_RD_Mouse_StrafeRight);
+    M_RD_StartBinding_Mouse(&mousebstraferight);
 }
 
 //
 // Previous Weapon
 //
-void M_RD_Mouse_PrevWeapon (int key)
-{
-    messageToBind = 0;
-
-    switch (key)
-    {
-        case 13:
-        {
-            if (mousebprevweapon == 0 && key == 13)   
-            mousebprevweapon = -1;
-            else
-            mousebprevweapon = 0;
-            break;
-        }
-        case 127:
-        {
-            if (mousebprevweapon == 1 && key == 127)
-            mousebprevweapon = -1;
-            else
-            mousebprevweapon = 1;
-            break;
-        }
-        case 4:
-        {
-            if (mousebprevweapon == 2 && key == 4)
-            mousebprevweapon = -1;
-            else
-            mousebprevweapon = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((mousebprevweapon == 3 && key == 8)
-            ||  (mousebprevweapon == 3 && key == 16)
-            ||  (mousebprevweapon == 3 && key == 173))
-            mousebprevweapon = -1;
-            else
-            mousebprevweapon = 3;
-
-            break;
-        }
-        case 175:
-        {
-            if (mousebprevweapon == 4 && key == 175)
-            mousebprevweapon = -1;
-            else
-            mousebprevweapon = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        {
-            return;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    // printf ("Previous Weapon: %d \n", key);
-}
-
 void M_RD_Mouse_Bind_PrevWeapon (int choice) 
 {
-    M_RD_StartBinding(M_RD_Mouse_PrevWeapon);
+    M_RD_StartBinding_Mouse(&mousebprevweapon);
 }
 
 //
 // Previous Weapon
 //
-void M_RD_Mouse_NextWeapon (int key)
-{
-    messageToBind = 0;
-
-    switch (key)
-    {
-        case 13:
-        {
-            if (mousebnextweapon == 0 && key == 13)   
-            mousebnextweapon = -1;
-            else
-            mousebnextweapon = 0;
-            break;
-        }
-        case 127:
-        {
-            if (mousebnextweapon == 1 && key == 127)
-            mousebnextweapon = -1;
-            else
-            mousebnextweapon = 1;
-            break;
-        }
-        case 4:
-        {
-            if (mousebnextweapon == 2 && key == 4)
-            mousebnextweapon = -1;
-            else
-            mousebnextweapon = 2;
-            break;
-        }
-        case 8:
-        case 16:
-        case 173:
-        {
-            if ((mousebnextweapon == 3 && key == 8)
-            ||  (mousebnextweapon == 3 && key == 16)
-            ||  (mousebnextweapon == 3 && key == 173))
-            mousebnextweapon = -1;
-            else
-            mousebnextweapon = 3;
-
-            break;
-        }
-        case 175:
-        {
-            if (mousebnextweapon == 4 && key == 175)
-            mousebnextweapon = -1;
-            else
-            mousebnextweapon = 4;
-            break;
-        }
-        case KEY_ESCAPE:
-        {
-            return;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    // printf ("Previous Weapon: %d \n", key);
-}
-
 void M_RD_Mouse_Bind_NextWeapon (int choice) 
 {
-    M_RD_StartBinding(M_RD_Mouse_NextWeapon);
+    M_RD_StartBinding_Mouse(&mousebnextweapon);
 }
 
 
@@ -11048,16 +9763,110 @@ void M_StopMessage(void)
 }
 
 
+void M_RD_Key_Binding_Routine (int key)
+{
+    messageToBind = 0;
+
+    if (keyToBind)
+    {
+        if (key == *keyToBind)
+        {
+            *keyToBind = 0;
+        }
+        else if (!(key == KEY_ESCAPE))
+        {
+            *keyToBind = key;
+        }
+
+        keyToBind = 0;
+    }
+}
+
 //
 // M_StartBinding
 // [JN] Used for key binding routine.
 //
-void M_RD_StartBinding (void *routine)
+void M_RD_StartBinding (int* key_var)
 {
     messageLastMenuActive = menuactive;
     messageToPrint = 1;
     messageToBind = 1;  // [JN] Binding key now
-    messageRoutine = routine;
+    keyToBind = key_var; // [Dasperal] Specify key to bind
+    messageRoutine = M_RD_Key_Binding_Routine;
+    messageNeedsInput = false;
+    menuactive = true;
+    return;
+}
+
+void M_RD_MouseKey_Binding_Routine (int key)
+{
+    messageToBind = 0;
+
+    switch (key)
+    {
+        case 13:
+        {
+            if (*keyToBind == 0 && key == 13)
+                *keyToBind = -1;
+            else
+                *keyToBind = 0;
+            break;
+        }
+        case 127:
+        {
+            if (*keyToBind == 1 && key == 127)
+                *keyToBind = -1;
+            else
+                *keyToBind = 1;
+            break;
+        }
+        case 4:
+        {
+            if (*keyToBind == 2 && key == 4)
+                *keyToBind = -1;
+            else
+                *keyToBind = 2;
+            break;
+        }
+        case 8:
+        case 16:
+        case 173:
+        {
+            if ((*keyToBind == 3 && key == 8)
+                ||  (*keyToBind == 3 && key == 16)
+                ||  (*keyToBind == 3 && key == 173))
+                *keyToBind = -1;
+            else
+                *keyToBind = 3;
+
+            break;
+        }
+        case 175:
+        {
+            if (*keyToBind == 4 && key == 175)
+                *keyToBind = -1;
+            else
+                *keyToBind = 4;
+            break;
+        }
+        case KEY_ESCAPE:
+        {
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+}
+
+void M_RD_StartBinding_Mouse (int* key_var)
+{
+    messageLastMenuActive = menuactive;
+    messageToPrint = 1;
+    messageToBind = 1;  // [JN] Binding key now
+    keyToBind = key_var; // [Dasperal] Specify key to bind
+    messageRoutine = M_RD_MouseKey_Binding_Routine;
     messageNeedsInput = false;
     menuactive = true;
     return;
