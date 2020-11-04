@@ -89,6 +89,15 @@ int english_language = -1;
 int english_language = 0;
 #endif
 
+// -----------------------------------------------------------------------------
+// [JN] PWAD autoloading. Initially all 9 values are empty.
+// -----------------------------------------------------------------------------
+
+char *autoload_pwad[10] =
+{
+//   1   2   3   4   5   6   7   8   9
+    "", "", "", "", "", "", "", "", ""
+};
 
 // -----------------------------------------------------------------------------
 // [JN] Default values
@@ -588,6 +597,14 @@ void D_BindVariables(void)
 
     // [JN] Support English/Russian language hot swapping
     M_BindIntVariable("english_language",       &english_language);
+
+    // [JN] PWAD autoloading. Note that we are starting from 1, not 0 value.
+    for (i = 1 ; i < 10 ; ++i)
+    {
+        static char pwad[16];
+        M_snprintf(pwad, sizeof(pwad), "autoloadpwad%i", i);
+        M_BindStringVariable(pwad, &autoload_pwad[i]);
+    }
 
     // Rendering
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
@@ -1323,6 +1340,43 @@ void D_IdentifyVersion(void)
     }
 }
 
+//
+// [JN] Load assets for Sigil (main and compat versions)
+//
+
+void D_RD_LoadSigilAssets (boolean compat)
+{
+    W_MergeFile("base/doom-sigil.wad");
+    gamedescription_eng = "SIGIL";
+    gamedescription_rus = "СИГИЛ";
+
+    if (compat)
+    {
+        sgl_compat_loaded = true;
+        DEH_AddStringReplacement("RD_EPI3", "RD_SGEP3");
+    }
+    else
+    {
+        sgl_loaded = true;
+        DEH_AddStringReplacement("RD_EPI5", "RD_SGEP5");
+    }
+}
+
+//
+// [JN] Load assets for No Rest for the Living (NERVE.WAD)
+//
+
+void D_RD_LoadNerveAssets (void)
+{
+    gamemission = pack_nerve;
+    W_MergeFile("base/doom-nerve.wad");
+
+    DEH_AddStringReplacement("TITLEPIC", "DMENUPIC");
+    DEH_AddStringReplacement("TITLEPI2", "DMENUPIC");
+    gamedescription_eng = "DOOM 2: No Rest For The Living";
+    gamedescription_rus = "DOOM 2: Нет покоя для живых";
+}
+
 // Set the gamedescription string
 // [JN] На этом этапе указываем заголовок окна игры и подгрузку 
 // необходимых файлов с локализованными ресурсами.
@@ -1472,6 +1526,46 @@ void D_SetGameDescription(void)
         }
     }
 
+    // [JN] PWAD autoloading routine. Scan through all 9 available variables,
+    // and don't load empty ones. There are two special cases: SIGIL and NERVE.
+    {
+        int i;
+
+        for (i = 1 ; i < 10 ; ++i)
+        {
+            // [JN] Don't try to load empty lines!
+            if (strncasecmp(autoload_pwad[i], "", 16))
+            {
+                W_MergeFile(autoload_pwad[i]);
+                printf(english_language ?
+                       " autoadding: %s\n" :
+                       " автодобавление: %s\n", autoload_pwad[i]);
+
+                // [JN] Check for SIGIL (main) autoloading
+                if (M_StrCaseStr(autoload_pwad[i],"sigil.wad")
+                ||  M_StrCaseStr(autoload_pwad[i],"sigil_v1_2.wad")
+                ||  M_StrCaseStr(autoload_pwad[i],"sigil_v1_21.wad"))
+                {
+                    D_RD_LoadSigilAssets(false);
+                }
+
+                // [JN] Check for SIGIL (compat) autoloading
+                if (M_StrCaseStr(autoload_pwad[i],"sigil_compat.wad")
+                ||  M_StrCaseStr(autoload_pwad[i],"sigil_compat_v1_2.wad")
+                ||  M_StrCaseStr(autoload_pwad[i],"sigil_compat_v1_21.wad"))
+                {
+                    D_RD_LoadSigilAssets(true);
+                }
+
+                // [JN] Check for No Rest for Living autoloading
+                if (M_StrCaseStr(autoload_pwad[i],"nerve.wad"))
+                {
+                    D_RD_LoadNerveAssets();
+                }
+            }
+        }
+    }
+
     // [JN] Параметр "-file" перенесен из w_main.c
     // Необходимо для того, что бы любые ресурсы из pwad-файлов
     // загружались после руссифицированных pwad-файлов.
@@ -1497,14 +1591,7 @@ void D_SetGameDescription(void)
             // [JN] Поддержка DOOM 2: No Rest for the Living
             if (M_StrCaseStr(myargv[newpwadfile], "nerve.wad"))
             {
-                gamemission = pack_nerve;
-                W_MergeFile("base/doom-nerve.wad");
-
-                DEH_AddStringReplacement("TITLEPIC", "DMENUPIC");
-                DEH_AddStringReplacement("TITLEPI2", "DMENUPIC");
-
-                gamedescription_eng = "DOOM 2: No Rest For The Living";
-                gamedescription_rus = "DOOM 2: Нет покоя для живых";
+                D_RD_LoadNerveAssets();
             }
             // [JN] Поддержка Master Levels for DOOM 2
             else if (M_StrCaseStr(myargv[newpwadfile], "ATTACK.WAD") ||
@@ -1710,26 +1797,14 @@ void D_SetGameDescription(void)
                      M_StrCaseStr(myargv[newpwadfile], "sigil_v1_2.wad") ||
                      M_StrCaseStr(myargv[newpwadfile], "sigil_v1_21.wad"))
             {
-                W_MergeFile("base/doom-sigil.wad");
-                sgl_loaded = true;
-
-                DEH_AddStringReplacement("RD_EPI5", "RD_SGEP5");
-
-                gamedescription_eng = "SIGIL";
-                gamedescription_rus = "СИГИЛ";
+                D_RD_LoadSigilAssets(false);
             }
             // [JN] Support for SIGIL (compat version)
             else if (M_StrCaseStr(myargv[newpwadfile], "sigil_compat.wad") ||
                      M_StrCaseStr(myargv[newpwadfile], "sigil_compat_v1_2.wad") ||
                      M_StrCaseStr(myargv[newpwadfile], "sigil_compat_v1_21.wad"))
             {
-                W_MergeFile("base/doom-sigil.wad");
-                sgl_compat_loaded = true;
-
-                DEH_AddStringReplacement("RD_EPI3", "RD_SGEP3");
-
-                gamedescription_eng = "SIGIL";
-                gamedescription_rus = "СИГИЛ";
+                D_RD_LoadSigilAssets(true);
             }
         }
     }

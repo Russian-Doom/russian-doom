@@ -144,6 +144,20 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(english_language),
 
     //!
+    // [JN] PWAD autoloading
+    //
+
+    CONFIG_VARIABLE_STRING(autoloadpwad1),
+    CONFIG_VARIABLE_STRING(autoloadpwad2),
+    CONFIG_VARIABLE_STRING(autoloadpwad3),
+    CONFIG_VARIABLE_STRING(autoloadpwad4),
+    CONFIG_VARIABLE_STRING(autoloadpwad5),
+    CONFIG_VARIABLE_STRING(autoloadpwad6),
+    CONFIG_VARIABLE_STRING(autoloadpwad7),
+    CONFIG_VARIABLE_STRING(autoloadpwad8),
+    CONFIG_VARIABLE_STRING(autoloadpwad9),
+
+    //!
     // @game strife
     //
     // If non-zero, dialogue text is displayed over characters' pictures
