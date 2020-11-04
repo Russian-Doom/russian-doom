@@ -147,15 +147,30 @@ static default_t extra_defaults_list[] =
     // [JN] PWAD autoloading
     //
 
-    CONFIG_VARIABLE_STRING(autoloadpwad1),
-    CONFIG_VARIABLE_STRING(autoloadpwad2),
-    CONFIG_VARIABLE_STRING(autoloadpwad3),
-    CONFIG_VARIABLE_STRING(autoloadpwad4),
-    CONFIG_VARIABLE_STRING(autoloadpwad5),
-    CONFIG_VARIABLE_STRING(autoloadpwad6),
-    CONFIG_VARIABLE_STRING(autoloadpwad7),
-    CONFIG_VARIABLE_STRING(autoloadpwad8),
-    CONFIG_VARIABLE_STRING(autoloadpwad9),
+    CONFIG_VARIABLE_STRING(autoload_global_pwad1),
+    CONFIG_VARIABLE_STRING(autoload_global_pwad2),
+    CONFIG_VARIABLE_STRING(autoload_global_pwad3),
+    CONFIG_VARIABLE_STRING(autoload_global_pwad4),
+
+    CONFIG_VARIABLE_STRING(autoload_doom1_pwad1),
+    CONFIG_VARIABLE_STRING(autoload_doom1_pwad2),
+    CONFIG_VARIABLE_STRING(autoload_doom1_pwad3),
+    CONFIG_VARIABLE_STRING(autoload_doom1_pwad4),
+
+    CONFIG_VARIABLE_STRING(autoload_doom2_pwad1),
+    CONFIG_VARIABLE_STRING(autoload_doom2_pwad2),
+    CONFIG_VARIABLE_STRING(autoload_doom2_pwad3),
+    CONFIG_VARIABLE_STRING(autoload_doom2_pwad4),
+
+    CONFIG_VARIABLE_STRING(autoload_plutonia_pwad1),
+    CONFIG_VARIABLE_STRING(autoload_plutonia_pwad2),
+    CONFIG_VARIABLE_STRING(autoload_plutonia_pwad3),
+    CONFIG_VARIABLE_STRING(autoload_plutonia_pwad4),
+
+    CONFIG_VARIABLE_STRING(autoload_tnt_pwad1),
+    CONFIG_VARIABLE_STRING(autoload_tnt_pwad2),
+    CONFIG_VARIABLE_STRING(autoload_tnt_pwad3),
+    CONFIG_VARIABLE_STRING(autoload_tnt_pwad4),
 
     //!
     // @game strife

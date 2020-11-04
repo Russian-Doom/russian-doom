@@ -90,14 +90,14 @@ int english_language = 0;
 #endif
 
 // -----------------------------------------------------------------------------
-// [JN] PWAD autoloading. Initially all 9 values are empty.
+// [JN] PWAD autoloading. Initially all 4 values are empty.
 // -----------------------------------------------------------------------------
 
-char *autoload_pwad[10] =
-{
-//   1   2   3   4   5   6   7   8   9
-    "", "", "", "", "", "", "", "", ""
-};
+char *autoloadglobalpwad[10]    = { "", "", "", "" };
+char *autoloaddoom1pwad[10]     = { "", "", "", "" };
+char *autoloaddoom2pwad[10]     = { "", "", "", "" };
+char *autoloadplutoniapwad[10]  = { "", "", "", "" };
+char *autoloadtntpwad[10]       = { "", "", "", "" };
 
 // -----------------------------------------------------------------------------
 // [JN] Default values
@@ -598,12 +598,25 @@ void D_BindVariables(void)
     // [JN] Support English/Russian language hot swapping
     M_BindIntVariable("english_language",       &english_language);
 
-    // [JN] PWAD autoloading. Note that we are starting from 1, not 0 value.
-    for (i = 1 ; i < 10 ; ++i)
+    // [JN] PWAD autoloading. Note that we are using variables 1..4, not 0...3.
+    for (i = 1 ; i < 5 ; ++i)
     {
-        static char pwad[16];
-        M_snprintf(pwad, sizeof(pwad), "autoloadpwad%i", i);
-        M_BindStringVariable(pwad, &autoload_pwad[i]);
+        static char pwad[24];
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_global_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloadglobalpwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_doom1_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloaddoom1pwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_doom2_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloaddoom2pwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_plutonia_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloadplutoniapwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_tnt_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloadtntpwad[i]);
     }
 
     // Rendering
@@ -1526,41 +1539,81 @@ void D_SetGameDescription(void)
         }
     }
 
-    // [JN] PWAD autoloading routine. Scan through all 9 available variables,
+    // [JN] PWAD autoloading routine. Scan through all 4 available variables,
     // and don't load empty ones. There are two special cases: SIGIL and NERVE.
     {
         int i;
 
-        for (i = 1 ; i < 10 ; ++i)
+        for (i = 1 ; i < 5 ; ++i)
         {
-            // [JN] Don't try to load empty lines!
-            if (strncasecmp(autoload_pwad[i], "", 16))
+            if (strncasecmp(autoloadglobalpwad[i], "", 16))
             {
-                W_MergeFile(autoload_pwad[i]);
-                printf(english_language ?
-                       " autoadding: %s\n" :
-                       " автодобавление: %s\n", autoload_pwad[i]);
+                W_MergeFile(autoloadglobalpwad[i]);
+                printf(english_language ? 
+                      " autoloading: %s\n" : " автозагрузка: %s\n",
+                        autoloadglobalpwad[i]);
+            }
 
-                // [JN] Check for SIGIL (main) autoloading
-                if (M_StrCaseStr(autoload_pwad[i],"sigil.wad")
-                ||  M_StrCaseStr(autoload_pwad[i],"sigil_v1_2.wad")
-                ||  M_StrCaseStr(autoload_pwad[i],"sigil_v1_21.wad"))
+            if (logical_gamemission == doom)
+            {
+                if (strncasecmp(autoloaddoom1pwad[i], "", 16))
                 {
-                    D_RD_LoadSigilAssets(false);
+                    W_MergeFile(autoloaddoom1pwad[i]);
+                    printf(english_language ?
+                           " autoloading: %s\n" : " автозагрузка: %s\n",
+                           autoloaddoom1pwad[i]);
+
+                    // [JN] Check for SIGIL (main) autoloading
+                    if (M_StrCaseStr(autoloaddoom1pwad[i],"sigil.wad")
+                    ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_v1_2.wad")
+                    ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_v1_21.wad"))
+                    {
+                        D_RD_LoadSigilAssets(false);
+                    }
+
+                    // [JN] Check for SIGIL (compat) autoloading
+                    if (M_StrCaseStr(autoloaddoom1pwad[i],"sigil_compat.wad")
+                    ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_compat_v1_2.wad")
+                    ||  M_StrCaseStr(autoloaddoom1pwad[i],"sigil_compat_v1_21.wad"))
+                    {
+                        D_RD_LoadSigilAssets(true);
+                    }
                 }
-
-                // [JN] Check for SIGIL (compat) autoloading
-                if (M_StrCaseStr(autoload_pwad[i],"sigil_compat.wad")
-                ||  M_StrCaseStr(autoload_pwad[i],"sigil_compat_v1_2.wad")
-                ||  M_StrCaseStr(autoload_pwad[i],"sigil_compat_v1_21.wad"))
+            }
+            else if (logical_gamemission == doom2)
+            {
+                if (strncasecmp(autoloaddoom2pwad[i], "", 16))
                 {
-                    D_RD_LoadSigilAssets(true);
+                    W_MergeFile(autoloaddoom2pwad[i]);
+                    printf(english_language ?
+                           " autoloading: %s\n" : " автозагрузка: %s\n",
+                           autoloaddoom2pwad[i]);
+
+                    // [JN] Check for No Rest for Living autoloading
+                    if (M_StrCaseStr(autoloaddoom2pwad[i],"nerve.wad"))
+                    {
+                        D_RD_LoadNerveAssets();
+                    }
                 }
-
-                // [JN] Check for No Rest for Living autoloading
-                if (M_StrCaseStr(autoload_pwad[i],"nerve.wad"))
+            }
+            else if (logical_gamemission == pack_plut)
+            {
+                if (strncasecmp(autoloadplutoniapwad[i], "", 16))
                 {
-                    D_RD_LoadNerveAssets();
+                    W_MergeFile(autoloadplutoniapwad[i]);
+                    printf(english_language ?
+                           " autoloading: %s\n" : " автозагрузка: %s\n",
+                           autoloadplutoniapwad[i]);
+                }
+            }
+            else if (logical_gamemission == pack_tnt)
+            {
+                if (strncasecmp(autoloadtntpwad[i], "", 16))
+                {
+                    W_MergeFile(autoloadtntpwad[i]);
+                    printf(english_language ?
+                           " autoadding: %s\n" : " автодобавление: %s\n",
+                           autoloadtntpwad[i]);
                 }
             }
         }
@@ -1948,8 +2001,8 @@ static boolean D_AddFile(char *filename)
     wad_file_t *handle;
 
     printf(english_language ?
-           " adding: %s\n" :
-           " добавление: %s\n",
+           " loading: %s\n" :
+           " загрузка: %s\n",
            filename);
     handle = W_AddFile(filename);
 
