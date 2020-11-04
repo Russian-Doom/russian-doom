@@ -1546,7 +1546,19 @@ void D_SetGameDescription(void)
 
         for (i = 1 ; i < 5 ; ++i)
         {
-            if (strncasecmp(autoloadglobalpwad[i], "", 16))
+            // [JN] If autoloads have not been set, initialize with defaults.
+            if (autoloadglobalpwad[i] == NULL)
+                autoloadglobalpwad[i] = "";
+            if (autoloaddoom1pwad[i] == NULL)
+                autoloaddoom1pwad[i] = "";
+            if (autoloaddoom2pwad[i] == NULL)
+                autoloaddoom2pwad[i] = "";
+            if (autoloadplutoniapwad[i] == NULL)
+                autoloadplutoniapwad[i] = "";
+            if (autoloadtntpwad[i] == NULL)
+                autoloadtntpwad[i] = "";
+
+            if (strcmp(autoloadglobalpwad[i], ""))
             {
                 W_MergeFile(autoloadglobalpwad[i]);
                 printf(english_language ? 
@@ -1556,7 +1568,7 @@ void D_SetGameDescription(void)
 
             if (logical_gamemission == doom)
             {
-                if (strncasecmp(autoloaddoom1pwad[i], "", 16))
+                if (strcmp(autoloaddoom1pwad[i], ""))
                 {
                     W_MergeFile(autoloaddoom1pwad[i]);
                     printf(english_language ?
@@ -1582,7 +1594,7 @@ void D_SetGameDescription(void)
             }
             else if (logical_gamemission == doom2)
             {
-                if (strncasecmp(autoloaddoom2pwad[i], "", 16))
+                if (strcmp(autoloaddoom2pwad[i], ""))
                 {
                     W_MergeFile(autoloaddoom2pwad[i]);
                     printf(english_language ?
@@ -1598,7 +1610,7 @@ void D_SetGameDescription(void)
             }
             else if (logical_gamemission == pack_plut)
             {
-                if (strncasecmp(autoloadplutoniapwad[i], "", 16))
+                if (strcmp(autoloadplutoniapwad[i], ""))
                 {
                     W_MergeFile(autoloadplutoniapwad[i]);
                     printf(english_language ?
@@ -1608,7 +1620,7 @@ void D_SetGameDescription(void)
             }
             else if (logical_gamemission == pack_tnt)
             {
-                if (strncasecmp(autoloadtntpwad[i], "", 16))
+                if (strcmp(autoloadtntpwad[i], ""))
                 {
                     W_MergeFile(autoloadtntpwad[i]);
                     printf(english_language ?
