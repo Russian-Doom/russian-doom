@@ -2045,7 +2045,7 @@ void A_BrainAwake (mobj_t* mo)
     }
 	
     // [JN] Don't break Boss sight sound by any others
-    S_StartSoundNoBreak (sfx_bossit);
+    S_StartSoundNoBreak(NULL, sfx_bossit);
     
     // [crispy] no spawn spots available
     if (numbraintargets == 0)
@@ -2084,7 +2084,7 @@ void A_BrainScream (mobj_t*	mo)
     }
 	
     // [JN] Don't break Boss death sound by any others
-    S_StartSoundNoBreak (sfx_bosdth);
+    S_StartSoundNoBreak(NULL, sfx_bosdth);
 }
 
 
@@ -2145,7 +2145,7 @@ void A_BrainSpit (mobj_t*	mo)
 	((targ->y - mo->y)/newmobj->momy) / newmobj->state->tics;
 
     // [JN] Don't break Boss spitting sound by any others
-    S_StartSoundNoBreak(sfx_bospit);
+    S_StartSoundNoBreak(NULL, sfx_bospit);
 }
 
 

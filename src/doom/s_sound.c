@@ -681,21 +681,43 @@ void S_StartSound(void *origin_p, int sfx_id)
 // Used by Icon of Sin for preventing it's sounds
 // being breaked by player's "oof" and few others. 
 //
-void S_StartSoundNoBreak(int sfx_id)
+void S_StartSoundNoBreak(void *origin_p, int sfx_id)
 {
-    if (snd_sfxdevice == 1)
+    sfxinfo_t *sfx = &S_sfx[sfx_id];
+    mobj_t *origin = (mobj_t *) origin_p;
+
+
+    // [crispy] make non-fatal, consider zero volume
+    if (sfx_id == sfx_None || !snd_SfxVolume)
     {
-        // [JN] TODO - not working with PC Speaker,
-        // use standard sfx playing function.
-        return S_StartSound(NULL, sfx_id);
+        return;
     }
 
-    channels[snd_channels_rd].handle = 
-        I_StartSound(&S_sfx[sfx_id],    // Sfx id to play
-                      snd_channels_rd,  // Use the last available channel
-                      snd_SfxVolume,    // Play with maximum available volume
-                      NORM_SEP,         // Don't use stereo separation (128)
-                      NORM_PITCH);      // Don't use pitch (127)
+    // [JN] If bogus sound #, just don't play it.
+    if (sfx_id < 1 || sfx_id > NUMSFX)
+    {
+        return;
+    }
+
+    // kill old sound
+    S_StopSound(origin);
+
+    // increase the usefulness
+    if (sfx->usefulness++ < 0)
+    {
+        sfx->usefulness = 1;
+    }
+
+    if (sfx->lumpnum < 0)
+    {
+        sfx->lumpnum = I_GetSfxLumpNum(sfx);
+    }
+
+    channels[snd_channels_rd].handle = I_StartSound(sfx, 
+                                                    snd_channels_rd,    // Use the last available channel
+                                                    snd_SfxVolume,      // Play with maximum available volume
+                                                    NORM_SEP,           // Don't use stereo separation (128)
+                                                    NORM_PITCH);        // Don't use pitch (127)
 }
 
 void S_StartSoundOnce (void *origin_p, int sfx_id)
