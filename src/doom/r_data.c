@@ -1307,9 +1307,11 @@ void R_InitBrightmaps (void)
 //
 void R_InitData (void)
 {
-    R_InitTextures ();
-    printf (".");
+    // [JN] Moved R_InitFlats to the top, needed for 
+    // R_GenerateComposite ivoking while level loading.
     R_InitFlats ();
+    printf (".");
+    R_InitTextures ();
     printf (".");
     R_InitSpriteLumps ();
     printf (".");
@@ -1469,6 +1471,9 @@ void R_PrecacheLevel (void)
         {
             texture_t *texture = textures[i];
             int j = texture->patchcount;
+
+            // [crispy] precache composite textures
+            R_GenerateComposite(i);
 
             while (--j >= 0)
             W_CacheLumpNum(texture->patches[j].patch, PU_CACHE);
