@@ -238,31 +238,19 @@ void EV_StartLightStrobing(line_t*	line)
 //
 void EV_TurnTagLightsOff(line_t* line)
 {
-    int			i;
-    int			j;
-    int			min;
-    sector_t*		sector;
-    sector_t*		tsec;
-    line_t*		templine;
-	
-    sector = sectors;
-    
-    for (j = 0;j < numsectors; j++, sector++)
+    int j;
+
+    // [JN] killough 10/98: replaced inefficient search with fast search
+    for (j = -1 ; (j = P_FindSectorFromLineTag(line,j)) >= 0 ; )
     {
-	if (sector->tag == line->tag)
-	{
-	    min = sector->lightlevel;
-	    for (i = 0;i < sector->linecount; i++)
-	    {
-		templine = sector->lines[i];
-		tsec = getNextSector(templine,sector);
-		if (!tsec)
-		    continue;
-		if (tsec->lightlevel < min)
-		    min = tsec->lightlevel;
-	    }
-	    sector->lightlevel = min;
-	}
+        sector_t *sector = sectors + j, *tsec;
+        int i, min = sector->lightlevel;
+
+        // find min neighbor light level
+        for (i = 0 ; i < sector->linecount ; i++)
+        if ((tsec = getNextSector(sector->lines[i], sector)) && tsec->lightlevel < min)
+        min = tsec->lightlevel;
+        sector->lightlevel = min;
     }
 }
 
