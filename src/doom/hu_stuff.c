@@ -130,7 +130,10 @@ static      hu_textline_t w_kills;
 static      hu_textline_t w_items;
 static      hu_textline_t w_scrts;
 static      hu_textline_t w_skill;
+static      hu_textline_t w_ltime_title;
 static      hu_textline_t w_ltime;
+static      hu_textline_t w_ttime_title;
+static      hu_textline_t w_ttime;
 static      hu_textline_t w_coord_x;
 static      hu_textline_t w_coord_y;
 static      hu_textline_t w_coord_z;
@@ -808,28 +811,43 @@ void HU_Start(void)
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
-    HUlib_initTextLine(&w_ltime,
+    HUlib_initTextLine(&w_ltime_title,
 		       HU_TITLEX, (HU_MSGY+1) + 6 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
+    HUlib_initTextLine(&w_ltime,
+		       HU_TITLEX, (HU_MSGY+1) + 7 * 8,
+		       english_language ? hu_font : hu_font_small_rus,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_ttime_title,
+		       HU_TITLEX, (HU_MSGY+1) + 9 * 8,
+		       english_language ? hu_font : hu_font_small_rus,
+		       HU_FONTSTART);
+
+    HUlib_initTextLine(&w_ttime,
+		       HU_TITLEX, (HU_MSGY+1) + 10 * 8,
+		       english_language ? hu_font : hu_font_small_rus,
+		       HU_FONTSTART);
+
     HUlib_initTextLine(&w_coord_x,
-		       HU_TITLEX, (HU_MSGY+1) + 8 * 8,
+		       HU_TITLEX, (HU_MSGY+1) + 12 * 8,
 		       hu_font,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_coord_y,
-		       HU_TITLEX, (HU_MSGY+1) + 9 * 8,
+		       HU_TITLEX, (HU_MSGY+1) + 13 * 8,
 		       hu_font,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_coord_z,
-		       HU_TITLEX, (HU_MSGY+1) + 10 * 8,
+		       HU_TITLEX, (HU_MSGY+1) + 14 * 8,
 		       hu_font,
 		       HU_FONTSTART);
 
     HUlib_initTextLine(&w_ang,
-		       HU_TITLEX, (HU_MSGY+1) + 11 * 8,
+		       HU_TITLEX, (HU_MSGY+1) + 15 * 8,
 		       english_language ? hu_font : hu_font_small_rus,
 		       HU_FONTSTART);
 
@@ -927,6 +945,7 @@ void HU_Drawer(void)
     {
         static char str[32], *s;
         int time = leveltime / TICRATE;
+        int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
         int extrakills = players[consoleplayer].killcount - totalkills;
 
         HUlib_drawTextLineUncolored(&w_title, false);
@@ -982,14 +1001,44 @@ void HU_Drawer(void)
             while (*s)
                 HUlib_addCharToTextLine(&w_skill, *(s++));
             HUlib_drawTextLineUncolored(&w_skill, false);
+        }
 
-            // [JN] Time
+        // [JN] Level time
+        if (automap_level_time && !vanillaparm)
+        {
+            sprintf(str, english_language ?
+                         "Level" : "ehjdtym"); // Уровень
+            HUlib_clearTextLine(&w_ltime_title);
+            s = str;
+            while (*s)
+                HUlib_addCharToTextLine(&w_ltime_title, *(s++));
+            HUlib_drawTextLineUncolored(&w_ltime_title, false);
+
             sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
             HUlib_clearTextLine(&w_ltime);
             s = str;
             while (*s)
                 HUlib_addCharToTextLine(&w_ltime, *(s++));
             HUlib_drawTextLineUncolored(&w_ltime, false);
+        }
+
+        // [JN] Total time
+        if (automap_total_time && !vanillaparm)
+        {
+            sprintf(str, english_language ?
+                         "Total" : "j,ott"); // Общее
+            HUlib_clearTextLine(&w_ttime_title);
+            s = str;
+            while (*s)
+                HUlib_addCharToTextLine(&w_ttime_title, *(s++));
+            HUlib_drawTextLineUncolored(&w_ttime_title, false);
+
+            sprintf(str, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+            HUlib_clearTextLine(&w_ttime);
+            s = str;
+            while (*s)
+                HUlib_addCharToTextLine(&w_ttime, *(s++));
+            HUlib_drawTextLineUncolored(&w_ttime, false);
         }
 
         // [JN] Player coords

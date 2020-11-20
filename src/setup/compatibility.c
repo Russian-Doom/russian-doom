@@ -39,6 +39,8 @@ int draw_shadowed_text = 1;
 int automap_color = 0;
 int automap_antialias = 1;
 int automap_stats = 1;
+int automap_level_time = 1;
+int automap_total_time = 0;
 int automap_coords = 0;
 int automap_overlay = 0;
 int automap_rotate = 0;
@@ -324,6 +326,8 @@ void BindCompatibilityVariables(void)
     // Automap
     M_BindIntVariable("automap_color",          &automap_color);
     M_BindIntVariable("automap_stats",          &automap_stats);
+    M_BindIntVariable("automap_level_time",     &automap_level_time);
+    M_BindIntVariable("automap_total_time",     &automap_total_time);
     M_BindIntVariable("automap_coords",         &automap_coords);
     M_BindIntVariable("automap_overlay",        &automap_overlay);
     M_BindIntVariable("automap_rotate",         &automap_rotate);

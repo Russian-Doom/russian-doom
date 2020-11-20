@@ -135,6 +135,8 @@ static void SensibleDefaults(void)
     automap_color = 0;
     automap_antialias = 1;
     automap_stats = 1;
+    automap_level_time = 1;
+    automap_total_time = 0;
     automap_coords = 0;
     automap_follow = 1;
     automap_overlay = 0;

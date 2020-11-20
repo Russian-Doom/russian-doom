@@ -236,6 +236,8 @@ void M_RD_Draw_AutomapSettings(void);
 void M_RD_Change_AutomapColor(int choice);
 void M_RD_Change_AutomapAntialias(int choice);
 void M_RD_Change_AutomapStats(int choice);
+void M_RD_Change_AutomapLevelTime(int choice);
+void M_RD_Change_AutomapTotalTime(int choice);
 void M_RD_Change_AutomapCoords(int choice);
 void M_RD_Change_AutomapOverlay(int choice);
 void M_RD_Change_AutomapRotate(int choice);
@@ -362,7 +364,6 @@ void M_RD_Change_ExitSfx(int choice);
 void M_RD_Change_CrushingSfx(int choice);
 void M_RD_Change_BlazingSfx(int choice);
 void M_RD_Change_AlertSfx(int choice);
-void M_RD_Change_AutoMapStats(int choice);
 void M_RD_Change_SecretNotify(int choice);
 void M_RD_Change_NegativeHealth(int choice);
 void M_RD_Change_InfraGreenVisor(int choice);
@@ -1706,6 +1707,8 @@ enum
     rd_automap_colors,
     rd_automap_antialias,
     rd_automap_stats,
+    rd_automap_l_time,
+    rd_automap_t_time,
     rd_automap_coords,
     rd_automap_overlay,
     rd_automap_rotate,
@@ -1724,6 +1727,8 @@ menuitem_t RD_Automap_Menu[]=
     {2, "color scheme:",      M_RD_Change_AutomapColor,     'c'},
     {2, "line antialiasing:", M_RD_Change_AutomapAntialias, 'l'},
     {2, "level stats:",       M_RD_Change_AutomapStats,     'l'},
+    {2, "level time:",        M_RD_Change_AutomapLevelTime, 'l'},
+    {2, "total time:",        M_RD_Change_AutomapTotalTime, 't'},
     {2, "player coords:",     M_RD_Change_AutomapCoords,    'p'},
     {2, "overlay mode:",      M_RD_Change_AutomapOverlay,   'o'},
     {2, "rotate mode:",       M_RD_Change_AutomapRotate,    'r'},
@@ -1752,6 +1757,8 @@ menuitem_t RD_Automap_Menu_Rus[]=
     {2, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,     'w'}, // Цветовая схема:
     {2, "cukf;bdfybt kbybq:", M_RD_Change_AutomapAntialias, 'c'}, // Сглаживание линий:
     {2, "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     'c'}, // Статистика уровня:
+    {2, "dhtvz ehjdyz:",      M_RD_Change_AutomapLevelTime, 'l'}, // Время уровня:
+    {2, "j,ott dhtvz: d",       M_RD_Change_AutomapTotalTime, 't'}, // Общее время:
     {2, "rjjhlbyfns buhjrf:", M_RD_Change_AutomapCoords,    'r'}, // Координаты игрока:
     {2, "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay,   'h'}, // Режим наложения:
     {2, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    'h'}, // Режим вращения:
@@ -4221,23 +4228,29 @@ void M_RD_Draw_AutomapSettings(void)
         // Level stats
         M_WriteTextSmall_ENG(159 + wide_delta, 45, automap_stats ? "on" : "off");
 
+        // Level time
+        M_WriteTextSmall_ENG(150 + wide_delta, 55, automap_level_time ? "on" : "off");
+
+        // Total time
+        M_WriteTextSmall_ENG(151 + wide_delta, 65, automap_total_time ? "on" : "off");
+
         // Player coords
-        M_WriteTextSmall_ENG(177 + wide_delta, 55, automap_coords ? "on" : "off");
+        M_WriteTextSmall_ENG(177 + wide_delta, 75, automap_coords ? "on" : "off");
         
         // Overlay mode
-        M_WriteTextSmall_ENG(170 + wide_delta, 65, automap_overlay ? "on" : "off");
+        M_WriteTextSmall_ENG(170 + wide_delta, 85, automap_overlay ? "on" : "off");
 
         // Rotate mode
-        M_WriteTextSmall_ENG(163 + wide_delta, 75, automap_rotate ? "on" : "off");
+        M_WriteTextSmall_ENG(163 + wide_delta, 95, automap_rotate ? "on" : "off");
 
         // Follow mode
-        M_WriteTextSmall_ENG(164 + wide_delta, 85, automap_follow ? "on" : "off");
+        M_WriteTextSmall_ENG(164 + wide_delta, 105, automap_follow ? "on" : "off");
 
         // Grid
-        M_WriteTextSmall_ENG(106 + wide_delta, 95, automap_grid ? "on" : "off");
+        M_WriteTextSmall_ENG(106 + wide_delta, 115, automap_grid ? "on" : "off");
 
         // Grid size
-        M_WriteTextSmall_ENG(136 + wide_delta, 105, num);
+        M_WriteTextSmall_ENG(136 + wide_delta, 125, num);
     }
     else
     {
@@ -4264,23 +4277,29 @@ void M_RD_Draw_AutomapSettings(void)
         // Статистика уровня
         M_WriteTextSmall_RUS(210 + wide_delta, 45, automap_stats ? "drk" : "dsrk");
 
+        // Время уровня
+        M_WriteTextSmall_RUS(171 + wide_delta, 55, automap_level_time ? "drk" : "dsrk");
+
+        // Общее время
+        M_WriteTextSmall_RUS(166 + wide_delta, 65, automap_total_time ? "drk" : "dsrk");
+
         // Координаты игрока
-        M_WriteTextSmall_RUS(213 + wide_delta, 55, automap_coords ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(213 + wide_delta, 75, automap_coords ? "drk" : "dsrk");
 
         // Режим наложения
-        M_WriteTextSmall_RUS(203 + wide_delta, 65, automap_overlay ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(203 + wide_delta, 85, automap_overlay ? "drk" : "dsrk");
 
         // Режим вращения
-        M_WriteTextSmall_RUS(194 + wide_delta, 75, automap_rotate ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(194 + wide_delta, 95, automap_rotate ? "drk" : "dsrk");
 
         // Режим следования
-        M_WriteTextSmall_RUS(208 + wide_delta, 85, automap_follow ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(208 + wide_delta, 105, automap_follow ? "drk" : "dsrk");
 
         // Сетка
-        M_WriteTextSmall_RUS(118 + wide_delta, 95, automap_grid ? "drk" : "dsrk");
+        M_WriteTextSmall_RUS(118 + wide_delta, 115, automap_grid ? "drk" : "dsrk");
 
         // Размер сетки
-        M_WriteTextSmall_ENG(171 + wide_delta, 105, num);
+        M_WriteTextSmall_ENG(171 + wide_delta, 125, num);
     }
 }
 
@@ -4319,6 +4338,16 @@ void M_RD_Change_AutomapOverlay(int choice)
 void M_RD_Change_AutomapStats(int choice)
 {
     automap_stats ^= 1;
+}
+
+void M_RD_Change_AutomapLevelTime(int choice)
+{
+    automap_level_time ^= 1;
+}
+
+void M_RD_Change_AutomapTotalTime(int choice)
+{
+    automap_total_time ^= 1;
 }
 
 void M_RD_Change_AutomapCoords(int choice)
@@ -9869,6 +9898,8 @@ void M_RD_BackToDefaults_Recommended(int choice)
     automap_color     = 0;
     automap_antialias = 1;
     automap_stats     = 1;
+    automap_level_time = 1;
+    automap_total_time = 0;
     automap_coords    = 0;
     automap_overlay   = 0;
     automap_rotate    = 0;
@@ -10014,6 +10045,8 @@ void M_RD_BackToDefaults_Original(int choice)
     automap_color     = 0;
     automap_antialias = 0;
     automap_stats     = 0;
+    automap_level_time = 0;
+    automap_total_time = 0;
     automap_coords    = 0;
     automap_overlay   = 0;
     automap_rotate    = 0;
