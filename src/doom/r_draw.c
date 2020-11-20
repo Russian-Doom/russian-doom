@@ -114,12 +114,16 @@ extern int Crispy_Random(void);
 // Thus a special case loop for very fast rendering can
 //  be used. It has also been used with Wolfenstein 3D.
 // 
+// [crispy] replace R_DrawColumn() with Lee Killough's implementation
+// found in MBF to fix Tutti-Frutti, taken from mbfsrc/R_DRAW.C:99-1979
+
 void R_DrawColumn (void) 
 { 
-    int                 count;
-    register byte       *dest;     // killough
-    register fixed_t    frac;      // killough
-    fixed_t             fracstep;
+    int      count;
+    int      heightmask = dc_texheight-1;
+    byte    *dest;
+    fixed_t  frac;
+    fixed_t  fracstep;
 
     count = dc_yh - dc_yl + 1;
 
@@ -139,64 +143,51 @@ void R_DrawColumn (void)
     // Framebuffer destination address.
     // Use ylookup LUT to avoid multiply with ScreenWidth.
     // Use columnofs LUT for subwindows?
-
     dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
 
     // Determine scaling, which is the only mapping to be done.
-
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     // Inner loop that does the actual texture mapping,
     //  e.g. a DDA-lile scaling.
-    // This is as fast as it gets.       (Yeah, right!!! -- killough)
-    //
-    // killough 2/1/98: more performance tuning
+    // This is as fast as it gets.
 
+    if (dc_texheight & heightmask)   // not a power of 2 -- killough
     {
-        register const byte *source = dc_source;
-        register const lighttable_t *colormap = dc_colormap;
-        register int heightmask = dc_texheight-1;
+        heightmask++;
+        heightmask <<= FRACBITS;
 
-        if (dc_texheight & heightmask)   // not a power of 2 -- killough
-        {
-            heightmask++;
-            heightmask <<= FRACBITS;
-
-            if (frac < 0)
-            while ((frac += heightmask) < 0);
-            else
-            while (frac >= heightmask)
-            frac -= heightmask;
-
-            do
-            {
-                // Re-map color indices from wall texture column
-                //  using a lighting/special effects LUT.
-
-                // heightmask is the Tutti-Frutti fix -- killough
-
-                *dest = colormap[source[frac>>FRACBITS]];
-                dest += screenwidth;                     // killough 11/98
-                if ((frac += fracstep) >= heightmask)
-                frac -= heightmask;
-            }
-            while (--count);
-        }
+        if (frac < 0)
+        while ((frac += heightmask) < 0);
         else
+        while (frac >= heightmask)
+        frac -= heightmask;
+
+        do
         {
-            while ((count-=2)>=0)   // texture height is a power of 2 -- killough
-            {
-                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
-                dest += screenwidth;   // killough 11/98
-                frac += fracstep;
-                *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
-                dest += screenwidth;   // killough 11/98
-                frac += fracstep;
-            }
-            if (count & 1)
-            *dest = colormap[source[(frac>>FRACBITS) & heightmask]];
+            // Re-map color indices from wall texture column
+            //  using a lighting/special effects LUT.
+            *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+            dest += screenwidth;
+            if ((frac += fracstep) >= heightmask)
+            frac -= heightmask;
         }
+        while (--count);
+    }
+    else    // texture height is a power of 2 -- killough
+    {
+        while ((count-=2)>=0)
+        {
+            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+            dest += screenwidth;
+            frac += fracstep;
+            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+            dest += screenwidth;
+            frac += fracstep;
+        }
+        if (count & 1)
+        *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
     }
 }
 
