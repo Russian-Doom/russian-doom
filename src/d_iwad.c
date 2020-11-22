@@ -730,6 +730,11 @@ char *D_FindWADByName(char *name)
     probe = M_FileCaseExists(name);
     if (probe != NULL)
     {
+        // [JN] Normalize slashes.
+        // Allows to properly load WADs with slashes (/), 
+        // instead of backslashes (\) in given path.
+        M_NormalizeSlashes(probe);
+
         return probe;
     }
 
