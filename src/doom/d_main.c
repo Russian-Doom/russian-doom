@@ -1545,6 +1545,8 @@ void D_SetGameDescription(void)
 
     // [JN] PWAD autoloading routine. Scan through all 4 available variables,
     // and don't load empty ones. There are two special cases: SIGIL and NERVE.
+    // P.S. You cannot use autoload with the shareware version. Register!
+    if (gamemode != shareware)
     {
         int i;
 
