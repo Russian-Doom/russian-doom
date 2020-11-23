@@ -200,13 +200,14 @@ boolean W_ParseCommandLine(void)
     // [JN] Параметр "-file" перенесен в "D_SetGameDescription":
     // Doom и Heretic: d_main.c / Heretic: h2_main.c
 
-    /*
+    
     p = M_CheckParmWithArgs ("-file", 1);
     if (p)
     {
 	// the parms after p are wadfile/lump names,
 	// until end of parms or another - preceded parm
 	modifiedgame = true;            // homebrew levels
+    /*
 	while (++p != myargc && myargv[p][0] != '-')
         {
             char *filename;
@@ -216,8 +217,8 @@ boolean W_ParseCommandLine(void)
             printf(" добавление: %s\n", filename);	// " adding %s\n"
 	    W_MergeFile(filename);
         }
-    }
     */
+    }
 
 //    W_PrintDirectory();
 
