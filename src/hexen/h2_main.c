@@ -53,7 +53,7 @@
 #include "w_main.h"
 #include "w_merge.h"
 #include "r_bmaps.h"
-#include "rushexen.h"
+#include "rd_rushexen.h"
 
 // MACROS ------------------------------------------------------------------
 

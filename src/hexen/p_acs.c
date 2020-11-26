@@ -27,7 +27,7 @@
 #include "i_system.h"
 #include "p_local.h"
 #include "jn.h"
-#include "rushexen.h"
+#include "rd_rushexen.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -46,6 +46,7 @@
 #define S_DROP ACScript->stackPtr--
 #define S_POP ACScript->stack[--ACScript->stackPtr]
 #define S_PUSH(x) ACScript->stack[ACScript->stackPtr++] = x
+#define CMD_EQ 19 //0 args
 
 // TYPES -------------------------------------------------------------------
 

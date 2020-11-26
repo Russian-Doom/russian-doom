@@ -29,7 +29,7 @@
 #include "i_videohr.h"
 #include "s_sound.h"
 #include "st_start.h"
-#include "rushexen.h"
+#include "rd_rushexen.h"
 
 
 // MACROS ------------------------------------------------------------------

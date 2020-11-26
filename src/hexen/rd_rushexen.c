@@ -14,12 +14,26 @@
 
 
 
-#include "rushexen.h"
+#include "rd_rushexen.h"
 #include "i_swap.h"
 
-#define US "YTJ;BLFYYFZ CNHJRF! 'NJ <FU!" // менФхдюммюъ ярпнйю! Щрн аюц!
+#define US "YTJ;BLFYYFZ CNHJRF! 'NJ <FU!" // п²п∙п·п╤п≤п■п░п²п²п░п╞ п║п╒п═п·п п░! я█п╒п· п▒п░п⌠!
 
 #define RECORD(a, c, v) {a, (int32_t) SDL_SwapLE32(c), (int32_t) SDL_SwapLE32(v)}
+#define CMD_NOP 0 // 0 args
+#define CMD_LSPEC3DIRECT 11 // 4 args
+#define CMD_DELAYDIRECT 56 //1 args
+#define LAST_EXTERNAL_CMD 101
+#define CMD_TABLE_DELAY_DIRECT (LAST_EXTERNAL_CMD + 1) // 1 arg
+#define CMD_PRINT_BOLD_ALWAYS_WITH_TABLE_DELAY_DIRECT (LAST_EXTERNAL_CMD + 2) // 2 args
+#define CMD_PRINT_BOLD_RUSSIAN_DIRECT (LAST_EXTERNAL_CMD + 3) // 1 arg
+#define CMD_PRINT_NUMBER_OR_PRINT_STRING_DIRECT (LAST_EXTERNAL_CMD + 4) // 1 arg
+#define CMD_PRINT_STRING_DIRECT_OR_PRINT_NUMBER (LAST_EXTERNAL_CMD + 5) // 1 arg
+#define CMD_PRINT_ALWAYS_WITH_TABLE_DELAY_DIRECT (LAST_EXTERNAL_CMD + 6) // 2 args
+#define CMD_PRINT_RUSSIAN_DIRECT (LAST_EXTERNAL_CMD + 7) // 1 arg
+#define CMD_PRINT_SCRIPTVAR_AND_STRING_ENGLISH_DIRECT (LAST_EXTERNAL_CMD + 8) // 2 arg
+#define CMD_PRINT_MAPVAR_AND_STRING_ENGLISH_DIRECT (LAST_EXTERNAL_CMD + 9) // 2 arg
+#define CMD_GT2EQ (LAST_EXTERNAL_CMD + 10) // 0 arg
 
 const char* Hexen_Map_01_StringTable[] = {
     US,
@@ -27,7 +41,7 @@ const char* Hexen_Map_01_StringTable[] = {
     US,
     US,
     US,
-    "LDTHM PF,KJRBHJDFYF", // дбепэ гюАкнйхпнбюмю
+    "LDTHM PF,KJRBHJDFYF", // п■п▓п∙п═п╛ п≈п░п╠п⌡п·п п≤п═п·п▓п░п²п░
     US,
     US,
     US,
@@ -45,18 +59,18 @@ const char* Hexen_Map_02_StringTable[] = {
     US,
     US,
     US,
-    "GHBDTNCNDE.< CVTHNYSQ", // опхберярбсЧа ялепрмши
+    "GHBDTNCNDE.< CVTHNYSQ", // п÷п═п≤п▓п∙п╒п║п╒п▓пёя▌п▒ п║п°п∙п═п╒п²п╚п≥
     US,
-    "UJNJD KB NS EVTHTNM?", // цнрнб кх рш слеперэ,
-    US,
-    US,
+    "UJNJD KB NS EVTHTNM?", // п⌠п·п╒п·п▓ п⌡п≤ п╒п╚ пёп°п∙п═п∙п╒п╛,
     US,
     US,
     US,
     US,
     US,
     US,
-    "LDTHM JNRHSNF E CNHF;F KMLF", // дбепэ нрйпшрю с ярпюФю кэдю
+    US,
+    US,
+    "LDTHM JNRHSNF E CNHF;F KMLF", // п■п▓п∙п═п╛ п·п╒п п═п╚п╒п░ пё п║п╒п═п░п╤п░ п⌡п╛п■п░
     US,
     US,
     US
@@ -75,7 +89,7 @@ const char* Hexen_Map_03_StringTable[] = {
     US,
     US,
     US,
-    "CTQXFC 'NJN GENM PFRHSN", // яеивюя Щрнр осрэ гюйпшр
+    "CTQXFC 'NJN GENM PFRHSN", // п║п∙п≥п╖п░п║ я█п╒п·п╒ п÷пёп╒п╛ п≈п░п п═п╚п╒
     US,
     US
 };
@@ -90,10 +104,10 @@ const char* Hexen_Map_04_StringTable[] = {
     US,
     US,
     US,
-    "GJKJDBYF UJKJDJKJVRB HFPUFLFYF>>>", // онкнбхмю цнкнбнкнлйх пюгцюдюмюччч
-    ">>>YF CTVB GJHNFKF[", // чччмю яелх онпрюкюУ
-    "NHTNM UJKJDJKJVRB HFPUFLFYF>>>", // рперэ цнкнбнкнлйх пюгцюдюмюччч
-    "KTCNYBWF DJPLDBUYTNCZ YF CTVB GJHNFKF[", // кеярмхжю бнгдбхцмеряъ мю яелх онпрюкюУ
+    "GJKJDBYF UJKJDJKJVRB HFPUFLFYF>>>", // п÷п·п⌡п·п▓п≤п²п░ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░п╝п╝п╝
+    ">>>YF CTVB GJHNFKF[", // п╝п╝п╝п²п░ п║п∙п°п≤ п÷п·п═п╒п░п⌡п░я┘
+    "NHTNM UJKJDJKJVRB HFPUFLFYF>>>", // п╒п═п∙п╒п╛ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░п╝п╝п╝
+    "KTCNYBWF DJPLDBUYTNCZ YF CTVB GJHNFKF[", // п⌡п∙п║п╒п²п≤п╕п░ п▓п·п≈п■п▓п≤п⌠п²п∙п╒п║п╞ п²п░ п║п∙п°п≤ п÷п·п═п╒п░п⌡п░я┘
     US,
     US,
     US,
@@ -110,11 +124,11 @@ const char* Hexen_Map_05_StringTable[] = {
     US,
     US,
     US,
-    "NHTNM UJKJDJKJVRB HFPUFLFYF>>>", // рперэ цнкнбнкнлйх пюгцюдюмюччч
-    ">>>YF CTVB GJHNFKF[", // чччмю яелх онпрюкюУ
-    "KTCNYBWF DJPLDBUYTNCZ YF CTVB GJHNFKF[", // кеярмхжю бнгдбхцмеряъ мю яелх онпрюкюУ
-    "JCNFKCZ TOT JLBY GTHTRK.XFNTKM>>>", // нярюкяъ еые ндхм оепейкЧвюрекэччч
-    "RFVTYYFZ GHTUHFLF JNCNEGBN>>>", // йюлеммюъ опецпюдю нрярсохрччч
+    "NHTNM UJKJDJKJVRB HFPUFLFYF>>>", // п╒п═п∙п╒п╛ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░п╝п╝п╝
+    ">>>YF CTVB GJHNFKF[", // п╝п╝п╝п²п░ п║п∙п°п≤ п÷п·п═п╒п░п⌡п░я┘
+    "KTCNYBWF DJPLDBUYTNCZ YF CTVB GJHNFKF[", // п⌡п∙п║п╒п²п≤п╕п░ п▓п·п≈п■п▓п≤п⌠п²п∙п╒п║п╞ п²п░ п║п∙п°п≤ п÷п·п═п╒п░п⌡п░я┘
+    "JCNFKCZ TOT JLBY GTHTRK.XFNTKM>>>", // п·п║п╒п░п⌡п║п╞ п∙п╘п∙ п·п■п≤п² п÷п∙п═п∙п п⌡я▌п╖п░п╒п∙п⌡п╛п╝п╝п╝
+    "RFVTYYFZ GHTUHFLF JNCNEGBN>>>", // п п░п°п∙п²п²п░п╞ п÷п═п∙п⌠п═п░п■п░ п·п╒п║п╒пёп÷п≤п╒п╝п╝п╝
     US,
     US
 };
@@ -126,12 +140,12 @@ const char* Hexen_Map_08_StringTable[] = {
     US,
     US,
     US,
-    "JLYF ITCNFZ UJKJDJKJVRB HFPUFLFYF>>>", // ндмю ьеярюъ цнкнбнкнлйх пюгцюдюмюччч
-    ">>>D KTCE NTYTQ", // чччб кеяс ремеи
+    "JLYF ITCNFZ UJKJDJKJVRB HFPUFLFYF>>>", // п·п■п²п░ п╗п∙п║п╒п░п╞ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░п╝п╝п╝
+    ">>>D KTCE NTYTQ", // п╝п╝п╝п▓ п⌡п∙п║пё п╒п∙п²п∙п≥
     US,
     US,
-    "LDTHM PF,KJRBHJDFYF BPYENHB", // дбепэ гюАкнйхпнбюмю хгмсрпх
-    "CKSITY PDER JNRHSDF.OTQCZ LDTHB", // якшьем гбсй нрйпшбюЧыеияъ дбепх
+    "LDTHM PF,KJRBHJDFYF BPYENHB", // п■п▓п∙п═п╛ п≈п░п╠п⌡п·п п≤п═п·п▓п░п²п░ п≤п≈п²пёп╒п═п≤
+    "CKSITY PDER JNRHSDF.OTQCZ LDTHB", // п║п⌡п╚п╗п∙п² п≈п▓пёп  п·п╒п п═п╚п▓п░я▌п╘п∙п≥п║п╞ п■п▓п∙п═п≤
     US,
     US,
     US,
@@ -146,8 +160,8 @@ const char* Hexen_Map_09_StringTable[] = {
     US,
     US,
     US,
-    "JLYF ITCNFZ UJKJDJKJVRB HFPUFLFYF>>>", // ндмю ьеярюъ цнкнбнкнлйх пюгцюдюмюччч
-    ">>>D KTCE NTYTQ", // чччб кеяс ремеи
+    "JLYF ITCNFZ UJKJDJKJVRB HFPUFLFYF>>>", // п·п■п²п░ п╗п∙п║п╒п░п╞ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░п╝п╝п╝
+    ">>>D KTCE NTYTQ", // п╝п╝п╝п▓ п⌡п∙п║пё п╒п∙п²п∙п≥
     US,
     US,
     US
@@ -160,8 +174,8 @@ const char* Hexen_Map_10_StringTable[] = {
     US,
     US,
     US,
-    "JLYF ITCNFZ UJKJDJKJVRB HFPUFLFYF>>>", // ндмю ьеярюъ цнкнбнкнлйх пюгцюдюмюччч
-    ">>>D KTCE NTYTQ", // чччб кеяс ремеи
+    "JLYF ITCNFZ UJKJDJKJVRB HFPUFLFYF>>>", // п·п■п²п░ п╗п∙п║п╒п░п╞ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░п╝п╝п╝
+    ">>>D KTCE NTYTQ", // п╝п╝п╝п▓ п⌡п∙п║пё п╒п∙п²п∙п≥
     US,
     US,
     US,
@@ -169,14 +183,14 @@ const char* Hexen_Map_10_StringTable[] = {
 };
 
 const char* Hexen_Map_11_StringTable[] = {
-    "JCNFKJCM 'NNBYJD: ", // нярюкняэ Щррхмнбф 
-    "CKBIRJV LJKUJ< UJNJDMCZ R CVTHNB!", // якхьйнл днкцна цнрнбэяъ й ялепрх!
+    "JCNFKJCM 'NNBYJD: ", // п·п║п╒п░п⌡п·п║п╛ я█п╒п╒п≤п²п·п▓п√ 
+    "CKBIRJV LJKUJ< UJNJDMCZ R CVTHNB!", // п║п⌡п≤п╗п п·п° п■п·п⌡п⌠п·п▒ п⌠п·п╒п·п▓п╛п║п╞ п  п║п°п∙п═п╒п≤!
     US,
     US,
     US,
     US,
     US,
-    "LDTHM JNRHJTNCZ YF GJRBYENJQ PFCNFDT", // дбепэ нрйпнеряъ мю онйхмсрни гюярюбе
+    "LDTHM JNRHJTNCZ YF GJRBYENJQ PFCNFDT", // п■п▓п∙п═п╛ п·п╒п п═п·п∙п╒п║п╞ п²п░ п÷п·п п≤п²пёп╒п·п≥ п≈п░п║п╒п░п▓п∙
     US,
     US,
     US,
@@ -194,7 +208,7 @@ const char* Hexen_Map_12_StringTable[] = {
     US,
     US,
     US,
-    "CTQXFC 'NF LDTHM PFRHSNF", // яеивюя Щрю дбепэ гюйпшрю
+    "CTQXFC 'NF LDTHM PFRHSNF", // п║п∙п≥п╖п░п║ я█п╒п░ п■п▓п∙п═п╛ п≈п░п п═п╚п╒п░
     US,
     US,
     US
@@ -212,7 +226,7 @@ const char* Hexen_Map_13_StringTable[] = {
     US,
     US,
     US,
-    "VJB GHBCKE;YBRB XE.N NDJ. RHJDM< XTKJDTR", // лнх опхяксФмхйх всЧр рбнЧ йпнбэа векнбей
+    "VJB GHBCKE;YBRB XE.N NDJ. RHJDM< XTKJDTR", // п°п·п≤ п÷п═п≤п║п⌡пёп╤п²п≤п п≤ п╖пёя▌п╒ п╒п▓п·я▌ п п═п·п▓п╛п▒ п╖п∙п⌡п·п▓п∙п 
     US,
     US,
     US,
@@ -225,9 +239,9 @@ const char* Hexen_Map_13_StringTable[] = {
 };
 
 const char* Hexen_Map_21_StringTable[] = {
-    "GHJ[JL ,ELTN JNRHSN DJPKT DBCTKBWS", // опнУнд Асдер нрйпшр бнгке бхяекхжш
+    "GHJ[JL ,ELTN JNRHSN DJPKT DBCTKBWS", // п÷п═п·я┘п·п■ п╠пёп■п∙п╒ п·п╒п п═п╚п╒ п▓п·п≈п⌡п∙ п▓п≤п║п∙п⌡п≤п╕п╚
     US,
-    "LDTHM PF,KJRBHJDFYF BPYENHB", // дбепэ гюАкнйхпнбюмю хгмсрпх
+    "LDTHM PF,KJRBHJDFYF BPYENHB", // п■п▓п∙п═п╛ п≈п░п╠п⌡п·п п≤п═п·п▓п░п²п░ п≤п≈п²пёп╒п═п≤
     US,
     US,
     US,
@@ -238,7 +252,7 @@ const char* Hexen_Map_22_StringTable[] = {
     US,
     US,
     US,
-    "GKJOFLRF JGECNBKFCM D WTYNHFKMYJQ ,FIYT", // окныюдйю носярхкюяэ б жемрпюкэмни Аюьме
+    "GKJOFLRF JGECNBKFCM D WTYNHFKMYJQ ,FIYT", // п÷п⌡п·п╘п░п■п п░ п·п÷пёп║п╒п≤п⌡п░п║п╛ п▓ п╕п∙п²п╒п═п░п⌡п╛п²п·п≥ п╠п░п╗п²п∙
     US,
     US,
     US,
@@ -262,9 +276,9 @@ const char* Hexen_Map_22_StringTable[] = {
     US,
     US,
     US,
-    "NS CKBIRJV PFBUHFKCZ< CVTHNYSQ>>>", // рш якхьйнл гюхцпюкяъа ялепрмшиччч
+    "NS CKBIRJV PFBUHFKCZ< CVTHNYSQ>>>", // п╒п╚ п║п⌡п≤п╗п п·п° п≈п░п≤п⌠п═п░п⌡п║п╞п▒ п║п°п∙п═п╒п²п╚п≥п╝п╝п╝
     US,
-    "GHBIKJ DHTVZ PFDTHIBNM NDJ. GFHNB.", // опхькн бпелъ гюбепьхрэ рбнЧ оюпрхЧ
+    "GHBIKJ DHTVZ PFDTHIBNM NDJ. GFHNB.", // п÷п═п≤п╗п⌡п· п▓п═п∙п°п╞ п≈п░п▓п∙п═п╗п≤п╒п╛ п╒п▓п·я▌ п÷п░п═п╒п≤я▌
     US,
     US,
     US,
@@ -285,11 +299,11 @@ const char* Hexen_Map_23_StringTable[] = {
     US,
     US,
     US,
-    "BP CTDTHYJUJ PFKF LJYJCBNCZ PDER>>>", // хг яебепмнцн гюкю днмняхряъ гбсйччч
+    "BP CTDTHYJUJ PFKF LJYJCBNCZ PDER>>>", // п≤п≈ п║п∙п▓п∙п═п²п·п⌠п· п≈п░п⌡п░ п■п·п²п·п║п≤п╒п║п╞ п≈п▓пёп п╝п╝п╝
     US,
     US,
     US,
-    ">>>GJLYBVF.OTQCZ RFVTYYJQ RJKJYYS" // 14 : extra string : чччондмхлюЧыеияъ йюлеммни йнкнммш
+    ">>>GJLYBVF.OTQCZ RFVTYYJQ RJKJYYS" // 14 : extra string : п╝п╝п╝п÷п·п■п²п≤п°п░я▌п╘п∙п≥п║п╞ п п░п°п∙п²п²п·п≥ п п·п⌡п·п²п²п╚
 };
 
 const char* Hexen_Map_27_StringTable[] = {
@@ -301,17 +315,17 @@ const char* Hexen_Map_27_StringTable[] = {
     US,
     US,
     US,
-    "GHTRKJYBCM GHTLJ VYJQ<", // опейкнмхяэ опедн лмниа
+    "GHTRKJYBCM GHTLJ VYJQ<", // п÷п═п∙п п⌡п·п²п≤п║п╛ п÷п═п∙п■п· п°п²п·п≥п▒
     US,
-    "B< VJ;TN ,SNM< Z ,ELE VBKJCTHLTY", // ха лнФер Ашрэа ъ Асдс лхкняепдем
-    US,
-    US,
+    "B< VJ;TN ,SNM< Z ,ELE VBKJCTHLTY", // п≤п▒ п°п·п╤п∙п╒ п╠п╚п╒п╛п▒ п╞ п╠пёп■пё п°п≤п⌡п·п║п∙п═п■п∙п²
     US,
     US,
     US,
     US,
     US,
-    "F< VJ;TN ,SNM< B YTN" // 18 : extra string : юа лнФер Ашрэа х мер
+    US,
+    US,
+    "F< VJ;TN ,SNM< B YTN" // 18 : extra string : п░п▒ п°п·п╤п∙п╒ п╠п╚п╒п╛п▒ п≤ п²п∙п╒
 };
 
 const char* Hexen_Map_28_StringTable[] = {
@@ -321,8 +335,8 @@ const char* Hexen_Map_28_StringTable[] = {
     US,
     US,
     US,
-    "JLYF LTDZNFZ UJKJDJKJVRB HFPUFLFYF>>>", // ндмю дебърюъ цнкнбнкнлйх пюгцюдюмюччч
-    ">>>D CTVBYFHBB THTCBFH[F", // чччб яелхмюпхх епеяхюпУю
+    "JLYF LTDZNFZ UJKJDJKJVRB HFPUFLFYF>>>", // п·п■п²п░ п■п∙п▓п╞п╒п░п╞ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░п╝п╝п╝
+    ">>>D CTVBYFHBB THTCBFH[F", // п╝п╝п╝п▓ п║п∙п°п≤п²п░п═п≤п≤ п∙п═п∙п║п≤п░п═я┘п░
     US,
     US,
 };
@@ -334,8 +348,8 @@ const char* Hexen_Map_30_StringTable[] = {
     US,
     US,
     US,
-    "JLYF LTDZNFZ UJKJDJKJVRB HFPUFLFYF>>>", // ндмю дебърюъ цнкнбнкнлйх пюгцюдюмюччч
-    ">>>D CTVBYFHBB THTCBFH[F", // чччб яелхмюпхх епеяхюпУю
+    "JLYF LTDZNFZ UJKJDJKJVRB HFPUFLFYF>>>", // п·п■п²п░ п■п∙п▓п╞п╒п░п╞ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░п╝п╝п╝
+    ">>>D CTVBYFHBB THTCBFH[F", // п╝п╝п╝п▓ п║п∙п°п≤п²п░п═п≤п≤ п∙п═п∙п║п≤п░п═я┘п░
     US,
     US,
     US,
@@ -345,8 +359,8 @@ const char* Hexen_Map_30_StringTable[] = {
 
 const char* Hexen_Map_34_StringTable[] = {
     US,
-    "JLYF LTDZNFZ UJKJDJKJVRB HFPUFLFYF>>>", // ндмю дебърюъ цнкнбнкнлйх пюгцюдюмюччч
-    ">>>D CTVBYFHBB THTCBFH[F", // чччб яелхмюпхх епеяхюпУю
+    "JLYF LTDZNFZ UJKJDJKJVRB HFPUFLFYF>>>", // п·п■п²п░ п■п∙п▓п╞п╒п░п╞ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░п╝п╝п╝
+    ">>>D CTVBYFHBB THTCBFH[F", // п╝п╝п╝п▓ п║п∙п°п≤п²п░п═п≤п≤ п∙п═п∙п║п≤п░п═я┘п░
     US,
     US,
     US,
@@ -359,21 +373,21 @@ const char* Hexen_Map_34_StringTable[] = {
 };
 
 const char* Hexen_Map_35_StringTable[] = {
-    "DHFNF PFRHSKBCM>>>", // бпюрю гюйпшкхяэччч
-    "CLTKFQ CDJQ DS,JH", // ядекюи ябни бшАнп
+    "DHFNF PFRHSKBCM>>>", // п▓п═п░п╒п░ п≈п░п п═п╚п⌡п≤п║п╛п╝п╝п╝
+    "CLTKFQ CDJQ DS,JH", // п║п■п∙п⌡п░п≥ п║п▓п·п≥ п▓п╚п╠п·п═
     US,
-    "LDTHM PFGTHNF BPYENHB", // дбепэ гюоепрю хгмсрпх
-    US,
-    US,
+    "LDTHM PFGTHNF BPYENHB", // п■п▓п∙п═п╛ п≈п░п÷п∙п═п╒п░ п≤п≈п²пёп╒п═п≤
     US,
     US,
     US,
     US,
     US,
     US,
-    "LJCNFNJXYJ KB NS CBKTY<", // днярюрнвмн кх рш яхкема
     US,
-    "XNJ,S CHFPBNMCZ CJ CDJBVB YFCNFDYBRFVB?", // врнАш япюгхрэяъ ян ябнхлх мюярюбмхйюлх,
+    US,
+    "LJCNFNJXYJ KB NS CBKTY<", // п■п·п║п╒п░п╒п·п╖п²п· п⌡п≤ п╒п╚ п║п≤п⌡п∙п²п▒
+    US,
+    "XNJ,S CHFPBNMCZ CJ CDJBVB YFCNFDYBRFVB?", // п╖п╒п·п╠п╚ п║п═п░п≈п≤п╒п╛п║п╞ п║п· п║п▓п·п≤п°п≤ п²п░п║п╒п░п▓п²п≤п п░п°п≤,
     US,
     US,
     US,
@@ -391,8 +405,8 @@ const char* Hexen_DK_Map_33_StringTable[] = {
     US,
     US,
     US,
-    "NS GJCVTK CHF;FNMCZ D RJVYFNT J;BLFYBZ?", // рш онялек япюФюрэяъ б йнлмюре нФхдюмхъ,
-    "NFR EVHB ;T!" // рюй слпх Фе!
+    "NS GJCVTK CHF;FNMCZ D RJVYFNT J;BLFYBZ?", // п╒п╚ п÷п·п║п°п∙п⌡ п║п═п░п╤п░п╒п╛п║п╞ п▓ п п·п°п²п░п╒п∙ п·п╤п≤п■п░п²п≤п╞,
+    "NFR EVHB ;T!" // п╒п░п  пёп°п═п≤ п╤п∙!
 };
 
 const char* Hexen_DK_Map_41_StringTable[] = {
@@ -402,9 +416,9 @@ const char* Hexen_DK_Map_41_StringTable[] = {
     US,
     US,
     US,
-    "GJNJR DJLS JCNFYJDKTY", // онрнй бндш нярюмнбкем
-    "GJNJR DJLS GHTUHF;LFTN GENM", // онрнй бндш опецпюФдюер осрэ
-    "LDTHM JNRHSKFCM D XFCJDYT", // дбепэ нрйпшкюяэ б вюянбме
+    "GJNJR DJLS JCNFYJDKTY", // п÷п·п╒п·п  п▓п·п■п╚ п·п║п╒п░п²п·п▓п⌡п∙п²
+    "GJNJR DJLS GHTUHF;LFTN GENM", // п÷п·п╒п·п  п▓п·п■п╚ п÷п═п∙п⌠п═п░п╤п■п░п∙п╒ п÷пёп╒п╛
+    "LDTHM JNRHSKFCM D XFCJDYT", // п■п▓п∙п═п╛ п·п╒п п═п╚п⌡п░п║п╛ п▓ п╖п░п║п·п▓п²п∙
     US,
     US,
     US,
@@ -418,7 +432,7 @@ const char* Hexen_DK_Map_42_StringTable[] = {
     US,
     US,
     US,
-    "RFR CNHFYYJ>>>", // йюй ярпюммнччч
+    "RFR CNHFYYJ>>>", // п п░п  п║п╒п═п░п²п²п·п╝п╝п╝
     US,
     US,
     US,
@@ -427,17 +441,17 @@ const char* Hexen_DK_Map_42_StringTable[] = {
 
 const char* Hexen_DK_Map_44_StringTable[] = {
     US,
-    "JCNFKJCM NHB XFCNB UJKJDJKJVRB", // нярюкняэ рпх вюярх цнкнбнкнлйх
-    "JCNFKJCM LDT XFCNB UJKJDJKJVRB", // нярюкняэ дбе вюярх цнкнбнкнлйх
-    "JCNFKFCM JLYF XFCNM UJKJDJKJVRB", // нярюкюяэ ндмю вюярэ цнкнбнкнлйх
-    "UJKJDJKJVRF HFPUFLFYF", // цнкнбнкнлйю пюгцюдюмю
+    "JCNFKJCM NHB XFCNB UJKJDJKJVRB", // п·п║п╒п░п⌡п·п║п╛ п╒п═п≤ п╖п░п║п╒п≤ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤
+    "JCNFKJCM LDT XFCNB UJKJDJKJVRB", // п·п║п╒п░п⌡п·п║п╛ п■п▓п∙ п╖п░п║п╒п≤ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤
+    "JCNFKFCM JLYF XFCNM UJKJDJKJVRB", // п·п║п╒п░п⌡п░п║п╛ п·п■п²п░ п╖п░п║п╒п╛ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤
+    "UJKJDJKJVRF HFPUFLFYF", // п⌠п·п⌡п·п▓п·п⌡п·п°п п░ п═п░п≈п⌠п░п■п░п²п░
     US,
-    "UJKJDJKJVRF YT HFPUFLFYF", // цнкнбнкнлйю ме пюгцюдюмю
+    "UJKJDJKJVRF YT HFPUFLFYF", // п⌠п·п⌡п·п▓п·п⌡п·п°п п░ п²п∙ п═п░п≈п⌠п░п■п░п²п░
     US,
-    "GJK CJDCTV GHJUYBK!", // онк янбяел опнцмхк!
+    "GJK CJDCTV GHJUYBK!", // п÷п·п⌡ п║п·п▓п║п∙п° п÷п═п·п⌠п²п≤п⌡!
     US,
-    "JLYF NHTNM UJKJDJKJVRB HFPUFLFYF", // ндмю рперэ цнкнбнкнлйх пюгцюдюмю
-    "LDT NHTNB UJKJDJKJVRB HFPUFLFYS", // дбе рперх цнкнбнкнлйх пюгцюдюмш
+    "JLYF NHTNM UJKJDJKJVRB HFPUFLFYF", // п·п■п²п░ п╒п═п∙п╒п╛ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░
+    "LDT NHTNB UJKJDJKJVRB HFPUFLFYS", // п■п▓п∙ п╒п═п∙п╒п≤ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п╚
     US,
     US,
     US,
@@ -446,7 +460,7 @@ const char* Hexen_DK_Map_44_StringTable[] = {
 
 const char* Hexen_DK_Map_45_StringTable[] = {
     US,
-    "YTGJLFKTRE HFPLFTNCZ PDER>>>", // меондюкейс пюгдюеряъ гбсйччч
+    "YTGJLFKTRE HFPLFTNCZ PDER>>>", // п²п∙п÷п·п■п░п⌡п∙п пё п═п░п≈п■п░п∙п╒п║п╞ п≈п▓пёп п╝п╝п╝
     US,
     US,
     US,
@@ -455,20 +469,20 @@ const char* Hexen_DK_Map_45_StringTable[] = {
     US,
     US,
     US,
-    ">>>LDB;EOTQCZ LTHTDZYYJQ GKJOFLRB" // 10 : extra string : чччдбхФсыеияъ депебъммни окныюдйх
+    ">>>LDB;EOTQCZ LTHTDZYYJQ GKJOFLRB" // 10 : extra string : п╝п╝п╝п■п▓п≤п╤пёп╘п∙п≥п║п╞ п■п∙п═п∙п▓п╞п²п²п·п≥ п÷п⌡п·п╘п░п■п п≤
 };
 
 const char* Hexen_DK_Map_46_StringTable[] = {
-    "UJNJDJ>>>", // цнрнбнччч
-    "UJKJDJKJVRF YT HFPUFLFYF", // цнкнбнкнлйю ме пюгцюдюмю
-    "Z NT,Z GHTLEGHT;LF.>>>", // ъ реАъ опедсопеФдюЧччч
-    "YT CKBIRJV KB NS EGHZVSQ?", // ме якхьйнл кх рш сопълши,
-    "B YT CKBIRJV-NJ HFPEVYSQ!", // х ме якхьйнл-рн пюгслмши!
+    "UJNJDJ>>>", // п⌠п·п╒п·п▓п·п╝п╝п╝
+    "UJKJDJKJVRF YT HFPUFLFYF", // п⌠п·п⌡п·п▓п·п⌡п·п°п п░ п²п∙ п═п░п≈п⌠п░п■п░п²п░
+    "Z NT,Z GHTLEGHT;LF.>>>", // п╞ п╒п∙п╠п╞ п÷п═п∙п■пёп÷п═п∙п╤п■п░я▌п╝п╝п╝
+    "YT CKBIRJV KB NS EGHZVSQ?", // п²п∙ п║п⌡п≤п╗п п·п° п⌡п≤ п╒п╚ пёп÷п═п╞п°п╚п≥,
+    "B YT CKBIRJV-NJ HFPEVYSQ!", // п≤ п²п∙ п║п⌡п≤п╗п п·п°-п╒п· п═п░п≈пёп°п²п╚п≥!
     US,
     US,
     US,
-    "JLYF XTNDTHNFZ 'NJQ UJKJDJKJVRB HFPUFLFYF", // ндмю вербепрюъ Щрни цнкнбнкнлйх пюгцюдюмю
-    "GKJ[JQ DS,JH>>>", // окнУни бшАнпччч
+    "JLYF XTNDTHNFZ 'NJQ UJKJDJKJVRB HFPUFLFYF", // п·п■п²п░ п╖п∙п╒п▓п∙п═п╒п░п╞ я█п╒п·п≥ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░
+    "GKJ[JQ DS,JH>>>", // п÷п⌡п·я┘п·п≥ п▓п╚п╠п·п═п╝п╝п╝
     US,
     US,
     US,
@@ -479,7 +493,7 @@ const char* Hexen_DK_Map_46_StringTable[] = {
 const char* Hexen_DK_Map_47_StringTable[] = {
     US,
     US,
-    "CBVDJKS YT CJDGFLF.N", // яхлбнкш ме янбоюдюЧр
+    "CBVDJKS YT CJDGFLF.N", // п║п≤п°п▓п·п⌡п╚ п²п∙ п║п·п▓п÷п░п■п░я▌п╒
     US,
     US,
     US,
@@ -495,7 +509,7 @@ const char* Hexen_DK_Map_47_StringTable[] = {
 const char* Hexen_DK_Map_48_StringTable[] = {
     US,
     US,
-    "C 'NJQ CNJHJYS LDTHM YT JNRHSNM", // я Щрни ярнпнмш дбепэ ме нрйпшрэ
+    "C 'NJQ CNJHJYS LDTHM YT JNRHSNM", // п║ я█п╒п·п≥ п║п╒п·п═п·п²п╚ п■п▓п∙п═п╛ п²п∙ п·п╒п п═п╚п╒п╛
     US,
     US,
     US,
@@ -518,7 +532,7 @@ const char* Hexen_DK_Map_48_StringTable[] = {
 
 const char* Hexen_DK_Map_50_StringTable[] = {
     US,
-    "LDTHM PF,KJRBHJDFYF CYFHE;B", // дбепэ гюАкнйхпнбюмю ямюпсФх
+    "LDTHM PF,KJRBHJDFYF CYFHE;B", // п■п▓п∙п═п╛ п≈п░п╠п⌡п·п п≤п═п·п▓п░п²п░ п║п²п░п═пёп╤п≤
     US,
     US,
     US,
@@ -535,27 +549,27 @@ const char* Hexen_DK_Map_51_StringTable[] = {
     US,
     US,
     US,
-    "CDZNJNFNCNDJ!", // ябърнрюрярбн!
-    "NS JCRDTHYBK VJUBKE 'HBRF!!", // рш няйбепмхк лнцхкс Щпхйю!!
-    "B EVHTIM PF 'NJ CNHFIYJQ CVTHNM.!!!", // х слпеьэ гю Щрн ярпюьмни ялепрэЧ!!!
-    "JLYF NHTNM UJKJDJKJVRB HFPUFLFYF", // ндмю рперэ цнкнбнкнлйх пюгцюдюмю
-    "LDT NHTNB UJKJDJKJVRB HFPUFLFYS", // дбе рперх цнкнбнкнлйх пюгцюдюмш
-    "CRKTG JNRHSN", // яйкео нрйпшр
-    "JGFCFQCZ UHJ,YBWS GFERF>>>", // ноюяюияъ цпнАмхжш оюсйюччч
+    "CDZNJNFNCNDJ!", // п║п▓п╞п╒п·п╒п░п╒п║п╒п▓п·!
+    "NS JCRDTHYBK VJUBKE 'HBRF!!", // п╒п╚ п·п║п п▓п∙п═п²п≤п⌡ п°п·п⌠п≤п⌡пё я█п═п≤п п░!!
+    "B EVHTIM PF 'NJ CNHFIYJQ CVTHNM.!!!", // п≤ пёп°п═п∙п╗п╛ п≈п░ я█п╒п· п║п╒п═п░п╗п²п·п≥ п║п°п∙п═п╒п╛я▌!!!
+    "JLYF NHTNM UJKJDJKJVRB HFPUFLFYF", // п·п■п²п░ п╒п═п∙п╒п╛ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п░
+    "LDT NHTNB UJKJDJKJVRB HFPUFLFYS", // п■п▓п∙ п╒п═п∙п╒п≤ п⌠п·п⌡п·п▓п·п⌡п·п°п п≤ п═п░п≈п⌠п░п■п░п²п╚
+    "CRKTG JNRHSN", // п║п п⌡п∙п÷ п·п╒п п═п╚п╒
+    "JGFCFQCZ UHJ,YBWS GFERF>>>", // п·п÷п░п║п░п≥п║п╞ п⌠п═п·п╠п²п≤п╕п╚ п÷п░пёп п░п╝п╝п╝
     US,
-    "CYFHE;B CKSITY PDER GJLYBVF.OTUJCZ RFVYZ", // ямюпсФх якшьем гбсй ондмхлюЧыецняъ йюлмъ
-    "&XEDCNDETIM KB NS CT,Z DTPEXBV?&", // ?всбярбсеьэ кх рш яеАъ бегсвхл,?
-    "YTGHFDBKMYJT GHTLGJKJ;TYBT!", // меопюбхкэмне опедонкнФемхе!
-    "GHFDBKMYJT GHTLGJKJ;TYBT", // опюбхкэмне опедонкнФемхе
-    "&VJ;TIM YFGBCFNM PF VTYZ DCT CRHBGNS?&", // ?лнФеьэ мюохяюрэ гю лемъ бяе яйпхорш,?
-    "&YT NHJUFQ VJ. DRECYZIRE&", // ?ме рпнцюи лнЧ бйсямъьйс?
-    "&JCNHTYMRJ ?!?!?!&", // ?нярпемэйн ,!,!,!?
-    "&GJLFQ-RF VYT CF[FH< LTNRF&", // ?ондюи-йю лме яюУюпа дерйю?
-    "&FUF-F-F-F>>>&", // ?юцю-ю-ю-юччч?
-    "&ABKMV YF XFC?&", // ?тхкэл мю вюя,?
-    "&E VTYZ LF;T YTN CDJTUJ YFLUHJ,BZ (R>A>)&", // ?с лемъ дюФе мер ябнецн мюдцпнАхъ (йчтч)?
-    "LF YT GHJKMTNCZ RHJDM>>>", // дю ме опнкэеряъ йпнбэччч
-    "B LF YT GJLYBVTNCZ HERF DJ UYTDT>>>", // х дю ме ондмхлеряъ псйю бн цмебеччч
+    "CYFHE;B CKSITY PDER GJLYBVF.OTUJCZ RFVYZ", // п║п²п░п═пёп╤п≤ п║п⌡п╚п╗п∙п² п≈п▓пёп  п÷п·п■п²п≤п°п░я▌п╘п∙п⌠п·п║п╞ п п░п°п²п╞
+    "&XEDCNDETIM KB NS CT,Z DTPEXBV?&", // ?п╖пёп▓п║п╒п▓пёп∙п╗п╛ п⌡п≤ п╒п╚ п║п∙п╠п╞ п▓п∙п≈пёп╖п≤п°,?
+    "YTGHFDBKMYJT GHTLGJKJ;TYBT!", // п²п∙п÷п═п░п▓п≤п⌡п╛п²п·п∙ п÷п═п∙п■п÷п·п⌡п·п╤п∙п²п≤п∙!
+    "GHFDBKMYJT GHTLGJKJ;TYBT", // п÷п═п░п▓п≤п⌡п╛п²п·п∙ п÷п═п∙п■п÷п·п⌡п·п╤п∙п²п≤п∙
+    "&VJ;TIM YFGBCFNM PF VTYZ DCT CRHBGNS?&", // ?п°п·п╤п∙п╗п╛ п²п░п÷п≤п║п░п╒п╛ п≈п░ п°п∙п²п╞ п▓п║п∙ п║п п═п≤п÷п╒п╚,?
+    "&YT NHJUFQ VJ. DRECYZIRE&", // ?п²п∙ п╒п═п·п⌠п░п≥ п°п·я▌ п▓п пёп║п²п╞п╗п пё?
+    "&JCNHTYMRJ ?!?!?!&", // ?п·п║п╒п═п∙п²п╛п п· ,!,!,!?
+    "&GJLFQ-RF VYT CF[FH< LTNRF&", // ?п÷п·п■п░п≥-п п░ п°п²п∙ п║п░я┘п░п═п▒ п■п∙п╒п п░?
+    "&FUF-F-F-F>>>&", // ?п░п⌠п░-п░-п░-п░п╝п╝п╝?
+    "&ABKMV YF XFC?&", // ?п╓п≤п⌡п╛п° п²п░ п╖п░п║,?
+    "&E VTYZ LF;T YTN CDJTUJ YFLUHJ,BZ (R>A>)&", // ?пё п°п∙п²п╞ п■п░п╤п∙ п²п∙п╒ п║п▓п·п∙п⌠п· п²п░п■п⌠п═п·п╠п≤п╞ (п п╝п╓п╝)?
+    "LF YT GHJKMTNCZ RHJDM>>>", // п■п░ п²п∙ п÷п═п·п⌡п╛п∙п╒п║п╞ п п═п·п▓п╛п╝п╝п╝
+    "B LF YT GJLYBVTNCZ HERF DJ UYTDT>>>", // п≤ п■п░ п²п∙ п÷п·п■п²п≤п°п∙п╒п║п╞ п═пёп п░ п▓п· п⌠п²п∙п▓п∙п╝п╝п╝
     US,
     US,
     US,
@@ -574,8 +588,8 @@ const char* Hexen_DK_Map_52_StringTable[] = {
     US,
     US,
     US,
-    "RNJ JCVTKBKCZ GJNHTDJ;BNM YFI GJRJQ?!", // йрн нялекхкяъ онрпебнФхрэ мюь онйни,!
-    "GENM JNRHSN", // осрэ нрйпшр
+    "RNJ JCVTKBKCZ GJNHTDJ;BNM YFI GJRJQ?!", // п п╒п· п·п║п°п∙п⌡п≤п⌡п║п╞ п÷п·п╒п═п∙п▓п·п╤п≤п╒п╛ п²п░п╗ п÷п·п п·п≥,!
+    "GENM JNRHSN", // п÷пёп╒п╛ п·п╒п п═п╚п╒
     US,
     US,
     US,
@@ -585,11 +599,11 @@ const char* Hexen_DK_Map_52_StringTable[] = {
 const char* Hexen_DK_Map_53_StringTable[] = {
     US,
     US,
-    "JCNFKJCM GTHTRK.XFNTKTQ: ", // нярюкняэ оепейкЧвюрекеиф
+    "JCNFKJCM GTHTRK.XFNTKTQ: ", // п·п║п╒п░п⌡п·п║п╛ п÷п∙п═п∙п п⌡я▌п╖п░п╒п∙п⌡п∙п≥п√
     "",
-    "JCNFKCZ DCTUJ JLBY GTHTRK.XFNTKM", // нярюкяъ бяецн ндхм оепейкЧвюрекэ
+    "JCNFKCZ DCTUJ JLBY GTHTRK.XFNTKM", // п·п║п╒п░п⌡п║п╞ п▓п║п∙п⌠п· п·п■п≤п² п÷п∙п═п∙п п⌡я▌п╖п░п╒п∙п⌡п╛
     US,
-    "DS[JL JNRHSN", // бшУнд нрйпшр
+    "DS[JL JNRHSN", // п▓п╚я┘п·п■ п·п╒п п═п╚п╒
     US,
     US,
     US
@@ -597,24 +611,24 @@ const char* Hexen_DK_Map_53_StringTable[] = {
 
 const char* Hexen_DK_Map_54_StringTable[] = {
     US,
-    "C 'NJQ CNJHJYS LDTHM YT JNRHSNM", // я Щрни ярнпнмш дбепэ ме нрйпшрэ
+    "C 'NJQ CNJHJYS LDTHM YT JNRHSNM", // п║ я█п╒п·п≥ п║п╒п·п═п·п²п╚ п■п▓п∙п═п╛ п²п∙ п·п╒п п═п╚п╒п╛
     US,
     US,
-    "GENM D WBNFLTKM JNRHSN>>>", // осрэ б жхрюдекэ нрйпшрччч
-    ">>>JCVTKBIMCZ KB NS DJQNB?", // чччнялекхьэяъ кх рш бнирх,
+    "GENM D WBNFLTKM JNRHSN>>>", // п÷пёп╒п╛ п▓ п╕п≤п╒п░п■п∙п⌡п╛ п·п╒п п═п╚п╒п╝п╝п╝
+    ">>>JCVTKBIMCZ KB NS DJQNB?", // п╝п╝п╝п·п║п°п∙п⌡п≤п╗п╛п║п╞ п⌡п≤ п╒п╚ п▓п·п≥п╒п≤,
     US,
     US,
     US,
-    "LDTHM JNRHJTNCZ>>>", // дбепэ нрйпнеряъччч
-    ">>>D XFCJDYT", // чччб вюянбме
-    "VJCN DJPLDBUYTNCZ>>>", // лняр бнгдбхцмеряъччч
-    ">>>YF ,JQYT", // чччмю Аниме
-    "KTCNYBWF DJPLDBUYTNCZ>>>", // кеярмхжю бнгдбхцмеряъччч
-    ">>>E NTVYJUJ CNHF;F", // чччс релмнцн ярпюФю
-    "ITCNTHYZ ECNFYJDKTYF", // ьеярепмъ сярюмнбкемю
-    "ITCNTHYTQ ECNFYJDKTYJ: ", // ьеярепмеи сярюмнбкемнф 
-    "GHTUHFLF GJLYBVTNCZ>>>", // опецпюдю ондмхлеряъччч
-    ">>>D RKJFRT", // чччб йкнюйе
+    "LDTHM JNRHJTNCZ>>>", // п■п▓п∙п═п╛ п·п╒п п═п·п∙п╒п║п╞п╝п╝п╝
+    ">>>D XFCJDYT", // п╝п╝п╝п▓ п╖п░п║п·п▓п²п∙
+    "VJCN DJPLDBUYTNCZ>>>", // п°п·п║п╒ п▓п·п≈п■п▓п≤п⌠п²п∙п╒п║п╞п╝п╝п╝
+    ">>>YF ,JQYT", // п╝п╝п╝п²п░ п╠п·п≥п²п∙
+    "KTCNYBWF DJPLDBUYTNCZ>>>", // п⌡п∙п║п╒п²п≤п╕п░ п▓п·п≈п■п▓п≤п⌠п²п∙п╒п║п╞п╝п╝п╝
+    ">>>E NTVYJUJ CNHF;F", // п╝п╝п╝пё п╒п∙п°п²п·п⌠п· п║п╒п═п░п╤п░
+    "ITCNTHYZ ECNFYJDKTYF", // п╗п∙п║п╒п∙п═п²п╞ пёп║п╒п░п²п·п▓п⌡п∙п²п░
+    "ITCNTHYTQ ECNFYJDKTYJ: ", // п╗п∙п║п╒п∙п═п²п∙п≥ пёп║п╒п░п²п·п▓п⌡п∙п²п·п√ 
+    "GHTUHFLF GJLYBVTNCZ>>>", // п÷п═п∙п⌠п═п░п■п░ п÷п·п■п²п≤п°п∙п╒п║п╞п╝п╝п╝
+    ">>>D RKJFRT", // п╝п╝п╝п▓ п п⌡п·п░п п∙
     US,
     US,
     US,
@@ -632,7 +646,7 @@ const char* Hexen_DK_Map_55_StringTable[] = {
     US,
     US,
     US,
-    "LDTHM PF,KJRBHJDFYF BPYENHB", // дбепэ гюАкнйхпнбюмю хгмсрпх
+    "LDTHM PF,KJRBHJDFYF BPYENHB", // п■п▓п∙п═п╛ п≈п░п╠п⌡п·п п≤п═п·п▓п░п²п░ п≤п≈п²пёп╒п═п≤
     US,
     US,
     US,
@@ -650,9 +664,9 @@ const char* Hexen_DK_Map_55_StringTable[] = {
 };
 
 const char* Hexen_DK_Map_56_StringTable[] = {
-    "NS GJCVTK JUHF,BNM VJUBKE>>>", // рш онялек нцпюАхрэ лнцхксччч
-    ">>>DTH[JDYJUJ GFKFXF?", // чччбепУнбмнцн оюкювю,
-    "UJNJDMCZ R CVTHNB", // цнрнбэяъ й ялепрх
+    "NS GJCVTK JUHF,BNM VJUBKE>>>", // п╒п╚ п÷п·п║п°п∙п⌡ п·п⌠п═п░п╠п≤п╒п╛ п°п·п⌠п≤п⌡пёп╝п╝п╝
+    ">>>DTH[JDYJUJ GFKFXF?", // п╝п╝п╝п▓п∙п═я┘п·п▓п²п·п⌠п· п÷п░п⌡п░п╖п░,
+    "UJNJDMCZ R CVTHNB", // п⌠п·п╒п·п▓п╛п║п╞ п  п║п°п∙п═п╒п≤
     US,
     US,
     US,
@@ -662,11 +676,11 @@ const char* Hexen_DK_Map_56_StringTable[] = {
 
 const char* Hexen_DK_Map_59_StringTable[] = {
     US,
-    "JCNFKJCM YFQNB GTHTRK.XFNTKTQ: ", // нярюкняэ мюирх оепейкЧвюрекеиф 
+    "JCNFKJCM YFQNB GTHTRK.XFNTKTQ: ", // п·п║п╒п░п⌡п·п║п╛ п²п░п≥п╒п≤ п÷п∙п═п∙п п⌡я▌п╖п░п╒п∙п⌡п∙п≥п√ 
     "",
-    "JCNFKCZ GJCKTLYBQ GTHTRK.XFNTKM", // нярюкяъ онякедмхи оепейкЧвюрекэ
+    "JCNFKCZ GJCKTLYBQ GTHTRK.XFNTKM", // п·п║п╒п░п⌡п║п╞ п÷п·п║п⌡п∙п■п²п≤п≥ п÷п∙п═п∙п п⌡я▌п╖п░п╒п∙п⌡п╛
     US,
-    "GENM R ,FIYT JNRHSN", // осрэ й Аюьме нрйпшр
+    "GENM R ,FIYT JNRHSN", // п÷пёп╒п╛ п  п╠п░п╗п²п∙ п·п╒п п═п╚п╒
     US,
     US
 };
@@ -675,7 +689,7 @@ const char* Hexen_DK_Map_60_StringTable[] = {
     US,
     US,
     US,
-    "GJHNFK JNRHSN>>>", //онпрюк нрйпшрччч
+    "GJHNFK JNRHSN>>>", //п÷п·п═п╒п░п⌡ п·п╒п п═п╚п╒п╝п╝п╝
     US,
     US,
     US,
