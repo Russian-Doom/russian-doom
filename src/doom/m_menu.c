@@ -49,6 +49,7 @@
 #include "st_stuff.h"
 #include "v_trans.h"
 
+#include "rd_keybinds.h"
 #include "rd_lang.h"
 #include "crispy.h"
 #include "jn.h"
@@ -99,7 +100,7 @@ typedef struct
 {
     // 0 = no cursor here, 1 = ok, 2 = arrows ok
     short   status;
-    char    name[128];  // [JN] Extended from 10 to 128, so long text string may appear
+    char*    name;  // [JN] Extended from 10 to 128, so long text string may appear
 
     // choice = menu item #.
     // if status = 2, choice=0:leftarrow, 1:rightarrow
@@ -120,6 +121,29 @@ typedef struct menu_s
     short           y;              // x,y of menu
     short           lastOn;         // last item user was on in menu
 } menu_t;
+
+typedef struct
+{
+    int y;
+    char eng_text[128];
+    char rus_text[128];
+} subtitle_t;
+
+typedef struct
+{
+    struct menu_s  *prevMenu;       // previous menu
+    void (*prev_page_routine)(int); // routine for choosing previous page
+    void (*next_page_routine)(int); // routine for choosing next page
+    char eng_prev_HotKey;
+    char rus_prev_HotKey;
+    char eng_next_HotKey;
+    char rus_next_HotKey;
+    char eng_pageNumber[9];
+    char rus_pageNumber[13];
+    subtitle_t* subtitles;
+    char num_of_subtitles; // uint_8
+    bound_key_t keys[11];           // keys what can be bound on this page
+} key_page_t;
 
 short   itemOn;             // menu item skull is on
 short   skullAnimCounter;   // skull animation counter
@@ -150,6 +174,8 @@ void M_WriteTextSmallCentered_RUS(int y, char *string);
 //
 // PROTOTYPES
 //
+
+menu_t* getMenuFromKeyPage(key_page_t* keyPage, boolean isEngMenu);
 
 void M_NewGame(int choice);
 void M_Episode(int choice);
@@ -273,60 +299,12 @@ void M_RD_Change_Acceleration(int choice);
 void M_RD_Change_Threshold(int choice);
 
 // Key bindings (1)
+void M_RD_Bind_Key(int choice);
+void M_RD_Draw_Bindings();
 void M_RD_Choose_Bindings_1(int choice);
-void M_RD_Draw_Bindings_1(void);
-void M_RD_Bind_MoveForward(int choice);
-void M_RD_Bind_MoveBackward(int choice);
-void M_RD_Bind_TurnLeft(int choice);
-void M_RD_Bind_TurnRight(int choice);
-void M_RD_Bind_StrafeLeft(int choice);
-void M_RD_Bind_StrafeRight(int choice);
-void M_RD_Bind_SpeedOn(int choice);
-void M_RD_Bind_StrafeOn(int choice);
-void M_RD_Bind_FireAttack(int choice);
-void M_RD_Bind_Use(int choice);
-
-// Key bindings (2)
 void M_RD_Choose_Bindings_2(int choice);
-void M_RD_Draw_Bindings_2(void);
-void M_RD_Bind_Weapon_1(int choice);
-void M_RD_Bind_Weapon_2(int choice);
-void M_RD_Bind_Weapon_3(int choice);
-void M_RD_Bind_Weapon_4(int choice);
-void M_RD_Bind_Weapon_5(int choice);
-void M_RD_Bind_Weapon_6(int choice);
-void M_RD_Bind_Weapon_7(int choice);
-void M_RD_Bind_Weapon_8(int choice);
-void M_RD_Bind_PrevWeapon(int choice);
-void M_RD_Bind_NextWeapon(int choice);
-
-// Key bindings (3)
 void M_RD_Choose_Bindings_3(int choice);
-void M_RD_Draw_Bindings_3(void);
-void M_RD_Bind_QuickSave(int choice);
-void M_RD_Bind_QuickLoad(int choice);
-void M_RD_Bind_NextLevel(int choice);
-void M_RD_Bind_RestartLevel(int choice);
-void M_RD_Bind_Screenshot(int choice);
-void M_RD_Bind_FinishDemo(int choice);
-void M_RD_Bind_MouseLook(int choice);
-void M_RD_Bind_AlwaysRun(int choice);
-void M_RD_Bind_Crosshair(int choice);
-void M_RD_Bind_FlipLevels(int choice);
-
-// Key bindings (4)
 void M_RD_Choose_Bindings_4(int choice);
-void M_RD_Draw_Bindings_4(void);
-void M_RD_Bind_Automap(int choice);
-void M_RD_Bind_ZoomIn(int choice);
-void M_RD_Bind_ZoomOut(int choice);
-void M_RD_Bind_MaximumZoom(int choice);
-void M_RD_Bind_Follow(int choice);
-void M_RD_Bind_Overlay(int choice);
-void M_RD_Bind_Rotate(int choice);
-void M_RD_Bind_Grid(int choice);
-void M_RD_Bind_Mark(int choice);
-void M_RD_Bind_ClearMarks(int choice);
 
 // Mouse bindings
 void M_RD_Choose_Mouse_Bindings(int choice);
@@ -443,6 +421,57 @@ void M_RD_ChangeLanguage(int choice);
 void M_Vanilla_DrawOptions(void);
 void M_Vanilla_DrawSound(void);
 
+void setAsEmptyMenuItem(menuitem_t* item)
+{
+    item->status = -1;
+    item->name = "";
+    item->routine = NULL;
+    item->alphaKey = '\0';
+}
+
+menu_t* getMenuFromKeyPage(key_page_t* keyPage, boolean isEngMenu)
+{
+    menuitem_t* items;
+    menu_t* r_menu;
+
+    items = malloc(sizeof(menuitem_t) * 15);
+    for (int i = 0; i < 11; ++i)
+    {
+        if (keyPage->keys[i] == bk_null || keyPage->keys[i] == bk_size)
+            setAsEmptyMenuItem(&items[i]);
+        else
+        {
+            bound_key_descriptor *keyDescriptor = BK_getKeyDescriptor(keyPage->keys[i]);
+            items[i].status = 1;
+            items[i].name = isEngMenu ? keyDescriptor->eng_name : keyDescriptor->rus_name;
+            items[i].routine = M_RD_Bind_Key;
+            items[i].alphaKey = isEngMenu ? keyDescriptor->eng_HotKey : keyDescriptor->rus_HotKey;
+        }
+    }
+
+    setAsEmptyMenuItem(&items[11]);
+    setAsEmptyMenuItem(&items[14]);
+
+    items[12].status = items[13].status = 1;
+    items[12].name = items[13].name = "";
+
+    items[12].routine = keyPage->next_page_routine;
+    items[12].alphaKey = isEngMenu ? keyPage->eng_next_HotKey : keyPage->rus_next_HotKey;
+
+    items[13].routine = keyPage->prev_page_routine;
+    items[13].alphaKey = isEngMenu ? keyPage->eng_prev_HotKey : keyPage->rus_prev_HotKey;
+
+    r_menu = malloc(sizeof(menu_t));
+    r_menu->numitems = 15;
+    r_menu->prevMenu = keyPage->prevMenu;
+    r_menu->menuitems = items;
+    r_menu->routine = M_RD_Draw_Bindings;
+    r_menu->x = 35;
+    r_menu->y = 35;
+    r_menu->lastOn = 0;
+
+    return r_menu;
+}
 
 // -----------------------------------------------------------------------------
 // M_WriteText
@@ -2009,360 +2038,131 @@ menu_t  RD_Controls_Def_Rus =
 // Key bindings (1)
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_bindings_1_move_forward,
-    rd_bindings_1_move_backward,
-    rd_bindings_1_turn_left,
-    rd_bindings_1_turn_right,
-    rd_bindings_1_strafe_left,
-    rd_bindings_1_strafe_right,
-    rd_bindings_1_speed_on,
-    rd_bindings_1_strafe_on,
-    rd_bindings_1_empty_1,
-    rd_bindings_1_fire,
-    rd_bindings_1_use,
-    rd_bindings_1_empty_2,
-    rd_bindings_1_next_page,
-    rd_bindings_1_prev_page,
-    rd_bindings_1_end
-} rd_bindings_1_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Bindings_Menu_1[]=
-{
-    {1, "Move Forward",  M_RD_Bind_MoveForward,  'm'},
-    {1, "Move Backward", M_RD_Bind_MoveBackward, 'm'},
-    {1, "Turn Left",     M_RD_Bind_TurnLeft,     't'},
-    {1, "Turn Right",    M_RD_Bind_TurnRight,    't'},
-    {1, "Strafe Left",   M_RD_Bind_StrafeLeft,   's'},
-    {1, "Strafe Right",  M_RD_Bind_StrafeRight,  's'},
-    {1, "Speed On",      M_RD_Bind_SpeedOn,      's'},
-    {1, "Strafe On",     M_RD_Bind_StrafeOn,     's'},
-    {-1,"",0,'\0'},
-    {1, "Fire/Attack",   M_RD_Bind_FireAttack,   'f'},
-    {1, "Use",           M_RD_Bind_Use,          'u'},
-    {-1,"",0,'\0'},
-    {1,"",               M_RD_Choose_Bindings_2, 'n'},
-    {1,"",               M_RD_Choose_Bindings_4, 'l'},
-    {-1,"",0,'\0'}
+subtitle_t RD_Bindings_1_subtitles[] = {
+    {25, "Movement", "ldb;tybt"},
+    {115, "Action", "ltqcndbt"}
 };
 
-menu_t  RD_Bindings_Menu_Def_1 =
-{
-    rd_bindings_1_end,
-    &RD_Controls_Def,
-    RD_Bindings_Menu_1,
-    M_RD_Draw_Bindings_1,
-    35,35,
-    0
+key_page_t RD_Bindings_1 = {
+     &RD_Controls_Def,
+     M_RD_Choose_Bindings_4,
+     M_RD_Choose_Bindings_2,
+     'l', 'y', 'n', 'l',
+     "page 1/4", "cnhfybwf 1*4",
+     RD_Bindings_1_subtitles,
+     2,
+     {bk_forward,
+    bk_backward,
+    bk_turn_left,
+    bk_turn_right,
+    bk_strafe_left,
+    bk_strafe_right,
+    bk_speed,
+    bk_strafe,
+    bk_null,
+    bk_fire,
+    bk_use}
 };
 
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Bindings_Menu_1_Rus[]=
-{
-    {1, "ldb;tybt dgthtl", M_RD_Bind_MoveForward,  'l'}, // Движение вперед
-    {1, "ldb;tybt yfpfl",  M_RD_Bind_MoveBackward, 'l'}, // Движение назад
-    {1, "gjdjhjn yfktdj",  M_RD_Bind_TurnLeft,     'g'}, // Поворот налево
-    {1, "gjdjhjn yfghfdj", M_RD_Bind_TurnRight,    'g'}, // Поворот направо
-    {1, ",jrjv dktdj",     M_RD_Bind_StrafeLeft,   ','}, // Боком влево
-    {1, ",jrjv dghfdj",    M_RD_Bind_StrafeRight,  ','}, // Боком вправо
-    {1, ",tu",             M_RD_Bind_SpeedOn,      ','}, // Бег
-    {1, "ldb;tybt ,jrjv",  M_RD_Bind_StrafeOn,     'l'}, // Движение боком
-    {-1,"",0,'\0'},
-    {1, "fnfrf*cnhtkm,f",  M_RD_Bind_FireAttack,   'f'}, // Атака/стрельба
-    {1, "bcgjkmpjdfnm",    M_RD_Bind_Use,          'b'}, // Использовать
-    {-1,"",0,'\0'},
-    {1,"",                 M_RD_Choose_Bindings_2, 'l'},
-    {1,"",                 M_RD_Choose_Bindings_4, 'y'},
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Bindings_Menu_Def_1_Rus =
-{
-    rd_bindings_1_end,
-    &RD_Controls_Def_Rus,
-    RD_Bindings_Menu_1_Rus,
-    M_RD_Draw_Bindings_1,
-    35,35,
-    0
-};
-
+menu_t* RD_Bindings_Menu_Def_1;
+menu_t* RD_Bindings_Menu_Def_1_Rus;
 
 // -----------------------------------------------------------------------------
 // Key bindings (2)
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_bindings_2_weapon_1,
-    rd_bindings_2_weapon_2,
-    rd_bindings_2_weapon_3,
-    rd_bindings_2_weapon_4,
-    rd_bindings_2_weapon_5,
-    rd_bindings_2_weapon_6,
-    rd_bindings_2_weapon_7,
-    rd_bindings_2_weapon_8,
-    rd_bindings_2_prevweapon,
-    rd_bindings_2_nextweapon,
-    rd_bindings_2_empty_1,
-    rd_bindings_2_empty_2,
-    rd_bindings_2_next_page,
-    rd_bindings_2_prev_page,
-    rd_bindings_2_end
-} rd_bindings_2_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Bindings_Menu_2[]=
-{
-    { 1, "Weapon 1",        M_RD_Bind_Weapon_1,     'w'},
-    { 1, "Weapon 2",        M_RD_Bind_Weapon_2,     'w'},
-    { 1, "Weapon 3",        M_RD_Bind_Weapon_3,     'w'},
-    { 1, "Weapon 4",        M_RD_Bind_Weapon_4,     'w'},
-    { 1, "Weapon 5",        M_RD_Bind_Weapon_5,     'w'},
-    { 1, "Weapon 6",        M_RD_Bind_Weapon_6,     'w'},
-    { 1, "Weapon 7",        M_RD_Bind_Weapon_7,     'w'},
-    { 1, "Weapon 8",        M_RD_Bind_Weapon_8,     'w'},
-    { 1, "Previous weapon", M_RD_Bind_PrevWeapon,   'p'},
-    { 1, "Next weapon",     M_RD_Bind_NextWeapon,   'n'},
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    { 1,"",                 M_RD_Choose_Bindings_3, 'n'},
-    { 1,"",                 M_RD_Choose_Bindings_1, 'p'},
-    {-1,"",0,'\0'}
+subtitle_t RD_Bindings_2_subtitles[] = {
+    {25, "Weapons", "jhe;bt"}
 };
 
-menu_t  RD_Bindings_Menu_Def_2 =
-{
-    rd_bindings_2_end,
+key_page_t RD_Bindings_2 = {
     &RD_Controls_Def,
-    RD_Bindings_Menu_2,
-    M_RD_Draw_Bindings_2,
-    35,35,
-    0
+    M_RD_Choose_Bindings_1,
+    M_RD_Choose_Bindings_3,
+    'p', 'y', 'n', 'l',
+    "page 2/4", "cnhfybwf 2*4",
+    RD_Bindings_2_subtitles,
+    1,
+    {bk_weapon_1,
+     bk_weapon_2,
+     bk_weapon_3,
+     bk_weapon_4,
+     bk_weapon_5,
+     bk_weapon_6,
+     bk_weapon_7,
+     bk_weapon_8,
+     bk_weapon_prev,
+     bk_weapon_next,
+     bk_null}
 };
 
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Bindings_Menu_2_Rus[]=
-{
-    { 1, "jhe;bt 1",          M_RD_Bind_Weapon_1,     'j'}, // Оружие 1
-    { 1, "jhe;bt 2",          M_RD_Bind_Weapon_2,     'j'}, // Оружие 2
-    { 1, "jhe;bt 3",          M_RD_Bind_Weapon_3,     'j'}, // Оружие 3
-    { 1, "jhe;bt 4",          M_RD_Bind_Weapon_4,     'j'}, // Оружие 4
-    { 1, "jhe;bt 5",          M_RD_Bind_Weapon_5,     'j'}, // Оружие 5
-    { 1, "jhe;bt 6",          M_RD_Bind_Weapon_6,     'j'}, // Оружие 6
-    { 1, "jhe;bt 7",          M_RD_Bind_Weapon_7,     'j'}, // Оружие 7
-    { 1, "jhe;bt 8",          M_RD_Bind_Weapon_8,     'j'}, // Оружие 8
-    { 1, "ghtlsleott jhe;bt", M_RD_Bind_PrevWeapon,   'g'}, // Предыдущее оружие
-    { 1, "cktle.ott jhe;bt",  M_RD_Bind_NextWeapon,   'c'}, // Следующее оружие
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    { 1,"",                   M_RD_Choose_Bindings_3, 'n'},
-    { 1,"",                   M_RD_Choose_Bindings_1, 'p'},
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Bindings_Menu_Def_2_Rus =
-{
-    rd_bindings_2_end,
-    &RD_Controls_Def_Rus,
-    RD_Bindings_Menu_2_Rus,
-    M_RD_Draw_Bindings_2,
-    35,35,
-    0
-};
-
+menu_t* RD_Bindings_Menu_Def_2;
+menu_t*  RD_Bindings_Menu_Def_2_Rus;
 
 // -----------------------------------------------------------------------------
 // Key bindings (3)
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_bindings_3_quicksave,
-    rd_bindings_3_quickload,
-    rd_bindings_3_nextlevel,
-    rd_bindings_3_restartlevel,
-    rd_bindings_3_screenshot,
-    rd_bindings_3_finishdemo,
-    rd_bindings_3_empty_1,
-    rd_bindings_3_mouselook,
-    rd_bindings_3_alwaysrun,
-    rd_bindings_3_crosshair,
-    rd_bindings_3_fliplevel,
-    rd_bindings_3_empty_2,
-    rd_bindings_3_next_page,
-    rd_bindings_3_prev_page,
-    rd_bindings_3_end
-} rd_bindings_3_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Bindings_Menu_3[]=
-{
-    { 1, "Quick save",            M_RD_Bind_QuickSave,    'q'},
-    { 1, "Quick load",            M_RD_Bind_QuickLoad,    'q'},
-    { 1, "Go to next level",      M_RD_Bind_NextLevel,    'g'},
-    { 1, "Restart level/demo",    M_RD_Bind_RestartLevel, 'r'},
-    { 1, "Save a screenshot",     M_RD_Bind_Screenshot,   's'},
-    { 1, "Finish demo recording", M_RD_Bind_FinishDemo,   'f'},
-    {-1,"",0,'\0'},
-    { 1, "Mouse look",            M_RD_Bind_MouseLook,    'm'},
-    { 1, "Always run",            M_RD_Bind_AlwaysRun,    'a'},
-    { 1, "Crosshair",             M_RD_Bind_Crosshair,    'c'},
-    { 1, "Level flipping",        M_RD_Bind_FlipLevels,   'l'},
-    {-1,"",0,'\0'},
-    { 1,"",                       M_RD_Choose_Bindings_4, 'n'},
-    { 1,"",                       M_RD_Choose_Bindings_2, 'p'},
-    {-1,"",0,'\0'}
+subtitle_t RD_Bindings_3_subtitles[] = {
+    {25, "Shortcut keys", ",scnhsq ljcneg"},
+    {95, "Toggleables", "gthtrk.xtybt"}
 };
 
-menu_t  RD_Bindings_Menu_Def_3 =
-{
-    rd_bindings_3_end,
+key_page_t RD_Bindings_3 = {
     &RD_Controls_Def,
-    RD_Bindings_Menu_3,
-    M_RD_Draw_Bindings_3,
-    35,35,
-    0
+    M_RD_Choose_Bindings_2,
+    M_RD_Choose_Bindings_4,
+    'p', 'y', 'n', 'l',
+    "page 3/4", "cnhfybwf 3*4",
+    RD_Bindings_3_subtitles,
+    2,
+    {bk_save,
+     bk_load,
+     bk_nextlevel,
+     bk_reloadlevel,
+     bk_screenshot,
+     bk_finish_demo,
+     bk_null,
+     bk_toggle_mlook,
+     bk_toggle_autorun,
+     bk_toggle_crosshair,
+     bk_toggle_fliplvls}
 };
 
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Bindings_Menu_3_Rus[]=
-{
-    { 1, ",scnhjt cj[hfytybt",    M_RD_Bind_QuickSave,    'q'}, // Быстрое сохранение
-    { 1, ",scnhfz pfuheprf",      M_RD_Bind_QuickLoad,    'q'}, // Быстрая загрузка
-    { 1, "cktle.obq ehjdtym",     M_RD_Bind_NextLevel,    'g'}, // Следующий уровень
-    { 1, "gthtpfgecr ehjdyz",     M_RD_Bind_RestartLevel, 'r'}, // Перезапуск уровня
-    { 1, "crhbyijn",              M_RD_Bind_Screenshot,   's'}, // Скриншот
-    { 1, "pfrjyxbnm pfgbcm ltvj", M_RD_Bind_FinishDemo,   'f'}, // Закончить запись демо
-    {-1,"",0,'\0'},
-    { 1, "j,pjh vsim.",           M_RD_Bind_MouseLook,    'm'}, // Обзор мышью
-    { 1, "gjcnjzyysq ,tu",        M_RD_Bind_AlwaysRun,    'a'}, // Постоянный бег
-    { 1, "ghbwtk",                M_RD_Bind_Crosshair,    'c'}, // Прицел
-    { 1, "pthrfkbhjdfybt ehjdyz", M_RD_Bind_FlipLevels,   'l'}, // Зеркалирование уровня
-    {-1,"",0,'\0'},
-    { 1,"",                       M_RD_Choose_Bindings_4, 'n'},
-    { 1,"",                       M_RD_Choose_Bindings_2, 'p'},
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Bindings_Menu_Def_3_Rus =
-{
-    rd_bindings_3_end,
-    &RD_Controls_Def_Rus,
-    RD_Bindings_Menu_3_Rus,
-    M_RD_Draw_Bindings_3,
-    35,35,
-    0
-};
-
+menu_t*  RD_Bindings_Menu_Def_3;
+menu_t*  RD_Bindings_Menu_Def_3_Rus;
 
 // -----------------------------------------------------------------------------
 // Key bindings (4)
 // -----------------------------------------------------------------------------
 
-enum
-{
-    rd_bindings_4_togglemap,
-    rd_bindings_4_zoomin,
-    rd_bindings_4_zoomout,
-    rd_bindings_4_maxzoomout,
-    rd_bindings_4_follow,
-    rd_bindings_4_overlay,
-    rd_bindings_4_rotate,
-    rd_bindings_4_grid,
-    rd_bindings_4_mark,
-    rd_bindings_4_clearmarks,
-    rd_bindings_4_empty1,
-    rd_bindings_4_empty2,
-    rd_bindings_4_next_page,
-    rd_bindings_4_prev_page,
-    rd_bindings_4_end
-} rd_bindings_4_e;
-
-// ------------
-// English menu
-// ------------
-
-menuitem_t RD_Bindings_Menu_4[]=
-{
-    { 1, "Toggle automap",   M_RD_Bind_Automap,      't'},
-    { 1, "Zoom in",          M_RD_Bind_ZoomIn,       'z'},
-    { 1, "Zoom out",         M_RD_Bind_ZoomOut,      'z'},
-    { 1, "Maximum zoom out", M_RD_Bind_MaximumZoom,  'm'},
-    { 1, "Follow mode",      M_RD_Bind_Follow,       'f'},
-    { 1, "Overlay mode",     M_RD_Bind_Overlay,      'o'},
-    { 1, "Rotate mode",      M_RD_Bind_Rotate,       'r'},
-    { 1, "Toggle grid",      M_RD_Bind_Grid,         't'},
-    { 1, "Mark location",    M_RD_Bind_Mark,         'm'},
-    { 1, "Clear all marks",  M_RD_Bind_ClearMarks,   'c'},
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    { 1,"",                  M_RD_Choose_Bindings_1, 'f'},
-    { 1,"",                  M_RD_Choose_Bindings_3, 'p'},
-    {-1,"",0,'\0'}
+subtitle_t RD_Bindings_4_subtitles[] = {
+    {25, "Automap", "rfhnf"}
 };
 
-menu_t  RD_Bindings_Menu_Def_4 =
-{
-    rd_bindings_4_end,
+key_page_t RD_Bindings_4 = {
     &RD_Controls_Def,
-    RD_Bindings_Menu_4,
-    M_RD_Draw_Bindings_4,
-    35,35,
-    0
+    M_RD_Choose_Bindings_3,
+    M_RD_Choose_Bindings_1,
+    'p', 'y', 'f', 'l',
+    "page 4/4", "cnhfybwf 4*4",
+    RD_Bindings_4_subtitles,
+    1,
+    {bk_map_toggle,
+     bk_map_zoom_in,
+     bk_map_zoom_out,
+     bk_map_zoom_max,
+     bk_map_follow,
+     bk_map_overlay,
+     bk_map_rotate,
+     bk_map_grid,
+     bk_map_mark,
+     bk_map_clearmark,
+     bk_null}
 };
 
-// ------------
-// Russian menu
-// ------------
-
-menuitem_t RD_Bindings_Menu_4_Rus[]=
-{
-    { 1, "jnrhsnm rfhne",     M_RD_Bind_Automap,      'j'}, // Открыть карту
-    { 1, "ghb,kbpbnm",        M_RD_Bind_ZoomIn,       'g'}, // Приблизить
-    { 1, "jnlfkbnm",          M_RD_Bind_ZoomOut,      'j'}, // Отдалить
-    { 1, "gjkysq vfcinf,",    M_RD_Bind_MaximumZoom,  'g'}, // Полный масштаб
-    { 1, "ht;bv cktljdfybz",  M_RD_Bind_Follow,       'h'}, // Режим следования
-    { 1, "ht;bv yfkj;tybz",   M_RD_Bind_Overlay,      'h'}, // Режим наложения
-    { 1, "ht;bv dhfotybz",    M_RD_Bind_Rotate,       'h'}, // Режим вращения
-    { 1, "ctnrf",             M_RD_Bind_Grid,         'c'}, // Сетка
-    { 1, "gjcnfdbnm jnvtnre", M_RD_Bind_Mark,         'g'}, // Поставить отметку
-    { 1, "e,hfnm jnvtnrb",    M_RD_Bind_ClearMarks,   'e'}, // Убрать отметки
-    {-1,"",0,'\0'},
-    {-1,"",0,'\0'},
-    { 1,"",                   M_RD_Choose_Bindings_1, 'f'},
-    { 1,"",                   M_RD_Choose_Bindings_3, 'p'},
-    {-1,"",0,'\0'}
-};
-
-menu_t  RD_Bindings_Menu_Def_4_Rus =
-{
-    rd_bindings_4_end,
-    &RD_Controls_Def_Rus,
-    RD_Bindings_Menu_4_Rus,
-    M_RD_Draw_Bindings_4,
-    35,35,
-    0
-};
+menu_t*  RD_Bindings_Menu_Def_4;
+menu_t*  RD_Bindings_Menu_Def_4_Rus;
 
 
 // -----------------------------------------------------------------------------
@@ -5095,1358 +4895,136 @@ void M_RD_Change_Threshold(int choice)
 }
 
 // -----------------------------------------------------------------------------
-// M_RD_KbdKeyDrawer
-// [JN] Returns key name for keyboard bindings. Values are simple ASCII table:
-// https://upload.wikimedia.org/wikipedia/commons/7/7b/Ascii_Table-nocolor.svg
+// Key bindings
 // -----------------------------------------------------------------------------
 
-static char *M_RD_KbdKeyDrawer (int i)
+key_page_t* getCurrentKeyPage()
 {
-    switch (i)
+    if(currentMenu == RD_Bindings_Menu_Def_1 ||
+       currentMenu == RD_Bindings_Menu_Def_1_Rus)
     {
-        case 0:     return "---";
-        case 9:     return "TAB";
-        case 13:    return "ENTER";
-        case 32:    return "SPACE BAR";
-        case 39:    return "'";
-        case 42:    return "*";
-        case 43:    return "+"; // [JN] NumPad +
-        case 44:    return ",";
-        case 45:    return "-";
-        case 46:    return ".";
-        case 47:    return "/";
-        case 48:    return "0";
-        case 49:    return "1";
-        case 50:    return "2";
-        case 51:    return "3";
-        case 52:    return "4";
-        case 53:    return "5";
-        case 54:    return "6";
-        case 55:    return "7";
-        case 56:    return "8";
-        case 57:    return "9";
-        case 59:    return ";";
-        case 61:    return "="; // [JN] Indicated as "+" in help screens
-        case 91:    return "[";
-        case 93:    return "]";
-        case 92:    return "\\";
-        case 96:    return "TILDE";
-        case 97:    return "A";
-        case 98:    return "B";
-        case 99:    return "C";
-        case 100:   return "D";
-        case 101:   return "E";
-        case 102:   return "F";
-        case 103:   return "G";
-        case 104:   return "H";
-        case 105:   return "I";
-        case 106:   return "J";
-        case 107:   return "K";
-        case 108:   return "L";
-        case 109:   return "M";
-        case 110:   return "N";
-        case 111:   return "O";
-        case 112:   return "P";
-        case 113:   return "Q";
-        case 114:   return "R";
-        case 115:   return "S";
-        case 116:   return "T";
-        case 117:   return "U";
-        case 118:   return "V";
-        case 119:   return "W";
-        case 120:   return "X";
-        case 121:   return "Y";
-        case 122:   return "Z";
-        case 127:   return "BACKSPACE";
-        case 157:   return "CTRL";
-        case 172:   return "LEFT ARROW";
-        case 173:   return "UP ARROW";
-        case 174:   return "RIGHT ARROW";
-        case 175:   return "DOWN ARROW";
-        case 182:   return "SHIFT";
-        case 184:   return "ALT";
-        case 186:   return "CAPS LOCK";
-        case 187:   return "F1";
-        case 188:   return "F2";
-        case 189:   return "F3";
-        case 190:   return "F4";
-        case 191:   return "F5";
-        case 192:   return "F6";
-        case 193:   return "F7";
-        case 194:   return "F8";
-        case 195:   return "F9";
-        case 197:   return "NUM LOCK";
-        case 198:   return "SCROLL LOCK";
-        case 199:   return "HOME";
-        case 201:   return "PAGE UP";
-        case 204:   return "5"; // [JN] NumPad 5
-        case 207:   return "END";
-        case 209:   return "PAGE DOWN";
-        case 210:   return "INSERT";
-        case 211:   return "DELETE";
-        case 215:   return "F11";
-        case 216:   return "F12";
-        case 217:   return "PRINT SCREEN";
-        case 255:   return "PAUSE";
-        default:    return "?"; // [JN] Unknown key
+        return &RD_Bindings_1;
+    }
+    else if(currentMenu == RD_Bindings_Menu_Def_2 ||
+            currentMenu == RD_Bindings_Menu_Def_2_Rus)
+    {
+        return &RD_Bindings_2;
+    }
+    else if(currentMenu == RD_Bindings_Menu_Def_3 ||
+            currentMenu == RD_Bindings_Menu_Def_3_Rus)
+    {
+        return &RD_Bindings_3;
+    }
+    else if(currentMenu == RD_Bindings_Menu_Def_4 ||
+            currentMenu == RD_Bindings_Menu_Def_4_Rus)
+    {
+        return &RD_Bindings_4;
+    }
+    else
+    {
+        return NULL;
     }
 }
 
+void M_RD_Bind_Key(int choice)
+{
+    key_page_t* keyPage = getCurrentKeyPage();
+    if(keyPage) M_RD_StartBinding(BK_getKeyDescriptor(keyPage->keys[choice])->key_var);
+}
 
-// -----------------------------------------------------------------------------
-// Key bindings (1)
-// -----------------------------------------------------------------------------
+void M_RD_Draw_Bindings()
+{
+    key_page_t *keyPage = getCurrentKeyPage();
+    int x = (english_language ? 209 : 210);
+
+    M_RD_Draw_Menu_Background();
+
+    if (english_language)
+        M_WriteTextBigCentered_ENG(5, "Keyboard bindings");
+    else
+        M_WriteTextBigCentered_RUS(5, "Yfcnhjqrb rkfdbfnehs"); // Настройки клавиатуры
+
+    dp_translation = cr[CR_GOLD];
+    for (int i = 0; i < keyPage->num_of_subtitles; ++i)
+    {
+        if (english_language)
+            M_WriteTextSmall_ENG(35 + wide_delta, keyPage->subtitles[i].y, keyPage->subtitles[i].eng_text);
+        else
+            M_WriteTextSmall_RUS(35 + wide_delta, keyPage->subtitles[i].y, keyPage->subtitles[i].rus_text);
+    }
+
+    dp_translation = cr[CR_GRAY];
+    if (english_language)
+    {
+        M_WriteTextSmall_ENG(35 + wide_delta, 155, currentMenu == RD_Bindings_Menu_Def_4 ? "first page >" : "next page >");
+        M_WriteTextSmall_ENG(35 + wide_delta, 165, currentMenu == RD_Bindings_Menu_Def_1 ? "< last page" : "< prev page");
+        M_WriteTextSmall_ENG(x + wide_delta, 165, keyPage->eng_pageNumber);
+        dp_translation = NULL;
+
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
+        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages");
+    }
+    else
+    {
+        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS);
+        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS);
+        M_WriteTextSmall_RUS(x + wide_delta, 165, keyPage->rus_pageNumber);
+        dp_translation = NULL;
+
+        dp_translation = cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
+        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
+        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
+        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
+
+        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =");
+        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws");
+    }
+    dp_translation = NULL;
+
+    for (int i = 0; i < 11; ++i)
+    {
+        bound_key_t key = keyPage->keys[i];
+        if (key != bk_null)
+        {
+            boolean bindingThis = messageToBind && i == itemOn;
+            if (bindingThis) dp_translation = cr[CR_GRAY];
+            else if (BK_KeyHasNoBinds(key)) dp_translation = cr[CR_DARKRED];
+
+            M_WriteTextSmall_ENG(x + wide_delta, i * 10 + 35, bindingThis ? "?" : BK_getBoundKeysString(key));
+            dp_translation = NULL;
+        }
+    }
+}
 
 void M_RD_Choose_Bindings_1(int choice)
 {
     M_SetupNextMenu(english_language ?
-                    &RD_Bindings_Menu_Def_1 :
-                    &RD_Bindings_Menu_Def_1_Rus);
+                    RD_Bindings_Menu_Def_1 :
+                    RD_Bindings_Menu_Def_1_Rus);
 }
-
-void M_RD_Draw_Bindings_1(void)
-{
-    int x = (english_language ? 209 : 210);
-    
-    M_RD_Draw_Menu_Background();
-
-    if (english_language)
-    {
-        M_WriteTextBigCentered_ENG(5, "Keyboard bindings");
-
-        //
-        // Movement
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Movement");
-        dp_translation = NULL;
-
-        //
-        // Action
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 115, "Action");
-        dp_translation = NULL;
-
-        //
-        // Footer
-        //
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "next page >"); 
-        M_WriteTextSmall_ENG(35 + wide_delta, 165, "< last page"); 
-        M_WriteTextSmall_ENG(x + wide_delta, 165, "page 1/4");
-        dp_translation = NULL;
-
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
-        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages");
-        dp_translation = NULL;
-    }
-    else
-    {
-        M_WriteTextBigCentered_RUS(5, "Yfcnhjqrb rkfdbfnehs"); // Настройки клавиатуры
-
-        //
-        // Движение
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "ldb;tybt");
-        dp_translation = NULL;
-
-        //
-        // Действие
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 115, "ltqcndbt");
-        dp_translation = NULL;
-
-
-        //
-        // Footer
-        //
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS); 
-        M_WriteTextSmall_RUS(x + wide_delta, 165, "cnhfybwf 1*4");
-        dp_translation = NULL;
-
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
-        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
-        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
-        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
-
-        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =");
-        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws");
-        dp_translation = NULL;
-    }
-
-    // Move forward
-    if (messageToPrint && itemOn == rd_bindings_1_move_forward)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_up == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_KbdKeyDrawer(key_up));
-        dp_translation = NULL;
-    }
-
-    // Move backward
-    if (messageToPrint && itemOn == rd_bindings_1_move_backward)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_down == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_KbdKeyDrawer(key_down));
-        dp_translation = NULL;
-    }
-
-    // Turn left
-    if (messageToPrint && itemOn == rd_bindings_1_turn_left)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_left == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_KbdKeyDrawer(key_left));
-        dp_translation = NULL;
-    }
-
-    // Turn right
-    if (messageToPrint && itemOn == rd_bindings_1_turn_right)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_right == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_KbdKeyDrawer(key_right));
-        dp_translation = NULL;
-    }
-
-    // Strafe left
-    if (messageToPrint && itemOn == rd_bindings_1_strafe_left)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_strafeleft == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_KbdKeyDrawer(key_strafeleft));
-        dp_translation = NULL;
-    }
-
-    // Strafe right
-    if (messageToPrint && itemOn == rd_bindings_1_strafe_right)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_straferight == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_KbdKeyDrawer(key_straferight));
-        dp_translation = NULL;
-    }
-
-    // Speed on
-    if (messageToPrint && itemOn == rd_bindings_1_speed_on)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 95, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_speed == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 95, M_RD_KbdKeyDrawer(key_speed));
-        dp_translation = NULL;
-    }
-
-    // Strafe on
-    if (messageToPrint && itemOn == rd_bindings_1_strafe_on)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_strafe == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_KbdKeyDrawer(key_strafe));
-        dp_translation = NULL;
-    }
-
-    // Fire/Attack
-    if (messageToPrint && itemOn == rd_bindings_1_fire)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_fire == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, M_RD_KbdKeyDrawer(key_fire));
-        dp_translation = NULL;
-    }
-
-    // Use
-    if (messageToPrint && itemOn == rd_bindings_1_use)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 135, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_use == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 135, M_RD_KbdKeyDrawer(key_use));
-        dp_translation = NULL;
-    }
-}
-
-
-// -----------------------------------------------------------------------------
-// Movement
-// -----------------------------------------------------------------------------
-
-//
-// Move Forward
-//
-void M_RD_Bind_MoveForward (int choice)
-{
-    M_RD_StartBinding(&key_up);
-}
-
-//
-// Move Backward
-//
-void M_RD_Bind_MoveBackward (int choice)
-{
-    M_RD_StartBinding(&key_down);
-}
-
-//
-// Turn Left
-//
-void M_RD_Bind_TurnLeft (int choice)
-{
-    M_RD_StartBinding(&key_left);
-}
-
-//
-// Turn Right
-//
-void M_RD_Bind_TurnRight (int choice)
-{
-    M_RD_StartBinding(&key_right);
-}
-
-//
-// Strafe Left
-//
-void M_RD_Bind_StrafeLeft (int choice)
-{
-    M_RD_StartBinding(&key_strafeleft);
-}
-
-//
-// Strafe Right
-//
-void M_RD_Bind_StrafeRight (int choice)
-{
-    M_RD_StartBinding(&key_straferight);
-}
-
-//
-// Speed On
-//
-void M_RD_Bind_SpeedOn (int choice)
-{
-    M_RD_StartBinding(&key_speed);
-}
-
-//
-// Strafe On
-//
-void M_RD_Bind_StrafeOn (int choice)
-{
-    M_RD_StartBinding(&key_strafe);
-}
-
-//
-// Fire/Attack
-//
-void M_RD_Bind_FireAttack (int choice)
-{
-    M_RD_StartBinding(&key_fire);
-}
-
-//
-// Use
-//
-void M_RD_Bind_Use (int choice)
-{
-    M_RD_StartBinding(&key_use);
-}
-
-
-// -----------------------------------------------------------------------------
-// Key bindings (2)
-// -----------------------------------------------------------------------------
 
 void M_RD_Choose_Bindings_2(int choice)
 {
     M_SetupNextMenu(english_language ?
-                    &RD_Bindings_Menu_Def_2 :
-                    &RD_Bindings_Menu_Def_2_Rus);
+                    RD_Bindings_Menu_Def_2 :
+                    RD_Bindings_Menu_Def_2_Rus);
 }
-
-void M_RD_Draw_Bindings_2(void)
-{
-    int x = (english_language ? 209 : 210);
-    
-    M_RD_Draw_Menu_Background();
-
-    if (english_language)
-    {
-        M_WriteTextBigCentered_ENG(5, "Keyboard bindings");
-
-        //
-        // Weapons
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Weapons");
-        dp_translation = NULL;
-
-        //
-        // Footer
-        //
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "next page >"); 
-        M_WriteTextSmall_ENG(35 + wide_delta, 165, "< prev page"); 
-        M_WriteTextSmall_ENG(x + wide_delta, 165, "page 2/4");
-        dp_translation = NULL;
-
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
-        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages");
-        dp_translation = NULL;
-    }
-    else
-    {
-        M_WriteTextBigCentered_RUS(5, "Yfcnhjqrb rkfdbfnehs"); // Настройки клавиатуры
-
-        //
-        // Оружие
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "jhe;bt");
-        dp_translation = NULL;
-
-        //
-        // Footer
-        //
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS); 
-        M_WriteTextSmall_RUS(x + wide_delta, 165, "cnhfybwf 2*4");
-        dp_translation = NULL;
-
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
-        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
-        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
-        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
-
-        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =");
-        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws");
-        dp_translation = NULL;
-    }
-
-    // Weapon 1
-    if (messageToPrint && itemOn == rd_bindings_2_weapon_1)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_weapon1 == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_KbdKeyDrawer(key_weapon1));
-        dp_translation = NULL;
-    }
-
-    // Weapon 2
-    if (messageToPrint && itemOn == rd_bindings_2_weapon_2)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_weapon2 == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_KbdKeyDrawer(key_weapon2));
-        dp_translation = NULL;
-    }
-
-    // Weapon 3
-    if (messageToPrint && itemOn == rd_bindings_2_weapon_3)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_weapon3 == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_KbdKeyDrawer(key_weapon3));
-        dp_translation = NULL;
-    }
-
-    // Weapon 4
-    if (messageToPrint && itemOn == rd_bindings_2_weapon_4)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_weapon4 == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_KbdKeyDrawer(key_weapon4));
-        dp_translation = NULL;
-    }
-
-    // Weapon 5
-    if (messageToPrint && itemOn == rd_bindings_2_weapon_5)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_weapon5 == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_KbdKeyDrawer(key_weapon5));
-        dp_translation = NULL;
-    }
-
-    // Weapon 6
-    if (messageToPrint && itemOn == rd_bindings_2_weapon_6)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_weapon6 == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_KbdKeyDrawer(key_weapon6));
-        dp_translation = NULL;
-    }
-
-    // Weapon 7
-    if (messageToPrint && itemOn == rd_bindings_2_weapon_7)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 95, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_weapon7 == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 95, M_RD_KbdKeyDrawer(key_weapon7));
-        dp_translation = NULL;
-    }
-
-    // Weapon 8
-    if (messageToPrint && itemOn == rd_bindings_2_weapon_8)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_weapon8 == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_KbdKeyDrawer(key_weapon8));
-        dp_translation = NULL;
-    }
-
-    // Previous weapon
-    if (messageToPrint && itemOn == rd_bindings_2_prevweapon)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 115, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_prevweapon == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 115, M_RD_KbdKeyDrawer(key_prevweapon));
-        dp_translation = NULL;
-    }
-
-    // Next weapon
-    if (messageToPrint && itemOn == rd_bindings_2_nextweapon)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_nextweapon == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, M_RD_KbdKeyDrawer(key_nextweapon));
-        dp_translation = NULL;
-    }
-}
-
-//
-// Weapon 1
-//
-void M_RD_Bind_Weapon_1 (int choice)
-{
-    M_RD_StartBinding(&key_weapon1);
-}
-
-//
-// Weapon 2
-//
-void M_RD_Bind_Weapon_2 (int choice)
-{
-    M_RD_StartBinding(&key_weapon2);
-}
-
-//
-// Weapon 3
-//
-void M_RD_Bind_Weapon_3 (int choice)
-{
-    M_RD_StartBinding(&key_weapon3);
-}
-
-//
-// Weapon 4
-//
-void M_RD_Bind_Weapon_4 (int choice)
-{
-    M_RD_StartBinding(&key_weapon4);
-}
-
-//
-// Weapon 5
-//
-void M_RD_Bind_Weapon_5 (int choice)
-{
-    M_RD_StartBinding(&key_weapon5);
-}
-
-//
-// Weapon 6
-//
-void M_RD_Bind_Weapon_6 (int choice)
-{
-    M_RD_StartBinding(&key_weapon6);
-}
-
-//
-// Weapon 7
-//
-void M_RD_Bind_Weapon_7 (int choice)
-{
-    M_RD_StartBinding(&key_weapon7);
-}
-
-//
-// Weapon 8
-//
-void M_RD_Bind_Weapon_8 (int choice)
-{
-    M_RD_StartBinding(&key_weapon8);
-}
-
-//
-// Previous weapon
-//
-void M_RD_Bind_PrevWeapon (int choice)
-{
-    M_RD_StartBinding(&key_prevweapon);
-}
-
-//
-// Next weapon
-//
-void M_RD_Bind_NextWeapon (int choice)
-{
-    M_RD_StartBinding(&key_nextweapon);
-}
-
-
-// -----------------------------------------------------------------------------
-// Key bindings (3)
-// -----------------------------------------------------------------------------
 
 void M_RD_Choose_Bindings_3(int choice)
 {
     M_SetupNextMenu(english_language ?
-                    &RD_Bindings_Menu_Def_3 :
-                    &RD_Bindings_Menu_Def_3_Rus);
+                    RD_Bindings_Menu_Def_3 :
+                    RD_Bindings_Menu_Def_3_Rus);
 }
-
-void M_RD_Draw_Bindings_3(void)
-{
-    int x = (english_language ? 209 : 210);
-    
-    M_RD_Draw_Menu_Background();
-
-    if (english_language)
-    {
-        M_WriteTextBigCentered_ENG(5, "Keyboard bindings");
-
-        //
-        // Shortcut keys
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Shortcut keys");
-        dp_translation = NULL;
-
-        //
-        // Toggleables
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 95, "Toggleables");
-        dp_translation = NULL;
-
-        //
-        // Footer
-        //
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "next page >"); 
-        M_WriteTextSmall_ENG(35 + wide_delta, 165, "< prev page"); 
-        M_WriteTextSmall_ENG(x + wide_delta, 165, "page 3/4");
-        dp_translation = NULL;
-
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
-        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages");
-        dp_translation = NULL;
-    }
-    else
-    {
-        M_WriteTextBigCentered_RUS(5, "Yfcnhjqrb rkfdbfnehs"); // Настройки клавиатуры
-
-        //
-        // Быстрый доступ
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, ",scnhsq ljcneg");
-        dp_translation = NULL;
-
-        //
-        // Переключение
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 95, "gthtrk.xtybt");
-        dp_translation = NULL;
-
-        //
-        // Footer
-        //
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS); 
-        M_WriteTextSmall_RUS(x + wide_delta, 165, "cnhfybwf 3*4");
-        dp_translation = NULL;
-
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
-        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
-        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
-        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
-
-        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =");
-        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws");
-        dp_translation = NULL;
-    }
-
-    // Quick save
-    if (messageToPrint && itemOn == rd_bindings_3_quicksave)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_menu_qsave == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_KbdKeyDrawer(key_menu_qsave));
-        dp_translation = NULL;
-    }
-
-    // Quick load
-    if (messageToPrint && itemOn == rd_bindings_3_quickload)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_menu_qload == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_KbdKeyDrawer(key_menu_qload));
-        dp_translation = NULL;
-    }
-
-    // Go to next level
-    if (messageToPrint && itemOn == rd_bindings_3_nextlevel)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_menu_nextlevel == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_KbdKeyDrawer(key_menu_nextlevel));
-        dp_translation = NULL;
-    }
-
-    // Restart level
-    if (messageToPrint && itemOn == rd_bindings_3_restartlevel)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_menu_reloadlevel == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_KbdKeyDrawer(key_menu_reloadlevel));
-        dp_translation = NULL;
-    }
-
-    // Save a screenshot
-    if (messageToPrint && itemOn == rd_bindings_3_screenshot)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_menu_screenshot == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_KbdKeyDrawer(key_menu_screenshot));
-        dp_translation = NULL;
-    }
-
-    // Finish demo recording
-    if (messageToPrint && itemOn == rd_bindings_3_finishdemo)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_demo_quit == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_KbdKeyDrawer(key_demo_quit));
-        dp_translation = NULL;
-    }
-
-    // Mouse look
-    if (messageToPrint && itemOn == rd_bindings_3_mouselook)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_togglemlook == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_KbdKeyDrawer(key_togglemlook));
-        dp_translation = NULL;
-    }
-
-    // Always run
-    if (messageToPrint && itemOn == rd_bindings_3_alwaysrun)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 115, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_toggleautorun == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 115, M_RD_KbdKeyDrawer(key_toggleautorun));
-        dp_translation = NULL;
-    }
-
-    // Crosshair
-    if (messageToPrint && itemOn == rd_bindings_3_crosshair)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_togglecrosshair == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, M_RD_KbdKeyDrawer(key_togglecrosshair));
-        dp_translation = NULL;
-    }
-
-    // Level flipping
-    if (messageToPrint && itemOn == rd_bindings_3_fliplevel)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 135, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_togglefliplvls == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 135, M_RD_KbdKeyDrawer(key_togglefliplvls));
-        dp_translation = NULL;
-    }
-}
-
-//
-// Quick save
-//
-void M_RD_Bind_QuickSave (int choice)
-{
-    M_RD_StartBinding(&key_menu_qsave);
-}
-
-//
-// Quick load
-//
-void M_RD_Bind_QuickLoad (int choice)
-{
-    M_RD_StartBinding(&key_menu_qload);
-}
-
-//
-// Go to next level
-//
-void M_RD_Bind_NextLevel (int choice)
-{
-    M_RD_StartBinding(&key_menu_nextlevel);
-}
-
-//
-// Restart level/demo
-//
-void M_RD_Bind_RestartLevel (int choice)
-{
-    M_RD_StartBinding(&key_menu_reloadlevel);
-}
-
-//
-// Save a screenshot
-//
-void M_RD_Bind_Screenshot (int choice)
-{
-    M_RD_StartBinding(&key_menu_screenshot);
-}
-
-//
-// Finish demo recording
-//
-void M_RD_Bind_FinishDemo (int choice)
-{
-    M_RD_StartBinding(&key_demo_quit);
-}
-
-//
-// Mouse look
-//
-void M_RD_Bind_MouseLook (int choice)
-{
-    M_RD_StartBinding(&key_togglemlook);
-}
-
-//
-// Always run
-//
-void M_RD_Bind_AlwaysRun (int choice)
-{
-    M_RD_StartBinding(&key_toggleautorun);
-}
-
-//
-// Crosshair
-//
-void M_RD_Bind_Crosshair (int choice)
-{
-    M_RD_StartBinding(&key_togglecrosshair);
-}
-
-//
-// FlipLevels
-//
-void M_RD_Bind_FlipLevels (int choice)
-{
-    M_RD_StartBinding(&key_togglefliplvls);
-}
-
-
-// -----------------------------------------------------------------------------
-// Key bindings (4)
-// -----------------------------------------------------------------------------
 
 void M_RD_Choose_Bindings_4(int choice)
 {
     M_SetupNextMenu(english_language ?
-                    &RD_Bindings_Menu_Def_4 :
-                    &RD_Bindings_Menu_Def_4_Rus);
+                    RD_Bindings_Menu_Def_4 :
+                    RD_Bindings_Menu_Def_4_Rus);
 }
-
-void M_RD_Draw_Bindings_4(void)
-{
-    int x = (english_language ? 209 : 210);
-    
-    M_RD_Draw_Menu_Background();
-
-    if (english_language)
-    {
-        M_WriteTextBigCentered_ENG(5, "Keyboard bindings");
-
-        //
-        // Shortcut keys
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 25, "Automap");
-        dp_translation = NULL;
-
-        //
-        // Footer
-        //
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(35 + wide_delta, 155, "first page >"); 
-        M_WriteTextSmall_ENG(35 + wide_delta, 165, "< prev page"); 
-        M_WriteTextSmall_ENG(x + wide_delta, 165, "page 4/4");
-        dp_translation = NULL;
-
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(55 + wide_delta, 180, "enter to change, del to clear");
-        M_WriteTextSmall_ENG(75 + wide_delta, 189, "pgup/pgdn to turn pages");
-        dp_translation = NULL;
-    }
-    else
-    {
-        M_WriteTextBigCentered_RUS(5, "Yfcnhjqrb rkfdbfnehs"); // Настройки клавиатуры
-
-        //
-        // Карта
-        //
-        dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 25, "rfhnf");
-        dp_translation = NULL;
-
-        //
-        // Footer
-        //
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS); 
-        M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS); 
-        M_WriteTextSmall_RUS(x + wide_delta, 165, "cnhfybwf 4*4");
-        dp_translation = NULL;
-
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(44 + wide_delta, 180, "enter =");
-        M_WriteTextSmall_RUS(88 + wide_delta, 180, "= yfpyfxbnm<");
-        M_WriteTextSmall_ENG(176 + wide_delta, 180, "del =");
-        M_WriteTextSmall_RUS(213 + wide_delta, 180, "jxbcnbnm");
-
-        M_WriteTextSmall_ENG(55 + wide_delta, 189, "pgup/pgdn =");
-        M_WriteTextSmall_RUS(139 + wide_delta, 189, "kbcnfnm cnhfybws");
-        dp_translation = NULL;
-    }
-
-    // Toggle automap
-    if (messageToPrint && itemOn == rd_bindings_4_togglemap)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_map_toggle == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 35, M_RD_KbdKeyDrawer(key_map_toggle));
-        dp_translation = NULL;
-    }
-
-    // Zoom in
-    if (messageToPrint && itemOn == rd_bindings_4_zoomin)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_map_zoomin == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 45, M_RD_KbdKeyDrawer(key_map_zoomin));
-        dp_translation = NULL;
-    }
-
-    // Zoom out
-    if (messageToPrint && itemOn == rd_bindings_4_zoomout)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_map_zoomout == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 55, M_RD_KbdKeyDrawer(key_map_zoomout));
-        dp_translation = NULL;
-    }
-
-    // Maximum zoom out
-    if (messageToPrint && itemOn == rd_bindings_4_maxzoomout)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_map_maxzoom == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 65, M_RD_KbdKeyDrawer(key_map_maxzoom));
-        dp_translation = NULL;
-    }
-
-    // Follow mode
-    if (messageToPrint && itemOn == rd_bindings_4_follow)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_map_follow == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 75, M_RD_KbdKeyDrawer(key_map_follow));
-        dp_translation = NULL;
-    }
-
-    // Overlay mode
-    if (messageToPrint && itemOn == rd_bindings_4_overlay)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_map_overlay == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 85, M_RD_KbdKeyDrawer(key_map_overlay));
-        dp_translation = NULL;
-    }
-
-    // Rotate mode
-    if (messageToPrint && itemOn == rd_bindings_4_rotate)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 95, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_map_rotate == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 95, M_RD_KbdKeyDrawer(key_map_rotate));
-        dp_translation = NULL;
-    }
-
-    // Toggle grid
-    if (messageToPrint && itemOn == rd_bindings_4_grid)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-
-        if (key_map_grid == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 105, M_RD_KbdKeyDrawer(key_map_grid));
-        dp_translation = NULL;
-    }
-
-    // Mark location
-    if (messageToPrint && itemOn == rd_bindings_4_mark)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 115, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_map_mark == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 115, M_RD_KbdKeyDrawer(key_map_mark));
-        dp_translation = NULL;
-    }
-
-    // Clear all marks
-    if (messageToPrint && itemOn == rd_bindings_4_clearmarks)
-    {
-        dp_translation = cr[CR_GRAY];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, "?");
-        dp_translation = NULL;
-    }
-    else
-    {
-        if (key_map_clearmark == 0)
-        dp_translation = cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(x + wide_delta, 125, M_RD_KbdKeyDrawer(key_map_clearmark));
-        dp_translation = NULL;
-    }
-}
-
-//
-// Toggle automap
-//
-void M_RD_Bind_Automap (int choice)
-{
-    M_RD_StartBinding(&key_map_toggle);
-}
-
-//
-// Zoom in
-//
-void M_RD_Bind_ZoomIn (int choice)
-{
-    M_RD_StartBinding(&key_map_zoomin);
-}
-
-//
-// Zoom out
-//
-void M_RD_Bind_ZoomOut (int choice)
-{
-    M_RD_StartBinding(&key_map_zoomout);
-}
-
-//
-// Maximum zoom out
-//
-void M_RD_Bind_MaximumZoom (int choice)
-{
-    M_RD_StartBinding(&key_map_maxzoom);
-}
-
-//
-// Follow mode
-//
-void M_RD_Bind_Follow (int choice)
-{
-    M_RD_StartBinding(&key_map_follow);
-}
-
-//
-// Overlay mode
-//
-void M_RD_Bind_Overlay (int choice)
-{
-    M_RD_StartBinding(&key_map_overlay);
-}
-
-//
-// Rotate mode
-//
-void M_RD_Bind_Rotate (int choice)
-{
-    M_RD_StartBinding(&key_map_rotate);
-}
-
-//
-// Toggle grid
-//
-void M_RD_Bind_Grid (int choice)
-{
-    M_RD_StartBinding(&key_map_grid);
-}
-
-//
-// Mark location
-//
-void M_RD_Bind_Mark (int choice)
-{
-    M_RD_StartBinding(&key_map_mark);
-}
-
-//
-// Clear all marks
-//
-void M_RD_Bind_ClearMarks (int choice)
-{
-    M_RD_StartBinding(&key_map_clearmark);
-}
-
 
 // -----------------------------------------------------------------------------
 // M_RD_MouseBtnDrawer
@@ -6525,7 +5103,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     }
 
     // Fire/Attack
-    if (messageToPrint && itemOn == rd_mouse_bindings_attack)
+    if (messageToBind && itemOn == rd_mouse_bindings_attack)
     {
         dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(x + wide_delta, 35, "?");
@@ -6540,7 +5118,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     }
 
     // Use
-    if (messageToPrint && itemOn == rd_mouse_bindings_use)
+    if (messageToBind && itemOn == rd_mouse_bindings_use)
     {
         dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(x + wide_delta, 45, "?");
@@ -6555,7 +5133,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     }
 
     // Move Forward
-    if (messageToPrint && itemOn == rd_mouse_bindings_forward)
+    if (messageToBind && itemOn == rd_mouse_bindings_forward)
     {
         dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(x + wide_delta, 55, "?");
@@ -6570,7 +5148,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     }
 
     // Move Backward
-    if (messageToPrint && itemOn == rd_mouse_bindings_backward)
+    if (messageToBind && itemOn == rd_mouse_bindings_backward)
     {
         dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(x + wide_delta, 65, "?");
@@ -6585,7 +5163,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     }
 
     // Strafe On
-    if (messageToPrint && itemOn == rd_mouse_bindings_strafeon)
+    if (messageToBind && itemOn == rd_mouse_bindings_strafeon)
     {
         dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(x + wide_delta, 75, "?");
@@ -6600,7 +5178,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     }
 
     // Strafe Left
-    if (messageToPrint && itemOn == rd_mouse_bindings_strafeleft)
+    if (messageToBind && itemOn == rd_mouse_bindings_strafeleft)
     {
         dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(x + wide_delta, 85, "?");
@@ -6615,7 +5193,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     }
 
     // Strafe Right
-    if (messageToPrint && itemOn == rd_mouse_bindings_straferight)
+    if (messageToBind && itemOn == rd_mouse_bindings_straferight)
     {
         dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(x + wide_delta, 95, "?");
@@ -6630,7 +5208,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     }
 
     // Previous Weapon
-    if (messageToPrint && itemOn == rd_mouse_bindings_prevweapon)
+    if (messageToBind && itemOn == rd_mouse_bindings_prevweapon)
     {
         dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(x + wide_delta, 105, "?");
@@ -6646,7 +5224,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     }
 
     // Next Weapon
-    if (messageToPrint && itemOn == rd_mouse_bindings_nextweapon)
+    if (messageToBind && itemOn == rd_mouse_bindings_nextweapon)
     {
         dp_translation = cr[CR_GRAY];
         M_WriteTextSmall_ENG(x + wide_delta, 115, "?");
@@ -10105,6 +8683,7 @@ boolean M_Responder (event_t* ev)
     int             i;
     static int      joywait = 0;
     static int      mousewait = 0;
+    key_page_t*     keyPage;
     // [FG] disable menu control by mouse
     /*
     static int      mousey = 0;
@@ -10163,31 +8742,31 @@ boolean M_Responder (event_t* ev)
     {
 
         // [JN] Disallow to use joystick keys while binding keyboard keys
-        if ((currentMenu == &RD_Bindings_Menu_Def_1
-        ||   currentMenu == &RD_Bindings_Menu_Def_1_Rus) && messageToBind)
+        if ((currentMenu == RD_Bindings_Menu_Def_1
+        ||   currentMenu == RD_Bindings_Menu_Def_1_Rus) && messageToBind)
         {
-            for (i = 0 ; i < rd_bindings_1_end ; i++)
+            for (i = 0 ; i < 15 ; i++)
                 if (itemOn == i)
                     return false;
         }
-        if ((currentMenu == &RD_Bindings_Menu_Def_2
-        ||   currentMenu == &RD_Bindings_Menu_Def_2_Rus) && messageToBind)
+        if ((currentMenu == RD_Bindings_Menu_Def_2
+        ||   currentMenu == RD_Bindings_Menu_Def_2_Rus) && messageToBind)
         {
-            for (i = 0 ; i < rd_bindings_2_end ; i++)
+            for (i = 0 ; i < 15 ; i++)
                 if (itemOn == i)
                     return false;
         }
-        if ((currentMenu == &RD_Bindings_Menu_Def_3
-        ||   currentMenu == &RD_Bindings_Menu_Def_3_Rus) && messageToBind)
+        if ((currentMenu == RD_Bindings_Menu_Def_3
+        ||   currentMenu == RD_Bindings_Menu_Def_3_Rus) && messageToBind)
         {
-            for (i = 0 ; i < rd_bindings_3_end ; i++)
+            for (i = 0 ; i < 15 ; i++)
                 if (itemOn == i)
                     return false;
         }
-        if ((currentMenu == &RD_Bindings_Menu_Def_4
-        ||   currentMenu == &RD_Bindings_Menu_Def_4_Rus) && messageToBind)
+        if ((currentMenu == RD_Bindings_Menu_Def_4
+        ||   currentMenu == RD_Bindings_Menu_Def_4_Rus) && messageToBind)
         {
-            for (i = 0 ; i < rd_bindings_4_end ; i++)
+            for (i = 0 ; i < 15 ; i++)
                 if (itemOn == i)
                     return false;
         }
@@ -10267,31 +8846,31 @@ boolean M_Responder (event_t* ev)
             */
 
             // [JN] Disallow to use mouse keys while binding keyboard keys
-            if ((currentMenu == &RD_Bindings_Menu_Def_1
-            ||   currentMenu == &RD_Bindings_Menu_Def_1_Rus) && messageToBind)
+            if ((currentMenu == RD_Bindings_Menu_Def_1
+            ||   currentMenu == RD_Bindings_Menu_Def_1_Rus) && messageToBind)
             {
-                for (i = 0 ; i < rd_bindings_1_end ; i++)
+                for (i = 0 ; i < 15 ; i++)
                     if (itemOn == i)
                         return false;
             }
-            if ((currentMenu == &RD_Bindings_Menu_Def_2
-            ||   currentMenu == &RD_Bindings_Menu_Def_2_Rus) && messageToBind)
+            if ((currentMenu == RD_Bindings_Menu_Def_2
+            ||   currentMenu == RD_Bindings_Menu_Def_2_Rus) && messageToBind)
             {
-                for (i = 0 ; i < rd_bindings_2_end ; i++)
+                for (i = 0 ; i < 15 ; i++)
                     if (itemOn == i)
                         return false;
             }
-            if ((currentMenu == &RD_Bindings_Menu_Def_3
-            ||   currentMenu == &RD_Bindings_Menu_Def_3_Rus) && messageToBind)
+            if ((currentMenu == RD_Bindings_Menu_Def_3
+            ||   currentMenu == RD_Bindings_Menu_Def_3_Rus) && messageToBind)
             {
-                for (i = 0 ; i < rd_bindings_3_end ; i++)
+                for (i = 0 ; i < 15 ; i++)
                     if (itemOn == i)
                         return false;
             }
-            if ((currentMenu == &RD_Bindings_Menu_Def_4
-            ||   currentMenu == &RD_Bindings_Menu_Def_4_Rus) && messageToBind)
+            if ((currentMenu == RD_Bindings_Menu_Def_4
+            ||   currentMenu == RD_Bindings_Menu_Def_4_Rus) && messageToBind)
             {
-                for (i = 0 ; i < rd_bindings_4_end ; i++)
+                for (i = 0 ; i < 15 ; i++)
                     if (itemOn == i)
                         return false;
             }
@@ -10423,14 +9002,14 @@ boolean M_Responder (event_t* ev)
     &&  currentMenu != &LoadDef
     &&  currentMenu != &LoadDef_Rus    
     // [JN] Do not close bindings menu after binding key / mouse button.
-    &&  currentMenu != &RD_Bindings_Menu_Def_1
-    &&  currentMenu != &RD_Bindings_Menu_Def_1_Rus
-    &&  currentMenu != &RD_Bindings_Menu_Def_2
-    &&  currentMenu != &RD_Bindings_Menu_Def_2_Rus
-    &&  currentMenu != &RD_Bindings_Menu_Def_3
-    &&  currentMenu != &RD_Bindings_Menu_Def_3_Rus
-    &&  currentMenu != &RD_Bindings_Menu_Def_4
-    &&  currentMenu != &RD_Bindings_Menu_Def_4_Rus
+    &&  currentMenu != RD_Bindings_Menu_Def_1
+    &&  currentMenu != RD_Bindings_Menu_Def_1_Rus
+    &&  currentMenu != RD_Bindings_Menu_Def_2
+    &&  currentMenu != RD_Bindings_Menu_Def_2_Rus
+    &&  currentMenu != RD_Bindings_Menu_Def_3
+    &&  currentMenu != RD_Bindings_Menu_Def_3_Rus
+    &&  currentMenu != RD_Bindings_Menu_Def_4
+    &&  currentMenu != RD_Bindings_Menu_Def_4_Rus
     &&  currentMenu != &RD_Mouse_Bindings_Menu_Def
     &&  currentMenu != &RD_Mouse_Bindings_Menu_Def_Rus)
     {
@@ -10741,78 +9320,15 @@ boolean M_Responder (event_t* ev)
             }
         }
 
-        // [JN] Keyboard bindings menu (1)
-        if (currentMenu == &RD_Bindings_Menu_Def_1
-        ||  currentMenu == &RD_Bindings_Menu_Def_1_Rus)
+        //[Dasperal] Key bindings menus
+        keyPage = getCurrentKeyPage();
+        if(keyPage)
         {
-            if (itemOn == rd_bindings_1_move_forward)  { key_up = 0; }
-            if (itemOn == rd_bindings_1_move_backward) { key_down = 0; }
-            if (itemOn == rd_bindings_1_turn_left)     { key_left = 0; }
-            if (itemOn == rd_bindings_1_turn_right)    { key_right = 0; }
-            if (itemOn == rd_bindings_1_strafe_left)   { key_strafeleft = 0; }
-            if (itemOn == rd_bindings_1_strafe_right)  { key_straferight = 0; }
-            if (itemOn == rd_bindings_1_speed_on)      { key_speed = 0; }
-            if (itemOn == rd_bindings_1_strafe_on)     { key_strafe = 0; }
-            if (itemOn == rd_bindings_1_fire)          { key_fire = 0; }
-            if (itemOn == rd_bindings_1_use)           { key_use = 0; }
-
+            BK_ClearBinds(keyPage->keys[itemOn]);
             S_StartSound(NULL,sfx_stnmov);
             return true;
         }
-        // [JN] Keyboard bindings menu (2)
-        if (currentMenu == &RD_Bindings_Menu_Def_2
-        ||  currentMenu == &RD_Bindings_Menu_Def_2_Rus)
-        {
-            if (itemOn == rd_bindings_2_weapon_1)      { key_weapon1 = 0; }
-            if (itemOn == rd_bindings_2_weapon_2)      { key_weapon2 = 0; }
-            if (itemOn == rd_bindings_2_weapon_3)      { key_weapon3 = 0; }
-            if (itemOn == rd_bindings_2_weapon_4)      { key_weapon4 = 0; }
-            if (itemOn == rd_bindings_2_weapon_5)      { key_weapon5 = 0; }
-            if (itemOn == rd_bindings_2_weapon_6)      { key_weapon6 = 0; }
-            if (itemOn == rd_bindings_2_weapon_7)      { key_weapon7 = 0; }
-            if (itemOn == rd_bindings_2_weapon_8)      { key_weapon8 = 0; }
-            if (itemOn == rd_bindings_2_prevweapon)    { key_prevweapon = 0; }
-            if (itemOn == rd_bindings_2_nextweapon)    { key_nextweapon = 0; }
 
-            S_StartSound(NULL,sfx_stnmov);
-            return true;
-        }
-        // [JN] Keyboard bindings menu (3)
-        if (currentMenu == &RD_Bindings_Menu_Def_3
-        ||  currentMenu == &RD_Bindings_Menu_Def_3_Rus)
-        {
-            if (itemOn == rd_bindings_3_quicksave)     { key_menu_qsave = 0;   }
-            if (itemOn == rd_bindings_3_quickload)     { key_menu_qload = 0; }
-            if (itemOn == rd_bindings_3_nextlevel)     { key_menu_nextlevel = 0; }
-            if (itemOn == rd_bindings_3_restartlevel)  { key_menu_reloadlevel = 0; }
-            if (itemOn == rd_bindings_3_screenshot)    { key_menu_screenshot = 0; }
-            if (itemOn == rd_bindings_3_finishdemo)    { key_demo_quit = 0; }
-            if (itemOn == rd_bindings_3_mouselook)     { key_togglemlook = 0; }
-            if (itemOn == rd_bindings_3_alwaysrun)     { key_toggleautorun = 0; }
-            if (itemOn == rd_bindings_3_crosshair)     { key_togglecrosshair = 0; }
-            if (itemOn == rd_bindings_3_fliplevel)     { key_togglefliplvls = 0; }
-
-            S_StartSound(NULL,sfx_stnmov);
-            return true;
-        }
-        // [JN] Keyboard bindings menu (4)
-        if (currentMenu == &RD_Bindings_Menu_Def_4
-        ||  currentMenu == &RD_Bindings_Menu_Def_4_Rus)
-        {
-            if (itemOn == rd_bindings_4_togglemap)     { key_map_toggle = 0; }
-            if (itemOn == rd_bindings_4_zoomin)        { key_map_zoomin = 0; }
-            if (itemOn == rd_bindings_4_zoomout)       { key_map_zoomout = 0; }
-            if (itemOn == rd_bindings_4_maxzoomout)    { key_map_maxzoom = 0; }
-            if (itemOn == rd_bindings_4_follow)        { key_map_follow = 0; }
-            if (itemOn == rd_bindings_4_overlay)       { key_map_overlay = 0; }
-            if (itemOn == rd_bindings_4_rotate)        { key_map_rotate = 0; }
-            if (itemOn == rd_bindings_4_grid)          { key_map_grid = 0; }
-            if (itemOn == rd_bindings_4_mark)          { key_map_mark = 0; }
-            if (itemOn == rd_bindings_4_clearmarks)    { key_map_clearmark = 0; }
-
-            S_StartSound(NULL,sfx_stnmov);
-            return true;
-        }
         // [JN] Mouse bindings menu
         if (currentMenu == &RD_Mouse_Bindings_Menu_Def
         ||  currentMenu == &RD_Mouse_Bindings_Menu_Def_Rus)
@@ -10838,39 +9354,39 @@ boolean M_Responder (event_t* ev)
         currentMenu->lastOn = itemOn;
 
         // [JN] Keyboard bindings menu
-        if (currentMenu == &RD_Bindings_Menu_Def_1
-        ||  currentMenu == &RD_Bindings_Menu_Def_1_Rus)
+        if (currentMenu == RD_Bindings_Menu_Def_1
+        ||  currentMenu == RD_Bindings_Menu_Def_1_Rus)
         {
             M_SetupNextMenu(english_language ?
-                           &RD_Bindings_Menu_Def_4 :
-                           &RD_Bindings_Menu_Def_4_Rus);
+                           RD_Bindings_Menu_Def_4 :
+                           RD_Bindings_Menu_Def_4_Rus);
             S_StartSound(NULL,sfx_pistol);
             return true;
         }
-        if (currentMenu == &RD_Bindings_Menu_Def_2
-        ||  currentMenu == &RD_Bindings_Menu_Def_2_Rus)
+        if (currentMenu == RD_Bindings_Menu_Def_2
+        ||  currentMenu == RD_Bindings_Menu_Def_2_Rus)
         {
             M_SetupNextMenu(english_language ?
-                           &RD_Bindings_Menu_Def_1 :
-                           &RD_Bindings_Menu_Def_1_Rus);
+                           RD_Bindings_Menu_Def_1 :
+                           RD_Bindings_Menu_Def_1_Rus);
             S_StartSound(NULL,sfx_pistol);
             return true;
         }
-        if (currentMenu == &RD_Bindings_Menu_Def_3
-        ||  currentMenu == &RD_Bindings_Menu_Def_3_Rus)
+        if (currentMenu == RD_Bindings_Menu_Def_3
+        ||  currentMenu == RD_Bindings_Menu_Def_3_Rus)
         {
             M_SetupNextMenu(english_language ?
-                           &RD_Bindings_Menu_Def_2 :
-                           &RD_Bindings_Menu_Def_2_Rus);
+                           RD_Bindings_Menu_Def_2 :
+                           RD_Bindings_Menu_Def_2_Rus);
             S_StartSound(NULL,sfx_pistol);
             return true;
         }
-        if (currentMenu == &RD_Bindings_Menu_Def_4
-        ||  currentMenu == &RD_Bindings_Menu_Def_4_Rus)
+        if (currentMenu == RD_Bindings_Menu_Def_4
+        ||  currentMenu == RD_Bindings_Menu_Def_4_Rus)
         {
             M_SetupNextMenu(english_language ?
-                           &RD_Bindings_Menu_Def_3 :
-                           &RD_Bindings_Menu_Def_3_Rus);
+                           RD_Bindings_Menu_Def_3 :
+                           RD_Bindings_Menu_Def_3_Rus);
             S_StartSound(NULL,sfx_pistol);
             return true;
         }
@@ -10938,39 +9454,39 @@ boolean M_Responder (event_t* ev)
         currentMenu->lastOn = itemOn;
 
         // [JN] Keyboard bindings menu
-        if (currentMenu == &RD_Bindings_Menu_Def_1
-        ||  currentMenu == &RD_Bindings_Menu_Def_1_Rus)
+        if (currentMenu == RD_Bindings_Menu_Def_1
+        ||  currentMenu == RD_Bindings_Menu_Def_1_Rus)
         {
             M_SetupNextMenu(english_language ?
-                           &RD_Bindings_Menu_Def_2 :
-                           &RD_Bindings_Menu_Def_2_Rus);
+                           RD_Bindings_Menu_Def_2 :
+                           RD_Bindings_Menu_Def_2_Rus);
             S_StartSound(NULL,sfx_pistol);
             return true;
         }
-        if (currentMenu == &RD_Bindings_Menu_Def_2
-        ||  currentMenu == &RD_Bindings_Menu_Def_2_Rus)
+        if (currentMenu == RD_Bindings_Menu_Def_2
+        ||  currentMenu == RD_Bindings_Menu_Def_2_Rus)
         {
             M_SetupNextMenu(english_language ?
-                           &RD_Bindings_Menu_Def_3 :
-                           &RD_Bindings_Menu_Def_3_Rus);
+                           RD_Bindings_Menu_Def_3 :
+                           RD_Bindings_Menu_Def_3_Rus);
             S_StartSound(NULL,sfx_pistol);
             return true;
         }
-        if (currentMenu == &RD_Bindings_Menu_Def_3
-        ||  currentMenu == &RD_Bindings_Menu_Def_3_Rus)
+        if (currentMenu == RD_Bindings_Menu_Def_3
+        ||  currentMenu == RD_Bindings_Menu_Def_3_Rus)
         {
             M_SetupNextMenu(english_language ?
-                           &RD_Bindings_Menu_Def_4 :
-                           &RD_Bindings_Menu_Def_4_Rus);
+                           RD_Bindings_Menu_Def_4 :
+                           RD_Bindings_Menu_Def_4_Rus);
             S_StartSound(NULL,sfx_pistol);
             return true;
         }
-        if (currentMenu == &RD_Bindings_Menu_Def_4
-        ||  currentMenu == &RD_Bindings_Menu_Def_4_Rus)
+        if (currentMenu == RD_Bindings_Menu_Def_4
+        ||  currentMenu == RD_Bindings_Menu_Def_4_Rus)
         {
             M_SetupNextMenu(english_language ?
-                           &RD_Bindings_Menu_Def_1 :
-                           &RD_Bindings_Menu_Def_1_Rus);
+                           RD_Bindings_Menu_Def_1 :
+                           RD_Bindings_Menu_Def_1_Rus);
             S_StartSound(NULL,sfx_pistol);
             return true;
         }
@@ -11260,10 +9776,10 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Audio_Def
         ||  currentMenu == &RD_Audio_System_Def
         ||  currentMenu == &RD_Controls_Def
-        ||  currentMenu == &RD_Bindings_Menu_Def_1
-        ||  currentMenu == &RD_Bindings_Menu_Def_2
-        ||  currentMenu == &RD_Bindings_Menu_Def_3
-        ||  currentMenu == &RD_Bindings_Menu_Def_4
+        ||  currentMenu == RD_Bindings_Menu_Def_1
+        ||  currentMenu == RD_Bindings_Menu_Def_2
+        ||  currentMenu == RD_Bindings_Menu_Def_3
+        ||  currentMenu == RD_Bindings_Menu_Def_4
         ||  currentMenu == &RD_Mouse_Bindings_Menu_Def
         ||  currentMenu == &RD_Gameplay_Def_1
         ||  currentMenu == &RD_Gameplay_Def_2
@@ -11289,10 +9805,10 @@ void M_Drawer (void)
         ||  currentMenu == &RD_Audio_Def_Rus
         ||  currentMenu == &RD_Audio_System_Def_Rus
         ||  currentMenu == &RD_Controls_Def_Rus
-        ||  currentMenu == &RD_Bindings_Menu_Def_1_Rus
-        ||  currentMenu == &RD_Bindings_Menu_Def_2_Rus
-        ||  currentMenu == &RD_Bindings_Menu_Def_3_Rus
-        ||  currentMenu == &RD_Bindings_Menu_Def_4_Rus
+        ||  currentMenu == RD_Bindings_Menu_Def_1_Rus
+        ||  currentMenu == RD_Bindings_Menu_Def_2_Rus
+        ||  currentMenu == RD_Bindings_Menu_Def_3_Rus
+        ||  currentMenu == RD_Bindings_Menu_Def_4_Rus
         ||  currentMenu == &RD_Mouse_Bindings_Menu_Def_Rus
         ||  currentMenu == &RD_Gameplay_Def_1_Rus
         ||  currentMenu == &RD_Gameplay_Def_2_Rus
@@ -11378,6 +9894,16 @@ void M_Ticker (void)
 //
 void M_Init (void)
 {
+    //[Dasperal] Init Bindings Menus
+    RD_Bindings_Menu_Def_1 = getMenuFromKeyPage(&RD_Bindings_1, true);
+    RD_Bindings_Menu_Def_1_Rus = getMenuFromKeyPage(&RD_Bindings_1, false);
+    RD_Bindings_Menu_Def_2 = getMenuFromKeyPage(&RD_Bindings_2, true);
+    RD_Bindings_Menu_Def_2_Rus = getMenuFromKeyPage(&RD_Bindings_2, false);
+    RD_Bindings_Menu_Def_3 = getMenuFromKeyPage(&RD_Bindings_3, true);
+    RD_Bindings_Menu_Def_3_Rus = getMenuFromKeyPage(&RD_Bindings_3, false);
+    RD_Bindings_Menu_Def_4 = getMenuFromKeyPage(&RD_Bindings_4, true);
+    RD_Bindings_Menu_Def_4_Rus = getMenuFromKeyPage(&RD_Bindings_4, false);
+
     currentMenu = english_language ? &MainDef : &MainDef_Rus;
 
     // [JN] Widescreen: set temp variable for rendering menu.
