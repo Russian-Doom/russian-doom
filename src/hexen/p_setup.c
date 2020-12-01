@@ -29,7 +29,7 @@
 #include "i_swap.h"
 #include "s_sound.h"
 #include "p_local.h"
-#include "rushexen.h"
+#include "rd_rushexen.h"
 
 // MACROS ------------------------------------------------------------------
 

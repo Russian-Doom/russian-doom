@@ -27,7 +27,7 @@
 #include <ctype.h>
 #include "v_video.h"
 #include "i_swap.h"
-#include "rushexen.h"
+#include "rd_rushexen.h"
 
 // MACROS ------------------------------------------------------------------
 
