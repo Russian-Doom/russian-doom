@@ -131,17 +131,18 @@ typedef struct
 
 typedef struct
 {
-    struct menu_s  *prevMenu;       // previous menu
-    void (*prev_page_routine)(int); // routine for choosing previous page
-    void (*next_page_routine)(int); // routine for choosing next page
-    char eng_prev_HotKey;
-    char rus_prev_HotKey;
-    char eng_next_HotKey;
-    char rus_next_HotKey;
-    char eng_pageNumber[9];
-    char rus_pageNumber[13];
-    subtitle_t* subtitles;
-    char num_of_subtitles; // uint_8
+    struct menu_s* prevMenu_eng;    // previous menu eng
+    struct menu_s* prevMenu_rus;    // previous menu rus
+    void (*prevPage_routine)(int);  // routine for choosing previous page
+    void (*nextPage_routine)(int);  // routine for choosing next page
+    char prevPage_HotKey_eng;       // eng hotkey for prev page menu item
+    char prevPage_HotKey_rus;       // rus hotkey for prev page menu item
+    char nextPage_HotKey_eng;       // eng hotkey for next page menu item
+    char nextPage_HotKey_rus;       // rus hotkey for next page menu item
+    char pageNumber_eng[9];         // 8 chars and one \0 char
+    char pageNumber_rus[13];        // 12 chars and one \0 char
+    subtitle_t* subtitles;          // pointer to array of subtitle_t
+    char num_of_subtitles;          // uint_8 size of subtitles array
     bound_key_t keys[11];           // keys what can be bound on this page
 } key_page_t;
 
@@ -456,15 +457,15 @@ menu_t* getMenuFromKeyPage(key_page_t* keyPage, boolean isEngMenu)
     items[12].status = items[13].status = 1;
     items[12].name = items[13].name = "";
 
-    items[12].routine = keyPage->next_page_routine;
-    items[12].alphaKey = isEngMenu ? keyPage->eng_next_HotKey : keyPage->rus_next_HotKey;
+    items[12].routine = keyPage->nextPage_routine;
+    items[12].alphaKey = isEngMenu ? keyPage->nextPage_HotKey_eng : keyPage->nextPage_HotKey_rus;
 
-    items[13].routine = keyPage->prev_page_routine;
-    items[13].alphaKey = isEngMenu ? keyPage->eng_prev_HotKey : keyPage->rus_prev_HotKey;
+    items[13].routine = keyPage->prevPage_routine;
+    items[13].alphaKey = isEngMenu ? keyPage->prevPage_HotKey_eng : keyPage->prevPage_HotKey_rus;
 
     r_menu = malloc(sizeof(menu_t));
     r_menu->numitems = 15;
-    r_menu->prevMenu = keyPage->prevMenu;
+    r_menu->prevMenu = isEngMenu ? keyPage->prevMenu_eng : keyPage->prevMenu_rus;
     r_menu->menuitems = items;
     r_menu->routine = M_RD_Draw_Bindings;
     r_menu->x = 35;
@@ -2052,6 +2053,7 @@ subtitle_t RD_Bindings_1_subtitles[] = {
 
 key_page_t RD_Bindings_1 = {
      &RD_Controls_Def,
+     &RD_Controls_Def_Rus,
      M_RD_Choose_Bindings_4,
      M_RD_Choose_Bindings_2,
      'l', 'y', 'n', 'l',
@@ -2084,6 +2086,7 @@ subtitle_t RD_Bindings_2_subtitles[] = {
 
 key_page_t RD_Bindings_2 = {
     &RD_Controls_Def,
+    &RD_Controls_Def_Rus,
     M_RD_Choose_Bindings_1,
     M_RD_Choose_Bindings_3,
     'p', 'y', 'n', 'l',
@@ -2117,6 +2120,7 @@ subtitle_t RD_Bindings_3_subtitles[] = {
 
 key_page_t RD_Bindings_3 = {
     &RD_Controls_Def,
+    &RD_Controls_Def_Rus,
     M_RD_Choose_Bindings_2,
     M_RD_Choose_Bindings_4,
     'p', 'y', 'n', 'l',
@@ -2149,6 +2153,7 @@ subtitle_t RD_Bindings_4_subtitles[] = {
 
 key_page_t RD_Bindings_4 = {
     &RD_Controls_Def,
+    &RD_Controls_Def_Rus,
     M_RD_Choose_Bindings_3,
     M_RD_Choose_Bindings_1,
     'p', 'y', 'f', 'l',
@@ -4987,7 +4992,7 @@ void M_RD_Draw_Bindings()
     {
         M_WriteTextSmall_ENG(35 + wide_delta, 155, currentMenu == RD_Bindings_Menu_Def_4 ? "first page >" : "next page >");
         M_WriteTextSmall_ENG(35 + wide_delta, 165, currentMenu == RD_Bindings_Menu_Def_1 ? "< last page" : "< prev page");
-        M_WriteTextSmall_ENG(x + wide_delta, 165, keyPage->eng_pageNumber);
+        M_WriteTextSmall_ENG(x + wide_delta, 165, keyPage->pageNumber_eng);
         dp_translation = NULL;
 
         dp_translation = cr[CR_DARKRED];
@@ -4998,7 +5003,7 @@ void M_RD_Draw_Bindings()
     {
         M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + wide_delta, 165, RD_PREV_RUS);
-        M_WriteTextSmall_RUS(x + wide_delta, 165, keyPage->rus_pageNumber);
+        M_WriteTextSmall_RUS(x + wide_delta, 165, keyPage->pageNumber_rus);
         dp_translation = NULL;
 
         dp_translation = cr[CR_DARKRED];
