@@ -341,6 +341,7 @@ void M_RD_Change_ColoredBlood(int choice);
 void M_RD_Change_SwirlingLiquids(int choice);
 void M_RD_Change_InvulSky(int choice);
 void M_RD_Change_FlipWeapons(int choice);
+void M_RD_Change_ZAxisSfx(int choice);
 void M_RD_Change_ExitSfx(int choice);
 void M_RD_Change_CrushingSfx(int choice);
 void M_RD_Change_BlazingSfx(int choice);
@@ -2277,6 +2278,7 @@ enum
 
 enum
 {
+    rd_gameplay_2_z_axis_sfx,
     rd_gameplay_2_play_exit_sfx,
     rd_gameplay_2_crushed_corpses_sfx,
     rd_gameplay_2_blazing_door_fix_sfx,
@@ -2363,6 +2365,7 @@ menu_t  RD_Gameplay_Def_1 =
 
 menuitem_t RD_Gameplay_Menu_2[]=
 {
+    {2,"Sound attenuation axises:",       M_RD_Change_ZAxisSfx,        's'},
     {2,"Play exit sounds:",               M_RD_Change_ExitSfx,         'p'},
     {2,"Sound of crushing corpses:",      M_RD_Change_CrushingSfx,     's'},
     {2,"Single sound of blazing door:",   M_RD_Change_BlazingSfx,      's'},
@@ -2479,6 +2482,7 @@ menu_t  RD_Gameplay_Def_1_Rus =
 
 menuitem_t RD_Gameplay_Menu_2_Rus[]=
 {
+    {2,"pfne[fybt pderf gj jczv:",          M_RD_Change_ZAxisSfx,           'p'},   // Затухание звука по осям
     {2,"Pderb ghb ds[jlt bp buhs:",         M_RD_Change_ExitSfx,            'p'},   // Звук при выходе из игры
     {2,"Pder hfplfdkbdfybz nhegjd:",        M_RD_Change_CrushingSfx,        'p'},   // Звук раздавливания трупов
     {2,"Jlbyjxysq pder ,scnhjq ldthb:",     M_RD_Change_BlazingSfx,         'j'},   // Одиночный звук быстрой двери
@@ -5545,46 +5549,51 @@ void M_RD_Draw_Gameplay_2(void)
         M_WriteTextSmall_ENG(35 + wide_delta, 25, "Audible");
         dp_translation = NULL;
 
+        // Sound attenuation axises
+        dp_translation = z_axis_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(217 + wide_delta, 35, z_axis_sfx ? "x/y/z" : "x/y");
+        dp_translation = NULL;
+
         // Play exit sounds
         dp_translation = play_exit_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(158 + wide_delta, 35, play_exit_sfx ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(158 + wide_delta, 45, play_exit_sfx ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Sound of crushing corpses
         dp_translation = crushed_corpses_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(223 + wide_delta, 45, crushed_corpses_sfx ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(223 + wide_delta, 55, crushed_corpses_sfx ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Single sound of closing blazing door
         dp_translation = blazing_door_fix_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(240 + wide_delta, 55, blazing_door_fix_sfx ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(240 + wide_delta, 65, blazing_door_fix_sfx ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Monster alert waking up other monsters
         dp_translation = noise_alert_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(263 + wide_delta, 65, noise_alert_sfx ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(263 + wide_delta, 75, noise_alert_sfx ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         //
         // Tactical
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_ENG(35 + wide_delta, 75, "Tactical");
+        M_WriteTextSmall_ENG(35 + wide_delta, 85, "Tactical");
         dp_translation = NULL;
 
         // Notify of revealed secrets
         dp_translation = secret_notification ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(232 + wide_delta, 85, secret_notification ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(232 + wide_delta, 95, secret_notification ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Show negative health
         dp_translation = negative_health ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(190 + wide_delta, 95, negative_health ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(190 + wide_delta, 105, negative_health ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         // Infragreen light amp. visor
         dp_translation = infragreen_visor ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(230 + wide_delta, 105, infragreen_visor ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(230 + wide_delta, 115, infragreen_visor ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         //
@@ -5607,46 +5616,51 @@ void M_RD_Draw_Gameplay_2(void)
         M_WriteTextSmall_RUS(35 + wide_delta, 25, "Pder");
         dp_translation = NULL;
 
+        // Затухание звука по осям
+        dp_translation = z_axis_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(217 + wide_delta, 35, z_axis_sfx ? "x/y/z" : "x/y");
+        dp_translation = NULL;
+
         // Звуки при выходе из игры
         dp_translation = play_exit_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(225 + wide_delta, 35, play_exit_sfx ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(225 + wide_delta, 45, play_exit_sfx ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Звук раздавливания трупов
         dp_translation = crushed_corpses_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(236 + wide_delta, 45, crushed_corpses_sfx ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(236 + wide_delta, 55, crushed_corpses_sfx ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Одиночный звук быстрой двери
         dp_translation = blazing_door_fix_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(260 + wide_delta, 55, blazing_door_fix_sfx ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(260 + wide_delta, 65, blazing_door_fix_sfx ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Общая тревога у монстров
         dp_translation = noise_alert_sfx ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(227 + wide_delta, 65, noise_alert_sfx ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(227 + wide_delta, 75, noise_alert_sfx ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         //
         // Тактика
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 75, "Nfrnbrf");
+        M_WriteTextSmall_RUS(35 + wide_delta, 85, "Nfrnbrf");
         dp_translation = NULL;
 
         // Сообщать о найденном тайнике
         dp_translation = secret_notification ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(260 + wide_delta, 85, secret_notification ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(260 + wide_delta, 95, secret_notification ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Отрицательное здоровье в HUD
         dp_translation = negative_health ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(255 + wide_delta, 95, negative_health ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(255 + wide_delta, 105, negative_health ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Инфразеленый визор освещения
         dp_translation = infragreen_visor ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(266 + wide_delta, 105, infragreen_visor ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(266 + wide_delta, 115, infragreen_visor ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         // Footer
@@ -6080,6 +6094,11 @@ void M_RD_Change_FlipWeapons(int choice)
 
     // [JN] Skip weapon bobbing interpolation for next frame.
     skippsprinterp = true;
+}
+
+void M_RD_Change_ZAxisSfx(int choice)
+{
+    z_axis_sfx ^= 1;
 }
 
 void M_RD_Change_ExitSfx(int choice)
@@ -7248,6 +7267,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     flip_weapons     = 0;
 
     // Gameplay: Audible
+    z_axis_sfx           = 0;
     play_exit_sfx        = 0;
     crushed_corpses_sfx  = 1;
     blazing_door_fix_sfx = 1;
@@ -7395,6 +7415,7 @@ void M_RD_BackToDefaults_Original(int choice)
     flip_weapons     = 0;
 
     // Gameplay: Audible
+    z_axis_sfx           = 0;
     play_exit_sfx        = 1;
     crushed_corpses_sfx  = 0;
     blazing_door_fix_sfx = 0;

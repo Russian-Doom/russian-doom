@@ -210,7 +210,11 @@ void T_MoveFloor(floormove_t* floor)
 		      floor->crush,0,floor->direction);
     
     if (!(leveltime&7))
+	{
+	// [JN] Z-axis sfx distance: sound invoked from the floor
+	floor->sector->soundorg.z = floor->sector->floorheight;
 	S_StartSound(&floor->sector->soundorg, sfx_stnmov);
+	}
     
     if (res == pastdest)
     {
@@ -242,7 +246,11 @@ void T_MoveFloor(floormove_t* floor)
 
     // [JN] Jaguar: no stop sound
     if (gamemission != jaguar)
+	{
+	// [JN] Z-axis sfx distance: sound invoked from the floor
+	floor->sector->soundorg.z = floor->sector->floorheight;
 	S_StartSound(&floor->sector->soundorg, sfx_pstop);
+	}
     }
 
 }

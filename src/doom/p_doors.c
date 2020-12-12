@@ -59,16 +59,22 @@ void T_VerticalDoor (vldoor_t* door)
 	    {
 	      case vld_blazeRaise:
 		door->direction = -1; // time to go back down
+		// [JN] Z-axis sfx distance: sound invoked from the ceiling
+		door->sector->soundorg.z = door->sector->ceilingheight;
 		S_StartSound(&door->sector->soundorg, sfx_bdcls);
 		break;
 		
 	      case vld_normal:
 		door->direction = -1; // time to go back down
+		// [JN] Z-axis sfx distance: sound invoked from the ceiling
+		door->sector->soundorg.z = door->sector->ceilingheight;
 		S_StartSound(&door->sector->soundorg, sfx_dorcls);
 		break;
 		
 	      case vld_close30ThenOpen:
 		door->direction = 1;
+		// [JN] Z-axis sfx distance: sound invoked from the ceiling
+		door->sector->soundorg.z = door->sector->ceilingheight;
 		S_StartSound(&door->sector->soundorg, sfx_doropn);
 		break;
 		
@@ -87,6 +93,8 @@ void T_VerticalDoor (vldoor_t* door)
 	      case vld_raiseIn5Mins:
 		door->direction = 1;
 		door->type = vld_normal;
+		// [JN] Z-axis sfx distance: sound invoked from the ceiling
+		door->sector->soundorg.z = door->sector->ceilingheight;
 		S_StartSound(&door->sector->soundorg, sfx_doropn);
 		break;
 		
@@ -293,6 +301,8 @@ EV_DoDoor
 	    door->topheight -= 4*FRACUNIT;
 	    door->direction = -1;
 	    door->speed = VDOORSPEED * 4;
+	    // [JN] Z-axis sfx distance: sound invoked from the ceiling
+	    door->sector->soundorg.z = door->sector->ceilingheight;
 	    S_StartSound(&door->sector->soundorg, sfx_bdcls);
 	    break;
 	    
@@ -300,12 +310,16 @@ EV_DoDoor
 	    door->topheight = P_FindLowestCeilingSurrounding(sec);
 	    door->topheight -= 4*FRACUNIT;
 	    door->direction = -1;
+        // [JN] Z-axis sfx distance: sound invoked from the ceiling
+	    door->sector->soundorg.z = door->sector->ceilingheight;
 	    S_StartSound(&door->sector->soundorg, sfx_dorcls);
 	    break;
 	    
 	  case vld_close30ThenOpen:
 	    door->topheight = sec->ceilingheight;
 	    door->direction = -1;
+	    // [JN] Z-axis sfx distance: sound invoked from ceiling
+	    door->sector->soundorg.z = door->sector->ceilingheight;
 	    S_StartSound(&door->sector->soundorg, sfx_dorcls);
 	    break;
 	    
@@ -316,7 +330,11 @@ EV_DoDoor
 	    door->topheight -= 4*FRACUNIT;
 	    door->speed = VDOORSPEED * 4;
 	    if (door->topheight != sec->ceilingheight)
-		S_StartSound(&door->sector->soundorg, sfx_bdopn);
+	    {
+	        // [JN] Z-axis sfx distance: sound invoked from ceiling
+	        door->sector->soundorg.z = door->sector->ceilingheight;
+	        S_StartSound(&door->sector->soundorg, sfx_bdopn);
+	    }
 	    break;
 	    
 	  case vld_normal:
@@ -325,7 +343,11 @@ EV_DoDoor
 	    door->topheight = P_FindLowestCeilingSurrounding(sec);
 	    door->topheight -= 4*FRACUNIT;
 	    if (door->topheight != sec->ceilingheight)
-		S_StartSound(&door->sector->soundorg, sfx_doropn);
+        {
+            // [JN] Z-axis sfx distance: sound invoked from ceiling
+            door->sector->soundorg.z = door->sector->ceilingheight;
+            S_StartSound(&door->sector->soundorg, sfx_doropn);
+        }
 	    break;
 	    
 	  default:
@@ -432,7 +454,11 @@ EV_VerticalDoor
 		door->direction = 1;	// go back up
 		// [crispy] play sound effect when the door is opened again while going down
 		if (!vanillaparm)
+		{
+		// [JN] Z-axis sfx distance: sound invoked from the ceiling
+		door->sector->soundorg.z = door->sector->ceilingheight;
 		S_StartSound(&door->sector->soundorg, line->special == 117 ? sfx_bdopn : sfx_doropn);
+		}
 	    }
 	    else
 	    {
@@ -448,7 +474,11 @@ EV_VerticalDoor
                     door->direction = -1;	// start going down immediately
                     // [crispy] play sound effect when the door is closed manually
                     if (!vanillaparm)
+                    {
+                    // [JN] Z-axis sfx distance: sound invoked from the ceiling
+                    door->sector->soundorg.z = door->sector->ceilingheight;
                     S_StartSound(&door->sector->soundorg, line->special == 117 ? sfx_bdcls : sfx_dorcls);
+                    }
                 }
                 else if (door->thinker.function.acp1 == (actionf_p1) T_PlatRaise)
                 {
@@ -487,15 +517,21 @@ EV_VerticalDoor
     {
       case 117:	// BLAZING DOOR RAISE
       case 118:	// BLAZING DOOR OPEN
+	// [JN] Z-axis sfx distance: sound invoked from the ceiling
+	sec->soundorg.z = sec->ceilingheight;
 	S_StartSound(&sec->soundorg,sfx_bdopn);
 	break;
 	
       case 1:	// NORMAL DOOR SOUND
       case 31:
+	// [JN] Z-axis sfx distance: sound invoked from the ceiling
+	sec->soundorg.z = sec->ceilingheight;
 	S_StartSound(&sec->soundorg,sfx_doropn);
 	break;
 	
       default:	// LOCKED DOOR SOUND
+	// [JN] Z-axis sfx distance: sound invoked from the ceiling
+	sec->soundorg.z = sec->ceilingheight;
 	S_StartSound(&sec->soundorg,sfx_doropn);
 	break;
     }

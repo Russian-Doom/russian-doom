@@ -1696,6 +1696,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(flip_weapons),
 
     // Gameplay: Audible
+    CONFIG_VARIABLE_INT(z_axis_sfx),
     CONFIG_VARIABLE_INT(play_exit_sfx),
     CONFIG_VARIABLE_INT(crushed_corpses_sfx),
     CONFIG_VARIABLE_INT(blazing_door_fix_sfx),

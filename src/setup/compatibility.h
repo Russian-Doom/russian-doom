@@ -65,6 +65,7 @@ extern int flip_weapons;
 extern int crushed_corpses_sfx;
 extern int blazing_door_fix_sfx;
 extern int correct_endlevel_sfx;
+extern int z_axis_sfx;
 extern int play_exit_sfx;
 extern int noise_alert_sfx;
 

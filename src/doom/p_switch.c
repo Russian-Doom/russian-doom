@@ -326,6 +326,28 @@ P_ChangeSwitchTexture
     // [crispy] corrected sound source
     if (playsound)
     {
+        // [JN] Z-axis sfx distance: sound invoked from the floor segmented source
+        if (line->backsector 
+        &&  line->backsector->floorheight > line->frontsector->floorheight)
+        {
+            line->soundorg.z = (line->backsector->floorheight 
+                             -  line->frontsector->floorheight) / 2;
+        }
+        // [JN] Z-axis sfx distance: sound invoked from the ceiling segmented source
+        else 
+        if (line->backsector 
+        &&  line->backsector->ceilingheight < line->frontsector->ceilingheight)
+        {
+            line->soundorg.z = (line->frontsector->ceilingheight
+                             +  line->backsector->ceilingheight) / 2;
+        }
+        // [JN] Z-axis sfx distance: sound invoked from the middle of the line
+        else
+        {
+            line->soundorg.z = (line->frontsector->ceilingheight
+                             +  line->frontsector->floorheight) / 2;
+        }
+
         S_StartSound(vanillaparm ? &line->soundorg : buttonlist->soundorg,sound);
     }
 }

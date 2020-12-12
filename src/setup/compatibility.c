@@ -60,6 +60,7 @@ int invul_sky = 1;
 int flip_weapons = 0;
 
 // Gameplay: Audible
+int z_axis_sfx = 0;
 int play_exit_sfx = 0;
 int crushed_corpses_sfx = 1;
 int blazing_door_fix_sfx = 1;
@@ -348,6 +349,7 @@ void BindCompatibilityVariables(void)
     
 
     // Gameplay: Audible
+    M_BindIntVariable("z_axis_sfx",             &z_axis_sfx);
     M_BindIntVariable("play_exit_sfx",          &play_exit_sfx);
     M_BindIntVariable("crushed_corpses_sfx",    &crushed_corpses_sfx);
     M_BindIntVariable("blazing_door_fix_sfx",   &blazing_door_fix_sfx);

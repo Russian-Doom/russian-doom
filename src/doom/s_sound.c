@@ -480,15 +480,18 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
     fixed_t        approx_dist;
     fixed_t        adx;
     fixed_t        ady;
+    fixed_t        adz; // [JN] Z-axis sfx distance
     angle_t        angle;
 
     // calculate the distance to sound origin
     //  and clip it if necessary
     adx = abs(listener->x - source->x);
     ady = abs(listener->y - source->y);
+    adz = !z_axis_sfx || vanillaparm ? 0 :
+          abs(listener->z - source->z);
 
     // From _GG1_ p.428. Appox. eucledian distance fast.
-    approx_dist = adx + ady - ((adx < ady ? adx : ady)>>1);
+    approx_dist = adx + ady + adz - ((adx < ady ? adx : ady)>>1);
 
     // [crispy] proper sound clipping in Doom 2 MAP08 and The Ultimate Doom E4M8
     if ((gamemap != 8 || (!vanillaparm && (gamemode == commercial || gameepisode == 4))) && approx_dist > S_CLIPPING_DIST)

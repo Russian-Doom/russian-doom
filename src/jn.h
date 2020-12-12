@@ -155,6 +155,7 @@ extern int invul_sky;
 extern int flip_weapons;
 
 // Gameplay: Audible
+extern int z_axis_sfx;
 extern int play_exit_sfx;
 extern int crushed_corpses_sfx;
 extern int blazing_door_fix_sfx;

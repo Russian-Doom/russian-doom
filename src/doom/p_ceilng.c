@@ -66,6 +66,8 @@ void T_MoveCeiling (ceiling_t* ceiling)
 	      case silentCrushAndRaise:
 		break;
 	      default:
+		// [JN] Z-axis sfx distance: sound invoked from the ceiling
+		ceiling->sector->soundorg.z = ceiling->sector->ceilingheight;
 		S_StartSound(&ceiling->sector->soundorg, sfx_stnmov);
 		// ?
 		break;
@@ -81,6 +83,8 @@ void T_MoveCeiling (ceiling_t* ceiling)
 		break;
 		
 	      case silentCrushAndRaise:
+		// [JN] Z-axis sfx distance: sound invoked from the ceiling
+		ceiling->sector->soundorg.z = ceiling->sector->ceilingheight;
 		S_StartSound(&ceiling->sector->soundorg, sfx_pstop);
 	      case fastCrushAndRaise:
 	      case crushAndRaise:
@@ -107,6 +111,8 @@ void T_MoveCeiling (ceiling_t* ceiling)
 	    {
 	      case silentCrushAndRaise: break;
 	      default:
+		// [JN] Z-axis sfx distance: sound invoked from the ceiling
+		ceiling->sector->soundorg.z = ceiling->sector->ceilingheight;
 		S_StartSound(&ceiling->sector->soundorg, sfx_stnmov);
 	    }
 	}
@@ -116,6 +122,8 @@ void T_MoveCeiling (ceiling_t* ceiling)
 	    switch(ceiling->type)
 	    {
 	      case silentCrushAndRaise:
+		// [JN] Z-axis sfx distance: sound invoked from the ceiling
+		ceiling->sector->soundorg.z = ceiling->sector->ceilingheight;
 		S_StartSound(&ceiling->sector->soundorg, sfx_pstop);
 	      case crushAndRaise:
 		ceiling->speed = CEILSPEED;

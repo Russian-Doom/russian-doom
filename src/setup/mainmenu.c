@@ -162,6 +162,7 @@ static void SensibleDefaults(void)
     draw_shadowed_text = 1;
 
     // Gameplay: Audible
+    z_axis_sfx = 0;
     play_exit_sfx = 0;
     crushed_corpses_sfx = 1;
     blazing_door_fix_sfx = 1;
