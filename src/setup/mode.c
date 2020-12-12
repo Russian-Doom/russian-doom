@@ -123,10 +123,55 @@ static char *back_flat = "F_PAVE01";
 static int comport = 0;
 static char *nickname = NULL;
 
+// -----------------------------------------------------------------------------
+// [JN] PWAD autoloading. Initially all 4 values are empty.
+// -----------------------------------------------------------------------------
+
+char *autoloadglobalpwad[10]    = { "", "", "", "" };
+char *autoloaddoom1pwad[10]     = { "", "", "", "" };
+char *autoloaddoom2pwad[10]     = { "", "", "", "" };
+char *autoloadplutoniapwad[10]  = { "", "", "", "" };
+char *autoloadtntpwad[10]       = { "", "", "", "" };
+
 static void BindMiscVariables(void)
 {
+    int i;
+
     // [JN] Initialise language variable first
     M_BindIntVariable("english_language", &english_language);
+
+    // [JN] PWAD autoloading. Note that we are using variables 1..4, not 0...3.
+    for (i = 1 ; i < 5 ; ++i)
+    {
+        static char pwad[24];
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_global_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloadglobalpwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_doom1_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloaddoom1pwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_doom2_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloaddoom2pwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_plutonia_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloadplutoniapwad[i]);
+
+        M_snprintf(pwad, sizeof(pwad), "autoload_tnt_pwad%i", i);
+        M_BindStringVariable(pwad, &autoloadtntpwad[i]);
+
+        // [JN] If autoloads have not been set, initialize with defaults.
+        if (autoloadglobalpwad[i] == NULL)
+            autoloadglobalpwad[i] = "";
+        if (autoloaddoom1pwad[i] == NULL)
+            autoloaddoom1pwad[i] = "";
+        if (autoloaddoom2pwad[i] == NULL)
+            autoloaddoom2pwad[i] = "";
+        if (autoloadplutoniapwad[i] == NULL)
+            autoloadplutoniapwad[i] = "";
+        if (autoloadtntpwad[i] == NULL)
+            autoloadtntpwad[i] = "";
+    }
 
     if (gamemission == doom)
     {
