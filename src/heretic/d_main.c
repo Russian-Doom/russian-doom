@@ -102,7 +102,7 @@ int english_language = -1;
 int english_language = 0;
 #endif
 
-static int show_endoom = 0;
+int show_endoom = 0;
 int level_brightness = 0; // [JN] Level brightness level
 int local_time = 0; // [JN] Local time widget
 

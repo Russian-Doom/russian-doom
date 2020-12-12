@@ -47,6 +47,7 @@ extern int show_fps, real_fps;
 extern int show_diskicon;
 extern int screen_wiping;
 extern int png_screenshots;
+extern int show_endoom;
 
 
 // -----------------------------------------------------------------------------

@@ -235,6 +235,7 @@ void M_RD_Change_DiskIcon(int choice);
 void M_RD_Change_Smoothing(int choice);
 void M_RD_Change_Wiping(int choice);
 void M_RD_Change_Screenshots(int choice);
+void M_RD_Change_ENDOOM(int choice);
 void M_RD_Change_Renderer(int choice);
 void M_RD_Change_PorchFlashing(int choice);
 
@@ -1508,6 +1509,7 @@ enum
     rd_rendering_diskicon,
     rd_rendering_wiping,
     rd_rendering_screenshots,
+    rd_rendering_endoom,
     rd_rendering_end
 } rd_rendering_e;
 
@@ -1528,6 +1530,7 @@ menuitem_t RD_Rendering_Menu[]=
     {2, "Show disk icon:",           M_RD_Change_DiskIcon,    's'},
     {2, "Screen wiping effect:",     M_RD_Change_Wiping,      's'},
     {2, "Screenshot format:",        M_RD_Change_Screenshots, 's'},
+    {2, "Show ENDOOM screen:",       M_RD_Change_ENDOOM,      's'},
     {-1,"",0,'\0'}
 };
 
@@ -1558,6 +1561,7 @@ menuitem_t RD_Rendering_Menu_Rus[]=
     {2, "Jnj,hf;fnm pyfxjr lbcrtns:",      M_RD_Change_DiskIcon,    'j'}, // Отображать значок дискеты
     {2, "\'aatrn cvtys \'rhfyjd:",         M_RD_Change_Wiping,      '\''}, // Эффект смены экранов
     {2, "Ajhvfn crhbyijnjd:",              M_RD_Change_Screenshots, 'a'}, // Формат скриншотов
+    {2, "Gjrfpsdfnm \'rhfy",               M_RD_Change_ENDOOM,      'g'}, // Показывать экран ENDOOM
     {-1,"",0,'\0'}
 };
 
@@ -3131,6 +3135,9 @@ void M_RD_Draw_Rendering(void)
 
         // Screenshot format
         M_WriteTextSmall_ENG(174 + wide_delta, 135, png_screenshots ? "png" : "pcx");
+
+        // Show ENDOOM screen
+        M_WriteTextSmall_ENG(179 + wide_delta, 145, show_endoom ? "on" : "off");
     }
     else
     {
@@ -3219,6 +3226,10 @@ void M_RD_Draw_Rendering(void)
 
         // Формат скриншотов
         M_WriteTextSmall_ENG(180 + wide_delta, 135, png_screenshots ? "png" : "pcx");
+
+        // Показывать экран ENDOOM
+        M_WriteTextSmall_ENG(165 + wide_delta, 145, "ENDOOM:");
+        M_WriteTextSmall_RUS(222 + wide_delta, 145, show_endoom ? "drk" : "dsrk");
     }
 }
 
@@ -3311,6 +3322,11 @@ void M_RD_Change_Wiping(int choice)
 void M_RD_Change_Screenshots(int choice)
 {
     png_screenshots ^= 1;
+}
+
+void M_RD_Change_ENDOOM(int choice)
+{
+    show_endoom ^= 1;
 }
 
 void M_RD_Change_Renderer(int choice)
