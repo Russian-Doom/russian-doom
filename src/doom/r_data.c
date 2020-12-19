@@ -493,7 +493,7 @@ static void R_GenerateLookup(int texnum)
     {
         if (!count[x].patches)     // killough 4/9/98
         {
-            if (devparm)
+            if (devparm && gamemode != shareware)
             {
                 // killough 8/8/98
                 printf(english_language ?
@@ -530,7 +530,7 @@ static void R_GenerateLookup(int texnum)
 
     texturecompositesize[texnum] = csize;
 
-    if (err)       // killough 10/98: non-verbose output
+    if (err && gamemode != shareware)       // killough 10/98: non-verbose output
     {
         printf(english_language ?
                "\nR_GenerateLookup: Column without a patch in texture %.8s" :
@@ -886,8 +886,13 @@ void R_InitTextures (void)
 		texturename[8] = '\0';
 		memcpy (texturename, texture->name, 8);
 		// [crispy] make non-fatal
-		fprintf (stderr, "R_InitTextures: Missing patch in texture %s\n",
-			 texturename);
+        if (gamemode != shareware)
+        {
+            fprintf (stderr, english_language ?
+                    "R_InitTextures: Missing patch in texture %s\n" :
+                    "R_InitTextures: отсутствует патч в текстуре %s\n",
+                    texturename);
+        }
 		patch->patch = 0;
 	    }
 	}		
