@@ -563,7 +563,7 @@ void D_Display (void)
 void EnableLoadingDisk(void)
 {
     V_EnableLoadingDisk((aspect_ratio >= 2 && screenblocks == 9 ? 
-                         SCREENWIDTH+WIDE_DELTA*2 : screenwidth) -
+                         SCREENWIDTH+wide_delta*2 : screenwidth) -
                          LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
 }
 
