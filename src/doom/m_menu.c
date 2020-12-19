@@ -3078,7 +3078,7 @@ void M_RD_Draw_Rendering(void)
         if (aspect_ratio_temp != aspect_ratio)
         {
             dp_translation = cr[CR_GRAY];
-            M_WriteTextSmall_ENG(66 + wide_delta, 150, "Program must be restarted");
+            M_WriteTextSmallCentered_ENG(156, "Program must be restarted");
             dp_translation = NULL;
         }
 
@@ -3160,7 +3160,7 @@ void M_RD_Draw_Rendering(void)
         if (aspect_ratio_temp != aspect_ratio)
         {
             dp_translation = cr[CR_GRAY];
-            M_WriteTextSmall_RUS(40 + wide_delta, 150, "ytj,[jlbv gthtpfgecr ghjuhfvvs");
+            M_WriteTextSmallCentered_RUS(156, "ytj,[jlbv gthtpfgecr ghjuhfvvs");
             dp_translation = NULL;
         }
 
