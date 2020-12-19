@@ -2293,7 +2293,6 @@ enum
     rd_gameplay_2_infragreen_visor,
     rd_gameplay_2_empty2,
     rd_gameplay_2_empty3,
-    rd_gameplay_2_empty4,
     rd_gameplay_2_next_page,
     rd_gameplay_2_prev_page,
     rd_gameplay_2_end
@@ -2378,7 +2377,6 @@ menuitem_t RD_Gameplay_Menu_2[]=
     {2,"Notify of revealed secrets:",     M_RD_Change_SecretNotify,    'n'},
     {2,"Show negative health:",           M_RD_Change_NegativeHealth,  's'},
     {2,"Infragreen light amp. visor:",    M_RD_Change_InfraGreenVisor, 'i'},
-    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"", /* Next page >   */            M_RD_Choose_Gameplay_3,      'n'},
@@ -2495,7 +2493,6 @@ menuitem_t RD_Gameplay_Menu_2_Rus[]=
     {2,"Cjj,ofnm j yfqltyyjv nfqybrt:",     M_RD_Change_SecretNotify,       'c'},   // Сообщать о найденном тайнике
     {2,"jnhbwfntkmyjt pljhjdmt d $:",       M_RD_Change_NegativeHealth,     'j'},   // Отрицательное здоровье в HUD
     {2,"Byahfptktysq dbpjh jcdtotybz:",     M_RD_Change_InfraGreenVisor,    'b'},   // Инфразеленый визор освещения
-    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"",                                  M_RD_Choose_Gameplay_3,         'l'},   // Далее >
