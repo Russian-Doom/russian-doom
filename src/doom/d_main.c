@@ -1936,10 +1936,7 @@ void D_SetGameDescription(void)
     // [JN] Check if we have replaced skill level graphics.
     // If found, replace "Ultra-Nightmare" patch with empty
     // placeholder for keeping menu style in one fashion.
-    if (W_CheckMultipleLumps("M_JKILL") > 1
-    ||  W_CheckMultipleLumps("M_ROUGH") > 1
-    ||  W_CheckMultipleLumps("M_HURT") > 1
-    ||  W_CheckMultipleLumps("M_ULTRA") > 1)
+    if (W_CheckMultipleLumps("M_ROUGH") > 1)
     {
         DEH_AddStringReplacement ("M_UNMARE",   "TNT1A0");
     }
