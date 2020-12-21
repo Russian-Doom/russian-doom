@@ -1933,7 +1933,8 @@ P_SetupLevel
         && gameversion >= exe_doom_1_9
         && gamemode != pressbeta
         && gamemission != jaguar
-        && gamevariant != freedoom && gamevariant != freedm)));
+        && gamevariant != freedoom && gamevariant != freedm))
+        && singleplayer);
 
     leveltime = 0;
     
