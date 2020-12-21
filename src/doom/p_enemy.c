@@ -1363,8 +1363,11 @@ void A_Fire (mobj_t* actor)
     // of its (faulty) spawn sector and the target's actual sector.
     // Thanks to Quasar for his excellent analysis at
     // https://www.doomworld.com/vb/post/1297952
-    actor->floorz = actor->subsector->sector->floorheight;
-    actor->ceilingz = actor->subsector->sector->ceilingheight;
+    if (singleplayer && !vanillaparm)
+    {
+        actor->floorz = actor->subsector->sector->floorheight;
+        actor->ceilingz = actor->subsector->sector->ceilingheight;
+    }
 }
 
 
