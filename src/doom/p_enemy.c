@@ -339,7 +339,7 @@ boolean P_Move (mobj_t*	actor)
     //
     // Do NOT simply return false 1/4th of the time (causes monsters to
     // back out when they shouldn't, and creates secondary stickiness).
-    if (singleplayer)
+    if (singleplayer && !vanillaparm)
     {
         line_t *blockline = spechit[numspechit];
 
@@ -700,7 +700,7 @@ void A_Look (mobj_t* actor)
     // [JN] Original id Software's idea: 
     // If a monster yells at a player, it will 
     // alert other monsters to the player.
-    if (!vanillaparm && noise_alert_sfx)
+    if (singleplayer && !vanillaparm && noise_alert_sfx)
     {
         P_NoiseAlert (actor->target, actor);
     }
@@ -1051,8 +1051,10 @@ void A_BruisAttack (mobj_t* actor)
 
     // [JN] Исправление оригинального бага с отсутствующим A_FaceTarget
     // https://doomwiki.org/wiki/Baron_attacks_a_monster_behind_him
-    if (singleplayer)
-    A_FaceTarget (actor);
+    if (singleplayer && !vanillaparm)
+    {
+        A_FaceTarget (actor);
+    }
     
     if (P_CheckMeleeRange (actor))
     {
@@ -1104,14 +1106,14 @@ void A_Tracer (mobj_t* actor)
     // killough 3/6/98: fix revenant internal demo bug by subtracting
     // levelstarttic from gametic:
 
-    if(singleplayer)
+    if (singleplayer)
     {
         if (leveltime & 3)
         return;
     }
     else
     {
-        if ((gametic-levelstarttic) & 3)
+        if (gametic & 3)
         return;
     }
 
