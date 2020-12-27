@@ -1602,17 +1602,20 @@ A_PainShootSkull
 	currentthinker = currentthinker->next;
     }
 
-    // if there are allready 20 skulls on the level,
-    // don't spit another one
-	
-    // [JN] Элементаль боли без ограничения... Ну, почти без ограничения. 
-    // Тем не менее, снятие лимита не распростроняется на запись и проигрывание
-    // демозаписи, а также сетевую игру, потому как может вызвать рассинхронизацию.
-    if (unlimited_lost_souls && !vanillaparm && singleplayer && count > 10240)
-    return;
-
-    else if (!unlimited_lost_souls && count > 20)
-    return;
+    // [JN] Optionally remove Lost Souls spawn limit.
+    if (singleplayer && !vanillaparm)
+    {
+        if ((unlimited_lost_souls && count > 10240)
+        || (!unlimited_lost_souls && count > 20))
+        return;
+    }
+    else
+    {
+        // if there are allready 20 skulls on the level,
+        // don't spit another one
+        if (count > 20)
+        return;
+    }
 
     // okay, there's playe for another one
     an = angle >> ANGLETOFINESHIFT;
@@ -1625,13 +1628,7 @@ A_PainShootSkull
     y = actor->y + FixedMul (prestep, finesine[an]);
     z = actor->z + 8*FRACUNIT;
 		
-    // [JN] Предотвращение появление Потеряных Душ за пределами карты,
-    // т.е. за односторонними линиями. Только для одиночной игры, так как
-    // небезопасно для внутренних демозаписей (например, Plutonia DEMO3).
-    // This code (as well as PIT_CrossLine and floor/ceiling checking) 
-    // has beed taken from Doom Retro, thanks to Brad Harding!
-
-    // Check whether the Lost Soul is being fired through a 1-sided
+    // [Doom Retro] Check whether the Lost Soul is being fired through a 1-sided
     // wall or an impassible line, or a "monsters can't cross" line.
     // If it is, then we don't allow the spawn.
     if (singleplayer)
@@ -1644,14 +1641,14 @@ A_PainShootSkull
 
     // Check for movements.
     if (!P_TryMove (newmobj, newmobj->x, newmobj->y)
-    // Check to see if the new Lost Soul's z value is above the
+    // [Doom Retro] Check to see if the new Lost Soul's z value is above the
     // ceiling of its new sector, or below the floor. If so, kill it.
-    || newmobj->z > newmobj->subsector->sector->ceilingheight - newmobj->height
-    || newmobj->z < newmobj->subsector->sector->floorheight)
+    || ((newmobj->z > newmobj->subsector->sector->ceilingheight - newmobj->height
+    || newmobj->z < newmobj->subsector->sector->floorheight) && singleplayer))
     {
-	// kill it immediately
-	P_DamageMobj (newmobj,actor,actor,10000);	
-	return;
+        // kill it immediately
+        P_DamageMobj (newmobj,actor,actor,10000);	
+        return;
     }
 		
     newmobj->target = actor->target;

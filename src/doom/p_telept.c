@@ -32,6 +32,8 @@
 
 // State.
 #include "r_state.h"
+#include "crispy.h"
+#include "jn.h"
 
 
 
@@ -106,7 +108,7 @@ EV_Teleport
             // телепорты в Final Doom не использовали Z координату.
             // https://doomwiki.org/wiki/Final_Doom_teleporters_do_not_set_Z_coordinate
             // Всегда выполнять проверку координаты Z, вне зависимости от игры и ее версии:
-            /* if (gameversion != exe_final) */
+            if (gameversion != exe_final || (singleplayer && !vanillaparm))
 		    thing->z = thing->floorz;
 
 		if (thing->player)

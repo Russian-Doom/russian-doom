@@ -223,129 +223,211 @@ boolean F_Responder (event_t *event)
 //
 void F_Ticker (void)
 {
+    size_t i;
+
     // [JN] Make PAUSE working properly on text screen
     if (paused)
     {
         return;
     }
 
-    // [JN] Check for skipping. Allow double-press skiping, but don't skip immediately.
-    if (finalecount > 10)
+    //
+    // [JN] If we are in single player mode, allow double skipping for 
+    // intermission text. First skip printing all intermission text,
+    // second is advancing to the next state.
+    //
+    if (singleplayer)
     {
-        size_t i;
-
-        // go on to the next level
-        for (i = 0 ; i < MAXPLAYERS ; i++)
+        // [JN] Check for skipping. Allow double-press skiping, 
+        // but don't skip immediately.
+        if (finalecount > 10)
         {
-            // [JN] Double-skip by pressing "attack" button.
-            if (players[i].cmd.buttons & BT_ATTACK && !menuactive)
+            // go on to the next level
+            for (i = 0 ; i < MAXPLAYERS ; i++)
             {
-                if (!players[i].attackdown)
+                // [JN] Double-skip by pressing "attack" button.
+                if (players[i].cmd.buttons & BT_ATTACK && !menuactive)
                 {
-                    // [JN] Don't allow to skip bunny screen,
-                    // and don't allow skipping by pressing pause button.
-                    if ((gameepisode == 3 && finalestage == F_STAGE_ARTSCREEN)
-                    || players->cmd.buttons & BTS_PAUSE)
-                    continue;
-
-                    if (finalecount >= 5003)
-                    break;
-
-                    finalecount += 5000;
+                    if (!players[i].attackdown)
+                    {
+                        // [JN] Don't allow to skip bunny screen,
+                        // and don't allow skipping by pressing pause button.
+                        if ((gameepisode == 3 && finalestage == F_STAGE_ARTSCREEN)
+                        || players->cmd.buttons & BTS_PAUSE)
+                        continue;
+    
+                        if (finalecount >= 5003)
+                        break;
+    
+                        finalecount += 5000;
+                        players[i].attackdown = true;
+                    }
                     players[i].attackdown = true;
                 }
-                players[i].attackdown = true;
-            }
-            else
-            {
-                players[i].attackdown = false;
-            }
-
-            // [JN] Double-skip by pressing "use" button.
-            if (players[i].cmd.buttons & BT_USE && !menuactive)
-            {
-                if (!players[i].usedown)
+                else
                 {
-                    // [JN] Don't allow to skip bunny screen,
-                    // and don't allow skipping by pressing pause button.
-                    if ((gameepisode == 3 && finalestage == F_STAGE_ARTSCREEN)
-                    || players->cmd.buttons & BTS_PAUSE)
-                    continue;
-
-                    if (finalecount >= 5003)
-                    break;
-
-                    finalecount += 5000;
+                    players[i].attackdown = false;
+                }
+    
+                // [JN] Double-skip by pressing "use" button.
+                if (players[i].cmd.buttons & BT_USE && !menuactive)
+                {
+                    if (!players[i].usedown)
+                    {
+                        // [JN] Don't allow to skip bunny screen,
+                        // and don't allow skipping by pressing pause button.
+                        if ((gameepisode == 3 && finalestage == F_STAGE_ARTSCREEN)
+                        || players->cmd.buttons & BTS_PAUSE)
+                        continue;
+    
+                        if (finalecount >= 5003)
+                        break;
+    
+                        finalecount += 5000;
+                        players[i].usedown = true;
+                    }
                     players[i].usedown = true;
+    
                 }
-                players[i].usedown = true;
-
+                else
+                {
+                    players[i].usedown = false;
+                }
             }
-            else
+    
+            if (i < MAXPLAYERS)
             {
-                players[i].usedown = false;
-            }
-        }
-
-        if (i < MAXPLAYERS)
-        {
-            if (gamemode != commercial)
-            {
+                if (gamemode != commercial)
+                {
+                    
+                    finalestage = F_STAGE_ARTSCREEN;
+    
+                    // [JN] Play wipe animation only once.
+                    if (!finale_wipe_done)
+                    {
+                        wipegamestate = -1; // force a wipe
+                        finale_wipe_done = true;
+                    }
+            
+                    if (gameepisode == 3)
+                    {
+                        finalecount = 0;
+                        S_StartMusic (mus_bunny);
+                    }
                 
-                finalestage = F_STAGE_ARTSCREEN;
-
-                // [JN] Play wipe animation only once.
-                if (!finale_wipe_done)
-                {
-                    wipegamestate = -1; // force a wipe
-                    finale_wipe_done = true;
+                    return;
                 }
-        
-                if (gameepisode == 3)
+    
+                // [JN] No Rest for the Living
+                if (gamemission == pack_nerve && gamemap == 8)
                 {
-                    finalecount = 0;
-                    S_StartMusic (mus_bunny);
+                    F_StartCast ();
+                }  
+                
+                // [JN] Jaguar Doom: after beating MAP23, don't go any farther
+                else if (gamemission == jaguar && gamemap == 23)
+                {
+                    F_StartCast ();
                 }
-            
-                return;
-            }
-
-            // [JN] No Rest for the Living
-            if (gamemission == pack_nerve && gamemap == 8)
-            {
-                F_StartCast ();
-            }  
-            
-            // [JN] Jaguar Doom: after beating MAP23, don't go any farther
-            else if (gamemission == jaguar && gamemap == 23)
-            {
-                F_StartCast ();
-            }
-  
-            else if (gamemap == 30)
-            {
-                F_StartCast ();
-            }
-
-            else
-            {
-                gameaction = ga_worlddone;
+    
+                else if (gamemap == 30)
+                {
+                    F_StartCast ();
+                }
+    
+                else
+                {
+                    gameaction = ga_worlddone;
+                }
             }
         }
+    
+        // advance animation
+        finalecount++;
+    
+        if (finalestage == F_STAGE_CAST)
+        {
+            F_CastTicker ();
+            return;
+        }
+        else if (finalestage == F_STAGE_CAST_JAGUAR)
+        {
+            F_CastTickerJaguar ();
+            return;
+        }
     }
-
-    // advance animation
-    finalecount++;
-
-    if (finalestage == F_STAGE_CAST)
+    //
+    // [JN] Standard Doom routine, safe for network game and demos.
+    //        
+    else
     {
-        F_CastTicker ();
+        // check for skipping
+        if ( (gamemode == commercial)
+        && ( finalecount > 50) )
+        {
+            // go on to the next level
+            for (i=0 ; i<MAXPLAYERS ; i++)
+            {
+                // [JN] Pressing PAUSE should not skip text screen
+                if (players[i].cmd.buttons && !(players->cmd.buttons & BTS_PAUSE))
+                {
+                    break;
+                }
+            }
+    
+            if (i < MAXPLAYERS)
+            {
+                // [JN] No Rest for the Living
+                if (gamemission == pack_nerve && gamemap == 8)
+                {
+                    F_StartCast ();
+                }  
+                
+                // [JN] Jaguar: after beating MAP23, don't go any farther
+                else if (gamemission == jaguar && gamemap == 23)
+                {
+                    F_StartCast ();
+                }
+    
+                else if (gamemap == 30)
+                {
+                    F_StartCast ();
+                }
+    
+                else
+                {
+                    gameaction = ga_worlddone;
+                }
+            }
+        }
+    
+        // advance animation
+        finalecount++;
+    
+        if (finalestage == F_STAGE_CAST)
+        {
+            F_CastTicker ();
+            return;
+        }
+        else if (finalestage == F_STAGE_CAST_JAGUAR)
+        {
+            F_CastTickerJaguar ();
+            return;
+        }
+    
+        if ( gamemode == commercial)
         return;
-    }
-    else if (finalestage == F_STAGE_CAST_JAGUAR)
-    {
-        F_CastTickerJaguar ();
-        return;
+    
+        if (finalestage == F_STAGE_TEXT
+        && finalecount>strlen (finaletext)*TEXTSPEED + TEXTWAIT)
+        {
+            finalecount = 0;
+            finalestage = F_STAGE_ARTSCREEN;
+            wipegamestate = -1; // force a wipe
+    
+            if (gameepisode == 3)
+            S_StartMusic (mus_bunny);
+        }
     }
 }
 
