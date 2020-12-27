@@ -894,7 +894,7 @@ void P_KillMobj (mobj_t *source, mobj_t *target)
     }
 
     // [JN] Dropped items tossing feature (from Doom Retro).
-    if (toss_drop && !vanillaparm)
+    if (toss_drop && singleplayer && !vanillaparm)
     {
         mo = P_SpawnMobj(target->x ,target->y, target->floorz
                                              + target->height

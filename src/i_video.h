@@ -63,6 +63,9 @@ void I_DrawBlackBorders (void);
 
 #define SCREENHEIGHT_4_3 (240 << hires)
 
+void *I_GetSDLWindow(void);
+void *I_GetSDLRenderer(void);
+
 typedef boolean (*grabmouse_callback_t)(void);
 
 // Called by D_DoomMain,

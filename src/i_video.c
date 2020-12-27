@@ -248,6 +248,16 @@ static int resize_delay = 70; // [JN] Redused from 500 to 70
 
 int usegamma = 4;
 
+void *I_GetSDLWindow(void)
+{
+    return screen;
+}
+
+void *I_GetSDLRenderer(void)
+{
+    return renderer;
+}
+
 static boolean MouseShouldBeGrabbed()
 {
     // never grab the mouse when in screensaver mode
@@ -1585,10 +1595,6 @@ void I_InitGraphics(void)
     while (SDL_PollEvent(&dummy));
 
     initialized = true;
-
-    // Call I_ShutdownGraphics on quit
-
-    I_AtExit(I_ShutdownGraphics, true);
 }
 
 // [crispy] re-initialize only the parts of the rendering stack that are really necessary
