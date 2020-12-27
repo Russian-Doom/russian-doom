@@ -1936,7 +1936,9 @@ void D_SetGameDescription(void)
     // [JN] Check if we have replaced skill level graphics.
     // If found, replace "Ultra-Nightmare" patch with empty
     // placeholder for keeping menu style in one fashion.
-    if (W_CheckMultipleLumps("M_ROUGH") > 1)
+    if (W_CheckMultipleLumps("M_ROUGH") > 1
+    && gamemission != jaguar    // [JN] Don't check in Jaguar Doom
+    && gamemode != pressbeta)   // [JN] Don't check in Press Beta
     {
         DEH_AddStringReplacement ("M_UNMARE",   "TNT1A0");
     }
