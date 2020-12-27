@@ -1547,8 +1547,9 @@ void D_SetGameDescription(void)
 
     // [JN] PWAD autoloading routine. Scan through all 4 available variables,
     // and don't load empty ones. There are two special cases: SIGIL and NERVE.
-    // P.S. You cannot use autoload with the shareware version. Register!
-    if (gamemode != shareware)
+    // P.S. You cannot use autoload with the shareware version (register!),
+    // as well as in Press Beta version.
+    if (gamemode != shareware && gamemode != pressbeta)
     {
         int i;
 
@@ -2835,7 +2836,7 @@ void D_DoomMain (void)
 
         int i;
 
-        if ( gamemode == shareware)
+        if (gamemode == shareware || gamemode == pressbeta)
             I_Error(DEH_String(english_language ?
                                "\nYou cannot -file with the shareware version. Register!" :
                                "\nВы не можете использовать -file в демонстрационной версии. Приобретите полную версию!"));
