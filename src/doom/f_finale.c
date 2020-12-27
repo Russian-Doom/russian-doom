@@ -225,12 +225,6 @@ void F_Ticker (void)
 {
     size_t i;
 
-    // [JN] Make PAUSE working properly on text screen
-    if (paused)
-    {
-        return;
-    }
-
     //
     // [JN] If we are in single player mode, allow double skipping for 
     // intermission text. First skip printing all intermission text,
@@ -238,6 +232,12 @@ void F_Ticker (void)
     //
     if (singleplayer)
     {
+        // [JN] Make PAUSE working properly on text screen
+        if (paused)
+        {
+            return;
+        }
+
         // [JN] Check for skipping. Allow double-press skiping, 
         // but don't skip immediately.
         if (finalecount > 10)
@@ -368,8 +368,7 @@ void F_Ticker (void)
             // go on to the next level
             for (i=0 ; i<MAXPLAYERS ; i++)
             {
-                // [JN] Pressing PAUSE should not skip text screen
-                if (players[i].cmd.buttons && !(players->cmd.buttons & BTS_PAUSE))
+                if (players[i].cmd.buttons)
                 {
                     break;
                 }

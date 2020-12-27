@@ -826,7 +826,7 @@ boolean P_ThingHeightClip (mobj_t* thing)
     // [JN] Update player's view when on moving platform.
     // Idea by Brad Harding, code by Fabian Greffrath.
     // Thanks, colleagues! (02.04.2018)
-    if (!vanillaparm && thing->player && thing->subsector->sector == movingsector)
+    if (singleplayer && !vanillaparm && thing->player && thing->subsector->sector == movingsector)
     {
 	    P_CalcHeight (thing->player, true);
     }
@@ -1383,10 +1383,10 @@ P_AimLineAttack
     shootz = t1->z + (t1->height>>1) + 8*FRACUNIT;
 
     // can't shoot outside view angles
-    // [JN] Widescreen support: SCREENWIDTH is replaced with (320 << hires),
+    // [JN] Widescreen support: SCREENWIDTH is replaced with (ORIGWIDTH << hires),
     // this value must not be changed for demo compatibily and other stuff.
-    topslope = (SCREENHEIGHT/2)*FRACUNIT/((320 << hires)/2);	
-    bottomslope = -(SCREENHEIGHT/2)*FRACUNIT/((320 << hires)/2);
+    topslope = (SCREENHEIGHT/2)*FRACUNIT/((ORIGWIDTH << hires)/2);	
+    bottomslope = -(SCREENHEIGHT/2)*FRACUNIT/((ORIGWIDTH << hires)/2);
     
     attackrange = distance;
     linetarget = NULL;
@@ -1646,11 +1646,9 @@ boolean PIT_ChangeSector (mobj_t*	thing)
     // crunch bodies to giblets
     if (thing->health <= 0)
     {
-        // [JN] No gibs for crushed explosive barrel and Lost Soul
-        if (thing->type == MT_BARREL || thing->type == MT_SKULL)
-        P_SetMobjState (thing, SPR_TROO);
-        else
-        P_SetMobjState (thing, S_GIBS);
+        // [crispy] no blood, no giblets
+        // S_GIBS should be a "safe" state, and so is S_NULL
+        P_SetMobjState (thing, (thing->flags & MF_NOBLOOD) ? S_NULL : S_GIBS);
 
         // [JN] Initialize player's movement momentum for preventing
         // "flying through" solid walls in crushed state.
@@ -1705,13 +1703,16 @@ boolean PIT_ChangeSector (mobj_t*	thing)
 
         // spray blood in a random direction
 
-        // [JN] Бочка не должна кровоточить от крашера
-        if (thing->type == MT_BARREL && !vanillaparm)
-        return true;
-    
-        // [JN] Все остальные монстры
+        if (thing->type == MT_BARREL && singleplayer && !vanillaparm)
+        {
+            // [JN] Barrel should not bleed by crushed damage
+            return true;
+        }
         else
-        mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOOD);
+        {
+            // [JN] Rest of monsters are bleeding
+            mo = P_SpawnMobj (thing->x, thing->y, thing->z + thing->height/2, MT_BLOOD);
+        }
 
         mo->momx = P_SubRandom() << 12;
         mo->momy = P_SubRandom() << 12;

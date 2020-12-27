@@ -42,6 +42,7 @@
 #include "st_stuff.h"
 #include "wi_stuff.h"
 
+#include "crispy.h"
 #include "jn.h"
 
 // [JN] Jaguar: prototypes
@@ -1792,7 +1793,7 @@ void WI_checkForAccelerate(void)
 void WI_Ticker(void)
 {
     // [JN] Make PAUSE working properly on intermission screen
-    if (paused)
+    if (paused && singleplayer)
     {
         return;
     }
