@@ -925,158 +925,162 @@ void HU_DemoProgressBar (void)
 
 void HU_Drawer(void)
 {
+    static char str[32], *s;
+    int time = leveltime / TICRATE;
+    int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+    int extrakills = players[consoleplayer].killcount - totalkills;
+
     HUlib_drawSText(&w_message);
     HUlib_drawSText_Secret(&w_message_secret);
     HUlib_drawSText_System(&w_message_system);
     HUlib_drawSText_Chat(&w_message_chat);
+
+    // [JN] Draw local time widget
     if (local_time)
     {
-        // [JN] Draw local time widget
         HUlib_drawSText(&w_message_time);
     }
+
+    // [JN] Draw FPS counter
     if (show_fps && !vanillaparm)
     {
-        // [JN] Draw FPS counter
         HUlib_drawSText(&w_message_fps);
     }
+
     HUlib_drawIText(&w_chat);
 
+    // [JN] Level name (in automap only)
     if (automapactive)
     {
-        static char str[32], *s;
-        int time = leveltime / TICRATE;
-        int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
-        int extrakills = players[consoleplayer].killcount - totalkills;
-
         HUlib_drawTextLineUncolored(&w_title, false);
+    }
 
-        // [JN] Show level stats in automap (from Crispy Doom).
-        if (automap_stats && !vanillaparm)
+    // [JN] Show level stats in automap (from Crispy Doom).
+    if (((automapactive && automap_stats == 1) || automap_stats == 2) && !vanillaparm)
+    {
+        // [JN] Kills (show extra kills when necessary).
+        if (players[consoleplayer].killcount <= totalkills)
         {
-            // [JN] Kills (show extra kills when necessary).
-            if (players[consoleplayer].killcount <= totalkills)
-            {
             sprintf(str, english_language ?
-                         "Kills: %d/%d" : "dhfub: %d*%d",
-                         players[consoleplayer].killcount, totalkills);
-            }
-            else
-            {
+                        "Kills: %d/%d" : "dhfub: %d*%d",
+                        players[consoleplayer].killcount, totalkills);
+        }
+        else
+        {
             sprintf(str, english_language ?
-                         "Kills: %d/%d+%d" : "dhfub: %d*%d+%d",
-                         players[consoleplayer].killcount, totalkills, extrakills);                
-            }
-            HUlib_clearTextLine(&w_kills);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_kills, *(s++));
-            HUlib_drawTextLineUncolored(&w_kills, false);
+                        "Kills: %d/%d+%d" : "dhfub: %d*%d+%d",
+                        players[consoleplayer].killcount, totalkills, extrakills);                
+        }
+        HUlib_clearTextLine(&w_kills);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_kills, *(s++));
+        HUlib_drawTextLineUncolored(&w_kills, false);
     
-            // [JN] Items
-            sprintf(str, english_language ?
-                         "Items: %d/%d" : "ghtlvtns: %d*%d",
-                         players[consoleplayer].itemcount, totalitems);
-            HUlib_clearTextLine(&w_items);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_items, *(s++));
-            HUlib_drawTextLineUncolored(&w_items, false);
+        // [JN] Items
+        sprintf(str, english_language ?
+                     "Items: %d/%d" : "ghtlvtns: %d*%d",
+                     players[consoleplayer].itemcount, totalitems);
+        HUlib_clearTextLine(&w_items);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_items, *(s++));
+        HUlib_drawTextLineUncolored(&w_items, false);
     
-            // [JN] Secrets
-            sprintf(str, english_language ?
-                         "Secret: %d/%d" : "nfqybrb: %d*%d",
-                         players[consoleplayer].secretcount, totalsecret);
-            HUlib_clearTextLine(&w_scrts);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_scrts, *(s++));
-            HUlib_drawTextLineUncolored(&w_scrts, false);
+        // [JN] Secrets
+        sprintf(str, english_language ?
+                     "Secret: %d/%d" : "nfqybrb: %d*%d",
+                     players[consoleplayer].secretcount, totalsecret);
+        HUlib_clearTextLine(&w_scrts);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_scrts, *(s++));
+        HUlib_drawTextLineUncolored(&w_scrts, false);
 
-            // [JN] Skill
-            sprintf(str, english_language ?
-                         "Skill: %d" : "ckj;yjcnm: %d",
-                         gameskill+1);
-            HUlib_clearTextLine(&w_skill);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_skill, *(s++));
-            HUlib_drawTextLineUncolored(&w_skill, false);
-        }
+        // [JN] Skill
+        sprintf(str, english_language ?
+                     "Skill: %d" : "ckj;yjcnm: %d",
+                     gameskill+1);
+        HUlib_clearTextLine(&w_skill);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_skill, *(s++));
+        HUlib_drawTextLineUncolored(&w_skill, false);
+    }
 
-        // [JN] Level time
-        if (automap_level_time && !vanillaparm)
-        {
-            sprintf(str, english_language ?
-                         "Level" : "ehjdtym"); // Уровень
-            HUlib_clearTextLine(&w_ltime_title);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_ltime_title, *(s++));
-            HUlib_drawTextLineUncolored(&w_ltime_title, false);
+    // [JN] Level time
+    if (((automapactive && automap_level_time == 1) || automap_level_time == 2) && !vanillaparm)
+    {
+        sprintf(str, english_language ?
+                     "Level" : "ehjdtym"); // Уровень
+        HUlib_clearTextLine(&w_ltime_title);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_ltime_title, *(s++));
+        HUlib_drawTextLineUncolored(&w_ltime_title, false);
 
-            sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
-            HUlib_clearTextLine(&w_ltime);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_ltime, *(s++));
-            HUlib_drawTextLineUncolored(&w_ltime, false);
-        }
+        sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+        HUlib_clearTextLine(&w_ltime);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_ltime, *(s++));
+        HUlib_drawTextLineUncolored(&w_ltime, false);
+    }
 
-        // [JN] Total time
-        if (automap_total_time && !vanillaparm)
-        {
-            sprintf(str, english_language ?
-                         "Total" : "j,ott"); // Общее
-            HUlib_clearTextLine(&w_ttime_title);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_ttime_title, *(s++));
-            HUlib_drawTextLineUncolored(&w_ttime_title, false);
+    // [JN] Total time
+    if (((automapactive && automap_total_time == 1) || automap_total_time == 2) && !vanillaparm)
+    {
+        sprintf(str, english_language ?
+                     "Total" : "j,ott"); // Общее
+        HUlib_clearTextLine(&w_ttime_title);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_ttime_title, *(s++));
+        HUlib_drawTextLineUncolored(&w_ttime_title, false);
 
-            sprintf(str, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
-            HUlib_clearTextLine(&w_ttime);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_ttime, *(s++));
-            HUlib_drawTextLineUncolored(&w_ttime, false);
-        }
+        sprintf(str, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+        HUlib_clearTextLine(&w_ttime);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_ttime, *(s++));
+        HUlib_drawTextLineUncolored(&w_ttime, false);
+    }
 
-        // [JN] Player coords
-        if (automap_coords && !vanillaparm)
-        {
-            // [JN] X coord
-            sprintf(str, "X: %d", players[consoleplayer].mo->x >> FRACBITS);
-            HUlib_clearTextLine(&w_coord_x);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_coord_x, *(s++));
-            HUlib_drawTextLineUncolored(&w_coord_x, false);
+    // [JN] Player coords
+    if (((automapactive && automap_coords == 1) || automap_coords == 2) && !vanillaparm)
+    {
+        // [JN] X coord
+        sprintf(str, "X: %d", players[consoleplayer].mo->x >> FRACBITS);
+        HUlib_clearTextLine(&w_coord_x);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_coord_x, *(s++));
+        HUlib_drawTextLineUncolored(&w_coord_x, false);
 
-            // [JN] Y coord
-            sprintf(str, "Y: %d", players[consoleplayer].mo->y >> FRACBITS);
-            HUlib_clearTextLine(&w_coord_y);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_coord_y, *(s++));
-            HUlib_drawTextLineUncolored(&w_coord_y, false);
+        // [JN] Y coord
+        sprintf(str, "Y: %d", players[consoleplayer].mo->y >> FRACBITS);
+        HUlib_clearTextLine(&w_coord_y);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_coord_y, *(s++));
+        HUlib_drawTextLineUncolored(&w_coord_y, false);
 
-            // [JN] Y coord
-            sprintf(str, "Z: %d", players[consoleplayer].mo->z >> FRACBITS);
-            HUlib_clearTextLine(&w_coord_z);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_coord_z, *(s++));
-            HUlib_drawTextLineUncolored(&w_coord_z, false);
+        // [JN] Y coord
+        sprintf(str, "Z: %d", players[consoleplayer].mo->z >> FRACBITS);
+        HUlib_clearTextLine(&w_coord_z);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_coord_z, *(s++));
+        HUlib_drawTextLineUncolored(&w_coord_z, false);
 
-            // [JN] Angle
-            sprintf(str, english_language ? "ANG: %d" : "EUJK: %d",
-                    players[consoleplayer].mo->angle / ANG1);
-            HUlib_clearTextLine(&w_ang);
-            s = str;
-            while (*s)
-                HUlib_addCharToTextLine(&w_ang, *(s++));
-            HUlib_drawTextLineUncolored(&w_ang, false);
-        }
+        // [JN] Angle
+        sprintf(str, english_language ? "ANG: %d" : "EUJK: %d",
+                players[consoleplayer].mo->angle / ANG1);
+        HUlib_clearTextLine(&w_ang);
+        s = str;
+        while (*s)
+            HUlib_addCharToTextLine(&w_ang, *(s++));
+        HUlib_drawTextLineUncolored(&w_ang, false);
     }
 
     // [JN] Draw crosshair. 

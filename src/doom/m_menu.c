@@ -250,7 +250,7 @@ void M_RD_Change_Detail(int choice);
 void M_RD_Change_LocalTime(int choice);
 
 // Messages
-void M_RD_Choose_MessagesSettings(int choice);
+void M_RD_Choose_MessagesAndTextSettings(int choice);
 void M_RD_Draw_MessagesSettings(void);
 void M_RD_Change_Messages(int choice);
 void M_RD_Change_ShadowedText(int choice);
@@ -261,19 +261,19 @@ void M_RD_Change_Msg_System_Color(int choice);
 void M_RD_Change_Msg_Chat_Color(int choice);
 
 // Automap
-void M_RD_Choose_AutomapSettings(int choice);
+void M_RD_Choose_AutomapAndStatsSettings(int choice);
 void M_RD_Draw_AutomapSettings(void);
 void M_RD_Change_AutomapColor(int choice);
 void M_RD_Change_AutomapAntialias(int choice);
-void M_RD_Change_AutomapStats(int choice);
-void M_RD_Change_AutomapLevelTime(int choice);
-void M_RD_Change_AutomapTotalTime(int choice);
-void M_RD_Change_AutomapCoords(int choice);
 void M_RD_Change_AutomapOverlay(int choice);
 void M_RD_Change_AutomapRotate(int choice);
 void M_RD_Change_AutomapFollow(int choice);
 void M_RD_Change_AutomapGrid(int choice);
 void M_RD_Change_AutomapGridSize(int choice);
+void M_RD_Change_AutomapStats(int choice);
+void M_RD_Change_AutomapLevelTime(int choice);
+void M_RD_Change_AutomapTotalTime(int choice);
+void M_RD_Change_AutomapCoords(int choice);
 
 // Sound
 void M_RD_Choose_Audio(int choice);
@@ -1614,8 +1614,8 @@ menuitem_t RD_Display_Menu[]=
     {2, "detail level:",       M_RD_Change_Detail,          'd'},
     {2, "local time:",         M_RD_Change_LocalTime,       'l'},
     {-1,"",0,'\0'},
-    {1, "messages settings",   M_RD_Choose_MessagesSettings, 'a'},
-    {1, "automap settings",    M_RD_Choose_AutomapSettings, 'a'},
+    {1, "messages and texts",  M_RD_Choose_MessagesAndTextSettings, 'm'},
+    {1, "automap and statistics", M_RD_Choose_AutomapAndStatsSettings, 'a'},
     {-1,"",0,'\0'}
 };
 
@@ -1646,8 +1646,8 @@ menuitem_t RD_Display_Menu_Rus[]=
     {2, "ehjdtym ltnfkbpfwbb:",     M_RD_Change_Detail,          'e'}, // Уровень детализации:
     {2, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
     {-1,"",0,'\0'},                                                    //
-    {1, "yfcnhjqrb cjj,otybq",      M_RD_Choose_MessagesSettings,'y'}, // Настройки сообщений
-    {1, "yfcnhjqrb rfhns",          M_RD_Choose_AutomapSettings, 'y'}, // Настройки карты
+    {1, "cjj,otybz b ntrcns",       M_RD_Choose_MessagesAndTextSettings,'c'}, // Сообщения и тексты
+    {1, "rfhnf b cnfnbcnbrf",       M_RD_Choose_AutomapAndStatsSettings, 'r'}, // Карта и статистика
     {-1,"",0,'\0'}
 };
 
@@ -1743,15 +1743,16 @@ enum
 {
     rd_automap_colors,
     rd_automap_antialias,
-    rd_automap_stats,
-    rd_automap_l_time,
-    rd_automap_t_time,
-    rd_automap_coords,
     rd_automap_overlay,
     rd_automap_rotate,
     rd_automap_follow,
     rd_automap_grid,
     rd_automap_grid_size,
+    rd_automap_empty1,
+    rd_automap_stats,
+    rd_automap_l_time,
+    rd_automap_t_time,
+    rd_automap_coords,    
     rd_automap_end
 } rd_automap_e;
 
@@ -1763,15 +1764,16 @@ menuitem_t RD_Automap_Menu[]=
 {
     {2, "color scheme:",      M_RD_Change_AutomapColor,     'c'},
     {2, "line antialiasing:", M_RD_Change_AutomapAntialias, 'l'},
-    {2, "level stats:",       M_RD_Change_AutomapStats,     'l'},
-    {2, "level time:",        M_RD_Change_AutomapLevelTime, 'l'},
-    {2, "total time:",        M_RD_Change_AutomapTotalTime, 't'},
-    {2, "player coords:",     M_RD_Change_AutomapCoords,    'p'},
     {2, "overlay mode:",      M_RD_Change_AutomapOverlay,   'o'},
     {2, "rotate mode:",       M_RD_Change_AutomapRotate,    'r'},
     {2, "follow mode:",       M_RD_Change_AutomapFollow,    'f'},
     {2, "grid:",              M_RD_Change_AutomapGrid,      'g'},
     {2, "grid size:",         M_RD_Change_AutomapGridSize,  'g'},
+    {-1,"",0,'\0'},
+    {2, "level stats:",       M_RD_Change_AutomapStats,     'l'},
+    {2, "level time:",        M_RD_Change_AutomapLevelTime, 'l'},
+    {2, "total time:",        M_RD_Change_AutomapTotalTime, 't'},
+    {2, "player coords:",     M_RD_Change_AutomapCoords,    'p'},
     {-1,"",0,'\0'}
 };
 
@@ -1781,7 +1783,7 @@ menu_t  RD_Automap_Def =
     &RD_Display_Def,
     RD_Automap_Menu,
     M_RD_Draw_AutomapSettings,
-    70,25,
+    70,35,
     0
 };
 
@@ -1793,15 +1795,16 @@ menuitem_t RD_Automap_Menu_Rus[]=
 {
     {2, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,     'w'}, // Цветовая схема:
     {2, "cukf;bdfybt kbybq:", M_RD_Change_AutomapAntialias, 'c'}, // Сглаживание линий:
-    {2, "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     'c'}, // Статистика уровня:
-    {2, "dhtvz ehjdyz:",      M_RD_Change_AutomapLevelTime, 'l'}, // Время уровня:
-    {2, "j,ott dhtvz: d",       M_RD_Change_AutomapTotalTime, 't'}, // Общее время:
-    {2, "rjjhlbyfns buhjrf:", M_RD_Change_AutomapCoords,    'r'}, // Координаты игрока:
     {2, "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay,   'h'}, // Режим наложения:
     {2, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    'h'}, // Режим вращения:
     {2, "ht;bv cktljdfybz:",  M_RD_Change_AutomapFollow,    'h'}, // Режим следования:
     {2, "ctnrf:",             M_RD_Change_AutomapGrid,      'c'}, // Сетка:
-    {2, "hfpvth ctnrb:",      M_RD_Change_AutomapGridSize,  'h'}, // Размер сетки:
+    {2, "hfpvth ctnrb:",      M_RD_Change_AutomapGridSize,  'h'}, // Размер сетки:    
+    {-1,"",0,'\0'},
+    {2, "cnfnbcnbrf ehjdyz:", M_RD_Change_AutomapStats,     'c'}, // Статистика уровня:
+    {2, "dhtvz ehjdyz:",      M_RD_Change_AutomapLevelTime, 'd'}, // Время уровня:
+    {2, "j,ott dhtvz:",       M_RD_Change_AutomapTotalTime, 'j'}, // Общее время:
+    {2, "rjjhlbyfns buhjrf:", M_RD_Change_AutomapCoords,    'r'}, // Координаты игрока:
     {-1,"",0,'\0'}
 };
 
@@ -1811,7 +1814,7 @@ menu_t  RD_Automap_Def_Rus =
     &RD_Display_Def_Rus,
     RD_Automap_Menu_Rus,
     M_RD_Draw_AutomapSettings,
-    70,25,
+    70,35,
     0
 };
 
@@ -3604,7 +3607,7 @@ void M_RD_Change_LocalTime(int choice)
 // Messages settings
 // -----------------------------------------------------------------------------
 
-void M_RD_Choose_MessagesSettings(int choice)
+void M_RD_Choose_MessagesAndTextSettings(int choice)
 {
     M_SetupNextMenu(english_language ? 
                     &RD_Messages_Def :
@@ -3615,7 +3618,7 @@ void M_RD_Draw_MessagesSettings(void)
 {
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "MESSAGES SETTINGS");
+        M_WriteTextBigCentered_ENG(5, "MESSAGES AND TEXTS");
 
         dp_translation = cr[CR_GOLD];
         M_WriteTextSmall_ENG(35 + wide_delta, 25, "General");  
@@ -3747,7 +3750,7 @@ void M_RD_Draw_MessagesSettings(void)
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB CJJ<OTYBQ"); // НАСТРОЙКИ СООБЩЕНИЙ
+        M_WriteTextBigCentered_RUS(5, "CJJ<OTYBZ B NTRCNS"); // СООБЩЕНИЯ И ТЕКСТЫ
 
         //
         // Общие
@@ -4014,7 +4017,7 @@ void M_RD_Change_ShadowedText(int choice)
 // Automap settings
 // -----------------------------------------------------------------------------
 
-void M_RD_Choose_AutomapSettings(int choice)
+void M_RD_Choose_AutomapAndStatsSettings(int choice)
 {
     M_SetupNextMenu(english_language ? 
                     &RD_Automap_Def :
@@ -4029,16 +4032,23 @@ void M_RD_Draw_AutomapSettings(void)
 
     if (english_language)
     {
-        M_WriteTextBigCentered_ENG(5, "AUTOMAP SETTINGS");
+        M_WriteTextBigCentered_ENG(5, "AUTOMAP AND STATS");
+
+        //
+        // Automap
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(70 + wide_delta, 25, "Automap");
+        dp_translation = NULL;
 
         // Automap colors (English only names, different placement)
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(170 + wide_delta, 25, "n/a");
+            M_WriteTextSmall_ENG(170 + wide_delta, 35, "n/a");
         }
         else
         {
-            M_WriteTextSmall_ENG (170 + wide_delta, 25, automap_color == 1 ? "boom"   :
+            M_WriteTextSmall_ENG (170 + wide_delta, 35, automap_color == 1 ? "boom"   :
                                                         automap_color == 2 ? "jaguar" :
                                                         automap_color == 3 ? "raven"  :
                                                         automap_color == 4 ? "strife" :
@@ -4047,47 +4057,91 @@ void M_RD_Draw_AutomapSettings(void)
         }
 
         // Line antialiasing
-        M_WriteTextSmall_ENG(193 + wide_delta, 35, automap_antialias ? "on" : "off");
+        dp_translation = automap_antialias ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(193 + wide_delta, 45, automap_antialias ? "on" : "off");
+        dp_translation = NULL;
 
-        // Level stats
-        M_WriteTextSmall_ENG(159 + wide_delta, 45, automap_stats ? "on" : "off");
-
-        // Level time
-        M_WriteTextSmall_ENG(150 + wide_delta, 55, automap_level_time ? "on" : "off");
-
-        // Total time
-        M_WriteTextSmall_ENG(151 + wide_delta, 65, automap_total_time ? "on" : "off");
-
-        // Player coords
-        M_WriteTextSmall_ENG(177 + wide_delta, 75, automap_coords ? "on" : "off");
-        
         // Overlay mode
-        M_WriteTextSmall_ENG(170 + wide_delta, 85, automap_overlay ? "on" : "off");
+        dp_translation = automap_overlay ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(170 + wide_delta, 55, automap_overlay ? "on" : "off");
+        dp_translation = NULL;
 
         // Rotate mode
-        M_WriteTextSmall_ENG(163 + wide_delta, 95, automap_rotate ? "on" : "off");
+        dp_translation = automap_rotate ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(163 + wide_delta, 65, automap_rotate ? "on" : "off");
+        dp_translation = NULL;
 
         // Follow mode
-        M_WriteTextSmall_ENG(164 + wide_delta, 105, automap_follow ? "on" : "off");
+        dp_translation = automap_follow ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(164 + wide_delta, 75, automap_follow ? "on" : "off");
+        dp_translation = NULL;
 
         // Grid
-        M_WriteTextSmall_ENG(106 + wide_delta, 115, automap_grid ? "on" : "off");
+        dp_translation = automap_grid ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(106 + wide_delta, 85, automap_grid ? "on" : "off");
+        dp_translation = NULL;
 
         // Grid size
-        M_WriteTextSmall_ENG(136 + wide_delta, 125, num);
+        dp_translation = automap_grid_size == 128 ? cr[CR_DARKRED] : cr[CR_GREEN];
+        M_WriteTextSmall_ENG(136 + wide_delta, 95, num);
+        dp_translation = NULL;
+
+        //
+        // Statistics
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_ENG(70 + wide_delta, 105, "Statistics");
+        dp_translation = NULL;
+
+        // Level stats
+        dp_translation = automap_stats ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(159 + wide_delta, 115, automap_stats == 1 ? "in automap" :
+                                                    automap_stats == 2 ? "always" :
+                                                                         "off");
+        dp_translation = NULL;
+
+        // Level time
+        dp_translation = automap_level_time ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(150 + wide_delta, 125, automap_level_time == 1 ? "in automap" :
+                                                    automap_level_time == 2 ? "always" :
+                                                                              "off");
+        dp_translation = NULL;
+
+        // Total time
+        dp_translation = automap_total_time ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(151 + wide_delta, 135, automap_total_time == 1 ? "in automap" :
+                                                    automap_total_time == 2 ? "always" :
+                                                                              "off");
+        dp_translation = NULL;
+
+        // Player coords
+        dp_translation = automap_coords ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(177 + wide_delta, 145, automap_coords == 1 ? "in automap" :
+                                                    automap_coords == 2 ? "always" :
+                                                                          "off");
+        dp_translation = NULL;
+        
+
     }
     else
     {
-        M_WriteTextBigCentered_RUS(5, "YFCNHJQRB RFHNS"); // НАСТРОЙКИ КАРТЫ
+        M_WriteTextBigCentered_RUS(5, "RFHNF B CNFNBCNBRF"); // КАРТА И СТАТИСТИКА
+
+        //
+        // Карта
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(70 + wide_delta, 25, "Rfhnf");
+        dp_translation = NULL;
 
         // Automap colors (English only names, different placement)
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(191 + wide_delta, 25, "y*l"); // н/д
+            M_WriteTextSmall_RUS(191 + wide_delta, 35, "y*l"); // н/д
         }
         else
         {
-            M_WriteTextSmall_ENG (189 + wide_delta, 25, automap_color == 1 ? "boom"   :
+            M_WriteTextSmall_ENG (189 + wide_delta, 35, automap_color == 1 ? "boom"   :
                                                         automap_color == 2 ? "jaguar" :
                                                         automap_color == 3 ? "raven"  :
                                                         automap_color == 4 ? "strife" :
@@ -4096,34 +4150,70 @@ void M_RD_Draw_AutomapSettings(void)
         }
 
         // Сглаживание линий
-        M_WriteTextSmall_RUS(214 + wide_delta, 35, automap_antialias ? "drk" : "dsrk");
-
-        // Статистика уровня
-        M_WriteTextSmall_RUS(210 + wide_delta, 45, automap_stats ? "drk" : "dsrk");
-
-        // Время уровня
-        M_WriteTextSmall_RUS(171 + wide_delta, 55, automap_level_time ? "drk" : "dsrk");
-
-        // Общее время
-        M_WriteTextSmall_RUS(166 + wide_delta, 65, automap_total_time ? "drk" : "dsrk");
-
-        // Координаты игрока
-        M_WriteTextSmall_RUS(213 + wide_delta, 75, automap_coords ? "drk" : "dsrk");
+        dp_translation = automap_antialias ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(214 + wide_delta, 45, automap_antialias ? "drk" : "dsrk");
+        dp_translation = NULL;
 
         // Режим наложения
-        M_WriteTextSmall_RUS(203 + wide_delta, 85, automap_overlay ? "drk" : "dsrk");
+        dp_translation = automap_overlay ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(203 + wide_delta, 55, automap_overlay ? "drk" : "dsrk");
+        dp_translation = NULL;
 
         // Режим вращения
-        M_WriteTextSmall_RUS(194 + wide_delta, 95, automap_rotate ? "drk" : "dsrk");
+        dp_translation = automap_rotate ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(194 + wide_delta, 65, automap_rotate ? "drk" : "dsrk");
+        dp_translation = NULL;
 
         // Режим следования
-        M_WriteTextSmall_RUS(208 + wide_delta, 105, automap_follow ? "drk" : "dsrk");
+        dp_translation = automap_follow ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(208 + wide_delta, 75, automap_follow ? "drk" : "dsrk");
+        dp_translation = NULL;
 
         // Сетка
-        M_WriteTextSmall_RUS(118 + wide_delta, 115, automap_grid ? "drk" : "dsrk");
+        dp_translation = automap_grid ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(118 + wide_delta, 85, automap_grid ? "drk" : "dsrk");
+        dp_translation = NULL;
 
         // Размер сетки
-        M_WriteTextSmall_ENG(171 + wide_delta, 125, num);
+        dp_translation = automap_grid_size == 128 ? cr[CR_DARKRED] : cr[CR_GREEN];
+        M_WriteTextSmall_ENG(171 + wide_delta, 95, num);
+        dp_translation = NULL;
+        
+        //
+        // Статистика
+        //
+        dp_translation = cr[CR_GOLD];
+        M_WriteTextSmall_RUS(70 + wide_delta, 105, "Cnfnbcnbrf");
+        dp_translation = NULL;
+        
+
+        // Статистика уровня
+        dp_translation = automap_stats ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(210 + wide_delta, 115, automap_stats == 1 ? "yf rfhnt" :
+                                                    automap_stats == 2 ? "dctulf" :
+                                                                         "dsrk");
+        dp_translation = NULL;
+
+        // Время уровня
+        dp_translation = automap_level_time ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(171 + wide_delta, 125, automap_level_time == 1 ? "yf rfhnt" :
+                                                    automap_level_time == 2 ? "dctulf" :
+                                                                              "dsrk");
+        dp_translation = NULL;
+
+        // Общее время
+        dp_translation = automap_total_time ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(166 + wide_delta, 135, automap_total_time == 1 ? "yf rfhnt" :
+                                                    automap_total_time == 2 ? "dctulf" :
+                                                                              "dsrk");
+        dp_translation = NULL;
+
+        // Координаты игрока
+        dp_translation = automap_coords ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(213 + wide_delta, 145, automap_coords == 1 ? "yf rfhnt" :
+                                                    automap_coords == 2 ? "dctulf" :
+                                                                          "dsrk");
+        dp_translation = NULL;
     }
 }
 
@@ -4157,26 +4247,6 @@ void M_RD_Change_AutomapAntialias(int choice)
 void M_RD_Change_AutomapOverlay(int choice)
 {
     automap_overlay ^= 1;
-}
-
-void M_RD_Change_AutomapStats(int choice)
-{
-    automap_stats ^= 1;
-}
-
-void M_RD_Change_AutomapLevelTime(int choice)
-{
-    automap_level_time ^= 1;
-}
-
-void M_RD_Change_AutomapTotalTime(int choice)
-{
-    automap_total_time ^= 1;
-}
-
-void M_RD_Change_AutomapCoords(int choice)
-{
-    automap_coords ^= 1;
 }
 
 void M_RD_Change_AutomapRotate(int choice)
@@ -4237,6 +4307,79 @@ void M_RD_Change_AutomapGridSize(int choice)
         break;
     }
 }
+
+void M_RD_Change_AutomapStats(int choice)
+{
+    switch(choice)
+    {
+        case 0: 
+        automap_stats--;
+        if (automap_stats < 0) 
+            automap_stats = 2;
+        break;
+    
+        case 1:
+        automap_stats++;
+        if (automap_stats > 2)
+            automap_stats = 0;
+        break;
+    }
+}
+
+void M_RD_Change_AutomapLevelTime(int choice)
+{
+    switch(choice)
+    {
+        case 0: 
+        automap_level_time--;
+        if (automap_level_time < 0) 
+            automap_level_time = 2;
+        break;
+    
+        case 1:
+        automap_level_time++;
+        if (automap_level_time > 2)
+            automap_level_time = 0;
+        break;
+    }
+}
+
+void M_RD_Change_AutomapTotalTime(int choice)
+{
+    switch(choice)
+    {
+        case 0: 
+        automap_total_time--;
+        if (automap_total_time < 0) 
+            automap_total_time = 2;
+        break;
+    
+        case 1:
+        automap_total_time++;
+        if (automap_total_time > 2)
+            automap_total_time = 0;
+        break;
+    }
+}
+
+void M_RD_Change_AutomapCoords(int choice)
+{
+    switch(choice)
+    {
+        case 0: 
+        automap_coords--;
+        if (automap_coords < 0) 
+            automap_coords = 2;
+        break;
+    
+        case 1:
+        automap_coords++;
+        if (automap_coords > 2)
+            automap_coords = 0;
+        break;
+    }
+}
+
 
 // -----------------------------------------------------------------------------
 // Sound
@@ -6132,11 +6275,6 @@ void M_RD_Change_BlazingSfx(int choice)
 void M_RD_Change_AlertSfx(int choice)
 {
      noise_alert_sfx ^= 1;
-}
-
-void M_RD_Change_AutoMapStats(int choice)
-{
-    automap_stats ^= 1;
 }
 
 void M_RD_Change_SecretNotify(int choice)
