@@ -5581,8 +5581,8 @@ void M_RD_Draw_Gameplay_1(void)
 
         // Colored HUD elements
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(195 + wide_delta, 75, colored_hud == 1 ? RD_ON  :
-                                                   colored_hud == 2 ? "On (%)" :
+        M_WriteTextSmall_ENG(195 + wide_delta, 75, colored_hud == 1 ? "On (no %)"  :
+                                                   colored_hud == 2 ? RD_ON :
                                                                       RD_OFF);
         dp_translation = NULL;
 
@@ -5652,8 +5652,8 @@ void M_RD_Draw_Gameplay_1(void)
 
         // Разноцветные элементы HUD
         dp_translation = colored_hud ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(239 + wide_delta, 75, colored_hud == 1 ? RD_ON_RUS   :
-                                                   colored_hud == 2 ? "Drk (%)" :
+        M_WriteTextSmall_RUS(239 + wide_delta, 75, colored_hud == 1 ? "Drk (,tp %)" :
+                                                   colored_hud == 2 ? RD_ON_RUS :
                                                                       RD_OFF_RUS);
         dp_translation = NULL;
 
