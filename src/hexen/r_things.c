@@ -59,8 +59,8 @@ lighttable_t **fullbrights_firebull;
 
 
 // constant arrays used for psprite clipping and initializing clipping
-short negonearray[WIDESCREENWIDTH];
-short screenheightarray[WIDESCREENWIDTH];
+int negonearray[WIDESCREENWIDTH];       // [crispy] 32-bit integer math
+int screenheightarray[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
 
 boolean LevelUseFullBright;
 /*
@@ -339,8 +339,8 @@ vissprite_t *R_NewVisSprite(void)
 ================
 */
 
-short *mfloorclip;
-short *mceilingclip;
+int* mfloorclip;   // [crispy] 32-bit integer math
+int* mceilingclip; // [crispy] 32-bit integer math
 fixed_t spryscale;
 fixed_t sprtopscreen;
 fixed_t sprbotscreen;
@@ -1208,7 +1208,7 @@ void R_SortVisSprites(void)
 void R_DrawSprite(vissprite_t * spr)
 {
     drawseg_t *ds;
-    short clipbot[WIDESCREENWIDTH], cliptop[WIDESCREENWIDTH];
+    int clipbot[WIDESCREENWIDTH], cliptop[WIDESCREENWIDTH]; // [crispy] 32-bit integer math
     int x, r1, r2;
     fixed_t scale, lowscale;
     int silhouette;
