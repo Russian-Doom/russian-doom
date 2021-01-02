@@ -1552,6 +1552,11 @@ void I_InitGraphics(void)
     AdjustWindowSize();
     SetVideoMode();
 
+    // [JN] Set window hint with a high priority.
+    // Fixes not working Win-key combinations on SDL 2.0.14.
+    SDL_SetHintWithPriority(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS,
+                            "1", SDL_HINT_OVERRIDE);
+
     // Start with a clear black screen
     // (screen will be flipped after we set the palette)
 
