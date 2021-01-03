@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2016-2020 Julian Nechaevsky
+// Copyright(C) 2016-2021 Julian Nechaevsky
 //
 
 /* sha1.c - SHA1 hash function
