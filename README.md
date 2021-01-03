@@ -10,13 +10,13 @@ Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archi
 
 Windows (32-bit): [russian-heretic-4.3-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/heretic-4.3/russian-heretic-4.3-win32.zip)<br />
 Windows (64-bit): [russian-heretic-4.3-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/heretic-4.3/russian-heretic-4.3-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/heretic-4.2.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/heretic-4.2.tar.gz) formats<br />
+Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/heretic-4.3.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/heretic-4.3.tar.gz) formats<br />
 
 #### Russian Hexen 4.1 (released: January 3, 2021)
 
 Windows (32-bit): [russian-hexen-4.1-win32.zip](https://github.com/JNechaevsky/russian-doom/releases/download/hexen-4.1/russian-hexen-4.1-win32.zip)<br />
 Windows (64-bit): [russian-hexen-4.1-win64.zip](https://github.com/JNechaevsky/russian-doom/releases/download/hexen-4.1/russian-hexen-4.1-win64.zip)<br />
-Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/hexen-4.0.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/hexen-4.0.tar.gz) formats<br />
+Source code available in [zip](https://github.com/JNechaevsky/russian-doom/archive/hexen-4.1.zip) and [tar.gz](https://github.com/JNechaevsky/russian-doom/archive/hexen-4.1.tar.gz) formats<br />
 
 #### Russian Doom for DOS 1.8 (released: June 9, 2020)
 
