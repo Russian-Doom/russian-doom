@@ -33,8 +33,8 @@ files only know about ccordinates, not the architecture of the frame buffer.
 
 byte *viewimage;
 int viewwidth, scaledviewwidth, viewheight, viewwindowx, viewwindowy;
-byte *ylookup[MAXHEIGHT];
-int columnofs[WIDEMAXWIDTH];
+byte *ylookup[SCREENHEIGHT];
+int columnofs[WIDESCREENWIDTH];
 byte translations[3][256];      // color tables for different players
 
 /*

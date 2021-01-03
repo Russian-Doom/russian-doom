@@ -452,14 +452,9 @@ int st_keyorskull[3];
 // a random number per tick
 static int st_randomnumber;  
 
-// [JN] Different status bar width and height between wide modes and games.
-static int st_width;  
+// [JN] Different status height between common Doom and Jaguar Doom.
 static int st_height;
 static int st_y;
-
-// [JN] Different wide deltas between wide screen modes.
-static int wborder_delta_l;
-static int wborder_delta_r;
 
 cheatseq_t cheat_mus = CHEAT("idmus", 2);
 cheatseq_t cheat_god = CHEAT("iddqd", 0);
@@ -513,6 +508,44 @@ void ST_refreshBackground(void)
     if (st_statusbaron)
     {
         V_UseBuffer(st_backing_screen);
+
+        // [JN] Draw side screen borders in wide screen mode.
+        if (aspect_ratio >= 2)
+        {
+            // [crispy] this is our own local copy of R_FillBackScreen() to
+            // fill the entire background of st_backing_screen with the bezel pattern,
+            // so it appears to the left and right of the status bar in widescreen mode
+            if ((screenwidth >> hires) != ORIGWIDTH)
+            {
+                int x, y;
+                byte *src;
+                byte *dest;
+                char *name = (gamemode == commercial) ? DEH_String("GRNROCK") : DEH_String("FLOOR7_2");
+        
+                src = W_CacheLumpName(name, PU_CACHE);
+                dest = st_backing_screen;
+        
+                for (y = SCREENHEIGHT-(st_height << hires); y < SCREENHEIGHT; y++)
+                {
+                    for (x = 0; x < screenwidth; x++)
+                    {
+                        *dest++ = src[((y&63)<<6) + (x&63)];
+                    }
+                }
+        
+                // [JN] Draw bezel bottom edge.
+                if (scaledviewwidth == screenwidth)
+                {
+                    patch_t *patch = W_CacheLumpName(DEH_String("brdr_b"), PU_CACHE);
+        
+                    for (x = 0; x < screenwidth; x += 8)
+                    {
+                        V_DrawPatch(x, 0, patch);
+                    }
+                }
+            }
+        }
+
         V_DrawPatch(ST_X + wide_delta, 0, english_language ? sbar : sbar_rus);
 
         // [crispy] back up arms widget background
@@ -525,29 +558,7 @@ void ST_refreshBackground(void)
         V_RestoreBuffer();
 
         V_CopyRect(ST_X, 0, st_backing_screen, 
-                   st_width, st_height, ST_X, st_y);
-
-        // [JN] Wide screen: draw side borders if needed,
-        // i.e. if status bar is 320 pixels wide.
-        if (aspect_ratio >= 2 && sbar->width == ORIGWIDTH)
-        {
-            if (gamemode == commercial)
-            {
-                V_DrawPatch(wborder_delta_l, 168,   // left border
-                            W_CacheLumpName(DEH_String("RDWBD2LF"), PU_CACHE));
-
-                V_DrawPatch(wborder_delta_r, 168,   // right border
-                            W_CacheLumpName(DEH_String("RDWBD2RT"), PU_CACHE));
-            }
-            else
-            {
-                V_DrawPatch(wborder_delta_l, 168,   // left border
-                            W_CacheLumpName(DEH_String("RDWBD1LF"), PU_CACHE));
-
-                V_DrawPatch(wborder_delta_r, 168,   // right border
-                            W_CacheLumpName(DEH_String("RDWBD1RT"), PU_CACHE));
-            }
-        }
+                   origwidth, st_height, ST_X, st_y);
     }
 }
 
@@ -2156,40 +2167,6 @@ void ST_initData(void)
     for (i=0;i<3;i++)
     keyboxes[i] = -1;
 
-    //
-    // [JN] Pre-define sizes and deltas for different width and height of stbar.
-    //
-
-    // [JN] Status bar width
-    if (aspect_ratio == 2)
-    {
-        st_width = ST_WIDEWIDTH_16_9;
-    }
-    else if (aspect_ratio == 3)
-    {
-        st_width = ST_WIDEWIDTH_16_10;
-    }
-    else
-    {
-        st_width = ST_WIDTH;
-    }
-    
-    // [JN] Status bar height
-    st_height = gamemission == jaguar ? ST_HEIGHT_JAG : ST_HEIGHT;
-    st_y = gamemission == jaguar ? ST_Y_JAG : ST_Y;
-
-    // [JN] Wide border deltas
-    if (aspect_ratio == 2)
-    {
-        wborder_delta_l = 0;
-        wborder_delta_r = 373;
-    }
-    else if (aspect_ratio == 3)
-    {
-        wborder_delta_l = -21;
-        wborder_delta_r = 352;
-    }
-
     STlib_init();
 }
 
@@ -2230,19 +2207,11 @@ void ST_DrawDemoTimer (const int time)
 
 void ST_createWidgets(void)
 {
-    static int widget_delta; // [JN] For different widget offset between wide modes.
     int i;
-
-    if (aspect_ratio == 2)
-    widget_delta = WIDE_DELTA;
-    else if (aspect_ratio == 3)
-    widget_delta = WIDE_DELTA - 21;
-    else
-    widget_delta = 0;
 
     // ready weapon ammo
     STlib_initNum(&w_ready,
-        ST_AMMOX + widget_delta,
+        ST_AMMOX + wide_delta,
         ST_AMMOY,
         tallnum,
         &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
@@ -2254,7 +2223,7 @@ void ST_createWidgets(void)
 
     // health percentage
     STlib_initPercent(&w_health,
-        ST_HEALTHX + widget_delta,
+        ST_HEALTHX + wide_delta,
         ST_HEALTHY,
         tallnum,
         &plyr->health,
@@ -2263,7 +2232,7 @@ void ST_createWidgets(void)
 
     // [JN] Negative player health
     STlib_initPercent(&w_health_neg,
-        ST_HEALTHX + widget_delta,
+        ST_HEALTHX + wide_delta,
         ST_HEALTHY,
         tallnum,
         &plyr->health_neg,
@@ -2272,7 +2241,7 @@ void ST_createWidgets(void)
 
     // arms background
     STlib_initBinIcon(&w_armsbg,
-        ST_ARMSBGX + widget_delta,
+        ST_ARMSBGX + wide_delta,
         ST_ARMSBGY,
         english_language ? armsbg : armsbg_rus,
         &st_notdeathmatch,
@@ -2282,7 +2251,7 @@ void ST_createWidgets(void)
     for(i=0;i<6;i++)
     {
         STlib_initMultIcon(&w_arms[i],
-            ST_ARMSX + widget_delta + (i%3)*ST_ARMSXSPACE,
+            ST_ARMSX + wide_delta + (i%3)*ST_ARMSXSPACE,
             ST_ARMSY+(i/3)*ST_ARMSYSPACE,
             arms[i],
             &plyr->weaponowned[i+1],
@@ -2294,7 +2263,7 @@ void ST_createWidgets(void)
 
     // frags sum
     STlib_initNum(&w_frags,
-        ST_FRAGSX + widget_delta,
+        ST_FRAGSX + wide_delta,
         ST_FRAGSY,
         tallnum,
         &st_fragscount,
@@ -2303,7 +2272,7 @@ void ST_createWidgets(void)
 
     // [JN] Press Beta artifacts sum
     STlib_initNum(&w_artifacts,
-        ST_FRAGSX + widget_delta + 1,
+        ST_FRAGSX + wide_delta + 1,
         ST_FRAGSY,
         tallnum,
         &st_artifactscount,
@@ -2312,7 +2281,7 @@ void ST_createWidgets(void)
 
     // [JN] Press Beta: player's lifes sum
     STlib_initNum(&w_lifes,
-        ST_LIFESX + widget_delta,
+        ST_LIFESX + wide_delta,
         ST_LIFESY,
         shortnum,
         &lifecount,
@@ -2321,7 +2290,7 @@ void ST_createWidgets(void)
 
     // faces
     STlib_initMultIcon(&w_faces,
-        ST_FACESX + widget_delta,
+        ST_FACESX + wide_delta,
         ST_FACESY,
         faces,
         &st_faceindex,
@@ -2329,7 +2298,7 @@ void ST_createWidgets(void)
 
     // armor percentage - should be colored later
     STlib_initPercent(&w_armor,
-        ST_ARMORX + widget_delta,
+        ST_ARMORX + wide_delta,
         ST_ARMORY,
         tallnum,
         &plyr->armorpoints,
@@ -2337,21 +2306,21 @@ void ST_createWidgets(void)
 
     // keyboxes 0-2
     STlib_initMultIcon(&w_keyboxes[0],
-        ST_KEY0X + widget_delta,
+        ST_KEY0X + wide_delta,
         ST_KEY0Y,
         keys,
         &keyboxes[0],
         &st_statusbaron);
 
     STlib_initMultIcon(&w_keyboxes[1],
-        ST_KEY1X + widget_delta,
+        ST_KEY1X + wide_delta,
         ST_KEY1Y,
         keys,
         &keyboxes[1],
         &st_statusbaron);
 
     STlib_initMultIcon(&w_keyboxes[2],
-        ST_KEY2X + widget_delta,
+        ST_KEY2X + wide_delta,
         ST_KEY2Y,
         keys,
         &keyboxes[2],
@@ -2359,7 +2328,7 @@ void ST_createWidgets(void)
 
     // ammo count (all four kinds)
     STlib_initNum(&w_ammo[0],
-        ST_AMMO0X + widget_delta,
+        ST_AMMO0X + wide_delta,
         ST_AMMO0Y,
         shortnum,
         &plyr->ammo[0],
@@ -2367,7 +2336,7 @@ void ST_createWidgets(void)
         ST_AMMO0WIDTH);
 
     STlib_initNum(&w_ammo[1],
-        ST_AMMO1X + widget_delta,
+        ST_AMMO1X + wide_delta,
         ST_AMMO1Y,
         shortnum,
         &plyr->ammo[1],
@@ -2375,7 +2344,7 @@ void ST_createWidgets(void)
         ST_AMMO1WIDTH);
 
     STlib_initNum(&w_ammo[2],
-        ST_AMMO2X + widget_delta,
+        ST_AMMO2X + wide_delta,
         ST_AMMO2Y,
         shortnum,
         &plyr->ammo[2],
@@ -2383,7 +2352,7 @@ void ST_createWidgets(void)
         ST_AMMO2WIDTH);
 
     STlib_initNum(&w_ammo[3],
-        ST_AMMO3X + widget_delta,
+        ST_AMMO3X + wide_delta,
         ST_AMMO3Y,
         shortnum,
         &plyr->ammo[3],
@@ -2392,7 +2361,7 @@ void ST_createWidgets(void)
 
     // max ammo count (all four kinds)
     STlib_initNum(&w_maxammo[0],
-        ST_MAXAMMO0X + widget_delta,
+        ST_MAXAMMO0X + wide_delta,
         ST_MAXAMMO0Y,
         shortnum,
         &plyr->maxammo[0],
@@ -2400,7 +2369,7 @@ void ST_createWidgets(void)
         ST_MAXAMMO0WIDTH);
 
     STlib_initNum(&w_maxammo[1],
-        ST_MAXAMMO1X + widget_delta,
+        ST_MAXAMMO1X + wide_delta,
         ST_MAXAMMO1Y,
         shortnum,
         &plyr->maxammo[1],
@@ -2408,7 +2377,7 @@ void ST_createWidgets(void)
         ST_MAXAMMO1WIDTH);
 
     STlib_initNum(&w_maxammo[2],
-        ST_MAXAMMO2X + widget_delta,
+        ST_MAXAMMO2X + wide_delta,
         ST_MAXAMMO2Y,
         shortnum,
         &plyr->maxammo[2],
@@ -2416,7 +2385,7 @@ void ST_createWidgets(void)
         ST_MAXAMMO2WIDTH);
 
     STlib_initNum(&w_maxammo[3],
-        ST_MAXAMMO3X + widget_delta,
+        ST_MAXAMMO3X + wide_delta,
         ST_MAXAMMO3Y,
         shortnum,
         &plyr->maxammo[3],
@@ -2459,26 +2428,16 @@ void ST_Stop (void)
 
 void ST_Init (void)
 {
-    static int st_width;  // [JN] For different width between wide modes.
-    static int st_height; // [JN] For different height between games.
-
     ST_loadData();
 
-    if (aspect_ratio == 2)
-    st_width = ST_WIDEWIDTH_16_9;
-    else if (aspect_ratio == 3)
-    st_width = ST_WIDEWIDTH_16_10;
-    else
-    st_width = ST_WIDTH;
+    // [JN] Initialize status bar height.
+    // In Jaguar Doom it's 40 pixels tall instead of 32.
+    st_height = gamemission == jaguar ? ST_HEIGHT_JAG : ST_HEIGHT;
+    st_y = gamemission == jaguar ? ST_Y_JAG : ST_Y;
 
-    if (gamemission == jaguar)
-    st_height = ST_HEIGHT_JAG;
-    else
-    st_height = ST_HEIGHT;
-
-    st_backing_screen = (byte *)Z_Malloc((st_width << hires) * 
-                                         (st_height << hires),
-                                          PU_STATIC, 0);
+    st_backing_screen = (byte *)Z_Malloc((screenwidth << hires) 
+                                       * (st_height << hires)
+                                       * sizeof(*st_backing_screen), PU_STATIC, 0);
 }
 
 
@@ -2589,18 +2548,10 @@ void ST_drawWidgetsJaguar (boolean refresh)
 void ST_createWidgetsJaguar(void)
 {
     int i;
-    static int widget_delta; // [JN] For different widget offset between wide modes.
-
-    if (aspect_ratio == 2)
-    widget_delta = WIDE_DELTA;
-    else if (aspect_ratio == 3)
-    widget_delta = WIDE_DELTA - 21;
-    else
-    widget_delta = 0;
 
     // ready weapon ammo
     STlib_initNum(&w_ready,
-        51 + widget_delta,
+        51 + wide_delta,
         174,
         tallnum,
         &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
@@ -2612,7 +2563,7 @@ void ST_createWidgetsJaguar(void)
 
     // health percentage
     STlib_initPercent(&w_health,
-        104 + widget_delta,
+        104 + wide_delta,
         174,
         tallnum,
         &plyr->health,
@@ -2621,7 +2572,7 @@ void ST_createWidgetsJaguar(void)
 
      // [JN] Negative player health
     STlib_initPercent(&w_health_neg,
-        104 + widget_delta,
+        104 + wide_delta,
         174,
         tallnum,
         &plyr->health_neg,
@@ -2632,7 +2583,7 @@ void ST_createWidgetsJaguar(void)
     for(i=0;i<6;i++)
     {
         STlib_initMultIcon(&w_arms[i],
-            widget_delta + 249+(i%3)*12,
+            wide_delta + 249+(i%3)*12,
             175+(i/3)*10,
             arms[i],
             &plyr->weaponowned[i+1],
@@ -2641,7 +2592,7 @@ void ST_createWidgetsJaguar(void)
 
     // faces
     STlib_initMultIcon(&w_faces,
-        143 + widget_delta,
+        143 + wide_delta,
         166,
         faces,
         &st_faceindex,
@@ -2649,7 +2600,7 @@ void ST_createWidgetsJaguar(void)
 
     // armor percentage - should be colored later
     STlib_initPercent(&w_armor,
-        225 + widget_delta,
+        225 + wide_delta,
         174,
         tallnum,
         &plyr->armorpoints,
@@ -2658,7 +2609,7 @@ void ST_createWidgetsJaguar(void)
     // keyboxes 0-2
     // Blue
     STlib_initMultIcon(&w_keyboxes[0],
-        124 + widget_delta,
+        124 + wide_delta,
         175,
         keys,
         &keyboxes[0],
@@ -2666,7 +2617,7 @@ void ST_createWidgetsJaguar(void)
 
     // Yellow
     STlib_initMultIcon(&w_keyboxes[1],
-        124 + widget_delta,
+        124 + wide_delta,
         187,
         keys,
         &keyboxes[1],
@@ -2674,7 +2625,7 @@ void ST_createWidgetsJaguar(void)
 
     // Red
     STlib_initMultIcon(&w_keyboxes[2],
-        124 + widget_delta,
+        124 + wide_delta,
         163,
         keys,
         &keyboxes[2],
@@ -2682,7 +2633,7 @@ void ST_createWidgetsJaguar(void)
 
     // сurrent map
     STlib_initNum(&w_currentmap,
-		  widget_delta + (gamemap >= 10 ? 317 : 309),
+		  wide_delta + (gamemap >= 10 ? 317 : 309),
 		  174,
 		  tallnum,
 		  &gamemap,

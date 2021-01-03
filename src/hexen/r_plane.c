@@ -439,8 +439,8 @@ void R_DrawPlanes(void)
     int frac;
     int fracstep = FRACUNIT >> hires;
 
-    extern byte *ylookup[MAXHEIGHT];
-    extern int columnofs[WIDEMAXWIDTH];
+    extern byte *ylookup[SCREENHEIGHT];
+    extern int columnofs[WIDESCREENWIDTH];
 
 #ifdef RANGECHECK
     if (ds_p - drawsegs > numdrawsegs)

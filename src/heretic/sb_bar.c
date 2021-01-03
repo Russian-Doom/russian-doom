@@ -622,26 +622,12 @@ void SB_Drawer(void)
     int f = real_fps;
     char fps [999];
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-    static int wborder_delta_l; // [JN] For different width between wide modes.
-    static int wborder_delta_r; // [JN] For different width between wide modes.
-
-    if (aspect_ratio == 2)
-    {
-        wborder_delta_l = 0;
-        wborder_delta_r = 344;
-    }
-    else if (aspect_ratio == 3)
-    {
-        wborder_delta_l = -21;
-        wborder_delta_r = 323;        
-    }
 
     // [JN] Draw extended skulls and stone border
     if ((aspect_ratio >= 2 && screenblocks <= 10) 
     ||  (aspect_ratio >= 2 && automapactive && !automap_overlay))
     {
-        V_DrawPatch(wborder_delta_l, 147, W_CacheLumpName(DEH_String("WDBARLF"), PU_CACHE));
-        V_DrawPatch(wborder_delta_r, 147, W_CacheLumpName(DEH_String("WDBARRT"), PU_CACHE));
+        V_DrawPatch(wide_delta, 147, W_CacheLumpName(DEH_String("WDBAR"), PU_CACHE));
     }
 
     // [JN] Draw horns separatelly in non wide screen mode

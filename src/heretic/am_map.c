@@ -846,43 +846,7 @@ void AM_clearFB(int color)
             mapystart += (finit_height >> hires);
     }
 
-    if (aspect_ratio == 2)
-    {
-        // [JN] Use static automap background for automap
-        // because of parallax problem.
-        for (y = 0; y < SCREENHEIGHT-28; y++)
-        {
-            for (x = 0; x < WIDESCREENWIDTH / 320; x++)
-            {
-                memcpy(dest, src + ((y & 127) << 6), 320);
-                dest += 320;
-            }
-            if (WIDESCREENWIDTH & 127)
-            {
-                memcpy(dest, src + ((y & 127) << 6), WIDESCREENWIDTH & 127);
-                dest += (WIDESCREENWIDTH & 127);
-            }
-        }
-    }
-    else if (aspect_ratio == 3)
-    {
-        // [JN] Use static automap background for automap
-        // because of parallax problem.
-        for (y = 0; y < SCREENHEIGHT - 21; y++)
-        {
-            for (x = 0; x < (WIDESCREENWIDTH - (42 << hires)) / 320; x++)
-            {
-                memcpy(dest, src + ((y & 127) << 6), 320);
-                dest += 320;
-            }
-            if ((WIDESCREENWIDTH - (42 << hires)) & 127)
-            {
-                memcpy(dest, src + ((y & 127) << 6), (WIDESCREENWIDTH - (42 << hires)) & 127);
-                dest += ((WIDESCREENWIDTH - (42 << hires)) & 127);
-            }
-        }
-    }
-    else
+    if (aspect_ratio == 0 || aspect_ratio == 1)
     {
         //blit the automap background to the screen.
         j = (mapystart & ~hires) * (SCREENWIDTH >> hires);
@@ -895,6 +859,26 @@ void AM_clearFB(int color)
             j += SCREENWIDTH;
             if (j >= (finit_height >> hires) * (SCREENWIDTH >> hires))
                 j = 0;
+        }
+    }
+    else
+    {
+        // [JN] Use static automap background for automap
+        // because of parallax problem.
+        for (y = 0 ; y < SCREENHEIGHT - (aspect_ratio == 2 ? 28 :
+                                         aspect_ratio == 3 ? 21 :
+                                         aspect_ratio == 4 ? 65 : 0) ; y++)
+        {
+            for (x = 0; x < screenwidth / 320; x++)
+            {
+                memcpy(dest, src + ((y & 127) << 6), 320);
+                dest += 320;
+            }
+            if (screenwidth & 127)
+            {
+                memcpy(dest, src + ((y & 127) << 6), screenwidth & 127);
+                dest += (screenwidth & 127);
+            }
         }
     }
 }

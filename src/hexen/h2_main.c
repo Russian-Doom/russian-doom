@@ -540,13 +540,6 @@ void D_DoomMain(void)
 
     I_AtExit(I_ShutdownGraphics, true);
 
-    // Initialize subsystems
-
-    ST_Message(english_language ?
-               "V_Init: allocate screens.\n" :
-               "V_Init: Инициализация видео.\n");
-    V_Init();
-
     // Load defaults before initing other systems
     ST_Message(english_language ?
                "M_LoadDefaults: Load system defaults.\n" :
@@ -577,6 +570,13 @@ void D_DoomMain(void)
 
     M_SetConfigFilenames(/*"hexen.ini", */PROGRAM_PREFIX "hexen.ini");
     M_LoadDefaults();
+
+    // Initialize subsystems
+
+    ST_Message(english_language ?
+               "V_Init: allocate screens.\n" :
+               "V_Init: Инициализация видео.\n");
+    V_Init();
 
     I_AtExit(M_SaveDefaults, false);
     D_SetDefaultSavePath();

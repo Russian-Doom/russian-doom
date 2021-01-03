@@ -3073,6 +3073,7 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextSmall_ENG(185 + wide_delta, 35, aspect_ratio_temp == 1 ? "5:4" :
                                                    aspect_ratio_temp == 2 ? "16:9" :
                                                    aspect_ratio_temp == 3 ? "16:10" :
+                                                   aspect_ratio_temp == 4 ? "21:9" :
                                                                             "4:3");
         // Informative message
         if (aspect_ratio_temp != aspect_ratio)
@@ -3154,6 +3155,7 @@ void M_RD_Draw_Rendering(void)
         M_WriteTextSmall_RUS(238 + wide_delta, 35, aspect_ratio_temp == 1 ? "5:4" :
                                                    aspect_ratio_temp == 2 ? "16:9" :
                                                    aspect_ratio_temp == 3 ? "16:10" :
+                                                   aspect_ratio_temp == 4 ? "21:9" :
                                                                             "4:3");
 
         // Informative message: Необходим перезапуск программы
@@ -3244,12 +3246,12 @@ void M_RD_Change_Widescreen(int choice)
         case 0:
         aspect_ratio_temp--;
         if (aspect_ratio_temp < 0)
-            aspect_ratio_temp = 3;
+            aspect_ratio_temp = 4;
         break;
 
         case 1:
         aspect_ratio_temp++;
-        if (aspect_ratio_temp > 3)
+        if (aspect_ratio_temp > 4)
             aspect_ratio_temp = 0;
         break;
     }

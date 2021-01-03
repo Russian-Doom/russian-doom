@@ -805,47 +805,11 @@ void AM_clearFB(int color)
             mapystart += (finit_height >> hires);
     }
 
-    if (aspect_ratio == 2)
-    {
-        // [JN] Use static automap background for automap
-        // because of parallax problem.
-        for (y = 0; y < SCREENHEIGHT-21; y++)
-        {
-            for (x = 0; x < WIDESCREENWIDTH / 320; x++)
-            {
-                memcpy(dest, src + ((y & 127) << 6), 320);
-                dest += 320;
-            }
-            if (WIDESCREENWIDTH & 127)
-            {
-                memcpy(dest, src + ((y & 127) << 6), WIDESCREENWIDTH & 127);
-                dest += (WIDESCREENWIDTH & 127);
-            }
-        }
-    }
-    else if (aspect_ratio == 3)
-    {
-        // [JN] Use static automap background for automap
-        // because of parallax problem.
-        for (y = 0; y < SCREENHEIGHT - 14; y++)
-        {
-            for (x = 0; x < (WIDESCREENWIDTH - (42 << hires)) / 320; x++)
-            {
-                memcpy(dest, src + ((y & 127) << 6), 320);
-                dest += 320;
-            }
-            if ((WIDESCREENWIDTH - (42 << hires)) & 127)
-            {
-                memcpy(dest, src + ((y & 127) << 6), (WIDESCREENWIDTH - (42 << hires)) & 127);
-                dest += ((WIDESCREENWIDTH - (42 << hires)) & 127);
-            }
-        }
-    }
-    else
+    if (aspect_ratio == 0 || aspect_ratio == 1)
     {
         //blit the automap background to the screen.
         j = (mapystart & ~hires) * (SCREENWIDTH >> hires);
-        for (i = 0; i < (finit_height+6); i++)
+        for (i = 0; i < finit_height+6; i++)
         {
             memcpy(I_VideoBuffer + i * SCREENWIDTH, maplump + j + mapxstart,
                    SCREENWIDTH - mapxstart);
@@ -854,6 +818,26 @@ void AM_clearFB(int color)
             j += SCREENWIDTH;
             if (j >= (finit_height >> hires) * (SCREENWIDTH >> hires))
                 j = 0;
+        }
+    }
+    else
+    {
+        // [JN] Use static automap background for automap
+        // because of parallax problem.
+        for (y = 0 ; y < SCREENHEIGHT - (aspect_ratio == 2 ? 21 :
+                                         aspect_ratio == 3 ? 14 :
+                                         aspect_ratio == 4 ? 59 : 0) ; y++)
+        {
+            for (x = 0; x < screenwidth / 320; x++)
+            {
+                memcpy(dest, src + ((y & 127) << 6), 320);
+                dest += 320;
+            }
+            if (screenwidth & 127)
+            {
+                memcpy(dest, src + ((y & 127) << 6), screenwidth & 127);
+                dest += (screenwidth & 127);
+            }
         }
     }
 }
@@ -1662,19 +1646,13 @@ void AM_Drawer(void)
 //  AM_drawMarks();
 //      if(gameskill == sk_baby) AM_drawkeys();
 
-    if (aspect_ratio >= 2)
+    if (english_language)
     {
-        if (english_language)
-        MN_DrTextA(P_GetMapName(gamemap), 74, 142);
-        else
-        MN_DrTextSmallRUS(P_GetMapName(gamemap), 74, 142);
+        MN_DrTextA(P_GetMapName(gamemap), 38 + wide_delta, 144);
     }
     else
     {
-        if (english_language)
-        MN_DrTextA(P_GetMapName(gamemap), 38, 144);
-        else
-        MN_DrTextSmallRUS(P_GetMapName(gamemap), 38, 144);
+        MN_DrTextSmallRUS(P_GetMapName(gamemap), 38 + wide_delta, 144);
     }
 
     if (ShowKills && netgame && deathmatch)

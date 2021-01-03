@@ -2603,12 +2603,6 @@ void D_DoomMain (void)
         sidemove[1] = sidemove[1]*scale/100;
     }
 
-    // init subsystems
-    DEH_printf(english_language ?
-               "V_Init: allocate screens.\n" :
-               "V_Init: Инициализация видео.\n");
-    V_Init ();
-
     // Load configuration files before initialising other subsystems.
     DEH_printf(english_language ?
                "M_LoadDefaults: Load system defaults.\n" :
@@ -2616,6 +2610,12 @@ void D_DoomMain (void)
     M_SetConfigFilenames(PROGRAM_PREFIX "doom.ini");
     D_BindVariables();
     M_LoadDefaults();
+
+    // init subsystems
+    DEH_printf(english_language ?
+               "V_Init: allocate screens.\n" :
+               "V_Init: Инициализация видео.\n");
+    V_Init ();
 
     // Save configuration at exit.
     I_AtExit(M_SaveDefaults, false);

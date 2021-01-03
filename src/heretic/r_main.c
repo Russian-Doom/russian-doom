@@ -586,7 +586,7 @@ boolean setsizeneeded;
 int setblocks, setdetail;
 
 // [crispy] lookup table for horizontal screen coordinates
-int		flipwidth[WIDEMAXWIDTH];
+int		flipwidth[WIDESCREENWIDTH];
 
 void R_SetViewSize(int blocks, int detail)
 {
@@ -610,11 +610,15 @@ void R_ExecuteSetViewSize(void)
 
     setsizeneeded = false;
 
+    // [JN] Set screen variables depending on aspect ratio.
+
+    scaledviewwidth = screenwidth;
+
     if (aspect_ratio == 0 || aspect_ratio == 1)
-    {   // [JN] 4:3 and 5:4
-        if (setblocks >= 11) 
+    {
+        // [JN] 4:3 and 5:4
+        if (setblocks >= 11)
         {
-            scaledviewwidth = SCREENWIDTH;
             viewheight = SCREENHEIGHT;
         }
         else
@@ -623,36 +627,18 @@ void R_ExecuteSetViewSize(void)
             viewheight = ((setblocks * 158 / 10)) << hires;
         }
     }
-    else if (aspect_ratio == 2)
-    {   // [JN] 16:9
-        if (setblocks == 9 || setblocks == 10)
-        {
-            scaledviewwidth = WIDESCREENWIDTH;
-            viewheight = SCREENHEIGHT - SBARHEIGHT;
-            
-        }
-        else if (setblocks >= 11)
-        {
-            scaledviewwidth = WIDESCREENWIDTH;
-            viewheight = SCREENHEIGHT;
-        }
-    }
-    else if (aspect_ratio == 3)
+    else
     {
-        // [JN] 16:10
+        // [JN] 16:9, 16:10 and 21:9
         if (setblocks == 9 || setblocks == 10)
         {
-            scaledviewwidth = WIDESCREENWIDTH - (42 << hires);
             viewheight = SCREENHEIGHT - SBARHEIGHT;
-            
         }
-        else if (setblocks >= 11)
+        else
         {
-            scaledviewwidth = WIDESCREENWIDTH - (42 << hires);
             viewheight = SCREENHEIGHT;
         }
     }
-
 
     detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;

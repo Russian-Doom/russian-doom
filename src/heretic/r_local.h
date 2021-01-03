@@ -33,9 +33,6 @@
 
 #define	BASEYCENTER			100
 
-// #define MAXWIDTH			1120
-// #define	MAXHEIGHT			832
-
 #define	PI					3.141592657
 
 #define	CENTERY				(SCREENHEIGHT/2)
@@ -488,7 +485,7 @@ extern int firstflat;
 extern int numflats;
 
 // [crispy] lookup table for horizontal screen coordinates
-extern int flipwidth[WIDEMAXWIDTH];
+extern int flipwidth[WIDESCREENWIDTH];
 
 extern int *flattranslation;    // for global animation
 extern int *texturetranslation; // for global animation

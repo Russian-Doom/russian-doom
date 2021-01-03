@@ -31,9 +31,6 @@
 // Size of statusbar.
 // Now sensitive for scaling.
 #define ST_HEIGHT	        32
-#define ST_WIDTH	        ORIGWIDTH
-#define ST_WIDEWIDTH_16_9   WIDEORIGWIDTH
-#define ST_WIDEWIDTH_16_10  WIDEORIGWIDTH-42
 #define ST_Y		        (ORIGHEIGHT - ST_HEIGHT)
 
 // [JN] Jaguar status bar is 40 px tall

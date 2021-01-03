@@ -85,7 +85,7 @@ static SDL_Rect blit_rect = {
 static SDL_Rect w_blit_rect_16_9 = {
     0,
     0,
-    WIDESCREENWIDTH,
+    WIDESCREENWIDTH - (142 << hires),
     SCREENHEIGHT
 };
 
@@ -93,6 +93,13 @@ static SDL_Rect w_blit_rect_16_10 = {
     0,
     0,
     WIDESCREENWIDTH - (42 << hires),
+    SCREENHEIGHT
+};
+
+static SDL_Rect w_blit_rect_21_9 = {
+    0,
+    0,
+    WIDESCREENWIDTH,
     SCREENHEIGHT
 };
 
@@ -165,7 +172,7 @@ int vsync = true;
 // Aspect ratio correction mode
 
 int aspect_ratio_correct = true;
-static int actualheight;
+int actualheight;
 
 // [JN] Show FPS counter
 
@@ -715,31 +722,16 @@ void I_DrawBlackBorders (void)
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     }
 
-    if (aspect_ratio == 2)
-    {
-        rectangle_left.x = 0;
-        rectangle_left.y = 0;
-        rectangle_left.w = wide_delta << hires;
-        rectangle_left.h = actualheight;
-    
-        rectangle_right.x = WIDESCREENWIDTH - (wide_delta << hires);
-        rectangle_right.y = 0;
-        rectangle_right.w = wide_delta << hires;
-        rectangle_right.h = actualheight;
-    }
-    else if (aspect_ratio == 3)
-    {
-        rectangle_left.x = 0;
-        rectangle_left.y = 0;
-        rectangle_left.w = wide_delta << hires;
-        rectangle_left.h = actualheight;
-    
-        rectangle_right.x = WIDESCREENWIDTH - (58 << hires) - wide_delta;
-        rectangle_right.y = 0;
-        rectangle_right.w = wide_delta << hires;
-        rectangle_right.h = actualheight;
-    }
-    
+    rectangle_left.x = 0;
+    rectangle_left.y = 0;
+    rectangle_left.w = wide_delta << hires;
+    rectangle_left.h = actualheight;
+
+    rectangle_right.x = (wide_delta << hires) + SCREENWIDTH;
+    rectangle_right.y = 0;
+    rectangle_right.w = WIDEORIGWIDTH;
+    rectangle_right.h = actualheight;
+
     SDL_RenderFillRect(renderer, &rectangle_left);
     SDL_RenderFillRect(renderer, &rectangle_right);
 }
@@ -872,6 +864,10 @@ void I_FinishUpdate (void)
     else if (aspect_ratio == 3)
     {
         SDL_LowerBlit(screenbuffer, &w_blit_rect_16_10, rgbabuffer, &w_blit_rect_16_10);
+    }
+    else if (aspect_ratio == 4)
+    {
+        SDL_LowerBlit(screenbuffer, &w_blit_rect_21_9, rgbabuffer, &w_blit_rect_21_9);
     }
 
     // Update the intermediate texture with the contents of the RGBA buffer.
@@ -1502,49 +1498,6 @@ void I_InitGraphics(void)
     if (screensaver_mode)
     {
         fullscreen = true;
-    }
-
-    // [JN] Set aspect ratio variables
-    if (aspect_ratio == 0)
-    {
-        // 4:3
-        screenwidth = SCREENWIDTH;
-        origwidth = ORIGWIDTH;
-        wide_delta = 0;
-    }
-    else if (aspect_ratio == 1)
-    {
-        // 5:4
-        screenwidth = SCREENWIDTH;
-        origwidth = ORIGWIDTH;
-        wide_delta = 0;
-        actualheight = SCREENHEIGHT_5_4;
-    }
-    else if (aspect_ratio == 2)
-    {
-        // 16:9
-        screenwidth = WIDESCREENWIDTH;
-        origwidth = WIDEORIGWIDTH;
-        wide_delta = WIDE_DELTA;
-    }
-    else if (aspect_ratio == 3)
-    {
-        // 16:10
-        screenwidth = WIDESCREENWIDTH - (42 << hires);
-        origwidth = WIDEORIGWIDTH - 42;
-        wide_delta = WIDE_DELTA - 21;
-    }
-
-    if (aspect_ratio_correct)
-    {
-        if (aspect_ratio == 1)
-        actualheight = SCREENHEIGHT_5_4;
-        else
-        actualheight = SCREENHEIGHT_4_3;
-    }
-    else
-    {
-        actualheight = SCREENHEIGHT;
     }
 
     // Create the game window; this may switch graphic modes depending

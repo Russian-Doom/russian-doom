@@ -57,8 +57,8 @@ int		scaledviewwidth;
 int		viewheight;
 int		viewwindowx;
 int		viewwindowy; 
-byte*		ylookup[MAXHEIGHT]; 
-int		columnofs[MAXWIDTH]; 
+byte*		ylookup[SCREENHEIGHT]; 
+int		columnofs[WIDESCREENWIDTH]; 
 
 // Color tables for different players,
 //  translate a limited part to another

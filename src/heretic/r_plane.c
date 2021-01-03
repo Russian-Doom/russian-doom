@@ -432,8 +432,8 @@ void R_DrawPlanes(void)
     int count;
     fixed_t frac, fracstep;
 
-    extern byte *ylookup[MAXHEIGHT];
-    extern int columnofs[MAXWIDTH];
+    extern byte *ylookup[SCREENHEIGHT];
+    extern int columnofs[WIDESCREENWIDTH];
 
 #ifdef RANGECHECK
     if (ds_p - drawsegs > numdrawsegs)

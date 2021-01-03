@@ -1145,14 +1145,6 @@ void D_DoomMain(void)
         autostart = true;
     }
 
-//
-// init subsystems
-//
-    DEH_printf(english_language ?
-               "V_Init: allocate screens.\n" :
-               "V_Init: Инициализация видео.\n");
-    V_Init();
-
     // Check for -CDROM
 
     cdrom = false;
@@ -1189,6 +1181,14 @@ void D_DoomMain(void)
     D_BindVariables();
     M_SetConfigFilenames(PROGRAM_PREFIX "heretic.ini");
     M_LoadDefaults();
+
+    //
+    // init subsystems
+    //
+    DEH_printf(english_language ?
+               "V_Init: allocate screens.\n" :
+               "V_Init: Инициализация видео.\n");
+    V_Init();
 
     I_AtExit(M_SaveDefaults, false);
 

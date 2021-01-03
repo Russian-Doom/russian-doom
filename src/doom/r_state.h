@@ -68,7 +68,7 @@ extern int viewheight;
 extern int scaledviewheight;
 
 // [crispy] lookup table for horizontal screen coordinates
-extern int flipwidth[WIDEMAXWIDTH];
+extern int flipwidth[WIDESCREENWIDTH];
 
 extern int firstflat;
 

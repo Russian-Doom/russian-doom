@@ -560,7 +560,7 @@ int     setblocks;
 int     setdetail;
 
 // [crispy] lookup table for horizontal screen coordinates
-int		flipwidth[WIDEMAXWIDTH];
+int		flipwidth[WIDESCREENWIDTH];
 
 
 void R_SetViewSize (int blocks, int detail)
@@ -585,62 +585,41 @@ void R_ExecuteSetViewSize (void)
 
     setsizeneeded = false;
 
+    // [JN] Set screen variables depending on aspect ratio.
+    // Note: status bar in Jaguar Doom is 40 pixels tall instead of 32.
+
+    scaledviewwidth = screenwidth;
+
     if (aspect_ratio == 0 || aspect_ratio == 1)
-    {   // [JN] 4:3
+    {
+        // [JN] 4:3 and 5:4
         if (setblocks >= 11)
         {
-            scaledviewwidth = SCREENWIDTH;
             scaledviewheight = SCREENHEIGHT;
         }
         else
         {
             scaledviewwidth = (setblocks*32)<<hires;
-            // [JN] Jaguar: status bar is 40 px tall, instead of standard 32
             scaledviewheight = ((setblocks * (gamemission == jaguar ?
                                             163: 168) / 10) & ~7) << hires;
         }
     }
-    else if (aspect_ratio == 2)
-    {   // [JN] 16:9
+    else
+    {
+        // [JN] 16:9, 16:10 and 21:9
         if (setblocks == 9)
         {
-            scaledviewwidth = WIDESCREENWIDTH;
             scaledviewheight = SCREENHEIGHT - (gamemission == jaguar ? 
                                                80 : 32 << hires);
         }
         else if (setblocks == 10)
         {
-            scaledviewwidth = WIDESCREENWIDTH;
-            // [JN] Jaguar: status bar is 40 px tall, instead of standard 32
             scaledviewheight = ((setblocks * (gamemission == jaguar ?
                                             163: 168) / 10) & ~7) << hires;
 
         }
         else if (setblocks >= 11)
         {
-            scaledviewwidth = WIDESCREENWIDTH;
-            scaledviewheight = SCREENHEIGHT;
-        }
-    }
-    else if (aspect_ratio == 3)
-    {   // [JN] 16:10
-        if (setblocks == 9)
-        {
-            scaledviewwidth = WIDESCREENWIDTH - (42 << hires);
-            scaledviewheight = SCREENHEIGHT - (gamemission == jaguar ? 
-                                               80 : 32 << hires);
-        }
-        else if (setblocks == 10)
-        {
-            scaledviewwidth = WIDESCREENWIDTH - (42 << hires);
-            // [JN] Jaguar: status bar is 40 px tall, instead of standard 32
-            scaledviewheight = ((setblocks * (gamemission == jaguar ?
-                                            163: 168) / 10) & ~7) << hires;
-
-        }
-        else if (setblocks >= 11)
-        {
-            scaledviewwidth = WIDESCREENWIDTH - (42 << hires);
             scaledviewheight = SCREENHEIGHT;
         }
     }

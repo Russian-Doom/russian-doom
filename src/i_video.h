@@ -36,19 +36,16 @@
 
 #define SCREENWIDTH_4_3 (256 << hires)
 
-#define WIDEMAXWIDTH    (WIDEORIGWIDTH << 1)  // [crispy]
-#define MAXWIDTH        (ORIGWIDTH << 1)      // [crispy]
-#define MAXHEIGHT       (ORIGHEIGHT << 1)     // [crispy]
-
 // [JN] Aspect ratio macroses and variables. Available ratios are:
 // aspect_ratio = 0 (4:3)
 // aspect_ratio = 1 (5:4)
 // aspect_ratio = 2 (16:9)
 // aspect_ratio = 3 (16:10)
+// aspect_ratio = 4 (21:9)
 
-#define WIDEORIGWIDTH   426
-#define WIDESCREENWIDTH (426 << hires)
-#define WIDE_DELTA      53
+#define WIDEORIGWIDTH   568
+#define WIDESCREENWIDTH (WIDEORIGWIDTH << hires)
+#define WIDE_DELTA      (WIDEORIGWIDTH - ORIGWIDTH) / 2
 #define SCREENHEIGHT_5_4 (256 << hires)
 
 extern int aspect_ratio;
@@ -56,6 +53,7 @@ extern int aspect_ratio_temp;
 extern int wide_delta;
 extern int screenwidth;
 extern int origwidth;
+extern int actualheight;
 
 void I_DrawBlackBorders (void);
 

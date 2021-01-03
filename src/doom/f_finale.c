@@ -1017,19 +1017,19 @@ void F_BunnyScroll (void)
 
         V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
-        scrolled = (WIDEORIGWIDTH - ((signed int) finalecount-230)/2);
+        scrolled = (origwidth - ((signed int) finalecount-230)/2);
 
-        if (scrolled > WIDEORIGWIDTH)
-        scrolled = WIDEORIGWIDTH;
+        if (scrolled > origwidth)
+        scrolled = origwidth;
         if (scrolled < 0)
         scrolled = 0;
 
-        for ( x=0 ; x<WIDEORIGWIDTH  ; x++)
+        for ( x=0 ; x<origwidth  ; x++)
         {
-            if (x+scrolled < WIDEORIGWIDTH)
+            if (x+scrolled < origwidth)
             F_DrawPatchCol (x, p1, x+scrolled);
             else
-            F_DrawPatchCol (x, p2, x+scrolled - WIDEORIGWIDTH);
+            F_DrawPatchCol (x, p2, x+scrolled - origwidth);
         }
     }
     else

@@ -1348,14 +1348,60 @@ void V_DrawRawScreen(byte *raw)
     V_CopyScaledBuffer(dest_screen, raw, ORIGWIDTH * ORIGHEIGHT);
 }
 
-//
-// V_Init
-// 
+// -----------------------------------------------------------------------------
+// [JN] V_Init
+// Used for setting aspect ratio variables: width, height and deltas.
+// -----------------------------------------------------------------------------
 void V_Init (void) 
 { 
-    // no-op!
-    // There used to be separate screens that could be drawn to; these are
-    // now handled in the upper layers.
+    if (aspect_ratio == 0)
+    {
+        // 4:3
+        origwidth = ORIGWIDTH;
+        screenwidth = SCREENWIDTH;
+        wide_delta = 0;
+    }
+    else if (aspect_ratio == 1)
+    {
+        // 5:4
+        origwidth = ORIGWIDTH;
+        screenwidth = SCREENWIDTH;
+        wide_delta = 0;
+        actualheight = SCREENHEIGHT_5_4;
+    }
+    else if (aspect_ratio == 2)
+    {
+        // 16:9
+        origwidth = WIDEORIGWIDTH - 142;
+        screenwidth = origwidth << hires;
+        wide_delta = WIDE_DELTA - 71;
+    }
+    else if (aspect_ratio == 3)
+    {
+        // 16:10
+        origwidth = WIDEORIGWIDTH - 184;
+        screenwidth = origwidth << hires;
+        wide_delta = WIDE_DELTA - 92;
+    }
+    else if (aspect_ratio == 4)
+    {
+        // 21:9
+        origwidth = WIDEORIGWIDTH;
+        screenwidth = origwidth << hires;
+        wide_delta = WIDE_DELTA;
+    }
+
+    if (aspect_ratio_correct)
+    {
+        if (aspect_ratio == 1)
+        actualheight = SCREENHEIGHT_5_4;
+        else
+        actualheight = SCREENHEIGHT_4_3;
+    }
+    else
+    {
+        actualheight = SCREENHEIGHT;
+    }
 }
 
 // Set the buffer that the code draws to.

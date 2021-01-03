@@ -784,26 +784,12 @@ void SB_Drawer(void)
     int f = real_fps;
     char fps [999];
     boolean wide_4_3 = aspect_ratio >= 2 && screenblocks == 9;
-    static int wborder_delta_l; // [JN] For different width between wide modes.
-    static int wborder_delta_r; // [JN] For different width between wide modes.
-
-    if (aspect_ratio == 2)
-    {
-        wborder_delta_l = 0;
-        wborder_delta_r = 373;
-    }
-    else if (aspect_ratio == 3)
-    {
-        wborder_delta_l = -21;
-        wborder_delta_r = 352;        
-    }
 
     // [JN] Draw extended skulls and stone border
     if ((aspect_ratio >= 2 && screenblocks == 10)
     ||  (aspect_ratio >= 2 && automapactive && !automap_overlay))
     {
-        V_DrawPatch(wborder_delta_l, 123, W_CacheLumpName("WDBARLF", PU_CACHE));    // left
-        V_DrawPatch(wborder_delta_r, 123, W_CacheLumpName("WDBARRT", PU_CACHE));    // right
+        V_DrawPatch(wide_delta, 123, W_CacheLumpName("WDBAR", PU_CACHE));
     }
 
     // [JN] Draw local time widget

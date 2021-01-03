@@ -1891,6 +1891,7 @@ static void DrawRenderingMenu(void)
         MN_DrTextSmallENG(DEH_String(aspect_ratio_temp == 1 ? "5:4" :
                                      aspect_ratio_temp == 2 ? "16:9" :
                                      aspect_ratio_temp == 3 ? "16:10" :
+                                     aspect_ratio_temp == 4 ? "21:9" :
                                                               "4:3"),
                                      185 + wide_delta, 42);
         // Informative message
@@ -1971,6 +1972,7 @@ static void DrawRenderingMenu(void)
         MN_DrTextSmallENG(DEH_String(aspect_ratio_temp == 1 ? "5:4" :
                                      aspect_ratio_temp == 2 ? "16:9" :
                                      aspect_ratio_temp == 3 ? "16:10" :
+                                     aspect_ratio_temp == 4 ? "21:9" :
                                                               "4:3"),
                                      230 + wide_delta, 42);
 
@@ -2051,12 +2053,12 @@ static boolean M_RD_Change_Widescreen(int option)
         case 0:
         aspect_ratio_temp--;
         if (aspect_ratio_temp < 0)
-            aspect_ratio_temp = 3;
+            aspect_ratio_temp = 4;
         break;
 
         case 1:
         aspect_ratio_temp++;
-        if (aspect_ratio_temp > 3)
+        if (aspect_ratio_temp > 4)
             aspect_ratio_temp = 0;
         break;
     }
