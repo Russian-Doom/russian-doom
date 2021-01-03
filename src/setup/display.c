@@ -46,7 +46,8 @@ static char *aspect_ratios[] =
     "4:3",
     "5:4",
     "16:9",
-    "16:10"
+    "16:10",
+    "21:9"
 };
 
 // List of aspect ratio-corrected window sizes:
@@ -98,6 +99,18 @@ static window_size_t window_sizes_16_10[] =
     { 1152, 720 },
     { 1440, 900 },
     { 1728, 1080 },
+    { 0, 0},
+};
+
+// [JN] List of 21:9 aspect ratio window sizes:
+static window_size_t window_sizes_21_9[] =
+{
+    { 1136,  480 },
+    { 1276,  540 },
+    { 1368,  576 },
+    { 1702,  720 },
+    { 2130,  900 },
+    { 2556,  1080 },
     { 0, 0},
 };
 
@@ -201,6 +214,10 @@ static void GenerateSizesTable(TXT_UNCAST_ARG(widget),
     else if (aspect_ratio == 3)
     {
         sizes = window_sizes_16_10;
+    }
+    else if (aspect_ratio == 4)
+    {
+        sizes = window_sizes_21_9;
     }
     else
     {
@@ -323,7 +340,7 @@ void ConfigDisplay(void)
                         "Display aspect ratio: ":
                         "Соотношение сторон экрана: "),
                         cc_dropdown = TXT_NewDropdownList(&aspect_ratio,
-                                                          aspect_ratios, 4),
+                                                          aspect_ratios, 5),
                         NULL),
 
         ar_checkbox = 
