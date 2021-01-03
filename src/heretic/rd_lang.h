@@ -732,7 +732,7 @@ extern char* txt_mlook_off;
 //
 
 // English
-#define TXT_VERSION "VERSION 4.2"
+#define TXT_VERSION "VERSION 4.3"
 #if defined (_WIN64)
 #define TXT_ARCH      " - (X64)"
 #elif defined (_WIN32)
@@ -740,10 +740,10 @@ extern char* txt_mlook_off;
 #else
 #define TXT_ARCH      ""
 #endif
-#define TXT_DATE      "2020-09-16"          // YYYY-MM-DD
+#define TXT_DATE      "2021-01-03"          // YYYY-MM-DD
 
 // Русский
-#define TXT_VERSION_RUS "DTHCBZ 4>2"        // ВЕРСИЯ 4.2
+#define TXT_VERSION_RUS "DTHCBZ 4>3"        // ВЕРСИЯ 4.3
 #if defined (_WIN64)
 #define TXT_ARCH_RUS      " - ([64)"        // x64
 #elif defined (_WIN32)
