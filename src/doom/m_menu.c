@@ -8146,6 +8146,8 @@ void M_DrawReadThis2(void)
 //
 void M_DrawMainMenu(void)
 {
+    inhelpscreens = true;
+
     if (english_language)
     {
         // [JN] Always draw original "M_DOOM" in English language
@@ -8168,6 +8170,8 @@ void M_DrawMainMenu(void)
 //
 void M_DrawNewGame(void)
 {
+    inhelpscreens = true;
+
     if (english_language)
     {
         V_DrawShadowedPatchDoom(96 + wide_delta, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
@@ -8208,6 +8212,8 @@ int epi;
 
 void M_DrawEpisode(void)
 {
+    inhelpscreens = true;
+
     if (english_language)
     {
         V_DrawShadowedPatchDoom(96 + wide_delta, 13, W_CacheLumpName(DEH_String("M_NEWG"), PU_CACHE));
