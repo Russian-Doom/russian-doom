@@ -717,7 +717,7 @@ void S_StartSoundNoBreak(void *origin_p, int sfx_id)
     }
 
     channels[snd_channels_rd].handle = I_StartSound(sfx, 
-                                                    snd_channels_rd,    // Use the last available channel
+                                                    snd_channels_rd-1,  // Use the last available channel
                                                     snd_SfxVolume,      // Play with maximum available volume
                                                     NORM_SEP,           // Don't use stereo separation (128)
                                                     NORM_PITCH);        // Don't use pitch (127)
