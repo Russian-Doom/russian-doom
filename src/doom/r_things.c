@@ -487,8 +487,8 @@ void R_DrawVisSprite (vissprite_t* vis, int x1, int x2)
 #ifdef RANGECHECK
         if (texturecolumn < 0 || texturecolumn >= SHORT(patch->width))
         I_Error (english_language ?
-                 "R_DrawSpriteRange: bad texturecolumn" :
-                 "R_DrawSpriteRange: некорректныая информация texturecolumn");
+                 "R_DrawVisSprite: bad texturecolumn" :
+                 "R_DrawVisSprite: некорректныая информация texturecolumn");
 #endif
         column = (column_t *) ((byte *)patch + LONG(patch->columnofs[texturecolumn]));
         R_DrawMaskedColumn (column);
@@ -1007,20 +1007,17 @@ void R_DrawPSprite (pspdef_t* psp)
 #ifdef RANGECHECK
     if ( (unsigned)psp->state->sprite >= (unsigned int) numsprites)
     I_Error (english_language ?
-             "R_ProjectSprite: invalid sprite number %i " :
-             "R_ProjectSprite: некорректный номер спрайта %i ",
+             "R_DrawPSprite: invalid sprite number %i " :
+             "R_DrawPSprite: некорректный номер спрайта %i ",
              psp->state->sprite);
 #endif
     sprdef = &sprites[psp->state->sprite];
 #ifdef RANGECHECK
     if ( (psp->state->frame & FF_FRAMEMASK)  >= sprdef->numframes)
-        return;
-    /* [JN] TODO - investigate why error may occur
     I_Error (english_language ?
-             "R_ProjectSprite: invalid sprite frame %i : %i " :
-             "R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
+             "R_DrawPSprite: invalid sprite frame %i : %i " :
+             "R_DrawPSprite: некорректный фрейм спрайта %i : %i ",
              psp->state->sprite, psp->state->frame);
-    */
 #endif
     sprframe = &sprdef->spriteframes[ psp->state->frame & FF_FRAMEMASK ];
 
