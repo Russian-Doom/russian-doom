@@ -22,7 +22,6 @@
 
 
 // Prototypes
-void R_InitBrightmaps (void);
 void R_InitBrightmappedTextures (void);
 
 // Floors and ceilings:

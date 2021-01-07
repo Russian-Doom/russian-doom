@@ -45,8 +45,6 @@
 #include "jn.h"
 
 
-// [JN] Prorotype for merging brightmaps PWAD
-extern void W_MergeFile(char *filename);
 
 //
 // Graphics.
@@ -1223,23 +1221,16 @@ static void R_InitShadeMap ()
 //
 // R_InitColormaps
 //
-void R_InitColormaps (void)
+static void R_InitColormaps (void)
 {
-    int	lump;
-
-    // Load in the light tables, 
-    //  256 byte align tables.
-
-    lump  = W_GetNumForName(DEH_String("COLORMAP"));
-    colormaps  = W_CacheLumpNum(lump, PU_STATIC);
+    // Load in the light tables 256 byte align tables.
+    colormaps = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMAP")), PU_STATIC);
 
     // [JN] COLORMAP (№33) from Press Release Beta for infra green visor
-    lump  = W_GetNumForName(DEH_String("COLORMAB"));
-    colormaps_beta  = W_CacheLumpNum(lump, PU_STATIC);
+    colormaps_beta = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMAB")), PU_STATIC);
 
     // [JN] COLORMBW for black and white fuzz effect
-    lump  = W_GetNumForName(DEH_String("COLORMBW"));
-    colormaps_bw  = W_CacheLumpNum(lump, PU_STATIC);
+    colormaps_bw = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMBW")), PU_STATIC);
 }
 
 
@@ -1250,54 +1241,23 @@ void R_InitColormaps (void)
 // Many thanks to Brad Harding for his amazing research of brightmap tables and colors!
 // -----------------------------------------------------------------------------
 
-void R_InitBrightmaps (void)
+static void R_InitBrightmaps (void)
 {
-    int bmap_lump;
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP1"));
-    brightmaps_notgray = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP2"));
-    brightmaps_notgrayorbrown = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP3"));
-    brightmaps_redonly = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP4"));
-    brightmaps_greenonly1 = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP5"));
-    brightmaps_greenonly2 = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP6"));
-    brightmaps_greenonly3 = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP7"));
-    brightmaps_orangeyellow = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP8"));
-    brightmaps_dimmeditems = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP9"));
-    brightmaps_brighttan = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP10"));
-    brightmaps_redonly1 = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP11"));
-    brightmaps_explosivebarrel = W_CacheLumpNum(bmap_lump, PU_STATIC);
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP12"));
-    brightmaps_alllights = W_CacheLumpNum(bmap_lump, PU_STATIC);    
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP13"));
-    brightmaps_candles = W_CacheLumpNum(bmap_lump, PU_STATIC);    
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP14"));
-    brightmaps_pileofskulls = W_CacheLumpNum(bmap_lump, PU_STATIC);    
-
-    bmap_lump = W_GetNumForName(DEH_String("BRTMAP15"));
-    brightmaps_redonly2 = W_CacheLumpNum(bmap_lump, PU_STATIC);
+    brightmaps_notgray         = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP1")), PU_STATIC);
+    brightmaps_notgrayorbrown  = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP2")), PU_STATIC);
+    brightmaps_redonly         = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP3")), PU_STATIC);
+    brightmaps_greenonly1      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP4")), PU_STATIC);
+    brightmaps_greenonly2      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP5")), PU_STATIC);
+    brightmaps_greenonly3      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP6")), PU_STATIC);
+    brightmaps_orangeyellow    = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP7")), PU_STATIC);
+    brightmaps_dimmeditems     = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP8")), PU_STATIC);
+    brightmaps_brighttan       = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP9")), PU_STATIC);
+    brightmaps_redonly1        = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP10")), PU_STATIC);
+    brightmaps_explosivebarrel = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP11")), PU_STATIC);
+    brightmaps_alllights       = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP12")), PU_STATIC);    
+    brightmaps_candles         = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP13")), PU_STATIC);    
+    brightmaps_pileofskulls    = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP14")), PU_STATIC);    
+    brightmaps_redonly2        = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP15")), PU_STATIC);
 
     // [JN] Brightmaps are loaded. But where can they be applied?
     brightmaps_allowed = !vanillaparm && gamevariant != freedoom 
@@ -1341,24 +1301,23 @@ void R_InitData (void)
 //
 int R_FlatNumForName (char* name)
 {
-    int		i;
-    char	namet[9];
-
-    i = W_CheckNumForNameFromTo (name, lastflat, firstflat);
+    char  namet[9];
+    int   i = W_CheckNumForNameFromTo (name, lastflat, firstflat);;
 
     if (i == -1)
     {
-	namet[8] = 0;
-	memcpy (namet, name,8);
-	// [crispy] make non-fatal
-	fprintf (stderr, english_language ?
-                     "R_FlatNumForName: %s not found\n" :
-                     "R_FlatNumForName: текстура поверхности %s не найдена\n",
-                     namet);
-	// [crispy] since there is no "No Flat" marker,
-	// render missing flats as SKY
-	return skyflatnum;
+        namet[8] = 0;
+        memcpy (namet, name,8);
+        // [crispy] make non-fatal
+        fprintf (stderr, english_language ?
+                 "R_FlatNumForName: %s not found\n" :
+                 "R_FlatNumForName: текстура поверхности %s не найдена\n",
+                 namet);
+        // [crispy] since there is no "No Flat" marker,
+        // render missing flats as SKY
+        return skyflatnum;
     }
+
     return i - firstflat;
 }
 
@@ -1373,24 +1332,26 @@ int R_FlatNumForName (char* name)
 int	R_CheckTextureNumForName (char *name)
 {
     texture_t *texture;
-    int key;
+    int        key = W_LumpNameHash(name) % numtextures;
 
     // "NoTexture" marker.
-    if (name[0] == '-')		
-	return 0;
-		
-    key = W_LumpNameHash(name) % numtextures;
+    if (name[0] == '-')
+    {
+        return 0;
+    }
 
     texture=textures_hashtable[key]; 
-    
+
     while (texture != NULL)
     {
-	if (!strncasecmp (texture->name, name, 8) )
-	    return texture->index;
+        if (!strncasecmp (texture->name, name, 8))
+        {
+            return texture->index;
+        }
 
         texture = texture->next;
     }
-    
+
     return -1;
 }
 
@@ -1403,19 +1364,18 @@ int	R_CheckTextureNumForName (char *name)
 //
 int	R_TextureNumForName (char* name)
 {
-    int		i;
-	
-    i = R_CheckTextureNumForName (name);
+    int i = R_CheckTextureNumForName(name);
 
     if (i==-1)
     {
-    // [crispy] make non-fatal
-    fprintf (stderr, english_language ?
-                     "R_TextureNumForName: %s not found\n" :
-                     "R_TextureNumForName: текстура %s не найдена\n",
-                     name);
- 	return 0;
+        // [crispy] make non-fatal
+        fprintf (stderr, english_language ?
+                 "R_TextureNumForName: %s not found\n" :
+                 "R_TextureNumForName: текстура %s не найдена\n",
+                 name);
+        return 0;
     }
+
     return i;
 }
 
@@ -1431,8 +1391,8 @@ int	R_TextureNumForName (char* name)
 
 void R_PrecacheLevel (void)
 {
-    register int i;
-    register byte *hitlist;
+    int i;
+    byte *hitlist;
 
     if (demoplayback)
     return;
