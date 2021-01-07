@@ -591,13 +591,10 @@ void R_ProjectSprite (mobj_t* thing)
     sprdef = &sprites[thing->sprite];
 #ifdef RANGECHECK
     if ( (thing->frame&FF_FRAMEMASK) >= sprdef->numframes )
-        return;
-    /* [JN] TODO - investigate why error may occur
     I_Error (english_language ?
              "R_ProjectSprite: invalid sprite frame %i : %i " :
              "R_ProjectSprite: некорректный фрейм спрайта %i : %i ",
              thing->sprite, thing->frame);
-    */
 #endif
     sprframe = &sprdef->spriteframes[ thing->frame & FF_FRAMEMASK];
 
