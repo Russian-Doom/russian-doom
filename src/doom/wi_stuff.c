@@ -1993,9 +1993,8 @@ static void WI_loadUnloadData(load_callback_t callback)
     callback(DEH_String("RD_WTOT"),  &total_rus);       // "Итог"
     callback(DEH_String("WIOVTIME"), &overtime);        // "Общее время:"
 
-    // [JN] TODO - needed?
-    /*
     // french wad uses WIOBJ (?)
+    // [JN] WIOBJ ("obj.") is a short version of WIOSTI ("objets")
     if (W_CheckNumForName(DEH_String("WIOBJ")) >= 0)
     {
         // "items"
@@ -2008,7 +2007,6 @@ static void WI_loadUnloadData(load_callback_t callback)
     {
         callback(DEH_String("WIOSTI"), &items);
     }
-    */
 
     // ":"
     callback(DEH_String("WICOLON"), &colon);
