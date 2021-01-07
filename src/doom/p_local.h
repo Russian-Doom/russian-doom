@@ -269,8 +269,8 @@ void P_ApplyTorque(mobj_t *mo);     // killough 9/12/98
 // P_SETUP
 //
 extern byte*		rejectmatrix;	// for fast sight rejection
-extern long*		blockmaplump;	// offsets in blockmap are from here
-extern long*		blockmap;
+extern int32_t*		blockmaplump;	// offsets in blockmap are from here // [crispy] BLOCKMAP limit
+extern int32_t*		blockmap; // [crispy] BLOCKMAP limit
 extern int		bmapwidth;
 extern int		bmapheight;	// in mapblocks
 extern fixed_t		bmaporgx;

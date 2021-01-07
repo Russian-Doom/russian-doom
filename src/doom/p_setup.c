@@ -95,9 +95,9 @@ boolean canmodify;
 // Blockmap size.
 int		bmapwidth;
 int		bmapheight;	// size in mapblocks
-long*		blockmap;	// int for larger maps
+int32_t*		blockmap;	// int for larger maps // [crispy] BLOCKMAP limit
 // offsets in blockmap are from here
-long*		blockmaplump;		
+int32_t*		blockmaplump; // [crispy] BLOCKMAP limit
 // origin of block map
 fixed_t		bmaporgx;
 fixed_t		bmaporgy;
