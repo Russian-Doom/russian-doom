@@ -1395,7 +1395,9 @@ void ST_updateFaceWidget(void)
     // look left or look right if the facecount has timed out
     if (!st_facecount)
     {
-        faceindex = st_randomnumber % 3;
+        // [JN] Use real random number generator
+        // instead of M_Random LUT for faces stide.
+        faceindex = (vanillaparm ? st_randomnumber : rand()) % 3;
         st_facecount = ST_STRAIGHTFACECOUNT;
         priority = 0;
     }
