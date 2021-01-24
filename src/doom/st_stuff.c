@@ -1395,9 +1395,7 @@ void ST_updateFaceWidget(void)
     // look left or look right if the facecount has timed out
     if (!st_facecount)
     {
-        // [JN] Use real random number generator
-        // instead of M_Random LUT for faces stide.
-        faceindex = (vanillaparm ? st_randomnumber : rand()) % 3;
+        faceindex = st_randomnumber % 3;
         st_facecount = ST_STRAIGHTFACECOUNT;
         priority = 0;
     }
@@ -1525,7 +1523,9 @@ void ST_updateWidgets(void)
 void ST_Ticker (void)
 {
     st_clock++;
-    st_randomnumber = M_Random();
+    // [JN] Use real random number generator
+    // instead of M_Random LUT for faces stide.
+    st_randomnumber = vanillaparm ? M_Random() : rand();
     ST_updateWidgets();
     st_oldhealth = plyr->health;
 }
