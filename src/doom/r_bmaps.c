@@ -47,9 +47,6 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
     bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
     bmaptexture91, bmaptexture92, bmaptexture93;
 
-// Terminator:
-int bmap_terminator;
-
 //
 // [JN] Lookup and init all the textures for brightmapping.
 // This function is called at startup, see R_Init.
@@ -78,9 +75,6 @@ void R_InitBrightmappedTextures(void)
 
         // Bright tan:
         bmaptexture88 = R_TextureNumForName("SW2GARG");
-
-        // Apply terminator
-        bmap_terminator = R_TextureNumForName("BIGDOOR2");
 
         // Don't look up any farther
         return;
@@ -290,16 +284,6 @@ void R_InitBrightmappedTextures(void)
         // Green only 3
         bmaptexture77 = R_TextureNumForName("SW2BRNGN");
         bmaptexture80 = R_TextureNumForName("SW2METAL");
-    }
-
-    // -------------------------------------------------------
-    //  Brightmap terminator
-    // -------------------------------------------------------
-    {
-        // We need to declare a "terminator" - standard game texture,
-        // presented in all Doom series and using standard light formula.
-        // Otherwise, non-defined textures will use latest brightmap.
-        bmap_terminator = R_TextureNumForName("BIGDOOR2");
     }
 }
 

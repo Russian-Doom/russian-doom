@@ -1487,16 +1487,6 @@ void R_StoreWallRange (int start, int stop)
                     }
                 }
             }
-
-            // -------------------------------------------------------
-            //  Brightmap terminator
-            // -------------------------------------------------------
-            if (midtexture == bmap_terminator
-            ||  toptexture == bmap_terminator
-            ||  bottomtexture == bmap_terminator)
-            {
-                walllights = scalelight[lightnum];
-            }
         }
     }
     }

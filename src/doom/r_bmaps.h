@@ -48,8 +48,6 @@ bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
 bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
 bmaptexture91, bmaptexture92, bmaptexture93;
 
-// Terminator:
-extern int bmap_terminator;
 
 
 #endif // __R_BMAPS__
