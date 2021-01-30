@@ -861,7 +861,7 @@ void P_MobjThinker(mobj_t * mobj)
     // killough 9/12/98: objects fall off ledges if they are hanging off
     // slightly push off of ledge if hanging more than halfway off
     // [JN] TODO: why it's not working with mobj->z > mobj->dropoffz ?
-    if (singleplayer && !vanillaparm && torque)
+    if (torque)
     {
         if (/*mobj->z > mobj->dropoffz      // Only objects contacting dropoff
         &&*/ !(mobj->flags & MF_NOGRAVITY)  // Only objects which fall

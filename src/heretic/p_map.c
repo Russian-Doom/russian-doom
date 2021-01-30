@@ -1002,6 +1002,10 @@ void P_ApplyTorque(mobj_t *mo)
         mo->y + mo->radius) - bmaporgy) >> MAPBLOCKSHIFT;
     int bx,by,flags = mo->intflags; // Remember the current state, for gear-change
 
+    // [JN] No torque available in following modes:
+    if (!singleplayer || vanillaparm)
+    return;
+
     tmthing = mo;
     validcount++;   // prevents checking same line twice
 
