@@ -149,111 +149,49 @@ void R_AddPointToBox (int x, int y, fixed_t* box)
 //  check point against partition plane.
 // Returns side 0 (front) or 1 (back).
 //
+// [JN] killough 5/2/98: reformatted
+//
 int R_PointOnSide (fixed_t x, fixed_t y, node_t* node)
 {
-    fixed_t dx;
-    fixed_t dy;
-    fixed_t left;
-    fixed_t right;
-
     if (!node->dx)
-    {
-        if (x <= node->x)
-        return node->dy > 0;
+    return x <= node->x ? node->dy > 0 : node->dy < 0;
 
-        return node->dy < 0;
-    }
     if (!node->dy)
-    {
-        if (y <= node->y)
-        return node->dx < 0;
+    return y <= node->y ? node->dx < 0 : node->dx > 0;
 
-        return node->dx > 0;
-    }
-
-    dx = (x - node->x);
-    dy = (y - node->y);
+    x -= node->x;
+    y -= node->y;
 
     // Try to quickly decide by looking at sign bits.
-    if ((node->dy ^ node->dx ^ dx ^ dy)&0x80000000)
-    {
-        if ((node->dy ^ dx) & 0x80000000)
-        {
-            // (left is negative)
-            return 1;
-        }
-        return 0;
-    }
+    if ((node->dy ^ node->dx ^ x ^ y) < 0)
+    return (node->dy ^ x) < 0;  // (left is negative)
 
-    left = FixedMul ( node->dy>>FRACBITS , dx );
-    right = FixedMul ( dy , node->dx>>FRACBITS );
-
-    if (right < left)
-    {
-        // front side
-        return 0;
-    }
-    // back side
-    return 1;			
+    return FixedMul(y, node->dx>>FRACBITS) >= FixedMul(node->dy>>FRACBITS, x);		
 }
 
 
+// [JN] killough 5/2/98: reformatted
 int R_PointOnSegSide (fixed_t x, fixed_t y, seg_t* line)
 {
-    fixed_t lx;
-    fixed_t ly;
-    fixed_t ldx;
-    fixed_t ldy;
-    fixed_t dx;
-    fixed_t dy;
-    fixed_t left;
-    fixed_t right;
-
-    lx = line->v1->x;
-    ly = line->v1->y;
-
-    ldx = line->v2->x - lx;
-    ldy = line->v2->y - ly;
+    fixed_t lx = line->v1->x;
+    fixed_t ly = line->v1->y;
+    fixed_t ldx = line->v2->x - lx;
+    fixed_t ldy = line->v2->y - ly;
 
     if (!ldx)
-    {
-        if (x <= lx)
-        return ldy > 0;
+    return x <= lx ? ldy > 0 : ldy < 0;
 
-        return ldy < 0;
-    }
     if (!ldy)
-    {
-        if (y <= ly)
-        return ldx < 0;
+    return y <= ly ? ldx < 0 : ldx > 0;
 
-        return ldx > 0;
-    }
-
-    dx = (x - lx);
-    dy = (y - ly);
+    x -= lx;
+    y -= ly;
 
     // Try to quickly decide by looking at sign bits.
-    if ( (ldy ^ ldx ^ dx ^ dy)&0x80000000 )
-    {
-        if  ( (ldy ^ dx) & 0x80000000 )
-        {
-            // (left is negative)
-            return 1;
-        }
-        return 0;
-    }
+    if ((ldy ^ ldx ^ x ^ y) < 0)
+    return (ldy ^ x) < 0;   // (left is negative)
 
-    left = FixedMul ( ldy>>FRACBITS , dx );
-    right = FixedMul ( dy , ldx>>FRACBITS );
-
-    if (right < left)
-    {
-        // front side
-        return 0;
-    }
-    // back side
-    return 1;			
+    return FixedMul(y, ldx>>FRACBITS) >= FixedMul(ldy>>FRACBITS, x);	
 }
 
 
