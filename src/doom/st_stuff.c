@@ -1116,16 +1116,16 @@ void ST_updateFaceWidget(void)
             faceindex = ST_DEADFACE;
             st_facecount = 1;
         }
-        // [JN] Atari и PSX Doom - дополнительные лице "разорванного" и "раздавленного" игрока.
-        // Proper checking for xdeath state has been taken from Crispy Doom, thanks to Fabian Greffrath!
-        // Don't use if for possible custom HUD faces.
+        // [JN] Jaguar and PSX Doom: extra exploded and squished player faces.
+        // Proper checking for xdeath state has been taken from Crispy Doom, thanks Fabian Greffrath!
+        // Don't use extra faces if possible custom faces has been loaded.
         if (!old_godface && extra_player_faces && !vanillaparm
         && plyr->health <= 0 && plyr->mo->state - states >= mobjinfo[plyr->mo->type].xdeathstate)
         {
             priority = 9;
             painoffset = 0;
 
-            // [JN] Синхронизация лица с состоянием игрока
+            // [JN] Sync with actual player state:
             if (plyr->mo->state == &states[S_PLAY_XDIE1])
                 faceindex = ST_EXPLFACE0;
             if (plyr->mo->state == &states[S_PLAY_XDIE2])
@@ -1136,10 +1136,7 @@ void ST_updateFaceWidget(void)
                 faceindex = ST_EXPLFACE3;
             if (plyr->mo->state == &states[S_PLAY_XDIE5])
                 faceindex = ST_EXPLFACE4;
-            if ((plyr->mo->state == &states[S_PLAY_XDIE6])
-            || (plyr->mo->state == &states[S_PLAY_XDIE7])
-            || (plyr->mo->state == &states[S_PLAY_XDIE8])
-            || (plyr->mo->state == &states[S_PLAY_XDIE9]))
+            if (plyr->mo->state >= &states[S_PLAY_XDIE6])
                 faceindex = ST_EXPLFACE5;
 
             if (plyr->mo->state == &states[S_GIBS])
