@@ -651,6 +651,14 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
         {
             look += 16;
         }
+
+		// [JN] Properly reset looking forward if mouse look 
+		// was disabled too fast or game FPS was too small.
+        if (gamestate == GS_LEVEL && !mlook && look != TOCENTER)
+        {
+            look = TOCENTER;
+        }
+
         cmd->lookfly = look;
     }
 
