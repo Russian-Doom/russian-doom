@@ -480,6 +480,21 @@ A_Punch
     angle = player->mo->angle;
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack (player->mo, angle, MELEERANGE);
+
+    // [JN] Also accout vertical attack angles
+    if (singleplayer && !linetarget && mlook)
+    {
+        if (aspect_ratio >= 2)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 180;
+        }
+        else
+        {
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / (screenblocks <= 10 ? 160 : 146);
+        }
+    }
+
     P_LineAttack (player->mo, angle, MELEERANGE, slope, damage);
 
     // turn to face target
@@ -515,6 +530,21 @@ A_Saw
     
     // use meleerange + 1 se the puff doesn't skip the flash
     slope = P_AimLineAttack (player->mo, angle, MELEERANGE+1);
+
+    // [JN] Also accout vertical attack angles
+    if (singleplayer && !linetarget && mlook)
+    {
+        if (aspect_ratio >= 2)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 180;
+        }
+        else
+        {
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / (screenblocks <= 10 ? 160 : 146);
+        }
+    }
+
     P_LineAttack (player->mo, angle, MELEERANGE+1, slope, damage);
 
     // [JN] Происходит обычная (пустая) атака
