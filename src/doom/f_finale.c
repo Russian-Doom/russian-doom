@@ -444,12 +444,6 @@ void F_TextWrite (void)
     byte  *dest;
     signed int count;
 
-    if (gamemission == jaguar)
-    {
-        F_TextWriteJaguar();
-        return;
-    }
-
     // erase the entire screen to a tiled background
     src = W_CacheLumpName ( finaleflat , PU_CACHE);
     dest = I_VideoBuffer;
@@ -1166,7 +1160,8 @@ void F_Drawer (void)
         break;
 
         case F_STAGE_TEXT:
-        F_TextWrite();
+        // [JN] Jaguar Doom: using own font writing function.
+        gamemission == jaguar ? F_TextWriteJaguar() : F_TextWrite();
         break;
 
         case F_STAGE_ARTSCREEN:
