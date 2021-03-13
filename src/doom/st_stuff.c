@@ -30,40 +30,26 @@
 #include "m_misc.h"
 #include "m_random.h"
 #include "w_wad.h"
-
 #include "deh_main.h"
 #include "deh_misc.h"
 #include "doomdef.h"
 #include "doomkeys.h"
-
 #include "g_game.h"
-
 #include "st_stuff.h"
 #include "st_lib.h"
 #include "r_local.h"
-
 #include "p_local.h"
 #include "p_inter.h"
-
 #include "am_map.h"
 #include "m_cheat.h"
 #include "m_menu.h"
-
 #include "s_sound.h"
-
-// Needs access to LFB.
 #include "v_video.h"
-
-// State.
 #include "doomstat.h"
-
-// Data.
 #include "rd_lang.h"
 #include "sounds.h"
-
 #include "v_trans.h"
 #include "v_diskicon.h"
-
 #include "jn.h"
 
 
@@ -89,23 +75,11 @@ void ST_createWidgetsJaguar (void);
 // [JN] Atari Jaguar: cyan invulnerability palette
 #define INVULNERABILITYPAL  14
 
-// N/256*100% probability
-//  that the normal face state will change
-#define ST_FACEPROBABILITY  96
-
-// For Responder
-#define ST_TOGGLECHAT       KEY_ENTER
-
 // Location of status bar
 #define ST_X                0
-#define ST_X2               104
 
 #define ST_FX               143
 #define ST_FY               169
-
-// Should be set to patch width
-//  for tall numbers later on
-#define ST_TALLNUMWIDTH     (tallnum[0]->width)
 
 // Number of status faces.
 #define ST_NUMPAINFACES     5
@@ -118,9 +92,9 @@ void ST_createWidgetsJaguar (void);
 
 #define ST_NUMEXTRAFACES    2
 
-// [JN] Дополнительные циклы лиц:
-// Atari Doom: +6 (разорванное лицо)
-// PSX Doom: +1 (раздавленное лицо)
+// [JN] Additional faces:
+// - Jaguar Doom: +6 (exploded face)
+// - PSX Doom: +1 (squished face)
 #define ST_NUMFACES \
        (ST_FACESTRIDE*ST_NUMPAINFACES+ST_NUMEXTRAFACES+7)
 
@@ -130,14 +104,14 @@ void ST_createWidgetsJaguar (void);
 #define ST_RAMPAGEOFFSET    (ST_EVILGRINOFFSET + 1)
 #define ST_GODFACE          (ST_NUMPAINFACES*ST_FACESTRIDE)
 #define ST_DEADFACE         (ST_GODFACE+1)
-// [JN] Atari Doom - дополнительное лицо "разорванного" игрока
+// [JN] Jaguar Doom: exploded face.
 #define ST_EXPLFACE0        (ST_DEADFACE+1)
 #define ST_EXPLFACE1        (ST_EXPLFACE0+1)
 #define ST_EXPLFACE2        (ST_EXPLFACE1+1)
 #define ST_EXPLFACE3        (ST_EXPLFACE2+1)
 #define ST_EXPLFACE4        (ST_EXPLFACE3+1)
 #define ST_EXPLFACE5        (ST_EXPLFACE4+1)
-// [JN] PSX Doom - дополнительное лицо "раздавленного" игрока
+// [JN] PSX Doom: squished face.
 #define ST_CRSHFACE0        (ST_EXPLFACE5+1)
 
 #define ST_FACESX           143
@@ -166,7 +140,6 @@ void ST_createWidgetsJaguar (void);
 #define ST_AMMOY            171
 
 // HEALTH number pos.
-#define ST_HEALTHWIDTH      3	
 #define ST_HEALTHX          90
 #define ST_HEALTHY          171
 
@@ -189,7 +162,6 @@ void ST_createWidgetsJaguar (void);
 #define ST_LIFESWIDTH       1
 
 // ARMOR number pos.
-#define ST_ARMORWIDTH       3
 #define ST_ARMORX           221
 #define ST_ARMORY           171
 
@@ -236,64 +208,9 @@ void ST_createWidgetsJaguar (void);
 #define ST_MAXAMMO3X        314
 #define ST_MAXAMMO3Y        185
 
-// pistol
-#define ST_WEAPON0X         110
-#define ST_WEAPON0Y         172
-
-// shotgun
-#define ST_WEAPON1X         122
-#define ST_WEAPON1Y         172
-
-// chain gun
-#define ST_WEAPON2X	        134
-#define ST_WEAPON2Y	        172
-
-// missile launcher
-#define ST_WEAPON3X         110
-#define ST_WEAPON3Y         181
-
-// plasma gun
-#define ST_WEAPON4X         122
-#define ST_WEAPON4Y         181
-
-// bfg
-#define ST_WEAPON5X	        134
-#define ST_WEAPON5Y	        181
-
-// WPNS title
-#define ST_WPNSX            109
-#define ST_WPNSY            191
-
-// DETH title
-#define ST_DETHX            109
-#define ST_DETHY            191
-
-
-//Incoming messages window location
-//UNUSED
-// #define ST_MSGTEXTX	   (viewwindowx)
-// #define ST_MSGTEXTY	   (viewwindowy+viewheight-18)
-#define ST_MSGTEXTX         0
-#define ST_MSGTEXTY         0
-
 // Dimensions given in characters.
 #define ST_MSGWIDTH         52
-// Or shall I say, in lines?
-#define ST_MSGHEIGHT        1
 
-#define ST_OUTTEXTX         0
-#define ST_OUTTEXTY         6
-
-// Width, in characters again.
-#define ST_OUTWIDTH         52 
- // Height, in lines. 
-#define ST_OUTHEIGHT        1
-
-#define ST_MAPTITLEX \
-    (ORIGWIDTH - ST_MAPWIDTH * ST_CHATFONTWIDTH)
-
-#define ST_MAPTITLEY        0
-#define ST_MAPHEIGHT        1
 
 // graphics are drawn to a backing screen and blitted to the real screen
 byte *st_backing_screen;
