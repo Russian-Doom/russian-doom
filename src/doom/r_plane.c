@@ -140,12 +140,6 @@ void R_MapPlane (int y, int x1, int x2)
     // [crispy] visplanes with the same flats now match up far better than before
     // adapted from prboom-plus/src/r_plane.c:191-239, translated to fixed-point math
 
-    // [crispy] avoid division by zero if (y == centery)
-    if (y == centery)
-    {
-        return;
-    }
-
     if (!(dy = abs(centery - y)))
     {
         return;
