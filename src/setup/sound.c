@@ -217,9 +217,7 @@ void ConfigSound(void)
                                     TXT_DIRECTORY),
                 NULL)),
 
-        TXT_NewRadioButton(english_language ?
-                           "MIDI/MP3/OGG/FLAC" : // [crispy] improve ambigious music backend name
-                           "MIDI/MP3/OGG/FLAC",  // [JN] yes!
+        TXT_NewRadioButton("MIDI/MP3/OGG/FLAC/Tracker", // [crispy] improve ambigious music backend name
                            &snd_musicdevice, SNDDEVICE_GENMIDI),
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GENMIDI,
             TXT_NewHorizBox(

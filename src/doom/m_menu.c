@@ -4598,7 +4598,7 @@ void M_RD_Draw_Audio_System(void)
         }
         else if (snd_musicdevice == 8)
         {
-            M_WriteTextSmall_ENG(79 + wide_delta, 45, "midi/mp3/ogg/flac");
+            M_WriteTextSmall_ENG(79 + wide_delta, 45, "MIDI/MP3/OGG/FLAC/TRACKER");
         }
 
         //
@@ -4686,7 +4686,7 @@ void M_RD_Draw_Audio_System(void)
         }
         else if (snd_musicdevice == 8)
         {
-            M_WriteTextSmall_ENG(94 + wide_delta, 45, "MIDI/MP3/OGG/FLAC");
+            M_WriteTextSmall_ENG(94 + wide_delta, 45, "MIDI/MP3/OGG/FLAC/TRACKER");
         }
 
         //
