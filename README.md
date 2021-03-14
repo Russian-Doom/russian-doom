@@ -1,4 +1,4 @@
-![](http://jnechaevsky.users.sourceforge.net/projects/rusdoom/files/russian_doom_git.png)
+![](https://jnechaevsky.github.io/projects/rusdoom/files/russian_doom_git.png)
 
 #### Russian Doom 4.6.1 (released: January 3, 2021)
 
@@ -36,4 +36,4 @@ DOS version is based on [PCDoom](https://github.com/nukeykt/PCDoom-v2) by Alexey
 
 The project, along with all its translation materials and source code, are available under the terms and conditions of [GNU General Public License version 2](https://github.com/JNechaevsky/russian-doom/blob/master/LICENSE.txt).
 
-Copyright &copy; 2016&ndash;2020 [Julian Nechaevsky](http://jnechaevsky.users.sourceforge.net/author.html)
+Copyright &copy; 2016&ndash;2021 [Julian Nechaevsky](https://jnechaevsky.github.io/author.html)

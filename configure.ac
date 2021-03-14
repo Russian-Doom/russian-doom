@@ -1,4 +1,4 @@
-AC_INIT(Russian Doom, 4.6.1, julian.nechaevsky@outlook.com,
+AC_INIT(Russian Doom, 4.6.2, julian.nechaevsky@outlook.com,
         russian-doom)
 
 PACKAGE_SHORTNAME=${PACKAGE_NAME% Doom}
