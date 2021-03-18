@@ -93,3 +93,4 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - mtvile666
 - Wells Lu
 - cubebert
+- Terry Hearst

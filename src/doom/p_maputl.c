@@ -523,6 +523,7 @@ P_BlockThingsIterator
   boolean(*func)(mobj_t*) )
 {
     mobj_t*		mobj;
+    extern boolean vanillaparm;
 	
     if ( x<0
 	 || y<0
@@ -540,6 +541,116 @@ P_BlockThingsIterator
 	if (!func( mobj ) )
 	    return false;
     }
+
+    // [JN] Blockmap bug fix - add other mobjs from
+    // surrounding blocks that overlap this one.
+    //
+    // The fix is written by Terry Hearst, thank you very much!
+    if (singleplayer && !vanillaparm)
+    {
+        // Unwrapped for least number of bounding box checks
+        // (-1, -1)
+        if (x > 0 && y > 0)
+        {
+            for (mobj = blocklinks[(y-1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+
+                if (xx == x && yy == y)
+                    if (!func( mobj ) )
+                        return false;
+            }
+        }
+        // (0, -1)
+        if (y > 0)
+        {
+            for (mobj = blocklinks[(y-1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
+            {
+                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+
+                if (yy == y)
+                    if (!func( mobj ) )
+                        return false;
+            }
+        }
+        // (1, -1)
+        if (x < (bmapwidth-1) && y > 0)
+        {
+            for (mobj = blocklinks[(y-1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+
+                if (xx == x && yy == y)
+                    if (!func( mobj ) )
+                        return false;
+            }
+        }
+        // (1, 0)
+        if (x < (bmapwidth-1))
+        {
+            for (mobj = blocklinks[y*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+
+                if (xx == x)
+                    if (!func( mobj ) )
+                        return false;
+            }
+        }
+        // (1, 1)
+        if (x < (bmapwidth-1) && y < (bmapheight-1))
+        {
+            for (mobj = blocklinks[(y+1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+
+                if (xx == x && yy == y)
+                    if (!func( mobj ) )
+                        return false;
+            }
+        }
+        // (0, 1)
+        if (y < (bmapheight-1))
+        {
+            for (mobj = blocklinks[(y+1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
+            {
+                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+
+                if (yy == y)
+                    if (!func( mobj ) )
+                        return false;
+            }
+        }
+        // (-1, 1)
+        if (x > 0 && y < (bmapheight-1))
+        {
+            for (mobj = blocklinks[(y+1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+
+                if (xx == x && yy == y)
+                    if (!func( mobj ) )
+                        return false;
+            }
+        }
+        // (-1, 0)
+        if (x > 0)
+        {
+            for (mobj = blocklinks[y*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+
+                if (xx == x)
+                    if (!func( mobj ) )
+                    return false;
+            }
+        }
+    }
+
     return true;
 }
 
