@@ -520,7 +520,8 @@ boolean
 P_BlockThingsIterator
 ( int			x,
   int			y,
-  boolean(*func)(mobj_t*) )
+  boolean(*func)(mobj_t*),
+  boolean explosion )
 {
     mobj_t*		mobj;
     extern boolean vanillaparm;
@@ -546,7 +547,7 @@ P_BlockThingsIterator
     // surrounding blocks that overlap this one.
     //
     // The fix is written by Terry Hearst, thank you very much!
-    if (singleplayer && !vanillaparm)
+    if (!explosion && singleplayer && !vanillaparm)
     {
         // Unwrapped for least number of bounding box checks
         // (-1, -1)
@@ -976,7 +977,7 @@ P_PathTraverse
 	
 	if (flags & PT_ADDTHINGS)
 	{
-	    if (!P_BlockThingsIterator (mapx, mapy,PIT_AddThingIntercepts))
+	    if (!P_BlockThingsIterator (mapx, mapy,PIT_AddThingIntercepts, false))
 		return false;	// early out
 	}
 		
