@@ -163,7 +163,7 @@ P_TeleportMove
 
     for (bx=xl ; bx<=xh ; bx++)
 	for (by=yl ; by<=yh ; by++)
-	    if (!P_BlockThingsIterator(bx,by,PIT_StompThing,false))
+	    if (!P_BlockThingsIterator(bx,by,PIT_StompThing))
 		return false;
     
     // the move is ok,
@@ -580,7 +580,7 @@ P_CheckPosition
 
     for (bx=xl ; bx<=xh ; bx++)
 	for (by=yl ; by<=yh ; by++)
-	    if (!P_BlockThingsIterator(bx,by,PIT_CheckThing,false))
+	    if (!P_BlockThingsIterator(bx,by,PIT_CheckThing))
 		return false;
     
     // check lines
@@ -1610,7 +1610,7 @@ P_RadiusAttack
 	
     for (y=yl ; y<=yh ; y++)
 	for (x=xl ; x<=xh ; x++)
-	    P_BlockThingsIterator (x, y, PIT_RadiusAttack, true );
+	    P_BlockThingsIterator (x, y, PIT_RadiusAttack);
 }
 
 
@@ -1749,7 +1749,7 @@ P_ChangeSector
     // re-check heights for all things near the moving sector
     for (x=sector->blockbox[BOXLEFT] ; x<= sector->blockbox[BOXRIGHT] ; x++)
 	for (y=sector->blockbox[BOXBOTTOM];y<= sector->blockbox[BOXTOP] ; y++)
-	    P_BlockThingsIterator (x, y, PIT_ChangeSector, false);
+	    P_BlockThingsIterator (x, y, PIT_ChangeSector);
 	
 	
     return nofit;

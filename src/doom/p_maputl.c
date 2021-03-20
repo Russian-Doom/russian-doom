@@ -516,139 +516,97 @@ P_BlockLinesIterator
 //
 // P_BlockThingsIterator
 //
-boolean
-P_BlockThingsIterator
-( int			x,
-  int			y,
-  boolean(*func)(mobj_t*),
-  boolean explosion )
+boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
 {
-    mobj_t*		mobj;
+    mobj_t *mobj;
     extern boolean vanillaparm;
-	
-    if ( x<0
-	 || y<0
-	 || x>=bmapwidth
-	 || y>=bmapheight)
-    {
-	return true;
-    }
-    
 
-    for (mobj = blocklinks[y*bmapwidth+x] ;
-	 mobj ;
-	 mobj = mobj->bnext)
+    if (x < 0 || y < 0 || x >= bmapwidth || y >= bmapheight)
     {
-	if (!func( mobj ) )
-	    return false;
+        return true;
     }
 
-    // [JN] Blockmap bug fix - add other mobjs from
-    // surrounding blocks that overlap this one.
-    //
+    for (mobj = blocklinks[y*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
+        if (!func(mobj))
+            return false;
+
+    // [JN] Do not apply following BLOCKMAP fix for explosion radius damage.
+    // Otherwise, explosion damage will be multiplied on ammount of BLOCKMAP 
+    // blocks object placed in.
+    if (func == PIT_RadiusAttack)
+    {
+        return true;
+    }
+
+    // [JN] Blockmap bug fix - add other mobjs from surrounding blocks that overlap this one.
     // The fix is written by Terry Hearst, thank you very much!
-    if (!explosion && singleplayer && !vanillaparm)
+    // Fixes: http://doom2.net/doom2/research/things.html
+    if (singleplayer && !vanillaparm)
     {
         // Unwrapped for least number of bounding box checks
         // (-1, -1)
         if (x > 0 && y > 0)
         {
             for (mobj = blocklinks[(y-1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
-            {
-                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
-                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
-
-                if (xx == x && yy == y)
-                    if (!func( mobj ) )
+                if ((mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x && (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
+                    if (!func(mobj))
                         return false;
-            }
         }
         // (0, -1)
         if (y > 0)
         {
             for (mobj = blocklinks[(y-1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
-            {
-                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
-
-                if (yy == y)
-                    if (!func( mobj ) )
+                if ((mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
+                    if (!func(mobj))
                         return false;
-            }
         }
         // (1, -1)
         if (x < (bmapwidth-1) && y > 0)
         {
             for (mobj = blocklinks[(y-1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
-            {
-                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
-                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
-
-                if (xx == x && yy == y)
-                    if (!func( mobj ) )
+                if ((mobj->x - mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x && (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
+                    if (!func(mobj))
                         return false;
-            }
         }
         // (1, 0)
         if (x < (bmapwidth-1))
         {
             for (mobj = blocklinks[y*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
-            {
-                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
-
-                if (xx == x)
-                    if (!func( mobj ) )
+                if ((mobj->x - mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x)
+                    if (!func(mobj))
                         return false;
-            }
         }
         // (1, 1)
         if (x < (bmapwidth-1) && y < (bmapheight-1))
         {
             for (mobj = blocklinks[(y+1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
-            {
-                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
-                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
-
-                if (xx == x && yy == y)
-                    if (!func( mobj ) )
+                if ((mobj->x - mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x && (mobj->y - mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
+                    if (!func(mobj))
                         return false;
-            }
         }
         // (0, 1)
         if (y < (bmapheight-1))
         {
             for (mobj = blocklinks[(y+1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
-            {
-                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
-
-                if (yy == y)
-                    if (!func( mobj ) )
+                if ((mobj->y - mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
+                    if (!func(mobj))
                         return false;
-            }
         }
         // (-1, 1)
         if (x > 0 && y < (bmapheight-1))
         {
             for (mobj = blocklinks[(y+1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
-            {
-                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
-                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
-
-                if (xx == x && yy == y)
-                    if (!func( mobj ) )
+                if ((mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x && (mobj->y - mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
+                    if (!func(mobj))
                         return false;
-            }
         }
         // (-1, 0)
         if (x > 0)
         {
             for (mobj = blocklinks[y*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
-            {
-                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
-
-                if (xx == x)
-                    if (!func( mobj ) )
-                    return false;
-            }
+                if ((mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x)
+                    if (!func(mobj))
+                        return false;
         }
     }
 
@@ -977,7 +935,7 @@ P_PathTraverse
 	
 	if (flags & PT_ADDTHINGS)
 	{
-	    if (!P_BlockThingsIterator (mapx, mapy,PIT_AddThingIntercepts, false))
+	    if (!P_BlockThingsIterator (mapx, mapy,PIT_AddThingIntercepts))
 		return false;	// early out
 	}
 		
