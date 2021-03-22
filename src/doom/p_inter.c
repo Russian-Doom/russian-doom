@@ -899,11 +899,8 @@ void P_KillMobj (mobj_t *source, mobj_t *target)
         mo = P_SpawnMobj(target->x ,target->y, target->floorz
                                              + target->height
                                              * 3 / 2 - 3 * FRACUNIT, item);
-        if (singleplayer)
-        {
-            mo->momx = (target->momx >> 1) + (Crispy_Random() << 8);
-            mo->momy = (target->momy >> 1) + (Crispy_Random() << 8);
-        }
+        mo->momx = (target->momx >> 1) + (Crispy_Random() << 8);
+        mo->momy = (target->momy >> 1) + (Crispy_Random() << 8);
         mo->momz = 2 * FRACUNIT + (M_Random() << 9);
     }
     else
