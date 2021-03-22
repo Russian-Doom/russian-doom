@@ -12,6 +12,7 @@
 // GNU General Public License for more details.
 //
 
+#include <stddef.h>
 #include "rd_keybinds.h"
 #include "m_controls.h"
 
