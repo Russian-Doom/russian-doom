@@ -229,6 +229,16 @@ static void ChooseFont(void)
 // Returns 1 if successful, 0 if an error occurred
 //
 
+void TXT_PreInit(SDL_Window *preset_window,
+                 SDL_Renderer *preset_renderer)
+{
+    if (preset_window != NULL && preset_renderer != NULL)
+    {
+        TXT_SDLWindow = preset_window;
+        renderer = preset_renderer;
+    }
+}
+
 int TXT_Init(void)
 {
     int flags = 0;
@@ -249,12 +259,21 @@ int TXT_Init(void)
         flags |= SDL_WINDOW_ALLOW_HIGHDPI;
     }
 
+    if (TXT_SDLWindow == NULL)
+    {
     TXT_SDLWindow =
         SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                          screen_image_w, screen_image_h, flags);
+    }
 
     if (TXT_SDLWindow == NULL)
         return 0;
+
+    // Destroy the existing renderer, so we can create our own new one
+    if (renderer != NULL)
+    {
+        SDL_DestroyRenderer(renderer);
+    }
 
     renderer = SDL_CreateRenderer(TXT_SDLWindow, -1, SDL_RENDERER_SOFTWARE);
 
