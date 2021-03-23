@@ -1339,7 +1339,8 @@ static void SetVideoMode(void)
 
         pixel_format = SDL_GetWindowPixelFormat(screen);
 
-        SDL_SetWindowMinimumSize(screen, screenwidth, actualheight);
+        // [JN] Allow game window to be downscaled to 1:1 pixel size.
+        SDL_SetWindowMinimumSize(screen, screenwidth >> hires, actualheight >> hires);
 
         I_InitWindowTitle();
         I_InitWindowIcon();
