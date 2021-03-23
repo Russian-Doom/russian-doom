@@ -18,7 +18,7 @@
 //
 
 
-
+#include <stdlib.h>     // [JN] rand()
 #include <string.h>
 
 #include "z_zone.h"
@@ -145,12 +145,14 @@ int wipe_initMelt (int width, int height, int ticks)
     // setup initial column positions
     // (y<0 => not ready to scroll yet)
     y = (int *) Z_Malloc(width*sizeof(int), PU_STATIC, 0);
-    y[0] = -(M_Random()%16);
+    // [JN] Use real random number generator instead of M_Random.
+    y[0] = -(vanillaparm ? M_Random()%16 : rand()%16);
     for (i=1;i<width;i++)
     {
         static int r;
 
-        r = (M_Random()%3) - 1;
+        // [JN] Use real random number generator instead of M_Random.
+        r = (vanillaparm ? M_Random()%3 : rand()%3) - 1;
         y[i] = y[i-1] + r;
         if (y[i] > 0) y[i] = 0;
         else if (y[i] == -16) y[i] = -15;
