@@ -96,9 +96,6 @@ int             dc_texheight;
 // first pixel in a column (possibly virtual) 
 byte*   dc_source;		
 
-// just for profiling 
-int dccount;
-
 // [JN] External data for new fuzz effect
 extern boolean inhelpscreens;
 extern int Crispy_Random(void);
@@ -215,7 +212,6 @@ void R_DrawColumnLow (void)
                  "R_DrawColumn: %i к %i у %i",
                  dc_yl, dc_yh, dc_x);
     }
-    //	dccount++; 
 #endif 
 
     // Blocky mode, need to multiply by 2.
