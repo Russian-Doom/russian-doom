@@ -68,7 +68,7 @@ size_t mem_fread(void *buf, size_t size, size_t nmemb, MEMFILE *stream)
 	{
 		printf(english_language ?
                "not a read stream\n" :
-               "потом не читабелен\n");
+               "поток не читабелен\n");
 		return -1;
 	}
 

@@ -436,7 +436,7 @@ char *M_StringDuplicate(const char *orig)
     {
         I_Error(english_language ?
                 "Failed to duplicate string (length %" PRIuPTR ")\n" :
-                "Невозможно дублировать строку (длина %i)\n",
+                "Невозможно дублировать строку (длина %i" PRIuPTR ")\n",
                 strlen(orig));
     }
 
