@@ -369,21 +369,11 @@ P_UseSpecialLine
   int		side )
 {               
 
-    // Err...
-    // Use the back sides of VERY SPECIAL lines...
     if (side)
     {
-	switch(line->special)
-	{
-	  case 124:
-	    // Sliding door open&close
-	    // UNUSED?
-	    break;
-
-	  default:
+        // [JN] Do not check for back sides. It was supposed 
+        // to be used only for special 124 (Sliding doors).
 	    return false;
-	    break;
-	}
     }
 
     
