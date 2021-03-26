@@ -208,8 +208,8 @@ void R_DrawColumnLow (void)
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
-                 "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i к %i у %i",
+                 "R_DrawColumnLow: %i to %i at %i" :
+                 "R_DrawColumnLow: %i к %i у %i",
                  dc_yl, dc_yh, dc_x);
     }
 #endif 
@@ -1244,11 +1244,12 @@ void R_DrawTranslatedColumnLow (void)
 void R_DrawTLColumn (void)
 {
     int count;
+    int heightmask = dc_texheight-1;
     byte*   dest;
     fixed_t frac;
     fixed_t fracstep;
 
-    count = dc_yh - dc_yl;
+    count = dc_yh - dc_yl + 1;
     if (count < 0)
     return;
 
@@ -1256,8 +1257,8 @@ void R_DrawTLColumn (void)
     if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
-                 "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i к %i у %i",
+                 "R_DrawTLColumn: %i to %i at %i" :
+                 "R_DrawTLColumn: %i к %i у %i",
                  dc_yl, dc_yh, dc_x);
     }
 #endif
@@ -1267,20 +1268,48 @@ void R_DrawTLColumn (void)
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
-    do
+    if (dc_texheight & heightmask)   // not a power of 2 -- killough
     {
-        *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-        dest += screenwidth;
+        heightmask++;
+        heightmask <<= FRACBITS;
 
-        frac += fracstep;
-    } while (count--);
+        if (frac < 0)
+        while ((frac += heightmask) < 0);
+        else
+        while (frac >= heightmask)
+        frac -= heightmask;
+
+        do
+        {
+            *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            dest += screenwidth;
+            if ((frac += fracstep) >= heightmask)
+            frac -= heightmask;
+        }
+        while (--count);
+    }
+    else    // texture height is a power of 2 -- killough
+    {
+        while ((count-=2)>=0)
+        {
+            *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            dest += screenwidth;
+            frac += fracstep;
+            *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            dest += screenwidth;
+            frac += fracstep;
+        }
+        if (count & 1)
+        *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+    }
 }
 
 
 // [crispy] draw translucent column, low-resolution version
 void R_DrawTLColumnLow (void)
 {
-    int count;
+    int     count;
+    int     heightmask = dc_texheight - 1;
     byte*   dest;
     byte*   dest2;
     byte*   dest3;
@@ -1299,8 +1328,8 @@ void R_DrawTLColumnLow (void)
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
         I_Error (english_language ?
-                 "R_DrawColumn: %i to %i at %i" :
-                 "R_DrawColumn: %i к %i у %i",
+                 "R_DrawTLColumnLow: %i to %i at %i" :
+                 "R_DrawTLColumnLow: %i к %i у %i",
                  dc_yl, dc_yh, x);
     }
 #endif
@@ -1313,23 +1342,57 @@ void R_DrawTLColumnLow (void)
     fracstep = dc_iscale;
     frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
-    do
+    if (dc_texheight & heightmask) // not a power of 2 -- killough
     {
-        *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-        *dest2 = tintmap[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-        dest += screenwidth << hires;
-        dest2 += screenwidth << hires;
+        heightmask++;
+        heightmask <<= FRACBITS;
 
-        if (hires)
+        if (frac < 0)
+        while ((frac += heightmask) < 0);
+        else
+        while (frac >= heightmask)
+        frac -= heightmask;
+
+        do
         {
-            *dest3 = tintmap[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            *dest4 = tintmap[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
-            dest3 += screenwidth << hires;
-            dest4 += screenwidth << hires;
-        }
+            *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest2 = tintmap[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
 
-        frac += fracstep;
-    } while (count--);
+            if (hires)
+            {
+                *dest3 = tintmap[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+                *dest4 = tintmap[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+                dest3 += screenwidth << hires;
+                dest4 += screenwidth << hires;
+            }
+
+            if ((frac += fracstep) >= heightmask)
+            frac -= heightmask;
+        } while (count--);
+    }
+    else // texture height is a power of 2 -- killough
+    {
+        do 
+        {
+            *dest = tintmap[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = tintmap[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+
+            if (hires)
+            {
+                *dest3 = tintmap[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+                *dest4 = tintmap[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+                dest3 += screenwidth << hires;
+                dest4 += screenwidth << hires;
+            }
+
+            frac += fracstep; 
+
+        } while (count--);
+    }
 }
 
 
