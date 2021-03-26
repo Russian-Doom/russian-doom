@@ -527,9 +527,7 @@ void P_ZMovement (mobj_t* mo)
 //
 void
 P_NightmareRespawn (mobj_t* mobj)
-    {
-    // [JN] Исправление ошибки "Респауна (0,0)" по методу 
-    // Брэда Хардинга и Джеймса "haleyjd" Хейли. 
+{
     fixed_t     x = mobj->spawnpoint.x << FRACBITS;
     fixed_t     y = mobj->spawnpoint.y << FRACBITS;
     fixed_t     z;
@@ -538,25 +536,12 @@ P_NightmareRespawn (mobj_t* mobj)
     mapthing_t  *mthing = &mobj->spawnpoint;
 
     // [BH] Fix (0,0) respawning bug. See <http://doomwiki.org/wiki/(0,0)_respawning_bug>.
-    if (!x && !y)
+    if (singleplayer && !x && !y)
     {
         x = mobj->x;
         y = mobj->y;
     }
     
-    /*
-    // Ранее:
-    fixed_t		x;
-    fixed_t		y;
-    fixed_t		z; 
-    subsector_t*	ss; 
-    mobj_t*		mo;
-    mapthing_t*		mthing;
-		
-    x = mobj->spawnpoint.x << FRACBITS; 
-    y = mobj->spawnpoint.y << FRACBITS; 
-    */
-
     // somthing is occupying it's position?
     if (!P_CheckPosition (mobj, x, y) ) 
 	return;	// no respwan
