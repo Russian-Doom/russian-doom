@@ -1185,15 +1185,15 @@ void WI_drawDeathmatchStats(void)
     // draw stat titles (top line)
     if (english_language)
     {
-        V_DrawShadowedPatchDoom(DM_TOTALSX-SHORT(total->width)/2, DM_MATRIXY-WI_SPACINGY+10, total);
-        V_DrawShadowedPatchDoom(DM_KILLERSX, DM_KILLERSY, killers);
-        V_DrawShadowedPatchDoom(DM_VICTIMSX, DM_VICTIMSY, victims);
+        V_DrawShadowedPatchDoom(DM_TOTALSX-SHORT(total->width)/2 + wide_delta, DM_MATRIXY-WI_SPACINGY+10, total);
+        V_DrawShadowedPatchDoom(DM_KILLERSX + wide_delta, DM_KILLERSY, killers);
+        V_DrawShadowedPatchDoom(DM_VICTIMSX + wide_delta, DM_VICTIMSY, victims);
     }
     else
     {
-        V_DrawShadowedPatchDoom(DM_TOTALSX-SHORT(total_rus->width)/2, DM_MATRIXY-WI_SPACINGY+10, total_rus);
-        V_DrawShadowedPatchDoom(DM_KILLERSX, DM_KILLERSY, killers_rus);
-        V_DrawShadowedPatchDoom(DM_VICTIMSX, DM_VICTIMSY, victims_rus);        
+        V_DrawShadowedPatchDoom(DM_TOTALSX-SHORT(total_rus->width)/2 + wide_delta, DM_MATRIXY-WI_SPACINGY+10, total_rus);
+        V_DrawShadowedPatchDoom(DM_KILLERSX + wide_delta, DM_KILLERSY, killers_rus);
+        V_DrawShadowedPatchDoom(DM_VICTIMSX + wide_delta, DM_VICTIMSY, victims_rus);        
     }
 
     // draw P?
@@ -1238,11 +1238,11 @@ void WI_drawDeathmatchStats(void)
             for (j=0 ; j<MAXPLAYERS ; j++)
             {
             if (playeringame[j])
-            WI_drawNum(x+w, y, dm_frags[i][j], 2);
+            WI_drawNum(x+w+wide_delta*2, y, dm_frags[i][j], 2);
 
             x += DM_SPACINGX;
             }
-            WI_drawNum(DM_TOTALSX+w, y, dm_totals[i], 2);
+            WI_drawNum(DM_TOTALSX+w+wide_delta*2, y, dm_totals[i], 2);
         }
         y += WI_SPACINGY;
     }
@@ -1451,23 +1451,23 @@ void WI_drawNetgameStats(void)
     // Russian language, so they can fit perfectly.
     if (english_language)
     {
-        V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(kills->width),   NG_STATSY, kills);
-        V_DrawShadowedPatchDoom(NG_STATSX+2*NG_SPACINGX-SHORT(items->width), NG_STATSY, items);
-        V_DrawShadowedPatchDoom(NG_STATSX+3*NG_SPACINGX-SHORT(secret->width),NG_STATSY, secret);
+        V_DrawShadowedPatchDoom(NG_STATSX + wide_delta + NG_SPACINGX-SHORT(kills->width),   NG_STATSY, kills);
+        V_DrawShadowedPatchDoom(NG_STATSX + wide_delta + 2*NG_SPACINGX-SHORT(items->width), NG_STATSY, items);
+        V_DrawShadowedPatchDoom(NG_STATSX + wide_delta + 3*NG_SPACINGX-SHORT(secret->width),NG_STATSY, secret);
     }
     else
     {
-        V_DrawShadowedPatchDoom(NG_STATSX+NG_SPACINGX-SHORT(mp_kills_rus->width),  NG_STATSY, mp_kills_rus);
-        V_DrawShadowedPatchDoom(NG_STATSX+2*NG_SPACINGX-SHORT(mp_items_rus->width),NG_STATSY, mp_items_rus);
-        V_DrawShadowedPatchDoom(NG_STATSX+3*NG_SPACINGX-SHORT(secret_rus->width),  NG_STATSY, secret_rus);
+        V_DrawShadowedPatchDoom(NG_STATSX + wide_delta + NG_SPACINGX-SHORT(mp_kills_rus->width),  NG_STATSY, mp_kills_rus);
+        V_DrawShadowedPatchDoom(NG_STATSX + wide_delta + 2*NG_SPACINGX-SHORT(mp_items_rus->width),NG_STATSY, mp_items_rus);
+        V_DrawShadowedPatchDoom(NG_STATSX + wide_delta + 3*NG_SPACINGX-SHORT(secret_rus->width),  NG_STATSY, secret_rus);
     }
 
     if (dofrags)
     {
         if (english_language)
-        V_DrawShadowedPatchDoom(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width), NG_STATSY, frags);
+        V_DrawShadowedPatchDoom(NG_STATSX + wide_delta + 4*NG_SPACINGX-SHORT(frags->width), NG_STATSY, frags);
         else
-        V_DrawShadowedPatchDoom(NG_STATSX+4*NG_SPACINGX-SHORT(frags_rus->width), NG_STATSY, frags_rus);
+        V_DrawShadowedPatchDoom(NG_STATSX + wide_delta + 4*NG_SPACINGX-SHORT(frags_rus->width), NG_STATSY, frags_rus);
     }
 
     // draw stats
@@ -1486,7 +1486,7 @@ void WI_drawNetgameStats(void)
         if (i == me)
         V_DrawPatch((x-SHORT(p[i]->width))+wide_delta, y, star);
 
-        x += NG_SPACINGX;
+        x += NG_SPACINGX + wide_delta*2;
         WI_drawPercent(x-pwidth, y+10, cnt_kills[i]);	x += NG_SPACINGX;
         WI_drawPercent(x-pwidth, y+10, cnt_items[i]);	x += NG_SPACINGX;
         WI_drawPercent(x-pwidth, y+10, cnt_secret[i]);	x += NG_SPACINGX;
