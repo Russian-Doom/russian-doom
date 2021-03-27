@@ -6453,9 +6453,19 @@ void M_RD_Change_NoInternalDemos(int choice)
 
 void M_RD_Choose_LevelSelect_1(int choice)
 {
-    M_SetupNextMenu(english_language ? 
-                    &RD_Level_Def_1 :
-                    &RD_Level_Def_1_Rus);
+    if (netgame && !demoplayback)
+    {
+        M_StartMessage(DEH_String(english_language ?
+                                  NEWGAME : NEWGAME_RUS),
+                                  NULL,false);
+        return;
+    }
+    else
+    {
+        M_SetupNextMenu(english_language ? 
+                        &RD_Level_Def_1 :
+                        &RD_Level_Def_1_Rus);
+    }
 }
 
 void M_RD_Choose_LevelSelect_2(int choice)
