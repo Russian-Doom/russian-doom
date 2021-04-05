@@ -463,7 +463,15 @@ void ST_refreshBackground(void)
             }
         }
 
-        V_DrawPatch(ST_X + wide_delta, 0, english_language ? sbar : sbar_rus);
+        // [JN] Always draw status bar on the center of the screen.
+        if (english_language)
+        {
+            V_DrawPatch(ST_X + (ORIGWIDTH - SHORT(sbar->width)) / 2 + wide_delta, 0, sbar);
+        }
+        else
+        {
+            V_DrawPatch(ST_X + (ORIGWIDTH - SHORT(sbar_rus->width)) / 2 + wide_delta, 0, sbar_rus);
+        }
 
         // [crispy] back up arms widget background
         if (!deathmatch && gamemode != pressbeta)
@@ -2066,6 +2074,10 @@ void ST_initData(void)
     st_clock = 0;
     st_chatstate = StartChatState;
     st_gamestate = FirstPersonState;
+
+    // [JN] Initialize STBAR horizontal offset with zero for centering.
+    sbar->leftoffset = 0;
+    sbar_rus->leftoffset = 0;
 
     st_statusbaron = true;
     st_oldchat = st_chat = false;
