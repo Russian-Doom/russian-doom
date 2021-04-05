@@ -854,7 +854,6 @@ void R_RenderPlayerView (player_t* player)
 {	
     extern void V_DrawFilledBox (int x, int y, int w, int h, int c);
     extern void R_InterpolateTextureOffsets (void);
-    extern boolean beneath_door;
 
     R_SetupFrame (player);
 
@@ -870,9 +869,12 @@ void R_RenderPlayerView (player_t* player)
     // [JN] Fill map's "out of bounds" with black color.
     V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
 
-    // [JN] Don't render anything farther if player is crushed beneath the door.
-    if (beneath_door)
-    return;
+    // [JN] Disable screen rendering if player is dead beneath closed door.
+    if (singleplayer && player->playerstate == PST_DEAD
+    &&  player->viewz < player->mo->floorz)
+    {
+        return;
+    }
 
     R_ClearPlanes ();
     R_ClearSprites ();

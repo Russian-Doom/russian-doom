@@ -35,7 +35,6 @@
 #define ANG5    (ANG90/18)
 
 boolean onground;
-boolean beneath_door;   // [JN] Player is crushed by closed door
 
 
 //
@@ -163,19 +162,6 @@ void P_CalcHeight (player_t *player, boolean safe)
     if (player->viewz > player->mo->ceilingz - 4 * FRACUNIT)
     {
         player->viewz = player->mo->ceilingz - 4 * FRACUNIT;
-    }
-
-    // [JN] If dead player is crushed by closed door, 
-    // set boolean "beneath_door" to true and stop
-    // game world rendering in R_RenderPlayerView.
-    if (singleplayer && player->playerstate == PST_DEAD
-    &&  player->viewz < player->mo->floorz)
-    {
-        beneath_door = true;
-    }
-    else
-    {
-        beneath_door = false;
     }
 }
 
