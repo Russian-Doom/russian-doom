@@ -548,65 +548,93 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
         if (x > 0 && y > 0)
         {
             for (mobj = blocklinks[(y-1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
-                if ((mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x && (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
-                    if (!func(mobj))
-                        return false;
+            {
+                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
+                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
+
+                if (xx == x && yy == y && !func(mobj))
+                return false;
+            }
         }
         // (0, -1)
         if (y > 0)
         {
             for (mobj = blocklinks[(y-1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
-                if ((mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
-                    if (!func(mobj))
-                        return false;
+            {
+                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
+
+                if (yy == y && !func(mobj))
+                return false;
+            }
         }
         // (1, -1)
         if (x < (bmapwidth-1) && y > 0)
         {
             for (mobj = blocklinks[(y-1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
-                if ((mobj->x - mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x && (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
-                    if (!func(mobj))
-                        return false;
+            {
+                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
+                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
+
+                if (xx == x && yy == y && !func(mobj))
+                return false;
+            }
         }
         // (1, 0)
         if (x < (bmapwidth-1))
         {
             for (mobj = blocklinks[y*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
-                if ((mobj->x - mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x)
-                    if (!func(mobj))
-                        return false;
+            {
+                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
+
+                if (xx == x && !func(mobj))
+                return false;
+            }
         }
         // (1, 1)
         if (x < (bmapwidth-1) && y < (bmapheight-1))
         {
             for (mobj = blocklinks[(y+1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
-                if ((mobj->x - mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x && (mobj->y - mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
-                    if (!func(mobj))
-                        return false;
+            {
+                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
+                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
+
+                if (xx == x && yy == y && !func(mobj))
+                return false;
+            }
         }
         // (0, 1)
         if (y < (bmapheight-1))
         {
             for (mobj = blocklinks[(y+1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
-                if ((mobj->y - mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
-                    if (!func(mobj))
-                        return false;
+            {
+                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
+
+                if (yy == y && !func(mobj))
+                return false;
+            }
         }
         // (-1, 1)
         if (x > 0 && y < (bmapheight-1))
         {
             for (mobj = blocklinks[(y+1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
-                if ((mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x && (mobj->y - mobj->radius - bmaporgy) >> MAPBLOCKSHIFT == y)
-                    if (!func(mobj))
-                        return false;
+            {
+                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
+                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
+
+                if (xx == x && yy == y && !func(mobj))
+                return false;
+            }
         }
         // (-1, 0)
         if (x > 0)
         {
             for (mobj = blocklinks[y*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
-                if ((mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT == x)
-                    if (!func(mobj))
-                        return false;
+            {
+                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
+
+                if (xx == x && !func(mobj))
+                return false;
+            }
         }
     }
 
