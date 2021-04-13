@@ -876,7 +876,7 @@ void D_PageDrawer (void)
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
     }
 
-    V_DrawPatch (wide_delta, 0, W_CacheLumpName(pagename, PU_CACHE));
+    V_DrawPatchFullScreen (W_CacheLumpName(pagename, PU_CACHE), false);
 }
 
 
@@ -1934,6 +1934,13 @@ void D_SetGameDescription(void)
     if (aspect_ratio >= 2 && gamemode == registered && W_CheckMultipleLumps("TITLEPIC") <= 2)
     {
         DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIR");
+    }
+
+    // [JN] Same for Ultimate DOOM.
+    if (aspect_ratio >= 2 && gamemode == retail && W_CheckMultipleLumps("TITLEPIC") <= 2)
+    {
+        DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
+        DEH_AddStringReplacement ("TITLEPIR",   "TITLEPIU");
     }
 
     // [JN] Check if we have replaced skill level graphics.

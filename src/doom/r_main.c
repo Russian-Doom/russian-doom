@@ -869,7 +869,7 @@ void R_RenderPlayerView (player_t* player)
     // [JN] Fill map's "out of bounds" with black color.
     V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight, 0);
 
-    // [JN] Disable screen rendering if player is dead beneath closed door.
+    // [JN] Disable screen rendering if player is crushed beneath closed door.
     if (singleplayer && player->playerstate == PST_DEAD
     &&  player->viewz < player->mo->floorz)
     {

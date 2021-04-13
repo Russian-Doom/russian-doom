@@ -58,7 +58,10 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Optimized mapping file for Heretic by Tom Klok ([ht_gus1m.zip](https://www.doomworld.com/idgames/sounds/ht_gus1m))
 - Optimized mapping file for Hexen by Colin Caird
 
-#### [GENMIDI](https://www.doomworld.com/forum/topic/97388-update-hisymaks-genmidi-an-enhanced-genmidi-lump-for-opl-synth/) sound bank for Atari Jaguar TC
+#### Doom 21:9 widescreen assets based on WidePix, created by
+- Nash Muhandes
+
+#### [GENMIDI](https://www.doomworld.com/forum/topic/97388-update-hisymaks-genmidi-an-enhanced-genmidi-lump-for-opl-synth/) sound bank for Jaguar Doom TC
 - Hisymak
 
 #### Korax Russian voiceover

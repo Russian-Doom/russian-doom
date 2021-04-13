@@ -268,6 +268,31 @@ void V_DrawPatch(int x, int y, patch_t *patch)
     }
 }
 
+
+void V_DrawPatchFullScreen(patch_t *patch, boolean flipped)
+{
+    int x = ((screenwidth >> hires) - SHORT(patch->width)) / 2;
+
+    patch->leftoffset = 0;
+    patch->topoffset = 0;
+
+    // [crispy] fill pillarboxes in widescreen mode
+    if (screenwidth != ORIGWIDTH)
+    {
+        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
+    }
+
+    if (flipped)
+    {
+        V_DrawPatchFlipped(x, 0, patch);
+    }
+    else
+    {
+        V_DrawPatch(x, 0, patch);
+    }
+}
+
+
 //
 // V_DrawPatchFlipped
 // Masks a column based masked pic to the screen.

@@ -490,7 +490,7 @@ void F_TextWrite (void)
                 V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
             }
 
-            V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE));
+            V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE), false);
         }
 
         // Leaving MAP31, entering MAP32: red Wolfenstein 3D background.
@@ -502,7 +502,7 @@ void F_TextWrite (void)
                 V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
             }
 
-            V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE));
+            V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE), false);
         }
     }
 
@@ -927,9 +927,9 @@ void F_CastDrawer (void)
 
     // erase the entire screen to a background
     if (!english_language && logical_gamemission == pack_plut)
-    V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("BOSSBACP"), PU_CACHE));
+    V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("BOSSBACP"), PU_CACHE), false);
     else
-    V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE));
+    V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("BOSSBACK"), PU_CACHE), false);
 
     F_CastPrint (DEH_String(english_language ?
                             castorder[castnum].name :
@@ -1139,7 +1139,7 @@ static void F_ArtScreenDrawer(void)
 
         lumpname = DEH_String(lumpname);
 
-        V_DrawPatch (wide_delta, 0, W_CacheLumpName(lumpname, PU_CACHE));
+        V_DrawPatchFullScreen(W_CacheLumpName(lumpname, PU_CACHE), false);
     }
 }
 

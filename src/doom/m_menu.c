@@ -8018,12 +8018,6 @@ void M_DrawReadThis1(void)
 
     inhelpscreens = true;
 
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: clean up wide screen remainings before drawing.
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
-    }
-
     // [JN] Различные экраны помощи и скорректированное положение M_SKULL для разных версий игры
 
     switch (gameversion)
@@ -8112,7 +8106,7 @@ void M_DrawReadThis1(void)
 
     lumpname = DEH_String(lumpname);
 
-    V_DrawPatch (wide_delta, 0, W_CacheLumpName(lumpname, PU_CACHE));
+    V_DrawPatchFullScreen (W_CacheLumpName(lumpname, PU_CACHE), false);
 
     ReadDef1.x = ReadDef1_Rus.x = skullx;
     ReadDef1.y = ReadDef1_Rus.y = skully;
@@ -8134,17 +8128,11 @@ void M_DrawReadThis2(void)
         ReadDef2_Rus.prevMenu = &MainDef_Rus;
     }
 
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Clean up remainings of the wide screen before drawing
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
-    }
-
     // We only ever draw the second page if this is 
     // gameversion == exe_doom_1_9 and gamemode == registered
 
-    V_DrawPatch(wide_delta, 0, W_CacheLumpName(DEH_String
-               (english_language ? "HELP1" : "HELP1R"), PU_CACHE));
+    V_DrawPatchFullScreen(W_CacheLumpName(DEH_String
+               (english_language ? "HELP1" : "HELP1R"), PU_CACHE), false);
 
     ReadDef2.x = ReadDef2_Rus.x = 330;
     ReadDef2.y = ReadDef2_Rus.y = 175;

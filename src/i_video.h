@@ -43,7 +43,7 @@
 // aspect_ratio = 3 (16:10)
 // aspect_ratio = 4 (21:9)
 
-#define WIDEORIGWIDTH   568
+#define WIDEORIGWIDTH   560
 #define WIDESCREENWIDTH (WIDEORIGWIDTH << hires)
 #define WIDE_DELTA      (WIDEORIGWIDTH - ORIGWIDTH) / 2
 #define SCREENHEIGHT_5_4 (256 << hires)

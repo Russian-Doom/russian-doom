@@ -431,13 +431,7 @@ static patch_t*     background;
 // slam background
 void WI_slamBackground(void)
 {
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: clean up wide screen remainings before drawing.
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
-    }
-
-    V_DrawPatch(wide_delta, 0, background);
+    V_DrawPatchFullScreen(background, false);
 }
 
 
