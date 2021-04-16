@@ -870,12 +870,6 @@ void D_PageTicker (void)
 
 void D_PageDrawer (void)
 {
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: clean up wide screen remainings before drawing.
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
-    }
-
     V_DrawPatchFullScreen (W_CacheLumpName(pagename, PU_CACHE), false);
 }
 

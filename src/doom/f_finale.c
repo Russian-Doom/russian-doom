@@ -472,7 +472,7 @@ void F_TextWrite (void)
             if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: clean up wide screen remainings before drawing.
-                V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
             }
 
             V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
@@ -487,7 +487,7 @@ void F_TextWrite (void)
             if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: clean up wide screen remainings before drawing.
-                V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
             }
 
             V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE), false);
@@ -499,7 +499,7 @@ void F_TextWrite (void)
             if (aspect_ratio >= 2)
             {
                 // [JN] Wide screen: clean up wide screen remainings before drawing.
-                V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
             }
 
             V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE), false);
@@ -922,7 +922,7 @@ void F_CastDrawer (void)
     if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
     // erase the entire screen to a background
@@ -1086,7 +1086,7 @@ static void F_ArtScreenDrawer(void)
     if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
     if (gameepisode == 3)
@@ -1212,7 +1212,7 @@ void F_TextWriteJaguar (void)
         if (aspect_ratio >= 2)
         {
             // Clean up remainings of the wide screen before drawing
-            V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+            V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
         }
 
         V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
@@ -1442,7 +1442,7 @@ void F_CastDrawerJaguar (void)
     if (aspect_ratio >= 2)
     {
         // Clean up remainings of the wide screen before drawing
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
     // erase the entire screen to a background
