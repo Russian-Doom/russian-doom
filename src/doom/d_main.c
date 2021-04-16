@@ -999,7 +999,7 @@ void D_DoAdvanceDemo (void)
 
             if (english_language)
             {
-                if (aspect_ratio >= 2 && (gamemode == shareware || gamemode == registered))
+                if (gamemode == shareware || gamemode == registered)
                 pagename = DEH_String("CREDITW");
                 else
                 pagename = DEH_String("CREDIT");
@@ -1434,11 +1434,8 @@ void D_SetGameDescription(void)
         {
             gamedescription_eng = gamedescription_rus = GetGameName("The Ultimate DOOM");
 
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Load widescreen backgrounds
-                W_MergeFile("base/doom-wide-doom1.wad");
-            }
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-doom1.wad");
 
             if (gameversion == exe_doom_se)
             {
@@ -1454,22 +1451,17 @@ void D_SetGameDescription(void)
             gamedescription_eng = GetGameName("DOOM Registered");
             gamedescription_rus = GetGameName("DOOM");
 
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Load widescreen backgrounds
-                W_MergeFile("base/doom-wide-doom1.wad");
-            }
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-doom1.wad");
         }
         else if (gamemode == shareware)
         {
             gamedescription_eng = GetGameName("DOOM Shareware");
             gamedescription_rus = GetGameName("DOOM (Демоверсия)");
 
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Load widescreen backgrounds
-                W_MergeFile("base/doom-wide-doom1.wad");
-            }
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-doom1.wad");
+
         }
         else if (gamemode == pressbeta)
         {
@@ -1510,33 +1502,24 @@ void D_SetGameDescription(void)
             gamedescription_eng = GetGameName("DOOM 2: Hell on Earth");
             gamedescription_rus = GetGameName("DOOM 2: Ад на Земле");
 
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Load widescreen backgrounds
-                W_MergeFile("base/doom-wide-doom2.wad");
-            }
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-doom2.wad");
         }
         else if (logical_gamemission == pack_plut)
         {
             gamedescription_eng = GetGameName("Final DOOM: Plutonia Experiment");
             gamedescription_rus = GetGameName("Final DOOM: Эксперимент “Плутония”");
 
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Load widescreen backgrounds
-                W_MergeFile("base/doom-wide-plutonia.wad");
-            }
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-plutonia.wad");
         }
         else if (logical_gamemission == pack_tnt)
         {
             gamedescription_eng = GetGameName("Final DOOM: TNT - Evilution");
             gamedescription_rus = GetGameName("Final DOOM: TNT - Дьяволюция");
 
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Load widescreen backgrounds
-                W_MergeFile("base/doom-wide-tnt.wad");
-            }
+            // [JN] Load widescreen backgrounds
+            W_MergeFile("base/doom-wide-tnt.wad");
         }
         else if (logical_gamemission == jaguar)
         {
@@ -1931,13 +1914,13 @@ void D_SetGameDescription(void)
     // 1) placed inside IWAD.
     // 2) placed inside doom-doom1-wide.wad.
     // 3 or more) modified titlepic inside PWAD.
-    if (aspect_ratio >= 2 && gamemode == registered && W_CheckMultipleLumps("TITLEPIC") <= 2)
+    if (gamemode == registered && W_CheckMultipleLumps("TITLEPIC") <= 2)
     {
         DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIR");
     }
 
     // [JN] Same for Ultimate DOOM.
-    if (aspect_ratio >= 2 && gamemode == retail && W_CheckMultipleLumps("TITLEPIC") <= 2)
+    if (gamemode == retail && W_CheckMultipleLumps("TITLEPIC") <= 2)
     {
         DEH_AddStringReplacement ("TITLEPIC",   "TITLEPIU");
         DEH_AddStringReplacement ("TITLEPIR",   "TITLEPIU");
