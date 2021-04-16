@@ -531,10 +531,6 @@ void R_ProjectSprite (mobj_t* thing)
     fixed_t             interpz;
     fixed_t             interpangle;
 
-    // [JN] Do not render player sprites in single player.
-    if (singleplayer && thing->type == MT_PLAYER)
-    return;
-
     // [AM] Interpolate between current and last position,
     //      if prudent.
     if (uncapped_fps && !vanillaparm &&
