@@ -1729,13 +1729,7 @@ void ST_drawWidgets(boolean refresh)
         if (!automapactive || (automapactive && automap_overlay)) // [JN] Don't draw signs in automap
         {
             // [JN] Don't draw ammo for fist and chainsaw
-            if (plyr->readyweapon == wp_pistol
-            ||  plyr->readyweapon == wp_shotgun
-            ||  plyr->readyweapon == wp_supershotgun
-            ||  plyr->readyweapon == wp_chaingun
-            ||  plyr->readyweapon == wp_missile
-            ||  plyr->readyweapon == wp_plasma
-            ||  plyr->readyweapon == wp_bfg)
+            if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
             V_DrawPatch(2 + wide_delta, 191, 
                         W_CacheLumpName(DEH_String(english_language ? 
                                                    "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
