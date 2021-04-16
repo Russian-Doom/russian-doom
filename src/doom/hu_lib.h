@@ -85,8 +85,6 @@ typedef struct
 // Widget creation, access, and update routines
 //
 
-// initializes heads-up widget library
-void HUlib_init(void);
 
 //
 // textline code
@@ -103,11 +101,17 @@ boolean HUlib_addCharToTextLine(hu_textline_t *t, char ch);
 // returns success
 boolean HUlib_delCharFromTextLine(hu_textline_t *t);
 
-// [JN] draws colored tline
-void HUlib_drawTextLine(hu_textline_t *l, boolean drawcursor);
+// [JN] Draws text line and colorizes depending on type given.
+typedef enum
+{
+    msg_pickup,     // Item pickup
+    msg_secret,     // Revealed secret
+    msg_system,     // System message
+    msg_chat,       // Netgame chat 
+    msg_uncolored   // Uncolored (automap strings and HUD fps/time widgets)
+} msgtype_t;
 
-// [JN] draws uncolored tline
-void HUlib_drawTextLineUncolored(hu_textline_t *l, boolean drawcursor);
+void HUlib_drawTextLine(hu_textline_t *l, boolean drawcursor, msgtype_t type);
 
 // erases text line
 void HUlib_eraseTextLine(hu_textline_t *l); 
@@ -127,10 +131,7 @@ void HUlib_addLineToSText (hu_stext_t* s);
 void HUlib_addMessageToSText (hu_stext_t* s, char* prefix, char* msg);
 
 // draws stext
-void HUlib_drawSText (hu_stext_t* s);
-void HUlib_drawSText_Secret (hu_stext_t* s);
-void HUlib_drawSText_System (hu_stext_t* s);
-void HUlib_drawSText_Chat (hu_stext_t* s);
+void HUlib_drawSText (hu_stext_t* s, msgtype_t type);
 
 // erases all stext lines
 void HUlib_eraseSText (hu_stext_t* s); 

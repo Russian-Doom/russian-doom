@@ -930,21 +930,21 @@ void HU_Drawer(void)
     int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
     int extrakills = players[consoleplayer].killcount - totalkills;
 
-    HUlib_drawSText(&w_message);
-    HUlib_drawSText_Secret(&w_message_secret);
-    HUlib_drawSText_System(&w_message_system);
-    HUlib_drawSText_Chat(&w_message_chat);
+    HUlib_drawSText(&w_message, msg_pickup);
+    HUlib_drawSText(&w_message_secret, msg_secret);
+    HUlib_drawSText(&w_message_system, msg_system);
+    HUlib_drawSText(&w_message_chat, msg_chat);
 
     // [JN] Draw local time widget
     if (local_time)
     {
-        HUlib_drawSText(&w_message_time);
+        HUlib_drawSText(&w_message_time, msg_uncolored);
     }
 
     // [JN] Draw FPS counter
     if (show_fps && !vanillaparm)
     {
-        HUlib_drawSText(&w_message_fps);
+        HUlib_drawSText(&w_message_fps, msg_uncolored);
     }
 
     HUlib_drawIText(&w_chat);
@@ -952,7 +952,7 @@ void HU_Drawer(void)
     // [JN] Level name (in automap only)
     if (automapactive)
     {
-        HUlib_drawTextLineUncolored(&w_title, false);
+        HUlib_drawTextLine(&w_title, false, msg_uncolored);
     }
 
     // [JN] Show level stats in automap (from Crispy Doom).
@@ -975,7 +975,7 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_kills, *(s++));
-        HUlib_drawTextLineUncolored(&w_kills, false);
+        HUlib_drawTextLine(&w_kills, false, msg_uncolored);
     
         // [JN] Items
         sprintf(str, english_language ?
@@ -985,7 +985,7 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_items, *(s++));
-        HUlib_drawTextLineUncolored(&w_items, false);
+        HUlib_drawTextLine(&w_items, false, msg_uncolored);
     
         // [JN] Secrets
         sprintf(str, english_language ?
@@ -995,7 +995,7 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_scrts, *(s++));
-        HUlib_drawTextLineUncolored(&w_scrts, false);
+        HUlib_drawTextLine(&w_scrts, false, msg_uncolored);
 
         // [JN] Skill
         sprintf(str, english_language ?
@@ -1005,7 +1005,7 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_skill, *(s++));
-        HUlib_drawTextLineUncolored(&w_skill, false);
+        HUlib_drawTextLine(&w_skill, false, msg_uncolored);
     }
 
     // [JN] Level time
@@ -1017,14 +1017,14 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_ltime_title, *(s++));
-        HUlib_drawTextLineUncolored(&w_ltime_title, false);
+        HUlib_drawTextLine(&w_ltime_title, false, msg_uncolored);
 
         sprintf(str, "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
         HUlib_clearTextLine(&w_ltime);
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_ltime, *(s++));
-        HUlib_drawTextLineUncolored(&w_ltime, false);
+        HUlib_drawTextLine(&w_ltime, false, msg_uncolored);
     }
 
     // [JN] Total time
@@ -1036,14 +1036,14 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_ttime_title, *(s++));
-        HUlib_drawTextLineUncolored(&w_ttime_title, false);
+        HUlib_drawTextLine(&w_ttime_title, false, msg_uncolored);
 
         sprintf(str, "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
         HUlib_clearTextLine(&w_ttime);
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_ttime, *(s++));
-        HUlib_drawTextLineUncolored(&w_ttime, false);
+        HUlib_drawTextLine(&w_ttime, false, msg_uncolored);
     }
 
     // [JN] Player coords
@@ -1055,7 +1055,7 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_coord_x, *(s++));
-        HUlib_drawTextLineUncolored(&w_coord_x, false);
+        HUlib_drawTextLine(&w_coord_x, false, msg_uncolored);
 
         // [JN] Y coord
         sprintf(str, "Y: %d", players[consoleplayer].mo->y >> FRACBITS);
@@ -1063,7 +1063,7 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_coord_y, *(s++));
-        HUlib_drawTextLineUncolored(&w_coord_y, false);
+        HUlib_drawTextLine(&w_coord_y, false, msg_uncolored);
 
         // [JN] Y coord
         sprintf(str, "Z: %d", players[consoleplayer].mo->z >> FRACBITS);
@@ -1071,7 +1071,7 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_coord_z, *(s++));
-        HUlib_drawTextLineUncolored(&w_coord_z, false);
+        HUlib_drawTextLine(&w_coord_z, false, msg_uncolored);
 
         // [JN] Angle
         sprintf(str, english_language ? "ANG: %d" : "EUJK: %d",
@@ -1080,7 +1080,7 @@ void HU_Drawer(void)
         s = str;
         while (*s)
             HUlib_addCharToTextLine(&w_ang, *(s++));
-        HUlib_drawTextLineUncolored(&w_ang, false);
+        HUlib_drawTextLine(&w_ang, false, msg_uncolored);
     }
 
     // [JN] Draw crosshair. 

@@ -37,12 +37,6 @@ extern boolean	automapactive;	// in AM_map.c
 extern GameMission_t gamemission; // [JN] For uncolored Jaguar messages
 
 
-void HUlib_init(void)
-{
-    // 
-}
-
-
 void HUlib_clearTextLine(hu_textline_t* t)
 {
     t->len = 0;
@@ -88,16 +82,14 @@ boolean HUlib_delCharFromTextLine(hu_textline_t* t)
 }
 
 
-void
-HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
+void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
 {
-    int i;
-    int w;
-    int x;
+    int i, w, x;
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // draw the new stuff
     x = l->x;
+
     for (i=0;i<l->len;i++)
     {
         unsigned char c = toupper(l->l[i]);
@@ -109,259 +101,78 @@ HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor)
             if (x+w > origwidth)
             break;
 
-            // [JN] Colorize message if necessary
-            if (messages_pickup_color > 0 && !vanillaparm && gamemission != jaguar)
+            // [JN] Colorize message depending on it's type.
+            if (!vanillaparm && gamemission != jaguar)
             {
-                messages_pickup_color == 1 ? dp_translation = cr[CR_GREEN] :
-                messages_pickup_color == 2 ? dp_translation = cr[CR_BLUE2] :
-                messages_pickup_color == 3 ? dp_translation = cr[CR_GOLD]  :
-                messages_pickup_color == 4 ? dp_translation = cr[CR_GRAY]  :
-                messages_pickup_color == 5 ? dp_translation = cr[CR_TAN]   :
-                messages_pickup_color == 6 ? dp_translation = cr[CR_BROWN] :
-                messages_pickup_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
-            }
-        
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
-                                    l->y, l->f[c - l->sc]);
+                switch (type)
+                {
+                    case msg_pickup:
+                    messages_pickup_color == 1 ? dp_translation = cr[CR_GREEN] :
+                    messages_pickup_color == 2 ? dp_translation = cr[CR_BLUE2] :
+                    messages_pickup_color == 3 ? dp_translation = cr[CR_GOLD]  :
+                    messages_pickup_color == 4 ? dp_translation = cr[CR_GRAY]  :
+                    messages_pickup_color == 5 ? dp_translation = cr[CR_TAN]   :
+                    messages_pickup_color == 6 ? dp_translation = cr[CR_BROWN] :
+                    messages_pickup_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+                    break;
 
-            // [JN] Clear color translation if necessary
-            if (messages_pickup_color > 0 && !vanillaparm && gamemission != jaguar)
+                    case msg_secret:
+                    messages_secret_color == 1 ? dp_translation = cr[CR_GREEN] :
+                    messages_secret_color == 2 ? dp_translation = cr[CR_BLUE2] :
+                    messages_secret_color == 3 ? dp_translation = cr[CR_GOLD]  :
+                    messages_secret_color == 4 ? dp_translation = cr[CR_GRAY]  :
+                    messages_secret_color == 5 ? dp_translation = cr[CR_TAN]   :
+                    messages_secret_color == 6 ? dp_translation = cr[CR_BROWN] :
+                    messages_secret_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+                    break;
+
+                    case msg_system:
+                    messages_system_color == 1 ? dp_translation = cr[CR_GREEN] :
+                    messages_system_color == 2 ? dp_translation = cr[CR_BLUE2] :
+                    messages_system_color == 3 ? dp_translation = cr[CR_GOLD]  :
+                    messages_system_color == 4 ? dp_translation = cr[CR_GRAY]  :
+                    messages_system_color == 5 ? dp_translation = cr[CR_TAN]   :
+                    messages_system_color == 6 ? dp_translation = cr[CR_BROWN] :
+                    messages_system_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+                    break;
+
+                    case msg_chat:
+                    messages_chat_color == 1 ? dp_translation = cr[CR_GREEN] :
+                    messages_chat_color == 2 ? dp_translation = cr[CR_BLUE2] :
+                    messages_chat_color == 3 ? dp_translation = cr[CR_GOLD]  :
+                    messages_chat_color == 4 ? dp_translation = cr[CR_GRAY]  :
+                    messages_chat_color == 5 ? dp_translation = cr[CR_TAN]   :
+                    messages_chat_color == 6 ? dp_translation = cr[CR_BROWN] :
+                    messages_chat_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
+                    break;
+
+                    default: // [JN] No coloring, including for "msg_uncolored".
+                    break;
+                }
+            }
+
+            // [JN] Draw message.
+            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f[c - l->sc]);
+
+            // [JN] Clear color translation.
             dp_translation = NULL;
 
             x += w;
         }
         else
         {
-        x += 4;
+            x += 4;
 
-        if (x >= origwidth)
-        break;
+            if (x >= origwidth)
+            break;
         }
     }
 
     // draw the cursor if requested
     if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= origwidth)
     {
-        // [JN] Colorize message if necessary
-        if (messages_pickup_color > 0 && !vanillaparm)
-        {
-            messages_pickup_color == 1 ? dp_translation = cr[CR_GREEN] :
-            messages_pickup_color == 2 ? dp_translation = cr[CR_BLUE2] :
-            messages_pickup_color == 3 ? dp_translation = cr[CR_GOLD]  :
-            messages_pickup_color == 4 ? dp_translation = cr[CR_GRAY]  :
-            messages_pickup_color == 5 ? dp_translation = cr[CR_TAN]   :
-            messages_pickup_color == 6 ? dp_translation = cr[CR_BROWN] :
-            messages_pickup_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
-        }
-
-        V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
-                                l->y, l->f['_' - l->sc]);
-
-        // [JN] Clear color translation if necessary
-        if (messages_pickup_color > 0 && !vanillaparm)
-        dp_translation = NULL;
-    }
-}
-
-void HUlib_drawTextLineUncolored (hu_textline_t *l, boolean drawcursor)
-{
-    int i;
-    int w;
-    int x;
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-
-    // draw the new stuff
-    x = l->x;
-    for (i=0;i<l->len;i++)
-    {
-        unsigned char c = toupper(l->l[i]);
-
-        if (c != ' ' && c >= l->sc && c <= '_')
-        {
-            w = SHORT(l->f[c - l->sc]->width);
-
-            if (x+w > origwidth)
-            break;
-
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
-                                    l->y, l->f[c - l->sc]);
-
-            x += w;
-        }
-        else
-        {
-        x += 4;
-
-        if (x >= origwidth)
-        break;
-        }
-    }
-
-    // draw the cursor if requested
-    if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= origwidth)
-    {
-        V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
-                                l->y, l->f['_' - l->sc]);
-    }
-}
-
-void HUlib_drawTextLineSecret (hu_textline_t *l)
-{
-    int i;
-    int w;
-    int x;
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-
-    // draw the new stuff
-    x = l->x;
-    for (i=0;i<l->len;i++)
-    {
-        unsigned char c = toupper(l->l[i]);
-
-        if (c != ' ' && c >= l->sc && c <= '_')
-        {
-            w = SHORT(l->f[c - l->sc]->width);
-
-            if (x+w > origwidth)
-            break;
-
-            // [JN] Colorize message if necessary
-            if (messages_secret_color > 0 && !vanillaparm && gamemission != jaguar)
-            {
-                messages_secret_color == 1 ? dp_translation = cr[CR_GREEN] :
-                messages_secret_color == 2 ? dp_translation = cr[CR_BLUE2] :
-                messages_secret_color == 3 ? dp_translation = cr[CR_GOLD]  :
-                messages_secret_color == 4 ? dp_translation = cr[CR_GRAY]  :
-                messages_secret_color == 5 ? dp_translation = cr[CR_TAN]   :
-                messages_secret_color == 6 ? dp_translation = cr[CR_BROWN] :
-                messages_secret_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
-            }
-        
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
-                                    l->y, l->f[c - l->sc]);
-
-            // [JN] Clear color translation if necessary
-            if (messages_secret_color > 0 && !vanillaparm && gamemission != jaguar)
-            dp_translation = NULL;
-
-            x += w;
-        }
-        else
-        {
-        x += 4;
-
-        if (x >= origwidth)
-        break;
-        }
-    }
-}
-
-void HUlib_drawTextLineSystem (hu_textline_t *l)
-{
-    int i;
-    int w;
-    int x;
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-
-    // draw the new stuff
-    x = l->x;
-    for (i=0;i<l->len;i++)
-    {
-        unsigned char c = toupper(l->l[i]);
-
-        if (c != ' ' && c >= l->sc && c <= '_')
-        {
-            w = SHORT(l->f[c - l->sc]->width);
-
-            if (x+w > origwidth)
-            break;
-
-            // [JN] Colorize message if necessary
-            if (messages_system_color > 0 && !vanillaparm && gamemission != jaguar)
-            {
-                messages_system_color == 1 ? dp_translation = cr[CR_GREEN] :
-                messages_system_color == 2 ? dp_translation = cr[CR_BLUE2] :
-                messages_system_color == 3 ? dp_translation = cr[CR_GOLD]  :
-                messages_system_color == 4 ? dp_translation = cr[CR_GRAY]  :
-                messages_system_color == 5 ? dp_translation = cr[CR_TAN]   :
-                messages_system_color == 6 ? dp_translation = cr[CR_BROWN] :
-                messages_system_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
-            }
-        
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
-                                    l->y, l->f[c - l->sc]);
-
-            // [JN] Clear color translation if necessary
-            if (messages_system_color > 0 && !vanillaparm && gamemission != jaguar)
-            dp_translation = NULL;
-
-            x += w;
-        }
-        else
-        {
-        x += 4;
-
-        if (x >= origwidth)
-        break;
-        }
-    }
-}
-
-void HUlib_drawTextLineChat (hu_textline_t *l, boolean drawcursor)
-{
-    int i;
-    int w;
-    int x;
-    boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-
-    // draw the new stuff
-    x = l->x;
-    for (i=0;i<l->len;i++)
-    {
-        unsigned char c = toupper(l->l[i]);
-
-        if (c != ' ' && c >= l->sc && c <= '_')
-        {
-            w = SHORT(l->f[c - l->sc]->width);
-
-            if (x+w > origwidth)
-            break;
-
-            // [JN] Colorize message if necessary
-            if (messages_chat_color > 0 && !vanillaparm && gamemission != jaguar)
-            {
-                messages_chat_color == 1 ? dp_translation = cr[CR_GREEN] :
-                messages_chat_color == 2 ? dp_translation = cr[CR_BLUE2] :
-                messages_chat_color == 3 ? dp_translation = cr[CR_GOLD]  :
-                messages_chat_color == 4 ? dp_translation = cr[CR_GRAY]  :
-                messages_chat_color == 5 ? dp_translation = cr[CR_TAN]   :
-                messages_chat_color == 6 ? dp_translation = cr[CR_BROWN] :
-                messages_chat_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
-            }
-        
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
-                                    l->y, l->f[c - l->sc]);
-
-            // [JN] Clear color translation if necessary
-            if (messages_chat_color > 0 && !vanillaparm && gamemission != jaguar)
-            dp_translation = NULL;
-
-            x += w;
-        }
-        else
-        {
-        x += 4;
-
-        if (x >= origwidth)
-        break;
-        }
-    }
-
-    // draw the cursor if requested
-    if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= origwidth)
-    {
-        // [JN] Colorize message if necessary
-        if (messages_chat_color > 0 && !vanillaparm && gamemission != jaguar)
+        // [JN] Colorize cursor, used for netgame chat only.
+        if (!vanillaparm && gamemission != jaguar)
         {
             messages_chat_color == 1 ? dp_translation = cr[CR_GREEN] :
             messages_chat_color == 2 ? dp_translation = cr[CR_BLUE2] :
@@ -372,11 +183,10 @@ void HUlib_drawTextLineChat (hu_textline_t *l, boolean drawcursor)
             messages_chat_color == 7 ? dp_translation = cr[CR_BRICK] : NULL;
         }
 
-        V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0),
-                                l->y, l->f['_' - l->sc]);
+        // [JN] Draw cursor.
+        V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f['_' - l->sc]);
 
-        // [JN] Clear color translation if necessary
-        if (messages_chat_color > 0 && !vanillaparm && gamemission != jaguar)
+        // [JN] Clear color translation.
         dp_translation = NULL;
     }
 }
@@ -460,30 +270,7 @@ void HUlib_addMessageToSText (hu_stext_t* s, char* prefix, char* msg)
 }
 
 
-void HUlib_drawSText(hu_stext_t* s)
-{
-    int i;
-
-    if (!*s->on)
-    return; // if not on, don't draw
-
-    // draw everything
-    for (i=0 ; i<s->h ; i++)
-    {
-        int idx = s->cl - i;
-        hu_textline_t *l = &s->l[idx];
-
-        if (idx < 0)
-        idx += s->h; // handle queue of lines
-
-        // l = &s->l[idx];
-
-        // need a decision made here on whether to skip the draw
-        HUlib_drawTextLine(l, false); // no cursor, please
-    }
-}
-
-void HUlib_drawSText_Secret(hu_stext_t* s)
+void HUlib_drawSText(hu_stext_t* s, msgtype_t type)
 {
     int i;
 
@@ -500,51 +287,15 @@ void HUlib_drawSText_Secret(hu_stext_t* s)
         idx += s->h; // handle queue of lines
 
         // need a decision made here on whether to skip the draw
-        HUlib_drawTextLineSecret(l); // no cursor, please
+        HUlib_drawTextLine(l, false, // no cursor, please
+                           type == msg_pickup ? msg_pickup :
+                           type == msg_secret ? msg_secret :
+                           type == msg_system ? msg_system :
+                           type == msg_chat   ? msg_chat   :
+                                                msg_uncolored);
     }
 }
 
-void HUlib_drawSText_System(hu_stext_t* s)
-{
-    int i;
-
-    if (!*s->on)
-    return; // if not on, don't draw
-
-    // draw everything
-    for (i=0 ; i<s->h ; i++)
-    {
-        int idx = s->cl - i;
-        hu_textline_t *l = &s->l[idx];
-
-        if (idx < 0)
-        idx += s->h; // handle queue of lines
-
-        // need a decision made here on whether to skip the draw
-        HUlib_drawTextLineSystem(l);
-    }
-}
-
-void HUlib_drawSText_Chat(hu_stext_t* s)
-{
-    int i;
-
-    if (!*s->on)
-    return; // if not on, don't draw
-
-    // draw everything
-    for (i=0 ; i<s->h ; i++)
-    {
-        int idx = s->cl - i;
-        hu_textline_t *l = &s->l[idx];
-
-        if (idx < 0)
-        idx += s->h; // handle queue of lines
-
-        // need a decision made here on whether to skip the draw
-        HUlib_drawTextLineChat(l, false);
-    }
-}
 
 void HUlib_eraseSText(hu_stext_t* s)
 {
@@ -626,7 +377,7 @@ void HUlib_drawIText(hu_itext_t* it)
     if (!*it->on)
     return;
 
-    HUlib_drawTextLineChat(l, true); // draw the line w/ cursor
+    HUlib_drawTextLine(l, true, msg_chat); // draw the line w/ cursor
 }
 
 
