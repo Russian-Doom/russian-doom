@@ -938,7 +938,7 @@ void D_DoAdvanceDemo (void)
             if (gamemode == shareware)
             {
                 if (english_language)
-                pagename = DEH_String("TITLEPSE");
+                pagename = DEH_String("TITLEPIS");
                 else
                 pagename = DEH_String("TITLEPSR");
             }
