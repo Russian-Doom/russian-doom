@@ -82,6 +82,12 @@ int     messx;
 int     messy;
 int     messageLastMenuActive;
 
+// [JN] Choosen message colors, used in HUlib_drawTextLine.
+byte   *messages_pickup_color_set;
+byte   *messages_secret_color_set;
+byte   *messages_system_color_set;
+byte   *messages_chat_color_set;
+
 // we are going to be entering a savegame string
 int     saveStringEnter;              
 int     saveSlot;           // which slot to save in
@@ -3921,6 +3927,29 @@ void M_RD_Change_Msg_TimeOut(int choice)
     }
 }
 
+void M_RD_Define_Msg_Pickup_Color(void)
+{
+    // [JN] No coloring in vanilla or Jaguar Doom.
+    if (vanillaparm || gamemission == jaguar)
+    {
+        messages_pickup_color_set = NULL;
+    }
+    else
+    {
+        switch (messages_pickup_color)
+        {
+            case 1:   messages_pickup_color_set = cr[CR_GREEN];  break;
+            case 2:   messages_pickup_color_set = cr[CR_BLUE2];  break;
+            case 3:   messages_pickup_color_set = cr[CR_GOLD];   break;
+            case 4:   messages_pickup_color_set = cr[CR_GRAY];   break;
+            case 5:   messages_pickup_color_set = cr[CR_TAN];    break;
+            case 6:   messages_pickup_color_set = cr[CR_BROWN];  break;
+            case 7:   messages_pickup_color_set = cr[CR_BRICK];  break;
+            default:  messages_pickup_color_set = NULL;          break;
+        }
+    }
+}
+
 void M_RD_Change_Msg_Pickup_Color(int choice)
 {
     // [JN] Disable colored messages toggling in Jaguar
@@ -3940,6 +3969,32 @@ void M_RD_Change_Msg_Pickup_Color(int choice)
         if (messages_pickup_color > 7)
             messages_pickup_color = 0;
         break;
+    }
+
+    // [JN] Redefine pickup message color.
+    M_RD_Define_Msg_Pickup_Color();
+}
+
+void M_RD_Define_Msg_Secret_Color(void)
+{
+    // [JN] No coloring in vanilla or Jaguar Doom.
+    if (vanillaparm || gamemission == jaguar)
+    {
+        messages_secret_color_set = NULL;
+    }
+    else
+    {
+        switch (messages_secret_color)
+        {
+            case 1:   messages_secret_color_set = cr[CR_GREEN];  break;
+            case 2:   messages_secret_color_set = cr[CR_BLUE2];  break;
+            case 3:   messages_secret_color_set = cr[CR_GOLD];   break;
+            case 4:   messages_secret_color_set = cr[CR_GRAY];   break;
+            case 5:   messages_secret_color_set = cr[CR_TAN];    break;
+            case 6:   messages_secret_color_set = cr[CR_BROWN];  break;
+            case 7:   messages_secret_color_set = cr[CR_BRICK];  break;
+            default:  messages_secret_color_set = NULL;          break;
+        }
     }
 }
 
@@ -3963,6 +4018,32 @@ void M_RD_Change_Msg_Secret_Color(int choice)
             messages_secret_color = 0;
         break;
     }
+
+    // [JN] Redefine revealed secret message color.
+    M_RD_Define_Msg_Secret_Color();
+}
+
+void M_RD_Define_Msg_System_Color(void)
+{
+    // [JN] No coloring in vanilla or Jaguar Doom.
+    if (vanillaparm || gamemission == jaguar)
+    {
+        messages_system_color_set = NULL;
+    }
+    else
+    {
+        switch (messages_system_color)
+        {
+            case 1:   messages_system_color_set = cr[CR_GREEN];  break;
+            case 2:   messages_system_color_set = cr[CR_BLUE2];  break;
+            case 3:   messages_system_color_set = cr[CR_GOLD];   break;
+            case 4:   messages_system_color_set = cr[CR_GRAY];   break;
+            case 5:   messages_system_color_set = cr[CR_TAN];    break;
+            case 6:   messages_system_color_set = cr[CR_BROWN];  break;
+            case 7:   messages_system_color_set = cr[CR_BRICK];  break;
+            default:  messages_system_color_set = NULL;          break;
+        }
+    }
 }
 
 void M_RD_Change_Msg_System_Color(int choice)
@@ -3984,6 +4065,32 @@ void M_RD_Change_Msg_System_Color(int choice)
         if (messages_system_color > 7)
             messages_system_color = 0;
         break;
+    }
+
+    // [JN] Redefine system message color.
+    M_RD_Define_Msg_System_Color();
+}
+
+void M_RD_Define_Msg_Chat_Color(void)
+{
+    // [JN] No coloring in vanilla or Jaguar Doom.
+    if (vanillaparm || gamemission == jaguar)
+    {
+        messages_chat_color_set = NULL;
+    }
+    else
+    {
+        switch (messages_chat_color)
+        {
+            case 1:   messages_chat_color_set = cr[CR_GREEN];  break;
+            case 2:   messages_chat_color_set = cr[CR_BLUE2];  break;
+            case 3:   messages_chat_color_set = cr[CR_GOLD];   break;
+            case 4:   messages_chat_color_set = cr[CR_GRAY];   break;
+            case 5:   messages_chat_color_set = cr[CR_TAN];    break;
+            case 6:   messages_chat_color_set = cr[CR_BROWN];  break;
+            case 7:   messages_chat_color_set = cr[CR_BRICK];  break;
+            default:  messages_chat_color_set = NULL;          break;
+        }
     }
 }
 
@@ -4007,6 +4114,9 @@ void M_RD_Change_Msg_Chat_Color(int choice)
             messages_chat_color = 0;
         break;
     }
+
+    // [JN] Redefine netgame chat message color.
+    M_RD_Define_Msg_Chat_Color();
 }
 
 void M_RD_Change_ShadowedText(int choice)
@@ -10119,6 +10229,12 @@ void M_Init (void)
     RD_Bindings_Menu_Def_3_Rus = getMenuFromKeyPage(&RD_Bindings_3, false);
     RD_Bindings_Menu_Def_4 = getMenuFromKeyPage(&RD_Bindings_4, true);
     RD_Bindings_Menu_Def_4_Rus = getMenuFromKeyPage(&RD_Bindings_4, false);
+
+    // [JN] Init message colors.
+    M_RD_Define_Msg_Pickup_Color();
+    M_RD_Define_Msg_Secret_Color();
+    M_RD_Define_Msg_System_Color();
+    M_RD_Define_Msg_Chat_Color();
 
     currentMenu = english_language ? &MainDef : &MainDef_Rus;
 
