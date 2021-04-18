@@ -869,7 +869,6 @@ boolean AM_Responder (event_t *ev)
         else if (key == key_map_overlay)
         {
             // [crispy] force redraw status bar
-            extern boolean inhelpscreens;
             inhelpscreens = true;
             
             automap_overlay = !automap_overlay;

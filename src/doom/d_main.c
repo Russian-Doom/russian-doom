@@ -280,8 +280,6 @@ boolean wide_loaded = false; // [JN] Boolen only for wide bunny screen
 boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
 
 
-extern boolean inhelpscreens;
-
 skill_t startskill;
 boolean autostart;
 boolean advancedemo;

@@ -97,7 +97,6 @@ int             dc_texheight;
 byte*   dc_source;		
 
 // [JN] External data for new fuzz effect
-extern boolean inhelpscreens;
 extern int Crispy_Random(void);
 
 

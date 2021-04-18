@@ -1847,8 +1847,6 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
 {
     // [JN] Redraw whole status bar while in HELP screens.
     // Fixes a notable delay of HUD redraw after closing HELP screen.
-    extern boolean inhelpscreens;
-
     st_statusbaron = (!fullscreen) || (automapactive && !automap_overlay) || screenblocks == 11 || screenblocks == 12;
     st_firsttime = st_firsttime || refresh || inhelpscreens;
 
