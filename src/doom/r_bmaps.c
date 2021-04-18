@@ -68,13 +68,13 @@ void R_InitBrightmappedTextures(void)
         // Textures
 
         // Red only:
-        bmaptexture39 = R_TextureNumForName("EXITSIGN");
-        bmaptexture08 = R_TextureNumForName("SW2WOOD");
-        bmaptexture17 = R_TextureNumForName("SW2GSTON");
-        bmaptexture34 = R_TextureNumForName("SW2HOT");
+        bmaptexture39 = R_CheckTextureNumForName("EXITSIGN");
+        bmaptexture08 = R_CheckTextureNumForName("SW2WOOD");
+        bmaptexture17 = R_CheckTextureNumForName("SW2GSTON");
+        bmaptexture34 = R_CheckTextureNumForName("SW2HOT");
 
         // Bright tan:
-        bmaptexture88 = R_TextureNumForName("SW2GARG");
+        bmaptexture88 = R_CheckTextureNumForName("SW2GARG");
 
         // Don't look up any farther
         return;
@@ -96,24 +96,24 @@ void R_InitBrightmappedTextures(void)
     if (gamemode != shareware)
     {
         // Red only
-        bmaptexture08 = R_TextureNumForName("SW2WOOD");
-        bmaptexture09 = R_TextureNumForName("WOOD4");
-        bmaptexture11 = R_TextureNumForName("SLADSKUL");
-        bmaptexture16 = R_TextureNumForName("SW2BLUE");
-        bmaptexture17 = R_TextureNumForName("SW2GSTON");
-        bmaptexture23 = R_TextureNumForName("WOODGARG");
-        bmaptexture34 = R_TextureNumForName("EXITSTON");
+        bmaptexture08 = R_CheckTextureNumForName("SW2WOOD");
+        bmaptexture09 = R_CheckTextureNumForName("WOOD4");
+        bmaptexture11 = R_CheckTextureNumForName("SLADSKUL");
+        bmaptexture16 = R_CheckTextureNumForName("SW2BLUE");
+        bmaptexture17 = R_CheckTextureNumForName("SW2GSTON");
+        bmaptexture23 = R_CheckTextureNumForName("WOODGARG");
+        bmaptexture34 = R_CheckTextureNumForName("EXITSTON");
 
         // Green only 1
-        bmaptexture73 = R_TextureNumForName("SW2VINE");
+        bmaptexture73 = R_CheckTextureNumForName("SW2VINE");
 
         // Bright tan
-        bmaptexture86 = R_TextureNumForName("SW2SATYR");
-        bmaptexture87 = R_TextureNumForName("SW2LION");
-        bmaptexture88 = R_TextureNumForName("SW2GARG");
+        bmaptexture86 = R_CheckTextureNumForName("SW2SATYR");
+        bmaptexture87 = R_CheckTextureNumForName("SW2LION");
+        bmaptexture88 = R_CheckTextureNumForName("SW2GARG");
 
         // Red only 2
-        bmaptexture93 = R_TextureNumForName("SW2HOT");
+        bmaptexture93 = R_CheckTextureNumForName("SW2HOT");
     }
 
     // -------------------------------------------------------
@@ -122,7 +122,7 @@ void R_InitBrightmappedTextures(void)
     if (gamemode == registered || gamemode == retail)
     {
         // Red only
-        bmaptexture10 = R_TextureNumForName("WOODSKUL");
+        bmaptexture10 = R_CheckTextureNumForName("WOODSKUL");
     }
 
     // -------------------------------------------------------
@@ -132,18 +132,18 @@ void R_InitBrightmappedTextures(void)
     ||  gamemode == pressbeta)
     {
         // Not gray
-        bmaptexture30 = R_TextureNumForName("PLANET1");
-        bmaptexture38 = R_TextureNumForName("LITEBLU2");
+        bmaptexture30 = R_CheckTextureNumForName("PLANET1");
+        bmaptexture38 = R_CheckTextureNumForName("LITEBLU2");
 
         // Not gray or brown
-        bmaptexture40 = R_TextureNumForName("COMP2");
-        bmaptexture41 = R_TextureNumForName("COMPUTE2");
-        bmaptexture43 = R_TextureNumForName("COMPUTE1");
-        bmaptexture44 = R_TextureNumForName("COMPUTE3");
+        bmaptexture40 = R_CheckTextureNumForName("COMP2");
+        bmaptexture41 = R_CheckTextureNumForName("COMPUTE2");
+        bmaptexture43 = R_CheckTextureNumForName("COMPUTE1");
+        bmaptexture44 = R_CheckTextureNumForName("COMPUTE3");
 
         // Red only 1
-        bmaptexture89 = R_TextureNumForName("TEKWALL2");
-        bmaptexture90 = R_TextureNumForName("TEKWALL5");
+        bmaptexture89 = R_CheckTextureNumForName("TEKWALL2");
+        bmaptexture90 = R_CheckTextureNumForName("TEKWALL5");
     }
 
     // -------------------------------------------------------
@@ -151,7 +151,7 @@ void R_InitBrightmappedTextures(void)
     // -------------------------------------------------------
     if (sgl_loaded || sgl_compat_loaded)
     {
-        bmaptexture92 = R_TextureNumForName("SIGIL");
+        bmaptexture92 = R_CheckTextureNumForName("SIGIL");
     }
 
     // -------------------------------------------------------
@@ -160,37 +160,37 @@ void R_InitBrightmappedTextures(void)
     if (gamemode == commercial)
     {
         // Red only
-        bmaptexture01 = R_TextureNumForName("SW1STARG");
-        bmaptexture02 = R_TextureNumForName("SW2MARB");
-        bmaptexture06 = R_TextureNumForName("SW2PANEL");
-        bmaptexture12 = R_TextureNumForName("SW1BRIK");
-        bmaptexture14 = R_TextureNumForName("SW1MET2");
-        bmaptexture18 = R_TextureNumForName("SW2ROCK");
-        bmaptexture19 = R_TextureNumForName("SW2STON6");
-        bmaptexture20 = R_TextureNumForName("SW2ZIM");
-        bmaptexture25 = R_TextureNumForName("SW1BRN1");
-        bmaptexture26 = R_TextureNumForName("SW1STON2");
-        bmaptexture91 = R_TextureNumForName("METAL3");
+        bmaptexture01 = R_CheckTextureNumForName("SW1STARG");
+        bmaptexture02 = R_CheckTextureNumForName("SW2MARB");
+        bmaptexture06 = R_CheckTextureNumForName("SW2PANEL");
+        bmaptexture12 = R_CheckTextureNumForName("SW1BRIK");
+        bmaptexture14 = R_CheckTextureNumForName("SW1MET2");
+        bmaptexture18 = R_CheckTextureNumForName("SW2ROCK");
+        bmaptexture19 = R_CheckTextureNumForName("SW2STON6");
+        bmaptexture20 = R_CheckTextureNumForName("SW2ZIM");
+        bmaptexture25 = R_CheckTextureNumForName("SW1BRN1");
+        bmaptexture26 = R_CheckTextureNumForName("SW1STON2");
+        bmaptexture91 = R_CheckTextureNumForName("METAL3");
 
         // Not gray or brown
-        bmaptexture35 = R_TextureNumForName("SILVER2");
-        bmaptexture42 = R_TextureNumForName("SILVER3");
+        bmaptexture35 = R_CheckTextureNumForName("SILVER2");
+        bmaptexture42 = R_CheckTextureNumForName("SILVER3");
 
         // Green only 1
-        bmaptexture45 = R_TextureNumForName("SW2MOD1");
-        bmaptexture58 = R_TextureNumForName("SPCDOOR3");
-        bmaptexture66 = R_TextureNumForName("SW2TEK");
-        bmaptexture67 = R_TextureNumForName("SW2BRIK");
-        bmaptexture71 = R_TextureNumForName("SW2MET2");
-        bmaptexture74 = R_TextureNumForName("PIPEWAL1");
-        bmaptexture75 = R_TextureNumForName("TEKLITE2");
+        bmaptexture45 = R_CheckTextureNumForName("SW2MOD1");
+        bmaptexture58 = R_CheckTextureNumForName("SPCDOOR3");
+        bmaptexture66 = R_CheckTextureNumForName("SW2TEK");
+        bmaptexture67 = R_CheckTextureNumForName("SW2BRIK");
+        bmaptexture71 = R_CheckTextureNumForName("SW2MET2");
+        bmaptexture74 = R_CheckTextureNumForName("PIPEWAL1");
+        bmaptexture75 = R_CheckTextureNumForName("TEKLITE2");
 
         // Green only 2
-        bmaptexture61 = R_TextureNumForName("SW2STARG");
-        bmaptexture62 = R_TextureNumForName("SW2BRN1");
+        bmaptexture61 = R_CheckTextureNumForName("SW2STARG");
+        bmaptexture62 = R_CheckTextureNumForName("SW2BRN1");
 
         // Orange and yellow
-        bmaptexture81 = R_TextureNumForName("TEKBRON2");
+        bmaptexture81 = R_CheckTextureNumForName("TEKBRON2");
     }
 
     // -------------------------------------------------------
@@ -199,7 +199,7 @@ void R_InitBrightmappedTextures(void)
     if (gamemission == doom2)
     {
         // Green only 2
-        bmaptexture78 = R_TextureNumForName("SW2SKULL");
+        bmaptexture78 = R_CheckTextureNumForName("SW2SKULL");
     }
 
     // -------------------------------------------------------
@@ -208,32 +208,32 @@ void R_InitBrightmappedTextures(void)
     if (gamemission == pack_tnt)
     {
         // Red only
-        bmaptexture27 = R_TextureNumForName("LITERED2");
-        bmaptexture28 = R_TextureNumForName("PNK4EXIT");
+        bmaptexture27 = R_CheckTextureNumForName("LITERED2");
+        bmaptexture28 = R_CheckTextureNumForName("PNK4EXIT");
 
         // Not gray or brown
-        bmaptexture46 = R_TextureNumForName("BTNTMETL");
-        bmaptexture47 = R_TextureNumForName("BTNTSLVR");
-        bmaptexture48 = R_TextureNumForName("SLAD2");
-        bmaptexture49 = R_TextureNumForName("SLAD3");
-        bmaptexture50 = R_TextureNumForName("SLAD4");
-        bmaptexture51 = R_TextureNumForName("SLAD5");
-        bmaptexture52 = R_TextureNumForName("SLAD6");
-        bmaptexture53 = R_TextureNumForName("SLAD7");
-        bmaptexture54 = R_TextureNumForName("SLAD8");
-        bmaptexture55 = R_TextureNumForName("SLAD9");
-        bmaptexture56 = R_TextureNumForName("SLAD10");
-        bmaptexture57 = R_TextureNumForName("SLAD11");
-        bmaptexture59 = R_TextureNumForName("SLADRIP1");
-        bmaptexture60 = R_TextureNumForName("SLADRIP3");
+        bmaptexture46 = R_CheckTextureNumForName("BTNTMETL");
+        bmaptexture47 = R_CheckTextureNumForName("BTNTSLVR");
+        bmaptexture48 = R_CheckTextureNumForName("SLAD2");
+        bmaptexture49 = R_CheckTextureNumForName("SLAD3");
+        bmaptexture50 = R_CheckTextureNumForName("SLAD4");
+        bmaptexture51 = R_CheckTextureNumForName("SLAD5");
+        bmaptexture52 = R_CheckTextureNumForName("SLAD6");
+        bmaptexture53 = R_CheckTextureNumForName("SLAD7");
+        bmaptexture54 = R_CheckTextureNumForName("SLAD8");
+        bmaptexture55 = R_CheckTextureNumForName("SLAD9");
+        bmaptexture56 = R_CheckTextureNumForName("SLAD10");
+        bmaptexture57 = R_CheckTextureNumForName("SLAD11");
+        bmaptexture59 = R_CheckTextureNumForName("SLADRIP1");
+        bmaptexture60 = R_CheckTextureNumForName("SLADRIP3");
 
         // Green only 2
-        bmaptexture79 = R_TextureNumForName("M_TEC");
+        bmaptexture79 = R_CheckTextureNumForName("M_TEC");
 
         // Orange and yellow
-        bmaptexture82 = R_TextureNumForName("LITEYEL2");
-        bmaptexture83 = R_TextureNumForName("LITEYEL3");
-        bmaptexture84 = R_TextureNumForName("YELMETAL");
+        bmaptexture82 = R_CheckTextureNumForName("LITEYEL2");
+        bmaptexture83 = R_CheckTextureNumForName("LITEYEL3");
+        bmaptexture84 = R_CheckTextureNumForName("YELMETAL");
     }
     // -------------------------------------------------------
     //  Plutonia only
@@ -241,7 +241,7 @@ void R_InitBrightmappedTextures(void)
     if (gamemission == pack_plut)
     {
         // Dimmed items (red color)
-        bmaptexture85 = R_TextureNumForName("SW2SKULL");
+        bmaptexture85 = R_CheckTextureNumForName("SW2SKULL");
     }
 
     // -------------------------------------------------------
@@ -249,41 +249,41 @@ void R_InitBrightmappedTextures(void)
     // -------------------------------------------------------
     {
         // In both games - Doom 1: red only, Doom 2: green only
-        bmaptexture24 = R_TextureNumForName("SW2STON2");
+        bmaptexture24 = R_CheckTextureNumForName("SW2STON2");
 
         // Red only
-        bmaptexture03 = R_TextureNumForName("SW1BRCOM");
-        bmaptexture04 = R_TextureNumForName("SW1DIRT");
-        bmaptexture05 = R_TextureNumForName("SW1STRTN");
-        bmaptexture07 = R_TextureNumForName("SW2SLAD");
-        bmaptexture13 = R_TextureNumForName("SW1COMM");
-        bmaptexture15 = R_TextureNumForName("SW1STON1");
-        bmaptexture21 = R_TextureNumForName("SW2COMP");
-        bmaptexture22 = R_TextureNumForName("SW1STONE");
-        bmaptexture39 = R_TextureNumForName("EXITSIGN");
+        bmaptexture03 = R_CheckTextureNumForName("SW1BRCOM");
+        bmaptexture04 = R_CheckTextureNumForName("SW1DIRT");
+        bmaptexture05 = R_CheckTextureNumForName("SW1STRTN");
+        bmaptexture07 = R_CheckTextureNumForName("SW2SLAD");
+        bmaptexture13 = R_CheckTextureNumForName("SW1COMM");
+        bmaptexture15 = R_CheckTextureNumForName("SW1STON1");
+        bmaptexture21 = R_CheckTextureNumForName("SW2COMP");
+        bmaptexture22 = R_CheckTextureNumForName("SW1STONE");
+        bmaptexture39 = R_CheckTextureNumForName("EXITSIGN");
 
         // Not gray
-        bmaptexture29 = R_TextureNumForName("COMPSTA2");
-        bmaptexture31 = R_TextureNumForName("SW2EXIT");
-        bmaptexture32 = R_TextureNumForName("SW2GRAY1");
-        bmaptexture33 = R_TextureNumForName("COMPSTA1");
-        bmaptexture36 = R_TextureNumForName("LITEBLU1");
-        bmaptexture37 = R_TextureNumForName("SW2GRAY");
+        bmaptexture29 = R_CheckTextureNumForName("COMPSTA2");
+        bmaptexture31 = R_CheckTextureNumForName("SW2EXIT");
+        bmaptexture32 = R_CheckTextureNumForName("SW2GRAY1");
+        bmaptexture33 = R_CheckTextureNumForName("COMPSTA1");
+        bmaptexture36 = R_CheckTextureNumForName("LITEBLU1");
+        bmaptexture37 = R_CheckTextureNumForName("SW2GRAY");
 
         // Green only 1
-        bmaptexture68 = R_TextureNumForName("SW2BRN2");
-        bmaptexture69 = R_TextureNumForName("SW2COMM");
-        bmaptexture72 = R_TextureNumForName("SW2STRTN");
+        bmaptexture68 = R_CheckTextureNumForName("SW2BRN2");
+        bmaptexture69 = R_CheckTextureNumForName("SW2COMM");
+        bmaptexture72 = R_CheckTextureNumForName("SW2STRTN");
 
         // Green only 2
-        bmaptexture63 = R_TextureNumForName("SW2BRCOM");
-        bmaptexture64 = R_TextureNumForName("SW2STON1");
-        bmaptexture65 = R_TextureNumForName("SW2STONE");
-        bmaptexture70 = R_TextureNumForName("SW2DIRT");
+        bmaptexture63 = R_CheckTextureNumForName("SW2BRCOM");
+        bmaptexture64 = R_CheckTextureNumForName("SW2STON1");
+        bmaptexture65 = R_CheckTextureNumForName("SW2STONE");
+        bmaptexture70 = R_CheckTextureNumForName("SW2DIRT");
 
         // Green only 3
-        bmaptexture77 = R_TextureNumForName("SW2BRNGN");
-        bmaptexture80 = R_TextureNumForName("SW2METAL");
+        bmaptexture77 = R_CheckTextureNumForName("SW2BRNGN");
+        bmaptexture80 = R_CheckTextureNumForName("SW2METAL");
     }
 }
 
