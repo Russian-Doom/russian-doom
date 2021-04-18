@@ -1025,7 +1025,6 @@ P_ShootSpecialLine
   line_t*	line )
 {
     int		ok;
-    extern boolean canmodify;   // [JN] For safe checking
     
     //	Impacts that other things can activate.
     if (!thing->player)

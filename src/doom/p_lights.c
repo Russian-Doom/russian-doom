@@ -181,7 +181,6 @@ P_SpawnStrobeFlash
   int		inSync )
 {
     strobe_t*	flash;
-    extern boolean canmodify;
 	
     flash = Z_Malloc ( sizeof(*flash), PU_LEVSPEC, 0);
 
