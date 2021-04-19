@@ -796,13 +796,6 @@ void D_DoomLoop (void)
     V_RestoreBuffer();
     R_ExecuteSetViewSize();
 
-    // [JN] Reinitialize fps and time widget's horizontal offset,
-    // needed when the game is started via -warp command.
-    if (gamestate == GS_LEVEL)
-    {
-        HU_Start ();
-    }
-
     D_StartGameLoop();
 
     if (testcontrols)
