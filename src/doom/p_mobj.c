@@ -232,11 +232,14 @@ void P_XYMovement (mobj_t* mo)
     // This explains the tendency for Mancubus fireballs
     // to pass through walls.
 
-    // [JN] Исправление бага: https://doomwiki.org/wiki/Mancubus_fireball_clipping
-    // Исключительно для одиночной игры, т.к. вызывает рассинхронизацию демозаписией.
+    // [JN] Fix: https://doomwiki.org/wiki/Mancubus_fireball_clipping
+    // But keep this bug in vanilla mode, needed for 
+    // a missile explosion in the code below.
+    //
     // Thanks to Jeff Doggett for simplifying!
 
-    if ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) || (singleplayer && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)))
+    if ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) 
+    || (singleplayer && !vanillaparm && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)))
     {
         ptryx = mo->x + xmove/2;
         ptryy = mo->y + ymove/2;
@@ -265,13 +268,19 @@ void P_XYMovement (mobj_t* mo)
 		    ceilingline->backsector &&
 		    ceilingline->backsector->ceilingpic == skyflatnum)
 		{
-		    if (mo->z > ceilingline->backsector->ceilingheight)
+		    if (mo->z > ceilingline->backsector->ceilingheight 
+            || vanillaparm) // [JN] Keep vanilla behaviour by removing missile object.
 		    {
 		    // Hack to prevent missiles exploding
 		    // against the sky.
 		    // Does not handle sky floors.
 		    P_RemoveMobj (mo);
 		    return;
+		    }
+		    else if (singleplayer)
+		    {
+		    // [JN] Make a full explosion with damage in single player.
+			safe = false;
 		    }
 		    else
 		    {
