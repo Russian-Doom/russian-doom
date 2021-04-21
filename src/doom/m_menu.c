@@ -9539,6 +9539,8 @@ boolean M_Responder (event_t* ev)
             if (itemOn+1 > currentMenu->numitems-1)
             itemOn = 0;
             else itemOn++;
+            // [JN] Play sound only if there are few menu items.
+            if (currentMenu->numitems > 1)
             S_StartSound(NULL,sfx_pstop);
         } while(currentMenu->menuitems[itemOn].status==-1);
 
@@ -9553,6 +9555,8 @@ boolean M_Responder (event_t* ev)
             if (!itemOn)
             itemOn = currentMenu->numitems-1;
             else itemOn--;
+            // [JN] Play sound only if there are few menu items.
+            if (currentMenu->numitems > 1)
             S_StartSound(NULL,sfx_pstop);
         } while(currentMenu->menuitems[itemOn].status==-1);
 
