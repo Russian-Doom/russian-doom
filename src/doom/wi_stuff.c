@@ -1751,6 +1751,10 @@ void WI_checkForAccelerate(void)
     {
         if (playeringame[i])
         {
+            // [JN] Don't allow to skip by pressing "pause" button.
+            if (player->cmd.buttons == (BT_SPECIAL | BTS_PAUSE))
+            continue;
+
             // [JN] Don't allow to skip intermission stats while active menu
             if (player->cmd.buttons & BT_ATTACK && !menuactive)
             {
