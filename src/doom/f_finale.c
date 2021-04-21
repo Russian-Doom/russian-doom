@@ -966,86 +966,62 @@ void F_BunnyScroll (void)
 {
     signed int          scrolled;
     int                 x;
-    int                 initialShift1;
-    int                 initialShift2;
+    int                 picture_delta;
+    int                 picture_delta_halved;
+    int                 timeCorrection;
     patch_t*            p1;
     patch_t*            p2;
     char                name[10];
     unsigned int        stage;
     static unsigned int laststage;
-    extern boolean      pfub2_replaced;
 
     p1 = W_CacheLumpName (DEH_String("PFUB2"), PU_LEVEL);
     p2 = W_CacheLumpName (DEH_String("PFUB1"), PU_LEVEL);
 
     V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
-    // [JN] If we are using standard 320x200 patch for PFUB2, 
-    // then use original scrolling code.
-    if (pfub2_replaced)
+    picture_delta = origwidth - p1->width;
+    picture_delta_halved = picture_delta / 2;
+
+    // [Dasperal] If the picture smaller than the screen then draw it centered with black stripes on sides
+    // and apply time correction based on picture size.
+    // If the picture bigger than the screen or equal then fill the screen with part of the picture
+    // and apply time correction based on screen size.
+    if (picture_delta >= 0)
     {
-        scrolled = (ORIGWIDTH - ((signed int) finalecount-230)/2);
+        scrolled = (p1->width - ((signed int) finalecount-230)/2);
+        timeCorrection = origwidth * 2 - ORIGWIDTH * 2;
 
-        if (scrolled > ORIGWIDTH)
-        scrolled = ORIGWIDTH;
-        if (scrolled < 0)
-        scrolled = 0;
+        if (scrolled > p1->width) scrolled = p1->width;
+        if (scrolled < 0) scrolled = 0;
 
-        for ( x=0 ; x<ORIGWIDTH  ; x++)
+        for (x = 0 ; x < p1->width; x++)
         {
-            if (x+scrolled < ORIGWIDTH)
-            F_DrawPatchCol (x + wide_delta, p1, x+scrolled);
+            if (x+scrolled < p1->width)
+                F_DrawPatchCol (x + picture_delta_halved, p1, x + scrolled);
             else
-            F_DrawPatchCol (x + wide_delta, p2, x+scrolled - ORIGWIDTH);
+                F_DrawPatchCol (x + picture_delta_halved, p2, x + scrolled - p1->width);
         }
     }
     else
     {
-    //[Dasperal] Ненависть
-    switch (origwidth) {
-        default:
-        case 320: // 4:3 and 5:4
-            initialShift1 = 120;
-            initialShift2 = 120;
-            break;
-        case 418: // 16:9
-            initialShift1 = 22;
-            initialShift2 = 120;
-            break;
-        case 376: // 16:10
-            initialShift1 = 46;
-            initialShift2 = 138;
-            break;
-        case 560: // 21:9
-            initialShift1 = -240;
-            initialShift2 = 240;
-            break;
-    }
+        scrolled = (origwidth - ((signed int) finalecount-230)/2) + 1;
+        timeCorrection = p1->width * 2 - ORIGWIDTH * 2;
 
-    scrolled = (origwidth - ((signed int) finalecount - 230) / 2);
-
-    if (scrolled > origwidth) scrolled = origwidth;
-    //[Dasperal] Hack for 21:9 to escape the crash
-    if (origwidth == 560)
-    {
-        if (scrolled < 240) scrolled = 240;
-    }
-    else
-    {
+        if (scrolled > origwidth) scrolled = origwidth;
         if (scrolled < 0) scrolled = 0;
+
+        for (x = 0; x < origwidth; x++) {
+            if (x + scrolled < origwidth)
+                F_DrawPatchCol(x, p1, x + scrolled + -picture_delta);
+            else
+                F_DrawPatchCol(x, p2, x + scrolled - origwidth);
+        }
     }
 
-    for (x = 0; x < origwidth; x++) {
-        if (x + scrolled < origwidth + initialShift2)
-            F_DrawPatchCol(x, p1, x + scrolled + initialShift1);
-        else
-            F_DrawPatchCol(x, p2, x + scrolled - origwidth - initialShift2);
-    }
-    }
+    if (finalecount < 1130 + timeCorrection) return;
 
-    if (finalecount < 1130) return;
-
-    if (finalecount < 1180)
+    if (finalecount < 1180 + timeCorrection)
     {
         V_DrawShadowedPatchDoom(((ORIGWIDTH - 13 * 8) / 2) + wide_delta, (ORIGHEIGHT - 8 * 8) / 2, 
             W_CacheLumpName(DEH_String(english_language ? "END0" : "RD_END0"), PU_CACHE));
@@ -1054,7 +1030,7 @@ void F_BunnyScroll (void)
         return;
     }
 
-    stage = (finalecount-1180) / 5;
+    stage = (finalecount - (1180 + timeCorrection)) / 5;
 
     if (stage > 6)
     {
