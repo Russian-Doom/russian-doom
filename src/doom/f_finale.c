@@ -245,17 +245,17 @@ void F_Ticker (void)
             // go on to the next level
             for (i = 0 ; i < MAXPLAYERS ; i++)
             {
+                // [JN] Don't allow to skip bunny screen,
+                // and don't allow to skip by pressing "pause" button.
+                if ((gameepisode == 3 && finalestage == F_STAGE_ARTSCREEN)
+                || players[i].cmd.buttons == (BT_SPECIAL | BTS_PAUSE))
+                continue;
+
                 // [JN] Double-skip by pressing "attack" button.
                 if (players[i].cmd.buttons & BT_ATTACK && !menuactive)
                 {
                     if (!players[i].attackdown)
                     {
-                        // [JN] Don't allow to skip bunny screen,
-                        // and don't allow skipping by pressing pause button.
-                        if ((gameepisode == 3 && finalestage == F_STAGE_ARTSCREEN)
-                        || players->cmd.buttons & BTS_PAUSE)
-                        continue;
-    
                         if (finalecount >= 5003)
                         break;
     
@@ -274,12 +274,6 @@ void F_Ticker (void)
                 {
                     if (!players[i].usedown)
                     {
-                        // [JN] Don't allow to skip bunny screen,
-                        // and don't allow skipping by pressing pause button.
-                        if ((gameepisode == 3 && finalestage == F_STAGE_ARTSCREEN)
-                        || players->cmd.buttons & BTS_PAUSE)
-                        continue;
-    
                         if (finalecount >= 5003)
                         break;
     
