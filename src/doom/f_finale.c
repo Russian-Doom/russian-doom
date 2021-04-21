@@ -988,63 +988,63 @@ void F_DrawPatchCol (int x, patch_t *patch, int col)
 //
 void F_BunnyScroll (void)
 {
-    signed int  scrolled;
-    int         x;
-    patch_t*    p1;
-    patch_t*    p2;
-    char        name[10];
-    int	        stage;
-    static int  laststage;
-    extern boolean wide_loaded;
+    signed int          scrolled;
+    int                 x;
+    int                 initialShift1;
+    int                 initialShift2;
+    patch_t*            p1;
+    patch_t*            p2;
+    char                name[10];
+    unsigned int        stage;
+    static unsigned int laststage;
 
-    // [JN] Draw wide screen backgrounds, only for 16:9 mode.
-    if (aspect_ratio == 2 && wide_loaded)
+    p1 = W_CacheLumpName (DEH_String("PFUB2"), PU_LEVEL);
+    p2 = W_CacheLumpName (DEH_String("PFUB1"), PU_LEVEL);
+
+    V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
+
+    //[Dasperal] Ненависть
+    switch (origwidth) {
+        default:
+        case 320: // 4:3 and 5:4
+            initialShift1 = 120;
+            initialShift2 = 120;
+            break;
+        case 418: // 16:9
+            initialShift1 = 22;
+            initialShift2 = 120;
+            break;
+        case 376: // 16:10
+            initialShift1 = 46;
+            initialShift2 = 138;
+            break;
+        case 560: // 21:9
+            initialShift1 = -240;
+            initialShift2 = 240;
+            break;
+    }
+
+    scrolled = (origwidth - ((signed int) finalecount - 230) / 2);
+
+    if (scrolled > origwidth) scrolled = origwidth;
+    //[Dasperal] Hack for 21:9 to escape the crash
+    if (origwidth == 560)
     {
-        p1 = W_CacheLumpName (DEH_String("PFUB2WD"), PU_LEVEL);
-        p2 = W_CacheLumpName (DEH_String("PFUB1WD"), PU_LEVEL);
-
-        V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
-
-        scrolled = (origwidth - ((signed int) finalecount-230)/2);
-
-        if (scrolled > origwidth)
-        scrolled = origwidth;
-        if (scrolled < 0)
-        scrolled = 0;
-
-        for ( x=0 ; x<origwidth  ; x++)
-        {
-            if (x+scrolled < origwidth)
-            F_DrawPatchCol (x, p1, x+scrolled);
-            else
-            F_DrawPatchCol (x, p2, x+scrolled - origwidth);
-        }
+        if (scrolled < 240) scrolled = 240;
     }
     else
     {
-        p1 = W_CacheLumpName (DEH_String("PFUB2"), PU_LEVEL);
-        p2 = W_CacheLumpName (DEH_String("PFUB1"), PU_LEVEL);
-
-        V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
-
-        scrolled = (ORIGWIDTH - ((signed int) finalecount-230)/2);
-
-        if (scrolled > ORIGWIDTH)
-        scrolled = ORIGWIDTH;
-        if (scrolled < 0)
-        scrolled = 0;
-
-        for ( x=0 ; x<ORIGWIDTH  ; x++)
-        {
-            if (x+scrolled < ORIGWIDTH)
-            F_DrawPatchCol (x + wide_delta, p1, x+scrolled);
-            else
-            F_DrawPatchCol (x + wide_delta, p2, x+scrolled - ORIGWIDTH);
-        }
+        if (scrolled < 0) scrolled = 0;
     }
 
-    if (finalecount < 1130)
-    return;
+    for (x = 0; x < origwidth; x++) {
+        if (x + scrolled < origwidth + initialShift2)
+            F_DrawPatchCol(x, p1, x + scrolled + initialShift1);
+        else
+            F_DrawPatchCol(x, p2, x + scrolled - origwidth - initialShift2);
+    }
+
+    if (finalecount < 1130) return;
 
     if (finalecount < 1180)
     {
