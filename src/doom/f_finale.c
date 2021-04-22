@@ -997,7 +997,7 @@ void F_BunnyScroll (void)
     char                name[10];
     unsigned int        stage;
     static unsigned int laststage;
-    const int           pfub2_replaced = W_CheckMultipleLumps("PFUB2") > 2;
+    const int           pfub2_replaced = (W_CheckMultipleLumps("PFUB2") > 2 || gamevariant == freedoom);
 
     p1 = W_CacheLumpName (DEH_String("PFUB2"), PU_LEVEL);
     p2 = W_CacheLumpName (DEH_String("PFUB1"), PU_LEVEL);
