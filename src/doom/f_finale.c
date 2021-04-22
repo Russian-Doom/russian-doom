@@ -997,12 +997,34 @@ void F_BunnyScroll (void)
     char                name[10];
     unsigned int        stage;
     static unsigned int laststage;
+    const int           pfub2_replaced = W_CheckMultipleLumps("PFUB2") > 2;
 
     p1 = W_CacheLumpName (DEH_String("PFUB2"), PU_LEVEL);
     p2 = W_CacheLumpName (DEH_String("PFUB1"), PU_LEVEL);
 
     V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
+    // [JN] Check if we are using standard 320x200 patch for PFUB2.
+    // If we do, then use original scrolling code.
+    if (pfub2_replaced && p2->width == 320)
+    {
+        scrolled = (ORIGWIDTH - ((signed int) finalecount-230)/2);
+
+        if (scrolled > ORIGWIDTH)
+        scrolled = ORIGWIDTH;
+        if (scrolled < 0)
+        scrolled = 0;
+
+        for ( x=0 ; x<ORIGWIDTH  ; x++)
+        {
+            if (x+scrolled < ORIGWIDTH)
+            F_DrawPatchCol (x + wide_delta, p1, x+scrolled);
+            else
+            F_DrawPatchCol (x + wide_delta, p2, x+scrolled - ORIGWIDTH);
+        }
+    }
+    else
+    {
     //[Dasperal] Ненависть
     switch (origwidth) {
         default:
@@ -1042,6 +1064,7 @@ void F_BunnyScroll (void)
             F_DrawPatchCol(x, p1, x + scrolled + initialShift1);
         else
             F_DrawPatchCol(x, p2, x + scrolled - origwidth - initialShift2);
+    }
     }
 
     if (finalecount < 1130) return;
