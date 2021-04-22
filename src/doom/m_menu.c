@@ -4802,7 +4802,7 @@ void M_RD_Draw_Audio_System(void)
         // Качество звучания
         //
         dp_translation = cr[CR_GOLD];
-        M_WriteTextSmall_RUS(35 + wide_delta, 55, "rfxfcndj pdexfybz");
+        M_WriteTextSmall_RUS(35 + wide_delta, 55, "rfxtcndj pdexfybz");
         dp_translation = NULL;
 
         // Частота дискретизации (ГЦ)
