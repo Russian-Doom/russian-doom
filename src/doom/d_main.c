@@ -276,7 +276,6 @@ boolean fastparm;    // checkparm of -fast
 
 boolean scaled_sky = false; // [JN] Boolean for sky scaling
 boolean old_godface; // [JN] Boolean for extra faces while in GOD mode
-boolean wide_loaded = false; // [JN] Boolen only for wide bunny screen
 boolean pfub2_replaced = false; // [JN] Check if we have a replaced PFUB2 gfx
 boolean realframe, skippsprinterp; // [JN] Interpolation for weapon bobbing
 
@@ -1936,21 +1935,6 @@ void D_SetGameDescription(void)
     else
     {
         old_godface = false;
-    }
-
-    // [JN] Wide screen: check for modified bunny backgrounds.
-    // If modified, use old scrolling code for 320x200 screens
-    // and modified backgrounds.
-    // If not modified, use wide scrolling code 426x200 and
-    // wide bunny backgrounds. See F_BunnyScroll (f_finale.c).
-    if (aspect_ratio >= 2 && ((W_CheckMultipleLumps("PFUB1") > 1 || W_CheckMultipleLumps("PFUB2") > 1
-    ||  gamevariant == freedoom)))
-    {
-        wide_loaded = false;
-    }
-    else
-    {
-        wide_loaded = true;
     }
 
     // [JN] Check if we are using standard 320x200 patch for PFUB2.
