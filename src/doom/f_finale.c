@@ -997,16 +997,16 @@ void F_BunnyScroll (void)
     char                name[10];
     unsigned int        stage;
     static unsigned int laststage;
-    const int           pfub2_replaced = (W_CheckMultipleLumps("PFUB2") > 2 || gamevariant == freedoom);
+    extern boolean      pfub2_replaced;
 
     p1 = W_CacheLumpName (DEH_String("PFUB2"), PU_LEVEL);
     p2 = W_CacheLumpName (DEH_String("PFUB1"), PU_LEVEL);
 
     V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
-    // [JN] Check if we are using standard 320x200 patch for PFUB2.
-    // If we do, then use original scrolling code.
-    if (pfub2_replaced && p2->width == 320)
+    // [JN] If we are using standard 320x200 patch for PFUB2, 
+    // then use original scrolling code.
+    if (pfub2_replaced)
     {
         scrolled = (ORIGWIDTH - ((signed int) finalecount-230)/2);
 
