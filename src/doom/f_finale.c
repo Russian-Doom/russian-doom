@@ -990,7 +990,7 @@ void F_BunnyScroll (void)
     if (picture_delta >= 0)
     {
         scrolled = (p1->width - ((signed int) finalecount-230)/2);
-        timeCorrection = origwidth * 2 - ORIGWIDTH * 2;
+        timeCorrection = p1->width * 2 - ORIGWIDTH * 2;
 
         if (scrolled > p1->width) scrolled = p1->width;
         if (scrolled < 0) scrolled = 0;
@@ -1006,7 +1006,7 @@ void F_BunnyScroll (void)
     else
     {
         scrolled = (origwidth - ((signed int) finalecount-230)/2) + 1;
-        timeCorrection = p1->width * 2 - ORIGWIDTH * 2;
+        timeCorrection = origwidth * 2 - ORIGWIDTH * 2;
 
         if (scrolled > origwidth) scrolled = origwidth;
         if (scrolled < 0) scrolled = 0;
