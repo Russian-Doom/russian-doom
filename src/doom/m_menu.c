@@ -991,8 +991,7 @@ void M_RD_Draw_Menu_Background (void)
 void M_RD_Jaguar_Menu_Background(void)
 {
     inhelpscreens = true;
-    V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-    V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE));
+    V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
 }
 
 

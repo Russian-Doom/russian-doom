@@ -463,13 +463,7 @@ void F_TextWrite (void)
         // Leaving MAP23, end game. Special background.
         if (gamemap == 23)
         {
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Wide screen: clean up wide screen remainings before drawing.
-                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-            }
-
-            V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
+            V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE), false);
         }
     }
     // [JN] Draw special background on entering Wolfenstein and Grosse levels
@@ -478,24 +472,12 @@ void F_TextWrite (void)
         // [JN] Leaving MAP15, entering MAP31: blue Wolfenstein 3D background.
         if (gamemap == 15)
         {
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Wide screen: clean up wide screen remainings before drawing.
-                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-            }
-
             V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("WLFBACK1"), PU_CACHE), false);
         }
 
         // Leaving MAP31, entering MAP32: red Wolfenstein 3D background.
         if (gamemap == 31)
         {
-            if (aspect_ratio >= 2)
-            {
-                // [JN] Wide screen: clean up wide screen remainings before drawing.
-                V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-            }
-
             V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("WLFBACK2"), PU_CACHE), false);
         }
     }
@@ -913,12 +895,6 @@ void F_CastDrawer (void)
     spritedef_t    *sprdef;
     spriteframe_t  *sprframe;
 
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: clean up wide screen remainings before drawing.
-        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-    }
-
     // erase the entire screen to a background
     if (!english_language && logical_gamemission == pack_plut)
     V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("BOSSBACP"), PU_CACHE), false);
@@ -1100,14 +1076,10 @@ void F_BunnyScroll (void)
 
 static void F_ArtScreenDrawer(void)
 {
-    if (aspect_ratio >= 2)
-    {
-        // [JN] Wide screen: clean up wide screen remainings before drawing.
-        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-    }
-
     if (gameepisode == 3)
     {
+        // [JN] Clean up wide screen remainings before drawing.
+        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
         F_BunnyScroll();
     }
     else
@@ -1226,13 +1198,7 @@ void F_TextWriteJaguar (void)
 
     if (gamemap == 23)  // Leaving MAP23, end game. Special background.
     {
-        if (aspect_ratio >= 2)
-        {
-            // Clean up remainings of the wide screen before drawing
-            V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-        }
-
-        V_DrawPatch (wide_delta, 0, W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE));
+        V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE), false);
     }
 
     // draw some of the text onto the screen
@@ -1456,14 +1422,8 @@ void F_CastDrawerJaguar (void)
     int              lump;
     patch_t         *patch;
 
-    if (aspect_ratio >= 2)
-    {
-        // Clean up remainings of the wide screen before drawing
-        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
-    }
-
     // erase the entire screen to a background
-    V_DrawPatch (0 + wide_delta, 0, W_CacheLumpName (DEH_String("VICPIC"), PU_CACHE));
+    V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("VICPIC"), PU_CACHE), false);
 
     F_CastPrintJaguar (DEH_String(english_language ?
                                   castorder_jaguar[castnum].name :

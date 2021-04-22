@@ -1939,6 +1939,7 @@ void D_SetGameDescription(void)
 
     // [JN] Check if we are using standard 320x200 patch for PFUB2.
     // If we do, then original scrolling code will be used in F_BunnyScroll.
+    if (gamemission != jaguar && gamemode != pressbeta)
     {
         const patch_t* pfub2 = W_CacheLumpName (DEH_String("PFUB2"), PU_STATIC);
 
