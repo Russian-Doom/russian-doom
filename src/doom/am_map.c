@@ -112,9 +112,6 @@
 #define CXMTOF(x) (f_x + MTOF((x)-m_x))
 #define CYMTOF(y) (f_y + (f_h - MTOF((y)-m_y)))
 
-// the following is crap
-#define LINE_NEVERSEE ML_DONTDRAW
-
 
 typedef struct
 {
@@ -280,7 +277,7 @@ static byte antialias[42][8] = {
     { 96,  97,  98,  99, 100, 101, 102, 103},   //  2.  TSWALLCOLORS
     {231, 160, 161, 162, 163, 164, 165, 166},   //  3.  CDWALLCOLORS
     {176, 177, 178, 179, 180, 181, 182, 183},   //  4.  SECRETWALLCOLORS
-    { 99, 100, 101, 102, 103, 104, 105, 106},   //  5.  GRAYS+3 (LINE_NEVERSEE)
+    { 99, 100, 101, 102, 103, 104, 105, 106},   //  5.  GRAYS+3 (ML_DONTDRAW)
     // Boom colors:
     { 23,  24,  25,  26,  27,  28,  29,  30},   //  6.  One-sided wall
     {119, 120, 121, 122, 123, 124, 125, 126},   //  7.  Various teleporters
@@ -310,7 +307,7 @@ static byte antialias[42][8] = {
     {203, 204, 205, 206, 207, 240, 241, 242},   // 28. floor level change
     {195, 196, 197, 198, 199, 200, 201, 202},   // 29. ceiling level change
     { 98,  99, 100, 101, 102, 103, 104, 105},   // 30. One-sided wall (cheating)
-    {102, 103, 104, 105, 106, 107, 108, 109},   // 31. One-sided wall (LINE_NEVERSEE)
+    {102, 103, 104, 105, 106, 107, 108, 109},   // 31. One-sided wall (ML_DONTDRAW)
     // Unity colors:
     {184, 185, 186, 187, 188, 189, 190, 191},   // 32. One sided wall / secret door
     { 81,  83,  85,  87,  88,  90,  92,  94},   // 33. Various doors
@@ -1294,7 +1291,7 @@ void AM_drawFline (fline_t* fl, int color)
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[24][0]), 8, 3);
             if (color == 133)   // ceiling level change
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[25][0]), 8, 3);
-            if (color == 99)    // ceiling level change, cheating (using GRAYS+3 (LINE_NEVERSEE))
+            if (color == 99)    // ceiling level change, cheating (using GRAYS+3 (ML_DONTDRAW))
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[5][0]), 8, 3);
         }
         // Strife colors:
@@ -1312,7 +1309,7 @@ void AM_drawFline (fline_t* fl, int color)
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[29][0]), 8, 3);
             if (color == 98)    // One-sided wall (cheating)
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[30][0]), 8, 3);
-            if (color == 102)   // One-sided wall (LINE_NEVERSEE)
+            if (color == 102)   // One-sided wall (ML_DONTDRAW)
                 DrawWuLine(fl->a.x, fl->a.y, fl->b.x, fl->b.y, (&antialias[31][0]), 8, 3);
         }
         // Unity colors:
@@ -1898,7 +1895,7 @@ void AM_drawWalls(int automap_color_set)
                 }
                 else if (plr->powers[pw_allmap])
                 {
-                    if (!(lines[i].flags & LINE_NEVERSEE)) AM_drawMline(&l, GRAYS+3);
+                    if (!(lines[i].flags & ML_DONTDRAW)) AM_drawMline(&l, GRAYS+3);
                 }
                 break;
             }
@@ -1966,7 +1963,7 @@ void AM_drawWalls(int automap_color_set)
                 }
                 else if (plr->powers[pw_allmap])
                 {
-                    if (!(lines[i].flags & LINE_NEVERSEE))
+                    if (!(lines[i].flags & ML_DONTDRAW))
                     {
                         AM_drawMline(&l, 99);
                     }
@@ -2024,7 +2021,7 @@ void AM_drawWalls(int automap_color_set)
                 }
                 else if (plr->powers[pw_allmap])
                 {
-                    if (!(lines[i].flags & LINE_NEVERSEE))
+                    if (!(lines[i].flags & ML_DONTDRAW))
                     {
                         AM_drawMline(&l, 102);
                     }
@@ -2038,7 +2035,7 @@ void AM_drawWalls(int automap_color_set)
             {
                 if (cheating || (lines[i].flags & ML_MAPPED))
                 {
-                    if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
+                    if ((lines[i].flags & ML_DONTDRAW) && !cheating)
                     {
                         continue;
                     }
@@ -2116,7 +2113,7 @@ void AM_drawWalls(int automap_color_set)
                 // [JN] Computermap visible lines
                 else if (plr->powers[pw_allmap])
                 {
-                    if (!(lines[i].flags & LINE_NEVERSEE)) AM_drawMline(&l, 104);
+                    if (!(lines[i].flags & ML_DONTDRAW)) AM_drawMline(&l, 104);
                 }
                 break;
             }
@@ -2127,7 +2124,7 @@ void AM_drawWalls(int automap_color_set)
             {
                 if (cheating || (lines[i].flags & ML_MAPPED))
                 {
-                    if ((lines[i].flags & LINE_NEVERSEE) && !cheating)
+                    if ((lines[i].flags & ML_DONTDRAW) && !cheating)
                     {
                         continue;
                     }
@@ -2166,7 +2163,7 @@ void AM_drawWalls(int automap_color_set)
                 }
                 else if (plr->powers[pw_allmap])
                 {
-                    if (!(lines[i].flags & LINE_NEVERSEE)) AM_drawMline(&l, GRAYS+3);
+                    if (!(lines[i].flags & ML_DONTDRAW)) AM_drawMline(&l, GRAYS+3);
                 }
                 break;
             }
