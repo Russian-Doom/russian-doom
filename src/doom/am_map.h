@@ -45,6 +45,9 @@ void AM_Drawer (void);
 // if the level is completed while it is up.
 void AM_Stop (void);
 
+// [JN] Automap color scheme init.
+// Called at game startup or when scheme is changed.
+void AM_initColors (void);
 
 extern cheatseq_t cheat_amap;
 

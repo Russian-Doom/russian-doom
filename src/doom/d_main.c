@@ -75,6 +75,7 @@
 #include "p_setup.h"
 #include "r_local.h"
 #include "d_main.h"
+#include "am_map.h"         // [JN] AM_initColors();
 #include "jn.h"
 
 
@@ -3027,6 +3028,9 @@ void D_DoomMain (void)
                "ST_Init: Init status bar.\n" :
                "ST_Init: Инициализация строки состояния.\n");
     ST_Init ();
+
+    // [JN] Predifine automap color scheme.
+    AM_initColors();
 
     // If Doom II without a MAP01 lump, this is a store demo.
     // Moved this here so that MAP01 isn't constantly looked up

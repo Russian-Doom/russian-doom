@@ -48,6 +48,7 @@
 #include "p_local.h"
 #include "st_stuff.h"
 #include "v_trans.h"
+#include "am_map.h"         // [JN] AM_initColors();
 
 #include "rd_keybinds.h"
 #include "rd_lang.h"
@@ -4348,6 +4349,9 @@ void M_RD_Change_AutomapColor(int choice)
             automap_color = 0;
         break;
     }
+
+    // [JN] Reinitialize automap color scheme.
+    AM_initColors();
 }
 
 void M_RD_Change_AutomapAntialias(int choice)
