@@ -65,6 +65,7 @@ void ST_Init (void);
 void ST_refreshBackground (void);
 void ST_drawWidgets (boolean refresh);
 void ST_doRefresh (void);
+void ST_createWidgets (void);
 
 
 // States for status bar code.

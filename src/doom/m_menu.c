@@ -7759,7 +7759,6 @@ void M_RD_BackToDefaults_Original(int choice)
 
 void M_RD_ChangeLanguage(int choice)
 {
-    extern void ST_Stop(void);
     extern void HU_Stop(void);
     extern void F_CastDrawer(void);
     extern void F_CastDrawerJaguar(void);
