@@ -7793,7 +7793,9 @@ void M_RD_ChangeLanguage(int choice)
         HU_Start();
 
         // Update status bar
-        ST_Start();
+        ST_doRefresh();
+        // Update ARMS/FRAGS widget
+        ST_createWidgets(); 
     }
 
     // Update finale sequence
