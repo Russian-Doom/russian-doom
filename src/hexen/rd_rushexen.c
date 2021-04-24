@@ -717,6 +717,9 @@ const int delayTable[][2] = {
     {   70,   128  }, // 13 Hexen_DK_Map_54 : Multi line prints
 };
 
+// [JN] Shutup GCC warning about missing braces around initializer.
+#pragma GCC diagnostic ignored "-Wmissing-braces"
+
 const CMDInjectionRecord_t Hexen_Map_02_CMDInjectionTable[] = {
     RECORD(0xFC4, CMD_TABLE_DELAY_DIRECT, 0), //Korax: GREETINGS delay
     RECORD(0xFF4, CMD_TABLE_DELAY_DIRECT, 0), //Korax: READY delay
@@ -884,6 +887,9 @@ const CMDInjectionRecord_t Hexen_DK_Map_59_CMDInjectionTable[] = {
     //End of shrinked print
     {0, 0, 0} //Important!
 };
+
+#pragma GCC diagnostic pop 
+// [JN] ENDOF #pragma GCC diagnostic ignored "-Wmissing-braces"
 
 const char** stringTables[] = {
     NULL, //MAP00
