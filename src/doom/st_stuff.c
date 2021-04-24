@@ -797,7 +797,7 @@ boolean ST_Responder (event_t* ev)
                         P_GivePower( plyr, i);
                         plyr->message_system = DEH_String(ststr_beholdx); // [JN] Активирован
                     }
-                    else if (i!=pw_strength)
+                    else if (i!=pw_strength && i!=pw_allmap) // [crispy] disable full Automap
                     {
                         plyr->powers[i] = 1;
                         plyr->message_system = DEH_String(ststr_beholdz); // [JN] Деактивирован
