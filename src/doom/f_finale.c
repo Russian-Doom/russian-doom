@@ -430,31 +430,14 @@ void F_Ticker (void)
 //
 void F_TextWrite (void)
 {
-    int    x,y,w;
+    int    w;
     int    cx;
     int    cy;
     char  *ch;
-    byte  *src;
-    byte  *dest;
     signed int count;
 
-    // erase the entire screen to a tiled background
-    src = W_CacheLumpName ( finaleflat , PU_CACHE);
-    dest = I_VideoBuffer;
-
-    for (y = 0 ; y < SCREENHEIGHT ; y++)
-    {
-        for (x = 0 ; x < screenwidth/64 ; x++)
-        {
-            memcpy(dest, src + ((y&63)<<6), 64);
-            dest += 64;
-        }
-        if (screenwidth & 63)
-        {
-            memcpy(dest, src + ((y&63)<<6), screenwidth&63);
-            dest += (screenwidth&63);
-        }
-    }
+    // [JN] Erase the entire screen to a tiled background.
+    V_FillFlat (finaleflat);
 
     V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
 
@@ -1171,35 +1154,12 @@ void F_Drawer (void)
 //
 void F_TextWriteJaguar (void)
 {
-    byte       *src, *dest;
-    int         x, y, w, cx, cy;
+    int         w, cx, cy;
     signed int  count;
     char       *ch;
 
-    // erase the entire screen to a tiled background
-    src = W_CacheLumpName(finaleflat, PU_CACHE);
-    dest = I_VideoBuffer;
-
-    for (y=0 ; y<SCREENHEIGHT ; y++)
-    {
-        for (x=0 ; x<screenwidth/64 ; x++)
-        {
-            memcpy (dest, src+((y&63)<<6), 64);
-            dest += 64;
-        }
-        if (screenwidth&63)
-        {
-            memcpy (dest, src+((y&63)<<6), screenwidth&63);
-            dest += (screenwidth&63);
-        }
-    }
-
-    V_MarkRect (0, 0, screenwidth, SCREENHEIGHT);
-
-    if (gamemap == 23)  // Leaving MAP23, end game. Special background.
-    {
-        V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE), false);
-    }
+    // Leaving MAP23, end game. Special background.
+    V_DrawPatchFullScreen (W_CacheLumpName (DEH_String("ENDPIC"), PU_CACHE), false);
 
     // draw some of the text onto the screen
     cx = 10;

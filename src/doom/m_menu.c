@@ -958,44 +958,6 @@ void M_WriteTextSmallCentered_RUS (int y, char *string)
 }
 
 
-// -----------------------------------------------------------------------------
-// M_RD_Draw_Menu_Background
-//
-// [JN] Draws menu background using FLOOR4_8 flat graphics.
-// -----------------------------------------------------------------------------
-
-void M_RD_Draw_Menu_Background (void)
-{
-    byte *src = W_CacheLumpName (DEH_String("FLOOR4_8"), PU_CACHE);
-    byte *dest;
-    int x, y;
-
-    dest = I_VideoBuffer;
-
-    for (y = 0; y < SCREENHEIGHT; y++)
-    {
-        for (x = 0; x < screenwidth; x++)
-        {
-            *dest++ = src[(y & 63) * 64 + (x & 63)];
-        }
-    }
-
-    inhelpscreens = true;
-}
-
-// -----------------------------------------------------------------------------
-// M_RD_Jaguar_Menu_Background
-//
-// [JN] Draws INTERPIC graphics as a background. Used only in Jaguar Doom.
-// -----------------------------------------------------------------------------
-
-void M_RD_Jaguar_Menu_Background(void)
-{
-    inhelpscreens = true;
-    V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
-}
-
-
 // =============================================================================
 // DOOM MENU
 // =============================================================================
@@ -5246,7 +5208,9 @@ void M_RD_Draw_Bindings()
     key_page_t *keyPage = getCurrentKeyPage();
     int x = (english_language ? 209 : 210);
 
-    M_RD_Draw_Menu_Background();
+    // [JN] Erase the entire screen to a tiled background.
+    inhelpscreens = true;
+    V_FillFlat ("FLOOR4_8");
 
     if (english_language)
         M_WriteTextBigCentered_ENG(5, "Keyboard bindings");
@@ -5369,7 +5333,9 @@ void M_RD_Draw_Mouse_Bindings(void)
 {
     int x = 186;
     
-    M_RD_Draw_Menu_Background();
+    // [JN] Erase the entire screen to a tiled background.
+    inhelpscreens = true;
+    V_FillFlat ("FLOOR4_8");
 
     if (english_language)
     {
@@ -5657,7 +5623,10 @@ void M_RD_Draw_Gameplay_1(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
-    M_RD_Jaguar_Menu_Background();
+    {
+        inhelpscreens = true;
+        V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
+    }
 
     if (english_language)
     {
@@ -5807,7 +5776,10 @@ void M_RD_Draw_Gameplay_2(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
-    M_RD_Jaguar_Menu_Background();
+    {
+        inhelpscreens = true;
+        V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
+    }
 
     if (english_language)
     {
@@ -5947,7 +5919,10 @@ void M_RD_Draw_Gameplay_3(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
-    M_RD_Jaguar_Menu_Background();
+    {
+        inhelpscreens = true;
+        V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
+    }
 
     if (english_language)
     {
@@ -6117,7 +6092,10 @@ void M_RD_Draw_Gameplay_4(void)
 {   
     // Jaguar: hide game background, don't draw lines over the HUD
     if (gamemission == jaguar)
-    M_RD_Jaguar_Menu_Background();
+    {
+        inhelpscreens = true;
+        V_DrawPatchFullScreen(W_CacheLumpName(DEH_String("INTERPIC"), PU_CACHE), false);
+    }
 
     if (english_language)
     {
@@ -6592,7 +6570,9 @@ void M_RD_Draw_Level_1 (void)
 {
     static char num[4];
 
-    M_RD_Draw_Menu_Background();
+    // [JN] Erase the entire screen to a tiled background.
+    inhelpscreens = true;
+    V_FillFlat ("FLOOR4_8");
 
     if (english_language)
     {
@@ -6908,7 +6888,9 @@ void M_RD_Draw_Level_2 (void)
 {
     static char num[4];
 
-    M_RD_Draw_Menu_Background();
+    // [JN] Erase the entire screen to a tiled background.
+    inhelpscreens = true;
+    V_FillFlat ("FLOOR4_8");
 
     if (english_language)
     {

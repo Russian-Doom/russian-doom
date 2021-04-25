@@ -1196,6 +1196,27 @@ void V_DrawPatchFinale(int x, int y, patch_t *patch)
     }
 }
 
+// -----------------------------------------------------------------------------
+// [JN] V_FillFlat
+// Fills background with given flat, with support for high/low detail mode.
+// -----------------------------------------------------------------------------
+
+void V_FillFlat (char *lump)
+{
+    int x, y;
+    extern int detailshift;
+    byte *src = W_CacheLumpName (DEH_String(lump), PU_CACHE);
+    byte *dest = I_VideoBuffer;
+
+    for (y = 0; y < SCREENHEIGHT; y++)
+    {
+        for (x = 0; x < screenwidth; x++)
+        {
+            *dest++ = src[(((y >> detailshift) & 63) << 6) + ((x >> detailshift) & 63)];
+        }
+    }
+}
+
 //
 // Load tint table from TINTTAB lump.
 //
