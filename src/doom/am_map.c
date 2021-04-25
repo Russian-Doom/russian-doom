@@ -2260,6 +2260,8 @@ void AM_drawPlayers(void)
     static int  their_colors[] = { GREENS, GRAYS, BROWNS, REDS };
     mpoint_t    pt;
     player_t   *p;
+    // [JN] Smooth player arrow rotation:
+    const angle_t smoothangle = automap_rotate ? plr->mo->angle : viewangle;
 
     if (!netgame)
     {
@@ -2276,19 +2278,19 @@ void AM_drawPlayers(void)
             // [JN] Jaguar Doom: draw dark green, blinking arrow.
             if (leveltime & 8)
             AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0, 
-                                 plr->mo->angle, GREEN_JAGUAR, pt.x, pt.y);
+                                 smoothangle, GREEN_JAGUAR, pt.x, pt.y);
         }
         else
         {
             if (cheating)
             {
                 AM_drawLineCharacter(cheat_player_arrow, arrlen(cheat_player_arrow), 0,
-                                     plr->mo->angle, WHITE, pt.x, pt.y);
+                                     smoothangle, WHITE, pt.x, pt.y);
             }
             else
             {
                 AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0,
-                                     plr->mo->angle, WHITE, pt.x, pt.y);
+                                     smoothangle, WHITE, pt.x, pt.y);
             }
         }
         
