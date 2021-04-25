@@ -843,12 +843,11 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_STRING(video_driver),
 
     //!
-    // Position of the window on the screen when running in windowed
-    // mode. Accepted values are: "" (empty string) - don't care,
-    // "center" - place window at center of screen, "x,y" - place
-    // window at the specified coordinates.
+    // [JN] Window X and Y position to save and restore.
+    //
 
-    CONFIG_VARIABLE_STRING(window_position),
+    CONFIG_VARIABLE_INT(window_position_x),
+    CONFIG_VARIABLE_INT(window_position_y),
 
 #ifdef FEATURE_MULTIPLAYER
 

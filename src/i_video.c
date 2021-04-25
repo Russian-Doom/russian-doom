@@ -127,9 +127,10 @@ int png_screenshots = 1; // [JN] Crispy!
 
 char *video_driver = "";
 
-// Window position:
+// [JN] Window X and Y position to save and restore.
 
-static char *window_position = "center";
+int window_position_y = 0;
+int window_position_x = 0;
 
 // [JN] Use bordered or borderless window.
 
@@ -429,6 +430,8 @@ static void HandleWindowEvent(SDL_WindowEvent *event)
             {
                 video_display = i;
             }
+            // [JN] Get X and Y coordinates after moving a window.
+            SDL_GetWindowPosition(screen, &window_position_x, &window_position_y);
             break;
 
         default:
@@ -1242,50 +1245,10 @@ static void CenterWindow(int *x, int *y, int w, int h)
     *y = bounds.y + SDL_max((bounds.h - h) / 2, 0);
 }
 
-static void GetWindowPosition(int *x, int *y, int w, int h)
-{
-    // in fullscreen mode, the window "position" still matters, because
-    // we use it to control which display we run fullscreen on.
-
-    if (fullscreen)
-    {
-        CenterWindow(x, y, w, h);
-        return;
-    }
-    
-    // in windowed mode, the desired window position can be specified
-    // in the configuration file.
-
-    if (window_border == false)
-    {
-        // [JN] Use zero window coords if running in borderless window.
-        *x = *y = 0;
-    }
-    else if (window_position == NULL || !strcmp(window_position, ""))
-    {
-        *x = *y = SDL_WINDOWPOS_UNDEFINED;
-    }
-    else if (!strcmp(window_position, "center"))
-    {
-        // Note: SDL has a SDL_WINDOWPOS_CENTER, but this is useless for our
-        // purposes, since we also want to control which display we appear on.
-        // So we have to do this ourselves.
-        CenterWindow(x, y, w, h);
-    }
-    else if (sscanf(window_position, "%i,%i", x, y) != 2)
-    {
-        // invalid format: revert to default
-        fprintf(stderr, english_language ?
-                "GetWindowPosition: invalid window_position setting\n" :
-                "GetWindowPosition: некорректное значение window_position\n");
-        *x = *y = SDL_WINDOWPOS_UNDEFINED;
-    }
-}
-
 static void SetVideoMode(void)
 {
     int w, h;
-    int x, y;
+    int x = 0, y = 0;
     unsigned int rmask, gmask, bmask, amask;
     int bpp;
     int window_flags = 0, renderer_flags = 0;
@@ -1318,7 +1281,20 @@ static void SetVideoMode(void)
         }
     }
     
-    GetWindowPosition(&x, &y, w, h);
+    // in fullscreen mode, the window "position" still matters, because
+    // we use it to control which display we run fullscreen on.
+    if (fullscreen)
+    {
+        CenterWindow(&x, &y, w, h);
+    }
+
+    // [JN] If window X and Y coords was not set,
+    // place game window in the center of the screen.
+    if (window_position_x == 0 || window_position_y == 0)
+    {
+        window_position_x = x/2 + w/2;
+        window_position_y = y/2 + h/2;
+    }
 
     // Create window and renderer contexts. We set the window title
     // later anyway and leave the window position "undefined". If
@@ -1327,7 +1303,11 @@ static void SetVideoMode(void)
 
     if (screen == NULL)
     {
-        screen = SDL_CreateWindow(NULL, x, y, w, h, window_flags);
+        // [JN] If we are running in borderless mode, 
+        // place game window in the top-left corner of the screen.
+        screen = SDL_CreateWindow(NULL, window_border == 0 ? 0 : window_position_x,
+                                        window_border == 0 ? 0 : window_position_y,
+                                        w, h, window_flags);
 
         if (screen == NULL)
         {
@@ -1763,7 +1743,8 @@ void I_BindVideoVariables(void)
     M_BindIntVariable("window_border",             &window_border);
     M_BindIntVariable("grabmouse",                 &grabmouse);
     M_BindStringVariable("video_driver",           &video_driver);
-    M_BindStringVariable("window_position",        &window_position);
+    M_BindIntVariable("window_position_x",         &window_position_x);
+    M_BindIntVariable("window_position_y",         &window_position_y);
     M_BindIntVariable("usegamma",                  &usegamma);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
 }
