@@ -54,7 +54,7 @@ m_misc.c             m_misc.h
 # @PROGRAM_PREFIX@server_SOURCES=$(COMMON_SOURCE_FILES) $(DEDSERV_FILES)
 # @PROGRAM_PREFIX@server_LDADD = @LDFLAGS@ @SDLNET_LIBS@
 
-# Source files used by the game binaries (chocolate-doom, etc.)
+# Source files used by the game binaries (russian-doom, etc.)
 
 GAME_SOURCE_FILES=\
 d_event.c            d_event.h             \

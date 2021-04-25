@@ -19,7 +19,7 @@
 
 // [crispy] adapted from smmu/r_ripple.c, by Simon Howard
 
-#include <doomstat.h>
+#include "doomstat.h"
 #include <tables.h>
 
 #include <i_system.h>
