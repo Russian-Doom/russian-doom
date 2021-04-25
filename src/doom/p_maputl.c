@@ -60,43 +60,15 @@ P_AproxDistance
 // P_PointOnLineSide
 // Returns 0 or 1
 //
-int
-P_PointOnLineSide
-( fixed_t	x,
-  fixed_t	y,
-  line_t*	line )
+// [JN] killough 5/3/98: reformatted, cleaned up
+int P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line)
 {
-    fixed_t	dx;
-    fixed_t	dy;
-    fixed_t	left;
-    fixed_t	right;
-	
-    if (!line->dx)
-    {
-	if (x <= line->v1->x)
-	    return line->dy > 0;
-	
-	return line->dy < 0;
-    }
-    if (!line->dy)
-    {
-	if (y <= line->v1->y)
-	    return line->dx < 0;
-	
-	return line->dx > 0;
-    }
-	
-    dx = (x - line->v1->x);
-    dy = (y - line->v1->y);
-	
-    left = FixedMul ( line->dy>>FRACBITS , dx );
-    right = FixedMul ( dy , line->dx>>FRACBITS );
-	
-    if (right < left)
-	return 0;		// front side
-    return 1;			// back side
+    return
+    !line->dx ? x <= line->v1->x ? line->dy > 0 : line->dy < 0 :
+    !line->dy ? y <= line->v1->y ? line->dx < 0 : line->dx > 0 :
+    FixedMul(y-line->v1->y, line->dx>>FRACBITS) >=
+    FixedMul(line->dy>>FRACBITS, x-line->v1->x);
 }
-
 
 
 //
@@ -104,50 +76,30 @@ P_PointOnLineSide
 // Considers the line to be infinite
 // Returns side 0 or 1, -1 if box crosses the line.
 //
-int
-P_BoxOnLineSide
-( fixed_t*	tmbox,
-  line_t*	ld )
+// [JN] killough 5/3/98: reformatted, cleaned up
+int P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld)
 {
-    int		p1 = 0;
-    int		p2 = 0;
-	
-    switch (ld->slopetype)
+  switch (ld->slopetype)
     {
-      case ST_HORIZONTAL:
-	p1 = tmbox[BOXTOP] > ld->v1->y;
-	p2 = tmbox[BOXBOTTOM] > ld->v1->y;
-	if (ld->dx < 0)
-	{
-	    p1 ^= 1;
-	    p2 ^= 1;
-	}
-	break;
-	
-      case ST_VERTICAL:
-	p1 = tmbox[BOXRIGHT] < ld->v1->x;
-	p2 = tmbox[BOXLEFT] < ld->v1->x;
-	if (ld->dy < 0)
-	{
-	    p1 ^= 1;
-	    p2 ^= 1;
-	}
-	break;
-	
-      case ST_POSITIVE:
-	p1 = P_PointOnLineSide (tmbox[BOXLEFT], tmbox[BOXTOP], ld);
-	p2 = P_PointOnLineSide (tmbox[BOXRIGHT], tmbox[BOXBOTTOM], ld);
-	break;
-	
-      case ST_NEGATIVE:
-	p1 = P_PointOnLineSide (tmbox[BOXRIGHT], tmbox[BOXTOP], ld);
-	p2 = P_PointOnLineSide (tmbox[BOXLEFT], tmbox[BOXBOTTOM], ld);
-	break;
+      int p;
+    default: // shut up compiler warnings -- killough
+    case ST_HORIZONTAL:
+      return
+      (tmbox[BOXBOTTOM] > ld->v1->y) == (p = tmbox[BOXTOP] > ld->v1->y) ?
+        p ^ (ld->dx < 0) : -1;
+    case ST_VERTICAL:
+      return
+        (tmbox[BOXLEFT] < ld->v1->x) == (p = tmbox[BOXRIGHT] < ld->v1->x) ?
+        p ^ (ld->dy < 0) : -1;
+    case ST_POSITIVE:
+      return
+        P_PointOnLineSide(tmbox[BOXRIGHT], tmbox[BOXBOTTOM], ld) ==
+        (p = P_PointOnLineSide(tmbox[BOXLEFT], tmbox[BOXTOP], ld)) ? p : -1;
+    case ST_NEGATIVE:
+      return
+        (P_PointOnLineSide(tmbox[BOXLEFT], tmbox[BOXBOTTOM], ld)) ==
+        (p = P_PointOnLineSide(tmbox[BOXRIGHT], tmbox[BOXTOP], ld)) ? p : -1;
     }
-
-    if (p1 == p2)
-	return p1;
-    return -1;
 }
 
 
@@ -155,49 +107,14 @@ P_BoxOnLineSide
 // P_PointOnDivlineSide
 // Returns 0 or 1.
 //
-int
-P_PointOnDivlineSide
-( fixed_t	x,
-  fixed_t	y,
-  divline_t*	line )
+// [JN] killough 5/3/98: reformatted, cleaned up
+int P_PointOnDivlineSide (fixed_t x, fixed_t y, const divline_t *line)
 {
-    fixed_t	dx;
-    fixed_t	dy;
-    fixed_t	left;
-    fixed_t	right;
-	
-    if (!line->dx)
-    {
-	if (x <= line->x)
-	    return line->dy > 0;
-	
-	return line->dy < 0;
-    }
-    if (!line->dy)
-    {
-	if (y <= line->y)
-	    return line->dx < 0;
-
-	return line->dx > 0;
-    }
-	
-    dx = (x - line->x);
-    dy = (y - line->y);
-	
-    // try to quickly decide by looking at sign bits
-    if ( (line->dy ^ line->dx ^ dx ^ dy)&0x80000000 )
-    {
-	if ( (line->dy ^ dx) & 0x80000000 )
-	    return 1;		// (left is negative)
-	return 0;
-    }
-	
-    left = FixedMul ( line->dy>>8, dx>>8 );
-    right = FixedMul ( dy>>8 , line->dx>>8 );
-	
-    if (right < left)
-	return 0;		// front side
-    return 1;			// back side
+    return
+    !line->dx ? x <= line->x ? line->dy > 0 : line->dy < 0 :
+    !line->dy ? y <= line->y ? line->dx < 0 : line->dx > 0 :
+    (line->dy^line->dx^(x -= line->x)^(y -= line->y)) < 0 ? (line->dy^x) < 0 :
+    FixedMul(y>>8, line->dx>>8) >= FixedMul(line->dy>>8, x>>8);
 }
 
 
@@ -801,42 +718,30 @@ boolean PIT_AddThingIntercepts (mobj_t* thing)
 // Returns true if the traverser function returns true
 // for all lines.
 // 
-boolean
-P_TraverseIntercepts
-( traverser_t	func,
-  fixed_t	maxfrac )
+// [JN] killough 5/3/98: reformatted, cleaned up
+boolean P_TraverseIntercepts (traverser_t func, fixed_t maxfrac)
 {
-    int			count;
-    fixed_t		dist;
-    intercept_t*	scan;
-    intercept_t*	in;
-	
-    count = intercept_p - intercepts;
-    
-    in = 0;			// shut up compiler warning
-	
+    intercept_t *in = NULL;
+    int count = intercept_p - intercepts;
+
     while (count--)
     {
-	dist = INT_MAX;
-	for (scan = intercepts ; scan<intercept_p ; scan++)
-	{
-	    if (scan->frac < dist)
-	    {
-		dist = scan->frac;
-		in = scan;
-	    }
-	}
-	
-	if (dist > maxfrac)
-	    return true;	// checked everything in range		
+        fixed_t dist = INT_MAX;
+        intercept_t *scan;
 
-        if ( !func (in) )
-	    return false;	// don't bother going farther
+        for (scan = intercepts; scan < intercept_p; scan++)
+            if (scan->frac < dist)
+                dist = (in=scan)->frac;
 
-	in->frac = INT_MAX;
+        if (dist > maxfrac)
+            return true;    // checked everything in range
+
+        if (!func(in))
+            return false;   // don't bother going farther
+
+      in->frac = INT_MAX;
     }
-	
-    return true;		// everything was traversed
+    return true;            // everything was traversed
 }
 
 extern fixed_t bulletslope;
