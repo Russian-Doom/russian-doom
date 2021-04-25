@@ -42,10 +42,12 @@
 //
 void T_FireFlicker (fireflicker_t* flick)
 {
-    const int amount = (P_Random()&3)*16;
+    int amount;
 	
     if (--flick->count)
 	return;
+
+    amount = (P_Random()&3)*16;
 
     if (flick->sector->lightlevel - amount < flick->minlight)
 	flick->sector->lightlevel = flick->minlight;
