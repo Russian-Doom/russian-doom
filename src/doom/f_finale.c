@@ -1008,13 +1008,13 @@ void F_BunnyScroll (void)
             initialShift1 = 120;
             initialShift2 = 120;
             break;
-        case 418: // 16:9
-            initialShift1 = 22;
-            initialShift2 = 120;
+        case 426: // 16:9
+            initialShift1 = 28;
+            initialShift2 = 106;
             break;
-        case 376: // 16:10
-            initialShift1 = 46;
-            initialShift2 = 138;
+        case 384: // 16:10
+            initialShift1 = 112;
+            initialShift2 = 64;
             break;
         case 560: // 21:9
             initialShift1 = -240;

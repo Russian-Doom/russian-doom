@@ -85,14 +85,14 @@ static SDL_Rect blit_rect = {
 static SDL_Rect w_blit_rect_16_9 = {
     0,
     0,
-    WIDESCREENWIDTH - (142 << hires),
+    426 << hires,
     SCREENHEIGHT
 };
 
 static SDL_Rect w_blit_rect_16_10 = {
     0,
     0,
-    WIDESCREENWIDTH - (42 << hires),
+    384 << hires,
     SCREENHEIGHT
 };
 

@@ -1397,23 +1397,23 @@ void V_Init (void)
     else if (aspect_ratio == 2)
     {
         // 16:9
-        origwidth = WIDEORIGWIDTH - 142;
-        screenwidth = origwidth << hires;
-        wide_delta = WIDE_DELTA - 71;
+        origwidth = 426;
+        screenwidth = 426 << hires;
+        wide_delta = 53;
     }
     else if (aspect_ratio == 3)
     {
         // 16:10
-        origwidth = WIDEORIGWIDTH - 184;
-        screenwidth = origwidth << hires;
-        wide_delta = WIDE_DELTA - 92;
+        origwidth = 384;
+        screenwidth = 384 << hires;
+        wide_delta = 32;
     }
     else if (aspect_ratio == 4)
     {
         // 21:9
-        origwidth = WIDEORIGWIDTH;
-        screenwidth = origwidth << hires;
-        wide_delta = WIDE_DELTA;
+        origwidth = 560;
+        screenwidth = 560 << hires;
+        wide_delta = 120;
     }
 
     if (aspect_ratio_correct)
