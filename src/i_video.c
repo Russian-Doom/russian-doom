@@ -160,7 +160,7 @@ int fullscreen = true;
 
 // [JN] Aspect ratio variables.
 
-int aspect_ratio = 0;
+int aspect_ratio = 2;
 int aspect_ratio_temp; // used for in-game toggling
 int wide_delta;
 int screenwidth;
