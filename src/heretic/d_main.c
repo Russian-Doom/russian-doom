@@ -104,6 +104,7 @@ int english_language = 0;
 
 int show_endoom = 0;
 int level_brightness = 0; // [JN] Level brightness level
+int hud_detaillevel = 0;  // [JN] Blocky mode, 0 = high, 1 = normal
 int local_time = 0; // [JN] Local time widget
 
 // [JN] Automap specific variables.

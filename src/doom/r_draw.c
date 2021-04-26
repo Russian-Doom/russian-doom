@@ -1665,20 +1665,20 @@ void R_FillBackScreen (void)
     src = W_CacheLumpName(name, PU_CACHE); 
     dest = background_buffer;
 
-    for (y=0 ; y<SCREENHEIGHT - (gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT) ; y++) 
-    { 
-        for (x=0 ; x<screenwidth/64 ; x++) 
-        { 
-            memcpy (dest, src+((y&63)<<6), 64); 
-            dest += 64; 
-        } 
+    // [JN] Variable HUD detail level.
+    {
+        const int sbarheight = gamemission == jaguar ? SBARHEIGHT_JAG : SBARHEIGHT;
+        const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
 
-        if (screenwidth&63) 
-        { 
-            memcpy (dest, src+((y&63)<<6), screenwidth&63); 
-            dest += (screenwidth&63); 
-        } 
-    } 
+        for (int y = 0; y < SCREENHEIGHT - sbarheight; y++)
+        {
+            for (int x = 0; x < screenwidth; x++)
+            {
+                *dest++ = src[(((y >> shift_allowed) & 63) << 6) 
+                             + ((x >> shift_allowed) & 63)];
+            }
+        }
+    }
 
     // Draw screen and bezel; this is done to a separate screen buffer.
 

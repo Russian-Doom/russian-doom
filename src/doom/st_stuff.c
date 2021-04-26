@@ -438,15 +438,18 @@ void ST_refreshBackground(void)
                 byte *src;
                 byte *dest;
                 char *name = (gamemode == commercial) ? DEH_String("GRNROCK") : DEH_String("FLOOR7_2");
+                const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
         
                 src = W_CacheLumpName(name, PU_CACHE);
                 dest = st_backing_screen;
         
+                // [JN] Variable HUD detail level.
                 for (y = SCREENHEIGHT-(st_height << hires); y < SCREENHEIGHT; y++)
                 {
                     for (x = 0; x < screenwidth; x++)
                     {
-                        *dest++ = src[((y&63)<<6) + (x&63)];
+                        *dest++ = src[((( y >> shift_allowed) & 63) << 6) 
+                                     + (( x >> shift_allowed) & 63)];
                     }
                 }
         

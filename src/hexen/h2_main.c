@@ -143,6 +143,7 @@ int english_language = 0;
 
 // Display
 int level_brightness = 0;
+int hud_detaillevel = 0;    // [JN] Blocky mode, 0 = high, 1 = normal
 int local_time = 0; 
 
 // Automap

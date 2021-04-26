@@ -154,6 +154,7 @@ int             graphical_startup = 1;
 int english_language = 0;
 
 int     lcd_gamma_fix = 1;      // [JN] Оптимизация палитры Strife
+int     hud_detaillevel = 0;    // [JN] Blocky mode, 0 = high, 1 = normal
 int     draw_shadowed_text;     // [JN] Элементы меню и тексты отбрасывают тень
 
 // If true, startup has completed and the main game loop has started.
