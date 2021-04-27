@@ -7794,6 +7794,7 @@ void M_RD_BackToDefaults_Original(int choice)
 void M_RD_ChangeLanguage(int choice)
 {
     extern void HU_Stop(void);
+    extern void ST_createWidgetsJaguar(void);
     extern void F_CastDrawer(void);
     extern void F_CastDrawerJaguar(void);
     extern void F_StartFinale(void);
@@ -7828,6 +7829,9 @@ void M_RD_ChangeLanguage(int choice)
         // Update status bar
         ST_doRefresh();
         // Update ARMS/FRAGS widget
+        if (gamemission == jaguar)
+        ST_createWidgetsJaguar();
+        else
         ST_createWidgets(); 
     }
 
