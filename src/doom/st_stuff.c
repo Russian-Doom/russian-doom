@@ -616,15 +616,15 @@ boolean ST_Responder (event_t* ev)
                 plyr->weaponowned[wp_plasma] = gamemode == shareware ? false : true;
                 plyr->weaponowned[wp_bfg] = gamemode == shareware ? false : true;
 
-                // [JN] Проверяем, есть ли у игрока рюкзак. Если нет - выдаём.
-                if (!plyr->backpack)
+                // [JN] Check if player have a backpack...
+                if (!plyr->backpack && !vanillaparm)
                 {
                     for (i=0 ; i<NUMAMMO ; i++)
                     plyr->maxammo[i] *= 2;
                     plyr->backpack = true;
                 }
 
-                // [JN] ...и лишь затем пополняем боезапас.
+                // [JN] ...and only then we replenish ammunition.
                 for (i=0;i<NUMAMMO;i++)
                 {
                     // [JN] Jaguar: happy 500 ammo for everything!
@@ -657,15 +657,15 @@ boolean ST_Responder (event_t* ev)
                 plyr->weaponowned[wp_plasma] = gamemode == shareware ? false : true;
                 plyr->weaponowned[wp_bfg] = gamemode == shareware ? false : true;
 	
-                // [JN] Проверяем, есть ли у игрока рюкзак. Если нет - выдаём.
-                if (!plyr->backpack)
+                // [JN] Check if player have a backpack.
+                if (!plyr->backpack && !vanillaparm)
                 {
                     for (i=0 ; i<NUMAMMO ; i++)
                     plyr->maxammo[i] *= 2;
                     plyr->backpack = true;
                 }
 
-                // [JN] ...и лишь затем пополняем боезапас.
+                // [JN] ...and only then we replenish ammunition.
                 for (i=0;i<NUMAMMO;i++)
                 {
                     // [JN] Jaguar: happy 500 ammo for everything!
