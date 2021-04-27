@@ -417,7 +417,7 @@ void P_PlayerThink (player_t *player)
         if (newweapon == wp_fist
         && player->weaponowned[wp_chainsaw]
         && !(player->readyweapon == wp_chainsaw
-        && (player->powers[pw_strength] || singleplayer)))
+        && (player->powers[pw_strength] || (singleplayer && !vanillaparm))))
         {
             newweapon = wp_chainsaw;
         }
