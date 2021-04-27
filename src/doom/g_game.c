@@ -2186,6 +2186,7 @@ void G_DoSelectiveGame (int choice)
 
     // Health
     plr->health = selective_health;
+    plr->mo->health = selective_health;
 
     // Armor
     plr->armorpoints = selective_armor;
