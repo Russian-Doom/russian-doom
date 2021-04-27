@@ -3033,6 +3033,10 @@ void M_RD_Choose_Rendering(int choice)
 
 void M_RD_Draw_Rendering(void)
 {
+    // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
+    if (gamemission == jaguar)
+    inhelpscreens = true;
+
     if (english_language)
     {
         M_WriteTextBigCentered_ENG(5, "RENDERING OPTIONS");
@@ -3344,6 +3348,10 @@ void M_RD_Choose_Display(int choice)
 void M_RD_Draw_Display(void)
 {
     static char num[4];
+
+    // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
+    if (gamemission == jaguar)
+    inhelpscreens = true;
 
     if (english_language)
     {
@@ -7429,6 +7437,10 @@ void M_RD_Choose_Reset(int choice)
 
 void M_RD_Draw_Reset(void)
 {   
+    // [JN] Jaguar Doom: clear remainings of bottom strings from the status bar.
+    if (gamemission == jaguar)
+    inhelpscreens = true;
+
     if (english_language)
     {
         M_WriteTextSmallCentered_ENG(65, "Graphical, audible and gameplay settings");
