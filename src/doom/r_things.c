@@ -475,6 +475,12 @@ void R_DrawVisSprite (vissprite_t* vis, int x1, int x2)
         colfunc = tlcolfunc;
     }
 
+    // [JN] Translucent fuzz effect.
+    if (vis->mobjflags & MF_SHADOW && improved_fuzz == 4)
+    {
+        colfunc = fuzzcolfunc;
+    }
+
     dc_iscale = abs(vis->xiscale)>>(detailshift && !hires);
     dc_texturemid = vis->texturemid;
     frac = vis->startfrac;
@@ -699,7 +705,9 @@ void R_ProjectSprite (mobj_t* thing)
     vis->patch = lump;
 
     // get light level
-    if (thing->flags & MF_SHADOW)
+    // [JN] improved_fuzz == 4 is a translucent fuzz effect,
+    // must use diminished lighting.
+    if (thing->flags & MF_SHADOW && improved_fuzz < 4)
     {
         // shadow draw
         vis->colormap = NULL;

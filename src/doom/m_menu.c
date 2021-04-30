@@ -5706,7 +5706,8 @@ void M_RD_Draw_Gameplay_1(void)
                              improved_fuzz == 0 ? "Original" :
                              improved_fuzz == 1 ? "Original (b&w)" :
                              improved_fuzz == 2 ? "Improved" :
-                                                  "Improved (b&w)");
+                             improved_fuzz == 3 ? "Improved (b&w)" :
+                                                  "Translucent");
         dp_translation = NULL;
 
         // Colored HUD elements
@@ -5777,7 +5778,8 @@ void M_RD_Draw_Gameplay_1(void)
                              improved_fuzz == 0 ? "Jhbubyfkmysq" :
                              improved_fuzz == 1 ? "Jhbubyfkmysq (x*,)" :
                              improved_fuzz == 2 ? "Ekexityysq" :
-                                                  "Ekexityysq (x*,)");
+                             improved_fuzz == 3 ? "Ekexityysq (x*,)" :
+                                                  "Ghjphfxysq");
         dp_translation = NULL;
 
         // Разноцветные элементы HUD
@@ -6329,12 +6331,12 @@ void M_RD_Change_ImprovedFuzz(int choice)
         case 0: 
         improved_fuzz--;
         if (improved_fuzz < 0) 
-            improved_fuzz = 3;
+            improved_fuzz = 4;
         break;
     
         case 1:
         improved_fuzz++;
-        if (improved_fuzz > 3)
+        if (improved_fuzz > 4)
             improved_fuzz = 0;
         break;
     }

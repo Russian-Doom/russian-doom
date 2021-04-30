@@ -52,6 +52,8 @@ void 	R_DrawFuzzColumnLow (void);
 void 	R_DrawFuzzColumnLowBW (void);
 void 	R_DrawFuzzColumnLowImproved (void);
 void 	R_DrawFuzzColumnLowImprovedBW (void);
+void 	R_DrawFuzzColumnTranslucent (void);
+void 	R_DrawFuzzColumnTranslucentLow (void);
 
 // [crispy] draw fuzz effect independent of rendering frame rate
 void 	R_SetFuzzPosTic (void);

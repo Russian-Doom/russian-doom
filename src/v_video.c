@@ -53,6 +53,7 @@
 // [JN] Only for Doom:
 byte *tintmap = NULL;   // Blending table for sprites.
 byte *shademap = NULL;  // Blending table for shadows.
+byte *fuzzmap = NULL;   // Blending table for translucent fuzz.
 
 // Blending table used for fuzzpatch, etc.
 // Only used in Heretic/Hexen

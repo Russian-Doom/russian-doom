@@ -86,6 +86,7 @@ extern byte  *cr[CRMAX];
 extern char **crstr;
 extern byte  *tintmap;
 extern byte  *shademap;
+extern byte  *fuzzmap;
 
 
 #endif // __V_TRANS__ 

@@ -1219,6 +1219,55 @@ static void R_InitShadeMap ()
 }
 
 //
+// R_InitTransFuzzMap
+// [JN] Generates 25% translucency table, used for translucent fuzz effect.
+//
+void R_InitTransFuzzMap ()
+{
+        // Compose a default transparent filter map based on PLAYPAL.
+        unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
+        const int originalgamma = usegamma;
+        const int fuzz_filter_pct = 25;
+        fuzzmap = Z_Malloc(256*256, PU_STATIC, 0);
+
+        {
+            byte *fg, *bg, blend[3], *tp = fuzzmap;
+            int i, j;
+
+            // [JN] Set gamma-correction to zero so I_SetPalette can use a full color range.
+            usegamma = 0;
+            I_SetPalette(playpal);
+            // [crispy] background color
+            for (i = 0; i < 256; i++)
+            {
+                // [crispy] foreground color
+                for (j = 0; j < 256; j++)
+                {
+                    // [crispy] shortcut: identical foreground and background
+                    if (i == j)
+                    {
+                        *tp++ = i;
+                        continue;
+                    }
+
+                    bg = playpal + 3*i;
+                    fg = playpal + 3*j;
+
+                    blend[r] = (fuzz_filter_pct * fg[r] + (100 - fuzz_filter_pct) * bg[r]) / 100;
+                    blend[g] = (fuzz_filter_pct * fg[g] + (100 - fuzz_filter_pct) * bg[g]) / 100;
+                    blend[b] = (fuzz_filter_pct * fg[b] + (100 - fuzz_filter_pct) * bg[b]) / 100;
+
+                    *tp++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
+                }
+            }
+        }
+
+        // [JN] Restore original gamma-correction level.
+        usegamma = originalgamma;
+        W_ReleaseLumpName("PLAYPAL");
+}
+
+//
 // R_InitColormaps
 //
 static void R_InitColormaps (void)
@@ -1284,6 +1333,7 @@ void R_InitData (void)
     
     R_InitTintMap (); // [crispy] prints a mark itself
     R_InitShadeMap (); // [JN] prints a mark itself
+    R_InitTransFuzzMap (); // [JN] does not prints a mark
 
     if (gamevariant != freedoom && gamevariant != freedm)
     {

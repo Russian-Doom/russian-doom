@@ -1122,6 +1122,153 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     }
 }
 
+// -----------------------------------------------------------------------------
+// [JN] Fuzz effect, translucent (improved_fuzz = 4)
+// -----------------------------------------------------------------------------
+
+void R_DrawFuzzColumnTranslucent (void)
+{
+    int      count = dc_yh - dc_yl + 1;
+    int      heightmask = dc_texheight-1;
+    byte    *dest;
+    fixed_t  frac, fracstep;
+
+    if (count < 0)
+    return;
+
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawFuzzColumnTranslucent: %i to %i at %i" :
+                 "R_DrawFuzzColumnTranslucent: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+
+    fracstep = dc_iscale;
+    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+
+    if (dc_texheight & heightmask)   // not a power of 2 -- killough
+    {
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+        while ((frac += heightmask) < 0);
+        else
+        while (frac >= heightmask)
+        frac -= heightmask;
+
+        do
+        {
+            *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            dest += screenwidth;
+            if ((frac += fracstep) >= heightmask)
+            frac -= heightmask;
+        }
+        while (--count);
+    }
+    else    // texture height is a power of 2 -- killough
+    {
+        while ((count-=2)>=0)
+        {
+            *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            dest += screenwidth;
+            frac += fracstep;
+            *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            dest += screenwidth;
+            frac += fracstep;
+        }
+        if (count & 1)
+        *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+    }
+}
+
+void R_DrawFuzzColumnTranslucentLow (void)
+{
+    int      count = dc_yh - dc_yl;
+    int      heightmask = dc_texheight - 1;
+    int      x = dc_x << 1;
+    byte    *dest, *dest2, *dest3, *dest4;
+    fixed_t  frac, fracstep;
+
+    if (count < 0)
+    return;
+
+#ifdef RANGECHECK
+    if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawFuzzColumnTranslucentLow: %i to %i at %i" :
+                 "R_DrawFuzzColumnTranslucentLow: %i к %i у %i",
+                 dc_yl, dc_yh, x);
+    }
+#endif
+
+    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+
+    fracstep = dc_iscale;
+    frac = dc_texturemid + (dc_yl-centery)*fracstep;
+
+    if (dc_texheight & heightmask) // not a power of 2 -- killough
+    {
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+        while ((frac += heightmask) < 0);
+        else
+        while (frac >= heightmask)
+        frac -= heightmask;
+
+        do
+        {
+            *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            *dest2 = fuzzmap[(*dest2<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+
+            if (hires)
+            {
+                *dest3 = fuzzmap[(*dest3<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+                *dest4 = fuzzmap[(*dest4<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+                dest3 += screenwidth << hires;
+                dest4 += screenwidth << hires;
+            }
+
+            if ((frac += fracstep) >= heightmask)
+            frac -= heightmask;
+        } while (count--);
+    }
+    else // texture height is a power of 2 -- killough
+    {
+        do 
+        {
+            *dest = fuzzmap[(*dest<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            *dest2 = fuzzmap[(*dest2<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+
+            if (hires)
+            {
+                *dest3 = fuzzmap[(*dest3<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+                *dest4 = fuzzmap[(*dest4<<8)+dc_colormap[dc_source[(frac>>FRACBITS)&heightmask]]];
+                dest3 += screenwidth << hires;
+                dest4 += screenwidth << hires;
+            }
+
+            frac += fracstep; 
+
+        } while (count--);
+    }
+}
+
 
 //
 // R_DrawTranslatedColumn
