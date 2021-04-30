@@ -1098,13 +1098,25 @@ void R_DrawPSprite (pspdef_t* psp)
 
     if (viewplayer->powers[pw_invisibility] > 4*32 || viewplayer->powers[pw_invisibility] & 8)
     {
-        // shadow draw
-        if (gamemode != pressbeta)
-        vis->colormap = NULL;
-
-        // [JN] Press Beta: use inverted palette for Partial Invisibility
+        if (gamemode == pressbeta)
+        {
+            // [JN] Press Beta: always use inverted palette for Partial Invisibility
+            vis->colormap = fixedcolormap ? fixedcolormap : spritelights[MAXLIGHTSCALE-1];
+        }
         else
-        vis->colormap = fixedcolormap;    
+        {
+            if (improved_fuzz < 4)
+            {
+                // shadow draw
+                vis->colormap = NULL;
+            }
+            else
+            {
+                // [JN] Translucent fuzz effect.
+                vis->colormap = fixedcolormap ? fixedcolormap : spritelights[MAXLIGHTSCALE-1];
+                vis->mobjflags |= MF_SHADOW;
+            }
+        }
     }
     else if (fixedcolormap)
     {
