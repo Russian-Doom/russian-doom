@@ -999,6 +999,7 @@ static const int tran_filter_pct = 85;
 static void R_InitTintMap()
 {
     int lump = W_CheckNumForName("TINTMAP");
+    const int originalgamma = usegamma;
 
     // If a tranlucency filter map lump is present, use it
     if (lump != -1)
@@ -1043,6 +1044,8 @@ static void R_InitTintMap()
             byte *fg, *bg, blend[3], *tp = tintmap;
             int i, j;
 
+            // [JN] Set gamma-correction to zero so I_SetPalette can use a full color range.
+            usegamma = 0;
             I_SetPalette(playpal);
             // [crispy] background color
             for (i = 0; i < 256; i++)
@@ -1099,6 +1102,8 @@ static void R_InitTintMap()
 
         free(fname);
 
+        // [JN] Restore original gamma-correction level.
+        usegamma = originalgamma;
         W_ReleaseLumpName("PLAYPAL");
     }
 }
@@ -1114,6 +1119,7 @@ static const int shade_filter_pct = 60;
 static void R_InitShadeMap ()
 {
     int lump = W_CheckNumForName("SHADEMAP");
+    const int originalgamma = usegamma;
 
     // If a tranlucency filter map lump is present, use it
     if (lump != -1)
@@ -1158,6 +1164,8 @@ static void R_InitShadeMap ()
             byte *fg, *bg, blend[3], *tp = shademap;
             int i, j;
 
+            // [JN] Set gamma-correction to zero so I_SetPalette can use a full color range.
+            usegamma = 0;
             I_SetPalette(playpal);
             // [crispy] background color
             for (i = 0; i < 256; i++)
@@ -1214,6 +1222,8 @@ static void R_InitShadeMap ()
 
         free(fname);
 
+        // [JN] Restore original gamma-correction level.
+        usegamma = originalgamma;
         W_ReleaseLumpName("PLAYPAL");
     }
 }
