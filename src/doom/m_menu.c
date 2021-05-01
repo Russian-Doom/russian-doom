@@ -111,6 +111,8 @@ typedef struct
 
     // choice = menu item #.
     // if status = 2, choice=0:leftarrow, 1:rightarrow
+    // [JN] Routine 3 is same to 2, but not playing activity sound itself.
+    // Activity sounds are invoking by called functions / actions themselves.
     void    (*routine)(int choice);
 
     // hotkey in menu
@@ -1489,10 +1491,10 @@ enum
 menuitem_t RD_Rendering_Menu[]=
 {
     {2, "Display aspect ratio:",     M_RD_Change_Widescreen,  'd'},
-    {2, "Vertical synchronization:", M_RD_Change_VSync,       'v'},
+    {3, "Vertical synchronization:", M_RD_Change_VSync,       'v'},
     {2, "Frame rate:",               M_RD_Change_Uncapped,    'f'},
     {2, "Show FPS counter:",         M_RD_Change_FPScounter,  's'},
-    {2, "Pixel scaling:",            M_RD_Change_Smoothing,   'p'},
+    {3, "Pixel scaling:",            M_RD_Change_Smoothing,   'p'},
     {2, "Porch palette changing:",   M_RD_Change_PorchFlashing,'v'},
     {2, "Video renderer:",           M_RD_Change_Renderer,    'v'},
     {-1,"",0,'\0'},
@@ -1520,10 +1522,10 @@ menu_t  RD_Rendering_Def =
 menuitem_t RD_Rendering_Menu_Rus[]=
 {
     {2, "Cjjnyjitybt cnjhjy \'rhfyf:",     M_RD_Change_Widescreen,  'c'}, // Соотношение сторон экрана
-    {2, "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,       'd'}, // Вертикальная синхронизация
+    {3, "Dthnbrfkmyfz cby[hjybpfwbz:",     M_RD_Change_VSync,       'd'}, // Вертикальная синхронизация
     {2, "Rflhjdfz xfcnjnf:",               M_RD_Change_Uncapped,    'r'}, // Кадровая частота
     {2, "Cxtnxbr rflhjdjq xfcnjns:",       M_RD_Change_FPScounter,  'c'}, // Счетчик кадровой частоты
-    {2, "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,   'g'}, // Пиксельное сглаживание
+    {3, "Gbrctkmyjt cukf;bdfybt:",         M_RD_Change_Smoothing,   'g'}, // Пиксельное сглаживание
     {2, "Bpvtytybt gfkbnhs rhftd 'rhfyf:", M_RD_Change_PorchFlashing,'b'}, // Изменение палитры краёв экрана
     {2, "J,hf,jnrf dbltj:",                M_RD_Change_Renderer,    'j'}, // Обработка видео
     {-1,"",0,'\0'},                                                       // Дополнительно
@@ -1572,13 +1574,13 @@ enum
 
 menuitem_t RD_Display_Menu[]=
 {
-    {2, "screen size",         M_RD_Change_ScreenSize,      's'},
+    {3, "screen size",         M_RD_Change_ScreenSize,      's'},
     {-1,"",0,'\0'},
-    {2, "gamma-correction",    M_RD_Change_Gamma,           'g'},
+    {3, "gamma-correction",    M_RD_Change_Gamma,           'g'},
     {-1,"",0,'\0'},
-    {2, "level brightness",    M_RD_Change_LevelBrightness, 'l'},
+    {3, "level brightness",    M_RD_Change_LevelBrightness, 'l'},
     {-1,"",0,'\0'},
-    {2, "menu shading",        M_RD_Change_MenuShading,     'm'},
+    {3, "menu shading",        M_RD_Change_MenuShading,     'm'},
     {-1,"",0,'\0'},
     {2, "graphics detail:",    M_RD_Change_Detail,          'g'},
     {2, "hud background detail:", M_RD_Change_HUD_Detail,   'h'},
@@ -1604,13 +1606,13 @@ menu_t  RD_Display_Def =
 
 menuitem_t RD_Display_Menu_Rus[]=
 {
-    {2, "hfpvth buhjdjuj \'rhfyf",  M_RD_Change_ScreenSize,      'h'}, // Размер игрового экрана
+    {3, "hfpvth buhjdjuj \'rhfyf",  M_RD_Change_ScreenSize,      'h'}, // Размер игрового экрана
     {-1,"",0,'\0'},                                                    //
-    {2, "ehjdtym ufvvf-rjhhtrwbb",  M_RD_Change_Gamma,           'e'}, // Уровень гамма-коррекции
+    {3, "ehjdtym ufvvf-rjhhtrwbb",  M_RD_Change_Gamma,           'e'}, // Уровень гамма-коррекции
     {-1,"",0,'\0'},                                                    //
-    {2, "ehjdtym jcdtotyyjcnb",     M_RD_Change_LevelBrightness, 'e'}, // Уровень освещенности
+    {3, "ehjdtym jcdtotyyjcnb",     M_RD_Change_LevelBrightness, 'e'}, // Уровень освещенности
     {-1,"",0,'\0'},                                                    //
-    {2, "pfntvytybt ajyf vty.",     M_RD_Change_MenuShading,     'p'}, // Затемнение фона меню
+    {3, "pfntvytybt ajyf vty.",     M_RD_Change_MenuShading,     'p'}, // Затемнение фона меню
     {-1,"",0,'\0'},                                                    //
     {2, "ltnfkbpfwbz uhfabrb:",     M_RD_Change_Detail,          'l'}, // Детализация графики:
     {2, "ltnfkbpfwbz ajyf",         M_RD_Change_HUD_Detail,      'l'}, // Детализация фона HUD:
@@ -1657,16 +1659,16 @@ enum
 menuitem_t RD_Messages_Menu[]=
 {
     {2, "messages enabled:",   M_RD_Change_Messages,        'm'},
-    {2, "message timeout",     M_RD_Change_Msg_TimeOut,     'm'},
+    {3, "message timeout",     M_RD_Change_Msg_TimeOut,     'm'},
     {-1,"",0,'\0'},
     {2, "text casts shadows:", M_RD_Change_ShadowedText,    't'},
     {-1,"",0,'\0'},
     {2, "local time:",         M_RD_Change_LocalTime,       'l'},
     {-1,"",0,'\0'},
-    {2, "item pickup:",        M_RD_Change_Msg_Pickup_Color,'i'},
-    {2, "revealed secret:",    M_RD_Change_Msg_Secret_Color,'r'},
-    {2, "system message:",     M_RD_Change_Msg_System_Color,'s'},
-    {2, "netgame chat:",       M_RD_Change_Msg_Chat_Color,  'n'},
+    {3, "item pickup:",        M_RD_Change_Msg_Pickup_Color,'i'},
+    {3, "revealed secret:",    M_RD_Change_Msg_Secret_Color,'r'},
+    {3, "system message:",     M_RD_Change_Msg_System_Color,'s'},
+    {3, "netgame chat:",       M_RD_Change_Msg_Chat_Color,  'n'},
     {-1,"",0,'\0'}
 };
 
@@ -1687,16 +1689,16 @@ menu_t  RD_Messages_Def =
 menuitem_t RD_Messages_Menu_Rus[]=
 {
     {2, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'j'}, // Отображение сообщений:
-    {2, "nfqvfen jnj,hf;tybz",      M_RD_Change_Msg_TimeOut,     'n'}, // Таймаут отображения
+    {3, "nfqvfen jnj,hf;tybz",      M_RD_Change_Msg_TimeOut,     'n'}, // Таймаут отображения
     {-1,"",0,'\0'},
     {2, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень:
     {-1,"",0,'\0'},
     {2, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
     {-1,"",0,'\0'},
-    {2, "gjkextybt ghtlvtnjd:",     M_RD_Change_Msg_Pickup_Color,'g'}, // Получение предметов:
-    {2, "j,yfhe;tybt nfqybrjd:",    M_RD_Change_Msg_Secret_Color,'j'}, // Обнаружение тайников:
-    {2, "cbcntvyst cjj,otybz:",     M_RD_Change_Msg_System_Color,'c'}, // Системные сообщения:
-    {2, "xfn ctntdjq buhs:",        M_RD_Change_Msg_Chat_Color,  'x'}, // Чат сетевой игры:
+    {3, "gjkextybt ghtlvtnjd:",     M_RD_Change_Msg_Pickup_Color,'g'}, // Получение предметов:
+    {3, "j,yfhe;tybt nfqybrjd:",    M_RD_Change_Msg_Secret_Color,'j'}, // Обнаружение тайников:
+    {3, "cbcntvyst cjj,otybz:",     M_RD_Change_Msg_System_Color,'c'}, // Системные сообщения:
+    {3, "xfn ctntdjq buhs:",        M_RD_Change_Msg_Chat_Color,  'x'}, // Чат сетевой игры:
     {-1,"",0,'\0'}
 };
 
@@ -1737,7 +1739,7 @@ enum
 
 menuitem_t RD_Automap_Menu[]=
 {
-    {2, "color scheme:",      M_RD_Change_AutomapColor,     'c'},
+    {3, "color scheme:",      M_RD_Change_AutomapColor,     'c'},
     {2, "line antialiasing:", M_RD_Change_AutomapAntialias, 'l'},
     {2, "overlay mode:",      M_RD_Change_AutomapOverlay,   'o'},
     {2, "rotate mode:",       M_RD_Change_AutomapRotate,    'r'},
@@ -1768,7 +1770,7 @@ menu_t  RD_Automap_Def =
 
 menuitem_t RD_Automap_Menu_Rus[]=
 {
-    {2, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,     'w'}, // Цветовая схема:
+    {3, "wdtnjdfz c[tvf:",    M_RD_Change_AutomapColor,     'w'}, // Цветовая схема:
     {2, "cukf;bdfybt kbybq:", M_RD_Change_AutomapAntialias, 'c'}, // Сглаживание линий:
     {2, "ht;bv yfkj;tybz:",   M_RD_Change_AutomapOverlay,   'h'}, // Режим наложения:
     {2, "ht;bv dhfotybz:",    M_RD_Change_AutomapRotate,    'h'}, // Режим вращения:
@@ -1817,12 +1819,12 @@ enum
 
 menuitem_t RD_Audio_Menu[]=
 {
-    {2, "sfx volume",              M_RD_Change_SfxVol,      's'},
+    {3, "sfx volume",              M_RD_Change_SfxVol,      's'},
     {-1,"",0,'\0'},
-    {2, "music volume",            M_RD_Change_MusicVol,    'm'},
+    {3, "music volume",            M_RD_Change_MusicVol,    'm'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
-    {2, "sound channels",          M_RD_Change_SfxChannels, 's'},
+    {3, "sound channels",          M_RD_Change_SfxChannels, 's'},
     {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"sound system settings",    M_RD_Choose_SoundSystem, 's'},
@@ -1845,12 +1847,12 @@ menu_t RD_Audio_Def =
 
 menuitem_t RD_Audio_Menu_Rus[]=
 {
-    {2, "pder",                         M_RD_Change_SfxVol,      'p'}, // Звук
+    {3, "pder",                         M_RD_Change_SfxVol,      'p'}, // Звук
     {-1,"",0,'\0'},                                                    //
-    {2, "vepsrf",                       M_RD_Change_MusicVol,    'v'}, // Музыка
+    {3, "vepsrf",                       M_RD_Change_MusicVol,    'v'}, // Музыка
     {-1,"",0,'\0'},                                                    //
     {-1,"",0,'\0'},                                                    //
-    {2, "Pderjdst rfyfks",              M_RD_Change_SfxChannels, 'p'}, // Звуковые каналы
+    {3, "Pderjdst rfyfks",              M_RD_Change_SfxChannels, 'p'}, // Звуковые каналы
     {-1,"",0,'\0'},                                                    //
     {-1,"",0,'\0'},                                                    //
     {1,"yfcnhjqrb pderjdjq cbcntvs",    M_RD_Choose_SoundSystem, 'y'}, // Настройки звуковой системы...
@@ -1970,11 +1972,11 @@ menuitem_t RD_Controls_Menu[]=
     {1, "keyboard bindings",  M_RD_Choose_Bindings_1,     'k'},
     {1, "mouse bindings",     M_RD_Choose_Mouse_Bindings, 'm'},
     {-1,"",0,'\0'},
-    {2, "sensivity",          M_RD_Change_Sensitivity,    'm'},
+    {3, "sensivity",          M_RD_Change_Sensitivity,    'm'},
     {-1,"",0,'\0'},
-    {2, "acceleration",       M_RD_Change_Acceleration,   'a'},
+    {3, "acceleration",       M_RD_Change_Acceleration,   'a'},
     {-1,"",0,'\0'},
-    {2, "acceleration threshold", M_RD_Change_Threshold,  't'},
+    {3, "acceleration threshold", M_RD_Change_Threshold,  't'},
     {-1,"",0,'\0'},
     {2, "mouse look:",        M_RD_Change_MouseLook,      'm'},
     {2, "invert y axis:",     M_RD_Change_InvertY,        'i'},
@@ -2002,11 +2004,11 @@ menuitem_t RD_Controls_Menu_Rus[]=
     {1, "yfcnhjqrb rkfdbfnehs",      M_RD_Choose_Bindings_1,  'k'}, // Настройки клавиатуры
     {1, "yfcnhjqrb vsib",            M_RD_Choose_Mouse_Bindings,'k'}, // Настройки мыши
     {-1,"",0,'\0'},                                                 //
-    {2, "crjhjcnm",                  M_RD_Change_Sensitivity, 'c'}, // Скорость
+    {3, "crjhjcnm",                  M_RD_Change_Sensitivity, 'c'}, // Скорость
     {-1,"",0,'\0'},                                                 //
-    {2, "frctkthfwbz",               M_RD_Change_Acceleration,'f'}, // Акселерация
+    {3, "frctkthfwbz",               M_RD_Change_Acceleration,'f'}, // Акселерация
     {-1,"",0,'\0'},
-    {2, "gjhju frctkthfwbb",         M_RD_Change_Threshold,   'g'}, // Порог акселерации
+    {3, "gjhju frctkthfwbb",         M_RD_Change_Threshold,   'g'}, // Порог акселерации
     {-1,"",0,'\0'},
     {2, "j,pjh vsim.:",              M_RD_Change_MouseLook,   'j'}, // Обзор мышью
     {2, "dthnbrfkmyfz bydthcbz:",    M_RD_Change_InvertY,     'd'}, // Вертикальная инверсия
@@ -2578,8 +2580,8 @@ enum
 menuitem_t RD_Level_Menu_1[]=
 {
     {2, "skill level",      M_RD_Change_Selective_Skill,        's'},
-    {2, "episode",          M_RD_Change_Selective_Episode,      'e'},
-    {2, "map",              M_RD_Change_Selective_Map,          'm'},
+    {3, "episode",          M_RD_Change_Selective_Episode,      'e'},
+    {3, "map",              M_RD_Change_Selective_Map,          'm'},
     {-1,"",0,'\0'},         // Player
     {2, "health",           M_RD_Change_Selective_Health,       'h'},
     {2, "armor",            M_RD_Change_Selective_Armor,        'a'},
@@ -2587,11 +2589,11 @@ menuitem_t RD_Level_Menu_1[]=
     {-1,"",0,'\0'},         // Weapons
     {2, "chainsaw",         M_RD_Change_Selective_WP_Chainsaw,  'c'},
     {2, "shotgun",          M_RD_Change_Selective_WP_Shotgun,   's'},
-    {2, "super shotgun",    M_RD_Change_Selective_WP_SSgun,     's'},
+    {3, "super shotgun",    M_RD_Change_Selective_WP_SSgun,     's'},
     {2, "chaingun",         M_RD_Change_Selective_WP_Chaingun,  'c'},
     {2, "rocket launcher",  M_RD_Change_Selective_WP_RLauncher, 'r'},
-    {2, "plasmagun",        M_RD_Change_Selective_WP_Plasmagun, 'p'},
-    {2, "bfg9000",          M_RD_Change_Selective_WP_BFG9000,   'b'},
+    {3, "plasmagun",        M_RD_Change_Selective_WP_Plasmagun, 'p'},
+    {3, "bfg9000",          M_RD_Change_Selective_WP_BFG9000,   'b'},
     {-1,"",0,'\0'},
     {1, "",                 M_RD_Choose_LevelSelect_2,          'n'},
     {1, "",                 G_DoSelectiveGame,                  's'},
@@ -2615,8 +2617,8 @@ menu_t RD_Level_Def_1 =
 menuitem_t RD_Level_Menu_1_Rus[]=
 {
     {2, "ckj;yjcnm",        M_RD_Change_Selective_Skill,        's'}, // Сложность
-    {2, "\'gbpjl",          M_RD_Change_Selective_Episode,      'e'}, // Эпизод
-    {2, "ehjdtym",          M_RD_Change_Selective_Map,          'm'}, // Уровень
+    {3, "\'gbpjl",          M_RD_Change_Selective_Episode,      'e'}, // Эпизод
+    {3, "ehjdtym",          M_RD_Change_Selective_Map,          'm'}, // Уровень
     {-1,"",0,'\0'},         // Игрок
     {2, "pljhjdmt",         M_RD_Change_Selective_Health,       'h'}, // Здоровье
     {2, ",hjyz",            M_RD_Change_Selective_Armor,        'a'}, // Броня
@@ -2624,11 +2626,11 @@ menuitem_t RD_Level_Menu_1_Rus[]=
     {-1,"",0,'\0'},         // Оружие
     {2, ",typjgbkf",        M_RD_Change_Selective_WP_Chainsaw,  'c'}, // Бензопила
     {2, "he;mt",            M_RD_Change_Selective_WP_Shotgun,   's'}, // Ружье
-    {2, "ldecndjkmyjt he;mt",M_RD_Change_Selective_WP_SSgun,    's'}, // Двуствольное ружье
+    {3, "ldecndjkmyjt he;mt",M_RD_Change_Selective_WP_SSgun,    's'}, // Двуствольное ружье
     {2, "gektvtn",          M_RD_Change_Selective_WP_Chaingun,  'c'}, // Пулемет
     {2, "hfrtnybwf",        M_RD_Change_Selective_WP_RLauncher, 'r'}, // Ракетница
-    {2, "gkfpvtyyfz geirf", M_RD_Change_Selective_WP_Plasmagun, 'p'}, // Плазменная пушка
-    {2, "&9000",            M_RD_Change_Selective_WP_BFG9000,   'b'}, // BFG9000
+    {3, "gkfpvtyyfz geirf", M_RD_Change_Selective_WP_Plasmagun, 'p'}, // Плазменная пушка
+    {3, "&9000",            M_RD_Change_Selective_WP_BFG9000,   'b'}, // BFG9000
     {-1,"",0,'\0'},
     {1, "",                 M_RD_Choose_LevelSelect_2,          'n'},
     {1, "",                 G_DoSelectiveGame,                  's'},
@@ -3246,6 +3248,9 @@ void M_RD_Change_VSync(int choice)
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Change_Uncapped(int choice)
@@ -3280,6 +3285,9 @@ void M_RD_Change_Smoothing(int choice)
         ST_refreshBackground();
         ST_drawWidgets(true);
     }
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Change_Wiping(int choice)
@@ -3440,6 +3448,8 @@ void M_RD_Change_ScreenSize(int choice)
         {
             screenblocks--;
             screenSize--;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
         }
         break;
 
@@ -3448,6 +3458,11 @@ void M_RD_Change_ScreenSize(int choice)
         {
             screenblocks++;
             screenSize++;
+            if (screenblocks <= 14)
+            {
+                // [JN] Routine №3: play sound only if necessary.
+                S_StartSound(NULL,sfx_stnmov);
+            }
         }
         break;
     }
@@ -3485,12 +3500,20 @@ void M_RD_Change_Gamma(int choice)
     {
         case 0:
         if (usegamma > 0) 
+        {
             usegamma--;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
 
         case 1:
         if (usegamma < 17) 
+        {
             usegamma++;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
 
@@ -3510,12 +3533,20 @@ void M_RD_Change_LevelBrightness(int choice)
     {
         case 0:
         if (level_brightness > 0)
+        {
             level_brightness -= 16;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     
         case 1:
         if (level_brightness < 64)
+        {
             level_brightness += 16;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
 }
@@ -3526,12 +3557,20 @@ void M_RD_Change_MenuShading(int choice)
     {
         case 0:
         if (menu_shading > 0)
+        {
             menu_shading -= 4;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     
         case 1:
         if (menu_shading < 24)
+        {
             menu_shading += 4;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
 }
@@ -3925,12 +3964,20 @@ void M_RD_Change_Msg_TimeOut(int choice)
     {
         case 0:
         if (messages_timeout > 1)
+        {
             messages_timeout--;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
 
         case 1:
         if (messages_timeout < 10)
+        {
             messages_timeout++;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
 }
@@ -3981,6 +4028,9 @@ void M_RD_Change_Msg_Pickup_Color(int choice)
 
     // [JN] Redefine pickup message color.
     M_RD_Define_Msg_Pickup_Color();
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Define_Msg_Secret_Color(void)
@@ -4003,6 +4053,9 @@ void M_RD_Define_Msg_Secret_Color(void)
             case 7:   messages_secret_color_set = cr[CR_BRICK];  break;
             default:  messages_secret_color_set = NULL;          break;
         }
+
+        // [JN] Routine №3: play sound only if necessary.
+        S_StartSound(NULL,sfx_stnmov);
     }
 }
 
@@ -4029,6 +4082,9 @@ void M_RD_Change_Msg_Secret_Color(int choice)
 
     // [JN] Redefine revealed secret message color.
     M_RD_Define_Msg_Secret_Color();
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Define_Msg_System_Color(void)
@@ -4051,6 +4107,9 @@ void M_RD_Define_Msg_System_Color(void)
             case 7:   messages_system_color_set = cr[CR_BRICK];  break;
             default:  messages_system_color_set = NULL;          break;
         }
+
+        // [JN] Routine №3: play sound only if necessary.
+        S_StartSound(NULL,sfx_stnmov);
     }
 }
 
@@ -4077,6 +4136,9 @@ void M_RD_Change_Msg_System_Color(int choice)
 
     // [JN] Redefine system message color.
     M_RD_Define_Msg_System_Color();
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Define_Msg_Chat_Color(void)
@@ -4099,6 +4161,9 @@ void M_RD_Define_Msg_Chat_Color(void)
             case 7:   messages_chat_color_set = cr[CR_BRICK];  break;
             default:  messages_chat_color_set = NULL;          break;
         }
+
+        // [JN] Routine №3: play sound only if necessary.
+        S_StartSound(NULL,sfx_stnmov);
     }
 }
 
@@ -4360,6 +4425,9 @@ void M_RD_Change_AutomapColor(int choice)
 
     // [JN] Reinitialize automap color scheme.
     AM_initColors();
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Change_AutomapAntialias(int choice)
@@ -4604,12 +4672,20 @@ void M_RD_Change_SfxVol(int choice)
     {
         case 0:
         if (sfxVolume)
+        {
             sfxVolume--;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
 
         case 1:
         if (sfxVolume < 15)
+        {
             sfxVolume++;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
 
@@ -4622,12 +4698,20 @@ void M_RD_Change_MusicVol(int choice)
     {
         case 0:
         if (musicVolume)
+        {
             musicVolume--;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
 
         case 1:
         if (musicVolume < 15)
+        {
             musicVolume++;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
 
@@ -4640,20 +4724,30 @@ void M_RD_Change_SfxChannels(int choice)
     {
         case 0:
         if (snd_channels_rd > 4)
+        {
             snd_channels_rd -= 4;
+            // Sync internal value
+            snd_channels = snd_channels_rd;
+            // Reallocate sound channels
+            S_ChannelsRealloc();
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     
         case 1:
         if (snd_channels_rd < 64)
+        {
             snd_channels_rd += 4;
+            // Sync internal value
+            snd_channels = snd_channels_rd;
+            // Reallocate sound channels
+            S_ChannelsRealloc();
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
-
-    // Sync internal value
-    snd_channels = snd_channels_rd;
-
-    // Reallocate sound channels
-    S_ChannelsRealloc();
 }
 
 // -----------------------------------------------------------------------------
@@ -5169,12 +5263,20 @@ void M_RD_Change_Sensitivity(int choice)
     {
         case 0:
         if (mouseSensitivity)
+        {
             mouseSensitivity--;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
 
         case 1:
         if (mouseSensitivity < 255) // [crispy] extended range
+        {
             mouseSensitivity++;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
 }
@@ -5185,12 +5287,20 @@ void M_RD_Change_Acceleration(int choice)
     {
         case 0:
         if (mouse_acceleration > 1.1)
+        {
             mouse_acceleration -= 0.1;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
 
         case 1:
         if (mouse_acceleration < 5.0)
+        {
             mouse_acceleration += 0.1;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
 }
@@ -5201,12 +5311,20 @@ void M_RD_Change_Threshold(int choice)
     {
         case 0:
         if (mouse_threshold > 0)
+        {
             mouse_threshold--;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
 
         case 1:
         if (mouse_threshold < 32)
+        {
             mouse_threshold++;
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
         break;
     }
 }
@@ -7194,6 +7312,9 @@ void M_RD_Change_Selective_Episode (int choice)
             selective_episode++;
         break;
     }
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Change_Selective_Map (int choice)
@@ -7216,6 +7337,9 @@ void M_RD_Change_Selective_Map (int choice)
             selective_map++;
         break;
     }
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Change_Selective_Health (int choice)
@@ -7275,6 +7399,9 @@ void M_RD_Change_Selective_WP_SSgun (int choice)
     return;
 
     selective_wp_supershotgun ^= 1;
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Change_Selective_WP_Chaingun (int choice)
@@ -7294,6 +7421,9 @@ void M_RD_Change_Selective_WP_Plasmagun (int choice)
     return;
 
     selective_wp_plasma ^= 1;
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Change_Selective_WP_BFG9000 (int choice)
@@ -7303,6 +7433,9 @@ void M_RD_Change_Selective_WP_BFG9000 (int choice)
     return;
 
     selective_wp_bfg ^= 1;
+
+    // [JN] Routine №3: play sound only if necessary.
+    S_StartSound(NULL,sfx_stnmov);
 }
 
 void M_RD_Change_Selective_Backpack (int choice)
@@ -7431,7 +7564,7 @@ void M_RD_Change_Selective_Respawn (int choice)
 // -----------------------------------------------------------------------------
 
 void M_RD_Choose_Reset(int choice)
-{ // pitto
+{
     M_SetupNextMenu(english_language ?
                     &RD_Reset_Def :
                     &RD_Reset_Def_Rus);
@@ -9551,7 +9684,6 @@ boolean M_Responder (event_t* ev)
 		if (automapactive || chat_on)
 		return false;
 		M_RD_Change_ScreenSize(0);
-		S_StartSound(NULL,sfx_stnmov);
 		return true;
 	}
 
@@ -9561,7 +9693,6 @@ boolean M_Responder (event_t* ev)
 		if (automapactive || chat_on)
 		return false;
 		M_RD_Change_ScreenSize(1);
-		S_StartSound(NULL,sfx_stnmov);
 		return true;
 	}
 
@@ -9615,9 +9746,16 @@ boolean M_Responder (event_t* ev)
     {
         // Slide slider left
 
-    if (currentMenu->menuitems[itemOn].routine && currentMenu->menuitems[itemOn].status == 2)
+    if (currentMenu->menuitems[itemOn].routine
+    && (currentMenu->menuitems[itemOn].status == 2 
+    ||  currentMenu->menuitems[itemOn].status == 3))
     {
-        S_StartSound(NULL,sfx_stnmov);
+        if (currentMenu->menuitems[itemOn].status == 2)
+        {
+            // [JN] Routine №3: play sound only if necessary.
+            S_StartSound(NULL,sfx_stnmov);
+        }
+            
         currentMenu->menuitems[itemOn].routine(0);
     }
     return true;
@@ -9626,9 +9764,16 @@ boolean M_Responder (event_t* ev)
     {
         // Slide slider right
 
-        if (currentMenu->menuitems[itemOn].routine && currentMenu->menuitems[itemOn].status == 2)
+        if (currentMenu->menuitems[itemOn].routine
+        && (currentMenu->menuitems[itemOn].status == 2 
+        ||  currentMenu->menuitems[itemOn].status == 3))
         {
-            S_StartSound(NULL,sfx_stnmov);
+            if (currentMenu->menuitems[itemOn].status == 2)
+            {
+                // [JN] Routine №3: play sound only if necessary.
+                S_StartSound(NULL,sfx_stnmov);
+            }
+
             currentMenu->menuitems[itemOn].routine(1);
         }
         return true;
@@ -9640,10 +9785,15 @@ boolean M_Responder (event_t* ev)
         if (currentMenu->menuitems[itemOn].routine && currentMenu->menuitems[itemOn].status)
         {
             currentMenu->lastOn = itemOn;
-            if (currentMenu->menuitems[itemOn].status == 2)
+            if (currentMenu->menuitems[itemOn].status == 2
+            ||  currentMenu->menuitems[itemOn].status == 3)
             {
                 currentMenu->menuitems[itemOn].routine(1);      // right arrow
-                S_StartSound(NULL,sfx_stnmov);
+                if (currentMenu->menuitems[itemOn].status == 2)
+                {
+                    // [JN] Routine №3: play sound only if necessary.
+                    S_StartSound(NULL,sfx_stnmov);
+                }
             }
             else
             {
