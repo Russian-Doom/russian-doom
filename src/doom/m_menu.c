@@ -9371,6 +9371,9 @@ boolean M_Responder (event_t* ev)
     &&  currentMenu != &SaveDef_Rus
     &&  currentMenu != &LoadDef
     &&  currentMenu != &LoadDef_Rus    
+    // [JN] Do not close Options menu after pressing "N" in End Game.
+    &&  currentMenu != &RD_Options_Def
+    &&  currentMenu != &RD_Options_Def_Rus
     // [JN] Do not close bindings menu after binding key / mouse button.
     &&  currentMenu != RD_Bindings_Menu_Def_1
     &&  currentMenu != RD_Bindings_Menu_Def_1_Rus
