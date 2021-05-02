@@ -113,10 +113,15 @@ extern int Crispy_Random(void);
 void R_DrawColumn (void) 
 { 
     int      count;
+    // heightmask is the Tutti-Frutti fix -- killough
     int      heightmask = dc_texheight-1;
-    byte    *dest;
-    fixed_t  frac;
-    fixed_t  fracstep;
+    // Framebuffer destination address.
+    // Use ylookup LUT to avoid multiply with ScreenWidth.
+    // Use columnofs LUT for subwindows?
+    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    // Determine scaling, which is the only mapping to be done.
+    fixed_t  fracstep = dc_iscale;
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     count = dc_yh - dc_yl + 1;
 
@@ -132,15 +137,6 @@ void R_DrawColumn (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
-
-    // Framebuffer destination address.
-    // Use ylookup LUT to avoid multiply with ScreenWidth.
-    // Use columnofs LUT for subwindows?
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-
-    // Determine scaling, which is the only mapping to be done.
-    fracstep = dc_iscale;
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     // Inner loop that does the actual texture mapping,
     //  e.g. a DDA-lile scaling.
@@ -187,15 +183,16 @@ void R_DrawColumn (void)
 
 void R_DrawColumnLow (void) 
 { 
-    int         count; 
-    byte*       dest; 
-    byte*       dest2;
-    byte*       dest3;
-    byte*       dest4;
-    fixed_t     frac;
-    fixed_t     fracstep;	 
-    int         x;
-    int         heightmask = dc_texheight - 1;
+    int      count; 
+    // Blocky mode, need to multiply by 2.
+    int      x = dc_x << 1;
+    int      heightmask = dc_texheight - 1;
+    byte    *dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    fixed_t  fracstep = dc_iscale; 
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     count = dc_yh - dc_yl; 
 
@@ -213,18 +210,6 @@ void R_DrawColumnLow (void)
     }
 #endif 
 
-    // Blocky mode, need to multiply by 2.
-    x = dc_x << 1;
-
-    dest = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
-
-    // heightmask is the Tutti-Frutti fix -- killough
     if (dc_texheight & heightmask) // not a power of 2 -- killough
     {
         heightmask++;
