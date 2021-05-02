@@ -995,6 +995,7 @@ static void R_InitColormaps (void)
     // 0) Standard full bright colors (dummy).
     // 1) Green colors for Infragreen Visor.
     // 2) Black and white color for B&W fuzz effect.
+    // 3) Inversed colormap for Press Beta invisibilite effect.
     colormaps_rd = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMRD")), PU_STATIC);
 }
 

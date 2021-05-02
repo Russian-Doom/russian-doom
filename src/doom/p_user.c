@@ -557,7 +557,7 @@ void P_PlayerThink (player_t *player)
         else if (player->powers[pw_invisibility] > 4*32 || player->powers[pw_invisibility] & 8)
         {
             // [JN] Invisibility using inverse colormap (32)
-            player->fixedcolormap = INVERSECOLORMAP;
+            player->fixedcolormap = 3;
         }
         else
         {
