@@ -984,299 +984,6 @@ void R_InitSpriteLumps (void)
 }
 
 
-// [crispy] initialize translucency filter map
-// based in parts on the implementation from boom202s/R_DATA.C:676-787
-
-extern char *configdir;
-
-enum {
-    r, g, b
-} rgb_t;
-
-// [JN] Increased from 66 to 85.
-static const int tran_filter_pct = 85;
-
-static void R_InitTintMap()
-{
-    int lump = W_CheckNumForName("TINTMAP");
-    const int originalgamma = usegamma;
-
-    // If a tranlucency filter map lump is present, use it
-    if (lump != -1)
-    {
-        // Set a pointer to the translucency filter maps.
-        tintmap = W_CacheLumpNum(lump, PU_STATIC);
-        // [crispy] loaded from a lump
-        printf(":");
-    }
-    else
-    {
-        // Compose a default transparent filter map based on PLAYPAL.
-        unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-        FILE *cachefp;
-        char *fname = NULL;
-
-        struct {
-            unsigned char pct;
-            unsigned char playpal[256*3]; // [crispy] a palette has 768 bytes!
-        } cache;
-
-        tintmap = Z_Malloc(256*256, PU_STATIC, 0);
-        fname = M_StringJoin(configdir, "tintmap.dat", NULL);
-
-        // [crispy] open file readable
-        if ((cachefp = fopen(fname, "rb")) &&
-            // [crispy] could read struct cache from file
-            fread(&cache, 1, sizeof(cache), cachefp) == sizeof(cache) &&
-            // [crispy] same filter percents
-            cache.pct == tran_filter_pct &&
-            // [crispy] same base palettes
-            memcmp(cache.playpal, playpal, sizeof(cache.playpal)) == 0 &&
-            // [crispy] could read entire translucency map
-            fread(tintmap, 256, 256, cachefp) == 256 )
-        {
-            // [crispy] loaded from a file
-            printf(".");
-        }
-        // [crispy] file not readable
-        else
-        {
-            byte *fg, *bg, blend[3], *tp = tintmap;
-            int i, j;
-
-            // [JN] Set gamma-correction to zero so I_SetPalette can use a full color range.
-            usegamma = 0;
-            I_SetPalette(playpal);
-            // [crispy] background color
-            for (i = 0; i < 256; i++)
-            {
-                // [crispy] foreground color
-                for (j = 0; j < 256; j++)
-                {
-                    // [crispy] shortcut: identical foreground and background
-                    if (i == j)
-                    {
-                        *tp++ = i;
-                        continue;
-                    }
-
-                    bg = playpal + 3*i;
-                    fg = playpal + 3*j;
-
-                    blend[r] = (tran_filter_pct * fg[r] + (100 - tran_filter_pct) * bg[r]) / 100;
-                    blend[g] = (tran_filter_pct * fg[g] + (100 - tran_filter_pct) * bg[g]) / 100;
-                    blend[b] = (tran_filter_pct * fg[b] + (100 - tran_filter_pct) * bg[b]) / 100;
-
-                    *tp++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
-                }
-            }
-
-            // [crispy] file not readable, open writable
-            if ((cachefp = fopen(fname, "wb")))
-            {
-                // [crispy] set filter percents
-                cache.pct = tran_filter_pct;
-                // [crispy] set base palette
-                memcpy(cache.playpal, playpal, sizeof(cache.playpal));
-                // [crispy] go to start of file
-                fseek(cachefp, 0, SEEK_SET);
-                // [crispy] write struct cache
-                fwrite(&cache, 1, sizeof(cache), cachefp);
-                // [crispy] write translucency map
-                fwrite(tintmap, 256, 256, cachefp);
-
-                // [crispy] generated and saved
-                printf("!");
-            }
-            else
-            {
-                // [crispy] generated, but not saved
-                printf("?");
-            }
-        }
-
-        if (cachefp)
-        {
-            fclose(cachefp);
-        }
-
-        free(fname);
-
-        // [JN] Restore original gamma-correction level.
-        usegamma = originalgamma;
-        W_ReleaseLumpName("PLAYPAL");
-    }
-}
-
-
-//
-// R_InitShadeMap
-// [JN] Same as R_InitTintMap, but generates 60% translucency table.
-// Used for text and menu shadows.
-//
-static const int shade_filter_pct = 60;
-
-static void R_InitShadeMap ()
-{
-    int lump = W_CheckNumForName("SHADEMAP");
-    const int originalgamma = usegamma;
-
-    // If a tranlucency filter map lump is present, use it
-    if (lump != -1)
-    {
-        // Set a pointer to the translucency filter maps.
-        shademap = W_CacheLumpNum(lump, PU_STATIC);
-        // [crispy] loaded from a lump
-        printf(":");
-    }
-    else
-    {
-        // Compose a default transparent filter map based on PLAYPAL.
-        unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-        FILE *cachefp;
-        char *fname = NULL;
-
-        struct {
-            unsigned char pct;
-            unsigned char playpal[256*3]; // [crispy] a palette has 768 bytes!
-        } cache;
-
-        shademap = Z_Malloc(256*256, PU_STATIC, 0);
-        fname = M_StringJoin(configdir, "shademap.dat", NULL);
-
-        // [crispy] open file readable
-        if ((cachefp = fopen(fname, "rb")) &&
-            // [crispy] could read struct cache from file
-            fread(&cache, 1, sizeof(cache), cachefp) == sizeof(cache) &&
-            // [crispy] same filter percents
-            cache.pct == shade_filter_pct &&
-            // [crispy] same base palettes
-            memcmp(cache.playpal, playpal, sizeof(cache.playpal)) == 0 &&
-            // [crispy] could read entire translucency map
-            fread(shademap, 256, 256, cachefp) == 256 )
-        {
-            // [crispy] loaded from a file
-            printf(".");
-        }
-        // [crispy] file not readable
-        else
-        {
-            byte *fg, *bg, blend[3], *tp = shademap;
-            int i, j;
-
-            // [JN] Set gamma-correction to zero so I_SetPalette can use a full color range.
-            usegamma = 0;
-            I_SetPalette(playpal);
-            // [crispy] background color
-            for (i = 0; i < 256; i++)
-            {
-                // [crispy] foreground color
-                for (j = 0; j < 256; j++)
-                {
-                    // [crispy] shortcut: identical foreground and background
-                    if (i == j)
-                    {
-                        *tp++ = i;
-                        continue;
-                    }
-
-                    bg = playpal + 3*i;
-                    fg = playpal + 3*j;
-
-                    blend[r] = (shade_filter_pct * fg[r] + (100 - shade_filter_pct) * bg[r]) / 100;
-                    blend[g] = (shade_filter_pct * fg[g] + (100 - shade_filter_pct) * bg[g]) / 100;
-                    blend[b] = (shade_filter_pct * fg[b] + (100 - shade_filter_pct) * bg[b]) / 100;
-
-                    *tp++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
-                }
-            }
-
-            // [crispy] file not readable, open writable
-            if ((cachefp = fopen(fname, "wb")))
-            {
-                // [crispy] set filter percents
-                cache.pct = shade_filter_pct;
-                // [crispy] set base palette
-                memcpy(cache.playpal, playpal, sizeof(cache.playpal));
-                // [crispy] go to start of file
-                fseek(cachefp, 0, SEEK_SET);
-                // [crispy] write struct cache
-                fwrite(&cache, 1, sizeof(cache), cachefp);
-                // [crispy] write translucency map
-                fwrite(shademap, 256, 256, cachefp);
-
-                // [crispy] generated and saved
-                printf("!");
-            }
-            else
-            {
-                // [crispy] generated, but not saved
-                printf("?");
-            }
-        }
-
-        if (cachefp)
-        {
-            fclose(cachefp);
-        }
-
-        free(fname);
-
-        // [JN] Restore original gamma-correction level.
-        usegamma = originalgamma;
-        W_ReleaseLumpName("PLAYPAL");
-    }
-}
-
-//
-// R_InitTransFuzzMap
-// [JN] Generates 25% translucency table, used for translucent fuzz effect.
-//
-void R_InitTransFuzzMap ()
-{
-        // Compose a default transparent filter map based on PLAYPAL.
-        unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-        const int originalgamma = usegamma;
-        const int fuzz_filter_pct = 25;
-        fuzzmap = Z_Malloc(256*256, PU_STATIC, 0);
-
-        {
-            byte *fg, *bg, blend[3], *tp = fuzzmap;
-            int i, j;
-
-            // [JN] Set gamma-correction to zero so I_SetPalette can use a full color range.
-            usegamma = 0;
-            I_SetPalette(playpal);
-            // [crispy] background color
-            for (i = 0; i < 256; i++)
-            {
-                // [crispy] foreground color
-                for (j = 0; j < 256; j++)
-                {
-                    // [crispy] shortcut: identical foreground and background
-                    if (i == j)
-                    {
-                        *tp++ = i;
-                        continue;
-                    }
-
-                    bg = playpal + 3*i;
-                    fg = playpal + 3*j;
-
-                    blend[r] = (fuzz_filter_pct * fg[r] + (100 - fuzz_filter_pct) * bg[r]) / 100;
-                    blend[g] = (fuzz_filter_pct * fg[g] + (100 - fuzz_filter_pct) * bg[g]) / 100;
-                    blend[b] = (fuzz_filter_pct * fg[b] + (100 - fuzz_filter_pct) * bg[b]) / 100;
-
-                    *tp++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
-                }
-            }
-        }
-
-        // [JN] Restore original gamma-correction level.
-        usegamma = originalgamma;
-        W_ReleaseLumpName("PLAYPAL");
-}
-
 //
 // R_InitColormaps
 //
@@ -1290,6 +997,86 @@ static void R_InitColormaps (void)
 
     // [JN] COLORMBW for black and white fuzz effect
     colormaps_bw = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMBW")), PU_STATIC);
+}
+
+
+// [crispy] initialize translucency filter map
+// based in parts on the implementation from boom202s/R_DATA.C:676-787
+//
+// [JN] Shortened to generate three maps:
+// 1) Common translucency for sprites (tintmap).
+// 2) Translucency for shadows casted by texts (shademap).
+// 3) Fuzz effect translucency, improved_full №4 (fuzzmap).
+
+enum {
+    r, g, b
+} rgb_t;
+
+
+static void R_InitTransMaps ()
+{
+    // Compose a default transparent filter map based on PLAYPAL.
+    unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
+    const int originalgamma = usegamma;
+    const int tint_filter_pct = 85;     // [JN] Common translucency
+    const int shade_filter_pct = 60;    // [JN] Text shadows
+    const int fuzz_filter_pct = 25;     // [JN] Translucent fuzz effect
+
+    tintmap = Z_Malloc(256*256, PU_STATIC, 0);
+    shademap = Z_Malloc(256*256, PU_STATIC, 0);
+    fuzzmap = Z_Malloc(256*256, PU_STATIC, 0);
+
+    // [JN] Set gamma-correction to zero so I_SetPalette can use a full color range.
+    usegamma = 0;
+    I_SetPalette(playpal);
+
+    // [JN] Always generate translucency tables dynamically.
+    {
+        byte *fg, *bg, blend[3];
+        byte *tp1 = tintmap;
+        byte *tp2 = shademap;
+        byte *tp3 = fuzzmap;
+        int i, j;
+
+        // [crispy] background color
+        for (i = 0; i < 256; i++)
+        {
+            // [crispy] foreground color
+            for (j = 0; j < 256; j++)
+            {
+                // [crispy] shortcut: identical foreground and background
+                if (i == j)
+                {
+                    *tp1++ = i;
+                    *tp2++ = i;
+                    *tp3++ = i;
+                    continue;
+                }
+
+                bg = playpal + 3*i;
+                fg = playpal + 3*j;
+
+                blend[r] = (tint_filter_pct * fg[r] + (100 - tint_filter_pct) * bg[r]) / 100;
+                blend[g] = (tint_filter_pct * fg[g] + (100 - tint_filter_pct) * bg[g]) / 100;
+                blend[b] = (tint_filter_pct * fg[b] + (100 - tint_filter_pct) * bg[b]) / 100;
+                *tp1++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
+
+                blend[r] = (shade_filter_pct * fg[r] + (100 - shade_filter_pct) * bg[r]) / 100;
+                blend[g] = (shade_filter_pct * fg[g] + (100 - shade_filter_pct) * bg[g]) / 100;
+                blend[b] = (shade_filter_pct * fg[b] + (100 - shade_filter_pct) * bg[b]) / 100;
+                *tp2++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
+
+                blend[r] = (fuzz_filter_pct * fg[r] + (100 - fuzz_filter_pct) * bg[r]) / 100;
+                blend[g] = (fuzz_filter_pct * fg[g] + (100 - fuzz_filter_pct) * bg[g]) / 100;
+                blend[b] = (fuzz_filter_pct * fg[b] + (100 - fuzz_filter_pct) * bg[b]) / 100;
+                *tp3++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
+            }
+        }
+    }
+
+    // [JN] Restore original gamma-correction level.
+    usegamma = originalgamma;
+    W_ReleaseLumpName("PLAYPAL");
 }
 
 
@@ -1340,11 +1127,11 @@ void R_InitData (void)
     R_InitSpriteLumps ();
     printf (".");
     R_InitColormaps ();
-    
-    R_InitTintMap (); // [crispy] prints a mark itself
-    R_InitShadeMap (); // [JN] prints a mark itself
-    R_InitTransFuzzMap (); // [JN] does not prints a mark
 
+    // [JN] Generate translucency tables
+    R_InitTransMaps ();
+    printf (".");
+    
     if (gamevariant != freedoom && gamevariant != freedm)
     {
         R_InitBrightmaps ();
