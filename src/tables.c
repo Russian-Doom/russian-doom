@@ -64,6 +64,28 @@ int SlopeDiv(unsigned int num, unsigned int den)
     }
 }
 
+// [crispy] catch SlopeDiv overflows, only used in rendering
+int SlopeDivCrispy(unsigned int num, unsigned int den)
+{
+    if (den < 512)
+    {
+	return SLOPERANGE;
+    }
+    else
+    {
+	uint64_t ans = ((uint64_t) num << 3) / (den >> 8);
+
+	if (ans <= SLOPERANGE)
+	{
+	    return (int) ans;
+	}
+	else
+	{
+	    return SLOPERANGE;
+	}
+    }
+}
+
 const fixed_t finetangent[4096] =
 {
     -170910304,-56965752,-34178904,-24413316,-18988036,-15535599,-13145455,-11392683,
