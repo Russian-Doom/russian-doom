@@ -322,11 +322,11 @@ void R_SetFuzzPosDraw (void)
 
 void R_DrawFuzzColumn (void) 
 { 
-    int     count; 
-    byte*   dest; 
-    fixed_t frac;
-    fixed_t fracstep;	 
-    boolean cutoff = false;
+    int      count;
+    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    fixed_t  fracstep = dc_iscale;   // Looks familiar.
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
+    boolean  cutoff = false;
 
     // Adjust borders. Low... 
     if (!dc_yl) 
@@ -335,8 +335,8 @@ void R_DrawFuzzColumn (void)
     // .. and high.
     if (dc_yh == viewheight-1) 
     {
-    dc_yh = viewheight - 2; 
-    cutoff = true;
+        dc_yh = viewheight - 2; 
+        cutoff = true;
     }
 
     count = dc_yh - dc_yl; 
@@ -354,12 +354,6 @@ void R_DrawFuzzColumn (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-
-    // Looks familiar.
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
-
     // Looks like an attempt at dithering,
     //  using the colormap #6 (of 0-31, a bit
     //  brighter than average).
@@ -376,7 +370,6 @@ void R_DrawFuzzColumn (void)
         fuzzpos = 0;
 
         dest += screenwidth;
-
         frac += fracstep; 
     } while (count--); 
 
@@ -392,15 +385,15 @@ void R_DrawFuzzColumn (void)
 // low detail mode version
 void R_DrawFuzzColumnLow (void) 
 { 
-    int     count; 
-    byte*   dest; 
-    byte*   dest2; 
-    byte*   dest3;
-    byte*   dest4;
-    fixed_t frac;
-    fixed_t fracstep;	 
-    int     x;
-    boolean cutoff = false;
+    int      count; 
+    int      x = dc_x << 1;  // low detail mode, need to multiply by 2
+    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    fixed_t  fracstep = dc_iscale; 
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;  
+    boolean  cutoff = false;
 
     // Adjust borders. Low... 
     if (!dc_yl) 
@@ -409,8 +402,8 @@ void R_DrawFuzzColumnLow (void)
     // .. and high.
     if (dc_yh == viewheight-1)
     {
-    dc_yh = viewheight - 2; 
-    cutoff = true;
+        dc_yh = viewheight - 2; 
+        cutoff = true;
     }
 
     count = dc_yh - dc_yl; 
@@ -418,9 +411,6 @@ void R_DrawFuzzColumnLow (void)
     // Zero length.
     if (count < 0) 
     return; 
-
-    // low detail mode, need to multiply by 2
-    x = dc_x << 1;
 
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
@@ -432,26 +422,11 @@ void R_DrawFuzzColumnLow (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-
-    // Looks familiar.
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
-
-    // Looks like an attempt at dithering,
-    //  using the colormap #6 (of 0-31, a bit
-    //  brighter than average).
     do 
     {
-        // Lookup framebuffer, and retrieve
-        //  a pixel that is either one column
-        //  left or right of the current one.
-        // Add index from colormap to index.
         *dest = colormaps[6*256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
         *dest2 = colormaps[6*256+dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
+
         if (hires)
         {
             *dest3 = colormaps[6*256+dest[screenwidth*fuzzoffset[fuzzpos]]];
@@ -461,12 +436,11 @@ void R_DrawFuzzColumnLow (void)
         }
 
         // Clamp table lookup index.
-        if (++fuzzpos == FUZZTABLE) 
+        if (++fuzzpos == FUZZTABLE)
         fuzzpos = 0;
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
-
         frac += fracstep; 
     } while (count--); 
 
@@ -477,7 +451,7 @@ void R_DrawFuzzColumnLow (void)
         *dest = colormaps[6*256+dest[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
         *dest2 = colormaps[6*256+dest2[(screenwidth*fuzzoffset[fuzzpos]-screenwidth)/2]];
 
-        if (hires)
+         if (hires)
         {
             *dest3 = *dest;
             *dest4 = *dest2;
@@ -491,13 +465,14 @@ void R_DrawFuzzColumnLow (void)
 
 void R_DrawFuzzColumnBW (void) 
 { 
-    int     count; 
-    byte*   dest; 
-    fixed_t frac;
-    fixed_t fracstep;	 
-    boolean cutoff = false;
-    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared]
-                                         && !players[consoleplayer].powers[pw_invulnerability];
+    int      count; 
+    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    fixed_t  fracstep = dc_iscale; 
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+    boolean  cutoff = false;
+    const boolean greenfuzz = infragreen_visor 
+                            &&  players[consoleplayer].powers[pw_infrared]
+                            && !players[consoleplayer].powers[pw_invulnerability];
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -522,19 +497,15 @@ void R_DrawFuzzColumnBW (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
-
     do 
     {
-        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+              + dest[screenwidth*fuzzoffset[fuzzpos]]]; 
 
-        if (++fuzzpos == FUZZTABLE) 
+        if (++fuzzpos == FUZZTABLE)
         fuzzpos = 0;
 
         dest += screenwidth;
-
         frac += fracstep; 
     } while (count--); 
 
@@ -547,17 +518,18 @@ void R_DrawFuzzColumnBW (void)
 
 void R_DrawFuzzColumnLowBW (void) 
 { 
-    int     count; 
-    byte*   dest; 
-    byte*   dest2; 
-    byte*   dest3;
-    byte*   dest4;
-    fixed_t frac;
-    fixed_t fracstep;	 
-    int     x;
-    boolean cutoff = false;
-    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared]
-                                         && !players[consoleplayer].powers[pw_invulnerability];
+    int      count; 
+    int      x = dc_x << 1;
+    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    fixed_t  fracstep = dc_iscale; 
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep; 	 
+    boolean  cutoff = false;
+    const boolean greenfuzz = infragreen_visor 
+                            && players[consoleplayer].powers[pw_infrared]
+                            && !players[consoleplayer].powers[pw_invulnerability];
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -573,8 +545,6 @@ void R_DrawFuzzColumnLowBW (void)
     if (count < 0) 
     return; 
 
-    x = dc_x << 1;
-
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
@@ -585,31 +555,28 @@ void R_DrawFuzzColumnLowBW (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
-
     do 
     {
-        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
-        *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+              + dest[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+               + dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
+
         if (hires)
         {
-            *dest3 = colormaps_rd[(greenfuzz ? 1 : 2)*256+dest[screenwidth*fuzzoffset[fuzzpos]]];
-            *dest4 = colormaps_rd[(greenfuzz ? 1 : 2)*256+dest2[screenwidth*fuzzoffset[fuzzpos]]];
+            *dest3 = colormaps_rd[(greenfuzz ? 1 : 2)*256
+                   + dest[screenwidth*fuzzoffset[fuzzpos]]];
+            *dest4 = colormaps_rd[(greenfuzz ? 1 : 2)*256
+                   + dest2[screenwidth*fuzzoffset[fuzzpos]]];
             dest3 += screenwidth << hires;
             dest4 += screenwidth << hires;
         }
 
-        if (++fuzzpos == FUZZTABLE) 
+        if (++fuzzpos == FUZZTABLE)
         fuzzpos = 0;
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
-
         frac += fracstep; 
     } while (count--); 
 
@@ -634,11 +601,11 @@ void R_DrawFuzzColumnLowBW (void)
 
 void R_DrawFuzzColumnImproved (void)
 { 
-    int     count; 
-    byte*   dest; 
-    fixed_t frac;
-    fixed_t fracstep;	 
-    boolean cutoff = false;
+    int      count; 
+    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]]; 
+    fixed_t  fracstep = dc_iscale; 
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep; 
+    boolean  cutoff = false;
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -663,21 +630,14 @@ void R_DrawFuzzColumnImproved (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
-
     do 
     {
         *dest = colormaps[6*256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
-        {
-            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
-        }
+        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
 
         dest += screenwidth;
-
         frac += fracstep; 
     } while (count--); 
 
@@ -689,15 +649,15 @@ void R_DrawFuzzColumnImproved (void)
 
 void R_DrawFuzzColumnLowImproved (void) 
 { 
-    int     count; 
-    byte*   dest; 
-    byte*   dest2; 
-    byte*   dest3;
-    byte*   dest4;
-    fixed_t frac;
-    fixed_t fracstep;	 
-    int     x;
-    boolean cutoff = false;
+    int      count; 
+    int      x = dc_x << 1;
+    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    fixed_t  fracstep = dc_iscale; 
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;  
+    boolean  cutoff = false;
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -713,8 +673,6 @@ void R_DrawFuzzColumnLowImproved (void)
     if (count < 0) 
     return; 
 
-    x = dc_x << 1;
-
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
@@ -724,13 +682,6 @@ void R_DrawFuzzColumnLowImproved (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
-
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
 
     do 
     {
@@ -745,13 +696,10 @@ void R_DrawFuzzColumnLowImproved (void)
         }
 
         if (++fuzzpos == FUZZTABLE) 
-        {
-            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
-        }
+        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
-
         frac += fracstep; 
     } while (count--); 
 
@@ -775,12 +723,13 @@ void R_DrawFuzzColumnLowImproved (void)
 void R_DrawFuzzColumnImprovedBW (void)
 { 
     int     count; 
-    byte*   dest; 
-    fixed_t frac;
-    fixed_t fracstep;	 
+    byte*   dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    fixed_t fracstep = dc_iscale;
+    fixed_t frac = dc_texturemid + (dc_yl-centery)*fracstep;
     boolean cutoff = false;
-    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared]
-                                         && !players[consoleplayer].powers[pw_invulnerability];
+    const boolean greenfuzz = infragreen_visor 
+                            && players[consoleplayer].powers[pw_infrared]
+                            && !players[consoleplayer].powers[pw_invulnerability];
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -805,21 +754,14 @@ void R_DrawFuzzColumnImprovedBW (void)
     }
 #endif
 
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
-
     do 
     {
         *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
-        {
-            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
-        }
+        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
 
         dest += screenwidth;
-
         frac += fracstep; 
     } while (count--); 
 
@@ -832,17 +774,18 @@ void R_DrawFuzzColumnImprovedBW (void)
 
 void R_DrawFuzzColumnLowImprovedBW (void) 
 { 
-    int     count; 
-    byte*   dest; 
-    byte*   dest2; 
-    byte*   dest3;
-    byte*   dest4;
-    fixed_t frac;
-    fixed_t fracstep;	 
-    int     x;
-    boolean cutoff = false;
-    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared]
-                                         && !players[consoleplayer].powers[pw_invulnerability];
+    int      count; 
+    int      x = dc_x << 1;
+    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    fixed_t  fracstep = dc_iscale; 
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;  
+    boolean  cutoff = false;
+    const boolean greenfuzz = infragreen_visor 
+                            && players[consoleplayer].powers[pw_infrared]
+                            && !players[consoleplayer].powers[pw_invulnerability];
 
     if (!dc_yl) 
     dc_yl = 1;
@@ -858,8 +801,6 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     if (count < 0) 
     return; 
 
-    x = dc_x << 1;
-
 #ifdef RANGECHECK 
     if ((unsigned)x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
@@ -870,33 +811,27 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     }
 #endif
 
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-    fracstep = dc_iscale; 
-    frac = dc_texturemid + (dc_yl-centery)*fracstep; 
-
     do 
     {
-        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[screenwidth*fuzzoffset[fuzzpos]]]; 
-        *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+              + dest[screenwidth*fuzzoffset[fuzzpos]]]; 
+        *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+               + dest2[screenwidth*fuzzoffset[fuzzpos]]]; 
         if (hires)
         {
-            *dest3 = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[screenwidth*fuzzoffset[fuzzpos]]];
-            *dest4 = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest2[screenwidth*fuzzoffset[fuzzpos]]];
+            *dest3 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+                   + dest[screenwidth*fuzzoffset[fuzzpos]]];
+            *dest4 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+                   + dest2[screenwidth*fuzzoffset[fuzzpos]]];
             dest3 += screenwidth << hires;
             dest4 += screenwidth << hires;
         }
 
         if (++fuzzpos == FUZZTABLE) 
-        {
-            fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
-        }
+        fuzzpos = paused || menuactive || inhelpscreens ? 0 : Crispy_Random()%49;
 
         dest += screenwidth << hires;
         dest2 += screenwidth << hires;
-
         frac += fracstep; 
     } while (count--); 
 
@@ -923,8 +858,9 @@ void R_DrawFuzzColumnTranslucent (void)
 {
     int      count = dc_yh - dc_yl + 1;
     int      heightmask = dc_texheight-1;
-    byte    *dest;
-    fixed_t  frac, fracstep;
+    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    fixed_t  fracstep = dc_iscale;
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     if (count < 0)
     return;
@@ -938,11 +874,6 @@ void R_DrawFuzzColumnTranslucent (void)
                  dc_yl, dc_yh, dc_x);
     }
 #endif
-
-    dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-
-    fracstep = dc_iscale;
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     if (dc_texheight & heightmask)   // not a power of 2 -- killough
     {
@@ -982,11 +913,17 @@ void R_DrawFuzzColumnTranslucent (void)
 
 void R_DrawFuzzColumnTranslucentLow (void)
 {
-    int      count = dc_yh - dc_yl;
+    int      count;
     int      heightmask = dc_texheight - 1;
     int      x = dc_x << 1;
-    byte    *dest, *dest2, *dest3, *dest4;
-    fixed_t  frac, fracstep;
+    byte    *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
+    byte    *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
+    byte    *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
+    byte    *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
+    fixed_t  fracstep = dc_iscale;
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
+
+    count = dc_yh - dc_yl;
 
     if (count < 0)
     return;
@@ -1000,14 +937,6 @@ void R_DrawFuzzColumnTranslucentLow (void)
                  dc_yl, dc_yh, x);
     }
 #endif
-
-    dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x]];
-    dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[x+1]];
-    dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x]];
-    dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[x+1]];
-
-    fracstep = dc_iscale;
-    frac = dc_texturemid + (dc_yl-centery)*fracstep;
 
     if (dc_texheight & heightmask) // not a power of 2 -- killough
     {
