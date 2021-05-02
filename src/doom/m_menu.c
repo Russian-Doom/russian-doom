@@ -6560,8 +6560,8 @@ void M_RD_Change_InfraGreenVisor(int choice)
         }
         else
         {
-            // Set respective colormap
-            players[consoleplayer].fixedcolormap = infragreen_visor ? 33 : 1;
+            // Set full bright colormap
+            players[consoleplayer].fixedcolormap = 1;
         }
     }
 }

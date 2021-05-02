@@ -170,8 +170,7 @@ fixed_t*	spriteoffset;
 fixed_t*	spritetopoffset;
 
 lighttable_t	*colormaps;
-lighttable_t	*colormaps_beta; // [JN] For infra green light amplification visor
-lighttable_t	*colormaps_bw;   // [JN] For B&W fuzz effect
+lighttable_t	*colormaps_rd; // [JN] Infragreen vison and B&W fuzz effect
 
 // [JN] Brightmaps
 lighttable_t	*brightmaps_notgray;
@@ -992,11 +991,11 @@ static void R_InitColormaps (void)
     // Load in the light tables 256 byte align tables.
     colormaps = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMAP")), PU_STATIC);
 
-    // [JN] COLORMAP (№33) from Press Release Beta for infra green visor
-    colormaps_beta = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMAB")), PU_STATIC);
-
-    // [JN] COLORMBW for black and white fuzz effect
-    colormaps_bw = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMBW")), PU_STATIC);
+    // [JN] RD special colormaps, have three rows:
+    // 0) Standard full bright colors (dummy).
+    // 1) Green colors for Infragreen Visor.
+    // 2) Black and white color for B&W fuzz effect.
+    colormaps_rd = W_CacheLumpNum(W_GetNumForName(DEH_String("COLORMRD")), PU_STATIC);
 }
 
 

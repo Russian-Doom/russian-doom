@@ -30,7 +30,7 @@
 
 
 #define INVERSECOLORMAP     32  // Index of the special effects (INVUL inverse) map.
-#define INFRAGREENCOLORMAP  33  // [JN] Infra green light amplification visor.
+#define INFRAGREENCOLORMAP  1   // [JN] Infra green light amplification visor.
 #define MAXBOB  0x100000        // 16 pixels of bob
 #define ANG5    (ANG90/18)
 
@@ -526,7 +526,7 @@ void P_PlayerThink (player_t *player)
         {
             if (infragreen_visor && !vanillaparm)
             {
-                // [JN] Infra green visor: COLORMAP 33
+                // [JN] Infra green visor
                 player->fixedcolormap = INFRAGREENCOLORMAP;
             }
             else

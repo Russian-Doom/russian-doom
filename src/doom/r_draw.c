@@ -434,22 +434,7 @@ void R_DrawFuzzColumn (void)
     // draw one extra line using only pixels of that line and the one above
     if (cutoff)
     {
-        if (aspect_ratio == 2)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-        }
-        else if (aspect_ratio == 3)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-        }
-        else if (aspect_ratio == 4)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-        }
-        else
-        {
-            *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        }
+        *dest = colormaps[6*256+dest[(afuzzoffset[fuzzpos]-screenwidth)/2]];
     }
 } 
 
@@ -544,26 +529,8 @@ void R_DrawFuzzColumnLow (void)
     // draw one extra line using only pixels of that line and the one above
     if (cutoff)
     {
-        if (aspect_ratio == 2)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-        }
-        else if (aspect_ratio == 3)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-        }
-        else if (aspect_ratio == 4)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-        }
-        else
-        {
-            *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-            *dest2 = colormaps[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        }
+        *dest = colormaps[6*256+dest[(afuzzoffset[fuzzpos]-screenwidth)/2]];
+        *dest2 = colormaps[6*256+dest2[(afuzzoffset[fuzzpos]-screenwidth)/2]];
 
         if (hires)
         {
@@ -584,7 +551,8 @@ void R_DrawFuzzColumnBW (void)
     fixed_t frac;
     fixed_t fracstep;	 
     boolean cutoff = false;
-    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
+    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared]
+                                         && !players[consoleplayer].powers[pw_invulnerability];
     // [RUDE] actual offset
     int* afuzzoffset = aspect_ratio == 2 ? wfuzzoffset_16_9 :
                        aspect_ratio == 3 ? wfuzzoffset_16_10 :
@@ -620,7 +588,7 @@ void R_DrawFuzzColumnBW (void)
 
     do 
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]]; 
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[afuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
         fuzzpos = 0;
@@ -632,22 +600,8 @@ void R_DrawFuzzColumnBW (void)
 
     if (cutoff)
     {
-        if (aspect_ratio == 2)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-        }
-        else if (aspect_ratio == 3)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-        }
-        else if (aspect_ratio == 4)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-        }
-        else
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        }
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+              + dest[(afuzzoffset[fuzzpos]-screenwidth)/2]];
     }
 } 
 
@@ -662,7 +616,8 @@ void R_DrawFuzzColumnLowBW (void)
     fixed_t fracstep;	 
     int     x;
     boolean cutoff = false;
-    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
+    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared]
+                                         && !players[consoleplayer].powers[pw_invulnerability];
     // [RUDE] actual offset
     int* afuzzoffset = aspect_ratio == 2 ? wfuzzoffset_16_9 :
                        aspect_ratio == 3 ? wfuzzoffset_16_10 :
@@ -704,12 +659,12 @@ void R_DrawFuzzColumnLowBW (void)
 
     do 
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]]; 
-        *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[afuzzoffset[fuzzpos]]]; 
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[afuzzoffset[fuzzpos]]]; 
+        *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest2[afuzzoffset[fuzzpos]]]; 
         if (hires)
         {
-            *dest3 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]];
-            *dest4 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[afuzzoffset[fuzzpos]]];
+            *dest3 = colormaps_rd[(greenfuzz ? 1 : 2)*256+dest[afuzzoffset[fuzzpos]]];
+            *dest4 = colormaps_rd[(greenfuzz ? 1 : 2)*256+dest2[afuzzoffset[fuzzpos]]];
             dest3 += screenwidth << hires;
             dest4 += screenwidth << hires;
         }
@@ -725,26 +680,10 @@ void R_DrawFuzzColumnLowBW (void)
 
     if (cutoff)
     {
-        if (aspect_ratio == 2)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-        }
-        else if (aspect_ratio == 3)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-        }
-        else if (aspect_ratio == 4)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-        }
-        else
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        }
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+              + dest[(afuzzoffset[fuzzpos]-screenwidth)/2]];
+        *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+               + dest2[(afuzzoffset[fuzzpos]-screenwidth)/2]];
 
         if (hires)
         {
@@ -814,22 +753,7 @@ void R_DrawFuzzColumnImproved (void)
 
     if (cutoff)
     {
-        if (aspect_ratio == 2)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-        }
-        else if (aspect_ratio == 3)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-        }
-        else if (aspect_ratio == 4)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-        }
-        else
-        {
-            *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        }
+        *dest = colormaps[6*256+dest[(afuzzoffset[fuzzpos]-screenwidth)/2]];
     }
 } 
 
@@ -908,26 +832,8 @@ void R_DrawFuzzColumnLowImproved (void)
 
     if (cutoff)
     {
-        if (aspect_ratio == 2)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-        }
-        else if (aspect_ratio == 3)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];            
-        }
-        else if (aspect_ratio == 4)
-        {
-            *dest = colormaps[6*256+dest[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-            *dest2 = colormaps[6*256+dest2[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];            
-        }
-        else
-        {
-            *dest = colormaps[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-            *dest2 = colormaps[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        }
+        *dest = colormaps[6*256+dest[(afuzzoffset[fuzzpos]-screenwidth)/2]];
+        *dest2 = colormaps[6*256+dest2[(afuzzoffset[fuzzpos]-screenwidth)/2]];
 
         if (hires)
         {
@@ -948,7 +854,8 @@ void R_DrawFuzzColumnImprovedBW (void)
     fixed_t frac;
     fixed_t fracstep;	 
     boolean cutoff = false;
-    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
+    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared]
+                                         && !players[consoleplayer].powers[pw_invulnerability];
     // [RUDE] actual offset
     int* afuzzoffset = aspect_ratio == 2 ? wfuzzoffset_16_9 :
                        aspect_ratio == 3 ? wfuzzoffset_16_10 :
@@ -984,7 +891,7 @@ void R_DrawFuzzColumnImprovedBW (void)
 
     do 
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]]; 
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[afuzzoffset[fuzzpos]]]; 
 
         if (++fuzzpos == FUZZTABLE) 
         {
@@ -998,22 +905,8 @@ void R_DrawFuzzColumnImprovedBW (void)
 
     if (cutoff)
     {
-        if (aspect_ratio == 2)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-        }
-        else if (aspect_ratio == 3)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-        }
-        else if (aspect_ratio == 4)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-        }
-        else
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        }
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+              + dest[(afuzzoffset[fuzzpos]-screenwidth)/2]];
     }
 } 
 
@@ -1028,7 +921,8 @@ void R_DrawFuzzColumnLowImprovedBW (void)
     fixed_t fracstep;	 
     int     x;
     boolean cutoff = false;
-    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared];
+    boolean greenfuzz = infragreen_visor && players[consoleplayer].powers[pw_infrared]
+                                         && !players[consoleplayer].powers[pw_invulnerability];
     // [RUDE] actual offset
     int* afuzzoffset = aspect_ratio == 2 ? wfuzzoffset_16_9 :
                        aspect_ratio == 3 ? wfuzzoffset_16_10 :
@@ -1070,12 +964,12 @@ void R_DrawFuzzColumnLowImprovedBW (void)
 
     do 
     {
-        *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]]; 
-        *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[afuzzoffset[fuzzpos]]]; 
+        *dest = colormaps_rd[(greenfuzz ? 1 : 1) * 256+dest[afuzzoffset[fuzzpos]]]; 
+        *dest2 = colormaps_rd[(greenfuzz ? 2 : 2) * 256+dest2[afuzzoffset[fuzzpos]]]; 
         if (hires)
         {
-            *dest3 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[afuzzoffset[fuzzpos]]];
-            *dest4 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[afuzzoffset[fuzzpos]]];
+            *dest3 = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest[afuzzoffset[fuzzpos]]];
+            *dest4 = colormaps_rd[(greenfuzz ? 1 : 2) * 256+dest2[afuzzoffset[fuzzpos]]];
             dest3 += screenwidth << hires;
             dest4 += screenwidth << hires;
         }
@@ -1093,26 +987,10 @@ void R_DrawFuzzColumnLowImprovedBW (void)
 
     if (cutoff)
     {
-        if (aspect_ratio == 2)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_16_9[fuzzpos]-WFUZZOFF_16_9)/2]];
-        }
-        else if (aspect_ratio == 3)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_16_10[fuzzpos]-WFUZZOFF_16_10)/2]];
-        }
-        else if (aspect_ratio == 4)
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(wfuzzoffset_21_9[fuzzpos]-WFUZZOFF_21_9)/2]];
-        }
-        else
-        {
-            *dest = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-            *dest2 = (greenfuzz ? colormaps_beta : colormaps_bw)[6*256+dest2[(fuzzoffset[fuzzpos]-FUZZOFF)/2]];
-        }
+        *dest = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+              + dest[(afuzzoffset[fuzzpos]-screenwidth)/2]];
+        *dest2 = colormaps_rd[(greenfuzz ? 1 : 2) * 256
+               + dest2[(afuzzoffset[fuzzpos]-screenwidth)/2]];
 
         if (hires)
         {

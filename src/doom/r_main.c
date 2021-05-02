@@ -830,7 +830,7 @@ void R_SetupFrame (player_t* player)
         else if ((gamemode == pressbeta && player->powers[pw_invisibility])
         || ((infragreen_visor || gamemode == pressbeta) && player->powers[pw_infrared]))
         {
-            fixedcolormap = colormaps_beta + player->fixedcolormap * 256;
+            fixedcolormap = colormaps_rd + player->fixedcolormap * 256;
         }
         else
         {
