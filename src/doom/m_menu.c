@@ -7765,6 +7765,9 @@ void M_RD_BackToDefaults_Recommended(int choice)
         ST_drawWidgets(true);
     }
 
+    // Reset Automap color scheme
+    AM_initColors();
+
     // Print informative message
     M_snprintf(resetmsg, sizeof(resetmsg), english_language ? 
                                            "Settings reset" :
@@ -7913,6 +7916,9 @@ void M_RD_BackToDefaults_Original(int choice)
         ST_refreshBackground();
         ST_drawWidgets(true);
     }
+
+    // Reset Automap color scheme
+    AM_initColors();
 
     // Print informative message
     M_snprintf(resetmsg, sizeof(resetmsg), english_language ? 
