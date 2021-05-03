@@ -211,7 +211,6 @@ static int f_w;
 static int f_h;
 
 static byte* fb;     // pseudo-frame buffer
-static int amclock;
 
 static mpoint_t m_paninc;     // how far the window pans each tic (map coords)
 static fixed_t  mtof_zoommul; // how far the window zooms in each tic (map coords)
@@ -543,7 +542,6 @@ void AM_initVariables(void)
     fb = I_VideoBuffer;
 
     f_oldloc.x = INT_MAX;
-    amclock = 0;
 
     m_paninc.x = m_paninc.y = 0;
     ftom_zoommul = FRACUNIT;
@@ -1001,8 +999,6 @@ void AM_Ticker (void)
     {
         return;
     }
-
-    amclock++;
 
     if (automap_follow)
     {
