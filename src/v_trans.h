@@ -88,5 +88,6 @@ extern byte  *tintmap;
 extern byte  *shademap;
 extern byte  *fuzzmap;
 
+int V_GetPaletteIndex(byte *palette, int r, int g, int b);
 
 #endif // __V_TRANS__ 

@@ -1017,7 +1017,6 @@ static void R_InitTransMaps ()
 {
     // Compose a default transparent filter map based on PLAYPAL.
     unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-    const int originalgamma = usegamma;
     const int tint_filter_pct = 85;     // [JN] Common translucency
     const int shade_filter_pct = 60;    // [JN] Text shadows
     const int fuzz_filter_pct = 25;     // [JN] Translucent fuzz effect
@@ -1025,10 +1024,6 @@ static void R_InitTransMaps ()
     tintmap = Z_Malloc(256*256, PU_STATIC, 0);
     shademap = Z_Malloc(256*256, PU_STATIC, 0);
     fuzzmap = Z_Malloc(256*256, PU_STATIC, 0);
-
-    // [JN] Set gamma-correction to zero so I_SetPalette can use a full color range.
-    usegamma = 0;
-    I_SetPalette(playpal);
 
     // [JN] Always generate translucency tables dynamically.
     {
@@ -1059,23 +1054,21 @@ static void R_InitTransMaps ()
                 blend[r] = (tint_filter_pct * fg[r] + (100 - tint_filter_pct) * bg[r]) / 100;
                 blend[g] = (tint_filter_pct * fg[g] + (100 - tint_filter_pct) * bg[g]) / 100;
                 blend[b] = (tint_filter_pct * fg[b] + (100 - tint_filter_pct) * bg[b]) / 100;
-                *tp1++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
+                *tp1++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
 
                 blend[r] = (shade_filter_pct * fg[r] + (100 - shade_filter_pct) * bg[r]) / 100;
                 blend[g] = (shade_filter_pct * fg[g] + (100 - shade_filter_pct) * bg[g]) / 100;
                 blend[b] = (shade_filter_pct * fg[b] + (100 - shade_filter_pct) * bg[b]) / 100;
-                *tp2++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
+                *tp2++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
 
                 blend[r] = (fuzz_filter_pct * fg[r] + (100 - fuzz_filter_pct) * bg[r]) / 100;
                 blend[g] = (fuzz_filter_pct * fg[g] + (100 - fuzz_filter_pct) * bg[g]) / 100;
                 blend[b] = (fuzz_filter_pct * fg[b] + (100 - fuzz_filter_pct) * bg[b]) / 100;
-                *tp3++ = I_GetPaletteIndex(blend[r], blend[g], blend[b]);
+                *tp3++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
             }
         }
     }
 
-    // [JN] Restore original gamma-correction level.
-    usegamma = originalgamma;
     W_ReleaseLumpName("PLAYPAL");
 }
 
