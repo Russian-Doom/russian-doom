@@ -161,7 +161,7 @@ void BuildGUI()
 
 int main(int argc, char *argv[])
 {
-    if (!TXT_Init())
+    if (!TXT_Init(0))
     {
         fprintf(stderr, "Failed to initialise GUI\n");
         exit(-1);

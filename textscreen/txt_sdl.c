@@ -47,7 +47,9 @@ typedef struct
 
 #include "fonts/small.h"
 #include "fonts/normal.h"
+#include "fonts/normal_en.h"
 #include "fonts/large.h"
+#include "fonts/large_en.h"
 #include "fonts/codepage.h"
 
 // Time between character blinks in ms
@@ -143,7 +145,9 @@ static const txt_font_t *FontForName(char *name)
     {
         &small_font,
         &normal_font,
+        &normal_en_font,
         &large_font,
+        &large_en_font,
         &highdpi_font,
         NULL,
     };
@@ -239,7 +243,13 @@ void TXT_PreInit(SDL_Window *preset_window,
     }
 }
 
-int TXT_Init(void)
+//
+// [JN] If function is called with English language using (use_en_font == 1),
+// English-only font atlases will be used. Needed for proper apperance of 
+// some special characters in ENDOOM screens.
+//
+
+int TXT_Init(int use_en_font)
 {
     int flags = 0;
 
@@ -289,7 +299,7 @@ int TXT_Init(void)
          && render_w >= TXT_SCREEN_W * large_font.w
          && render_h >= TXT_SCREEN_H * large_font.h)
         {
-            font = &large_font;
+            font = use_en_font ? &large_en_font : &large_font;
             // Note that we deliberately do not update screen_image_{w,h}
             // since these are the dimensions of textscreen image in screen
             // coordinates, not pixels.
@@ -300,7 +310,7 @@ int TXT_Init(void)
     // then use the normal resolution font instead.
     if (font == &highdpi_font)
     {
-        font = &normal_font;
+        font = use_en_font ? &normal_en_font : &normal_font;
     }
 
     // Instead, we draw everything into an intermediate 8-bit surface

@@ -473,7 +473,7 @@ static void InitTextscreen(void)
 {
     SetDisplayDriver();
 
-    if (!TXT_Init())
+    if (!TXT_Init(0))
         {
             fprintf(stderr, english_language ?
                             "Failed to initialize GUI\n" :

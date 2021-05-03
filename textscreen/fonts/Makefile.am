@@ -11,8 +11,14 @@ small.h: small.png convert-font
 normal.h: normal.png convert-font
 	./convert-font normal normal.png normal.h
 
+normal_en.h: normal_en.png convert-font
+	./convert-font normal_en normal_en.png normal_en.h
+
 large.h: large.png convert-font
 	./convert-font large large.png large.h
+
+large_en.h: large_en.png convert-font
+	./convert-font large_en large_en.png large_en.h
 
 endif
 

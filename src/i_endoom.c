@@ -24,7 +24,7 @@
 #include "config.h"
 #include "doomtype.h"
 #include "i_video.h"
-
+#include "jn.h"
 #include "txt_main.h"
 
 #define ENDOOM_W 80
@@ -43,7 +43,9 @@ void I_Endoom(byte *endoom_data)
     // Set up text mode screen
     TXT_PreInit(I_GetSDLWindow(), I_GetSDLRenderer());
 
-    TXT_Init();
+    // [JN] If English language is set, draw ENDOOM 
+    // screen with English-only font atlases.
+    TXT_Init(english_language);
 
     // Write the data to the screen memory
 
