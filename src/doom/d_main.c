@@ -193,6 +193,7 @@ int colored_hud = 0;
 int colored_blood = 1;
 int swirling_liquids = 1;
 int invul_sky = 1;
+int linear_sky = 1;
 int flip_weapons = 0;
 
 // Gameplay: Audible
@@ -676,6 +677,7 @@ void D_BindVariables(void)
     M_BindIntVariable("colored_blood",          &colored_blood);
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
+    M_BindIntVariable("linear_sky",             &linear_sky);
     M_BindIntVariable("flip_weapons",           &flip_weapons);
 
     // Gameplay: Audible

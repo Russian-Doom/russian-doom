@@ -351,6 +351,7 @@ void M_RD_Change_ColoredHUD(int choice);
 void M_RD_Change_ColoredBlood(int choice);
 void M_RD_Change_SwirlingLiquids(int choice);
 void M_RD_Change_InvulSky(int choice);
+void M_RD_Change_LinearSky(int choice);
 void M_RD_Change_FlipWeapons(int choice);
 void M_RD_Change_ZAxisSfx(int choice);
 void M_RD_Change_ExitSfx(int choice);
@@ -2251,10 +2252,10 @@ enum
     rd_gameplay_1_colored_blood,
     rd_gameplay_1_swirling_liquids,
     rd_gameplay_1_invul_sky,
+    rd_gameplay_1_linear_sky,
     rd_gameplay_1_flip_weapons,
     rd_gameplay_1_empty1,
     rd_gameplay_1_empty2,
-    rd_gameplay_1_empty3,
     rd_gameplay_1_next_page,
     rd_gameplay_1_last_page,
     rd_gameplay_1_end
@@ -2328,8 +2329,8 @@ menuitem_t RD_Gameplay_Menu_1[]=
     {2,"Colored blood and corpses:",   M_RD_Change_ColoredBlood,   'c'},
     {2,"Swirling liquids:",            M_RD_Change_SwirlingLiquids,'s'},
     {2,"Invulnerability affects sky:", M_RD_Change_InvulSky,       'i'},
+    {2,"Horizontally linear sky drawing:",M_RD_Change_LinearSky,   'h'},
     {2,"Flip weapons:",                M_RD_Change_FlipWeapons,    'f'},
-    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"", /* Next Page > */           M_RD_Choose_Gameplay_2,     'n'},
     {1,"", /* < Last Page */           M_RD_Choose_Gameplay_4,     'l'},
@@ -2444,8 +2445,8 @@ menuitem_t RD_Gameplay_Menu_1_Rus[]=
     {2,"Hfpyjwdtnyfz rhjdm b nhegs:",       M_RD_Change_ColoredBlood,   'h'},   // Разноцветная кровь и трупы
     {2,"ekexityyfz fybvfwbz ;blrjcntq:",    M_RD_Change_SwirlingLiquids,'e'},   // Улучшенная анимация жидкостей
     {2,"ytezpdbvjcnm jrhfibdftn yt,j:",     M_RD_Change_InvulSky,       'y'},   // Неуязвимость окрашивает небо
+    {2,"kbytqyjt jnj,hf;tybt yt,f:",        M_RD_Change_LinearSky,      'k'},   // Линейное отображение неба
     {2,"pthrfkmyjt jnhf;tybt jhe;bz:",      M_RD_Change_FlipWeapons,    'p'},   // Зеркальное отражение оружия
-    {-1,"",0,'\0'},
     {-1,"",0,'\0'},
     {1,"",                                  M_RD_Choose_Gameplay_2,     'l'},   // Далее >
     {1,"",                                  M_RD_Choose_Gameplay_4,     'y'},   // < Назад
@@ -5850,9 +5851,14 @@ void M_RD_Draw_Gameplay_1(void)
         M_WriteTextSmall_ENG(237 + wide_delta, 105, invul_sky ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
+        // Horizontally linear sky drawing
+        dp_translation = linear_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_ENG(266 + wide_delta, 115, linear_sky ? RD_ON : RD_OFF);
+        dp_translation = NULL;
+
         // Flip weapons
         dp_translation = flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_ENG(131 + wide_delta, 115, flip_weapons ? RD_ON : RD_OFF);
+        M_WriteTextSmall_ENG(131 + wide_delta, 125, flip_weapons ? RD_ON : RD_OFF);
         dp_translation = NULL;
 
         //
@@ -5922,9 +5928,14 @@ void M_RD_Draw_Gameplay_1(void)
         M_WriteTextSmall_RUS(262 + wide_delta, 105, invul_sky ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
+        // Линейное отображение неба
+        dp_translation = linear_sky ? cr[CR_GREEN] : cr[CR_DARKRED];
+        M_WriteTextSmall_RUS(239 + wide_delta, 115, linear_sky ? RD_ON_RUS : RD_OFF_RUS);
+        dp_translation = NULL;
+
         // Зеркальное отражение оружия
         dp_translation = flip_weapons ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(259 + wide_delta, 115, flip_weapons ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(259 + wide_delta, 125, flip_weapons ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL;
 
         //
@@ -6501,6 +6512,11 @@ void M_RD_Change_SwirlingLiquids(int choice)
 void M_RD_Change_InvulSky(int choice)
 {
     invul_sky ^= 1;
+}
+
+void M_RD_Change_LinearSky(int choice)
+{
+    linear_sky ^= 1;
 }
 
 void M_RD_Change_FlipWeapons(int choice)
@@ -7708,6 +7724,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
     colored_blood    = 1;
     swirling_liquids = 1;
     invul_sky        = 1;
+    linear_sky       = 1;
     flip_weapons     = 0;
 
     // Gameplay: Audible
@@ -7860,6 +7877,7 @@ void M_RD_BackToDefaults_Original(int choice)
     colored_blood    = 0;
     swirling_liquids = 0;
     invul_sky        = 0;
+    linear_sky       = 0;
     flip_weapons     = 0;
 
     // Gameplay: Audible

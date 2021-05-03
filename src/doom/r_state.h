@@ -69,6 +69,8 @@ extern int scaledviewheight;
 // [crispy] lookup table for horizontal screen coordinates
 extern int flipwidth[WIDESCREENWIDTH];
 
+extern angle_t linearskyangle[WIDESCREENWIDTH+1];
+
 extern int firstflat;
 
 // for global animation

@@ -1693,6 +1693,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(improved_fuzz),
     CONFIG_VARIABLE_INT(swirling_liquids),
     CONFIG_VARIABLE_INT(invul_sky),
+    CONFIG_VARIABLE_INT(linear_sky),
     CONFIG_VARIABLE_INT(flip_weapons),
 
     // Gameplay: Audible
