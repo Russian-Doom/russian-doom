@@ -6214,7 +6214,7 @@ void M_RD_Draw_Gameplay_3(void)
 
         // Подбрасывать выпавшие предметы
         dp_translation = toss_drop ? cr[CR_GREEN] : cr[CR_DARKRED];
-        M_WriteTextSmall_RUS(286 + wide_delta, 95, toss_drop ? RD_ON_RUS : RD_OFF_RUS);
+        M_WriteTextSmall_RUS(285 + wide_delta, 95, toss_drop ? RD_ON_RUS : RD_OFF_RUS);
         dp_translation = NULL; 
 
         //
