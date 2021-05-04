@@ -8583,7 +8583,8 @@ void M_Episode(int choice)
         M_StartMessage(DEH_String(english_language ?
                                   SWSTRING : SWSTRING_RUS),
                                   NULL,false);
-        M_SetupNextMenu(&ReadDef1);
+        // [JN] Return to Episode menu.
+        M_SetupNextMenu(english_language ? &EpiDef : &EpiDef_Rus);
         return;
     }
 
@@ -9528,6 +9529,9 @@ boolean M_Responder (event_t* ev)
     &&  currentMenu != &SaveDef_Rus
     &&  currentMenu != &LoadDef
     &&  currentMenu != &LoadDef_Rus    
+    // [JN] Do not close Episode menu after closing "purchase entire trilogy" message in Shareware.
+    &&  (currentMenu != &EpiDef && gamemode == shareware)
+    &&  (currentMenu != &EpiDef_Rus && gamemode == shareware)
     // [JN] Do not close Options menu after pressing "N" in End Game.
     &&  currentMenu != &RD_Options_Def
     &&  currentMenu != &RD_Options_Def_Rus
