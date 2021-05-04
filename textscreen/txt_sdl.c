@@ -46,6 +46,7 @@ typedef struct
 // Fonts:
 
 #include "fonts/small.h"
+#include "fonts/small_en.h"
 #include "fonts/normal.h"
 #include "fonts/normal_en.h"
 #include "fonts/large.h"
@@ -144,6 +145,7 @@ static const txt_font_t *FontForName(char *name)
     const txt_font_t *fonts[] =
     {
         &small_font,
+        &small_en_font,
         &normal_font,
         &normal_en_font,
         &large_font,
@@ -303,6 +305,12 @@ int TXT_Init(int use_en_font)
             // Note that we deliberately do not update screen_image_{w,h}
             // since these are the dimensions of textscreen image in screen
             // coordinates, not pixels.
+        }
+
+        // [JN] If window is too small to show a regular font, use a small one.
+        if (render_w < 640 || render_h < 480)
+        {
+            font = use_en_font ? &small_en_font : &small_font;
         }
     }
 

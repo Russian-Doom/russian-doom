@@ -8,6 +8,9 @@ if HAVE_PYTHON
 small.h: small.png convert-font
 	./convert-font small small.png small.h
 
+small_en.h: small_en.png convert-font
+	./convert-font small_en small_en.png small_en.h
+
 normal.h: normal.png convert-font
 	./convert-font normal normal.png normal.h
 
