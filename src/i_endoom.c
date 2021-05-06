@@ -45,7 +45,7 @@ void I_Endoom(byte *endoom_data)
 
     // [JN] If English language is set, draw ENDOOM 
     // screen with English-only font atlases.
-    TXT_Init(english_language);
+    TXT_Init(english_language, 1);
 
     // Write the data to the screen memory
 

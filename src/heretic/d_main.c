@@ -768,7 +768,7 @@ void initStartup(void)
         return;
     }
 
-    if (!TXT_Init(0)) 
+    if (!TXT_Init(0, 0)) 
     {
         using_graphical_startup = false;
         return;

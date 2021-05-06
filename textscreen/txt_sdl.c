@@ -251,7 +251,7 @@ void TXT_PreInit(SDL_Window *preset_window,
 // some special characters in ENDOOM screens.
 //
 
-int TXT_Init(int use_en_font)
+int TXT_Init(int use_en_font, int use_small_font)
 {
     int flags = 0;
 
@@ -308,7 +308,7 @@ int TXT_Init(int use_en_font)
         }
 
         // [JN] If window is too small to show a regular font, use a small one.
-        if (render_w < 640 || render_h < 480)
+        if (use_small_font && (render_w < 640 || render_h < 480))
         {
             font = use_en_font ? &small_en_font : &small_font;
         }
