@@ -1972,9 +1972,6 @@ void G_DoLoadGame (void)
 
     fclose(save_stream);
     
-    if (setsizeneeded)
-    R_ExecuteSetViewSize ();
-    
     // [JN] Дополнительный фидбек о загрузке игры (Игра загружена.)
     players[consoleplayer].message_system = DEH_String(ggloaded);
     
