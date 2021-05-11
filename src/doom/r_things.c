@@ -402,7 +402,7 @@ void R_DrawMaskedColumn (column_t* column)
     basetexturemid = dc_texturemid;
     dc_texheight = 0; // [crispy] Tutti-Frutti fix
 	
-    for ( ; column->topdelta != 0xff ; ) 
+    while (column->topdelta != 0xff)
     {
 	// [crispy] support for DeePsea tall patches
 	if (column->topdelta <= top)
@@ -413,8 +413,7 @@ void R_DrawMaskedColumn (column_t* column)
 	{
 		top = column->topdelta;
 	}
-	// calculate unclipped screen coordinates
-	//  for post
+	// calculate unclipped screen coordinates for post
 	topscreen = sprtopscreen + spryscale*top;
 	bottomscreen = topscreen + spryscale*column->length;
 
@@ -426,11 +425,11 @@ void R_DrawMaskedColumn (column_t* column)
 	if (dc_yl <= mceilingclip[dc_x])
 	    dc_yl = mceilingclip[dc_x]+1;
 
-	if (dc_yl <= dc_yh)
+    // [JN] killough 3/2/98, 3/27/98: Failsafe against overflow/crash:
+	if (dc_yl <= dc_yh && dc_yh < viewheight)
 	{
 	    dc_source = (byte *)column + 3;
 	    dc_texturemid = basetexturemid - (top<<FRACBITS);
-	    // dc_source = (byte *)column + 3 - top;
 
 	    // Drawn by either R_DrawColumn
 	    //  or (SHADOW) R_DrawFuzzColumn.
