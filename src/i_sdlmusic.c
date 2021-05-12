@@ -117,6 +117,13 @@ void I_InitTimidityConfig(void)
     {
         env_string = M_StringJoin("TIMIDITY_CFG=", temp_timidity_cfg, NULL);
         putenv(env_string);
+        // env_string deliberately not freed; see putenv manpage
+
+        // If we're explicitly configured to use Timidity (either through
+        // timidity_cfg_path or GUS mode), then disable Fluidsynth, because
+        // SDL_mixer considers Fluidsynth a higher priority than Timidity and
+        // therefore can end up circumventing Timidity entirely.
+        putenv("SDL_MIXER_DISABLE_FLUIDSYNTH=1");
     }
     else
     {
@@ -181,7 +188,7 @@ static boolean I_SDL_InitMusic(void)
         {
             fprintf(stderr, "Unable to set up sound.\n");
         }
-        else if (Mix_OpenAudio(snd_samplerate, AUDIO_S16SYS, 2, 1024) < 0)
+        else if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, 1024, NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
         {
             fprintf(stderr, "Error initializing SDL_mixer: %s\n",
                     Mix_GetError());
@@ -218,11 +225,11 @@ static boolean I_SDL_InitMusic(void)
 
 #if defined(_WIN32)
     // [AM] Start up midiproc to handle playing MIDI music.
-    // [JN] Do not start Midiproc if music device is set to GUS.
-    // Running Midiproc is preventing GUS synth to be played,
-    // using a Windows MIDI synth instead.
+    // Don't enable it for GUS, since it handles its own volume just fine.
     if (snd_musicdevice != SNDDEVICE_GUS)
-    I_MidiPipe_InitServer();
+    {
+        I_MidiPipe_InitServer();
+    }
 #endif
 
     return music_initialized;
@@ -351,12 +358,19 @@ static void I_SDL_UnRegisterSong(void *handle)
         return;
     }
 
-    if (handle == NULL)
+#if defined(_WIN32)
+    if (midi_server_registered)
     {
-        return;
+        I_MidiPipe_UnregisterSong();
     }
-
-    Mix_FreeMusic(music);
+    else
+#endif
+    {
+        if (handle != NULL)
+        {
+            Mix_FreeMusic(music);
+        }
+    }
 }
 
 // Determine whether memory block is a .mid file 
@@ -368,8 +382,6 @@ static boolean IsMid(byte *mem, int len)
     return len > 4 && !memcmp(mem, "MThd", 4);
 }
 */
-
-#define WRITE_TIMEOUT 1000 // ms
 
 static boolean ConvertMus(byte *musdata, int len, const char *filename)
 {
@@ -388,7 +400,7 @@ static boolean ConvertMus(byte *musdata, int len, const char *filename)
     {
         mem_get_buf(outstream, &outbuf, &outbuf_len);
 
-        M_WriteFileTimeout(filename, outbuf, outbuf_len, WRITE_TIMEOUT);
+        M_WriteFile(filename, outbuf, outbuf_len);
     }
 
     mem_fclose(instream);
@@ -420,7 +432,7 @@ static void *I_SDL_RegisterSong(void *data, int len)
 */
     if (len < 4 || memcmp(data, "MUS\x1a", 4)) // [crispy] MUS_HEADER_MAGIC
     {
-        M_WriteFileTimeout(filename, data, len, WRITE_TIMEOUT);
+        M_WriteFile(filename, data, len);
     }
     else
     {

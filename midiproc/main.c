@@ -119,7 +119,6 @@ static void ShutdownSDL(void)
 
 static boolean RegisterSong(const char *filename)
 {
-    UnregisterSong();
     music = Mix_LoadMUS(filename);
 
     // Remove the temporary MIDI file
@@ -165,29 +164,18 @@ static void StopSong()
 
 static boolean MidiPipe_RegisterSong(buffer_reader_t *reader)
 {
-    CHAR buffer[2];
-    DWORD bytes_written;
-
     char *filename = Reader_ReadString(reader);
     if (filename == NULL)
     {
         return false;
     }
 
-    if (!RegisterSong(filename))
-    {
-        return false;
-    }
+    return RegisterSong(filename);
+}
 
-    if (!WriteInt16(buffer, sizeof(buffer),
-                    MIDIPIPE_PACKET_TYPE_REGISTER_SONG_ACK))
-    {
-        return false;
-    }
-
-    WriteFile(midi_process_out, buffer, sizeof(buffer),
-              &bytes_written, NULL);
-
+static boolean MidiPipe_UnregisterSong(buffer_reader_t *reader)
+{
+    UnregisterSong();
     return true;
 }
 
@@ -222,7 +210,6 @@ boolean MidiPipe_PlaySong(buffer_reader_t *reader)
 boolean MidiPipe_StopSong()
 {
     StopSong();
-    UnregisterSong();
 
     return true;
 }
@@ -246,6 +233,8 @@ boolean ParseCommand(buffer_reader_t *reader, uint16_t command)
     {
     case MIDIPIPE_PACKET_TYPE_REGISTER_SONG:
         return MidiPipe_RegisterSong(reader);
+    case MIDIPIPE_PACKET_TYPE_UNREGISTER_SONG:
+        return MidiPipe_UnregisterSong(reader);
     case MIDIPIPE_PACKET_TYPE_SET_VOLUME:
         return MidiPipe_SetVolume(reader);
     case MIDIPIPE_PACKET_TYPE_PLAY_SONG:
@@ -264,6 +253,8 @@ boolean ParseCommand(buffer_reader_t *reader, uint16_t command)
 //
 boolean ParseMessage(buffer_t *buf)
 {
+    CHAR buffer[2];
+    DWORD bytes_written;
     int bytes_read;
     uint16_t command;
     buffer_reader_t *reader = NewReader(buf);
@@ -285,6 +276,15 @@ boolean ParseMessage(buffer_t *buf)
     bytes_read = Reader_BytesRead(reader);
     DeleteReader(reader);
     Buffer_Shift(buf, bytes_read);
+
+    // Send acknowledgement back that the command has completed.
+    if (!WriteInt16(buffer, sizeof(buffer), MIDIPIPE_PACKET_TYPE_ACK))
+    {
+        goto fail;
+    }
+
+    WriteFile(midi_process_out, buffer, sizeof(buffer),
+              &bytes_written, NULL);
 
     return true;
 
@@ -363,7 +363,7 @@ boolean InitSDL()
         return false;
     }
 
-    if (Mix_OpenAudio(snd_samplerate, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    if (Mix_OpenAudioDevice(snd_samplerate, MIX_DEFAULT_FORMAT, 2, 2048, NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
     {
         return false;
     }
@@ -378,28 +378,12 @@ boolean InitSDL()
 //
 // Ensure that we can communicate.
 //
-boolean InitPipes()
+void InitPipes(HANDLE in, HANDLE out)
 {
-    midi_process_in = GetStdHandle(STD_INPUT_HANDLE);
-    if (midi_process_in == INVALID_HANDLE_VALUE)
-    {
-        goto fail;
-    }
-
-    midi_process_out = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (midi_process_out == INVALID_HANDLE_VALUE)
-    {
-        goto fail;
-    }
+    midi_process_in = in;
+    midi_process_out = out;
 
     atexit(FreePipes);
-
-    return true;
-
-fail:
-    FreePipes();
-
-    return false;
 }
 
 //
@@ -409,8 +393,10 @@ fail:
 //
 int main(int argc, char *argv[])
 {
+    HANDLE in, out;
+
     // Make sure we're not launching this process by itself.
-    if (argc < 3)
+    if (argc < 5)
     {
         MessageBox(NULL, TEXT("This program is tasked with playing Native ")
                    TEXT("MIDI music, and is intended to be launched by ")
@@ -421,10 +407,6 @@ int main(int argc, char *argv[])
     }
 
     // Make sure our Choccolate Doom and midiproc version are lined up.
-    // [JN] Disable version checking. Russian Doom, Heretic and Hexen
-    // may have a different versions, and thus, installing them into
-    // one folder will prevent Midiproc from running.
-    /*
     if (strcmp(PACKAGE_STRING, argv[1]) != 0)
     {
         char message[1024];
@@ -441,7 +423,6 @@ int main(int argc, char *argv[])
 
         return EXIT_FAILURE;
     }
-    */
 
     // Parse out the sample rate - if we can't, default to 44100.
     snd_samplerate = strtol(argv[2], NULL, 10);
@@ -451,10 +432,20 @@ int main(int argc, char *argv[])
         snd_samplerate = 44100;
     }
 
-    if (!InitPipes())
+    // Parse out our handle ids.
+    in = (HANDLE) strtol(argv[3], NULL, 10);
+    if (in == 0)
     {
         return EXIT_FAILURE;
     }
+
+    out = (HANDLE) strtol(argv[4], NULL, 10);
+    if (out == 0)
+    {
+        return EXIT_FAILURE;
+    }
+
+    InitPipes(in, out);
 
     if (!InitSDL())
     {
