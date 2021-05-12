@@ -1404,7 +1404,7 @@ static void P_CreateBlockMap(void)
         {
             // Increase size of allocated list if necessary
             if (bmap[b].n >= bmap[b].nalloc)
-                bmap[b].list = crispy_realloc(bmap[b].list,
+                bmap[b].list = I_Realloc(bmap[b].list,
                (bmap[b].nalloc = bmap[b].nalloc ?
 				bmap[b].nalloc*2 : 8)*sizeof*bmap->list);
 

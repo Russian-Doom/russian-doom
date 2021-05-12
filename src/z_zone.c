@@ -599,23 +599,3 @@ unsigned int Z_ZoneSize(void)
     return mainzone->size;
 }
 
-void *crispy_realloc(void *ptr, size_t size)
-{
-    void *newp;
-
-    newp = realloc(ptr, size);
-
-    if (!newp && size)
-    {
-	I_Error (english_language ?
-    "crispy_realloc: failed to (re-)allocate %i bytes" :
-    "crispy_realloc: ошибка (пере-)обнаружения %i байт",
-    size);
-    }
-    else
-    {
-	ptr = newp;
-    }
-
-    return ptr;
-}

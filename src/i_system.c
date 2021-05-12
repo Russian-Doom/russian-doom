@@ -51,7 +51,7 @@
 
 // [JN] Объём необходимой памяти увеличен вдвое
 #define DEFAULT_RAM 16*2 /* MiB */
-#define MIN_RAM     4*2  /* MiB */
+#define MIN_RAM     4*4  /* MiB */
 
 
 typedef struct atexit_listentry_s atexit_listentry_t;
@@ -154,14 +154,21 @@ byte *I_ZoneBase (int *size)
         min_ram = MIN_RAM;
     }
 
+    // [crispy] do not allocate new zones ad infinitum
+    if (i > 8)
+    {
+        min_ram = default_ram + 1;
+    }
+
     zonemem = AutoAllocMemory(size, default_ram * i, min_ram * i);
+
     // [crispy] if called again, allocate another zone twice as big
     i *= 2;
 
     printf(english_language ?
            "zone memory: %p, %x allocated for zone\n" :
            "Распределение памяти: выделено %p байт.\n", 
-           zonemem, *size);
+           zonemem, *size >> 20); // [crispy] human-understandable zone heap size
 
     return zonemem;
 }
