@@ -258,7 +258,7 @@ void R_RaiseVisplanes (visplane_t** vp)
                    MAXVISPLANES);
     
         numvisplanes = numvisplanes ? 2 * numvisplanes : MAXVISPLANES;
-        visplanes = realloc(visplanes, numvisplanes * sizeof(*visplanes));
+        visplanes = I_Realloc(visplanes, numvisplanes * sizeof(*visplanes));
         lastvisplane = visplanes + numvisplanes_old;
         floorplane = visplanes + (floorplane - visplanes_old);
         ceilingplane = visplanes + (ceilingplane - visplanes_old);

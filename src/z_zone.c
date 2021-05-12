@@ -19,7 +19,6 @@
 
 
 
-#include <stdlib.h> // [crispy] realloc()
 #include <string.h>
 
 #include "doomtype.h"

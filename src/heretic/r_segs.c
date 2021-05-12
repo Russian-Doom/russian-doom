@@ -560,7 +560,7 @@ void R_StoreWallRange(int start, int stop)
                    MAXDRAWSEGS);
 
         numdrawsegs = numdrawsegs ? 2 * numdrawsegs : MAXDRAWSEGS;
-        drawsegs = realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));
+        drawsegs = I_Realloc(drawsegs, numdrawsegs * sizeof(*drawsegs));
         ds_p = drawsegs + numdrawsegs_old;
     }
 
