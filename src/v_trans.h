@@ -49,6 +49,7 @@ enum
     CR_DARKBLUE,
     CR_GOLD,
     CR_ORANGE,
+    CR_WHITE,
     CR_GRAY,
     CR_DARKGRAY,
     CR_TAN,

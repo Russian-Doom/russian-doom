@@ -3060,7 +3060,7 @@ void M_RD_Draw_Rendering(void)
         // Informative message
         if (aspect_ratio_temp != aspect_ratio)
         {
-            dp_translation = cr[CR_GRAY];
+            dp_translation = cr[CR_WHITE];
             M_WriteTextSmallCentered_ENG(156, "Program must be restarted");
             dp_translation = NULL;
         }
@@ -3143,7 +3143,7 @@ void M_RD_Draw_Rendering(void)
         // Informative message: Необходим перезапуск программы
         if (aspect_ratio_temp != aspect_ratio)
         {
-            dp_translation = cr[CR_GRAY];
+            dp_translation = cr[CR_WHITE];
             M_WriteTextSmallCentered_RUS(156, "ytj,[jlbv gthtpfgecr ghjuhfvvs");
             dp_translation = NULL;
         }
@@ -3713,20 +3713,22 @@ void M_RD_Draw_MessagesSettings(void)
             else if (message_pickup_color == 8)
             { dp_translation = cr[CR_ORANGE]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "orange"); dp_translation = NULL; }
             else if (message_pickup_color == 9)
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "white"); dp_translation = NULL; }
+            { dp_translation = cr[CR_WHITE]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "white"); dp_translation = NULL; }
             else if (message_pickup_color == 10)
-            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "gray"); dp_translation = NULL; }
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "gray"); dp_translation = NULL; }
             else if (message_pickup_color == 11)
-            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "tan"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "dark gray"); dp_translation = NULL; }
             else if (message_pickup_color == 12)
-            { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "brown"); dp_translation = NULL; }
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "tan"); dp_translation = NULL; }
             else if (message_pickup_color == 13)
-            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "almond"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "brown"); dp_translation = NULL; }
             else if (message_pickup_color == 14)
-            { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "khaki"); dp_translation = NULL; }
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "almond"); dp_translation = NULL; }
             else if (message_pickup_color == 15)
-            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "pink"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "khaki"); dp_translation = NULL; }
             else if (message_pickup_color == 16)
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "pink"); dp_translation = NULL; }
+            else if (message_pickup_color == 17)
             { dp_translation = cr[CR_DARKBRICK]; M_WriteTextSmall_ENG(120 + wide_delta, 105, "burgundy"); dp_translation = NULL; }
             else
             { dp_translation = NULL; M_WriteTextSmall_ENG(120 + wide_delta, 105, "red"); }
@@ -3756,20 +3758,22 @@ void M_RD_Draw_MessagesSettings(void)
             else if (message_secret_color == 8)
             { dp_translation = cr[CR_ORANGE]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "orange"); dp_translation = NULL; }
             else if (message_secret_color == 9)
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "white"); dp_translation = NULL; }
+            { dp_translation = cr[CR_WHITE]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "white"); dp_translation = NULL; }
             else if (message_secret_color == 10)
-            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "gray"); dp_translation = NULL; }
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "gray"); dp_translation = NULL; }
             else if (message_secret_color == 11)
-            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "tan"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "dark gray"); dp_translation = NULL; }
             else if (message_secret_color == 12)
-            { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "brown"); dp_translation = NULL; }
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "tan"); dp_translation = NULL; }
             else if (message_secret_color == 13)
-            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "almond"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "brown"); dp_translation = NULL; }
             else if (message_secret_color == 14)
-            { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "khaki"); dp_translation = NULL; }
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "almond"); dp_translation = NULL; }
             else if (message_secret_color == 15)
-            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "pink"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "khaki"); dp_translation = NULL; }
             else if (message_secret_color == 16)
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "pink"); dp_translation = NULL; }
+            else if (message_secret_color == 17)
             { dp_translation = cr[CR_DARKBRICK]; M_WriteTextSmall_ENG(157 + wide_delta, 115, "burgundy"); dp_translation = NULL; }
             else
             { dp_translation = NULL; M_WriteTextSmall_ENG(157 + wide_delta, 115, "red"); }
@@ -3799,20 +3803,22 @@ void M_RD_Draw_MessagesSettings(void)
             else if (message_system_color == 8)
             { dp_translation = cr[CR_ORANGE]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "orange"); dp_translation = NULL; }
             else if (message_system_color == 9)
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "white"); dp_translation = NULL; }
+            { dp_translation = cr[CR_WHITE]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "white"); dp_translation = NULL; }
             else if (message_system_color == 10)
-            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "gray"); dp_translation = NULL; }
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "gray"); dp_translation = NULL; }
             else if (message_system_color == 11)
-            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "tan"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "dark gray"); dp_translation = NULL; }
             else if (message_system_color == 12)
-            { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "brown"); dp_translation = NULL; }
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "tan"); dp_translation = NULL; }
             else if (message_system_color == 13)
-            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "almond"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "brown"); dp_translation = NULL; }
             else if (message_system_color == 14)
-            { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "khaki"); dp_translation = NULL; }
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "almond"); dp_translation = NULL; }
             else if (message_system_color == 15)
-            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "pink"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "khaki"); dp_translation = NULL; }
             else if (message_system_color == 16)
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "pink"); dp_translation = NULL; }
+            else if (message_system_color == 17)
             { dp_translation = cr[CR_DARKBRICK]; M_WriteTextSmall_ENG(149 + wide_delta, 125, "burgundy"); dp_translation = NULL; }
             else
             { dp_translation = NULL; M_WriteTextSmall_ENG(149 + wide_delta, 125, "red"); }
@@ -3842,20 +3848,22 @@ void M_RD_Draw_MessagesSettings(void)
             else if (message_chat_color == 8)
             { dp_translation = cr[CR_ORANGE]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "orange"); dp_translation = NULL; }
             else if (message_chat_color == 9)
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "white"); dp_translation = NULL; }
+            { dp_translation = cr[CR_WHITE]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "white"); dp_translation = NULL; }
             else if (message_chat_color == 10)
-            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "gray"); dp_translation = NULL; }
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "gray"); dp_translation = NULL; }
             else if (message_chat_color == 11)
-            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "tan"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "dark gray"); dp_translation = NULL; }
             else if (message_chat_color == 12)
-            { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "brown"); dp_translation = NULL; }
+            { dp_translation = cr[CR_TAN]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "tan"); dp_translation = NULL; }
             else if (message_chat_color == 13)
-            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "almond"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "brown"); dp_translation = NULL; }
             else if (message_chat_color == 14)
-            { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "khaki"); dp_translation = NULL; }
+            { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "almond"); dp_translation = NULL; }
             else if (message_chat_color == 15)
-            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "pink"); dp_translation = NULL; }
+            { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "khaki"); dp_translation = NULL; }
             else if (message_chat_color == 16)
+            { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "pink"); dp_translation = NULL; }
+            else if (message_chat_color == 17)
             { dp_translation = cr[CR_DARKBRICK]; M_WriteTextSmall_ENG(136 + wide_delta, 135, "burgundy"); dp_translation = NULL; }
             else
             { dp_translation = NULL; M_WriteTextSmall_ENG(136 + wide_delta, 135, "red"); }
@@ -3936,20 +3944,22 @@ void M_RD_Draw_MessagesSettings(void)
             else if (message_pickup_color == 8) // Оранжевый
             { dp_translation = cr[CR_ORANGE]; M_WriteTextSmall_RUS(193 + wide_delta, 105, "jhfy;tdsq"); dp_translation = NULL; }
             else if (message_pickup_color == 9) // Белый
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(193 + wide_delta, 105, ",tksq"); dp_translation = NULL; }
+            { dp_translation = cr[CR_WHITE]; M_WriteTextSmall_RUS(193 + wide_delta, 105, ",tksq"); dp_translation = NULL; }
             else if (message_pickup_color == 10) // Серый
-            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_RUS(193 + wide_delta, 105, "cthsq"); dp_translation = NULL; }
-            else if (message_pickup_color == 11) // Бежевый
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(193 + wide_delta, 105, "cthsq"); dp_translation = NULL; }
+            else if (message_pickup_color == 11) // Тёмно-серый
+            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_RUS(193 + wide_delta, 105, "ntvyj-cthsq"); dp_translation = NULL; }
+            else if (message_pickup_color == 12) // Бежевый
             { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(193 + wide_delta, 105, ",t;tdsq"); dp_translation = NULL; }
-            else if (message_pickup_color == 12) // Коричневый
+            else if (message_pickup_color == 13) // Коричневый
             { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_RUS(193 + wide_delta, 105, "rjhbxytdsq"); dp_translation = NULL; }
-            else if (message_pickup_color == 13) // Миндальный
+            else if (message_pickup_color == 14) // Миндальный
             { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(193 + wide_delta, 105, "vbylfkmysq"); dp_translation = NULL; }
-            else if (message_pickup_color == 14) // Хаки
+            else if (message_pickup_color == 15) // Хаки
             { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_RUS(193 + wide_delta, 105, "[frb"); dp_translation = NULL; }
-            else if (message_pickup_color == 15) // Розовый
+            else if (message_pickup_color == 16) // Розовый
             { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(193 + wide_delta, 105, "hjpjdsq"); dp_translation = NULL; }
-            else if (message_pickup_color == 16) // Бордовый
+            else if (message_pickup_color == 17) // Бордовый
             { dp_translation = cr[CR_DARKBRICK]; M_WriteTextSmall_RUS(193 + wide_delta, 105, ",jhljdsq"); dp_translation = NULL; }
             else                                  // Красный
             { dp_translation = NULL; M_WriteTextSmall_RUS(193 + wide_delta, 105, "rhfcysq"); }
@@ -3979,20 +3989,22 @@ void M_RD_Draw_MessagesSettings(void)
             else if (message_secret_color == 8) // Оранжевый
             { dp_translation = cr[CR_ORANGE]; M_WriteTextSmall_RUS(203 + wide_delta, 115, "jhfy;tdsq"); dp_translation = NULL; }
             else if (message_secret_color == 9) // Белый
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(203 + wide_delta, 115, ",tksq"); dp_translation = NULL; }
+            { dp_translation = cr[CR_WHITE]; M_WriteTextSmall_RUS(203 + wide_delta, 115, ",tksq"); dp_translation = NULL; }
             else if (message_secret_color == 10) // Серый
-            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_RUS(203 + wide_delta, 115, "cthsq"); dp_translation = NULL; }
-            else if (message_secret_color == 11) // Бежевый
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(203 + wide_delta, 115, "cthsq"); dp_translation = NULL; }
+            else if (message_secret_color == 11) // Тёмно-серый
+            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_RUS(203 + wide_delta, 115, "ntvyj-cthsq"); dp_translation = NULL; }
+            else if (message_secret_color == 12) // Бежевый
             { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(203 + wide_delta, 115, ",t;tdsq"); dp_translation = NULL; }
-            else if (message_secret_color == 12) // Коричневый
+            else if (message_secret_color == 13) // Коричневый
             { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_RUS(203 + wide_delta, 115, "rjhbxytdsq"); dp_translation = NULL; }
-            else if (message_secret_color == 13) // Миндальный
+            else if (message_secret_color == 14) // Миндальный
             { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(203 + wide_delta, 115, "vbylfkmysq"); dp_translation = NULL; }
-            else if (message_secret_color == 14) // Хаки
+            else if (message_secret_color == 15) // Хаки
             { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_RUS(203 + wide_delta, 115, "[frb"); dp_translation = NULL; }
-            else if (message_secret_color == 15) // Розовый
+            else if (message_secret_color == 16) // Розовый
             { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(203 + wide_delta, 115, "hjpjdsq"); dp_translation = NULL; }
-            else if (message_secret_color == 16) // Бордовый
+            else if (message_secret_color == 17) // Бордовый
             { dp_translation = cr[CR_DARKBRICK]; M_WriteTextSmall_RUS(203 + wide_delta, 115, ",jhljdsq"); dp_translation = NULL; }
             else                                  // Красный
             { dp_translation = NULL; M_WriteTextSmall_RUS(203 + wide_delta, 115, "rhfcysq"); }
@@ -4022,20 +4034,22 @@ void M_RD_Draw_MessagesSettings(void)
             else if (message_system_color == 8)  // Оранжевый
             { dp_translation = cr[CR_ORANGE]; M_WriteTextSmall_RUS(197 + wide_delta, 125, "jhfy;tdsq"); dp_translation = NULL; }
             else if (message_system_color == 9)  // Белый
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(197 + wide_delta, 125, ",tksq"); dp_translation = NULL; }
+            { dp_translation = cr[CR_WHITE]; M_WriteTextSmall_RUS(197 + wide_delta, 125, ",tksq"); dp_translation = NULL; }
             else if (message_system_color == 10)  // Серый
-            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_RUS(197 + wide_delta, 125, "cthsq"); dp_translation = NULL; }
-            else if (message_system_color == 11) // Бежевый
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(197 + wide_delta, 125, "cthsq"); dp_translation = NULL; }
+            else if (message_system_color == 11) // Тёмно-серый
+            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_RUS(197 + wide_delta, 125, "ntvyj-cthsq"); dp_translation = NULL; }
+            else if (message_system_color == 12) // Бежевый
             { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(197 + wide_delta, 125, ",t;tdsq"); dp_translation = NULL; }
-            else if (message_system_color == 12) // Коричневый
+            else if (message_system_color == 13) // Коричневый
             { dp_translation = cr[CR_DARKTAN]; M_WriteTextSmall_RUS(197 + wide_delta, 125, "rjhbxytdsq"); dp_translation = NULL; }
-            else if (message_system_color == 13) // Миндальный
+            else if (message_system_color == 14) // Миндальный
             { dp_translation = cr[CR_BROWN]; M_WriteTextSmall_RUS(197 + wide_delta, 125, "vbylfkmysq"); dp_translation = NULL; }
-            else if (message_system_color == 14) // Хаки
+            else if (message_system_color == 15) // Хаки
             { dp_translation = cr[CR_DARKBROWN]; M_WriteTextSmall_RUS(197 + wide_delta, 125, "[frb"); dp_translation = NULL; }
-            else if (message_system_color == 15) // Розовый
+            else if (message_system_color == 16) // Розовый
             { dp_translation = cr[CR_BRICK]; M_WriteTextSmall_RUS(197 + wide_delta, 125, "hjpjdsq"); dp_translation = NULL; }
-            else if (message_system_color == 16) // Бордовый
+            else if (message_system_color == 17) // Бордовый
             { dp_translation = cr[CR_DARKBRICK]; M_WriteTextSmall_RUS(197 + wide_delta, 125, ",jhljdsq"); dp_translation = NULL; }
             else                                // Красный
             { dp_translation = NULL; M_WriteTextSmall_RUS(197 + wide_delta, 125, "rhfcysq"); }
@@ -4065,9 +4079,11 @@ void M_RD_Draw_MessagesSettings(void)
             else if (message_chat_color == 8)  // Оранжевый
             { dp_translation = cr[CR_ORANGE]; M_WriteTextSmall_RUS(164 + wide_delta, 135, "jhfy;tdsq"); dp_translation = NULL; }
             else if (message_chat_color == 9)  // Белый
-            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(164 + wide_delta, 135, ",tksq"); dp_translation = NULL; }
+            { dp_translation = cr[CR_WHITE]; M_WriteTextSmall_RUS(164 + wide_delta, 135, ",tksq"); dp_translation = NULL; }
             else if (message_chat_color == 10)  // Серый
-            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_RUS(164 + wide_delta, 135, "cthsq"); dp_translation = NULL; }
+            { dp_translation = cr[CR_GRAY]; M_WriteTextSmall_RUS(164 + wide_delta, 135, "cthsq"); dp_translation = NULL; }
+            else if (message_chat_color == 11) // Тёмно-серый
+            { dp_translation = cr[CR_DARKGRAY]; M_WriteTextSmall_RUS(164 + wide_delta, 135, "ntvyj-cthsq"); dp_translation = NULL; }
             else if (message_chat_color == 11) // Бежевый
             { dp_translation = cr[CR_TAN]; M_WriteTextSmall_RUS(164 + wide_delta, 135, ",t;tdsq"); dp_translation = NULL; }
             else if (message_chat_color == 12) // Коричневый
@@ -4146,14 +4162,15 @@ void M_RD_Define_Msg_Pickup_Color(void)
             case 6:   messages_pickup_color_set = cr[CR_DARKBLUE];   break;
             case 7:   messages_pickup_color_set = cr[CR_GOLD];       break;
             case 8:   messages_pickup_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_pickup_color_set = cr[CR_GRAY];       break;
-            case 10:  messages_pickup_color_set = cr[CR_DARKGRAY];   break;
-            case 11:  messages_pickup_color_set = cr[CR_TAN];        break;
-            case 12:  messages_pickup_color_set = cr[CR_DARKTAN];    break;            
-            case 13:  messages_pickup_color_set = cr[CR_BROWN];      break;
-            case 14:  messages_pickup_color_set = cr[CR_DARKBROWN];  break;
-            case 15:  messages_pickup_color_set = cr[CR_BRICK];      break;
-            case 16:  messages_pickup_color_set = cr[CR_DARKBRICK];  break;
+            case 9:   messages_pickup_color_set = cr[CR_WHITE];      break;
+            case 10:  messages_pickup_color_set = cr[CR_GRAY];       break;
+            case 11:  messages_pickup_color_set = cr[CR_DARKGRAY];   break;
+            case 12:  messages_pickup_color_set = cr[CR_TAN];        break;
+            case 13:  messages_pickup_color_set = cr[CR_DARKTAN];    break;            
+            case 14:  messages_pickup_color_set = cr[CR_BROWN];      break;
+            case 15:  messages_pickup_color_set = cr[CR_DARKBROWN];  break;
+            case 16:  messages_pickup_color_set = cr[CR_BRICK];      break;
+            case 17:  messages_pickup_color_set = cr[CR_DARKBRICK];  break;
             default:  messages_pickup_color_set = NULL;              break;
         }
     }
@@ -4170,12 +4187,12 @@ void M_RD_Change_Msg_Pickup_Color(int choice)
         case 0:
         message_pickup_color--;
         if (message_pickup_color < 0)
-            message_pickup_color = 16;
+            message_pickup_color = 17;
         break;
 
         case 1:
         message_pickup_color++;
-        if (message_pickup_color > 16)
+        if (message_pickup_color > 17)
             message_pickup_color = 0;
         break;
     }
@@ -4206,14 +4223,15 @@ void M_RD_Define_Msg_Secret_Color(void)
             case 6:   messages_secret_color_set = cr[CR_DARKBLUE];   break;
             case 7:   messages_secret_color_set = cr[CR_GOLD];       break;
             case 8:   messages_secret_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_secret_color_set = cr[CR_GRAY];       break;
-            case 10:  messages_secret_color_set = cr[CR_DARKGRAY];   break;
-            case 11:  messages_secret_color_set = cr[CR_TAN];        break;
-            case 12:  messages_secret_color_set = cr[CR_DARKTAN];    break;            
-            case 13:  messages_secret_color_set = cr[CR_BROWN];      break;
-            case 14:  messages_secret_color_set = cr[CR_DARKBROWN];  break;
-            case 15:  messages_secret_color_set = cr[CR_BRICK];      break;
-            case 16:  messages_secret_color_set = cr[CR_DARKBRICK];  break;
+            case 9:   messages_secret_color_set = cr[CR_WHITE];      break;
+            case 10:  messages_secret_color_set = cr[CR_GRAY];       break;
+            case 11:  messages_secret_color_set = cr[CR_DARKGRAY];   break;
+            case 12:  messages_secret_color_set = cr[CR_TAN];        break;
+            case 13:  messages_secret_color_set = cr[CR_DARKTAN];    break;            
+            case 14:  messages_secret_color_set = cr[CR_BROWN];      break;
+            case 15:  messages_secret_color_set = cr[CR_DARKBROWN];  break;
+            case 16:  messages_secret_color_set = cr[CR_BRICK];      break;
+            case 17:  messages_secret_color_set = cr[CR_DARKBRICK];  break;
             default:  messages_secret_color_set = NULL;              break;
         }
 
@@ -4233,12 +4251,12 @@ void M_RD_Change_Msg_Secret_Color(int choice)
         case 0:
         message_secret_color--;
         if (message_secret_color < 0)
-            message_secret_color = 16;
+            message_secret_color = 17;
         break;
 
         case 1:
         message_secret_color++;
-        if (message_secret_color > 16)
+        if (message_secret_color > 17)
             message_secret_color = 0;
         break;
     }
@@ -4269,14 +4287,15 @@ void M_RD_Define_Msg_System_Color(void)
             case 6:   messages_system_color_set = cr[CR_DARKBLUE];   break;
             case 7:   messages_system_color_set = cr[CR_GOLD];       break;
             case 8:   messages_system_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_system_color_set = cr[CR_GRAY];       break;
-            case 10:  messages_system_color_set = cr[CR_DARKGRAY];   break;
-            case 11:  messages_system_color_set = cr[CR_TAN];        break;
-            case 12:  messages_system_color_set = cr[CR_DARKTAN];    break;            
-            case 13:  messages_system_color_set = cr[CR_BROWN];      break;
-            case 14:  messages_system_color_set = cr[CR_DARKBROWN];  break;
-            case 15:  messages_system_color_set = cr[CR_BRICK];      break;
-            case 16:  messages_system_color_set = cr[CR_DARKBRICK];  break;
+            case 9:   messages_system_color_set = cr[CR_WHITE];      break;
+            case 10:  messages_system_color_set = cr[CR_GRAY];       break;
+            case 11:  messages_system_color_set = cr[CR_DARKGRAY];   break;
+            case 12:  messages_system_color_set = cr[CR_TAN];        break;
+            case 13:  messages_system_color_set = cr[CR_DARKTAN];    break;            
+            case 14:  messages_system_color_set = cr[CR_BROWN];      break;
+            case 15:  messages_system_color_set = cr[CR_DARKBROWN];  break;
+            case 16:  messages_system_color_set = cr[CR_BRICK];      break;
+            case 17:  messages_system_color_set = cr[CR_DARKBRICK];  break;
             default:  messages_system_color_set = NULL;              break;
         }
 
@@ -4296,12 +4315,12 @@ void M_RD_Change_Msg_System_Color(int choice)
         case 0:
         message_system_color--;
         if (message_system_color < 0)
-            message_system_color = 16;
+            message_system_color = 17;
         break;
 
         case 1:
         message_system_color++;
-        if (message_system_color > 16)
+        if (message_system_color > 17)
             message_system_color = 0;
         break;
     }
@@ -4332,14 +4351,15 @@ void M_RD_Define_Msg_Chat_Color(void)
             case 6:   messages_chat_color_set = cr[CR_DARKBLUE];   break;
             case 7:   messages_chat_color_set = cr[CR_GOLD];       break;
             case 8:   messages_chat_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_chat_color_set = cr[CR_GRAY];       break;
-            case 10:  messages_chat_color_set = cr[CR_DARKGRAY];   break;
-            case 11:  messages_chat_color_set = cr[CR_TAN];        break;
-            case 12:  messages_chat_color_set = cr[CR_DARKTAN];    break;            
-            case 13:  messages_chat_color_set = cr[CR_BROWN];      break;
-            case 14:  messages_chat_color_set = cr[CR_DARKBROWN];  break;
-            case 15:  messages_chat_color_set = cr[CR_BRICK];      break;
-            case 16:  messages_chat_color_set = cr[CR_DARKBRICK];  break;
+            case 9:   messages_chat_color_set = cr[CR_WHITE];      break;
+            case 10:  messages_chat_color_set = cr[CR_GRAY];       break;
+            case 11:  messages_chat_color_set = cr[CR_DARKGRAY];   break;
+            case 12:  messages_chat_color_set = cr[CR_TAN];        break;
+            case 13:  messages_chat_color_set = cr[CR_DARKTAN];    break;            
+            case 14:  messages_chat_color_set = cr[CR_BROWN];      break;
+            case 15:  messages_chat_color_set = cr[CR_DARKBROWN];  break;
+            case 16:  messages_chat_color_set = cr[CR_BRICK];      break;
+            case 17:  messages_chat_color_set = cr[CR_DARKBRICK];  break;
             default:  messages_chat_color_set = NULL;              break;
         }
 
@@ -4359,12 +4379,12 @@ void M_RD_Change_Msg_Chat_Color(int choice)
         case 0:
         message_chat_color--;
         if (message_chat_color < 0)
-            message_chat_color = 16;
+            message_chat_color = 17;
         break;
 
         case 1:
         message_chat_color++;
-        if (message_chat_color > 16)
+        if (message_chat_color > 17)
             message_chat_color = 0;
         break;
     }
@@ -5571,7 +5591,7 @@ void M_RD_Draw_Bindings()
             M_WriteTextSmall_RUS(35 + wide_delta, keyPage->subtitles[i].y, keyPage->subtitles[i].rus_text);
     }
 
-    dp_translation = cr[CR_GRAY];
+    dp_translation = cr[CR_WHITE];
     if (english_language)
     {
         M_WriteTextSmall_ENG(35 + wide_delta, 155, currentMenu == RD_Bindings_Menu_Def_4 ? "first page >" : "next page >");
@@ -5607,7 +5627,7 @@ void M_RD_Draw_Bindings()
         if (key != bk_null)
         {
             boolean bindingThis = messageToBind && i == itemOn;
-            if (bindingThis) dp_translation = cr[CR_GRAY];
+            if (bindingThis) dp_translation = cr[CR_WHITE];
             else if (BK_KeyHasNoBinds(key)) dp_translation = cr[CR_DARKRED];
 
             M_WriteTextSmall_ENG(x + wide_delta, i * 10 + 35, bindingThis ? "?" : BK_getBoundKeysString(key));
@@ -5725,7 +5745,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     // Fire/Attack
     if (messageToBind && itemOn == rd_mouse_bindings_attack)
     {
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(x + wide_delta, 35, "?");
         dp_translation = NULL;
     }
@@ -5740,7 +5760,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     // Use
     if (messageToBind && itemOn == rd_mouse_bindings_use)
     {
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(x + wide_delta, 45, "?");
         dp_translation = NULL;
     }
@@ -5755,7 +5775,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     // Move Forward
     if (messageToBind && itemOn == rd_mouse_bindings_forward)
     {
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(x + wide_delta, 55, "?");
         dp_translation = NULL;
     }
@@ -5770,7 +5790,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     // Move Backward
     if (messageToBind && itemOn == rd_mouse_bindings_backward)
     {
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(x + wide_delta, 65, "?");
         dp_translation = NULL;
     }
@@ -5785,7 +5805,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     // Strafe On
     if (messageToBind && itemOn == rd_mouse_bindings_strafeon)
     {
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(x + wide_delta, 75, "?");
         dp_translation = NULL;
     }
@@ -5800,7 +5820,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     // Strafe Left
     if (messageToBind && itemOn == rd_mouse_bindings_strafeleft)
     {
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(x + wide_delta, 85, "?");
         dp_translation = NULL;
     }
@@ -5815,7 +5835,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     // Strafe Right
     if (messageToBind && itemOn == rd_mouse_bindings_straferight)
     {
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(x + wide_delta, 95, "?");
         dp_translation = NULL;
     }
@@ -5830,7 +5850,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     // Previous Weapon
     if (messageToBind && itemOn == rd_mouse_bindings_prevweapon)
     {
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(x + wide_delta, 105, "?");
         dp_translation = NULL;
     }
@@ -5846,7 +5866,7 @@ void M_RD_Draw_Mouse_Bindings(void)
     // Next Weapon
     if (messageToBind && itemOn == rd_mouse_bindings_nextweapon)
     {
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(x + wide_delta, 115, "?");
         dp_translation = NULL;
     }
@@ -6044,7 +6064,7 @@ void M_RD_Draw_Gameplay_1(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >"); 
         M_WriteTextSmall_ENG(35 + wide_delta, 155, "< last page"); 
         M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 1/4");
@@ -6121,7 +6141,7 @@ void M_RD_Draw_Gameplay_1(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS); 
         M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS); 
         M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 1*4");
@@ -6199,7 +6219,7 @@ void M_RD_Draw_Gameplay_2(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >");
         M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page");
         M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 2/4");
@@ -6264,7 +6284,7 @@ void M_RD_Draw_Gameplay_2(void)
         dp_translation = NULL;
 
         // Footer
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS);
         M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 2*4");
@@ -6356,7 +6376,7 @@ void M_RD_Draw_Gameplay_3(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(35 + wide_delta, 145, "next page >");
         M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page");
         M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 3/4");
@@ -6437,7 +6457,7 @@ void M_RD_Draw_Gameplay_3(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS);
         M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 3*4");
@@ -6528,7 +6548,7 @@ void M_RD_Draw_Gameplay_4(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(35 + wide_delta, 145, "first page >");
         M_WriteTextSmall_ENG(35 + wide_delta, 155, "< prev page");
         M_WriteTextSmall_ENG(231 + wide_delta, 155, "page 4/4");
@@ -6610,7 +6630,7 @@ void M_RD_Draw_Gameplay_4(void)
         //
         // Footer
         //
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_RUS(35 + wide_delta, 145, RD_NEXT_RUS);
         M_WriteTextSmall_RUS(35 + wide_delta, 155, RD_PREV_RUS);
         M_WriteTextSmall_RUS(197 + wide_delta, 155, "cnhfybwf 4*4");
@@ -7083,7 +7103,7 @@ void M_RD_Draw_Level_1 (void)
         }
 
         // Next page
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(75 + wide_delta, 180, "NEXT PAGE");
 
         // Start game
@@ -7237,7 +7257,7 @@ void M_RD_Draw_Level_1 (void)
         }
 
         // Следующая страница
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_RUS(72 + wide_delta, 180, "cktle.ofz cnhfybwf");
 
         // Начать игру
@@ -7354,7 +7374,7 @@ void M_RD_Draw_Level_2 (void)
         dp_translation = NULL;
 
         // Previous page
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_ENG(75 + wide_delta, 180, "PREVIOUS PAGE");
 
         // Start game
@@ -7461,7 +7481,7 @@ void M_RD_Draw_Level_2 (void)
         dp_translation = NULL;
 
         // Предыдущая страница
-        dp_translation = cr[CR_GRAY];
+        dp_translation = cr[CR_WHITE];
         M_WriteTextSmall_RUS(72 + wide_delta, 180, "ghtlsleofz cnhfybwf");
 
         // Начать игру
