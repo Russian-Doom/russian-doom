@@ -39,16 +39,24 @@
 
 enum
 {
-    CR_BRICK,
-    CR_TAN,
-    CR_GRAY,
+    CR_RED,
     CR_DARKRED,
     CR_GREEN,
-    CR_BROWN,
-    CR_GOLD,
+    CR_DARKGREEN,
+    CR_OLIVE,
     CR_BLUE,
     CR_BLUE2,
-    CR_RED,
+    CR_DARKBLUE,
+    CR_GOLD,
+    CR_ORANGE,
+    CR_GRAY,
+    CR_DARKGRAY,
+    CR_TAN,
+    CR_DARKTAN,
+    CR_BROWN,
+    CR_DARKBROWN,
+    CR_BRICK,
+    CR_DARKBRICK,
     CR_RED2BLUE,
     CR_RED2GREEN,
     // Heretic (big font)
@@ -83,7 +91,7 @@ enum
 };
 
 extern byte  *cr[CRMAX];
-extern char **crstr;
+
 extern byte  *tintmap;
 extern byte  *shademap;
 extern byte  *fuzzmap;

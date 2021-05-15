@@ -30,10 +30,10 @@ int level_brightness = 0;
 int menu_shading = 0;
 int hud_detaillevel = 0;
 int messages_timeout = 4;
-int messages_pickup_color = 0;
-int messages_secret_color = 3;
-int messages_system_color = 0;
-int messages_chat_color = 1;
+int message_pickup_color = 0;
+int message_secret_color = 7;
+int message_system_color = 0;
+int message_chat_color = 2;
 int draw_shadowed_text = 1;
 
 // Automap
@@ -321,10 +321,10 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("menu_shading",           &menu_shading);
     M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
-    M_BindIntVariable("messages_pickup_color",  &messages_pickup_color);
-    M_BindIntVariable("messages_secret_color",  &messages_secret_color);
-    M_BindIntVariable("messages_system_color",  &messages_system_color);
-    M_BindIntVariable("messages_chat_color",    &messages_chat_color);
+    M_BindIntVariable("message_pickup_color",   &message_pickup_color);
+    M_BindIntVariable("message_secret_color",   &message_secret_color);
+    M_BindIntVariable("message_system_color",   &message_system_color);
+    M_BindIntVariable("message_chat_color",     &message_chat_color);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
     
     // Automap

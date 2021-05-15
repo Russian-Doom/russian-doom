@@ -63,10 +63,10 @@ extern int hud_detaillevel;
 extern int showMessages;
 extern int draw_shadowed_text;
 extern int messages_timeout;
-extern int messages_pickup_color;
-extern int messages_secret_color;
-extern int messages_system_color;
-extern int messages_chat_color;
+extern int message_pickup_color;
+extern int message_secret_color;
+extern int message_system_color;
+extern int message_chat_color;
 
 
 // -----------------------------------------------------------------------------
