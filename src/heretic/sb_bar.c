@@ -363,7 +363,7 @@ static void DrINumber(signed int val, int x, int y)
     V_DrawPatch(x + 18, y, patch);
 
     // [JN] Reset color translation if colored hud activated
-    if (colored_hud)
+    if (sbar_colored)
     dp_translation = NULL;
 }
 
@@ -417,7 +417,7 @@ static void DrBNumber(signed int val, int x, int y)
     V_DrawShadowedPatch(xpos + 6 - SHORT(patch->width) / 2, y, patch);
 
     // [JN] Reset color translation if colored hud activated
-    if (colored_hud)
+    if (sbar_colored)
     dp_translation = NULL;
 }
 
@@ -980,7 +980,7 @@ void DrawMainBar(void)
             V_DrawPatch(57, 171, PatchARMCLEAR);
 
             // [JN] Colored HUD: Frags
-            if (colored_hud && !vanillaparm)
+            if (sbar_colored && !vanillaparm)
             {
                 if (temp < 0)
                 dp_translation = cr[CR_GOLD2RED_HERETIC];
@@ -1018,7 +1018,7 @@ void DrawMainBar(void)
             V_DrawPatch(57 + wide_delta, 171, PatchARMCLEAR);
 
             // [JN] Colored HUD: Health
-            if (colored_hud && !vanillaparm)
+            if (sbar_colored && !vanillaparm)
             {
                 if ((CPlayer->cheats & CF_GODMODE) || CPlayer->powers[pw_invulnerability])
                 dp_translation = cr[CR_GOLD2GRAY_HERETIC];
@@ -1039,7 +1039,7 @@ void DrawMainBar(void)
     if (oldkeys != playerkeys)
     {
         // [JN] Reset color translation if colored hud activated
-        if (colored_hud)
+        if (sbar_colored)
         dp_translation = NULL;
         
         if (CPlayer->keys[key_yellow])
@@ -1068,7 +1068,7 @@ void DrawMainBar(void)
         if (temp && CPlayer->readyweapon > 0 && CPlayer->readyweapon < 7)
         {
             // [JN] Colored HUD: Ammo
-            if (colored_hud && !vanillaparm)
+            if (sbar_colored && !vanillaparm)
             {
                 int ammo =  CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
                 int fullammo = maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
@@ -1098,7 +1098,7 @@ void DrawMainBar(void)
         V_DrawPatch(224 + wide_delta, 171, PatchARMCLEAR);
 
         // [JN] Colored HUD: Armor
-        if (colored_hud && !vanillaparm)
+        if (sbar_colored && !vanillaparm)
         {
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
             dp_translation = cr[CR_GOLD2GRAY_HERETIC];
@@ -1172,7 +1172,7 @@ void DrawFullScreenStuff(void)
     if (CPlayer->mo->health > 0)
     {
         // [JN] Colored HUD: Health
-        if (colored_hud && !vanillaparm)
+        if (sbar_colored && !vanillaparm)
         {
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
             dp_translation = cr[CR_GREEN2GRAY_HERETIC];
@@ -1189,7 +1189,7 @@ void DrawFullScreenStuff(void)
     // [JN] Negative and zero health: can't drop below -99, drawing, colorizing
     else if (CPlayer->mo->health <= 0)
     {
-        if (colored_hud && !vanillaparm)
+        if (sbar_colored && !vanillaparm)
         dp_translation = cr[CR_GREEN2RED_HERETIC];
 
         if (CPlayer->mo->health <= -99)
@@ -1205,7 +1205,7 @@ void DrawFullScreenStuff(void)
     if (fs_ammo && CPlayer->readyweapon > 0 && CPlayer->readyweapon < 7)
     {
         // [JN] Colored HUD: Health
-        if (colored_hud && !vanillaparm)
+        if (sbar_colored && !vanillaparm)
         {
             int ammo =  CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
             int fullammo = maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
@@ -1238,7 +1238,7 @@ void DrawFullScreenStuff(void)
             }
 
             // [JN] Colored HUD: Frags
-            if (colored_hud && !vanillaparm)
+            if (sbar_colored && !vanillaparm)
             {
                 if (temp < 0)
                 dp_translation = cr[CR_GREEN2RED_HERETIC];
@@ -1325,7 +1325,7 @@ void DrawFullScreenStuff(void)
                 V_DrawShadowedPatch(108, 216, W_CacheLumpName("SHD2A0", PU_CACHE));
 
             // [JN] Colored HUD: Armor
-            if (colored_hud && !vanillaparm)
+            if (sbar_colored && !vanillaparm)
             {
                 if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
                 dp_translation = cr[CR_GREEN2GRAY_HERETIC];

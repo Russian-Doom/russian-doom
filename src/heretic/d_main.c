@@ -939,7 +939,7 @@ void D_BindVariables(void)
     // Gameplay: Graphical
     M_BindIntVariable("brightmaps",             &brightmaps);
     M_BindIntVariable("fake_contrast",          &fake_contrast);
-    M_BindIntVariable("colored_hud",            &colored_hud);
+    M_BindIntVariable("sbar_colored",           &sbar_colored);
     M_BindIntVariable("colored_blood",          &colored_blood);
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);

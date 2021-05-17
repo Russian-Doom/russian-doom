@@ -150,12 +150,23 @@ extern int brightmaps;
 extern int fake_contrast;
 extern int translucency;
 extern int improved_fuzz;
-extern int colored_hud;
 extern int colored_blood;
 extern int swirling_liquids;
 extern int invul_sky;
 extern int linear_sky;
 extern int flip_weapons;
+
+// Gameplay: Status Bar
+extern int extra_player_faces;
+extern int negative_health;
+extern int sbar_colored;
+extern int sbar_color_high;
+extern int sbar_color_normal;
+extern int sbar_color_low;
+extern int sbar_color_critical;
+extern int sbar_color_armor_1;
+extern int sbar_color_armor_2;
+extern int sbar_color_armor_0;
 
 // Gameplay: Audible
 extern int z_axis_sfx;
@@ -167,7 +178,6 @@ extern int correct_endlevel_sfx;
 
 // Gameplay: Tactical
 extern int secret_notification;
-extern int negative_health;
 extern int infragreen_visor;
 
 // Gameplay: Physical
@@ -187,7 +197,6 @@ extern int crosshair_scale;
 // Gameplay: Gameplay
 extern int fix_map_errors;
 extern int flip_levels;
-extern int extra_player_faces;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
 extern int pistol_start;

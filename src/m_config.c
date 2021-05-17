@@ -1688,13 +1688,24 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(brightmaps),
     CONFIG_VARIABLE_INT(fake_contrast),
     CONFIG_VARIABLE_INT(translucency),
-    CONFIG_VARIABLE_INT(colored_hud),
     CONFIG_VARIABLE_INT(colored_blood),
     CONFIG_VARIABLE_INT(improved_fuzz),
     CONFIG_VARIABLE_INT(swirling_liquids),
     CONFIG_VARIABLE_INT(invul_sky),
     CONFIG_VARIABLE_INT(linear_sky),
     CONFIG_VARIABLE_INT(flip_weapons),
+
+    // Gameplay: Status Bar
+    CONFIG_VARIABLE_INT(extra_player_faces),
+    CONFIG_VARIABLE_INT(negative_health),
+    CONFIG_VARIABLE_INT(sbar_colored),
+    CONFIG_VARIABLE_INT(sbar_color_high),
+    CONFIG_VARIABLE_INT(sbar_color_normal),
+    CONFIG_VARIABLE_INT(sbar_color_low),
+    CONFIG_VARIABLE_INT(sbar_color_critical),
+    CONFIG_VARIABLE_INT(sbar_color_armor_1),
+    CONFIG_VARIABLE_INT(sbar_color_armor_2),
+    CONFIG_VARIABLE_INT(sbar_color_armor_0),
 
     // Gameplay: Audible
     CONFIG_VARIABLE_INT(z_axis_sfx),
@@ -1706,7 +1717,6 @@ static default_t extra_defaults_list[] =
 
     // Gameplay: Tactical
     CONFIG_VARIABLE_INT(secret_notification),
-    CONFIG_VARIABLE_INT(negative_health),
     CONFIG_VARIABLE_INT(infragreen_visor),
 
     // Gameplay: Physical
@@ -1726,7 +1736,6 @@ static default_t extra_defaults_list[] =
     // Gameplay: Gameplay
     CONFIG_VARIABLE_INT(fix_map_errors),
     CONFIG_VARIABLE_INT(flip_levels),
-    CONFIG_VARIABLE_INT(extra_player_faces),
     CONFIG_VARIABLE_INT(unlimited_lost_souls),
     CONFIG_VARIABLE_INT(agressive_lost_souls),
     CONFIG_VARIABLE_INT(pistol_start),

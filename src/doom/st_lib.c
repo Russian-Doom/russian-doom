@@ -181,8 +181,8 @@ STlib_updatePercent
 
     STlib_updateNum(&per->n, refresh); // [crispy] moved here
 
-    if (colored_hud == 1 && !vanillaparm)
-        dp_translation = cr[CR_GRAY];
+    if (sbar_colored == 1 && !vanillaparm)
+        dp_translation = cr[CR_WHITE];
 
     if (refresh && *per->n.on)
 	V_DrawPatch(per->n.x, per->n.y, per->p);

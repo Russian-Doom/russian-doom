@@ -61,6 +61,18 @@ int invul_sky = 1;
 int linear_sky = 1;
 int flip_weapons = 0;
 
+// Gameplay: Status Bar
+int extra_player_faces = 1;
+int negative_health = 0;
+int sbar_colored = 0;
+int sbar_color_high = 5;
+int sbar_color_normal = 2;
+int sbar_color_low = 7;
+int sbar_color_critical = 0;
+int sbar_color_armor_1 = 2;
+int sbar_color_armor_2 = 5;
+int sbar_color_armor_0 = 0;
+
 // Gameplay: Audible
 int z_axis_sfx = 0;
 int play_exit_sfx = 0;
@@ -71,7 +83,6 @@ int correct_endlevel_sfx = 0;
 
 // Gameplay: Tactical
 int secret_notification = 1;
-int negative_health = 0;
 int infragreen_visor = 0;
 
 // Gameplay: Physical
@@ -91,7 +102,6 @@ int crosshair_scale = 0;
 // Gameplay: Gameplay
 int fix_map_errors = 1;
 int flip_levels = 0;
-int extra_player_faces = 1;
 int unlimited_lost_souls = 1;
 int agressive_lost_souls = 0;
 int pistol_start = 0;
@@ -350,7 +360,18 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("linear_sky",             &linear_sky);
     M_BindIntVariable("flip_weapons",           &flip_weapons);
-    
+
+    // Gameplay: Status Bar
+    M_BindIntVariable("extra_player_faces",     &extra_player_faces);
+    M_BindIntVariable("negative_health",        &negative_health);
+    M_BindIntVariable("sbar_colored",           &sbar_colored);
+    M_BindIntVariable("sbar_color_high",        &sbar_color_high);
+    M_BindIntVariable("sbar_color_normal",      &sbar_color_normal);
+    M_BindIntVariable("sbar_color_low",         &sbar_color_low);
+    M_BindIntVariable("sbar_color_critical",    &sbar_color_critical);
+    M_BindIntVariable("sbar_color_armor_1",     &sbar_color_armor_1);
+    M_BindIntVariable("sbar_color_armor_2",     &sbar_color_armor_2);
+    M_BindIntVariable("sbar_color_armor_0",     &sbar_color_armor_0);
 
     // Gameplay: Audible
     M_BindIntVariable("z_axis_sfx",             &z_axis_sfx);
@@ -362,7 +383,6 @@ void BindCompatibilityVariables(void)
 
     // Gameplay: Tactical
     M_BindIntVariable("secret_notification",    &secret_notification);
-    M_BindIntVariable("negative_health",        &negative_health);
     M_BindIntVariable("infragreen_visor",       &infragreen_visor);
 
     // Gameplay: Physical
@@ -382,7 +402,6 @@ void BindCompatibilityVariables(void)
     // Gameplay: Gameplay
     M_BindIntVariable("fix_map_errors",         &fix_map_errors);
     M_BindIntVariable("flip_levels",            &flip_levels);
-    M_BindIntVariable("extra_player_faces",     &extra_player_faces);
     M_BindIntVariable("unlimited_lost_souls",   &unlimited_lost_souls);
     M_BindIntVariable("agressive_lost_souls",   &agressive_lost_souls);
     M_BindIntVariable("fast_quickload",         &fast_quickload);

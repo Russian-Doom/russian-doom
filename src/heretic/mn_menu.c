@@ -3214,9 +3214,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = NULL;
 
         // Colored HUD
-        dp_translation = colored_hud ? cr[CR_GRAY2GREEN_HERETIC] :
-                                       cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(colored_hud ? "ON" : "OFF"),
+        dp_translation = sbar_colored ? cr[CR_GRAY2GREEN_HERETIC] :
+                                        cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(DEH_String(sbar_colored ? "ON" : "OFF"),
                                      126 + wide_delta, 56);
         dp_translation = NULL;
 
@@ -3292,9 +3292,9 @@ static void DrawGameplay1Menu(void)
         dp_translation = NULL;
 
         // Разноцветные элемен HUD
-        dp_translation = colored_hud ? cr[CR_GRAY2GREEN_HERETIC] :
-                                       cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(colored_hud ? "DRK" : "DSRK"),
+        dp_translation = sbar_colored ? cr[CR_GRAY2GREEN_HERETIC] :
+                                        cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(DEH_String(sbar_colored ? "DRK" : "DSRK"),
                                      235 + wide_delta, 56);
         dp_translation = NULL;
 
@@ -3356,7 +3356,7 @@ static boolean M_RD_FakeContrast(int option)
 
 static boolean M_RD_ColoredHUD(int option)
 {
-    colored_hud ^= 1;
+    sbar_colored ^= 1;
     SB_state = -1;      // Update status bar (JN: not sure is it needed)
     return true;
 }
@@ -3769,7 +3769,7 @@ void M_RD_DoResetSettings(void)
     // Gameplay (1)
     brightmaps           = 1;
     fake_contrast        = 0;
-    colored_hud          = 0;
+    sbar_colored         = 0;
     colored_blood        = 1;
     invul_sky            = 1;
     torque               = 1;

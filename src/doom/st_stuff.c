@@ -373,6 +373,15 @@ static int st_randomnumber;
 static int st_height;
 static int st_y;
 
+// [JN] status bar widget colors.
+byte *sbar_color_high_set;
+byte *sbar_color_normal_set;
+byte *sbar_color_low_set;
+byte *sbar_color_critical_set;
+byte *sbar_color_armor_1_set;
+byte *sbar_color_armor_2_set;
+byte *sbar_color_armor_0_set;
+
 cheatseq_t cheat_mus = CHEAT("idmus", 2);
 cheatseq_t cheat_god = CHEAT("iddqd", 0);
 cheatseq_t cheat_ammo = CHEAT("idkfa", 0);
@@ -1556,7 +1565,7 @@ enum
 // [crispy] return ammo/health/armor widget color
 static byte* ST_WidgetColor(int i)
 {
-    if (!colored_hud || vanillaparm)
+    if (!sbar_colored || vanillaparm)
         return NULL;
 
     switch (i)
@@ -1573,13 +1582,13 @@ static byte* ST_WidgetColor(int i)
                 int fullammo = maxammo[weaponinfo[plyr->readyweapon].ammo];
 
                 if (ammo < fullammo/4)
-                    return cr[CR_RED];
+                    return sbar_color_critical_set;
                 else if (ammo < fullammo/2)
-                    return cr[CR_GOLD];
+                    return sbar_color_low_set;
                 else if (ammo <= fullammo)
-                    return cr[CR_GREEN];
+                    return sbar_color_normal_set;
                 else
-                    return cr[CR_BLUE2];
+                    return sbar_color_high_set;
             }
             break;
         }
@@ -1592,15 +1601,15 @@ static byte* ST_WidgetColor(int i)
             // and thus a little bit different logic.
             if (plyr->cheats & CF_GODMODE ||
                 plyr->powers[pw_invulnerability])
-                return cr[CR_GRAY];
+                return cr[CR_WHITE];
             else if (health > 100)
-                return cr[CR_BLUE2];
+                return sbar_color_high_set;
             else if (health >= 67)
-                return cr[CR_GREEN];
+                return sbar_color_normal_set;
             else if (health >= 34)
-                return cr[CR_GOLD];            
+                return sbar_color_low_set;            
             else
-                return cr[CR_RED];
+                return sbar_color_critical_set;
             break;
         }
         case hudcolor_frags:
@@ -1608,11 +1617,11 @@ static byte* ST_WidgetColor(int i)
             int frags = st_fragscount;
 
             if (frags < 0)
-                return cr[CR_RED];
+                return sbar_color_critical_set;
             else if (frags == 0)
-                return cr[CR_GOLD];
+                return sbar_color_low_set;
             else
-                return cr[CR_GREEN];
+                return sbar_color_normal_set;
 
             break;
         }
@@ -1621,14 +1630,14 @@ static byte* ST_WidgetColor(int i)
 	    // [crispy] Invulnerability powerup and God Mode cheat turn Armor values gray
 	    if (plyr->cheats & CF_GODMODE ||
                 plyr->powers[pw_invulnerability])
-                return cr[CR_GRAY];
+                return cr[CR_WHITE];
 	    // [crispy] color by armor type
 	    else if (plyr->armortype >= 2)
-                return cr[CR_BLUE2];
+                return sbar_color_armor_2_set;
 	    else if (plyr->armortype == 1)
-                return cr[CR_GREEN];
+                return sbar_color_armor_1_set;
 	    else if (plyr->armortype == 0)
-                return cr[CR_RED];
+                return sbar_color_armor_0_set;
             break;
         }
         case hudcolor_artifacts:
@@ -1641,13 +1650,13 @@ static byte* ST_WidgetColor(int i)
             if ((gameepisode == 1 && st_artifactscount == 36)
             ||  (gameepisode == 2 && st_artifactscount == 29)
             ||  (gameepisode == 3 && st_artifactscount == 25))
-            return cr[CR_GREEN];
+            return sbar_color_normal_set;
 
             else if (st_artifactscount > 0)
-            return cr[CR_GOLD];
+            return sbar_color_low_set;
 
             else
-            return cr[CR_RED];
+            return sbar_color_critical_set;
 
             break;
         }
@@ -2361,6 +2370,15 @@ void ST_Init (void)
     st_backing_screen = (byte *)Z_Malloc((screenwidth << hires) 
                                        * (st_height << hires)
                                        * sizeof(*st_backing_screen), PU_STATIC, 0);
+
+    // [JN] Initialize status bar widget colors.
+    M_RD_Define_SBarHighValue();
+    M_RD_Define_SBarNormalValue();
+    M_RD_Define_SBarLowValue();
+    M_RD_Define_SBarCriticalValue();
+    M_RD_Define_SBarArmorType1();
+    M_RD_Define_SBarArmorType2();
+    M_RD_Define_SBarArmorType0();
 }
 
 

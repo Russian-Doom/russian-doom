@@ -163,6 +163,18 @@ static void SensibleDefaults(void)
     flip_weapons = 0;
     draw_shadowed_text = 1;
 
+    // Gameplay: Status Bar
+    extra_player_faces = 1;
+    negative_health = 0;
+    sbar_colored = 0;
+    sbar_color_high = 5;
+    sbar_color_normal = 2;
+    sbar_color_low = 7;
+    sbar_color_critical = 0;
+    sbar_color_armor_1 = 2;
+    sbar_color_armor_2 = 5;
+    sbar_color_armor_0 = 0;
+
     // Gameplay: Audible
     z_axis_sfx = 0;
     play_exit_sfx = 0;
@@ -173,7 +185,6 @@ static void SensibleDefaults(void)
 
     // Gameplay: Tactical
     secret_notification = 1;
-    negative_health = 0;
     infragreen_visor = 0;
 
     // Gameplay: Physical
@@ -193,7 +204,6 @@ static void SensibleDefaults(void)
     // Gameplay: Gameplay
     fix_map_errors = 1;
     flip_levels = 0;
-    extra_player_faces = 1;
     unlimited_lost_souls = 1;
     agressive_lost_souls = 0;
     pistol_start = 0;

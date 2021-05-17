@@ -63,6 +63,18 @@ extern int invul_sky;
 extern int linear_sky;
 extern int flip_weapons;
 
+// Status Bar
+extern int extra_player_faces;
+extern int negative_health;
+extern int sbar_colored;
+extern int sbar_color_high;
+extern int sbar_color_normal;
+extern int sbar_color_low;
+extern int sbar_color_critical;
+extern int sbar_color_armor_1;
+extern int sbar_color_armor_2;
+extern int sbar_color_armor_0;
+
 // Звук
 extern int crushed_corpses_sfx;
 extern int blazing_door_fix_sfx;
@@ -73,7 +85,6 @@ extern int noise_alert_sfx;
 
 // Тактика
 extern int secret_notification;
-extern int negative_health;
 extern int infragreen_visor;
 
 // Физика
@@ -88,7 +99,6 @@ extern int toss_drop;
 // Геймплей
 extern int fix_map_errors;
 extern int flip_levels;
-extern int extra_player_faces;
 extern int unlimited_lost_souls;
 extern int agressive_lost_souls;
 extern int pistol_start;
