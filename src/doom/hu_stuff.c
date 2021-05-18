@@ -1095,7 +1095,7 @@ void HU_Drawer(void)
         if (crosshair_type == 1)
         {
             dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
-                             plr->health >= 34 ? cr[CR_GOLD] :
+                             plr->health >= 34 ? cr[CR_YELLOW] :
                                                  cr[CR_RED];
         }
         else if (crosshair_type == 2)
@@ -1108,7 +1108,7 @@ void HU_Drawer(void)
         else if (crosshair_type == 3)
         {
             dp_translation = plr->health >= 67 ? cr[CR_GREEN] :
-                             plr->health >= 34 ? cr[CR_GOLD] :
+                             plr->health >= 34 ? cr[CR_YELLOW] :
                                                  cr[CR_RED];
 
             P_AimLineAttack(plr->mo, plr->mo->angle, missilerange);
