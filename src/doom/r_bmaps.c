@@ -45,7 +45,7 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
     bmaptexture76, bmaptexture77, bmaptexture78, bmaptexture79, bmaptexture80,
     bmaptexture81, bmaptexture82, bmaptexture83, bmaptexture84, bmaptexture85,
     bmaptexture86, bmaptexture87, bmaptexture88, bmaptexture89, bmaptexture90,
-    bmaptexture91, bmaptexture92, bmaptexture93;
+    bmaptexture91, bmaptexture92, bmaptexture93, bmaptexture94;
 
 //
 // [JN] Lookup and init all the textures for brightmapping.
@@ -144,6 +144,16 @@ void R_InitBrightmappedTextures(void)
         // Red only 1
         bmaptexture89 = R_CheckTextureNumForName("TEKWALL2");
         bmaptexture90 = R_CheckTextureNumForName("TEKWALL5");
+
+        // SW2STON2 is a special case.
+        // It's presented in both Doom 1 and Doom 2,
+        // but uses "redonly" in Doom 1 and "greenonly2" in Doom 2.
+        // See below for `else` condition and different bmap name.
+        bmaptexture24 = R_CheckTextureNumForName("SW2STON2");
+    }
+    else
+    {
+        bmaptexture94 = R_CheckTextureNumForName("SW2STON2");
     }
 
     // -------------------------------------------------------
@@ -248,9 +258,6 @@ void R_InitBrightmappedTextures(void)
     //  All games
     // -------------------------------------------------------
     {
-        // In both games - Doom 1: red only, Doom 2: green only
-        bmaptexture24 = R_CheckTextureNumForName("SW2STON2");
-
         // Red only
         bmaptexture03 = R_CheckTextureNumForName("SW1BRCOM");
         bmaptexture04 = R_CheckTextureNumForName("SW1DIRT");
