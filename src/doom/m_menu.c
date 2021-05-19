@@ -8539,7 +8539,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
         S_SetSfxVolume(sfxVolume * 8);
     musicVolume          = 8;
         S_SetMusicVolume(musicVolume * 8);
-    snd_channels_rd      = 32;
+    snd_channels_rd      = 8;
     snd_channels         = snd_channels_rd;
         S_ChannelsRealloc();
     snd_monomode         = 0;

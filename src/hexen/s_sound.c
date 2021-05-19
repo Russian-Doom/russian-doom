@@ -84,7 +84,7 @@ int snd_MaxVolume_tmp;  // [JN] Temp volume variable used for hot-muting.
 int snd_MusicVolume = 10;              // maximum volume for music
 
 int snd_Channels_RD;
-int snd_Channels = 32;
+int snd_Channels = 8;
 int snd_Channels_Vanilla = 8;
 
 // int AmbChan;

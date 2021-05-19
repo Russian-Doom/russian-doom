@@ -143,7 +143,7 @@ int automap_grid_size = 128;
 int sfxVolume = 8;          // Maximum volume of a sound effect (internal: 0-15)
 int musicVolume = 8;        // Maximum volume of music.
 int snd_channels_rd;        // Number of channels to use
-int snd_channels = 32;
+int snd_channels = 8;
 int snd_channels_vanilla = 8;
 int snd_monomode = 0;
 
