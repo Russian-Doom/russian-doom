@@ -4878,7 +4878,7 @@ void M_RD_Choose_SoundSystem(int choice)
 
 void M_RD_Draw_Audio_System(void)
 {
-    static char snd_frequency[4];
+    static char snd_frequency[16];
 
     if (english_language)
     {
