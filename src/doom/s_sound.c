@@ -150,20 +150,16 @@ void S_Init(int sfxVolume, int musicVolume)
     // [JN] Cap sound channels to 8 in -vanilla game mode.
     if (vanillaparm)
     {
-        snd_channels_rd = snd_channels_vanilla;
-    }
-    else
-    {
-        snd_channels_rd = snd_channels;
+        snd_channels = 8;
     }
 
     // Allocating the internal channels for mixing
     // (the maximum numer of sounds rendered
     // simultaneously) within zone memory.
-    channels = Z_Malloc(snd_channels_rd*sizeof(channel_t), PU_STATIC, 0);
+    channels = I_Realloc(NULL, snd_channels*sizeof(channel_t));
 
     // Free all channels for use
-    for (i=0 ; i<snd_channels_rd ; i++)
+    for (i=0 ; i<snd_channels ; i++)
     {
         channels[i].sfxinfo = 0;
     }
@@ -202,7 +198,7 @@ void S_RD_Change_SoundDevice (void)
     I_PrecacheSounds(S_sfx, NUMSFX);
 
     // Free all channels for use
-    for (i=0 ; i<snd_channels_rd ; i++)
+    for (i=0 ; i<snd_channels ; i++)
     {
         channels[i].sfxinfo = 0;
     }
@@ -224,13 +220,13 @@ void S_ChannelsRealloc(void)
     int i;
 
     // Safeguard conditions:
-    if (snd_channels_rd < 4)
-        snd_channels_rd = 4;
-    if (snd_channels_rd > 64)
-        snd_channels_rd = 64;
+    if (snd_channels < 4)
+        snd_channels = 4;
+    if (snd_channels > 64)
+        snd_channels = 64;
 
-    channels = Z_Malloc(snd_channels_rd * sizeof(channel_t), PU_STATIC, 0);
-    for (i=0 ; i<snd_channels_rd ; i++)
+    channels = I_Realloc(channels, snd_channels * sizeof(channel_t));
+    for (i=0 ; i<snd_channels ; i++)
     {
         channels[i].sfxinfo = 0;
     }
@@ -283,7 +279,7 @@ static void S_StopChannel(int cnum)
 
         // check to see if other channels are playing the sound
 
-        for (i=0; i<snd_channels_rd; i++)
+        for (i=0; i<snd_channels; i++)
         {
             if (cnum != i && c->sfxinfo == channels[i].sfxinfo)
             {
@@ -312,7 +308,7 @@ void S_Start(void)
 
     // kill all playing sounds at start of level
     //  (trust me - a good idea)
-    for (cnum=0 ; cnum<snd_channels_rd ; cnum++)
+    for (cnum=0 ; cnum<snd_channels ; cnum++)
     {
         if (channels[cnum].sfxinfo)
         {
@@ -398,7 +394,7 @@ void S_StopSound(mobj_t *origin)
 {
     int cnum;
 
-    for (cnum=0 ; cnum<snd_channels_rd ; cnum++)
+    for (cnum=0 ; cnum<snd_channels ; cnum++)
     {
         if (channels[cnum].sfxinfo && channels[cnum].origin == origin)
         {
@@ -421,7 +417,7 @@ static int S_GetChannel(mobj_t *origin, sfxinfo_t *sfxinfo)
     channel_t*        c;
 
     // Find an open channel
-    for (cnum=0 ; cnum<snd_channels_rd ; cnum++)
+    for (cnum=0 ; cnum<snd_channels ; cnum++)
     {
         if (!channels[cnum].sfxinfo)
         {
@@ -435,10 +431,10 @@ static int S_GetChannel(mobj_t *origin, sfxinfo_t *sfxinfo)
     }
 
     // None available
-    if (cnum == snd_channels_rd)
+    if (cnum == snd_channels)
     {
         // Look for lower priority
-        for (cnum=0 ; cnum<snd_channels_rd ; cnum++)
+        for (cnum=0 ; cnum<snd_channels ; cnum++)
         {
             if (channels[cnum].sfxinfo->priority >= sfxinfo->priority)
             {
@@ -446,7 +442,7 @@ static int S_GetChannel(mobj_t *origin, sfxinfo_t *sfxinfo)
             }
         }
 
-        if (cnum == snd_channels_rd)
+        if (cnum == snd_channels)
         {
             // FUCK!  No lower priority.  Sorry, Charlie.
             return -1;
@@ -679,56 +675,12 @@ void S_StartSound(void *origin_p, int sfx_id)
     channels[cnum].handle = I_StartSound(sfx, cnum, volume, sep, channels[cnum].pitch);
 }
 
-//
-// [JN] Play unbreakable NULL-origin sound.
-// Used by Icon of Sin for preventing it's sounds
-// being breaked by player's "oof" and few others. 
-//
-void S_StartSoundNoBreak(void *origin_p, int sfx_id)
-{
-    sfxinfo_t *sfx = &S_sfx[sfx_id];
-    mobj_t *origin = (mobj_t *) origin_p;
-
-
-    // [crispy] make non-fatal, consider zero volume
-    if (sfx_id == sfx_None || !snd_SfxVolume)
-    {
-        return;
-    }
-
-    // [JN] If bogus sound #, just don't play it.
-    if (sfx_id < 1 || sfx_id > NUMSFX)
-    {
-        return;
-    }
-
-    // kill old sound
-    S_StopSound(origin);
-
-    // increase the usefulness
-    if (sfx->usefulness++ < 0)
-    {
-        sfx->usefulness = 1;
-    }
-
-    if (sfx->lumpnum < 0)
-    {
-        sfx->lumpnum = I_GetSfxLumpNum(sfx);
-    }
-
-    channels[snd_channels_rd].handle = I_StartSound(sfx, 
-                                                    snd_channels_rd-1,  // Use the last available channel
-                                                    snd_SfxVolume,      // Play with maximum available volume
-                                                    NORM_SEP,           // Don't use stereo separation (128)
-                                                    NORM_PITCH);        // Don't use pitch (127)
-}
-
 void S_StartSoundOnce (void *origin_p, int sfx_id)
 {
     int cnum;
     const sfxinfo_t *const sfx = &S_sfx[sfx_id];
 
-    for (cnum = 0; cnum < snd_channels_rd; cnum++)
+    for (cnum = 0; cnum < snd_channels; cnum++)
     {
         if (channels[cnum].sfxinfo == sfx &&
             channels[cnum].origin == origin_p)
@@ -777,7 +729,7 @@ void S_UpdateSounds(mobj_t *listener)
 
     I_UpdateSound();
 
-    for (cnum=0; cnum<snd_channels_rd; cnum++)
+    for (cnum=0; cnum<snd_channels; cnum++)
     {
         c = &channels[cnum];
         sfx = c->sfxinfo;
@@ -970,7 +922,7 @@ void S_MuteSound(void)
 
     S_SetMusicVolume(0);
     S_SetSfxVolume(0);
-    for (i=0; i<snd_channels_rd; i++)
+    for (i=0; i<snd_channels; i++)
     {
         S_StopChannel(i);
     }

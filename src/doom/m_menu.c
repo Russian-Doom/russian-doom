@@ -4775,9 +4775,9 @@ void M_RD_Draw_Audio(void)
     M_WriteTextSmall_ENG(177 + wide_delta, 65, num);
 
     // SFX channels slider
-    M_DrawThermo_Small(35 + wide_delta, 94, 16, snd_channels_rd / 4 - 1);
+    M_DrawThermo_Small(35 + wide_delta, 94, 16, snd_channels / 4 - 1);
     // Numerical representation of channels
-    M_snprintf(num, 4, "%3d", snd_channels_rd);
+    M_snprintf(num, 4, "%3d", snd_channels);
     M_WriteTextSmall_ENG(177 + wide_delta, 95, num);
 }
 
@@ -4838,11 +4838,9 @@ void M_RD_Change_SfxChannels(int choice)
     switch(choice)
     {
         case 0:
-        if (snd_channels_rd > 4)
+        if (snd_channels > 4)
         {
-            snd_channels_rd -= 4;
-            // Sync internal value
-            snd_channels = snd_channels_rd;
+            snd_channels -= 4;
             // Reallocate sound channels
             S_ChannelsRealloc();
             // [JN] Routine №3: play sound only if necessary.
@@ -4851,11 +4849,9 @@ void M_RD_Change_SfxChannels(int choice)
         break;
     
         case 1:
-        if (snd_channels_rd < 64)
+        if (snd_channels < 64)
         {
-            snd_channels_rd += 4;
-            // Sync internal value
-            snd_channels = snd_channels_rd;
+            snd_channels += 4;
             // Reallocate sound channels
             S_ChannelsRealloc();
             // [JN] Routine №3: play sound only if necessary.
@@ -8539,8 +8535,7 @@ void M_RD_BackToDefaults_Recommended(int choice)
         S_SetSfxVolume(sfxVolume * 8);
     musicVolume          = 8;
         S_SetMusicVolume(musicVolume * 8);
-    snd_channels_rd      = 8;
-    snd_channels         = snd_channels_rd;
+    snd_channels         = 32;
         S_ChannelsRealloc();
     snd_monomode         = 0;
     snd_pitchshift       = 0;
@@ -8701,8 +8696,7 @@ void M_RD_BackToDefaults_Original(int choice)
         S_SetSfxVolume(sfxVolume * 8);
     musicVolume          = 8;
         S_SetMusicVolume(musicVolume * 8);
-    snd_channels_rd      = 8;  
-    snd_channels         = snd_channels_rd;
+    snd_channels         = 8;
         S_ChannelsRealloc();
     snd_monomode         = 0;
     snd_pitchshift       = 0;

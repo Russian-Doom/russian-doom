@@ -2273,7 +2273,7 @@ extern char* ststr_massacre;
 #else
 #define STSRT_ARCH      ""
 #endif
-#define STSRT_DATE      "????-??-??"        // YYYY-MM-DD
+#define STSRT_DATE      "2021-00-00"        // YYYY-MM-DD
 
 // Русский
 #define STSTR_VERSION_RUS   "dthcbz 5>0"    // Версия 5.0
