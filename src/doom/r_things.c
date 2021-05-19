@@ -762,81 +762,37 @@ void R_ProjectSprite (mobj_t* thing)
         if (brightmaps && brightmaps_allowed)
         {
             // Armor Bonus (don't light up Skull Chest from Press Beta)
-            if (thing->type == MT_MISC3 && gamemode != pressbeta)
+            if ((thing->type == MT_MISC3 && gamemode != pressbeta) 
+            ||   thing->type == MT_MISC20  // Cell Charge
+            ||   thing->type == MT_MISC21) // Cell Charge Pack
             vis->colormap = fullbrights_dimmeditems[index];
 
-            // Cell Charge
-            else if (thing->type == MT_MISC20)
-            vis->colormap = fullbrights_dimmeditems[index];
-
-            // Cell Charge Pack
-            else if (thing->type == MT_MISC21)
-            vis->colormap = fullbrights_dimmeditems[index];
-
-            // BFG9000
-            else if (thing->type == MT_MISC25)
+            if (thing->type == MT_MISC25  // BFG9000
+            ||  thing->type == MT_MISC28) // Plasmagun
             vis->colormap = fullbrights_redonly[index];
 
-            // Plasmagun
-            else if (thing->type == MT_MISC28)
-            vis->colormap = fullbrights_redonly[index];
-
-            // Explosive barrel
-            else if (thing->type == MT_BARREL)
+            if (thing->type == MT_BARREL) // Explosive barrel
             vis->colormap = fullbrights_explosivebarrel[index];
 
-            // Pile of skulls and candles (29)
-            else if (thing->type == MT_MISC73)
+            if (thing->type == MT_MISC73) // Pile of skulls and candles (29)
             vis->colormap = fullbrights_pileofskulls[index];
 
-            // Candlestick (34)
-            else if (thing->type == MT_MISC49)
-            vis->colormap = fullbrights_candles[index];
-        
-            // Candelabra (35)
-            else if (thing->type == MT_MISC50)
+            if (thing->type == MT_MISC49  // Candlestick (34)
+            ||  thing->type == MT_MISC50) // Candelabra (35)
             vis->colormap = fullbrights_candles[index];
 
-            // Tall blue torch (44)
-            else if (thing->type == MT_MISC41)
+            if (thing->type == MT_MISC41  // Tall blue torch (44)
+            ||  thing->type == MT_MISC42  // Tall green torch (45)
+            ||  thing->type == MT_MISC43  // Tall red torch (46)
+            ||  thing->type == MT_MISC44  // Short blue torch (55)
+            ||  thing->type == MT_MISC45  // Short green torch (56)
+            ||  thing->type == MT_MISC46  // Short red torch (57)
+            ||  thing->type == MT_MISC77  // Burning barrel (70)
+            ||  thing->type == MT_MISC29  // Tall tech lamp (85)
+            ||  thing->type == MT_MISC30  // Short tech lamp (86)
+            ||  thing->type == MT_MISC31) // Floor lamp (2028)
             vis->colormap = fullbrights_alllights[index];
             
-            // Tall green torch (45)
-            else if (thing->type == MT_MISC42)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Tall red torch (46)
-            else if (thing->type == MT_MISC43)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Short blue torch (55)
-            else if (thing->type == MT_MISC44)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Short green torch (56)
-            else if (thing->type == MT_MISC45)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Short red torch (57)
-            else if (thing->type == MT_MISC46)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Burning barrel (70)
-            else if (thing->type == MT_MISC77)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Tall tech lamp (85)
-            else if (thing->type == MT_MISC29)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Short tech lamp (86)
-            else if (thing->type == MT_MISC30)
-            vis->colormap = fullbrights_alllights[index];
-
-            // Floor lamp (2028)
-            else if (thing->type == MT_MISC31)
-            vis->colormap = fullbrights_alllights[index];
-        
             // Press Beta's Lost Soul
             if (thing->type == MT_SKULL && gamemode == pressbeta)
             vis->colormap = fullbrights_notgray[index];
