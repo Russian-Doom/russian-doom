@@ -692,6 +692,36 @@ void S_StartSoundOnce (void *origin_p, int sfx_id)
     S_StartSound(origin_p, sfx_id);
 }
 
+// -----------------------------------------------------------------------------
+// S_StartSoundNoBreak 
+// [JN] Plays unbreakable sound on the last available sound channel.
+// -----------------------------------------------------------------------------
+
+void S_StartSoundNoBreak(int sfx_id)
+{
+    sfxinfo_t *sfx = &S_sfx[sfx_id];
+
+    // [JN] Do not play sound if not audible.
+    if (sfx_id < 1 || sfx_id > NUMSFX || !snd_SfxVolume)
+    {
+        return;
+    }
+
+    // [JN] Set poper lump number for playing.
+    if (sfx->lumpnum < 0)
+    {
+        sfx->lumpnum = I_GetSfxLumpNum(sfx);
+    }
+
+    // [JN] Start sound with given parameters:
+    channels[snd_channels-1].handle = 
+    I_StartSound(sfx,            // SFX to play
+                 snd_channels-1, // Use last available channel
+                 snd_SfxVolume,  // Use maximum available volume
+                 NORM_SEP,       // Normal stereo separation
+                 NORM_PITCH);    // Normal pitch
+}
+
 //
 // Stop and resume music, during game PAUSE.
 //

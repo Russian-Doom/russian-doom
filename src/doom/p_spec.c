@@ -1118,8 +1118,9 @@ void P_PlayerInSpecialSector (player_t* player)
 	if (secret_notification && !vanillaparm)
 	{
         player->message_secret = secretfound;
+        // [JN] Don't break revealed's secret sound by any others
 	    if (player == &players[consoleplayer])
-		S_StartSound(NULL, sfx_getpow);
+		S_StartSoundNoBreak(sfx_getpow);
 	}
 	
 	player->secretcount++;

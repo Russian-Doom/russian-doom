@@ -61,8 +61,8 @@ void S_Start(void);
 //
 
 void S_StartSound(void *origin_p, int sfx_id);
-void S_StartSoundNoBreak(void *origin_p, int sfx_id);
 void S_StartSoundOnce(void *origin, int sound_id);
+void S_StartSoundNoBreak(int sfx_id);
 
 // Stop sound for thing at <origin>
 void S_StopSound(mobj_t *origin);
