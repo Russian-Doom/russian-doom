@@ -93,6 +93,10 @@ T_MovePlane
 	    break;
 						
 	  case 1:
+        // [JN] Don't allow platform floor go through the ceiling.
+        dest = singleplayer && dest < sector->ceilingheight ?
+                               dest : sector->ceilingheight;
+      
 	    // UP
 	    if (sector->floorheight + speed > dest)
 	    {
