@@ -108,6 +108,7 @@ char *autoloadtntpwad[10]       = { "", "", "", "" };
 // Rendering
 int screen_wiping = 1;
 int show_endoom = 0;
+int flashing_hom = 0;
 
 // Display
 int screenblocks = 10, screenSize;
@@ -636,6 +637,7 @@ void D_BindVariables(void)
     M_BindIntVariable("show_diskicon",          &show_diskicon);
     M_BindIntVariable("screen_wiping",          &screen_wiping);
     M_BindIntVariable("show_endoom",            &show_endoom);
+    M_BindIntVariable("flashing_hom",           &flashing_hom);
 
     // Display
     M_BindIntVariable("screenblocks",           &screenblocks);

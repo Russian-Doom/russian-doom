@@ -1639,6 +1639,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(show_diskicon),
     CONFIG_VARIABLE_INT(screen_wiping),
     CONFIG_VARIABLE_INT(png_screenshots),
+    CONFIG_VARIABLE_INT(flashing_hom),
 
     // Display
     CONFIG_VARIABLE_INT(screenblocks),

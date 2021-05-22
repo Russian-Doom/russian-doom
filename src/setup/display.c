@@ -138,6 +138,7 @@ int graphical_startup = 0; // [JN] Disabled by default
 int screen_wiping = 1;
 int show_endoom = 0;
 int png_screenshots = 1;   // [JN] Crispy!
+int flashing_hom = 0;
 
 static int system_video_env_set;
 
@@ -453,6 +454,7 @@ void BindDisplayVariables(void)
     M_BindIntVariable("show_diskicon",             &show_diskicon);
     M_BindIntVariable("screen_wiping",             &screen_wiping);
     M_BindIntVariable("png_screenshots",           &png_screenshots);
+    M_BindIntVariable("flashing_hom",              &flashing_hom);
 
     M_BindIntVariable("vga_porch_flash",           &vga_porch_flash);
     M_BindIntVariable("integer_scaling",           &integer_scaling);

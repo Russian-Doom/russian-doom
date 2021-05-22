@@ -48,6 +48,7 @@ extern int show_diskicon;
 extern int screen_wiping;
 extern int png_screenshots;
 extern int show_endoom;
+extern int flashing_hom;
 
 
 // -----------------------------------------------------------------------------

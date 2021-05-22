@@ -28,5 +28,6 @@ extern int show_endoom;
 extern int graphical_startup;
 // extern int show_exit_sequence;
 extern int png_screenshots;
+extern int flashing_hom;
 
 #endif /* #ifndef SETUP_DISPLAY_H */

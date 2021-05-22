@@ -121,6 +121,7 @@ static void SensibleDefaults(void)
     mouse_y_invert = 0; // [crispy]
     snd_dmxoption = "-opl3 -reverse";
     png_screenshots = 1;
+    flashing_hom = 0;
 
     // Rendering
     vsync = 1;
