@@ -764,25 +764,17 @@ void R_Init (void)
 //
 // R_PointInSubsector
 //
-subsector_t*
-R_PointInSubsector (fixed_t x, fixed_t y)
+// [JN] killough 5/2/98: reformatted, cleaned up
+subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
 {
-    node_t* node;
-    int     side;
-    int     nodenum;
+    int nodenum = numnodes-1;
 
-    // single subsector is a special case
-    if (!numnodes)				
+    // special case for trivial maps (single subsector, no nodes)
+    if (numnodes == 0)
     return subsectors;
 
-    nodenum = numnodes-1;
-
-    while (! (nodenum & NF_SUBSECTOR) )
-    {
-        node = &nodes[nodenum];
-        side = R_PointOnSide (x, y, node);
-        nodenum = node->children[side];
-    }
+    while (!(nodenum & NF_SUBSECTOR))
+    nodenum = nodes[nodenum].children[R_PointOnSide(x, y, nodes+nodenum)];
 
     return &subsectors[nodenum & ~NF_SUBSECTOR];
 }
