@@ -3828,6 +3828,7 @@ sectorfix_t sectorfix[] =
     { doom2,            1,  21,     22, "SWATER2", "",        DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  21,     23, "SWATER2", "RROCK09", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  21,     24, "",        "RROCK11", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
+    { doom2,            1,  21,     50, "",        "",        DEFAULT,     200,           DEFAULT,                            DEFAULT, DEFAULT },
 
     { doom2,            1,  22,      8, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
     { doom2,            1,  22,     17, "",        "FLAT5_5", DEFAULT,     DEFAULT,       DEFAULT,                            DEFAULT, DEFAULT },
