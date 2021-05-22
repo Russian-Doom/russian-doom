@@ -151,7 +151,6 @@ static void SensibleDefaults(void)
     fake_contrast = 0;
     translucency = 1;
     improved_fuzz = 2;
-    colored_hud = 0;
     messages_timeout = 4;
     message_pickup_color = 0;
     message_secret_color = 7;
