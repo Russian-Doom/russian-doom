@@ -43,13 +43,19 @@ fixed_t skyiscale;
 // opening
 //
 
-visplane_t *visplanes = NULL;
-visplane_t *lastvisplane;
+static visplane_t *visplanes[MAXVISPLANES]; // [JN] killough
+static visplane_t *freetail;                // [JN] killough
+static visplane_t **freehead = &freetail;   // [JN] killough
 visplane_t *floorplane, *ceilingplane;
-static int numvisplanes;
 
 int  openings[MAXOPENINGS]; // [crispy] 32-bit integer math
 int* lastopening;           // [crispy] 32-bit integer math
+
+// killough -- hash function for visplanes
+// Empirically verified to be fairly uniform:
+
+#define visplane_hash(picnum, lightlevel, height) \
+    ((unsigned int)((picnum) * 3 + (lightlevel) + (height) * 7) & (MAXVISPLANES - 1))
 
 //
 // clip values are the solid pixel bounding the range
@@ -220,7 +226,10 @@ void R_ClearPlanes(void)
         ceilingclip[i] = -1;
     }
 
-    lastvisplane = visplanes;
+    for (int i = 0; i < MAXVISPLANES; i++)
+        for (*freehead = visplanes[i], visplanes[i] = NULL; *freehead; )
+            freehead = &(*freehead)->next;
+
     lastopening = openings;
 
 //
@@ -235,28 +244,22 @@ void R_ClearPlanes(void)
 }
 
 // [crispy] remove MAXVISPLANES Vanilla limit
-void R_RaiseVisplanes (visplane_t** vp)
+// New function, by Lee Killough
+static visplane_t *new_visplane(unsigned int hash)
 {
-    if (lastvisplane - visplanes == numvisplanes)
+    visplane_t *check = freetail;
+
+    if (!check)
     {
-	int numvisplanes_old = numvisplanes;
-	visplane_t* visplanes_old = visplanes;
-
-	if (numvisplanes_old == MAXVISPLANES)
-	    printf(english_language ?
-               "R_FindPlane: Hit MAXVISPLANES (%d) Vanilla limit.\n" :
-               "R_FindPlane: достигнут лимит MAXVISPLANES (%d).\n",
-               MAXVISPLANES);
-
-	numvisplanes = numvisplanes ? 2 * numvisplanes : MAXVISPLANES;
-	visplanes = I_Realloc(visplanes, numvisplanes * sizeof(*visplanes));
-	lastvisplane = visplanes + numvisplanes_old;
-	floorplane = visplanes + (floorplane - visplanes_old);
-	ceilingplane = visplanes + (ceilingplane - visplanes_old);
-
-	if (vp)
-	    *vp = visplanes + (*vp - visplanes_old);
+        check = calloc(1, sizeof(*check));
     }
+    else if (!(freetail = freetail->next))
+    {
+        freehead = &freetail;
+    }
+    check->next = visplanes[hash];
+    visplanes[hash] = check;
+    return check;
 }
 
 /*
@@ -271,6 +274,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
                         int lightlevel, int special)
 {
     visplane_t *check;
+    unsigned int hash;
 
     if (picnum == skyflatnum)
     {
@@ -279,22 +283,18 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
         lightlevel = 0;
     }
 
-    for (check = visplanes; check < lastvisplane; check++)
-    {
-        if (height == check->height
-            && picnum == check->picnum
-            && lightlevel == check->lightlevel && special == check->special)
-            break;
-    }
+    // New visplane algorithm uses hash table -- killough
+    hash = visplane_hash(picnum, lightlevel, height);
 
-    if (check < lastvisplane)
-    {
-        return (check);
-    }
+    // New visplane algorithm uses hash table -- killough
+    hash = visplane_hash(picnum, lightlevel, height);
+    
+    for (check = visplanes[hash]; check; check = check->next)
+        if (height == check->height && picnum == check->picnum && lightlevel == check->lightlevel)
+            return check;
 
-    R_RaiseVisplanes(&check);
+    check = new_visplane(hash);
 
-    lastvisplane++;
     check->height = height;
     check->picnum = picnum;
     check->lightlevel = lightlevel;
@@ -303,6 +303,30 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
     check->maxx = -1;
     memset(check->top, 0xff, sizeof(check->top));
     return (check);
+}
+
+/*
+===============
+=
+= R_DupPlane
+=
+===============
+*/
+
+visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop)
+{
+    unsigned int    hash = visplane_hash(pl->picnum, pl->lightlevel, pl->height);
+    visplane_t      *new_pl = new_visplane(hash);
+
+    new_pl->height = pl->height;
+    new_pl->picnum = pl->picnum;
+    new_pl->lightlevel = pl->lightlevel;
+    new_pl->minx = start;
+    new_pl->maxx = stop;
+
+    memset(new_pl->top, USHRT_MAX, sizeof(new_pl->top));
+
+    return new_pl;
 }
 
 /*
@@ -341,28 +365,18 @@ visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop)
         intrh = stop;
     }
 
-    for (x = intrl; x <= intrh; x++)
-        if (pl->top[x] != 0xffffffffu) // [crispy] hires / 32-bit integer math
-            break;
-
-    if (x > intrh)
+    for (x=intrl ; x <= intrh && pl->top[x] == 0xffffffffu; x++); // [crispy] hires / 32-bit integer math
+    // [crispy] fix HOM if ceilingplane and floorplane are the same visplane (e.g. both are skies)
+    if (!(pl == floorplane && markceiling && floorplane == ceilingplane) && x > intrh)
     {
-        pl->minx = unionl;
-        pl->maxx = unionh;
-        return pl;              // use the same one
+        // Can use existing plane; extend range
+        pl->minx = unionl, pl->maxx = unionh;
     }
-
-// make a new visplane
-
-    R_RaiseVisplanes(&pl);
-    lastvisplane->height = pl->height;
-    lastvisplane->picnum = pl->picnum;
-    lastvisplane->lightlevel = pl->lightlevel;
-    lastvisplane->special = pl->special;
-    pl = lastvisplane++;
-    pl->minx = start;
-    pl->maxx = stop;
-    memset(pl->top, 0xff, sizeof(pl->top));
+    else
+    {
+        // Cannot use existing plane; create a new one
+        return R_DupPlane(pl,start,stop);
+    }
 
     return pl;
 }
@@ -422,6 +436,7 @@ void R_MakeSpans(int x,
 void R_DrawPlanes(void)
 {
     visplane_t *pl;
+    int i;
     int light;
     int x, stop;
     int lumpnum;
@@ -435,25 +450,9 @@ void R_DrawPlanes(void)
     extern byte *ylookup[SCREENHEIGHT];
     extern int columnofs[WIDESCREENWIDTH];
 
-#ifdef RANGECHECK
-    if (ds_p - drawsegs > numdrawsegs)
-        I_Error(english_language ?
-                "R_DrawPlanes: drawsegs overflow (%i)" :
-                "R_DrawPlanes: переполнение drawsegs (%i)",
-                ds_p - drawsegs);
-    if (lastvisplane - visplanes > numvisplanes)
-        I_Error(english_language ?
-                "R_DrawPlanes: drawsegs overflow (%i)" :
-                "R_DrawPlanes: переполнение visplane (%i)",
-                lastvisplane - visplanes);
-    if (lastopening - openings > MAXOPENINGS)
-        I_Error(english_language ?
-                "R_DrawPlanes: drawsegs overflow (%i)" :
-                "R_DrawPlanes: переполнение opening (%i)",
-                lastopening - openings);
-#endif
-
-    for (pl = visplanes; pl < lastvisplane; pl++)
+    for (i = 0 ; i < MAXVISPLANES ; i++)
+    for (pl = visplanes[i] ; pl ; pl = pl->next)
+    if (pl->minx <= pl->maxx)
     {
         if (pl->minx > pl->maxx)
             continue;
