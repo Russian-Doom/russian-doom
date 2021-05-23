@@ -38,6 +38,25 @@ typedef struct
     int bottomclip;
 } maskdraw_t;
 
+typedef struct drawseg_xrange_item_s
+{
+    short x1, x2;
+    drawseg_t *user;
+} drawseg_xrange_item_t;
+
+typedef struct drawsegs_xrange_s
+{
+    drawseg_xrange_item_t *items;
+    int count;
+} drawsegs_xrange_t;
+
+#define DS_RANGES_COUNT 3
+static drawsegs_xrange_t drawsegs_xranges[DS_RANGES_COUNT];
+
+static drawseg_xrange_item_t *drawsegs_xrange;
+static unsigned int drawsegs_xrange_size = 0;
+static int drawsegs_xrange_count = 0;
+
 /*
 
 Sprite rotation 0 is facing the viewer, rotation 1 is one angle turn CLOCKWISE
@@ -276,10 +295,8 @@ void R_InitSpriteDefs(char **namelist)
 ===============================================================================
 */
 
-vissprite_t *vissprites;
-vissprite_t *vissprite_p;
-int newvissprite;
-static int	numvissprites;
+static size_t num_vissprite, num_vissprite_alloc, num_vissprite_ptrs; // [JN] killough
+static vissprite_t *vissprites, **vissprite_ptrs;                     // [JN] killough
 
 
 /*
@@ -315,7 +332,7 @@ void R_InitSprites(char **namelist)
 
 void R_ClearSprites(void)
 {
-    vissprite_p = vissprites;
+    num_vissprite = 0;  // [JN] killough
 }
 
 
@@ -327,26 +344,20 @@ void R_ClearSprites(void)
 ===================
 */
 
-vissprite_t overflowsprite;
-
 vissprite_t *R_NewVisSprite(void)
 {
-    // [crispy] remove MAXVISSPRITE limit
-    if (vissprite_p == &vissprites[numvissprites])
+    if (num_vissprite >= num_vissprite_alloc)   // [JN] killough
     {
-        static int i;
-        int numvissprites_old = numvissprites;
+        size_t num_vissprite_alloc_prev = num_vissprite_alloc;
 
-        if (i++ == 1)
-        puts("R_NewVisSprite: Hit MAXVISSPRITES limit.");
+        num_vissprite_alloc = num_vissprite_alloc ? num_vissprite_alloc*2 : 128;
+        vissprites = realloc(vissprites,num_vissprite_alloc*sizeof(*vissprites));
 
-        numvissprites += i * MAXVISSPRITES;
-        vissprites = I_Realloc(vissprites, numvissprites * sizeof(*vissprites));
-        vissprite_p = vissprites + numvissprites_old;
+        // [JN] e6y: set all fields to zero
+        memset(vissprites + num_vissprite_alloc_prev, 0,
+        (num_vissprite_alloc - num_vissprite_alloc_prev)*sizeof(*vissprites));
     }
-
-    vissprite_p++;
-    return vissprite_p - 1;
+    return vissprites + num_vissprite++;
 }
 
 
@@ -1570,56 +1581,78 @@ void R_DrawPlayerSprites(void)
 =
 = R_SortVisSprites
 =
+= Rewritten by Lee Killough to avoid using unnecessary
+= linked lists, and to use faster sorting algorithm.
 ========================
 */
 
-vissprite_t vsprsortedhead;
+#define bcopyp(d, s, n) memcpy(d, s, (n) * sizeof(void *))
+
+// killough 9/2/98: merge sort
+
+static void msort(vissprite_t **s, vissprite_t **t, int n)
+{
+    if (n >= 16)
+    {
+        int n1 = n/2, n2 = n - n1;
+        vissprite_t **s1 = s, **s2 = s + n1, **d = t;
+
+        msort(s1, t, n1);
+        msort(s2, t, n2);
+
+        while ((*s1)->scale > (*s2)->scale ?
+              (*d++ = *s1++, --n1) : (*d++ = *s2++, --n2));
+
+        if (n2)
+        bcopyp(d, s2, n2);
+        else
+        bcopyp(d, s1, n1);
+
+        bcopyp(s, t, n);
+    }
+    else
+    {
+        int i;
+
+        for (i = 1; i < n; i++)
+        {
+            vissprite_t *temp = s[i];
+
+            if (s[i-1]->scale < temp->scale)
+            {
+                int j = i;
+
+                while ((s[j] = s[j-1])->scale < temp->scale && --j);
+                s[j] = temp;
+            }
+        }
+    }
+}
 
 void R_SortVisSprites(void)
 {
-    int i, count;
-    vissprite_t *ds, *best;
-    vissprite_t unsorted;
-    fixed_t bestscale;
-
-    count = vissprite_p - vissprites;
-
-    unsorted.next = unsorted.prev = &unsorted;
-    if (!count)
-        return;
-
-    for (ds = vissprites; ds < vissprite_p; ds++)
+    if (num_vissprite)
     {
-        ds->next = ds + 1;
-        ds->prev = ds - 1;
-    }
-    vissprites[0].prev = &unsorted;
-    unsorted.next = &vissprites[0];
-    (vissprite_p - 1)->next = &unsorted;
-    unsorted.prev = vissprite_p - 1;
+        int i = num_vissprite;
 
-//
-// pull the vissprites out by scale
-//
-    best = 0;                   // shut up the compiler warning
-    vsprsortedhead.next = vsprsortedhead.prev = &vsprsortedhead;
-    for (i = 0; i < count; i++)
-    {
-        bestscale = INT_MAX;
-        for (ds = unsorted.next; ds != &unsorted; ds = ds->next)
+        // If we need to allocate more pointers for the vissprites,
+        // allocate as many as were allocated for sprites -- killough
+        // killough 9/22/98: allocate twice as many
+
+        if (num_vissprite_ptrs < num_vissprite*2)
         {
-            if (ds->scale < bestscale)
-            {
-                bestscale = ds->scale;
-                best = ds;
-            }
+            free(vissprite_ptrs);  // better than realloc -- no preserving needed
+            vissprite_ptrs = malloc((num_vissprite_ptrs = num_vissprite_alloc*2)
+                                    * sizeof *vissprite_ptrs);
         }
-        best->next->prev = best->prev;
-        best->prev->next = best->next;
-        best->next = &vsprsortedhead;
-        best->prev = vsprsortedhead.prev;
-        vsprsortedhead.prev->next = best;
-        vsprsortedhead.prev = best;
+
+        while (--i>=0)
+        vissprite_ptrs[i] = vissprites+i;
+
+        // killough 9/22/98: replace qsort with merge sort, since the keys
+        // are roughly in order to begin with, due to BSP rendering.
+
+        msort(vissprite_ptrs, vissprite_ptrs + num_vissprite, num_vissprite);
     }
 }
 
@@ -1649,6 +1682,62 @@ void R_DrawSprite(vissprite_t * spr)
 // scan drawsegs from end to start for obscuring segs
 // the first drawseg that has a greater scale is the clip seg
 //
+    // [JN] e6y: optimization
+
+    if (drawsegs_xrange_size)
+    {
+        const drawseg_xrange_item_t *last = &drawsegs_xrange[drawsegs_xrange_count - 1];
+        drawseg_xrange_item_t *curr = &drawsegs_xrange[-1];
+        while (++curr <= last)
+        {
+        // determine if the drawseg obscures the sprite
+        if (curr->x1 > spr->x2 || curr->x2 < spr->x1)
+            continue;      // does not cover sprite
+
+        ds = curr->user;
+
+        if (ds->scale1 > ds->scale2)
+        {
+            lowscale = ds->scale2;
+            scale = ds->scale1;
+        }
+        else
+        {
+            lowscale = ds->scale1;
+            scale = ds->scale2;
+        }
+
+        if (scale < spr->scale || (lowscale < spr->scale &&
+            !R_PointOnSegSide (spr->gx, spr->gy, ds->curline)))
+        {
+            if (ds->maskedtexturecol)       // masked mid texture?
+            {
+            r1 = ds->x1 < spr->x1 ? spr->x1 : ds->x1;
+            r2 = ds->x2 > spr->x2 ? spr->x2 : ds->x2;
+            R_RenderMaskedSegRange(ds, r1, r2);
+            }
+            continue;               // seg is behind sprite
+        }
+
+        r1 = ds->x1 < spr->x1 ? spr->x1 : ds->x1;
+        r2 = ds->x2 > spr->x2 ? spr->x2 : ds->x2;
+
+        // clip this piece of the sprite
+        // killough 3/27/98: optimized and made much shorter
+
+        if (ds->silhouette&SIL_BOTTOM && spr->gz < ds->bsilheight) //bottom sil
+            for (x=r1 ; x<=r2 ; x++)
+            if (clipbot[x] == -2)
+                clipbot[x] = ds->sprbottomclip[x];
+
+        if (ds->silhouette&SIL_TOP && spr->gzt > ds->tsilheight)   // top sil
+            for (x=r1 ; x<=r2 ; x++)
+            if (cliptop[x] == -2)
+                cliptop[x] = ds->sprtopclip[x];
+        }
+    }
+    else
+    {
     for (ds = ds_p - 1; ds >= drawsegs; ds--)
     {
         //
@@ -1711,7 +1800,7 @@ void R_DrawSprite(vissprite_t * spr)
                     cliptop[x] = ds->sprtopclip[x];
             }
         }
-
+    }
     }
 
 //
@@ -1743,34 +1832,99 @@ void R_DrawSprite(vissprite_t * spr)
 
 void R_DrawMasked(void)
 {
-    vissprite_t *spr;
-    drawseg_t *ds;
+    int i;
+    drawseg_t*      ds;
+    int cx = screenwidth / 2;
 
     R_SortVisSprites();
 
-    if (vissprite_p > vissprites)
+    // [JN] e6y
+    // Makes sense for scenes with huge amount of drawsegs.
+    for(i = 0 ; i < DS_RANGES_COUNT ; i++)
     {
-        // draw all vissprites back to front
+        drawsegs_xranges[i].count = 0;
+    }
 
-        for (spr = vsprsortedhead.next; spr != &vsprsortedhead;
-             spr = spr->next)
-            R_DrawSprite(spr);
+    if (num_vissprite > 0)
+    {
+        if (drawsegs_xrange_size < numdrawsegs)
+        {
+            drawsegs_xrange_size = 2 * numdrawsegs;
+
+            for(i = 0; i < DS_RANGES_COUNT; i++)
+            {
+                drawsegs_xranges[i].items = I_Realloc(
+                drawsegs_xranges[i].items,
+                drawsegs_xrange_size * sizeof(drawsegs_xranges[i].items[0]));
+            }
+        }
+
+        for (ds = ds_p; ds-- > drawsegs;)
+        {
+            if (ds->silhouette || ds->maskedtexturecol)
+            {
+                drawsegs_xranges[0].items[drawsegs_xranges[0].count].x1 = ds->x1;
+                drawsegs_xranges[0].items[drawsegs_xranges[0].count].x2 = ds->x2;
+                drawsegs_xranges[0].items[drawsegs_xranges[0].count].user = ds;
+
+                if (ds->x1 < cx)
+                {
+                    drawsegs_xranges[1].items[drawsegs_xranges[1].count] = 
+                    drawsegs_xranges[0].items[drawsegs_xranges[0].count];
+                    drawsegs_xranges[1].count++;
+                }
+                if (ds->x2 >= cx)
+                {
+                    drawsegs_xranges[2].items[drawsegs_xranges[2].count] = 
+                    drawsegs_xranges[0].items[drawsegs_xranges[0].count];
+                    drawsegs_xranges[2].count++;
+                }
+
+                drawsegs_xranges[0].count++;
+            }
+        }
+    }
+
+//
+// draw all vissprites back to front
+//
+
+    for (i = num_vissprite ; --i>=0 ; )
+    {
+        vissprite_t* spr = vissprite_ptrs[i];
+
+        if (spr->x2 < cx)
+        {
+            drawsegs_xrange = drawsegs_xranges[1].items;
+            drawsegs_xrange_count = drawsegs_xranges[1].count;
+        }
+        else if (spr->x1 >= cx)
+        {
+            drawsegs_xrange = drawsegs_xranges[2].items;
+            drawsegs_xrange_count = drawsegs_xranges[2].count;
+        }
+        else
+        {
+            drawsegs_xrange = drawsegs_xranges[0].items;
+            drawsegs_xrange_count = drawsegs_xranges[0].count;
+        }
+
+        R_DrawSprite(vissprite_ptrs[i]);
     }
 
 //
 // render any remaining masked mid textures
 //
-    for (ds = ds_p - 1; ds >= drawsegs; ds--)
+
+    for (ds=ds_p ; ds-- > drawsegs ; )  // new -- killough
         if (ds->maskedtexturecol)
             R_RenderMaskedSegRange(ds, ds->x1, ds->x2);
 
 //
 // draw the psprites on top of everything
+// but does not draw on side views
 //
-// Added for the sideviewing with an external device
-    if (viewangleoffset <= 1024 << ANGLETOFINESHIFT || viewangleoffset >=
-        -1024 << ANGLETOFINESHIFT)
-    {                           // don't draw on side views
-        R_DrawPlayerSprites();
-    }
+
+    if (!viewangleoffset)		
+    R_DrawPlayerSprites ();
 }

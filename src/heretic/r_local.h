@@ -500,11 +500,6 @@ void R_PrecacheLevel(void);
 //
 // R_things.c
 //
-#define	MAXVISSPRITES	128
-
-extern vissprite_t *vissprites;
-extern vissprite_t *vissprite_p;
-extern vissprite_t vsprsortedhead;
 
 // constant arrays used for psprite clipping and initializing clipping
 extern int negonearray[WIDESCREENWIDTH];       // [crispy] 32-bit integer math
