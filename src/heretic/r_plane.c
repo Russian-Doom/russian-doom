@@ -32,21 +32,18 @@ planefunction_t floorfunc, ceilingfunc;
 //
 // sky mapping
 //
-int skyflatnum;
-int skytexture;
-int skytexturemid;
+int     skyflatnum;
+int     skytexture;
+int     skytexturemid;
 fixed_t skyiscale;
-
-
 
 //
 // opening
 //
-
-static visplane_t *visplanes[MAXVISPLANES]; // [JN] killough
-static visplane_t *freetail;                // [JN] killough
-static visplane_t **freehead = &freetail;   // [JN] killough
-visplane_t *floorplane, *ceilingplane;
+static visplane_t  *visplanes[MAXVISPLANES]; // [JN] killough
+static visplane_t  *freetail;                // [JN] killough
+static visplane_t **freehead = &freetail;    // [JN] killough
+visplane_t         *floorplane, *ceilingplane;
 
 int  openings[MAXOPENINGS]; // [crispy] 32-bit integer math
 int* lastopening;           // [crispy] 32-bit integer math
@@ -90,64 +87,62 @@ fixed_t cachedystep[SCREENHEIGHT];
 
 
 /*
-================
+================================================================================
 =
 = R_InitSkyMap
 =
-= Called whenever the view size changes
+= Called whenever the view size changes.
 =
-================
+================================================================================
 */
 
-void R_InitSkyMap(void)
+void R_InitSkyMap (void)
 {
     skyflatnum = R_FlatNumForName(DEH_String("F_SKY1"));
     skytexturemid = 200 * FRACUNIT;
     skyiscale = FRACUNIT >> hires;
 }
 
-
 /*
-====================
+================================================================================
 =
 = R_InitPlanes
 =
-= Only at game startup
-====================
+= Only at game startup.
+=
+= [JN] TODO: remove
+=
+================================================================================
 */
 
-void R_InitPlanes(void)
+void R_InitPlanes (void)
 {
 }
 
 
 /*
-================
+================================================================================
 =
 = R_MapPlane
 =
-global vars:
-
-planeheight
-ds_source
-basexscale
-baseyscale
-viewx
-viewy
-
-BASIC PRIMITIVE
-================
+= global vars:
+= 
+= planeheight
+= ds_source
+= basexscale
+= baseyscale
+= viewx
+= viewy
+= 
+= BASIC PRIMITIVE
+================================================================================
 */
 
-void R_MapPlane(int y, int x1, int x2)
+void R_MapPlane (int y, int x1, int x2)
 {
-    // [crispy] see below
-    // angle_t angle;
-    fixed_t distance;
-    // [JN] also see below
-    // fixed_t length;
-    unsigned index;
-    int dx, dy;
+    fixed_t   distance;
+    unsigned  index;
+    int       dx, dy;
 
 #ifdef RANGECHECK
     if (x2 < x1 || x1 < 0 || x2 >= viewwidth || (unsigned) y > viewheight)
@@ -185,7 +180,9 @@ void R_MapPlane(int y, int x1, int x2)
     ds_yfrac = -viewy - FixedMul(viewsin, distance) + dx * ds_ystep;
     
     if (fixedcolormap)
+    {
         ds_colormap = fixedcolormap;
+    }
     else
     {
         index = distance >> LIGHTZSHIFT;
@@ -201,25 +198,22 @@ void R_MapPlane(int y, int x1, int x2)
     spanfunc();                 // high or low detail
 }
 
-//=============================================================================
-
 /*
-====================
+================================================================================
 =
 = R_ClearPlanes
 =
-= At begining of frame
-====================
+= At begining of frame.
+=
+================================================================================
 */
 
-void R_ClearPlanes(void)
+void R_ClearPlanes (void)
 {
     int i;
-    angle_t angle;
+    const angle_t angle = (viewangle - ANG90) >> ANGLETOFINESHIFT; // left to right mapping
 
-//
-// opening / clipping determination
-//      
+    // opening / clipping determination
     for (i = 0; i < viewwidth; i++)
     {
         floorclip[i] = viewheight;
@@ -232,19 +226,25 @@ void R_ClearPlanes(void)
 
     lastopening = openings;
 
-//
-// texture calculation
-//
+    // texture calculation
     memset(cachedheight, 0, sizeof(cachedheight));
-    angle = (viewangle - ANG90) >> ANGLETOFINESHIFT;    // left to right mapping
 
     // scale will be unit scale at SCREENWIDTH/2 distance
     basexscale = FixedDiv(finecosine[angle], centerxfrac);
     baseyscale = -FixedDiv(finesine[angle], centerxfrac);
 }
 
-// [crispy] remove MAXVISPLANES Vanilla limit
-// New function, by Lee Killough
+/*
+================================================================================
+=
+= new_visplane
+=
+= [crispy] remove MAXVISPLANES Vanilla limit
+= New function, by Lee Killough
+=
+================================================================================
+*/
+
 static visplane_t *new_visplane(unsigned int hash)
 {
     visplane_t *check = freetail;
@@ -263,18 +263,17 @@ static visplane_t *new_visplane(unsigned int hash)
 }
 
 /*
-===============
+================================================================================
 =
 = R_FindPlane
 =
-===============
+================================================================================
 */
 
-visplane_t *R_FindPlane(fixed_t height, int picnum,
-                        int lightlevel, int special)
+visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
 {
-    visplane_t *check;
-    unsigned int hash;
+    visplane_t   *check;
+    unsigned int  hash;
 
     if (picnum == skyflatnum)
     {
@@ -286,9 +285,6 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
     // New visplane algorithm uses hash table -- killough
     hash = visplane_hash(picnum, lightlevel, height);
 
-    // New visplane algorithm uses hash table -- killough
-    hash = visplane_hash(picnum, lightlevel, height);
-    
     for (check = visplanes[hash]; check; check = check->next)
         if (height == check->height && picnum == check->picnum && lightlevel == check->lightlevel)
             return check;
@@ -301,22 +297,24 @@ visplane_t *R_FindPlane(fixed_t height, int picnum,
     check->special = special;
     check->minx = screenwidth;
     check->maxx = -1;
+
     memset(check->top, 0xff, sizeof(check->top));
+
     return (check);
 }
 
 /*
-===============
+================================================================================
 =
 = R_DupPlane
 =
-===============
+================================================================================
 */
 
-visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop)
+visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
 {
-    unsigned int    hash = visplane_hash(pl->picnum, pl->lightlevel, pl->height);
-    visplane_t      *new_pl = new_visplane(hash);
+    unsigned int  hash = visplane_hash(pl->picnum, pl->lightlevel, pl->height);
+    visplane_t   *new_pl = new_visplane(hash);
 
     new_pl->height = pl->height;
     new_pl->picnum = pl->picnum;
@@ -330,14 +328,14 @@ visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop)
 }
 
 /*
-===============
+================================================================================
 =
 = R_CheckPlane
 =
-===============
+================================================================================
 */
 
-visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop)
+visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
 {
     int intrl, intrh;
     int unionl, unionh;
@@ -381,16 +379,12 @@ visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop)
     return pl;
 }
 
-
-
-//=============================================================================
-
 /*
-================
+================================================================================
 =
 = R_MakeSpans
 =
-================
+================================================================================
 */
 
 void R_MakeSpans(int x, 
@@ -422,30 +416,30 @@ void R_MakeSpans(int x,
     }
 }
 
-
-
 /*
-================
+================================================================================
 =
 = R_DrawPlanes
 =
-= At the end of each frame
-================
+= At the end of each frame.
+=
+= [JN] TODO: fix scrollers
+=
+================================================================================
 */
 
-void R_DrawPlanes(void)
+void R_DrawPlanes (void)
 {
-    visplane_t *pl;
-    int i;
-    int light;
-    int x, stop;
-    int lumpnum;
-    int angle;
-    byte *tempSource;
-
-    byte *dest;
-    int count;
-    fixed_t frac, fracstep;
+    visplane_t  *pl;
+    int          i;
+    int          light;
+    int          x, stop;
+    int          lumpnum;
+    int          angle;
+    byte        *tempSource;
+    byte        *dest;
+    int          count;
+    fixed_t      frac, fracstep;
 
     extern byte *ylookup[SCREENHEIGHT];
     extern int columnofs[WIDESCREENWIDTH];
@@ -479,8 +473,8 @@ void R_DrawPlanes(void)
                 {
                     angle = (viewangle + xtoviewangle[x]) >> ANGLETOSKYSHIFT;
                     dc_x = x;
-                    dc_source = R_GetColumn(skytexture, angle);
-
+                    dc_source = R_GetColumn(skytexture, angle, true);
+/*
                     count = dc_yh - dc_yl;
                     if (count < 0)
                         return;
@@ -505,7 +499,7 @@ void R_DrawPlanes(void)
                         frac += fracstep;
                     }
                     while (count--);
-
+*/
                     // [JN] Initially it was commented out. Colfunc() calls R_DrawColumn()
                     // which, originally, doesn't know how to draw textures taller than 128 pixels.
                     // I'm using R_DrawColumn with enhancements by Lee Killough, so now it actually
@@ -521,8 +515,8 @@ void R_DrawPlanes(void)
         //
         lumpnum = firstflat + flattranslation[pl->picnum];
 
-        tempSource = W_CacheLumpNum(lumpnum, PU_STATIC);
-
+        ds_source = W_CacheLumpNum(lumpnum, PU_STATIC);
+/*
         switch (pl->special)
         {
             case 25:
@@ -562,6 +556,7 @@ void R_DrawPlanes(void)
             default:
                 ds_source = tempSource;
         }
+*/
         planeheight = abs(pl->height - viewz);
         light = ((pl->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
         if (light >= LIGHTLEVELS)
@@ -583,9 +578,13 @@ void R_DrawPlanes(void)
         pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
 
         stop = pl->maxx + 1;
-        for (x = pl->minx; x <= stop; x++)
-            R_MakeSpans(x, pl->top[x - 1], pl->bottom[x - 1], pl->top[x],
-                        pl->bottom[x]);
+        for (x=pl->minx ; x<= stop ; x++)
+        {
+            R_MakeSpans(x,pl->top[x-1],
+            pl->bottom[x-1],
+            pl->top[x],
+            pl->bottom[x]);
+        }
 
         W_ReleaseLumpNum(lumpnum);
     }

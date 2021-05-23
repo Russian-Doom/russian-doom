@@ -532,6 +532,8 @@ extern boolean respawnparm;     // checkparm of -respawn
 
 extern boolean debugmode;       // checkparm of -debug
 
+extern boolean devparm;         // [JN] Game launched with -devparm
+
 extern boolean usergame;        // ok to save / end game
 
 extern boolean ravpic;          // checkparm of -ravpic
