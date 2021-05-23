@@ -74,6 +74,22 @@ typedef struct
     unsigned short sidenum[2];
 } PACKEDATTR maplinedef_t;
 
+// [crispy] allow loading of Hexen-format maps
+// taken from chocolate-doom/src/hexen/xddefs.h:63-75
+typedef struct
+{
+    short v1;
+    short v2;
+    short flags;
+    byte special;
+    byte arg1;
+    byte arg2;
+    byte arg3;
+    byte arg4;
+    byte arg5;
+    short sidenum[2];
+} PACKEDATTR maplinedef_hexen_t;
+
 #define	ML_BLOCKING			1
 #define	ML_BLOCKMONSTERS	2
 #define	ML_TWOSIDED			4       // backside will not be present at all
@@ -107,6 +123,20 @@ typedef struct
     unsigned short firstseg;             // segs are stored sequentially
 } PACKEDATTR mapsubsector_t;
 
+// [crispy] allow loading of maps with DeePBSP nodes
+// taken from prboom-plus/src/doomdata.h:163-166
+typedef struct
+{
+    unsigned short numsegs;
+    int firstseg;
+} PACKEDATTR mapsubsector_deepbsp_t;
+
+// [crispy] allow loading of maps with ZDBSP nodes
+// taken from prboom-plus/src/doomdata.h:168-170
+typedef struct {
+    unsigned int numsegs;
+} PACKEDATTR mapsubsector_zdbsp_t;
+
 typedef struct
 {
     unsigned short v1;
@@ -116,6 +146,26 @@ typedef struct
     short side;
     short offset;
 } PACKEDATTR mapseg_t;
+
+// [crispy] allow loading of maps with DeePBSP nodes
+// taken from prboom-plus/src/doomdata.h:183-190
+typedef struct
+{
+    int v1;
+    int v2;
+    unsigned short angle;
+    unsigned short linedef;
+    short side;
+    unsigned short offset;
+} PACKEDATTR mapseg_deepbsp_t;
+
+// [crispy] allow loading of maps with ZDBSP nodes
+// taken from prboom-plus/src/doomdata.h:192-196
+typedef struct {
+    unsigned int v1, v2;
+    unsigned short linedef;
+    unsigned char side;
+} PACKEDATTR mapseg_zdbsp_t;
 
 #define NF_SUBSECTOR    0x80000000
 #define NO_INDEX        ((unsigned short)-1)
@@ -127,6 +177,29 @@ typedef struct
     unsigned short children[2]; // if NF_SUBSECTOR its a subsector
 } PACKEDATTR mapnode_t;
 
+// [crispy] allow loading of maps with DeePBSP nodes
+// taken from prboom-plus/src/doomdata.h:216-225
+typedef struct
+{
+    short x;
+    short y;
+    short dx;
+    short dy;
+    short bbox[2][4];
+    int children[2];
+} PACKEDATTR mapnode_deepbsp_t;
+
+// [crispy] allow loading of maps with ZDBSP nodes
+// taken from prboom-plus/src/doomdata.h:227-136
+typedef struct {
+    short x;
+    short y;
+    short dx;
+    short dy;
+    short bbox[2][4];
+    int children[2];
+} PACKEDATTR mapnode_zdbsp_t;
+
 typedef struct
 {
     short x, y;
@@ -134,6 +207,25 @@ typedef struct
     short type;
     short options;
 } PACKEDATTR mapthing_t;
+
+// [crispy] allow loading of Hexen-format maps
+// taken from chocolate-doom/src/hexen/xddefs.h:134-149
+typedef struct
+{
+    short tid;
+    short x;
+    short y;
+    short height;
+    short angle;
+    short type;
+    short options;
+    byte special;
+    byte arg1;
+    byte arg2;
+    byte arg3;
+    byte arg4;
+    byte arg5;
+} PACKEDATTR mapthing_hexen_t;
 
 #define	MTF_EASY		1
 #define	MTF_NORMAL		2

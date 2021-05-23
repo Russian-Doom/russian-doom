@@ -474,6 +474,20 @@ byte *R_GetColumn (int tex, int col, boolean opaque)
     return texturecomposite[tex] + ofs;
 }
 
+byte *R_GetColumn2(int tex, int col)
+{
+    int lump, ofs;
+
+    col &= texturewidthmask[tex];
+    lump = texturecolumnlump[tex][col];
+    ofs = texturecolumnofs[tex][col];
+    if (lump > 0)
+        return (byte *) W_CacheLumpNum(lump, PU_CACHE) + ofs;
+    if (!texturecomposite[tex])
+        R_GenerateComposite(tex);
+    return texturecomposite[tex] + ofs;
+}
+
 /*
 ================================================================================
 =
@@ -1055,7 +1069,7 @@ int R_FlatNumForName (char *name)
         memcpy(namet, name, 8);
         // [crispy] make non-fatal
         fprintf (stderr, english_language ?
-                         "R_FlatNumForName: %s not found" :
+                         "R_FlatNumForName: %s not found\n" :
                          "R_FlatNumForName: текстура поверхности %s не найдена\n",
                          namet);
         // [crispy] since there is no "No Flat" marker,
@@ -1116,8 +1130,8 @@ int R_TextureNumForName (char *name)
     {
         // [crispy] make non-fatal
         fprintf (stderr, english_language ?
-                         "R_TextureNumForName: %s not found" :
-                         "R_TextureNumForName: текстура %s не найдена",
+                         "R_TextureNumForName: %s not found\n" :
+                         "R_TextureNumForName: текстура %s не найдена\n",
                          name);
         return 0;
     }
