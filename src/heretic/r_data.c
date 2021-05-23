@@ -954,65 +954,19 @@ void R_InitColormaps(void)
 ================================================================================
 */
 
-void R_InitBrightmaps(void)
+static void R_InitBrightmaps (void)
 {
-    int lump2, lump3, lump4, lump5, lump6, lump7, lump8, lump9, lump10, lump11, lump12;
-    int length = W_LumpLength(W_GetNumForName(DEH_String("COLORMAP")));
-
-    // Green only
-    lump2 = W_GetNumForName(DEH_String("BRTMAP1"));
-    brightmaps_greenonly = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump2, brightmaps_greenonly);
-
-    // Red only
-    lump3 = W_GetNumForName(DEH_String("BRTMAP2"));
-    brightmaps_redonly = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump3, brightmaps_redonly);
-    
-    // Blue only
-    lump4 = W_GetNumForName(DEH_String("BRTMAP3"));
-    brightmaps_blueonly = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump4, brightmaps_blueonly);
-
-    // Purple only
-    lump5 = W_GetNumForName(DEH_String("BRTMAP4"));
-    brightmaps_purpleonly = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump5, brightmaps_purpleonly);
-
-    // Not bronze
-    lump6 = W_GetNumForName(DEH_String("BRTMAP5"));
-    brightmaps_notbronze = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump6, brightmaps_notbronze);
-    
-    // Flame (yellow, red, orange)
-    lump7 = W_GetNumForName(DEH_String("BRTMAP6"));
-    brightmaps_flame = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump7, brightmaps_flame);
-    
-    // Green only (diminished)
-    lump8 = W_GetNumForName(DEH_String("BRTMAP7"));
-    brightmaps_greenonly_dim = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump8, brightmaps_greenonly_dim);
-
-    // Red only (diminished)
-    lump9 = W_GetNumForName(DEH_String("BRTMAP8"));
-    brightmaps_redonly_dim = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump9, brightmaps_redonly_dim);
-    
-    // Blue only (diminished)
-    lump10 = W_GetNumForName(DEH_String("BRTMAP9"));
-    brightmaps_blueonly_dim = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump10, brightmaps_blueonly_dim);
-    
-    // Yellow only (diminished)
-    lump11 = W_GetNumForName(DEH_String("BRTMAP10"));
-    brightmaps_yellowonly_dim = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump11, brightmaps_yellowonly_dim);
-
-    // Ethereal
-    lump12 = W_GetNumForName(DEH_String("BRTMAP11"));
-    brightmaps_ethereal = Z_Malloc(length, PU_STATIC, 0);
-    W_ReadLump(lump12, brightmaps_ethereal);
+    brightmaps_greenonly      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP1")), PU_STATIC);
+    brightmaps_redonly        = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP2")), PU_STATIC);
+    brightmaps_blueonly       = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP3")), PU_STATIC);
+    brightmaps_purpleonly     = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP4")), PU_STATIC);
+    brightmaps_notbronze      = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP5")), PU_STATIC);
+    brightmaps_flame          = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP6")), PU_STATIC);
+    brightmaps_greenonly_dim  = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP7")), PU_STATIC);
+    brightmaps_redonly_dim    = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP8")), PU_STATIC);
+    brightmaps_blueonly_dim   = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP9")), PU_STATIC);
+    brightmaps_yellowonly_dim = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP10")), PU_STATIC);
+    brightmaps_ethereal       = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP11")), PU_STATIC);
 }
 
 
