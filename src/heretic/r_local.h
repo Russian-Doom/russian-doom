@@ -389,6 +389,7 @@ extern void R_ExecuteSetViewSize();
 int R_PointOnSide(fixed_t x, fixed_t y, node_t * node);
 int R_PointOnSegSide(fixed_t x, fixed_t y, seg_t * line);
 angle_t R_PointToAngle(fixed_t x, fixed_t y);
+angle_t R_PointToAngleCrispy(fixed_t x, fixed_t y);
 angle_t R_PointToAngle2(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2);
 fixed_t R_PointToDist(fixed_t x, fixed_t y);
 fixed_t R_ScaleFromGlobalAngle(angle_t visangle);
@@ -463,8 +464,7 @@ void R_MakeSpans(int x,
  unsigned int b2); // [crispy] 32-bit integer math
 void R_DrawPlanes(void);
 
-visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel,
-                        int special);
+visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel);
 visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop);
 
 

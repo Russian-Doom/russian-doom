@@ -270,7 +270,7 @@ static visplane_t *new_visplane(unsigned int hash)
 ================================================================================
 */
 
-visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
+visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel)
 {
     visplane_t   *check;
     unsigned int  hash;
@@ -294,7 +294,6 @@ visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
     check->height = height;
     check->picnum = picnum;
     check->lightlevel = lightlevel;
-    check->special = special;
     check->minx = screenwidth;
     check->maxx = -1;
 
