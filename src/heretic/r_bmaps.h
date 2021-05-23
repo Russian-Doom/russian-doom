@@ -20,7 +20,6 @@
 
 
 // Prototypes
-// void R_InitBrightmaps (void);
 void R_InitBrightmappedTextures (void);
 
 // Floors and ceilings:
@@ -29,9 +28,6 @@ extern int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4, bmapflatnum5;
 // Walls:
 extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
 bmaptexture06, bmaptexture07;
-
-// Terminator:
-extern int bmap_terminator;
 
 
 #endif // __R_BMAPS__

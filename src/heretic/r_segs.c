@@ -572,10 +572,8 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 =
 = R_StoreWallRange
 =
-= A wall segment will be drawn between start and stop pixels (inclusive)
+= A wall segment will be drawn between start and stop pixels (inclusive).
 =
-= [JN] TODO: optimize brightmap applying 
-= by if (midtexture / toptextue / bottomtexture).
 ================================================================================
 */
 
@@ -890,65 +888,72 @@ void R_StoreWallRange (int start, int stop)
                 // [JN] Apply brightmaps to walls...
                 if (brightmaps && !vanillaparm)
                 {
-                    // -------------------------------------------------------
-                    //  Red only
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmaptexture01)
-                    walllights = fullbright_redonly[lightnum];
-
-                    if (toptexture == bmaptexture01)
-                    walllights_top = fullbright_redonly[lightnum];
-
-                    if (bottomtexture == bmaptexture01)
-                    walllights_bottom = fullbright_redonly[lightnum];
-
-                    // -------------------------------------------------------
-                    //  Blue only
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmaptexture02
-                    ||  midtexture == bmaptexture03
-                    ||  midtexture == bmaptexture04
-                    ||  midtexture == bmaptexture05)
-                    walllights_middle = fullbright_blueonly[lightnum];
-
-                    if (toptexture == bmaptexture02
-                    ||  toptexture == bmaptexture03
-                    ||  toptexture == bmaptexture04
-                    ||  toptexture == bmaptexture05)
-                    walllights_top = fullbright_blueonly[lightnum];
-
-                    if (bottomtexture == bmaptexture02
-                    ||  bottomtexture == bmaptexture03
-                    ||  bottomtexture == bmaptexture04
-                    ||  bottomtexture == bmaptexture05)
-                    walllights_bottom = fullbright_blueonly[lightnum];
-
-                    // -------------------------------------------------------
-                    //  Not bronze
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmaptexture06
-                    ||  midtexture == bmaptexture07)
-                    walllights_middle = fullbright_notbronze[lightnum];
-
-                    if (toptexture == bmaptexture06
-                    ||  toptexture == bmaptexture07)
-                    walllights_top = fullbright_notbronze[lightnum];
-                    
-                    if (bottomtexture == bmaptexture06
-                    ||  bottomtexture == bmaptexture07)
-                    walllights_bottom = fullbright_notbronze[lightnum];
-
-                    // -------------------------------------------------------
-                    //  Brightmap terminator
-                    // -------------------------------------------------------
-
-                    if (midtexture == bmap_terminator
-                    ||  toptexture == bmap_terminator
-                    ||  bottomtexture == bmap_terminator)
-                    walllights = scalelight[lightnum];
+                    //
+                    // [JN] Middle segment
+                    //
+                    if (midtexture)
+                    {
+                        //  Red only
+                        if (midtexture == bmaptexture01)
+                        {
+                            walllights = fullbright_redonly[lightnum];
+                        }
+                        //  Blue only
+                        if (midtexture == bmaptexture02 || midtexture == bmaptexture03
+                        ||  midtexture == bmaptexture04 || midtexture == bmaptexture05)
+                        {
+                            walllights_middle = fullbright_blueonly[lightnum];
+                        }
+                        //  Not bronze
+                        if (midtexture == bmaptexture06 || midtexture == bmaptexture07)
+                        {
+                            walllights_middle = fullbright_notbronze[lightnum];
+                        }
+                    }
+                    //
+                    // [JN] Top segment
+                    //
+                    if (toptexture)
+                    {
+                        //  Red only
+                        if (toptexture == bmaptexture01)
+                        {
+                            walllights_top = fullbright_redonly[lightnum];
+                        }
+                        //  Blue only
+                        if (toptexture == bmaptexture02 || toptexture == bmaptexture03
+                        ||  toptexture == bmaptexture04 || toptexture == bmaptexture05)
+                        {
+                            walllights_top = fullbright_blueonly[lightnum];
+                        }
+                        //  Not bronze
+                        if (toptexture == bmaptexture06 || toptexture == bmaptexture07)
+                        {
+                            walllights_top = fullbright_notbronze[lightnum];
+                        }
+                    }
+                    //
+                    // [JN] Bottom segment
+                    //
+                    if (bottomtexture)
+                    {
+                        //  Red only
+                        if (bottomtexture == bmaptexture01)
+                        {
+                            walllights_bottom = fullbright_redonly[lightnum];
+                        }
+                        //  Blue only
+                        if (bottomtexture == bmaptexture02 || bottomtexture == bmaptexture03
+                        ||  bottomtexture == bmaptexture04 || bottomtexture == bmaptexture05)
+                        {
+                            walllights_bottom = fullbright_blueonly[lightnum];
+                        }
+                        //  Not bronze
+                        if (bottomtexture == bmaptexture06 || bottomtexture == bmaptexture07)
+                        {
+                            walllights_bottom = fullbright_notbronze[lightnum];
+                        }
+                    }
                 }
             }
         }

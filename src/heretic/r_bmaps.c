@@ -29,15 +29,16 @@ int bmapflatnum1, bmapflatnum2, bmapflatnum3, bmapflatnum4, bmapflatnum5;
 int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05, 
     bmaptexture06, bmaptexture07;
 
-// Terminator:
-int bmap_terminator;
 
-
-// ===========================================================
-// =                                                         =
-// = [JN] Lookup and init all the textures for brightmapping =
-// =                                                         =
-// ===========================================================
+/*
+================================================================================
+=
+= R_InitBrightmappedTextures
+=
+= [JN] Lookup and init all the textures for brightmapping.
+=
+================================================================================
+*/
 
 void R_InitBrightmappedTextures(void)
 {
@@ -57,19 +58,14 @@ void R_InitBrightmappedTextures(void)
     // -------------------------------------------------------
 
     // brightmap_redonly
-    bmaptexture01 = R_TextureNumForName(DEH_String("GRSKULL3"));
+    bmaptexture01 = R_CheckTextureNumForName(DEH_String("GRSKULL3"));
     // brightmap_blueonly
-    bmaptexture02 = R_TextureNumForName(DEH_String("DOOREXIT"));
-    bmaptexture03 = R_TextureNumForName(DEH_String("SW2ON"));
-    bmaptexture04 = R_TextureNumForName(DEH_String("SW2OFF"));
-    bmaptexture05 = R_TextureNumForName(DEH_String("SW2OFF"));
+    bmaptexture02 = R_CheckTextureNumForName(DEH_String("DOOREXIT"));
+    bmaptexture03 = R_CheckTextureNumForName(DEH_String("SW2ON"));
+    bmaptexture04 = R_CheckTextureNumForName(DEH_String("SW2OFF"));
+    bmaptexture05 = R_CheckTextureNumForName(DEH_String("SW2OFF"));
     // brightmap_notbronze
-    bmaptexture06 = R_TextureNumForName(DEH_String("SW1ON"));
-    bmaptexture07 = R_TextureNumForName(DEH_String("SW1OFF"));
-    
-    // We need to declare a "terminator" - standard game texture,
-    // presented in all Heretic series and using standard light formula.
-    // Otherwise, non-defined textures will use latest brightmap.
-    bmap_terminator = R_TextureNumForName(DEH_String("WOODWL"));
+    bmaptexture06 = R_CheckTextureNumForName(DEH_String("SW1ON"));
+    bmaptexture07 = R_CheckTextureNumForName(DEH_String("SW1OFF"));
 }
 
