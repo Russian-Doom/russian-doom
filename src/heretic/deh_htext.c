@@ -457,7 +457,6 @@ static const hhe_string_t strings[] =
     { { 11064, 12860, 12860 }, "R_InitData " },
     { { 11076, 12872, 12872 }, "R_InitPointToAngle\n" },
     { { 11096, 12892, 12892 }, "R_InitTables " },
-    { { 11112, 12908, 12908 }, "R_InitPlanes\n" },
     { { 11128, 12924, 12924 }, "R_InitLightTables " },
     { { 11148, 12944, 12944 }, "R_InitSkyMap\n" },
     { { 11164, 12960, 12960 }, "F_SKY1" },
