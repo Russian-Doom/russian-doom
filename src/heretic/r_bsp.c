@@ -550,7 +550,8 @@ void R_Subsector(int num)
     {
         floorplane = R_FindPlane(frontsector->interpfloorheight,
                                  frontsector->floorpic,
-                                 frontsector->lightlevel);
+                                 frontsector->lightlevel,
+                                 frontsector->special);
     }
     else
     {
@@ -561,7 +562,8 @@ void R_Subsector(int num)
     {
         ceilingplane = R_FindPlane(frontsector->interpceilingheight,
                                    frontsector->ceilingpic,
-                                   frontsector->lightlevel);
+                                   frontsector->lightlevel,
+                                   0);
     }
     else
     {

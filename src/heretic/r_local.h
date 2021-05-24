@@ -464,7 +464,7 @@ void R_MakeSpans(int x,
  unsigned int b2); // [crispy] 32-bit integer math
 void R_DrawPlanes(void);
 
-visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel);
+visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special);
 visplane_t *R_CheckPlane(visplane_t * pl, int start, int stop);
 
 

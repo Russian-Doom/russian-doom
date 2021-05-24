@@ -253,7 +253,7 @@ static visplane_t *new_visplane(unsigned int hash)
 ================================================================================
 */
 
-visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel)
+visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel, int special)
 {
     visplane_t   *check;
     unsigned int  hash;
@@ -269,7 +269,8 @@ visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel)
     hash = visplane_hash(picnum, lightlevel, height);
 
     for (check = visplanes[hash]; check; check = check->next)
-        if (height == check->height && picnum == check->picnum && lightlevel == check->lightlevel)
+        if (height == check->height && picnum == check->picnum
+        && lightlevel == check->lightlevel && special == check->special)
             return check;
 
     check = new_visplane(hash);
@@ -277,6 +278,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel)
     check->height = height;
     check->picnum = picnum;
     check->lightlevel = lightlevel;
+    check->special = special;
     check->minx = screenwidth;
     check->maxx = -1;
 
@@ -301,6 +303,7 @@ visplane_t *R_DupPlane (const visplane_t *pl, int start, int stop)
     new_pl->height = pl->height;
     new_pl->picnum = pl->picnum;
     new_pl->lightlevel = pl->lightlevel;
+    new_pl->special = pl->special;
     new_pl->minx = start;
     new_pl->maxx = stop;
 
@@ -405,8 +408,6 @@ void R_MakeSpans(int x,
 =
 = At the end of each frame.
 =
-= [JN] TODO: fix scrollers
-=
 ================================================================================
 */
 
@@ -419,19 +420,11 @@ void R_DrawPlanes (void)
     int          lumpnum;
     int          angle;
     byte        *tempSource;
-    byte        *dest;
-    int          count;
-    fixed_t      frac, fracstep;
-
-    extern byte *ylookup[SCREENHEIGHT];
-    extern int columnofs[WIDESCREENWIDTH];
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next)
     if (pl->minx <= pl->maxx)
     {
-        if (pl->minx > pl->maxx)
-            continue;
         //
         // sky flat
         //
@@ -456,32 +449,7 @@ void R_DrawPlanes (void)
                     angle = (viewangle + xtoviewangle[x]) >> ANGLETOSKYSHIFT;
                     dc_x = x;
                     dc_source = R_GetColumn(skytexture, angle, true);
-/*
-                    count = dc_yh - dc_yl;
-                    if (count < 0)
-                        return;
 
-#ifdef RANGECHECK
-                    if ((unsigned) dc_x >= screenwidth || dc_yl < 0
-                        || dc_yh >= SCREENHEIGHT)
-                        I_Error(english_language ?
-                                "R_DrawColumn: %i to %i at %i" :
-                                "R_DrawColumn: %i к %i в %i",
-                                dc_yl, dc_yh, dc_x);
-#endif
-
-                    dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
-
-                    fracstep = dc_iscale;
-                    frac = dc_texturemid + (dc_yl - centery) * fracstep;
-                    do
-                    {
-                        *dest = dc_source[frac >> FRACBITS];
-                        dest += screenwidth;
-                        frac += fracstep;
-                    }
-                    while (count--);
-*/
                     // [JN] Initially it was commented out. Colfunc() calls R_DrawColumn()
                     // which, originally, doesn't know how to draw textures taller than 128 pixels.
                     // I'm using R_DrawColumn with enhancements by Lee Killough, so now it actually
@@ -491,83 +459,87 @@ void R_DrawPlanes (void)
             }
             continue;
         }
-
         //
         // regular flat
         //
-        lumpnum = firstflat + flattranslation[pl->picnum];
-
-        ds_source = W_CacheLumpNum(lumpnum, PU_STATIC);
-/*
-        switch (pl->special)
+        else
         {
-            case 25:
-            case 26:
-            case 27:
-            case 28:
-            case 29:           // Scroll_North
-                ds_source = tempSource;
+
+            lumpnum = firstflat + flattranslation[pl->picnum];
+            tempSource = W_CacheLumpNum(lumpnum, PU_STATIC);
+
+            switch (pl->special)
+            {
+                case 25:
+                case 26:
+                case 27:
+                case 28:
+                case 29:           // Scroll_North
+                    ds_source = tempSource;
                 break;
-            case 20:
-            case 21:
-            case 22:
-            case 23:
-            case 24:           // Scroll_East
-                ds_source = tempSource + ((63 - ((leveltime >> 1) & 63)) <<
-                                          (pl->special - 20) & 63);
-                //ds_source = tempSource+((leveltime>>1)&63);
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:           // Scroll_East
+                    ds_source = tempSource + ((63 - ((leveltime >> 1) & 63)) <<
+                                                (pl->special - 20) & 63);
                 break;
-            case 30:
-            case 31:
-            case 32:
-            case 33:
-            case 34:           // Scroll_South
-                ds_source = tempSource;
+                case 30:
+                case 31:
+                case 32:
+                case 33:
+                case 34:           // Scroll_South
+                    ds_source = tempSource;
                 break;
-            case 35:
-            case 36:
-            case 37:
-            case 38:
-            case 39:           // Scroll_West
-                ds_source = tempSource;
+                case 35:
+                case 36:
+                case 37:
+                case 38:
+                case 39:           // Scroll_West
+                    ds_source = tempSource;
                 break;
-            case 4:            // Scroll_EastLavaDamage
-                ds_source =
-                    tempSource + (((63 - ((leveltime >> 1) & 63)) << 3) & 63);
+                case 4:            // Scroll_EastLavaDamage
+                    ds_source =
+                        tempSource + (((63 - ((leveltime >> 1) & 63)) << 3) & 63);
                 break;
-            default:
-                ds_source = tempSource;
+                default:
+                    ds_source = tempSource;
+            }
+
+            planeheight = abs(pl->height - viewz);
+            light = ((pl->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
+
+            if (light >= LIGHTLEVELS)
+                light = LIGHTLEVELS - 1;
+            if (light < 0)
+                light = 0;
+            planezlight = zlight[light];
+
+            // [JN] Apply brightmaps to floor/ceiling...
+            if (brightmaps && !vanillaparm
+            &&(pl->picnum == bmapflatnum1    // FLOOR21
+            || pl->picnum == bmapflatnum2   // FLOOR22
+            || pl->picnum == bmapflatnum3   // FLOOR23
+            || pl->picnum == bmapflatnum4   // FLOOR24
+            || pl->picnum == bmapflatnum5)) // FLOOR26
+            {
+                planezlight = fullbright_blueonly_floor[light];
+            }
+
+            pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
+            pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
+
+            stop = pl->maxx + 1;
+            for (x=pl->minx ; x<= stop ; x++)
+            {
+                R_MakeSpans(x,pl->top[x-1],
+                pl->bottom[x-1],
+                pl->top[x],
+                pl->bottom[x]);
+            }
+
+            W_ReleaseLumpNum(lumpnum);
         }
-*/
-        planeheight = abs(pl->height - viewz);
-        light = ((pl->lightlevel + level_brightness) >> LIGHTSEGSHIFT) + extralight;
-        if (light >= LIGHTLEVELS)
-            light = LIGHTLEVELS - 1;
-        if (light < 0)
-            light = 0;
-        planezlight = zlight[light];
-
-        // [JN] Apply brightmaps to floor/ceiling...
-        if (brightmaps && !vanillaparm &&
-        (pl->picnum == bmapflatnum1     // FLOOR21
-        || pl->picnum == bmapflatnum2   // FLOOR22
-        || pl->picnum == bmapflatnum3   // FLOOR23
-        || pl->picnum == bmapflatnum4   // FLOOR24
-        || pl->picnum == bmapflatnum5)) // FLOOR26
-        planezlight = fullbright_blueonly_floor[light];
-
-        pl->top[pl->maxx+1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
-        pl->top[pl->minx-1] = 0xffffffffu; // [crispy] hires / 32-bit integer math
-
-        stop = pl->maxx + 1;
-        for (x=pl->minx ; x<= stop ; x++)
-        {
-            R_MakeSpans(x,pl->top[x-1],
-            pl->bottom[x-1],
-            pl->top[x],
-            pl->bottom[x]);
-        }
-
-        W_ReleaseLumpNum(lumpnum);
     }
 }
