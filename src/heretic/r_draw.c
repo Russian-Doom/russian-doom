@@ -211,6 +211,74 @@ void R_DrawTLColumn(void)
 }
 
 /*
+================================================================================
+=
+= R_DrawExtraTLColumn
+=
+= [JN] Draw extra translucent column. With Tutti-Frutti fix by Lee Killough.
+=
+================================================================================
+*/
+
+void R_DrawExtraTLColumn(void)
+{
+    int      count, heightmask = dc_texheight-1;
+    fixed_t  fracstep = dc_iscale;
+    fixed_t  frac = dc_texturemid + (dc_yl-centery)*fracstep;
+    byte    *dest = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+
+    count = dc_yh - dc_yl + 1;
+
+    if (count < 0)
+    return;
+
+#ifdef RANGECHECK
+    if ((unsigned)dc_x >= screenwidth || dc_yl < 0 || dc_yh >= SCREENHEIGHT)
+    {
+        I_Error (english_language ?
+                 "R_DrawTLColumn: %i to %i at %i" :
+                 "R_DrawTLColumn: %i к %i у %i",
+                 dc_yl, dc_yh, dc_x);
+    }
+#endif
+
+    if (dc_texheight & heightmask)   // not a power of 2 -- killough
+    {
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+        while ((frac += heightmask) < 0);
+        else
+        while (frac >= heightmask)
+        frac -= heightmask;
+
+        do
+        {
+            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS]]];
+            dest += screenwidth;
+            if ((frac += fracstep) >= heightmask)
+            frac -= heightmask;
+        }
+        while (--count);
+    }
+    else    // texture height is a power of 2 -- killough
+    {
+        while ((count-=2)>=0)
+        {
+            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            dest += screenwidth;
+            frac += fracstep;
+            *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+            dest += screenwidth;
+            frac += fracstep;
+        }
+        if (count & 1)
+        *dest = extratinttable[(*dest<<8)+dc_colormap[dc_source[frac>>FRACBITS & heightmask]]];
+    }
+}
+
+/*
 ========================
 =
 = R_DrawTranslatedColumn

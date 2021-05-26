@@ -58,6 +58,7 @@ byte *fuzzmap = NULL;   // Blending table for translucent fuzz.
 // Blending table used for fuzzpatch, etc.
 // Only used in Heretic/Hexen
 byte *tinttable = NULL;
+byte *extratinttable = NULL;
 
 // [JN] Color translation
 byte *dp_translation = NULL;

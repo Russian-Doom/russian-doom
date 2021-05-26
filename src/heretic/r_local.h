@@ -383,6 +383,7 @@ extern int detailshift;         // 0 = high, 1 = low
 extern void (*colfunc) (void);
 extern void (*basecolfunc) (void);
 extern void (*tlcolfunc) (void);
+extern void (*extratlcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void R_ExecuteSetViewSize();
 
@@ -547,6 +548,7 @@ void R_DrawColumn(void);
 void R_DrawColumnLow(void);
 void R_DrawTLColumn(void);
 void R_DrawTLColumnLow(void);
+void R_DrawExtraTLColumn(void);
 void R_DrawTranslatedColumn(void);
 void R_DrawTranslatedTLColumn(void);
 void R_DrawTranslatedColumnLow(void);

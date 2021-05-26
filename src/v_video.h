@@ -39,6 +39,7 @@
 extern int dirtybox[4];
 
 extern byte *tinttable;
+extern byte *extratinttable;
 extern byte *dp_translation;
 
 // haleyjd 08/28/10: implemented for Strife support

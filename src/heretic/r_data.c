@@ -26,6 +26,8 @@
 #include "r_local.h"
 #include "p_local.h"
 #include "r_bmaps.h"
+#include "v_video.h"
+#include "v_trans.h"
 #include "jn.h"
 
 extern void CheckAbortStartup(void);
@@ -973,6 +975,62 @@ static void R_InitBrightmaps (void)
     brightmaps_ethereal       = W_CacheLumpNum(W_GetNumForName(DEH_String("BRTMAP11")), PU_STATIC);
 }
 
+/*
+================================================================================
+=
+= R_InitExtraTintTable
+=
+= [JN] Generates extra translucency table for some objects.
+=
+================================================================================
+*/
+
+enum {
+    r, g, b
+} rgb_t;
+
+
+static void R_InitExtraTintTable (void)
+{
+    // Compose a default transparent filter map based on PLAYPAL.
+    unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
+    const int filter_pct = 75;
+
+    extratinttable = Z_Malloc(256*256, PU_STATIC, 0);
+
+    // [JN] Always generate translucency tables dynamically.
+    {
+        byte *fg, *bg, blend[3];
+        byte *tp = extratinttable;
+        int i, j;
+
+        // [crispy] background color
+        for (i = 0; i < 256; i++)
+        {
+            // [crispy] foreground color
+            for (j = 0; j < 256; j++)
+            {
+                // [crispy] shortcut: identical foreground and background
+                if (i == j)
+                {
+                    *tp++ = i;
+                    continue;
+                }
+
+                bg = playpal + 3*i;
+                fg = playpal + 3*j;
+
+                blend[r] = (filter_pct * fg[r] + (100 - filter_pct) * bg[r]) / 100;
+                blend[g] = (filter_pct * fg[g] + (100 - filter_pct) * bg[g]) / 100;
+                blend[b] = (filter_pct * fg[b] + (100 - filter_pct) * bg[b]) / 100;
+                *tp++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+            }
+        }
+    }
+
+    W_ReleaseLumpName("PLAYPAL");
+}
+
 
 /*
 ================================================================================
@@ -998,6 +1056,9 @@ void R_InitData(void)
     IncThermo();
     printf (".");
     R_InitColormaps();
+    // [JN] Generate extra translucency table.
+    R_InitExtraTintTable ();
+    printf (".");
 
     if (!vanillaparm)
     {

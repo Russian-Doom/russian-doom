@@ -258,6 +258,8 @@ typedef struct
 #define	MF_TRANSLATION	0xc000000 // if 0x4 0x8 or 0xc, use a translation
 #define	MF_TRANSSHIFT	26      // table for player colormaps
 
+#define MF_EXTRATRANS   0x4000000 // [JN] Extra translucency
+
 // --- mobj.flags2 ---
 
 #define MF2_LOGRAV		0x00000001  // alternate gravity setting
