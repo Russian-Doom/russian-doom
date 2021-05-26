@@ -32,7 +32,7 @@
 int finalestage;                // 0 = text, 1 = art screen
 int finalecount;
 
-#define TEXTSPEED       3
+#define TEXTSPEED       1
 #define TEXTWAIT        250
 
 char *finaletext;
@@ -385,6 +385,8 @@ void F_DrawUnderwater(void)
     extern boolean askforquit;
     char *lumpname;
     byte *palette;
+    patch_t *e2end = W_CacheLumpName("E2END", PU_CACHE);
+    patch_t *title = W_CacheLumpName("TITLE", PU_CACHE);
 
     // The underwater screen has its own palette, which is rather annoying.
     // The palette doesn't correspond to the normal palette. Because of
@@ -404,6 +406,10 @@ void F_DrawUnderwater(void)
                 palette = W_CacheLumpName(lumpname, PU_STATIC);
                 I_SetPalette(palette);
                 W_ReleaseLumpName(lumpname);
+                
+                if (e2end->width == 560)
+                V_DrawPatchFullScreen(e2end, false);
+                else
                 V_DrawRawScreen(W_CacheLumpName(DEH_String("E2END"), PU_CACHE));
             }
             paused = false;
@@ -422,16 +428,25 @@ void F_DrawUnderwater(void)
                 underwawa = false;
             }
 
+            // [JN] Clean up remainings of the wide screen before 
+            // drawing a TITLE screen.
+            V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
+
             if (english_language)
             {
+                if (gamemode == retail && title->width == 560)
+                V_DrawPatchFullScreen(W_CacheLumpName("TITLE", PU_CACHE), false);
+                else if (gamemode == registered || gamemode == shareware)
+                V_DrawPatchFullScreen(W_CacheLumpName("TITLEOLD", PU_CACHE), false);            
+                else
                 V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE"), PU_CACHE));
             }
             else
             {
-                if (gamemode == retail)
-                V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE_RT"), PU_CACHE));
-                else
-                V_DrawRawScreen(W_CacheLumpName(DEH_String("TITLE"), PU_CACHE));
+                V_DrawPatchFullScreen(W_CacheLumpName(gamemode == retail ?
+                                                      "TITLE_RT" : "TITLEOLD",
+                                                      PU_CACHE), false);
+
             }
         break;
     }
@@ -447,6 +462,8 @@ void F_DrawUnderwater(void)
 
 void F_Drawer(void)
 {
+    const patch_t *credit =  W_CacheLumpName("CREDIT", PU_CACHE);
+
     UpdateState |= I_FULLSCRN;
     if (!finalestage)
     {
@@ -464,21 +481,22 @@ void F_Drawer(void)
                 V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 if (gamemode == shareware)
                 {
-                    V_DrawRawScreen(W_CacheLumpName
-                                   (english_language ? 
-                                    "ORDER" : "ORDER_R", PU_CACHE));
+                    V_DrawPatchFullScreen(W_CacheLumpName(english_language ? 
+                                          "ORDER" : "ORDER_R", PU_CACHE), false);
                 }
                 else
                 {
                     if (english_language)
                     {
+                        if (credit->width == 560)
+                        V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
+                        else
                         V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
                     }
                     else
                     {
-                        V_DrawRawScreen(W_CacheLumpName
-                                    (gamemode == retail ?
-                                        "CRED_RT" : "CRED_RG", PU_CACHE));
+                        V_DrawPatchFullScreen(W_CacheLumpName(gamemode == retail ?
+                                              "CRED_RT" : "CRED_RG", PU_CACHE), false);
                     }
                 }
                 break;
@@ -496,10 +514,17 @@ void F_Drawer(void)
             case 5:
                 V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
                 if (english_language)
-                V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                {
+                    if (credit->width == 560)
+                    V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
+                    else
+                    V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+                }
                 else
-                V_DrawRawScreen(W_CacheLumpName(gamemode == retail ?
-                                                "CRED_RT" : "CRED_RG", PU_CACHE));
+                {
+                    V_DrawPatchFullScreen(W_CacheLumpName(gamemode == retail ?
+                                                    "CRED_RT" : "CRED_RG", PU_CACHE), false);
+                }
                 break;
         }
     }

@@ -4805,33 +4805,69 @@ void MN_DeactivateMenu(void)
 
 void MN_DrawInfo(void)
 {
+    // [JN] For checking of modified fullscreen graphics.
+    patch_t *page0_gfx = W_CacheLumpName("TITLE", PU_CACHE);
+    patch_t *page1_gfx = W_CacheLumpName("HELP1", PU_CACHE);
+    patch_t *page2_gfx = W_CacheLumpName("HELP2", PU_CACHE);
+    patch_t *page3_gfx = W_CacheLumpName("CREDIT", PU_CACHE);
+
     if (aspect_ratio_temp >= 2)
     {
         // [JN] Clean up remainings of the wide screen before 
         // drawing a HELP or TITLE screens.
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
-    I_SetPalette(W_CacheLumpName(usegamma <= 8 ?
-                                 "PALFIX" :
-                                 "PLAYPAL",
-                                 PU_CACHE));
+    I_SetPalette(W_CacheLumpName(usegamma <= 8 ? "PALFIX" : "PLAYPAL", PU_CACHE));
 
     // [JN] Some complex mess to avoid using numerical identification of screens.
     // Note: older Shareware version using paletted screens instead of RAWs.
+    //
+    // Check if have a modified graphics:
+    // - If we don't, we can draw a GFX wide version.
+    // - If we do, draw it as a RAW screen instead.
+    
     if (english_language)
     {
-        V_DrawRawScreen(W_CacheLumpNum
-                       (W_GetNumForName
-                       (InfoType == 0 ? "TITLE" :
-                        InfoType == 1 ? "HELP1" :
-                        InfoType == 2 ? "HELP2" :
-                        InfoType == 3 ? "CREDIT" :
-                                        "ORDER"), PU_CACHE));
+        switch (InfoType)
+        {
+            case 0:
+            if (page0_gfx->width == 560)
+            V_DrawPatchFullScreen(W_CacheLumpName("TITLE", PU_CACHE), false);
+            else
+            V_DrawRawScreen(W_CacheLumpName("TITLE", PU_CACHE));
+            break;
+
+            case 1:
+            if (page1_gfx->width == 560)
+            V_DrawPatchFullScreen(W_CacheLumpName("HELP1", PU_CACHE), false);
+            else
+            V_DrawRawScreen(W_CacheLumpName("HELP1", PU_CACHE));
+            break;
+
+            case 2:
+            if (page2_gfx->width == 560)
+            V_DrawPatchFullScreen(W_CacheLumpName("HELP2", PU_CACHE), false);
+            else
+            V_DrawRawScreen(W_CacheLumpName("HELP2", PU_CACHE));
+            break;
+
+            case 3:
+            if (page3_gfx->width == 560)
+            V_DrawPatchFullScreen(W_CacheLumpName("CREDIT", PU_CACHE), false);
+            else
+            V_DrawRawScreen(W_CacheLumpName("CREDIT", PU_CACHE));
+            break;
+
+            case 4:
+            // [JN] Available only in Shareware, can't be replaced.
+            V_DrawPatchFullScreen(W_CacheLumpName("ORDER", PU_CACHE), false);
+            break;
+        }
     }
     else
     {
-        V_DrawRawScreen(W_CacheLumpNum
+        V_DrawPatchFullScreen(W_CacheLumpNum
                        (W_GetNumForName
                        (InfoType == 0 ? 
                        (gamemode == retail ? "TITLE_RT" : "TITLE") :
@@ -4839,7 +4875,7 @@ void MN_DrawInfo(void)
                         InfoType == 2 ? "HELP2_R" :
                         InfoType == 3 ?
                        (gamemode == retail ? "CRED_RT" : "CRED_RG") :
-                                             "ORDER_R"), PU_CACHE));
+                                             "ORDER_R"), PU_CACHE), false);
     }
 }
 

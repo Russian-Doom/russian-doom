@@ -119,6 +119,7 @@ void D_PageDrawer(void);
 void D_AdvanceDemo(void);
 boolean F_Responder(event_t * ev);
 
+
 //---------------------------------------------------------------------------
 //
 // PROC D_ProcessEvents
@@ -386,6 +387,7 @@ void D_PageTicker(void)
 void D_PageDrawer(void)
 {
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+    const patch_t *page =  W_CacheLumpName(pagename, PU_CACHE);
 
     if (aspect_ratio >= 2)
     {
@@ -394,7 +396,15 @@ void D_PageDrawer(void)
         V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
     }
 
-    V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
+    if (page->width == 560)
+    {
+        V_DrawPatchFullScreen(W_CacheLumpName(pagename, PU_CACHE), false);
+    }
+    else
+    {
+        V_DrawRawScreen(W_CacheLumpName(pagename, PU_CACHE));
+    }
+
     if (demosequence == 1)
     {
         V_DrawShadowedPatchRaven(4 + (wide_4_3 ? wide_delta : 0), 160,
@@ -432,30 +442,19 @@ void D_DoAdvanceDemo(void)
         case 0:
             pagetic = 210;
             gamestate = GS_DEMOSCREEN;
-
             if (english_language)
-            {
-                pagename = DEH_String("TITLE");
-            }
+            pagename = DEH_String(gamemode == retail ? "TITLE" : "TITLEOLD");
             else
-            {
-                pagename = DEH_String(gamemode == retail ? "TITLE_RT" : "TITLE");
-            }
+            pagename = DEH_String(gamemode == retail ? "TITLE_RT" : "TITLEOLD");
             S_StartSong(mus_titl, false);
             break;
         case 1:
             pagetic = 140;
             gamestate = GS_DEMOSCREEN;
-
             if (english_language)
-            {
-                pagename = DEH_String("TITLE");
-            }
+            pagename = DEH_String(gamemode == retail ? "TITLE" : "TITLEOLD");
             else
-            {
-                pagename = DEH_String(gamemode == retail ? "TITLE_RT" : "TITLE");
-            }
-
+            pagename = DEH_String(gamemode == retail ? "TITLE_RT" : "TITLEOLD");
             break;
         case 2:
             BorderNeedRefresh = true;
@@ -466,16 +465,10 @@ void D_DoAdvanceDemo(void)
         case 3:
             pagetic = 200;
             gamestate = GS_DEMOSCREEN;
-
             if (english_language)
-            {
-                pagename = DEH_String("CREDIT");
-            }
+            pagename = DEH_String("CREDIT");
             else
-            {
-                pagename = DEH_String(gamemode == retail ? "CRED_RT" : "CRED_RG");
-            }
-
+            pagename = DEH_String(gamemode == retail ? "CRED_RT" : "CRED_RG");
             break;
         case 4:
             BorderNeedRefresh = true;
@@ -496,20 +489,9 @@ void D_DoAdvanceDemo(void)
             else
             {
                 if (english_language)
-                {
-                    pagename = DEH_String("CREDIT");
-                }
+                pagename = DEH_String("CREDIT");
                 else
-                {
-                    if (gamemode == retail)
-                    {
-                        pagename = DEH_String("CRED_RT");
-                    }
-                    else
-                    {
-                        pagename = DEH_String("CRED_RG");
-                    }
-                }
+                pagename = DEH_String(gamemode == retail ? "CRED_RT" : "CRED_RG");
             }
             break;
         case 6:

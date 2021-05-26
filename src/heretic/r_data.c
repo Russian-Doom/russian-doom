@@ -364,6 +364,9 @@ static void R_GenerateLookup (int texnum)
                 const byte *base = (const byte *) col;
 
                 // count posts
+                // [JN] Don't count in Shareware, leading to a crash.
+                if (gamemode != shareware)
+                {
                 for (;col->topdelta != 0xff; count[x].posts++)
                 if ((unsigned)((byte *) col - base) <= limit)
                 col = (column_t *)((byte *) col + col->length + 4);
@@ -379,6 +382,7 @@ static void R_GenerateLookup (int texnum)
                         texture->name, texture->height, x);
                     }
                 break;
+                }
                 }
             }
         }
