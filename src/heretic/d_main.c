@@ -944,6 +944,7 @@ void D_BindVariables(void)
     M_BindIntVariable("torque",                 &torque);
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
+    M_BindIntVariable("floating_powerups",      &floating_powerups);
 
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);

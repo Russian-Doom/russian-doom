@@ -209,6 +209,7 @@ static void DrawGameplay2Menu(void);
 static boolean M_RD_Torque(int option);
 static boolean M_RD_Bobbing(int option);
 static boolean M_RD_FlipCorpses(int option);
+static boolean M_RD_FloatAmplitude(int option);
 static boolean M_RD_CrossHairDraw(int option);
 static boolean M_RD_CrossHairType(int option);
 static boolean M_RD_CrossHairScale(int option);
@@ -764,7 +765,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_LRFUNC, "CORPSES SLIDING FROM LEDGES:", M_RD_Torque,       0, MENU_NONE},
     {ITT_LRFUNC, "WEAPON BOBBING WHILE FIRING:", M_RD_Bobbing,      0, MENU_NONE},
     {ITT_LRFUNC, "RANDOMLY MIRRORED CORPSES:",   M_RD_FlipCorpses,  0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                           NULL,              0, MENU_NONE},
+    {ITT_LRFUNC, "FLOATING ITEMS AMPLITUDE:" ,   M_RD_FloatAmplitude,0, MENU_NONE},
     {ITT_SETMENU,"NEXT PAGE...",                 NULL,              0, MENU_GAMEPLAY2}
 };
 
@@ -779,8 +780,7 @@ static MenuItem_t Gameplay1Items_Rus[] = {
     {ITT_LRFUNC, "NHEGS CGJKPF.N C DJPDSITYBQ:",   M_RD_Torque,       0, MENU_NONE},      // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
     {ITT_LRFUNC, "EKEXITYYJT GJRFXBDFYBT JHE;BZ:", M_RD_Bobbing,      0, MENU_NONE},      // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
     {ITT_LRFUNC, "PTHRFKBHJDFYBT NHEGJD:",         M_RD_FlipCorpses,  0, MENU_NONE},      // ЗЕКРАЛИРОВАНИЕ ТРУПОВ
-    {ITT_EMPTY,  NULL,                             NULL,              0, MENU_NONE},      //
-    {ITT_EMPTY,  NULL,                             NULL,              0, MENU_NONE},      //
+    {ITT_LRFUNC, "KTDBNFWBZ GHTLVTNJD:",           M_RD_FloatAmplitude,0, MENU_NONE},      // АМПЛИТУДА ЛЕВИТАЦИИ ПРЕДМЕТОВ
     {ITT_SETMENU,"CKTLE.OFZ CNHFYBWF>>>",          NULL,              0, MENU_GAMEPLAY2 } // СЛЕДУЮЩАЯ СТРАНИЦА
 };
 
@@ -3180,11 +3180,8 @@ static boolean M_RD_Novert(int option)
 
 static void DrawGameplay1Menu(void)
 {
-
-    static char *title_eng, *title_rus;
-
-    title_eng = DEH_String("GAMEPLAY FEATURES");
-    title_rus = DEH_String("YFCNHJQRB UTQVGKTZ");  // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    char *title_eng = DEH_String("GAMEPLAY FEATURES");
+    char *title_rus = DEH_String("YFCNHJQRB UTQVGKTZ");  // НАСТРОЙКИ ГЕЙМПЛЕЯ
 
     if (english_language)
     {
@@ -3251,6 +3248,13 @@ static void DrawGameplay1Menu(void)
         dp_translation = randomly_flipcorpses ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(randomly_flipcorpses ? "ON" : "OFF"), 232 + wide_delta, 126);
         dp_translation = NULL;
+
+        // Floating items amplitude
+        dp_translation = floating_powerups ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(DEH_String(floating_powerups == 1 ? "STANDARD" :
+                                     floating_powerups == 2 ? "HALFED" : "OFF"),
+                                     209 + wide_delta, 136);
+        dp_translation = NULL;
     }
     else
     {
@@ -3316,6 +3320,13 @@ static void DrawGameplay1Menu(void)
         // Зеркалирование трупов
         dp_translation = randomly_flipcorpses ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(randomly_flipcorpses ? "DRK" : "DSRK"), 201 + wide_delta, 126);
+        dp_translation = NULL;
+
+        // Амплитуда левитации предметов
+        dp_translation = floating_powerups ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(DEH_String(floating_powerups == 1 ? "CNFYLFHNYFZ" :
+                                     floating_powerups == 2 ? "EGJKJDBYTYFZ" : "DSRK"),
+                                     188 + wide_delta, 136);
         dp_translation = NULL;
     }
 }
@@ -3575,6 +3586,26 @@ static boolean M_RD_Bobbing(int option)
 static boolean M_RD_FlipCorpses(int option)
 {
     randomly_flipcorpses ^= 1;
+    return true;
+}
+
+static boolean M_RD_FloatAmplitude(int option)
+{
+    switch(option)
+    {
+        case 0: 
+        floating_powerups--;
+        if (floating_powerups < 0) 
+            floating_powerups = 2;
+        break;
+    
+        case 1:
+        floating_powerups++;
+        if (floating_powerups > 2)
+            floating_powerups = 0;
+        break;
+    }
+
     return true;
 }
 

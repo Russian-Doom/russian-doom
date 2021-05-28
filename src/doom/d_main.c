@@ -224,7 +224,7 @@ int torque = 1;
 int weapon_bobbing = 1;
 int ssg_blast_enemies = 1;
 int randomly_flipcorpses = 1;
-int floating_powerups = 0;
+int floating_powerups = 1;
 int toss_drop = 1;
 
 // Gameplay: Crosshair

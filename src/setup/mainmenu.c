@@ -193,7 +193,7 @@ static void SensibleDefaults(void)
     weapon_bobbing = 1;
     ssg_blast_enemies = 1;
     randomly_flipcorpses = 1;
-    floating_powerups = 0;
+    floating_powerups = 1;
     toss_drop = 1;
 
     // Gameplay: Crosshair

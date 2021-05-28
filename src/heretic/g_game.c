@@ -156,6 +156,7 @@ int negative_health = 0;
 int torque = 1;
 int weapon_bobbing = 1;
 int randomly_flipcorpses = 1;
+int floating_powerups = 1;
 
 // Gameplay: Crosshair
 int crosshair_draw = 0;
