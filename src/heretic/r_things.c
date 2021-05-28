@@ -517,21 +517,16 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
 
 void R_ProjectSprite (mobj_t *thing)
 {
-    fixed_t trx, try;
-    fixed_t gxt, gyt;
-    fixed_t tx, tz;
-    fixed_t xscale;
-    int x1, x2;
-    spritedef_t *sprdef;
+    int            x1, x2, lump, index;
+    unsigned       rot;
+    fixed_t        trx, try, tx, tz, gxt, gyt, xscale, iscale;
+    fixed_t        gzt;    // [JN] killough 3/27/98
+    angle_t        ang;
+    boolean        flip;
+    vissprite_t   *vis;
+    spritedef_t   *sprdef;
     spriteframe_t *sprframe;
-    int lump;
-    unsigned rot;
-    boolean flip;
-    int index;
-    vissprite_t *vis;
-    angle_t ang;
-    fixed_t iscale;
-    fixed_t interpx, interpy, interpz, interpangle;
+    fixed_t        interpx, interpy, interpz, interpangle;
 
     // [AM] Interpolate between current and last position,
     //      if prudent.
@@ -556,42 +551,41 @@ void R_ProjectSprite (mobj_t *thing)
     }
 
     if (thing->flags2 & MF2_DONTDRAW)
-    {   // Never make a vissprite when MF2_DONTDRAW is flagged.
+    {
+        // Never make a vissprite when MF2_DONTDRAW is flagged.
         return;
     }
 
-    // [JN] Never draw a blood splat for Liches if colored blood is not set
+    // [JN] Never draw a blood splat for Liches if colored blood is not set.
     if ((!colored_blood || vanillaparm) 
-    &&  thing->type == MT_BLOODSPLATTER &&  thing->target
+    &&  thing->type == MT_BLOODSPLATTER && thing->target
     &&  thing->target->type == MT_HEAD)
     {
         return;
     }
 
-//
-// transform the origin point
-//
+    // Transform the origin point.
     trx = interpx - viewx;
     try = interpy - viewy;
-
     gxt = FixedMul(trx, viewcos);
     gyt = -FixedMul(try, viewsin);
     tz = gxt - gyt;
 
+    // Thing is behind view plane.
     if (tz < MINZ)
-        return;                 // thing is behind view plane
+    return;                 
+
     xscale = FixedDiv(projection, tz);
 
     gxt = -FixedMul(trx, viewsin);
     gyt = FixedMul(try, viewcos);
-    tx = -(gyt + gxt);
+    tx  = -(gyt + gxt);
 
+    // Too far off the side.
     if (abs(tx) > (tz << 2))
-        return;                 // too far off the side
+    return;
 
-//
-// decide which patch to use for sprite reletive to player
-//
+    // Decide which patch to use for sprite reletive to player.
 #ifdef RANGECHECK
     if ((unsigned) thing->sprite >= numsprites)
         I_Error(english_language ?
@@ -609,34 +603,48 @@ void R_ProjectSprite (mobj_t *thing)
     sprframe = &sprdef->spriteframes[thing->frame & FF_FRAMEMASK];
 
     if (sprframe->rotate)
-    {                           // choose a different rotation based on player view
+    {
+        // choose a different rotation based on player view
         ang = R_PointToAngle(interpx, interpy);
         rot = (ang - interpangle + (unsigned) (ANG45 / 2) * 9) >> 29;
         lump = sprframe->lump[rot];
         flip = (boolean) sprframe->flip[rot];
     }
     else
-    {                           // use single rotation for all views
+    {
+        // use single rotation for all views
         lump = sprframe->lump[0];
         flip = (boolean) sprframe->flip[0];
     }
 
-//
-// calculate edges of the shape
-//
-    tx -= spriteoffset[lump];
+    // calculate edges of the shape
+    // [crispy] fix sprite offsets for mirrored sprites
+    tx -= flip ? spritewidth[lump] - spriteoffset[lump] : spriteoffset[lump];
     x1 = (centerxfrac + FixedMul(tx, xscale)) >> FRACBITS;
+
+    // Off the right side.
     if (x1 > viewwidth)
-        return;                 // off the right side
+    return;
+
     tx += spritewidth[lump];
     x2 = ((centerxfrac + FixedMul(tx, xscale)) >> FRACBITS) - 1;
+
+    // Off the left side.
     if (x2 < 0)
-        return;                 // off the left side
+    return;
 
+    // [JN] killough 4/9/98: clip things which are out of view due to height
+    gzt = interpz + spritetopoffset[lump];
 
-//
-// store information in a vissprite
-//
+    if (interpz > viewz + FixedDiv(viewheight << FRACBITS, xscale)
+    ||  gzt     < (int64_t)viewz - FixedDiv((viewheight << FRACBITS)-viewheight, xscale))
+    return;
+
+    // [JN] Quickly reject sprites with bad x ranges.
+    if (x1 >= x2)
+    return;
+
+    // store information in a vissprite
     vis = R_NewVisSprite();
     vis->translation = NULL;
     vis->mobjflags = thing->flags;
@@ -645,18 +653,20 @@ void R_ProjectSprite (mobj_t *thing)
     vis->gx = interpx;
     vis->gy = interpy;
     vis->gz = interpz;
-    vis->gzt = interpz + spritetopoffset[lump];
+    vis->gzt = gzt;     // [JN] killough 3/27/98
 
     // foot clipping
     if (thing->flags2 & MF2_FEETARECLIPPED
-        && thing->z <= thing->subsector->sector->floorheight)
+    &&  thing->z <= thing->subsector->sector->floorheight)
     {
         vis->footclip = 10;
     }
     else
+    {
         vis->footclip = 0;
-    vis->texturemid = vis->gzt - viewz - (vis->footclip << FRACBITS);
+    }
 
+    vis->texturemid = gzt - viewz - (vis->footclip << FRACBITS);
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth - 1 : x2;
     iscale = FixedDiv(FRACUNIT, xscale);
@@ -691,104 +701,132 @@ void R_ProjectSprite (mobj_t *thing)
         vis->startfrac = 0;
         vis->xiscale = iscale;
     }
+
     if (vis->x1 > x1)
+    {
         vis->startfrac += vis->xiscale * (vis->x1 - x1);
+    }
+
     vis->patch = lump;
-//
-// get light level
-//
 
-//      if (thing->flags & MF_SHADOW)
-//              vis->colormap = NULL;                   // shadow draw
-//      else ...
 
+    // Get light level.
     if (fixedcolormap)
-        vis->colormap = fixedcolormap;  // fixed map
+    {
+        // Fixed map.
+        vis->colormap = fixedcolormap;
+    }
     else if (thing->frame & FF_FULLBRIGHT)
-        vis->colormap = colormaps;      // full bright
+    {
+        // Full bright.
+        vis->colormap = colormaps;
+    }
     else
-    {                           // diminished light
+    {
+        // Diminished light.
         index = xscale >> (LIGHTSCALESHIFT - detailshift + hires);
+
         if (index >= MAXLIGHTSCALE)
             index = MAXLIGHTSCALE - 1;
+
         vis->colormap = spritelights[index];
 
         // [JN] Applying brightmaps to sprites...
         if (brightmaps && !vanillaparm)
         {
-            // - Green only -
-            if (thing->type == MT_ARTIEGG ||   // Morph Ovum
-                thing->type == MT_AMCBOWHEFTY) // Quiver of Etherial Arrows
+            // Green only
+            if (thing->type == MT_ARTIEGG       // Morph Ovum
+            ||  thing->type == MT_AMCBOWHEFTY)  // Quiver of Etherial Arrows
+            {
                 vis->colormap = fullbrights_greenonly[index];
+            }
 
-            // - Red only -
-            if (thing->type == MT_AMSKRDWIMPY  || // Lesser Runes
-                thing->type == MT_AMSKRDHEFTY  || // Greater Runes
-                thing->type == MT_ARTITELEPORT || // Chaos Device
-                thing->type == MT_MUMMYSOUL    || // Golem's freed ghost
-                thing->type == MT_HEAD)           // Iron Lich
+            // Red only
+            if (thing->type == MT_AMSKRDWIMPY   // Lesser Runes
+            ||  thing->type == MT_AMSKRDHEFTY   // Greater Runes
+            ||  thing->type == MT_ARTITELEPORT  // Chaos Device
+            ||  thing->type == MT_MUMMYSOUL     // Golem's freed ghost
+            ||  thing->type == MT_HEAD)         // Iron Lich
+            {
                 vis->colormap = fullbrights_redonly[index];
+            }
 
-            // - Blue only -
-            if (thing->type == MT_SORCERER1 ||  // D'Sparil on Serpent
-                thing->type == MT_SORCERER2 ||  // D'Sparil walking
-                thing->type == MT_SOR2TELEFADE) // D'Sparil teleporting
+            // Blue only
+            if (thing->type == MT_SORCERER1     // D'Sparil on Serpent
+            ||  thing->type == MT_SORCERER2     // D'Sparil walking
+            ||  thing->type == MT_SOR2TELEFADE) // D'Sparil teleporting
+            {
                 vis->colormap = fullbrights_blueonly[index];
+            }
 
-            // - Not bronze -
+            // Not bronze
             if (thing->type == MT_ARTIINVULNERABILITY) // Ring of Invulnerability
+            {
                 vis->colormap = fullbrights_notbronze[index];
+            }
 
-            // - Purple only -
+            // Purple only
             if (thing->type == MT_WIZARD) // Disciple of D'Sparil
+            {
                 vis->colormap = fullbrights_purpleonly[index];
+            }
 
-            // - Flame -
-            if (thing->type == MT_AMPHRDWIMPY || // Flame Orb
-                thing->type == MT_AMPHRDHEFTY || // Inferno Orb
-                thing->type == MT_MISC4       || // Torch (Artifact)
-                thing->type == MT_CHANDELIER  || // Chandelier
-                thing->type == MT_MISC10      || // Torch
-                thing->type == MT_SERPTORCH   || // Serpent Torch
-                thing->type == MT_MISC6       || // Fire Brazier
-                thing->type == MT_MISC12      || // Volcano
-                thing->info->deathstate == S_CLINK_DIE1) // Sabreclaw's death sequence
+            // Flame
+            if (thing->type == MT_AMPHRDWIMPY  // Flame Orb
+            ||  thing->type == MT_AMPHRDHEFTY  // Inferno Orb
+            ||  thing->type == MT_MISC4        // Torch (Artifact)
+            ||  thing->type == MT_CHANDELIER   // Chandelier
+            ||  thing->type == MT_MISC10       // Torch
+            ||  thing->type == MT_SERPTORCH    // Serpent Torch
+            ||  thing->type == MT_MISC6        // Fire Brazier
+            ||  thing->type == MT_MISC12       // Volcano
+            ||  thing->info->deathstate == S_CLINK_DIE1) // Sabreclaw's death sequence
+            {
                 vis->colormap = fullbrights_flame[index];
+            }
 
-            // - Green only (diminished) -
-            if (thing->type == MT_MISC15    || // Etherial Crossbow
-                thing->type == MT_AMCBOWWIMPY) // Etherial Arrows
+            // Green only (diminished)
+            if (thing->type == MT_MISC15        // Etherial Crossbow
+            ||  thing->type == MT_AMCBOWWIMPY   // Etherial Arrows
+            ||  thing->type == MT_KNIGHT        // Undead Warrior
+            ||  thing->type == MT_KNIGHTGHOST)  // Undead Warrior Ghost
+            {
                 vis->colormap = fullbrights_greenonly_dim[index];
+            }
 
-            if (thing->type == MT_KNIGHT    || // Undead Warrior
-                thing->type == MT_KNIGHTGHOST) // Undead Warrior Ghost
-                vis->colormap = fullbrights_greenonly_dim[index];
-
-            // - Red only (diminished) -
-            if (thing->type == MT_WSKULLROD   || // Hellstaff
-                thing->type == MT_WPHOENIXROD || // Phoenix Rod
-                thing->type == MT_ITEMSHIELD2)   // Enchanted Shield
+            // Red only (diminished)
+            if (thing->type == MT_WSKULLROD     // Hellstaff
+            ||  thing->type == MT_WPHOENIXROD   // Phoenix Rod
+            ||  thing->type == MT_ITEMSHIELD2)  // Enchanted Shield
+            {
                 vis->colormap = fullbrights_redonly_dim[index];
+            }
 
-            // - Blue only -
-            if (thing->type == MT_AMBLSRWIMPY || // Claw Orb
-                thing->type == MT_AMBLSRHEFTY)   // Energy Orb
+            // Blue only
+            if (thing->type == MT_AMBLSRWIMPY   // Claw Orb
+            ||  thing->type == MT_AMBLSRHEFTY)  // Energy Orb
+            {
                 vis->colormap = fullbrights_blueonly_dim[index];
+            }
 
-            // - Yellow only -
-            if (thing->type == MT_AMGWNDWIMPY || // Wand Crystal
-                thing->type == MT_AMGWNDHEFTY)   // Crystal Geode
+            // Yellow only
+            if (thing->type == MT_AMGWNDWIMPY   // Wand Crystal
+            ||  thing->type == MT_AMGWNDHEFTY)  // Crystal Geode
+            {
                 vis->colormap = fullbrights_yellowonly_dim[index];
+            }
 
-            // - Standard full bright formula -
-            if (thing->type == MT_BEASTBALL    || // Weredragon's fireball
-                thing->type == MT_BURNBALL     || // Weredragon's fireball
-                thing->type == MT_BURNBALLFB   || // Weredragon's fireball
-                thing->type == MT_PUFFY        || // Weredragon's fireball
-                thing->type == MT_HEADFX3      || // Iron Lich's fire column
-                thing->type == MT_VOLCANOBLAST || // Volcano blast
-                thing->type == MT_VOLCANOTBLAST)  // Volcano blast (impact)
+            // Standard full bright formula
+            if (thing->type == MT_BEASTBALL       // Weredragon's fireball
+            ||  thing->type == MT_BURNBALL        // Weredragon's fireball
+            ||  thing->type == MT_BURNBALLFB      // Weredragon's fireball
+            ||  thing->type == MT_PUFFY           // Weredragon's fireball
+            ||  thing->type == MT_HEADFX3         // Iron Lich's fire column
+            ||  thing->type == MT_VOLCANOBLAST    // Volcano blast
+            ||  thing->type == MT_VOLCANOTBLAST)  // Volcano blast (impact)
+            {
                 vis->colormap = colormaps;
+            }
         }
         
         // [JN] Fallback. If we are not using brightmaps, apply full brightness
@@ -796,10 +834,12 @@ void R_ProjectSprite (mobj_t *thing)
         // (S_FIREBRAZIER* and S_WALLTORCH*).
         if (!brightmaps || vanillaparm)
         {
-            if (thing->type == MT_MISC4  || // Torch (Artifact)
-                thing->type == MT_MISC6  || // S_FIREBRAZIER*
-                thing->type == MT_MISC10)   // S_WALLTORCH*
+            if (thing->type == MT_MISC4    // Torch (Artifact)
+            ||  thing->type == MT_MISC6    // S_FIREBRAZIER*
+            ||  thing->type == MT_MISC10)  // S_WALLTORCH*
+            {
                 vis->colormap = colormaps;
+            }
         }
     }
 
