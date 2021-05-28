@@ -157,6 +157,14 @@ void DrawMessage(void)
     player_t *player;
 
     player = &players[consoleplayer];
+
+    // [JN] Activate message counter in non-level or paused states.
+    // Make messages go away in menu, finale and help screens.
+    if (gamestate != GS_LEVEL || paused)
+    {
+        player->messageTics--;  // Can go negative
+    }
+
     if (player->messageTics <= 0 || !player->message)
     {                           // No message
         return;
