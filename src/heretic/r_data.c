@@ -994,7 +994,7 @@ static void R_InitExtraTintTable (void)
 {
     // Compose a default transparent filter map based on PLAYPAL.
     unsigned char *playpal = W_CacheLumpName("PLAYPAL", PU_STATIC);
-    const int filter_pct = 75;
+    const int filter_pct = 80;
 
     extratinttable = Z_Malloc(256*256, PU_STATIC, 0);
 

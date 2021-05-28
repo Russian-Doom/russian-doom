@@ -141,6 +141,7 @@ int snd_monomode = 0;
 // Gameplay: Graphical
 int brightmaps = 1;
 int fake_contrast = 0;
+int translucency = 1;
 int sbar_colored = 0;
 int colored_blood = 1;
 int invul_sky = 1;

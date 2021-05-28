@@ -1155,6 +1155,7 @@ void A_MaceBallImpact(mobj_t * ball)
     else
     {                           // Explode
         ball->flags |= MF_NOGRAVITY;
+        ball->flags |= MF_EXTRATRANS; // [JN] Extra translucency
         ball->flags2 &= ~MF2_LOGRAV;
         S_StartSound(ball, sfx_lobhit);
     }
@@ -1180,6 +1181,7 @@ void A_MaceBallImpact2(mobj_t * ball)
     {                           // Explode
         ball->momx = ball->momy = ball->momz = 0;
         ball->flags |= MF_NOGRAVITY;
+        ball->flags |= MF_EXTRATRANS; // [JN] Extra translucency
         ball->flags2 &= ~(MF2_LOGRAV | MF2_FLOORBOUNCE);
     }
     else
@@ -1303,6 +1305,7 @@ void A_DeathBallImpact(mobj_t * ball)
     else
     {                           // Explode
         ball->flags |= MF_NOGRAVITY;
+        ball->flags |= MF_EXTRATRANS; // [JN] Extra translucency
         ball->flags2 &= ~MF2_LOGRAV;
         S_StartSound(ball, sfx_phohit);
     }
