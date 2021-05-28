@@ -25,6 +25,9 @@ extern int snd_MaxVolume;
 extern int snd_MaxVolume_tmp;
 extern int snd_MusicVolume;
 
+extern int snd_Channels;
+extern int snd_Channels_RD;
+
 void S_Start(void);
 void S_StartSound(void *origin, int sound_id);
 void S_StartSoundAtVolume(void *origin, int sound_id, int volume);

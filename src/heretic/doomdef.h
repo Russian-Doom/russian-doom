@@ -607,6 +607,8 @@ extern int startepisode;
 extern int startmap;
 extern boolean autostart;
 
+extern int show_messages;
+
 extern boolean testcontrols;
 extern int testcontrols_mousespeed;
 

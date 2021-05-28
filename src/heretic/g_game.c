@@ -135,40 +135,6 @@ boolean testcontrols = false;
 int testcontrols_mousespeed;
 
 
-// Sound
-int snd_monomode = 0;
-
-// Gameplay: Graphical
-int brightmaps = 1;
-int fake_contrast = 0;
-int translucency = 1;
-int sbar_colored = 0;
-int colored_blood = 1;
-int invul_sky = 1;
-int draw_shadowed_text = 1;
-
-// Gameplay: Tactical
-int automap_stats = 1;
-int secret_notification = 1;
-int negative_health = 0;
-
-// Gameplay: Physical
-int torque = 1;
-int weapon_bobbing = 1;
-int randomly_flipcorpses = 1;
-int floating_powerups = 1;
-
-// Gameplay: Crosshair
-int crosshair_draw = 0;
-int crosshair_type = 1;
-int crosshair_scale = 0;
-
-// Gameplay: Gameplay
-int flip_levels = 0;
-int no_internal_demos = 0;
-int pistol_start = 0;
-
-
 //
 // controls (have defaults)
 //

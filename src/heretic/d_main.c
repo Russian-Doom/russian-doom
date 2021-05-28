@@ -102,16 +102,65 @@ int english_language = -1;
 int english_language = 0;
 #endif
 
-int show_endoom = 0;
-int level_brightness = 0; // [JN] Level brightness level
-int hud_detaillevel = 0;  // [JN] Blocky mode, 0 = high, 1 = normal
-int local_time = 0; // [JN] Local time widget
+//------------------------------------------------------------------------------
+//
+// [JN] Default variables and bindings.
+//
+//------------------------------------------------------------------------------
 
-// [JN] Automap specific variables.
-int automap_follow = 1;
+// Rendering
+int show_endoom = 0;
+
+// Display
+int screenblocks = 10;
+int level_brightness = 0;
+int hud_detaillevel = 0;    // Blocky mode, 0 = high, 1 = normal
+int local_time = 0;
+int show_messages = 1;
+int draw_shadowed_text = 1;
+
+// Automap
+int automap_stats = 1;
 int automap_overlay = 0;
 int automap_rotate = 0;
+int automap_follow = 1;
 int automap_grid = 0;
+
+// Sound
+int snd_MaxVolume = 10;
+int snd_MusicVolume = 10;
+int snd_Channels = 8;       // Default SFX channels
+int snd_Channels_RD;        // For hot-swapping
+int snd_monomode = 0;
+
+// Gameplay: Graphical
+int brightmaps = 1;
+int fake_contrast = 0;
+int translucency = 1;
+int sbar_colored = 0;
+int colored_blood = 1;
+int invul_sky = 1;
+
+// Gameplay: Physical
+int torque = 1;
+int weapon_bobbing = 1;
+int randomly_flipcorpses = 1;
+int floating_powerups = 1;
+
+// Gameplay: Tactical
+int secret_notification = 1;
+int negative_health = 0;
+
+// Gameplay: Crosshair
+int crosshair_draw = 0;
+int crosshair_type = 1;
+int crosshair_scale = 0;
+
+// Gameplay: Gameplay
+int flip_levels = 0;
+int no_internal_demos = 0;
+int pistol_start = 0;
+
 
 void D_ConnectNetGame(void);
 void D_CheckNetGame(void);
@@ -870,7 +919,6 @@ void InitThermo(int max)
 
 void D_BindVariables(void)
 {
-    extern int snd_Channels;
     int i;
 
     M_ApplyPlatformDefaults();
@@ -909,6 +957,8 @@ void D_BindVariables(void)
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("local_time",             &local_time);
+    // pitto
+    M_BindIntVariable("show_messages",          &show_messages);
 
     // Automap
     M_BindIntVariable("automap_follow",         &automap_follow);

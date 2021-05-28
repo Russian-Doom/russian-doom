@@ -51,7 +51,6 @@ player_t *viewplayer;
 
 int detailshift;                // 0 = high, 1 = low
 int detailLevel;
-int screenblocks = 10;
 
 //
 // precalculated math tables

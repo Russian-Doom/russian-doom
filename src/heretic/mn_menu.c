@@ -234,7 +234,6 @@ static boolean M_RD_ChangeLanguage(int option);
 
 boolean menuactive;
 int InfoType;
-boolean messageson;
 
 // Private Data
 
@@ -268,7 +267,6 @@ static int slotptr;
 static int currentSlot;
 static int quicksave;
 static int quickload;
-extern int snd_Channels;
 
 // [JN] Set default mouse sensitivity to 5, like in Doom
 int mouseSensitivity = 5;
@@ -1072,7 +1070,6 @@ void MN_Init(void)
 {
     InitFonts();
     menuactive = false;
-    messageson = true;
     SkullBaseLump = W_GetNumForName(DEH_String("M_SKL00"));
 
     // [JN] Widescreen: set temp variable for rendering menu.
@@ -2176,7 +2173,7 @@ static void DrawDisplayMenu(void)
                           110 + wide_delta, 112);
 
         // Messages
-        MN_DrTextSmallENG(DEH_String(messageson ? "ON" : "OFF"),
+        MN_DrTextSmallENG(DEH_String(show_messages ? "ON" : "OFF"),
                                      108 + wide_delta, 122);
 
         // Text casts shadows
@@ -2208,7 +2205,7 @@ static void DrawDisplayMenu(void)
                           157 + wide_delta, 112);
 
         // Отображение сообщений
-        MN_DrTextSmallRUS(DEH_String(messageson ? "DRK" : "DSRK"),
+        MN_DrTextSmallRUS(DEH_String(show_messages ? "DRK" : "DSRK"),
                                      208 + wide_delta, 122);
 
         // Тексты отбрасывают тень
@@ -2342,9 +2339,9 @@ static boolean M_RD_LocalTime(int option)
 
 static boolean M_RD_Messages(int option)
 {
-    messageson ^= 1;
+    show_messages ^= 1;
 
-    if (messageson)
+    if (show_messages)
     {
         P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
                       "MESSAGES ON" :
@@ -3671,11 +3668,11 @@ static void DrawOptionsMenu_Vanilla(void)
 {
     if (english_language)
     {
-        MN_DrTextB(DEH_String(messageson ? "ON" : "OFF"), 196 + wide_delta, 50);
+        MN_DrTextB(DEH_String(show_messages ? "ON" : "OFF"), 196 + wide_delta, 50);
     }
     else
     {
-        MN_DrTextBigRUS(DEH_String(messageson ? "DRK" : "DSRK"), 223 + wide_delta, 50);
+        MN_DrTextBigRUS(DEH_String(show_messages ? "DRK" : "DSRK"), 223 + wide_delta, 50);
     }
     DrawSlider(&OptionsMenu_Vanilla, 3, 10, mouseSensitivity);
 }
@@ -3752,7 +3749,7 @@ void M_RD_DoResetSettings(void)
     usegamma            = 4;
     level_brightness    = 0;
     local_time          = 0;
-    messageson          = 1;
+    show_messages       = 1;
     draw_shadowed_text  = 1;
 
     // Automap
@@ -3784,6 +3781,7 @@ void M_RD_DoResetSettings(void)
     // Gameplay (1)
     brightmaps           = 1;
     fake_contrast        = 0;
+    translucency         = 1;
     sbar_colored         = 0;
     colored_blood        = 1;
     invul_sky            = 1;
@@ -3948,9 +3946,9 @@ static boolean SCQuitGame(int option)
 
 static boolean SCMessages(int option)
 {
-    messageson ^= 1;
+    show_messages ^= 1;
 
-    if (messageson)
+    if (show_messages)
     {
         P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
                       "MESSAGES ON" :

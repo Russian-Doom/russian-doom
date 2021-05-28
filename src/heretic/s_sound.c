@@ -53,13 +53,9 @@ int mus_lumpnum;
 void *mus_sndptr;
 byte *soundCurve;
 
-int snd_MaxVolume = 10;
 int snd_MaxVolume_tmp;  // [JN] Temp volume variable used for hot-muting.
-int snd_MusicVolume = 10;
 
-int snd_Channels_RD;
-int snd_Channels = 8;
-int snd_Channels_Vanilla = 8;
+
 
 int AmbChan;
 
@@ -653,7 +649,7 @@ void S_Init(void)
     // [JN] Cap sound channels to 8 in -vanilla game mode.
     if (vanillaparm)
     {
-        snd_Channels_RD = snd_Channels_Vanilla;
+        snd_Channels_RD = 8;
     }
     else
     {

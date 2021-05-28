@@ -83,9 +83,7 @@ boolean ultimatemsg;
 
 void P_SetMessage(player_t * player, char *message, boolean ultmsg)
 {
-    extern boolean messageson;
-
-    if ((ultimatemsg || !messageson) && !ultmsg)
+    if ((ultimatemsg || !show_messages) && !ultmsg)
     {
         return;
     }
