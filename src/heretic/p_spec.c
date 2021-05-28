@@ -1341,6 +1341,14 @@ void P_AmbientSound(void)
                 break;
             case afxcmd_delayrand:
                 AmbSfxTics = P_Random() & (*AmbSfxPtr++);
+                // [JN] Fix vanilla bug:
+                // https://doomwiki.org/wiki/Heretic_ambient_sounds_stop_playing
+                // Increase AmbSfxTics by one once it gets zero by P_Random,
+                // so sounds can be playable again.
+                if (AmbSfxTics == 0)
+                {
+                    AmbSfxTics++;
+                }
                 done = true;
                 break;
             case afxcmd_end:
