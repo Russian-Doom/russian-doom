@@ -1,8 +1,6 @@
 
 AM_CFLAGS=@SDLMIXER_CFLAGS@
 
-SUBDIRS = . examples
-
 noinst_LIBRARIES=libopl.a
 
 libopl_a_SOURCES =                                \

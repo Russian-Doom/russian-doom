@@ -1,5 +1,4 @@
 
-# strife
 SUBDIRS = doom heretic hexen strife setup
 
 execgamesdir = ${bindir}
@@ -34,25 +33,6 @@ i_main.c                                   \
 i_system.c           i_system.h            \
 m_argv.c             m_argv.h              \
 m_misc.c             m_misc.h
-
-# Dedicated server (chocolate-server):
-
-# DEDSERV_FILES=\
-# d_dedicated.c                              \
-# d_mode.c             d_mode.h              \
-# i_timer.c            i_timer.h             \
-# net_common.c         net_common.h          \
-# net_dedicated.c      net_dedicated.h       \
-# net_io.c             net_io.h              \
-# net_packet.c         net_packet.h          \
-# net_sdl.c            net_sdl.h             \
-# net_query.c          net_query.h           \
-# net_server.c         net_server.h          \
-# net_structrw.c       net_structrw.h        \
-# z_native.c           z_zone.h
-
-# @PROGRAM_PREFIX@server_SOURCES=$(COMMON_SOURCE_FILES) $(DEDSERV_FILES)
-# @PROGRAM_PREFIX@server_LDADD = @LDFLAGS@ @SDLNET_LIBS@
 
 # Source files used by the game binaries (russian-doom, etc.)
 
@@ -220,56 +200,7 @@ endif
                         $(top_builddir)/textscreen/libtextscreen.a   \
                         @LDFLAGS@ @SDL_LIBS@ @SDLMIXER_LIBS@ @SDLNET_LIBS@
 
-EXTRA_DIST =                        \
-        icon.c                      \
-        doom-screensaver.desktop.in \
-        manifest.xml
-
-appdatadir = $(prefix)/share/appdata
-appdata_DATA =                              \
-        @PROGRAM_PREFIX@doom.appdata.xml    \
-        @PROGRAM_PREFIX@heretic.appdata.xml \
-        @PROGRAM_PREFIX@hexen.appdata.xml   \
-        @PROGRAM_PREFIX@strife.appdata.xml
-
-@PROGRAM_PREFIX@doom.appdata.xml : doom.appdata.xml
-	cp doom.appdata.xml $@
-
-@PROGRAM_PREFIX@heretic.appdata.xml : heretic.appdata.xml
-	cp heretic.appdata.xml $@
-
-@PROGRAM_PREFIX@hexen.appdata.xml : hexen.appdata.xml
-	cp hexen.appdata.xml $@
-
-@PROGRAM_PREFIX@strife.appdata.xml : strife.appdata.xml
-	cp strife.appdata.xml $@
-
-appdir = $(prefix)/share/applications
-app_DATA =                                 \
-           @PROGRAM_PREFIX@doom.desktop    \
-           @PROGRAM_PREFIX@heretic.desktop \
-           @PROGRAM_PREFIX@hexen.desktop   \
-           @PROGRAM_PREFIX@strife.desktop
-
-@PROGRAM_PREFIX@doom.desktop : doom.desktop
-	cp doom.desktop $@
-
-@PROGRAM_PREFIX@heretic.desktop : heretic.desktop
-	cp heretic.desktop $@
-
-@PROGRAM_PREFIX@hexen.desktop : hexen.desktop
-	cp hexen.desktop $@
-
-@PROGRAM_PREFIX@strife.desktop : strife.desktop
-	cp strife.desktop $@
-
-screensaverdir = $(prefix)/share/applications/screensavers
-screensaver_DATA = @PROGRAM_PREFIX@doom-screensaver.desktop
-
-@PROGRAM_PREFIX@doom-screensaver.desktop: doom-screensaver.desktop
-	cp doom-screensaver.desktop $@
-
-CLEANFILES = $(execgames_SCRIPTS) $(app_DATA) $(screensaver_DATA)
+CLEANFILES = $(execgames_SCRIPTS)
 
 .rc.o:
 	$(WINDRES) $< -o $@
@@ -282,12 +213,3 @@ icon.c : $(top_builddir)/data/doom.png
 	$(top_builddir)/data/convert-icon $(top_builddir)/data/doom.png $@
 
 endif
-
-midiread : midifile.c
-	$(CC) -DTEST $(CFLAGS) @LDFLAGS@ midifile.c -o $@
-
-MUS2MID_SRC_FILES = mus2mid.c memio.c z_native.c i_system.c m_argv.c m_misc.c
-mus2mid : $(MUS2MID_SRC_FILES)
-	$(CC) -DSTANDALONE -I$(top_builddir) $(CFLAGS) @LDFLAGS@ \
-              $(MUS2MID_SRC_FILES) -o $@
-

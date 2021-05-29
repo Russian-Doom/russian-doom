@@ -12,32 +12,6 @@ set(COMMON_SOURCE_FILES
     m_argv.c             m_argv.h
     m_misc.c             m_misc.h)
 
-# Dedicated server (chocolate-server):
-
-# set(DEDSERV_FILES
-#     d_dedicated.c
-#     d_iwad.c            d_iwad.h
-#     d_mode.c            d_mode.h
-#     deh_str.c           deh_str.h
-#     i_timer.c           i_timer.h
-#     m_config.c          m_config.h
-#     net_common.c        net_common.h
-#     net_dedicated.c     net_dedicated.h
-#     net_io.c            net_io.h
-#     net_packet.c        net_packet.h
-#     net_sdl.c           net_sdl.h
-#     net_query.c         net_query.h
-#     net_server.c        net_server.h
-#     net_structrw.c      net_structrw.h
-#     z_native.c          z_zone.h)
-
-# add_executable("${PROGRAM_PREFIX}server" WIN32 ${COMMON_SOURCE_FILES} ${DEDSERV_FILES})
-# target_include_directories("${PROGRAM_PREFIX}server"
-#                            PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
-# target_link_libraries("${PROGRAM_PREFIX}server" SDL2::SDL2main SDL2::net)
-
-# Source files used by the game binaries (russian-doom, etc.)
-
 set(GAME_SOURCE_FILES
     aes_prng.c          aes_prng.h
     d_event.c           d_event.h
@@ -221,15 +195,3 @@ if(MSVC)
     set_target_properties("${PROGRAM_PREFIX}setup" PROPERTIES
                           LINK_FLAGS "/MANIFEST:NO")
 endif()
-
-# midiread and mus2mid require some *.c file to declare non-extern var "english_language"
-
-#add_executable(midiread midifile.c z_native.c i_system.c m_argv.c m_misc.c d_iwad.c deh_str.c m_config.c)
-#target_compile_definitions(midiread PRIVATE "-DTEST")
-#target_include_directories(midiread PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
-#target_link_libraries(midiread SDL2::SDL2main SDL2::SDL2)
-
-#add_executable(mus2mid mus2mid.c memio.c z_native.c i_system.c m_argv.c m_misc.c d_iwad.c deh_str.c m_config.c)
-#target_compile_definitions(mus2mid PRIVATE "-DSTANDALONE")
-#target_include_directories(mus2mid PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
-#target_link_libraries(mus2mid SDL2::SDL2main SDL2::SDL2)

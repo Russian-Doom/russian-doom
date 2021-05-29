@@ -1,5 +1,4 @@
 FONT_HDRS = small.h normal.h large.h
-EXTRA_DIST = small.png normal.png large.png convert-font $(FONT_HDRS)
 
 noinst_DATA = $(FONT_HDRS)
 
@@ -24,4 +23,3 @@ large_en.h: large_en.png convert-font
 	./convert-font large_en large_en.png large_en.h
 
 endif
-
