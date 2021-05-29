@@ -1868,10 +1868,11 @@ static void DrawOptionsMenu(void)
 {
     char *title_eng = DEH_String("OPTIONS");
     char *title_rus = DEH_String("YFCNHJQRB");  // НАСТРОЙКИ
-    
+
+    // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
-    // Update status bar
+    // Update status bar.
     SB_state = -1;
 
     if (english_language)
@@ -1892,10 +1893,14 @@ static void DrawOptionsMenu(void)
 
 static void DrawRenderingMenu(void)
 {
-    static char *title_eng, *title_rus;
+    char *title_eng = DEH_String("RENDERING OPTIONS");
+    char *title_rus = DEH_String("YFCNHJQRB DBLTJ");  // НАСТРОЙКИ ВИДЕО
 
-    title_eng = DEH_String("RENDERING OPTIONS");
-    title_rus = DEH_String("YFCNHJQRB DBLTJ");  // НАСТРОЙКИ ВИДЕО
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
 
     if (english_language)
     {
@@ -2168,11 +2173,15 @@ static boolean M_RD_Screenshots(int option)
 
 static void DrawDisplayMenu(void)
 {
-    static char *title_eng, *title_rus;
-    static char num[4];
+    char *title_eng = DEH_String("DISPLAY OPTIONS");
+    char *title_rus = DEH_String("YFCNHJQRB \'RHFYF");  // НАСТРОЙКИ ЭКРАНА
+    char  num[4];
 
-    title_eng = DEH_String("DISPLAY OPTIONS");
-    title_rus = DEH_String("YFCNHJQRB \'RHFYF");  // НАСТРОЙКИ ЭКРАНА
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
 
     if (english_language)
     {
@@ -2399,10 +2408,14 @@ static boolean M_RD_ShadowedText(int option)
 
 static void DrawAutomapMenu(void)
 {
-    static char *title_eng, *title_rus;
+    char *title_eng = DEH_String("AUTOMAP SETTINGS");
+    char *title_rus = DEH_String("YFCNHJQRB RFHNS");  // НАСТРОЙКИ КАРТЫ
 
-    title_eng = DEH_String("AUTOMAP SETTINGS");
-    title_rus = DEH_String("YFCNHJQRB RFHNS");  // НАСТРОЙКИ КАРТЫ
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
 
     if (english_language)
     {
@@ -2498,11 +2511,15 @@ static boolean M_RD_AutoMapGrid(int option)
 
 static void DrawSoundMenu(void)
 {
-    static char *title_eng, *title_rus;
-    static char num[4];
+    char *title_eng = DEH_String("SOUND OPTIONS");
+    char *title_rus = DEH_String("YFCNHJQRB PDERF");  // НАСТРОЙКИ ЗВУКА
+    char  num[4];
 
-    title_eng = DEH_String("SOUND OPTIONS");
-    title_rus = DEH_String("YFCNHJQRB PDERF");  // НАСТРОЙКИ ЗВУКА
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
 
     if (english_language)
     {
@@ -2632,10 +2649,14 @@ static boolean M_RD_SfxChannels(int option)
 
 static void DrawSoundSystemMenu(void)
 {
-    static char *title_eng, *title_rus;
+    char *title_eng = DEH_String("SOUND SYSTEM SETTINGS");
+    char *title_rus = DEH_String("YFCNHJQRB PDERJDJQ CBCNTVS");  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
 
-    title_eng = DEH_String("SOUND SYSTEM SETTINGS");
-    title_rus = DEH_String("YFCNHJQRB PDERJDJQ CBCNTVS");  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
 
     if (english_language)
     {
@@ -2984,11 +3005,15 @@ static boolean M_RD_MuteInactive(int option)
 
 static void DrawControlsMenu(void)
 {
-    static char *title_eng, *title_rus;
-    static char num[4];
+    char *title_eng = DEH_String("CONTROL SETTINGS");
+    char *title_rus = DEH_String("EGHFDKTYBT");  // УПРАВЛЕНИЕ
+    char  num[4];
 
-    title_eng = DEH_String("CONTROL SETTINGS");
-    title_rus = DEH_String("EGHFDKTYBT");  // УПРАВЛЕНИЕ
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
 
     if (english_language)
     {
@@ -3206,6 +3231,12 @@ static void DrawGameplay1Menu(void)
     char *title_eng = DEH_String("GAMEPLAY FEATURES");
     char *title_rus = DEH_String("YFCNHJQRB UTQVGKTZ");  // НАСТРОЙКИ ГЕЙМПЛЕЯ
 
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
+
     if (english_language)
     {
         //
@@ -3409,10 +3440,14 @@ static boolean M_RD_NegativeHealth(int option)
 
 static void DrawGameplay2Menu(void)
 {
-    static char *title_eng, *title_rus;
+    char *title_eng = DEH_String("GAMEPLAY FEATURES");
+    char *title_rus = DEH_String("YFCNHJQRB UTQVGKTZ");  // НАСТРОЙКИ ГЕЙМПЛЕЯ
 
-    title_eng = DEH_String("GAMEPLAY FEATURES");
-    title_rus = DEH_String("YFCNHJQRB UTQVGKTZ");  // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
 
     if (english_language)
     {
