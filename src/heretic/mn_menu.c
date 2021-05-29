@@ -131,6 +131,7 @@ static void DrawFilesMenu(void);
 static void MN_DrawInfo(void);
 static void DrawLoadMenu(void);
 static void DrawSaveMenu(void);
+static void DrawOptionsMenu(void);
 static void DrawSlider(Menu_t * menu, int item, int width, int slot);
 static void DrawSliderSmall(Menu_t * menu, int item, int width, int slot);
 void MN_LoadSlotText(void);
@@ -471,16 +472,16 @@ static MenuItem_t OptionsItems_Rus[] = {
 };
 
 static Menu_t OptionsMenu = {
-    77, 16,
-    NULL,
+    81, 31,
+    DrawOptionsMenu,
     7, OptionsItems,
     0,
     MENU_MAIN
 };
 
 static Menu_t OptionsMenu_Rus = {
-    77, 16,
-    NULL,
+    81, 31,
+    DrawOptionsMenu,
     7, OptionsItems_Rus,
     0,
     MENU_MAIN
@@ -1859,6 +1860,31 @@ static void DrawFileSlots(Menu_t * menu)
     }
 }
 
+// -----------------------------------------------------------------------------
+// DrawOptionsMenu
+// -----------------------------------------------------------------------------
+
+static void DrawOptionsMenu(void)
+{
+    char *title_eng = DEH_String("OPTIONS");
+    char *title_rus = DEH_String("YFCNHJQRB");  // НАСТРОЙКИ
+    
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar
+    SB_state = -1;
+
+    if (english_language)
+    {
+        MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
+                                       + wide_delta, 7);
+    }
+    else
+    {
+        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
+                                       + wide_delta, 7);
+    }
+}
 
 // -----------------------------------------------------------------------------
 // DrawRenderingMenu
