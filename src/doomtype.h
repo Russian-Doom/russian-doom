@@ -23,6 +23,8 @@
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__
 
+#include "config.h"
+
 #if defined(_MSC_VER) && !defined(__cplusplus)
 #define inline __inline
 #endif
@@ -31,11 +33,15 @@
 // Outside Windows, we use strings.h for str[n]casecmp.
 
 
-#ifdef _WIN32
+#if !HAVE_DECL_STRCASECMP || !HAVE_DECL_STRNCASECMP
 
-#include <string.h>
-#define strcasecmp stricmp
-#define strncasecmp strnicmp
+    #include <string.h>
+    #if !HAVE_DECL_STRCASECMP
+        #define strcasecmp stricmp
+    #endif
+    #if !HAVE_DECL_STRNCASECMP
+        #define strncasecmp strnicmp
+    #endif
 
 #else
 
