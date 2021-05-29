@@ -1030,7 +1030,17 @@ static void D_Endoom(void)
         return;
     }
 
-    endoom_data = W_CacheLumpName(DEH_String("ENDTEXT"), PU_STATIC);
+    if (english_language)
+    {
+        endoom_data = W_CacheLumpName(DEH_String("ENDTEXT"), PU_STATIC);
+    }
+    else
+    {
+        endoom_data = W_CacheLumpName(DEH_String(gamemode == shareware  ? "ENDTXTSW" :
+                                                 gamemode == registered ? "ENDTXTRG" :
+                                                                          "ENDTXTRT"),
+                                                                           PU_STATIC);
+    }
 
     I_Endoom(endoom_data);
 }

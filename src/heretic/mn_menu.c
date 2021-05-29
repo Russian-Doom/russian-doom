@@ -150,6 +150,7 @@ static boolean M_RD_Smoothing(int option);
 static boolean M_RD_PorchFlashing(int option);
 static boolean M_RD_Renderer(int option);
 static boolean M_RD_Screenshots(int option);
+static boolean M_RD_EndText(int option);
 
 // Display
 static void DrawDisplayMenu(void);
@@ -500,7 +501,8 @@ static MenuItem_t RenderingItems[] = {
     {ITT_LRFUNC, "PORCH PALETTE CHANGING:",   M_RD_PorchFlashing,     0, MENU_NONE},
     {ITT_LRFUNC, "VIDEO RENDERER:",           M_RD_Renderer,          0, MENU_NONE},
     {ITT_EMPTY,  NULL,                        NULL,                   0, MENU_NONE},
-    {ITT_LRFUNC, "SCREENSHOT FORMAT:",        M_RD_Screenshots,       0, MENU_NONE}
+    {ITT_LRFUNC, "SCREENSHOT FORMAT:",        M_RD_Screenshots,       0, MENU_NONE},
+    {ITT_LRFUNC, "SHOW ENDTEXT SCREEN:",      M_RD_EndText,           0, MENU_NONE}
 };
 
 static MenuItem_t RenderingItems_Rus[] = {
@@ -512,13 +514,14 @@ static MenuItem_t RenderingItems_Rus[] = {
     {ITT_LRFUNC, "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing, 0, MENU_NONE}, // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
     {ITT_LRFUNC, "J,HF,JNRF DBLTJ:",            M_RD_Renderer,          0, MENU_NONE}, // ОБРАБОТКА ВИДЕО
     {ITT_EMPTY,  NULL,                          NULL,                   0, MENU_NONE}, //
-    {ITT_LRFUNC, "AJHVFN CRHBYIJNJD:",          M_RD_Screenshots,       0, MENU_NONE}  // ФОРМАТ СКРИНШОТОВ
+    {ITT_LRFUNC, "AJHVFN CRHBYIJNJD:",          M_RD_Screenshots,       0, MENU_NONE}, // ФОРМАТ СКРИНШОТОВ
+    {ITT_LRFUNC, "GJRFPSDFNM \'RHFY",           M_RD_EndText,           0, MENU_NONE}  // ПОКАЗЫВАТЬ ЭКРАН ENDTEXT
 };
 
 static Menu_t RenderingMenu = {
     36, 42,
     DrawRenderingMenu,
-    9, RenderingItems,
+    10, RenderingItems,
     0,
     MENU_OPTIONS
 };
@@ -526,7 +529,7 @@ static Menu_t RenderingMenu = {
 static Menu_t RenderingMenu_Rus = {
     36, 42,
     DrawRenderingMenu,
-    9, RenderingItems_Rus,
+    10, RenderingItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -1982,6 +1985,10 @@ static void DrawRenderingMenu(void)
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + wide_delta, 112);
         dp_translation = NULL;
+
+        // Show ENDTEXT screen
+        MN_DrTextSmallENG(DEH_String(show_endoom ? "ON" : "OFF"),
+                                     188 + wide_delta, 132);
     }
     else
     {
@@ -2066,6 +2073,11 @@ static void DrawRenderingMenu(void)
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + wide_delta, 112);
         dp_translation = NULL;
+
+        // Показывать экран ENDTEXT
+        MN_DrTextSmallENG(DEH_String("ENDTEXT:"), 160 + wide_delta, 132);
+        MN_DrTextSmallRUS(DEH_String(show_endoom ? "DRK" : "DSRK"),
+                                     222 + wide_delta, 132);
     }
 
     // Screenshot format / Формат скриншотов (same english values)
@@ -2164,6 +2176,12 @@ static boolean M_RD_Renderer(int option)
 static boolean M_RD_Screenshots(int option)
 {
     png_screenshots ^= 1;
+    return true;
+}
+
+static boolean M_RD_EndText(int option)
+{
+    show_endoom ^= 1;
     return true;
 }
 
