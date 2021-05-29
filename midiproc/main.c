@@ -433,13 +433,13 @@ int main(int argc, char *argv[])
     }
 
     // Parse out our handle ids.
-    in = (HANDLE) strtol(argv[3], NULL, 10);
+    in = (HANDLE) (intptr_t) strtol(argv[3], NULL, 10);
     if (in == 0)
     {
         return EXIT_FAILURE;
     }
 
-    out = (HANDLE) strtol(argv[4], NULL, 10);
+    out = (HANDLE) (intptr_t) strtol(argv[4], NULL, 10);
     if (out == 0)
     {
         return EXIT_FAILURE;
