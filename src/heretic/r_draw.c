@@ -23,6 +23,7 @@
 #include "r_local.h"
 #include "i_video.h"
 #include "v_video.h"
+#include "jn.h"
 
 /*
 
@@ -902,6 +903,7 @@ void R_DrawViewBorder(void)
 {
     byte *src, *dest;
     int x, y;
+    const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
 
     if (scaledviewwidth == screenwidth)
         return;
@@ -916,17 +918,13 @@ void R_DrawViewBorder(void)
     }
     dest = I_VideoBuffer;
 
+    // [JN] Simplified, same to V_FillFlat now.
     for (y = 0; y < SCREENHEIGHT - SBARHEIGHT; y++)
     {
-        for (x = 0; x < screenwidth / 64; x++)
+        for (x = 0; x < screenwidth; x++)
         {
-            memcpy(dest, src + ((y & 63) << 6), 64);
-            dest += 64;
-        }
-        if (screenwidth & 63)
-        {
-            memcpy(dest, src + ((y & 63) << 6), screenwidth & 63);
-            dest += (screenwidth & 63);
+            *dest++ = src[(((y >> shift_allowed) & 63) << 6) 
+                         + ((x >> shift_allowed) & 63)];
         }
     }
     for (x = (viewwindowx >> hires); x < ((viewwindowx >> hires) + (scaledviewwidth >> hires)); x += 16)

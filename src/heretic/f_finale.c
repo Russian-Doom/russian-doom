@@ -32,7 +32,7 @@
 int finalestage;                // 0 = text, 1 = art screen
 int finalecount;
 
-#define TEXTSPEED       1
+#define TEXTSPEED       3
 #define TEXTWAIT        250
 
 char *finaletext;
@@ -151,8 +151,6 @@ void F_Ticker(void)
 
 void F_TextWrite(void)
 {
-    byte *src, *dest;
-    int x, y;
     int count;
     char *ch;
     int c;
@@ -162,22 +160,8 @@ void F_TextWrite(void)
 //
 // erase the entire screen to a tiled background
 //
-    src = W_CacheLumpName(finaleflat, PU_CACHE);
-    dest = I_VideoBuffer;
-    for (y = 0; y < SCREENHEIGHT; y++)
-    {
-        for (x = 0; x < screenwidth / 64; x++)
-        {
-            memcpy(dest, src + ((y & 63) << 6), 64);
-            dest += 64;
-        }
-        if (screenwidth & 63)
-        {
-            memcpy(dest, src + ((y & 63) << 6), screenwidth & 63);
-            dest += (screenwidth & 63);
-        }
-    }
-
+    // [JN] Use unified function.
+    V_FillFlat(finaleflat);
 //
 // draw some of the text onto the screen
 //

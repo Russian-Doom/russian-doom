@@ -60,7 +60,6 @@ void IN_InitDeathmatchStats(void);
 void IN_InitNetgameStats(void);
 void IN_DrawOldLevel(void);
 void IN_DrawYAH(void);
-void IN_DrawStatBack(void);
 void IN_DrawSingleStats(void);
 void IN_DrawCoopStats(void);
 void IN_DrawDMStats(void);
@@ -559,7 +558,8 @@ void IN_Drawer(void)
     switch (interstate)
     {
         case 0:                // draw stats
-            IN_DrawStatBack();
+            // [JN] Use unified function.
+            V_FillFlat("FLOOR16");
             switch (gametype)
             {
                 case SINGLE:
@@ -599,38 +599,6 @@ void IN_Drawer(void)
             else
             I_Error("IN_lude: Ошибка последовательности в межмиссионном экране.\n");
             break;
-    }
-}
-
-//========================================================================
-//
-// IN_DrawStatBack
-//
-//========================================================================
-
-void IN_DrawStatBack(void)
-{
-    int x;
-    int y;
-
-    byte *src;
-    byte *dest;
-
-    src = W_CacheLumpName(DEH_String("FLOOR16"), PU_CACHE);
-    dest = I_VideoBuffer;
-
-    for (y = 0; y < SCREENHEIGHT; y++)
-    {
-        for (x = 0; x < screenwidth / 64; x++)
-        {
-            memcpy(dest, src + ((y & 63) << 6), 64);
-            dest += 64;
-        }
-        if (screenwidth & 63)
-        {
-            memcpy(dest, src + ((y & 63) << 6), screenwidth & 63);
-            dest += (screenwidth & 63);
-        }
     }
 }
 
