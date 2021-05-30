@@ -609,7 +609,6 @@ static int oldkeys = -1;
 
 int playerkeys = 0;
 
-extern boolean automapactive;
 
 
 void SB_Drawer(void)

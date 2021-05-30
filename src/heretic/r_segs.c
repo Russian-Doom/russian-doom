@@ -579,7 +579,6 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 
 void R_StoreWallRange (int start, int stop)
 {
-    extern boolean automapactive;
     angle_t  offsetangle;
     fixed_t  vtop;
     int      lightnum;

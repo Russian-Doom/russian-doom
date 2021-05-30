@@ -1729,7 +1729,7 @@ void G_DoLoadGame(void)
         playeringame[i] = SV_ReadByte();
     }
     // Load a base level
-    G_InitNew(gameskill, gameepisode, gamemap);
+    G_InitNew(gameskill, gameepisode, gamemap, 0);
 
     // Create leveltime
     a = SV_ReadByte();
@@ -1783,11 +1783,98 @@ void G_DeferedInitNew(skill_t skill, int episode, int map)
 
 void G_DoNewGame(void)
 {
-    G_InitNew(d_skill, d_episode, d_map);
+    G_InitNew(d_skill, d_episode, d_map, 0);
     gameaction = ga_nothing;
 }
 
-void G_InitNew(skill_t skill, int episode, int map)
+/*
+================================================================================
+=
+= G_DoSelectiveGame
+=
+= [JN] Start new game with given parameters in "Level select" menu.
+=
+================================================================================
+*/
+
+boolean G_DoSelectiveGame (int option)
+{
+    int i;
+    player_t *p = &players[consoleplayer];
+    demoplayback = false; 
+    netgame = false;
+    deathmatch = false;
+    playeringame[1] = playeringame[2] = playeringame[3] = 0;
+    consoleplayer = 0;
+    gameaction = ga_nothing; 
+    automapactive = false;
+
+    // Close "Level select" menu.
+    MN_DeactivateMenu ();
+    
+    // Start a new game, activate fast monsters if appropriate.
+    G_InitNew (selective_skill, selective_episode, selective_map, selective_fast);
+
+    // Respawning monsters.
+    respawnmonsters = selective_respawn;
+
+    // Health.
+    p->health = selective_health;
+    p->mo->health = selective_health;
+
+    // Armor.
+    p->armorpoints = selective_armor;
+    // Armor type (set to 0 if no armor given).
+    p->armortype = selective_armor == 0 ? 0 : selective_armortype;
+
+    // Weapons.
+    p->weaponowned[wp_gauntlets]  = selective_wp_gauntlets;
+    p->weaponowned[wp_crossbow]   = selective_wp_crossbow;
+    p->weaponowned[wp_blaster]    = selective_wp_dragonclaw;
+    p->weaponowned[wp_skullrod]   = gamemode == shareware ? 0 : selective_wp_hellstaff;
+    p->weaponowned[wp_phoenixrod] = gamemode == shareware ? 0 : selective_wp_phoenixrod;
+    p->weaponowned[wp_mace]       = gamemode == shareware ? 0 : selective_wp_firemace;
+
+    // Backpack.
+    p->backpack = selective_backpack;
+    if (selective_backpack)
+    {
+        p->maxammo[0] *= 2;
+        p->maxammo[1] *= 2;
+        p->maxammo[2] *= 2;
+        p->maxammo[3] *= 2;
+    }
+
+    // Ammo.
+    p->ammo[0] = selective_ammo_0; // wand crystals
+    p->ammo[1] = selective_ammo_1; // ethereal arrows
+    p->ammo[2] = selective_ammo_2; // claw orbs
+    p->ammo[3] = selective_ammo_3; // hellstaff runes
+    p->ammo[4] = selective_ammo_4; // flame orbs
+    p->ammo[5] = selective_ammo_5; // mace spheres
+
+    // Keys.
+    p->keys[0] = selective_key_0; // yellow key
+    p->keys[1] = selective_key_1; // green key
+    p->keys[2] = selective_key_2; // blue key
+
+    // Artifacts.
+    for (i = 0 ; i < selective_arti_0 ; i++) P_GiveArtifact(p, arti_health, NULL);
+    for (i = 0 ; i < selective_arti_1 ; i++) P_GiveArtifact(p, arti_superhealth, NULL);
+    for (i = 0 ; i < selective_arti_2 ; i++) P_GiveArtifact(p, arti_firebomb, NULL);
+    for (i = 0 ; i < selective_arti_3 ; i++) P_GiveArtifact(p, arti_tomeofpower, NULL);
+    for (i = 0 ; i < selective_arti_4 ; i++) P_GiveArtifact(p, arti_invulnerability, NULL);
+    for (i = 0 ; i < selective_arti_5 ; i++) P_GiveArtifact(p, arti_egg, NULL);
+    for (i = 0 ; i < selective_arti_6 ; i++) P_GiveArtifact(p, arti_teleport, NULL);
+    for (i = 0 ; i < selective_arti_7 ; i++) P_GiveArtifact(p, arti_invisibility, NULL);
+    for (i = 0 ; i < selective_arti_8 ; i++) P_GiveArtifact(p, arti_fly, NULL);
+    for (i = 0 ; i < selective_arti_9 ; i++) P_GiveArtifact(p, arti_torch, NULL);
+
+    // All done!
+    return true;
+} 
+
+void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
 {
     int i;
     int speed;
@@ -1824,7 +1911,7 @@ void G_InitNew(skill_t skill, int episode, int map)
     }
     // Set monster missile speeds
     // [JN] Speed up for 5th and 6th skill levels
-    speed = (skill == sk_nightmare || skill == sk_ultranm);
+    speed = (skill == sk_nightmare || skill == sk_ultranm || fast_monsters);
     for (i = 0; MonsterMissileInfo[i].type != -1; i++)
     {
         mobjinfo[MonsterMissileInfo[i].type].speed
@@ -2089,7 +2176,7 @@ void G_RecordDemo(skill_t skill, int numplayers, int episode, int map,
 
     shortticfix = M_ParmExists("-shortticfix");
 
-    G_InitNew(skill, episode, map);
+    G_InitNew(skill, episode, map, 0);
     usergame = false;
     M_StringCopy(demoname, name, sizeof(demoname));
     M_StringConcat(demoname, ".lmp", sizeof(demoname));
@@ -2193,7 +2280,7 @@ void G_DoPlayDemo(void)
         playeringame[i] = (*demo_p++) != 0;
 
     precache = false;           // don't spend a lot of time in loadlevel
-    G_InitNew(skill, episode, map);
+    G_InitNew(skill, episode, map, 0);
     precache = true;
     usergame = false;
     demoplayback = true;
@@ -2230,7 +2317,7 @@ void G_TimeDemo(char *name)
         playeringame[i] = (*demo_p++) != 0;
     }
 
-    G_InitNew(skill, episode, map);
+    G_InitNew(skill, episode, map, 0);
     starttime = I_GetTime();
 
     usergame = false;

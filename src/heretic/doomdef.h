@@ -686,11 +686,13 @@ typedef struct
 
 void G_DeathMatchSpawnPlayer(int playernum);
 
-void G_InitNew(skill_t skill, int episode, int map);
+void G_InitNew(skill_t skill, int episode, int map, int fast_monsters);
 
 void G_DeferedInitNew(skill_t skill, int episode, int map);
 // can be called by the startup code or M_Responder
 // a normal game starts at map 1, but a warp test can start elsewhere
+
+boolean G_DoSelectiveGame (int option);
 
 void G_DeferedPlayDemo(char *demo);
 
@@ -810,6 +812,12 @@ int R_CheckTextureNumForName(char *name);
 // returns the position of the given parameter in the arg list (0 if not found)
 
 int M_DrawText(int x, int y, boolean direct, char *string);
+
+//----------------------
+// Automap (AM_map.c)
+//----------------------
+
+extern boolean automapactive;
 
 //----------------------
 // Interlude (IN_lude.c)

@@ -41,7 +41,6 @@ char *finaleflat;
 int FontABaseLump;
 int FontFBaseLump;
 
-extern boolean automapactive;
 extern boolean viewactive;
 
 extern void D_StartTitle(void);

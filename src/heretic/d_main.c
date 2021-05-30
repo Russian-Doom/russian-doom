@@ -87,7 +87,6 @@ static int graphical_startup = 0; // [JN] Disabled by default
 static boolean using_graphical_startup;
 static boolean main_loop_started = false;
 boolean autostart;
-extern boolean automapactive;
 
 boolean advancedemo;
 
@@ -160,6 +159,46 @@ int crosshair_scale = 0;
 int flip_levels = 0;
 int no_internal_demos = 0;
 int pistol_start = 0;
+
+// Level Select (1)
+int selective_skill = 2;
+int selective_episode = 1;
+int selective_map = 1;
+int selective_health = 100;
+int selective_armor = 0;
+int selective_armortype = 1;
+int selective_wp_gauntlets = 0;
+int selective_wp_crossbow = 0;
+int selective_wp_dragonclaw = 0;
+int selective_wp_hellstaff = 0;
+int selective_wp_phoenixrod = 0;
+int selective_wp_firemace = 0;
+
+// Level Select (2)
+int selective_backpack = 0;
+int selective_ammo_0 = 50;  // wand crystals
+int selective_ammo_1 = 0;   // ethereal arrows
+int selective_ammo_2 = 0;   // claw orbs
+int selective_ammo_3 = 0;   // hellstaff runes
+int selective_ammo_4 = 0;   // flame orbs
+int selective_ammo_5 = 0;   // mace spheres
+int selective_key_0 = 0;    // yellow key
+int selective_key_1 = 0;    // green key
+int selective_key_2 = 0;    // blue key
+int selective_fast = 0;
+int selective_respawn = 0;
+
+// Level Select (3)
+int selective_arti_0 = 0;   // Quartz Flask
+int selective_arti_1 = 0;   // Mystic Urn
+int selective_arti_2 = 0;   // Timebomb
+int selective_arti_3 = 0;   // Tome of Power
+int selective_arti_4 = 0;   // Ring of Invincibility
+int selective_arti_5 = 0;   // Morph Ovum
+int selective_arti_6 = 0;   // Chaos Device
+int selective_arti_7 = 0;   // Shadowsphere
+int selective_arti_8 = 0;   // Wings of Wrath
+int selective_arti_9 = 0;   // Torch
 
 
 void D_ConnectNetGame(void);
@@ -1568,7 +1607,7 @@ void D_DoomMain(void)
         BorderNeedRefresh = true;
         if (autostart || netgame)
         {
-            G_InitNew(startskill, startepisode, startmap);
+            G_InitNew(startskill, startepisode, startmap, 0);
         }
         else
         {

@@ -117,6 +117,7 @@ extern int selective_health;
 extern int selective_armor;
 extern int selective_armortype;
 
+// Doom weapons
 extern int selective_wp_chainsaw;
 extern int selective_wp_shotgun;
 extern int selective_wp_supershotgun;
@@ -125,12 +126,22 @@ extern int selective_wp_missile;
 extern int selective_wp_plasma;
 extern int selective_wp_bfg;
 
+// Heretic weapons
+extern int selective_wp_gauntlets;
+extern int selective_wp_crossbow;
+extern int selective_wp_dragonclaw;
+extern int selective_wp_hellstaff;
+extern int selective_wp_phoenixrod;
+extern int selective_wp_firemace;
+
 extern int selective_backpack;
 
-extern int selective_ammo_0;  // bullets
-extern int selective_ammo_1;   // shells
-extern int selective_ammo_2;   // cells
-extern int selective_ammo_3;   // rockets
+extern int selective_ammo_0;   // bullets | wand crystals
+extern int selective_ammo_1;   // shells  | ethereal arrows
+extern int selective_ammo_2;   // cells   | claw orbs
+extern int selective_ammo_3;   // rockets | hellstaff runes
+extern int selective_ammo_4;   //         | flame orbs
+extern int selective_ammo_5;   //         | mace spheres
 
 extern int selective_key_0;
 extern int selective_key_1;
@@ -141,6 +152,18 @@ extern int selective_key_5;
 
 extern int selective_fast;
 extern int selective_respawn;
+
+// Heretic artifacts
+extern int selective_arti_0;   // Quartz Flask
+extern int selective_arti_1;   // Mystic Urn
+extern int selective_arti_2;   // Timebomb
+extern int selective_arti_3;   // Tome of Power
+extern int selective_arti_4;   // Ring of Invincibility
+extern int selective_arti_5;   // Morph Ovum
+extern int selective_arti_6;   // Chaos Device
+extern int selective_arti_7;   // Shadowsphere
+extern int selective_arti_8;   // Wings of Wrath
+extern int selective_arti_9;   // Torch
 
 // -----------------------------------------------------------------------------
 // Gameplay feautures

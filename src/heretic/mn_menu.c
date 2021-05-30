@@ -86,6 +86,9 @@ typedef enum
     MENU_CONTROLS,
     MENU_GAMEPLAY1,
     MENU_GAMEPLAY2,
+    MENU_LEVEL1,
+    MENU_LEVEL2,
+    MENU_LEVEL3,
     MENU_OPTIONS_VANILLA,
     MENU_OPTIONS2_VANILLA,
     MENU_NONE
@@ -218,6 +221,49 @@ static boolean M_RD_CrossHairScale(int option);
 static boolean M_RD_FlipLevels(int option);
 static boolean M_RD_NoDemos(int option);
 static boolean M_RD_WandStart(int option);
+
+// Level Select (page 1)
+static void DrawLevelSelect1Menu(void);
+static boolean M_RD_SelectiveSkill(int option);
+static boolean M_RD_SelectiveEpisode(int option);
+static boolean M_RD_SelectiveMap(int option);
+static boolean M_RD_SelectiveHealth(int option);
+static boolean M_RD_SelectiveArmor(int option);
+static boolean M_RD_SelectiveArmorType(int option);
+static boolean M_RD_SelectiveGauntlets(int option);
+static boolean M_RD_SelectiveCrossbow(int option);
+static boolean M_RD_SelectiveDragonClaw(int option);
+static boolean M_RD_SelectiveHellStaff(int option);
+static boolean M_RD_SelectivePhoenixRod(int option);
+static boolean M_RD_SelectiveFireMace(int option);
+
+// Level Select (page 2)
+static void DrawLevelSelect2Menu(void);
+static boolean M_RD_SelectiveBag(int option);
+static boolean M_RD_SelectiveAmmo_0(int option);
+static boolean M_RD_SelectiveAmmo_1(int option);
+static boolean M_RD_SelectiveAmmo_2(int option);
+static boolean M_RD_SelectiveAmmo_3(int option);
+static boolean M_RD_SelectiveAmmo_4(int option);
+static boolean M_RD_SelectiveAmmo_5(int option);
+static boolean M_RD_SelectiveKey_0(int option);
+static boolean M_RD_SelectiveKey_1(int option);
+static boolean M_RD_SelectiveKey_2(int option);
+static boolean M_RD_SelectiveFast(int option);
+static boolean M_RD_SelectiveRespawn(int option);
+
+// Level Select (page 3)
+static void DrawLevelSelect3Menu(void);
+static boolean M_RD_SelectiveArti_0(int option);
+static boolean M_RD_SelectiveArti_1(int option);
+static boolean M_RD_SelectiveArti_2(int option);
+static boolean M_RD_SelectiveArti_3(int option);
+static boolean M_RD_SelectiveArti_4(int option);
+static boolean M_RD_SelectiveArti_5(int option);
+static boolean M_RD_SelectiveArti_6(int option);
+static boolean M_RD_SelectiveArti_7(int option);
+static boolean M_RD_SelectiveArti_8(int option);
+static boolean M_RD_SelectiveArti_9(int option);
 
 // Vanilla Options menu
 static void DrawOptionsMenu_Vanilla(void);
@@ -458,6 +504,7 @@ static MenuItem_t OptionsItems[] = {
     {ITT_SETMENU, "SOUND",             NULL,                0, MENU_SOUND    },
     {ITT_SETMENU, "CONTROLS",          NULL,                0, MENU_CONTROLS },
     {ITT_SETMENU, "GAMEPLAY",          NULL,                0, MENU_GAMEPLAY1},
+    {ITT_SETMENU, "LEVEL SELECT",      NULL,                0, MENU_LEVEL1   },
     {ITT_EFUNC,   "RESET SETTINGS",    M_RD_ResetSettings,  0, MENU_NONE     },
     {ITT_LRFUNC,  "LANGUAGE: ENGLISH", M_RD_ChangeLanguage, 0, MENU_NONE     }
 };
@@ -468,6 +515,7 @@ static MenuItem_t OptionsItems_Rus[] = {
     {ITT_SETMENU, "FELBJ",             NULL,                0, MENU_SOUND    },  // АУДИО
     {ITT_SETMENU, "EGHFDKTYBT",        NULL,                0, MENU_CONTROLS },  // УПРАВЛЕНИЕ
     {ITT_SETMENU, "UTQVGKTQ",          NULL,                0, MENU_GAMEPLAY1},  // ГЕЙМПЛЕЙ
+    {ITT_SETMENU, "DS,JH EHJDYZ",      NULL,                0, MENU_LEVEL1   },  // ВЫБОР УРОВНЯ
     {ITT_EFUNC,   "C,HJC YFCNHJTR",    M_RD_ResetSettings,  0, MENU_NONE     },  // СБРОС НАСТРОЕК
     {ITT_LRFUNC,  "ZPSR: HECCRBQ",     M_RD_ChangeLanguage, 0, MENU_NONE     }   // ЯЗЫК: РУССКИЙ
 };
@@ -475,7 +523,7 @@ static MenuItem_t OptionsItems_Rus[] = {
 static Menu_t OptionsMenu = {
     81, 31,
     DrawOptionsMenu,
-    7, OptionsItems,
+    8, OptionsItems,
     0,
     MENU_MAIN
 };
@@ -483,7 +531,7 @@ static Menu_t OptionsMenu = {
 static Menu_t OptionsMenu_Rus = {
     81, 31,
     DrawOptionsMenu,
-    7, OptionsItems_Rus,
+    8, OptionsItems_Rus,
     0,
     MENU_MAIN
 };
@@ -853,6 +901,184 @@ static Menu_t Gameplay2Menu_Rus = {
 };
 
 // -----------------------------------------------------------------------------
+// Level select (1)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Level1Items[] = {
+    {ITT_LRFUNC, "SKILL LEVEL:",       M_RD_SelectiveSkill,      0, MENU_NONE},
+    {ITT_LRFUNC, "EPISODE:",           M_RD_SelectiveEpisode,    0, MENU_NONE},
+    {ITT_LRFUNC, "MAP:",               M_RD_SelectiveMap,        0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                 NULL,                     0, MENU_NONE},
+    {ITT_LRFUNC, "HEALTH:",            M_RD_SelectiveHealth,     0, MENU_NONE},
+    {ITT_LRFUNC, "ARMOR:",             M_RD_SelectiveArmor,      0, MENU_NONE},
+    {ITT_LRFUNC, "ARMOR TYPE:",        M_RD_SelectiveArmorType,  0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                 NULL,                     0, MENU_NONE},
+    {ITT_LRFUNC, "GAUNTLETS:",         M_RD_SelectiveGauntlets,  0, MENU_NONE},
+    {ITT_LRFUNC, "ETHEREAL CROSSBOW:", M_RD_SelectiveCrossbow,   0, MENU_NONE},
+    {ITT_LRFUNC, "DRAGON CLAW:",       M_RD_SelectiveDragonClaw, 0, MENU_NONE},
+    {ITT_LRFUNC, "HELLSTAFF:",         M_RD_SelectiveHellStaff,  0, MENU_NONE},
+    {ITT_LRFUNC, "PHOENIX ROD:",       M_RD_SelectivePhoenixRod, 0, MENU_NONE},
+    {ITT_LRFUNC, "FIREMACE:",          M_RD_SelectiveFireMace,   0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                 NULL,                     0, MENU_NONE},
+    {ITT_SETMENU,"NEXT PAGE...",       NULL,                     0, MENU_LEVEL2},
+    {ITT_LRFUNC, "START GAME",         G_DoSelectiveGame,        0, MENU_NONE}
+};
+
+static MenuItem_t Level1Items_Rus[] = {
+    {ITT_LRFUNC, "CKJ;YJCNM:",            M_RD_SelectiveSkill,      0, MENU_NONE},   // СЛОЖНОСТЬ
+    {ITT_LRFUNC, "\'GBPJL:",              M_RD_SelectiveEpisode,    0, MENU_NONE},   // ЭПИЗОД
+    {ITT_LRFUNC, "EHJDTYM:",              M_RD_SelectiveMap,        0, MENU_NONE},   // УРОВЕНЬ
+    {ITT_EMPTY,  NULL,                    NULL,                     0, MENU_NONE},
+    {ITT_LRFUNC, "PLJHJDMT:",             M_RD_SelectiveHealth,     0, MENU_NONE},   // ЗДОРОВЬЕ
+    {ITT_LRFUNC, ",HJYZ:",                M_RD_SelectiveArmor,      0, MENU_NONE},   // БРОНЯ
+    {ITT_LRFUNC, "NBG ,HJYB:",            M_RD_SelectiveArmorType,  0, MENU_NONE},   // ТИП БРОНИ
+    {ITT_EMPTY,  NULL,                    NULL,                     0, MENU_NONE},
+    {ITT_LRFUNC, "GTHXFNRB:",             M_RD_SelectiveGauntlets,  0, MENU_NONE},   // ПЕРЧАТКИ
+    {ITT_LRFUNC, "\'ABHYSQ FH,FKTN:",     M_RD_SelectiveCrossbow,   0, MENU_NONE},   // ЭФИРНЫЙ АРБАЛЕТ
+    {ITT_LRFUNC, "RJUJNM LHFRJYF:",       M_RD_SelectiveDragonClaw, 0, MENU_NONE},   // КОГОТЬ ДРАКОНА
+    {ITT_LRFUNC, "GJCJ] FLF:",            M_RD_SelectiveHellStaff,  0, MENU_NONE},   // ПОСОХ АДА
+    {ITT_LRFUNC, ";TPK ATYBRCF:",         M_RD_SelectivePhoenixRod, 0, MENU_NONE},   // ЖЕЗЛ ФЕНИКСА
+    {ITT_LRFUNC, "JUYTYYFZ ,EKFDF:",      M_RD_SelectiveFireMace,   0, MENU_NONE},   // ОГНЕННАЯ БУЛАВА
+    {ITT_EMPTY,  NULL,                    NULL,                     0, MENU_NONE},
+    {ITT_SETMENU,"CKTLE.OFZ CNHFYBWF>>>", NULL,                     0, MENU_LEVEL2}, // СЛЕДУЮЩАЯ СТРАНИЦА...
+    {ITT_LRFUNC, "YFXFNM BUHE",           G_DoSelectiveGame,        0, MENU_NONE}    // НАЧАТЬ ИГРУ
+};
+
+static Menu_t LevelSelectMenu1 = {
+    74, 26,
+    DrawLevelSelect1Menu,
+    17, Level1Items,
+    0,
+    MENU_OPTIONS
+};
+
+static Menu_t LevelSelectMenu1_Rus = {
+    74, 26,
+    DrawLevelSelect1Menu,
+    17, Level1Items_Rus,
+    0,
+    MENU_OPTIONS
+};
+
+// -----------------------------------------------------------------------------
+// Level select (2)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Level2Items[] = {
+    {ITT_LRFUNC, "BAG OF HOLDING:",      M_RD_SelectiveBag,     0, MENU_NONE},
+    {ITT_LRFUNC, "WAND CRYSTALS:",       M_RD_SelectiveAmmo_0,  0, MENU_NONE},
+    {ITT_LRFUNC, "ETHEREAL ARROWS:",     M_RD_SelectiveAmmo_1,  0, MENU_NONE},
+    {ITT_LRFUNC, "CLAW ORBS:",           M_RD_SelectiveAmmo_2,  0, MENU_NONE},
+    {ITT_LRFUNC, "HELLSTAFF RUNES:",     M_RD_SelectiveAmmo_3,  0, MENU_NONE},
+    {ITT_LRFUNC, "FLAME ORBS:",          M_RD_SelectiveAmmo_4,  0, MENU_NONE},
+    {ITT_LRFUNC, "MACE SPHERES:",        M_RD_SelectiveAmmo_5,  0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                   NULL,                  0, MENU_NONE},
+    {ITT_LRFUNC, "YELLOW KEY:",          M_RD_SelectiveKey_0,   0, MENU_NONE},
+    {ITT_LRFUNC, "GREEN KEY:",           M_RD_SelectiveKey_1,   0, MENU_NONE},
+    {ITT_LRFUNC, "BLUE KEY:",            M_RD_SelectiveKey_2,   0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                   NULL,                  0, MENU_NONE},
+    {ITT_LRFUNC, "FAST:",                M_RD_SelectiveFast,    0, MENU_NONE},
+    {ITT_LRFUNC, "RESPAWNING:",          M_RD_SelectiveRespawn, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                   NULL,                  0, MENU_NONE},
+    {ITT_SETMENU,"LAST PAGE...",         NULL,                  0, MENU_LEVEL3},
+    {ITT_LRFUNC, "START GAME",           G_DoSelectiveGame,     0, MENU_NONE}
+};
+
+static MenuItem_t Level2Items_Rus[] = {
+    {ITT_LRFUNC, "YJCBKMYSQ RJITKM:",     M_RD_SelectiveBag,    0, MENU_NONE},
+    {ITT_LRFUNC, "RHBCNFKKS LKZ ;TPKF:",  M_RD_SelectiveAmmo_0, 0, MENU_NONE},
+    {ITT_LRFUNC, "\'ABHYST CNHTKS:",      M_RD_SelectiveAmmo_1, 0, MENU_NONE},
+    {ITT_LRFUNC, "RJUNTDST IFHS:",        M_RD_SelectiveAmmo_2, 0, MENU_NONE},
+    {ITT_LRFUNC, "HEYS GJCJ[F:",          M_RD_SelectiveAmmo_3, 0, MENU_NONE},
+    {ITT_LRFUNC, "GKFVTYYST IFHS:",       M_RD_SelectiveAmmo_4, 0, MENU_NONE},
+    {ITT_LRFUNC, "CATHS ,EKFDS:",         M_RD_SelectiveAmmo_5, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                    NULL,                 0, MENU_NONE},
+    {ITT_LRFUNC, ";TKNSQ RK.X:",          M_RD_SelectiveKey_0,  0, MENU_NONE},
+    {ITT_LRFUNC, "PTKTYSQ RK.X:",         M_RD_SelectiveKey_1,  0, MENU_NONE},
+    {ITT_LRFUNC, "CBYBQ RK.X:",           M_RD_SelectiveKey_2,  0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                    NULL,                 0, MENU_NONE},
+    {ITT_LRFUNC, "ECRJHTYYST:",           M_RD_SelectiveFast,   0, MENU_NONE},
+    {ITT_LRFUNC,  "DJCRHTIF.OBTCZ:",      M_RD_SelectiveRespawn,0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                    NULL,                 0, MENU_NONE},
+    {ITT_SETMENU,"GJCKTLYZZ CNHFYBWF>>>", NULL,                 0, MENU_LEVEL3},
+    {ITT_LRFUNC, "YFXFNM BUHE",           G_DoSelectiveGame,    0, MENU_NONE}
+};
+
+static Menu_t LevelSelectMenu2 = {
+    74, 26,
+    DrawLevelSelect2Menu,
+    17, Level2Items,
+    0,
+    MENU_OPTIONS
+};
+
+static Menu_t LevelSelectMenu2_Rus = {
+    74, 26,
+    DrawLevelSelect2Menu,
+    17, Level2Items_Rus,
+    0,
+    MENU_OPTIONS
+};
+
+// -----------------------------------------------------------------------------
+// Level select (3)
+// -----------------------------------------------------------------------------
+
+static MenuItem_t Level3Items[] = {
+    {ITT_LRFUNC, "QUARTZ FLASK:",          M_RD_SelectiveArti_0, 0, MENU_NONE},
+    {ITT_LRFUNC, "MYSTIC URN:",            M_RD_SelectiveArti_1, 0, MENU_NONE},
+    {ITT_LRFUNC, "TIMEBOMB:",              M_RD_SelectiveArti_2, 0, MENU_NONE},
+    {ITT_LRFUNC, "TOME OF POWER:",         M_RD_SelectiveArti_3, 0, MENU_NONE},
+    {ITT_LRFUNC, "RING OF INVINCIBILITY:", M_RD_SelectiveArti_4, 0, MENU_NONE},
+    {ITT_LRFUNC, "MORPH OVUM:",            M_RD_SelectiveArti_5, 0, MENU_NONE},
+    {ITT_LRFUNC, "CHAOS DEVICE:",          M_RD_SelectiveArti_6, 0, MENU_NONE},
+    {ITT_LRFUNC, "SHADOWSPHERE:",          M_RD_SelectiveArti_7, 0, MENU_NONE},
+    {ITT_LRFUNC, "WINGS OF WRATH:",        M_RD_SelectiveArti_8, 0, MENU_NONE},
+    {ITT_LRFUNC, "TORCH:",                 M_RD_SelectiveArti_9, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                     NULL,                 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                     NULL,                 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                     NULL,                 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                     NULL,                 0, MENU_NONE},
+    {ITT_SETMENU,"FIRST PAGE...",          NULL,                 0, MENU_LEVEL1},
+    {ITT_LRFUNC, "START GAME",             G_DoSelectiveGame,    0, MENU_NONE}
+};
+
+static MenuItem_t Level3Items_Rus[] = {
+    {ITT_LRFUNC, "RDFHWTDSQ AKFRJY:",    M_RD_SelectiveArti_0, 0, MENU_NONE},
+    {ITT_LRFUNC, "VBCNBXTCRFZ EHYF:",    M_RD_SelectiveArti_1, 0, MENU_NONE},
+    {ITT_LRFUNC, "XFCJDFZ ,JV,F:",       M_RD_SelectiveArti_2, 0, MENU_NONE},
+    {ITT_LRFUNC, "NJV VJUEOTCNDF:",      M_RD_SelectiveArti_3, 0, MENU_NONE},
+    {ITT_LRFUNC, "RJKMWJ YTEZPDBVJCNB:", M_RD_SelectiveArti_4, 0, MENU_NONE},
+    {ITT_LRFUNC, "ZQWJ GHTDHFOTYBQ:",    M_RD_SelectiveArti_5, 0, MENU_NONE},
+    {ITT_LRFUNC, "\'V,KTVF [FJCF:",      M_RD_SelectiveArti_6, 0, MENU_NONE},
+    {ITT_LRFUNC, "NTYTDFZ CATHF:",       M_RD_SelectiveArti_7, 0, MENU_NONE},
+    {ITT_LRFUNC, "RHSKMZ UYTDF:",        M_RD_SelectiveArti_8, 0, MENU_NONE},
+    {ITT_LRFUNC, "AFRTK:",               M_RD_SelectiveArti_9, 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                   NULL,                 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                   NULL,                 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                   NULL,                 0, MENU_NONE},
+    {ITT_EMPTY,  NULL,                   NULL,                 0, MENU_NONE},
+    {ITT_SETMENU,"GTHDFZ CNHFYBWF>>>",   NULL,                 0, MENU_LEVEL1},
+    {ITT_LRFUNC, "YFXFNM BUHE",          G_DoSelectiveGame,    0, MENU_NONE}
+};
+
+static Menu_t LevelSelectMenu3 = {
+    74, 36,
+    DrawLevelSelect3Menu,
+    16, Level3Items,
+    0,
+    MENU_OPTIONS
+};
+
+static Menu_t LevelSelectMenu3_Rus = {
+    74, 36,
+    DrawLevelSelect3Menu,
+    16, Level3Items_Rus,
+    0,
+    MENU_OPTIONS
+};
+
+// -----------------------------------------------------------------------------
 // Vanilla options menu
 // -----------------------------------------------------------------------------
 
@@ -944,6 +1170,9 @@ static Menu_t *Menus[] = {
     &ControlsMenu,
     &Gameplay1Menu,
     &Gameplay2Menu,
+    &LevelSelectMenu1,
+    &LevelSelectMenu2,
+    &LevelSelectMenu3,
     &OptionsMenu_Vanilla,
     &Options2Menu_Vanilla
 };
@@ -964,6 +1193,9 @@ static Menu_t *Menus_Rus[] = {
     &ControlsMenu_Rus,
     &Gameplay1Menu_Rus,
     &Gameplay2Menu_Rus,
+    &LevelSelectMenu1_Rus,
+    &LevelSelectMenu2_Rus,
+    &LevelSelectMenu3_Rus,
     &OptionsMenu_Rus_Vanilla,
     &Options2Menu_Rus_Vanilla
 };
@@ -1932,7 +2164,7 @@ static void DrawRenderingMenu(void)
         {
             dp_translation = cr[CR_GRAY2GREEN_HERETIC];
             MN_DrTextSmallENG(DEH_String("THE PROGRAM MUST BE RESTARTED"),
-                                         51 + wide_delta, 138);
+                                         51 + wide_delta, 148);
             dp_translation = NULL;
         }
 
@@ -2018,7 +2250,7 @@ static void DrawRenderingMenu(void)
         {
             dp_translation = cr[CR_GRAY2GREEN_HERETIC];
             MN_DrTextSmallRUS(DEH_String("YTJ,[JLBV GTHTPFGECR GHJUHFVVS"), 
-                                         46 + wide_delta, 138);
+                                         46 + wide_delta, 148);
             dp_translation = NULL;
         }
 
@@ -3739,6 +3971,917 @@ static boolean M_RD_WandStart(int option)
     return true;
 }
 
+// -----------------------------------------------------------------------------
+// DrawLevelSelect1Menu
+// -----------------------------------------------------------------------------
+
+static void DrawLevelSelect1Menu(void)
+{
+    char *title_eng = DEH_String("LEVEL SELECT");
+    char *title_rus = DEH_String("DS,JH EHJDYZ");  // ВЫБОР УРОВНЯ
+    char  num[4];
+
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
+
+    if (english_language)
+    {
+        //
+        // Title
+        //
+        MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
+                                       + wide_delta, 4);
+
+        //
+        // PLAYER
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("PLAYER"), 74 + wide_delta, 56);
+        dp_translation = NULL;
+
+        //
+        // WEAPONS
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("WEAPONS"), 74 + wide_delta, 96);
+        dp_translation = NULL;
+
+        // Gauntlets
+        dp_translation = selective_wp_gauntlets ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_wp_gauntlets ? "YES" : "NO", 228 + wide_delta, 106);
+        dp_translation = NULL;
+
+        // Ethereal Crossbow
+        dp_translation = selective_wp_crossbow ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_wp_crossbow ? "YES" : "NO", 228 + wide_delta, 116);
+        dp_translation = NULL;
+
+        // Dragon Claw
+        dp_translation = selective_wp_dragonclaw ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_wp_dragonclaw ? "YES" : "NO", 228 + wide_delta, 126);
+        dp_translation = NULL;
+
+        // Hellstaff
+        dp_translation = selective_wp_hellstaff ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_wp_hellstaff ? "YES" : "NO", 228 + wide_delta, 136);
+        dp_translation = NULL;
+
+        // Phoenix Rod
+        dp_translation = selective_wp_phoenixrod ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_wp_phoenixrod ? "YES" : "NO", 228 + wide_delta, 146);
+        dp_translation = NULL;
+
+        // Firemace
+        dp_translation = selective_wp_firemace ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_wp_firemace ? "YES" : "NO", 228 + wide_delta, 156);
+        dp_translation = NULL;
+    }
+    else
+    {
+        //
+        // Title
+        //
+        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
+                                       + wide_delta, 4);
+
+        //
+        // ИГРОК
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("BUHJR"), 74 + wide_delta, 56);
+        dp_translation = NULL;
+
+        //
+        // ОРУЖИЕ
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("JHE;BT"), 74 + wide_delta, 96);
+        dp_translation = NULL;
+
+        // Перчатки
+        dp_translation = selective_wp_gauntlets ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_wp_gauntlets ? "LF" : "YTN", 228 + wide_delta, 106);
+        dp_translation = NULL;
+
+        // Эфирный арбалет
+        dp_translation = selective_wp_crossbow ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_wp_crossbow ? "LF" : "YTN", 228 + wide_delta, 116);
+        dp_translation = NULL;
+
+        // Коготь дракона
+        dp_translation = selective_wp_dragonclaw ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_wp_dragonclaw ? "LF" : "YTN", 228 + wide_delta, 126);
+        dp_translation = NULL;
+
+        // Посох Ада
+        dp_translation = selective_wp_hellstaff ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_wp_hellstaff ? "LF" : "YTN", 228 + wide_delta, 136);
+        dp_translation = NULL;
+
+        // Жезл Феникса
+        dp_translation = selective_wp_phoenixrod ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_wp_phoenixrod ? "LF" : "YTN", 228 + wide_delta, 146);
+        dp_translation = NULL;
+
+        // Огненная булава
+        dp_translation = selective_wp_firemace ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_wp_firemace ? "LF" : "YTN", 228 + wide_delta, 156);
+        dp_translation = NULL;
+    }
+
+    // The rest of values/placements are same for both languages.
+    {
+        // Skill level | Сложность
+        M_snprintf(num, 4, "%d", selective_skill+1);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 26);
+
+        // Episode | Эпизод
+        if (gamemode == shareware)
+        {
+            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            MN_DrTextSmallENG("1", 228 + wide_delta, 36);
+            dp_translation = NULL;
+        }
+        else
+        {
+            M_snprintf(num, 4, "%d", selective_episode);
+            MN_DrTextSmallENG(num, 228 + wide_delta, 36);
+        }
+
+        // Map | Уровень
+        M_snprintf(num, 4, "%d", selective_map);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 46);
+
+        // Health | Здоровье
+        dp_translation = selective_health >= 67 ? cr[CR_GRAY2GREEN_HERETIC] :
+                         selective_health >= 34 ? cr[CR_GRAY2DARKGOLD_HERETIC]  :
+                                                  cr[CR_GRAY2RED_HERETIC];
+        M_snprintf(num, 4, "%d", selective_health);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 66);
+
+        // Armor | Броня
+        dp_translation = selective_armortype == 1 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
+                                                    cr[CR_GRAY2GREEN_HERETIC];
+        if (selective_armor == 0) 
+        dp_translation = cr[CR_GRAY2RED_HERETIC];
+        M_snprintf(num, 4, "%d", selective_armor);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 76);
+        dp_translation = NULL;
+
+        // Armor type | Тип брони
+        dp_translation = selective_armortype == 1 ? cr[CR_GRAY2DARKGOLD_HERETIC] : 
+                                                    cr[CR_GRAY2GREEN_HERETIC];
+        M_snprintf(num, 4, "%d", selective_armortype);
+        MN_DrTextSmallENG(selective_armortype == 1 ? "1" : "2", 228 + wide_delta, 86);
+        dp_translation = NULL;
+    }
+}
+
+static boolean M_RD_SelectiveSkill(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_skill > 0)
+            selective_skill--;
+        break;
+
+        case 1:
+        if (selective_skill < 5)
+            selective_skill++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveEpisode(int option)
+{
+    // [JN] Shareware have only 1 episode.
+    if (gamemode == shareware)
+    return false;
+
+    switch(option)
+    {
+        case 0:
+        if (selective_episode > 1)
+            selective_episode--;
+        break;
+
+        case 1:
+        if (selective_episode < (gamemode == retail ? 5 : 3))
+            selective_episode++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveMap(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_map > 1)
+            selective_map--;
+        break;
+
+        case 1:
+        if (selective_map < 9)
+            selective_map++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveHealth(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_health > 1)
+            selective_health--;
+        break;
+
+        case 1:
+        if (selective_health < 100)
+            selective_health++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArmor(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_armor > 0)
+            selective_armor--;
+        break;
+
+        case 1:
+        if (selective_armor < (selective_armortype == 1 ? 100 : 200))
+            selective_armor++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArmorType(int choice)
+{
+    selective_armortype++;
+
+    if (selective_armortype > 2)
+        selective_armortype = 1;
+
+    // [JN] Silver Shield armor can't go above 100.
+    if (selective_armortype == 1 && selective_armor > 100)
+        selective_armor = 100;
+
+    return true;
+}
+
+static boolean M_RD_SelectiveGauntlets(int choice)
+{
+    selective_wp_gauntlets ^= 1;
+    return true;
+}
+
+static boolean M_RD_SelectiveCrossbow(int choice)
+{
+    selective_wp_crossbow ^= 1;
+    return true;
+}
+
+static boolean M_RD_SelectiveDragonClaw(int choice)
+{
+    selective_wp_dragonclaw ^= 1;
+    return true;
+}
+
+static boolean M_RD_SelectiveHellStaff(int choice)
+{
+    selective_wp_hellstaff ^= 1;
+    return true;
+}
+
+static boolean M_RD_SelectivePhoenixRod(int choice)
+{
+    selective_wp_phoenixrod ^= 1;
+    return true;
+}
+
+static boolean M_RD_SelectiveFireMace(int choice)
+{
+    selective_wp_firemace ^= 1;
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+// DrawLevelSelect2Menu
+// -----------------------------------------------------------------------------
+
+static void DrawLevelSelect2Menu(void)
+{
+    char *title_eng = DEH_String("LEVEL SELECT");
+    char *title_rus = DEH_String("DS,JH EHJDYZ");  // ВЫБОР УРОВНЯ
+    char  num[4];
+
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
+
+    if (english_language)
+    {
+        //
+        // Title
+        //
+        MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
+                                       + wide_delta, 4);
+
+        // Bag of Holding
+        dp_translation = selective_backpack ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_backpack ? "YES" : "NO", 228 + wide_delta, 26);
+        dp_translation = NULL;
+
+        //
+        // KEYS
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("KEYS"), 74 + wide_delta, 96);
+        dp_translation = NULL;
+
+        // Yellow Key
+        dp_translation = selective_key_0 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_key_0 ? "YES" : "NO", 228 + wide_delta, 106);
+        dp_translation = NULL;
+
+        // Green Key
+        dp_translation = selective_key_1 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_key_1 ? "YES" : "NO", 228 + wide_delta, 116);
+        dp_translation = NULL;
+
+        // Blue Key
+        dp_translation = selective_key_2 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_key_2 ? "YES" : "NO", 228 + wide_delta, 126);
+        dp_translation = NULL;
+
+        //
+        // MONSTERS
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("MONSTERS"), 74 + wide_delta, 136);
+        dp_translation = NULL;
+
+        // Fast Monsters
+        dp_translation = selective_fast ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_fast ? "YES" : "NO", 228 + wide_delta, 146);
+        dp_translation = NULL;
+
+        // Respawning Monsters
+        dp_translation = selective_respawn ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(selective_respawn ? "YES" : "NO", 228 + wide_delta, 156);
+        dp_translation = NULL;
+    }
+    else
+    {
+        //
+        // Title
+        //
+        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
+                                       + wide_delta, 4);
+
+        // Носильный кошель
+        dp_translation = selective_backpack ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_backpack ? "LF" : "YTN", 228 + wide_delta, 26);
+        dp_translation = NULL;
+
+        //
+        // КЛЮЧИ
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("RK.XB"), 74 + wide_delta, 96);
+        dp_translation = NULL;
+
+        // Желтый ключ
+        dp_translation = selective_key_0 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_key_0 ? "LF" : "YTN", 228 + wide_delta, 106);
+        dp_translation = NULL;
+
+        // Зеленый ключ
+        dp_translation = selective_key_1 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_key_1 ? "LF" : "YTN", 228 + wide_delta, 116);
+        dp_translation = NULL;
+
+        // Синий ключ
+        dp_translation = selective_key_2 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_key_2 ? "LF" : "YTN", 228 + wide_delta, 126);
+        dp_translation = NULL;
+
+        //
+        // МОНСТРЫ
+        //
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("VJYCNHS"), 74 + wide_delta, 136);
+        dp_translation = NULL;
+
+        // Ускоренные
+        dp_translation = selective_fast ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_fast ? "LF" : "YTN", 228 + wide_delta, 146);
+        dp_translation = NULL;
+
+        // Воскрешающиеся
+        dp_translation = selective_respawn ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(selective_respawn ? "LF" : "YTN", 228 + wide_delta, 156);
+        dp_translation = NULL;
+    }
+
+    // The rest of values/placements are same for both languages.
+    {
+        // Wand Crystals | Кристаллы для жезла
+        dp_translation = selective_ammo_0 >=  50 ? cr[CR_GRAY2GREEN_HERETIC]    :
+                         selective_ammo_0 >=  25 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
+                                                   cr[CR_GRAY2RED_HERETIC]      ;
+        M_snprintf(num, 4, "%d", selective_ammo_0);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 36);
+        dp_translation = NULL;
+
+        // Ethereal Arrows | Эфирные стрелы
+        dp_translation = selective_ammo_1 >=  25 ? cr[CR_GRAY2GREEN_HERETIC]    :
+                         selective_ammo_1 >=  12 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
+                                                   cr[CR_GRAY2RED_HERETIC]      ;
+        M_snprintf(num, 4, "%d", selective_ammo_1);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 46);
+        dp_translation = NULL;
+
+        // Claw Orbs | Когтевые шары
+        dp_translation = selective_ammo_2 >= 100 ? cr[CR_GRAY2GREEN_HERETIC]    :
+                         selective_ammo_2 >=  50 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
+                                                   cr[CR_GRAY2RED_HERETIC]      ;
+        M_snprintf(num, 4, "%d", selective_ammo_2);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 56);
+        dp_translation = NULL;
+
+        // Hellstaff Runes | Руны посоха
+        dp_translation = selective_ammo_3 >= 100 ? cr[CR_GRAY2GREEN_HERETIC]    :
+                         selective_ammo_3 >=  50 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
+                                                   cr[CR_GRAY2RED_HERETIC]      ;
+        M_snprintf(num, 4, "%d", selective_ammo_3);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 66);
+        dp_translation = NULL;
+
+        // Flame Orbs | Пламенные шары
+        dp_translation = selective_ammo_4 >= 10 ? cr[CR_GRAY2GREEN_HERETIC]    :
+                         selective_ammo_4 >=  5 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
+                                                  cr[CR_GRAY2RED_HERETIC]      ;
+        M_snprintf(num, 4, "%d", selective_ammo_4);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 76);
+        dp_translation = NULL;
+
+        // Mace Spheres | Сферы булавы
+        dp_translation = selective_ammo_5 >= 75 ? cr[CR_GRAY2GREEN_HERETIC]    :
+                         selective_ammo_5 >= 37 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
+                                                  cr[CR_GRAY2RED_HERETIC]      ;
+        M_snprintf(num, 4, "%d", selective_ammo_5);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 86);
+        dp_translation = NULL;
+    }
+}
+
+static boolean M_RD_SelectiveBag(int option)
+{
+    selective_backpack ^= 1;
+
+    if (!selective_backpack)
+    {
+        if (selective_ammo_0 > 100) // wand crystals
+            selective_ammo_0 = 100;
+        if (selective_ammo_1 > 50)  // ethereal arrows
+            selective_ammo_1 = 50;
+        if (selective_ammo_2 > 200) // claw orbs
+            selective_ammo_2 = 200;
+        if (selective_ammo_3 > 200) // hellstaff runes
+            selective_ammo_3 = 200;
+        if (selective_ammo_4 > 20)  // flame orbs
+            selective_ammo_4 = 20;
+        if (selective_ammo_5 > 150) // mace spheres
+            selective_ammo_5 = 150;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveAmmo_0(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_ammo_0 > 0)
+            selective_ammo_0--;
+        break;
+
+        case 1:
+        if (selective_ammo_0 < (selective_backpack ? 200 : 100))
+            selective_ammo_0++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveAmmo_1(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_ammo_1 > 0)
+            selective_ammo_1--;
+        break;
+
+        case 1:
+        if (selective_ammo_1 < (selective_backpack ? 100 : 50))
+            selective_ammo_1++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveAmmo_2(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_ammo_2 > 0)
+            selective_ammo_2--;
+        break;
+
+        case 1:
+        if (selective_ammo_2 < (selective_backpack ? 400 : 200))
+            selective_ammo_2++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveAmmo_3(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_ammo_3 > 0)
+            selective_ammo_3--;
+        break;
+
+        case 1:
+        if (selective_ammo_3 < (selective_backpack ? 400 : 200))
+            selective_ammo_3++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveAmmo_4(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_ammo_4 > 0)
+            selective_ammo_4--;
+        break;
+
+        case 1:
+        if (selective_ammo_4 < (selective_backpack ? 40 : 20))
+            selective_ammo_4++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveAmmo_5(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_ammo_5 > 0)
+            selective_ammo_5--;
+        break;
+
+        case 1:
+        if (selective_ammo_5 < (selective_backpack ? 300 : 150))
+            selective_ammo_5++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveKey_0(int option)
+{
+    selective_key_0 ^= 1;
+    return true;
+}
+
+static boolean M_RD_SelectiveKey_1(int option)
+{
+    selective_key_1 ^= 1;
+    return true;
+}
+
+static boolean M_RD_SelectiveKey_2(int option)
+{
+    selective_key_2 ^= 1;
+    return true;
+}
+
+static boolean M_RD_SelectiveFast(int option)
+{
+    selective_fast ^= 1;
+    return true;
+}
+
+static boolean M_RD_SelectiveRespawn(int option)
+{
+    selective_respawn ^= 1;
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+// DrawLevelSelect3Menu
+// -----------------------------------------------------------------------------
+
+static void DrawLevelSelect3Menu(void)
+{
+    char *title_eng = DEH_String("LEVEL SELECT");
+    char *title_rus = DEH_String("DS,JH EHJDYZ");  // ВЫБОР УРОВНЯ
+    char  num[4];
+
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
+
+    if (english_language)
+    {
+        // Title
+        MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
+                                       + wide_delta, 4);
+
+        // ARTIFACTS
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("ARTIFACTS"), 74 + wide_delta, 26);
+        dp_translation = NULL;
+    }
+    else
+    {
+        // Title
+        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
+                                       + wide_delta, 4);
+
+        // АРТЕФАКТЫ
+        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("FHNTAFRNS"), 74 + wide_delta, 26);
+        dp_translation = NULL;
+    }
+
+    // The rest of vanules/placements are same for both languages.
+    {
+        // Quartz Flask
+        dp_translation = selective_arti_0 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_0);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 36);
+        dp_translation = NULL;
+
+        // Mystic Urn
+        dp_translation = selective_arti_1 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_1);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 46);
+        dp_translation = NULL;
+
+        // Timebomb
+        dp_translation = selective_arti_2 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_2);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 56);
+        dp_translation = NULL;
+
+        // Tome of Power
+        dp_translation = selective_arti_3 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_3);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 66);
+        dp_translation = NULL;
+
+        // Ring of Invincibility
+        dp_translation = selective_arti_4 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_4);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 76);
+        dp_translation = NULL;
+
+        // Morph Ovum
+        dp_translation = selective_arti_5 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_5);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 86);
+        dp_translation = NULL;
+
+        // Chaos Device
+        dp_translation = selective_arti_6 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_6);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 96);
+        dp_translation = NULL;
+
+        // Shadowsphere
+        dp_translation = selective_arti_7 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_7);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 106);
+        dp_translation = NULL;
+
+        // Wings of Wrath
+        dp_translation = selective_arti_8 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_8);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 116);
+        dp_translation = NULL;
+
+        // Torch
+        dp_translation = selective_arti_9 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        M_snprintf(num, 4, "%d", selective_arti_9);
+        MN_DrTextSmallENG(num, 228 + wide_delta, 126);
+        dp_translation = NULL;
+    }
+}
+
+static boolean M_RD_SelectiveArti_0(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_0 > 0)
+            selective_arti_0--;
+        break;
+
+        case 1:
+        if (selective_arti_0 < 9)
+            selective_arti_0++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArti_1(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_1 > 0)
+            selective_arti_1--;
+        break;
+
+        case 1:
+        if (selective_arti_1 < 9)
+            selective_arti_1++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArti_2(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_2 > 0)
+            selective_arti_2--;
+        break;
+
+        case 1:
+        if (selective_arti_2 < 9)
+            selective_arti_2++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArti_3(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_3 > 0)
+            selective_arti_3--;
+        break;
+
+        case 1:
+        if (selective_arti_3 < 9)
+            selective_arti_3++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArti_4(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_4 > 0)
+            selective_arti_4--;
+        break;
+
+        case 1:
+        if (selective_arti_4 < 9)
+            selective_arti_4++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArti_5(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_5 > 0)
+            selective_arti_5--;
+        break;
+
+        case 1:
+        if (selective_arti_5 < 9)
+            selective_arti_5++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArti_6(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_6 > 0)
+            selective_arti_6--;
+        break;
+
+        case 1:
+        if (selective_arti_6 < 9)
+            selective_arti_6++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArti_7(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_7 > 0)
+            selective_arti_7--;
+        break;
+
+        case 1:
+        if (selective_arti_7 < 9)
+            selective_arti_7++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArti_8(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_8 > 0)
+            selective_arti_8--;
+        break;
+
+        case 1:
+        if (selective_arti_8 < 9)
+            selective_arti_8++;
+        break;
+    }
+    return true;
+}
+
+static boolean M_RD_SelectiveArti_9(int option)
+{
+    switch(option)
+    {
+        case 0:
+        if (selective_arti_9 > 0)
+            selective_arti_9--;
+        break;
+
+        case 1:
+        if (selective_arti_9 < 9)
+            selective_arti_9++;
+        break;
+    }
+    return true;
+}
+
+
+
+
 //---------------------------------------------------------------------------
 // [JN] Vanilla Options menu 1 and 2
 //---------------------------------------------------------------------------
@@ -4200,7 +5343,6 @@ boolean MN_Responder(event_t * event)
     int key;
     int i;
     MenuItem_t *item;
-    extern boolean automapactive;
     extern void D_StartTitle(void);
     extern void G_CheckDemoStatus(void);
     char *textBuffer;
@@ -4704,9 +5846,10 @@ boolean MN_Responder(event_t * event)
             }
             return (true);
         }
-        // [JN] Scroll Gameplay features menu by PgUp/PgDn keys
-        else if (key == KEY_PGUP || key == KEY_PGDN)
+        // [JN] Scroll menus by PgUp/PgDn keys
+        else if (key == KEY_PGUP)
         {
+            // Gameplay features
             if (CurrentMenu == &Gameplay1Menu || CurrentMenu == &Gameplay1Menu_Rus)
             {
                 SetMenu(MENU_GAMEPLAY2);
@@ -4716,6 +5859,62 @@ boolean MN_Responder(event_t * event)
             if (CurrentMenu == &Gameplay2Menu || CurrentMenu == &Gameplay2Menu_Rus)
             {
                 SetMenu(MENU_GAMEPLAY1);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+
+            // Level select
+            if (CurrentMenu == &LevelSelectMenu1 || CurrentMenu == &LevelSelectMenu1_Rus)
+            {
+                SetMenu(MENU_LEVEL3);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+            if (CurrentMenu == &LevelSelectMenu2 || CurrentMenu == &LevelSelectMenu2_Rus)
+            {
+                SetMenu(MENU_LEVEL1);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+            if (CurrentMenu == &LevelSelectMenu3 || CurrentMenu == &LevelSelectMenu3_Rus)
+            {
+                SetMenu(MENU_LEVEL2);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+        }
+        else if (key == KEY_PGDN)
+        {
+            // Gameplay features
+            if (CurrentMenu == &Gameplay1Menu || CurrentMenu == &Gameplay1Menu_Rus)
+            {
+                SetMenu(MENU_GAMEPLAY2);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+            if (CurrentMenu == &Gameplay2Menu || CurrentMenu == &Gameplay2Menu_Rus)
+            {
+                SetMenu(MENU_GAMEPLAY1);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+
+            // Level select
+            if (CurrentMenu == &LevelSelectMenu1 || CurrentMenu == &LevelSelectMenu1_Rus)
+            {
+                SetMenu(MENU_LEVEL2);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+            if (CurrentMenu == &LevelSelectMenu2 || CurrentMenu == &LevelSelectMenu2_Rus)
+            {
+                SetMenu(MENU_LEVEL3);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+            if (CurrentMenu == &LevelSelectMenu3 || CurrentMenu == &LevelSelectMenu3_Rus)
+            {
+                SetMenu(MENU_LEVEL1);
                 S_StartSound(NULL,sfx_dorcls);
                 return true;
             }
