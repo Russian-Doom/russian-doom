@@ -23,6 +23,7 @@
 #include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
+#include "crispy.h"
 #include "jn.h"
 
 // Macros
@@ -830,6 +831,20 @@ void A_BeakAttackPL1(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_BEAKPUFF;
+    // [JN] Also accout vertical attack angles
+    if (singleplayer && !linetarget && mlook)
+    {
+        if (aspect_ratio >= 2)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
+        }
+        else
+        {
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
+                    (screenblocks <= 10 ? 161 : 146);
+        }
+    }
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
@@ -858,6 +873,20 @@ void A_BeakAttackPL2(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_BEAKPUFF;
+    // [JN] Also accout vertical attack angles
+    if (singleplayer && !linetarget && mlook)
+    {
+        if (aspect_ratio >= 2)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
+        }
+        else
+        {
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
+                    (screenblocks <= 10 ? 161 : 146);
+        }
+    }
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
@@ -887,6 +916,20 @@ void A_StaffAttackPL1(player_t * player, pspdef_t * psp)
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_STAFFPUFF;
+    // [JN] Also accout vertical attack angles
+    if (singleplayer && !linetarget && mlook)
+    {
+        if (aspect_ratio >= 2)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
+        }
+        else
+        {
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
+                    (screenblocks <= 10 ? 161 : 146);
+        }
+    }
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
@@ -915,6 +958,20 @@ void A_StaffAttackPL2(player_t * player, pspdef_t * psp)
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_STAFFPUFF2;
+    // [JN] Also accout vertical attack angles
+    if (singleplayer && !linetarget && mlook)
+    {
+        if (aspect_ratio >= 2)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
+        }
+        else
+        {
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
+                    (screenblocks <= 10 ? 161 : 146);
+        }
+    }
     P_LineAttack(player->mo, angle, MELEERANGE, slope, damage);
     if (linetarget)
     {
@@ -1777,6 +1834,20 @@ void A_GauntletAttack(player_t * player, pspdef_t * psp)
         PuffType = MT_GAUNTLETPUFF1;
     }
     slope = P_AimLineAttack(player->mo, angle, dist);
+    // [JN] Also accout vertical attack angles
+    if (singleplayer && !linetarget && mlook)
+    {
+        if (aspect_ratio >= 2)
+        {
+            // [JN] Wide screen: new magic number :(
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 177;
+        }
+        else
+        {
+            slope = (player->lookdir / MLOOKUNIT << FRACBITS) / 
+                    (screenblocks <= 10 ? 161 : 146);
+        }
+    }
     P_LineAttack(player->mo, angle, dist, slope, damage);
     if (!linetarget)
     {
