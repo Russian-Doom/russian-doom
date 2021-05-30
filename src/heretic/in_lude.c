@@ -552,7 +552,7 @@ void IN_Drawer(void)
     if (aspect_ratio >= 2)
     {
         // [JN] Wide screen: clean up wide screen remainings before drawing.
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
     switch (interstate)

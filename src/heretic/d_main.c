@@ -490,7 +490,7 @@ void D_PageDrawer(void)
     {
         // [JN] Clean up remainings of the wide screen before
         // drawing any new RAW screen.
-        V_DrawFilledBox(0, 0, WIDESCREENWIDTH, SCREENHEIGHT, 0);
+        V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
     }
 
     if (page->width == 560)
