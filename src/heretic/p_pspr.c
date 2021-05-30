@@ -831,8 +831,8 @@ void A_BeakAttackPL1(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_BEAKPUFF;
-    // [JN] Also accout vertical attack angles
-    if (singleplayer && !linetarget && mlook)
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
     {
         if (aspect_ratio >= 2)
         {
@@ -873,8 +873,8 @@ void A_BeakAttackPL2(player_t * player, pspdef_t * psp)
     angle = player->mo->angle;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_BEAKPUFF;
-    // [JN] Also accout vertical attack angles
-    if (singleplayer && !linetarget && mlook)
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
     {
         if (aspect_ratio >= 2)
         {
@@ -916,8 +916,8 @@ void A_StaffAttackPL1(player_t * player, pspdef_t * psp)
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_STAFFPUFF;
-    // [JN] Also accout vertical attack angles
-    if (singleplayer && !linetarget && mlook)
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
     {
         if (aspect_ratio >= 2)
         {
@@ -958,8 +958,8 @@ void A_StaffAttackPL2(player_t * player, pspdef_t * psp)
     angle += P_SubRandom() << 18;
     slope = P_AimLineAttack(player->mo, angle, MELEERANGE);
     PuffType = MT_STAFFPUFF2;
-    // [JN] Also accout vertical attack angles
-    if (singleplayer && !linetarget && mlook)
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
     {
         if (aspect_ratio >= 2)
         {
@@ -1834,8 +1834,8 @@ void A_GauntletAttack(player_t * player, pspdef_t * psp)
         PuffType = MT_GAUNTLETPUFF1;
     }
     slope = P_AimLineAttack(player->mo, angle, dist);
-    // [JN] Also accout vertical attack angles
-    if (singleplayer && !linetarget && mlook)
+    // [JN] Also account vertical attack angles
+    if (singleplayer && !linetarget)
     {
         if (aspect_ratio >= 2)
         {
