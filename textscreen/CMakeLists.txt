@@ -26,3 +26,7 @@ target_include_directories(textscreen
                            INTERFACE "."
                            PRIVATE "../src/")
 target_link_libraries(textscreen m SDL2::SDL2)
+# [Dasperal] Disable clang warnings for windows-1251 strings
+if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(textscreen PRIVATE -Wno-invalid-source-encoding)
+endif()

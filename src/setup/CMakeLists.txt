@@ -16,3 +16,7 @@ add_library(setup STATIC
 
 target_include_directories(setup PRIVATE "../" "${CMAKE_CURRENT_BINARY_DIR}/../../")
 target_link_libraries(setup textscreen SDL2::SDL2 SDL2::mixer)
+# [Dasperal] Disable clang warnings for windows-1251 strings
+if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(setup PRIVATE -Wno-invalid-source-encoding)
+endif()

@@ -134,14 +134,14 @@ void P_RunThinkers (void)
         {
             if (currentthinker->function.acp1)
                 if (currentthinker->function.acp1 != (actionf_p1)P_MobjThinker)
-            currentthinker->function.acp1 (currentthinker);
-                nextthinker = currentthinker->next;
+                    currentthinker->function.acp1 (currentthinker);
+            nextthinker = currentthinker->next;
         }
         else
         {
             if (currentthinker->function.acp1)
-            currentthinker->function.acp1 (currentthinker);
-                nextthinker = currentthinker->next;
+                currentthinker->function.acp1 (currentthinker);
+            nextthinker = currentthinker->next;
         }
 	}
 	currentthinker = nextthinker;
