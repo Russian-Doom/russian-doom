@@ -77,19 +77,13 @@ AC_CHECK_LIB(m, log)
 
 AC_CHECK_HEADERS([linux/kd.h dev/isa/spkrio.h dev/speaker/speaker.h])
 AC_CHECK_FUNCS(mmap ioperm)
+AC_CHECK_DECLS([strcasecmp, strncasecmp], [], [], [[#include <strings.h>]])
 
 # OpenBSD I/O i386 library for I/O port access.
 # (64 bit has the same thing with a different name!)
 
 AC_CHECK_LIB(i386, i386_iopl)
 AC_CHECK_LIB(amd64, amd64_iopl)
-
-AC_ARG_WITH([bashcompletiondir],
-    AS_HELP_STRING([--with-bashcompletiondir=DIR], [Bash completion directory]),
-    [],
-    [AS_IF([$($PKG_CONFIG --exists bash-completion 2> /dev/null)],
-        [bashcompletiondir=$($PKG_CONFIG --variable=completionsdir bash-completion)],
-	[bashcompletiondir=${datadir}/bash-completion/completions])])
 
 case "$host" in
   *-*-mingw* | *-*-cygwin* | *-*-msvc* )
@@ -141,47 +135,25 @@ AC_SUBST(PACKAGE_MAINTAINER)
 AC_SUBST(PACKAGE_URL)
 AC_SUBST(PACKAGE_ISSUES)
 
-AC_SUBST(bashcompletiondir)
-
 dnl Shut up the datarootdir warnings.
 AC_DEFUN([AC_DATAROOTDIR_CHECKED])
-
-# [JN] Unused, moved out
-# man/Makefile
-# man/bash-completion/Makefile
 
 AC_OUTPUT([
 Makefile
 midiproc/Makefile
 opl/Makefile
-opl/examples/Makefile
 pcsound/Makefile
-pkg/Makefile
-pkg/config.make
-pkg/osx/Info.plist
-rpm.spec
 data/Makefile
 src/Makefile
-src/doom.appdata.xml
-src/doom.desktop
-src/doom-screensaver.desktop
 src/doom/Makefile
-src/heretic.appdata.xml
-src/heretic.desktop
 src/heretic/Makefile
-src/hexen.appdata.xml
-src/hexen.desktop
 src/hexen/Makefile
-src/strife.appdata.xml
-src/strife.desktop
 src/strife/Makefile
 src/resource.rc
 src/setup-res.rc
 src/setup/Makefile
-src/setup/setup.desktop
 src/setup/setup-manifest.xml
 textscreen/Makefile
-textscreen/examples/Makefile
 textscreen/fonts/Makefile
 ])
 

@@ -718,6 +718,7 @@ const int delayTable[][2] = {
 };
 
 // [JN] Shutup GCC warning about missing braces around initializer.
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-braces"
 
 const CMDInjectionRecord_t Hexen_Map_02_CMDInjectionTable[] = {

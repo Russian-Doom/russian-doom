@@ -3,13 +3,9 @@ AM_CFLAGS = -I$(top_srcdir)/src
 
 CTAGS_ARGS=-I TXT_UNCAST_ARG+
 
-# build this directory before the examples directory.
-
-SUBDIRS = fonts . examples
+SUBDIRS = fonts
 
 noinst_LIBRARIES=libtextscreen.a
-
-EXTRA_DIST=Doxyfile
 
 libtextscreen_a_SOURCES =                                 \
 	textscreen.h                                      \
@@ -35,7 +31,3 @@ libtextscreen_a_SOURCES =                                 \
 	txt_widget.c             txt_widget.h             \
 	txt_window.c             txt_window.h             \
 	txt_window_action.c      txt_window_action.h
-
-doc:
-	doxygen
-
