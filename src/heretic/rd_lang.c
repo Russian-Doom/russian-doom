@@ -135,6 +135,8 @@ char* txt_gamma_original_25;
 char* txt_gamma_original_3;
 char* txt_gamma_original_35;
 char* txt_gamma_original_4;
+char* txt_detail_high;
+char* txt_detail_low;
 
 // Port-specific strings
 char* txt_alwaysrun_on;
@@ -265,6 +267,8 @@ void RD_DefineLanguageStrings (void)
         txt_gamma_original_3   = TXT_GAMMA_ORIGINAL_3;
         txt_gamma_original_35  = TXT_GAMMA_ORIGINAL_35;
         txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4;
+        txt_detail_high        = TXT_GAMMA_DETAIL_HIGH;
+        txt_detail_low         = TXT_GAMMA_DETAIL_LOW;
 
         // Port-specific strings
         txt_alwaysrun_on       = TXT_ALWAYSRUN_ON;
@@ -389,6 +393,8 @@ void RD_DefineLanguageStrings (void)
         txt_gamma_original_3   = TXT_GAMMA_ORIGINAL_3_RUS;
         txt_gamma_original_35  = TXT_GAMMA_ORIGINAL_35_RUS;
         txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4_RUS;
+        txt_detail_high        = TXT_GAMMA_DETAIL_HIGH_RUS;
+        txt_detail_low         = TXT_GAMMA_DETAIL_LOW_RUS;
 
         // Port-specific strings
         txt_alwaysrun_on       = TXT_ALWAYSRUN_ON_RUS;

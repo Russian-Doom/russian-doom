@@ -160,6 +160,7 @@ static void DrawDisplayMenu(void);
 static boolean M_RD_ScreenSize(int option);
 static boolean M_RD_Gamma(int option);
 static boolean M_RD_LevelBrightness(int option);
+static boolean M_RD_Detail(int option);
 static boolean M_RD_LocalTime(int option);
 static boolean M_RD_Messages(int option);
 static boolean M_RD_ShadowedText(int option);
@@ -593,6 +594,7 @@ static MenuItem_t DisplayItems[] = {
     {ITT_EMPTY,  NULL,                  NULL,                 0, MENU_NONE},
     {ITT_LRFUNC, "LEVEL BRIGHTNESS",    M_RD_LevelBrightness, 0, MENU_NONE},
     {ITT_EMPTY,  NULL,                  NULL,                 0, MENU_NONE},
+    {ITT_LRFUNC, "GRAPHICS DETAIL:",    M_RD_Detail,          0, MENU_NONE},
     {ITT_EMPTY,  NULL,                  NULL,                 0, MENU_NONE},
     {ITT_LRFUNC, "LOCAL TIME:",         M_RD_LocalTime,       0, MENU_NONE},
     {ITT_LRFUNC, "MESSAGES:",           M_RD_Messages,        0, MENU_NONE},
@@ -607,6 +609,7 @@ static MenuItem_t DisplayItems_Rus[] = {
     {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE},   //
     {ITT_LRFUNC, "EHJDTYM JCDTOTYYJCNB",     M_RD_LevelBrightness, 0, MENU_NONE},   // УРОВЕНЬ ОСВЕЩЕННОСТИ
     {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE},   //
+    {ITT_LRFUNC, "LTNFKBPFWBZ UHFABRB:",     M_RD_Detail,          0, MENU_NONE},   // ДЕТАЛИЗАЦИЯ ГРАФИКИ
     {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE},   //
     {ITT_LRFUNC, "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,       0, MENU_NONE},   // СИСТЕМНОЕ ВРЕМЯ
     {ITT_LRFUNC, "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,        0, MENU_NONE},   // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
@@ -617,7 +620,7 @@ static MenuItem_t DisplayItems_Rus[] = {
 static Menu_t DisplayMenu = {
     36, 42,
     DrawDisplayMenu,
-    11, DisplayItems,
+    12, DisplayItems,
     0,
     MENU_OPTIONS
 };
@@ -625,7 +628,7 @@ static Menu_t DisplayMenu = {
 static Menu_t DisplayMenu_Rus = {
     36, 42,
     DrawDisplayMenu,
-    11, DisplayItems_Rus,
+    12, DisplayItems_Rus,
     0,
     MENU_OPTIONS
 };
@@ -2446,8 +2449,12 @@ static void DrawDisplayMenu(void)
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("SCREEN"), 36 + wide_delta, 32);
-        MN_DrTextSmallENG(DEH_String("INTERFACE"), 36 + wide_delta, 102);
+        MN_DrTextSmallENG(DEH_String("INTERFACE"), 36 + wide_delta, 112);
         dp_translation = NULL;
+
+        // Graphics detail
+        MN_DrTextSmallENG(DEH_String(detailLevel ? "LOW" : "HIGH"),
+                                     149 + wide_delta, 102);
 
         // Local time
         MN_DrTextSmallENG(DEH_String(
@@ -2455,15 +2462,15 @@ static void DrawDisplayMenu(void)
                           local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                           local_time == 3 ? "24-HOUR (HH:MM)" :
                           local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF"),
-                          110 + wide_delta, 112);
+                          110 + wide_delta, 122);
 
         // Messages
         MN_DrTextSmallENG(DEH_String(show_messages ? "ON" : "OFF"),
-                                     108 + wide_delta, 122);
+                                     108 + wide_delta, 132);
 
         // Text casts shadows
         MN_DrTextSmallENG(DEH_String(draw_shadowed_text ? "ON" : "OFF"),
-                                     179 + wide_delta, 132);
+                                     179 + wide_delta, 142);
     }
     else
     {
@@ -2478,8 +2485,12 @@ static void DrawDisplayMenu(void)
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("\'RHFY"), 36 + wide_delta, 32);
-        MN_DrTextSmallRUS(DEH_String("BYNTHATQC"), 36 + wide_delta, 102);
+        MN_DrTextSmallRUS(DEH_String("BYNTHATQC"), 36 + wide_delta, 112);
         dp_translation = NULL;
+
+        // Детализация графики
+        MN_DrTextSmallRUS(DEH_String(detailLevel ? "YBPRFZ" : "DSCJRFZ"),
+                                     188 + wide_delta, 102);
 
         // Системное время
         MN_DrTextSmallRUS(DEH_String(
@@ -2487,15 +2498,15 @@ static void DrawDisplayMenu(void)
                           local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                           local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                           local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK"),
-                          157 + wide_delta, 112);
+                          157 + wide_delta, 122);
 
         // Отображение сообщений
         MN_DrTextSmallRUS(DEH_String(show_messages ? "DRK" : "DSRK"),
-                                     208 + wide_delta, 122);
+                                     208 + wide_delta, 132);
 
         // Тексты отбрасывают тень
         MN_DrTextSmallRUS(DEH_String(draw_shadowed_text ? "DRK" : "DSRK"),
-                                     220 + wide_delta, 132);
+                                     220 + wide_delta, 142);
     }
 
     //
@@ -2598,6 +2609,18 @@ static boolean M_RD_LevelBrightness(int option)
             level_brightness += 16;
         break;
     }
+
+    return true;
+}
+
+static boolean M_RD_Detail(int option)
+{
+    detailLevel ^= 1;
+
+    R_SetViewSize (screenblocks, detailLevel);
+
+    P_SetMessage(&players[consoleplayer], detailLevel ?
+                 txt_detail_low : txt_detail_high, false);
 
     return true;
 }
@@ -5609,7 +5632,9 @@ boolean MN_Responder(event_t * event)
         }
         else if (key == key_menu_detail)          // F5 (detail)
         {
-            // F5 isn't used in Heretic. (detail level)
+            // [JN] Restored variable detail mode.
+            M_RD_Detail(0);
+            S_StartSound(NULL, sfx_chat);
             return true;
         }
         else if (key == key_menu_qsave)           // F6 (quicksave)

@@ -50,7 +50,6 @@ fixed_t viewcos, viewsin;
 player_t *viewplayer;
 
 int detailshift;                // 0 = high, 1 = low
-int detailLevel;
 
 //
 // precalculated math tables
@@ -93,6 +92,7 @@ void (*basecolfunc) (void);
 void (*tlcolfunc) (void);
 void (*extratlcolfunc) (void);
 void (*transcolfunc) (void);
+void (*transtlcolfunc) (void);
 void (*spanfunc) (void);
 
 /*
@@ -581,12 +581,12 @@ void R_ExecuteSetViewSize (void)
         // [JN] 4:3 and 5:4
         if (setblocks >= 11)
         {
-            viewheight = SCREENHEIGHT;
+            scaledviewheight = SCREENHEIGHT;
         }
         else
         {
             scaledviewwidth = (setblocks * 32) << hires;
-            viewheight = ((setblocks * 158 / 10)) << hires;
+            scaledviewheight = ((setblocks * 158 / 10)) << hires;
         }
     }
     else
@@ -594,16 +594,17 @@ void R_ExecuteSetViewSize (void)
         // [JN] 16:9, 16:10 and 21:9
         if (setblocks == 9 || setblocks == 10)
         {
-            viewheight = SCREENHEIGHT - SBARHEIGHT;
+            scaledviewheight = SCREENHEIGHT - SBARHEIGHT;
         }
         else
         {
-            viewheight = SCREENHEIGHT;
+            scaledviewheight = SCREENHEIGHT;
         }
     }
 
     detailshift = setdetail;
     viewwidth = scaledviewwidth >> detailshift;
+    viewheight = scaledviewheight>>(detailshift && hires);
 
     centery = viewheight / 2;
     centerx = viewwidth / 2;
@@ -625,18 +626,20 @@ void R_ExecuteSetViewSize (void)
         tlcolfunc = R_DrawTLColumn;
         extratlcolfunc = R_DrawExtraTLColumn;
         transcolfunc = R_DrawTranslatedColumn;
+        transtlcolfunc = R_DrawTranslatedTLColumn;
         spanfunc = R_DrawSpan;
     }
     else
     {
         colfunc = basecolfunc = R_DrawColumnLow;
-        tlcolfunc = R_DrawTLColumn;
-        extratlcolfunc = R_DrawExtraTLColumn;
-        transcolfunc = R_DrawTranslatedColumn;
+        tlcolfunc = R_DrawTLColumnLow;
+        extratlcolfunc = R_DrawExtraTLColumnLow;
+        transcolfunc = R_DrawTranslatedColumnLow;
+        transtlcolfunc = R_DrawTranslatedTLColumnLow;
         spanfunc = R_DrawSpanLow;
     }
 
-    R_InitBuffer(scaledviewwidth, viewheight);
+    R_InitBuffer(scaledviewwidth, scaledviewheight);
     R_InitTextureMapping();
 
     // psprite scales

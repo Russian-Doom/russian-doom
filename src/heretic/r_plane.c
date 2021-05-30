@@ -430,7 +430,7 @@ void R_DrawPlanes (void)
         //
         if (pl->picnum == skyflatnum)
         {
-            dc_iscale = skyiscale;
+            dc_iscale = pspriteiscale>>(detailshift && !hires);
 
             // [JN] Invulnerability effect will colorize sky texture
             if (invul_sky && !vanillaparm)

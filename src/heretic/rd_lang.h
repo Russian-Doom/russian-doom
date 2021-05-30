@@ -144,6 +144,8 @@ extern char* txt_gamma_original_25;
 extern char* txt_gamma_original_3;
 extern char* txt_gamma_original_35;
 extern char* txt_gamma_original_4;
+extern char* txt_detail_high;
+extern char* txt_detail_low;
 
 // Port-specific strings
 extern char* txt_alwaysrun_on;
@@ -271,6 +273,9 @@ extern char* txt_mlook_off;
 #define TXT_GAMMA_ORIGINAL_3    "STANDARD GAMMA CORRECTION LEVEL 3.0"
 #define TXT_GAMMA_ORIGINAL_35   "STANDARD GAMMA CORRECTION LEVEL 3.5"
 #define TXT_GAMMA_ORIGINAL_4    "STANDARD GAMMA CORRECTION LEVEL 4.0"
+
+#define TXT_GAMMA_DETAIL_HIGH   "HIGH DETAIL"
+#define TXT_GAMMA_DETAIL_LOW    "LOW DETAIL"
 
 // F_finale.c
 #define E1TEXT  "with the destruction of the iron\n"\
@@ -498,6 +503,9 @@ extern char* txt_mlook_off;
 #define TXT_GAMMA_ORIGINAL_3_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 3>0"  // Уровень стандартной гамма-коррекции: 3.0
 #define TXT_GAMMA_ORIGINAL_35_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 3>5"  // Уровень стандартной гамма-коррекции: 3.5
 #define TXT_GAMMA_ORIGINAL_4_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 4>0"  // Уровень стандартной гамма-коррекции: 4.0
+
+#define TXT_GAMMA_DETAIL_HIGH_RUS   "DSCJRFZ LTNFKBPFWBZ"   // ВЫСОКАЯ ДЕТАЛИЗАЦИЯ
+#define TXT_GAMMA_DETAIL_LOW_RUS    "YBPRFZ LTNFKBPFWBZ"    // НИЗКАЯ ДЕТАЛИЗАЦИЯ
 
 // F_finale.c
 #define E1TEXT_RUS  "C EYBXNJ;TYBTV ;TKTPYS[ KBXTQ\n"\

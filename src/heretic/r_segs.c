@@ -274,7 +274,7 @@ void R_RenderMaskedSegRange (drawseg_t *ds, int x1, int x2)
         {
             if (!fixedcolormap)
             {
-                index = spryscale >> (LIGHTSCALESHIFT + hires);
+                index = spryscale >> (LIGHTSCALESHIFT - (detailshift && hires) + hires);
 
                 if (index >= MAXLIGHTSCALE)
                 index = MAXLIGHTSCALE - 1;
@@ -388,7 +388,7 @@ void R_RenderSegLoop(void)
         }
 
         // [JN] Moved outside "segtextured"
-        index = rw_scale >> (LIGHTSCALESHIFT + hires);
+        index = rw_scale >> (LIGHTSCALESHIFT - (detailshift && hires) + hires);
 
         // texturecolumn and lighting are independent of wall tiers
         if (segtextured)

@@ -434,7 +434,7 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
     {
         if (vis->mobjflags & MF_TRANSLATION)
         {
-            colfunc = R_DrawTranslatedTLColumn;
+            colfunc = transtlcolfunc;
             dc_translation = translationtables - 256 +
                 ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT - 8));
         }
@@ -461,7 +461,7 @@ void R_DrawVisSprite (vissprite_t *vis, int x1, int x2)
         dc_translation = vis->translation;
     }
 
-    dc_iscale = abs(vis->xiscale) >> detailshift;
+    dc_iscale = abs(vis->xiscale) >> (detailshift && !hires);
     dc_texturemid = vis->texturemid;
     frac = vis->startfrac;
     spryscale = vis->scale;
@@ -649,7 +649,7 @@ void R_ProjectSprite (mobj_t *thing)
     vis->translation = NULL;
     vis->mobjflags = thing->flags;
     vis->psprite = false;
-    vis->scale = xscale << detailshift;
+    vis->scale = xscale << (detailshift && !hires);
     vis->gx = interpx;
     vis->gy = interpy;
     vis->gz = interpz;
@@ -1178,7 +1178,7 @@ void R_DrawPSprite (pspdef_t *psp)
     }
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth - 1 : x2;
-    vis->scale = pspritescale << detailshift;
+    vis->scale = pspritescale << (detailshift && !hires);
     if (flip)
     {
         vis->xiscale = -pspriteiscale;

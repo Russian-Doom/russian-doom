@@ -113,6 +113,7 @@ int show_endoom = 0;
 // Display
 int screenblocks = 10;
 int level_brightness = 0;
+int detailLevel = 0;        // Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // Blocky mode, 0 = high, 1 = normal
 int local_time = 0;
 int show_messages = 1;
@@ -995,6 +996,7 @@ void D_BindVariables(void)
     // Display
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("level_brightness",       &level_brightness);
+    M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("local_time",             &local_time);
     // pitto
     M_BindIntVariable("show_messages",          &show_messages);
