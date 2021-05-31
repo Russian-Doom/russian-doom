@@ -4241,7 +4241,7 @@ static void M_RD_SelectiveArti_0(intptr_t option)
                 selective_arti_0--;
             break;
         case 1:
-            if (selective_arti_0 < 9)
+            if (selective_arti_0 < 16)
                 selective_arti_0++;
         default:
             break;
@@ -4257,7 +4257,7 @@ static void M_RD_SelectiveArti_1(intptr_t option)
                 selective_arti_1--;
             break;
         case 1:
-            if (selective_arti_1 < 9)
+            if (selective_arti_1 < 16)
                 selective_arti_1++;
         default:
             break;
@@ -4273,7 +4273,7 @@ static void M_RD_SelectiveArti_2(intptr_t option)
                 selective_arti_2--;
             break;
         case 1:
-            if (selective_arti_2 < 9)
+            if (selective_arti_2 < 16)
                 selective_arti_2++;
         default:
             break;
@@ -4289,7 +4289,7 @@ static void M_RD_SelectiveArti_3(intptr_t option)
                 selective_arti_3--;
             break;
         case 1:
-            if (selective_arti_3 < 9)
+            if (selective_arti_3 < 16)
                 selective_arti_3++;
         default:
             break;
@@ -4305,7 +4305,7 @@ static void M_RD_SelectiveArti_4(intptr_t option)
                 selective_arti_4--;
             break;
         case 1:
-            if (selective_arti_4 < 9)
+            if (selective_arti_4 < 16)
                 selective_arti_4++;
         default:
             break;
@@ -4321,7 +4321,7 @@ static void M_RD_SelectiveArti_5(intptr_t option)
                 selective_arti_5--;
             break;
         case 1:
-            if (selective_arti_5 < 9)
+            if (selective_arti_5 < 16)
                 selective_arti_5++;
         default:
             break;
@@ -4337,7 +4337,7 @@ static void M_RD_SelectiveArti_6(intptr_t option)
                 selective_arti_6--;
             break;
         case 1:
-            if (selective_arti_6 < 9)
+            if (selective_arti_6 < 16)
                 selective_arti_6++;
         default:
             break;
@@ -4353,7 +4353,7 @@ static void M_RD_SelectiveArti_7(intptr_t option)
                 selective_arti_7--;
             break;
         case 1:
-            if (selective_arti_7 < 9)
+            if (selective_arti_7 < 16)
                 selective_arti_7++;
         default:
             break;
@@ -4369,7 +4369,7 @@ static void M_RD_SelectiveArti_8(intptr_t option)
                 selective_arti_8--;
             break;
         case 1:
-            if (selective_arti_8 < 9)
+            if (selective_arti_8 < 16)
                 selective_arti_8++;
         default:
             break;
@@ -4385,7 +4385,7 @@ static void M_RD_SelectiveArti_9(intptr_t option)
                 selective_arti_9--;
             break;
         case 1:
-            if (selective_arti_9 < 9)
+            if (selective_arti_9 < 16)
                 selective_arti_9++;
         default:
             break;
