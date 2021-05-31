@@ -921,7 +921,9 @@ void DrawCommonBar(void)
         V_DrawPatch(0 + wide_delta, 190, PatchLTFACE);
         V_DrawPatch(276 + wide_delta, 190, PatchRTFACE);
         ShadeChain();
-        UpdateState |= I_STATBAR;
+        // [JN] Do a full status bar update. Fixes chain's background shaking
+        // after toggling GOD mode. Old code: UpdateState |= I_STATBAR;
+        SB_state = -1;
     }
 }
 
