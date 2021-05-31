@@ -64,6 +64,7 @@ int flip_weapons = 0;
 int extra_player_faces = 1;
 int negative_health = 0;
 int sbar_colored = 0;
+int sbar_colored_gem = 0;
 int sbar_color_high = 5;
 int sbar_color_normal = 2;
 int sbar_color_low = 7;
@@ -363,6 +364,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("extra_player_faces",     &extra_player_faces);
     M_BindIntVariable("negative_health",        &negative_health);
     M_BindIntVariable("sbar_colored",           &sbar_colored);
+    M_BindIntVariable("sbar_colored_gem",       &sbar_colored_gem);
     M_BindIntVariable("sbar_color_high",        &sbar_color_high);
     M_BindIntVariable("sbar_color_normal",      &sbar_color_normal);
     M_BindIntVariable("sbar_color_low",         &sbar_color_low);

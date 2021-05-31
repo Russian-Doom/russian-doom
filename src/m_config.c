@@ -1700,6 +1700,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(extra_player_faces),
     CONFIG_VARIABLE_INT(negative_health),
     CONFIG_VARIABLE_INT(sbar_colored),
+    CONFIG_VARIABLE_INT(sbar_colored_gem),
     CONFIG_VARIABLE_INT(sbar_color_high),
     CONFIG_VARIABLE_INT(sbar_color_normal),
     CONFIG_VARIABLE_INT(sbar_color_low),

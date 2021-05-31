@@ -205,6 +205,7 @@ static boolean M_RD_Brightmaps(int option);
 static boolean M_RD_FakeContrast(int option);
 static boolean M_RD_ExtraTrans(int option);
 static boolean M_RD_ColoredHUD(int option);
+static boolean M_RD_ColoredGem(int option);
 static boolean M_RD_ColoredBlood(int option);
 static boolean M_RD_InvulSky(int option);
 static boolean M_RD_LinearSky(int option);
@@ -813,6 +814,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_LRFUNC, "FAKE CONTRAST:",               M_RD_FakeContrast, 0, MENU_NONE},
     {ITT_LRFUNC, "EXTRA TRANSLUCENCY:",          M_RD_ExtraTrans,   0, MENU_NONE},
     {ITT_LRFUNC, "COLORED HUD:",                 M_RD_ColoredHUD,   0, MENU_NONE},
+    {ITT_LRFUNC, "COLORED HEALTH GEM:",          M_RD_ColoredGem,   0, MENU_NONE},
     {ITT_LRFUNC, "COLORED BLOOD:",               M_RD_ColoredBlood, 0, MENU_NONE},
     {ITT_LRFUNC, "INVULNERABILITY AFFECTS SKY:", M_RD_InvulSky,     0, MENU_NONE},
     {ITT_LRFUNC, "SKY DRAWING MODE:",            M_RD_LinearSky,    0, MENU_NONE},
@@ -829,6 +831,7 @@ static MenuItem_t Gameplay1Items_Rus[] = {
     {ITT_LRFUNC, "BVBNFWBZ RJYNHFCNYJCNB:",        M_RD_FakeContrast, 0, MENU_NONE},      // ИМИТАЦИЯ КОНТРАСТНОСТИ
     {ITT_LRFUNC, "LJGJKYBNTKMYFZ GHJPHFXYJCNM:",   M_RD_ExtraTrans,   0, MENU_NONE},      // ДОПОЛНИТЕЛЬНАЯ ПРОЗРАЧНОСТЬ
     {ITT_LRFUNC, "HFPYJWDTNYST \'KTVTYNS $:",      M_RD_ColoredHUD,   0, MENU_NONE},      // РАЗНОЦВЕТНЫЕ ЭЛЕМЕНТЫ HUD
+    {ITT_LRFUNC, "JRHFIBDFYBT RFVYZ PLJHJDMZ:",    M_RD_ColoredGem,   0, MENU_NONE},      // ОКРАШИВАНИЕ КАМНЯ ЗДОРОВЬЯ
     {ITT_LRFUNC, "HFPYJWDTNYFZ RHJDM:",            M_RD_ColoredBlood, 0, MENU_NONE},      // РАЗНОЦВЕТНАЯ КРОВЬ
     {ITT_LRFUNC, "YTEZPDBVJCNM JRHFIBDFTN YT,J:",  M_RD_InvulSky,     0, MENU_NONE},      // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
     {ITT_LRFUNC, "HT;BV JNHBCJDRB YT,F:",          M_RD_LinearSky,    0, MENU_NONE},      // РЕЖИМ ОТРИСОВКИ НЕБА
@@ -843,7 +846,7 @@ static MenuItem_t Gameplay1Items_Rus[] = {
 static Menu_t Gameplay1Menu = {
     36, 36,
     DrawGameplay1Menu,
-    13, Gameplay1Items,
+    14, Gameplay1Items,
     0,
     MENU_OPTIONS
 };
@@ -851,7 +854,7 @@ static Menu_t Gameplay1Menu = {
 static Menu_t Gameplay1Menu_Rus = {
     36, 36,
     DrawGameplay1Menu,
-    13, Gameplay1Items_Rus,
+    14, Gameplay1Items_Rus,
     0,
     MENU_OPTIONS
 };
@@ -3547,48 +3550,54 @@ static void DrawGameplay1Menu(void)
         MN_DrTextSmallENG(DEH_String(sbar_colored ? "ON" : "OFF"), 126 + wide_delta, 66);
         dp_translation = NULL;
 
+        // Colored health gem
+        dp_translation = sbar_colored_gem ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(DEH_String(sbar_colored_gem == 1 ? "BRIGHT" :
+                                     sbar_colored_gem == 2 ? "DARK" : "OFF"), 175 + wide_delta, 76);
+        dp_translation = NULL;
+
         // Colored blood
         dp_translation = colored_blood ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(colored_blood ? "ON" : "OFF"), 139 + wide_delta, 76);
+        MN_DrTextSmallENG(DEH_String(colored_blood ? "ON" : "OFF"), 139 + wide_delta, 86);
         dp_translation = NULL;
 
         // Invulnerability affects sky
         dp_translation = invul_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(invul_sky ? "ON" : "OFF"), 235 + wide_delta, 86);
+        MN_DrTextSmallENG(DEH_String(invul_sky ? "ON" : "OFF"), 235 + wide_delta, 96);
         dp_translation = NULL;
 
         // Sky drawing mode
         dp_translation = linear_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(linear_sky ? "LINEAR" : "ORIGINAL"), 162 + wide_delta, 96);
+        MN_DrTextSmallENG(DEH_String(linear_sky ? "LINEAR" : "ORIGINAL"), 162 + wide_delta, 106);
         dp_translation = NULL;
 
         //
         // PHYSICAL
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 106);
+        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 116);
         dp_translation = NULL;
 
         // Corpses sliding from the ledges
         dp_translation = torque ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(torque ? "ON" : "OFF"), 238 + wide_delta, 116);
+        MN_DrTextSmallENG(DEH_String(torque ? "ON" : "OFF"), 238 + wide_delta, 126);
         dp_translation = NULL;
 
         // Weapon bobbing while firing
         dp_translation = weapon_bobbing ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(weapon_bobbing ? "ON" : "OFF"), 233 + wide_delta, 126);
+        MN_DrTextSmallENG(DEH_String(weapon_bobbing ? "ON" : "OFF"), 233 + wide_delta, 136);
         dp_translation = NULL;
 
         // Randomly flipped corpses
         dp_translation = randomly_flipcorpses ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(randomly_flipcorpses ? "ON" : "OFF"), 232 + wide_delta, 136);
+        MN_DrTextSmallENG(DEH_String(randomly_flipcorpses ? "ON" : "OFF"), 232 + wide_delta, 146);
         dp_translation = NULL;
 
         // Floating items amplitude
         dp_translation = floating_powerups ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(floating_powerups == 1 ? "STANDARD" :
                                      floating_powerups == 2 ? "HALFED" : "OFF"),
-                                     209 + wide_delta, 146);
+                                     209 + wide_delta, 156);
         dp_translation = NULL;
     }
     else
@@ -3625,48 +3634,53 @@ static void DrawGameplay1Menu(void)
         MN_DrTextSmallRUS(DEH_String(sbar_colored ? "DRK" : "DSRK"), 235 + wide_delta, 66);
         dp_translation = NULL;
 
+        // Окрашивание камня здоровья
+        dp_translation = sbar_colored_gem ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(DEH_String(sbar_colored_gem == 1 ? "CDTNKJT" :
+                                     sbar_colored_gem == 2 ? "NTVYJT" : "DSRK"), 238 + wide_delta, 76);
+
         // Разноцветная кровь
         dp_translation = colored_blood ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(colored_blood ? "DRK" : "DSRK"), 178 + wide_delta, 76);          
+        MN_DrTextSmallRUS(DEH_String(colored_blood ? "DRK" : "DSRK"), 178 + wide_delta, 86);          
         dp_translation = NULL;
 
         // Неуязвимость окрашивает небо
         dp_translation = invul_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(invul_sky ? "DRK" : "DSRK"), 253 + wide_delta, 86);
+        MN_DrTextSmallRUS(DEH_String(invul_sky ? "DRK" : "DSRK"), 253 + wide_delta, 96);
         dp_translation = NULL;
 
         // Режим отрисовки неба
         dp_translation = linear_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ"), 195 + wide_delta, 96);
+        MN_DrTextSmallRUS(DEH_String(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ"), 195 + wide_delta, 106);
         dp_translation = NULL;
 
         //
         // ФИЗИКА
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 106);
+        MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 116);
         dp_translation = NULL;
 
         // Трупы сползают с возвышений
         dp_translation = torque ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(torque ? "DRK" : "DSRK"), 248 + wide_delta, 116);
+        MN_DrTextSmallRUS(DEH_String(torque ? "DRK" : "DSRK"), 248 + wide_delta, 126);
         dp_translation = NULL;
 
         // Улучшенное покачивание оружия
         dp_translation = weapon_bobbing ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(weapon_bobbing ? "DRK" : "DSRK"), 260 + wide_delta, 126);
+        MN_DrTextSmallRUS(DEH_String(weapon_bobbing ? "DRK" : "DSRK"), 260 + wide_delta, 136);
         dp_translation = NULL;
 
         // Зеркалирование трупов
         dp_translation = randomly_flipcorpses ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(randomly_flipcorpses ? "DRK" : "DSRK"), 201 + wide_delta, 136);
+        MN_DrTextSmallRUS(DEH_String(randomly_flipcorpses ? "DRK" : "DSRK"), 201 + wide_delta, 146);
         dp_translation = NULL;
 
         // Амплитуда левитации предметов
         dp_translation = floating_powerups ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(floating_powerups == 1 ? "CNFYLFHNYFZ" :
                                      floating_powerups == 2 ? "EGJKJDBYTYFZ" : "DSRK"),
-                                     188 + wide_delta, 146);
+                                     188 + wide_delta, 156);
         dp_translation = NULL;
     }
 }
@@ -3692,6 +3706,26 @@ static boolean M_RD_ExtraTrans(int option)
 static boolean M_RD_ColoredHUD(int option)
 {
     sbar_colored ^= 1;
+    SB_state = -1;      // Update status bar (JN: not sure is it needed)
+    return true;
+}
+
+static boolean M_RD_ColoredGem(int option)
+{
+    switch(option)
+    {
+        case 0: 
+        sbar_colored_gem--;
+        if (sbar_colored_gem < 0) 
+            sbar_colored_gem = 2;
+        break;
+    
+        case 1:
+        sbar_colored_gem++;
+        if (sbar_colored_gem > 2)
+            sbar_colored_gem = 0;
+        break;
+    }
     SB_state = -1;      // Update status bar (JN: not sure is it needed)
     return true;
 }
@@ -5047,6 +5081,7 @@ void M_RD_DoResetSettings(void)
     fake_contrast        = 0;
     translucency         = 1;
     sbar_colored         = 0;
+    sbar_colored_gem     = 0;
     colored_blood        = 1;
     invul_sky            = 1;
     linear_sky            = 1;

@@ -167,6 +167,7 @@ static void SensibleDefaults(void)
     extra_player_faces = 1;
     negative_health = 0;
     sbar_colored = 0;
+    sbar_colored_gem = 0;
     sbar_color_high = 5;
     sbar_color_normal = 2;
     sbar_color_low = 7;

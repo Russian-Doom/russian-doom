@@ -917,7 +917,22 @@ void DrawCommonBar(void)
             (HealthMarker == CPlayer->mo->health) ? 191 : 191 + ChainWiggle;
         V_DrawPatch(0 + wide_delta, 190, PatchCHAINBACK);
         V_DrawPatch(2 + (healthPos % 17) + wide_delta, chainY, PatchCHAIN);
+        // [JN] Colorize health gem:
+        if (sbar_colored_gem && !vanillaparm && !netgame)
+        {
+            if ((CPlayer->cheats & CF_GODMODE) || CPlayer->powers[pw_invulnerability])
+            dp_translation = cr[CR_RED2GRAY_HERETIC];
+            else if (CPlayer->mo->health <= 0)
+            dp_translation = cr[CR_RED2DARKRED_HERETIC];
+            else if (CPlayer->mo->health >= 67)
+            dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2GREEN_HERETIC] : cr[CR_RED2MIDGREEN_HERETIC];
+            else if (CPlayer->mo->health >= 34)
+            dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2YELLOW_HERETIC] : cr[CR_RED2GOLD_HERETIC];
+            else if (CPlayer->mo->health <= 34)
+            dp_translation = sbar_colored_gem == 2 ? cr[CR_RED2DARKRED_HERETIC] : NULL;
+		}
         V_DrawPatch(17 + healthPos + wide_delta, chainY, PatchLIFEGEM);
+        dp_translation = NULL;
         V_DrawPatch(0 + wide_delta, 190, PatchLTFACE);
         V_DrawPatch(276 + wide_delta, 190, PatchRTFACE);
         ShadeChain();

@@ -66,6 +66,7 @@ extern int flip_weapons;
 extern int extra_player_faces;
 extern int negative_health;
 extern int sbar_colored;
+extern int sbar_colored_gem;
 extern int sbar_color_high;
 extern int sbar_color_normal;
 extern int sbar_color_low;
