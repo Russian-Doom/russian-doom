@@ -692,7 +692,7 @@ void G_DeferedInitNew(skill_t skill, int episode, int map);
 // can be called by the startup code or M_Responder
 // a normal game starts at map 1, but a warp test can start elsewhere
 
-boolean G_DoSelectiveGame (int option);
+void G_DoSelectiveGame(intptr_t option);
 
 void G_DeferedPlayDemo(char *demo);
 
