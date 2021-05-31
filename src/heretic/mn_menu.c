@@ -207,6 +207,7 @@ static boolean M_RD_ExtraTrans(int option);
 static boolean M_RD_ColoredHUD(int option);
 static boolean M_RD_ColoredBlood(int option);
 static boolean M_RD_InvulSky(int option);
+static boolean M_RD_LinearSky(int option);
 static boolean M_RD_SecretNotify(int option);
 static boolean M_RD_NegativeHealth(int option);
 
@@ -814,6 +815,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_LRFUNC, "COLORED HUD:",                 M_RD_ColoredHUD,   0, MENU_NONE},
     {ITT_LRFUNC, "COLORED BLOOD:",               M_RD_ColoredBlood, 0, MENU_NONE},
     {ITT_LRFUNC, "INVULNERABILITY AFFECTS SKY:", M_RD_InvulSky,     0, MENU_NONE},
+    {ITT_LRFUNC, "SKY DRAWING MODE:",            M_RD_LinearSky,    0, MENU_NONE},
     {ITT_EMPTY,  NULL,                           NULL,              0, MENU_NONE},
     {ITT_LRFUNC, "CORPSES SLIDING FROM LEDGES:", M_RD_Torque,       0, MENU_NONE},
     {ITT_LRFUNC, "WEAPON BOBBING WHILE FIRING:", M_RD_Bobbing,      0, MENU_NONE},
@@ -829,6 +831,7 @@ static MenuItem_t Gameplay1Items_Rus[] = {
     {ITT_LRFUNC, "HFPYJWDTNYST \'KTVTYNS $:",      M_RD_ColoredHUD,   0, MENU_NONE},      // РАЗНОЦВЕТНЫЕ ЭЛЕМЕНТЫ HUD
     {ITT_LRFUNC, "HFPYJWDTNYFZ RHJDM:",            M_RD_ColoredBlood, 0, MENU_NONE},      // РАЗНОЦВЕТНАЯ КРОВЬ
     {ITT_LRFUNC, "YTEZPDBVJCNM JRHFIBDFTN YT,J:",  M_RD_InvulSky,     0, MENU_NONE},      // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
+    {ITT_LRFUNC, "HT;BV JNHBCJDRB YT,F:",          M_RD_LinearSky,    0, MENU_NONE},      // РЕЖИМ ОТРИСОВКИ НЕБА
     {ITT_EMPTY,  NULL,                             NULL,              0, MENU_NONE},      //
     {ITT_LRFUNC, "NHEGS CGJKPF.N C DJPDSITYBQ:",   M_RD_Torque,       0, MENU_NONE},      // ТРУПЫ СПОЛЗАЮТ С ВОЗВЫШЕНИЙ
     {ITT_LRFUNC, "EKEXITYYJT GJRFXBDFYBT JHE;BZ:", M_RD_Bobbing,      0, MENU_NONE},      // УЛУЧШЕННОЕ ПОКАЧИВАНИЕ ОРУЖИЯ
@@ -840,7 +843,7 @@ static MenuItem_t Gameplay1Items_Rus[] = {
 static Menu_t Gameplay1Menu = {
     36, 36,
     DrawGameplay1Menu,
-    12, Gameplay1Items,
+    13, Gameplay1Items,
     0,
     MENU_OPTIONS
 };
@@ -848,7 +851,7 @@ static Menu_t Gameplay1Menu = {
 static Menu_t Gameplay1Menu_Rus = {
     36, 36,
     DrawGameplay1Menu,
-    12, Gameplay1Items_Rus,
+    13, Gameplay1Items_Rus,
     0,
     MENU_OPTIONS
 };
@@ -3554,33 +3557,38 @@ static void DrawGameplay1Menu(void)
         MN_DrTextSmallENG(DEH_String(invul_sky ? "ON" : "OFF"), 235 + wide_delta, 86);
         dp_translation = NULL;
 
+        // Sky drawing mode
+        dp_translation = linear_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallENG(DEH_String(linear_sky ? "LINEAR" : "ORIGINAL"), 162 + wide_delta, 96);
+        dp_translation = NULL;
+
         //
         // PHYSICAL
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 96);
+        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 106);
         dp_translation = NULL;
 
         // Corpses sliding from the ledges
         dp_translation = torque ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(torque ? "ON" : "OFF"), 238 + wide_delta, 106);
+        MN_DrTextSmallENG(DEH_String(torque ? "ON" : "OFF"), 238 + wide_delta, 116);
         dp_translation = NULL;
 
         // Weapon bobbing while firing
         dp_translation = weapon_bobbing ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(weapon_bobbing ? "ON" : "OFF"), 233 + wide_delta, 116);
+        MN_DrTextSmallENG(DEH_String(weapon_bobbing ? "ON" : "OFF"), 233 + wide_delta, 126);
         dp_translation = NULL;
 
         // Randomly flipped corpses
         dp_translation = randomly_flipcorpses ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(randomly_flipcorpses ? "ON" : "OFF"), 232 + wide_delta, 126);
+        MN_DrTextSmallENG(DEH_String(randomly_flipcorpses ? "ON" : "OFF"), 232 + wide_delta, 136);
         dp_translation = NULL;
 
         // Floating items amplitude
         dp_translation = floating_powerups ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(floating_powerups == 1 ? "STANDARD" :
                                      floating_powerups == 2 ? "HALFED" : "OFF"),
-                                     209 + wide_delta, 136);
+                                     209 + wide_delta, 146);
         dp_translation = NULL;
     }
     else
@@ -3627,33 +3635,38 @@ static void DrawGameplay1Menu(void)
         MN_DrTextSmallRUS(DEH_String(invul_sky ? "DRK" : "DSRK"), 253 + wide_delta, 86);
         dp_translation = NULL;
 
+        // Режим отрисовки неба
+        dp_translation = linear_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        MN_DrTextSmallRUS(DEH_String(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ"), 195 + wide_delta, 96);
+        dp_translation = NULL;
+
         //
         // ФИЗИКА
         //
         dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 96);
+        MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 106);
         dp_translation = NULL;
 
         // Трупы сползают с возвышений
         dp_translation = torque ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(torque ? "DRK" : "DSRK"), 248 + wide_delta, 106);
+        MN_DrTextSmallRUS(DEH_String(torque ? "DRK" : "DSRK"), 248 + wide_delta, 116);
         dp_translation = NULL;
 
         // Улучшенное покачивание оружия
         dp_translation = weapon_bobbing ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(weapon_bobbing ? "DRK" : "DSRK"), 260 + wide_delta, 116);
+        MN_DrTextSmallRUS(DEH_String(weapon_bobbing ? "DRK" : "DSRK"), 260 + wide_delta, 126);
         dp_translation = NULL;
 
         // Зеркалирование трупов
         dp_translation = randomly_flipcorpses ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(randomly_flipcorpses ? "DRK" : "DSRK"), 201 + wide_delta, 126);
+        MN_DrTextSmallRUS(DEH_String(randomly_flipcorpses ? "DRK" : "DSRK"), 201 + wide_delta, 136);
         dp_translation = NULL;
 
         // Амплитуда левитации предметов
         dp_translation = floating_powerups ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(floating_powerups == 1 ? "CNFYLFHNYFZ" :
                                      floating_powerups == 2 ? "EGJKJDBYTYFZ" : "DSRK"),
-                                     188 + wide_delta, 136);
+                                     188 + wide_delta, 146);
         dp_translation = NULL;
     }
 }
@@ -3692,6 +3705,12 @@ static boolean M_RD_ColoredBlood(int option)
 static boolean M_RD_InvulSky(int option)
 {
     invul_sky ^= 1;
+    return true;
+}
+
+static boolean M_RD_LinearSky(int option)
+{
+    linear_sky ^= 1;
     return true;
 }
 
@@ -5030,6 +5049,7 @@ void M_RD_DoResetSettings(void)
     sbar_colored         = 0;
     colored_blood        = 1;
     invul_sky            = 1;
+    linear_sky            = 1;
     torque               = 1;
     weapon_bobbing       = 1;
     randomly_flipcorpses = 1;
