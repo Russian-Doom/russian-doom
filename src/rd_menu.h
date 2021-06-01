@@ -15,6 +15,8 @@
 #ifndef RD_MENU_H
 #define RD_MENU_H
 
+#include <stdint.h>
+
 typedef enum
 {
     ITT_EMPTY,
