@@ -515,7 +515,7 @@ void D_Display (void)
         // [JN] Atari Jaguar: draw PAUSE pic independently, offsets done in the sprite
         if (gamemission == jaguar)
         {
-            V_DrawShadowedPatchDoom(wide_delta, gamestate == GS_INTERMISSION ?
+            V_DrawShadowedPatchDoom(0, gamestate == GS_INTERMISSION ?
                                     -40 : 0, // [JN] Do not obstruct titles on intermission screen
                                     W_CacheLumpName (DEH_String(english_language ?
                                                                 "M_PAUSE" : "RD_PAUSE"), PU_CACHE));
@@ -529,7 +529,7 @@ void D_Display (void)
             else
             y = (viewwindowy >> hires)+4;
 
-            V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2, 
+            V_DrawShadowedPatchDoom((viewwindowx >> hires) + ((scaledviewwidth >> hires) - 68) / 2 - wide_delta, 
                                     y, W_CacheLumpName (DEH_String(english_language ?
                                                                    "M_PAUSE" : "RD_PAUSE"), PU_CACHE));
         }

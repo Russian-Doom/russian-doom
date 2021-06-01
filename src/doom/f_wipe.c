@@ -304,7 +304,7 @@ int wipe_ScreenWipe (int wipeno, int x, int y, int width, int height, int ticks)
     // [JN] Draw "Loading" picture
     if ((gamemission == jaguar || screen_wiping == 2) && !vanillaparm)
     {
-        V_DrawShadowedPatchDoom (wide_delta, 0, W_CacheLumpName(DEH_String
+        V_DrawShadowedPatchDoom (0, 0, W_CacheLumpName(DEH_String
                                 (english_language ? "M_LOADIN" : "RD_LDNG"),
                                  PU_CACHE));
     }
