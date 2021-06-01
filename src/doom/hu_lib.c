@@ -118,7 +118,7 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
             }
 
             // [JN] Draw message.
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? 0 : -wide_delta), l->y, l->f[c - l->sc]);
+            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f[c - l->sc]);
 
             // [JN] Clear color translation.
             dp_translation = NULL;
@@ -141,7 +141,7 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
         dp_translation = messages_chat_color_set;
 
         // [JN] Draw cursor.
-        V_DrawShadowedPatchDoom(x + (wide_4_3 ? 0 : -wide_delta), l->y, l->f['_' - l->sc]);
+        V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f['_' - l->sc]);
 
         // [JN] Clear color translation.
         dp_translation = NULL;

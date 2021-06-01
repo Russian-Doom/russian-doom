@@ -724,9 +724,6 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch)
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
 
-    // [JN] Account horizontal offset for wide screen modes.
-    x += wide_delta;
-
 // [JN] Do not crash if patch goes out of screen bounds.
 #ifdef RANGECHECK_NO_THANKS
     if (x < 0

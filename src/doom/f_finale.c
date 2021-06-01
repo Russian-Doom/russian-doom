@@ -509,9 +509,9 @@ void F_TextWrite (void)
 	    break;
 
         if (english_language)
-        V_DrawShadowedPatchDoom(cx, cy, hu_font[c]);
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font[c]);
         else
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_small_rus[c]);
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font_small_rus[c]);
 
         cx+=w;
     }
@@ -1030,7 +1030,7 @@ void F_BunnyScroll (void)
 
     if (finalecount < 1180)
     {
-        V_DrawShadowedPatchDoom(((ORIGWIDTH - 13 * 8) / 2), (ORIGHEIGHT - 8 * 8) / 2, 
+        V_DrawShadowedPatchDoom(((ORIGWIDTH - 13 * 8) / 2) + wide_delta, (ORIGHEIGHT - 8 * 8) / 2, 
             W_CacheLumpName(DEH_String(english_language ? "END0" : "RD_END0"), PU_CACHE));
 
         laststage = 0;
@@ -1052,7 +1052,7 @@ void F_BunnyScroll (void)
 
     DEH_snprintf(name, 10, english_language ? "END%i" : "RD_END%i", stage);
 
-    V_DrawShadowedPatchDoom(((ORIGWIDTH - 13 * 8) / 2), (ORIGHEIGHT - 8 * 8) / 2, 
+    V_DrawShadowedPatchDoom(((ORIGWIDTH - 13 * 8) / 2) + wide_delta, (ORIGHEIGHT - 8 * 8) / 2, 
         W_CacheLumpName (name,PU_CACHE));
 }
 
@@ -1201,9 +1201,9 @@ void F_TextWriteJaguar (void)
 	    break;
 
         if (english_language)
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_big_eng[c]);
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font_big_eng[c]);
         else
-        V_DrawShadowedPatchDoom(cx, cy, hu_font_big_rus[c]);
+        V_DrawShadowedPatchDoom(cx + wide_delta, cy, hu_font_big_rus[c]);
 
         cx+=w;
     }
