@@ -1797,7 +1797,7 @@ void G_DoNewGame(void)
 ================================================================================
 */
 
-boolean G_DoSelectiveGame (int option)
+void G_DoSelectiveGame(intptr_t option)
 {
     int i;
     player_t *p = &players[consoleplayer];
@@ -1869,9 +1869,6 @@ boolean G_DoSelectiveGame (int option)
     for (i = 0 ; i < selective_arti_7 ; i++) P_GiveArtifact(p, arti_invisibility, NULL);
     for (i = 0 ; i < selective_arti_8 ; i++) P_GiveArtifact(p, arti_fly, NULL);
     for (i = 0 ; i < selective_arti_9 ; i++) P_GiveArtifact(p, arti_torch, NULL);
-
-    // All done!
-    return true;
 } 
 
 void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
