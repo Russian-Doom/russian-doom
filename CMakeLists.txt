@@ -1,7 +1,8 @@
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 cmake_minimum_required(VERSION 3.7.2)
 
-project("Russian Doom" VERSION 5.0.0 LANGUAGES C NONE CXX)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
+project("Russian Doom" VERSION 5.0 LANGUAGES C NONE)
 
 # Autotools variables
 set(top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
@@ -12,8 +13,6 @@ set(PACKAGE_NAME "${PROJECT_NAME}")
 set(PACKAGE_TARNAME "russian-doom")
 set(PACKAGE_VERSION "${PROJECT_VERSION}")
 set(PACKAGE_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
-
-string(REGEX REPLACE " Doom$" "" PACKAGE_SHORTNAME "${PACKAGE_NAME}")
 set(PACKAGE_COPYRIGHT "Copyright (C) 2016-2021")
 set(PACKAGE_LICENSE "GNU General Public License, version 2")
 
@@ -27,9 +26,9 @@ else()
                         "-Wredundant-decls")
 endif()
 
-find_package(SDL2 2.0.1)
-find_package(SDL2_mixer 2.0.0)
-find_package(SDL2_net 2.0.0)
+find_package(SDL2 2.0.1 REQUIRED)
+find_package(SDL2_mixer 2.0.0 REQUIRED)
+find_package(SDL2_net 2.0.0 REQUIRED)
 
 # Check for libsamplerate.
 find_package(samplerate)
@@ -51,14 +50,9 @@ check_symbol_exists(strcasecmp "strings.h" HAVE_DECL_STRCASECMP)
 check_symbol_exists(strncasecmp "strings.h" HAVE_DECL_STRNCASECMP)
 check_include_file("dirent.h" HAVE_DIRENT_H)
 
-string(CONCAT WINDOWS_RC_VERSION "${PROJECT_VERSION_MAJOR}, "
-    "${PROJECT_VERSION_MINOR}, ${PROJECT_VERSION_PATCH}, 0")
+string(REPLACE "." ", " WINDOWS_RC_VERSION ${PROJECT_VERSION})
 
-# Without a hyphen. This is used for the bash-completion scripts.
-string(TOLOWER "${PACKAGE_SHORTNAME}" PROGRAM_SPREFIX)
-
-# With a hyphen, used almost everywhere else.
-set(PROGRAM_PREFIX "${PROGRAM_SPREFIX}-")
+string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 
 configure_file(cmake/config.h.cin config.h)
 
