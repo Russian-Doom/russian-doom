@@ -34,6 +34,7 @@
 #include "i_input.h"
 #include "i_system.h"
 #include "i_swap.h"
+#include "i_timer.h" // [JN] I_GetTime()
 #include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
@@ -263,6 +264,10 @@ static int slotptr;
 static int currentSlot;
 static int quicksave;
 static int quickload;
+
+// [JN] Used as a timer for hiding menu background
+// while changing screen size, gamma and level brightness.
+static int menubgwait;
 
 // [JN] Set default mouse sensitivity to 5, like in Doom
 int mouseSensitivity = 5;
@@ -1963,7 +1968,9 @@ static void DrawDisplayMenu(void)
     char *title_rus = DEH_String("YFCNHJQRB \'RHFYF");  // НАСТРОЙКИ ЭКРАНА
     char  num[4];
 
-    // Draw menu background.
+    // Draw menu background. Hide it for a moment while changing 
+    // screen size, gamma and level brightness in GS_LEVEL game state.
+    if (gamestate != GS_LEVEL || (gamestate == GS_LEVEL && menubgwait < I_GetTime()))
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     // Update status bar.
@@ -2073,6 +2080,9 @@ static void DrawDisplayMenu(void)
 
 static void M_RD_ScreenSize(intptr_t option)
 {
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 25;
+
     if (option == RIGHT_DIR)
     {
         if (screenblocks < 12) // [JN] Now we have 12 screen sizes
@@ -2100,6 +2110,9 @@ static void M_RD_ScreenSize(intptr_t option)
 
 static void M_RD_Gamma(intptr_t option)
 {
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 25;
+
     switch(option)
     {
         case 0:
@@ -2127,6 +2140,9 @@ static void M_RD_Gamma(intptr_t option)
 
 static void M_RD_LevelBrightness(intptr_t option)
 {
+    // [JN] Hide menu background for a moment.
+    menubgwait = I_GetTime() + 25;
+
     switch(option)
     {
         case 0:
