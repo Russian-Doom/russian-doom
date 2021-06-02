@@ -269,6 +269,11 @@ static int quickload;
 // while changing screen size, gamma and level brightness.
 static int menubgwait;
 
+// [JN] Used as a flag for drawing Sound / Sound System menu background:
+// - if menu was invoked by F4, don't draw background.
+// - if menu was invoked from Options menu, draw background.
+static boolean sfxbgdraw;
+
 // [JN] Set default mouse sensitivity to 5, like in Doom
 int mouseSensitivity = 5;
 
@@ -1658,6 +1663,9 @@ static void DrawOptionsMenu(void)
     char *title_eng = DEH_String("OPTIONS");
     char *title_rus = DEH_String("YFCNHJQRB");  // НАСТРОЙКИ
 
+    // Sound / Sound System menu background will be drawn.
+    sfxbgdraw = true;
+
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
@@ -2322,7 +2330,8 @@ static void DrawSoundMenu(void)
     char *title_rus = DEH_String("YFCNHJQRB PDERF");  // НАСТРОЙКИ ЗВУКА
     char  num[4];
 
-    // Draw menu background.
+    // Draw menu background. Don't draw if menu is invoked by pressing F4.
+    if (sfxbgdraw)
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     // Update status bar.
@@ -2453,7 +2462,8 @@ static void DrawSoundSystemMenu(void)
     char *title_eng = DEH_String("SOUND SYSTEM SETTINGS");
     char *title_rus = DEH_String("YFCNHJQRB PDERJDJQ CBCNTVS");  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
 
-    // Draw menu background.
+    // Draw menu background. Don't draw if menu is invoked by pressing F4.
+    if (sfxbgdraw)
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     // Update status bar.
@@ -5123,6 +5133,7 @@ boolean MN_Responder(event_t * event)
             menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
+            sfxbgdraw = false; // [JN] Don't draw menu background.
             // [JN] Force to use vanilla options 2 menu in -vanilla game mode.
             if (vanillaparm)
             {
