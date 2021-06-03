@@ -111,6 +111,12 @@ static void M_RD_LocalTime(intptr_t option);
 static void M_RD_Messages(intptr_t option);
 static void M_RD_ShadowedText(intptr_t option);
 
+// Messages
+static void M_RD_Define_Msg_Pickup_Color(intptr_t option);
+static void M_RD_Define_Msg_Secret_Color(intptr_t option);
+static void M_RD_Define_Msg_System_Color(intptr_t option);
+static void M_RD_Define_Msg_Chat_Color(intptr_t option);
+
 // Automap
 static void DrawAutomapMenu(void);
 static void M_RD_AutoMapStats(intptr_t option);
@@ -264,6 +270,13 @@ static int slotptr;
 static int currentSlot;
 static int quicksave;
 static int quickload;
+
+// [JN] Choosen message colors
+byte *messages_pickup_color_set;
+byte *messages_secret_color_set;
+byte *messages_system_color_set;
+byte *messages_chat_color_set;
+
 
 // [JN] Used as a timer for hiding menu background
 // while changing screen size, gamma and level brightness.
@@ -890,6 +903,12 @@ void MN_Init(void)
         EpisodeMenu.itemCount = 5;
         EpisodeMenu.y -= ITEM_HEIGHT; //TODO test why
     }
+
+    // [JN] Init message colors.
+    M_RD_Define_Msg_Pickup_Color(0);
+    M_RD_Define_Msg_Secret_Color(0);
+    M_RD_Define_Msg_System_Color(0);
+    M_RD_Define_Msg_Chat_Color(0);
 }
 
 //---------------------------------------------------------------------------
@@ -2221,6 +2240,107 @@ static void M_RD_ShadowedText(intptr_t option)
 {
     draw_shadowed_text ^= 1;
 }
+
+//
+//
+//
+
+static void M_RD_Define_Msg_Pickup_Color (intptr_t option)
+{
+    // [JN] No coloring in vanilla.
+    if (vanillaparm)
+    {
+        messages_pickup_color_set = NULL;
+    }
+    else
+    {
+        switch (message_secret_color)
+        {
+            case 1:   messages_pickup_color_set = cr[CR_GRAY2GDARKGRAY_HERETIC]; break;
+            case 2:   messages_pickup_color_set = cr[CR_GRAY2DARKGOLD_HERETIC];  break;
+            case 3:   messages_pickup_color_set = cr[CR_GRAY2GREEN_HERETIC];     break;
+            case 4:   messages_pickup_color_set = cr[CR_GRAY2RED_HERETIC];       break;
+
+            default:  messages_pickup_color_set = NULL;                          break;
+        }
+
+        // [JN] Routine №3: play sound only if necessary.
+        // S_StartSound(NULL, sfx_stnmov);
+    }
+}
+
+static void M_RD_Define_Msg_Secret_Color (intptr_t option)
+{
+    // [JN] No coloring in vanilla.
+    if (vanillaparm)
+    {
+        messages_secret_color_set = NULL;
+    }
+    else
+    {
+        switch (message_secret_color)
+        {
+            case 1:   messages_secret_color_set = cr[CR_GRAY2GDARKGRAY_HERETIC]; break;
+            case 2:   messages_secret_color_set = cr[CR_GRAY2DARKGOLD_HERETIC];  break;
+            case 3:   messages_secret_color_set = cr[CR_GRAY2GREEN_HERETIC];     break;
+            case 4:   messages_secret_color_set = cr[CR_GRAY2RED_HERETIC];       break;
+
+            default:  messages_secret_color_set = NULL;                          break;
+        }
+
+        // [JN] Routine №3: play sound only if necessary.
+        // S_StartSound(NULL, sfx_stnmov);
+    }
+}
+
+static void M_RD_Define_Msg_System_Color (intptr_t option)
+{
+    // [JN] No coloring in vanilla.
+    if (vanillaparm)
+    {
+        messages_system_color_set = NULL;
+    }
+    else
+    {
+        switch (message_secret_color)
+        {
+            case 1:   messages_system_color_set = cr[CR_GRAY2GDARKGRAY_HERETIC]; break;
+            case 2:   messages_system_color_set = cr[CR_GRAY2DARKGOLD_HERETIC];  break;
+            case 3:   messages_system_color_set = cr[CR_GRAY2GREEN_HERETIC];     break;
+            case 4:   messages_system_color_set = cr[CR_GRAY2RED_HERETIC];       break;
+
+            default:  messages_system_color_set = NULL;                          break;
+        }
+
+        // [JN] Routine №3: play sound only if necessary.
+        // S_StartSound(NULL, sfx_stnmov);
+    }
+}
+
+static void M_RD_Define_Msg_Chat_Color (intptr_t option)
+{
+    // [JN] No coloring in vanilla.
+    if (vanillaparm)
+    {
+        messages_chat_color_set = NULL;
+    }
+    else
+    {
+        switch (message_secret_color)
+        {
+            case 1:   messages_chat_color_set = cr[CR_GRAY2GDARKGRAY_HERETIC]; break;
+            case 2:   messages_chat_color_set = cr[CR_GRAY2DARKGOLD_HERETIC];  break;
+            case 3:   messages_chat_color_set = cr[CR_GRAY2GREEN_HERETIC];     break;
+            case 4:   messages_chat_color_set = cr[CR_GRAY2RED_HERETIC];       break;
+
+            default:  messages_chat_color_set = NULL;                          break;
+        }
+
+        // [JN] Routine №3: play sound only if necessary.
+        // S_StartSound(NULL, sfx_stnmov);
+    }
+}
+
 
 // -----------------------------------------------------------------------------
 // DrawAutomapMenu

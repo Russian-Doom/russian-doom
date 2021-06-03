@@ -120,6 +120,12 @@ int local_time = 0;
 int show_messages = 1;
 int draw_shadowed_text = 1;
 
+// Display: Messages
+int message_pickup_color = 0;
+int message_secret_color = 0;
+int message_system_color = 0;
+int message_chat_color = 0;
+
 // Automap
 int automap_stats = 1;
 int automap_overlay = 0;
@@ -246,9 +252,12 @@ void D_ProcessEvents(void)
 
 void DrawMessage(void)
 {
-    player_t *player;
+    player_t *player = &players[consoleplayer];
 
-    player = &players[consoleplayer];
+    extern byte *messages_pickup_color_set;
+    extern byte *messages_secret_color_set;
+    extern byte *messages_system_color_set;
+    extern byte *messages_chat_color_set;
 
     // [JN] Activate message counter in non-level or paused states.
     // Make messages go away in menu, finale and help screens.
@@ -267,21 +276,17 @@ void DrawMessage(void)
     switch (player->messageColor)
     {
         case 1: // Item pickup.
-            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            dp_translation = messages_pickup_color_set;
         break;
-
         case 2: // Revealed secret
-            dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+            dp_translation = messages_secret_color_set;
         break;
-
         case 3: // System message
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = messages_system_color_set;
         break;
-
         case 4: // Netgame chat
-            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            dp_translation = messages_chat_color_set;
         break;
-
         case 0: // Not supposed to be colored.
         default:
         break;
@@ -1031,6 +1036,10 @@ void D_BindVariables(void)
     M_BindIntVariable("local_time",             &local_time);
     // pitto
     M_BindIntVariable("show_messages",          &show_messages);
+    M_BindIntVariable("message_pickup_color",   &message_pickup_color);
+    M_BindIntVariable("message_secret_color",   &message_secret_color);
+    M_BindIntVariable("message_system_color",   &message_system_color);
+    M_BindIntVariable("message_chat_color",     &message_chat_color);
 
     // Automap
     M_BindIntVariable("automap_follow",         &automap_follow);
