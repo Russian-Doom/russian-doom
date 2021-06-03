@@ -55,6 +55,7 @@
 #include "r_local.h"
 #include "s_sound.h"
 #include "w_main.h"
+#include "v_trans.h"
 #include "v_video.h"
 #include "w_merge.h"
 #include "jn.h"
@@ -261,6 +262,31 @@ void DrawMessage(void)
         return;
     }
 
+    // [JN] Colorize depending on given color type.
+    // TODO: make color variable.
+    switch (player->messageColor)
+    {
+        case 1: // Item pickup.
+            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+        break;
+
+        case 2: // Revealed secret
+            dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        break;
+
+        case 3: // System message
+            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        break;
+
+        case 4: // Netgame chat
+            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+        break;
+
+        case 0: // Not supposed to be colored.
+        default:
+        break;
+    }
+
     if (english_language)
     {
         MN_DrTextA(player->message, 
@@ -273,6 +299,9 @@ void DrawMessage(void)
                           160 - MN_DrTextSmallRUSWidth(player->message) /
                           2 + wide_delta, 1);
     }
+
+    // [JN] Clear color translation.
+    dp_translation = NULL;
 }
 
 //---------------------------------------------------------------------------

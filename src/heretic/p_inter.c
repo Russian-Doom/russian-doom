@@ -89,6 +89,23 @@ void P_SetMessage(player_t * player, char *message, boolean ultmsg)
     }
     player->message = message;
     player->messageTics = MESSAGETICS;
+    player->messageColor = 0; // [JN] Do not colorize.
+    BorderTopRefresh = true;
+    if (ultmsg)
+    {
+        ultimatemsg = true; 
+    }
+}
+
+void P_SetMessageColored(player_t * player, char *message, int color, boolean ultmsg)
+{
+    if ((ultimatemsg || !show_messages) && !ultmsg)
+    {
+        return;
+    }
+    player->message = message;
+    player->messageTics = MESSAGETICS;
+    player->messageColor = color; // [JN] Colorize.
     BorderTopRefresh = true;
     if (ultmsg)
     {

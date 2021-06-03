@@ -260,6 +260,7 @@ extern int maxammo[NUMAMMO];
 extern int clipammo[NUMAMMO];
 
 void P_SetMessage(player_t * player, char *message, boolean ultmsg);
+void P_SetMessageColored(player_t * player, char *message, int color, boolean ultmsg);
 void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher);
 void P_DamageMobj(mobj_t * target, mobj_t * inflictor, mobj_t * source,
                   int damage);
