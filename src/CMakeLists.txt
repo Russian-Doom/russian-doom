@@ -179,6 +179,18 @@ if(MSVC)
     endforeach()
 endif()
 
+# Generation of game-specific setup executables
+foreach(TARGET doom heretic hexen strife)
+    add_custom_command(TARGET ${PROGRAM_PREFIX}setup POST_BUILD
+            MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}setup>"
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${PROGRAM_PREFIX}setup>"
+            "${PROGRAM_PREFIX}${TARGET}-setup$<TARGET_FILE_SUFFIX:${PROGRAM_PREFIX}setup>")
+    list(APPEND GAME_SETUP_FILES "${PROGRAM_PREFIX}${TARGET}-setup$<TARGET_FILE_SUFFIX:${PROGRAM_PREFIX}setup>")
+endforeach()
+set_target_properties(${PROGRAM_PREFIX}setup PROPERTIES
+    ADDITIONAL_CLEAN_FILES "${GAME_SETUP_FILES}"
+)
+
 # Source groups
 source_group("Midiproc" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/midiproc/.+")
 source_group("Opl" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/opl/.+")
