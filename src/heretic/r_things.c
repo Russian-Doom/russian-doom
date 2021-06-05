@@ -1005,6 +1005,31 @@ static inline void R_ApplyWeaponFiringBob (fixed_t *sx, boolean bobx, fixed_t *s
 /*
 ================================================================================
 =
+= R_ApplyRaiseLowerBob
+=
+= [JN] Smooth bobbing for raise and lowering weapons.
+=
+================================================================================
+*/
+
+static inline void R_ApplyRaiseLowerBob (fixed_t *sx, boolean bobx)
+{
+	const angle_t angle = (128 * leveltime) & FINEMASK;
+
+	if (sx)
+	{
+		*sx = FRACUNIT;
+
+		if (bobx)
+		{
+			 *sx += FixedMul(viewplayer->bob, finecosine[angle]);
+		}
+	}
+}
+
+/*
+================================================================================
+=
 = R_ApplyWeaponBob
 =
 = [crispy] & [JN] Chicken's special bobbingю
@@ -1091,24 +1116,23 @@ void R_DrawPSprite (pspdef_t *psp)
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0] ^ flip_levels;
 
-    // [JN] Applying standard bobbing for animation interpolation (Staff+, Gauntlets+),
-    // and for preventing "shaking" between refiring states. "Plus" means activated Tome of Power:
-    if (singleplayer && weapon_bobbing && !vanillaparm && (
-        /* Staff+       */ state == S_STAFFREADY2_1    || state == S_STAFFREADY2_2    || state == S_STAFFREADY2_3    ||
+    // [JN] Applying weapon bobbing for ready states, halfed for firing states 
+    // and x-only for raise/lower states. "Plus" means activated Tome of Power.
+    if (weapon_bobbing && singleplayer && !vanillaparm)
+    {
+        if (/* Staff+   */ state == S_STAFFREADY2_1    || state == S_STAFFREADY2_2    || state == S_STAFFREADY2_3    ||
         /* Gauntlets+   */ state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3 ||
         /* CrBow        */ state == S_CRBOWATK1_6      || state == S_CRBOWATK1_7      || state == S_CRBOWATK1_8      ||
         /* CrBow+       */ state == S_CRBOWATK2_6      || state == S_CRBOWATK2_7      || state == S_CRBOWATK2_8      ||
         /* HellStaff+   */ state == S_HORNRODATK2_5    || state == S_HORNRODATK2_6    || state == S_HORNRODATK2_7    || state == S_HORNRODATK2_8 || state == S_HORNRODATK2_9 ||
         /* Phoenix Rod  */ state == S_PHOENIXATK1_4    || state == S_PHOENIXATK1_5    ||
         /* Phoenix Rod+ */ state == S_PHOENIXATK2_4    ||
-        /* Firemace+    */ state == S_MACEATK2_4))
+        /* Firemace+    */ state == S_MACEATK2_4)
         {
             R_ApplyWeaponBob(&psp_sx, true, &psp_sy, true);
         }
 
-    // [JN] Applying halfed bobbing while firing:
-    if (singleplayer && weapon_bobbing && !vanillaparm && (
-        /* Gauntlets    */ state == S_GAUNTLETATK1_1 || state == S_GAUNTLETATK1_2 || state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4 || state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK1_6 || state == S_GAUNTLETATK1_7 ||
+        if (/* Gauntlets*/ state == S_GAUNTLETATK1_1 || state == S_GAUNTLETATK1_2 || state == S_GAUNTLETATK1_3 || state == S_GAUNTLETATK1_4 || state == S_GAUNTLETATK1_5 || state == S_GAUNTLETATK1_6 || state == S_GAUNTLETATK1_7 ||
         /* Gauntlets+   */ state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2 || state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4 || state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6 || state == S_GAUNTLETATK2_7 ||
         /* Staff        */ state == S_STAFFATK1_1    || state == S_STAFFATK1_2    || state == S_STAFFATK1_3    ||
         /* Staff+       */ state == S_STAFFATK2_1    || state == S_STAFFATK2_2    || state == S_STAFFATK2_3    ||
@@ -1123,14 +1147,30 @@ void R_DrawPSprite (pspdef_t *psp)
         /* Phoenix Rod  */ state == S_PHOENIXATK1_1  || state == S_PHOENIXATK1_2  || state == S_PHOENIXATK1_3  ||
         /* Phoenix Rod+ */ state == S_PHOENIXATK2_1  || state == S_PHOENIXATK2_2  || state == S_PHOENIXATK2_3  ||
         /* Firemace     */ state == S_MACEATK1_1     || state == S_MACEATK1_2     || state == S_MACEATK1_3     || state == S_MACEATK1_4     || state == S_MACEATK1_5     || state == S_MACEATK1_6     || state == S_MACEATK1_7     || state == S_MACEATK1_8 || state == S_MACEATK1_9 || state == S_MACEATK1_10 ||
-        /* Firemace+    */ state == S_MACEATK2_1     || state == S_MACEATK2_2     || state == S_MACEATK2_3))
+        /* Firemace+    */ state == S_MACEATK2_1     || state == S_MACEATK2_2     || state == S_MACEATK2_3)
         {
             R_ApplyWeaponFiringBob(&psp_sx, true, &psp_sy, true);
         }
 
-    // [JN] Applying special chicken's bobbing:
-    if (singleplayer && weapon_bobbing && !vanillaparm && (state == S_BEAKREADY || state == S_BEAKATK1_1 || state == S_BEAKATK2_1))
-        R_ApplyChickenBob(&psp_sx, true, &psp_sy, true);
+        if (/* Gauntlets*/ state == S_GAUNTLETDOWN || state == S_GAUNTLETUP ||
+        /* Staff        */ state == S_STAFFDOWN    || state == S_STAFFUP    ||
+        /* Staff+       */ state == S_STAFFDOWN2   || state == S_STAFFUP2   ||
+        /* Wand         */ state == S_GOLDWANDDOWN || state == S_GOLDWANDUP ||
+        /* CrBow        */ state == S_CRBOWDOWN    || state == S_CRBOWUP    ||
+        /* DrClaw       */ state == S_BLASTERDOWN  || state == S_BLASTERUP  ||
+        /* HlStaff      */ state == S_HORNRODDOWN  || state == S_HORNRODUP  ||
+        /* Phoenix Rod  */ state == S_PHOENIXDOWN  || state == S_PHOENIXUP  ||
+        /* Firemace     */ state == S_MACEDOWN     || state == S_MACEUP)
+        {
+            R_ApplyRaiseLowerBob(&psp_sx, true);
+        }
+
+        // [JN] Applying special chicken's bobbing:
+        if (state == S_BEAKREADY || state == S_BEAKATK1_1 || state == S_BEAKATK2_1)
+        {
+            R_ApplyChickenBob(&psp_sx, true, &psp_sy, true);
+        }
+    }
 
     // [crispy] squat down weapon sprite a bit after hitting the ground
     if (weapon_bobbing && !vanillaparm)
