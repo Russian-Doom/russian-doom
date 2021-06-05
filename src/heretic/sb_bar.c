@@ -73,6 +73,9 @@ static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat);
 
 // Public Data
 
+// graphics are drawn to a backing screen and blitted to the real screen
+byte *st_backing_screen;
+
 boolean DebugSound;             // debug flag for displaying sound info
 
 boolean inventory;
@@ -194,6 +197,10 @@ void SB_Init(void)
 {
     int i;
     int startLump;
+
+    st_backing_screen = (byte *)Z_Malloc((screenwidth << hires) 
+                                       * (40 << hires)
+                                       * sizeof(*st_backing_screen), PU_STATIC, 0);
 
     PatchLTFACE = W_CacheLumpName(DEH_String("LTFACE"), PU_STATIC);
     PatchRTFACE = W_CacheLumpName(DEH_String("RTFACE"), PU_STATIC);
@@ -622,13 +629,6 @@ void SB_Drawer(void)
     char fps [999];
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
-    // [JN] Draw extended skulls and stone border
-    if ((aspect_ratio >= 2 && screenblocks <= 10) 
-    ||  (aspect_ratio >= 2 && automapactive && !automap_overlay))
-    {
-        V_DrawPatch(wide_delta, 147, W_CacheLumpName(DEH_String("WDBAR"), PU_CACHE));
-    }
-
     // [JN] Draw horns separatelly in non wide screen mode
     if (aspect_ratio < 2 && screenblocks <= 10 && automapactive && automap_overlay)
     {
@@ -716,6 +716,10 @@ void SB_Drawer(void)
         dp_translation = NULL;
     }
 
+    // [JN] TODO: OPTIMIZE - try to do not redraw whole status bar.
+    if (automapactive)
+        SB_state = -1;
+
     if ((screenblocks >= 11 && !automapactive) 
     ||  (screenblocks >= 11 && automapactive && automap_overlay))
     {
@@ -725,6 +729,56 @@ void SB_Drawer(void)
     }
     else
     {
+        // [JN] Draw side screen borders in wide screen mode.
+        if (aspect_ratio >= 2)
+        {
+            V_UseBuffer(st_backing_screen);
+            
+            // [crispy] this is our own local copy of R_FillBackScreen() to
+            // fill the entire background of st_backing_screen with the bezel pattern,
+            // so it appears to the left and right of the status bar in widescreen mode
+            if ((screenwidth >> hires) != ORIGWIDTH)
+            {
+                int x, y;
+                byte *src;
+                byte *dest;
+                char *name = DEH_String(gamemode == shareware ? "FLOOR04" : "FLAT513");
+                const int shift_allowed = vanillaparm ? 1 : hud_detaillevel;
+        
+                src = W_CacheLumpName(name, PU_CACHE);
+                dest = st_backing_screen;
+        
+                // [JN] Variable HUD detail level.
+                for (y = SCREENHEIGHT-SBARHEIGHT; y < SCREENHEIGHT; y++)
+                {
+                    for (x = 0; x < screenwidth; x++)
+                    {
+                        *dest++ = src[((( y >> shift_allowed) & 63) << 6) 
+                                     + (( x >> shift_allowed) & 63)];
+                    }
+                }
+        
+                // [JN] Draw bezel bottom edge.
+                if (scaledviewwidth == screenwidth)
+                {
+                    patch_t *patch = W_CacheLumpName(DEH_String("BORDB"), PU_CACHE);
+                
+                    for (x = 0; x < screenwidth; x += 8)
+                    {
+                        V_DrawPatch(x, 0, patch);
+                    }
+                }
+            }
+
+            V_RestoreBuffer();
+
+            V_CopyRect(0, 0, st_backing_screen, 
+                       origwidth, 42, 0, 158);
+
+            // [JN] TODO: OPTIMIZE - try to do not redraw whole status bar.
+            SB_state = -1;
+        }
+
         if (SB_state == -1)
         {
             V_DrawPatch(0 + wide_delta, 158, PatchBARBACK);
