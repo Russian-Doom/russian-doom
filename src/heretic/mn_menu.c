@@ -124,12 +124,15 @@ static void M_RD_Change_Msg_Chat_Color(intptr_t option);
 
 // Automap
 static void DrawAutomapMenu(void);
-static void M_RD_AutoMapStats(intptr_t option);
 static void M_RD_AutoMapOverlay(intptr_t option);
 static void M_RD_AutoMapRotate(intptr_t option);
 static void M_RD_AutoMapFollow(intptr_t option);
 static void M_RD_AutoMapGrid(intptr_t option);
 static void M_RD_AutoMapGridSize(intptr_t option);
+static void M_RD_AutoMapStats(intptr_t option);
+static void M_RD_AutoMapLevTime(intptr_t option);
+static void M_RD_AutoMapTotTime(intptr_t option);
+static void M_RD_AutoMapCoords(intptr_t option);
 
 // Sound
 static void DrawSoundMenu(void);
@@ -482,7 +485,7 @@ static MenuItem_t DisplayItems[] = {
     {ITT_LRFUNC, "GRAPHICS DETAIL:",     "LTNFKBPFWBZ UHFABRB:",     M_RD_Detail,          0}, // ДЕТАЛИЗАЦИЯ ГРАФИКИ
     {ITT_EMPTY,   NULL,                  NULL,                       NULL,                 0},
     {ITT_SETMENU, "MESSAGES AND TEXTS...", "CJJ,OTYBZ B NTRCNS>>>",     NULL, (const intptr_t) &MessagesMenu}, // СООБЩЕНИЯ И ТЕКСТЫ...
-    {ITT_SETMENU, "AUTOMAP AND STATISTICS...", "RFHNF B CNFNBCNBRF>>>", NULL, (const intptr_t) &AutomapMenu}   // КАРТЫ И СТАТИСТИКА...
+    {ITT_SETMENU, "AUTOMAP AND STATISTICS...", "RFHNF B CNFNBCNBRF>>>", NULL, (const intptr_t) &AutomapMenu}   // КАРТА И СТАТИСТИКА...
 };
 
 static Menu_t DisplayMenu = {
@@ -524,18 +527,22 @@ static Menu_t MessagesMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t AutomapItems[] = {
-    {ITT_LRFUNC, "LEVEL STATS:",  "CNFNBCNBRF EHJDYZ:", M_RD_AutoMapStats,   0}, // СТАТИСТИКА УРОВНЯ
     {ITT_LRFUNC, "OVERLAY MODE:", "HT;BV YFKJ;TYBZ:",   M_RD_AutoMapOverlay, 0}, // РЕЖИМ НАЛОЖЕНИЯ
     {ITT_LRFUNC, "ROTATE MODE:",  "HT;BV DHFOTYBZ:",    M_RD_AutoMapRotate,  0}, // РЕЖИМ ВРАЩЕНИЯ
     {ITT_LRFUNC, "FOLLOW MODE:",  "HT;BV CKTLJDFYBZ:",  M_RD_AutoMapFollow,  0}, // РЕЖИМ СЛЕДОВАНИЯ
     {ITT_LRFUNC, "GRID:",         "CTNRF:",             M_RD_AutoMapGrid,    0}, // СЕТКА
-    {ITT_LRFUNC, "GRID SIZE:",    "HFPVTH CTNRB:",      M_RD_AutoMapGridSize,0}  // РАЗМЕР СЕТКИ
+    {ITT_LRFUNC, "GRID SIZE:",    "HFPVTH CTNRB:",      M_RD_AutoMapGridSize,0}, // РАЗМЕР СЕТКИ
+    {ITT_EMPTY,   NULL,           NULL,                 NULL,                0},
+    {ITT_LRFUNC, "LEVEL STATS:",  "CNFNBCNBRF EHJDYZ:", M_RD_AutoMapStats,   0}, // СТАТИСТИКА УРОВНЯ
+    {ITT_LRFUNC, "LEVEL TIME:",   "DHTVZ EHJDYZ:",      M_RD_AutoMapLevTime, 0}, // ВРЕМЯ УРОВНЯ
+    {ITT_LRFUNC, "TOTAL TIME:",   "J,OTT EHJDYZ:",      M_RD_AutoMapTotTime, 0}, // ОБЩЕЕ ВРЕМЯ
+    {ITT_LRFUNC, "PLAYER COORDS:","RJJHLBYFNS BUHJRF:", M_RD_AutoMapCoords,  0}  // КООРДИНАТЫ ИГРОКА
 };
 
 static Menu_t AutomapMenu = {
-    102, 32,
-    82,
-    6, AutomapItems,
+    78, 42,
+    61,
+    10, AutomapItems,
     DrawAutomapMenu,
     &DisplayMenu,
     0
@@ -2635,8 +2642,8 @@ void M_RD_Change_Msg_Chat_Color(intptr_t option)
 
 static void DrawAutomapMenu(void)
 {
-    char *title_eng = DEH_String("AUTOMAP SETTINGS");
-    char *title_rus = DEH_String("YFCNHJQRB RFHNS");  // НАСТРОЙКИ КАРТЫ
+    char *title_eng = DEH_String("AUTOMAP AND STATISTICS");
+    char *title_rus = DEH_String("RFHNF B CNFNBCNBRF");  // КАРТА И СТАТИСТИКА
     char  num[4];
 
     M_snprintf(num, 4, "%d", automap_grid_size);
@@ -2655,28 +2662,52 @@ static void DrawAutomapMenu(void)
         MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
                                        + wide_delta, 7);
 
-        // Level stats
-        MN_DrTextSmallENG(DEH_String(automap_stats ? "ON" : "OFF"),
-                                     187 + wide_delta, 32);
+        //
+        // AUTOMAP, STATISTICS
+        //
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("AUTOMAP"), 78 + wide_delta, 32);
+        MN_DrTextSmallENG(DEH_String("STATISTICS"), 78 + wide_delta, 92);
+        dp_translation = NULL;
 
         // Overlay mode
         MN_DrTextSmallENG(DEH_String(automap_overlay ? "ON" : "OFF"),
-                                     200 + wide_delta, 42);
+                                     176 + wide_delta, 42);
 
         // Rotate mode
         MN_DrTextSmallENG(DEH_String(automap_rotate ? "ON" : "OFF"),
-                                     193 + wide_delta, 52);
+                                     169 + wide_delta, 52);
 
         // Follow mode
         MN_DrTextSmallENG(DEH_String(automap_follow ? "ON" : "OFF"),
-                                     189 + wide_delta, 62);
+                                     165 + wide_delta, 62);
 
         // Grid
         MN_DrTextSmallENG(DEH_String(automap_grid ? "ON" : "OFF"),
-                                     138 + wide_delta, 72);
+                                     114 + wide_delta, 72);
 
         // Grid size
-        MN_DrTextSmallENG(DEH_String(num), 171 + wide_delta, 82);
+        MN_DrTextSmallENG(DEH_String(num), 147 + wide_delta, 82);
+
+        // Level stats
+        MN_DrTextSmallENG(DEH_String(automap_stats == 1 ? "IN AUTOMAP" :
+                                     automap_stats == 2 ? "ALWAYS" : "OFF"),
+                                     163 + wide_delta, 102);
+
+        // Level time
+        MN_DrTextSmallENG(DEH_String(automap_level_time == 1 ? "IN AUTOMAP" :
+                                     automap_level_time == 2 ? "ALWAYS" : "OFF"),
+                                     152 + wide_delta, 112);
+
+        // Total time
+        MN_DrTextSmallENG(DEH_String(automap_total_time == 1 ? "IN AUTOMAP" :
+                                     automap_total_time == 2 ? "ALWAYS" : "OFF"),
+                                     153 + wide_delta, 122);
+
+        // Player coords
+        MN_DrTextSmallENG(DEH_String(automap_coords == 1 ? "IN AUTOMAP" :
+                                     automap_coords == 2 ? "ALWAYS" : "OFF"),
+                                     184 + wide_delta, 132);
     }
     else
     {
@@ -2686,34 +2717,53 @@ static void DrawAutomapMenu(void)
         MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
                                        + wide_delta, 7);
 
-        // Статистика уровня
-        MN_DrTextSmallRUS(DEH_String(automap_stats ? "DRK" : "DSRK"),
-                                     214 + wide_delta, 32);
+        //
+        // КАРТА, СТАТИСТИКА
+        //
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("RFHNF"), 61 + wide_delta, 32);
+        MN_DrTextSmallRUS(DEH_String("CNFNBCNBRF"), 61 + wide_delta, 92);
+        dp_translation = NULL;
 
         // Режим наложения
         MN_DrTextSmallRUS(DEH_String(automap_overlay ? "DRK" : "DSRK"),
-                                     208 + wide_delta, 42);
+                                     187 + wide_delta, 42);
 
         // Режим вращения
         MN_DrTextSmallRUS(DEH_String(automap_rotate ? "DRK" : "DSRK"),
-                                     200 + wide_delta, 52);
+                                     179 + wide_delta, 52);
 
         // Режим следования
         MN_DrTextSmallRUS(DEH_String(automap_follow ? "DRK" : "DSRK"),
-                                     215 + wide_delta, 62);
+                                     194 + wide_delta, 62);
 
         // Сетка
         MN_DrTextSmallRUS(DEH_String(automap_grid ? "DRK" : "DSRK"),
-                                     128 + wide_delta, 72);
+                                     107 + wide_delta, 72);
 
         // Размер сетки
-        MN_DrTextSmallRUS(DEH_String(num), 179 + wide_delta, 82);
-    }
-}
+        MN_DrTextSmallRUS(DEH_String(num), 158 + wide_delta, 82);
 
-static void M_RD_AutoMapStats(intptr_t option)
-{
-    automap_stats ^= 1;
+        // Статистика уровня
+        MN_DrTextSmallRUS(DEH_String(automap_stats == 1 ? "YF RFHNT" :
+                                     automap_stats == 2 ? "DCTULF" : "DSRK"),
+                                     193 + wide_delta, 102);
+
+        // Время уровня
+        MN_DrTextSmallRUS(DEH_String(automap_level_time == 1 ? "YF RFHNT" :
+                                     automap_level_time == 2 ? "DCTULF" : "DSRK"),
+                                     158 + wide_delta, 112);
+
+        // Общее время
+        MN_DrTextSmallRUS(DEH_String(automap_total_time == 1 ? "YF RFHNT" :
+                                     automap_total_time == 2 ? "DCTULF" : "DSRK"),
+                                     161 + wide_delta, 122);
+
+        // Координаты игрока
+        MN_DrTextSmallRUS(DEH_String(automap_coords == 1 ? "YF RFHNT" :
+                                     automap_coords == 2 ? "DCTULF" : "DSRK"),
+                                     198 + wide_delta, 132);
+    }
 }
 
 static void M_RD_AutoMapOverlay(intptr_t option)
@@ -2766,6 +2816,78 @@ static void M_RD_AutoMapGridSize(intptr_t option)
             else
             if (automap_grid_size == 256)
                 automap_grid_size = 512;
+        break;
+    }
+}
+
+static void M_RD_AutoMapStats(intptr_t option)
+{
+    switch(option)
+    {
+        case 0: 
+        automap_stats--;
+        if (automap_stats < 0) 
+            automap_stats = 2;
+        break;
+    
+        case 1:
+        automap_stats++;
+        if (automap_stats > 2)
+            automap_stats = 0;
+        break;
+    }
+}
+
+static void M_RD_AutoMapLevTime(intptr_t option)
+{
+    switch(option)
+    {
+        case 0: 
+        automap_level_time--;
+        if (automap_level_time < 0) 
+            automap_level_time = 2;
+        break;
+    
+        case 1:
+        automap_level_time++;
+        if (automap_level_time > 2)
+            automap_level_time = 0;
+        break;
+    }
+}
+
+static void M_RD_AutoMapTotTime(intptr_t option)
+{
+    switch(option)
+    {
+        case 0: 
+        automap_total_time--;
+        if (automap_total_time < 0) 
+            automap_total_time = 2;
+        break;
+    
+        case 1:
+        automap_total_time++;
+        if (automap_total_time > 2)
+            automap_total_time = 0;
+        break;
+    }
+}
+
+static void M_RD_AutoMapCoords(intptr_t option)
+{
+    switch(option)
+    {
+        case 0: 
+        automap_coords--;
+        if (automap_coords < 0) 
+            automap_coords = 2;
+        break;
+    
+        case 1:
+        automap_coords++;
+        if (automap_coords > 2)
+            automap_coords = 0;
         break;
     }
 }
@@ -4966,12 +5088,15 @@ void M_RD_DoResetSettings(void)
     message_chat_color = 5;
 
     // Automap
-    automap_stats   = 1;
-    automap_follow  = 1;
-    automap_overlay = 0;
-    automap_rotate  = 0;
-    automap_grid    = 0;
-    automap_grid_size  = 128;
+    automap_overlay    = 0;
+    automap_rotate     = 0;
+    automap_follow     = 1;
+    automap_grid       = 0;
+    automap_grid_size  = 128;    
+    automap_stats      = 1;
+    automap_level_time = 1;
+    automap_total_time = 0;
+    automap_coords     = 0;
 
     // Audio
     snd_MaxVolume   = 8;

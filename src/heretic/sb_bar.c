@@ -23,6 +23,7 @@
 #include "deh_str.h"
 #include "i_video.h"
 #include "i_swap.h"
+#include "i_timer.h"    // [JN] TICRATE
 #include "m_cheat.h"
 #include "m_misc.h"
 #include "m_random.h"
@@ -660,6 +661,105 @@ void SB_Drawer(void)
         sprintf (fps, "%d", f);
         MN_DrTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 23);
         MN_DrTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta*2), 23);   // [JN] fps digits
+    }
+
+    // [JN] Show statistics
+    if (screenblocks <= 11 && !vanillaparm)
+    {
+        char text[32];
+        const int time = leveltime / TICRATE;
+        const int totaltime = (totalleveltimes / TICRATE) + (leveltime / TICRATE);
+
+        // [JN] Level stats
+        if ((automapactive && automap_stats == 1) || automap_stats == 2)
+        {
+            M_snprintf(text, sizeof(text), english_language ? "KILLS: %d/ %d" : "DHFUB: %d/ %d",
+                       players[consoleplayer].killcount, totalkills);
+            if (english_language)
+            {
+                MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
+            }
+            else
+            {
+                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
+            }
+            M_snprintf(text, sizeof(text), english_language ? "ITEMS: %d/ %d" : "GHTLVTNS: %d/ %d",
+                       players[consoleplayer].itemcount, totalitems);
+            if (english_language)
+            {
+                MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
+            }
+            else
+            {
+                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
+            }
+            M_snprintf(text, sizeof(text), english_language ? "SECRETS: %d/ %d" : "NFQYBRB: %d/ %d",
+                       players[consoleplayer].secretcount, totalsecret);
+            if (english_language)
+            {
+                MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
+            }
+            else
+            {
+                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
+            }
+    
+            M_snprintf(text, sizeof(text), english_language ? "SKILL: %d" : "CKJ;YJCNM: %d",  gameskill +1);
+            if (english_language)
+            {
+                MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
+            }
+            else
+            {
+                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
+            }
+        }
+
+        // [JN] Level time
+        if ((automapactive && automap_level_time == 1) || automap_level_time == 2)
+        {
+            if (english_language)
+            {
+                MN_DrTextA("LEVEL", 20 + (wide_4_3 ? wide_delta : 0), 61);
+            }
+            else
+            {
+                MN_DrTextSmallRUS("EHJDTYM", 20 + (wide_4_3 ? wide_delta : 0), 61);
+            }
+
+            M_snprintf(text, sizeof(text), "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
+            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 71);
+        }
+
+        // [JN] Total time
+        if ((automapactive && automap_total_time == 1) || automap_total_time == 2)
+        {
+            if (english_language)
+            {
+                MN_DrTextA("TOTAL", 20 + (wide_4_3 ? wide_delta : 0), 81);
+            }
+            else
+            {
+                MN_DrTextSmallRUS("J,OTT", 20 + (wide_4_3 ? wide_delta : 0), 81);
+            }
+
+            M_snprintf(text, sizeof(text), "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
+            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 91);
+        }
+
+        // [JN] Player coords
+        if ((automapactive && automap_coords == 1) || automap_coords == 2)
+        {
+            M_snprintf(text, sizeof(text), "X: %d, Y: %d",
+                       players[consoleplayer].mo->x >> FRACBITS,
+                       players[consoleplayer].mo->y >> FRACBITS);
+            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 106);
+
+            M_snprintf(text, sizeof(text), "Z: %d, ANG: %d",
+                       players[consoleplayer].mo->z >> FRACBITS,
+                       players[consoleplayer].mo->angle / ANG1);
+            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 116);
+        }
     }
 
     // Sound info debug stuff

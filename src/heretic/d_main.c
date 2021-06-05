@@ -127,12 +127,15 @@ int message_system_color = 0;
 int message_chat_color = 5;
 
 // Automap
-int automap_stats = 1;
 int automap_overlay = 0;
 int automap_rotate = 0;
 int automap_follow = 1;
 int automap_grid = 0;
 int automap_grid_size = 128;
+int automap_stats = 1;
+int automap_level_time = 1;
+int automap_total_time = 0;
+int automap_coords = 0;
 
 // Sound
 int snd_MaxVolume = 10;
@@ -1037,10 +1040,16 @@ void D_BindVariables(void)
     M_BindIntVariable("message_chat_color",     &message_chat_color);
 
     // Automap
-    M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_overlay",        &automap_overlay);
     M_BindIntVariable("automap_rotate",         &automap_rotate);
+    M_BindIntVariable("automap_follow",         &automap_follow);
     M_BindIntVariable("automap_grid",           &automap_grid);
+    M_BindIntVariable("automap_grid_size",      &automap_grid_size);
+    M_BindIntVariable("automap_stats",          &automap_stats);
+    M_BindIntVariable("automap_level_time",     &automap_level_time);
+    M_BindIntVariable("automap_total_time",     &automap_total_time);
+    M_BindIntVariable("automap_coords",         &automap_coords);
+    
 
     // Sound
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);
@@ -1064,7 +1073,6 @@ void D_BindVariables(void)
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
 
     // Gameplay: Tactical
-    M_BindIntVariable("automap_stats",          &automap_stats);
     M_BindIntVariable("secret_notification",    &secret_notification);
     M_BindIntVariable("negative_health",        &negative_health);
 

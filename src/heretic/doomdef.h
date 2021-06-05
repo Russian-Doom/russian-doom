@@ -583,6 +583,7 @@ extern int prevmap;
 extern int totalkills, totalitems, totalsecret; // for intermission
 extern int levelstarttic;       // gametic at level start
 extern int leveltime;           // tics in game play for par
+extern int totalleveltimes;     // [crispy] CPhipps - total time for all completed levels
 
 // [crispy] CPhipps - total game time for completed levels so far
 extern int totaltimes; 
