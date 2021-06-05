@@ -191,6 +191,41 @@ set_target_properties(${PROGRAM_PREFIX}setup PROPERTIES
     ADDITIONAL_CLEAN_FILES "${GAME_SETUP_FILES}"
 )
 
+# Copying gus patches
+file(GLOB GUS_PATCHES_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/base/gus_patches/*")
+
+foreach(SRC_FILE_PATH ${GUS_PATCHES_SRC_FILES})
+    get_filename_component(DEST_FILE_NAME "${SRC_FILE_PATH}" NAME)
+    add_custom_command(OUTPUT "base/gus_patches/${DEST_FILE_NAME}"
+            MAIN_DEPENDENCY "${SRC_FILE_PATH}"
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SRC_FILE_PATH}"
+            "base/gus_patches/${DEST_FILE_NAME}"
+            COMMENT "Copying ${CMAKE_CURRENT_BINARY_DIR}/base/gus_patches/${DEST_FILE_NAME}")
+    list(APPEND GUS_PATCHES_DEST_FILES "${CMAKE_CURRENT_BINARY_DIR}/base/gus_patches/${DEST_FILE_NAME}")
+endforeach()
+add_custom_target(gus-patches DEPENDS ${GUS_PATCHES_DEST_FILES})
+
+foreach(TARGET doom heretic hexen strife setup)
+    add_dependencies("${PROGRAM_PREFIX}${TARGET}" gus-patches)
+endforeach()
+
+# Copying game support wads
+foreach(TARGET doom heretic hexen strife)
+
+    file(GLOB WADS "${CMAKE_CURRENT_SOURCE_DIR}/base/${TARGET}-*.wad")
+    foreach(SRC_FILE_PATH ${WADS})
+        get_filename_component(DEST_FILE_NAME "${SRC_FILE_PATH}" NAME)
+        add_custom_command(OUTPUT "base/${DEST_FILE_NAME}"
+                MAIN_DEPENDENCY "${SRC_FILE_PATH}"
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SRC_FILE_PATH}"
+                "base/${DEST_FILE_NAME}"
+                COMMENT "Copying ${CMAKE_CURRENT_BINARY_DIR}/base/${DEST_FILE_NAME}")
+        list(APPEND "${TARGET}_DEST_WADS" "${CMAKE_CURRENT_BINARY_DIR}/base/${DEST_FILE_NAME}")
+    endforeach()
+    add_custom_target("${TARGET}-wads" DEPENDS ${${TARGET}_DEST_WADS})
+    add_dependencies("${PROGRAM_PREFIX}${TARGET}" "${TARGET}-wads")
+endforeach()
+
 # Source groups
 source_group("Midiproc" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/midiproc/.+")
 source_group("Opl" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/opl/.+")
