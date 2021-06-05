@@ -122,9 +122,9 @@ int draw_shadowed_text = 1;
 
 // Display: Messages
 int message_pickup_color = 0;
-int message_secret_color = 0;
+int message_secret_color = 15;
 int message_system_color = 0;
-int message_chat_color = 0;
+int message_chat_color = 5;
 
 // Automap
 int automap_stats = 1;
@@ -254,11 +254,6 @@ void DrawMessage(void)
 {
     player_t *player = &players[consoleplayer];
 
-    extern byte *messages_pickup_color_set;
-    extern byte *messages_secret_color_set;
-    extern byte *messages_system_color_set;
-    extern byte *messages_chat_color_set;
-
     // [JN] Activate message counter in non-level or paused states.
     // Make messages go away in menu, finale and help screens.
     if (gamestate != GS_LEVEL || paused)
@@ -272,7 +267,6 @@ void DrawMessage(void)
     }
 
     // [JN] Colorize depending on given color type.
-    // TODO: make color variable.
     switch (player->messageColor)
     {
         case 1: // Item pickup.

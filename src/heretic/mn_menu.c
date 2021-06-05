@@ -112,10 +112,15 @@ static void M_RD_Messages(intptr_t option);
 static void M_RD_ShadowedText(intptr_t option);
 
 // Messages
-static void M_RD_Define_Msg_Pickup_Color(intptr_t option);
-static void M_RD_Define_Msg_Secret_Color(intptr_t option);
-static void M_RD_Define_Msg_System_Color(intptr_t option);
-static void M_RD_Define_Msg_Chat_Color(intptr_t option);
+static void DrawMessagesMenu(void);
+static void M_RD_Define_Msg_Pickup_Color(void);
+static void M_RD_Change_Msg_Pickup_Color(intptr_t option);
+static void M_RD_Define_Msg_Secret_Color(void);
+static void M_RD_Change_Msg_Secret_Color(intptr_t option);
+static void M_RD_Define_Msg_System_Color(void);
+static void M_RD_Change_Msg_System_Color(intptr_t option);
+static void M_RD_Define_Msg_Chat_Color(void);
+static void M_RD_Change_Msg_Chat_Color(intptr_t option);
 
 // Automap
 static void DrawAutomapMenu(void);
@@ -277,6 +282,56 @@ byte *messages_secret_color_set;
 byte *messages_system_color_set;
 byte *messages_chat_color_set;
 
+static byte *M_RD_ColorTranslation (int color)
+{
+    switch (color)
+    {
+        case 1:   return cr[CR_WHITE2GRAY_HERETIC];      break;
+        case 2:   return cr[CR_WHITE2DARKGRAY_HERETIC];  break;
+        case 3:   return cr[CR_WHITE2RED_HERETIC];       break;
+        case 4:   return cr[CR_WHITE2DARKRED_HERETIC];   break;
+        case 5:   return cr[CR_WHITE2GREEN_HERETIC];     break;
+        case 6:   return cr[CR_WHITE2DARKGREEN_HERETIC]; break;
+        case 7:   return cr[CR_WHITE2OLIVE_HERETIC];     break;
+        case 8:   return cr[CR_WHITE2BLUE_HERETIC];      break;
+        case 9:   return cr[CR_WHITE2DARKBLUE_HERETIC];  break;
+        case 10:  return cr[CR_WHITE2PURPLE_HERETIC];    break;
+        case 11:  return cr[CR_WHITE2NIAGARA_HERETIC];   break;
+        case 12:  return cr[CR_WHITE2AZURE_HERETIC];     break;
+        case 13:  return cr[CR_WHITE2YELLOW_HERETIC];    break;
+        case 14:  return cr[CR_WHITE2GOLD_HERETIC];      break;
+        case 15:  return cr[CR_WHITE2DARKGOLD_HERETIC];  break;
+        case 16:  return cr[CR_WHITE2TAN_HERETIC];       break;
+        case 17:  return cr[CR_WHITE2BROWN_HERETIC];     break;
+        default:  return NULL;                           break;
+    }
+}
+
+static char *M_RD_ColorName (int color)
+{
+    switch (color)
+    {
+        case 1:   return english_language ? "GRAY"       : "CTHSQ";          break;  // СЕРЫЙ
+        case 2:   return english_language ? "DARK GRAY"  : "NTVYJ-CTHSQ";    break;  // ТЁМНО-СЕРЫЙ
+        case 3:   return english_language ? "RED"        : "RHFCYSQ";        break;  // КРАСНЫЙ
+        case 4:   return english_language ? "DARK RED"   : "NTVYJ-RHFCYSQ";  break;  // ТЁМНО-КРАСНЫЙ
+        case 5:   return english_language ? "GREEN"      : "PTKTYSQ";        break;  // ЗЕЛЕНЫЙ
+        case 6:   return english_language ? "DARK GREEN" : "NTVYJ-PTKTYSQ";  break;  // ТЕМНО-ЗЕЛЕНЫЙ
+        case 7:   return english_language ? "OLIVE"      : "JKBDRJDSQ";      break;  // ОЛИВКОВЫЙ
+        case 8:   return english_language ? "BLUE"       : "CBYBQ";          break;  // СИНИЙ
+        case 9:   return english_language ? "DARK BLUE"  : "NTVYJ-CBYBQ";    break;  // ТЕМНО-СИНИЙ
+        case 10:  return english_language ? "PURPLE"     : "ABJKTNJDSQ";     break;  // ФИОЛЕТОВЫЙ
+        case 11:  return english_language ? "NIAGARA"    : "YBFUFHF";        break;  // НИАГАРА
+        case 12:  return english_language ? "AZURE"      : "KFPEHYSQ";       break;  // ЛАЗУРНЫЙ
+        case 13:  return english_language ? "YELLOW"     : ";TKNSQ";         break;  // ЖЕЛТЫЙ
+        case 14:  return english_language ? "GOLD"       : "PJKJNJQ";        break;  // ЗОЛОТОЙ
+        case 15:  return english_language ? "DARK GOLD"  : "NTVYJ-PJKJNJQ";  break;  // ТЕМНО-ЗОЛОТОЙ
+        case 16:  return english_language ? "TAN"        : ",T;TDSQ";        break;  // БЕЖЕВЫЙ
+        case 17:  return english_language ? "BROWN"      : "RJHBXYTDSQ";     break;  // КОРИЧНЕВЫЙ
+        default:  return english_language ? "WHITE"      : ",TKSQ";          break;  // БЕЛЫЙ
+    }
+}
+
 
 // [JN] Used as a timer for hiding menu background
 // while changing screen size, gamma and level brightness.
@@ -295,6 +350,7 @@ static Menu_t EpisodeMenu;
 static Menu_t OptionsMenu;
 static Menu_t RenderingMenu;
 static Menu_t DisplayMenu;
+static Menu_t MessagesMenu;
 static Menu_t AutomapMenu;
 static Menu_t SoundMenu;
 static Menu_t SoundSysMenu;
@@ -424,18 +480,41 @@ static MenuItem_t DisplayItems[] = {
     {ITT_EMPTY,   NULL,                  NULL,                       NULL,                 0},
     {ITT_LRFUNC, "GRAPHICS DETAIL:",     "LTNFKBPFWBZ UHFABRB:",     M_RD_Detail,          0}, // ДЕТАЛИЗАЦИЯ ГРАФИКИ
     {ITT_EMPTY,   NULL,                  NULL,                       NULL,                 0},
-    {ITT_LRFUNC,  "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,       0}, // СИСТЕМНОЕ ВРЕМЯ
-    {ITT_LRFUNC,  "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,        0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
-    {ITT_LRFUNC,  "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,    0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
-    {ITT_SETMENU, "AUTOMAP SETTINGS...", "YFCNHJQRB RFHNS>>>",       NULL, (const intptr_t) &AutomapMenu}  // НАСТРОЙКИ КАРТЫ
+    {ITT_SETMENU, "MESSAGES AND TEXTS...", "CJJ,OTYBZ B NTRCNS>>>",     NULL, (const intptr_t) &MessagesMenu}, // СООБЩЕНИЯ И ТЕКСТЫ...
+    {ITT_SETMENU, "AUTOMAP AND STATISTICS...", "RFHNF B CNFNBCNBRF>>>", NULL, (const intptr_t) &AutomapMenu}   // КАРТЫ И СТАТИСТИКА...
 };
 
 static Menu_t DisplayMenu = {
     36, 42,
     36,
-    12, DisplayItems,
+    10, DisplayItems,
     DrawDisplayMenu,
     &OptionsMenu,
+    0
+};
+
+// -----------------------------------------------------------------------------
+// Messages settings
+// -----------------------------------------------------------------------------
+
+static MenuItem_t MessagesItems[] = {
+    {ITT_LRFUNC,  "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,                0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
+    {ITT_LRFUNC,  "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,            0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
+    {ITT_EMPTY,   NULL,                  NULL,                       NULL,                         0},
+    {ITT_LRFUNC,  "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,               0}, // СИСТЕМНОЕ ВРЕМЯ
+    {ITT_EMPTY,   NULL,                  NULL,                       NULL,                         0},
+    {ITT_LRFUNC,  "ITEM PICKUP:",        "GJKEXTYBT GHTLVTNJD:",     M_RD_Change_Msg_Pickup_Color, 0}, // ПОЛУЧЕНИЕ ПРЕДМЕТОВ
+    {ITT_LRFUNC,  "REVEALED SECRET:",    "J,YFHE;TYBT NFQYBRJD:",    M_RD_Change_Msg_Secret_Color, 0}, // ОБНАРУЖЕНИЕ ТАЙНИКОВ
+    {ITT_LRFUNC,  "SYSTEM MESSAGE:",     "CBCNTVYST CJJ,OTYBZ:",     M_RD_Change_Msg_System_Color, 0}, // СИСТЕМНЫЕ СООБЩЕНИЯ
+    {ITT_LRFUNC,  "NETGAME CHAT:",       "XFN CTNTDJQ BUHS:",        M_RD_Change_Msg_Chat_Color,   0}  // ЧАТ СЕТЕВОЙ ИГРЫ
+};
+
+static Menu_t MessagesMenu = {
+    36, 42,
+    36,
+    9, MessagesItems,
+    DrawMessagesMenu,
+    &DisplayMenu,
     0
 };
 
@@ -905,10 +984,10 @@ void MN_Init(void)
     }
 
     // [JN] Init message colors.
-    M_RD_Define_Msg_Pickup_Color(0);
-    M_RD_Define_Msg_Secret_Color(0);
-    M_RD_Define_Msg_System_Color(0);
-    M_RD_Define_Msg_Chat_Color(0);
+    M_RD_Define_Msg_Pickup_Color();
+    M_RD_Define_Msg_Secret_Color();
+    M_RD_Define_Msg_System_Color();
+    M_RD_Define_Msg_Chat_Color();
 }
 
 //---------------------------------------------------------------------------
@@ -1729,7 +1808,7 @@ static void DrawRenderingMenu(void)
         //
         // RENDERING
         // 
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("RENDERING"), 36 + wide_delta, 32);
         dp_translation = NULL;
 
@@ -1743,7 +1822,7 @@ static void DrawRenderingMenu(void)
         // Informative message
         if (aspect_ratio_temp != aspect_ratio)
         {
-            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            dp_translation = cr[CR_WHITE2GREEN_HERETIC];
             MN_DrTextSmallENG(DEH_String("THE PROGRAM MUST BE RESTARTED"),
                                          51 + wide_delta, 148);
             dp_translation = NULL;
@@ -1752,7 +1831,7 @@ static void DrawRenderingMenu(void)
         // Vertical sync
         if (force_software_renderer)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
             MN_DrTextSmallENG(DEH_String("N/A"), 216 + wide_delta, 52);
             dp_translation = NULL;
         }
@@ -1773,7 +1852,7 @@ static void DrawRenderingMenu(void)
         // Pixel scaling
         if (force_software_renderer)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
             MN_DrTextSmallENG(DEH_String("N/A"), 131 + wide_delta, 82);
             dp_translation = NULL;
         }
@@ -1795,7 +1874,7 @@ static void DrawRenderingMenu(void)
         //
         // EXTRA
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("EXTRA"), 36 + wide_delta, 112);
         dp_translation = NULL;
 
@@ -1814,7 +1893,7 @@ static void DrawRenderingMenu(void)
         //
         // РЕНДЕРИНГ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("HTYLTHBYU"), 36 + wide_delta, 32);
         dp_translation = NULL;
 
@@ -1829,7 +1908,7 @@ static void DrawRenderingMenu(void)
         // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
         if (aspect_ratio_temp != aspect_ratio)
         {
-            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            dp_translation = cr[CR_WHITE2GREEN_HERETIC];
             MN_DrTextSmallRUS(DEH_String("YTJ,[JLBV GTHTPFGECR GHJUHFVVS"), 
                                          46 + wide_delta, 148);
             dp_translation = NULL;
@@ -1838,7 +1917,7 @@ static void DrawRenderingMenu(void)
         // Вертикальная синхронизация
         if (force_software_renderer)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
             MN_DrTextSmallRUS(DEH_String("Y/L"), 236 + wide_delta, 52);
             dp_translation = NULL;
         }
@@ -1861,7 +1940,7 @@ static void DrawRenderingMenu(void)
         // Пиксельное сглаживание
         if (force_software_renderer)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
             MN_DrTextSmallRUS(DEH_String("Y/L"), 211 + wide_delta, 82);
             dp_translation = NULL;
         }
@@ -1883,7 +1962,7 @@ static void DrawRenderingMenu(void)
         //
         // ДОПОЛНИТЕЛЬНО
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + wide_delta, 112);
         dp_translation = NULL;
 
@@ -2014,7 +2093,7 @@ static void DrawDisplayMenu(void)
         //
         // SCREEN, INTERFACE
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("SCREEN"), 36 + wide_delta, 32);
         MN_DrTextSmallENG(DEH_String("INTERFACE"), 36 + wide_delta, 112);
         dp_translation = NULL;
@@ -2022,22 +2101,6 @@ static void DrawDisplayMenu(void)
         // Graphics detail
         MN_DrTextSmallENG(DEH_String(detailLevel ? "LOW" : "HIGH"),
                                      149 + wide_delta, 102);
-
-        // Local time
-        MN_DrTextSmallENG(DEH_String(
-                          local_time == 1 ? "12-HOUR (HH:MM)" :
-                          local_time == 2 ? "12-HOUR (HH:MM:SS)" :
-                          local_time == 3 ? "24-HOUR (HH:MM)" :
-                          local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF"),
-                          110 + wide_delta, 122);
-
-        // Messages
-        MN_DrTextSmallENG(DEH_String(show_messages ? "ON" : "OFF"),
-                                     108 + wide_delta, 132);
-
-        // Text casts shadows
-        MN_DrTextSmallENG(DEH_String(draw_shadowed_text ? "ON" : "OFF"),
-                                     179 + wide_delta, 142);
     }
     else
     {
@@ -2050,7 +2113,7 @@ static void DrawDisplayMenu(void)
         //
         // ЭКРАН, ИНТЕРФЕЙС
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("\'RHFY"), 36 + wide_delta, 32);
         MN_DrTextSmallRUS(DEH_String("BYNTHATQC"), 36 + wide_delta, 112);
         dp_translation = NULL;
@@ -2058,22 +2121,6 @@ static void DrawDisplayMenu(void)
         // Детализация графики
         MN_DrTextSmallRUS(DEH_String(detailLevel ? "YBPRFZ" : "DSCJRFZ"),
                                      188 + wide_delta, 102);
-
-        // Системное время
-        MN_DrTextSmallRUS(DEH_String(
-                          local_time == 1 ? "12-XFCJDJT (XX:VV)" :
-                          local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
-                          local_time == 3 ? "24-XFCJDJT (XX:VV)" :
-                          local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK"),
-                          157 + wide_delta, 122);
-
-        // Отображение сообщений
-        MN_DrTextSmallRUS(DEH_String(show_messages ? "DRK" : "DSRK"),
-                                     208 + wide_delta, 132);
-
-        // Тексты отбрасывают тень
-        MN_DrTextSmallRUS(DEH_String(draw_shadowed_text ? "DRK" : "DSRK"),
-                                     220 + wide_delta, 142);
     }
 
     //
@@ -2085,7 +2132,7 @@ static void DrawDisplayMenu(void)
     {
         DrawSliderSmall(&DisplayMenu, 1, 4, screenblocks - 9);
         M_snprintf(num, 4, "%3d", screenblocks);
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = cr[CR_WHITE2GRAY_HERETIC];
         MN_DrTextSmallENG(num, 85 + wide_delta, 52);
         dp_translation = NULL;
     }
@@ -2093,7 +2140,7 @@ static void DrawDisplayMenu(void)
     {
         DrawSliderSmall(&DisplayMenu, 1, 10, screenblocks - 3);
         M_snprintf(num, 4, "%3d", screenblocks);
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = cr[CR_WHITE2GRAY_HERETIC];
         MN_DrTextA(num, 135 + wide_delta, 52);
         dp_translation = NULL;
     }
@@ -2162,7 +2209,7 @@ static void M_RD_Gamma(intptr_t option)
     P_SetMessage(&players[consoleplayer], english_language ? 
                                           GammaText[usegamma] :
                                           GammaText_Rus[usegamma],
-                                          false);
+                                          msg_system, false);
 }
 
 static void M_RD_LevelBrightness(intptr_t option)
@@ -2192,7 +2239,130 @@ static void M_RD_Detail(intptr_t option)
     R_SetViewSize (screenblocks, detailLevel);
 
     P_SetMessage(&players[consoleplayer], detailLevel ?
-                 txt_detail_low : txt_detail_high, false);
+                 txt_detail_low : txt_detail_high, msg_system, false);
+}
+
+// -----------------------------------------------------------------------------
+// DrawMessagesMenu
+// -----------------------------------------------------------------------------
+
+static void DrawMessagesMenu(void)
+{
+    char *title_eng = DEH_String("MESSAGES AND TEXTS");
+    char *title_rus = DEH_String("CJJ,OTYBZ B NTRCNS");  // СООБЩЕНИЯ И ТЕКСТЫ
+
+    // Draw menu background.
+    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+
+    // Update status bar.
+    SB_state = -1;
+
+    if (english_language)
+    {
+        //
+        // Title
+        //
+        MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2 
+                                       + wide_delta, 7);
+
+        //
+        // GENERAL, MISC., COLORS
+        //
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("GENERAL"), 36 + wide_delta, 32);
+        MN_DrTextSmallENG(DEH_String("MISC."), 36 + wide_delta, 62);
+        MN_DrTextSmallENG(DEH_String("COLORS"), 36 + wide_delta, 82);
+        dp_translation = NULL;
+
+        // Messages
+        MN_DrTextSmallENG(DEH_String(show_messages ? "ON" : "OFF"),
+                                     108 + wide_delta, 42);
+
+        // Text casts shadows
+        MN_DrTextSmallENG(DEH_String(draw_shadowed_text ? "ON" : "OFF"),
+                                     179 + wide_delta, 52);
+
+        // Local time
+        MN_DrTextSmallENG(DEH_String(
+                          local_time == 1 ? "12-HOUR (HH:MM)" :
+                          local_time == 2 ? "12-HOUR (HH:MM:SS)" :
+                          local_time == 3 ? "24-HOUR (HH:MM)" :
+                          local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF"),
+                          110 + wide_delta, 72);
+
+        // Item pickup
+        dp_translation = M_RD_ColorTranslation(message_pickup_color);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_pickup_color)), 120 + wide_delta, 92);
+        dp_translation = NULL;
+
+        // Revealed secret
+        dp_translation = M_RD_ColorTranslation(message_secret_color);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_secret_color)), 157 + wide_delta, 102);
+        dp_translation = NULL;
+
+        // System message
+        dp_translation = M_RD_ColorTranslation(message_system_color);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_system_color)), 152 + wide_delta, 112);
+        dp_translation = NULL;
+
+        // Netgame chat
+        dp_translation = M_RD_ColorTranslation(message_chat_color);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_chat_color)), 135 + wide_delta, 122);
+        dp_translation = NULL;
+    }
+    else
+    {
+        //
+        // Title
+        //
+        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
+                                       + wide_delta, 7);
+
+        //
+        // GENERAL, MISC., COLORS
+        //
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("JCYJDYJT"), 36 + wide_delta, 32); // ОСНОВНОЕ
+        MN_DrTextSmallRUS(DEH_String("HFPYJT"), 36 + wide_delta, 62);   // РАЗНОЕ
+        MN_DrTextSmallRUS(DEH_String("WDTNF"), 36 + wide_delta, 82);    // ЦВЕТА
+        dp_translation = NULL;
+
+        // Отображение сообщений
+        MN_DrTextSmallRUS(DEH_String(show_messages ? "DRK" : "DSRK"),
+                                     208 + wide_delta, 42);
+
+        // Тексты отбрасывают тень
+        MN_DrTextSmallRUS(DEH_String(draw_shadowed_text ? "DRK" : "DSRK"),
+                                     220 + wide_delta, 52);
+
+        // Системное время
+        MN_DrTextSmallRUS(DEH_String(
+                          local_time == 1 ? "12-XFCJDJT (XX:VV)" :
+                          local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
+                          local_time == 3 ? "24-XFCJDJT (XX:VV)" :
+                          local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK"),
+                          157 + wide_delta, 72);
+
+        // Получение предметов
+        dp_translation = M_RD_ColorTranslation(message_pickup_color);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_pickup_color)), 187 + wide_delta, 92);
+        dp_translation = NULL;
+
+        // Обнаружение тайников
+        dp_translation = M_RD_ColorTranslation(message_secret_color);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_secret_color)), 195 + wide_delta, 102);
+        dp_translation = NULL;
+
+        // Системные сообщения
+        dp_translation = M_RD_ColorTranslation(message_system_color);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_system_color)), 191 + wide_delta, 112);
+        dp_translation = NULL;
+
+        // Чат сетевой игры
+        dp_translation = M_RD_ColorTranslation(message_chat_color);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_chat_color)), 162 + wide_delta, 122);
+        dp_translation = NULL;
+    }
 }
 
 static void M_RD_LocalTime(intptr_t option)
@@ -2223,14 +2393,14 @@ static void M_RD_Messages(intptr_t option)
         P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
                       "MESSAGES ON" :
                       "CJJ,OTYBZ DRK.XTYS"), // СООБЩЕНИЯ ВКЛЮЧЕНЫ
-                      true);
+                      msg_system, true);
     }
     else
     {
         P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
                       "MESSAGES OFF" :
                       "CJJ,OTYBZ DSRK.XTYS"), // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
-                      true);
+                      msg_system, true);
     }
 
     S_StartSound(NULL, sfx_chat);
@@ -2241,11 +2411,7 @@ static void M_RD_ShadowedText(intptr_t option)
     draw_shadowed_text ^= 1;
 }
 
-//
-//
-//
-
-static void M_RD_Define_Msg_Pickup_Color (intptr_t option)
+static void M_RD_Define_Msg_Pickup_Color (void)
 {
     // [JN] No coloring in vanilla.
     if (vanillaparm)
@@ -2254,22 +2420,52 @@ static void M_RD_Define_Msg_Pickup_Color (intptr_t option)
     }
     else
     {
-        switch (message_secret_color)
+        switch (message_pickup_color)
         {
-            case 1:   messages_pickup_color_set = cr[CR_GRAY2GDARKGRAY_HERETIC]; break;
-            case 2:   messages_pickup_color_set = cr[CR_GRAY2DARKGOLD_HERETIC];  break;
-            case 3:   messages_pickup_color_set = cr[CR_GRAY2GREEN_HERETIC];     break;
-            case 4:   messages_pickup_color_set = cr[CR_GRAY2RED_HERETIC];       break;
-
-            default:  messages_pickup_color_set = NULL;                          break;
+            case 1:   messages_pickup_color_set = cr[CR_WHITE2GRAY_HERETIC];      break;
+            case 2:   messages_pickup_color_set = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
+            case 3:   messages_pickup_color_set = cr[CR_WHITE2RED_HERETIC];       break;
+            case 4:   messages_pickup_color_set = cr[CR_WHITE2DARKRED_HERETIC];   break;
+            case 5:   messages_pickup_color_set = cr[CR_WHITE2GREEN_HERETIC];     break;
+            case 6:   messages_pickup_color_set = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
+            case 7:   messages_pickup_color_set = cr[CR_WHITE2OLIVE_HERETIC];     break;
+            case 8:   messages_pickup_color_set = cr[CR_WHITE2BLUE_HERETIC];      break;
+            case 9:   messages_pickup_color_set = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
+            case 10:  messages_pickup_color_set = cr[CR_WHITE2PURPLE_HERETIC];    break;
+            case 11:  messages_pickup_color_set = cr[CR_WHITE2NIAGARA_HERETIC];   break;
+            case 12:  messages_pickup_color_set = cr[CR_WHITE2AZURE_HERETIC];     break;
+            case 13:  messages_pickup_color_set = cr[CR_WHITE2YELLOW_HERETIC];    break;
+            case 14:  messages_pickup_color_set = cr[CR_WHITE2GOLD_HERETIC];      break;
+            case 15:  messages_pickup_color_set = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
+            case 16:  messages_pickup_color_set = cr[CR_WHITE2TAN_HERETIC];       break;
+            case 17:  messages_pickup_color_set = cr[CR_WHITE2BROWN_HERETIC];     break;
+            default:  messages_pickup_color_set = NULL;                           break;
         }
-
-        // [JN] Routine №3: play sound only if necessary.
-        // S_StartSound(NULL, sfx_stnmov);
     }
 }
 
-static void M_RD_Define_Msg_Secret_Color (intptr_t option)
+void M_RD_Change_Msg_Pickup_Color(intptr_t option)
+{
+    switch(option)
+    {
+        case 0:
+        message_pickup_color--;
+        if (message_pickup_color < 0)
+            message_pickup_color = 17;
+        break;
+
+        case 1:
+        message_pickup_color++;
+        if (message_pickup_color > 17)
+            message_pickup_color = 0;
+        break;
+    }
+
+    // [JN] Redefine pickup message color.
+    M_RD_Define_Msg_Pickup_Color();
+}
+
+static void M_RD_Define_Msg_Secret_Color (void)
 {
     // [JN] No coloring in vanilla.
     if (vanillaparm)
@@ -2280,20 +2476,50 @@ static void M_RD_Define_Msg_Secret_Color (intptr_t option)
     {
         switch (message_secret_color)
         {
-            case 1:   messages_secret_color_set = cr[CR_GRAY2GDARKGRAY_HERETIC]; break;
-            case 2:   messages_secret_color_set = cr[CR_GRAY2DARKGOLD_HERETIC];  break;
-            case 3:   messages_secret_color_set = cr[CR_GRAY2GREEN_HERETIC];     break;
-            case 4:   messages_secret_color_set = cr[CR_GRAY2RED_HERETIC];       break;
-
-            default:  messages_secret_color_set = NULL;                          break;
+            case 1:   messages_secret_color_set = cr[CR_WHITE2GRAY_HERETIC];      break;
+            case 2:   messages_secret_color_set = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
+            case 3:   messages_secret_color_set = cr[CR_WHITE2RED_HERETIC];       break;
+            case 4:   messages_secret_color_set = cr[CR_WHITE2DARKRED_HERETIC];   break;
+            case 5:   messages_secret_color_set = cr[CR_WHITE2GREEN_HERETIC];     break;
+            case 6:   messages_secret_color_set = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
+            case 7:   messages_secret_color_set = cr[CR_WHITE2OLIVE_HERETIC];     break;
+            case 8:   messages_secret_color_set = cr[CR_WHITE2BLUE_HERETIC];      break;
+            case 9:   messages_secret_color_set = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
+            case 10:  messages_secret_color_set = cr[CR_WHITE2PURPLE_HERETIC];    break;
+            case 11:  messages_secret_color_set = cr[CR_WHITE2NIAGARA_HERETIC];   break;
+            case 12:  messages_secret_color_set = cr[CR_WHITE2AZURE_HERETIC];     break;
+            case 13:  messages_secret_color_set = cr[CR_WHITE2YELLOW_HERETIC];    break;
+            case 14:  messages_secret_color_set = cr[CR_WHITE2GOLD_HERETIC];      break;
+            case 15:  messages_secret_color_set = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
+            case 16:  messages_secret_color_set = cr[CR_WHITE2TAN_HERETIC];       break;
+            case 17:  messages_secret_color_set = cr[CR_WHITE2BROWN_HERETIC];     break;
+            default:  messages_secret_color_set = NULL;                           break;
         }
-
-        // [JN] Routine №3: play sound only if necessary.
-        // S_StartSound(NULL, sfx_stnmov);
     }
 }
 
-static void M_RD_Define_Msg_System_Color (intptr_t option)
+void M_RD_Change_Msg_Secret_Color(intptr_t option)
+{
+    switch(option)
+    {
+        case 0:
+        message_secret_color--;
+        if (message_secret_color < 0)
+            message_secret_color = 17;
+        break;
+
+        case 1:
+        message_secret_color++;
+        if (message_secret_color > 17)
+            message_secret_color = 0;
+        break;
+    }
+
+    // [JN] Redefine revealed secret message color.
+    M_RD_Define_Msg_Secret_Color();
+}
+
+static void M_RD_Define_Msg_System_Color (void)
 {
     // [JN] No coloring in vanilla.
     if (vanillaparm)
@@ -2302,22 +2528,52 @@ static void M_RD_Define_Msg_System_Color (intptr_t option)
     }
     else
     {
-        switch (message_secret_color)
+        switch (message_system_color)
         {
-            case 1:   messages_system_color_set = cr[CR_GRAY2GDARKGRAY_HERETIC]; break;
-            case 2:   messages_system_color_set = cr[CR_GRAY2DARKGOLD_HERETIC];  break;
-            case 3:   messages_system_color_set = cr[CR_GRAY2GREEN_HERETIC];     break;
-            case 4:   messages_system_color_set = cr[CR_GRAY2RED_HERETIC];       break;
-
-            default:  messages_system_color_set = NULL;                          break;
+            case 1:   messages_system_color_set = cr[CR_WHITE2GRAY_HERETIC];      break;
+            case 2:   messages_system_color_set = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
+            case 3:   messages_system_color_set = cr[CR_WHITE2RED_HERETIC];       break;
+            case 4:   messages_system_color_set = cr[CR_WHITE2DARKRED_HERETIC];   break;
+            case 5:   messages_system_color_set = cr[CR_WHITE2GREEN_HERETIC];     break;
+            case 6:   messages_system_color_set = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
+            case 7:   messages_system_color_set = cr[CR_WHITE2OLIVE_HERETIC];     break;
+            case 8:   messages_system_color_set = cr[CR_WHITE2BLUE_HERETIC];      break;
+            case 9:   messages_system_color_set = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
+            case 10:  messages_system_color_set = cr[CR_WHITE2PURPLE_HERETIC];    break;
+            case 11:  messages_system_color_set = cr[CR_WHITE2NIAGARA_HERETIC];   break;
+            case 12:  messages_system_color_set = cr[CR_WHITE2AZURE_HERETIC];     break;
+            case 13:  messages_system_color_set = cr[CR_WHITE2YELLOW_HERETIC];    break;
+            case 14:  messages_system_color_set = cr[CR_WHITE2GOLD_HERETIC];      break;
+            case 15:  messages_system_color_set = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
+            case 16:  messages_system_color_set = cr[CR_WHITE2TAN_HERETIC];       break;
+            case 17:  messages_system_color_set = cr[CR_WHITE2BROWN_HERETIC];     break;
+            default:  messages_system_color_set = NULL;                           break;
         }
-
-        // [JN] Routine №3: play sound only if necessary.
-        // S_StartSound(NULL, sfx_stnmov);
     }
 }
 
-static void M_RD_Define_Msg_Chat_Color (intptr_t option)
+void M_RD_Change_Msg_System_Color(intptr_t option)
+{
+    switch(option)
+    {
+        case 0:
+        message_system_color--;
+        if (message_system_color < 0)
+            message_system_color = 17;
+        break;
+
+        case 1:
+        message_system_color++;
+        if (message_system_color > 17)
+            message_system_color = 0;
+        break;
+    }
+
+    // [JN] Redefine revealed secret message color.
+    M_RD_Define_Msg_System_Color();
+}
+
+static void M_RD_Define_Msg_Chat_Color (void)
 {
     // [JN] No coloring in vanilla.
     if (vanillaparm)
@@ -2326,21 +2582,50 @@ static void M_RD_Define_Msg_Chat_Color (intptr_t option)
     }
     else
     {
-        switch (message_secret_color)
+        switch (message_chat_color)
         {
-            case 1:   messages_chat_color_set = cr[CR_GRAY2GDARKGRAY_HERETIC]; break;
-            case 2:   messages_chat_color_set = cr[CR_GRAY2DARKGOLD_HERETIC];  break;
-            case 3:   messages_chat_color_set = cr[CR_GRAY2GREEN_HERETIC];     break;
-            case 4:   messages_chat_color_set = cr[CR_GRAY2RED_HERETIC];       break;
-
-            default:  messages_chat_color_set = NULL;                          break;
+            case 1:   messages_chat_color_set = cr[CR_WHITE2GRAY_HERETIC];      break;
+            case 2:   messages_chat_color_set = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
+            case 3:   messages_chat_color_set = cr[CR_WHITE2RED_HERETIC];       break;
+            case 4:   messages_chat_color_set = cr[CR_WHITE2DARKRED_HERETIC];   break;
+            case 5:   messages_chat_color_set = cr[CR_WHITE2GREEN_HERETIC];     break;
+            case 6:   messages_chat_color_set = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
+            case 7:   messages_chat_color_set = cr[CR_WHITE2OLIVE_HERETIC];     break;
+            case 8:   messages_chat_color_set = cr[CR_WHITE2BLUE_HERETIC];      break;
+            case 9:   messages_chat_color_set = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
+            case 10:  messages_chat_color_set = cr[CR_WHITE2PURPLE_HERETIC];    break;
+            case 11:  messages_chat_color_set = cr[CR_WHITE2NIAGARA_HERETIC];   break;
+            case 12:  messages_chat_color_set = cr[CR_WHITE2AZURE_HERETIC];     break;
+            case 13:  messages_chat_color_set = cr[CR_WHITE2YELLOW_HERETIC];    break;
+            case 14:  messages_chat_color_set = cr[CR_WHITE2GOLD_HERETIC];      break;
+            case 15:  messages_chat_color_set = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
+            case 16:  messages_chat_color_set = cr[CR_WHITE2TAN_HERETIC];       break;
+            case 17:  messages_chat_color_set = cr[CR_WHITE2BROWN_HERETIC];     break;
+            default:  messages_chat_color_set = NULL;                           break;
         }
-
-        // [JN] Routine №3: play sound only if necessary.
-        // S_StartSound(NULL, sfx_stnmov);
     }
 }
 
+void M_RD_Change_Msg_Chat_Color(intptr_t option)
+{
+    switch(option)
+    {
+        case 0:
+        message_chat_color--;
+        if (message_chat_color < 0)
+            message_chat_color = 17;
+        break;
+
+        case 1:
+        message_chat_color++;
+        if (message_chat_color > 17)
+            message_chat_color = 0;
+        break;
+    }
+
+    // [JN] Redefine netgame chat message color.
+    M_RD_Define_Msg_Chat_Color();
+}
 
 // -----------------------------------------------------------------------------
 // DrawAutomapMenu
@@ -2468,7 +2753,7 @@ static void DrawSoundMenu(void)
         //
         // VOLUME, CHANNELS, ADVANCED
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("VOLUME"), 36 + wide_delta, 32);
         MN_DrTextSmallENG(DEH_String("CHANNELS"), 36 + wide_delta, 82);
         MN_DrTextSmallENG(DEH_String("ADVANCED"), 36 + wide_delta, 112);
@@ -2485,7 +2770,7 @@ static void DrawSoundMenu(void)
         //
         // ГРОМКОСТЬ, ВОСПРОИЗВЕДЕНИЕ, ДОПОЛНИТЕЛЬНО
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("UHJVRJCNM"), 36 + wide_delta, 32);
         MN_DrTextSmallRUS(DEH_String("DJCGHJBPDTLTYBT"), 36 + wide_delta, 82);
         MN_DrTextSmallRUS(DEH_String("LJGJKYBNTKMYJ"), 36 + wide_delta, 112);
@@ -2499,21 +2784,21 @@ static void DrawSoundMenu(void)
     // SFX Volume
     DrawSliderSmall(&SoundMenu, 1, 16, snd_MaxVolume_tmp);
     M_snprintf(num, 4, "%3d", snd_MaxVolume_tmp);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
     MN_DrTextSmallENG(num, 184 + wide_delta, 53);
     dp_translation = NULL;
 
     // Music Volume
     DrawSliderSmall(&SoundMenu, 3, 16, snd_MusicVolume);
     M_snprintf(num, 4, "%3d", snd_MusicVolume);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
     MN_DrTextSmallENG(num, 184 + wide_delta, 73);
     dp_translation = NULL;
 
     // SFX Channels
     DrawSliderSmall(&SoundMenu, 6, 16, snd_Channels / 4 - 1);
     M_snprintf(num, 4, "%3d", snd_Channels);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
     MN_DrTextSmallENG(num, 184 + wide_delta, 103);
     dp_translation = NULL;
 }
@@ -2600,14 +2885,14 @@ static void DrawSoundSystemMenu(void)
         //
         // SOUND SYSTEM
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("SOUND SYSTEM"), 36 + wide_delta, 32);
         dp_translation = NULL;
 
         // Sound effects
         if (snd_sfxdevice == 0)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
             MN_DrTextSmallENG(DEH_String("DISABLED"), 144 + wide_delta, 42);
             dp_translation = NULL;
         }
@@ -2619,7 +2904,7 @@ static void DrawSoundSystemMenu(void)
         // Music
         if (snd_musicdevice == 0)
         {   
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
             MN_DrTextSmallENG(DEH_String("DISABLED"), 80 + wide_delta, 52);
             dp_translation = NULL;
         }
@@ -2644,7 +2929,7 @@ static void DrawSoundSystemMenu(void)
         //
         // QUALITY
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("QUALITY"), 36 + wide_delta, 62);
         dp_translation = NULL;
 
@@ -2665,7 +2950,7 @@ static void DrawSoundSystemMenu(void)
         //
         // MISCELLANEOUS
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("MISCELLANEOUS"), 36 + wide_delta, 82);
         dp_translation = NULL;
 
@@ -2684,7 +2969,7 @@ static void DrawSoundSystemMenu(void)
         // Informative message:
         if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
         {
-            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            dp_translation = cr[CR_WHITE2GREEN_HERETIC];
             MN_DrTextSmallENG(DEH_String("CHANGING WILL REQUIRE RESTART OF THE PROGRAM"),
                                          3 + wide_delta, 132);
             dp_translation = NULL;
@@ -2702,7 +2987,7 @@ static void DrawSoundSystemMenu(void)
         //
         // ЗВУКВАЯ СИСТЕМА
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("PDERJDFZ CBCNTVF"), 36 + wide_delta, 32);
         dp_translation = NULL;
 
@@ -2710,7 +2995,7 @@ static void DrawSoundSystemMenu(void)
         if (snd_sfxdevice == 0)
         {
             // ОТКЛЮЧЕНЫ
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
             MN_DrTextSmallRUS(DEH_String("JNRK.XTYS"), 173 + wide_delta, 42);
             dp_translation = NULL;
         }
@@ -2724,7 +3009,7 @@ static void DrawSoundSystemMenu(void)
         if (snd_musicdevice == 0)
         {   
             // ОТКЛЮЧЕНА
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
             MN_DrTextSmallRUS(DEH_String("JNRK.XTYF"), 91 + wide_delta, 52);
             dp_translation = NULL;
         }
@@ -2755,7 +3040,7 @@ static void DrawSoundSystemMenu(void)
         //
         // КАЧЕСТВО ЗВУЧАНИЯ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("RFXTCNDJ PDEXFYBZ"), 36 + wide_delta, 62);
         dp_translation = NULL;
 
@@ -2776,7 +3061,7 @@ static void DrawSoundSystemMenu(void)
         //
         // РАЗНОЕ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("HFPYJT"), 36 + wide_delta, 82);
         dp_translation = NULL;
 
@@ -2795,7 +3080,7 @@ static void DrawSoundSystemMenu(void)
         // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
         if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
         {
-            dp_translation = cr[CR_GRAY2GREEN_HERETIC];
+            dp_translation = cr[CR_WHITE2GREEN_HERETIC];
             MN_DrTextSmallRUS(DEH_String("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS"), 
                                          11 + wide_delta, 132);
             dp_translation = NULL;
@@ -2953,7 +3238,7 @@ static void DrawControlsMenu(void)
         //
         // MOVEMENT
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("MOVEMENT"), 36 + wide_delta, 32);
         dp_translation = NULL;
 
@@ -2964,7 +3249,7 @@ static void DrawControlsMenu(void)
         //
         // MOUSE
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("MOUSE"), 36 + wide_delta, 52);
         dp_translation = NULL;
 
@@ -2974,14 +3259,14 @@ static void DrawControlsMenu(void)
 
         // Invert Y axis
         if (!mlook)
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
         MN_DrTextSmallENG(DEH_String(mouse_y_invert ? "ON" : "OFF"),
                                      133 + wide_delta, 132);
         dp_translation = NULL;
 
         // Novert
         if (mlook)
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
         MN_DrTextSmallENG(DEH_String(!novert ? "ON" : "OFF"),
                                      168 + wide_delta, 142);
         dp_translation = NULL;
@@ -2997,7 +3282,7 @@ static void DrawControlsMenu(void)
         //
         // ПЕРЕДВИЖЕНИЕ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("GTHTLDB;TYBT"), 36 + wide_delta, 32);
         dp_translation = NULL;
 
@@ -3008,7 +3293,7 @@ static void DrawControlsMenu(void)
         //
         // МЫШЬ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("VSIM"), 36 + wide_delta, 52);
         dp_translation = NULL;
 
@@ -3018,14 +3303,14 @@ static void DrawControlsMenu(void)
 
         // Вертикальная инверсия
         if (!mlook)
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
         MN_DrTextSmallRUS(DEH_String(mouse_y_invert ? "DRK" : "DSRK"),
                                      199 + wide_delta, 132);
         dp_translation = NULL;
 
         // Вертикальное перемещение
         if (mlook)
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
         MN_DrTextSmallRUS(DEH_String(!novert ? "DRK" : "DSRK"),
                                      227 + wide_delta, 142);
         dp_translation = NULL;
@@ -3038,21 +3323,21 @@ static void DrawControlsMenu(void)
     // Mouse sensivity
     DrawSliderSmall(&ControlsMenu, 3, 12, mouseSensitivity);
     M_snprintf(num, 4, "%3d", mouseSensitivity);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
     MN_DrTextSmallENG(num, 152 + wide_delta, 73);
     dp_translation = NULL;
 
     // Acceleration
     DrawSliderSmall(&ControlsMenu, 5, 12, mouse_acceleration * 4 - 4);
     M_snprintf(num, 4, "%f", mouse_acceleration);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
     MN_DrTextSmallENG(num, 152 + wide_delta, 93);
     dp_translation = NULL;
 
     // Threshold
     DrawSliderSmall(&ControlsMenu, 7, 12, mouse_threshold / 2);
     M_snprintf(num, 4, "%3d", mouse_threshold);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
     MN_DrTextSmallENG(num, 152 + wide_delta, 113);
     dp_translation = NULL;
 }
@@ -3164,75 +3449,75 @@ static void DrawGameplay1Menu(void)
         //
         // VISUAL
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("VISUAL"), 36 + wide_delta, 26);
         dp_translation = NULL;
 
         // Brightmaps
-        dp_translation = brightmaps ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = brightmaps ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(brightmaps ? "ON" : "OFF"), 119 + wide_delta, 36);
         dp_translation = NULL;
 
         // Fake contrast
-        dp_translation = fake_contrast ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = fake_contrast ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(fake_contrast ? "ON" : "OFF"), 143 + wide_delta, 46);
         dp_translation = NULL;
 
         // Extra translucency
-        dp_translation = translucency ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = translucency ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(translucency ? "ON" : "OFF"), 180 + wide_delta, 56);
         dp_translation = NULL;
 
         // Colored HUD
-        dp_translation = sbar_colored ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = sbar_colored ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(sbar_colored ? "ON" : "OFF"), 126 + wide_delta, 66);
         dp_translation = NULL;
 
         // Colored health gem
-        dp_translation = sbar_colored_gem ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = sbar_colored_gem ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(sbar_colored_gem == 1 ? "BRIGHT" :
                                      sbar_colored_gem == 2 ? "DARK" : "OFF"), 175 + wide_delta, 76);
         dp_translation = NULL;
 
         // Colored blood
-        dp_translation = colored_blood ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = colored_blood ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(colored_blood ? "ON" : "OFF"), 139 + wide_delta, 86);
         dp_translation = NULL;
 
         // Invulnerability affects sky
-        dp_translation = invul_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = invul_sky ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(invul_sky ? "ON" : "OFF"), 235 + wide_delta, 96);
         dp_translation = NULL;
 
         // Sky drawing mode
-        dp_translation = linear_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = linear_sky ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(linear_sky ? "LINEAR" : "ORIGINAL"), 162 + wide_delta, 106);
         dp_translation = NULL;
 
         //
         // PHYSICAL
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 116);
         dp_translation = NULL;
 
         // Corpses sliding from the ledges
-        dp_translation = torque ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = torque ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(torque ? "ON" : "OFF"), 238 + wide_delta, 126);
         dp_translation = NULL;
 
         // Weapon bobbing while firing
-        dp_translation = weapon_bobbing ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = weapon_bobbing ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(weapon_bobbing ? "ON" : "OFF"), 233 + wide_delta, 136);
         dp_translation = NULL;
 
         // Randomly flipped corpses
-        dp_translation = randomly_flipcorpses ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = randomly_flipcorpses ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(randomly_flipcorpses ? "ON" : "OFF"), 232 + wide_delta, 146);
         dp_translation = NULL;
 
         // Floating items amplitude
-        dp_translation = floating_powerups ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = floating_powerups ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(floating_powerups == 1 ? "STANDARD" :
                                      floating_powerups == 2 ? "HALFED" : "OFF"),
                                      209 + wide_delta, 156);
@@ -3248,74 +3533,74 @@ static void DrawGameplay1Menu(void)
         //
         // ГРАФИКА
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("UHFABRF"), 36 + wide_delta, 26);
         dp_translation = NULL;
 
         // Брайтмаппинг
-        dp_translation = brightmaps ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = brightmaps ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(brightmaps ? "DRK" : "DSRK"), 133 + wide_delta, 36);
         dp_translation = NULL;
 
         // Имитация контрастности
-        dp_translation = fake_contrast ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = fake_contrast ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(fake_contrast ? "DRK" : "DSRK"), 205 + wide_delta, 46);
         dp_translation = NULL;
 
         // Дополнительная прозрачность
-        dp_translation = translucency ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = translucency ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(translucency ? "DRK" : "DSRK"), 245 + wide_delta, 56);
         dp_translation = NULL;
 
         // Разноцветные элемен HUD
-        dp_translation = sbar_colored ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = sbar_colored ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(sbar_colored ? "DRK" : "DSRK"), 235 + wide_delta, 66);
         dp_translation = NULL;
 
         // Окрашивание камня здоровья
-        dp_translation = sbar_colored_gem ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = sbar_colored_gem ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(sbar_colored_gem == 1 ? "CDTNKJT" :
                                      sbar_colored_gem == 2 ? "NTVYJT" : "DSRK"), 238 + wide_delta, 76);
 
         // Разноцветная кровь
-        dp_translation = colored_blood ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = colored_blood ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(colored_blood ? "DRK" : "DSRK"), 178 + wide_delta, 86);
         dp_translation = NULL;
 
         // Неуязвимость окрашивает небо
-        dp_translation = invul_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = invul_sky ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(invul_sky ? "DRK" : "DSRK"), 253 + wide_delta, 96);
         dp_translation = NULL;
 
         // Режим отрисовки неба
-        dp_translation = linear_sky ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = linear_sky ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ"), 195 + wide_delta, 106);
         dp_translation = NULL;
 
         //
         // ФИЗИКА
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 116);
         dp_translation = NULL;
 
         // Трупы сползают с возвышений
-        dp_translation = torque ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = torque ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(torque ? "DRK" : "DSRK"), 248 + wide_delta, 126);
         dp_translation = NULL;
 
         // Улучшенное покачивание оружия
-        dp_translation = weapon_bobbing ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = weapon_bobbing ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(weapon_bobbing ? "DRK" : "DSRK"), 260 + wide_delta, 136);
         dp_translation = NULL;
 
         // Зеркалирование трупов
-        dp_translation = randomly_flipcorpses ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = randomly_flipcorpses ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(randomly_flipcorpses ? "DRK" : "DSRK"), 201 + wide_delta, 146);
         dp_translation = NULL;
 
         // Амплитуда левитации предметов
-        dp_translation = floating_powerups ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = floating_powerups ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(floating_powerups == 1 ? "CNFYLFHNYFZ" :
                                      floating_powerups == 2 ? "EGJKJDBYTYFZ" : "DSRK"),
                                      188 + wide_delta, 156);
@@ -3414,20 +3699,20 @@ static void DrawGameplay2Menu(void)
         //
         // TACTICAL
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("TACTICAL"), 36 + wide_delta, 26);
         dp_translation = NULL;
 
         // Notify of revealed secrets
-        dp_translation = secret_notification ? cr[CR_GRAY2GREEN_HERETIC] :
-                                               cr[CR_GRAY2RED_HERETIC];
+        dp_translation = secret_notification ? cr[CR_WHITE2GREEN_HERETIC] :
+                                               cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(secret_notification ? "ON" : "OFF"),
                                      235 + wide_delta, 36);
         dp_translation = NULL;
 
         // Negative health
-        dp_translation = negative_health ? cr[CR_GRAY2GREEN_HERETIC] :
-                                           cr[CR_GRAY2RED_HERETIC];
+        dp_translation = negative_health ? cr[CR_WHITE2GREEN_HERETIC] :
+                                           cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(negative_health ? "ON" : "OFF"),
                                      190 + wide_delta, 46);
         dp_translation = NULL;
@@ -3435,20 +3720,20 @@ static void DrawGameplay2Menu(void)
         //
         // CROSSHAIR
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("CROSSHAIR"), 36 + wide_delta, 56);
         dp_translation = NULL;
 
         // Draw crosshair
-        dp_translation = crosshair_draw ? cr[CR_GRAY2GREEN_HERETIC] :
-                                          cr[CR_GRAY2RED_HERETIC];
+        dp_translation = crosshair_draw ? cr[CR_WHITE2GREEN_HERETIC] :
+                                          cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(crosshair_draw ? "ON" : "OFF"),
                                      150 + wide_delta, 66);
         dp_translation = NULL;
 
         // Indication
-        dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HERETIC] :
-                                          cr[CR_GRAY2RED_HERETIC];
+        dp_translation = crosshair_type ? cr[CR_WHITE2GREEN_HERETIC] :
+                                          cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(crosshair_type == 1 ? "HEALTH" :
                                      crosshair_type == 2 ? "TARGET HIGHLIGHTING" :
                                      crosshair_type == 3 ? "TARGET HIGHLIGHTING+HEALTH" :
@@ -3457,8 +3742,8 @@ static void DrawGameplay2Menu(void)
         dp_translation = NULL;
 
         // Increased size
-        dp_translation = crosshair_scale ? cr[CR_GRAY2GREEN_HERETIC] :
-                                           cr[CR_GRAY2RED_HERETIC];
+        dp_translation = crosshair_scale ? cr[CR_WHITE2GREEN_HERETIC] :
+                                           cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(crosshair_scale ? "ON" : "OFF"),
                                      146 + wide_delta, 86);
         dp_translation = NULL;
@@ -3466,27 +3751,27 @@ static void DrawGameplay2Menu(void)
         //
         // GAMEPLAY
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("GAMEPLAY"), 36 + wide_delta, 96);
         dp_translation = NULL;
 
         // Flip game levels
-        dp_translation = flip_levels ? cr[CR_GRAY2GREEN_HERETIC] :
-                                       cr[CR_GRAY2RED_HERETIC];
+        dp_translation = flip_levels ? cr[CR_WHITE2GREEN_HERETIC] :
+                                       cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(flip_levels ? "ON" : "OFF"),
                                      153 + wide_delta, 106);
         dp_translation = NULL;
 
         // Play internal demos
-        dp_translation = no_internal_demos ? cr[CR_GRAY2RED_HERETIC] :
-                                             cr[CR_GRAY2GREEN_HERETIC];
+        dp_translation = no_internal_demos ? cr[CR_WHITE2RED_HERETIC] :
+                                             cr[CR_WHITE2GREEN_HERETIC];
         MN_DrTextSmallENG(DEH_String(no_internal_demos ? "OFF" : "ON"),
                                      179 + wide_delta, 116);
         dp_translation = NULL;
 
         // Wand start
-        dp_translation = pistol_start ? cr[CR_GRAY2GREEN_HERETIC] :
-                                        cr[CR_GRAY2RED_HERETIC];
+        dp_translation = pistol_start ? cr[CR_WHITE2GREEN_HERETIC] :
+                                        cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(pistol_start ? "ON" : "OFF"),
                                      193 + wide_delta, 126);
         dp_translation = NULL;
@@ -3502,20 +3787,20 @@ static void DrawGameplay2Menu(void)
         //
         // ТАКТИКА
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("NFRNBRF"), 36 + wide_delta, 26);
         dp_translation = NULL;
 
         // Сообщать о найденном тайнике
-        dp_translation = secret_notification ? cr[CR_GRAY2GREEN_HERETIC] :
-                                               cr[CR_GRAY2RED_HERETIC];
+        dp_translation = secret_notification ? cr[CR_WHITE2GREEN_HERETIC] :
+                                               cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(secret_notification ? "DRK" : "DSRK"),
                                      251 + wide_delta, 36);
         dp_translation = NULL;
 
         // Отрицательное здоровье в HUD
-        dp_translation = negative_health ? cr[CR_GRAY2GREEN_HERETIC] :
-                                           cr[CR_GRAY2RED_HERETIC];
+        dp_translation = negative_health ? cr[CR_WHITE2GREEN_HERETIC] :
+                                           cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(negative_health ? "DRK" : "DSRK"),
                                      253 + wide_delta, 46);
         dp_translation = NULL;
@@ -3523,20 +3808,20 @@ static void DrawGameplay2Menu(void)
         //
         // ПРИЦЕЛ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + wide_delta, 56);
         dp_translation = NULL;
 
         // Отображать прицел
-        dp_translation = crosshair_draw ? cr[CR_GRAY2GREEN_HERETIC] :
-                                          cr[CR_GRAY2RED_HERETIC];
+        dp_translation = crosshair_draw ? cr[CR_WHITE2GREEN_HERETIC] :
+                                          cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(crosshair_draw ? "DRK" : "DSRK"),
                                      175 + wide_delta, 66);
         dp_translation = NULL;
 
         // Индикация
-        dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HERETIC] :
-                                          cr[CR_GRAY2RED_HERETIC];
+        dp_translation = crosshair_type ? cr[CR_WHITE2GREEN_HERETIC] :
+                                          cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(crosshair_type == 1 ? "PLJHJDMT" :       // ЗДОРОВЬЕ
                                      crosshair_type == 2 ? "GJLCDTNRF WTKB" : // ПОДСВЕТКА ЦЕЛИ
                                      crosshair_type == 3 ? "GJLCDTNRF WTKB+PLJHJDMT" :
@@ -3545,8 +3830,8 @@ static void DrawGameplay2Menu(void)
         dp_translation = NULL;
 
         // Увеличенный размер
-        dp_translation = crosshair_scale ? cr[CR_GRAY2GREEN_HERETIC] :
-                                           cr[CR_GRAY2RED_HERETIC];
+        dp_translation = crosshair_scale ? cr[CR_WHITE2GREEN_HERETIC] :
+                                           cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(crosshair_scale ? "DRK" : "DSRK"),
                                      181 + wide_delta, 86);
         dp_translation = NULL;
@@ -3554,20 +3839,20 @@ static void DrawGameplay2Menu(void)
         //
         // ГЕЙМПЛЕЙ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + wide_delta, 96);
         dp_translation = NULL;
 
         // Зеркальное отражение уровней
-        dp_translation = flip_levels ? cr[CR_GRAY2GREEN_HERETIC] :
-                                       cr[CR_GRAY2RED_HERETIC];
+        dp_translation = flip_levels ? cr[CR_WHITE2GREEN_HERETIC] :
+                                       cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(flip_levels ? "DRK" : "DSRK"),
                                      255 + wide_delta, 106);
         dp_translation = NULL;
 
         // Проигрывать демозаписи
-        dp_translation = no_internal_demos ? cr[CR_GRAY2RED_HERETIC] :
-                                             cr[CR_GRAY2GREEN_HERETIC];
+        dp_translation = no_internal_demos ? cr[CR_WHITE2RED_HERETIC] :
+                                             cr[CR_WHITE2GREEN_HERETIC];
         MN_DrTextSmallRUS(DEH_String(no_internal_demos ? "DSRK" : "DRK"),
                                      211 + wide_delta, 116);
         dp_translation = NULL;
@@ -3575,8 +3860,8 @@ static void DrawGameplay2Menu(void)
         // Режим игры "Wand start"
         MN_DrTextSmallRUS(DEH_String("HT;BV BUHS"), 36 + wide_delta, 126);
         MN_DrTextSmallENG(DEH_String("\"WAND START\":"), 120 + wide_delta, 126);
-        dp_translation = pistol_start ? cr[CR_GRAY2GREEN_HERETIC] :
-                                        cr[CR_GRAY2RED_HERETIC];
+        dp_translation = pistol_start ? cr[CR_WHITE2GREEN_HERETIC] :
+                                        cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(pistol_start ? "DRK" : "DSRK"),
                                      217 + wide_delta, 126);
         dp_translation = NULL;
@@ -3690,44 +3975,44 @@ static void DrawLevelSelect1Menu(void)
         //
         // PLAYER
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("PLAYER"), 74 + wide_delta, 56);
         dp_translation = NULL;
 
         //
         // WEAPONS
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("WEAPONS"), 74 + wide_delta, 96);
         dp_translation = NULL;
 
         // Gauntlets
-        dp_translation = selective_wp_gauntlets ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_gauntlets ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_wp_gauntlets ? "YES" : "NO", 228 + wide_delta, 106);
         dp_translation = NULL;
 
         // Ethereal Crossbow
-        dp_translation = selective_wp_crossbow ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_crossbow ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_wp_crossbow ? "YES" : "NO", 228 + wide_delta, 116);
         dp_translation = NULL;
 
         // Dragon Claw
-        dp_translation = selective_wp_dragonclaw ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_dragonclaw ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_wp_dragonclaw ? "YES" : "NO", 228 + wide_delta, 126);
         dp_translation = NULL;
 
         // Hellstaff
-        dp_translation = selective_wp_hellstaff ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_hellstaff ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_wp_hellstaff ? "YES" : "NO", 228 + wide_delta, 136);
         dp_translation = NULL;
 
         // Phoenix Rod
-        dp_translation = selective_wp_phoenixrod ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_phoenixrod ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_wp_phoenixrod ? "YES" : "NO", 228 + wide_delta, 146);
         dp_translation = NULL;
 
         // Firemace
-        dp_translation = selective_wp_firemace ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_firemace ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_wp_firemace ? "YES" : "NO", 228 + wide_delta, 156);
         dp_translation = NULL;
     }
@@ -3742,44 +4027,44 @@ static void DrawLevelSelect1Menu(void)
         //
         // ИГРОК
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("BUHJR"), 74 + wide_delta, 56);
         dp_translation = NULL;
 
         //
         // ОРУЖИЕ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("JHE;BT"), 74 + wide_delta, 96);
         dp_translation = NULL;
 
         // Перчатки
-        dp_translation = selective_wp_gauntlets ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_gauntlets ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_wp_gauntlets ? "LF" : "YTN", 228 + wide_delta, 106);
         dp_translation = NULL;
 
         // Эфирный арбалет
-        dp_translation = selective_wp_crossbow ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_crossbow ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_wp_crossbow ? "LF" : "YTN", 228 + wide_delta, 116);
         dp_translation = NULL;
 
         // Коготь дракона
-        dp_translation = selective_wp_dragonclaw ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_dragonclaw ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_wp_dragonclaw ? "LF" : "YTN", 228 + wide_delta, 126);
         dp_translation = NULL;
 
         // Посох Ада
-        dp_translation = selective_wp_hellstaff ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_hellstaff ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_wp_hellstaff ? "LF" : "YTN", 228 + wide_delta, 136);
         dp_translation = NULL;
 
         // Жезл Феникса
-        dp_translation = selective_wp_phoenixrod ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_phoenixrod ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_wp_phoenixrod ? "LF" : "YTN", 228 + wide_delta, 146);
         dp_translation = NULL;
 
         // Огненная булава
-        dp_translation = selective_wp_firemace ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_wp_firemace ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_wp_firemace ? "LF" : "YTN", 228 + wide_delta, 156);
         dp_translation = NULL;
     }
@@ -3793,7 +4078,7 @@ static void DrawLevelSelect1Menu(void)
         // Episode | Эпизод
         if (gamemode == shareware)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HERETIC];
+            dp_translation = cr[CR_WHITE2GRAY_HERETIC];
             MN_DrTextSmallENG("1", 228 + wide_delta, 36);
             dp_translation = NULL;
         }
@@ -3808,24 +4093,24 @@ static void DrawLevelSelect1Menu(void)
         MN_DrTextSmallENG(num, 228 + wide_delta, 46);
 
         // Health | Здоровье
-        dp_translation = selective_health >= 67 ? cr[CR_GRAY2GREEN_HERETIC] :
-                         selective_health >= 34 ? cr[CR_GRAY2DARKGOLD_HERETIC]  :
-                                                  cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_health >= 67 ? cr[CR_WHITE2GREEN_HERETIC] :
+                         selective_health >= 34 ? cr[CR_WHITE2DARKGOLD_HERETIC]  :
+                                                  cr[CR_WHITE2RED_HERETIC];
         M_snprintf(num, 4, "%d", selective_health);
         MN_DrTextSmallENG(num, 228 + wide_delta, 66);
 
         // Armor | Броня
-        dp_translation = selective_armortype == 1 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
-                                                    cr[CR_GRAY2GREEN_HERETIC];
+        dp_translation = selective_armortype == 1 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                                                    cr[CR_WHITE2GREEN_HERETIC];
         if (selective_armor == 0)
-            dp_translation = cr[CR_GRAY2RED_HERETIC];
+            dp_translation = cr[CR_WHITE2RED_HERETIC];
         M_snprintf(num, 4, "%d", selective_armor);
         MN_DrTextSmallENG(num, 228 + wide_delta, 76);
         dp_translation = NULL;
 
         // Armor type | Тип брони
-        dp_translation = selective_armortype == 1 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
-                                                    cr[CR_GRAY2GREEN_HERETIC];
+        dp_translation = selective_armortype == 1 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                                                    cr[CR_WHITE2GREEN_HERETIC];
         M_snprintf(num, 4, "%d", selective_armortype);
         MN_DrTextSmallENG(selective_armortype == 1 ? "1" : "2", 228 + wide_delta, 86);
         dp_translation = NULL;
@@ -3985,46 +4270,46 @@ static void DrawLevelSelect2Menu(void)
                                        + wide_delta, 4);
 
         // Bag of Holding
-        dp_translation = selective_backpack ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_backpack ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_backpack ? "YES" : "NO", 228 + wide_delta, 26);
         dp_translation = NULL;
 
         //
         // KEYS
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("KEYS"), 74 + wide_delta, 96);
         dp_translation = NULL;
 
         // Yellow Key
-        dp_translation = selective_key_0 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_key_0 ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_key_0 ? "YES" : "NO", 228 + wide_delta, 106);
         dp_translation = NULL;
 
         // Green Key
-        dp_translation = selective_key_1 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_key_1 ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_key_1 ? "YES" : "NO", 228 + wide_delta, 116);
         dp_translation = NULL;
 
         // Blue Key
-        dp_translation = selective_key_2 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_key_2 ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_key_2 ? "YES" : "NO", 228 + wide_delta, 126);
         dp_translation = NULL;
 
         //
         // MONSTERS
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("MONSTERS"), 74 + wide_delta, 136);
         dp_translation = NULL;
 
         // Fast Monsters
-        dp_translation = selective_fast ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_fast ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_fast ? "YES" : "NO", 228 + wide_delta, 146);
         dp_translation = NULL;
 
         // Respawning Monsters
-        dp_translation = selective_respawn ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_respawn ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(selective_respawn ? "YES" : "NO", 228 + wide_delta, 156);
         dp_translation = NULL;
     }
@@ -4037,46 +4322,46 @@ static void DrawLevelSelect2Menu(void)
                                        + wide_delta, 4);
 
         // Носильный кошель
-        dp_translation = selective_backpack ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_backpack ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_backpack ? "LF" : "YTN", 228 + wide_delta, 26);
         dp_translation = NULL;
 
         //
         // КЛЮЧИ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("RK.XB"), 74 + wide_delta, 96);
         dp_translation = NULL;
 
         // Желтый ключ
-        dp_translation = selective_key_0 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_key_0 ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_key_0 ? "LF" : "YTN", 228 + wide_delta, 106);
         dp_translation = NULL;
 
         // Зеленый ключ
-        dp_translation = selective_key_1 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_key_1 ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_key_1 ? "LF" : "YTN", 228 + wide_delta, 116);
         dp_translation = NULL;
 
         // Синий ключ
-        dp_translation = selective_key_2 ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_key_2 ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_key_2 ? "LF" : "YTN", 228 + wide_delta, 126);
         dp_translation = NULL;
 
         //
         // МОНСТРЫ
         //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("VJYCNHS"), 74 + wide_delta, 136);
         dp_translation = NULL;
 
         // Ускоренные
-        dp_translation = selective_fast ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_fast ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_fast ? "LF" : "YTN", 228 + wide_delta, 146);
         dp_translation = NULL;
 
         // Воскрешающиеся
-        dp_translation = selective_respawn ? cr[CR_GRAY2GREEN_HERETIC] : cr[CR_GRAY2RED_HERETIC];
+        dp_translation = selective_respawn ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(selective_respawn ? "LF" : "YTN", 228 + wide_delta, 156);
         dp_translation = NULL;
     }
@@ -4084,49 +4369,49 @@ static void DrawLevelSelect2Menu(void)
     // The rest of values/placements are same for both languages.
     {
         // Wand Crystals | Кристаллы для жезла
-        dp_translation = selective_ammo_0 >=  50 ? cr[CR_GRAY2GREEN_HERETIC]    :
-                         selective_ammo_0 >=  25 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
-                                                   cr[CR_GRAY2RED_HERETIC]      ;
+        dp_translation = selective_ammo_0 >=  50 ? cr[CR_WHITE2GREEN_HERETIC]    :
+                         selective_ammo_0 >=  25 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                                                   cr[CR_WHITE2RED_HERETIC]      ;
         M_snprintf(num, 4, "%d", selective_ammo_0);
         MN_DrTextSmallENG(num, 228 + wide_delta, 36);
         dp_translation = NULL;
 
         // Ethereal Arrows | Эфирные стрелы
-        dp_translation = selective_ammo_1 >=  25 ? cr[CR_GRAY2GREEN_HERETIC]    :
-                         selective_ammo_1 >=  12 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
-                                                   cr[CR_GRAY2RED_HERETIC]      ;
+        dp_translation = selective_ammo_1 >=  25 ? cr[CR_WHITE2GREEN_HERETIC]    :
+                         selective_ammo_1 >=  12 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                                                   cr[CR_WHITE2RED_HERETIC]      ;
         M_snprintf(num, 4, "%d", selective_ammo_1);
         MN_DrTextSmallENG(num, 228 + wide_delta, 46);
         dp_translation = NULL;
 
         // Claw Orbs | Когтевые шары
-        dp_translation = selective_ammo_2 >= 100 ? cr[CR_GRAY2GREEN_HERETIC]    :
-                         selective_ammo_2 >=  50 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
-                                                   cr[CR_GRAY2RED_HERETIC]      ;
+        dp_translation = selective_ammo_2 >= 100 ? cr[CR_WHITE2GREEN_HERETIC]    :
+                         selective_ammo_2 >=  50 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                                                   cr[CR_WHITE2RED_HERETIC]      ;
         M_snprintf(num, 4, "%d", selective_ammo_2);
         MN_DrTextSmallENG(num, 228 + wide_delta, 56);
         dp_translation = NULL;
 
         // Hellstaff Runes | Руны посоха
-        dp_translation = selective_ammo_3 >= 100 ? cr[CR_GRAY2GREEN_HERETIC]    :
-                         selective_ammo_3 >=  50 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
-                                                   cr[CR_GRAY2RED_HERETIC]      ;
+        dp_translation = selective_ammo_3 >= 100 ? cr[CR_WHITE2GREEN_HERETIC]    :
+                         selective_ammo_3 >=  50 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                                                   cr[CR_WHITE2RED_HERETIC]      ;
         M_snprintf(num, 4, "%d", selective_ammo_3);
         MN_DrTextSmallENG(num, 228 + wide_delta, 66);
         dp_translation = NULL;
 
         // Flame Orbs | Пламенные шары
-        dp_translation = selective_ammo_4 >= 10 ? cr[CR_GRAY2GREEN_HERETIC]    :
-                         selective_ammo_4 >=  5 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
-                                                  cr[CR_GRAY2RED_HERETIC]      ;
+        dp_translation = selective_ammo_4 >= 10 ? cr[CR_WHITE2GREEN_HERETIC]    :
+                         selective_ammo_4 >=  5 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                                                  cr[CR_WHITE2RED_HERETIC]      ;
         M_snprintf(num, 4, "%d", selective_ammo_4);
         MN_DrTextSmallENG(num, 228 + wide_delta, 76);
         dp_translation = NULL;
 
         // Mace Spheres | Сферы булавы
-        dp_translation = selective_ammo_5 >= 75 ? cr[CR_GRAY2GREEN_HERETIC]    :
-                         selective_ammo_5 >= 37 ? cr[CR_GRAY2DARKGOLD_HERETIC] :
-                                                  cr[CR_GRAY2RED_HERETIC]      ;
+        dp_translation = selective_ammo_5 >= 75 ? cr[CR_WHITE2GREEN_HERETIC]    :
+                         selective_ammo_5 >= 37 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                                                  cr[CR_WHITE2RED_HERETIC]      ;
         M_snprintf(num, 4, "%d", selective_ammo_5);
         MN_DrTextSmallENG(num, 228 + wide_delta, 86);
         dp_translation = NULL;
@@ -4298,7 +4583,7 @@ static void DrawLevelSelect3Menu(void)
                                        + wide_delta, 4);
 
         // ARTIFACTS
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("ARTIFACTS"), 74 + wide_delta, 26);
         dp_translation = NULL;
     }
@@ -4309,7 +4594,7 @@ static void DrawLevelSelect3Menu(void)
                                        + wide_delta, 4);
 
         // АРТЕФАКТЫ
-        dp_translation = cr[CR_GRAY2DARKGOLD_HERETIC];
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("FHNTAFRNS"), 74 + wide_delta, 26);
         dp_translation = NULL;
     }
@@ -4317,61 +4602,61 @@ static void DrawLevelSelect3Menu(void)
     // The rest of vanules/placements are same for both languages.
     {
         // Quartz Flask
-        dp_translation = selective_arti_0 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_0 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_0);
         MN_DrTextSmallENG(num, 228 + wide_delta, 36);
         dp_translation = NULL;
 
         // Mystic Urn
-        dp_translation = selective_arti_1 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_1 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_1);
         MN_DrTextSmallENG(num, 228 + wide_delta, 46);
         dp_translation = NULL;
 
         // Timebomb
-        dp_translation = selective_arti_2 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_2 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_2);
         MN_DrTextSmallENG(num, 228 + wide_delta, 56);
         dp_translation = NULL;
 
         // Tome of Power
-        dp_translation = selective_arti_3 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_3 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_3);
         MN_DrTextSmallENG(num, 228 + wide_delta, 66);
         dp_translation = NULL;
 
         // Ring of Invincibility
-        dp_translation = selective_arti_4 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_4 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_4);
         MN_DrTextSmallENG(num, 228 + wide_delta, 76);
         dp_translation = NULL;
 
         // Morph Ovum
-        dp_translation = selective_arti_5 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_5 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_5);
         MN_DrTextSmallENG(num, 228 + wide_delta, 86);
         dp_translation = NULL;
 
         // Chaos Device
-        dp_translation = selective_arti_6 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_6 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_6);
         MN_DrTextSmallENG(num, 228 + wide_delta, 96);
         dp_translation = NULL;
 
         // Shadowsphere
-        dp_translation = selective_arti_7 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_7 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_7);
         MN_DrTextSmallENG(num, 228 + wide_delta, 106);
         dp_translation = NULL;
 
         // Wings of Wrath
-        dp_translation = selective_arti_8 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_8 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_8);
         MN_DrTextSmallENG(num, 228 + wide_delta, 116);
         dp_translation = NULL;
 
         // Torch
-        dp_translation = selective_arti_9 ? NULL : cr[CR_GRAY2GDARKGRAY_HERETIC];
+        dp_translation = selective_arti_9 ? NULL : cr[CR_WHITE2GRAY_HERETIC];
         M_snprintf(num, 4, "%d", selective_arti_9);
         MN_DrTextSmallENG(num, 228 + wide_delta, 126);
         dp_translation = NULL;
@@ -4629,6 +4914,12 @@ void M_RD_DoResetSettings(void)
     show_messages       = 1;
     draw_shadowed_text  = 1;
 
+    // Messages
+    message_pickup_color = 0;
+    message_secret_color = 15;
+    message_system_color = 0;
+    message_chat_color = 5;
+
     // Automap
     automap_stats   = 1;
     automap_follow  = 1;
@@ -4690,7 +4981,7 @@ void M_RD_DoResetSettings(void)
                   english_language ?
                   "SETTINGS RESET" :
                   "YFCNHJQRB C,HJITYS", // НАСТРОЙКИ СБРОШЕНЫ
-                  false);
+                  msg_system, false);
     S_StartSound(NULL, sfx_dorcls);
     menuactive = true;
 }
@@ -4774,14 +5065,14 @@ static void SCNetCheck_NG_LG(Menu_t* menu)
         P_SetMessage(&players[consoleplayer], english_language ?
         "YOU CAN'T START A NEW GAME IN NETPLAY!" :
         "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
-        true);
+        msg_system, true);
     }
     else // if(menu == &LoadMenu)
     {
         P_SetMessage(&players[consoleplayer], english_language ?
         "YOU CAN'T LOAD A GAME IN NETPLAY!" :
         "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
-        true);
+        msg_system, true);
     }
     menuactive = false;
 }
@@ -4804,13 +5095,13 @@ static boolean SCNetCheck(int option)
             P_SetMessage(&players[consoleplayer], english_language ?
                          "YOU CAN'T START A NEW GAME IN NETPLAY!" :
                          "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
-                         true);
+                         msg_system, true);
             break;
         case 2:
             P_SetMessage(&players[consoleplayer], english_language ?
                          "YOU CAN'T LOAD A GAME IN NETPLAY!" :
                          "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
-                         true);
+                         msg_system, true);
             break;
         default:
             break;
@@ -4855,14 +5146,14 @@ static void SCMessages(intptr_t option)
         P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
                       "MESSAGES ON" :
                       "CJJ,OTYBZ DRK.XTYS"), // СООБЩЕНИЯ ВКЛЮЧЕНЫ
-                      true);
+                      msg_system, true);
     }
     else
     {
         P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
                       "MESSAGES OFF" :
                       "CJJ,OTYBZ DSRK.XTYS"), // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
-                      true);
+                      msg_system, true);
     }
 
     S_StartSound(NULL, sfx_chat);
@@ -4961,7 +5252,7 @@ static void SCEpisode(intptr_t option)
         P_SetMessage(&players[consoleplayer], english_language ?
                      "ONLY AVAILABLE IN THE REGISTERED VERSION" :
                      "'GBPJL YTLJCNEGTY D LTVJDTHCBB", // ЭПИЗОД НЕДОСТУПЕН В ДЕМОВЕРСИИ
-                     true);
+                     msg_system, true);
     }
     else
     {
@@ -5137,7 +5428,7 @@ boolean MN_Responder(event_t * event)
                     P_SetMessage(&players[consoleplayer], english_language ?
                                   "QUICKSAVING...." :
                                   ",SCNHJT CJ[HFYTYBT>>>", // БЫСТРОЕ СОХРАНЕНИЕ...
-                                  false);
+                                  msg_system, false);
                     FileMenuKeySteal = true;
                     SCSaveGame(quicksave - 1);
                     BorderNeedRefresh = true;
@@ -5147,7 +5438,7 @@ boolean MN_Responder(event_t * event)
                     P_SetMessage(&players[consoleplayer], english_language ?
                                   "QUICKLOADING...." :
                                   ",SCNHFZ PFUHEPRF>>>", // БЫСТРАЯ ЗАГРУЗКА...
-                                  false);
+                                  msg_system, false);
                     SCLoadGame(quickload - 1);
                     BorderNeedRefresh = true;
                     break;
@@ -5300,7 +5591,7 @@ boolean MN_Responder(event_t * event)
                     P_SetMessage(&players[consoleplayer], english_language ?
                                   "CHOOSE A QUICKSAVE SLOT" : 
                                   "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ", // ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
-                                  true);
+                                  msg_system, true);
                 }
                 else
                 {
@@ -5348,7 +5639,7 @@ boolean MN_Responder(event_t * event)
                 P_SetMessage(&players[consoleplayer], english_language ?
                              "CHOOSE A QUICKLOAD SLOT" :
                              "DS,THBNT CKJN ,SCNHJQ PFUHEPRB", // ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
-                             true);
+                             msg_system, true);
             }
             else
             {
@@ -5386,7 +5677,7 @@ boolean MN_Responder(event_t * event)
             P_SetMessage(&players[consoleplayer], english_language ? 
                                                   GammaText[usegamma] :
                                                   GammaText_Rus[usegamma],
-                                                  false);
+                                                  msg_system, false);
             return true;
         }
         // [crispy] those two can be considered as shortcuts for the ENGAGE cheat

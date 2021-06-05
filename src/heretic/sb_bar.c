@@ -1456,11 +1456,11 @@ static void CheatGodFunc(player_t * player, Cheat_t * cheat)
     player->cheats ^= CF_GODMODE;
     if (player->cheats & CF_GODMODE)
     {
-        P_SetMessage(player, DEH_String(txt_cheatgodon), false);
+        P_SetMessage(player, DEH_String(txt_cheatgodon), msg_system, false);
     }
     else
     {
-        P_SetMessage(player, DEH_String(txt_cheatgodoff), false);
+        P_SetMessage(player, DEH_String(txt_cheatgodoff), msg_system, false);
     }
     SB_state = -1;
 }
@@ -1471,11 +1471,11 @@ static void CheatNoClipFunc(player_t * player, Cheat_t * cheat)
     player->cheats ^= CF_NOCLIP;
     if (player->cheats & CF_NOCLIP)
     {
-        P_SetMessage(player, DEH_String(txt_cheatnoclipon), false);
+        P_SetMessage(player, DEH_String(txt_cheatnoclipon), msg_system, false);
     }
     else
     {
-        P_SetMessage(player, DEH_String(txt_cheatnoclipoff), false);
+        P_SetMessage(player, DEH_String(txt_cheatnoclipoff), msg_system, false);
     }
 }
 
@@ -1509,7 +1509,7 @@ static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat)
     {
         player->ammo[i] = player->maxammo[i];
     }
-    P_SetMessage(player, DEH_String(txt_cheatweapons), false);
+    P_SetMessage(player, DEH_String(txt_cheatweapons), msg_system, false);
 }
 
 static void CheatPowerFunc(player_t * player, Cheat_t * cheat)
@@ -1518,12 +1518,12 @@ static void CheatPowerFunc(player_t * player, Cheat_t * cheat)
     if (player->powers[pw_weaponlevel2])
     {
         player->powers[pw_weaponlevel2] = 0;
-        P_SetMessage(player, DEH_String(txt_cheatpoweroff), false);
+        P_SetMessage(player, DEH_String(txt_cheatpoweroff), msg_system, false);
     }
     else
     {
         P_UseArtifact(player, arti_tomeofpower);
-        P_SetMessage(player, DEH_String(txt_cheatpoweron), false);
+        P_SetMessage(player, DEH_String(txt_cheatpoweron), msg_system, false);
     }
 }
 
@@ -1538,7 +1538,7 @@ static void CheatHealthFunc(player_t * player, Cheat_t * cheat)
     {
         player->health = player->mo->health = MAXHEALTH;
     }
-    P_SetMessage(player, DEH_String(txt_cheathealth), false);
+    P_SetMessage(player, DEH_String(txt_cheathealth), msg_system, false);
 }
 
 static void CheatKeysFunc(player_t * player, Cheat_t * cheat)
@@ -1548,7 +1548,7 @@ static void CheatKeysFunc(player_t * player, Cheat_t * cheat)
     player->keys[key_green] = true;
     player->keys[key_blue] = true;
     playerkeys = 7;             // Key refresh flags
-    P_SetMessage(player, DEH_String(txt_cheatkeys), false);
+    P_SetMessage(player, DEH_String(txt_cheatkeys), msg_system, false);
 }
 
 static void CheatSoundFunc(player_t * player, Cheat_t * cheat)
@@ -1557,11 +1557,11 @@ static void CheatSoundFunc(player_t * player, Cheat_t * cheat)
     DebugSound = !DebugSound;
     if (DebugSound)
     {
-        P_SetMessage(player, DEH_String(txt_cheatsoundon), false);
+        P_SetMessage(player, DEH_String(txt_cheatsoundon), msg_system, false);
     }
     else
     {
-        P_SetMessage(player, DEH_String(txt_cheatsoundoff), false);
+        P_SetMessage(player, DEH_String(txt_cheatsoundoff), msg_system, false);
     }
 }
 
@@ -1570,11 +1570,11 @@ static void CheatTickerFunc(player_t * player, Cheat_t * cheat)
     DisplayTicker = !DisplayTicker;
     if (DisplayTicker)
     {
-        P_SetMessage(player, DEH_String(txt_cheattickeron), false);
+        P_SetMessage(player, DEH_String(txt_cheattickeron), msg_system, false);
     }
     else
     {
-        P_SetMessage(player, DEH_String(txt_cheattickeroff), false);
+        P_SetMessage(player, DEH_String(txt_cheattickeroff), msg_system, false);
     }
 
     I_DisplayFPSDots(DisplayTicker);
@@ -1583,13 +1583,13 @@ static void CheatTickerFunc(player_t * player, Cheat_t * cheat)
 static void CheatArtifact1Func(player_t * player, Cheat_t * cheat)
 {
     NIGHTMARE_NETGAME_CHECK;
-    P_SetMessage(player, DEH_String(txt_cheatartifacts1), false);
+    P_SetMessage(player, DEH_String(txt_cheatartifacts1), msg_system, false);
 }
 
 static void CheatArtifact2Func(player_t * player, Cheat_t * cheat)
 {
     NIGHTMARE_NETGAME_CHECK;
-    P_SetMessage(player, DEH_String(txt_cheatartifacts2), false);
+    P_SetMessage(player, DEH_String(txt_cheatartifacts2), msg_system, false);
 }
 
 static void CheatArtifact3Func(player_t * player, Cheat_t * cheat)
@@ -1618,7 +1618,7 @@ static void CheatArtifact3Func(player_t * player, Cheat_t * cheat)
                 P_GiveArtifact(player, i, NULL);
             }
         }
-        P_SetMessage(player, DEH_String(txt_cheatartifacts3), false);
+        P_SetMessage(player, DEH_String(txt_cheatartifacts3), msg_system, false);
     }
     else if (type > arti_none && type < NUMARTIFACTS
              && count > 0 && count < 10)
@@ -1626,18 +1626,18 @@ static void CheatArtifact3Func(player_t * player, Cheat_t * cheat)
         if (gamemode == shareware
          && (type == arti_superhealth || type == arti_teleport))
         {
-            P_SetMessage(player, DEH_String(txt_cheatartifactsfail), false);
+            P_SetMessage(player, DEH_String(txt_cheatartifactsfail), msg_system, false);
             return;
         }
         for (i = 0; i < count; i++)
         {
             P_GiveArtifact(player, type, NULL);
         }
-        P_SetMessage(player, DEH_String(txt_cheatartifacts3), false);
+        P_SetMessage(player, DEH_String(txt_cheatartifacts3), msg_system, false);
     }
     else
     {                           // Bad input
-        P_SetMessage(player, DEH_String(txt_cheatartifactsfail), false);
+        P_SetMessage(player, DEH_String(txt_cheatartifactsfail), msg_system, false);
     }
 }
 
@@ -1655,7 +1655,7 @@ static void CheatWarpFunc(player_t * player, Cheat_t * cheat)
     if (D_ValidEpisodeMap(heretic, gamemode, episode, map))
     {
         G_DeferedInitNew(gameskill, episode, map);
-        P_SetMessage(player, DEH_String(txt_cheatwarp), false);
+        P_SetMessage(player, DEH_String(txt_cheatwarp), msg_system, false);
     }
 }
 
@@ -1668,12 +1668,12 @@ static void CheatChickenFunc(player_t * player, Cheat_t * cheat)
     {
         if (P_UndoPlayerChicken(player))
         {
-            P_SetMessage(player, DEH_String(txt_cheatchickenoff), false);
+            P_SetMessage(player, DEH_String(txt_cheatchickenoff), msg_system, false);
         }
     }
     else if (P_ChickenMorphPlayer(player))
     {
-        P_SetMessage(player, DEH_String(txt_cheatchickenon), false);
+        P_SetMessage(player, DEH_String(txt_cheatchickenon), msg_system, false);
     }
 }
 
@@ -1681,7 +1681,7 @@ static void CheatMassacreFunc(player_t * player, Cheat_t * cheat)
 {
     NIGHTMARE_NETGAME_CHECK;
     P_Massacre();
-    P_SetMessage(player, DEH_String(txt_cheatmassacre), false);
+    P_SetMessage(player, DEH_String(txt_cheatmassacre), msg_system, false);
 }
 
 static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat)
@@ -1698,14 +1698,14 @@ static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat)
         player->weaponowned[i] = false;
     }
     player->pendingweapon = wp_staff;
-    P_SetMessage(player, DEH_String(txt_cheatidkfa), true);
+    P_SetMessage(player, DEH_String(txt_cheatidkfa), msg_system, true);
 }
 
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
 {
     NIGHTMARE_NETGAME_CHECK;
     P_DamageMobj(player->mo, NULL, player->mo, 10000);
-    P_SetMessage(player, DEH_String(txt_cheatiddqd), true);
+    P_SetMessage(player, DEH_String(txt_cheatiddqd), msg_system, true);
 }
 
 static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)
@@ -1727,5 +1727,5 @@ static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)
         TXT_DATE);
     }
     
-    P_SetMessage(player, msg, true);
+    P_SetMessage(player, msg, msg_system, true);
 }

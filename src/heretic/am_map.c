@@ -652,25 +652,25 @@ boolean AM_Responder(event_t * ev)
             automap_follow = !automap_follow;
             f_oldloc.x = INT_MAX;
             P_SetMessage(plr, automap_follow ?
-                              amstr_followon : amstr_followoff, true);
+                              amstr_followon : amstr_followoff, msg_uncolored, true);
         }
         else if (key == key_map_overlay)
         {
             automap_overlay = !automap_overlay;
             P_SetMessage(plr, automap_overlay ?
-                              amstr_overlayon : amstr_overlayoff, true);
+                              amstr_overlayon : amstr_overlayoff, msg_uncolored, true);
         }
         else if (key == key_map_rotate)
         {
             automap_rotate = !automap_rotate;
             P_SetMessage(plr, automap_rotate ?
-                              amstr_rotateon : amstr_rotateoff, true);
+                              amstr_rotateon : amstr_rotateoff, msg_uncolored, true);
         }
         else if (key == key_map_grid)
         {
             automap_grid = !automap_grid;
             P_SetMessage(plr, automap_grid ?
-                              amstr_gridon : amstr_gridoff, true);
+                              amstr_gridon : amstr_gridoff, msg_uncolored, true);
         }
         else
         {

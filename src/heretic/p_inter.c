@@ -81,7 +81,7 @@ static weapontype_t GetAmmoChange[] = {
 
 boolean ultimatemsg;
 
-void P_SetMessage(player_t * player, char *message, boolean ultmsg)
+void P_SetMessage(player_t * player, char *message, int color, boolean ultmsg)
 {
     if ((ultimatemsg || !show_messages) && !ultmsg)
     {
@@ -89,23 +89,7 @@ void P_SetMessage(player_t * player, char *message, boolean ultmsg)
     }
     player->message = message;
     player->messageTics = MESSAGETICS;
-    player->messageColor = 0; // [JN] Do not colorize.
-    BorderTopRefresh = true;
-    if (ultmsg)
-    {
-        ultimatemsg = true; 
-    }
-}
-
-void P_SetMessageColored(player_t * player, char *message, int color, boolean ultmsg)
-{
-    if ((ultimatemsg || !show_messages) && !ultmsg)
-    {
-        return;
-    }
-    player->message = message;
-    player->messageTics = MESSAGETICS;
-    player->messageColor = color; // [JN] Colorize.
+    player->messageColor = color; // [JN] Apply colorization.
     BorderTopRefresh = true;
     if (ultmsg)
     {
@@ -521,21 +505,21 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_itemhealth), false);
+            P_SetMessage(player, DEH_String(txt_itemhealth), msg_pickup, false);
             break;
         case SPR_SHLD:         // Item_Shield1
             if (!P_GiveArmor(player, 1))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_itemshield1), false);
+            P_SetMessage(player, DEH_String(txt_itemshield1), msg_pickup, false);
             break;
         case SPR_SHD2:         // Item_Shield2
             if (!P_GiveArmor(player, 2))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_itemshield2), false);
+            P_SetMessage(player, DEH_String(txt_itemshield2), msg_pickup, false);
             break;
         case SPR_BAGH:         // Item_BagOfHolding
             if (!player->backpack)
@@ -551,21 +535,21 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             P_GiveAmmo(player, am_crossbow, AMMO_CBOW_WIMPY);
             P_GiveAmmo(player, am_skullrod, AMMO_SKRD_WIMPY);
             P_GiveAmmo(player, am_phoenixrod, AMMO_PHRD_WIMPY);
-            P_SetMessage(player, DEH_String(txt_itembagofholding), false);
+            P_SetMessage(player, DEH_String(txt_itembagofholding), msg_pickup, false);
             break;
         case SPR_SPMP:         // Item_SuperMap
             if (!P_GivePower(player, pw_allmap))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_itemsupermap), false);
+            P_SetMessage(player, DEH_String(txt_itemsupermap), msg_pickup, false);
             break;
 
             // Keys
         case SPR_BKYY:         // Key_Blue
             if (!player->keys[key_blue])
             {
-                P_SetMessage(player, DEH_String(txt_gotbluekey), false);
+                P_SetMessage(player, DEH_String(txt_gotbluekey), msg_pickup, false);
             }
             P_GiveKey(player, key_blue);
             sound = sfx_keyup;
@@ -577,7 +561,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
         case SPR_CKYY:         // Key_Yellow
             if (!player->keys[key_yellow])
             {
-                P_SetMessage(player, DEH_String(txt_gotyellowkey), false);
+                P_SetMessage(player, DEH_String(txt_gotyellowkey), msg_pickup, false);
             }
             sound = sfx_keyup;
             P_GiveKey(player, key_yellow);
@@ -589,7 +573,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
         case SPR_AKYY:         // Key_Green
             if (!player->keys[key_green])
             {
-                P_SetMessage(player, DEH_String(txt_gotgreenkey), false);
+                P_SetMessage(player, DEH_String(txt_gotgreenkey), msg_pickup, false);
             }
             sound = sfx_keyup;
             P_GiveKey(player, key_green);
@@ -603,70 +587,70 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
         case SPR_PTN2:         // Arti_HealingPotion
             if (P_GiveArtifact(player, arti_health, special))
             {
-                P_SetMessage(player, DEH_String(txt_artihealth), false);
+                P_SetMessage(player, DEH_String(txt_artihealth), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_SOAR:         // Arti_Fly
             if (P_GiveArtifact(player, arti_fly, special))
             {
-                P_SetMessage(player, DEH_String(txt_artifly), false);
+                P_SetMessage(player, DEH_String(txt_artifly), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_INVU:         // Arti_Invulnerability
             if (P_GiveArtifact(player, arti_invulnerability, special))
             {
-                P_SetMessage(player, DEH_String(txt_artiinvulnerability), false);
+                P_SetMessage(player, DEH_String(txt_artiinvulnerability), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_PWBK:         // Arti_TomeOfPower
             if (P_GiveArtifact(player, arti_tomeofpower, special))
             {
-                P_SetMessage(player, DEH_String(txt_artitomeofpower), false);
+                P_SetMessage(player, DEH_String(txt_artitomeofpower), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_INVS:         // Arti_Invisibility
             if (P_GiveArtifact(player, arti_invisibility, special))
             {
-                P_SetMessage(player, DEH_String(txt_artiinvisibility), false);
+                P_SetMessage(player, DEH_String(txt_artiinvisibility), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_EGGC:         // Arti_Egg
             if (P_GiveArtifact(player, arti_egg, special))
             {
-                P_SetMessage(player, DEH_String(txt_artiegg), false);
+                P_SetMessage(player, DEH_String(txt_artiegg), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_SPHL:         // Arti_SuperHealth
             if (P_GiveArtifact(player, arti_superhealth, special))
             {
-                P_SetMessage(player, DEH_String(txt_artisuperhealth), false);
+                P_SetMessage(player, DEH_String(txt_artisuperhealth), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_TRCH:         // Arti_Torch
             if (P_GiveArtifact(player, arti_torch, special))
             {
-                P_SetMessage(player, DEH_String(txt_artitorch), false);
+                P_SetMessage(player, DEH_String(txt_artitorch), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_FBMB:         // Arti_FireBomb
             if (P_GiveArtifact(player, arti_firebomb, special))
             {
-                P_SetMessage(player, DEH_String(txt_artifirebomb), false);
+                P_SetMessage(player, DEH_String(txt_artifirebomb), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
         case SPR_ATLP:         // Arti_Teleport
             if (P_GiveArtifact(player, arti_teleport, special))
             {
-                P_SetMessage(player, DEH_String(txt_artiteleport), false);
+                P_SetMessage(player, DEH_String(txt_artiteleport), msg_pickup, false);
                 P_SetDormantArtifact(special);
             }
             return;
@@ -677,84 +661,84 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammogoldwand1), false);
+            P_SetMessage(player, DEH_String(txt_ammogoldwand1), msg_pickup, false);
             break;
         case SPR_AMG2:         // Ammo_GoldWandHefty
             if (!P_GiveAmmo(player, am_goldwand, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammogoldwand2), false);
+            P_SetMessage(player, DEH_String(txt_ammogoldwand2), msg_pickup, false);
             break;
         case SPR_AMM1:         // Ammo_MaceWimpy
             if (!P_GiveAmmo(player, am_mace, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammomace1), false);
+            P_SetMessage(player, DEH_String(txt_ammomace1), msg_pickup, false);
             break;
         case SPR_AMM2:         // Ammo_MaceHefty
             if (!P_GiveAmmo(player, am_mace, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammomace2), false);
+            P_SetMessage(player, DEH_String(txt_ammomace2), msg_pickup, false);
             break;
         case SPR_AMC1:         // Ammo_CrossbowWimpy
             if (!P_GiveAmmo(player, am_crossbow, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammocrossbow1), false);
+            P_SetMessage(player, DEH_String(txt_ammocrossbow1), msg_pickup, false);
             break;
         case SPR_AMC2:         // Ammo_CrossbowHefty
             if (!P_GiveAmmo(player, am_crossbow, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammocrossbow2), false);
+            P_SetMessage(player, DEH_String(txt_ammocrossbow2), msg_pickup, false);
             break;
         case SPR_AMB1:         // Ammo_BlasterWimpy
             if (!P_GiveAmmo(player, am_blaster, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammoblaster1), false);
+            P_SetMessage(player, DEH_String(txt_ammoblaster1), msg_pickup, false);
             break;
         case SPR_AMB2:         // Ammo_BlasterHefty
             if (!P_GiveAmmo(player, am_blaster, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammoblaster2), false);
+            P_SetMessage(player, DEH_String(txt_ammoblaster2), msg_pickup, false);
             break;
         case SPR_AMS1:         // Ammo_SkullRodWimpy
             if (!P_GiveAmmo(player, am_skullrod, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammoskullrod1), false);
+            P_SetMessage(player, DEH_String(txt_ammoskullrod1), msg_pickup, false);
             break;
         case SPR_AMS2:         // Ammo_SkullRodHefty
             if (!P_GiveAmmo(player, am_skullrod, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammoskullrod2), false);
+            P_SetMessage(player, DEH_String(txt_ammoskullrod2), msg_pickup, false);
             break;
         case SPR_AMP1:         // Ammo_PhoenixRodWimpy
             if (!P_GiveAmmo(player, am_phoenixrod, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammophoenixrod1), false);
+            P_SetMessage(player, DEH_String(txt_ammophoenixrod1), msg_pickup, false);
             break;
         case SPR_AMP2:         // Ammo_PhoenixRodHefty
             if (!P_GiveAmmo(player, am_phoenixrod, special->health))
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_ammophoenixrod2), false);
+            P_SetMessage(player, DEH_String(txt_ammophoenixrod2), msg_pickup, false);
             break;
 
             // Weapons
@@ -763,7 +747,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_wpnmace), false);
+            P_SetMessage(player, DEH_String(txt_wpnmace), msg_pickup, false);
             sound = sfx_wpnup;
             break;
         case SPR_WBOW:         // Weapon_Crossbow
@@ -771,7 +755,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_wpncrossbow), false);
+            P_SetMessage(player, DEH_String(txt_wpncrossbow), msg_pickup, false);
             sound = sfx_wpnup;
             break;
         case SPR_WBLS:         // Weapon_Blaster
@@ -779,7 +763,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_wpnblaster), false);
+            P_SetMessage(player, DEH_String(txt_wpnblaster), msg_pickup, false);
             sound = sfx_wpnup;
             break;
         case SPR_WSKL:         // Weapon_SkullRod
@@ -787,7 +771,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_wpnskullrod), false);
+            P_SetMessage(player, DEH_String(txt_wpnskullrod), msg_pickup, false);
             sound = sfx_wpnup;
             break;
         case SPR_WPHX:         // Weapon_PhoenixRod
@@ -795,7 +779,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_wpnphoenixrod), false);
+            P_SetMessage(player, DEH_String(txt_wpnphoenixrod), msg_pickup, false);
             sound = sfx_wpnup;
             break;
         case SPR_WGNT:         // Weapon_Gauntlets
@@ -803,7 +787,7 @@ void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
             {
                 return;
             }
-            P_SetMessage(player, DEH_String(txt_wpngauntlets), false);
+            P_SetMessage(player, DEH_String(txt_wpngauntlets), msg_pickup, false);
             sound = sfx_wpnup;
             break;
         default:

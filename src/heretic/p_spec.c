@@ -893,8 +893,8 @@ void P_PlayerInSpecialSector(player_t * player)
             if (secret_notification && !vanillaparm)
             {
                 // [JN] Notification of revealed secrets
-                P_SetMessageColored(&players[consoleplayer], english_language ? 
-                                    TXT_SECRET_FOUND : TXT_SECRET_FOUND_RUS, 2, false);
+                P_SetMessage(&players[consoleplayer], english_language ? 
+                             TXT_SECRET_FOUND : TXT_SECRET_FOUND_RUS, msg_secret, false);
                 if (player == &players[consoleplayer])
                 S_StartSound(NULL, sfx_chat);
             }

@@ -366,7 +366,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
 
         // [JN] Added audible feedback
         P_SetMessage(&players[consoleplayer], (joybspeed >= MAX_JOY_BUTTONS) ?
-                     txt_alwaysrun_on : txt_alwaysrun_off, false);
+                     txt_alwaysrun_on : txt_alwaysrun_off, msg_system, false);
     
         S_StartSound(NULL, sfx_chat);
 
@@ -379,7 +379,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         crosshair_draw ^= 1;
 
         P_SetMessage(&players[consoleplayer], crosshair_draw ? 
-                     txt_crosshair_on : txt_crosshair_off, false);
+                     txt_crosshair_on : txt_crosshair_off, msg_system, false);
 
         S_StartSound(NULL, sfx_chat);
 
@@ -727,7 +727,7 @@ void G_BuildTiccmd(ticcmd_t *cmd, int maketic)
         }
 
         P_SetMessage(&players[consoleplayer], (mlook == true ?
-                     txt_mlook_on : txt_mlook_off), false);
+                     txt_mlook_on : txt_mlook_off), msg_system, false);
 
         S_StartSound(NULL, sfx_chat);
 
@@ -883,7 +883,7 @@ void G_DoLoadLevel(void)
         P_SetMessage(&players[consoleplayer], english_language ? 
         "PRESS ESCAPE TO QUIT." :
         "HT;BV GHJDTHRB EGHFDKTYBZ", // РЕЖИМ ПРОВЕРКИ УПРАВЛЕНИЯ
-        false);
+        msg_system, false);
     }
 }
 
@@ -2446,7 +2446,7 @@ void G_DoSaveGame(void)
 
     gameaction = ga_nothing;
     savedescription[0] = 0;
-    P_SetMessage(&players[consoleplayer], DEH_String(txt_gamesaved), true);
+    P_SetMessage(&players[consoleplayer], DEH_String(txt_gamesaved), msg_system, true);
 
     free(filename);
 }

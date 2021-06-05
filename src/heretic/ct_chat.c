@@ -311,7 +311,7 @@ void CT_Ticker(void)
                     && *chat_msg[i])
                 {
                     P_SetMessage(&players[consoleplayer], plr_lastmsg[i],
-                                 true);
+                                 msg_chat, true);
                     S_StartSound(NULL, sfx_chat);
                 }
                 else if (i == consoleplayer && (*chat_msg[i]))
@@ -321,7 +321,7 @@ void CT_Ticker(void)
                         P_SetMessage(&players[consoleplayer], english_language ?
                                      "-MESSAGE SENT-" :
                                      "-CJJ<OTYBT JNGHFDKTYJ-", // -СООБЩЕНИЕ ОТПРАВЛЕНО-
-                                     true);
+                                     msg_system, true);
                         S_StartSound(NULL, sfx_chat);
                     }
                     else
@@ -329,7 +329,7 @@ void CT_Ticker(void)
                         P_SetMessage(&players[consoleplayer], english_language ?
                                      "THERE ARE NO OTHER PLAYERS IN THE GAME!" :
                                      "D BUHT YTN LHEUB[ BUHJRJD!", // В ИГРЕ НЕТ ДРУГИХ ИГРОКОВ!
-                                     true);
+                                     msg_system, true);
                         S_StartSound(NULL, sfx_chat);
                     }
                 }

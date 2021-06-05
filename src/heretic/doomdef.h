@@ -484,13 +484,7 @@ typedef struct player_s
     int killcount, itemcount, secretcount;      // for intermission
     char *message;              // hint messages
     int messageTics;            // counter for showing messages
-    // [JN] Colored message type:
-    // 0 - never colored
-    // 1 - item pickup
-    // 2 - revealed secret
-    // 3 - system message
-    // 4 - netgame chat
-    int messageColor;
+    int messageColor;           // [JN] Colored message type
     int damagecount, bonuscount;        // for screen flashing
     int flamecount;             // for flame thrower duration
     mobj_t *attacker;           // who did damage (NULL for floors)
