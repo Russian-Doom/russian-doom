@@ -132,6 +132,7 @@ int automap_overlay = 0;
 int automap_rotate = 0;
 int automap_follow = 1;
 int automap_grid = 0;
+int automap_grid_size = 128;
 
 // Sound
 int snd_MaxVolume = 10;

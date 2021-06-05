@@ -129,6 +129,7 @@ static void M_RD_AutoMapOverlay(intptr_t option);
 static void M_RD_AutoMapRotate(intptr_t option);
 static void M_RD_AutoMapFollow(intptr_t option);
 static void M_RD_AutoMapGrid(intptr_t option);
+static void M_RD_AutoMapGridSize(intptr_t option);
 
 // Sound
 static void DrawSoundMenu(void);
@@ -527,13 +528,14 @@ static MenuItem_t AutomapItems[] = {
     {ITT_LRFUNC, "OVERLAY MODE:", "HT;BV YFKJ;TYBZ:",   M_RD_AutoMapOverlay, 0}, // РЕЖИМ НАЛОЖЕНИЯ
     {ITT_LRFUNC, "ROTATE MODE:",  "HT;BV DHFOTYBZ:",    M_RD_AutoMapRotate,  0}, // РЕЖИМ ВРАЩЕНИЯ
     {ITT_LRFUNC, "FOLLOW MODE:",  "HT;BV CKTLJDFYBZ:",  M_RD_AutoMapFollow,  0}, // РЕЖИМ СЛЕДОВАНИЯ
-    {ITT_LRFUNC, "GRID:",         "CTNRF:",             M_RD_AutoMapGrid,    0}  // СЕТКА
+    {ITT_LRFUNC, "GRID:",         "CTNRF:",             M_RD_AutoMapGrid,    0}, // СЕТКА
+    {ITT_LRFUNC, "GRID SIZE:",    "HFPVTH CTNRB:",      M_RD_AutoMapGridSize,0}  // РАЗМЕР СЕТКИ
 };
 
 static Menu_t AutomapMenu = {
     102, 32,
     82,
-    5, AutomapItems,
+    6, AutomapItems,
     DrawAutomapMenu,
     &DisplayMenu,
     0
@@ -2635,6 +2637,9 @@ static void DrawAutomapMenu(void)
 {
     char *title_eng = DEH_String("AUTOMAP SETTINGS");
     char *title_rus = DEH_String("YFCNHJQRB RFHNS");  // НАСТРОЙКИ КАРТЫ
+    char  num[4];
+
+    M_snprintf(num, 4, "%d", automap_grid_size);
 
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
@@ -2669,6 +2674,9 @@ static void DrawAutomapMenu(void)
         // Grid
         MN_DrTextSmallENG(DEH_String(automap_grid ? "ON" : "OFF"),
                                      138 + wide_delta, 72);
+
+        // Grid size
+        MN_DrTextSmallENG(DEH_String(num), 171 + wide_delta, 82);
     }
     else
     {
@@ -2697,6 +2705,9 @@ static void DrawAutomapMenu(void)
         // Сетка
         MN_DrTextSmallRUS(DEH_String(automap_grid ? "DRK" : "DSRK"),
                                      128 + wide_delta, 72);
+
+        // Размер сетки
+        MN_DrTextSmallRUS(DEH_String(num), 179 + wide_delta, 82);
     }
 }
 
@@ -2723,6 +2734,40 @@ static void M_RD_AutoMapFollow(intptr_t option)
 static void M_RD_AutoMapGrid(intptr_t option)
 {
     automap_grid ^= 1;
+}
+
+static void M_RD_AutoMapGridSize(intptr_t option)
+{
+    switch (option)
+    {
+        case 0:
+            if (automap_grid_size == 512)
+                automap_grid_size = 256;
+            else
+            if (automap_grid_size == 256)
+                automap_grid_size = 128;
+            else
+            if (automap_grid_size == 128)
+                automap_grid_size = 64;
+            else
+            if (automap_grid_size == 64)
+                automap_grid_size = 32;
+        break;
+
+        case 1:
+            if (automap_grid_size == 32)
+                automap_grid_size = 64;
+            else
+            if (automap_grid_size == 64)
+                automap_grid_size = 128;
+            else
+            if (automap_grid_size == 128)
+                automap_grid_size = 256;
+            else
+            if (automap_grid_size == 256)
+                automap_grid_size = 512;
+        break;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -4926,6 +4971,7 @@ void M_RD_DoResetSettings(void)
     automap_overlay = 0;
     automap_rotate  = 0;
     automap_grid    = 0;
+    automap_grid_size  = 128;
 
     // Audio
     snd_MaxVolume   = 8;
