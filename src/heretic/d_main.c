@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN
@@ -307,6 +308,51 @@ void DrawMessage(void)
     dp_translation = NULL;
 }
 
+/*
+================================================================================
+=
+= DrawTimeAndFPS
+=
+= [JN] Draws local time and FPS widgets.
+=
+================================================================================
+*/
+
+void DrawTimeAndFPS(void)
+{
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    char   s[64], fps[9999];
+    int    f = real_fps;
+    const  boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+
+    if (!vanillaparm)
+    {
+        if (local_time)
+        {
+            strftime(s, sizeof(s), 
+                     local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
+                     local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
+                     local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
+                     local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
+                                       "", tm);        // No time
+    
+            MN_DrTextC(s, (local_time == 1 ? 281 :
+                       local_time == 2 ? 269 :
+                       local_time == 3 ? 293 :
+                       local_time == 4 ? 281 : 0) 
+                       + (wide_4_3 ? wide_delta : wide_delta*2), 13);
+        }
+
+        if (show_fps)
+        {
+            sprintf (fps, "%d", f);
+            MN_DrTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 23);
+            MN_DrTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta*2), 23);   // [JN] fps digits
+        }
+    }
+}
+
 //---------------------------------------------------------------------------
 //
 // PROC D_Display
@@ -403,6 +449,9 @@ void D_Display(void)
 
     // Menu drawing
     MN_Drawer();
+
+    // [JN] Draw local time and FPS widgets on top of everything.
+    DrawTimeAndFPS();
 
     // Send out any new accumulation
     NetUpdate();

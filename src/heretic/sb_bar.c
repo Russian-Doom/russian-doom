@@ -18,7 +18,6 @@
 
 
 
-#include <time.h>
 #include "doomdef.h"
 #include "deh_str.h"
 #include "i_video.h"
@@ -623,11 +622,6 @@ void SB_Drawer(void)
 {
     int frame;
     static boolean hitCenterFrame;
-    time_t t = time(NULL);
-    struct tm *tm = localtime(&t);
-    static char s[64];
-    int f = real_fps;
-    char fps [999];
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
     // [JN] Draw horns separatelly in non wide screen mode
@@ -635,32 +629,6 @@ void SB_Drawer(void)
     {
         V_DrawPatch(0 + wide_delta, 148, PatchLTFCTOP);
         V_DrawPatch(290 + wide_delta, 148, PatchRTFCTOP);
-    }
-
-    // [JN] Draw local time widget
-    if (local_time && !vanillaparm)
-    {
-
-        strftime(s, sizeof(s), 
-                 local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
-                 local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
-                 local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
-                 local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
-                                   "", tm);        // No time
-
-        MN_DrTextC(s, (local_time == 1 ? 281 :
-                       local_time == 2 ? 269 :
-                       local_time == 3 ? 293 :
-                       local_time == 4 ? 281 : 0) 
-                       + (wide_4_3 ? wide_delta : wide_delta*2), 13);
-    }
-
-    // [JN] Draw FPS widget
-    if (show_fps && !vanillaparm)
-    {
-        sprintf (fps, "%d", f);
-        MN_DrTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 23);
-        MN_DrTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta*2), 23);   // [JN] fps digits
     }
 
     // [JN] Show statistics
