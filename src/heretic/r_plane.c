@@ -466,7 +466,6 @@ void R_DrawPlanes (void)
         //
         else
         {
-            extern boolean canmodify;
             const int scrollOffset = leveltime >> 1 & 63;
             lumpnum = firstflat + flattranslation[pl->picnum];
             tempSource = W_CacheLumpNum(lumpnum, PU_STATIC);
@@ -478,39 +477,59 @@ void R_DrawPlanes (void)
                 case 27:
                 case 28:
                 case 29:           // Scroll_North
-                    ds_source = canmodify ? (tempSource + ((scrollOffset
-                                           << (pl->special - 25) & 63) << 6)) : tempSource;
+                    ds_source = tempSource;
                 break;
                 case 20:
                 case 21:
                 case 22:
                 case 23:
                 case 24:           // Scroll_East
-                    ds_source = tempSource + ((63 - ((leveltime >> 1) & 63)) <<
-                                                (pl->special - 20) & 63);
+                    ds_source = tempSource + ((63 - scrollOffset) << (pl->special - 20) & 63);
                 break;
                 case 30:
                 case 31:
                 case 32:
                 case 33:
                 case 34:           // Scroll_South
-                    ds_source = canmodify ? (tempSource + (((63 - scrollOffset)
-                                           << (pl->special - 30) & 63) << 6)) : tempSource;
+                    ds_source = tempSource;
                 break;
                 case 35:
                 case 36:
                 case 37:
                 case 38:
                 case 39:           // Scroll_West
-                    ds_source = canmodify ? (tempSource + (scrollOffset
-                                          << (pl->special - 35) & 63)) : tempSource;
+                    ds_source = tempSource;
                 break;
                 case 4:            // Scroll_EastLavaDamage
-                    ds_source =
-                        tempSource + (((63 - ((leveltime >> 1) & 63)) << 3) & 63);
+                    ds_source = tempSource + (((63 - scrollOffset) << 3) & 63);
                 break;
+                //
+                // [JN] Custom sector effects for scrolling in any direction:
+                //
+                case 250: case 260: case 270: case 280:  // Scroll_North
+                    ds_source = tempSource + ((scrollOffset << ((pl->special/10) - 25) & 63) << 6);
+                break;
+                case 200: case 210: case 220: case 230:  // Scroll_East
+                    ds_source = tempSource + ((63 - scrollOffset) << ((pl->special/10) - 20) & 63);
+                break;
+                case 300: case 310: case 320: case 330:  // Scroll_South
+                    ds_source = tempSource + (((63 - scrollOffset) << ((pl->special/10) - 30) & 63) << 6);
+                break;
+                case 350: case 360: case 370: case 380:  // Scroll_West
+                    ds_source = tempSource + (scrollOffset << ((pl->special/10) - 35) & 63);
+                break;
+                //
+                // [JN] Extra cases to fix reverse scrolling bug for fastest scrollers.
+                // Use speed from "fast", not from "fastest" types.
+                //
+                case 290:  ds_source = tempSource + ((scrollOffset << 3 & 63) << 6);         break;  // Scroll_North
+                case 240:  ds_source = tempSource + ((63 - scrollOffset) << 3 & 63);         break;  // Scroll_East
+                case 340:  ds_source = tempSource + (((63 - scrollOffset) << 3 & 63) << 6);  break;  // Scroll_South
+                case 390:  ds_source = tempSource + (scrollOffset << 3 & 63);                break;  // Scroll_West
+
                 default:
                     ds_source = tempSource;
+                break;
             }
 
             planeheight = abs(pl->height - viewz);

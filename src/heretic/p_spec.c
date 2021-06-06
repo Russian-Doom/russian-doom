@@ -973,10 +973,30 @@ void P_PlayerInSpecialSector(player_t * player)
             // Only used in (P_mobj):P_XYMovement and (P_user):P_Thrust
             break;
 
-        // [JN] Don't do anything
-        // default:
-        //     I_Error("P_PlayerInSpecialSector: "
-        //             "unknown special %i", sector->special);
+        // [JN] Custom sector effects for scrolling in any direction:
+        // Scroll_North
+        case 250: case 260: case 270: case 280: case 290:
+            P_Thrust(player, ANG90, pushTab[(sector->special/10) - 25]);
+        break;
+        // Scroll_East
+        case 200: case 210: case 220: case 230: case 240:
+            P_Thrust(player, 0, pushTab[(sector->special/10) - 20]);
+        break;
+        // Scroll_South
+        case 300: case 310: case 320: case 330: case 340:
+            P_Thrust(player, ANG270, pushTab[(sector->special/10) - 30]);
+        break;
+        // Scroll_West
+        case 350: case 360: case 370: case 380: case 390:
+            P_Thrust(player, ANG180, pushTab[(sector->special/10) - 35]);
+        break;
+        // [JN] Made non-fatal:
+        default:
+            printf(english_language ? 
+                   "P_PlayerInSpecialSector: unknown special %i" :
+                   "P_PlayerInSpecialSector: неизвестная специфика сектора %i",
+                                                              sector->special);
+        break;
     }
 }
 
