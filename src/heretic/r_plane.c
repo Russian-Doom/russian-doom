@@ -466,7 +466,8 @@ void R_DrawPlanes (void)
         //
         else
         {
-
+            extern boolean canmodify;
+            const int scrollOffset = leveltime >> 1 & 63;
             lumpnum = firstflat + flattranslation[pl->picnum];
             tempSource = W_CacheLumpNum(lumpnum, PU_STATIC);
 
@@ -477,7 +478,8 @@ void R_DrawPlanes (void)
                 case 27:
                 case 28:
                 case 29:           // Scroll_North
-                    ds_source = tempSource;
+                    ds_source = canmodify ? (tempSource + ((scrollOffset
+                                           << (pl->special - 25) & 63) << 6)) : tempSource;
                 break;
                 case 20:
                 case 21:
@@ -492,14 +494,16 @@ void R_DrawPlanes (void)
                 case 32:
                 case 33:
                 case 34:           // Scroll_South
-                    ds_source = tempSource;
+                    ds_source = canmodify ? (tempSource + (((63 - scrollOffset)
+                                           << (pl->special - 30) & 63) << 6)) : tempSource;
                 break;
                 case 35:
                 case 36:
                 case 37:
                 case 38:
                 case 39:           // Scroll_West
-                    ds_source = tempSource;
+                    ds_source = canmodify ? (tempSource + (scrollOffset
+                                          << (pl->special - 35) & 63)) : tempSource;
                 break;
                 case 4:            // Scroll_EastLavaDamage
                     ds_source =

@@ -187,6 +187,12 @@ animdef_t animdefs[] = {
     {false, "FLATHUH4", "FLATHUH1", 8}, // Super Lava
     {true, "LAVAFL3", "LAVAFL1", 6},    // Texture: Lavaflow
     {true, "WATRWAL3", "WATRWAL1", 4},  // Texture: Waterfall
+    // [JN] Custom flats for scrolling in any direction
+    {false, "WATSCRN3", "WATSCRN1", 9}, // River - North ( ↑ )
+    {false, "WATSCRE3", "WATSCRE1", 9}, // River - East  ( → )
+    {false, "WATSCRS3", "WATSCRS1", 9}, // River - South ( ↓ )
+    {false, "WATSCRW3", "WATSCRW1", 9}, // River - West  ( ← )
+    {false, "WATSCRX3", "WATSCRX1", 8}, // Scrollable still water
     {-1}
 };
 
@@ -205,6 +211,12 @@ struct
     { "FLTLAVA1", FLOOR_LAVA },
     { "FLATHUH1", FLOOR_LAVA },
     { "FLTSLUD1", FLOOR_SLUDGE },
+    // [JN] Custom flats for scrolling in any direction
+    { "WATSCRN1", FLOOR_WATER },
+    { "WATSCRE1", FLOOR_WATER },
+    { "WATSCRS1", FLOOR_WATER },
+    { "WATSCRW1", FLOOR_WATER },
+    { "WATSCRX1", FLOOR_WATER },
     { "END", -1 }
 };
 

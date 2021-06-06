@@ -26,6 +26,7 @@
 #include "i_system.h"
 #include "m_argv.h"
 #include "m_bbox.h"
+#include "p_fix.h"
 #include "p_local.h"
 #include "s_sound.h"
 #include "crispy.h"
@@ -62,6 +63,9 @@ int numsides;
 side_t *sides;
 
 static int totallines;
+
+// [JN] Is applying map-specific fixes allowed?
+boolean canmodify;
 
 int32_t *blockmaplump;          // offsets in blockmap are from here // [crispy] BLOCKMAP limit
 int32_t *blockmap;              // [crispy] BLOCKMAP limit
@@ -140,6 +144,24 @@ void P_LoadVertexes (int lump)
     {
         li->x = SHORT(ml->x)<<FRACBITS;
         li->y = SHORT(ml->y)<<FRACBITS;
+
+        // [JN] Apply any map-specific fixes.
+        if (canmodify)
+        {
+            for (int j = 0; vertexfix[j].epsiode != -1; j++)
+            {
+                if (i == vertexfix[j].vertex
+                && gameepisode == vertexfix[j].epsiode && gamemap == vertexfix[j].map
+                && vertexes[i].x == SHORT(vertexfix[j].oldx) << FRACBITS
+                && vertexes[i].y == SHORT(vertexfix[j].oldy) << FRACBITS)
+                {
+                    vertexes[i].x = SHORT(vertexfix[j].newx) << FRACBITS;
+                    vertexes[i].y = SHORT(vertexfix[j].newy) << FRACBITS;
+
+                    break;
+                }
+            }
+        }
 
         // [crispy] initialize pseudovertexes with actual vertex coordinates
         li->px = li->x;
@@ -260,6 +282,62 @@ void P_LoadSegs(int lump)
         else
         {
             li->backsector = 0;
+        }
+
+        // [JN] Apply any map-specific fixes.
+        if (canmodify)
+        {
+            for (int j = 0; linefix[j].epsiode != -1; j++)
+            {
+                if (linedef == linefix[j].linedef && gameepisode == linefix[j].epsiode
+                && gamemap == linefix[j].map && side == linefix[j].side)
+                {
+                    if (*linefix[j].toptexture)
+                    {
+                        li->sidedef->toptexture = R_TextureNumForName(linefix[j].toptexture);
+                    }
+
+                    if (*linefix[j].middletexture)
+                    {
+                        li->sidedef->midtexture = R_TextureNumForName(linefix[j].middletexture);
+                    }
+
+                    if (*linefix[j].bottomtexture)
+                    {
+                        li->sidedef->bottomtexture = R_TextureNumForName(linefix[j].bottomtexture);
+                    }
+
+                    if (linefix[j].offset != DEFAULT)
+                    {
+                        li->offset = SHORT(linefix[j].offset) << FRACBITS;
+                        li->sidedef->textureoffset = 0;
+                    }
+
+                    if (linefix[j].rowoffset != DEFAULT)
+                    {
+                        li->sidedef->rowoffset = SHORT(linefix[j].rowoffset) << FRACBITS;
+                    }
+
+                    if (linefix[j].flags != DEFAULT)
+                    {
+                        if (li->linedef->flags & linefix[j].flags)
+                            li->linedef->flags &= ~linefix[j].flags;
+                        else
+                            li->linedef->flags |= linefix[j].flags;
+                    }
+                    if (linefix[j].special != DEFAULT)
+                    {
+                        li->linedef->special = linefix[j].special;
+                    }
+
+                    if (linefix[j].tag != DEFAULT)
+                    {
+                        li->linedef->tag = linefix[j].tag;
+                    }
+
+                    break;
+                }
+            }
         }
     }
 
@@ -472,6 +550,51 @@ void P_LoadSectors (int lump)
         ss->interpceilingheight = ss->ceilingheight;
         // [crispy] inhibit sector interpolation during the 0th gametic
         ss->oldgametic = -1;
+
+        // [JN] Apply any map-specific fixes.
+        if (canmodify)
+        {
+            for (int j = 0; sectorfix[j].epsiode != -1; j++)
+            {
+                if (i == sectorfix[j].sector && gameepisode == sectorfix[j].epsiode
+                && gamemap == sectorfix[j].map)
+                {
+                    if (*sectorfix[j].floorpic)
+                    {
+                        ss->floorpic = R_FlatNumForName(sectorfix[j].floorpic);
+                    }
+    
+                    if (*sectorfix[j].ceilingpic)
+                    {
+                        ss->ceilingpic = R_FlatNumForName(sectorfix[j].ceilingpic);
+                    }
+    
+                    if (sectorfix[j].floorheight != DEFAULT)
+                    {
+                        ss->floorheight = SHORT(sectorfix[j].floorheight) << FRACBITS;
+                    }
+    
+                    if (sectorfix[j].ceilingheight != DEFAULT)
+                    {
+                        ss->ceilingheight = SHORT(sectorfix[j].ceilingheight) << FRACBITS;
+                    }
+    
+                    if (sectorfix[j].special != DEFAULT)
+                    {
+                        ss->special = SHORT(sectorfix[j].special);
+                    }
+    
+                    if (sectorfix[j].newtag != DEFAULT && (sectorfix[j].oldtag == DEFAULT
+                        || sectorfix[j].oldtag == ss->tag))
+                    {
+                        ss->tag = SHORT(sectorfix[j].newtag) << FRACBITS;
+                    }
+    
+                    break;
+                }
+            }
+        }
+
     }
 
     W_ReleaseLumpNum(lump);
@@ -906,6 +1029,38 @@ void P_LoadThings (int lump)
         spawnthing.angle = SHORT(mt->angle);
         spawnthing.type = SHORT(mt->type);
         spawnthing.options = SHORT(mt->options);
+
+        // [JN] Apply any map-specific fixes.
+        if (canmodify)
+        {
+            for (int j = 0; thingfix[j].epsiode != -1; j++)
+            {
+                if (gameepisode == thingfix[j].epsiode
+                && gamemap == thingfix[j].map && i == thingfix[j].thing && spawnthing.type == thingfix[j].type
+                && spawnthing.x == SHORT(thingfix[j].oldx) && spawnthing.y == SHORT(thingfix[j].oldy))
+                {
+                    // if (thingfix[j].newx == REMOVE && thingfix[j].newy == REMOVE)
+                    //     spawn = false;
+                    // else
+                    {
+                        spawnthing.x = SHORT(thingfix[j].newx);
+                        spawnthing.y = SHORT(thingfix[j].newy);
+                    }
+        
+                    if (thingfix[j].angle != DEFAULT)
+                    {
+                        spawnthing.angle = SHORT(thingfix[j].angle);
+                    }
+        
+                    if (thingfix[j].options != DEFAULT)
+                    {
+                        spawnthing.options = thingfix[j].options;
+                    }
+        
+                    break;
+                }
+            }
+        }
 
         P_SpawnMapThing(&spawnthing);
     }
@@ -1840,6 +1995,11 @@ void P_SetupLevel (int episode, int map, int playermask, skill_t skill)
     leveltime = 0;
 
     lumpnum = W_GetNumForName(lumpname);
+
+    // [JN] Checking for multiple map lump names for allowing map fixes to work.
+    // Adaptaken from Doom Retro, thanks Brad Harding!
+    canmodify = (W_CheckMultipleLumps(lumpname) == 1
+              && (!netgame && !vanillaparm && gamemode != shareware && singleplayer));
 
     // [crispy] check and log map and nodes format
     crispy_mapformat = P_CheckMapFormat(lumpnum);
