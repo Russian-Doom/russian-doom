@@ -160,6 +160,8 @@ typedef struct line_s
     sector_t *frontsector, *backsector;
     int validcount;             // if == validcount, already checked
     void *specialdata;          // thinker_t for reversable actions
+    // [crispy] calculate sound origin of line to be its midpoint
+    degenmobj_t	soundorg;
 } line_t;
 
 

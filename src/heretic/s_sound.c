@@ -143,6 +143,7 @@ void S_StartSound(void *_origin, int sound_id)
     int angle;
     int absx;
     int absy;
+    int absz;
 
     static int sndcount = 0;
     int chan;
@@ -160,7 +161,9 @@ void S_StartSound(void *_origin, int sound_id)
 // sounds that are beyond the hearing range.
     absx = abs(origin->x - listener->x);
     absy = abs(origin->y - listener->y);
-    dist = absx + absy - (absx > absy ? absy >> 1 : absx >> 1);
+    // [JN] Z-axis sfx distance
+    absz = !z_axis_sfx || vanillaparm ? 0 : abs(origin->z - listener->z);
+    dist = absx + absy + absz - (absx > absy ? absy >> 1 : absx >> 1);
     dist >>= FRACBITS;
 //  dist = P_AproxDistance(origin->x-viewx, origin->y-viewy)>>FRACBITS;
 
@@ -542,6 +545,7 @@ void S_UpdateSounds(mobj_t * listener)
     int priority;
     int absx;
     int absy;
+    int absz;
 
     I_UpdateSound();
 
@@ -580,7 +584,9 @@ void S_UpdateSounds(mobj_t * listener)
         {
             absx = abs(channel[i].mo->x - listener->x);
             absy = abs(channel[i].mo->y - listener->y);
-            dist = absx + absy - (absx > absy ? absy >> 1 : absx >> 1);
+            // [JN] Z-axis sfx distance.
+            absz = !z_axis_sfx || vanillaparm ? 0 : abs(channel[i].mo->z - listener->z);
+            dist = absx + absy + absz - (absx > absy ? absy >> 1 : absx >> 1);
             dist >>= FRACBITS;
 
             if (dist >= MAX_SND_DIST)

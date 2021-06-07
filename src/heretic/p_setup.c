@@ -1186,8 +1186,8 @@ void P_LoadLineDefs (int lump)
         }
 
         // [crispy] calculate sound origin of line to be its midpoint
-        // ld->soundorg.x = ld->bbox[BOXLEFT] / 2 + ld->bbox[BOXRIGHT] / 2;
-        // ld->soundorg.y = ld->bbox[BOXTOP] / 2 + ld->bbox[BOXBOTTOM] / 2;
+        ld->soundorg.x = ld->bbox[BOXLEFT] / 2 + ld->bbox[BOXRIGHT] / 2;
+        ld->soundorg.y = ld->bbox[BOXTOP] / 2 + ld->bbox[BOXBOTTOM] / 2;
 
         ld->sidenum[0] = SHORT(mld->sidenum[0]);
         ld->sidenum[1] = SHORT(mld->sidenum[1]);

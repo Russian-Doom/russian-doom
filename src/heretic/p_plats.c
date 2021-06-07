@@ -44,6 +44,8 @@ void T_PlatRaise(plat_t * plat)
                               plat->high, plat->crush, 0, 1);
             if (!(leveltime & 31))
             {
+                // [JN] Z-axis sfx distance: sound invoked from the floor.
+                plat->sector->soundorg.z = plat->sector->floorheight;
                 S_StartSound(&plat->sector->soundorg, sfx_stnmov);
             }
             if (plat->type == raiseAndChange
@@ -51,20 +53,25 @@ void T_PlatRaise(plat_t * plat)
             {
                 if (!(leveltime & 7))
                 {
-                    S_StartSound(&plat->sector->soundorg,
-                                 sfx_stnmov);
+                    // [JN] Z-axis sfx distance: sound invoked from the floor.
+                    plat->sector->soundorg.z = plat->sector->floorheight;
+                    S_StartSound(&plat->sector->soundorg, sfx_stnmov);
                 }
             }
             if (res == crushed && (!plat->crush))
             {
                 plat->count = plat->wait;
                 plat->status = down;
+                // [JN] Z-axis sfx distance: sound invoked from the floor.
+                plat->sector->soundorg.z = plat->sector->floorheight;
                 S_StartSound(&plat->sector->soundorg, sfx_pstart);
             }
             else if (res == pastdest)
             {
                 plat->count = plat->wait;
                 plat->status = waiting;
+                // [JN] Z-axis sfx distance: sound invoked from the floor.
+                plat->sector->soundorg.z = plat->sector->floorheight;
                 S_StartSound(&plat->sector->soundorg, sfx_pstop);
                 switch (plat->type)
                 {
@@ -87,14 +94,17 @@ void T_PlatRaise(plat_t * plat)
             {
                 plat->count = plat->wait;
                 plat->status = waiting;
+                // [JN] Z-axis sfx distance: sound invoked from the floor.
+                plat->sector->soundorg.z = plat->sector->floorheight;
                 S_StartSound(&plat->sector->soundorg, sfx_pstop);
             }
             else
             {
                 if (!(leveltime & 31))
                 {
-                    S_StartSound(&plat->sector->soundorg,
-                                 sfx_stnmov);
+                    // [JN] Z-axis sfx distance: sound invoked from the floor.
+                    plat->sector->soundorg.z = plat->sector->floorheight;
+                    S_StartSound(&plat->sector->soundorg, sfx_stnmov);
                 }
             }
             break;
@@ -105,6 +115,8 @@ void T_PlatRaise(plat_t * plat)
                     plat->status = up;
                 else
                     plat->status = down;
+                // [JN] Z-axis sfx distance: sound invoked from the floor.
+                plat->sector->soundorg.z = plat->sector->floorheight;
                 S_StartSound(&plat->sector->soundorg, sfx_pstart);
             }
         case in_stasis:
@@ -168,6 +180,8 @@ int EV_DoPlat(line_t * line, plattype_e type, int amount)
                 plat->wait = 0;
                 plat->status = up;
                 sec->special = 0;       // NO MORE DAMAGE, IF APPLICABLE
+                // [JN] Z-axis sfx distance: sound invoked from the floor.
+                sec->soundorg.z = sec->floorheight;
                 S_StartSound(&sec->soundorg, sfx_stnmov);
                 break;
             case raiseAndChange:
@@ -176,6 +190,8 @@ int EV_DoPlat(line_t * line, plattype_e type, int amount)
                 plat->high = sec->floorheight + amount * FRACUNIT;
                 plat->wait = 0;
                 plat->status = up;
+                // [JN] Z-axis sfx distance: sound invoked from the floor.
+                sec->soundorg.z = sec->floorheight;
                 S_StartSound(&sec->soundorg, sfx_stnmov);
                 break;
             case downWaitUpStay:
@@ -186,6 +202,8 @@ int EV_DoPlat(line_t * line, plattype_e type, int amount)
                 plat->high = sec->floorheight;
                 plat->wait = 35 * PLATWAIT;
                 plat->status = down;
+                // [JN] Z-axis sfx distance: sound invoked from the floor.
+                sec->soundorg.z = sec->floorheight;
                 S_StartSound(&sec->soundorg, sfx_pstart);
                 break;
             case perpetualRaise:
@@ -198,6 +216,8 @@ int EV_DoPlat(line_t * line, plattype_e type, int amount)
                     plat->high = sec->floorheight;
                 plat->wait = 35 * PLATWAIT;
                 plat->status = P_Random() & 1;
+                // [JN] Z-axis sfx distance: sound invoked from the floor.
+                sec->soundorg.z = sec->floorheight;
                 S_StartSound(&sec->soundorg, sfx_pstart);
                 break;
         }

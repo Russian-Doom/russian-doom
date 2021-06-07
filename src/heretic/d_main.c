@@ -161,6 +161,9 @@ int weapon_bobbing = 1;
 int randomly_flipcorpses = 1;
 int floating_powerups = 1;
 
+// Gameplay: Audible
+int z_axis_sfx = 0;
+
 // Gameplay: Tactical
 int secret_notification = 1;
 int negative_health = 0;
@@ -1130,6 +1133,9 @@ void D_BindVariables(void)
     M_BindIntVariable("weapon_bobbing",         &weapon_bobbing);
     M_BindIntVariable("randomly_flipcorpses",   &randomly_flipcorpses);
     M_BindIntVariable("floating_powerups",      &floating_powerups);
+
+    // Gameplay: Audible
+    M_BindIntVariable("z_axis_sfx",             &z_axis_sfx);
 
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);

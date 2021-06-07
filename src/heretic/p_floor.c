@@ -197,6 +197,8 @@ void T_MoveFloor(floormove_t * floor)
                       floor->direction);
     if (!(leveltime & 7))
     {
+        // [JN] Z-axis sfx distance: sound invoked from the floor.
+        floor->sector->soundorg.z = floor->sector->floorheight;
         S_StartSound(&floor->sector->soundorg, sfx_dormov);
     }
 
@@ -205,6 +207,8 @@ void T_MoveFloor(floormove_t * floor)
         floor->sector->specialdata = NULL;
         if (floor->type == raiseBuildStep)
         {
+            // [JN] Z-axis sfx distance: sound invoked from the floor.
+            floor->sector->soundorg.z = floor->sector->floorheight;
             S_StartSound(&floor->sector->soundorg, sfx_pstop);
         }
         if (floor->direction == 1)

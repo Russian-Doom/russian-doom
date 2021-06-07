@@ -175,6 +175,7 @@ static void M_RD_NegativeHealth(intptr_t option);
 
 // Gameplay (page 2)
 static void DrawGameplay2Menu(void);
+static void M_RD_ZAxisSFX(intptr_t option);
 static void M_RD_Torque(intptr_t option);
 static void M_RD_Bobbing(intptr_t option);
 static void M_RD_FlipCorpses(intptr_t option);
@@ -659,6 +660,8 @@ static Menu_t Gameplay1Menu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t Gameplay2Items[] = {
+    {ITT_LRFUNC, "SOUND ATTENUATION AXISES:",   "PFNE[FYBT PDERF GJ JCZV:",      M_RD_ZAxisSFX,       0}, // ЗАТУХАНИЕ ЗВУКА ПО ОСЯМ
+    {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
     {ITT_LRFUNC, "NOTIFY OF REVEALED SECRETS:", "CJJ,OFNM J YFQLTYYJV NFQYBRT:", M_RD_SecretNotify,    0}, // СООБЩАТЬ О НАЙДЕННОМ ТАЙНИКЕ
     {ITT_LRFUNC, "SHOW NEGATIVE HEALTH:",       "JNHBWFNTKMYJT PLJHJDMT D $:",   M_RD_NegativeHealth, 0}, // ОТРИЦАТЕЛЬНОЕ ЗДОРОВЬЕ В HUD
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
@@ -676,7 +679,7 @@ static MenuItem_t Gameplay2Items[] = {
 static Menu_t Gameplay2Menu = {
     36, 36,
     36,
-    12, Gameplay2Items,
+    14, Gameplay2Items,
     DrawGameplay2Menu,
     &OptionsMenu,
     0
@@ -3864,38 +3867,52 @@ static void DrawGameplay2Menu(void)
                                        + wide_delta, 4);
 
         //
+        // AUDIBLE
+        //
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
+        MN_DrTextSmallENG(DEH_String("AUDIBLE"), 36 + wide_delta, 26);
+        dp_translation = NULL;
+
+        // Sound attenuation axises
+        dp_translation = z_axis_sfx ? cr[CR_WHITE2GREEN_HERETIC] :
+                                      cr[CR_WHITE2RED_HERETIC];
+        MN_DrTextSmallENG(DEH_String(z_axis_sfx ? "X/Y/Z" : "X/Y"),
+                                     219 + wide_delta, 36);
+        dp_translation = NULL;
+
+        //
         // TACTICAL
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("TACTICAL"), 36 + wide_delta, 26);
+        MN_DrTextSmallENG(DEH_String("TACTICAL"), 36 + wide_delta, 46);
         dp_translation = NULL;
 
         // Notify of revealed secrets
         dp_translation = secret_notification ? cr[CR_WHITE2GREEN_HERETIC] :
                                                cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(secret_notification ? "ON" : "OFF"),
-                                     235 + wide_delta, 36);
+                                     235 + wide_delta, 56);
         dp_translation = NULL;
 
         // Negative health
         dp_translation = negative_health ? cr[CR_WHITE2GREEN_HERETIC] :
                                            cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(negative_health ? "ON" : "OFF"),
-                                     190 + wide_delta, 46);
+                                     190 + wide_delta, 66);
         dp_translation = NULL;
 
         //
         // CROSSHAIR
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("CROSSHAIR"), 36 + wide_delta, 56);
+        MN_DrTextSmallENG(DEH_String("CROSSHAIR"), 36 + wide_delta, 76);
         dp_translation = NULL;
 
         // Draw crosshair
         dp_translation = crosshair_draw ? cr[CR_WHITE2GREEN_HERETIC] :
                                           cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(crosshair_draw ? "ON" : "OFF"),
-                                     150 + wide_delta, 66);
+                                     150 + wide_delta, 86);
         dp_translation = NULL;
 
         // Indication
@@ -3905,42 +3922,42 @@ static void DrawGameplay2Menu(void)
                                      crosshair_type == 2 ? "TARGET HIGHLIGHTING" :
                                      crosshair_type == 3 ? "TARGET HIGHLIGHTING+HEALTH" :
                                                             "STATIC"),
-                                     111 + wide_delta, 76);
+                                     111 + wide_delta, 96);
         dp_translation = NULL;
 
         // Increased size
         dp_translation = crosshair_scale ? cr[CR_WHITE2GREEN_HERETIC] :
                                            cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(crosshair_scale ? "ON" : "OFF"),
-                                     146 + wide_delta, 86);
+                                     146 + wide_delta, 106);
         dp_translation = NULL;
 
         //
         // GAMEPLAY
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("GAMEPLAY"), 36 + wide_delta, 96);
+        MN_DrTextSmallENG(DEH_String("GAMEPLAY"), 36 + wide_delta, 116);
         dp_translation = NULL;
 
         // Flip game levels
         dp_translation = flip_levels ? cr[CR_WHITE2GREEN_HERETIC] :
                                        cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(flip_levels ? "ON" : "OFF"),
-                                     153 + wide_delta, 106);
+                                     153 + wide_delta, 126);
         dp_translation = NULL;
 
         // Play internal demos
         dp_translation = no_internal_demos ? cr[CR_WHITE2RED_HERETIC] :
                                              cr[CR_WHITE2GREEN_HERETIC];
         MN_DrTextSmallENG(DEH_String(no_internal_demos ? "OFF" : "ON"),
-                                     179 + wide_delta, 116);
+                                     179 + wide_delta, 136);
         dp_translation = NULL;
 
         // Wand start
         dp_translation = pistol_start ? cr[CR_WHITE2GREEN_HERETIC] :
                                         cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(pistol_start ? "ON" : "OFF"),
-                                     193 + wide_delta, 126);
+                                     193 + wide_delta, 146);
         dp_translation = NULL;
     }
     else
@@ -3952,38 +3969,52 @@ static void DrawGameplay2Menu(void)
                                        + wide_delta, 4);
 
         //
+        // ЗВУК
+        //
+        dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
+        MN_DrTextSmallRUS(DEH_String("PDER"), 36 + wide_delta, 26);
+        dp_translation = NULL;
+
+        // Затухание звука по осям
+        dp_translation = z_axis_sfx ? cr[CR_WHITE2GREEN_HERETIC] :
+                                      cr[CR_WHITE2RED_HERETIC];
+        MN_DrTextSmallENG(DEH_String(z_axis_sfx ? "X/Y/Z" : "X/Y"),
+                                     209 + wide_delta, 36);
+        dp_translation = NULL;
+
+        //
         // ТАКТИКА
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("NFRNBRF"), 36 + wide_delta, 26);
+        MN_DrTextSmallRUS(DEH_String("NFRNBRF"), 36 + wide_delta, 46);
         dp_translation = NULL;
 
         // Сообщать о найденном тайнике
         dp_translation = secret_notification ? cr[CR_WHITE2GREEN_HERETIC] :
                                                cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(secret_notification ? "DRK" : "DSRK"),
-                                     251 + wide_delta, 36);
+                                     251 + wide_delta, 56);
         dp_translation = NULL;
 
         // Отрицательное здоровье в HUD
         dp_translation = negative_health ? cr[CR_WHITE2GREEN_HERETIC] :
                                            cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(negative_health ? "DRK" : "DSRK"),
-                                     253 + wide_delta, 46);
+                                     253 + wide_delta, 66);
         dp_translation = NULL;
 
         //
         // ПРИЦЕЛ
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + wide_delta, 56);
+        MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + wide_delta, 76);
         dp_translation = NULL;
 
         // Отображать прицел
         dp_translation = crosshair_draw ? cr[CR_WHITE2GREEN_HERETIC] :
                                           cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(crosshair_draw ? "DRK" : "DSRK"),
-                                     175 + wide_delta, 66);
+                                     175 + wide_delta, 86);
         dp_translation = NULL;
 
         // Индикация
@@ -3993,46 +4024,51 @@ static void DrawGameplay2Menu(void)
                                      crosshair_type == 2 ? "GJLCDTNRF WTKB" : // ПОДСВЕТКА ЦЕЛИ
                                      crosshair_type == 3 ? "GJLCDTNRF WTKB+PLJHJDMT" :
                                                            "CNFNBXYFZ"),      // СТАТИЧНАЯ
-                                     111 + wide_delta, 76);
+                                     111 + wide_delta, 96);
         dp_translation = NULL;
 
         // Увеличенный размер
         dp_translation = crosshair_scale ? cr[CR_WHITE2GREEN_HERETIC] :
                                            cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(crosshair_scale ? "DRK" : "DSRK"),
-                                     181 + wide_delta, 86);
+                                     181 + wide_delta, 106);
         dp_translation = NULL;
 
         //
         // ГЕЙМПЛЕЙ
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + wide_delta, 96);
+        MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + wide_delta, 116);
         dp_translation = NULL;
 
         // Зеркальное отражение уровней
         dp_translation = flip_levels ? cr[CR_WHITE2GREEN_HERETIC] :
                                        cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(flip_levels ? "DRK" : "DSRK"),
-                                     255 + wide_delta, 106);
+                                     255 + wide_delta, 126);
         dp_translation = NULL;
 
         // Проигрывать демозаписи
         dp_translation = no_internal_demos ? cr[CR_WHITE2RED_HERETIC] :
                                              cr[CR_WHITE2GREEN_HERETIC];
         MN_DrTextSmallRUS(DEH_String(no_internal_demos ? "DSRK" : "DRK"),
-                                     211 + wide_delta, 116);
+                                     211 + wide_delta, 136);
         dp_translation = NULL;
 
         // Режим игры "Wand start"
-        MN_DrTextSmallRUS(DEH_String("HT;BV BUHS"), 36 + wide_delta, 126);
-        MN_DrTextSmallENG(DEH_String("\"WAND START\":"), 120 + wide_delta, 126);
+        MN_DrTextSmallRUS(DEH_String("HT;BV BUHS"), 36 + wide_delta, 146);
+        MN_DrTextSmallENG(DEH_String("\"WAND START\":"), 120 + wide_delta, 146);
         dp_translation = pistol_start ? cr[CR_WHITE2GREEN_HERETIC] :
                                         cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(pistol_start ? "DRK" : "DSRK"),
-                                     217 + wide_delta, 126);
+                                     217 + wide_delta, 146);
         dp_translation = NULL;
     }
+}
+
+static void M_RD_ZAxisSFX(intptr_t option)
+{
+    z_axis_sfx ^= 1;
 }
 
 static void M_RD_Torque(intptr_t option)

@@ -50,8 +50,11 @@ void T_MoveCeiling(ceiling_t * ceiling)
                               ceiling->topheight, false, 1,
                               ceiling->direction);
             if (!(leveltime & 7))
-                S_StartSound(&ceiling->sector->soundorg,
-                             sfx_dormov);
+            {
+                // [JN] Z-axis sfx distance: sound invoked from the ceiling.
+                ceiling->sector->soundorg.z = ceiling->sector->ceilingheight;
+                S_StartSound(&ceiling->sector->soundorg, sfx_dormov);
+            }
             if (res == pastdest)
                 switch (ceiling->type)
                 {
@@ -71,8 +74,11 @@ void T_MoveCeiling(ceiling_t * ceiling)
                               ceiling->bottomheight, ceiling->crush, 1,
                               ceiling->direction);
             if (!(leveltime & 7))
-                S_StartSound(&ceiling->sector->soundorg,
-                             sfx_dormov);
+            {
+                // [JN] Z-axis sfx distance: sound invoked from the ceiling.
+                ceiling->sector->soundorg.z = ceiling->sector->ceilingheight;
+                S_StartSound(&ceiling->sector->soundorg, sfx_dormov);
+            }
             if (res == pastdest)
                 switch (ceiling->type)
                 {
