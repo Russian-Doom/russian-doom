@@ -906,7 +906,7 @@ void P_PlayerInSpecialSector(player_t * player)
             {
                 // [JN] Notification of revealed secrets
                 P_SetMessage(&players[consoleplayer], english_language ? 
-                             TXT_SECRET_FOUND : TXT_SECRET_FOUND_RUS, msg_secret, false);
+                             TXT_SECRET_FOUND : TXT_SECRET_FOUND_RUS, msg_secret, true);
                 if (player == &players[consoleplayer])
                 S_StartSound(NULL, sfx_chat);
             }
