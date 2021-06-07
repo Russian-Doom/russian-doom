@@ -5826,11 +5826,9 @@ boolean MN_Responder(event_t * event)
         }
         else if (key == key_menu_quit)            // F10 (quit)
         {
-            if (gamestate == GS_LEVEL)
-            {
-                SCQuitGame(0);
-                S_StartSound(NULL, sfx_chat);
-            }
+            // [JN] Allow to invoke quit responce in any game states.
+            SCQuitGame(0);
+            S_StartSound(NULL, sfx_chat);
             return true;
         }
         else if (key == key_menu_gamma)           // F11 (gamma correction)
