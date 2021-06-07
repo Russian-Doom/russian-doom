@@ -386,6 +386,8 @@ void R_DrawMaskedColumn (column_t *column, signed int baseclip)
             dc_yh = mfloorclip[dc_x]-1;
         if (dc_yl <= mceilingclip[dc_x])
             dc_yl = mceilingclip[dc_x]+1;
+        if (dc_yh >= baseclip && baseclip != -1)
+            dc_yh = baseclip;
 
         // [JN] killough 3/2/98, 3/27/98: Failsafe against overflow/crash:
         if (dc_yl <= dc_yh && dc_yh < viewheight)
