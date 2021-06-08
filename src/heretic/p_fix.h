@@ -45,6 +45,7 @@
 
 typedef struct
 {
+    int     mission;
     int     epsiode;
     int     map;
     int     vertex;
@@ -56,6 +57,7 @@ extern vertexfix_t  vertexfix[];
 
 typedef struct
 {
+    int     mission;
     int     epsiode;
     int     map;
     int     linedef;
@@ -74,6 +76,7 @@ extern linefix_t    linefix[];
 
 typedef struct
 {
+    int     mission;
     int     epsiode;
     int     map;
     int     sector;
@@ -90,6 +93,7 @@ extern sectorfix_t  sectorfix[];
 
 typedef struct
 {
+    int     mission;
     int     epsiode;
     int     map;
     int     thing;

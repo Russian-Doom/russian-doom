@@ -21,6 +21,7 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "d_mode.h"
 #include "doomdef.h"
 #include "i_swap.h"
 #include "i_system.h"
@@ -66,6 +67,7 @@ static int totallines;
 
 // [JN] Is applying map-specific fixes allowed?
 boolean canmodify;
+GameMission_t gamemission;
 
 int32_t *blockmaplump;          // offsets in blockmap are from here // [crispy] BLOCKMAP limit
 int32_t *blockmap;              // [crispy] BLOCKMAP limit
@@ -148,10 +150,12 @@ void P_LoadVertexes (int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify)
         {
-            for (int j = 0; vertexfix[j].epsiode != -1; j++)
+            for (int j = 0; vertexfix[j].mission != -1; j++)
             {
                 if (i == vertexfix[j].vertex
-                && gameepisode == vertexfix[j].epsiode && gamemap == vertexfix[j].map
+                && gamemission == vertexfix[j].mission
+                && gameepisode == vertexfix[j].epsiode
+                && gamemap == vertexfix[j].map
                 && vertexes[i].x == SHORT(vertexfix[j].oldx) << FRACBITS
                 && vertexes[i].y == SHORT(vertexfix[j].oldy) << FRACBITS)
                 {
@@ -287,10 +291,13 @@ void P_LoadSegs(int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify)
         {
-            for (int j = 0; linefix[j].epsiode != -1; j++)
+            for (int j = 0; linefix[j].mission != -1; j++)
             {
-                if (linedef == linefix[j].linedef && gameepisode == linefix[j].epsiode
-                && gamemap == linefix[j].map && side == linefix[j].side)
+                if (linedef == linefix[j].linedef
+                && gamemission == linefix[j].mission
+                && gameepisode == linefix[j].epsiode
+                && gamemap == linefix[j].map
+                && side == linefix[j].side)
                 {
                     if (*linefix[j].toptexture)
                     {
@@ -554,9 +561,11 @@ void P_LoadSectors (int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify)
         {
-            for (int j = 0; sectorfix[j].epsiode != -1; j++)
+            for (int j = 0; sectorfix[j].mission != -1; j++)
             {
-                if (i == sectorfix[j].sector && gameepisode == sectorfix[j].epsiode
+                if (i == sectorfix[j].sector
+                && gamemission == linefix[j].mission
+                && gameepisode == sectorfix[j].epsiode
                 && gamemap == sectorfix[j].map)
                 {
                     if (*sectorfix[j].floorpic)
@@ -1033,11 +1042,15 @@ void P_LoadThings (int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify)
         {
-            for (int j = 0; thingfix[j].epsiode != -1; j++)
+            for (int j = 0; thingfix[j].mission != -1; j++)
             {
-                if (gameepisode == thingfix[j].epsiode
-                && gamemap == thingfix[j].map && i == thingfix[j].thing && spawnthing.type == thingfix[j].type
-                && spawnthing.x == SHORT(thingfix[j].oldx) && spawnthing.y == SHORT(thingfix[j].oldy))
+                if (gamemission == thingfix[j].mission
+                && gameepisode == thingfix[j].epsiode
+                && gamemap == thingfix[j].map
+                && i == thingfix[j].thing
+                && spawnthing.type == thingfix[j].type
+                && spawnthing.x == SHORT(thingfix[j].oldx)
+                && spawnthing.y == SHORT(thingfix[j].oldy))
                 {
                     // if (thingfix[j].newx == REMOVE && thingfix[j].newy == REMOVE)
                     //     spawn = false;
