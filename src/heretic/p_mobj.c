@@ -974,6 +974,15 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     }
     mobj->lastlook = safe ? 0 : P_Random () % MAXPLAYERS;
 
+    // [JN] Reduce radius of Imp chunks so they will not hang part way on ledges.
+    // Empirically verified to be small enough to prevent hanging and to 
+    // don't spawn part way inside walls. Original radius: 20 * FRACUNIT.
+    if (singleplayer && !vanillaparm
+    && (mobj->type == MT_IMPCHUNK1 || mobj->type == MT_IMPCHUNK2))
+    {
+        mobj->radius = 5 * FRACUNIT;
+    }
+
     // Set the state, but do not use P_SetMobjState, because action
     // routines can't be called yet.  If the spawnstate has an action
     // routine, it will not be called.
