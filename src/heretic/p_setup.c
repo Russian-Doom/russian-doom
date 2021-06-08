@@ -152,10 +152,9 @@ void P_LoadVertexes (int lump)
         {
             for (int j = 0; vertexfix[j].mission != -1; j++)
             {
-                if (i == vertexfix[j].vertex
-                && gamemission == vertexfix[j].mission
-                && gameepisode == vertexfix[j].epsiode
+                if (gameepisode == vertexfix[j].epsiode
                 && gamemap == vertexfix[j].map
+                && i == vertexfix[j].vertex
                 && vertexes[i].x == SHORT(vertexfix[j].oldx) << FRACBITS
                 && vertexes[i].y == SHORT(vertexfix[j].oldy) << FRACBITS)
                 {
@@ -293,10 +292,9 @@ void P_LoadSegs(int lump)
         {
             for (int j = 0; linefix[j].mission != -1; j++)
             {
-                if (linedef == linefix[j].linedef
-                && gamemission == linefix[j].mission
-                && gameepisode == linefix[j].epsiode
+                if (gameepisode == linefix[j].epsiode
                 && gamemap == linefix[j].map
+                && linedef == linefix[j].linedef
                 && side == linefix[j].side)
                 {
                     if (*linefix[j].toptexture)
@@ -563,10 +561,9 @@ void P_LoadSectors (int lump)
         {
             for (int j = 0; sectorfix[j].mission != -1; j++)
             {
-                if (i == sectorfix[j].sector
-                && gamemission == linefix[j].mission
-                && gameepisode == sectorfix[j].epsiode
-                && gamemap == sectorfix[j].map)
+                if (gameepisode == sectorfix[j].epsiode
+                && gamemap == sectorfix[j].map
+                && i == sectorfix[j].sector)
                 {
                     if (*sectorfix[j].floorpic)
                     {
@@ -1044,8 +1041,7 @@ void P_LoadThings (int lump)
         {
             for (int j = 0; thingfix[j].mission != -1; j++)
             {
-                if (gamemission == thingfix[j].mission
-                && gameepisode == thingfix[j].epsiode
+                if (gameepisode == thingfix[j].epsiode
                 && gamemap == thingfix[j].map
                 && i == thingfix[j].thing
                 && spawnthing.type == thingfix[j].type
