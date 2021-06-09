@@ -160,8 +160,6 @@ static yahpt_t YAHspot[3][9] = {
 //
 //========================================================================
 
-extern void AM_Stop(void);
-
 void IN_Start(void)
 {
     I_SetPalette(W_CacheLumpName(DEH_String(usegamma <= 8 ?

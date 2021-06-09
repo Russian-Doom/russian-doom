@@ -1989,6 +1989,9 @@ void G_InitNew(skill_t skill, int episode, int map, int fast_monsters)
     paused = false;
     demorecording = false;
     demoplayback = false;
+    // [JN] Reset automap scale. Fixes:
+    // https://doomwiki.org/wiki/Automap_scale_preserved_after_warps_in_Heretic_and_Hexen
+    automapactive = false; 
     viewactive = true;
     gameepisode = episode;
     gamemap = map;

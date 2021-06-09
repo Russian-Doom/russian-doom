@@ -820,6 +820,7 @@ int M_DrawText(int x, int y, boolean direct, char *string);
 //----------------------
 
 extern boolean automapactive;
+void AM_Stop ();
 
 //----------------------
 // Interlude (IN_lude.c)

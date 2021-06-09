@@ -876,6 +876,11 @@ void P_KillMobj(mobj_t * source, mobj_t * target)
             P_SetMobjState(target, S_PLAY_FDTH1);
             return;
         }
+        if (target->player == &players[consoleplayer] && automapactive)
+        {
+            // [JN] Don't die in auto map, switch view prior to dying.
+            AM_Stop ();
+        }
     }
     if (target->health < -(target->info->spawnhealth >> 1)
         && target->info->xdeathstate)
