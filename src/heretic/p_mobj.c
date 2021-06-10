@@ -159,20 +159,17 @@ void P_ExplodeMissile(mobj_t * mo)
         {
             case FLOOR_WATER:
                 P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SPLASHBASE);
-                mo = P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SPLASH);
-                mo->momx = P_SubRandom() << 8;
-                mo->momy = P_SubRandom() << 8;
-                mo->momz = 2.3 * FRACUNIT + (P_Random() << 8);
+                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SPLASH);
                 S_StartSound(mo, sfx_gloop);
             break;
             case FLOOR_LAVA:
                 P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_LAVASPLASH);
-                mo = P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_LAVASMOKE);
-                mo->momz = FRACUNIT + (P_Random() << 7);
+                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_LAVASMOKE);
                 S_StartSound(mo, sfx_burn);
             break;
             case FLOOR_SLUDGE:
                 P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SLUDGESPLASH);
+                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SLUDGECHUNK);
             break;
         }
     }
@@ -1368,26 +1365,21 @@ void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe)
     // [JN] Allow hitscan attacks to make splashes on water/lava/sludge
     if (singleplayer && puff->z <= puff->floorz + FRACUNIT*8 && !vanillaparm)
     {
-        mobj_t *mo;
-
         switch (P_GetThingFloorType(puff))
         {
             case FLOOR_WATER:
                 P_SpawnMobj(x, y, ONFLOORZ, MT_SPLASHBASE);
-                mo = P_SpawnMobj(x, y, ONFLOORZ, MT_SPLASH);
-                mo->momx = P_SubRandom() << 8;
-                mo->momy = P_SubRandom() << 8;
-                mo->momz = 2.3 * FRACUNIT + (P_Random() << 8);
+                P_SpawnMobj(x, y, ONFLOORZ, MT_SPLASH);
                 S_StartSound(puff, sfx_gloop);
             break;
             case FLOOR_LAVA:
                 P_SpawnMobj(x, y, ONFLOORZ, MT_LAVASPLASH);
-                mo = P_SpawnMobj(x, y, ONFLOORZ, MT_LAVASMOKE);
-                mo->momz = FRACUNIT + (P_Random() << 7);
+                P_SpawnMobj(x, y, ONFLOORZ, MT_LAVASMOKE);
                 S_StartSound(puff, sfx_burn);
             break;
             case FLOOR_SLUDGE:
                 P_SpawnMobj(x, y, ONFLOORZ, MT_SLUDGESPLASH);
+                P_SpawnMobj(x, y, ONFLOORZ, MT_SLUDGECHUNK);
             break;
         }
     }
