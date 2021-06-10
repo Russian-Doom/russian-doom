@@ -150,7 +150,7 @@ void P_LoadVertexes (int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify)
         {
-            for (int j = 0; vertexfix[j].mission != -1; j++)
+            for (int j = 0; vertexfix[j].mission != 0; j++)
             {
                 if (gameepisode == vertexfix[j].epsiode
                 && gamemap == vertexfix[j].map
@@ -290,7 +290,7 @@ void P_LoadSegs(int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify)
         {
-            for (int j = 0; linefix[j].mission != -1; j++)
+            for (int j = 0; linefix[j].mission != 0; j++)
             {
                 if (gameepisode == linefix[j].epsiode
                 && gamemap == linefix[j].map
@@ -559,7 +559,7 @@ void P_LoadSectors (int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify)
         {
-            for (int j = 0; sectorfix[j].mission != -1; j++)
+            for (int j = 0; sectorfix[j].mission != 0; j++)
             {
                 if (gameepisode == sectorfix[j].epsiode
                 && gamemap == sectorfix[j].map
@@ -1039,7 +1039,7 @@ void P_LoadThings (int lump)
         // [JN] Apply any map-specific fixes.
         if (canmodify)
         {
-            for (int j = 0; thingfix[j].mission != -1; j++)
+            for (int j = 0; thingfix[j].mission != 0; j++)
             {
                 if (gameepisode == thingfix[j].epsiode
                 && gamemap == thingfix[j].map
