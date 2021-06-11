@@ -420,6 +420,12 @@ void R_DrawPlanes (void)
     int          lumpnum;
     int          angle;
     byte        *tempSource;
+    int          count;
+    byte        *dest;
+    int          frac;
+    int          fracstep = FRACUNIT >> hires;
+    extern byte *ylookup[SCREENHEIGHT];
+    extern int   columnofs[WIDESCREENWIDTH];
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next)
@@ -446,17 +452,24 @@ void R_DrawPlanes (void)
                 dc_yh = pl->bottom[x];
                 if ((unsigned) dc_yl <= dc_yh) // [crispy] 32-bit integer math
                 {
+                    count = dc_yh - dc_yl;
+                    if (count < 0)
+                    {
+                        return;
+                    }
                     // [crispy] Optionally draw skies horizontally linear.
                     angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
                                            xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
-                    dc_x = x;
-                    dc_source = R_GetColumn(skytexture, angle, true);
-
-                    // [JN] Initially it was commented out. Colfunc() calls R_DrawColumn()
-                    // which, originally, doesn't know how to draw textures taller than 128 pixels.
-                    // I'm using R_DrawColumn with enhancements by Lee Killough, so now it actually
-                    // can draw 128++ tall textures, but height itself must be defined in TEXTURE lump.
-                    colfunc ();
+                    dc_source = R_GetColumn(skytexture, angle , false);
+                    dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
+                    frac = skytexturemid + (dc_yl - centery) * fracstep;
+                    do
+                    {
+                        *dest = dc_colormap[dc_source[frac >> FRACBITS]];
+                        dest += screenwidth;
+                        frac += fracstep;
+                    }
+                    while (count--);
                 }
             }
             continue;
