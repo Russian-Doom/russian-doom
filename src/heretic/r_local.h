@@ -386,6 +386,7 @@ extern fixed_t viewcos, viewsin;
 extern int detailshift;         // 0 = high, 1 = low
 
 extern void (*colfunc) (void);
+extern void (*skycolfunc) (void);
 extern void (*basecolfunc) (void);
 extern void (*tlcolfunc) (void);
 extern void (*extratlcolfunc) (void);
@@ -549,9 +550,12 @@ extern fixed_t dc_iscale;
 extern fixed_t dc_texturemid;
 extern int dc_texheight;
 extern byte *dc_source;         // first pixel in a column
+extern int skytexturemid;
 
 void R_DrawColumn(void);
 void R_DrawColumnLow(void);
+void R_DrawSkyColumn(void);
+void R_DrawSkyColumnLow(void);
 void R_DrawTLColumn(void);
 void R_DrawTLColumnLow(void);
 void R_DrawExtraTLColumn(void);

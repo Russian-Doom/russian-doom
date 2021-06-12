@@ -145,6 +145,71 @@ void R_DrawColumn(void)
 /*
 ================================================================================
 =
+= R_DrawSkyColumn
+=
+= [JN] Draws sky texture column.
+=
+================================================================================
+*/
+
+void R_DrawSkyColumn(void)
+{
+    int   count = dc_yh - dc_yl;
+    int   fracstep = FRACUNIT >> hires;
+    int   frac  = skytexturemid + (dc_yl - centery) * fracstep;
+    byte *dest  = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+
+    if (count < 0)
+    return;
+
+    do
+    {
+        *dest = dc_colormap[dc_source[frac >> FRACBITS]];
+         dest += screenwidth;
+         frac += fracstep;
+    }
+    while (count--);
+}
+
+/*
+================================================================================
+=
+= R_DrawSkyColumn
+=
+= [JN] Low detail version of R_DrawSkyColumn.
+=
+================================================================================
+*/
+
+void R_DrawSkyColumnLow(void)
+{
+    int   count = dc_yh - dc_yl;
+    int   fracstep = FRACUNIT >> (hires && !detailshift);
+    int   frac  = skytexturemid + (dc_yl - centery) * fracstep;
+    byte *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(dc_x << hires)]];
+    byte *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(dc_x << hires) + 1]];
+    byte *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(dc_x << hires)]];
+    byte *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(dc_x << hires) + 1]];
+
+    if (count < 0)
+    return;
+
+    do
+    {
+        *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[frac >> FRACBITS]];
+         dest  += screenwidth << hires;
+         dest2 += screenwidth << hires;
+         dest3 += screenwidth << hires;
+         dest4 += screenwidth << hires;
+
+        frac += fracstep;
+    }
+    while (count--);
+}
+
+/*
+================================================================================
+=
 = R_DrawColumnLow
 =
 = [JN] Low detail version of R_DrawColumn.

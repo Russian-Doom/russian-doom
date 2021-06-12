@@ -437,20 +437,12 @@ void R_DrawPlanes (void)
 
                 if ((unsigned) dc_yl <= dc_yh) // [crispy] 32-bit integer math
                 {
-                    int   count = dc_yh - dc_yl;
-                    int   fracstep = FRACUNIT >> (hires && !detailshift);
-                    int   frac  = skytexturemid + (dc_yl - centery) * fracstep;
-                    byte *dest  = ylookup[(dc_yl << detailshift)] + columnofs[flipwidth[(x << detailshift)]];
-                    byte *dest2 = ylookup[(dc_yl << detailshift)] + columnofs[flipwidth[(x << detailshift) + 1]];
-                    byte *dest3 = ylookup[(dc_yl << detailshift) + 1] + columnofs[flipwidth[(x << detailshift)]];
-                    byte *dest4 = ylookup[(dc_yl << detailshift) + 1] + columnofs[flipwidth[(x << detailshift) + 1]];
 
-                    if (count < 0)
-                    return;
 
                     // [crispy] Optionally draw skies horizontally linear.
                     angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
                                            xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
+                    dc_x = x;
                     dc_source = R_GetColumn(skytexture, angle , false);
 
                     if (invul_sky && !vanillaparm)
@@ -474,22 +466,7 @@ void R_DrawPlanes (void)
                         dc_colormap = colormaps;
                     }
 
-                    do
-                    {
-                        *dest = dc_colormap[dc_source[frac >> FRACBITS]];
-                         dest += screenwidth << detailshift;
-
-                        if (detailshift)
-                        {
-                            *dest4 = *dest3 = *dest2 = dc_colormap[dc_source[frac >> FRACBITS]];
-                             dest2 += screenwidth << detailshift;
-                             dest3 += screenwidth << detailshift;
-                             dest4 += screenwidth << detailshift;
-                        }
-
-                        frac += fracstep;
-                    }
-                    while (count--);
+                    skycolfunc ();
                 }
             }
             continue;

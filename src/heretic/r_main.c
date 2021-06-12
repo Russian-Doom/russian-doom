@@ -91,6 +91,7 @@ lighttable_t *fullbright_ethereal[LIGHTLEVELS][MAXLIGHTSCALE];
 int extralight;                 // bumped light from gun blasts
 
 void (*colfunc) (void);
+void (*skycolfunc) (void);
 void (*basecolfunc) (void);
 void (*tlcolfunc) (void);
 void (*extratlcolfunc) (void);
@@ -630,6 +631,7 @@ void R_ExecuteSetViewSize (void)
     if (!detailshift)
     {
         colfunc = basecolfunc = R_DrawColumn;
+        skycolfunc = R_DrawSkyColumn;
         tlcolfunc = R_DrawTLColumn;
         extratlcolfunc = R_DrawExtraTLColumn;
         transcolfunc = R_DrawTranslatedColumn;
@@ -639,6 +641,7 @@ void R_ExecuteSetViewSize (void)
     else
     {
         colfunc = basecolfunc = R_DrawColumnLow;
+        skycolfunc = R_DrawSkyColumnLow;
         tlcolfunc = R_DrawTLColumnLow;
         extratlcolfunc = R_DrawExtraTLColumnLow;
         transcolfunc = R_DrawTranslatedColumnLow;
