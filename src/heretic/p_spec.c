@@ -185,7 +185,7 @@ animdef_t animdefs[] = {
     {false, "FLTTELE4", "FLTTELE1", 6}, // Teleport
     {false, "FLTFLWW3", "FLTFLWW1", 8}, // River - West (ex. 9)
     {false, "FLTLAVA4", "FLTLAVA1", 8}, // Lava
-    {false, "FLATHUH4", "FLATHUH1", 8}, // Super Lava
+    {false, "FLATHUH4", "FLATHUH1", 9}, // Super Lava (ex. 8)
     {true, "LAVAFL3", "LAVAFL1", 6},    // Texture: Lavaflow
     {true, "WATRWAL3", "WATRWAL1", 4},  // Texture: Waterfall
     // [JN] Custom flats for scrolling in any direction
