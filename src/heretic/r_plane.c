@@ -420,12 +420,6 @@ void R_DrawPlanes (void)
     int          lumpnum;
     int          angle;
     byte        *tempSource;
-    int          count;
-    byte        *dest;
-    int          frac;
-    int          fracstep = FRACUNIT >> hires;
-    extern byte *ylookup[SCREENHEIGHT];
-    extern int   columnofs[WIDESCREENWIDTH];
 
     for (i = 0 ; i < MAXVISPLANES ; i++)
     for (pl = visplanes[i] ; pl ; pl = pl->next)
@@ -436,37 +430,53 @@ void R_DrawPlanes (void)
         //
         if (pl->picnum == skyflatnum)
         {
-            dc_iscale = pspriteiscale>>(detailshift && !hires);
-
-            // [JN] Invulnerability effect will colorize sky texture
-            if (invul_sky && !vanillaparm)
-            dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
-            else
-            dc_colormap = colormaps;    // sky is allways drawn full bright
-
-            dc_texturemid = skytexturemid;
-            dc_texheight = textureheight[skytexture]>>FRACBITS;
             for (x = pl->minx; x <= pl->maxx; x++)
             {
                 dc_yl = pl->top[x];
                 dc_yh = pl->bottom[x];
+
                 if ((unsigned) dc_yl <= dc_yh) // [crispy] 32-bit integer math
                 {
-                    count = dc_yh - dc_yl;
+                    int   count = dc_yh - dc_yl;
+                    int   fracstep = FRACUNIT >> (hires && !detailshift);
+                    int   frac  = skytexturemid + (dc_yl - centery) * fracstep;
+                    byte *dest  = ylookup[(dc_yl << detailshift)] + columnofs[flipwidth[(x << detailshift)]];
+                    byte *dest2 = ylookup[(dc_yl << detailshift)] + columnofs[flipwidth[(x << detailshift) + 1]];
+                    byte *dest3 = ylookup[(dc_yl << detailshift) + 1] + columnofs[flipwidth[(x << detailshift)]];
+                    byte *dest4 = ylookup[(dc_yl << detailshift) + 1] + columnofs[flipwidth[(x << detailshift) + 1]];
+
                     if (count < 0)
-                    {
-                        return;
-                    }
+                    return;
+
                     // [crispy] Optionally draw skies horizontally linear.
                     angle = ((viewangle + (linear_sky && !vanillaparm ? linearskyangle[x] : 
                                            xtoviewangle[x])) ^ flip_levels) >> ANGLETOSKYSHIFT;
                     dc_source = R_GetColumn(skytexture, angle , false);
-                    dest = ylookup[dc_yl] + columnofs[flipwidth[x]];
-                    frac = skytexturemid + (dc_yl - centery) * fracstep;
+
+                    if (invul_sky && !vanillaparm)
+                    {
+                        // [JN] Invulnerability effect will colorize sky texture
+                        dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
+                    }
+                    else
+                    {
+                        // sky is allways drawn full bright
+                        dc_colormap = colormaps;
+                    }
+
                     do
                     {
                         *dest = dc_colormap[dc_source[frac >> FRACBITS]];
-                        dest += screenwidth;
+                         dest += screenwidth << detailshift;
+
+                        if (detailshift)
+                        {
+                            *dest4 = *dest3 = *dest2 = dc_colormap[dc_source[frac >> FRACBITS]];
+                             dest2 += screenwidth << detailshift;
+                             dest3 += screenwidth << detailshift;
+                             dest4 += screenwidth << detailshift;
+                        }
+
                         frac += fracstep;
                     }
                     while (count--);
