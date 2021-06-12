@@ -24,6 +24,7 @@
 #include "i_system.h"
 #include "r_local.h"
 #include "r_bmaps.h"
+#include "r_swirl.h"
 #include "jn.h"
 
 
@@ -478,7 +479,11 @@ void R_DrawPlanes (void)
         {
             const int scrollOffset = leveltime >> 1 & 63;
             lumpnum = firstflat + flattranslation[pl->picnum];
-            tempSource = W_CacheLumpNum(lumpnum, PU_STATIC);
+            // [crispy] add support for SMMU swirling flats
+            tempSource = (flattranslation[pl->picnum] == -1) ?
+                          R_DistortedFlat(pl->picnum) :
+                          W_CacheLumpNum(lumpnum, PU_STATIC);
+
 
             switch (pl->special)
             {
@@ -574,7 +579,11 @@ void R_DrawPlanes (void)
                 pl->bottom[x]);
             }
 
-            W_ReleaseLumpNum(lumpnum);
+            // [crispy] add support for SMMU swirling flats
+            if (flattranslation[pl->picnum] != -1)
+            {
+                W_ReleaseLumpNum(lumpnum);
+            }
         }
     }
 }

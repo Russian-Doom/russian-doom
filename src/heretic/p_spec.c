@@ -24,6 +24,7 @@
 #include "i_timer.h"
 #include "m_random.h"
 #include "p_local.h"
+#include "r_swirl.h"
 #include "s_sound.h"
 #include "v_video.h"
 #include "jn.h"
@@ -179,21 +180,21 @@ int *AmbientSfx[] = {
 animdef_t animdefs[] = {
     // false = flat
     // true = texture
-    {false, "FLTWAWA3", "FLTWAWA1", 8}, // Water
-    {false, "FLTSLUD3", "FLTSLUD1", 8}, // Sludge
+    {false, "FLTWAWA3", "FLTWAWA1", 9}, // Water (ex. 8)
+    {false, "FLTSLUD3", "FLTSLUD1", 9}, // Sludge (ex. 8)
     {false, "FLTTELE4", "FLTTELE1", 6}, // Teleport
-    {false, "FLTFLWW3", "FLTFLWW1", 9}, // River - West
+    {false, "FLTFLWW3", "FLTFLWW1", 8}, // River - West (ex. 9)
     {false, "FLTLAVA4", "FLTLAVA1", 8}, // Lava
     {false, "FLATHUH4", "FLATHUH1", 8}, // Super Lava
     {true, "LAVAFL3", "LAVAFL1", 6},    // Texture: Lavaflow
     {true, "WATRWAL3", "WATRWAL1", 4},  // Texture: Waterfall
     // [JN] Custom flats for scrolling in any direction
-    {false, "WATSCRN3", "WATSCRN1", 9}, // River - North ( ↑ )
-    {false, "WATSCRE3", "WATSCRE1", 9}, // River - East  ( → )
-    {false, "WATSCRS3", "WATSCRS1", 9}, // River - South ( ↓ )
-    {false, "WATSCRW3", "WATSCRW1", 9}, // River - West  ( ← )
+    {false, "WATSCRN3", "WATSCRN1", 8}, // River - North ( ↑ )
+    {false, "WATSCRE3", "WATSCRE1", 8}, // River - East  ( → )
+    {false, "WATSCRS3", "WATSCRS1", 8}, // River - South ( ↓ )
+    {false, "WATSCRW3", "WATSCRW1", 8}, // River - West  ( ← )
     {false, "WATSCRX3", "WATSCRX1", 8}, // Scrollable still water
-    {-1}
+    {-1,    "",         "",         0},
 };
 
 anim_t anims[MAXANIMS];
@@ -321,6 +322,10 @@ void P_InitPicAnims(void)
         lastanim->speed = animdefs[i].speed;
         lastanim++;
     }
+
+    // [JN] Don't init in "-vanilla", since there is no swirling flats.
+    if (!vanillaparm)
+    R_InitDistortedFlats();
 }
 
 /*
@@ -1039,6 +1044,13 @@ void P_UpdateSpecials(void)
             if (anim->istexture)
             {
                 texturetranslation[i] = pic;
+            }
+            // [crispy] add support for SMMU swirling flats
+            // [JN] Animate only surface with animation == 9,
+            // i.e. only those ones, which defined in animdefs.
+            else if (anim->speed == 9 && swirling_liquids && !vanillaparm)
+            {
+                flattranslation[i] = -1;
             }
             else
             {

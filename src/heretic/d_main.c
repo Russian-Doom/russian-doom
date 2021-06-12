@@ -152,6 +152,7 @@ int translucency = 1;
 int sbar_colored = 0;
 int sbar_colored_gem = 0;
 int colored_blood = 1;
+int swirling_liquids = 1;
 int invul_sky = 1;
 int linear_sky = 1;
 
@@ -1120,6 +1121,7 @@ void D_BindVariables(void)
     M_BindIntVariable("sbar_colored",           &sbar_colored);
     M_BindIntVariable("sbar_colored_gem",       &sbar_colored_gem);
     M_BindIntVariable("colored_blood",          &colored_blood);
+    M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("linear_sky",             &linear_sky);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);

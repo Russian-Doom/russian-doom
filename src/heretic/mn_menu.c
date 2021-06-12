@@ -169,6 +169,7 @@ static void M_RD_ColoredHUD(intptr_t option);
 static void M_RD_ColoredGem(intptr_t option);
 static void M_RD_ColoredBlood(intptr_t option);
 static void M_RD_InvulSky(intptr_t option);
+static void M_RD_SwirlingLiquids(intptr_t option);
 static void M_RD_LinearSky(intptr_t option);
 static void M_RD_SecretNotify(intptr_t option);
 static void M_RD_NegativeHealth(intptr_t option);
@@ -636,6 +637,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_LRFUNC, "COLORED HUD:",                 "HFPYJWDTNYST \'KTVTYNS $:",      M_RD_ColoredHUD,     0}, // РАЗНОЦВЕТНЫЕ ЭЛЕМЕНТЫ HUD
     {ITT_LRFUNC, "COLORED HEALTH GEM:",          "JRHFIBDFYBT RFVYZ PLJHJDMZ:",    M_RD_ColoredGem,     0}, // ОКРАШИВАНИЕ КАМНЯ ЗДОРОВЬЯ
     {ITT_LRFUNC, "COLORED BLOOD:",               "HFPYJWDTNYFZ RHJDM:",            M_RD_ColoredBlood,   0}, // РАЗНОЦВЕТНАЯ КРОВЬ
+    {ITT_LRFUNC, "SWIRLING LIQUIDS:",            "EKEXITYYFZ FYBVFWBZ ;BLRJCNTQ:", M_RD_SwirlingLiquids,0}, // УЛУЧШЕННАЯ АНИМАЦИЯ ЖИДКОСТЕЙ
     {ITT_LRFUNC, "INVULNERABILITY AFFECTS SKY:", "YTEZPDBVJCNM JRHFIBDFTN YT,J:",  M_RD_InvulSky,       0}, // НЕУЯЗВИМОСТЬ ОКРАШИВАЕТ НЕБО
     {ITT_LRFUNC, "SKY DRAWING MODE:",            "HT;BV JNHBCJDRB YT,F:",          M_RD_LinearSky,      0}, // РЕЖИМ ОТРИСОВКИ НЕБА
     {ITT_EMPTY,  NULL,                           NULL,                             NULL,                0},
@@ -649,7 +651,7 @@ static MenuItem_t Gameplay1Items[] = {
 static Menu_t Gameplay1Menu = {
     36, 36,
     36,
-    14, Gameplay1Items,
+    15, Gameplay1Items,
     DrawGameplay1Menu,
     &OptionsMenu,
     0
@@ -3654,43 +3656,48 @@ static void DrawGameplay1Menu(void)
         MN_DrTextSmallENG(DEH_String(colored_blood ? "ON" : "OFF"), 139 + wide_delta, 86);
         dp_translation = NULL;
 
+        // Swirling liquids
+        dp_translation = swirling_liquids ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
+        MN_DrTextSmallENG(DEH_String(swirling_liquids ? "ON" : "OFF"), 147 + wide_delta, 96);
+        dp_translation = NULL;
+
         // Invulnerability affects sky
         dp_translation = invul_sky ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(invul_sky ? "ON" : "OFF"), 235 + wide_delta, 96);
+        MN_DrTextSmallENG(DEH_String(invul_sky ? "ON" : "OFF"), 235 + wide_delta, 106);
         dp_translation = NULL;
 
         // Sky drawing mode
         dp_translation = linear_sky ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(linear_sky ? "LINEAR" : "ORIGINAL"), 162 + wide_delta, 106);
+        MN_DrTextSmallENG(DEH_String(linear_sky ? "LINEAR" : "ORIGINAL"), 162 + wide_delta, 116);
         dp_translation = NULL;
 
         //
         // PHYSICAL
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
-        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 116);
+        MN_DrTextSmallENG(DEH_String("PHYSICAL"), 36 + wide_delta, 126);
         dp_translation = NULL;
 
         // Corpses sliding from the ledges
         dp_translation = torque ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(torque ? "ON" : "OFF"), 238 + wide_delta, 126);
+        MN_DrTextSmallENG(DEH_String(torque ? "ON" : "OFF"), 238 + wide_delta, 136);
         dp_translation = NULL;
 
         // Weapon bobbing while firing
         dp_translation = weapon_bobbing ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(weapon_bobbing ? "ON" : "OFF"), 233 + wide_delta, 136);
+        MN_DrTextSmallENG(DEH_String(weapon_bobbing ? "ON" : "OFF"), 233 + wide_delta, 146);
         dp_translation = NULL;
 
         // Randomly flipped corpses
         dp_translation = randomly_flipcorpses ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(randomly_flipcorpses ? "ON" : "OFF"), 232 + wide_delta, 146);
+        MN_DrTextSmallENG(DEH_String(randomly_flipcorpses ? "ON" : "OFF"), 232 + wide_delta, 156);
         dp_translation = NULL;
 
         // Floating items amplitude
         dp_translation = floating_powerups ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(floating_powerups == 1 ? "STANDARD" :
                                      floating_powerups == 2 ? "HALFED" : "OFF"),
-                                     209 + wide_delta, 156);
+                                     209 + wide_delta, 166);
         dp_translation = NULL;
     }
     else
@@ -3737,43 +3744,48 @@ static void DrawGameplay1Menu(void)
         MN_DrTextSmallRUS(DEH_String(colored_blood ? "DRK" : "DSRK"), 178 + wide_delta, 86);
         dp_translation = NULL;
 
+        // Улучшенная анимация жидкостей
+        dp_translation = swirling_liquids ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
+        MN_DrTextSmallRUS(DEH_String(swirling_liquids ? "DRK" : "DSRK"), 261 + wide_delta, 96);
+        dp_translation = NULL;
+
         // Неуязвимость окрашивает небо
         dp_translation = invul_sky ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(invul_sky ? "DRK" : "DSRK"), 253 + wide_delta, 96);
+        MN_DrTextSmallRUS(DEH_String(invul_sky ? "DRK" : "DSRK"), 253 + wide_delta, 106);
         dp_translation = NULL;
 
         // Режим отрисовки неба
         dp_translation = linear_sky ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ"), 195 + wide_delta, 106);
+        MN_DrTextSmallRUS(DEH_String(linear_sky ? "KBYTQYSQ" : "JHBUBYFKMYSQ"), 195 + wide_delta, 116);
         dp_translation = NULL;
 
         //
         // ФИЗИКА
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
-        MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 116);
+        MN_DrTextSmallRUS(DEH_String("ABPBRF"), 36 + wide_delta, 126);
         dp_translation = NULL;
 
         // Трупы сползают с возвышений
         dp_translation = torque ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(torque ? "DRK" : "DSRK"), 248 + wide_delta, 126);
+        MN_DrTextSmallRUS(DEH_String(torque ? "DRK" : "DSRK"), 248 + wide_delta, 136);
         dp_translation = NULL;
 
         // Улучшенное покачивание оружия
         dp_translation = weapon_bobbing ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(weapon_bobbing ? "DRK" : "DSRK"), 260 + wide_delta, 136);
+        MN_DrTextSmallRUS(DEH_String(weapon_bobbing ? "DRK" : "DSRK"), 260 + wide_delta, 146);
         dp_translation = NULL;
 
         // Зеркалирование трупов
         dp_translation = randomly_flipcorpses ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(randomly_flipcorpses ? "DRK" : "DSRK"), 201 + wide_delta, 146);
+        MN_DrTextSmallRUS(DEH_String(randomly_flipcorpses ? "DRK" : "DSRK"), 201 + wide_delta, 156);
         dp_translation = NULL;
 
         // Амплитуда левитации предметов
         dp_translation = floating_powerups ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(floating_powerups == 1 ? "CNFYLFHNYFZ" :
                                      floating_powerups == 2 ? "EGJKJDBYTYFZ" : "DSRK"),
-                                     188 + wide_delta, 156);
+                                     188 + wide_delta, 166);
         dp_translation = NULL;
     }
 }
@@ -3826,6 +3838,11 @@ static void M_RD_ColoredBlood(intptr_t option)
 static void M_RD_InvulSky(intptr_t option)
 {
     invul_sky ^= 1;
+}
+
+static void M_RD_SwirlingLiquids(intptr_t option)
+{
+    swirling_liquids ^= 1;
 }
 
 static void M_RD_LinearSky(intptr_t option)
@@ -5160,6 +5177,7 @@ void M_RD_DoResetSettings(void)
     sbar_colored         = 0;
     sbar_colored_gem     = 0;
     colored_blood        = 1;
+    swirling_liquids     = 1;
     invul_sky            = 1;
     linear_sky            = 1;
     torque               = 1;
