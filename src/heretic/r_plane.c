@@ -455,8 +455,17 @@ void R_DrawPlanes (void)
 
                     if (invul_sky && !vanillaparm)
                     {
-                        // [JN] Invulnerability effect will colorize sky texture
-                        dc_colormap = (fixedcolormap ? fixedcolormap : colormaps);
+                        if (players[consoleplayer].powers[pw_invulnerability])  
+                        {
+                            // [JN] Invulnerability effect will colorize sky texture,
+                            // with out any changes in sky texture light level.
+                            dc_colormap = fixedcolormap;
+                        }
+                        else
+                        {
+                            // [JN] Otherwise, sky is allways drawn full bright.
+                            dc_colormap = colormaps;
+                        }
                     }
                     else
                     {

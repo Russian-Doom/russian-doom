@@ -339,6 +339,8 @@ extern int flyheight;
 extern fixed_t centerxfrac;
 extern fixed_t centeryfrac;
 extern fixed_t projection;
+extern byte *ylookup[SCREENHEIGHT];
+extern int   columnofs[WIDESCREENWIDTH];
 
 extern int validcount;
 
