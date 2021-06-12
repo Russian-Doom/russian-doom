@@ -390,6 +390,7 @@ extern void (*skycolfunc) (void);
 extern void (*basecolfunc) (void);
 extern void (*tlcolfunc) (void);
 extern void (*extratlcolfunc) (void);
+extern void (*transcolfunc) (void);
 extern void (*transtlcolfunc) (void);
 extern void (*spanfunc) (void);
 extern void R_ExecuteSetViewSize();
