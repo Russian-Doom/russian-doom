@@ -974,13 +974,22 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     }
     mobj->lastlook = safe ? 0 : P_Random () % MAXPLAYERS;
 
-    // [JN] Reduce radius of Imp chunks so they will not hang part way on ledges.
-    // Empirically verified to be small enough to prevent hanging and to 
-    // don't spawn part way inside walls. Original radius: 20 * FRACUNIT.
-    if (singleplayer && !vanillaparm
-    && (mobj->type == MT_IMPCHUNK1 || mobj->type == MT_IMPCHUNK2))
+    // [JN] Apply various enhancements:
+    if (singleplayer && !vanillaparm)
     {
-        mobj->radius = 5 * FRACUNIT;
+        // [JN] Reduce radius of Imp chunks so they will not hang part way on ledges.
+        // Empirically verified to be small enough to prevent hanging and to 
+        // don't spawn part way inside walls. Original radius: 20 * FRACUNIT.
+        if (mobj->type == MT_IMPCHUNK1 || mobj->type == MT_IMPCHUNK2)
+        {
+            mobj->radius = 5 * FRACUNIT;
+        }
+
+        // [JN] Apply small Weredragon's ball smoke Z momentum.
+        if (mobj->type == MT_PUFFY)
+        {
+            mobj->momz = 0.35 * FRACUNIT;
+        }
     }
 
     // Set the state, but do not use P_SetMobjState, because action
