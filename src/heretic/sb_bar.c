@@ -831,7 +831,7 @@ void SB_Drawer(void)
                 {
                     patch_t *patch = W_CacheLumpName(DEH_String("BORDB"), PU_CACHE);
                 
-                    for (x = 0; x < screenwidth; x += 8)
+                    for (x = 0; x < screenwidth; x += 16)
                     {
                         V_DrawPatch(x, 0, patch);
                     }
