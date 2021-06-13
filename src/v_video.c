@@ -59,6 +59,15 @@ byte *fuzzmap = NULL;   // Blending table for translucent fuzz.
 // Only used in Heretic/Hexen
 byte *tinttable = NULL;
 byte *extratinttable = NULL;
+byte *transtable90 = NULL;
+byte *transtable80 = NULL;
+byte *transtable70 = NULL;
+byte *transtable60 = NULL;
+byte *transtable50 = NULL;
+byte *transtable40 = NULL;
+byte *transtable30 = NULL;
+byte *transtable20 = NULL;
+byte *transtable10 = NULL;
 
 // [JN] Color translation
 byte *dp_translation = NULL;
@@ -591,6 +600,86 @@ void V_DrawAltTLPatch(int x, int y, patch_t * patch)
                 dest += screenwidth;
             }
             }
+            column = (column_t *) ((byte *) column + column->length + 4);
+        }
+    }
+}
+
+//
+// V_DrawFadePatch
+//
+// [JN] Draws colorized with variable transluceny, with given tinting table.
+//
+
+void V_DrawFadePatch(int x, int y, patch_t * patch, byte *table)
+{
+    int       count, col, w, f;
+    byte     *desttop, *dest, *source, *sourcetrans;
+    byte     *desttop2, *dest2; // [JN] Casting shadow if appropriate.
+    column_t *column;
+
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
+    w  = SHORT(patch->width);
+
+    col = 0;
+    desttop = dest_screen + (y << hires) * screenwidth + x;
+    desttop2 = draw_shadowed_text && !vanillaparm ?
+               dest_screen + ((y + 1) << hires) * screenwidth + x + 2 : NULL;
+
+    for (; col < w; x++, col++, desttop++, desttop2++)
+    {
+        column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
+
+        while (column->topdelta != 0xff)
+        {
+            for (f = 0; f <= hires; f++)
+            {
+                source = sourcetrans = (byte *) column + 3;
+                dest = desttop + column->topdelta * (screenwidth << hires) + (x * hires) + f;
+                dest2 = draw_shadowed_text && !vanillaparm ?
+                        desttop2 + column->topdelta * (screenwidth << hires) + (x * hires) + f : NULL;
+                count = column->length;
+
+                while (count--)
+                {
+                    if (dp_translation)
+                    sourcetrans = &dp_translation[*source++];
+    
+                    if (hires)
+                    {
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            if (table == transtable90 || table == transtable80 || table == transtable70)
+                            *dest2 = transtable30[((*dest2) << 8)];
+                            if (table == transtable60 || table == transtable50 || table == transtable40)
+                            *dest2 = transtable20[((*dest2) << 8)];
+                            else
+                            *dest2 = transtable10[((*dest2) << 8)];
+
+                            dest2 += screenwidth;
+                        }
+                        *dest = table[((*dest) << 8) + *sourcetrans];
+                        dest += screenwidth;
+                    }
+                    
+                        if (draw_shadowed_text && !vanillaparm)
+                        {
+                            if (table == transtable90 || table == transtable80 || table == transtable70)
+                            *dest2 = transtable30[((*dest2) << 8)];
+                            if (table == transtable60 || table == transtable50 || table == transtable40)
+                            *dest2 = transtable20[((*dest2) << 8)];
+                            else
+                            *dest2 = transtable10[((*dest2) << 8)];
+
+                            dest2 += screenwidth;
+                        }
+
+                    *dest = table[((*dest) << 8) + *sourcetrans++];
+                    dest += screenwidth;
+                }
+            }
+
             column = (column_t *) ((byte *) column + column->length + 4);
         }
     }

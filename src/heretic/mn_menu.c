@@ -109,6 +109,7 @@ static void M_RD_LevelBrightness(intptr_t option);
 static void M_RD_Detail(intptr_t option);
 static void M_RD_LocalTime(intptr_t option);
 static void M_RD_Messages(intptr_t option);
+static void M_RD_MessagesFade(intptr_t option);
 static void M_RD_ShadowedText(intptr_t option);
 
 // Messages
@@ -505,6 +506,7 @@ static Menu_t DisplayMenu = {
 
 static MenuItem_t MessagesItems[] = {
     {ITT_LRFUNC,  "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,                0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
+    {ITT_LRFUNC,  "FADING EFFECT:",      "\'AATRN GKFDYJUJ BCXTPYJDTYBZ:", M_RD_MessagesFade,      0}, // ЭФФЕКТ ПЛАВНОГО ИСЧЕЗНОВЕНИЯ
     {ITT_LRFUNC,  "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,            0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
     {ITT_EMPTY,   NULL,                  NULL,                       NULL,                         0},
     {ITT_LRFUNC,  "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,               0}, // СИСТЕМНОЕ ВРЕМЯ
@@ -518,7 +520,7 @@ static MenuItem_t MessagesItems[] = {
 static Menu_t MessagesMenu = {
     36, 42,
     36,
-    9, MessagesItems,
+    10, MessagesItems,
     DrawMessagesMenu,
     &DisplayMenu,
     0
@@ -1056,6 +1058,36 @@ void MN_DrTextA(char *text, int x, int y)
     }
 }
 
+/*
+================================================================================
+=
+= MN_DrTextAFade
+=
+= [JN] Draw text using font A with fading effect.
+=
+================================================================================
+*/
+
+void MN_DrTextAFade(char *text, int x, int y, byte *table)
+{
+    char c;
+    patch_t *p;
+
+    while ((c = *text++) != 0)
+    {
+        if (c < 33)
+        {
+            x += 5;
+        }
+        else
+        {
+            p = W_CacheLumpNum(FontABaseLump + c - 33, PU_CACHE);
+            V_DrawFadePatch(x, y, p, table);
+            x += SHORT(p->width) - 1;
+        }
+    }
+}
+
 //---------------------------------------------------------------------------
 //
 // FUNC MN_TextAWidth
@@ -1345,6 +1377,36 @@ int MN_DrTextSmallRUSWidth(char *text)
         }
     }
     return (width);
+}
+
+/*
+================================================================================
+=
+= MN_DrTextAFade
+=
+= [JN] Draw text using Russian small font (F) with fading effect.
+=
+================================================================================
+*/
+
+void MN_DrTextSmallRUSFade(char *text, int x, int y, byte *table)
+{
+    char c;
+    patch_t *p;
+
+    while ((c = *text++) != 0)
+    {
+        if (c < 33)
+        {
+            x += 5;
+        }
+        else
+        {
+            p = W_CacheLumpNum(FontFBaseLump + c - 33, PU_CACHE);
+            V_DrawFadePatch(x, y, p, table);
+            x += SHORT(p->width) - 1;
+        }
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -2284,17 +2346,21 @@ static void DrawMessagesMenu(void)
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("GENERAL"), 36 + wide_delta, 32);
-        MN_DrTextSmallENG(DEH_String("MISC."), 36 + wide_delta, 62);
-        MN_DrTextSmallENG(DEH_String("COLORS"), 36 + wide_delta, 82);
+        MN_DrTextSmallENG(DEH_String("MISC."), 36 + wide_delta, 72);
+        MN_DrTextSmallENG(DEH_String("COLORS"), 36 + wide_delta, 92);
         dp_translation = NULL;
 
         // Messages
         MN_DrTextSmallENG(DEH_String(show_messages ? "ON" : "OFF"),
                                      108 + wide_delta, 42);
 
+        // Fading effect 
+        MN_DrTextSmallENG(DEH_String(message_fade ? "ON" : "OFF"),
+                                     140 + wide_delta, 52);
+
         // Text casts shadows
         MN_DrTextSmallENG(DEH_String(draw_shadowed_text ? "ON" : "OFF"),
-                                     179 + wide_delta, 52);
+                                     179 + wide_delta, 62);
 
         // Local time
         MN_DrTextSmallENG(DEH_String(
@@ -2302,26 +2368,26 @@ static void DrawMessagesMenu(void)
                           local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                           local_time == 3 ? "24-HOUR (HH:MM)" :
                           local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF"),
-                          110 + wide_delta, 72);
+                          110 + wide_delta, 82);
 
         // Item pickup
         dp_translation = M_RD_ColorTranslation(message_pickup_color);
-        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_pickup_color)), 120 + wide_delta, 92);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_pickup_color)), 120 + wide_delta, 102);
         dp_translation = NULL;
 
         // Revealed secret
         dp_translation = M_RD_ColorTranslation(message_secret_color);
-        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_secret_color)), 157 + wide_delta, 102);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_secret_color)), 157 + wide_delta, 112);
         dp_translation = NULL;
 
         // System message
         dp_translation = M_RD_ColorTranslation(message_system_color);
-        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_system_color)), 152 + wide_delta, 112);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_system_color)), 152 + wide_delta, 122);
         dp_translation = NULL;
 
         // Netgame chat
         dp_translation = M_RD_ColorTranslation(message_chat_color);
-        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_chat_color)), 135 + wide_delta, 122);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_chat_color)), 135 + wide_delta, 132);
         dp_translation = NULL;
     }
     else
@@ -2337,17 +2403,21 @@ static void DrawMessagesMenu(void)
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("JCYJDYJT"), 36 + wide_delta, 32); // ОСНОВНОЕ
-        MN_DrTextSmallRUS(DEH_String("HFPYJT"), 36 + wide_delta, 62);   // РАЗНОЕ
-        MN_DrTextSmallRUS(DEH_String("WDTNF"), 36 + wide_delta, 82);    // ЦВЕТА
+        MN_DrTextSmallRUS(DEH_String("HFPYJT"), 36 + wide_delta, 72);   // РАЗНОЕ
+        MN_DrTextSmallRUS(DEH_String("WDTNF"), 36 + wide_delta, 92);    // ЦВЕТА
         dp_translation = NULL;
 
         // Отображение сообщений
         MN_DrTextSmallRUS(DEH_String(show_messages ? "DRK" : "DSRK"),
                                      208 + wide_delta, 42);
 
+        // Эффект плавного исчезновения
+        MN_DrTextSmallRUS(DEH_String(message_fade ? "DRK" : "DSRK"),
+                                     255 + wide_delta, 52);
+
         // Тексты отбрасывают тень
         MN_DrTextSmallRUS(DEH_String(draw_shadowed_text ? "DRK" : "DSRK"),
-                                     220 + wide_delta, 52);
+                                     220 + wide_delta, 62);
 
         // Системное время
         MN_DrTextSmallRUS(DEH_String(
@@ -2355,26 +2425,26 @@ static void DrawMessagesMenu(void)
                           local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                           local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                           local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK"),
-                          157 + wide_delta, 72);
+                          157 + wide_delta, 82);
 
         // Получение предметов
         dp_translation = M_RD_ColorTranslation(message_pickup_color);
-        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_pickup_color)), 187 + wide_delta, 92);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_pickup_color)), 187 + wide_delta, 102);
         dp_translation = NULL;
 
         // Обнаружение тайников
         dp_translation = M_RD_ColorTranslation(message_secret_color);
-        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_secret_color)), 195 + wide_delta, 102);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_secret_color)), 195 + wide_delta, 112);
         dp_translation = NULL;
 
         // Системные сообщения
         dp_translation = M_RD_ColorTranslation(message_system_color);
-        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_system_color)), 191 + wide_delta, 112);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_system_color)), 191 + wide_delta, 122);
         dp_translation = NULL;
 
         // Чат сетевой игры
         dp_translation = M_RD_ColorTranslation(message_chat_color);
-        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_chat_color)), 162 + wide_delta, 122);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_chat_color)), 162 + wide_delta, 132);
         dp_translation = NULL;
     }
 }
@@ -2418,6 +2488,11 @@ static void M_RD_Messages(intptr_t option)
     }
 
     S_StartSound(NULL, sfx_chat);
+}
+
+static void M_RD_MessagesFade(intptr_t option)
+{
+    message_fade ^= 1;
 }
 
 static void M_RD_ShadowedText(intptr_t option)
@@ -5132,6 +5207,7 @@ void M_RD_DoResetSettings(void)
     level_brightness    = 0;
     local_time          = 0;
     show_messages       = 1;
+    message_fade        = 1;
     draw_shadowed_text  = 1;
 
     // Messages

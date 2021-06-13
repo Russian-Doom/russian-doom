@@ -161,6 +161,7 @@ static void SensibleDefaults(void)
     invul_sky = 1;
     linear_sky = 1;
     flip_weapons = 0;
+    message_fade = 1;
     draw_shadowed_text = 1;
 
     // Gameplay: Status Bar

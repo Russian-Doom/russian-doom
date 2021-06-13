@@ -119,6 +119,7 @@ int detailLevel = 0;        // Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // Blocky mode, 0 = high, 1 = normal
 int local_time = 0;
 int show_messages = 1;
+int message_fade = 1;
 int draw_shadowed_text = 1;
 
 // Display: Messages
@@ -297,15 +298,49 @@ void DrawMessage(void)
 
     if (english_language)
     {
-        MN_DrTextA(player->message, 
-                   160 - MN_TextAWidth(player->message) /
-                   2 + wide_delta, 1);
+        if (player->messageTics < 10 && message_fade && !vanillaparm)
+        {
+            MN_DrTextAFade(player->message, 
+                           160 - MN_TextAWidth(player->message) /
+                           2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
+                                              player->messageTics >= 8 ? transtable80 :
+                                              player->messageTics >= 7 ? transtable70 :
+                                              player->messageTics >= 6 ? transtable60 :
+                                              player->messageTics >= 5 ? transtable50 :
+                                              player->messageTics >= 4 ? transtable40 :
+                                              player->messageTics >= 3 ? transtable30 :
+                                              player->messageTics >= 2 ? transtable20 :
+                                                                         transtable10);
+        }
+        else
+        {
+            MN_DrTextA(player->message, 
+                       160 - MN_TextAWidth(player->message) /
+                       2 + wide_delta, 1);
+        }
     }
     else
     {
-        MN_DrTextSmallRUS(player->message, 
-                          160 - MN_DrTextSmallRUSWidth(player->message) /
-                          2 + wide_delta, 1);
+        if (player->messageTics < 10 && message_fade && !vanillaparm)
+        {
+            MN_DrTextSmallRUSFade(player->message, 
+                                  160 - MN_DrTextSmallRUSWidth(player->message) /
+                                  2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
+                                                     player->messageTics >= 8 ? transtable80 :
+                                                     player->messageTics >= 7 ? transtable70 :
+                                                     player->messageTics >= 6 ? transtable60 :
+                                                     player->messageTics >= 5 ? transtable50 :
+                                                     player->messageTics >= 4 ? transtable40 :
+                                                     player->messageTics >= 3 ? transtable30 :
+                                                     player->messageTics >= 2 ? transtable20 :
+                                                                                transtable10);
+        }
+        else
+        {
+            MN_DrTextSmallRUS(player->message, 
+                              160 - MN_DrTextSmallRUSWidth(player->message) /
+                              2 + wide_delta, 1);
+        }
     }
 
     // [JN] Clear color translation.
@@ -1087,6 +1122,7 @@ void D_BindVariables(void)
     M_BindIntVariable("local_time",             &local_time);
     // pitto
     M_BindIntVariable("show_messages",          &show_messages);
+    M_BindIntVariable("message_fade",           &message_fade);
     M_BindIntVariable("message_pickup_color",   &message_pickup_color);
     M_BindIntVariable("message_secret_color",   &message_secret_color);
     M_BindIntVariable("message_system_color",   &message_system_color);

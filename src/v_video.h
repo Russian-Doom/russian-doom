@@ -40,6 +40,16 @@ extern int dirtybox[4];
 
 extern byte *tinttable;
 extern byte *extratinttable;
+extern byte *transtable90;
+extern byte *transtable80;
+extern byte *transtable70;
+extern byte *transtable60;
+extern byte *transtable50;
+extern byte *transtable40;
+extern byte *transtable30;
+extern byte *transtable20;
+extern byte *transtable10;
+
 extern byte *dp_translation;
 
 // haleyjd 08/28/10: implemented for Strife support
@@ -63,6 +73,7 @@ void V_DrawPatchFullScreen(patch_t *patch, boolean flipped);
 void V_DrawPatchFlipped(int x, int y, patch_t *patch);
 void V_DrawTLPatch(int x, int y, patch_t *patch);
 void V_DrawAltTLPatch(int x, int y, patch_t * patch);
+void V_DrawFadePatch(int x, int y, patch_t * patch, byte *table);
 void V_DrawShadowedPatch(int x, int y, patch_t *patch);
 void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch);
 void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch);

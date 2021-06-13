@@ -29,6 +29,7 @@
 int level_brightness = 0;
 int menu_shading = 0;
 int hud_detaillevel = 0;
+int message_fade = 1;
 int messages_timeout = 4;
 int message_pickup_color = 0;
 int message_secret_color = 7;
@@ -331,6 +332,7 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("menu_shading",           &menu_shading);
     M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
+    M_BindIntVariable("message_fade",           &message_fade);
     M_BindIntVariable("message_pickup_color",   &message_pickup_color);
     M_BindIntVariable("message_secret_color",   &message_secret_color);
     M_BindIntVariable("message_system_color",   &message_system_color);

@@ -985,7 +985,7 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
             mobj->radius = 5 * FRACUNIT;
         }
 
-        // [JN] Apply small Weredragon's ball smoke Z momentum.
+        // [JN] Apply small Z momentum for Weredragon's ball smoke.
         if (mobj->type == MT_PUFFY)
         {
             mobj->momz = 0.35 * FRACUNIT;
