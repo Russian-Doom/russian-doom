@@ -434,8 +434,10 @@ void D_SetGameDescription(void)
     Press any key to continue.
 */
     int newpwadfile;
+    char* internalWadName = RD_M_FindInternalResource("hexen-common.wad");
 
-    W_MergeFile("base/hexen-common.wad");
+    W_MergeFile(internalWadName);
+    free(internalWadName);
     if (gamemode == shareware)
     {
         isHexenDemo = true;

@@ -54,6 +54,10 @@ string(REPLACE "." ", " WINDOWS_RC_VERSION ${PROJECT_VERSION})
 
 string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 
+if(NOT WIN32)
+    Option(DEV_ENV "Development environment" ON)
+endif()
+
 configure_file(cmake/config.h.cin config.h)
 
 configure_file(src/resource.rc.in src/resource.rc)

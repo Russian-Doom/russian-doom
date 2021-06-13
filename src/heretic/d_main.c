@@ -1242,6 +1242,7 @@ void D_DoomMain(void)
     char file[256];
     char demolumpname[9];
     int newpwadfile;
+    char* internalWadName;
 
 #ifdef _WIN32
     // [JN] Get system preffed language...
@@ -1536,7 +1537,9 @@ void D_DoomMain(void)
 
     demoextend = M_ParmExists("-demoextend");
 
-    W_MergeFile("base/heretic-common.wad");
+    internalWadName = RD_M_FindInternalResource("heretic-common.wad");
+    W_MergeFile(internalWadName);
+    free(internalWadName);
 
     if (W_CheckNumForName(DEH_String("E2M1")) == -1)
     {

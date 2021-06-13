@@ -93,6 +93,7 @@ int main(int argc, char **argv)
     myargc = argc;
     myargv = argv;
 
+    M_SetExeDir();
     M_FindResponseFile();
 
     // Check for -devparm being activated

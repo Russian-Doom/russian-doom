@@ -42,10 +42,12 @@
 
 #include "doomtype.h"
 #include "deh_str.h"
+#include "config.h"
 #include "i_swap.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_video.h"
+#include "m_argv.h"
 #include "m_misc.h"
 #include "v_video.h"
 #include "w_wad.h"
@@ -70,6 +72,9 @@ void M_MakeDirectory(char *path)
 
 boolean M_FileExists(char *filename)
 {
+#ifdef _WIN32
+    return INVALID_FILE_ATTRIBUTES != GetFileAttributesA(filename);
+#else
     FILE *fstream;
 
     fstream = fopen(filename, "r");
@@ -83,9 +88,10 @@ boolean M_FileExists(char *filename)
     {
         // If we can't open because the file is a directory, the 
         // "file" exists at least!
-
+        // [Dasperal] For some reason, I get EACCES or ENOENT here for a directory on Win7
         return errno == EISDIR;
     }
+#endif
 }
 
 // Check if a file exists by probing for common case variation of its filename.
@@ -719,4 +725,47 @@ void M_NormalizeSlashes(char *str)
             }
         }
     }
+}
+
+//
+// RD_M_FindInternalResource
+//
+// [Dasperal] Returns a newly-malloced string containing the path to the given resource.
+// Terminates program with an error if the resource is not found
+//
+char* RD_M_FindInternalResource(char* resourceName)
+{
+    char* retVal = NULL;
+#ifdef _WIN32
+    retVal = M_StringJoin(exedir, "base", DIR_SEPARATOR_S, resourceName, NULL);
+    if(!M_FileExists(retVal))
+    {
+#else
+    #ifdef DEV_ENV
+    retVal = M_StringJoin("base", DIR_SEPARATOR_S, resourceName, NULL);
+    if(!M_FileExists(retVal))
+    {
+        free(retVal);
+    #endif
+    #ifdef __APPLE__
+        retVal = // TODO set canonical path for internal resources on MacOS
+        if(!M_FileExists(retVal))
+        {
+    #else // Linux
+        retVal = M_StringJoin("/usr/local/share", DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, resourceName, NULL);
+        if(!M_FileExists(retVal))
+        {
+    #endif
+#endif
+            I_Error(english_language ?
+                    "Internal resource \"%s\" not found!" :
+                    "Внутренний ресурс \"%s\" не найден!",
+                    retVal);
+            free(retVal);
+            return NULL;
+#if !defined(_WIN32) && defined(DEV_ENV)
+        }
+#endif
+    }
+    return retVal;
 }
