@@ -88,7 +88,7 @@ void P_SetMessage(player_t * player, char *message, int color, boolean ultmsg)
         return;
     }
     player->message = message;
-    player->messageTics = MESSAGETICS;
+    player->messageTics = messages_timeout * TICRATE;
     player->messageColor = color; // [JN] Apply colorization.
     BorderTopRefresh = true;
     if (ultmsg)

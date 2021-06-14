@@ -85,7 +85,6 @@ skill_t startskill;
 int startepisode;
 int startmap;
 int UpdateState;
-static int graphical_startup = 0; // [JN] Disabled by default
 static boolean using_graphical_startup;
 static boolean main_loop_started = false;
 boolean autostart;
@@ -111,18 +110,20 @@ int english_language = 0;
 
 // Rendering
 int show_endoom = 0;
+int graphical_startup = 0;
 
 // Display
 int screenblocks = 10;
 int level_brightness = 0;
 int detailLevel = 0;        // Blocky mode, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // Blocky mode, 0 = high, 1 = normal
-int local_time = 0;
+
+// Messages and Texts
 int show_messages = 1;
+int messages_timeout = 4;
 int message_fade = 1;
 int draw_shadowed_text = 1;
-
-// Display: Messages
+int local_time = 0;
 int message_pickup_color = 0;
 int message_secret_color = 15;
 int message_system_color = 0;
@@ -1119,10 +1120,13 @@ void D_BindVariables(void)
     M_BindIntVariable("screenblocks",           &screenblocks);
     M_BindIntVariable("level_brightness",       &level_brightness);
     M_BindIntVariable("detaillevel",            &detailLevel);
-    M_BindIntVariable("local_time",             &local_time);
-    // pitto
+
+    // Messages and Texts
     M_BindIntVariable("show_messages",          &show_messages);
+    M_BindIntVariable("messages_timeout",       &messages_timeout);
     M_BindIntVariable("message_fade",           &message_fade);
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
+    M_BindIntVariable("local_time",             &local_time);
     M_BindIntVariable("message_pickup_color",   &message_pickup_color);
     M_BindIntVariable("message_secret_color",   &message_secret_color);
     M_BindIntVariable("message_system_color",   &message_system_color);
@@ -1138,7 +1142,6 @@ void D_BindVariables(void)
     M_BindIntVariable("automap_level_time",     &automap_level_time);
     M_BindIntVariable("automap_total_time",     &automap_total_time);
     M_BindIntVariable("automap_coords",         &automap_coords);
-    
 
     // Sound
     M_BindIntVariable("sfx_volume",             &snd_MaxVolume);
@@ -1160,11 +1163,6 @@ void D_BindVariables(void)
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("linear_sky",             &linear_sky);
-    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
-
-    // Gameplay: Tactical
-    M_BindIntVariable("secret_notification",    &secret_notification);
-    M_BindIntVariable("negative_health",        &negative_health);
 
     // Gameplay: Physical
     M_BindIntVariable("torque",                 &torque);
@@ -1175,12 +1173,16 @@ void D_BindVariables(void)
     // Gameplay: Audible
     M_BindIntVariable("z_axis_sfx",             &z_axis_sfx);
 
+    // Gameplay: Tactical
+    M_BindIntVariable("secret_notification",    &secret_notification);
+    M_BindIntVariable("negative_health",        &negative_health);
+
     // Gameplay: Crosshair
     M_BindIntVariable("crosshair_draw",         &crosshair_draw);
     M_BindIntVariable("crosshair_type",         &crosshair_type);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);    
 
-    // Геймплей
+    // Gameplay: Gameplay
     M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
     M_BindIntVariable("pistol_start",           &pistol_start);
