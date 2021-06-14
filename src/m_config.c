@@ -2275,19 +2275,38 @@ float M_GetFloatVariable(char *name)
 
 static char *GetDefaultConfigDir(void)
 {
-#if !defined(_WIN32) || defined(_WIN32_WCE)
-
-    // Configuration settings are stored in an OS-appropriate path
-    // determined by SDL.  On typical Unix systems, this might be
-    // ~/.local/share/chocolate-doom.  On Windows, we behave like
-    // Vanilla Doom and save in the current directory.
-
     char *result;
-
-    result = SDL_GetPrefPath("", PACKAGE_TARNAME);
+    char* tempResult;
+#ifdef _WIN32
+    result = M_StringDuplicate(exedir);
+    // [Dasperal] Try to check whether writing to exedir is possible by creating a savegames directory
+    tempResult = M_StringJoin(result, "savegames", NULL);
+    // If the savegames directory already exists, optimistically assume that writing is possible
+    if (!M_FileExists(tempResult))
+    {
+        M_MakeDirectory(tempResult);
+        if (!M_FileExists(tempResult))
+        {
+            free(result);
+            result = M_StringDuplicate("");
+        }
+    }
+    free(tempResult);
+#else
+    #ifndef DEV_ENV
+    tempResult = SDL_GetPrefPath("", PACKAGE_TARNAME); // This might be ~/.local/share/russian-doom
+    if (tempResult != NULL)
+    {
+        result = M_StringDuplicate(tempResult);
+        SDL_free(tempResult);
+    }
+    else
+        result = M_StringDuplicate("");
+    #else
+    result = M_StringDuplicate("");
+    #endif
+#endif
     return result;
-#endif /* #ifndef _WIN32 */
-    return M_StringDuplicate("");
 }
 
 // 
