@@ -1239,11 +1239,11 @@ void DrawMainBar(void)
         if (sbar_colored && !vanillaparm)
         {
             if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
-            dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+            dp_translation = cr[CR_GOLD2GRAY_HERETIC]; // TODO: "flame" color
             else if (CPlayer->armortype >= 2)
-            dp_translation = cr[CR_GOLD2GREEN_HERETIC];
-            else if (CPlayer->armortype == 1)
             dp_translation = NULL;
+            else if (CPlayer->armortype == 1)
+            dp_translation = cr[CR_GOLD2GRAY_HERETIC];
             else
             dp_translation = cr[CR_GOLD2RED_HERETIC];
         }
@@ -1466,11 +1466,11 @@ void DrawFullScreenStuff(void)
             if (sbar_colored && !vanillaparm)
             {
                 if (CPlayer->cheats & CF_GODMODE || CPlayer->powers[pw_invulnerability])
-                dp_translation = cr[CR_GREEN2GRAY_HERETIC];
+                dp_translation = cr[CR_GREEN2GRAY_HERETIC]; // TODO: "flame" color
                 else if (CPlayer->armortype >= 2)
-                dp_translation = NULL;    
-                else if (CPlayer->armortype == 1)
                 dp_translation = cr[CR_GREEN2GOLD_HERETIC];
+                else if (CPlayer->armortype == 1)
+                dp_translation = cr[CR_GREEN2GRAY_HERETIC];
                 else
                 dp_translation = cr[CR_GREEN2RED_HERETIC];
             }
