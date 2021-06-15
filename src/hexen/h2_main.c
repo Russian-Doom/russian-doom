@@ -93,7 +93,6 @@ static void PageDrawer(void);
 static void HandleArgs(void);
 static void CheckRecordFrom(void);
 static void DrawAndBlit(void);
-static void CreateSavePath(void);
 static void WarpCheck(void);
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
@@ -175,7 +174,6 @@ int no_internal_demos = 0;
 static int WarpMap;
 static int pagetic;
 static char *pagename;
-static char *SavePathConfig;
 
 // CODE --------------------------------------------------------------------
 
@@ -247,8 +245,6 @@ void D_BindVariables(void)
     M_BindIntVariable("crosshair_type",         &crosshair_type);
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);
 
-    M_BindStringVariable("savedir", &SavePathConfig);
-
     // Multiplayer chat macros
     for (i=0; i<10; ++i)
     {
@@ -256,39 +252,6 @@ void D_BindVariables(void)
 
         M_snprintf(buf, sizeof(buf), "chatmacro%i", i);
         M_BindStringVariable(buf, &chat_macros[i]);
-    }
-}
-
-// Set the default directory where hub savegames are saved.
-
-static void D_SetDefaultSavePath(void)
-{
-    SavePath = M_GetSaveGameDir("hexen.wad");
-
-    if (!strcmp(SavePath, ""))
-    {
-        // only get hexen.cfg path if one is not already found
-
-        if (!strcmp(SavePathConfig, ""))
-        {
-            // If we are not using a savegame path (probably because we are on
-            // Windows and not using a config dir), behave like Vanilla Hexen
-            // and use hexndata/:
-
-            SavePath = malloc(10);
-            M_snprintf(SavePath, 10, "hexndata%c", DIR_SEPARATOR);
-        }
-        else
-        {
-            SavePath = M_StringDuplicate(SavePathConfig);
-        }
-    }
-
-    // only set hexen.cfg path if using default handling
-
-    if (!M_ParmExists("-savedir") && !M_ParmExists("-cdrom"))
-    {
-        SavePathConfig = SavePath;
     }
 }
 
@@ -582,11 +545,9 @@ void D_DoomMain(void)
     V_Init();
 
     I_AtExit(M_SaveDefaults, false);
-    D_SetDefaultSavePath();
 
-
-    // Now that the savedir is loaded, make sure it exists
-    CreateSavePath();
+    // Set the directory where hub savegames are saved.
+    SavePath = M_GetSaveGameDir();
 
     ST_Message(english_language ?
                "Z_Init: Init zone memory allocation daemon.\n" :
@@ -1399,14 +1360,3 @@ void CleanExit(void)
 	exit(1);
 }
 */
-
-//==========================================================================
-//
-// CreateSavePath
-//
-//==========================================================================
-
-static void CreateSavePath(void)
-{
-    M_MakeDirectory(SavePath);
-}

@@ -1583,7 +1583,7 @@ void D_DoomMain(void)
 
     I_SetWindowTitle(gamedescription);
 
-    savegamedir = M_GetSaveGameDir("heretic.wad");
+    savegamedir = M_GetSaveGameDir();
 
     if (M_ParmExists("-testcontrols"))
     {

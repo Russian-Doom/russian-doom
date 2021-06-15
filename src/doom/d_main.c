@@ -2882,7 +2882,7 @@ void D_DoomMain (void)
     // we've finished loading Dehacked patches.
     D_SetGameDescription();
 
-    savegamedir = M_GetSaveGameDir(D_SaveGameIWADName(gamemission));
+    savegamedir = M_GetSaveGameDir();
 
     // Check for -file in shareware
     if (modifiedgame && (gamevariant != freedoom))

@@ -1732,7 +1732,7 @@ void D_DoomMain (void)
     D_IdentifyVersion();
     InitGameVersion();
     D_SetGameDescription();
-    savegamedir = M_GetSaveGameDir("strife1.wad");
+    savegamedir = M_GetSaveGameDir();
 
     // fraggle 20130405: I_InitTimer is needed here for the netgame
     // startup. Start low-level sound init here too.
