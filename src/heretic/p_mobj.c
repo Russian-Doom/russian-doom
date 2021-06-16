@@ -386,7 +386,11 @@ void P_XYMovement(mobj_t * mo)
     ymove = mo->momy;
     do
     {
-        if (xmove > MAXMOVE / 2 || ymove > MAXMOVE / 2)
+        // [JN] Fix projectiles may sometimes pass though walls, altrough
+        // it is rarely happening in Heretic. This fix is written by Lee Killough,
+        // and it's same to: https://doomwiki.org/wiki/Mancubus_fireball_clipping
+        if ((xmove > MAXMOVE/2 || ymove > MAXMOVE/2) 
+        || (singleplayer && !vanillaparm && (xmove < -MAXMOVE/2 || ymove < -MAXMOVE/2)))
         {
             ptryx = mo->x + xmove / 2;
             ptryy = mo->y + ymove / 2;
