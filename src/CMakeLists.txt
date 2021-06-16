@@ -226,6 +226,34 @@ foreach(TARGET doom heretic hexen strife)
     add_dependencies("${PROGRAM_PREFIX}${TARGET}" "${TARGET}-wads")
 endforeach()
 
+# Install rules
+# strife is not production ready
+foreach(TARGET doom heretic hexen)
+    install(TARGETS "${PROGRAM_PREFIX}${TARGET}"
+            DESTINATION $<IF:$<BOOL:${WIN32}>,.,bin>
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
+    )
+    install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${PROGRAM_PREFIX}${TARGET}-setup$<TARGET_FILE_SUFFIX:${PROGRAM_PREFIX}setup>"
+            DESTINATION $<IF:$<BOOL:${WIN32}>,.,bin>
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
+    )
+    install(FILES ${${TARGET}_DEST_WADS}
+            DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>
+    )
+endforeach()
+install(FILES ${GUS_PATCHES_DEST_FILES}
+        DESTINATION $<IF:$<BOOL:${WIN32}>,base,share/${PACKAGE_TARNAME}>/gus_patches
+)
+if(WIN32)
+    install(TARGETS "${PROGRAM_PREFIX}midiproc"
+            DESTINATION .
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
+    )
+#   TODO install dll libs on windows
+#   install(FILES <DLL LIBS>
+#           DESTINATION .)
+endif()
+
 # Source groups
 source_group("Midiproc" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/midiproc/.+")
 source_group("Opl" REGULAR_EXPRESSION "^${PROJECT_SOURCE_DIR}/opl/.+")
