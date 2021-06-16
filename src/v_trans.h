@@ -100,6 +100,8 @@ enum
     CR_RED2BROWN_HERETIC,
     CR_RED2MAGENTA_HERETIC,
     CR_RED2GRAY_HERETIC,
+    CR_RED2WHITE_HERETIC,
+    CR_RED2BLACK_HERETIC,
     // Hexen (small font)
     CR_GRAY2GDARKGRAY_HEXEN,    // Menu digits and inactive items
     CR_GRAY2DARKGOLD_HEXEN,     // Gameplay features headers

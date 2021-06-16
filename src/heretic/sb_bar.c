@@ -1043,9 +1043,9 @@ void DrawCommonBar(void)
         if (sbar_colored_gem && !vanillaparm && !netgame)
         {
             if ((CPlayer->cheats & CF_GODMODE) || CPlayer->powers[pw_invulnerability])
-            dp_translation = cr[CR_RED2GRAY_HERETIC];
+            dp_translation = cr[CR_RED2WHITE_HERETIC];
             else if (CPlayer->mo->health <= 0)
-            dp_translation = cr[CR_RED2DARKRED_HERETIC];
+            dp_translation = cr[CR_RED2BLACK_HERETIC];
             else if (CPlayer->mo->health >= 67)
             dp_translation = sbar_colored_gem == 1 ? cr[CR_RED2GREEN_HERETIC] : cr[CR_RED2MIDGREEN_HERETIC];
             else if (CPlayer->mo->health >= 34)
