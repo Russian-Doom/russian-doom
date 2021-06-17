@@ -154,21 +154,52 @@ void R_DrawColumn(void)
 
 void R_DrawSkyColumn(void)
 {
-    int   count = dc_yh - dc_yl;
+    int   count = dc_yh - dc_yl + 1;
     int   fracstep = FRACUNIT >> hires;
     int   frac  = skytexturemid + (dc_yl - centery) * fracstep;
     byte *dest  = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
+    // [JN] Tutti-Frutti fix for sky texture.
+    // Use actual texture height (200), instead of dc_texheight (128).
+    const int sky_texheight = 200;
+    int       heightmask = sky_texheight-1; 
 
-    if (count < 0)
+    if (count <= 0)
     return;
 
-    do
+    if (sky_texheight & heightmask)   // not a power of 2 -- killough
     {
-        *dest = dc_colormap[dc_source[frac >> FRACBITS]];
-         dest += screenwidth;
-         frac += fracstep;
+        heightmask++;
+        heightmask <<= FRACBITS;
+
+        if (frac < 0)
+            while ((frac += heightmask) < 0);
+        else
+            while (frac >= heightmask)
+            frac -= heightmask;
+
+        do
+        {
+           *dest = dc_colormap[dc_source[frac>>FRACBITS]];
+            dest += screenwidth;
+            if ((frac += fracstep) >= heightmask)
+                frac -= heightmask;
+        }
+        while (--count);
     }
-    while (count--);
+    else
+    {
+        while ((count-=2)>=0)   // texture height is a power of 2 -- killough
+        {
+           *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+            dest += screenwidth;
+            frac += fracstep;
+           *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+            dest += screenwidth;
+            frac += fracstep;
+        }
+        if (count & 1)
+           *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+    }
 }
 
 /*
@@ -183,28 +214,56 @@ void R_DrawSkyColumn(void)
 
 void R_DrawSkyColumnLow(void)
 {
-    int   count = dc_yh - dc_yl;
+    int   count = dc_yh - dc_yl + 1;
     int   fracstep = FRACUNIT >> (hires && !detailshift);
     int   frac  = skytexturemid + (dc_yl - centery) * fracstep;
     byte *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(dc_x << hires)]];
     byte *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(dc_x << hires) + 1]];
     byte *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(dc_x << hires)]];
     byte *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(dc_x << hires) + 1]];
+    // [JN] Tutti-Frutti fix for sky texture.
+    // Use actual texture height (200), instead of dc_texheight (128).
+    const int sky_texheight = 200;
+    int       heightmask = sky_texheight-1; 
 
-    if (count < 0)
+    if (count <= 0)
     return;
 
-    do
+    if (sky_texheight & heightmask)   // not a power of 2 -- killough
     {
-        *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[frac >> FRACBITS]];
-         dest  += screenwidth << hires;
-         dest2 += screenwidth << hires;
-         dest3 += screenwidth << hires;
-         dest4 += screenwidth << hires;
+        heightmask++;
+        heightmask <<= FRACBITS;
 
-        frac += fracstep;
+        if (frac < 0)
+            while ((frac += heightmask) < 0);
+        else
+            while (frac >= heightmask)
+            frac -= heightmask;
+
+        do
+        {
+           *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[frac >> FRACBITS]];
+            dest  += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+            if ((frac += fracstep) >= heightmask)
+                frac -= heightmask;
+        }
+        while (--count);
     }
-    while (count--);
+    else // texture height is a power of 2 -- killough
+    {
+        do 
+        {
+           *dest4 = *dest3 = *dest2 = *dest = dc_colormap[dc_source[(frac >> FRACBITS) & heightmask]];
+            dest += screenwidth << hires;
+            dest2 += screenwidth << hires;
+            dest3 += screenwidth << hires;
+            dest4 += screenwidth << hires;
+            frac += fracstep; 
+        } while (count--);
+    }
 }
 
 /*
