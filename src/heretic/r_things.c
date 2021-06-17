@@ -1348,7 +1348,8 @@ void R_DrawPlayerSprites (void)
             spritelights = fullbright_greenonly[0];
             // Gauntlets+
             else
-            if (state == S_GAUNTLETDOWN2 || state == S_GAUNTLETUP2
+            if (state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3
+            ||  state == S_GAUNTLETDOWN2  || state == S_GAUNTLETUP2
             ||  state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2
             ||  state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4
             ||  state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6
@@ -1456,7 +1457,8 @@ void R_DrawPlayerSprites (void)
                 spritelights = fullbright_greenonly[LIGHTLEVELS - 1];
                 // Gauntlets+
                 else
-                if (state == S_GAUNTLETDOWN2 || state == S_GAUNTLETUP2
+                if (state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3
+                ||  state == S_GAUNTLETDOWN2  || state == S_GAUNTLETUP2
                 ||  state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2
                 ||  state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4
                 ||  state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6
@@ -1563,7 +1565,8 @@ void R_DrawPlayerSprites (void)
             spritelights = fullbright_greenonly[lightnum];
             // Gauntlets+
             else
-            if (state == S_GAUNTLETDOWN2 || state == S_GAUNTLETUP2
+            if (state == S_GAUNTLETREADY2_1 || state == S_GAUNTLETREADY2_2 || state == S_GAUNTLETREADY2_3
+            ||  state == S_GAUNTLETDOWN2  || state == S_GAUNTLETUP2
             ||  state == S_GAUNTLETATK2_1 || state == S_GAUNTLETATK2_2
             ||  state == S_GAUNTLETATK2_3 || state == S_GAUNTLETATK2_4
             ||  state == S_GAUNTLETATK2_5 || state == S_GAUNTLETATK2_6
