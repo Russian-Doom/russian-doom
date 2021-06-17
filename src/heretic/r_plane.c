@@ -37,6 +37,8 @@ int     skyflatnum;
 int     skytexture;
 int     skytexturemid;
 fixed_t skyiscale;
+fixed_t skyiscale_low;
+fixed_t skytextureheight;
 
 //
 // opening
@@ -101,7 +103,11 @@ void R_InitSkyMap (void)
 {
     skyflatnum = R_FlatNumForName(DEH_String("F_SKY1"));
     skytexturemid = 200 * FRACUNIT;
+    // [JN] Tutti-Frutti fix for sky texture.
+    // Use actual texture height (200), instead of dc_texheight (128).
     skyiscale = FRACUNIT >> hires;
+    skyiscale_low = FRACUNIT;
+    skytextureheight = 200;
 }
 
 /*

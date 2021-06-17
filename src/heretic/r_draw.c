@@ -155,18 +155,14 @@ void R_DrawColumn(void)
 void R_DrawSkyColumn(void)
 {
     int   count = dc_yh - dc_yl + 1;
-    int   fracstep = FRACUNIT >> hires;
-    int   frac  = skytexturemid + (dc_yl - centery) * fracstep;
+    int   frac  = skytexturemid + (dc_yl - centery) * skyiscale;
+    int   heightmask = skytextureheight-1; 
     byte *dest  = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
-    // [JN] Tutti-Frutti fix for sky texture.
-    // Use actual texture height (200), instead of dc_texheight (128).
-    const int sky_texheight = 200;
-    int       heightmask = sky_texheight-1; 
 
     if (count <= 0)
     return;
 
-    if (sky_texheight & heightmask)   // not a power of 2 -- killough
+    if (skytextureheight & heightmask)   // not a power of 2 -- killough
     {
         heightmask++;
         heightmask <<= FRACBITS;
@@ -181,7 +177,7 @@ void R_DrawSkyColumn(void)
         {
            *dest = dc_colormap[dc_source[frac>>FRACBITS]];
             dest += screenwidth;
-            if ((frac += fracstep) >= heightmask)
+            if ((frac += skyiscale) >= heightmask)
                 frac -= heightmask;
         }
         while (--count);
@@ -192,10 +188,10 @@ void R_DrawSkyColumn(void)
         {
            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
             dest += screenwidth;
-            frac += fracstep;
+            frac += skyiscale;
            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
             dest += screenwidth;
-            frac += fracstep;
+            frac += skyiscale;
         }
         if (count & 1)
            *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
@@ -215,21 +211,17 @@ void R_DrawSkyColumn(void)
 void R_DrawSkyColumnLow(void)
 {
     int   count = dc_yh - dc_yl + 1;
-    int   fracstep = FRACUNIT >> (hires && !detailshift);
-    int   frac  = skytexturemid + (dc_yl - centery) * fracstep;
+    int   frac  = skytexturemid + (dc_yl - centery) * skyiscale_low;
+    int   heightmask = skytextureheight-1; 
     byte *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(dc_x << hires)]];
     byte *dest2 = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(dc_x << hires) + 1]];
     byte *dest3 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(dc_x << hires)]];
     byte *dest4 = ylookup[(dc_yl << hires) + 1] + columnofs[flipwidth[(dc_x << hires) + 1]];
-    // [JN] Tutti-Frutti fix for sky texture.
-    // Use actual texture height (200), instead of dc_texheight (128).
-    const int sky_texheight = 200;
-    int       heightmask = sky_texheight-1; 
 
     if (count <= 0)
     return;
 
-    if (sky_texheight & heightmask)   // not a power of 2 -- killough
+    if (skytextureheight & heightmask)   // not a power of 2 -- killough
     {
         heightmask++;
         heightmask <<= FRACBITS;
@@ -247,7 +239,7 @@ void R_DrawSkyColumnLow(void)
             dest2 += screenwidth << hires;
             dest3 += screenwidth << hires;
             dest4 += screenwidth << hires;
-            if ((frac += fracstep) >= heightmask)
+            if ((frac += skyiscale_low) >= heightmask)
                 frac -= heightmask;
         }
         while (--count);
@@ -261,7 +253,7 @@ void R_DrawSkyColumnLow(void)
             dest2 += screenwidth << hires;
             dest3 += screenwidth << hires;
             dest4 += screenwidth << hires;
-            frac += fracstep; 
+            frac += skyiscale_low; 
         } while (count--);
     }
 }

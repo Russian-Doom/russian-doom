@@ -552,6 +552,9 @@ extern fixed_t dc_texturemid;
 extern int dc_texheight;
 extern byte *dc_source;         // first pixel in a column
 extern int skytexturemid;
+extern fixed_t skyiscale;
+extern fixed_t skyiscale_low;
+extern fixed_t skytextureheight;
 
 void R_DrawColumn(void);
 void R_DrawColumnLow(void);
