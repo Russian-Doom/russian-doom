@@ -616,7 +616,7 @@ static void AddIWADPath(char *path, char *suffix)
 // <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
 static void AddXdgDirs(void)
 {
-    char *env, *tmp_env;
+    char *env;
 
     // Quote:
     // > $XDG_DATA_HOME defines the base directory relative to which
@@ -624,7 +624,6 @@ static void AddXdgDirs(void)
     // > is either not set or empty, a default equal to
     // > $HOME/.local/share should be used.
     env = getenv("XDG_DATA_HOME");
-    tmp_env = NULL;
 
     if (env == NULL)
     {
@@ -634,15 +633,14 @@ static void AddXdgDirs(void)
             homedir = "/";
         }
 
-        tmp_env = M_StringJoin(homedir, "/.local/share", NULL);
-        env = tmp_env;
+        env = M_StringJoin(homedir, "/.local/share", NULL);
     }
 
     // We support $XDG_DATA_HOME/games/doom (which will usually be
     // ~/.local/share/games/doom) as a user-writeable extension to
     // the usual /usr/share/games/doom location.
     AddIWADDir(M_StringJoin(env, "/games/doom", NULL));
-    free(tmp_env);
+    free(env);
 
     // Quote:
     // > $XDG_DATA_DIRS defines the preference-ordered set of base
@@ -664,6 +662,36 @@ static void AddXdgDirs(void)
     // XDG_DATA_DIRS mechanism, through which it can be overridden.
     AddIWADPath(env, "/games/doom");
 }
+
+#ifndef __MACOSX__
+// Steam on Linux allows installing some select Windows games,
+// including the classic Doom series (running DOSBox via Wine).  We
+// could parse *.vdf files to more accurately detect installation
+// locations, but the defaults are likely to be good enough for just
+// about everyone.
+static void AddSteamDirs(void)
+{
+    char *homedir, *steampath;
+
+    homedir = getenv("HOME");
+    if (homedir == NULL)
+    {
+        homedir = "/";
+    }
+    steampath = M_StringJoin(homedir, "/.steam/root/steamapps/common", NULL);
+
+    AddIWADPath(steampath, "/Doom 2/base");
+    AddIWADPath(steampath, "/Master Levels of Doom/doom2");
+    AddIWADPath(steampath, "/Ultimate Doom/base");
+    AddIWADPath(steampath, "/Final Doom/base");
+    AddIWADPath(steampath, "/DOOM 3 BFG Edition/base/wads");
+    AddIWADPath(steampath, "/Heretic Shadow of the Serpent Riders/base");
+    AddIWADPath(steampath, "/Hexen/base");
+    AddIWADPath(steampath, "/Hexen Deathkings of the Dark Citadel/base");
+    AddIWADPath(steampath, "/Strife");
+    free(steampath);
+}
+#endif // __MACOSX__
 #endif
 
 //
@@ -681,6 +709,10 @@ static void BuildIWADDirList(void)
 
     // Look in the current directory.  Doom always does this.
     AddIWADDir(".");
+
+    // Next check the directory where the executable is located. This might
+    // be different from the current directory.
+    AddIWADDir(exedir);
 
     // Add DOOMWADDIR if it is in the environment
     env = getenv("DOOMWADDIR");
@@ -712,6 +744,9 @@ static void BuildIWADDirList(void)
 
 #else
     AddXdgDirs();
+#ifndef __MACOSX__
+    AddSteamDirs();
+#endif
 #endif
 
     // Don't run this function again.
