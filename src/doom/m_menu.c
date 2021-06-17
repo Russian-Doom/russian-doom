@@ -264,8 +264,9 @@ void M_RD_Change_LocalTime(int choice);
 void M_RD_Choose_MessagesAndTextSettings(int choice);
 void M_RD_Draw_MessagesSettings(void);
 void M_RD_Change_Messages(int choice);
-void M_RD_Change_ShadowedText(int choice);
 void M_RD_Change_Msg_TimeOut(int choice);
+void M_RD_Change_Msg_Fade(int choice);
+void M_RD_Change_ShadowedText(int choice);
 void M_RD_Change_Msg_Pickup_Color(int choice);
 void M_RD_Change_Msg_Secret_Color(int choice);
 void M_RD_Change_Msg_System_Color(int choice);
@@ -1750,6 +1751,7 @@ enum
     rd_messages_toggle,
     rd_messages_timeout,
     rd_messages_empty1,
+    rd_messages_fade,
     rd_messages_shadows,
     rd_messages_empty2,
     rd_display_localtime,
@@ -1770,6 +1772,7 @@ menuitem_t RD_Messages_Menu[]=
     {2, "messages enabled:",   M_RD_Change_Messages,        'm'},
     {3, "message timeout",     M_RD_Change_Msg_TimeOut,     'm'},
     {-1,"",0,'\0'},
+    {2, "fading effect:",      M_RD_Change_Msg_Fade,        'f'},
     {2, "text casts shadows:", M_RD_Change_ShadowedText,    't'},
     {-1,"",0,'\0'},
     {2, "local time:",         M_RD_Change_LocalTime,       'l'},
@@ -1800,6 +1803,7 @@ menuitem_t RD_Messages_Menu_Rus[]=
     {2, "jnj,hf;tybt cjj,otybq:",   M_RD_Change_Messages,        'j'}, // Отображение сообщений:
     {3, "nfqvfen jnj,hf;tybz",      M_RD_Change_Msg_TimeOut,     'n'}, // Таймаут отображения
     {-1,"",0,'\0'},
+    {2, "gkfdyjt bcxtpyjdtybt:",    M_RD_Change_Msg_Fade,        'g'}, // Плавное исчезновение:
     {2, "ntrcns jn,hfcsdf.n ntym:", M_RD_Change_ShadowedText,    'n'}, // Тексты отбрасывают тень:
     {-1,"",0,'\0'},
     {2, "cbcntvyjt dhtvz:",         M_RD_Change_LocalTime,       'c'}, // Системное время:
@@ -3829,63 +3833,65 @@ void M_RD_Draw_MessagesSettings(void)
                                                    messages_timeout == 9 ? "9 seconds" :
                                                                            "10 seconds", NULL);
 
+        // Fading effect
+        M_WriteTextSmall_ENG(139 + wide_delta, 65, message_fade ? "on" : "off", NULL);
+
         // Text casts shadows
-        M_WriteTextSmall_ENG(177 + wide_delta, 65, draw_shadowed_text ? "on" : "off", NULL);
+        M_WriteTextSmall_ENG(177 + wide_delta, 75, draw_shadowed_text ? "on" : "off", NULL);
 
-        M_WriteTextSmall_ENG(35 + wide_delta, 75, "Misc.", dp_translation = cr[CR_YELLOW]);
-
+        M_WriteTextSmall_ENG(35 + wide_delta, 85, "Misc.", dp_translation = cr[CR_YELLOW]);
 
         // Local time
-        M_WriteTextSmall_ENG(116 + wide_delta, 85, 
+        M_WriteTextSmall_ENG(116 + wide_delta, 95, 
                              local_time == 1 ? "12-hour (hh:mm)" :
                              local_time == 2 ? "12-hour (hh:mm:ss)" :
                              local_time == 3 ? "24-hour (hh:mm)" :
                              local_time == 4 ? "24-hour (hh:mm:ss)" :
                                                "off", NULL);
 
-        M_WriteTextSmall_ENG(35 + wide_delta, 95, "Colors", dp_translation = cr[CR_YELLOW]);
+        M_WriteTextSmall_ENG(35 + wide_delta, 105, "Colors", dp_translation = cr[CR_YELLOW]);
 
         // Item pickup
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(120 + wide_delta, 105, "n/a", NULL);
+            M_WriteTextSmall_ENG(120 + wide_delta, 115, "n/a", NULL);
         }
         else
         {
-            M_WriteTextSmall_ENG(120 + wide_delta, 105, M_RD_ColorName_ENG(message_pickup_color), 
+            M_WriteTextSmall_ENG(120 + wide_delta, 115, M_RD_ColorName_ENG(message_pickup_color), 
                                                         M_RD_ColorTranslation(message_pickup_color));
         }
 
         // Revealed secret
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(157 + wide_delta, 115, "n/a", NULL);
+            M_WriteTextSmall_ENG(157 + wide_delta, 125, "n/a", NULL);
         }
         else
         {
-            M_WriteTextSmall_ENG(157 + wide_delta, 115, M_RD_ColorName_ENG(message_secret_color),
+            M_WriteTextSmall_ENG(157 + wide_delta, 125, M_RD_ColorName_ENG(message_secret_color),
                                                         M_RD_ColorTranslation(message_secret_color));
         }
 
         // System message
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(149 + wide_delta, 125, "n/a", NULL);
+            M_WriteTextSmall_ENG(149 + wide_delta, 135, "n/a", NULL);
         }
         else
         {
-            M_WriteTextSmall_ENG(149 + wide_delta, 125, M_RD_ColorName_ENG(message_system_color),
+            M_WriteTextSmall_ENG(149 + wide_delta, 135, M_RD_ColorName_ENG(message_system_color),
                                                         M_RD_ColorTranslation(message_system_color));
         }
 
         // Netgame chat
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_ENG(136 + wide_delta, 135, "n/a", NULL);
+            M_WriteTextSmall_ENG(136 + wide_delta, 145, "n/a", NULL);
         }
         else
         {
-            M_WriteTextSmall_ENG(136 + wide_delta, 135, M_RD_ColorName_ENG(message_chat_color),
+            M_WriteTextSmall_ENG(136 + wide_delta, 145, M_RD_ColorName_ENG(message_chat_color),
                                                         M_RD_ColorTranslation(message_chat_color));
         }
     }
@@ -3913,16 +3919,19 @@ void M_RD_Draw_MessagesSettings(void)
                                                    messages_timeout == 9 ? "9 ctreyl"  :
                                                                            "10 ctreyl", NULL);
 
+        // Плавное исчезновение
+        M_WriteTextSmall_RUS(198 + wide_delta, 65, message_fade ? "drk" : "dsrk", NULL);
+
         // Тексты отбрасывают тень
-        M_WriteTextSmall_RUS(226 + wide_delta, 65, draw_shadowed_text ? "drk" : "dsrk", NULL);
+        M_WriteTextSmall_RUS(226 + wide_delta, 75, draw_shadowed_text ? "drk" : "dsrk", NULL);
 
         //
         // Разное
         //
-        M_WriteTextSmall_RUS(35 + wide_delta, 75, "hfpyjt", cr[CR_YELLOW]);
+        M_WriteTextSmall_RUS(35 + wide_delta, 85, "hfpyjt", cr[CR_YELLOW]);
 
         // Системное время
-        M_WriteTextSmall_RUS(161 + wide_delta, 85, 
+        M_WriteTextSmall_RUS(161 + wide_delta, 95, 
                              local_time == 1 ? "12-xfcjdjt (xx:vv)" :
                              local_time == 2 ? "12-xfcjdjt (xx:vv:cc)" :
                              local_time == 3 ? "24-xfcjdjt (xx:vv)" :
@@ -3932,49 +3941,49 @@ void M_RD_Draw_MessagesSettings(void)
         //
         // Цвета
         //
-        M_WriteTextSmall_RUS(35 + wide_delta, 95, "wdtnf", cr[CR_YELLOW]);
+        M_WriteTextSmall_RUS(35 + wide_delta, 105, "wdtnf", cr[CR_YELLOW]);
 
         // Получение предметов
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(193 + wide_delta, 105, "y*l", NULL); // н/д
+            M_WriteTextSmall_RUS(193 + wide_delta, 115, "y*l", NULL); // н/д
         }
         else
         {
-            M_WriteTextSmall_RUS(193 + wide_delta, 105, M_RD_ColorName_RUS(message_pickup_color),
+            M_WriteTextSmall_RUS(193 + wide_delta, 115, M_RD_ColorName_RUS(message_pickup_color),
                                                         M_RD_ColorTranslation(message_pickup_color));
         }
 
         // Обнаружение тайников
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(203 + wide_delta, 115, "y*l", NULL); // н/д
+            M_WriteTextSmall_RUS(203 + wide_delta, 125, "y*l", NULL); // н/д
         }
         else
         {
-            M_WriteTextSmall_RUS(203 + wide_delta, 115, M_RD_ColorName_RUS(message_secret_color),
+            M_WriteTextSmall_RUS(203 + wide_delta, 125, M_RD_ColorName_RUS(message_secret_color),
                                                         M_RD_ColorTranslation(message_secret_color));
         }
 
         // Системные сообщения
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(197 + wide_delta, 125, "y*l", NULL); // н/д
+            M_WriteTextSmall_RUS(197 + wide_delta, 135, "y*l", NULL); // н/д
         }
         else
         {
-            M_WriteTextSmall_RUS(197 + wide_delta, 125, M_RD_ColorName_RUS(message_system_color),
+            M_WriteTextSmall_RUS(197 + wide_delta, 135, M_RD_ColorName_RUS(message_system_color),
                                                         M_RD_ColorTranslation(message_system_color));
         }
 
         // Чат сетевой игры
         if (gamemission == jaguar)
         {
-            M_WriteTextSmall_RUS(164 + wide_delta, 135, "y*l", NULL); // н/д
+            M_WriteTextSmall_RUS(164 + wide_delta, 145, "y*l", NULL); // н/д
         }
         else
         {
-            M_WriteTextSmall_RUS(164 + wide_delta, 135, M_RD_ColorName_RUS(message_chat_color),
+            M_WriteTextSmall_RUS(164 + wide_delta, 145, M_RD_ColorName_RUS(message_chat_color),
                                                         M_RD_ColorTranslation(message_chat_color));
         }
     }
@@ -4019,6 +4028,16 @@ void M_RD_Change_Msg_TimeOut(int choice)
         }
         break;
     }
+}
+
+void M_RD_Change_Msg_Fade(int choice)
+{
+    message_fade ^= 1;
+}
+
+void M_RD_Change_ShadowedText(int choice)
+{
+    draw_shadowed_text ^= 1;
 }
 
 void M_RD_Define_Msg_Pickup_Color(void)
@@ -4269,11 +4288,6 @@ void M_RD_Change_Msg_Chat_Color(int choice)
 
     // [JN] Redefine netgame chat message color.
     M_RD_Define_Msg_Chat_Color();
-}
-
-void M_RD_Change_ShadowedText(int choice)
-{
-    draw_shadowed_text ^= 1;
 }
 
 
@@ -8076,14 +8090,17 @@ void M_RD_BackToDefaults_Recommended(int choice)
     menu_shading          = 0;
     detailLevel           = 0;
     hud_detaillevel       = 0;
-    local_time            = 0;
+
+    // Messages
     showMessages          = 1;
     messages_timeout      = 4;
+    message_fade          = 0;
+    draw_shadowed_text    = 1;
+    local_time            = 0;
     message_pickup_color  = 0;
     message_secret_color  = 7;
     message_system_color  = 0;
     message_chat_color    = 2;
-    draw_shadowed_text    = 1;
 
     // Automap
     automap_color     = 0;
@@ -8237,14 +8254,17 @@ void M_RD_BackToDefaults_Original(int choice)
     menu_shading          = 0;
     detailLevel           = 1;
     hud_detaillevel       = 1;
-    local_time            = 0;
+
+    // Messages
     showMessages          = 1;
     messages_timeout      = 4;
+    message_fade          = 0;
+    draw_shadowed_text    = 0;
+    local_time            = 0;
     message_pickup_color  = 0;
     message_secret_color  = 0;
     message_system_color  = 0;
     message_chat_color    = 0;
-    draw_shadowed_text    = 0;
 
     // Automap
     automap_color     = 0;

@@ -116,12 +116,13 @@ int level_brightness = 0;
 int menu_shading = 0;
 int detailLevel = 0;        // Blocky mode, has default, 0 = high, 1 = normal
 int hud_detaillevel = 0;    // [JN] Also blocky mode, 0 = high, 1 = normal
-int local_time = 0;
 
 // Display: Messages
 int showMessages = 1;
-int draw_shadowed_text = 1;
 int messages_timeout = 4;
+int message_fade = 1;
+int draw_shadowed_text = 1;
+int local_time = 0;
 int message_pickup_color = 0;
 int message_secret_color = 7;
 int message_system_color = 0;
@@ -645,14 +646,17 @@ void D_BindVariables(void)
     M_BindIntVariable("menu_shading",           &menu_shading);
     M_BindIntVariable("detaillevel",            &detailLevel);
     M_BindIntVariable("hud_detaillevel",        &hud_detaillevel);
-    M_BindIntVariable("local_time",             &local_time);
+
+    // Messages
     M_BindIntVariable("show_messages",          &showMessages);
     M_BindIntVariable("messages_timeout",       &messages_timeout);
+    M_BindIntVariable("message_fade",           &message_fade);
+    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
+    M_BindIntVariable("local_time",             &local_time);
     M_BindIntVariable("message_pickup_color",   &message_pickup_color);
     M_BindIntVariable("message_secret_color",   &message_secret_color);
     M_BindIntVariable("message_system_color",   &message_system_color);
     M_BindIntVariable("message_chat_color",     &message_chat_color);
-    M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);
 
     // Automap
     M_BindIntVariable("automap_color",          &automap_color);

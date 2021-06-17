@@ -119,8 +119,7 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
             }
 
             // [JN] Draw message.
-            // TODO - make optional
-            if (/*message_fade && */ !vanillaparm && type != msg_uncolored)
+            if (message_fade && !vanillaparm && type != msg_uncolored)
             {
                 if (message_counter >= 10)
                 V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f[c - l->sc]);
