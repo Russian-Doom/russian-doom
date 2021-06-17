@@ -413,17 +413,23 @@ void P_XYMovement(mobj_t * mo)
             {   // Explode a missile
                 if (ceilingline && ceilingline->backsector
                     && ceilingline->backsector->ceilingpic == skyflatnum)
-                {   // Hack to prevent missiles exploding against the sky
+                {
                     if (mo->type == MT_BLOODYSKULL)
                     {
                         mo->momx = mo->momy = 0;
                         mo->momz = -FRACUNIT;
                     }
-                    else
+
+                    // [JN] Fix projectiles may sometimes dissapear in ledges.
+                    // To keep demo sync and/or vanilla behaviour,
+                    // remove missile. Otherwise, explode it normally.
+                    if (mo->z > ceilingline->backsector->ceilingheight
+                    || !singleplayer || vanillaparm)
                     {
+                        // Hack to prevent missiles exploding against the sky
                         P_RemoveMobj(mo);
+                        return;
                     }
-                    return;
                 }
                 P_ExplodeMissile(mo);
             }
