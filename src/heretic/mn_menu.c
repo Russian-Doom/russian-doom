@@ -3264,7 +3264,7 @@ static void DrawSoundSystemMenu(void)
                                      184 + wide_delta, 112);
 
         // Informative message:
-        if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
+        if (CurrentItPos == 1 || CurrentItPos == 3)
         {
             dp_translation = cr[CR_WHITE2GREEN_HERETIC];
             MN_DrTextSmallENG(DEH_String("CHANGING WILL REQUIRE RESTART OF THE PROGRAM"),
@@ -3375,7 +3375,7 @@ static void DrawSoundSystemMenu(void)
                                      201 + wide_delta, 112);
 
         // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
-        if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
+        if (CurrentItPos == 1 || CurrentItPos == 3)
         {
             dp_translation = cr[CR_WHITE2GREEN_HERETIC];
             MN_DrTextSmallRUS(DEH_String("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS"), 
@@ -3399,6 +3399,15 @@ static void M_RD_SoundDevice(intptr_t option)
         default:
             break;
     }
+
+    // Reinitialize SFX module
+    InitSfxModule(snd_sfxdevice);
+
+    // Call sfx device changing routine
+    S_RD_Change_SoundDevice();
+
+    // Reinitialize sound volume, recalculate sound curve
+    S_SetMaxVolume(true);
 }
 
 static void M_RD_MusicDevice(intptr_t option)

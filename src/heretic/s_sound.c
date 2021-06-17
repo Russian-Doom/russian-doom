@@ -678,6 +678,40 @@ void S_Init(void)
     I_PrecacheSounds(S_sfx, NUMSFX);
 }
 
+/*
+================================================================================
+=
+= S_RD_Change_SoundDevice
+=
+= [JN] Routine for sfx device hot-swapping.
+=
+================================================================================
+*/
+
+void S_RD_Change_SoundDevice (void)
+{
+    int i;
+
+    // Regenerate cache of digital sounds
+    I_PrecacheSounds(S_sfx, NUMSFX);
+
+    // Free all channels for use
+    for (i = 0; i < snd_Channels; i++)
+    {
+        if (channel[i].handle)
+        {
+            S_StopSound(channel[i].mo);
+        }
+    }
+    memset(channel, 0, 8 * sizeof(channel_t));
+
+    // Reinitialize sfx usefulness
+    for (i = 0 ; i < NUMSFX ; i++)
+    {
+        S_sfx[i].lumpnum = S_sfx[i].usefulness = -1;
+    }
+}
+
 // -----------------------------------------------------------------------------
 // S_ChannelsRealloc
 // [JN] Reallocates sound channels, needed for hot-swapping.
