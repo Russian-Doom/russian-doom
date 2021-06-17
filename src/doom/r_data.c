@@ -42,6 +42,7 @@
 #include "r_data.h"
 #include "r_bmaps.h"
 #include "v_trans.h"
+#include "v_video.h"
 #include "jn.h"
 
 
@@ -1024,6 +1025,16 @@ static void R_InitTransMaps ()
     tintmap = Z_Malloc(256*256, PU_STATIC, 0);
     shademap = Z_Malloc(256*256, PU_STATIC, 0);
     fuzzmap = Z_Malloc(256*256, PU_STATIC, 0);
+    // [JN] Fading effect for messages:
+    transtable90 = Z_Malloc(256*256, PU_STATIC, 0);
+    transtable80 = Z_Malloc(256*256, PU_STATIC, 0);
+    transtable70 = Z_Malloc(256*256, PU_STATIC, 0);
+    transtable60 = Z_Malloc(256*256, PU_STATIC, 0);
+    transtable50 = Z_Malloc(256*256, PU_STATIC, 0);
+    transtable40 = Z_Malloc(256*256, PU_STATIC, 0);
+    transtable30 = Z_Malloc(256*256, PU_STATIC, 0);
+    transtable20 = Z_Malloc(256*256, PU_STATIC, 0);
+    transtable10 = Z_Malloc(256*256, PU_STATIC, 0);
 
     // [JN] Always generate translucency tables dynamically.
     {
@@ -1031,6 +1042,15 @@ static void R_InitTransMaps ()
         byte *tp1 = tintmap;
         byte *tp2 = shademap;
         byte *tp3 = fuzzmap;
+        byte *tp90 = transtable90;
+        byte *tp80 = transtable80;
+        byte *tp70 = transtable70;
+        byte *tp60 = transtable60;
+        byte *tp50 = transtable50;
+        byte *tp40 = transtable40;
+        byte *tp30 = transtable30;
+        byte *tp20 = transtable20;
+        byte *tp10 = transtable10;
         int i, j;
 
         // [crispy] background color
@@ -1045,6 +1065,9 @@ static void R_InitTransMaps ()
                     *tp1++ = i;
                     *tp2++ = i;
                     *tp3++ = i;
+                    *tp90++ = i; *tp80++ = i; *tp70++ = i;
+                    *tp60++ = i; *tp50++ = i; *tp40++ = i;
+                    *tp30++ = i; *tp20++ = i; *tp10++ = i;
                     continue;
                 }
 
@@ -1065,6 +1088,51 @@ static void R_InitTransMaps ()
                 blend[g] = (fuzz_filter_pct * fg[g] + (100 - fuzz_filter_pct) * bg[g]) / 100;
                 blend[b] = (fuzz_filter_pct * fg[b] + (100 - fuzz_filter_pct) * bg[b]) / 100;
                 *tp3++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+
+                blend[r] = (90 * fg[r] + (100 - 90) * bg[r]) / 100;
+                blend[g] = (90 * fg[g] + (100 - 90) * bg[g]) / 100;
+                blend[b] = (90 * fg[b] + (100 - 90) * bg[b]) / 100;
+                *tp90++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+
+                blend[r] = (80 * fg[r] + (100 - 80) * bg[r]) / 100;
+                blend[g] = (80 * fg[g] + (100 - 80) * bg[g]) / 100;
+                blend[b] = (80 * fg[b] + (100 - 80) * bg[b]) / 100;
+                *tp80++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+
+                blend[r] = (70 * fg[r] + (100 - 70) * bg[r]) / 100;
+                blend[g] = (70 * fg[g] + (100 - 70) * bg[g]) / 100;
+                blend[b] = (70 * fg[b] + (100 - 70) * bg[b]) / 100;
+                *tp70++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+
+                blend[r] = (60 * fg[r] + (100 - 60) * bg[r]) / 100;
+                blend[g] = (60 * fg[g] + (100 - 60) * bg[g]) / 100;
+                blend[b] = (60 * fg[b] + (100 - 60) * bg[b]) / 100;
+                *tp60++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+
+                blend[r] = (50 * fg[r] + (100 - 50) * bg[r]) / 100;
+                blend[g] = (50 * fg[g] + (100 - 50) * bg[g]) / 100;
+                blend[b] = (50 * fg[b] + (100 - 50) * bg[b]) / 100;
+                *tp50++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+
+                blend[r] = (40 * fg[r] + (100 - 40) * bg[r]) / 100;
+                blend[g] = (40 * fg[g] + (100 - 40) * bg[g]) / 100;
+                blend[b] = (40 * fg[b] + (100 - 40) * bg[b]) / 100;
+                *tp40++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+
+                blend[r] = (30 * fg[r] + (100 - 30) * bg[r]) / 100;
+                blend[g] = (30 * fg[g] + (100 - 30) * bg[g]) / 100;
+                blend[b] = (30 * fg[b] + (100 - 30) * bg[b]) / 100;
+                *tp30++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+
+                blend[r] = (20 * fg[r] + (100 - 20) * bg[r]) / 100;
+                blend[g] = (20 * fg[g] + (100 - 20) * bg[g]) / 100;
+                blend[b] = (20 * fg[b] + (100 - 20) * bg[b]) / 100;
+                *tp20++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
+
+                blend[r] = (10 * fg[r] + (100 - 10) * bg[r]) / 100;
+                blend[g] = (10 * fg[g] + (100 - 10) * bg[g]) / 100;
+                blend[b] = (10 * fg[b] + (100 - 10) * bg[b]) / 100;
+                *tp10++ = V_GetPaletteIndex(playpal, blend[r], blend[g], blend[b]);
             }
         }
     }

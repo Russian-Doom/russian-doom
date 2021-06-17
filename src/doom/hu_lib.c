@@ -91,6 +91,7 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
     extern byte *messages_secret_color_set;
     extern byte *messages_system_color_set;
     extern byte *messages_chat_color_set;
+    extern int message_counter;
 
     // draw the new stuff
     x = l->x;
@@ -118,7 +119,27 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
             }
 
             // [JN] Draw message.
-            V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f[c - l->sc]);
+            // TODO - make optional
+            if (/*message_fade && */ !vanillaparm && type != msg_uncolored)
+            {
+                if (message_counter >= 10)
+                V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f[c - l->sc]);
+                else
+                V_DrawFadePatch(x + (wide_4_3 ? wide_delta : 0), 
+                                l->y, l->f[c - l->sc], message_counter >= 9 ? transtable90 :
+                                                       message_counter >= 8 ? transtable80 :
+                                                       message_counter >= 7 ? transtable70 :
+                                                       message_counter >= 6 ? transtable60 :
+                                                       message_counter >= 5 ? transtable50 :
+                                                       message_counter >= 4 ? transtable40 :
+                                                       message_counter >= 3 ? transtable30 :
+                                                       message_counter >= 2 ? transtable20 :
+                                                                              transtable10);
+            }
+            else
+            {
+                V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f[c - l->sc]);
+            }
 
             // [JN] Clear color translation.
             dp_translation = NULL;

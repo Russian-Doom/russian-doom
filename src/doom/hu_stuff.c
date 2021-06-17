@@ -156,7 +156,7 @@ static hu_stext_t w_message;        // [JN] Item pickup
 static hu_stext_t w_message_secret; // [JN] Revealed secret
 static hu_stext_t w_message_system; // [JN] System messages
 static hu_stext_t w_message_chat;   // [JN] Netgame chat
-static int message_counter;
+int message_counter;                // [JN] Un-static for fading
 
 // [JN] Local time widget
 static boolean  message_on_time;
