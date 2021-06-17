@@ -120,7 +120,7 @@ int hud_detaillevel = 0;    // [JN] Also blocky mode, 0 = high, 1 = normal
 // Display: Messages
 int showMessages = 1;
 int messages_timeout = 4;
-int message_fade = 1;
+int message_fade = 0;
 int draw_shadowed_text = 1;
 int local_time = 0;
 int message_pickup_color = 0;
