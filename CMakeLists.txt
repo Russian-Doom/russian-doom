@@ -16,6 +16,17 @@ set(PACKAGE_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
 set(PACKAGE_COPYRIGHT "Copyright (C) 2016-2021")
 set(PACKAGE_LICENSE "GNU General Public License, version 2")
 
+# Check architecture
+if(WIN32)
+    if("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw64.*)|(.*clang64.*)" OR
+    (DEFINED MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "x64"))
+        set(ARCH x64)
+    elseif("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw32.*)|(.*clang32.*)" OR
+    (DEFINED MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
+        set(ARCH x86)
+    endif()
+endif()
+
 # Any settings that should apply to all targets in this directory and all
 # subdirectories should go here.  Use judiciously.
 if(MSVC)

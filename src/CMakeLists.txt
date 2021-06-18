@@ -10,21 +10,16 @@ foreach(TARGET doom heretic hexen strife setup)
         i_main.c
         i_system.c           i_system.h
         m_argv.c             m_argv.h
-        m_misc.c             m_misc.h
-    )
+        m_misc.c             m_misc.h)
 endforeach()
 
 # Add resources for windows
 if(WIN32)
     foreach(TARGET doom heretic hexen strife)
-        target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE
-            "${CMAKE_CURRENT_BINARY_DIR}/resource.rc"
-        )
+        target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/resource.rc")
     endforeach()
 
-    target_sources("${PROGRAM_PREFIX}setup" PRIVATE
-        "${CMAKE_CURRENT_BINARY_DIR}/setup-res.rc"
-    )
+    target_sources("${PROGRAM_PREFIX}setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup-res.rc")
 endif()
 
 # Add game sources
@@ -91,8 +86,7 @@ foreach(TARGET doom heretic hexen strife)
         w_file_posix.c
         w_file_win32.c
         w_merge.c           w_merge.h
-        z_zone.c            z_zone.h
-    )
+        z_zone.c            z_zone.h)
 endforeach()
 
 # Add dehacked sources
@@ -102,8 +96,7 @@ foreach(TARGET doom heretic strife)
         deh_io.c            deh_io.h
         deh_main.c          deh_main.h
         deh_mapping.c       deh_mapping.h
-        deh_text.c
-    )
+        deh_text.c)
 endforeach()
 
 # Add sources for russian-setup:
@@ -119,57 +112,37 @@ target_sources("${PROGRAM_PREFIX}setup" PRIVATE
         net_sdl.c           net_sdl.h
         net_query.c         net_query.h
         net_structrw.c      net_structrw.h
-        z_native.c          z_zone.h
-)
+        z_native.c          z_zone.h)
 
 # Add include directories and link libraries
 foreach(TARGET doom heretic hexen strife)
-    target_include_directories("${PROGRAM_PREFIX}${TARGET}" PRIVATE
-            "${PROJECT_BINARY_DIR}"
-    )
+    target_include_directories("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
     target_link_libraries("${PROGRAM_PREFIX}${TARGET}"
         ${TARGET}
-    )
-    if(PC_SDL2_FOUND AND NOT (SDL2_MAIN_LIBRARY STREQUAL "SDL2_MAIN_LIBRARY-NOTFOUND"))
-        target_link_libraries("${PROGRAM_PREFIX}${TARGET}"
-            SDL2::SDL2main
-        )
-    endif()
-    target_link_libraries("${PROGRAM_PREFIX}${TARGET}"
+        SDL2::SDL2main
         SDL2::SDL2
         SDL2::mixer
         SDL2::net
         textscreen
         pcsound
-        opl
-    )
+        opl)
 
     if(SAMPLERATE_FOUND)
-        target_link_libraries("${PROGRAM_PREFIX}${TARGET}"
-            samplerate::samplerate
-        )
+        target_link_libraries("${PROGRAM_PREFIX}${TARGET}" samplerate::samplerate)
     endif()
     if(PNG_FOUND)
-        target_link_libraries("${PROGRAM_PREFIX}${TARGET}"
-            PNG::PNG
-        )
+        target_link_libraries("${PROGRAM_PREFIX}${TARGET}" PNG::PNG)
     endif()
 endforeach()
-target_include_directories("${PROGRAM_PREFIX}setup" PRIVATE
-        "${PROJECT_BINARY_DIR}"
-)
-if(PC_SDL2_FOUND AND NOT (SDL2_MAIN_LIBRARY STREQUAL "SDL2_MAIN_LIBRARY-NOTFOUND"))
-    target_link_libraries("${PROGRAM_PREFIX}setup"
-        SDL2::SDL2main
-    )
-endif()
+target_include_directories("${PROGRAM_PREFIX}setup"
+                           PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
 target_link_libraries("${PROGRAM_PREFIX}setup"
-    SDL2::SDL2
-    SDL2::mixer
-    SDL2::net
-    setup
-    textscreen
-)
+        SDL2::SDL2main
+        SDL2::SDL2
+        SDL2::mixer
+        SDL2::net
+        setup
+        textscreen)
 
 # MSVC link flags
 if(MSVC)
@@ -187,9 +160,7 @@ foreach(TARGET doom heretic hexen strife)
             "${PROGRAM_PREFIX}${TARGET}-setup$<TARGET_FILE_SUFFIX:${PROGRAM_PREFIX}setup>")
     list(APPEND GAME_SETUP_FILES "${PROGRAM_PREFIX}${TARGET}-setup$<TARGET_FILE_SUFFIX:${PROGRAM_PREFIX}setup>")
 endforeach()
-set_target_properties(${PROGRAM_PREFIX}setup PROPERTIES
-    ADDITIONAL_CLEAN_FILES "${GAME_SETUP_FILES}"
-)
+set_target_properties(${PROGRAM_PREFIX}setup PROPERTIES ADDITIONAL_CLEAN_FILES "${GAME_SETUP_FILES}")
 
 # Copying gus patches
 file(GLOB GUS_PATCHES_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/base/gus_patches/*")
@@ -226,6 +197,26 @@ foreach(TARGET doom heretic hexen strife)
     add_dependencies("${PROGRAM_PREFIX}${TARGET}" "${TARGET}-wads")
 endforeach()
 
+# Windows DLLs
+if(WIN32)
+    file(GLOB WIN_LIBS "${PROJECT_SOURCE_DIR}/win_libs/${ARCH}/*.dll")
+
+    foreach(SRC_FILE_PATH ${WIN_LIBS})
+        get_filename_component(DEST_FILE_NAME "${SRC_FILE_PATH}" NAME)
+        add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE_NAME}"
+                MAIN_DEPENDENCY "${SRC_FILE_PATH}"
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SRC_FILE_PATH}"
+                "${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE_NAME}"
+                COMMENT "Copying ${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE_NAME}")
+        list(APPEND WIN_LIBS_DEST_FILES "${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE_NAME}")
+    endforeach()
+    add_custom_target(win-libs DEPENDS ${WIN_LIBS_DEST_FILES})
+
+    foreach(TARGET doom heretic hexen strife setup)
+        add_dependencies("${PROGRAM_PREFIX}${TARGET}" win-libs)
+    endforeach()
+endif()
+
 # Install rules
 # strife is not production ready
 foreach(TARGET doom heretic hexen)
@@ -249,9 +240,9 @@ if(WIN32)
             DESTINATION .
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
     )
-#   TODO install dll libs on windows
-#   install(FILES <DLL LIBS>
-#           DESTINATION .)
+    install(FILES ${WIN_LIBS}
+            DESTINATION .
+    )
 endif()
 
 # Source groups
