@@ -154,7 +154,7 @@ void R_DrawColumn(void)
 
 void R_DrawSkyColumn(void)
 {
-    int   count = dc_yh - dc_yl + 2;
+    int   count = dc_yh - dc_yl + 1;
     int   frac  = skytexturemid + (dc_yl - centery) * skyiscale;
     int   heightmask = skytextureheight-1; 
     byte *dest  = ylookup[dc_yl] + columnofs[flipwidth[dc_x]];
@@ -187,7 +187,7 @@ void R_DrawSkyColumn(void)
 
 void R_DrawSkyColumnLow(void)
 {
-    int   count = dc_yh - dc_yl + 2;
+    int   count = dc_yh - dc_yl + 1;
     int   frac  = skytexturemid + (dc_yl - centery) * skyiscale_low;
     int   heightmask = skytextureheight-1; 
     byte *dest  = ylookup[(dc_yl << hires)] + columnofs[flipwidth[(dc_x << hires)]];
