@@ -263,6 +263,10 @@ void HUlib_drawSText(hu_stext_t* s, msgtype_t type)
     {
         s->l->x = (ORIGWIDTH - M_StringWidth(s->l->l) + wide_4_3) / 2;
     }
+    else
+    {
+        s->l->x = 0;
+    }
 
     // draw everything
     for (i=0 ; i<s->h ; i++)
