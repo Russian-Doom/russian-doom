@@ -119,6 +119,7 @@ int hud_detaillevel = 0;    // [JN] Also blocky mode, 0 = high, 1 = normal
 
 // Display: Messages
 int showMessages = 1;
+int messages_alignment = 0;
 int messages_timeout = 4;
 int message_fade = 0;
 int draw_shadowed_text = 1;
@@ -649,6 +650,7 @@ void D_BindVariables(void)
 
     // Messages
     M_BindIntVariable("show_messages",          &showMessages);
+    M_BindIntVariable("messages_alignment",     &messages_alignment);
     M_BindIntVariable("messages_timeout",       &messages_timeout);
     M_BindIntVariable("message_fade",           &message_fade);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);

@@ -35,6 +35,7 @@
 
 extern boolean	automapactive;	// in AM_map.c
 extern GameMission_t gamemission; // [JN] For uncolored Jaguar messages
+extern int M_StringWidth(char *string); // [JN] For centered messages (HUlib_drawSText)
 
 
 void HUlib_clearTextLine(hu_textline_t* t)
@@ -250,9 +251,18 @@ void HUlib_addMessageToSText (hu_stext_t* s, char* prefix, char* msg)
 void HUlib_drawSText(hu_stext_t* s, msgtype_t type)
 {
     int i;
+    const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? 0 : wide_delta*2;
 
     if (!*s->on)
     return; // if not on, don't draw
+
+    // [JN] Optionally centered messages.
+    // Center only selective types, i.e. not FPS / local time widgets.
+    if (messages_alignment && !vanillaparm
+    && (type == msg_pickup || type == msg_secret || type == msg_system || type == msg_chat))
+    {
+        s->l->x = (ORIGWIDTH - M_StringWidth(s->l->l) + wide_4_3) / 2;
+    }
 
     // draw everything
     for (i=0 ; i<s->h ; i++)
