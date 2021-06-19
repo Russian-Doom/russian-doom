@@ -64,6 +64,7 @@ extern int hud_detaillevel;
 extern int showMessages;
 extern int message_fade;
 extern int draw_shadowed_text;
+extern int messages_alignment;
 extern int messages_timeout;
 extern int message_pickup_color;
 extern int message_secret_color;

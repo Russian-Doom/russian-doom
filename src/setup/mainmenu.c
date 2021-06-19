@@ -151,6 +151,7 @@ static void SensibleDefaults(void)
     fake_contrast = 0;
     translucency = 1;
     improved_fuzz = 2;
+    messages_alignment = 0;
     messages_timeout = 4;
     message_pickup_color = 0;
     message_secret_color = 7;
@@ -161,7 +162,6 @@ static void SensibleDefaults(void)
     invul_sky = 1;
     linear_sky = 1;
     flip_weapons = 0;
-    message_fade = 1;
     draw_shadowed_text = 1;
 
     // Gameplay: Status Bar

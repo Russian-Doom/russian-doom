@@ -120,6 +120,7 @@ int hud_detaillevel = 0;    // Blocky mode, 0 = high, 1 = normal
 
 // Messages and Texts
 int show_messages = 1;
+int messages_alignment = 0;
 int messages_timeout = 4;
 int message_fade = 1;
 int draw_shadowed_text = 1;
@@ -264,6 +265,7 @@ void D_ProcessEvents(void)
 void DrawMessage(void)
 {
     player_t *player = &players[consoleplayer];
+    int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
 
     // [JN] Activate message counter in non-level or paused states.
     // Make messages go away in menu, finale and help screens.
@@ -301,46 +303,44 @@ void DrawMessage(void)
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
-            MN_DrTextAFade(player->message, 
-                           160 - MN_TextAWidth(player->message) /
-                           2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
-                                              player->messageTics >= 8 ? transtable80 :
-                                              player->messageTics >= 7 ? transtable70 :
-                                              player->messageTics >= 6 ? transtable60 :
-                                              player->messageTics >= 5 ? transtable50 :
-                                              player->messageTics >= 4 ? transtable40 :
-                                              player->messageTics >= 3 ? transtable30 :
-                                              player->messageTics >= 2 ? transtable20 :
-                                                                         transtable10);
+            MN_DrTextAFade(player->message, messages_alignment == 0 ?
+                           160 - MN_TextAWidth(player->message) / 2 + wide_delta : 4 + wide_4_3, 1,
+                           player->messageTics >= 9 ? transtable90 :
+                           player->messageTics >= 8 ? transtable80 :
+                           player->messageTics >= 7 ? transtable70 :
+                           player->messageTics >= 6 ? transtable60 :
+                           player->messageTics >= 5 ? transtable50 :
+                           player->messageTics >= 4 ? transtable40 :
+                           player->messageTics >= 3 ? transtable30 :
+                           player->messageTics >= 2 ? transtable20 :
+                                                      transtable10);
         }
         else
         {
-            MN_DrTextA(player->message, 
-                       160 - MN_TextAWidth(player->message) /
-                       2 + wide_delta, 1);
+            MN_DrTextA(player->message, messages_alignment == 0 ?
+                       160 - MN_TextAWidth(player->message) / 2 + wide_delta : 4 + wide_4_3, 1);
         }
     }
     else
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
-            MN_DrTextSmallRUSFade(player->message, 
-                                  160 - MN_DrTextSmallRUSWidth(player->message) /
-                                  2 + wide_delta, 1, player->messageTics >= 9 ? transtable90 :
-                                                     player->messageTics >= 8 ? transtable80 :
-                                                     player->messageTics >= 7 ? transtable70 :
-                                                     player->messageTics >= 6 ? transtable60 :
-                                                     player->messageTics >= 5 ? transtable50 :
-                                                     player->messageTics >= 4 ? transtable40 :
-                                                     player->messageTics >= 3 ? transtable30 :
-                                                     player->messageTics >= 2 ? transtable20 :
-                                                                                transtable10);
+            MN_DrTextSmallRUSFade(player->message, messages_alignment == 0 ?
+                                  160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta : 4 + wide_4_3, 1, 
+                                  player->messageTics >= 9 ? transtable90 :
+                                  player->messageTics >= 8 ? transtable80 :
+                                  player->messageTics >= 7 ? transtable70 :
+                                  player->messageTics >= 6 ? transtable60 :
+                                  player->messageTics >= 5 ? transtable50 :
+                                  player->messageTics >= 4 ? transtable40 :
+                                  player->messageTics >= 3 ? transtable30 :
+                                  player->messageTics >= 2 ? transtable20 :
+                                                             transtable10);
         }
         else
         {
-            MN_DrTextSmallRUS(player->message, 
-                              160 - MN_DrTextSmallRUSWidth(player->message) /
-                              2 + wide_delta, 1);
+            MN_DrTextSmallRUS(player->message, messages_alignment == 0 ? 
+                              160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta : 4 + wide_4_3, 1);
         }
     }
 
@@ -1123,6 +1123,7 @@ void D_BindVariables(void)
 
     // Messages and Texts
     M_BindIntVariable("show_messages",          &show_messages);
+    M_BindIntVariable("messages_alignment",     &messages_alignment);
     M_BindIntVariable("messages_timeout",       &messages_timeout);
     M_BindIntVariable("message_fade",           &message_fade);
     M_BindIntVariable("draw_shadowed_text",     &draw_shadowed_text);

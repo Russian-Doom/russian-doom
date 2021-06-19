@@ -111,6 +111,7 @@ static void M_RD_Detail(intptr_t option);
 // Messages and Texts
 static void DrawMessagesMenu(void);
 static void M_RD_Messages(intptr_t option);
+static void M_RD_MessagesAlignment(intptr_t option);
 static void M_RD_MessagesTimeout(intptr_t option);
 static void M_RD_MessagesFade(intptr_t option);
 static void M_RD_ShadowedText(intptr_t option);
@@ -507,7 +508,8 @@ static Menu_t DisplayMenu = {
 
 static MenuItem_t MessagesItems[] = {
     {ITT_LRFUNC,  "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,                0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
-    {ITT_LRFUNC,  "MESSAGE TIMEOUT",    "NFQVFEN JNJ,HF;TYBZ",       M_RD_MessagesTimeout,         0}, // ТАЙМАУТ ОТОБРАЖЕНИЯ
+    {ITT_LRFUNC,  "MESSAGES ALIGNMENT:", "DSHFDYBDFYBT:",            M_RD_MessagesAlignment,       0}, // ВЫРАВНИВАНИЕ
+    {ITT_LRFUNC,  "MESSAGE TIMEOUT",     "NFQVFEN JNJ,HF;TYBZ",      M_RD_MessagesTimeout,         0}, // ТАЙМАУТ ОТОБРАЖЕНИЯ
     {ITT_EMPTY,   NULL,                  NULL,                       NULL,                         0},
     {ITT_LRFUNC,  "FADING EFFECT:",      "GKFDYJT BCXTPYJDTYBT:",    M_RD_MessagesFade,            0}, // ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ
     {ITT_LRFUNC,  "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,            0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
@@ -523,7 +525,7 @@ static MenuItem_t MessagesItems[] = {
 static Menu_t MessagesMenu = {
     36, 42,
     36,
-    12, MessagesItems,
+    13, MessagesItems,
     DrawMessagesMenu,
     &DisplayMenu,
     0
@@ -2349,13 +2351,16 @@ static void DrawMessagesMenu(void)
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("GENERAL"), 36 + wide_delta, 32);
-        MN_DrTextSmallENG(DEH_String("MISC."), 36 + wide_delta, 92);
-        MN_DrTextSmallENG(DEH_String("COLORS"), 36 + wide_delta, 112);
+        MN_DrTextSmallENG(DEH_String("MISC."), 36 + wide_delta, 102);
+        MN_DrTextSmallENG(DEH_String("COLORS"), 36 + wide_delta, 122);
         dp_translation = NULL;
 
         // Messages
         MN_DrTextSmallENG(DEH_String(show_messages ? "ON" : "OFF"),
                                      108 + wide_delta, 42);
+
+        // Messages alignment
+        MN_DrTextSmallENG(messages_alignment ? "LEFT" : "CENTERED", 177 + wide_delta, 52);
 
         // Таймаут отображения (текст)
         dp_translation = cr[CR_WHITE2GRAY_HERETIC];
@@ -2368,15 +2373,15 @@ static void DrawMessagesMenu(void)
                           messages_timeout == 7 ? "7 SECONDS" :
                           messages_timeout == 8 ? "8 SECONDS" :
                           messages_timeout == 9 ? "9 SECONDS" :
-                                                  "10 SECONDS", 136 + wide_delta, 63);
+                                                  "10 SECONDS", 136 + wide_delta, 73);
 
         // Fading effect 
         MN_DrTextSmallENG(DEH_String(message_fade ? "ON" : "OFF"),
-                                     140 + wide_delta, 72);
+                                     140 + wide_delta, 82);
 
         // Text casts shadows
         MN_DrTextSmallENG(DEH_String(draw_shadowed_text ? "ON" : "OFF"),
-                                     179 + wide_delta, 82);
+                                     179 + wide_delta, 92);
         dp_translation = NULL;
 
         // Local time
@@ -2385,26 +2390,26 @@ static void DrawMessagesMenu(void)
                           local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                           local_time == 3 ? "24-HOUR (HH:MM)" :
                           local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF"),
-                          110 + wide_delta, 102);
+                          110 + wide_delta, 112);
 
         // Item pickup
         dp_translation = M_RD_ColorTranslation(message_pickup_color);
-        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_pickup_color)), 120 + wide_delta, 122);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_pickup_color)), 120 + wide_delta, 132);
         dp_translation = NULL;
 
         // Revealed secret
         dp_translation = M_RD_ColorTranslation(message_secret_color);
-        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_secret_color)), 157 + wide_delta, 132);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_secret_color)), 157 + wide_delta, 142);
         dp_translation = NULL;
 
         // System message
         dp_translation = M_RD_ColorTranslation(message_system_color);
-        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_system_color)), 152 + wide_delta, 142);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_system_color)), 152 + wide_delta, 152);
         dp_translation = NULL;
 
         // Netgame chat
         dp_translation = M_RD_ColorTranslation(message_chat_color);
-        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_chat_color)), 135 + wide_delta, 152);
+        MN_DrTextSmallENG(DEH_String(M_RD_ColorName(message_chat_color)), 135 + wide_delta, 162);
         dp_translation = NULL;
     }
     else
@@ -2420,13 +2425,16 @@ static void DrawMessagesMenu(void)
         //
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("JCYJDYJT"), 36 + wide_delta, 32); // ОСНОВНОЕ
-        MN_DrTextSmallRUS(DEH_String("HFPYJT"), 36 + wide_delta, 92);   // РАЗНОЕ
-        MN_DrTextSmallRUS(DEH_String("WDTNF"), 36 + wide_delta, 112);   // ЦВЕТА
+        MN_DrTextSmallRUS(DEH_String("HFPYJT"), 36 + wide_delta, 102);  // РАЗНОЕ
+        MN_DrTextSmallRUS(DEH_String("WDTNF"), 36 + wide_delta, 122);   // ЦВЕТА
         dp_translation = NULL;
 
         // Отображение сообщений
         MN_DrTextSmallRUS(DEH_String(show_messages ? "DRK" : "DSRK"),
                                      208 + wide_delta, 42);
+
+        // Выравнивание сообщений
+        MN_DrTextSmallRUS(messages_alignment ? "GJ KTDJVE RHF." : "GJ WTYNHE", 138 + wide_delta, 52);
 
         // Таймаут отображения (текст)
         dp_translation = cr[CR_WHITE2GRAY_HERETIC];
@@ -2439,16 +2447,16 @@ static void DrawMessagesMenu(void)
                           messages_timeout == 7 ? "7 CTREYL"  :
                           messages_timeout == 8 ? "8 CTREYL"  :
                           messages_timeout == 9 ? "9 CTREYL"  :
-                                                  "10 CTREYL", 136 + wide_delta, 63);
+                                                  "10 CTREYL", 136 + wide_delta, 73);
         dp_translation = NULL;
 
         // Плавное исчезновение
         MN_DrTextSmallRUS(DEH_String(message_fade ? "DRK" : "DSRK"),
-                                     193 + wide_delta, 72);
+                                     193 + wide_delta, 82);
 
         // Тексты отбрасывают тень
         MN_DrTextSmallRUS(DEH_String(draw_shadowed_text ? "DRK" : "DSRK"),
-                                     220 + wide_delta, 82);
+                                     220 + wide_delta, 92);
 
         // Системное время
         MN_DrTextSmallRUS(DEH_String(
@@ -2456,31 +2464,31 @@ static void DrawMessagesMenu(void)
                           local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                           local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                           local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK"),
-                          157 + wide_delta, 102);
+                          157 + wide_delta, 112);
 
         // Получение предметов
         dp_translation = M_RD_ColorTranslation(message_pickup_color);
-        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_pickup_color)), 187 + wide_delta, 122);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_pickup_color)), 187 + wide_delta, 132);
         dp_translation = NULL;
 
         // Обнаружение тайников
         dp_translation = M_RD_ColorTranslation(message_secret_color);
-        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_secret_color)), 195 + wide_delta, 132);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_secret_color)), 195 + wide_delta, 142);
         dp_translation = NULL;
 
         // Системные сообщения
         dp_translation = M_RD_ColorTranslation(message_system_color);
-        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_system_color)), 191 + wide_delta, 142);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_system_color)), 191 + wide_delta, 152);
         dp_translation = NULL;
 
         // Чат сетевой игры
         dp_translation = M_RD_ColorTranslation(message_chat_color);
-        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_chat_color)), 162 + wide_delta, 152);
+        MN_DrTextSmallRUS(DEH_String(M_RD_ColorName(message_chat_color)), 162 + wide_delta, 162);
         dp_translation = NULL;
     }
 
     // Messages timeout
-    DrawSliderSmall(&DisplayMenu, 2, 10, messages_timeout - 1);
+    DrawSliderSmall(&DisplayMenu, 3, 10, messages_timeout - 1);
 }
 
 static void M_RD_LocalTime(intptr_t option)
@@ -2522,6 +2530,11 @@ static void M_RD_Messages(intptr_t option)
     }
 
     S_StartSound(NULL, sfx_chat);
+}
+
+static void M_RD_MessagesAlignment(intptr_t option)
+{
+    messages_alignment ^= 1;
 }
 
 static void M_RD_MessagesTimeout(intptr_t option)
@@ -5266,6 +5279,7 @@ void M_RD_DoResetSettings(void)
     level_brightness    = 0;
     local_time          = 0;
     show_messages       = 1;
+    messages_alignment  = 0;
     messages_timeout    = 4;
     message_fade        = 1;
     draw_shadowed_text  = 1;
