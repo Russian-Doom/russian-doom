@@ -167,6 +167,7 @@ int floating_powerups = 1;
 
 // Gameplay: Audible
 int z_axis_sfx = 0;
+int noise_alert_sfx = 0;
 
 // Gameplay: Tactical
 int secret_notification = 1;
@@ -1173,6 +1174,7 @@ void D_BindVariables(void)
 
     // Gameplay: Audible
     M_BindIntVariable("z_axis_sfx",             &z_axis_sfx);
+    M_BindIntVariable("noise_alert_sfx",        &noise_alert_sfx);
 
     // Gameplay: Tactical
     M_BindIntVariable("secret_notification",    &secret_notification);

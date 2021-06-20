@@ -680,6 +680,15 @@ void A_Look(mobj_t * actor)
             S_StartSound(actor, sound);
         }
     }
+
+    // [JN] Original id Software's idea: 
+    // If a monster yells at a player, it will 
+    // alert other monsters to the player.
+    if (singleplayer && !vanillaparm && noise_alert_sfx)
+    {
+        P_NoiseAlert (actor->target, actor);
+    }
+
     P_SetMobjState(actor, actor->info->seestate);
 }
 
