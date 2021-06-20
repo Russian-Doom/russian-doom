@@ -230,7 +230,7 @@ static byte antialias_overlay[NUMALIAS][8] = {
     {  0,   0,   1,   1,   2,   2,   3,   4}    // BLACK
 };
 
-static byte *maplump;           // pointer to the raw data for the automap background.
+static patch_t *maplump;        // [JN] Pointer to the GFX patch for the automap background.
 static short mapystart = 0;     // y-value for the start of the map bitmap...used in the paralax stuff.
 static short mapxstart = 0;     //x-value for the bitmap.
 
@@ -454,7 +454,8 @@ void AM_initVariables(void)
 
 void AM_loadPics(void)
 {
-    maplump = W_CacheLumpName(DEH_String("AUTOPAGE"), PU_STATIC);
+    // [JN] Parallax problem: AUTOPAGE changed to unreplacable MAPEPAGE.
+    maplump = W_CacheLumpName(DEH_String("MAPEPAGE"), PU_STATIC);
 }
 
 // should be called at the start of every level
@@ -803,13 +804,8 @@ void AM_Ticker(void)
 
 void AM_clearFB(int color)
 {
-    int i, j;
-
     int dmapx;
     int dmapy;
-    int x, y;
-    byte *src = W_CacheLumpName(DEH_String("AUTOPAGE"), PU_CACHE);
-    byte *dest = I_VideoBuffer;
 
     if (automap_follow)
     {
@@ -846,41 +842,11 @@ void AM_clearFB(int color)
             mapystart += (finit_height >> hires);
     }
 
-    if (aspect_ratio == 0 || aspect_ratio == 1)
-    {
-        //blit the automap background to the screen.
-        j = (mapystart & ~hires) * (SCREENWIDTH >> hires);
-        for (i = 0; i < finit_height; i++)
-        {
-            memcpy(I_VideoBuffer + i * SCREENWIDTH, maplump + j + mapxstart,
-                   SCREENWIDTH - mapxstart);
-            memcpy(I_VideoBuffer + i * SCREENWIDTH + SCREENWIDTH - mapxstart,
-                   maplump + j, mapxstart);
-            j += SCREENWIDTH;
-            if (j >= (finit_height >> hires) * (SCREENWIDTH >> hires))
-                j = 0;
-        }
-    }
-    else
-    {
-        // [JN] Use static automap background for automap
-        // because of parallax problem.
-        for (y = 0 ; y < SCREENHEIGHT - (aspect_ratio == 2 ? 28 :
-                                         aspect_ratio == 3 ? 21 :
-                                         aspect_ratio == 4 ? 65 : 0) ; y++)
-        {
-            for (x = 0; x < screenwidth / 320; x++)
-            {
-                memcpy(dest, src + ((y & 127) << 6), 320);
-                dest += 320;
-            }
-            if (screenwidth & 127)
-            {
-                memcpy(dest, src + ((y & 127) << 6), screenwidth & 127);
-                dest += (screenwidth & 127);
-            }
-        }
-    }
+    // [JN] Draw automap background as tiled GFX patches.
+    V_DrawPatchUnscaled(0, 0, maplump);
+    V_DrawPatchUnscaled(560, 0, maplump);
+    V_DrawPatchUnscaled(0, 200, maplump);
+    V_DrawPatchUnscaled(560, 200, maplump); 
 }
 
 // Based on Cohen-Sutherland clipping algorithm but with a slightly
