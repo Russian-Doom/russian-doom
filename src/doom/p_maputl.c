@@ -466,11 +466,11 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
         {
             for (mobj = blocklinks[(y-1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
             {
-                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
-                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
-
-                if (xx == x && yy == y && !func(mobj))
-                return false;
+                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (xx == x && yy == y)
+                    if (!func( mobj ))
+                        return false;
             }
         }
         // (0, -1)
@@ -478,10 +478,10 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
         {
             for (mobj = blocklinks[(y-1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
             {
-                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
-
-                if (yy == y && !func(mobj))
-                return false;
+                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (yy == y)
+                    if (!func( mobj ))
+                        return false;
             }
         }
         // (1, -1)
@@ -489,11 +489,11 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
         {
             for (mobj = blocklinks[(y-1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
             {
-                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
-                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
-
-                if (xx == x && yy == y && !func(mobj))
-                return false;
+                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (xx == x && yy == y)
+                    if (!func( mobj ))
+                        return false;
             }
         }
         // (1, 0)
@@ -501,10 +501,10 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
         {
             for (mobj = blocklinks[y*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
             {
-                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
-
-                if (xx == x && !func(mobj))
-                return false;
+                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                if (xx == x)
+                    if (!func( mobj ))
+                        return false;
             }
         }
         // (1, 1)
@@ -512,11 +512,11 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
         {
             for (mobj = blocklinks[(y+1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
             {
-                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
-                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
-
-                if (xx == x && yy == y && !func(mobj))
-                return false;
+                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (xx == x && yy == y)
+                    if (!func( mobj ))
+                        return false;
             }
         }
         // (0, 1)
@@ -524,10 +524,10 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
         {
             for (mobj = blocklinks[(y+1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
             {
-                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
-
-                if (yy == y && !func(mobj))
-                return false;
+                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (yy == y)
+                    if (!func( mobj ))
+                        return false;
             }
         }
         // (-1, 1)
@@ -535,11 +535,11 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
         {
             for (mobj = blocklinks[(y+1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
             {
-                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
-                const int yy = (mobj->y + mobj->radius - bmaporgy) >> MAPBLOCKSHIFT;
-
-                if (xx == x && yy == y && !func(mobj))
-                return false;
+                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (xx == x && yy == y)
+                    if (!func( mobj ))
+                        return false;
             }
         }
         // (-1, 0)
@@ -547,10 +547,10 @@ boolean P_BlockThingsIterator (int x, int y, boolean (*func)(mobj_t*))
         {
             for (mobj = blocklinks[y*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
             {
-                const int xx = (mobj->x + mobj->radius - bmaporgx) >> MAPBLOCKSHIFT;
-
-                if (xx == x && !func(mobj))
-                return false;
+                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                if (xx == x)
+                    if (!func( mobj ))
+                        return false;
             }
         }
     }
