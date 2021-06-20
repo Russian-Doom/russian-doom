@@ -21,6 +21,8 @@
 #include "doomdef.h"
 #include "m_bbox.h"
 #include "p_local.h"
+#include "crispy.h"
+#include "jn.h"
 
 
 /*
@@ -430,6 +432,114 @@ boolean P_BlockThingsIterator (int x, int y, boolean(*func) (mobj_t *))
     for (mobj = blocklinks[y * bmapwidth + x]; mobj; mobj = mobj->bnext)
         if (!func(mobj))
             return false;
+
+    // [JN] Do not apply following BLOCKMAP fix for explosion radius damage.
+    // Otherwise, explosion damage will be multiplied on ammount of BLOCKMAP 
+    // blocks object placed in.
+    if (func == PIT_RadiusAttack)
+    {
+        return true;
+    }
+
+    // [JN] Blockmap bug fix - add other mobjs from surrounding blocks that overlap this one.
+    // The fix is written by Terry Hearst, thank you very much!
+    // Fixes: http://doom2.net/doom2/research/things.html
+    if (singleplayer && !vanillaparm)
+    {
+        // Unwrapped for least number of bounding box checks
+        // (-1, -1)
+        if (x > 0 && y > 0)
+        {
+            for (mobj = blocklinks[(y-1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (xx == x && yy == y)
+                    if (!func( mobj ))
+                        return false;
+            }
+        }
+        // (0, -1)
+        if (y > 0)
+        {
+            for (mobj = blocklinks[(y-1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
+            {
+                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (yy == y)
+                    if (!func( mobj ))
+                        return false;
+            }
+        }
+        // (1, -1)
+        if (x < (bmapwidth-1) && y > 0)
+        {
+            for (mobj = blocklinks[(y-1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y + mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (xx == x && yy == y)
+                    if (!func( mobj ))
+                        return false;
+            }
+        }
+        // (1, 0)
+        if (x < (bmapwidth-1))
+        {
+            for (mobj = blocklinks[y*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                if (xx == x)
+                    if (!func( mobj ))
+                        return false;
+            }
+        }
+        // (1, 1)
+        if (x < (bmapwidth-1) && y < (bmapheight-1))
+        {
+            for (mobj = blocklinks[(y+1)*bmapwidth+(x+1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x - mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (xx == x && yy == y)
+                    if (!func( mobj ))
+                        return false;
+            }
+        }
+        // (0, 1)
+        if (y < (bmapheight-1))
+        {
+            for (mobj = blocklinks[(y+1)*bmapwidth+x] ; mobj ; mobj = mobj->bnext)
+            {
+                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (yy == y)
+                    if (!func( mobj ))
+                        return false;
+            }
+        }
+        // (-1, 1)
+        if (x > 0 && y < (bmapheight-1))
+        {
+            for (mobj = blocklinks[(y+1)*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                int yy = (mobj->y - mobj->radius - bmaporgy)>>MAPBLOCKSHIFT;
+                if (xx == x && yy == y)
+                    if (!func( mobj ))
+                        return false;
+            }
+        }
+        // (-1, 0)
+        if (x > 0)
+        {
+            for (mobj = blocklinks[y*bmapwidth+(x-1)] ; mobj ; mobj = mobj->bnext)
+            {
+                int xx = (mobj->x + mobj->radius - bmaporgx)>>MAPBLOCKSHIFT;
+                if (xx == x)
+                    if (!func( mobj ))
+                        return false;
+            }
+        }
+    }
 
     return true;
 }
