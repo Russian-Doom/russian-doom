@@ -831,7 +831,11 @@ void R_ProjectSprite (mobj_t *thing)
 
             // Yellow only
             if (thing->type == MT_AMGWNDWIMPY   // Wand Crystal
-            ||  thing->type == MT_AMGWNDHEFTY)  // Crystal Geode
+            ||  thing->type == MT_AMGWNDHEFTY   // Crystal Geode
+            ||  thing->state - states == S_IMP_MEATK2   // Gargoyle melee attack
+            ||  thing->state - states == S_IMP_MEATK3
+            ||  thing->state - states == S_IMP_MSATK2_1 // Gargoyle missle attack
+            ||  thing->state - states == S_IMP_MSATK2_2)
             {
                 vis->colormap = fullbrights_yellowonly_dim[index];
             }
