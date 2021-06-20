@@ -787,8 +787,7 @@ void R_ProjectSprite (mobj_t *thing)
             ||  thing->state - states == S_CLINK_DIE3
             ||  thing->state - states == S_CLINK_DIE4
             ||  thing->state - states == S_CLINK_DIE5
-            ||  thing->state - states == S_CLINK_DIE6
-            ||  thing->state - states == S_CLINK_DIE7)
+            ||  thing->state - states == S_CLINK_DIE6)
             {
                 vis->colormap = fullbrights_flame[index];
             }
