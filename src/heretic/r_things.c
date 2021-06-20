@@ -782,7 +782,13 @@ void R_ProjectSprite (mobj_t *thing)
             ||  thing->type == MT_SERPTORCH    // Serpent Torch
             ||  thing->type == MT_MISC6        // Fire Brazier
             ||  thing->type == MT_MISC12       // Volcano
-            ||  thing->info->deathstate == S_CLINK_DIE1) // Sabreclaw's death sequence
+            ||  thing->state - states == S_CLINK_DIE1 // Sabreclaw's death sequence
+            ||  thing->state - states == S_CLINK_DIE2
+            ||  thing->state - states == S_CLINK_DIE3
+            ||  thing->state - states == S_CLINK_DIE4
+            ||  thing->state - states == S_CLINK_DIE5
+            ||  thing->state - states == S_CLINK_DIE6
+            ||  thing->state - states == S_CLINK_DIE7)
             {
                 vis->colormap = fullbrights_flame[index];
             }
