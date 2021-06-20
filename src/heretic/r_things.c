@@ -795,8 +795,18 @@ void R_ProjectSprite (mobj_t *thing)
             // Green only (diminished)
             if (thing->type == MT_MISC15        // Etherial Crossbow
             ||  thing->type == MT_AMCBOWWIMPY   // Etherial Arrows
-            ||  thing->type == MT_KNIGHT        // Undead Warrior
-            ||  thing->type == MT_KNIGHTGHOST)  // Undead Warrior Ghost
+            ||  thing->state - states == S_KNIGHT_ATK1  // Undead Warrior's attacking and death sequence
+            ||  thing->state - states == S_KNIGHT_ATK2
+            ||  thing->state - states == S_KNIGHT_ATK3
+            ||  thing->state - states == S_KNIGHT_ATK4
+            ||  thing->state - states == S_KNIGHT_ATK5
+            ||  thing->state - states == S_KNIGHT_ATK6
+            ||  thing->state - states == S_KNIGHT_DIE1
+            ||  thing->state - states == S_KNIGHT_DIE2
+            ||  thing->state - states == S_KNIGHT_DIE3
+            ||  thing->state - states == S_KNIGHT_DIE4
+            ||  thing->state - states == S_KNIGHT_DIE5
+            ||  thing->state - states == S_KNIGHT_DIE6)
             {
                 vis->colormap = fullbrights_greenonly_dim[index];
             }
