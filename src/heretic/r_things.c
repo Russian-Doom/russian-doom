@@ -815,7 +815,9 @@ void R_ProjectSprite (mobj_t *thing)
             // Red only (diminished)
             if (thing->type == MT_WSKULLROD     // Hellstaff
             ||  thing->type == MT_WPHOENIXROD   // Phoenix Rod
-            ||  thing->type == MT_ITEMSHIELD2)  // Enchanted Shield
+            ||  thing->type == MT_ITEMSHIELD2   // Enchanted Shield
+            ||  thing->state - states == S_BEAST_ATK1 // Weredragon's attacking frames
+            ||  thing->state - states == S_BEAST_ATK2)
             {
                 vis->colormap = fullbrights_redonly_dim[index];
             }
