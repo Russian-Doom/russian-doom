@@ -3931,7 +3931,7 @@ static void DrawGameplay1Menu(void)
         // Амплитуда левитации предметов
         dp_translation = floating_powerups ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(floating_powerups == 1 ? "CNFYLFHNYFZ" :
-                                     floating_powerups == 2 ? "EGJKJDBYTYFZ" : "DSRK"),
+                                     floating_powerups == 2 ? "EVTHTYYFZ" : "DSRK"),
                                      188 + wide_delta, 166);
         dp_translation = NULL;
     }
