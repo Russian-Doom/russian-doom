@@ -768,7 +768,8 @@ void R_ProjectSprite (mobj_t *thing)
             }
 
             // Purple only
-            if (thing->type == MT_WIZARD) // Disciple of D'Sparil
+            if (thing->type == MT_WIZARD
+            &&  thing->state - states != S_WIZARD_DIE8) // Disciple of D'Sparil
             {
                 vis->colormap = fullbrights_purpleonly[index];
             }
