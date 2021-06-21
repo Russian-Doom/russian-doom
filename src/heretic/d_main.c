@@ -1265,8 +1265,9 @@ void D_DoomMain(void)
                                                            | FOREGROUND_GREEN
                                                            | FOREGROUND_BLUE
                                                            | FOREGROUND_INTENSITY);
-    DEH_printf("                              Russian Heretic " PACKAGE_VERSION
-               "                              ");
+    for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
+    DEH_printf("Russian Heretic " PACKAGE_VERSION);
+    for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 
     // [JN] Fallback to standard console colos
@@ -1275,7 +1276,10 @@ void D_DoomMain(void)
                                                            | FOREGROUND_BLUE);
 #else
     // [JN] Just print an uncolored banner
-    I_PrintBanner(PACKAGE_STRING);    
+    for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
+    DEH_printf("Russian Heretic " PACKAGE_VERSION);
+    for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
+    DEH_printf("\n");
 #endif 
 
     // Call I_ShutdownGraphics on quit

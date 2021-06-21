@@ -482,8 +482,9 @@ void D_DoomMain(void)
                                                            | FOREGROUND_GREEN
                                                            | FOREGROUND_BLUE
                                                            | FOREGROUND_INTENSITY);
-    ST_Message("                               Russian Hexen " PACKAGE_VERSION
-               "                               ");
+    for (p = 0 ; p < 32 ; p++) ST_Message(" ");
+    ST_Message("Russian Hexen " PACKAGE_VERSION);
+    for (p = 0 ; p < 31 ; p++) ST_Message(" ");
     ST_Message("\n");
 
     // [JN] Fallback to standard console colos
@@ -492,7 +493,10 @@ void D_DoomMain(void)
                                                            | FOREGROUND_BLUE);
 #else
     // [JN] Just print an uncolored banner
-    I_PrintBanner(PACKAGE_STRING);    
+    for (p = 0 ; p < 32 ; p++) ST_Message(" ");
+    ST_Message("Russian Hexen " PACKAGE_VERSION);
+    for (p = 0 ; p < 31 ; p++) ST_Message(" ");
+    ST_Message("\n");
 #endif
 
     I_AtExit(D_HexenQuitMessage, false);

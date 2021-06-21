@@ -2459,7 +2459,7 @@ void D_DoomMain (void)
                            | FOREGROUND_INTENSITY);
 
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf(PACKAGE_NAME " " PACKAGE_VERSION);
+    DEH_printf("Russian Doom " PACKAGE_VERSION);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 
@@ -2468,7 +2468,10 @@ void D_DoomMain (void)
                             FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 #else
     // [JN] Just print an uncolored banner
-    I_PrintBanner(PACKAGE_STRING);    
+    for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
+    DEH_printf("Russian Doom " PACKAGE_VERSION);
+    for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
+    DEH_printf("\n");
 #endif
 
     // Call I_ShutdownGraphics on quit
