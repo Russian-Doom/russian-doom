@@ -63,7 +63,7 @@ void S_Start(void)
 {
     int i;
 
-    S_StartSong((gameepisode - 1) * 9 + gamemap - 1, true);
+    S_StartSong((gameepisode - 1) * 9 + gamemap - 1, true, false);
 
     //stop all sounds
     for (i = 0; i < snd_Channels_RD; i++)
@@ -76,19 +76,23 @@ void S_Start(void)
     memset(channel, 0, 8 * sizeof(channel_t));
 }
 
-void S_StartSong(int song, boolean loop)
+void S_StartSong(int song, boolean loop, boolean replay)
 {
     int mus_len;
 
-    if (song == mus_song)
-    {                           // don't replay an old song
+    // [JN] Don't replay an old song, but
+    // allow replay if music system is changed.
+    if (song == mus_song && !replay)
+    {
         return;
     }
 
     if (rs != NULL)
     {
         I_StopSong();
-        I_UnRegisterSong(rs);
+        // [JN] No-op. Do not unregister song now, otherwise 
+        // changed music system will be able to handle it.
+        // I_UnRegisterSong(rs);
     }
 
     if (song < mus_e1m1 || song > NUMMUSIC)
@@ -109,6 +113,13 @@ void S_StartSong(int song, boolean loop)
     rs = I_RegisterSong(mus_sndptr, mus_len);
     I_PlaySong(rs, loop);       //'true' denotes endless looping.
     mus_song = song;
+}
+
+void S_StopSong(void)
+{
+    I_StopSong();
+    I_UnRegisterSong(rs);
+    W_ReleaseLumpNum(mus_lumpnum);
 }
 
 static mobj_t *GetSoundListener(void)

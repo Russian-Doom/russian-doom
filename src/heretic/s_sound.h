@@ -25,6 +25,8 @@ extern int snd_MaxVolume;
 extern int snd_MaxVolume_tmp;
 extern int snd_MusicVolume;
 
+extern int mus_song;
+
 extern int snd_Channels;
 extern int snd_Channels_RD;
 
@@ -36,7 +38,8 @@ void S_StopSound(void *origin);
 void S_PauseSound(void);
 void S_ResumeSound(void);
 void S_UpdateSounds(mobj_t * listener);
-void S_StartSong(int song, boolean loop);
+void S_StartSong(int song, boolean loop, boolean replay);
+void S_StopSong(void);
 void S_Init(void);
 void S_RD_Change_SoundDevice(void);
 void S_ChannelsRealloc(void);

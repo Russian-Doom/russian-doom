@@ -3279,7 +3279,7 @@ static void DrawSoundSystemMenu(void)
                                      184 + wide_delta, 112);
 
         // Informative message:
-        if (CurrentItPos == 1 || CurrentItPos == 3)
+        if (CurrentItPos == 3)
         {
             dp_translation = cr[CR_WHITE2GREEN_HERETIC];
             MN_DrTextSmallENG(DEH_String("CHANGING WILL REQUIRE RESTART OF THE PROGRAM"),
@@ -3390,7 +3390,7 @@ static void DrawSoundSystemMenu(void)
                                      201 + wide_delta, 112);
 
         // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
-        if (CurrentItPos == 1 || CurrentItPos == 3)
+        if (CurrentItPos == 3)
         {
             dp_translation = cr[CR_WHITE2GREEN_HERETIC];
             MN_DrTextSmallRUS(DEH_String("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS"), 
@@ -3479,6 +3479,21 @@ static void M_RD_MusicDevice(intptr_t option)
         default:
             break;
     }
+
+    // Shut down current music
+    S_StopSong();
+
+    // Shut down music system
+    I_ShutdownSound();
+    
+    // Start music system
+    I_InitSound(true);
+
+    // Reinitialize music volume
+    S_SetMusicVolume();
+
+    // Restart current music
+    S_StartSong(mus_song, true, true);
 }
 
 static void M_RD_Sampling(intptr_t option)

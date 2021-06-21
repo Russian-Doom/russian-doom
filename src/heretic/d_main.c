@@ -667,7 +667,7 @@ void D_DoAdvanceDemo(void)
             pagename = DEH_String(gamemode == retail ? "TITLE" : "TITLEOLD");
             else
             pagename = DEH_String(gamemode == retail ? "TITLE_RT" : "TITLEOLD");
-            S_StartSong(mus_titl, false);
+            S_StartSong(mus_titl, false, false);
             break;
         case 1:
             pagetic = 140;

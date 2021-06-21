@@ -91,7 +91,7 @@ void F_StartFinale(void)
     FontABaseLump = W_GetNumForName(DEH_String("FONTA_S")) + 1;
     FontFBaseLump = W_GetNumForName(DEH_String("FONTF_S")) + 1;
 
-    S_StartSong(mus_cptd, true);
+    S_StartSong(mus_cptd, true, false);
 }
 
 

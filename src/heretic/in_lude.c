@@ -174,7 +174,7 @@ void IN_Start(void)
     intertime = 0;
     oldintertime = 0;
     AM_Stop();
-    S_StartSong(mus_intr, true);
+    S_StartSong(mus_intr, true, false);
 }
 
 //========================================================================
