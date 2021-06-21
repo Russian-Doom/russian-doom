@@ -16,6 +16,13 @@
 //
 
 
+#include <stdlib.h>
+#include "i_system.h"
+#include "doomdef.h"
+#include "r_local.h"
+#include "r_bmaps.h"
+#include "jn.h"
+
 
 //**************************************************************************
 //**
@@ -24,19 +31,6 @@
 //** This version has the tall-sector-crossing-precision-bug fixed.
 //**
 //**************************************************************************
-
-#include <stdlib.h>
-
-#include "i_system.h"
-#include "doomdef.h"
-#include "r_local.h"
-#include "r_bmaps.h"
-#include "jn.h"
-
-
-#define HEIGHTBITS      12
-#define HEIGHTUNIT      (1<<HEIGHTBITS)
-
 
 
 // OPTIMIZE: closed two sided lines as single sided
