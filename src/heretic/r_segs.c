@@ -30,6 +30,7 @@
 #include "i_system.h"
 #include "doomdef.h"
 #include "r_local.h"
+#include "r_bmaps.h"
 #include "jn.h"
 
 
@@ -37,13 +38,6 @@
 #define HEIGHTUNIT      (1<<HEIGHTBITS)
 
 
-// [JN] Brightmaps
-int brightmap_redonly;
-int brightmap_blueonly;
-int brightmap_notbronze;
-extern int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04;
-extern int bmaptexture05, bmaptexture06, bmaptexture07;
-extern int bmap_terminator;
 
 // OPTIMIZE: closed two sided lines as single sided
 
@@ -895,7 +889,7 @@ void R_StoreWallRange (int start, int stop)
                         //  Red only
                         if (midtexture == bmaptexture01)
                         {
-                            walllights = fullbright_redonly[lightnum];
+                            walllights_middle = fullbright_redonly[lightnum];
                         }
                         //  Blue only
                         if (midtexture == bmaptexture02 || midtexture == bmaptexture03

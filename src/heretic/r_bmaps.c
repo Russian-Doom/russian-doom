@@ -43,29 +43,29 @@ int bmaptexture01, bmaptexture02, bmaptexture03, bmaptexture04, bmaptexture05,
 void R_InitBrightmappedTextures(void)
 {
     // -------------------------------------------------------
-    //  Flats and ceilings
+    //  Floors and ceilings
     // -------------------------------------------------------
 
     // blue_only_floor
-    bmapflatnum1 = R_FlatNumForName(DEH_String("FLOOR21"));
-    bmapflatnum2 = R_FlatNumForName(DEH_String("FLOOR22"));
-    bmapflatnum3 = R_FlatNumForName(DEH_String("FLOOR23"));
-    bmapflatnum4 = R_FlatNumForName(DEH_String("FLOOR24"));
-    bmapflatnum5 = R_FlatNumForName(DEH_String("FLOOR26"));    
+    bmapflatnum1 = R_FlatNumForName("FLOOR21");
+    bmapflatnum2 = R_FlatNumForName("FLOOR22");
+    bmapflatnum3 = R_FlatNumForName("FLOOR23");
+    bmapflatnum4 = R_FlatNumForName("FLOOR24");
+    bmapflatnum5 = R_FlatNumForName("FLOOR26");
 
     // -------------------------------------------------------
     //  Textures
     // -------------------------------------------------------
 
     // brightmap_redonly
-    bmaptexture01 = R_CheckTextureNumForName(DEH_String("GRSKULL3"));
+    bmaptexture01 = R_CheckTextureNumForName("GRSKULL3");
     // brightmap_blueonly
-    bmaptexture02 = R_CheckTextureNumForName(DEH_String("DOOREXIT"));
-    bmaptexture03 = R_CheckTextureNumForName(DEH_String("SW2ON"));
-    bmaptexture04 = R_CheckTextureNumForName(DEH_String("SW2OFF"));
-    bmaptexture05 = R_CheckTextureNumForName(DEH_String("SW2OFF"));
+    bmaptexture02 = R_CheckTextureNumForName("DOOREXIT");
+    bmaptexture03 = R_CheckTextureNumForName("SW2ON");
+    bmaptexture04 = R_CheckTextureNumForName("SW2OFF");
+    bmaptexture05 = R_CheckTextureNumForName("SW2OFF");
     // brightmap_notbronze
-    bmaptexture06 = R_CheckTextureNumForName(DEH_String("SW1ON"));
-    bmaptexture07 = R_CheckTextureNumForName(DEH_String("SW1OFF"));
+    bmaptexture06 = R_CheckTextureNumForName("SW1ON");
+    bmaptexture07 = R_CheckTextureNumForName("SW1OFF");
 }
 
