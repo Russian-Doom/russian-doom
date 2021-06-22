@@ -1266,7 +1266,7 @@ void D_DoomMain(void)
                                                            | FOREGROUND_BLUE
                                                            | FOREGROUND_INTENSITY);
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf("Russian Heretic " PACKAGE_VERSION);
+    DEH_printf("Russian Heretic " BUILD_HERETIC_VERSION);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 
@@ -1277,7 +1277,7 @@ void D_DoomMain(void)
 #else
     // [JN] Just print an uncolored banner
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf("Russian Heretic " PACKAGE_VERSION);
+    DEH_printf("Russian Heretic " PACKAGE_HERETIC_VERSION);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 #endif 

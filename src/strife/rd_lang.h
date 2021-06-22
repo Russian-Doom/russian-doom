@@ -300,33 +300,22 @@ extern char *ststr_clev;
 #define STSTR_BEHOLDX_RUS   "ghtlvtn gjkexty"      // Предмет получен
 #define STSTR_CLEV_RUS      "cvtyf ehjdyz>>>"      // Смена уровня...
 
-
-
-
-//
-// Отображение версии проекта
-//
-
 // English
-// #define STSTR_VERSION   "Version 4.5"
-// #if defined (_WIN64)
-// #define STSRT_ARCH      " - (x64)"
-// #elif defined (_WIN32)
-// #define STSRT_ARCH      " - (x86)"
-// #else
-// #define STSRT_ARCH      ""
-// #endif
-// #define STSRT_DATE      "2020-09-16"        // YYYY-MM-DD
-// 
-// // Русский
-// #define STSTR_VERSION_RUS   "dthcbz 4>5"    // Версия 4.5
-// #if defined (_WIN64)
-// #define STSRT_ARCH_RUS      " - ([64)"      // x64
-// #elif defined (_WIN32)
-// #define STSRT_ARCH_RUS      " - ([86)"      // x86
-// #else
-// #define STSRT_ARCH_RUS      ""              // ?  
-// #endif
+#if defined (_WIN64)
+#define STSRT_ARCH      " - (x64)"
+#elif defined (_WIN32)
+#define STSRT_ARCH      " - (x86)"
+#else
+#define STSRT_ARCH      ""
+#endif
 
+// // Русский
+#if defined (_WIN64)
+#define STSRT_ARCH_RUS      " - ([64)"      // x64
+#elif defined (_WIN32)
+#define STSRT_ARCH_RUS      " - ([86)"      // x86
+#else
+#define STSRT_ARCH_RUS      ""              // ?
+#endif
 
 #endif
