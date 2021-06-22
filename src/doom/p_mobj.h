@@ -282,6 +282,7 @@ typedef struct mobj_s
     int			threshold;
 
     short       gear; // killough 11/98: used in torque simulation
+    int         geartics; // [JN] Duration of torque sumulation.
 
     // Additional info record for player avatars only.
     // Only valid if type == MT_PLAYER

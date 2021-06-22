@@ -796,6 +796,7 @@ void P_KillMobj (mobj_t *source, mobj_t *target)
 
     target->flags |= MF_CORPSE|MF_DROPOFF;
     target->height >>= 2;
+    target->geartics = 3 * TICRATE;  // [JN] Limit torque simulation for 3 seconds.
 
     if (source && source->player)
     {
