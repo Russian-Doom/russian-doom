@@ -341,43 +341,6 @@ boolean PIT_CheckThing(mobj_t * thing)
         return (true);
     }
 
-    // [JN] Check if things are stuck and allow them to move further apart.
-    // Taken from Doom Retro, slightly adopted for Heretic.
-    if (singleplayer && !vanillaparm && !thing->player && thing->flags & MF_SHOOTABLE)
-    {
-        if (tmthing->z >= thing->z + thing->height)
-        {
-            // walks over object
-            tmfloorz = thing->z + thing->height;
-            thing->ceilingz = tmthing->z;
-            return true;
-        }
-        else
-        if (tmthing->z + tmthing->height <= thing->z)
-        {
-            // walks underneath object
-            tmceilingz = thing->z;
-            thing->floorz = tmthing->z + tmthing->height;
-            return true;
-        }
-
-        if (tmx == tmthing->x && tmy == tmthing->y)
-        {
-            unblocking = true;
-        }
-        else
-        {
-            fixed_t newdist = P_AproxDistance(thing->x - tmx, thing->y - tmy);
-            fixed_t olddist = P_AproxDistance(thing->x - tmthing->x, thing->y - tmthing->y);
-
-            if (newdist > olddist)
-            {
-                unblocking = (tmthing->z < thing->z + thing->height
-                           && tmthing->z + tmthing->height > thing->z);
-            }
-        }
-    }
-
     if (tmthing->flags2 & MF2_PASSMOBJ)
     {   // check if a mobj passed over/under another object
         if ((tmthing->type == MT_IMP || tmthing->type == MT_WIZARD)
@@ -488,6 +451,44 @@ boolean PIT_CheckThing(mobj_t * thing)
         }
         return (!solid);
     }
+
+    // [JN] Check if things are stuck and allow them to move further apart.
+    // Taken from Doom Retro, slightly adopted for Heretic.
+    if (singleplayer && !vanillaparm && !thing->player && thing->flags & MF_SHOOTABLE)
+    {
+        if (tmthing->z >= thing->z + thing->height)
+        {
+            // walks over object
+            tmfloorz = thing->z + thing->height;
+            thing->ceilingz = tmthing->z;
+            return true;
+        }
+        else
+        if (tmthing->z + tmthing->height <= thing->z)
+        {
+            // walks underneath object
+            tmceilingz = thing->z;
+            thing->floorz = tmthing->z + tmthing->height;
+            return true;
+        }
+
+        if (tmx == tmthing->x && tmy == tmthing->y)
+        {
+            unblocking = true;
+        }
+        else
+        {
+            fixed_t newdist = P_AproxDistance(thing->x - tmx, thing->y - tmy);
+            fixed_t olddist = P_AproxDistance(thing->x - tmthing->x, thing->y - tmthing->y);
+
+            if (newdist > olddist)
+            {
+                unblocking = (tmthing->z < thing->z + thing->height
+                           && tmthing->z + tmthing->height > thing->z);
+            }
+        }
+    }
+
     return !(thing->flags & MF_SOLID) || unblocking;
 }
 
