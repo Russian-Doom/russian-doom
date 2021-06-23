@@ -2670,9 +2670,7 @@ static int GetMobjNum(mobj_t * mobj)
     {
         return MOBJ_NULL;
     }
-    // [JN] Fix possible overflow of mobj->player number.
-    // See: https://github.com/JNechaevsky/russian-doom/issues/210
-    if (/*mobj->player && */ &players[consoleplayer] && !SavingPlayers)
+    if (mobj->player && !SavingPlayers)
     {
         return MOBJ_XX_PLAYER;
     }
