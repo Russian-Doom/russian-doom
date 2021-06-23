@@ -928,20 +928,10 @@ void A_ImpExplode(mobj_t * actor)
     mo->momx = P_SubRandom() << 10;
     mo->momy = P_SubRandom() << 10;
     mo->momz = 9 * FRACUNIT;
-    // [JN] Apply small clipping.
-    if (singleplayer && !vanillaparm)
-    {
-        mo->flags2 |= MF2_FOOTCLIP2;
-    }
     mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_IMPCHUNK2);
     mo->momx = P_SubRandom() << 10;
     mo->momy = P_SubRandom() << 10;
     mo->momz = 9 * FRACUNIT;
-    // [JN] Apply small clipping.
-    if (singleplayer && !vanillaparm)
-    {
-        mo->flags2 |= MF2_FOOTCLIP2;
-    }
     if (actor->special1.i == 666)
     {                           // Extreme death crash
         P_SetMobjState(actor, S_IMP_XCRASH1);

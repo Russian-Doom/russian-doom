@@ -988,12 +988,21 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     // [JN] Apply various enhancements:
     if (singleplayer && !vanillaparm)
     {
+        // [JN] Always apply small floor clipping to Imps, so they can
+        // be properly clipped in water while blocking by other mobjs.
+        if (mobj->type == MT_IMP || mobj->type == MT_IMPLEADER)
+        {
+            mobj->flags2 |= MF2_FOOTCLIP2;
+        }
+
         // [JN] Reduce radius of Imp chunks so they will not hang part way on ledges.
         // Empirically verified to be small enough to prevent hanging and to 
         // don't spawn part way inside walls. Original radius: 20 * FRACUNIT.
+        // Apply small floor clipping, too.
         if (mobj->type == MT_IMPCHUNK1 || mobj->type == MT_IMPCHUNK2)
         {
             mobj->radius = 5 * FRACUNIT;
+            mobj->flags2 |= MF2_FOOTCLIP2;
         }
 
         // [JN] Apply small Z momentum for Weredragon's ball smoke.
