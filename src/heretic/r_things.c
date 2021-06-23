@@ -663,13 +663,8 @@ void R_ProjectSprite (mobj_t *thing)
     {
         vis->footclip = 10;
     }
-    else
-    {
-        vis->footclip = 0;
-    }
-
     // [JN] Smaller clipping.
-    if (thing->flags2 & MF2_FEETARECLIPPED2
+    else if (thing->flags2 & MF2_FEETARECLIPPED2
     &&  thing->z <= thing->subsector->sector->floorheight)
     {
         vis->footclip = 3;
