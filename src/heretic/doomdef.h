@@ -292,6 +292,9 @@ typedef struct
 #define MF2_FLOATBOB		0x00080000  // use float bobbing z movement
 #define MF2_DONTDRAW		0X00100000  // don't generate a vissprite
 
+#define MF2_FOOTCLIP2       0x00400000  // [JN] If feet are allowed to be clipped for 3 pixels.
+#define MF2_FEETARECLIPPED2 0x00800000  // [JN] A mobj's feet are now being cut for 3 pixels.
+
 // --- [JN] Torque internal flags ---
 
 // killough 9/15/98: Same, but internal flags, not intended for .deh

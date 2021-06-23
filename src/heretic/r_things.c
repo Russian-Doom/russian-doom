@@ -668,6 +668,17 @@ void R_ProjectSprite (mobj_t *thing)
         vis->footclip = 0;
     }
 
+    // [JN] Smaller clipping.
+    if (thing->flags2 & MF2_FEETARECLIPPED2
+    &&  thing->z <= thing->subsector->sector->floorheight)
+    {
+        vis->footclip = 3;
+    }
+    else
+    {
+        vis->footclip = 0;
+    }
+
     vis->texturemid = gzt - viewz - (vis->footclip << FRACBITS);
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth - 1 : x2;

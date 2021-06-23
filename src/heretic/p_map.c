@@ -923,6 +923,17 @@ boolean P_TryMove(mobj_t * thing, fixed_t x, fixed_t y)
         thing->flags2 &= ~MF2_FEETARECLIPPED;
     }
 
+    // [JN] Smaller clipping.
+    if (thing->flags2 & MF2_FOOTCLIP2
+        && P_GetThingFloorType(thing) != FLOOR_SOLID)
+    {
+        thing->flags2 |= MF2_FEETARECLIPPED2;
+    }
+    else if (thing->flags2 & MF2_FEETARECLIPPED2)
+    {
+        thing->flags2 &= ~MF2_FEETARECLIPPED2;
+    }
+
 //
 // if any special lines were hit, do the effect
 //
