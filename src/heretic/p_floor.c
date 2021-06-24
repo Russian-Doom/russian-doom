@@ -21,6 +21,7 @@
 #include "p_local.h"
 #include "s_sound.h"
 #include "v_video.h"
+#include "crispy.h"
 
 //==================================================================
 //==================================================================
@@ -83,6 +84,10 @@ result_e T_MovePlane(sector_t * sector, fixed_t speed,
                     break;
 
                 case 1:        // UP
+                    // [JN] Don't allow platform floor go through the ceiling.
+                    dest = singleplayer && dest < sector->ceilingheight ?
+                                           dest : sector->ceilingheight;
+
                     if (sector->floorheight + speed > dest)
                     {
                         lastpos = sector->floorheight;
