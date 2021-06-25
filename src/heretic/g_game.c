@@ -1138,6 +1138,10 @@ void G_Ticker(void)
                 // [JN] Reset looking direction if game is loaded w/o mouse look
                 if (!mlook)
                 players[consoleplayer].lookdir = 0;
+                // [JN] Reset counters for missing key fading effects.
+                players[consoleplayer].yellowkeyTics = 0;
+                players[consoleplayer].greenkeyTics = 0;
+                players[consoleplayer].bluekeyTics = 0;
                 break;
             case ga_savegame:
                 G_DoSaveGame();
@@ -1347,6 +1351,9 @@ void G_PlayerFinishLevel(int player)
         p->chickenTics = 0;
     }
     p->messageTics = 0;
+    p->yellowkeyTics = 0;
+    p->greenkeyTics = 0;
+    p->bluekeyTics = 0;
     p->lookdir = 0;
     p->mo->flags &= ~MF_SHADOW; // Remove invisibility
     p->extralight = 0;          // Remove weapon flashes
@@ -1409,6 +1416,9 @@ void G_PlayerReborn(int player)
     p->weaponowned[wp_staff] = true;
     p->weaponowned[wp_goldwand] = true;
     p->messageTics = 0;
+    p->yellowkeyTics = 0;
+    p->greenkeyTics = 0;
+    p->bluekeyTics = 0;
     p->lookdir = 0;
     p->ammo[am_goldwand] = 50;
     for (i = 0; i < NUMAMMO; i++)

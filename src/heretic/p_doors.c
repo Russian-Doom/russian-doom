@@ -245,6 +245,8 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
             {
                 P_SetMessage(player, DEH_String(txt_needbluekey), msg_system, false);
                 S_StartSound(NULL, sfx_plroof);
+                // [JN] Set counter for missing key fading effect.
+                player->bluekeyTics = 15;
                 return;
             }
             break;
@@ -258,6 +260,8 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
             {
                 P_SetMessage(player, DEH_String(txt_needyellowkey), msg_system, false);
                 S_StartSound(NULL, sfx_plroof);
+                // [JN] Set counter for missing key fading effect.
+                player->yellowkeyTics = 15;
                 return;
             }
             break;
@@ -271,6 +275,8 @@ void EV_VerticalDoor(line_t * line, mobj_t * thing)
             {
                 P_SetMessage(player, DEH_String(txt_needgreenkey), msg_system, false);
                 S_StartSound(NULL, sfx_plroof);
+                // [JN] Set counter for missing key fading effect.
+                player->greenkeyTics = 15;
                 return;
             }
             break;

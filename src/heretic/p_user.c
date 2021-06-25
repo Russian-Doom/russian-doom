@@ -604,6 +604,21 @@ void P_PlayerThink(player_t * player)
         ultimatemsg = false;    // clear out any chat messages.
         BorderTopRefresh = true;
     }
+
+    // [JN] Decrease counters for missing key fading effects, don't go negative.
+    if (player->yellowkeyTics > 0)
+    {
+        player->yellowkeyTics--;
+    }
+    if (player->greenkeyTics > 0)
+    {
+        player->greenkeyTics--;
+    }
+    if (player->bluekeyTics > 0)
+    {
+        player->bluekeyTics--;
+    }   
+
     if (player->playerstate == PST_DEAD)
     {
         P_DeathThink(player);

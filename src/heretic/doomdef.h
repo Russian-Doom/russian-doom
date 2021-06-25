@@ -488,6 +488,9 @@ typedef struct player_s
     int killcount, itemcount, secretcount;      // for intermission
     char *message;              // hint messages
     int messageTics;            // counter for showing messages
+    int yellowkeyTics;          // [JN] Counter for missing yellow key
+    int greenkeyTics;           // [JN] Counter for missing green key
+    int bluekeyTics;            // [JN] Counter for missing blue key
     int messageColor;           // [JN] Colored message type
     int damagecount, bonuscount;        // for screen flashing
     int flamecount;             // for flame thrower duration

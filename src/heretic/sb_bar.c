@@ -784,10 +784,6 @@ void SB_Drawer(void)
         dp_translation = NULL;
     }
 
-    // [JN] TODO: OPTIMIZE - try to do not redraw whole status bar.
-    if (automapactive)
-        SB_state = -1;
-
     if ((screenblocks >= 11 && !automapactive) 
     ||  (screenblocks >= 11 && automapactive && automap_overlay))
     {
@@ -960,6 +956,10 @@ void SB_Drawer(void)
             UpdateState |= I_MESSAGES;
         }
     }
+
+    // [JN] Always update whole status bar.
+    // TODO: remove bunch of other update conditions.
+    SB_state = -1;
 }
 
 // sets the new palette based upon current values of player->damagecount
@@ -1185,15 +1185,63 @@ void DrawMainBar(void)
             V_DrawPatch(153 + wide_delta, 164,
                         W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
         }
+        else
+        {
+            if (CPlayer->yellowkeyTics && !vanillaparm)
+            {
+                V_DrawFadePatch(153 + wide_delta, 164, W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE), 
+                                CPlayer->yellowkeyTics > 13 ? transtable90 :
+                                CPlayer->yellowkeyTics > 11 ? transtable80 :
+                                CPlayer->yellowkeyTics >  9 ? transtable70 :
+                                CPlayer->yellowkeyTics >  7 ? transtable60 :
+                                CPlayer->yellowkeyTics >  5 ? transtable50 :
+                                CPlayer->yellowkeyTics >  4 ? transtable40 :
+                                CPlayer->yellowkeyTics >  3 ? transtable30 :
+                                CPlayer->yellowkeyTics >  2 ? transtable20 :
+                                                              transtable10);
+            }
+        }
         if (CPlayer->keys[key_green])
         {
             V_DrawPatch(153 + wide_delta, 172,
                         W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
         }
+        else
+        {
+            if (CPlayer->greenkeyTics && !vanillaparm)
+            {
+                V_DrawFadePatch(153 + wide_delta, 172, W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE), 
+                                CPlayer->greenkeyTics > 13 ? transtable90 :
+                                CPlayer->greenkeyTics > 11 ? transtable80 :
+                                CPlayer->greenkeyTics >  9 ? transtable70 :
+                                CPlayer->greenkeyTics >  7 ? transtable60 :
+                                CPlayer->greenkeyTics >  5 ? transtable50 :
+                                CPlayer->greenkeyTics >  4 ? transtable40 :
+                                CPlayer->greenkeyTics >  3 ? transtable30 :
+                                CPlayer->greenkeyTics >  2 ? transtable20 :
+                                                             transtable10);
+            }
+        }
         if (CPlayer->keys[key_blue])
         {
             V_DrawPatch(153 + wide_delta, 180,
                         W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+        }
+        else
+        {
+            if (CPlayer->bluekeyTics && !vanillaparm)
+            {
+                V_DrawFadePatch(153 + wide_delta, 180, W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE), 
+                                CPlayer->bluekeyTics > 13 ? transtable90 :
+                                CPlayer->bluekeyTics > 11 ? transtable80 :
+                                CPlayer->bluekeyTics >  9 ? transtable70 :
+                                CPlayer->bluekeyTics >  7 ? transtable60 :
+                                CPlayer->bluekeyTics >  5 ? transtable50 :
+                                CPlayer->bluekeyTics >  4 ? transtable40 :
+                                CPlayer->bluekeyTics >  3 ? transtable30 :
+                                CPlayer->bluekeyTics >  2 ? transtable20 :
+                                                            transtable10);
+            }
         }
         oldkeys = playerkeys;
         UpdateState |= I_STATBAR;
@@ -1433,14 +1481,71 @@ void DrawFullScreenStuff(void)
         if (!deathmatch)
         {
             if (CPlayer->keys[key_yellow])
-            V_DrawShadowedPatch(219 + (wide_delta * 2), 174,
-                                W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            {
+                V_DrawShadowedPatch(219 + (wide_delta * 2), 174,
+                                    W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE));
+            }
+            else
+            {
+                if (CPlayer->yellowkeyTics && !vanillaparm)
+                {
+                    V_DrawFadePatch(219 + (wide_delta * 2), 174, 
+                                    W_CacheLumpName(DEH_String("ykeyicon"), PU_CACHE), 
+                                    CPlayer->yellowkeyTics > 13 ? transtable90 :
+                                    CPlayer->yellowkeyTics > 11 ? transtable80 :
+                                    CPlayer->yellowkeyTics >  9 ? transtable70 :
+                                    CPlayer->yellowkeyTics >  7 ? transtable60 :
+                                    CPlayer->yellowkeyTics >  5 ? transtable50 :
+                                    CPlayer->yellowkeyTics >  4 ? transtable40 :
+                                    CPlayer->yellowkeyTics >  3 ? transtable30 :
+                                    CPlayer->yellowkeyTics >  2 ? transtable20 :
+                                                                  transtable10);
+                }
+            }
             if (CPlayer->keys[key_green])
-            V_DrawShadowedPatch(219 + (wide_delta * 2), 182,
-                                W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            {
+                V_DrawShadowedPatch(219 + (wide_delta * 2), 182,
+                                    W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE));
+            }
+            else
+            {
+                if (CPlayer->greenkeyTics && !vanillaparm)
+                {
+                    V_DrawFadePatch(219 + (wide_delta * 2), 182,
+                                    W_CacheLumpName(DEH_String("gkeyicon"), PU_CACHE), 
+                                    CPlayer->greenkeyTics > 13 ? transtable90 :
+                                    CPlayer->greenkeyTics > 11 ? transtable80 :
+                                    CPlayer->greenkeyTics >  9 ? transtable70 :
+                                    CPlayer->greenkeyTics >  7 ? transtable60 :
+                                    CPlayer->greenkeyTics >  5 ? transtable50 :
+                                    CPlayer->greenkeyTics >  4 ? transtable40 :
+                                    CPlayer->greenkeyTics >  3 ? transtable30 :
+                                    CPlayer->greenkeyTics >  2 ? transtable20 :
+                                                                 transtable10);
+                }
+            }
             if (CPlayer->keys[key_blue])
-            V_DrawShadowedPatch(219 + (wide_delta * 2), 190,
-                                W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+            {
+                V_DrawShadowedPatch(219 + (wide_delta * 2), 190,
+                                    W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE));
+            }
+            else
+            {
+                if (CPlayer->bluekeyTics && !vanillaparm)
+                {
+                    V_DrawFadePatch(219 + (wide_delta * 2), 190,
+                                    W_CacheLumpName(DEH_String("bkeyicon"), PU_CACHE), 
+                                    CPlayer->bluekeyTics > 13 ? transtable90 :
+                                    CPlayer->bluekeyTics > 11 ? transtable80 :
+                                    CPlayer->bluekeyTics >  9 ? transtable70 :
+                                    CPlayer->bluekeyTics >  7 ? transtable60 :
+                                    CPlayer->bluekeyTics >  5 ? transtable50 :
+                                    CPlayer->bluekeyTics >  4 ? transtable40 :
+                                    CPlayer->bluekeyTics >  3 ? transtable30 :
+                                    CPlayer->bluekeyTics >  2 ? transtable20 :
+                                                                transtable10);
+                }
+            }
         }
 
         if (CPlayer->readyArtifact > 0)
