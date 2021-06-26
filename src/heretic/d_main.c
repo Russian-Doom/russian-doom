@@ -308,23 +308,23 @@ void DrawMessage(void)
     }
 
     // [JN] Colorize depending on given color type.
-    switch (player->messageColor)
+    switch (player->messageType)
     {
-        case 1: // Item pickup.
+        case msg_pickup: // Item pickup.
             dp_translation = messages_pickup_color_set;
-        break;
-        case 2: // Revealed secret
+            break;
+        case msg_secret: // Revealed secret
             dp_translation = messages_secret_color_set;
-        break;
-        case 3: // System message
+            break;
+        case msg_system: // System message
             dp_translation = messages_system_color_set;
-        break;
-        case 4: // Netgame chat
+            break;
+        case msg_chat: // Netgame chat
             dp_translation = messages_chat_color_set;
-        break;
-        case 0: // Not supposed to be colored.
+            break;
+        case msg_uncolored: // Not supposed to be colored.
         default:
-        break;
+            break;
     }
 
     if (english_language)

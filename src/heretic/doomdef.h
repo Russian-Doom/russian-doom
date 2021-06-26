@@ -114,6 +114,16 @@ typedef enum
     wipe_random
 } wipe_t;
 
+// [JN] Colored message type, used by P_SetMessage.
+typedef enum
+{
+    msg_uncolored,  // 0: never colored
+    msg_pickup,     // 1: item pickup
+    msg_secret,     // 2: revealed secret
+    msg_system,     // 3: system message
+    msg_chat        // 4: netgame chat
+} MessageType_t;
+
 /*
 ===============================================================================
 
@@ -491,7 +501,7 @@ typedef struct player_s
     int yellowkeyTics;          // [JN] Counter for missing yellow key
     int greenkeyTics;           // [JN] Counter for missing green key
     int bluekeyTics;            // [JN] Counter for missing blue key
-    int messageColor;           // [JN] Colored message type
+    MessageType_t messageType; // [JN] Colored message type
     int damagecount, bonuscount;        // for screen flashing
     int flamecount;             // for flame thrower duration
     mobj_t *attacker;           // who did damage (NULL for floors)

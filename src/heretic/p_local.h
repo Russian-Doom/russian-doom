@@ -79,16 +79,6 @@ typedef enum
 
 // ***** MN_MENU *****
 
-// [JN] Colored message type, used by P_SetMessage.
-enum
-{
-    msg_uncolored,  // 0: never colored
-    msg_pickup,     // 1: item pickup
-    msg_secret,     // 2: revealed secret
-    msg_system,     // 3: system message
-    msg_chat        // 4: netgame chat
-};
-
 extern byte *messages_pickup_color_set;
 extern byte *messages_secret_color_set;
 extern byte *messages_system_color_set;
@@ -280,7 +270,7 @@ extern mobj_t **blocklinks;     // for thing chains
 extern int maxammo[NUMAMMO];
 extern int clipammo[NUMAMMO];
 
-void P_SetMessage(player_t * player, char *message, int color, boolean ultmsg);
+void P_SetMessage(player_t * player, char *message, MessageType_t messageType, boolean ultmsg);
 void P_TouchSpecialThing(mobj_t * special, mobj_t * toucher);
 void P_DamageMobj(mobj_t * target, mobj_t * inflictor, mobj_t * source,
                   int damage);

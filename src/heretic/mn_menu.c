@@ -116,13 +116,10 @@ static void M_RD_MessagesTimeout(intptr_t option);
 static void M_RD_MessagesFade(intptr_t option);
 static void M_RD_ShadowedText(intptr_t option);
 static void M_RD_LocalTime(intptr_t option);
-static void M_RD_Define_Msg_Pickup_Color(void);
+static void M_RD_Define_Msg_Color(MessageType_t messageType, int color);
 static void M_RD_Change_Msg_Pickup_Color(intptr_t option);
-static void M_RD_Define_Msg_Secret_Color(void);
 static void M_RD_Change_Msg_Secret_Color(intptr_t option);
-static void M_RD_Define_Msg_System_Color(void);
 static void M_RD_Change_Msg_System_Color(intptr_t option);
-static void M_RD_Define_Msg_Chat_Color(void);
 static void M_RD_Change_Msg_Chat_Color(intptr_t option);
 
 // Automap
@@ -1043,10 +1040,10 @@ void MN_Init(void)
     }
 
     // [JN] Init message colors.
-    M_RD_Define_Msg_Pickup_Color();
-    M_RD_Define_Msg_Secret_Color();
-    M_RD_Define_Msg_System_Color();
-    M_RD_Define_Msg_Chat_Color();
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
+    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 }
 
 //---------------------------------------------------------------------------
@@ -2595,35 +2592,54 @@ static void M_RD_ShadowedText(intptr_t option)
     draw_shadowed_text ^= 1;
 }
 
-static void M_RD_Define_Msg_Pickup_Color (void)
+static void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
 {
+    byte** colorVar;
+    switch (messageType)
+    {
+        case msg_pickup: // Item pickup.
+            colorVar = &messages_pickup_color_set;
+            break;
+        case msg_secret: // Revealed secret
+            colorVar = &messages_secret_color_set;
+            break;
+        case msg_system: // System message
+            colorVar = &messages_system_color_set;
+            break;
+        case msg_chat: // Netgame chat
+            colorVar = &messages_chat_color_set;
+            break;
+        default:
+            break;
+    }
+
     // [JN] No coloring in vanilla.
     if (vanillaparm)
     {
-        messages_pickup_color_set = NULL;
+        *colorVar = NULL;
     }
     else
     {
-        switch (message_pickup_color)
+        switch (color)
         {
-            case 1:   messages_pickup_color_set = cr[CR_WHITE2GRAY_HERETIC];      break;
-            case 2:   messages_pickup_color_set = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
-            case 3:   messages_pickup_color_set = cr[CR_WHITE2RED_HERETIC];       break;
-            case 4:   messages_pickup_color_set = cr[CR_WHITE2DARKRED_HERETIC];   break;
-            case 5:   messages_pickup_color_set = cr[CR_WHITE2GREEN_HERETIC];     break;
-            case 6:   messages_pickup_color_set = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
-            case 7:   messages_pickup_color_set = cr[CR_WHITE2OLIVE_HERETIC];     break;
-            case 8:   messages_pickup_color_set = cr[CR_WHITE2BLUE_HERETIC];      break;
-            case 9:   messages_pickup_color_set = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
-            case 10:  messages_pickup_color_set = cr[CR_WHITE2PURPLE_HERETIC];    break;
-            case 11:  messages_pickup_color_set = cr[CR_WHITE2NIAGARA_HERETIC];   break;
-            case 12:  messages_pickup_color_set = cr[CR_WHITE2AZURE_HERETIC];     break;
-            case 13:  messages_pickup_color_set = cr[CR_WHITE2YELLOW_HERETIC];    break;
-            case 14:  messages_pickup_color_set = cr[CR_WHITE2GOLD_HERETIC];      break;
-            case 15:  messages_pickup_color_set = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
-            case 16:  messages_pickup_color_set = cr[CR_WHITE2TAN_HERETIC];       break;
-            case 17:  messages_pickup_color_set = cr[CR_WHITE2BROWN_HERETIC];     break;
-            default:  messages_pickup_color_set = NULL;                           break;
+            case 1:   *colorVar = cr[CR_WHITE2GRAY_HERETIC];      break;
+            case 2:   *colorVar = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
+            case 3:   *colorVar = cr[CR_WHITE2RED_HERETIC];       break;
+            case 4:   *colorVar = cr[CR_WHITE2DARKRED_HERETIC];   break;
+            case 5:   *colorVar = cr[CR_WHITE2GREEN_HERETIC];     break;
+            case 6:   *colorVar = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
+            case 7:   *colorVar = cr[CR_WHITE2OLIVE_HERETIC];     break;
+            case 8:   *colorVar = cr[CR_WHITE2BLUE_HERETIC];      break;
+            case 9:   *colorVar = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
+            case 10:  *colorVar = cr[CR_WHITE2PURPLE_HERETIC];    break;
+            case 11:  *colorVar = cr[CR_WHITE2NIAGARA_HERETIC];   break;
+            case 12:  *colorVar = cr[CR_WHITE2AZURE_HERETIC];     break;
+            case 13:  *colorVar = cr[CR_WHITE2YELLOW_HERETIC];    break;
+            case 14:  *colorVar = cr[CR_WHITE2GOLD_HERETIC];      break;
+            case 15:  *colorVar = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
+            case 16:  *colorVar = cr[CR_WHITE2TAN_HERETIC];       break;
+            case 17:  *colorVar = cr[CR_WHITE2BROWN_HERETIC];     break;
+            default:  *colorVar = NULL;                           break;
         }
     }
 }
@@ -2646,40 +2662,7 @@ void M_RD_Change_Msg_Pickup_Color(intptr_t option)
     }
 
     // [JN] Redefine pickup message color.
-    M_RD_Define_Msg_Pickup_Color();
-}
-
-static void M_RD_Define_Msg_Secret_Color (void)
-{
-    // [JN] No coloring in vanilla.
-    if (vanillaparm)
-    {
-        messages_secret_color_set = NULL;
-    }
-    else
-    {
-        switch (message_secret_color)
-        {
-            case 1:   messages_secret_color_set = cr[CR_WHITE2GRAY_HERETIC];      break;
-            case 2:   messages_secret_color_set = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
-            case 3:   messages_secret_color_set = cr[CR_WHITE2RED_HERETIC];       break;
-            case 4:   messages_secret_color_set = cr[CR_WHITE2DARKRED_HERETIC];   break;
-            case 5:   messages_secret_color_set = cr[CR_WHITE2GREEN_HERETIC];     break;
-            case 6:   messages_secret_color_set = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
-            case 7:   messages_secret_color_set = cr[CR_WHITE2OLIVE_HERETIC];     break;
-            case 8:   messages_secret_color_set = cr[CR_WHITE2BLUE_HERETIC];      break;
-            case 9:   messages_secret_color_set = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
-            case 10:  messages_secret_color_set = cr[CR_WHITE2PURPLE_HERETIC];    break;
-            case 11:  messages_secret_color_set = cr[CR_WHITE2NIAGARA_HERETIC];   break;
-            case 12:  messages_secret_color_set = cr[CR_WHITE2AZURE_HERETIC];     break;
-            case 13:  messages_secret_color_set = cr[CR_WHITE2YELLOW_HERETIC];    break;
-            case 14:  messages_secret_color_set = cr[CR_WHITE2GOLD_HERETIC];      break;
-            case 15:  messages_secret_color_set = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
-            case 16:  messages_secret_color_set = cr[CR_WHITE2TAN_HERETIC];       break;
-            case 17:  messages_secret_color_set = cr[CR_WHITE2BROWN_HERETIC];     break;
-            default:  messages_secret_color_set = NULL;                           break;
-        }
-    }
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
 }
 
 void M_RD_Change_Msg_Secret_Color(intptr_t option)
@@ -2700,40 +2683,7 @@ void M_RD_Change_Msg_Secret_Color(intptr_t option)
     }
 
     // [JN] Redefine revealed secret message color.
-    M_RD_Define_Msg_Secret_Color();
-}
-
-static void M_RD_Define_Msg_System_Color (void)
-{
-    // [JN] No coloring in vanilla.
-    if (vanillaparm)
-    {
-        messages_system_color_set = NULL;
-    }
-    else
-    {
-        switch (message_system_color)
-        {
-            case 1:   messages_system_color_set = cr[CR_WHITE2GRAY_HERETIC];      break;
-            case 2:   messages_system_color_set = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
-            case 3:   messages_system_color_set = cr[CR_WHITE2RED_HERETIC];       break;
-            case 4:   messages_system_color_set = cr[CR_WHITE2DARKRED_HERETIC];   break;
-            case 5:   messages_system_color_set = cr[CR_WHITE2GREEN_HERETIC];     break;
-            case 6:   messages_system_color_set = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
-            case 7:   messages_system_color_set = cr[CR_WHITE2OLIVE_HERETIC];     break;
-            case 8:   messages_system_color_set = cr[CR_WHITE2BLUE_HERETIC];      break;
-            case 9:   messages_system_color_set = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
-            case 10:  messages_system_color_set = cr[CR_WHITE2PURPLE_HERETIC];    break;
-            case 11:  messages_system_color_set = cr[CR_WHITE2NIAGARA_HERETIC];   break;
-            case 12:  messages_system_color_set = cr[CR_WHITE2AZURE_HERETIC];     break;
-            case 13:  messages_system_color_set = cr[CR_WHITE2YELLOW_HERETIC];    break;
-            case 14:  messages_system_color_set = cr[CR_WHITE2GOLD_HERETIC];      break;
-            case 15:  messages_system_color_set = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
-            case 16:  messages_system_color_set = cr[CR_WHITE2TAN_HERETIC];       break;
-            case 17:  messages_system_color_set = cr[CR_WHITE2BROWN_HERETIC];     break;
-            default:  messages_system_color_set = NULL;                           break;
-        }
-    }
+    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
 }
 
 void M_RD_Change_Msg_System_Color(intptr_t option)
@@ -2754,40 +2704,7 @@ void M_RD_Change_Msg_System_Color(intptr_t option)
     }
 
     // [JN] Redefine revealed secret message color.
-    M_RD_Define_Msg_System_Color();
-}
-
-static void M_RD_Define_Msg_Chat_Color (void)
-{
-    // [JN] No coloring in vanilla.
-    if (vanillaparm)
-    {
-        messages_chat_color_set = NULL;
-    }
-    else
-    {
-        switch (message_chat_color)
-        {
-            case 1:   messages_chat_color_set = cr[CR_WHITE2GRAY_HERETIC];      break;
-            case 2:   messages_chat_color_set = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
-            case 3:   messages_chat_color_set = cr[CR_WHITE2RED_HERETIC];       break;
-            case 4:   messages_chat_color_set = cr[CR_WHITE2DARKRED_HERETIC];   break;
-            case 5:   messages_chat_color_set = cr[CR_WHITE2GREEN_HERETIC];     break;
-            case 6:   messages_chat_color_set = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
-            case 7:   messages_chat_color_set = cr[CR_WHITE2OLIVE_HERETIC];     break;
-            case 8:   messages_chat_color_set = cr[CR_WHITE2BLUE_HERETIC];      break;
-            case 9:   messages_chat_color_set = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
-            case 10:  messages_chat_color_set = cr[CR_WHITE2PURPLE_HERETIC];    break;
-            case 11:  messages_chat_color_set = cr[CR_WHITE2NIAGARA_HERETIC];   break;
-            case 12:  messages_chat_color_set = cr[CR_WHITE2AZURE_HERETIC];     break;
-            case 13:  messages_chat_color_set = cr[CR_WHITE2YELLOW_HERETIC];    break;
-            case 14:  messages_chat_color_set = cr[CR_WHITE2GOLD_HERETIC];      break;
-            case 15:  messages_chat_color_set = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
-            case 16:  messages_chat_color_set = cr[CR_WHITE2TAN_HERETIC];       break;
-            case 17:  messages_chat_color_set = cr[CR_WHITE2BROWN_HERETIC];     break;
-            default:  messages_chat_color_set = NULL;                           break;
-        }
-    }
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
 }
 
 void M_RD_Change_Msg_Chat_Color(intptr_t option)
@@ -2808,7 +2725,7 @@ void M_RD_Change_Msg_Chat_Color(intptr_t option)
     }
 
     // [JN] Redefine netgame chat message color.
-    M_RD_Define_Msg_Chat_Color();
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 }
 
 // -----------------------------------------------------------------------------

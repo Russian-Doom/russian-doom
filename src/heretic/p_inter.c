@@ -81,7 +81,7 @@ static weapontype_t GetAmmoChange[] = {
 
 boolean ultimatemsg;
 
-void P_SetMessage(player_t * player, char *message, int color, boolean ultmsg)
+void P_SetMessage(player_t * player, char *message, MessageType_t messageType, boolean ultmsg)
 {
     if ((ultimatemsg || !show_messages) && !ultmsg)
     {
@@ -89,7 +89,7 @@ void P_SetMessage(player_t * player, char *message, int color, boolean ultmsg)
     }
     player->message = message;
     player->messageTics = messages_timeout * TICRATE;
-    player->messageColor = color; // [JN] Apply colorization.
+    player->messageType = messageType; // [JN] Apply colorization.
     BorderTopRefresh = true;
     if (ultmsg)
     {
