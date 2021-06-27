@@ -47,8 +47,6 @@
 
 // Macros
 
-#define LEFT_DIR 0
-#define RIGHT_DIR 1
 #define ITEM_HEIGHT 20
 #define SELECTOR_XOFFSET (-28)
 #define SELECTOR_YOFFSET (-1)
@@ -2092,20 +2090,7 @@ static void M_RD_Change_Widescreen(intptr_t option)
 {
     // [JN] Widescreen: changing only temp variable here.
     // Initially it is set in MN_Init and stored into config file in M_QuitResponse.
-    switch(option)
-    {
-        case 0:
-            aspect_ratio_temp--;
-            if (aspect_ratio_temp < 0)
-                aspect_ratio_temp = 4;
-            break;
-        case 1:
-            aspect_ratio_temp++;
-            if (aspect_ratio_temp > 4)
-                aspect_ratio_temp = 0;
-        default:
-            break;
-    }
+    RD_Menu_SpinInt(&aspect_ratio_temp, 0, 4, option);
 }
 
 static void M_RD_Change_VSync(intptr_t option)
@@ -2258,17 +2243,7 @@ static void M_RD_ScreenSize(intptr_t option)
     // [JN] Hide menu background for a moment.
     menubgwait = I_GetTime() + 25;
 
-    if (option == RIGHT_DIR)
-    {
-        if (screenblocks < 12) // [JN] Now we have 12 screen sizes
-        {
-            screenblocks++;
-        }
-    }
-    else if (screenblocks > 3)
-    {
-        screenblocks--;
-    }
+    RD_Menu_SlideInt(&screenblocks, 3, 12, option); // [JN] Now we have 12 screen sizes
 
     if (aspect_ratio_temp >= 2)
     {
@@ -2288,19 +2263,7 @@ static void M_RD_Gamma(intptr_t option)
     // [JN] Hide menu background for a moment.
     menubgwait = I_GetTime() + 25;
 
-    switch(option)
-    {
-        case 0:
-            if (usegamma > 0)
-                usegamma--;
-            break;
-
-        case 1:
-            if (usegamma < 17)
-                usegamma++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&usegamma, 0, 17, option);
 
     I_SetPalette((byte *) W_CacheLumpName(usegamma <= 8 ?
                                           "PALFIX" :
@@ -2318,19 +2281,7 @@ static void M_RD_LevelBrightness(intptr_t option)
     // [JN] Hide menu background for a moment.
     menubgwait = I_GetTime() + 25;
 
-    switch(option)
-    {
-        case 0:
-            if (level_brightness > 0)
-                level_brightness -= 16;
-            break;
-
-        case 1:
-            if (level_brightness < 64)
-                level_brightness += 16;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, option);
 }
 
 static void M_RD_Detail(intptr_t option)
@@ -2515,21 +2466,7 @@ static void DrawMessagesMenu(void)
 
 static void M_RD_LocalTime(intptr_t option)
 {
-    switch(option)
-    {
-        case 0: 
-            local_time--;
-            if (local_time < 0)
-                local_time = 4;
-            break;
-
-        case 1:
-            local_time++;
-            if (local_time > 4)
-                local_time = 0;
-        default:
-            break;
-    }
+    RD_Menu_SpinInt(&local_time, 0, 4, option);
 }
 
 static void M_RD_Messages(intptr_t option)
@@ -2550,36 +2487,12 @@ static void M_RD_Messages(intptr_t option)
 
 static void M_RD_MessagesAlignment(intptr_t option)
 {
-    switch (option)
-    {
-        case 0: 
-        messages_alignment--;
-        if (messages_alignment < 0) 
-            messages_alignment = 2;
-        break;
-
-        case 1:
-        messages_alignment++;
-        if (messages_alignment > 2)
-            messages_alignment = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&messages_alignment, 0, 2, option);
 }
 
 static void M_RD_MessagesTimeout(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-        if (messages_timeout > 1)
-            messages_timeout--;
-        break;
-
-        case 1:
-        if (messages_timeout < 10)
-            messages_timeout++;
-        break;
-    }
+    RD_Menu_SlideInt(&messages_timeout, 1, 10, option);
 }
 
 static void M_RD_MessagesFade(intptr_t option)
@@ -2646,20 +2559,7 @@ static void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
 
 void M_RD_Change_Msg_Pickup_Color(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-        message_pickup_color--;
-        if (message_pickup_color < 0)
-            message_pickup_color = 17;
-        break;
-
-        case 1:
-        message_pickup_color++;
-        if (message_pickup_color > 17)
-            message_pickup_color = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&message_pickup_color, 0, 17, option);
 
     // [JN] Redefine pickup message color.
     M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
@@ -2667,20 +2567,7 @@ void M_RD_Change_Msg_Pickup_Color(intptr_t option)
 
 void M_RD_Change_Msg_Secret_Color(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-        message_secret_color--;
-        if (message_secret_color < 0)
-            message_secret_color = 17;
-        break;
-
-        case 1:
-        message_secret_color++;
-        if (message_secret_color > 17)
-            message_secret_color = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&message_secret_color, 0, 17, option);
 
     // [JN] Redefine revealed secret message color.
     M_RD_Define_Msg_Color(msg_secret, message_secret_color);
@@ -2688,20 +2575,7 @@ void M_RD_Change_Msg_Secret_Color(intptr_t option)
 
 void M_RD_Change_Msg_System_Color(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-        message_system_color--;
-        if (message_system_color < 0)
-            message_system_color = 17;
-        break;
-
-        case 1:
-        message_system_color++;
-        if (message_system_color > 17)
-            message_system_color = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&message_system_color, 0, 17, option);
 
     // [JN] Redefine revealed secret message color.
     M_RD_Define_Msg_Color(msg_system, message_system_color);
@@ -2709,20 +2583,7 @@ void M_RD_Change_Msg_System_Color(intptr_t option)
 
 void M_RD_Change_Msg_Chat_Color(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-        message_chat_color--;
-        if (message_chat_color < 0)
-            message_chat_color = 17;
-        break;
-
-        case 1:
-        message_chat_color++;
-        if (message_chat_color > 17)
-            message_chat_color = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&message_chat_color, 0, 17, option);
 
     // [JN] Redefine netgame chat message color.
     M_RD_Define_Msg_Color(msg_chat, message_chat_color);
@@ -2877,108 +2738,27 @@ static void M_RD_AutoMapGrid(intptr_t option)
 
 static void M_RD_AutoMapGridSize(intptr_t option)
 {
-    switch (option)
-    {
-        case 0:
-            if (automap_grid_size == 512)
-                automap_grid_size = 256;
-            else
-            if (automap_grid_size == 256)
-                automap_grid_size = 128;
-            else
-            if (automap_grid_size == 128)
-                automap_grid_size = 64;
-            else
-            if (automap_grid_size == 64)
-                automap_grid_size = 32;
-        break;
-
-        case 1:
-            if (automap_grid_size == 32)
-                automap_grid_size = 64;
-            else
-            if (automap_grid_size == 64)
-                automap_grid_size = 128;
-            else
-            if (automap_grid_size == 128)
-                automap_grid_size = 256;
-            else
-            if (automap_grid_size == 256)
-                automap_grid_size = 512;
-        break;
-    }
+    RD_Menu_ShiftSlideInt(&automap_grid_size, 32, 512, option);
 }
 
 static void M_RD_AutoMapStats(intptr_t option)
 {
-    switch(option)
-    {
-        case 0: 
-        automap_stats--;
-        if (automap_stats < 0) 
-            automap_stats = 2;
-        break;
-    
-        case 1:
-        automap_stats++;
-        if (automap_stats > 2)
-            automap_stats = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&automap_stats, 0, 2, option);
 }
 
 static void M_RD_AutoMapLevTime(intptr_t option)
 {
-    switch(option)
-    {
-        case 0: 
-        automap_level_time--;
-        if (automap_level_time < 0) 
-            automap_level_time = 2;
-        break;
-    
-        case 1:
-        automap_level_time++;
-        if (automap_level_time > 2)
-            automap_level_time = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&automap_level_time, 0, 2, option);
 }
 
 static void M_RD_AutoMapTotTime(intptr_t option)
 {
-    switch(option)
-    {
-        case 0: 
-        automap_total_time--;
-        if (automap_total_time < 0) 
-            automap_total_time = 2;
-        break;
-    
-        case 1:
-        automap_total_time++;
-        if (automap_total_time > 2)
-            automap_total_time = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&automap_total_time, 0, 2, option);
 }
 
 static void M_RD_AutoMapCoords(intptr_t option)
 {
-    switch(option)
-    {
-        case 0: 
-        automap_coords--;
-        if (automap_coords < 0) 
-            automap_coords = 2;
-        break;
-    
-        case 1:
-        automap_coords++;
-        if (automap_coords > 2)
-            automap_coords = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&automap_coords, 0, 2, option);
 }
 
 // -----------------------------------------------------------------------------
@@ -3058,17 +2838,7 @@ static void DrawSoundMenu(void)
 
 static void M_RD_SfxVolume(intptr_t option)
 {
-    if (option == RIGHT_DIR)
-    {
-        if (snd_MaxVolume < 15)
-        {
-            snd_MaxVolume++;
-        }
-    }
-    else if (snd_MaxVolume)
-    {
-        snd_MaxVolume--;
-    }
+    RD_Menu_SlideInt(&snd_MaxVolume, 0, 15, option);
 
     snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable.
 
@@ -3078,34 +2848,13 @@ static void M_RD_SfxVolume(intptr_t option)
 
 static void M_RD_MusVolume(intptr_t option)
 {
-    if (option == RIGHT_DIR)
-    {
-        if (snd_MusicVolume < 15)
-        {
-            snd_MusicVolume++;
-        }
-    }
-    else if (snd_MusicVolume)
-    {
-        snd_MusicVolume--;
-    }
-
+    RD_Menu_SlideInt(&snd_MusicVolume, 0, 15, option);
     S_SetMusicVolume();
 }
 
 static void M_RD_SfxChannels(intptr_t option)
 {
-    if (option == RIGHT_DIR)
-    {
-        if (snd_Channels < 64)
-        {
-            snd_Channels += 4;
-        }
-    }
-    else if (snd_Channels > 4)
-    {
-        snd_Channels -= 4;
-    }
+    RD_Menu_SlideInt_Step(&snd_Channels, 4, 64, 4, option);
 
     // Reallocate sound channels
     S_ChannelsRealloc();
@@ -3340,18 +3089,10 @@ static void DrawSoundSystemMenu(void)
 
 static void M_RD_SoundDevice(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-        case 1:
-            if (snd_sfxdevice == 0)
-                snd_sfxdevice = 3;
-            else
-            if (snd_sfxdevice == 3)
-                snd_sfxdevice = 0;
-        default:
-            break;
-    }
+    if (snd_sfxdevice == 0)
+        snd_sfxdevice = 3;
+    else if (snd_sfxdevice == 3)
+        snd_sfxdevice = 0;
 
     // Reinitialize SFX module
     InitSfxModule(snd_sfxdevice);
@@ -3436,38 +3177,7 @@ static void M_RD_MusicDevice(intptr_t option)
 
 static void M_RD_Sampling(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (snd_samplerate == 44100)
-            {
-                snd_samplerate = 22050;
-            }
-            else if (snd_samplerate == 22050)
-            {
-                snd_samplerate = 11025;
-            }
-            else if (snd_samplerate == 11025)
-            {
-                snd_samplerate  = 44100;
-            }
-            break;
-        case 1:
-            if (snd_samplerate == 11025)
-            {
-                snd_samplerate = 22050;
-            }
-            else if (snd_samplerate == 22050)
-            {
-                snd_samplerate = 44100;
-            }
-            else if (snd_samplerate == 44100)
-            {
-                snd_samplerate = 11025;
-            }
-        default:
-            break;
-    }
+    RD_Menu_ShiftSpinInt(&snd_samplerate, 11025, 44100, option);
 }
 
 static void M_RD_SndMode(intptr_t option)
@@ -3630,51 +3340,17 @@ static void M_RD_AlwaysRun(intptr_t option)
 
 static void M_RD_Sensitivity(intptr_t option)
 {
-    if (option == RIGHT_DIR)
-    {
-        if (mouseSensitivity < 255) // [crispy] extended range
-        {
-            mouseSensitivity++;
-        }
-    }
-    else if (mouseSensitivity)
-    {
-        mouseSensitivity--;
-    }
+    RD_Menu_SlideInt(&mouseSensitivity, 0, 255, option); // [crispy] extended range
 }
 
 static void M_RD_Acceleration(intptr_t option)
 {
-    switch (option)
-    {
-        case 0:
-            if (mouse_acceleration > 1.1)
-                mouse_acceleration -= 0.1F;
-            break;
-
-        case 1:
-            if (mouse_acceleration < 5.0)
-                mouse_acceleration += 0.1F;
-        default:
-            break;
-    }
+    RD_Menu_SlideFloat_Step(&mouse_acceleration, 1.1F, 5.0F, 0.1F, option);
 }
 
 static void M_RD_Threshold(intptr_t option)
 {
-    switch (option)
-    {
-        case 0:
-            if (mouse_threshold > 0)
-                mouse_threshold--;
-            break;
-
-        case 1:
-            if (mouse_threshold < 32)
-                mouse_threshold++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&mouse_threshold, 0, 32, option);
 }
 
 static void M_RD_MouseLook(intptr_t option)
@@ -3910,20 +3586,7 @@ static void M_RD_FlipCorpses(intptr_t option)
 
 static void M_RD_FloatAmplitude(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            floating_powerups--;
-            if (floating_powerups < 0)
-                floating_powerups = 2;
-            break;
-        case 1:
-            floating_powerups++;
-            if (floating_powerups > 2)
-                floating_powerups = 0;
-        default:
-            break;
-    }
+    RD_Menu_SpinInt(&floating_powerups, 0, 2, option);
 }
 
 // -----------------------------------------------------------------------------
@@ -3973,7 +3636,7 @@ static void DrawGameplay2Menu(void)
 
         // Draw widget
         dp_translation = ammo_widget ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(ammo_widget == 1 ? "BRIEF" : 
+        MN_DrTextSmallENG(DEH_String(ammo_widget == 1 ? "BRIEF" :
                                      ammo_widget == 2 ? "FULL" :  "OFF"), 124 + wide_delta, 76);
         dp_translation = NULL;
 
@@ -4038,7 +3701,7 @@ static void DrawGameplay2Menu(void)
 
         // Отображать виджет
         dp_translation = ammo_widget ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(ammo_widget == 1 ? "RHFNRBQ" : 
+        MN_DrTextSmallRUS(DEH_String(ammo_widget == 1 ? "RHFNRBQ" :
                                      ammo_widget == 2 ? "GJLHJ,YSQ" : "DSRK"), 179 + wide_delta, 76);
         dp_translation = NULL;
 
@@ -4083,20 +3746,7 @@ static void M_RD_ColoredSBar(intptr_t option)
 
 static void M_RD_ColoredGem(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            sbar_colored_gem--;
-            if (sbar_colored_gem < 0)
-                sbar_colored_gem = 2;
-            break;
-        case 1:
-            sbar_colored_gem++;
-            if (sbar_colored_gem > 2)
-                sbar_colored_gem = 0;
-        default:
-            break;
-    }
+    RD_Menu_SpinInt(&sbar_colored_gem, 0, 2, option);
 }
 
 static void M_RD_NegativeHealth(intptr_t option)
@@ -4106,22 +3756,7 @@ static void M_RD_NegativeHealth(intptr_t option)
 
 static void M_RD_AmmoWidgetDraw(intptr_t option)
 {
-    switch (option)
-    {
-        case 0: 
-            ammo_widget--;
-            if (ammo_widget < 0)
-                ammo_widget = 2;
-            break;
-
-        case 1:
-            ammo_widget++;
-            if (ammo_widget > 2)
-                ammo_widget = 0;
-        default:
-            break;
-    }
-
+    RD_Menu_SpinInt(&ammo_widget, 0, 2, option);
 }
 
 static void M_RD_AmmoWidgetColoring(intptr_t option)
@@ -4136,21 +3771,7 @@ static void M_RD_CrossHairDraw(intptr_t option)
 
 static void M_RD_CrossHairType(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            crosshair_type--;
-            if (crosshair_type < 0)
-                crosshair_type = 3;
-            break;
-
-        case 1:
-            crosshair_type++;
-            if (crosshair_type > 3)
-                crosshair_type = 0;
-        default:
-            break;
-    }
+    RD_Menu_SpinInt(&crosshair_type, 0, 3, option);
 }
 
 static void M_RD_CrossHairScale(intptr_t option)
@@ -4352,20 +3973,7 @@ static void M_RD_ShowAllArti(intptr_t option)
 
 static void M_RD_ShowArtiTimer(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            show_artifacts_timer--;
-            if (show_artifacts_timer < 0)
-                show_artifacts_timer = 3;
-            break;
-        case 1:
-            show_artifacts_timer++;
-            if (show_artifacts_timer > 3)
-                show_artifacts_timer = 0;
-        default:
-            break;
-    }
+    RD_Menu_SpinInt(&show_artifacts_timer, 0, 3, option);
 }
 
 static void M_RD_FixMapErrors(intptr_t option)
@@ -4559,18 +4167,7 @@ static void DrawLevelSelect1Menu(void)
 
 static void M_RD_SelectiveSkill(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_skill > 0)
-                selective_skill--;
-            break;
-        case 1:
-            if (selective_skill < 5)
-                selective_skill++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_skill, 0, 5, option);
 }
 
 static void M_RD_SelectiveEpisode(intptr_t option)
@@ -4579,68 +4176,22 @@ static void M_RD_SelectiveEpisode(intptr_t option)
     if (gamemode == shareware)
         return;
 
-    switch(option)
-    {
-        case 0:
-            if (selective_episode > 1)
-                selective_episode--;
-            break;
-        case 1:
-            if (selective_episode < (gamemode == retail ? 5 : 3))
-                selective_episode++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_episode, 1, gamemode == retail ? 5 : 3, option);
 }
 
 static void M_RD_SelectiveMap(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_map > 1)
-                selective_map--;
-            break;
-
-        case 1:
-            if (selective_map < 9)
-                selective_map++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_map, 1, 9, option);
 }
 
 static void M_RD_SelectiveHealth(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_health > 1)
-                selective_health--;
-            break;
-
-        case 1:
-            if (selective_health < 100)
-                selective_health++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_health, 1, 100, option);
 }
 
 static void M_RD_SelectiveArmor(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_armor > 0)
-                selective_armor--;
-            break;
-        case 1:
-            if (selective_armor < (selective_armortype == 1 ? 100 : 200))
-                selective_armor++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_armor, 0, selective_armortype == 1 ? 100 : 200, option);
 }
 
 static void M_RD_SelectiveArmorType(intptr_t option)
@@ -4878,98 +4429,32 @@ static void M_RD_SelectiveBag(intptr_t option)
 
 static void M_RD_SelectiveAmmo_0(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_ammo_0 > 0)
-                selective_ammo_0--;
-            break;
-        case 1:
-            if (selective_ammo_0 < (selective_backpack ? 200 : 100))
-                selective_ammo_0++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_0, 0, selective_backpack ? 200 : 100, option);
 }
 
 static void M_RD_SelectiveAmmo_1(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_ammo_1 > 0)
-                selective_ammo_1--;
-            break;
-        case 1:
-            if (selective_ammo_1 < (selective_backpack ? 100 : 50))
-                selective_ammo_1++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_1, 0, selective_backpack ? 100 : 50, option);
 }
 
 static void M_RD_SelectiveAmmo_2(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_ammo_2 > 0)
-                selective_ammo_2--;
-            break;
-        case 1:
-            if (selective_ammo_2 < (selective_backpack ? 400 : 200))
-                selective_ammo_2++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_2, 0, selective_backpack ? 400 : 200, option);
 }
 
 static void M_RD_SelectiveAmmo_3(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_ammo_3 > 0)
-                selective_ammo_3--;
-            break;
-        case 1:
-            if (selective_ammo_3 < (selective_backpack ? 400 : 200))
-                selective_ammo_3++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_3, 0, selective_backpack ? 400 : 200, option);
 }
 
 static void M_RD_SelectiveAmmo_4(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_ammo_4 > 0)
-                selective_ammo_4--;
-            break;
-        case 1:
-            if (selective_ammo_4 < (selective_backpack ? 40 : 20))
-                selective_ammo_4++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_4, 0, selective_backpack ? 40 : 20, option);
 }
 
 static void M_RD_SelectiveAmmo_5(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_ammo_5 > 0)
-                selective_ammo_5--;
-            break;
-        case 1:
-            if (selective_ammo_5 < (selective_backpack ? 300 : 150))
-                selective_ammo_5++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_ammo_5, 0, selective_backpack ? 300 : 150, option);
 }
 
 static void M_RD_SelectiveKey_0(intptr_t option)
@@ -5099,166 +4584,53 @@ static void DrawLevelSelect3Menu(void)
 
 static void M_RD_SelectiveArti_0(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_0 > 0)
-                selective_arti_0--;
-            break;
-        case 1:
-            if (selective_arti_0 < 16)
-                selective_arti_0++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_0, 0, 16, option);
 }
 
 static void M_RD_SelectiveArti_1(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_1 > 0)
-                selective_arti_1--;
-            break;
-        case 1:
-            if (selective_arti_1 < 16)
-                selective_arti_1++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_1, 0, 16, option);
 }
 
 static void M_RD_SelectiveArti_2(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_2 > 0)
-                selective_arti_2--;
-            break;
-        case 1:
-            if (selective_arti_2 < 16)
-                selective_arti_2++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_2, 0, 16, option);
 }
 
 static void M_RD_SelectiveArti_3(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_3 > 0)
-                selective_arti_3--;
-            break;
-        case 1:
-            if (selective_arti_3 < 16)
-                selective_arti_3++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_3, 0, 16, option);
 }
 
 static void M_RD_SelectiveArti_4(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_4 > 0)
-                selective_arti_4--;
-            break;
-        case 1:
-            if (selective_arti_4 < 16)
-                selective_arti_4++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_4, 0, 16, option);
 }
 
 static void M_RD_SelectiveArti_5(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_5 > 0)
-                selective_arti_5--;
-            break;
-        case 1:
-            if (selective_arti_5 < 16)
-                selective_arti_5++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_5, 0, 16, option);
 }
 
 static void M_RD_SelectiveArti_6(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_6 > 0)
-                selective_arti_6--;
-            break;
-        case 1:
-            if (selective_arti_6 < 16)
-                selective_arti_6++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_6, 0, 16, option);
 }
 
 static void M_RD_SelectiveArti_7(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_7 > 0)
-                selective_arti_7--;
-            break;
-        case 1:
-            if (selective_arti_7 < 16)
-                selective_arti_7++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_7, 0, 16, option);
 }
 
 static void M_RD_SelectiveArti_8(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_8 > 0)
-                selective_arti_8--;
-            break;
-        case 1:
-            if (selective_arti_8 < 16)
-                selective_arti_8++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_8, 0, 16, option);
 }
 
 static void M_RD_SelectiveArti_9(intptr_t option)
 {
-    switch(option)
-    {
-        case 0:
-            if (selective_arti_9 > 0)
-                selective_arti_9--;
-            break;
-        case 1:
-            if (selective_arti_9 < 16)
-                selective_arti_9++;
-        default:
-            break;
-    }
+    RD_Menu_SlideInt(&selective_arti_9, 0, 16, option);
 }
-
-
-
 
 //---------------------------------------------------------------------------
 // [JN] Vanilla Options menu 1 and 2
@@ -5789,7 +5161,7 @@ boolean MN_Responder(event_t * event)
     {
         if (event->type == ev_mouse && mousewait < I_GetTime())
         {
-            // [JN] Catch all incoming data1 mouse events. Makes middle mouse button 
+            // [JN] Catch all incoming data1 mouse events. Makes middle mouse button
             // working for message interruption and for binding ability.
             if (event->data1)
             {

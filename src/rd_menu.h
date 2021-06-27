@@ -17,6 +17,9 @@
 
 #include <stdint.h>
 
+#define LEFT_DIR 0
+#define RIGHT_DIR 1
+
 typedef enum
 {
     ITT_EMPTY,
@@ -47,5 +50,43 @@ typedef struct Menu_s
 
     int lastOn;
 } Menu_t;
+
+/**
+ * Increments or decrements 'var' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
+ * If value of 'var' exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range
+ */
+extern void RD_Menu_SpinInt(int* var, int minValue, int maxValue, int direction);
+/**
+ * Increments or decrements 'var' by 'step' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
+ * If value of 'var' exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range
+ */
+extern void RD_Menu_SpinInt_Step(int* var, int minValue, int maxValue, int step, int direction);
+
+/**
+ * Increments or decrements 'var' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
+ * Value can not exit range specified by 'minValue' and 'maxValue'
+ */
+extern void RD_Menu_SlideInt(int* var, int minValue, int maxValue, int direction);
+/**
+ * Increments or decrements 'var' by 'step' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
+ * Value can not exit range specified by 'minValue' and 'maxValue'
+ */
+extern void RD_Menu_SlideInt_Step(int* var, int minValue, int maxValue, int step, int direction);
+/**
+ * Increments or decrements 'var' by 'step' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
+ * Value can not exit range specified by 'minValue' and 'maxValue'
+ */
+extern void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, float step, int direction);
+
+/**
+ * Shifts value of 'var' by 2 in 'direction', LEFT_DIR = left, RIGHT_DIR = right.
+ * If value of 'var' exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range
+ */
+extern void RD_Menu_ShiftSpinInt(int* var, int minValue, int maxValue, int direction);
+/**
+ * Shifts value of 'var' by 2 in 'direction', LEFT_DIR = left, RIGHT_DIR = right.
+ * Value can not exit range specified by 'minValue' and 'maxValue'
+ */
+extern void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, int direction);
 
 #endif //RD_MENU_H
