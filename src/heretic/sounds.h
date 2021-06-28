@@ -284,6 +284,8 @@ typedef enum
     sfx_amb9,
     sfx_amb10,
     sfx_amb11,
+    // [crispy] play SECRET if available
+    sfx_secret,
     NUMSFX
 } sfxenum_t;
 

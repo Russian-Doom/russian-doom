@@ -247,5 +247,8 @@ sfxinfo_t S_sfx[] = {
     SOUND("amb8",    1,   1),
     SOUND("amb9",    1,   1),
     SOUND("amb10",   1,   1),
-    SOUND("amb11",   1,   0)
+    SOUND("amb11",   1,   0),
+
+    // [crispy] play SECRET if available
+    SOUND("secret",  60,  1)
 };
