@@ -252,6 +252,8 @@ typedef enum
     sfx_dgact,
     sfx_dgdth,
     sfx_dgpain,
+    // [crispy] play DSSECRET if available
+    sfx_secret,
     NUMSFX
 } sfxenum_t;
 

@@ -254,5 +254,7 @@ sfxinfo_t S_sfx[] =
     SOUND("dgact", 120),
     SOUND("dgdth",  70),
     SOUND("dgpain", 96),
+    // [crispy] play DSSECRET if available
+    SOUND("secret",  60),
 };
 
