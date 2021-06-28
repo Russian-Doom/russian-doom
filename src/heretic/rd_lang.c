@@ -68,6 +68,10 @@ char* txt_wpnskullrod;
 char* txt_wpnphoenixrod;
 char* txt_wpngauntlets;
 
+// CT_chat.c
+char* txt_msgsent;
+char* txt_noplayers;
+
 // SB_bar.c
 char* txt_cheatgodon;
 char* txt_cheatgodoff;
@@ -101,8 +105,12 @@ char* txt_needbluekey;
 char* txt_needgreenkey;
 char* txt_needyellowkey;
 
+// P_spec.c
+char* txt_secret_found;
+
 // G_game.c
 char* txt_gamesaved;
+char* txt_testcontrols;
 
 // AM_map.c
 char* amstr_followon;
@@ -137,6 +145,16 @@ char* txt_gamma_original_35;
 char* txt_gamma_original_4;
 char* txt_detail_high;
 char* txt_detail_low;
+char* txt_messages_on;
+char* txt_messages_off;
+char* txt_settings_reset;
+char* txt_cant_start_in_netgame;
+char* txt_cant_load_in_netgame;
+char* txt_registered_only;
+char* txt_quicksaving;
+char* txt_quickloading;
+char* txt_choose_qsave;
+char* txt_choose_qload;
 
 // Port-specific strings
 char* txt_alwaysrun_on;
@@ -200,6 +218,10 @@ void RD_DefineLanguageStrings (void)
         txt_wpnphoenixrod = TXT_WPNPHOENIXROD;
         txt_wpngauntlets  = TXT_WPNGAUNTLETS;
 
+        // CT_chat.c
+        txt_msgsent   = TXT_MSGSENT;
+        txt_noplayers = TXT_NOPLAYERS;
+
         // SB_bar.c
         txt_cheatgodon         = TXT_CHEATGODON;
         txt_cheatgodoff        = TXT_CHEATGODOFF;
@@ -233,8 +255,12 @@ void RD_DefineLanguageStrings (void)
         txt_needgreenkey       = TXT_NEEDGREENKEY;
         txt_needyellowkey      = TXT_NEEDYELLOWKEY;
 
+        // P_spec.c
+        txt_secret_found       = TXT_SECRET_FOUND;
+
         // G_game.c
         txt_gamesaved          = TXT_GAMESAVED;
+        txt_testcontrols       = TXT_TESTCONTROLS;
 
         // AM_map.c
         amstr_followon         = AMSTR_FOLLOWON;
@@ -269,6 +295,16 @@ void RD_DefineLanguageStrings (void)
         txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4;
         txt_detail_high        = TXT_GAMMA_DETAIL_HIGH;
         txt_detail_low         = TXT_GAMMA_DETAIL_LOW;
+        txt_messages_on        = TXT_MESSAGES_ON;
+        txt_messages_off       = TXT_MESSAGES_OFF;
+        txt_settings_reset     = TXT_SETTINGS_RESET;
+        txt_cant_start_in_netgame = TXT_CANT_START_IN_NETGAME;
+        txt_cant_load_in_netgame  = TXT_CANT_LOAD_IN_NETGAME;
+        txt_registered_only    = TXT_REGISTERED_ONLY;
+        txt_quicksaving        = TXT_QUICKSAVING;
+        txt_quickloading       = TXT_QUICKLOADING;
+        txt_choose_qsave       = TXT_CHOOSE_QSAVE;
+        txt_choose_qload       = TXT_CHOOSE_QLOAD;
 
         // Port-specific strings
         txt_alwaysrun_on       = TXT_ALWAYSRUN_ON;
@@ -326,6 +362,10 @@ void RD_DefineLanguageStrings (void)
         txt_wpnphoenixrod = TXT_WPNPHOENIXROD_RUS;
         txt_wpngauntlets  = TXT_WPNGAUNTLETS_RUS;
 
+        // CT_chat.c
+        txt_msgsent   = TXT_MSGSENT_RUS;
+        txt_noplayers = TXT_NOPLAYERS_RUS;
+
         // SB_bar.c
         txt_cheatgodon         = TXT_CHEATGODON_RUS;
         txt_cheatgodoff        = TXT_CHEATGODOFF_RUS;
@@ -359,8 +399,12 @@ void RD_DefineLanguageStrings (void)
         txt_needgreenkey       = TXT_NEEDGREENKEY_RUS;
         txt_needyellowkey      = TXT_NEEDYELLOWKEY_RUS;
 
+        // P_spec.c
+        txt_secret_found       = TXT_SECRET_FOUND_RUS;
+
         // G_game.c
         txt_gamesaved          = TXT_GAMESAVED_RUS;
+        txt_testcontrols       = TXT_TESTCONTROLS_RUS;
 
         // AM_map.c
         amstr_followon         = AMSTR_FOLLOWON_RUS;
@@ -395,6 +439,16 @@ void RD_DefineLanguageStrings (void)
         txt_gamma_original_4   = TXT_GAMMA_ORIGINAL_4_RUS;
         txt_detail_high        = TXT_GAMMA_DETAIL_HIGH_RUS;
         txt_detail_low         = TXT_GAMMA_DETAIL_LOW_RUS;
+        txt_messages_on        = TXT_MESSAGES_ON_RUS;
+        txt_messages_off       = TXT_MESSAGES_OFF_RUS;
+        txt_settings_reset     = TXT_SETTINGS_RESET_RUS;
+        txt_cant_start_in_netgame = TXT_CANT_START_IN_NETGAME_RUS;
+        txt_cant_load_in_netgame  = TXT_CANT_LOAD_IN_NETGAME_RUS;
+        txt_registered_only    = TXT_REGISTERED_ONLY_RUS;
+        txt_quicksaving        = TXT_QUICKSAVING_RUS;
+        txt_quickloading       = TXT_QUICKLOADING_RUS;
+        txt_choose_qsave       = TXT_CHOOSE_QSAVE_RUS;
+        txt_choose_qload       = TXT_CHOOSE_QLOAD_RUS;
 
         // Port-specific strings
         txt_alwaysrun_on       = TXT_ALWAYSRUN_ON_RUS;

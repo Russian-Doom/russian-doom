@@ -77,6 +77,10 @@ extern char* txt_wpnskullrod;
 extern char* txt_wpnphoenixrod;
 extern char* txt_wpngauntlets;
 
+// CT_chat.c
+extern char* txt_msgsent;
+extern char* txt_noplayers;
+
 // SB_bar.c
 extern char* txt_cheatgodon;
 extern char* txt_cheatgodoff;
@@ -110,8 +114,12 @@ extern char* txt_needbluekey;
 extern char* txt_needgreenkey;
 extern char* txt_needyellowkey;
 
+// P_spec.c
+extern char* txt_secret_found;
+
 // G_game.c
 extern char* txt_gamesaved;
+extern char* txt_testcontrols;
 
 // AM_map.c
 extern char* amstr_followon;
@@ -146,6 +154,16 @@ extern char* txt_gamma_original_35;
 extern char* txt_gamma_original_4;
 extern char* txt_detail_high;
 extern char* txt_detail_low;
+extern char* txt_messages_on;
+extern char* txt_messages_off;
+extern char* txt_settings_reset;
+extern char* txt_cant_start_in_netgame;
+extern char* txt_cant_load_in_netgame;
+extern char* txt_registered_only;
+extern char* txt_quicksaving;
+extern char* txt_quickloading;
+extern char* txt_choose_qsave;
+extern char* txt_choose_qload;
 
 // Port-specific strings
 extern char* txt_alwaysrun_on;
@@ -206,6 +224,10 @@ extern char* txt_mlook_off;
 #define TXT_WPNPHOENIXROD       "PHOENIX ROD"
 #define TXT_WPNGAUNTLETS        "GAUNTLETS OF THE NECROMANCER"
 
+// CT_chat.c
+#define TXT_MSGSENT             "-MESSAGE SENT-"
+#define TXT_NOPLAYERS           "THERE ARE NO OTHER PLAYERS IN THE GAME!"
+
 // SB_bar.c
 #define TXT_CHEATGODON          "GOD MODE ON"
 #define TXT_CHEATGODOFF         "GOD MODE OFF"
@@ -239,8 +261,12 @@ extern char* txt_mlook_off;
 #define TXT_NEEDGREENKEY        "YOU NEED A GREEN KEY TO OPEN THIS DOOR"
 #define TXT_NEEDYELLOWKEY       "YOU NEED A YELLOW KEY TO OPEN THIS DOOR"
 
+// P_spec.c
+#define TXT_SECRET_FOUND        "A SECRET IS REVEALED!"
+
 // G_game.c
 #define TXT_GAMESAVED           "GAME SAVED"
+#define TXT_TESTCONTROLS        "PRESS ESCAPE TO QUIT"
 
 // AM_map.c
 #define AMSTR_FOLLOWON          "FOLLOW MODE ON"
@@ -273,9 +299,18 @@ extern char* txt_mlook_off;
 #define TXT_GAMMA_ORIGINAL_3    "STANDARD GAMMA CORRECTION LEVEL 3.0"
 #define TXT_GAMMA_ORIGINAL_35   "STANDARD GAMMA CORRECTION LEVEL 3.5"
 #define TXT_GAMMA_ORIGINAL_4    "STANDARD GAMMA CORRECTION LEVEL 4.0"
-
 #define TXT_GAMMA_DETAIL_HIGH   "HIGH DETAIL"
 #define TXT_GAMMA_DETAIL_LOW    "LOW DETAIL"
+#define TXT_MESSAGES_ON         "MESSAGES ON"
+#define TXT_MESSAGES_OFF        "MESSAGES OFF"
+#define TXT_SETTINGS_RESET      "SETTINGS RESET"
+#define TXT_CANT_START_IN_NETGAME "YOU CAN'T START A NEW GAME IN NETPLAY!"
+#define TXT_CANT_LOAD_IN_NETGAME  "YOU CAN'T LOAD A GAME IN NETPLAY!"
+#define TXT_REGISTERED_ONLY     "ONLY AVAILABLE IN THE REGISTERED VERSION"
+#define TXT_QUICKSAVING         "QUICKSAVING...."
+#define TXT_QUICKLOADING        "QUICKLOADING...."
+#define TXT_CHOOSE_QSAVE        "CHOOSE A QUICKSAVE SLOT"
+#define TXT_CHOOSE_QLOAD        "CHOOSE A QUICKLOAD SLOT"
 
 // F_finale.c
 #define E1TEXT  "with the destruction of the iron\n"\
@@ -382,7 +417,6 @@ extern char* txt_mlook_off;
 #define TXT_MLOOK_OFF       "MOUSE LOOK OFF"
 #define TXT_CROSSHAIR_ON    "CROSSHAIR ON"
 #define TXT_CROSSHAIR_OFF   "CROSSHAIR OFF"
-#define TXT_SECRET_FOUND    "A SECRET IS REVEALED!"
 #define RD_ON               "ON"
 #define RD_OFF              "OFF"
 
@@ -436,6 +470,10 @@ extern char* txt_mlook_off;
 #define TXT_WPNPHOENIXROD_RUS       ";TPK ATYBRCF"          // ЖЕЗЛ ФЕНИКСА
 #define TXT_WPNGAUNTLETS_RUS        "GTHXFNRB YTRHJVFYNF"   // ПЕРЧАТКИ НЕКРОМАНТА
 
+// CT_chat.c
+#define TXT_MSGSENT_RUS             "-CJJ<OTYBT JNGHFDKTYJ-"     // -СООБЩЕНИЕ ОТПРАВЛЕНО-
+#define TXT_NOPLAYERS_RUS           "D BUHT YTN LHEUB[ BUHJRJD!" // В ИГРЕ НЕТ ДРУГИХ ИГРОКОВ!
+
 // SB_bar.c
 #define TXT_CHEATGODON_RUS          "HT;BV ,JUF"                            // РЕЖИМ БОГА
 #define TXT_CHEATGODOFF_RUS         "HT;BV ,JUF JNVTYTY"                    // РЕЖИМ БОГА ОТМЕНЕН
@@ -469,8 +507,12 @@ extern char* txt_mlook_off;
 #define TXT_NEEDGREENKEY_RUS    "LKZ JNRHSNBZ YE;TY PTKTYSQ RK.X"   // ДЛЯ ОТКРЫТИЯ НУЖЕН ЗЕЛЕНЫЙ КЛЮЧ
 #define TXT_NEEDYELLOWKEY_RUS   "LKZ JNRHSNBZ YE;TY ;TKNSQ RK.X"    // ДЛЯ ОТКРЫТИЯ НУЖЕН ЖЕЛТЫЙ КЛЮЧ
 
+// P_spec.c
+#define TXT_SECRET_FOUND_RUS    "J,YFHE;TY NFQYBR!"                 // ОБНАРУЖЕН ТАЙНИК!
+
 // G_game.c
 #define TXT_GAMESAVED_RUS       "BUHF CJ[HFYTYF"    // ИГРА СОХРАНЕНА
+#define TXT_TESTCONTROLS_RUS    "HT;BV GHJDTHRB EGHFDKTYBZ"     // РЕЖИМ ПРОВЕРКИ УПРАВЛЕНИЯ
 
 // AM_map.c
 #define AMSTR_FOLLOWON_RUS      "HT;BV CKTLJDFYBZ DRK.XTY"      // РЕЖИМ СЛЕДОВАНИЯ ВКЛЮЧЕН
@@ -503,9 +545,18 @@ extern char* txt_mlook_off;
 #define TXT_GAMMA_ORIGINAL_3_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 3>0"  // Уровень стандартной гамма-коррекции: 3.0
 #define TXT_GAMMA_ORIGINAL_35_RUS   "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 3>5"  // Уровень стандартной гамма-коррекции: 3.5
 #define TXT_GAMMA_ORIGINAL_4_RUS    "EHJDTYM CNFYLFHNYJQ UFVVF-RJHHTRWBB 4>0"  // Уровень стандартной гамма-коррекции: 4.0
-
 #define TXT_GAMMA_DETAIL_HIGH_RUS   "DSCJRFZ LTNFKBPFWBZ"   // ВЫСОКАЯ ДЕТАЛИЗАЦИЯ
 #define TXT_GAMMA_DETAIL_LOW_RUS    "YBPRFZ LTNFKBPFWBZ"    // НИЗКАЯ ДЕТАЛИЗАЦИЯ
+#define TXT_MESSAGES_ON_RUS         "CJJ,OTYBZ DRK.XTYS"    // СООБЩЕНИЯ ВКЛЮЧЕНЫ
+#define TXT_MESSAGES_OFF_RUS        "CJJ,OTYBZ DSRK.XTYS"   // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
+#define TXT_SETTINGS_RESET_RUS      "YFCNHJQRB C,HJITYS"    // НАСТРОЙКИ СБРОШЕНЫ
+#define TXT_CANT_START_IN_NETGAME_RUS  "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!" // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
+#define TXT_CANT_LOAD_IN_NETGAME_RUS   "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!"       // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
+#define TXT_REGISTERED_ONLY_RUS     "'GBPJL YTLJCNEGTY D LTVJDTHCBB"    // ЭПИЗОД НЕДОСТУПЕН В ДЕМОВЕРСИИ
+#define TXT_QUICKSAVING_RUS         ",SCNHJT CJ[HFYTYBT>>>"             // БЫСТРОЕ СОХРАНЕНИЕ...
+#define TXT_QUICKLOADING_RUS        ",SCNHFZ PFUHEPRF>>>"               // БЫСТРАЯ ЗАГРУЗКА...
+#define TXT_CHOOSE_QSAVE_RUS        "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ" // ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
+#define TXT_CHOOSE_QLOAD_RUS        "DS,THBNT CKJN ,SCNHJQ PFUHEPRB"    // ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
 
 // F_finale.c
 #define E1TEXT_RUS  "C EYBXNJ;TYBTV ;TKTPYS[ KBXTQ\n"\
@@ -731,7 +782,6 @@ extern char* txt_mlook_off;
 #define TXT_MLOOK_OFF_RUS       "J,PJH VSIM. DSRK.XTY"      // ОБЗОР МЫШЬЮ ВЫКЛЮЧЕН
 #define TXT_CROSSHAIR_ON_RUS    "GHBWTK DRK.XTY"            // ПРИЦЕЛ ВКЛЮЧЕН
 #define TXT_CROSSHAIR_OFF_RUS   "GHBWTK DSRK.XTY"           // ПРИЦЕЛ ВЫКЛЮЧЕН
-#define TXT_SECRET_FOUND_RUS    "J,YFHE;TY NFQYBR!"         // ОБНАРУЖЕН ТАЙНИК!
 #define RD_ON_RUS               "DRK"                       // ВКЛ
 #define RD_OFF_RUS              "DSRK"                      // ВЫКЛ
 

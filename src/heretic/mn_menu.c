@@ -2500,17 +2500,11 @@ static void M_RD_Messages(intptr_t option)
 
     if (show_messages)
     {
-        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
-                      "MESSAGES ON" :
-                      "CJJ,OTYBZ DRK.XTYS"), // СООБЩЕНИЯ ВКЛЮЧЕНЫ
-                      msg_system, true);
+        P_SetMessage(&players[consoleplayer], txt_messages_on, msg_system, true);
     }
     else
     {
-        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
-                      "MESSAGES OFF" :
-                      "CJJ,OTYBZ DSRK.XTYS"), // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
-                      msg_system, true);
+        P_SetMessage(&players[consoleplayer], txt_messages_off, msg_system, true);
     }
 
     S_StartSound(NULL, sfx_chat);
@@ -5339,11 +5333,7 @@ void M_RD_DoResetSettings(void)
 
     BorderNeedRefresh = true;
 
-    P_SetMessage(&players[consoleplayer], 
-                  english_language ?
-                  "SETTINGS RESET" :
-                  "YFCNHJQRB C,HJITYS", // НАСТРОЙКИ СБРОШЕНЫ
-                  msg_system, false);
+    P_SetMessage(&players[consoleplayer], txt_settings_reset, msg_system, false);
     S_StartSound(NULL, sfx_dorcls);
     menuactive = true;
 }
@@ -5423,17 +5413,11 @@ static void SCNetCheck_NG_LG(Menu_t* menu)
     }
     else if(menu == &EpisodeMenu)
     {
-        P_SetMessage(&players[consoleplayer], english_language ?
-        "YOU CAN'T START A NEW GAME IN NETPLAY!" :
-        "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
-        msg_system, true);
+        P_SetMessage(&players[consoleplayer], txt_cant_start_in_netgame, msg_system, true);
     }
     else // if(menu == &LoadMenu)
     {
-        P_SetMessage(&players[consoleplayer], english_language ?
-        "YOU CAN'T LOAD A GAME IN NETPLAY!" :
-        "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
-        msg_system, true);
+        P_SetMessage(&players[consoleplayer], txt_cant_load_in_netgame, msg_system, true);
     }
     menuactive = false;
 }
@@ -5453,16 +5437,10 @@ static boolean SCNetCheck(int option)
     switch (option)
     {
         case 1:
-            P_SetMessage(&players[consoleplayer], english_language ?
-                         "YOU CAN'T START A NEW GAME IN NETPLAY!" :
-                         "YTDJPVJ;YJ YFXFNM YJDE. BUHE D CTNTDJQ BUHT!", // НЕВОЗМОЖНО НАЧАТЬ НОВУЮ ИГРУ В СЕТЕВОЙ ИГРЕ!
-                         msg_system, true);
+            P_SetMessage(&players[consoleplayer], txt_cant_start_in_netgame, msg_system, true);
             break;
         case 2:
-            P_SetMessage(&players[consoleplayer], english_language ?
-                         "YOU CAN'T LOAD A GAME IN NETPLAY!" :
-                         "YTDJPVJ;YJ PFUHEPBNMCZ D CTNTDJQ BUHT!", // НЕВОЗМОЖНО ЗАГРУЗИТЬСЯ В СЕТЕВОЙ ИГРЕ!
-                         msg_system, true);
+            P_SetMessage(&players[consoleplayer], txt_cant_load_in_netgame, msg_system, true);
             break;
         default:
             break;
@@ -5504,17 +5482,11 @@ static void SCMessages(intptr_t option)
 
     if (show_messages)
     {
-        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
-                      "MESSAGES ON" :
-                      "CJJ,OTYBZ DRK.XTYS"), // СООБЩЕНИЯ ВКЛЮЧЕНЫ
-                      msg_system, true);
+        P_SetMessage(&players[consoleplayer], txt_messages_on, msg_system, true);
     }
     else
     {
-        P_SetMessage(&players[consoleplayer], DEH_String(english_language ?
-                      "MESSAGES OFF" :
-                      "CJJ,OTYBZ DSRK.XTYS"), // СООБЩЕНИЯ ВЫКЛЮЧЕНЫ
-                      msg_system, true);
+        P_SetMessage(&players[consoleplayer], txt_messages_off, msg_system, true);
     }
 
     S_StartSound(NULL, sfx_chat);
@@ -5610,10 +5582,7 @@ static void SCEpisode(intptr_t option)
 {
     if (gamemode == shareware && option > 1)
     {
-        P_SetMessage(&players[consoleplayer], english_language ?
-                     "ONLY AVAILABLE IN THE REGISTERED VERSION" :
-                     "'GBPJL YTLJCNEGTY D LTVJDTHCBB", // ЭПИЗОД НЕДОСТУПЕН В ДЕМОВЕРСИИ
-                     msg_system, true);
+        P_SetMessage(&players[consoleplayer], txt_registered_only, msg_system, true);
     }
     else
     {
@@ -5785,20 +5754,14 @@ boolean MN_Responder(event_t * event)
                     break;
 
                 case 3:
-                    P_SetMessage(&players[consoleplayer], english_language ?
-                                  "QUICKSAVING...." :
-                                  ",SCNHJT CJ[HFYTYBT>>>", // БЫСТРОЕ СОХРАНЕНИЕ...
-                                  msg_system, false);
+                    P_SetMessage(&players[consoleplayer], txt_quicksaving, msg_system, false);
                     FileMenuKeySteal = true;
                     SCSaveGame(quicksave - 1);
                     BorderNeedRefresh = true;
                     break;
 
                 case 4:
-                    P_SetMessage(&players[consoleplayer], english_language ?
-                                  "QUICKLOADING...." :
-                                  ",SCNHFZ PFUHEPRF>>>", // БЫСТРАЯ ЗАГРУЗКА...
-                                  msg_system, false);
+                    P_SetMessage(&players[consoleplayer], txt_quickloading, msg_system, false);
                     SCLoadGame(quickload - 1);
                     BorderNeedRefresh = true;
                     break;
@@ -5948,10 +5911,7 @@ boolean MN_Responder(event_t * event)
                     S_StartSound(NULL, sfx_dorcls);
                     slottextloaded = false; //reload the slot text, when needed
                     quicksave = -1;
-                    P_SetMessage(&players[consoleplayer], english_language ?
-                                  "CHOOSE A QUICKSAVE SLOT" : 
-                                  "DS,THBNT CKJN ,SCNHJUJ CJ[HFYTYBZ", // ВЫБЕРИТЕ СЛОТ БЫСТРОГО СОХРАНЕНИЯ
-                                  msg_system, true);
+                    P_SetMessage(&players[consoleplayer], txt_choose_qsave, msg_system, true);
                 }
                 else
                 {
@@ -5996,10 +5956,7 @@ boolean MN_Responder(event_t * event)
                 S_StartSound(NULL, sfx_dorcls);
                 slottextloaded = false;     //reload the slot text, when needed
                 quickload = -1;
-                P_SetMessage(&players[consoleplayer], english_language ?
-                             "CHOOSE A QUICKLOAD SLOT" :
-                             "DS,THBNT CKJN ,SCNHJQ PFUHEPRB", // ВЫБЕРИТЕ СЛОТ БЫСТРОЙ ЗАГРУЗКИ
-                             msg_system, true);
+                P_SetMessage(&players[consoleplayer], txt_choose_qload, msg_system, true);
             }
             else
             {

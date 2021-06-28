@@ -929,8 +929,7 @@ void P_PlayerInSpecialSector(player_t * player)
                          I_GetSfxLumpNum(&S_sfx[sfx_chat]) != -1 ? sfx_chat : -1;
 
                 // [JN] Notification of revealed secrets
-                P_SetMessage(&players[consoleplayer], english_language ? 
-                             TXT_SECRET_FOUND : TXT_SECRET_FOUND_RUS, msg_secret, true);
+                P_SetMessage(&players[consoleplayer], txt_secret_found, msg_secret, true);
                 if (player == &players[consoleplayer] && sfx_id != -1)
                 S_StartSound(NULL, sfx_id);
             }
