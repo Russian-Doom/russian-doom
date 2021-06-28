@@ -2259,13 +2259,7 @@ extern char* ststr_massacre;
 #define CC_CYBER_RUS    "rb,thltvjy"            // Кибердемон
 #define CC_HERO_RUS     "yfi uthjq"             // Наш Герой
 
-
-//
-// Отображение версии проекта
-//
-
 // English
-#define STSTR_VERSION   "Version 5.0"
 #if defined (_WIN64)
 #define STSRT_ARCH      " - (x64)"
 #elif defined (_WIN32)
@@ -2273,10 +2267,8 @@ extern char* ststr_massacre;
 #else
 #define STSRT_ARCH      ""
 #endif
-#define STSRT_DATE      "2021-00-00"        // YYYY-MM-DD
 
 // Русский
-#define STSTR_VERSION_RUS   "dthcbz 5>0"    // Версия 5.0
 #if defined (_WIN64)
 #define STSRT_ARCH_RUS      " - ([64)"      // x64
 #elif defined (_WIN32)
@@ -2284,6 +2276,5 @@ extern char* ststr_massacre;
 #else
 #define STSRT_ARCH_RUS      ""              // ?  
 #endif
-
 
 #endif

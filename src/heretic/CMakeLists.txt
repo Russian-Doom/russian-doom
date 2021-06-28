@@ -54,7 +54,16 @@ add_library(heretic STATIC
             rd_lang.c           rd_lang.h
             sb_bar.c
             sounds.c            sounds.h
-            s_sound.c           s_sound.h)
+            s_sound.c           s_sound.h
+)
 
-target_include_directories(heretic PRIVATE "../" "${CMAKE_CURRENT_BINARY_DIR}/../../")
-target_link_libraries(heretic textscreen SDL2::SDL2 SDL2::mixer SDL2::net)
+target_include_directories(heretic PRIVATE
+    "${PROJECT_SOURCE_DIR}/src"
+    "${PROJECT_BINARY_DIR}"
+)
+target_link_libraries(heretic
+    textscreen
+    SDL2::SDL2
+    SDL2::mixer
+    SDL2::net
+)

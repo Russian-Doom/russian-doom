@@ -1381,7 +1381,9 @@ void D_IdentifyVersion(void)
 
 void D_RD_LoadSigilAssets (boolean compat)
 {
-    W_MergeFile("base/doom-sigil.wad");
+    char* internalWadName = RD_M_FindInternalResource("doom-sigil.wad");
+    W_MergeFile(internalWadName);
+    free(internalWadName);
     gamedescription_eng = "SIGIL";
     gamedescription_rus = "СИГИЛ";
 
@@ -1403,8 +1405,12 @@ void D_RD_LoadSigilAssets (boolean compat)
 
 void D_RD_LoadNerveAssets (void)
 {
+    char* internalWadName;
+
     gamemission = pack_nerve;
-    W_MergeFile("base/doom-nerve.wad");
+    internalWadName = RD_M_FindInternalResource("doom-nerve.wad");
+    W_MergeFile(internalWadName);
+    free(internalWadName);
 
     DEH_AddStringReplacement("TITLEPIC", "DMENUPIC");
     DEH_AddStringReplacement("TITLEPI2", "DMENUPIC");
@@ -1419,6 +1425,7 @@ void D_RD_LoadNerveAssets (void)
 void D_SetGameDescription(void)
 {
     int newpwadfile;
+    char* internalWadName;
 
     boolean is_freedoom = W_CheckNumForName("FREEDOOM") >= 0,
             is_freedm = W_CheckNumForName("FREEDM") >= 0;
@@ -1427,11 +1434,17 @@ void D_SetGameDescription(void)
     gamedescription_rus = "Неизвестная игра";
 
     // [JN] Always load RD system pwad
-    W_MergeFile("base/doom-common.wad");
+    internalWadName = RD_M_FindInternalResource("doom-common.wad");
+    W_MergeFile(internalWadName);
+    free(internalWadName);
 
     // [JN] Load extra content for vanilla Doom
     if (!is_freedoom && !is_freedm)
-    W_MergeFile("base/doom-extra.wad");
+    {
+        internalWadName = RD_M_FindInternalResource("doom-extra.wad");
+        W_MergeFile(internalWadName);
+        free(internalWadName);
+    }
 
     if (logical_gamemission == doom)
     {
@@ -1439,7 +1452,9 @@ void D_SetGameDescription(void)
 
         if (is_freedoom)
         {
-            W_MergeFile("base/doom-freedoom.wad");
+            internalWadName = RD_M_FindInternalResource("doom-freedoom.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
 
             gamedescription_eng = GetGameName("Freedoom: Phase 1");
             gamedescription_rus = GetGameName("Freedoom: Стадия 1");
@@ -1449,7 +1464,9 @@ void D_SetGameDescription(void)
             gamedescription_eng = gamedescription_rus = GetGameName("The Ultimate DOOM");
 
             // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-doom1.wad");
+            internalWadName = RD_M_FindInternalResource("doom-wide-doom1.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
 
             if (gameversion == exe_doom_se)
             {
@@ -1466,7 +1483,9 @@ void D_SetGameDescription(void)
             gamedescription_rus = GetGameName("DOOM");
 
             // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-doom1.wad");
+            internalWadName = RD_M_FindInternalResource("doom-wide-doom1.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
         }
         else if (gamemode == shareware)
         {
@@ -1474,12 +1493,16 @@ void D_SetGameDescription(void)
             gamedescription_rus = GetGameName("DOOM (Демоверсия)");
 
             // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-doom1.wad");
+            internalWadName = RD_M_FindInternalResource("doom-wide-doom1.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
 
         }
         else if (gamemode == pressbeta)
         {
-            W_MergeFile("base/doom-beta.wad");
+            internalWadName = RD_M_FindInternalResource("doom-beta.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
 
             DEH_AddStringReplacement (GOTHTHBONUS,     GOTDAGGER);
             DEH_AddStringReplacement (GOTARMBONUS,     GOTCHEST);
@@ -1498,12 +1521,16 @@ void D_SetGameDescription(void)
 
         if (is_freedoom)
         {
-            W_MergeFile("base/doom-freedoom.wad");
+            internalWadName = RD_M_FindInternalResource("doom-freedoom.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
 
             if (is_freedm)
             {
                 gamedescription_eng = gamedescription_rus = GetGameName("FreeDM");
-                W_MergeFile("base/doom-freedm.wad");
+                internalWadName = RD_M_FindInternalResource("doom-freedm.wad");
+                W_MergeFile(internalWadName);
+                free(internalWadName);
             }
             else
             {
@@ -1517,7 +1544,9 @@ void D_SetGameDescription(void)
             gamedescription_rus = GetGameName("DOOM 2: Ад на Земле");
 
             // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-doom2.wad");
+            internalWadName = RD_M_FindInternalResource("doom-wide-doom2.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
         }
         else if (logical_gamemission == pack_plut)
         {
@@ -1525,7 +1554,9 @@ void D_SetGameDescription(void)
             gamedescription_rus = GetGameName("Final DOOM: Эксперимент “Плутония”");
 
             // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-plutonia.wad");
+            internalWadName = RD_M_FindInternalResource("doom-wide-plutonia.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
         }
         else if (logical_gamemission == pack_tnt)
         {
@@ -1533,11 +1564,15 @@ void D_SetGameDescription(void)
             gamedescription_rus = GetGameName("Final DOOM: TNT - Дьяволюция");
 
             // [JN] Load widescreen backgrounds
-            W_MergeFile("base/doom-wide-tnt.wad");
+            internalWadName = RD_M_FindInternalResource("doom-wide-tnt.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
         }
         else if (logical_gamemission == jaguar)
         {
-            W_MergeFile("base/doom-jaguar.wad");
+            internalWadName = RD_M_FindInternalResource("doom-jaguar.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
             
             gamedescription_eng = GetGameName("DOOM for Atari Jaguar");
             gamedescription_rus = GetGameName("DOOM для Atari Jaguar");
@@ -1688,7 +1723,9 @@ void D_SetGameDescription(void)
                      M_StrCaseStr(myargv[newpwadfile], "VESPERAS.WAD") ||
                      M_StrCaseStr(myargv[newpwadfile], "VIRGIL.WAD"))
             {
-                W_MergeFile("base/doom-mlevels.wad");
+                internalWadName = RD_M_FindInternalResource("doom-mlevels.wad");
+                W_MergeFile(internalWadName);
+                free(internalWadName);
                 mlvls_loaded = true;
 
                 gamedescription_eng = "Master Levels for DOOM 2";
@@ -1907,19 +1944,32 @@ void D_SetGameDescription(void)
 
         // Doom 1
         if (gamemode == shareware || gamemode == registered || gamemode == retail)
-        W_MergeFile("base/doom-skies-doom1.wad");
-
+        {
+            internalWadName = RD_M_FindInternalResource("doom-skies-doom1.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
+        }
         // Doom 2
         else if (gamemission == doom2 || gamemission == pack_nerve)
-        W_MergeFile("base/doom-skies-doom2.wad");
-
+        {
+            internalWadName = RD_M_FindInternalResource("doom-skies-doom2.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
+        }
         // TNT - Evilution
         else if (gamemission == pack_tnt)
-        W_MergeFile("base/doom-skies-tnt.wad");
-
+        {
+            internalWadName = RD_M_FindInternalResource("doom-skies-tnt.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
+        }
         // Plutonia
         else if (gamemission == pack_plut)
-        W_MergeFile("base/doom-skies-plutonia.wad");
+        {
+            internalWadName = RD_M_FindInternalResource("doom-skies-plutonia.wad");
+            W_MergeFile(internalWadName);
+            free(internalWadName);
+        }
     }
 
     // [JN] Check if we have exactly two TITLEPICs loaded in Russian version
@@ -2409,7 +2459,7 @@ void D_DoomMain (void)
                            | FOREGROUND_INTENSITY);
 
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf(PACKAGE_NAME " " PACKAGE_VERSION);
+    DEH_printf("Russian Doom " BUILD_DOOM_VERSION);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 
@@ -2418,7 +2468,10 @@ void D_DoomMain (void)
                             FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 #else
     // [JN] Just print an uncolored banner
-    I_PrintBanner(PACKAGE_STRING);    
+    for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
+    DEH_printf("Russian Doom " PACKAGE_DOOM_VERSION);
+    for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
+    DEH_printf("\n");
 #endif
 
     // Call I_ShutdownGraphics on quit
@@ -2832,7 +2885,7 @@ void D_DoomMain (void)
     // we've finished loading Dehacked patches.
     D_SetGameDescription();
 
-    savegamedir = M_GetSaveGameDir(D_SaveGameIWADName(gamemission));
+    savegamedir = M_GetSaveGameDir();
 
     // Check for -file in shareware
     if (modifiedgame && (gamevariant != freedoom))

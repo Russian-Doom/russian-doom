@@ -1242,6 +1242,7 @@ void D_DoomMain(void)
     char file[256];
     char demolumpname[9];
     int newpwadfile;
+    char* internalWadName;
 
 #ifdef _WIN32
     // [JN] Get system preffed language...
@@ -1264,8 +1265,9 @@ void D_DoomMain(void)
                                                            | FOREGROUND_GREEN
                                                            | FOREGROUND_BLUE
                                                            | FOREGROUND_INTENSITY);
-    DEH_printf("                              Russian Heretic " PACKAGE_VERSION
-               "                              ");
+    for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
+    DEH_printf("Russian Heretic " BUILD_HERETIC_VERSION);
+    for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 
     // [JN] Fallback to standard console colos
@@ -1274,7 +1276,10 @@ void D_DoomMain(void)
                                                            | FOREGROUND_BLUE);
 #else
     // [JN] Just print an uncolored banner
-    I_PrintBanner(PACKAGE_STRING);    
+    for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
+    DEH_printf("Russian Heretic " PACKAGE_HERETIC_VERSION);
+    for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
+    DEH_printf("\n");
 #endif 
 
     // Call I_ShutdownGraphics on quit
@@ -1536,7 +1541,9 @@ void D_DoomMain(void)
 
     demoextend = M_ParmExists("-demoextend");
 
-    W_MergeFile("base/heretic-common.wad");
+    internalWadName = RD_M_FindInternalResource("heretic-common.wad");
+    W_MergeFile(internalWadName);
+    free(internalWadName);
 
     if (W_CheckNumForName(DEH_String("E2M1")) == -1)
     {
@@ -1580,7 +1587,7 @@ void D_DoomMain(void)
 
     I_SetWindowTitle(gamedescription);
 
-    savegamedir = M_GetSaveGameDir("heretic.wad");
+    savegamedir = M_GetSaveGameDir();
 
     if (M_ParmExists("-testcontrols"))
     {

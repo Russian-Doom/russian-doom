@@ -1,7 +1,15 @@
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-cmake_minimum_required(VERSION 3.7.2)
+cmake_minimum_required(VERSION 3.15)
 
-project("Russian Doom" VERSION 5.0.0 LANGUAGES C NONE CXX)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
+project("Russian Doom" VERSION 5.0 LANGUAGES C NONE)
+set(BUILD_HERETIC_VERSION "4.3")
+set(BUILD_HEXEN_VERSION "4.1")
+set(BUILD_STRIFE_VERSION "0.0")
+set(BUILD_DOOM_DATE "2021-05-04") # YYYY-MM-DD
+set(BUILD_HERETIC_DATE "2021-01-03") # YYYY-MM-DD
+set(BUILD_HEXEN_DATE "2021-01-03") # YYYY-MM-DD
+set(BUILD_STRIFE_DATE "2021-00-00") # YYYY-MM-DD
 
 # Autotools variables
 set(top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
@@ -10,12 +18,26 @@ set(top_builddir ${CMAKE_CURRENT_BINARY_DIR})
 # AC_INIT variables
 set(PACKAGE_NAME "${PROJECT_NAME}")
 set(PACKAGE_TARNAME "russian-doom")
-set(PACKAGE_VERSION "${PROJECT_VERSION}")
 set(PACKAGE_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
-
-string(REGEX REPLACE " Doom$" "" PACKAGE_SHORTNAME "${PACKAGE_NAME}")
 set(PACKAGE_COPYRIGHT "Copyright (C) 2016-2021")
 set(PACKAGE_LICENSE "GNU General Public License, version 2")
+
+set(BUILD_DOOM_VERSION "${PROJECT_VERSION}")
+string(REPLACE "." ">" BUILD_DOOM_VERSION_RUS ${BUILD_DOOM_VERSION})
+string(REPLACE "." ">" BUILD_HERETIC_VERSION_RUS ${BUILD_HERETIC_VERSION})
+string(REPLACE "." ">" BUILD_HEXEN_VERSION_RUS ${BUILD_HEXEN_VERSION})
+string(REPLACE "." ">" BUILD_STRIFE_VERSION_RUS ${BUILD_STRIFE_VERSION})
+
+# Check architecture
+if(WIN32)
+    if("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw64.*)|(.*clang64.*)" OR
+    (DEFINED MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "x64"))
+        set(ARCH x64)
+    elseif("${CMAKE_C_COMPILER}" MATCHES "^(.*mingw32.*)|(.*clang32.*)" OR
+    (DEFINED MSVC AND "${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
+        set(ARCH x86)
+    endif()
+endif()
 
 # Any settings that should apply to all targets in this directory and all
 # subdirectories should go here.  Use judiciously.
@@ -27,9 +49,9 @@ else()
                         "-Wredundant-decls")
 endif()
 
-find_package(SDL2 2.0.1)
-find_package(SDL2_mixer 2.0.0)
-find_package(SDL2_net 2.0.0)
+find_package(SDL2 2.0.1 REQUIRED)
+find_package(SDL2_mixer 2.0.0 REQUIRED)
+find_package(SDL2_net 2.0.0 REQUIRED)
 
 # Check for libsamplerate.
 find_package(samplerate)
@@ -51,14 +73,13 @@ check_symbol_exists(strcasecmp "strings.h" HAVE_DECL_STRCASECMP)
 check_symbol_exists(strncasecmp "strings.h" HAVE_DECL_STRNCASECMP)
 check_include_file("dirent.h" HAVE_DIRENT_H)
 
-string(CONCAT WINDOWS_RC_VERSION "${PROJECT_VERSION_MAJOR}, "
-    "${PROJECT_VERSION_MINOR}, ${PROJECT_VERSION_PATCH}, 0")
+string(REPLACE "." ", " WINDOWS_RC_VERSION ${PROJECT_VERSION})
 
-# Without a hyphen. This is used for the bash-completion scripts.
-string(TOLOWER "${PACKAGE_SHORTNAME}" PROGRAM_SPREFIX)
+string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 
-# With a hyphen, used almost everywhere else.
-set(PROGRAM_PREFIX "${PROGRAM_SPREFIX}-")
+if(NOT WIN32)
+    Option(DEV_ENV "Development environment" ON)
+endif()
 
 configure_file(cmake/config.h.cin config.h)
 

@@ -711,9 +711,10 @@ boolean ST_Responder (event_t* ev)
             // [JN] Отображение версии проекта
             else if (cht_CheckCheat(&cheat_version, ev->data2))
             {
-                M_snprintf(msg, sizeof(msg), "%s%s - %s",
-                english_language ? STSTR_VERSION : STSTR_VERSION_RUS,
-                english_language ? STSRT_ARCH : STSRT_ARCH_RUS, STSRT_DATE);
+                M_snprintf(msg, sizeof(msg), "%s %s%s - %s",
+                english_language ? "Version" : "dthcbz",
+                english_language ? BUILD_DOOM_VERSION : BUILD_DOOM_VERSION_RUS,
+                english_language ? STSRT_ARCH : STSRT_ARCH_RUS, BUILD_DOOM_DATE);
 
                 plyr->message_system = msg;
             }

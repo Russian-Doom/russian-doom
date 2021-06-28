@@ -293,7 +293,7 @@ void BindSoundVariables(void)
     }
 
     timidity_cfg_path = M_StringDuplicate("");
-    gus_patches_path = M_StringDuplicate("base/gus_patches");
+    gus_patches_path = RD_M_FindInternalResource("gus_patches");
 
     // All versions of Heretic and Hexen did pitch-shifting.
     // Most versions of Doom did not and Strife never did.

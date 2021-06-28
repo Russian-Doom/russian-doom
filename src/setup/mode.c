@@ -116,7 +116,6 @@ int english_language = 0;
 static int showMessages = 1;
 static int screenblocks = 10;
 static int detailLevel = 0;
-static char *savedir = NULL;
 static char *executable = NULL;
 static char *game_title = "Doom";
 static char *back_flat = "F_PAVE01";
@@ -181,21 +180,7 @@ static void BindMiscVariables(void)
 
     if (gamemission == hexen)
     {
-        M_BindStringVariable("savedir", &savedir);
         M_BindIntVariable("messageson", &showMessages);
-
-        // Hexen has a variable to control the savegame directory
-        // that is used.
-
-        savedir = M_GetSaveGameDir("hexen.wad");
-
-        // On Windows, hexndata\ is the default.
-
-        if (!strcmp(savedir, ""))
-        {
-            free(savedir);
-            savedir = "hexndata" DIR_SEPARATOR_S;
-        }
     }
 
     if (gamemission == strife)

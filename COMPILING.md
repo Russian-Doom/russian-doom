@@ -1,23 +1,65 @@
 ### Building Russian Doom on Windows
 
-##### Step 1: Getting Code::Blocks and MinGW compiler
+The primary way of building Russian Doom on Windows is using an MSYS environment.
 
-The primary IDE for building Russian Doom is Code::Blocks, which may be downloaded on it's [official site](http://www.codeblocks.org/downloads/binaries). It is recommended to download a package that includes the compiler from TDM-GCC pre-installed. Otherwise, in case you want to install compiler manually, you can find the TDM-GCC installer [here](http://tdm-gcc.tdragon.net/).
+##### Step 1: Setting up the environment
 
-##### Step 2: Installing the Development Libraries
+Install [MSYS2](https://www.msys2.org/). Open the MSYS2 terminal and install dependencies using the following command:
+```
+pacman -S base-devel msys2-devel \
+       mingw-w64-{i686,x86_64}-{toolchain,cmake,SDL2{,_net,_mixer},libsamplerate,libpng} \
+       git
+```
 
-Next you will need development libraries for [SDL2](https://www.libsdl.org/download-2.0.php), [SDL2 Mixer](https://www.libsdl.org/projects/SDL_mixer/) and [SDL2 Net](https://www.libsdl.org/projects/SDL_net/). Pay attention, you will need MinGW libraries, not Visual C++. After you get the development libraries, extract the files and copy the 'include', 'lib' and 'bin' folders to the top of your TDM-GCC directory (i.e. C:\TDM-GCC). Also make sure to move the files from the 'include\SDL' subfolder to the main 'include' folder. At this point you should be ready to build Russian Doom.
+#### Step 2: Compiling Russian Doom
 
-##### Step 3: Compiling Russian Doom
+Download source code archive of latest release version or from Git repository and unpack it.
 
-In the source directory of Russian Doom, you will find the Code::Blocks files in the 'codeblocks' folder, the workspace file is called 'russian_doom.workspace'.
+At this stage, you **must** use the appropriate MSYS2 terminal (**mingw32.exe** or **mingw64.exe**) 
+so that the $PATH environment variable points to the proper toolchain. 
+For the **mingw-w64-i686** toolchain (**32**-bit), use the **MSYS MinGW 32-bit** start menu/screen shortcut 
+and for the **mingw-w64-x86_64** toolchain (**64**-bit), use the **MSYS MinGW 64-bit** start menu/screen shortcut.
 
-After you open the workspace, you can select what type of build you want to create: Debug or Release. In case you are going to debug Russian Doom, you should compile a debug build (which is quite a lot bigger than the release), otherwise, you can just compile a release build. In order to start building, click on Build and then Rebuild workspace.
+There are two options to build with: **Cmake** or **Autotools**.  
+Autotools is the primary way but CMake is recommended.
 
-At the end of the compilation process, you will find your new Russian Doom build in the 'bin' folder at the top of the source directory.
+##### Step 2.1: Building with CMake
 
-Please note: to run the compiled game executables you will need the folder 'russian' to be placed in the folder with executables, as well as SDL2.dll, SDL2_mixer.dll and SDL2_net.dll files, and official IWAD files.
+To configure the project use the following command:
+```
+cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -S . -B build
+```
+To build the project use the following command:
+```
+cmake --build build
+```
 
+After successful compilation, the resulting binaries can be found in the `build\src\` folder.
+
+##### Step 2.2: Building with Autotools
+
+To configure the project for 32-bit environment run
+```
+./autogen.sh --host=i686-w64-mingw64
+```
+or to configure the project for 64-bit environment run
+```
+./autogen.sh --host=x86_64-w64-mingw64
+```
+To build the project use the following command:
+```
+make
+```
+After successful compilation, the resulting binaries can be found in the `src\` folder.
+
+##### Step 3: Installing Russian Doom
+
+To install Russian Doom to `<install directory>` use the following command:
+```
+cmake --install build --prefix <install directory>
+```
+If you are using Autotools, you have to install Russian Doom manually. Copy built executables and `base` folder from `src\`
+directory to `<install directory>` along with DLL libraries from `win_libs\<arch>\`.
 
 ### Building Russian Doom on Linux
 
@@ -25,21 +67,61 @@ Compiling on Linux is rather simple.
 
 ##### Step 1: Checking compilation dependencies
 
-First of all, make sure you have all necessary dependencies for compilation. On Debian Linux they can be installed by following command, invoked by root:
-
-`apt-get install gcc make libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev python-imaging`
+First, make sure you have all the necessary dependencies for compilation.
+On Ubuntu Linux they can be installed by the following command:
+```
+sudo apt-get install gcc cmake make automake libsdl2-dev libsdl2-net-dev
+libsdl2-mixer-dev libpng-dev libsamplerate-dev
+```
+On Fedora Linux they can be installed by the following command:
+```
+sudo dnf install gcc cmake make automake SDL2-devel SDL2_mixer-devel
+SDL2_net-devel libpng-devel libsamplerate-devel
+```
 
 ##### Step 2: Compiling Russian Doom
 
-Download source code archive of latest release version or from Git repository, unpack it and use following commands:
+Download source code archive of latest release version or from Git repository and unpack it.
 
-`./autogen.sh` <br />
-`make`
+There are two options to build with: **Cmake** or **Autotools**.  
+Autotools is the primary way but CMake is recommended.
 
-After successful compilation the resulting binaries can be found in the src/ directory.
+##### Step 2.1: Building with CMake
 
-Please note: to run the compiled game executables you will need the folder 'russian' to be placed in the folder with executables, as well as official IWAD files.
+To configure the project use the following command:
+```
+cmake -DCMAKE_BUILD_TYPE=Release -DDEV_ENV=OFF -S . -B build
+```
+If you want to use dev builds without installing, set DEV_ENV option to `ON` and
+point `<current directory>` to `build/src/`.
 
+To build the project use the following command:
+```
+cmake --build build
+```
+After successful compilation, the resulting binaries can be found in the `build/src/` folder.
+
+##### Step 2.2: Building with Autotools
+
+To configure the project use the following command:
+```
+./autogen.sh
+```
+To build the project use the following command:
+```
+make
+```
+After successful compilation, the resulting binaries can be found in the `src/` directory.
+
+##### Step 3: Installing Russian Doom
+
+To install Russian Doom use the following command:
+```
+cmake --install build
+```
+
+If you are using Autotools, you have to install Russian Doom manually. Copy built executables from `build/src/`
+to `/usr/local/bin/` directory. Copy content of `src/base/` folder to `/usr/local/share/russian-doom/` directory.
 
 ### Building a DOS version of Russian Doom
 
@@ -49,9 +131,10 @@ The primary IDE for building Russian Doom is Open Watcom C, which may be downloa
 
 ##### Step 2: Compiling project
 
-After installation of Open Watcom C, open it's IDE and then choose menu File > Open Project... 
-<br />Choose 'src_dos/rusdoom.wpj' and press 'Make target' button.
+After installation of Open Watcom C, open it's IDE and then choose menu File > Open Project...  
+Choose `src_dos/rusdoom.wpj` and press 'Make target' button.
 
-At the end of the compilation process, you will find compiled binary 'rusdoom.exe' in the source code directory.
+At the end of the compilation process, you will find compiled binary `rusdoom.exe` in the source code directory.
 
-Please note: to run the compiled game executable you will need to copy 'rusdoom.exe', 'rusdoom.wad' and 'dos4gw.exe' files to your Doom directory, as well as official IWAD files.
+Please note: to run the compiled game executable you will need to copy
+`rusdoom.exe`, `rusdoom.wad` and `dos4gw.exe` files to your Doom directory, as well as official IWAD files.

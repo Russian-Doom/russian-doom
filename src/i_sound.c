@@ -32,6 +32,7 @@
 #include "i_video.h"
 #include "m_argv.h"
 #include "m_config.h"
+#include "m_misc.h"
 
 // Sound sample rate to use for digital output (Hz)
 
@@ -443,6 +444,8 @@ void I_BindSoundVariables(void)
 {
     // extern int use_libsamplerate;
     extern float libsamplerate_scale;
+
+    gus_patches_path = RD_M_FindInternalResource("gus_patches");
 
     M_BindIntVariable("snd_musicdevice",         &snd_musicdevice);
     M_BindIntVariable("snd_sfxdevice",           &snd_sfxdevice);

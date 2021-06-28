@@ -543,14 +543,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(snd_sfxdevice),
 
     //!
-    // @game hexen
-    //
-    // Directory in which to store savegames.
-    //
-
-    CONFIG_VARIABLE_STRING(savedir),
-
-    //!
     // @game strife
     //
     // Name of background flat used by view border.
@@ -2275,19 +2267,38 @@ float M_GetFloatVariable(char *name)
 
 static char *GetDefaultConfigDir(void)
 {
-#if !defined(_WIN32) || defined(_WIN32_WCE)
-
-    // Configuration settings are stored in an OS-appropriate path
-    // determined by SDL.  On typical Unix systems, this might be
-    // ~/.local/share/chocolate-doom.  On Windows, we behave like
-    // Vanilla Doom and save in the current directory.
-
     char *result;
-
-    result = SDL_GetPrefPath("", PACKAGE_TARNAME);
+    char* tempResult;
+#ifdef _WIN32
+    result = M_StringDuplicate(exedir);
+    // [Dasperal] Try to check whether writing to exedir is possible by creating a savegames directory
+    tempResult = M_StringJoin(result, "savegames", NULL);
+    // If the savegames directory already exists, optimistically assume that writing is possible
+    if (!M_FileExists(tempResult))
+    {
+        M_MakeDirectory(tempResult);
+        if (!M_FileExists(tempResult))
+        {
+            free(result);
+            result = M_StringDuplicate("");
+        }
+    }
+    free(tempResult);
+#else
+    #ifndef DEV_ENV
+    tempResult = SDL_GetPrefPath("", PACKAGE_TARNAME); // This might be ~/.local/share/russian-doom
+    if (tempResult != NULL)
+    {
+        result = M_StringDuplicate(tempResult);
+        SDL_free(tempResult);
+    }
+    else
+        result = M_StringDuplicate("");
+    #else
+    result = M_StringDuplicate("");
+    #endif
+#endif
     return result;
-#endif /* #ifndef _WIN32 */
-    return M_StringDuplicate("");
 }
 
 // 
@@ -2313,8 +2324,8 @@ void M_SetConfigDir(char *dir)
     if (strcmp(configdir, "") != 0)
     {
         printf(english_language ?
-               "Using %s for configuration and saves\n" :
-               "Настройки программы и сохраненные игры будут расположены в папке:\n \t%s\n",
+               "Using %s for configuration\n" :
+               "Настройки программы будут расположены в папке:\n \t%s\n",
                configdir);
     }
 
@@ -2328,55 +2339,47 @@ void M_SetConfigDir(char *dir)
 // Creates the directory as necessary.
 //
 
-char *M_GetSaveGameDir(char *iwadname)
+char *M_GetSaveGameDir()
 {
     char *savegamedir;
-    char *topdir;
 
-    // If not "doing" a configuration directory (Windows), don't "do"
-    // a savegame directory, either.
-
-    // [JN] Modified a bit for RD needs. 
-    // Always use "savegames" dir, but without IWAD subfolders,
-    // to emulate standard Windows behavior.
-
-    if (!strcmp(configdir, ""))
+    int p = M_CheckParmWithArgs("-savedir", 1);
+    if (p)
     {
-        // add separator at end just in case
-        savegamedir = M_StringJoin(configdir, "savegames", DIR_SEPARATOR_S, NULL);
-
-        if (!M_FileExists(savegamedir))
-        {
-            M_MakeDirectory(savegamedir);
-        }
-
-#ifdef _WIN32
-    // In -cdrom mode, we write savegames to a specific directory
-    // in addition to configs.
-
-    if (M_ParmExists("-cdrom"))
-    {
-        savegamedir = configdir;
-    }
-#endif
+        savegamedir = M_StringJoin(myargv[p + 1], DIR_SEPARATOR_S, NULL);
     }
     else
     {
-        // ~/.local/share/chocolate-doom/savegames
+#ifdef _WIN32
+        // In -cdrom mode, we write savegames to a specific directory
+        // in addition to configs.
+        if (M_ParmExists("-cdrom"))
+        {
+            savegamedir = configdir;
+        }
+        else if (0 == strcmp(configdir, ""))
+        {
+            char* topdir = M_StringJoin(getenv("USERPROFILE"), DIR_SEPARATOR_S, "Saved Games", NULL);
+            if (M_FileExists(topdir))
+                savegamedir = M_StringJoin(topdir, DIR_SEPARATOR_S, PACKAGE_TARNAME, DIR_SEPARATOR_S, NULL);
+            else
+                savegamedir = M_StringJoin("savegames", DIR_SEPARATOR_S, NULL);
 
-        topdir = M_StringJoin(configdir, "savegames", NULL);
-        M_MakeDirectory(topdir);
-
-        // eg. ~/.local/share/chocolate-doom/savegames/doom2.wad/
-
-        savegamedir = M_StringJoin(topdir, DIR_SEPARATOR_S, iwadname,
-                                   DIR_SEPARATOR_S, NULL);
-
-        M_MakeDirectory(savegamedir);
-
-        free(topdir);
+            free(topdir);
+        }
+        else
+#endif
+            savegamedir = M_StringJoin(configdir, "savegames", DIR_SEPARATOR_S, NULL);
     }
 
+    if (!M_FileExists(savegamedir))
+    {
+        M_MakeDirectory(savegamedir);
+    }
+    printf(english_language ?
+            "Using %s for saves\n" :
+            "Сохраненные игры будут расположены в папке:\n \t%s\n",
+            savegamedir);
     return savegamedir;
 }
 

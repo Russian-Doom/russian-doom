@@ -12,10 +12,19 @@ add_library(setup STATIC
             txt_joyaxis.c       txt_joyaxis.h
             txt_joybinput.c     txt_joybinput.h
             txt_keyinput.c      txt_keyinput.h
-            txt_mouseinput.c    txt_mouseinput.h)
+            txt_mouseinput.c    txt_mouseinput.h
+)
 
-target_include_directories(setup PRIVATE "../" "${CMAKE_CURRENT_BINARY_DIR}/../../")
-target_link_libraries(setup textscreen SDL2::SDL2 SDL2::mixer)
+target_include_directories(setup PRIVATE
+    "${PROJECT_SOURCE_DIR}/src"
+    "${PROJECT_BINARY_DIR}"
+)
+target_link_libraries(setup
+    textscreen
+    SDL2::SDL2
+    SDL2::mixer
+)
+
 # [Dasperal] Disable clang warnings for windows-1251 strings
 if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
     target_compile_options(setup PRIVATE -Wno-invalid-source-encoding)

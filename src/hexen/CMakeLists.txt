@@ -54,7 +54,15 @@ add_library(hexen STATIC
             st_start.c          st_start.h
             sv_save.c
                                 textdefs.h
-                                xddefs.h)
+                                xddefs.h
+)
 
-target_include_directories(hexen PRIVATE "../" "${CMAKE_CURRENT_BINARY_DIR}/../../")
-target_link_libraries(hexen SDL2::SDL2 SDL2::mixer SDL2::net)
+target_include_directories(hexen PRIVATE
+    "${PROJECT_SOURCE_DIR}/src"
+    "${PROJECT_BINARY_DIR}"
+)
+target_link_libraries(hexen
+    SDL2::SDL2
+    SDL2::mixer
+    SDL2::net
+)

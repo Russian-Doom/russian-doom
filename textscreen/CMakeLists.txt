@@ -1,4 +1,4 @@
-add_library(textscreen STATIC
+add_library(textscreen STATIC EXCLUDE_FROM_ALL
                                 textscreen.h
             txt_conditional.c   txt_conditional.h
             txt_checkbox.c      txt_checkbox.h
@@ -21,11 +21,17 @@ add_library(textscreen STATIC
             txt_utf8.c          txt_utf8.h
             txt_widget.c        txt_widget.h
             txt_window.c        txt_window.h
-            txt_window_action.c txt_window_action.h)
+            txt_window_action.c txt_window_action.h
+)
 target_include_directories(textscreen
-                           INTERFACE "."
-                           PRIVATE "../src/")
-target_link_libraries(textscreen m SDL2::SDL2)
+    INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}"
+    PRIVATE "${PROJECT_SOURCE_DIR}/src"
+)
+target_link_libraries(textscreen
+    m
+    SDL2::SDL2
+)
+
 # [Dasperal] Disable clang warnings for windows-1251 strings
 if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
     target_compile_options(textscreen PRIVATE -Wno-invalid-source-encoding)

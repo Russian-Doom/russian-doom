@@ -952,13 +952,18 @@ void DoTimeBomb(void)
 void D_SetGameDescription(void)
 {
     int newpwadfile;
+    char* internalWadName;
 
     gamedescription = GetGameName("Strife: Сага о поиске Сигиля");
-    W_MergeFile("base/strife-common.wad");
+    internalWadName = RD_M_FindInternalResource("strife-common.wad");
+    W_MergeFile(internalWadName);
+    free(internalWadName);
 
     if (!english_language)
     {
-        W_MergeFile("base/strife-russian.wad");
+        internalWadName = RD_M_FindInternalResource("strife-russian.wad");
+        W_MergeFile(internalWadName);
+        free(internalWadName);
     }
 
     // [JN] Параметр "-file" перенесен из w_main.c
@@ -1727,7 +1732,7 @@ void D_DoomMain (void)
     D_IdentifyVersion();
     InitGameVersion();
     D_SetGameDescription();
-    savegamedir = M_GetSaveGameDir("strife1.wad");
+    savegamedir = M_GetSaveGameDir();
 
     // fraggle 20130405: I_InitTimer is needed here for the netgame
     // startup. Start low-level sound init here too.

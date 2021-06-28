@@ -1939,20 +1939,10 @@ static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)
 {
     static char msg[38];
 
-    if (english_language)
-    {
-        M_snprintf(msg, sizeof(msg), "%s%s - %s",
-        TXT_VERSION,
-        TXT_ARCH,
-        TXT_DATE);
-    }
-    else
-    {
-        M_snprintf(msg, sizeof(msg), "%s%s - %s",
-        TXT_VERSION_RUS,
-        TXT_ARCH_RUS,
-        TXT_DATE);
-    }
+    M_snprintf(msg, sizeof(msg), "%s %s%s - %s",
+               english_language ? "Version" : "dthcbz",
+               english_language ? BUILD_HERETIC_VERSION : BUILD_HERETIC_VERSION_RUS,
+               english_language ? TXT_ARCH : TXT_ARCH_RUS, BUILD_HERETIC_DATE);
     
     P_SetMessage(player, msg, msg_system, true);
 }
