@@ -789,7 +789,6 @@ void SB_Drawer(void)
     {
         if (screenblocks == 11) // [JN] Draw only in 11 screen size, 12 is clean full screen
         DrawFullScreenStuff();
-        SB_state = -1;
     }
     else
     {
@@ -838,9 +837,6 @@ void SB_Drawer(void)
 
             V_CopyRect(0, 0, st_backing_screen, 
                        origwidth, 42, 0, 158);
-
-            // [JN] TODO: OPTIMIZE - try to do not redraw whole status bar.
-            SB_state = -1;
         }
 
         if (SB_state == -1)
@@ -888,8 +884,6 @@ void SB_Drawer(void)
                     W_CacheLumpName(DEH_String("GOD1"), PU_CACHE));
         V_DrawPatch(287 + wide_delta, 167,
                     W_CacheLumpName(DEH_String("GOD2"), PU_CACHE));
-
-        SB_state = -1;
     }
 
     // Flight icons
@@ -1058,9 +1052,6 @@ void DrawCommonBar(void)
         V_DrawPatch(0 + wide_delta, 190, PatchLTFACE);
         V_DrawPatch(276 + wide_delta, 190, PatchRTFACE);
         ShadeChain();
-        // [JN] Do a full status bar update. Fixes chain's background shaking
-        // after toggling GOD mode. Old code: UpdateState |= I_STATBAR;
-        SB_state = -1;
     }
 }
 
@@ -1689,7 +1680,6 @@ static void CheatGodFunc(player_t * player, Cheat_t * cheat)
     {
         P_SetMessage(player, DEH_String(txt_cheatgodoff), msg_system, false);
     }
-    SB_state = -1;
 }
 
 static void CheatNoClipFunc(player_t * player, Cheat_t * cheat)

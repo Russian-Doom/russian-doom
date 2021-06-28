@@ -1850,9 +1850,6 @@ static void DrawOptionsMenu(void)
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
-    // Update status bar.
-    SB_state = -1;
-
     if (english_language)
     {
         MN_DrTextBigENG(title_eng, 160 - MN_DrTextBigENGWidth(title_eng) / 2
@@ -1876,9 +1873,6 @@ static void DrawRenderingMenu(void)
 
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
-
-    // Update status bar.
-    SB_state = -1;
 
     if (english_language)
     {
@@ -2113,9 +2107,6 @@ static void M_RD_Smoothing(intptr_t option)
 
     // Reinitialize graphics
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
-
-    // Update status bar
-    SB_state = -1;
 }
 
 static void M_RD_PorchFlashing(intptr_t option)
@@ -2132,9 +2123,6 @@ static void M_RD_Renderer(intptr_t option)
 
     // Do a full graphics reinitialization
     I_InitGraphics();
-
-    // Update status bar
-    SB_state = -1;;
 }
 
 static void M_RD_Screenshots(intptr_t option)
@@ -2161,9 +2149,6 @@ static void DrawDisplayMenu(void)
     // screen size, gamma and level brightness in GS_LEVEL game state.
     if (gamestate != GS_LEVEL || (gamestate == GS_LEVEL && menubgwait < I_GetTime()))
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
-
-    // Update status bar.
-    SB_state = -1;
 
     if (english_language)
     {
@@ -2336,9 +2321,6 @@ static void DrawMessagesMenu(void)
 
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
-
-    // Update status bar.
-    SB_state = -1;
 
     if (english_language)
     {
@@ -2796,9 +2778,6 @@ static void DrawAutomapMenu(void)
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
-    // Update status bar.
-    SB_state = -1;
-
     if (english_language)
     {
         //
@@ -3051,9 +3030,6 @@ static void DrawSoundMenu(void)
     if (sfxbgdraw)
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
-    // Update status bar.
-    SB_state = -1;
-
     if (english_language)
     {
         //
@@ -3182,9 +3158,6 @@ static void DrawSoundSystemMenu(void)
     // Draw menu background. Don't draw if menu is invoked by pressing F4.
     if (sfxbgdraw)
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
-
-    // Update status bar.
-    SB_state = -1;
 
     if (english_language)
     {
@@ -3560,9 +3533,6 @@ static void DrawControlsMenu(void)
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
-    // Update status bar.
-    SB_state = -1;
-
     if (english_language)
     {
         //
@@ -3772,9 +3742,6 @@ static void DrawGameplay1Menu(void)
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
-    // Update status bar.
-    SB_state = -1;
-
     if (english_language)
     {
         //
@@ -3972,7 +3939,6 @@ static void M_RD_ExtraTrans(intptr_t option)
 static void M_RD_ColoredHUD(intptr_t option)
 {
     sbar_colored ^= 1;
-    SB_state = -1;      // Update status bar (JN: not sure is it needed)
 }
 
 static void M_RD_ColoredGem(intptr_t option)
@@ -3991,7 +3957,6 @@ static void M_RD_ColoredGem(intptr_t option)
         default:
             break;
     }
-    SB_state = -1;      // Update status bar (JN: not sure is it needed)
 }
 
 static void M_RD_ColoredBlood(intptr_t option)
@@ -4035,9 +4000,6 @@ static void DrawGameplay2Menu(void)
 
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
-
-    // Update status bar.
-    SB_state = -1;
 
     if (english_language)
     {
@@ -4362,9 +4324,6 @@ static void DrawLevelSelect1Menu(void)
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
-    // Update status bar.
-    SB_state = -1;
-
     if (english_language)
     {
         //
@@ -4658,9 +4617,6 @@ static void DrawLevelSelect2Menu(void)
 
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
-
-    // Update status bar.
-    SB_state = -1;
 
     if (english_language)
     {
@@ -4973,9 +4929,6 @@ static void DrawLevelSelect3Menu(void)
 
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
-
-    // Update status bar.
-    SB_state = -1;
 
     if (english_language)
     {
@@ -5384,8 +5337,6 @@ void M_RD_DoResetSettings(void)
     I_InitGraphics();
     R_SetViewSize(screenblocks, detailLevel);
 
-    // Update status bar
-    SB_state = -1;
     BorderNeedRefresh = true;
 
     P_SetMessage(&players[consoleplayer], 
@@ -5449,7 +5400,6 @@ static void M_RD_ChangeLanguage(intptr_t option)
     // Update game screen, borders and status bar
     UpdateState |= I_FULLSCRN;
     BorderNeedRefresh = true;
-    SB_state = -1;
 
     // Restart finale text
     if (gamestate == GS_FINALE)
@@ -5796,7 +5746,6 @@ boolean MN_Responder(event_t * event)
         {
             paused = false;
             MN_DeactivateMenu();
-            SB_state = -1;      //refresh the statbar
             BorderNeedRefresh = true;
         }
         S_StartSound(NULL, sfx_dorcls);

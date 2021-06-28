@@ -1362,10 +1362,6 @@ void G_PlayerFinishLevel(int player)
     p->bonuscount = 0;
     p->rain1 = NULL;
     p->rain2 = NULL;
-    if (p == &players[consoleplayer])
-    {
-        SB_state = -1;          // refresh the status bar
-    }
     // [JN] Fix Raven's bug: finishing level 9 was not considered as "didsecret".
     if (gamemap == 9)
     {
@@ -1431,7 +1427,6 @@ void G_PlayerReborn(int player)
     }
     if (p == &players[consoleplayer])
     {
-        SB_state = -1;          // refresh the status bar
         inv_ptr = 0;            // reset the inventory pointer
         curpos = 0;
     }
