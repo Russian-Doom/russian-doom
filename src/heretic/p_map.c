@@ -456,22 +456,6 @@ boolean PIT_CheckThing(mobj_t * thing)
     // Taken from Doom Retro, slightly adopted for Heretic.
     if (singleplayer && !vanillaparm && !thing->player && thing->flags & MF_SHOOTABLE)
     {
-        if (tmthing->z >= thing->z + thing->height)
-        {
-            // walks over object
-            tmfloorz = thing->z + thing->height;
-            thing->ceilingz = tmthing->z;
-            return true;
-        }
-        else
-        if (tmthing->z + tmthing->height <= thing->z)
-        {
-            // walks underneath object
-            tmceilingz = thing->z;
-            thing->floorz = tmthing->z + tmthing->height;
-            return true;
-        }
-
         if (tmx == tmthing->x && tmy == tmthing->y)
         {
             unblocking = true;
@@ -483,8 +467,11 @@ boolean PIT_CheckThing(mobj_t * thing)
 
             if (newdist > olddist)
             {
-                unblocking = (tmthing->z < thing->z + thing->height
-                           && tmthing->z + tmthing->height > thing->z);
+                unblocking = true;
+            }
+            if (thing->player)
+            {
+                unblocking = false;
             }
         }
     }
