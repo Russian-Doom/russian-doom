@@ -37,7 +37,7 @@
 #include "doomtype.h"
 
 
-enum
+typedef enum
 {
     CR_RED,
     CR_DARKRED,
@@ -116,8 +116,9 @@ enum
     CR_GOLD2GREEN_STRIFE,
     CR_GOLD2RED_STRIFE,
     CR_GOLD2DARKGOLD_STRIFE,
-    CRMAX
-};
+    CRMAX,
+    CR_NONE
+} Translation_CR_t;
 
 extern byte  *cr[CRMAX];
 
