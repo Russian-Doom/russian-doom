@@ -989,7 +989,7 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     ||  mobj->type == MT_SLUDGECHUNK    // Sludge small chunk
     ||  mobj->type == MT_SLUDGECHUNK    // Sludge small chunk
     ||  mobj->type == MT_IMPCHUNK1      // Gargoyle chunk 1
-    ||  mobj->type == MT_IMPCHUNK2)     // Gargoyle chunk 1
+    ||  mobj->type == MT_IMPCHUNK2)     // Gargoyle chunk 2
     {
         mobj->tics -= M_Random() & 3;
         mobj->health -= mobj->tics & 1;
