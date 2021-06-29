@@ -85,8 +85,11 @@ result_e T_MovePlane(sector_t * sector, fixed_t speed,
 
                 case 1:        // UP
                     // [JN] Don't allow platform floor go through the ceiling.
-                    dest = singleplayer && dest < sector->ceilingheight ?
-                                           dest : sector->ceilingheight;
+                    if (singleplayer)
+                    {
+                        dest = dest < sector->ceilingheight ?
+                               dest : sector->ceilingheight;
+                    }
 
                     if (sector->floorheight + speed > dest)
                     {

@@ -572,8 +572,8 @@ boolean P_LookForPlayers(mobj_t * actor, boolean allaround)
     fixed_t dist;
 
     // [JN] This is odd. Keep all monsters infighting
-    // bacchanalia behaviour only for vanilla mode.
-    if (!netgame && players[0].health <= 0 && vanillaparm)
+    // bacchanalia behaviour only for demo sync and vanilla mode.
+    if ((!singleplayer || vanillaparm) && !netgame && players[0].health <= 0)
     {   // Single player game and player is dead, look for monsters
         return (P_LookForMonsters(actor));
     }
