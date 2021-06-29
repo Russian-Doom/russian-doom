@@ -30,6 +30,7 @@
 #include "am_data.h"
 #include "m_misc.h"
 #include "doomkeys.h"
+#include "v_trans.h"
 #include "v_video.h"
 #include "jn.h"
 
@@ -126,6 +127,8 @@ static mpoint_t mapcenter;
 static angle_t mapangle;
 
 // Functions
+
+extern void MN_DrTextSmallRUS(char *text, int x, int y, Translation_CR_t translation);
 
 void DrawWuLine(int X0, int Y0, int X1, int Y1, byte * BaseColor,
                 int NumLevels, unsigned short IntensityBits);
@@ -1590,13 +1593,13 @@ void AM_Drawer(void)
         {
             if (english_language)
             {
-                MN_DrTextA(DEH_String(level_name), 4 + 
+                MN_DrTextA(DEH_String(level_name), 4 +
                           (wide_4_3 ?wide_delta : 0), 136);
             }
             else
             {
-                MN_DrTextSmallRUS(DEH_String(level_name), 4 + 
-                                 (wide_4_3 ? wide_delta : 0), 136);
+                MN_DrTextSmallRUS(DEH_String(level_name), 4 +
+                                 (wide_4_3 ? wide_delta : 0), 136, CR_NONE);
             }
         }
         else
@@ -1607,7 +1610,7 @@ void AM_Drawer(void)
             }
             else
             {
-                MN_DrTextSmallRUS(DEH_String(level_name), 20, 146);
+                MN_DrTextSmallRUS(DEH_String(level_name), 20, 146, CR_NONE);
             }
         }
     }

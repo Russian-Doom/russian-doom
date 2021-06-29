@@ -257,6 +257,8 @@ void D_PageDrawer(void);
 void D_AdvanceDemo(void);
 boolean F_Responder(event_t * ev);
 
+extern void MN_DrTextSmallRUS(char *text, int x, int y, Translation_CR_t translation);
+
 
 //---------------------------------------------------------------------------
 //
@@ -376,7 +378,7 @@ void DrawMessage(void)
             MN_DrTextSmallRUS(player->message,
                               messages_alignment == 0 ? 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
                               messages_alignment == 1 ? 4 + wide_4_3 :          // по краю экрана
-                                                        wide_delta, 1);         // по краю статус-бара
+                                                        wide_delta, 1, CR_NONE);         // по краю статус-бара
         }
     }
 

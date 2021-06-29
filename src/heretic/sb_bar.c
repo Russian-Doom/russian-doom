@@ -75,6 +75,11 @@ static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat);
 static void DrSmallAmmoNumber (int val, int x, int y, boolean opaque);
 static void SB_Draw_Ammo_Widget (void);
 
+// Public Functions
+
+extern void MN_DrTextSmallENG(char *text, int x, int y, Translation_CR_t translation);
+extern void MN_DrTextSmallRUS(char *text, int x, int y, Translation_CR_t translation);
+
 // Public Data
 
 // graphics are drawn to a backing screen and blitted to the real screen
@@ -527,13 +532,13 @@ static void DrawSoundInfo(void)
         if (english_language)
         {
             MN_DrTextSmallENG(DEH_String("*** SOUND DEBUG INFO ***"), xPos[0]
-                                                                    + wide_delta, 20);
+                                                                    + wide_delta, 20, CR_NONE);
         }
         else
         {
             // *** ОТЛАДОЧНАЯ ИНФОРМАЦИЯ О ЗВУКЕ ***
             MN_DrTextSmallRUS(DEH_String("*** JNKFLJXYFZ BYAJHVFWBZ J PDERT ***"), xPos[0]
-                                                                                 + wide_delta, 20);
+                                                                                 + wide_delta, 20, CR_NONE);
         }
     }
     S_GetChannelInfo(&s);
@@ -658,7 +663,7 @@ void SB_Drawer(void)
             }
             else
             {
-                MN_DrTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 38);
+                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 38, CR_NONE);
             }
             M_snprintf(text, sizeof(text), english_language ? "ITEMS: %d/ %d" : "GHTLVTNS: %d/ %d",
                        players[consoleplayer].itemcount, totalitems);
@@ -668,7 +673,7 @@ void SB_Drawer(void)
             }
             else
             {
-                MN_DrTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 48);
+                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 48, CR_NONE);
             }
             M_snprintf(text, sizeof(text), english_language ? "SECRETS: %d/ %d" : "NFQYBRB: %d/ %d",
                        players[consoleplayer].secretcount, totalsecret);
@@ -678,7 +683,7 @@ void SB_Drawer(void)
             }
             else
             {
-                MN_DrTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 58);
+                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 58, CR_NONE);
             }
     
             M_snprintf(text, sizeof(text), english_language ? "SKILL: %d" : "CKJ;YJCNM: %d",  gameskill +1);
@@ -688,7 +693,7 @@ void SB_Drawer(void)
             }
             else
             {
-                MN_DrTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 68);
+                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 68, CR_NONE);
             }
         }
 
@@ -701,7 +706,7 @@ void SB_Drawer(void)
             }
             else
             {
-                MN_DrTextSmallRUS("EHJDTYM", 4 + (wide_4_3 ? wide_delta : 0), 78);
+                MN_DrTextSmallRUS("EHJDTYM", 20 + (wide_4_3 ? wide_delta : 0), 78, CR_NONE);
             }
 
             M_snprintf(text, sizeof(text), "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
@@ -717,7 +722,7 @@ void SB_Drawer(void)
             }
             else
             {
-                MN_DrTextSmallRUS("J,OTT", 4 + (wide_4_3 ? wide_delta : 0), 98);
+                MN_DrTextSmallRUS("J,OTT", 20 + (wide_4_3 ? wide_delta : 0), 98, CR_NONE);
             }
 
             M_snprintf(text, sizeof(text), "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
@@ -946,7 +951,7 @@ void SB_Drawer(void)
                     dp_translation = cr[CR_GOLD2GREEN_HERETIC];
                 }
 
-                DrSmallNumber(CPlayer->powers[pw_flight] / TICRATE, 
+                DrSmallNumber(CPlayer->powers[pw_flight] / TICRATE,
                               (14 - xval) + (wide_4_3 ? wide_delta : 0), 30, true);
 
                 dp_translation = NULL;
@@ -984,7 +989,7 @@ void SB_Drawer(void)
                     dp_translation = cr[CR_GOLD2GREEN_HERETIC];
                 }
 
-                DrSmallNumber(CPlayer->powers[pw_weaponlevel2] / TICRATE, 
+                DrSmallNumber(CPlayer->powers[pw_weaponlevel2] / TICRATE,
                               (294 - xval) + (wide_4_3 ? wide_delta : wide_delta*2) - xval_widget, 30, true);
 
                 dp_translation = NULL;
@@ -1023,7 +1028,7 @@ void SB_Drawer(void)
                         dp_translation = cr[CR_GOLD2GREEN_HERETIC];
                     }
 
-                    DrSmallNumber(CPlayer->powers[pw_invisibility] / TICRATE, 
+                    DrSmallNumber(CPlayer->powers[pw_invisibility] / TICRATE,
                                 (49 - xval) + (wide_4_3 ? wide_delta : 0), 30, true);
 
                     dp_translation = NULL;
@@ -1059,7 +1064,7 @@ void SB_Drawer(void)
                         dp_translation = cr[CR_GOLD2GREEN_HERETIC];
                     }
 
-                    DrSmallNumber(CPlayer->powers[pw_infrared] / TICRATE, 
+                    DrSmallNumber(CPlayer->powers[pw_infrared] / TICRATE,
                                 (83 - xval) + (wide_4_3 ? wide_delta : 0), 30, true);
 
                     dp_translation = NULL;
@@ -1095,7 +1100,7 @@ void SB_Drawer(void)
                         dp_translation = cr[CR_GOLD2GREEN_HERETIC];
                     }
 
-                    DrSmallNumber(CPlayer->powers[pw_invulnerability] / TICRATE, 
+                    DrSmallNumber(CPlayer->powers[pw_invulnerability] / TICRATE,
                                 (259 - xval) + (wide_4_3 ? wide_delta : wide_delta*2) - xval_widget, 30, true);
 
                     dp_translation = NULL;
@@ -2140,7 +2145,7 @@ static void SB_Draw_Ammo_Widget (void)
     V_DrawPatchUnscaled(xpos_pic, 99 << hires, W_CacheLumpName(DEH_String("INAMGLD"), PU_CACHE),
                        (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? NULL : transtable60);
     dp_translation = NULL;
-                       
+
     if (!(CPlayer->weaponowned[wp_crossbow])) dp_translation = cr[CR_MONOCHROME_HERETIC];
     V_DrawPatchUnscaled(xpos_pic, 106 << hires, W_CacheLumpName(DEH_String("INAMBOW"), PU_CACHE),
                        (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? NULL : transtable60);
@@ -2241,13 +2246,13 @@ static void SB_Draw_Ammo_Widget (void)
         dp_translation = !(CPlayer->weaponowned[wp_phoenixrod]) ? cr[CR_GOLD2GRAY_HERETIC] :
                          ammo5 < fullammo5 / 4 ? cr[CR_GOLD2RED_HERETIC] :
                          ammo5 < fullammo5 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
-        DrSmallAmmoNumber(ammo5, xpos_qty1, 128, 
+        DrSmallAmmoNumber(ammo5, xpos_qty1, 128,
                          (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
             V_DrawPatchUnscaled(xpos_slash, 128 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                                (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? NULL : transtable60);
-            DrSmallAmmoNumber(fullammo5, xpos_qty2, 128, 
+            DrSmallAmmoNumber(fullammo5, xpos_qty2, 128,
                               (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
         }
         dp_translation = NULL;
@@ -2257,13 +2262,13 @@ static void SB_Draw_Ammo_Widget (void)
         dp_translation = !(CPlayer->weaponowned[wp_mace]) ? cr[CR_GOLD2GRAY_HERETIC] :
                          ammo6 < fullammo6 / 4 ? cr[CR_GOLD2RED_HERETIC] :
                          ammo6 < fullammo6 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
-        DrSmallAmmoNumber(ammo6, xpos_qty1, 135, 
+        DrSmallAmmoNumber(ammo6, xpos_qty1, 135,
                          (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
             V_DrawPatchUnscaled(xpos_slash, 135 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
                                (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? NULL : transtable60);
-            DrSmallAmmoNumber(fullammo6, xpos_qty2, 135, 
+            DrSmallAmmoNumber(fullammo6, xpos_qty2, 135,
                              (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);
         }
         dp_translation = NULL;

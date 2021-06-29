@@ -32,6 +32,7 @@
 #include "i_swap.h"
 #include "i_system.h"
 #include "i_video.h"
+#include "v_trans.h"
 #include "v_video.h"
 #include "jn.h"
 
@@ -45,6 +46,7 @@ typedef enum
 
 // Public functions
 
+extern void MN_DrTextSmallRUS(char *text, int x, int y, Translation_CR_t translation);
 
 boolean intermission;
 
@@ -627,7 +629,7 @@ void IN_DrawOldLevel(void)
 
         // УРОВЕНЬ ЗАВЕРШЕН
         x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;
-        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25);
+        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25, CR_NONE);
     }
 
     if (prevmap == 9)
@@ -689,7 +691,7 @@ void IN_DrawYAH(void)
     {
         // СЛЕДУЮЩИЙ УРОВЕНЬ:
         x = 160 - MN_DrTextSmallRUSWidth(DEH_String("CKTLE.OBQ EHJDTYM:")) / 2;
-        MN_DrTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 10);
+        MN_DrTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 10, CR_NONE);
 
         x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1)
                 * 9 + gamemap - 1] + 7) / 2;
@@ -760,7 +762,7 @@ void IN_DrawSingleStats(void)
         MN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
 
         x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;         // УРОВЕНЬ ЗАВЕРШЕН
-        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25); // УРОВЕНЬ ЗАВЕРШЕН
+        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25, CR_NONE); // УРОВЕНЬ ЗАВЕРШЕН
     }
 
     if (intertime < 30)
@@ -848,7 +850,7 @@ void IN_DrawSingleStats(void)
         else
         {
             x = 160 - MN_DrTextSmallRUSWidth(DEH_String("CKTLE.OBQ EHJDTYM:")) / 2;    // СЛЕДУЮЩИЙ УРОВЕНЬ:
-            MN_DrTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 160);  // СЛЕДУЮЩИЙ УРОВЕНЬ:
+            MN_DrTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 160, CR_NONE);  // СЛЕДУЮЩИЙ УРОВЕНЬ:
 
             x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
             MN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7, x + wide_delta, 170);
@@ -906,7 +908,7 @@ void IN_DrawCoopStats(void)
         MN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + prevmap - 1] + 7, x + wide_delta, 3);
 
         x = 160 - MN_DrTextSmallRUSWidth(DEH_String("EHJDTYM PFDTHITY")) / 2;   // УРОВЕНЬ ЗАВЕРШЕН
-        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25);  // УРОВЕНЬ ЗАВЕРШЕН
+        MN_DrTextSmallRUS(DEH_String("EHJDTYM PFDTHITY"), x + wide_delta, 25, CR_NONE);  // УРОВЕНЬ ЗАВЕРШЕН
     }
 
     ypos = 50;
@@ -981,15 +983,15 @@ void IN_DrawDMStats(void)
     else
     {
         MN_DrTextBigRUS(DEH_String("BNJU"), 265 + wide_delta, 30);    // ИТОГ
-        MN_DrTextSmallRUS(DEH_String(";THNDS"), 140 + wide_delta, 8); // ЖЕРТВЫ
+        MN_DrTextSmallRUS(DEH_String(";THNDS"), 140 + wide_delta, 8, CR_NONE); // ЖЕРТВЫ
     }
 
     for (i = 0; i < 7; i++)
     {
         if (english_language)
-        MN_DrTextA(DEH_String(KillersText[i]), 10 + wide_delta, 80 + 9 * i);
+            MN_DrTextA(DEH_String(KillersText[i]), 10 + wide_delta, 80 + 9 * i);
         else
-        MN_DrTextSmallRUS(DEH_String(KillersText_Rus[i]), 10 + wide_delta, 80 + 9 * i);
+            MN_DrTextSmallRUS(DEH_String(KillersText_Rus[i]), 10 + wide_delta, 80 + 9 * i, CR_NONE);
     }
     if (intertime < 20)
     {
