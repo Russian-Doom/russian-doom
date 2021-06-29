@@ -696,7 +696,9 @@ void R_ProjectSprite (mobj_t *thing)
         || thing->info->spawnstate == S_LAVASPLASH1       // Lava splash base
         || thing->info->spawnstate == S_LAVASMOKE1        // Lava smoke
         || thing->info->spawnstate == S_SLUDGESPLASH1     // Sludge splash base
-        || thing->info->spawnstate == S_SLUDGECHUNK1)     // Sludge small chunk
+        || thing->info->spawnstate == S_SLUDGECHUNK1      // Sludge small chunk
+        || thing->info->spawnstate == S_IMP_CHUNKA1       // Gargoyle chunk 1
+        || thing->info->spawnstate == S_IMP_CHUNKB1)      // Gargoyle chunk 1
         {
             if (thing->health & 1)
             {
