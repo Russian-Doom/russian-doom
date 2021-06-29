@@ -978,7 +978,25 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
     mobj->flags = info->flags;
     mobj->flags2 = info->flags2;
     mobj->damage = info->damage;
-    mobj->health = info->spawnhealth;
+
+    // [JN] Randomize splashes/smoke health
+    // so they can be flipped in R_ProjectSprite.
+    if (!vanillaparm &&
+    (  mobj->type == MT_SPLASHBASE     // Water splash base
+    || mobj->type == MT_SPLASH         // Water small splash
+    || mobj->type == MT_LAVASPLASH     // Lava splash base
+    || mobj->type == MT_LAVASMOKE      // Lava smoke
+    || mobj->type == MT_SLUDGESPLASH   // Sludge splash base
+    || mobj->type == MT_SLUDGECHUNK))  // Sludge small chunk
+    {
+        mobj->tics -= M_Random() & 3;
+        mobj->health -= mobj->tics & 1;
+    }
+    else
+    {
+        mobj->health = info->spawnhealth;
+    }
+
     if (gameskill != sk_nightmare && gameskill != sk_ultranm)
     {
         mobj->reactiontime = info->reactiontime;

@@ -690,7 +690,13 @@ void R_ProjectSprite (mobj_t *thing)
         || thing->info->spawnstate == S_SKULLHANG70_1     // Hanging Skull 1 (17)
         || thing->info->spawnstate == S_SKULLHANG60_1     // Hanging Skull 2 (24)
         || thing->info->spawnstate == S_SKULLHANG45_1     // Hanging Skull 3 (25)
-        || thing->info->spawnstate == S_SKULLHANG35_1)    // Hanging Skull 4 (26)
+        || thing->info->spawnstate == S_SKULLHANG35_1     // Hanging Skull 4 (26)
+        || thing->info->spawnstate == S_SPLASHBASE1       // Water splash base
+        || thing->info->spawnstate == S_SPLASH1           // Water small splash
+        || thing->info->spawnstate == S_LAVASPLASH1       // Lava splash base
+        || thing->info->spawnstate == S_LAVASMOKE1        // Lava smoke
+        || thing->info->spawnstate == S_SLUDGESPLASH1     // Sludge splash base
+        || thing->info->spawnstate == S_SLUDGECHUNK1)     // Sludge small chunk
         {
             if (thing->health & 1)
             {
