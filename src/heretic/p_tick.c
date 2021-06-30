@@ -22,6 +22,7 @@
 #include "i_system.h"
 #include "p_local.h"
 #include "v_video.h"
+#include "crispy.h"
 
 int leveltime;
 int TimerGame;
@@ -114,6 +115,23 @@ void P_RunThinkers(void)
 {
     thinker_t *currentthinker, *nextthinker;
 
+    // [JN] Prevent dropped item from jittering on moving platforms.
+    // For single player only, really not safe for internal demos.
+    // See: https://github.com/bradharding/doomretro/issues/501
+    if (singleplayer)
+    {
+        currentthinker = thinkercap.next;
+        while (currentthinker != &thinkercap)
+        {
+            if (currentthinker->function)
+                if (currentthinker->function == P_MobjThinker)
+                    currentthinker->function (currentthinker);
+            
+            nextthinker = currentthinker->next;
+            currentthinker = nextthinker;
+        }
+    }
+
     currentthinker = thinkercap.next;
     while (currentthinker != &thinkercap)
     {
@@ -126,9 +144,22 @@ void P_RunThinkers(void)
         }
         else
         {
-            if (currentthinker->function)
-                currentthinker->function(currentthinker);
-            nextthinker = currentthinker->next;
+            // [JN] Prevent dropped item from jittering on moving platforms.
+            if (singleplayer)
+            {
+                if (currentthinker->function)
+                    if (currentthinker->function != P_MobjThinker)
+                        currentthinker->function (currentthinker);
+
+                nextthinker = currentthinker->next;
+            }
+            else
+            {
+                if (currentthinker->function)
+                    currentthinker->function(currentthinker);
+
+                nextthinker = currentthinker->next;
+            }
         }
         currentthinker = nextthinker;
     }
