@@ -55,6 +55,7 @@
 #include "rd_lang.h"
 #include "crispy.h"
 #include "jn.h"
+#include "hu_lib.h"
 
 
 #define SKULLXOFF      -32
@@ -85,10 +86,10 @@ int     messy;
 int     messageLastMenuActive;
 
 // [JN] Choosen message colors, used in HUlib_drawTextLine.
-byte   *messages_pickup_color_set;
-byte   *messages_secret_color_set;
-byte   *messages_system_color_set;
-byte   *messages_chat_color_set;
+Translation_CR_t messages_pickup_color_set;
+Translation_CR_t messages_secret_color_set;
+Translation_CR_t messages_system_color_set;
+Translation_CR_t messages_chat_color_set;
 
 // we are going to be entering a savegame string
 int     saveStringEnter;              
@@ -4116,35 +4117,54 @@ void M_RD_Change_ShadowedText(int choice)
     draw_shadowed_text ^= 1;
 }
 
-void M_RD_Define_Msg_Pickup_Color(void)
+void M_RD_Define_Msg_Color(msgtype_t messageType, int color)
 {
+    Translation_CR_t * colorVar;
+    switch (messageType)
+    {
+        case msg_pickup: // Item pickup.
+        colorVar = &messages_pickup_color_set;
+        break;
+        case msg_secret: // Revealed secret
+        colorVar = &messages_secret_color_set;
+        break;
+        case msg_system: // System message
+        colorVar = &messages_system_color_set;
+        break;
+        case msg_chat: // Netgame chat
+        colorVar = &messages_chat_color_set;
+        break;
+        default:
+            break;
+    }
+
     // [JN] No coloring in vanilla or Jaguar Doom.
     if (vanillaparm || gamemission == jaguar)
     {
-        messages_pickup_color_set = NULL;
+        *colorVar = CR_NONE;
     }
     else
     {
-        switch (message_pickup_color)
+        switch (color)
         {
-            case 1:   messages_pickup_color_set = cr[CR_DARKRED];    break;
-            case 2:   messages_pickup_color_set = cr[CR_GREEN];      break;
-            case 3:   messages_pickup_color_set = cr[CR_DARKGREEN];  break;
-            case 4:   messages_pickup_color_set = cr[CR_OLIVE];      break;
-            case 5:   messages_pickup_color_set = cr[CR_BLUE2];      break;
-            case 6:   messages_pickup_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   messages_pickup_color_set = cr[CR_YELLOW];       break;
-            case 8:   messages_pickup_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_pickup_color_set = cr[CR_WHITE];      break;
-            case 10:  messages_pickup_color_set = cr[CR_GRAY];       break;
-            case 11:  messages_pickup_color_set = cr[CR_DARKGRAY];   break;
-            case 12:  messages_pickup_color_set = cr[CR_TAN];        break;
-            case 13:  messages_pickup_color_set = cr[CR_BROWN];    break;            
-            case 14:  messages_pickup_color_set = cr[CR_ALMOND];      break;
-            case 15:  messages_pickup_color_set = cr[CR_KHAKI];  break;
-            case 16:  messages_pickup_color_set = cr[CR_PINK];      break;
-            case 17:  messages_pickup_color_set = cr[CR_BURGUNDY];  break;
-            default:  messages_pickup_color_set = NULL;              break;
+            case 1:   *colorVar = CR_DARKRED;    break;
+            case 2:   *colorVar = CR_GREEN;      break;
+            case 3:   *colorVar = CR_DARKGREEN;  break;
+            case 4:   *colorVar = CR_OLIVE;      break;
+            case 5:   *colorVar = CR_BLUE2;      break;
+            case 6:   *colorVar = CR_DARKBLUE;   break;
+            case 7:   *colorVar = CR_YELLOW;     break;
+            case 8:   *colorVar = CR_ORANGE;     break;
+            case 9:   *colorVar = CR_WHITE;      break;
+            case 10:  *colorVar = CR_GRAY;       break;
+            case 11:  *colorVar = CR_DARKGRAY;   break;
+            case 12:  *colorVar = CR_TAN;        break;
+            case 13:  *colorVar = CR_BROWN;      break;
+            case 14:  *colorVar = CR_ALMOND;     break;
+            case 15:  *colorVar = CR_KHAKI;      break;
+            case 16:  *colorVar = CR_PINK;       break;
+            case 17:  *colorVar = CR_BURGUNDY;   break;
+            default:  *colorVar = CR_NONE;       break;
         }
     }
 }
@@ -4171,46 +4191,10 @@ void M_RD_Change_Msg_Pickup_Color(int choice)
     }
 
     // [JN] Redefine pickup message color.
-    M_RD_Define_Msg_Pickup_Color();
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
-}
-
-void M_RD_Define_Msg_Secret_Color(void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        messages_secret_color_set = NULL;
-    }
-    else
-    {
-        switch (message_secret_color)
-        {
-            case 1:   messages_secret_color_set = cr[CR_DARKRED];    break;
-            case 2:   messages_secret_color_set = cr[CR_GREEN];      break;
-            case 3:   messages_secret_color_set = cr[CR_DARKGREEN];  break;
-            case 4:   messages_secret_color_set = cr[CR_OLIVE];      break;
-            case 5:   messages_secret_color_set = cr[CR_BLUE2];      break;
-            case 6:   messages_secret_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   messages_secret_color_set = cr[CR_YELLOW];       break;
-            case 8:   messages_secret_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_secret_color_set = cr[CR_WHITE];      break;
-            case 10:  messages_secret_color_set = cr[CR_GRAY];       break;
-            case 11:  messages_secret_color_set = cr[CR_DARKGRAY];   break;
-            case 12:  messages_secret_color_set = cr[CR_TAN];        break;
-            case 13:  messages_secret_color_set = cr[CR_BROWN];    break;            
-            case 14:  messages_secret_color_set = cr[CR_ALMOND];      break;
-            case 15:  messages_secret_color_set = cr[CR_KHAKI];  break;
-            case 16:  messages_secret_color_set = cr[CR_PINK];      break;
-            case 17:  messages_secret_color_set = cr[CR_BURGUNDY];  break;
-            default:  messages_secret_color_set = NULL;              break;
-        }
-
-        // [JN] Routine №3: play sound only if necessary.
-        S_StartSound(NULL,sfx_stnmov);
-    }
 }
 
 void M_RD_Change_Msg_Secret_Color(int choice)
@@ -4235,46 +4219,10 @@ void M_RD_Change_Msg_Secret_Color(int choice)
     }
 
     // [JN] Redefine revealed secret message color.
-    M_RD_Define_Msg_Secret_Color();
+    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
-}
-
-void M_RD_Define_Msg_System_Color(void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        messages_system_color_set = NULL;
-    }
-    else
-    {
-        switch (message_system_color)
-        {
-            case 1:   messages_system_color_set = cr[CR_DARKRED];    break;
-            case 2:   messages_system_color_set = cr[CR_GREEN];      break;
-            case 3:   messages_system_color_set = cr[CR_DARKGREEN];  break;
-            case 4:   messages_system_color_set = cr[CR_OLIVE];      break;
-            case 5:   messages_system_color_set = cr[CR_BLUE2];      break;
-            case 6:   messages_system_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   messages_system_color_set = cr[CR_YELLOW];       break;
-            case 8:   messages_system_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_system_color_set = cr[CR_WHITE];      break;
-            case 10:  messages_system_color_set = cr[CR_GRAY];       break;
-            case 11:  messages_system_color_set = cr[CR_DARKGRAY];   break;
-            case 12:  messages_system_color_set = cr[CR_TAN];        break;
-            case 13:  messages_system_color_set = cr[CR_BROWN];    break;            
-            case 14:  messages_system_color_set = cr[CR_ALMOND];      break;
-            case 15:  messages_system_color_set = cr[CR_KHAKI];  break;
-            case 16:  messages_system_color_set = cr[CR_PINK];      break;
-            case 17:  messages_system_color_set = cr[CR_BURGUNDY];  break;
-            default:  messages_system_color_set = NULL;              break;
-        }
-
-        // [JN] Routine №3: play sound only if necessary.
-        S_StartSound(NULL,sfx_stnmov);
-    }
 }
 
 void M_RD_Change_Msg_System_Color(int choice)
@@ -4299,46 +4247,10 @@ void M_RD_Change_Msg_System_Color(int choice)
     }
 
     // [JN] Redefine system message color.
-    M_RD_Define_Msg_System_Color();
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
-}
-
-void M_RD_Define_Msg_Chat_Color(void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        messages_chat_color_set = NULL;
-    }
-    else
-    {
-        switch (message_chat_color)
-        {
-            case 1:   messages_chat_color_set = cr[CR_DARKRED];    break;
-            case 2:   messages_chat_color_set = cr[CR_GREEN];      break;
-            case 3:   messages_chat_color_set = cr[CR_DARKGREEN];  break;
-            case 4:   messages_chat_color_set = cr[CR_OLIVE];      break;
-            case 5:   messages_chat_color_set = cr[CR_BLUE2];      break;
-            case 6:   messages_chat_color_set = cr[CR_DARKBLUE];   break;
-            case 7:   messages_chat_color_set = cr[CR_YELLOW];       break;
-            case 8:   messages_chat_color_set = cr[CR_ORANGE];     break;
-            case 9:   messages_chat_color_set = cr[CR_WHITE];      break;
-            case 10:  messages_chat_color_set = cr[CR_GRAY];       break;
-            case 11:  messages_chat_color_set = cr[CR_DARKGRAY];   break;
-            case 12:  messages_chat_color_set = cr[CR_TAN];        break;
-            case 13:  messages_chat_color_set = cr[CR_BROWN];    break;            
-            case 14:  messages_chat_color_set = cr[CR_ALMOND];      break;
-            case 15:  messages_chat_color_set = cr[CR_KHAKI];  break;
-            case 16:  messages_chat_color_set = cr[CR_PINK];      break;
-            case 17:  messages_chat_color_set = cr[CR_BURGUNDY];  break;
-            default:  messages_chat_color_set = NULL;              break;
-        }
-
-        // [JN] Routine №3: play sound only if necessary.
-        S_StartSound(NULL,sfx_stnmov);
-    }
 }
 
 void M_RD_Change_Msg_Chat_Color(int choice)
@@ -4363,9 +4275,8 @@ void M_RD_Change_Msg_Chat_Color(int choice)
     }
 
     // [JN] Redefine netgame chat message color.
-    M_RD_Define_Msg_Chat_Color();
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 }
-
 
 // -----------------------------------------------------------------------------
 // Automap settings
@@ -11014,10 +10925,10 @@ void M_Init (void)
     RD_Bindings_Menu_Def_4_Rus = getMenuFromKeyPage(&RD_Bindings_4, false);
 
     // [JN] Init message colors.
-    M_RD_Define_Msg_Pickup_Color();
-    M_RD_Define_Msg_Secret_Color();
-    M_RD_Define_Msg_System_Color();
-    M_RD_Define_Msg_Chat_Color();
+    M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
+    M_RD_Define_Msg_Color(msg_secret, message_secret_color);
+    M_RD_Define_Msg_Color(msg_system, message_system_color);
+    M_RD_Define_Msg_Color(msg_chat, message_chat_color);
 
     currentMenu = english_language ? &MainDef : &MainDef_Rus;
 

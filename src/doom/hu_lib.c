@@ -88,10 +88,10 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
     int i, w, x;
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
     // [JN] Choosen message colors, defined in M_RD_Define_Msg_Colors.
-    extern byte *messages_pickup_color_set;
-    extern byte *messages_secret_color_set;
-    extern byte *messages_system_color_set;
-    extern byte *messages_chat_color_set;
+    extern Translation_CR_t messages_pickup_color_set;
+    extern Translation_CR_t messages_secret_color_set;
+    extern Translation_CR_t messages_system_color_set;
+    extern Translation_CR_t messages_chat_color_set;
     extern int message_counter;
 
     // draw the new stuff
@@ -106,15 +106,15 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
             w = SHORT(l->f[c - l->sc]->width);
 
             if (x+w > origwidth)
-            break;
+                break;
 
             // [JN] Colorize message depending on it's type.
             switch (type)
             {
-                case msg_pickup:  dp_translation = messages_pickup_color_set;  break;
-                case msg_secret:  dp_translation = messages_secret_color_set;  break;
-                case msg_system:  dp_translation = messages_system_color_set;  break;
-                case msg_chat:    dp_translation = messages_chat_color_set;    break;
+                case msg_pickup:  dp_translation = messages_pickup_color_set == CR_NONE ? NULL : cr[messages_pickup_color_set];  break;
+                case msg_secret:  dp_translation = messages_secret_color_set == CR_NONE ? NULL : cr[messages_secret_color_set];  break;
+                case msg_system:  dp_translation = messages_system_color_set == CR_NONE ? NULL : cr[messages_system_color_set];  break;
+                case msg_chat:    dp_translation = messages_chat_color_set == CR_NONE ? NULL : cr[messages_chat_color_set];      break;
                 // [JN] No coloring, including for "msg_uncolored" and fps/time widgets.
                 default:  dp_translation = NULL;  break;
             }
@@ -159,7 +159,7 @@ void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
     if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= origwidth)
     {
         // [JN] Colorize cursor, used for netgame chat only.
-        dp_translation = messages_chat_color_set;
+        dp_translation = messages_chat_color_set == CR_NONE ? NULL : cr[messages_chat_color_set];
 
         // [JN] Draw cursor.
         V_DrawShadowedPatchDoom(x + (wide_4_3 ? wide_delta : 0), l->y, l->f['_' - l->sc]);

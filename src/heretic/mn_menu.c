@@ -294,10 +294,10 @@ static int quicksave;
 static int quickload;
 
 // [JN] Choosen message colors
-byte *messages_pickup_color_set;
-byte *messages_secret_color_set;
-byte *messages_system_color_set;
-byte *messages_chat_color_set;
+Translation_CR_t messages_pickup_color_set;
+Translation_CR_t messages_secret_color_set;
+Translation_CR_t messages_system_color_set;
+Translation_CR_t messages_chat_color_set;
 
 static Translation_CR_t M_RD_ColorTranslation (int color)
 {
@@ -2443,7 +2443,7 @@ static void M_RD_ShadowedText(intptr_t option)
 
 static void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
 {
-    byte** colorVar;
+    Translation_CR_t * colorVar;
     switch (messageType)
     {
         case msg_pickup: // Item pickup.
@@ -2465,30 +2465,30 @@ static void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
     // [JN] No coloring in vanilla.
     if (vanillaparm)
     {
-        *colorVar = NULL;
+        *colorVar = CR_NONE;
     }
     else
     {
         switch (color)
         {
-            case 1:   *colorVar = cr[CR_WHITE2GRAY_HERETIC];      break;
-            case 2:   *colorVar = cr[CR_WHITE2DARKGRAY_HERETIC];  break;
-            case 3:   *colorVar = cr[CR_WHITE2RED_HERETIC];       break;
-            case 4:   *colorVar = cr[CR_WHITE2DARKRED_HERETIC];   break;
-            case 5:   *colorVar = cr[CR_WHITE2GREEN_HERETIC];     break;
-            case 6:   *colorVar = cr[CR_WHITE2DARKGREEN_HERETIC]; break;
-            case 7:   *colorVar = cr[CR_WHITE2OLIVE_HERETIC];     break;
-            case 8:   *colorVar = cr[CR_WHITE2BLUE_HERETIC];      break;
-            case 9:   *colorVar = cr[CR_WHITE2DARKBLUE_HERETIC];  break;
-            case 10:  *colorVar = cr[CR_WHITE2PURPLE_HERETIC];    break;
-            case 11:  *colorVar = cr[CR_WHITE2NIAGARA_HERETIC];   break;
-            case 12:  *colorVar = cr[CR_WHITE2AZURE_HERETIC];     break;
-            case 13:  *colorVar = cr[CR_WHITE2YELLOW_HERETIC];    break;
-            case 14:  *colorVar = cr[CR_WHITE2GOLD_HERETIC];      break;
-            case 15:  *colorVar = cr[CR_WHITE2DARKGOLD_HERETIC];  break;
-            case 16:  *colorVar = cr[CR_WHITE2TAN_HERETIC];       break;
-            case 17:  *colorVar = cr[CR_WHITE2BROWN_HERETIC];     break;
-            default:  *colorVar = NULL;                           break;
+            case 1:   *colorVar = CR_WHITE2GRAY_HERETIC;      break;
+            case 2:   *colorVar = CR_WHITE2DARKGRAY_HERETIC;  break;
+            case 3:   *colorVar = CR_WHITE2RED_HERETIC;       break;
+            case 4:   *colorVar = CR_WHITE2DARKRED_HERETIC;   break;
+            case 5:   *colorVar = CR_WHITE2GREEN_HERETIC;     break;
+            case 6:   *colorVar = CR_WHITE2DARKGREEN_HERETIC; break;
+            case 7:   *colorVar = CR_WHITE2OLIVE_HERETIC;     break;
+            case 8:   *colorVar = CR_WHITE2BLUE_HERETIC;      break;
+            case 9:   *colorVar = CR_WHITE2DARKBLUE_HERETIC;  break;
+            case 10:  *colorVar = CR_WHITE2PURPLE_HERETIC;    break;
+            case 11:  *colorVar = CR_WHITE2NIAGARA_HERETIC;   break;
+            case 12:  *colorVar = CR_WHITE2AZURE_HERETIC;     break;
+            case 13:  *colorVar = CR_WHITE2YELLOW_HERETIC;    break;
+            case 14:  *colorVar = CR_WHITE2GOLD_HERETIC;      break;
+            case 15:  *colorVar = CR_WHITE2DARKGOLD_HERETIC;  break;
+            case 16:  *colorVar = CR_WHITE2TAN_HERETIC;       break;
+            case 17:  *colorVar = CR_WHITE2BROWN_HERETIC;     break;
+            default:  *colorVar = CR_NONE;                    break;
         }
     }
 }

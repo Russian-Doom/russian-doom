@@ -294,6 +294,11 @@ void D_ProcessEvents(void)
 
 void DrawMessage(void)
 {
+    extern Translation_CR_t messages_pickup_color_set;
+    extern Translation_CR_t messages_secret_color_set;
+    extern Translation_CR_t messages_system_color_set;
+    extern Translation_CR_t messages_chat_color_set;
+
     player_t *player = &players[consoleplayer];
     int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta : 0;
 
@@ -313,16 +318,16 @@ void DrawMessage(void)
     switch (player->messageType)
     {
         case msg_pickup: // Item pickup.
-            dp_translation = messages_pickup_color_set;
+            dp_translation = messages_pickup_color_set == CR_NONE ? NULL : cr[messages_pickup_color_set];
             break;
         case msg_secret: // Revealed secret
-            dp_translation = messages_secret_color_set;
+            dp_translation = messages_secret_color_set == CR_NONE ? NULL : cr[messages_secret_color_set];
             break;
         case msg_system: // System message
-            dp_translation = messages_system_color_set;
+            dp_translation = messages_system_color_set == CR_NONE ? NULL : cr[messages_system_color_set];
             break;
         case msg_chat: // Netgame chat
-            dp_translation = messages_chat_color_set;
+            dp_translation = messages_chat_color_set == CR_NONE ? NULL : cr[messages_chat_color_set];
             break;
         case msg_uncolored: // Not supposed to be colored.
         default:
