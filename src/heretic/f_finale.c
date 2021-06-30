@@ -26,6 +26,7 @@
 #include "i_video.h"
 #include "s_sound.h"
 #include "v_video.h"
+#include "crispy.h"
 #include "jn.h"
 
 
@@ -122,20 +123,83 @@ boolean F_Responder(event_t * event)
 
 void F_Ticker(void)
 {
-    // [JN] Make PAUSE working properly on text screen
-    if (paused)
+    // [JN] If we are in single player mode, allow double skipping for 
+    // intermission text. First skip printing all intermission text,
+    // second is advancing to the next state.
+    if (singleplayer && !vanillaparm)
     {
-        return;
-    }
-
-    finalecount++;
-
-    if (!finalestage && finalecount > strlen(finaletext) * TEXTSPEED + TEXTWAIT)
-    {
-        finalecount = 0;
-        if (!finalestage)
+        // [JN] Make PAUSE working properly on text screen.
+        if (paused)
         {
-            finalestage = 1;
+            return;
+        }
+
+        // [JN] Check for skipping. Allow double-press skiping, but don't skip immediately.
+        if (finalecount > 10)
+        {
+            // [JN] Don't allow to skip by pressing "pause" button.
+            if (players[consoleplayer].cmd.buttons == (BT_SPECIAL | BTS_PAUSE))
+            {
+                return;
+            }
+
+            // [JN] Double-skip by pressing "attack" button.
+            if (players[consoleplayer].cmd.buttons & BT_ATTACK && !menuactive)
+            {
+                if (!players[consoleplayer].attackdown)
+                {
+                    if (finalecount >= 5003)
+                    {
+                        finalestage = 1;
+                    }
+                    finalecount += 5000;
+                    players[consoleplayer].attackdown = true;
+                }
+                players[consoleplayer].attackdown = true;
+            }
+            else
+            {
+                players[consoleplayer].attackdown = false;
+            }
+    
+            // [JN] Double-skip by pressing "use" button.
+            if (players[consoleplayer].cmd.buttons & BT_USE && !menuactive)
+            {
+                if (!players[consoleplayer].usedown)
+                {
+                    if (finalecount >= 5003 && !finalestage)
+                    {
+                        finalestage = 1;
+                    }
+                    finalecount += 5000;
+                    players[consoleplayer].usedown = true;
+                }
+                players[consoleplayer].usedown = true;
+            
+            }
+            else
+            {
+                players[consoleplayer].usedown = false;
+            }
+        }
+
+        // [JN] Advance animation.
+        finalecount++;
+    }
+    //
+    // [JN] Standard Heretic routine, safe for network game and demos.
+    //    
+    else
+    {
+        finalecount++;
+
+        if (!finalestage && finalecount > strlen(finaletext) * TEXTSPEED + TEXTWAIT)
+        {
+            finalecount = 0;
+            if (!finalestage)
+            {
+                finalestage = 1;
+            }
         }
     }
 }
