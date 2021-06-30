@@ -28,6 +28,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "m_argv.h"
 #include "m_misc.h"
 #include "w_wad.h"
 #include "z_zone.h"
@@ -43,7 +44,7 @@ typedef struct
     unsigned int count;
 } gus_config_t;
 
-char *gus_patches_path = "base/gus_patches";
+char *gus_patch_path = "";
 int gus_ram_kb = 1024;
 
 static unsigned int MappingIndex(void)
@@ -227,7 +228,7 @@ static char *ReadDMXConfig(void)
     return data;
 }
 
-static boolean WriteTimidityConfig(char *path, gus_config_t *config)
+static boolean WriteTimidityConfig(char *path, gus_config_t *config, char* gus_patches_path)
 {
     FILE *fstream;
     unsigned int i;
@@ -278,37 +279,36 @@ boolean GUS_WriteConfig(char *path)
 {
     boolean result;
     char *dmxconf;
+    char* gus_patches_path;
     gus_config_t config;
 
-    if (!strcmp(gus_patches_path, ""))
+    int p = M_CheckParmWithArgs("-gus_patches", 1);
+    if (p)
     {
-        if (english_language)
-        {
-            printf("You haven't configured gus_patches_path.\n");
-            printf("gus_patches_path needs to point to the location of "
-                   "your GUS patch set.\n"
-                   "To get a copy of the \"standard\" GUS patches, "
-                   "download a copy of dgguspat.zip.\n");
-        }
-        else
-        {
-            printf("Вы не задали переменную gus_patches_path.\n");
-            printf("gus_patches_path необходим для обнаружения "
-                   "патчей GUS.\n"
-                   "Чтобы воспользоваться стандартными патчами, "
-                   "скачайте файл dgguspat.zip.\n");
-        }
-
-        return false;
+        gus_patches_path = M_StringDuplicate(myargv[p + 1]);
     }
+    else if (strcmp(gus_patch_path, "") == 0)
+    {
+        gus_patches_path = RD_M_FindInternalResource("gus_patches");
+    }
+    else
+    {
+        gus_patches_path = M_StringDuplicate(gus_patch_path);
+    }
+
+    printf(english_language ?
+    "Using GUS patch set from: %s\n" :
+    "Используются патчи GUS из папки:\n \t%s\n",
+    gus_patches_path);
 
     dmxconf = ReadDMXConfig();
     ParseDMXConfig(dmxconf, &config);
 
-    result = WriteTimidityConfig(path, &config);
+    result = WriteTimidityConfig(path, &config, gus_patches_path);
 
     FreeDMXConfig(&config);
     Z_Free(dmxconf);
+    free(gus_patches_path);
 
     return result;
 }

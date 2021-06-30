@@ -238,9 +238,6 @@ static char *steam_install_subdirs[] =
     "steamapps\\common\\Strife",
 };
 
-#define STEAM_BFG_GUS_PATCHES \
-    "steamapps\\common\\DOOM 3 BFG Edition\\base\\classicmusic\\instruments"
-
 static char *GetRegistryString(registry_value_t *reg_val)
 {
     HKEY key;
@@ -378,50 +375,6 @@ static void CheckSteamEdition(void)
 
     free(install_path);
 }
-
-// The BFG edition ships with a full set of GUS patches. If we find them,
-// we can autoconfigure to use them.
-// [JN] Function disabled. GUS patches now included in release package.
-
-/*
-static void CheckSteamGUSPatches(void)
-{
-    const char *current_path;
-    char *install_path;
-    char *patch_path;
-    int len;
-
-    // Already configured? Don't stomp on the user's choices.
-    current_path = M_GetStringVariable("gus_patches_path");
-    if (current_path != NULL && strlen(current_path) > 0)
-    {
-        return;
-    }
-
-    install_path = GetRegistryString(&steam_install_location);
-
-    if (install_path == NULL)
-    {
-        return;
-    }
-
-    len = strlen(install_path) + strlen(STEAM_BFG_GUS_PATCHES) + 20;
-    patch_path = malloc(len);
-    M_snprintf(patch_path, len, "%s\\%s\\ACBASS.PAT",
-               install_path, STEAM_BFG_GUS_PATCHES);
-
-    // Does acbass.pat exist? If so, then set gus_patches_path.
-    if (M_FileExists(patch_path))
-    {
-        M_snprintf(patch_path, len, "%s\\%s",
-                   install_path, STEAM_BFG_GUS_PATCHES);
-        M_SetVariable("gus_patches_path", patch_path);
-    }
-
-    free(patch_path);
-    free(install_path);
-}
-*/
 
 // Default install directories for DOS Doom
 
@@ -736,11 +689,6 @@ static void BuildIWADDirList(void)
     CheckInstallRootPaths();
     CheckSteamEdition();
     CheckDOSDefaults();
-
-    // Check for GUS patches installed with the BFG edition!
-    // [JN] Disable checking, GUS patches now included in release package.
-
-    // CheckSteamGUSPatches();
 
 #else
     AddXdgDirs();

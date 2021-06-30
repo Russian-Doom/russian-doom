@@ -72,7 +72,7 @@ static int show_talk = 0;
 static float libsamplerate_scale = 0.65;
 
 static char *timidity_cfg_path = NULL;
-static char *gus_patches_path = "base/gus_patches";
+static char *gus_patch_path = "";
 static int gus_ram_kb = 1024;
 
 static int snd_oplmode;
@@ -211,7 +211,7 @@ void ConfigSound(void)
         TXT_NewConditional(&snd_musicdevice, SNDDEVICE_GUS,
             TXT_NewHorizBox(
                 TXT_NewStrut(4, 0),
-                TXT_NewFileSelector(&gus_patches_path, 34, english_language ?
+                TXT_NewFileSelector(&gus_patch_path, 34, english_language ?
                                     "Select directory containing GUS patches" :
                                     "“кажите путь к патчам GUS",
                                     TXT_DIRECTORY),
@@ -242,7 +242,7 @@ void ConfigSound(void)
                         "Mute inactive window" :
                         "‡вук в неактивном окне",
                         &mute_inactive_window),
-                         
+
         NULL);
 
     //
@@ -273,7 +273,7 @@ void BindSoundVariables(void)
     M_BindFloatVariable("libsamplerate_scale",    &libsamplerate_scale);
 
     M_BindIntVariable("gus_ram_kb",               &gus_ram_kb);
-    M_BindStringVariable("gus_patches_path",      &gus_patches_path);
+    M_BindStringVariable("gus_patch_path",      &gus_patch_path);
     M_BindStringVariable("timidity_cfg_path",     &timidity_cfg_path);
 
     M_BindIntVariable("snd_maxslicetime_ms",      &snd_maxslicetime_ms);
@@ -293,7 +293,6 @@ void BindSoundVariables(void)
     }
 
     timidity_cfg_path = M_StringDuplicate("");
-    gus_patches_path = RD_M_FindInternalResource("gus_patches");
 
     // All versions of Heretic and Hexen did pitch-shifting.
     // Most versions of Doom did not and Strife never did.

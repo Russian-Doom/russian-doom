@@ -23,7 +23,7 @@
 
 #include "doomtype.h"
 
-extern char *gus_patches_path;
+extern char *gus_patch_path;
 extern int gus_ram_kb;
 
 boolean GUS_WriteConfig(char *path);

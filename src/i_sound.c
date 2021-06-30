@@ -445,8 +445,6 @@ void I_BindSoundVariables(void)
     // extern int use_libsamplerate;
     extern float libsamplerate_scale;
 
-    gus_patches_path = RD_M_FindInternalResource("gus_patches");
-
     M_BindIntVariable("snd_musicdevice",         &snd_musicdevice);
     M_BindIntVariable("snd_sfxdevice",           &snd_sfxdevice);
     M_BindIntVariable("snd_maxslicetime_ms",     &snd_maxslicetime_ms);
@@ -459,7 +457,7 @@ void I_BindSoundVariables(void)
     M_BindIntVariable("mute_inactive_window",    &mute_inactive_window);
 
     M_BindStringVariable("timidity_cfg_path",    &timidity_cfg_path);
-    M_BindStringVariable("gus_patches_path",     &gus_patches_path);
+    M_BindStringVariable("gus_patch_path",     &gus_patch_path);
     M_BindIntVariable("gus_ram_kb",              &gus_ram_kb);
 
 #ifdef FEATURE_SOUND
