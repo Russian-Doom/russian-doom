@@ -1011,7 +1011,8 @@ mobj_t* P_SpawnMobjSafe (fixed_t x, fixed_t y, fixed_t z, mobjtype_t type, boole
         // [JN] Remove MF_NOBLOCKMAP flag from following objects
         // so they can properly connect to the moving sectors and 
         // don't stuck in the midair.
-        if (mobj->type == MT_SPLASHBASE     // Water splash base
+        if (mobj->type == MT_BLOOD          // Blood splay
+        ||  mobj->type == MT_SPLASHBASE     // Water splash base
         ||  mobj->type == MT_SPLASH         // Water small splash
         ||  mobj->type == MT_LAVASPLASH     // Lava splash base
         ||  mobj->type == MT_SLUDGESPLASH   // Sludge splash base
