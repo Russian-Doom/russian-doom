@@ -337,32 +337,6 @@ void F_TextWriteRUS(void)
     }
 }
 
-void F_DrawPatchCol(int x, patch_t * patch, int col)
-{
-    column_t *column;
-    byte *source, *dest, *desttop;
-    int count;
-
-    column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
-    desttop = I_VideoBuffer + x;
-
-// step through the posts in a column
-
-    while (column->topdelta != 0xff)
-    {
-        source = (byte *) column + 3;
-        dest = desttop + column->topdelta * screenwidth;
-        count = column->length;
-
-        while (count--)
-        {
-            *dest = *source++;
-            dest += screenwidth;
-        }
-        column = (column_t *) ((byte *) column + column->length + 4);
-    }
-}
-
 /*
 ==================
 =
@@ -385,17 +359,37 @@ void F_DemonScroll(void)
     p1 = W_CacheLumpName(DEH_String("FINAL1"), PU_LEVEL);
     p2 = W_CacheLumpName(DEH_String("FINAL2"), PU_LEVEL);
 
-    if (aspect_ratio >= 2)
+    if (screenwidth != ORIGWIDTH)
     {
         // [JN] Clean up remainings of the wide screen before drawing.
         V_DrawFilledBox(0, 0, screenwidth, SCREENHEIGHT, 0);
+    }
 
-        // [JN] Only single static picture for now.
-        // TODO - fix scrolling for new V_CopyScaledBuffer.
-        V_CopyScaledBuffer(I_VideoBuffer, p2, ORIGWIDTH * ORIGHEIGHT);
+    if (((patch_t*) p1)->width == 560)
+    {
+        // Scroll patches
+        int x = ((screenwidth >> hires) - SHORT(((patch_t*) p1)->width)) / 2;
+        if (finalecount < 70)
+        {
+            V_DrawPatchFullScreen((patch_t*) p1, false);
+            nextscroll = finalecount;
+            return;
+        }
+        if (yval < 200)
+        {
+            V_DrawPatch(x, -((patch_t*) p2)->height + yval, (patch_t*) p2);
+            V_DrawPatch(x, yval, (patch_t*) p1);
+            yval++;
+            nextscroll = finalecount + 3;
+        }
+        else
+        {   //else, we'll just sit here and wait, for now
+            V_DrawPatchFullScreen((patch_t*) p2, false);
+        }
     }
     else
     {
+        // Scroll Raws
         if (finalecount < 70)
         {
             V_CopyScaledBuffer(I_VideoBuffer, p1, ORIGHEIGHT * ORIGWIDTH);
@@ -406,7 +400,7 @@ void F_DemonScroll(void)
         {
             V_CopyScaledBuffer(I_VideoBuffer,
                                p2 + ORIGHEIGHT * ORIGWIDTH - yval, yval);
-            V_CopyScaledBuffer(I_VideoBuffer + (yval << (2 * hires)), 
+            V_CopyScaledBuffer(I_VideoBuffer + screenwidth * ((yval / ORIGWIDTH) << hires),
                                p1, ORIGHEIGHT * ORIGWIDTH - yval);
             yval += ORIGWIDTH;
             nextscroll = finalecount + 3;

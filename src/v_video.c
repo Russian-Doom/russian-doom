@@ -243,6 +243,7 @@ void V_DrawPatch(int x, int y, patch_t *patch)
                 {
                     count--;
                     source++;
+                    sourcetrans++; // [Dasperal] Increment sourcetrans as well in case dp_translation is NULL
                     dest += (screenwidth << hires);
                     tmpy++;
                 }
