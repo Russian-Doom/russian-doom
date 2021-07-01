@@ -386,8 +386,9 @@ void F_DemonScroll(void)
             if (!paused)
             {
                 yval++;
+                nextscroll = finalecount + 3;
             }
-            nextscroll = finalecount + 3;
+            
         }
         else
         {   //else, we'll just sit here and wait, for now
