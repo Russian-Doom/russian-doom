@@ -41,6 +41,10 @@ char *finaleflat;
 
 int FontABaseLump;
 int FontFBaseLump;
+// [JN] F_DemonScroll values, should be reinitialized 
+// in F_StartFinale for repeated scrolling.
+static int yval;
+static int nextscroll;
 
 extern boolean viewactive;
 
@@ -91,6 +95,8 @@ void F_StartFinale(void)
     finalecount = 0;
     FontABaseLump = W_GetNumForName(DEH_String("FONTA_S")) + 1;
     FontFBaseLump = W_GetNumForName(DEH_String("FONTF_S")) + 1;
+    yval = 0;
+    nextscroll = 0;
 
     S_StartSong(mus_cptd, true, false);
 }
@@ -349,8 +355,6 @@ void F_DemonScroll(void)
 {
     byte *p1;
     byte *p2;
-    static int yval = 0;
-    static int nextscroll = 0;
 
     if (finalecount < nextscroll)
     {
