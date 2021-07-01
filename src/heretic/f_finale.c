@@ -150,7 +150,7 @@ void F_Ticker(void)
             }
 
             // [JN] Double-skip by pressing "attack" button.
-            if (players[consoleplayer].cmd.buttons & BT_ATTACK && !menuactive)
+            if (players[consoleplayer].cmd.buttons & BT_ATTACK && !menuactive && finalestage != 1)
             {
                 if (!players[consoleplayer].attackdown)
                 {
@@ -169,7 +169,7 @@ void F_Ticker(void)
             }
     
             // [JN] Double-skip by pressing "use" button.
-            if (players[consoleplayer].cmd.buttons & BT_USE && !menuactive)
+            if (players[consoleplayer].cmd.buttons & BT_USE && !menuactive && finalestage != 1)
             {
                 if (!players[consoleplayer].usedown)
                 {
