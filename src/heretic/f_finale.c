@@ -135,7 +135,7 @@ void F_Ticker(void)
     if (singleplayer && !vanillaparm)
     {
         // [JN] Make PAUSE working properly on text screen.
-        if (paused)
+        if (paused && finalestage == 0)
         {
             return;
         }
@@ -383,7 +383,10 @@ void F_DemonScroll(void)
         {
             V_DrawPatch(x, -((patch_t*) p2)->height + yval, (patch_t*) p2);
             V_DrawPatch(x, yval, (patch_t*) p1);
-            yval++;
+            if (!paused)
+            {
+                yval++;
+            }
             nextscroll = finalecount + 3;
         }
         else
