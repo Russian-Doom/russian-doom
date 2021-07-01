@@ -46,6 +46,7 @@ int FontFBaseLump;
 static int yval;
 static int nextscroll;
 
+static boolean reset_scroll_delay;
 extern boolean viewactive;
 
 extern void D_StartTitle(void);
@@ -97,6 +98,7 @@ void F_StartFinale(void)
     FontFBaseLump = W_GetNumForName(DEH_String("FONTF_S")) + 1;
     yval = 0;
     nextscroll = 0;
+    reset_scroll_delay = false;
 
     S_StartSong(mus_cptd, true, false);
 }
@@ -355,6 +357,13 @@ void F_DemonScroll(void)
 {
     byte *p1;
     byte *p2;
+
+    if (!reset_scroll_delay)
+    {
+        // [JN] Reset finalecount to 0 after text screen has been skipped.
+        finalecount = 0;
+        reset_scroll_delay = true;
+    }
 
     if (finalecount < nextscroll)
     {
