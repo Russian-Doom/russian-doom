@@ -410,8 +410,11 @@ void F_DemonScroll(void)
                                p2 + ORIGHEIGHT * ORIGWIDTH - yval, yval);
             V_CopyScaledBuffer(I_VideoBuffer + screenwidth * ((yval / ORIGWIDTH) << hires),
                                p1, ORIGHEIGHT * ORIGWIDTH - yval);
-            yval += ORIGWIDTH;
-            nextscroll = finalecount + 3;
+            if (!paused)
+            {
+                yval += ORIGWIDTH;
+                nextscroll = finalecount + 3;
+            }
         }
         else
         {   //else, we'll just sit here and wait, for now
