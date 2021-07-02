@@ -61,6 +61,8 @@
 
 #include "d_loop.h"
 
+#include "rd_text.h"
+
 // [JN] Extended name from "hticsav".
 #define	SAVEGAMENAME "heretic-save-"
 
@@ -102,27 +104,6 @@ typedef enum
     ga_worlddone,
     ga_screenshot
 } gameaction_t;
-
-typedef enum
-{
-    wipe_0,
-    wipe_1,
-    wipe_2,
-    wipe_3,
-    wipe_4,
-    NUMWIPES,
-    wipe_random
-} wipe_t;
-
-// [JN] Colored message type, used by P_SetMessage.
-typedef enum
-{
-    msg_uncolored,  // 0: never colored
-    msg_pickup,     // 1: item pickup
-    msg_secret,     // 2: revealed secret
-    msg_system,     // 3: system message
-    msg_chat        // 4: netgame chat
-} MessageType_t;
 
 /*
 ===============================================================================

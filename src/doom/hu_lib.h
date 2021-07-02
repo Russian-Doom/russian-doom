@@ -23,6 +23,7 @@
 
 // We are referring to patches.
 #include "r_defs.h"
+#include "rd_text.h"
 
 // font stuff
 #define HU_CHARERASE        KEY_BACKSPACE
@@ -101,17 +102,7 @@ boolean HUlib_addCharToTextLine(hu_textline_t *t, char ch);
 // returns success
 boolean HUlib_delCharFromTextLine(hu_textline_t *t);
 
-// [JN] Draws text line and colorizes depending on type given.
-typedef enum
-{
-    msg_pickup,     // Item pickup
-    msg_secret,     // Revealed secret
-    msg_system,     // System message
-    msg_chat,       // Netgame chat 
-    msg_uncolored   // Uncolored (automap strings and HUD fps/time widgets)
-} msgtype_t;
-
-void HUlib_drawTextLine(hu_textline_t *l, boolean drawcursor, msgtype_t type);
+void HUlib_drawTextLine(hu_textline_t *l, boolean drawcursor, MessageType_t type);
 
 // erases text line
 void HUlib_eraseTextLine(hu_textline_t *l); 
@@ -131,7 +122,7 @@ void HUlib_addLineToSText (hu_stext_t* s);
 void HUlib_addMessageToSText (hu_stext_t* s, char* prefix, char* msg);
 
 // draws stext
-void HUlib_drawSText (hu_stext_t* s, msgtype_t type);
+void HUlib_drawSText (hu_stext_t* s, MessageType_t type);
 
 // erases all stext lines
 void HUlib_eraseSText (hu_stext_t* s); 

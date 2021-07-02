@@ -77,6 +77,7 @@ net_server.c         net_server.h          \
 net_structrw.c       net_structrw.h        \
 rd_keybinds.c        rd_keybinds.h         \
 rd_menu.c            rd_menu.h             \
+rd_text.c            rd_text.h             \
 sha1.c               sha1.h                \
 memio.c              memio.h               \
 tables.c             tables.h              \

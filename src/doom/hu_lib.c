@@ -27,7 +27,6 @@
 #include "hu_lib.h"
 #include "r_local.h"
 #include "r_draw.h"
-#include "v_trans.h"
 #include "jn.h"
 
 // boolean : whether the screen is always erased
@@ -83,15 +82,10 @@ boolean HUlib_delCharFromTextLine(hu_textline_t* t)
 }
 
 
-void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, msgtype_t type)
+void HUlib_drawTextLine (hu_textline_t* l, boolean drawcursor, MessageType_t type)
 {
     int i, w, x;
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
-    // [JN] Choosen message colors, defined in M_RD_Define_Msg_Colors.
-    extern Translation_CR_t messages_pickup_color_set;
-    extern Translation_CR_t messages_secret_color_set;
-    extern Translation_CR_t messages_system_color_set;
-    extern Translation_CR_t messages_chat_color_set;
     extern int message_counter;
 
     // draw the new stuff
@@ -248,7 +242,7 @@ void HUlib_addMessageToSText (hu_stext_t* s, char* prefix, char* msg)
 }
 
 
-void HUlib_drawSText(hu_stext_t* s, msgtype_t type)
+void HUlib_drawSText(hu_stext_t* s, MessageType_t type)
 {
     int i;
     const int wide_4_3 = aspect_ratio >= 2 && screenblocks == 9 ? 0 : wide_delta*2;

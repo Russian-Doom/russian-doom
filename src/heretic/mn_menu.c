@@ -114,7 +114,6 @@ static void M_RD_MessagesTimeout(intptr_t option);
 static void M_RD_MessagesFade(intptr_t option);
 static void M_RD_ShadowedText(intptr_t option);
 static void M_RD_LocalTime(intptr_t option);
-static void M_RD_Define_Msg_Color(MessageType_t messageType, int color);
 static void M_RD_Change_Msg_Pickup_Color(intptr_t option);
 static void M_RD_Change_Msg_Secret_Color(intptr_t option);
 static void M_RD_Change_Msg_System_Color(intptr_t option);
@@ -292,12 +291,6 @@ static int slotptr;
 static int currentSlot;
 static int quicksave;
 static int quickload;
-
-// [JN] Choosen message colors
-Translation_CR_t messages_pickup_color_set;
-Translation_CR_t messages_secret_color_set;
-Translation_CR_t messages_system_color_set;
-Translation_CR_t messages_chat_color_set;
 
 static Translation_CR_t M_RD_ColorTranslation (int color)
 {
@@ -2441,7 +2434,7 @@ static void M_RD_ShadowedText(intptr_t option)
     draw_shadowed_text ^= 1;
 }
 
-static void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
+void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
 {
     Translation_CR_t * colorVar;
     switch (messageType)

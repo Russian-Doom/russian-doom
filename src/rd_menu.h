@@ -16,6 +16,7 @@
 #define RD_MENU_H
 
 #include <stdint.h>
+#include "rd_text.h"
 
 #define LEFT_DIR 0
 #define RIGHT_DIR 1

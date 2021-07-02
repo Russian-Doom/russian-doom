@@ -53,9 +53,9 @@
 
 #include "rd_keybinds.h"
 #include "rd_lang.h"
+#include "rd_text.h" //TODO replace with rd_menu.h
 #include "crispy.h"
 #include "jn.h"
-#include "hu_lib.h"
 
 
 #define SKULLXOFF      -32
@@ -84,12 +84,6 @@ boolean QuickSaveTitle;     // [JN] Extra title "БЫСТРОЕ СОХРАНЕН
 int     messx;
 int     messy;
 int     messageLastMenuActive;
-
-// [JN] Choosen message colors, used in HUlib_drawTextLine.
-Translation_CR_t messages_pickup_color_set;
-Translation_CR_t messages_secret_color_set;
-Translation_CR_t messages_system_color_set;
-Translation_CR_t messages_chat_color_set;
 
 // we are going to be entering a savegame string
 int     saveStringEnter;              
@@ -4117,7 +4111,7 @@ void M_RD_Change_ShadowedText(int choice)
     draw_shadowed_text ^= 1;
 }
 
-void M_RD_Define_Msg_Color(msgtype_t messageType, int color)
+void M_RD_Define_Msg_Color(MessageType_t messageType, int color)
 {
     Translation_CR_t * colorVar;
     switch (messageType)
