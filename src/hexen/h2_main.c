@@ -494,7 +494,7 @@ void D_DoomMain(void)
 #else
     // [JN] Just print an uncolored banner
     for (p = 0 ; p < 32 ; p++) ST_Message(" ");
-    ST_Message("Russian Hexen " PACKAGE_HEXEN_VERSION);
+    ST_Message("Russian Hexen " BUILD_HEXEN_VERSION);
     for (p = 0 ; p < 31 ; p++) ST_Message(" ");
     ST_Message("\n");
 #endif
