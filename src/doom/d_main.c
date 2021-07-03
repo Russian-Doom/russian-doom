@@ -2469,7 +2469,7 @@ void D_DoomMain (void)
 #else
     // [JN] Just print an uncolored banner
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf("Russian Doom " PACKAGE_DOOM_VERSION);
+    DEH_printf("Russian Doom " BUILD_DOOM_VERSION);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 #endif
