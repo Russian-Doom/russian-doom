@@ -2296,7 +2296,7 @@ static void DrawSoundSystemMenu(void)
         else if (snd_musicdevice == 8)
         {
             // MIDI/MP3/OGG/FLAC
-            MN_DrTextA("MIDI/MP3/OGG/FLAC", 80 + wide_delta, 52);
+            MN_DrTextA("MIDI/MP3/OGG/FLAC/TRACKER", 80 + wide_delta, 52);
         }
 
         //
@@ -2403,7 +2403,7 @@ static void DrawSoundSystemMenu(void)
         else if (snd_musicdevice == 8)
         {
             // MIDI/MP3/OGG/FLAC
-            MN_DrTextA("MIDI/MP3/OGG/FLAC", 91 + wide_delta, 52);
+            MN_DrTextA("MIDI/MP3/OGG/FLAC/TRACKER", 91 + wide_delta, 52);
         }
 
         //
