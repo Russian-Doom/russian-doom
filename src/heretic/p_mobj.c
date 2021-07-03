@@ -155,23 +155,7 @@ void P_ExplodeMissile(mobj_t * mo)
     // [JN] Allow missle attacks to make splashes on water/lava/sludge
     if (singleplayer && mo->z <= mo->floorz + FRACUNIT*8 && !vanillaparm)
     {
-        switch (P_GetThingFloorType(mo))
-        {
-            case FLOOR_WATER:
-                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SPLASHBASE);
-                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SPLASH);
-                S_StartSound(mo, sfx_gloop);
-            break;
-            case FLOOR_LAVA:
-                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_LAVASPLASH);
-                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_LAVASMOKE);
-                S_StartSound(mo, sfx_burn);
-            break;
-            case FLOOR_SLUDGE:
-                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SLUDGESPLASH);
-                P_SpawnMobj(mo->x, mo->y, ONFLOORZ, MT_SLUDGECHUNK);
-            break;
-        }
+        P_HitFloor(mo);
     }
 }
 
@@ -1428,23 +1412,7 @@ void P_SpawnPuffSafe (fixed_t x, fixed_t y, fixed_t z, boolean safe)
     // [JN] Allow hitscan attacks to make splashes on water/lava/sludge
     if (singleplayer && puff->z <= puff->floorz + FRACUNIT*8 && !vanillaparm)
     {
-        switch (P_GetThingFloorType(puff))
-        {
-            case FLOOR_WATER:
-                P_SpawnMobj(x, y, ONFLOORZ, MT_SPLASHBASE);
-                P_SpawnMobj(x, y, ONFLOORZ, MT_SPLASH);
-                S_StartSound(puff, sfx_gloop);
-            break;
-            case FLOOR_LAVA:
-                P_SpawnMobj(x, y, ONFLOORZ, MT_LAVASPLASH);
-                P_SpawnMobj(x, y, ONFLOORZ, MT_LAVASMOKE);
-                S_StartSound(puff, sfx_burn);
-            break;
-            case FLOOR_SLUDGE:
-                P_SpawnMobj(x, y, ONFLOORZ, MT_SLUDGESPLASH);
-                P_SpawnMobj(x, y, ONFLOORZ, MT_SLUDGECHUNK);
-            break;
-        }
+        P_HitFloor(puff);
     }
 }
 
@@ -1507,7 +1475,9 @@ int P_HitFloor(mobj_t * thing)
 {
     mobj_t *mo;
 
-    if (thing->floorz != thing->subsector->sector->floorheight)
+    if (thing->floorz != thing->subsector->sector->floorheight
+    // [JN] Don't let small splashes spawn big splashes.
+    || ((thing->type == MT_SPLASH || thing->type == MT_SLUDGECHUNK) && singleplayer))
     {   // don't splash if landing on the edge above water/lava/etc....
         return (FLOOR_SOLID);
     }
