@@ -288,7 +288,9 @@ boolean PIT_CheckLine (line_t* ld)
 //
 boolean PIT_CheckThing (mobj_t* thing)
 {
-    fixed_t		blockdist;
+    fixed_t		blockdist = thing->radius + tmthing->radius;
+    fixed_t		newdist = P_AproxDistance(thing->x - tmx, thing->y - tmy);
+    fixed_t		olddist = P_AproxDistance(thing->x - tmthing->x, thing->y - tmthing->y);
     boolean		solid;
     boolean		unblocking = false;
     int			damage;
@@ -296,8 +298,6 @@ boolean PIT_CheckThing (mobj_t* thing)
     if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE) ))
 	return true;
     
-    blockdist = thing->radius + tmthing->radius;
-
     if ( abs(thing->x - tmx) >= blockdist
 	 || abs(thing->y - tmy) >= blockdist )
     {
@@ -436,9 +436,6 @@ boolean PIT_CheckThing (mobj_t* thing)
             unblocking = true;
         else
         {
-            fixed_t newdist = P_AproxDistance(thing->x - tmx, thing->y - tmy);
-            fixed_t olddist = P_AproxDistance(thing->x - tmthing->x, thing->y - tmthing->y);
-
             if (newdist > olddist)
             {
                 unblocking = (tmthing->z < thing->z + thing->height
@@ -447,6 +444,27 @@ boolean PIT_CheckThing (mobj_t* thing)
         }
     }
     
+    // [JN] Allow to unblock monsters which are being stuck in each other.
+    if (singleplayer && !vanillaparm
+    && !tmthing->player && thing->flags & MF_SHOOTABLE)
+    {
+        if (tmx == tmthing->x && tmy == tmthing->y)
+        {
+            unblocking = true;
+        }
+        else
+        {
+            if (newdist > olddist)
+            {
+                unblocking = true;
+            }
+            if (thing->player)
+            {
+                unblocking = false;
+            }
+        }
+    }
+
     return !(thing->flags & MF_SOLID) || unblocking;
 }
 
