@@ -69,7 +69,6 @@ static void CheatChickenFunc(player_t * player, Cheat_t * cheat);
 static void CheatMassacreFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat);
-static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat);
 
 // [JN] Ammo widget prototypes.
 void SB_Define_Ammo_Widget_Opacity (void);
@@ -168,9 +167,6 @@ cheatseq_t CheatMassacreSeq = CHEAT("massacre", 0);
 cheatseq_t CheatIDKFASeq = CHEAT("idkfa", 0);
 cheatseq_t CheatIDDQDSeq = CHEAT("iddqd", 0);
 
-// [JN] Russian Doom "VERSION" cheat code
-cheatseq_t CheatVERSIONSeq = CHEAT("version", 0);
-
 static Cheat_t Cheats[] = {
     {CheatGodFunc,       &CheatGodSeq},
     {CheatNoClipFunc,    &CheatNoClipSeq},
@@ -188,7 +184,6 @@ static Cheat_t Cheats[] = {
     {CheatMassacreFunc,  &CheatMassacreSeq},
     {CheatIDKFAFunc,     &CheatIDKFASeq},
     {CheatIDDQDFunc,     &CheatIDDQDSeq},
-    {CheatVERSIONFunc,   &CheatVERSIONSeq},
     {NULL,               NULL} 
 };
 
@@ -1939,18 +1934,6 @@ static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
     P_SetMessage(player, DEH_String(txt_cheatiddqd), msg_system, true);
 }
 
-static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)
-{
-    static char msg[38];
-
-    M_snprintf(msg, sizeof(msg), "%s %s%s - %s",
-               english_language ? "Version" : "dthcbz",
-               english_language ? BUILD_HERETIC_VERSION : BUILD_HERETIC_VERSION_RUS,
-               english_language ? TXT_ARCH : TXT_ARCH_RUS, BUILD_HERETIC_DATE);
-    
-    P_SetMessage(player, msg, msg_system, true);
-}
-
 /*
 ================================================================================
 =
@@ -2090,7 +2073,7 @@ static void SB_Draw_Ammo_Widget (void)
 
         // Firemace ammo
         if (ammo_widget_colored)
-        dp_translation = ammo6 < fullammo6 / 4 ? cr[CR_GOLD2RED_HERETIC] : 
+        dp_translation = ammo6 < fullammo6 / 4 ? cr[CR_GOLD2RED_HERETIC] :
                          ammo6 < fullammo6 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
         DrSmallAmmoNumber(ammo6, xpos_qty1, 135);
         if (ammo_widget == 2)
