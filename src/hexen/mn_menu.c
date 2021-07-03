@@ -1386,6 +1386,9 @@ static void DrawMainMenu(void)
     V_DrawShadowedPatchRaven(42 + wide_delta, 83, W_CacheLumpNum(MauloBaseLump + (frame + 2) % 7,
                                        PU_CACHE));
     V_DrawShadowedPatchRaven(273 + wide_delta, 83, W_CacheLumpNum(MauloBaseLump + frame, PU_CACHE));
+
+    // [JN] Update Status bar.
+    SB_state = -1;
 }
 
 //==========================================================================
@@ -1449,6 +1452,9 @@ static void DrawSkillMenu(void)
     {
         MN_DrTextBigRUS("EHJDTYM CKJ;YJCNB:", 57 + wide_delta, 16);   // УРОВЕНЬ СЛОЖНОСТИ:
     }
+
+    // [JN] Update Status bar.
+    SB_state = -1;
 }
 
 //---------------------------------------------------------------------------
