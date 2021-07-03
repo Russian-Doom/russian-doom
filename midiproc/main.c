@@ -407,6 +407,8 @@ int main(int argc, char *argv[])
     }
 
     // Make sure our Choccolate Doom and midiproc version are lined up.
+    // [JN] Don't need this check, Midiproc working fine with different versions.
+    /*
     if (strcmp(PACKAGE_STRING, argv[1]) != 0)
     {
         char message[1024];
@@ -423,6 +425,7 @@ int main(int argc, char *argv[])
 
         return EXIT_FAILURE;
     }
+    */
 
     // Parse out the sample rate - if we can't, default to 44100.
     snd_samplerate = strtol(argv[2], NULL, 10);
