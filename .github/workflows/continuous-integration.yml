@@ -3,6 +3,63 @@ name: Continuous Integration
 on: [push, pull_request]
 
 jobs:
+  Windows:
+    name: Windows | ${{ matrix.env.name }} | ${{ matrix.build-system.name }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        env:
+          - name: "x86"
+            msystem: MINGW32
+            arch: i686
+          - name: "x64"
+            msystem: MINGW64
+            arch: x86_64
+        build-system:
+          - name: "Cmake"
+            dependency: cmake
+            build-command: cmake --build build --parallel 2
+          - name: "Autotools"
+            dependency: gcc # Placeholder
+            build-command: make -j 2
+    steps:
+      - name: Setup MSYS
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.env.msystem }}
+          update: true
+          install: >-
+            base-devel
+            msys2-devel
+            mingw-w64-${{ matrix.env.arch }}-toolchain
+            mingw-w64-${{ matrix.env.arch }}-${{ matrix.build-system.dependency }}
+            mingw-w64-${{ matrix.env.arch }}-SDL2
+            mingw-w64-${{ matrix.env.arch }}-SDL2_net
+            mingw-w64-${{ matrix.env.arch }}-SDL2_mixer
+            mingw-w64-${{ matrix.env.arch }}-libsamplerate
+            mingw-w64-${{ matrix.env.arch }}-libpng
+
+      - uses: actions/checkout@v2
+
+      - name: Configure CMake
+        if: ${{ matrix.build-system.name == 'Cmake' }}
+        shell: msys2 {0}
+        run: |
+          cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -S . -B build
+
+      - name: Configure Autotools
+        if: ${{ matrix.build-system.name == 'Autotools' }}
+        shell: msys2 {0}
+        run: |
+          ./autogen.sh --host=${{ matrix.env.arch }}-w64-mingw64
+
+      - name: Build
+        shell: msys2 {0}
+        run: |
+          export MAKEFLAGS=--keep-going
+          ${{ matrix.build-system.build-command }}
+
   Linux:
     name: Linux | ${{ matrix.build-system.name }} | ${{ matrix.env }}
     runs-on: ubuntu-latest
