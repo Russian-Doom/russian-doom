@@ -84,6 +84,7 @@
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Doom";
 char* RD_Project_String = PACKAGE_PREFIX " Doom " BUILD_DOOM_VERSION;
+GameType_t RD_GameType = gt_Doom;
 
 // -----------------------------------------------------------------------------
 // [JN] Support for fallback to the English language.

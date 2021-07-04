@@ -75,11 +75,6 @@ static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat);
 static void DrSmallAmmoNumber (int val, int x, int y, boolean opaque);
 static void SB_Draw_Ammo_Widget (void);
 
-// Public Functions
-
-extern void MN_DrTextSmallENG(char *text, int x, int y, Translation_CR_t translation);
-extern void MN_DrTextSmallRUS(char *text, int x, int y, Translation_CR_t translation);
-
 // Public Data
 
 // graphics are drawn to a backing screen and blitted to the real screen
@@ -531,14 +526,14 @@ static void DrawSoundInfo(void)
     {
         if (english_language)
         {
-            MN_DrTextSmallENG(DEH_String("*** SOUND DEBUG INFO ***"), xPos[0]
-                                                                    + wide_delta, 20, CR_NONE);
+            RD_M_DrawTextSmallENG(DEH_String("*** SOUND DEBUG INFO ***"), xPos[0]
+                                                                          + wide_delta, 20, CR_NONE);
         }
         else
         {
             // *** ОТЛАДОЧНАЯ ИНФОРМАЦИЯ О ЗВУКЕ ***
-            MN_DrTextSmallRUS(DEH_String("*** JNKFLJXYFZ BYAJHVFWBZ J PDERT ***"), xPos[0]
-                                                                                 + wide_delta, 20, CR_NONE);
+            RD_M_DrawTextSmallRUS(DEH_String("*** JNKFLJXYFZ BYAJHVFWBZ J PDERT ***"), xPos[0]
+                                                                                       + wide_delta, 20, CR_NONE);
         }
     }
     S_GetChannelInfo(&s);
@@ -547,13 +542,13 @@ static void DrawSoundInfo(void)
         return;
     }
     x = 0;
-    MN_DrTextA(DEH_String("NAME"), xPos[x++] + wide_delta, 30);
-    MN_DrTextA(DEH_String("MO.T"), xPos[x++] + wide_delta, 30);
-    MN_DrTextA(DEH_String("MO.X"), xPos[x++] + wide_delta, 30);
-    MN_DrTextA(DEH_String("MO.Y"), xPos[x++] + wide_delta, 30);
-    MN_DrTextA(DEH_String("ID"), xPos[x++] + wide_delta, 30);
-    MN_DrTextA(DEH_String("PRI"), xPos[x++] + wide_delta, 30);
-    MN_DrTextA(DEH_String("DIST"), xPos[x++] + wide_delta, 30);
+    RD_M_DrawTextA(DEH_String("NAME"), xPos[x++] + wide_delta, 30);
+    RD_M_DrawTextA(DEH_String("MO.T"), xPos[x++] + wide_delta, 30);
+    RD_M_DrawTextA(DEH_String("MO.X"), xPos[x++] + wide_delta, 30);
+    RD_M_DrawTextA(DEH_String("MO.Y"), xPos[x++] + wide_delta, 30);
+    RD_M_DrawTextA(DEH_String("ID"), xPos[x++] + wide_delta, 30);
+    RD_M_DrawTextA(DEH_String("PRI"), xPos[x++] + wide_delta, 30);
+    RD_M_DrawTextA(DEH_String("DIST"), xPos[x++] + wide_delta, 30);
     // [JN] "i < s.channelCount" replaced with "8".
     // Don't draw info for more than 8 channels.
     for (i = 0; i < 8; i++)
@@ -563,24 +558,24 @@ static void DrawSoundInfo(void)
         y = 40 + i * 10;
         if (c->mo == NULL)
         {                       // Channel is unused
-            MN_DrTextA(DEH_String("------"), xPos[0] + wide_delta, y);
+            RD_M_DrawTextA(DEH_String("------"), xPos[0] + wide_delta, y);
             continue;
         }
         M_snprintf(text, sizeof(text), "%s", c->name);
         M_ForceUppercase(text);
-        MN_DrTextA(text, xPos[x++] + wide_delta, y);
+        RD_M_DrawTextA(text, xPos[x++] + wide_delta, y);
         M_snprintf(text, sizeof(text), "%d", c->mo->type);
-        MN_DrTextA(text, xPos[x++] + wide_delta, y);
+        RD_M_DrawTextA(text, xPos[x++] + wide_delta, y);
         M_snprintf(text, sizeof(text), "%d", c->mo->x >> FRACBITS);
-        MN_DrTextA(text, xPos[x++] + wide_delta, y);
+        RD_M_DrawTextA(text, xPos[x++] + wide_delta, y);
         M_snprintf(text, sizeof(text), "%d", c->mo->y >> FRACBITS);
-        MN_DrTextA(text, xPos[x++] + wide_delta, y);
+        RD_M_DrawTextA(text, xPos[x++] + wide_delta, y);
         M_snprintf(text, sizeof(text), "%d", c->id);
-        MN_DrTextA(text, xPos[x++] + wide_delta, y);
+        RD_M_DrawTextA(text, xPos[x++] + wide_delta, y);
         M_snprintf(text, sizeof(text), "%d", c->priority);
-        MN_DrTextA(text, xPos[x++] + wide_delta, y);
+        RD_M_DrawTextA(text, xPos[x++] + wide_delta, y);
         M_snprintf(text, sizeof(text), "%d", c->distance);
-        MN_DrTextA(text, xPos[x++] + wide_delta, y);
+        RD_M_DrawTextA(text, xPos[x++] + wide_delta, y);
     }
     UpdateState |= I_FULLSCRN;
     BorderNeedRefresh = true;
@@ -659,41 +654,41 @@ void SB_Drawer(void)
                        players[consoleplayer].killcount, totalkills);
             if (english_language)
             {
-                MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 38);
+                RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 38);
             }
             else
             {
-                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 38, CR_NONE);
+                RD_M_DrawTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 38, CR_NONE);
             }
             M_snprintf(text, sizeof(text), english_language ? "ITEMS: %d/ %d" : "GHTLVTNS: %d/ %d",
                        players[consoleplayer].itemcount, totalitems);
             if (english_language)
             {
-                MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 48);
+                RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 48);
             }
             else
             {
-                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 48, CR_NONE);
+                RD_M_DrawTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 48, CR_NONE);
             }
             M_snprintf(text, sizeof(text), english_language ? "SECRETS: %d/ %d" : "NFQYBRB: %d/ %d",
                        players[consoleplayer].secretcount, totalsecret);
             if (english_language)
             {
-                MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 58);
+                RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 58);
             }
             else
             {
-                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 58, CR_NONE);
+                RD_M_DrawTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 58, CR_NONE);
             }
     
             M_snprintf(text, sizeof(text), english_language ? "SKILL: %d" : "CKJ;YJCNM: %d",  gameskill +1);
             if (english_language)
             {
-                MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 68);
+                RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 68);
             }
             else
             {
-                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 68, CR_NONE);
+                RD_M_DrawTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 68, CR_NONE);
             }
         }
 
@@ -702,15 +697,15 @@ void SB_Drawer(void)
         {
             if (english_language)
             {
-                MN_DrTextA("LEVEL", 4 + (wide_4_3 ? wide_delta : 0), 78);
+                RD_M_DrawTextA("LEVEL", 4 + (wide_4_3 ? wide_delta : 0), 78);
             }
             else
             {
-                MN_DrTextSmallRUS("EHJDTYM", 20 + (wide_4_3 ? wide_delta : 0), 78, CR_NONE);
+                RD_M_DrawTextSmallRUS("EHJDTYM", 20 + (wide_4_3 ? wide_delta : 0), 78, CR_NONE);
             }
 
             M_snprintf(text, sizeof(text), "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
-            MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 88);
+            RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 88);
         }
 
         // [JN] Total time
@@ -718,15 +713,15 @@ void SB_Drawer(void)
         {
             if (english_language)
             {
-                MN_DrTextA("TOTAL", 4 + (wide_4_3 ? wide_delta : 0), 98);
+                RD_M_DrawTextA("TOTAL", 4 + (wide_4_3 ? wide_delta : 0), 98);
             }
             else
             {
-                MN_DrTextSmallRUS("J,OTT", 20 + (wide_4_3 ? wide_delta : 0), 98, CR_NONE);
+                RD_M_DrawTextSmallRUS("J,OTT", 20 + (wide_4_3 ? wide_delta : 0), 98, CR_NONE);
             }
 
             M_snprintf(text, sizeof(text), "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
-            MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 108);
+            RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 108);
         }
 
         // [JN] Player coords
@@ -737,7 +732,7 @@ void SB_Drawer(void)
                        players[consoleplayer].mo->y >> FRACBITS,
                        players[consoleplayer].mo->z >> FRACBITS,
                        players[consoleplayer].mo->angle / ANG1);
-            MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 118);
+            RD_M_DrawTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 118);
         }
     }
 

@@ -57,7 +57,6 @@
 #include "r_local.h"
 #include "s_sound.h"
 #include "w_main.h"
-#include "v_trans.h"
 #include "v_video.h"
 #include "w_merge.h"
 #include "jn.h"
@@ -76,6 +75,7 @@
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Heretic";
 char* RD_Project_String = PACKAGE_PREFIX " Heretic " BUILD_HERETIC_VERSION;
+GameType_t RD_GameType = gt_Heretic;
 
 GameMode_t gamemode = indetermined;
 char *gamedescription = "unknown";
@@ -257,9 +257,6 @@ void D_PageDrawer(void);
 void D_AdvanceDemo(void);
 boolean F_Responder(event_t * ev);
 
-extern void MN_DrTextSmallRUS(char *text, int x, int y, Translation_CR_t translation);
-
-
 //---------------------------------------------------------------------------
 //
 // PROC D_ProcessEvents
@@ -333,8 +330,8 @@ void DrawMessage(void)
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
-            MN_DrTextAFade(player->message,
-                           messages_alignment == 0 ? 160 - MN_TextAWidth(player->message) / 2 + wide_delta :  // centered
+            RD_M_DrawTextAFade(player->message,
+                           messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
                            messages_alignment == 1 ? 4 + wide_4_3 :   // left edge of the screen
                                                      wide_delta, 1,   // left edge of the status bar
                            player->messageTics >= 9 ? transtable90 :
@@ -349,8 +346,8 @@ void DrawMessage(void)
         }
         else
         {
-            MN_DrTextA(player->message,
-                       messages_alignment == 0 ? 160 - MN_TextAWidth(player->message) / 2 + wide_delta :  // centered
+            RD_M_DrawTextA(player->message,
+                       messages_alignment == 0 ? 160 - RD_M_TextAWidth(player->message) / 2 + wide_delta :  // centered
                        messages_alignment == 1 ? 4 + wide_4_3 :       // left edge of the screen
                                                  wide_delta, 1);      // left edge of the status bar
         }
@@ -359,26 +356,26 @@ void DrawMessage(void)
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
-            MN_DrTextSmallRUSFade(player->message,
-                                  messages_alignment == 0 ? 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
-                                  messages_alignment == 1 ? 4 + wide_4_3 :      // по краю экрана
-                                                                wide_delta, 1,  // по краю статус-бара
-                                  player->messageTics >= 9 ? transtable90 :
-                                  player->messageTics >= 8 ? transtable80 :
-                                  player->messageTics >= 7 ? transtable70 :
-                                  player->messageTics >= 6 ? transtable60 :
-                                  player->messageTics >= 5 ? transtable50 :
-                                  player->messageTics >= 4 ? transtable40 :
-                                  player->messageTics >= 3 ? transtable30 :
-                                  player->messageTics >= 2 ? transtable20 :
-                                                             transtable10);
+            RD_M_DrawTextSmallRUSFade(player->message,
+                                      messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
+                                      messages_alignment == 1 ? 4 + wide_4_3 :      // по краю экрана
+                                                                    wide_delta, 1,  // по краю статус-бара
+                                      player->messageTics >= 9 ? transtable90 :
+                                      player->messageTics >= 8 ? transtable80 :
+                                      player->messageTics >= 7 ? transtable70 :
+                                      player->messageTics >= 6 ? transtable60 :
+                                      player->messageTics >= 5 ? transtable50 :
+                                      player->messageTics >= 4 ? transtable40 :
+                                      player->messageTics >= 3 ? transtable30 :
+                                      player->messageTics >= 2 ? transtable20 :
+                                                                 transtable10);
         }
         else
         {
-            MN_DrTextSmallRUS(player->message,
-                              messages_alignment == 0 ? 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
-                              messages_alignment == 1 ? 4 + wide_4_3 :          // по краю экрана
-                                                        wide_delta, 1, CR_NONE);         // по краю статус-бара
+            RD_M_DrawTextSmallRUS(player->message,
+                                  messages_alignment == 0 ? 160 - RD_M_TextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
+                                  messages_alignment == 1 ? 4 + wide_4_3 :           // по краю экрана
+                                                            wide_delta, 1, CR_NONE); // по краю статус-бара
         }
     }
 
@@ -414,19 +411,19 @@ void DrawTimeAndFPS(void)
                      local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
                      local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
                                        "", tm);        // No time
-    
-            MN_DrTextC(s, (local_time == 1 ? 281 :
-                       local_time == 2 ? 269 :
-                       local_time == 3 ? 293 :
-                       local_time == 4 ? 281 : 0) 
-                       + (wide_4_3 ? wide_delta : wide_delta*2), 13);
+
+            RD_M_DrawTextC(s, (local_time == 1 ? 281 :
+                               local_time == 2 ? 269 :
+                               local_time == 3 ? 293 :
+                               local_time == 4 ? 281 : 0)
+                              + (wide_4_3 ? wide_delta : wide_delta * 2), 13);
         }
 
         if (show_fps)
         {
             sprintf (fps, "%d", f);
-            MN_DrTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 23);
-            MN_DrTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta*2), 23);   // [JN] fps digits
+            RD_M_DrawTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);
+            RD_M_DrawTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta * 2), 23);   // [JN] fps digits
         }
     }
 }

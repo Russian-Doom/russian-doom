@@ -108,6 +108,7 @@ extern boolean askforquit;
 // -----------------------------------------------------------------------------
 char* RD_Project_Name = PACKAGE_PREFIX " Hexen";
 char* RD_Project_String = PACKAGE_PREFIX " Hexen " BUILD_HEXEN_VERSION;
+GameType_t RD_GameType = gt_Hexen;
 
 GameMode_t gamemode;
 char *gamedescription;

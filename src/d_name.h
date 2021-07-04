@@ -15,8 +15,17 @@
 #ifndef RD_D_NAME_H
 #define RD_D_NAME_H
 
+typedef enum
+{
+    gt_Doom,
+    gt_Heretic,
+    gt_Hexen,
+    gt_Strife
+} GameType_t;
+
 // [Dasperal] Those vars should be defined in game-specific code
 extern char* RD_Project_Name;
 extern char* RD_Project_String;
+extern GameType_t RD_GameType;
 
 #endif //RD_D_NAME_H
