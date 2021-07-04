@@ -109,9 +109,6 @@ static char *KillersText[] = { "K", "I", "L", "L", "E", "R", "S" };
 //                                 "У", "Б", "И", "Й", "Ц", "Ы", ""
 static char *KillersText_Rus[] = { "E", ",", "B", "Q", "W", "S", "" };
 
-extern char *LevelNames[];
-extern char *LevelNames_Rus[];
-
 typedef struct
 {
     int x;

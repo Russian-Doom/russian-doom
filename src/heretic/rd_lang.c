@@ -113,6 +113,119 @@ char* txt_gamesaved;
 char* txt_testcontrols;
 
 // AM_map.c
+char *LevelNames[] = {
+    // EPISODE 1 - THE CITY OF THE DAMNED
+    "E1M1:  THE DOCKS",
+    "E1M2:  THE DUNGEONS",
+    "E1M3:  THE GATEHOUSE",
+    "E1M4:  THE GUARD TOWER",
+    "E1M5:  THE CITADEL",
+    "E1M6:  THE CATHEDRAL",
+    "E1M7:  THE CRYPTS",
+    "E1M8:  HELL'S MAW",
+    "E1M9:  THE GRAVEYARD",
+    // EPISODE 2 - HELL'S MAW
+    "E2M1:  THE CRATER",
+    "E2M2:  THE LAVA PITS",
+    "E2M3:  THE RIVER OF FIRE",
+    "E2M4:  THE ICE GROTTO",
+    "E2M5:  THE CATACOMBS",
+    "E2M6:  THE LABYRINTH",
+    "E2M7:  THE GREAT HALL",
+    "E2M8:  THE PORTALS OF CHAOS",
+    "E2M9:  THE GLACIER",
+    // EPISODE 3 - THE DOME OF D'SPARIL
+    "E3M1:  THE STOREHOUSE",
+    "E3M2:  THE CESSPOOL",
+    "E3M3:  THE CONFLUENCE",
+    "E3M4:  THE AZURE FORTRESS",
+    "E3M5:  THE OPHIDIAN LAIR",
+    "E3M6:  THE HALLS OF FEAR",
+    "E3M7:  THE CHASM",
+    "E3M8:  D'SPARIL'S KEEP",
+    "E3M9:  THE AQUIFER",
+    // EPISODE 4: THE OSSUARY
+    "E4M1:  CATAFALQUE",
+    "E4M2:  BLOCKHOUSE",
+    "E4M3:  AMBULATORY",
+    "E4M4:  SEPULCHER",
+    "E4M5:  GREAT STAIR",
+    "E4M6:  HALLS OF THE APOSTATE",
+    "E4M7:  RAMPARTS OF PERDITION",
+    "E4M8:  SHATTERED BRIDGE",
+    "E4M9:  MAUSOLEUM",
+    // EPISODE 5: THE STAGNANT DEMESNE
+    "E5M1:  OCHRE CLIFFS",
+    "E5M2:  RAPIDS",
+    "E5M3:  QUAY",
+    "E5M4:  COURTYARD",
+    "E5M5:  HYDRATYR",
+    "E5M6:  COLONNADE",
+    "E5M7:  FOETID MANSE",
+    "E5M8:  FIELD OF JUDGEMENT",
+    "E5M9:  SKEIN OF D'SPARIL",
+    // EPISODE 6: unnamed
+    "E6M1:  ",
+    "E6M2:  ",
+    "E6M3:  ",
+};
+
+char *LevelNames_Rus[] = {
+    // ЭПИЗОД 1 - ГОРОД ПРОКЛЯТЫХ
+    "T1V1:  LJRB",                  // E1M1: ДОКИ
+    "T1V2:  NTVYBWS",               // E1M2: ТЕМНИЦЫ
+    "T1V3:  GHBDHFNYBWRFZ",         // E1M3: ПРИВРАТНИЦКАЯ
+    "T1V4:  CNJHJ;TDFZ ,FIYZ",      // E1M4: СТОРОЖЕВАЯ БАШНЯ
+    "T1V5:  WBNFLTKM",              // E1M5: ЦИТАДЕЛЬ
+    "T1V6:  RFATLTHFKMYSQ CJ,JH",   // E1M6: КАФЕДРАЛЬНЫЙ СОБОР
+    "T1V7:  CRKTGS",                // E1M7: СКЛЕПЫ
+    "T1V8:  FLCRFZ ENHJ,F",         // E1M8: АДСКАЯ УТРОБА
+    "T1V9:  RKFL,BOT",              // E1M9: КЛАДБИЩЕ
+    // ЭПИЗОД 2 - АДСКАЯ УТРОБА
+    "T2V1:  RHFNTH",                // E2M1: КРАТЕР
+    "T2V2:  KFDJDST JXFUB",         // E2M2: ЛАВОВЫЕ ОЧАГИ
+    "T2V3:  HTRF JUYZ",             // E2M3: РЕКА ОГНЯ
+    "T2V4:  KTLZYJQ UHJN",          // E2M4: ЛЕДЯНОЙ ГРОТ
+    "T2V5:  RFNFRJV,S",             // E2M5: КАТАКОМБЫ
+    "T2V6:  KF,BHBYN",              // E2M6: ЛАБИРИНТ
+    "T2V7:  ,JKMIJQ PFK",           // E2M7: БОЛЬШОЙ ЗАЛ
+    "T2V8:  GJHNFKS [FJCF",         // E2M8: ПОРТАЛЫ ХАОСА
+    "T2V9:  KTLYBR",                // E2M9: ЛЕДНИК 
+    // ЭПИЗОД 3 - КУПОЛ Д'СПАРИЛА
+    "T3V1:  RKFLJDFZ",              // E3M1: КЛАДОВАЯ
+    "T3V2:  CNJXYSQ RJKJLTW",       // E3M2: СТОЧНЫЙ КОЛОДЕЦ
+    "T3V3:  CKBZYBT",               // E3M3: СЛИЯНИЕ 
+    "T3V4:  KFPEHYFZ RHTGJCNM",     // E3M4: ЛАЗУРНАЯ КРЕПОСТЬ
+    "T3V5:  KJUJDJ JABLBFYJD",      // E3M5: ЛОГОВО ОФИДИАНОВ
+    "T3V6:  PFKS CNHF[F",           // E3M6: ЗАЛЫ СТРАХА
+    "T3V7:  GHJGFCNM",              // E3M7: ПРОПАСТЬ
+    "T3V8:  RHTGJCNM L\"CGFHBKF",   // E3M8: КРЕПОСТЬ Д'СПАРИЛА
+    "T3V9:  DJLJYJCYSQ CKJQ",       // E3M9: ВОДОНОСНЫЙ СЛОЙ
+    // ЭПИЗОД 4: СКЛЕП
+    "T4V1:  RFNFAFKR",              // E4M1: КАТАФАЛК
+    "T4V2:  ERHSNBT",               // E4M2: УКРЫТИЕ
+    "T4V3:  VJYFCNSHCRFZ UFKTHTZ",  // E4M3: МОНАСТЫРСКАЯ ГАЛЕРЕЯ
+    "T4V4:  UHJ,YBWF",              // E4M4: ГРОБНИЦА
+    "T4V5:  DTKBRFZ KTCNYBWF",      // E4M5: ВЕЛИКАЯ ЛЕСТНИЦА
+    "T4V6:  PFKS JNCNEGYBRJD",      // E4M6: ЗАЛЫ ОТСТУПНИКОВ
+    "T4V7:  NDTHLSYB GJUB,TKB",     // E4M7: ТВЕРДЫНИ ПОГИБЕЛИ
+    "T4V8:  HFPHEITYYSQ VJCN",      // E4M8: РАЗРУШЕННЫЙ МОСТ
+    "T4V9:  VFDPJKTQ",              // E4M9: МАВЗОЛЕЙ
+    // ЭПИЗОД 5: ЗАСТОЙНЫЕ ВЛАДЕНИЯ  
+    "T5V1:  J[HJDST ENTCS",         // E5M1: ОХРОВЫЕ УТЕСЫ
+    "T5V2:  CNHTVYBYF",             // E5M2: СТРЕМНИНА
+    "T5V3:  GHBXFK",                // E5M3: ПРИЧАЛ
+    "T5V4:  DYENHTYYBQ LDJH",       // E5M4: ВНУТРЕННИЙ ДВОР
+    "T5V5:  UBLHJNBH",              // E5M5: ГИДРОТИР
+    "T5V6:  RJKJYYFLF",             // E5M6: КОЛОННАДА 
+    "T5V7:  PKJDJYYSQ JCJ,YZR",     // E5M7: ЗЛОВОННЫЙ ОСОБНЯК
+    "T5V8:  GJKT DSCITUJ CELF",     // E5M8: ПОЛЕ ВЫСШЕГО СУДА
+    "T5V9:  GENFYBWF L\"CGFHBKF",   // E5M9: ПУТАНИЦА Д'СПАРИЛА
+    // ЭПИЗОД 6: БЕЗ НАЗВАНИЯ
+    "T6V1:  ",
+    "T6V2:  ",
+    "T6V3:  ",
+};
 char* amstr_followon;
 char* amstr_followoff;
 char* amstr_gridon;

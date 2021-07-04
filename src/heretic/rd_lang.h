@@ -122,6 +122,8 @@ extern char* txt_gamesaved;
 extern char* txt_testcontrols;
 
 // AM_map.c
+extern char* LevelNames[];
+extern char *LevelNames_Rus[];
 extern char* amstr_followon;
 extern char* amstr_followoff;
 extern char* amstr_gridon;
