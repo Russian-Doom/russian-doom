@@ -13,13 +13,11 @@ FILETYPE 1
  {
   BLOCK "040904E4"
   {
-   VALUE "FileVersion", "@PACKAGE_VERSION@.0"
-   VALUE "FileDescription", "@PACKAGE_STRING@"
-   VALUE "InternalName", "@PACKAGE_TARNAME@"
-   VALUE "CompanyName", "@PACKAGE_BUGREPORT@"
-   VALUE "LegalCopyright", "Copyright \xA9 2016-2021 Julian Nechaevsky. Licensed under GNU General Public License, version 2"
-   VALUE "ProductName", "@PACKAGE_NAME@"
-   VALUE "ProductVersion", "@PACKAGE_VERSION@"
+     VALUE "ProductName", "@PACKAGE_NAME@"
+     VALUE "ProductVersion", "@PACKAGE_VERSION@"
+     VALUE "FileVersion", "@PACKAGE_VERSION@"
+     VALUE "FileDescription", "@PACKAGE_STRING@"
+     VALUE "LegalCopyright", "@PACKAGE_COPYRIGHT@"
   }
  }
  BLOCK "VarFileInfo"

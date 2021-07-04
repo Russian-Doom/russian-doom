@@ -13,7 +13,6 @@
 #cmakedefine HAVE_LIBI386
 #cmakedefine HAVE_LIBAMD64
 
-#cmakedefine HAVE_DIRENT_H
 #cmakedefine HAVE_DEV_ISA_SPKRIO_H
 #cmakedefine HAVE_DEV_SPEAKER_SPEAKER_H
 #cmakedefine HAVE_LINUX_KD_H

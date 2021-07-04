@@ -15,8 +15,7 @@ set(top_builddir ${CMAKE_CURRENT_BINARY_DIR})
 set(PACKAGE_NAME "${PROJECT_NAME}")
 set(PACKAGE_TARNAME "russian-doom")
 set(PACKAGE_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
-set(PACKAGE_COPYRIGHT "Copyright (C) 2016-2021")
-set(PACKAGE_LICENSE "GNU General Public License, version 2")
+set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2021 Julian Nechaevsky. Licensed under GNU General Public License, version 2")
 set(BUILD_DOOM_VERSION "${PROJECT_VERSION}")
 
 # Check architecture
@@ -67,7 +66,6 @@ check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
 check_symbol_exists(i386_iopl "i386/pio.h" HAVE_LIBI386)
 check_symbol_exists(amd64_iopl "amd64/pio.h" HAVE_LIBAMD64)
 
-check_include_file("dirent.h" HAVE_DIRENT_H)
 check_include_file("dev/isa/spkrio.h" HAVE_DEV_ISA_SPKRIO_H)
 check_include_file("dev/speaker/speaker.h" HAVE_DEV_SPEAKER_SPEAKER_H)
 check_include_file("linux/kd.h" HAVE_LINUX_KD_H)
