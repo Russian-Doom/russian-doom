@@ -1772,7 +1772,7 @@ enum
 menuitem_t RD_Messages_Menu[]=
 {
     {2, "messages enabled:",   M_RD_Change_Messages,        'm'},
-    {2, "message alignment:",  M_RD_Change_Msg_Alignment,   'm'},
+    {2, "alignment:",          M_RD_Change_Msg_Alignment,   'a'},
     {3, "message timeout",     M_RD_Change_Msg_TimeOut,     'm'},
     {-1,"",0,'\0'},
     {2, "fading effect:",      M_RD_Change_Msg_Fade,        'f'},
@@ -3824,7 +3824,9 @@ void M_RD_Draw_MessagesSettings(void)
         M_WriteTextSmall_ENG(165 + wide_delta, 35, showMessages ? "on" : "off", NULL);
 
         // Message alignment
-        M_WriteTextSmall_ENG(171 + wide_delta, 45, messages_alignment ? "centered" : "left", NULL);
+        M_WriteTextSmall_ENG(112 + wide_delta, 45, messages_alignment == 1 ? "centered" : 
+                                                   messages_alignment == 2 ? "left edge of the status bar" :
+                                                                             "left edge of the screen", NULL);
 
         // Message timeout. Print "second" or "seconds", depending of ammount.
         // [JN] Note: using M_StringJoin could be a smarter way,
@@ -3915,7 +3917,9 @@ void M_RD_Draw_MessagesSettings(void)
         M_WriteTextSmall_RUS(214 + wide_delta, 35, showMessages ? "drk" : "dsrk", NULL);
 
         // Выравнивание
-        M_WriteTextSmall_RUS(141 + wide_delta, 45, messages_alignment ? "gj wtynhe" : "gj ktdjve rhf.", NULL);
+        M_WriteTextSmall_RUS(141 + wide_delta, 45, messages_alignment == 1 ? "gj wtynhe" :             // по центру
+                                                   messages_alignment == 2 ? "gj rhf. cnfnec-,fhf" :   // по краю статус-бара
+                                                                             "gj rhf. \'rhfyf", NULL); // по краю экрана
 
         // Таймаут отображения. Печатать секунд(а/ы) в зависимости от количества.
         M_WriteTextSmall_RUS(133 + wide_delta, 65, messages_timeout == 1 ? "1 ctreylf" :
@@ -4018,7 +4022,20 @@ void M_RD_Change_Messages(int choice)
 
 void M_RD_Change_Msg_Alignment(int choice)
 {
-    messages_alignment ^= 1;
+    switch (choice)
+    {
+        case 0: 
+        messages_alignment--;
+        if (messages_alignment < 0) 
+            messages_alignment = 2;
+        break;
+
+        case 1:
+        messages_alignment++;
+        if (messages_alignment > 2)
+            messages_alignment = 0;
+        break;
+    }
 }
 
 void M_RD_Change_Msg_TimeOut(int choice)

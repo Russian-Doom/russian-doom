@@ -258,14 +258,29 @@ void HUlib_drawSText(hu_stext_t* s, msgtype_t type)
 
     // [JN] Optionally centered messages.
     // Center only selective types, i.e. not FPS / local time widgets.
-    if (messages_alignment && !vanillaparm
-    && (type == msg_pickup || type == msg_secret || type == msg_system || type == msg_chat))
+    if (type == msg_pickup || type == msg_secret || type == msg_system || type == msg_chat)
     {
-        s->l->x = (ORIGWIDTH - M_StringWidth(s->l->l) + wide_4_3) / 2;
-    }
-    else
-    {
-        s->l->x = 0;
+        if (!vanillaparm)
+        {
+            if (messages_alignment == 1)
+            {
+                s->l->x = (ORIGWIDTH - M_StringWidth(s->l->l) + wide_4_3) / 2;
+            }
+            else if (messages_alignment == 2)
+            {
+                s->l->x = !wide_4_3 ? 0 : wide_delta;
+            }
+            else
+            {
+                s->l->x = 0;
+            }
+        }
+        else
+        {
+            // [JN] There is no proper "alignment meaning" for vanilla,
+            // so let's just draw messages on left edge of the screen.
+            s->l->x = 0;
+        }
     }
 
     // draw everything
