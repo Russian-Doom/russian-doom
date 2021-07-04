@@ -62,7 +62,15 @@ include(CheckSymbolExists)
 include(CheckIncludeFile)
 check_symbol_exists(strcasecmp "strings.h" HAVE_DECL_STRCASECMP)
 check_symbol_exists(strncasecmp "strings.h" HAVE_DECL_STRNCASECMP)
+check_symbol_exists(ioperm "sys/io.h" HAVE_IOPERM)
+check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
+check_symbol_exists(i386_iopl "i386/pio.h" HAVE_LIBI386)
+check_symbol_exists(amd64_iopl "amd64/pio.h" HAVE_LIBAMD64)
+
 check_include_file("dirent.h" HAVE_DIRENT_H)
+check_include_file("dev/isa/spkrio.h" HAVE_DEV_ISA_SPKRIO_H)
+check_include_file("dev/speaker/speaker.h" HAVE_DEV_SPEAKER_SPEAKER_H)
+check_include_file("linux/kd.h" HAVE_LINUX_KD_H)
 
 string(REPLACE "." ", " WINDOWS_RC_VERSION ${PROJECT_VERSION})
 
