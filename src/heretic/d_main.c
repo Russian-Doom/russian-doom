@@ -304,8 +304,10 @@ void DrawMessage(void)
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
-            MN_DrTextAFade(player->message, messages_alignment == 0 ?
-                           160 - MN_TextAWidth(player->message) / 2 + wide_delta : 4 + wide_4_3, 1,
+            MN_DrTextAFade(player->message,
+                           messages_alignment == 0 ? 160 - MN_TextAWidth(player->message) / 2 + wide_delta :  // centered
+                           messages_alignment == 1 ? 4 + wide_4_3 :   // left edge of the screen
+                                                     wide_delta, 1,   // left edge of the status bar
                            player->messageTics >= 9 ? transtable90 :
                            player->messageTics >= 8 ? transtable80 :
                            player->messageTics >= 7 ? transtable70 :
@@ -318,16 +320,20 @@ void DrawMessage(void)
         }
         else
         {
-            MN_DrTextA(player->message, messages_alignment == 0 ?
-                       160 - MN_TextAWidth(player->message) / 2 + wide_delta : 4 + wide_4_3, 1);
+            MN_DrTextA(player->message,
+                       messages_alignment == 0 ? 160 - MN_TextAWidth(player->message) / 2 + wide_delta :  // centered
+                       messages_alignment == 1 ? 4 + wide_4_3 :       // left edge of the screen
+                                                 wide_delta, 1);      // left edge of the status bar
         }
     }
     else
     {
         if (player->messageTics < 10 && message_fade && !vanillaparm)
         {
-            MN_DrTextSmallRUSFade(player->message, messages_alignment == 0 ?
-                                  160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta : 4 + wide_4_3, 1, 
+            MN_DrTextSmallRUSFade(player->message,
+                                  messages_alignment == 0 ? 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
+                                  messages_alignment == 1 ? 4 + wide_4_3 :      // по краю экрана
+                                                                wide_delta, 1,  // по краю статус-бара
                                   player->messageTics >= 9 ? transtable90 :
                                   player->messageTics >= 8 ? transtable80 :
                                   player->messageTics >= 7 ? transtable70 :
@@ -340,8 +346,10 @@ void DrawMessage(void)
         }
         else
         {
-            MN_DrTextSmallRUS(player->message, messages_alignment == 0 ? 
-                              160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta : 4 + wide_4_3, 1);
+            MN_DrTextSmallRUS(player->message,
+                              messages_alignment == 0 ? 160 - MN_DrTextSmallRUSWidth(player->message) / 2 + wide_delta :  // по центру
+                              messages_alignment == 1 ? 4 + wide_4_3 :          // по краю экрана
+                                                        wide_delta, 1);         // по краю статус-бара
         }
     }
 
@@ -1277,7 +1285,7 @@ void D_DoomMain(void)
 #else
     // [JN] Just print an uncolored banner
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf("Russian Heretic " BUILD_HERETIC_VERSION);
+    DEH_printf("Russian Heretic " PACKAGE_HERETIC_VERSION);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 #endif 

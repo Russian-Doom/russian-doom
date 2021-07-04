@@ -509,7 +509,7 @@ static Menu_t DisplayMenu = {
 
 static MenuItem_t MessagesItems[] = {
     {ITT_LRFUNC,  "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,                0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
-    {ITT_LRFUNC,  "MESSAGES ALIGNMENT:", "DSHFDYBDFYBT:",            M_RD_MessagesAlignment,       0}, // ВЫРАВНИВАНИЕ
+    {ITT_LRFUNC,  "ALIGNMENT:",          "DSHFDYBDFYBT:",            M_RD_MessagesAlignment,       0}, // ВЫРАВНИВАНИЕ
     {ITT_LRFUNC,  "MESSAGE TIMEOUT",     "NFQVFEN JNJ,HF;TYBZ",      M_RD_MessagesTimeout,         0}, // ТАЙМАУТ ОТОБРАЖЕНИЯ
     {ITT_EMPTY,   NULL,                  NULL,                       NULL,                         0},
     {ITT_LRFUNC,  "FADING EFFECT:",      "GKFDYJT BCXTPYJDTYBT:",    M_RD_MessagesFade,            0}, // ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ
@@ -2344,7 +2344,9 @@ static void DrawMessagesMenu(void)
                                      108 + wide_delta, 42);
 
         // Messages alignment
-        MN_DrTextSmallENG(messages_alignment ? "LEFT" : "CENTERED", 177 + wide_delta, 52);
+        MN_DrTextSmallENG(messages_alignment == 1 ? "LEFT EDGE OF THE SCREEN" :
+                          messages_alignment == 2 ? "LEFT EDGE OF THE STATUS BAR" :
+                                                    "CENTERED", 108 + wide_delta, 52);
 
         // Таймаут отображения (текст)
         dp_translation = cr[CR_WHITE2GRAY_HERETIC];
@@ -2418,7 +2420,9 @@ static void DrawMessagesMenu(void)
                                      208 + wide_delta, 42);
 
         // Выравнивание сообщений
-        MN_DrTextSmallRUS(messages_alignment ? "GJ KTDJVE RHF." : "GJ WTYNHE", 138 + wide_delta, 52);
+        MN_DrTextSmallRUS(messages_alignment == 1 ? "GJ RHF. \'RHFYF" :
+                          messages_alignment == 2 ? "GJ RHF. CNFNEC-,FHF" :
+                                                    "GJ WTYNHE", 138 + wide_delta, 52);
 
         // Таймаут отображения (текст)
         dp_translation = cr[CR_WHITE2GRAY_HERETIC];
@@ -2512,7 +2516,20 @@ static void M_RD_Messages(intptr_t option)
 
 static void M_RD_MessagesAlignment(intptr_t option)
 {
-    messages_alignment ^= 1;
+    switch (option)
+    {
+        case 0: 
+        messages_alignment--;
+        if (messages_alignment < 0) 
+            messages_alignment = 2;
+        break;
+
+        case 1:
+        messages_alignment++;
+        if (messages_alignment > 2)
+            messages_alignment = 0;
+        break;
+    }
 }
 
 static void M_RD_MessagesTimeout(intptr_t option)
