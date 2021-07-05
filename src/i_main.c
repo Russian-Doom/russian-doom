@@ -35,6 +35,7 @@
 #include "doomtype.h"
 #include "i_system.h"
 #include "m_argv.h"
+#include "m_misc.h"
 
 // [JN] Vanilla game mode available for all three games in RD
 boolean vanillaparm;
@@ -74,6 +75,24 @@ void RD_CreateWindowsConsole (void)
     wcscpy(cfi.FaceName, L"Consolas");
     SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 }
+
+void M_SetExeDir(void)
+{
+    TCHAR dirname[MAX_PATH + 1];
+    DWORD dirname_len;
+    TCHAR *fp = NULL;
+
+    memset(dirname, 0, sizeof(dirname));
+    dirname_len = GetModuleFileName(NULL, dirname, MAX_PATH);
+    fp = &dirname[dirname_len];
+    while (dirname <= fp && *fp != DIR_SEPARATOR)
+    {
+        fp--;
+    }
+    *(fp + 1) = '\0';
+
+    exedir = M_StringDuplicate(dirname);
+}
 #endif
 
 
@@ -93,13 +112,14 @@ int main(int argc, char **argv)
     myargc = argc;
     myargv = argv;
 
-    M_SetExeDir();
     M_FindResponseFile();
 
     // Check for -devparm being activated
     devparm = M_CheckParm ("-devparm");
 
 #ifdef _WIN32
+    M_SetExeDir();
+
     // [JN] Create a console output on Windows for devparm mode.
     if (devparm)
     {
