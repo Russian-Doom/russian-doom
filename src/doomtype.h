@@ -115,6 +115,9 @@ typedef uint8_t byte;
 
 #endif
 
+// [Dasperal] Use Windows MAX_PATH + 1 as max path length for RD
+#define RD_MAX_PATH 261
+
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 
 #endif

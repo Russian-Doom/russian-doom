@@ -1527,7 +1527,7 @@ static boolean ReadDescriptionForSlot(int slot, char *description)
 {
     FILE *fp;
     boolean found;
-    char name[100];
+    char name[RD_MAX_PATH];
     char versionText[HXS_VERSION_TEXT_LENGTH];
 
     M_snprintf(name, sizeof(name), "%shexen-save-%d.sav", SavePath, slot);

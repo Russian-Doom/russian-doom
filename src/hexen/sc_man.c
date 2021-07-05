@@ -78,7 +78,7 @@ static boolean AlreadyGot = false;
 
 void SC_Open(char *name)
 {
-    char fileName[128];
+    char fileName[RD_MAX_PATH];
 
     if (sc_FileScripts == true)
     {
