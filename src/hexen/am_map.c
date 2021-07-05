@@ -678,8 +678,10 @@ void AM_doautomap_follow(void)
 //  m_y = FTOM(MTOF(plr->mo->y - m_h/2));
 //  m_x = plr->mo->x - m_w/2;
 //  m_y = plr->mo->y - m_h/2;
-        m_x = FTOM(MTOF(plr->mo->x)) - m_w / 2;
-        m_y = FTOM(MTOF(plr->mo->y)) - m_h / 2;
+        // [JN] Use interpolated player coords for smooth
+        // scrolling and static player arrow position.
+        m_x = plr->mo->x - m_w/2;
+        m_y = plr->mo->y - m_h/2;
         m_x2 = m_x + m_w;
         m_y2 = m_y + m_h;
 
