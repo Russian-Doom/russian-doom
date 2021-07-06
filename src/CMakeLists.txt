@@ -2,153 +2,186 @@ foreach(SUBDIR doom heretic hexen strife setup)
     add_subdirectory("${SUBDIR}")
 endforeach()
 
-# Create executables
-foreach(TARGET doom heretic hexen strife setup)
-    add_executable("${PROGRAM_PREFIX}${TARGET}" WIN32
-                             crispy.h
-                             jn.h
-        i_main.c
-        i_system.c           i_system.h
-        m_argv.c             m_argv.h
-        m_misc.c             m_misc.h)
-endforeach()
+# Common library
+add_library(Common STATIC EXCLUDE_FROM_ALL
+                         crispy.h
+                         jn.h
+    i_system.c           i_system.h
+    m_argv.c             m_argv.h
+    m_misc.c             m_misc.h
+)
 
-# Add resources for windows
-if(WIN32)
-    foreach(TARGET doom heretic hexen strife)
-        target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET}/resource.rc")
-    endforeach()
+target_include_directories(Common PUBLIC
+    "${PROJECT_BINARY_DIR}"
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+)
 
-    target_sources("${PROGRAM_PREFIX}setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup-res.rc")
+if(PC_SDL2_FOUND AND NOT (SDL2_MAIN_LIBRARY STREQUAL "SDL2_MAIN_LIBRARY-NOTFOUND"))
+    target_link_libraries(Common PUBLIC
+        SDL2::SDL2main
+    )
 endif()
 
-# Add game sources
+target_link_libraries(Common PUBLIC
+    SDL2::SDL2
+)
+
+# Game Library
+add_library(Game STATIC EXCLUDE_FROM_ALL
+    aes_prng.c          aes_prng.h
+    d_event.c           d_event.h
+                        doomkeys.h
+                        doomfeatures.h
+                        doomtype.h
+    d_iwad.c            d_iwad.h
+    d_loop.c            d_loop.h
+    d_mode.c            d_mode.h
+                        d_ticcmd.h
+    deh_str.c           deh_str.h
+    gusconf.c           gusconf.h
+    i_cdmus.c           i_cdmus.h
+    i_endoom.c          i_endoom.h
+    i_input.c           i_input.h
+    i_joystick.c        i_joystick.h
+                        i_swap.h
+    i_midipipe.c        i_midipipe.h
+    i_pcsound.c
+    i_sdlsound.c
+    i_sdlmusic.c
+    i_oplmusic.c
+    i_sound.c           i_sound.h
+    i_timer.c           i_timer.h
+    i_video.c           i_video.h
+    i_videohr.c         i_videohr.h
+    midifile.c          midifile.h
+    mus2mid.c           mus2mid.h
+    m_bbox.c            m_bbox.h
+    m_cheat.c           m_cheat.h
+    m_config.c          m_config.h
+    m_controls.c        m_controls.h
+    m_fixed.c           m_fixed.h
+    net_client.c        net_client.h
+    net_common.c        net_common.h
+    net_dedicated.c     net_dedicated.h
+                        net_defs.h
+    net_gui.c           net_gui.h
+    net_io.c            net_io.h
+    net_loop.c          net_loop.h
+    net_packet.c        net_packet.h
+    net_query.c         net_query.h
+    net_sdl.c           net_sdl.h
+    net_server.c        net_server.h
+    net_structrw.c      net_structrw.h
+    rd_keybinds.c       rd_keybinds.h
+    rd_menu.c           rd_menu.h
+    sha1.c              sha1.h
+    memio.c             memio.h
+    tables.c            tables.h
+    v_diskicon.c        v_diskicon.h
+    v_video.c           v_video.h
+                        v_patch.h
+    v_trans.c           v_trans.h
+    w_checksum.c        w_checksum.h
+    w_main.c            w_main.h
+    w_wad.c             w_wad.h
+    w_file.c            w_file.h
+    w_file_stdc.c
+    w_file_posix.c
+    w_file_win32.c
+    w_merge.c           w_merge.h
+    z_zone.c            z_zone.h
+)
+
+target_include_directories(Game PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+
+target_link_libraries(Game PUBLIC
+    Common
+    SDL2::mixer
+    SDL2::net
+    textscreen
+    pcsound
+    opl
+)
+
+if(SAMPLERATE_FOUND)
+    target_link_libraries(Game PUBLIC samplerate::samplerate)
+endif()
+if(PNG_FOUND)
+    target_link_libraries(Game PUBLIC PNG::PNG)
+endif()
+
+# SetupCommon libraty
+add_library(SetupCommon STATIC EXCLUDE_FROM_ALL
+    deh_str.c           deh_str.h
+    d_mode.c            d_mode.h
+    d_iwad.c            d_iwad.h
+    i_timer.c           i_timer.h
+    m_config.c          m_config.h
+    m_controls.c        m_controls.h
+    net_io.c            net_io.h
+    net_packet.c        net_packet.h
+    net_sdl.c           net_sdl.h
+    net_query.c         net_query.h
+    net_structrw.c      net_structrw.h
+    z_native.c          z_zone.h
+)
+
+target_link_libraries(SetupCommon PUBLIC
+    Common
+    SDL2::net
+    textscreen
+)
+
+# Create executables
 foreach(TARGET doom heretic hexen strife)
-    target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE
-        aes_prng.c          aes_prng.h
-        d_event.c           d_event.h
-                            doomkeys.h
-                            doomfeatures.h
-                            doomtype.h
-        d_iwad.c            d_iwad.h
-        d_loop.c            d_loop.h
-        d_mode.c            d_mode.h
-                            d_ticcmd.h
-        deh_str.c           deh_str.h
-        gusconf.c           gusconf.h
-        i_cdmus.c           i_cdmus.h
-        i_endoom.c          i_endoom.h
-        i_input.c           i_input.h
-        i_joystick.c        i_joystick.h
-                            i_swap.h
-        i_midipipe.c        i_midipipe.h
-        i_pcsound.c
-        i_sdlsound.c
-        i_sdlmusic.c
-        i_oplmusic.c
-        i_sound.c           i_sound.h
-        i_timer.c           i_timer.h
-        i_video.c           i_video.h
-        i_videohr.c         i_videohr.h
-        midifile.c          midifile.h
-        mus2mid.c           mus2mid.h
-        m_bbox.c            m_bbox.h
-        m_cheat.c           m_cheat.h
-        m_config.c          m_config.h
-        m_controls.c        m_controls.h
-        m_fixed.c           m_fixed.h
-        net_client.c        net_client.h
-        net_common.c        net_common.h
-        net_dedicated.c     net_dedicated.h
-                            net_defs.h
-        net_gui.c           net_gui.h
-        net_io.c            net_io.h
-        net_loop.c          net_loop.h
-        net_packet.c        net_packet.h
-        net_query.c         net_query.h
-        net_sdl.c           net_sdl.h
-        net_server.c        net_server.h
-        net_structrw.c      net_structrw.h
-        rd_keybinds.c       rd_keybinds.h
-        rd_menu.c           rd_menu.h
-        sha1.c              sha1.h
-        memio.c             memio.h
-        tables.c            tables.h
-        v_diskicon.c        v_diskicon.h
-        v_video.c           v_video.h
-                            v_patch.h
-        v_trans.c           v_trans.h
-        w_checksum.c        w_checksum.h
-        w_main.c            w_main.h
-        w_wad.c             w_wad.h
-        w_file.c            w_file.h
-        w_file_stdc.c
-        w_file_posix.c
-        w_file_win32.c
-        w_merge.c           w_merge.h
-        z_zone.c            z_zone.h)
-endforeach()
+    add_executable("${PROGRAM_PREFIX}${TARGET}" WIN32
+        i_main.c
+    )
 
-# Add dehacked sources
-foreach(TARGET doom heretic strife)
-    target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE
-                            deh_defs.h
-        deh_io.c            deh_io.h
-        deh_main.c          deh_main.h
-        deh_mapping.c       deh_mapping.h
-        deh_text.c)
-endforeach()
+    # Add resources for windows
+    if(WIN32)
+        target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET}/resource.rc")
+    endif()
 
-# Add sources for russian-setup:
-target_sources("${PROGRAM_PREFIX}setup" PRIVATE
-        deh_str.c           deh_str.h
-        d_mode.c            d_mode.h
-        d_iwad.c            d_iwad.h
-        i_timer.c           i_timer.h
-        m_config.c          m_config.h
-        m_controls.c        m_controls.h
-        net_io.c            net_io.h
-        net_packet.c        net_packet.h
-        net_sdl.c           net_sdl.h
-        net_query.c         net_query.h
-        net_structrw.c      net_structrw.h
-        z_native.c          z_zone.h)
+    # Dehacked sources
+    if(NOT "${TARGET}" STREQUAL "hexen")
+        target_sources("${PROGRAM_PREFIX}${TARGET}" PUBLIC
+                                deh_defs.h
+            deh_io.c            deh_io.h
+            deh_main.c          deh_main.h
+            deh_mapping.c       deh_mapping.h
+            deh_text.c
+        )
+    endif()
 
-# Add include directories and link libraries
-foreach(TARGET doom heretic hexen strife)
-    target_include_directories("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
-    target_link_libraries("${PROGRAM_PREFIX}${TARGET}"
+    target_link_libraries("${PROGRAM_PREFIX}${TARGET}" PUBLIC
         ${TARGET}
-        SDL2::SDL2main
-        SDL2::SDL2
-        SDL2::mixer
-        SDL2::net
-        textscreen
-        pcsound
-        opl)
-
-    if(SAMPLERATE_FOUND)
-        target_link_libraries("${PROGRAM_PREFIX}${TARGET}" samplerate::samplerate)
-    endif()
-    if(PNG_FOUND)
-        target_link_libraries("${PROGRAM_PREFIX}${TARGET}" PNG::PNG)
-    endif()
+        Game
+    )
 endforeach()
-target_include_directories("${PROGRAM_PREFIX}setup"
-                           PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../")
-target_link_libraries("${PROGRAM_PREFIX}setup"
-        SDL2::SDL2main
-        SDL2::SDL2
-        SDL2::mixer
-        SDL2::net
-        setup
-        textscreen)
+
+add_executable("${PROGRAM_PREFIX}setup" WIN32
+    i_main.c
+)
+
+target_link_libraries("${PROGRAM_PREFIX}setup" PUBLIC
+    setup
+    SetupCommon
+)
+
+# Add setup resources for windows
+if(WIN32)
+    target_sources("${PROGRAM_PREFIX}setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup-res.rc")
+endif()
 
 # MSVC link flags
 if(MSVC)
     foreach(TARGET doom heretic hexen strife setup)
         set_target_properties("${PROGRAM_PREFIX}${TARGET}" PROPERTIES
-            LINK_FLAGS "/MANIFEST:NO")
+            LINK_FLAGS "/MANIFEST:NO"
+        )
     endforeach()
 endif()
 
