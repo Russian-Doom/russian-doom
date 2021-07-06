@@ -3,18 +3,18 @@
 1 24 MOVEABLE PURE "@top_builddir@/src/setup/setup-manifest.xml"
 
 1 VERSIONINFO
-PRODUCTVERSION @WINDOWS_RC_VERSION@
-FILEVERSION @WINDOWS_RC_VERSION@
+PRODUCTVERSION @WINDOWS_RC_DOOM_VERSION@
+FILEVERSION @WINDOWS_RC_DOOM_VERSION@
 FILETYPE 1
 {
  BLOCK "StringFileInfo"
  {
   BLOCK "040904E4"
   {
-   VALUE "ProductName", "@PACKAGE_NAME@ Setup"
-   VALUE "ProductVersion", "@PACKAGE_VERSION@"
-   VALUE "FileVersion", "@PACKAGE_VERSION@.0"
-   VALUE "FileDescription", "@PACKAGE_STRING@ Setup"
+   VALUE "ProductName", "@PACKAGE_PREFIX@ Setup"
+   VALUE "ProductVersion", "@BUILD_DOOM_VERSION@"
+   VALUE "FileVersion", "@BUILD_DOOM_VERSION@"
+   VALUE "FileDescription", "@PACKAGE_PREFIX@ Setup"
    VALUE "LegalCopyright", "@PACKAGE_COPYRIGHT@"
   }
  }

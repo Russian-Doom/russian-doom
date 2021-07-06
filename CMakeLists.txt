@@ -70,8 +70,12 @@ check_include_file("dev/isa/spkrio.h" HAVE_DEV_ISA_SPKRIO_H)
 check_include_file("dev/speaker/speaker.h" HAVE_DEV_SPEAKER_SPEAKER_H)
 check_include_file("linux/kd.h" HAVE_LINUX_KD_H)
 
-string(REPLACE "." ", " WINDOWS_RC_VERSION ${PROJECT_VERSION})
+string(REPLACE "." ", " WINDOWS_RC_DOOM_VERSION ${BUILD_DOOM_VERSION})
+string(REPLACE "." ", " WINDOWS_RC_HERETIC_VERSION ${BUILD_HERETIC_VERSION})
+string(REPLACE "." ", " WINDOWS_RC_HEXEN_VERSION ${BUILD_HEXEN_VERSION})
+string(REPLACE "." ", " WINDOWS_RC_STRIFE_VERSION ${BUILD_STRIFE_VERSION})
 
+string(REPLACE " Doom" "" PACKAGE_PREFIX "${PROJECT_NAME}")
 string(REPLACE "doom" "" PROGRAM_PREFIX "${PACKAGE_TARNAME}")
 
 if(NOT WIN32)
@@ -80,7 +84,10 @@ endif()
 
 configure_file(cmake/config.h.cin config.h)
 
-configure_file(src/resource.rc.in src/resource.rc)
+configure_file(src/doom/resource.rc.in src/doom/resource.rc)
+configure_file(src/heretic/resource.rc.in src/heretic/resource.rc)
+configure_file(src/hexen/resource.rc.in src/hexen/resource.rc)
+configure_file(src/strife/resource.rc.in src/strife/resource.rc)
 configure_file(src/setup-res.rc.in src/setup-res.rc)
 configure_file(src/setup/setup-manifest.xml.in src/setup/setup-manifest.xml)
 

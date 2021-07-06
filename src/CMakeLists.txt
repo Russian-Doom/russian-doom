@@ -16,7 +16,7 @@ endforeach()
 # Add resources for windows
 if(WIN32)
     foreach(TARGET doom heretic hexen strife)
-        target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/resource.rc")
+        target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET}/resource.rc")
     endforeach()
 
     target_sources("${PROGRAM_PREFIX}setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup-res.rc")

@@ -107,13 +107,17 @@ dnl Automake v1.8.0 is required, please upgrade!
 AM_INIT_AUTOMAKE([1.8.0 foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-WINDOWS_RC_VERSION=`echo $PACKAGE_VERSION | sed 's/\./, /g'`
+WINDOWS_RC_DOOM_VERSION=`echo $BUILD_DOOM_VERSION | sed 's/\./, /g'`
+WINDOWS_RC_HERETIC_VERSION=`echo $BUILD_HERETIC_VERSION | sed 's/\./, /g'`
+WINDOWS_RC_HEXEN_VERSION=`echo $BUILD_HEXEN_VERSION | sed 's/\./, /g'`
+WINDOWS_RC_STRIFE_VERSION=`echo $BUILD_STRIFE_VERSION | sed 's/\./, /g'`
 
 # This controls the prefix added to the start of program names.  For example,
 # if this is changed to "lemon-", the programs generated will be named
 # lemon-doom, lemon-heretic, etc.
 
 PROGRAM_PREFIX=russian-
+PACKAGE_PREFIX=Russian
 
 AC_SUBST(PROGRAM_PREFIX)
 AC_DEFINE_UNQUOTED(PROGRAM_PREFIX, "$PROGRAM_PREFIX",
@@ -121,7 +125,15 @@ AC_DEFINE_UNQUOTED(PROGRAM_PREFIX, "$PROGRAM_PREFIX",
 
 AM_CONFIG_HEADER(config.h:config.hin)
 
-AC_SUBST(WINDOWS_RC_VERSION)
+AC_SUBST(PACKAGE_PREFIX)
+AC_SUBST(BUILD_HERETIC_VERSION)
+AC_SUBST(BUILD_HEXEN_VERSION)
+AC_SUBST(BUILD_STRIFE_VERSION)
+AC_SUBST(BUILD_DOOM_VERSION)
+AC_SUBST(WINDOWS_RC_DOOM_VERSION)
+AC_SUBST(WINDOWS_RC_HERETIC_VERSION)
+AC_SUBST(WINDOWS_RC_HEXEN_VERSION)
+AC_SUBST(WINDOWS_RC_STRIFE_VERSION)
 AC_SUBST(SDLMIXER_CFLAGS)
 AC_SUBST(SDLMIXER_LIBS)
 
@@ -145,7 +157,10 @@ src/doom/Makefile
 src/heretic/Makefile
 src/hexen/Makefile
 src/strife/Makefile
-src/resource.rc
+src/doom/resource.rc
+src/heretic/resource.rc
+src/hexen/resource.rc
+src/strife/resource.rc
 src/setup-res.rc
 src/setup/Makefile
 src/setup/setup-manifest.xml
