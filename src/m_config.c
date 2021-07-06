@@ -144,7 +144,7 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(english_language),
 
     //!
-    // [JN] PWAD autoloading
+    // [JN] Doom PWAD autoloading
     //
 
     CONFIG_VARIABLE_STRING(autoload_global_pwad1),
@@ -171,6 +171,20 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_STRING(autoload_tnt_pwad2),
     CONFIG_VARIABLE_STRING(autoload_tnt_pwad3),
     CONFIG_VARIABLE_STRING(autoload_tnt_pwad4),
+
+    //!
+    // [JN] Heretic PWAD autoloading
+    //
+
+    CONFIG_VARIABLE_STRING(autoload_registered_pwad1),
+    CONFIG_VARIABLE_STRING(autoload_registered_pwad2),
+    CONFIG_VARIABLE_STRING(autoload_registered_pwad3),
+    CONFIG_VARIABLE_STRING(autoload_registered_pwad4),
+
+    CONFIG_VARIABLE_STRING(autoload_retail_pwad1),
+    CONFIG_VARIABLE_STRING(autoload_retail_pwad2),
+    CONFIG_VARIABLE_STRING(autoload_retail_pwad3),
+    CONFIG_VARIABLE_STRING(autoload_retail_pwad4),
 
     //!
     // @game strife
