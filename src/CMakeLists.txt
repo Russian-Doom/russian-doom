@@ -40,6 +40,7 @@ add_library(Game STATIC EXCLUDE_FROM_ALL
     deh_str.c           deh_str.h
     gusconf.c           gusconf.h
     i_cdmus.c           i_cdmus.h
+                        icon.h
     i_endoom.c          i_endoom.h
     i_input.c           i_input.h
     i_joystick.c        i_joystick.h
@@ -117,6 +118,7 @@ add_library(SetupCommon STATIC EXCLUDE_FROM_ALL
     deh_str.c           deh_str.h
     d_mode.c            d_mode.h
     d_iwad.c            d_iwad.h
+                        icon.h
     i_timer.c           i_timer.h
     m_config.c          m_config.h
     m_controls.c        m_controls.h
@@ -138,6 +140,7 @@ target_link_libraries(SetupCommon PUBLIC
 foreach(TARGET doom heretic hexen strife)
     add_executable("${PROGRAM_PREFIX}${TARGET}" WIN32
         i_main.c
+        "${PROJECT_SOURCE_DIR}/data/${TARGET}_icon.c"
     )
 
     # Add resources for windows
@@ -164,6 +167,7 @@ endforeach()
 
 add_executable("${PROGRAM_PREFIX}setup" WIN32
     i_main.c
+    "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
 )
 
 target_link_libraries("${PROGRAM_PREFIX}setup" PUBLIC

@@ -47,6 +47,7 @@ d_mode.c             d_mode.h              \
 deh_str.c            deh_str.h             \
 gusconf.c            gusconf.h             \
 i_cdmus.c            i_cdmus.h             \
+                     icon.h                \
 i_endoom.c           i_endoom.h            \
 i_input.c            i_input.h             \
 i_joystick.c         i_joystick.h          \
@@ -126,33 +127,33 @@ EXTRA_LIBS =                                               \
                @SDLNET_LIBS@
 
 if HAVE_WINDRES
-@PROGRAM_PREFIX@doom_SOURCES=$(SOURCE_FILES_WITH_DEH) doom/resource.rc
+@PROGRAM_PREFIX@doom_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/doom_icon.c doom/resource.rc
 else
-@PROGRAM_PREFIX@doom_SOURCES=$(SOURCE_FILES_WITH_DEH)
+@PROGRAM_PREFIX@doom_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/doom_icon.c
 endif
 
 @PROGRAM_PREFIX@doom_LDADD = doom/libdoom.a $(EXTRA_LIBS)
 
 if HAVE_WINDRES
-@PROGRAM_PREFIX@heretic_SOURCES=$(SOURCE_FILES_WITH_DEH) heretic/resource.rc
+@PROGRAM_PREFIX@heretic_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/heretic_icon.c heretic/resource.rc
 else
-@PROGRAM_PREFIX@heretic_SOURCES=$(SOURCE_FILES_WITH_DEH)
+@PROGRAM_PREFIX@heretic_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/heretic_icon.c
 endif
 
 @PROGRAM_PREFIX@heretic_LDADD = heretic/libheretic.a $(EXTRA_LIBS)
 
 if HAVE_WINDRES
-@PROGRAM_PREFIX@hexen_SOURCES=$(SOURCE_FILES) hexen/resource.rc
+@PROGRAM_PREFIX@hexen_SOURCES=$(SOURCE_FILES) $(top_builddir)/data/hexen_icon.c hexen/resource.rc
 else
-@PROGRAM_PREFIX@hexen_SOURCES=$(SOURCE_FILES)
+@PROGRAM_PREFIX@hexen_SOURCES=$(SOURCE_FILES) $(top_builddir)/data/hexen_icon.c
 endif
 
 @PROGRAM_PREFIX@hexen_LDADD = hexen/libhexen.a $(EXTRA_LIBS)
 
 if HAVE_WINDRES
-@PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH) strife/resource.rc
+@PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/strife_icon.c strife/resource.rc
 else
-@PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH)
+@PROGRAM_PREFIX@strife_SOURCES=$(SOURCE_FILES_WITH_DEH) $(top_builddir)/data/strife_icon.c
 endif
 
 @PROGRAM_PREFIX@strife_LDADD = strife/libstrife.a $(EXTRA_LIBS)
@@ -166,6 +167,7 @@ SETUP_FILES=                               \
 deh_str.c            deh_str.h             \
 d_mode.c             d_mode.h              \
 d_iwad.c             d_iwad.h              \
+                     icon.h                \
 i_timer.c            i_timer.h             \
 m_config.c           m_config.h            \
 m_controls.c         m_controls.h          \
@@ -177,9 +179,9 @@ net_structrw.c       net_structrw.h        \
 z_native.c           z_zone.h
 
 if HAVE_WINDRES
-@PROGRAM_PREFIX@setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c setup-res.rc
+@PROGRAM_PREFIX@setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup-res.rc
 else
-@PROGRAM_PREFIX@setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c
+@PROGRAM_PREFIX@setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
 endif
 @PROGRAM_PREFIX@setup_LDADD = setup/libsetup.a                             \
                         $(top_builddir)/textscreen/libtextscreen.a   \
@@ -191,10 +193,3 @@ CLEANFILES = $(execgames_SCRIPTS)
 	$(WINDRES) $< -o $@
 %.o : %.rc
 	$(WINDRES) $< -o $@
-
-if HAVE_PYTHON
-
-icon.c : $(top_builddir)/data/doom.png
-	$(top_builddir)/data/convert-icon $(top_builddir)/data/doom.png $@
-
-endif

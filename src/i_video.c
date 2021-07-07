@@ -31,7 +31,7 @@
 #include <windows.h>
 #endif
 
-#include "icon.c"
+#include "icon.h"
 #include "config.h"
 #include "d_loop.h"
 #include "deh_str.h"
@@ -373,7 +373,7 @@ static void AdjustWindowSize(void)
 
 static void HandleWindowEvent(SDL_WindowEvent *event)
 {
-    int i, flags;
+    int i;
 
     switch (event->event)
     {

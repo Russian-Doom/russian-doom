@@ -104,7 +104,7 @@ AM_CONDITIONAL(HAVE_PYTHON, $HAVE_PYTHON)
 
 dnl Automake v1.8.0 is required, please upgrade!
 
-AM_INIT_AUTOMAKE([1.8.0 foreign])
+AM_INIT_AUTOMAKE([1.8.0 foreign subdir-objects])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 WINDOWS_RC_DOOM_VERSION=`echo $BUILD_DOOM_VERSION | sed 's/\./, /g'`
