@@ -38,11 +38,9 @@
 #include "textscreen.h"
 #include "jn.h"
 
-#ifdef __clang__
 // [Dasperal] Disable clang warnings for windows-1251 strings
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-source-encoding"
-#endif
 
 static txt_window_t *window;
 static int old_max_players;
@@ -551,7 +549,5 @@ void NET_WaitForLaunch(void)
     TXT_Shutdown();
 }
 
-#ifdef __clang__
 #pragma clang diagnostic pop
 // [Dasperal] End of #pragma clang diagnostic ignored "-Winvalid-source-encoding"
-#endif

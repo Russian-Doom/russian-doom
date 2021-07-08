@@ -34,9 +34,10 @@ endif()
 if(MSVC)
     add_definitions("/D_CRT_SECURE_NO_WARNINGS" "/D_CRT_SECURE_NO_DEPRECATE"
                     "/D_CRT_NONSTDC_NO_DEPRECATE")
+    add_compile_options("/wd4068")
 else()
     add_compile_options("-Wall" "-Wdeclaration-after-statement"
-                        "-Wredundant-decls")
+                        "-Wredundant-decls" "-Wno-unknown-pragmas")
 endif()
 
 find_package(SDL2 2.0.1 REQUIRED)

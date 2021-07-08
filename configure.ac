@@ -28,7 +28,7 @@ OPT_LEVEL=2
 
 if test "$GCC" = "yes"
 then
-        WARNINGS="-Wall -Wdeclaration-after-statement -Wredundant-decls"
+        WARNINGS="-Wall -Wdeclaration-after-statement -Wredundant-decls -Wno-unknown-pragmas"
         CFLAGS="-O$OPT_LEVEL -g $WARNINGS $orig_CFLAGS"
 fi
 
