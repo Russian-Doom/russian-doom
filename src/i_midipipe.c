@@ -438,7 +438,7 @@ boolean I_MidiPipe_InitServer()
     RemoveFileSpec(dirname, dirname_len);
 
     // Define the module.
-    module = PROGRAM_PREFIX "midiproc.exe";
+    module = M_StringJoin(dirname, PROGRAM_PREFIX "midiproc.exe", NULL);
 
     // Set up pipes
     memset(&sec_attrs, 0, sizeof(SECURITY_ATTRIBUTES));
@@ -487,11 +487,11 @@ boolean I_MidiPipe_InitServer()
     if (!ok)
     {
         FreePipes();
-        free(cmdline);
-
         return false;
     }
 
+    free(module);
+    free(cmdline);
     // Since the server has these handles, we don't need them anymore.
     CloseHandle(midi_process_in_reader);
     midi_process_in_reader = NULL;
