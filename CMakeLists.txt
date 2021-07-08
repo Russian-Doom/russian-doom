@@ -33,9 +33,11 @@ if(MSVC)
     add_definitions("/D_CRT_SECURE_NO_WARNINGS" "/D_CRT_SECURE_NO_DEPRECATE"
                     "/D_CRT_NONSTDC_NO_DEPRECATE")
     add_compile_options("/wd4068")
+    # MSVC already has /O2 in Release flags
 else()
     add_compile_options("-Wall" "-Wdeclaration-after-statement"
                         "-Wredundant-decls" "-Wno-unknown-pragmas")
+    string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
 endif()
 
 find_package(SDL2 2.0.1 REQUIRED)
