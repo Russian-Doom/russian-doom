@@ -23,5 +23,6 @@ if(WIN32)
     )
     set_target_properties(${PROGRAM_PREFIX}midiproc PROPERTIES
         ADDITIONAL_CLEAN_FILES "${PROJECT_BINARY_DIR}/src/$<TARGET_FILE_NAME:${PROGRAM_PREFIX}midiproc>"
+        LINK_FLAGS_RELEASE -s
     )
 endif()

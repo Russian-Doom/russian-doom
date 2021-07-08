@@ -175,6 +175,15 @@ foreach(TARGET doom heretic hexen strife)
         setup
         SetupCommon
     )
+
+    # Link flags
+    set_target_properties("${PROGRAM_PREFIX}${TARGET}" PROPERTIES
+        LINK_FLAGS_RELEASE -s
+    )
+
+    set_target_properties("${PROGRAM_PREFIX}${TARGET}-setup" PROPERTIES
+        LINK_FLAGS_RELEASE -s
+    )
 endforeach()
 
 # MSVC link flags
