@@ -37,6 +37,7 @@ d_event.c            d_event.h             \
 d_iwad.c             d_iwad.h              \
 d_loop.c             d_loop.h              \
 d_mode.c             d_mode.h              \
+                     d_name.h              \
                      d_ticcmd.h            \
 deh_str.c            deh_str.h             \
 gusconf.c            gusconf.h             \

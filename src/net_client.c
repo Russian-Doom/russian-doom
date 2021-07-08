@@ -26,6 +26,7 @@
 #include "doomtype.h"
 #include "deh_main.h"
 #include "deh_str.h"
+#include "d_name.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "m_argv.h"
@@ -926,7 +927,7 @@ static void NET_CL_SendSYN(net_connect_data_t *data)
     packet = NET_NewPacket(10);
     NET_WriteInt16(packet, NET_PACKET_TYPE_SYN);
     NET_WriteInt32(packet, NET_MAGIC_NUMBER);
-    NET_WriteString(packet, PACKAGE_STRING);
+    NET_WriteString(packet, RD_Project_String);
     NET_WriteConnectData(packet, data);
     NET_WriteString(packet, net_player_name);
     NET_Conn_SendPacket(&client_connection, packet);

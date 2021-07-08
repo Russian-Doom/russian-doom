@@ -33,6 +33,7 @@
 
 #include "icon.h"
 #include "config.h"
+#include "d_name.h"
 #include "d_loop.h"
 #include "deh_str.h"
 #include "doomtype.h"
@@ -999,7 +1000,7 @@ void I_InitWindowTitle(void)
     char *buf;
 
     buf = M_StringJoin(window_title, window_title_short ? 
-                       NULL : " - ", PACKAGE_STRING, NULL);
+                       NULL : " - ", RD_Project_String, NULL);
     SDL_SetWindowTitle(screen, buf);
     free(buf);
 }

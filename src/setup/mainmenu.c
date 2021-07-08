@@ -28,6 +28,7 @@
 
 #include "execute.h"
 
+#include "d_name.h"
 #include "m_argv.h"
 #include "m_config.h"
 #include "m_controls.h"
@@ -46,7 +47,8 @@
 #include "sound.h"
 
 #define WINDOW_HELP_URL "https://jnechaevsky.github.io/projects/rusdoom/setup/index.html"
-
+char* RD_Project_Name = PACKAGE_PREFIX " Setup";
+char* RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_DOOM_VERSION;
 
 //
 // [JN] Prototype for Main Menu
@@ -468,19 +470,7 @@ static void SetIcon(void)
 
 static void SetWindowTitle(void)
 {
-    // char *title;
-
-	/* [JN] Сокращено для универсальности названия
-    title = M_StringReplace(PACKAGE_NAME " Setup ver " PACKAGE_VERSION,
-                            "Doom",
-                            GetGameTitle());
-	*/
-
     TXT_SetDesktopTitle("Setup.exe");
-
-	// Ранее: TXT_SetDesktopTitle(title);
-
-    // free(title);
 }
 
 // Initialize the textscreen library.

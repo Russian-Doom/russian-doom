@@ -12,9 +12,7 @@ set(top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
 set(top_builddir ${CMAKE_CURRENT_BINARY_DIR})
 
 # AC_INIT variables
-set(PACKAGE_NAME "${PROJECT_NAME}")
 set(PACKAGE_TARNAME "russian-doom")
-set(PACKAGE_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
 set(PACKAGE_COPYRIGHT "Copyright \\xA9 2016-2021 Julian Nechaevsky. Licensed under GNU General Public License, version 2")
 set(BUILD_DOOM_VERSION "${PROJECT_VERSION}")
 

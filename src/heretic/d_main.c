@@ -41,6 +41,7 @@
 #include "doomdef.h"
 #include "deh_main.h"
 #include "d_iwad.h"
+#include "d_name.h"
 #include "i_endoom.h"
 #include "i_input.h"
 #include "i_joystick.h"
@@ -69,6 +70,12 @@
 
 #define STARTUP_WINDOW_X 17
 #define STARTUP_WINDOW_Y 7
+
+// -----------------------------------------------------------------------------
+// [Dasperal] d_name.h var definition
+// -----------------------------------------------------------------------------
+char* RD_Project_Name = PACKAGE_PREFIX " Heretic";
+char* RD_Project_String = PACKAGE_PREFIX " Heretic " BUILD_HERETIC_VERSION;
 
 GameMode_t gamemode = indetermined;
 char *gamedescription = "unknown";
@@ -1311,7 +1318,7 @@ void D_DoomMain(void)
                                                            | FOREGROUND_BLUE
                                                            | FOREGROUND_INTENSITY);
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf("Russian Heretic " BUILD_HERETIC_VERSION);
+    DEH_printf(RD_Project_String);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 
@@ -1322,7 +1329,7 @@ void D_DoomMain(void)
 #else
     // [JN] Just print an uncolored banner
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf("Russian Heretic " BUILD_HERETIC_VERSION);
+    DEH_printf(RD_Project_String);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 #endif 

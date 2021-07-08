@@ -24,6 +24,7 @@
 
 #include "config.h"
 #include "doomtype.h"
+#include "d_name.h"
 #include "d_mode.h"
 #include "i_system.h"
 #include "i_timer.h"
@@ -615,7 +616,7 @@ static void NET_SV_ParseSYN(net_packet_t *packet,
         return;
     }
 
-    if (strcmp(client_version, PACKAGE_STRING) != 0)
+    if (strcmp(client_version, RD_Project_String) != 0)
     {
         //!
         // @category net
@@ -628,9 +629,10 @@ static void NET_SV_ParseSYN(net_packet_t *packet,
 
         if (M_CheckParm("-ignoreversion") == 0)
         {
-            NET_SV_SendReject(addr,
-                "Different " PACKAGE_NAME " versions cannot play a net game!\n"
-                "Version mismatch: server version is: " PACKAGE_STRING);
+            char* message = M_StringJoin("Different ", RD_Project_Name, " versions cannot play a net game!\n",
+                                         "Version mismatch: server version is: ", RD_Project_String);
+            NET_SV_SendReject(addr, message);
+            free(message);
             return;
         }
     }
@@ -1333,7 +1335,7 @@ void NET_SV_SendQueryResponse(net_addr_t *addr)
 
     // Version
 
-    querydata.version = PACKAGE_STRING;
+    querydata.version = RD_Project_String;
 
     // Server state
 

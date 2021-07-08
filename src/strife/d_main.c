@@ -78,9 +78,16 @@
 #include "r_local.h"
 
 #include "d_main.h"
+#include "d_name.h"
 #include "w_merge.h"
 #include "rd_lang.h"
 #include "jn.h"
+
+// -----------------------------------------------------------------------------
+// [Dasperal] d_name.h var definition
+// -----------------------------------------------------------------------------
+char* RD_Project_Name = PACKAGE_PREFIX " Strife";
+char* RD_Project_String = PACKAGE_PREFIX " Strife " BUILD_STRIFE_VERSION;
 
 //
 // D-DoomLoop()
@@ -1409,7 +1416,7 @@ void D_DoomMain (void)
 
     // print banner
 
-    I_PrintBanner(PACKAGE_STRING);
+    I_PrintBanner(RD_Project_String);
 
     //DEH_printf("Z_Init: Init zone memory allocation daemon. \n"); [STRIFE] removed
     Z_Init ();

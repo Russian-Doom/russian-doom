@@ -400,32 +400,12 @@ int main(int argc, char *argv[])
     {
         MessageBox(NULL, TEXT("This program is tasked with playing Native ")
                    TEXT("MIDI music, and is intended to be launched by ")
-                   TEXT(PACKAGE_NAME) TEXT("."),
-                   TEXT(PACKAGE_STRING), MB_OK | MB_ICONASTERISK);
+                   // [Dasperal] Just use Russian Doom because russian-midiproc executable is common for all games
+                   TEXT(PACKAGE_PREFIX) TEXT(" Doom") TEXT("."),
+                   TEXT(PACKAGE_PREFIX) TEXT(" Doom"), MB_OK | MB_ICONASTERISK);
 
         return EXIT_FAILURE;
     }
-
-    // Make sure our Choccolate Doom and midiproc version are lined up.
-    // [JN] Don't need this check, Midiproc working fine with different versions.
-    /*
-    if (strcmp(PACKAGE_STRING, argv[1]) != 0)
-    {
-        char message[1024];
-        _snprintf(message, sizeof(message),
-                  "It appears that the version of %s and %smidiproc are out "
-                  "of sync.  Please reinstall %s.\r\n\r\n"
-                  "Server Version: %s\r\nClient Version: %s",
-                  PACKAGE_NAME, PROGRAM_PREFIX, PACKAGE_NAME,
-                  PACKAGE_STRING, argv[1]);
-        message[sizeof(message) - 1] = '\0';
-
-        MessageBox(NULL, TEXT(message),
-                   TEXT(PACKAGE_STRING), MB_OK | MB_ICONASTERISK);
-
-        return EXIT_FAILURE;
-    }
-    */
 
     // Parse out the sample rate - if we can't, default to 44100.
     snd_samplerate = strtol(argv[2], NULL, 10);

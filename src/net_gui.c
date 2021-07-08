@@ -26,6 +26,7 @@
 
 #include "config.h"
 #include "doomkeys.h"
+#include "d_name.h"
 #include "i_system.h"
 #include "i_timer.h"
 #include "i_video.h"
@@ -77,7 +78,7 @@ static void OpenWaitDialog(void)
     TXT_SetColor(TXT_COLOR_CYAN, 70, 176, 219);         // Highlighted item
     TXT_SetColor(TXT_COLOR_GREEN, 0, 255, 0);           // Language switching text
 
-    TXT_SetDesktopTitle(PACKAGE_STRING);
+    TXT_SetDesktopTitle(RD_Project_String);
 
     window = TXT_NewWindow(english_language ?
                            "Waiting for game start..." :

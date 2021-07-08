@@ -37,6 +37,7 @@
 #include "config.h"
 #include "deh_str.h"
 #include "doomtype.h"
+#include "d_name.h"
 #include "m_argv.h"
 #include "m_config.h"
 #include "m_misc.h"
@@ -359,11 +360,11 @@ void I_Error (char *error, ...)
     // and I have not idea why. Here I'm using WINAPI's function MessageBox 
     // which is displaying Russian chars uncut, but requiring byte retranslation.
     MultiByteToWideChar(CP_UTF8, 0, msgbuf, -1, win_error_message, 1000);
-    MultiByteToWideChar(CP_UTF8, 0, PACKAGE_STRING, -1, win_error_title, 1000);
+    MultiByteToWideChar(CP_UTF8, 0, RD_Project_String, -1, win_error_title, 1000);
     MessageBoxW(NULL, win_error_message, win_error_title, MB_ICONSTOP);
 #else
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-                                 PACKAGE_STRING, msgbuf, NULL);
+                                 RD_Project_String, msgbuf, NULL);
 #endif
     }
 

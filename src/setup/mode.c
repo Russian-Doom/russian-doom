@@ -25,6 +25,7 @@
 
 #include "doomtype.h"
 #include "d_mode.h"
+#include "d_name.h"
 #include "d_iwad.h"
 #include "i_system.h"
 #include "m_argv.h"
@@ -287,6 +288,22 @@ static void SetExecutable(mission_config_t *config)
 
 static void SetMission(mission_config_t *config)
 {
+    switch (config->mission)
+    {
+        case heretic:
+            RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_HERETIC_VERSION;
+            break;
+        case hexen:
+            RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_HEXEN_VERSION;
+            break;
+        case strife:
+            RD_Project_String = PACKAGE_PREFIX " Setup " BUILD_STRIFE_VERSION;
+            break;
+        // [Dasperal] For everything else use default doom version
+        default:
+            break;
+    }
+
     iwads = D_FindAllIWADs(config->mask);
     gamemission = config->mission;
     SetExecutable(config);
@@ -352,7 +369,7 @@ static void OpenGameSelectDialog(GameSelectCallback callback)
     int i;
 
 	// "Select game"
-    window = TXT_NewWindow("Russian Doom");
+	window = TXT_NewWindow(PACKAGE_PREFIX " Doom");
 
     // TXT_AddWidget(window, TXT_NewLabel("Выберите желаемую игру:\n"));
     TXT_AddWidget(window, TXT_NewLabel(" "));

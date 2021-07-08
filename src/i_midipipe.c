@@ -27,6 +27,7 @@
 #include "i_midipipe.h"
 
 #include "config.h"
+#include "d_name.h"
 #include "i_sound.h"
 #include "i_timer.h"
 #include "m_misc.h"
@@ -473,7 +474,7 @@ boolean I_MidiPipe_InitServer()
     // the executable name.
     M_snprintf(params_buf, sizeof(params_buf), "%d %Iu %Iu",
         snd_samplerate, (size_t) midi_process_in_reader, (size_t) midi_process_out_writer);
-    cmdline = M_StringJoin(module, " \"" PACKAGE_STRING "\"", " ", params_buf, NULL);
+    cmdline = M_StringJoin(module, " . ", params_buf, NULL);
 
     // Launch the subprocess
     memset(&proc_info, 0, sizeof(proc_info));

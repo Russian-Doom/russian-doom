@@ -120,12 +120,14 @@ PROGRAM_PREFIX=russian-
 PACKAGE_PREFIX=Russian
 
 AC_SUBST(PROGRAM_PREFIX)
+AC_SUBST(PACKAGE_PREFIX)
 AC_DEFINE_UNQUOTED(PROGRAM_PREFIX, "$PROGRAM_PREFIX",
+                   Change this when you create your awesome forked version)
+AC_DEFINE_UNQUOTED(PACKAGE_PREFIX, "$PACKAGE_PREFIX",
                    Change this when you create your awesome forked version)
 
 AM_CONFIG_HEADER(config.h:config.hin)
 
-AC_SUBST(PACKAGE_PREFIX)
 AC_SUBST(BUILD_HERETIC_VERSION)
 AC_SUBST(BUILD_HEXEN_VERSION)
 AC_SUBST(BUILD_STRIFE_VERSION)
