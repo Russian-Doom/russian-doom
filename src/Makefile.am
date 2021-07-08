@@ -3,20 +3,14 @@ SUBDIRS = doom heretic hexen strife setup
 
 execgamesdir = ${bindir}
 
-execgames_PROGRAMS = @PROGRAM_PREFIX@doom     \
-                     @PROGRAM_PREFIX@heretic  \
-                     @PROGRAM_PREFIX@hexen    \
-                     @PROGRAM_PREFIX@strife
-
-
-noinst_PROGRAMS = @PROGRAM_PREFIX@setup
-
-SETUP_BINARIES = @PROGRAM_PREFIX@doom-setup$(EXEEXT)    \
-                 @PROGRAM_PREFIX@heretic-setup$(EXEEXT) \
-                 @PROGRAM_PREFIX@hexen-setup$(EXEEXT)   \
-                 @PROGRAM_PREFIX@strife-setup$(EXEEXT)
-
-execgames_SCRIPTS = $(SETUP_BINARIES)
+execgames_PROGRAMS = @PROGRAM_PREFIX@doom          \
+                     @PROGRAM_PREFIX@heretic       \
+                     @PROGRAM_PREFIX@hexen         \
+                     @PROGRAM_PREFIX@strife        \
+                     @PROGRAM_PREFIX@doom-setup    \
+                     @PROGRAM_PREFIX@heretic-setup \
+                     @PROGRAM_PREFIX@hexen-setup   \
+                     @PROGRAM_PREFIX@strife-setup
 
 AM_CFLAGS = -I$(top_srcdir)/textscreen            \
             -I$(top_srcdir)/opl                   \
@@ -158,9 +152,6 @@ endif
 
 @PROGRAM_PREFIX@strife_LDADD = strife/libstrife.a $(EXTRA_LIBS)
 
-$(SETUP_BINARIES): @PROGRAM_PREFIX@setup$(EXEEXT)
-	cp @PROGRAM_PREFIX@setup$(EXEEXT) $@
-
 # Source files needed for russian-setup:
 
 SETUP_FILES=                               \
@@ -178,16 +169,42 @@ net_query.c          net_query.h           \
 net_structrw.c       net_structrw.h        \
 z_native.c           z_zone.h
 
-if HAVE_WINDRES
-@PROGRAM_PREFIX@setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup-res.rc
-else
-@PROGRAM_PREFIX@setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
-endif
-@PROGRAM_PREFIX@setup_LDADD = setup/libsetup.a                             \
-                        $(top_builddir)/textscreen/libtextscreen.a   \
-                        @LDFLAGS@ @SDL_LIBS@ @SDLMIXER_LIBS@ @SDLNET_LIBS@
+SETUP_LIBS=                                         \
+setup/libsetup.a                                    \
+$(top_builddir)/textscreen/libtextscreen.a          \
+@LDFLAGS@ @SDL_LIBS@ @SDLMIXER_LIBS@ @SDLNET_LIBS@
 
-CLEANFILES = $(execgames_SCRIPTS)
+if HAVE_WINDRES
+@PROGRAM_PREFIX@doom_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/doom-resource.rc
+else
+@PROGRAM_PREFIX@doom_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
+endif
+
+@PROGRAM_PREFIX@doom_setup_LDADD = $(SETUP_LIBS)
+
+if HAVE_WINDRES
+@PROGRAM_PREFIX@heretic_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/heretic-resource.rc
+else
+@PROGRAM_PREFIX@heretic_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
+endif
+
+@PROGRAM_PREFIX@heretic_setup_LDADD = $(SETUP_LIBS)
+
+if HAVE_WINDRES
+@PROGRAM_PREFIX@hexen_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/hexen-resource.rc
+else
+@PROGRAM_PREFIX@hexen_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
+endif
+
+@PROGRAM_PREFIX@hexen_setup_LDADD = $(SETUP_LIBS)
+
+if HAVE_WINDRES
+@PROGRAM_PREFIX@strife_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c setup/strife-resource.rc
+else
+@PROGRAM_PREFIX@strife_setup_SOURCES=$(SETUP_FILES) $(COMMON_SOURCE_FILES) i_main.c $(top_builddir)/data/setup_icon.c
+endif
+
+@PROGRAM_PREFIX@strife_setup_LDADD = $(SETUP_LIBS)
 
 .rc.o:
 	$(WINDRES) $< -o $@

@@ -143,9 +143,15 @@ foreach(TARGET doom heretic hexen strife)
         "${PROJECT_SOURCE_DIR}/data/${TARGET}_icon.c"
     )
 
+    add_executable("${PROGRAM_PREFIX}${TARGET}-setup" WIN32
+        i_main.c
+        "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
+    )
+
     # Add resources for windows
     if(WIN32)
         target_sources("${PROGRAM_PREFIX}${TARGET}" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET}/resource.rc")
+        target_sources("${PROGRAM_PREFIX}${TARGET}-setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup/${TARGET}-resource.rc")
     endif()
 
     # Dehacked sources
@@ -163,41 +169,24 @@ foreach(TARGET doom heretic hexen strife)
         ${TARGET}
         Game
     )
+
+    target_link_libraries("${PROGRAM_PREFIX}${TARGET}-setup" PUBLIC
+        setup
+        SetupCommon
+    )
 endforeach()
-
-add_executable("${PROGRAM_PREFIX}setup" WIN32
-    i_main.c
-    "${PROJECT_SOURCE_DIR}/data/setup_icon.c"
-)
-
-target_link_libraries("${PROGRAM_PREFIX}setup" PUBLIC
-    setup
-    SetupCommon
-)
-
-# Add setup resources for windows
-if(WIN32)
-    target_sources("${PROGRAM_PREFIX}setup" PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/setup-res.rc")
-endif()
 
 # MSVC link flags
 if(MSVC)
-    foreach(TARGET doom heretic hexen strife setup)
+    foreach(TARGET doom heretic hexen strife)
         set_target_properties("${PROGRAM_PREFIX}${TARGET}" PROPERTIES
+            LINK_FLAGS "/MANIFEST:NO"
+        )
+        set_target_properties("${PROGRAM_PREFIX}${TARGET}-setup" PROPERTIES
             LINK_FLAGS "/MANIFEST:NO"
         )
     endforeach()
 endif()
-
-# Generation of game-specific setup executables
-foreach(TARGET doom heretic hexen strife)
-    add_custom_command(TARGET ${PROGRAM_PREFIX}setup POST_BUILD
-            MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}setup>"
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${PROGRAM_PREFIX}setup>"
-            "${PROGRAM_PREFIX}${TARGET}-setup$<TARGET_FILE_SUFFIX:${PROGRAM_PREFIX}setup>")
-    list(APPEND GAME_SETUP_FILES "${PROGRAM_PREFIX}${TARGET}-setup$<TARGET_FILE_SUFFIX:${PROGRAM_PREFIX}setup>")
-endforeach()
-set_target_properties(${PROGRAM_PREFIX}setup PROPERTIES ADDITIONAL_CLEAN_FILES "${GAME_SETUP_FILES}")
 
 # Copying gus patches
 file(GLOB GUS_PATCHES_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/base/gus_patches/*")
@@ -213,7 +202,7 @@ foreach(SRC_FILE_PATH ${GUS_PATCHES_SRC_FILES})
 endforeach()
 add_custom_target(gus-patches DEPENDS ${GUS_PATCHES_DEST_FILES})
 
-foreach(TARGET doom heretic hexen strife setup)
+foreach(TARGET doom heretic hexen strife)
     add_dependencies("${PROGRAM_PREFIX}${TARGET}" gus-patches)
 endforeach()
 
@@ -249,19 +238,16 @@ if(WIN32)
     endforeach()
     add_custom_target(win-libs DEPENDS ${WIN_LIBS_DEST_FILES})
 
-    foreach(TARGET doom heretic hexen strife setup)
+    foreach(TARGET doom heretic hexen strife)
         add_dependencies("${PROGRAM_PREFIX}${TARGET}" win-libs)
+        add_dependencies("${PROGRAM_PREFIX}${TARGET}-setup" win-libs)
     endforeach()
 endif()
 
 # Install rules
 # strife is not production ready
 foreach(TARGET doom heretic hexen)
-    install(TARGETS "${PROGRAM_PREFIX}${TARGET}"
-            DESTINATION $<IF:$<BOOL:${WIN32}>,.,bin>
-            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
-    )
-    install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${PROGRAM_PREFIX}${TARGET}-setup$<TARGET_FILE_SUFFIX:${PROGRAM_PREFIX}setup>"
+    install(TARGETS "${PROGRAM_PREFIX}${TARGET}" "${PROGRAM_PREFIX}${TARGET}-setup"
             DESTINATION $<IF:$<BOOL:${WIN32}>,.,bin>
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_WRITE WORLD_EXECUTE
     )

@@ -1,0 +1,26 @@
+1 ICON "@top_srcdir@/data/setup.ico"
+
+1 24 MOVEABLE PURE "@top_builddir@/src/setup/setup-manifest.xml"
+
+1 VERSIONINFO
+PRODUCTVERSION @WINDOWS_RC_STRIFE_VERSION@
+FILEVERSION @WINDOWS_RC_STRIFE_VERSION@
+FILETYPE 1
+{
+ BLOCK "StringFileInfo"
+ {
+  BLOCK "040904E4"
+  {
+   VALUE "ProductName", "@PACKAGE_PREFIX@ Strife"
+   VALUE "ProductVersion", "@BUILD_STRIFE_VERSION@"
+   VALUE "FileVersion", "@BUILD_STRIFE_VERSION@"
+   VALUE "FileDescription", "@PACKAGE_PREFIX@ Strife Setup"
+   VALUE "LegalCopyright", "@PACKAGE_COPYRIGHT@"
+  }
+ }
+ BLOCK "VarFileInfo"
+ {
+  VALUE "Translation", 0x0419, 1251
+ }
+}
+

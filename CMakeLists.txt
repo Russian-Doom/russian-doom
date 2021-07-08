@@ -88,7 +88,11 @@ configure_file(src/doom/resource.rc.in src/doom/resource.rc)
 configure_file(src/heretic/resource.rc.in src/heretic/resource.rc)
 configure_file(src/hexen/resource.rc.in src/hexen/resource.rc)
 configure_file(src/strife/resource.rc.in src/strife/resource.rc)
-configure_file(src/setup-res.rc.in src/setup-res.rc)
+
+configure_file(src/setup/doom-resource.rc.in src/setup/doom-resource.rc)
+configure_file(src/setup/heretic-resource.rc.in src/setup/heretic-resource.rc)
+configure_file(src/setup/hexen-resource.rc.in src/setup/hexen-resource.rc)
+configure_file(src/setup/strife-resource.rc.in src/setup/strife-resource.rc)
 configure_file(src/setup/setup-manifest.xml.in src/setup/setup-manifest.xml)
 
 foreach(SUBDIR textscreen midiproc opl pcsound src)

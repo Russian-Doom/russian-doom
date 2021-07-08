@@ -161,7 +161,10 @@ src/doom/resource.rc
 src/heretic/resource.rc
 src/hexen/resource.rc
 src/strife/resource.rc
-src/setup-res.rc
+src/setup/doom-resource.rc
+src/setup/heretic-resource.rc
+src/setup/hexen-resource.rc
+src/setup/strife-resource.rc
 src/setup/Makefile
 src/setup/setup-manifest.xml
 textscreen/Makefile
