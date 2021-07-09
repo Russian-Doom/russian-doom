@@ -38,7 +38,7 @@ static int OPL_Linux_Init(unsigned int port_base)
 {
     // Try to get permissions:
 
-    if (ioperm(port_base, 2, 1) < 0)
+    if (ioperm(port_base, 3, 1) < 0)
     {
         fprintf(stderr, "Невозможно получить доступ для чтения/записи в 0x%x: %s\n",
                         port_base, strerror(errno));
