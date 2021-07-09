@@ -1,8 +1,8 @@
 AC_INIT(Russian Doom, 5.0, julian.nechaevsky@outlook.com,
         russian-doom)
 
-BUILD_HERETIC_VERSION="4.3"
-BUILD_HEXEN_VERSION="4.1"
+BUILD_HERETIC_VERSION="4.9"
+BUILD_HEXEN_VERSION="4.9"
 BUILD_STRIFE_VERSION="0.0"
 PACKAGE_COPYRIGHT="Copyright \\xA9 2016-2021 Julian Nechaevsky. Licensed under GNU General Public License, version 2"
 
