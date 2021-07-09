@@ -63,9 +63,11 @@ void RD_CreateWindowsConsole (void)
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 }
+#endif
 
 void M_SetExeDir(void)
 {
+#ifdef _WIN32
     TCHAR dirname[MAX_PATH + 1];
     DWORD dirname_len;
     TCHAR *fp = NULL;
@@ -80,9 +82,14 @@ void M_SetExeDir(void)
     *(fp + 1) = '\0';
 
     exedir = M_StringDuplicate(dirname);
-}
-#endif
+#else
+    char *dirname;
 
+    dirname = M_DirName(myargv[0]);
+    exedir = M_StringJoin(dirname, DIR_SEPARATOR_S, NULL);
+    free(dirname);
+#endif
+}
 
 //
 // D_DoomMain()
@@ -100,14 +107,14 @@ int main(int argc, char **argv)
     myargc = argc;
     myargv = argv;
 
+    M_SetExeDir();
+
     M_FindResponseFile();
 
     // Check for -devparm being activated
     devparm = M_CheckParm ("-devparm");
 
 #ifdef _WIN32
-    M_SetExeDir();
-
     // [JN] Create a console output on Windows for devparm mode.
     if (devparm)
     {

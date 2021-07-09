@@ -22,11 +22,3 @@ SOURCE_FILES =                                  \
     txt_mouseinput.c  txt_mouseinput.h
 
 libsetup_a_SOURCES = $(SOURCE_FILES)
-
-if HAVE_PYTHON
-
-setup_icon.c : $(top_builddir)/data/setup.png
-	$(top_builddir)/data/convert-icon $(top_builddir)/data/setup.png $@
-
-endif
-

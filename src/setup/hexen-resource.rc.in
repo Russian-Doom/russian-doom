@@ -1,0 +1,26 @@
+1 ICON "@top_srcdir@/data/setup.ico"
+
+1 24 MOVEABLE PURE "@top_builddir@/src/setup/setup-manifest.xml"
+
+1 VERSIONINFO
+PRODUCTVERSION @WINDOWS_RC_HEXEN_VERSION@
+FILEVERSION @WINDOWS_RC_HEXEN_VERSION@
+FILETYPE 1
+{
+ BLOCK "StringFileInfo"
+ {
+  BLOCK "040904E4"
+  {
+   VALUE "ProductName", "@PACKAGE_PREFIX@ Hexen"
+   VALUE "ProductVersion", "@BUILD_HEXEN_VERSION@"
+   VALUE "FileVersion", "@BUILD_HEXEN_VERSION@"
+   VALUE "FileDescription", "@PACKAGE_PREFIX@ Hexen Setup"
+   VALUE "LegalCopyright", "@PACKAGE_COPYRIGHT@"
+  }
+ }
+ BLOCK "VarFileInfo"
+ {
+  VALUE "Translation", 0x0419, 1251
+ }
+}
+

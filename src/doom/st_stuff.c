@@ -417,8 +417,6 @@ cheatseq_t cheat_god_beta    = CHEAT("tst", 0); // iddqd
 cheatseq_t cheat_ammo_beta   = CHEAT("amo", 0); // idkfa
 cheatseq_t cheat_noclip_beta = CHEAT("nc", 0);  // idclip
 
-// [JN] Чит-код отображения версии проекта
-cheatseq_t cheat_version = CHEAT("version", 0);
 static char msg[ST_MSGWIDTH];
 
 //
@@ -705,17 +703,6 @@ boolean ST_Responder (event_t* ev)
                 int killcount = ST_cheat_massacre();
 
                 M_snprintf(msg, sizeof(msg), "%s %d", ststr_massacre, killcount);
-                plyr->message_system = msg;
-            }
-
-            // [JN] Отображение версии проекта
-            else if (cht_CheckCheat(&cheat_version, ev->data2))
-            {
-                M_snprintf(msg, sizeof(msg), "%s %s%s - %s",
-                english_language ? "Version" : "dthcbz",
-                english_language ? BUILD_DOOM_VERSION : BUILD_DOOM_VERSION_RUS,
-                english_language ? STSRT_ARCH : STSRT_ARCH_RUS, BUILD_DOOM_DATE);
-
                 plyr->message_system = msg;
             }
 

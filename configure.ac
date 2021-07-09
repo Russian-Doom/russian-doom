@@ -1,41 +1,16 @@
 AC_INIT(Russian Doom, 5.0, julian.nechaevsky@outlook.com,
         russian-doom)
 
-BUILD_HERETIC_VERSION="4.3"
-BUILD_HEXEN_VERSION="4.1"
+BUILD_HERETIC_VERSION="4.9"
+BUILD_HEXEN_VERSION="4.9"
 BUILD_STRIFE_VERSION="0.0"
-
-BUILD_DOOM_DATE="2021-05-04" # YYYY-MM-DD
-BUILD_HERETIC_DATE="2021-01-03" # YYYY-MM-DD
-BUILD_HEXEN_DATE="2021-01-03" # YYYY-MM-DD
-BUILD_STRIFE_DATE="2021-00-00" # YYYY-MM-DD
+PACKAGE_COPYRIGHT="Copyright \\xA9 2016-2021 Julian Nechaevsky. Licensed under GNU General Public License, version 2"
 
 BUILD_DOOM_VERSION=${PACKAGE_VERSION}
-BUILD_DOOM_VERSION_RUS=`echo $BUILD_DOOM_VERSION | sed 's/\./>/g'`
-BUILD_HERETIC_VERSION_RUS=`echo $BUILD_HERETIC_VERSION | sed 's/\./>/g'`
-BUILD_HEXEN_VERSION_RUS=`echo $BUILD_HEXEN_VERSION_VERSION | sed 's/\./>/g'`
-BUILD_STRIFE_VERSION_RUS=`echo $BUILD_STRIFE_VERSION_VERSION | sed 's/\./>/g'`
-PACKAGE_SHORTNAME=${PACKAGE_NAME% Doom}
-PACKAGE_SHORTDESC="Russian Doom, Freedoom, Heretic and Hexen"
-PACKAGE_COPYRIGHT="Copyright (C) 2016-2021"
-PACKAGE_LICENSE="GNU General Public License, version 2"
-PACKAGE_MAINTAINER="Julian Nechaevsky"
-PACKAGE_URL="https://jnechaevsky.github.io/rusdoom"
-
 AC_DEFINE_UNQUOTED(BUILD_DOOM_VERSION, "$BUILD_DOOM_VERSION", "Doom build version")
 AC_DEFINE_UNQUOTED(BUILD_HERETIC_VERSION, "$BUILD_HERETIC_VERSION", "Heretic build version")
 AC_DEFINE_UNQUOTED(BUILD_HEXEN_VERSION, "$BUILD_HEXEN_VERSION", "Hexen build version")
 AC_DEFINE_UNQUOTED(BUILD_STRIFE_VERSION, "$BUILD_STRIFE_VERSION", "Strife build version")
-
-AC_DEFINE_UNQUOTED(BUILD_DOOM_VERSION_RUS, "$BUILD_DOOM_VERSION_RUS", "Doom build russian version")
-AC_DEFINE_UNQUOTED(BUILD_HERETIC_VERSION_RUS, "$BUILD_HERETIC_VERSION_RUS", "Heretic build russian version")
-AC_DEFINE_UNQUOTED(BUILD_HEXEN_VERSION_RUS, "$BUILD_HEXEN_VERSION_RUS", "Hexen build russian version")
-AC_DEFINE_UNQUOTED(BUILD_STRIFE_DATE, "$BUILD_STRIFE_DATE", "Strife build russian version")
-
-AC_DEFINE_UNQUOTED(BUILD_DOOM_DATE, "$BUILD_DOOM_DATE", "Doom build date")
-AC_DEFINE_UNQUOTED(BUILD_HERETIC_DATE, "$BUILD_HERETIC_DATE", "Heretic build date")
-AC_DEFINE_UNQUOTED(BUILD_HEXEN_DATE, "$BUILD_HEXEN_DATE", "Hexen build date")
-AC_DEFINE_UNQUOTED(BUILD_HERETIC_VERSION, "$BUILD_HERETIC_VERSION", "Strife build date")
 
 AC_CONFIG_AUX_DIR(autotools)
 AC_CANONICAL_HOST
@@ -53,7 +28,7 @@ OPT_LEVEL=2
 
 if test "$GCC" = "yes"
 then
-        WARNINGS="-Wall -Wdeclaration-after-statement -Wredundant-decls"
+        WARNINGS="-Wall -Wdeclaration-after-statement -Wredundant-decls -Wno-unknown-pragmas"
         CFLAGS="-O$OPT_LEVEL -g $WARNINGS $orig_CFLAGS"
 fi
 
@@ -129,24 +104,38 @@ AM_CONDITIONAL(HAVE_PYTHON, $HAVE_PYTHON)
 
 dnl Automake v1.8.0 is required, please upgrade!
 
-AM_INIT_AUTOMAKE([1.8.0 foreign])
+AM_INIT_AUTOMAKE([1.8.0 foreign subdir-objects])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-WINDOWS_RC_VERSION=`echo $PACKAGE_VERSION | sed 's/-.*//; s/\./, /g; s/$/, 0/'`
+WINDOWS_RC_DOOM_VERSION=`echo $BUILD_DOOM_VERSION | sed 's/\./, /g'`
+WINDOWS_RC_HERETIC_VERSION=`echo $BUILD_HERETIC_VERSION | sed 's/\./, /g'`
+WINDOWS_RC_HEXEN_VERSION=`echo $BUILD_HEXEN_VERSION | sed 's/\./, /g'`
+WINDOWS_RC_STRIFE_VERSION=`echo $BUILD_STRIFE_VERSION | sed 's/\./, /g'`
 
 # This controls the prefix added to the start of program names.  For example,
 # if this is changed to "lemon-", the programs generated will be named
 # lemon-doom, lemon-heretic, etc.
 
 PROGRAM_PREFIX=russian-
+PACKAGE_PREFIX=Russian
 
 AC_SUBST(PROGRAM_PREFIX)
+AC_SUBST(PACKAGE_PREFIX)
 AC_DEFINE_UNQUOTED(PROGRAM_PREFIX, "$PROGRAM_PREFIX",
+                   Change this when you create your awesome forked version)
+AC_DEFINE_UNQUOTED(PACKAGE_PREFIX, "$PACKAGE_PREFIX",
                    Change this when you create your awesome forked version)
 
 AM_CONFIG_HEADER(config.h:config.hin)
 
-AC_SUBST(WINDOWS_RC_VERSION)
+AC_SUBST(BUILD_HERETIC_VERSION)
+AC_SUBST(BUILD_HEXEN_VERSION)
+AC_SUBST(BUILD_STRIFE_VERSION)
+AC_SUBST(BUILD_DOOM_VERSION)
+AC_SUBST(WINDOWS_RC_DOOM_VERSION)
+AC_SUBST(WINDOWS_RC_HERETIC_VERSION)
+AC_SUBST(WINDOWS_RC_HEXEN_VERSION)
+AC_SUBST(WINDOWS_RC_STRIFE_VERSION)
 AC_SUBST(SDLMIXER_CFLAGS)
 AC_SUBST(SDLMIXER_LIBS)
 
@@ -154,13 +143,7 @@ AC_SUBST(SDLNET_CFLAGS)
 AC_SUBST(SDLNET_LIBS)
 
 AC_SUBST(ac_aux_dir)
-
-AC_SUBST(PACKAGE_SHORTNAME)
-AC_SUBST(PACKAGE_SHORTDESC)
 AC_SUBST(PACKAGE_COPYRIGHT)
-AC_SUBST(PACKAGE_LICENSE)
-AC_SUBST(PACKAGE_MAINTAINER)
-AC_SUBST(PACKAGE_URL)
 
 dnl Shut up the datarootdir warnings.
 AC_DEFUN([AC_DATAROOTDIR_CHECKED])
@@ -176,8 +159,14 @@ src/doom/Makefile
 src/heretic/Makefile
 src/hexen/Makefile
 src/strife/Makefile
-src/resource.rc
-src/setup-res.rc
+src/doom/resource.rc
+src/heretic/resource.rc
+src/hexen/resource.rc
+src/strife/resource.rc
+src/setup/doom-resource.rc
+src/setup/heretic-resource.rc
+src/setup/hexen-resource.rc
+src/setup/strife-resource.rc
 src/setup/Makefile
 src/setup/setup-manifest.xml
 textscreen/Makefile

@@ -116,6 +116,7 @@ static void OPL_Win32_PortWrite(opl_port_t port, unsigned int value)
 
 static int OPL_Win32_Init(unsigned int port_base)
 {
+#ifndef NO_PORT_RW
 
     OSVERSIONINFO version_info;
 
@@ -128,7 +129,6 @@ static int OPL_Win32_Init(unsigned int port_base)
 
     GetVersionEx(&version_info);
 
-#ifndef NO_PORT_RW
     // On NT-based systems, we must acquire I/O port permissions
     // using the ioperm.sys driver.
 

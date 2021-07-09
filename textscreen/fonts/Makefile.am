@@ -1,4 +1,4 @@
-FONT_HDRS = small.h normal.h large.h
+FONT_HDRS = small.h small_en.h normal.h normal_en.h large.h large_en.h
 
 noinst_DATA = $(FONT_HDRS)
 

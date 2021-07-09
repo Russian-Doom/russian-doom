@@ -75,9 +75,15 @@
 #include "p_setup.h"
 #include "r_local.h"
 #include "d_main.h"
+#include "d_name.h"
 #include "am_map.h"         // [JN] AM_initColors();
 #include "jn.h"
 
+// -----------------------------------------------------------------------------
+// [Dasperal] d_name.h var definition
+// -----------------------------------------------------------------------------
+char* RD_Project_Name = PACKAGE_PREFIX " Doom";
+char* RD_Project_String = PACKAGE_PREFIX " Doom " BUILD_DOOM_VERSION;
 
 // -----------------------------------------------------------------------------
 // [JN] Support for fallback to the English language.
@@ -2459,7 +2465,7 @@ void D_DoomMain (void)
                            | FOREGROUND_INTENSITY);
 
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf("Russian Doom " BUILD_DOOM_VERSION);
+    DEH_printf(RD_Project_String);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 
@@ -2469,7 +2475,7 @@ void D_DoomMain (void)
 #else
     // [JN] Just print an uncolored banner
     for (p = 0 ; p < 32 ; p++) DEH_printf(" ");
-    DEH_printf("Russian Doom " BUILD_DOOM_VERSION);
+    DEH_printf(RD_Project_String);
     for (p = 0 ; p < 31 ; p++) DEH_printf(" ");
     DEH_printf("\n");
 #endif

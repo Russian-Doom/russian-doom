@@ -16,4 +16,13 @@ if(WIN32)
     target_link_libraries("${PROGRAM_PREFIX}midiproc"
         SDL2::mixer
     )
+    add_custom_command(TARGET "${PROGRAM_PREFIX}midiproc" POST_BUILD
+        MAIN_DEPENDENCY "$<TARGET_FILE:${PROGRAM_PREFIX}midiproc>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${PROGRAM_PREFIX}midiproc>"
+        "${PROJECT_BINARY_DIR}/src/$<TARGET_FILE_NAME:${PROGRAM_PREFIX}midiproc>"
+    )
+    set_target_properties(${PROGRAM_PREFIX}midiproc PROPERTIES
+        ADDITIONAL_CLEAN_FILES "${PROJECT_BINARY_DIR}/src/$<TARGET_FILE_NAME:${PROGRAM_PREFIX}midiproc>"
+        LINK_FLAGS_RELEASE -s
+    )
 endif()

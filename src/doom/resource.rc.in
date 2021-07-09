@@ -1,0 +1,28 @@
+1 ICON "@top_srcdir@/data/doom.ico"
+
+#include <winuser.h>
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "@top_srcdir@/src/manifest.xml"
+
+1 VERSIONINFO
+PRODUCTVERSION @WINDOWS_RC_DOOM_VERSION@
+FILEVERSION @WINDOWS_RC_DOOM_VERSION@
+FILETYPE 1
+{
+ BLOCK "StringFileInfo"
+ {
+  BLOCK "040904E4"
+  {
+     VALUE "ProductName", "@PACKAGE_PREFIX@ Doom"
+     VALUE "ProductVersion", "@BUILD_DOOM_VERSION@"
+     VALUE "FileVersion", "@BUILD_DOOM_VERSION@"
+     VALUE "FileDescription", "@PACKAGE_PREFIX@ Doom @BUILD_DOOM_VERSION@"
+     VALUE "LegalCopyright", "@PACKAGE_COPYRIGHT@"
+  }
+ }
+ BLOCK "VarFileInfo"
+ {
+  VALUE "Translation", 0x0419, 1251
+ }
+}
+

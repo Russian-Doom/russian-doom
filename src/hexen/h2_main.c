@@ -38,6 +38,7 @@
 #include "ct_chat.h"
 #include "d_iwad.h"
 #include "d_mode.h"
+#include "d_name.h"
 #include "m_misc.h"
 #include "s_sound.h"
 #include "i_input.h"
@@ -101,6 +102,12 @@ extern boolean automapactive;
 extern boolean askforquit;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// [Dasperal] d_name.h var definition
+// -----------------------------------------------------------------------------
+char* RD_Project_Name = PACKAGE_PREFIX " Hexen";
+char* RD_Project_String = PACKAGE_PREFIX " Hexen " BUILD_HEXEN_VERSION;
 
 GameMode_t gamemode;
 char *gamedescription;
@@ -483,7 +490,7 @@ void D_DoomMain(void)
                                                            | FOREGROUND_BLUE
                                                            | FOREGROUND_INTENSITY);
     for (p = 0 ; p < 32 ; p++) ST_Message(" ");
-    ST_Message("Russian Hexen " BUILD_HEXEN_VERSION);
+    ST_Message(RD_Project_String);
     for (p = 0 ; p < 31 ; p++) ST_Message(" ");
     ST_Message("\n");
 
@@ -494,7 +501,7 @@ void D_DoomMain(void)
 #else
     // [JN] Just print an uncolored banner
     for (p = 0 ; p < 32 ; p++) ST_Message(" ");
-    ST_Message("Russian Hexen " BUILD_HEXEN_VERSION);
+    ST_Message(RD_Project_String);
     for (p = 0 ; p < 31 ; p++) ST_Message(" ");
     ST_Message("\n");
 #endif
