@@ -1143,7 +1143,7 @@ void V_DrawShadowedPatchStrife(int x, int y, patch_t *patch)
 // [JN] V_DrawPatchUnscaled - hires independent version of V_DrawPatch 
 //
 
-void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
+void V_DrawPatchUnscaled(int x, int y, patch_t *patch, byte *table)
 {
     int count;
     int col;
@@ -1156,33 +1156,12 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
-
-    // haleyjd 08/28/10: Strife needs silent error checking here.
-    if(patchclip_callback)
-    {
-        if(!patchclip_callback(patch, x, y))
-            return;
-    }
-
-// [JN] Do not crash if patch goes out of screen bounds.
-#ifdef RANGECHECK_NO_THANKS
-    if (x < 0
-     || x + SHORT(patch->width) > screenwidth
-     || y < 0
-     || y + SHORT(patch->height) > SCREENHEIGHT)
-    {
-        I_Error(english_language ?
-        "Bad V_DrawPatchUnscaled" :
-        "Ошибка V_DrawPatchUnscaled");
-    }
-#endif
+    w  = SHORT(patch->width);
 
     V_MarkRect(x, y, SHORT(patch->width), SHORT(patch->height));
 
     col = 0;
     desttop = dest_screen + y * screenwidth + x;
-
-    w = SHORT(patch->width);
 
     for ( ; col<w ; x++, col++, desttop++)
     {
@@ -1200,7 +1179,12 @@ void V_DrawPatchUnscaled(int x, int y, patch_t *patch)
                 if (dp_translation)
                 sourcetrans = &dp_translation[*source++];
 
-                *dest = *sourcetrans++;
+                // [JN] If given table is a NULL, draw opaque patch.
+                if (table != NULL)
+                *dest = table[((*dest) << 8) + *sourcetrans++];
+                else
+                *dest = *sourcetrans++;    
+
                 dest += screenwidth;
             }
             column = (column_t *)((byte *)column + column->length + 4);

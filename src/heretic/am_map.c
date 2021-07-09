@@ -731,10 +731,10 @@ void AM_clearFB(int color)
     }
 
     // [JN] Draw automap background as tiled GFX patches.
-    V_DrawPatchUnscaled(0, 0, maplump);
-    V_DrawPatchUnscaled(560, 0, maplump);
-    V_DrawPatchUnscaled(0, 200, maplump);
-    V_DrawPatchUnscaled(560, 200, maplump); 
+    V_DrawPatchUnscaled(0, 0, maplump, NULL);
+    V_DrawPatchUnscaled(560, 0, maplump, NULL);
+    V_DrawPatchUnscaled(0, 200, maplump, NULL);
+    V_DrawPatchUnscaled(560, 200, maplump, NULL); 
 }
 
 // Based on Cohen-Sutherland clipping algorithm but with a slightly

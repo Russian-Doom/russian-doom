@@ -73,6 +73,9 @@ int sbar_color_critical = 0;
 int sbar_color_armor_1 = 2;
 int sbar_color_armor_2 = 5;
 int sbar_color_armor_0 = 0;
+int ammo_widget = 0;
+int ammo_widget_colored = 1;
+int ammo_widget_opacity = 100;
 
 // Gameplay: Audible
 int z_axis_sfx = 0;
@@ -375,6 +378,9 @@ void BindCompatibilityVariables(void)
     M_BindIntVariable("sbar_color_armor_1",     &sbar_color_armor_1);
     M_BindIntVariable("sbar_color_armor_2",     &sbar_color_armor_2);
     M_BindIntVariable("sbar_color_armor_0",     &sbar_color_armor_0);
+    M_BindIntVariable("ammo_widget",             &ammo_widget);
+    M_BindIntVariable("ammo_widget_colored",     &ammo_widget_colored);
+    M_BindIntVariable("ammo_widget_opacity",     &ammo_widget_opacity);
 
     // Gameplay: Audible
     M_BindIntVariable("z_axis_sfx",             &z_axis_sfx);

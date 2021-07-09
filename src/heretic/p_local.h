@@ -93,6 +93,7 @@ extern byte *messages_pickup_color_set;
 extern byte *messages_secret_color_set;
 extern byte *messages_system_color_set;
 extern byte *messages_chat_color_set;
+extern byte *ammo_widget_opacity_set;
 
 // ***** P_TICK *****
 

@@ -171,6 +171,11 @@ int swirling_liquids = 1;
 int invul_sky = 1;
 int linear_sky = 1;
 
+// Gameplay: Status bar
+int ammo_widget = 0;
+int ammo_widget_colored = 1;
+int ammo_widget_opacity = 100;
+
 // Gameplay: Physical
 int torque = 1;
 int weapon_bobbing = 1;
@@ -1200,6 +1205,11 @@ void D_BindVariables(void)
     M_BindIntVariable("swirling_liquids",       &swirling_liquids);
     M_BindIntVariable("invul_sky",              &invul_sky);
     M_BindIntVariable("linear_sky",             &linear_sky);
+
+    // Gameplay: Status bar
+    M_BindIntVariable("ammo_widget",            &ammo_widget);
+    M_BindIntVariable("ammo_widget_colored",    &ammo_widget_colored);
+    M_BindIntVariable("ammo_widget_opacity",    &ammo_widget_opacity);
 
     // Gameplay: Physical
     M_BindIntVariable("torque",                 &torque);

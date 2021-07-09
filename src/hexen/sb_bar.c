@@ -850,7 +850,7 @@ void SB_Drawer(void)
         {
             V_DrawPatchUnscaled(screenwidth/2,
                 ((screenblocks <= 10) ? (SCREENHEIGHT-76)/2 : (SCREENHEIGHT+8)/2),
-                W_CacheLumpName("XHAIR_1U", PU_CACHE));
+                W_CacheLumpName("XHAIR_1U", PU_CACHE), NULL);
         }
 
         dp_translation = NULL;

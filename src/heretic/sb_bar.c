@@ -71,6 +71,11 @@ static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat);
 static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat);
 
+// [JN] Ammo widget prototypes.
+void SB_Define_Ammo_Widget_Opacity (void);
+static void DrSmallAmmoNumber (int val, int x, int y);
+static void SB_Draw_Ammo_Widget (void);
+
 // Public Data
 
 // graphics are drawn to a backing screen and blitted to the real screen
@@ -252,6 +257,9 @@ void SB_Init(void)
     playpalette2 = W_GetNumForName(DEH_String("PLAYPAL"));
     spinbooklump = W_GetNumForName(DEH_String("SPINBK0"));
     spinflylump = W_GetNumForName(DEH_String("SPFLY0"));
+
+    // [JN] Define ammo widget opacity.
+    SB_Define_Ammo_Widget_Opacity();
 }
 
 //---------------------------------------------------------------------------
@@ -778,7 +786,7 @@ void SB_Drawer(void)
         {
             V_DrawPatchUnscaled(screenwidth/2,
                 ((screenblocks <= 10) ? (SCREENHEIGHT-76)/2 : (SCREENHEIGHT+8)/2),
-                W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE));
+                W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE), NULL);
         }
 
         dp_translation = NULL;
@@ -949,6 +957,12 @@ void SB_Drawer(void)
             BorderTopRefresh = true;
             UpdateState |= I_MESSAGES;
         }
+    }
+
+    // [JN] Draw ammo widget.
+    if (ammo_widget && !vanillaparm)
+    {
+        SB_Draw_Ammo_Widget();
     }
 
     // [JN] Always update whole status bar.
@@ -1935,4 +1949,155 @@ static void CheatVERSIONFunc(player_t * player, Cheat_t * cheat)
                english_language ? TXT_ARCH : TXT_ARCH_RUS, BUILD_HERETIC_DATE);
     
     P_SetMessage(player, msg, msg_system, true);
+}
+
+/*
+================================================================================
+=
+= [JN] Ammo widget. Initializing, drawing and coloring.
+=
+================================================================================
+*/
+
+byte *ammo_widget_opacity_set;
+
+void SB_Define_Ammo_Widget_Opacity (void)
+{
+    switch (ammo_widget_opacity)
+    {
+        case 10:   ammo_widget_opacity_set = transtable10;  break;
+        case 20:   ammo_widget_opacity_set = transtable20;  break;
+        case 30:   ammo_widget_opacity_set = transtable30;  break;
+        case 40:   ammo_widget_opacity_set = transtable40;  break;
+        case 50:   ammo_widget_opacity_set = transtable50;  break;
+        case 60:   ammo_widget_opacity_set = transtable60;  break;
+        case 70:   ammo_widget_opacity_set = transtable70;  break;
+        case 80:   ammo_widget_opacity_set = transtable80;  break;
+        case 90:   ammo_widget_opacity_set = transtable90;  break;
+        case 100: default: ammo_widget_opacity_set = NULL;  break;
+    }
+}
+
+static void DrSmallAmmoNumber (int val, int x, int y)
+{
+    int oldval = val;
+    patch_t *patch;
+
+    if (val > 99)
+    {
+        patch = PatchINumbers[val / 100];
+        V_DrawPatchUnscaled(x << hires, y << hires, patch, ammo_widget_opacity_set);
+    }
+    val = val % 100;
+    if (val > 9 || oldval > 99)
+    {
+        patch = PatchINumbers[val / 10];
+        V_DrawPatchUnscaled((x + 5) << hires, y << hires, patch, ammo_widget_opacity_set);
+    }
+    val = val % 10;
+    patch = PatchINumbers[val];
+    V_DrawPatchUnscaled((x + 10) << hires, y << hires, patch, ammo_widget_opacity_set);
+}
+
+static void SB_Draw_Ammo_Widget (void)
+{
+    const int wide_4_3   = aspect_ratio >= 2 && screenblocks == 9 ? wide_delta * 2 : 0;
+    const int xpos_pic   = (((ammo_widget == 1 ? 288 : 267) + wide_delta * 2) << hires) - wide_4_3;
+    const int xpos_slash = (((ammo_widget == 1 ? 288 : 296) + wide_delta * 2) << hires) - wide_4_3;
+    const int xpos_qty1  = ((ammo_widget == 1 ? 302 : 281) + wide_delta * 2) - (wide_4_3 / 2);
+    const int xpos_qty2  = (302 + wide_delta * 2) - (wide_4_3 / 2);
+    const int ammo1 = CPlayer->ammo[am_goldwand], fullammo1 = CPlayer->maxammo[am_goldwand];
+    const int ammo2 = CPlayer->ammo[am_crossbow], fullammo2 = CPlayer->maxammo[am_crossbow];
+    const int ammo3 = CPlayer->ammo[am_blaster], fullammo3 = CPlayer->maxammo[am_blaster];
+    const int ammo4 = CPlayer->ammo[am_skullrod], fullammo4 = CPlayer->maxammo[am_skullrod];
+    const int ammo5 = CPlayer->ammo[am_phoenixrod], fullammo5 = CPlayer->maxammo[am_phoenixrod];
+    const int ammo6 = CPlayer->ammo[am_mace], fullammo6 = CPlayer->maxammo[am_mace];
+
+    // Ammo GFX patches
+    V_DrawPatchUnscaled(xpos_pic, 99 << hires, W_CacheLumpName(DEH_String("INAMGLD"), PU_CACHE), ammo_widget_opacity_set);
+    V_DrawPatchUnscaled(xpos_pic, 106 << hires, W_CacheLumpName(DEH_String("INAMBOW"), PU_CACHE), ammo_widget_opacity_set);
+    V_DrawPatchUnscaled(xpos_pic, 113 << hires, W_CacheLumpName(DEH_String("INAMBST"), PU_CACHE), ammo_widget_opacity_set);
+    // Following weapons not available in Shareware
+    if (gamemode != shareware)
+    {
+        V_DrawPatchUnscaled(xpos_pic, 120 << hires, W_CacheLumpName(DEH_String("INAMRAM"), PU_CACHE), ammo_widget_opacity_set);
+        V_DrawPatchUnscaled(xpos_pic, 127 << hires, W_CacheLumpName(DEH_String("INAMPNX"), PU_CACHE), ammo_widget_opacity_set);
+        V_DrawPatchUnscaled(xpos_pic, 134 << hires, W_CacheLumpName(DEH_String("INAMLOB"), PU_CACHE), ammo_widget_opacity_set);
+    }
+
+    // Wand ammo
+    if (ammo_widget_colored)
+    dp_translation = ammo1 < fullammo1 / 4 ? cr[CR_GOLD2RED_HERETIC] :
+                     ammo1 < fullammo1 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+    DrSmallAmmoNumber(ammo1, xpos_qty1, 100);
+    if (ammo_widget == 2)
+    {
+        V_DrawPatchUnscaled(xpos_slash, 100 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
+        DrSmallAmmoNumber(fullammo1, xpos_qty2, 100);
+    }
+    dp_translation = NULL;
+
+    // Crossbow ammo
+    if (ammo_widget_colored)
+    dp_translation = ammo2 < fullammo2 / 4 ? cr[CR_GOLD2RED_HERETIC] :
+                     ammo2 < fullammo2 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+    DrSmallAmmoNumber(ammo2, xpos_qty1, 107);
+    if (ammo_widget == 2)
+    {
+        V_DrawPatchUnscaled(xpos_slash, 107 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
+        DrSmallAmmoNumber(fullammo2, xpos_qty2, 107);
+    }
+    dp_translation = NULL;
+
+    // Dragon Claw ammo
+    if (ammo_widget_colored)
+    dp_translation = ammo3 < fullammo3 / 4 ? cr[CR_GOLD2RED_HERETIC] :
+                     ammo3 < fullammo3 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+    DrSmallAmmoNumber(ammo3, xpos_qty1, 114);
+    if (ammo_widget == 2)
+    {
+        V_DrawPatchUnscaled(xpos_slash, 114 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
+        DrSmallAmmoNumber(fullammo3, xpos_qty2, 114);
+    }
+    dp_translation = NULL;
+
+    // Following weapons not available in Shareware
+    if (gamemode != shareware)
+    {
+        // Hellstaff ammo
+        if (ammo_widget_colored)
+        dp_translation = ammo4 < fullammo4 / 4 ? cr[CR_GOLD2RED_HERETIC] :
+                         ammo4 < fullammo4 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+        DrSmallAmmoNumber(ammo4, xpos_qty1, 121);
+        if (ammo_widget == 2)
+        {
+            V_DrawPatchUnscaled(xpos_slash, 121 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
+            DrSmallAmmoNumber(fullammo4, xpos_qty2, 121);
+        }
+        dp_translation = NULL;
+
+        // Phoenix Rod ammo
+        if (ammo_widget_colored)
+        dp_translation = ammo5 < fullammo5 / 4 ? cr[CR_GOLD2RED_HERETIC] :
+                         ammo5 < fullammo5 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+        DrSmallAmmoNumber(ammo5, xpos_qty1, 128);
+        if (ammo_widget == 2)
+        {
+            V_DrawPatchUnscaled(xpos_slash, 128 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
+            DrSmallAmmoNumber(fullammo5, xpos_qty2, 128);
+        }
+        dp_translation = NULL;
+
+        // Firemace ammo
+        if (ammo_widget_colored)
+        dp_translation = ammo6 < fullammo6 / 4 ? cr[CR_GOLD2RED_HERETIC] : 
+                         ammo6 < fullammo6 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
+        DrSmallAmmoNumber(ammo6, xpos_qty1, 135);
+        if (ammo_widget == 2)
+        {
+            V_DrawPatchUnscaled(xpos_slash, 135 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
+            DrSmallAmmoNumber(fullammo6, xpos_qty2, 135);
+        }
+        dp_translation = NULL;
+    }
 }

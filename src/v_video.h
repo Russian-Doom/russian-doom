@@ -79,7 +79,7 @@ void V_DrawShadowedPatchDoom(int x, int y, patch_t *patch);
 void V_DrawShadowedPatchRaven(int x, int y, patch_t *patch);
 void V_DrawShadowedPatchStrife(int x, int y, patch_t *patch);
 void V_DrawXlaPatch(int x, int y, patch_t * patch);     // villsa [STRIFE]
-void V_DrawPatchUnscaled(int x, int y, patch_t *patch);
+void V_DrawPatchUnscaled(int x, int y, patch_t *patch, byte *table);
 void V_DrawPatchFinale(int x, int y, patch_t *patch);
 void V_FillFlat (char *lump);
 

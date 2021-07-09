@@ -1127,7 +1127,7 @@ void HU_Drawer(void)
         {
             V_DrawPatchUnscaled(screenwidth/2, ((screenblocks <= 10) ?
                 (SCREENHEIGHT-ST_HEIGHT-26)/2 : (SCREENHEIGHT+4)/2),
-                    W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE));
+                    W_CacheLumpName(DEH_String("XHAIR_1U"), PU_CACHE), NULL);
         }
 
         dp_translation = NULL;

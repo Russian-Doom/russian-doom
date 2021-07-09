@@ -2416,7 +2416,7 @@ void AM_drawCrosshair(int color)
         {
             dp_translation = cr[CR_GRAY];
             V_DrawPatchUnscaled(screenwidth/2, (SCREENHEIGHT-ST_HEIGHT-26)/2,
-                                W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE));
+                                W_CacheLumpName(DEH_String("XHAIR_1S"), PU_CACHE), NULL);
             dp_translation = NULL;
         }
     }

@@ -5331,6 +5331,9 @@ void M_RD_DoResetSettings(void)
     torque               = 1;
     weapon_bobbing       = 1;
     randomly_flipcorpses = 1;
+    ammo_widget          = 0;
+    ammo_widget_colored  = 1;
+    ammo_widget_opacity  = 100;
 
     // Gameplay (2)
     z_axis_sfx           = 0;
