@@ -658,14 +658,13 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_LRFUNC, "RANDOMLY MIRRORED CORPSES:",   "PTHRFKBHJDFYBT NHEGJD:",         M_RD_FlipCorpses,    0}, // ЗЕКРАЛИРОВАНИЕ ТРУПОВ
     {ITT_LRFUNC, "FLOATING ITEMS AMPLITUDE:" ,   "KTDBNFWBZ GHTLVTNJD:",           M_RD_FloatAmplitude, 0}, // АМПЛИТУДА ЛЕВИТАЦИИ ПРЕДМЕТОВ
     {ITT_EMPTY,  NULL,                           NULL,                             NULL,                0},
-    {ITT_SETMENU,"NEXT PAGE...",                 "CKTLE.OFZ CNHFYBWF>>>",          NULL, (const intptr_t) &Gameplay2Menu}, // СЛЕДУЮЩАЯ СТРАНИЦА
-    {ITT_SETMENU,"LAST PAGE...",                 "GJCKTLYZZ CNHFYBWF>>>",          NULL, (const intptr_t) &Gameplay3Menu}  // ПОСЛЕДНЯЯ СТРАНИЦА
+    {ITT_SETMENU,"NEXT PAGE...",                 "CKTLE.OFZ CNHFYBWF>>>",          NULL, (const intptr_t) &Gameplay2Menu} // СЛЕДУЮЩАЯ СТРАНИЦА
 };
 
 static Menu_t Gameplay1Menu = {
     36, 36,
     36,
-    15, Gameplay1Items,
+    14, Gameplay1Items,
     DrawGameplay1Menu,
     &OptionsMenu,
     0
@@ -689,14 +688,13 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_LRFUNC, "INDICATION:",           "BYLBRFWBZ:",                  M_RD_CrossHairType,      0}, // ИНДИКАЦИЯ
     {ITT_LRFUNC, "INCREASED SIZE:",       "EDTKBXTYYSQ HFPVTH:",         M_RD_CrossHairScale,     0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
     {ITT_EMPTY,  NULL,                     NULL,                         NULL,                    0},
-    {ITT_SETMENU,"LAST PAGE...",          "GJCKTLYZZ CNHFYBWF>>>",       NULL, (const intptr_t) &Gameplay3Menu}, // ПОСЛЕДНЯЯ СТРАНИЦА
-    {ITT_SETMENU,"FIRST PAGE...",         "GTHDFZ CNHFYBWF>>>",          NULL, (const intptr_t) &Gameplay1Menu}  // ПЕРВАЯ СТРАНИЦА
+    {ITT_SETMENU,"LAST PAGE...",          "GJCKTLYZZ CNHFYBWF>>>",       NULL, (const intptr_t) &Gameplay3Menu} // ПОСЛЕДНЯЯ СТРАНИЦА
 };
 
 static Menu_t Gameplay2Menu = {
     36, 36,
     36,
-    15, Gameplay2Items,
+    14, Gameplay2Items,
     DrawGameplay2Menu,
     &OptionsMenu,
     0
@@ -720,14 +718,13 @@ static MenuItem_t Gameplay3Items[] = {
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
-    {ITT_SETMENU,"FIRST PAGE...",               "GTHDFZ CNHFYBWF>>>",            NULL, (const intptr_t) &Gameplay1Menu}, // ПЕРВАЯ СТРАНИЦА
-    {ITT_SETMENU,"PREVIOUS PAGE...",            "GHTLSLEOFZ CNHFYBWF>>>",        NULL, (const intptr_t) &Gameplay2Menu}  // ПРЕДЫДУЩАЯ СТРАНИЦА
+    {ITT_SETMENU,"FIRST PAGE...",               "GTHDFZ CNHFYBWF>>>",            NULL, (const intptr_t) &Gameplay1Menu} // ПЕРВАЯ СТРАНИЦА
 };
 
 static Menu_t Gameplay3Menu = {
     36, 36,
     36,
-    15, Gameplay3Items,
+    14, Gameplay3Items,
     DrawGameplay3Menu,
     &OptionsMenu,
     0
@@ -2397,6 +2394,7 @@ static void DrawMessagesMenu(void)
                           messages_timeout == 8 ? "8 SECONDS" :
                           messages_timeout == 9 ? "9 SECONDS" :
                                                   "10 SECONDS", 136 + wide_delta, 73);
+        dp_translation = NULL;
 
         // Fading effect 
         MN_DrTextSmallENG(DEH_String(message_fade ? "ON" : "OFF"),
@@ -3934,6 +3932,11 @@ static void DrawGameplay1Menu(void)
                                      188 + wide_delta, 146);
         dp_translation = NULL;
     }
+
+    // (1/3)
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
+    MN_DrTextSmallENG(DEH_String("(1/3)"), 254 + wide_delta, 166);
+    dp_translation = NULL;
 }
 
 static void M_RD_Brightmaps(intptr_t option)
@@ -4176,6 +4179,11 @@ static void DrawGameplay2Menu(void)
 
     // Ammo widget opacity
     DrawSliderSmall(&DisplayMenu, 106, 9, (ammo_widget_opacity / 10) - 2);
+
+    // (2/3)
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
+    MN_DrTextSmallENG(DEH_String("(2/3)"), 254 + wide_delta, 166);
+    dp_translation = NULL;
 }
 
 static void M_RD_ColoredSBar(intptr_t option)
@@ -4208,8 +4216,6 @@ static void M_RD_NegativeHealth(intptr_t option)
 
 static void M_RD_AmmoWidgetDraw(intptr_t option)
 {
-//    ammo_widget ^= 1;
-
     switch (option)
     {
         case 0: 
@@ -4404,6 +4410,11 @@ static void DrawGameplay3Menu(void)
         MN_DrTextSmallRUS(DEH_String(pistol_start ? "DRK" : "DSRK"), 217 + wide_delta, 106);
         dp_translation = NULL;
     }
+
+    // (3/3)
+    dp_translation = cr[CR_WHITE2GRAY_HERETIC];
+    MN_DrTextSmallENG(DEH_String("(3/3)"), 254 + wide_delta, 166);
+    dp_translation = NULL;
 }
 
 static void M_RD_ZAxisSFX(intptr_t option)
@@ -6256,13 +6267,19 @@ boolean MN_Responder(event_t * event)
             // Gameplay features
             if (CurrentMenu == &Gameplay1Menu)
             {
-                SetMenu(&Gameplay2Menu);
+                SetMenu(&Gameplay3Menu);
                 S_StartSound(NULL,sfx_dorcls);
                 return true;
             }
             if (CurrentMenu == &Gameplay2Menu)
             {
                 SetMenu(&Gameplay1Menu);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+            if (CurrentMenu == &Gameplay3Menu)
+            {
+                SetMenu(&Gameplay2Menu);
                 S_StartSound(NULL,sfx_dorcls);
                 return true;
             }
@@ -6297,6 +6314,12 @@ boolean MN_Responder(event_t * event)
                 return true;
             }
             if (CurrentMenu == &Gameplay2Menu)
+            {
+                SetMenu(&Gameplay3Menu);
+                S_StartSound(NULL,sfx_dorcls);
+                return true;
+            }
+            if (CurrentMenu == &Gameplay3Menu)
             {
                 SetMenu(&Gameplay1Menu);
                 S_StartSound(NULL,sfx_dorcls);
