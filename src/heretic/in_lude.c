@@ -687,9 +687,9 @@ void IN_DrawYAH(void)
     }
     else
     {
-        // ЗАГРУЖАЕТСЯ УРОВЕНЬ
-        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;
-        MN_DrTextSmallRUS(DEH_String("PFUHE;FTNCZ EHJDTYM"), x + wide_delta, 10);
+        // СЛЕДУЮЩИЙ УРОВЕНЬ:
+        x = 160 - MN_DrTextSmallRUSWidth(DEH_String("CKTLE.OBQ EHJDTYM:")) / 2;
+        MN_DrTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 10);
 
         x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1)
                 * 9 + gamemap - 1] + 7) / 2;
@@ -847,8 +847,8 @@ void IN_DrawSingleStats(void)
         }
         else
         {
-            x = 160 - MN_DrTextSmallRUSWidth(DEH_String("PFUHE;FTNCZ EHJDTYM")) / 2;    // ЗАГРУЖАЕТСЯ УРОВЕНЬ
-            MN_DrTextSmallRUS(DEH_String("PFUHE;FTNCZ EHJDTYM"), x + wide_delta, 160);  // ЗАГРУЖАЕТСЯ УРОВЕНЬ
+            x = 160 - MN_DrTextSmallRUSWidth(DEH_String("CKTLE.OBQ EHJDTYM:")) / 2;    // СЛЕДУЮЩИЙ УРОВЕНЬ:
+            MN_DrTextSmallRUS(DEH_String("CKTLE.OBQ EHJDTYM:"), x + wide_delta, 160);  // СЛЕДУЮЩИЙ УРОВЕНЬ:
 
             x = 160 - MN_DrTextBigRUSWidth(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7) / 2;
             MN_DrTextBigRUS(LevelNames_Rus[(gameepisode - 1) * 9 + gamemap - 1] + 7, x + wide_delta, 170);

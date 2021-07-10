@@ -176,7 +176,7 @@ linefix_t linefix[] =
     {  heretic,       5,   6,     683,    0,     "METL2",            "",            "", DEFAULT,   DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     {  heretic,       5,   6,     684,    0,     "METL2",            "",            "", DEFAULT,   DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     {  heretic,       5,   6,     685,    0,     "METL2",            "",            "", DEFAULT,   DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
-    {  heretic,       5,   6,    1629,    1,          "",            "",       "METL2", DEFAULT,   DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
+    {  heretic,       5,   6,    1629,    1,     "METL2",            "",            "", DEFAULT,   DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     {  heretic,       5,   6,    1942,    1,     "METL2",            "",            "", DEFAULT,   DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     {  heretic,       5,   6,    1945,    1,     "METL2",            "",            "", DEFAULT,   DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
     {  heretic,       5,   7,    1109,    0,  "CTYSTCI4",            "",            "", DEFAULT,   DEFAULT,          DEFAULT, DEFAULT, DEFAULT },
