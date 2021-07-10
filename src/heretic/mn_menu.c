@@ -5779,6 +5779,7 @@ boolean MN_Responder(event_t * event)
     int charTyped;
     int key;
     int i;
+    int mousewait = 0;
     MenuItem_t *item;
     extern void D_StartTitle(void);
     extern void G_CheckDemoStatus(void);
@@ -5826,6 +5827,10 @@ boolean MN_Responder(event_t * event)
         return true;
     }
 
+    // [JN] Initialize events.
+    charTyped = 0;
+    key = -1;
+
     // Allow the menu to be activated from a joystick button if a button
     // is bound for joybmenu.
     if (event->type == ev_joystick)
@@ -5836,14 +5841,60 @@ boolean MN_Responder(event_t * event)
             return true;
         }
     }
+    // [JN] Support for mouse controls.
+    else
+    {
+        if (event->type == ev_mouse && mousewait < I_GetTime())
+        {
+            // [JN] Catch all incoming data1 mouse events. Makes middle mouse button 
+            // working for message interruption and for binding ability.
+            if (event->data1)
+            {
+                key = event->data1;
+                mousewait = I_GetTime() + 5;
+            }
 
-    if (event->type != ev_keydown)
+            // [JN] Do not read mouse events while typing and "typeofask" events.
+            if (!FileMenuKeySteal)
+            {
+                if (event->data1&1)
+                {
+                    key = key_menu_forward;
+                    mousewait = I_GetTime() + 15;
+                }
+                if (event->data1&2)
+                {
+                    key = key_menu_back;
+                    mousewait = I_GetTime() + 15;
+                }
+            }
+            // [crispy] scroll menus with mouse wheel
+            if (mousebprevweapon >= 0 && event->data1 & (1 << mousebprevweapon))
+            {
+                key = key_menu_down;
+                mousewait = I_GetTime() + 1;
+            }
+            else
+            if (mousebnextweapon >= 0 && event->data1 & (1 << mousebnextweapon))
+            {
+                key = key_menu_up;
+                mousewait = I_GetTime() + 1;
+            }
+        }
+        else
+        {
+            if (event->type == ev_keydown)
+            {
+                key = event->data1;
+                charTyped = event->data2;
+            }
+        }
+    }
+
+    if (key == -1)
     {
         return false;
     }
-
-    key = event->data1;
-    charTyped = event->data2;
 
     if (InfoType)
     {
