@@ -947,8 +947,10 @@ void R_RenderPlayerView(player_t *player)
         R_RenderBSPNode (numnodes-1);
         return;
     }
-    // [JN] Fill level's "out of bounds" with black color
-    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, viewheight, 0);
+    // [JN] Fill level's "out of bounds" with black color.
+    // Flash with red/black color if flashing HOM feature enabled.
+    V_DrawFilledBox(viewwindowx, viewwindowy, scaledviewwidth, scaledviewheight,
+                    flashing_hom ? (gametic & 4 ? 0 : 159) : 0);
 
     // [JN] Disable screen rendering if player is crushed beneath closed door.
     if (singleplayer && player->playerstate == PST_DEAD

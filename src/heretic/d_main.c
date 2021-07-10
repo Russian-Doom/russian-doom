@@ -130,6 +130,7 @@ static char *autoloadretailpwad[10]     = { "", "", "", "" };
 // Rendering
 int show_endoom = 0;
 int graphical_startup = 0;
+int flashing_hom = 0;
 
 // Display
 int screenblocks = 10;
@@ -1163,6 +1164,7 @@ void D_BindVariables(void)
     M_BindIntVariable("uncapped_fps",           &uncapped_fps);
     M_BindIntVariable("show_endoom",            &show_endoom);
     M_BindIntVariable("graphical_startup",      &graphical_startup);
+    M_BindIntVariable("flashing_hom",           &flashing_hom);
 
     // Display
     M_BindIntVariable("screenblocks",           &screenblocks);
