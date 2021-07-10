@@ -204,6 +204,7 @@ int crosshair_type = 1;
 int crosshair_scale = 0;
 
 // Gameplay: Gameplay
+int fix_map_errors = 1;
 int flip_levels = 0;
 int no_internal_demos = 0;
 int pistol_start = 0;
@@ -1240,6 +1241,7 @@ void D_BindVariables(void)
     M_BindIntVariable("crosshair_scale",        &crosshair_scale);    
 
     // Gameplay: Gameplay
+    M_BindIntVariable("fix_map_errors",         &fix_map_errors);
     M_BindIntVariable("flip_levels",            &flip_levels);
     M_BindIntVariable("no_internal_demos",      &no_internal_demos);
     M_BindIntVariable("pistol_start",           &pistol_start);

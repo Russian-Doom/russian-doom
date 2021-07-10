@@ -148,7 +148,7 @@ void P_LoadVertexes (int lump)
         li->y = SHORT(ml->y)<<FRACBITS;
 
         // [JN] Apply any map-specific fixes.
-        if (canmodify)
+        if (canmodify && fix_map_errors)
         {
             for (int j = 0; vertexfix[j].mission != 0; j++)
             {
@@ -288,7 +288,7 @@ void P_LoadSegs(int lump)
         }
 
         // [JN] Apply any map-specific fixes.
-        if (canmodify)
+        if (canmodify && fix_map_errors)
         {
             for (int j = 0; linefix[j].mission != 0; j++)
             {
@@ -557,7 +557,7 @@ void P_LoadSectors (int lump)
         ss->oldgametic = -1;
 
         // [JN] Apply any map-specific fixes.
-        if (canmodify)
+        if (canmodify && fix_map_errors)
         {
             for (int j = 0; sectorfix[j].mission != 0; j++)
             {
@@ -1037,7 +1037,7 @@ void P_LoadThings (int lump)
         spawnthing.options = SHORT(mt->options);
 
         // [JN] Apply any map-specific fixes.
-        if (canmodify)
+        if (canmodify && fix_map_errors)
         {
             for (int j = 0; thingfix[j].mission != 0; j++)
             {
