@@ -44,9 +44,7 @@ boolean automapactive = false;
 static int finit_height = SCREENHEIGHT - (42 << hires);
 static int f_x, f_y;            // location of window on screen
 static int f_w, f_h;            // size of window on screen
-static int lightlev;            // used for funky strobing effect
 static byte *fb;                // pseudo-frame buffer
-static int amclock;
 
 static mpoint_t m_paninc;       // how far the window pans each tic (map coords)
 static fixed_t mtof_zoommul;    // how far the window zooms in each tic (map coords)
@@ -278,8 +276,6 @@ void AM_initVariables(void)
     fb = I_VideoBuffer;
 
     f_oldloc.x = INT_MAX;
-    amclock = 0;
-    lightlev = 0;
 
     m_paninc.x = m_paninc.y = 0;
     ftom_zoommul = FRACUNIT;
@@ -658,8 +654,6 @@ void AM_Ticker(void)
 
     if (!automapactive)
         return;
-
-    amclock++;
 
     if (automap_follow)
     {
@@ -1270,7 +1264,7 @@ void AM_drawWalls(void)
                 continue;
             if (!lines[i].backsector)
             {
-                AM_drawMline(&l, WALLCOLORS + lightlev);
+                AM_drawMline(&l, WALLCOLORS);
             }
             else
             {
@@ -1283,7 +1277,7 @@ void AM_drawWalls(void)
                     if (cheating)
                         AM_drawMline(&l, 0);
                     else
-                        AM_drawMline(&l, WALLCOLORS + lightlev);
+                        AM_drawMline(&l, WALLCOLORS);
                 }
                 else if (lines[i].special > 25 && lines[i].special < 35)
                 {
@@ -1308,16 +1302,16 @@ void AM_drawWalls(void)
                 else if (lines[i].backsector->floorheight
                          != lines[i].frontsector->floorheight)
                 {
-                    AM_drawMline(&l, FDWALLCOLORS + lightlev);  // floor level change
+                    AM_drawMline(&l, FDWALLCOLORS);  // floor level change
                 }
                 else if (lines[i].backsector->ceilingheight
                          != lines[i].frontsector->ceilingheight)
                 {
-                    AM_drawMline(&l, CDWALLCOLORS + lightlev);  // ceiling level change
+                    AM_drawMline(&l, CDWALLCOLORS);  // ceiling level change
                 }
                 else if (cheating)
                 {
-                    AM_drawMline(&l, TSWALLCOLORS + lightlev);
+                    AM_drawMline(&l, TSWALLCOLORS);
                 }
             }
         }
@@ -1492,7 +1486,7 @@ void AM_drawThings(int colors, int colorrange)
             }
 
             AM_drawLineCharacter(thintriangle_guy, NUMTHINTRIANGLEGUYLINES,
-                                 16 << FRACBITS, t->angle, colors + lightlev,
+                                 16 << FRACBITS, t->angle, colors,
                                  pt.x, pt.y);
             t = t->snext;
         }
