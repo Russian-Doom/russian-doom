@@ -20,6 +20,7 @@
 
 #define LEFT_DIR 0
 #define RIGHT_DIR 1
+#define ITEM_HEIGHT 20
 
 typedef enum
 {
@@ -51,6 +52,19 @@ typedef struct Menu_s
 
     int lastOn;
 } Menu_t;
+
+void RD_Menu_InitSliders(char* BigSlider_left_patch,
+                         char* BigSlider_middle1_patch,
+                         char* BigSlider_middle2_patch,
+                         char* BigSlider_right_patch,
+                         char* BigSlider_gem_patch,
+                         char* SmallSlider_left_patch,
+                         char* SmallSlider_middle_patch,
+                         char* SmallSlider_right_patch,
+                         char* SmallSlider_gem_patch,
+                         Translation_CR_t Gem_normal_translation,
+                         Translation_CR_t Gem_zero_translation,
+                         Translation_CR_t Gem_max_translation);
 
 /**
  * Increments or decrements 'var' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
@@ -89,5 +103,10 @@ extern void RD_Menu_ShiftSpinInt(int* var, int minValue, int maxValue, int direc
  * Value can not exit range specified by 'minValue' and 'maxValue'
  */
 extern void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, int direction);
+
+/** [Dasperal] y = menu->y + 2 + (item * ITEM_HEIGHT) */
+void RD_Menu_DrawSlider(Menu_t * menu, int y, int width, int value);
+/** [JN] Draw small slider*/
+void RD_Menu_DrawSliderSmall(Menu_t * menu, int y, int width, int value);
 
 #endif //RD_MENU_H

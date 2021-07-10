@@ -47,7 +47,6 @@
 
 // Macros
 
-#define ITEM_HEIGHT 20
 #define SELECTOR_XOFFSET (-28)
 #define SELECTOR_YOFFSET (-1)
 #define SLOTTEXTLEN     22
@@ -78,8 +77,6 @@ static void MN_DrawInfo(void);
 static void DrawLoadMenu(void);
 static void DrawSaveMenu(void);
 static void DrawOptionsMenu(void);
-static void DrawSlider(Menu_t * menu, int item, int width, int slot);
-static void DrawSliderSmall(Menu_t * menu, int y, int width, int slot);
 void MN_LoadSlotText(void);
 
 // -----------------------------------------------------------------------------
@@ -1016,6 +1013,22 @@ void MN_Init(void)
                    DEH_String("FONTF_S"),
                    DEH_String("FONTG_S"));
 
+    RD_Menu_InitSliders(// [Dasperal] Big slider
+                        DEH_String("M_SLDLT"),
+                        DEH_String("M_SLDMD1"),
+                        DEH_String("M_SLDMD2"),
+                        DEH_String("M_SLDRT"),
+                        DEH_String("M_SLDKB"),
+                        // [Dasperal] Small slider
+                        DEH_String("M_RDSLDL"),
+                        DEH_String("M_RDSLD1"),
+                        DEH_String("M_RDSLDR"),
+                        DEH_String("M_RDSLG"),
+                        // [Dasperal] Gem translations
+                        CR_NONE,
+                        CR_GREEN2GRAY_HERETIC,
+                        CR_GREEN2RED_HERETIC);
+
     menuactive = false;
     SkullBaseLump = W_GetNumForName(DEH_String("M_SKL00"));
 
@@ -1722,13 +1735,13 @@ static void DrawDisplayMenu(void)
     // Screen size
     if (aspect_ratio_temp >= 2)
     {
-        DrawSliderSmall(&DisplayMenu, 52, 4, screenblocks - 9);
+        RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 4, screenblocks - 9);
         M_snprintf(num, 4, "%d", screenblocks);
         RD_M_DrawTextSmallENG(num, 88 + wide_delta, 53, CR_WHITE2GRAY_HERETIC);
     }
     else
     {
-        DrawSliderSmall(&DisplayMenu, 52, 10, screenblocks - 3);
+        RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 10, screenblocks - 3);
         M_snprintf(num, 4, "%d", screenblocks);
         dp_translation = cr[CR_WHITE2GRAY_HERETIC];
         RD_M_DrawTextA(num, 136 + wide_delta, 53);
@@ -1736,10 +1749,10 @@ static void DrawDisplayMenu(void)
     }
 
     // Gamma-correction
-    DrawSliderSmall(&DisplayMenu, 72, 18, usegamma);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 18, usegamma);
 
     // Level brightness
-    DrawSliderSmall(&DisplayMenu, 92, 5, level_brightness / 16);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 92, 5, level_brightness / 16);
 }
 
 static void M_RD_ScreenSize(intptr_t option)
@@ -1948,7 +1961,7 @@ static void DrawMessagesMenu(void)
     }
 
     // Messages timeout
-    DrawSliderSmall(&DisplayMenu, 72, 10, messages_timeout - 1);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 10, messages_timeout - 1);
 }
 
 static void M_RD_LocalTime(intptr_t option)
@@ -2294,17 +2307,17 @@ static void DrawSoundMenu(void)
     //
 
     // SFX Volume
-    DrawSliderSmall(&SoundMenu, 52, 16, snd_MaxVolume_tmp);
+    RD_Menu_DrawSliderSmall(&SoundMenu, 52, 16, snd_MaxVolume_tmp);
     M_snprintf(num, 4, "%d", snd_MaxVolume_tmp);
     RD_M_DrawTextSmallENG(num, 184 + wide_delta, 53, CR_WHITE2GRAY_HERETIC);
 
     // Music Volume
-    DrawSliderSmall(&SoundMenu, 72, 16, snd_MusicVolume);
+    RD_Menu_DrawSliderSmall(&SoundMenu, 72, 16, snd_MusicVolume);
     M_snprintf(num, 4, "%d", snd_MusicVolume);
     RD_M_DrawTextSmallENG(num, 184 + wide_delta, 73, CR_WHITE2GRAY_HERETIC);
 
     // SFX Channels
-    DrawSliderSmall(&SoundMenu, 102, 16, snd_Channels / 4 - 1);
+    RD_Menu_DrawSliderSmall(&SoundMenu, 102, 16, snd_Channels / 4 - 1);
     M_snprintf(num, 4, "%d", snd_Channels);
     RD_M_DrawTextSmallENG(num, 184 + wide_delta, 103, CR_WHITE2GRAY_HERETIC);
 }
@@ -2731,17 +2744,17 @@ static void DrawControlsMenu(void)
     //
 
     // Mouse sensivity
-    DrawSliderSmall(&ControlsMenu, 72, 12, mouseSensitivity);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 72, 12, mouseSensitivity);
     M_snprintf(num, 4, "%d", mouseSensitivity);
     RD_M_DrawTextSmallENG(num, 152 + wide_delta, 73, CR_WHITE2GRAY_HERETIC);
 
     // Acceleration
-    DrawSliderSmall(&ControlsMenu, 92, 12, mouse_acceleration * 4 - 4);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 92, 12, mouse_acceleration * 4 - 4);
     M_snprintf(num, 4, "%f", mouse_acceleration);
     RD_M_DrawTextSmallENG(num, 152 + wide_delta, 93, CR_WHITE2GRAY_HERETIC);
 
     // Threshold
-    DrawSliderSmall(&ControlsMenu, 112, 12, mouse_threshold / 2);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 112, 12, mouse_threshold / 2);
     M_snprintf(num, 4, "%d", mouse_threshold);
     RD_M_DrawTextSmallENG(num, 152 + wide_delta, 113, CR_WHITE2GRAY_HERETIC);
 }
@@ -3906,21 +3919,21 @@ static void DrawOptionsMenu_Vanilla(void)
     {
         RD_M_DrawTextBigRUS(DEH_String(show_messages ? "DRK" : "DSRK"), 223 + wide_delta, 50);
     }
-    DrawSlider(&OptionsMenu_Vanilla, 3, 10, mouseSensitivity);
+    RD_Menu_DrawSlider(&OptionsMenu_Vanilla, 92, 10, mouseSensitivity);
 }
 
 static void DrawOptions2Menu_Vanilla(void)
 {
     if (aspect_ratio_temp >= 2)
     {
-        DrawSlider(&Options2Menu_Vanilla, 1, 4, screenblocks - 9);
+        RD_Menu_DrawSlider(&Options2Menu_Vanilla, 42, 4, screenblocks - 9);
     }
     else
     {
-        DrawSlider(&Options2Menu_Vanilla, 1, 10, screenblocks - 3);
+        RD_Menu_DrawSlider(&Options2Menu_Vanilla, 42, 10, screenblocks - 3);
     }
-    DrawSlider(&Options2Menu_Vanilla, 3, 16, snd_MaxVolume);
-    DrawSlider(&Options2Menu_Vanilla, 5, 16, snd_MusicVolume);
+    RD_Menu_DrawSlider(&Options2Menu_Vanilla, 82, 16, snd_MaxVolume);
+    RD_Menu_DrawSlider(&Options2Menu_Vanilla, 122, 16, snd_MusicVolume);
 }
 
 //---------------------------------------------------------------------------
@@ -5238,106 +5251,4 @@ static void SetMenu(const Menu_t* const menu)
             CurrentMenu = &OptionsMenu_Vanilla;
         }
     }
-}
-
-//---------------------------------------------------------------------------
-//
-// PROC DrawSlider
-//---------------------------------------------------------------------------
-static void DrawSlider(Menu_t * menu, int item, int width, int slot)
-{
-    int x;
-    int y;
-    int x2;
-    int count;
-
-    x = (english_language ? menu->x_eng : menu->x_rus) + 24;
-    y = menu->y + 2 + (item * ITEM_HEIGHT);
-    V_DrawShadowedPatchRaven(x - 32 + wide_delta, y,
-                             W_CacheLumpName(DEH_String("M_SLDLT"), PU_CACHE));
-    for (x2 = x, count = width; count--; x2 += 8)
-    {
-        V_DrawShadowedPatchRaven(x2 + wide_delta, y,
-                                 W_CacheLumpName(DEH_String(count & 1 ? 
-                                                           "M_SLDMD1" : "M_SLDMD2"), PU_CACHE));
-    }
-    V_DrawShadowedPatchRaven(x2 + wide_delta, y,
-                             W_CacheLumpName(DEH_String("M_SLDRT"), PU_CACHE));
-
-    // [JN] Colorizing slider gem...
-    // Most left position (dull green gem)
-    if (slot == 0)
-    {
-        dp_translation = cr[CR_GREEN2GRAY_HERETIC];
-        V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7,
-                    W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
-        dp_translation = NULL;
-    }
-    // [JN] Most right position that is "out of bounds" (red gem).
-    // Only mouse sensivity in vanilla options menu requires this trick.
-    else if (CurrentMenu == &OptionsMenu_Vanilla && slot > 9)
-    {
-        slot = 9;
-        dp_translation = cr[CR_GREEN2RED_HERETIC];
-        V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7,
-                    W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
-        dp_translation = NULL;
-    }
-    // [JN] Standard function (green gem)
-    else
-    V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7,
-                W_CacheLumpName(DEH_String("M_SLDKB"), PU_CACHE));
-}
-
-//---------------------------------------------------------------------------
-//
-// PROC DrawSliderSmall
-//
-// [JN] Draw small slider
-//
-//---------------------------------------------------------------------------
-
-static void DrawSliderSmall(Menu_t * menu, int y, int width, int slot)
-{
-    int x;
-    int x2;
-    int count;
-
-    x = (english_language ? menu->x_eng : menu->x_rus) + 24;
-
-    V_DrawShadowedPatchRaven(x - 32 + wide_delta, y,
-                             W_CacheLumpName(DEH_String("M_RDSLDL"), PU_CACHE));
-
-    for (x2 = x, count = width; count--; x2 += 8)
-    {
-        V_DrawShadowedPatchRaven(x2 - 16 + wide_delta, y,
-                                 W_CacheLumpName(DEH_String("M_RDSLD1"), PU_CACHE));
-    }
-
-    V_DrawShadowedPatchRaven(x2 - 25 + wide_delta, y,
-                             W_CacheLumpName(DEH_String("M_RDSLDR"), PU_CACHE));
-
-    // [JN] Colorizing slider gem...
-    // Most left position (dull green gem)
-    if (slot == 0)
-    {
-        dp_translation = cr[CR_GREEN2GRAY_HERETIC];
-        V_DrawPatch(x + slot * 8 + wide_delta, y + 7,
-                    W_CacheLumpName(DEH_String("M_RDSLG"), PU_CACHE));
-        dp_translation = NULL;
-    }
-    // [JN] Most right position that is "out of bounds" (red gem).
-    // Only the mouse sensitivity menu requires this trick.
-    else if (CurrentMenu == &ControlsMenu && slot > 11)
-    {
-        slot = 11;
-        dp_translation = cr[CR_GREEN2RED_HERETIC];
-        V_DrawPatch(x + slot * 8 + wide_delta, y + 7,
-                    W_CacheLumpName(DEH_String("M_RDSLG"), PU_CACHE));
-        dp_translation = NULL;
-    }
-    // [JN] Standard function (green gem)
-    else
-    V_DrawPatch(x + slot * 8 + wide_delta, y + 7,
-                W_CacheLumpName(DEH_String("M_RDSLG"), PU_CACHE));
 }

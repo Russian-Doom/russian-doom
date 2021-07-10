@@ -26,7 +26,7 @@ Translation_CR_t messages_secret_color_set;
 Translation_CR_t messages_system_color_set;
 Translation_CR_t messages_chat_color_set;
 
-void (*drawLetter)(int x, int y, patch_t *patch);
+void (*drawShadowedPatch)(int x, int y, patch_t *patch);
 
 static lumpindex_t fontA;
 static lumpindex_t fontB;
@@ -45,17 +45,17 @@ void RD_M_InitFonts(char* FontA, char* FontB, char* FontC,
     switch (RD_GameType)
     {
         case gt_Doom:
-            drawLetter = V_DrawShadowedPatchDoom;
+            drawShadowedPatch = V_DrawShadowedPatchDoom;
             break;
         case gt_Heretic:
         case gt_Hexen:
-            drawLetter = V_DrawShadowedPatchRaven;
+            drawShadowedPatch = V_DrawShadowedPatchRaven;
             break;
         case gt_Strife:
-            drawLetter = V_DrawShadowedPatchStrife;
+            drawShadowedPatch = V_DrawShadowedPatchStrife;
             break;
         default:
-            drawLetter = V_DrawShadowedPatch;
+            drawShadowedPatch = V_DrawShadowedPatch;
     }
 
     fontA = W_GetNumForName(FontA) + 1;
@@ -84,7 +84,7 @@ void RD_M_DrawTextA(char *text, int x, int y)
         else
         {
             p = W_CacheLumpNum(fontA + c - 33, PU_CACHE);
-            drawLetter(x, y, p);
+            drawShadowedPatch(x, y, p);
             x += SHORT(p->width) - 1;
         }
     }
@@ -149,7 +149,7 @@ void RD_M_DrawTextB(char *text, int x, int y)
         else
         {
             p = W_CacheLumpNum(fontB + c - 33, PU_CACHE);
-            drawLetter(x, y, p);
+            drawShadowedPatch(x, y, p);
             x += SHORT(p->width) - 1;
         }
     }
@@ -215,7 +215,7 @@ void RD_M_DrawTextSmallENG(char *text, int x, int y, Translation_CR_t translatio
         {
             p = W_CacheLumpNum(smallEngFont + c - 33, PU_CACHE);
             dp_translation = translation == CR_NONE ? NULL : cr[translation];
-            drawLetter(x, y, p);
+            drawShadowedPatch(x, y, p);
             dp_translation = NULL;
             x += SHORT(p->width) - 1;
         }
@@ -237,7 +237,7 @@ void RD_M_DrawTextBigENG(char *text, int x, int y)
         else
         {
             p = W_CacheLumpNum(bigEngFont + c - 33, PU_CACHE);
-            drawLetter(x, y, p);
+            drawShadowedPatch(x, y, p);
             x += SHORT(p->width) - 1;
         }
     }
@@ -282,7 +282,7 @@ void RD_M_DrawTextSmallRUS(char *text, int x, int y, Translation_CR_t translatio
         {
             p = W_CacheLumpNum(smallRusFont + c - 33, PU_CACHE);
             dp_translation = translation == CR_NONE ? NULL : cr[translation];
-            drawLetter(x, y, p);
+            drawShadowedPatch(x, y, p);
             dp_translation = NULL;
             x += SHORT(p->width) - 1;
         }
@@ -348,7 +348,7 @@ void RD_M_DrawTextBigRUS(char *text, int x, int y)
         else
         {
             p = W_CacheLumpNum(bigRusFont + c - 33, PU_CACHE);
-            drawLetter(x, y, p);
+            drawShadowedPatch(x, y, p);
             x += SHORT(p->width) - 1;
         }
     }
