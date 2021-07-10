@@ -1257,7 +1257,7 @@ void DrawMainBar(void)
             if (sbar_colored && !vanillaparm)
             {
                 int ammo =  CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
-                int fullammo = maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
+                int fullammo = CPlayer->maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
                 
                 if (ammo < fullammo/4)
                 dp_translation = cr[CR_GOLD2RED_HERETIC];
@@ -1394,7 +1394,7 @@ void DrawFullScreenStuff(void)
         if (sbar_colored && !vanillaparm)
         {
             int ammo =  CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
-            int fullammo = maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
+            int fullammo = CPlayer->maxammo[wpnlev1info[CPlayer->readyweapon].ammo];
 
             if (ammo < fullammo/4)
             dp_translation = cr[CR_GREEN2RED_HERETIC];
