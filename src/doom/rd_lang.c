@@ -354,7 +354,7 @@ void RD_DefineLanguageStrings (void)
         gotbluecard = GOTBLUECARD;
         gotyelwcard = GOTYELWCARD;
         gotredcard  = GOTREDCARD;
-        gotblueskul = GOTREDCARD;
+        gotblueskul = GOTBLUESKUL;
         gotyelwskul = GOTYELWSKUL;
         gotredskull = GOTREDSKULL;
 
@@ -493,7 +493,7 @@ void RD_DefineLanguageStrings (void)
         gotbluecard = GOTBLUECARD_RUS;
         gotyelwcard = GOTYELWCARD_RUS;
         gotredcard  = GOTREDCARD_RUS;
-        gotblueskul = GOTREDCARD_RUS;
+        gotblueskul = GOTBLUESKUL_RUS;
         gotyelwskul = GOTYELWSKUL_RUS;
         gotredskull = GOTREDSKULL_RUS;
 
