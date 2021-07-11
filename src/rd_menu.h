@@ -21,6 +21,7 @@
 #define LEFT_DIR 0
 #define RIGHT_DIR 1
 #define ITEM_HEIGHT 20
+#define ITEM_HEIGHT_SMALL 10
 
 typedef enum
 {
@@ -47,6 +48,7 @@ typedef struct Menu_s
     const int x_rus;
     int itemCount;
     const MenuItem_t* const items;
+    const boolean bigFont;
     void (*drawFunc) (void);
     const struct Menu_s* const prevMenu;
 
@@ -65,6 +67,11 @@ void RD_Menu_InitSliders(char* BigSlider_left_patch,
                          Translation_CR_t Gem_normal_translation,
                          Translation_CR_t Gem_zero_translation,
                          Translation_CR_t Gem_max_translation);
+
+void RD_Menu_InitCursor(char* BigCursor1_patch,
+                        char* BigCursor2_patch,
+                        char* SmallCursor1_patch,
+                        char* SmallCursor2_patch);
 
 /**
  * Increments or decrements 'var' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
@@ -108,5 +115,7 @@ extern void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, int dire
 void RD_Menu_DrawSlider(Menu_t * menu, int y, int width, int value);
 /** [JN] Draw small slider*/
 void RD_Menu_DrawSliderSmall(Menu_t * menu, int y, int width, int value);
+
+void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos);
 
 #endif //RD_MENU_H

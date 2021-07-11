@@ -21,6 +21,10 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
+#define SELECTOR_YOFFSET (-1)
+#define SELECTOR_XOFFSET (-28)
+#define SELECTOR_XOFFSET_SMALL (-14)
+
 static lumpindex_t bigSlider_left_patch;
 static lumpindex_t bigSlider_middle1_patch;
 static lumpindex_t bigSlider_middle2_patch;
@@ -35,6 +39,12 @@ static lumpindex_t smallSlider_gem_patch;
 static Translation_CR_t gem_normal_translation;
 static Translation_CR_t gem_zero_translation;
 static Translation_CR_t gem_max_translation;
+
+static lumpindex_t bigCursor1_patch;
+static lumpindex_t bigCursor2_patch;
+
+static lumpindex_t smallCursor1_patch;
+static lumpindex_t smallCursor2_patch;
 
 extern void (*drawShadowedPatch)(int x, int y, patch_t *patch);
 
@@ -68,6 +78,18 @@ void RD_Menu_InitSliders(char* BigSlider_left_patch,
     gem_normal_translation = Gem_normal_translation;
     gem_zero_translation = Gem_zero_translation;
     gem_max_translation = Gem_max_translation;
+}
+
+void RD_Menu_InitCursor(char* BigCursor1_patch,
+                        char* BigCursor2_patch,
+                        char* SmallCursor1_patch,
+                        char* SmallCursor2_patch)
+{
+    bigCursor1_patch = W_GetNumForName(BigCursor1_patch);
+    bigCursor2_patch = W_GetNumForName(BigCursor2_patch);
+
+    smallCursor1_patch = W_GetNumForName(SmallCursor1_patch);
+    smallCursor2_patch = W_GetNumForName(SmallCursor2_patch);
 }
 
 /**
@@ -249,4 +271,74 @@ void RD_Menu_DrawSliderSmall(Menu_t * menu, int y, int width, int value)
 
     V_DrawPatch(x + value * 8 + wide_delta, y + 7, W_CacheLumpNum(smallSlider_gem_patch, PU_CACHE));
     dp_translation = NULL;
+}
+
+void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
+{
+    int i;
+    int x;
+    int y;
+    const MenuItem_t *item;
+
+    if (menu->drawFunc != NULL)
+    {
+        menu->drawFunc();
+    }
+    x = english_language ? menu->x_eng : menu->x_rus;
+    y = menu->y;
+    item = menu->items;
+    for (i = 0; i < menu->itemCount; i++)
+    {
+        if (item->type != ITT_EMPTY && (english_language ? item->text_eng : item->text_rus))
+        {
+            // [JN] Define where to use big and where small fonts,
+            // and where to use big or small vertical spacing.
+            if (english_language)
+            {
+                if (menu->bigFont)
+                {
+                    RD_M_DrawTextBigENG((char *) item->text_eng, x + wide_delta, y);
+                }
+                else
+                {
+                    RD_M_DrawTextSmallENG((char *) item->text_eng, x + wide_delta, y, CR_NONE);
+                }
+            }
+            else
+            {
+                if (menu->bigFont)
+                {
+                    RD_M_DrawTextBigRUS((char *) item->text_rus, x + wide_delta, y);
+                }
+                else
+                {
+                    RD_M_DrawTextSmallRUS((char *) item->text_rus, x + wide_delta, y, CR_NONE);
+                }
+            }
+        }
+
+        if (menu->bigFont)
+        {
+            y += ITEM_HEIGHT;
+        }
+        else
+        {
+            y += ITEM_HEIGHT_SMALL;
+        }
+
+        item++;
+    }
+
+    if (menu->bigFont)
+    {
+        y = menu->y + (currentItPos * ITEM_HEIGHT) + SELECTOR_YOFFSET;
+        drawShadowedPatch(x + SELECTOR_XOFFSET + wide_delta, y,
+            W_CacheLumpNum(menuTime & 16 ? bigCursor1_patch : bigCursor2_patch, PU_CACHE));
+    }
+    else
+    {
+        y = menu->y + (currentItPos * ITEM_HEIGHT_SMALL) + SELECTOR_YOFFSET;
+        drawShadowedPatch(x + SELECTOR_XOFFSET_SMALL + wide_delta, y,
+            W_CacheLumpNum(menuTime & 8 ? smallCursor1_patch : smallCursor2_patch, PU_CACHE));
+    }
 }

@@ -46,15 +46,8 @@
 #include "rd_menu.h"
 
 // Macros
-
-#define SELECTOR_XOFFSET (-28)
-#define SELECTOR_YOFFSET (-1)
 #define SLOTTEXTLEN     22
 #define ASCII_CURSOR '_'
-
-// [JN] Sizes of small font and small arrow for RD menu
-#define ITEM_HEIGHT_SMALL 10
-#define SELECTOR_XOFFSET_SMALL (-14)
 
 // Private Functions
 
@@ -69,8 +62,6 @@ static void SCSaveGame(intptr_t option);
 static void SCMessages(intptr_t option);
 static void SCInfo(intptr_t option);
 static void DrawMainMenu(void);
-static void DrawEpisodeMenu(void);
-static void DrawSkillMenu(void);
 static void DrawFileSlots(Menu_t * menu);
 static void DrawFilesMenu(void);
 static void MN_DrawInfo(void);
@@ -366,7 +357,7 @@ static MenuItem_t MainItems[] = {
 static Menu_t MainMenu = {
     110, 56,
     103,
-    5, MainItems,
+    5, MainItems, true,
     DrawMainMenu,
     NULL,
     0
@@ -383,8 +374,8 @@ static MenuItem_t EpisodeItems[] = {
 static Menu_t EpisodeMenu = {
     80, 50,
     55,
-    3, EpisodeItems,
-    DrawEpisodeMenu,
+    3, EpisodeItems, true,
+    NULL,
     &MainMenu,
     0
 };
@@ -401,8 +392,8 @@ static MenuItem_t SkillItems[] = {
 static Menu_t SkillMenu = {
     38, 30,
     38,
-    6, SkillItems,
-    DrawSkillMenu,
+    6, SkillItems, true,
+    NULL,
     &EpisodeMenu,
     2
 };
@@ -425,7 +416,7 @@ static MenuItem_t OptionsItems[] = {
 static Menu_t OptionsMenu = {
     81, 31,
     81,
-    8, OptionsItems,
+    8, OptionsItems, true,
     DrawOptionsMenu,
     &MainMenu,
     0
@@ -451,7 +442,7 @@ static MenuItem_t RenderingItems[] = {
 static Menu_t RenderingMenu = {
     36, 42,
     36,
-    10, RenderingItems,
+    10, RenderingItems, false,
     DrawRenderingMenu,
     &OptionsMenu,
     0
@@ -477,7 +468,7 @@ static MenuItem_t DisplayItems[] = {
 static Menu_t DisplayMenu = {
     36, 42,
     36,
-    10, DisplayItems,
+    10, DisplayItems, false,
     DrawDisplayMenu,
     &OptionsMenu,
     0
@@ -506,7 +497,7 @@ static MenuItem_t MessagesItems[] = {
 static Menu_t MessagesMenu = {
     36, 42,
     36,
-    13, MessagesItems,
+    13, MessagesItems, false,
     DrawMessagesMenu,
     &DisplayMenu,
     0
@@ -532,7 +523,7 @@ static MenuItem_t AutomapItems[] = {
 static Menu_t AutomapMenu = {
     78, 42,
     61,
-    10, AutomapItems,
+    10, AutomapItems, false,
     DrawAutomapMenu,
     &DisplayMenu,
     0
@@ -557,7 +548,7 @@ static MenuItem_t SoundItems[] = {
 static Menu_t SoundMenu = {
     36, 42,
     36,
-    9, SoundItems,
+    9, SoundItems, false,
     DrawSoundMenu,
     &OptionsMenu,
     0
@@ -581,7 +572,7 @@ static MenuItem_t SoundSysItems[] = {
 static Menu_t SoundSysMenu = {
     36, 42,
     36,
-    8, SoundSysItems,
+    8, SoundSysItems, false,
     DrawSoundSystemMenu,
     &SoundMenu,
     0
@@ -608,7 +599,7 @@ static MenuItem_t ControlsItems[] = {
 static Menu_t ControlsMenu = {
     36, 42,
     36,
-    11, ControlsItems,
+    11, ControlsItems, false,
     DrawControlsMenu,
     &OptionsMenu,
     0
@@ -638,7 +629,7 @@ static MenuItem_t Gameplay1Items[] = {
 static Menu_t Gameplay1Menu = {
     36, 36,
     36,
-    14, Gameplay1Items,
+    14, Gameplay1Items, false,
     DrawGameplay1Menu,
     &OptionsMenu,
     0
@@ -668,7 +659,7 @@ static MenuItem_t Gameplay2Items[] = {
 static Menu_t Gameplay2Menu = {
     36, 36,
     36,
-    14, Gameplay2Items,
+    14, Gameplay2Items, false,
     DrawGameplay2Menu,
     &OptionsMenu,
     0
@@ -698,7 +689,7 @@ static MenuItem_t Gameplay3Items[] = {
 static Menu_t Gameplay3Menu = {
     36, 36,
     36,
-    14, Gameplay3Items,
+    14, Gameplay3Items, false,
     DrawGameplay3Menu,
     &OptionsMenu,
     0
@@ -731,7 +722,7 @@ static MenuItem_t Level1Items[] = {
 static Menu_t LevelSelectMenu1 = {
     74, 26,
     74,
-    17, Level1Items,
+    17, Level1Items, false,
     DrawLevelSelect1Menu,
     &OptionsMenu,
     0
@@ -764,7 +755,7 @@ static MenuItem_t Level2Items[] = {
 static Menu_t LevelSelectMenu2 = {
     74, 26,
     74,
-    17, Level2Items,
+    17, Level2Items, false,
     DrawLevelSelect2Menu,
     &OptionsMenu,
     0
@@ -796,7 +787,7 @@ static MenuItem_t Level3Items[] = {
 static Menu_t LevelSelectMenu3 = {
     74, 36,
     74,
-    16, Level3Items,
+    16, Level3Items, false,
     DrawLevelSelect3Menu,
     &OptionsMenu,
     0
@@ -817,7 +808,7 @@ static MenuItem_t OptionsItems_Vanilla[] = {
 static Menu_t OptionsMenu_Vanilla = {
     88, 30,
     88,
-    5, OptionsItems_Vanilla,
+    5, OptionsItems_Vanilla, true,
     DrawOptionsMenu_Vanilla,
     &MainMenu,
     0,
@@ -839,7 +830,7 @@ static MenuItem_t Options2Items_Vanilla[] = {
 static Menu_t Options2Menu_Vanilla = {
     90, 20,
     90,
-    6, Options2Items_Vanilla,
+    6, Options2Items_Vanilla, true,
     DrawOptions2Menu_Vanilla,
     &OptionsMenu_Vanilla,
     0
@@ -853,7 +844,7 @@ static MenuItem_t FilesItems[] = {
 static Menu_t FilesMenu = {
     110, 60,
     90,
-    2, FilesItems,
+    2, FilesItems, true,
     DrawFilesMenu,
     &MainMenu,
     0
@@ -871,7 +862,7 @@ static MenuItem_t LoadItems[] = {
 static Menu_t LoadMenu = {
     70, 30,
     70,
-    6, LoadItems,
+    6, LoadItems, true,
     DrawLoadMenu,
     &FilesMenu,
     0
@@ -889,7 +880,7 @@ static MenuItem_t SaveItems[] = {
 static Menu_t SaveMenu = {
     70, 30,
     70,
-    6, SaveItems,
+    6, SaveItems, true,
     DrawSaveMenu,
     &FilesMenu,
     0
@@ -1029,6 +1020,13 @@ void MN_Init(void)
                         CR_GREEN2GRAY_HERETIC,
                         CR_GREEN2RED_HERETIC);
 
+    RD_Menu_InitCursor(// [Dasperal] Big cursor
+                       DEH_String("M_SLCTR1"),
+                       DEH_String("M_SLCTR2"),
+                       // [Dasperal] Small cursor
+                       DEH_String("M_RDGEM1"),
+                       DEH_String("M_RDGEM2"));
+
     menuactive = false;
     SkullBaseLump = W_GetNumForName(DEH_String("M_SKL00"));
 
@@ -1087,12 +1085,7 @@ char *QuitEndMsg_Rus[] = {
 
 void MN_Drawer(void)
 {
-    int i;
-    int x;
-    int y;
-    const MenuItem_t *item;
     char *message;
-    char *selName;
 
     if (menuactive == false)
     {
@@ -1143,96 +1136,7 @@ void MN_Drawer(void)
         {
             BorderNeedRefresh = true;
         }
-        if (CurrentMenu->drawFunc != NULL)
-        {
-            CurrentMenu->drawFunc();
-        }
-        x = english_language ? CurrentMenu->x_eng : CurrentMenu->x_rus;
-        y = CurrentMenu->y;
-        item = CurrentMenu->items;
-        for (i = 0; i < CurrentMenu->itemCount; i++)
-        {
-            if (item->type != ITT_EMPTY && (english_language ? item->text_eng : item->text_rus))
-            {
-                // [JN] Define where to use big and where small fonts,
-                // and where to use big or small vertical spacing.
-                if (english_language)
-                {
-                    if (CurrentMenu == &MainMenu
-                    ||  CurrentMenu == &EpisodeMenu
-                    ||  CurrentMenu == &FilesMenu
-                    ||  CurrentMenu == &SkillMenu
-                    ||  CurrentMenu == &OptionsMenu
-                    ||  CurrentMenu == &OptionsMenu_Vanilla
-                    ||  CurrentMenu == &Options2Menu_Vanilla)
-                    {
-                        RD_M_DrawTextBigENG(DEH_String((char *) item->text_eng), x + wide_delta, y);
-                    }
-                    else
-                    {
-                        RD_M_DrawTextSmallENG(DEH_String((char *) item->text_eng), x + wide_delta, y, CR_NONE);
-                    }
-                }
-                else
-                {
-                    if (CurrentMenu == &MainMenu
-                    ||  CurrentMenu == &EpisodeMenu
-                    ||  CurrentMenu == &FilesMenu
-                    ||  CurrentMenu == &SkillMenu
-                    ||  CurrentMenu == &OptionsMenu
-                    ||  CurrentMenu == &OptionsMenu_Vanilla
-                    ||  CurrentMenu == &Options2Menu_Vanilla)
-                    {
-                        RD_M_DrawTextBigRUS(DEH_String((char *) item->text_rus), x + wide_delta, y);
-                    }
-                    else
-                    {
-                        RD_M_DrawTextSmallRUS(DEH_String((char *) item->text_rus), x + wide_delta, y, CR_NONE);
-                    }
-                }
-            }
-
-            if (CurrentMenu == &MainMenu
-            ||  CurrentMenu == &EpisodeMenu
-            ||  CurrentMenu == &FilesMenu
-            ||  CurrentMenu == &SkillMenu
-            ||  CurrentMenu == &OptionsMenu
-            ||  CurrentMenu == &OptionsMenu_Vanilla
-            ||  CurrentMenu == &Options2Menu_Vanilla)
-            {
-                y += ITEM_HEIGHT;
-            }
-            else
-            {
-                y += ITEM_HEIGHT_SMALL;
-            }
-
-            item++;
-        }
-
-        // [JN] Define where to draw big arrow and where small arrow.
-        if (CurrentMenu == &MainMenu
-        ||  CurrentMenu == &EpisodeMenu
-        ||  CurrentMenu == &FilesMenu
-        ||  CurrentMenu == &LoadMenu
-        ||  CurrentMenu == &SaveMenu
-        ||  CurrentMenu == &SkillMenu
-        ||  CurrentMenu == &OptionsMenu
-        ||  CurrentMenu == &OptionsMenu_Vanilla
-        ||  CurrentMenu == &Options2Menu_Vanilla)
-        {
-            y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT) + SELECTOR_YOFFSET;
-            selName = DEH_String(MenuTime & 16 ? "M_SLCTR1" : "M_SLCTR2");
-            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET + wide_delta, y,
-                                     W_CacheLumpName(selName, PU_CACHE));
-        }
-        else
-        {
-            y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT_SMALL) + SELECTOR_YOFFSET;
-            selName = DEH_String(MenuTime & 8 ? "M_RDGEM1" : "M_RDGEM2");
-            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET_SMALL + wide_delta, y,
-                                     W_CacheLumpName(selName, PU_CACHE));
-        }
+        RD_Menu_DrawMenu(CurrentMenu, MenuTime, CurrentItPos);
     }
 }
 
@@ -1253,28 +1157,6 @@ static void DrawMainMenu(void)
                              W_CacheLumpNum(SkullBaseLump + (17 - frame), PU_CACHE));
     V_DrawShadowedPatchRaven(232 + wide_delta, 10,
                              W_CacheLumpNum(SkullBaseLump + frame, PU_CACHE));
-}
-
-//---------------------------------------------------------------------------
-//
-// PROC DrawEpisodeMenu
-//
-//---------------------------------------------------------------------------
-
-static void DrawEpisodeMenu(void)
-{
-    //FIXME WTF
-}
-
-//---------------------------------------------------------------------------
-//
-// PROC DrawSkillMenu
-//
-//---------------------------------------------------------------------------
-
-static void DrawSkillMenu(void)
-{
-    //FIXME WTF
 }
 
 //---------------------------------------------------------------------------
