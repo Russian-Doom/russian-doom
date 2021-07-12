@@ -241,6 +241,7 @@ void P_SetThingPosition(mobj_t * thing);
 
 extern boolean floatok;         // if true, move would be ok if
 extern fixed_t tmfloorz, tmceilingz;    // within tmfloorz - tmceilingz
+extern mobj_t *BlockingMobj;
 extern boolean PIT_RadiusAttack(mobj_t * thing);
 
 extern line_t *ceilingline;

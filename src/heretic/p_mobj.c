@@ -391,7 +391,29 @@ void P_XYMovement(mobj_t * mo)
         {                       // Blocked move
             if (mo->flags2 & MF2_SLIDE)
             {                   // Try to slide along it
-                P_SlideMove(mo);
+                if (BlockingMobj == NULL || !singleplayer || vanillaparm)
+                {   
+                    // [JN] Slide against wall.
+                    // Always apply this sliding in demos and vanilla mode.
+                    P_SlideMove(mo);
+                }
+                else
+                {
+                    // [JN] Slide against mobj.
+                    // Remove X/Y momentum while moving on solid things.
+                    if (P_TryMove(mo, mo->x, ptryy))
+                    {
+                        mo->momx = 0;
+                    }
+                    else if (P_TryMove(mo, ptryx, mo->y))
+                    {
+                        mo->momy = 0;
+                    }
+                    else
+                    {
+                        mo->momx = mo->momy = 0;
+                    }
+                }
             }
             else if (mo->flags & MF_MISSILE)
             {   // Explode a missile
@@ -816,6 +838,7 @@ void P_MobjThinker(mobj_t * mobj)
     }
 
     // Handle X and Y momentums
+    BlockingMobj = NULL;
     if (mobj->momx || mobj->momy || (mobj->flags & MF_SKULLFLY))
     {
         P_XYMovement(mobj);
@@ -830,7 +853,8 @@ void P_MobjThinker(mobj_t * mobj)
         mobj->z = mobj->floorz + (floating_powerups == 1 ? FloatBobOffsets[(mobj->health++) & 63] :
                                   floating_powerups == 2 ? FloatBobOffsetsHalfed[(mobj->health++) & 63] : 0);
     }
-    else if ((mobj->z != mobj->floorz) || mobj->momz)
+    else if ((mobj->z != mobj->floorz) || mobj->momz 
+    || (BlockingMobj && singleplayer && !vanillaparm))
     {                           // Handle Z momentum and gravity
         if (mobj->flags2 & MF2_PASSMOBJ)
         {
