@@ -258,10 +258,11 @@ void P_XYMovement (mobj_t* mo)
 	    // blocked move
 	    if (mo->player)
 	    {	// try to slide along it
-            if (BlockingMobj == NULL || !singleplayer || vanillaparm)
+            if (BlockingMobj == NULL          // [JN] Mobj is not blocking.
+            || BlockingMobj->health <= 0      // [JN] Allow to slightly bump into falling corpse.
+            || !singleplayer || vanillaparm)  // [JN] Keep demo compatibility.
             {   
-                // [JN] Slide against wall.
-                // Always apply this sliding in demos and vanilla mode.
+                // [JN] Slide movement.
                 P_SlideMove(mo);
             }
             else
