@@ -404,66 +404,53 @@ boolean PIT_CheckThing (mobj_t* thing)
 	return !solid;
     }
 	
-    // [crispy] a solid hanging body will allow sufficiently small things underneath it
-    if (singleplayer && !vanillaparm && over_under && 
-        (thing->flags & (MF_SOLID | MF_SPAWNCEILING)) == (MF_SOLID | MF_SPAWNCEILING) &&
-        tmthing->z + tmthing->height <= thing->z)
+    if (singleplayer && !vanillaparm)
     {
-        tmceilingz = thing->z;
-        return true;
-    }
-
-    // [crispy] allow players to walk over/under shootable objects
-    if (singleplayer && !vanillaparm && over_under &&
-        tmthing->player && thing->flags & MF_SHOOTABLE)
-    {
-        if (tmthing->z >= thing->z + thing->height)
+        if (over_under)
         {
-            // player walks over object
-            tmfloorz = thing->z + thing->height;
-            thing->ceilingz = tmthing->z;
-            return true;
-        }
-        else
-        if (tmthing->z + tmthing->height <= thing->z)
-        {
-            // player walks underneath object
-            tmceilingz = thing->z;
-            thing->floorz = tmthing->z + tmthing->height;
-            return true;
-        }
-
-        // [crispy] check if things are stuck and allow them to move further apart
-        // taken from doomretro/src/p_map.c:319-332
-        if (tmx == tmthing->x && tmy == tmthing->y)
-            unblocking = true;
-        else
-        {
-            if (newdist > olddist)
+            // [crispy] a solid hanging body will allow sufficiently small things underneath it
+            if ((thing->flags & (MF_SOLID | MF_SPAWNCEILING)) == (MF_SOLID | MF_SPAWNCEILING) 
+            && tmthing->z + tmthing->height <= thing->z)
             {
-                unblocking = (tmthing->z < thing->z + thing->height
-                           && tmthing->z + tmthing->height > thing->z);
+                tmceilingz = thing->z;
+                return true;
+            }
+
+            // [crispy] allow players to walk over/under shootable objects
+            if (tmthing->player && thing->flags & MF_SHOOTABLE)
+            {
+                if (tmthing->z >= thing->z + thing->height)
+                {
+                    // player walks over object
+                    tmfloorz = thing->z + thing->height;
+                    thing->ceilingz = tmthing->z;
+                    return true;
+                }
+                else
+                if (tmthing->z + tmthing->height <= thing->z)
+                {
+                    // player walks underneath object
+                    tmceilingz = thing->z;
+                    thing->floorz = tmthing->z + tmthing->height;
+                    return true;
+                }
             }
         }
-    }
-    
-    // [JN] Allow to unblock monsters which are being stuck in each other.
-    if (singleplayer && !vanillaparm
-    && !tmthing->player && thing->flags & MF_SHOOTABLE)
-    {
-        if (tmx == tmthing->x && tmy == tmthing->y)
+        // [crispy] check if things are stuck and allow them to move further apart
+        // taken from doomretro/src/p_map.c:319-332
+        if (!thing->player && thing->health > 0)
         {
-            unblocking = true;
-        }
-        else
-        {
-            if (newdist > olddist)
+            if (tmx == tmthing->x && tmy == tmthing->y)
             {
                 unblocking = true;
             }
-            if (thing->player)
+            else
             {
-                unblocking = false;
+                if (newdist > olddist)
+                {
+                    unblocking = (tmthing->z < thing->z + thing->height &&
+                                  tmthing->z + tmthing->height > thing->z);
+                }
             }
         }
     }
