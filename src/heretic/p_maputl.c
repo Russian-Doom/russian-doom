@@ -436,7 +436,8 @@ boolean P_BlockThingsIterator (int x, int y, boolean(*func) (mobj_t *))
     // [JN] Do not apply following BLOCKMAP fix for explosion radius damage.
     // Otherwise, explosion damage will be multiplied on ammount of BLOCKMAP 
     // blocks object placed in.
-    if (func == PIT_RadiusAttack)
+    // Also do not apply for crusher damage, same reason as above.
+    if (func == PIT_RadiusAttack || func == PIT_ChangeSector)
     {
         return true;
     }
