@@ -46,6 +46,9 @@ typedef struct Menu_s
     const int x_eng;
     int y;
     const int x_rus;
+    const char* const title_eng;
+    const char* const title_rus;
+    const boolean replaceableBigFont;
     int itemCount;
     const MenuItem_t* const items;
     const boolean bigFont;

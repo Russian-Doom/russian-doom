@@ -357,6 +357,7 @@ static MenuItem_t MainItems[] = {
 static Menu_t MainMenu = {
     110, 56,
     103,
+    NULL, NULL, true,
     5, MainItems, true,
     DrawMainMenu,
     NULL,
@@ -374,6 +375,7 @@ static MenuItem_t EpisodeItems[] = {
 static Menu_t EpisodeMenu = {
     80, 50,
     55,
+    NULL, NULL, true,
     3, EpisodeItems, true,
     NULL,
     &MainMenu,
@@ -392,6 +394,7 @@ static MenuItem_t SkillItems[] = {
 static Menu_t SkillMenu = {
     38, 30,
     38,
+    NULL, NULL, true,
     6, SkillItems, true,
     NULL,
     &EpisodeMenu,
@@ -416,6 +419,7 @@ static MenuItem_t OptionsItems[] = {
 static Menu_t OptionsMenu = {
     81, 31,
     81,
+    "OPTIONS", "YFCNHJQRB", false, // НАСТРОЙКИ
     8, OptionsItems, true,
     DrawOptionsMenu,
     &MainMenu,
@@ -442,6 +446,7 @@ static MenuItem_t RenderingItems[] = {
 static Menu_t RenderingMenu = {
     36, 42,
     36,
+    "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
     10, RenderingItems, false,
     DrawRenderingMenu,
     &OptionsMenu,
@@ -468,6 +473,7 @@ static MenuItem_t DisplayItems[] = {
 static Menu_t DisplayMenu = {
     36, 42,
     36,
+    "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
     10, DisplayItems, false,
     DrawDisplayMenu,
     &OptionsMenu,
@@ -497,6 +503,7 @@ static MenuItem_t MessagesItems[] = {
 static Menu_t MessagesMenu = {
     36, 42,
     36,
+    "MESSAGES AND TEXTS", "CJJ,OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
     13, MessagesItems, false,
     DrawMessagesMenu,
     &DisplayMenu,
@@ -523,6 +530,7 @@ static MenuItem_t AutomapItems[] = {
 static Menu_t AutomapMenu = {
     78, 42,
     61,
+    "AUTOMAP AND STATISTICS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
     10, AutomapItems, false,
     DrawAutomapMenu,
     &DisplayMenu,
@@ -548,6 +556,7 @@ static MenuItem_t SoundItems[] = {
 static Menu_t SoundMenu = {
     36, 42,
     36,
+    "SOUND OPTIONS", "YFCNHJQRB PDERF", false, // НАСТРОЙКИ ЗВУКА
     9, SoundItems, false,
     DrawSoundMenu,
     &OptionsMenu,
@@ -572,6 +581,7 @@ static MenuItem_t SoundSysItems[] = {
 static Menu_t SoundSysMenu = {
     36, 42,
     36,
+    "SOUND SYSTEM SETTINGS", "YFCNHJQRB PDERJDJQ CBCNTVS", false, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
     8, SoundSysItems, false,
     DrawSoundSystemMenu,
     &SoundMenu,
@@ -599,6 +609,7 @@ static MenuItem_t ControlsItems[] = {
 static Menu_t ControlsMenu = {
     36, 42,
     36,
+    "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
     11, ControlsItems, false,
     DrawControlsMenu,
     &OptionsMenu,
@@ -629,6 +640,7 @@ static MenuItem_t Gameplay1Items[] = {
 static Menu_t Gameplay1Menu = {
     36, 36,
     36,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay1Items, false,
     DrawGameplay1Menu,
     &OptionsMenu,
@@ -659,6 +671,7 @@ static MenuItem_t Gameplay2Items[] = {
 static Menu_t Gameplay2Menu = {
     36, 36,
     36,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay2Items, false,
     DrawGameplay2Menu,
     &OptionsMenu,
@@ -689,6 +702,7 @@ static MenuItem_t Gameplay3Items[] = {
 static Menu_t Gameplay3Menu = {
     36, 36,
     36,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay3Items, false,
     DrawGameplay3Menu,
     &OptionsMenu,
@@ -722,6 +736,7 @@ static MenuItem_t Level1Items[] = {
 static Menu_t LevelSelectMenu1 = {
     74, 26,
     74,
+    "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level1Items, false,
     DrawLevelSelect1Menu,
     &OptionsMenu,
@@ -755,6 +770,7 @@ static MenuItem_t Level2Items[] = {
 static Menu_t LevelSelectMenu2 = {
     74, 26,
     74,
+    "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level2Items, false,
     DrawLevelSelect2Menu,
     &OptionsMenu,
@@ -787,6 +803,7 @@ static MenuItem_t Level3Items[] = {
 static Menu_t LevelSelectMenu3 = {
     74, 36,
     74,
+    "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     16, Level3Items, false,
     DrawLevelSelect3Menu,
     &OptionsMenu,
@@ -808,6 +825,7 @@ static MenuItem_t OptionsItems_Vanilla[] = {
 static Menu_t OptionsMenu_Vanilla = {
     88, 30,
     88,
+    NULL, NULL, true,
     5, OptionsItems_Vanilla, true,
     DrawOptionsMenu_Vanilla,
     &MainMenu,
@@ -830,6 +848,7 @@ static MenuItem_t Options2Items_Vanilla[] = {
 static Menu_t Options2Menu_Vanilla = {
     90, 20,
     90,
+    NULL, NULL, true,
     6, Options2Items_Vanilla, true,
     DrawOptions2Menu_Vanilla,
     &OptionsMenu_Vanilla,
@@ -844,6 +863,7 @@ static MenuItem_t FilesItems[] = {
 static Menu_t FilesMenu = {
     110, 60,
     90,
+    NULL, NULL, true,
     2, FilesItems, true,
     DrawFilesMenu,
     &MainMenu,
@@ -862,6 +882,7 @@ static MenuItem_t LoadItems[] = {
 static Menu_t LoadMenu = {
     70, 30,
     70,
+    "LOAD GAME", "PFUHEPBNM BUHE", true, // ЗАГРУЗИТЬ ИГРУ
     6, LoadItems, true,
     DrawLoadMenu,
     &FilesMenu,
@@ -880,6 +901,7 @@ static MenuItem_t SaveItems[] = {
 static Menu_t SaveMenu = {
     70, 30,
     70,
+    "SAVE GAME", "CJ[HFYBNM BUHE", true, // СОХРАНИТЬ ИГРУ
     6, SaveItems, true,
     DrawSaveMenu,
     &FilesMenu,
@@ -1182,20 +1204,6 @@ static void DrawFilesMenu(void)
 
 static void DrawLoadMenu(void)
 {
-    static char *title_eng, *title_rus;
-
-    title_eng = DEH_String("LOAD GAME");
-    title_rus = DEH_String("PFUHEPBNM BUHE");   // ЗАГРУЗИТЬ ИГРУ
-
-    if (english_language)
-    {
-        RD_M_DrawTextB(title_eng, 160 - RD_M_TextBWidth(title_eng) / 2 + wide_delta, 7);
-    }
-    else
-    {
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2 + wide_delta, 7);
-    }
-    
     if (!slottextloaded)
     {
         MN_LoadSlotText();
@@ -1211,20 +1219,6 @@ static void DrawLoadMenu(void)
 
 static void DrawSaveMenu(void)
 {
-    static char *title_eng, *title_rus;
-
-    title_eng = DEH_String("SAVE GAME");
-    title_rus = DEH_String("CJ[HFYBNM BUHE");   // СОХРАНИТЬ ИГРУ
-
-    if (english_language)
-    {
-        RD_M_DrawTextB(title_eng, 160 - RD_M_TextBWidth(title_eng) / 2 + wide_delta, 7);
-    }
-    else
-    {
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2 + wide_delta, 7);
-    }
-
     if (!slottextloaded)
     {
         MN_LoadSlotText();
@@ -1297,25 +1291,11 @@ static void DrawFileSlots(Menu_t * menu)
 
 static void DrawOptionsMenu(void)
 {
-    char *title_eng = DEH_String("OPTIONS");
-    char *title_rus = DEH_String("YFCNHJQRB");  // НАСТРОЙКИ
-
     // Sound / Sound System menu background will be drawn.
     sfxbgdraw = true;
 
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
-
-    if (english_language)
-    {
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 7);
-    }
-    else
-    {
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 7);
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1324,20 +1304,11 @@ static void DrawOptionsMenu(void)
 
 static void DrawRenderingMenu(void)
 {
-    char *title_eng = DEH_String("RENDERING OPTIONS");
-    char *title_rus = DEH_String("YFCNHJQRB DBLTJ");  // НАСТРОЙКИ ВИДЕО
-
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 7);
-
         //
         // RENDERING
         //
@@ -1407,12 +1378,6 @@ static void DrawRenderingMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 7);
-
         //
         // РЕНДЕРИНГ
         //
@@ -1564,23 +1529,15 @@ static void M_RD_EndText(intptr_t option)
 
 static void DrawDisplayMenu(void)
 {
-    char *title_eng = DEH_String("DISPLAY OPTIONS");
-    char *title_rus = DEH_String("YFCNHJQRB \'RHFYF");  // НАСТРОЙКИ ЭКРАНА
     char  num[4];
 
     // Draw menu background. Hide it for a moment while changing 
     // screen size, gamma and level brightness in GS_LEVEL game state.
     if (gamestate != GS_LEVEL || (gamestate == GS_LEVEL && menubgwait < I_GetTime()))
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+        V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 7);
-
         //
         // SCREEN, INTERFACE
         //
@@ -1593,12 +1550,6 @@ static void DrawDisplayMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 7);
-
         //
         // ЭКРАН, ИНТЕРФЕЙС
         //
@@ -1699,20 +1650,11 @@ static void M_RD_Detail(intptr_t option)
 
 static void DrawMessagesMenu(void)
 {
-    char *title_eng = DEH_String("MESSAGES AND TEXTS");
-    char *title_rus = DEH_String("CJJ,OTYBZ B NTRCNS");  // СООБЩЕНИЯ И ТЕКСТЫ
-
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 7);
-
         //
         // GENERAL, MISC., COLORS
         //
@@ -1775,12 +1717,6 @@ static void DrawMessagesMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 7);
-
         //
         // GENERAL, MISC., COLORS
         //
@@ -1977,8 +1913,6 @@ void M_RD_Change_Msg_Chat_Color(intptr_t option)
 
 static void DrawAutomapMenu(void)
 {
-    char *title_eng = DEH_String("AUTOMAP AND STATISTICS");
-    char *title_rus = DEH_String("RFHNF B CNFNBCNBRF");  // КАРТА И СТАТИСТИКА
     char  num[4];
 
     M_snprintf(num, 4, "%d", automap_grid_size);
@@ -1988,12 +1922,6 @@ static void DrawAutomapMenu(void)
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 7);
-
         //
         // AUTOMAP, STATISTICS
         //
@@ -2041,12 +1969,6 @@ static void DrawAutomapMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 7);
-
         //
         // КАРТА, СТАТИСТИКА
         //
@@ -2145,22 +2067,14 @@ static void M_RD_AutoMapCoords(intptr_t option)
 
 static void DrawSoundMenu(void)
 {
-    char *title_eng = DEH_String("SOUND OPTIONS");
-    char *title_rus = DEH_String("YFCNHJQRB PDERF");  // НАСТРОЙКИ ЗВУКА
     char  num[4];
 
     // Draw menu background. Don't draw if menu is invoked by pressing F4.
     if (sfxbgdraw)
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+        V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 7);
-
         //
         // VOLUME, CHANNELS, ADVANCED
         //
@@ -2170,12 +2084,6 @@ static void DrawSoundMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 7);
-
         //
         // ГРОМКОСТЬ, ВОСПРОИЗВЕДЕНИЕ, ДОПОЛНИТЕЛЬНО
         //
@@ -2234,21 +2142,12 @@ static void M_RD_SfxChannels(intptr_t option)
 
 static void DrawSoundSystemMenu(void)
 {
-    char *title_eng = DEH_String("SOUND SYSTEM SETTINGS");
-    char *title_rus = DEH_String("YFCNHJQRB PDERJDJQ CBCNTVS");  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
-
     // Draw menu background. Don't draw if menu is invoked by pressing F4.
     if (sfxbgdraw)
-    V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
+        V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 7);
-
         //
         // SOUND SYSTEM
         //
@@ -2332,13 +2231,6 @@ static void DrawSoundSystemMenu(void)
     }
     else
     {
-
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 7);
-
         //
         // ЗВУКВАЯ СИСТЕМА
         //
@@ -2545,8 +2437,6 @@ static void M_RD_MuteInactive(intptr_t option)
 
 static void DrawControlsMenu(void)
 {
-    char *title_eng = DEH_String("CONTROL SETTINGS");
-    char *title_rus = DEH_String("EGHFDKTYBT");  // УПРАВЛЕНИЕ
     char  num[4];
 
     // Draw menu background.
@@ -2554,12 +2444,6 @@ static void DrawControlsMenu(void)
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 7);
-
         //
         // MOVEMENT
         //
@@ -2588,12 +2472,6 @@ static void DrawControlsMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 7);
-
         //
         // ПЕРЕДВИЖЕНИЕ
         //
@@ -2695,19 +2573,11 @@ static void M_RD_Novert(intptr_t option)
 
 static void DrawGameplay1Menu(void)
 {
-    char *title_eng = DEH_String("GAMEPLAY FEATURES");
-    char *title_rus = DEH_String("YFCNHJQRB UTQVGKTZ");  // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2 + wide_delta, 4);
-
         //
         // Subheaders
         //
@@ -2761,11 +2631,6 @@ static void DrawGameplay1Menu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2 + wide_delta, 4);
-
         //
         // ГРАФИКА, ФИЗИКА
         //
@@ -2883,20 +2748,11 @@ static void M_RD_FloatAmplitude(intptr_t option)
 
 static void DrawGameplay2Menu(void)
 {
-    char *title_eng = DEH_String("GAMEPLAY FEATURES");
-    char *title_rus = DEH_String("YFCNHJQRB UTQVGKTZ");  // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 4);
-
         //
         // VISUAL
         //
@@ -2949,11 +2805,6 @@ static void DrawGameplay2Menu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2 + wide_delta, 4);
-
         //
         // СТАТУС-БАР, ВИДЖЕТ БОЕЗАПАСА, ПРИЦЕЛ
         //
@@ -3051,20 +2902,11 @@ static void M_RD_CrossHairScale(intptr_t option)
 
 static void DrawGameplay3Menu(void)
 {
-    char *title_eng = DEH_String("GAMEPLAY FEATURES");
-    char *title_rus = DEH_String("YFCNHJQRB UTQVGKTZ");  // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
     // Draw menu background.
     V_DrawPatchFullScreen(W_CacheLumpName("MENUBG", PU_CACHE), false);
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 4);
-
         //
         // AUDIBLE
         //
@@ -3119,12 +2961,6 @@ static void DrawGameplay3Menu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 4);
-
         //
         // ЗВУК, ТАКТИКА, ГЕЙМПЛЕЙ
         //
@@ -3239,8 +3075,6 @@ static void M_RD_WandStart(intptr_t option)
 
 static void DrawLevelSelect1Menu(void)
 {
-    char *title_eng = DEH_String("LEVEL SELECT");
-    char *title_rus = DEH_String("DS,JH EHJDYZ");  // ВЫБОР УРОВНЯ
     char  num[4];
 
     // Draw menu background.
@@ -3248,12 +3082,6 @@ static void DrawLevelSelect1Menu(void)
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 4);
-
         //
         // PLAYER
         //
@@ -3290,12 +3118,6 @@ static void DrawLevelSelect1Menu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 4);
-
         //
         // ИГРОК
         //
@@ -3450,8 +3272,6 @@ static void M_RD_SelectiveFireMace(intptr_t option)
 
 static void DrawLevelSelect2Menu(void)
 {
-    char *title_eng = DEH_String("LEVEL SELECT");
-    char *title_rus = DEH_String("DS,JH EHJDYZ");  // ВЫБОР УРОВНЯ
     char  num[4];
 
     // Draw menu background.
@@ -3459,12 +3279,6 @@ static void DrawLevelSelect2Menu(void)
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 4);
-
         // Bag of Holding
         RD_M_DrawTextSmallENG(selective_backpack ? "YES" : "NO", 228 + wide_delta, 26,
                               selective_backpack ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
@@ -3501,12 +3315,6 @@ static void DrawLevelSelect2Menu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 4);
-
         // Носильный кошель
         RD_M_DrawTextSmallRUS(selective_backpack ? "LF" : "YTN", 228 + wide_delta, 26,
                               selective_backpack ? CR_WHITE2GREEN_HERETIC : CR_WHITE2RED_HERETIC);
@@ -3667,8 +3475,6 @@ static void M_RD_SelectiveRespawn(intptr_t option)
 
 static void DrawLevelSelect3Menu(void)
 {
-    char *title_eng = DEH_String("LEVEL SELECT");
-    char *title_rus = DEH_String("DS,JH EHJDYZ");  // ВЫБОР УРОВНЯ
     char  num[4];
 
     // Draw menu background.
@@ -3676,19 +3482,11 @@ static void DrawLevelSelect3Menu(void)
 
     if (english_language)
     {
-        // Title
-        RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2
-                                       + wide_delta, 4);
-
         // ARTIFACTS
         RD_M_DrawTextSmallENG(DEH_String("ARTIFACTS"), 74 + wide_delta, 26, CR_WHITE2DARKGOLD_HERETIC);
     }
     else
     {
-        // Title
-        RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2
-                                       + wide_delta, 4);
-
         // АРТЕФАКТЫ
         RD_M_DrawTextSmallRUS(DEH_String("FHNTAFRNS"), 74 + wide_delta, 26, CR_WHITE2DARKGOLD_HERETIC);
     }

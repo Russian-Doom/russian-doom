@@ -286,6 +286,31 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
     }
     x = english_language ? menu->x_eng : menu->x_rus;
     y = menu->y;
+
+    if(english_language)
+    {
+        if(menu->title_eng)
+        {
+            char* title_eng = (char *) menu->title_eng;
+            if(menu->replaceableBigFont)
+            {
+                RD_M_DrawTextB(title_eng, 160 - RD_M_TextBWidth(title_eng) / 2 + wide_delta, 4);
+            }
+            else
+            {
+                RD_M_DrawTextBigENG(title_eng, 160 - RD_M_TextBigENGWidth(title_eng) / 2 + wide_delta, 4);
+            }
+        }
+    }
+    else
+    {
+        if(menu->title_rus)
+        {
+            char* title_rus = (char *) menu->title_rus;
+            RD_M_DrawTextBigRUS(title_rus, 160 - RD_M_TextBigRUSWidth(title_rus) / 2 + wide_delta, 4);
+        }
+    }
+
     item = menu->items;
     for (i = 0; i < menu->itemCount; i++)
     {
@@ -297,7 +322,14 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
             {
                 if (menu->bigFont)
                 {
-                    RD_M_DrawTextBigENG((char *) item->text_eng, x + wide_delta, y);
+                    if(menu->replaceableBigFont)
+                    {
+                        RD_M_DrawTextB((char *) item->text_eng, x + wide_delta, y);
+                    }
+                    else
+                    {
+                        RD_M_DrawTextBigENG((char *) item->text_eng, x + wide_delta, y);
+                    }
                 }
                 else
                 {
