@@ -213,6 +213,7 @@ void P_SetThingPosition (mobj_t* thing);
 extern boolean		floatok;
 extern fixed_t		tmfloorz;
 extern fixed_t		tmceilingz;
+extern mobj_t		*BlockingMobj;
 
 
 extern	line_t*		ceilingline;

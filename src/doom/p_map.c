@@ -73,6 +73,7 @@ line_t*		ceilingline;
 line_t*		spechit[MAXSPECIALCROSS];
 int		numspechit;
 
+mobj_t *BlockingMobj;
 
 
 //
@@ -309,6 +310,8 @@ boolean PIT_CheckThing (mobj_t* thing)
     if (thing == tmthing)
 	return true;
     
+    BlockingMobj = thing;
+
     // check for skulls slamming into things
     if (tmthing->flags & MF_SKULLFLY)
     {
@@ -596,12 +599,17 @@ P_CheckPosition
     yl = (tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS)>>MAPBLOCKSHIFT;
     yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS)>>MAPBLOCKSHIFT;
 
+    BlockingMobj = NULL;
+
     for (bx=xl ; bx<=xh ; bx++)
 	for (by=yl ; by<=yh ; by++)
 	    if (!P_BlockThingsIterator(bx,by,PIT_CheckThing))
 		return false;
     
     // check lines
+
+    BlockingMobj = NULL;
+
     xl = (tmbbox[BOXLEFT] - bmaporgx)>>MAPBLOCKSHIFT;
     xh = (tmbbox[BOXRIGHT] - bmaporgx)>>MAPBLOCKSHIFT;
     yl = (tmbbox[BOXBOTTOM] - bmaporgy)>>MAPBLOCKSHIFT;
