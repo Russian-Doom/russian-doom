@@ -4651,18 +4651,32 @@ boolean MN_Responder(event_t * event)
         }
         else if (charTyped != 0)
         {
-            // Jump to menu item based on first letter: //TODO add support for russian chars and ability to select not only first found item
+            // Jump to menu item based on first letter:
 
-            for (i = 0; i < CurrentMenu->itemCount; i++)
+            for (i = CurrentItPos + 1; i < CurrentMenu->itemCount; i++)
             {
                 const char *textString = english_language ? CurrentMenu->items[i].text_eng
                                                           : CurrentMenu->items[i].text_rus;
                 if (textString)
                 {
-                    if (toupper(charTyped) == toupper(DEH_String((char*) textString)[0]))
+                    if (toupper(charTyped) == toupper(textString[0]))
                     {
                         CurrentItPos = i;
-                        return (true);
+                        return true;
+                    }
+                }
+            }
+
+            for (i = 0; i <= CurrentItPos; i++)
+            {
+                const char *textString = english_language ? CurrentMenu->items[i].text_eng
+                                                          : CurrentMenu->items[i].text_rus;
+                if (textString)
+                {
+                    if (toupper(charTyped) == toupper(textString[0]))
+                    {
+                        CurrentItPos = i;
+                        return true;
                     }
                 }
             }
