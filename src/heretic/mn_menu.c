@@ -62,11 +62,10 @@ static void SCSaveGame(intptr_t option);
 static void SCMessages(intptr_t option);
 static void SCInfo(intptr_t option);
 static void DrawMainMenu(void);
-static void DrawFileSlots(Menu_t * menu);
+static void DrawFileSlots();
 static void DrawFilesMenu(void);
 static void MN_DrawInfo(void);
-static void DrawLoadMenu(void);
-static void DrawSaveMenu(void);
+static void DrawSaveLoadMenu(void);
 static void DrawOptionsMenu(void);
 void MN_LoadSlotText(void);
 
@@ -884,7 +883,7 @@ static Menu_t LoadMenu = {
     70,
     "LOAD GAME", "PFUHEPBNM BUHE", true, // ЗАГРУЗИТЬ ИГРУ
     6, LoadItems, true,
-    DrawLoadMenu,
+    DrawSaveLoadMenu,
     &FilesMenu,
     0
 };
@@ -903,7 +902,7 @@ static Menu_t SaveMenu = {
     70,
     "SAVE GAME", "CJ[HFYBNM BUHE", true, // СОХРАНИТЬ ИГРУ
     6, SaveItems, true,
-    DrawSaveMenu,
+    DrawSaveLoadMenu,
     &FilesMenu,
     0
 };
@@ -1198,32 +1197,17 @@ static void DrawFilesMenu(void)
 
 //---------------------------------------------------------------------------
 //
-// PROC DrawLoadMenu
+// PROC DrawSaveLoadMenu
 //
 //---------------------------------------------------------------------------
 
-static void DrawLoadMenu(void)
+static void DrawSaveLoadMenu(void)
 {
     if (!slottextloaded)
     {
         MN_LoadSlotText();
     }
-    DrawFileSlots(&LoadMenu);
-}
-
-//---------------------------------------------------------------------------
-//
-// PROC DrawSaveMenu
-//
-//---------------------------------------------------------------------------
-
-static void DrawSaveMenu(void)
-{
-    if (!slottextloaded)
-    {
-        MN_LoadSlotText();
-    }
-    DrawFileSlots(&SaveMenu);
+    DrawFileSlots();
 }
 
 //===========================================================================
@@ -1264,14 +1248,14 @@ void MN_LoadSlotText(void)
 //
 //---------------------------------------------------------------------------
 
-static void DrawFileSlots(Menu_t * menu)
+static void DrawFileSlots()
 {
     int i;
     int x;
     int y;
 
-    x = english_language ? menu->x_eng : menu->x_rus;
-    y = menu->y;
+    x = 70; // [Dasperal] SaveMenu and LoadMenu have the same x and the same y
+    y = 30; // so inline them here to eliminate the Menu_t* argument
     for (i = 0; i < 6; i++)
     {
         V_DrawShadowedPatchRaven(x + wide_delta, y,
