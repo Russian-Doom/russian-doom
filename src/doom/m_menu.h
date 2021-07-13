@@ -65,4 +65,6 @@ void M_RD_Define_SBarArmorType1 (void);
 void M_RD_Define_SBarArmorType2 (void);
 void M_RD_Define_SBarArmorType0 (void);
 
+void M_WriteTimeAndFPS (int x, int y, char *string);
+
 #endif    

@@ -158,14 +158,6 @@ static hu_stext_t w_message_system; // [JN] System messages
 static hu_stext_t w_message_chat;   // [JN] Netgame chat
 int message_counter;                // [JN] Un-static for fading
 
-// [JN] Local time widget
-static boolean  message_on_time;
-static hu_stext_t w_message_time;
-
-// [JN] FPS counter
-static boolean  message_on_fps;
-static hu_stext_t w_message_fps;
-
 static boolean headsupactive = false;
 
 
@@ -737,13 +729,6 @@ void HU_Start(void)
 {
     int     i;
     char*   s;
-    boolean wide = aspect_ratio >= 2 && screenblocks > 9;
-    static int widget_delta;
-
-    if (aspect_ratio >= 2)
-    widget_delta = wide_delta * 2;
-    else
-    widget_delta = 0;
 
     if (headsupactive)
     HU_Stop();
@@ -752,8 +737,6 @@ void HU_Start(void)
     message_on = false;
     message_on_secret = false;
     message_on_system = false;
-    message_on_time = true; // [JN] Local time widget
-    message_on_fps = true;  // [JN] FPS counter
     message_dontfuckwithme = false;
     message_nottobefuckedwith = false;
     chat_on = false;
@@ -770,19 +753,6 @@ void HU_Start(void)
     HUlib_initSText(&w_message_system, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, 
                     english_language ? hu_font : hu_font_small_rus,
                     HU_FONTSTART, &message_on_system);
-
-    // [JN] Create the local time widget
-    HUlib_initSText(&w_message_time,
-                    (local_time == 1 ? 282 :
-                     local_time == 2 ? 270 :
-                     local_time == 3 ? 294 :
-                     local_time == 4 ? 282 :
-                     0) + (wide ? widget_delta : 0), 10,
-                     HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_time);
-
-    // [JN] Create the FPS widget
-    HUlib_initSText(&w_message_fps, 278 + (wide ? widget_delta : 0), 20, 
-                    HU_MSGHEIGHT, hu_font_gray, HU_FONTSTART, &message_on_fps);
 
     // create the map title widget
     HUlib_initTextLine(&w_title, HU_TITLEX, (gamemission == jaguar ?
@@ -934,18 +904,6 @@ void HU_Drawer(void)
     HUlib_drawSText(&w_message_secret, msg_secret);
     HUlib_drawSText(&w_message_system, msg_system);
     HUlib_drawSText(&w_message_chat, msg_chat);
-
-    // [JN] Draw local time widget
-    if (local_time)
-    {
-        HUlib_drawSText(&w_message_time, msg_uncolored);
-    }
-
-    // [JN] Draw FPS counter
-    if (show_fps && !vanillaparm)
-    {
-        HUlib_drawSText(&w_message_fps, msg_uncolored);
-    }
 
     HUlib_drawIText(&w_chat);
 
@@ -1158,16 +1116,6 @@ void HU_Erase(void)
     HUlib_eraseSText(&w_message_secret);
     HUlib_eraseSText(&w_message_system);
     HUlib_eraseSText(&w_message_chat);
-    if (local_time)
-    {
-        // [JN] Erase local time widget
-        HUlib_eraseSText(&w_message_time);
-    }
-    if (show_fps && !vanillaparm)
-    {
-        // [JN] Erase FPS counter
-        HUlib_eraseSText(&w_message_fps);
-    }
     HUlib_eraseIText(&w_chat);
     HUlib_eraseTextLine(&w_title);
 }
@@ -1175,31 +1123,6 @@ void HU_Erase(void)
 
 void HU_Ticker(void)
 {
-    time_t t = time(NULL);
-    struct tm *tm = localtime(&t);
-    static char s[64];
-    static char f[64];
-
-    // [JN] Compose the local time widget
-    if (local_time && !vanillaparm)
-    {
-        strftime(s, sizeof(s), 
-                 local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
-                 local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
-                 local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
-                 local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
-                                   "", tm);        // No time
-
-        plr->message_time = (s);
-    }
-
-    // [JN] Compose the FPS widget
-    if (show_fps && !vanillaparm)
-    {
-        M_snprintf(f, sizeof(f), "FPS: %d", real_fps);
-        plr->message_fps = (f);
-    }
-
     // tick down message counter if message is up
     if (message_counter && !--message_counter)
     {
@@ -1282,22 +1205,6 @@ void HU_Ticker(void)
             message_dontfuckwithme = 0;
         }
     } // else message_on = false;
-
-    // [JN] Handling local time widget
-    if (plr->message_time)
-    {
-        HUlib_addMessageToSText(&w_message_time, 0, plr->message_time);
-        plr->message_time = 0;
-        message_on_time = true;
-    }
-
-    // [JN] Handling local time widget
-    if (plr->message_fps)
-    {
-        HUlib_addMessageToSText(&w_message_fps, 0, plr->message_fps);
-        plr->message_fps = 0;
-        message_on_fps = true;
-    }
 
     // check for incoming chat characters
     if (netgame)

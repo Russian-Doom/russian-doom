@@ -338,6 +338,47 @@ void D_ProcessEvents (void)
     }
 }
 
+// -----------------------------------------------------------------------------
+// 
+// [JN] DrawTimeAndFPS
+// Draws time and FPS widgets separatelly from HUD system.
+//
+// -----------------------------------------------------------------------------
+
+static void DrawTimeAndFPS (void)
+{
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    char   s[64], fps[9999];
+    int    f = real_fps;
+    const  boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
+
+    if (!vanillaparm)
+    {
+        if (local_time)
+        {
+            strftime(s, sizeof(s), 
+                     local_time == 1 ? "%I:%M %p" :    // 12-hour (HH:MM designation)
+                     local_time == 2 ? "%I:%M:%S %p" : // 12-hour (HH:MM:SS designation)
+                     local_time == 3 ? "%H:%M" :       // 24-hour (HH:MM)
+                     local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
+                                       "", tm);        // No time
+    
+            M_WriteTimeAndFPS((local_time == 1 ? 282 :
+                               local_time == 2 ? 270 :
+                               local_time == 3 ? 294 :
+                               local_time == 4 ? 282 : 0) 
+                               + (wide_4_3 ? wide_delta : wide_delta*2), 10, s);
+        }
+
+        if (show_fps)
+        {
+            sprintf (fps, "%d", f);
+            M_WriteTimeAndFPS(278 + (wide_4_3 ? wide_delta : wide_delta*2), 20, "FPS:");
+            M_WriteTimeAndFPS(298 + (wide_4_3 ? wide_delta : wide_delta*2), 20, fps);   // [JN] fps digits
+        }
+    }
+}
 
 //
 // D_Display
@@ -545,6 +586,10 @@ void D_Display (void)
 
     // menus go directly to the screen
     M_Drawer ();    // menu is drawn even on top of everything
+
+    // [JN] Draw local time and FPS widgets on top of everything, excluding wipes.
+    DrawTimeAndFPS();
+
     NetUpdate ();   // send out any new accumulation
 
     // normal update
@@ -569,8 +614,6 @@ void D_Display (void)
 
     wipestart = nowtime;
     done = wipe_ScreenWipe(wipe_Melt, 0, 0, screenwidth, SCREENHEIGHT, tics);
-    // [JN] Don't call empty function
-    // I_UpdateNoBlit ();
     M_Drawer ();        // menu is drawn even on top of wipes
     I_FinishUpdate ();  // page flip or blit buffer
     } while (!done);

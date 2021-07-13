@@ -982,6 +982,50 @@ void M_WriteTextSmallCentered_RUS (int y, char *string)
 }
 
 // -----------------------------------------------------------------------------
+// M_WriteTimeAndFPS
+// [JN] Write a time and FPS widget digits using a hu_font_gray.
+// -----------------------------------------------------------------------------
+
+void M_WriteTimeAndFPS (int x, int y, char *string)
+{
+    int    w, c, cx, cy;
+    char  *ch;
+
+    ch = string;
+    cx = x;
+    cy = y;
+
+    while(1)
+    {
+        c = *ch++;
+
+        if (!c)
+        {
+            break;
+        }
+
+        c = toupper(c) - HU_FONTSTART_GRAY;
+
+        if (c < 0 || c >= HU_FONTSIZE_GRAY)
+        {
+            cx += 4;
+            continue;
+        }
+
+        w = SHORT (hu_font_gray[c]->width);
+
+        if (cx + w > origwidth)
+        {
+            break;
+        }
+
+        V_DrawShadowedPatchDoom(cx, cy, hu_font_gray[c]);
+
+        cx += w;
+    }
+}
+
+// -----------------------------------------------------------------------------
 // M_RD_ColorTranslation
 // [JN] Returns a color translation for given variable.
 // -----------------------------------------------------------------------------

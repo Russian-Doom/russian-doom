@@ -123,8 +123,6 @@ typedef struct player_s
     char *message_secret;   // [JN] Revealed secret
     char *message_system;   // [JN] System messages
     char *message_chat;     // [JN] Netgame chat
-    char *message_fps;      // [JN] FPS counter
-    char *message_time;     // [JN] Local time widget
 
     // For screen flashing (red or bright).
     int damagecount;
