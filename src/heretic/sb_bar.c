@@ -435,26 +435,33 @@ static void DrBNumber(signed int val, int x, int y)
 //
 // PROC DrSmallNumber
 //
-// Draws a small two digit number.
+// [JN] Extended to draw a small three digit number.
 //
 //---------------------------------------------------------------------------
 
 static void DrSmallNumber(int val, int x, int y)
 {
+    int oldval = val;
     patch_t *patch;
 
     if (val == 1)
     {
         return;
     }
-    if (val > 9)
+    if (val > 99)
+    {
+        patch = PatchSmNumbers[val / 100];
+        V_DrawPatch(x, y, patch);
+    }
+    val = val % 100;
+    if (val > 9 || oldval > 99)
     {
         patch = PatchSmNumbers[val / 10];
-        V_DrawPatch(x, y, patch);
+        V_DrawPatch(x + 4, y, patch);
     }
     val = val % 10;
     patch = PatchSmNumbers[val];
-    V_DrawPatch(x + 4, y, patch);
+    V_DrawPatch(x + 8, y, patch);
 }
 
 //---------------------------------------------------------------------------
@@ -1096,7 +1103,7 @@ void DrawMainBar(void)
             V_DrawPatch(179 + wide_delta, 160,
                         W_CacheLumpName(DEH_String(patcharti[CPlayer->readyArtifact]),
                                         PU_CACHE));
-            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 201 + wide_delta, 182);
+            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 197 + wide_delta, 182);
         }
         oldarti = CPlayer->readyArtifact;
         oldartiCount = CPlayer->inventory[inv_ptr].count;
@@ -1327,7 +1334,7 @@ void DrawInventoryBar(void)
 
             V_DrawPatch(50 + i * 31 + wide_delta, 160,
                         W_CacheLumpName(patch, PU_CACHE));
-            DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31
+            DrSmallNumber(CPlayer->inventory[x + i].count, 65 + i * 31
                                                               + wide_delta, 182);
         }
     }
@@ -1555,7 +1562,7 @@ void DrawFullScreenStuff(void)
             // [JN] Draw Artifacts
             V_DrawShadowedPatch(238 + (wide_delta * 2), 170,
                                 W_CacheLumpName(patch, PU_CACHE));
-            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 259 + (wide_delta * 2), 191);
+            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 255 + (wide_delta * 2), 191);
         }
 
         if (CPlayer->armorpoints > 0)
@@ -1597,7 +1604,7 @@ void DrawFullScreenStuff(void)
                 patch = DEH_String(patcharti[CPlayer->inventory[x + i].type]);
                 V_DrawPatch(50 + i * 31 + wide_delta, 168,
                             W_CacheLumpName(patch, PU_CACHE));
-                DrSmallNumber(CPlayer->inventory[x + i].count, 69 + i * 31 
+                DrSmallNumber(CPlayer->inventory[x + i].count, 65 + i * 31 
                                                                   + wide_delta, 190);
             }
         }
