@@ -353,8 +353,8 @@ static MenuItem_t MainItems[] = {
 };
 
 static Menu_t MainMenu = {
-    110, 56,
-    103,
+    110, 103,
+    56,
     NULL, NULL, true,
     5, MainItems, true,
     DrawMainMenu,
@@ -371,8 +371,8 @@ static MenuItem_t EpisodeItems[] = {
 };
 
 static Menu_t EpisodeMenu = {
-    80, 50,
-    55,
+    80, 55,
+    50,
     NULL, NULL, true,
     3, EpisodeItems, true,
     NULL,
@@ -390,8 +390,8 @@ static MenuItem_t SkillItems[] = {
 };
 
 static Menu_t SkillMenu = {
-    38, 30,
-    38,
+    38, 38,
+     30,
     NULL, NULL, true,
     6, SkillItems, true,
     NULL,
@@ -415,8 +415,8 @@ static MenuItem_t OptionsItems[] = {
 };
 
 static Menu_t OptionsMenu = {
-    81, 31,
-    81,
+    81, 81,
+    31,
     "OPTIONS", "YFCNHJQRB", false, // НАСТРОЙКИ
     8, OptionsItems, true,
     DrawOptionsMenu,
@@ -442,8 +442,8 @@ static MenuItem_t RenderingItems[] = {
 };
 
 static Menu_t RenderingMenu = {
-    36, 42,
-    36,
+    36, 36,
+    42,
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
     10, RenderingItems, false,
     DrawRenderingMenu,
@@ -469,8 +469,8 @@ static MenuItem_t DisplayItems[] = {
 };
 
 static Menu_t DisplayMenu = {
-    36, 42,
-    36,
+    36, 36,
+    42,
     "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
     10, DisplayItems, false,
     DrawDisplayMenu,
@@ -499,8 +499,8 @@ static MenuItem_t MessagesItems[] = {
 };
 
 static Menu_t MessagesMenu = {
-    36, 42,
-    36,
+    36, 36,
+    42,
     "MESSAGES AND TEXTS", "CJJ,OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
     13, MessagesItems, false,
     DrawMessagesMenu,
@@ -526,8 +526,8 @@ static MenuItem_t AutomapItems[] = {
 };
 
 static Menu_t AutomapMenu = {
-    78, 42,
-    61,
+    78, 61,
+    42,
     "AUTOMAP AND STATISTICS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
     10, AutomapItems, false,
     DrawAutomapMenu,
@@ -552,8 +552,8 @@ static MenuItem_t SoundItems[] = {
 };
 
 static Menu_t SoundMenu = {
-    36, 42,
-    36,
+    36, 36,
+    42,
     "SOUND OPTIONS", "YFCNHJQRB PDERF", false, // НАСТРОЙКИ ЗВУКА
     9, SoundItems, false,
     DrawSoundMenu,
@@ -577,8 +577,8 @@ static MenuItem_t SoundSysItems[] = {
 };
 
 static Menu_t SoundSysMenu = {
-    36, 42,
-    36,
+    36, 36,
+    42,
     "SOUND SYSTEM SETTINGS", "YFCNHJQRB PDERJDJQ CBCNTVS", false, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
     8, SoundSysItems, false,
     DrawSoundSystemMenu,
@@ -605,8 +605,8 @@ static MenuItem_t ControlsItems[] = {
 };
 
 static Menu_t ControlsMenu = {
-    36, 42,
-    36,
+    36, 36,
+    42,
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
     11, ControlsItems, false,
     DrawControlsMenu,
@@ -732,8 +732,8 @@ static MenuItem_t Level1Items[] = {
 };
 
 static Menu_t LevelSelectMenu1 = {
-    74, 26,
-    74,
+    74, 74,
+    26,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level1Items, false,
     DrawLevelSelect1Menu,
@@ -766,8 +766,8 @@ static MenuItem_t Level2Items[] = {
 };
 
 static Menu_t LevelSelectMenu2 = {
-    74, 26,
-    74,
+    74, 74,
+    26,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level2Items, false,
     DrawLevelSelect2Menu,
@@ -799,8 +799,8 @@ static MenuItem_t Level3Items[] = {
 };
 
 static Menu_t LevelSelectMenu3 = {
-    74, 36,
-    74,
+    74, 74,
+    36,
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     16, Level3Items, false,
     DrawLevelSelect3Menu,
@@ -821,8 +821,8 @@ static MenuItem_t OptionsItems_Vanilla[] = {
 };
 
 static Menu_t OptionsMenu_Vanilla = {
-    88, 30,
-    88,
+    88, 88,
+    30,
     NULL, NULL, true,
     5, OptionsItems_Vanilla, true,
     DrawOptionsMenu_Vanilla,
@@ -844,8 +844,8 @@ static MenuItem_t Options2Items_Vanilla[] = {
 };
 
 static Menu_t Options2Menu_Vanilla = {
-    90, 20,
-    90,
+    90, 90,
+    20,
     NULL, NULL, true,
     6, Options2Items_Vanilla, true,
     DrawOptions2Menu_Vanilla,
@@ -859,8 +859,8 @@ static MenuItem_t FilesItems[] = {
 };
 
 static Menu_t FilesMenu = {
-    110, 60,
-    90,
+    110, 90,
+    60,
     NULL, NULL, true,
     2, FilesItems, true,
     DrawFilesMenu,
@@ -878,8 +878,8 @@ static MenuItem_t LoadItems[] = {
 };
 
 static Menu_t LoadMenu = {
-    70, 30,
-    70,
+    70, 70,
+    30,
     "LOAD GAME", "PFUHEPBNM BUHE", true, // ЗАГРУЗИТЬ ИГРУ
     6, LoadItems, true,
     DrawSaveLoadMenu,
@@ -897,8 +897,8 @@ static MenuItem_t SaveItems[] = {
 };
 
 static Menu_t SaveMenu = {
-    70, 30,
-    70,
+    70, 70,
+    30,
     "SAVE GAME", "CJ[HFYBNM BUHE", true, // СОХРАНИТЬ ИГРУ
     6, SaveItems, true,
     DrawSaveLoadMenu,

@@ -71,8 +71,8 @@ typedef struct
 typedef struct Menu_s
 {
     const int x_eng;
-    int y;
     const int x_rus;
+    int y;
     const char* const title_eng;
     const char* const title_rus;
     const boolean replaceableBigFont;
