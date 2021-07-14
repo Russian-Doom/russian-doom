@@ -51,8 +51,6 @@
 
 // Private Functions
 
-static void SetMenu(const Menu_t* menu);
-static boolean SCNetCheck(int option);
 static void SCQuitGame(int option);
 static void SCEpisode(int option);
 static void SCSkill(int option);
@@ -242,10 +240,7 @@ int InfoType;
 // Private Data
 
 static int SkullBaseLump;
-static Menu_t *CurrentMenu;
-static int CurrentItPos;
 static int MenuEpisode;
-static int MenuTime;
 static boolean soundchanged;
 
 boolean askforquit;
@@ -336,9 +331,11 @@ static Menu_t ControlsMenu;
 static Menu_t Gameplay1Menu;
 static Menu_t Gameplay2Menu;
 static Menu_t Gameplay3Menu;
+static const Menu_t* GameplayMenuPages[] = {&Gameplay1Menu, &Gameplay2Menu, &Gameplay3Menu};
 static Menu_t LevelSelectMenu1;
 static Menu_t LevelSelectMenu2;
 static Menu_t LevelSelectMenu3;
+static const Menu_t* LevelSelectMenuPages[] = {&LevelSelectMenu1, &LevelSelectMenu2, &LevelSelectMenu3};
 static Menu_t Options2Menu_Vanilla;
 static Menu_t FilesMenu;
 static Menu_t LoadMenu;
@@ -358,6 +355,7 @@ static Menu_t MainMenu = {
     NULL, NULL, true,
     5, MainItems, true,
     DrawMainMenu,
+    NULL, 0,
     NULL,
     0
 };
@@ -376,6 +374,7 @@ static Menu_t EpisodeMenu = {
     NULL, NULL, true,
     3, EpisodeItems, true,
     NULL,
+    NULL, 0,
     &MainMenu,
     0
 };
@@ -395,6 +394,7 @@ static Menu_t SkillMenu = {
     NULL, NULL, true,
     6, SkillItems, true,
     NULL,
+    NULL, 0,
     &EpisodeMenu,
     2
 };
@@ -420,6 +420,7 @@ static Menu_t OptionsMenu = {
     "OPTIONS", "YFCNHJQRB", false, // НАСТРОЙКИ
     8, OptionsItems, true,
     DrawOptionsMenu,
+    NULL, 0,
     &MainMenu,
     0
 };
@@ -447,6 +448,7 @@ static Menu_t RenderingMenu = {
     "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
     10, RenderingItems, false,
     DrawRenderingMenu,
+    NULL, 0,
     &OptionsMenu,
     0
 };
@@ -474,6 +476,7 @@ static Menu_t DisplayMenu = {
     "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
     10, DisplayItems, false,
     DrawDisplayMenu,
+    NULL, 0,
     &OptionsMenu,
     0
 };
@@ -504,6 +507,7 @@ static Menu_t MessagesMenu = {
     "MESSAGES AND TEXTS", "CJJ,OTYBZ B NTRCNS", false, // СООБЩЕНИЯ И ТЕКСТЫ
     13, MessagesItems, false,
     DrawMessagesMenu,
+    NULL, 0,
     &DisplayMenu,
     0
 };
@@ -531,6 +535,7 @@ static Menu_t AutomapMenu = {
     "AUTOMAP AND STATISTICS", "RFHNF B CNFNBCNBRF", false, // КАРТА И СТАТИСТИКА
     10, AutomapItems, false,
     DrawAutomapMenu,
+    NULL, 0,
     &DisplayMenu,
     0
 };
@@ -557,6 +562,7 @@ static Menu_t SoundMenu = {
     "SOUND OPTIONS", "YFCNHJQRB PDERF", false, // НАСТРОЙКИ ЗВУКА
     9, SoundItems, false,
     DrawSoundMenu,
+    NULL, 0,
     &OptionsMenu,
     0
 };
@@ -582,6 +588,7 @@ static Menu_t SoundSysMenu = {
     "SOUND SYSTEM SETTINGS", "YFCNHJQRB PDERJDJQ CBCNTVS", false, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
     8, SoundSysItems, false,
     DrawSoundSystemMenu,
+    NULL, 0,
     &SoundMenu,
     0
 };
@@ -610,6 +617,7 @@ static Menu_t ControlsMenu = {
     "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
     11, ControlsItems, false,
     DrawControlsMenu,
+    NULL, 0,
     &OptionsMenu,
     0
 };
@@ -641,6 +649,7 @@ static Menu_t Gameplay1Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay1Items, false,
     DrawGameplay1Menu,
+    GameplayMenuPages, 3,
     &OptionsMenu,
     0
 };
@@ -672,6 +681,7 @@ static Menu_t Gameplay2Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay2Items, false,
     DrawGameplay2Menu,
+    GameplayMenuPages, 3,
     &OptionsMenu,
     0
 };
@@ -703,6 +713,7 @@ static Menu_t Gameplay3Menu = {
     "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
     14, Gameplay3Items, false,
     DrawGameplay3Menu,
+    GameplayMenuPages, 3,
     &OptionsMenu,
     0
 };
@@ -737,6 +748,7 @@ static Menu_t LevelSelectMenu1 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level1Items, false,
     DrawLevelSelect1Menu,
+    LevelSelectMenuPages, 3,
     &OptionsMenu,
     0
 };
@@ -771,6 +783,7 @@ static Menu_t LevelSelectMenu2 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     17, Level2Items, false,
     DrawLevelSelect2Menu,
+    LevelSelectMenuPages, 3,
     &OptionsMenu,
     0
 };
@@ -804,6 +817,7 @@ static Menu_t LevelSelectMenu3 = {
     "LEVEL SELECT", "DS,JH EHJDYZ", false, // ВЫБОР УРОВНЯ
     16, Level3Items, false,
     DrawLevelSelect3Menu,
+    LevelSelectMenuPages, 3,
     &OptionsMenu,
     0
 };
@@ -826,6 +840,7 @@ static Menu_t OptionsMenu_Vanilla = {
     NULL, NULL, true,
     5, OptionsItems_Vanilla, true,
     DrawOptionsMenu_Vanilla,
+    NULL, 0,
     &MainMenu,
     0,
 };
@@ -849,6 +864,7 @@ static Menu_t Options2Menu_Vanilla = {
     NULL, NULL, true,
     6, Options2Items_Vanilla, true,
     DrawOptions2Menu_Vanilla,
+    NULL, 0,
     &OptionsMenu_Vanilla,
     0
 };
@@ -864,6 +880,7 @@ static Menu_t FilesMenu = {
     NULL, NULL, true,
     2, FilesItems, true,
     DrawFilesMenu,
+    NULL, 0,
     &MainMenu,
     0
 };
@@ -883,6 +900,7 @@ static Menu_t LoadMenu = {
     "LOAD GAME", "PFUHEPBNM BUHE", true, // ЗАГРУЗИТЬ ИГРУ
     6, LoadItems, true,
     DrawSaveLoadMenu,
+    NULL, 0,
     &FilesMenu,
     0
 };
@@ -902,6 +920,7 @@ static Menu_t SaveMenu = {
     "SAVE GAME", "CJ[HFYBNM BUHE", true, // СОХРАНИТЬ ИГРУ
     6, SaveItems, true,
     DrawSaveLoadMenu,
+    NULL, 0,
     &FilesMenu,
     0
 };
@@ -3803,7 +3822,7 @@ static void M_RD_ChangeLanguage(Direction_t direction)
 //
 //---------------------------------------------------------------------------
 
-static boolean SCNetCheck(int option)
+boolean SCNetCheck(int option)
 {
     if (!netgame)
     {                           // okay to go into the menu
@@ -4005,7 +4024,6 @@ boolean MN_Responder(event_t * event)
 {
     int charTyped;
     int key;
-    int i;
     int mousewait = 0;
     MenuItem_t *item;
     extern void D_StartTitle(void);
@@ -4415,7 +4433,7 @@ boolean MN_Responder(event_t * event)
                                                   "PLAYPAL",
                                                   PU_CACHE));
 
-            P_SetMessage(&players[consoleplayer], english_language ? 
+            P_SetMessage(&players[consoleplayer], english_language ?
                                                   GammaText[usegamma] :
                                                   GammaText_Rus[usegamma],
                                                   msg_system, false);
@@ -4446,225 +4464,7 @@ boolean MN_Responder(event_t * event)
     }
     if (!FileMenuKeySteal)
     {
-        item = (MenuItem_t*) &CurrentMenu->items[CurrentItPos];
-
-        if (key == key_menu_down)            // Next menu item
-        {
-            do
-            {
-                if (CurrentItPos + 1 > CurrentMenu->itemCount - 1)
-                {
-                    CurrentItPos = 0;
-                }
-                else
-                {
-                    CurrentItPos++;
-                }
-            }
-            while (CurrentMenu->items[CurrentItPos].type == ITT_EMPTY);
-            S_StartSound(NULL, sfx_switch);
-            return (true);
-        }
-        else if (key == key_menu_up)         // Previous menu item
-        {
-            do
-            {
-                if (CurrentItPos == 0)
-                {
-                    CurrentItPos = CurrentMenu->itemCount - 1;
-                }
-                else
-                {
-                    CurrentItPos--;
-                }
-            }
-            while (CurrentMenu->items[CurrentItPos].type == ITT_EMPTY);
-            S_StartSound(NULL, sfx_switch);
-            return (true);
-        }
-        else if (key == key_menu_left)       // Slider left
-        {
-            if (item->type == ITT_LRFUNC && item->pointer != NULL)
-            {
-                ((void (*) (Direction_t direction)) item->pointer)(LEFT_DIR);
-                S_StartSound(NULL, sfx_keyup);
-            }
-            return (true);
-        }
-        else if (key == key_menu_right)      // Slider right
-        {
-            if (item->type == ITT_LRFUNC && item->pointer != NULL)
-            {
-                ((void (*) (Direction_t direction)) item->pointer)(RIGHT_DIR);
-                S_StartSound(NULL, sfx_keyup);
-            }
-            return (true);
-        }
-        else if (key == key_menu_forward)    // Activate item (enter)
-        {
-            if (item->type == ITT_SETMENU)
-            {
-                SetMenu((Menu_t*) item->pointer);
-            }
-            if (item->type == ITT_SETMENU_NONET)
-            {
-                if (SCNetCheck(item->option))
-                {
-                    SetMenu((Menu_t*) item->pointer);
-                }
-            }
-            else if (item->pointer != NULL)
-            {
-                CurrentMenu->lastOn = CurrentItPos;
-                if (item->type == ITT_LRFUNC)
-                {
-                    ((void (*) (Direction_t direction)) item->pointer)(RIGHT_DIR);
-                }
-                else if (item->type == ITT_EFUNC)
-                {
-                    ((void (*) (int option)) item->pointer)(item->option);
-                }
-            }
-            S_StartSound(NULL, sfx_dorcls);
-            return (true);
-        }
-        else if (key == key_menu_activate)     // Toggle menu
-        {
-            MN_DeactivateMenu();
-            return (true);
-        }
-        else if (key == key_menu_back)         // Go back to previous menu
-        {
-            S_StartSound(NULL, sfx_switch);
-            if (CurrentMenu->prevMenu == NULL)
-            {
-                MN_DeactivateMenu();
-            }
-            else
-            {
-                SetMenu(CurrentMenu->prevMenu);
-            }
-            return (true);
-        }
-        // [JN] Scroll menus by PgUp/PgDn keys
-        else if (key == KEY_PGUP)
-        {
-            // Gameplay features
-            if (CurrentMenu == &Gameplay1Menu)
-            {
-                SetMenu(&Gameplay3Menu);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-            if (CurrentMenu == &Gameplay2Menu)
-            {
-                SetMenu(&Gameplay1Menu);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-            if (CurrentMenu == &Gameplay3Menu)
-            {
-                SetMenu(&Gameplay2Menu);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-
-            // Level select
-            if (CurrentMenu == &LevelSelectMenu1)
-            {
-                SetMenu(&LevelSelectMenu3);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-            if (CurrentMenu == &LevelSelectMenu2)
-            {
-                SetMenu(&LevelSelectMenu1);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-            if (CurrentMenu == &LevelSelectMenu3)
-            {
-                SetMenu(&LevelSelectMenu2);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-        }
-        else if (key == KEY_PGDN)
-        {
-            // Gameplay features
-            if (CurrentMenu == &Gameplay1Menu)
-            {
-                SetMenu(&Gameplay2Menu);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-            if (CurrentMenu == &Gameplay2Menu)
-            {
-                SetMenu(&Gameplay3Menu);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-            if (CurrentMenu == &Gameplay3Menu)
-            {
-                SetMenu(&Gameplay1Menu);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-
-            // Level select
-            if (CurrentMenu == &LevelSelectMenu1)
-            {
-                SetMenu(&LevelSelectMenu2);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-            if (CurrentMenu == &LevelSelectMenu2)
-            {
-                SetMenu(&LevelSelectMenu3);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-            if (CurrentMenu == &LevelSelectMenu3)
-            {
-                SetMenu(&LevelSelectMenu1);
-                S_StartSound(NULL,sfx_dorcls);
-                return true;
-            }
-        }
-        else if (charTyped != 0)
-        {
-            // Jump to menu item based on first letter:
-
-            for (i = CurrentItPos + 1; i < CurrentMenu->itemCount; i++)
-            {
-                const char *textString = english_language ? CurrentMenu->items[i].text_eng
-                                                          : CurrentMenu->items[i].text_rus;
-                if (textString)
-                {
-                    if (toupper(charTyped) == toupper(textString[0]))
-                    {
-                        CurrentItPos = i;
-                        return true;
-                    }
-                }
-            }
-
-            for (i = 0; i <= CurrentItPos; i++)
-            {
-                const char *textString = english_language ? CurrentMenu->items[i].text_eng
-                                                          : CurrentMenu->items[i].text_rus;
-                if (textString)
-                {
-                    if (toupper(charTyped) == toupper(textString[0]))
-                    {
-                        CurrentItPos = i;
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return (false);
+        return RD_Menu_Responder(key, charTyped);
     }
     else
     {
@@ -4701,11 +4501,11 @@ boolean MN_Responder(event_t * event)
             CurrentMenu->lastOn = CurrentItPos;
             if (item->type == ITT_EFUNC)
             {
-                ((void (*) (int option)) item->pointer)(item->option);
+                ((void (*) (int)) item->pointer)(item->option);
             }
             return (true);
         }
-        if (slotptr < SLOTTEXTLEN && key != KEY_BACKSPACE)
+        if (slotptr < SLOTTEXTLEN)
         {
             if (isalpha(charTyped))
             {
@@ -4747,7 +4547,6 @@ boolean MN_Responder(event_t * event)
         }
         return (true);
     }
-    return (false);
 }
 
 //---------------------------------------------------------------------------
@@ -4890,14 +4689,13 @@ void MN_DrawInfo(void)
     }
 }
 
-
 //---------------------------------------------------------------------------
 //
 // PROC SetMenu
 //
 //---------------------------------------------------------------------------
 
-static void SetMenu(const Menu_t* const menu)
+void SetMenu(const Menu_t* const menu)
 {
     CurrentMenu->lastOn = CurrentItPos;
     CurrentMenu = (Menu_t*) menu;
@@ -4910,5 +4708,23 @@ static void SetMenu(const Menu_t* const menu)
         {
             CurrentMenu = &OptionsMenu_Vanilla;
         }
+    }
+}
+
+void RD_Menu_StartSound(MenuSound_t sound)
+{
+    switch (sound)
+    {
+        case MENU_SOUND_CURSOR_MOVE:
+            S_StartSound(NULL, sfx_switch);
+            break;
+        case MENU_SOUND_SLIDER_MOVE:
+            S_StartSound(NULL, sfx_keyup);
+            break;
+        case MENU_SOUND_CLICK:
+            S_StartSound(NULL, sfx_dorcls);
+            break;
+        default:
+            break;
     }
 }

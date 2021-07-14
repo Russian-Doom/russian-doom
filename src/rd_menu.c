@@ -12,10 +12,13 @@
 // GNU General Public License for more details.
 //
 
+#include <ctype.h>
 #include "rd_menu.h"
 
+#include "doomkeys.h"
 #include "i_video.h"
 #include "jn.h"
+#include "m_controls.h"
 #include "v_patch.h"
 #include "v_video.h"
 #include "w_wad.h"
@@ -45,6 +48,10 @@ static lumpindex_t bigCursor2_patch;
 
 static lumpindex_t smallCursor1_patch;
 static lumpindex_t smallCursor2_patch;
+
+Menu_t *CurrentMenu;
+int CurrentItPos;
+int MenuTime;
 
 extern void (*drawShadowedPatch)(int x, int y, patch_t *patch);
 
@@ -373,4 +380,189 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
         drawShadowedPatch(x + SELECTOR_XOFFSET_SMALL + wide_delta, y,
             W_CacheLumpNum(menuTime & 8 ? smallCursor1_patch : smallCursor2_patch, PU_CACHE));
     }
+}
+
+extern void MN_ActivateMenu(void);
+extern void MN_DeactivateMenu(void);
+
+boolean RD_Menu_Responder(int key, int charTyped)
+{
+    int i;
+    MenuItem_t *item;
+
+    item = (MenuItem_t *) &CurrentMenu->items[CurrentItPos];
+
+    if (key == key_menu_down)            // Next menu item
+    {
+        do
+        {
+            if (CurrentItPos + 1 > CurrentMenu->itemCount - 1)
+            {
+                CurrentItPos = 0;
+            }
+            else
+            {
+                CurrentItPos++;
+            }
+        } while (CurrentMenu->items[CurrentItPos].type == ITT_EMPTY);
+        RD_Menu_StartSound(MENU_SOUND_CURSOR_MOVE);
+        return true;
+    }
+    else if (key == key_menu_up)         // Previous menu item
+    {
+        do
+        {
+            if (CurrentItPos == 0)
+            {
+                CurrentItPos = CurrentMenu->itemCount - 1;
+            }
+            else
+            {
+                CurrentItPos--;
+            }
+        } while (CurrentMenu->items[CurrentItPos].type == ITT_EMPTY);
+        RD_Menu_StartSound(MENU_SOUND_CURSOR_MOVE);
+        return true;
+    }
+    else if (key == key_menu_left)       // Slider left
+    {
+        if (item->type == ITT_LRFUNC && item->pointer != NULL)
+        {
+            ((void (*)(Direction_t)) item->pointer)(LEFT_DIR);
+            RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+        }
+        return true;
+    }
+    else if (key == key_menu_right)      // Slider right
+    {
+        if (item->type == ITT_LRFUNC && item->pointer != NULL)
+        {
+            ((void (*)(Direction_t)) item->pointer)(RIGHT_DIR);
+            RD_Menu_StartSound(MENU_SOUND_SLIDER_MOVE);
+        }
+        return true;
+    }
+    else if (key == key_menu_forward)    // Activate item (enter)
+    {
+        if (item->type == ITT_SETMENU)
+        {
+            SetMenu((Menu_t *) item->pointer);
+        }
+        if (item->type == ITT_SETMENU_NONET)
+        {
+            if (SCNetCheck(item->option))
+            {
+                SetMenu((Menu_t *) item->pointer);
+            }
+        }
+        else if (item->pointer != NULL)
+        {
+            CurrentMenu->lastOn = CurrentItPos;
+            if (item->type == ITT_LRFUNC)
+            {
+                ((void (*)(Direction_t)) item->pointer)(RIGHT_DIR);
+            }
+            else if (item->type == ITT_EFUNC)
+            {
+                ((void (*)(int)) item->pointer)(item->option);
+            }
+        }
+        RD_Menu_StartSound(MENU_SOUND_CLICK);
+        return true;
+    }
+    else if (key == key_menu_activate)     // Toggle menu
+    {
+        MN_DeactivateMenu();
+        return true;
+    }
+    else if (key == key_menu_back)         // Go back to previous menu
+    {
+        RD_Menu_StartSound(MENU_SOUND_CURSOR_MOVE);
+        if (CurrentMenu->prevMenu == NULL)
+        {
+            MN_DeactivateMenu();
+        }
+        else
+        {
+            SetMenu(CurrentMenu->prevMenu);
+        }
+        return true;
+    }
+    // [JN] Scroll menus by PgUp/PgDn keys
+    else if (key == KEY_PGUP)
+    {
+        if (CurrentMenu->pagesArray != NULL)
+        {
+            int j;
+            for (j = 0; j < CurrentMenu->pageCount; ++j)
+            {
+                if(CurrentMenu->pagesArray[j] == CurrentMenu)
+                {
+                    j--;
+                    if(j < 0)
+                        j = CurrentMenu->pageCount - 1;
+                    break;
+                }
+            }
+
+            SetMenu(CurrentMenu->pagesArray[j]);
+            RD_Menu_StartSound(MENU_SOUND_CLICK);
+            return true;
+        }
+    }
+    else if (key == KEY_PGDN)
+    {
+        if (CurrentMenu->pagesArray != NULL)
+        {
+            int j;
+            for (j = 0; j < CurrentMenu->pageCount; ++j)
+            {
+                if(CurrentMenu->pagesArray[j] == CurrentMenu)
+                {
+                    j++;
+                    if(j >= CurrentMenu->pageCount)
+                        j = 0;
+                    break;
+                }
+            }
+
+            SetMenu(CurrentMenu->pagesArray[j]);
+            RD_Menu_StartSound(MENU_SOUND_CLICK);
+            return true;
+        }
+    }
+    else if (charTyped != 0)
+    {
+        // Jump to menu item based on first letter:
+
+        for (i = CurrentItPos + 1; i < CurrentMenu->itemCount; i++)
+        {
+            const char *textString = english_language ? CurrentMenu->items[i].text_eng
+                                                      : CurrentMenu->items[i].text_rus;
+            if (textString)
+            {
+                if (toupper(charTyped) == toupper(textString[0]))
+                {
+                    CurrentItPos = i;
+                    return true;
+                }
+            }
+        }
+
+        for (i = 0; i <= CurrentItPos; i++)
+        {
+            const char *textString = english_language ? CurrentMenu->items[i].text_eng
+                                                      : CurrentMenu->items[i].text_rus;
+            if (textString)
+            {
+                if (toupper(charTyped) == toupper(textString[0]))
+                {
+                    CurrentItPos = i;
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
