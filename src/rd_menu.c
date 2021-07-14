@@ -96,7 +96,7 @@ void RD_Menu_InitCursor(char* BigCursor1_patch,
  * Increments or decrements 'var' depending on 'direction'. LEFT_DIR = decrement, RIGHT_DIR = increment.
  * If value of var exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range
  */
-inline void RD_Menu_SpinInt(int* var, int minValue, int maxValue, int direction)
+inline void RD_Menu_SpinInt(int* var, int minValue, int maxValue, Direction_t direction)
 {
     RD_Menu_SpinInt_Step(var, minValue, maxValue, 1, direction);
 }
@@ -105,7 +105,7 @@ inline void RD_Menu_SpinInt(int* var, int minValue, int maxValue, int direction)
  * Increments or decrements 'var' depending on 'direction' by 'step'. LEFT_DIR = decrement, RIGHT_DIR = increment.
  * If value of var exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range
  */
-inline void RD_Menu_SpinInt_Step(int* var, int minValue, int maxValue, int step, int direction)
+inline void RD_Menu_SpinInt_Step(int* var, int minValue, int maxValue, int step, Direction_t direction)
 {
     switch (direction)
     {
@@ -127,7 +127,7 @@ inline void RD_Menu_SpinInt_Step(int* var, int minValue, int maxValue, int step,
  * Increments or decrements 'var' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
  * Value can not exit range specified by 'minValue' and 'maxValue'
  */
-inline void RD_Menu_SlideInt(int* var, int minValue, int maxValue, int direction)
+inline void RD_Menu_SlideInt(int* var, int minValue, int maxValue, Direction_t direction)
 {
     RD_Menu_SlideInt_Step(var, minValue, maxValue, 1, direction);
 }
@@ -136,7 +136,7 @@ inline void RD_Menu_SlideInt(int* var, int minValue, int maxValue, int direction
  * Increments or decrements 'var' by 'step' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
  * Value can not exit range specified by 'minValue' and 'maxValue'
  */
-inline void RD_Menu_SlideInt_Step(int* var, int minValue, int maxValue, int step, int direction)
+inline void RD_Menu_SlideInt_Step(int* var, int minValue, int maxValue, int step, Direction_t direction)
 {
     switch (direction)
     {
@@ -156,7 +156,7 @@ inline void RD_Menu_SlideInt_Step(int* var, int minValue, int maxValue, int step
  * Increments or decrements 'var' by 'step' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.
  * Value can not exit range specified by 'minValue' and 'maxValue'
  */
-inline void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, float step, int direction)
+inline void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, float step, Direction_t direction)
 {
     switch (direction)
     {
@@ -176,7 +176,7 @@ inline void RD_Menu_SlideFloat_Step(float* var, float minValue, float maxValue, 
  * Shifts value of 'var' by 1 in 'direction', LEFT_DIR = left, RIGHT_DIR = right.
  * If value of 'var' exits range specified by 'minValue' and 'maxValue' then it will wrap to other end of the range
  */
-inline void RD_Menu_ShiftSpinInt(int* var, int minValue, int maxValue, int direction)
+inline void RD_Menu_ShiftSpinInt(int* var, int minValue, int maxValue, Direction_t direction)
 {
     switch (direction)
     {
@@ -198,7 +198,7 @@ inline void RD_Menu_ShiftSpinInt(int* var, int minValue, int maxValue, int direc
  * Shifts value of 'var' by 1 in 'direction', LEFT_DIR = left, RIGHT_DIR = right.
  * Value can not exit range specified by 'minValue' and 'maxValue'
  */
-inline void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, int direction)
+inline void RD_Menu_ShiftSlideInt(int* var, int minValue, int maxValue, Direction_t direction)
 {
     switch (direction)
     {

@@ -1799,7 +1799,7 @@ void G_DoNewGame(void)
 ================================================================================
 */
 
-void G_DoSelectiveGame(intptr_t option)
+void G_DoSelectiveGame(int option)
 {
     int i;
     player_t *p = &players[consoleplayer];

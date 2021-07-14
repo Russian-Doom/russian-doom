@@ -52,15 +52,14 @@
 // Private Functions
 
 static void SetMenu(const Menu_t* menu);
-static void SCNetCheck_NG_LG(Menu_t* menu);
 static boolean SCNetCheck(int option);
-static void SCQuitGame(intptr_t option);
-static void SCEpisode(intptr_t option);
-static void SCSkill(intptr_t option);
-static void SCLoadGame(intptr_t option);
-static void SCSaveGame(intptr_t option);
-static void SCMessages(intptr_t option);
-static void SCInfo(intptr_t option);
+static void SCQuitGame(int option);
+static void SCEpisode(int option);
+static void SCSkill(int option);
+static void SCLoadGame(int option);
+static void SCSaveGame(int option);
+static void SCMessages(int option);
+static void SCInfo(int option);
 static void DrawMainMenu(void);
 static void DrawFileSlots();
 static void DrawFilesMenu(void);
@@ -75,165 +74,165 @@ void MN_LoadSlotText(void);
 
 // Rendering
 static void DrawRenderingMenu(void);
-static void M_RD_Change_Widescreen(intptr_t option);
-static void M_RD_Change_VSync(intptr_t option);
-static void M_RD_Uncapped(intptr_t option);
-static void M_RD_FPScounter(intptr_t option);
-static void M_RD_Smoothing(intptr_t option);
-static void M_RD_PorchFlashing(intptr_t option);
-static void M_RD_Renderer(intptr_t option);
-static void M_RD_Screenshots(intptr_t option);
-static void M_RD_EndText(intptr_t option);
+static void M_RD_Change_Widescreen(Direction_t direction);
+static void M_RD_Change_VSync(Direction_t direction);
+static void M_RD_Uncapped(Direction_t direction);
+static void M_RD_FPScounter(Direction_t direction);
+static void M_RD_Smoothing(Direction_t direction);
+static void M_RD_PorchFlashing(Direction_t direction);
+static void M_RD_Renderer(Direction_t direction);
+static void M_RD_Screenshots(Direction_t direction);
+static void M_RD_EndText(Direction_t direction);
 
 // Display
 static void DrawDisplayMenu(void);
-static void M_RD_ScreenSize(intptr_t option);
-static void M_RD_Gamma(intptr_t option);
-static void M_RD_LevelBrightness(intptr_t option);
-static void M_RD_Detail(intptr_t option);
+static void M_RD_ScreenSize(Direction_t direction);
+static void M_RD_Gamma(Direction_t direction);
+static void M_RD_LevelBrightness(Direction_t direction);
+static void M_RD_Detail(Direction_t direction);
 
 // Messages and Texts
 static void DrawMessagesMenu(void);
-static void M_RD_Messages(intptr_t option);
-static void M_RD_MessagesAlignment(intptr_t option);
-static void M_RD_MessagesTimeout(intptr_t option);
-static void M_RD_MessagesFade(intptr_t option);
-static void M_RD_ShadowedText(intptr_t option);
-static void M_RD_LocalTime(intptr_t option);
-static void M_RD_Change_Msg_Pickup_Color(intptr_t option);
-static void M_RD_Change_Msg_Secret_Color(intptr_t option);
-static void M_RD_Change_Msg_System_Color(intptr_t option);
-static void M_RD_Change_Msg_Chat_Color(intptr_t option);
+static void M_RD_Messages(Direction_t direction);
+static void M_RD_MessagesAlignment(Direction_t direction);
+static void M_RD_MessagesTimeout(Direction_t direction);
+static void M_RD_MessagesFade(Direction_t direction);
+static void M_RD_ShadowedText(Direction_t direction);
+static void M_RD_LocalTime(Direction_t direction);
+static void M_RD_Change_Msg_Pickup_Color(Direction_t direction);
+static void M_RD_Change_Msg_Secret_Color(Direction_t direction);
+static void M_RD_Change_Msg_System_Color(Direction_t direction);
+static void M_RD_Change_Msg_Chat_Color(Direction_t direction);
 
 // Automap
 static void DrawAutomapMenu(void);
-static void M_RD_AutoMapOverlay(intptr_t option);
-static void M_RD_AutoMapRotate(intptr_t option);
-static void M_RD_AutoMapFollow(intptr_t option);
-static void M_RD_AutoMapGrid(intptr_t option);
-static void M_RD_AutoMapGridSize(intptr_t option);
-static void M_RD_AutoMapStats(intptr_t option);
-static void M_RD_AutoMapLevTime(intptr_t option);
-static void M_RD_AutoMapTotTime(intptr_t option);
-static void M_RD_AutoMapCoords(intptr_t option);
+static void M_RD_AutoMapOverlay(Direction_t direction);
+static void M_RD_AutoMapRotate(Direction_t direction);
+static void M_RD_AutoMapFollow(Direction_t direction);
+static void M_RD_AutoMapGrid(Direction_t direction);
+static void M_RD_AutoMapGridSize(Direction_t direction);
+static void M_RD_AutoMapStats(Direction_t direction);
+static void M_RD_AutoMapLevTime(Direction_t direction);
+static void M_RD_AutoMapTotTime(Direction_t direction);
+static void M_RD_AutoMapCoords(Direction_t direction);
 
 // Sound
 static void DrawSoundMenu(void);
-static void M_RD_SfxVolume(intptr_t option);
-static void M_RD_MusVolume(intptr_t option);
-static void M_RD_SfxChannels(intptr_t option);
+static void M_RD_SfxVolume(Direction_t direction);
+static void M_RD_MusVolume(Direction_t direction);
+static void M_RD_SfxChannels(Direction_t direction);
 
 // Sound system
 static void DrawSoundSystemMenu(void);
-static void M_RD_SoundDevice(intptr_t option);
-static void M_RD_MusicDevice(intptr_t option);
-static void M_RD_Sampling(intptr_t option);
-static void M_RD_SndMode(intptr_t option);
-static void M_RD_PitchShifting(intptr_t option);
-static void M_RD_MuteInactive(intptr_t option);
+static void M_RD_SoundDevice(Direction_t direction);
+static void M_RD_MusicDevice(Direction_t direction);
+static void M_RD_Sampling(Direction_t direction);
+static void M_RD_SndMode(Direction_t direction);
+static void M_RD_PitchShifting(Direction_t direction);
+static void M_RD_MuteInactive(Direction_t direction);
 
 // Controls
 static void DrawControlsMenu(void);
-static void M_RD_AlwaysRun(intptr_t option);
-static void M_RD_Sensitivity(intptr_t option);
-static void M_RD_Acceleration(intptr_t option);
-static void M_RD_Threshold(intptr_t option);
-static void M_RD_MouseLook(intptr_t option);
-static void M_RD_InvertY(intptr_t option);
-static void M_RD_Novert(intptr_t option);
+static void M_RD_AlwaysRun(Direction_t direction);
+static void M_RD_Sensitivity(Direction_t direction);
+static void M_RD_Acceleration(Direction_t direction);
+static void M_RD_Threshold(Direction_t direction);
+static void M_RD_MouseLook(Direction_t direction);
+static void M_RD_InvertY(Direction_t direction);
+static void M_RD_Novert(Direction_t direction);
 
 // Gameplay (page 1)
 static void DrawGameplay1Menu(void);
-static void M_RD_Brightmaps(intptr_t option);
-static void M_RD_FakeContrast(intptr_t option);
-static void M_RD_ExtraTrans(intptr_t option);
-static void M_RD_ColoredBlood(intptr_t option);
-static void M_RD_SwirlingLiquids(intptr_t option);
-static void M_RD_InvulSky(intptr_t option);
-static void M_RD_LinearSky(intptr_t option);
-static void M_RD_Torque(intptr_t option);
-static void M_RD_Bobbing(intptr_t option);
-static void M_RD_FlipCorpses(intptr_t option);
-static void M_RD_FloatAmplitude(intptr_t option);
+static void M_RD_Brightmaps(Direction_t direction);
+static void M_RD_FakeContrast(Direction_t direction);
+static void M_RD_ExtraTrans(Direction_t direction);
+static void M_RD_ColoredBlood(Direction_t direction);
+static void M_RD_SwirlingLiquids(Direction_t direction);
+static void M_RD_InvulSky(Direction_t direction);
+static void M_RD_LinearSky(Direction_t direction);
+static void M_RD_Torque(Direction_t direction);
+static void M_RD_Bobbing(Direction_t direction);
+static void M_RD_FlipCorpses(Direction_t direction);
+static void M_RD_FloatAmplitude(Direction_t direction);
 
 // Gameplay (page 2)
 static void DrawGameplay2Menu(void);
-static void M_RD_ColoredSBar(intptr_t option);
-static void M_RD_ColoredGem(intptr_t option);
-static void M_RD_NegativeHealth(intptr_t option);
-static void M_RD_AmmoWidgetDraw(intptr_t option);
-static void M_RD_AmmoWidgetColoring(intptr_t option);
-static void M_RD_CrossHairDraw(intptr_t option);
-static void M_RD_CrossHairType(intptr_t option);
-static void M_RD_CrossHairScale(intptr_t option);
+static void M_RD_ColoredSBar(Direction_t direction);
+static void M_RD_ColoredGem(Direction_t direction);
+static void M_RD_NegativeHealth(Direction_t direction);
+static void M_RD_AmmoWidgetDraw(Direction_t direction);
+static void M_RD_AmmoWidgetColoring(Direction_t direction);
+static void M_RD_CrossHairDraw(Direction_t direction);
+static void M_RD_CrossHairType(Direction_t direction);
+static void M_RD_CrossHairScale(Direction_t direction);
 
 // Gameplay (page 3)
 static void DrawGameplay3Menu(void);
-static void M_RD_ZAxisSFX(intptr_t option);
-static void M_RD_AlertSFX(intptr_t option);
-static void M_RD_SecretNotify(intptr_t option);
-static void M_RD_ShowAllArti(intptr_t option);
-static void M_RD_ShowArtiTimer(intptr_t option);
-static void M_RD_FixMapErrors(intptr_t option);
-static void M_RD_FlipLevels(intptr_t option);
-static void M_RD_NoDemos(intptr_t option);
-static void M_RD_WandStart(intptr_t option);
+static void M_RD_ZAxisSFX(Direction_t direction);
+static void M_RD_AlertSFX(Direction_t direction);
+static void M_RD_SecretNotify(Direction_t direction);
+static void M_RD_ShowAllArti(Direction_t direction);
+static void M_RD_ShowArtiTimer(Direction_t direction);
+static void M_RD_FixMapErrors(Direction_t direction);
+static void M_RD_FlipLevels(Direction_t direction);
+static void M_RD_NoDemos(Direction_t direction);
+static void M_RD_WandStart(Direction_t direction);
 
 // Level Select (page 1)
 static void DrawLevelSelect1Menu(void);
-static void M_RD_SelectiveSkill(intptr_t option);
-static void M_RD_SelectiveEpisode(intptr_t option);
-static void M_RD_SelectiveMap(intptr_t option);
-static void M_RD_SelectiveHealth(intptr_t option);
-static void M_RD_SelectiveArmor(intptr_t option);
-static void M_RD_SelectiveArmorType(intptr_t option);
-static void M_RD_SelectiveGauntlets(intptr_t option);
-static void M_RD_SelectiveCrossbow(intptr_t option);
-static void M_RD_SelectiveDragonClaw(intptr_t option);
-static void M_RD_SelectiveHellStaff(intptr_t option);
-static void M_RD_SelectivePhoenixRod(intptr_t option);
-static void M_RD_SelectiveFireMace(intptr_t option);
+static void M_RD_SelectiveSkill(Direction_t direction);
+static void M_RD_SelectiveEpisode(Direction_t direction);
+static void M_RD_SelectiveMap(Direction_t direction);
+static void M_RD_SelectiveHealth(Direction_t direction);
+static void M_RD_SelectiveArmor(Direction_t direction);
+static void M_RD_SelectiveArmorType(Direction_t direction);
+static void M_RD_SelectiveGauntlets(Direction_t direction);
+static void M_RD_SelectiveCrossbow(Direction_t direction);
+static void M_RD_SelectiveDragonClaw(Direction_t direction);
+static void M_RD_SelectiveHellStaff(Direction_t direction);
+static void M_RD_SelectivePhoenixRod(Direction_t direction);
+static void M_RD_SelectiveFireMace(Direction_t direction);
 
 // Level Select (page 2)
 static void DrawLevelSelect2Menu(void);
-static void M_RD_SelectiveBag(intptr_t option);
-static void M_RD_SelectiveAmmo_0(intptr_t option);
-static void M_RD_SelectiveAmmo_1(intptr_t option);
-static void M_RD_SelectiveAmmo_2(intptr_t option);
-static void M_RD_SelectiveAmmo_3(intptr_t option);
-static void M_RD_SelectiveAmmo_4(intptr_t option);
-static void M_RD_SelectiveAmmo_5(intptr_t option);
-static void M_RD_SelectiveKey_0(intptr_t option);
-static void M_RD_SelectiveKey_1(intptr_t option);
-static void M_RD_SelectiveKey_2(intptr_t option);
-static void M_RD_SelectiveFast(intptr_t option);
-static void M_RD_SelectiveRespawn(intptr_t option);
+static void M_RD_SelectiveBag(Direction_t direction);
+static void M_RD_SelectiveAmmo_0(Direction_t direction);
+static void M_RD_SelectiveAmmo_1(Direction_t direction);
+static void M_RD_SelectiveAmmo_2(Direction_t direction);
+static void M_RD_SelectiveAmmo_3(Direction_t direction);
+static void M_RD_SelectiveAmmo_4(Direction_t direction);
+static void M_RD_SelectiveAmmo_5(Direction_t direction);
+static void M_RD_SelectiveKey_0(Direction_t direction);
+static void M_RD_SelectiveKey_1(Direction_t direction);
+static void M_RD_SelectiveKey_2(Direction_t direction);
+static void M_RD_SelectiveFast(Direction_t direction);
+static void M_RD_SelectiveRespawn(Direction_t direction);
 
 // Level Select (page 3)
 static void DrawLevelSelect3Menu(void);
-static void M_RD_SelectiveArti_0(intptr_t option);
-static void M_RD_SelectiveArti_1(intptr_t option);
-static void M_RD_SelectiveArti_2(intptr_t option);
-static void M_RD_SelectiveArti_3(intptr_t option);
-static void M_RD_SelectiveArti_4(intptr_t option);
-static void M_RD_SelectiveArti_5(intptr_t option);
-static void M_RD_SelectiveArti_6(intptr_t option);
-static void M_RD_SelectiveArti_7(intptr_t option);
-static void M_RD_SelectiveArti_8(intptr_t option);
-static void M_RD_SelectiveArti_9(intptr_t option);
+static void M_RD_SelectiveArti_0(Direction_t direction);
+static void M_RD_SelectiveArti_1(Direction_t direction);
+static void M_RD_SelectiveArti_2(Direction_t direction);
+static void M_RD_SelectiveArti_3(Direction_t direction);
+static void M_RD_SelectiveArti_4(Direction_t direction);
+static void M_RD_SelectiveArti_5(Direction_t direction);
+static void M_RD_SelectiveArti_6(Direction_t direction);
+static void M_RD_SelectiveArti_7(Direction_t direction);
+static void M_RD_SelectiveArti_8(Direction_t direction);
+static void M_RD_SelectiveArti_9(Direction_t direction);
 
 // Vanilla Options menu
 static void DrawOptionsMenu_Vanilla(void);
 static void DrawOptions2Menu_Vanilla(void);
 
 // End game
-static void M_RD_EndGame(intptr_t option);
+static void M_RD_EndGame(int option);
 
 // Reset settings
-static void M_RD_ResetSettings(intptr_t option);
+static void M_RD_ResetSettings(int option);
 
 // Change language
-static void M_RD_ChangeLanguage(intptr_t option);
+static void M_RD_ChangeLanguage(Direction_t direction);
 
 // Public Data
 
@@ -346,11 +345,11 @@ static Menu_t LoadMenu;
 static Menu_t SaveMenu;
 
 static MenuItem_t MainItems[] = {
-    {ITT_EFUNC,   "NEW GAME",   "YJDFZ BUHF", (void (*)(intptr_t)) SCNetCheck_NG_LG, (const intptr_t) &EpisodeMenu}, // НОВАЯ ИГРА
-    {ITT_SETMENU, "OPTIONS",    "YFCNHJQRB",  NULL,       (const intptr_t) &OptionsMenu}, // НАСТРОЙКИ
-    {ITT_SETMENU, "GAME FILES", "AFQKS BUHS", NULL,       (const intptr_t) &FilesMenu}, // ФАЙЛЫ ИГРЫ
-    {ITT_EFUNC,   "INFO",       "BYAJHVFWBZ", SCInfo,     0}, // ИНФОРМАЦИЯ
-    {ITT_EFUNC,   "QUIT GAME",  "DS[JL",      SCQuitGame, 0} // ВЫХОД
+    {ITT_SETMENU_NONET, "NEW GAME",   "YJDFZ BUHF", &EpisodeMenu, 1}, // НОВАЯ ИГРА
+    {ITT_SETMENU,       "OPTIONS",    "YFCNHJQRB",  &OptionsMenu, 0}, // НАСТРОЙКИ
+    {ITT_SETMENU,       "GAME FILES", "AFQKS BUHS", &FilesMenu,   0}, // ФАЙЛЫ ИГРЫ
+    {ITT_EFUNC,         "INFO",       "BYAJHVFWBZ", SCInfo,       0}, // ИНФОРМАЦИЯ
+    {ITT_EFUNC,         "QUIT GAME",  "DS[JL",      SCQuitGame,   0}  // ВЫХОД
 };
 
 static Menu_t MainMenu = {
@@ -405,12 +404,12 @@ static Menu_t SkillMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t OptionsItems[] = {
-    {ITT_SETMENU, "RENDERING",         "DBLTJ",          NULL, (const intptr_t) &RenderingMenu}, // ВИДЕО
-    {ITT_SETMENU, "DISPLAY",           "\'RHFY",         NULL, (const intptr_t) &DisplayMenu}, // ЭКРАН
-    {ITT_SETMENU, "SOUND",             "FELBJ",          NULL, (const intptr_t) &SoundMenu}, // АУДИО
-    {ITT_SETMENU, "CONTROLS",          "EGHFDKTYBT",     NULL, (const intptr_t) &ControlsMenu}, // УПРАВЛЕНИЕ
-    {ITT_SETMENU, "GAMEPLAY",          "UTQVGKTQ",       NULL, (const intptr_t) &Gameplay1Menu}, // ГЕЙМПЛЕЙ
-    {ITT_SETMENU, "LEVEL SELECT",      "DS,JH EHJDYZ",   NULL, (const intptr_t) &LevelSelectMenu1}, // ВЫБОР УРОВНЯ
+    {ITT_SETMENU, "RENDERING",         "DBLTJ",          &RenderingMenu,      0}, // ВИДЕО
+    {ITT_SETMENU, "DISPLAY",           "\'RHFY",         &DisplayMenu,        0}, // ЭКРАН
+    {ITT_SETMENU, "SOUND",             "FELBJ",          &SoundMenu,          0}, // АУДИО
+    {ITT_SETMENU, "CONTROLS",          "EGHFDKTYBT",     &ControlsMenu,       0}, // УПРАВЛЕНИЕ
+    {ITT_SETMENU, "GAMEPLAY",          "UTQVGKTQ",       &Gameplay1Menu,      0}, // ГЕЙМПЛЕЙ
+    {ITT_SETMENU, "LEVEL SELECT",      "DS,JH EHJDYZ",   &LevelSelectMenu1,   0}, // ВЫБОР УРОВНЯ
     {ITT_EFUNC,   "RESET SETTINGS",    "C,HJC YFCNHJTR", M_RD_ResetSettings,  0}, // СБРОС НАСТРОЕК
     {ITT_LRFUNC,  "LANGUAGE: ENGLISH", "ZPSR: HECCRBQ",  M_RD_ChangeLanguage, 0}  // ЯЗЫК: РУССКИЙ
 };
@@ -457,16 +456,16 @@ static Menu_t RenderingMenu = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t DisplayItems[] = {
-    {ITT_LRFUNC,  "SCREEN SIZE",         "HFPVTH BUHJDJUJ \'RHFYF",  M_RD_ScreenSize,      0}, // РАЗМЕР ИГРОВОГО ЭКРАНА
-    {ITT_EMPTY,   NULL,                  NULL,                       NULL,                 0},
-    {ITT_LRFUNC,  "GAMMA-CORRECTION",    "EHJDTYM UFVVF-RJHHTRWBB",  M_RD_Gamma,           0}, // УРОВЕНЬ ГАММА-КОРРЕКЦИИ
-    {ITT_EMPTY,   NULL,                  NULL,                       NULL,                 0},
-    {ITT_LRFUNC,  "LEVEL BRIGHTNESS",    "EHJDTYM JCDTOTYYJCNB",     M_RD_LevelBrightness, 0}, // УРОВЕНЬ ОСВЕЩЕННОСТИ
-    {ITT_EMPTY,   NULL,                  NULL,                       NULL,                 0},
-    {ITT_LRFUNC, "GRAPHICS DETAIL:",     "LTNFKBPFWBZ UHFABRB:",     M_RD_Detail,          0}, // ДЕТАЛИЗАЦИЯ ГРАФИКИ
-    {ITT_EMPTY,   NULL,                  NULL,                       NULL,                 0},
-    {ITT_SETMENU, "MESSAGES AND TEXTS...", "CJJ,OTYBZ B NTRCNS>>>",     NULL, (const intptr_t) &MessagesMenu}, // СООБЩЕНИЯ И ТЕКСТЫ...
-    {ITT_SETMENU, "AUTOMAP AND STATISTICS...", "RFHNF B CNFNBCNBRF>>>", NULL, (const intptr_t) &AutomapMenu}   // КАРТА И СТАТИСТИКА...
+    {ITT_LRFUNC,  "SCREEN SIZE",               "HFPVTH BUHJDJUJ \'RHFYF", M_RD_ScreenSize,      0}, // РАЗМЕР ИГРОВОГО ЭКРАНА
+    {ITT_EMPTY,   NULL,                        NULL,                      NULL,                 0},
+    {ITT_LRFUNC,  "GAMMA-CORRECTION",          "EHJDTYM UFVVF-RJHHTRWBB", M_RD_Gamma,           0}, // УРОВЕНЬ ГАММА-КОРРЕКЦИИ
+    {ITT_EMPTY,   NULL,                        NULL,                      NULL,                 0},
+    {ITT_LRFUNC,  "LEVEL BRIGHTNESS",          "EHJDTYM JCDTOTYYJCNB",    M_RD_LevelBrightness, 0}, // УРОВЕНЬ ОСВЕЩЕННОСТИ
+    {ITT_EMPTY,   NULL,                        NULL,                      NULL,                 0},
+    {ITT_LRFUNC, "GRAPHICS DETAIL:",           "LTNFKBPFWBZ UHFABRB:",    M_RD_Detail,          0}, // ДЕТАЛИЗАЦИЯ ГРАФИКИ
+    {ITT_EMPTY,   NULL,                        NULL,                      NULL,                 0},
+    {ITT_SETMENU, "MESSAGES AND TEXTS...",     "CJJ,OTYBZ B NTRCNS>>>",   &MessagesMenu,        0}, // СООБЩЕНИЯ И ТЕКСТЫ...
+    {ITT_SETMENU, "AUTOMAP AND STATISTICS...", "RFHNF B CNFNBCNBRF>>>",   &AutomapMenu,         0}  // КАРТА И СТАТИСТИКА...
 };
 
 static Menu_t DisplayMenu = {
@@ -549,7 +548,7 @@ static MenuItem_t SoundItems[] = {
     {ITT_LRFUNC, "SFX CHANNELS",             "PDERJDST RFYFKS",               M_RD_SfxChannels, 0}, // ЗВУКОВЫЕ КАНАЛЫ
     {ITT_EMPTY,  NULL,                       NULL,                            NULL,             0},
     {ITT_EMPTY,  NULL,                       NULL,                            NULL,             0},
-    {ITT_SETMENU,"SOUND SYSTEM SETTINGS...", "YFCNHJQRB PDERJDJQ CBCNTVS>>>", NULL, (const intptr_t) &SoundSysMenu}  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
+    {ITT_SETMENU,"SOUND SYSTEM SETTINGS...", "YFCNHJQRB PDERJDJQ CBCNTVS>>>", &SoundSysMenu,    0}  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
 };
 
 static Menu_t SoundMenu = {
@@ -633,7 +632,7 @@ static MenuItem_t Gameplay1Items[] = {
     {ITT_LRFUNC, "RANDOMLY MIRRORED CORPSES:",   "PTHRFKBHJDFYBT NHEGJD:",         M_RD_FlipCorpses,    0}, // ЗЕКРАЛИРОВАНИЕ ТРУПОВ
     {ITT_LRFUNC, "FLOATING ITEMS AMPLITUDE:" ,   "KTDBNFWBZ GHTLVTNJD:",           M_RD_FloatAmplitude, 0}, // АМПЛИТУДА ЛЕВИТАЦИИ ПРЕДМЕТОВ
     {ITT_EMPTY,  NULL,                           NULL,                             NULL,                0},
-    {ITT_SETMENU,"NEXT PAGE...",                 "CKTLE.OFZ CNHFYBWF>>>",          NULL, (const intptr_t) &Gameplay2Menu} // СЛЕДУЮЩАЯ СТРАНИЦА
+    {ITT_SETMENU,"NEXT PAGE...",                 "CKTLE.OFZ CNHFYBWF>>>",          &Gameplay2Menu,      0}  // СЛЕДУЮЩАЯ СТРАНИЦА
 };
 
 static Menu_t Gameplay1Menu = {
@@ -664,7 +663,7 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_EMPTY,  NULL,                    NULL,                          NULL,                    0},
     {ITT_EMPTY,  NULL,                    NULL,                          NULL,                    0},
     {ITT_EMPTY,  NULL,                    NULL,                          NULL,                    0},
-    {ITT_SETMENU,"LAST PAGE...",          "GJCKTLYZZ CNHFYBWF>>>",       NULL, (const intptr_t) &Gameplay3Menu} // ПОСЛЕДНЯЯ СТРАНИЦА
+    {ITT_SETMENU,"LAST PAGE...",          "GJCKTLYZZ CNHFYBWF>>>",       &Gameplay3Menu,          0}  // ПОСЛЕДНЯЯ СТРАНИЦА
 };
 
 static Menu_t Gameplay2Menu = {
@@ -695,7 +694,7 @@ static MenuItem_t Gameplay3Items[] = {
     {ITT_LRFUNC, "WAND START GAME MODE:",       " ",/* [JN] Joint EN/RU string*/ M_RD_WandStart,      0}, // РЕЖИМ ИГРЫ "WAND START"
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
-    {ITT_SETMENU,"FIRST PAGE...",               "GTHDFZ CNHFYBWF>>>",            NULL, (const intptr_t) &Gameplay1Menu} // ПЕРВАЯ СТРАНИЦА
+    {ITT_SETMENU,"FIRST PAGE...",               "GTHDFZ CNHFYBWF>>>",            &Gameplay1Menu,      0}  // ПЕРВАЯ СТРАНИЦА
 };
 
 static Menu_t Gameplay3Menu = {
@@ -728,7 +727,7 @@ static MenuItem_t Level1Items[] = {
     {ITT_LRFUNC, "PHOENIX ROD:",       ";TPK ATYBRCF:",         M_RD_SelectivePhoenixRod, 0}, // ЖЕЗЛ ФЕНИКСА
     {ITT_LRFUNC, "FIREMACE:",          "JUYTYYFZ ,EKFDF:",      M_RD_SelectiveFireMace,   0}, // ОГНЕННАЯ БУЛАВА
     {ITT_EMPTY,  NULL,                 NULL,                    NULL,                     0},
-    {ITT_SETMENU,"NEXT PAGE...",       "CKTLE.OFZ CNHFYBWF>>>", NULL, (const intptr_t) &LevelSelectMenu2}, // СЛЕДУЮЩАЯ СТРАНИЦА...
+    {ITT_SETMENU,"NEXT PAGE...",       "CKTLE.OFZ CNHFYBWF>>>", &LevelSelectMenu2,        0}, // СЛЕДУЮЩАЯ СТРАНИЦА...
     {ITT_LRFUNC, "START GAME",         "YFXFNM BUHE",           G_DoSelectiveGame,        0}  // НАЧАТЬ ИГРУ
 };
 
@@ -762,7 +761,7 @@ static MenuItem_t Level2Items[] = {
     {ITT_LRFUNC, "FAST:",            "ECRJHTYYST:",           M_RD_SelectiveFast,    0},
     {ITT_LRFUNC, "RESPAWNING:",       "DJCRHTIF.OBTCZ:",      M_RD_SelectiveRespawn, 0},
     {ITT_EMPTY,  NULL,               NULL,                    NULL,                  0},
-    {ITT_SETMENU,"LAST PAGE...",     "GJCKTLYZZ CNHFYBWF>>>", NULL, (const intptr_t) &LevelSelectMenu3},
+    {ITT_SETMENU,"LAST PAGE...",     "GJCKTLYZZ CNHFYBWF>>>", &LevelSelectMenu3,     0},
     {ITT_LRFUNC, "START GAME",       "YFXFNM BUHE",           G_DoSelectiveGame,     0}
 };
 
@@ -795,7 +794,7 @@ static MenuItem_t Level3Items[] = {
     {ITT_EMPTY,  NULL,                     NULL,                   NULL,                 0},
     {ITT_EMPTY,  NULL,                     NULL,                   NULL,                 0},
     {ITT_EMPTY,  NULL,                     NULL,                   NULL,                 0},
-    {ITT_SETMENU,"FIRST PAGE...",          "GTHDFZ CNHFYBWF>>>",   NULL, (const intptr_t) &LevelSelectMenu1},
+    {ITT_SETMENU,"FIRST PAGE...",          "GTHDFZ CNHFYBWF>>>",   &LevelSelectMenu1,    0},
     {ITT_LRFUNC, "START GAME",             "YFXFNM BUHE",          G_DoSelectiveGame,    0}
 };
 
@@ -814,11 +813,11 @@ static Menu_t LevelSelectMenu3 = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t OptionsItems_Vanilla[] = {
-    {ITT_EFUNC,   "END GAME",          "PFRJYXBNM BUHE",   M_RD_EndGame,     0},
-    {ITT_EFUNC,   "MESSAGES : ",       "CJJ,OTYBZ : ",     SCMessages,       0},
-    {ITT_LRFUNC,  "MOUSE SENSITIVITY", "CRJHJCNM VSIB",    M_RD_Sensitivity, 0},
-    {ITT_EMPTY,   NULL,                NULL,               NULL,             0},
-    {ITT_SETMENU, "MORE...",           "LJGJKYBNTKMYJ>>>", NULL, (const intptr_t) &Options2Menu_Vanilla}
+    {ITT_EFUNC,   "END GAME",          "PFRJYXBNM BUHE",   M_RD_EndGame,          0},
+    {ITT_EFUNC,   "MESSAGES : ",       "CJJ,OTYBZ : ",     SCMessages,            0},
+    {ITT_LRFUNC,  "MOUSE SENSITIVITY", "CRJHJCNM VSIB",    M_RD_Sensitivity,      0},
+    {ITT_EMPTY,   NULL,                NULL,               NULL,                  0},
+    {ITT_SETMENU, "MORE...",           "LJGJKYBNTKMYJ>>>", &Options2Menu_Vanilla, 0}
 };
 
 static Menu_t OptionsMenu_Vanilla = {
@@ -855,8 +854,8 @@ static Menu_t Options2Menu_Vanilla = {
 };
 
 static MenuItem_t FilesItems[] = {
-    {ITT_EFUNC,   "LOAD GAME", "PFUHEPBNM BUHE", (void (*)(intptr_t)) SCNetCheck_NG_LG, (const intptr_t) &LoadMenu}, // ЗАГРУЗИТЬ ИГРУ
-    {ITT_SETMENU, "SAVE GAME", "CJ[HFYBNM BUHE", NULL, (const intptr_t) &SaveMenu} // СОХРАНИТЬ ИГРУ
+    {ITT_SETMENU_NONET, "LOAD GAME", "PFUHEPBNM BUHE", &LoadMenu, 2}, // ЗАГРУЗИТЬ ИГРУ
+    {ITT_SETMENU,       "SAVE GAME", "CJ[HFYBNM BUHE", &SaveMenu, 0}  // СОХРАНИТЬ ИГРУ
 };
 
 static Menu_t FilesMenu = {
@@ -1440,14 +1439,14 @@ static void DrawRenderingMenu(void)
 
 }
 
-static void M_RD_Change_Widescreen(intptr_t option)
+static void M_RD_Change_Widescreen(Direction_t direction)
 {
     // [JN] Widescreen: changing only temp variable here.
     // Initially it is set in MN_Init and stored into config file in M_QuitResponse.
-    RD_Menu_SpinInt(&aspect_ratio_temp, 0, 4, option);
+    RD_Menu_SpinInt(&aspect_ratio_temp, 0, 4, direction);
 }
 
-static void M_RD_Change_VSync(intptr_t option)
+static void M_RD_Change_VSync(Direction_t direction)
 {
     // [JN] Disable "vsync" toggling in software renderer
     if (force_software_renderer == 1)
@@ -1459,17 +1458,17 @@ static void M_RD_Change_VSync(intptr_t option)
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
 
-static void M_RD_Uncapped(intptr_t option)
+static void M_RD_Uncapped(Direction_t direction)
 {
     uncapped_fps ^= 1;
 }
 
-static void M_RD_FPScounter(intptr_t option)
+static void M_RD_FPScounter(Direction_t direction)
 {
     show_fps ^= 1;
 }
 
-static void M_RD_Smoothing(intptr_t option)
+static void M_RD_Smoothing(Direction_t direction)
 {
     // [JN] Disable smoothing toggling in software renderer
     if (force_software_renderer == 1)
@@ -1481,7 +1480,7 @@ static void M_RD_Smoothing(intptr_t option)
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
 
-static void M_RD_PorchFlashing(intptr_t option)
+static void M_RD_PorchFlashing(Direction_t direction)
 {
     vga_porch_flash ^= 1;
 
@@ -1489,7 +1488,7 @@ static void M_RD_PorchFlashing(intptr_t option)
     I_DrawBlackBorders();
 }
 
-static void M_RD_Renderer(intptr_t option)
+static void M_RD_Renderer(Direction_t direction)
 {
     force_software_renderer ^= 1;
 
@@ -1497,12 +1496,12 @@ static void M_RD_Renderer(intptr_t option)
     I_InitGraphics();
 }
 
-static void M_RD_Screenshots(intptr_t option)
+static void M_RD_Screenshots(Direction_t direction)
 {
     png_screenshots ^= 1;
 }
 
-static void M_RD_EndText(intptr_t option)
+static void M_RD_EndText(Direction_t direction)
 {
     show_endoom ^= 1;
 }
@@ -1572,12 +1571,12 @@ static void DrawDisplayMenu(void)
     RD_Menu_DrawSliderSmall(&DisplayMenu, 92, 5, level_brightness / 16);
 }
 
-static void M_RD_ScreenSize(intptr_t option)
+static void M_RD_ScreenSize(Direction_t direction)
 {
     // [JN] Hide menu background for a moment.
     menubgwait = I_GetTime() + 25;
 
-    RD_Menu_SlideInt(&screenblocks, 3, 12, option); // [JN] Now we have 12 screen sizes
+    RD_Menu_SlideInt(&screenblocks, 3, 12, direction); // [JN] Now we have 12 screen sizes
 
     if (aspect_ratio_temp >= 2)
     {
@@ -1592,12 +1591,12 @@ static void M_RD_ScreenSize(intptr_t option)
     R_SetViewSize(screenblocks, detailLevel);
 }
 
-static void M_RD_Gamma(intptr_t option)
+static void M_RD_Gamma(Direction_t direction)
 {
     // [JN] Hide menu background for a moment.
     menubgwait = I_GetTime() + 25;
 
-    RD_Menu_SlideInt(&usegamma, 0, 17, option);
+    RD_Menu_SlideInt(&usegamma, 0, 17, direction);
 
     I_SetPalette((byte *) W_CacheLumpName(usegamma <= 8 ?
                                           "PALFIX" :
@@ -1610,15 +1609,15 @@ static void M_RD_Gamma(intptr_t option)
                                           msg_system, false);
 }
 
-static void M_RD_LevelBrightness(intptr_t option)
+static void M_RD_LevelBrightness(Direction_t direction)
 {
     // [JN] Hide menu background for a moment.
     menubgwait = I_GetTime() + 25;
 
-    RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, option);
+    RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, direction);
 }
 
-static void M_RD_Detail(intptr_t option)
+static void M_RD_Detail(Direction_t direction)
 {
     detailLevel ^= 1;
 
@@ -1766,12 +1765,12 @@ static void DrawMessagesMenu(void)
     RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 10, messages_timeout - 1);
 }
 
-static void M_RD_LocalTime(intptr_t option)
+static void M_RD_LocalTime(Direction_t direction)
 {
-    RD_Menu_SpinInt(&local_time, 0, 4, option);
+    RD_Menu_SpinInt(&local_time, 0, 4, direction);
 }
 
-static void M_RD_Messages(intptr_t option)
+static void M_RD_Messages(Direction_t direction)
 {
     show_messages ^= 1;
 
@@ -1787,22 +1786,22 @@ static void M_RD_Messages(intptr_t option)
     S_StartSound(NULL, sfx_chat);
 }
 
-static void M_RD_MessagesAlignment(intptr_t option)
+static void M_RD_MessagesAlignment(Direction_t direction)
 {
-    RD_Menu_SpinInt(&messages_alignment, 0, 2, option);
+    RD_Menu_SpinInt(&messages_alignment, 0, 2, direction);
 }
 
-static void M_RD_MessagesTimeout(intptr_t option)
+static void M_RD_MessagesTimeout(Direction_t direction)
 {
-    RD_Menu_SlideInt(&messages_timeout, 1, 10, option);
+    RD_Menu_SlideInt(&messages_timeout, 1, 10, direction);
 }
 
-static void M_RD_MessagesFade(intptr_t option)
+static void M_RD_MessagesFade(Direction_t direction)
 {
     message_fade ^= 1;
 }
 
-static void M_RD_ShadowedText(intptr_t option)
+static void M_RD_ShadowedText(Direction_t direction)
 {
     draw_shadowed_text ^= 1;
 }
@@ -1859,33 +1858,33 @@ void M_RD_Define_Msg_Color (MessageType_t messageType, int color)
     }
 }
 
-void M_RD_Change_Msg_Pickup_Color(intptr_t option)
+void M_RD_Change_Msg_Pickup_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_pickup_color, 0, 17, option);
+    RD_Menu_SpinInt(&message_pickup_color, 0, 17, direction);
 
     // [JN] Redefine pickup message color.
     M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);
 }
 
-void M_RD_Change_Msg_Secret_Color(intptr_t option)
+void M_RD_Change_Msg_Secret_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_secret_color, 0, 17, option);
+    RD_Menu_SpinInt(&message_secret_color, 0, 17, direction);
 
     // [JN] Redefine revealed secret message color.
     M_RD_Define_Msg_Color(msg_secret, message_secret_color);
 }
 
-void M_RD_Change_Msg_System_Color(intptr_t option)
+void M_RD_Change_Msg_System_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_system_color, 0, 17, option);
+    RD_Menu_SpinInt(&message_system_color, 0, 17, direction);
 
     // [JN] Redefine revealed secret message color.
     M_RD_Define_Msg_Color(msg_system, message_system_color);
 }
 
-void M_RD_Change_Msg_Chat_Color(intptr_t option)
+void M_RD_Change_Msg_Chat_Color(Direction_t direction)
 {
-    RD_Menu_SpinInt(&message_chat_color, 0, 17, option);
+    RD_Menu_SpinInt(&message_chat_color, 0, 17, direction);
 
     // [JN] Redefine netgame chat message color.
     M_RD_Define_Msg_Color(msg_chat, message_chat_color);
@@ -2000,49 +1999,49 @@ static void DrawAutomapMenu(void)
     }
 }
 
-static void M_RD_AutoMapOverlay(intptr_t option)
+static void M_RD_AutoMapOverlay(Direction_t direction)
 {
     automap_overlay ^= 1;
 }
 
-static void M_RD_AutoMapRotate(intptr_t option)
+static void M_RD_AutoMapRotate(Direction_t direction)
 {
     automap_rotate ^= 1;
 }
 
-static void M_RD_AutoMapFollow(intptr_t option)
+static void M_RD_AutoMapFollow(Direction_t direction)
 {
     automap_follow ^= 1;
 }
 
-static void M_RD_AutoMapGrid(intptr_t option)
+static void M_RD_AutoMapGrid(Direction_t direction)
 {
     automap_grid ^= 1;
 }
 
-static void M_RD_AutoMapGridSize(intptr_t option)
+static void M_RD_AutoMapGridSize(Direction_t direction)
 {
-    RD_Menu_ShiftSlideInt(&automap_grid_size, 32, 512, option);
+    RD_Menu_ShiftSlideInt(&automap_grid_size, 32, 512, direction);
 }
 
-static void M_RD_AutoMapStats(intptr_t option)
+static void M_RD_AutoMapStats(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_stats, 0, 2, option);
+    RD_Menu_SpinInt(&automap_stats, 0, 2, direction);
 }
 
-static void M_RD_AutoMapLevTime(intptr_t option)
+static void M_RD_AutoMapLevTime(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_level_time, 0, 2, option);
+    RD_Menu_SpinInt(&automap_level_time, 0, 2, direction);
 }
 
-static void M_RD_AutoMapTotTime(intptr_t option)
+static void M_RD_AutoMapTotTime(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_total_time, 0, 2, option);
+    RD_Menu_SpinInt(&automap_total_time, 0, 2, direction);
 }
 
-static void M_RD_AutoMapCoords(intptr_t option)
+static void M_RD_AutoMapCoords(Direction_t direction)
 {
-    RD_Menu_SpinInt(&automap_coords, 0, 2, option);
+    RD_Menu_SpinInt(&automap_coords, 0, 2, direction);
 }
 
 // -----------------------------------------------------------------------------
@@ -2096,9 +2095,9 @@ static void DrawSoundMenu(void)
     RD_M_DrawTextSmallENG(num, 184 + wide_delta, 103, CR_WHITE2GRAY_HERETIC);
 }
 
-static void M_RD_SfxVolume(intptr_t option)
+static void M_RD_SfxVolume(Direction_t direction)
 {
-    RD_Menu_SlideInt(&snd_MaxVolume, 0, 15, option);
+    RD_Menu_SlideInt(&snd_MaxVolume, 0, 15, direction);
 
     snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable.
 
@@ -2106,15 +2105,15 @@ static void M_RD_SfxVolume(intptr_t option)
     soundchanged = true;        // we'll set it when we leave the menu
 }
 
-static void M_RD_MusVolume(intptr_t option)
+static void M_RD_MusVolume(Direction_t direction)
 {
-    RD_Menu_SlideInt(&snd_MusicVolume, 0, 15, option);
+    RD_Menu_SlideInt(&snd_MusicVolume, 0, 15, direction);
     S_SetMusicVolume();
 }
 
-static void M_RD_SfxChannels(intptr_t option)
+static void M_RD_SfxChannels(Direction_t direction)
 {
-    RD_Menu_SlideInt_Step(&snd_Channels, 4, 64, 4, option);
+    RD_Menu_SlideInt_Step(&snd_Channels, 4, 64, 4, direction);
 
     // Reallocate sound channels
     S_ChannelsRealloc();
@@ -2307,7 +2306,7 @@ static void DrawSoundSystemMenu(void)
     }
 }
 
-static void M_RD_SoundDevice(intptr_t option)
+static void M_RD_SoundDevice(Direction_t direction)
 {
     if (snd_sfxdevice == 0)
         snd_sfxdevice = 3;
@@ -2324,9 +2323,9 @@ static void M_RD_SoundDevice(intptr_t option)
     S_SetMaxVolume(true);
 }
 
-static void M_RD_MusicDevice(intptr_t option)
+static void M_RD_MusicDevice(Direction_t direction)
 {
-    switch(option)
+    switch(direction)
     {
         case 0:
             if (snd_musicdevice == 0)
@@ -2395,22 +2394,22 @@ static void M_RD_MusicDevice(intptr_t option)
     S_StartSong(mus_song, true, true);
 }
 
-static void M_RD_Sampling(intptr_t option)
+static void M_RD_Sampling(Direction_t direction)
 {
-    RD_Menu_ShiftSpinInt(&snd_samplerate, 11025, 44100, option);
+    RD_Menu_ShiftSpinInt(&snd_samplerate, 11025, 44100, direction);
 }
 
-static void M_RD_SndMode(intptr_t option)
+static void M_RD_SndMode(Direction_t direction)
 {
     snd_monomode ^= 1;
 }
 
-static void M_RD_PitchShifting(intptr_t option)
+static void M_RD_PitchShifting(Direction_t direction)
 {
     snd_pitchshift ^= 1;
 }
 
-static void M_RD_MuteInactive(intptr_t option)
+static void M_RD_MuteInactive(Direction_t direction)
 {
     mute_inactive_window ^= 1;
 }
@@ -2503,7 +2502,7 @@ static void DrawControlsMenu(void)
     RD_M_DrawTextSmallENG(num, 152 + wide_delta, 113, CR_WHITE2GRAY_HERETIC);
 }
 
-static void M_RD_AlwaysRun(intptr_t option)
+static void M_RD_AlwaysRun(Direction_t direction)
 {
     static int joybspeed_old = 2;
 
@@ -2518,22 +2517,22 @@ static void M_RD_AlwaysRun(intptr_t option)
     }
 }
 
-static void M_RD_Sensitivity(intptr_t option)
+static void M_RD_Sensitivity(Direction_t direction)
 {
-    RD_Menu_SlideInt(&mouseSensitivity, 0, 255, option); // [crispy] extended range
+    RD_Menu_SlideInt(&mouseSensitivity, 0, 255, direction); // [crispy] extended range
 }
 
-static void M_RD_Acceleration(intptr_t option)
+static void M_RD_Acceleration(Direction_t direction)
 {
-    RD_Menu_SlideFloat_Step(&mouse_acceleration, 1.1F, 5.0F, 0.1F, option);
+    RD_Menu_SlideFloat_Step(&mouse_acceleration, 1.1F, 5.0F, 0.1F, direction);
 }
 
-static void M_RD_Threshold(intptr_t option)
+static void M_RD_Threshold(Direction_t direction)
 {
-    RD_Menu_SlideInt(&mouse_threshold, 0, 32, option);
+    RD_Menu_SlideInt(&mouse_threshold, 0, 32, direction);
 }
 
-static void M_RD_MouseLook(intptr_t option)
+static void M_RD_MouseLook(Direction_t direction)
 {
     mlook ^= 1;
 
@@ -2541,12 +2540,12 @@ static void M_RD_MouseLook(intptr_t option)
         players[consoleplayer].centering = true;
 }
 
-static void M_RD_InvertY(intptr_t option)
+static void M_RD_InvertY(Direction_t direction)
 {
     mouse_y_invert ^= 1;
 }
 
-static void M_RD_Novert(intptr_t option)
+static void M_RD_Novert(Direction_t direction)
 {
     novert ^= 1;
 }
@@ -2671,59 +2670,59 @@ static void DrawGameplay1Menu(void)
     RD_M_DrawTextSmallENG(DEH_String("(1/3)"), 254 + wide_delta, 166, CR_WHITE2GRAY_HERETIC);
 }
 
-static void M_RD_Brightmaps(intptr_t option)
+static void M_RD_Brightmaps(Direction_t direction)
 {
     brightmaps ^= 1;
 }
 
-static void M_RD_FakeContrast(intptr_t option)
+static void M_RD_FakeContrast(Direction_t direction)
 {
     fake_contrast ^= 1;
 }
 
-static void M_RD_ExtraTrans(intptr_t option)
+static void M_RD_ExtraTrans(Direction_t direction)
 {
     translucency ^= 1;
 }
 
-static void M_RD_ColoredBlood(intptr_t option)
+static void M_RD_ColoredBlood(Direction_t direction)
 {
     colored_blood ^= 1;
 }
 
-static void M_RD_InvulSky(intptr_t option)
+static void M_RD_InvulSky(Direction_t direction)
 {
     invul_sky ^= 1;
 }
 
-static void M_RD_SwirlingLiquids(intptr_t option)
+static void M_RD_SwirlingLiquids(Direction_t direction)
 {
     swirling_liquids ^= 1;
 }
 
-static void M_RD_LinearSky(intptr_t option)
+static void M_RD_LinearSky(Direction_t direction)
 {
     linear_sky ^= 1;
 }
 
-static void M_RD_Torque(intptr_t option)
+static void M_RD_Torque(Direction_t direction)
 {
     torque ^= 1;
 }
 
-static void M_RD_Bobbing(intptr_t option)
+static void M_RD_Bobbing(Direction_t direction)
 {
     weapon_bobbing ^= 1;
 }
 
-static void M_RD_FlipCorpses(intptr_t option)
+static void M_RD_FlipCorpses(Direction_t direction)
 {
     randomly_flipcorpses ^= 1;
 }
 
-static void M_RD_FloatAmplitude(intptr_t option)
+static void M_RD_FloatAmplitude(Direction_t direction)
 {
-    RD_Menu_SpinInt(&floating_powerups, 0, 2, option);
+    RD_Menu_SpinInt(&floating_powerups, 0, 2, direction);
 }
 
 // -----------------------------------------------------------------------------
@@ -2840,42 +2839,42 @@ static void DrawGameplay2Menu(void)
     RD_M_DrawTextSmallENG(DEH_String("(2/3)"), 254 + wide_delta, 166, CR_WHITE2GRAY_HERETIC);
 }
 
-static void M_RD_ColoredSBar(intptr_t option)
+static void M_RD_ColoredSBar(Direction_t direction)
 {
     sbar_colored ^= 1;
 }
 
-static void M_RD_ColoredGem(intptr_t option)
+static void M_RD_ColoredGem(Direction_t direction)
 {
-    RD_Menu_SpinInt(&sbar_colored_gem, 0, 2, option);
+    RD_Menu_SpinInt(&sbar_colored_gem, 0, 2, direction);
 }
 
-static void M_RD_NegativeHealth(intptr_t option)
+static void M_RD_NegativeHealth(Direction_t direction)
 {
     negative_health ^= 1;
 }
 
-static void M_RD_AmmoWidgetDraw(intptr_t option)
+static void M_RD_AmmoWidgetDraw(Direction_t direction)
 {
-    RD_Menu_SpinInt(&ammo_widget, 0, 2, option);
+    RD_Menu_SpinInt(&ammo_widget, 0, 2, direction);
 }
 
-static void M_RD_AmmoWidgetColoring(intptr_t option)
+static void M_RD_AmmoWidgetColoring(Direction_t direction)
 {
     ammo_widget_colored ^= 1;
 }
 
-static void M_RD_CrossHairDraw(intptr_t option)
+static void M_RD_CrossHairDraw(Direction_t direction)
 {
     crosshair_draw ^= 1;
 }
 
-static void M_RD_CrossHairType(intptr_t option)
+static void M_RD_CrossHairType(Direction_t direction)
 {
-    RD_Menu_SpinInt(&crosshair_type, 0, 3, option);
+    RD_Menu_SpinInt(&crosshair_type, 0, 3, direction);
 }
 
-static void M_RD_CrossHairScale(intptr_t option)
+static void M_RD_CrossHairScale(Direction_t direction)
 {
     crosshair_scale ^= 1;
 }
@@ -3005,37 +3004,37 @@ static void DrawGameplay3Menu(void)
     RD_M_DrawTextSmallENG(DEH_String("(3/3)"), 254 + wide_delta, 166, CR_WHITE2GRAY_HERETIC);
 }
 
-static void M_RD_ZAxisSFX(intptr_t option)
+static void M_RD_ZAxisSFX(Direction_t direction)
 {
     z_axis_sfx ^= 1;
 }
 
-static void M_RD_AlertSFX(intptr_t option)
+static void M_RD_AlertSFX(Direction_t direction)
 {
     noise_alert_sfx ^= 1;
 }
 
-static void M_RD_SecretNotify(intptr_t option)
+static void M_RD_SecretNotify(Direction_t direction)
 {
     secret_notification ^= 1;
 }
 
-static void M_RD_ShowAllArti(intptr_t option)
+static void M_RD_ShowAllArti(Direction_t direction)
 {
     show_all_artifacts ^= 1;
 }
 
-static void M_RD_ShowArtiTimer(intptr_t option)
+static void M_RD_ShowArtiTimer(Direction_t direction)
 {
-    RD_Menu_SpinInt(&show_artifacts_timer, 0, 3, option);
+    RD_Menu_SpinInt(&show_artifacts_timer, 0, 3, direction);
 }
 
-static void M_RD_FixMapErrors(intptr_t option)
+static void M_RD_FixMapErrors(Direction_t direction)
 {
     fix_map_errors ^= 1;
 }
 
-static void M_RD_FlipLevels(intptr_t option)
+static void M_RD_FlipLevels(Direction_t direction)
 {
     flip_levels ^= 1;
 
@@ -3043,12 +3042,12 @@ static void M_RD_FlipLevels(intptr_t option)
     R_ExecuteSetViewSize();
 }
 
-static void M_RD_NoDemos(intptr_t option)
+static void M_RD_NoDemos(Direction_t direction)
 {
     no_internal_demos ^= 1;
 }
 
-static void M_RD_WandStart(intptr_t option)
+static void M_RD_WandStart(Direction_t direction)
 {
     pistol_start ^= 1;
 }
@@ -3179,36 +3178,36 @@ static void DrawLevelSelect1Menu(void)
     }
 }
 
-static void M_RD_SelectiveSkill(intptr_t option)
+static void M_RD_SelectiveSkill(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_skill, 0, 5, option);
+    RD_Menu_SlideInt(&selective_skill, 0, 5, direction);
 }
 
-static void M_RD_SelectiveEpisode(intptr_t option)
+static void M_RD_SelectiveEpisode(Direction_t direction)
 {
     // [JN] Shareware have only 1 episode.
     if (gamemode == shareware)
         return;
 
-    RD_Menu_SlideInt(&selective_episode, 1, gamemode == retail ? 5 : 3, option);
+    RD_Menu_SlideInt(&selective_episode, 1, gamemode == retail ? 5 : 3, direction);
 }
 
-static void M_RD_SelectiveMap(intptr_t option)
+static void M_RD_SelectiveMap(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_map, 1, 9, option);
+    RD_Menu_SlideInt(&selective_map, 1, 9, direction);
 }
 
-static void M_RD_SelectiveHealth(intptr_t option)
+static void M_RD_SelectiveHealth(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_health, 1, 100, option);
+    RD_Menu_SlideInt(&selective_health, 1, 100, direction);
 }
 
-static void M_RD_SelectiveArmor(intptr_t option)
+static void M_RD_SelectiveArmor(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_armor, 0, selective_armortype == 1 ? 100 : 200, option);
+    RD_Menu_SlideInt(&selective_armor, 0, selective_armortype == 1 ? 100 : 200, direction);
 }
 
-static void M_RD_SelectiveArmorType(intptr_t option)
+static void M_RD_SelectiveArmorType(Direction_t direction)
 {
     selective_armortype++;
 
@@ -3220,32 +3219,32 @@ static void M_RD_SelectiveArmorType(intptr_t option)
         selective_armor = 100;
 }
 
-static void M_RD_SelectiveGauntlets(intptr_t option)
+static void M_RD_SelectiveGauntlets(Direction_t direction)
 {
     selective_wp_gauntlets ^= 1;
 }
 
-static void M_RD_SelectiveCrossbow(intptr_t option)
+static void M_RD_SelectiveCrossbow(Direction_t direction)
 {
     selective_wp_crossbow ^= 1;
 }
 
-static void M_RD_SelectiveDragonClaw(intptr_t option)
+static void M_RD_SelectiveDragonClaw(Direction_t direction)
 {
     selective_wp_dragonclaw ^= 1;
 }
 
-static void M_RD_SelectiveHellStaff(intptr_t option)
+static void M_RD_SelectiveHellStaff(Direction_t direction)
 {
     selective_wp_hellstaff ^= 1;
 }
 
-static void M_RD_SelectivePhoenixRod(intptr_t option)
+static void M_RD_SelectivePhoenixRod(Direction_t direction)
 {
     selective_wp_phoenixrod ^= 1;
 }
 
-static void M_RD_SelectiveFireMace(intptr_t option)
+static void M_RD_SelectiveFireMace(Direction_t direction)
 {
     selective_wp_firemace ^= 1;
 }
@@ -3377,7 +3376,7 @@ static void DrawLevelSelect2Menu(void)
                           CR_WHITE2RED_HERETIC);
 }
 
-static void M_RD_SelectiveBag(intptr_t option)
+static void M_RD_SelectiveBag(Direction_t direction)
 {
     selective_backpack ^= 1;
 
@@ -3398,57 +3397,57 @@ static void M_RD_SelectiveBag(intptr_t option)
     }
 }
 
-static void M_RD_SelectiveAmmo_0(intptr_t option)
+static void M_RD_SelectiveAmmo_0(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_ammo_0, 0, selective_backpack ? 200 : 100, option);
+    RD_Menu_SlideInt(&selective_ammo_0, 0, selective_backpack ? 200 : 100, direction);
 }
 
-static void M_RD_SelectiveAmmo_1(intptr_t option)
+static void M_RD_SelectiveAmmo_1(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_ammo_1, 0, selective_backpack ? 100 : 50, option);
+    RD_Menu_SlideInt(&selective_ammo_1, 0, selective_backpack ? 100 : 50, direction);
 }
 
-static void M_RD_SelectiveAmmo_2(intptr_t option)
+static void M_RD_SelectiveAmmo_2(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_ammo_2, 0, selective_backpack ? 400 : 200, option);
+    RD_Menu_SlideInt(&selective_ammo_2, 0, selective_backpack ? 400 : 200, direction);
 }
 
-static void M_RD_SelectiveAmmo_3(intptr_t option)
+static void M_RD_SelectiveAmmo_3(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_ammo_3, 0, selective_backpack ? 400 : 200, option);
+    RD_Menu_SlideInt(&selective_ammo_3, 0, selective_backpack ? 400 : 200, direction);
 }
 
-static void M_RD_SelectiveAmmo_4(intptr_t option)
+static void M_RD_SelectiveAmmo_4(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_ammo_4, 0, selective_backpack ? 40 : 20, option);
+    RD_Menu_SlideInt(&selective_ammo_4, 0, selective_backpack ? 40 : 20, direction);
 }
 
-static void M_RD_SelectiveAmmo_5(intptr_t option)
+static void M_RD_SelectiveAmmo_5(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_ammo_5, 0, selective_backpack ? 300 : 150, option);
+    RD_Menu_SlideInt(&selective_ammo_5, 0, selective_backpack ? 300 : 150, direction);
 }
 
-static void M_RD_SelectiveKey_0(intptr_t option)
+static void M_RD_SelectiveKey_0(Direction_t direction)
 {
     selective_key_0 ^= 1;
 }
 
-static void M_RD_SelectiveKey_1(intptr_t option)
+static void M_RD_SelectiveKey_1(Direction_t direction)
 {
     selective_key_1 ^= 1;
 }
 
-static void M_RD_SelectiveKey_2(intptr_t option)
+static void M_RD_SelectiveKey_2(Direction_t direction)
 {
     selective_key_2 ^= 1;
 }
 
-static void M_RD_SelectiveFast(intptr_t option)
+static void M_RD_SelectiveFast(Direction_t direction)
 {
     selective_fast ^= 1;
 }
 
-static void M_RD_SelectiveRespawn(intptr_t option)
+static void M_RD_SelectiveRespawn(Direction_t direction)
 {
     selective_respawn ^= 1;
 }
@@ -3519,54 +3518,54 @@ static void DrawLevelSelect3Menu(void)
     }
 }
 
-static void M_RD_SelectiveArti_0(intptr_t option)
+static void M_RD_SelectiveArti_0(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_0, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_0, 0, 16, direction);
 }
 
-static void M_RD_SelectiveArti_1(intptr_t option)
+static void M_RD_SelectiveArti_1(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_1, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_1, 0, 16, direction);
 }
 
-static void M_RD_SelectiveArti_2(intptr_t option)
+static void M_RD_SelectiveArti_2(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_2, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_2, 0, 16, direction);
 }
 
-static void M_RD_SelectiveArti_3(intptr_t option)
+static void M_RD_SelectiveArti_3(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_3, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_3, 0, 16, direction);
 }
 
-static void M_RD_SelectiveArti_4(intptr_t option)
+static void M_RD_SelectiveArti_4(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_4, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_4, 0, 16, direction);
 }
 
-static void M_RD_SelectiveArti_5(intptr_t option)
+static void M_RD_SelectiveArti_5(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_5, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_5, 0, 16, direction);
 }
 
-static void M_RD_SelectiveArti_6(intptr_t option)
+static void M_RD_SelectiveArti_6(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_6, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_6, 0, 16, direction);
 }
 
-static void M_RD_SelectiveArti_7(intptr_t option)
+static void M_RD_SelectiveArti_7(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_7, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_7, 0, 16, direction);
 }
 
-static void M_RD_SelectiveArti_8(intptr_t option)
+static void M_RD_SelectiveArti_8(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_8, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_8, 0, 16, direction);
 }
 
-static void M_RD_SelectiveArti_9(intptr_t option)
+static void M_RD_SelectiveArti_9(Direction_t direction)
 {
-    RD_Menu_SlideInt(&selective_arti_9, 0, 16, option);
+    RD_Menu_SlideInt(&selective_arti_9, 0, 16, direction);
 }
 
 //---------------------------------------------------------------------------
@@ -3604,7 +3603,7 @@ static void DrawOptions2Menu_Vanilla(void)
 // M_RD_EndGame
 //---------------------------------------------------------------------------
 
-static void M_RD_EndGame(intptr_t option)
+static void M_RD_EndGame(int option)
 {
     if (demoplayback || netgame)
     {
@@ -3625,7 +3624,7 @@ static void M_RD_EndGame(intptr_t option)
 // M_RD_ResetSettings
 //---------------------------------------------------------------------------
 
-static void M_RD_ResetSettings(intptr_t option)
+static void M_RD_ResetSettings(int option)
 {
     menuactive = false;
     askforquit = true;
@@ -3742,7 +3741,7 @@ void M_RD_DoResetSettings(void)
 // M_RD_ChangeLanguage
 //---------------------------------------------------------------------------
 
-static void M_RD_ChangeLanguage(intptr_t option)
+static void M_RD_ChangeLanguage(Direction_t direction)
 {
     extern void D_DoAdvanceDemo(void);
     extern int demosequence;
@@ -3800,30 +3799,6 @@ static void M_RD_ChangeLanguage(intptr_t option)
 
 //---------------------------------------------------------------------------
 //
-// PROC SCNetCheck_NG_LG //TODO do something with this
-//
-//---------------------------------------------------------------------------
-
-static void SCNetCheck_NG_LG(Menu_t* menu)
-{
-    if (!netgame)
-    {
-        SetMenu(menu); // okay to go into the menu
-        return;
-    }
-    else if(menu == &EpisodeMenu)
-    {
-        P_SetMessage(&players[consoleplayer], txt_cant_start_in_netgame, msg_system, true);
-    }
-    else // if(menu == &LoadMenu)
-    {
-        P_SetMessage(&players[consoleplayer], txt_cant_load_in_netgame, msg_system, true);
-    }
-    menuactive = false;
-}
-
-//---------------------------------------------------------------------------
-//
 // PROC SCNetCheck
 //
 //---------------------------------------------------------------------------
@@ -3856,7 +3831,7 @@ static boolean SCNetCheck(int option)
 //
 //---------------------------------------------------------------------------
 
-static void SCQuitGame(intptr_t option)
+static void SCQuitGame(int option)
 {
     menuactive = false;
     askforquit = true;
@@ -3876,7 +3851,7 @@ static void SCQuitGame(intptr_t option)
 //
 //---------------------------------------------------------------------------
 
-static void SCMessages(intptr_t option)
+static void SCMessages(int option)
 {
     show_messages ^= 1;
 
@@ -3898,7 +3873,7 @@ static void SCMessages(intptr_t option)
 //
 //---------------------------------------------------------------------------
 
-static void SCLoadGame(intptr_t option)
+static void SCLoadGame(int option)
 {
     char *filename;
 
@@ -3928,7 +3903,7 @@ static void SCLoadGame(intptr_t option)
 //
 //---------------------------------------------------------------------------
 
-static void SCSaveGame(intptr_t option)
+static void SCSaveGame(int option)
 {
     char *ptr;
 
@@ -3978,7 +3953,7 @@ static void SCSaveGame(intptr_t option)
 //
 //---------------------------------------------------------------------------
 
-static void SCEpisode(intptr_t option)
+static void SCEpisode(int option)
 {
     if (gamemode == shareware && option > 1)
     {
@@ -3997,7 +3972,7 @@ static void SCEpisode(intptr_t option)
 //
 //---------------------------------------------------------------------------
 
-static void SCSkill(intptr_t option)
+static void SCSkill(int option)
 {
     G_DeferedInitNew(option, MenuEpisode, 1);
     MN_DeactivateMenu();
@@ -4009,7 +3984,7 @@ static void SCSkill(intptr_t option)
 //
 //---------------------------------------------------------------------------
 
-static void SCInfo(intptr_t option)
+static void SCInfo(int option)
 {
     InfoType = 1;
     S_StartSound(NULL, sfx_dorcls);
@@ -4509,18 +4484,18 @@ boolean MN_Responder(event_t * event)
         }
         else if (key == key_menu_left)       // Slider left
         {
-            if (item->type == ITT_LRFUNC && item->func != NULL)
+            if (item->type == ITT_LRFUNC && item->pointer != NULL)
             {
-                item->func(LEFT_DIR);
+                ((void (*) (Direction_t direction)) item->pointer)(LEFT_DIR);
                 S_StartSound(NULL, sfx_keyup);
             }
             return (true);
         }
         else if (key == key_menu_right)      // Slider right
         {
-            if (item->type == ITT_LRFUNC && item->func != NULL)
+            if (item->type == ITT_LRFUNC && item->pointer != NULL)
             {
-                item->func(RIGHT_DIR);
+                ((void (*) (Direction_t direction)) item->pointer)(RIGHT_DIR);
                 S_StartSound(NULL, sfx_keyup);
             }
             return (true);
@@ -4529,18 +4504,25 @@ boolean MN_Responder(event_t * event)
         {
             if (item->type == ITT_SETMENU)
             {
-                SetMenu((Menu_t *) item->option);
+                SetMenu((Menu_t*) item->pointer);
             }
-            else if (item->func != NULL)
+            if (item->type == ITT_SETMENU_NONET)
+            {
+                if (SCNetCheck(item->option))
+                {
+                    SetMenu((Menu_t*) item->pointer);
+                }
+            }
+            else if (item->pointer != NULL)
             {
                 CurrentMenu->lastOn = CurrentItPos;
                 if (item->type == ITT_LRFUNC)
                 {
-                    item->func(RIGHT_DIR);
+                    ((void (*) (Direction_t direction)) item->pointer)(RIGHT_DIR);
                 }
                 else if (item->type == ITT_EFUNC)
                 {
-                    item->func(item->option);
+                    ((void (*) (int option)) item->pointer)(item->option);
                 }
             }
             S_StartSound(NULL, sfx_dorcls);
@@ -4719,7 +4701,7 @@ boolean MN_Responder(event_t * event)
             CurrentMenu->lastOn = CurrentItPos;
             if (item->type == ITT_EFUNC)
             {
-                item->func(item->option);
+                ((void (*) (int option)) item->pointer)(item->option);
             }
             return (true);
         }
