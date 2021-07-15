@@ -40,6 +40,11 @@ typedef enum
      *  Field 'option' must be 0
      */
     ITT_EMPTY,
+    /** Subheader menu item. Can not be selected or clicked. Rendered in gold color.
+     *  Field 'pointer' must be NULL.
+     *  Field 'option' must be 0
+     */
+    ITT_TITLE,
     /** Clickable menu item.
      *  The type of field 'pointer' is void (*) (int option).
      *  Field 'option' is an argument for the function specified by 'pointer'
@@ -60,8 +65,7 @@ typedef enum
      *  The type of field 'pointer' is Menu_t*.
      *  Field 'option' is the type of error
      */
-    ITT_SETMENU_NONET,
-    ITT_INERT
+    ITT_SETMENU_NONET
 } ItemType_t;
 
 typedef struct
@@ -97,6 +101,7 @@ typedef struct Menu_s
     const int pageCount;
     const struct Menu_s* const prevMenu;
 
+    /** The initial value of this field must be the index of the first clickable menu item */
     int lastOn;
 } Menu_t;
 
