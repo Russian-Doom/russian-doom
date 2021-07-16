@@ -183,7 +183,6 @@ static void M_RD_ColoredGem(intptr_t option);
 static void M_RD_NegativeHealth(intptr_t option);
 static void M_RD_AmmoWidgetDraw(intptr_t option);
 static void M_RD_AmmoWidgetColoring(intptr_t option);
-static void M_RD_AmmoWidgetOpacity(intptr_t option);
 static void M_RD_CrossHairDraw(intptr_t option);
 static void M_RD_CrossHairType(intptr_t option);
 static void M_RD_CrossHairScale(intptr_t option);
@@ -684,13 +683,13 @@ static MenuItem_t Gameplay2Items[] = {
     {ITT_EMPTY,  NULL,                    NULL,                          NULL,                    0},
     {ITT_LRFUNC, "DRAW WIDGET:",          "JNJ,HF;FNM DBL;TN:",          M_RD_AmmoWidgetDraw,     0}, // ОТОБРАЖАТЬ ВИДЖЕТ
     {ITT_LRFUNC, "COLORING:",             "WDTNJDFZ BYLBRFWBZ:",         M_RD_AmmoWidgetColoring, 0}, // ЦВЕТОВАЯ ИНДИКАЦИЯ
-    {ITT_LRFUNC, "WIDGET TRANSLUCENCY",   "GHJPHFXYJCNM DBL;TNF",        M_RD_AmmoWidgetOpacity,  0}, // ПРОЗРАЧНОСТЬ ВИДЖЕТА
-    {ITT_EMPTY,  NULL,                    NULL,                          NULL,                    0},
     {ITT_EMPTY,  NULL,                    NULL,                          NULL,                    0},
     {ITT_LRFUNC, "DRAW CROSSHAIR:",       "JNJ,HF;FNM GHBWTK:",          M_RD_CrossHairDraw,      0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
     {ITT_LRFUNC, "INDICATION:",           "BYLBRFWBZ:",                  M_RD_CrossHairType,      0}, // ИНДИКАЦИЯ
     {ITT_LRFUNC, "INCREASED SIZE:",       "EDTKBXTYYSQ HFPVTH:",         M_RD_CrossHairScale,     0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
-    {ITT_EMPTY,  NULL,                     NULL,                         NULL,                    0},
+    {ITT_EMPTY,  NULL,                    NULL,                          NULL,                    0},
+    {ITT_EMPTY,  NULL,                    NULL,                          NULL,                    0},
+    {ITT_EMPTY,  NULL,                    NULL,                          NULL,                    0},
     {ITT_SETMENU,"LAST PAGE...",          "GJCKTLYZZ CNHFYBWF>>>",       NULL, (const intptr_t) &Gameplay3Menu} // ПОСЛЕДНЯЯ СТРАНИЦА
 };
 
@@ -4035,7 +4034,7 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("STATUS BAR"), 36 + wide_delta, 26);
         MN_DrTextSmallENG(DEH_String("AMMO WIDGET"), 36 + wide_delta, 66);
-        MN_DrTextSmallENG(DEH_String("CROSSHAIR"), 36 + wide_delta, 116);
+        MN_DrTextSmallENG(DEH_String("CROSSHAIR"), 36 + wide_delta, 96);
         dp_translation = NULL;
 
         // Colored Status Bar
@@ -4065,23 +4064,9 @@ static void DrawGameplay2Menu(void)
         MN_DrTextSmallENG(DEH_String(ammo_widget_colored ? "ON" : "OFF"), 101 + wide_delta, 86);
         dp_translation = NULL;
 
-        // Widget translucency
-        dp_translation = cr[CR_WHITE2GRAY_HERETIC];
-        MN_DrTextSmallENG(ammo_widget_opacity ==  90 ? "10%" :
-                          ammo_widget_opacity ==  80 ? "20%" :
-                          ammo_widget_opacity ==  70 ? "30%" :
-                          ammo_widget_opacity ==  60 ? "40%" :
-                          ammo_widget_opacity ==  50 ? "50%" :
-                          ammo_widget_opacity ==  40 ? "60%" :
-                          ammo_widget_opacity ==  30 ? "70%" :
-                          ammo_widget_opacity ==  20 ? "80%" :
-                          ammo_widget_opacity ==  10 ? "90%" :
-                          "OFF", 128 + wide_delta, 107);
-        dp_translation = NULL;
-
         // Draw crosshair
         dp_translation = crosshair_draw ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(crosshair_draw ? "ON" : "OFF"), 150 + wide_delta, 126);
+        MN_DrTextSmallENG(DEH_String(crosshair_draw ? "ON" : "OFF"), 150 + wide_delta, 106);
         dp_translation = NULL;
 
         // Indication
@@ -4091,13 +4076,13 @@ static void DrawGameplay2Menu(void)
                                      crosshair_type == 2 ? "TARGET HIGHLIGHTING" :
                                      crosshair_type == 3 ? "TARGET HIGHLIGHTING+HEALTH" :
                                                             "STATIC"),
-                                     111 + wide_delta, 136);
+                                     111 + wide_delta, 116);
         dp_translation = NULL;
 
         // Increased size
         dp_translation = crosshair_scale ? cr[CR_WHITE2GREEN_HERETIC] :
                                            cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(crosshair_scale ? "ON" : "OFF"), 146 + wide_delta, 146);
+        MN_DrTextSmallENG(DEH_String(crosshair_scale ? "ON" : "OFF"), 146 + wide_delta, 126);
         dp_translation = NULL;
     }
     else
@@ -4113,7 +4098,7 @@ static void DrawGameplay2Menu(void)
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("CNFNEC-,FH"), 36 + wide_delta, 26);
         MN_DrTextSmallRUS(DEH_String("DBL;TN ,JTPFGFCF"), 36 + wide_delta, 66);
-        MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + wide_delta, 116);
+        MN_DrTextSmallRUS(DEH_String("GHBWTK"), 36 + wide_delta, 96);
         dp_translation = NULL;
 
         // Разноцветные элементы
@@ -4143,24 +4128,10 @@ static void DrawGameplay2Menu(void)
         MN_DrTextSmallRUS(DEH_String(ammo_widget_colored ? "DRK" : "DSRK"), 178 + wide_delta, 86);
         dp_translation = NULL;
 
-        // Прозрачность виджета
-        dp_translation = cr[CR_WHITE2GRAY_HERETIC];
-        MN_DrTextSmallRUS(ammo_widget_opacity ==  90 ? "10%" :
-                          ammo_widget_opacity ==  80 ? "20%" :
-                          ammo_widget_opacity ==  70 ? "30%" :
-                          ammo_widget_opacity ==  60 ? "40%" :
-                          ammo_widget_opacity ==  50 ? "50%" :
-                          ammo_widget_opacity ==  40 ? "60%" :
-                          ammo_widget_opacity ==  30 ? "70%" :
-                          ammo_widget_opacity ==  20 ? "80%" :
-                          ammo_widget_opacity ==  10 ? "90%" :
-                          "JNCENCNDETN", 128 + wide_delta, 107);
-        dp_translation = NULL;
-
         // Отображать прицел
         dp_translation = crosshair_draw ? cr[CR_WHITE2GREEN_HERETIC] :
                                           cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(crosshair_draw ? "DRK" : "DSRK"), 175 + wide_delta, 126);
+        MN_DrTextSmallRUS(DEH_String(crosshair_draw ? "DRK" : "DSRK"), 175 + wide_delta, 106);
         dp_translation = NULL;
 
         // Индикация
@@ -4170,18 +4141,15 @@ static void DrawGameplay2Menu(void)
                                      crosshair_type == 2 ? "GJLCDTNRF WTKB" : // ПОДСВЕТКА ЦЕЛИ
                                      crosshair_type == 3 ? "GJLCDTNRF WTKB+PLJHJDMT" :
                                                            "CNFNBXYFZ"),      // СТАТИЧНАЯ
-                                     111 + wide_delta, 136);
+                                     111 + wide_delta, 116);
         dp_translation = NULL;
 
         // Увеличенный размер
         dp_translation = crosshair_scale ? cr[CR_WHITE2GREEN_HERETIC] :
                                            cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(crosshair_scale ? "DRK" : "DSRK"), 181 + wide_delta, 146);
+        MN_DrTextSmallRUS(DEH_String(crosshair_scale ? "DRK" : "DSRK"), 181 + wide_delta, 126);
         dp_translation = NULL;
     }
-
-    // Ammo widget opacity
-    DrawSliderSmall(&DisplayMenu, 106, 9, (ammo_widget_opacity / 10) - 2);
 
     // (2/3)
     dp_translation = cr[CR_WHITE2GRAY_HERETIC];
@@ -4240,27 +4208,6 @@ static void M_RD_AmmoWidgetDraw(intptr_t option)
 static void M_RD_AmmoWidgetColoring(intptr_t option)
 {
     ammo_widget_colored ^= 1;
-}
-
-static void M_RD_AmmoWidgetOpacity(intptr_t option)
-{
-    extern void SB_Define_Ammo_Widget_Opacity (void);
-
-    switch (option)
-    {
-        case 0:
-        if (ammo_widget_opacity > 20)
-            ammo_widget_opacity -= 10;
-        break;
-
-        case 1:
-        if (ammo_widget_opacity < 100)
-            ammo_widget_opacity += 10;
-        break;
-    }
-
-    // [JN] Redefine ammo widget opacity.
-    SB_Define_Ammo_Widget_Opacity();
 }
 
 static void M_RD_CrossHairDraw(intptr_t option)
@@ -5536,7 +5483,6 @@ void M_RD_DoResetSettings(void)
     randomly_flipcorpses = 1;
     ammo_widget          = 0;
     ammo_widget_colored  = 1;
-    ammo_widget_opacity  = 100;
 
     // Gameplay (2)
     z_axis_sfx           = 0;

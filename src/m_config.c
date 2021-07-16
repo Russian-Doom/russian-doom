@@ -1718,7 +1718,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(sbar_color_armor_0),
     CONFIG_VARIABLE_INT(ammo_widget),
     CONFIG_VARIABLE_INT(ammo_widget_colored),
-    CONFIG_VARIABLE_INT(ammo_widget_opacity),
 
     // Gameplay: Audible
     CONFIG_VARIABLE_INT(z_axis_sfx),

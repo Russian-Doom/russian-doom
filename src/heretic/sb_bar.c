@@ -72,8 +72,7 @@ static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat);
 
 // [JN] Ammo widget prototypes.
-void SB_Define_Ammo_Widget_Opacity (void);
-static void DrSmallAmmoNumber (int val, int x, int y);
+static void DrSmallAmmoNumber (int val, int x, int y, boolean active_weapon);
 static void SB_Draw_Ammo_Widget (void);
 
 // Public Data
@@ -253,9 +252,6 @@ void SB_Init(void)
     playpalette2 = W_GetNumForName(DEH_String("PLAYPAL"));
     spinbooklump = W_GetNumForName(DEH_String("SPINBK0"));
     spinflylump = W_GetNumForName(DEH_String("SPFLY0"));
-
-    // [JN] Define ammo widget opacity.
-    SB_Define_Ammo_Widget_Opacity();
 }
 
 //---------------------------------------------------------------------------
@@ -2093,31 +2089,12 @@ static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
 /*
 ================================================================================
 =
-= [JN] Ammo widget. Initializing, drawing and coloring.
+= [JN] Ammo widget. Drawing and coloring.
 =
 ================================================================================
 */
 
-byte *ammo_widget_opacity_set;
-
-void SB_Define_Ammo_Widget_Opacity (void)
-{
-    switch (ammo_widget_opacity)
-    {
-        case 10:   ammo_widget_opacity_set = transtable10;  break;
-        case 20:   ammo_widget_opacity_set = transtable20;  break;
-        case 30:   ammo_widget_opacity_set = transtable30;  break;
-        case 40:   ammo_widget_opacity_set = transtable40;  break;
-        case 50:   ammo_widget_opacity_set = transtable50;  break;
-        case 60:   ammo_widget_opacity_set = transtable60;  break;
-        case 70:   ammo_widget_opacity_set = transtable70;  break;
-        case 80:   ammo_widget_opacity_set = transtable80;  break;
-        case 90:   ammo_widget_opacity_set = transtable90;  break;
-        case 100: default: ammo_widget_opacity_set = NULL;  break;
-    }
-}
-
-static void DrSmallAmmoNumber (int val, int x, int y)
+static void DrSmallAmmoNumber (int val, int x, int y, boolean active_weapon)
 {
     int oldval = val;
     patch_t *patch;
@@ -2125,17 +2102,17 @@ static void DrSmallAmmoNumber (int val, int x, int y)
     if (val > 99)
     {
         patch = PatchINumbers[val / 100];
-        V_DrawPatchUnscaled(x << hires, y << hires, patch, ammo_widget_opacity_set);
+        V_DrawPatchUnscaled(x << hires, y << hires, patch, active_weapon ? NULL : transtable50);
     }
     val = val % 100;
     if (val > 9 || oldval > 99)
     {
         patch = PatchINumbers[val / 10];
-        V_DrawPatchUnscaled((x + 5) << hires, y << hires, patch, ammo_widget_opacity_set);
+        V_DrawPatchUnscaled((x + 5) << hires, y << hires, patch, active_weapon ? NULL : transtable50);
     }
     val = val % 10;
     patch = PatchINumbers[val];
-    V_DrawPatchUnscaled((x + 10) << hires, y << hires, patch, ammo_widget_opacity_set);
+    V_DrawPatchUnscaled((x + 10) << hires, y << hires, patch, active_weapon ? NULL : transtable50);
 }
 
 static void SB_Draw_Ammo_Widget (void)
@@ -2153,26 +2130,35 @@ static void SB_Draw_Ammo_Widget (void)
     const int ammo6 = CPlayer->ammo[am_mace], fullammo6 = CPlayer->maxammo[am_mace];
 
     // Ammo GFX patches
-    V_DrawPatchUnscaled(xpos_pic, 99 << hires, W_CacheLumpName(DEH_String("INAMGLD"), PU_CACHE), ammo_widget_opacity_set);
-    V_DrawPatchUnscaled(xpos_pic, 106 << hires, W_CacheLumpName(DEH_String("INAMBOW"), PU_CACHE), ammo_widget_opacity_set);
-    V_DrawPatchUnscaled(xpos_pic, 113 << hires, W_CacheLumpName(DEH_String("INAMBST"), PU_CACHE), ammo_widget_opacity_set);
+    V_DrawPatchUnscaled(xpos_pic, 99 << hires, W_CacheLumpName(DEH_String("INAMGLD"), PU_CACHE),
+                       (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? NULL : transtable50);
+    V_DrawPatchUnscaled(xpos_pic, 106 << hires, W_CacheLumpName(DEH_String("INAMBOW"), PU_CACHE),
+                       (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? NULL : transtable50);
+    V_DrawPatchUnscaled(xpos_pic, 113 << hires, W_CacheLumpName(DEH_String("INAMBST"), PU_CACHE),
+                       (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? NULL : transtable50);
     // Following weapons not available in Shareware
     if (gamemode != shareware)
     {
-        V_DrawPatchUnscaled(xpos_pic, 120 << hires, W_CacheLumpName(DEH_String("INAMRAM"), PU_CACHE), ammo_widget_opacity_set);
-        V_DrawPatchUnscaled(xpos_pic, 127 << hires, W_CacheLumpName(DEH_String("INAMPNX"), PU_CACHE), ammo_widget_opacity_set);
-        V_DrawPatchUnscaled(xpos_pic, 134 << hires, W_CacheLumpName(DEH_String("INAMLOB"), PU_CACHE), ammo_widget_opacity_set);
+        V_DrawPatchUnscaled(xpos_pic, 120 << hires, W_CacheLumpName(DEH_String("INAMRAM"), PU_CACHE),
+                           (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? NULL : transtable50);
+        V_DrawPatchUnscaled(xpos_pic, 127 << hires, W_CacheLumpName(DEH_String("INAMPNX"), PU_CACHE),
+                           (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? NULL : transtable50);
+        V_DrawPatchUnscaled(xpos_pic, 134 << hires, W_CacheLumpName(DEH_String("INAMLOB"), PU_CACHE),
+                           (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? NULL : transtable50);
     }
 
     // Wand ammo
     if (ammo_widget_colored)
     dp_translation = ammo1 < fullammo1 / 4 ? cr[CR_GOLD2RED_HERETIC] :
                      ammo1 < fullammo1 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
-    DrSmallAmmoNumber(ammo1, xpos_qty1, 100);
+    DrSmallAmmoNumber(ammo1, xpos_qty1, 100,
+                     (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
     {
-        V_DrawPatchUnscaled(xpos_slash, 100 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
-        DrSmallAmmoNumber(fullammo1, xpos_qty2, 100);
+        V_DrawPatchUnscaled(xpos_slash, 100 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+                           (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? NULL : transtable50);
+        DrSmallAmmoNumber(fullammo1, xpos_qty2, 100,
+                         (CPlayer->readyweapon == wp_goldwand || (automapactive && !automap_overlay)) ? true : false);
     }
     dp_translation = NULL;
 
@@ -2180,11 +2166,14 @@ static void SB_Draw_Ammo_Widget (void)
     if (ammo_widget_colored)
     dp_translation = ammo2 < fullammo2 / 4 ? cr[CR_GOLD2RED_HERETIC] :
                      ammo2 < fullammo2 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
-    DrSmallAmmoNumber(ammo2, xpos_qty1, 107);
+    DrSmallAmmoNumber(ammo2, xpos_qty1, 107,
+                     (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
     {
-        V_DrawPatchUnscaled(xpos_slash, 107 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
-        DrSmallAmmoNumber(fullammo2, xpos_qty2, 107);
+        V_DrawPatchUnscaled(xpos_slash, 107 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+                           (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? NULL : transtable50);
+        DrSmallAmmoNumber(fullammo2, xpos_qty2, 107,
+                         (CPlayer->readyweapon == wp_crossbow || (automapactive && !automap_overlay)) ? true : false);
     }
     dp_translation = NULL;
 
@@ -2192,11 +2181,14 @@ static void SB_Draw_Ammo_Widget (void)
     if (ammo_widget_colored)
     dp_translation = ammo3 < fullammo3 / 4 ? cr[CR_GOLD2RED_HERETIC] :
                      ammo3 < fullammo3 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
-    DrSmallAmmoNumber(ammo3, xpos_qty1, 114);
+    DrSmallAmmoNumber(ammo3, xpos_qty1, 114,
+                     (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? true : false);
     if (ammo_widget == 2)
     {
-        V_DrawPatchUnscaled(xpos_slash, 114 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
-        DrSmallAmmoNumber(fullammo3, xpos_qty2, 114);
+        V_DrawPatchUnscaled(xpos_slash, 114 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+                           (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? NULL : transtable50);
+        DrSmallAmmoNumber(fullammo3, xpos_qty2, 114,
+                         (CPlayer->readyweapon == wp_blaster || (automapactive && !automap_overlay)) ? true : false);
     }
     dp_translation = NULL;
 
@@ -2207,11 +2199,14 @@ static void SB_Draw_Ammo_Widget (void)
         if (ammo_widget_colored)
         dp_translation = ammo4 < fullammo4 / 4 ? cr[CR_GOLD2RED_HERETIC] :
                          ammo4 < fullammo4 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
-        DrSmallAmmoNumber(ammo4, xpos_qty1, 121);
+        DrSmallAmmoNumber(ammo4, xpos_qty1, 121,
+                         (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
-            V_DrawPatchUnscaled(xpos_slash, 121 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
-            DrSmallAmmoNumber(fullammo4, xpos_qty2, 121);
+            V_DrawPatchUnscaled(xpos_slash, 121 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+                               (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? NULL : transtable50);
+            DrSmallAmmoNumber(fullammo4, xpos_qty2, 121,
+                             (CPlayer->readyweapon == wp_skullrod || (automapactive && !automap_overlay)) ? true : false);
         }
         dp_translation = NULL;
 
@@ -2219,11 +2214,14 @@ static void SB_Draw_Ammo_Widget (void)
         if (ammo_widget_colored)
         dp_translation = ammo5 < fullammo5 / 4 ? cr[CR_GOLD2RED_HERETIC] :
                          ammo5 < fullammo5 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
-        DrSmallAmmoNumber(ammo5, xpos_qty1, 128);
+        DrSmallAmmoNumber(ammo5, xpos_qty1, 128, 
+                         (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
-            V_DrawPatchUnscaled(xpos_slash, 128 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
-            DrSmallAmmoNumber(fullammo5, xpos_qty2, 128);
+            V_DrawPatchUnscaled(xpos_slash, 128 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+                               (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? NULL : transtable50);
+            DrSmallAmmoNumber(fullammo5, xpos_qty2, 128, 
+                              (CPlayer->readyweapon == wp_phoenixrod || (automapactive && !automap_overlay)) ? true : false);
         }
         dp_translation = NULL;
 
@@ -2231,11 +2229,14 @@ static void SB_Draw_Ammo_Widget (void)
         if (ammo_widget_colored)
         dp_translation = ammo6 < fullammo6 / 4 ? cr[CR_GOLD2RED_HERETIC] :
                          ammo6 < fullammo6 / 2 ? NULL : cr[CR_GOLD2GREEN_HERETIC];
-        DrSmallAmmoNumber(ammo6, xpos_qty1, 135);
+        DrSmallAmmoNumber(ammo6, xpos_qty1, 135, 
+                         (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);
         if (ammo_widget == 2)
         {
-            V_DrawPatchUnscaled(xpos_slash, 135 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE), ammo_widget_opacity_set);
-            DrSmallAmmoNumber(fullammo6, xpos_qty2, 135);
+            V_DrawPatchUnscaled(xpos_slash, 135 << hires, W_CacheLumpName(DEH_String("SLASHNUM"), PU_CACHE),
+                               (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? NULL : transtable50);
+            DrSmallAmmoNumber(fullammo6, xpos_qty2, 135, 
+                             (CPlayer->readyweapon == wp_mace || (automapactive && !automap_overlay)) ? true : false);
         }
         dp_translation = NULL;
     }

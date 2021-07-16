@@ -182,7 +182,6 @@ int linear_sky = 1;
 // Gameplay: Status bar
 int ammo_widget = 0;
 int ammo_widget_colored = 1;
-int ammo_widget_opacity = 100;
 
 // Gameplay: Physical
 int torque = 1;
@@ -1221,7 +1220,6 @@ void D_BindVariables(void)
     // Gameplay: Status bar
     M_BindIntVariable("ammo_widget",            &ammo_widget);
     M_BindIntVariable("ammo_widget_colored",    &ammo_widget_colored);
-    M_BindIntVariable("ammo_widget_opacity",    &ammo_widget_opacity);
 
     // Gameplay: Physical
     M_BindIntVariable("torque",                 &torque);

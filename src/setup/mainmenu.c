@@ -180,7 +180,6 @@ static void SensibleDefaults(void)
     sbar_color_armor_0 = 0;
     ammo_widget = 0;
     ammo_widget_colored = 1;
-    ammo_widget_opacity = 100;
 
     // Gameplay: Audible
     z_axis_sfx = 0;
