@@ -72,7 +72,7 @@ static void CheatIDKFAFunc(player_t * player, Cheat_t * cheat);
 static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat);
 
 // [JN] Ammo widget prototypes.
-static void DrSmallAmmoNumber (int val, int x, int y, boolean active_weapon);
+static void DrSmallAmmoNumber (int val, int x, int y, boolean opaque);
 static void SB_Draw_Ammo_Widget (void);
 
 // Public Data
@@ -2094,25 +2094,29 @@ static void CheatIDDQDFunc(player_t * player, Cheat_t * cheat)
 ================================================================================
 */
 
-static void DrSmallAmmoNumber (int val, int x, int y, boolean active_weapon)
+static void DrSmallAmmoNumber (int val, int x, int y, boolean opaque)
 {
     int oldval = val;
     patch_t *patch;
 
+    if (val > 999)
+    {
+        val = 999;  // [JN] Overflow guard.
+    }
     if (val > 99)
     {
         patch = PatchINumbers[val / 100];
-        V_DrawPatchUnscaled(x << hires, y << hires, patch, active_weapon ? NULL : transtable50);
+        V_DrawPatchUnscaled(x << hires, y << hires, patch, opaque ? NULL : transtable50);
     }
     val = val % 100;
     if (val > 9 || oldval > 99)
     {
         patch = PatchINumbers[val / 10];
-        V_DrawPatchUnscaled((x + 5) << hires, y << hires, patch, active_weapon ? NULL : transtable50);
+        V_DrawPatchUnscaled((x + 5) << hires, y << hires, patch, opaque ? NULL : transtable50);
     }
     val = val % 10;
     patch = PatchINumbers[val];
-    V_DrawPatchUnscaled((x + 10) << hires, y << hires, patch, active_weapon ? NULL : transtable50);
+    V_DrawPatchUnscaled((x + 10) << hires, y << hires, patch, opaque ? NULL : transtable50);
 }
 
 static void SB_Draw_Ammo_Widget (void)
