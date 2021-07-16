@@ -88,8 +88,8 @@ int correct_endlevel_sfx = 0;
 // Gameplay: Tactical
 int secret_notification = 1;
 int infragreen_visor = 0;
+int show_all_artifacts = 0;
 int show_artifacts_timer = 0;
-int negative_health = 0;
 
 // Gameplay: Physical
 int over_under = 0;

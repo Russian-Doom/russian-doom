@@ -193,6 +193,7 @@ static void SensibleDefaults(void)
     // Gameplay: Tactical
     secret_notification = 1;
     infragreen_visor = 0;
+    show_all_artifacts = 0;
     show_artifacts_timer = 0;
     negative_health = 0;
 
