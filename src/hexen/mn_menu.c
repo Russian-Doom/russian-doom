@@ -34,93 +34,29 @@
 #include "m_controls.h"
 #include "m_misc.h"
 #include "p_local.h"
-#include "r_local.h"
 #include "s_sound.h"
 #include "v_trans.h"
 #include "v_video.h"
+#include "rd_menu.h"
 #include "rd_rushexen.h"
 #include "crispy.h"
 #include "jn.h"
 
 // MACROS ------------------------------------------------------------------
 
-#define LEFT_DIR 0
-#define RIGHT_DIR 1
-#define ITEM_HEIGHT 20
-#define SELECTOR_XOFFSET (-28)
-#define SELECTOR_YOFFSET (-1)
 #define SLOTTEXTLEN	16
 #define ASCII_CURSOR '['
-
-// [JN] Sizes of small font and small arrow for RD menu
-#define ITEM_HEIGHT_SMALL 10
-#define SELECTOR_XOFFSET_SMALL (-14)
-
-// TYPES -------------------------------------------------------------------
-
-typedef enum
-{
-    ITT_EMPTY,
-    ITT_EFUNC,
-    ITT_LRFUNC,
-    ITT_SETMENU,
-    ITT_INERT
-} ItemType_t;
-
-typedef enum
-{
-    MENU_MAIN,
-    MENU_CLASS,
-    MENU_SKILL,
-    MENU_OPTIONS,
-    MENU_FILES,
-    MENU_LOAD,
-    MENU_SAVE,
-    MENU_RENDERING,
-    MENU_DISPLAY,
-    MENU_AUTOMAP,
-    MENU_SOUND,
-    MENU_SOUND_SYS,
-    MENU_CONTROLS,
-    MENU_GAMEPLAY,
-    MENU_NONE
-} MenuType_t;
-
-typedef struct
-{
-    ItemType_t type;
-    char *text;
-    void (*func) (int option);
-    int option;
-    MenuType_t menu;
-} MenuItem_t;
-
-typedef struct
-{
-    int x;
-    int y;
-    void (*drawFunc) (void);
-    int itemCount;
-    MenuItem_t *items;
-    int oldItPos;
-    MenuType_t prevMenu;
-} Menu_t;
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
 extern void InitMapInfo(void);
 
-// PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
-
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
 
 static void InitFonts(void);
-static void SetMenu(MenuType_t menu);
 static void SCQuitGame(int option);
 static void SCClass(int option);
 static void SCSkill(int option);
-static boolean SCNetCheck(int option);
-static void SCNetCheck2(int option);
 static void SCLoadGame(int option);
 static void SCSaveGame(int option);
 static void SCMessages(int option);
@@ -133,8 +69,6 @@ static void DrawFilesMenu(void);
 static void MN_DrawInfo(void);
 static void DrawLoadMenu(void);
 static void DrawSaveMenu(void);
-//static void DrawSlider(Menu_t * menu, int item, int width, int slot);
-static void DrawSliderSmall(Menu_t * menu, int item, int width, int slot);
 void MN_LoadSlotText(void);
 
 // -----------------------------------------------------------------------------
@@ -143,63 +77,63 @@ void MN_LoadSlotText(void);
 
 // Rendering
 static void DrawRenderingMenu(void);
-static void M_RD_Change_Widescreen(int option);
-static void M_RD_Change_VSync(int option);
-static void M_RD_Uncapped(int option);
-static void M_RD_FPScounter(int option);
-static void M_RD_Smoothing(int option);
-static void M_RD_PorchFlashing(int option);
-static void M_RD_Renderer(int option);
-static void M_RD_Screenshots(int option);
+static void M_RD_Change_Widescreen(Direction_t direction);
+static void M_RD_Change_VSync(Direction_t direction);
+static void M_RD_Uncapped(Direction_t direction);
+static void M_RD_FPScounter(Direction_t direction);
+static void M_RD_Smoothing(Direction_t direction);
+static void M_RD_PorchFlashing(Direction_t direction);
+static void M_RD_Renderer(Direction_t direction);
+static void M_RD_Screenshots(Direction_t direction);
 
 // Display
 static void DrawDisplayMenu(void);
-static void M_RD_ScreenSize(int option);
-static void M_RD_Gamma(int option);
-static void M_RD_LevelBrightness(int option);
-static void M_RD_LocalTime(int option);
-static void M_RD_Messages(int option);
-static void M_RD_ShadowedText(int option);
+static void M_RD_ScreenSize(Direction_t direction);
+static void M_RD_Gamma(Direction_t direction);
+static void M_RD_LevelBrightness(Direction_t direction);
+static void M_RD_LocalTime(Direction_t direction);
+static void M_RD_Messages(Direction_t direction);
+static void M_RD_ShadowedText(Direction_t direction);
 
 // Automap
 static void DrawAutomapMenu(void);
-static void M_RD_AutoMapOverlay(int option);
-static void M_RD_AutoMapRotate(int option);
-static void M_RD_AutoMapFollow(int option);
-static void M_RD_AutoMapGrid(int option);
+static void M_RD_AutoMapOverlay(Direction_t direction);
+static void M_RD_AutoMapRotate(Direction_t direction);
+static void M_RD_AutoMapFollow(Direction_t direction);
+static void M_RD_AutoMapGrid(Direction_t direction);
 
 // Sound
 static void DrawSoundMenu(void);
-static void M_RD_SfxVolume(int option);
-static void M_RD_MusVolume(int option);
-static void M_RD_SfxChannels(int option);
+static void M_RD_SfxVolume(Direction_t direction);
+static void M_RD_MusVolume(Direction_t direction);
+static void M_RD_SfxChannels(Direction_t direction);
 
 // Sound system
 static void DrawSoundSystemMenu(void);
-static void M_RD_SoundDevice(int option);
-static void M_RD_MusicDevice(int option);
-static void M_RD_Sampling(int option);
-static void M_RD_SndMode(int option);
-static void M_RD_PitchShifting(int option);
-static void M_RD_MuteInactive(int option);
+static void M_RD_SoundDevice(Direction_t direction);
+static void M_RD_MusicDevice(Direction_t direction);
+static void M_RD_Sampling(Direction_t direction);
+static void M_RD_SndMode(Direction_t direction);
+static void M_RD_PitchShifting(Direction_t direction);
+static void M_RD_MuteInactive(Direction_t direction);
 
 // Controls
 static void DrawControlsMenu(void);
-static void M_RD_AlwaysRun(int option);
-static void M_RD_Sensitivity(int option);
-static void M_RD_MouseLook(int option);
-static void M_RD_InvertY(int option);
-static void M_RD_Novert(int option);
+static void M_RD_AlwaysRun(Direction_t direction);
+static void M_RD_Sensitivity(Direction_t direction);
+static void M_RD_MouseLook(Direction_t direction);
+static void M_RD_InvertY(Direction_t direction);
+static void M_RD_Novert(Direction_t direction);
 
 // Gameplay
 static void DrawGameplayMenu(void);
-static void M_RD_Brightmaps(int option);
-static void M_RD_FakeContrast(int option);
-static void M_RD_CrossHairDraw(int option);
-static void M_RD_CrossHairType(int option);
-static void M_RD_CrossHairScale(int option);
-static void M_RD_FlipLevels(int option);
-static void M_RD_NoDemos(int option);
+static void M_RD_Brightmaps(Direction_t direction);
+static void M_RD_FakeContrast(Direction_t direction);
+static void M_RD_CrossHairDraw(Direction_t direction);
+static void M_RD_CrossHairType(Direction_t direction);
+static void M_RD_CrossHairScale(Direction_t direction);
+static void M_RD_FlipLevels(Direction_t direction);
+static void M_RD_NoDemos(Direction_t direction);
 
 // End game
 static void SCEndGame(int option);
@@ -230,15 +164,12 @@ static int FontBBaseLump;       // big
 // [JN] Small special font used for time/fps widget
 static int FontCBaseLump;
 // [JN] Unchangable Russian fonts
-static int FontDBaseLump;       // small
-static int FontDYellowBaseLump; // small yellow
-static int FontEBaseLump;       // big
+static int FontFBaseLump;       // small
+static int FontFYellowBaseLump; // small yellow
+static int FontGBaseLump;       // big
 
 static int MauloBaseLump;
-static Menu_t *CurrentMenu;
-static int CurrentItPos;
 static int MenuPClass;
-static int MenuTime;
 static boolean soundchanged;
 
 boolean askforquit;
@@ -253,149 +184,114 @@ static int currentSlot;
 static int quicksave;
 static int quickload;
 
-static MenuItem_t MainItems[] = {
-    {ITT_SETMENU, "NEW GAME", SCNetCheck2, 1, MENU_CLASS},
-    {ITT_SETMENU, "OPTIONS", NULL, 0, MENU_OPTIONS},
-    {ITT_SETMENU, "GAME FILES", NULL, 0, MENU_FILES},
-    {ITT_EFUNC,   "INFO", SCInfo, 0, MENU_NONE},
-    {ITT_EFUNC,   "QUIT GAME", SCQuitGame, 0, MENU_NONE}
-};
+//[Dasperal] Predeclare menu variables to allow referencing them before they initialized
+static Menu_t ClassMenu;
+static Menu_t OptionsMenu;
+static Menu_t RenderingMenu;
+static Menu_t DisplayMenu;
+static Menu_t AutomapMenu;
+static Menu_t SoundMenu;
+static Menu_t SoundSysMenu;
+static Menu_t ControlsMenu;
+static Menu_t GameplayMenu;
+static Menu_t FilesMenu;
+static Menu_t LoadMenu;
+static Menu_t SaveMenu;
 
-static MenuItem_t MainItems_Rus[] = {
-    {ITT_SETMENU, "YJDFZ BUHF", SCNetCheck2, 1, MENU_CLASS},	// НОВАЯ ИГРА
-    {ITT_SETMENU, "YFCNHJQRB", NULL, 0, MENU_OPTIONS},			// НАСТРОЙКИ
-    {ITT_SETMENU, "AFQKS BUHS", NULL, 0, MENU_FILES},			// ФАЙЛЫ ИГРЫ
-    {ITT_EFUNC,   "BYAJHVFWBZ", SCInfo, 0, MENU_NONE},			// ИНФОРМАЦИЯ
-    {ITT_EFUNC,   "DS[JL", SCQuitGame, 0, MENU_NONE}			// ВЫХОД
+static MenuItem_t MainItems[] = {
+    {ITT_SETMENU_NONET, "NEW GAME",   "YJDFZ BUHF", &ClassMenu,   1}, // НОВАЯ ИГРА
+    {ITT_SETMENU,       "OPTIONS",    "YFCNHJQRB",  &OptionsMenu, 0}, // НАСТРОЙКИ
+    {ITT_SETMENU,       "GAME FILES", "AFQKS BUHS", &FilesMenu,   0}, // ФАЙЛЫ ИГРЫ
+    {ITT_EFUNC,         "INFO",       "BYAJHVFWBZ", SCInfo,       0}, // ИНФОРМАЦИЯ
+    {ITT_EFUNC,         "QUIT GAME",  "DS[JL",      SCQuitGame,   0}  // ВЫХОД
 };
 
 static Menu_t MainMenu = {
-    110, 56,
+    110, 104,
+    56,
+    NULL, NULL, true,
+    5, MainItems, true,
     DrawMainMenu,
-    5, MainItems,
-    0,
-    MENU_NONE
-};
-
-static Menu_t MainMenu_Rus = {
-    104, 56,
-    DrawMainMenu,
-    5, MainItems_Rus,
-    0,
-    MENU_NONE
+    NULL, 0,
+    NULL,
+    0
 };
 
 static MenuItem_t ClassItems[] = {
-    {ITT_EFUNC, "FIGHTER", SCClass, 0, MENU_NONE},
-    {ITT_EFUNC, "CLERIC", SCClass, 1, MENU_NONE},
-    {ITT_EFUNC, "MAGE", SCClass, 2, MENU_NONE}
-};
-
-static MenuItem_t ClassItems_Rus[] = {
-    {ITT_EFUNC, "DJBY", SCClass, 0, MENU_NONE},		// ВОИН
-    {ITT_EFUNC, "RKTHBR", SCClass, 1, MENU_NONE},	// КЛЕРИК
-    {ITT_EFUNC, "VFU", SCClass, 2, MENU_NONE}		// МАГ
+    {ITT_EFUNC, "FIGHTER", "DJBY",   SCClass, 0}, // ВОИН
+    {ITT_EFUNC, "CLERIC",  "RKTHBR", SCClass, 1}, // КЛЕРИК
+    {ITT_EFUNC, "MAGE",    "VFU",    SCClass, 2}  // МАГ
 };
 
 static Menu_t ClassMenu = {
     66, 66,
+    66,
+    NULL, NULL, true,
+    3, ClassItems, true,
     DrawClassMenu,
-    3, ClassItems,
-    0,
-    MENU_MAIN
+    NULL, 0,
+    &MainMenu,
+    0
 };
 
-static Menu_t ClassMenu_Rus = {
-    66, 66,
-    DrawClassMenu,
-    3, ClassItems_Rus,
-    0,
-    MENU_MAIN
+static MenuItem_t SkillItems_F[] = {
+    {ITT_EFUNC, "SQUIRE",    "JHE;TYJCTW", SCSkill, sk_baby},      // ОРУЖЕНОСЕЦ
+    {ITT_EFUNC, "KNIGHT",    "HSWFHM",     SCSkill, sk_easy},      // РЫЦАРЬ
+    {ITT_EFUNC, "WARRIOR",   "DJBNTKM",    SCSkill, sk_medium},    // ВОИТЕЛЬ
+    {ITT_EFUNC, "BERSERKER", ",THCTHR",    SCSkill, sk_hard},      // БЕРСЕРК
+    {ITT_EFUNC, "TITAN",     "NBNFY",      SCSkill, sk_nightmare}, // ТИТАН
+    {ITT_EFUNC, "AVATAR",    "DTHIBNTKM",  SCSkill, sk_ultranm}    // ВЕРШИТЕЛЬ
 };
 
-static MenuItem_t FilesItems[] = {
-    {ITT_SETMENU, "LOAD GAME", SCNetCheck2, 2, MENU_LOAD},
-    {ITT_SETMENU, "SAVE GAME", NULL, 0, MENU_SAVE}
-};
-
-static MenuItem_t FilesItems_Rus[] = {
-    {ITT_SETMENU, "PFUHEPBNM BUHE", SCNetCheck2, 2, MENU_LOAD},		// ЗАГРУЗИТЬ ИГРУ
-    {ITT_SETMENU, "CJ[HFYBNM BUHE", NULL, 0, MENU_SAVE}				// СОХРАНИТЬ ИГРУ
-};
-
-static Menu_t FilesMenu = {
-    110, 60,
-    DrawFilesMenu,
-    2, FilesItems,
-    0,
-    MENU_MAIN
-};
-
-static Menu_t FilesMenu_Rus = {
-    110, 60,
-    DrawFilesMenu,
-    2, FilesItems_Rus,
-    0,
-    MENU_MAIN
-};
-
-static MenuItem_t LoadItems[] = {
-    {ITT_EFUNC, NULL, SCLoadGame, 0, MENU_NONE},
-    {ITT_EFUNC, NULL, SCLoadGame, 1, MENU_NONE},
-    {ITT_EFUNC, NULL, SCLoadGame, 2, MENU_NONE},
-    {ITT_EFUNC, NULL, SCLoadGame, 3, MENU_NONE},
-    {ITT_EFUNC, NULL, SCLoadGame, 4, MENU_NONE},
-    {ITT_EFUNC, NULL, SCLoadGame, 5, MENU_NONE}
-};
-
-static Menu_t LoadMenu = {
-    70, 30,
-    DrawLoadMenu,
-    6, LoadItems,
-    0,
-    MENU_FILES
-};
-
-static MenuItem_t SaveItems[] = {
-    {ITT_EFUNC, NULL, SCSaveGame, 0, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSaveGame, 1, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSaveGame, 2, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSaveGame, 3, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSaveGame, 4, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSaveGame, 5, MENU_NONE}
-};
-
-static Menu_t SaveMenu = {
-    70, 30,
-    DrawSaveMenu,
-    6, SaveItems,
-    0,
-    MENU_FILES
-};
-
-static MenuItem_t SkillItems[] = {
-    {ITT_EFUNC, NULL, SCSkill, sk_baby, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSkill, sk_easy, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSkill, sk_medium, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSkill, sk_hard, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSkill, sk_nightmare, MENU_NONE},
-    {ITT_EFUNC, NULL, SCSkill, sk_ultranm, MENU_NONE}
-};
-
-static Menu_t SkillMenu = {
-    120, 44,
+static Menu_t SkillMenu_F = {
+    120, 120,
+    44,
+    "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
+    6, SkillItems_F, true,
     DrawSkillMenu,
-    6, SkillItems,
-    2,
-    MENU_CLASS
+    NULL, 0,
+    &ClassMenu,
+    2
 };
 
-static Menu_t SkillMenu_Rus = {
-    120, 44,
+static MenuItem_t SkillItems_C[] = {
+    {ITT_EFUNC, "ALTAR BOY", "FKNFHYBR",  SCSkill, sk_baby},      // АЛТАРНИК
+    {ITT_EFUNC, "ACOLYTE",   "CKE;BNTKM", SCSkill, sk_easy},      // СЛУЖИТЕЛЬ
+    {ITT_EFUNC, "PRIEST",    "CDZOTYYBR", SCSkill, sk_medium},    // СВЯЩЕННИК
+    {ITT_EFUNC, "CARDINAL",  "RFHLBYFK",  SCSkill, sk_hard},      // КАРДИНАЛ
+    {ITT_EFUNC, "POPE",      "TGBCRJG",   SCSkill, sk_nightmare}, // ЕПИСКОП
+    {ITT_EFUNC, "APOSTLE",   "FGJCNJK",   SCSkill, sk_ultranm}    // АПОСТОЛ
+};
+
+static Menu_t SkillMenu_C = {
+    116, 116,
+    44,
+    "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
+    6, SkillItems_C, true,
     DrawSkillMenu,
-    6, SkillItems,
-    2,
-    MENU_CLASS
+    NULL, 0,
+    &ClassMenu,
+    2
+};
+
+static MenuItem_t SkillItems_M[] = {
+    {ITT_EFUNC, "APPRENTICE",     "EXTYBR",          SCSkill, sk_baby},      // УЧЕНИК
+    {ITT_EFUNC, "ENCHANTER",      "XFHJLTQ",         SCSkill, sk_easy},      // ЧАРОДЕЙ
+    {ITT_EFUNC, "SORCERER",       "RJKLEY",          SCSkill, sk_medium},    // КОЛДУН
+    {ITT_EFUNC, "WARLOCK",        "XTHYJRYB;YBR",    SCSkill, sk_hard},      // ЧЕРНОКНИЖНИК
+    {ITT_EFUNC, "HIGHER MAGE",    "DTH[JDYSQ VFU",   SCSkill, sk_nightmare}, // ВЕРХОВНЫЙ МАГ
+    {ITT_EFUNC, "GREAT ARCHMAGE", "DTKBRBQ FH[BVFU", SCSkill, sk_ultranm}    // ВЕЛИКИЙ АРХИМАГ
+};
+
+static Menu_t SkillMenu_M = {
+    112, 112,
+    44,
+    "CHOOSE SKILL LEVEL:", "EHJDTYM CKJ;YJCNB:", true, // УРОВЕНЬ СЛОЖНОСТИ:
+    6, SkillItems_M, true,
+    DrawSkillMenu,
+    NULL, 0,
+    &ClassMenu,
+    2
 };
 
 // -----------------------------------------------------------------------------
@@ -403,40 +299,24 @@ static Menu_t SkillMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t OptionsItems[] = {
-    {ITT_SETMENU, "RENDERING",      NULL,               0, MENU_RENDERING},
-    {ITT_SETMENU, "DISPLAY",        NULL,               0, MENU_DISPLAY  },
-    {ITT_SETMENU, "SOUND",          NULL,               0, MENU_SOUND    },
-    {ITT_SETMENU, "CONTROLS",       NULL,               0, MENU_CONTROLS },
-    {ITT_SETMENU, "GAMEPLAY",       NULL,               0, MENU_GAMEPLAY },
-    {ITT_EFUNC,   "RESET SETTINGS", M_RD_ResetSettings, 0, MENU_NONE     },
-    {ITT_EFUNC,   "LANGUAGE: ENGLISH", M_RD_ChangeLanguage, 0, MENU_NONE     }
-};
-
-static MenuItem_t OptionsItems_Rus[] = {
-    {ITT_SETMENU, "DBLTJ",          NULL,               0, MENU_RENDERING}, // ВИДЕО
-    {ITT_SETMENU, "\'RHFY",         NULL,               0, MENU_DISPLAY  }, // ЭКРАН
-    {ITT_SETMENU, "FELBJ",          NULL,               0, MENU_SOUND    }, // АУДИО
-    {ITT_SETMENU, "EGHFDKTYBT",     NULL,               0, MENU_CONTROLS }, // УПРАВЛЕНИЕ
-    {ITT_SETMENU, "UTQVGKTQ",       NULL,               0, MENU_GAMEPLAY }, // ГЕЙМПЛЕЙ
-    {ITT_EFUNC,   "C,HJC YFCNHJTR", M_RD_ResetSettings, 0, MENU_NONE     }, // СБРОС НАСТРОЕК
-    {ITT_EFUNC,   "ZPSR: HECCRBQ", M_RD_ChangeLanguage, 0, MENU_NONE     }
-    
+    {ITT_SETMENU, "RENDERING",         "DBLTJ",          &RenderingMenu,      0}, // ВИДЕО
+    {ITT_SETMENU, "DISPLAY",           "\'RHFY",         &DisplayMenu,        0}, // ЭКРАН
+    {ITT_SETMENU, "SOUND",             "FELBJ",          &SoundMenu,          0}, // АУДИО
+    {ITT_SETMENU, "CONTROLS",          "EGHFDKTYBT",     &ControlsMenu,       0}, // УПРАВЛЕНИЕ
+    {ITT_SETMENU, "GAMEPLAY",          "UTQVGKTQ",       &GameplayMenu,       0}, // ГЕЙМПЛЕЙ
+    {ITT_EFUNC,   "RESET SETTINGS",    "C,HJC YFCNHJTR", M_RD_ResetSettings,  0}, // СБРОС НАСТРОЕК
+    {ITT_EFUNC,   "LANGUAGE: ENGLISH", "ZPSR: HECCRBQ",  M_RD_ChangeLanguage, 0}  // ЯЗЫК: РУССКИЙ
 };
 
 static Menu_t OptionsMenu = {
-    77, 16,
+    77, 77,
+    16,
+    NULL, NULL, false,
+    7, OptionsItems, true,
     NULL,
-    7, OptionsItems,
-    0,
-    MENU_MAIN
-};
-
-static Menu_t OptionsMenu_Rus = {
-    77, 16,
-    NULL,
-    7, OptionsItems_Rus,
-    0,
-    MENU_MAIN
+    NULL, 0,
+    &MainMenu,
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -444,43 +324,27 @@ static Menu_t OptionsMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t RenderingItems[] = {
-    {ITT_LRFUNC, "DISPLAY ASPECT RATIO:",     M_RD_Change_Widescreen, 0, MENU_NONE},
-    {ITT_LRFUNC, "VERTICAL SYNCHRONIZATION:", M_RD_Change_VSync,      0, MENU_NONE},
-    {ITT_LRFUNC, "FRAME RATE:",               M_RD_Uncapped,          0, MENU_NONE},
-    {ITT_LRFUNC, "FPS COUNTER:",              M_RD_FPScounter,        0, MENU_NONE},
-    {ITT_LRFUNC, "PIXEL SCALING:",            M_RD_Smoothing,         0, MENU_NONE},
-    {ITT_LRFUNC, "PORCH PALETTE CHANGING:",   M_RD_PorchFlashing,     0, MENU_NONE},
-    {ITT_LRFUNC, "VIDEO RENDERER:",           M_RD_Renderer,          0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                        NULL,                   0, MENU_NONE},
-    {ITT_LRFUNC, "SCREENSHOT FORMAT:",        M_RD_Screenshots,       0, MENU_NONE}
-};
-
-static MenuItem_t RenderingItems_Rus[] = {
-    {ITT_LRFUNC, "CJJNYJITYBT CNJHJY \'RHFYF:", M_RD_Change_Widescreen, 0, MENU_NONE}, // СООТНОШЕНИЕ СТОРОН ЭКРАНА
-    {ITT_LRFUNC, "DTHNBRFKMYFZ CBY[HJYBPFWBZ:", M_RD_Change_VSync,      0, MENU_NONE}, // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
-    {ITT_LRFUNC, "RFLHJDFZ XFCNJNF:",           M_RD_Uncapped,          0, MENU_NONE}, // КАДРОВАЯ ЧАСТОТА
-    {ITT_LRFUNC, "CXTNXBR RFLHJDJQ XFCNJNS:",   M_RD_FPScounter,        0, MENU_NONE}, // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ
-    {ITT_LRFUNC, "GBRCTKMYJT CUKF;BDFYBT:",     M_RD_Smoothing,         0, MENU_NONE}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
-    {ITT_LRFUNC, "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing, 0, MENU_NONE}, // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
-    {ITT_LRFUNC, "J,HF,JNRF DBLTJ:",            M_RD_Renderer,          0, MENU_NONE}, // ОБРАБОТКА ВИДЕО
-    {ITT_EMPTY,  NULL,                          NULL,                   0, MENU_NONE}, //
-    {ITT_LRFUNC, "AJHVFN CRHBYIJNJD:",          M_RD_Screenshots,       0, MENU_NONE}  // ФОРМАТ СКРИНШОТОВ
+    {ITT_TITLE,  "RENDERING",                 "HTYLTHBYU",                       NULL,                   0}, // РЕНДЕРИНГ
+    {ITT_LRFUNC, "DISPLAY ASPECT RATIO:",     "CJJNYJITYBT CNJHJY \'RHFYF:",     M_RD_Change_Widescreen, 0}, // СООТНОШЕНИЕ СТОРОН ЭКРАНА
+    {ITT_LRFUNC, "VERTICAL SYNCHRONIZATION:", "DTHNBRFKMYFZ CBY[HJYBPFWBZ:",     M_RD_Change_VSync,      0}, // ВЕРТИКАЛЬНАЯ СИНХРОНИЗАЦИЯ
+    {ITT_LRFUNC, "FRAME RATE:",               "RFLHJDFZ XFCNJNF:",               M_RD_Uncapped,          0}, // КАДРОВАЯ ЧАСТОТА
+    {ITT_LRFUNC, "FPS COUNTER:",              "CXTNXBR RFLHJDJQ XFCNJNS:",       M_RD_FPScounter,        0}, // СЧЕТЧИК КАДРОВОЙ ЧАСТОТЫ
+    {ITT_LRFUNC, "PIXEL SCALING:",            "GBRCTKMYJT CUKF;BDFYBT:",         M_RD_Smoothing,         0}, // ПИКСЕЛЬНОЕ СГЛАЖИВАНИЕ
+    {ITT_LRFUNC, "PORCH PALETTE CHANGING:",   "BPVTYTYBT GFKBNHS RHFTD 'RHFYF:", M_RD_PorchFlashing,     0}, // ИЗМЕНЕНИЕ ПАЛИТРЫ КРАЕВ ЭКРАНА
+    {ITT_LRFUNC, "VIDEO RENDERER:",           "J,HF,JNRF DBLTJ:",                M_RD_Renderer,          0}, // ОБРАБОТКА ВИДЕО
+    {ITT_TITLE,  "EXTRA",                     "LJGJKYBNTKMYJ",                   NULL,                   0}, // ДОПОЛНИТЕЛЬНО
+    {ITT_LRFUNC, "SCREENSHOT FORMAT:",        "AJHVFN CRHBYIJNJD:",              M_RD_Screenshots,       0}  // ФОРМАТ СКРИНШОТОВ
 };
 
 static Menu_t RenderingMenu = {
-    36, 42,
+    36, 36,
+    32,
+    "RENDERING OPTIONS", "YFCNHJQRB DBLTJ", false, // НАСТРОЙКИ ВИДЕО
+    10, RenderingItems, false,
     DrawRenderingMenu,
-    9, RenderingItems,
-    0,
-    MENU_OPTIONS
-};
-
-static Menu_t RenderingMenu_Rus = {
-    36, 42,
-    DrawRenderingMenu,
-    9, RenderingItems_Rus,
-    0,
-    MENU_OPTIONS
+    NULL, 0,
+    &OptionsMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
@@ -488,47 +352,29 @@ static Menu_t RenderingMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t DisplayItems[] = {
-    {ITT_LRFUNC, "SCREEN SIZE",         M_RD_ScreenSize,      0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                  NULL,                 0, MENU_NONE},
-    {ITT_LRFUNC, "GAMMA-CORRECTION",    M_RD_Gamma,           0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                  NULL,                 0, MENU_NONE},
-    {ITT_LRFUNC, "LEVEL BRIGHTNESS",    M_RD_LevelBrightness, 0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                  NULL,                 0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                  NULL,                 0, MENU_NONE},
-    {ITT_LRFUNC, "LOCAL TIME:",         M_RD_LocalTime,       0, MENU_NONE},
-    {ITT_LRFUNC, "MESSAGES:",           M_RD_Messages,        0, MENU_NONE},
-    {ITT_LRFUNC, "TEXT CASTS SHADOWS:", M_RD_ShadowedText,    0, MENU_NONE},
-    {ITT_SETMENU,"AUTOMAP SETTINGS...", NULL,                 0, MENU_AUTOMAP}
-};
-
-static MenuItem_t DisplayItems_Rus[] = {
-    {ITT_LRFUNC, "HFPVTH BUHJDJUJ \'RHFYF",  M_RD_ScreenSize,      0, MENU_NONE},   // РАЗМЕР ИГРОВОГО ЭКРАНА
-    {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE},   // 
-    {ITT_LRFUNC, "EHJDTYM UFVVF-RJHHTRWBB",  M_RD_Gamma,           0, MENU_NONE},   // УРОВЕНЬ ГАММА-КОРРЕКЦИИ
-    {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE},   //
-    {ITT_LRFUNC, "EHJDTYM JCDTOTYYJCNB",     M_RD_LevelBrightness, 0, MENU_NONE},   // УРОВЕНЬ ОСВЕЩЕННОСТИ
-    {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE},   //
-    {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE},   //
-    {ITT_LRFUNC, "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,       0, MENU_NONE},   // СИСТЕМНОЕ ВРЕМЯ
-    {ITT_LRFUNC, "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,        0, MENU_NONE},   // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
-    {ITT_LRFUNC, "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,    0, MENU_NONE},   // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
-    {ITT_SETMENU,"YFCNHJQRB RFHNS>>>",       NULL,                 0, MENU_AUTOMAP} // НАСТРОЙКИ КАРТЫ
+    {ITT_TITLE,  "SCREEN",              "\'RHFY",                   NULL,                 0}, // ЭКРАН
+    {ITT_LRFUNC, "SCREEN SIZE",         "HFPVTH BUHJDJUJ \'RHFYF",  M_RD_ScreenSize,      0}, // РАЗМЕР ИГРОВОГО ЭКРАНА
+    {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
+    {ITT_LRFUNC, "GAMMA-CORRECTION",    "EHJDTYM UFVVF-RJHHTRWBB",  M_RD_Gamma,           0}, // УРОВЕНЬ ГАММА-КОРРЕКЦИИ
+    {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
+    {ITT_LRFUNC, "LEVEL BRIGHTNESS",    "EHJDTYM JCDTOTYYJCNB",     M_RD_LevelBrightness, 0}, // УРОВЕНЬ ОСВЕЩЕННОСТИ
+    {ITT_EMPTY,  NULL,                  NULL,                       NULL,                 0},
+    {ITT_TITLE,  "INTERFACE",           "BYNTHATQC",                NULL,                 0}, // ИНТЕРФЕЙС
+    {ITT_LRFUNC, "LOCAL TIME:",         "CBCNTVYJT DHTVZ:",         M_RD_LocalTime,       0}, // СИСТЕМНОЕ ВРЕМЯ
+    {ITT_LRFUNC, "MESSAGES:",           "JNJ,HF;TYBT CJJ,OTYBQ:",   M_RD_Messages,        0}, // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
+    {ITT_LRFUNC, "TEXT CASTS SHADOWS:", "NTRCNS JN,HFCSDF.N NTYM:", M_RD_ShadowedText,    0}, // ТЕКСТЫ ОТБРАСЫВАЮТ ТЕНЬ
+    {ITT_SETMENU,"AUTOMAP SETTINGS...", "YFCNHJQRB RFHNS>>>",       &AutomapMenu,         0}  // НАСТРОЙКИ КАРТЫ
 };
 
 static Menu_t DisplayMenu = {
-    36, 42,
+    36, 36,
+    32,
+    "DISPLAY OPTIONS", "YFCNHJQRB \'RHFYF", false, // НАСТРОЙКИ ЭКРАНА
+    12, DisplayItems, false,
     DrawDisplayMenu,
-    11, DisplayItems,
-    0,
-    MENU_OPTIONS
-};
-
-static Menu_t DisplayMenu_Rus = {
-    36, 42,
-    DrawDisplayMenu,
-    11, DisplayItems_Rus,
-    0,
-    MENU_OPTIONS
+    NULL, 0,
+    &OptionsMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
@@ -536,33 +382,21 @@ static Menu_t DisplayMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t AutomapItems[] = {
-    {ITT_LRFUNC, "OVERLAY MODE:", M_RD_AutoMapOverlay, 0, MENU_NONE},
-    {ITT_LRFUNC, "ROTATE MODE:",  M_RD_AutoMapRotate,  0, MENU_NONE},
-    {ITT_LRFUNC, "FOLLOW MODE:",  M_RD_AutoMapFollow,  0, MENU_NONE},
-    {ITT_LRFUNC, "GRID:",         M_RD_AutoMapGrid,    0, MENU_NONE}
-};
-
-static MenuItem_t AutomapItems_Rus[] = {
-    {ITT_LRFUNC, "HT;BV YFKJ;TYBZ:",   M_RD_AutoMapOverlay, 0, MENU_NONE}, // РЕЖИМ НАЛОЖЕНИЯ
-    {ITT_LRFUNC, "HT;BV DHFOTYBZ:",    M_RD_AutoMapRotate,  0, MENU_NONE}, // РЕЖИМ ВРАЩЕНИЯ
-    {ITT_LRFUNC, "HT;BV CKTLJDFYBZ:",  M_RD_AutoMapFollow,  0, MENU_NONE}, // РЕЖИМ СЛЕДОВАНИЯ
-    {ITT_LRFUNC, "CTNRF:",             M_RD_AutoMapGrid,    0, MENU_NONE}  // СЕТКА
+    {ITT_LRFUNC, "OVERLAY MODE:", "HT;BV YFKJ;TYBZ:",  M_RD_AutoMapOverlay, 0}, // РЕЖИМ НАЛОЖЕНИЯ
+    {ITT_LRFUNC, "ROTATE MODE:",  "HT;BV DHFOTYBZ:",   M_RD_AutoMapRotate,  0}, // РЕЖИМ ВРАЩЕНИЯ
+    {ITT_LRFUNC, "FOLLOW MODE:",  "HT;BV CKTLJDFYBZ:", M_RD_AutoMapFollow,  0}, // РЕЖИМ СЛЕДОВАНИЯ
+    {ITT_LRFUNC, "GRID:",         "CTNRF:",            M_RD_AutoMapGrid,    0}  // СЕТКА
 };
 
 static Menu_t AutomapMenu = {
-    102, 32,
+    102, 82,
+    32,
+    "AUTOMAP SETTINGS", "YFCNHJQRB RFHNS", false, // НАСТРОЙКИ КАРТЫ
+    4, AutomapItems, false,
     DrawAutomapMenu,
-    4, AutomapItems,
-    0,
-    MENU_DISPLAY
-};
-
-static Menu_t AutomapMenu_Rus = {
-    82, 32,
-    DrawAutomapMenu,
-    4, AutomapItems_Rus,
-    0,
-    MENU_DISPLAY
+    NULL, 0,
+    &DisplayMenu,
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -570,43 +404,27 @@ static Menu_t AutomapMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t SoundItems[] = {
-    {ITT_LRFUNC, "SFX VOLUME",               M_RD_SfxVolume,   0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
-    {ITT_LRFUNC, "MUSIC VOLUME",             M_RD_MusVolume,   0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
-    {ITT_LRFUNC, "SFX CHANNELS",             M_RD_SfxChannels, 0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                       NULL,             0, MENU_NONE},
-    {ITT_SETMENU,"SOUND SYSTEM SETTINGS...", NULL,             0, MENU_SOUND_SYS}
-};
-
-static MenuItem_t SoundItems_Rus[] = {
-    {ITT_LRFUNC, "UHJVRJCNM PDERF",               M_RD_SfxVolume,   0, MENU_NONE},      // ГРОМКОСТЬ ЗВУКА
-    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
-    {ITT_LRFUNC, "UHJVRJCNM VEPSRB",              M_RD_MusVolume,   0, MENU_NONE},      // ГРОМКОСТЬ МУЗЫКИ
-    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
-    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
-    {ITT_LRFUNC, "PDERJDST RFYFKS",               M_RD_SfxChannels, 0, MENU_NONE},      // ЗВУКОВЫЕ КАНАЛЫ
-    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
-    {ITT_EMPTY,  NULL,                            NULL,             0, MENU_NONE},      //
-    {ITT_SETMENU,"YFCNHJQRB PDERJDJQ CBCNTVS>>>", NULL,             0, MENU_SOUND_SYS}, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
+    {ITT_TITLE,  "VOLUME",                   "UHJVRJCNM",                     NULL,             0}, // ГРОМКОСТЬ
+    {ITT_LRFUNC, "SFX VOLUME",               "UHJVRJCNM PDERF",               M_RD_SfxVolume,   0}, // ГРОМКОСТЬ ЗВУКА
+    {ITT_EMPTY,  NULL,                       NULL,                            NULL,             0},
+    {ITT_LRFUNC, "MUSIC VOLUME",             "UHJVRJCNM VEPSRB",              M_RD_MusVolume,   0}, // ГРОМКОСТЬ МУЗЫКИ
+    {ITT_EMPTY,  NULL,                       NULL,                            NULL,             0},
+    {ITT_TITLE,  "CHANNELS",                 "DJCGHJBPDTLTYBT",               NULL,             0}, // ВОСПРОИЗВЕДЕНИЕ
+    {ITT_LRFUNC, "SFX CHANNELS",             "PDERJDST RFYFKS",               M_RD_SfxChannels, 0}, // ЗВУКОВЫЕ КАНАЛЫ
+    {ITT_EMPTY,  NULL,                       NULL,                            NULL,             0},
+    {ITT_TITLE,  "ADVANCED",                 "LJGJKYBNTKMYJ",                 NULL,             0}, // ДОПОЛНИТЕЛЬНО
+    {ITT_SETMENU,"SOUND SYSTEM SETTINGS...", "YFCNHJQRB PDERJDJQ CBCNTVS>>>", &SoundSysMenu,    0}  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
 };
 
 static Menu_t SoundMenu = {
-    36, 42,
+    36, 36,
+    32,
+    "SOUND OPTIONS", "YFCNHJQRB PDERF", false, // НАСТРОЙКИ ЗВУКА
+    10, SoundItems, false,
     DrawSoundMenu,
-    9, SoundItems,
-    0,
-    MENU_OPTIONS
-};
-
-static Menu_t SoundMenu_Rus = {
-    36, 42,
-    DrawSoundMenu,
-    9, SoundItems_Rus,
-    0,
-    MENU_OPTIONS
+    NULL, 0,
+    &OptionsMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
@@ -614,41 +432,26 @@ static Menu_t SoundMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t SoundSysItems[] = {
-    {ITT_LRFUNC, "SOUND EFFECTS:",        M_RD_SoundDevice,   0, MENU_NONE},
-    {ITT_LRFUNC, "MUSIC:",                M_RD_MusicDevice,   0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                    NULL,               0, MENU_NONE},
-    {ITT_LRFUNC, "SAMPLING FREQUENCY:",   M_RD_Sampling,      0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                    NULL,               0, MENU_NONE},
-    {ITT_LRFUNC, "SOUND EFFECTS MODE:",   M_RD_SndMode,       0, MENU_NONE},
-    {ITT_LRFUNC, "PITCH-SHIFTED SOUNDS:", M_RD_PitchShifting, 0, MENU_NONE},
-    {ITT_LRFUNC, "MUTE INACTIVE WINDOW:", M_RD_MuteInactive,  0, MENU_NONE},
-};
-
-static MenuItem_t SoundSysItems_Rus[] = {
-    {ITT_LRFUNC, "PDERJDST \'AATRNS:",         M_RD_SoundDevice,   0, MENU_NONE}, // ЗВУКОВЫЕ ЭФФЕКТЫ:
-    {ITT_LRFUNC, "VEPSRF:",                    M_RD_MusicDevice,   0, MENU_NONE}, // МУЗЫКА:
-    {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
-    {ITT_LRFUNC, "XFCNJNF LBCRHTNBPFWBB:",     M_RD_Sampling,      0, MENU_NONE}, // ЧАСТОТА ДИСКРЕТИЗАЦИИ:
-    {ITT_EMPTY,  NULL,                         NULL,               0, MENU_NONE}, //
-    {ITT_LRFUNC, "HT;BV PDERJDS[ \'AATRNJD:",  M_RD_SndMode,       0, MENU_NONE}, // РЕЖИМ ЗВУКОВЫХ ЭФФЕКТОВ
-    {ITT_LRFUNC, "GHJBPDJKMYSQ GBNX-IBANBYU:", M_RD_PitchShifting, 0, MENU_NONE}, // ПРОИЗВОЛЬНЫЙ ПИТЧ-ШИФТИНГ
-    {ITT_LRFUNC, "PDER D YTFRNBDYJV JRYT:",    M_RD_MuteInactive,  0, MENU_NONE}, // ЗВУК В НЕАКТИВНОМ ОКНЕ
+    {ITT_TITLE,  "SOUND SYSTEM",          "PDERJDFZ CBCNTVF",           NULL,               0}, // ЗВУКВАЯ СИСТЕМА
+    {ITT_LRFUNC, "SOUND EFFECTS:",        "PDERJDST \'AATRNS:",         M_RD_SoundDevice,   0}, // ЗВУКОВЫЕ ЭФФЕКТЫ:
+    {ITT_LRFUNC, "MUSIC:",                "VEPSRF:",                    M_RD_MusicDevice,   0}, // МУЗЫКА:
+    {ITT_TITLE,  "QUALITY",               "RFXTCNDJ PDEXFYBZ",          NULL,               0}, // КАЧЕСТВО ЗВУЧАНИЯ
+    {ITT_LRFUNC, "SAMPLING FREQUENCY:",   "XFCNJNF LBCRHTNBPFWBB:",     M_RD_Sampling,      0}, // ЧАСТОТА ДИСКРЕТИЗАЦИИ:
+    {ITT_TITLE,  "MISCELLANEOUS",         "HFPYJT",                     NULL,               0}, // РАЗНОЕ
+    {ITT_LRFUNC, "SOUND EFFECTS MODE:",   "HT;BV PDERJDS[ \'AATRNJD:",  M_RD_SndMode,       0}, // РЕЖИМ ЗВУКОВЫХ ЭФФЕКТОВ
+    {ITT_LRFUNC, "PITCH-SHIFTED SOUNDS:", "GHJBPDJKMYSQ GBNX-IBANBYU:", M_RD_PitchShifting, 0}, // ПРОИЗВОЛЬНЫЙ ПИТЧ-ШИФТИНГ
+    {ITT_LRFUNC, "MUTE INACTIVE WINDOW:", "PDER D YTFRNBDYJV JRYT:",    M_RD_MuteInactive,  0}, // ЗВУК В НЕАКТИВНОМ ОКНЕ
 };
 
 static Menu_t SoundSysMenu = {
-    36, 42,
+    36, 36,
+    32,
+    "SOUND SYSTEM SETTINGS", "YFCNHJQRB PDERJDJQ CBCNTVS", false, // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
+    9, SoundSysItems, false,
     DrawSoundSystemMenu,
-    8, SoundSysItems,
-    0,
-    MENU_SOUND
-};
-
-static Menu_t SoundSysMenu_Rus = {
-    36, 42,
-    DrawSoundSystemMenu,
-    8, SoundSysItems_Rus,
-    0,
-    MENU_SOUND
+    NULL, 0,
+    &SoundMenu,
+    0
 };
 
 // -----------------------------------------------------------------------------
@@ -656,39 +459,25 @@ static Menu_t SoundSysMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t ControlsItems[] = {
-    {ITT_LRFUNC, "ALWAYS RUN:",        M_RD_AlwaysRun,   0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                 NULL,             0, MENU_NONE},
-    {ITT_LRFUNC, "MOUSE SENSIVITY",    M_RD_Sensitivity, 0, MENU_NONE},
-    {ITT_EMPTY,  NULL,                 NULL,             0, MENU_NONE},
-    {ITT_LRFUNC, "MOUSE LOOK:",        M_RD_MouseLook,   0, MENU_NONE},
-    {ITT_LRFUNC, "INVERT Y AXIS:",     M_RD_InvertY,     0, MENU_NONE},
-    {ITT_LRFUNC, "VERTICAL MOVEMENT:", M_RD_Novert,      0, MENU_NONE}
-};
-
-static MenuItem_t ControlsItems_Rus[] = {
-    {ITT_LRFUNC, "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,   0, MENU_NONE}, // РЕЖИМ ПОСТОЯННОГО БЕГА
-    {ITT_EMPTY,  NULL,                        NULL,             0, MENU_NONE}, //
-    {ITT_LRFUNC, "CRJHJCNM VSIB",             M_RD_Sensitivity, 0, MENU_NONE}, // СКОРОСТЬ МЫШИ
-    {ITT_EMPTY,  NULL,                        NULL,             0, MENU_NONE}, //
-    {ITT_LRFUNC, "J,PJH VSIM.:",              M_RD_MouseLook,   0, MENU_NONE}, // ОБЗОР МЫШЬЮ
-    {ITT_LRFUNC, "DTHNBRFKMYFZ BYDTHCBZ:",    M_RD_InvertY,     0, MENU_NONE}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
-    {ITT_LRFUNC, "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,      0, MENU_NONE}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
+    {ITT_TITLE,  "MOVEMENT",           "GTHTLDB;TYBT",              NULL,             0}, // ПЕРЕДВИЖЕНИЕ
+    {ITT_LRFUNC, "ALWAYS RUN:",        "HT;BV GJCNJZYYJUJ ,TUF:",   M_RD_AlwaysRun,   0}, // РЕЖИМ ПОСТОЯННОГО БЕГА
+    {ITT_TITLE,  "MOUSE",              "VSIM",                      NULL,             0}, // МЫШЬ
+    {ITT_LRFUNC, "MOUSE SENSIVITY",    "CRJHJCNM VSIB",             M_RD_Sensitivity, 0}, // СКОРОСТЬ МЫШИ
+    {ITT_EMPTY,  NULL,                 NULL,                        NULL,             0},
+    {ITT_LRFUNC, "MOUSE LOOK:",        "J,PJH VSIM.:",              M_RD_MouseLook,   0}, // ОБЗОР МЫШЬЮ
+    {ITT_LRFUNC, "INVERT Y AXIS:",     "DTHNBRFKMYFZ BYDTHCBZ:",    M_RD_InvertY,     0}, // ВЕРТИКАЛЬНАЯ ИНВЕРСИЯ
+    {ITT_LRFUNC, "VERTICAL MOVEMENT:", "DTHNBRFKMYJT GTHTVTOTYBT:", M_RD_Novert,      0}  // ВЕРТИКАЛЬНОЕ ПЕРЕМЕЩЕНИЕ
 };
 
 static Menu_t ControlsMenu = {
-    36, 42,
+    36, 36,
+    32,
+    "CONTROL SETTINGS", "EGHFDKTYBT", false, // УПРАВЛЕНИЕ
+    8, ControlsItems, false,
     DrawControlsMenu,
-    7, ControlsItems,
-    0,
-    MENU_OPTIONS
-};
-
-static Menu_t ControlsMenu_Rus = {
-    36, 42,
-    DrawControlsMenu,
-    7, ControlsItems_Rus,
-    0,
-    MENU_OPTIONS
+    NULL, 0,
+    &OptionsMenu,
+    1
 };
 
 // -----------------------------------------------------------------------------
@@ -696,77 +485,83 @@ static Menu_t ControlsMenu_Rus = {
 // -----------------------------------------------------------------------------
 
 static MenuItem_t GameplayItems[] = {
-    {ITT_LRFUNC, "BRIGHTMAPS:",          M_RD_Brightmaps,      0, MENU_NONE   },
-    {ITT_LRFUNC, "FAKE CONTRAST:",       M_RD_FakeContrast,    0, MENU_NONE   },
-    {ITT_EMPTY,  NULL,                   NULL,                 0, MENU_NONE   },
-    {ITT_LRFUNC, "DRAW CROSSHAIR:",      M_RD_CrossHairDraw,   0, MENU_NONE   },
-    {ITT_LRFUNC, "INDICATION:",          M_RD_CrossHairType,   0, MENU_NONE   },
-    {ITT_LRFUNC, "INCREASED SIZE:",      M_RD_CrossHairScale,  0, MENU_NONE   },
-    {ITT_EMPTY,  NULL,                   NULL,                 0, MENU_NONE   },
-    {ITT_LRFUNC, "FLIP GAME LEVELS:",    M_RD_FlipLevels,      0, MENU_NONE   },
-    {ITT_LRFUNC, "PLAY INTERNAL DEMOS:", M_RD_NoDemos,         0, MENU_NONE   }
-};
-
-static MenuItem_t GameplayItems_Rus[] = {
-    {ITT_LRFUNC, ",HFQNVFGGBYU:",            M_RD_Brightmaps,      0, MENU_NONE   }, // БРАЙТМАППИНГ
-    {ITT_LRFUNC, "BVBNFWBZ RJYNHFCNYJCNB:",  M_RD_FakeContrast,    0, MENU_NONE   }, // ИМИТАЦИЯ КОНТРАСТНОСТИ
-    {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE   }, //
-    {ITT_LRFUNC, "JNJ,HF;FNM GHBWTK:",       M_RD_CrossHairDraw,   0, MENU_NONE   }, // ОТОБРАЖАТЬ ПРИЦЕЛ
-    {ITT_LRFUNC, "BYLBRFWBZ:",               M_RD_CrossHairType,   0, MENU_NONE   }, // ИНДИКАЦИЯ
-    {ITT_LRFUNC, "EDTKBXTYYSQ HFPVTH:",      M_RD_CrossHairScale,  0, MENU_NONE   }, // УВЕЛИЧЕННЫЙ РАЗМЕР
-    {ITT_EMPTY,  NULL,                       NULL,                 0, MENU_NONE   }, //
-    {ITT_LRFUNC, "PTHRFKMYJT JNHF;TYBT EHJDYTQ:",  M_RD_FlipLevels,0, MENU_NONE   }, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
-    {ITT_LRFUNC, "GHJBUHSDFNM LTVJPFGBCB:",  M_RD_NoDemos,         0, MENU_NONE   }  // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
+    {ITT_TITLE,  "VISUAL",               "UHFABRF",                       NULL,                 0}, // ГРАФИКА
+    {ITT_LRFUNC, "BRIGHTMAPS:",          ",HFQNVFGGBYU:",                 M_RD_Brightmaps,      0}, // БРАЙТМАППИНГ
+    {ITT_LRFUNC, "FAKE CONTRAST:",       "BVBNFWBZ RJYNHFCNYJCNB:",       M_RD_FakeContrast,    0}, // ИМИТАЦИЯ КОНТРАСТНОСТИ
+    {ITT_TITLE,  "CROSSHAIR",            "GHBWTK",                        NULL,                 0}, // ПРИЦЕЛ
+    {ITT_LRFUNC, "DRAW CROSSHAIR:",      "JNJ,HF;FNM GHBWTK:",            M_RD_CrossHairDraw,   0}, // ОТОБРАЖАТЬ ПРИЦЕЛ
+    {ITT_LRFUNC, "INDICATION:",          "BYLBRFWBZ:",                    M_RD_CrossHairType,   0}, // ИНДИКАЦИЯ
+    {ITT_LRFUNC, "INCREASED SIZE:",      "EDTKBXTYYSQ HFPVTH:",           M_RD_CrossHairScale,  0}, // УВЕЛИЧЕННЫЙ РАЗМЕР
+    {ITT_TITLE,  "GAMEPLAY",             "UTQVGKTQ",                      NULL,                 0}, // ГЕЙМПЛЕЙ
+    {ITT_LRFUNC, "FLIP GAME LEVELS:",    "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,      0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
+    {ITT_LRFUNC, "PLAY INTERNAL DEMOS:", "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,         0}  // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
 };
 
 static Menu_t GameplayMenu = {
-    36, 42,
+    36, 36,
+    32,
+    "GAMEPLAY FEATURES", "YFCNHJQRB UTQVGKTZ", false, // НАСТРОЙКИ ГЕЙМПЛЕЯ
+    10, GameplayItems, false,
     DrawGameplayMenu,
-    9, GameplayItems,
-    0,
-    MENU_OPTIONS
-};
-
-static Menu_t GameplayMenu_Rus = {
-    36, 42,
-    DrawGameplayMenu,
-    9, GameplayItems_Rus,
-    0,
-    MENU_OPTIONS
-};
-
-static Menu_t *Menus[] = {
-    &MainMenu,
-    &ClassMenu,
-    &SkillMenu,
+    NULL, 0,
     &OptionsMenu,
-    &FilesMenu,
-    &LoadMenu,
-    &SaveMenu,
-    &RenderingMenu,
-    &DisplayMenu,
-    &AutomapMenu,
-    &SoundMenu,
-    &SoundSysMenu,
-    &ControlsMenu,
-    &GameplayMenu
+    1
 };
 
-static Menu_t *Menus_Rus[] = {
-    &MainMenu_Rus,
-    &ClassMenu_Rus,
-    &SkillMenu_Rus,
-    &OptionsMenu_Rus,
-    &FilesMenu_Rus,
-    &LoadMenu,
-    &SaveMenu,
-    &RenderingMenu_Rus,
-    &DisplayMenu_Rus,
-    &AutomapMenu_Rus,
-    &SoundMenu_Rus,
-    &SoundSysMenu_Rus,
-    &ControlsMenu_Rus,
-    &GameplayMenu_Rus,
+static MenuItem_t FilesItems[] = {
+    {ITT_SETMENU_NONET, "LOAD GAME", "PFUHEPBNM BUHE", &LoadMenu, 2}, // ЗАГРУЗИТЬ ИГРУ
+    {ITT_SETMENU,       "SAVE GAME", "CJ[HFYBNM BUHE", &SaveMenu, 0}  // СОХРАНИТЬ ИГРУ
+};
+
+static Menu_t FilesMenu = {
+    110, 110,
+    60,
+    NULL, NULL, true,
+    2, FilesItems, true,
+    DrawFilesMenu,
+    NULL, 0,
+    &MainMenu,
+    0
+};
+
+static MenuItem_t LoadItems[] = {
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 0},
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 1},
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 2},
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 3},
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 4},
+    {ITT_EFUNC, NULL, NULL, SCLoadGame, 5}
+};
+
+static Menu_t LoadMenu = {
+    70, 70,
+    30,
+    "LOAD GAME", "PFUHEPBNM BUHE", true, // ЗАГРУЗИТЬ ИГРУ
+    6, LoadItems, true,
+    DrawLoadMenu,
+    NULL, 0,
+    &FilesMenu,
+    0
+};
+
+static MenuItem_t SaveItems[] = {
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 0},
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 1},
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 2},
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 3},
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 4},
+    {ITT_EFUNC, NULL, NULL, SCSaveGame, 5}
+};
+
+static Menu_t SaveMenu = {
+    70, 70,
+    30,
+    "SAVE GAME", "CJ[HFYBNM BUHE", true, // СОХРАНИТЬ ИГРУ
+    6, SaveItems, true,
+    DrawSaveMenu,
+    NULL, 0,
+    &FilesMenu,
+    0
 };
 
 static char *GammaText[] = {
@@ -822,6 +617,39 @@ static char *GammaText_Rus[] = {
 void MN_Init(void)
 {
     InitFonts();
+    RD_M_InitFonts(// [JN] Original English fonts
+                   "FONTA_S",
+                   "FONTB_S",
+                   // [JN] Small special font used for time/fps widget
+                   "FONTC_S",
+                   // [JN] Unchangable English fonts
+                   "FONTD_S",
+                   "FONTE_S",
+                   // [JN] Unchangable Russian fonts
+                   "FONTF_S",
+                   "FONTG_S");
+    RD_Menu_InitSliders(// [Dasperal] Big slider
+                        "M_SLDLT",
+                        "M_SLDMD1",
+                        "M_SLDMD2",
+                        "M_SLDRT",
+                        "M_SLDKB",
+                        // [Dasperal] Small slider
+                        "M_RDSLDL",
+                        "M_RDSLD1",
+                        "M_RDSLDR",
+                        "M_RDSLG",
+                        // [Dasperal] Gem translation
+                        CR_NONE,
+                        CR_GREEN2GRAY_HEXEN,
+                        CR_GREEN2RED_HEXEN);
+    RD_Menu_InitCursor(// [Dasperal] Big cursor
+                        "M_SLCTR1",
+                        "M_SLCTR2",
+                        // [Dasperal] Small cursor
+                        "INVGEMR1",
+                        "INVGEMR2");
+
     menuactive = false;
 //      messageson = true;              // Set by defaults in .CFG
     MauloBaseLump = W_GetNumForName("FBULA0");  // ("M_SKL00");
@@ -847,9 +675,9 @@ static void InitFonts(void)
     FontCBaseLump = W_GetNumForName("FONTC_S") + 1;
 
     // [JN] Unchangable Russian fonts
-    FontDBaseLump = W_GetNumForName("FONTD_S") + 1;        // small
-    FontDYellowBaseLump = W_GetNumForName("FONTDY_S") + 1; // small yellow
-    FontEBaseLump = W_GetNumForName("FONTE_S") + 1;        // big
+    FontFBaseLump = W_GetNumForName("FONTF_S") + 1;        // small
+    FontFYellowBaseLump = W_GetNumForName("FONTFY_S") + 1; // small yellow
+    FontGBaseLump = W_GetNumForName("FONTG_S") + 1;        // big
 }
 
 //---------------------------------------------------------------------------
@@ -966,36 +794,6 @@ void MN_DrTextB(char *text, int x, int y)
 
 //---------------------------------------------------------------------------
 //
-// FUNC MN_TextBWidth
-//
-// Returns the pixel width of a string using font B.
-//
-//---------------------------------------------------------------------------
-
-int MN_TextBWidth(char *text)
-{
-    char c;
-    int width;
-    patch_t *p;
-
-    width = 0;
-    while ((c = *text++) != 0)
-    {
-        if (c < 33)
-        {
-            width += 5;
-        }
-        else
-        {
-            p = W_CacheLumpNum(FontBBaseLump + c - 33, PU_CACHE);
-            width += SHORT(p->width) - 1;
-        }
-    }
-    return (width);
-}
-
-//---------------------------------------------------------------------------
-//
 // PROC MN_DrTextC
 //
 // [JN] Draw small time digits using font C.
@@ -1043,7 +841,7 @@ void MN_DrTextSmallRUS(char *text, int x, int y)
         }
         else
         {
-            p = W_CacheLumpNum(FontDBaseLump + c - 33, PU_CACHE);
+            p = W_CacheLumpNum(FontFBaseLump + c - 33, PU_CACHE);
             V_DrawShadowedPatchRaven(x, y, p);
             x += SHORT(p->width) - 1;
         }
@@ -1071,7 +869,7 @@ void MN_DrTextSmallYellowRUS(char *text, int x, int y)
         }
         else
         {
-            p = W_CacheLumpNum(FontDYellowBaseLump + c - 33, PU_CACHE);
+            p = W_CacheLumpNum(FontFYellowBaseLump + c - 33, PU_CACHE);
             V_DrawShadowedPatchRaven(x, y, p);
             x += SHORT(p->width) - 1;
         }
@@ -1101,7 +899,7 @@ int MN_DrTextSmallRUSWidth(char *text)
         }
         else
         {
-            p = W_CacheLumpNum(FontDBaseLump + c - 33, PU_CACHE);
+            p = W_CacheLumpNum(FontFBaseLump + c - 33, PU_CACHE);
             width += SHORT(p->width) - 1;
         }
     }
@@ -1129,41 +927,11 @@ void MN_DrTextBigRUS(char *text, int x, int y)
         }
         else
         {
-            p = W_CacheLumpNum(FontEBaseLump + c - 33, PU_CACHE);
+            p = W_CacheLumpNum(FontGBaseLump + c - 33, PU_CACHE);
             V_DrawShadowedPatchRaven(x, y, p);
             x += SHORT(p->width) - 1;
         }
     }
-}
-
-//---------------------------------------------------------------------------
-//
-// FUNC MN_DrTextBigRUSWidth
-//
-// [JN] Returns the pixel width of a string using font G.
-//
-//---------------------------------------------------------------------------
-
-int MN_DrTextBigRUSWidth(char *text)
-{
-    char c;
-    int width;
-    patch_t *p;
-
-    width = 0;
-    while ((c = *text++) != 0)
-    {
-        if (c < 33)
-        {
-            width += 5;
-        }
-        else
-        {
-            p = W_CacheLumpNum(FontEBaseLump + c - 33, PU_CACHE);
-            width += SHORT(p->width) - 1;
-        }
-    }
-    return (width);
 }
 
 //---------------------------------------------------------------------------
@@ -1209,12 +977,6 @@ char *QuitEndMsg_Rus[] = {
 
 void MN_Drawer(void)
 {
-    int i;
-    int x;
-    int y;
-    MenuItem_t *item;
-    char *selName;
-
     if (menuactive == false)
     {
         if (askforquit)
@@ -1267,105 +1029,7 @@ void MN_Drawer(void)
         {
             BorderNeedRefresh = true;
         }
-        if (CurrentMenu->drawFunc != NULL)
-        {
-            CurrentMenu->drawFunc();
-        }
-        x = CurrentMenu->x;
-        y = CurrentMenu->y;
-        item = CurrentMenu->items;
-        for (i = 0; i < CurrentMenu->itemCount; i++)
-        {
-            if (item->type != ITT_EMPTY && item->text)
-            {
-                // [JN] Define where to use big and where small fonts,
-                // and where to use big or small vertical spacing.
-                if (english_language)
-                {
-                    if (CurrentMenu == &MainMenu
-                    ||  CurrentMenu == &ClassMenu
-                    ||  CurrentMenu == &SkillMenu
-                    ||  CurrentMenu == &OptionsMenu
-                    ||  CurrentMenu == &FilesMenu)
-                    {
-                        MN_DrTextB(item->text, x + wide_delta, y);
-                    }
-                    else
-                    {
-                        MN_DrTextA(item->text, x + wide_delta, y);
-                    }
-                }
-                else
-                {
-                    if (CurrentMenu == &MainMenu_Rus
-                    ||  CurrentMenu == &ClassMenu_Rus
-                    ||  CurrentMenu == &SkillMenu_Rus
-                    ||  CurrentMenu == &OptionsMenu_Rus
-                    ||  CurrentMenu == &FilesMenu_Rus)
-                    {
-                        MN_DrTextBigRUS(item->text, x + wide_delta, y);
-                    }
-                    else
-                    {
-                        MN_DrTextSmallRUS(item->text, x + wide_delta, y);
-                    }
-                }
-            }
-
-            // [JN] Use a different font's vertical spacing in following menus:
-            if (CurrentMenu == & RenderingMenu
-            ||  CurrentMenu == & DisplayMenu
-            ||  CurrentMenu == & AutomapMenu
-            ||  CurrentMenu == & SoundMenu
-            ||  CurrentMenu == & SoundSysMenu
-            ||  CurrentMenu == & ControlsMenu
-            ||  CurrentMenu == & GameplayMenu
-            ||  CurrentMenu == & RenderingMenu_Rus
-            ||  CurrentMenu == & DisplayMenu_Rus
-            ||  CurrentMenu == & AutomapMenu_Rus
-            ||  CurrentMenu == & SoundMenu_Rus
-            ||  CurrentMenu == & SoundSysMenu_Rus
-            ||  CurrentMenu == & ControlsMenu_Rus
-            ||  CurrentMenu == & GameplayMenu_Rus)
-            {
-                y += ITEM_HEIGHT_SMALL;
-            }
-            else
-            {
-                y += ITEM_HEIGHT;
-            }
-
-            item++;
-        }
-
-        // [JN] Draw small arrow instead of big in following menus:
-        if (CurrentMenu == & RenderingMenu
-        ||  CurrentMenu == & DisplayMenu
-        ||  CurrentMenu == & AutomapMenu
-        ||  CurrentMenu == & SoundMenu
-        ||  CurrentMenu == & SoundSysMenu
-        ||  CurrentMenu == & ControlsMenu
-        ||  CurrentMenu == & GameplayMenu
-        ||  CurrentMenu == & RenderingMenu_Rus
-        ||  CurrentMenu == & DisplayMenu_Rus
-        ||  CurrentMenu == & AutomapMenu_Rus
-        ||  CurrentMenu == & SoundMenu_Rus
-        ||  CurrentMenu == & SoundSysMenu_Rus
-        ||  CurrentMenu == & ControlsMenu_Rus
-        ||  CurrentMenu == & GameplayMenu_Rus)
-        {
-            y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT_SMALL) + SELECTOR_YOFFSET;
-            selName = MenuTime & 8 ? "INVGEMR1" : "INVGEMR2";
-            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET_SMALL + wide_delta, y,
-                                     W_CacheLumpName(selName, PU_CACHE));
-        }
-        else
-        {
-            y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT) + SELECTOR_YOFFSET;
-            selName = MenuTime & 16 ? "M_SLCTR1" : "M_SLCTR2";
-            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET + wide_delta, y,
-                        W_CacheLumpName(selName, PU_CACHE));
-        }
+        RD_Menu_DrawMenu(CurrentMenu, MenuTime, CurrentItPos);
     }
 }
 
@@ -1382,7 +1046,7 @@ static void DrawMainMenu(void)
     frame = (MenuTime / 5) % 7;
     
     V_DrawShadowedPatchRaven(88 + wide_delta, 0, W_CacheLumpName("M_HTIC", PU_CACHE));
-// Old Gold skull positions: (40, 10) and (232, 10)
+
     V_DrawShadowedPatchRaven(42 + wide_delta, 83, W_CacheLumpNum(MauloBaseLump + (frame + 2) % 7,
                                        PU_CACHE));
     V_DrawShadowedPatchRaven(273 + wide_delta, 83, W_CacheLumpNum(MauloBaseLump + frame, PU_CACHE));
@@ -1444,16 +1108,9 @@ static void DrawClassMenu(void)
 
 static void DrawSkillMenu(void)
 {
-    if (english_language)
-    {
-        MN_DrTextB("CHOOSE SKILL LEVEL:", 74 + wide_delta, 16);
-    }
-    else
-    {
-        MN_DrTextBigRUS("EHJDTYM CKJ;YJCNB:", 57 + wide_delta, 16);   // УРОВЕНЬ СЛОЖНОСТИ:
-    }
-
     // [JN] Update Status bar.
+    // [Dasperal] Once this line is deleted, Delete DrawSkillMenu function and
+    // replace it's reference to NULL
     SB_state = -1;
 }
 
@@ -1479,17 +1136,6 @@ static void DrawFilesMenu(void)
 
 static void DrawLoadMenu(void)
 {
-    if (english_language)
-    {
-        MN_DrTextB("LOAD GAME", 160 - MN_TextBWidth("LOAD GAME") / 2 + wide_delta, 10);
-    }
-    else
-    {
-        // ЗАГРУЗИТЬ ИГРУ
-        MN_DrTextBigRUS("PFUHEPBNM BUHE", 160 - MN_DrTextBigRUSWidth("PFUHEPBNM BUHE")
-                                              / 2 + wide_delta, 10);
-    }
-
     if (!slottextloaded)
     {
         MN_LoadSlotText();
@@ -1505,17 +1151,6 @@ static void DrawLoadMenu(void)
 
 static void DrawSaveMenu(void)
 {
-    if (english_language)
-    {
-        MN_DrTextB("SAVE GAME", 160 - MN_TextBWidth("SAVE GAME") / 2 + wide_delta, 10);
-    }
-    else
-    {
-        // СОХРАНИТЬ ИГРУ
-        MN_DrTextBigRUS("CJ[HFYBNM BUHE", 160 - MN_DrTextBigRUSWidth("CJ[HFYBNM BUHE")
-                                              / 2 + wide_delta, 10);
-    }
-    
     if (!slottextloaded)
     {
         MN_LoadSlotText();
@@ -1590,7 +1225,7 @@ static void DrawFileSlots(Menu_t * menu)
     int x;
     int y;
 
-    x = menu->x;
+    x = english_language ? menu->x_eng : menu->x_rus;
     y = menu->y;
     for (i = 0; i < 6; i++)
     {
@@ -1609,25 +1244,8 @@ static void DrawFileSlots(Menu_t * menu)
 
 static void DrawRenderingMenu(void)
 {
-    static char *title_eng, *title_rus;
-
-    title_eng = "RENDERING OPTIONS";
-    title_rus = "YFCNHJQRB DBLTJ";  // НАСТРОЙКИ ВИДЕО
-
     if (english_language)
     {
-        //
-        // Title
-        //
-        MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + wide_delta, 7);
-
-        //
-        // RENDERING
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("RENDERING", 36 + wide_delta, 32);
-        dp_translation = NULL;
-
         // Display aspect ratio
         MN_DrTextA(aspect_ratio_temp == 1 ? "5:4" :
                    aspect_ratio_temp == 2 ? "16:9" :
@@ -1679,28 +1297,9 @@ static void DrawRenderingMenu(void)
         // Video renderer
         MN_DrTextA(force_software_renderer ? "SOFTWARE (CPU)" : "HARDWARE (GPU)",
                    149 + wide_delta, 102);
-
-        //
-        // EXTRA
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("EXTRA", 36 + wide_delta, 112);
-        dp_translation = NULL;
     }
     else
     {
-        //
-        // Title
-        //
-        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 + wide_delta, 7);
-
-        //
-        // РЕНДЕРИНГ
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("HTYLTHBYU", 36 + wide_delta, 32);
-        dp_translation = NULL;
-
         // Соотношение сторон экрана
         MN_DrTextA(aspect_ratio_temp == 1 ? "5:4" :
                    aspect_ratio_temp == 2 ? "16:9" :
@@ -1755,44 +1354,24 @@ static void DrawRenderingMenu(void)
         // Обработка видео
         MN_DrTextSmallRUS(force_software_renderer ? "GHJUHFVVYFZ" : "FGGFHFNYFZ",
                           159 + wide_delta, 102);
-
-        //
-        // ДОПОЛНИТЕЛЬНО
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("LJGJKYBNTKMYJ", 36 + wide_delta, 112);
-        dp_translation = NULL;
     }
 
     // Screenshot format / Формат скриншотов (same english values)
     MN_DrTextA(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 122);
 }
 
-static void M_RD_Change_Widescreen(int option)
+static void M_RD_Change_Widescreen(Direction_t direction)
 {
     // [JN] Widescreen: changing only temp variable here.
     // Initially it is set in MN_Init and stored into config file in M_QuitResponse.
-    switch(option)
-    {
-        case 0:
-        aspect_ratio_temp--;
-        if (aspect_ratio_temp < 0)
-            aspect_ratio_temp = 4;
-        break;
-
-        case 1:
-        aspect_ratio_temp++;
-        if (aspect_ratio_temp > 4)
-            aspect_ratio_temp = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&aspect_ratio_temp, 0, 4, direction);
 }
 
-static void M_RD_Change_VSync(int option)
+static void M_RD_Change_VSync(Direction_t direction)
 {
     // [JN] Disable "vsync" toggling in software renderer
     if (force_software_renderer == 1)
-    return;
+        return;
 
     vsync ^= 1;
 
@@ -1800,21 +1379,21 @@ static void M_RD_Change_VSync(int option)
     I_ReInitGraphics(REINIT_RENDERER | REINIT_TEXTURES | REINIT_ASPECTRATIO);
 }
 
-static void M_RD_Uncapped(int option)
+static void M_RD_Uncapped(Direction_t direction)
 {
     uncapped_fps ^= 1;
 }
 
-static void M_RD_FPScounter(int option)
+static void M_RD_FPScounter(Direction_t direction)
 {
     show_fps ^= 1;
 }
 
-static void M_RD_Smoothing(int option)
+static void M_RD_Smoothing(Direction_t direction)
 {
     // [JN] Disable smoothing toggling in software renderer
     if (force_software_renderer == 1)
-    return;
+        return;
 
     smoothing ^= 1;
 
@@ -1825,7 +1404,7 @@ static void M_RD_Smoothing(int option)
     SB_state = -1;
 }
 
-static void M_RD_PorchFlashing(int option)
+static void M_RD_PorchFlashing(Direction_t direction)
 {
     vga_porch_flash ^= 1;
 
@@ -1833,7 +1412,7 @@ static void M_RD_PorchFlashing(int option)
     I_DrawBlackBorders();
 }
 
-static void M_RD_Renderer(int option)
+static void M_RD_Renderer(Direction_t direction)
 {
     force_software_renderer ^= 1;
 
@@ -1844,7 +1423,7 @@ static void M_RD_Renderer(int option)
     SB_state = -1;
 }
 
-static void M_RD_Screenshots(int option)
+static void M_RD_Screenshots(Direction_t direction)
 {
     png_screenshots ^= 1;
 }
@@ -1855,27 +1434,10 @@ static void M_RD_Screenshots(int option)
 
 static void DrawDisplayMenu(void)
 {
-    static char *title_eng, *title_rus;
     static char num[4];
-
-    title_eng = "DISPLAY OPTIONS";
-    title_rus = "YFCNHJQRB \'RHFYF";  // НАСТРОЙКИ ЭКРАНА
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + wide_delta, 7);
-
-        //
-        // SCREEN, INTERFACE
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("SCREEN", 36 + wide_delta, 32);
-        MN_DrTextA("INTERFACE", 36 + wide_delta, 102);
-        dp_translation = NULL;
-
         // Local time
         MN_DrTextA(local_time == 1 ? "12-HOUR (HH:MM)" :
                    local_time == 2 ? "12-HOUR (HH:MM:SS)" :
@@ -1891,20 +1453,6 @@ static void DrawDisplayMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + wide_delta, 7);
-
-        //
-        // ЭКРАН, ИНТЕРФЕЙС
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("\'RHFY", 36 + wide_delta, 32);
-        MN_DrTextSmallRUS("BYNTHATQC", 36 + wide_delta, 102);
-        dp_translation = NULL;
-
         // Системное время
         MN_DrTextSmallRUS(local_time == 1 ? "12-XFCJDJT (XX:VV)" :
                           local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
@@ -1922,7 +1470,7 @@ static void DrawDisplayMenu(void)
     // Screen size
     if (aspect_ratio >= 2)
     {
-        DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 4, screenblocks - 9);
+        RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 4, screenblocks - 9);
         M_snprintf(num, 4, "%3d", screenblocks);
         dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
         MN_DrTextA(num, 85 + wide_delta, 52);
@@ -1930,7 +1478,7 @@ static void DrawDisplayMenu(void)
     }
     else
     {
-        DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 1, 10, screenblocks - 3);
+        RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 10, screenblocks - 3);
         M_snprintf(num, 4, "%3d", screenblocks);
         dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
         MN_DrTextA(num, 135 + wide_delta, 52);
@@ -1938,25 +1486,15 @@ static void DrawDisplayMenu(void)
     }
 
     // Gamma-correction
-    DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 3, 18, usegamma);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 72, 18, usegamma);
 
     // Level brightness
-    DrawSliderSmall((english_language ? &DisplayMenu : &DisplayMenu_Rus), 5, 5, level_brightness / 16);
+    RD_Menu_DrawSliderSmall(&DisplayMenu, 92, 5, level_brightness / 16);
 }
 
-static void M_RD_ScreenSize(int option)
+static void M_RD_ScreenSize(Direction_t direction)
 {
-    if (option == RIGHT_DIR)
-    {
-        if (screenblocks < 12) // [JN] Now we have 12 screen sizes
-        {
-            screenblocks++;
-        }
-    }
-    else if (screenblocks > 3)
-    {
-        screenblocks--;
-    }
+    RD_Menu_SlideInt(&screenblocks, 3, 12, direction);
 
     if (aspect_ratio >= 2)
     {
@@ -1971,20 +1509,9 @@ static void M_RD_ScreenSize(int option)
     R_SetViewSize(screenblocks, detailLevel);
 }
 
-static void M_RD_Gamma(int option)
+static void M_RD_Gamma(Direction_t direction)
 {
-    switch(option)
-    {
-        case 0:
-        if (usegamma > 0) 
-            usegamma--;
-        break;
-
-        case 1:
-        if (usegamma < 17) 
-            usegamma++;
-        break;
-    }
+    RD_Menu_SlideInt(&usegamma, 0, 17, direction);
 
     I_SetPalette((byte *) W_CacheLumpName(usegamma <= 8 ?
                                           "PALFIX" :
@@ -1997,7 +1524,7 @@ static void M_RD_Gamma(int option)
                                           false);
 }
 
-static void M_RD_Messages(int option)
+static void M_RD_Messages(Direction_t direction)
 {
     messageson ^= 1;
     if (messageson)
@@ -2017,38 +1544,14 @@ static void M_RD_Messages(int option)
     S_StartSound(NULL, SFX_CHAT);
 }
 
-static void M_RD_LevelBrightness(int option)
+static void M_RD_LevelBrightness(Direction_t direction)
 {
-    switch(option)
-    {
-        case 0:
-        if (level_brightness > 0)
-            level_brightness -= 16;
-        break;
-
-        case 1:
-        if (level_brightness < 64)
-            level_brightness += 16;
-        break;
-    }
+    RD_Menu_SlideInt_Step(&level_brightness, 0, 64, 16, direction);
 }
 
-static void M_RD_LocalTime(int option)
+static void M_RD_LocalTime(Direction_t direction)
 {
-    switch(option)
-    {
-        case 0: 
-        local_time--;
-        if (local_time < 0) 
-            local_time = 4;
-        break;
-
-        case 1:
-        local_time++;
-        if (local_time > 4)
-            local_time = 0;
-        break;
-    }
+    RD_Menu_SpinInt(&local_time, 0, 4, direction);
 }
 
 // -----------------------------------------------------------------------------
@@ -2057,19 +1560,8 @@ static void M_RD_LocalTime(int option)
 
 static void DrawAutomapMenu(void)
 {
-    static char *title_eng, *title_rus;
-
-    title_eng = "AUTOMAP SETTINGS";
-    title_rus = "YFCNHJQRB RFHNS";  // НАСТРОЙКИ КАРТЫ
-
     if (english_language)
     {
-        //
-        // Title
-        //
-        MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 
-                                  + wide_delta, 7);
-
         // Overlay mode
         MN_DrTextA(automap_overlay ? "ON" : "OFF", 200 + wide_delta, 32);
 
@@ -2084,12 +1576,6 @@ static void DrawAutomapMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + wide_delta, 7);
-
         // Режим наложения
         MN_DrTextSmallRUS(automap_overlay ? "DRK" : "DSRK", 208 + wide_delta, 32);
 
@@ -2104,22 +1590,22 @@ static void DrawAutomapMenu(void)
     }
 }
 
-static void M_RD_AutoMapOverlay(int option)
+static void M_RD_AutoMapOverlay(Direction_t direction)
 {
     automap_overlay ^= 1;
 }
 
-static void M_RD_AutoMapRotate(int option)
+static void M_RD_AutoMapRotate(Direction_t direction)
 {
     automap_rotate ^= 1;
 }
 
-static void M_RD_AutoMapFollow(int option)
+static void M_RD_AutoMapFollow(Direction_t direction)
 {
     automap_follow ^= 1;
 }
 
-static void M_RD_AutoMapGrid(int option)
+static void M_RD_AutoMapGrid(Direction_t direction)
 {
     automap_grid ^= 1;
 }
@@ -2130,114 +1616,46 @@ static void M_RD_AutoMapGrid(int option)
 
 static void DrawSoundMenu(void)
 {
-    static char *title_eng, *title_rus;
     static char num[4];
 
-    title_eng = "SOUND OPTIONS";
-    title_rus = "YFCNHJQRB PDERF";  // НАСТРОЙКИ ЗВУКА
-
-    if (english_language)
-    {
-        //
-        // Title
-        //
-        MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + wide_delta, 7);
-
-        //
-        // VOLUME, CHANNELS, ADVANCED
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("VOLUME", 36 + wide_delta, 32);
-        MN_DrTextA("CHANNELS", 36 + wide_delta, 82);
-        MN_DrTextA("ADVANCED", 36 + wide_delta, 112);
-        dp_translation = NULL;
-    }
-    else
-    {
-        //
-        // Title
-        //
-        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + wide_delta, 7);
-
-        //
-        // ГРОМКОСТЬ, ВОСПРОИЗВЕДЕНИЕ, ДОПОЛНИТЕЛЬНО
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("UHJVRJCNM", 36 + wide_delta, 32);
-        MN_DrTextSmallRUS("DJCGHJBPDTLTYBT", 36 + wide_delta, 82);
-        MN_DrTextSmallRUS("LJGJKYBNTKMYJ", 36 + wide_delta, 112);
-        dp_translation = NULL;
-    }
-
     // SFX Volume
-    DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 1, 16, snd_MaxVolume_tmp);
+    RD_Menu_DrawSliderSmall(&SoundMenu, 52, 16, snd_MaxVolume_tmp);
     M_snprintf(num, 4, "%3d", snd_MaxVolume_tmp);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
     MN_DrTextA(num, 184 + wide_delta, 53);
     dp_translation = NULL;
 
     // Music Volume
-    DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 3, 16, snd_MusicVolume);
+    RD_Menu_DrawSliderSmall(&SoundMenu, 72, 16, snd_MusicVolume);
     M_snprintf(num, 4, "%3d", snd_MusicVolume);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
     MN_DrTextA(num, 184 + wide_delta, 73);
     dp_translation = NULL;
 
     // SFX Channels
-    DrawSliderSmall((english_language ? &SoundMenu : &SoundMenu_Rus), 6, 16, snd_Channels / 4 - 1);
+    RD_Menu_DrawSliderSmall(&SoundMenu, 102, 16, snd_Channels / 4 - 1);
     M_snprintf(num, 4, "%3d", snd_Channels);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
     MN_DrTextA(num, 184 + wide_delta, 103);
     dp_translation = NULL;
 }
 
-static void M_RD_SfxVolume(int option)
+static void M_RD_SfxVolume(Direction_t direction)
 {
-    if (option == RIGHT_DIR)
-    {
-        if (snd_MaxVolume < 15)
-        {
-            snd_MaxVolume++;
-        }
-    }
-    else if (snd_MaxVolume)
-    {
-        snd_MaxVolume--;
-    }
+    RD_Menu_SlideInt(&snd_MaxVolume, 0, 15, direction);
     snd_MaxVolume_tmp = snd_MaxVolume; // [JN] Sync temp volume variable.
     soundchanged = true;        // we'll set it when we leave the menu
 }
 
-static void M_RD_MusVolume(int option)
+static void M_RD_MusVolume(Direction_t direction)
 {
-    if (option == RIGHT_DIR)
-    {
-        if (snd_MusicVolume < 15)
-        {
-            snd_MusicVolume++;
-        }
-    }
-    else if (snd_MusicVolume)
-    {
-        snd_MusicVolume--;
-    }
+    RD_Menu_SlideInt(&snd_MusicVolume, 0, 15, direction);
     S_SetMusicVolume();
 }
 
-static void M_RD_SfxChannels(int option)
+static void M_RD_SfxChannels(Direction_t direction)
 {
-    if (option == RIGHT_DIR)
-    {
-        if (snd_Channels < 64)
-        {
-            snd_Channels += 4;
-        }
-    }
-    else if (snd_Channels > 4)
-    {
-        snd_Channels -= 4;
-    }
+    RD_Menu_SlideInt_Step(&snd_Channels, 4, 64, 4, direction);
 
     // Reallocate sound channels
     S_ChannelsRealloc();
@@ -2249,25 +1667,8 @@ static void M_RD_SfxChannels(int option)
 
 static void DrawSoundSystemMenu(void)
 {
-    static char *title_eng, *title_rus;
-
-    title_eng = "SOUND SYSTEM SETTINGS";
-    title_rus = "YFCNHJQRB PDERJDJQ CBCNTVS";  // НАСТРОЙКИ ЗВУКОВОЙ СИСТЕМЫ
-
     if (english_language)
     {
-        //
-        // Title
-        //
-        MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + wide_delta, 7);
-
-        //
-        // SOUND SYSTEM
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("SOUND SYSTEM", 36 + wide_delta, 32);
-        dp_translation = NULL;
-
         // Sound effects
         if (snd_sfxdevice == 0)
         {
@@ -2305,13 +1706,6 @@ static void DrawSoundSystemMenu(void)
             MN_DrTextA("MIDI/MP3/OGG/FLAC/TRACKER", 80 + wide_delta, 52);
         }
 
-        //
-        // QUALITY
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("QUALITY", 36 + wide_delta, 62);
-        dp_translation = NULL;
-
         // Sampling frequency (hz)
         if (snd_samplerate == 44100)
         {
@@ -2325,13 +1719,6 @@ static void DrawSoundSystemMenu(void)
         {
             MN_DrTextA("11025 HZ", 178 + wide_delta, 72);
         }
-
-        //
-        // MISCELLANEOUS
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("MISCELLANEOUS", 36 + wide_delta, 82);
-        dp_translation = NULL;
 
         // SFX Mode
         MN_DrTextA(snd_monomode ? "MONO" : "STEREO", 181 + wide_delta, 92);
@@ -2352,20 +1739,6 @@ static void DrawSoundSystemMenu(void)
     }
     else
     {
-
-        //
-        // Title
-        //
-        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + wide_delta, 7);
-
-        //
-        // ЗВУКВАЯ СИСТЕМА
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("PDERJDFZ CBCNTVF", 36 + wide_delta, 32);
-        dp_translation = NULL;
-
         // Звуковые эффекты
         if (snd_sfxdevice == 0)
         {
@@ -2412,13 +1785,6 @@ static void DrawSoundSystemMenu(void)
             MN_DrTextA("MIDI/MP3/OGG/FLAC/TRACKER", 91 + wide_delta, 52);
         }
 
-        //
-        // КАЧЕСТВО ЗВУЧАНИЯ
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("RFXTCNDJ PDEXFYBZ", 36 + wide_delta, 62);
-        dp_translation = NULL;
-
         // Частота дискретизации (гц)
         if (snd_samplerate == 44100)
         {
@@ -2432,13 +1798,6 @@ static void DrawSoundSystemMenu(void)
         {
             MN_DrTextSmallRUS("11025 UW", 200 + wide_delta, 72);
         }
-
-        //
-        // РАЗНОЕ
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("HFPYJT", 36 + wide_delta, 82);
-        dp_translation = NULL;
 
         // Режим звуковых эффектов
         MN_DrTextSmallRUS(snd_monomode ? "VJYJ" : "CNTHTJ", 226 + wide_delta, 92);
@@ -2460,24 +1819,17 @@ static void DrawSoundSystemMenu(void)
     }
 }
 
-static void M_RD_SoundDevice(int option)
+static void M_RD_SoundDevice(Direction_t direction)
 {
-    switch(option)
-    {
-        case 0:
-        case 1:
         if (snd_sfxdevice == 0)
             snd_sfxdevice = 3;
-        else 
-        if (snd_sfxdevice == 3)
+        else if (snd_sfxdevice == 3)
             snd_sfxdevice = 0;
-        break;
-    }
 }
 
-static void M_RD_MusicDevice(int option)
+static void M_RD_MusicDevice(Direction_t direction)
 {
-    switch(option)
+    switch(direction)
     {
         case 0:
             if (snd_musicdevice == 0)
@@ -2502,7 +1854,7 @@ static void M_RD_MusicDevice(int option)
             {
                 snd_musicdevice = 0;    // Disable
             }
-        break;
+            break;
         case 1:
             if (snd_musicdevice == 0)
             {
@@ -2526,57 +1878,27 @@ static void M_RD_MusicDevice(int option)
             {
                 snd_musicdevice  = 0;   // Disable
             }
-        break;
-
+        default:
+            break;
     }
 }
 
-static void M_RD_Sampling(int option)
+static void M_RD_Sampling(Direction_t direction)
 {
-    switch(option)
-    {
-        case 0:
-            if (snd_samplerate == 44100)
-            {
-                snd_samplerate = 22050;
-            }
-            else if (snd_samplerate == 22050)
-            {
-                snd_samplerate = 11025;
-            }
-            else if (snd_samplerate == 11025)
-            {
-                snd_samplerate  = 44100;
-            }
-        break;
-        case 1:
-            if (snd_samplerate == 11025)
-            {
-                snd_samplerate = 22050;
-            }
-            else if (snd_samplerate == 22050)
-            {
-                snd_samplerate = 44100;
-            }
-            else if (snd_samplerate == 44100)
-            {
-                snd_samplerate = 11025;
-            }
-        break;
-    }
+    RD_Menu_ShiftSpinInt(&snd_samplerate, 11025, 44100, direction);
 }
 
-static void M_RD_SndMode(int option)
+static void M_RD_SndMode(Direction_t direction)
 {
     snd_monomode ^= 1;
 }
 
-static void M_RD_PitchShifting(int option)
+static void M_RD_PitchShifting(Direction_t direction)
 {
     snd_pitchshift ^= 1;
 }
 
-static void M_RD_MuteInactive(int option)
+static void M_RD_MuteInactive(Direction_t direction)
 {
     mute_inactive_window ^= 1;
 }
@@ -2587,35 +1909,12 @@ static void M_RD_MuteInactive(int option)
 
 static void DrawControlsMenu(void)
 {
-    static char *title_eng, *title_rus;
     static char num[4];
-
-    title_eng = "CONTROL SETTINGS";
-    title_rus = "EGHFDKTYBT";  // УПРАВЛЕНИЕ
 
     if (english_language)
     {
-        //
-        // Title
-        //
-        MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + wide_delta, 7);
-
-        //
-        // MOVEMENT
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("MOVEMENT", 36 + wide_delta, 32);
-        dp_translation = NULL;
-
         // Always run
         MN_DrTextA(joybspeed >= 20 ? "ON" : "OFF", 118 + wide_delta, 42);
-
-        //
-        // MOUSE
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("MOUSE", 36 + wide_delta, 52);
-        dp_translation = NULL;
 
         // Mouse look
         MN_DrTextA(mlook ? "ON" : "OFF", 118 + wide_delta, 82);
@@ -2634,28 +1933,8 @@ static void DrawControlsMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + wide_delta, 7);
-
-        //
-        // ПЕРЕДВИЖЕНИЕ
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("GTHTLDB;TYBT", 36 + wide_delta, 32);
-        dp_translation = NULL;
-
         // Режим постоянного бега
         MN_DrTextSmallRUS(joybspeed >= 20 ? "DRK" : "DSRK", 209 + wide_delta, 42);
-
-        //
-        // МЫШЬ
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("VSIM", 36 + wide_delta, 52);
-        dp_translation = NULL;
 
         // Обзор мышью
         MN_DrTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 82);
@@ -2674,14 +1953,14 @@ static void DrawControlsMenu(void)
     }
 
     // Mouse sensivity
-    DrawSliderSmall((english_language ? &ControlsMenu : &ControlsMenu_Rus), 3, 12, mouseSensitivity);
+    RD_Menu_DrawSliderSmall(&ControlsMenu, 72, 12, mouseSensitivity);
     M_snprintf(num, 4, "%3d", mouseSensitivity);
     dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
     MN_DrTextA(num, 152 + wide_delta, 73);
     dp_translation = NULL;
 }
 
-static void M_RD_AlwaysRun(int option)
+static void M_RD_AlwaysRun(Direction_t direction)
 {
     static int joybspeed_old = 2;
 
@@ -2696,34 +1975,24 @@ static void M_RD_AlwaysRun(int option)
     }
 }
 
-static void M_RD_MouseLook(int option)
+static void M_RD_MouseLook(Direction_t direction)
 {
     mlook ^= 1;
     if (!mlook)
     players[consoleplayer].centering = true;
 }
 
-static void M_RD_Sensitivity(int option)
+static void M_RD_Sensitivity(Direction_t direction)
 {
-    if (option == RIGHT_DIR)
-    {
-        if (mouseSensitivity < 255) // [crispy] extended range
-        {
-            mouseSensitivity++;
-        }
-    }
-    else if (mouseSensitivity)
-    {
-        mouseSensitivity--;
-    }
+    RD_Menu_SlideInt(&mouseSensitivity, 0, 255, direction); // [crispy] extended range
 }
 
-static void M_RD_InvertY(int option)
+static void M_RD_InvertY(Direction_t direction)
 {
     mouse_y_invert ^= 1;
 }
 
-static void M_RD_Novert(int option)
+static void M_RD_Novert(Direction_t direction)
 {
     novert ^= 1;
 }
@@ -2734,27 +2003,8 @@ static void M_RD_Novert(int option)
 
 static void DrawGameplayMenu(void)
 {
-    static char *title_eng, *title_rus;
-
-    title_eng = "GAMEPLAY FEATURES";
-    title_rus = "YFCNHJQRB UTQVGKTZ";  // НАСТРОЙКИ ГЕЙМПЛЕЯ
-
     if (english_language)
     {
-        //
-        // Title
-        //
-        MN_DrTextB(title_eng, 160 - MN_TextBWidth(title_eng) / 2 + wide_delta, 7);
-
-        //
-        // VISUAL, CROSSHAIR, GAMEPLAY
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextA("VISUAL", 36 + wide_delta, 32);
-        MN_DrTextA("CROSSHAIR", 36 + wide_delta, 62);
-        MN_DrTextA("GAMEPLAY", 36 + wide_delta, 102);
-        dp_translation = NULL;
-
         // Brightmaps
         dp_translation = brightmaps ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
         MN_DrTextA(brightmaps ? "ON" : "OFF", 119 + wide_delta, 42);
@@ -2792,21 +2042,6 @@ static void DrawGameplayMenu(void)
     }
     else
     {
-        //
-        // Title
-        //
-        MN_DrTextBigRUS(title_rus, 160 - MN_DrTextBigRUSWidth(title_rus) / 2 
-                                       + wide_delta, 7);
-
-        //
-        // ГРАФИКА, CROSSHAIR, GAMEPLAY
-        //
-        dp_translation = cr[CR_GRAY2DARKGOLD_HEXEN];
-        MN_DrTextSmallRUS("UHFABRF", 36 + wide_delta, 32);
-        MN_DrTextSmallRUS("GHBWTK", 36 + wide_delta, 62);
-        MN_DrTextSmallRUS("UTQVGKTQ", 36 + wide_delta, 102);
-        dp_translation = NULL;
-
         // Брайтмаппинг
         dp_translation = brightmaps ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
         MN_DrTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 42);
@@ -2846,37 +2081,37 @@ static void DrawGameplayMenu(void)
     }
 }
 
-static void M_RD_Brightmaps(int option)
+static void M_RD_Brightmaps(Direction_t direction)
 {
     brightmaps ^= 1;
 }
 
-static void M_RD_FakeContrast(int option)
+static void M_RD_FakeContrast(Direction_t direction)
 {
     fake_contrast ^= 1;
 }
 
-static void M_RD_ShadowedText(int option)
+static void M_RD_ShadowedText(Direction_t direction)
 {
     draw_shadowed_text ^= 1;
 }
 
-static void M_RD_CrossHairDraw(int option)
+static void M_RD_CrossHairDraw(Direction_t direction)
 {
     crosshair_draw ^= 1;
 }
 
-static void M_RD_CrossHairType(int option)
+static void M_RD_CrossHairType(Direction_t direction)
 {
     crosshair_type ^= 1;
 }
 
-static void M_RD_CrossHairScale(int option)
+static void M_RD_CrossHairScale(Direction_t direction)
 {
     crosshair_scale ^= 1;
 }
 
-static void M_RD_FlipLevels(int option)
+static void M_RD_FlipLevels(Direction_t direction)
 {
     flip_levels ^= 1;
 
@@ -2884,7 +2119,7 @@ static void M_RD_FlipLevels(int option)
     R_ExecuteSetViewSize();
 }
 
-static void M_RD_NoDemos(int option)
+static void M_RD_NoDemos(Direction_t direction)
 {
     no_internal_demos ^= 1;
 }
@@ -2975,9 +2210,6 @@ static void M_RD_ChangeLanguage(int option)
     extern int demosequence;
 
     english_language ^= 1;
-
-    // Reset options menu
-    CurrentMenu = english_language ? &OptionsMenu : &OptionsMenu_Rus;
 
     // Clear HUD messages
     players[consoleplayer].message[0] = 0;
@@ -3112,7 +2344,7 @@ static void SCMessages(int option)
 //
 //===========================================================================
 
-static boolean SCNetCheck(int option)
+boolean SCNetCheck(int option)
 {
     if (!netgame)
     {
@@ -3137,23 +2369,12 @@ static boolean SCNetCheck(int option)
                          "YOU CAN'T END A GAME IN NETPLAY!" :
                          "YTDJPVJ;YJ PFRJYXBNM CTNTDE. BUHE!", // НЕВОЗМОЖНО ЗАКОНЧИТЬ СЕТЕВУЮ ИГРУ!
                          true);
+        default:
             break;
     }
     menuactive = false;
     S_StartSound(NULL, SFX_CHAT);
     return false;
-}
-
-//===========================================================================
-//
-// SCNetCheck2
-//
-//===========================================================================
-
-static void SCNetCheck2(int option)
-{
-    SCNetCheck(option);
-    return;
 }
 
 //---------------------------------------------------------------------------
@@ -3200,7 +2421,7 @@ static void SCSaveGame(int option)
         FileMenuKeySteal = true;
         // We need to activate the text input interface to type the save
         // game name:
-        x = SaveMenu.x + 1;
+        x = (english_language ? SaveMenu.x_eng : SaveMenu.x_rus) + 1;
         y = SaveMenu.y + 1 + option * ITEM_HEIGHT;
         I_StartTextInput(x, y, x + 190, y + ITEM_HEIGHT - 2);
 
@@ -3252,34 +2473,16 @@ static void SCClass(int option)
     switch (MenuPClass)
     {
         case PCLASS_FIGHTER:
-            SkillMenu.x = 120;
-            SkillItems[0].text = english_language ? "SQUIRE" : "JHE;TYJCTW";    // ОРУЖЕНОСЕЦ
-            SkillItems[1].text = english_language ? "KNIGHT" : "HSWFHM";        // РЫЦАРЬ
-            SkillItems[2].text = english_language ? "WARRIOR" : "DJBNTKM";      // ВОИТЕЛЬ
-            SkillItems[3].text = english_language ? "BERSERKER" : ",THCTHR";    // БЕРСЕРК
-            SkillItems[4].text = english_language ? "TITAN" : "NBNFY";          // ТИТАН
-            SkillItems[5].text = english_language ? "AVATAR" : "DTHIBNTKM";     // ВЕРШИТЕЛЬ
+            SetMenu(&SkillMenu_F);
             break;
         case PCLASS_CLERIC:
-            SkillMenu.x = 116;
-            SkillItems[0].text = english_language ? "ALTAR BOY" : "FKNFHYBR";   // АЛТАРНИК
-            SkillItems[1].text = english_language ? "ACOLYTE" : "CKE;BNTKM";    // СЛУЖИТЕЛЬ  
-            SkillItems[2].text = english_language ? "PRIEST" : "CDZOTYYBR";     // СВЯЩЕННИК
-            SkillItems[3].text = english_language ? "CARDINAL" : "RFHLBYFK";    // КАРДИНАЛ
-            SkillItems[4].text = english_language ? "POPE" : "TGBCRJG";         // ЕПИСКОП
-            SkillItems[5].text = english_language ? "APOSTLE" : "FGJCNJK";      // АПОСТОЛ
+            SetMenu(&SkillMenu_C);
             break;
         case PCLASS_MAGE:
-            SkillMenu.x = 112;
-			SkillItems[0].text = english_language ? "APPRENTICE" : "EXTYBR";                // УЧЕНИК
-            SkillItems[1].text = english_language ? "ENCHANTER" : "XFHJLTQ";                // ЧАРОДЕЙ
-            SkillItems[2].text = english_language ? "SORCERER" : "RJKLEY";                  // КОЛДУН
-            SkillItems[3].text = english_language ? "WARLOCK" : "XTHYJRYB;YBR";             // ЧЕРНОКНИЖНИК
-            SkillItems[4].text = english_language ? "HIGHER MAGE" : "DTH[JDYSQ VFU";        // ВЕРХОВНЫЙ МАГ
-            SkillItems[5].text = english_language ? "GREAT ARCHMAGE" : "DTKBRBQ FH[BVFU";   // ВЕЛИКИЙ АРХИМАГ
+            SetMenu(&SkillMenu_M);
+        default:
             break;
     }
-    SetMenu(MENU_SKILL);
 }
 
 //---------------------------------------------------------------------------
@@ -3329,7 +2532,6 @@ boolean MN_Responder(event_t * event)
 {
     int key;
     int charTyped;
-    int i;
     MenuItem_t *item;
     extern boolean automapactive;
     extern void H2_StartTitle(void);
@@ -3399,16 +2601,8 @@ boolean MN_Responder(event_t * event)
 
     if (InfoType)
     {
-        /* The 4-Level Demo Version also has 3 Info pages
-        if (gamemode == shareware)
-        {
-            InfoType = (InfoType + 1) % 5;
-        }
-        else
-        */
-        {
-            InfoType = (InfoType + 1) % 4;
-        }
+        InfoType = (InfoType + 1) % 4;
+
         if (key == KEY_ESCAPE)
         {
             InfoType = 0;
@@ -3544,7 +2738,7 @@ boolean MN_Responder(event_t * event)
                 FileMenuKeySteal = false;
                 MenuTime = 0;
                 CurrentMenu = &SaveMenu;
-                CurrentItPos = CurrentMenu->oldItPos;
+                CurrentItPos = CurrentMenu->lastOn;
                 if (!netgame && !demoplayback)
                 {
                     paused = true;
@@ -3562,7 +2756,7 @@ boolean MN_Responder(event_t * event)
                 FileMenuKeySteal = false;
                 MenuTime = 0;
                 CurrentMenu = &LoadMenu;
-                CurrentItPos = CurrentMenu->oldItPos;
+                CurrentItPos = CurrentMenu->lastOn;
                 if (!netgame && !demoplayback)
                 {
                     paused = true;
@@ -3577,10 +2771,8 @@ boolean MN_Responder(event_t * event)
             menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
-            CurrentMenu = english_language ?
-                          &SoundMenu :
-                          &SoundMenu_Rus;
-            CurrentItPos = CurrentMenu->oldItPos;
+            CurrentMenu = &SoundMenu;
+            CurrentItPos = CurrentMenu->lastOn;
             if (!netgame && !demoplayback)
             {
                 paused = true;
@@ -3606,7 +2798,7 @@ boolean MN_Responder(event_t * event)
                     FileMenuKeySteal = false;
                     MenuTime = 0;
                     CurrentMenu = &SaveMenu;
-                    CurrentItPos = CurrentMenu->oldItPos;
+                    CurrentItPos = CurrentMenu->lastOn;
                     if (!netgame && !demoplayback)
                     {
                         paused = true;
@@ -3659,7 +2851,7 @@ boolean MN_Responder(event_t * event)
                     FileMenuKeySteal = false;
                     MenuTime = 0;
                     CurrentMenu = &LoadMenu;
-                    CurrentItPos = CurrentMenu->oldItPos;
+                    CurrentItPos = CurrentMenu->lastOn;
                     if (!netgame && !demoplayback)
                     {
                         paused = true;
@@ -3746,120 +2938,7 @@ boolean MN_Responder(event_t * event)
     }
     if (!FileMenuKeySteal)
     {
-        item = &CurrentMenu->items[CurrentItPos];
-
-        if (key == key_menu_down)                // Next menu item
-        {
-            do
-            {
-                if (CurrentItPos + 1 > CurrentMenu->itemCount - 1)
-                {
-                    CurrentItPos = 0;
-                }
-                else
-                {
-                    CurrentItPos++;
-                }
-            }
-            while (CurrentMenu->items[CurrentItPos].type == ITT_EMPTY);
-            S_StartSound(NULL, SFX_FIGHTER_HAMMER_HITWALL);
-            return (true);
-        }
-        else if (key == key_menu_up)             // Previous menu item
-        {
-            do
-            {
-                if (CurrentItPos == 0)
-                {
-                    CurrentItPos = CurrentMenu->itemCount - 1;
-                }
-                else
-                {
-                    CurrentItPos--;
-                }
-            }
-            while (CurrentMenu->items[CurrentItPos].type == ITT_EMPTY);
-            S_StartSound(NULL, SFX_FIGHTER_HAMMER_HITWALL);
-            return (true);
-        }
-        else if (key == key_menu_left)           // Slider left
-        {
-            if (item->type == ITT_LRFUNC && item->func != NULL)
-            {
-                item->func(LEFT_DIR);
-                S_StartSound(NULL, SFX_PICKUP_KEY);
-            }
-            return (true);
-        }
-        else if (key == key_menu_right)          // Slider right
-        {
-            if (item->type == ITT_LRFUNC && item->func != NULL)
-            {
-                item->func(RIGHT_DIR);
-                S_StartSound(NULL, SFX_PICKUP_KEY);
-            }
-            return (true);
-        }
-        else if (key == key_menu_forward)        // Activate item (enter)
-        {
-            if (item->type == ITT_SETMENU)
-            {
-                if (item->func != NULL)
-                {
-                    item->func(item->option);
-                }
-                SetMenu(item->menu);
-            }
-            else if (item->func != NULL)
-            {
-                CurrentMenu->oldItPos = CurrentItPos;
-                if (item->type == ITT_LRFUNC)
-                {
-                    item->func(RIGHT_DIR);
-                }
-                else if (item->type == ITT_EFUNC)
-                {
-                    item->func(item->option);
-                }
-            }
-            S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
-            return (true);
-        }
-        else if (key == key_menu_activate)
-        {
-            MN_DeactivateMenu();
-            return (true);
-        }
-        else if (key == key_menu_back)
-        {
-            S_StartSound(NULL, SFX_PICKUP_KEY);
-
-            if (CurrentMenu->prevMenu == MENU_NONE)
-            {
-                MN_DeactivateMenu();
-            }
-            else
-            {
-                SetMenu(CurrentMenu->prevMenu);
-            }
-            return (true);
-        }
-        else if (charTyped != 0)
-        {
-            for (i = 0; i < CurrentMenu->itemCount; i++)
-            {
-                if (CurrentMenu->items[i].text)
-                {
-                    if (toupper(charTyped)
-                        == toupper(CurrentMenu->items[i].text[0]))
-                    {
-                        CurrentItPos = i;
-                        return (true);
-                    }
-                }
-            }
-        }
-        return (false);
+        return RD_Menu_Responder(key, charTyped);
     }
     else
     {
@@ -3890,19 +2969,15 @@ boolean MN_Responder(event_t * event)
         if (key == KEY_ENTER)
         {
             SlotText[currentSlot][slotptr] = 0; // clear the cursor
-            item = &CurrentMenu->items[CurrentItPos];
-            CurrentMenu->oldItPos = CurrentItPos;
+            item = (MenuItem_t*) &CurrentMenu->items[CurrentItPos];
+            CurrentMenu->lastOn = CurrentItPos;
             if (item->type == ITT_EFUNC)
             {
-                item->func(item->option);
-                if (item->menu != MENU_NONE)
-                {
-                    SetMenu(item->menu);
-                }
+                ((void (*) (int)) item->pointer)(item->option);
             }
             return (true);
         }
-        if (slotptr < SLOTTEXTLEN && key != KEY_BACKSPACE)
+        if (slotptr < SLOTTEXTLEN)
         {
             if (isalpha(charTyped))
             {
@@ -3944,7 +3019,6 @@ boolean MN_Responder(event_t * event)
         }
         return (true);
     }
-    return (false);
 }
 
 //---------------------------------------------------------------------------
@@ -3966,10 +3040,8 @@ void MN_ActivateMenu(void)
     menuactive = true;
     FileMenuKeySteal = false;
     MenuTime = 0;
-    CurrentMenu = english_language ? 
-                  &MainMenu :
-                  &MainMenu_Rus;
-    CurrentItPos = CurrentMenu->oldItPos;
+    CurrentMenu = &MainMenu;
+    CurrentItPos = CurrentMenu->lastOn;
     if (!netgame && !demoplayback)
     {
         paused = true;
@@ -3988,7 +3060,7 @@ void MN_DeactivateMenu(void)
 {
     if (CurrentMenu != NULL)
     {
-        CurrentMenu->oldItPos = CurrentItPos;
+        CurrentMenu->lastOn = CurrentItPos;
     }
     S_ResumeSound();    // [JN] Fix vanilla Hexen bug: resume music playing
     menuactive = false;
@@ -4045,116 +3117,33 @@ void MN_DrawInfo(void)
     }
 }
 
-
 //---------------------------------------------------------------------------
 //
 // PROC SetMenu
 //
 //---------------------------------------------------------------------------
 
-static void SetMenu(MenuType_t menu)
+void SetMenu(const Menu_t* menu)
 {
-    CurrentMenu->oldItPos = CurrentItPos;
-    CurrentMenu = english_language ?
-                  Menus[menu] :
-                  Menus_Rus[menu];
-    CurrentItPos = CurrentMenu->oldItPos;
+    CurrentMenu->lastOn = CurrentItPos;
+    CurrentMenu = (Menu_t*) menu;
+    CurrentItPos = CurrentMenu->lastOn;
 }
 
-//---------------------------------------------------------------------------
-//
-// PROC DrawSlider
-//
-// [JN] Not used for now
-//
-//---------------------------------------------------------------------------
-/*
-static void DrawSlider(Menu_t * menu, int item, int width, int slot)
+void RD_Menu_StartSound(MenuSound_t sound)
 {
-    int x;
-    int y;
-    int x2;
-    int count;
-
-    x = menu->x + 24;
-    y = menu->y + 2 + (item * ITEM_HEIGHT);
-    V_DrawShadowedPatchRaven(x - 32 + wide_delta, y, W_CacheLumpName("M_SLDLT", PU_CACHE));
-    for (x2 = x, count = width; count--; x2 += 8)
+    switch (sound)
     {
-        V_DrawShadowedPatchRaven(x2 + wide_delta, y, W_CacheLumpName(count & 1 ? "M_SLDMD1"
-                                           : "M_SLDMD2", PU_CACHE));
+        case MENU_SOUND_CURSOR_MOVE:
+            S_StartSound(NULL, SFX_FIGHTER_HAMMER_HITWALL);
+            break;
+        case MENU_SOUND_SLIDER_MOVE:
+            S_StartSound(NULL, SFX_PICKUP_KEY);
+            break;
+        case MENU_SOUND_CLICK:
+            S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
+            break;
+        default:
+            break;
     }
-    V_DrawShadowedPatchRaven(x2 + wide_delta, y, W_CacheLumpName("M_SLDRT", PU_CACHE));
-
-    // [JN] Colorizing slider gem...
-    // Most left position (dull green gem)
-    if (slot == 0)
-    {
-        V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7, W_CacheLumpName("M_SLDKD", PU_CACHE));
-    }
-    // [JN] Most right position that is "out of bounds" (red gem).
-    // Only the mouse sensitivity menu requires this trick.
-    else if ((CurrentMenu == &ControlsMenu || CurrentMenu == &ControlsMenu_Rus) && slot > 11)
-    {
-        slot = 11;
-        V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7, W_CacheLumpName("M_SLDKR", PU_CACHE));
-    }
-    // [JN] Standard function (green gem)
-    else
-    V_DrawPatch(x + 4 + slot * 8 + wide_delta, y + 7, W_CacheLumpName("M_SLDKB", PU_CACHE));
-}
-*/
-
-//---------------------------------------------------------------------------
-//
-// PROC DrawSliderSmall
-//
-// [JN] Draw small slider
-//
-//---------------------------------------------------------------------------
-
-static void DrawSliderSmall(Menu_t * menu, int item, int width, int slot)
-{
-    int x;
-    int y;
-    int x2;
-    int count;
-
-    x = menu->x + 24;
-    y = menu->y + (item * ITEM_HEIGHT_SMALL);
-
-    V_DrawShadowedPatchRaven(x - 32 + wide_delta, y, W_CacheLumpName("M_RDSLDL", PU_CACHE));
-
-    for (x2 = x, count = width; count--; x2 += 8)
-    {
-        V_DrawShadowedPatchRaven(x2 - 16 + wide_delta, y,
-                                 W_CacheLumpName("M_RDSLD1", PU_CACHE));
-    }
-
-    V_DrawShadowedPatchRaven(x2 - 25 + wide_delta, y,
-                             W_CacheLumpName("M_RDSLDR", PU_CACHE));
-
-    // [JN] Colorizing slider gem...
-    // Most left position (dull green gem)
-    if (slot == 0)
-    {
-        dp_translation = cr[CR_GREEN2GRAY_HERETIC];
-        V_DrawPatch(x + slot * 8 + wide_delta, y + 7,
-                    W_CacheLumpName("M_RDSLG", PU_CACHE));
-        dp_translation = NULL;
-    }
-    // [JN] Most right position that is "out of bounds" (red gem).
-    // Only the mouse sensitivity menu requires this trick.
-    else if ((CurrentMenu == &ControlsMenu || CurrentMenu == &ControlsMenu_Rus) && slot > 11)
-    {
-        slot = 11;
-        dp_translation = cr[CR_GREEN2RED_HERETIC];
-        V_DrawPatch(x + slot * 8 + wide_delta, y + 7,
-                    W_CacheLumpName("M_RDSLG", PU_CACHE));
-        dp_translation = NULL;
-    }
-    // [JN] Standard function (green gem)
-    else
-    V_DrawPatch(x + slot * 8 + wide_delta, y + 7,
-                W_CacheLumpName("M_RDSLG", PU_CACHE));
 }
