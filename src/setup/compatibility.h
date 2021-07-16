@@ -90,6 +90,8 @@ extern int noise_alert_sfx;
 // Тактика
 extern int secret_notification;
 extern int infragreen_visor;
+extern int show_artifacts_timer;
+extern int negative_health;
 
 // Физика
 extern int over_under;

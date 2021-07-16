@@ -1731,6 +1731,8 @@ static default_t extra_defaults_list[] =
     // Gameplay: Tactical
     CONFIG_VARIABLE_INT(secret_notification),
     CONFIG_VARIABLE_INT(infragreen_visor),
+    CONFIG_VARIABLE_INT(show_all_artifacts),
+    CONFIG_VARIABLE_INT(show_artifacts_timer),
 
     // Gameplay: Physical
     CONFIG_VARIABLE_INT(over_under),

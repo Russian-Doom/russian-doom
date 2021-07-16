@@ -88,6 +88,8 @@ int correct_endlevel_sfx = 0;
 // Gameplay: Tactical
 int secret_notification = 1;
 int infragreen_visor = 0;
+int show_artifacts_timer = 0;
+int negative_health = 0;
 
 // Gameplay: Physical
 int over_under = 0;
@@ -393,6 +395,8 @@ void BindCompatibilityVariables(void)
     // Gameplay: Tactical
     M_BindIntVariable("secret_notification",    &secret_notification);
     M_BindIntVariable("infragreen_visor",       &infragreen_visor);
+    M_BindIntVariable("show_all_artifacts",     &show_all_artifacts);
+    M_BindIntVariable("show_artifacts_timer",   &show_artifacts_timer);
 
     // Gameplay: Physical
     M_BindIntVariable("over_under",             &over_under);

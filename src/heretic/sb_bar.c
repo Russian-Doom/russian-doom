@@ -48,6 +48,7 @@ static void ShadeLine(int x, int y, int height, int shade);
 static void ShadeChain(void);
 static void DrINumber(signed int val, int x, int y);
 static void DrBNumber(signed int val, int x, int y);
+static void DrSmallNumber(int val, int x, int y, boolean draw_val1);
 static void DrawCommonBar(void);
 static void DrawMainBar(void);
 static void DrawInventoryBar(void);
@@ -631,6 +632,8 @@ int playerkeys = 0;
 void SB_Drawer(void)
 {
     int frame;
+    int xval;
+    const int xval_widget = show_fps || local_time ? 50 : 0;
     static boolean hitCenterFrame;
     boolean wide_4_3 = (aspect_ratio >= 2 && screenblocks == 9);
 
@@ -655,41 +658,41 @@ void SB_Drawer(void)
                        players[consoleplayer].killcount, totalkills);
             if (english_language)
             {
-                MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
+                MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 38);
             }
             else
             {
-                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 16);
+                MN_DrTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 38);
             }
             M_snprintf(text, sizeof(text), english_language ? "ITEMS: %d/ %d" : "GHTLVTNS: %d/ %d",
                        players[consoleplayer].itemcount, totalitems);
             if (english_language)
             {
-                MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
+                MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 48);
             }
             else
             {
-                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 26);
+                MN_DrTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 48);
             }
             M_snprintf(text, sizeof(text), english_language ? "SECRETS: %d/ %d" : "NFQYBRB: %d/ %d",
                        players[consoleplayer].secretcount, totalsecret);
             if (english_language)
             {
-                MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
+                MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 58);
             }
             else
             {
-                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 36);
+                MN_DrTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 58);
             }
     
             M_snprintf(text, sizeof(text), english_language ? "SKILL: %d" : "CKJ;YJCNM: %d",  gameskill +1);
             if (english_language)
             {
-                MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
+                MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 68);
             }
             else
             {
-                MN_DrTextSmallRUS(text, 20 + (wide_4_3 ? wide_delta : 0), 46);
+                MN_DrTextSmallRUS(text, 4 + (wide_4_3 ? wide_delta : 0), 68);
             }
         }
 
@@ -698,15 +701,15 @@ void SB_Drawer(void)
         {
             if (english_language)
             {
-                MN_DrTextA("LEVEL", 20 + (wide_4_3 ? wide_delta : 0), 61);
+                MN_DrTextA("LEVEL", 4 + (wide_4_3 ? wide_delta : 0), 78);
             }
             else
             {
-                MN_DrTextSmallRUS("EHJDTYM", 20 + (wide_4_3 ? wide_delta : 0), 61);
+                MN_DrTextSmallRUS("EHJDTYM", 4 + (wide_4_3 ? wide_delta : 0), 78);
             }
 
             M_snprintf(text, sizeof(text), "%02d:%02d:%02d", time/3600, (time%3600)/60, time%60);
-            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 71);
+            MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 88);
         }
 
         // [JN] Total time
@@ -714,29 +717,26 @@ void SB_Drawer(void)
         {
             if (english_language)
             {
-                MN_DrTextA("TOTAL", 20 + (wide_4_3 ? wide_delta : 0), 81);
+                MN_DrTextA("TOTAL", 4 + (wide_4_3 ? wide_delta : 0), 98);
             }
             else
             {
-                MN_DrTextSmallRUS("J,OTT", 20 + (wide_4_3 ? wide_delta : 0), 81);
+                MN_DrTextSmallRUS("J,OTT", 4 + (wide_4_3 ? wide_delta : 0), 98);
             }
 
             M_snprintf(text, sizeof(text), "%02d:%02d:%02d", totaltime/3600, (totaltime%3600)/60, totaltime%60);
-            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 91);
+            MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 108);
         }
 
         // [JN] Player coords
         if ((automapactive && automap_coords == 1) || automap_coords == 2)
         {
-            M_snprintf(text, sizeof(text), "X: %d, Y: %d",
+            M_snprintf(text, sizeof(text), "X: %d, Y: %d, Z: %d, ANG: %d",
                        players[consoleplayer].mo->x >> FRACBITS,
-                       players[consoleplayer].mo->y >> FRACBITS);
-            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 106);
-
-            M_snprintf(text, sizeof(text), "Z: %d, ANG: %d",
+                       players[consoleplayer].mo->y >> FRACBITS,
                        players[consoleplayer].mo->z >> FRACBITS,
                        players[consoleplayer].mo->angle / ANG1);
-            MN_DrTextA(text, 20 + (wide_4_3 ? wide_delta : 0), 116);
+            MN_DrTextA(text, 4 + (wide_4_3 ? wide_delta : 0), 118);
         }
     }
 
@@ -932,14 +932,32 @@ void SB_Drawer(void)
                     hitCenterFrame = true;
                 }
             }
-            BorderTopRefresh = true;
-            UpdateState |= I_MESSAGES;
+            // [JN] Draw artifact timer.
+            if (show_artifacts_timer && !vanillaparm)
+            {
+                xval = CPlayer->powers[pw_flight] / TICRATE > 99 ? 0 :
+                       CPlayer->powers[pw_flight] / TICRATE >  9 ? 2 : 4;
+
+                if (show_artifacts_timer == 2)
+                {
+                    dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                }
+                if (show_artifacts_timer == 3)
+                {
+                    if (CPlayer->powers[pw_flight] < FLIGHTTICS / 4)
+                    dp_translation = cr[CR_GOLD2RED_HERETIC];
+                    else if (CPlayer->powers[pw_flight] > FLIGHTTICS / 2)
+                    dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                }
+
+                DrSmallNumber(CPlayer->powers[pw_flight] / TICRATE, 
+                              (14 - xval) + (wide_4_3 ? wide_delta : 0), 30, true);
+
+                dp_translation = NULL;
+            }
         }
-        else
-        {
-            BorderTopRefresh = true;
-            UpdateState |= I_MESSAGES;
-        }
+        BorderNeedRefresh = true;
+        UpdateState |= I_MESSAGES;
     }
 
     if (CPlayer->powers[pw_weaponlevel2] && !CPlayer->chickenTics)
@@ -949,14 +967,145 @@ void SB_Drawer(void)
         {
             frame = (leveltime / 3) & 15;
             // [JN] Do not obstruct clock widget
-            V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2), 17,
+            V_DrawPatch(300 + (wide_4_3 ? wide_delta : wide_delta*2) - xval_widget, 17,
                         W_CacheLumpNum(spinbooklump + frame, PU_CACHE));
-            BorderTopRefresh = true;
+
+            // [JN] Draw artifact timer.
+            if (show_artifacts_timer && !vanillaparm)
+            {
+                xval = CPlayer->powers[pw_weaponlevel2] / TICRATE > 99 ? 0 :
+                       CPlayer->powers[pw_weaponlevel2] / TICRATE >  9 ? 2 : 4;
+
+                if (show_artifacts_timer == 2)
+                {
+                    dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                }
+                if (show_artifacts_timer == 3)
+                {
+                    if (CPlayer->powers[pw_weaponlevel2] < WPNLEV2TICS / 4)
+                    dp_translation = cr[CR_GOLD2RED_HERETIC];
+                    else if (CPlayer->powers[pw_weaponlevel2] > WPNLEV2TICS / 2)
+                    dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                }
+
+                DrSmallNumber(CPlayer->powers[pw_weaponlevel2] / TICRATE, 
+                              (294 - xval) + (wide_4_3 ? wide_delta : wide_delta*2) - xval_widget, 30, true);
+
+                dp_translation = NULL;
+            }
+        }
+        BorderNeedRefresh = true;
+        UpdateState |= I_MESSAGES;
+    }
+
+    // [JN] Draw all active artifacts.
+    if (show_all_artifacts && !vanillaparm)
+    {
+        if (CPlayer->powers[pw_invisibility] && !CPlayer->chickenTics)
+        {
+            if (CPlayer->powers[pw_invisibility] > BLINKTHRESHOLD
+            || !(CPlayer->powers[pw_invisibility] & 16))
+            {
+                V_DrawPatch(40 + (wide_4_3 ? wide_delta : 0), 1,
+                            W_CacheLumpName(DEH_String("ARTIINVS"), PU_CACHE));
+
+                // [JN] Draw artifact timer.
+                if (show_artifacts_timer && !vanillaparm)
+                {
+                    xval = CPlayer->powers[pw_invisibility] / TICRATE > 99 ? 0 :
+                           CPlayer->powers[pw_invisibility] / TICRATE >  9 ? 2 : 4;
+
+                    if (show_artifacts_timer == 2)
+                    {
+                        dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                    }
+                    if (show_artifacts_timer == 3)
+                    {
+                        if (CPlayer->powers[pw_invisibility] < INVISTICS / 4)
+                        dp_translation = cr[CR_GOLD2RED_HERETIC];
+                        else if (CPlayer->powers[pw_invisibility] > INVISTICS / 2)
+                        dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                    }
+
+                    DrSmallNumber(CPlayer->powers[pw_invisibility] / TICRATE, 
+                                (49 - xval) + (wide_4_3 ? wide_delta : 0), 30, true);
+
+                    dp_translation = NULL;
+                }
+            }
+            BorderNeedRefresh = true;
             UpdateState |= I_MESSAGES;
         }
-        else
+
+        if (CPlayer->powers[pw_infrared] && !CPlayer->chickenTics)
         {
-            BorderTopRefresh = true;
+            if (CPlayer->powers[pw_infrared] > BLINKTHRESHOLD
+            || !(CPlayer->powers[pw_infrared] & 16))
+            {
+                V_DrawPatch(74 + (wide_4_3 ? wide_delta : 0), 1,
+                            W_CacheLumpName(DEH_String("ARTITRCH"), PU_CACHE));
+
+                // [JN] Draw artifact timer.
+                if (show_artifacts_timer && !vanillaparm)
+                {
+                    xval = CPlayer->powers[pw_infrared] / TICRATE > 99 ? 0 :
+                           CPlayer->powers[pw_infrared] / TICRATE >  9 ? 2 : 4;
+
+                    if (show_artifacts_timer == 2)
+                    {
+                        dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                    }
+                    if (show_artifacts_timer == 3)
+                    {
+                        if (CPlayer->powers[pw_infrared] < INFRATICS / 4)
+                        dp_translation = cr[CR_GOLD2RED_HERETIC];
+                        else if (CPlayer->powers[pw_infrared] > INFRATICS / 2)
+                        dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                    }
+
+                    DrSmallNumber(CPlayer->powers[pw_infrared] / TICRATE, 
+                                (83 - xval) + (wide_4_3 ? wide_delta : 0), 30, true);
+
+                    dp_translation = NULL;
+                }
+            }
+            BorderNeedRefresh = true;
+            UpdateState |= I_MESSAGES;
+        }
+
+        if (CPlayer->powers[pw_invulnerability] && !CPlayer->chickenTics)
+        {
+            if (CPlayer->powers[pw_invulnerability] > BLINKTHRESHOLD
+            || !(CPlayer->powers[pw_invulnerability] & 16))
+            {
+                V_DrawPatch(251 + (wide_4_3 ? wide_delta : wide_delta*2) - xval_widget, 1,
+                            W_CacheLumpName(DEH_String("ARTIINVU"), PU_CACHE));
+
+                // [JN] Draw artifact timer.
+                if (show_artifacts_timer && !vanillaparm)
+                {
+                    xval = CPlayer->powers[pw_invulnerability] / TICRATE > 99 ? 0 :
+                        CPlayer->powers[pw_invulnerability] / TICRATE >  9 ? 2 : 4;
+
+                    if (show_artifacts_timer == 2)
+                    {
+                        dp_translation = cr[CR_GOLD2GRAY_HERETIC];
+                    }
+                    if (show_artifacts_timer == 3)
+                    {
+                        if (CPlayer->powers[pw_invulnerability] < INVULNTICS / 4)
+                        dp_translation = cr[CR_GOLD2RED_HERETIC];
+                        else if (CPlayer->powers[pw_invulnerability] > INVULNTICS / 2)
+                        dp_translation = cr[CR_GOLD2GREEN_HERETIC];
+                    }
+
+                    DrSmallNumber(CPlayer->powers[pw_invulnerability] / TICRATE, 
+                                (259 - xval) + (wide_4_3 ? wide_delta : wide_delta*2) - xval_widget, 30, true);
+
+                    dp_translation = NULL;
+                }
+            }
+            BorderNeedRefresh = true;
             UpdateState |= I_MESSAGES;
         }
     }

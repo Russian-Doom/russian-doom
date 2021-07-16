@@ -196,6 +196,8 @@ int noise_alert_sfx = 0;
 
 // Gameplay: Tactical
 int secret_notification = 1;
+int show_all_artifacts = 0;
+int show_artifacts_timer = 0;
 int negative_health = 0;
 
 // Gameplay: Crosshair
@@ -1233,6 +1235,8 @@ void D_BindVariables(void)
 
     // Gameplay: Tactical
     M_BindIntVariable("secret_notification",    &secret_notification);
+    M_BindIntVariable("show_all_artifacts",     &show_all_artifacts);
+    M_BindIntVariable("show_artifacts_timer",   &show_artifacts_timer);
     M_BindIntVariable("negative_health",        &negative_health);
 
     // Gameplay: Crosshair

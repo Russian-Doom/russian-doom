@@ -1590,12 +1590,12 @@ void AM_Drawer(void)
         {
             if (english_language)
             {
-                MN_DrTextA(DEH_String(level_name), 20 + 
+                MN_DrTextA(DEH_String(level_name), 4 + 
                           (wide_4_3 ?wide_delta : 0), 136);
             }
             else
             {
-                MN_DrTextSmallRUS(DEH_String(level_name), 20 + 
+                MN_DrTextSmallRUS(DEH_String(level_name), 4 + 
                                  (wide_4_3 ? wide_delta : 0), 136);
             }
         }

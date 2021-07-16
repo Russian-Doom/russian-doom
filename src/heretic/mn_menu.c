@@ -193,6 +193,8 @@ static void DrawGameplay3Menu(void);
 static void M_RD_ZAxisSFX(intptr_t option);
 static void M_RD_AlertSFX(intptr_t option);
 static void M_RD_SecretNotify(intptr_t option);
+static void M_RD_ShowAllArti(intptr_t option);
+static void M_RD_ShowArtiTimer(intptr_t option);
 static void M_RD_FixMapErrors(intptr_t option);
 static void M_RD_FlipLevels(intptr_t option);
 static void M_RD_NoDemos(intptr_t option);
@@ -710,13 +712,13 @@ static MenuItem_t Gameplay3Items[] = {
     {ITT_LRFUNC, "MONSTER ALERT WAKING UP OTHERS:", "J,OFZ NHTDJUF E VJYCNHJD:", M_RD_AlertSFX,       0}, // ОБЩАЯ ТРЕВОГА У МОНСТРОВ
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
     {ITT_LRFUNC, "NOTIFY OF REVEALED SECRETS:", "CJJ,OFNM J YFQLTYYJV NFQYBRT:", M_RD_SecretNotify,   0}, // СООБЩАТЬ О НАЙДЕННОМ ТАЙНИКЕ
+    {ITT_LRFUNC, "SHOW ACTIVE ARTIFACTS:",      "BYLBRFWBZ FHNTAFRNJD:",         M_RD_ShowAllArti,    0}, // ИНДИКАЦИЯ АРТЕФАЕКТОВ
+    {ITT_LRFUNC, "ARTIFACTS TIMER:",            "NFQVTH FHNTAFRNJD:",            M_RD_ShowArtiTimer,  0}, // ТАЙМЕР АРТЕФАКТОВ
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
     {ITT_LRFUNC, "FIX ERRORS ON VANILLA MAPS:","ECNHFYZNM JIB,RB JHBU> EHJDYTQ:",M_RD_FixMapErrors,   0}, // УСТРАНЯТЬ ОШИБКИ ОРИГИНАЛЬНЫХ УРОВНЕЙ
     {ITT_LRFUNC, "FLIP GAME LEVELS:",           "PTHRFKMYJT JNHF;TYBT EHJDYTQ:", M_RD_FlipLevels,     0}, // ЗЕРКАЛЬНОЕ ОТРАЖЕНИЕ УРОВНЕЙ
     {ITT_LRFUNC, "PLAY INTERNAL DEMOS:",        "GHJBUHSDFNM LTVJPFGBCB:",       M_RD_NoDemos,        0}, // ПРОИГРЫВАТЬ ДЕМОЗАПИСИ
     {ITT_LRFUNC, "WAND START GAME MODE:",       " ",/* [JN] Joint EN/RU string*/ M_RD_WandStart,      0}, // РЕЖИМ ИГРЫ "WAND START"
-    {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
-    {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
     {ITT_EMPTY,  NULL,                          NULL,                            NULL,                0},
     {ITT_SETMENU,"FIRST PAGE...",               "GTHDFZ CNHFYBWF>>>",            NULL, (const intptr_t) &Gameplay1Menu} // ПЕРВАЯ СТРАНИЦА
@@ -4316,7 +4318,7 @@ static void DrawGameplay3Menu(void)
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallENG(DEH_String("AUDIBLE"), 36 + wide_delta, 26);
         MN_DrTextSmallENG(DEH_String("TACTICAL"), 36 + wide_delta, 56);
-        MN_DrTextSmallENG(DEH_String("GAMEPLAY"), 36 + wide_delta, 76);
+        MN_DrTextSmallENG(DEH_String("GAMEPLAY"), 36 + wide_delta, 96);
         dp_translation = NULL;
 
         // Sound attenuation axises
@@ -4337,28 +4339,44 @@ static void DrawGameplay3Menu(void)
         MN_DrTextSmallENG(DEH_String(secret_notification ? "ON" : "OFF"), 235 + wide_delta, 66);
         dp_translation = NULL;
 
+        // Active artifacts
+        dp_translation = show_all_artifacts ? cr[CR_WHITE2GREEN_HERETIC] :
+                                              cr[CR_WHITE2RED_HERETIC];
+        MN_DrTextSmallENG(DEH_String(show_all_artifacts ? "ALL" : "WINGS/TOME"), 195 + wide_delta, 76);
+        dp_translation = NULL;
+
+        // Artifacts timer
+        dp_translation = show_artifacts_timer == 1 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                         show_artifacts_timer == 2 ? cr[CR_WHITE2GRAY_HERETIC] :
+                         show_artifacts_timer == 3 ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
+        MN_DrTextSmallENG(DEH_String(show_artifacts_timer == 1 ? "GOLD" :
+                                     show_artifacts_timer == 2 ? "SILVER" :
+                                     show_artifacts_timer == 3 ? "COLORED" : "OFF"),
+                                     150 + wide_delta, 86);
+        dp_translation = NULL;
+
         // Fix errors of vanilla maps
         dp_translation = fix_map_errors ? cr[CR_WHITE2GREEN_HERETIC] :
                                           cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(fix_map_errors ? "ON" : "OFF"), 226 + wide_delta, 86);
+        MN_DrTextSmallENG(DEH_String(fix_map_errors ? "ON" : "OFF"), 226 + wide_delta, 106);
         dp_translation = NULL;
 
         // Flip game levels
         dp_translation = flip_levels ? cr[CR_WHITE2GREEN_HERETIC] :
                                        cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(flip_levels ? "ON" : "OFF"), 153 + wide_delta, 96);
+        MN_DrTextSmallENG(DEH_String(flip_levels ? "ON" : "OFF"), 153 + wide_delta, 116);
         dp_translation = NULL;
 
         // Play internal demos
         dp_translation = no_internal_demos ? cr[CR_WHITE2RED_HERETIC] :
                                              cr[CR_WHITE2GREEN_HERETIC];
-        MN_DrTextSmallENG(DEH_String(no_internal_demos ? "OFF" : "ON"), 179 + wide_delta, 106);
+        MN_DrTextSmallENG(DEH_String(no_internal_demos ? "OFF" : "ON"), 179 + wide_delta, 126);
         dp_translation = NULL;
 
         // Wand start
         dp_translation = pistol_start ? cr[CR_WHITE2GREEN_HERETIC] :
                                         cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallENG(DEH_String(pistol_start ? "ON" : "OFF"), 193 + wide_delta, 116);
+        MN_DrTextSmallENG(DEH_String(pistol_start ? "ON" : "OFF"), 193 + wide_delta, 136);
         dp_translation = NULL;
     }
     else
@@ -4375,7 +4393,7 @@ static void DrawGameplay3Menu(void)
         dp_translation = cr[CR_WHITE2DARKGOLD_HERETIC];
         MN_DrTextSmallRUS(DEH_String("PDER"), 36 + wide_delta, 26);
         MN_DrTextSmallRUS(DEH_String("NFRNBRF"), 36 + wide_delta, 56);
-        MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + wide_delta, 76);
+        MN_DrTextSmallRUS(DEH_String("UTQVGKTQ"), 36 + wide_delta, 96);
         dp_translation = NULL;
 
         // Затухание звука по осям
@@ -4397,30 +4415,46 @@ static void DrawGameplay3Menu(void)
         MN_DrTextSmallRUS(DEH_String(secret_notification ? "DRK" : "DSRK"), 251 + wide_delta, 66);
         dp_translation = NULL;
 
+        // Индикация артефаектов
+        dp_translation = show_all_artifacts ? cr[CR_WHITE2GREEN_HERETIC] :
+                                              cr[CR_WHITE2RED_HERETIC];
+        MN_DrTextSmallRUS(DEH_String(show_all_artifacts ? "DCT FHNTAFRNS" : "RHSKMZ/NJV"), 196 + wide_delta, 76);
+        dp_translation = NULL;
+
+        // Таймер артефаектов
+        dp_translation = show_artifacts_timer == 1 ? cr[CR_WHITE2DARKGOLD_HERETIC] :
+                         show_artifacts_timer == 2 ? cr[CR_WHITE2GRAY_HERETIC] :
+                         show_artifacts_timer == 3 ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
+        MN_DrTextSmallRUS(DEH_String(show_artifacts_timer == 1 ? "PJKJNJQ" :
+                                     show_artifacts_timer == 2 ? "CTHT,HZYSQ" :
+                                     show_artifacts_timer == 3 ? "HFPYJWDTNYSQ" : "DSRK"),
+                                     175 + wide_delta, 86);
+        dp_translation = NULL;
+
         // Устранять ошибки оригинальных уровней
         dp_translation = fix_map_errors ? cr[CR_WHITE2GREEN_HERETIC] :
                                           cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(fix_map_errors ? "DRK" : "DSRK"), 257 + wide_delta, 86);
+        MN_DrTextSmallRUS(DEH_String(fix_map_errors ? "DRK" : "DSRK"), 257 + wide_delta, 106);
         dp_translation = NULL;
 
         // Зеркальное отражение уровней
         dp_translation = flip_levels ? cr[CR_WHITE2GREEN_HERETIC] :
                                        cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(flip_levels ? "DRK" : "DSRK"), 255 + wide_delta, 96);
+        MN_DrTextSmallRUS(DEH_String(flip_levels ? "DRK" : "DSRK"), 255 + wide_delta, 116);
         dp_translation = NULL;
 
         // Проигрывать демозаписи
         dp_translation = no_internal_demos ? cr[CR_WHITE2RED_HERETIC] :
                                              cr[CR_WHITE2GREEN_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(no_internal_demos ? "DSRK" : "DRK"), 211 + wide_delta, 106);
+        MN_DrTextSmallRUS(DEH_String(no_internal_demos ? "DSRK" : "DRK"), 211 + wide_delta, 126);
         dp_translation = NULL;
 
         // Режим игры "Wand start"
-        MN_DrTextSmallRUS(DEH_String("HT;BV BUHS"), 36 + wide_delta, 116);
-        MN_DrTextSmallENG(DEH_String("\"WAND START\":"), 120 + wide_delta, 116);
+        MN_DrTextSmallRUS(DEH_String("HT;BV BUHS"), 36 + wide_delta, 136);
+        MN_DrTextSmallENG(DEH_String("\"WAND START\":"), 120 + wide_delta, 136);
         dp_translation = pistol_start ? cr[CR_WHITE2GREEN_HERETIC] :
                                         cr[CR_WHITE2RED_HERETIC];
-        MN_DrTextSmallRUS(DEH_String(pistol_start ? "DRK" : "DSRK"), 217 + wide_delta, 116);
+        MN_DrTextSmallRUS(DEH_String(pistol_start ? "DRK" : "DSRK"), 217 + wide_delta, 136);
         dp_translation = NULL;
     }
 
@@ -4443,6 +4477,29 @@ static void M_RD_AlertSFX(intptr_t option)
 static void M_RD_SecretNotify(intptr_t option)
 {
     secret_notification ^= 1;
+}
+
+static void M_RD_ShowAllArti(intptr_t option)
+{
+    show_all_artifacts ^= 1;
+}
+
+static void M_RD_ShowArtiTimer(intptr_t option)
+{
+    switch(option)
+    {
+        case 0:
+            show_artifacts_timer--;
+            if (show_artifacts_timer < 0)
+                show_artifacts_timer = 3;
+            break;
+        case 1:
+            show_artifacts_timer++;
+            if (show_artifacts_timer > 3)
+                show_artifacts_timer = 0;
+        default:
+            break;
+    }
 }
 
 static void M_RD_FixMapErrors(intptr_t option)
@@ -5485,6 +5542,8 @@ void M_RD_DoResetSettings(void)
     z_axis_sfx           = 0;
     noise_alert_sfx      = 0;
     secret_notification  = 1;
+    show_all_artifacts   = 0;
+    show_artifacts_timer = 0;
     negative_health      = 0;
     crosshair_draw       = 0;
     crosshair_type       = 1;
