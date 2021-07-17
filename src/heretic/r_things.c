@@ -619,6 +619,34 @@ void R_ProjectSprite (mobj_t *thing)
         flip = (boolean) sprframe->flip[0];
     }
 
+    // [crispy] flip death sprites and corpses randomly
+    if (randomly_flipcorpses && !vanillaparm)
+    {
+        if ((thing->flags & MF_CORPSE && thing->type != MT_MINOTAUR
+        && thing->type != MT_SORCERER1 && thing->type != MT_SORCERER2)
+        || thing->info->spawnstate == S_MOSS1             // Moss 1
+        || thing->info->spawnstate == S_MOSS2             // Moss 2
+        || thing->info->spawnstate == S_HANGINGCORPSE     // Hanging Corpse (51)
+        || thing->info->spawnstate == S_SKULLHANG70_1     // Hanging Skull 1 (17)
+        || thing->info->spawnstate == S_SKULLHANG60_1     // Hanging Skull 2 (24)
+        || thing->info->spawnstate == S_SKULLHANG45_1     // Hanging Skull 3 (25)
+        || thing->info->spawnstate == S_SKULLHANG35_1     // Hanging Skull 4 (26)
+        || thing->info->spawnstate == S_SPLASHBASE1       // Water splash base
+        || thing->info->spawnstate == S_SPLASH1           // Water small splash
+        || thing->info->spawnstate == S_LAVASPLASH1       // Lava splash base
+        || thing->info->spawnstate == S_LAVASMOKE1        // Lava smoke
+        || thing->info->spawnstate == S_SLUDGESPLASH1     // Sludge splash base
+        || thing->info->spawnstate == S_SLUDGECHUNK1      // Sludge small chunk
+        || thing->info->spawnstate == S_IMP_CHUNKA1       // Gargoyle chunk 1
+        || thing->info->spawnstate == S_IMP_CHUNKB1)      // Gargoyle chunk 2
+        {
+            if (thing->health & 1)
+            {
+                flip = true;
+            }
+        }
+    }
+
     // calculate edges of the shape
     // [crispy] fix sprite offsets for mirrored sprites
     tx -= flip ? spritewidth[lump] - spriteoffset[lump] : spriteoffset[lump];
@@ -678,34 +706,6 @@ void R_ProjectSprite (mobj_t *thing)
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth - 1 : x2;
     iscale = FixedDiv(FRACUNIT, xscale);
-
-    // [crispy] flip death sprites and corpses randomly
-    if (randomly_flipcorpses && !vanillaparm)
-    {
-        if ((thing->flags & MF_CORPSE && thing->type != MT_MINOTAUR
-        && thing->type != MT_SORCERER1 && thing->type != MT_SORCERER2)
-        || thing->info->spawnstate == S_MOSS1             // Moss 1
-        || thing->info->spawnstate == S_MOSS2             // Moss 2
-        || thing->info->spawnstate == S_HANGINGCORPSE     // Hanging Corpse (51)
-        || thing->info->spawnstate == S_SKULLHANG70_1     // Hanging Skull 1 (17)
-        || thing->info->spawnstate == S_SKULLHANG60_1     // Hanging Skull 2 (24)
-        || thing->info->spawnstate == S_SKULLHANG45_1     // Hanging Skull 3 (25)
-        || thing->info->spawnstate == S_SKULLHANG35_1     // Hanging Skull 4 (26)
-        || thing->info->spawnstate == S_SPLASHBASE1       // Water splash base
-        || thing->info->spawnstate == S_SPLASH1           // Water small splash
-        || thing->info->spawnstate == S_LAVASPLASH1       // Lava splash base
-        || thing->info->spawnstate == S_LAVASMOKE1        // Lava smoke
-        || thing->info->spawnstate == S_SLUDGESPLASH1     // Sludge splash base
-        || thing->info->spawnstate == S_SLUDGECHUNK1      // Sludge small chunk
-        || thing->info->spawnstate == S_IMP_CHUNKA1       // Gargoyle chunk 1
-        || thing->info->spawnstate == S_IMP_CHUNKB1)      // Gargoyle chunk 2
-        {
-            if (thing->health & 1)
-            {
-                flip = true;
-            }
-        }
-    }
 
     if (flip)
     {

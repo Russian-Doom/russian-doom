@@ -533,6 +533,20 @@ void R_ProjectSprite (mobj_t *thing)
         flip = (boolean)sprframe->flip[0];
     }
 
+    // [crispy] flip death sprites and corpses randomly
+    if ((thing->flags & MF_CORPSE
+    &&   thing->type != MT_CYBORG
+    &&   thing->type != MT_BARREL
+    &&   thing->type != MT_BOSSBRAIN)
+    ||   thing->info->spawnstate == S_PLAY_DIE7
+    ||   thing->info->spawnstate == S_PLAY_XDIE9)
+    {
+        if ((thing->health & 1) && randomly_flipcorpses && !vanilla)
+        {
+            flip = true;
+        }
+    }
+
     // calculate edges of the shape
     // [crispy] fix sprite offsets for mirrored sprites
     tx -= flip ? spritewidth[lump] - spriteoffset[lump] : spriteoffset[lump];
@@ -579,20 +593,6 @@ void R_ProjectSprite (mobj_t *thing)
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth-1 : x2;	
     iscale = FixedDiv (FRACUNIT, xscale);
-
-    // [crispy] flip death sprites and corpses randomly
-    if ((thing->flags & MF_CORPSE
-    &&   thing->type != MT_CYBORG
-    &&   thing->type != MT_BARREL
-    &&   thing->type != MT_BOSSBRAIN)
-    ||   thing->info->spawnstate == S_PLAY_DIE7
-    ||   thing->info->spawnstate == S_PLAY_XDIE9)
-    {
-        if ((thing->health & 1) && randomly_flipcorpses && !vanilla)
-        {
-            flip = true;
-        }
-    }
 
     if (flip)
     {
