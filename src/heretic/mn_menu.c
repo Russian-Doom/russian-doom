@@ -4038,7 +4038,8 @@ static void DrawGameplay2Menu(void)
         dp_translation = NULL;
 
         // Colored Status Bar
-        dp_translation = sbar_colored ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
+        dp_translation = sbar_colored_gem == 1 ? cr[CR_WHITE2GREEN_HERETIC] :
+                         sbar_colored_gem == 2 ? cr[CR_WHITE2DARKGREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallENG(DEH_String(sbar_colored ? "ON" : "OFF"), 177 + wide_delta, 36);
         dp_translation = NULL;
 
@@ -4107,7 +4108,8 @@ static void DrawGameplay2Menu(void)
         dp_translation = NULL;
 
         // Окрашивание камня здоровья
-        dp_translation = sbar_colored_gem ? cr[CR_WHITE2GREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
+        dp_translation = sbar_colored_gem == 1 ? cr[CR_WHITE2GREEN_HERETIC] :
+                         sbar_colored_gem == 2 ? cr[CR_WHITE2DARKGREEN_HERETIC] : cr[CR_WHITE2RED_HERETIC];
         MN_DrTextSmallRUS(DEH_String(sbar_colored_gem == 1 ? "CDTNKJT" :
                                      sbar_colored_gem == 2 ? "NTVYJT" : "DSRK"), 238 + wide_delta, 46);
         dp_translation = NULL;
