@@ -53,7 +53,6 @@ extern void InitMapInfo(void);
 
 // PRIVATE FUNCTION PROTOTYPES ---------------------------------------------
 
-static void InitFonts(void);
 static void SCQuitGame(int option);
 static void SCClass(int option);
 static void SCSkill(int option);
@@ -157,15 +156,9 @@ boolean mn_SuicideConsole;
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
 // [JN] Original English fonts
-static int FontABaseLump;       // small
 static int FontAYellowBaseLump; // small yellow
-static int FontBBaseLump;       // big
-// [JN] Small special font used for time/fps widget
-static int FontCBaseLump;
 // [JN] Unchangable Russian fonts
-static int FontFBaseLump;       // small
 static int FontFYellowBaseLump; // small yellow
-static int FontGBaseLump;       // big
 
 static int MauloBaseLump;
 static int MenuPClass;
@@ -450,7 +443,7 @@ static Menu_t SoundSysMenu = {
     DrawSoundSystemMenu,
     NULL, 0,
     &SoundMenu,
-    0
+    1
 };
 
 // -----------------------------------------------------------------------------
@@ -615,7 +608,8 @@ static char *GammaText_Rus[] = {
 
 void MN_Init(void)
 {
-    InitFonts();
+    FontAYellowBaseLump = W_GetNumForName("FONTAY_S") + 1; // eng small yellow
+    FontFYellowBaseLump = W_GetNumForName("FONTFY_S") + 1; // rus small yellow
     RD_M_InitFonts(// [JN] Original English fonts
                    "FONTA_S",
                    "FONTB_S",
@@ -657,56 +651,6 @@ void MN_Init(void)
     aspect_ratio_temp = aspect_ratio;
 }
 
-//---------------------------------------------------------------------------
-//
-// PROC InitFonts
-//
-//---------------------------------------------------------------------------
-
-static void InitFonts(void)
-{
-    // [JN] Original English fonts
-    FontABaseLump = W_GetNumForName("FONTA_S") + 1;
-    FontAYellowBaseLump = W_GetNumForName("FONTAY_S") + 1;
-    FontBBaseLump = W_GetNumForName("FONTB_S") + 1;
-
-    // [JN] Small special font used for time/fps widget
-    FontCBaseLump = W_GetNumForName("FONTC_S") + 1;
-
-    // [JN] Unchangable Russian fonts
-    FontFBaseLump = W_GetNumForName("FONTF_S") + 1;        // small
-    FontFYellowBaseLump = W_GetNumForName("FONTFY_S") + 1; // small yellow
-    FontGBaseLump = W_GetNumForName("FONTG_S") + 1;        // big
-}
-
-//---------------------------------------------------------------------------
-//
-// PROC MN_DrTextA
-//
-// Draw text using font A.
-//
-//---------------------------------------------------------------------------
-
-void MN_DrTextA(char *text, int x, int y)
-{
-    char c;
-    patch_t *p;
-
-    while ((c = *text++) != 0)
-    {
-        if (c < 33)
-        {
-            x += 5;
-        }
-        else
-        {
-            p = W_CacheLumpNum(FontABaseLump + c - 33, PU_CACHE);
-            V_DrawShadowedPatchRaven(x, y, p);
-            x += SHORT(p->width) - 1;
-        }
-    }
-}
-
 //==========================================================================
 //
 // MN_DrTextAYellow
@@ -735,120 +679,6 @@ void MN_DrTextAYellow(char *text, int x, int y)
 
 //---------------------------------------------------------------------------
 //
-// FUNC MN_TextAWidth
-//
-// Returns the pixel width of a string using font A.
-//
-//---------------------------------------------------------------------------
-
-int MN_TextAWidth(char *text)
-{
-    char c;
-    int width;
-    patch_t *p;
-
-    width = 0;
-    while ((c = *text++) != 0)
-    {
-        if (c < 33)
-        {
-            width += 5;
-        }
-        else
-        {
-            p = W_CacheLumpNum(FontABaseLump + c - 33, PU_CACHE);
-            width += SHORT(p->width) - 1;
-        }
-    }
-    return (width);
-}
-
-//---------------------------------------------------------------------------
-//
-// PROC MN_DrTextB
-//
-// Draw text using font B.
-//
-//---------------------------------------------------------------------------
-
-void MN_DrTextB(char *text, int x, int y)
-{
-    char c;
-    patch_t *p;
-
-    while ((c = *text++) != 0)
-    {
-        if (c < 33)
-        {
-            x += 8;
-        }
-        else
-        {
-            p = W_CacheLumpNum(FontBBaseLump + c - 33, PU_CACHE);
-            V_DrawShadowedPatchRaven(x, y, p);
-            x += SHORT(p->width) - 1;
-        }
-    }
-}
-
-//---------------------------------------------------------------------------
-//
-// PROC MN_DrTextC
-//
-// [JN] Draw small time digits using font C.
-//
-//---------------------------------------------------------------------------
-
-void MN_DrTextC(char *text, int x, int y)
-{
-    char c;
-    patch_t *p;
-
-    while ((c = *text++) != 0)
-    {
-        if (c < 33) // [JN] Means space symbol (" ").
-        {
-            x += 4;
-        }
-        else
-        {
-            p = W_CacheLumpNum(FontCBaseLump + c - 33, PU_CACHE);
-            V_DrawPatch(x, y, p);
-            x += SHORT(p->width);
-        }
-    }
-}
-
-//---------------------------------------------------------------------------
-//
-// MN_DrTextSmallRUS
-//
-// [JN] Draw text string with unreplacable Russian font.
-//
-//---------------------------------------------------------------------------
-
-void MN_DrTextSmallRUS(char *text, int x, int y)
-{
-    char c;
-    patch_t *p;
-
-    while ((c = *text++) != 0)
-    {
-        if (c < 33)
-        {
-            x += 5;
-        }
-        else
-        {
-            p = W_CacheLumpNum(FontFBaseLump + c - 33, PU_CACHE);
-            V_DrawShadowedPatchRaven(x, y, p);
-            x += SHORT(p->width) - 1;
-        }
-    }
-}
-
-//---------------------------------------------------------------------------
-//
 // MN_DrTextSmallYellowRUS
 //
 // [JN] Draw text string with unreplacable Russian yellow font.
@@ -869,64 +699,6 @@ void MN_DrTextSmallYellowRUS(char *text, int x, int y)
         else
         {
             p = W_CacheLumpNum(FontFYellowBaseLump + c - 33, PU_CACHE);
-            V_DrawShadowedPatchRaven(x, y, p);
-            x += SHORT(p->width) - 1;
-        }
-    }
-}
-
-//---------------------------------------------------------------------------
-//
-// FUNC MN_DrTextSmallRUSWidth
-//
-// [JN] Returns the pixel width of a string using font F.
-//
-//---------------------------------------------------------------------------
-
-int MN_DrTextSmallRUSWidth(char *text)
-{
-    char c;
-    int width;
-    patch_t *p;
-
-    width = 0;
-    while ((c = *text++) != 0)
-    {
-        if (c < 33)
-        {
-            width += 5;
-        }
-        else
-        {
-            p = W_CacheLumpNum(FontFBaseLump + c - 33, PU_CACHE);
-            width += SHORT(p->width) - 1;
-        }
-    }
-    return (width);
-}
-
-//---------------------------------------------------------------------------
-//
-// MN_DrTextBigRUS
-//
-// [JN] Draw text string with unreplacable English font.
-//
-//---------------------------------------------------------------------------
-
-void MN_DrTextBigRUS(char *text, int x, int y)
-{
-    char c;
-    patch_t *p;
-
-    while ((c = *text++) != 0)
-    {
-        if (c < 33)
-        {
-            x += 8;
-        }
-        else
-        {
-            p = W_CacheLumpNum(FontGBaseLump + c - 33, PU_CACHE);
             V_DrawShadowedPatchRaven(x, y, p);
             x += SHORT(p->width) - 1;
         }
@@ -982,33 +754,33 @@ void MN_Drawer(void)
         {
             if (english_language)
             {
-                MN_DrTextA(QuitEndMsg[typeofask - 1], 160 -
-                           MN_TextAWidth(QuitEndMsg[typeofask - 1]) / 2
+                RD_M_DrawTextA(QuitEndMsg[typeofask - 1], 160 -
+                           RD_M_TextAWidth(QuitEndMsg[typeofask - 1]) / 2
                            + wide_delta, 80);
             }
             else
             {
-                MN_DrTextSmallRUS(QuitEndMsg_Rus[typeofask - 1], 160 -
-                           MN_DrTextSmallRUSWidth(QuitEndMsg_Rus[typeofask - 1]) / 2
-                           + wide_delta, 80);
+                RD_M_DrawTextSmallRUS(QuitEndMsg_Rus[typeofask - 1], 160 -
+                           RD_M_TextSmallRUSWidth(QuitEndMsg_Rus[typeofask - 1]) / 2
+                           + wide_delta, 80, CR_NONE);
             }
 
             if (typeofask == 3)
             {
-                MN_DrTextA(SlotText[quicksave - 1], 160 -
-                           MN_TextAWidth(SlotText[quicksave - 1]) / 2
+                RD_M_DrawTextA(SlotText[quicksave - 1], 160 -
+                           RD_M_TextAWidth(SlotText[quicksave - 1]) / 2
                            + wide_delta, 90);
-                MN_DrTextA("?", 160 +
-                           MN_TextAWidth(SlotText[quicksave - 1]) / 2
+                RD_M_DrawTextA("?", 160 +
+                           RD_M_TextAWidth(SlotText[quicksave - 1]) / 2
                            + wide_delta, 90);
             }
             if (typeofask == 4)
             {
-                MN_DrTextA(SlotText[quickload - 1], 160 -
-                           MN_TextAWidth(SlotText[quickload - 1]) / 2
+                RD_M_DrawTextA(SlotText[quickload - 1], 160 -
+                           RD_M_TextAWidth(SlotText[quickload - 1]) / 2
                            + wide_delta, 90);
-                MN_DrTextA("?", 160 +
-                           MN_TextAWidth(SlotText[quicksave - 1]) / 2
+                RD_M_DrawTextA("?", 160 +
+                           RD_M_TextAWidth(SlotText[quicksave - 1]) / 2
                            + wide_delta, 90);
             }
 
@@ -1081,11 +853,11 @@ static void DrawClassMenu(void)
 
     if (english_language)
     {
-        MN_DrTextB("CHOOSE CLASS:", 34 + wide_delta, 24);
+        RD_M_DrawTextB("CHOOSE CLASS:", 34 + wide_delta, 24);
     }
     else
     {
-        MN_DrTextBigRUS("DS,THBNT RKFCC:", 5 + wide_delta, 24);   // ВЫБЕРИТЕ КЛАСС:
+        RD_M_DrawTextBigRUS("DS,THBNT RKFCC:", 5 + wide_delta, 24);   // ВЫБЕРИТЕ КЛАСС:
     }
     class = (pclass_t) CurrentMenu->items[CurrentItPos].option;
 
@@ -1216,7 +988,7 @@ static void DrawFileSlots()
         V_DrawShadowedPatchRaven(x + wide_delta, y, W_CacheLumpName("M_FSLOT", PU_CACHE));
         if (SlotStatus[i])
         {
-            MN_DrTextA(SlotText[i], x + 5 + wide_delta, y + 5);
+            RD_M_DrawTextA(SlotText[i], x + 5 + wide_delta, y + 5);
         }
         y += ITEM_HEIGHT;
     }
@@ -1231,117 +1003,105 @@ static void DrawRenderingMenu(void)
     if (english_language)
     {
         // Display aspect ratio
-        MN_DrTextA(aspect_ratio_temp == 1 ? "5:4" :
+        RD_M_DrawTextSmallENG(aspect_ratio_temp == 1 ? "5:4" :
                    aspect_ratio_temp == 2 ? "16:9" :
                    aspect_ratio_temp == 3 ? "16:10" :
                    aspect_ratio_temp == 4 ? "21:9" :
-                                            "4:3", 185 + wide_delta, 42);
+                                            "4:3", 185 + wide_delta, 42, CR_NONE);
 
         // Informative message
         if (aspect_ratio_temp != aspect_ratio)
         {
-            dp_translation = cr[CR_GRAY2RED_HEXEN];
-            MN_DrTextA("THE PROGRAM MUST BE RESTARTED", 51 + wide_delta, 135);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallENG("THE PROGRAM MUST BE RESTARTED", 51 + wide_delta, 135, CR_GRAY2RED_HEXEN);
         }
 
         // Vertical sync
         if (force_software_renderer)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-            MN_DrTextA("N/A", 216 + wide_delta, 52);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallENG("N/A", 216 + wide_delta, 52, CR_GRAY2GDARKGRAY_HEXEN);
         }
         else
         {
-            MN_DrTextA(vsync ? "ON" : "OFF", 216 + wide_delta, 52);
+            RD_M_DrawTextSmallENG(vsync ? "ON" : "OFF", 216 + wide_delta, 52, CR_NONE);
         }
 
         // Uncapped FPS
-        MN_DrTextA(uncapped_fps ? "UNCAPPED" : "35 FPS", 120 + wide_delta, 62);
+        RD_M_DrawTextSmallENG(uncapped_fps ? "UNCAPPED" : "35 FPS", 120 + wide_delta, 62, CR_NONE);
 
         // FPS counter
-        MN_DrTextA(show_fps ? "ON" : "OFF", 129 + wide_delta, 72);
+        RD_M_DrawTextSmallENG(show_fps ? "ON" : "OFF", 129 + wide_delta, 72, CR_NONE);
 
         // Pixel scaling
         if (force_software_renderer)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-            MN_DrTextA("N/A", 131 + wide_delta, 82);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallENG("N/A", 131 + wide_delta, 82, CR_GRAY2GDARKGRAY_HEXEN);
         }
         else
         {
-            MN_DrTextA(smoothing ? "SMOOTH" : "SHARP", 131 + wide_delta, 82);
+            RD_M_DrawTextSmallENG(smoothing ? "SMOOTH" : "SHARP", 131 + wide_delta, 82, CR_NONE);
         }
 
         // Porch palette changing
-        MN_DrTextA(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 92);
+        RD_M_DrawTextSmallENG(vga_porch_flash ? "ON" : "OFF", 205 + wide_delta, 92, CR_NONE);
 
         // Video renderer
-        MN_DrTextA(force_software_renderer ? "SOFTWARE (CPU)" : "HARDWARE (GPU)",
-                   149 + wide_delta, 102);
+        RD_M_DrawTextSmallENG(force_software_renderer ? "SOFTWARE (CPU)" : "HARDWARE (GPU)",
+                              149 + wide_delta, 102, CR_NONE);
     }
     else
     {
         // Соотношение сторон экрана
-        MN_DrTextA(aspect_ratio_temp == 1 ? "5:4" :
+        RD_M_DrawTextSmallENG(aspect_ratio_temp == 1 ? "5:4" :
                    aspect_ratio_temp == 2 ? "16:9" :
                    aspect_ratio_temp == 3 ? "16:10" :
                    aspect_ratio_temp == 4 ? "21:9" :
-                                            "4:3", 230 + wide_delta, 42);
+                                            "4:3", 230 + wide_delta, 42, CR_NONE);
 
         // Informative message: НЕОБХОДИМ ПЕРЕЗАПУСК ИГРЫ
         if (aspect_ratio_temp != aspect_ratio)
         {
-            dp_translation = cr[CR_GRAY2RED_HEXEN];
-            MN_DrTextSmallRUS("YTJ,[JLBV GTHTPFGECR GHJUHFVVS", 46 + wide_delta, 135);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallRUS("YTJ,[JLBV GTHTPFGECR GHJUHFVVS", 46 + wide_delta, 135, CR_GRAY2RED_HEXEN);
         }
 
         // Вертикальная синхронизация
         if (force_software_renderer)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-            MN_DrTextSmallRUS("Y/L", 236 + wide_delta, 52);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallRUS("Y/L", 236 + wide_delta, 52, CR_GRAY2GDARKGRAY_HEXEN);
         }
         else
         {
-            MN_DrTextSmallRUS(vsync ? "DRK" : "DSRK", 236 + wide_delta, 52);
+            RD_M_DrawTextSmallRUS(vsync ? "DRK" : "DSRK", 236 + wide_delta, 52, CR_NONE);
         }
 
         // Кадровая частота
         if (uncapped_fps)
-        MN_DrTextSmallRUS(",TP JUHFYBXTYBZ", 165 + wide_delta, 62);
+            RD_M_DrawTextSmallRUS(",TP JUHFYBXTYBZ", 165 + wide_delta, 62, CR_NONE);
         else
-        MN_DrTextA("35 FPS", 165 + wide_delta, 62);
+            RD_M_DrawTextSmallENG("35 FPS", 165 + wide_delta, 62, CR_NONE);
 
         // Счетчик кадровой частоты
-        MN_DrTextSmallRUS(show_fps ? "DRK" : "DSRK", 223 + wide_delta, 72);
+        RD_M_DrawTextSmallRUS(show_fps ? "DRK" : "DSRK", 223 + wide_delta, 72, CR_NONE);
 
         // Пиксельное сглаживание
         if (force_software_renderer)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-            MN_DrTextSmallRUS("Y/L", 211 + wide_delta, 82);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallRUS("Y/L", 211 + wide_delta, 82, CR_GRAY2GDARKGRAY_HEXEN);
         }
         else
         {
-            MN_DrTextSmallRUS(smoothing ? "DRK" : "DSRK", 211 + wide_delta, 82);
+            RD_M_DrawTextSmallRUS(smoothing ? "DRK" : "DSRK", 211 + wide_delta, 82, CR_NONE);
         }
 
         // Изменение палитры краев экрана
-        MN_DrTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 92);
+        RD_M_DrawTextSmallRUS(vga_porch_flash ? "DRK" : "DSRK", 265 + wide_delta, 92, CR_NONE);
 
         // Обработка видео
-        MN_DrTextSmallRUS(force_software_renderer ? "GHJUHFVVYFZ" : "FGGFHFNYFZ",
-                          159 + wide_delta, 102);
+        RD_M_DrawTextSmallRUS(force_software_renderer ? "GHJUHFVVYFZ" : "FGGFHFNYFZ",
+                              159 + wide_delta, 102, CR_NONE);
     }
 
     // Screenshot format / Формат скриншотов (same english values)
-    MN_DrTextA(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 122);
+    RD_M_DrawTextSmallENG(png_screenshots ? "PNG" : "PCX", 175 + wide_delta, 122, CR_NONE);
 }
 
 static void M_RD_Change_Widescreen(Direction_t direction)
@@ -1423,32 +1183,32 @@ static void DrawDisplayMenu(void)
     if (english_language)
     {
         // Local time
-        MN_DrTextA(local_time == 1 ? "12-HOUR (HH:MM)" :
+        RD_M_DrawTextSmallENG(local_time == 1 ? "12-HOUR (HH:MM)" :
                    local_time == 2 ? "12-HOUR (HH:MM:SS)" :
                    local_time == 3 ? "24-HOUR (HH:MM)" :
                    local_time == 4 ? "24-HOUR (HH:MM:SS)" : "OFF",
-                   110 + wide_delta, 112);
+                   110 + wide_delta, 112, CR_NONE);
 
         // Messages
-        MN_DrTextA((messageson ? "ON" : "OFF"), 108 + wide_delta, 122);
+        RD_M_DrawTextSmallENG((messageson ? "ON" : "OFF"), 108 + wide_delta, 122, CR_NONE);
 
         // Text casts shadows
-        MN_DrTextA((draw_shadowed_text ? "ON" : "OFF"), 179 + wide_delta, 132);
+        RD_M_DrawTextSmallENG((draw_shadowed_text ? "ON" : "OFF"), 179 + wide_delta, 132, CR_NONE);
     }
     else
     {
         // Системное время
-        MN_DrTextSmallRUS(local_time == 1 ? "12-XFCJDJT (XX:VV)" :
+        RD_M_DrawTextSmallRUS(local_time == 1 ? "12-XFCJDJT (XX:VV)" :
                           local_time == 2 ? "12-XFCJDJT (XX:VV:CC)" :
                           local_time == 3 ? "24-XFCJDJT (XX:VV)" :
                           local_time == 4 ? "24-XFCJDJT (XX:VV:CC)" : "DSRK",
-                          157 + wide_delta, 112);
+                          157 + wide_delta, 112, CR_NONE);
 
         // Отображение сообщений
-        MN_DrTextSmallRUS((messageson ? "DRK" : "DSRK"), 208 + wide_delta, 122);
+        RD_M_DrawTextSmallRUS((messageson ? "DRK" : "DSRK"), 208 + wide_delta, 122, CR_NONE);
 
         // Тексты отбрасывают тень
-        MN_DrTextSmallRUS((draw_shadowed_text ? "DRK" : "DSRK"), 220 + wide_delta, 132);
+        RD_M_DrawTextSmallRUS((draw_shadowed_text ? "DRK" : "DSRK"), 220 + wide_delta, 132, CR_NONE);
     }
 
     // Screen size
@@ -1456,17 +1216,13 @@ static void DrawDisplayMenu(void)
     {
         RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 4, screenblocks - 9);
         M_snprintf(num, 4, "%3d", screenblocks);
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-        MN_DrTextA(num, 85 + wide_delta, 52);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(num, 85 + wide_delta, 52, CR_GRAY2GDARKGRAY_HEXEN);
     }
     else
     {
         RD_Menu_DrawSliderSmall(&DisplayMenu, 52, 10, screenblocks - 3);
         M_snprintf(num, 4, "%3d", screenblocks);
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-        MN_DrTextA(num, 135 + wide_delta, 52);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(num, 135 + wide_delta, 52, CR_GRAY2GDARKGRAY_HEXEN);
     }
 
     // Gamma-correction
@@ -1547,30 +1303,30 @@ static void DrawAutomapMenu(void)
     if (english_language)
     {
         // Overlay mode
-        MN_DrTextA(automap_overlay ? "ON" : "OFF", 200 + wide_delta, 32);
+        RD_M_DrawTextSmallENG(automap_overlay ? "ON" : "OFF", 200 + wide_delta, 32, CR_NONE);
 
         // Rotate mode
-        MN_DrTextA(automap_rotate ? "ON" : "OFF", 193 + wide_delta, 42);
+        RD_M_DrawTextSmallENG(automap_rotate ? "ON" : "OFF", 193 + wide_delta, 42, CR_NONE);
 
         // Follow mode
-        MN_DrTextA(automap_follow ? "ON" : "OFF", 189 + wide_delta, 52);
+        RD_M_DrawTextSmallENG(automap_follow ? "ON" : "OFF", 189 + wide_delta, 52, CR_NONE);
 
         // Grid
-        MN_DrTextA(automap_grid ? "ON" : "OFF", 138 + wide_delta, 62);
+        RD_M_DrawTextSmallENG(automap_grid ? "ON" : "OFF", 138 + wide_delta, 62, CR_NONE);
     }
     else
     {
         // Режим наложения
-        MN_DrTextSmallRUS(automap_overlay ? "DRK" : "DSRK", 208 + wide_delta, 32);
+        RD_M_DrawTextSmallRUS(automap_overlay ? "DRK" : "DSRK", 208 + wide_delta, 32, CR_NONE);
 
         // Режим вращения
-        MN_DrTextSmallRUS(automap_rotate ? "DRK" : "DSRK", 200 + wide_delta, 42);
+        RD_M_DrawTextSmallRUS(automap_rotate ? "DRK" : "DSRK", 200 + wide_delta, 42, CR_NONE);
 
         // Режим следования
-        MN_DrTextSmallRUS(automap_follow ? "DRK" : "DSRK", 215 + wide_delta, 52);
+        RD_M_DrawTextSmallRUS(automap_follow ? "DRK" : "DSRK", 215 + wide_delta, 52, CR_NONE);
 
         // Сетка
-        MN_DrTextSmallRUS(automap_grid ? "DRK" : "DSRK", 128 + wide_delta, 62);
+        RD_M_DrawTextSmallRUS(automap_grid ? "DRK" : "DSRK", 128 + wide_delta, 62, CR_NONE);
     }
 }
 
@@ -1605,23 +1361,17 @@ static void DrawSoundMenu(void)
     // SFX Volume
     RD_Menu_DrawSliderSmall(&SoundMenu, 52, 16, snd_MaxVolume_tmp);
     M_snprintf(num, 4, "%3d", snd_MaxVolume_tmp);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-    MN_DrTextA(num, 184 + wide_delta, 53);
-    dp_translation = NULL;
+    RD_M_DrawTextSmallENG(num, 184 + wide_delta, 53, CR_GRAY2GDARKGRAY_HEXEN);
 
     // Music Volume
     RD_Menu_DrawSliderSmall(&SoundMenu, 72, 16, snd_MusicVolume);
     M_snprintf(num, 4, "%3d", snd_MusicVolume);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-    MN_DrTextA(num, 184 + wide_delta, 73);
-    dp_translation = NULL;
+    RD_M_DrawTextSmallENG(num, 184 + wide_delta, 73, CR_GRAY2GDARKGRAY_HEXEN);
 
     // SFX Channels
     RD_Menu_DrawSliderSmall(&SoundMenu, 102, 16, snd_Channels / 4 - 1);
     M_snprintf(num, 4, "%3d", snd_Channels);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-    MN_DrTextA(num, 184 + wide_delta, 103);
-    dp_translation = NULL;
+    RD_M_DrawTextSmallENG(num, 184 + wide_delta, 103, CR_GRAY2GDARKGRAY_HEXEN);
 }
 
 static void M_RD_SfxVolume(Direction_t direction)
@@ -1656,69 +1406,63 @@ static void DrawSoundSystemMenu(void)
         // Sound effects
         if (snd_sfxdevice == 0)
         {
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-            MN_DrTextA("DISABLED", 144 + wide_delta, 42);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallENG("DISABLED", 144 + wide_delta, 42, CR_GRAY2GDARKGRAY_HEXEN);
         }
         else if (snd_sfxdevice == 3)
         {
-            MN_DrTextA("DIGITAL SFX", 144 + wide_delta, 42);
+            RD_M_DrawTextSmallENG("DIGITAL SFX", 144 + wide_delta, 42, CR_NONE);
         }
 
         // Music
         if (snd_musicdevice == 0)
         {   
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-            MN_DrTextA("DISABLED", 80 + wide_delta, 52);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallENG("DISABLED", 80 + wide_delta, 52, CR_GRAY2GDARKGRAY_HEXEN);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
         {
-            MN_DrTextA("OPL2 SYNTH", 80 + wide_delta, 52);
+            RD_M_DrawTextSmallENG("OPL2 SYNTH", 80 + wide_delta, 52, CR_NONE);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, "-opl3"))
         {
-            MN_DrTextA("OPL3 SYNTH", 80 + wide_delta, 52);
+            RD_M_DrawTextSmallENG("OPL3 SYNTH", 80 + wide_delta, 52, CR_NONE);
         }
         else if (snd_musicdevice == 5)
         {
-            MN_DrTextA("GUS EMULATION", 80 + wide_delta, 52);
+            RD_M_DrawTextSmallENG("GUS EMULATION", 80 + wide_delta, 52, CR_NONE);
         }
         else if (snd_musicdevice == 8)
         {
             // MIDI/MP3/OGG/FLAC
-            MN_DrTextA("MIDI/MP3/OGG/FLAC/TRACKER", 80 + wide_delta, 52);
+            RD_M_DrawTextSmallENG("MIDI/MP3/OGG/FLAC/TRACKER", 80 + wide_delta, 52, CR_NONE);
         }
 
         // Sampling frequency (hz)
         if (snd_samplerate == 44100)
         {
-            MN_DrTextA("44100 HZ", 178 + wide_delta, 72);
+            RD_M_DrawTextSmallENG("44100 HZ", 178 + wide_delta, 72, CR_NONE);
         }
         else if (snd_samplerate == 22050)
         {
-            MN_DrTextA("22050 HZ", 178 + wide_delta, 72);
+            RD_M_DrawTextSmallENG("22050 HZ", 178 + wide_delta, 72, CR_NONE);
         }
         else if (snd_samplerate == 11025)
         {
-            MN_DrTextA("11025 HZ", 178 + wide_delta, 72);
+            RD_M_DrawTextSmallENG("11025 HZ", 178 + wide_delta, 72, CR_NONE);
         }
 
         // SFX Mode
-        MN_DrTextA(snd_monomode ? "MONO" : "STEREO", 181 + wide_delta, 92);
+        RD_M_DrawTextSmallENG(snd_monomode ? "MONO" : "STEREO", 181 + wide_delta, 92, CR_NONE);
 
         // Pitch-Shifted sounds
-        MN_DrTextA(snd_pitchshift ? "ON" : "OFF", 189 + wide_delta, 102);
+        RD_M_DrawTextSmallENG(snd_pitchshift ? "ON" : "OFF", 189 + wide_delta, 102, CR_NONE);
 
         // Mute inactive window
-        MN_DrTextA(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 112);
+        RD_M_DrawTextSmallENG(mute_inactive_window ? "ON" : "OFF", 184 + wide_delta, 112, CR_NONE);
 
         // Informative message:
         if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
         {
-            dp_translation = cr[CR_GRAY2RED_HEXEN];
-            MN_DrTextA("CHANGING WILL REQUIRE RESTART OF THE PROGRAM", 3 + wide_delta, 132);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallENG("CHANGING WILL REQUIRE RESTART OF THE PROGRAM", 3 + wide_delta, 132, CR_GRAY2RED_HEXEN);
         }
     }
     else
@@ -1727,78 +1471,72 @@ static void DrawSoundSystemMenu(void)
         if (snd_sfxdevice == 0)
         {
             // ОТКЛЮЧЕНЫ
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-            MN_DrTextSmallRUS("JNRK.XTYS", 173 + wide_delta, 42);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallRUS("JNRK.XTYS", 173 + wide_delta, 42, CR_GRAY2GDARKGRAY_HEXEN);
         }
         else if (snd_sfxdevice == 3)
         {
             // ЦИФРОВЫЕ
-            MN_DrTextSmallRUS("WBAHJDST", 173 + wide_delta, 42);
+            RD_M_DrawTextSmallRUS("WBAHJDST", 173 + wide_delta, 42, CR_NONE);
         }
 
         // Музыка
         if (snd_musicdevice == 0)
         {   
             // ОТКЛЮЧЕНА
-            dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-            MN_DrTextSmallRUS("JNRK.XTYF", 91 + wide_delta, 52);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallRUS("JNRK.XTYF", 91 + wide_delta, 52, CR_GRAY2GDARKGRAY_HEXEN);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, ""))
         {
             // СИНТЕЗ OPL2
-            MN_DrTextSmallRUS("CBYNTP", 91 + wide_delta, 52);
-            MN_DrTextA("OPL2", 140 + wide_delta, 52);
+            RD_M_DrawTextSmallRUS("CBYNTP", 91 + wide_delta, 52, CR_NONE);
+            RD_M_DrawTextSmallENG("OPL2", 140 + wide_delta, 52, CR_NONE);
         }
         else if (snd_musicdevice == 3 && !strcmp(snd_dmxoption, "-opl3"))
         {
             // СИНТЕЗ OPL3
-            MN_DrTextSmallRUS("CBYNTP", 91 + wide_delta, 52);
-            MN_DrTextA("OPL3", 140 + wide_delta, 52);
+            RD_M_DrawTextSmallRUS("CBYNTP", 91 + wide_delta, 52, CR_NONE);
+            RD_M_DrawTextSmallENG("OPL3", 140 + wide_delta, 52, CR_NONE);
         }
         else if (snd_musicdevice == 5)
         {
             // ЭМУЛЯЦИЯ GUS
-            MN_DrTextSmallRUS("\'VEKZWBZ", 91 + wide_delta, 52);
-            MN_DrTextA("GUS", 155 + wide_delta, 52);
+            RD_M_DrawTextSmallRUS("\'VEKZWBZ", 91 + wide_delta, 52, CR_NONE);
+            RD_M_DrawTextSmallENG("GUS", 155 + wide_delta, 52, CR_NONE);
         }
         else if (snd_musicdevice == 8)
         {
             // MIDI/MP3/OGG/FLAC
-            MN_DrTextA("MIDI/MP3/OGG/FLAC/TRACKER", 91 + wide_delta, 52);
+            RD_M_DrawTextSmallENG("MIDI/MP3/OGG/FLAC/TRACKER", 91 + wide_delta, 52, CR_NONE);
         }
 
         // Частота дискретизации (гц)
         if (snd_samplerate == 44100)
         {
-            MN_DrTextSmallRUS("44100 UW", 200 + wide_delta, 72);
+            RD_M_DrawTextSmallRUS("44100 UW", 200 + wide_delta, 72, CR_NONE);
         }
         else if (snd_samplerate == 22050)
         {
-            MN_DrTextSmallRUS("22050 UW", 200 + wide_delta, 72);
+            RD_M_DrawTextSmallRUS("22050 UW", 200 + wide_delta, 72, CR_NONE);
         }
         else if (snd_samplerate == 11025)
         {
-            MN_DrTextSmallRUS("11025 UW", 200 + wide_delta, 72);
+            RD_M_DrawTextSmallRUS("11025 UW", 200 + wide_delta, 72, CR_NONE);
         }
 
         // Режим звуковых эффектов
-        MN_DrTextSmallRUS(snd_monomode ? "VJYJ" : "CNTHTJ", 226 + wide_delta, 92);
+        RD_M_DrawTextSmallRUS(snd_monomode ? "VJYJ" : "CNTHTJ", 226 + wide_delta, 92, CR_NONE);
 
         // Произвольный питч-шифтинг
-        MN_DrTextSmallRUS(snd_pitchshift ? "DRK" : "DSRK", 230 + wide_delta, 102);
+        RD_M_DrawTextSmallRUS(snd_pitchshift ? "DRK" : "DSRK", 230 + wide_delta, 102, CR_NONE);
 
         // Звук в неактивном окне
-        MN_DrTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 112);
+        RD_M_DrawTextSmallRUS(mute_inactive_window ? "DSRK" : "DRK", 201 + wide_delta, 112, CR_NONE);
 
         // Informative message: ИЗМЕНЕНИЕ ПОТРЕБУЕТ ПЕРЕЗАПУСК ПРОГРАММЫ
         if (CurrentItPos == 0 || CurrentItPos == 1 || CurrentItPos == 3)
         {
-            dp_translation = cr[CR_GRAY2RED_HEXEN];
-            MN_DrTextSmallRUS("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS", 
-                              11 + wide_delta, 132);
-            dp_translation = NULL;
+            RD_M_DrawTextSmallRUS("BPVTYTYBT GJNHT,ETN GTHTPFGECR GHJUHFVVS",
+                                  11 + wide_delta, 132, CR_GRAY2RED_HEXEN);
         }
     }
 }
@@ -1898,50 +1636,40 @@ static void DrawControlsMenu(void)
     if (english_language)
     {
         // Always run
-        MN_DrTextA(joybspeed >= 20 ? "ON" : "OFF", 118 + wide_delta, 42);
+        RD_M_DrawTextSmallENG(joybspeed >= 20 ? "ON" : "OFF", 118 + wide_delta, 42, CR_NONE);
 
         // Mouse look
-        MN_DrTextA(mlook ? "ON" : "OFF", 118 + wide_delta, 82);
+        RD_M_DrawTextSmallENG(mlook ? "ON" : "OFF", 118 + wide_delta, 82, CR_NONE);
 
         // Invert Y axis
-        if (!mlook)
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-        MN_DrTextA(mouse_y_invert ? "ON" : "OFF", 133 + wide_delta, 92);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(mouse_y_invert ? "ON" : "OFF", 133 + wide_delta, 92,
+                              !mlook ? CR_GRAY2GDARKGRAY_HEXEN : CR_NONE);
 
         // Novert
-        if (mlook)
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-        MN_DrTextA(!novert ? "ON" : "OFF", 168 + wide_delta, 102);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(!novert ? "ON" : "OFF", 168 + wide_delta, 102,
+                              mlook ? CR_GRAY2GDARKGRAY_HEXEN : CR_NONE);
     }
     else
     {
         // Режим постоянного бега
-        MN_DrTextSmallRUS(joybspeed >= 20 ? "DRK" : "DSRK", 209 + wide_delta, 42);
+        RD_M_DrawTextSmallRUS(joybspeed >= 20 ? "DRK" : "DSRK", 209 + wide_delta, 42, CR_NONE);
 
         // Обзор мышью
-        MN_DrTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 82);
+        RD_M_DrawTextSmallRUS(mlook ? "DRK" : "DSRK", 132 + wide_delta, 82, CR_NONE);
 
         // Вертикальная инверсия
-        if (!mlook)
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-        MN_DrTextSmallRUS(mouse_y_invert ? "DRK" : "DSRK", 199 + wide_delta, 92);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallRUS(mouse_y_invert ? "DRK" : "DSRK", 199 + wide_delta, 92,
+                              !mlook ? CR_GRAY2GDARKGRAY_HEXEN : CR_NONE);
 
         // Вертикальное перемещение
-        if (mlook)
-        dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-        MN_DrTextSmallRUS(!novert ? "DRK" : "DSRK", 227 + wide_delta, 102);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallRUS(!novert ? "DRK" : "DSRK", 227 + wide_delta, 102,
+                              mlook ? CR_GRAY2GDARKGRAY_HEXEN : CR_NONE);
     }
 
     // Mouse sensivity
     RD_Menu_DrawSliderSmall(&ControlsMenu, 72, 12, mouseSensitivity);
     M_snprintf(num, 4, "%3d", mouseSensitivity);
-    dp_translation = cr[CR_GRAY2GDARKGRAY_HEXEN];
-    MN_DrTextA(num, 152 + wide_delta, 73);
-    dp_translation = NULL;
+    RD_M_DrawTextSmallENG(num, 152 + wide_delta, 73, CR_GRAY2GDARKGRAY_HEXEN);
 }
 
 static void M_RD_AlwaysRun(Direction_t direction)
@@ -1990,78 +1718,63 @@ static void DrawGameplayMenu(void)
     if (english_language)
     {
         // Brightmaps
-        dp_translation = brightmaps ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(brightmaps ? "ON" : "OFF", 119 + wide_delta, 42);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(brightmaps ? "ON" : "OFF", 119 + wide_delta, 42,
+                              brightmaps ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Fake contrast
-        dp_translation = fake_contrast ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 52);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(fake_contrast ? "ON" : "OFF", 143 + wide_delta, 52,
+                              fake_contrast ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Draw crosshair
-        dp_translation = crosshair_draw ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 72);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(crosshair_draw ? "ON" : "OFF", 150 + wide_delta, 72,
+                              crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Indication
-        dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 82);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(crosshair_type == 1 ? "HEALTH" : "STATIC",  111 + wide_delta, 82,
+                              crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Increased size
-        dp_translation = crosshair_scale ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 92);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(crosshair_scale ? "ON" : "OFF", 146 + wide_delta, 92,
+                              crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Flip game levels
-        dp_translation = flip_levels ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextA(flip_levels ? "ON" : "OFF", 153 + wide_delta, 112);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(flip_levels ? "ON" : "OFF", 153 + wide_delta, 112,
+                              flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Play internal demos
-        dp_translation = no_internal_demos ? cr[CR_GRAY2RED_HEXEN] : cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextA(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 122);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallENG(no_internal_demos ? "OFF" : "ON", 179 + wide_delta, 122,
+                              no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
     else
     {
         // Брайтмаппинг
-        dp_translation = brightmaps ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 42);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallRUS(brightmaps ? "DRK" : "DSRK", 133 + wide_delta, 42,
+                              brightmaps ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Имитация контрастности
-        dp_translation = fake_contrast ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 52);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallRUS(fake_contrast ? "DRK" : "DSRK", 205 + wide_delta, 52,
+                              fake_contrast ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Отображать прицел
-        dp_translation = crosshair_draw ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 72);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallRUS(crosshair_draw ? "DRK" : "DSRK", 175 + wide_delta, 72,
+                              crosshair_draw ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Индикация
-        dp_translation = crosshair_type ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" :       // ЗДОРОВЬЕ
-                                                "CNFNBXYFZ",       // СТАТИЧНАЯ
-                                                111 + wide_delta, 82);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallRUS(crosshair_type == 1 ? "PLJHJDMT" : // ЗДОРОВЬЕ
+                                                         "CNFNBXYFZ", // СТАТИЧНАЯ
+                              111 + wide_delta, 82, crosshair_type ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Увеличенный размер
-        dp_translation = crosshair_scale ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 92);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallRUS(crosshair_scale ? "DRK" : "DSRK", 181 + wide_delta, 92,
+                              crosshair_scale ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Зеркальное отражение уровней
-        dp_translation = flip_levels ? cr[CR_GRAY2GREEN_HEXEN] : cr[CR_GRAY2RED_HEXEN];
-        MN_DrTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 112);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallRUS(flip_levels ? "DRK" : "DSRK", 255 + wide_delta, 112,
+                              flip_levels ? CR_GRAY2GREEN_HEXEN : CR_GRAY2RED_HEXEN);
 
         // Проигрывать демозаписи
-        dp_translation = no_internal_demos ? cr[CR_GRAY2RED_HEXEN] : cr[CR_GRAY2GREEN_HEXEN];
-        MN_DrTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 122);
-        dp_translation = NULL;
+        RD_M_DrawTextSmallRUS(no_internal_demos ? "DRK" : "DSRK", 211 + wide_delta, 122,
+                              no_internal_demos ? CR_GRAY2RED_HEXEN : CR_GRAY2GREEN_HEXEN);
     }
 }
 

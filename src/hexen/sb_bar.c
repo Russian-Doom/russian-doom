@@ -666,7 +666,7 @@ static void DrawSoundInfo(void)
 
     if (leveltime & 16)
     {
-        MN_DrTextA(english_language ?
+        RD_M_DrawTextA(english_language ?
         "*** SOUND DEBUG INFO ***" :
         "*** JNKFLJXYFZ BYAJHVFWBZ J PDERT ***", // *** ОТЛАДОЧНАЯ ИНФОРМАЦИЯ О ЗВУКЕ ***
         xPos[0], 20);
@@ -677,13 +677,13 @@ static void DrawSoundInfo(void)
         return;
     }
     x = 0;
-    MN_DrTextA(english_language ? "NAME" : "BVZ", xPos[x++], 30);   // ИМЯ
-    MN_DrTextA(english_language ? "MO.T" : "VJ>N", xPos[x++], 30);  // МО.Т
-    MN_DrTextA(english_language ? "MO.X" : "VJ>{", xPos[x++], 30);  // МО.Х
-    MN_DrTextA(english_language ? "MO.Y" : "VJ>E", xPos[x++], 30);  // МО.У
-    MN_DrTextA(english_language ? "ID" : "YV", xPos[x++], 30);      // НМ (НОМЕР)
-    MN_DrTextA(english_language ? "PRI" : "GHT", xPos[x++], 30);    // ПРЕ
-    MN_DrTextA(english_language ? "DIST" : "LBCN", xPos[x++], 30);  // ДИСТ
+    RD_M_DrawTextA(english_language ? "NAME" : "BVZ", xPos[x++], 30);   // ИМЯ
+    RD_M_DrawTextA(english_language ? "MO.T" : "VJ>N", xPos[x++], 30);  // МО.Т
+    RD_M_DrawTextA(english_language ? "MO.X" : "VJ>{", xPos[x++], 30);  // МО.Х
+    RD_M_DrawTextA(english_language ? "MO.Y" : "VJ>E", xPos[x++], 30);  // МО.У
+    RD_M_DrawTextA(english_language ? "ID" : "YV", xPos[x++], 30);      // НМ (НОМЕР)
+    RD_M_DrawTextA(english_language ? "PRI" : "GHT", xPos[x++], 30);    // ПРЕ
+    RD_M_DrawTextA(english_language ? "DIST" : "LBCN", xPos[x++], 30);  // ДИСТ
     for (i = 0; i < s.channelCount; i++)
     {
         c = &s.chan[i];
@@ -691,24 +691,24 @@ static void DrawSoundInfo(void)
         y = 40 + i * 10;
         if (c->mo == NULL)
         {                       // Channel is unused
-            MN_DrTextA("------", xPos[0], y);
+            RD_M_DrawTextA("------", xPos[0], y);
             continue;
         }
         M_snprintf(text, sizeof(text), "%s", c->name);
         M_ForceUppercase(text);
-        MN_DrTextA(text, xPos[x++], y);
+        RD_M_DrawTextA(text, xPos[x++], y);
         M_snprintf(text, sizeof(text), "%d", c->mo->type);
-        MN_DrTextA(text, xPos[x++], y);
+        RD_M_DrawTextA(text, xPos[x++], y);
         M_snprintf(text, sizeof(text), "%d", c->mo->x >> FRACBITS);
-        MN_DrTextA(text, xPos[x++], y);
+        RD_M_DrawTextA(text, xPos[x++], y);
         M_snprintf(text, sizeof(text), "%d", c->mo->y >> FRACBITS);
-        MN_DrTextA(text, xPos[x++], y);
+        RD_M_DrawTextA(text, xPos[x++], y);
         M_snprintf(text, sizeof(text), "%d", (int) c->id);
-        MN_DrTextA(text, xPos[x++], y);
+        RD_M_DrawTextA(text, xPos[x++], y);
         M_snprintf(text, sizeof(text), "%d", c->priority);
-        MN_DrTextA(text, xPos[x++], y);
+        RD_M_DrawTextA(text, xPos[x++], y);
         M_snprintf(text, sizeof(text), "%d", c->distance);
-        MN_DrTextA(text, xPos[x++], y);
+        RD_M_DrawTextA(text, xPos[x++], y);
     }
     UpdateState |= I_FULLSCRN;
     BorderNeedRefresh = true;
@@ -799,7 +799,7 @@ void SB_Drawer(void)
                  local_time == 4 ? "%H:%M:%S" :    // 24-hour (HH:MM:SS)
                                    "", tm);        // No time
 
-        MN_DrTextC(s, (local_time == 1 ? 281 :
+                                   RD_M_DrawTextC(s, (local_time == 1 ? 281 :
                        local_time == 2 ? 269 :
                        local_time == 3 ? 293 :
                        local_time == 4 ? 281 : 0) 
@@ -810,8 +810,8 @@ void SB_Drawer(void)
     if (show_fps && !vanillaparm)
     {
         sprintf (fps, "%d", f);
-        MN_DrTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 42);
-        MN_DrTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta*2), 42);   // [JN] fps digits
+        RD_M_DrawTextC("FPS:", 279 + (wide_4_3 ? wide_delta : wide_delta*2), 42);
+        RD_M_DrawTextC(fps, 297 + (wide_4_3 ? wide_delta : wide_delta*2), 42);   // [JN] fps digits
     }
 
     // Sound info debug stuff

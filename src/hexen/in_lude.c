@@ -574,14 +574,14 @@ static void DrDeathTally(void)
             }
             else
             {
-                temp = MN_TextAWidth("--") / 2;
+                temp = RD_M_TextAWidth("--") / 2;
                 if (bold)
                 {
                     MN_DrTextAYellow("--", x - temp, y);
                 }
                 else
                 {
-                    MN_DrTextA("--", x - temp, y);
+                    RD_M_DrawTextA("--", x - temp, y);
                 }
             }
         }
@@ -610,7 +610,7 @@ static void DrNumber(int val, int x, int y, int wrapThresh)
         M_snprintf(buff, sizeof(buff), "%d",
                    val >= wrapThresh ? val % wrapThresh : val);
     }
-    MN_DrTextA(buff, x - MN_TextAWidth(buff) / 2, y);
+    RD_M_DrawTextA(buff, x - RD_M_TextAWidth(buff) / 2, y);
 }
 
 //==========================================================================
@@ -628,7 +628,7 @@ static void DrNumberBold(int val, int x, int y, int wrapThresh)
         M_snprintf(buff, sizeof(buff), "%d",
                    val >= wrapThresh ? val % wrapThresh : val);
     }
-    MN_DrTextAYellow(buff, x - MN_TextAWidth(buff) / 2, y);
+    MN_DrTextAYellow(buff, x - RD_M_TextAWidth(buff) / 2, y);
 }
 
 //===========================================================================

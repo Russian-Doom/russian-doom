@@ -1650,11 +1650,11 @@ void AM_Drawer(void)
 
     if (english_language)
     {
-        MN_DrTextA(P_GetMapName(gamemap), 38 + wide_delta, 144);
+        RD_M_DrawTextA(P_GetMapName(gamemap), 38 + wide_delta, 144);
     }
     else
     {
-        MN_DrTextSmallRUS(P_GetMapName(gamemap), 38 + wide_delta, 144);
+        RD_M_DrawTextSmallRUS(P_GetMapName(gamemap), 38 + wide_delta, 144, CR_NONE);
     }
 
     if (ShowKills && netgame && deathmatch)
@@ -1741,10 +1741,10 @@ void AM_DrawDeathmatchStats(void)
         }
         else
         {
-            MN_DrTextA(PlayerColorText[order[i]], 8, yPosition);
+            RD_M_DrawTextA(PlayerColorText[order[i]], 8, yPosition);
             M_snprintf(textBuffer, sizeof(textBuffer),
                        "%d", fragCount[order[i]]);
-            MN_DrTextA(textBuffer, 80, yPosition);
+            RD_M_DrawTextA(textBuffer, 80, yPosition);
             yPosition += 10;
         }
     }
@@ -1781,7 +1781,7 @@ static void DrawWorldTimer(void)
 
     M_snprintf(timeBuffer, sizeof(timeBuffer),
                "%.2d : %.2d : %.2d", hours, minutes, seconds);
-    MN_DrTextA(timeBuffer, 237 + (wide_4_3 ? wide_delta : wide_delta*2), 8); // [JN] Небольшая корректировка позиции
+    RD_M_DrawTextA(timeBuffer, 237 + (wide_4_3 ? wide_delta : wide_delta*2), 8); // [JN] Небольшая корректировка позиции
 
     // [JN] No good place for days indication, there is also a local time widget.
     /*
@@ -1810,12 +1810,12 @@ static void DrawWorldTimer(void)
     if (english_language)
     {
         M_snprintf(skill, sizeof(skill), "SKILL: %d", gameskill + 1);
-        MN_DrTextA(skill, 264 + (wide_4_3 ? wide_delta : wide_delta*2), 18);
+        RD_M_DrawTextA(skill, 264 + (wide_4_3 ? wide_delta : wide_delta*2), 18);
     }
     else
     {
         // СЛОЖНОСТЬ:
         M_snprintf(skill, sizeof(skill), "CKJ;YJCNM: %d", gameskill + 1);
-        MN_DrTextSmallRUS(skill, 222 + (wide_4_3 ? wide_delta : wide_delta*2), 18);
+        RD_M_DrawTextSmallRUS(skill, 222 + (wide_4_3 ? wide_delta : wide_delta*2), 18, CR_NONE);
     }
 }

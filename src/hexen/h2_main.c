@@ -1152,13 +1152,13 @@ static void DrawMessage(void)
         if (english_language)
         {
             MN_DrTextAYellow(player->message,
-                            160 - MN_TextAWidth(player->message) / 2 
+                             160 - RD_M_TextAWidth(player->message) / 2
                             + wide_delta, 1);
         }
         else
         {
             MN_DrTextSmallYellowRUS(player->message,
-                                    160 - MN_DrTextSmallRUSWidth(player->message) / 2 
+                                    160 - RD_M_TextSmallRUSWidth(player->message) / 2
                                     + wide_delta, 1);
         }
     }
@@ -1166,15 +1166,15 @@ static void DrawMessage(void)
     {
         if (english_language)
         {
-            MN_DrTextA(player->message, 
-                       160 - MN_TextAWidth(player->message) / 2
+            RD_M_DrawTextA(player->message,
+                       160 - RD_M_TextAWidth(player->message) / 2
                        + wide_delta, 1);
         }
         else
         {
-            MN_DrTextSmallRUS(player->message,
-                              160 - MN_DrTextSmallRUSWidth(player->message) / 2
-                              + wide_delta, 1);            
+            RD_M_DrawTextSmallRUS(player->message,
+                              160 - RD_M_TextSmallRUSWidth(player->message) / 2
+                              + wide_delta, 1, CR_NONE);
         }
     }
 }
