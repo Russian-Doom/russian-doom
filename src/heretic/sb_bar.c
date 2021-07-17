@@ -1484,6 +1484,12 @@ void DrawInventoryBar(void)
         }
     }
     V_DrawPatch(50 + curpos * 31 + wide_delta, 189, PatchSELECTBOX);
+
+    // [JN] Overflow guard.
+    if (x > 3)
+    {
+        x = 3;
+    }
     if (x > 0)
     {
         V_DrawPatch(38 + wide_delta, 159, !(leveltime & 4) ? PatchINVLFGEM1 :
@@ -1754,6 +1760,12 @@ void DrawFullScreenStuff(void)
             }
         }
         V_DrawPatch(50 + curpos * 31 + wide_delta, 197, PatchSELECTBOX);
+
+        // [JN] Overflow guard.
+        if (x > 3)
+        {
+            x = 3;
+        }
         if (x > 0)
         {
             V_DrawPatch(38 + wide_delta, 167, !(leveltime & 4) ? PatchINVLFGEM1 :
