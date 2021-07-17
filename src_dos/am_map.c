@@ -814,17 +814,14 @@ void AM_doFollowPlayer(void)
 {
     if (f_oldloc.x != plr->mo->x || f_oldloc.y != plr->mo->y)
     {
-        m_x = FTOM(MTOF(plr->mo->x)) - m_w/2;
-        m_y = FTOM(MTOF(plr->mo->y)) - m_h/2;
+        // [JN] Use interpolated player coords for smooth
+        // scrolling and static player arrow position.
+        m_x = plr->mo->x - m_w/2;
+        m_y = plr->mo->y - m_h/2;
         m_x2 = m_x + m_w;
         m_y2 = m_y + m_h;
         f_oldloc.x = plr->mo->x;
         f_oldloc.y = plr->mo->y;
-
-        //  m_x = FTOM(MTOF(plr->mo->x - m_w/2));
-        //  m_y = FTOM(MTOF(plr->mo->y - m_h/2));
-        //  m_x = plr->mo->x - m_w/2;
-        //  m_y = plr->mo->y - m_h/2;
     }
 }
 
@@ -858,7 +855,7 @@ void AM_Ticker (void)
         // [crispy] keep the map static in overlay mode
         // if not following the player
         if (!(!automap_follow && automap_overlay))
-        mapangle = ANG90 - viewangle;
+        mapangle = ANG90 - plr->mo->angle;
     }
 }
 
