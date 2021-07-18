@@ -1864,6 +1864,7 @@ static void CheatWeaponsFunc(player_t * player, Cheat_t * cheat)
     {
         player->mana[i] = MAX_MANA;
     }
+    player->pieces |= WPIECE1 | WPIECE2 | WPIECE3;
     P_SetMessage(player, english_language ?
                          TXT_CHEATWEAPONS :
                          TXT_CHEATWEAPONS_RUS,
