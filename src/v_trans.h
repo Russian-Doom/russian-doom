@@ -109,6 +109,8 @@ enum
     CR_GRAY2DARKGOLD_HEXEN,     // Gameplay features headers
     CR_GRAY2GREEN_HEXEN,        // Gameplay features "ON"
     CR_GRAY2RED_HEXEN,          // Gameplay features "OFF"
+    CR_GREEN2GRAY_HEXEN,
+    CR_GREEN2RED_HEXEN,
     // Strife
     CR_GOLD2GRAY_STRIFE,
     CR_GOLD2GREEN_STRIFE,
