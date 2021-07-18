@@ -9358,17 +9358,28 @@ void M_DrawThermo_Small (int x, int y, int thermWidth, int thermDot)
     V_DrawShadowedPatchDoom(xx, y, W_CacheLumpName(DEH_String("RD_THRMR"), PU_CACHE));
 
     // [crispy] do not crash anymore if value exceeds thermometer range
-    // [JN] Draw red slider instead of blue.
-    if (thermDot >= thermWidth)
+    // [JN] Colorize gray if slider is placed most left.
+    if (thermDot == 0)
+    {
+        dp_translation = cr[CR_DARKGRAY];
+        V_DrawPatch((x + 8) + thermDot * 8, y,
+                W_CacheLumpName(DEH_String("RD_THRMW"), PU_CACHE));
+        dp_translation = NULL;
+    }
+    // [JN] Colorize red if slider exceeds thermometer range.
+    else if (thermDot >= thermWidth)
     {
         thermDot = thermWidth - 1;
         V_DrawPatch((x + 8) + thermDot * 8, y,
                 W_CacheLumpName(DEH_String("RD_THRMW"), PU_CACHE));
     }
+    // [JN] Colorize blue in common cases.
     else
     {
+        dp_translation = cr[CR_BLUE2];
         V_DrawPatch((x + 8) + thermDot * 8, y,
-                W_CacheLumpName(DEH_String("RD_THRMO"), PU_CACHE));
+                W_CacheLumpName(DEH_String("RD_THRMW"), PU_CACHE));
+        dp_translation = NULL;
     }
 }
 
