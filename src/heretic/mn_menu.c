@@ -58,6 +58,9 @@
 // [JN] Sizes of small font and small arrow for RD menu
 #define ITEM_HEIGHT_SMALL 10
 #define SELECTOR_XOFFSET_SMALL (-14)
+// [JN] Patches for small arrow (INVGEMR1 and INVGEMR2).
+extern patch_t *PatchINVRTGEM1;
+extern patch_t *PatchINVRTGEM2;
 
 // Private Functions
 
@@ -1691,9 +1694,8 @@ void MN_Drawer(void)
         else
         {
             y = CurrentMenu->y + (CurrentItPos * ITEM_HEIGHT_SMALL) + SELECTOR_YOFFSET;
-            selName = DEH_String(MenuTime & 8 ? "INVGEMR1" : "INVGEMR2");
-            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET_SMALL + wide_delta, y,
-                                     W_CacheLumpName(selName, PU_CACHE));
+            V_DrawShadowedPatchRaven(x + SELECTOR_XOFFSET_SMALL + wide_delta, y, 
+                                     MenuTime & 8 ? PatchINVRTGEM1 : PatchINVRTGEM2);
         }
     }
 }
