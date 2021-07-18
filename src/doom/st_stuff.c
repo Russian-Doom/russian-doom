@@ -291,6 +291,18 @@ static patch_t* faceback;
 static patch_t* armsbg;
 static patch_t* armsbg_rus;
 
+// [JN] Custom RD status bar graphics:
+static patch_t* stchammo;     // ammo
+static patch_t* rdchammo;     // патроны
+static patch_t* stchfrgs;     // frags
+static patch_t* rdchfrgs;     // фраги
+static patch_t* stcharms;     // arms
+static patch_t* rdcharms;     // оружие
+static patch_t* stchnams;     // health, armor, ammo types
+static patch_t* rdchnams;     // здоровье, броня, типы патронов
+static patch_t* stysslsh;     // 4 yellow slashes
+static patch_t* faceback_sp;  // face background in single player
+
 // weapon ownership patches
 static patch_t* arms[6][2]; 
 
@@ -1714,13 +1726,10 @@ void ST_drawWidgets(boolean refresh)
     }
 
     // [JN] Signed Crispy HUD: no STBAR backbround, with player's face/background
+    // Account player's color in network game, use only gray color in single player.
     if (screenblocks == 11 && (!automapactive || (automapactive && automap_overlay)))
     {
-        if (netgame)    // [JN] Account player's color in network game
-        V_DrawPatch(ST_FX + wide_delta, ST_FY, faceback);
-        else            // [JN] Use only gray color in single player
-        V_DrawPatch(ST_FX + wide_delta, ST_FY, 
-                    W_CacheLumpName(DEH_String("STFB1"), PU_CACHE));
+        V_DrawPatch(ST_FX + wide_delta, ST_FY, netgame ? faceback : faceback_sp);
     }
     
     // [JN] Signed Crispy HUD: no STBAR backbround, without player's face/background
@@ -1730,33 +1739,23 @@ void ST_drawWidgets(boolean refresh)
         {
             // [JN] Don't draw ammo for fist and chainsaw
             if (weaponinfo[plyr->readyweapon].ammo != am_noammo)
-            V_DrawPatch(2 + wide_delta, 191, 
-                        W_CacheLumpName(DEH_String(english_language ? 
-                                                   "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
+            V_DrawPatch(2 + wide_delta, 191, english_language ? stchammo : rdchammo);
 
             if (deathmatch) // [JN] Frags
-            V_DrawPatch(108 + wide_delta, 191, 
-                        W_CacheLumpName(DEH_String(english_language ?
-                                                   "STCHFRGS" : "RDCHFRGS"), PU_CACHE));
+            V_DrawPatch(108 + wide_delta, 191, english_language ? stchfrgs : rdchfrgs);
             else            // [JN] Arms
-            V_DrawPatch(108 + wide_delta, 191, 
-                        W_CacheLumpName(DEH_String(english_language ? 
-                                                   "STCHARMS" : "RDCHARMS"), PU_CACHE));
+            V_DrawPatch(108 + wide_delta, 191, english_language ? stcharms : rdcharms);
 
             // [JN] Health, armor, ammo
-            V_DrawPatch(52 + wide_delta, 173, 
-                        W_CacheLumpName(DEH_String(english_language ? 
-                                                   "STCHNAMS" : "RDCHNAMS"), PU_CACHE));
+            V_DrawPatch(52 + wide_delta, 173, english_language ? stchnams : rdchnams);
         }
 
-        V_DrawPatch(292 + wide_delta, 173, 
-                    W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+        V_DrawPatch(292 + wide_delta, 173, stysslsh);
     }
 
     // [JN] Traditional Crispy HUD
     if (screenblocks == 13)
-    V_DrawPatch(292 + wide_delta, 173, 
-                W_CacheLumpName(DEH_String("STYSSLSH"), PU_CACHE));
+    V_DrawPatch(292 + wide_delta, 173, stysslsh);
 
     dp_translation = ST_WidgetColor(hudcolor_health);
     // [JN] Negative player halth
@@ -1904,6 +1903,18 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     // arms background
     callback(DEH_String("STARMS"), &armsbg);
     callback(DEH_String("RDARMS"), &armsbg_rus);
+
+    // [JN] Custom RD status bar graphics:
+    callback(DEH_String("STCHAMMO"), &stchammo);
+    callback(DEH_String("RDCHAMMO"), &rdchammo);
+    callback(DEH_String("STCHFRGS"), &stchfrgs);
+    callback(DEH_String("RDCHFRGS"), &rdchfrgs);
+    callback(DEH_String("STCHARMS"), &stcharms);
+    callback(DEH_String("RDCHARMS"), &rdcharms);
+    callback(DEH_String("STCHNAMS"), &stchnams);
+    callback(DEH_String("RDCHNAMS"), &rdchnams);
+    callback(DEH_String("STYSSLSH"), &stysslsh);
+    callback(DEH_String("STPB1"), &faceback_sp);
 
     // arms ownership widgets
     for (i=0; i<6; i++)
@@ -2396,32 +2407,19 @@ void ST_drawWidgetsJaguar (boolean refresh)
         // [crispy] draw berserk pack instead of no ammo if appropriate
         if (plyr->readyweapon == wp_fist && plyr->powers[pw_strength])
         {
-            static patch_t *patch;
+            static int lump;
+            patch_t *patch;
 
-            if (!patch)
-            {
-                const int lump = W_CheckNumForName(DEH_String("PSTRA0"));
+            lump = W_CheckNumForName(DEH_String("PSTRA0"));
+            patch = W_CacheLumpNum(lump, PU_CACHE);
 
-                if (lump >= 0)
-                patch = W_CacheLumpNum(lump, PU_STATIC);
-            }
-
-            if (patch)
-            {
-                // [crispy] (23,179) is the center of the Ammo widget
-                V_DrawPatch(wide_delta + 
-                            23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
-                            179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
-                            patch);
-            }
+            // [crispy] (23,179) is the center of the Ammo widget
+            V_DrawPatch(wide_delta + 
+                        23 - SHORT(patch->width)/2 + SHORT(patch->leftoffset),
+                        179 - SHORT(patch->height)/2 + SHORT(patch->topoffset),
+                        patch);
         }
     }
-
-    // Signed Crispy HUD: no STBAR backbround, with player's face/background
-    if (screenblocks == 11 && (!automapactive || (automapactive && automap_overlay)))
-    {
-        V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("STPBG"), PU_CACHE));
-    } 
 
     // Signed Crispy HUD: no STBAR backbround, without player's 
     // face/background. Also don't draw signs in automap.
@@ -2430,12 +2428,10 @@ void ST_drawWidgetsJaguar (boolean refresh)
     {
         // Don't draw ammo for fist and chainsaw
         if (plyr->readyweapon != wp_fist && plyr->readyweapon != wp_chainsaw)
-        V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String(english_language ?
-                                                                       "STCHAMMO" : "RDCHAMMO"), PU_CACHE));
+        V_DrawPatch(0 + wide_delta, 0, english_language ? stchammo : rdchammo);
 
         //  Health, armor, ammo
-        V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String(english_language ?
-                                                                       "STCHNAMS" : "RDCHNAMS"), PU_CACHE));
+        V_DrawPatch(0 + wide_delta, 0, english_language ? stchnams : rdchnams);
     }
 
     // Health and Armor widgets ------------------------------------------------
@@ -2447,6 +2443,12 @@ void ST_drawWidgetsJaguar (boolean refresh)
     STlib_updatePercent(&w_armor, refresh  || screenblocks == 11
                                            || screenblocks == 12
                                            || screenblocks == 13);
+
+    // Signed Crispy HUD: no STBAR backbround, with player's face/background
+    if (screenblocks == 11 && (!automapactive || (automapactive && automap_overlay)))
+    {
+        V_DrawPatch(0 + wide_delta, 0, W_CacheLumpName(DEH_String("STPBG"), PU_CACHE));
+    }
 
     // ARMS widget -------------------------------------------------------------
     for (i=0;i<6;i++)
