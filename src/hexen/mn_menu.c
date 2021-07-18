@@ -63,6 +63,8 @@ static void SCInfo(int option);
 static void DrawMainMenu(void);
 static void DrawClassMenu(void);
 static void DrawSkillMenu(void);
+static void DrawOptionsMenu_Vanilla(void);
+static void DrawOptions2Menu_Vanilla(void);
 static void DrawFileSlots();
 static void DrawFilesMenu(void);
 static void MN_DrawInfo(void);
@@ -186,6 +188,7 @@ static Menu_t SoundMenu;
 static Menu_t SoundSysMenu;
 static Menu_t ControlsMenu;
 static Menu_t GameplayMenu;
+static Menu_t Options2Menu_Vanilla;
 static Menu_t FilesMenu;
 static Menu_t LoadMenu;
 static Menu_t SaveMenu;
@@ -498,6 +501,45 @@ static Menu_t GameplayMenu = {
     NULL, 0,
     &OptionsMenu,
     1
+};
+
+static MenuItem_t OptionsItems_Vanilla[] = {
+    {ITT_EFUNC,   "END GAME",          "PFRJYXBNM BUHE",   SCEndGame,             0}, // ЗАКОНЧИТЬ ИГРУ
+    {ITT_EFUNC,   "MESSAGES : ",        "CJJ,OTYBZ : ",    SCMessages,            0}, // СООБЩЕНИЯ:
+    {ITT_LRFUNC,  "MOUSE SENSITIVITY", "CRJHJCNM VSIB",    M_RD_Sensitivity,      0}, // СКОРОСТЬ МЫШИ
+    {ITT_EMPTY,   NULL,                NULL,               NULL,                  0},
+    {ITT_SETMENU, "MORE...",           "LJGJKYBNTKMYJ>>>", &Options2Menu_Vanilla, 0}  // ДОПОЛНИТЕЛЬНО...
+};
+
+static Menu_t OptionsMenu_Vanilla = {
+    88, 88,
+    30,
+    NULL, NULL, true,
+    5, OptionsItems_Vanilla, true,
+    DrawOptionsMenu_Vanilla,
+    NULL, 0,
+    &MainMenu,
+    0,
+};
+
+static MenuItem_t Options2Items_Vanilla[] = {
+    {ITT_LRFUNC, "SCREEN SIZE",  "HFPVTH 'RHFYF",    M_RD_ScreenSize, 0}, // РАЗМЕР ЭКРАНА
+    {ITT_EMPTY,  NULL,           NULL,               NULL,            0},
+    {ITT_LRFUNC, "SFX VOLUME",   "UHJVRJCNM PDERF",  M_RD_SfxVolume,  0}, // ГРОМКОСТЬ ЗВУКА
+    {ITT_EMPTY,  NULL,           NULL,               NULL,            0},
+    {ITT_LRFUNC, "MUSIC VOLUME", "UHJVRJCNM VEPSRB", M_RD_MusVolume,  0}, // ГРОМКОСТЬ МУЗЫКИ
+    {ITT_EMPTY,  NULL,           NULL,               NULL,            0}
+};
+
+static Menu_t Options2Menu_Vanilla = {
+    90, 90,
+    20,
+    NULL, NULL, true,
+    6, Options2Items_Vanilla, true,
+    DrawOptions2Menu_Vanilla,
+    NULL, 0,
+    &OptionsMenu_Vanilla,
+    0
 };
 
 static MenuItem_t FilesItems[] = {
@@ -1822,6 +1864,38 @@ static void M_RD_NoDemos(Direction_t direction)
 }
 
 //---------------------------------------------------------------------------
+// DrawOptionsMenu_Vanilla
+//---------------------------------------------------------------------------
+
+static void DrawOptionsMenu_Vanilla(void)
+{
+    if (english_language)
+    {
+        RD_M_DrawTextB(messageson ? "ON" : "OFF", 196 + wide_delta, 50);
+    }
+    else
+    {
+        RD_M_DrawTextBigRUS(messageson ? "DRK>" : "DSRK>", 223 + wide_delta, 50);	// ВКЛ. / ВЫКЛ.
+    }
+
+    RD_Menu_DrawSlider(&OptionsMenu_Vanilla, 92, 10, mouseSensitivity);
+}
+
+static void DrawOptions2Menu_Vanilla(void)
+{
+    if (aspect_ratio_temp >= 2)
+    {
+        RD_Menu_DrawSlider(&Options2Menu_Vanilla, 42, 4, screenblocks - 9);
+    }
+    else
+    {
+        RD_Menu_DrawSlider(&Options2Menu_Vanilla, 42, 10, screenblocks - 3);
+    }
+    RD_Menu_DrawSlider(&Options2Menu_Vanilla, 82, 16, snd_MaxVolume);
+    RD_Menu_DrawSlider(&Options2Menu_Vanilla, 122, 16, snd_MusicVolume);
+}
+
+//---------------------------------------------------------------------------
 // M_RD_ResetSettings
 //---------------------------------------------------------------------------
 
@@ -2468,7 +2542,7 @@ boolean MN_Responder(event_t * event)
             menuactive = true;
             FileMenuKeySteal = false;
             MenuTime = 0;
-            CurrentMenu = &SoundMenu;
+            CurrentMenu = vanillaparm ? &Options2Menu_Vanilla : &SoundMenu;
             CurrentItPos = CurrentMenu->lastOn;
             if (!netgame && !demoplayback)
             {
@@ -2825,6 +2899,15 @@ void SetMenu(const Menu_t* menu)
     CurrentMenu->lastOn = CurrentItPos;
     CurrentMenu = (Menu_t*) menu;
     CurrentItPos = CurrentMenu->lastOn;
+
+    // [Dasperal] Force to use vanilla options menu in -vanilla game mode.
+    if (vanillaparm)
+    {
+        if (CurrentMenu == &OptionsMenu)
+        {
+            CurrentMenu = &OptionsMenu_Vanilla;
+        }
+    }
 }
 
 void RD_Menu_StartSound(MenuSound_t sound)
