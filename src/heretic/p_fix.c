@@ -396,6 +396,7 @@ sectorfix_t sectorfix[] =
     {  heretic,       5,   2,    166,   "WATSCRW1",         "",     DEFAULT,       DEFAULT,     380,  DEFAULT,   DEFAULT },
     {  heretic,       5,   2,    167,   "WATSCRW1",         "",     DEFAULT,       DEFAULT,     380,  DEFAULT,   DEFAULT },
     {  heretic,       5,   3,    176,    "SMLAVA1",         "",     DEFAULT,       DEFAULT, DEFAULT,  DEFAULT,   DEFAULT },
+    {  heretic,       5,   3,    210,           "",         "",          56,            56, DEFAULT,  DEFAULT,   DEFAULT },
     {  heretic,       5,   5,    192,    "SMLAVA1",         "",     DEFAULT,       DEFAULT, DEFAULT,  DEFAULT,   DEFAULT },
     {  heretic,       5,   5,    196,    "SMLAVA1",         "",     DEFAULT,       DEFAULT, DEFAULT,  DEFAULT,   DEFAULT },
     {  heretic,       5,   5,    197,    "SMLAVA1",         "",     DEFAULT,       DEFAULT, DEFAULT,  DEFAULT,   DEFAULT },
