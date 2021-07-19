@@ -1942,6 +1942,113 @@ void G_DoNewGame(void)
 }
 
 /*
+================================================================================
+=
+= G_DoSelectiveGame
+=
+= [JN] Start new game with given parameters in "Level select" menu.
+=
+================================================================================
+*/
+
+void G_DoSelectiveGame(int option)
+{
+    int i;
+    player_t *p = &players[consoleplayer];
+    //Class
+    PlayerClass[consoleplayer] = selective_class;
+    p->class = selective_class;
+    SB_SetClassData();
+    SB_state = -1;
+
+    demoplayback = false;
+    netgame = false;
+    deathmatch = false;
+    playeringame[1] = playeringame[2] = playeringame[3] = 0;
+    consoleplayer = 0;
+    gameaction = ga_nothing;
+    automapactive = false;
+
+    // Close "Level select" menu
+    MN_DeactivateMenu ();
+
+    // Start a new game
+    G_InitNew (selective_skill,selective_episode, P_TranslateMap(selective_map));
+
+    // Health
+    p->health = selective_health;
+    p->mo->health = selective_health;
+
+    // Armor
+    p->armorpoints[ARMOR_ARMOR] = selective_armor_0 * 5 * FRACUNIT;
+    p->armorpoints[ARMOR_SHIELD] = selective_armor_1 * 5 * FRACUNIT;
+    p->armorpoints[ARMOR_HELMET] = selective_armor_2 * 5 * FRACUNIT;
+    p->armorpoints[ARMOR_AMULET] = selective_armor_3 * 5 * FRACUNIT;
+
+    // Weapons
+    p->weaponowned[WP_FIRST]  = 1;
+    p->weaponowned[WP_SECOND] = selective_wp_second;
+    p->weaponowned[WP_THIRD]  = selective_wp_third;
+    p->weaponowned[WP_FOURTH] = selective_wp_fourth;
+    p->pieces |= selective_wp_piece_2;
+    p->pieces |= selective_wp_piece_1 << 1;
+    p->pieces |= selective_wp_piece_0 << 2;
+
+    // Ammo
+    p->mana[0] = selective_ammo_0; // blue mana
+    p->mana[1] = selective_ammo_1; // green mana
+
+    // Artifacts
+    for (i = 0 ; i < selective_arti_0 ; i++) P_GiveArtifact(p, arti_health, NULL);          // Quartz Flask
+    for (i = 0 ; i < selective_arti_1 ; i++) P_GiveArtifact(p, arti_superhealth, NULL);     // Mystic Urn
+    for (i = 0 ; i < selective_arti_2 ; i++) P_GiveArtifact(p, arti_poisonbag, NULL);       // FLECHETTE
+    for (i = 0 ; i < selective_arti_3 ; i++) P_GiveArtifact(p, arti_blastradius, NULL);     // DISC OF REPULSION
+    for (i = 0 ; i < selective_arti_4 ; i++) P_GiveArtifact(p, arti_invulnerability, NULL); // ICON OF THE DEFENDER
+    for (i = 0 ; i < selective_arti_5 ; i++) P_GiveArtifact(p, arti_egg, NULL);             // PORKALATOR
+    for (i = 0 ; i < selective_arti_6 ; i++) P_GiveArtifact(p, arti_teleport, NULL);        // CHAOS DEVICE
+    for (i = 0 ; i < selective_arti_7 ; i++) P_GiveArtifact(p, arti_teleportother, NULL);   // BANISHMENT DEVICE
+    for (i = 0 ; i < selective_arti_8 ; i++) P_GiveArtifact(p, arti_fly, NULL);             // WINGS OF WRATH
+    for (i = 0 ; i < selective_arti_9 ; i++) P_GiveArtifact(p, arti_torch, NULL);           // TORCH
+    for (i = 0 ; i < selective_arti_10 ; i++) P_GiveArtifact(p, arti_boostmana, NULL);      // KRATER OF MIGHT
+    for (i = 0 ; i < selective_arti_11 ; i++) P_GiveArtifact(p, arti_boostarmor, NULL);     // DRAGONSKIN BRACERS
+    for (i = 0 ; i < selective_arti_12 ; i++) P_GiveArtifact(p, arti_summon, NULL);         // DARK SERVANT
+    for (i = 0 ; i < selective_arti_13 ; i++) P_GiveArtifact(p, arti_speed, NULL);          // BOOTS OF SPEED
+    for (i = 0 ; i < selective_arti_14 ; i++) P_GiveArtifact(p, arti_healingradius, NULL);  // MYSTIC AMBIT INCANT
+
+    // Keys
+    p->keys |= selective_key_0 << KEY_5;  // EMERALD KEY
+    p->keys |= selective_key_1 << KEY_7;  // SILVER KEY
+    p->keys |= selective_key_2 << KEY_4;  // FIRE KEY
+    p->keys |= selective_key_3 << KEY_1;  // STEEL KEY
+    p->keys |= selective_key_4 << KEY_9;  // HORN KEY
+    p->keys |= selective_key_5 << KEY_2;  // CAVE KEY
+    p->keys |= selective_key_6 << KEY_B;  // CASTLE KEY
+    p->keys |= selective_key_7 << KEY_A;  // SWAMP KEY
+    p->keys |= selective_key_8 << KEY_8;  // RUSTED KEY
+    p->keys |= selective_key_9 << KEY_6;  // DUNGEON KEY
+    p->keys |= selective_key_10 << KEY_3; // AXE KEY
+
+    // Puzzles
+    for (i = 0 ; i < selective_puzzle_0 ; i++) P_GiveArtifact(p, arti_puzzskull2, NULL);    // FLAME MASK
+    for (i = 0 ; i < selective_puzzle_1 ; i++) P_GiveArtifact(p, arti_puzzgembig, NULL);    // HEART OF D'SPARIL
+    for (i = 0 ; i < selective_puzzle_2 ; i++) P_GiveArtifact(p, arti_puzzgemred, NULL);    // RUBY PLANET
+    for (i = 0 ; i < selective_puzzle_3 ; i++) P_GiveArtifact(p, arti_puzzgemgreen1, NULL); // EMERALD PLANET 1
+    for (i = 0 ; i < selective_puzzle_4 ; i++) P_GiveArtifact(p, arti_puzzgemgreen2, NULL); // EMERALD PLANET 2
+    for (i = 0 ; i < selective_puzzle_5 ; i++) P_GiveArtifact(p, arti_puzzgemblue1, NULL);  // SAPPHIRE PLANET 1
+    for (i = 0 ; i < selective_puzzle_6 ; i++) P_GiveArtifact(p, arti_puzzgemblue2, NULL);  // SAPPHIRE PLANET 2
+    for (i = 0 ; i < selective_puzzle_7 ; i++) P_GiveArtifact(p, arti_puzzgear1, NULL);     // CLOCK GEAR ((S)
+    for (i = 0 ; i < selective_puzzle_8 ; i++) P_GiveArtifact(p, arti_puzzgear2, NULL);     // CLOCK GEAR ((B)
+    for (i = 0 ; i < selective_puzzle_9 ; i++) P_GiveArtifact(p, arti_puzzgear3, NULL);     // CLOCK GEAR ((S B)
+    for (i = 0 ; i < selective_puzzle_10 ; i++) P_GiveArtifact(p, arti_puzzgear4, NULL);    // CLOCK GEAR ((B S)
+    for (i = 0 ; i < selective_puzzle_11 ; i++) P_GiveArtifact(p, arti_puzzbook1, NULL);    // DAEMON CODEX
+    for (i = 0 ; i < selective_puzzle_12 ; i++) P_GiveArtifact(p, arti_puzzbook2, NULL);    // LIBER OSCURA
+    for (i = 0 ; i < selective_puzzle_13 ; i++) P_GiveArtifact(p, arti_puzzskull, NULL);    // YORICK'S SKULL
+    for (i = 0 ; i < selective_puzzle_14 ; i++) P_GiveArtifact(p, arti_puzzfweapon, NULL);  // GLAIVE SEAL
+    for (i = 0 ; i < selective_puzzle_15 ; i++) P_GiveArtifact(p, arti_puzzcweapon, NULL);  // HOlY RELIC
+    for (i = 0 ; i < selective_puzzle_16 ; i++) P_GiveArtifact(p, arti_puzzmweapon, NULL);  // SIGIL OF THE MAGUS
+}
+
+/*
 ====================
 =
 = G_InitNew

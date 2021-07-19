@@ -98,7 +98,6 @@ static void WarpCheck(void);
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
-extern boolean automapactive;
 extern boolean askforquit;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
@@ -176,6 +175,72 @@ int crosshair_scale = 0;
 // Gameplay: Gameplay
 int no_internal_demos = 0;
 
+int selective_class = 0;
+int selective_skill = 2;
+int selective_episode = 1;
+int selective_map = 1;
+
+int selective_health = 100;
+int selective_armor_0 = 0; // MESH ARMOR
+int selective_armor_1 = 0; // FALCON SHIELD
+int selective_armor_2 = 0; // PLATINUM HELMET
+int selective_armor_3 = 0; // AMULET OF WARDING
+
+int selective_wp_second = 0;
+int selective_wp_third = 0;
+int selective_wp_fourth = 0;
+int selective_wp_piece_0 = 0;
+int selective_wp_piece_1 = 0;
+int selective_wp_piece_2 = 0;
+
+int selective_ammo_0 = 0; // blue mana
+int selective_ammo_1 = 0; // green mana
+
+int selective_arti_0 = 0;  // Quartz Flask
+int selective_arti_1 = 0;  // Mystic Urn
+int selective_arti_2 = 0;  // FLECHETTE
+int selective_arti_3 = 0;  // DISC OF REPULSION
+int selective_arti_4 = 0;  // ICON OF THE DEFENDER
+int selective_arti_5 = 0;  // PORKALATOR
+int selective_arti_6 = 0;  // Chaos Device
+int selective_arti_7 = 0;  // BANISHMENT DEVICE
+int selective_arti_8 = 0;  // Wings of Wrath
+int selective_arti_9 = 0;  // Torch
+int selective_arti_10 = 0; // KRATER OF MIGHT
+int selective_arti_11 = 0; // DRAGONSKIN BRACERS
+int selective_arti_12 = 0; // DARK SERVANT
+int selective_arti_13 = 0; // BOOTS OF SPEED
+int selective_arti_14 = 0; // MYSTIC AMBIT INCANT
+
+int selective_key_0 = 0;  // EMERALD KEY
+int selective_key_1 = 0;  // SILVER KEY
+int selective_key_2 = 0;  // FIRE KEY
+int selective_key_3 = 0;  // STEEL KEY
+int selective_key_4 = 0;  // HORN KEY
+int selective_key_5 = 0;  // CAVE KEY
+int selective_key_6 = 0;  // CASTLE KEY
+int selective_key_7 = 0;  // SWAMP KEY
+int selective_key_8 = 0;  // RUSTED KEY
+int selective_key_9 = 0;  // DUNGEON KEY
+int selective_key_10 = 0; // AXE KEY
+
+int selective_puzzle_0 = 0;  // FLAME MASK
+int selective_puzzle_1 = 0;  // HEART OF D'SPARIL
+int selective_puzzle_2 = 0;  // RUBY PLANET
+int selective_puzzle_3 = 0;  // EMERALD PLANET 1
+int selective_puzzle_4 = 0;  // EMERALD PLANET 2
+int selective_puzzle_5 = 0;  // SAPPHIRE PLANET 1
+int selective_puzzle_6 = 0;  // SAPPHIRE PLANET 2
+int selective_puzzle_7 = 0;  // CLOCK GEAR ((S)
+int selective_puzzle_8 = 0;  // CLOCK GEAR ((B)
+int selective_puzzle_9 = 0;  // CLOCK GEAR ((S B)
+int selective_puzzle_10 = 0; // CLOCK GEAR ((B S)
+int selective_puzzle_11 = 0; // DAEMON CODEX
+int selective_puzzle_12 = 0; // LIBER OSCURA
+int selective_puzzle_13 = 0; // YORICK'S SKULL
+int selective_puzzle_14 = 0; // GLAIVE SEAL
+int selective_puzzle_15 = 0; // HOlY RELIC
+int selective_puzzle_16 = 0; // SIGIL OF THE MAGUS
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 

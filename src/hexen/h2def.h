@@ -634,6 +634,8 @@ extern boolean cmdfrag;         // true if a CMD_FRAG packet should be sent out 
                                                 // kill
 extern boolean menuactive;
 
+extern boolean automapactive;
+
 extern boolean devparm;         // [JN] DEBUG: launched with -devparm
 
 extern boolean playeringame[MAXPLAYERS];
@@ -778,6 +780,8 @@ void G_DeferedInitNew(skill_t skill, int episode, int map);
 // a normal game starts at map 1, but a warp test can start elsewhere
 
 void G_DeferredNewGame(skill_t skill);
+
+void G_DoSelectiveGame(int direction);
 
 void G_DeferedPlayDemo(char *demo);
 
