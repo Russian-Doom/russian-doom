@@ -6610,35 +6610,35 @@ void M_RD_Change_SBarColored(int choice)
     }
 }
 
-void M_RD_Define_SBarHighValue (void)
+void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color)
 {
     // [JN] No coloring in vanilla or Jaguar Doom.
     if (vanillaparm || gamemission == jaguar)
     {
-        sbar_color_high_set = NULL;
+        *sbar_color_set = NULL;
     }
     else
     {
-        switch (sbar_color_high)
+        switch (color)
         {
-            case 1:   sbar_color_high_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_high_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_high_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_high_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_high_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_high_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_high_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_high_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_high_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_high_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_high_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_high_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_high_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_high_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_high_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_high_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_high_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_high_set = NULL;              break;
+            case 1:   *sbar_color_set = cr[CR_DARKRED];    break;
+            case 2:   *sbar_color_set = cr[CR_GREEN];      break;
+            case 3:   *sbar_color_set = cr[CR_DARKGREEN];  break;
+            case 4:   *sbar_color_set = cr[CR_OLIVE];      break;
+            case 5:   *sbar_color_set = cr[CR_BLUE2];      break;
+            case 6:   *sbar_color_set = cr[CR_DARKBLUE];   break;
+            case 7:   *sbar_color_set = cr[CR_YELLOW];       break;
+            case 8:   *sbar_color_set = cr[CR_ORANGE];     break;
+            case 9:   *sbar_color_set = cr[CR_WHITE];      break;
+            case 10:  *sbar_color_set = cr[CR_GRAY];       break;
+            case 11:  *sbar_color_set = cr[CR_DARKGRAY];   break;
+            case 12:  *sbar_color_set = cr[CR_TAN];        break;
+            case 13:  *sbar_color_set = cr[CR_BROWN];    break;
+            case 14:  *sbar_color_set = cr[CR_ALMOND];      break;
+            case 15:  *sbar_color_set = cr[CR_KHAKI];  break;
+            case 16:  *sbar_color_set = cr[CR_PINK];      break;
+            case 17:  *sbar_color_set = cr[CR_BURGUNDY];  break;
+            default:  *sbar_color_set = NULL;              break;
         }
     }
 }
@@ -6665,43 +6665,10 @@ void M_RD_Change_SBarHighValue (int choice)
     }
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarHighValue();
+    M_RD_Define_SBarColorValue(&sbar_color_high_set, sbar_color_high);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
-}
-
-void M_RD_Define_SBarNormalValue (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_normal_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_normal)
-        {
-            case 1:   sbar_color_normal_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_normal_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_normal_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_normal_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_normal_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_normal_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_normal_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_normal_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_normal_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_normal_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_normal_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_normal_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_normal_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_normal_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_normal_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_normal_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_normal_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_normal_set = NULL;              break;
-        }
-    }
 }
 
 void M_RD_Change_SBarNormalValue (int choice)
@@ -6726,43 +6693,10 @@ void M_RD_Change_SBarNormalValue (int choice)
     }
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarNormalValue();
+    M_RD_Define_SBarColorValue(&sbar_color_normal_set, sbar_color_normal);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
-}
-
-void M_RD_Define_SBarLowValue (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_low_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_low)
-        {
-            case 1:   sbar_color_low_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_low_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_low_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_low_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_low_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_low_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_low_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_low_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_low_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_low_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_low_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_low_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_low_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_low_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_low_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_low_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_low_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_low_set = NULL;              break;
-        }
-    }
 }
 
 void M_RD_Change_SBarLowValue (int choice)
@@ -6787,43 +6721,10 @@ void M_RD_Change_SBarLowValue (int choice)
     }
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarLowValue();
+    M_RD_Define_SBarColorValue(&sbar_color_low_set, sbar_color_low);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
-}
-
-void M_RD_Define_SBarCriticalValue (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_critical_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_critical)
-        {
-            case 1:   sbar_color_critical_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_critical_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_critical_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_critical_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_critical_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_critical_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_critical_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_critical_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_critical_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_critical_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_critical_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_critical_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_critical_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_critical_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_critical_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_critical_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_critical_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_critical_set = NULL;              break;
-        }
-    }
 }
 
 void M_RD_Change_SBarCriticalValue (int choice)
@@ -6848,43 +6749,10 @@ void M_RD_Change_SBarCriticalValue (int choice)
     }
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarCriticalValue();
+    M_RD_Define_SBarColorValue(&sbar_color_critical_set, sbar_color_critical);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
-}
-
-void M_RD_Define_SBarArmorType1 (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_armor_1_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_armor_1)
-        {
-            case 1:   sbar_color_armor_1_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_armor_1_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_armor_1_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_armor_1_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_armor_1_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_armor_1_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_armor_1_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_armor_1_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_armor_1_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_armor_1_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_armor_1_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_armor_1_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_armor_1_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_armor_1_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_armor_1_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_armor_1_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_armor_1_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_armor_1_set = NULL;              break;
-        }
-    }
 }
 
 void M_RD_Change_SBarArmorType1 (int choice)
@@ -6909,43 +6777,10 @@ void M_RD_Change_SBarArmorType1 (int choice)
     }
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarArmorType1();
+    M_RD_Define_SBarColorValue(&sbar_color_armor_1_set, sbar_color_armor_1);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
-}
-
-void M_RD_Define_SBarArmorType2 (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_armor_2_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_armor_2)
-        {
-            case 1:   sbar_color_armor_2_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_armor_2_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_armor_2_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_armor_2_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_armor_2_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_armor_2_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_armor_2_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_armor_2_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_armor_2_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_armor_2_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_armor_2_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_armor_2_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_armor_2_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_armor_2_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_armor_2_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_armor_2_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_armor_2_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_armor_2_set = NULL;              break;
-        }
-    }
 }
 
 void M_RD_Change_SBarArmorType2 (int choice)
@@ -6970,43 +6805,10 @@ void M_RD_Change_SBarArmorType2 (int choice)
     }
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarArmorType2();
+    M_RD_Define_SBarColorValue(&sbar_color_armor_2_set, sbar_color_armor_2);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);
-}
-
-void M_RD_Define_SBarArmorType0 (void)
-{
-    // [JN] No coloring in vanilla or Jaguar Doom.
-    if (vanillaparm || gamemission == jaguar)
-    {
-        sbar_color_armor_0_set = NULL;
-    }
-    else
-    {
-        switch (sbar_color_armor_0)
-        {
-            case 1:   sbar_color_armor_0_set = cr[CR_DARKRED];    break;
-            case 2:   sbar_color_armor_0_set = cr[CR_GREEN];      break;
-            case 3:   sbar_color_armor_0_set = cr[CR_DARKGREEN];  break;
-            case 4:   sbar_color_armor_0_set = cr[CR_OLIVE];      break;
-            case 5:   sbar_color_armor_0_set = cr[CR_BLUE2];      break;
-            case 6:   sbar_color_armor_0_set = cr[CR_DARKBLUE];   break;
-            case 7:   sbar_color_armor_0_set = cr[CR_YELLOW];       break;
-            case 8:   sbar_color_armor_0_set = cr[CR_ORANGE];     break;
-            case 9:   sbar_color_armor_0_set = cr[CR_WHITE];      break;
-            case 10:  sbar_color_armor_0_set = cr[CR_GRAY];       break;
-            case 11:  sbar_color_armor_0_set = cr[CR_DARKGRAY];   break;
-            case 12:  sbar_color_armor_0_set = cr[CR_TAN];        break;
-            case 13:  sbar_color_armor_0_set = cr[CR_BROWN];    break;
-            case 14:  sbar_color_armor_0_set = cr[CR_ALMOND];      break;
-            case 15:  sbar_color_armor_0_set = cr[CR_KHAKI];  break;
-            case 16:  sbar_color_armor_0_set = cr[CR_PINK];      break;
-            case 17:  sbar_color_armor_0_set = cr[CR_BURGUNDY];  break;
-            default:  sbar_color_armor_0_set = NULL;              break;
-        }
-    }
 }
 
 void M_RD_Change_SBarArmorType0 (int choice)
@@ -7031,7 +6833,7 @@ void M_RD_Change_SBarArmorType0 (int choice)
     }
 
     // [JN] Redefine system message color.
-    M_RD_Define_SBarArmorType0();
+    M_RD_Define_SBarColorValue(&sbar_color_armor_0_set, sbar_color_armor_0);
 
     // [JN] Routine №3: play sound only if necessary.
     S_StartSound(NULL,sfx_stnmov);

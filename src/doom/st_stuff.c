@@ -2378,13 +2378,13 @@ void ST_Init (void)
                                        * sizeof(*st_backing_screen), PU_STATIC, 0);
 
     // [JN] Initialize status bar widget colors.
-    M_RD_Define_SBarHighValue();
-    M_RD_Define_SBarNormalValue();
-    M_RD_Define_SBarLowValue();
-    M_RD_Define_SBarCriticalValue();
-    M_RD_Define_SBarArmorType1();
-    M_RD_Define_SBarArmorType2();
-    M_RD_Define_SBarArmorType0();
+    M_RD_Define_SBarColorValue(&sbar_color_high_set, sbar_color_high);
+    M_RD_Define_SBarColorValue(&sbar_color_normal_set, sbar_color_normal);
+    M_RD_Define_SBarColorValue(&sbar_color_low_set, sbar_color_low);
+    M_RD_Define_SBarColorValue(&sbar_color_critical_set, sbar_color_critical);
+    M_RD_Define_SBarColorValue(&sbar_color_armor_1_set, sbar_color_armor_1);
+    M_RD_Define_SBarColorValue(&sbar_color_armor_2_set, sbar_color_armor_2);
+    M_RD_Define_SBarColorValue(&sbar_color_armor_0_set, sbar_color_armor_0);
 }
 
 

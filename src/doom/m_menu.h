@@ -57,13 +57,7 @@ void M_StartControlPanel (void);
 void M_ClearMenus (void);
 
 // [JN] Called by ST_InitColors.
-void M_RD_Define_SBarHighValue (void);
-void M_RD_Define_SBarNormalValue (void);
-void M_RD_Define_SBarLowValue (void);
-void M_RD_Define_SBarCriticalValue (void);
-void M_RD_Define_SBarArmorType1 (void);
-void M_RD_Define_SBarArmorType2 (void);
-void M_RD_Define_SBarArmorType0 (void);
+void M_RD_Define_SBarColorValue(byte** sbar_color_set, int color);
 
 void M_WriteTimeAndFPS (int x, int y, char *string);
 
