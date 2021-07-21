@@ -295,7 +295,7 @@ extern char* gotshotgun2;
 #define GOTCLIP     "Picked up a clip."
 #define GOTCLIPBOX  "Picked up a box of bullets."
 #define GOTROCKET   "Picked up a rocket."
-#define GOTROCKET2  "Picked up a two rockets."
+#define GOTROCKET2  "Picked up two rockets."
 #define GOTROCKBOX  "Picked up a box of rockets."
 #define GOTCELL     "Picked up an energy cell."
 #define GOTCELLBOX  "Picked up an energy cell pack."
