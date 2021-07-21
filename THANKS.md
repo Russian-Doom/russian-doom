@@ -97,3 +97,6 @@ Project's author would like to thank everyone for code, technical, linguistic, i
 - Wells Lu
 - cubebert
 - Terry Hearst
+- CthulhuInACan
+- Michael Day
+- NightFright
