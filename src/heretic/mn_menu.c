@@ -319,7 +319,8 @@ static boolean sfxbgdraw;
 int mouseSensitivity = 5;
 
 //[Dasperal] Predeclare menu variables to allow referencing them before they initialized
-static Menu_t EpisodeMenu;
+static Menu_t* EpisodeMenu;
+static Menu_t RegisteredEpisodeMenu;
 static Menu_t OptionsMenu;
 static Menu_t RenderingMenu;
 static Menu_t DisplayMenu;
@@ -342,11 +343,11 @@ static Menu_t LoadMenu;
 static Menu_t SaveMenu;
 
 static MenuItem_t MainItems[] = {
-    {ITT_SETMENU_NONET, "NEW GAME",   "YJDFZ BUHF", &EpisodeMenu, 1}, // НОВАЯ ИГРА
-    {ITT_SETMENU,       "OPTIONS",    "YFCNHJQRB",  &OptionsMenu, 0}, // НАСТРОЙКИ
-    {ITT_SETMENU,       "GAME FILES", "AFQKS BUHS", &FilesMenu,   0}, // ФАЙЛЫ ИГРЫ
-    {ITT_EFUNC,         "INFO",       "BYAJHVFWBZ", SCInfo,       0}, // ИНФОРМАЦИЯ
-    {ITT_EFUNC,         "QUIT GAME",  "DS[JL",      SCQuitGame,   0}  // ВЫХОД
+    {ITT_SETMENU_NONET, "NEW GAME",   "YJDFZ BUHF", &RegisteredEpisodeMenu, 1}, // НОВАЯ ИГРА
+    {ITT_SETMENU,       "OPTIONS",    "YFCNHJQRB",  &OptionsMenu,           0}, // НАСТРОЙКИ
+    {ITT_SETMENU,       "GAME FILES", "AFQKS BUHS", &FilesMenu,             0}, // ФАЙЛЫ ИГРЫ
+    {ITT_EFUNC,         "INFO",       "BYAJHVFWBZ", SCInfo,                 0}, // ИНФОРМАЦИЯ
+    {ITT_EFUNC,         "QUIT GAME",  "DS[JL",      SCQuitGame,             0}  // ВЫХОД
 };
 
 static Menu_t MainMenu = {
@@ -368,11 +369,22 @@ static MenuItem_t EpisodeItems[] = {
     {ITT_EFUNC, "THE STAGNANT DEMESNE", "PFCNJQYST DKFLTYBZ", SCEpisode, 5}  // ЗАСТОЙНЫЕ ВЛАДЕНИЯ
 };
 
-static Menu_t EpisodeMenu = {
+static Menu_t RegisteredEpisodeMenu = {
     80, 55,
     50,
     NULL, NULL, true,
     3, EpisodeItems, true,
+    NULL,
+    NULL, 0,
+    &MainMenu,
+    0
+};
+
+static Menu_t RetailEpisodeMenu = {
+    80, 55,
+    30,
+    NULL, NULL, true,
+    5, EpisodeItems, true,
     NULL,
     NULL, 0,
     &MainMenu,
@@ -395,7 +407,7 @@ static Menu_t SkillMenu = {
     6, SkillItems, true,
     NULL,
     NULL, 0,
-    &EpisodeMenu,
+    &RegisteredEpisodeMenu,
     2
 };
 
@@ -1084,10 +1096,12 @@ void MN_Init(void)
     aspect_ratio_temp = aspect_ratio;
 
     if (gamemode == retail)
-    {                           // Add episodes 4 and 5 to the menu
-        EpisodeMenu.itemCount = 5;
-        EpisodeMenu.y -= ITEM_HEIGHT; //TODO test why
-    }
+        EpisodeMenu = &RetailEpisodeMenu;
+    else
+        EpisodeMenu = &RegisteredEpisodeMenu;
+
+    MainItems[0].pointer = EpisodeMenu;
+    SkillMenu.prevMenu = EpisodeMenu;
 
     // [JN] Init message colors.
     M_RD_Define_Msg_Color(msg_pickup, message_pickup_color);

@@ -83,11 +83,11 @@ typedef struct Menu_s
 {
     const int x_eng;
     const int x_rus;
-    int y;
+    const int y;
     const char* const title_eng;
     const char* const title_rus;
     const boolean replaceableBigFont;
-    int itemCount;
+    const int itemCount;
     const MenuItem_t* const items;
     const boolean bigFont;
     void (*drawFunc) (void);
@@ -99,7 +99,7 @@ typedef struct Menu_s
      *  otherwise, this field must be 0.
      */
     const int pageCount;
-    const struct Menu_s* const prevMenu;
+    const struct Menu_s* prevMenu;
 
     /** The initial value of this field must be the index of the first clickable menu item */
     int lastOn;
