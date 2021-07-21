@@ -771,8 +771,13 @@ void R_ProjectSprite (mobj_t* thing)
             ||  thing->type == MT_MISC28) // Plasmagun
             vis->colormap = fullbrights_redonly[index];
 
-            if (thing->type == MT_BARREL) // Explosive barrel
+            if (thing->state - states == S_BAR1   // Explosive barrel (idle)
+            ||  thing->state - states == S_BAR2
+            ||  thing->state - states == S_BEXP)
             vis->colormap = fullbrights_explosivebarrel[index];
+
+            if (thing->state - states == S_BEXP3) // Explosive barrel (explosion)
+            vis->colormap = fullbrights_alllights[index];
 
             if (thing->type == MT_MISC73) // Pile of skulls and candles (29)
             vis->colormap = fullbrights_pileofskulls[index];
@@ -809,6 +814,9 @@ void R_ProjectSprite (mobj_t* thing)
             ||  thing->type == MT_MISC44    // Short blue torch
             ||  thing->type == MT_MISC45    // Short green torch
             ||  thing->type == MT_MISC46    // Short red torch
+            ||  thing->state - states == S_BEXP  // Explosive barrel
+            ||  thing->state - states == S_BEXP2
+            ||  thing->state - states == S_BEXP3
             ||  thing->type == MT_MISC73    // Pile of skulls and candles
             ||  thing->type == MT_MISC77    // Burning barrel
             ||  thing->type == MT_MISC29    // Tall tech lamp

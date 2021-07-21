@@ -968,9 +968,10 @@ state_t	states[NUMSTATES] = {
     {SPR_ARM2,32769,6,{NULL},S_ARM2,0,0},	// S_ARM2A
     {SPR_BAR1,0,6,{NULL},S_BAR2,0,0},	// S_BAR1
     {SPR_BAR1,1,6,{NULL},S_BAR1,0,0},	// S_BAR2
-    {SPR_BEXP,32768,5,{NULL},S_BEXP2,0,0},	// S_BEXP
-    {SPR_BEXP,32769,5,{A_Scream},S_BEXP3,0,0},	// S_BEXP2
-    {SPR_BEXP,32770,5,{NULL},S_BEXP4,0,0},	// S_BEXP3
+    // [JN] Disable full bright, use brightmap instead
+    {SPR_BEXP,0,5,{NULL},S_BEXP2,0,0},	// S_BEXP
+    {SPR_BEXP,1,5,{A_Scream},S_BEXP3,0,0},	// S_BEXP2
+    {SPR_BEXP,2,5,{NULL},S_BEXP4,0,0},	// S_BEXP3
     {SPR_BEXP,32771,10,{A_Explode},S_BEXP5,0,0},	// S_BEXP4
     {SPR_BEXP,32772,10,{NULL},S_NULL,0,0},	// S_BEXP5
     // [JN] Disable full bright, use brightmap instead
