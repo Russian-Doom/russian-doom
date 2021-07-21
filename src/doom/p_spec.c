@@ -153,6 +153,7 @@ static size_t	maxanims;
 extern  short	numlinespecials;
 extern  line_t*	linespeciallist[MAXLINEANIMS];
 
+extern boolean message_secret_keepvisible;
 
 
 void P_InitPicAnims (void)
@@ -1124,6 +1125,8 @@ void P_PlayerInSpecialSector (player_t* player)
                  I_GetSfxLumpNum(&S_sfx[sfx_getpow]) != -1 ? sfx_getpow : -1;
 
         player->message_secret = secretfound;
+        // [JN] Keep revealed secret message visible.
+        message_secret_keepvisible = true;
         // [JN] Don't break revealed's secret sound by any others
 	    if (player == &players[consoleplayer] && sfx_id != -1)
 		S_StartSoundNoBreak(sfx_id);
