@@ -86,7 +86,8 @@ jobs:
       - name: Install Dependencies
         shell: bash
         run: |
-          sudo apt-get install gcc make libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev ${{ matrix.build-system.dependency }}
+          sudo apt-get update --fix-missing
+          sudo apt-get install --fix-missing gcc make libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libpng-dev libsamplerate-dev ${{ matrix.build-system.dependency }}
 
       - uses: actions/checkout@v2
 
