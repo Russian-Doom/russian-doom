@@ -479,7 +479,14 @@ void ST_refreshBackground(void)
         
                     for (x = 0; x < screenwidth; x += 8)
                     {
-                        V_DrawPatch(x, 0, patch);
+                        if (hud_detaillevel)
+                        {
+                            V_DrawPatch(x, 0, patch);
+                        }
+                        else
+                        {
+                            V_DrawPatchUnscaled(x, 0, patch, NULL);
+                        }
                     }
                 }
             }
