@@ -591,7 +591,8 @@ void AM_loadPics(void)
 
     for (i = 0 ; i < 10 ; i++)
     {
-        DEH_snprintf(namebuf, 9, "AMMNUM%d", i);
+        // [JN] Use custom, precise versions of automap marks.
+        DEH_snprintf(namebuf, 9, "MARKNUM%d", i);
         marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
     }
 }
@@ -604,7 +605,8 @@ void AM_unloadPics(void)
 
     for (i = 0 ; i < 10 ; i++)
     {
-        DEH_snprintf(namebuf, 9, "AMMNUM%d", i);
+        // [JN] Use custom, precise versions of automap marks.
+        DEH_snprintf(namebuf, 9, "MARKNUM%d", i);
         W_ReleaseLumpName(namebuf);
     }
 }
@@ -2389,13 +2391,14 @@ void AM_drawMarks(void)
                 AM_rotatePoint(&pt);
             }
 
-            fx = (flipwidth[CXMTOF(pt.x)] >> hires) - 1;
-            fy = (CYMTOF(pt.y) >> hires) - 2;
+            // [JN] Use custom, precise versions of automap marks.
+            fx = flipwidth[CXMTOF(pt.x)];
+            fy = CYMTOF(pt.y);
 
-            if (fx >= f_x && fx <= (f_w >> hires) - 5 
-            &&  fy >= f_y && fy <= (f_h >> hires) - 6)
+            if (fx >= f_x + 5 && fx <= (f_w) - 5
+            &&  fy >= f_y + 6 && fy <= (f_h) - 6)
             {
-                V_DrawPatch(fx, fy, marknums[i]);
+                V_DrawPatchUnscaled(fx, fy, marknums[i], NULL);
             }
         }
     }
