@@ -17,9 +17,6 @@
 
 #include "rd_text.h"
 
-#define ITEM_HEIGHT 20
-#define ITEM_HEIGHT_SMALL 10
-
 typedef enum
 {
     LEFT_DIR,
@@ -30,7 +27,11 @@ typedef enum
 {
     MENU_SOUND_CURSOR_MOVE,
     MENU_SOUND_SLIDER_MOVE,
-    MENU_SOUND_CLICK
+    MENU_SOUND_CLICK,
+    MENU_SOUND_ACTIVATE,
+    MENU_SOUND_DEACTIVATE,
+    MENU_SOUND_BACK,
+    MENU_SOUND_PAGE
 } MenuSound_t;
 
 typedef enum
@@ -81,9 +82,9 @@ typedef struct
 
 typedef struct Menu_s
 {
-    const int x_eng;
-    const int x_rus;
-    const int y;
+    int x_eng; //
+    int x_rus; // [Dasperal] Those fields should be const but some menus of Doom dynamically change them.
+    int y;     //
     const char* const title_eng;
     const char* const title_rus;
     const boolean replaceableBigFont;
@@ -109,6 +110,8 @@ extern Menu_t *CurrentMenu;
 extern int CurrentItPos;
 extern int MenuTime;
 
+void RD_Menu_InitMenu(int Item_Height, int Item_Height_Small);
+
 void RD_Menu_InitSliders(char* BigSlider_left_patch,
                          char* BigSlider_middle1_patch,
                          char* BigSlider_middle2_patch,
@@ -125,7 +128,11 @@ void RD_Menu_InitSliders(char* BigSlider_left_patch,
 void RD_Menu_InitCursor(char* BigCursor1_patch,
                         char* BigCursor2_patch,
                         char* SmallCursor1_patch,
-                        char* SmallCursor2_patch);
+                        char* SmallCursor2_patch,
+                        int Cursor_Y_Offset,
+                        int Cursor_Y_Offset_Small,
+                        int Cursor_X_Offset,
+                        int Cursor_X_Offset_Small);
 
 /**
  * Increments or decrements 'var' depending on 'direction', LEFT_DIR = decrement, RIGHT_DIR = increment.

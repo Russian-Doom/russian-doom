@@ -15,6 +15,7 @@
 #include <ctype.h>
 #include "rd_menu.h"
 
+#include "deh_str.h"
 #include "d_name.h"
 #include "doomkeys.h"
 #include "i_video.h"
@@ -25,9 +26,12 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-#define SELECTOR_YOFFSET (-1)
-#define SELECTOR_XOFFSET (-28)
-#define SELECTOR_XOFFSET_SMALL (-14)
+static int item_Height;
+static int item_Height_Small;
+static int cursor_Y_Offset;
+static int cursor_Y_Offset_Small;
+static int cursor_X_Offset;
+static int cursor_X_Offset_Small;
 
 static lumpindex_t bigSlider_left_patch;
 static lumpindex_t bigSlider_middle1_patch;
@@ -55,6 +59,12 @@ int CurrentItPos;
 int MenuTime;
 
 extern void (*drawShadowedPatch)(int x, int y, patch_t *patch);
+
+void RD_Menu_InitMenu(int Item_Height, int Item_Height_Small)
+{
+    item_Height = Item_Height;
+    item_Height_Small = Item_Height_Small;
+}
 
 void RD_Menu_InitSliders(char* BigSlider_left_patch,
                          char* BigSlider_middle1_patch,
@@ -91,13 +101,22 @@ void RD_Menu_InitSliders(char* BigSlider_left_patch,
 void RD_Menu_InitCursor(char* BigCursor1_patch,
                         char* BigCursor2_patch,
                         char* SmallCursor1_patch,
-                        char* SmallCursor2_patch)
+                        char* SmallCursor2_patch,
+                        int Cursor_Y_Offset,
+                        int Cursor_Y_Offset_Small,
+                        int Cursor_X_Offset,
+                        int Cursor_X_Offset_Small)
 {
     bigCursor1_patch = W_GetNumForName(BigCursor1_patch);
     bigCursor2_patch = W_GetNumForName(BigCursor2_patch);
 
     smallCursor1_patch = W_GetNumForName(SmallCursor1_patch);
     smallCursor2_patch = W_GetNumForName(SmallCursor2_patch);
+
+    cursor_Y_Offset = Cursor_Y_Offset;
+    cursor_Y_Offset_Small = Cursor_Y_Offset_Small;
+    cursor_X_Offset = Cursor_X_Offset;
+    cursor_X_Offset_Small = Cursor_X_Offset_Small;
 }
 
 /**
@@ -229,8 +248,8 @@ void RD_Menu_DrawSlider(Menu_t * menu, int y, int width, int value)
     int x2;
     int count;
 
-    x = (english_language ? menu->x_eng : menu->x_rus) + 24;
-    V_DrawPatch(x - 32 + wide_delta, y, W_CacheLumpNum(bigSlider_left_patch, PU_CACHE));
+    x = (english_language ? menu->x_eng : menu->x_rus) + (RD_GameType == gt_Doom ? 8 : 24);
+    V_DrawPatch(x - (RD_GameType == gt_Doom ? 8 : 32) + wide_delta, y, W_CacheLumpNum(bigSlider_left_patch, PU_CACHE));
     for (x2 = x, count = width; count--; x2 += 8)
     {
         V_DrawPatch(x2 + wide_delta, y,
@@ -243,7 +262,7 @@ void RD_Menu_DrawSlider(Menu_t * menu, int y, int width, int value)
     if (value > width)
         value = width;
 
-    V_DrawPatch(x + 4 + value * 8 + wide_delta, y + 7, W_CacheLumpNum(bigSlider_gem_patch, PU_CACHE));
+    V_DrawPatch(x + (RD_GameType == gt_Doom ? 0 : 4) + value * 8 + wide_delta, y + (RD_GameType == gt_Doom ? 0 : 7), W_CacheLumpNum(bigSlider_gem_patch, PU_CACHE));
 }
 
 /** [JN] Draw small slider*/
@@ -253,14 +272,14 @@ void RD_Menu_DrawSliderSmall(Menu_t * menu, int y, int width, int value)
     int x2;
     int count;
 
-    x = (english_language ? menu->x_eng : menu->x_rus) + 24;
+    x = (english_language ? menu->x_eng : menu->x_rus) + (RD_GameType == gt_Doom ? 8 : 24);
 
-    drawShadowedPatch(x - 32 + wide_delta, y, W_CacheLumpNum(smallSlider_left_patch, PU_CACHE));
+    drawShadowedPatch(x - (RD_GameType == gt_Doom ? 8 : 32) + wide_delta, y, W_CacheLumpNum(smallSlider_left_patch, PU_CACHE));
     for (x2 = x, count = width; count--; x2 += 8)
     {
-        drawShadowedPatch(x2 - 16 + wide_delta, y, W_CacheLumpNum(smallSlider_middle_patch, PU_CACHE));
+        drawShadowedPatch(x2 - (RD_GameType == gt_Doom ? 0 : 16) + wide_delta, y, W_CacheLumpNum(smallSlider_middle_patch, PU_CACHE));
     }
-    drawShadowedPatch(x2 - 25 + wide_delta, y, W_CacheLumpNum(smallSlider_right_patch, PU_CACHE));
+    drawShadowedPatch(x2 - (RD_GameType == gt_Doom ? 0 : 25) + wide_delta, y, W_CacheLumpNum(smallSlider_right_patch, PU_CACHE));
 
     // [JN] Colorizing slider gem...
     // Most left position (dull green gem)
@@ -277,7 +296,7 @@ void RD_Menu_DrawSliderSmall(Menu_t * menu, int y, int width, int value)
     else
         dp_translation = gem_normal_translation == CR_NONE ? NULL : cr[gem_normal_translation];
 
-    V_DrawPatch(x + value * 8 + wide_delta, y + 7, W_CacheLumpNum(smallSlider_gem_patch, PU_CACHE));
+    V_DrawPatch(x + value * 8 + wide_delta, y + (RD_GameType == gt_Doom ? 0 : 7), W_CacheLumpNum(smallSlider_gem_patch, PU_CACHE));
     dp_translation = NULL;
 }
 
@@ -338,7 +357,14 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
                 {
                     if(menu->replaceableBigFont)
                     {
-                        RD_M_DrawTextB((char *) item->text_eng, x + wide_delta, y);
+                        if(RD_GameType == gt_Doom)
+                        {
+                            char* text = (char *) item->text_eng;
+                            text++;
+                            drawShadowedPatch(x + wide_delta, y, W_CacheLumpName(DEH_String(text), PU_CACHE));
+                        }
+                        else
+                            RD_M_DrawTextB((char *) item->text_eng, x + wide_delta, y);
                     }
                     else
                     {
@@ -355,7 +381,14 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
             {
                 if (menu->bigFont)
                 {
-                    RD_M_DrawTextBigRUS((char *) item->text_rus, x + wide_delta, y);
+                    if(RD_GameType == gt_Doom && menu->replaceableBigFont)
+                    {
+                        char* text = (char *) item->text_rus;
+                        text++;
+                        drawShadowedPatch(x + wide_delta, y, W_CacheLumpName(DEH_String(text), PU_CACHE));
+                    }
+                    else
+                        RD_M_DrawTextBigRUS((char *) item->text_rus, x + wide_delta, y);
                 }
                 else
                 {
@@ -367,11 +400,11 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
 
         if (menu->bigFont)
         {
-            y += ITEM_HEIGHT;
+            y += item_Height;
         }
         else
         {
-            y += ITEM_HEIGHT_SMALL;
+            y += item_Height_Small;
         }
 
         item++;
@@ -379,14 +412,14 @@ void RD_Menu_DrawMenu(Menu_t* menu, int menuTime, int currentItPos)
 
     if (menu->bigFont)
     {
-        y = menu->y + (currentItPos * ITEM_HEIGHT) + SELECTOR_YOFFSET;
-        drawShadowedPatch(x + SELECTOR_XOFFSET + wide_delta, y,
+        y = menu->y + (currentItPos * item_Height) + cursor_Y_Offset;
+        drawShadowedPatch(x + cursor_X_Offset + wide_delta, y,
             W_CacheLumpNum(menuTime & 16 ? bigCursor1_patch : bigCursor2_patch, PU_CACHE));
     }
     else
     {
-        y = menu->y + (currentItPos * ITEM_HEIGHT_SMALL) + SELECTOR_YOFFSET;
-        drawShadowedPatch(x + SELECTOR_XOFFSET_SMALL + wide_delta, y,
+        y = menu->y + (currentItPos * item_Height_Small) + cursor_Y_Offset_Small;
+        drawShadowedPatch(x + cursor_X_Offset_Small + wide_delta, y,
             W_CacheLumpNum(menuTime & 8 ? smallCursor1_patch : smallCursor2_patch, PU_CACHE));
     }
 }
@@ -488,7 +521,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
     }
     else if (key == key_menu_back)         // Go back to previous menu
     {
-        RD_Menu_StartSound(MENU_SOUND_CURSOR_MOVE);
+        RD_Menu_StartSound(MENU_SOUND_BACK);
         if (CurrentMenu->prevMenu == NULL)
         {
             MN_DeactivateMenu();
@@ -517,7 +550,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
             }
 
             SetMenu(CurrentMenu->pagesArray[j]);
-            RD_Menu_StartSound(MENU_SOUND_CLICK);
+            RD_Menu_StartSound(MENU_SOUND_PAGE);
             return true;
         }
     }
@@ -538,7 +571,7 @@ boolean RD_Menu_Responder(int key, int charTyped)
             }
 
             SetMenu(CurrentMenu->pagesArray[j]);
-            RD_Menu_StartSound(MENU_SOUND_CLICK);
+            RD_Menu_StartSound(MENU_SOUND_PAGE);
             return true;
         }
     }
@@ -548,7 +581,8 @@ boolean RD_Menu_Responder(int key, int charTyped)
 
         for (i = CurrentItPos + 1; i < CurrentMenu->itemCount; i++)
         {
-            if (CurrentMenu->items[i].type != ITT_TITLE && CurrentMenu->items[i].type != ITT_EMPTY)
+            if (CurrentMenu->items[i].type != ITT_TITLE && CurrentMenu->items[i].type != ITT_EMPTY &&
+                (english_language ? CurrentMenu->items[i].text_eng : CurrentMenu->items[i].text_rus))
             {
                 const char *textString = english_language ? CurrentMenu->items[i].text_eng
                                                           : CurrentMenu->items[i].text_rus;
@@ -565,7 +599,8 @@ boolean RD_Menu_Responder(int key, int charTyped)
 
         for (i = 0; i <= CurrentItPos; i++)
         {
-            if (CurrentMenu->items[i].type != ITT_TITLE && CurrentMenu->items[i].type != ITT_EMPTY)
+            if (CurrentMenu->items[i].type != ITT_TITLE && CurrentMenu->items[i].type != ITT_EMPTY &&
+                (english_language ? CurrentMenu->items[i].text_eng : CurrentMenu->items[i].text_rus))
             {
                 const char *textString = english_language ? CurrentMenu->items[i].text_eng
                                                           : CurrentMenu->items[i].text_rus;

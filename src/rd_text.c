@@ -58,34 +58,47 @@ void RD_M_InitFonts(char* FontA, char* FontB, char* FontC,
             drawShadowedPatch = V_DrawShadowedPatch;
     }
 
-    fontA = W_GetNumForName(FontA) + 1;
-    fontB = W_GetNumForName(FontB) + 1;
-    fontC = W_GetNumForName(FontC) + 1;
+    fontA = W_GetNumForName(FontA) + (RD_GameType != gt_Doom ? 1 : 0);
+    fontB = W_GetNumForName(FontB) + (RD_GameType != gt_Doom ? 1 : 0);
+    fontC = W_GetNumForName(FontC) + (RD_GameType != gt_Doom ? 1 : 0);
 
-    smallEngFont = W_GetNumForName(SmallEngFont) + 1;
-    bigEngFont = W_GetNumForName(BigEngFont) + 1;
+    smallEngFont = W_GetNumForName(SmallEngFont) + (RD_GameType != gt_Doom ? 1 : 0);
+    bigEngFont = W_GetNumForName(BigEngFont) + (RD_GameType != gt_Doom ? 1 : 0);
 
-    smallRusFont = W_GetNumForName(SmallRusFont) + 1;
-    bigRusFont = W_GetNumForName(BigRusFont) + 1;
+    smallRusFont = W_GetNumForName(SmallRusFont) + (RD_GameType != gt_Doom ? 1 : 0);
+    bigRusFont = W_GetNumForName(BigRusFont) + (RD_GameType != gt_Doom ? 1 : 0);
 }
 
 /** Draw text using replaceable English font A*/
 void RD_M_DrawTextA(char *text, int x, int y)
 {
     char c;
+    int cx, cy;
     patch_t *p;
+
+    cx = x;
+    cy = y;
 
     while ((c = *text++) != 0)
     {
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
         if (c < 33)
         {
-            x += 5;
+            cx += (RD_GameType == gt_Doom ? 4 : 5);
         }
         else
         {
-            p = W_CacheLumpNum(fontA + c - 33, PU_CACHE);
-            drawShadowedPatch(x, y, p);
-            x += SHORT(p->width) - 1;
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(fontA + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            drawShadowedPatch(cx, cy, p);
+            cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
         }
     }
 }
@@ -94,19 +107,32 @@ void RD_M_DrawTextA(char *text, int x, int y)
 void RD_M_DrawTextAFade(char *text, int x, int y, byte *table)
 {
     char c;
+    int cx, cy;
     patch_t *p;
+
+    cx = x;
+    cy = y;
 
     while ((c = *text++) != 0)
     {
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
         if (c < 33)
         {
-            x += 5;
+            cx += (RD_GameType == gt_Doom ? 4 : 5);
         }
         else
         {
-            p = W_CacheLumpNum(fontA + c - 33, PU_CACHE);
-            V_DrawFadePatch(x, y, p, table);
-            x += SHORT(p->width) - 1;
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(fontA + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            V_DrawFadePatch(cx, cy, p, table);
+            cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
         }
     }
 }
@@ -123,12 +149,14 @@ int RD_M_TextAWidth(char *text)
     {
         if (c < 33)
         {
-            width += 5;
+            width += (RD_GameType == gt_Doom ? 4 : 5);
         }
         else
         {
-            p = W_CacheLumpNum(fontA + c - 33, PU_CACHE);
-            width += SHORT(p->width) - 1;
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(fontA + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            width += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
         }
     }
     return (width);
@@ -138,19 +166,31 @@ int RD_M_TextAWidth(char *text)
 void RD_M_DrawTextB(char *text, int x, int y)
 {
     char c;
+    int cx, cy;
     patch_t *p;
+
+    cx = x;
+    cy = y;
 
     while ((c = *text++) != 0)
     {
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
         if (c < 33)
         {
-            x += 8;
+            cx += (RD_GameType == gt_Doom ? 10 : 8);
         }
         else
         {
-            p = W_CacheLumpNum(fontB + c - 33, PU_CACHE);
-            drawShadowedPatch(x, y, p);
-            x += SHORT(p->width) - 1;
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(fontB + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            drawShadowedPatch(cx, cy, p);
+            cx += SHORT(p->width) - 1;
         }
     }
 }
@@ -167,11 +207,12 @@ int RD_M_TextBWidth(char *text)
     {
         if (c < 33)
         {
-            width += 5;
+            width += (RD_GameType == gt_Doom ? 10 : 8);
         }
         else
         {
-            p = W_CacheLumpNum(fontB + c - 33, PU_CACHE);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(fontB + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
             width += SHORT(p->width) - 1;
         }
     }
@@ -187,12 +228,14 @@ void RD_M_DrawTextC(char *text, int x, int y)
     while ((c = *text++) != 0)
     {
         if (c < 33) // [JN] Means space symbol (" ").
-            {
+        {
             x += 4;
-            }
+        }
         else
         {
-            p = W_CacheLumpNum(fontC + c - 33, PU_CACHE);
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(fontC + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
             V_DrawPatch(x, y, p);
             x += SHORT(p->width);
         }
@@ -203,21 +246,34 @@ void RD_M_DrawTextC(char *text, int x, int y)
 void RD_M_DrawTextSmallENG(char *text, int x, int y, Translation_CR_t translation)
 {
     char c;
+    int cx, cy;
     patch_t *p;
+
+    cx = x;
+    cy = y;
 
     while ((c = *text++) != 0)
     {
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
         if (c < 33)
         {
-            x += 5;
+            cx += (RD_GameType == gt_Doom ? 4 : 5);
         }
         else
         {
-            p = W_CacheLumpNum(smallEngFont + c - 33, PU_CACHE);
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(smallEngFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
             dp_translation = translation == CR_NONE ? NULL : cr[translation];
-            drawShadowedPatch(x, y, p);
+            drawShadowedPatch(cx, cy, p);
             dp_translation = NULL;
-            x += SHORT(p->width) - 1;
+            cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
         }
     }
 }
@@ -226,19 +282,31 @@ void RD_M_DrawTextSmallENG(char *text, int x, int y, Translation_CR_t translatio
 void RD_M_DrawTextBigENG(char *text, int x, int y)
 {
     char c;
+    int cx, cy;
     patch_t *p;
+
+    cx = x;
+    cy = y;
 
     while ((c = *text++) != 0)
     {
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
         if (c < 33)
         {
-            x += 8;
+            cx += (RD_GameType == gt_Doom ? 10 : 8);
         }
         else
         {
-            p = W_CacheLumpNum(bigEngFont + c - 33, PU_CACHE);
-            drawShadowedPatch(x, y, p);
-            x += SHORT(p->width) - 1;
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(bigEngFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            drawShadowedPatch(cx, cy, p);
+            cx += SHORT(p->width) - 1;
         }
     }
 }
@@ -255,11 +323,12 @@ int RD_M_TextBigENGWidth(char *text)
     {
         if (c < 33)
         {
-            width += 5;
+            width += (RD_GameType == gt_Doom ? 10 : 8);
         }
         else
         {
-            p = W_CacheLumpNum(bigEngFont + c - 33, PU_CACHE);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(bigEngFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
             width += SHORT(p->width) - 1;
         }
     }
@@ -270,21 +339,34 @@ int RD_M_TextBigENGWidth(char *text)
 void RD_M_DrawTextSmallRUS(char *text, int x, int y, Translation_CR_t translation)
 {
     char c;
+    int cx, cy;
     patch_t *p;
+
+    cx = x;
+    cy = y;
 
     while ((c = *text++) != 0)
     {
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
         if (c < 33)
         {
-            x += 5;
+            cx += (RD_GameType == gt_Doom ? 4 : 5);
         }
         else
         {
-            p = W_CacheLumpNum(smallRusFont + c - 33, PU_CACHE);
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(smallRusFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
             dp_translation = translation == CR_NONE ? NULL : cr[translation];
-            drawShadowedPatch(x, y, p);
+            drawShadowedPatch(cx, cy, p);
             dp_translation = NULL;
-            x += SHORT(p->width) - 1;
+            cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
         }
     }
 }
@@ -293,19 +375,32 @@ void RD_M_DrawTextSmallRUS(char *text, int x, int y, Translation_CR_t translatio
 void RD_M_DrawTextSmallRUSFade(char *text, int x, int y, byte *table)
 {
     char c;
+    int cx, cy;
     patch_t *p;
+
+    cx = x;
+    cy = y;
 
     while ((c = *text++) != 0)
     {
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
         if (c < 33)
         {
-            x += 5;
+            cx += (RD_GameType == gt_Doom ? 4 : 5);
         }
         else
         {
-            p = W_CacheLumpNum(smallRusFont + c - 33, PU_CACHE);
-            V_DrawFadePatch(x, y, p, table);
-            x += SHORT(p->width) - 1;
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(smallRusFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            V_DrawFadePatch(cx, cy, p, table);
+            cx += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
         }
     }
 }
@@ -322,12 +417,14 @@ int RD_M_TextSmallRUSWidth(char *text)
     {
         if (c < 33)
         {
-            width += 5;
+            width += (RD_GameType == gt_Doom ? 4 : 5);
         }
         else
         {
-            p = W_CacheLumpNum(smallRusFont + c - 33, PU_CACHE);
-            width += SHORT(p->width) - 1;
+            c = toupper(c);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(smallRusFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            width += SHORT(p->width) - (RD_GameType == gt_Doom ? 0 : 1);
         }
     }
     return (width);
@@ -337,19 +434,31 @@ int RD_M_TextSmallRUSWidth(char *text)
 void RD_M_DrawTextBigRUS(char *text, int x, int y)
 {
     char c;
+    int cx, cy;
     patch_t *p;
+
+    cx = x;
+    cy = y;
 
     while ((c = *text++) != 0)
     {
+        if (c == '\n')
+        {
+            cx = x;
+            cy += 12;
+            continue;
+        }
+
         if (c < 33)
         {
-            x += 8;
+            cx += (RD_GameType == gt_Doom ? 10 : 8);
         }
         else
         {
-            p = W_CacheLumpNum(bigRusFont + c - 33, PU_CACHE);
-            drawShadowedPatch(x, y, p);
-            x += SHORT(p->width) - 1;
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(bigRusFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
+            drawShadowedPatch(cx, cy, p);
+            cx += SHORT(p->width) - 1;
         }
     }
 }
@@ -366,11 +475,12 @@ int RD_M_TextBigRUSWidth(char *text)
     {
         if (c < 33)
         {
-            width += 5;
+            width += (RD_GameType == gt_Doom ? 10 : 8);
         }
         else
         {
-            p = W_CacheLumpNum(bigRusFont + c - 33, PU_CACHE);
+            // [Dasperal] Use PU_STATIC for Doom because of Doom's font system
+            p = W_CacheLumpNum(bigRusFont + c - 33, RD_GameType == gt_Doom ? PU_STATIC : PU_CACHE);
             width += SHORT(p->width) - 1;
         }
     }

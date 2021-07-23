@@ -46,6 +46,7 @@
 #include "rd_menu.h"
 
 // Macros
+#define ITEM_HEIGHT 20
 #define SLOTTEXTLEN     22
 #define ASCII_CURSOR '_'
 
@@ -1066,6 +1067,8 @@ void MN_Init(void)
                    DEH_String("FONTF_S"),
                    DEH_String("FONTG_S"));
 
+    RD_Menu_InitMenu(20, 10);
+
     RD_Menu_InitSliders(// [Dasperal] Big slider
                         DEH_String("M_SLDLT"),
                         DEH_String("M_SLDMD1"),
@@ -1087,7 +1090,8 @@ void MN_Init(void)
                        DEH_String("M_SLCTR2"),
                        // [Dasperal] Small cursor
                        DEH_String("M_RDGEM1"),
-                       DEH_String("M_RDGEM2"));
+                       DEH_String("M_RDGEM2"),
+                       -1, -1, -28, -14);
 
     menuactive = false;
     SkullBaseLump = W_GetNumForName(DEH_String("M_SKL00"));
@@ -4517,12 +4521,16 @@ void RD_Menu_StartSound(MenuSound_t sound)
     switch (sound)
     {
         case MENU_SOUND_CURSOR_MOVE:
+        case MENU_SOUND_BACK:
             S_StartSound(NULL, sfx_switch);
             break;
         case MENU_SOUND_SLIDER_MOVE:
             S_StartSound(NULL, sfx_keyup);
             break;
         case MENU_SOUND_CLICK:
+        case MENU_SOUND_ACTIVATE:
+        case MENU_SOUND_DEACTIVATE:
+        case MENU_SOUND_PAGE:
             S_StartSound(NULL, sfx_dorcls);
             break;
         default:

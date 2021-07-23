@@ -43,7 +43,7 @@
 #include "jn.h"
 
 // MACROS ------------------------------------------------------------------
-
+#define ITEM_HEIGHT 20
 #define SLOTTEXTLEN	16
 #define ASCII_CURSOR '['
 
@@ -986,6 +986,9 @@ void MN_Init(void)
                    // [JN] Unchangable Russian fonts
                    "FONTF_S",
                    "FONTG_S");
+
+    RD_Menu_InitMenu(20, 10);
+
     RD_Menu_InitSliders(// [Dasperal] Big slider
                         "M_SLDLT",
                         "M_SLDMD1",
@@ -1001,12 +1004,14 @@ void MN_Init(void)
                         CR_NONE,
                         CR_GREEN2GRAY_HEXEN,
                         CR_GREEN2RED_HEXEN);
+
     RD_Menu_InitCursor(// [Dasperal] Big cursor
                         "M_SLCTR1",
                         "M_SLCTR2",
                         // [Dasperal] Small cursor
                         "INVGEMR1",
-                        "INVGEMR2");
+                        "INVGEMR2",
+                        -1, -1, -28, -14);
 
     menuactive = false;
 //      messageson = true;              // Set by defaults in .CFG
@@ -4101,11 +4106,17 @@ void RD_Menu_StartSound(MenuSound_t sound)
         case MENU_SOUND_CURSOR_MOVE:
             S_StartSound(NULL, SFX_FIGHTER_HAMMER_HITWALL);
             break;
+        case MENU_SOUND_BACK:
         case MENU_SOUND_SLIDER_MOVE:
             S_StartSound(NULL, SFX_PICKUP_KEY);
             break;
         case MENU_SOUND_CLICK:
+        case MENU_SOUND_PAGE:
             S_StartSound(NULL, SFX_DOOR_LIGHT_CLOSE);
+            break;
+        case MENU_SOUND_ACTIVATE:
+        case MENU_SOUND_DEACTIVATE:
+            S_StartSound(NULL, SFX_PLATFORM_STOP);
             break;
         default:
             break;
