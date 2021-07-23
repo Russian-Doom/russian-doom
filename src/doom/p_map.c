@@ -438,7 +438,7 @@ boolean PIT_CheckThing (mobj_t* thing)
         }
         // [crispy] check if things are stuck and allow them to move further apart
         // taken from doomretro/src/p_map.c:319-332
-        if (!thing->player && thing->health > 0)
+        if (!thing->player && thing->flags & MF_SHOOTABLE)
         {
             if (tmx == tmthing->x && tmy == tmthing->y)
             {
