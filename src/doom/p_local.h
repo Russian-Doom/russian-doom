@@ -188,7 +188,6 @@ boolean PIT_ChangeSector (mobj_t* thing);
 
 #define PT_ADDLINES		1
 #define PT_ADDTHINGS	2
-#define PT_EARLYOUT		4
 
 extern divline_t	trace;
 
